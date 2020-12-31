@@ -1,0 +1,62 @@
+import request from '@/utils/request'
+
+// 获取流程表单列表
+export function FlowEngineFormList(data) {
+  return request({
+    url: `/api/WorkFlow/FlowEngineForm`,
+    method: 'get',
+    data
+  })
+}
+// 列表ListAll
+export function FlowEngineFormListAll() {
+  return request({
+    url: `/api/WorkFlow/FlowEngineForm/ListAll`,
+    method: 'get',
+  })
+}
+// 获取流程表单信息
+export function FlowEngineFormInfo(id) {
+  return request({
+    url: `/api/WorkFlow/FlowEngineForm/${id}`,
+    method: 'get'
+  })
+}
+// 删除流程表单
+export function Delete(id) {
+  return request({
+    url: `/api/WorkFlow/FlowEngineForm/${id}`,
+    method: 'DELETE'
+  })
+}
+// 新建流程表单
+export function Create(data) {
+  return request({
+    url: `/api/WorkFlow/FlowEngineForm`,
+    method: 'post',
+    data
+  })
+}
+// 修改流程表单
+export function Update(data) {
+  return request({
+    url: `/api/WorkFlow/FlowEngineForm/${data.id}`,
+    method: 'PUT',
+    data,
+  })
+}
+// 待定
+export function IsExistByFullName(data) {
+  return request({
+    url: `/api/WorkFlow/FlowEngineForm/IsExistByFullName`,
+    method: 'get',
+    data
+  })
+}
+export function IsExistByEnCode(data) {
+  return request({
+    url: `/api/WorkFlow/FlowEngineForm/IsExistByEnCode`,
+    method: 'get',
+    data
+  })
+}
