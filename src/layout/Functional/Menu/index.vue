@@ -64,7 +64,7 @@ export default {
           path: "/menuMore",
           children: [],
           fullName: '更多 ...',
-          vueName: 'MoreMenu',
+          vueName: 'moreMenu',
           icon: ''
         }
         let number = Math.floor(width / 116)

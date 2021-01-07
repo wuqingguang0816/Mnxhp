@@ -23,17 +23,17 @@
         </div>
       </el-scrollbar>
     </el-drawer>
-    <im ref="JNPFIm" append-to-body />
+    <Im ref="JNPFIm" append-to-body />
   </div>
 </template>
 
 <script>
 import { mapGetters } from 'vuex'
 import { UserListAll } from '@/api/permission/user'
-import im from './im'
+import Im from './Im'
 export default {
   name: 'UserList',
-  components: { im },
+  components: { Im },
   data() {
     return {
       drawer: false,

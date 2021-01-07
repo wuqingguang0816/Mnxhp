@@ -82,21 +82,18 @@
         </JNPF-table>
       </div>
     </div>
-    <JNPF-Form v-if="formVisible" ref="JNPFForm" @refreshDataList="reset" />
-    <task v-show="taskVisible" ref="task" @close="taskVisible=false" />
+    <Form v-if="formVisible" ref="Form" @refreshDataList="reset" />
+    <Task v-show="taskVisible" ref="task" @close="taskVisible=false" />
   </div>
 </template>
 
 <script>
 import { ProjectGanttList, Delete } from '@/api/extend/projectGantt'
-import JNPFForm from './form'
-import task from './task'
+import Form from './Form'
+import Task from './Task'
 export default {
-  name: 'Extend-ProjectGantt',
-  components: {
-    JNPFForm,
-    task
-  },
+  name: 'extend-projectGantt',
+  components: { Form, Task },
   data() {
     return {
       keyword: '',
@@ -151,7 +148,7 @@ export default {
     addOrUpdateHandle(id) {
       this.formVisible = true
       this.$nextTick(() => {
-        this.$refs.JNPFForm.init(id)
+        this.$refs.Form.init(id)
       })
     },
     sortChange({ column, prop, order }) {

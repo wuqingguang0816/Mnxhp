@@ -3,7 +3,7 @@
     <div class="JNPF-common-title" style="border:none">
       <h2>表单地址</h2>
     </div>
-    <el-input :value="`WorkFlowForm/${enCode}/index.vue`" disabled />
+    <el-input :value="`workFlow/workFlowForm/${enCode}/index.vue`" disabled />
     <div class="JNPF-common-title">
       <h2>字段设置</h2>
     </div>
@@ -17,6 +17,12 @@
       <el-table-column prop="filedId" label="字段">
         <template slot-scope="scope">
           <el-input v-model="scope.row.filedId" placeholder="输入字段"></el-input>
+        </template>
+      </el-table-column>
+      <el-table-column prop="required" label="必填" width="50">
+        <template slot-scope="scope">
+          <el-checkbox :checked="scope.row.required"
+            @change='scope.row.required?scope.row.required=false:scope.row.required=true' />
         </template>
       </el-table-column>
       <el-table-column label="操作" width="50">
@@ -33,8 +39,8 @@
 </template>
 
 <script>
-import { deepClone } from '@/utils/generator/index'
-import { saveDrawingList } from '@/utils/generator/db'
+import { deepClone } from '@/utils'
+import { saveDrawingList } from '@/components/Generator/utils/db'
 import { debounce } from 'throttle-debounce'
 export default {
   props: ['conf', 'enCode'],
@@ -51,7 +57,8 @@ export default {
       handler(val) {
         let list = val.map(o => ({
           __config__: {
-            label: o.filedName
+            label: o.filedName,
+            required: o.required || false
           },
           __vModel__: o.filedId
         }))
@@ -60,7 +67,7 @@ export default {
           this.isDrawingListChange = true
           return
         }
-        this.$emit('drawingListChange')
+        // this.$emit('drawingListChange')
       },
       deep: true
     },
@@ -140,7 +147,7 @@ export default {
       this.drawingList.splice(index, 1);
     },
     addHandle() {
-      let item = { filedName: "", filedId: "" }
+      let item = { filedName: "", filedId: "", required: false }
       this.drawingList.push(item)
     }
   }

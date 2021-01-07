@@ -9,7 +9,7 @@
       height='parent' :eventLimit='true' allDayText='全天' :editable='true'
       @datesRender="datesRender" />
     <!-- :dayNamesShort='dayNamesShort' :dayNames='dayNamesShort' axisFormat='HH:mm' timeFormat='HH:mm' -->
-    <JNPF-Form v-if="formVisible" ref="JNPFForm" @refreshDataList="refreshDataList" />
+    <Form v-if="formVisible" ref="Form" @refreshDataList="refreshDataList" />
   </div>
 </template>
 <script>
@@ -19,12 +19,12 @@ import dayGridPlugin from '@fullcalendar/daygrid'
 import timeGridPlugin from '@fullcalendar/timegrid'
 import interactionPlugin from '@fullcalendar/interaction'
 import bootstrapPlugin from '@fullcalendar/bootstrap';
-import JNPFForm from './form'
+import Form from './Form'
 export default {
-  name: 'Extend-Schedule',
+  name: 'extend-schedule',
   components: {
     FullCalendar,
-    JNPFForm
+    Form
   },
   data() {
     return {
@@ -104,7 +104,7 @@ export default {
     addOrUpdateHandle(id, startTime) {
       this.formVisible = true
       this.$nextTick(() => {
-        this.$refs.JNPFForm.init(id, startTime)
+        this.$refs.Form.init(id, startTime)
       })
     },
     refreshDataList() {
@@ -117,10 +117,10 @@ export default {
 <style lang='scss'>
 // you must include each plugins' css
 // paths prefixed with ~ signify node_modules
-@import "~@fullcalendar/core/main.css";
-@import "~@fullcalendar/daygrid/main.css";
-@import "~@fullcalendar/timegrid/main.css";
-@import "~@fullcalendar/bootstrap/main.css";
+@import '~@fullcalendar/core/main.css';
+@import '~@fullcalendar/daygrid/main.css';
+@import '~@fullcalendar/timegrid/main.css';
+@import '~@fullcalendar/bootstrap/main.css';
 .Schedule-container {
   padding: 0;
   .fc-toolbar.fc-header-toolbar {

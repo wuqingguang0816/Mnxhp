@@ -94,16 +94,16 @@
           :limit.sync="listQuery.pageSize" @pagination="initData" />
       </div>
     </div>
-    <JNPF-Form v-if="formVisible" ref="JNPFForm" @refreshDataList="reset" />
+    <Form v-if="formVisible" ref="Form" @refreshDataList="reset" />
   </div>
 </template>
 
 <script>
 import { EmployeeList, EmployeeDelete, ExportExcel, ExportPdf, ExportWord } from '@/api/extend/employee'
-import JNPFForm from './form'
+import Form from './Form'
 export default {
-  name: 'Extend-ImportAndExport',
-  components: { JNPFForm },
+  name: 'extend-importAndExport',
+  components: { Form },
   data() {
     return {
       keyword: '',
@@ -173,7 +173,7 @@ export default {
     openDialog() {
       this.formVisible = true
       this.$nextTick(() => {
-        this.$refs.JNPFForm.init()
+        this.$refs.Form.init()
       })
     },
     excelImport(key) {

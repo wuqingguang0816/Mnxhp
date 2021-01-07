@@ -37,7 +37,7 @@
 <script>
 import { createModel, updateModel, getModelInfo } from '@/api/onlineDev/visualDev'
 import Parser from '@/components/Generator/parser/Parser'
-import { deepClone } from '@/utils/generator/index'
+import { deepClone } from '@/utils'
 export default {
   components: { Parser },
   data() {

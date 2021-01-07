@@ -7,7 +7,7 @@
 
 <script>
 export default {
-  name: 'ExternalLink',
+  name: 'externalLink',
   data() {
     return {
       url: ''

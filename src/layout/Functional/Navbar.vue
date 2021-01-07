@@ -8,7 +8,7 @@
 <script>
 import { mapState } from 'vuex'
 import Logo from './Logo'
-import Menu from './Menu'
+import Menu from './menu'
 import NavbarRight from '../components/NavbarRight'
 export default {
   components: { Logo, Menu, NavbarRight },

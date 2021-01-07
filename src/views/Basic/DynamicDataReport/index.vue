@@ -8,7 +8,7 @@
 import { getToken } from '@/utils/auth'
 
 export default {
-  name: 'DynamicDataReport',
+  name: 'dynamicDataReport',
   data() {
     return {
       id: '',

@@ -15,7 +15,7 @@
 <script>
 import { mapGetters } from 'vuex'
 export default {
-  name: 'LockScreen',
+  name: 'lockScreen',
   data() {
     return {
       password: '',

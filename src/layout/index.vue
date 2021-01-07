@@ -4,9 +4,9 @@
 
 <script>
 import { mapState, mapGetters } from "vuex";
-import classic from './Classic/index.vue'
-import functional from './Functional/index.vue'
-import plain from './Plain/index.vue'
+import classic from './classic/index.vue'
+import functional from './functional/index.vue'
+import plain from './plain/index.vue'
 
 export default {
   name: 'Layout',

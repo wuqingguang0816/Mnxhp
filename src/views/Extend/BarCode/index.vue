@@ -45,7 +45,7 @@
 import QRCode from 'qrcodejs2'
 import JsBarcode from 'jsbarcode'
 export default {
-  name: 'Extend-BarCode',
+  name: 'extend-barCode',
   data() {
     return {
       qrcode: '',

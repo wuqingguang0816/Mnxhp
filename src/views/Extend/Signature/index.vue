@@ -43,10 +43,10 @@
 <script>
 import Vue from 'vue'
 import vueEsign from 'vue-esign'
-import printStyle from '../PrintData/printStyle'
+import printStyle from '../printData/printStyle'
 
 export default {
-  name: 'Extend-Signature',
+  name: 'extend-signature',
   data() {
     return {
       lineWidth: 6,

@@ -109,8 +109,8 @@
 </template>
 <script>
 import Sortable from 'sortablejs'
-import { getDrawingList } from '@/utils/generator/db'
-import { deepClone } from '@/utils/generator/index'
+import { getDrawingList } from '@/components/Generator/utils/db'
+import { deepClone } from '@/utils'
 import { noColumnShowList, noSearchList } from '@/components/Generator/generator/comConfig'
 const defaultColumnData = {
   searchList: [], // 查询条件

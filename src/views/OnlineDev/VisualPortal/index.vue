@@ -80,7 +80,7 @@
         </JNPF-table>
       </div>
     </div>
-    <JNPF-Form v-if="formVisible" ref="JNPFForm" @close="colseForm" />
+    <Form v-if="formVisible" ref="Form" @close="colseForm" />
     <Preview :visible.sync="previewVisible" :id="activeId" />
     <Transfer ref="transfer" :visible.sync="transferShow" :id="transferId" />
   </div>
@@ -88,12 +88,12 @@
 
 <script>
 import { getPortalList, Delete, Copy } from '@/api/onlineDev/portal'
-import JNPFForm from './form'
-import Preview from './indexPreview'
-import Transfer from './transfer'
+import Form from './Form'
+import Preview from './IndexPreview'
+import Transfer from './Transfer'
 export default {
-  name: 'OnlineDev-VisualPortal',
-  components: { JNPFForm, Preview, Transfer },
+  name: 'onlineDev-visualPortal',
+  components: { Form, Preview, Transfer },
   data() {
     return {
       query: { keyword: '' },
@@ -185,7 +185,7 @@ export default {
     addOrUpdateHandle(id) {
       this.formVisible = true
       this.$nextTick(() => {
-        this.$refs.JNPFForm.init(this.categoryList, id)
+        this.$refs.Form.init(this.categoryList, id)
       })
     },
     colseForm(isRefresh) {

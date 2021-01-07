@@ -100,11 +100,11 @@ import {
   updateUserState,
   delUser
 } from '@/api/permission/user'
-import Form from './form'
-import ResetPwdForm from './resetPassword'
+import Form from './Form'
+import ResetPwdForm from './ResetPassword'
 
 export default {
-  name: 'Permission-User',
+  name: 'permission-user',
   components: {
     Form,
     ResetPwdForm

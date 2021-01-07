@@ -144,11 +144,11 @@
 <script>
 import { FlowLaunchList, Delete, Revoke } from '@/api/workFlow/FlowLaunch'
 import { FlowEngineListAll } from '@/api/workFlow/FlowEngine'
-import edit from '../fromBox/edit'
-import audit from '../fromBox/audit'
-import flow from './flow'
+import edit from '../fromBox/Edit'
+import audit from '../fromBox/Audit'
+import flow from './Flow'
 export default {
-  name: 'WorkFlow-FlowLaunch',
+  name: 'workFlow-flowLaunch',
   components: { edit, audit, flow },
   data() {
     return {

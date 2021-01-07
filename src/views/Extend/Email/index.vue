@@ -153,20 +153,20 @@
       </div>
     </el-tabs>
     <Config v-if="configVisible" ref="config" />
-    <JNPFform v-show="formVisible" ref="JNPFform" @close="formVisible=false" @refresh="refresh" />
-    <detail v-show="detailVisible" ref="detail" @close="detailVisible=false" @setRead="setRead" />
+    <Form v-show="formVisible" ref="Form" @close="formVisible=false" @refresh="refresh" />
+    <Detail v-show="detailVisible" ref="detail" @close="detailVisible=false" @setRead="setRead" />
   </div>
 </template>
 
 <script>
 import { EmailList, Receive, Delete, ReceiveRead, ReceiveUnread, ReceiveYesStarred, ReceiveNoStarred } from '@/api/extend/email'
 import Config from './Config'
-import JNPFform from './form'
-import detail from './detail'
+import Form from './Form'
+import Detail from './Detail'
 
 export default {
-  name: 'Extend-Email',
-  components: { Config, JNPFform, detail },
+  name: 'extend-email',
+  components: { Config, Form, Detail },
   data() {
     return {
       receiveing: false,
@@ -292,7 +292,7 @@ export default {
     write(id) {
       this.formVisible = true
       this.$nextTick(() => {
-        this.$refs.JNPFform.init(id)
+        this.$refs.Form.init(id)
       })
     },
     // 收邮件

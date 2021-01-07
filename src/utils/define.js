@@ -2,7 +2,7 @@ const APIURl = 'http://192.168.0.10:7772'
 
 module.exports = {
   APIURl: APIURl,
-  timeout: process.env.NODE_ENV === 'development' ? 2000 : 10000,
+  timeout: process.env.NODE_ENV === 'development' ? 10000 : 1000000,
   WebSocketUrl: process.env.NODE_ENV === 'development' ? APIURl.replace('http', 'ws') + '/websocket' : process.env.VUE_APP_BASE_WSS,
   comUploadUrl: process.env.VUE_APP_BASE_API + '/api/Common/Uploader',
   comUrl: process.env.VUE_APP_BASE_API,

@@ -122,7 +122,7 @@ export default {
                 path: this.redirect || '/home',
                 query: this.otherQuery
               })
-              this.loading = false
+              // this.loading = false
             })
             .catch(() => {
               this.loading = false

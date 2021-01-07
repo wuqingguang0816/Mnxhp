@@ -35,16 +35,16 @@
         </JNPF-table>
       </div>
     </div>
-    <detail v-show="detailVisible" ref="detail" @close="detailVisible=false" />
+    <Detail v-show="detailVisible" ref="detail" @close="detailVisible=false" />
   </div>
 </template>
 
 <script>
 import { DocumentPreviewList } from '@/api/extend/documentPreview'
-import detail from './detail'
+import Detail from './Detail'
 export default {
-  components: { detail },
-  name: 'Extend-DocumentPreview',
+  components: { Detail },
+  name: 'extend-documentPreview',
   data() {
     return {
       detailVisible: false,

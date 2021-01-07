@@ -1,54 +1,54 @@
 // 基础路由
 const baseRouter = [{
-    path: 'home',
+    path: '/home',
     component: (resolve) => require(['@/views/dashboard'], resolve),
-    name: 'Home',
+    name: 'home',
     meta: {
-      title: 'Home',
+      title: 'home',
       icon: 'icon-ym icon-ym-nav-home',
       affix: true,
       zhTitle: '首页'
     }
   },
   {
-    path: 'dashboard',
-    component: (resolve) => require(['@/views/Basic/Dashboard'], resolve),
-    name: 'Dashboard',
+    path: '/dashboard',
+    component: (resolve) => require(['@/views/basic/dashboard'], resolve),
+    name: 'dashboard',
     meta: {
-      title: 'Dashboard',
+      title: 'dashboard',
       icon: 'icon-ym icon-ym-generator-kanban',
       affix: true,
       zhTitle: '门户展示'
     }
   },
   {
-    path: '/MessageRecord',
-    component: (resolve) => require(['@/views/Basic/MessageRecord'], resolve),
-    name: 'MessageRecord',
+    path: '/messageRecord',
+    component: (resolve) => require(['@/views/basic/messageRecord'], resolve),
+    name: 'messageRecord',
     meta: {
-      title: 'MessageRecord',
+      title: 'messageRecord',
       affix: false,
       zhTitle: '消息中心',
       icon: 'icon-ym icon-ym-sysNotice',
     }
   },
   {
-    path: '/PreviewModel',
-    component: (resolve) => require(['@/views/Basic/PreviewModel'], resolve),
-    name: 'PreviewModel',
+    path: '/previewModel',
+    component: (resolve) => require(['@/views/basic/previewModel'], resolve),
+    name: 'previewModel',
     meta: {
-      title: 'PreviewModel',
+      title: 'previewModel',
       affix: false,
       zhTitle: '功能预览',
       icon: 'icon-ym icon-ym-btn-preview',
     }
   },
   {
-    path: '/Profile',
-    component: (resolve) => require(['@/views/Basic/Profile'], resolve),
-    name: 'Profile',
+    path: '/profile',
+    component: (resolve) => require(['@/views/basic/profile'], resolve),
+    name: 'profile',
     meta: {
-      title: 'Profile',
+      title: 'profile',
       affix: false,
       zhTitle: '个人信息',
       icon: 'icon-ym icon-ym-user',

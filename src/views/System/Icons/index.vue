@@ -64,7 +64,7 @@ const ymCustom = ymCustomJson.glyphs.map(o => `ym-custom-${o.font_class}`)
 const elementIcons = elementIconsJson.map(name => `el-icon-${name}`)
 
 export default {
-  name: 'System-Icons',
+  name: 'system-icons',
   data() {
     return {
       elementIcons,

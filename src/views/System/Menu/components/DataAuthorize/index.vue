@@ -1,7 +1,7 @@
 <template>
   <div>
     <el-drawer :title="dialogTitle" :visible.sync="dataAuthorizeListDrawer" :wrapperClosable="false"
-      ref="drawer" size="700px" :before-close="handleDrawerClose" class="JNPF-common-drawer">
+      ref="drawer" size="700px" class="JNPF-common-drawer">
       <div class="JNPF-flex-main">
         <el-tabs type="border-card" v-model="tabActiveName" @tab-click="handleClick"
           class="JNPF-flex-tabs">
@@ -81,8 +81,8 @@ import {
   delDataScheme,
   delDataAuthorize
 } from '@/api/system/dataAuthorize'
-import DataSchemeForm from './dataSchemeForm'
-import DataAuthorizeForm from './dataAuthorizeForm'
+import DataSchemeForm from './DataSchemeForm'
+import DataAuthorizeForm from './DataAuthorizeForm'
 
 export default {
   components: {
@@ -187,10 +187,6 @@ export default {
           })
         })
       }).catch(() => { })
-    },
-    handleDrawerClose(done) {
-      done();
-      this.$emit('refreshDataList')
     }
   }
 }

@@ -52,7 +52,7 @@ import Authorize from './components/Authorize'
 import SysLog from './components/SysLog'
 
 export default {
-  name: 'Profile',
+  name: 'profile',
   components: { UserInfo, Password, Authorize, SysLog },
   data() {
     return {

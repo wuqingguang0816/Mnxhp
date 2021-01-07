@@ -15,6 +15,9 @@
       <el-form-item label="流水日期" prop="dateFormat">
         <el-select v-model="dataForm.dateFormat" placeholder="请选择" clearable @change="handleChange">
           <el-option label="yyyymmdd" value="yyyyMMdd" />
+          <el-option label="yyyymm" value="yyyyMM" />
+          <el-option label="yyyy" value="yyyy" />
+          <el-option label="no" value="no" />
         </el-select>
       </el-form-item>
       <el-form-item label="流水位数" prop="digit">
@@ -119,8 +122,8 @@ export default {
       // 流水日期格式
       const dateFormat = this.dataForm.dateFormat
       let dateVal = ''
-      if (dateFormat === 'yyyyMMdd') {
-        dateVal = dayjs().format('YYYYMMDD')
+      if (dateFormat !== 'no') {
+        dateVal = dayjs().format(dateFormat.toUpperCase())
       }
       // 流水位数
       let digitVal = this.dataForm.digit

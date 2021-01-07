@@ -133,11 +133,11 @@ const actions = {
                 isTree = propertyJson.isTree || 0
               }
               if (e.type == 3) {
-                componentUrl = 'Basic/DynamicModel'
+                componentUrl = 'basic/dynamicModel'
               } else if (e.type == 4) {
-                componentUrl = 'Basic/DynamicDictionary'
+                componentUrl = 'basic/dynamicDictionary'
               } else {
-                componentUrl = 'Basic/DynamicDataReport'
+                componentUrl = 'basic/dynamicDataReport'
               }
               e.path = '/' + e.urlAddress
               let newObj = {
@@ -167,7 +167,7 @@ const actions = {
             //   e.path = '/' + e.urlAddress
             //   let newObj = {
             //     path: '/' + e.urlAddress,
-            //     component: (resolve) => require([`@/views/Basic/ExternalLink`], resolve),
+            //     component: (resolve) => require([`@/views/basic/externalLink`], resolve),
             //     name: e.enCode,
             //     meta: {
             //       title: name,

@@ -63,19 +63,17 @@
           :limit.sync="listQuery.pageSize" @pagination="initData" />
       </div>
     </div>
-    <JNPF-Form v-if="formVisible" ref="JNPFForm" @refreshDataList="initData" />
+    <Form v-if="formVisible" ref="Form" @refreshDataList="initData" />
   </div>
 </template>
 
 <script>
 import { getDictionaryDataSelector } from '@/api/systemData/dictionary'
 import { LanguageMapList, LanguageMapDelete } from '@/api/systemData/languageMap'
-import JNPFForm from './form'
+import Form from './Form'
 export default {
-  name: 'System-Language',
-  components: {
-    JNPFForm
-  },
+  name: 'system-language',
+  components: { Form },
   data() {
     return {
       keyword: '',
@@ -150,7 +148,7 @@ export default {
     addOrUpdateHandle(id) {
       this.formVisible = true
       this.$nextTick(() => {
-        this.$refs.JNPFForm.init(this.languageList, this.languageTypeId, this.languageTypeText, id)
+        this.$refs.Form.init(this.languageList, this.languageTypeId, this.languageTypeText, id)
       })
     },
     handleNodeClick(data) {

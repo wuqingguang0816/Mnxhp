@@ -18,7 +18,7 @@
         </el-select>
       </el-form-item>
       <el-form-item label="条件符号" prop="conditionSymbol">
-        <el-select v-model="dataForm.conditionSymbol" multiple placeholder="请选择">
+        <el-select v-model="conditionSymbol" multiple placeholder="请选择">
           <el-option v-for="item in conditionSymbolOptions" :key="item.value" :label="item.label"
             :value="item.value">
           </el-option>
@@ -108,10 +108,11 @@ export default {
         fullName: '',
         enCode: '',
         type: '',
-        conditionSymbol: [],
+        conditionSymbol: '',
         conditionText: '',
         description: ''
       },
+      conditionSymbol: [],
       dataRule: {
         enCode: [
           { required: true, message: '字段名称不能为空', trigger: 'blur' }
@@ -135,6 +136,7 @@ export default {
     init(moduleId, id) {
       this.dataForm.id = id || ''
       this.dataForm.moduleId = moduleId
+      this.conditionSymbol = []
       this.visible = true
       this.formLoading = true
       this.$nextTick(() => {
@@ -143,7 +145,7 @@ export default {
         if (this.dataForm.id) {
           getDataAuthorizeInfo(this.dataForm.id).then(res => {
             this.dataForm = res.data
-            this.dataForm.conditionSymbol = (res.data.conditionSymbol).split(",")
+            this.conditionSymbol = res.data.conditionSymbol ? res.data.conditionSymbol.split(",") : []
           })
         }
         this.formLoading = false
@@ -153,8 +155,7 @@ export default {
       this.$refs['dataForm'].validate((valid) => {
         if (valid) {
           this.btnLoading = true
-          const conditionSymbol = this.dataForm.conditionSymbol
-          this.dataForm.conditionSymbol = conditionSymbol.toString()
+          this.dataForm.conditionSymbol = this.conditionSymbol.join()
           const formMethod = this.dataForm.id ? updateDataAuthorize : createDataAuthorize
           formMethod(this.dataForm).then(res => {
             this.$message({

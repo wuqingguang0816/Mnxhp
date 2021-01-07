@@ -76,17 +76,17 @@
         </JNPF-table>
       </div>
     </div>
-    <JNPF-Form v-if="formVisible" ref="JNPFForm" @close="colseForm" />
+    <Form v-if="formVisible" ref="Form" @close="colseForm" />
   </div>
 </template>
 
 <script>
 import { getVisualDevList, Delete, Copy } from '@/api/onlineDev/visualDev'
-import JNPFForm from './form'
+import Form from './Form'
 export default {
-  name: 'OnlineDev-WebDesign',
+  name: 'onlineDev-webDesign',
   components: {
-    JNPFForm
+    Form
   },
   data() {
     return {
@@ -170,13 +170,13 @@ export default {
       }).catch(() => { });
     },
     preview(id) {
-      this.$router.push(`/PreviewModel?id=${id}`)
+      this.$router.push(`/previewModel?id=${id}`)
     },
     // 新增 / 修改
     addOrUpdateHandle(id, type) {
       this.formVisible = true
       this.$nextTick(() => {
-        this.$refs.JNPFForm.init(this.categoryList, id, type)
+        this.$refs.Form.init(this.categoryList, id, type)
       })
     },
     colseForm(isRefresh) {

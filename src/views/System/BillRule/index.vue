@@ -63,10 +63,10 @@ import {
   delBillRule,
   updateBillRuleState
 } from '@/api/system/billRule'
-import Form from './form'
+import Form from './Form'
 
 export default {
-  name: 'System-BillRule',
+  name: 'system-billRule',
   components: {
     Form
   },

@@ -65,7 +65,7 @@
 <script>
 import { QYUserList, QYUserSynchronization } from '@/api/weChat/QY'
 export default {
-  name: 'WeChat-QYUser',
+  name: 'weChat-qyUser',
   data() {
     return {
       keyword: '',

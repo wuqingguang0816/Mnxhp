@@ -53,7 +53,7 @@
 <script>
 import { QYDepartmentList, QYDSynchronization } from '@/api/weChat/QY'
 export default {
-  name: 'WeChat-QYDepartment',
+  name: 'weChat-qyDepartment',
   data() {
     return {
       keyword: '',

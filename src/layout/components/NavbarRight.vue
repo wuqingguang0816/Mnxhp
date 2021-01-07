@@ -27,7 +27,7 @@
         <i class="el-icon-arrow-down"></i>
       </div>
       <el-dropdown-menu slot="dropdown">
-        <router-link to="/Profile">
+        <router-link to="/profile">
           <el-dropdown-item>
             <i class="icon-ym icon-ym-header-userInfo"></i>{{ $t('navbar.profile') }}
           </el-dropdown-item>
@@ -82,8 +82,8 @@ import SizeSelect from '@/components/SizeSelect'
 import LangSelect from '@/components/LangSelect'
 import Search from '@/components/HeaderSearch'
 import MessageList from './MessageList'
-import Settings from './Settings'
-import UserList from './UserList/UserList'
+import Settings from './settings'
+import UserList from './userList/UserList'
 import elDragDialog from "@/directive/el-drag-dialog";
 import ReconnectingWebSocket from 'reconnecting-websocket'
 import { UserListAll } from '@/api/permission/user'

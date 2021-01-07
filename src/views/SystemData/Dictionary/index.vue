@@ -81,11 +81,11 @@ import {
   delDictionaryData,
   updateDictionaryState
 } from '@/api/systemData/dictionary'
-import Form from './form'
-import TypeList from './components/typeList'
+import Form from './Form'
+import TypeList from './components/index'
 
 export default {
-  name: 'Dictionary',
+  name: 'systemData-dictionary',
   components: {
     Form,
     TypeList

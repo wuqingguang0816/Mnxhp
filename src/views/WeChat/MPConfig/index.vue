@@ -33,7 +33,7 @@ import {
 } from '@/api/weChat/config'
 
 export default {
-  name: 'WeChat-MPConfig',
+  name: 'weChat-mpConfig',
   data() {
     return {
       activeName: 'first',

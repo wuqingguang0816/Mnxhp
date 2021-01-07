@@ -84,7 +84,7 @@
 import lineChart from '@/components/Charts/Normal'
 import { getSystemMonitor } from '@/api/system/monitor'
 export default {
-  name: 'SystemMonitor',
+  name: 'system-monitor',
   components: { lineChart },
   data() {
     return {

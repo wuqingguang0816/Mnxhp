@@ -198,7 +198,7 @@ import {
 } from '@/api/system/sysConfig'
 
 export default {
-  name: 'System-SysConfig',
+  name: 'system-sysConfig',
   data() {
     return {
       activeName: 'first',

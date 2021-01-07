@@ -101,7 +101,7 @@
 
 <script>
 import { isArray } from 'util'
-import { deepClone } from '@/utils/generator/index'
+import { deepClone } from '@/utils'
 import { dyOptionsList, useInputList, useTimeList, useSelectList } from '@/components/Generator/generator/comConfig'
 import { getDictionaryDataSelector } from '@/api/systemData/dictionary'
 import { previewDataInterface } from '@/api/systemData/dataInterface'

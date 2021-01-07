@@ -97,23 +97,20 @@
       </div>
     </div>
     <Form v-if="formVisible" ref="Form" @refreshDataList="initData" />
-    <ButtonAuthorizeListDrawer v-if="buttonAuthorizeListDrawer" ref="buttonAuthorizeList"
-      @refreshDataList="initData" />
-    <ColumnAuthorizeListDrawer v-if="columnAuthorizeListDrawer" ref="ColumnAuthorizeList"
-      @refreshDataList="initData" />
-    <DataAuthorizeListDrawer v-if="dataAuthorizeListDrawer" ref="DataAuthorizeList"
-      @refreshDataList="initData" />
+    <ButtonAuthorizeListDrawer v-if="buttonAuthorizeListDrawer" ref="buttonAuthorizeList" />
+    <ColumnAuthorizeListDrawer v-if="columnAuthorizeListDrawer" ref="ColumnAuthorizeList" />
+    <DataAuthorizeListDrawer v-if="dataAuthorizeListDrawer" ref="DataAuthorizeList" />
   </div>
 </template>
 <script>
 import { getMenuList, updateMenuState, delMenu } from '@/api/system/menu'
-import Form from './form'
-import ButtonAuthorizeListDrawer from './components/ButtonAuthorize/index'
-import ColumnAuthorizeListDrawer from './components/ColumnAuthorize/index'
-import DataAuthorizeListDrawer from './components/DataAuthorize/index'
+import Form from './Form'
+import ButtonAuthorizeListDrawer from './components/buttonAuthorize/index'
+import ColumnAuthorizeListDrawer from './components/columnAuthorize/index'
+import DataAuthorizeListDrawer from './components/dataAuthorize/index'
 
 export default {
-  name: 'System-Menu',
+  name: 'system-menu',
   components: {
     Form,
     ButtonAuthorizeListDrawer,

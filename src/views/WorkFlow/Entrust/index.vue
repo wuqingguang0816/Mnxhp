@@ -61,18 +61,16 @@
           :limit.sync="listQuery.pageSize" @pagination="initData" />
       </div>
     </div>
-    <JNPF-Form v-if="formVisible" ref="JNPFForm" @refreshDataList="reset" />
+    <Form v-if="formVisible" ref="Form" @refreshDataList="reset" />
   </div>
 </template>
 
 <script>
 import { FlowDelegateList, Delete } from '@/api/workFlow/FlowDelegate'
-import JNPFForm from './form'
+import Form from './Form'
 export default {
-  name: 'WorkFlow-Entrust',
-  components: {
-    JNPFForm
-  },
+  name: 'workFlow-entrust',
+  components: { Form },
   data() {
     return {
       keyword: '',
@@ -170,7 +168,7 @@ export default {
     addOrUpdateHandle(id) {
       this.formVisible = true
       this.$nextTick(() => {
-        this.$refs.JNPFForm.init(id)
+        this.$refs.Form.init(id)
       })
     },
   }

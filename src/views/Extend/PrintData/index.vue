@@ -19,14 +19,14 @@
 </template>
 
 <script>
-import offer from "./offer";
-import bill from "./bill";
-import record from "./record";
-import storage from "./storage";
+import offer from "./Offer";
+import bill from "./Bill";
+import record from "./Record";
+import storage from "./Storage";
 import printStyle from './printStyle'
 
 export default {
-  name: "Extend-PrintData",
+  name: "extend-printData",
   data() {
     return {
       activeName: "offer",

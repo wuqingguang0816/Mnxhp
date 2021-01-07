@@ -63,12 +63,12 @@
 import { getConfigData, getColumnData, getFormData, getModelList, deteleModel, importModel, exportModel } from '@/api/onlineDev/visualDev'
 import { getDictionaryDataSelector } from '@/api/systemData/dictionary'
 import Form from './Form'
-import Detail from './Detail'
+import Detail from './detail'
 import ImportBox from './ImportBox'
 import ExportBox from './ExportBox'
 import Search from './Search'
 export default {
-  name: 'DynamicModel',
+  name: 'dynamicModel',
   components: { Form, ImportBox, ExportBox, Search, Detail },
   data() {
     return {

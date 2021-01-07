@@ -60,7 +60,7 @@ import { getRoleSelector } from '@/api/permission/role'
 import { getAuthorizeValues, updateBatchAuthorize } from '@/api/permission/authorize'
 
 export default {
-  name: 'Permission-Authorize',
+  name: 'permission-authorize',
   data() {
     return {
       active: 0,

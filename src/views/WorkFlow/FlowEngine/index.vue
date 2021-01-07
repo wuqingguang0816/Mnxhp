@@ -108,18 +108,18 @@
         </JNPF-table>
       </div>
     </div>
-    <JNPF-Form v-if="formVisible" ref="JNPFForm" @close="colseForm" />
+    <Form v-if="formVisible" ref="Form" @close="colseForm" />
     <preview v-if="previewVisible" ref="preview" @close="previewVisible=false" />
   </div>
 </template>
 
 <script>
 import { FlowEngineList, Delete, Release, Stop, Copy } from '@/api/workFlow/FlowEngine'
-import JNPFForm from './form'
-import preview from '../fromBox/preview'
+import Form from './Form'
+import preview from '../fromBox/Preview'
 export default {
-  name: 'WorkFlow-FlowEngine',
-  components: { JNPFForm, preview },
+  name: 'workFlow-flowEngine',
+  components: { Form, preview },
   data() {
     return {
       keyword: '',
@@ -180,7 +180,7 @@ export default {
     addOrUpdateHandle(id, formType) {
       this.formVisible = true
       this.$nextTick(() => {
-        this.$refs.JNPFForm.init(this.categoryList, id, formType)
+        this.$refs.Form.init(this.categoryList, id, formType)
       })
     },
     copy(id) {

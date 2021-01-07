@@ -108,9 +108,9 @@
 <script>
 import { getVisualDevInfo, Update, Create } from '@/api/onlineDev/visualDev'
 import { DbTableFieldList } from '@/api/systemData/dbTable'
-import Generator from '../../Generator/index/Home'
+import Generator from '@/components/Generator/index/Home'
 import ColumnDesign from '@/components/ColumnDesign/index'
-import TableForm from '@/views/CodeGenerator/tableForm'
+import TableForm from '@/views/generator/TableForm'
 export default {
   components: { Generator, ColumnDesign, TableForm },
   data() {

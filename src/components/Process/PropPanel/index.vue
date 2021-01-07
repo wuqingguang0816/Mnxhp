@@ -212,7 +212,7 @@
 <script>
 import Clickoutside from "element-ui/src/utils/clickoutside"
 import { NodeUtils } from "../FlowCard/util.js"
-import { getDrawingList } from '@/utils/generator/db'
+import { getDrawingList } from '@/components/Generator/utils/db'
 import OrgSelect from '../OrgSelect'
 
 const defaultInitForm = {

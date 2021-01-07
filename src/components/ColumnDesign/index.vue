@@ -70,12 +70,14 @@
             <el-divider>列表布局</el-divider>
             <div class="typeList">
               <div class="item" v-for="(item, index) in typeList" :key="index"
-                :class="{'checked':columnData.type==item.value}"
                 @click="columnData.type=item.value">
-                <img :src="item.url" alt="">
-                <div class="icon-checked" v-if="columnData.type==item.value">
-                  <i class="el-icon-check"></i>
+                <div class="item-img" :class="{'checked':columnData.type==item.value}">
+                  <img :src="item.url" alt="">
+                  <div class="icon-checked" v-if="columnData.type==item.value">
+                    <i class="el-icon-check"></i>
+                  </div>
                 </div>
+                <p class="item-name">{{item.name}}</p>
               </div>
             </div>
             <el-divider class="typeLine">排序设置</el-divider>
@@ -196,8 +198,8 @@
 </template>
 <script>
 import Sortable from 'sortablejs'
-import { getDrawingList } from '@/utils/generator/db'
-import { deepClone } from '@/utils/generator/index'
+import { getDrawingList } from '@/components/Generator/utils/db'
+import { deepClone } from '@/utils'
 import { noColumnShowList, noSearchList } from '@/components/Generator/generator/comConfig'
 const defaultColumnData = {
   searchList: [], // 查询条件
@@ -256,9 +258,9 @@ export default {
       btnsList: [],
       columnBtnsList: [],
       typeList: [
-        { url: require('@/assets/images/generator/columnType1.png'), value: 1 },
-        { url: require('@/assets/images/generator/columnType2.png'), value: 2 },
-        { url: require('@/assets/images/generator/columnType3.png'), value: 3 },
+        { url: require('@/assets/images/generator/columnType1.png'), value: 1, name: '普通表格' },
+        { url: require('@/assets/images/generator/columnType2.png'), value: 2, name: '左侧树形+普通表格' },
+        { url: require('@/assets/images/generator/columnType3.png'), value: 3, name: '分组表格' },
         // { url: require('@/assets/images/generator/columnType4.png'), value: 4 },
       ]
     }

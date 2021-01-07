@@ -56,7 +56,7 @@ export const constantRoutes = [{
   },
   {
     path: '/lockScreen',
-    component: (resolve) => require(['@/views/Basic/LockScreen'], resolve),
+    component: (resolve) => require(['@/views/basic/lockScreen'], resolve),
     hidden: true
   },
   {

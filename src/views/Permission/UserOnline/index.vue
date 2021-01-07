@@ -56,7 +56,7 @@ import {
 } from '@/api/permission/onlineUser'
 
 export default {
-  name: 'Permission-UserOnline',
+  name: 'permission-userOnline',
   data() {
     return {
       formVisible: false,

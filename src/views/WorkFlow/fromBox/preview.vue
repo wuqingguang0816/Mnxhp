@@ -29,9 +29,9 @@ export default {
     init(data) {
       this.setting = data
       if (data.formType == 1) {
-        this.currentView = (resolve) => require([`@/views/WorkFlowForm/${data.enCode}`], resolve)
+        this.currentView = (resolve) => require([`@/views/workFlow/workFlowForm/${data.enCode}`], resolve)
       } else {
-        this.currentView = (resolve) => require([`@/views/WorkFlowForm/DynamicForm`], resolve)
+        this.currentView = (resolve) => require([`@/views/workFlow/workFlowForm/dynamicForm`], resolve)
       }
       setTimeout(() => {
         this.$nextTick(() => {

@@ -1,8 +1,7 @@
 <template>
   <div>
     <el-drawer :title="dialogTitle" :visible.sync="buttonAuthorizeListDrawer"
-      :wrapperClosable="false" ref="drawer" size="700px" :before-close="handleDrawerClose"
-      class="JNPF-common-drawer">
+      :wrapperClosable="false" ref="drawer" size="700px" class="JNPF-common-drawer">
       <div class="JNPF-flex-main">
         <div class="JNPF-common-head">
           <topOpts @add="handleAddEdit('')" addPerCode="btn_btnPer_add" />
@@ -53,7 +52,7 @@ import {
   updateButtonState,
   delButton
 } from '@/api/system/buttonAuthorize'
-import ButtonAuthorizeForm from './form'
+import ButtonAuthorizeForm from './Form'
 
 export default {
   components: {
@@ -136,10 +135,6 @@ export default {
           })
         })
       }).catch(() => { })
-    },
-    handleDrawerClose(done) {
-      done();
-      this.$emit('refreshDataList')
     }
   }
 }

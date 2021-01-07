@@ -1,8 +1,7 @@
 <template>
   <div>
     <el-drawer :title="dialogTitle" :visible.sync="columnAuthorizeListDrawer"
-      :wrapperClosable="false" ref="drawer" size="700px" :before-close="handleDrawerClose"
-      class="JNPF-common-drawer">
+      :wrapperClosable="false" ref="drawer" size="700px" class="JNPF-common-drawer">
       <div class="JNPF-flex-main">
         <div class="JNPF-common-head">
           <topOpts @add="handleAddEdit('')" addPerCode="btn_columnPer_add">
@@ -53,8 +52,8 @@ import {
   updateColumnState,
   delColumn
 } from '@/api/system/columnAuthorize'
-import ColumnAuthorizeForm from './form'
-import ColumnAuthorizeBatchForm from './batchForm'
+import ColumnAuthorizeForm from './Form'
+import ColumnAuthorizeBatchForm from './BatchForm'
 
 export default {
   components: {
@@ -144,10 +143,6 @@ export default {
           })
         })
       }).catch(() => { })
-    },
-    handleDrawerClose(done) {
-      done();
-      this.$emit('refreshDataList')
     }
   }
 }

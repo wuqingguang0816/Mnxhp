@@ -51,19 +51,15 @@
 </template>
 
 <script>
-import JNPFForm from './form'
 import {
   getOrganizeList,
   delOrganize
 } from '@/api/permission/organize'
-import Form from './form'
+import Form from './Form'
 
 export default {
-  name: 'Permission-Organize',
-  components: {
-    Form,
-    JNPFForm
-  },
+  name: 'permission-organize',
+  components: { Form },
   data() {
     return {
       params: {

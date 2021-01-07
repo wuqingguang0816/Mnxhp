@@ -248,11 +248,11 @@
 
 <script>
 import { AllList, Create, Delete, Download, DocumentInfo, ShareCancel, ShareOutList, ShareTomeList, TrashDelete, TrashList, TrashRecovery, Update } from '@/api/extend/document'
-import userBox from './userBox'
-import folderTree from './folderTree'
+import userBox from './UserBox'
+import folderTree from './FolderTree'
 
 export default {
-  name: 'Extend-Document',
+  name: 'extend-document',
   components: { userBox, folderTree },
   data() {
     return {

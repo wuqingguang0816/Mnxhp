@@ -131,9 +131,9 @@
 <script>
 import { FlowBeforeList, Revoke } from '@/api/workFlow/FlowBefore'
 import { FlowEngineListAll } from '@/api/workFlow/FlowEngine'
-import fromBox from '../fromBox/audit'
+import fromBox from '../fromBox/Audit'
 export default {
-  name: 'WorkFlow-FlowTodo',
+  name: 'workFlow-flowTodo',
   components: { fromBox },
   data() {
     return {

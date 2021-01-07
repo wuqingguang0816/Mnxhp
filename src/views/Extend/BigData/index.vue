@@ -46,7 +46,7 @@
 <script>
 import { BigDataList, BigDataCreate } from '@/api/extend/bigData'
 export default {
-  name: 'Extend-BigData',
+  name: 'extend-bigData',
   data() {
     return {
       keyword: '',

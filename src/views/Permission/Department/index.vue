@@ -71,10 +71,10 @@ import {
   delDepartment
 } from '@/api/permission/department'
 
-import Form from './form'
+import Form from './Form'
 
 export default {
-  name: 'Permission-Department',
+  name: 'permission-department',
   components: {
     Form
   },

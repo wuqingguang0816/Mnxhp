@@ -83,10 +83,10 @@
 </template>
 <script>
 import VueDragResize from 'vue-drag-resize'
-import printStyle from '../PrintData/printStyle'
+import printStyle from '../printData/printStyle'
 
 export default {
-  name: 'Extend-Signet',
+  name: 'extend-signet',
   data() {
     return {
       showSign: true,

@@ -40,9 +40,9 @@ export default {
     init(data) {
       this.activeTab = '0'
       if (data.formType == 1) {
-        this.currentView = (resolve) => require([`@/views/WorkFlowForm/${data.enCode}`], resolve)
+        this.currentView = (resolve) => require([`@/views/workFlow/workFlowForm/${data.enCode}`], resolve)
       } else {
-        this.currentView = (resolve) => require([`@/views/WorkFlowForm/DynamicForm`], resolve)
+        this.currentView = (resolve) => require([`@/views/workFlow/workFlowForm/dynamicForm`], resolve)
       }
       this.setting = data
       this.getInfo(data)

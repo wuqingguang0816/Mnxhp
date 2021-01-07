@@ -87,7 +87,7 @@
 import { getLogList, delLog } from '@/api/system/log'
 
 export default {
-  name: 'System-Log',
+  name: 'system-log',
   data() {
     return {
       delBtn: false,

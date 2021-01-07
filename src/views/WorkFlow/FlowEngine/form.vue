@@ -154,9 +154,9 @@ import { FlowEngineFormListAll } from '@/api/workFlow/FlowEngineForm'
 import { DbTableFieldList } from '@/api/systemData/dbTable'
 import iconBox from '@/components/JNPF-iconBox'
 import Process from "@/components/Process";
-import Generator from '../../Generator/index/Home'
-import FieldForm from './fieldForm'
-import TableForm from '@/views/CodeGenerator/tableForm'
+import Generator from '@/components/Generator/index/Home'
+import FieldForm from './FieldForm'
+import TableForm from '@/views/generator/TableForm'
 
 export default {
   components: { iconBox, Process, Generator, FieldForm, TableForm },
@@ -218,9 +218,6 @@ export default {
       formList: [],
       formType: '系统表单'
     }
-  },
-  created() {
-    this.$store.dispatch('base/getPositionList')
   },
   methods: {
     init(categoryList, id, formType) {

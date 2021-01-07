@@ -99,7 +99,7 @@
 <script>
 import { TreeViewUsers, Preview, Sent } from '@/api/weChat/MPMessage'
 import { TagsTree } from '@/api/weChat/MPTag'
-import userBox from './userBox'
+import userBox from './UserBox'
 export default {
   components: { userBox },
   data() {

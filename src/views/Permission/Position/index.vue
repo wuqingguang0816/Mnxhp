@@ -89,11 +89,11 @@
 <script>
 import { getDepartmentSelector } from '@/api/permission/department'
 import { getPositionList, delPosition } from '@/api/permission/position'
-import Form from './form'
-import UserRelationList from '@/views/Permission/UserRelation/selector'
+import Form from './Form'
+import UserRelationList from '@/views/permission/userRelation/Selector'
 
 export default {
-  name: 'Permission-Position',
+  name: 'permission-position',
   components: { Form, UserRelationList },
   data() {
     return {

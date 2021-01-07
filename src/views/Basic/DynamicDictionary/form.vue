@@ -41,7 +41,6 @@ import {
 } from '@/api/systemData/dictionary'
 
 export default {
-  name: 'SystemData-Dictionary',
   data() {
     return {
       visible: false,

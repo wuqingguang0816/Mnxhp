@@ -67,18 +67,16 @@
         </el-tabs>
       </div>
     </div>
-    <JNPF-Form v-if="formVisible" ref="JNPFForm" @refreshDataList="initData" />
+    <Form v-if="formVisible" ref="Form" @refreshDataList="initData" />
   </div>
 </template>
 
 <script>
 import { getMessageList, MessageDeleteRecord } from '@/api/system/message'
-import JNPFForm from './form'
+import Form from './Form'
 export default {
-  name: 'MessageRecord',
-  components: {
-    JNPFForm
-  },
+  name: 'messageRecord',
+  components: { Form },
   data() {
     return {
       visible: false,
@@ -160,7 +158,7 @@ export default {
       this.formVisible = true
       item.isRead = '1'
       this.$nextTick(() => {
-        this.$refs.JNPFForm.init(item.id)
+        this.$refs.Form.init(item.id)
       })
     }
   }

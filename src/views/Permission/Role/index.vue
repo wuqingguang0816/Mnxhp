@@ -95,9 +95,9 @@ import {
   delRole,
   updateRoleState
 } from '@/api/permission/role'
-import Form from './form'
-import AuthorizeForm from '@/views/Permission/Authorize/authorizeForm'
-import UserRelationList from '@/views/Permission/UserRelation/selector'
+import Form from './Form'
+import AuthorizeForm from '@/views/permission/authorize/AuthorizeForm'
+import UserRelationList from '@/views/permission/userRelation/Selector'
 
 export default {
   components: {
@@ -105,7 +105,7 @@ export default {
     AuthorizeForm,
     UserRelationList
   },
-  name: 'Permission-Role',
+  name: 'permission-role',
   data() {
     return {
       params: {

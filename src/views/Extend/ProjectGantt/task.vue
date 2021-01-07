@@ -72,7 +72,7 @@
             </template>
           </el-table-column>
         </JNPF-table>
-        <JNPF-Form v-if="formVisible" ref="JNPFForm" @refreshDataList="reset" />
+        <Form v-if="formVisible" ref="Form" @refreshDataList="reset" />
       </div>
     </div>
   </transition>
@@ -84,9 +84,9 @@ const uuidv4 = require("uuid/v4"); // 导入uuid生成插件
 import isBetween from "dayjs/plugin/isBetween";
 dayjs.extend(isBetween);
 import { TaskList, Delete } from '@/api/extend/projectGantt'
-import JNPFForm from './taskForm'
+import Form from './TaskForm'
 export default {
-  components: { JNPFForm },
+  components: { Form },
   data() {
     return {
       keyword: '',
@@ -201,7 +201,7 @@ export default {
     addOrUpdateHandle(id) {
       this.formVisible = true
       this.$nextTick(() => {
-        this.$refs.JNPFForm.init(this.projectId, id, this.managerIds)
+        this.$refs.Form.init(this.projectId, id, this.managerIds)
       })
     },
     /**

@@ -125,22 +125,22 @@
           :limit.sync="listQuery.pageSize" @pagination="initData" />
       </div>
     </div>
-    <JNPF-Form v-show="formVisible" ref="JNPFForm" @close="colseForm" />
-    <detail v-show="detailVisible" ref="detail" @close="detailVisible=false" />
-    <userBox v-if="userBoxVisible" ref="userBox" @refresh="initData" />
+    <Form v-show="formVisible" ref="Form" @close="colseForm" />
+    <Detail v-show="detailVisible" ref="detail" @close="detailVisible=false" />
+    <UserBox v-if="userBoxVisible" ref="userBox" @refresh="initData" />
     <ApprovalBox v-if="approvalVisible" ref="approval" @close="approvalVisible=false" />
   </div>
 </template>
 
 <script>
 import { OrderList, Delete, OrderEntryList, OrderReceivableList, FlowRevoke } from '@/api/extend/order'
-import JNPFForm from './form'
-import detail from './detail'
-import userBox from './userBox'
-import ApprovalBox from '@/views/WorkFlow/fromBox/audit'
+import Form from './Form'
+import Detail from './Detail'
+import UserBox from './UserBox'
+import ApprovalBox from '@/views/workFlow/fromBox/Audit'
 export default {
-  name: 'Extend-Order',
-  components: { JNPFForm, detail, userBox, ApprovalBox },
+  name: 'extend-order',
+  components: { Form, Detail, UserBox, ApprovalBox },
   data() {
     return {
       keyword: '',
@@ -286,7 +286,7 @@ export default {
     addOrUpdateHandle(id) {
       this.formVisible = true
       this.$nextTick(() => {
-        this.$refs.JNPFForm.init(id)
+        this.$refs.Form.init(id)
       })
     },
     toApprovalDetail(id) {

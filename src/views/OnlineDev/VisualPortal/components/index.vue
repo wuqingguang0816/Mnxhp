@@ -67,9 +67,9 @@
 </template>
 <script>
 import VueGridLayout from 'vue-grid-layout'
-import { deepClone } from '@/utils/generator/index'
-import { basicComponents, countComponents, chartComponents } from './config'
-import Preview from './preview'
+import { deepClone } from '@/utils'
+import { basicComponents, chartComponents } from './config'
+import Preview from './Preview'
 import RightPanel from './RightPanel'
 const defaultConf = {
   layouyId: 100,
@@ -89,7 +89,6 @@ export default {
     return {
       leftComponents: [
         { title: '基础控件', list: basicComponents },
-        { title: '计算控件', list: countComponents },
         { title: '图表控件', list: chartComponents }
       ],
       layout: [],

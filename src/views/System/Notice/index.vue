@@ -73,11 +73,11 @@
 
 <script>
 import { getNoticeList, delNotice, releaseNotice } from '@/api/system/message'
-import Form from './form'
-import ViewNotice from './view'
+import Form from './Form'
+import ViewNotice from './View'
 
 export default {
-  name: 'System-Notice',
+  name: 'system-notice',
   components: { Form, ViewNotice },
   data() {
     return {

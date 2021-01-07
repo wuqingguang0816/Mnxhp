@@ -58,10 +58,10 @@
 
 <script>
 import { getMapList, delMap, updateMapState } from '@/api/onlineDev/map'
-import Form from './form'
+import Form from './Form'
 
 export default {
-  name: 'SystemData-Map',
+  name: 'systemData-map',
   components: {
     Form
   },

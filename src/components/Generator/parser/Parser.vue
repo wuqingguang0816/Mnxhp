@@ -1,5 +1,5 @@
 <script>
-import { deepClone } from '@/utils/generator/index'
+import { deepClone } from '@/utils'
 import render from '@/components/Generator/render/render.js'
 import { ruleTrigger, dyOptionsList } from '@/components/Generator/generator/comConfig'
 import { getDictionaryDataSelector } from '@/api/systemData/dictionary'

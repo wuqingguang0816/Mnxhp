@@ -139,9 +139,9 @@
 import { FlowMonitorList, DeleteList } from '@/api/workFlow/FlowMonitor'
 import { Cancel } from '@/api/workFlow/FlowBefore'
 import { FlowEngineListAll } from '@/api/workFlow/FlowEngine'
-import fromBox from '../fromBox/audit'
+import fromBox from '../fromBox/Audit'
 export default {
-  name: 'WorkFlow-FlowMonitor',
+  name: 'workFlow-flowMonitor',
   components: { fromBox },
   data() {
     return {

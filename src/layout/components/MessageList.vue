@@ -99,12 +99,21 @@ export default {
           item.isRead = '1'
           this.$emit('read')
         }
-        this.visible = true
+        if (item.type == 1) {
+          this.visible = true
+        } else {
+          let body = this.info.bodyText ? JSON.parse(this.info.bodyText) : {}
+          let url = 'flowLaunch'
+          if (body.type == 2) url = 'flowTodo'
+          if (body.type == 3) url = 'flowCirculate'
+          this.drawer = false
+          this.$router.push(`/workFlow/${url}`)
+        }
       })
     },
     gotoCenter() {
       this.drawer = false
-      this.$router.push('/MessageRecord')
+      this.$router.push('/messageRecord')
     },
     readAll() {
       this.$confirm('您确定全部为已读状态, 是否继续?', '提示', {

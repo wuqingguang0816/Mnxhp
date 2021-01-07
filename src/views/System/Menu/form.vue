@@ -190,7 +190,7 @@ export default {
             const menuType = this.dataForm.type
             this.oldUrlAddress = res.data.urlAddress
             this.switchType(menuType)
-            this.formLoading = false
+            this.$nextTick(() => { this.formLoading = false })
           }).catch(() => { })
         }
 
@@ -355,22 +355,22 @@ export default {
               this.dataForm.isButtonAuthorize = 1
               this.dataForm.isColumnAuthorize = 1
               this.dataForm.isDataAuthorize = 1
-              this.dataForm.urlAddress = `Model/${menuEnCode}`
+              this.dataForm.urlAddress = `model/${menuEnCode}`
               this.dataForm.linkTarget = '_self'
               break
             case '4': // 字典
               this.dataForm.isButtonAuthorize = 1
               this.dataForm.isColumnAuthorize = 1
               this.dataForm.isDataAuthorize = 1
-              this.dataForm.urlAddress = `Dictionary/${menuEnCode}`
+              this.dataForm.urlAddress = `dictionary/${menuEnCode}`
               this.dataForm.linkTarget = '_self'
               break
             case '5': // 报表
-              this.dataForm.urlAddress = `DataReport/${menuEnCode}`
+              this.dataForm.urlAddress = `dataReport/${menuEnCode}`
               this.dataForm.linkTarget = '_self'
               break
             case '6': // 大屏
-              this.dataForm.urlAddress = `DataV/${menuEnCode}`
+              this.dataForm.urlAddress = `dataScreen/${menuEnCode}`
               this.dataForm.linkTarget = '_blank'
               break
           }

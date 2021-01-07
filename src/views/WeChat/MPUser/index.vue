@@ -102,9 +102,9 @@
 <script>
 import { MPTagList, DeleteTag, UpdateTag } from '@/api/weChat/MPTag'
 import { MPUserList, UpdateRemark, AddBatchBlack, DeleteBatchUnBlack } from '@/api/weChat/MPUser'
-import tagTree from './tagTree'
+import tagTree from './TagTree'
 export default {
-  name: 'WeChat-MPUser',
+  name: 'weChat-mpUser',
   components: { tagTree },
   data() {
     return {

@@ -38,7 +38,7 @@
 
 <script>
 import { getDataChange, getConfigData } from '@/api/onlineDev/visualDev'
-import { deepClone } from '@/utils/generator/index'
+import { deepClone } from '@/utils'
 import Parser from './Parser'
 export default {
   name: 'Detail',

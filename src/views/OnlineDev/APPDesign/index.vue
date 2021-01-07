@@ -76,7 +76,7 @@
         </JNPF-table>
       </div>
     </div>
-    <JNPF-Form v-if="formVisible" ref="JNPFForm" @close="colseForm" />
+    <Form v-if="formVisible" ref="Form" @close="colseForm" />
     <el-dialog :close-on-click-modal="false" :modal-append-to-body="false"
       :visible.sync="previewVisible" class="JNPF-dialog JNPF-dialog_center code-dialog" title="预览"
       width="400px" @opened="getQRimg">
@@ -90,11 +90,11 @@
 
 <script>
 import { getVisualDevList, Delete, Copy, Preview } from '@/api/onlineDev/visualDev';
-import JNPFForm from './form'
+import Form from './Form'
 import QRCode from 'qrcodejs2'
 export default {
-  name: 'OnlineDev-AppDesign',
-  components: { JNPFForm },
+  name: 'onlineDev-appDesign',
+  components: { Form },
   data() {
     return {
       query: { keyword: '', type: 2 },
@@ -197,7 +197,7 @@ export default {
     addOrUpdateHandle(id, type) {
       this.formVisible = true
       this.$nextTick(() => {
-        this.$refs.JNPFForm.init(this.categoryList, id, type)
+        this.$refs.Form.init(this.categoryList, id, type)
       })
     },
     colseForm(isRefresh) {

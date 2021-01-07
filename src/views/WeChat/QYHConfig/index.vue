@@ -39,7 +39,7 @@ import {
 } from '@/api/weChat/config'
 
 export default {
-  name: 'WeChat-QYHConfig',
+  name: 'weChat-qyhConfig',
   data() {
     return {
       activeName: 'first',

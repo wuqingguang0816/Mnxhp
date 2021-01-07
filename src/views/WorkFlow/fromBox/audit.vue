@@ -48,7 +48,7 @@
 <script>
 import { FlowBeforeInfo, Audit, Reject } from '@/api/workFlow/FlowBefore'
 import { Revoke } from '@/api/workFlow/FlowLaunch'
-import recordList from './recordList'
+import recordList from './RecordList'
 import Process from '@/components/Process/Preview'
 export default {
   components: { recordList, Process },
@@ -82,9 +82,9 @@ export default {
     init(data) {
       this.activeTab = '0'
       if (data.formType == 1) {
-        this.currentView = (resolve) => require([`@/views/WorkFlowForm/${data.enCode}`], resolve)
+        this.currentView = (resolve) => require([`@/views/workFlow/workFlowForm/${data.enCode}`], resolve)
       } else {
-        this.currentView = (resolve) => require([`@/views/WorkFlowForm/DynamicForm`], resolve)
+        this.currentView = (resolve) => require([`@/views/workFlow/workFlowForm/dynamicForm`], resolve)
       }
       this.setting = data
       this.getInfo(data)
@@ -183,7 +183,7 @@ export default {
       }
     },
     revoke() {
-      this.$prompt('', "撤回审核", {
+      this.$prompt('', "撤回流程", {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         inputPlaceholder: '请输入撤回原因（必填）',

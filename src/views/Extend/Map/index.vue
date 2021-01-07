@@ -8,7 +8,7 @@
 
 
 export default {
-  name: 'Extend-Map',
+  name: 'extend-map',
   data() {
     return {
       key: ''

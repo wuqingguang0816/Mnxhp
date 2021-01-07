@@ -1,5 +1,5 @@
 import { isArray } from 'util'
-import { exportDefault, titleCase, deepClone } from '@/utils/generator/index'
+import { exportDefault, titleCase, deepClone } from '@/components/Generator/utils'
 import ruleTrigger from './ruleTrigger'
 
 const units = {

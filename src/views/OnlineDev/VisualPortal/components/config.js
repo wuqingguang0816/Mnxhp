@@ -65,26 +65,25 @@ export const basicComponents = [{
     minH: 7,
     maxW: 12,
     maxH: 7
+  },
+  {
+    icon: 'icon-ym icon-ym-generator-Panel',
+    label: '数据计算',
+    jnpfKey: 'dataBoard',
+    list: [
+      { fullName: "新增客户（个）", num: 262, icon: "icon-ym icon-ym-wf-contractApproval" },
+      { fullName: "新增商机（个）", num: 199, icon: "icon-ym icon-ym-wf-outgoingApply" },
+      { fullName: "合同金额（元）", num: 1236263.05, icon: "icon-ym icon-ym-wf-payDistribution" },
+      { fullName: "回款金额（元）", num: 6223.23, icon: "icon-ym icon-ym-wf-incomeRecognition" }
+    ],
+    w: 12,
+    h: 3,
+    minW: 12,
+    minH: 3,
+    maxW: 12,
+    maxH: 6
   }
 ]
-// 计算控件 【左面板】
-export const countComponents = [{
-  icon: 'icon-ym icon-ym-generator-Panel',
-  label: '数据计算',
-  jnpfKey: 'dataBoard',
-  list: [
-    { fullName: "新增客户（个）", num: 262, icon: "icon-ym icon-ym-wf-contractApproval" },
-    { fullName: "新增商机（个）", num: 199, icon: "icon-ym icon-ym-wf-outgoingApply" },
-    { fullName: "合同金额（元）", num: 1236263.05, icon: "icon-ym icon-ym-wf-payDistribution" },
-    { fullName: "回款金额（元）", num: 6223.23, icon: "icon-ym icon-ym-wf-incomeRecognition" }
-  ],
-  w: 12,
-  h: 3,
-  minW: 12,
-  minH: 3,
-  maxW: 12,
-  maxH: 6
-}]
 // 图表控件 【左面板】
 export const chartComponents = [{
     icon: 'icon-ym icon-ym-generator-bar',

@@ -95,15 +95,15 @@ import {
   delDataReport
 } from '@/api/onlineDev/dataReport'
 import { reportServer } from '@/utils/define'
-import Form from './form'
-import Preview from './preview'
+import Form from './Form'
+import Preview from './Preview'
 
 export default {
   components: {
     Form,
     Preview
   },
-  name: 'OnlineDev-DataReport',
+  name: 'onlineDev-dataReport',
   data() {
     return {
       defaultProps: {

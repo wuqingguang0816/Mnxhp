@@ -52,17 +52,17 @@
         </JNPF-table>
       </div>
     </div>
-    <JNPF-Form v-if="formVisible" ref="JNPFForm" @refreshDataList="reset" />
+    <Form v-if="formVisible" ref="Form" @refreshDataList="reset" />
   </div>
 </template>
 
 <script>
 import { MPMenuList, MPMenuDelete } from '@/api/weChat/MPMenu'
-import JNPFForm from './form'
+import Form from './Form'
 export default {
-  name: 'WeChat-MPMenu',
+  name: 'weChat-mpMenu',
   components: {
-    JNPFForm
+    Form
   },
   data() {
     return {
@@ -116,7 +116,7 @@ export default {
     addOrUpdateHandle(id) {
       this.formVisible = true
       this.$nextTick(() => {
-        this.$refs.JNPFForm.init(id)
+        this.$refs.Form.init(id)
       })
     },
   }

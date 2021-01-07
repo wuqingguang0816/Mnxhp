@@ -54,10 +54,10 @@
 
 <script>
 import { getDictionaryDataList, delDictionaryData, updateDictionaryState } from '@/api/systemData/dictionary'
-import Form from './form'
+import Form from './Form'
 
 export default {
-  name: 'DynamicDictionary',
+  name: 'dynamicDictionary',
   components: { Form },
   data() {
     return {

@@ -48,17 +48,17 @@
           @pagination="initData" />
       </div>
     </div>
-    <JNPFform v-show="formVisible" ref="JNPFform" @close="formVisible=false" @refresh="refresh" />
+    <Form v-show="formVisible" ref="Form" @close="formVisible=false" @refresh="refresh" />
   </div>
 </template>
 
 <script>
 import { QYMessageList } from '@/api/weChat/QY'
-import JNPFform from './form'
+import Form from './Form'
 
 export default {
-  name: 'WeChat-QYMessage',
-  components: { JNPFform },
+  name: 'weChat-qyMessage',
+  components: { Form },
   data() {
     return {
       formVisible: false,
@@ -180,7 +180,7 @@ export default {
     addOrUpdateHandle() {
       this.formVisible = true
       this.$nextTick(() => {
-        this.$refs.JNPFform.init()
+        this.$refs.Form.init()
       })
     },
     reset() {

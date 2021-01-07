@@ -117,18 +117,18 @@
           :limit.sync="listQuery.pageSize" @pagination="initData" />
       </el-tab-pane>
     </el-tabs>
-    <JNPFform v-show="formVisible" ref="JNPFform" @close="formVisible=false" @refresh="refresh" />
+    <Form v-show="formVisible" ref="Form" @close="formVisible=false" @refresh="refresh" />
   </div>
 </template>
 
 <script>
 import { MPMaterialList, DeleteForeverMedia } from '@/api/weChat/MPMaterial'
-import JNPFform from './form'
+import Form from './Form'
 import JNPFenlarge from "@/components/JNPF-enlarge";
 
 export default {
-  name: 'WeChat-MPMaterial',
-  components: { JNPFform, JNPFenlarge },
+  name: 'weChat-mpMaterial',
+  components: { Form, JNPFenlarge },
   data() {
     return {
       formVisible: false,
@@ -186,7 +186,7 @@ export default {
     addOrUpdateHandle() {
       this.formVisible = true
       this.$nextTick(() => {
-        this.$refs.JNPFform.init()
+        this.$refs.Form.init()
       })
     },
     refresh() {
