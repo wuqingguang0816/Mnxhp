@@ -1,0 +1,124 @@
+// 规则
+const ruleTrigger = {
+  'el-input': 'blur',
+  'el-input-number': 'blur',
+  'el-select': 'change',
+  'el-radio-group': 'change',
+  'el-checkbox-group': 'change',
+  'el-cascader': 'change',
+  'el-time-picker': 'change',
+  'el-date-picker': 'change',
+  'el-rate': 'change',
+  'el-color-picker': 'change',
+  'JNPF-Quill': 'blur',
+  "JNPF-Text": 'blur',
+  "JNPF-Amount": 'change',
+  "JNPF-UploadFz": 'change',
+  "JNPF-UploadImg": 'change',
+  "com-select": 'change',
+  "dep-select": 'change',
+  "pos-select": 'change',
+  "user-select": 'change',
+  "dic-select": 'change',
+  "JNPF-Address": 'change',
+}
+// 动态options
+const dyOptionsList = ['radio', 'checkbox', 'select', 'cascader', 'treeSelect']
+// 不添加vModel
+const noVModelList = ['divider', 'JNPFText', 'groupTitle', 'relationFormAttr', 'relationFlowAttr']
+// 不可以添加到子表组件
+const noTableAllowList = ['textarea', 'JNPFText', 'JNPFAmount', 'divider', 'editor', 'uploadImg', 'uploadFz', 'radio', 'checkbox', 'relationForm', 'relationFormAttr', 'relationFlow', 'relationFlowAttr', 'groupTitle', 'createUser', 'createTime', 'modifyUser', 'modifyTime', 'currOrganize', 'currDept', 'currPosition', 'rate', 'slider', 'PsdInput']
+// 不可以添加到列表展示
+const noColumnShowList = ['PsdInput', 'colorPicker', 'rate', 'slider', 'divider', 'uploadImg', 'uploadFz', 'editor', 'JNPFText', 'relationFormAttr', 'relationFlowAttr', 'groupTitle']
+// 不可以添加到搜索
+const noSearchList = [...noColumnShowList, 'switch', 'timeRange', 'dateRange', 'relationForm', 'relationFlow']
+// 搜索时控件为input
+const useInputList = ['comInput', 'textarea', 'JNPFText', 'numInput', 'JNPFAmount', 'billRule', 'createUser', 'modifyUser', 'currOrganize', 'currDept', 'currPosition']
+// 搜索时控件为时间选择器
+const useTimeList = ['createTime', 'modifyTime']
+// 搜索时控件为下拉选择器
+const useSelectList = ['radio', 'checkbox', 'select']
+// 在线开发-功能设计/流程设计独有组件
+const webPeculiarList = [{
+    __config__: {
+      label: '关联表单',
+      showLabel: true,
+      changeTag: true,
+      labelWidth: null,
+      defaultValue: '',
+      required: false,
+      tag: 'relationForm',
+      tagIcon: 'icon-ym icon-ym-generator-menu',
+      span: 24,
+      layout: 'colFormItem',
+      dragDisabled: false,
+      jnpfKey: 'relationForm'
+    },
+    placeholder: '请选择',
+    flowId: '',
+    clearable: true,
+    filterable: false,
+    disabled: false
+  },
+  {
+    __config__: {
+      label: '关联表单属性',
+      showLabel: true,
+      changeTag: true,
+      labelWidth: null,
+      defaultValue: '',
+      required: false,
+      tag: 'relationFormAttr',
+      tagIcon: 'icon-ym icon-ym-generator-nature',
+      span: 24,
+      layout: 'colFormItem',
+      dragDisabled: false,
+      jnpfKey: 'relationFormAttr'
+    },
+    showField: '',
+    relationField: ''
+  }
+]
+// 在线开发-流程设计独有组件
+const flowPeculiarList = [{
+    __config__: {
+      label: '关联流程表单',
+      showLabel: true,
+      changeTag: true,
+      labelWidth: null,
+      defaultValue: '',
+      required: false,
+      tag: 'relationFlow',
+      tagIcon: 'icon-ym icon-ym-generator-flow',
+      span: 24,
+      layout: 'colFormItem',
+      dragDisabled: false,
+      jnpfKey: 'relationFlow'
+    },
+    placeholder: '请选择',
+    modelId: '',
+    relationField: '',
+    clearable: true,
+    filterable: false,
+    disabled: false
+  },
+  {
+    __config__: {
+      label: '关联流程属性',
+      showLabel: true,
+      changeTag: true,
+      labelWidth: null,
+      defaultValue: '',
+      required: false,
+      tag: 'relationFlowAttr',
+      tagIcon: 'icon-ym icon-ym-generator-nature',
+      span: 24,
+      layout: 'colFormItem',
+      dragDisabled: false,
+      jnpfKey: 'relationFlowAttr'
+    },
+    showField: '',
+    relationField: ''
+  }
+]
+export { ruleTrigger, dyOptionsList, noVModelList, noTableAllowList, noColumnShowList, noSearchList, webPeculiarList, flowPeculiarList, useInputList, useTimeList, useSelectList }
