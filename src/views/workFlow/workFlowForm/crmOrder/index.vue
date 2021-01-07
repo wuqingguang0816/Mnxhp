@@ -211,11 +211,13 @@
       </div>
     </div>
     <GoodsBox v-if="goodsBoxVisible" ref="goodsBox" @refreshDataList="initList" />
+    <UserBox v-if="userBoxVisible" ref="userBox" @submit="submit" />
   </div>
 </template>
 
 <script>
-import { CustomerList, GoodsList, OrderInfo, Create, Update } from '@/api/extend/order'
+import { Info, Create, Update } from '@/api/workFlowForm/Common'
+import { CustomerList, GoodsList } from '@/api/extend/order'
 import { BillNumber } from '@/api/system/billRule'
 import GoodsBox from '@/views/extend/order/GoodsBox'
 export default {
@@ -239,6 +241,8 @@ export default {
         description: '',
         customerId: '',
         salesmanName: '',
+        goodsList: [],
+        collectionPlanList: [],
         fileJson: ''
       },
       dataRule: {
@@ -257,12 +261,13 @@ export default {
       },
       list: [],
       planList: [],
-      loading: false,
+      loading: true,
       options: ['现金', '转帐', '汇票'],
       transportOptions: ['快递', '物流', '配送', '自提'],
       treeData: [],
       fileList: [],
       goodsBoxVisible: false,
+      userBoxVisible: false,
       setting: {}
     }
   },
@@ -310,8 +315,8 @@ export default {
       this.$nextTick(() => {
         if (this.dataForm.id) {
           this.$refs['dataForm'].resetFields()
-          OrderInfo(this.dataForm.id).then(res => {
-            this.dataForm = res.data.orderInfo
+          Info(this.setting.enCode, this.dataForm.id).then(res => {
+            this.dataForm = res.data
             this.list = res.data.goodsList
             this.planList = res.data.collectionPlanList
             this.fileList = JSON.parse(this.dataForm.fileJson)
@@ -328,7 +333,7 @@ export default {
         }
       })
     },
-    dataFormSubmit() {
+    dataFormSubmit(isSubmit) {
       this.$refs['dataForm'].validate((valid) => {
         if (valid) {
           if (!this.exist()) return
@@ -341,24 +346,44 @@ export default {
             fileType: o.fileType || o.raw.type
           }))
           this.dataForm.fileJson = JSON.stringify(list)
-          let query = {
-            orderInfo: this.dataForm,
-            goodsList: this.list,
-            collectionPlanList: this.planList,
+          this.dataForm.goodsList = this.list
+          this.dataForm.collectionPlanList = this.planList
+          this.dataForm.status = isSubmit ? 0 : 1
+          if (isSubmit) {
+            if (this.setting.freeApprover == 0) {
+              this.$confirm('您确定要提交当前流程吗, 是否继续?', '提示', {
+                type: 'warning'
+              }).then(() => {
+                this.submit()
+              }).catch(() => { });
+            } else {
+              this.userBoxVisible = true
+              this.$nextTick(() => {
+                this.$refs.userBox.init()
+              })
+            }
+          } else {
+            this.request()
           }
-          const formMethod = this.dataForm.id ? Update : Create
-          formMethod(query, this.dataForm.id).then(res => {
-            this.$message({
-              message: res.msg,
-              type: 'success',
-              duration: 1500,
-              onClose: () => {
-                this.visible = false
-                this.$emit('close', true)
-              }
-            })
-          })
         }
+      })
+    },
+    submit(freeApproverUserId) {
+      if (freeApproverUserId) this.dataForm.freeApproverUserId = freeApproverUserId
+      this.request()
+    },
+    request() {
+      if (!this.dataForm.id) delete (this.dataForm.id)
+      const formMethod = this.dataForm.id ? Update : Create
+      formMethod(this.setting.enCode, this.dataForm).then(res => {
+        this.$message({
+          message: res.msg,
+          type: 'success',
+          duration: 1500,
+          onClose: () => {
+            this.$emit('close', true)
+          }
+        })
       })
     },
     handleDel(index, row) {

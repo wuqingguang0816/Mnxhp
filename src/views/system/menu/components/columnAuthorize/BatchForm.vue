@@ -78,7 +78,7 @@ export default {
                 this.$emit('refreshDataList')
               }
             })
-          })
+          }).catch(() => { this.btnLoading = false })
         }
       })
     }

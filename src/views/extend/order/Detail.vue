@@ -151,7 +151,8 @@
 </template>
 
 <script>
-import { ExportExcel, NextInfo, PrevInfo, OrderInfo } from '@/api/extend/order'
+import { ExportExcel, NextInfo, PrevInfo } from '@/api/extend/order'
+import { Info } from '@/api/workFlowForm/Common'
 import { getDownloadUrl } from '@/api/common'
 export default {
   data() {
@@ -177,7 +178,7 @@ export default {
       dataRule: {},
       list: [],
       planList: [],
-      loading: false,
+      loading: true,
       fileList: [],
     }
   },
@@ -191,8 +192,8 @@ export default {
       this.$nextTick(() => {
         if (this.dataForm.id) {
           this.$refs['dataForm'].resetFields()
-          OrderInfo(this.dataForm.id).then(res => {
-            this.dataForm = res.data.orderInfo
+          Info('crmOrder', this.dataForm.id).then(res => {
+            this.dataForm = res.data
             this.dataForm.orderDate = this.jnpf.toDate(this.dataForm.orderDate)
             this.dataForm.deliveryDate = this.jnpf.toDate(this.dataForm.deliveryDate, "yyyy-MM-dd")
             this.list = res.data.goodsList
@@ -214,7 +215,7 @@ export default {
           this.$message({ message: '第一单了哦', type: 'warning', duration: 1500 })
           return
         }
-        this.dataForm = res.data.orderInfo
+        this.dataForm = res.data
         this.dataForm.orderDate = this.jnpf.toDate(this.dataForm.orderDate)
         this.dataForm.deliveryDate = this.jnpf.toDate(this.dataForm.deliveryDate, "yyyy-MM-dd")
         this.list = res.data.goodsList
@@ -234,7 +235,7 @@ export default {
           this.$message({ message: '最后一单了哦', type: 'warning', duration: 1500 })
           return
         }
-        this.dataForm = res.data.orderInfo
+        this.dataForm = res.data
         this.dataForm.orderDate = this.jnpf.toDate(this.dataForm.orderDate)
         this.dataForm.deliveryDate = this.jnpf.toDate(this.dataForm.deliveryDate, "yyyy-MM-dd")
         this.list = res.data.goodsList

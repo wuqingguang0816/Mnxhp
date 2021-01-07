@@ -67,7 +67,7 @@ export default {
           this.isDrawingListChange = true
           return
         }
-        // this.$emit('drawingListChange')
+        this.$emit('drawingListChange')
       },
       deep: true
     },

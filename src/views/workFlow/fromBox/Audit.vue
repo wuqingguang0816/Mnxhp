@@ -6,8 +6,8 @@
         </el-button>
         <el-button type="danger" v-if="setting.isAudit" @click="reject()">拒 绝
         </el-button>
-        <el-button type="danger" v-if="setting.isSelf && setting.status == 1" @click="revoke()"
-          v-has="'btn_revoke'">撤 回</el-button>
+        <el-button type="danger" v-if="setting.isSelf && setting.status == 1" @click="revoke()">撤 回
+        </el-button>
         <el-button @click="goBack()">{{$t('common.cancelButton')}}</el-button>
       </div>
       <div class="approve-result" v-if="setting.showStatus && activeTab==='0'">

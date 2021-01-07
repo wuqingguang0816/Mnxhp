@@ -92,7 +92,7 @@
               <el-tag type="info" v-else>等待提交</el-tag>
             </template>
           </el-table-column>
-          <el-table-column label="操作" width="200" fixed="right">
+          <el-table-column label="操作" width="150" fixed="right">
             <template slot-scope="scope">
               <el-button size="mini" type="text" @click="addOrUpdateHandle(scope.row.id)"
                 :disabled="[1,2,5].indexOf(scope.row.currentState)>-1" v-has="'btn_edit'">编辑
@@ -100,21 +100,19 @@
               <el-button size="mini" type="text" class="JNPF-table-delBtn"
                 @click="handleDel(scope.$index,scope.row.id)" :disabled="scope.row.currentState>0"
                 v-has="'btn_remove'">删除</el-button>
-              <el-button size="mini" type="text" @click="toDetail(scope.row.id)"
-                v-has="'btn_detail'">详情</el-button>
-              <el-dropdown v-has="'btn_flow'">
+              <el-dropdown>
                 <el-button type="text" size="mini">
-                  审批流<i class="el-icon-arrow-down el-icon--right"></i>
+                  更多<i class="el-icon-arrow-down el-icon--right"></i>
                 </el-button>
                 <el-dropdown-menu slot="dropdown">
-                  <el-dropdown-item :disabled="[1,2,5].indexOf(scope.row.currentState)>-1"
-                    @click.native="approval(scope.row.id)" v-has="'btn_flowSubmit'">提交审核
+                  <el-dropdown-item @click.native="toDetail(scope.row.id)" v-has="'btn_detail'">详情
                   </el-dropdown-item>
                   <el-dropdown-item :disabled="scope.row.currentState !=1"
                     @click.native="flowRevoke(scope.row.id)" v-has="'btn_flowRevoke'">撤回审核
                   </el-dropdown-item>
                   <el-dropdown-item :disabled="!scope.row.currentState"
-                    @click.native="toApprovalDetail(scope.row.id)" v-has="'btn_flowDetail'">查看审核
+                    @click.native="toApprovalDetail(scope.row.id,scope.row.currentState)"
+                    v-has="'btn_flowDetail'">查看审核
                   </el-dropdown-item>
                 </el-dropdown-menu>
               </el-dropdown>
@@ -125,22 +123,20 @@
           :limit.sync="listQuery.pageSize" @pagination="initData" />
       </div>
     </div>
-    <Form v-show="formVisible" ref="Form" @close="colseForm" />
+    <component :is="currentView" v-if="formVisible" @close="colseForm" ref="Form" />
     <Detail v-show="detailVisible" ref="detail" @close="detailVisible=false" />
-    <UserBox v-if="userBoxVisible" ref="userBox" @refresh="initData" />
-    <ApprovalBox v-if="approvalVisible" ref="approval" @close="approvalVisible=false" />
   </div>
 </template>
 
 <script>
-import { OrderList, Delete, OrderEntryList, OrderReceivableList, FlowRevoke } from '@/api/extend/order'
-import Form from './Form'
+import { OrderList, Delete, OrderEntryList, OrderReceivableList } from '@/api/extend/order'
+import { Revoke } from '@/api/workFlow/FlowLaunch'
 import Detail from './Detail'
-import UserBox from './UserBox'
-import ApprovalBox from '@/views/workFlow/fromBox/Audit'
+import edit from '@/views/workFlow/fromBox/Edit'
+import audit from '@/views/workFlow/fromBox/Audit'
 export default {
   name: 'extend-order',
-  components: { Form, Detail, UserBox, ApprovalBox },
+  components: { Detail, edit, audit },
   data() {
     return {
       keyword: '',
@@ -155,8 +151,6 @@ export default {
       },
       formVisible: false,
       detailVisible: false,
-      userBoxVisible: false,
-      approvalVisible: false,
       pickerOptions: {
         shortcuts: [{
           text: '最近一周',
@@ -256,12 +250,6 @@ export default {
         });
       })
     },
-    approval(id) {
-      this.userBoxVisible = true
-      this.$nextTick(() => {
-        this.$refs.userBox.init(id)
-      })
-    },
     flowRevoke(id) {
       this.$prompt('', "撤回审批", {
         confirmButtonText: '确定',
@@ -273,7 +261,7 @@ export default {
         inputValidator: (val) => { if (!val) { if (this.firstTest) { this.firstTest = false; return true } return false } },
         closeOnClickModal: false
       }).then(({ value }) => {
-        FlowRevoke(id, { handleOpinion: value }).then(res => {
+        Revoke(id, { handleOpinion: value }).then(res => {
           this.$message({
             type: 'success',
             message: res.msg
@@ -282,18 +270,34 @@ export default {
         })
       }).catch(() => { });
     },
-    // 新增 / 修改
     addOrUpdateHandle(id) {
-      this.formVisible = true
+      let data = { enCode: 'crmOrder', id, formType: 1, flowId: '52d3144909d04e2f8a6629ab2ab39e14' }
+      this.currentView = 'edit'
       this.$nextTick(() => {
-        this.$refs.Form.init(id)
+        this.formVisible = true
+        this.$nextTick(() => {
+          this.$refs.Form.init(data)
+        })
       })
     },
-    toApprovalDetail(id) {
-      let data = { enCode: 'CRM_Order', id, readonly: true, showStatus: true, formType: 1 }
-      this.approvalVisible = true
+    toApprovalDetail(id, status) {
+      let data = {
+        enCode: 'crmOrder',
+        flowId: '52d3144909d04e2f8a6629ab2ab39e14',
+        delegateId: "",
+        id,
+        formType: 1,
+        isSelf: true,
+        readonly: true,
+        status,
+        showStatus: true
+      }
+      this.currentView = 'audit'
       this.$nextTick(() => {
-        this.$refs.approval.init(data)
+        this.formVisible = true
+        this.$nextTick(() => {
+          this.$refs.Form.init(data)
+        })
       })
     },
     toDetail(id) {

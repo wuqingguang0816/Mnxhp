@@ -38,7 +38,7 @@ export function updateBillRule(data) {
 // 获取单据规则信息
 export function getBillRuleInfo(id) {
   return request({
-    url: `/api/System/BillRule/${id}`,
+    url: `/api/system/System/BillRule/${id}`,
     method: 'GET'
   })
 }
