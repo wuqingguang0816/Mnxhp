@@ -3,7 +3,7 @@ import request from '@/utils/request'
 // 获取行政区划列表
 export function getProvinceList(nodeId, data) {
   return request({
-    url: `/api/System/Province/${nodeId}`,
+    url: `/api/system/System/Area/${nodeId}`,
     method: 'GET',
     data
   })
@@ -12,7 +12,7 @@ export function getProvinceList(nodeId, data) {
 // 获取行政区划下拉框数据
 export function getProvinceSelector(id) {
   return request({
-    url: `/api/System/Province/${id}/Selector`,
+    url: `/api/system/System/Area/${id}/Selector`,
     method: 'GET'
   })
 }
@@ -21,7 +21,7 @@ export function getProvinceSelector(id) {
 // 添加行政区划
 export function createProvince(data) {
   return request({
-    url: '/api/System/Province',
+    url: '/api/system/System/Area',
     method: 'POST',
     data
   })
@@ -30,7 +30,7 @@ export function createProvince(data) {
 // 修改行政区划
 export function updateProvince(data) {
   return request({
-    url: `/api/System/Province/${data.id}`,
+    url: `/api/system/System/Area/${data.id}`,
     method: 'PUT',
     data
   })
@@ -39,7 +39,7 @@ export function updateProvince(data) {
 // 获取行政区划信息
 export function getProvinceInfo(id) {
   return request({
-    url: `/api/System/Province/${id}/Info`,
+    url: `/api/system/System/Area/${id}/Info`,
     method: 'GET'
   })
 }
@@ -47,7 +47,7 @@ export function getProvinceInfo(id) {
 // 删除行政区划信息
 export function delProvince(id) {
   return request({
-    url: `/api/System/Province/${id}`,
+    url: `/api/system/System/Area/${id}`,
     method: 'DELETE'
   })
 }
@@ -55,7 +55,7 @@ export function delProvince(id) {
 // 更新行政区划状态
 export function updateProvinceState(id) {
   return request({
-    url: `/api/System/Province/${id}/Actions/State`,
+    url: `/api/system/System/Area/${id}/Actions/State`,
     method: 'PUT'
   })
 }

@@ -3,7 +3,7 @@ import request from '@/utils/request'
 // 获取单据规则列表(带分页)
 export function getBillRuleList(data) {
   return request({
-    url: '/api/System/BillRule',
+    url: '/api/system/System/BillRule',
     method: 'GET',
     data
   })
@@ -12,7 +12,7 @@ export function getBillRuleList(data) {
 // 获取单据规则下拉框
 export function getBillRuleSelector() {
   return request({
-    url: '/api/System/BillRule/Selector',
+    url: '/api/system/System/BillRule/Selector',
     method: 'GET'
   })
 }
@@ -20,7 +20,7 @@ export function getBillRuleSelector() {
 // 添加单据规则
 export function createBillRule(data) {
   return request({
-    url: '/api/System/BillRule',
+    url: '/api/system/System/BillRule',
     method: 'POST',
     data
   })
@@ -29,7 +29,7 @@ export function createBillRule(data) {
 // 修改单据规则
 export function updateBillRule(data) {
   return request({
-    url: `/api/System/BillRule/${data.id}`,
+    url: `/api/system/System/BillRule/${data.id}`,
     method: 'PUT',
     data
   })
@@ -46,7 +46,7 @@ export function getBillRuleInfo(id) {
 // 删除单据规则
 export function delBillRule(id) {
   return request({
-    url: `/api/System/BillRule/${id}`,
+    url: `/api/system/System/BillRule/${id}`,
     method: 'DELETE'
   })
 }
@@ -54,14 +54,14 @@ export function delBillRule(id) {
 // 更新单据规则状态
 export function updateBillRuleState(id) {
   return request({
-    url: `/api/System/BillRule/${id}/Actions/State`,
+    url: `/api/system/System/BillRule/${id}/Actions/State`,
     method: 'PUT'
   })
 }
 
 export function BillNumber(enCode) {
   return request({
-    url: `/api/System/BillRule/BillNumber/${enCode}`,
+    url: `/api/system/System/BillRule/BillNumber/${enCode}`,
     method: 'GET'
   })
 }

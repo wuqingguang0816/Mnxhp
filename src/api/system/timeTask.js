@@ -3,7 +3,7 @@ import request from '@/utils/request'
 // 获取任务调度列表
 export function TimeTaskList(data) {
   return request({
-    url: '/api/PlatForm/TimeTask',
+    url: '/api/system/System/TimeTask',
     method: 'get',
     data
   })
@@ -11,28 +11,28 @@ export function TimeTaskList(data) {
 // 启动任务调度
 export function TimeTaskEnable(id) {
   return request({
-    url: `/api/PlatForm/TimeTask/${id}/Actions/Enable`,
+    url: `/api/system/System/TimeTask/${id}/Actions/Enable`,
     method: 'put',
   })
 }
 // 停止任务调度
 export function TimeTaskStop(id) {
   return request({
-    url: `/api/PlatForm/TimeTask/${id}/Actions/Stop`,
+    url: `/api/system/System/TimeTask/${id}/Actions/Stop`,
     method: 'put',
   })
 }
 // 删除任务
 export function TimeTaskDelete(id) {
   return request({
-    url: `/api/PlatForm/TimeTask/${id}`,
+    url: `/api/system/System/TimeTask/${id}`,
     method: 'DELETE',
   })
 }
 //  获取任务调度信息
 export function TimeTaskInfo(id) {
   return request({
-    url: `/api/PlatForm/TimeTask/Info/${id}`,
+    url: `/api/system/System/TimeTask/Info/${id}`,
     method: 'get',
   })
 }

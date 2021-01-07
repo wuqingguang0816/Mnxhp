@@ -3,7 +3,7 @@ import request from '@/utils/request'
 // 获取系统日志信息
 export function getLogList(id, data) {
   return request({
-    url: `/api/System/Log/${id}`,
+    url: `/api/system/System/Log/${id}`,
     method: 'GET',
     data
   })
@@ -12,7 +12,7 @@ export function getLogList(id, data) {
 // 删除或批量删除日志
 export function delLog(data) {
   return request({
-    url: '/api/System/Log',
+    url: '/api/system/System/Log',
     method: 'DELETE',
     data
   })

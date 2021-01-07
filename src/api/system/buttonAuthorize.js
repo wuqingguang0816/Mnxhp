@@ -3,7 +3,7 @@ import request from '@/utils/request'
 // 获取按钮权限列表
 export function getButtonAuthorizeList(moduleId, data) {
   return request({
-    url: `/api/System/ModuleButton/${moduleId}/List`,
+    url: `/api/system/System/ModuleButton/${moduleId}/List`,
     method: 'GET',
     data
   })
@@ -12,7 +12,7 @@ export function getButtonAuthorizeList(moduleId, data) {
 // 获取按钮权限下拉列表
 export function getButtonAuthorizeSelector(moduleId) {
   return request({
-    url: `/api/System/ModuleButton/${moduleId}/Selector`,
+    url: `/api/system/System/ModuleButton/${moduleId}/Selector`,
     method: 'GET'
   })
 }
@@ -20,7 +20,7 @@ export function getButtonAuthorizeSelector(moduleId) {
 // 添加按钮
 export function createButton(data) {
   return request({
-    url: `/api/System/ModuleButton`,
+    url: `/api/system/System/ModuleButton`,
     method: 'POST',
     data
   })
@@ -29,7 +29,7 @@ export function createButton(data) {
 // 更新按钮
 export function updateButton(data) {
   return request({
-    url: `/api/System/ModuleButton/${data.id}`,
+    url: `/api/system/System/ModuleButton/${data.id}`,
     method: 'PUT',
     data
   })
@@ -38,7 +38,7 @@ export function updateButton(data) {
 // 获取按钮信息
 export function getButtonInfo(id) {
   return request({
-    url: `/api/System/ModuleButton/${id}`,
+    url: `/api/system/System/ModuleButton/${id}`,
     method: 'GET'
   })
 }
@@ -47,7 +47,7 @@ export function getButtonInfo(id) {
 // 删除按钮
 export function delButton(id) {
   return request({
-    url: `/api/System/ModuleButton/${id}`,
+    url: `/api/system/System/ModuleButton/${id}`,
     method: 'DELETE'
   })
 }
@@ -55,7 +55,7 @@ export function delButton(id) {
 // 更新按钮状态
 export function updateButtonState(id) {
   return request({
-    url: `/api/System/ModuleButton/${id}/Actions/State`,
+    url: `/api/system/System/ModuleButton/${id}/Actions/State`,
     method: 'PUT'
   })
 }
