@@ -3,7 +3,7 @@ import request from '@/utils/request'
 // 获取部门列表
 export const getDepartmentList = (companyId, data) => {
   return request({
-    url: `/api/Permission/Organize/${companyId}/Department`,
+    url: `/api/system/Permission/Organize/${companyId}/Department`,
     method: 'GET',
     data
   })
@@ -12,7 +12,7 @@ export const getDepartmentList = (companyId, data) => {
 // 获取部门下拉框列表(公司+部门)
 export const getDepartmentSelector = () => {
   return request({
-    url: '/api/Permission/Organize/Department/Selector',
+    url: '/api/system/Permission/Organize/Department/Selector',
     method: 'GET'
   })
 }
@@ -20,7 +20,7 @@ export const getDepartmentSelector = () => {
 // 新建部门
 export const createDepartment = (data) => {
   return request({
-    url: '/api/Permission/Organize/Department',
+    url: '/api/system/Permission/Organize/Department',
     method: 'POST',
     data
   })
@@ -29,7 +29,7 @@ export const createDepartment = (data) => {
 // 修改部门
 export const updateDepartment = (data) => {
   return request({
-    url: `/api/Permission/Organize/Department/${data.id}`,
+    url: `/api/system/Permission/Organize/Department/${data.id}`,
     method: 'PUT',
     data
   })

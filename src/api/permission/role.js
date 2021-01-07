@@ -3,7 +3,7 @@ import request from '@/utils/request'
 // 获取角色列表
 export const getRoleList = (data) => {
   return request({
-    url: '/api/Permission/Role',
+    url: '/api/system/Permission/Role',
     method: 'GET',
     data
   })
@@ -12,7 +12,7 @@ export const getRoleList = (data) => {
 // 获取角色下拉框列表
 export const getRoleSelector = () => {
   return request({
-    url: '/api/Permission/Role/Selector',
+    url: '/api/system/Permission/Role/Selector',
     method: 'GET'
   })
 }
@@ -20,7 +20,7 @@ export const getRoleSelector = () => {
 // 新建角色
 export const createRole = (data) => {
   return request({
-    url: '/api/Permission/Role',
+    url: '/api/system/Permission/Role',
     method: 'POST',
     data
   })
@@ -29,7 +29,7 @@ export const createRole = (data) => {
 // 修改角色
 export const updateRole = (data) => {
   return request({
-    url: `/api/Permission/Role/${data.id}`,
+    url: `/api/system/Permission/Role/${data.id}`,
     method: 'PUT',
     data
   })
@@ -38,7 +38,7 @@ export const updateRole = (data) => {
 // 获取角色信息
 export const getRoleInfo = (id) => {
   return request({
-    url: `/api/Permission/Role/${id}`,
+    url: `/api/system/Permission/Role/${id}`,
     method: 'GET'
   })
 }
@@ -46,7 +46,7 @@ export const getRoleInfo = (id) => {
 // 删除角色
 export const delRole = (id) => {
   return request({
-    url: `/api/Permission/Role/${id}`,
+    url: `/api/system/Permission/Role/${id}`,
     method: 'DELETE'
   })
 }
@@ -54,7 +54,7 @@ export const delRole = (id) => {
 // 更新角色状态
 export const updateRoleState = (id) => {
   return request({
-    url: `/api/Permission/Role/${id}/Actions/State`,
+    url: `/api/system/Permission/Role/${id}/Actions/State`,
     method: 'PUT'
   })
 }
@@ -62,7 +62,7 @@ export const updateRoleState = (id) => {
 // 获取角色类型
 export const getRoleTypeSelector = () => {
   return request({
-    url: '/api/System/DictionaryData/4501f6f26a384757bce12d4c4b03342c/Data/Selector',
+    url: '/api/system/System/DictionaryData/4501f6f26a384757bce12d4c4b03342c/Data/Selector',
     method: 'GET'
   })
 }

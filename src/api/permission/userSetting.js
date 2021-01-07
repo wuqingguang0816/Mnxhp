@@ -3,21 +3,21 @@ import request from '@/utils/request'
 // 更新当前用户头像
 export function UpdateAvatar(name) {
   return request({
-    url: `/api/Permission/Users/Current/Avatar/${name}`,
+    url: `/api/system/Permission/Users/Current/Avatar/${name}`,
     method: 'PUT'
   })
 }
 // 获取当前用户个人资料
 export function UserSettingInfo() {
   return request({
-    url: '/api/Permission/Users/Current/BaseInfo',
+    url: '/api/system/Permission/Users/Current/BaseInfo',
     method: 'GET'
   })
 }
 // 更新当前用户个人资料
 export function UpdateUser(data) {
   return request({
-    url: '/api/Permission/Users/Current/BaseInfo',
+    url: '/api/system/Permission/Users/Current/BaseInfo',
     method: 'PUT',
     data
   })
@@ -25,7 +25,7 @@ export function UpdateUser(data) {
 // 修改当前用户密码
 export function UpdatePassword(data) {
   return request({
-    url: '/api/Permission/Users/Current/Actions/ModifyPassword',
+    url: '/api/system/Permission/Users/Current/Actions/ModifyPassword',
     method: 'POST',
     data
   })
@@ -33,7 +33,7 @@ export function UpdatePassword(data) {
 // 更新当前用户系统主题
 export function UpdateTheme(data) {
   return request({
-    url: '/api/Permission/Users/Current/SystemTheme',
+    url: '/api/system/Permission/Users/Current/SystemTheme',
     method: 'PUT',
     data
   })
@@ -41,14 +41,14 @@ export function UpdateTheme(data) {
 // 获取系统语言列表
 export function getLanguage() {
   return request({
-    url: '/api/Common/Language',
+    url: '/api/system/Common/Language',
     method: 'GET'
   })
 }
 // 更新当前用户系统语言配置
 export function UpdateLanguage(data) {
   return request({
-    url: `/api/Permission/Users/Current/SystemLanguage`,
+    url: `/api/system/Permission/Users/Current/SystemLanguage`,
     method: 'PUT',
     data
   })
@@ -56,21 +56,21 @@ export function UpdateLanguage(data) {
 // 获取我的下属
 export function getSubordinate() {
   return request({
-    url: `/api/Permission/Users/Current/Subordinate`,
+    url: `/api/system/Permission/Users/Current/Subordinate`,
     method: 'GET'
   })
 }
 // 获取当前用户系统权限
 export function AuthorizeList() {
   return request({
-    url: '/api/Permission/Users/Current/Authorize',
+    url: '/api/system/Permission/Users/Current/Authorize',
     method: 'GET'
   })
 }
 // 获取系统日志
 export function LogList(data) {
   return request({
-    url: `/api/Permission/Users/Current/SystemLog`,
+    url: `/api/system/Permission/Users/Current/SystemLog`,
     method: 'GET',
     data
   })
