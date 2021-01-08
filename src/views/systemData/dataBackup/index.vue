@@ -122,7 +122,7 @@ export default {
     },
     handleDownload(fileUrl) {
       if (!fileUrl) return
-      window.location.href = this.define.comUrl + fileUrl
+      window.location.href = this.define.comUrl + '/system/' + fileUrl
     },
     search() {
       this.params.currentPage = 1
