@@ -3,7 +3,7 @@ import request from '@/utils/request'
 // 获取功能列表
 export function getVisualDevList(data) {
   return request({
-    url: '/api/VisualDevelopment',
+    url: '/api/visiualdev/VisualDevelopment',
     method: 'get',
     data
   })
@@ -11,14 +11,14 @@ export function getVisualDevList(data) {
 // 获取功能信息
 export function getVisualDevInfo(id) {
   return request({
-    url: `/api/VisualDevelopment/${id}`,
+    url: `/api/visiualdev/VisualDevelopment/${id}`,
     method: 'get'
   })
 }
 // App预览(后台APP表单设计)
 export function Preview(data) {
   return request({
-    url: `/api/VisualDevelopment/App/Preview`,
+    url: `/api/visiualdev/VisualDevelopment/App/Preview`,
     method: 'post',
     data: { data }
   })
@@ -27,14 +27,14 @@ export function Preview(data) {
 // 删除功能
 export function Delete(id) {
   return request({
-    url: `/api/VisualDevelopment/${id}`,
+    url: `/api/visiualdev/VisualDevelopment/${id}`,
     method: 'DELETE'
   })
 }
 // 修改功能
 export function Update(data) {
   return request({
-    url: `/api/VisualDevelopment/${data.id}`,
+    url: `/api/visiualdev/VisualDevelopment/${data.id}`,
     method: 'PUT',
     data
   })
@@ -42,7 +42,7 @@ export function Update(data) {
 // 新建功能
 export function Create(data) {
   return request({
-    url: '/api/VisualDevelopment',
+    url: '/api/visiualdev/VisualDevelopment',
     method: 'post',
     data
   })
@@ -50,21 +50,21 @@ export function Create(data) {
 // 复制功能
 export function Copy(id) {
   return request({
-    url: `/api/VisualDevelopment/${id}/Actions/Copy`,
+    url: `/api/visiualdev/VisualDevelopment/${id}/Actions/Copy`,
     method: 'POST'
   })
 }
 // 获取命名空间
 export function getAreasName() {
   return request({
-    url: `/api/VisualDevelopment/AreasName`,
+    url: `/api/visiualdev/VisualDevelopment/AreasName`,
     method: 'get'
   })
 }
 // 代码下载
 export function DownloadCode(id, data) {
   return request({
-    url: `/api/VisualDevelopment/${id}/Actions/DownloadCode`,
+    url: `/api/visiualdev/VisualDevelopment/${id}/Actions/DownloadCode`,
     method: 'POST',
     data
   })
@@ -72,7 +72,7 @@ export function DownloadCode(id, data) {
 // 代码预览
 export function CodePreview(id, data) {
   return request({
-    url: `/api/VisualDevelopment/${id}/Actions/CodePreview`,
+    url: `/api/visiualdev/VisualDevelopment/${id}/Actions/CodePreview`,
     method: 'POST',
     data
   })
@@ -81,28 +81,28 @@ export function CodePreview(id, data) {
 // 获取列表表单配置JSON
 export function getConfigData(modelId) {
   return request({
-    url: `/api/VisualDevelopment/Model/${modelId}/Config`,
+    url: `/api/visiualdev/VisualDevelopment/Model/${modelId}/Config`,
     method: 'get'
   })
 }
 // 获取列表配置JSON
 export function getColumnData(modelId) {
   return request({
-    url: `/api/VisualDevelopment/Model/${modelId}/ColumnData`,
+    url: `/api/visiualdev/VisualDevelopment/Model/${modelId}/ColumnData`,
     method: 'get'
   })
 }
 // 获取表单配置JSON
 export function getFormData(modelId) {
   return request({
-    url: `/api/VisualDevelopment/Model/${modelId}/FormData`,
+    url: `/api/visiualdev/VisualDevelopment/Model/${modelId}/FormData`,
     method: 'get'
   })
 }
 // 获取数据列表
 export function getModelList(modelId, data) {
   return request({
-    url: `/api/VisualDevelopment/Model/${modelId}/List`,
+    url: `/api/visiualdev/VisualDevelopment/Model/${modelId}/List`,
     method: 'get',
     data
   })
@@ -110,7 +110,7 @@ export function getModelList(modelId, data) {
 // 添加数据
 export function createModel(modelId, data) {
   return request({
-    url: `/api/VisualDevelopment/Model/${modelId}`,
+    url: `/api/visiualdev/VisualDevelopment/Model/${modelId}`,
     method: 'POST',
     data
   })
@@ -118,7 +118,7 @@ export function createModel(modelId, data) {
 // 修改数据
 export function updateModel(modelId, data) {
   return request({
-    url: `/api/VisualDevelopment/Model/${modelId}/${data.id}`,
+    url: `/api/visiualdev/VisualDevelopment/Model/${modelId}/${data.id}`,
     method: 'PUT',
     data
   })
@@ -126,28 +126,28 @@ export function updateModel(modelId, data) {
 // 获取数据信息
 export function getModelInfo(modelId, id) {
   return request({
-    url: `/api/VisualDevelopment/Model/${modelId}/${id}`,
+    url: `/api/visiualdev/VisualDevelopment/Model/${modelId}/${id}`,
     method: 'GET'
   })
 }
 // 获取数据详情
 export function getDataChange(modelId, id) {
   return request({
-    url: `/api/VisualDevelopment/Model/${modelId}/${id}/DataChange`,
+    url: `/api/visiualdev/VisualDevelopment/Model/${modelId}/${id}/DataChange`,
     method: 'GET'
   })
 }
 // 获取表单主表属性列表
 export function getFormDataFields(modelId) {
   return request({
-    url: `/api/VisualDevelopment/${modelId}/FormDataFields`,
+    url: `/api/visiualdev/VisualDevelopment/${modelId}/FormDataFields`,
     method: 'GET'
   })
 }
 // 获取表单主表属性下拉框
 export function getFieldDataSelect(modelId, data) {
   return request({
-    url: `/api/VisualDevelopment/${modelId}/FieldDataSelect`,
+    url: `/api/visiualdev/VisualDevelopment/${modelId}/FieldDataSelect`,
     method: 'GET',
     data
   })
@@ -155,14 +155,14 @@ export function getFieldDataSelect(modelId, data) {
 // 删除数据
 export function deteleModel(modelId, id) {
   return request({
-    url: `/api/VisualDevelopment/Model/${modelId}/${id}`,
+    url: `/api/visiualdev/VisualDevelopment/Model/${modelId}/${id}`,
     method: 'DELETE'
   })
 }
 // 导出
 export function exportModel(modelId, data) {
   return request({
-    url: `/api/VisualDevelopment/Model/${modelId}/Actions/Export`,
+    url: `/api/visiualdev/VisualDevelopment/Model/${modelId}/Actions/Export`,
     method: 'POST',
     data
   })
@@ -170,14 +170,14 @@ export function exportModel(modelId, data) {
 // 下载模板
 export function getTemplate(modelId) {
   return request({
-    url: `/api/VisualDevelopment/Model/${modelId}/Template`,
+    url: `/api/visiualdev/VisualDevelopment/Model/${modelId}/Template`,
     method: 'GET'
   })
 }
 // 获取功能下拉框列表
 export function getFeatureSelector(data) {
   return request({
-    url: '/api/VisualDevelopment/Selector',
+    url: '/api/visiualdev/VisualDevelopment/Selector',
     method: 'GET',
     data
   })
