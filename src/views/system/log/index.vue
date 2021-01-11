@@ -57,7 +57,7 @@
               <el-table-column prop="creatorTime" :formatter="jnpf.tableDateFormat" label="请求时间"
                 width="120" />
               <el-table-column prop="userName" label="请求用户" width="120" />
-              <el-table-column prop="iPAddress" label="请求IP" width="120" />
+              <el-table-column prop="ipaddress" label="请求IP" width="120" />
               <el-table-column prop="platForm" label="请求设备" width="120" show-overflow-tooltip />
               <el-table-column prop="requestURL" label="请求地址" show-overflow-tooltip />
               <el-table-column prop="requestMethod" label="请求类型" width="120" />
@@ -70,7 +70,7 @@
               <el-table-column prop="creatorTime" :formatter="jnpf.tableDateFormat" label="创建时间"
                 width="120" />
               <el-table-column prop="userName" label="创建用户" width="120" />
-              <el-table-column prop="iPAddress" label="异常IP" width="120" />
+              <el-table-column prop="ipaddress" label="异常IP" width="120" />
               <el-table-column prop="moduleName" label="异常功能" width="120" />
               <el-table-column prop="json" label="异常描述" show-overflow-tooltip />
             </JNPF-table>

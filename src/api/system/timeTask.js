@@ -39,14 +39,14 @@ export function TimeTaskInfo(id) {
 // 获取任务调度日志列表
 export function TimeTaskTaskLogList(id) {
   return request({
-    url: `/api/PlatForm/TimeTask/${id}/TaskLog`,
+    url: `/api/system/System/TimeTask/${id}/TaskLog`,
     method: 'get',
   })
 }
 // 新建任务调度
 export function TimeTaskCreate(data) {
   return request({
-    url: '/api/PlatForm/TimeTask',
+    url: '/api/system/System/TimeTask',
     method: 'post',
     data
   })
@@ -54,7 +54,7 @@ export function TimeTaskCreate(data) {
 // 修改任务调度
 export function TimeTaskUpdate(data) {
   return request({
-    url: `/api/PlatForm/TimeTask/${data.id}`,
+    url: `/api/system/System/TimeTask/${data.id}`,
     method: 'PUT',
     data
   })
@@ -63,14 +63,14 @@ export function TimeTaskUpdate(data) {
 //  新接口没有
 export function IsExistByEnCode(data) {
   return request({
-    url: '/api/PlatForm/TimeTask/IsExistByEnCode',
+    url: '/api/system/System/TimeTask/IsExistByEnCode',
     method: 'get',
     data
   })
 }
 export function IsExistByFullName(data) {
   return request({
-    url: '/api/PlatForm/TimeTask/IsExistByFullName',
+    url: '/api/system/System/TimeTask/IsExistByFullName',
     method: 'get',
     data
   })
