@@ -3,7 +3,7 @@ const APIURl = 'http://localhost:30000'
 module.exports = {
   APIURl: APIURl,
   timeout: process.env.NODE_ENV === 'development' ? 10000 : 1000000,
-  WebSocketUrl: process.env.NODE_ENV === 'development' ? APIURl.replace('http', 'ws') + '/websocket' : process.env.VUE_APP_BASE_WSS,
+  WebSocketUrl: process.env.NODE_ENV === 'development' ? APIURl.replace('http', 'ws') + '/api/system/websocket' : process.env.VUE_APP_BASE_WSS,
   comUploadUrl: process.env.VUE_APP_BASE_API + '/api/Common/Uploader',
   comUrl: process.env.VUE_APP_BASE_API,
   // 大屏应用前端路径
