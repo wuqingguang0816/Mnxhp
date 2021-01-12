@@ -38,7 +38,7 @@ export const updateDepartment = (data) => {
 // 获取部门信息
 export const getDepartmentInfo = (id) => {
   return request({
-    url: `/api/Permission/Organize/Department/${id}`,
+    url: `/api/system/Permission/Organize/Department/${id}`,
     method: 'GET'
   })
 }
@@ -46,7 +46,7 @@ export const getDepartmentInfo = (id) => {
 // 删除部门
 export const delDepartment = (id) => {
   return request({
-    url: `/api/Permission/Organize/Department/${id}`,
+    url: `/api/system/Permission/Organize/Department/${id}`,
     method: 'DELETE'
   })
 }
@@ -54,7 +54,7 @@ export const delDepartment = (id) => {
 // 更新部门状态
 export const updateDepartmentState = (id) => {
   return request({
-    url: `/api/Permission/Organize/Department/${id}/Actions/State`,
+    url: `/api/system/Permission/Organize/Department/${id}/Actions/State`,
     method: 'PUT'
   })
 }
