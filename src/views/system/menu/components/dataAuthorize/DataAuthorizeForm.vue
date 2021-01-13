@@ -152,10 +152,10 @@ export default {
       })
     },
     dataFormSubmit() {
+      this.dataForm.conditionSymbol = this.conditionSymbol.join()
       this.$refs['dataForm'].validate((valid) => {
         if (valid) {
           this.btnLoading = true
-          this.dataForm.conditionSymbol = this.conditionSymbol.join()
           const formMethod = this.dataForm.id ? updateDataAuthorize : createDataAuthorize
           formMethod(this.dataForm).then(res => {
             this.$message({

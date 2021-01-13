@@ -48,7 +48,8 @@
                 <template slot-scope="scope">
                   <span v-if="scope.row.conditionText === 'text'">任意文本</span>
                   <span v-if="scope.row.conditionText === '@userId'">当前用户</span>
-                  <span v-if="scope.row.conditionText === '@organizeId'">当前部门</span>
+                  <span v-if="scope.row.conditionText === '@organizeId'">当前公司</span>
+                  <span v-if="scope.row.conditionText === '@dempmentId'">当前部门</span>
                   <span v-if="scope.row.conditionText === '@subordinateId'">我的下属</span>
                 </template>
               </el-table-column>

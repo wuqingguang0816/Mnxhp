@@ -72,7 +72,7 @@ export function updateDataAuthorize(data) {
 // 获取字段
 export function getDataAuthorizeInfo(id) {
   return request({
-    url: `/api/System/ModuleDataAuthorize/${id}`,
+    url: `/api/system/System/ModuleDataAuthorize/${id}`,
     method: 'GET'
   })
 }
@@ -81,7 +81,7 @@ export function getDataAuthorizeInfo(id) {
 // 删除字段
 export function delDataAuthorize(id) {
   return request({
-    url: `/api/System/ModuleDataAuthorize/${id}`,
+    url: `/api/system/System/ModuleDataAuthorize/${id}`,
     method: 'DELETE'
   })
 }
