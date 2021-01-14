@@ -27,7 +27,7 @@
       <h2>数据库表</h2>
     </div>
     <JNPF-table v-loading="listLoading" :data="list">
-      <el-table-column prop="tableName" label="表名" show-overflow-tooltip />
+      <el-table-column prop="table" label="表名" show-overflow-tooltip />
       <el-table-column prop="size" label="大小" />
       <el-table-column prop="sum" label="总数" />
       <el-table-column prop="result" label="结果" />

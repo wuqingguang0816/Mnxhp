@@ -48,7 +48,7 @@ export function getDbLinkListAll() {
 }
 export function Execute(data) {
   return request({
-    url: `/api/system/System/DataSource/Actions/Execute`,
+    url: `/api/system/System/DataSync/Actions/Execute`,
     method: 'post',
     data
   })
