@@ -34,7 +34,7 @@ export function logout() {
 // 锁屏解锁登录
 export function unlock(data) {
   return request({
-    url: '/api/oauth/Common/Login/LockScreen',
+    url: '/api/oauth/LockScreen',
     method: 'post',
     data
   })
