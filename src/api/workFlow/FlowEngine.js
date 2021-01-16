@@ -3,7 +3,7 @@ import request from '@/utils/request'
 // 获取流程引擎列表
 export function FlowEngineList(data) {
   return request({
-    url: `/api/WorkFlow/FlowEngine`,
+    url: `/api/workflow/WorkFlow/FlowEngine`,
     method: 'get',
     data
   })
@@ -11,21 +11,21 @@ export function FlowEngineList(data) {
 // 获取流程引擎信息
 export function FlowEngineInfo(id) {
   return request({
-    url: `/api/WorkFlow/FlowEngine/${id}`,
+    url: `/api/workflow/WorkFlow/FlowEngine/${id}`,
     method: 'get'
   })
 }
 // 删除流程引擎
 export function Delete(id) {
   return request({
-    url: `/api/WorkFlow/FlowEngine/${id}`,
+    url: `/api/workflow/WorkFlow/FlowEngine/${id}`,
     method: 'DELETE'
   })
 }
 // 新建流程引擎
 export function Create(data) {
   return request({
-    url: `/api/WorkFlow/FlowEngine`,
+    url: `/api/workflow/WorkFlow/FlowEngine`,
     method: 'post',
     data
   })
@@ -33,7 +33,7 @@ export function Create(data) {
 //  更新流程引擎
 export function Update(data) {
   return request({
-    url: `/api/WorkFlow/FlowEngine/${data.id}`,
+    url: `/api/workflow/WorkFlow/FlowEngine/${data.id}`,
     method: 'PUT',
     data
   })
@@ -41,35 +41,35 @@ export function Update(data) {
 // 复制流程表单
 export function Copy(id) {
   return request({
-    url: `/api/WorkFlow/FlowEngine/${id}/Actions/Copy`,
+    url: `/api/workflow/WorkFlow/FlowEngine/${id}/Actions/Copy`,
     method: 'post'
   })
 }
 // 发布流程引擎
 export function Release(id) {
   return request({
-    url: `/api/WorkFlow/FlowEngine/Release/${id}`,
+    url: `/api/workflow/WorkFlow/FlowEngine/Release/${id}`,
     method: 'post'
   })
 }
 // 停止流程引擎
 export function Stop(id) {
   return request({
-    url: `/api/WorkFlow/FlowEngine/Stop/${id}`,
+    url: `/api/workflow/WorkFlow/FlowEngine/Stop/${id}`,
     method: 'post'
   })
 }
 // 列表ListAll
 export function FlowEngineListAll() {
   return request({
-    url: `/api/WorkFlow/FlowEngine/ListAll`,
+    url: `/api/workflow/WorkFlow/FlowEngine/ListAll`,
     method: 'get'
   })
 }
 // 流程引擎下拉框
 export function FlowEngineSelector(type) {
   return request({
-    url: `/api/WorkFlow/FlowEngine/Selector`,
+    url: `/api/workflow/WorkFlow/FlowEngine/Selector`,
     method: 'get',
     data: { type }
   })
@@ -77,21 +77,21 @@ export function FlowEngineSelector(type) {
 // 流程表单主表属性
 export function getFormDataFields(id) {
   return request({
-    url: `/api/WorkFlow/FlowEngine/${id}/FormDataFields`,
+    url: `/api/workflow/WorkFlow/FlowEngine/${id}/FormDataFields`,
     method: 'get'
   })
 }
 // 流程表单主表属性
 export function FieldDataSelect(id) {
   return request({
-    url: `/api/WorkFlow/FlowEngine/${id}/FieldDataSelect`,
+    url: `/api/workflow/WorkFlow/FlowEngine/${id}/FieldDataSelect`,
     method: 'get'
   })
 }
 // 获取流程表单详情
 export function getFlowTaskData(flowId, id) {
   return request({
-    url: `/api/WorkFlow/FlowTask/${flowId}/${id}`,
+    url: `/api/workflow/WorkFlow/FlowTask/${flowId}/${id}`,
     method: 'get'
   })
 }

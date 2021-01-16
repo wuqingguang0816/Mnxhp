@@ -3,14 +3,14 @@ import request from '@/utils/request'
 // 获取动态表单信息
 export function Info(id) {
   return request({
-    url: `/api/WorkFlow/FlowTask/${id}`,
+    url: `/api/workflow/WorkFlow/FlowTask/${id}`,
     method: 'get'
   })
 }
 // 新建动态表单
 export function Create(data) {
   return request({
-    url: `/api/WorkFlow/FlowTask`,
+    url: `/api/workflow/WorkFlow/FlowTask`,
     method: 'post',
     data
   })
@@ -18,7 +18,7 @@ export function Create(data) {
 // 修改动态表单
 export function Update(data) {
   return request({
-    url: `/api/WorkFlow/FlowTask/${data.id}`,
+    url: `/api/workflow/WorkFlow/FlowTask/${data.id}`,
     method: 'put',
     data
   })

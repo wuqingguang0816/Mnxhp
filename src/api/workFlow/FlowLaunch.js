@@ -3,7 +3,7 @@ import request from '@/utils/request'
 // 获取流程发起列表
 export function FlowLaunchList(data) {
   return request({
-    url: `/api/WorkFlow/FlowLaunch`,
+    url: `/api/workflow/WorkFlow/FlowLaunch`,
     method: 'get',
     data
   })
@@ -11,14 +11,14 @@ export function FlowLaunchList(data) {
 // 删除流程发起
 export function Delete(id) {
   return request({
-    url: `/api/WorkFlow/FlowLaunch/${id}`,
+    url: `/api/workflow/WorkFlow/FlowLaunch/${id}`,
     method: 'DELETE'
   })
 }
 // 撤回流程发起
 export function Revoke(id, data) {
   return request({
-    url: `/api/WorkFlow/FlowLaunch/${id}/Actions/Withdraw`,
+    url: `/api/workflow/WorkFlow/FlowLaunch/${id}/Actions/Withdraw`,
     method: 'PUT',
     data
   })
