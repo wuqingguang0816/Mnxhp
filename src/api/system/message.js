@@ -3,7 +3,7 @@ import request from '@/utils/request'
 // 获取消息中心列表
 export function getMessageList(data) {
   return request({
-    url: `/api/system/System/Message`,
+    url: `/api/system/System/Notice`,
     method: 'GET',
     data
   })
@@ -11,21 +11,21 @@ export function getMessageList(data) {
 // 全部已读
 export function MessageAllRead() {
   return request({
-    url: '/api/system/System/Message/Actions/ReadAll',
+    url: '/api/system/System/Notice/Actions/ReadAll',
     method: 'POST'
   })
 }
 // 查看消息内容
 export function ReadInfo(id) {
   return request({
-    url: `/api/system/System/Message/ReadInfo/${id}`,
+    url: `/api/system/System/Notice/ReadInfo/${id}`,
     method: 'get'
   })
 }
 // 删除消息
 export function MessageDeleteRecord(data) {
   return request({
-    url: `/api/system/System/Message/Record`,
+    url: `/api/system/System/Notice/Record`,
     method: 'DELETE',
     data
   })
@@ -33,7 +33,7 @@ export function MessageDeleteRecord(data) {
 // 获取系统公告列表
 export function getNoticeList(data) {
   return request({
-    url: '/api/system/System/Message/Notice',
+    url: '/api/system/System/Notice/Notice',
     method: 'GET',
     data
   })
@@ -41,7 +41,7 @@ export function getNoticeList(data) {
 // 添加公告
 export function createNotice(data) {
   return request({
-    url: '/api/system/System/Message',
+    url: '/api/system/System/Notice',
     method: 'POST',
     data
   })
@@ -49,7 +49,7 @@ export function createNotice(data) {
 // 修改公告
 export function updateNotice(data) {
   return request({
-    url: `/api/system/System/Message/${data.id}`,
+    url: `/api/system/System/Notice/${data.id}`,
     method: 'PUT',
     data
   })
@@ -57,21 +57,21 @@ export function updateNotice(data) {
 // 获取/查看系统公告信息
 export function getNoticeInfo(id) {
   return request({
-    url: `/api/system/System/Message/${id}`,
+    url: `/api/system/System/Notice/${id}`,
     method: 'GET'
   })
 }
 // 删除公告
 export function delNotice(id) {
   return request({
-    url: `/api/system/System/Message/${id}`,
+    url: `/api/system/System/Notice/${id}`,
     method: 'DELETE'
   })
 }
 // 发布公告
 export function releaseNotice(id) {
   return request({
-    url: `/api/system/System/Message/${id}/Actions/Release`,
+    url: `/api/system/System/Notice/${id}/Actions/Release`,
     method: 'PUT'
   })
 }
