@@ -3,7 +3,7 @@ import request from '@/utils/request'
 // 获取消息中心列表
 export function getMessageList(data) {
   return request({
-    url: `/api/system/Message/Notice`,
+    url: `/api/system/Message`,
     method: 'GET',
     data
   })
