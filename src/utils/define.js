@@ -1,9 +1,9 @@
-const APIURl = 'http://192.168.0.10:7772'
+const APIURl = 'http://127.0.0.1:30000'
 
 module.exports = {
   APIURl: APIURl,
   timeout: process.env.NODE_ENV === 'development' ? 10000 : 1000000,
-  WebSocketUrl: process.env.NODE_ENV === 'development' ? APIURl.replace('http', 'ws') + '/websocket' : process.env.VUE_APP_BASE_WSS,
+  WebSocketUrl: process.env.NODE_ENV === 'development' ? APIURl.replace('http', 'ws') + '/system/Message/websocket' : process.env.VUE_APP_BASE_WSS,
   comUploadUrl: process.env.VUE_APP_BASE_API + '/api/Common/Uploader',
   comUrl: process.env.VUE_APP_BASE_API,
   // 大屏应用前端路径
