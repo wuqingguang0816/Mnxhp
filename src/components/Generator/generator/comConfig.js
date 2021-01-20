@@ -41,39 +41,40 @@ const useSelectList = ['radio', 'checkbox', 'select']
 // 在线开发-功能设计/流程设计独有组件
 const webPeculiarList = [{
     __config__: {
+      jnpfKey: 'relationForm',
       label: '关联表单',
-      showLabel: true,
-      changeTag: true,
       labelWidth: null,
-      defaultValue: '',
-      required: false,
+      showLabel: true,
       tag: 'relationForm',
       tagIcon: 'icon-ym icon-ym-generator-menu',
-      span: 24,
+      defaultValue: '',
+      required: false,
       layout: 'colFormItem',
+      span: 24,
       dragDisabled: false,
-      jnpfKey: 'relationForm'
+      regList: [],
+      trigger: 'change'
     },
     placeholder: '请选择',
     flowId: '',
+    relationField: '',
     clearable: true,
     filterable: false,
     disabled: false
   },
   {
     __config__: {
+      jnpfKey: 'relationFormAttr',
       label: '关联表单属性',
-      showLabel: true,
-      changeTag: true,
       labelWidth: null,
-      defaultValue: '',
-      required: false,
+      showLabel: true,
       tag: 'relationFormAttr',
       tagIcon: 'icon-ym icon-ym-generator-nature',
-      span: 24,
+      defaultValue: '',
+      required: false,
       layout: 'colFormItem',
-      dragDisabled: false,
-      jnpfKey: 'relationFormAttr'
+      span: 24,
+      dragDisabled: false
     },
     showField: '',
     relationField: ''
@@ -82,18 +83,19 @@ const webPeculiarList = [{
 // 在线开发-流程设计独有组件
 const flowPeculiarList = [{
     __config__: {
+      jnpfKey: 'relationFlow',
       label: '关联流程表单',
-      showLabel: true,
-      changeTag: true,
       labelWidth: null,
-      defaultValue: '',
-      required: false,
+      showLabel: true,
       tag: 'relationFlow',
       tagIcon: 'icon-ym icon-ym-generator-flow',
-      span: 24,
+      defaultValue: '',
+      required: false,
       layout: 'colFormItem',
+      span: 24,
       dragDisabled: false,
-      jnpfKey: 'relationFlow'
+      regList: [],
+      trigger: 'change'
     },
     placeholder: '请选择',
     modelId: '',
@@ -104,18 +106,17 @@ const flowPeculiarList = [{
   },
   {
     __config__: {
+      jnpfKey: 'relationFlowAttr',
       label: '关联流程属性',
-      showLabel: true,
-      changeTag: true,
       labelWidth: null,
-      defaultValue: '',
-      required: false,
+      showLabel: true,
       tag: 'relationFlowAttr',
       tagIcon: 'icon-ym icon-ym-generator-nature',
-      span: 24,
+      defaultValue: '',
+      required: false,
       layout: 'colFormItem',
-      dragDisabled: false,
-      jnpfKey: 'relationFlowAttr'
+      span: 24,
+      dragDisabled: false
     },
     showField: '',
     relationField: ''

@@ -3,7 +3,7 @@ import request from '@/utils/request'
 // 获取待我审核
 export function FlowBeforeList(category, data) {
   return request({
-    url: `/api/workflow/WorkFlow/FlowBefore/List/${category}`,
+    url: `/api/workflow/Engine/FlowBefore/List/${category}`,
     method: 'get',
     data
   })
@@ -11,14 +11,14 @@ export function FlowBeforeList(category, data) {
 // 获取待我审批信息
 export function FlowBeforeInfo(id) {
   return request({
-    url: `/api/workflow/WorkFlow/FlowBefore/${id}`,
+    url: `/api/workflow/Engine/FlowBefore/${id}`,
     method: 'get'
   })
 }
 // 待我审核审核
 export function Audit(id, data) {
   return request({
-    url: `/api/workflow/WorkFlow/FlowBefore/Audit/${id}`,
+    url: `/api/workflow/Engine/FlowBefore/Audit/${id}`,
     method: 'post',
     data
   })
@@ -26,7 +26,7 @@ export function Audit(id, data) {
 // 待我审核驳回
 export function Reject(id, data) {
   return request({
-    url: `/api/workflow/WorkFlow/FlowBefore/Reject/${id}`,
+    url: `/api/workflow/Engine/FlowBefore/Reject/${id}`,
     method: 'post',
     data
   })
@@ -34,7 +34,7 @@ export function Reject(id, data) {
 // 待我审核撤回审核
 export function Recall(id, data) {
   return request({
-    url: `/api/workflow/WorkFlow/FlowBefore/Recall/${id}`,
+    url: `/api/workflow/Engine/FlowBefore/Recall/${id}`,
     method: 'post',
     data
   })
@@ -42,7 +42,7 @@ export function Recall(id, data) {
 // 待我审核终止审核
 export function Cancel(id, data) {
   return request({
-    url: `/api/workflow/WorkFlow/FlowBefore/Cancel/${id}`,
+    url: `/api/workflow/Engine/FlowBefore/Cancel/${id}`,
     method: 'post',
     data
   })

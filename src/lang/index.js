@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import VueI18n from 'vue-i18n'
-import Cookies from 'js-cookie'
+import jnpf from '@/utils/jnpf'
 import elementEnLocale from 'element-ui/lib/locale/lang/en' // element-ui lang
 import elementZhLocale from 'element-ui/lib/locale/lang/zh-CN' // element-ui lang
 import elementZhTWLocale from 'element-ui/lib/locale/lang/zh-TW' // element-ui lang
@@ -25,7 +25,7 @@ const messages = {
   }
 }
 export function getLanguage() {
-  const chooseLanguage = Cookies.get('language')
+  const chooseLanguage = jnpf.storageGet('language')
   if (chooseLanguage) return chooseLanguage
 
   // if has not choose language

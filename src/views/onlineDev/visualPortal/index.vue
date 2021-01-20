@@ -31,22 +31,25 @@
         </div>
         <JNPF-table v-loading="listLoading" :data="listAll" row-key="id"
           :tree-props="{children: 'children', hasChildren: ''}" default-expand-all>
-          <el-table-column prop="fullName" label="名称" show-overflow-tooltip width="200">
+          <el-table-column prop="fullName" label="名称" show-overflow-tooltip width="200"
+            v-if="jnpf.hasP('fullName')">
             <template slot-scope="scope">
               <span v-if="scope.row.top"
                 style="font-weight:bold;">{{scope.row.fullName}}【{{scope.row.count}}】</span>
               <span v-else>{{scope.row.fullName}}</span>
             </template>
           </el-table-column>
-          <el-table-column prop="enCode" label="编码" width="200">
+          <el-table-column prop="enCode" label="编码" width="200" v-if="jnpf.hasP('enCode')">
             <template slot-scope="scope" v-if="!scope.row.top">{{scope.row.enCode}}</template>
           </el-table-column>
-          <el-table-column prop="creatorUser" label="创建人" width="100" />
+          <el-table-column prop="creatorUser" label="创建人" width="100"
+            v-if="jnpf.hasP('creatorUser')" />
           <el-table-column prop="creatorTime" label="创建时间" :formatter="jnpf.tableDateFormat"
-            width="120" />
-          <el-table-column prop="lastmodifyuser" label="最后修改人" width="100" />
+            width="120" v-if="jnpf.hasP('creatorTime')" />
+          <el-table-column prop="lastmodifyuser" label="最后修改人" width="100"
+            v-if="jnpf.hasP('lastmodifyuser')" />
           <el-table-column prop="lastmodifytime" label="最后修改时间" :formatter="jnpf.tableDateFormat"
-            width="120" />
+            width="120" v-if="jnpf.hasP('lastmodifytime')" />
           <el-table-column prop="description" label="说明" show-overflow-tooltip />
           <el-table-column label="状态" width="70" align="center">
             <template slot-scope="scope" v-if="!scope.row.top">
@@ -54,7 +57,8 @@
                 {{scope.row.enabledMark==1?'正常':'停用'}}</el-tag>
             </template>
           </el-table-column>
-          <el-table-column prop="sortCode" label="排序" width="70" align="center" />
+          <el-table-column prop="sortCode" label="排序" width="70" align="center"
+            v-if="jnpf.hasP('sortCode')" />
           <el-table-column label="操作" fixed="right" width="150">
             <template slot-scope="scope" v-if="!scope.row.top">
               <tableOpts @edit="addOrUpdateHandle(scope.row.id)"

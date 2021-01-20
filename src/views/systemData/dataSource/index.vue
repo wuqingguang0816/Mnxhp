@@ -31,22 +31,25 @@
         </div>
         <JNPF-table v-loading="listLoading" :data="list" row-key="id"
           :tree-props="{children: 'children', hasChildren: ''}" default-expand-all>
-          <el-table-column prop="fullName" label="连接名称" width="300">
+          <el-table-column prop="fullName" label="连接名称" width="300" v-if="jnpf.hasP('fullName')">
             <template slot-scope="scope">
               <span v-if="scope.row.top"
                 style="font-weight:bold;">{{scope.row.name}}【{{scope.row.count}}】</span>
               <span v-else>{{scope.row.fullName}}</span>
             </template>
           </el-table-column>
-          <el-table-column prop="host" label="主机地址" />
-          <el-table-column prop="port" label="端口" width="60" />
+          <el-table-column prop="host" label="主机地址" v-if="jnpf.hasP('host')" />
+          <el-table-column prop="port" label="端口" width="60" v-if="jnpf.hasP('port')" />
           <el-table-column prop="creatorTime" label="创建时间" width="120"
-            :formatter="jnpf.tableDateFormat" />
-          <el-table-column label="创建人" prop="creatorUser" width="100" />
+            :formatter="jnpf.tableDateFormat" v-if="jnpf.hasP('creatorTime')" />
+          <el-table-column label="创建人" prop="creatorUser" width="100"
+            v-if="jnpf.hasP('creatorUser')" />
           <el-table-column prop="lastModifyTime" label="修改时间" width="120"
-            :formatter="jnpf.tableDateFormat" />
-          <el-table-column label="修改人" prop="lastModifyUser" width="100" />
-          <el-table-column prop="sortCode" label="排序" width="70" align="center" />
+            :formatter="jnpf.tableDateFormat" v-if="jnpf.hasP('lastModifyTime')" />
+          <el-table-column label="修改人" prop="lastModifyUser" width="100"
+            v-if="jnpf.hasP('lastModifyUser')" />
+          <el-table-column prop="sortCode" label="排序" width="70" align="center"
+            v-if="jnpf.hasP('sortCode')" />
           <el-table-column label="操作" fixed="right" width="100">
             <template slot-scope="scope" v-if="!scope.row.top">
               <tableOpts @edit="addOrUpdateHandle(scope.row.id)" @del="handleDel(scope.row.id)" />

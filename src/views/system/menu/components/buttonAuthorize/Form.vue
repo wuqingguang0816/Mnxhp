@@ -13,12 +13,12 @@
       <el-form-item label="编码" prop="enCode">
         <el-input v-model="dataForm.enCode" placeholder="输入编码" />
       </el-form-item>
-      <el-form-item label="图标" prop="icon">
+      <!-- <el-form-item label="图标" prop="icon">
         <el-input v-model="dataForm.icon" placeholder="请选择图标" readonly>
           <template slot="prepend"><i :class="dataForm.icon" /></template>
           <el-button slot="append" icon="el-icon-thumb" @click="openIconBox">选择</el-button>
         </el-input>
-      </el-form-item>
+      </el-form-item> -->
       <el-form-item label="排序" prop="sortCode">
         <el-input-number :min="0" :max="9999" v-model="dataForm.sortCode" />
       </el-form-item>

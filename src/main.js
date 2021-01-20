@@ -1,6 +1,6 @@
 import Vue from 'vue'
 
-import Cookies from 'js-cookie'
+const jnpf = require('./utils/jnpf').default
 
 import 'normalize.css/normalize.css' // a modern alternative to CSS resets
 
@@ -26,7 +26,7 @@ import permission from "@/directive/permission";
 Vue.use(permission)
 
 Vue.use(Element, {
-  size: Cookies.get('size') || 'small', // set element-ui default size
+  size: jnpf.storageGet('size') || 'small', // set element-ui default size
   i18n: (key, value) => i18n.t(key, value)
 })
 // 批量引入组件
@@ -36,7 +36,7 @@ Vue.use(components)
 // 添加实例属性
 Object.assign(Vue.prototype, {
   define: require('./utils/define'), // 常量
-  jnpf: require('./utils/jnpf').default, // 公共方法
+  jnpf, // 公共方法
   formValidate: require('./utils/formValidate').default, // 表单验证
 })
 

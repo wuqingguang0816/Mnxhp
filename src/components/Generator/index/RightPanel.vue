@@ -177,7 +177,8 @@
             <el-radio-group v-model="formConf.labelPosition">
               <el-radio-button label="left">左对齐</el-radio-button>
               <el-radio-button label="right">右对齐</el-radio-button>
-              <el-radio-button label="top">顶部对齐</el-radio-button>
+              <el-radio-button label="top" :disabled="formConf.formStyle==='word-form'">顶部对齐
+              </el-radio-button>
             </el-radio-group>
           </el-form-item>
           <el-form-item label="标题宽度">
@@ -192,7 +193,7 @@
               <el-option label="全屏弹窗" value="fullScreen"></el-option>
             </el-select>
           </el-form-item>
-          <el-form-item label="表单样式" v-if="modelType != 3 && modelType!=6">
+          <el-form-item label="表单样式" v-if="modelType != 3">
             <el-select v-model="formConf.formStyle" placeholder="请选择">
               <el-option label="默认风格" value=""></el-option>
               <el-option label="公文风格" value="word-form"></el-option>
@@ -355,6 +356,9 @@ export default {
     formConf: {
       handler(val) {
         // saveFormConf(val)
+        if (val.formStyle === 'word-form' && val.labelPosition === 'top') {
+          val.labelPosition = 'left'
+        }
       },
       deep: true
     },

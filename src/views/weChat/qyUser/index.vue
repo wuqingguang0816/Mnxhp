@@ -31,31 +31,33 @@
           </div>
         </div>
         <JNPF-table v-loading="listLoading" :data="list">
-          <el-table-column prop="account" label="账户" width="100" />
-          <el-table-column prop="nickName" label="户名" width="100" />
-          <el-table-column prop="gender" label="性别" width="60">
+          <el-table-column prop="account" label="账户" width="100" v-if="jnpf.hasP('account')" />
+          <el-table-column prop="nickName" label="户名" width="100" v-if="jnpf.hasP('nickName')" />
+          <el-table-column prop="gender" label="性别" width="60" v-if="jnpf.hasP('gender')">
             <template slot-scope="scope">
               {{scope.row.gender== 1? "男":"女"}}
             </template>
           </el-table-column>
-          <el-table-column prop="mobilePhone" label="手机" width="100" />
-          <el-table-column prop="department" label="机构" width="120" />
-          <el-table-column prop="position" label="岗位" width="180" />
-          <el-table-column prop="syncState" label="同步状态">
+          <el-table-column prop="mobilePhone" label="手机" width="100"
+            v-if="jnpf.hasP('mobilePhone')" />
+          <el-table-column prop="department" label="机构" width="120"
+            v-if="jnpf.hasP('department')" />
+          <el-table-column prop="position" label="岗位" width="180" v-if="jnpf.hasP('position')" />
+          <el-table-column prop="syncState" label="同步状态" v-if="jnpf.hasP('syncState')">
             <template slot-scope="scope">
               <el-tag type="success" v-if="scope.row.syncState">同步成功</el-tag>
               <el-tag type="info" v-else>未同步</el-tag>
               <!-- <el-tag type="danger" v-else>同步失败</el-tag> -->
             </template>
           </el-table-column>
-          <el-table-column prop="enabledMark" label="提交状态">
+          <el-table-column prop="enabledMark" label="提交状态" v-if="jnpf.hasP('enabledMark')">
             <template slot-scope="scope">
               <el-tag v-if="scope.row.enabledMark  == 1">正常</el-tag>
               <el-tag type="danger" v-else-if="scope.row.enabledMark  == 0">停用</el-tag>
               <el-tag type="info" v-else>未激活</el-tag>
             </template>
           </el-table-column>
-          <el-table-column prop="description" label="备注" />
+          <el-table-column prop="description" label="备注" v-if="jnpf.hasP('description')" />
         </JNPF-table>
       </div>
     </div>

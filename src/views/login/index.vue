@@ -112,6 +112,7 @@ export default {
       this.capsTooltip = key && key.length === 1 && key >= 'A' && key <= 'Z'
     },
     handleLogin() {
+      if (this.loading) return
       this.$refs.loginForm.validate(valid => {
         if (valid) {
           this.loading = true

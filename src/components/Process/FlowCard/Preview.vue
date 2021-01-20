@@ -1,6 +1,6 @@
 <script>
 import { NodeUtils } from "./util.js";
-const isCondition = data => data.type === "condition";
+const isCondition = data => data.type === "condition" || (data.type === "approver" && data.isInterflow);
 const notEmptyArray = arr => Array.isArray(arr) && arr.length > 0;
 const hasBranch = data => notEmptyArray(data.conditionNodes);
 const stopPro = ev => ev.stopPropagation();
@@ -12,16 +12,13 @@ function createNormalCard(ctx, conf, h) {
   const isStartNode = afterTrue(NodeUtils.isStartNode(conf), 'start-node')
   const isApprNode = afterTrue(NodeUtils.isApproverNode(conf), 'approver')
   const isCopyNode = afterTrue(NodeUtils.isCopyNode(conf), 'copy')
+  const isTimerNode = afterTrue(NodeUtils.isTimerNode(conf), 'timer')
   if (conf.nodeId === this.thisStepId) classList.push('state-curr')
   if (this.thisStepId === 'start') afterTrue(NodeUtils.isStartNode(conf), 'state-curr')
   return (
     <section class={classList.join(' ')} onClick={this.eventLancher.bind(ctx, "edit", conf)} >
       <header class="header">
         <div class="title-box" style="height: 100%;width:190px;">
-          {isApprNode}
-          {isCopyNode && (
-            <i class="iconfont icon-ym-workflow-flowcirculate" style="font-size:12px;color:white;margin-right:4px;"></i>
-          )}
           <span class="title-text">{conf.properties.title}</span>
         </div>
       </header>
@@ -37,17 +34,19 @@ let nodes = {
   start: createFunc,
   approver: createFunc,
   copy: createFunc,
+  timer: createFunc,
+  interflow: createFunc,
   empty: _ => '',
   condition: function (ctx, conf, h) {
     return (
-      <section class="flow-path-card condition" >
+      <section class="flow-path-card condition">
         <header class="header">
           <div class="title-box" style="height: 20px;width:160px;">
             <span class="title-text">{conf.properties.title}</span>
           </div>
         </header>
         <div class="body">
-          <pre class="text" >{conf.content}</pre>
+          <pre class="text">{conf.content}</pre>
         </div>
       </section>
     );
@@ -62,7 +61,7 @@ function addNodeButton(ctx, data, h, isBranch = false) {
     return "";
   }
   return (
-    <div class="add-node-btn-box flex  justify-center"></div>
+    <div class="add-node-btn-box flex justify-center"></div>
   );
 }
 
@@ -73,7 +72,7 @@ function NodeFactory(ctx, data, h) {
     branchNode = "",
     selfNode = (
       <div class="node-wrap">
-        <div class={`node-wrap-box ${data.type} ${showErrorTip ? 'error' : ''}`}>
+        <div class={`node-wrap-box ${data.type} ${NodeUtils.isInterflowNode(data) ? 'interflow' : ''} ${showErrorTip ? 'error' : ''}`}>
           {nodes[data.type].call(ctx, ctx, data, h)}
           {addNodeButton.call(ctx, ctx, data, h)}
         </div>
@@ -86,7 +85,7 @@ function NodeFactory(ctx, data, h) {
     branchNode = (
       <div class="branch-wrap">
         <div class="branch-box-wrap">
-          <div class="branch-box  flex justify-center relative">
+          <div class="branch-box flex justify-center relative">
             <span class="line"></span>
             {data.conditionNodes.map(d => NodeFactory.call(ctx, ctx, d, h))}
           </div>

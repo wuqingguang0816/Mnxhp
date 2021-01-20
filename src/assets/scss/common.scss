@@ -1488,6 +1488,15 @@ textarea.el-textarea__inner {
         }
       }
     }
+
+    .el-input-number {
+      margin-left: 0;
+    }
+
+    .el-color-picker,
+    .el-switch {
+      padding-left: 0;
+    }
   }
 
   .el-table th:nth-last-child(2) {

@@ -9,9 +9,13 @@
     <el-form-item label="占位提示" v-if="activeData.__config__.jnpfKey !=='editor'">
       <el-input v-model="activeData.placeholder" placeholder="请输入占位提示" />
     </el-form-item>
-    <el-form-item label="控件宽度">
+    <el-form-item label="控件宽度" v-if="!activeData.__config__.isSubTable">
       <el-slider v-model="activeData.__config__.span" :max="24" :min="6" show-stops :step="2"
         show-tooltip />
+    </el-form-item>
+    <el-form-item label="控件宽度" v-if="activeData.__config__.isSubTable">
+      <el-input-number v-model="activeData.__config__.columnWidth" placeholder="控件宽度" :min="0"
+        :precision="0" /> px
     </el-form-item>
     <el-form-item label="标题宽度">
       <el-input v-model.number="activeData.__config__.labelWidth" type="number"

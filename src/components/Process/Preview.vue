@@ -68,12 +68,13 @@ export default {
       let oldProp = this.activeData.properties;
       this.activeData.properties = value;
       // 修改优先级
-      if (NodeUtils.isConditionNode(this.activeData) && value.priority !== oldProp.priority) {
-        NodeUtils.resortPrioByCNode(
-          this.activeData,
-          oldProp.priority,
-          this.data
-        );
+      if (NodeUtils.isConditionNode(this.activeData)) {
+        value.priority !== oldProp.priority
+          && NodeUtils.resortPrioByCNode(
+            this.activeData,
+            oldProp.priority,
+            this.data
+          );
         NodeUtils.setDefaultCondition(this.activeData, this.data)
       }
       if (NodeUtils.isStartNode(this.activeData)) this.$emit('startNodeChange', this.data)
@@ -109,19 +110,14 @@ export default {
     }
   },
   render: function (h) {
-    NodeUtils.globalID = NodeUtils.getMaxNodeId(this.data)
     return (
       <div class="flow-container flow-container-preview">
         <div class="scale-slider">
-          <i
-            class="btn el-icon-minus"
-            onClick={this.changeScale.bind(this, -this.step)}
-          ></i>
+          <i class="btn el-icon-minus"
+            onClick={this.changeScale.bind(this, -this.step)}></i>
           <span style="font-size:14px;">{this.scaleVal}%</span>
-          <i
-            class="btn el-icon-plus"
-            onClick={this.changeScale.bind(this, this.step)}
-          ></i>
+          <i class="btn el-icon-plus"
+            onClick={this.changeScale.bind(this, this.step)}></i>
         </div>
         <div class="tips">
           <div class="tips-item"><span class="icon success">●</span>已完成</div>
@@ -186,6 +182,7 @@ $bg-color: #fff;
         box-shadow: 0 0 0 2px #b6b6b6, 0 0 5px 4px rgb(0 0 0 / 20%);
       }
       &.start-node,
+      &.timer,
       &.approver {
         &:hover {
           box-shadow: 0 0 0 2px #b6b6b6, 0 0 5px 4px rgb(0 0 0 / 20%);

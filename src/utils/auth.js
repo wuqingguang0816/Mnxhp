@@ -1,27 +1,24 @@
-import Cookies from 'js-cookie'
-
-const TokenKey = 'JNPF-Token'
-const LockKey = 'JNPF-Lock'
+import jnpf from '@/utils/jnpf'
 
 export function getToken() {
-  return Cookies.get(TokenKey)
+  return jnpf.storageGet('token')
 }
 
 export function setToken(token) {
-  return Cookies.set(TokenKey, token)
+  return jnpf.storageSet({ token })
 }
 
 export function removeToken() {
-  return Cookies.remove(TokenKey)
+  return jnpf.storageRemove('token')
 }
 
 export function getLock() {
-  return Cookies.get(LockKey)
+  return jnpf.storageGet('lock')
 }
 
-export function setLock(isLock) {
-  return Cookies.set(LockKey, isLock)
+export function setLock(lock) {
+  return jnpf.storageSet({ lock })
 }
 export function removeLock() {
-  return Cookies.remove(LockKey)
+  return jnpf.storageRemove('lock')
 }

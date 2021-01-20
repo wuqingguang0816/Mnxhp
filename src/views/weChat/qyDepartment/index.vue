@@ -32,18 +32,19 @@
         </div>
         <JNPF-table v-loading="listLoading" row-key="id" :data="treeData" default-expand-all
           :tree-props="{children: 'children', hasChildren: ''}">
-          <el-table-column prop="fullName" label="名称" />
-          <el-table-column prop="enCode" label="编码" width="200" />
-          <el-table-column prop="category" label="分类" width="100" />
-          <el-table-column prop="syncState" label="状态" width="100">
+          <el-table-column prop="fullName" label="名称" v-if="jnpf.hasP('fullName')" />
+          <el-table-column prop="enCode" label="编码" width="200" v-if="jnpf.hasP('enCode')" />
+          <el-table-column prop="category" label="分类" width="100" v-if="jnpf.hasP('category')" />
+          <el-table-column prop="syncState" label="状态" width="100" v-if="jnpf.hasP('syncState')">
             <template slot-scope="scope">
               <el-tag type="success" v-if="scope.row.syncState ">同步成功</el-tag>
               <el-tag type="info" v-else>未同步</el-tag>
               <!-- <el-tag type="danger" v-else>同步失败</el-tag> -->
             </template>
           </el-table-column>
-          <el-table-column prop="submitState" label="提交状态" width="100" />
-          <el-table-column prop="description" label="备注" />
+          <el-table-column prop="submitState" label="提交状态" width="100"
+            v-if="jnpf.hasP('submitState')" />
+          <el-table-column prop="description" label="备注" v-if="jnpf.hasP('description')" />
         </JNPF-table>
       </div>
     </div>

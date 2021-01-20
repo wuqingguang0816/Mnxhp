@@ -5,7 +5,7 @@
         <el-page-header @back="goBack" content="订单详细" />
         <div class="options">
           <el-button-group>
-            <el-button icon="el-icon-printer" @click="print">打印</el-button>
+            <el-button icon="el-icon-printer" @click="print()">打印</el-button>
             <el-button icon="el-icon-download" @click="exportExcel">导出</el-button>
           </el-button-group>
           <el-button-group>
@@ -18,106 +18,109 @@
         </div>
       </div>
       <div class="main" v-loading="loading">
-        <el-form :model="dataForm" :rules="dataRule" ref="dataForm" label-width="90px">
-          <el-row>
-            <el-col :span="6">
-              <el-form-item label="客户名称">
-                <p class="text">{{dataForm.customerName}}</p>
-              </el-form-item>
-            </el-col>
-            <el-col :span="6">
-              <el-form-item label="业务人员">
-                <p class="text">{{dataForm.salesmanName}}</p>
-              </el-form-item>
-            </el-col>
-            <el-col :span="6">
-              <el-form-item label="订单日期">
-                <p class="text">{{dataForm.orderDate}}</p>
-              </el-form-item>
-            </el-col>
-            <el-col :span="6">
-              <el-form-item label="订单编码">
-                <p class="text">{{dataForm.orderCode}}</p>
-              </el-form-item>
-            </el-col>
-            <el-col :span="6">
-              <el-form-item label="付款方式">
-                <p class="text">{{dataForm.paymentMode}}</p>
-              </el-form-item>
-            </el-col>
-            <el-col :span="6">
-              <el-form-item label="付款金额">
-                <p class="text">{{dataForm.receivableMoney}}</p>
-              </el-form-item>
-            </el-col>
-            <el-col :span="6">
-              <el-form-item label="定金比率">
-                <p class="text">{{dataForm.earnestRate}}</p>
-              </el-form-item>
-            </el-col>
-            <el-col :span="6">
-              <el-form-item label="预付定金">
-                <p class="text">{{dataForm.prepayEarnest}}</p>
-              </el-form-item>
-            </el-col>
-            <el-col :span="6">
-              <el-form-item label="运输方式">
-                <p class="text">{{dataForm.transportMode}}</p>
-              </el-form-item>
-            </el-col>
-            <el-col :span="6">
-              <el-form-item label="发货日期">
-                <p class="text">{{dataForm.deliveryDate}}</p>
-              </el-form-item>
-            </el-col>
-            <el-col :span="12">
-              <el-form-item label="发货地址">
-                <p class="text">{{dataForm.deliveryAddress}}</p>
-              </el-form-item>
-            </el-col>
-            <el-col :span="24">
-              <el-form-item label="相关附件">
-                <ul class="el-upload-list el-upload-list--text">
-                  <li class="el-upload-list__item" v-for="(item,i) in fileList" :key="i"
-                    @click="download(item.fileId)">
-                    <a class="el-upload-list__item-name"><i
-                        class="el-icon-document"></i>{{item.fileName}}
-                    </a>
-                  </li>
-                </ul>
-              </el-form-item>
-            </el-col>
-            <el-col :span="24">
-              <el-form-item label="订单备注">
-                <p>{{dataForm.description}}</p>
-              </el-form-item>
-            </el-col>
-            <el-col :span="6">
-              <el-form-item label="制单人员">
-                <p class="text">{{dataForm.creatorUserId}}</p>
-              </el-form-item>
-            </el-col>
-            <el-col :span="6">
-              <el-form-item label="制单时间">
-                <p class="text">{{dataForm.creatorTime|toDate()}}</p>
-              </el-form-item>
-            </el-col>
-            <el-col :span="6">
-              <el-form-item label="修改人员">
-                <p class="text">{{dataForm.lastModifyUserId}}</p>
-              </el-form-item>
-            </el-col>
-            <el-col :span="6">
-              <el-form-item label="修改时间">
-                <p class="text">{{dataForm.lastModifyTime|toDate()}}</p>
-              </el-form-item>
-            </el-col>
-          </el-row>
-        </el-form>
+        <div class="form" ref="print1">
+          <el-form :model="dataForm" :rules="dataRule" ref="dataForm" label-width="90px">
+            <el-row>
+              <el-col :span="6">
+                <el-form-item label="客户名称">
+                  <p class="text">{{dataForm.customerName}}</p>
+                </el-form-item>
+              </el-col>
+              <el-col :span="6">
+                <el-form-item label="业务人员">
+                  <p class="text">{{dataForm.salesmanName}}</p>
+                </el-form-item>
+              </el-col>
+              <el-col :span="6">
+                <el-form-item label="订单日期">
+                  <p class="text">{{dataForm.orderDate}}</p>
+                </el-form-item>
+              </el-col>
+              <el-col :span="6">
+                <el-form-item label="订单编码">
+                  <p class="text">{{dataForm.orderCode}}</p>
+                </el-form-item>
+              </el-col>
+              <el-col :span="6">
+                <el-form-item label="付款方式">
+                  <p class="text">{{dataForm.paymentMode}}</p>
+                </el-form-item>
+              </el-col>
+              <el-col :span="6">
+                <el-form-item label="付款金额">
+                  <p class="text">{{dataForm.receivableMoney}}</p>
+                </el-form-item>
+              </el-col>
+              <el-col :span="6">
+                <el-form-item label="定金比率">
+                  <p class="text">{{dataForm.earnestRate}}</p>
+                </el-form-item>
+              </el-col>
+              <el-col :span="6">
+                <el-form-item label="预付定金">
+                  <p class="text">{{dataForm.prepayEarnest}}</p>
+                </el-form-item>
+              </el-col>
+              <el-col :span="6">
+                <el-form-item label="运输方式">
+                  <p class="text">{{dataForm.transportMode}}</p>
+                </el-form-item>
+              </el-col>
+              <el-col :span="6">
+                <el-form-item label="发货日期">
+                  <p class="text">{{dataForm.deliveryDate}}</p>
+                </el-form-item>
+              </el-col>
+              <el-col :span="12">
+                <el-form-item label="发货地址">
+                  <p class="text">{{dataForm.deliveryAddress}}</p>
+                </el-form-item>
+              </el-col>
+              <el-col :span="24">
+                <el-form-item label="相关附件">
+                  <ul class="el-upload-list el-upload-list--text">
+                    <li class="el-upload-list__item" v-for="(item,i) in fileList" :key="i"
+                      @click="download(item.fileId)">
+                      <a class="el-upload-list__item-name"><i
+                          class="el-icon-document"></i>{{item.fileName}}
+                      </a>
+                    </li>
+                  </ul>
+                </el-form-item>
+              </el-col>
+              <el-col :span="24">
+                <el-form-item label="订单备注">
+                  <p>{{dataForm.description}}</p>
+                </el-form-item>
+              </el-col>
+              <el-col :span="6">
+                <el-form-item label="制单人员">
+                  <p class="text">{{dataForm.creatorUserId}}</p>
+                </el-form-item>
+              </el-col>
+              <el-col :span="6">
+                <el-form-item label="制单时间">
+                  <p class="text">{{dataForm.creatorTime|toDate()}}</p>
+                </el-form-item>
+              </el-col>
+              <el-col :span="6">
+                <el-form-item label="修改人员">
+                  <p class="text">{{dataForm.lastModifyUserId}}</p>
+                </el-form-item>
+              </el-col>
+              <el-col :span="6">
+                <el-form-item label="修改时间">
+                  <p class="text">{{dataForm.lastModifyTime|toDate()}}</p>
+                </el-form-item>
+              </el-col>
+            </el-row>
+          </el-form>
+        </div>
         <div class="box">
-          <el-tabs v-model="activeName">
+          <el-tabs v-model="activeName" @tab-click="handleClick">
             <el-tab-pane label="订单商品" name="goods">
-              <el-table :data="list" size='small' show-summary :summary-method="getSummaries">
+              <el-table :data="list" size='small' show-summary :summary-method="getSummaries"
+                id="myTable1">
                 <el-table-column type="index" width="50" label="序号" align="center" />
                 <el-table-column prop="goodsName" label="商品名称" show-overflow-tooltip />
                 <el-table-column prop="specifications" label="规格型号" width="80" />
@@ -133,7 +136,8 @@
               </el-table>
             </el-tab-pane>
             <el-tab-pane label="收款计划" name="plan">
-              <el-table :data="planList" size='small' show-summary :summary-method="getSummaries">
+              <el-table :data="planList" size='small' show-summary :summary-method="getSummaries"
+                id="myTable2">
                 <el-table-column type="index" width="50" label="序号" align="center" />
                 <el-table-column prop="receivableDate" label="收款日期"
                   :formatter="jnpf.tableDateFormat" />
@@ -146,6 +150,7 @@
           </el-tabs>
         </div>
       </div>
+
     </div>
   </transition>
 </template>
@@ -154,9 +159,11 @@
 import { ExportExcel, NextInfo, PrevInfo } from '@/api/extend/order'
 import { Info } from '@/api/workFlowForm/Common'
 import { getDownloadUrl } from '@/api/common'
+import printStyle from '../printData/printStyle'
 export default {
   data() {
     return {
+      printId: 'myTable1',
       activeName: 'goods',
       dataForm: {
         id: '',
@@ -183,8 +190,20 @@ export default {
     }
   },
   methods: {
+    print2() {
+      window.document.body.innerHTML = this.detiel.list2 + this.detiel.list + printStyle;
+      window.print();
+      window.location.reload()
+    },
     goBack() {
       this.$emit('close')
+    },
+    handleClick(tab, event) {
+      if (tab.index == '1') {
+        this.printId = 'myTable2'
+      } else {
+        this.printId = 'myTable1'
+      }
     },
     init(id) {
       this.dataForm.id = id || ''
@@ -284,8 +303,73 @@ export default {
         }
       })
     },
+    // 打印
     print() {
-      this.$message({ message: '正在努力开发中...', type: 'warning', duration: 1500 })
+      const tabStyle = `<style>
+          table{width:100%;display:table-cell!important;box-sizing:border-box;}
+          .el-table__header,.el-table__body,.el-table__footer{width:100%!important;border-collapse: collapse;text-align:center;}
+          table, table tr td { border:1px solid #333;color:#606266;word-wrap:break-word}
+          table tr th,table tr td{padding:4mm 0mm;word-wrap:break-word }
+          table thead{border-bottom:0!important;display:none;}
+          .el-table__body, tr td .cell{width:100%!important}
+          .el-table th.gutter{display: none;}
+          .el-table colgroup.gutter{display: none;}                
+          </style><body>`;
+      // 表单数据
+      let printForm = this.$refs.print1.innerHTML;
+      let id = this.printId
+      // 表格数据
+      const html = document.querySelector('#' + id).innerHTML
+      // 新建一个 DOM
+      const div = document.createElement('div')
+      const printDOMID = 'printDOMElement'
+      div.id = printDOMID
+      div.innerHTML = html;
+      // 提取第3个表格的内容
+      // const ths1 = div.querySelectorAll('.el-table__footer tbody tr td .cell')
+      // const ThsTextArry1 = []
+      // for (let i = 0, len = ths1.length; i < len; i++) {
+      //   if (ths1[i].innerText !== '') ThsTextArry1.push(ths1[i].innerText)
+      // }
+      // 提取第一个表格的内容 即表头
+      const ths = div.querySelectorAll('.el-table__header-wrapper th')
+      const ThsTextArry = []
+      for (let i = 0, len = ths.length; i < len; i++) {
+        if (ths[i].innerText !== '') ThsTextArry.push(ths[i].innerText)
+      }
+      // 删除多余的表头
+      div.querySelector('.hidden-columns').remove();
+      div.querySelector('.has-gutter').remove();
+
+      //  删掉第一个表格的内容
+      div.querySelector('.el-table__header-wrapper').remove();
+      // 删除第三个表格的内容
+      div.querySelector('.el-table__footer-wrapper').remove();
+      //取出表头放到tr里面
+      let newHTML = '<tr>'
+      for (let i = 0, len = ThsTextArry.length; i < len; i++) {
+        newHTML += '<td style="text-align: center; font-weight : bold;padding:10px;">' + ThsTextArry[i] + '</td>'
+      }
+      newHTML += '</tr>'
+      //合计取出表头放到tr里面
+      // let newHTML1 = '<tr>'
+      // for (let i = 0, len = ThsTextArry1.length; i < len; i++) {
+      //   newHTML1 += '<td style="text-align: center; font-weight: bold;padding:10px;">' + ThsTextArry1[i] + '</td>'
+      // }
+      // newHTML1 += '</tr>'
+      let printStr = "<html><head><meta http-equiv='Content-Type' content='text/html; charset=utf-8'></head>";
+      let content = "";
+      let print = document.getElementById(id).innerHTML;
+      content = content + print;
+      let content1 = content.replace('<tbody>', '<tbody>' + newHTML)
+      // let content2 = content.replace('</tbody>', newHTML1 + '</tbody>')
+      let printPart1 = printStr + tabStyle + content1 + "</body></html>";
+      // 打印方法
+      let printPart = printForm + printPart1 + printStyle;
+      let newTab = window.open('_blank');
+      newTab.document.body.innerHTML = printPart;
+      newTab.print();
+      newTab.close();
     },
     download(id) {
       getDownloadUrl('workFlow', id).then(res => {

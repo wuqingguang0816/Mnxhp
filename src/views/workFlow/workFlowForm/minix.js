@@ -11,6 +11,7 @@ export default {
       flowUrgentOptions: [{ value: 1, label: '普通' }, { value: 2, label: '重要' }, { value: 3, label: '紧急' }],
       fileList: [],
       setting: {},
+      isSubmit: false,
       loading: true,
       userBoxVisible: false
     }
@@ -65,6 +66,7 @@ export default {
             this.dataForm.fileJson = fileJson
           }
           this.dataForm.status = isSubmit ? 0 : 1
+          this.isSubmit = isSubmit
           if (isSubmit) {
             if (this.setting.freeApprover == 0) {
               this.$confirm('您确定要提交当前流程吗, 是否继续?', '提示', {
@@ -90,6 +92,7 @@ export default {
     },
     request() {
       if (!this.dataForm.id) delete(this.dataForm.id)
+      if (!this.isSubmit) this.$emit('setLoad', true)
       const formMethod = this.dataForm.id ? Update : Create
       formMethod(this.setting.enCode, this.dataForm).then(res => {
         this.$message({
@@ -97,10 +100,13 @@ export default {
           type: 'success',
           duration: 1500,
           onClose: () => {
+            if (!this.isSubmit) this.$emit('setLoad')
             this.$emit('close', true)
           }
         })
-      }).catch(() => { this.$emit('reset') })
+      }).catch(() => {
+        if (!this.isSubmit) this.$emit('setLoad')
+      })
     },
     JudgeShow(id) {
       if (!this.setting.formOperates || !this.setting.formOperates.length) return true

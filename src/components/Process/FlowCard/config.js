@@ -30,6 +30,25 @@ export default {
       userOptional: true
     }
   },
+  timer: {
+    type: 'timer',
+    content: '请设置时间',
+    properties: {
+      title: '定时器',
+      day: 0,
+      hour: 0,
+      minute: 0,
+      second: 0
+    }
+  },
+  interflow: {
+    type: "approver",
+    content: "请设置审批人",
+    isInterflow: true,
+    properties: {
+      title: '审批节点'
+    }
+  },
   condition: {
     type: "condition",
     content: "请设置条件",

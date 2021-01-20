@@ -3,7 +3,7 @@ import request from '@/utils/request'
 // 获取系统配置
 export function getSystemConfig() {
   return request({
-    url: '/api/system/System/SysConfig',
+    url: '/api/system/Base/SysConfig',
     method: 'GET'
   })
 }
@@ -11,7 +11,7 @@ export function getSystemConfig() {
 // 更新系统配置
 export function updateSystemConfig(data) {
   return request({
-    url: '/api/system/System/SysConfig',
+    url: '/api/system/Base/SysConfig',
     method: 'PUT',
     data
   })
@@ -20,7 +20,7 @@ export function updateSystemConfig(data) {
 // 邮箱连接测试
 export function testEmail(data) {
   return request({
-    url: '/api/system/System/SysConfig/Email/Test',
+    url: '/api/system/Base/SysConfig/Email/Test',
     method: 'POST',
     data
   })

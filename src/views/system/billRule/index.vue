@@ -30,18 +30,20 @@
           </div>
         </div>
         <JNPF-table v-loading="listLoading" :data="tableList">
-          <el-table-column prop="fullName" label="业务名称" width="200" />
-          <el-table-column prop="enCode" label="业务编码" width="200" />
-          <el-table-column prop="digit" label="流水位数" width="80" />
-          <el-table-column prop="startNumber" label="流水起始" width="120" />
-          <el-table-column prop="outputNumber" label="当前流水号" />
-          <el-table-column label="流水状态" width="100">
+          <el-table-column prop="fullName" label="业务名称" width="200" v-if="jnpf.hasP('fullName')" />
+          <el-table-column prop="enCode" label="业务编码" width="200" v-if="jnpf.hasP('enCode')" />
+          <el-table-column prop="digit" label="流水位数" width="80" v-if="jnpf.hasP('digit')" />
+          <el-table-column prop="startNumber" label="流水起始" width="120"
+            v-if="jnpf.hasP('startNumber')" />
+          <el-table-column prop="outputNumber" label="当前流水号" v-if="jnpf.hasP('outputNumber')" />
+          <el-table-column label="流水状态" width="100" v-if="jnpf.hasP('enabledMark')">
             <template slot-scope="scope">
               <el-switch v-model="scope.row.enabledMark" :active-value="1" :inactive-value="0"
                 @click.native="handleUpdateState(scope.row)" disabled class="table-switch" />
             </template>
           </el-table-column>
-          <el-table-column prop="sortCode" label="排序" width="70" align="center" />
+          <el-table-column prop="sortCode" label="排序" width="70" align="center"
+            v-if="jnpf.hasP('sortCode')" />
           <el-table-column label="操作" width="100">
             <template slot-scope="scope">
               <tableOpts @edit="handleAddEdit(scope.row.id)" @del="handleDel(scope.row.id)">
@@ -101,6 +103,7 @@ export default {
       })
     },
     handleUpdateState(row) {
+      if (!this.jnpf.hasBtnP('btn_edit')) return this.$message.warning(this.$t('common.noPerTip'))
       const txt = row.enabledMark ? '禁用' : '开启'
       this.$confirm(`您确定要${txt}当前规则吗, 是否继续?`, '提示', {
         type: 'warning'

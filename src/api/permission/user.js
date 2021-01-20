@@ -1,5 +1,4 @@
 import request from '@/utils/request'
-import { getRoleSelector } from "@/api/permission/role";
 
 // 获取用户列表
 export const getUserList = (data) => {

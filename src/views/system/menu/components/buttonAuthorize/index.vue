@@ -14,13 +14,7 @@
         </div>
         <JNPF-table v-loading="listLoading" :data="treeList" row-key="id" default-expand-all
           :tree-props="{children: 'children', hasChildren: ''}">
-          <el-table-column label="按钮名称" width="160">
-            <template slot-scope="scope">
-              <span>
-                <i :class="scope.row.icon" style="margin-right: 5px" />{{scope.row.fullName}}
-              </span>
-            </template>
-          </el-table-column>
+          <el-table-column prop="fullName" label="按钮名称" width="160" />
           <el-table-column prop="enCode" label="按钮编码" />
           <el-table-column prop="sortCode" label="排序" width="90" align="center" />
           <el-table-column label="状态" width="90">

@@ -45,14 +45,15 @@
             </div>
             <JNPF-table v-loading="listLoading" :data="treeList" row-key="id" v-if="refreshTable"
               :default-expand-all="expands" :tree-props="{children: 'children', hasChildren: ''}">
-              <el-table-column label="菜单名称" width="200">
+              <el-table-column label="菜单名称" width="200" v-if="jnpf.hasP('fullName')">
                 <template slot-scope="scope">
                   <i :class="scope.row.icon+' table-icon'" />
                   <label>{{ scope.row.fullName }}</label>
                 </template>
               </el-table-column>
-              <el-table-column prop="urlAddress" label="菜单地址" show-overflow-tooltip />
-              <el-table-column label="类型" width="90" align="center">
+              <el-table-column prop="urlAddress" label="菜单地址" show-overflow-tooltip
+                v-if="jnpf.hasP('urlAddress')" />
+              <el-table-column label="类型" width="90" align="center" v-if="jnpf.hasP('type')">
                 <template slot-scope="scope">
                   <span v-if="scope.row.type === 1">目录</span>
                   <span v-if="scope.row.type === 2">页面</span>
@@ -62,8 +63,9 @@
                   <span v-if="scope.row.type === 6">大屏</span>
                 </template>
               </el-table-column>
-              <el-table-column prop="sortCode" label="排序" width="70" align="center" />
-              <el-table-column label="状态" width="70" align="center">
+              <el-table-column prop="sortCode" label="排序" width="70" align="center"
+                v-if="jnpf.hasP('sortCode')" />
+              <el-table-column label="状态" width="70" align="center" v-if="jnpf.hasP('enabledMark')">
                 <template slot-scope="scope">
                   <el-switch v-model="scope.row.enabledMark" :active-value="1" :inactive-value="0"
                     @click.native="handleUpdateState(scope.row)" disabled class="table-switch" />
@@ -182,6 +184,7 @@ export default {
       })
     },
     handleUpdateState(row) {
+      if (!this.jnpf.hasBtnP('btn_edit')) return this.$message.warning(this.$t('common.noPerTip'))
       const txt = row.enabledMark ? '禁用' : '开启'
       this.$confirm(`您确定要${txt}当前菜单吗, 是否继续?`, '提示', {
         type: 'warning'

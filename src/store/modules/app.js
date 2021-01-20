@@ -1,14 +1,14 @@
-import Cookies from 'js-cookie'
+import jnpf from '@/utils/jnpf'
 import { getLanguage } from '@/lang/index'
 
 const state = {
   sidebar: {
-    opened: Cookies.get('sidebarStatus') ? !!+Cookies.get('sidebarStatus') : true,
+    opened: jnpf.storageGet('sidebarStatus') ? !!+jnpf.storageGet('sidebarStatus') : true,
     withoutAnimation: false
   },
   device: 'desktop',
   language: getLanguage(),
-  size: Cookies.get('size') || 'medium'
+  size: jnpf.storageGet('size') || 'medium'
 }
 
 const mutations = {
@@ -16,13 +16,13 @@ const mutations = {
     state.sidebar.opened = !state.sidebar.opened
     state.sidebar.withoutAnimation = false
     if (state.sidebar.opened) {
-      Cookies.set('sidebarStatus', 1)
+      jnpf.storageSet({ sidebarStatus: 1 })
     } else {
-      Cookies.set('sidebarStatus', 0)
+      jnpf.storageSet({ sidebarStatus: 0 })
     }
   },
   CLOSE_SIDEBAR: (state, withoutAnimation) => {
-    Cookies.set('sidebarStatus', 0)
+    jnpf.storageSet({ sidebarStatus: 0 })
     state.sidebar.opened = false
     state.sidebar.withoutAnimation = withoutAnimation
   },
@@ -31,11 +31,11 @@ const mutations = {
   },
   SET_LANGUAGE: (state, language) => {
     state.language = language
-    Cookies.set('language', language)
+    jnpf.storageSet({ language })
   },
   SET_SIZE: (state, size) => {
     state.size = size
-    Cookies.set('size', size)
+    jnpf.storageSet({ size })
   }
 }
 

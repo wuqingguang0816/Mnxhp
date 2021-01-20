@@ -10,7 +10,7 @@
       </div>
       <el-tabs class="JNPF-el_tabs" v-model="activeTab">
         <el-tab-pane label="流程表单">
-          <component :is="currentView" @close="goBack" ref="form" @reset="btnLoading=false" />
+          <component :is="currentView" @close="goBack" ref="form" @setLoad="setLoad" />
         </el-tab-pane>
         <el-tab-pane label="流程视图">
           <Process :conf="flowTemplateJson" thisStepId="start" v-if="flowTemplateJson.childNode" />
@@ -61,8 +61,10 @@ export default {
       })
     },
     dataFormSubmit(isSubmit) {
-      if (!isSubmit) this.btnLoading = true
       this.$refs.form && this.$refs.form.dataFormSubmit(isSubmit)
+    },
+    setLoad(val) {
+      this.btnLoading = !!val
     }
   }
 }

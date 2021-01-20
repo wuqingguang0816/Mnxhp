@@ -1,5 +1,6 @@
 import store from '@/store'
 import dayjs from 'dayjs'
+import context from '@/main'
 const STORAGEPREFIX = 'jnpf_'
 const STORAGETYPE = window.localStorage
 
@@ -285,6 +286,29 @@ const jnpf = {
       }
     }
   },
-
+  hasP(enCode) {
+    const permissionList = store.getters && store.getters.permissionList
+    const modelId = context.$route.meta.modelId || ''
+    if (!modelId) return false
+    const list = permissionList.filter(o => o.modelId === modelId)
+    if (!list.length) return false
+    const columnList = list[0] && list[0].column ? list[0].column : []
+    if (!columnList.length) return false
+    const hasPermission = columnList.some(column => column.enCode === enCode)
+    if (hasPermission) return true
+    return false
+  },
+  hasBtnP(enCode) {
+    const permissionList = store.getters && store.getters.permissionList
+    const modelId = context.$route.meta.modelId || ''
+    if (!modelId) return false
+    const list = permissionList.filter(o => o.modelId === modelId)
+    if (!list.length) return false
+    const btnList = list[0] && list[0].button ? list[0].button : []
+    if (!btnList.length) return false
+    const hasPermission = btnList.some(btn => btn.enCode === enCode)
+    if (hasPermission) return true
+    return false
+  }
 }
 export default jnpf

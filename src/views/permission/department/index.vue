@@ -46,13 +46,14 @@
         </div>
         <JNPF-table v-loading="listLoading" :data="tableData" row-key="id" default-expand-all
           :tree-props="{children: 'children', hasChildren: ''}">
-          <el-table-column prop="fullName" label="名称" />
-          <el-table-column prop="enCode" label="编码" />
-          <el-table-column prop="manager" label="部门经理" />
-          <el-table-column prop="description" label="备注" />
+          <el-table-column prop="fullName" label="名称" v-if="jnpf.hasP('fullName')" />
+          <el-table-column prop="enCode" label="编码" v-if="jnpf.hasP('enCode')" />
+          <el-table-column prop="manager" label="部门经理" v-if="jnpf.hasP('manager')" />
+          <el-table-column prop="description" label="备注" v-if="jnpf.hasP('description')" />
           <el-table-column prop="creatorTime" label="创建时间" :formatter="jnpf.tableDateFormat"
-            width="120" />
-          <el-table-column prop="sortCode" label="排序" width="70" align="center" />
+            width="120" v-if="jnpf.hasP('creatorTime')" />
+          <el-table-column prop="sortCode" label="排序" width="70" align="center"
+            v-if="jnpf.hasP('sortCode')" />
           <el-table-column label="操作" width="100">
             <template slot-scope="scope">
               <tableOpts @edit="handleAddEdit(scope.row.id)" @del="handleDel(scope.row.id)" />
@@ -107,6 +108,11 @@ export default {
       getOrganizeTree().then(res => {
         this.treeData = res.data.list
         this.$nextTick(() => {
+          if (!this.treeData.length) {
+            this.treeLoading = false
+            this.listLoading = false
+            return
+          }
           this.companyId = this.treeData[0].id
           this.$refs.treeBox.setCurrentKey(this.companyId)
           this.treeLoading = false

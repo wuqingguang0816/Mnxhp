@@ -47,16 +47,22 @@
             </template>
           </el-table-column>
           <el-table-column type="index" width="50" label="序号" align="center" />
-          <el-table-column prop="fullName" label="任务标题" sortable show-overflow-tooltip />
-          <el-table-column prop="enCode" label="任务编码" sortable width="200" />
-          <el-table-column prop="runCount" label="执行次数" sortable width="100" />
+          <el-table-column prop="fullName" label="任务标题" sortable show-overflow-tooltip
+            v-if="jnpf.hasP('fullName')" />
+          <el-table-column prop="enCode" label="任务编码" sortable width="200"
+            v-if="jnpf.hasP('enCode')" />
+          <el-table-column prop="runCount" label="执行次数" sortable width="100"
+            v-if="jnpf.hasP('runCount')" />
           <el-table-column prop="lastRunTime" label="最后执行时间" sortable width="120"
-            :formatter="jnpf.tableDateFormat" />
+            :formatter="jnpf.tableDateFormat" v-if="jnpf.hasP('lastRunTime')" />
           <el-table-column prop="nextRunTime" label="下次运行时间" sortable width="120"
-            :formatter="jnpf.tableDateFormat" />
-          <el-table-column prop="description" label="执行说明" show-overflow-tooltip />
-          <el-table-column prop="sortCode" label="排序" width="70" align="center" />
-          <el-table-column label="执行状态" prop="enabledMark" width="70" align="center">
+            :formatter="jnpf.tableDateFormat" v-if="jnpf.hasP('nextRunTime')" />
+          <el-table-column prop="description" label="执行说明" show-overflow-tooltip
+            v-if="jnpf.hasP('description')" />
+          <el-table-column prop="sortCode" label="排序" width="70" align="center"
+            v-if="jnpf.hasP('sortCode')" />
+          <el-table-column label="执行状态" prop="enabledMark" width="70" align="center"
+            v-if="jnpf.hasP('enabledMark')">
             <template slot-scope="scope">
               <el-tag :type="scope.row.enabledMark == 1 ? 'success' : 'danger'" disable-transitions>
                 {{scope.row.enabledMark==1?'正常':'停止'}}</el-tag>

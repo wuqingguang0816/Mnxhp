@@ -100,22 +100,9 @@
               <el-button size="mini" type="text" class="JNPF-table-delBtn"
                 @click="handleDel(scope.$index,scope.row.id)" :disabled="scope.row.currentState>0"
                 v-has="'btn_remove'">删除</el-button>
-              <el-dropdown>
-                <el-button type="text" size="mini">
-                  更多<i class="el-icon-arrow-down el-icon--right"></i>
-                </el-button>
-                <el-dropdown-menu slot="dropdown">
-                  <el-dropdown-item @click.native="toDetail(scope.row.id)" v-has="'btn_detail'">详情
-                  </el-dropdown-item>
-                  <el-dropdown-item :disabled="scope.row.currentState !=1"
-                    @click.native="flowRevoke(scope.row.id)" v-has="'btn_flowRevoke'">撤回审核
-                  </el-dropdown-item>
-                  <el-dropdown-item :disabled="!scope.row.currentState"
-                    @click.native="toApprovalDetail(scope.row.id,scope.row.currentState)"
-                    v-has="'btn_flowDetail'">查看审核
-                  </el-dropdown-item>
-                </el-dropdown-menu>
-              </el-dropdown>
+              <el-button size="mini" type="text" :disabled="!scope.row.currentState"
+                @click="toApprovalDetail(scope.row.id,scope.row.currentState)"
+                v-has="'btn_flowDetail'">详情</el-button>
             </template>
           </el-table-column>
         </JNPF-table>
@@ -130,7 +117,6 @@
 
 <script>
 import { OrderList, Delete, OrderEntryList, OrderReceivableList } from '@/api/extend/order'
-import { Revoke } from '@/api/workFlow/FlowLaunch'
 import Detail from './Detail'
 import edit from '@/views/workFlow/fromBox/Edit'
 import audit from '@/views/workFlow/fromBox/Audit'
@@ -180,8 +166,7 @@ export default {
       },
       pickerVal: [],
       startTime: '',
-      endTime: '',
-      firstTest: true
+      endTime: ''
     }
   },
   created() {
@@ -249,26 +234,6 @@ export default {
           message: res.msg
         });
       })
-    },
-    flowRevoke(id) {
-      this.$prompt('', "撤回审批", {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        inputPlaceholder: '请输入撤回原因（必填）',
-        inputType: 'textarea',
-        inputErrorMessage: '原因不能为空',
-        inputValue: "",
-        inputValidator: (val) => { if (!val) { if (this.firstTest) { this.firstTest = false; return true } return false } },
-        closeOnClickModal: false
-      }).then(({ value }) => {
-        Revoke(id, { handleOpinion: value }).then(res => {
-          this.$message({
-            type: 'success',
-            message: res.msg
-          });
-          this.initData()
-        })
-      }).catch(() => { });
     },
     addOrUpdateHandle(id) {
       let data = { enCode: 'crmOrder', id, formType: 1, flowId: '52d3144909d04e2f8a6629ab2ab39e14' }

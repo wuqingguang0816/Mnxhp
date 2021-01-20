@@ -3,7 +3,7 @@ import request from '@/utils/request'
 // 获取地图列表(带分页)
 export const getMapList = (data) => {
   return request({
-    url: '/api/system/DataMap',
+    url: '/api/DataV/Map',
     method: 'GET',
     data
   })
@@ -12,7 +12,7 @@ export const getMapList = (data) => {
 // 新建地图
 export const createMap = (data) => {
   return request({
-    url: '/api/system/DataMap',
+    url: '/api/DataV/Map',
     method: 'POST',
     data
   })
@@ -21,7 +21,7 @@ export const createMap = (data) => {
 // 修改地图
 export const updateMap = (data) => {
   return request({
-    url: `/api/system/DataMap/${data.id}`,
+    url: `/api/DataV/Map/${data.id}`,
     method: 'PUT',
     data
   })
@@ -30,7 +30,7 @@ export const updateMap = (data) => {
 // 获取地图信息
 export const getMapInfo = (id) => {
   return request({
-    url: `/api/system/DataMap/${id}`,
+    url: `/api/DataV/Map/${id}`,
     method: 'GET'
   })
 }
@@ -38,7 +38,7 @@ export const getMapInfo = (id) => {
 // 删除地图
 export const delMap = (id) => {
   return request({
-    url: `/api/system/DataMap/${id}`,
+    url: `/api/DataV/Map/${id}`,
     method: 'DELETE'
   })
 }
@@ -46,7 +46,7 @@ export const delMap = (id) => {
 // 更新地图状态
 export const updateMapState = (id) => {
   return request({
-    url: `/api/system/DataMap/${id}/Actions/State`,
+    url: `/api/DataV/Map/${id}/Actions/State`,
     method: 'PUT'
   })
 }

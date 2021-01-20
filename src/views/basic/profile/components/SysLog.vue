@@ -35,7 +35,7 @@
           <el-table-column prop="platForm" label="登录摘要" show-overflow-tooltip />
         </JNPF-table>
       </el-tab-pane>
-      <el-tab-pane label="访问日志" name="2">
+      <el-tab-pane label="请求日志" name="2">
         <JNPF-table v-loading="listLoading" :data="viewLogData" tooltip-effect="dark">
           <el-table-column prop="creatorTime" label="访问时间" :formatter="jnpf.tableDateFormat"
             width="120" />
@@ -50,7 +50,7 @@
           <el-table-column prop="creatorTime" label="操作时间" :formatter="jnpf.tableDateFormat"
             width="120" />
           <el-table-column prop="userName" label="操作用户" width="120" />
-          <el-table-column prop="iPAddress" label="操作IP" width="120" />
+          <el-table-column prop="ipaddress" label="操作IP" width="120" />
           <el-table-column prop="moduleName" label="操作功能" width="120" />
           <el-table-column prop="type" label="操作类型" width="120">
             <template slot-scope="scope">
@@ -68,7 +68,7 @@
           <el-table-column prop="creatorTime" label="请求时间" :formatter="jnpf.tableDateFormat"
             width="120" />
           <el-table-column prop="userName" label="请求用户" width="120" />
-          <el-table-column prop="iPAddress" label="请求IP" width="120" />
+          <el-table-column prop="ipaddress" label="请求IP" width="120" />
           <el-table-column prop="platForm" label="请求设备" width="120" show-overflow-tooltip />
           <el-table-column prop="requestURL" label="请求地址" show-overflow-tooltip />
           <el-table-column prop="requestMethod" label="请求类型" width="120" />
@@ -80,7 +80,7 @@
           <el-table-column rop="creatorTime" label="创建时间" :formatter="jnpf.tableDateFormat"
             width="120" />
           <el-table-column prop="userName" label="创建用户" width="120" />
-          <el-table-column prop="iPAddress" label="异常IP" width="120" />
+          <el-table-column prop="ipaddress" label="异常IP" width="120" />
           <el-table-column prop="moduleName" label="异常功能" width="120" />
           <el-table-column prop="json" label="异常描述" show-overflow-tooltip />
         </JNPF-table>

@@ -47,14 +47,15 @@
           </div>
         </div>
         <JNPF-table v-loading="listLoading" :data="tableData">
-          <el-table-column prop="fullName" label="岗位名称" />
-          <el-table-column prop="enCode" label="岗位编码" />
-          <el-table-column prop="department" label="所属部门" />
-          <el-table-column prop="type" label="岗位类型" />
-          <el-table-column prop="description" label="岗位说明" />
+          <el-table-column prop="fullName" label="岗位名称" v-if="jnpf.hasP('fullName')" />
+          <el-table-column prop="enCode" label="岗位编码" v-if="jnpf.hasP('enCode')" />
+          <el-table-column prop="department" label="所属部门" v-if="jnpf.hasP('department')" />
+          <el-table-column prop="type" label="岗位类型" v-if="jnpf.hasP('type')" />
+          <el-table-column prop="description" label="岗位说明" v-if="jnpf.hasP('description')" />
           <el-table-column prop="creatorTime" :formatter="jnpf.tableDateFormat" label="创建时间"
-            width="120" />
-          <el-table-column prop="sortCode" label="排序" width="70" align="center" />
+            width="120" v-if="jnpf.hasP('creatorTime')" />
+          <el-table-column prop="sortCode" label="排序" width="70" align="center"
+            v-if="jnpf.hasP('sortCode')" />
           <el-table-column label="操作" width="150">
             <template slot-scope="scope">
               <tableOpts @edit="handleAddEdit(scope.row.id)" @del="handleDel(scope.row.id)">
@@ -127,9 +128,6 @@ export default {
       getDepartmentSelector().then(res => {
         this.treeData = res.data.list
         this.$nextTick(() => {
-          this.params.organizeId = this.treeData[0].id
-          this.type = this.treeData[0].type
-          this.$refs.treeBox.setCurrentKey(this.params.organizeId)
           this.treeLoading = false
           this.initData()
         })

@@ -33,13 +33,13 @@
           </div>
         </div>
         <JNPF-table v-loading="listLoading" :data="list">
-          <el-table-column label="消息类别">
+          <el-table-column label="消息类别" v-if="jnpf.hasP('msgType')">
             <template slot-scope="scope">{{ scope.row.msgType |typeFilter }}</template>
           </el-table-column>
-          <el-table-column prop="sendUser" label="发送用户" sortable />
-          <el-table-column prop="sendDate" label="发送时间" sortable
-            :formatter="jnpf.tableDateFormat" />
-          <el-table-column prop="enabledMark" label="消息状态">
+          <el-table-column prop="sendUser" label="发送用户" sortable v-if="jnpf.hasP('sendUser')" />
+          <el-table-column prop="sendDate" label="发送时间" sortable :formatter="jnpf.tableDateFormat"
+            v-if="jnpf.hasP('sendDate')" />
+          <el-table-column prop="enabledMark" label="消息状态" v-if="jnpf.hasP('enabledMark')">
             <template slot-scope="scope">
               <el-tag type="success" v-if="!scope.row.enabledMark">发送成功</el-tag>
               <el-tag type="danger" v-else>发送失败</el-tag>

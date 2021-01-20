@@ -3,7 +3,7 @@ import request from '@/utils/request'
 // 获取文档列表
 export function DocumentPreviewList(data) {
   return request({
-    url: `/api/Extend/DocumentPreview`,
+    url: `/api/extend/DocumentPreview`,
     method: 'get',
     data
   })
@@ -11,7 +11,7 @@ export function DocumentPreviewList(data) {
 // 文件在线预览
 export function PreviewFile(fileId) {
   return request({
-    url: `/api/Extend/DocumentPreview/${fileId}/Preview`,
+    url: `/api/extend/DocumentPreview/${fileId}/Preview`,
     method: 'get'
   })
 }

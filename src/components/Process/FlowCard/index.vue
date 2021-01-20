@@ -1,6 +1,6 @@
 <script>
 import { NodeUtils } from "./util.js";
-const isCondition = data => data.type === "condition";
+const isCondition = data => data.type === "condition" || (data.type === "approver" && data.isInterflow);
 const notEmptyArray = arr => Array.isArray(arr) && arr.length > 0;
 const hasBranch = data => notEmptyArray(data.conditionNodes);
 const stopPro = ev => ev.stopPropagation();
@@ -11,16 +11,13 @@ function createNormalCard(ctx, conf, h) {
   const isStartNode = afterTrue(NodeUtils.isStartNode(conf), 'start-node')
   const isApprNode = afterTrue(NodeUtils.isApproverNode(conf), 'approver')
   const isCopyNode = afterTrue(NodeUtils.isCopyNode(conf), 'copy')
+  const isTimerNode = afterTrue(NodeUtils.isTimerNode(conf), 'timer')
   return (
     <section class={classList.join(' ')} onClick={this.eventLancher.bind(ctx, "edit", conf)} >
       <header class="header">
         <div class="title-box" style="height: 100%;width:190px;">
-          {isApprNode}
-          {isCopyNode && (
-            <i class="iconfont icon-ym-workflow-flowcirculate" style="font-size:12px;color:white;margin-right:4px;"></i>
-          )}
           <span class="title-text">{conf.properties.title}</span>
-          {!isStartNode && (
+          {(!isStartNode && !isTimerNode) && (
             <input vModel_trim={conf.properties.title} class="title-input" style="margin-top:4px;" onClick={stopPro} />
           )}
         </div>
@@ -45,6 +42,8 @@ let nodes = {
   start: createFunc,
   approver: createFunc,
   copy: createFunc,
+  timer: createFunc,
+  interflow: createFunc,
   empty: _ => '',
   condition: function (ctx, conf, h) {
     // <i
@@ -59,33 +58,18 @@ let nodes = {
         <header class="header">
           <div class="title-box" style="height: 20px;width:160px;">
             <span class="title-text">{conf.properties.title}</span>
-            {
-              <input
-                vModel_trim={conf.properties.title}
-                class="title-input"
-                style="margin:4px 0 0 2px;"
-                onClick={stopPro}
-              />
-            }
+            <input vModel_trim={conf.properties.title} class="title-input"
+              style="margin:4px 0 0 2px;" onClick={stopPro} />
           </div>
           {
             // <span class="priority">优先级{conf.properties.priority + 1}</span> 
           }
           <div class="actions">
-
-            <i
-              class="el-icon-close icon"
-              onClick={this.eventLancher.bind(
-                ctx,
-                "deleteNode",
-                conf,
-                ctx.data
-              )}
-            ></i>
+            <i class="el-icon-close icon" onClick={this.eventLancher.bind(ctx, "deleteNode", conf, ctx.data)}></i>
           </div>
         </header>
         <div class="body">
-          <pre class="text" >{conf.content}</pre>
+          <pre class="text">{conf.content}</pre>
         </div>
         {
           //  <div
@@ -124,7 +108,7 @@ function addNodeButton(ctx, data, h, isBranch = false) {
     return "";
   }
   return (
-    <div class="add-node-btn-box flex  justify-center">
+    <div class="add-node-btn-box flex justify-center">
       <div class="add-node-btn">
         <el-popover placement="right" trigger="click" width="300">
           <div class="condition-box">
@@ -150,6 +134,12 @@ function addNodeButton(ctx, data, h, isBranch = false) {
               </div>
               条件分支
             </div>
+            <div>
+              <div class="condition-icon" onClick={ctx.eventLancher.bind(ctx, "addTimerNode", data, isBranch)} >
+                <i class="el-icon-timer" style="vertical-align: middle;"></i>
+              </div>
+              定时器
+            </div>
           </div>
 
           <button class="btn" type="button" slot="reference">
@@ -166,10 +156,11 @@ function NodeFactory(ctx, data, h) {
   const showErrorTip = ctx.verifyMode && NodeUtils.checkNode(data) === false
   let res = [],
     branchNode = "",
+    content = NodeUtils.isConditionNode(data) ? "未设置条件" : "未设置审批人",
     selfNode = (
       <div class="node-wrap">
-        <div class={`node-wrap-box ${data.type} ${showErrorTip ? 'error' : ''}`}>
-          <el-tooltip content="未设置条件" placement="top" effect="dark">
+        <div class={`node-wrap-box ${data.type} ${NodeUtils.isInterflowNode(data) ? 'interflow' : ''} ${showErrorTip ? 'error' : ''}`}>
+          <el-tooltip content={content} placement="top" effect="dark">
             <div class="error-tip" onClick={this.eventLancher.bind(ctx, "edit", data)}>!!!</div>
           </el-tooltip>
           {nodes[data.type].call(ctx, ctx, data, h)}

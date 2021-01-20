@@ -3,7 +3,7 @@ import request from '@/utils/request'
 // 添加项目
 export function Create(data) {
   return request({
-    url: `/api/Extend/ProjectGantt`,
+    url: `/api/extend/ProjectGantt`,
     method: 'post',
     data
   })
@@ -11,7 +11,7 @@ export function Create(data) {
 // 修改项目
 export function Update(data) {
   return request({
-    url: `/api/Extend/ProjectGantt/${data.id}`,
+    url: `/api/extend/ProjectGantt/${data.id}`,
     method: 'PUT',
     data
   })
@@ -19,7 +19,7 @@ export function Update(data) {
 // 获取项目管理列表
 export function ProjectGanttList(data) {
   return request({
-    url: `/api/Extend/ProjectGantt`,
+    url: `/api/extend/ProjectGantt`,
     method: 'get',
     data
   })
@@ -27,21 +27,21 @@ export function ProjectGanttList(data) {
 // 删除项目/任务
 export function Delete(id) {
   return request({
-    url: `/api/Extend/ProjectGantt/${id}`,
+    url: `/api/extend/ProjectGantt/${id}`,
     method: 'DELETE'
   })
 }
 // 获取项目信息
 export function ProjectGanttInfo(id) {
   return request({
-    url: `/api/Extend/ProjectGantt/${id}`,
+    url: `/api/extend/ProjectGantt/${id}`,
     method: 'get'
   })
 }
 // 获取项目任务列表
 export function TaskList(data, projectId) {
   return request({
-    url: `/api/Extend/ProjectGantt/${projectId}/Task`,
+    url: `/api/extend/ProjectGantt/${projectId}/Task`,
     method: 'get',
     data
   })
@@ -49,21 +49,21 @@ export function TaskList(data, projectId) {
 // 获取项目任务树形（新建任务）
 export function TaskTreeView(projectId) {
   return request({
-    url: `/api/Extend/ProjectGantt/${projectId}/Task/Selector`,
+    url: `/api/extend/ProjectGantt/${projectId}/Task/Selector`,
     method: 'get'
   })
 }
 // 获取项目任务信息
 export function TaskInfo(taskId) {
   return request({
-    url: `/api/Extend/ProjectGantt/Task/${taskId}`,
+    url: `/api/extend/ProjectGantt/Task/${taskId}`,
     method: 'get'
   })
 }
 // 添加项目任务
 export function TaskCreate(data) {
   return request({
-    url: `/api/Extend/ProjectGantt/Task`,
+    url: `/api/extend/ProjectGantt/Task`,
     method: 'post',
     data
   })
@@ -71,7 +71,7 @@ export function TaskCreate(data) {
 // 修改项目任务
 export function TaskUpdate(data) {
   return request({
-    url: `/api/Extend/ProjectGantt/Task/${data.id}`,
+    url: `/api/extend/ProjectGantt/Task/${data.id}`,
     method: 'PUT',
     data
   })

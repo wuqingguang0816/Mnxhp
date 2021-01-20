@@ -2,7 +2,7 @@ import request from '@/utils/request'
 
 export function FlowMonitorList(data) {
   return request({
-    url: `/api/workflow/WorkFlow/FlowMonitor`,
+    url: `/api/workflow/Engine/FlowMonitor`,
     method: 'get',
     data
   })
@@ -10,7 +10,7 @@ export function FlowMonitorList(data) {
 // 批量删除流程监控
 export function DeleteList(data) {
   return request({
-    url: `/api/workflow/WorkFlow/FlowMonitor`,
+    url: `/api/workflow/Engine/FlowMonitor`,
     method: 'DELETE',
     data
   })

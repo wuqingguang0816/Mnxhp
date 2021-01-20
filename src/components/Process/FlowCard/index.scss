@@ -38,8 +38,13 @@ $base-size : 12px;
   @include flex-center();
   flex-direction: column;
 
-  &.condition {
+  &.condition,
+  &.interflow {
     padding: 30px 50px 0
+  }
+
+  &.empty {
+    overflow: hidden;
   }
 
   &.approver::before {
@@ -56,8 +61,14 @@ $base-size : 12px;
     background: $bg-color;
   }
 
+  &.approver.interflow::before {
+    top: 20px;
+  }
+
   &.error {
-    &.condition .error-tip {
+
+    &.condition .error-tip,
+    &.interflow .error-tip {
       right: 0;
     }
 
@@ -88,7 +99,8 @@ $base-size : 12px;
     transition: right .5s;
   }
 
-  &.condition .error-tip {
+  &.condition .error-tip,
+  &.interflow .error-tip {
     right: 60px;
   }
 }
@@ -131,6 +143,12 @@ $base-size : 12px;
   }
 
   &.copy {
+    .header {
+      background-color: #3296fa;
+    }
+  }
+
+  &.timer {
     .header {
       background-color: #3296fa;
     }
@@ -209,7 +227,14 @@ $base-size : 12px;
     }
   }
 
-  &:not(.start-node):hover {
+  &.timer:hover {
+    .actions {
+      visibility: visible;
+      margin-right: 4px;
+    }
+  }
+
+  &:not(.start-node):not(.timer):hover {
     .actions {
       visibility: visible;
       margin-right: 4px;
@@ -455,7 +480,7 @@ $base-size : 12px;
   justify-content: space-around;
   align-items: center;
   text-align: center;
-  padding: 10px 20px;
+  padding: 10px 0;
 
   >div:nth-child(1) .iconfont {
     color: #FF943E;
@@ -477,6 +502,7 @@ $base-size : 12px;
     margin-bottom: 4px;
 
     .icon-ym,
+    [class^=el-icon-],
     .ym-custom {
       font-size: 32px;
     }
@@ -486,6 +512,7 @@ $base-size : 12px;
       box-shadow: 0 0 8px 4px rgba(0, 0, 0, .1);
 
       >.icon-ym,
+      >[class^=el-icon-],
       >.ym-custom {
         color: white;
       }

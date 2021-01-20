@@ -1,5 +1,6 @@
 export default {
   route: {
+    "home": "Home",
     "dashboard": "Dashboard",
     "onlineDev": "OnlineDev",
     "onlineDev-webDesign": "WebDesign",
@@ -124,6 +125,7 @@ export default {
     feedback: 'Feedback',
     about: 'About',
     lockScreen: 'Lock Screen',
+    documentation: 'Documentation',
     logOut: 'Log Out',
     notice: 'Notice',
     chat: 'Chat'
@@ -131,6 +133,7 @@ export default {
   login: {
     title: 'Account Login',
     scanTitle: 'Scan Login',
+    codeTitle: 'Verification Code Login',
     logIn: 'Login',
     username: 'Username / Mobile Number',
     password: 'Password',
@@ -139,7 +142,14 @@ export default {
     upper: 'Caps locked',
     scanTip: 'APP Scan code login',
     accountTip: 'Please enter the account number',
-    passwordTip: 'Please enter your password'
+    passwordTip: 'Please enter your password',
+    mobile: 'Please enter mobile number',
+    rightMobile: 'Please enter the correct mobile number',
+    smsCode: 'Please enter the verification code',
+    getCode: 'Get code',
+    reSend: 'Resend',
+    company: 'Please enter company name',
+    contacts: 'Please enter contact'
   },
   tagsView: {
     refresh: 'Refresh',
@@ -185,6 +195,8 @@ export default {
     cancelButton: 'Cancel',
     delTip: 'This operation will permanently delete the data. Do you want to continue?',
     loadingText: 'Data Loading',
+    noData: 'No Data',
+    noPerTip: 'Permission Denied',
     tipTitle: 'Tips',
     prev: 'Prev',
     next: 'Next',

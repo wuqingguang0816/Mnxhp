@@ -146,8 +146,8 @@ export default {
       list: [],
       historyList: [],
       historyDefaultList: [],
-      page: 1,
-      rows: 50,
+      currentPage: 1,
+      pageSize: 50,
       finish: false,
       ajaxing: false,
       popoverVisible: false,
@@ -178,7 +178,6 @@ export default {
           }
         })
       }, num || 0);
-
     },
     colseIM() {
       this.showHistory = false
@@ -207,8 +206,8 @@ export default {
     },
     getList(data) {
       let list = []
-      for (let i = 0; i < data.rows.length; i++) {
-        const item = data.rows[i];
+      for (let i = 0; i < data.list.length; i++) {
+        const item = data.list[i];
         if (item.contentType === "text") {
           item.content = this.replaceEmoji(item.content)
         } else if (item.contentType === "image") {
@@ -220,9 +219,8 @@ export default {
           userId: item.sendUserId,
           messageType: item.contentType,
           message: item.content,
-          dateTime: this.jnpf.toDate(item.sendTime),
+          dateTime: this.jnpf.toDate(item.sendTime)
         })
-
       }
       if (!this.showHistory) {
         this.list = list
@@ -231,8 +229,8 @@ export default {
         })
       } else {
         this.historyList = [...this.historyList, ...list]
-        this.page += 1
-        this.finish = data.total == data.page ? true : false
+        this.currentPage += 1
+        this.finish = list.length < data.pagination.pageSize
       }
       this.ajaxing = false
     },
@@ -249,8 +247,8 @@ export default {
       }
     },
     searchHistory() {
-      this.page = 1
-      this.rows = 50
+      this.currentPage = 1
+      this.pageSize = 50
       this.finish = false
       this.historyList = []
       this.sendList()
@@ -278,8 +276,8 @@ export default {
       this.showHistory = !this.showHistory
       if (this.showHistory) {
         this.historyList = []
-        this.page = 1
-        this.rows = 50
+        this.currentPage = 1
+        this.pageSize = 50
         this.finish = false
         this.sendList()
         this.$nextTick(() => {
@@ -304,8 +302,8 @@ export default {
         toUserId: this.info.id,
         formUserId: this.userInfo.userId,
         token: this.$store.getters.token,
-        page: this.page,
-        rows: this.rows,
+        currentPage: this.currentPage,
+        pageSize: this.pageSize,
         sord: "asc",
         keyword: this.keyword
       }

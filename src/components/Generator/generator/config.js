@@ -33,8 +33,8 @@ export const inputComponents = [{
       layout: 'colFormItem',
       span: 24,
       dragDisabled: false,
-      trigger: 'blur',
-      regList: []
+      regList: [],
+      trigger: 'blur'
     },
     __slot__: {
       prepend: '',
@@ -63,6 +63,7 @@ export const inputComponents = [{
       layout: 'colFormItem',
       span: 24,
       dragDisabled: false,
+      regList: [],
       trigger: 'blur'
     },
     type: 'textarea',
@@ -90,7 +91,8 @@ export const inputComponents = [{
       layout: 'colFormItem',
       span: 24,
       dragDisabled: false,
-      trigger: 'blur'
+      regList: [],
+      trigger: ['blur', 'change']
     },
     placeholder: '数字文本',
     min: undefined,
@@ -114,7 +116,8 @@ export const inputComponents = [{
       layout: 'colFormItem',
       span: 24,
       dragDisabled: false,
-      trigger: 'blur'
+      regList: [],
+      trigger: ['blur', 'change']
     },
     placeholder: '',
     min: undefined,
@@ -139,6 +142,7 @@ export const inputComponents = [{
       layout: 'colFormItem',
       span: 24,
       dragDisabled: false,
+      regList: [],
       trigger: 'change',
       optionType: 'default',
       border: false,
@@ -176,6 +180,7 @@ export const inputComponents = [{
       layout: 'colFormItem',
       span: 24,
       dragDisabled: false,
+      regList: [],
       trigger: 'change',
       optionType: 'default',
       border: false,
@@ -215,6 +220,7 @@ export const inputComponents = [{
       layout: 'colFormItem',
       span: 24,
       dragDisabled: false,
+      regList: [],
       trigger: 'change',
       dataType: 'static',
       dictionaryType: '',
@@ -253,6 +259,7 @@ export const inputComponents = [{
       layout: 'colFormItem',
       span: 24,
       dragDisabled: true,
+      regList: [],
       trigger: 'change',
       dataType: 'static',
       propsUrl: '',
@@ -295,6 +302,7 @@ export const inputComponents = [{
       layout: 'colFormItem',
       span: 24,
       dragDisabled: false,
+      regList: [],
       trigger: 'change'
     },
     placeholder: '请选择',
@@ -320,6 +328,7 @@ export const inputComponents = [{
       layout: 'colFormItem',
       span: 24,
       dragDisabled: false,
+      regList: [],
       trigger: 'change'
     },
     style: { width: '100%' },
@@ -345,6 +354,7 @@ export const inputComponents = [{
       layout: 'colFormItem',
       span: 24,
       dragDisabled: false,
+      regList: [],
       trigger: 'change'
     },
     placeholder: '请选择',
@@ -369,6 +379,7 @@ export const inputComponents = [{
       layout: 'colFormItem',
       span: 24,
       dragDisabled: false,
+      regList: [],
       trigger: 'change'
     },
     style: { width: '100%' },
@@ -395,6 +406,7 @@ export const inputComponents = [{
       layout: 'colFormItem',
       span: 24,
       dragDisabled: false,
+      regList: [],
       trigger: 'click'
     },
     disabled: false,
@@ -418,6 +430,7 @@ export const inputComponents = [{
       layout: 'colFormItem',
       span: 24,
       dragDisabled: false,
+      regList: [],
       trigger: 'click'
     },
     disabled: false,
@@ -440,6 +453,7 @@ export const inputComponents = [{
       layout: 'colFormItem',
       span: 24,
       dragDisabled: false,
+      regList: [],
       trigger: 'change'
     },
     'show-alpha': false,
@@ -460,6 +474,7 @@ export const inputComponents = [{
       layout: 'colFormItem',
       span: 24,
       dragDisabled: false,
+      regList: [],
       trigger: 'change'
     },
     style: {},
@@ -482,6 +497,7 @@ export const inputComponents = [{
       layout: 'colFormItem',
       span: 24,
       dragDisabled: false,
+      regList: [],
       trigger: 'change'
     },
     disabled: false,
@@ -505,6 +521,7 @@ export const inputComponents = [{
       layout: 'colFormItem',
       span: 24,
       dragDisabled: false,
+      regList: [],
       trigger: 'change'
     },
     disabled: false,
@@ -571,6 +588,7 @@ export const inputComponents = [{
       layout: 'colFormItem',
       span: 24,
       dragDisabled: false,
+      regList: [],
       trigger: 'blur'
     },
     placeholder: '请输入内容...'
@@ -588,6 +606,7 @@ export const inputComponents = [{
   //     layout: 'colFormItem',
   //     span: 24,
   //     dragDisabled: false,
+  //     regList: [],
   //     trigger: 'blur'
   //   },
   //   __slot__: {
@@ -621,6 +640,7 @@ export const selectComponents = [{
       layout: 'colFormItem',
       span: 24,
       dragDisabled: false,
+      regList: [],
       trigger: 'change'
     },
     placeholder: '请选择',
@@ -639,6 +659,7 @@ export const selectComponents = [{
       layout: 'colFormItem',
       span: 24,
       dragDisabled: false,
+      regList: [],
       trigger: 'change'
     },
     placeholder: '请选择',
@@ -657,6 +678,7 @@ export const selectComponents = [{
       layout: 'colFormItem',
       span: 24,
       dragDisabled: false,
+      regList: [],
       trigger: 'change'
     },
     placeholder: '请选择',
@@ -676,6 +698,7 @@ export const selectComponents = [{
       layout: 'colFormItem',
       span: 24,
       dragDisabled: false,
+      regList: [],
       trigger: 'change'
     },
     placeholder: '请选择',
@@ -695,6 +718,7 @@ export const selectComponents = [{
       layout: 'colFormItem',
       span: 24,
       dragDisabled: false,
+      regList: [],
       trigger: 'change',
       dataType: 'static',
       dictionaryType: '',
@@ -774,6 +798,7 @@ export const selectComponents = [{
       layout: 'colFormItem',
       span: 24,
       dragDisabled: false,
+      regList: [],
       trigger: 'change'
     },
     placeholder: '请选择',

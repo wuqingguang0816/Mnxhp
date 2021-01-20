@@ -3,7 +3,7 @@ import request from '@/utils/request'
 // 获取岗位/角色/用户权限树形结构及数据
 export const getAuthorizeValues = (objectId, data) => {
   return request({
-    url: `/api/system/Permission/Authorize/Data/${objectId}/Values`,
+    url: `/api/system/Permission/Authority/Data/${objectId}/Values`,
     method: 'POST',
     data
   })
@@ -12,7 +12,7 @@ export const getAuthorizeValues = (objectId, data) => {
 // 更新岗位/角色/用户权限
 export const updateAuthorizeList = (objectId, data) => {
   return request({
-    url: `/api/system/Permission/Authorize/Data/${objectId}`,
+    url: `/api/system/Permission/Authority/Data/${objectId}`,
     method: 'PUT',
     data
   })
@@ -21,7 +21,7 @@ export const updateAuthorizeList = (objectId, data) => {
 // 批量设置权限
 export const updateBatchAuthorize = (data) => {
   return request({
-    url: `/api/system/Permission/Authorize/Data/Batch`,
+    url: `/api/system/Permission/Authority/Data/Batch`,
     method: 'POST',
     data
   })
@@ -29,14 +29,14 @@ export const updateBatchAuthorize = (data) => {
 // 获取功能权限数据
 export const getModelData = (id, ObjectType) => {
   return request({
-    url: `/api/system/Permission/Authorize/Model/${id}/${ObjectType}`,
+    url: `/api/system/Permission/Authority/Model/${id}/${ObjectType}`,
     method: 'GET'
   })
 }
 // 设置/更新功能权限
 export const setModelData = (id, data) => {
   return request({
-    url: `/api/system/Permission/Authorize/Model/${id}`,
+    url: `/api/system/Permission/Authority/Model/${id}`,
     method: 'PUT',
     data
   })

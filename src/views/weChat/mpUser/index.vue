@@ -58,23 +58,23 @@
           <el-tab-pane label="已关注" name="1"></el-tab-pane>
           <el-tab-pane label="黑名单" name="unblack"></el-tab-pane>
           <JNPF-table v-loading="listLoading" :data="list">
-            <el-table-column prop="headimgurl" label="头像" width="50">
+            <el-table-column prop="headimgurl" label="头像" width="50" v-if="jnpf.hasP('fullName')">
               <template slot-scope="scope">
                 <el-avatar shape="square" :size="20" :src="scope.row.headimgurl"
                   style="vertical-align:middle">
                 </el-avatar>
               </template>
             </el-table-column>
-            <el-table-column prop="nickname" label="昵称" width="150" />
-            <el-table-column prop="sex" label="性别" width="50">
+            <el-table-column prop="nickname" label="昵称" width="150" v-if="jnpf.hasP('nickname')" />
+            <el-table-column prop="sex" label="性别" width="50" v-if="jnpf.hasP('sex')">
               <template slot-scope="scope">
                 {{scope.row.sex==1? "男" : "女"}}
               </template>
             </el-table-column>
-            <el-table-column prop="country" label="国家" width="100" />
-            <el-table-column prop="province" label="省份" width="100" />
-            <el-table-column prop="city" label="城市" width="100" />
-            <el-table-column prop="remark" label="备注" />
+            <el-table-column prop="country" label="国家" width="100" v-if="jnpf.hasP('country')" />
+            <el-table-column prop="province" label="省份" width="100" v-if="jnpf.hasP('province')" />
+            <el-table-column prop="city" label="城市" width="100" v-if="jnpf.hasP('city')" />
+            <el-table-column prop="remark" label="备注" v-if="jnpf.hasP('remark')" />
             <el-table-column label="操作" fixed="right" width="240">
               <template slot-scope="scope">
                 <el-button size="mini" type="text" @click="updateRemark(scope.row)"

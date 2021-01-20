@@ -9,7 +9,7 @@ export function login(data) {
     params: {
       client_id: 'admin',
       client_secret: '123456',
-      scope: 'all', 
+      scope: 'all',
       grant_type: 'password'
     }
   })

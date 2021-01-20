@@ -16,7 +16,7 @@ const layouts = {
       return (
         <el-col span={config.span}>
           <el-form-item label-width={labelWidth} prop={scheme.__vModel__}
-            label={config.showLabel ? config.label : ''} >
+            label={config.showLabel ? config.label : ''}>
             <render formData={this[this.formConf.formModel]} conf={scheme} {...{ on: listeners }} ref={config.rowType === 'table' ? scheme.__vModel__ : undefined} />
           </el-form-item>
         </el-col>
@@ -194,7 +194,7 @@ export default {
           }
           rules[cur.__vModel__] = config.regList.map(item => {
             item.pattern && (item.pattern = eval(item.pattern))
-            item.trigger = ruleTrigger && ruleTrigger[config.tag]
+            item.trigger = config.trigger || 'blur'
             return item
           })
         }

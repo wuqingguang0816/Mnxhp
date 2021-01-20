@@ -72,7 +72,7 @@
 </template>
 
 <script>
-import { getMessageList, MessageDeleteRecord } from '@/api/system/message'
+import { getMessageList, MessageDeleteRecord, ReadInfo } from '@/api/system/message'
 import Form from './Form'
 export default {
   name: 'messageRecord',
@@ -155,11 +155,22 @@ export default {
       this.multipleSelection = val.map(item => item.id)
     },
     readInfo(item) {
-      this.formVisible = true
-      item.isRead = '1'
-      this.$nextTick(() => {
-        this.$refs.Form.init(item.id)
-      })
+      if (item.type == 1) {
+        this.formVisible = true
+        item.isRead = '1'
+        this.$nextTick(() => {
+          this.$refs.Form.init(item.id)
+        })
+      } else {
+        ReadInfo(item.id).then(res => {
+          item.isRead = '1'
+          let body = res.data.bodyText ? JSON.parse(res.data.bodyText) : {}
+          let url = 'flowLaunch'
+          if (body.type == 2) url = 'flowTodo'
+          if (body.type == 3) url = 'flowCirculate'
+          this.$router.push(`/workFlow/${url}`)
+        })
+      }
     }
   }
 }

@@ -1,5 +1,6 @@
 export default {
   route: {
+    "home": "首页",
     "dashboard": "门户展示",
     "onlineDev": "在线开发",
     "onlineDev-webDesign": "功能设计",
@@ -124,6 +125,7 @@ export default {
     feedback: '反馈问题',
     about: '关于平台',
     lockScreen: '锁住屏幕',
+    documentation: '帮助文档',
     logOut: '退出系统',
     notice: '消息',
     chat: '聊天'
@@ -131,6 +133,7 @@ export default {
   login: {
     title: '账户登录',
     scanTitle: '扫码登录',
+    codeTitle: '验证码登录',
     logIn: '登录',
     username: '请输入用户名/手机号',
     password: '请输入密码',
@@ -139,7 +142,14 @@ export default {
     upper: '大写已锁定',
     scanTip: 'APP扫码登录',
     accountTip: '请输入账号',
-    passwordTip: '请输入密码'
+    passwordTip: '请输入密码',
+    mobile: '请输入手机号',
+    rightMobile: '请输入正确的手机号',
+    smsCode: '请输入验证码',
+    getCode: '获取验证码',
+    reSend: '重新发送',
+    company: '请输入公司名',
+    contacts: '请输入联系人'
   },
   tagsView: {
     refresh: '刷新',
@@ -185,6 +195,8 @@ export default {
     cancelButton: '取 消',
     delTip: '此操作将永久删除该数据, 是否继续？',
     loadingText: '数据加载中',
+    noData: '暂无数据',
+    noPerTip: '暂无权限',
     tipTitle: '提示',
     prev: '上一步',
     next: '下一步',
@@ -199,7 +211,6 @@ export default {
   department: {
     addDepartment: '新建部门',
     editDepartment: '编辑部门',
-
   },
   position: {
     newPost: '新建岗位',
@@ -230,7 +241,6 @@ export default {
     listPermission: '列表权限',
     dataPermission: '数据权限',
     selectRoles: '选择角色',
-
   },
   userOnline: {
     cancelAccountTip: '确定要注销该账号?',

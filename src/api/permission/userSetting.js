@@ -41,7 +41,7 @@ export function UpdateTheme(data) {
 // 获取系统语言列表
 export function getLanguage() {
   return request({
-    url: '/api/system/Common/Language',
+    url: '/api/Common/Language',
     method: 'GET'
   })
 }

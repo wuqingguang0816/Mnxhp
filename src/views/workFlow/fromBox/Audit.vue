@@ -110,7 +110,7 @@ export default {
               if (Array.isArray(data)) data.forEach(d => loop(d))
               if (data.nodeId === nodeItem.nodeCode) {
                 if (nodeItem.completion) data.state = 'state-past'
-                data.content = nodeItem.userName
+                if (nodeItem.nodeType === 'approver') data.content = nodeItem.userName
                 return
               }
               if (data.conditionNodes && Array.isArray(data.conditionNodes)) loop(data.conditionNodes)
@@ -118,6 +118,8 @@ export default {
             }
             loop(this.flowTemplateJson)
           }
+        } else {
+          this.thisStepId = "start"
         }
         setTimeout(() => {
           this.$nextTick(() => {

@@ -8,6 +8,9 @@
     <header slot="title" class="header"
       v-else-if="value && value.type=='approver' && properties.title">
       {{properties.title}}</header>
+    <header slot="title" class="header"
+      v-else-if="value && value.type=='timer' && properties.title">
+      {{properties.title}}</header>
     <header slot="title" class="header" v-else>
       <span @click="titleInputVisible = true" v-show="!titleInputVisible" style="cursor:pointer;">
         {{properties.title}}
@@ -64,11 +67,42 @@
       </div>
     </section>
 
+    <!-- 定时器  -->
+    <section class="condition-pane pd-10" v-if="value && isTimerNode()">
+      <el-row style="padding: 10px;">
+        <el-col :span="24" style="font-size: 14px;line-height:32px;color: #a5a5a5;">
+          添加定时器后，审批节点将根据设置的时间流转</el-col>
+        <el-col :span="24">
+          <el-form label-position="top">
+            <el-form-item label="时间设置">
+              <!-- <el-switch v-model="properties.hasInitFunc" /> -->
+              <div class="mb-10">
+                <el-input-number :min="0" v-model="properties.day" :precision="0" />
+                <span>天</span>
+              </div>
+              <div class="mb-10">
+                <el-input-number :min="0" v-model="properties.hour" :precision="0" />
+                <span>小时</span>
+              </div>
+              <div class="mb-10">
+                <el-input-number :min="0" v-model="properties.minute" :precision="0" />
+                <span>分钟</span>
+              </div>
+              <div>
+                <el-input-number :min="0" v-model="properties.second" :precision="0" />
+                <span>秒</span>
+              </div>
+            </el-form-item>
+          </el-form>
+        </el-col>
+      </el-row>
+    </section>
+
     <!-- 发起人 -->
     <section class="approver-pane" style="height:100%;" v-if="value && isStartNode()">
       <el-tabs style="height:100%;">
         <el-tab-pane label="设置发起人">
-          <el-row style="padding: 10px;" v-if="value.type === 'start'">
+          <el-row style="padding: 10px;">
             <el-col :span="4" style="font-size: 14px;line-height:32px">谁可以发起</el-col>
             <el-col :span="20" style="font-size: 14px;line-height:32px;margin-bottom:10px">
               默认所有人,需要设置请选择
@@ -80,6 +114,21 @@
                 buttonType="button" />
             </div>
           </el-row>
+        </el-tab-pane>
+        <el-tab-pane label="表单权限" name="formAuth">
+          <div class="form-auth-table">
+            <el-table :data="getFormOperates()" class="JNPF-common-table" size="mini">
+              <el-table-column prop="name" label="表单字段" align="left"></el-table-column>
+              <el-table-column prop="write" label="操作" align="center" width="200px">
+                <template slot-scope="scope">
+                  <el-checkbox v-model="scope.row.read"
+                    :disabled="scope.row.write|| scope.row.required">可见</el-checkbox>
+                  <el-checkbox v-model="scope.row.write" @change="writeChange($event,scope.row)"
+                    :disabled="scope.row.required">可写</el-checkbox>
+                </template>
+              </el-table-column>
+            </el-table>
+          </div>
         </el-tab-pane>
         <el-tab-pane label="流程发起事件">
           <el-form label-position="top" class="pd-10">
@@ -175,13 +224,13 @@
         </el-tab-pane>
         <el-tab-pane label="表单权限" name="formAuth">
           <div class="form-auth-table">
-            <el-table :data="getFormOperates()" ref="JNPFTable" class="JNPF-common-table"
-              size="mini">
+            <el-table :data="getFormOperates()" class="JNPF-common-table" size="mini">
               <el-table-column prop="name" label="表单字段" align="left"></el-table-column>
               <el-table-column prop="write" label="操作" align="center" width="200px">
                 <template slot-scope="scope">
-                  <el-checkbox v-model="scope.row.read">可见</el-checkbox>
-                  <el-checkbox v-model="scope.row.write">可写</el-checkbox>
+                  <el-checkbox v-model="scope.row.read" :disabled="scope.row.write">可见</el-checkbox>
+                  <el-checkbox v-model="scope.row.write" @change="writeChange($event,scope.row)">可写
+                  </el-checkbox>
                 </template>
               </el-table-column>
             </el-table>
@@ -387,18 +436,28 @@ export default {
       let res = []
       if (!formOperates.length) {
         const formItems = getDrawingList()
-        res = formItems.map(t => ({
-          id: t.__vModel__,
-          name: t.__config__.label,
-          read: true,
-          write: false
-        }))
+        if (this.isStartNode()) {
+          res = formItems.map(t => ({
+            id: t.__vModel__,
+            name: t.__config__.label,
+            required: t.__config__.required,
+            read: true,
+            write: true
+          }))
+        }
+        if (this.isApproverNode()) {
+          res = formItems.map(t => ({
+            id: t.__vModel__,
+            name: t.__config__.label,
+            read: true,
+            write: false
+          }))
+        }
       } else {
         res = formOperates
       }
       return res
     },
-
     initCopyNode() {
       // this.properties = this.value.properties
       this.properties = Object.assign(defaultInitForm, this.value.properties)
@@ -444,6 +503,21 @@ export default {
         content = "所有人"
       } else {
         content = initiatorPosText + (initiatorText && initiatorPosText ? ',' : '') + initiatorText
+      }
+      Object.assign(this.properties, this.startForm)
+      this.$emit("confirm", this.properties, content);
+      this.visible = false;
+    },
+    /**
+     * 定时器节点确认保存
+     */
+    timerNodeComfirm() {
+      let content = ''
+      let { day, hour, minute, second } = this.properties
+      if (!day && !hour && !minute && !second) {
+        content = '请设置时间'
+      } else {
+        content = `将于${day ? day + '天' : ''}${hour ? hour + '小时' : ''}${minute ? minute + '分钟' : ''}${second ? second + '秒' : ''}后流转`
       }
       this.$emit("confirm", this.properties, content);
       this.visible = false;
@@ -494,6 +568,7 @@ export default {
     confirm() {
       this.isCopyNode() && this.copyNodeConfirm()
       this.isStartNode() && this.startNodeComfirm()
+      this.isTimerNode() && this.timerNodeComfirm()
       this.isApproverNode() && this.approverNodeComfirm()
       this.isConditionNode() && this.conditionNodeComfirm()
     },
@@ -530,15 +605,17 @@ export default {
     isStartNode() {
       return this.value ? NodeUtils.isStartNode(this.value) : false;
     },
-
     isCopyNode() {
       return this.value ? NodeUtils.isCopyNode(this.value) : false
     },
-
+    isTimerNode() {
+      return this.value ? NodeUtils.isTimerNode(this.value) : false
+    },
     // 初始化发起人节点
     initInitiator() {
       this.initiator = this.value.properties && this.value.properties.initiator
       this.initiatePos = this.value.properties && this.value.properties.initiatePos
+      this.startForm.formOperates = this.initFormOperates(this.value)
     },
     /**
     * 初始化审批节点所需数据
@@ -597,6 +674,9 @@ export default {
     logicChange(val, item) {
       let obj = this.logicOptions.filter(o => o.value == val)[0]
       item.logicName = obj.label
+    },
+    writeChange(val, item) {
+      if (val) item.read = true
     },
     // 条件字段验证
     exist() {

@@ -62,8 +62,8 @@
           </el-table-column>
           <el-table-column prop="primaryKey" label="是否主键" width="70" align="center">
             <template slot-scope="scope">
-              <el-checkbox :value="scope.row.field === dataForm.primaryKey"
-                @change='changeKey($event,scope.row)' />
+              <el-checkbox v-model="scope.row.primaryKey" @change='changeKey($event,scope.row)'
+                :true-label="1" :false-label="0" />
             </template>
           </el-table-column>
           <el-table-column prop="allowNull" label="允许空" width="60" align="center">
@@ -102,7 +102,6 @@ export default {
       dataForm: {
         table: '',
         tableName: '',
-        primaryKey: 'F_Id',
         newTable: ''
       },
       dataRule: {
@@ -112,10 +111,7 @@ export default {
         ],
         tableName: [
           { required: true, message: '表说明不能为空', trigger: 'blur' }
-        ],
-        primaryKey: [
-          { required: true, message: '表主键不能为空', trigger: 'blur' }
-        ],
+        ]
       },
       list: [],
       fieldList: [],
@@ -159,7 +155,6 @@ export default {
           this.dataForm.newTable = table || ''
           this.listLoading = false
           this.list = []
-          // this.list = [{ field: "F_Id", dataType: "varchar", dataLength: 50, primaryKey: "F_Id", allowNull: 0, fieldName: "自然主键", index: 0 }]
         }
       })
       this.$nextTick(() => {
@@ -194,9 +189,8 @@ export default {
             return
           }
           if (!this.exist()) return
-          let boo = this.list.some(o => o.field === this.dataForm.primaryKey)
-          if (!boo) this.dataForm.primaryKey = ''
-          if (!this.dataForm.primaryKey) {
+          let boo = this.list.some(o => o.primaryKey === 1)
+          if (!boo) {
             this.$message({
               message: '请选择一个字段作为主键',
               type: 'error',
@@ -276,11 +270,11 @@ export default {
       return isOk;
     },
     changeKey(val, row) {
-      let primaryKey = row.field
-      if (!val) primaryKey = ''
-      this.dataForm.primaryKey = primaryKey
+      if (!val) return
       for (let i = 0; i < this.list.length; i++) {
-        this.$set(this.list[i], 'primaryKey', primaryKey)
+        if (row.field != this.list[i].field) {
+          this.$set(this.list[i], 'primaryKey', 0)
+        }
       }
     },
     handleDel(index, row) {
@@ -290,7 +284,7 @@ export default {
       let index = this.list.length, item = {}
       if (!row) {
         item = {
-          field: "", dataType: "varchar", dataLength: 50, allowNull: 1, primaryKey: this.dataForm.primaryKey, fieldName: "", index: index
+          field: "", dataType: "varchar", dataLength: 50, allowNull: 1, primaryKey: 0, fieldName: "", index
         }
       } else {
         item = {
@@ -299,8 +293,8 @@ export default {
           dataLength: row.dataLength,
           allowNull: row.allowNull,
           fieldName: row.fieldName,
-          index: index,
-          primaryKey: this.dataForm.primaryKey
+          index,
+          primaryKey: 0
         }
       }
       this.list.push(item)

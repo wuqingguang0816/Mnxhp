@@ -24,15 +24,15 @@ const checkStatus = (response) => {
 
 // 获取报表列表
 export const getDataReportList = data => {
-  return axios.get(`/api/DataReport`, { data }).then(checkStatus)
+  return axios.get(`/api/datareport`, { data }).then(checkStatus)
 }
 
 // 获取报表下拉列表
 export const getDataReportSelector = () => {
-  return axios.get(`/api/DataReport/Selector`).then(checkStatus)
+  return axios.get(`/api/datareport/Selector`).then(checkStatus)
 }
 
 // 删除报表
 export const delDataReport = id => {
-  return axios.delete(`/api/DataReport/${id}`).then(checkStatus)
+  return axios.delete(`/api/datareport/${id}`).then(checkStatus)
 }

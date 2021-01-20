@@ -30,10 +30,12 @@
           </div>
         </div>
         <JNPF-table v-loading="listLoading" :data="tableList">
-          <el-table-column prop="fileName" label="文件名" sortable show-overflow-tooltip />
-          <el-table-column prop="fileSize" label="文件大小" sortable width="120" />
+          <el-table-column prop="fileName" label="文件名" sortable show-overflow-tooltip
+            v-if="jnpf.hasP('fileName')" />
+          <el-table-column prop="fileSize" label="文件大小" sortable width="120"
+            v-if="jnpf.hasP('fileSize')" />
           <el-table-column prop="creatorTime" :formatter="jnpf.tableDateFormat" sortable
-            label="备份时间" width="120" />
+            label="备份时间" width="120" v-if="jnpf.hasP('creatorTime')" />
           <el-table-column label="操作" width="100">
             <template slot-scope="scope">
               <tableOpts @del="handleDel(scope.row.id)">

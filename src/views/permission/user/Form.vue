@@ -72,9 +72,14 @@
                 </el-select>
               </el-form-item>
             </el-col>
-            <el-col :span="24">
+            <el-col :span="12">
               <el-form-item label="排序" prop="sortCode">
                 <el-input-number :min="0" :max="9999" v-model="dataForm.sortCode" />
+              </el-form-item>
+            </el-col>
+            <el-col :span="12">
+              <el-form-item label="状态" prop="enabledMark">
+                <el-switch v-model="dataForm.enabledMark" :active-value="1" :inactive-value="0" />
               </el-form-item>
             </el-col>
             <el-col :span="24">
@@ -197,6 +202,7 @@ export default {
       dataForm: {
         id: '',
         sortCode: 0,
+        enabledMark: 1,
         account: '',
         realName: '',
         organizeId: '',

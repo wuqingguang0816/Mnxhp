@@ -31,18 +31,18 @@
         </div>
         <JNPF-table v-loading="listLoading" row-key="id" :data="treeData" default-expand-all
           :tree-props="{children: 'children', hasChildren: ''}">
-          <el-table-column prop="fullName" label="菜单名称" />
-          <el-table-column prop="type" label="菜单类型" width="100">
+          <el-table-column prop="fullName" label="菜单名称" v-if="jnpf.hasP('fullName')" />
+          <el-table-column prop="type" label="菜单类型" width="100" v-if="jnpf.hasP('type')">
             <template slot-scope="scope">
               {{scope.row.type== "view"? "页面":scope.row.type== "click"?"文本":"目录"}}
             </template>
           </el-table-column>
-          <el-table-column prop="key" label="菜单内容">
+          <el-table-column prop="key" label="菜单内容" v-if="jnpf.hasP('key')">
             <template slot-scope="scope">
               {{scope.row.type== "view"? scope.row.url:scope.row.id}}
             </template>
           </el-table-column>
-          <el-table-column prop="sortCode" label="排序" width="120" />
+          <el-table-column prop="sortCode" label="排序" width="120" v-if="jnpf.hasP('sortCode')" />
           <el-table-column label="操作" fixed="right" width="100">
             <template slot-scope="scope">
               <tableOpts @edit="addOrUpdateHandle(scope.row.id)" @del="handleDel(scope.row)">

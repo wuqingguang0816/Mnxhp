@@ -44,6 +44,11 @@
         <el-dropdown-item @click.native="lock">
           <i class="icon-ym icon-ym-header-lockScreen"></i>{{ $t('navbar.lockScreen') }}
         </el-dropdown-item>
+        <a href="https://docs.jnpfsoft.com/" target="_blank">
+          <el-dropdown-item>
+            <i class="icon-ym icon-ym-file-text"></i>{{ $t('navbar.documentation') }}
+          </el-dropdown-item>
+        </a>
         <el-dropdown-item divided @click.native="handleLogout">
           <i class="icon-ym icon-ym-header-loginOut"></i>{{ $t('navbar.logOut') }}
         </el-dropdown-item>
@@ -62,7 +67,7 @@
         </div>
         <div>
           <p class="title"><a href="https://www.jnpfsoft.com" target="_blank">JNPF快速开发平台</a></p>
-          <p>版本：3.0.3</p>
+          <p>版本：3.0</p>
           <p>作者：引迈软件</p>
           <p>引迈信息技术有限公司出品</p>
         </div>

@@ -31,7 +31,7 @@
         </div>
         <JNPF-table v-loading="listLoading" :data="tableListAll" row-key="id" default-expand-all
           :tree-props="{children: 'children', hasChildren: ''}">
-          <el-table-column prop="fullName" label="报表名称">
+          <el-table-column prop="fullName" label="报表名称" v-if="jnpf.hasP('fullName')">
             <template slot-scope="scope">
               <span v-if="scope.row.top" style="font-weight:bold;">
                 {{scope.row.fullName}}【{{scope.row.count}}】
@@ -39,25 +39,27 @@
               <span v-else>{{ scope.row.fullName }}</span>
             </template>
           </el-table-column>
-          <el-table-column prop="enCode" label="编码">
+          <el-table-column prop="enCode" label="编码" v-if="jnpf.hasP('enCode')">
             <template slot-scope="scope">
               <span v-if="!scope.row.top">{{ scope.row.enCode }}</span>
             </template>
           </el-table-column>
-          <el-table-column prop="creatorUser" label="创建人" width="120">
+          <el-table-column prop="creatorUser" label="创建人" width="120"
+            v-if="jnpf.hasP('creatorUser')">
             <template slot-scope="scope">
               <span v-if="!scope.row.top">{{scope.row.creatorUser}}</span>
             </template>
           </el-table-column>
           <el-table-column prop="creatorTime" label="创建时间" :formatter="jnpf.tableDateFormat"
-            width="120" />
-          <el-table-column prop="lastModifyUser" label="修改人" width="120">
+            width="120" v-if="jnpf.hasP('creatorTime')" />
+          <el-table-column prop="lastModifyUser" label="修改人" width="120"
+            v-if="jnpf.hasP('lastModifyUser')">
             <template slot-scope="scope">
               <span v-if="!scope.row.top">{{scope.row.lastModifyUser}}</span>
             </template>
           </el-table-column>
           <el-table-column prop="lastModifyTime" label="最后修改时间" :formatter="jnpf.tableDateFormat"
-            width="120" />
+            width="120" v-if="jnpf.hasP('lastModifyTime')" />
           <el-table-column label="操作" width="150">
             <template slot-scope="scope" v-if="!scope.row.top">
               <tableOpts @edit="handleAddEdit(scope.row.id)" @del="handleDel(scope.row.id)">

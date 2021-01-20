@@ -111,6 +111,7 @@ export default {
     },
     request() {
       if (!this.dataForm.id) delete (this.dataForm.id)
+      if (!this.isSubmit) this.$emit('setLoad', true)
       const formMethod = this.dataForm.id ? Update : Create
       formMethod(this.dataForm).then(res => {
         this.$message({
@@ -118,9 +119,12 @@ export default {
           type: 'success',
           duration: 1500,
           onClose: () => {
+            if (!this.isSubmit) this.$emit('setLoad')
             this.$emit('close', true)
           }
         })
+      }).catch(() => {
+        if (!this.isSubmit) this.$emit('setLoad')
       })
     }
   }

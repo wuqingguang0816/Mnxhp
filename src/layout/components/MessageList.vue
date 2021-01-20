@@ -1,26 +1,29 @@
 <template>
   <div>
     <el-drawer title="站内消息" :visible.sync="drawer" direction="rtl" size="280px"
-      class="JNPF-messageList  JNPF-common-drawer" :before-close="handleClose">
+      class="JNPF-messageList JNPF-common-drawer" :before-close="handleClose">
       <div class="tool">
         <el-link :underline="false" @click.native="readAll">全部已读</el-link>
         <el-link :underline="false" @click.native="gotoCenter">消息中心</el-link>
       </div>
       <div class="JNPF-messageList-box" v-loading="loading && listQuery.currentPage==1"
         ref="messageListBody">
-        <div v-for="(item,i) in list" :key="i" class="JNPF-messageList-item"
-          @click="readInfo(item)">
-          <el-badge is-dot :hidden="item.isRead=='1'" type="warning">
-            <i class="el-icon-chat-dot-square JNPF-messageList-item-icon"></i>
-          </el-badge>
-          <div class="JNPF-messageList-txt">
-            <p class="title">{{item.title}}</p>
-            <p class="name">
-              <span>{{item.creatorUser}}</span>
-              <span class="time">{{item.lastModifyTime| toDateText()}}</span>
-            </p>
+        <div v-if="list.length">
+          <div v-for="(item,i) in list" :key="i" class="JNPF-messageList-item"
+            @click="readInfo(item)" :title="item.title">
+            <el-badge is-dot :hidden="item.isRead=='1'" type="warning">
+              <i class="el-icon-chat-dot-square JNPF-messageList-item-icon"></i>
+            </el-badge>
+            <div class="JNPF-messageList-txt">
+              <p class="title">{{item.title}}</p>
+              <p class="name">
+                <span>{{item.creatorUser}}</span>
+                <span class="time">{{item.lastModifyTime| toDateText()}}</span>
+              </p>
+            </div>
           </div>
         </div>
+        <p class="noData-txt" v-else>{{$t('common.noData')}}</p>
       </div>
     </el-drawer>
     <el-dialog title="查看消息" :close-on-click-modal="false" :visible.sync="visible"
@@ -182,6 +185,13 @@ export default {
       border-top: 1px solid #f5f7f9;
       >>> .el-loading-mask {
         top: 100px;
+      }
+      .noData-txt {
+        font-size: 14px;
+        color: #666;
+        line-height: 20px;
+        text-align: center;
+        padding-top: 20px;
       }
     }
     .JNPF-messageList-item {

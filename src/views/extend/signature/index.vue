@@ -25,8 +25,9 @@
           <div class="sigbut">
             <div class="tip">请在这里输入你的签名</div>
             <div class="left-bu">
-              <el-button class="clear-bu" size="mini" @click="handleReset"> 清空</el-button>
-              <el-button class="sure" size="mini" @click="handleGenerate"> 确定签名</el-button>
+              <el-button class="clear-bu" size="mini" @click="handleReset">清空</el-button>
+              <el-button class="sure" size="mini" @click="handleGenerate" :disabled="!showSig">确定签名
+              </el-button>
             </div>
           </div>
           <div class="online-sig">

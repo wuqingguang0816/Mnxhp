@@ -39,41 +39,44 @@
         </div>
         <JNPF-table v-loading="listLoading" :data="flowEngineListAll" row-key="id"
           :tree-props="{children: 'children', hasChildren: ''}" default-expand-all>
-          <el-table-column prop="fullName" label="流程名称">
+          <el-table-column prop="fullName" label="流程名称" v-if="jnpf.hasP('fullName')">
             <template slot-scope="scope">
               <span v-if="scope.row.top"
                 style="font-weight:bold;">{{scope.row.fullName}}【{{scope.row.count}}】</span>
               <span v-else>{{scope.row.fullName}}</span>
             </template>
           </el-table-column>
-          <el-table-column prop="enCode" label="流程编码" width="200">
+          <el-table-column prop="enCode" label="流程编码" width="200" v-if="jnpf.hasP('enCode')">
             <template slot-scope="scope">
               <span v-if="!scope.row.top">{{ scope.row.enCode }}</span>
             </template>
           </el-table-column>
-          <el-table-column prop="formType" label="表单类型" width="80">
+          <el-table-column prop="formType" label="表单类型" width="80" v-if="jnpf.hasP('formType')">
             <template slot-scope="scope">
               <span v-if="!scope.row.top">{{ scope.row.formType == 1? "系统表单" : "自定义表单" }}</span>
             </template>
           </el-table-column>
-          <el-table-column prop="type" label="流程类型" width="80">
+          <el-table-column prop="type" label="流程类型" width="80" v-if="jnpf.hasP('type')">
             <template slot-scope="scope">
               <span v-if="!scope.row.top">{{ scope.row.type == 0? "发起流程" : "功能流程" }}</span>
             </template>
           </el-table-column>
-          <el-table-column prop="visibleType" label="可见范围" width="80">
+          <el-table-column prop="visibleType" label="可见范围" width="80"
+            v-if="jnpf.hasP('visibleType')">
             <template slot-scope="scope">
               <span v-if="!scope.row.top">{{ scope.row.visibleType ==  0 ? "全部可见" : "部分可见" }}</span>
             </template>
           </el-table-column>
-          <el-table-column prop="creatorUser" label="创建人" width="100" />
+          <el-table-column prop="creatorUser" label="创建人" width="100"
+            v-if="jnpf.hasP('creatorUser')" />
           <el-table-column prop="creatorTime" label="创建时间" :formatter="jnpf.tableDateFormat"
-            width="120" />
+            width="120" v-if="jnpf.hasP('creatorTime')" />
           <!-- <el-table-column prop="lastModifyUser" label="最后修改人" width="100" />
       <el-table-column prop="lastModifyTime" label="最后修改时间" :formatter="jnpf.tableDateFormat"
         width="120" /> -->
-          <el-table-column prop="sortCode" label="排序" width="70" align="center" />
-          <el-table-column label="流程状态" width="70" align="center">
+          <el-table-column prop="sortCode" label="排序" width="70" align="center"
+            v-if="jnpf.hasP('sortCode')" />
+          <el-table-column label="流程状态" width="70" align="center" v-if="jnpf.hasP('enabledMark')">
             <template slot-scope="scope">
               <el-switch v-model="scope.row.enabledMark" :active-value="1" :inactive-value="0"
                 v-if="!scope.row.top" @click.native="handleUpdate(scope.row)" disabled

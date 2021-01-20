@@ -3,7 +3,7 @@ import request from '@/utils/request'
 // 获取接口列表(分页)
 export function getDataInterfaceList(data) {
   return request({
-    url: '/api/system/System/DataInterface',
+    url: '/api/system/Base/DataInterface',
     method: 'GET',
     data
   })
@@ -12,7 +12,7 @@ export function getDataInterfaceList(data) {
 // 获取接口列表下拉框
 export function getDataInterfaceSelector() {
   return request({
-    url: '/api/system/System/DataInterface/Selector',
+    url: '/api/system/Base/DataInterface/Selector',
     method: 'GET'
   })
 }
@@ -20,7 +20,7 @@ export function getDataInterfaceSelector() {
 // 添加接口
 export function createDataInterface(data) {
   return request({
-    url: '/api/system/System/DataInterface',
+    url: '/api/system/Base/DataInterface',
     method: 'POST',
     data
   })
@@ -29,7 +29,7 @@ export function createDataInterface(data) {
 // 修改接口
 export function updateDataInterface(data) {
   return request({
-    url: `/api/system/System/DataInterface/${data.id}`,
+    url: `/api/system/Base/DataInterface/${data.id}`,
     method: 'PUT',
     data
   })
@@ -38,7 +38,7 @@ export function updateDataInterface(data) {
 // 获取接口数据
 export function getDataInterfaceInfo(id) {
   return request({
-    url: `/api/system/System/DataInterface/${id}`,
+    url: `/api/system/Base/DataInterface/${id}`,
     method: 'GET'
   })
 }
@@ -46,7 +46,7 @@ export function getDataInterfaceInfo(id) {
 // 删除接口数据
 export function delDataInterface(id) {
   return request({
-    url: `/api/system/System/DataInterface/${id}`,
+    url: `/api/system/Base/DataInterface/${id}`,
     method: 'DELETE'
   })
 }
@@ -54,7 +54,7 @@ export function delDataInterface(id) {
 // 更新接口状态
 export function updateDataInterfaceState(id) {
   return request({
-    url: `/api/system/System/DataInterface/${id}/Actions/State`,
+    url: `/api/system/Base/DataInterface/${id}/Actions/State`,
     method: 'PUT'
   })
 }
@@ -62,7 +62,7 @@ export function updateDataInterfaceState(id) {
 // 获取接口分类
 export function getDataInterfaceTypeSelector() {
   return request({
-    url: '/api/system/System/DictionaryData/9c43287481364d348c0ea0d0f64b38be/Data/Selector',
+    url: '/api/System/DictionaryData/9c43287481364d348c0ea0d0f64b38be/Data/Selector',
     method: 'GET'
   })
 }
@@ -70,7 +70,7 @@ export function getDataInterfaceTypeSelector() {
 // 获取接口数据
 export function previewDataInterface(id) {
   return request({
-    url: `/api/system/System/DataInterface/${id}/Actions/Response`,
+    url: `/api/system/Base/DataInterface/${id}/Actions/Response`,
     method: 'GET'
   })
 }

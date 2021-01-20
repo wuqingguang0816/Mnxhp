@@ -3,7 +3,7 @@ import request from '@/utils/request'
 // 获取列表权限列表
 export function getColumnAuthorizeList(moduleId, data) {
   return request({
-    url: `/api/system/System/ModuleColumn/${moduleId}/Fields`,
+    url: `/api/system/Base/ModuleColumn/${moduleId}/Fields`,
     method: 'GET',
     data
   })
@@ -12,7 +12,7 @@ export function getColumnAuthorizeList(moduleId, data) {
 // 添加字段
 export function createColumn(data) {
   return request({
-    url: `/api/system/System/ModuleColumn`,
+    url: `/api/system/Base/ModuleColumn`,
     method: 'POST',
     data
   })
@@ -21,7 +21,7 @@ export function createColumn(data) {
 // 批量添加字段
 export function batchCreateColumn(data) {
   return request({
-    url: `/api/system/System/ModuleColumn/Actions/Batch`,
+    url: `/api/system/Base/ModuleColumn/Actions/Batch`,
     method: 'POST',
     data
   })
@@ -30,7 +30,7 @@ export function batchCreateColumn(data) {
 // 更新字段
 export function updateColumn(data) {
   return request({
-    url: `/api/system/System/ModuleColumn/${data.id}`,
+    url: `/api/system/Base/ModuleColumn/${data.id}`,
     method: 'PUT',
     data
   })
@@ -39,7 +39,7 @@ export function updateColumn(data) {
 // 获取字段信息
 export function getColumnInfo(id) {
   return request({
-    url: `/api/system/System/ModuleColumn/${id}`,
+    url: `/api/system/Base/ModuleColumn/${id}`,
     method: 'GET'
   })
 }
@@ -47,7 +47,7 @@ export function getColumnInfo(id) {
 // 删除字段
 export function delColumn(id) {
   return request({
-    url: `/api/system/System/ModuleColumn/${id}`,
+    url: `/api/system/Base/ModuleColumn/${id}`,
     method: 'DELETE'
   })
 }
@@ -55,7 +55,7 @@ export function delColumn(id) {
 // 更新字段状态
 export function updateColumnState(id) {
   return request({
-    url: `/api/system/System/ModuleColumn/${id}/Actions/State`,
+    url: `/api/system/Base/ModuleColumn/${id}/Actions/State`,
     method: 'PUT'
   })
 }

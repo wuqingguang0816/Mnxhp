@@ -3,7 +3,7 @@ import request from '@/utils/request'
 // 获取数据库表列表
 export function DbTableList(id, data) {
   return request({
-    url: `/api/system/System/DataModel/${id}/Tables`,
+    url: `/api/system/Base/DataModel/${id}/Tables`,
     method: 'get',
     data
   })
@@ -11,7 +11,7 @@ export function DbTableList(id, data) {
 // 添加数据表
 export function DbTableCreate(linkId, data) {
   return request({
-    url: `/api/system/System/DataModel/${linkId}/Table`,
+    url: `/api/system/Base/DataModel/${linkId}/Table`,
     method: 'post',
     data
   })
@@ -19,7 +19,7 @@ export function DbTableCreate(linkId, data) {
 // 预览数据库表
 export function DbTableData(linkId, table, data) {
   return request({
-    url: `/api/system/System/DataModel/${linkId}/Table/${table}/Preview`,
+    url: `/api/system/Base/DataModel/${linkId}/Table/${table}/Preview`,
     method: 'get',
     data
   })
@@ -27,28 +27,28 @@ export function DbTableData(linkId, table, data) {
 // 删除数据表
 export function DbTableDelete(linkId, id) {
   return request({
-    url: `/api/system/System/DataModel/${linkId}/Table/${id}`,
+    url: `/api/system/Base/DataModel/${linkId}/Table/${id}`,
     method: 'delete',
   })
 }
 // 获取数据库表字段列表
 export function DbTableFieldList(linkId, table) {
   return request({
-    url: `/api/system/System/DataModel/${linkId}/Tables/${table}/Fields`,
+    url: `/api/system/Base/DataModel/${linkId}/Tables/${table}/Fields`,
     method: 'get',
   })
 }
 //  获取数据表
 export function DbTableInfo(linkId, id) {
   return request({
-    url: `/api/system/System/DataModel/${linkId}/Table/${id}`,
+    url: `/api/system/Base/DataModel/${linkId}/Table/${id}`,
     method: 'get',
   })
 }
 // 修改数据表
 export function DbTableUpdate(linkId, data) {
   return request({
-    url: `/api/system/System/DataModel/${linkId}/Table`,
+    url: `/api/system/Base/DataModel/${linkId}/Table`,
     method: 'put',
     data
   })
@@ -56,7 +56,7 @@ export function DbTableUpdate(linkId, data) {
 // 新接口文档未有
 export function IsExistByTable(data) {
   return request({
-    url: '/api/PlatForm/DbTable/IsExistByTable',
+    url: '/api/system/Base/DbTable/IsExistByTable',
     method: 'get',
     data
   })

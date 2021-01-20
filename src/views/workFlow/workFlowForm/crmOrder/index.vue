@@ -102,14 +102,9 @@
         </el-row>
       </el-form>
       <div class="box">
-        <template v-if="!setting.readonly">
-          <el-button type="primary" class="add-btn" @click="choice" v-if="activeName=='goods'">新增商品
-          </el-button>
-          <el-button type="primary" class="add-btn" @click="addPlan" v-else>新增计划</el-button>
-        </template>
         <el-tabs v-model="activeName">
           <el-tab-pane label="订单商品" name="goods">
-            <el-table :data="list" size='mini' show-summary>
+            <el-table :data="list" size='mini' show-summary :summary-method="getSummaries">
               <el-table-column type="index" width="50" label="序号" align="center" />
               <el-table-column prop="goodsName" label="商品名称" />
               <el-table-column prop="specifications" label="规格型号" width="80" />
@@ -166,9 +161,12 @@
                 </template>
               </el-table-column>
             </el-table>
+            <div class="table-actions" @click="choice" v-if="!setting.readonly">
+              <el-button type="text" icon="el-icon-plus">新增商品</el-button>
+            </div>
           </el-tab-pane>
           <el-tab-pane label="收款计划" name="plan">
-            <el-table :data="planList" size='mini' show-summary>
+            <el-table :data="planList" size='mini' show-summary :summary-method="getSummaries">
               <el-table-column type="index" width="50" label="序号" align="center" />
               <el-table-column prop="receivableDate" label="收款日期">
                 <template slot-scope="scope">
@@ -206,6 +204,9 @@
                 </template>
               </el-table-column>
             </el-table>
+            <div class="table-actions" @click="addPlan" v-if="!setting.readonly">
+              <el-button type="text" icon="el-icon-plus">新增计划</el-button>
+            </div>
           </el-tab-pane>
         </el-tabs>
       </div>
@@ -397,6 +398,34 @@ export default {
       this.$nextTick(() => {
         this.$refs.goodsBox.init()
       })
+    },
+    getSummaries(param) {
+      const { columns, data } = param;
+      const sums = [];
+      columns.forEach((column, index) => {
+        if (index === 0) {
+          sums[index] = '合计';
+          return;
+        }
+        if (index === 1) {
+          sums[index] = '';
+          return;
+        }
+        const values = data.map(item => Number(item[column.property]));
+        if (!values.every(value => isNaN(value))) {
+          sums[index] = values.reduce((prev, curr) => {
+            const value = Number(curr);
+            if (!isNaN(value)) {
+              return prev + curr;
+            } else {
+              return prev;
+            }
+          }, 0);
+        } else {
+          sums[index] = '';
+        }
+      });
+      return sums
     },
     exist() {
       let isOk = true;

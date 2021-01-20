@@ -87,21 +87,27 @@
       </el-tab-pane>
       <el-tab-pane label="图文" name="5">
         <JNPF-table v-loading="listLoading" :data="list">
-          <el-table-column label="标题" prop="title" width="150" sortable>
+          <el-table-column label="标题" prop="title" width="150" sortable v-if="jnpf.hasP('title')">
           </el-table-column>
-          <el-table-column prop="author" label="作者" width="120" sortable />
-          <el-table-column prop="uploadUser" label="上传用户" width="120" sortable />
-          <el-table-column prop="enabledMark" label="消息状态" width="120" sortable>
+          <el-table-column prop="author" label="作者" width="120" sortable
+            v-if="jnpf.hasP('author')" />
+          <el-table-column prop="uploadUser" label="上传用户" width="120" sortable
+            v-if="jnpf.hasP('uploadUser')" />
+          <el-table-column prop="enabledMark" label="消息状态" width="120" sortable
+            v-if="jnpf.hasP('enabledMark')">
             <template slot-scope="scope">
               <el-tag type="success" v-if="!scope.row.enabledMark">成功</el-tag>
               <el-tag type="danger" v-else>失败</el-tag>
             </template>
           </el-table-column>
           <el-table-column label="上传时间" prop="uploadDate" width="120" sortable
-            :formatter="jnpf.tableDateFormat" />
-          <el-table-column label="描述" prop="digest" width="150" sortable />
-          <el-table-column label="原文链接" prop="contentSourceUrl" width="150" sortable />
-          <el-table-column label="封面" prop="fileJson" sortable width="150">
+            :formatter="jnpf.tableDateFormat" v-if="jnpf.hasP('uploadDate')" />
+          <el-table-column label="描述" prop="digest" width="150" sortable
+            v-if="jnpf.hasP('digest')" />
+          <el-table-column label="原文链接" prop="contentSourceUrl" width="150" sortable
+            v-if="jnpf.hasP('contentSourceUrl')" />
+          <el-table-column label="封面" prop="fileJson" sortable width="150"
+            v-if="jnpf.hasP('fileJson')">
             <template slot-scope="scope">
               <JNPFenlarge :img="define.comUrl+scope.row.returnUrl" />
             </template>

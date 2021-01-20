@@ -8,19 +8,22 @@
         <i slot="suffix" class="el-input__icon el-icon-search" @click="initData()" />
       </el-input>
       <el-scrollbar class="JNPF-messageList-box" v-loading="loading">
-        <div v-for="(item,i) in list" :key="i" class="JNPF-messageList-item" @click="readInfo(item)"
-          :title="item.isOnline?'在线':'离线'">
-          <el-avatar :size="36" :class="{'offLine':!item.isOnline}"
-            :src="define.comUrl+ item.headIcon">
-          </el-avatar>
-          <div class="JNPF-messageList-txt">
-            <p class="title">{{item.realName}}/{{item.account}}</p>
-            <p class="name">
-              <span>{{item.department}}</span>
-            </p>
+        <div v-if="list.length">
+          <div v-for="(item,i) in list" :key="i" class="JNPF-messageList-item"
+            @click="readInfo(item)" :title="item.isOnline?'在线':'离线'">
+            <el-avatar :size="36" :class="{'offLine':!item.isOnline}"
+              :src="define.comUrl+ item.headIcon">
+            </el-avatar>
+            <div class="JNPF-messageList-txt">
+              <p class="title">{{item.realName}}/{{item.account}}</p>
+              <p class="name">
+                <span>{{item.department}}</span>
+              </p>
+            </div>
+            <el-badge :value="item.unreadNum" :hidden="!item.unreadNum"></el-badge>
           </div>
-          <el-badge :value="item.unreadNum" :hidden="!item.unreadNum"></el-badge>
         </div>
+        <p class="noData-txt" v-else>{{$t('common.noData')}}</p>
       </el-scrollbar>
     </el-drawer>
     <Im ref="JNPFIm" append-to-body />
@@ -155,8 +158,8 @@ export default {
         toUserId: item.id,
         formUserId: this.userInfo.userId,
         token: this.$store.getters.token,
-        page: "1",
-        rows: "30",
+        currentPage: 1,
+        pageSize: 30,
         sord: "desc"
       }
       socket.send(JSON.stringify(messageList));
@@ -212,6 +215,13 @@ export default {
       }
       .el-scrollbar__wrap {
         overflow: hidden auto;
+      }
+      .noData-txt {
+        font-size: 14px;
+        color: #666;
+        line-height: 20px;
+        text-align: center;
+        padding-top: 20px;
       }
     }
     .JNPF-messageList-item {

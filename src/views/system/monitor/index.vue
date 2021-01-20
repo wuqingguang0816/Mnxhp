@@ -221,8 +221,11 @@ export default {
   },
   created() {
     this.initData()
-
-    // this.initData()
+    this.monitor = window.setInterval(() => {
+      setTimeout(() => {
+        this.initData()
+      }, 2)
+    }, 5000)
   },
   destroyed() {
     clearInterval(this.monitor)

@@ -296,10 +296,10 @@ export default {
         this.activeData = tempActiveData
         this.activeId = this.idGlobal
       }
-      if (this.$store.getters.hasTable) {
-        if (obj.to.className.indexOf('table') > -1) {
+      if (obj.to.className.indexOf('table') > -1) {
+        this.$set(this.activeItem.__config__, 'isSubTable', true)
+        if (this.$store.getters.hasTable) {
           this.$set(this.activeItem.__config__, 'relationTable', this.activeTableItem.__config__.tableName)
-          this.$set(this.activeItem.__config__, 'isSubTable', true)
           this.activeItem.__vModel__ = ''
         }
       }
@@ -307,21 +307,19 @@ export default {
     onCenterEnd(obj) {
       this.showTip = true
       if (obj.from == obj.to) return
-      if (this.$store.getters.hasTable) {
-        if (obj.to.className.indexOf('table') > -1) {
+      if (obj.to.className.indexOf('table') > -1) {
+        this.$set(this.activeItem.__config__, 'isSubTable', true)
+        if (this.$store.getters.hasTable) {
           this.$set(this.activeItem.__config__, 'relationTable', this.activeTableItem.__config__.tableName)
-          this.$set(this.activeItem.__config__, 'isSubTable', true)
           this.activeItem.__vModel__ = ''
         }
       }
     },
     onTableEnd(obj, target, conf) {
       if (obj.from == obj.to) return
-      if (this.$store.getters.hasTable) {
-        if (obj.to.className.indexOf('table') < 0) {
-          this.$set(this.activeItem.__config__, 'isSubTable', false)
-          this.activeItem.__vModel__ = ''
-        }
+      if (obj.to.className.indexOf('table') < 0) {
+        this.$set(this.activeItem.__config__, 'isSubTable', false)
+        if (this.$store.getters.hasTable) this.activeItem.__vModel__ = ''
       }
     },
     addComponent(item) {

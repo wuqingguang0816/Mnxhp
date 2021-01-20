@@ -17,14 +17,12 @@
     </el-tabs>
   </div>
 </template>
-
 <script>
 import offer from "./Offer";
 import bill from "./Bill";
 import record from "./Record";
 import storage from "./Storage";
 import printStyle from './printStyle'
-
 export default {
   name: "extend-printData",
   data() {

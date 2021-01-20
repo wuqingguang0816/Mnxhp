@@ -45,34 +45,47 @@
             <JNPF-table v-loading="listLoading" :data="loginLogData" has-c
               @selection-change="handleSelectionChange">
               <el-table-column prop="creatorTime" :formatter="jnpf.tableDateFormat" label="登录时间"
-                width="120" />
-              <el-table-column prop="userName" label="登录用户" width="120" />
-              <el-table-column prop="ipaddress" label="登录IP" width="120" />
-              <el-table-column prop="platForm" label="登录摘要" show-overflow-tooltip />
+                width="120" v-if="jnpf.hasP('creatorTime')" />
+              <el-table-column prop="userName" label="登录用户" width="120"
+                v-if="jnpf.hasP('userName')" />
+              <el-table-column prop="ipaddress" label="登录IP" width="120"
+                v-if="jnpf.hasP('ipaddress')" />
+              <el-table-column prop="platForm" label="登录摘要" show-overflow-tooltip
+                v-if="jnpf.hasP('platForm')" />
             </JNPF-table>
           </el-tab-pane>
           <el-tab-pane label="请求日志" name="5">
             <JNPF-table v-loading="listLoading" :data="requestLogData" has-c
               @selection-change="handleSelectionChange">
               <el-table-column prop="creatorTime" :formatter="jnpf.tableDateFormat" label="请求时间"
-                width="120" />
-              <el-table-column prop="userName" label="请求用户" width="120" />
-              <el-table-column prop="ipaddress" label="请求IP" width="120" />
-              <el-table-column prop="platForm" label="请求设备" width="120" show-overflow-tooltip />
-              <el-table-column prop="requestURL" label="请求地址" show-overflow-tooltip />
-              <el-table-column prop="requestMethod" label="请求类型" width="120" />
-              <el-table-column prop="requestDuration" label="请求耗时" width="120" />
+                width="120" v-if="jnpf.hasP('creatorTime')" />
+              <el-table-column prop="userName" label="请求用户" width="120"
+                v-if="jnpf.hasP('userName')" />
+              <el-table-column prop="ipaddress" label="请求IP" width="120"
+                v-if="jnpf.hasP('ipaddress')" />
+              <el-table-column prop="platForm" label="请求设备" width="120" show-overflow-tooltip
+                v-if="jnpf.hasP('platForm')" />
+              <el-table-column prop="requestURL" label="请求地址" show-overflow-tooltip
+                v-if="jnpf.hasP('requestURL')" />
+              <el-table-column prop="requestMethod" label="请求类型" width="120"
+                v-if="jnpf.hasP('requestMethod')" />
+              <el-table-column prop="requestDuration" label="请求耗时" width="120"
+                v-if="jnpf.hasP('requestDuration')" />
             </JNPF-table>
           </el-tab-pane>
           <el-tab-pane label="异常日志" name="4">
             <JNPF-table v-loading="listLoading" :data="errorLogData" has-c
               @selection-change="handleSelectionChange">
               <el-table-column prop="creatorTime" :formatter="jnpf.tableDateFormat" label="创建时间"
-                width="120" />
-              <el-table-column prop="userName" label="创建用户" width="120" />
-              <el-table-column prop="ipaddress" label="异常IP" width="120" />
-              <el-table-column prop="moduleName" label="异常功能" width="120" />
-              <el-table-column prop="json" label="异常描述" show-overflow-tooltip />
+                width="120" v-if="jnpf.hasP('creatorTime')" />
+              <el-table-column prop="userName" label="创建用户" width="120"
+                v-if="jnpf.hasP('userName')" />
+              <el-table-column prop="ipaddress" label="异常IP" width="120"
+                v-if="jnpf.hasP('ipaddress')" />
+              <el-table-column prop="moduleName" label="异常功能" width="120"
+                v-if="jnpf.hasP('moduleName')" />
+              <el-table-column prop="json" label="异常描述" show-overflow-tooltip
+                v-if="jnpf.hasP('json')" />
             </JNPF-table>
           </el-tab-pane>
           <pagination :total="total" :page.sync="params.currentPage" :limit.sync="params.pageSize"

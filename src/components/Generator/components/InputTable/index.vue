@@ -20,7 +20,7 @@
       </el-table-column>
       <!-- 组件列 -->
       <el-table-column v-for="(head, cindex) in tableData" :key="head.__config__.formId"
-        :min-width="head['min-width']" :prop="head.__vModel__">
+        :min-width="head['min-width']" :prop="head.__vModel__" :width="head.__config__.columnWidth">
         <template slot="header">
           <span style="color: #f56c6c;" v-if="head.__config__.required">*</span>
           {{head.__config__['label']}}
@@ -467,7 +467,7 @@ export default {
       // vertical-align: top;
       &::after,
       &::before {
-        content: "";
+        content: '';
         width: 10px;
         height: 10px;
         background: white;

@@ -145,6 +145,7 @@ export default {
       })
     },
     handleUpdateState(item) {
+      if (!this.jnpf.hasBtnP('btn_edit')) return this.$message.warning(this.$t('common.noPerTip'))
       const txt = item.enabledMark ? '禁用' : '开启'
       this.$confirm(`您确定要${txt}当前大屏吗, 是否继续?`, '提示', {
         type: 'warning'

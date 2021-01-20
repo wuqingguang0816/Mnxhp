@@ -32,23 +32,24 @@
         </div>
         <JNPF-table v-loading="listLoading" :data="tableListAll" row-key="id" default-expand-all
           :tree-props="{children: 'children', hasChildren: ''}">
-          <el-table-column prop="fullName" label="名称">
+          <el-table-column prop="fullName" label="名称" v-if="jnpf.hasP('fullName')">
             <template slot-scope="scope">
               <span v-if="scope.row.top"
                 style="font-weight:bold;">{{scope.row.fullName}}【{{scope.row.count}}】</span>
               <span v-else>{{scope.row.fullName}}</span>
             </template>
           </el-table-column>
-          <el-table-column prop="enCode" label="编码">
+          <el-table-column prop="enCode" label="编码" v-if="jnpf.hasP('enCode')">
             <template slot-scope="scope">
               <span v-if="!scope.row.top">{{ scope.row.enCode }}</span>
             </template>
           </el-table-column>
-          <el-table-column prop="description" label="描述" />
+          <el-table-column prop="description" label="描述" v-if="jnpf.hasP('description')" />
           <el-table-column prop="creatorTime" label="创建时间" :formatter="jnpf.tableDateFormat"
-            width="120" />
-          <el-table-column prop="sortCode" label="排序" width="70" align="center" />
-          <el-table-column label="状态" width="70" align="center">
+            width="120" v-if="jnpf.hasP('creatorTime')" />
+          <el-table-column prop="sortCode" label="排序" width="70" align="center"
+            v-if="jnpf.hasP('sortCode')" />
+          <el-table-column label="状态" width="70" align="center" v-if="jnpf.hasP('enabledMark')">
             <template slot-scope="scope" v-if="!scope.row.top">
               <el-switch v-model="scope.row.enabledMark" :active-value="1" :inactive-value="0"
                 @click.native="handleUpdateState(scope.row)" disabled class="table-switch" />
@@ -184,6 +185,7 @@ export default {
       this.initData()
     },
     handleUpdateState(row) {
+      if (!this.jnpf.hasBtnP('btn_edit')) return this.$message.warning(this.$t('common.noPerTip'))
       const txt = row.enabledMark ? '禁用' : '开启'
       this.$confirm(`您确定要${txt}当前角色吗, 是否继续?`, '提示', {
         type: 'warning'

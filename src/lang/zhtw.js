@@ -1,5 +1,6 @@
 export default {
   route: {
+    "home": "首頁",
     "dashboard": "門戶展示",
     "onlineDev": "在線開發",
     "onlineDev-webDesign": "功能設計",
@@ -124,6 +125,7 @@ export default {
     feedback: '反饋問題',
     about: '關於平臺',
     lockScreen: '鎖住屏幕',
+    documentation: '幫助文檔',
     logOut: '退出系統',
     notice: '消息',
     chat: '聊天'
@@ -131,6 +133,7 @@ export default {
   login: {
     title: '賬戶登錄',
     scanTitle: '掃碼登錄',
+    codeTitle: '驗證碼登錄',
     logIn: '登錄',
     username: '請輸入用戶名/手機號',
     password: '請輸入密碼',
@@ -139,7 +142,14 @@ export default {
     upper: '大寫已鎖定',
     scanTip: 'APP掃碼登錄',
     accountTip: '請輸入賬號',
-    passwordTip: '請輸入密碼'
+    passwordTip: '請輸入密碼',
+    mobile: '請輸入手機號',
+    rightMobile: '請輸入正確的手機號',
+    smsCode: '請輸入驗證碼',
+    getCode: '獲取驗證碼',
+    reSend: '重新發送',
+    company: '請輸入公司名',
+    contacts: '請輸入聯系人'
   },
   tagsView: {
     refresh: '刷新',
@@ -185,6 +195,8 @@ export default {
     cancelButton: '取 消',
     delTip: '此操作將永久刪除該數據, 是否繼續？',
     loadingText: '數據加載中',
+    noData: '暫無數據',
+    noPerTip: '暫無權限',
     tipTitle: '提示',
     prev: '上壹步',
     next: '下壹步',

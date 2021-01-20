@@ -74,19 +74,22 @@
           </div>
         </div>
         <JNPF-table v-loading="listLoading" :data="list" hasC @selection-change="handleChange">
-          <el-table-column prop="enCode" label="流程标题/流程编码" show-overflow-tooltip>
+          <el-table-column prop="fullName" label="流程标题/流程编码" show-overflow-tooltip
+            v-if="jnpf.hasP('fullName')">
             <template slot-scope="scope">
               <p>{{ scope.row.fullName }}</p>
               <p class="text-grey">{{ scope.row.enCode }}</p>
             </template>
           </el-table-column>
-          <el-table-column prop="flowCategory" label="所属流程/所属分类" width="130">
+          <el-table-column prop="flowCategory" label="所属流程/所属分类" width="130"
+            v-if="jnpf.hasP('flowCategory')">
             <template slot-scope="scope">
               <p>{{ scope.row.flowName }}</p>
               <p class="text-grey">{{ scope.row.flowCategory|getCategoryText(categoryList) }}</p>
             </template>
           </el-table-column>
-          <el-table-column prop="startTime" label="发起人员/发起时间" width="130">
+          <el-table-column prop="startTime" label="发起人员/发起时间" width="130"
+            v-if="jnpf.hasP('startTime')">
             <template slot-scope="scope">
               <p>{{ scope.row.userName }}</p>
               <p class="text-grey" v-if="scope.row.startTime">
@@ -94,13 +97,15 @@
               <p v-else>----</p>
             </template>
           </el-table-column>
-          <el-table-column prop="flowUrgent" label="紧急程度/当前节点" sortable width="150">
+          <el-table-column prop="flowUrgent" label="紧急程度/当前节点" sortable width="150"
+            v-if="jnpf.hasP('flowUrgent')">
             <template slot-scope="scope">
               <p>{{ scope.row.flowUrgent | urgentText() }}</p>
               <p class="text-grey">{{ scope.row.thisStep}}</p>
             </template>
           </el-table-column>
-          <el-table-column prop="status" label="流程状态" sortable width="150">
+          <el-table-column prop="status" label="流程状态" sortable width="150"
+            v-if="jnpf.hasP('status')">
             <template slot-scope="scope">
               <el-tag type="primary" v-if="scope.row.status==1">等待审核</el-tag>
               <el-tag type="success" v-else-if="scope.row.status==2">审核通过</el-tag>
@@ -110,7 +115,8 @@
               <el-tag v-else type="info">等待提交</el-tag>
             </template>
           </el-table-column>
-          <el-table-column prop="completion" label="流程进度" sortable width="150">
+          <el-table-column prop="completion" label="流程进度" sortable width="150"
+            v-if="jnpf.hasP('completion')">
             <template slot-scope="scope">
               <p class="text-grey" v-if="scope.row.status==5 || scope.row.completion == 0">----</p>
               <p v-else-if=" scope.row.completion == 100">已完成</p>
