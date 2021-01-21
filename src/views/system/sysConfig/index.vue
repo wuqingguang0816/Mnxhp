@@ -164,10 +164,10 @@
           <el-row style="margin-top: 15px">
             <el-col :span="18">
               <el-form-item label="应用名称">
-                <span>JNPF.WebApi baseForm.</span>
+                <span>JNPF-JAVA-Cloud</span>
               </el-form-item>
               <el-form-item label="授权名称">
-                <span>JNPF.NET-BF068949-ECF2-4C8B-906A-6E56E7722A35</span>
+                <span>JAVA-Cloud-BF068949-ECF2-4C8B-906A-6E56E7722A35</span>
               </el-form-item>
               <el-form-item label="授权状态">
                 <template>
