@@ -4,7 +4,7 @@ module.exports = {
   APIURl: APIURl,
   timeout: process.env.NODE_ENV === 'development' ? 10000 : 1000000,
   WebSocketUrl: process.env.NODE_ENV === 'development' ? APIURl.replace('http', 'ws') + '/api/system/Message/websocket' : process.env.VUE_APP_BASE_WSS,
-  comUploadUrl: process.env.VUE_APP_BASE_API + '/api/Common/Uploader',
+  comUploadUrl: process.env.VUE_APP_BASE_API + '/api/file/Uploader',
   comUrl: process.env.VUE_APP_BASE_API,
   // 大屏应用前端路径
   dataV: process.env.NODE_ENV === 'development' ? 'http://localhost:8100/DataV' : process.env.VUE_APP_BASE_API + '/DataV',
