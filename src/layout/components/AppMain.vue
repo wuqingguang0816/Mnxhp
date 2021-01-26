@@ -27,11 +27,12 @@ export default {
   height: calc(100vh - 60px);
   width: 100%;
   position: relative;
-  overflow: hidden auto;
+  overflow: auto;
+  overflow-x: hidden;
   padding: 10px;
   margin-bottom: 20px;
   box-sizing: border-box;
-  background: url("../../assets/images/loading-iframe.gif") no-repeat center
+  background: url('../../assets/images/loading-iframe.gif') no-repeat center
     center #ebeef5;
   background-size: 600px 450px;
 }

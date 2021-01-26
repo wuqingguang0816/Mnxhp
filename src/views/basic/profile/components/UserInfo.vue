@@ -146,7 +146,7 @@
 
 <script>
 
-import { UserSettingInfo, UpdateUser } from '@/api/permission/userSetting'
+import { UpdateUser } from '@/api/permission/userSetting'
 export default {
   props: {
     user: {
@@ -213,7 +213,7 @@ export default {
         this.nationOptions = JSON.parse(JSON.stringify(res))
       })
     },
-    getInfo(user) {
+    getInfo() {
       this.form = this.user
       for (let key of Object.keys(this.form2)) {
         this.form2[key] = this.form[key]
@@ -224,8 +224,9 @@ export default {
         this.$message({
           message: res.msg,
           type: 'success',
-          duration: 1500,
+          duration: 1500
         })
+        this.$store.commit('user/SET_USERINFO_USERNAME', this.form2.realName)
       })
     }
   }

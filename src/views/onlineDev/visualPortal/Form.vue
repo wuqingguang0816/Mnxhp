@@ -37,11 +37,8 @@
                   v-for="item in categoryList" />
               </el-select>
             </el-form-item>
-            <el-form-item label="门户状态" prop="enabledMark">
+            <el-form-item label="状态" prop="enabledMark">
               <el-switch v-model="dataForm.enabledMark" :active-value="1" :inactive-value="0" />
-            </el-form-item>
-            <el-form-item label="门户排序" prop="sortCode">
-              <el-input-number :min="0" :max="9999" v-model="dataForm.sortCode" />
             </el-form-item>
             <el-form-item label="门户说明" prop="description">
               <el-input v-model="dataForm.description" placeholder="门户说明" type="textarea"
@@ -59,7 +56,6 @@
 
 <script>
 import { getPortalInfo, Update, Create } from '@/api/onlineDev/portal'
-import { DbTableFieldList } from '@/api/systemData/dbTable'
 import PortalDesigner from './components'
 export default {
   components: { PortalDesigner },
@@ -73,8 +69,7 @@ export default {
         enCode: '',
         enabledMark: 1,
         category: '',
-        description: "",
-        sortCode: 0
+        description: ""
       },
       dataRule: {
         fullName: [
@@ -88,8 +83,8 @@ export default {
           { required: true, message: '门户分类不能为空', trigger: 'change' },
         ],
         enabledMark: [
-          { required: true, message: '门户状态不能为空', trigger: 'blur' },
-        ],
+          { required: true, message: '状态不能为空', trigger: 'blur' },
+        ]
       },
       formVisible: false,
       btnLoading: false,
@@ -151,7 +146,7 @@ export default {
     stepChick(key) {
       if (this.activeStep <= key) return
       this.activeStep = key
-    },
+    }
   }
 }
 </script>

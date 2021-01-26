@@ -82,7 +82,7 @@
           <el-table-column prop="receivableMoney" label="付款金额" width="100" sortable />
           <el-table-column prop="creatorUser" label="制单人员" width="120" />
           <el-table-column prop="description" label="订单备注" show-overflow-tooltip />
-          <el-table-column prop="currentState" label="订单状态" width="100" sortable>
+          <el-table-column prop="currentState" label="状态" width="100" sortable>
             <template slot-scope="scope">
               <el-tag v-if="scope.row.currentState==1">等待审核</el-tag>
               <el-tag type="success" v-else-if="scope.row.currentState==2">审核通过</el-tag>

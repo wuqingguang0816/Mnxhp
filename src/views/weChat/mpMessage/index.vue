@@ -39,7 +39,7 @@
           <el-table-column prop="sendUser" label="发送用户" sortable v-if="jnpf.hasP('sendUser')" />
           <el-table-column prop="sendDate" label="发送时间" sortable :formatter="jnpf.tableDateFormat"
             v-if="jnpf.hasP('sendDate')" />
-          <el-table-column prop="enabledMark" label="消息状态" v-if="jnpf.hasP('enabledMark')">
+          <el-table-column prop="enabledMark" label="状态" v-if="jnpf.hasP('enabledMark')">
             <template slot-scope="scope">
               <el-tag type="success" v-if="!scope.row.enabledMark">发送成功</el-tag>
               <el-tag type="danger" v-else>发送失败</el-tag>

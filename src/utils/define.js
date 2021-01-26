@@ -1,4 +1,4 @@
-const APIURl = 'http://127.0.0.1:30000'
+const APIURl = 'http://192.168.0.25:30000'
 
 module.exports = {
   APIURl: APIURl,

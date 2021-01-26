@@ -16,7 +16,7 @@
       <el-form-item label="字段注解" prop="fullName">
         <el-input v-model="dataForm.fullName" placeholder="输入字段注解" />
       </el-form-item>
-      <el-form-item label="字段状态" prop="enabledMark">
+      <el-form-item label="状态" prop="enabledMark">
         <el-switch v-model="dataForm.enabledMark" :active-value="1" :inactive-value="0" />
       </el-form-item>
       <el-form-item label="字段说明" prop="description">

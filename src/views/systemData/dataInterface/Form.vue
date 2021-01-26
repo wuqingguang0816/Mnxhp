@@ -400,7 +400,8 @@ export default {
         border-radius: 4px;
         height: calc(100vh - 280px);
         border: 1px solid #dcdfe6;
-        overflow: hidden auto;
+        overflow: auto;
+        overflow-x: hidden;
         >>> .el-tree-node__content > .el-tree-node__expand-icon {
           padding: 0;
         }

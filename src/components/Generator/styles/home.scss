@@ -270,7 +270,7 @@ $lighterBlue: #409EFF;
 
     &>.drawing-item-copy,
     &>.drawing-item-delete {
-      display: initial;
+      display: block;
     }
 
     &>.component-name {
@@ -345,7 +345,7 @@ $lighterBlue: #409EFF;
 
     &>.drawing-item-copy,
     &>.drawing-item-delete {
-      display: initial;
+      display: block;
     }
   }
 

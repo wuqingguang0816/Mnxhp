@@ -21,7 +21,7 @@
           <div style="flex:1;margin-right:10px">
             <el-input v-model="dataForm.icon" placeholder="请选择图标" readonly>
               <template slot="prepend"><i :class="dataForm.icon" /></template>
-              <el-button slot="append" icon="el-icon-thumb" @click="openIconBox">选择</el-button>
+              <el-button slot="append" @click="openIconBox">选择</el-button>
             </el-input>
           </div>
           <el-color-picker v-model="dataForm.propertyJson.iconBackgroundColor"

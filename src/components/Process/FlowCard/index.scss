@@ -87,7 +87,7 @@ $base-size : 12px;
 
   .error-tip {
     position: absolute;
-    right: 0;
+    right: 1px;
     top: 15%;
     width: 30px;
     height: 30px;
@@ -139,28 +139,32 @@ $base-size : 12px;
   font-size: 14px;
 
   &:hover {
-    box-shadow: 0 0 0 2px #3296fa, 0 0 5px 4px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 0 0 2px #1890ff, 0 0 5px 4px rgba(0, 0, 0, 0.2);
   }
 
   &.copy {
     .header {
-      background-color: #3296fa;
+      background-color: #1890ff;
     }
   }
 
   &.timer {
+    &:hover {
+      box-shadow: 0 0 0 2px #52C41A, 0 0 5px 4px rgba(0, 0, 0, 0.2);
+    }
+
     .header {
-      background-color: #3296fa;
+      background-color: #52C41A;
     }
   }
 
   &.approver {
     &:hover {
-      box-shadow: 0 0 0 2px #409EFF, 0 0 5px 4px rgba(0, 0, 0, 0.2);
+      box-shadow: 0 0 0 2px #1890ff, 0 0 5px 4px rgba(0, 0, 0, 0.2);
     }
 
     .header {
-      background-color: #409EFF;
+      background-color: #1890ff;
     }
   }
 
@@ -198,9 +202,10 @@ $base-size : 12px;
       background: inherit;
       color: inherit;
       opacity: 0;
+      margin-top: 6px;
 
       &:focus {
-        border-radius: 6px;
+        border-radius: 4px;
         font-size: $base-size;
         padding: 2px;
         padding-left: 4px;
@@ -208,7 +213,7 @@ $base-size : 12px;
         margin-left: 1px;
         height: 18px;
         box-sizing: border-box;
-        box-shadow: 0 0 2px 2px #7ec3e1;
+        box-shadow: 0 0 1px 1px #1890ff;
         background-color: $bg-color;
         color: black;
         opacity: 1;
@@ -367,7 +372,7 @@ $base-size : 12px;
       border-radius: 15px;
       cursor: pointer;
       outline: none;
-      background-color: #3296fa;
+      background-color: #1890ff;
       border-color: transparent;
       transition: transform 0.5s;
 
@@ -458,18 +463,19 @@ $base-size : 12px;
       cursor: pointer;
       position: absolute;
       top: 0;
+      left: 50%;
       outline: none;
-      transform: translateY(-50%);
+      transform: translate(-50%, -50%);
       padding: 9px 16px;
       border: none;
       border-radius: 15px;
       background: white;
       box-shadow: 0 0 10px 0px rgba(0, 0, 0, 0.2);
       transition: transform .3s;
-      color: #409EFF;
+      color: #1890ff;
 
       &:hover {
-        transform: scale(1.1) translateY(-50%)
+        transform: scale(1.1) translate(-46%, -50%);
       }
     }
   }
@@ -543,4 +549,9 @@ $base-size : 12px;
   position: absolute;
   right: 0;
   font-size: 12px;
+}
+
+input::-ms-clear,
+input::-ms-reveal {
+  display: none;
 }

@@ -45,14 +45,14 @@ service.interceptors.response.use(
     let config = response.config
     let url = config.url
     // 特殊接口处理
-    if (url.indexOf('/PlatForm/DbLink/Actions/Test') > -1 || (url.indexOf('Model') > -1 && url.indexOf('Config') > -1)) return res
+    if (url.indexOf('/Base/DataSource/Actions/Test') > -1 || (url.indexOf('Model') > -1 && url.indexOf('Config') > -1)) return res
     if (res.code !== 200) {
       Message({
         message: res.msg || '请求出错，请重试',
         type: 'error',
         duration: 3000,
         onClose: () => {
-          if (url.indexOf('/api/Common/Login/Login') < 0 && url.indexOf('/api/Common/Login/LockScreen') < 0 && (res.code === 600 || res.code === 601 || res.code === 602)) {
+          if (url.indexOf('/api/oauth/Login') < 0 && url.indexOf('/api/oauth/LockScreen') < 0 && (res.code === 600 || res.code === 601 || res.code === 602)) {
             // 600：登录过期,请重新登录  601: 您的帐号在其他地方已登录,被强制踢出 602: Token验证失败
             store.dispatch('user/resetToken').then(() => {
               setTimeout(() => { location.reload() }, 100);

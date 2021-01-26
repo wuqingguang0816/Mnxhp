@@ -2,12 +2,17 @@
   <transition name="el-zoom-in-center">
     <div class="JNPF-preview-main flow-form-main nohead">
       <div class="btns">
-        <el-button type="primary" v-if="setting.isAudit" @click="audit()">通 过
-        </el-button>
-        <el-button type="danger" v-if="setting.isAudit" @click="reject()">拒 绝
-        </el-button>
+        <template v-if="setting.isAudit">
+          <el-button type="primary" @click="transfer()">转 办</el-button>
+          <el-button type="primary" @click="audit()">通 过</el-button>
+          <el-button type="danger" @click="reject()">拒 绝</el-button>
+        </template>
         <el-button type="danger" v-if="setting.isSelf && setting.status == 1" @click="revoke()">撤 回
         </el-button>
+        <el-button type="danger" v-if="setting.hasRecall" @click="recall()">撤 回</el-button>
+        <el-button type="danger" @click="cancel()"
+          v-if="setting.hasCancel && setting.status != 2 && setting.status != 5">
+          终 止</el-button>
         <el-button @click="goBack()">{{$t('common.cancelButton')}}</el-button>
       </div>
       <div class="approve-result" v-if="setting.showStatus && activeTab==='0'">
@@ -41,12 +46,13 @@
           </el-button>
         </span>
       </el-dialog>
+      <UserBox v-if="userBoxVisible" ref="userBox" @submit="transferSubmit" />
     </div>
   </transition>
 </template>
 
 <script>
-import { FlowBeforeInfo, Audit, Reject } from '@/api/workFlow/FlowBefore'
+import { FlowBeforeInfo, Audit, Reject, Transfer, Recall, Cancel } from '@/api/workFlow/FlowBefore'
 import { Revoke } from '@/api/workFlow/FlowLaunch'
 import recordList from './RecordList'
 import Process from '@/components/Process/Preview'
@@ -54,6 +60,7 @@ export default {
   components: { recordList, Process },
   data() {
     return {
+      userBoxVisible: false,
       currentView: '',
       setting: {},
       flowFormInfo: {},
@@ -146,7 +153,7 @@ export default {
               onClose: () => {
                 this.$emit('close', true)
               }
-            });
+            })
           })
         }).catch(() => { });
       } else {
@@ -175,7 +182,7 @@ export default {
             onClose: () => {
               this.$emit('close', true)
             }
-          });
+          })
         })
       }).catch(() => { });
     },
@@ -203,10 +210,73 @@ export default {
             onClose: () => {
               this.$emit('close', true)
             }
-          });
-
+          })
         })
-      }).catch(() => { });
+      }).catch(() => { })
+    },
+    recall() {
+      this.$prompt('', "撤回审核", {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        inputPlaceholder: '请输入撤回原因（必填）',
+        inputType: 'textarea',
+        inputErrorMessage: '原因不能为空',
+        inputValue: "",
+        inputValidator: (val) => { if (!val) { if (this.firstTest) { this.firstTest = false; return true } return false } },
+        closeOnClickModal: false
+      }).then(({ value }) => {
+        Recall(this.setting.taskId, { handleOpinion: value }).then(res => {
+          this.$message({
+            type: 'success',
+            message: res.msg,
+            duration: 1000,
+            onClose: () => {
+              this.$emit('close', true)
+            }
+          })
+        })
+      }).catch(() => { })
+    },
+    cancel() {
+      this.$prompt('', "终止审核不可恢复", {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        inputPlaceholder: '请输入终止原因（必填）',
+        inputType: 'textarea',
+        inputErrorMessage: '原因不能为空',
+        inputValue: "",
+        inputValidator: (val) => { if (!val) { if (this.firstTest) { this.firstTest = false; return true } return false } },
+        closeOnClickModal: false
+      }).then(({ value }) => {
+        Cancel(this.setting.taskId, { handleOpinion: value }).then(res => {
+          this.$message({
+            type: 'success',
+            message: res.msg,
+            duration: 1000,
+            onClose: () => {
+              this.$emit('close', true)
+            }
+          })
+        })
+      }).catch(() => { })
+    },
+    transfer() {
+      this.userBoxVisible = true
+      this.$nextTick(() => {
+        this.$refs.userBox.init()
+      })
+    },
+    transferSubmit(freeApproverUserId) {
+      Transfer(this.setting.taskId, { freeApproverUserId }).then(res => {
+        this.$message({
+          type: 'success',
+          message: res.msg,
+          duration: 1000,
+          onClose: () => {
+            this.$emit('close', true)
+          }
+        })
+      })
     },
     dataFormSubmit() {
       if (this.handleType == 0 && !this.handleId) {
@@ -214,7 +284,7 @@ export default {
           type: 'error',
           message: '请选择下一审批人',
           duration: 1000
-        });
+        })
         return
       }
       let query = {
@@ -231,7 +301,7 @@ export default {
             this.visible = false
             this.$emit('close', true)
           }
-        });
+        })
       })
     }
   }

@@ -34,7 +34,7 @@
             :max="100" controls-position="right" label="11">
           </el-input-number>&nbsp;&nbsp;%
         </el-form-item>
-        <el-form-item label="项目状态" prop="state">
+        <el-form-item label="状态" prop="state">
           <el-select v-model="dataForm.state" placeholder="请选择">
             <el-option :key="1" label="进行中" :value="1"></el-option>
             <el-option :key="2" label="已暂停" :value="2"></el-option>

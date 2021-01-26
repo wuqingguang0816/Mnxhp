@@ -33,7 +33,7 @@
               </el-form-item>
               <el-form-item label="图标">
                 <el-input v-model="item.icon" placeholder="请输入图标名称">
-                  <el-button slot="append" icon="el-icon-thumb" @click="openIconsDialog(index)">
+                  <el-button slot="append" @click="openIconsDialog(index)">
                     选择</el-button>
                 </el-input>
               </el-form-item>

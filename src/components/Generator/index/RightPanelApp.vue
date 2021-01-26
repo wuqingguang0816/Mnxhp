@@ -420,10 +420,24 @@ export default {
     fieldChange(val) {
       if (!val) return
       const drawingList = getDrawingList()
-      let boo = drawingList.some(o => o.__vModel__ === val)
+      let boo = false
+      const loop = list => {
+        for (let i = 0; i < list.length; i++) {
+          const e = list[i]
+          const config = e.__config__
+          if (e.__vModel__ === val) {
+            boo = true
+            break
+          }
+          if (config && config.jnpfKey != 'table' && config.children && Array.isArray(config.children)) {
+            loop(config.children)
+          }
+        }
+      }
+      loop(drawingList)
       if (boo) {
         this.$message.warning(`字段【${val}】已存在,请重新选!`)
-        this.activeData.__vModel__ = ""
+        this.activeData.__vModel__ = ''
         return
       }
       let item = this.formItemList.filter(o => o.field == val)[0]

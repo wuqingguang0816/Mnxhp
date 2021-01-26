@@ -71,6 +71,20 @@ import { deepClone } from '@/utils'
 import { basicComponents, chartComponents } from './config'
 import Preview from './Preview'
 import RightPanel from './RightPanel'
+import {
+  Todo,
+  CommonFunc,
+  TodoList,
+  HNotice,
+  HEmail,
+  DataBoard,
+  HBarChart,
+  HAnnularChart,
+  HAreaChart,
+  HLineChart,
+  HPieChart,
+  HRadarChart
+} from "@/components/VisualPortal"
 const defaultConf = {
   layouyId: 100,
   layout: []
@@ -83,7 +97,19 @@ export default {
     GridLayout: VueGridLayout.GridLayout,
     GridItem: VueGridLayout.GridItem,
     Preview,
-    RightPanel
+    RightPanel,
+    Todo,
+    CommonFunc,
+    TodoList,
+    HNotice,
+    HEmail,
+    DataBoard,
+    HBarChart,
+    HAnnularChart,
+    HAreaChart,
+    HLineChart,
+    HPieChart,
+    HRadarChart
   },
   data() {
     return {
@@ -275,7 +301,8 @@ $lighterBlue: #409eff;
     }
     .layout-area {
       height: calc(100% - 42px);
-      overflow: hidden auto;
+      overflow: auto;
+      overflow-x: hidden;
       .vue-grid-item {
         position: relative;
         height: 100%;
@@ -284,7 +311,7 @@ $lighterBlue: #409eff;
           border: 1px solid $lighterBlue;
           .drawing-item-copy,
           .drawing-item-delete {
-            display: initial;
+            display: block;
           }
         }
         >>> .vue-resizable-handle {
@@ -340,7 +367,7 @@ $lighterBlue: #409eff;
         &:hover {
           .drawing-item-copy,
           .drawing-item-delete {
-            display: initial;
+            display: block;
           }
         }
         >>> .el-card {

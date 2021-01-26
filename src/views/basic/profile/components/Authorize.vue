@@ -61,7 +61,8 @@ export default {
     padding-top: 0 !important;
   }
   >>> .el-tabs__content {
-    overflow: hidden auto;
+    overflow: auto;
+    overflow-x: hidden;
     .el-tab-pane {
       height: auto !important;
     }

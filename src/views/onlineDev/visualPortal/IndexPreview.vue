@@ -20,8 +20,10 @@
 
 <script>
 import { getPortalInfo } from '@/api/onlineDev/portal'
+import PortalLayout from '@/components/VisualPortal/Layout'
 export default {
   props: ['id'],
+  components: { PortalLayout },
   data() {
     return {
       layout: [],

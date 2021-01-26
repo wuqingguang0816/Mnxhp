@@ -260,7 +260,8 @@ export default {
   word-wrap: break-word;
   >>> .el-drawer__body {
     padding: 30px 20px;
-    overflow: hidden auto;
+    overflow: auto;
+    overflow-x: hidden;
   }
   >>> .nav_items {
     display: flex;

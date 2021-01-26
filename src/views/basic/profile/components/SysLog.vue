@@ -35,34 +35,6 @@
           <el-table-column prop="platForm" label="登录摘要" show-overflow-tooltip />
         </JNPF-table>
       </el-tab-pane>
-      <el-tab-pane label="请求日志" name="2">
-        <JNPF-table v-loading="listLoading" :data="viewLogData" tooltip-effect="dark">
-          <el-table-column prop="creatorTime" label="访问时间" :formatter="jnpf.tableDateFormat"
-            width="120" />
-          <el-table-column prop="userName" label="访问用户" width="120" />
-          <el-table-column prop="ipaddress" label="访问IP" width="120" />
-          <el-table-column prop="moduleName" label="访问功能" width="120" />
-          <el-table-column prop="requestURL" label="访问地址" show-overflow-tooltip />
-        </JNPF-table>
-      </el-tab-pane>
-      <!-- <el-tab-pane label="操作日志" name="3">
-        <JNPF-table v-loading="listLoading" :data="optionLogData" tooltip-effect="dark">
-          <el-table-column prop="creatorTime" label="操作时间" :formatter="jnpf.tableDateFormat"
-            width="120" />
-          <el-table-column prop="userName" label="操作用户" width="120" />
-          <el-table-column prop="ipaddress" label="操作IP" width="120" />
-          <el-table-column prop="moduleName" label="操作功能" width="120" />
-          <el-table-column prop="type" label="操作类型" width="120">
-            <template slot-scope="scope">
-              <el-tag type="success" v-if="scope.row.type==1">创建</el-tag>
-              <el-tag type="danger" v-if="scope.row.type==2">删除</el-tag>
-              <el-tag type="primary" v-if="scope.row.type==3">编辑</el-tag>
-              <el-tag type="warning" v-if="scope.row.type==0">其他</el-tag>
-            </template>
-          </el-table-column>
-          <el-table-column prop="abstracts" label="操作内容" show-overflow-tooltip />
-        </JNPF-table>
-      </el-tab-pane>
       <el-tab-pane label="请求日志" name="5">
         <JNPF-table v-loading="listLoading" :data="requestLogData" tooltip-effect="dark">
           <el-table-column prop="creatorTime" label="请求时间" :formatter="jnpf.tableDateFormat"
@@ -75,16 +47,6 @@
           <el-table-column prop="requestDuration" label="请求耗时" width="120" />
         </JNPF-table>
       </el-tab-pane>
-      <el-tab-pane label="异常日志" name="4">
-        <JNPF-table v-loading="listLoading" :data="errorLogData" tooltip-effect="dark">
-          <el-table-column rop="creatorTime" label="创建时间" :formatter="jnpf.tableDateFormat"
-            width="120" />
-          <el-table-column prop="userName" label="创建用户" width="120" />
-          <el-table-column prop="ipaddress" label="异常IP" width="120" />
-          <el-table-column prop="moduleName" label="异常功能" width="120" />
-          <el-table-column prop="json" label="异常描述" show-overflow-tooltip />
-        </JNPF-table>
-      </el-tab-pane> -->
       <pagination :total="total" :page.sync="listQuery.currentPage" :limit.sync="listQuery.pageSize"
         @pagination="initData" />
     </el-tabs>
@@ -103,9 +65,6 @@ export default {
       endTime: '',
       activeName: '1',
       loginLogData: [],
-      viewLogData: [],
-      errorLogData: [],
-      optionLogData: [],
       requestLogData: [],
       total: 0,
       listLoading: true,
@@ -160,10 +119,7 @@ export default {
       }
       LogList(data).then(res => {
         if (category == 1) this.loginLogData = res.data.list
-        if (category == 2) this.viewLogData = res.data.list
-        // if (category == 3) this.optionLogData = res.data.list
-        // if (category == 4) this.errorLogData = res.data.list
-        // if (category == 5) this.requestLogData = res.data.list
+        if (category == 5) this.requestLogData = res.data.list
         this.total = res.data.pagination.total
         this.listLoading = false
       })
@@ -213,7 +169,8 @@ export default {
     overflow: hidden;
   }
   >>> .el-tabs__content {
-    overflow: hidden auto;
+    overflow: auto;
+    overflow-x: hidden;
     display: flex;
     flex-direction: column;
     .el-tab-pane {

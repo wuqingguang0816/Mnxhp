@@ -51,7 +51,7 @@
               </el-link>
             </el-popover>
             <el-upload :show-file-list="false" action='' :limit="1" class="uploadImg-btn"
-              :auto-upload="false" :on-change="getFile" ref="upload">
+              :auto-upload="false" :on-change="getFile" ref="upload" accept="image/*">
               <el-link icon="ym-custom ym-custom-image" :underline="false" title="发送图片">
               </el-link>
             </el-upload>
@@ -311,6 +311,8 @@ export default {
     },
     // 发送图片
     getFile(file) {
+      let isRightSize = file.size < 1024 * 1024 * 5
+      if (!isRightSize) return this.$message.error(`图片大小不能超过5M`)
       this.getBase64(file.raw).then(res => {
         let data = res
         this.getImgSize(data.e).then(res => {
@@ -444,7 +446,8 @@ export default {
       height: 480px;
       .chatList {
         height: 335px;
-        overflow: hidden auto;
+        overflow: auto;
+        overflow-x: hidden;
         padding: 5px 15px 5px;
         background: #fff;
       }
@@ -524,7 +527,8 @@ export default {
       }
       .historyList-box {
         height: 448px;
-        overflow: hidden auto;
+        overflow: auto;
+        overflow-x: hidden;
         padding: 5px;
         border-bottom-right-radius: 4px;
         .chatList-item .chatList-text {

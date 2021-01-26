@@ -10,9 +10,8 @@
       <el-scrollbar class="JNPF-messageList-box" v-loading="loading">
         <div v-if="list.length">
           <div v-for="(item,i) in list" :key="i" class="JNPF-messageList-item"
-            @click="readInfo(item)" :title="item.isOnline?'在线':'离线'">
-            <el-avatar :size="36" :class="{'offLine':!item.isOnline}"
-              :src="define.comUrl+ item.headIcon">
+            @click="readInfo(item)">
+            <el-avatar :size="36" :src="define.comUrl+ item.headIcon">
             </el-avatar>
             <div class="JNPF-messageList-txt">
               <p class="title">{{item.realName}}/{{item.account}}</p>
@@ -78,28 +77,30 @@ export default {
           }
         }
       }
-      if (onlineUsers && onlineUsers.length) {
-        let delArr = []
-        outer: for (let i = 0; i < onlineUsers.length; i++) {
-          let onlineUser = onlineUsers[i];
-          let length = this.defaultList.length;
-          inner: for (let j = 0; j < length; j++) {
-            let user = this.defaultList[j];
-            if (user.id === onlineUser) {
-              user.isOnline = true
-              this.defaultList.splice(j, 1);
-              delArr.push(user)
-              length--
-              j--
-              break inner
-            }
-          }
-        }
-        delArr = this.numSort(delArr)
-        this.defaultList = this.numSort(this.defaultList)
-        this.defaultList = [...delArr, ...this.defaultList]
-        if (this.drawer) this.list = this.defaultList
-      }
+      this.defaultList = this.numSort(this.defaultList)
+      if (this.drawer) this.list = this.defaultList
+      // if (onlineUsers && onlineUsers.length) {
+      //   let delArr = []
+      //   outer: for (let i = 0; i < onlineUsers.length; i++) {
+      //     let onlineUser = onlineUsers[i];
+      //     let length = this.defaultList.length;
+      //     inner: for (let j = 0; j < length; j++) {
+      //       let user = this.defaultList[j];
+      //       if (user.id === onlineUser) {
+      //         user.isOnline = true
+      //         this.defaultList.splice(j, 1);
+      //         delArr.push(user)
+      //         length--
+      //         j--
+      //         break inner
+      //       }
+      //     }
+      //   }
+      //   delArr = this.numSort(delArr)
+      //   this.defaultList = this.numSort(this.defaultList)
+      //   this.defaultList = [...delArr, ...this.defaultList]
+      //   if (this.drawer) this.list = this.defaultList
+      // }
     },
     updateOffLine(user) {
       let delArr = []
@@ -130,6 +131,7 @@ export default {
           this.defaultList[i].unreadNum += 1
         }
       }
+      this.defaultList = this.numSort(this.defaultList)
       if (this.drawer) this.list = this.defaultList
     },
     isblink() {
@@ -202,7 +204,8 @@ export default {
       background: #fff;
     }
     .JNPF-messageList-box {
-      overflow: hidden auto;
+      overflow: auto;
+      overflow-x: hidden;
       position: relative;
       flex: 1;
       .el-badge {
@@ -214,7 +217,8 @@ export default {
         top: 100px;
       }
       .el-scrollbar__wrap {
-        overflow: hidden auto;
+        overflow: auto;
+        overflow-x: hidden;
       }
       .noData-txt {
         font-size: 14px;

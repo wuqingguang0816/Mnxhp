@@ -45,7 +45,8 @@ export default {
 <style lang="scss" scoped>
 .main {
   flex: 1;
-  overflow: hidden auto;
+  overflow: auto;
+  overflow-x: hidden;
   padding: 0 10px;
 }
 </style>

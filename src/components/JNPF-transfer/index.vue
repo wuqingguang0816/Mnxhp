@@ -147,7 +147,8 @@ export default {
     position: relative;
     width: 100%;
     height: calc(100% - 40px);
-    overflow: hidden auto;
+    overflow: auto;
+    overflow-x: hidden;
     font-size: 14px;
     border: 1px solid #dcdfe6;
   }

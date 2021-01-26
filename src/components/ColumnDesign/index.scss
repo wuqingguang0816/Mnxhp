@@ -8,7 +8,8 @@
     width: auto;
     margin: 0 350px 0 0;
     padding: 20px 10px 10px;
-    overflow: hidden auto;
+    overflow: auto;
+    overflow-x: hidden;
     background: #fff;
     border-radius: 4px;
 
@@ -38,7 +39,8 @@
     .field-box {
       position: relative;
       height: calc(100% - 42px);
-      overflow: hidden auto;
+      overflow: auto;
+      overflow-x: hidden;
       padding: 10px;
     }
 

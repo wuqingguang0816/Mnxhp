@@ -182,7 +182,8 @@ export default {
 .el-form {
   padding: 10px;
   flex: 1;
-  overflow: hidden auto;
+  overflow: auto;
+  overflow-x: hidden;
   >>> .el-select {
     width: 100%;
   }

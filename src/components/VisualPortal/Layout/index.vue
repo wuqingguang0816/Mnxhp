@@ -33,6 +33,20 @@
 </template>
 
 <script>
+import {
+  Todo,
+  CommonFunc,
+  TodoList,
+  HNotice,
+  HEmail,
+  DataBoard,
+  HBarChart,
+  HAnnularChart,
+  HAreaChart,
+  HLineChart,
+  HPieChart,
+  HRadarChart
+} from "@/components/VisualPortal"
 import VueGridLayout from 'vue-grid-layout'
 export default {
   props: {
@@ -42,6 +56,18 @@ export default {
   components: {
     GridLayout: VueGridLayout.GridLayout,
     GridItem: VueGridLayout.GridItem,
+    Todo,
+    CommonFunc,
+    TodoList,
+    HNotice,
+    HEmail,
+    DataBoard,
+    HBarChart,
+    HAnnularChart,
+    HAreaChart,
+    HLineChart,
+    HPieChart,
+    HRadarChart
   },
 }
 </script>

@@ -258,7 +258,7 @@ export const inputComponents = [{
       required: false,
       layout: 'colFormItem',
       span: 24,
-      dragDisabled: true,
+      dragDisabled: false,
       regList: [],
       trigger: 'change',
       dataType: 'static',

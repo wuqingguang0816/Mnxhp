@@ -111,7 +111,8 @@ export default {
 <style lang="scss" scoped>
 .el-form {
   flex: 1;
-  overflow: hidden auto;
+  overflow: auto;
+  overflow-x: hidden;
   >>> .el-form-item {
     margin-bottom: 0;
   }

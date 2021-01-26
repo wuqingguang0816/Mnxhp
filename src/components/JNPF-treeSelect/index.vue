@@ -7,7 +7,8 @@
         :default-expand-all="defaultExpandAll" :props="props" :node-key="props.value"
         :default-expanded-keys="defaultExpandedKey" @node-click="handleNodeClick"
         :filter-node-method="filterNode" :show-checkbox="multiple" :check-on-click-node="multiple"
-        :class="{'single':!multiple}" :expand-on-click-node="!multiple" @check="check">
+        :class="{'single':!multiple}" :expand-on-click-node="!multiple" @check="check"
+        v-show="options.length">
         <span class="custom-tree-node" slot-scope="{ node, data }">
           <slot :data="{ node, data }">
             <i :class="data.icon" v-if="data.icon"></i>
@@ -21,6 +22,7 @@
           <!-- 自定义slot示例 结束 -->
         </span>
       </el-tree>
+      <p v-show="!options.length" class="empty-text">无数据</p>
     </el-option>
   </el-select>
 </template>
@@ -76,7 +78,7 @@ export default {
   },
   methods: {
     selectFilter(val) {
-      this.$refs.selectTree.filter(val);
+      if (this.options.length) this.$refs.selectTree.filter(val);
     },
     filterNode(value, data) {
       if (!value) return true;
@@ -126,7 +128,9 @@ export default {
         let scrollWrap = list[index]
         let scrollBar = document.querySelectorAll('.el-scrollbar .el-scrollbar__bar')
         scrollWrap.style && (scrollWrap.style.cssText = 'margin: 0px; max-height: none; overflow: hidden;')
-        scrollBar.forEach(ele => ele.style.width = 0)
+        for (let i = 0; i < scrollBar.length; i++) {
+          scrollBar[i].style.width = 0
+        }
       })
     },
     // 单选切换选项
@@ -178,7 +182,9 @@ export default {
     // 清空选中样式
     clearSelected() {
       let allNode = document.querySelectorAll('#tree-option .el-tree-node')
-      allNode.forEach((element) => element.classList.remove('is-current'))
+      for (let i = 0; i < allNode.length; i++) {
+        allNode[i].classList.remove('is-current')
+      }
     }
   },
   watch: {
@@ -232,5 +238,15 @@ ul li >>> .el-tree .el-tree-node__content {
 .el-tree.single >>> .is-current .el-tree-node__children .el-tree-node__label {
   color: #606266;
   font-weight: normal;
+}
+.empty-text {
+  margin: 0;
+  text-align: center;
+  color: #999;
+  font-size: 14px;
+  background: #fff;
+  cursor: auto;
+  padding: 0;
+  line-height: 24px;
 }
 </style>

@@ -1,6 +1,8 @@
 <template>
   <div class="password">
-    <el-divider content-position="left">修改密码</el-divider>
+    <div class="JNPF-common-title mb-20">
+      <h2 class="bold">修改密码</h2>
+    </div>
     <el-row>
       <el-col :span="16">
         <el-form ref="dataForm" :model="dataForm" :rules="dataRule" label-width="100px">
@@ -114,7 +116,7 @@ export default {
     changeImg() {
       let timestamp = Math.random()
       this.timestamp = timestamp
-      this.imgUrl = `/api/file/ImageCode/${timestamp}`
+      this.imgUrl = `/api/Common/ImageCode/${timestamp}`
     }
   }
 

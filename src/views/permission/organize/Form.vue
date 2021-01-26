@@ -272,6 +272,7 @@ export default {
 .main {
   padding: 10px 30px 0;
   flex: 1;
-  overflow: hidden auto;
+  overflow: auto;
+  overflow-x: hidden;
 }
 </style>

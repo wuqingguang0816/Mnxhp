@@ -44,7 +44,7 @@
             :formatter="jnpf.tableDateFormat" v-if="jnpf.hasP('startTime')" />
           <el-table-column prop="endTime" label="结束时间" sortable width="120"
             :formatter="jnpf.tableDateFormat" v-if="jnpf.hasP('endTime')" />
-          <el-table-column label="当前状态" width="100" prop="status" v-if="jnpf.hasP('status')">
+          <el-table-column label="状态" width="100" prop="status" v-if="jnpf.hasP('status')">
             <template slot-scope="scope">
               <el-tag type="info" v-if='scope.row.status==1'>未开始</el-tag>
               <el-tag type="danger" v-else-if='scope.row.status==2'>已失效</el-tag>

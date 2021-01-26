@@ -218,7 +218,8 @@ export default {
   padding: 0 6px 0 6px;
   margin-top: 20px;
   height: calc(100% - 56px);
-  overflow: hidden auto;
+  overflow: auto;
+  overflow-x: hidden;
   .el-row {
     margin: 0 5px !important;
   }

@@ -6,9 +6,11 @@ export default {
   name: 'Process',
   props: ['tabName', 'conf', 'thisStepId'],
   data() {
-    let data = getMockData()
+    let data = {}
     if (typeof this.conf === 'object' && this.conf !== null) {
-      Object.assign(data, this.conf)
+      data = Object.assign(NodeUtils.createNode('start'), this.conf)
+    } else {
+      data = getMockData()
     }
     return {
       data, // 流程图数据

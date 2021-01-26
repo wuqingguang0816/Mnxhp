@@ -67,7 +67,7 @@
         </div>
         <div>
           <p class="title"><a href="https://www.jnpfsoft.com" target="_blank">JNPF快速开发平台</a></p>
-          <p>版本：3.1</p>
+          <p>版本：3.0</p>
           <p>作者：引迈软件</p>
           <p>引迈信息技术有限公司出品</p>
         </div>
@@ -136,7 +136,7 @@ export default {
     getUserList() {
       UserListAll().then(res => {
         this.$store.commit('base/SET_USER_LIST', res.data.list || [])
-        let list = deepClone(res.data.list)
+        let list = deepClone(res.data.list).filter(o => o.id !== this.userInfo.userId)
         for (let i = 0; i < list.length; i++) {
           let e = list[i];
           this.$set(e, 'isOnline', false)
@@ -150,7 +150,7 @@ export default {
       this.socket = this.$store.getters.socket || null
       if ('WebSocket' in window) {
         if (!this.socket) {
-          this.socket = new ReconnectingWebSocket(this.define.WebSocketUrl);
+          this.socket = new ReconnectingWebSocket(this.define.WebSocketUrl)
           this.$store.commit('user/SET_SOCKET', this.socket)
         }
         //添加事件监听
@@ -159,7 +159,7 @@ export default {
           var onConnection = {
             "method": "OnConnection", "token": this.$store.getters.token, "mobileDevice": false
           }
-          socket.send(JSON.stringify(onConnection));
+          socket.send(JSON.stringify(onConnection))
         }
         socket.onmessage = (event) => {
           let data = JSON.parse(event.data)
@@ -174,13 +174,13 @@ export default {
           }
           //用户在线
           if (data.method == 'Online') {
-            let list = []
-            list.push(data.userId)
-            this.$refs.UserList.handleList(this.userList, list, [])
+            // let list = []
+            // list.push(data.userId)
+            // this.$refs.UserList.handleList(this.userList, list, [])
           }
           //用户离线
           if (data.method == 'Offline') {
-            this.$refs.UserList.updateOffLine(data.userId)
+            // this.$refs.UserList.updateOffLine(data.userId)
           }
           if (data.method == 'messagePush') {
             //消息推送（消息公告用的）
@@ -218,7 +218,7 @@ export default {
                   formUserId: data.formUserId,
                   token: this.$store.getters.token
                 }
-                socket.send(JSON.stringify(updateReadMessage));
+                socket.send(JSON.stringify(updateReadMessage))
               } else {
                 this.$refs.UserList.updateUnreadNum(data.formUserId)
                 this.$refs.UserList.isblink()
@@ -230,15 +230,13 @@ export default {
           }
           //显示自己发送的消息
           if (data.method == 'sendMessage') {
-            if (this.$refs.UserList.$refs.JNPFIm.info.id !== data.toUserId) {
-              return false;
-            }
+            if (this.$refs.UserList.$refs.JNPFIm.info.id !== data.toUserId) return
             //添加到客户端
             let messIitem = {
               userId: data.UserId,
               messageType: data.messageType,
               message: data.toMessage,
-              dateTime: this.jnpf.toDate(data.dateTime),
+              dateTime: this.jnpf.toDate(data.dateTime)
             }
             this.$refs.UserList.$refs.JNPFIm.addItem(messIitem)
           }

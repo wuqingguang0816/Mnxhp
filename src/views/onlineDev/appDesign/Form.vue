@@ -38,7 +38,7 @@
                   v-for="item in categoryList" />
               </el-select>
             </el-form-item>
-            <el-form-item label="功能状态" prop="state">
+            <el-form-item label="状态" prop="state">
               <el-switch v-model="dataForm.state" :active-value="1" :inactive-value="0" />
             </el-form-item>
             <el-form-item label="功能说明" prop="description">
@@ -138,7 +138,7 @@ export default {
           { required: true, message: '功能分类不能为空', trigger: 'change' },
         ],
         state: [
-          { required: true, message: '功能状态不能为空', trigger: 'blur' },
+          { required: true, message: '状态不能为空', trigger: 'blur' },
         ],
       },
       tables: [],

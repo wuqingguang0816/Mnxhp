@@ -72,7 +72,15 @@ export default {
       active: 1
     }
   },
+  computed: {
+    loginLoading() {
+      return this.$store.state.user.loginLoading
+    }
+  },
   watch: {
+    loginLoading(val) {
+      if (!val) this.loading = false
+    },
     $route: {
       handler: function (route) {
         const query = route.query
@@ -99,6 +107,7 @@ export default {
     // } else if (this.loginForm.password === '') {
     //   this.$refs.password.focus()
     // }
+    this.$store.commit('user/SET_LOGIN_LOADING', false)
   },
   destroyed() {
     document.onkeydown = function (e) {
@@ -116,6 +125,7 @@ export default {
       this.$refs.loginForm.validate(valid => {
         if (valid) {
           this.loading = true
+          this.$store.commit('user/SET_LOGIN_LOADING', true)
           this.$store
             .dispatch('user/login', this.loginForm)
             .then(() => {
@@ -123,10 +133,9 @@ export default {
                 path: this.redirect || '/home',
                 query: this.otherQuery
               })
-              // this.loading = false
             })
             .catch(() => {
-              this.loading = false
+              this.$store.commit('user/SET_LOGIN_LOADING', false)
             })
         } else {
           return false

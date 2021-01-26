@@ -18,8 +18,10 @@
 </template>
 
 <script>
+import PortalLayout from '@/components/VisualPortal/Layout'
 export default {
   props: ['layout'],
+  components: { PortalLayout },
   data() {
     return {}
   },

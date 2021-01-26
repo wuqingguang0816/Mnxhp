@@ -594,6 +594,7 @@ export default {
 }
 .main {
   flex: 1;
-  overflow: hidden auto;
+  overflow: auto;
+  overflow-x: hidden;
 }
 </style>

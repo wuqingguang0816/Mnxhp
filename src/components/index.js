@@ -28,20 +28,7 @@ import RelationForm from '@/components/Generator/components/RelationForm'
 import RelationFormAttr from '@/components/Generator/components/RelationFormAttr'
 import RelationFlow from '@/components/Generator/components/RelationFlow'
 import RelationFlowAttr from '@/components/Generator/components/RelationFlowAttr'
-// 门户设计专供
-import PortalLayout from '@/components/VisualPortal/Layout'
-import Todo from '@/components/VisualPortal/Todo'
-import CommonFunc from '@/components/VisualPortal/CommonFunc'
-import TodoList from '@/components/VisualPortal/TodoList'
-import HNotice from '@/components/VisualPortal/HNotice'
-import HEmail from '@/components/VisualPortal/HEmail'
-import DataBoard from '@/components/VisualPortal/DataBoard'
-import HBarChart from '@/components/VisualPortal/HBarChart'
-import HAnnularChart from '@/components/VisualPortal/HAnnularChart'
-import HAreaChart from '@/components/VisualPortal/HAreaChart'
-import HLineChart from '@/components/VisualPortal/HLineChart'
-import HPieChart from '@/components/VisualPortal/HPieChart'
-import HRadarChart from '@/components/VisualPortal/HRadarChart'
+
 export default {
   install(Vue, options) {
     Vue.component('JNPFTreeSelect', JNPFTreeSelect)
@@ -73,18 +60,5 @@ export default {
     Vue.component('JNPFQuill', JNPFQuill)
     Vue.component('Screenfull', Screenfull)
     Vue.component('ColumnSettings', ColumnSettings)
-    Vue.component('PortalLayout', PortalLayout)
-    Vue.component('Todo', Todo)
-    Vue.component('CommonFunc', CommonFunc)
-    Vue.component('TodoList', TodoList)
-    Vue.component('HNotice', HNotice)
-    Vue.component('HEmail', HEmail)
-    Vue.component('DataBoard', DataBoard)
-    Vue.component('HBarChart', HBarChart)
-    Vue.component('HAnnularChart', HAnnularChart)
-    Vue.component('HAreaChart', HAreaChart)
-    Vue.component('HLineChart', HLineChart)
-    Vue.component('HPieChart', HPieChart)
-    Vue.component('HRadarChart', HRadarChart)
   }
 }

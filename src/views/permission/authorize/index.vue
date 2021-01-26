@@ -313,6 +313,7 @@ export default {
   padding: 20px;
   height: calc(100% - 50px);
   font-size: 14px;
-  overflow: hidden auto;
+  overflow: auto;
+  overflow-x: hidden;
 }
 </style>

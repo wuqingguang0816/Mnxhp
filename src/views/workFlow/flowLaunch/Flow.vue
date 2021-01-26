@@ -58,7 +58,8 @@ export default {
   padding-top: 10px;
   flex: 1;
   color: #606266;
-  overflow: hidden auto;
+  overflow: auto;
+  overflow-x: hidden;
   .flowList {
     margin: 16px;
     .cap {

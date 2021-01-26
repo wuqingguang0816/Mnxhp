@@ -51,7 +51,7 @@
               <el-progress :percentage="scope.row.schedule"></el-progress>
             </template>
           </el-table-column>
-          <el-table-column label="执行状态" width="100" sortable prop="state">
+          <el-table-column label="状态" width="100" sortable prop="state">
             <template slot-scope="scope">
               <el-tag type="success" v-if="scope.row.schedule==100">已完成</el-tag>
               <template v-else>

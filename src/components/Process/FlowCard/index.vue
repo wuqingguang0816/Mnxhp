@@ -18,7 +18,7 @@ function createNormalCard(ctx, conf, h) {
         <div class="title-box" style="height: 100%;width:190px;">
           <span class="title-text">{conf.properties.title}</span>
           {(!isStartNode && !isTimerNode) && (
-            <input vModel_trim={conf.properties.title} class="title-input" style="margin-top:4px;" onClick={stopPro} />
+            <input vModel_trim={conf.properties.title} class="title-input" onClick={stopPro} />
           )}
         </div>
         <div class="actions">
@@ -58,8 +58,7 @@ let nodes = {
         <header class="header">
           <div class="title-box" style="height: 20px;width:160px;">
             <span class="title-text">{conf.properties.title}</span>
-            <input vModel_trim={conf.properties.title} class="title-input"
-              style="margin:4px 0 0 2px;" onClick={stopPro} />
+            <input vModel_trim={conf.properties.title} class="title-input" onClick={stopPro} />
           </div>
           {
             // <span class="priority">优先级{conf.properties.priority + 1}</span> 
@@ -110,7 +109,7 @@ function addNodeButton(ctx, data, h, isBranch = false) {
   return (
     <div class="add-node-btn-box flex justify-center">
       <div class="add-node-btn">
-        <el-popover placement="right" trigger="click" width="300">
+        <el-popover placement="right" trigger="click" width="330">
           <div class="condition-box">
             <div>
               <div class="condition-icon" onClick={ctx.eventLancher.bind(ctx, "addApprovalNode", data, isBranch)} >
@@ -133,6 +132,12 @@ function addNodeButton(ctx, data, h, isBranch = false) {
                 <i class="ym-custom ym-custom-sitemap"></i>
               </div>
               条件分支
+            </div>
+            <div>
+              <div class="condition-icon" onClick={this.eventLancher.bind(ctx, "appendInterflowBranch", data, isBranch)}>
+                <i class="icon-ym icon-ym-node"></i>
+              </div>
+              分流/合流
             </div>
             <div>
               <div class="condition-icon" onClick={ctx.eventLancher.bind(ctx, "addTimerNode", data, isBranch)} >
@@ -172,22 +177,38 @@ function NodeFactory(ctx, data, h) {
   if (hasBranch(data)) {
     // 如果节点是数组 一定为条件分支 添加分支样式包裹
     // {data.childNode && NodeFactory.call(ctx, ctx, data.childNode, h)}
-    branchNode = (
-      <div class="branch-wrap">
-        <div class="branch-box-wrap">
-          <div class="branch-box  flex justify-center relative">
-            <button
-              class="btn"
-              onClick={this.eventLancher.bind(ctx, "appendConditionNode", data)}
-            >
-              添加条件
-            </button>
-            {data.conditionNodes.map(d => NodeFactory.call(ctx, ctx, d, h))}
+    if (NodeUtils.isConditionNode(data.conditionNodes[0])) {
+      branchNode = (
+        <div class="branch-wrap">
+          <div class="branch-box-wrap">
+            <div class="branch-box flex justify-center relative">
+              <button onClick={this.eventLancher.bind(ctx, "appendConditionNode", data)}
+                class="btn">
+                添加条件
+              </button>
+              {data.conditionNodes.map(d => NodeFactory.call(ctx, ctx, d, h))}
+            </div>
           </div>
+          {addNodeButton.call(ctx, ctx, data, h, true)}
         </div>
-        {addNodeButton.call(ctx, ctx, data, h, true)}
-      </div>
-    );
+      );
+    }
+    if (NodeUtils.isInterflowNode(data.conditionNodes[0])) {
+      branchNode = (
+        <div class="branch-wrap">
+          <div class="branch-box-wrap">
+            <div class="branch-box flex justify-center relative">
+              <button onClick={this.eventLancher.bind(ctx, "appendInterflowNode", data)}
+                class="btn">
+                添加分流
+              </button>
+              {data.conditionNodes.map(d => NodeFactory.call(ctx, ctx, d, h))}
+            </div>
+          </div>
+          {addNodeButton.call(ctx, ctx, data, h, true)}
+        </div>
+      );
+    }
   }
 
   if (isCondition(data)) {

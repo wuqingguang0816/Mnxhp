@@ -17,11 +17,12 @@
 <script>
 import { getAuthPortal } from '@/api/onlineDev/portal'
 import Setting from './Setting'
+import PortalLayout from '@/components/VisualPortal/Layout'
 import { mapGetters } from 'vuex'
 
 export default {
   name: 'dashboard',
-  components: { Setting },
+  components: { Setting, PortalLayout },
   data() {
     return {
       portalId: '',

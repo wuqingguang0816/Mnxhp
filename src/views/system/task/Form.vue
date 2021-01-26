@@ -32,11 +32,6 @@
                 </el-form-item>
               </el-col>
               <el-col :span="24">
-                <el-form-item label="排序" prop="sortCode">
-                  <el-input-number :min="0" :max="9999" v-model="dataForm.sortCode" />
-                </el-form-item>
-              </el-col>
-              <el-col :span="24">
                 <el-form-item label="开始时间" prop="executeContent.start">
                   <el-radio-group v-model="dataForm.executeContent.start">
                     <!-- @change="() => dataForm.executeContent.startTime=null" -->
@@ -284,7 +279,7 @@
 </template>
 
 <script>
-import { TimeTaskInfo, IsExistByFullName, IsExistByEnCode, TimeTaskUpdate, TimeTaskCreate } from '@/api/system/timeTask'
+import { TimeTaskInfo, TimeTaskUpdate, TimeTaskCreate } from '@/api/system/timeTask'
 import { getDbLinkListAll } from '@/api/systemData/dbLink'
 import frequencyForm from './FrequencyForm'
 import { deepClone } from '@/utils'
@@ -344,7 +339,6 @@ export default {
         id: '',
         fullName: '',
         enCode: '',
-        sortCode: 0,
         executeType: '1',
         description: '',
         executeContent: {
@@ -494,7 +488,6 @@ export default {
         id: '',
         fullName: '',
         enCode: '',
-        sortCode: 0,
         executeType: '1',
         description: '',
         executeContent: {

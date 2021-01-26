@@ -36,7 +36,7 @@
             v-if="jnpf.hasP('creatorUser')" />
           <el-table-column prop="lastModifyTime" label="发布时间" :formatter="jnpf.tableDateFormat"
             width="120" v-if="jnpf.hasP('lastModifyTime')" />
-          <el-table-column label="发布状态" width="100" v-if="jnpf.hasP('enabledMark')">
+          <el-table-column label="状态" width="100" v-if="jnpf.hasP('enabledMark')">
             <template slot-scope="scope">
               <el-tag :type="scope.row.enabledMark == 1 ? 'success' : 'danger'" disable-transitions>
                 {{ scope.row.enabledMark==1?'已发送':'存草稿' }}

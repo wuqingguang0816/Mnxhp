@@ -10,6 +10,7 @@ const state = {
   menuList: [],
   userInfo: {},
   permissionList: [],
+  loginLoading: false,
   socket: ''
 }
 
@@ -29,6 +30,9 @@ const mutations = {
   SET_USERINFO_HEADICON: (state, headIcon) => {
     state.userInfo.headIcon = headIcon
   },
+  SET_USERINFO_USERNAME: (state, userName) => {
+    state.userInfo.userName = userName
+  },
   SET_USERINFO_PORTALID: (state, portalId) => {
     state.userInfo.portalId = portalId
   },
@@ -38,6 +42,9 @@ const mutations = {
   SET_LOCK: (state, isLock) => {
     state.isLock = isLock
   },
+  SET_LOGIN_LOADING: (state, loginLoading) => {
+    state.loginLoading = loginLoading
+  }
 }
 
 const actions = {
@@ -217,6 +224,7 @@ const actions = {
       commit('SET_MENULIST', [])
       commit('SET_USERINFO', {})
       commit('SET_PERMISSION_LIST', [])
+      commit('SET_LOGIN_LOADING', false)
       removeToken()
       resolve()
     })

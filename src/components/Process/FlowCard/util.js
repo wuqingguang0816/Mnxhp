@@ -209,6 +209,20 @@ export class NodeUtils {
     }
     this.setDefaultCondition(node, data)
   }
+  static appendInterflowNode(data) {
+    const conditions = data.conditionNodes
+    let node = this.createNode('interflow', data.nodeId)
+    let defaultNodeIndex = conditions.findIndex(node => node.properties.isDefault)
+    node.properties.priority = conditions.length
+    if (defaultNodeIndex > -1) {
+      conditions.splice(-1, 0, node) // 插在倒数第二个
+      //更新优先级
+      node.properties.priority = conditions.length - 2
+      conditions[conditions.length - 1].properties.priority = conditions.length - 1
+    } else {
+      conditions.push(node)
+    }
+  }
   /**
    * 添加条件分支 branch 
    * @param { Object } data - 目标节点所在节点数据，在该节点最后添加分支节点
@@ -224,6 +238,7 @@ export class NodeUtils {
       } else {
         let emptyNode = this.addEmptyNode(nodeData, true)
         emptyNode.conditionNodes = nodeData.conditionNodes
+        emptyNode.conditionType = "condition"
         emptyNode.conditionNodes.forEach(n => {
           n.prevId = emptyNode.nodeId
         })
@@ -233,11 +248,36 @@ export class NodeUtils {
       this.createNode("condition", nodeData.nodeId),
       this.createNode("condition", nodeData.nodeId)
     ].map((c, i) => {
-      c.properties.title += i + 1;
+      // c.properties.title += i + 1;
       c.properties.priority = i;
       return c
     })
     nodeData.conditionNodes = conditionNodes
+    nodeData.conditionType = "condition"
+  }
+  static appendInterflowBranch(data, isBottomBtnOfBranch) {
+    // isBottomBtnOfBranch 用户点击的是分支树下面的按钮
+    let nodeData = data
+    // 由于conditionNodes是数组 不能添加下级分支 故在两个分支树之间添加一个不会显示的正常节点 兼容此种情况
+    if (Array.isArray(data.conditionNodes) && data.conditionNodes.length) {
+      if (isBottomBtnOfBranch) {
+        // 添加一个模拟用的空白节点并返回这个节点，作为新分支的父节点
+        nodeData = this.addEmptyNode(nodeData, true)
+      } else {
+        let emptyNode = this.addEmptyNode(nodeData, true)
+        emptyNode.conditionNodes = nodeData.conditionNodes
+        emptyNode.conditionType = "interflow"
+        emptyNode.conditionNodes.forEach(n => {
+          n.prevId = emptyNode.nodeId
+        })
+      }
+    }
+    let conditionNodes = [
+      this.createNode("interflow", nodeData.nodeId),
+      this.createNode("interflow", nodeData.nodeId)
+    ]
+    nodeData.conditionNodes = conditionNodes
+    nodeData.conditionType = "interflow"
   }
   /**
    * 重设节点优先级（条件节点）

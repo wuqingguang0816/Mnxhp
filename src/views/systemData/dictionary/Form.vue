@@ -14,11 +14,11 @@
       <el-form-item label="字典编码" prop="enCode">
         <el-input v-model="dataForm.enCode" placeholder="输入编码" />
       </el-form-item>
-      <el-form-item label="字典状态" prop="enabledMark">
-        <el-switch v-model="dataForm.enabledMark" :active-value="1" :inactive-value="0" />
-      </el-form-item>
       <el-form-item label="排序" prop="sortCode">
         <el-input-number :min="0" :max="9999" v-model="dataForm.sortCode" />
+      </el-form-item>
+      <el-form-item label="状态" prop="enabledMark">
+        <el-switch v-model="dataForm.enabledMark" :active-value="1" :inactive-value="0" />
       </el-form-item>
       <el-form-item label="字典说明" prop="description">
         <el-input v-model="dataForm.description" type="textarea" :rows="6" />
@@ -91,7 +91,6 @@ export default {
           if (this.dataForm.id) {
             getDictionaryDataInfo(this.dataForm.id).then(res => {
               this.dataForm = res.data
-              this.dataForm.parentId = res.data.parentId === '0' ? this.dataForm.dictionaryTypeId : res.data.parentId
               this.formLoading = false
             })
           } else {
@@ -105,6 +104,7 @@ export default {
       this.$refs['dataForm'].validate((valid) => {
         if (valid) {
           this.btnLoading = true
+          this.dataForm.parentId = this.dataForm.dictionaryTypeId === this.dataForm.parentId ? '0' : this.dataForm.parentId
           const formMethod = this.dataForm.id ? updateDictionaryData : createDictionaryData
           formMethod(this.dataForm).then(res => {
             this.$message({

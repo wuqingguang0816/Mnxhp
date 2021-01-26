@@ -54,7 +54,7 @@
               </el-table-column>
               <el-table-column prop="lastModifyTime" label="发送时间" :formatter="jnpf.tableDateFormat"
                 width="120" />
-              <el-table-column prop="isRead" label="阅读状态" width="100">
+              <el-table-column prop="isRead" label="状态" width="100">
                 <template slot-scope="scope">
                   <el-tag type="success" v-if="scope.row.isRead=='1'">已读</el-tag>
                   <el-tag type="info" v-else>未读</el-tag>

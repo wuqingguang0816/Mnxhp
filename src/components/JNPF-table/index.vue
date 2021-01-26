@@ -51,9 +51,11 @@ export default {
   },
   methods: {
     doLayout() {
-      this.$nextTick(() => {
-        this.$refs.JNPFTable.doLayout()
-      })
+      setTimeout(() => {
+        this.$nextTick(() => {
+          this.$refs.JNPFTable.doLayout()
+        })
+      }, 100)
     }
   }
 }

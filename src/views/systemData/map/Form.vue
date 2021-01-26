@@ -17,11 +17,11 @@
         <el-form-item label="地图编码" prop="enCode">
           <el-input v-model="dataForm.enCode" placeholder="请输入地图编码" />
         </el-form-item>
-        <el-form-item label="地图状态" prop="enabledMark">
-          <el-switch v-model="dataForm.enabledMark" :active-value="1" :inactive-value="0" />
-        </el-form-item>
         <el-form-item label="排序" prop="sortCode">
           <el-input-number :min="0" :max="9999" v-model="dataForm.sortCode" />
+        </el-form-item>
+        <el-form-item label="状态" prop="enabledMark">
+          <el-switch v-model="dataForm.enabledMark" :active-value="1" :inactive-value="0" />
         </el-form-item>
         <el-form-item label="地图数据" prop="data">
           <el-input type="textarea" :rows="16" v-model="dataForm.data" />

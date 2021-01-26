@@ -96,7 +96,8 @@ export default {
 .JNPF-preview-main {
   .basicForm {
     flex: 1;
-    overflow: hidden auto;
+    overflow: auto;
+    overflow-x: hidden;
   }
   .content {
     >>> {

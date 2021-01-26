@@ -67,7 +67,8 @@ export default {
   >>> .main {
     padding: 10px 20px;
     height: 100%;
-    overflow: hidden auto;
+    overflow: auto;
+    overflow-x: hidden;
     .item {
       .item-title {
         font-size: 12px;

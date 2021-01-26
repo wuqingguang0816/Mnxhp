@@ -36,14 +36,14 @@
     </el-form-item>
     <el-form-item label="前图标">
       <el-input v-model="activeData['prefix-icon']" placeholder="请输入前图标名称">
-        <el-button slot="append" icon="el-icon-thumb" @click="openIconsDialog('prefix-icon')">
+        <el-button slot="append" @click="openIconsDialog('prefix-icon')">
           选择
         </el-button>
       </el-input>
     </el-form-item>
     <el-form-item label="后图标">
       <el-input v-model="activeData['suffix-icon']" placeholder="请输入后图标名称">
-        <el-button slot="append" icon="el-icon-thumb" @click="openIconsDialog('suffix-icon')">
+        <el-button slot="append" @click="openIconsDialog('suffix-icon')">
           选择
         </el-button>
       </el-input>

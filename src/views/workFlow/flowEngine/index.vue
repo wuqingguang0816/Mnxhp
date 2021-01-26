@@ -39,7 +39,8 @@
         </div>
         <JNPF-table v-loading="listLoading" :data="flowEngineListAll" row-key="id"
           :tree-props="{children: 'children', hasChildren: ''}" default-expand-all>
-          <el-table-column prop="fullName" label="流程名称" v-if="jnpf.hasP('fullName')">
+          <el-table-column prop="fullName" label="流程名称" min-width="150"
+            v-if="jnpf.hasP('fullName')">
             <template slot-scope="scope">
               <span v-if="scope.row.top"
                 style="font-weight:bold;">{{scope.row.fullName}}【{{scope.row.count}}】</span>
@@ -76,7 +77,7 @@
         width="120" /> -->
           <el-table-column prop="sortCode" label="排序" width="70" align="center"
             v-if="jnpf.hasP('sortCode')" />
-          <el-table-column label="流程状态" width="70" align="center" v-if="jnpf.hasP('enabledMark')">
+          <el-table-column label="状态" width="70" align="center" v-if="jnpf.hasP('enabledMark')">
             <template slot-scope="scope">
               <el-switch v-model="scope.row.enabledMark" :active-value="1" :inactive-value="0"
                 v-if="!scope.row.top" @click.native="handleUpdate(scope.row)" disabled

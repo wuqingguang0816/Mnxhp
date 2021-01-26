@@ -74,38 +74,25 @@
           </div>
         </div>
         <JNPF-table v-loading="listLoading" :data="list" hasC @selection-change="handleChange">
-          <el-table-column prop="fullName" label="流程标题/流程编码" show-overflow-tooltip
-            v-if="jnpf.hasP('fullName')">
+          <el-table-column prop="fullName" label="流程标题" show-overflow-tooltip
+            v-if="jnpf.hasP('fullName')" min-width="150" />
+          <el-table-column prop="flowName" label="所属流程" width="130" v-if="jnpf.hasP('flowName')" />
+          <el-table-column prop="userName" label="发起人员" width="130" v-if="jnpf.hasP('userName')" />
+          <el-table-column prop="startTime" label="发起时间" width="130" v-if="jnpf.hasP('startTime')">
             <template slot-scope="scope">
-              <p>{{ scope.row.fullName }}</p>
-              <p class="text-grey">{{ scope.row.enCode }}</p>
-            </template>
-          </el-table-column>
-          <el-table-column prop="flowCategory" label="所属流程/所属分类" width="130"
-            v-if="jnpf.hasP('flowCategory')">
-            <template slot-scope="scope">
-              <p>{{ scope.row.flowName }}</p>
-              <p class="text-grey">{{ scope.row.flowCategory|getCategoryText(categoryList) }}</p>
-            </template>
-          </el-table-column>
-          <el-table-column prop="startTime" label="发起人员/发起时间" width="130"
-            v-if="jnpf.hasP('startTime')">
-            <template slot-scope="scope">
-              <p>{{ scope.row.userName }}</p>
-              <p class="text-grey" v-if="scope.row.startTime">
+              <p v-if="scope.row.startTime">
                 {{scope.row.startTime | toDate() }}</p>
               <p v-else>----</p>
             </template>
           </el-table-column>
-          <el-table-column prop="flowUrgent" label="紧急程度/当前节点" sortable width="150"
+          <el-table-column prop="flowUrgent" label="紧急程度" sortable width="130"
             v-if="jnpf.hasP('flowUrgent')">
             <template slot-scope="scope">
-              <p>{{ scope.row.flowUrgent | urgentText() }}</p>
-              <p class="text-grey">{{ scope.row.thisStep}}</p>
+              {{ scope.row.flowUrgent | urgentText() }}
             </template>
           </el-table-column>
-          <el-table-column prop="status" label="流程状态" sortable width="150"
-            v-if="jnpf.hasP('status')">
+          <el-table-column prop="thisStep" label="当前节点" width="130" v-if="jnpf.hasP('thisStep')" />
+          <el-table-column prop="status" label="状态" sortable width="130" v-if="jnpf.hasP('status')">
             <template slot-scope="scope">
               <el-tag type="primary" v-if="scope.row.status==1">等待审核</el-tag>
               <el-tag type="success" v-else-if="scope.row.status==2">审核通过</el-tag>
@@ -123,13 +110,10 @@
               <el-progress :percentage="scope.row.completion" v-else></el-progress>
             </template>
           </el-table-column>
-          <el-table-column label="操作" width="100">
+          <el-table-column label="操作" width="50" fixed="right">
             <template slot-scope="scope">
               <el-button size="mini" type="text" @click="toDetail(scope.row)" v-has="'btn_detail'">
                 详情</el-button>
-              <el-button size="mini" type="text" @click="revoke(scope.row.id)" v-has="'btn_cancel'"
-                :disabled="scope.row.status==2 ||scope.row.status==5" class="JNPF-table-delBtn">终止
-              </el-button>
             </template>
           </el-table-column>
         </JNPF-table>
@@ -143,7 +127,6 @@
 
 <script>
 import { FlowMonitorList, DeleteList } from '@/api/workFlow/FlowMonitor'
-import { Cancel } from '@/api/workFlow/FlowBefore'
 import { FlowEngineListAll } from '@/api/workFlow/FlowEngine'
 import fromBox from '../fromBox/Audit'
 export default {
@@ -200,8 +183,7 @@ export default {
       flowEngineList: [],
       flowEngineListAll: [],
       treeData: [],
-      multipleSelection: [],
-      firstTest: false
+      multipleSelection: []
     }
   },
   filters: {
@@ -272,26 +254,6 @@ export default {
         this.listLoading = false
       })
     },
-    revoke(id) {
-      this.$prompt('', "终止审核不可恢复", {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        inputPlaceholder: '请输入终止原因（必填）',
-        inputType: 'textarea',
-        inputErrorMessage: '原因不能为空',
-        inputValue: "",
-        inputValidator: (val) => { if (!val) { if (this.firstTest) { this.firstTest = false; return true } return false } },
-        closeOnClickModal: false
-      }).then(({ value }) => {
-        Cancel(id, { handleOpinion: value }).then(res => {
-          this.$message({
-            type: 'success',
-            message: res.msg
-          });
-          this.initData()
-        })
-      }).catch(() => { });
-    },
     toDetail(item) {
       let data = {
         enCode: item.flowCode,
@@ -299,8 +261,11 @@ export default {
         delegateId: item.delegateId,
         id: item.processId,
         formType: item.formType,
+        taskId: item.id,
+        status: item.status,
+        hasCancel: true,
         showStatus: true,
-        readonly: false
+        readonly: true
       }
       this.formVisible = true
       this.$nextTick(() => {

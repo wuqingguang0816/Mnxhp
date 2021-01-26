@@ -52,7 +52,7 @@
                   <div style="flex:1;margin-right:10px">
                     <el-input v-model="dataForm.icon" placeholder="请选择流程图标" readonly>
                       <template slot="prepend"><i :class="dataForm.icon" /></template>
-                      <el-button slot="append" icon="el-icon-thumb" @click="openIconBox()">选择
+                      <el-button slot="append" @click="openIconBox()">选择
                       </el-button>
                     </el-input>
                   </div>
@@ -64,11 +64,11 @@
             <el-form-item label="表单类型" prop="formType">
               <el-input v-model="formType" maxlength="50" disabled></el-input>
             </el-form-item>
-            <el-form-item label="流程状态" prop="enabledMark">
-              <el-switch v-model="dataForm.enabledMark" :active-value="1" :inactive-value="0" />
-            </el-form-item>
             <el-form-item label="排序" prop="sortCode">
               <el-input-number :min="0" :max="9999" v-model="dataForm.sortCode" />
+            </el-form-item>
+            <el-form-item label="状态" prop="enabledMark">
+              <el-switch v-model="dataForm.enabledMark" :active-value="1" :inactive-value="0" />
             </el-form-item>
             <el-form-item label="流程说明" prop="description">
               <el-input v-model="dataForm.description" placeholder="流程说明" type="textarea"
@@ -149,11 +149,10 @@
 </template>
 
 <script>
-import { FlowEngineInfo, IsExistByFullName, IsExistByEnCode, Update, Create } from '@/api/workFlow/FlowEngine'
-import { FlowEngineFormListAll } from '@/api/workFlow/FlowEngineForm'
+import { FlowEngineInfo, Update, Create } from '@/api/workFlow/FlowEngine'
 import { DbTableFieldList } from '@/api/systemData/dbTable'
 import iconBox from '@/components/JNPF-iconBox'
-import Process from "@/components/Process";
+import Process from "@/components/Process"
 import Generator from '@/components/Generator/index/Home'
 import FieldForm from './FieldForm'
 import TableForm from '@/views/generator/TableForm'
@@ -199,7 +198,7 @@ export default {
           { required: true, message: '表单类型不能为空', trigger: 'blur' }
         ],
         enabledMark: [
-          { required: true, message: '流程状态不能为空', trigger: 'change' }
+          { required: true, message: '状态不能为空', trigger: 'change' }
         ],
         icon: [
           { required: true, message: '流程图标不能为空', trigger: 'click' }

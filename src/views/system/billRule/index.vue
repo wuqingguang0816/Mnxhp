@@ -36,14 +36,12 @@
           <el-table-column prop="startNumber" label="流水起始" width="120"
             v-if="jnpf.hasP('startNumber')" />
           <el-table-column prop="outputNumber" label="当前流水号" v-if="jnpf.hasP('outputNumber')" />
-          <el-table-column label="流水状态" width="100" v-if="jnpf.hasP('enabledMark')">
+          <el-table-column label="状态" width="100" v-if="jnpf.hasP('enabledMark')">
             <template slot-scope="scope">
               <el-switch v-model="scope.row.enabledMark" :active-value="1" :inactive-value="0"
                 @click.native="handleUpdateState(scope.row)" disabled class="table-switch" />
             </template>
           </el-table-column>
-          <el-table-column prop="sortCode" label="排序" width="70" align="center"
-            v-if="jnpf.hasP('sortCode')" />
           <el-table-column label="操作" width="100">
             <template slot-scope="scope">
               <tableOpts @edit="handleAddEdit(scope.row.id)" @del="handleDel(scope.row.id)">

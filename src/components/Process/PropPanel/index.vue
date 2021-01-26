@@ -3,23 +3,11 @@
   <el-drawer size="550px" class="drawer JNPF-common-drawer" :visible.sync="visible" @close="cancel"
     v-if="properties" append-to-body :wrapperClosable="false">
     <!-- 标题 -->
-    <header slot="title" class="header" v-if="value && value.type=='start' && properties.title">
-      {{properties.title}}</header>
-    <header slot="title" class="header"
-      v-else-if="value && value.type=='approver' && properties.title">
-      {{properties.title}}</header>
-    <header slot="title" class="header"
-      v-else-if="value && value.type=='timer' && properties.title">
-      {{properties.title}}</header>
-    <header slot="title" class="header" v-else>
-      <span @click="titleInputVisible = true" v-show="!titleInputVisible" style="cursor:pointer;">
-        {{properties.title}}
-        <i class="el-icon-edit"></i>
-      </span>
-      <el-input size="mini" v-model="properties.title" v-show="titleInputVisible"
-        v-clickoutside="_ => titleInputVisible=false" style="z-index:9;max-width: 200px;">
+    <header slot="title" class="header" v-if="value && value.type=='condition' && properties.title">
+      <el-input size="mini" v-model="properties.title" style="z-index:9;max-width: 200px;">
       </el-input>
     </header>
+    <header slot="title" class="header" v-else>{{properties.title}}</header>
 
     <!-- 条件  -->
     <section class="condition-pane pd-10" v-if="value && isConditionNode()">
@@ -259,7 +247,6 @@
   </el-drawer>
 </template>
 <script>
-import Clickoutside from "element-ui/src/utils/clickoutside"
 import { NodeUtils } from "../FlowCard/util.js"
 import { getDrawingList } from '@/components/Generator/utils/db'
 import OrgSelect from '../OrgSelect'
@@ -391,9 +378,6 @@ export default {
     usedFormItems() {
       return getDrawingList()
     }
-  },
-  directives: {
-    Clickoutside
   },
   methods: {
     getFormOperates() {
@@ -836,7 +820,8 @@ export default {
 
 .condition-pane {
   height: 100%;
-  overflow: hidden auto;
+  overflow: auto;
+  overflow-x: hidden;
 }
 .condition-list {
   font-size: 14px;

@@ -30,11 +30,8 @@
       <el-form-item label="流水范例" prop="example">
         <el-input v-model="dataForm.example" disabled />
       </el-form-item>
-      <el-form-item label="流水状态" prop="enabledMark">
+      <el-form-item label="状态" prop="enabledMark">
         <el-switch v-model="dataForm.enabledMark" :active-value="1" :inactive-value="0" />
-      </el-form-item>
-      <el-form-item label="排序" prop="sortCode">
-        <el-input-number :min="0" :max="9999" v-model="dataForm.sortCode" />
       </el-form-item>
       <el-form-item label="流水说明" prop="description">
         <el-input v-model="dataForm.description" type="textarea" :rows="6" />
@@ -71,7 +68,6 @@ export default {
         startNumber: '',
         example: '',
         enabledMark: 1,
-        sortCode: 0,
         description: ''
       },
       dataRule: {
@@ -122,7 +118,7 @@ export default {
       // 流水日期格式
       const dateFormat = this.dataForm.dateFormat
       let dateVal = ''
-      if (dateFormat !== 'no') {
+      if (dateFormat && dateFormat !== 'no') {
         dateVal = dayjs().format(dateFormat.toUpperCase())
       }
       // 流水位数

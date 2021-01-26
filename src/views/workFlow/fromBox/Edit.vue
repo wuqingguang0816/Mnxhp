@@ -53,6 +53,10 @@ export default {
         data.freeApprover = res.data.freeApprover || 0
         data.formConf = res.data.formData
         this.flowTemplateJson = res.data.flowTemplateJson ? JSON.parse(res.data.flowTemplateJson) : null
+        data.formOperates = []
+        if (this.flowTemplateJson && this.flowTemplateJson.properties && this.flowTemplateJson.properties.formOperates) {
+          data.formOperates = this.flowTemplateJson.properties.formOperates || []
+        }
         setTimeout(() => {
           this.$nextTick(() => {
             this.$refs.form && this.$refs.form.init(data)

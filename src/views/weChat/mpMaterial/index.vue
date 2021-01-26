@@ -14,7 +14,7 @@
       <el-tab-pane label="图片" name="2">
         <JNPF-table v-loading="listLoading" :data="list">
           <el-table-column prop="uploadUser" label="上传用户" width="120" sortable />
-          <el-table-column prop="enabledMark" label="消息状态" width="120" sortable>
+          <el-table-column prop="enabledMark" label="状态" width="120" sortable>
             <template slot-scope="scope">
               <el-tag type="success" v-if="!scope.row.enabledMark">成功</el-tag>
               <el-tag type="danger" v-else>失败</el-tag>
@@ -41,7 +41,7 @@
       <el-tab-pane label="语音" name="3">
         <JNPF-table v-loading="listLoading" :data="list">
           <el-table-column prop="uploadUser" label="上传用户" width="120" sortable />
-          <el-table-column prop="enabledMark" label="消息状态" width="120" sortable>
+          <el-table-column prop="enabledMark" label="状态" width="120" sortable>
             <template slot-scope="scope">
               <el-tag type="success" v-if="!scope.row.enabledMark">成功</el-tag>
               <el-tag type="danger" v-else>失败</el-tag>
@@ -65,7 +65,7 @@
         <JNPF-table v-loading="listLoading" :data="list">
           <el-table-column label="标题" prop="title" width="150" sortable />
           <el-table-column prop="uploadUser" label="上传用户" width="120" sortable />
-          <el-table-column prop="enabledMark" label="消息状态" width="120" sortable>
+          <el-table-column prop="enabledMark" label="状态" width="120" sortable>
             <template slot-scope="scope">
               <el-tag type="success" v-if="!scope.row.enabledMark">成功</el-tag>
               <el-tag type="danger" v-else>失败</el-tag>
@@ -93,7 +93,7 @@
             v-if="jnpf.hasP('author')" />
           <el-table-column prop="uploadUser" label="上传用户" width="120" sortable
             v-if="jnpf.hasP('uploadUser')" />
-          <el-table-column prop="enabledMark" label="消息状态" width="120" sortable
+          <el-table-column prop="enabledMark" label="状态" width="120" sortable
             v-if="jnpf.hasP('enabledMark')">
             <template slot-scope="scope">
               <el-tag type="success" v-if="!scope.row.enabledMark">成功</el-tag>

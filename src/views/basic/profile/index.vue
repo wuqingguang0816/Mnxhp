@@ -9,7 +9,9 @@
       </el-tab-pane>
       <el-tab-pane disabled name="line"></el-tab-pane>
       <el-tab-pane label="我的下属" name="subordinate">
-        <el-divider content-position="left">我的下属</el-divider>
+        <div class="JNPF-common-title mb-20">
+          <h2 class="bold">我的下属</h2>
+        </div>
         <el-row :gutter="12">
           <el-col :span="6" v-for="(item,i) in subordinateIds" :key="i" class="subordinate-item">
             <el-card shadow="hover">
@@ -134,7 +136,8 @@ export default {
       height: 100%;
       .el-tab-pane {
         height: 100%;
-        overflow: hidden auto;
+        overflow: auto;
+        overflow-x: hidden;
 
         &.el-tab-pane-authorize {
           overflow: hidden;

@@ -154,7 +154,8 @@ export default {
 <style lang="scss" scoped>
 .el-form {
   flex: 1;
-  overflow: hidden auto;
+  overflow: auto;
+  overflow-x: hidden;
   >>> .el-select {
     width: 100%;
     .el-select__tags {

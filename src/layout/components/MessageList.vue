@@ -179,7 +179,8 @@ export default {
       background: #fff;
     }
     .JNPF-messageList-box {
-      overflow: hidden auto;
+      overflow: auto;
+      overflow-x: hidden;
       position: relative;
       flex: 1;
       border-top: 1px solid #f5f7f9;

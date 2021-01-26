@@ -65,40 +65,17 @@
           </div>
         </div>
         <JNPF-table v-loading="listLoading" :data="list">
-          <el-table-column prop="fullName" label="流程标题/流程编码" show-overflow-tooltip
-            v-if="jnpf.hasP('fullName')">
+          <el-table-column prop="fullName" label="流程标题" show-overflow-tooltip
+            v-if="jnpf.hasP('fullName')" min-width="150" />
+          <el-table-column prop="flowName" label="所属流程" width="130" v-if="jnpf.hasP('flowName')" />
+          <el-table-column prop="startTime" label="发起时间" width="130" v-if="jnpf.hasP('startTime')">
             <template slot-scope="scope">
-              <p>{{ scope.row.fullName }}</p>
-              <p class="text-grey">{{ scope.row.enCode }}</p>
-            </template>
-          </el-table-column>
-          <el-table-column prop="flowCategory" label="所属流程/所属分类" width="130"
-            v-if="jnpf.hasP('flowCategory')">
-            <template slot-scope="scope">
-              <p>{{ scope.row.flowName }}</p>
-              <p class="text-grey">{{ scope.row.flowCategory|getCategoryText(categoryList) }}</p>
-            </template>
-          </el-table-column>
-          <el-table-column prop="startTime" label="发起时间/结束时间" width="130"
-            v-if="jnpf.hasP('startTime')">
-            <template slot-scope="scope">
-              <p v-if="scope.row.startTime">{{ scope.row.startTime | toDate() }}
-              </p>
-              <p v-else>----</p>
-              <p class="text-grey" v-if="scope.row.endTime">
-                {{scope.row.endTime | toDate() }}</p>
+              <p v-if="scope.row.startTime">{{ scope.row.startTime | toDate() }}</p>
               <p v-else>----</p>
             </template>
           </el-table-column>
-          <el-table-column prop="creatorTime" label="当前节点/创建时间" sortable width="150"
-            v-if="jnpf.hasP('creatorTime')">
-            <template slot-scope="scope">
-              <p>{{ scope.row.thisStep }}</p>
-              <p class="text-grey">{{ scope.row.creatorTime|toDate()}}</p>
-            </template>
-          </el-table-column>
-          <el-table-column prop="status" label="流程状态" sortable width="150"
-            v-if="jnpf.hasP('status')">
+          <el-table-column prop="thisStep" label="当前节点" width="150" v-if="jnpf.hasP('thisStep')" />
+          <el-table-column prop="status" label="状态" sortable width="150" v-if="jnpf.hasP('status')">
             <template slot-scope="scope">
               <el-tag type="primary" v-if="scope.row.status==1">等待审核</el-tag>
               <el-tag type="success" v-else-if="scope.row.status==2">审核通过</el-tag>
@@ -116,7 +93,7 @@
               <el-progress :percentage="scope.row.completion" v-else></el-progress>
             </template>
           </el-table-column>
-          <el-table-column label="操作" width="150">
+          <el-table-column label="操作" width="150" fixed="right">
             <template slot-scope="scope">
               <el-button size="mini" type="text" @click="addOrUpdateHandle(scope.row)"
                 :disabled="[1,2,5].indexOf(scope.row.status)>-1" v-has="'btn_edit'">编辑
@@ -342,7 +319,7 @@ export default {
       this.formVisible = false
       if (isRefresh) this.refresh()
     },
-    refresh(isRefresh) {
+    refresh() {
       this.pickerVal = ''
       this.startTime = ''
       this.endTime = ''
