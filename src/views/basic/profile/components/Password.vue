@@ -116,7 +116,7 @@ export default {
     changeImg() {
       let timestamp = Math.random()
       this.timestamp = timestamp
-      this.imgUrl = `/api/Common/ImageCode/${timestamp}`
+      this.imgUrl = `/api/file/ImageCode/${timestamp}`
     }
   }
 
