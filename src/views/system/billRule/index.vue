@@ -143,7 +143,6 @@ export default {
     search() {
       this.params.currentPage = 1
       this.params.pageSize = 20
-      this.params.sort = 'asc'
       this.initData()
     },
     reset() {
