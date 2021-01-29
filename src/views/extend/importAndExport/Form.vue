@@ -13,7 +13,7 @@
         <p>上传填写好的文件</p>
         <img src="../../../assets/images/xsl1.png" alt="">
         <p>
-          <el-upload :action="define.comUrl+'/api/Extend/Employee/ImportData'"
+          <el-upload :action="define.comUrl+'/api/extend/Employee/ImportData'"
             :headers="{ Authorization: $store.getters.token}" :on-success="handleSuccess"
             :show-file-list="false" accept=".xls,.xlsx" :before-upload="beforeUpload">
             <el-button type="primary" round :loading="btnLoading">上传文件</el-button>
