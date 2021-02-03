@@ -21,6 +21,8 @@
 </template>
 
 <script>
+  import { getToken } from '@/utils/auth'
+
   export default {
     data() {
       return {
@@ -38,6 +40,8 @@
         this.id = id || ''
         this.visible = true
         this.$nextTick(() => {
+          let token = getToken()
+          document.cookie = `JNPF-Token=${token}; path=/`
           if(id){
             this.src = `${this.define.dataV}/build/${id}`
           } else {
