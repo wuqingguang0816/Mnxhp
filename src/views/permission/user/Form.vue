@@ -97,7 +97,7 @@
                 <el-upload class="avatar-uploader" :action="define.comUploadUrl+'/userAvatar'"
                   :show-file-list="false" :on-success="handleAvatarSuccess" accept="image/*">
                   <img v-if="dataForm.headIcon"
-                    :src="define.comUrl +'/api/Common/Image/userAvatar/' + dataForm.headIcon"
+                    :src="define.comUrl +'/api/file/Image/userAvatar/' + dataForm.headIcon"
                     class="avatar">
                   <i v-else class="el-icon-plus avatar-uploader-icon" />
                 </el-upload>
