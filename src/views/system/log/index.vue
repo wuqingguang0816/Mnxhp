@@ -112,6 +112,7 @@ export default {
       loginLogData: [],
       errorLogData: [],
       requestLogData: [],
+      multipleSelection: [],
       total: 0,
       params: {
         keyword: '',
