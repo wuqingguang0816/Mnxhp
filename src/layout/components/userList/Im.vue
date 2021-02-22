@@ -24,9 +24,9 @@
               <div class="chatList-arrow"></div>
               <p v-if="item.messageType=='text'" v-html="item.message" class="chatList__msg--text">
               </p>
-              <img :src="define.comUrl +'/api/Common/Image/IM/' + item.message.path" alt=""
+              <img :src="define.comUrl +'/api/file/Image/IM/' + item.message.path" alt=""
                 class="chatList__msg--img" v-if="item.messageType=='image' && item.message.path"
-                @click="handleEvent('image',define.comUrl+'/api/Common/Image/IM/' + item.message.path)">
+                @click="handleEvent('image',define.comUrl+'/api/file/Image/IM/' + item.message.path)">
               <audio class="chatList__msg--audio" controls :src="define.comUrl + item.message.path"
                 v-if="item.messageType=='voice' && item.message.path"
                 @click="handleEvent('voice',define.comUrl + item.message.path)"></audio>
@@ -89,9 +89,9 @@
               <div class="chatList-text">
                 <div class="chatList-arrow"></div>
                 <span v-if="item.messageType=='text'" v-html="item.message"></span>
-                <img :src="define.comUrl +'/api/Common/Image/IM/'+ item.message.path" alt=""
+                <img :src="define.comUrl +'/api/file/Image/IM/'+ item.message.path" alt=""
                   class="chatList__msg--img" v-if="item.messageType=='image' && item.message.path"
-                  @click="handleEvent('image',define.comUrl +'/api/Common/Image/IM/'+ item.message.path)">
+                  @click="handleEvent('image',define.comUrl +'/api/file/Image/IM/'+ item.message.path)">
                 <audio class="chatList__msg--audio" controls
                   :src="define.comUrl + item.message.path"
                   v-if="item.messageType=='voice' && item.message.path"
