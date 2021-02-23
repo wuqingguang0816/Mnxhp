@@ -11,8 +11,7 @@
           <el-button @click="goBack()">{{$t('common.cancelButton')}}</el-button>
         </div>
       </div>
-      <el-form ref="dataForm" :model="dataForm" :rules="dataRule" label-width="100px"
-        class="basicForm">
+      <el-form ref="dataForm" :model="dataForm" :rules="dataRule" label-width="100px" class="main">
         <el-form-item label="收件人" prop="recipient">
           <el-select v-model="dataForm.recipient" multiple filterable allow-create
             default-first-option placeholder="收件人" title="输入完按回车" popper-class="JNPF-select-tags">
@@ -153,9 +152,6 @@ export default {
 </script>
 <style lang="scss" scoped>
 .el-form {
-  flex: 1;
-  overflow: auto;
-  overflow-x: hidden;
   >>> .el-select {
     width: 100%;
     .el-select__tags {

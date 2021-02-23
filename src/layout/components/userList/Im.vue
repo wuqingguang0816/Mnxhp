@@ -1,9 +1,7 @@
 <template>
   <div class="im-container" v-if="visible">
     <div class="header">
-      <el-avatar :size="30" :class="{'offLine':!info.isOnline}"
-        :src="define.comUrl + info.headIcon">
-      </el-avatar>
+      <el-avatar :size="30" :src="define.comUrl + info.headIcon" />
       <span class="name">{{info.realName}}/{{info.account}}</span>
       <el-link icon="el-icon-close" :underline="false" @click="visible=false"></el-link>
     </div>
@@ -17,7 +15,7 @@
               <cite><i>{{item.dateTime}}</i>我</cite>
             </div>
             <div class="chatList-user" v-else>
-              <img :src="define.comUrl + info.headIcon" :class="{'offLine':!info.isOnline}" />
+              <img :src="define.comUrl + info.headIcon" />
               <cite>{{info.realName}}<i>{{item.dateTime}}</i></cite>
             </div>
             <div class="chatList-text">
@@ -83,7 +81,7 @@
                 <cite>我<i>{{item.dateTime}}</i></cite>
               </div>
               <div class="chatList-user" v-else>
-                <img :src="define.comUrl + info.headIcon" :class="{'offLine':!info.isOnline}" />
+                <img :src="define.comUrl + info.headIcon" />
                 <cite>{{info.realName}}<i>{{item.dateTime}}</i></cite>
               </div>
               <div class="chatList-text">

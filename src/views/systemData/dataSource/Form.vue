@@ -43,21 +43,9 @@
 </template>
 
 <script>
-import { DbLinkInfo, IsExistByFullName, DbLinkUpdate, DbLinkCreate, TestDbConnection } from '@/api/systemData/dbLink'
+import { DbLinkInfo, DbLinkUpdate, DbLinkCreate, TestDbConnection } from '@/api/systemData/dbLink'
 export default {
   data() {
-    var checkDuplicate = (rule, value, callback) => {
-      IsExistByFullName({
-        fullName: value,
-        id: this.dataForm.id
-      }).then(res => {
-        if (res.data) {
-          callback(new Error('名称已重复'));
-        } else {
-          callback();
-        }
-      })
-    }
     return {
       visible: false,
       dataForm: {
@@ -77,8 +65,7 @@ export default {
           { required: true, message: '连接驱动不能为空', trigger: 'change' }
         ],
         fullName: [
-          { required: true, message: '应用名称不能为空', trigger: 'blur' },
-          // { validator: checkDuplicate, trigger: 'blur' }
+          { required: true, message: '应用名称不能为空', trigger: 'blur' }
         ],
         host: [
           { required: true, message: '主机地址不能为空', trigger: 'blur' },
@@ -144,26 +131,6 @@ export default {
         }
       })
     },
-    // exist() {
-    //   let isOk = true;
-    //   if (isOk) {
-    //     IsExistByFullName({
-    //       fullName: this.dataForm.fullName,
-    //       id: this.dataForm.id
-    //     }).then(res => {
-    //       if (res.data) {
-    //         this.$message({
-    //           showClose: true,
-    //           message: '名称已重复',
-    //           type: 'error',
-    //           duration: 1500
-    //         });
-    //       }
-    //       isOk = false
-    //     })
-    //   }
-    //   return isOk;
-    // },
     handleChange(val) {
       let port = ''
       switch (val) {

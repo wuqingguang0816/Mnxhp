@@ -111,23 +111,19 @@ const actions = {
               }
             }
             if (e.type == 2) {
-              if (e.linkTarget === "_self") {
-                e.path = '/' + e.urlAddress
-                let newObj = {
-                  path: '/' + e.urlAddress,
-                  component: (resolve) => require([`@/views/${e.urlAddress}`], resolve),
-                  name: name,
-                  meta: {
-                    title: name,
-                    icon: e.icon,
-                    zhTitle: e.fullName,
-                    modelId: e.id
-                  }
+              e.path = '/' + e.urlAddress
+              let newObj = {
+                path: '/' + e.urlAddress,
+                component: (resolve) => require([`@/views/${e.urlAddress}`], resolve),
+                name: name,
+                meta: {
+                  title: name,
+                  icon: e.icon,
+                  zhTitle: e.fullName,
+                  modelId: e.id
                 }
-                routerList.push(newObj)
-              } else {
-                e.path = e.urlAddress
               }
+              routerList.push(newObj)
             }
             // 功能、字典、报表
             if ([3, 4, 5].indexOf(e.type) > -1) {
@@ -140,16 +136,16 @@ const actions = {
                 isTree = propertyJson.isTree || 0
               }
               if (e.type == 3) {
-                componentUrl = 'basic/dynamicModel'
+                componentUrl = 'dynamicModel'
               } else if (e.type == 4) {
-                componentUrl = 'basic/dynamicDictionary'
+                componentUrl = 'dynamicDictionary'
               } else {
-                componentUrl = 'basic/dynamicDataReport'
+                componentUrl = 'dynamicDataReport'
               }
               e.path = '/' + e.urlAddress
               let newObj = {
                 path: '/' + e.urlAddress,
-                component: (resolve) => require([`@/views/${componentUrl}`], resolve),
+                component: (resolve) => require([`@/views/basic/${componentUrl}`], resolve),
                 name: e.enCode,
                 meta: {
                   title: name,
@@ -169,22 +165,27 @@ const actions = {
               if (propertyJson) moduleId = propertyJson.moduleId || ''
               e.path = `${define.dataV}/view/${moduleId}`
             }
-            // 内置外链
-            // if (e.type == 7) {
-            //   e.path = '/' + e.urlAddress
-            //   let newObj = {
-            //     path: '/' + e.urlAddress,
-            //     component: (resolve) => require([`@/views/basic/externalLink`], resolve),
-            //     name: e.enCode,
-            //     meta: {
-            //       title: name,
-            //       icon: e.icon,
-            //       zhTitle: e.fullName,
-            //       modelId: e.id
-            //     }
-            //   }
-            //   routerList.push(newObj)
-            // }
+            // 外链
+            if (e.type == 7) {
+              if (e.linkTarget === "_self") {
+                e.path = '/' + e.enCode
+                let newObj = {
+                  path: '/' + e.enCode,
+                  component: (resolve) => require([`@/views/basic/externalLink`], resolve),
+                  name: e.enCode,
+                  meta: {
+                    title: name,
+                    icon: e.icon,
+                    zhTitle: e.fullName,
+                    modelId: e.id,
+                    urlAddress: e.urlAddress
+                  }
+                }
+                routerList.push(newObj)
+              } else {
+                e.path = e.urlAddress
+              }
+            }
           }
         }
         setData(menuList)

@@ -12,7 +12,7 @@
               <item :icon="route.icon" :title="generateTitle(route.vueName,route.fullName)" />
               <div class="mainTitle">{{generateTitle(route.vueName,route.fullName)}}</div>
             </template>
-            <sidebar-item v-for="child in route.children" :key="child.path" :is-nest="true"
+            <sidebar-item v-for="child in route.children" :key="child.enCode" :is-nest="true"
               :item="child" :base-path="child.path" class="nest-menu" />
           </el-submenu>
           <template v-else>

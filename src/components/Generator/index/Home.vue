@@ -190,8 +190,7 @@ export default {
       this.drawingList = []
       this.idGlobal = 100
     }
-    if (this.modelType == 1) this.leftComponents[1].list = [...this.leftComponents[1].list, ...webPeculiarList]
-    if (this.modelType == 6) this.leftComponents[1].list = [...this.leftComponents[1].list, ...webPeculiarList, ...flowPeculiarList]
+    if (this.modelType == 1 || this.modelType == 6) this.leftComponents[1].list = [...this.leftComponents[1].list, ...webPeculiarList]
   },
   mounted() {
     // fix: firefox 下 拖拽 会新打卡一个选项卡

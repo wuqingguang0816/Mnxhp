@@ -780,6 +780,7 @@ export const selectComponents = [{
       children: [],
       tableName: ''
     },
+    disabled: false,
     actionText: '添加',
     'show-summary': false,
     tableConf: {},

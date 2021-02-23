@@ -4,10 +4,10 @@ import { NodeUtils, getMockData } from "./FlowCard/util.js";
 
 export default {
   name: 'Process',
-  props: ['tabName', 'conf', 'thisStepId'],
+  props: ['tabName', 'conf'],
   data() {
     let data = {}
-    if (typeof this.conf === 'object' && this.conf !== null) {
+    if (typeof this.conf === 'object' && this.conf !== null && JSON.stringify(this.conf) !== '{}') {
       data = Object.assign(NodeUtils.createNode('start'), this.conf)
     } else {
       data = getMockData()
@@ -129,7 +129,6 @@ export default {
         <FlowCard
           verifyMode={this.verifyMode}
           key={this.updateId}
-          thisStepId={this.thisStepId}
           data={this.data}
           onEmits={this.eventReciver}
           style={{ transform: `scale(${this.scaleVal / 100})` }}
@@ -180,11 +179,11 @@ $bg-color: #fff;
           border-bottom: none;
         }
       }
-      &.condition:hover {
+      &.condition:hover,
+      &.timer:hover {
         box-shadow: 0 0 0 2px #b6b6b6, 0 0 5px 4px rgb(0 0 0 / 20%);
       }
       &.start-node,
-      &.timer,
       &.approver {
         &:hover {
           box-shadow: 0 0 0 2px #b6b6b6, 0 0 5px 4px rgb(0 0 0 / 20%);

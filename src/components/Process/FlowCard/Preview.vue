@@ -13,8 +13,6 @@ function createNormalCard(ctx, conf, h) {
   const isApprNode = afterTrue(NodeUtils.isApproverNode(conf), 'approver')
   const isCopyNode = afterTrue(NodeUtils.isCopyNode(conf), 'copy')
   const isTimerNode = afterTrue(NodeUtils.isTimerNode(conf), 'timer')
-  if (conf.nodeId === this.thisStepId) classList.push('state-curr')
-  if (this.thisStepId === 'start') afterTrue(NodeUtils.isStartNode(conf), 'state-curr')
   return (
     <section class={classList.join(' ')} onClick={this.eventLancher.bind(ctx, "edit", conf)} >
       <header class="header">
@@ -46,7 +44,7 @@ let nodes = {
           </div>
         </header>
         <div class="body">
-          <pre class="text">{conf.content}</pre>
+          <div class="text">{conf.content}</div>
         </div>
       </section>
     );
@@ -122,7 +120,6 @@ export default {
     data: { type: Object, required: true },
     // 点击发布时需要校验节点数据完整性 此时打开校验模式
     verifyMode: { type: Boolean, default: true },
-    thisStepId: { type: String, default: '' },
   },
   watch: {
 

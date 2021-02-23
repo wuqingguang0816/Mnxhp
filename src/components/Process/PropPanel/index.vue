@@ -89,7 +89,7 @@
     <!-- 发起人 -->
     <section class="approver-pane" style="height:100%;" v-if="value && isStartNode()">
       <el-tabs style="height:100%;">
-        <el-tab-pane label="设置发起人">
+        <el-tab-pane label="发起人">
           <el-row style="padding: 10px;">
             <el-col :span="4" style="font-size: 14px;line-height:32px">谁可以发起</el-col>
             <el-col :span="20" style="font-size: 14px;line-height:32px;margin-bottom:10px">
@@ -149,7 +149,7 @@
     <!-- 审批人 -->
     <section class="approver-pane" style="height:100%;" v-if="value && isApproverNode()">
       <el-tabs v-model="activeName" style="height:100%;">
-        <el-tab-pane label="设置审批人" name="config">
+        <el-tab-pane label="审批人" name="config">
           <div>
             <div style="padding: 10px;">
               <el-radio-group v-model="approverForm.assigneeType" style="line-height: 32px;"
@@ -199,7 +199,7 @@
             </el-form>
           </div>
         </el-tab-pane>
-        <el-tab-pane label="设置抄送人" name="copy">
+        <el-tab-pane label="抄送人" name="copy">
           <div class="pd-10">
             <div class="option-box">
               <org-select ref="approver-copy-position-org" buttonType="button"
@@ -328,7 +328,7 @@ export default {
           value: 6
         },
         {
-          label: '会签（须所有审批人同意）',
+          label: '会签（需所有审批人同意）',
           value: 8
         }],
       rejectStepOptions: [],

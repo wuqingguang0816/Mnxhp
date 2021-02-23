@@ -11,7 +11,7 @@
           <el-button @click="goBack()">{{$t('common.cancelButton')}}</el-button>
         </div>
       </div>
-      <el-form ref="dataForm" :model="dataForm" :rules="dataRule" label-width="100px">
+      <el-form ref="dataForm" :model="dataForm" :rules="dataRule" label-width="100px" class="main">
         <el-alert title="注意：" type="warning" :closable="false" class="mb-10">
           <div class="tips">
             <p>1、公众平台群发人数的上限？ 微信公众平台群发消息的人数没有限制，只能群发给粉丝，不支持群发给非订阅用户。</p>
@@ -203,11 +203,7 @@ export default {
 .tips {
   line-height: 1.5;
 }
-.el-form {
-  padding: 10px;
-  flex: 1;
-  overflow: auto;
-  overflow-x: hidden;
+.main {
   >>> .el-select {
     width: 100%;
   }

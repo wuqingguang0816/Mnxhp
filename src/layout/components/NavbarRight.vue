@@ -194,10 +194,12 @@ export default {
             this.$message({
               message: '登录过期,请重新登录',
               type: 'error',
-              duration: 1000
-            })
-            this.$store.dispatch('user/resetToken').then(() => {
-              location.reload()
+              duration: 1000,
+              onClose: () => {
+                this.$store.dispatch('user/resetToken').then(() => {
+                  location.reload()
+                })
+              }
             })
           }
           //接收对方发送的消息

@@ -107,9 +107,9 @@ export default {
       })
     },
     test() {
-      this.testLoad = true
       this.$refs['dataForm'].validate((valid) => {
         if (valid) {
+          this.testLoad = true
           CheckMail(this.dataForm).then(res => {
             this.$message({
               message: res.msg,

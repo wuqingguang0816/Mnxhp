@@ -3,18 +3,15 @@
     <div class="JNPF-common-title" v-if="config.__config__.showTitle && config.__config__.label">
       <h2>{{config.__config__.label}}</h2>
     </div>
-    <el-table v-if="['table', 'default'].includes(config.__config__.type)" :data="tableFormData"
-      class="JNPF-common-table" @cell-click="focusInput" v-bind="config.tableConf || {}"
-      :show-summary="config['show-summary']" :summary-method="getTableSummaries" size="mini">
+    <el-table :data="tableFormData" class="JNPF-common-table" @cell-click="focusInput"
+      v-bind="config.tableConf || {}" :show-summary="config['show-summary']"
+      :summary-method="getTableSummaries" size="mini">
       <el-table-column width="50" align="center" label="序号">
         <!-- 序号 -->
         <template slot-scope="scope">
           <div class="row-action">
-            <span class="index"> {{scope.$index + 1}}</span>
+            <span class="index" :class="{'btn-disabled':disabled}"> {{scope.$index + 1}}</span>
             <i class="el-icon-delete delete-btn" @click="removeRow(scope.$index)"></i>
-            <!-- <el-popconfirm title="确定删除该行数据吗？" @onConfirm="removeRow(scope.$index)">
-              <i slot="reference" class="el-icon-delete delete-btn"></i>
-            </el-popconfirm> -->
           </div>
         </template>
       </el-table-column>
@@ -27,24 +24,29 @@
         </template>
         <template slot-scope="scope">
           <!-- 单选框组 多选框组 都替换成下拉 并添加options -->
-          <template
-            v-if="['el-select', 'el-checkbox-group','el-radio-group'].includes(head.__config__.tag)">
-            <el-select v-model="tableFormData[scope.$index][cindex].value" placeholder="请选择"
-              :multiple="head.__config__.tag === 'el-checkbox-group' || getConfById(head.__config__.formId).multiple"
-              @change="onFormDataChange(scope.$index, cindex, 'el-select')"
-              :filterable="getConfById(head.__config__.formId).filterable">
-              <template v-if="head.__config__.dataType==='dynamic'">
-                <el-option v-for="(opt,oindex) in head.__slot__.options" :key="oindex"
-                  :label="opt[head.__config__.props.label]"
-                  :value="opt[head.__config__.props.value]">
-                </el-option>
-              </template>
-              <template v-else>
-                <el-option v-for="(opt, oindex) in head.__slot__.options" :key="oindex"
-                  :label="opt.fullName" :value="opt.id">
-                </el-option>
-              </template>
+          <template v-if="['select', 'checkbox','radio'].includes(head.__config__.jnpfKey)">
+            <el-select v-model="tableFormData[scope.$index][cindex].value"
+              v-bind="getConfById(head.__config__.formId)" :rowIndex="scope.$index"
+              @change="onFormDataChange(scope.$index, cindex, 'el-select')">
+              <el-option v-for="(opt,oindex) in head.__slot__.options" :key="oindex"
+                :label="opt[head.__config__.props.label]" :value="opt[head.__config__.props.value]">
+              </el-option>
             </el-select>
+          </template>
+          <!-- 单行输入 -->
+          <template v-else-if="head.__config__.jnpfKey==='comInput'">
+            <el-input v-model="tableFormData[scope.$index][cindex].value"
+              v-bind="getConfById(head.__config__.formId)" :rowIndex="scope.$index"
+              @change="onFormDataChange(scope.$index, cindex, 'el-input')">
+              <template v-if="head.__slot__">
+                <template slot="prepend" v-if="head.__slot__.prepend">
+                  {{head.__slot__.prepend}}
+                </template>
+                <template slot="append" v-if="head.__slot__.append">
+                  {{head.__slot__.append}}
+                </template>
+              </template>
+            </el-input>
           </template>
           <!-- 其他 -->
           <component v-else :is="head.__config__.tag" :rowIndex="scope.$index"
@@ -58,53 +60,14 @@
         </template>
       </el-table-column>
     </el-table>
-
-    <template v-if="config.type === 'list'">
-      <div v-for="(row, rindex) in tableFormData" :key="rindex" class="list-row">
-        <el-tooltip content="删除">
-          <i class="el-icon-delete delete-btn" @click="removeRow(rindex)"></i>
-        </el-tooltip>
-        <div v-for="(conf, cindex) in config.children" :key="cindex" class="row-item"
-          :class="{error: !tableFormData[rindex][cindex].valid}">
-          <div :style="{width: labelWidth}">
-            <span style="color: #f56c6c;" v-if="conf.required">*</span>
-            {{conf.label}}
-          </div>
-          <div :style="{'margin-left': labelWidth}">
-            <render :formData="formData" :conf="Object.assign({rowIndex: rindex},conf)"
-              :size="formSize" :value="tableFormData[rindex][cindex]" :key="conf.renderKey"
-              style="max-width: 350px;" @input="payload => {
-                  $set(tableFormData[rindex][cindex], 'value', payload);
-                  onFormDataChange(rindex, cindex, conf.tag);
-                }" />
-          </div>
-          <span class="error-tip">
-            不能为空
-          </span>
-        </div>
-      </div>
-    </template>
-    <div class="list-summary" v-if="config.type === 'list' && config['show-summary']">
-      <div style="padding:6px 12px;float:left;">合计</div>
-      <div style="overflow: hidden;padding-top: 6px;;">
-        <div v-for="(val, name) in listSummation" :key="name">
-          {{val.label}}：{{val.sum}}
-        </div>
-      </div>
-    </div>
-    <div class="table-actions" @click="addRow">
+    <div class="table-actions" @click="addRow" v-if="!disabled">
       <el-button type="text" icon="el-icon-plus"> {{ config.actionText }}</el-button>
     </div>
   </div>
 </template>
 <script>
-import { getDictionaryDataSelector } from '@/api/systemData/dictionary'
-import { useableProps } from './config'
-import render from './render.js'
-import { getOptions } from 'highcharts';
-// useableProps —— 需要的组件属性 很多属性在表格中没用 需要过滤
 export default {
-  name: "fc-input-table",
+  name: "input-table",
   props: {
     config: {
       type: Object,
@@ -115,34 +78,27 @@ export default {
       default: () => ([])
     },
     formData: Object,
-    labelWidth: String,
-    formSize: String
+    disabled: {
+      type: Boolean,
+      default: false
+    }
   },
   data() {
     return {
       tableFormData: [],
       tableData: [],
-      listSummation: {},
       isAddRow: true // list类型下 添加行数据 number类型组件会进行校验 产生不需要的结果 在这里进行添加行数据判断 hack
     };
   },
   created() {
-    this.tableData = this.config.__config__.type === 'table' ? this.config.__config__.children : this.config.__config__.children
-    this.getOptions()
+    this.tableData = this.config.__config__.children
     if (this.value && this.value.length) {
       this.value.forEach(t => this.addRow(t))
     } else {
       this.addRow()
     }
   },
-
   methods: {
-    getOptions() {
-      for (let i = 0; i < this.tableData.length; i++) {
-        const e = this.tableData[i];
-        // console.log(e);
-      }
-    },
     clearAddRowFlag() {
       this.$nextTick(() => {
         this.isAddRow = false
@@ -157,21 +113,6 @@ export default {
       const input = child && child.querySelector('input')
       input && input.focus()
     },
-    /**
-     * 过滤不需要的组件配置， 表格中的组件需要统一样式
-     */
-    filterProps() {
-      const conf = this.config.__config__.children
-      if (!conf) return []
-      const getUseableProp = item => useableProps.find(t => t.jnpfKey === item.__config__.jnpfKey)
-      return conf.map(t => {
-        const useable = getUseableProp(t)
-        const res = t
-        // const res = useable ? useable.props.reduce((r, key) => (r[key] = t[key], r), {}) : t
-        return useable.forceProp ? Object.assign({}, res, useable.forceProp) : res
-      })
-    },
-
     onFormDataChange(rowIndex, colIndex, tag) {
       if (this.isAddRow) return
       const data = this.tableFormData[rowIndex][colIndex]
@@ -179,9 +120,6 @@ export default {
       if (['JNPF-Amount', 'el-input-number'].includes(tag)) { // 金额变动 更新数据 触发计算公式更新
         const newVal = this.tableFormData.map(row => row.reduce((p, c) => (p[c.__vModel__] = c.value, p), {}))
         this.$emit('input', newVal)
-        if (this.config.type === 'list') {
-          this.getListSummaries()
-        }
       }
     },
     /**
@@ -226,6 +164,12 @@ export default {
         if (key != '__config__' && key != '__slot__' && key != '__vModel__') {
           newObj[key] = item[key]
         }
+        if (key === 'props') {
+          newObj[key] = item[key][key]
+        }
+        if (key === 'disabled') {
+          newObj[key] = this.disabled || item[key][key]
+        }
       }
       return newObj
     },
@@ -247,11 +191,9 @@ export default {
         return res
       })
     },
-
     removeRow(index) {
       this.tableFormData.splice(index, 1)
     },
-
     addRow(val) {
       this.isAddRow = true
       if (!Array.isArray(this.tableFormData)) {
@@ -260,7 +202,6 @@ export default {
       this.tableFormData.push(this.getEmptyRow(val))
       this.clearAddRowFlag()
     },
-
     getCmpValOfRow(row, key) {
       // 获取数字相关组件的输入值
       const isNumCmp = tag => ['fc-amount', 'el-input-number', 'el-slider'].includes(tag)
@@ -268,19 +209,6 @@ export default {
       if (!target) return NaN
       if (isNumCmp(target.tag)) return target.value || 0
       return NaN
-    },
-
-    getListSummaries() {
-      this.tableData.forEach(row => {
-        const isNumCmp = tag => ['fc-amount', 'el-input-number', 'el-slider'].includes(tag)
-        if (!isNumCmp(row.tag)) return
-        const sum = this.tableFormData
-          .reduce((sum, d) => sum + this.getCmpValOfRow(d, row.vModel), 0)
-        this.$set(this.listSummation, row.vModel, {
-          label: row.label,
-          sum
-        })
-      })
     },
     /**
      * 对表格进行合计 目前只支持数字，金额，滑块
@@ -299,30 +227,6 @@ export default {
       });
       return sums;
     },
-
-
-
-    onUploadSuccess(response, target) {
-      !Array.isArray(target.value) && (target.value = [])
-      target.value.push(response)
-    },
-
-    showUploadList(ev) {
-      const btn = ev.currentTarget
-      const { offsetX, clientX, clientY, offsetY } = ev
-      const list = btn.querySelector('.el-upload-list--text')
-      list && list.classList.add('show')
-      const unit = v => v + 'px'
-      list.style.left = unit(clientX - offsetX)
-      list.style.top = unit(clientY - offsetY + btn.clientHeight)
-    },
-
-    hideUploadList(ev) {
-      const btn = ev.currentTarget
-      const list = btn.querySelector('.el-upload-list--text')
-      list && setTimeout(() => list.classList.remove('show'), 500)
-    },
-
     reset() {
       this.tableData.map((t) => {
         let index = this.tableFormData[0].findIndex(c => c.vModel === t.vModel)
@@ -332,10 +236,6 @@ export default {
         }
       })
     }
-  },
-
-  components: {
-    render
   }
 };
 </script>
@@ -435,6 +335,13 @@ export default {
   >>> .el-table__row:hover {
     .index {
       display: none;
+      &.btn-disabled {
+        display: block;
+        & + .el-icon-delete {
+          opacity: 0;
+          z-index: -1;
+        }
+      }
     }
     .el-icon-delete {
       z-index: 9;

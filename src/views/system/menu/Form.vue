@@ -19,8 +19,8 @@
       <el-form-item label="图标" prop="icon">
         <el-row type="flex">
           <div style="flex:1;margin-right:10px">
-            <el-input v-model="dataForm.icon" placeholder="请选择图标" readonly>
-              <template slot="prepend"><i :class="dataForm.icon" /></template>
+            <el-input v-model="dataForm.icon" placeholder="请选择图标" readonly
+              :suffix-icon="dataForm.icon">
               <el-button slot="append" @click="openIconBox">选择</el-button>
             </el-input>
           </div>
@@ -35,15 +35,16 @@
           </el-option>
         </el-select>
       </el-form-item>
-      <el-form-item v-if="dataForm.type === '2'" label="地址" prop="urlAddress">
+      <el-form-item v-if="dataForm.type == 2 || dataForm.type == 7" label="地址" prop="urlAddress">
         <el-input v-model="dataForm.urlAddress" placeholder="填写地址">
-          <el-select slot="append" v-model="dataForm.linkTarget" style="width: 90px;">
+          <el-select slot="append" v-model="dataForm.linkTarget" style="width: 90px;"
+            v-if="dataForm.category ==='Web' && dataForm.type == 7">
             <el-option label="_self" value="_self" />
             <el-option label="_blank" value="_blank" />
           </el-select>
         </el-input>
       </el-form-item>
-      <el-form-item v-if="['3','4','5','6'].indexOf(dataForm.type)>-1" label="关联"
+      <el-form-item v-if="[3,4,5,6].indexOf(dataForm.type)>-1" label="关联"
         prop="propertyJson.moduleId">
         <JNPF-TreeSelect v-model="dataForm.propertyJson.moduleId" :options="tempData"
           placeholder="请选择" lastLevel @getValue="handleSelectModule" />
@@ -69,19 +70,34 @@
 </template>
 
 <script>
-import {
-  getMenuSelector,
-  createMenu,
-  updateMenu,
-  getMenuInfo,
-  getMenuType
-} from '@/api/system/menu'
+import { getMenuSelector, createMenu, updateMenu, getMenuInfo } from '@/api/system/menu'
 import { getFeatureSelector } from '@/api/onlineDev/visualDev'
 import { getDictionaryType } from '@/api/systemData/dictionary'
 import { getDataReportSelector } from '@/api/onlineDev/dataReport'
 import { getDataVSelector } from '@/api/onlineDev/dataV'
-
 import iconBox from '@/components/JNPF-iconBox'
+const typeData = [{
+  enCode: 1,
+  fullName: "目录"
+}, {
+  enCode: 2,
+  fullName: "页面"
+}, {
+  enCode: 3,
+  fullName: "功能"
+}, {
+  enCode: 4,
+  fullName: "字典"
+}, {
+  enCode: 5,
+  fullName: "报表"
+}, {
+  enCode: 6,
+  fullName: "大屏"
+}, {
+  enCode: 7,
+  fullName: "外链"
+}]
 
 export default {
   components: { iconBox },
@@ -108,7 +124,7 @@ export default {
         enCode: '',
         sortCode: 0,
         icon: '',
-        type: '',
+        type: null,
         urlAddress: '',
         category: 'Web',
         linkTarget: '_self',
@@ -146,7 +162,7 @@ export default {
           { required: true, message: '请选择菜单分类', trigger: 'input' }
         ],
         urlAddress: [
-          { required: true, message: '请求地址不能为空', trigger: 'blur' }
+          { required: true, message: '地址不能为空', trigger: 'blur' }
         ],
         'propertyJson.moduleId': [
           { required: true, message: '关联不能为空', trigger: 'blur' }
@@ -182,7 +198,6 @@ export default {
           this.formLoading = true
           getMenuInfo(this.dataForm.id).then(res => {
             this.dataForm = res.data
-            this.dataForm.type = (res.data.type).toString()
             const propertyJson = res.data.propertyJson ? JSON.parse(res.data.propertyJson) : null
             this.dataForm.propertyJson = propertyJson || { moduleId: '', iconBackgroundColor: '' }
             const menuType = this.dataForm.type
@@ -196,13 +211,11 @@ export default {
     },
     // 获取类型
     fetchMenuTypeList() {
-      getMenuType().then(res => {
-        let newType = res.data.list
-        if (this.dataForm.category === 'App') {
-          newType = res.data.list.filter(o => ['目录', '功能', '页面'].includes(o.fullName))
-        }
-        this.typeData = newType
-      })
+      let newType = typeData
+      if (this.dataForm.category === 'App') {
+        newType = typeData.filter(o => [1, 2, 3, 7].includes(o.enCode))
+      }
+      this.typeData = newType
     },
     // 功能列表
     fetchFeatureList() {
@@ -273,16 +286,16 @@ export default {
     },
     switchType(val) {
       switch (val) {
-        case '3':
+        case 3:
           this.fetchFeatureList()
           break
-        case '4':
+        case 4:
           this.fetchDictionaryType()
           break
-        case '5':
+        case 5:
           this.fetchDataReportList()
           break
-        case '6':
+        case 6:
           this.fetchDataVList()
           break
       }
@@ -311,7 +324,7 @@ export default {
       return newArr
     },
     handleSelectModule(val) {
-      if (this.dataForm.type === '4') {
+      if (this.dataForm.type == 4) {
         const item = this.treeToArray(this.dictionaryData).filter(o => o.id === val)
         this.dataForm.propertyJson.isTree = item[0].isTree
       }
@@ -324,46 +337,40 @@ export default {
 
         if (this.dataForm.category === 'Web') {
           switch (this.dataForm.type) {
-            case '2':
+            case 2:
               this.dataForm.isButtonAuthorize = 1
               this.dataForm.isColumnAuthorize = 1
               this.dataForm.isDataAuthorize = 1
+              this.dataForm.linkTarget = '_self'
               break
-            case '3': // 功能
+            case 3: // 功能
               this.dataForm.isButtonAuthorize = 1
               this.dataForm.isColumnAuthorize = 1
               this.dataForm.isDataAuthorize = 1
               this.dataForm.urlAddress = `model/${menuEnCode}`
               this.dataForm.linkTarget = '_self'
               break
-            case '4': // 字典
+            case 4: // 字典
               this.dataForm.isButtonAuthorize = 1
               this.dataForm.isColumnAuthorize = 1
               this.dataForm.isDataAuthorize = 1
               this.dataForm.urlAddress = `dictionary/${menuEnCode}`
               this.dataForm.linkTarget = '_self'
               break
-            case '5': // 报表
+            case 5: // 报表
               this.dataForm.urlAddress = `dataReport/${menuEnCode}`
               this.dataForm.linkTarget = '_self'
               break
-            case '6': // 大屏
+            case 6: // 大屏
               this.dataForm.urlAddress = `dataScreen/${menuEnCode}`
               this.dataForm.linkTarget = '_blank'
               break
           }
         } else {
-          switch (this.dataForm.type) {
-            case '3':
-              this.dataForm.isButtonAuthorize = 1
-              this.dataForm.isColumnAuthorize = 1
-              this.dataForm.isDataAuthorize = 1
-              this.dataForm.urlAddress = `/pages/apply/apply/features/index?id=${moduleId}`
-              this.dataForm.linkTarget = '_self'
-              break
+          if (this.dataForm.type == 3) {
+            this.dataForm.urlAddress = `/pages/apply/apply/features/index?id=${moduleId}`
           }
         }
-
         if (valid) {
           this.btnLoading = true
           const formMethod = this.dataForm.id ? updateMenu : createMenu

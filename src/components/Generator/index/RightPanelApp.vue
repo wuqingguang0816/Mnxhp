@@ -189,20 +189,14 @@
               <el-form-item label="字体颜色">
                 <el-color-picker v-model="activeData['color']"></el-color-picker>
               </el-form-item>
-              <el-row>
-                <el-col :span="12">
-                  <el-form-item label="是否加粗">
-                    <el-switch v-model="activeData['font-weight']" active-value="bold"
-                      inactive-value="normal" />
-                  </el-form-item>
-                </el-col>
-                <el-col :span="12">
-                  <el-form-item label="是否斜体">
-                    <el-switch v-model="activeData['font-style']" active-value="italic"
-                      inactive-value="normal" />
-                  </el-form-item>
-                </el-col>
-              </el-row>
+              <el-form-item label="是否加粗">
+                <el-switch v-model="activeData['font-weight']" active-value="bold"
+                  inactive-value="normal" />
+              </el-form-item>
+              <el-form-item label="是否斜体">
+                <el-switch v-model="activeData['font-style']" active-value="italic"
+                  inactive-value="normal" />
+              </el-form-item>
               <el-form-item label="下划线样式">
                 <el-radio-group v-model="activeData['text-decoration']">
                   <el-radio-button label="none">无样式</el-radio-button>

@@ -55,11 +55,8 @@ export default {
 </script>
 <style lang="scss" scoped>
 .main {
-  padding-top: 10px;
-  flex: 1;
+  padding: 10px 0 0;
   color: #606266;
-  overflow: auto;
-  overflow-x: hidden;
   .flowList {
     margin: 16px;
     .cap {

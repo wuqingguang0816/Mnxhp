@@ -445,8 +445,11 @@
     margin-bottom: 0;
   }
 
-  .basicForm {
+  .main {
     padding: 10px;
+    flex: 1;
+    overflow: auto;
+    overflow-x: hidden;
   }
 }
 

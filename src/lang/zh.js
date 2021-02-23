@@ -21,7 +21,7 @@ export default {
     "system-monitor": "系统监控",
     "system-icons": "系统图标",
     "system-language": "翻译管理",
-    "system-menu": "菜单管理",
+    "system-menu": "系统菜单",
     "system-area": "行政区划",
     "system-billRule": "单据规则",
     "systemData": "数据应用",

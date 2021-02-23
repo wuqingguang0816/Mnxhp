@@ -8,7 +8,7 @@
         </div>
       </div>
       <el-form ref="dataForm" :model="dataForm" label-width="80px" size="mini" v-loading="loading"
-        class="basicForm">
+        class="main">
         <el-form-item label-width="10px">
           <h4 class="text">{{dataForm.subject}}</h4>
         </el-form-item>
@@ -110,9 +110,6 @@ export default {
 </script>
 <style lang="scss" scoped>
 .el-form {
-  flex: 1;
-  overflow: auto;
-  overflow-x: hidden;
   >>> .el-form-item {
     margin-bottom: 0;
   }

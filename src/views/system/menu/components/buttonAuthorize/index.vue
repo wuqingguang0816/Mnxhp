@@ -4,11 +4,22 @@
       :wrapperClosable="false" ref="drawer" size="700px" class="JNPF-common-drawer">
       <div class="JNPF-flex-main">
         <div class="JNPF-common-head">
-          <topOpts @add="handleAddEdit('')" addPerCode="btn_btnPer_add" />
+          <div>
+            <topOpts @add="handleAddEdit('')" addPerCode="btn_btnPer_add" />
+            <el-dropdown>
+              <el-button icon="el-icon-plus" :loading="loading">
+                常用按钮权限<i class="el-icon-arrow-down el-icon--right"></i>
+              </el-button>
+              <el-dropdown-menu slot="dropdown">
+                <el-dropdown-item @click.native="addHandle(item)" v-for="item in btnList"
+                  :key="item.enCode">{{item.fullName}}</el-dropdown-item>
+              </el-dropdown-menu>
+            </el-dropdown>
+          </div>
           <div class="JNPF-common-head-right">
             <el-tooltip effect="dark" :content="$t('common.refresh')" placement="top">
-              <el-link icon="icon-ym icon-ym-Refresh
-              JNPF-common-head-icon" :underline="false" @click="getList()" />
+              <el-link icon="icon-ym icon-ym-Refresh JNPF-common-head-icon" :underline="false"
+                @click="getList()" />
             </el-tooltip>
           </div>
         </div>
@@ -19,8 +30,8 @@
           <el-table-column prop="sortCode" label="排序" width="90" align="center" />
           <el-table-column label="状态" width="90">
             <template slot-scope="scope">
-              <el-switch v-model="scope.row.enabledMark" :active-value=1 :inactive-value=0
-                @change="handleUpdateState(scope.row)" />
+              <el-switch v-model="scope.row.enabledMark" :active-value="1" :inactive-value="0"
+                @click.native="handleUpdateState(scope.row)" disabled class="table-switch" />
             </template>
           </el-table-column>
           <el-table-column label="操作" width="100">
@@ -44,7 +55,8 @@
 import {
   getButtonAuthorizeList,
   updateButtonState,
-  delButton
+  delButton,
+  createButton
 } from '@/api/system/buttonAuthorize'
 import ButtonAuthorizeForm from './Form'
 
@@ -66,6 +78,14 @@ export default {
       btnLoading: false,
       listLoading: false,
       treeList: [],
+      btnList: [
+        { fullName: '新增', enCode: 'btn_add' },
+        { fullName: '编辑', enCode: 'btn_edit' },
+        { fullName: '详情', enCode: 'btn_detail' },
+        { fullName: '删除', enCode: 'btn_remove' },
+        { fullName: '导入', enCode: 'btn_upload' },
+        { fullName: '导出', enCode: 'btn_download' }
+      ]
     }
   },
   methods: {
@@ -94,24 +114,50 @@ export default {
       this.getList()
     },
     handleUpdateState(row) {
-      const flag = row.enabledMark
-      updateButtonState(row.id).then(res => {
-        this.$message({
-          type: 'success',
-          message: res.msg,
-          duration: 1500,
-          onClose: () => {
-            row.enabledMark = flag
-          }
+      const txt = row.enabledMark ? '禁用' : '开启'
+      this.$confirm(`您确定要${txt}当前按钮权限吗, 是否继续?`, '提示', {
+        type: 'warning'
+      }).then(() => {
+        updateButtonState(row.id).then(res => {
+          this.$message({
+            type: 'success',
+            message: res.msg,
+            duration: 1000,
+            onClose: () => {
+              row.enabledMark = row.enabledMark ? 0 : 1
+            }
+          })
         })
-      }).catch(() => {
-        row.enabledMark = !flag
-      })
+      }).catch(() => { })
     },
     handleAddEdit(id) {
       this.buttonAuthorizeFormVisible = true
       this.$nextTick(() => {
         this.$refs.ButtonAuthorizeForm.init(this.moduleId, id)
+      })
+    },
+    addHandle(item) {
+      this.loading = true
+      let query = {
+        parentId: '-1',
+        moduleId: this.moduleId,
+        fullName: item.fullName,
+        enCode: item.enCode,
+        sortCode: 0,
+        icon: '',
+        enabledMark: 1,
+        description: ''
+      }
+      createButton(query).then(res => {
+        this.$message({
+          message: res.msg,
+          type: 'success',
+          duration: 1500,
+          onClose: () => {
+            this.getList()
+            this.loading = false
+          }
+        })
       })
     },
     handleDel(id) {

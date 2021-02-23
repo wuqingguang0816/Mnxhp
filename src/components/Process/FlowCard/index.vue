@@ -56,7 +56,7 @@ let nodes = {
         onClick={this.eventLancher.bind(ctx, "edit", conf)}
       >
         <header class="header">
-          <div class="title-box" style="height: 20px;width:160px;">
+          <div class="title-box" style="height:20px;width:160px;">
             <span class="title-text">{conf.properties.title}</span>
             <input vModel_trim={conf.properties.title} class="title-input" onClick={stopPro} />
           </div>
@@ -68,7 +68,7 @@ let nodes = {
           </div>
         </header>
         <div class="body">
-          <pre class="text">{conf.content}</pre>
+          <div class="text">{conf.content}</div>
         </div>
         {
           //  <div

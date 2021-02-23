@@ -30,7 +30,7 @@
             <screenfull />
           </div>
         </div>
-        <JNPF-table v-loading="listLoading" :data="list" stripe row-key="id"
+        <JNPF-table v-loading="listLoading" :data="list" row-key="id"
           :tree-props="{children: 'children', hasChildren: 'expanded'}" default-expand-all>
           <el-table-column prop="projectName" label="项目名称" width="200">
             <template slot-scope="scope">

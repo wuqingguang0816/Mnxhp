@@ -33,8 +33,8 @@
           :hasNO="false">
           <el-table-column type="expand" width="40">
             <template slot-scope="scope">
-              <el-table v-loading="scope.row.childLoading" :data="scope.row.childTable" stripe
-                size='mini' :element-loading-text="$t('common.loadingText')">
+              <el-table v-loading="scope.row.childLoading" :data="scope.row.childTable" size='mini'
+                :element-loading-text="$t('common.loadingText')">
                 <el-table-column prop="fullName" label="名称" />
                 <el-table-column prop="enCode" label="编码" width="150" />
               </el-table>

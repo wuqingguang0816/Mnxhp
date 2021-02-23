@@ -24,7 +24,8 @@
         </el-tooltip>
       </div>
     </el-row>
-    <JNPF-table v-loading="listLoading" :data="list" hasC @selection-change="handleSelectionChange">
+    <JNPF-table v-loading="listLoading" :data="list" hasC @selection-change="handleSelectionChange"
+      :border="false">
       <el-table-column prop="text" label="商品名称" width="200" />
       <el-table-column prop="code" label="商品编码" />
       <el-table-column prop="specifications" label="规格型号" />

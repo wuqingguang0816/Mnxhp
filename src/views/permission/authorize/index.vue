@@ -1,8 +1,9 @@
 <template>
-  <div class="app-container JNPF-flex-main">
+  <div class="app-container JNPF-flex-main authorize-container">
     <div class="JNPF-common-head">
-      <div>
-        <el-dropdown>
+      <div class="el-page-header__content">权限批量设置</div>
+      <div class="btn-group">
+        <el-dropdown style="margin-right: 8px">
           <el-button plain>
             {{$t('authorize.operation')}}<i class="el-icon-arrow-down el-icon--right"></i>
           </el-button>
@@ -17,8 +18,6 @@
             </el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>
-      </div>
-      <div class="btn-group">
         <el-button :disabled="active <= 0" @click="handlePrevStep">{{$t('common.prev')}}</el-button>
         <el-button :disabled="active >= 4" @click="handleNextStep">{{$t('common.next')}}</el-button>
         <el-button type="primary" :loading="btnLoading" :disabled="active < 4"
@@ -309,6 +308,9 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
+.authorize-container {
+  padding: 0;
+}
 .authorize-bd {
   padding: 20px;
   height: calc(100% - 50px);

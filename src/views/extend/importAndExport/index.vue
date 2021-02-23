@@ -58,7 +58,7 @@
           <el-table-column prop="departmentName" label="部门" width="120" sortable />
           <el-table-column prop="positionName" label="岗位" width="120" sortable />
           <el-table-column prop="workingNature" label="用工性质" width="100" sortable />
-          <el-table-column prop="idnumber" label="身份证号" width="150" sortable />
+          <el-table-column prop="idNumber" label="身份证号" width="150" sortable />
           <el-table-column prop="telephone" label="联系电话" width="100" sortable />
           <el-table-column label="出生年月" sortable width="100">
             <template slot-scope="scope">

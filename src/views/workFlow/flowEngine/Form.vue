@@ -50,10 +50,9 @@
               <el-form-item label="流程图标" prop="icon">
                 <el-row type="flex">
                   <div style="flex:1;margin-right:10px">
-                    <el-input v-model="dataForm.icon" placeholder="请选择流程图标" readonly>
-                      <template slot="prepend"><i :class="dataForm.icon" /></template>
-                      <el-button slot="append" @click="openIconBox()">选择
-                      </el-button>
+                    <el-input v-model="dataForm.icon" placeholder="请选择流程图标" readonly
+                      :suffix-icon="dataForm.icon">
+                      <el-button slot="append" @click="openIconBox()">选择</el-button>
                     </el-input>
                   </div>
                   <el-color-picker v-model="dataForm.iconBackground" title="图标背景色"

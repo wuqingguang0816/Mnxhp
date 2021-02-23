@@ -95,11 +95,13 @@
               :active-data="activeData" v-on="$listeners" />
             <RelationFlowAttr v-if="activeData.__config__.jnpfKey==='relationFlowAttr'"
               :active-data="activeData" ref="relationFlowAttr" />
+            <JNPFCalculate v-if="activeData.__config__.jnpfKey==='calculate'"
+              :active-data="activeData" ref="calculate" />
             <template v-if="isSystem">
               <el-form-item label="标题名">
                 <el-input v-model="activeData.__config__.label" placeholder="请输入标题名" />
               </el-form-item>
-              <el-form-item label="控件宽度">
+              <el-form-item label="控件栅格">
                 <el-slider v-model="activeData.__config__.span" :max="24" :min="6" show-stops
                   :step="2" show-tooltip />
               </el-form-item>
@@ -134,7 +136,7 @@
               </el-form-item>
             </template>
             <template v-if="activeData.__config__.jnpfKey==='card'">
-              <el-form-item label="控件宽度" label-width="76px">
+              <el-form-item label="控件栅格" label-width="76px">
                 <el-slider v-model="activeData.__config__.span" :max="24" :min="6" show-stops
                   :step="2" show-tooltip />
               </el-form-item>
@@ -151,7 +153,7 @@
               <el-form-item v-if="activeData.__config__.componentName!==undefined" label="组件名">
                 {{ activeData.__config__.componentName }}
               </el-form-item>
-              <el-form-item label="控件宽度">
+              <el-form-item label="控件栅格">
                 <el-slider v-model="activeData.__config__.span" :max="24" :min="6" show-stops
                   :step="2" show-tooltip />
               </el-form-item>
@@ -259,6 +261,7 @@ import RelationForm from './RightComponents/RelationForm'
 import RelationFormAttr from './RightComponents/RelationFormAttr'
 import RelationFlow from './RightComponents/RelationFlow'
 import RelationFlowAttr from './RightComponents/RelationFlowAttr'
+import JNPFCalculate from './RightComponents/Calculate'
 
 const commonRightList = ['comSelect', 'depSelect', 'posSelect', 'userSelect', 'dicSelect', 'editor']
 const systemList = ['createUser', 'createTime', 'modifyUser', 'modifyTime', 'currOrganize', 'currDept', 'currPosition', 'billRule']
@@ -294,6 +297,7 @@ export default {
     RelationFormAttr,
     RelationFlow,
     RelationFlowAttr,
+    JNPFCalculate
   },
   props: ['showField', 'activeData', 'formConf', 'modelType'],
   data() {
@@ -371,6 +375,11 @@ export default {
       if (val.__config__.jnpfKey === 'relationFlowAttr') {
         this.$nextTick(() => {
           this.$refs.relationFlowAttr && this.$refs.relationFlowAttr.getOptions()
+        })
+      }
+      if (val.__config__.jnpfKey !== 'calculate') {
+        this.$nextTick(() => {
+          this.$refs.calculate && this.$refs.calculate.reloadExpressionTemp()
         })
       }
     }

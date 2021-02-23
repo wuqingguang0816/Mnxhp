@@ -52,7 +52,7 @@
               <span v-if="!scope.row.top">{{ scope.row.enCode }}</span>
             </template>
           </el-table-column>
-          <el-table-column prop="formType" label="表单类型" width="80" v-if="jnpf.hasP('formType')">
+          <el-table-column prop="formType" label="表单类型" width="100" v-if="jnpf.hasP('formType')">
             <template slot-scope="scope">
               <span v-if="!scope.row.top">{{ scope.row.formType == 1? "系统表单" : "自定义表单" }}</span>
             </template>
@@ -68,11 +68,11 @@
               <span v-if="!scope.row.top">{{ scope.row.visibleType ==  0 ? "全部可见" : "部分可见" }}</span>
             </template>
           </el-table-column>
-          <el-table-column prop="creatorUser" label="创建人" width="100"
+          <el-table-column prop="creatorUser" label="创建人" width="120"
             v-if="jnpf.hasP('creatorUser')" />
           <el-table-column prop="creatorTime" label="创建时间" :formatter="jnpf.tableDateFormat"
             width="120" v-if="jnpf.hasP('creatorTime')" />
-          <!-- <el-table-column prop="lastModifyUser" label="最后修改人" width="100" />
+          <!-- <el-table-column prop="lastModifyUser" label="最后修改人" width="120" />
       <el-table-column prop="lastModifyTime" label="最后修改时间" :formatter="jnpf.tableDateFormat"
         width="120" /> -->
           <el-table-column prop="sortCode" label="排序" width="70" align="center"

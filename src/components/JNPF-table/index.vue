@@ -1,6 +1,7 @@
 <template>
   <el-table :data="data" ref="JNPFTable" class="JNPF-common-table" :height="height"
-    :element-loading-text="$t('common.loadingText')" v-bind="$attrs" v-on="$listeners">
+    :element-loading-text="$t('common.loadingText')" v-bind="$attrs" v-on="$listeners"
+    :border="border">
     <el-table-column type="selection" width="50" v-if="hasC" align="center" />
     <el-table-column type="index" width="50" label="序号" v-if="hasNO" align="center" />
     <slot></slot>
@@ -28,6 +29,10 @@ export default {
     hasC: {
       type: Boolean,
       default: false
+    },
+    border: {
+      type: Boolean,
+      default: true
     },
     height: {
       default: '100%'

@@ -30,7 +30,6 @@
 
 <script>
 import { getAreasName, DownloadCode } from '@/api/onlineDev/visualDev'
-import { LanguageMapInfo, IsExistBySignKey, LanguageMapUpdate, LanguageMapCreate } from '@/api/systemData/languageMap'
 export default {
   data() {
     return {

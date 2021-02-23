@@ -42,11 +42,3 @@ export default {
   }
 }
 </script>
-<style lang="scss" scoped>
-.main {
-  flex: 1;
-  overflow: auto;
-  overflow-x: hidden;
-  padding: 0 10px;
-}
-</style>

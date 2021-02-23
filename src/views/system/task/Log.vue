@@ -2,7 +2,7 @@
   <transition name="el-zoom-in-center">
     <div class="JNPF-preview-main flow-form-main">
       <div class="JNPF-common-page-header">
-        <el-page-header @back="goBack" content="执行日志" />
+        <el-page-header @back="goBack" :content="title" />
         <div class="options">
           <el-button @click="goBack()">{{$t('common.cancelButton')}}</el-button>
         </div>
@@ -32,6 +32,7 @@ export default {
   data() {
     return {
       id: '',
+      title: '',
       list: [],
       total: 0,
       listLoading: true,
@@ -47,9 +48,10 @@ export default {
     goBack() {
       this.$emit('close')
     },
-    init(id) {
+    init(id, title) {
       if (!id) return this.$emit('close')
       this.id = id
+      this.title = title
       this.initData()
     },
     initData() {
@@ -65,11 +67,10 @@ export default {
 </script>
 <style lang="scss" scoped>
 .main {
-  flex: 1;
   overflow: hidden;
   display: flex;
   flex-direction: column;
-  padding-bottom: 10px;
+  padding: 0 0 10px;
   >>> .el-table {
     flex: 1;
     border-top: none;

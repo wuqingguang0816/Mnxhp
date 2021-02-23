@@ -3,12 +3,14 @@
     <div class="JNPF-preview-main flow-form-main nohead">
       <div class="btns">
         <template v-if="setting.isAudit">
-          <el-button type="primary" @click="transfer()">转 办</el-button>
+          <el-button type="warning" @click="transfer()">转 办</el-button>
           <el-button type="primary" @click="audit()">通 过</el-button>
           <el-button type="danger" @click="reject()">拒 绝</el-button>
         </template>
-        <el-button type="danger" v-if="setting.isSelf && setting.status == 1" @click="revoke()">撤 回
-        </el-button>
+        <template v-if="setting.isSelf && setting.status == 1">
+          <el-button type="primary" @click="press()">催 办</el-button>
+          <el-button type="danger" @click="revoke()">撤 回</el-button>
+        </template>
         <el-button type="danger" v-if="setting.hasRecall" @click="recall()">撤 回</el-button>
         <el-button type="danger" @click="cancel()"
           v-if="setting.hasCancel && setting.status != 2 && setting.status != 5">
@@ -16,17 +18,16 @@
         <el-button @click="goBack()">{{$t('common.cancelButton')}}</el-button>
       </div>
       <div class="approve-result" v-if="setting.showStatus && activeTab==='0'">
-        <div class="approve-result-img" :class=" flowTaskInfo.status |flowStatus()"></div>
+        <div class="approve-result-img" :class="flowTaskInfo.status | flowStatus()"></div>
       </div>
       <el-tabs class="JNPF-el_tabs" v-model="activeTab">
-        <el-tab-pane label="流程表单">
+        <el-tab-pane label="表单信息">
           <component :is="currentView" @close="goBack" ref="form" />
         </el-tab-pane>
-        <el-tab-pane label="流程视图">
-          <Process :conf="flowTemplateJson" :thisStepId="thisStepId"
-            v-if="flowTemplateJson.childNode" />
+        <el-tab-pane label="流程信息">
+          <Process :conf="flowTemplateJson" v-if="flowTemplateJson.nodeId" />
         </el-tab-pane>
-        <el-tab-pane label="审批记录">
+        <el-tab-pane label="流转记录">
           <recordList :list='flowTaskOperatorRecordList' :endTime='endTime' />
         </el-tab-pane>
       </el-tabs>
@@ -53,7 +54,7 @@
 
 <script>
 import { FlowBeforeInfo, Audit, Reject, Transfer, Recall, Cancel } from '@/api/workFlow/FlowBefore'
-import { Revoke } from '@/api/workFlow/FlowLaunch'
+import { Revoke, Press } from '@/api/workFlow/FlowLaunch'
 import recordList from './RecordList'
 import Process from '@/components/Process/Preview'
 export default {
@@ -78,7 +79,6 @@ export default {
       treeData: [],
       firstTest: true,
       fullName: '',
-      thisStepId: '',
       activeTab: '0'
     }
   },
@@ -105,18 +105,18 @@ export default {
         this.flowTaskOperatorList = res.data.flowTaskOperatorList
         this.flowTaskOperatorRecordList = res.data.flowTaskOperatorRecordList
         this.fullName = this.flowTaskInfo.flowName
-        this.thisStepId = this.flowTaskInfo.thisStepId
         this.freeApprover = res.data.freeApprover || 0
         this.endTime = this.flowTaskInfo.completion == 100 ? this.flowTaskInfo.endTime : 0
         data.formConf = res.data.flowFormInfo
         data.formOperates = res.data.formOperates
-        if (this.thisStepId && this.flowTaskNodeList.length) {
+        if (this.flowTaskNodeList.length) {
           for (let i = 0; i < this.flowTaskNodeList.length; i++) {
             const nodeItem = this.flowTaskNodeList[i]
             const loop = data => {
               if (Array.isArray(data)) data.forEach(d => loop(d))
               if (data.nodeId === nodeItem.nodeCode) {
-                if (nodeItem.completion) data.state = 'state-past'
+                if (nodeItem.type == 0) data.state = 'state-past'
+                if (nodeItem.type == 1) data.state = 'state-curr'
                 if (nodeItem.nodeType === 'approver') data.content = nodeItem.userName
                 return
               }
@@ -125,8 +125,6 @@ export default {
             }
             loop(this.flowTemplateJson)
           }
-        } else {
-          this.thisStepId = "start"
         }
         setTimeout(() => {
           this.$nextTick(() => {
@@ -145,7 +143,7 @@ export default {
           inputValue: "",
           closeOnClickModal: false
         }).then(({ value }) => {
-          Audit(this.setting.id, { handleOpinion: value, delegateId: this.setting.delegateId }).then(res => {
+          Audit(this.setting.taskId, { handleOpinion: value, delegateId: this.setting.delegateId }).then(res => {
             this.$message({
               type: 'success',
               message: res.msg,
@@ -174,7 +172,7 @@ export default {
         inputValidator: (val) => { if (!val) { if (this.firstTest) { this.firstTest = false; return true } return false } },
         closeOnClickModal: false
       }).then(({ value }) => {
-        Reject(this.setting.id, { handleOpinion: value, delegateId: this.setting.delegateId }).then(res => {
+        Reject(this.setting.taskId, { handleOpinion: value, delegateId: this.setting.delegateId }).then(res => {
           this.$message({
             type: 'success',
             message: res.msg,
@@ -210,6 +208,19 @@ export default {
             onClose: () => {
               this.$emit('close', true)
             }
+          })
+        })
+      }).catch(() => { })
+    },
+    press() {
+      this.$confirm('此操作将提示该节点尽快处理，是否继续?', '提示', {
+        type: 'warning'
+      }).then(() => {
+        Press(this.setting.id).then(res => {
+          this.$message({
+            type: 'success',
+            message: res.msg,
+            duration: 1000
           })
         })
       }).catch(() => { })
@@ -292,7 +303,7 @@ export default {
         handleOpinion: this.reason,
         freeApproverUserId: this.handleId
       }
-      Audit(this.setting.id, query).then(res => {
+      Audit(this.setting.taskId, query).then(res => {
         this.$message({
           type: 'success',
           message: res.msg,

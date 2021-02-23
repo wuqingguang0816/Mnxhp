@@ -149,12 +149,13 @@ $base-size : 12px;
   }
 
   &.timer {
-    &:hover {
-      box-shadow: 0 0 0 2px #52C41A, 0 0 5px 4px rgba(0, 0, 0, 0.2);
-    }
-
     .header {
-      background-color: #52C41A;
+      color: #f5811c;
+      border-bottom: 1px solid #EEEEEE;
+
+      .actions {
+        color: #606266;
+      }
     }
   }
 
@@ -306,7 +307,7 @@ $base-size : 12px;
 
   .body {
     padding: 10px;
-    color: #A1A5AD;
+    color: #606266;
   }
 
   .icon-wrapper {

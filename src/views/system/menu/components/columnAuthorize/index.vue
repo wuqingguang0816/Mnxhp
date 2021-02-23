@@ -24,7 +24,7 @@
           <el-table-column label="状态" width="90">
             <template slot-scope="scope">
               <el-switch v-model="scope.row.enabledMark" :active-value="1" :inactive-value="0"
-                @change="handleUpdateState(scope.row)" />
+                @click.native="handleUpdateState(scope.row)" disabled class="table-switch" />
             </template>
           </el-table-column>
           <el-table-column label="操作" width="100">
@@ -102,19 +102,21 @@ export default {
       this.getList()
     },
     handleUpdateState(row) {
-      const flag = row.enabledMark
-      updateColumnState(row.id).then(res => {
-        this.$message({
-          type: 'success',
-          message: res.msg,
-          duration: 1500,
-          onClose: () => {
-            row.enabledMark = flag
-          }
+      const txt = row.enabledMark ? '禁用' : '开启'
+      this.$confirm(`您确定要${txt}当前列表权限吗, 是否继续?`, '提示', {
+        type: 'warning'
+      }).then(() => {
+        updateColumnState(row.id).then(res => {
+          this.$message({
+            type: 'success',
+            message: res.msg,
+            duration: 1000,
+            onClose: () => {
+              row.enabledMark = row.enabledMark ? 0 : 1
+            }
+          })
         })
-      }).catch(() => {
-        row.enabledMark = Number(!flag)
-      })
+      }).catch(() => { })
     },
     handleAddEdit(id) {
       this.columnAuthorizeFormVisible = true

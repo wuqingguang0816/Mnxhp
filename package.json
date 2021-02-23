@@ -1,6 +1,6 @@
 {
-  "name": "jnpf-admin",
-  "version": "3.0.0",
+  "name": "jnpf-web",
+  "version": "3.1.0",
   "description": "JNPF快速开发平台",
   "author": "JNPF快速开发平台",
   "license": "MIT",

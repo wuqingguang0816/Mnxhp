@@ -9,11 +9,11 @@
         <el-button @click="goBack()">{{$t('common.cancelButton')}}</el-button>
       </div>
       <el-tabs class="JNPF-el_tabs" v-model="activeTab">
-        <el-tab-pane label="流程表单">
+        <el-tab-pane label="表单信息">
           <component :is="currentView" @close="goBack" ref="form" @setLoad="setLoad" />
         </el-tab-pane>
-        <el-tab-pane label="流程视图">
-          <Process :conf="flowTemplateJson" thisStepId="start" v-if="flowTemplateJson.childNode" />
+        <el-tab-pane label="流程信息">
+          <Process :conf="flowTemplateJson" v-if="flowTemplateJson.nodeId" />
         </el-tab-pane>
       </el-tabs>
     </div>
@@ -53,6 +53,7 @@ export default {
         data.freeApprover = res.data.freeApprover || 0
         data.formConf = res.data.formData
         this.flowTemplateJson = res.data.flowTemplateJson ? JSON.parse(res.data.flowTemplateJson) : null
+        this.flowTemplateJson.state = 'state-curr'
         data.formOperates = []
         if (this.flowTemplateJson && this.flowTemplateJson.properties && this.flowTemplateJson.properties.formOperates) {
           data.formOperates = this.flowTemplateJson.properties.formOperates || []

@@ -42,11 +42,11 @@
           <el-table-column prop="port" label="端口" width="60" v-if="jnpf.hasP('port')" />
           <el-table-column prop="creatorTime" label="创建时间" width="120"
             :formatter="jnpf.tableDateFormat" v-if="jnpf.hasP('creatorTime')" />
-          <el-table-column label="创建人" prop="creatorUser" width="100"
+          <el-table-column label="创建人" prop="creatorUser" width="120"
             v-if="jnpf.hasP('creatorUser')" />
           <el-table-column prop="lastModifyTime" label="修改时间" width="120"
             :formatter="jnpf.tableDateFormat" v-if="jnpf.hasP('lastModifyTime')" />
-          <el-table-column label="修改人" prop="lastModifyUser" width="100"
+          <el-table-column label="修改人" prop="lastModifyUser" width="120"
             v-if="jnpf.hasP('lastModifyUser')" />
           <el-table-column prop="sortCode" label="排序" width="70" align="center"
             v-if="jnpf.hasP('sortCode')" />

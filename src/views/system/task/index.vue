@@ -53,7 +53,7 @@
             <template slot-scope="scope">
               <tableOpts @edit="addOrUpdateHandle(scope.row.id)"
                 @del="handleDel(scope.$index,scope.row.id)">
-                <el-button size="mini" type="text" @click="viewLog(scope.row.id)">日志</el-button>
+                <el-button size="mini" type="text" @click="viewLog(scope.row)">日志</el-button>
               </tableOpts>
             </template>
           </el-table-column>
@@ -132,10 +132,10 @@ export default {
         })
       }).catch(() => { });
     },
-    viewLog(id) {
+    viewLog(row) {
       this.logVisible = true
       this.$nextTick(() => {
-        this.$refs.Log.init(id)
+        this.$refs.Log.init(row.id, row.fullName)
       })
     },
     handleUpdateState(row) {

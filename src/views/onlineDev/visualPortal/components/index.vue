@@ -25,7 +25,7 @@
         <el-button class="delete-btn" icon="el-icon-delete" type="text" @click="empty"
           size="medium">清空</el-button>
       </div>
-      <div class="layout-area">
+      <el-scrollbar class="layout-area">
         <grid-layout :layout.sync="layout" :row-height="40">
           <grid-item v-for="item in layout" :x="item.x" :y="item.y" :w="item.w" :h="item.h"
             :i="item.i" :key="item.i" :maxH="item.maxH" :minH="item.minH" :minW="item.minW"
@@ -59,7 +59,7 @@
         <div v-show="!layout.length" class="empty-info">
           <img src="@/assets/images/emptyPortal.png" alt="" class="empty-img">
         </div>
-      </div>
+      </el-scrollbar>
     </el-main>
     <right-panel :active-data="activeData" />
     <Preview :visible.sync="previewVisible" :layout="layout" />
@@ -301,8 +301,10 @@ $lighterBlue: #409eff;
     }
     .layout-area {
       height: calc(100% - 42px);
-      overflow: auto;
-      overflow-x: hidden;
+      >>> .el-scrollbar__wrap {
+        margin-bottom: 0 !important;
+        overflow-x: auto;
+      }
       .vue-grid-item {
         position: relative;
         height: 100%;

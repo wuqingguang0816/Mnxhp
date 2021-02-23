@@ -416,12 +416,6 @@ export default {
   height: 100%;
   overflow: hidden;
 }
-.main {
-  padding: 10px;
-  flex: 1;
-  overflow: auto;
-  overflow-x: hidden;
-}
 .text {
   word-break: break-all;
   overflow: hidden;

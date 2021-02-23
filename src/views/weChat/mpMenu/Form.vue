@@ -39,21 +39,9 @@
 </template>
 
 <script>
-import { MPMenuListAll, getMPMenuInfo, MPMenuUpdate, MPMenuCreate, IsExistByFullName } from '@/api/weChat/MPMenu'
+import { MPMenuListAll, getMPMenuInfo, MPMenuUpdate, MPMenuCreate } from '@/api/weChat/MPMenu'
 export default {
   data() {
-    var checkDuplicate = (rule, value, callback) => {
-      IsExistByFullName({
-        fullName: this.dataForm.fullName,
-        id: this.dataForm.id
-      }).then(res => {
-        if (res.data) {
-          callback(new Error('名称已重复'));
-        } else {
-          callback();
-        }
-      })
-    }
     return {
       visible: false,
       btnLoading: false,
@@ -71,8 +59,7 @@ export default {
           { required: true, message: '上级不能为空', trigger: 'change' }
         ],
         fullName: [
-          { required: true, message: '名称不能为空', trigger: 'blur' },
-          // { validator: checkDuplicate, trigger: 'blur' }
+          { required: true, message: '名称不能为空', trigger: 'blur' }
         ],
       },
       options: [],

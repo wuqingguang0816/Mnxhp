@@ -28,6 +28,7 @@ import RelationForm from '@/components/Generator/components/RelationForm'
 import RelationFormAttr from '@/components/Generator/components/RelationFormAttr'
 import RelationFlow from '@/components/Generator/components/RelationFlow'
 import RelationFlowAttr from '@/components/Generator/components/RelationFlowAttr'
+import Calculate from '@/components/Generator/components/Calculate'
 
 export default {
   install(Vue, options) {
@@ -57,6 +58,7 @@ export default {
     Vue.component('RelationFormAttr', RelationFormAttr)
     Vue.component('RelationFlow', RelationFlow)
     Vue.component('RelationFlowAttr', RelationFlowAttr)
+    Vue.component('Calculate', Calculate)
     Vue.component('JNPFQuill', JNPFQuill)
     Vue.component('Screenfull', Screenfull)
     Vue.component('ColumnSettings', ColumnSettings)

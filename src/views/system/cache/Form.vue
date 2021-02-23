@@ -7,7 +7,7 @@
           <el-button @click="goBack()">{{$t('common.cancelButton')}}</el-button>
         </div>
       </div>
-      <el-form ref="dataForm" :model="dataForm" label-width="100px" class="basicForm">
+      <el-form ref="dataForm" :model="dataForm" label-width="100px" class="main">
         <el-form-item label="STRING" prop="name">
           <el-input v-model="dataForm.name" placeholder="STRING" />
         </el-form-item>
@@ -52,12 +52,3 @@ export default {
   }
 }
 </script>
-<style lang="scss" scoped>
-.JNPF-preview-main {
-  .basicForm {
-    flex: 1;
-    overflow: auto;
-    overflow-x: hidden;
-  }
-}
-</style>

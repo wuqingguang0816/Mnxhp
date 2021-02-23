@@ -123,7 +123,6 @@ $lighterBlue: #409EFF;
   }
 
   .el-scrollbar__view {
-    height: 100%;
     overflow-x: hidden;
   }
 }
@@ -204,14 +203,18 @@ $lighterBlue: #409EFF;
   box-sizing: border-box;
   height: 100%;
 
-
   &>.el-form {
-    // 69 = 12+15+42
-    height: 100%;
+    height: calc(100vh - 150px);
   }
 
   .el-tabs__header {
     margin: 0;
+  }
+}
+
+.ipadbody {
+  .center-board-row>.el-form {
+    height: 550px;
   }
 }
 

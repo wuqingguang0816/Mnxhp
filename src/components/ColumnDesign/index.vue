@@ -11,8 +11,8 @@
                 title='点击拖动' />
             </template>
           </el-table-column>
-          <el-table-column prop="__config__.label" label="查询列名" />
-          <el-table-column prop="__vModel__" label="查询字段" />
+          <el-table-column prop="__config__.label" label="列名" />
+          <el-table-column prop="__vModel__" label="字段" />
         </el-table>
       </div>
       <el-divider></el-divider>
@@ -232,7 +232,8 @@ export default {
     conf: {
       type: Object,
       default: () => { }
-    }
+    },
+    modelType: ''
   },
   data() {
     return {
@@ -292,6 +293,9 @@ export default {
     },
   },
   created() {
+    if (this.modelType == 4) {
+      this.columnBtnsOption = this.columnBtnsOption.filter(o => o.value != 'detail')
+    }
     let list = []
     const loop = (data, parent) => {
       if (!data) return

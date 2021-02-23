@@ -161,3 +161,33 @@ export function dynamicText(value, options) {
   if (!item || !item.fullName) return value
   return item.fullName
 }
+
+export function dynamicTreeText(value, options) {
+  function transfer(data) {
+    let textList = []
+
+    function loop(data, id) {
+      for (let i = 0; i < data.length; i++) {
+        if (data[i].id === id) {
+          textList.push(data[i].fullName)
+          break
+        }
+        if (data[i].children) loop(data[i].children, id)
+      }
+    }
+    for (let i = 0; i < data.length; i++) {
+      loop(options, data[i])
+    }
+    return textList.join()
+  }
+  if (!options || !Array.isArray(options)) return value.join()
+  if (Array.isArray(value)) {
+    let text = transfer(value)
+    return text
+  } else {
+    if (!options || !Array.isArray(options)) return value
+    let list = value.split()
+    let text = transfer(list)
+    return text
+  }
+}

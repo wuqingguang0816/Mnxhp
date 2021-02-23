@@ -383,9 +383,6 @@ export default {
 .user-form {
   .main {
     padding: 10px 30px 0;
-    flex: 1;
-    overflow: auto;
-    overflow-x: hidden;
   }
   >>> .el-select,
   >>> .el-date-editor {

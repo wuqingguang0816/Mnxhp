@@ -10,7 +10,7 @@
         </div>
       </div>
       <el-form ref="dataForm" :model="dataForm" :rules="dataRule" v-loading="formLoading"
-        label-width="60px" class="basicForm">
+        label-width="60px" class="main">
         <el-form-item label="标题" prop="title">
           <el-input v-model="dataForm.title" placeholder="公告标题" />
         </el-form-item>
@@ -94,11 +94,6 @@ export default {
 </script>
 <style lang="scss" scoped>
 .JNPF-preview-main {
-  .basicForm {
-    flex: 1;
-    overflow: auto;
-    overflow-x: hidden;
-  }
   .content {
     >>> {
       p {

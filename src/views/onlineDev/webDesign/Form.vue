@@ -95,7 +95,7 @@
       </el-row>
       <template v-if="activeStep==1">
         <Generator ref="generator" :conf="formData" @drawingListChange="onDrawingListChange"
-          :modelType="1" />
+          :modelType="dataForm.type" />
       </template>
       <template v-if="activeStep==2">
         <columnDesign ref="columnDesign" :conf="columnData" />

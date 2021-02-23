@@ -57,7 +57,7 @@
         <el-link :underline="false" type="danger" icon="icon-ym icon-ym-extend-minus-circle"
           slot="dot" class="timeline-icon" />
         <el-card>
-          <p class="timeline-cell">节点名称：结束</p>
+          <p class="timeline-cell">流程结束</p>
         </el-card>
       </el-timeline-item>
     </el-timeline>

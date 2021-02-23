@@ -112,7 +112,7 @@ export default {
         } else if (type === 'Position') {
           this.title = this.$t(`position.postPermission`) + '- ' + fullName
         } else if (type === 'Role') {
-          this.title = this.$t(`role.roleMember`) + ' - ' + fullName
+          this.title = this.$t(`role.rolePermission`) + ' - ' + fullName
         }
         this.getAuthorizeList()
       })
@@ -284,8 +284,5 @@ export default {
 }
 .main {
   padding: 20px;
-  flex: 1;
-  overflow: auto;
-  overflow-x: hidden;
 }
 </style>

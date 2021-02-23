@@ -7,7 +7,7 @@
           <el-button @click="goBack">{{$t('common.cancelButton')}}</el-button>
         </div>
       </div>
-      <div class="preview" v-loading="formLoading" :element-loading-text="$t('common.loadingText')">
+      <div class="main" v-loading="formLoading" :element-loading-text="$t('common.loadingText')">
         <JNPFCodeEditor v-model="responseData" :options="options" ref="CodeEditor" />
       </div>
     </div>
@@ -62,8 +62,8 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
-.preview {
-  height: calc(100vh - 181px);
+.main {
   overflow: auto;
+  padding: 0;
 }
 </style>

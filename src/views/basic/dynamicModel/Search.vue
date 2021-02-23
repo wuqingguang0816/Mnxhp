@@ -49,25 +49,9 @@
                 end-placeholder="结束日期" class="item">
               </el-date-picker>
             </template>
-            <template v-if="item.__config__.jnpfKey==='comSelect'">
-              <com-select v-model="item.value" :placeholder="'请选择'+item.__config__.label"
-                class="item" />
-            </template>
-            <template v-if="item.__config__.jnpfKey==='depSelect'">
-              <dep-select v-model="item.value" :placeholder="'请选择'+item.__config__.label"
-                class="item" />
-            </template>
-            <template v-if="item.__config__.jnpfKey==='posSelect'">
-              <pos-select v-model="item.value" :placeholder="'请选择'+item.__config__.label"
-                class="item" />
-            </template>
-            <template v-if="item.__config__.jnpfKey==='userSelect'">
-              <user-select v-model="item.value" :placeholder="'请选择'+item.__config__.label"
-                class="item" />
-            </template>
-            <template v-if="item.__config__.jnpfKey==='dicSelect'">
-              <dic-select v-model="item.value" :placeholder="'请选择'+item.__config__.label"
-                class="item" />
+            <template v-if="commonList.includes(item.__config__.jnpfKey)">
+              <component :is="item.__config__.tag" v-model="item.value"
+                :placeholder="'请选择'+item.__config__.label" class="item" />
             </template>
             <template v-if="item.__config__.jnpfKey==='address'">
               <JNPFAddress v-model="item.value" :placeholder="'请选择'+item.__config__.label"
@@ -111,6 +95,7 @@ export default {
     return {
       showAll: false,
       searchList: [],
+      commonList: ['comSelect', 'depSelect', 'posSelect', 'userSelect', 'dicSelect'],
       useInputList,
       useTimeList,
       useSelectList

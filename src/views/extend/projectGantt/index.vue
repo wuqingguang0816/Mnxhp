@@ -153,7 +153,7 @@ export default {
     },
     sortChange({ column, prop, order }) {
       // if (!order) {
-      //   this.listQuery.sort = 'asc'
+      //   this.listQuery.sort = 'desc'
       //   this.listQuery.sidx = ''
       // } else {
       //   this.listQuery.sort = order == 'descending' ? "desc" : 'asc'

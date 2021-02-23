@@ -119,6 +119,7 @@ export class NodeUtils {
       } else {
         let anotherCon = cons[+(!index)]
         delete prevNode.conditionNodes
+        delete prevNode.conditionType
         if (prevNode.childNode) {
           let endNode = anotherCon
           while (endNode.childNode) {
@@ -248,7 +249,6 @@ export class NodeUtils {
       this.createNode("condition", nodeData.nodeId),
       this.createNode("condition", nodeData.nodeId)
     ].map((c, i) => {
-      // c.properties.title += i + 1;
       c.properties.priority = i;
       return c
     })

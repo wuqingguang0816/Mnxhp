@@ -17,7 +17,7 @@
       </div>
       <el-divider></el-divider>
       <div class="search-box">
-        <h4 class="cap">筛选查询</h4>
+        <h4 class="cap">查询条件</h4>
         <el-table :data="columnData.searchList" class="JNPF-common-table" ref="dragTableSearch"
           :row-key="row=>row.prop">
           <el-table-column align="center" label="拖动" width="50">

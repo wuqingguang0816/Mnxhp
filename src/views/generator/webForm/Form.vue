@@ -94,7 +94,7 @@
         <Generator ref="generator" :conf="formData" @drawingListChange="onDrawingListChange" />
       </template>
       <template v-if="activeStep==2">
-        <columnDesign ref="columnDesign" :conf="columnData" />
+        <columnDesign ref="columnDesign" :conf="columnData" :modelType="dataForm.type" />
       </template>
     </div>
     <TableForm :visible.sync="formVisible" ref="tableForm" @closeForm="colseForm" />

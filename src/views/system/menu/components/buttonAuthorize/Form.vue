@@ -14,8 +14,7 @@
         <el-input v-model="dataForm.enCode" placeholder="输入编码" />
       </el-form-item>
       <!-- <el-form-item label="图标" prop="icon">
-        <el-input v-model="dataForm.icon" placeholder="请选择图标" readonly>
-          <template slot="prepend"><i :class="dataForm.icon" /></template>
+        <el-input v-model="dataForm.icon" placeholder="请选择图标" readonly :suffix-icon="dataForm.icon">
           <el-button slot="append" @click="openIconBox">选择</el-button>
         </el-input>
       </el-form-item> -->

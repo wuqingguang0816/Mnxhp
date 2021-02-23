@@ -8,7 +8,7 @@
           <el-button @click="goBack()">{{$t('common.cancelButton')}}</el-button>
         </div>
       </div>
-      <el-form ref="dataForm" :model="dataForm" :rules="dataRule" label-width="100px">
+      <el-form ref="dataForm" :model="dataForm" :rules="dataRule" label-width="100px" class="main">
         <el-alert title="注意：" type="warning" :closable="false">
           <div class="tips">
             <p>1、上传图片最大支持2MB,支持bmp/png/jpeg/jpg/gif格式</p>
@@ -132,11 +132,5 @@ export default {
 <style lang="scss" scoped>
 .tips {
   line-height: 1.5;
-}
-.el-form {
-  padding: 10px;
-  flex: 1;
-  overflow: auto;
-  overflow-x: hidden;
 }
 </style>

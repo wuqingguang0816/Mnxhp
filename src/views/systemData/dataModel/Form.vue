@@ -9,7 +9,7 @@
           <el-button @click="goBack()">{{$t('common.cancelButton')}}</el-button>
         </div>
       </div>
-      <div class="content">
+      <div class="main">
         <el-form :inline="true" :model="dataForm" :rules="dataRule" ref="dataForm" class="mt-20"
           label-width="100px">
           <el-form-item label="表名称" prop="newTable">
@@ -94,7 +94,7 @@
 
 <script>
 import Sortable from 'sortablejs'
-import { DbTableInfo, IsExistByTable, DbTableUpdate, DbTableCreate } from '@/api/systemData/dbTable'
+import { DbTableInfo, DbTableUpdate, DbTableCreate } from '@/api/systemData/dbTable'
 import { getList } from '@/api/systemData/commonFields'
 export default {
   data() {
@@ -303,10 +303,7 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
-.content {
-  flex: 1;
-  overflow: auto;
-  overflow-x: hidden;
-  padding-bottom: 10px;
+.main {
+  padding: 0 0 10px;
 }
 </style>

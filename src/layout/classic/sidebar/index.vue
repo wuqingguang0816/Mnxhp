@@ -4,7 +4,7 @@
     <el-scrollbar wrap-class="scrollbar-wrapper">
       <el-menu :default-active="activeMenu" :collapse="isCollapse" :unique-opened="true"
         :collapse-transition="false" mode="vertical">
-        <sidebar-item v-for="route in menuList" :key="route.path" :item="route"
+        <sidebar-item v-for="route in menuList" :key="route.enCode" :item="route"
           :base-path="route.path" />
       </el-menu>
     </el-scrollbar>
@@ -56,6 +56,6 @@ export default {
 }
 </script>
 <style lang="scss" >
-@import "../../../styles/variables.scss";
-@import "../../../styles/sidebar.scss";
+@import '../../../styles/variables.scss';
+@import '../../../styles/sidebar.scss';
 </style>

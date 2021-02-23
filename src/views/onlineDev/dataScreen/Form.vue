@@ -1,64 +1,49 @@
 <template>
-  <el-dialog
-    :close-on-click-modal="false"
-    :close-on-press-escape="false"
-    :visible.sync="visible"
-    :show-close="false"
-    :modal="false"
-    fullscreen
-    lock-scroll
-    class="JNPF-full-dialog jnpf-datav"
-  >
-    <iframe
-      :src="src"
-      ref="iframe"
-      width="100%"
-      height="100%"
-      frameborder="0"
-      class="frame"
-    />
+  <el-dialog :close-on-click-modal="false" :close-on-press-escape="false" :visible.sync="visible"
+    :show-close="false" :modal="false" fullscreen lock-scroll class="JNPF-full-dialog jnpf-datav">
+    <iframe :src="src" ref="iframe" width="100%" height="100%" frameborder="0" class="frame" />
   </el-dialog>
 </template>
 
 <script>
-  import { getToken } from '@/utils/auth'
+import { getToken } from '@/utils/auth'
 
-  export default {
-    data() {
-      return {
-        id: '',
-        visible: false,
-        btnLoading: false,
-        src: ''
-      }
-    },
-    mounted() {
-      window.addEventListener('message', this.handleMessage)
-    },
-    methods: {
-      init(id) {
-        this.id = id || ''
-        this.visible = true
-        this.$nextTick(() => {
-          let token = getToken()
-          document.cookie = `JNPF-Token=${token}; path=/`
-          if(id){
-            this.src = `${this.define.dataV}/build/${id}`
-          } else {
-            this.src = `${this.define.dataV}/build/`
-          }
-        })
-      },
-      async handleMessage(e) {
-        const data = e.data
-        if(data === 'closeDialog') {
-          this.visible = false
-          this.src = ''
-          this.$emit('refreshDataList')
+export default {
+  data() {
+    return {
+      id: '',
+      visible: false,
+      btnLoading: false,
+      src: ''
+    }
+  },
+  mounted() {
+    window.addEventListener('message', this.handleMessage)
+  },
+  methods: {
+    init(id) {
+      this.id = id || ''
+      this.visible = true
+      this.$nextTick(() => {
+        let token = getToken()
+        document.cookie = `JNPF-Token=${token}; path=/`
+        if (id) {
+          this.src = `${this.define.dataV}/build/${id}`
+        } else {
+          this.src = `${this.define.dataV}/build/`
         }
+      })
+    },
+    async handleMessage(e) {
+      const data = e.data
+      if (data === 'closeDialog') {
+        this.visible = false
+        this.src = ''
+        this.$emit('refreshDataList')
       }
     }
   }
+}
 </script>
 <style lang="scss" scoped>
 .jnpf-datav {

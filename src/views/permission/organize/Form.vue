@@ -271,8 +271,5 @@ export default {
 <style lang="scss" scoped>
 .main {
   padding: 10px 30px 0;
-  flex: 1;
-  overflow: auto;
-  overflow-x: hidden;
 }
 </style>

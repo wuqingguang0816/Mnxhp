@@ -9,17 +9,19 @@
     <el-form-item label="占位提示">
       <el-input v-model="activeData.placeholder" placeholder="请输入占位提示" />
     </el-form-item>
-    <el-form-item label="控件宽度" v-if="!activeData.__config__.isSubTable">
-      <el-slider v-model="activeData.__config__.span" :max="24" :min="6" show-stops :step="2"
-        show-tooltip />
-    </el-form-item>
+    <template v-if="!activeData.__config__.isSubTable">
+      <el-form-item label="控件栅格">
+        <el-slider v-model="activeData.__config__.span" :max="24" :min="6" show-stops :step="2"
+          show-tooltip />
+      </el-form-item>
+      <el-form-item label="标题宽度">
+        <el-input v-model.number="activeData.__config__.labelWidth" type="number"
+          placeholder="请输入标题宽度" />
+      </el-form-item>
+    </template>
     <el-form-item label="控件宽度" v-if="activeData.__config__.isSubTable">
       <el-input-number v-model="activeData.__config__.columnWidth" placeholder="控件宽度" :min="0"
         :precision="0" /> px
-    </el-form-item>
-    <el-form-item label="标题宽度">
-      <el-input v-model.number="activeData.__config__.labelWidth" type="number"
-        placeholder="请输入标题宽度" />
     </el-form-item>
     <!-- <el-form-item label="组件宽度">
       <el-input v-model="activeData.style.width" placeholder="请输入组件宽度" clearable />
@@ -72,38 +74,24 @@
       </template>
       <el-divider />
     </template>
-    <el-row>
-      <el-col :span="12">
-        <el-form-item label="是否多选">
-          <el-switch v-model="activeData.props.props.multiple" />
-        </el-form-item>
-      </el-col>
-      <el-col :span="12">
-        <el-form-item label="展示全路径">
-          <el-switch v-model="activeData['show-all-levels']" />
-        </el-form-item>
-      </el-col>
-      <el-col :span="12">
-        <el-form-item label="可否筛选">
-          <el-switch v-model="activeData.filterable" />
-        </el-form-item>
-      </el-col>
-      <el-col :span="12">
-        <el-form-item label="能否清空">
-          <el-switch v-model="activeData.clearable" />
-        </el-form-item>
-      </el-col>
-      <el-col :span="12">
-        <el-form-item label="是否禁用">
-          <el-switch v-model="activeData.disabled" />
-        </el-form-item>
-      </el-col>
-      <el-col :span="12">
-        <el-form-item label="是否必填">
-          <el-switch v-model="activeData.__config__.required" />
-        </el-form-item>
-      </el-col>
-    </el-row>
+    <el-form-item label="是否多选">
+      <el-switch v-model="activeData.props.props.multiple" />
+    </el-form-item>
+    <el-form-item label="展示全路径">
+      <el-switch v-model="activeData['show-all-levels']" />
+    </el-form-item>
+    <el-form-item label="可否筛选">
+      <el-switch v-model="activeData.filterable" />
+    </el-form-item>
+    <el-form-item label="能否清空">
+      <el-switch v-model="activeData.clearable" />
+    </el-form-item>
+    <el-form-item label="是否禁用">
+      <el-switch v-model="activeData.disabled" />
+    </el-form-item>
+    <el-form-item label="是否必填">
+      <el-switch v-model="activeData.__config__.required" />
+    </el-form-item>
     <!-- <el-form-item label="显示标签">
       <el-switch v-model="activeData.__config__.showLabel" />
     </el-form-item> -->
@@ -199,23 +187,16 @@ export default {
       const index = children.findIndex(d => d.id === data.id)
       children.splice(index, 1)
     },
-    dataTypeChange(val) {
+    dataTypeChange() {
+      this.cascaderKey = +new Date()
+      this.activeData.__config__.renderKey = +new Date()
       this.activeData.__config__.defaultValue = []
       this.activeData.options = []
       this.activeData.props.props.value = 'id'
       this.activeData.props.props.label = 'fullName'
       this.activeData.props.props.children = 'children'
-      this.cascaderKey = +new Date()
-      if (val === 'static') {
-        this.activeData.__config__.dictionaryType = ''
-        this.activeData.__config__.propsUrl = ''
-      }
-      if (val === 'dynamic') {
-        this.activeData.__config__.dictionaryType = ''
-      }
-      if (val === 'dictionary') {
-        this.activeData.__config__.propsUrl = ''
-      }
+      this.activeData.__config__.dictionaryType = ''
+      this.activeData.__config__.propsUrl = ''
     },
     propsUrlChange(val) {
       this.activeData.__config__.defaultValue = []

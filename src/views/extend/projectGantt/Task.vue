@@ -478,7 +478,6 @@ export default {
 </script>
 <style lang="scss" scoped>
 .main {
-  flex: 1;
   overflow: hidden;
   display: flex;
   flex-direction: column;

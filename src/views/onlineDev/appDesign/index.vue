@@ -42,11 +42,11 @@
           <el-table-column prop="enCode" label="编码" width="200" v-if="jnpf.hasP('enCode')">
             <template slot-scope="scope" v-if="!scope.row.top">{{scope.row.enCode}}</template>
           </el-table-column>
-          <el-table-column prop="creatorUser" label="创建人" width="100"
+          <el-table-column prop="creatorUser" label="创建人" width="120"
             v-if="jnpf.hasP('creatorUser')" />
           <el-table-column prop="creatorTime" label="创建时间" :formatter="jnpf.tableDateFormat"
             width="120" v-if="jnpf.hasP('creatorTime')" />
-          <el-table-column prop="lastmodifyuser" label="最后修改人" width="100"
+          <el-table-column prop="lastmodifyuser" label="最后修改人" width="120"
             v-if="jnpf.hasP('lastmodifyuser')" />
           <el-table-column prop="lastmodifytime" label="最后修改时间" :formatter="jnpf.tableDateFormat"
             width="120" v-if="jnpf.hasP('lastmodifytime')" />

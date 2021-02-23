@@ -1,7 +1,7 @@
 <template>
   <div :class="classObj" class="top-menu" id="topMenu">
     <el-menu mode="horizontal" :unique-opened="true" :default-active="activeMenu">
-      <sidebar-item v-for="route in list" :key="route.path" :item="route" :base-path="route.path"
+      <sidebar-item v-for="route in list" :key="route.enCode" :item="route" :base-path="route.path"
         ref="sidebarItem" />
     </el-menu>
   </div>

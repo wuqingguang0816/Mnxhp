@@ -91,7 +91,8 @@ export default {
           { pattern: /^[1-9]\d*$/, message: '仅能输入正整数' }
         ],
         startNumber: [
-          { required: true, message: '不允许输入0或特殊字符', trigger: 'blur' }
+          { required: true, message: '只能输入数字', trigger: 'blur' },
+          { pattern: /^[0-9]*$/, message: '只能输入数字', trigger: 'blur' }
         ]
       }
     }

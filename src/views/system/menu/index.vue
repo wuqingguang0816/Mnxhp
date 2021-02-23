@@ -45,7 +45,7 @@
             </div>
             <JNPF-table v-loading="listLoading" :data="treeList" row-key="id" v-if="refreshTable"
               :default-expand-all="expands" :tree-props="{children: 'children', hasChildren: ''}">
-              <el-table-column label="菜单名称" width="200" v-if="jnpf.hasP('fullName')">
+              <el-table-column label="菜单名称" width="260" v-if="jnpf.hasP('fullName')">
                 <template slot-scope="scope">
                   <i :class="scope.row.icon+' table-icon'" />
                   <label>{{ scope.row.fullName }}</label>
@@ -61,6 +61,7 @@
                   <span v-if="scope.row.type === 4">字典</span>
                   <span v-if="scope.row.type === 5">报表</span>
                   <span v-if="scope.row.type === 6">大屏</span>
+                  <span v-if="scope.row.type === 7">外链</span>
                 </template>
               </el-table-column>
               <el-table-column prop="sortCode" label="排序" width="70" align="center"
@@ -75,7 +76,7 @@
                 <template slot-scope="scope">
                   <tableOpts @edit="handleAddEdit(scope.row.id)" @del="handleDel(scope.row.id)">
                     <template
-                      v-if="[2,3,4].indexOf(scope.row.type)>-1&& (scope.row.isButtonAuthorize === 1 || scope.row.isColumnAuthorize === 1 || scope.row.isDataAuthorize === 1)">
+                      v-if="params.category==='Web' && [2,3,4].indexOf(scope.row.type)>-1&& (scope.row.isButtonAuthorize === 1 || scope.row.isColumnAuthorize === 1 || scope.row.isDataAuthorize === 1)">
                       <el-dropdown v-has="'btn_more'">
                         <span class="el-dropdown-link">
                           <el-button type="text" size="mini">{{$t('common.moreBtn')}}<i

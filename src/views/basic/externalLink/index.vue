@@ -14,7 +14,7 @@ export default {
     }
   },
   created() {
-    this.url = this.$route.path.replace('/', '')
+    this.url = this.$route.meta.urlAddress || ''
   },
   methods: {}
 }

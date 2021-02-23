@@ -25,7 +25,8 @@
         </el-tooltip>
       </div>
     </el-row>
-    <JNPF-table v-loading="listLoading" :data="list" hasC @selection-change="handleSelectionChange">
+    <JNPF-table v-loading="listLoading" :data="list" hasC @selection-change="handleSelectionChange"
+      :border="false">
       <el-table-column prop="table" label="表名" show-overflow-tooltip />
       <el-table-column prop="sum" label="总数" width="90" />
       <el-table-column prop="size" label="大小" width="90" />

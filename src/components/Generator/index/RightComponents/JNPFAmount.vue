@@ -9,7 +9,7 @@
     <el-form-item label="占位提示">
       <el-input v-model="activeData.placeholder" placeholder="请输入占位提示" />
     </el-form-item>
-    <el-form-item label="控件宽度">
+    <el-form-item label="控件栅格">
       <el-slider v-model="activeData.__config__.span" :max="24" :min="6" show-stops :step="2"
         show-tooltip />
     </el-form-item>
