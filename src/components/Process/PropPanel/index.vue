@@ -155,7 +155,7 @@
               <el-radio-group v-model="approverForm.assigneeType" style="line-height: 32px;"
                 @change="resetOrgColl">
                 <el-radio v-for="item in assigneeTypeOptions" :label="item.value" :key="item.value"
-                  class="radio-item">{{item.label}}</el-radio>
+                  :disabled="item.disabled" class="radio-item">{{item.label}}</el-radio>
               </el-radio-group>
             </div>
             <div style="border-bottom: 1px solid #dcdfe6;padding-bottom: 1rem;">
@@ -605,6 +605,7 @@ export default {
     * 初始化审批节点所需数据
     */
     initApproverNodeData() {
+      if (this.value.isInterflow) this.assigneeTypeOptions[3].disabled = true
       this.activeName = 'config'
       Object.assign(this.approverForm, this.value.properties)
       this.getRejectStepOption()
