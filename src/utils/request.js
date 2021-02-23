@@ -26,7 +26,13 @@ service.interceptors.request.use(
     }
     if (config.method == 'get') {
       config.params = config.data
-    } else {}
+    }
+    let timestamp = Date.parse(new Date()) / 1000
+    if (config.url.indexOf('?') > -1) {
+      config.url += `&n=${timestamp}`
+    } else {
+      config.url += `?n=${timestamp}`
+    }
     return config
   },
   error => {
