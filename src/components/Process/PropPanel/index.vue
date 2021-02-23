@@ -605,7 +605,7 @@ export default {
     * 初始化审批节点所需数据
     */
     initApproverNodeData() {
-      if (this.value.isInterflow) this.assigneeTypeOptions[3].disabled = true
+      this.assigneeTypeOptions[3].disabled = this.value.isInterflow
       this.activeName = 'config'
       Object.assign(this.approverForm, this.value.properties)
       this.getRejectStepOption()
