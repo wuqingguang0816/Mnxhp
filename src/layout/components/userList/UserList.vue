@@ -222,7 +222,7 @@ export default {
       }
       .noData-txt {
         font-size: 14px;
-        color: #666;
+        color: #909399;
         line-height: 20px;
         text-align: center;
         padding-top: 20px;
