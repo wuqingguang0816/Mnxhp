@@ -41,23 +41,6 @@ const useSelectList = ['radio', 'checkbox', 'select']
 // 在线开发-功能设计/流程设计独有组件
 const webPeculiarList = [{
     __config__: {
-      jnpfKey: 'calculate',
-      label: '计算公式',
-      labelWidth: null,
-      showLabel: true,
-      required: false,
-      tag: 'calculate',
-      tagIcon: 'icon-ym icon-ym-generator-count',
-      defaultValue: null,
-      layout: 'colFormItem',
-      span: 24,
-      dragDisabled: false,
-      regList: []
-    },
-    expression: []
-  },
-  {
-    __config__: {
       jnpfKey: 'relationForm',
       label: '关联表单',
       labelWidth: null,
@@ -95,6 +78,23 @@ const webPeculiarList = [{
     },
     showField: '',
     relationField: ''
+  },
+  {
+    __config__: {
+      jnpfKey: 'calculate',
+      label: '计算公式',
+      labelWidth: null,
+      showLabel: true,
+      required: false,
+      tag: 'calculate',
+      tagIcon: 'icon-ym icon-ym-generator-count',
+      defaultValue: null,
+      layout: 'colFormItem',
+      span: 24,
+      dragDisabled: false,
+      regList: []
+    },
+    expression: []
   }
 ]
 // 在线开发-流程设计独有组件
