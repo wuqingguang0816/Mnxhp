@@ -44,7 +44,7 @@
 </template>
 
 <script>
-import { DbTableData, DbTableFieldList } from '@/api/systemData/dbTable'
+import { DataModelData, DataModelFieldList } from '@/api/systemData/dataModel'
 export default {
   data() {
     return {
@@ -90,7 +90,7 @@ export default {
       this.dataBase = dataBase
       this.table = table
       this.$nextTick(() => {
-        DbTableFieldList(dataBase, table).then(res => {
+        DataModelFieldList(dataBase, table).then(res => {
           this.options = res.data.list
           this.queryJson.field = this.options[0].field
           this.initData()
@@ -104,7 +104,7 @@ export default {
       }
       this.listLoading = true
       this.list = []
-      DbTableData(this.dataBase, this.table, query).then(res => {
+      DataModelData(this.dataBase, this.table, query).then(res => {
         this.list = res.data.list
         this.total = res.data.pagination.total
         this.listLoading = false

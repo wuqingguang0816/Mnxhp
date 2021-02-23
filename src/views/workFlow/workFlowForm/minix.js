@@ -1,5 +1,5 @@
-import { mapGetters } from "vuex";
-import { Info, Create, Update } from '@/api/workFlowForm/Common'
+import { mapGetters } from "vuex"
+import { Info, Create, Update } from '@/api/workFlow/workFlowForm'
 import { BillNumber } from '@/api/system/billRule'
 
 export default {

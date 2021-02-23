@@ -45,18 +45,3 @@ export function Update(data) {
     data,
   })
 }
-// 待定
-export function IsExistByFullName(data) {
-  return request({
-    url: `/api/workflow/Engine/FlowEngineForm/IsExistByFullName`,
-    method: 'get',
-    data
-  })
-}
-export function IsExistByEnCode(data) {
-  return request({
-    url: `/api/workflow/Engine/FlowEngineForm/IsExistByEnCode`,
-    method: 'get',
-    data
-  })
-}

@@ -94,7 +94,7 @@
 
 <script>
 import Sortable from 'sortablejs'
-import { DbTableInfo, DbTableUpdate, DbTableCreate } from '@/api/systemData/dbTable'
+import { DataModelInfo, DataModelUpdate, DataModelCreate } from '@/api/systemData/dataModel'
 import { getList } from '@/api/systemData/commonFields'
 export default {
   data() {
@@ -145,7 +145,7 @@ export default {
       this.getFieldList()
       this.$nextTick(() => {
         if (this.dataForm.table) {
-          DbTableInfo(dataBase, this.dataForm.table).then(res => {
+          DataModelInfo(dataBase, this.dataForm.table).then(res => {
             this.dataForm = res.data.tableInfo
             this.$set(this.dataForm, 'newTable', this.dataForm.table)
             this.list = res.data.tableFieldList.map((o, i) => ({ index: i, ...o }))
@@ -203,7 +203,7 @@ export default {
             tableFieldList: this.list,
             tableInfo: this.dataForm
           }
-          const formMethod = this.dataForm.table ? DbTableUpdate : DbTableCreate
+          const formMethod = this.dataForm.table ? DataModelUpdate : DataModelCreate
           formMethod(this.dataBase, query).then((res) => {
             this.$message({
               message: res.msg,

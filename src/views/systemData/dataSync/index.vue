@@ -43,8 +43,8 @@
 </template>
 
 <script>
-import { getDbLinkListAll, Execute } from '@/api/systemData/dbLink'
-import { DbTableList } from '@/api/systemData/dbTable'
+import { getDataSourceListAll, Execute } from '@/api/systemData/dataSource'
+import { DataModelList } from '@/api/systemData/dataModel'
 export default {
   name: 'systemData-dataSync',
   data() {
@@ -81,7 +81,7 @@ export default {
   },
   methods: {
     initData() {
-      getDbLinkListAll().then(res => {
+      getDataSourceListAll().then(res => {
         for (let i = 0; i < res.data.list.length; i++) {
           const element = res.data.list[i];
           if (element.dbType == 'SqlServer') {
@@ -107,7 +107,7 @@ export default {
             return
           }
           this.listLoading = true
-          DbTableList(this.dataForm.dbConnectionFrom).then((res) => {
+          DataModelList(this.dataForm.dbConnectionFrom).then((res) => {
             this.list = res.data.list
             for (let i = 0; i < this.list.length; i++) {
               const e = this.list[i];

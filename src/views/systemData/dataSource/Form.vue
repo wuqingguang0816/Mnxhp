@@ -43,7 +43,7 @@
 </template>
 
 <script>
-import { DbLinkInfo, DbLinkUpdate, DbLinkCreate, TestDbConnection } from '@/api/systemData/dbLink'
+import { DataSourceInfo, DataSourceUpdate, DataSourceCreate, TestDbConnection } from '@/api/systemData/dataSource'
 export default {
   data() {
     return {
@@ -105,7 +105,7 @@ export default {
       this.$nextTick(() => {
         this.$refs['dataForm'].resetFields()
         if (this.dataForm.id) {
-          DbLinkInfo(this.dataForm.id).then(res => {
+          DataSourceInfo(this.dataForm.id).then(res => {
             this.dataForm = res.data
           })
         }
@@ -115,7 +115,7 @@ export default {
       this.$refs['dataForm'].validate((valid) => {
         if (valid) {
           this.btnLoading = true
-          const formMethod = this.dataForm.id ? DbLinkUpdate : DbLinkCreate
+          const formMethod = this.dataForm.id ? DataSourceUpdate : DataSourceCreate
           formMethod(this.dataForm).then(res => {
             this.$message({
               message: res.msg,

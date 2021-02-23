@@ -149,7 +149,7 @@
 
 <script>
 import { FlowEngineInfo, Update, Create } from '@/api/workFlow/FlowEngine'
-import { DbTableFieldList } from '@/api/systemData/dbTable'
+import { DataModelFieldList } from '@/api/systemData/dataModel'
 import iconBox from '@/components/JNPF-iconBox'
 import Process from "@/components/Process"
 import Generator from '@/components/Generator/index/Home'
@@ -336,7 +336,7 @@ export default {
           const e = data[i];
           let relationTable = data[0].table
           let typeId = i == 0 ? "1" : "0"
-          let res = await DbTableFieldList('0', e.table)
+          let res = await DataModelFieldList('0', e.table)
           let fields = res.data.list.map(o => ({ field: o.field, fieldName: o.fieldName, dataType: o.dataType }))
           let item = {
             relationField: "", relationTable: i == 0 ? '' : relationTable, table: e.table, tableName: e.tableName, tableField: '', typeId, fields
@@ -351,7 +351,7 @@ export default {
           const e = data[i];
           let boo = this.tables.some(o => o.table == e.table)
           if (!boo) {
-            let res = await DbTableFieldList('0', e.table)
+            let res = await DataModelFieldList('0', e.table)
             let fields = res.data.list.map(o => ({ field: o.field, fieldName: o.fieldName, dataType: o.dataType }))
             let item = {
               relationField: "", relationTable: this.relationTable, table: e.table, tableName: e.tableName, tableField: '', typeId: "0", fields

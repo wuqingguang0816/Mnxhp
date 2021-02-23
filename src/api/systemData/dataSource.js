@@ -1,32 +1,32 @@
 import request from '@/utils/request'
 
-export function getDbLinkList(data) {
+export function getDataSourceList(data) {
   return request({
     url: '/api/system/Base/DataSource',
     method: 'get',
     data
   })
 }
-export function DbLinkCreate(data) {
+export function DataSourceCreate(data) {
   return request({
     url: '/api/system/Base/DataSource',
     method: 'post',
     data
   })
 }
-export function DbLinkDelete(id) {
+export function DataSourceDelete(id) {
   return request({
     url: `/api/system/Base/DataSource/${id}`,
     method: 'delete',
   })
 }
-export function DbLinkInfo(id) {
+export function DataSourceInfo(id) {
   return request({
     url: `/api/system/Base/DataSource/${id}`,
     method: 'get',
   })
 }
-export function DbLinkUpdate(data) {
+export function DataSourceUpdate(data) {
   return request({
     url: `/api/system/Base/DataSource/${data.id}`,
     method: 'put',
@@ -40,7 +40,7 @@ export function TestDbConnection(data) {
     data
   })
 }
-export function getDbLinkListAll() {
+export function getDataSourceListAll() {
   return request({
     url: '/api/system/Base/DataSource/Selector',
     method: 'get',
@@ -50,14 +50,6 @@ export function Execute(data) {
   return request({
     url: `/api/system/Base/DataSync/Actions/Execute`,
     method: 'post',
-    data
-  })
-}
-// 新接口文档未有
-export function IsExistByFullName(data) {
-  return request({
-    url: '/api/system/Base/DataSource/IsExistByFullName',
-    method: 'get',
     data
   })
 }

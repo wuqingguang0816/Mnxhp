@@ -280,7 +280,7 @@
 
 <script>
 import { TimeTaskInfo, TimeTaskUpdate, TimeTaskCreate } from '@/api/system/timeTask'
-import { getDbLinkListAll } from '@/api/systemData/dbLink'
+import { getDataSourceListAll } from '@/api/systemData/dataSource'
 import frequencyForm from './FrequencyForm'
 import { deepClone } from '@/utils'
 const defaultOptions = [{
@@ -521,7 +521,7 @@ export default {
       this.dbOptions = deepClone(defaultOptions)
       this.$nextTick(() => {
         this.$refs['dataForm'].resetFields()
-        getDbLinkListAll().then(res => {
+        getDataSourceListAll().then(res => {
           for (let i = 0; i < res.data.list.length; i++) {
             const element = res.data.list[i];
             if (element.dbType == 'SqlServer') {

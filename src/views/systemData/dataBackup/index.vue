@@ -53,11 +53,7 @@
 </template>
 
 <script>
-import {
-  getDbBackupList,
-  createDbBackup,
-  delDbBackup
-} from '@/api/system/dbBackup'
+import { getDataBackupList, createDataBackup, delDataBackup } from '@/api/systemData/dataBackup'
 
 export default {
   name: 'systemData-dataBackup',
@@ -80,7 +76,7 @@ export default {
   methods: {
     initData() {
       this.listLoading = true
-      getDbBackupList(this.params).then(res => {
+      getDataBackupList(this.params).then(res => {
         this.tableList = res.data.list
         this.total = res.data.pagination.total
         this.listLoading = false
@@ -94,7 +90,7 @@ export default {
       this.$confirm('您确定要备份数据库吗, 是否继续？', '提示', {
         type: 'warning'
       }).then(() => {
-        createDbBackup().then(res => {
+        createDataBackup().then(res => {
           this.$message({
             type: 'success',
             message: res.msg,
@@ -110,7 +106,7 @@ export default {
       this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
         type: 'warning'
       }).then(() => {
-        delDbBackup(id).then(res => {
+        delDataBackup(id).then(res => {
           this.$message({
             type: 'success',
             message: res.msg,

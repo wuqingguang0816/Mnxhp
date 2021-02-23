@@ -134,8 +134,8 @@ import {
   createDataInterface,
   updateDataInterface,
 } from '@/api/systemData/dataInterface'
-import { getDbLinkListAll } from '@/api/systemData/dbLink'
-import { DbTableList } from '@/api/systemData/dbTable'
+import { getDataSourceListAll } from '@/api/systemData/dataSource'
+import { DataModelList } from '@/api/systemData/dataModel'
 import { deepClone } from '@/utils'
 import SQLEditor from '@/components/JNPFEditor/monaco'
 import JSONEditor from '@/components/JNPFEditor/monaco'
@@ -265,7 +265,7 @@ export default {
           this.selectData = res.data.list
         })
         // 获取数据库
-        getDbLinkListAll().then(res => {
+        getDataSourceListAll().then(res => {
           for (let i = 0; i < res.data.list.length; i++) {
             const element = res.data.list[i];
             if (element.dbType === 'SqlServer') {
@@ -300,7 +300,7 @@ export default {
     },
     getTableList(id) {
       this.treeLoading = true
-      DbTableList(id).then(res => {
+      DataModelList(id).then(res => {
         this.treeData = res.data.list
         this.treeLoading = false
       })

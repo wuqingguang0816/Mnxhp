@@ -217,8 +217,8 @@
 </template>
 
 <script>
-import { Info, Create, Update } from '@/api/workFlowForm/Common'
-import { CustomerList, GoodsList } from '@/api/extend/order'
+import { Info, Create, Update } from '@/api/workFlow/workFlowForm'
+import { CustomerList } from '@/api/extend/order'
 import { BillNumber } from '@/api/system/billRule'
 import GoodsBox from '@/views/extend/order/GoodsBox'
 export default {

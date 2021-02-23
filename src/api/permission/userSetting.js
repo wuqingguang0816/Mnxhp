@@ -38,13 +38,6 @@ export function UpdateTheme(data) {
     data
   })
 }
-// 获取系统语言列表
-export function getLanguage() {
-  return request({
-    url: '/api/Common/Language',
-    method: 'GET'
-  })
-}
 // 更新当前用户系统语言配置
 export function UpdateLanguage(data) {
   return request({

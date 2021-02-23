@@ -85,8 +85,8 @@
 </template>
 
 <script>
-import { getDbLinkListAll } from '@/api/systemData/dbLink'
-import { DbTableList, DbTableDelete, DbTableFieldList } from '@/api/systemData/dbTable'
+import { getDataSourceListAll } from '@/api/systemData/dataSource'
+import { DataModelList, DataModelDelete, DataModelFieldList } from '@/api/systemData/dataModel'
 import Form from './Form'
 import Preview from './Preview'
 import FieldsList from './fields/index'
@@ -134,7 +134,7 @@ export default {
     },
     initData() {
       this.listLoading = true
-      getDbLinkListAll().then(res => {
+      getDataSourceListAll().then(res => {
         for (let i = 0; i < res.data.list.length; i++) {
           const element = res.data.list[i];
           if (element.dbType == 'SqlServer') {
@@ -151,7 +151,7 @@ export default {
     },
     getTabelData() {
       this.listLoading = true
-      DbTableList(this.dataBase, { keyword: this.keyword }).then(res => {
+      DataModelList(this.dataBase, { keyword: this.keyword }).then(res => {
         this.list = res.data.list
         for (let i = 0; i < this.list.length; i++) {
           this.$set(this.list[i], 'isExpanded', false)
@@ -169,7 +169,7 @@ export default {
       }).catch(() => { });
     },
     asyncDel(index, tableName) {
-      DbTableDelete(this.dataBase, tableName).then(res => {
+      DataModelDelete(this.dataBase, tableName).then(res => {
         this.list.splice(index, 1);
         this.$message({
           type: 'success',
@@ -189,7 +189,7 @@ export default {
       if (!rows.isExpanded) return
       if (rows.childTable.length) return
       rows.childTableLoading = true
-      DbTableFieldList(this.dataBase, rows.table).then(res => {
+      DataModelFieldList(this.dataBase, rows.table).then(res => {
         rows.childTableLoading = false
         rows.childTable = res.data.list
       }).catch(() => {

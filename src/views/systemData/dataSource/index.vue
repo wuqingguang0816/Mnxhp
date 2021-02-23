@@ -63,7 +63,7 @@
 </template>
 
 <script>
-import { getDbLinkList, DbLinkDelete } from '@/api/systemData/dbLink'
+import { getDataSourceList, DataSourceDelete } from '@/api/systemData/dataSource'
 import Form from './Form'
 export default {
   name: 'systemData-dataSource',
@@ -87,7 +87,7 @@ export default {
     },
     initData() {
       this.listLoading = true
-      getDbLinkList({ keyword: this.keyword }).then(res => {
+      getDataSourceList({ keyword: this.keyword }).then(res => {
         let list = res.data.list
         this.list = JSON.parse(JSON.stringify(this.listAll))
         for (let i = 0; i < this.list.length; i++) {
@@ -105,7 +105,7 @@ export default {
       this.$confirm(this.$t('common.delTip'), this.$t('common.tipTitle'), {
         type: 'warning'
       }).then(() => {
-        DbLinkDelete(id).then(res => {
+        DataSourceDelete(id).then(res => {
           this.$message({ type: 'success', message: res.msg });
           this.initData()
         })

@@ -157,7 +157,7 @@
 
 <script>
 import { ExportExcel, NextInfo, PrevInfo } from '@/api/extend/order'
-import { Info } from '@/api/workFlowForm/Common'
+import { Info } from '@/api/workFlow/workFlowForm'
 import { getDownloadUrl } from '@/api/common'
 import printStyle from '../printData/printStyle'
 export default {

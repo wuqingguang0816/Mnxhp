@@ -40,7 +40,7 @@
 </template>
 
 <script>
-import { DbTableList } from '@/api/systemData/dbTable'
+import { DataModelList } from '@/api/systemData/dataModel'
 export default {
   data() {
     return {
@@ -64,7 +64,7 @@ export default {
     initData() {
       this.listLoading = true
       let query = { keyword: this.keyword }
-      DbTableList('0', { keyword: this.keyword }).then(res => {
+      DataModelList('0', { keyword: this.keyword }).then(res => {
         this.list = res.data.list
         this.listLoading = false
       })

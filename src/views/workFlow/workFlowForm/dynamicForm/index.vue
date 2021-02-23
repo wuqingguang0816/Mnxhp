@@ -6,7 +6,7 @@
   </div>
 </template>
 <script>
-import { Info, Create, Update } from '@/api/workFlowForm/Dynamic'
+import { DynamicInfo, DynamicCreate, DynamicUpdate } from '@/api/workFlow/workFlowForm'
 import Parser from '@/components/Generator/parser/Parser'
 import { deepClone } from '@/utils'
 export default {
@@ -34,7 +34,7 @@ export default {
       this.loading = true
       this.$nextTick(() => {
         if (this.dataForm.id) {
-          Info(this.dataForm.id).then(res => {
+          DynamicInfo(this.dataForm.id).then(res => {
             this.dataForm = res.data
             if (!this.dataForm.data) return
             this.formData = JSON.parse(this.dataForm.data)
@@ -112,7 +112,7 @@ export default {
     request() {
       if (!this.dataForm.id) delete (this.dataForm.id)
       if (!this.isSubmit) this.$emit('setLoad', true)
-      const formMethod = this.dataForm.id ? Update : Create
+      const formMethod = this.dataForm.id ? DynamicUpdate : DynamicCreate
       formMethod(this.dataForm).then(res => {
         this.$message({
           message: res.msg,
