@@ -118,29 +118,24 @@
             </el-table>
           </div>
         </el-tab-pane>
-        <el-tab-pane label="流程发起事件">
+        <el-tab-pane label="流程事件">
           <el-form label-position="top" class="pd-10">
+            <el-alert type="warning" :closable="false" title="请求方式为GET,参数有：taskNodeId(任务id)" />
             <el-form-item label="自定义发起事件">
               <el-switch v-model="properties.hasInitFunc" />
             </el-form-item>
             <template v-if="properties.hasInitFunc">
-              <el-form-item label="请求路径">
-                <el-input v-model="properties.initInterfaceUrl" placeholder="请求路径" />
+              <el-form-item label="发起事件请求路径">
+                <el-input v-model="properties.initInterfaceUrl" placeholder="发起事件请求路径" />
               </el-form-item>
-              <el-alert type="warning" :closable="false" title="请求方式为GET,参数有：taskNodeId(任务id)" />
             </template>
-          </el-form>
-        </el-tab-pane>
-        <el-tab-pane label="流程结束事件">
-          <el-form label-position="top" class="pd-10">
             <el-form-item label="自定义结束事件">
               <el-switch v-model="properties.hasEndFunc" />
             </el-form-item>
             <template v-if="properties.hasEndFunc">
-              <el-form-item label="请求路径">
-                <el-input v-model="properties.endInterfaceUrl" placeholder="请求路径" />
+              <el-form-item label="结束事件请求路径">
+                <el-input v-model="properties.endInterfaceUrl" placeholder="结束事件请求路径" />
               </el-form-item>
-              <el-alert type="warning" :closable="false" title="请求方式为GET,参数有：taskNodeId(任务id)" />
             </template>
           </el-form>
         </el-tab-pane>

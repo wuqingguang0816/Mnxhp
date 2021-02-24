@@ -102,6 +102,16 @@ let nodes = {
 function addNodeButton(ctx, data, h, isBranch = false) {
   // 只有非条件节点和条件分支树下面的那个按钮 才能添加新分支树
   let couldAddBranch = !hasBranch(data) || isBranch;
+  let canAddAppendBranch = true
+  let canAddAppendInterflow = true
+  let canAddTimerNode = true
+  if (Array.isArray(data.conditionNodes) && data.conditionNodes.length) {
+    canAddAppendBranch = false
+    canAddAppendInterflow = false
+  }
+  if (data.type === 'timer' || (data.childNode && data.childNode.type === 'timer')) {
+    canAddTimerNode = false
+  }
   let isEmpty = data.type === "empty";
   if (isEmpty && !isBranch) {
     return "";
@@ -127,20 +137,20 @@ function addNodeButton(ctx, data, h, isBranch = false) {
               // </div>
             }
 
-            <div>
-              <div class="condition-icon" onClick={this.eventLancher.bind(ctx, "appendBranch", data, isBranch)}>
+            <div class={{ 'condition-disabled': !canAddAppendBranch }}>
+              <div class="condition-icon" onClick={this.eventLancher.bind(ctx, "appendBranch", data, isBranch, !canAddAppendBranch)}>
                 <i class="ym-custom ym-custom-sitemap"></i>
               </div>
               条件分支
             </div>
-            <div>
-              <div class="condition-icon" onClick={this.eventLancher.bind(ctx, "appendInterflowBranch", data, isBranch)}>
+            <div class={{ 'condition-disabled': !canAddAppendInterflow }}>
+              <div class="condition-icon" onClick={this.eventLancher.bind(ctx, "appendInterflowBranch", data, isBranch, !canAddAppendInterflow)}>
                 <i class="icon-ym icon-ym-node"></i>
               </div>
               分流/合流
             </div>
-            <div>
-              <div class="condition-icon" onClick={ctx.eventLancher.bind(ctx, "addTimerNode", data, isBranch)} >
+            <div class={{ 'condition-disabled': !canAddTimerNode }}>
+              <div class="condition-icon" onClick={ctx.eventLancher.bind(ctx, "addTimerNode", data, isBranch, !canAddTimerNode)} >
                 <i class="el-icon-timer" style="vertical-align: middle;"></i>
               </div>
               定时器
@@ -248,6 +258,8 @@ export default {
      * @param { Object } 包含event（事件名）和args（事件参数）两个参数
      */
     eventLancher(event, ...args) {
+      let list = ['appendBranch', 'appendInterflowBranch', 'addTimerNode']
+      if (list.includes(event) && args[args.length - 2]) return
       // args.slice(0,-1) vue 会注入MouseEvent到最后一个参数 去除事件对象
       let param = { event, args: args.slice(0, -1) };
       this.$emit("emits", param);
