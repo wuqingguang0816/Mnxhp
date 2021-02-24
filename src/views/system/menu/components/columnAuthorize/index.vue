@@ -5,7 +5,7 @@
       <div class="JNPF-flex-main">
         <div class="JNPF-common-head">
           <topOpts @add="handleAddEdit('')" addPerCode="btn_columnPer_add">
-            <el-button type="primary" icon="el-icon-copy-document" @click="handleBatchAdd"
+            <el-button type="text" icon="el-icon-copy-document" @click="handleBatchAdd"
               v-has="'btn_columnPer_batchAdd'">
               批量新增
             </el-button>

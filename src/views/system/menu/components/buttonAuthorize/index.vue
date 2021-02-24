@@ -6,8 +6,8 @@
         <div class="JNPF-common-head">
           <div>
             <topOpts @add="handleAddEdit('')" addPerCode="btn_btnPer_add" />
-            <el-dropdown>
-              <el-button icon="el-icon-plus" :loading="loading">
+            <el-dropdown style="margin-left: 10px">
+              <el-button icon="el-icon-plus" :loading="loading" type="text">
                 常用按钮权限<i class="el-icon-arrow-down el-icon--right"></i>
               </el-button>
               <el-dropdown-menu slot="dropdown">
