@@ -269,7 +269,7 @@ export default {
         id: '0',
         fullName: '全部文档'
       }],
-      uploadUrl: process.env.VUE_APP_BASE_API + '/api/Extend/Document/Uploader',
+      uploadUrl: process.env.VUE_APP_BASE_API + '/api/extend/Document/Uploader',
       uploadHeaders: { Authorization: this.$store.getters.token },
       firstTest: true
     }
