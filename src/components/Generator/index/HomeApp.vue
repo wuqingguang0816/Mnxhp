@@ -279,6 +279,9 @@ export default {
         this.activeItem = targetConf
         this.activeTableItem = conf
       }
+      if (conf.__config__.jnpfKey === 'card') {
+        if (targetConf.__config__.layout === 'rowFormItem') return false
+      }
       return true
     },
     activeFormItem(element) {
