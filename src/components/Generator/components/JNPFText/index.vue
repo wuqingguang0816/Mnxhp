@@ -18,19 +18,11 @@ export default {
     },
     value: {
       default: ''
-    },
-    lineHeight: {
-      type: Number,
-      default: 32
-    },
-    fontSize: {
-      type: Number,
-      default: 12
-    },
+    }
   },
   computed: {
     _style() {
-      return { ...this.textStyle, 'line-height': this.lineHeight + 'px', 'font-size': this.fontSize + 'px' }
+      return { ...this.textStyle, 'line-height': this.textStyle['line-height'] + 'px', 'font-size': this.textStyle['font-size'] + 'px' }
     }
   }
 }

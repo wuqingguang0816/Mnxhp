@@ -571,9 +571,9 @@ export const inputComponents = [{
       'font-weight': 'normal',
       'font-style': 'normal',
       'text-decoration': 'none',
-    },
-    lineHeight: 32,
-    fontSize: 12
+      'line-height': 32,
+      'font-size': 12
+    }
   },
   {
     __config__: {

@@ -386,13 +386,15 @@ export const inputComponents = [{
       dragDisabled: false
     },
     style: { width: '100%' },
-    "color": '#000000',
-    'text-align': 'left',
-    'font-weight': 'normal',
-    'font-style': 'normal',
-    'text-decoration': 'none',
-    lineHeight: 32,
-    fontSize: 12
+    textStyle: {
+      "color": '#000000',
+      'text-align': 'left',
+      'font-weight': 'normal',
+      'font-style': 'normal',
+      'text-decoration': 'none',
+      'line-height': 32,
+      'font-size': 12
+    }
   },
   {
     __config__: {
