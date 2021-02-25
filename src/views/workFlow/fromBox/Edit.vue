@@ -2,9 +2,9 @@
   <transition name="el-zoom-in-center">
     <div class="JNPF-preview-main flow-form-main nohead">
       <div class="btns">
-        <el-button type="primary" @click="dataFormSubmit(true)">提交审核
+        <el-button type="primary" @click="dataFormSubmit('submit')">提交审核
         </el-button>
-        <el-button type="warning" @click="dataFormSubmit()" :loading="btnLoading">保存草稿
+        <el-button type="warning" @click="dataFormSubmit('save')" :loading="btnLoading">保存草稿
         </el-button>
         <el-button @click="goBack()">{{$t('common.cancelButton')}}</el-button>
       </div>
@@ -65,8 +65,8 @@ export default {
         }, 100)
       })
     },
-    dataFormSubmit(isSubmit) {
-      this.$refs.form && this.$refs.form.dataFormSubmit(isSubmit)
+    dataFormSubmit(eventType) {
+      this.$refs.form && this.$refs.form.dataFormSubmit(eventType)
     },
     setLoad(val) {
       this.btnLoading = !!val

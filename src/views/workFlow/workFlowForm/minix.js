@@ -11,7 +11,7 @@ export default {
       flowUrgentOptions: [{ value: 1, label: '普通' }, { value: 2, label: '重要' }, { value: 3, label: '紧急' }],
       fileList: [],
       setting: {},
-      isSubmit: false,
+      eventType: '',
       loading: true,
       userBoxVisible: false
     }
@@ -50,7 +50,7 @@ export default {
         this.paymentMethodOptions = res
       })
     },
-    dataFormSubmit(isSubmit) {
+    dataFormSubmit(eventType) {
       this.$refs['dataForm'].validate((valid) => {
         if (valid) {
           if ('fileJson' in this.dataForm) {
@@ -65,9 +65,13 @@ export default {
             let fileJson = JSON.stringify(list)
             this.dataForm.fileJson = fileJson
           }
-          this.dataForm.status = isSubmit ? 0 : 1
-          this.isSubmit = isSubmit
-          if (isSubmit) {
+          if (eventType === 'audit' || eventType === 'reject') {
+            this.$emit('approval', this.dataForm, eventType)
+            return
+          }
+          this.dataForm.status = eventType === 'submit' ? 0 : 1
+          this.eventType = eventType
+          if (this.eventType === 'submit') {
             if (this.setting.freeApprover == 0) {
               this.$confirm('您确定要提交当前流程吗, 是否继续?', '提示', {
                 type: 'warning'
@@ -92,7 +96,7 @@ export default {
     },
     request() {
       if (!this.dataForm.id) delete(this.dataForm.id)
-      if (!this.isSubmit) this.$emit('setLoad', true)
+      if (this.eventType === 'save') this.$emit('setLoad', true)
       const formMethod = this.dataForm.id ? Update : Create
       formMethod(this.setting.enCode, this.dataForm).then(res => {
         this.$message({
@@ -100,12 +104,12 @@ export default {
           type: 'success',
           duration: 1500,
           onClose: () => {
-            if (!this.isSubmit) this.$emit('setLoad')
+            if (this.eventType === 'save') this.$emit('setLoad')
             this.$emit('close', true)
           }
         })
       }).catch(() => {
-        if (!this.isSubmit) this.$emit('setLoad')
+        if (this.eventType === 'save') this.$emit('setLoad')
       })
     },
     JudgeShow(id) {

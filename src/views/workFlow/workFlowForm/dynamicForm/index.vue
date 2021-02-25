@@ -17,7 +17,7 @@ export default {
       formData: {},
       key: +new Date(),
       loading: true,
-      isSubmit: false,
+      eventType: '',
       userBoxVisible: false,
       dataForm: {
         id: '',
@@ -83,8 +83,12 @@ export default {
     sumbitForm(data) {
       if (!data) return
       this.dataForm.data = JSON.stringify(data)
-      this.dataForm.status = this.isSubmit ? 0 : 1
-      if (this.isSubmit) {
+      if (this.eventType === 'audit' || this.eventType === 'reject') {
+        this.$emit('approval', this.dataForm, this.eventType)
+        return
+      }
+      this.dataForm.status = this.eventType === 'submit' ? 0 : 1
+      if (this.eventType === 'submit') {
         if (this.setting.freeApprover == 0) {
           this.$confirm('您确定要提交当前流程吗, 是否继续?', '提示', {
             type: 'warning'
@@ -101,8 +105,8 @@ export default {
         this.request()
       }
     },
-    dataFormSubmit(isSubmit) {
-      this.isSubmit = isSubmit ? true : false
+    dataFormSubmit(eventType) {
+      this.eventType = eventType
       this.$refs.dynamicForm && this.$refs.dynamicForm.submitForm()
     },
     submit(freeApproverUserId) {
@@ -111,7 +115,7 @@ export default {
     },
     request() {
       if (!this.dataForm.id) delete (this.dataForm.id)
-      if (!this.isSubmit) this.$emit('setLoad', true)
+      if (this.eventType === 'save') this.$emit('setLoad', true)
       const formMethod = this.dataForm.id ? DynamicUpdate : DynamicCreate
       formMethod(this.dataForm).then(res => {
         this.$message({
@@ -119,12 +123,12 @@ export default {
           type: 'success',
           duration: 1500,
           onClose: () => {
-            if (!this.isSubmit) this.$emit('setLoad')
+            if (this.eventType === 'save') this.$emit('setLoad')
             this.$emit('close', true)
           }
         })
       }).catch(() => {
-        if (!this.isSubmit) this.$emit('setLoad')
+        if (this.eventType === 'save') this.$emit('setLoad')
       })
     }
   }

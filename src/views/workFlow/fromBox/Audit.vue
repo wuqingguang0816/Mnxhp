@@ -4,8 +4,8 @@
       <div class="btns">
         <template v-if="setting.isAudit">
           <el-button type="warning" @click="transfer()">转 办</el-button>
-          <el-button type="primary" @click="audit()">通 过</el-button>
-          <el-button type="danger" @click="reject()">拒 绝</el-button>
+          <el-button type="primary" @click="approval('audit')">通 过</el-button>
+          <el-button type="danger" @click="approval('reject')">拒 绝</el-button>
         </template>
         <template v-if="setting.isSelf && setting.status == 1">
           <el-button type="primary" @click="press()">催 办</el-button>
@@ -22,7 +22,7 @@
       </div>
       <el-tabs class="JNPF-el_tabs" v-model="activeTab">
         <el-tab-pane label="表单信息">
-          <component :is="currentView" @close="goBack" ref="form" />
+          <component :is="currentView" @close="goBack" ref="form" @approval="handleApproval" />
         </el-tab-pane>
         <el-tab-pane label="流程信息">
           <Process :conf="flowTemplateJson" v-if="flowTemplateJson.nodeId" />
@@ -63,6 +63,7 @@ export default {
     return {
       userBoxVisible: false,
       currentView: '',
+      formData: {},
       setting: {},
       flowFormInfo: {},
       flowTaskInfo: {},
@@ -133,6 +134,13 @@ export default {
         }, 100)
       })
     },
+    approval(eventType) {
+      this.$refs.form && this.$refs.form.dataFormSubmit(eventType)
+    },
+    handleApproval(formData, eventType) {
+      this.formData = formData
+      this[eventType]()
+    },
     audit() {
       if (this.freeApprover == 0) {
         this.$prompt('', "审批通过", {
@@ -143,7 +151,13 @@ export default {
           inputValue: "",
           closeOnClickModal: false
         }).then(({ value }) => {
-          Audit(this.setting.taskId, { handleOpinion: value, delegateId: this.setting.delegateId }).then(res => {
+          let query = {
+            handleOpinion: value,
+            delegateId: this.setting.delegateId,
+            formData: this.formData,
+            enCode: this.setting.enCode
+          }
+          Audit(this.setting.taskId, query).then(res => {
             this.$message({
               type: 'success',
               message: res.msg,
@@ -172,7 +186,13 @@ export default {
         inputValidator: (val) => { if (!val) { if (this.firstTest) { this.firstTest = false; return true } return false } },
         closeOnClickModal: false
       }).then(({ value }) => {
-        Reject(this.setting.taskId, { handleOpinion: value, delegateId: this.setting.delegateId }).then(res => {
+        let query = {
+          handleOpinion: value,
+          delegateId: this.setting.delegateId,
+          formData: this.formData,
+          enCode: this.setting.enCode
+        }
+        Reject(this.setting.taskId, query).then(res => {
           this.$message({
             type: 'success',
             message: res.msg,
@@ -301,7 +321,9 @@ export default {
       let query = {
         delegateId: this.setting.delegateId,
         handleOpinion: this.reason,
-        freeApproverUserId: this.handleId
+        freeApproverUserId: this.handleId,
+        formData: this.formData,
+        enCode: this.setting.enCode
       }
       Audit(this.setting.taskId, query).then(res => {
         this.$message({
