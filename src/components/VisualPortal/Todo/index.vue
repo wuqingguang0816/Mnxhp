@@ -4,21 +4,21 @@
       <span>{{title}}</span>
     </div>
     <div class="todo-box-body">
-      <router-link class="item" to="/WorkFlow/FlowTodo">
+      <router-link class="item" to="/workFlow/flowTodo">
         <i class="icon-ym icon-ym-flowTodo"></i>
         <div class="text">
           <p class="num">{{toBeReviewed}}</p>
           <p class="name">待我审核</p>
         </div>
       </router-link>
-      <router-link class="item" to="/WorkFlow/Entrust">
+      <router-link class="item" to="/workFlow/entrust">
         <i class="icon-ym icon-ym-flowEntrust"></i>
         <div class="text">
           <p class="num">{{entrust}}</p>
           <p class="name">流程委托</p>
         </div>
       </router-link>
-      <router-link class="item" to="/WorkFlow/FlowDone">
+      <router-link class="item" to="/workFlow/flowDone">
         <i class="icon-ym icon-ym-flowDone"></i>
         <div class="text">
           <p class="num">{{flowDone}}</p>
