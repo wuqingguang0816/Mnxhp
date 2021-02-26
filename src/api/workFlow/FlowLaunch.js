@@ -23,3 +23,10 @@ export function Revoke(id, data) {
     data
   })
 }
+// 发起催办
+export function Press(id) {
+  return request({
+    url: `/api/workflow/Engine/FlowLaunch/Press/${id}`,
+    method: 'post'
+  })
+}
