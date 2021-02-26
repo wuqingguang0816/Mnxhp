@@ -120,13 +120,18 @@
         </el-tab-pane>
         <el-tab-pane label="流程事件">
           <el-form label-position="top" class="pd-10">
-            <el-alert type="warning" :closable="false" title="请求方式为GET,参数有：taskNodeId(任务id)" />
+            <el-alert type="warning" :closable="false">
+              <div slot="title" class="tips">
+                <p>请求方式：GET</p>
+                <p>请求参数：taskld、taskNodeld</p>
+              </div>
+            </el-alert>
             <el-form-item label="自定义发起事件">
               <el-switch v-model="properties.hasInitFunc" />
             </el-form-item>
             <template v-if="properties.hasInitFunc">
               <el-form-item label="发起事件请求路径">
-                <el-input v-model="properties.initInterfaceUrl" placeholder="发起事件请求路径" />
+                <el-input v-model="properties.initInterfaceUrl" placeholder="请输入接口地址" />
               </el-form-item>
             </template>
             <el-form-item label="自定义结束事件">
@@ -134,7 +139,15 @@
             </el-form-item>
             <template v-if="properties.hasEndFunc">
               <el-form-item label="结束事件请求路径">
-                <el-input v-model="properties.endInterfaceUrl" placeholder="结束事件请求路径" />
+                <el-input v-model="properties.endInterfaceUrl" placeholder="请输入接口地址" />
+              </el-form-item>
+            </template>
+            <el-form-item label="自定义撤回事件">
+              <el-switch v-model="properties.hasFlowRecallFunc" />
+            </el-form-item>
+            <template v-if="properties.hasFlowRecallFunc">
+              <el-form-item label="撤回事件请求路径">
+                <el-input v-model="properties.flowRecallInterfaceUrl" placeholder="请输入接口地址" />
               </el-form-item>
             </template>
           </el-form>
@@ -219,17 +232,30 @@
             </el-table>
           </div>
         </el-tab-pane>
-        <el-tab-pane label="审批事件">
+        <el-tab-pane label="节点事件">
           <el-form label-position="top" :model="approverForm" class="pd-10">
+            <el-alert type="warning" :closable="false">
+              <div slot="title" class="tips">
+                <p>请求方式：GET</p>
+                <p>请求参数：taskld、taskNodeld、handleStatus(撤回事件无此参数)</p>
+                <p>处理状态：0-拒绝、1-同意</p>
+              </div>
+            </el-alert>
             <el-form-item label="自定义审批事件">
               <el-switch v-model="approverForm.hasApproverFunc" />
             </el-form-item>
             <template v-if="approverForm.hasApproverFunc">
-              <el-form-item label="请求路径">
-                <el-input v-model="approverForm.approverInterfaceUrl" placeholder="请求路径" />
+              <el-form-item label="审批事件请求路径">
+                <el-input v-model="approverForm.approverInterfaceUrl" placeholder="请输入接口地址" />
               </el-form-item>
-              <el-alert type="warning" :closable="false"
-                title="请求方式为GET,参数有：taskNodeId(任务id),handleStatus(审批状态0-拒绝、1-同意)" />
+            </template>
+            <el-form-item label="自定义撤回事件">
+              <el-switch v-model="approverForm.hasRecallFunc" />
+            </el-form-item>
+            <template v-if="approverForm.hasRecallFunc">
+              <el-form-item label="撤回事件请求路径">
+                <el-input v-model="approverForm.recallInterfaceUrl" placeholder="请输入接口地址" />
+              </el-form-item>
             </template>
           </el-form>
         </el-tab-pane>
@@ -249,10 +275,12 @@ import OrgSelect from '../OrgSelect'
 const defaultInitForm = {
   hasInitFunc: false,
   initInterfaceUrl: '',
-  initInterfaceType: 'POST',
+  initInterfaceType: 'GET',
   hasEndFunc: false,
   endInterfaceUrl: '',
-  endInterfaceType: 'POST',
+  endInterfaceType: 'GET',
+  hasFlowRecallFunc: false,
+  flowRecallInterfaceUrl: ''
 }
 const defaultApproverForm = {
   approvers: [], // 审批人集合
@@ -266,7 +294,9 @@ const defaultApproverForm = {
   description: '',  // 节点描述
   hasApproverFunc: false,
   approverInterfaceUrl: '',
-  approverInterfaceType: 'POST',
+  approverInterfaceType: 'GET',
+  hasRecallFunc: false,
+  recallInterfaceUrl: ''
 }
 const defaultStep = [{
   nodeId: '1',
@@ -728,6 +758,9 @@ export default {
 }
 </style>
 <style lang="scss" scoped>
+.tips p {
+  line-height: 24px;
+}
 .drawer {
   >>> .el-drawer__body {
     padding-bottom: 62px;
