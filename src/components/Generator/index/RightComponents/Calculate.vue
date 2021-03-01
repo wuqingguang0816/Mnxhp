@@ -38,9 +38,13 @@
             {{typeof item !== 'string' ? item.label : item}}
           </span>
           <div class="preview-actions">
-            <i class="el-icon-price-tag" style="transform: rotate(-90deg);"
-              @click="expressionTemp.pop()"></i>
-            <i class="el-icon-delete" @click="expressionTemp = []"></i>
+            <el-tooltip content="删除">
+              <i class="el-icon-price-tag" style="transform: rotate(-90deg);"
+                @click="expressionTemp.pop()"></i>
+            </el-tooltip>
+            <el-tooltip content="清空">
+              <i class="el-icon-delete" @click="expressionTemp = []"></i>
+            </el-tooltip>
           </div>
         </div>
         <div class="calc-tip">
