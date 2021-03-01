@@ -109,10 +109,8 @@
               <el-table-column prop="name" label="表单字段" align="left"></el-table-column>
               <el-table-column prop="write" label="操作" align="center" width="200px">
                 <template slot-scope="scope">
-                  <el-checkbox v-model="scope.row.read"
-                    :disabled="scope.row.write|| scope.row.required">可见</el-checkbox>
-                  <el-checkbox v-model="scope.row.write" @change="writeChange($event,scope.row)"
-                    :disabled="scope.row.required">可写</el-checkbox>
+                  <el-checkbox v-model="scope.row.read">可见</el-checkbox>
+                  <el-checkbox v-model="scope.row.write">可写</el-checkbox>
                 </template>
               </el-table-column>
             </el-table>
@@ -224,9 +222,8 @@
               <el-table-column prop="name" label="表单字段" align="left"></el-table-column>
               <el-table-column prop="write" label="操作" align="center" width="200px">
                 <template slot-scope="scope">
-                  <el-checkbox v-model="scope.row.read" :disabled="scope.row.write">可见</el-checkbox>
-                  <el-checkbox v-model="scope.row.write" @change="writeChange($event,scope.row)">可写
-                  </el-checkbox>
+                  <el-checkbox v-model="scope.row.read">可见</el-checkbox>
+                  <el-checkbox v-model="scope.row.write">可写</el-checkbox>
                 </template>
               </el-table-column>
             </el-table>
@@ -684,9 +681,6 @@ export default {
     logicChange(val, item) {
       let obj = this.logicOptions.filter(o => o.value == val)[0]
       item.logicName = obj.label
-    },
-    writeChange(val, item) {
-      if (val) item.read = true
     },
     // 条件字段验证
     exist() {
