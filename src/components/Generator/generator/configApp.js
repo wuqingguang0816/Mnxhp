@@ -73,25 +73,22 @@ export const inputComponents = [{
     step: 1,
     disabled: false
   },
-  // {
-  //   __config__: {
-  //     label: '密码',
-  //     showLabel: true,
-  //     labelWidth: null,
-  //     tag: 'el-input',
-  //     tagIcon: 'icon-ym icon-ym-generator-password',
-  //     defaultValue: undefined,
-  //     layout: 'colFormItem',
-  //     span: 24,
-  //     required: false,
-  //     dragDisabled: false,
-  //     jnpfKey: 'PsdInput'
-  //   },
-  //   placeholder: '请输入',
-  //   password: true,
-  //   maxlength: null,
-  //   disabled: false
-  // },
+  {
+    __config__: {
+      jnpfKey: 'switch',
+      label: '开关',
+      labelWidth: null,
+      showLabel: true,
+      tag: 'el-switch',
+      tagIcon: 'icon-ym icon-ym-generator-switch',
+      defaultValue: false,
+      required: false,
+      layout: 'colFormItem',
+      span: 24,
+      dragDisabled: false
+    },
+    disabled: false
+  },
   {
     __config__: {
       jnpfKey: 'radio',
@@ -335,22 +332,6 @@ export const inputComponents = [{
     max: 5,
     allowHalf: false,
     readonly: false,
-    disabled: false
-  },
-  {
-    __config__: {
-      jnpfKey: 'switch',
-      label: '开关',
-      labelWidth: null,
-      showLabel: true,
-      tag: 'el-switch',
-      tagIcon: 'icon-ym icon-ym-generator-switch',
-      defaultValue: false,
-      required: false,
-      layout: 'colFormItem',
-      span: 24,
-      dragDisabled: false
-    },
     disabled: false
   },
   {

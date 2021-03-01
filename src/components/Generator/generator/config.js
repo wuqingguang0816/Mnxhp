@@ -105,29 +105,27 @@ export const inputComponents = [{
   },
   {
     __config__: {
-      jnpfKey: 'JNPFAmount',
-      label: '金额输入',
-      showLabel: true,
+      jnpfKey: 'switch',
+      label: '开关',
       labelWidth: null,
-      tag: 'JNPF-Amount',
-      tagIcon: 'icon-ym icon-ym-generator-number',
-      defaultValue: undefined,
+      showLabel: true,
+      tag: 'el-switch',
+      tagIcon: 'icon-ym icon-ym-generator-switch',
+      defaultValue: false,
       required: false,
       layout: 'colFormItem',
       span: 24,
       dragDisabled: false,
       regList: [],
-      trigger: ['blur', 'change']
+      trigger: 'change'
     },
-    placeholder: '',
-    min: undefined,
-    max: undefined,
-    step: undefined,
-    'step-strictly': false,
-    precision: undefined,
-    'controls-position': 'right',
     disabled: false,
-    showChinese: true
+    'active-text': '',
+    'inactive-text': '',
+    'active-color': null,
+    'inactive-color': null,
+    'active-value': 1,
+    'inactive-value': 0
   },
   {
     __config__: {
@@ -309,6 +307,7 @@ export const inputComponents = [{
     style: { width: '100%' },
     disabled: false,
     clearable: true,
+    readonly: false,
     'picker-options': {
       selectableRange: '00:00:00-23:59:59'
     },
@@ -334,6 +333,7 @@ export const inputComponents = [{
     style: { width: '100%' },
     disabled: false,
     clearable: true,
+    readonly: false,
     'is-range': true,
     'range-separator': '至',
     'start-placeholder': '开始时间',
@@ -486,30 +486,6 @@ export const inputComponents = [{
   },
   {
     __config__: {
-      jnpfKey: 'switch',
-      label: '开关',
-      labelWidth: null,
-      showLabel: true,
-      tag: 'el-switch',
-      tagIcon: 'icon-ym icon-ym-generator-switch',
-      defaultValue: false,
-      required: false,
-      layout: 'colFormItem',
-      span: 24,
-      dragDisabled: false,
-      regList: [],
-      trigger: 'change'
-    },
-    disabled: false,
-    'active-text': '',
-    'inactive-text': '',
-    'active-color': null,
-    'inactive-color': null,
-    'active-value': 1,
-    'inactive-value': 0
-  },
-  {
-    __config__: {
       jnpfKey: 'slider',
       label: '滑块',
       labelWidth: null,
@@ -592,38 +568,7 @@ export const inputComponents = [{
       trigger: 'blur'
     },
     placeholder: '请输入内容...'
-  },
-  // {
-  //   __config__: {
-  //     jnpfKey: 'PsdInput',
-  //     label: '密码',
-  //     labelWidth: null,
-  //     showLabel: true,
-  //     tag: 'el-input',
-  //     tagIcon: 'icon-ym icon-ym-generator-password',
-  //     defaultValue: undefined,
-  //     required: false,
-  //     layout: 'colFormItem',
-  //     span: 24,
-  //     dragDisabled: false,
-  //     regList: [],
-  //     trigger: 'blur'
-  //   },
-  //   __slot__: {
-  //     prepend: '',
-  //     append: ''
-  //   },
-  //   placeholder: '请输入',
-  //   'show-password': true,
-  //   style: { width: '100%' },
-  //   clearable: true,
-  //   'prefix-icon': '',
-  //   'suffix-icon': '',
-  //   maxlength: null,
-  //   'show-word-limit': false,
-  //   readonly: false,
-  //   disabled: false
-  // }
+  }
 ]
 
 // 高级控件 【左面板】

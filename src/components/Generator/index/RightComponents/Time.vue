@@ -44,6 +44,9 @@
     <el-form-item label="能否清空">
       <el-switch v-model="activeData.clearable" />
     </el-form-item>
+    <el-form-item label="是否只读">
+      <el-switch v-model="activeData.readonly" />
+    </el-form-item>
     <el-form-item label="是否禁用">
       <el-switch v-model="activeData.disabled" />
     </el-form-item>

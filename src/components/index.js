@@ -12,7 +12,6 @@ import ColumnSettings from '@/components/ColumnSettings'
 import JNPFQuill from '@/components/JNPFEditor/quill'
 // 代码生成器专供
 import JNPFText from '@/components/Generator/components/JNPFText'
-import JNPFAmount from '@/components/Generator/components/Amount'
 import JNPFUploadFz from '@/components/Generator/components/Upload/UploadFz' // 代码生成器专用上传附件
 import JNPFUploadImg from '@/components/Generator/components/Upload/UploadImg' // 代码生成器专用上传图片
 import ComSelect from '@/components/Generator/components/ComSelect'
@@ -42,7 +41,6 @@ export default {
     Vue.component('SingleImg', SingleImg)
     Vue.component('UserBox', UserBox)
     Vue.component('JNPFText', JNPFText)
-    Vue.component('JNPFAmount', JNPFAmount)
     Vue.component('JNPFUploadFz', JNPFUploadFz)
     Vue.component('JNPFUploadImg', JNPFUploadImg)
     Vue.component('ComSelect', ComSelect)
