@@ -15,14 +15,7 @@ export function getVisualDevInfo(id) {
     method: 'get'
   })
 }
-// App预览(后台APP表单设计)
-export function Preview(data) {
-  return request({
-    url: `/api/visualdev/VisualDevelopment/App/Preview`,
-    method: 'post',
-    data: { data }
-  })
-}
+
 
 // 删除功能
 export function Delete(id) {
@@ -57,14 +50,14 @@ export function Copy(id) {
 // 获取命名空间
 export function getAreasName() {
   return request({
-    url: `/api/visualdev/Base/AreasName`,
+    url: `/api/visualdev/Generater/AreasName`,
     method: 'get'
   })
 }
 // 代码下载
 export function DownloadCode(id, data) {
   return request({
-    url: `/api/visualdev/VisualDevelopmentGen/${id}/Actions/DownloadCode`,
+    url: `/api/visualdev/Generater/${id}/Actions/DownloadCode`,
     method: 'POST',
     data
   })
@@ -72,7 +65,7 @@ export function DownloadCode(id, data) {
 // 代码预览
 export function CodePreview(id, data) {
   return request({
-    url: `/api/visualdev/VisualDevelopmentGen/${id}/Actions/CodePreview`,
+    url: `/api/visualdev/Generater/${id}/Actions/CodePreview`,
     method: 'POST',
     data
   })
@@ -180,5 +173,13 @@ export function getFeatureSelector(data) {
     url: '/api/visualdev/Base/Selector',
     method: 'GET',
     data
+  })
+}
+// App预览(后台APP表单设计)
+export function Preview(data) {
+  return request({
+    url: `/api/visualdev/OnlineDev/App/Preview`,
+    method: 'post',
+    data: { data }
   })
 }
