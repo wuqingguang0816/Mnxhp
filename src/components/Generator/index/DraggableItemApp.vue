@@ -76,11 +76,16 @@ const layouts = {
           {child}
         </el-row>
       }
+      let tip = ''
+      if (!element.__config__.children.length) {
+        tip = <div class="table-tip">请将组件拖到此区域(可拖多个组件)</div>
+      }
       return (
         <el-col span={element.__config__.span}>
           <el-row gutter={element.__config__.gutter} class={className}
             nativeOnClick={event => { activeItem(element); event.stopPropagation() }}>
             <span class="component-name">{element.__config__.componentName}</span>
+            {tip}
             <draggable list={element.__config__.children} animation={340} group={group} class="drag-wrapper">
               {child}
             </draggable>
@@ -90,11 +95,16 @@ const layouts = {
       )
     }
     if (element.__config__.jnpfKey === 'card') {
+      let tip = ''
+      if (!element.__config__.children.length) {
+        tip = <div class="table-tip">请将组件拖到此区域(可拖多个组件)</div>
+      }
       return (
         <el-col span={element.__config__.span}>
           <el-row gutter={element.__config__.gutter} class={className}
             nativeOnClick={event => { activeItem(element); event.stopPropagation() }}>
             <span class="component-name">{element.__config__.label}</span>
+            {tip}
             <draggable list={element.__config__.children} animation={340} group={group} class="drag-wrapper">
               {child}
             </draggable>
@@ -104,11 +114,16 @@ const layouts = {
       )
     }
     if (element.__config__.jnpfKey === 'table') {
+      let tip = ''
+      if (!element.__config__.children.length) {
+        tip = <div class="table-tip">请将组件拖到此区域(可拖多个组件)</div>
+      }
       return (
         <el-col span={element.__config__.span}>
           <el-row gutter={element.__config__.gutter} class={className}
             nativeOnClick={event => { activeItem(element); event.stopPropagation() }}>
             <span class="component-name">{element.__config__.label}</span>
+            {tip}
             <draggable list={element.__config__.children} animation={340} group={group} class="drag-wrapper table-wrapper" onEnd={onEnd} clone={cloneComponent}>
               {child}
             </draggable>
@@ -166,3 +181,12 @@ export default {
   }
 }
 </script>
+<style lang="scss" scoped>
+.table-tip {
+  width: 100%;
+  color: #999;
+  text-align: center;
+  position: absolute;
+  top: 40px;
+}
+</style>

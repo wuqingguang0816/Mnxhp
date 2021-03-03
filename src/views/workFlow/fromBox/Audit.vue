@@ -78,7 +78,6 @@ export default {
       handleType: 1,
       handleId: '',
       treeData: [],
-      firstTest: true,
       fullName: '',
       activeTab: '0'
     }
@@ -183,7 +182,7 @@ export default {
         inputType: 'textarea',
         inputErrorMessage: '审批意见不能为空',
         inputValue: "",
-        inputValidator: (val) => { if (!val) { if (this.firstTest) { this.firstTest = false; return true } return false } },
+        inputValidator: (val) => { if (!val) return false },
         closeOnClickModal: false
       }).then(({ value }) => {
         let query = {
@@ -217,7 +216,7 @@ export default {
         inputType: 'textarea',
         inputErrorMessage: '原因不能为空',
         inputValue: "",
-        inputValidator: (val) => { if (!val) { if (this.firstTest) { this.firstTest = false; return true } return false } },
+        inputValidator: (val) => { if (!val) return false },
         closeOnClickModal: false
       }).then(({ value }) => {
         Revoke(this.setting.id, { handleOpinion: value }).then(res => {
@@ -253,7 +252,7 @@ export default {
         inputType: 'textarea',
         inputErrorMessage: '原因不能为空',
         inputValue: "",
-        inputValidator: (val) => { if (!val) { if (this.firstTest) { this.firstTest = false; return true } return false } },
+        inputValidator: (val) => { if (!val) return false },
         closeOnClickModal: false
       }).then(({ value }) => {
         Recall(this.setting.taskId, { handleOpinion: value }).then(res => {
@@ -276,7 +275,7 @@ export default {
         inputType: 'textarea',
         inputErrorMessage: '原因不能为空',
         inputValue: "",
-        inputValidator: (val) => { if (!val) { if (this.firstTest) { this.firstTest = false; return true } return false } },
+        inputValidator: (val) => { if (!val) return false },
         closeOnClickModal: false
       }).then(({ value }) => {
         Cancel(this.setting.taskId, { handleOpinion: value }).then(res => {

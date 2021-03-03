@@ -270,8 +270,7 @@ export default {
         fullName: '全部文档'
       }],
       uploadUrl: process.env.VUE_APP_BASE_API + '/api/extend/Document/Uploader',
-      uploadHeaders: { Authorization: this.$store.getters.token },
-      firstTest: true
+      uploadHeaders: { Authorization: this.$store.getters.token }
     }
   },
   watch: {
@@ -405,12 +404,9 @@ export default {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         inputPlaceholder: '输入名称',
-        inputErrorMessage: '文件夹名称不能为空',
+        inputErrorMessage: '请正确输入文件夹名称',
         inputValue: inputValue,
-        inputValidator: (val) => {
-          if (!val) { if (this.firstTest) { this.firstTest = false; return true } return false }
-          if (!/^[\u4e00-\u9fa5_a-zA-Z0-9]+$/.test(val)) return '请正确输入文件夹名称'
-        },
+        inputPattern: /^[\u4e00-\u9fa5_a-zA-Z0-9]+$/,
         closeOnClickModal: false
       }).then(({ value }) => {
         let data = {

@@ -1,9 +1,9 @@
 // 基础控件 【左面板】
 export const basicComponents = [{
     icon: 'icon-ym icon-ym-generator-todo',
-    label: '我的代办',
+    label: '我的待办',
     jnpfKey: 'todo',
-    title: '我的代办',
+    title: '我的待办',
     w: 6,
     h: 4,
     minW: 6,
