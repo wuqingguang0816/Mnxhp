@@ -1,4 +1,4 @@
-# jnpf-cloud-web
+# jnpf-web
 
 ## 环境要求
 
