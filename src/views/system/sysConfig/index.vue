@@ -167,7 +167,7 @@
                 <span>JNPF-JAVA-Cloud</span>
               </el-form-item>
               <el-form-item label="授权名称">
-                <span>>JAVA-Cloud-BF068949-ECF2-4C8B-906A-6E56E7722A35</span>
+                <span>JAVA-Cloud-BF068949-ECF2-4C8B-906A-6E56E7722A35</span>
               </el-form-item>
               <el-form-item label="授权状态">
                 <template>
