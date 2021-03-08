@@ -159,7 +159,30 @@
             </el-col>
           </el-row>
         </el-tab-pane>
-        <el-tab-pane label="授权激活" name="fiveth">
+        <el-tab-pane label="短信设置" name="fourth">
+          <el-alert title="注意：请在短信厂家官网网站开通申请" type="warning" :closable="false" show-icon />
+          <el-row style="margin-top: 15px">
+            <el-col :span="12">
+              <el-form-item label="短信厂家" prop="smsCompany" label-width="120px">
+                <el-radio-group v-model="baseForm.smsCompany">
+                  <el-radio-button label="1">阿里</el-radio-button>
+                  <el-radio-button label="2">腾讯</el-radio-button>
+                </el-radio-group>
+              </el-form-item>
+              <el-form-item label="accessKeyId" prop="accessKeyId" label-width="120px">
+                <el-input v-model="baseForm.accessKeyId" clearable />
+              </el-form-item>
+              <el-form-item label="accessKeySecret" prop="accessKeySecret" label-width="120px">
+                <el-input v-model="baseForm.accessKeySecret" show-password clearable />
+              </el-form-item>
+              <el-form-item>
+                <el-button type="primary" size="small" :loading="btnLoading" class="saveBtn"
+                  @click="submitForm('baseForm')" v-has="'btn_save'">保 存</el-button>
+              </el-form-item>
+            </el-col>
+          </el-row>
+        </el-tab-pane>
+        <el-tab-pane label="授权激活" name="fifth">
           <el-alert title="注意：系统授权有疑问请联系客服人员" type="warning" :closable="false" show-icon />
           <el-row style="margin-top: 15px">
             <el-col :span="18">
@@ -229,7 +252,10 @@ export default {
         emailAccount: '',
         emailPassword: '',
         emailSsl: 0,
-        registerKey: ''
+        registerKey: '',
+        smsCompany: '1',
+        accessKeyId: '',
+        accessKeySecret: '',
       }
     }
   },
