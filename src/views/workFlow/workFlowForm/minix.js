@@ -37,11 +37,18 @@ export default {
           })
         } else {
           this.dataForm.flowId = data.flowId
-          this.selfInit(data)
-          BillNumber(`WF_${data.enCode}No`).then(res => {
-            this.dataForm.billNo = res.data
-            this.loading = false
-          })
+          if (this.selfInit) this.selfInit(data)
+          if (data.enCode === 'crmOrder') {
+            BillNumber('OrderNumber').then(res => {
+              this.dataForm.orderCode = res.data
+              this.loading = false
+            })
+          } else {
+            BillNumber(`WF_${data.enCode}No`).then(res => {
+              this.dataForm.billNo = res.data
+              this.loading = false
+            })
+          }
         }
       })
     },
@@ -53,6 +60,7 @@ export default {
     dataFormSubmit(eventType) {
       this.$refs['dataForm'].validate((valid) => {
         if (valid) {
+          if (this.exist && !this.exist()) return
           if ('fileJson' in this.dataForm) {
             let list = this.fileList.map(o => ({
               fileId: o.fileId || o.response.data.name,

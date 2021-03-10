@@ -104,7 +104,8 @@
       <div class="box">
         <el-tabs v-model="activeName">
           <el-tab-pane label="订单商品" name="goods">
-            <el-table :data="list" size='mini' show-summary :summary-method="getSummaries">
+            <el-table :data="dataForm.goodsList" size='mini' show-summary
+              :summary-method="getSummaries">
               <el-table-column type="index" width="50" label="序号" align="center" />
               <el-table-column prop="goodsName" label="商品名称" />
               <el-table-column prop="specifications" label="规格型号" width="80" />
@@ -166,7 +167,8 @@
             </div>
           </el-tab-pane>
           <el-tab-pane label="收款计划" name="plan">
-            <el-table :data="planList" size='mini' show-summary :summary-method="getSummaries">
+            <el-table :data="dataForm.collectionPlanList" size='mini' show-summary
+              :summary-method="getSummaries">
               <el-table-column type="index" width="50" label="序号" align="center" />
               <el-table-column prop="receivableDate" label="收款日期">
                 <template slot-scope="scope">
@@ -217,11 +219,11 @@
 </template>
 
 <script>
-import { Info, Create, Update } from '@/api/workFlow/workFlowForm'
+import comMinix from '../minix'
 import { CustomerList } from '@/api/extend/order'
-import { BillNumber } from '@/api/system/billRule'
 import GoodsBox from '@/views/extend/order/GoodsBox'
 export default {
+  mixins: [comMinix],
   components: { GoodsBox },
   data() {
     return {
@@ -260,20 +262,14 @@ export default {
           { required: true, message: '付款方式不能为空', trigger: 'change' }
         ],
       },
-      list: [],
-      planList: [],
-      loading: true,
       options: ['现金', '转帐', '汇票'],
       transportOptions: ['快递', '物流', '配送', '自提'],
       treeData: [],
-      fileList: [],
-      goodsBoxVisible: false,
-      userBoxVisible: false,
-      setting: {}
+      goodsBoxVisible: false
     }
   },
   watch: {
-    list: {
+    'dataForm.goodsList': {
       handler(newVal, oldVal) {
         let menoy = 0
         for (let i = 0; i < newVal.length; i++) {
@@ -289,9 +285,6 @@ export default {
     this.initData()
   },
   methods: {
-    goBack() {
-      this.$emit('close')
-    },
     initData() {
       this.$store.dispatch('base/getUserTree').then(res => {
         this.treeData = res
@@ -309,89 +302,11 @@ export default {
       this.dataForm.customerName = item.text
       this.dataForm.customerId = item.id
     },
-    init(data) {
-      this.loading = true
-      this.dataForm.id = data.id || ''
-      this.setting = data
-      this.$nextTick(() => {
-        if (this.dataForm.id) {
-          this.$refs['dataForm'].resetFields()
-          Info(this.setting.enCode, this.dataForm.id).then(res => {
-            this.dataForm = res.data
-            this.list = res.data.goodsList
-            this.planList = res.data.collectionPlanList
-            this.fileList = JSON.parse(this.dataForm.fileJson)
-            for (let i = 0; i < this.fileList.length; i++) {
-              this.$set(this.fileList[i], 'name', this.fileList[i].fileName)
-            }
-            this.loading = false
-          })
-        } else {
-          BillNumber('OrderNumber').then(res => {
-            this.dataForm.orderCode = res.data
-            this.loading = false
-          })
-        }
-      })
-    },
-    dataFormSubmit(isSubmit) {
-      this.$refs['dataForm'].validate((valid) => {
-        if (valid) {
-          if (!this.exist()) return
-          let list = this.fileList.map(o => ({
-            fileId: o.fileId || o.response.data.name,
-            fileName: o.fileName || o.name,
-            fileSize: o.fileSize || this.jnpf.toFileSize(o.raw.size),
-            fileTime: o.fileTime || o.raw.lastModifiedDate,
-            fileState: o.fileState || "success",
-            fileType: o.fileType || o.raw.type
-          }))
-          this.dataForm.fileJson = JSON.stringify(list)
-          this.dataForm.goodsList = this.list
-          this.dataForm.collectionPlanList = this.planList
-          this.dataForm.status = isSubmit ? 0 : 1
-          if (isSubmit) {
-            if (this.setting.freeApprover == 0) {
-              this.$confirm('您确定要提交当前流程吗, 是否继续?', '提示', {
-                type: 'warning'
-              }).then(() => {
-                this.submit()
-              }).catch(() => { });
-            } else {
-              this.userBoxVisible = true
-              this.$nextTick(() => {
-                this.$refs.userBox.init()
-              })
-            }
-          } else {
-            this.request()
-          }
-        }
-      })
-    },
-    submit(freeApproverUserId) {
-      if (freeApproverUserId) this.dataForm.freeApproverUserId = freeApproverUserId
-      this.request()
-    },
-    request() {
-      if (!this.dataForm.id) delete (this.dataForm.id)
-      const formMethod = this.dataForm.id ? Update : Create
-      formMethod(this.setting.enCode, this.dataForm).then(res => {
-        this.$message({
-          message: res.msg,
-          type: 'success',
-          duration: 1500,
-          onClose: () => {
-            this.$emit('close', true)
-          }
-        })
-      })
-    },
     handleDel(index, row) {
-      this.list.splice(index, 1);
+      this.dataForm.goodsList.splice(index, 1);
     },
     handleDelPlan(index, row) {
-      this.planList.splice(index, 1);
+      this.dataForm.collectionPlanList.splice(index, 1);
     },
     choice() {
       this.goodsBoxVisible = true
@@ -430,8 +345,8 @@ export default {
     exist() {
       let isOk = true;
       //  遍历数组，判断非空
-      for (let i = 0; i < this.list.length; i++) {
-        const e = this.list[i];
+      for (let i = 0; i < this.dataForm.goodsList.length; i++) {
+        const e = this.dataForm.goodsList[i];
         if (!e.qty) {
           this.$message({
             showClose: true,
@@ -464,8 +379,8 @@ export default {
         }
       }
       if (isOk) {
-        for (let i = 0; i < this.planList.length; i++) {
-          const e = this.planList[i];
+        for (let i = 0; i < this.dataForm.collectionPlanList.length; i++) {
+          const e = this.dataForm.collectionPlanList[i];
           if (!e.receivableRate) {
             this.$message({
               showClose: true,
@@ -504,7 +419,7 @@ export default {
       let item = {
         receivableDate: "", receivableRate: 0, receivableMoney: 0, receivableMode: "", abstract: ""
       }
-      this.planList.push(item)
+      this.dataForm.collectionPlanList.push(item)
     },
     initList(list) {
       for (let i = 0; i < list.length; i++) {
@@ -524,7 +439,7 @@ export default {
           actualAmount: e.price,
           description: ''
         }
-        this.list.push(item)
+        this.dataForm.goodsList.push(item)
       }
     },
     count(row) {
@@ -536,20 +451,6 @@ export default {
       row.actualPrice = this.jnpf.toDecimal(discountPrice * (1 + (row.cess / 100)));
       //实际金额
       row.actualAmount = this.jnpf.toDecimal(parseFloat(row.actualPrice) * parseFloat(row.qty))
-    },
-    JudgeShow(id) {
-      if (!this.setting.formOperates || !this.setting.formOperates.length) return true
-      let arr = this.setting.formOperates.filter(o => o.id === id) || []
-      if (!arr.length) return true
-      let item = arr[0]
-      return item.read
-    },
-    JudgeWrite(id) {
-      if (!this.setting.formOperates || !this.setting.formOperates.length) return false
-      let arr = this.setting.formOperates.filter(o => o.id === id) || []
-      if (!arr.length) return true
-      let item = arr[0]
-      return !item.write
     }
   }
 }
