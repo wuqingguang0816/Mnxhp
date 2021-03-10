@@ -6,7 +6,7 @@
         <parser :form-conf="formData" :key="key" ref="dynamicForm" v-if="!loading" />
         <span slot="footer" class="dialog-footer">
           <el-button @click="visible = false">{{formData.cancelButtonText||'取 消'}}</el-button>
-          <el-button type="primary" @click="visible = false">{{formData.confirmButtonText||'确 定'}}
+          <el-button type="primary" @click="handleComfirm">{{formData.confirmButtonText||'确 定'}}
           </el-button>
         </span>
       </el-dialog>
@@ -17,7 +17,7 @@
           <div class="JNPF-common-page-header">
             <el-page-header @back="goBack" :content="!dataForm.id ? '新建' : isDetail? '详情':'编辑'" />
             <div class="options">
-              <el-button type="primary" @click="goBack">{{formData.confirmButtonText||'确 定'}}
+              <el-button type="primary" @click="handleComfirm">{{formData.confirmButtonText||'确 定'}}
               </el-button>
               <el-button @click="goBack">{{formData.cancelButtonText||'取 消'}}</el-button>
             </div>
@@ -53,6 +53,9 @@ export default {
   methods: {
     goBack() {
       this.$emit('refreshDataList')
+    },
+    handleComfirm() {
+      this.$message({ message: '功能预览不支持数据保存', type: 'warning' })
     },
     init(formData) {
       this.formData = deepClone(formData)
