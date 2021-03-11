@@ -245,46 +245,12 @@ export const inputComponents = [{
   },
   {
     __config__: {
-      label: '时间范围',
-      tag: 'el-date-picker',
-      tagIcon: 'icon-ym icon-ym-generator-time-range',
-      defaultValue: null,
-      span: 24,
-      showLabel: true,
-      labelWidth: null,
-      required: false,
-      layout: 'colFormItem',
-      jnpfKey: 'timeRange',
-      dragDisabled: false,
-    },
-    placeholder: '请选择',
-    disabled: false
-  },
-  {
-    __config__: {
       jnpfKey: 'date',
       label: '日期选择',
       labelWidth: null,
       showLabel: true,
       tag: 'el-date-picker',
       tagIcon: 'icon-ym icon-ym-generator-date',
-      defaultValue: null,
-      required: false,
-      layout: 'colFormItem',
-      span: 24,
-      dragDisabled: false
-    },
-    placeholder: '请选择',
-    disabled: false
-  },
-  {
-    __config__: {
-      jnpfKey: 'dateRange',
-      label: '日期范围',
-      labelWidth: null,
-      showLabel: true,
-      tag: 'el-date-picker',
-      tagIcon: 'icon-ym icon-ym-generator-date-range',
       defaultValue: null,
       required: false,
       layout: 'colFormItem',
