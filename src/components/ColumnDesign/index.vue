@@ -295,6 +295,7 @@ export default {
   created() {
     if (this.modelType == 4) {
       this.columnBtnsOption = this.columnBtnsOption.filter(o => o.value != 'detail')
+      this.typeList = this.typeList.filter(o => o.value != 3)
     }
     let list = []
     const loop = (data, parent) => {
