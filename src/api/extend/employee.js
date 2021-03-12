@@ -16,31 +16,27 @@ export function EmployeeDelete(id) {
   })
 }
 // 导出Excel
-export function ExportExcel() {
+export function ExportExcel(data) {
   return request({
-    url: 'api/extend/Employee/ExportExcel',
-    method: 'get'
-  })
-}
-// 导出pdf
-export function ExportPdf() {
-  return request({
-    url: '/api/extend/Employee/ExportPdf',
-    method: 'get'
-  })
-}
-// 导出Word
-export function ExportWord() {
-  return request({
-    url: '/api/extend/Employee/ExportWord',
-    method: 'get'
+    url: 'api/Extend/Employee/ExportExcelData',
+    method: 'get',
+    data
   })
 }
 // 导入
-export function ImportData() {
+export function ImportData(data) {
   return request({
     url: '/api/extend/Employee/ImportData',
-    method: 'post'
+    method: 'post',
+    data
+  })
+}
+// 导入预览
+export function ImportPreview(data) {
+  return request({
+    url: '/api/extend/Employee/ImportPreview',
+    method: 'get',
+    data
   })
 }
 // 模板下载

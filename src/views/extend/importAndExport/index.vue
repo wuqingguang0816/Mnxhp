@@ -5,7 +5,7 @@
         <el-form @submit.native.prevent>
           <el-col :span="6">
             <el-form-item label="查询字段">
-              <el-select v-model="condition" placeholder="请选择">
+              <el-select v-model="listQuery.condition" placeholder="请选择">
                 <el-option v-for="item in options" :key="item.value" :label="item.label"
                   :value="item.value">
                 </el-option>
@@ -14,7 +14,7 @@
           </el-col>
           <el-col :span="6">
             <el-form-item label="关键词">
-              <el-input v-model="keyword" placeholder="请输入关键词查询" clearable />
+              <el-input v-model="listQuery.keyword" placeholder="请输入关键词查询" clearable />
             </el-form-item>
           </el-col>
           <el-col :span="6">
@@ -30,17 +30,8 @@
       <div class="JNPF-common-layout-main JNPF-flex-main">
         <div class="JNPF-common-head">
           <div>
-            <el-dropdown>
-              <el-button type="primary" icon="el-icon-download" :loading="btnLoading">导出<i
-                  class="el-icon-arrow-down el-icon--right"></i></el-button>
-              <el-dropdown-menu slot="dropdown">
-                <el-dropdown-item @click.native="excelImport('Excel')">Excel</el-dropdown-item>
-                <el-dropdown-item @click.native="excelImport('Word')">Word</el-dropdown-item>
-                <el-dropdown-item @click.native="excelImport('Pdf')">PDF</el-dropdown-item>
-              </el-dropdown-menu>
-            </el-dropdown>
-            <el-button icon="el-icon-upload2" @click="openDialog" type="text"
-              style="margin-left:10px">导入</el-button>
+            <el-button type="primary" icon="el-icon-download" @click="exportForm">导出</el-button>
+            <el-button type="text" icon="el-icon-upload2" @click="uploadForm">导入</el-button>
           </div>
           <div class="JNPF-common-head-right">
             <el-tooltip effect="dark" :content="$t('common.refresh')" placement="top">
@@ -86,7 +77,7 @@
           <el-table-column label="操作" fixed="right" width="50">
             <template slot-scope="scope">
               <el-button size="mini" type="text" class="JNPF-table-delBtn"
-                @click="handleDel(scope.$index,scope.row.id)">删除</el-button>
+                @click="handleDel(scope.row.id,scope.$index)">删除</el-button>
             </template>
           </el-table-column>
         </JNPF-table>
@@ -94,25 +85,26 @@
           :limit.sync="listQuery.pageSize" @pagination="initData" />
       </div>
     </div>
-    <Form v-if="formVisible" ref="Form" @refreshDataList="reset" />
+    <ExportForm v-if="exportFormVisible" ref="exportForm" />
+    <ImportForm v-if="importFormVisible" ref="importForm" />
   </div>
 </template>
 
 <script>
-import { EmployeeList, EmployeeDelete, ExportExcel, ExportPdf, ExportWord } from '@/api/extend/employee'
-import Form from './Form'
+import { EmployeeList, EmployeeDelete } from '@/api/extend/employee'
+import ImportForm from './ImportForm'
+import ExportForm from './ExportForm'
 export default {
   name: 'extend-importAndExport',
-  components: { Form },
+  components: { ExportForm, ImportForm },
   data() {
     return {
-      keyword: '',
-      condition: 'EnCode',
       list: [],
       total: 0,
       listLoading: true,
-      btnLoading: false,
       listQuery: {
+        keyword: '',
+        condition: 'EnCode',
         currentPage: 1,
         pageSize: 20,
         sort: 'desc'
@@ -122,7 +114,8 @@ export default {
       { value: 'Telephone', label: '电话' },
       { value: 'DepartmentName', label: '部门' },
       { value: 'PositionName', label: '岗位' }],
-      formVisible: false
+      importFormVisible: false,
+      exportFormVisible: false
     }
   },
   created() {
@@ -130,11 +123,13 @@ export default {
   },
   methods: {
     reset() {
-      this.keyword = ''
+      this.listQuery.keyword = ''
+      this.listQuery.condition = 'EnCode'
       this.search()
     },
     search() {
       this.listQuery = {
+        ...this.listQuery,
         currentPage: 1,
         pageSize: 20,
         sort: 'desc'
@@ -143,54 +138,36 @@ export default {
     },
     initData() {
       this.listLoading = true
-      let query = {
-        ...this.listQuery,
-        condition: this.condition,
-        keyword: this.keyword
-      }
-      EmployeeList(query).then(res => {
+      EmployeeList(this.listQuery).then(res => {
         this.list = res.data.list
         this.total = res.data.pagination.total
         this.listLoading = false
       })
     },
-    handleDel(index, id) {
+    handleDel(id, index) {
       this.$confirm(this.$t('common.delTip'), this.$t('common.tipTitle'), {
         type: 'warning'
       }).then(() => {
-        this.asyncDel(index, id);
-      }).catch(() => { });
+        EmployeeDelete(id).then(res => {
+          this.list.splice(index, 1)
+          this.$message({
+            type: 'success',
+            message: res.msg
+          })
+        })
+      }).catch(() => { })
     },
-    asyncDel(index, id) {
-      EmployeeDelete(id).then(res => {
-        this.list.splice(index, 1);
-        this.$message({
-          type: 'success',
-          message: res.msg
-        });
-      })
-    },
-    openDialog() {
-      this.formVisible = true
+    exportForm() {
+      this.exportFormVisible = true
       this.$nextTick(() => {
-        this.$refs.Form.init()
+        this.$refs.exportForm.init(this.listQuery)
       })
     },
-    excelImport(key) {
-      this.btnLoading = true
-      let method = ''
-      if (key === 'Pdf') {
-        method = ExportPdf
-      } else if (key === 'Word') {
-        method = ExportWord
-      } else {
-        method = ExportExcel
-      }
-      method().then(res => {
-        this.btnLoading = false
-        if (!res.data.url) return
-        window.location.href = this.define.comUrl + res.data.url
-      }).catch(() => { this.btnLoading = false })
+    uploadForm() {
+      this.importFormVisible = true
+      this.$nextTick(() => {
+        this.$refs.importForm.init()
+      })
     }
   }
 }

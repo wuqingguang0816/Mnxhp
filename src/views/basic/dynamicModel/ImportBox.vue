@@ -1,6 +1,6 @@
 <template>
   <el-dialog title="导入数据" :close-on-click-modal="false" :visible.sync="visible"
-    class="JNPF-dialog JNPF-dialog_center JNPF-Import-dialog" lock-scroll width="600px">
+    class="JNPF-dialog JNPF-dialog_center" lock-scroll width="600px">
     <el-row>
       <el-col :span="12" class="grid-content">
         <p>下载导入模板，填写数据</p>
@@ -68,3 +68,25 @@ export default {
   }
 }
 </script>
+<style lang="scss" scoped>
+::v-deep .el-dialog__body {
+  padding: 40px 30px !important;
+}
+
+.grid-content {
+  &:first-child {
+    border-right: 1px solid #dcdfe6;
+  }
+
+  text-align: center;
+
+  p {
+    text-align: center;
+  }
+
+  img {
+    width: 128px;
+    margin: 10px 0;
+  }
+}
+</style>

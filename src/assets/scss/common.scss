@@ -691,29 +691,6 @@
   }
 }
 
-.JNPF-Import-dialog {
-  .el-dialog__body {
-    padding: 40px 30px !important;
-  }
-
-  .grid-content {
-    &:first-child {
-      border-right: 1px solid #dcdfe6;
-    }
-
-    text-align: center;
-
-    p {
-      text-align: center;
-    }
-
-    img {
-      width: 128px;
-      margin: 10px 0;
-    }
-  }
-}
-
 .dynamic-form-main {
   height: calc(100% - 61px);
   overflow: auto;
