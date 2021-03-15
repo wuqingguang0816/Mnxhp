@@ -45,7 +45,10 @@ export default {
           })
         } else {
           this.formData = {}
-          this.loading = false
+          this.fillFormData(this.formConf, this.formData)
+          this.$nextTick(() => {
+            this.loading = false
+          })
           this.dataForm.flowId = data.flowId
         }
         this.key = +new Date()

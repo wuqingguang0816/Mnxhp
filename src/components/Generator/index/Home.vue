@@ -27,8 +27,8 @@
       <div class="action-bar">
         <el-button icon="el-icon-video-play" type="text" @click="preview" size="medium">
           预览</el-button>
-        <el-button icon="el-icon-view" type="text" @click="showJson" size="medium">
-          查看json</el-button>
+        <!-- <el-button icon="el-icon-view" type="text" @click="showJson" size="medium">
+          查看json</el-button> -->
         <el-button class="delete-btn" icon="el-icon-delete" type="text" @click="empty"
           size="medium">清空</el-button>
       </div>

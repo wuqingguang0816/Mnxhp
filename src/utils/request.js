@@ -56,7 +56,7 @@ service.interceptors.response.use(
       Message({
         message: res.msg || '请求出错，请重试',
         type: 'error',
-        duration: 3000,
+        duration: 1500,
         onClose: () => {
           if (url.indexOf('/api/oauth/Login') < 0 && url.indexOf('/api/oauth/LockScreen') < 0 && (res.code === 600 || res.code === 601 || res.code === 602)) {
             // 600：登录过期,请重新登录  601: 您的帐号在其他地方已登录,被强制踢出 602: Token验证失败

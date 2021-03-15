@@ -245,8 +245,6 @@ export default {
       columnData: JSON.parse(JSON.stringify(defaultColumnData)),
       btnsOption: [
         { value: 'add', icon: 'el-icon-plus', label: '新增' },
-        // { value: 'print', icon: 'el-icon-printer', label: '打印' },
-        // { value: 'upload', icon: 'el-icon-upload2', label: '导入' },
         { value: 'download', icon: 'el-icon-download', label: '导出' },
       ],
       columnBtnsOption: [
@@ -262,7 +260,6 @@ export default {
         { url: require('@/assets/images/generator/columnType1.png'), value: 1, name: '普通表格' },
         { url: require('@/assets/images/generator/columnType2.png'), value: 2, name: '左侧树形+普通表格' },
         { url: require('@/assets/images/generator/columnType3.png'), value: 3, name: '分组表格' },
-        // { url: require('@/assets/images/generator/columnType4.png'), value: 4 },
       ]
     }
   },
