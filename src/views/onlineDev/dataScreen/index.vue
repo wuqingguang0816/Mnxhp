@@ -170,6 +170,7 @@ export default {
       })
     },
     handleView(id) {
+      const token = getToken()
       const viewUrl = `${this.define.dataV}/view/${id}?token=${token}`
       window.open(viewUrl, '_blank')
     },
