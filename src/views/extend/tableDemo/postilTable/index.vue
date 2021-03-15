@@ -66,7 +66,7 @@
         </JNPF-table>
         <pagination :total="total" :page.sync="listQuery.currentPage"
           :limit.sync="listQuery.pageSize" @pagination="initData" />
-        <Form v-if="formVisible" ref="Form" @refreshDataList="refresh" />
+        <Form v-if="formVisible" ref="Form" @refreshDataList="initData" />
       </div>
     </div>
   </div>

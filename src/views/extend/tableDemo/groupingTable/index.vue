@@ -73,7 +73,7 @@
             </template>
           </el-table-column>
         </JNPF-table>
-        <JNPF-Form v-if="formVisible" ref="JNPFForm" @refreshDataList="refresh" />
+        <JNPF-Form v-if="formVisible" ref="JNPFForm" @refreshDataList="initData" />
       </div>
     </div>
   </div>
