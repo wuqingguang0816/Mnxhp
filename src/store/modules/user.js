@@ -163,7 +163,7 @@ const actions = {
               let propertyJson = e.propertyJson ? JSON.parse(e.propertyJson) : null,
                 moduleId = '';
               if (propertyJson) moduleId = propertyJson.moduleId || ''
-              e.path = `${define.dataV}/view/${moduleId}`
+              e.path = `${define.dataV}/view/${moduleId}?token=${getToken()}`
             }
             // 外链
             if (e.type == 7) {
