@@ -82,6 +82,7 @@ import {
   updateDataVState
 } from '@/api/onlineDev/dataV'
 import Form from './Form'
+import { getToken } from '@/utils/auth'
 
 export default {
   name: 'onlineDev-dataScreen',
@@ -169,7 +170,7 @@ export default {
       })
     },
     handleView(id) {
-      const viewUrl = `${this.define.dataV}/view/${id}`
+      const viewUrl = `${this.define.dataV}/view/${id}?token=${token}`
       window.open(viewUrl, '_blank')
     },
     handleCopy(id) {
