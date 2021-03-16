@@ -109,7 +109,7 @@
         <el-table-column label="操作" fixed="right" width="50">
           <template slot-scope="scope">
             <el-button size="mini" type="text" class="JNPF-table-delBtn"
-              @click="handleDel(scope.row.id,scope.$index)">删除</el-button>
+              @click="handleDel(scope.$index)">删除</el-button>
           </template>
         </el-table-column>
       </JNPF-table>
@@ -219,6 +219,9 @@ export default {
       this.fileList = []
       this.fileName = ''
       this.visible = true
+    },
+    handleDel(index) {
+      this.list.splice(index, 1)
     },
     templateDownload() {
       TemplateDownload().then(res => {

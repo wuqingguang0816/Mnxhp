@@ -61,7 +61,7 @@ export default {
         },
         {
           label: "身份证号",
-          prop: "idnumber"
+          prop: "idNumber"
         },
         {
           label: "联系电话",
