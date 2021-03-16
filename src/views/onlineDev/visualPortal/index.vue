@@ -50,8 +50,9 @@
             v-if="jnpf.hasP('lastmodifyuser')" />
           <el-table-column prop="lastmodifytime" label="最后修改时间" :formatter="jnpf.tableDateFormat"
             width="120" v-if="jnpf.hasP('lastmodifytime')" />
-          <el-table-column prop="description" label="说明" show-overflow-tooltip />
-          <el-table-column label="状态" width="70" align="center">
+          <el-table-column prop="description" label="说明" v-if="jnpf.hasP('description')"
+            show-overflow-tooltip />
+          <el-table-column label="状态" width="70" align="center" v-if="jnpf.hasP('enabledMark')">
             <template slot-scope="scope" v-if="!scope.row.top">
               <el-tag :type="scope.row.enabledMark == 1 ? 'success' : 'danger'" disable-transitions>
                 {{scope.row.enabledMark==1?'正常':'停用'}}</el-tag>
