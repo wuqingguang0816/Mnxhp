@@ -40,7 +40,7 @@
             <el-col :sm="12" :md="8" :lg="6" :xl="4" v-for="item in listData" :key="item.id">
               <div class="item">
                 <div class="imgBox">
-                  <img :src="define.comUrl + '/api/DataV/Images/screenShot/' + item.screenShot" />
+                  <img :src="define.comUrl + '/api/visualdev/DataScreen/Images/screenShot/' + item.screenShot" />
                 </div>
                 <h3 class="title">
                   <span class="txt">

@@ -27,7 +27,7 @@ export default {
       this.$nextTick(() => {
         const token = getToken()
         if(id){
-          this.src = `${this.define.dataV}/build/${id}?token=${token}`
+          this.src = `${this.define.dataV}/build/${id}?id=${id}&token=${token}`
         } else {
           this.src = `${this.define.dataV}/build/?token=${token}`
         }
