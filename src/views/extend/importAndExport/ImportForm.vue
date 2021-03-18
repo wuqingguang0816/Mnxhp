@@ -14,7 +14,7 @@
         <div class="up_right">
           <p class="title">上传填好的数据表</p>
           <p class="tip">文件后缀名必须是xls或xlsx，文件大小不超过500KB，最多支持导入1000条数据</p>
-          <el-upload :action="define.comUrl+'/api/Extend/Employee/Uploader'"
+          <el-upload :action="define.comUrl+'/api/extend/Employee/Uploader'"
             :headers="{ Authorization: $store.getters.token}" :on-success="handleSuccess"
             :on-remove="handleRemove" :before-remove="beforeRemove" :on-change="handleChange"
             :file-list="fileList" accept=".xls,.xlsx" :before-upload="beforeUpload"
