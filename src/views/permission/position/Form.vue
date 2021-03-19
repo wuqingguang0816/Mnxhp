@@ -4,10 +4,9 @@
     class="JNPF-dialog JNPF-dialog_center" width="600px">
     <el-form ref="dataForm" v-loading="formLoading" :model="dataForm" :rules="dataRule"
       label-width="90px">
-      <el-form-item label="所属部门" prop="organizeId">
-        <JNPF-TreeSelect v-model="dataForm.organizeId" :options="treeData" lastLevel
-          lastLevelKey='type' lastLevelValue='department' @getValue="getValue"
-          placeholder="选择所属部门" />
+      <el-form-item label="所属组织" prop="organizeId">
+        <JNPF-TreeSelect v-model="dataForm.organizeId" :options="treeData" @getValue="getValue"
+          placeholder="选择所属组织" />
       </el-form-item>
       <el-form-item label="岗位名称" prop="fullName">
         <el-input v-model="dataForm.fullName" placeholder="输入名称" />
@@ -68,7 +67,7 @@ export default {
       usersTreeData: [],
       dataRule: {
         organizeId: [
-          { required: true, message: '所属部门不能为空', trigger: 'input' }
+          { required: true, message: '所属组织不能为空', trigger: 'input' }
         ],
         fullName: [
           { required: true, message: '请输入岗位名称', trigger: 'blur' },

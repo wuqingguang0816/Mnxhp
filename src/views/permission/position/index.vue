@@ -49,7 +49,7 @@
         <JNPF-table v-loading="listLoading" :data="tableData">
           <el-table-column prop="fullName" label="岗位名称" v-if="jnpf.hasP('fullName')" />
           <el-table-column prop="enCode" label="岗位编码" v-if="jnpf.hasP('enCode')" />
-          <el-table-column prop="department" label="所属部门" v-if="jnpf.hasP('department')" />
+          <el-table-column prop="department" label="所属组织" v-if="jnpf.hasP('department')" />
           <el-table-column prop="type" label="岗位类型" v-if="jnpf.hasP('type')" />
           <el-table-column prop="description" label="岗位说明" v-if="jnpf.hasP('description')" />
           <el-table-column prop="creatorTime" :formatter="jnpf.tableDateFormat" label="创建时间"
