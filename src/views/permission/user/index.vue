@@ -3,6 +3,11 @@
     <div class="JNPF-common-layout-left">
       <div class="JNPF-common-title">
         <h2>{{$t('common.organization')}}</h2>
+        <span class="options">
+          <el-tooltip content="组织架构图" placement="top">
+            <el-link icon="el-icon-menu" :underline="false" @click="showDiagram" />
+          </el-tooltip>
+        </span>
       </div>
       <el-scrollbar class="JNPF-common-el-tree-scrollbar">
         <el-tree ref="treeBox" :data="treeData" :element-loading-text="$t('common.loadingText')"
@@ -89,6 +94,7 @@
       </div>
     </div>
     <Form v-show="formVisible" ref="Form" @close="removeForm" />
+    <Diagram v-if="diagramVisible" ref="Diagram" @close="diagramVisible = false" />
     <ResetPwdForm v-if="resetFormVisible" ref="ResetPwdForm" @refreshDataList="initData" />
   </div>
 </template>
@@ -102,12 +108,14 @@ import {
   delUser
 } from '@/api/permission/user'
 import Form from './Form'
+import Diagram from './Diagram'
 import ResetPwdForm from './ResetPassword'
 
 export default {
   name: 'permission-user',
   components: {
     Form,
+    Diagram,
     ResetPwdForm
   },
   data() {
@@ -130,6 +138,7 @@ export default {
       total: 0,
       type: '',
       formVisible: false,
+      diagramVisible: false,
       resetFormVisible: false,
       authorizeFormVisible: false
     }
@@ -138,6 +147,12 @@ export default {
     this.getOrganizeList()
   },
   methods: {
+    showDiagram() {
+      this.diagramVisible = true
+      this.$nextTick(() => {
+        this.$refs.Diagram.init()
+      })
+    },
     search() {
       this.params.currentPage = 1
       this.params.pageSize = 20
