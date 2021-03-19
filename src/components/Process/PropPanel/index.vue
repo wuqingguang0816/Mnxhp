@@ -121,7 +121,7 @@
             <el-alert type="warning" :closable="false">
               <div slot="title" class="tips">
                 <p>请求方式：GET</p>
-                <p>请求参数：taskld、taskNodeld</p>
+                <p>请求参数：taskId、taskNodeId</p>
               </div>
             </el-alert>
             <el-form-item label="自定义发起事件">
@@ -234,7 +234,7 @@
             <el-alert type="warning" :closable="false">
               <div slot="title" class="tips">
                 <p>请求方式：GET</p>
-                <p>请求参数：taskld、taskNodeld、handleStatus(撤回事件无此参数)</p>
+                <p>请求参数：taskId、taskNodeId、handleStatus(撤回事件无此参数)</p>
                 <p>处理状态：0-拒绝、1-同意</p>
               </div>
             </el-alert>
