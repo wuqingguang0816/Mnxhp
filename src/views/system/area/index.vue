@@ -27,7 +27,7 @@
             <screenfull />
           </div>
         </div>
-        <JNPF-table v-loading="listLoading" :data="treeList" row-key="id" lazy
+        <JNPF-table v-loading="listLoading" :data="treeList" row-key="id" lazy v-if="refreshTable"
           :load="loadExpandData" :tree-props="{children: 'children', hasChildren: 'hasChildren'}">
           <el-table-column prop="fullName" label="区域名称" v-if="jnpf.hasP('fullName')" />
           <el-table-column prop="enCode" label="区域编码" v-if="jnpf.hasP('enCode')" />
@@ -71,6 +71,7 @@ export default {
         keyword: ''
       },
       nodeId: -1,
+      refreshTable: true,
       formVisible: false
     }
   },
@@ -86,12 +87,17 @@ export default {
       this.listLoading = true
       this.treeList = []
       getProvinceList(this.nodeId, this.params).then(res => {
+        this.refreshTable = false
         this.treeList = res.data.list
         this.listLoading = false
         this.btnLoading = false
+        this.$nextTick(() => {
+          this.refreshTable = true
+        })
       }).catch(() => {
         this.listLoading = false
         this.btnLoading = false
+        this.refreshTable = true
       })
     },
     loadExpandData(tree, treeNode, resolve) {

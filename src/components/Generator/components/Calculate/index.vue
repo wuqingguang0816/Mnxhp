@@ -6,7 +6,7 @@ import { mergeNumberOfExps, validExp, toRPN, calcRPN, debounce } from '../../uti
 export default {
   model: {
     prop: 'value',
-    event: 'change'
+    event: 'input'
   },
   props: [
     "value",
@@ -61,7 +61,7 @@ export default {
     execRPN() {
       const temp = this.RPN_EXP.map(t => typeof t === 'object' ? this.getFormVal(t.__vModel__) : t)
       this.innerValue = calcRPN(temp)
-      this.$emit('change', this.innerValue)
+      this.$emit('input', this.innerValue)
     }
   },
   watch: {
