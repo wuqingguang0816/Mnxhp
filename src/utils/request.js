@@ -61,6 +61,7 @@ service.interceptors.response.use(
           if (url.indexOf('/api/oauth/Login') < 0 && url.indexOf('/api/oauth/LockScreen') < 0 && (res.code === 600 || res.code === 601 || res.code === 602)) {
             // 600：登录过期,请重新登录  601: 您的帐号在其他地方已登录,被强制踢出 602: Token验证失败
             store.dispatch('user/resetToken').then(() => {
+              if (window.location.pathname.indexOf('login') > -1) return
               setTimeout(() => { location.reload() }, 100);
             })
           }
