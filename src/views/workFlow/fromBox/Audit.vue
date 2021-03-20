@@ -178,11 +178,9 @@ export default {
       this.$prompt('', "审批拒绝", {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
-        inputPlaceholder: '请输入审批意见（必填）',
+        inputPlaceholder: '请输入审批意见（选填）',
         inputType: 'textarea',
-        inputErrorMessage: '审批意见不能为空',
         inputValue: "",
-        inputValidator: (val) => { if (!val) return false },
         closeOnClickModal: false
       }).then(({ value }) => {
         let query = {
@@ -212,11 +210,9 @@ export default {
       this.$prompt('', "撤回流程", {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
-        inputPlaceholder: '请输入撤回原因（必填）',
+        inputPlaceholder: '请输入撤回原因（选填）',
         inputType: 'textarea',
-        inputErrorMessage: '原因不能为空',
         inputValue: "",
-        inputValidator: (val) => { if (!val) return false },
         closeOnClickModal: false
       }).then(({ value }) => {
         Revoke(this.setting.id, { handleOpinion: value }).then(res => {
@@ -248,11 +244,9 @@ export default {
       this.$prompt('', "撤回审核", {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
-        inputPlaceholder: '请输入撤回原因（必填）',
+        inputPlaceholder: '请输入撤回原因（选填）',
         inputType: 'textarea',
-        inputErrorMessage: '原因不能为空',
         inputValue: "",
-        inputValidator: (val) => { if (!val) return false },
         closeOnClickModal: false
       }).then(({ value }) => {
         Recall(this.setting.taskId, { handleOpinion: value }).then(res => {
@@ -271,11 +265,9 @@ export default {
       this.$prompt('', "终止审核不可恢复", {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
-        inputPlaceholder: '请输入终止原因（必填）',
+        inputPlaceholder: '请输入终止原因（选填）',
         inputType: 'textarea',
-        inputErrorMessage: '原因不能为空',
         inputValue: "",
-        inputValidator: (val) => { if (!val) return false },
         closeOnClickModal: false
       }).then(({ value }) => {
         Cancel(this.setting.taskId, { handleOpinion: value }).then(res => {
