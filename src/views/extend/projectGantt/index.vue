@@ -152,13 +152,8 @@ export default {
       })
     },
     sortChange({ column, prop, order }) {
-      // if (!order) {
-      //   this.listQuery.sort = 'desc'
-      //   this.listQuery.sidx = ''
-      // } else {
-      //   this.listQuery.sort = order == 'descending' ? "desc" : 'asc'
-      //   this.listQuery.sidx = prop
-      // }
+      // this.listQuery.sort = order == 'ascending' ? 'asc' : 'desc'
+      // this.listQuery.sidx = !order ? '' : prop
       // this.initData()
     }
   }

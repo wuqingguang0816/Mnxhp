@@ -30,8 +30,8 @@
           </el-input-number>&nbsp;&nbsp;天
         </el-form-item>
         <el-form-item label="完成进度" prop="schedule">
-          <el-input-number v-model="dataForm.schedule" :precision="2" :step="0.1" :min="0"
-            :max="100" controls-position="right" label="11">
+          <el-input-number v-model="dataForm.schedule" :step="1" :min="0" :max="100"
+            controls-position="right">
           </el-input-number>&nbsp;&nbsp;%
         </el-form-item>
         <el-form-item label="状态" prop="state">
