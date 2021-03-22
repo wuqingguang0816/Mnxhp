@@ -84,7 +84,6 @@
 </template>
 
 <script>
-import { isArray } from 'util'
 import { deepClone } from '@/utils'
 import { dyOptionsList, useInputList, useTimeList, useSelectList } from '@/components/Generator/generator/comConfig'
 import { getDictionaryDataSelector } from '@/api/systemData/dictionary'
@@ -134,7 +133,7 @@ export default {
       for (let i = 0; i < this.searchList.length; i++) {
         const e = this.searchList[i]
         if (e.value) {
-          if (isArray(e.value)) {
+          if (Array.isArray(e.value)) {
             if (e.value.length) obj[e.__vModel__] = e.value
           } else {
             obj[e.__vModel__] = e.value

@@ -28,6 +28,11 @@
           </el-table-column>
           <el-table-column prop="label" label="列名" />
           <el-table-column prop="prop" label="字段" />
+          <el-table-column prop="sortable" label="排序" width="60">
+            <template slot-scope="scope">
+              <el-checkbox v-model="scope.row.sortable" />
+            </template>
+          </el-table-column>
           <el-table-column prop="align" label="对齐">
             <template slot-scope="scope">
               <el-select v-model="scope.row.align" placeholder="请选择">
@@ -112,60 +117,42 @@
                 <el-input v-model="columnData.treeTitle" placeholder="树形标题"></el-input>
               </el-form-item>
               <el-form-item label="数据来源">
-                <el-select v-model="columnData.treeDataSource" placeholder="请选择数据来源">
+                <el-select v-model="columnData.treeDataSource" placeholder="请选择数据来源"
+                  @change="dataTypeChange">
                   <el-option label="数据字典" value="dictionary"></el-option>
-                  <!-- <el-option label="数据列表" value="api"></el-option> -->
+                  <el-option label="公司数据" value="organize"></el-option>
+                  <el-option label="部门数据" value="department"></el-option>
+                  <el-option label="人员数据" value="user"></el-option>
+                  <el-option label="远端数据" value="api"></el-option>
                 </el-select>
               </el-form-item>
               <template v-if="columnData.treeDataSource==='dictionary'">
                 <el-form-item label="数据字典">
                   <DicSelect v-model="columnData.treeDictionary" placeholder="请选择数据字典" />
                 </el-form-item>
-                <el-form-item label="关联字段">
-                  <el-select v-model="columnData.treeDbTableFieldRelation" placeholder="请选择关联字段">
-                    <el-option :label="item.__config__.label" :value="item.__vModel__"
-                      v-for="(item, index) in list" :key="index"></el-option>
-                  </el-select>
-                </el-form-item>
               </template>
               <template v-if="columnData.treeDataSource==='api'">
-                <el-form-item label="数据选择">
-                  <el-select v-model="columnData.treeDbTable" placeholder="请选择数据选择">
-                    <el-option label="数据字典" value="dictionary"></el-option>
-                    <el-option label="数据列表" value="api"></el-option>
-                  </el-select>
+                <el-form-item label="数据接口">
+                  <JNPF-TreeSelect :options="dataInterfaceSelector"
+                    v-model="columnData.treePropsUrl" placeholder="请选择数据接口" lastLevel
+                    lastLevelKey='categoryId' lastLevelValue='1' clearable />
                 </el-form-item>
                 <el-form-item label="主键字段">
-                  <el-select v-model="columnData.treeDbTableField" placeholder="请选择主键字段">
-                    <el-option label="数据字典" value="dictionary"></el-option>
-                    <el-option label="数据列表" value="api"></el-option>
-                  </el-select>
-                </el-form-item>
-                <el-form-item label="主键字段">
-                  <el-select v-model="columnData.treeDbTableFieldParentId" placeholder="请选择主键字段">
-                    <el-option label="数据字典" value="dictionary"></el-option>
-                    <el-option label="数据列表" value="api"></el-option>
-                  </el-select>
-                </el-form-item>
-                <el-form-item label="父级字段">
-                  <el-select v-model="columnData.treeDbTableFieldParentId" placeholder="请选择父级字段">
-                    <el-option label="数据字典" value="dictionary"></el-option>
-                    <el-option label="数据列表" value="api"></el-option>
-                  </el-select>
+                  <el-input v-model="columnData.treePropsValue" placeholder="主键字段" />
                 </el-form-item>
                 <el-form-item label="显示字段">
-                  <el-select v-model="columnData.treeDbTableFieldShow" placeholder="请选择显示字段">
-                    <el-option label="数据字典" value="dictionary"></el-option>
-                    <el-option label="数据列表" value="api"></el-option>
-                  </el-select>
+                  <el-input v-model="columnData.treePropsLabel" placeholder="显示字段" />
                 </el-form-item>
-                <el-form-item label="关联字段">
-                  <el-select v-model="columnData.treeDbTableFieldRelation" placeholder="请选择关联字段">
-                    <el-option label="数据字典" value="dictionary"></el-option>
-                    <el-option label="数据列表" value="api"></el-option>
-                  </el-select>
+                <el-form-item label="子级字段">
+                  <el-input v-model="columnData.treePropsChildren" placeholder="子级字段" />
                 </el-form-item>
               </template>
+              <el-form-item label="关联字段">
+                <el-select v-model="columnData.treeRelation" placeholder="请选择关联字段">
+                  <el-option :label="item.__config__.label" :value="item.__vModel__"
+                    v-for="(item, index) in list" :key="index"></el-option>
+                </el-select>
+              </el-form-item>
             </template>
             <template v-if="columnData.type==3">
               <el-divider>分组设置</el-divider>
@@ -201,6 +188,8 @@ import Sortable from 'sortablejs'
 import { getDrawingList } from '@/components/Generator/utils/db'
 import { deepClone } from '@/utils'
 import { noColumnShowList, noSearchList } from '@/components/Generator/generator/comConfig'
+import { getDataInterfaceSelector } from '@/api/systemData/dataInterface'
+
 const defaultColumnData = {
   searchList: [], // 查询条件
   columnList: [], // 字段列表
@@ -212,11 +201,11 @@ const defaultColumnData = {
   treeTitle: '左侧标题', // 树形标题
   treeDataSource: 'dictionary',  // 树形数据来源
   treeDictionary: '',//数据字典
-  treeDbTableFieldRelation: '',  // 关联字段
-  treeDbTable: '',  // 数据选择
-  treeDbTableField: '',  // 主键字段
-  treeDbTableFieldParentId: '',  // 父级字段
-  treeDbTableFieldShow: '',  // 显示字段
+  treeRelation: '',  // 关联字段
+  treePropsUrl: '',  // 数据选择
+  treePropsValue: 'id',  // 主键字段
+  treePropsChildren: 'children',  // 子级字段
+  treePropsLabel: 'fullName',  // 显示字段
   groupField: '',  // 分组字段
   btnsList: [
     { value: 'add', icon: 'el-icon-plus', label: '新增' }
@@ -260,7 +249,8 @@ export default {
         { url: require('@/assets/images/generator/columnType1.png'), value: 1, name: '普通表格' },
         { url: require('@/assets/images/generator/columnType2.png'), value: 2, name: '左侧树形+普通表格' },
         { url: require('@/assets/images/generator/columnType3.png'), value: 3, name: '分组表格' },
-      ]
+      ],
+      dataInterfaceSelector: []
     }
   },
   watch: {
@@ -290,6 +280,7 @@ export default {
     },
   },
   created() {
+    this.getDataInterfaceSelector()
     if (this.modelType == 4) {
       this.columnBtnsOption = this.columnBtnsOption.filter(o => o.value != 'detail')
       this.typeList = this.typeList.filter(o => o.value != 3)
@@ -315,6 +306,8 @@ export default {
       label: o.__config__.label,
       prop: o.__vModel__,
       align: 'left',
+      jnpfKey: o.__config__.jnpfKey,
+      sortable: false,
       width: null
     }));
     this.searchOptions = searchOptions.map(o => ({ ...o, value: '' }));
@@ -358,8 +351,16 @@ export default {
       return new Promise((resolve, reject) => {
         if (!this.columnData.columnList.length) reject({ msg: '列表字段不允许为空', target: 2 })
         if (this.columnData.type == 2) {
-          if (!this.columnData.treeDictionary) reject({ msg: '请选择数据字典', target: 2 })
-          if (!this.columnData.treeDbTableFieldRelation) reject({ msg: '请选择关联字段', target: 2 })
+          if (this.columnData.treeDataSource === 'dictionary' && !this.columnData.treeDictionary) reject({ msg: '请选择数据字典', target: 2 })
+          if (this.columnData.treeDataSource === 'api') {
+            if (!this.columnData.treePropsValue) reject({ msg: '请输入主键字段', target: 2 })
+            if (!this.columnData.treePropsLabel) reject({ msg: '请输入显示字段', target: 2 })
+            if (!this.columnData.treePropsChildren) reject({ msg: '请输入子级字段', target: 2 })
+          }
+          if (!this.columnData.treeRelation) reject({ msg: '请选择关联字段', target: 2 })
+        }
+        if (this.columnData.type == 3) {
+          if (!this.columnData.groupField) reject({ msg: '请选择分组字段', target: 2 })
         }
         resolve({ columnData: this.columnData, target: 2 })
       })
@@ -395,6 +396,16 @@ export default {
     },
     columnSelectionChange(val) {
       this.$set(this.columnData, 'columnList', val)
+    },
+    getDataInterfaceSelector() {
+      getDataInterfaceSelector().then(res => {
+        this.dataInterfaceSelector = res.data
+      })
+    },
+    dataTypeChange() {
+      this.columnData.treePropsValue = 'id'
+      this.columnData.treePropsChildren = 'children'
+      this.columnData.treePropsLabel = 'fullName'
     }
   }
 }

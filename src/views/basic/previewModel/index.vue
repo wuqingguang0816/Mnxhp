@@ -1,13 +1,13 @@
 
 <template>
   <div class="JNPF-common-layout" v-show="showPage">
-    <div class="JNPF-common-layout-left" v-if="columnData.type === 2 && columnData.treeDictionary">
+    <div class="JNPF-common-layout-left" v-if="columnData.type === 2">
       <div class="JNPF-common-title" v-if="columnData.treeTitle">
         <h2>{{columnData.treeTitle}}</h2>
       </div>
-      <el-tree :data="treeData" :props="defaultProps" default-expand-all highlight-current
+      <el-tree :data="treeData" :props="treeProps" default-expand-all highlight-current
         ref="treeBox" :expand-on-click-node="false" @node-click="handleNodeClick"
-        class="JNPF-common-el-tree" node-key="id">
+        class="JNPF-common-el-tree" :node-key="treeProps.value">
         <span class="custom-tree-node" slot-scope="{ node, data }">
           <i :class="data.icon"></i>
           <span class="text">{{node.label}}</span>
@@ -32,9 +32,10 @@
           </div>
         </div>
         <JNPF-table v-loading="listLoading" :data="list" row-key="id" default-expand-all
-          :tree-props="{children: 'children', hasChildren: ''}">
+          :tree-props="{children: 'children', hasChildren: ''}" @sort-change='sortChange'>
           <el-table-column :prop="item.prop" :label="item.label" :align="item.align"
-            :width="item.width" v-for="(item, i) in columnData.columnList" :key="i" />
+            :width="item.width" v-for="(item, i) in columnData.columnList" :key="i"
+            :sortable="item.sortable" />
           <el-table-column label="操作" fixed="right" :width="columnData.columnBtnsList.length*50"
             v-if="columnData.columnBtnsList.length">
             <template slot-scope="scope">
@@ -57,8 +58,9 @@
 </template>
 
 <script>
-import { getConfigData, getColumnData, getFormData, getModelList, deteleModel, importModel, exportModel } from '@/api/onlineDev/visualDev'
+import { getConfigData, getModelList, deteleModel, exportModel } from '@/api/onlineDev/visualDev'
 import { getDictionaryDataSelector } from '@/api/systemData/dictionary'
+import { previewDataInterface } from '@/api/systemData/dataInterface'
 import Form from './Form'
 import ExportBox from '../dynamicModel/ExportBox'
 import Search from '../dynamicModel/Search'
@@ -69,9 +71,10 @@ export default {
     return {
       showPage: false,
       keyword: '',
-      defaultProps: {
+      treeProps: {
         children: 'children',
-        label: 'fullName'
+        label: 'fullName',
+        value: 'id'
       },
       list: [],
       total: 0,
@@ -116,7 +119,10 @@ export default {
         this.listQuery.sort = this.columnData.sort
         this.listQuery.sidx = this.columnData.defaultSidx
         if (this.columnData.type === 3 || !this.columnData.hasPage) this.listQuery.pageSize = 10000
-        if (this.columnData.type === 2 && this.columnData.treeDictionary) {
+        if (this.columnData.type === 2) {
+          this.treeProps.value = this.columnData.treePropsValue
+          this.treeProps.label = this.columnData.treePropsLabel
+          this.treeProps.children = this.columnData.treePropsChildren
           this.getTreeView()
         } else {
           this.initData()
@@ -134,15 +140,42 @@ export default {
           this.initData()
         })
       }
+      if (this.columnData.treeDataSource === "organize") {
+        this.$store.dispatch('generator/getCompanyTree').then(res => {
+          this.treeData = res
+          this.initData()
+        })
+      }
+      if (this.columnData.treeDataSource === "department") {
+        this.$store.dispatch('generator/getDepTree').then(res => {
+          this.treeData = res
+          this.initData()
+        })
+      }
+      if (this.columnData.treeDataSource === "user") {
+        this.$store.dispatch('base/getUserTree').then(res => {
+          this.treeData = res
+          this.initData()
+        })
+      }
+      if (this.columnData.treeDataSource === "api") {
+        if (!this.columnData.treePropsUrl) return
+        previewDataInterface(this.columnData.treePropsUrl).then(res => {
+          if (Array.isArray(res.data)) {
+            this.treeData = res.data
+          } else {
+            this.treeData = []
+          }
+          this.initData()
+        })
+      }
     },
     handleNodeClick(data) {
-      if (this.columnData.treeDataSource === "dictionary") {
-        if (this.treeActiveId == data.id) return
-        this.treeActiveId = data.id
-        this.$refs.Search.treeReset()
-        let json = { [this.columnData.treeDbTableFieldRelation]: data.id }
-        this.search(JSON.stringify(json))
-      }
+      if (this.treeActiveId == data[this.treeProps.value]) return
+      this.treeActiveId = data[this.treeProps.value]
+      this.$refs.Search.treeReset()
+      let json = { [this.columnData.treeRelation]: data[this.treeProps.value] }
+      this.search(JSON.stringify(json))
     },
     handleDel(id, index) {
       this.$confirm(this.$t('common.delTip'), this.$t('common.tipTitle'), {
@@ -169,15 +202,6 @@ export default {
       if (key === 'add') {
         this.addOrUpdateHandle()
       }
-      if (key == 'print') {
-        console.log('打印');
-      }
-      if (key == 'upload') {
-        this.importBoxVisible = true
-        this.$nextTick(() => {
-          this.$refs.ImportBox.init(this.modelId)
-        })
-      }
       if (key == 'download') {
         this.exportBoxVisible = true
         this.$nextTick(() => {
@@ -197,11 +221,18 @@ export default {
         this.handleDel(id, index)
       }
     },
+    sortChange({ column, prop, order }) {
+      this.listQuery.sort = order == 'ascending' ? 'asc' : 'desc'
+      this.listQuery.sidx = !order ? '' : prop
+      this.initData()
+    },
     refresh(isrRefresh) {
       this.formVisible = false
-      if (isrRefresh) this.reset()
+      if (isrRefresh) this.initData()
     },
     reset() {
+      this.listQuery.sort = 'desc'
+      this.listQuery.sidx = ''
       this.$refs.Search.reset()
     },
     search(json) {
