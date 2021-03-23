@@ -35,10 +35,10 @@
         <el-form-item label="主题" prop="subject">
           <el-input v-model="dataForm.subject" placeholder="输入主题" />
         </el-form-item>
-        <el-form-item label="附件">
+        <el-form-item label="附件" prop="attachment">
           <UploadFile v-model="fileList" type="mail" />
         </el-form-item>
-        <el-form-item label="正文">
+        <el-form-item label="正文" prop="bodyText">
           <JNPF-Quill v-model="dataForm.bodyText" />
         </el-form-item>
       </el-form>
@@ -89,6 +89,7 @@ export default {
     },
     init(id) {
       this.$nextTick(() => {
+        this.fileList = []
         this.$refs['dataForm'].resetFields()
         if (id) {
           EmailInfo(id).then(res => {
