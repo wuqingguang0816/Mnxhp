@@ -89,6 +89,7 @@ export default {
     },
     init(id) {
       this.$nextTick(() => {
+        this.fileList = []
         this.$refs['dataForm'].resetFields()
         if (id) {
           EmailInfo(id).then(res => {
