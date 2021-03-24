@@ -128,7 +128,8 @@ export default {
     documentation: '帮助文档',
     logOut: '退出系统',
     notice: '消息',
-    chat: '聊天'
+    chat: '聊天',
+    setting: '设置'
   },
   login: {
     title: '账户登录',

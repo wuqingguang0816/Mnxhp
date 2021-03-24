@@ -54,9 +54,11 @@
         </el-dropdown-item>
       </el-dropdown-menu>
     </el-dropdown>
-    <div class="right-menu-item hover-effect" @click="$refs.Settings.init()" v-if="showSettings">
-      <i class="icon-ym icon-ym-header-pannel"></i>
-    </div>
+    <el-tooltip :content="$t('navbar.setting')" placement="bottom">
+      <div class="right-menu-item hover-effect" @click="$refs.Settings.init()" v-if="showSettings">
+        <i class="icon-ym icon-ym-header-pannel"></i>
+      </div>
+    </el-tooltip>
     <!-- 关于平台弹窗 -->
     <!-- v-el-drag-dialog -->
     <el-dialog title="关于平台" :close-on-click-modal="false" :visible.sync="visible"

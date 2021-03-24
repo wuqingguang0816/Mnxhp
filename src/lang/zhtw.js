@@ -128,7 +128,8 @@ export default {
     documentation: '幫助文檔',
     logOut: '退出系統',
     notice: '消息',
-    chat: '聊天'
+    chat: '聊天',
+    setting: '設置'
   },
   login: {
     title: '賬戶登錄',

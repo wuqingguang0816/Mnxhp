@@ -128,7 +128,8 @@ export default {
     documentation: 'Documentation',
     logOut: 'Log Out',
     notice: 'Notice',
-    chat: 'Chat'
+    chat: 'Chat',
+    setting: 'Setting'
   },
   login: {
     title: 'Account Login',
