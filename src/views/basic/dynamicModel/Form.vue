@@ -52,16 +52,18 @@ export default {
       formValue: {},
       key: +new Date(),
       btnLoading: false,
-      loading: true
+      loading: true,
+      isPreview: false
     }
   },
   methods: {
     goBack() {
       this.$emit('refreshDataList')
     },
-    init(formData, modelId, id) {
+    init(formData, modelId, id, isPreview) {
       this.formData = deepClone(formData)
       this.modelId = modelId
+      this.isPreview = isPreview
       this.dataForm.id = id || ''
       this.loading = true
       this.$nextTick(() => {
@@ -118,6 +120,7 @@ export default {
       }).catch(() => { this.btnLoading = false })
     },
     dataFormSubmit() {
+      if (this.isPreview) return this.$message({ message: '功能预览不支持数据保存', type: 'warning' })
       this.$refs.dynamicForm && this.$refs.dynamicForm.submitForm()
     }
   }

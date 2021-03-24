@@ -18,9 +18,16 @@
       <Search ref="Search" :list="columnData.searchList" @reset="reset" @search="search" />
       <div class="JNPF-common-layout-main JNPF-flex-main">
         <div class="JNPF-common-head">
-          <div>
+          <div v-if="isPreview">
+            <el-button :type="i==0?'primary':'text'" :icon="item.icon"
+              @click="headBtnsHandel(item.value)" v-for="(item, i) in columnData.btnsList"
+              :class="{'JNPF-table-delBtn':item.value=='batchRemove' && i!=0 }" :key="i">
+              {{item.label}}</el-button>
+          </div>
+          <div v-else>
             <el-button :type="i==0?'primary':'text'" :icon="item.icon" v-has="'btn_'+item.value"
-              @click="headBtnsHandel(item.value)" v-for="(item, i) in columnData.btnsList" :key="i">
+              @click="headBtnsHandel(item.value)" v-for="(item, i) in columnData.btnsList"
+              :class="{'JNPF-table-delBtn':item.value=='batchRemove' && i!=0 }" :key="i">
               {{item.label}}</el-button>
           </div>
           <div class="JNPF-common-head-right">
@@ -32,7 +39,8 @@
           </div>
         </div>
         <JNPF-table v-loading="listLoading" :data="list" row-key="id" default-expand-all
-          :tree-props="{children: 'children', hasChildren: ''}" @sort-change='sortChange'>
+          :tree-props="{children: 'children', hasChildren: ''}" @sort-change='sortChange'
+          :has-c="hasBatchBtn" @selection-change="handleSelectionChange" v-if="refreshTable">
           <el-table-column :prop="item.prop" :label="item.label" :align="item.align"
             :width="item.width" v-for="(item, i) in columnData.columnList" :key="i"
             :sortable="item.sortable" />
@@ -80,7 +88,7 @@ export default {
       },
       list: [],
       total: 0,
-      listLoading: true,
+      listLoading: false,
       listQuery: {
         currentPage: 1,
         pageSize: 20,
@@ -98,11 +106,21 @@ export default {
       columnData: {
         columnBtnsList: []
       },
-      formData: {}
+      formData: {},
+      isPreview: false,
+      hasBatchBtn: false,
+      refreshTable: true,
+      multipleSelection: []
     }
   },
   created() {
-    this.modelId = this.$route.meta.relationId
+    let isPreview = this.$route.query.isPreview
+    if (isPreview) {
+      this.modelId = this.$route.query.id
+      this.isPreview = true
+    } else {
+      this.modelId = this.$route.meta.relationId
+    }
     if (!this.modelId) return
     this.getColumnData()
   },
@@ -115,12 +133,18 @@ export default {
         }
         if (!res.data) return
         this.showPage = true
+        this.refreshTable = false
         if (!res.data.columnData || !res.data.formData) return
         this.columnData = JSON.parse(res.data.columnData)
         if (this.columnData.type === 3) {
           this.columnData.columnList = this.columnData.columnList.filter(o => o.prop != this.columnData.groupField)
         }
+        this.hasBatchBtn = this.columnData.btnsList.some(o => o.value == 'batchRemove')
+        this.$nextTick(() => {
+          this.refreshTable = true
+        })
         this.formData = JSON.parse(res.data.formData)
+        if (this.isPreview) return
         this.listQuery.pageSize = this.columnData.pageSize
         this.listQuery.sort = this.columnData.sort
         this.listQuery.sidx = this.columnData.defaultSidx
@@ -136,6 +160,7 @@ export default {
       }).catch(() => { })
     },
     initData() {
+      if (this.isPreview) return
       this.listLoading = true
       getModelList(this.modelId, this.listQuery).then(res => {
         this.list = res.data.list
@@ -202,11 +227,10 @@ export default {
         })
       }).catch(() => { });
     },
-    // 新增 / 修改
     addOrUpdateHandle(id) {
       this.formVisible = true
       this.$nextTick(() => {
-        this.$refs.Form.init(this.formData, this.modelId, id)
+        this.$refs.Form.init(this.formData, this.modelId, id, this.isPreview)
       })
     },
     headBtnsHandel(key) {
@@ -219,8 +243,42 @@ export default {
           this.$refs.ExportBox.init(this.columnData.columnList)
         })
       }
+      if (this.isPreview) return
+      if (key === 'batchRemove') {
+        this.batchRemove()
+      }
+    },
+    handleSelectionChange(val) {
+      const res = val.map(item => item.id)
+      this.multipleSelection = res
+    },
+    batchRemove() {
+      if (!this.multipleSelection.length) {
+        this.$message({
+          type: 'error',
+          message: '请选择一条数据',
+          duration: 1500,
+        })
+        return
+      }
+      const data = { ids: this.multipleSelection }
+      this.$confirm('您确定要删除这些数据吗, 是否继续？', '提示', {
+        type: 'warning'
+      }).then(() => {
+        // deteleModel(this.modelId, id).then(res => {
+        //   this.$message({
+        //     type: 'success',
+        //     message: res.msg,
+        //     duration: 1500,
+        //     onClose: () => {
+        //       this.initData()
+        //     }
+        //   })
+        // })
+      }).catch(() => { })
     },
     download(data) {
+      if (this.isPreview) return this.$message({ message: '功能预览不支持数据导出', type: 'warning' })
       let query = { ...this.listQuery, ...data }
       exportModel(this.modelId, query).then(res => {
         if (!res.data.url) return
@@ -258,6 +316,7 @@ export default {
       this.$refs.Search.reset()
     },
     search(json) {
+      if (this.isPreview) return
       if (!json) this.$refs.treeBox && this.$refs.treeBox.setCurrentKey(null);
       this.listQuery.json = json
       this.listQuery.currentPage = 1

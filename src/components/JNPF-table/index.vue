@@ -60,7 +60,7 @@ export default {
         this.$nextTick(() => {
           this.$refs.JNPFTable.doLayout()
         })
-      }, 100)
+      }, 50)
     }
   }
 }

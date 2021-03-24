@@ -235,6 +235,7 @@ export default {
       btnsOption: [
         { value: 'add', icon: 'el-icon-plus', label: '新增' },
         { value: 'download', icon: 'el-icon-download', label: '导出' },
+        { value: 'batchRemove', icon: 'el-icon-delete', label: '批量删除' },
       ],
       columnBtnsOption: [
         { value: 'edit', icon: 'el-icon-edit', label: '编辑' },
