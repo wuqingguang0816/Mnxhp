@@ -56,14 +56,14 @@
             {{item.label}}
           </span>
         </div>
-        <div style="margin: 10px 0;">
+        <div style="margin: 10px 0;" class="comBtn">
           <span>计算符号：</span>
           <span v-for="item in ['+', '-', '×', '÷', '(', ')']" class="calc-btn" :key="item"
             @click="expressionTemp.push(item)">{{item}}</span>
         </div>
         <div style="margin: 10px 0;">
           <span style="float: left;">数字键盘：</span>
-          <div style="width: 110px;line-height: 2.5;overflow: hidden;">
+          <div class="numBtn comBtn">
             <span :key="item" class="calc-btn"
               v-for="item in ['1', '2', '3', '4', '5', '6', '7', '8', '9', '0', '.']"
               @click="expressionTemp.push(item)">{{item}}</span>
@@ -103,7 +103,7 @@ export default {
         }
         if (Array.isArray(data)) data.forEach(d => loop(d, parent))
         if (data.__config__ && data.__config__.jnpfKey) {
-          if (['numInput', 'JNPFAmount'].includes(data.__config__.jnpfKey)) {
+          if (['numInput', 'JNPFAmount', 'comInput'].includes(data.__config__.jnpfKey)) {
             const isTableChild = parent && parent.__config__ && parent.__config__.jnpfKey === 'table'
             calcList.push({
               __vModel__: isTableChild ? parent.__vModel__ + '.' + data.__vModel__ : data.__vModel__,
@@ -164,12 +164,18 @@ export default {
   .placeholder-text {
     color: #c0c4cc;
   }
+  .calc-btn {
+    &:first-child {
+      margin-left: 0;
+    }
+  }
 }
 .calc-btn {
   padding: 4px 8px;
   margin: 0 6px;
   background: #dcdfe6;
   cursor: pointer;
+
   &.error {
     background: #f56c6c;
     color: white;
@@ -189,6 +195,21 @@ export default {
       margin: 10px 0;
       font-size: 12px;
       color: #aaa;
+    }
+    .numBtn {
+      width: 110px;
+      line-height: 2.5;
+      overflow: hidden;
+      padding-left: 3px;
+    }
+    .comBtn {
+      .calc-btn {
+        width: 22px;
+        padding: 0;
+        text-align: center;
+        line-height: 22px;
+        display: inline-block;
+      }
     }
 
     .calc-preview {

@@ -61,6 +61,7 @@ export default {
     execRPN() {
       const temp = this.RPN_EXP.map(t => typeof t === 'object' ? this.getFormVal(t.__vModel__) : t)
       this.innerValue = calcRPN(temp)
+      if (isNaN(this.innerValue)) this.innerValue = 0
       this.$emit('input', this.innerValue)
     }
   },
