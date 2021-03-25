@@ -14,7 +14,7 @@
       <el-form-item label="部门编码" prop="enCode">
         <el-input v-model="dataForm.enCode" placeholder="输入编码" />
       </el-form-item>
-      <el-form-item label="部门经理" prop="managerId">
+      <el-form-item label="部门主管" prop="managerId">
         <JNPF-TreeSelect v-model="dataForm.managerId" :options="usersTreeData" @getValue="getValue"
           lastLevel lastLevelKey='type' lastLevelValue='user' placeholder="选择所属部门主管" />
       </el-form-item>

@@ -48,7 +48,7 @@
           :tree-props="{children: 'children', hasChildren: ''}">
           <el-table-column prop="fullName" label="名称" v-if="jnpf.hasP('fullName')" />
           <el-table-column prop="enCode" label="编码" v-if="jnpf.hasP('enCode')" />
-          <el-table-column prop="manager" label="部门经理" v-if="jnpf.hasP('manager')" />
+          <el-table-column prop="manager" label="部门主管" v-if="jnpf.hasP('manager')" />
           <el-table-column prop="description" label="备注" v-if="jnpf.hasP('description')" />
           <el-table-column prop="creatorTime" label="创建时间" :formatter="jnpf.tableDateFormat"
             width="120" v-if="jnpf.hasP('creatorTime')" />
