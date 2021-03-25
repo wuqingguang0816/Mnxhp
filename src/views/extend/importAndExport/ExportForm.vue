@@ -137,5 +137,8 @@ export default {
 <style lang="scss" scoped>
 >>> .el-dialog__body {
   padding: 20px !important;
+  .el-checkbox {
+    width: 150px;
+  }
 }
 </style>
