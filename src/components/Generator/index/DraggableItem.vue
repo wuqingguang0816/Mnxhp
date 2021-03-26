@@ -1,6 +1,9 @@
 <script>
 import draggable from 'vuedraggable'
 import render from '@/components/Generator/render/render'
+import { dyOptionsList } from '@/components/Generator/generator/comConfig'
+import { getDictionaryDataSelector } from '@/api/systemData/dictionary'
+import { previewDataInterface } from '@/api/systemData/dataInterface'
 
 let activeData = {}
 const components = {
@@ -142,6 +145,30 @@ function layoutIsNotFound() {
   throw new Error(`没有与${this.element.__config__.layout}匹配的layout`)
 }
 
+function buildOptions(element) {
+  const config = element.__config__
+  if (dyOptionsList.indexOf(config.jnpfKey) > -1) {
+    let isTreeSelect = config.jnpfKey === 'treeSelect' || config.jnpfKey === 'cascader'
+    if (config.dataType === 'dictionary') {
+      if (!config.dictionaryType) return
+      getDictionaryDataSelector(config.dictionaryType).then(res => {
+        isTreeSelect ? element.options = res.data.list : element.__slot__.options = res.data.list
+      })
+    }
+    if (config.dataType === 'dynamic') {
+      if (!config.propsUrl) return
+      previewDataInterface(config.propsUrl).then(res => {
+        isTreeSelect ? element.options = res.data : element.__slot__.options = res.data
+      })
+    }
+  }
+  if (config.children && Array.isArray(config.children)) {
+    for (let i = 0; i < config.children.length; i++) {
+      buildOptions(config.children[i])
+    }
+  }
+}
+
 export default {
   components: {
     render,
@@ -155,6 +182,7 @@ export default {
     'formConf'
   ],
   render(h) {
+    buildOptions(this.element)
     const layout = layouts[this.element.__config__.layout]
 
     if (layout) {
