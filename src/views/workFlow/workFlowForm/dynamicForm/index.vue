@@ -87,7 +87,7 @@ export default {
       if (!data) return
       this.dataForm.data = JSON.stringify(data)
       if (this.eventType === 'audit' || this.eventType === 'reject') {
-        this.$emit('approval', this.dataForm, this.eventType)
+        this.$emit('eventReciver', this.dataForm, this.eventType)
         return
       }
       this.dataForm.status = this.eventType === 'submit' ? 0 : 1

@@ -74,7 +74,7 @@ export default {
             this.dataForm.fileJson = fileJson
           }
           if (eventType === 'audit' || eventType === 'reject') {
-            this.$emit('approval', this.dataForm, eventType)
+            this.$emit('eventReciver', this.dataForm, eventType)
             return
           }
           this.dataForm.status = eventType === 'submit' ? 0 : 1

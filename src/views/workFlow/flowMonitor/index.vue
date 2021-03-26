@@ -117,17 +117,17 @@
           :limit.sync="listQuery.pageSize" @pagination="initData" />
       </div>
     </div>
-    <fromBox v-if="formVisible" ref="JNPFForm" @close="colseForm" />
+    <FlowBox v-if="formVisible" ref="FlowBox" @close="colseForm" />
   </div>
 </template>
 
 <script>
 import { FlowMonitorList, DeleteList } from '@/api/workFlow/FlowMonitor'
 import { FlowEngineListAll } from '@/api/workFlow/FlowEngine'
-import fromBox from '../fromBox/Audit'
+import FlowBox from '../fromBox/FlowBox'
 export default {
   name: 'workFlow-flowMonitor',
-  components: { fromBox },
+  components: { FlowBox },
   data() {
     return {
       list: [],
@@ -254,18 +254,17 @@ export default {
       let data = {
         enCode: item.flowCode,
         flowId: item.flowId,
-        delegateId: item.delegateId,
         id: item.processId,
         formType: item.formType,
         taskId: item.id,
         status: item.status,
+        opType: 4,
         hasCancel: true,
-        showStatus: true,
         readonly: true
       }
       this.formVisible = true
       this.$nextTick(() => {
-        this.$refs.JNPFForm.init(data)
+        this.$refs.FlowBox.init(data)
       })
     },
     handleChange(val) {
