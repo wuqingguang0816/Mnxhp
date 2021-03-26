@@ -438,10 +438,19 @@ export default {
 
     initFormOperates(target) {
       const formOperates = target.properties && target.properties.formOperates || []
-      // 自定义组件不加入权限控制
       let res = []
       if (!formOperates.length) {
-        const formItems = getDrawingList()
+        let list = []
+        const loop = (data, parent) => {
+          if (!data) return
+          if (data.__config__ && data.__config__.jnpfKey !== 'table' && data.__config__.children && Array.isArray(data.__config__.children)) {
+            loop(data.__config__.children, data)
+          }
+          if (Array.isArray(data)) data.forEach(d => loop(d, parent))
+          if (data.__vModel__) list.push(data)
+        }
+        loop(getDrawingList())
+        const formItems = list
         if (this.isStartNode()) {
           res = formItems.map(t => ({
             id: t.__vModel__,

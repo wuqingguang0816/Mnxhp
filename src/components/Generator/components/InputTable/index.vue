@@ -66,6 +66,9 @@
   </div>
 </template>
 <script>
+import { dyOptionsList } from '@/components/Generator/generator/comConfig'
+import { getDictionaryDataSelector } from '@/api/systemData/dictionary'
+import { previewDataInterface } from '@/api/systemData/dataInterface'
 export default {
   name: "input-table",
   props: {
@@ -92,6 +95,7 @@ export default {
   },
   created() {
     this.tableData = this.config.__config__.children
+    this.buildOptions()
     if (this.value && this.value.length) {
       this.value.forEach(t => this.addRow(t))
     } else {
@@ -99,6 +103,26 @@ export default {
     }
   },
   methods: {
+    buildOptions() {
+      this.tableData.forEach(cur => {
+        const config = cur.__config__
+        if (dyOptionsList.indexOf(config.jnpfKey) > -1) {
+          let isTreeSelect = config.jnpfKey === 'treeSelect' || config.jnpfKey === 'cascader'
+          if (config.dataType === 'dictionary') {
+            if (!config.dictionaryType) return
+            getDictionaryDataSelector(config.dictionaryType).then(res => {
+              isTreeSelect ? cur.options = res.data.list : cur.__slot__.options = res.data.list
+            })
+          }
+          if (config.dataType === 'dynamic') {
+            if (!config.propsUrl) return
+            previewDataInterface(config.propsUrl).then(res => {
+              isTreeSelect ? cur.options = res.data : cur.__slot__.options = res.data
+            })
+          }
+        }
+      })
+    },
     clearAddRowFlag() {
       this.$nextTick(() => {
         this.isAddRow = false

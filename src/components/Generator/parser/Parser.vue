@@ -175,9 +175,8 @@ export default {
             })
           }
         }
-        if (config.children) this.buildOptions(config.children, data)
+        if (config.children && config.jnpfKey !== 'table') this.buildOptions(config.children, data)
       })
-
     },
     buildRules(componentList, rules) {
       componentList.forEach(cur => {
