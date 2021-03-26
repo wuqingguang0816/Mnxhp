@@ -42,7 +42,7 @@
           :tree-props="{children: 'children', hasChildren: ''}" @sort-change='sortChange'
           :has-c="hasBatchBtn" @selection-change="handleSelectionChange" v-if="refreshTable">
           <el-table-column :prop="item.prop" :label="item.label" :align="item.align"
-            :width="item.width" v-for="(item, i) in columnData.columnList" :key="i"
+            :width="item.width" v-for="(item, i) in columnList" :key="i"
             :sortable="item.sortable" />
           <el-table-column label="操作" fixed="right" :width="columnData.columnBtnsList.length*50"
             v-if="columnData.columnBtnsList.length">
@@ -107,6 +107,7 @@ export default {
         columnBtnsList: []
       },
       formData: {},
+      columnList: [],
       isPreview: false,
       hasBatchBtn: false,
       refreshTable: true,
@@ -148,6 +149,7 @@ export default {
         this.listQuery.pageSize = this.columnData.pageSize
         this.listQuery.sort = this.columnData.sort
         this.listQuery.sidx = this.columnData.defaultSidx
+        this.getColumnList()
         if (this.columnData.type === 3 || !this.columnData.hasPage) this.listQuery.pageSize = 10000
         if (this.columnData.type === 2) {
           this.treeProps.value = this.columnData.treePropsValue
@@ -205,6 +207,22 @@ export default {
           this.initData()
         })
       }
+    },
+    getColumnList() {
+      const permissionList = this.$store.getters.permissionList
+      const modelId = this.$route.meta.modelId
+      const list = permissionList.filter(o => o.modelId === modelId)
+      const columnList = list[0] && list[0].column ? list[0].column : []
+      let realList = []
+      for (let i = 0; i < columnList.length; i++) {
+        inner: for (let j = 0; j < this.columnData.columnList.length; j++) {
+          if (columnList[i].enCode === this.columnData.columnList[j].prop) {
+            realList.push(this.columnData.columnList[j])
+            break inner
+          }
+        }
+      }
+      this.columnList = realList
     },
     handleNodeClick(data) {
       if (this.treeActiveId == data[this.treeProps.value]) return

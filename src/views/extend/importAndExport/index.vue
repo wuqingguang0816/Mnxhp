@@ -86,7 +86,7 @@
       </div>
     </div>
     <ExportForm v-if="exportFormVisible" ref="exportForm" />
-    <ImportForm v-if="importFormVisible" ref="importForm" />
+    <ImportForm v-if="importFormVisible" ref="importForm" @refresh="reset()" />
   </div>
 </template>
 
