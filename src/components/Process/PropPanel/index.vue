@@ -447,12 +447,7 @@ export default {
             loop(data.__config__.children, data)
           }
           if (Array.isArray(data)) data.forEach(d => loop(d, parent))
-          if (data.__config__ && data.__config__.jnpfKey) {
-            if (data.__config__.layout === "colFormItem" && data.__vModel__) {
-              list.push(data)
-            }
-            if (data.__config__.jnpfKey == 'table') list.push(data)
-          }
+          if (data.__vModel__) list.push(data)
         }
         loop(getDrawingList())
         const formItems = list
