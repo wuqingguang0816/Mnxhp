@@ -182,7 +182,7 @@ export default {
     'formConf'
   ],
   render(h) {
-    buildOptions(this.element)
+    // buildOptions(this.element)
     const layout = layouts[this.element.__config__.layout]
 
     if (layout) {

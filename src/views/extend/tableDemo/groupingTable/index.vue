@@ -139,7 +139,7 @@ export default {
         type: 'warning'
       }).then(() => {
         TableExampleDelete(id).then(res => {
-          this.list.splice(index, 1);
+          this.initData()
           this.$message({
             type: 'success',
             message: res.msg
