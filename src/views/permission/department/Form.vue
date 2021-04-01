@@ -75,6 +75,9 @@ export default {
           { required: true, message: '请输入部门编码', trigger: 'blur' },
           { validator: this.formValidate('enCode', '部门编码只能输入英文、数字和小数点且小数点不能放在首尾'), trigger: 'blur' },
           { max: 50, message: '部门编码最多为50个字符！', trigger: 'blur' }
+        ],
+        managerId: [
+          { required: true, message: '请选择部门主管', trigger: 'change' }
         ]
       }
     }
