@@ -5,8 +5,9 @@
       title="预览">
       <parser :form-conf="formConf" @submit="sumbitForm" :key="key" ref="dynamicForm" />
       <div slot="footer">
-        <el-button @click="close">取消</el-button>
-        <el-button type="primary" @click="handelConfirm">确定</el-button>
+        <el-button @click="close">{{formConf.cancelButtonText||'取 消'}}</el-button>
+        <el-button type="primary" @click="handelConfirm">{{formConf.confirmButtonText||'确 定'}}
+        </el-button>
       </div>
     </el-dialog>
   </div>
@@ -34,14 +35,7 @@ export default {
     onOpen() {
       this.key = +new Date()
       this.formConf = this.formData
-      // 表单数据回填，模拟异步请求场景
-      setTimeout(() => {
-        // 请求回来的表单数据
-        const data = {}
-        // 回填数据
-        this.fillFormData(this.formConf, data)
-        // 更新表单
-      }, 2000)
+      console.log(this.formConf);
     },
     onClose() {
     },
