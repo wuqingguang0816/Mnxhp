@@ -35,7 +35,6 @@ export default {
     onOpen() {
       this.key = +new Date()
       this.formConf = this.formData
-      console.log(this.formConf);
     },
     onClose() {
     },
