@@ -62,6 +62,7 @@
                   <span v-if="scope.row.type === 5">报表</span>
                   <span v-if="scope.row.type === 6">大屏</span>
                   <span v-if="scope.row.type === 7">外链</span>
+                  <span v-if="scope.row.type === 8">门户</span>
                 </template>
               </el-table-column>
               <el-table-column prop="sortCode" label="排序" width="70" align="center"
