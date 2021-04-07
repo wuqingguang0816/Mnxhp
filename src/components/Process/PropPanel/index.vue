@@ -168,7 +168,7 @@
               <div v-if="approverForm.assigneeType === 3" class="option-box"
                 style="color: #a5a5a5;">发起人自己将作为审批人处理审批单</div>
               <div v-else-if="approverForm.assigneeType === 2" class="option-box"
-                style="color: #a5a5a5;">发起人的部门经理将作为审批人处理审批单</div>
+                style="color: #a5a5a5;">发起人的部门主管将作为审批人处理审批单</div>
               <div v-else-if="approverForm.assigneeType === 1" class="option-box"
                 style="color: #a5a5a5;">发起人主管将作为审批人处理审批单</div>
               <div v-else-if="approverForm.assigneeType === 7" class="option-box"
@@ -330,7 +330,7 @@ export default {
       approverForm: JSON.parse(JSON.stringify(defaultApproverForm)),
       assigneeTypeOptions: [
         {
-          label: '部门经理',
+          label: '部门主管',
           value: 2
         },
         {
@@ -398,7 +398,18 @@ export default {
       return this.pconditions.length - this.showingPCons.length + 1;
     },
     usedFormItems() {
-      return getDrawingList()
+      let list = []
+      const loop = (data, parent) => {
+        if (!data) return
+        if (data.__config__ && data.__config__.jnpfKey !== 'table' && data.__config__.children && Array.isArray(data.__config__.children)) {
+          loop(data.__config__.children, data)
+        }
+        if (Array.isArray(data)) data.forEach(d => loop(d, parent))
+        if (data.__vModel__ && data.__config__.jnpfKey !== 'table') list.push(data)
+      }
+      loop(getDrawingList())
+      const formItems = list
+      return formItems
     }
   },
   methods: {
