@@ -104,7 +104,6 @@
 <script>
 import JNPFenlarge from "@/components/JNPF-enlarge"
 import { getDownloadUrl } from '@/api/common'
-import { isArray } from 'util'
 
 export default {
   name: 'Item',
@@ -134,7 +133,7 @@ export default {
       })
     },
     getValue(item) {
-      if (isArray(item.__config__.defaultValue)) {
+      if (Array.isArray(item.__config__.defaultValue)) {
         if (['timeRange', 'dateRange'].includes(item.__config__.jnpfKey)) {
           return item.__config__.defaultValue.join('')
         }

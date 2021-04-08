@@ -1,4 +1,3 @@
-import { isArray } from 'util'
 import { isNumberStr } from '@/components/Generator/utils'
 export default {
   data() {
@@ -6,7 +5,7 @@ export default {
   },
   methods: {
     onDefaultValueInput(str) {
-      if (isArray(this.activeData.__config__.defaultValue)) {
+      if (Array.isArray(this.activeData.__config__.defaultValue)) {
         // 数组
         this.$set(
           this.activeData.__config__,
