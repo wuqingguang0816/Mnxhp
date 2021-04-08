@@ -29,7 +29,7 @@ export default {
       if (!id) {
         this.goBack()
       } else {
-        this.title = '文件预览 - ' + name
+        this.title = '文档预览 - ' + name
         PreviewFile(id).then(res => {
           if (res.data && res.data.filePath) {
             this.url = 'https://view.officeapps.live.com/op/view.aspx?src=' + this.define.comUrl + res.data.filePath

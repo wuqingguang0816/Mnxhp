@@ -55,7 +55,7 @@
               </el-form-item>
               <el-form-item>
                 <el-button type="primary" size="small" :loading="btnLoading" class="saveBtn"
-                  @click="submitForm('baseForm')" v-has="'btn_save'">保 存</el-button>
+                  @click="submitForm()" v-has="'btn_save'">保 存</el-button>
               </el-form-item>
             </el-col>
           </el-row>
@@ -102,7 +102,7 @@
               </el-form-item>
               <el-form-item>
                 <el-button type="primary" size="small" :loading="btnLoading" class="saveBtn"
-                  @click="submitForm('baseForm')" v-has="'btn_save'">保 存</el-button>
+                  @click="submitForm()" v-has="'btn_save'">保 存</el-button>
               </el-form-item>
             </el-col>
           </el-row>
@@ -154,7 +154,7 @@
               </el-form-item>
               <el-form-item>
                 <el-button type="primary" size="small" :loading="btnLoading" class="saveBtn"
-                  @click="submitForm('baseForm')" v-has="'btn_save'">保 存</el-button>
+                  @click="submitForm()" v-has="'btn_save'">保 存</el-button>
               </el-form-item>
             </el-col>
           </el-row>
@@ -177,33 +177,7 @@
               </el-form-item>
               <el-form-item>
                 <el-button type="primary" size="small" :loading="btnLoading" class="saveBtn"
-                  @click="submitForm('baseForm')" v-has="'btn_save'">保 存</el-button>
-              </el-form-item>
-            </el-col>
-          </el-row>
-        </el-tab-pane>
-        <el-tab-pane label="授权激活" name="fifth">
-          <el-alert title="注意：系统授权有疑问请联系客服人员" type="warning" :closable="false" show-icon />
-          <el-row style="margin-top: 15px">
-            <el-col :span="18">
-              <el-form-item label="应用名称">
-                <span>JNPF-JAVA-Cloud</span>
-              </el-form-item>
-              <el-form-item label="授权名称">
-                <span>JAVA-Cloud-BF068949-ECF2-4C8B-906A-6E56E7722A35</span>
-              </el-form-item>
-              <el-form-item label="授权状态">
-                <template>
-                  <el-link type="success" :underline="false">正版授权</el-link>
-                  <el-link type="danger" :underline="false" style="display: none">未授权</el-link>
-                </template>
-              </el-form-item>
-              <el-form-item label="授权密钥">
-                <el-input v-model="baseForm.registerKey" type="textarea" :rows="5" />
-              </el-form-item>
-              <el-form-item>
-                <el-button type="primary" size="small" :loading="btnLoading" class="saveBtn"
-                  @click="submitForm('baseForm')" v-has="'btn_save'">保 存</el-button>
+                  @click="submitForm()" v-has="'btn_save'">保 存</el-button>
               </el-form-item>
             </el-col>
           </el-row>
@@ -252,7 +226,6 @@ export default {
         emailAccount: '',
         emailPassword: '',
         emailSsl: 0,
-        registerKey: '',
         smsCompany: '1',
         accessKeyId: '',
         accessKeySecret: '',
@@ -302,7 +275,7 @@ export default {
         }
       })
     },
-    submitForm: function () {
+    submitForm() {
       this.$refs['baseForm'].validate((valid) => {
         if (valid) {
           const data = { ...this.baseForm }
