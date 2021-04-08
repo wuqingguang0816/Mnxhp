@@ -11,16 +11,18 @@
           <HNotice v-if="item.jnpfKey==='notice'" :title="item.title" />
           <HEmail v-if="item.jnpfKey==='email'" :title="item.title" />
           <DataBoard v-if="item.jnpfKey==='dataBoard'" :title="item.title" :list="item.list" />
-          <HBarChart v-if="item.jnpfKey==='barChart'" :title="item.title" :option=" item.option" />
+          <HBarChart v-if="item.jnpfKey==='barChart'" :title="item.title" :option="item.option"
+            :dataType="item.dataType" :propsApi="item.propsApi" />
           <HAnnularChart v-if="item.jnpfKey==='annularChart'" :title="item.title"
-            :option=" item.option" />
-          <HAreaChart v-if="item.jnpfKey==='areaChart'" :title="item.title"
-            :option=" item.option" />
-          <HLineChart v-if="item.jnpfKey==='lineChart'" :title="item.title"
-            :option=" item.option" />
-          <HPieChart v-if="item.jnpfKey==='pieChart'" :title="item.title" :option=" item.option" />
-          <HRadarChart v-if="item.jnpfKey==='radarChart'" :title="item.title"
-            :option=" item.option" />
+            :option=" item.option" :dataType="item.dataType" :propsApi="item.propsApi" />
+          <HAreaChart v-if="item.jnpfKey==='areaChart'" :title="item.title" :option="item.option"
+            :dataType="item.dataType" :propsApi="item.propsApi" />
+          <HLineChart v-if="item.jnpfKey==='lineChart'" :title="item.title" :option="item.option"
+            :dataType="item.dataType" :propsApi="item.propsApi" />
+          <HPieChart v-if="item.jnpfKey==='pieChart'" :title="item.title" :option="item.option"
+            :dataType="item.dataType" :propsApi="item.propsApi" />
+          <HRadarChart v-if="item.jnpfKey==='radarChart'" :title="item.title" :option="item.option"
+            :dataType="item.dataType" :propsApi="item.propsApi" />
           <div class="mask" v-if="mask"></div>
         </grid-item>
       </grid-layout>

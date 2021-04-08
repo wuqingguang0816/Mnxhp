@@ -2,7 +2,7 @@
   <el-aside width="300px" class="right-box">
     <div class="cap-wrapper">控件属性</div>
     <el-scrollbar class="aside-scrollbar">
-      <el-form size="small" label-width="60px" labelPosition="left">
+      <el-form size="small" label-width="80px" labelPosition="left">
         <template v-if="activeData">
           <el-form-item v-if="activeData.title !== undefined" label="标题">
             <el-input v-model="activeData.title" placeholder="请输入标题" />
@@ -40,8 +40,19 @@
             </div>
           </template>
           <template v-if="activeData.jnpfKey && activeData.jnpfKey.indexOf('Chart')>-1">
-            <el-form-item label="数据源">
+            <el-form-item label="数据类型">
+              <el-radio-group v-model="activeData.dataType" size="small" @change="dataTypeChange">
+                <el-radio-button label="static">静态数据</el-radio-button>
+                <el-radio-button label="dynamic">远端数据</el-radio-button>
+              </el-radio-group>
+            </el-form-item>
+            <el-form-item label="数据源" v-if="activeData.dataType==='static'">
               <el-button @click="showData(activeData.option)">查看</el-button>
+            </el-form-item>
+            <el-form-item label="数据接口" v-if="activeData.dataType==='dynamic'">
+              <JNPF-TreeSelect :options="dataInterfaceOptions" v-model="activeData.propsApi"
+                placeholder="请选择数据接口" lastLevel lastLevelKey='categoryId' lastLevelValue='1'
+                clearable />
             </el-form-item>
           </template>
         </template>
@@ -54,6 +65,7 @@
 <script>
 import draggable from 'vuedraggable'
 import { getSelectorAll } from '@/api/system/menu'
+import { getDataInterfaceSelector } from '@/api/systemData/dataInterface'
 import iconBox from '@/components/JNPF-iconBox'
 import JSONArea from './JSONArea'
 export default {
@@ -65,16 +77,23 @@ export default {
       areaVisible: false,
       currentIndex: 0,
       current: '',
-      menuList: []
+      menuList: [],
+      dataInterfaceOptions: []
     }
   },
   created() {
     this.getMenuList()
+    this.getDataInterfaceSelector()
   },
   methods: {
     getMenuList() {
       getSelectorAll({ category: 'Web' }).then(res => {
         this.menuList = res.data.list
+      })
+    },
+    getDataInterfaceSelector() {
+      getDataInterfaceSelector().then(res => {
+        this.dataInterfaceOptions = res.data
       })
     },
     getSelectValue(data, i) {
@@ -125,6 +144,9 @@ export default {
     updataOption(data) {
       let option = data ? JSON.parse(data) : {}
       this.activeData.option = option
+    },
+    dataTypeChange() {
+      this.activeData.propsApi = ''
     }
   }
 }

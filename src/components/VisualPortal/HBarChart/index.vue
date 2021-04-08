@@ -13,50 +13,8 @@
   </el-card>
 </template>
 <script>
-import echarts from 'echarts'
-import resize from '@/components/Charts/mixins/resize'
+import echartMixin from '@/components/VisualPortal/mixins'
 export default {
-  mixins: [resize],
-  props: {
-    title: { type: String, default: '' },
-    option: { type: Object, default: () => { } }
-  },
-  data() {
-    return {
-      chart: null,
-      currOption: {},
-      isEmpty: false
-    }
-  },
-  mounted() {
-    this.currOption = this.option
-    this.initChart()
-  },
-  watch: {
-    option: {
-      handler(val) {
-        this.currOption = val
-        this.isEmpty = JSON.stringify(val) === "{}"
-        if (!this.isEmpty) this.initChart()
-      },
-      deep: true
-    }
-  },
-  methods: {
-    initChart() {
-      this.chart = echarts.init(this.$refs.chart)
-      this.chart.setOption(this.currOption)
-      setTimeout(() => {
-        this.$nextTick(() => {
-          this.chart.resize();
-        })
-      }, 50);
-    }
-  },
-  beforeDestroy() {
-    if (!this.chart) return
-    this.chart.dispose()
-    this.chart = null
-  }
+  mixins: [echartMixin]
 }
 </script>

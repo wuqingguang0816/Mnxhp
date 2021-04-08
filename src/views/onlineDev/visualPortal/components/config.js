@@ -90,6 +90,8 @@ export const chartComponents = [{
     label: '柱状图',
     jnpfKey: 'barChart',
     title: '柱状图',
+    dataType: 'static',
+    propsApi: '',
     option: {
       color: ['#1890ff'],
       title: {
@@ -131,6 +133,8 @@ export const chartComponents = [{
     label: '饼图',
     jnpfKey: 'pieChart',
     title: '饼图',
+    dataType: 'static',
+    propsApi: '',
     option: {
       title: {
         text: '天气情况统计',
@@ -180,6 +184,8 @@ export const chartComponents = [{
     label: '折线图',
     jnpfKey: 'lineChart',
     title: '折线图',
+    dataType: 'static',
+    propsApi: '',
     option: {
       title: {
         text: ''
@@ -258,6 +264,8 @@ export const chartComponents = [{
     label: '环形图',
     jnpfKey: 'annularChart',
     title: '环形图',
+    dataType: 'static',
+    propsApi: '',
     option: {
       tooltip: {
         trigger: 'item',
@@ -308,6 +316,8 @@ export const chartComponents = [{
     label: '面积图',
     jnpfKey: 'areaChart',
     title: '面积图',
+    dataType: 'static',
+    propsApi: '',
     option: {
       xAxis: {
         type: 'category',
@@ -343,6 +353,8 @@ export const chartComponents = [{
     label: '雷达图',
     jnpfKey: 'radarChart',
     title: '雷达图',
+    dataType: 'static',
+    propsApi: '',
     option: {
       title: {
         text: '雷达图'

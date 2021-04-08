@@ -1,17 +1,15 @@
 <template>
-  <transition name="el-zoom-in-center">
-    <div class="JNPF-preview-main form-main">
-      <div class="JNPF-common-page-header">
-        <el-page-header @back="goBack" :content="title" />
-        <div class="options">
-          <el-button @click="goBack">{{$t('common.cancelButton')}}</el-button>
-        </div>
-      </div>
-      <div class="main" v-loading="formLoading" :element-loading-text="$t('common.loadingText')">
-        <JNPFCodeEditor v-model="responseData" :options="options" ref="CodeEditor" />
+  <div class="JNPF-preview-main form-main">
+    <div class="JNPF-common-page-header">
+      <el-page-header @back="goBack" :content="title" />
+      <div class="options">
+        <el-button @click="goBack">{{$t('common.cancelButton')}}</el-button>
       </div>
     </div>
-  </transition>
+    <div class="main" v-loading="formLoading" :element-loading-text="$t('common.loadingText')">
+      <JNPFCodeEditor v-model="responseData" :options="options" ref="CodeEditor" />
+    </div>
+  </div>
 </template>
 
 <script>
