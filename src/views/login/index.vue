@@ -1,7 +1,7 @@
 <template>
   <div class="login-container">
     <div class="login-version">
-      <p class="login-version-text">{{$t('login.version')}}3.0</p>
+      <p class="login-version-text">{{$t('login.version')}} {{define.version}}</p>
     </div>
     <div class="login-content">
       <img class="login-img" src="../../assets/images/login_content_img.png" alt="">

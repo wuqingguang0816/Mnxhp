@@ -67,7 +67,7 @@
         </div>
         <div>
           <p class="title"><a href="https://www.jnpfsoft.com" target="_blank">JNPF快速开发平台</a></p>
-          <p>版本：3.0</p>
+          <p>版本：{{define.version}}</p>
           <p>作者：引迈软件</p>
           <p>引迈信息技术有限公司出品</p>
         </div>
