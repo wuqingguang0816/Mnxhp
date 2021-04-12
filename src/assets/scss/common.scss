@@ -1328,6 +1328,10 @@ textarea.el-textarea__inner {
   padding: 0 !important;
 }
 
+.el-input-number.is-controls-right .el-input__inner {
+  text-align: left !important;
+}
+
 .word-form {
   padding: 0 !important;
   margin: 0 !important;
