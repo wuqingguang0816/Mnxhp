@@ -133,7 +133,7 @@ export default {
         actualAttendance: '',
         allowance: '',
         insurance: '',
-        unpaidAmount: '',
+        overtimePay: '',
         performance: '',
         grossPay: '',
         incomeTax: '',
