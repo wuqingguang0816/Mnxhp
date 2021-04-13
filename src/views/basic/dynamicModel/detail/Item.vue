@@ -31,8 +31,10 @@
             </div>
           </template>
           <template v-else-if="item.__config__.jnpfKey==='uploadImg'">
-            <JNPFenlarge :img="define.comUrl+cItem.url"
-              v-for="(cItem,ci) in item.__config__.defaultValue" :key="ci" />
+            <el-image :src="define.comUrl+cItem.url" class="dy-img"
+              v-for="(cItem,ci) in item.__config__.defaultValue" :key="ci"
+              :preview-src-list="getImgList(item.__config__.defaultValue)" :z-index="10000">
+            </el-image>
           </template>
           <template v-else-if="item.__config__.jnpfKey==='colorPicker'">
             <el-color-picker v-model="item.__config__.defaultValue" :show-alpha="item['show-alpha']"
@@ -102,12 +104,10 @@
   </el-col>
 </template>
 <script>
-import JNPFenlarge from "@/components/JNPF-enlarge"
 import { getDownloadUrl } from '@/api/common'
 
 export default {
   name: 'Item',
-  components: { JNPFenlarge },
   props: {
     item: {
       type: Object,
@@ -131,6 +131,10 @@ export default {
       getDownloadUrl('annex', file.fileId).then(res => {
         if (res.data.url) window.location.href = this.define.comUrl + res.data.url
       })
+    },
+    getImgList(list) {
+      const newList = list.map(o => this.define.comUrl + o.url)
+      return newList
     },
     getValue(item) {
       if (Array.isArray(item.__config__.defaultValue)) {
