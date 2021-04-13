@@ -247,7 +247,8 @@ export default {
         enCode: item.flowCode,
         flowId: item.flowId,
         formType: item.formType,
-        opType: 3
+        opType: 3,
+        taskNodeId: item.thisStepId
       }
       this.formVisible = true
       this.$nextTick(() => {

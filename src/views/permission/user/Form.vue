@@ -47,9 +47,9 @@
               </el-form-item>
             </el-col>
             <el-col :sm="12" :xs="24">
-              <el-form-item label="主管" prop="managerId">
+              <el-form-item label="直属主管" prop="managerId">
                 <JNPF-TreeSelect v-model="dataForm.managerId" :options="managerTreeData" lastLevel
-                  lastLevelKey='type' lastLevelValue='user' placeholder="选择主管" clearable />
+                  lastLevelKey='type' lastLevelValue='user' placeholder="选择直属主管" clearable />
               </el-form-item>
             </el-col>
             <el-col :sm="12" :xs="24">

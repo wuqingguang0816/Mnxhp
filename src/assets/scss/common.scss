@@ -1264,6 +1264,15 @@
     }
   }
 
+  .dy-img {
+    width: 120px;
+    height: 120px;
+    overflow: hidden;
+    margin: 0 8px 8px 0;
+    border: 1px solid #c0ccda;
+    border-radius: 6px;
+  }
+
   .el-color-picker__mask {
     background: none;
   }
@@ -1326,6 +1335,10 @@ textarea.el-textarea__inner {
 
 .el-form--label-top .el-form-item__label {
   padding: 0 !important;
+}
+
+.el-input-number.is-controls-right .el-input__inner {
+  text-align: left !important;
 }
 
 .word-form {

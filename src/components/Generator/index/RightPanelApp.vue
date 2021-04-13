@@ -22,8 +22,8 @@
                   <el-form-item v-if="activeData.__vModel__ !== undefined" label="字段名">
                     <el-select v-model="activeData.__vModel__" placeholder="请选择字段名（v-model）"
                       clearable @change="fieldChange">
-                      <el-option v-for="item in formItemList" :key="item.field" :label="item.field"
-                        :value="item.field">
+                      <el-option v-for="item in formItemList" :key="item.field" :value="item.field"
+                        :label="item.fieldName?item.field+'('+item.fieldName+')':item.field">
                       </el-option>
                     </el-select>
                   </el-form-item>
@@ -34,7 +34,8 @@
                       clearable @change="fieldChange1">
                       <el-option
                         v-for="item in getSubTalebFiled(activeData.__config__.relationTable)"
-                        :key="item.field" :label="item.field" :value="item.field">
+                        :key="item.field" :value="item.field"
+                        :label="item.fieldName?item.field+'('+item.fieldName+')':item.field">
                       </el-option>
                     </el-select>
                   </el-form-item>

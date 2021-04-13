@@ -248,6 +248,7 @@ export default {
         flowId: item.flowId,
         formType: item.formType,
         opType: 1,
+        taskNodeId: item.thisStepId,
         taskId: item.id
       }
       this.formVisible = true

@@ -8,7 +8,7 @@
         </div>
       </div>
       <div class="main">
-        <el-row class="JNPF-common-search-box" :gutter="16">
+        <el-row class="JNPF-common-search-box" :gutter="20">
           <el-form @submit.native.prevent>
             <el-col :span="6">
               <el-form-item label="关键词">
@@ -481,6 +481,7 @@ export default {
   overflow: hidden;
   display: flex;
   flex-direction: column;
+  padding: 0;
   >>> .el-table {
     flex: 1;
   }
