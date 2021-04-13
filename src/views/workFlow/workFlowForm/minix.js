@@ -121,6 +121,7 @@ export default {
       })
     },
     JudgeShow(id) {
+      if (this.setting.opType == 4) return true
       if (!this.setting.formOperates || !this.setting.formOperates.length) return true
       let arr = this.setting.formOperates.filter(o => o.id === id) || []
       if (!arr.length) return true
@@ -128,6 +129,7 @@ export default {
       return item.read
     },
     JudgeWrite(id) {
+      if (this.setting.readonly) return false
       if (!this.setting.formOperates || !this.setting.formOperates.length) return false
       let arr = this.setting.formOperates.filter(o => o.id === id) || []
       if (!arr.length) return true
