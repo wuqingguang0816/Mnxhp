@@ -133,7 +133,7 @@ export default {
         }, 100)
       })
     },
-    getInfo(data) {
+    getBeforeInfo(data) {
       FlowBeforeInfo(data.id, { taskNodeId: data.taskNodeId }).then(res => {
         this.flowFormInfo = res.data.flowFormInfo
         this.flowTaskInfo = res.data.flowTaskInfo
