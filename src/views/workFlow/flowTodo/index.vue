@@ -249,6 +249,7 @@ export default {
         id: item.processId,
         formType: item.formType,
         taskId: item.id,
+        taskNodeId: item.thisStepId,
         isAudit: true
       }
       this.formVisible = true

@@ -248,6 +248,7 @@ export default {
         delegateId: item.delegateId,
         id: item.processId,
         formType: item.formType,
+        taskNodeId: item.thisStepId,
         readonly: true
       }
       this.formVisible = true

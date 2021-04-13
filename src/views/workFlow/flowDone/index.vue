@@ -246,6 +246,7 @@ export default {
         id: item.processId,
         formType: item.formType,
         taskId: item.id,
+        taskNodeId: item.thisStepId,
         hasRecall: true,
         readonly: true
       }
