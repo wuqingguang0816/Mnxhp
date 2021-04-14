@@ -3,13 +3,12 @@
     class="JNPF-dialog JNPF-dialog_center JNPF-dialog-export" lock-scroll width="600px">
     <el-form label-position="top">
       <el-form-item>
-        <p slot="label" class="export-label">数据选择</p>
         <el-radio-group v-model="type">
           <el-radio :label="0">当前页面数据</el-radio>
           <el-radio :label="1">全部页面数据</el-radio>
         </el-radio-group>
       </el-form-item>
-      <el-form-item>
+      <el-form-item class="export-line">
         <p slot="label" class="export-label">列表数据<span>请选择导出字段</span></p>
         <el-checkbox :indeterminate="isIndeterminate" v-model="checkAll"
           @change="handleCheckAllChange">全选</el-checkbox>
