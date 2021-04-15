@@ -40,7 +40,7 @@
           </div>
         </div>
         <JNPF-table v-loading="listLoading" :data="list" @expand-change="expandChange"
-          :hasNO="false">
+          :hasNO="false" @sort-change="sortChange">
           <el-table-column type="expand" width="40">
             <template slot-scope="props">
               <el-tabs>
@@ -74,15 +74,15 @@
             </template>
           </el-table-column>
           <el-table-column type="index" width="50" label="序号" align="center" />
-          <el-table-column prop="orderCode" label="订单编码" width="150" sortable />
-          <el-table-column prop="orderDate" label="订单日期" width="120" sortable
+          <el-table-column prop="orderCode" label="订单编码" width="150" sortable="custom" />
+          <el-table-column prop="orderDate" label="订单日期" width="120" sortable="custom"
             :formatter="jnpf.tableDateFormat" />
-          <el-table-column prop="customerName" label="客户名称" width="220" sortable />
-          <el-table-column prop="salesmanName" label="业务人员" width="120" sortable />
-          <el-table-column prop="receivableMoney" label="付款金额" width="100" sortable />
+          <el-table-column prop="customerName" label="客户名称" width="220" sortable="custom" />
+          <el-table-column prop="salesmanName" label="业务人员" width="120" sortable="custom" />
+          <el-table-column prop="receivableMoney" label="付款金额" width="100" sortable="custom" />
           <el-table-column prop="creatorUser" label="制单人员" width="120" />
           <el-table-column prop="description" label="订单备注" show-overflow-tooltip />
-          <el-table-column prop="currentState" label="状态" width="100" sortable>
+          <el-table-column prop="currentState" label="状态" width="100" sortable="custom">
             <template slot-scope="scope">
               <el-tag v-if="scope.row.currentState==1">等待审核</el-tag>
               <el-tag type="success" v-else-if="scope.row.currentState==2">审核通过</el-tag>
@@ -218,6 +218,11 @@ export default {
       OrderReceivableList(rows.id).then(res => {
         rows.childTable1 = res.data.list
       })
+    },
+    sortChange({ column, prop, order }) {
+      this.listQuery.sort = order == 'ascending' ? 'asc' : 'desc'
+      this.listQuery.sidx = !order ? '' : prop
+      this.initData()
     },
     handleDel(index, id) {
       this.$confirm(this.$t('common.delTip'), this.$t('common.tipTitle'), {
