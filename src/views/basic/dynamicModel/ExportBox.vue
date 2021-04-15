@@ -1,14 +1,15 @@
 <template>
   <el-dialog title="导出数据" :close-on-click-modal="false" :visible.sync="visible"
-    class="JNPF-dialog JNPF-dialog_center" lock-scroll width="600px">
-    <el-form label-position="top" label-width="80px">
-      <el-form-item label="数据选择">
+    class="JNPF-dialog JNPF-dialog_center JNPF-dialog-export" lock-scroll width="600px">
+    <el-form label-position="top">
+      <el-form-item>
         <el-radio-group v-model="type">
           <el-radio :label="0">当前页面数据</el-radio>
           <el-radio :label="1">全部页面数据</el-radio>
         </el-radio-group>
       </el-form-item>
-      <el-form-item label="导出字段">
+      <el-form-item class="export-line">
+        <p slot="label" class="export-label">列表数据<span>请选择导出字段</span></p>
         <el-checkbox :indeterminate="isIndeterminate" v-model="checkAll"
           @change="handleCheckAllChange">全选</el-checkbox>
         <el-checkbox-group v-model="columns" @change="handleCheckedChange">
@@ -20,6 +21,7 @@
       </el-form-item>
     </el-form>
     <span slot="footer" class="dialog-footer">
+      <p class="footer-tip">提示:系统将导出列表中选中的数据</p>
       <el-button @click="visible=false">{{$t('common.cancelButton')}}</el-button>
       <el-button type="primary" @click="downLoad">导 出</el-button>
     </span>
@@ -60,14 +62,3 @@ export default {
   }
 }
 </script>
-<style lang="scss" scoped>
->>> .el-dialog__body {
-  padding: 20px !important;
-  .el-checkbox {
-    width: 150px;
-  }
-}
-.column-item.el-checkbox {
-  width: calc(33.33% - 30px);
-}
-</style>

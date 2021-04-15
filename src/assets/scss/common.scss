@@ -292,6 +292,42 @@
   }
 }
 
+.JNPF-dialog-export {
+  .el-dialog {
+    .el-dialog__body {
+      padding: 20px 20px 0 !important;
+    }
+  }
+
+  .column-item.el-checkbox {
+    width: calc(33.33% - 30px);
+  }
+
+  .export-label {
+    font-size: 18px;
+    font-weight: bold;
+
+    width: 100%;
+
+    span {
+      margin-left: 10px;
+      font-size: 14px;
+      font-weight: normal;
+    }
+  }
+
+  .export-line .el-form-item__content {
+    border-top: 1px solid #dcdfe6;
+  }
+
+  .footer-tip {
+    float: left;
+    font-size: 14px;
+    color: #999999;
+    padding-top: 7px;
+  }
+}
+
 .JNPF-common-title {
   border-bottom: 1px solid #ebeef5;
   display: flex;

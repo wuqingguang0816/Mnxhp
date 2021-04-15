@@ -16,13 +16,14 @@
       </el-steps>
       <div class="options">
         <el-button @click="prve" :disabled="activeStep<=0">{{$t('common.prev')}}</el-button>
-        <el-button @click="next" :disabled="activeStep>=2">{{$t('common.next')}}</el-button>
+        <el-button @click="next" :disabled="activeStep>=2 || loading">{{$t('common.next')}}
+        </el-button>
         <el-button type="primary" @click="dataFormSubmit()" :disabled="activeStep<2"
           :loading="btnLoading">{{$t('common.confirmButton')}}</el-button>
         <el-button @click="closeDialog()">{{$t('common.cancelButton')}}</el-button>
       </div>
     </div>
-    <div class="main">
+    <div class="main" v-loading="loading">
       <el-row type="flex" justify="center" align="middle" v-if="!activeStep" class="basic-box">
         <el-col :xs="12" :sm="12" :md="12" :lg="12" :xl="10" class="basicForm">
           <el-form :model="dataForm" :rules="dataRule" ref="dataForm" label-width="80px"
@@ -161,6 +162,7 @@ export default {
   data() {
     return {
       visible: false,
+      loading: false,
       activeStep: 0,
       dataForm: {
         id: '',
@@ -228,7 +230,9 @@ export default {
       this.$nextTick(() => {
         this.$refs['dataForm'].resetFields()
         if (this.dataForm.id) {
+          this.loading = true
           FlowEngineInfo(this.dataForm.id).then(res => {
+            this.loading = false
             this.dataForm = res.data
             this.formType = this.dataForm.formType == 1 ? '系统表单' : '自定义表单'
             this.loading = false
@@ -239,7 +243,7 @@ export default {
             let mainTable = this.tables.filter(o => o.typeId == '1')[0]
             this.mainTableFields = mainTable.fields
             this.relationTable = mainTable.table
-          })
+          }).catch(() => { this.loading = false })
         } else {
           this.dataForm.formType = formType
           this.formType = formType == 1 ? '系统表单' : '自定义表单'
