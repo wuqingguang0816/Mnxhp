@@ -110,7 +110,7 @@
           :limit.sync="listQuery.pageSize" @pagination="initData" />
       </div>
     </div>
-    <component :is="currentView" v-if="formVisible" @close="colseForm" ref="Form" />
+    <FlowBox v-if="formVisible" @close="colseForm" ref="Form" />
     <Detail v-show="detailVisible" ref="detail" @close="detailVisible=false" />
   </div>
 </template>
@@ -118,11 +118,10 @@
 <script>
 import { OrderList, Delete, OrderEntryList, OrderReceivableList } from '@/api/extend/order'
 import Detail from './Detail'
-import edit from '@/views/workFlow/fromBox/Edit'
-import audit from '@/views/workFlow/fromBox/Audit'
+import FlowBox from '@/views/workFlow/fromBox/FlowBox'
 export default {
   name: 'extend-order',
-  components: { Detail, edit, audit },
+  components: { Detail, FlowBox },
   data() {
     return {
       keyword: '',
@@ -241,33 +240,30 @@ export default {
       })
     },
     addOrUpdateHandle(id) {
-      let data = { enCode: 'crmOrder', id, formType: 1, flowId: '52d3144909d04e2f8a6629ab2ab39e14' }
-      this.currentView = 'edit'
+      let data = {
+        id,
+        enCode: 'crmOrder',
+        flowId: '52d3144909d04e2f8a6629ab2ab39e14',
+        formType: 1,
+        opType: '-1'
+      }
+      this.formVisible = true
       this.$nextTick(() => {
-        this.formVisible = true
-        this.$nextTick(() => {
-          this.$refs.Form.init(data)
-        })
+        this.$refs.Form.init(data)
       })
     },
     toApprovalDetail(id, status) {
       let data = {
+        id,
         enCode: 'crmOrder',
         flowId: '52d3144909d04e2f8a6629ab2ab39e14',
-        delegateId: "",
-        id,
         formType: 1,
-        isSelf: true,
-        readonly: true,
-        status,
-        showStatus: true
+        opType: 0,
+        status
       }
-      this.currentView = 'audit'
+      this.formVisible = true
       this.$nextTick(() => {
-        this.formVisible = true
-        this.$nextTick(() => {
-          this.$refs.Form.init(data)
-        })
+        this.$refs.Form.init(data)
       })
     },
     toDetail(id) {

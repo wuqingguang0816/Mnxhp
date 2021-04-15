@@ -109,17 +109,17 @@
           :limit.sync="listQuery.pageSize" @pagination="initData" />
       </div>
     </div>
-    <fromBox v-if="formVisible" ref="JNPFForm" @close="colseForm" />
+    <FlowBox v-if="formVisible" ref="FlowBox" @close="colseForm" />
   </div>
 </template>
 
 <script>
 import { FlowBeforeList } from '@/api/workFlow/FlowBefore'
 import { FlowEngineListAll } from '@/api/workFlow/FlowEngine'
-import fromBox from '../fromBox/Audit'
+import FlowBox from '../fromBox/FlowBox'
 export default {
   name: 'workFlow-flowCirculate',
-  components: { fromBox },
+  components: { FlowBox },
   data() {
     return {
       list: [],
@@ -243,17 +243,16 @@ export default {
     },
     toDetail(item) {
       let data = {
+        id: item.processId,
         enCode: item.flowCode,
         flowId: item.flowId,
-        delegateId: item.delegateId,
-        id: item.processId,
         formType: item.formType,
-        taskNodeId: item.thisStepId,
-        readonly: true
+        opType: 3,
+        taskNodeId: item.thisStepId
       }
       this.formVisible = true
       this.$nextTick(() => {
-        this.$refs.JNPFForm.init(data)
+        this.$refs.FlowBox.init(data)
       })
     },
     colseForm(isRefresh) {
