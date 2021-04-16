@@ -4,16 +4,13 @@ import tableOperation from '@/components/JNPF-tableOperation'
 import Pagination from '@/components/Pagination'
 import JNPFTable from '@/components/JNPF-table'
 import UserBox from '@/components/JNPF-userBox'
-import UploadFile from '@/components/Upload/UploadFile'
-import UploadFileSingle from '@/components/Upload/UploadFileSingle'
-import SingleImg from '@/components/Upload/SingleImg'
 import Screenfull from '@/components/Screenfull'
 import ColumnSettings from '@/components/ColumnSettings'
 import JNPFQuill from '@/components/JNPFEditor/quill'
 // 代码生成器专供
 import JNPFText from '@/components/Generator/components/JNPFText'
-import JNPFUploadFz from '@/components/Generator/components/Upload/UploadFz' // 代码生成器专用上传附件
-import JNPFUploadImg from '@/components/Generator/components/Upload/UploadImg' // 代码生成器专用上传图片
+import JNPFUploadFz from '@/components/Generator/components/Upload/UploadFz'
+import JNPFUploadImg from '@/components/Generator/components/Upload/UploadImg'
 import ComSelect from '@/components/Generator/components/ComSelect'
 import DepSelect from '@/components/Generator/components/DepSelect'
 import PosSelect from '@/components/Generator/components/PosSelect'
@@ -36,9 +33,6 @@ export default {
     Vue.component('tableOpts', tableOperation)
     Vue.component('Pagination', Pagination)
     Vue.component('JNPFTable', JNPFTable)
-    Vue.component('UploadFile', UploadFile)
-    Vue.component('UploadFileSingle', UploadFileSingle)
-    Vue.component('SingleImg', SingleImg)
     Vue.component('UserBox', UserBox)
     Vue.component('JNPFText', JNPFText)
     Vue.component('JNPFUploadFz', JNPFUploadFz)

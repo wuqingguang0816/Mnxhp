@@ -87,7 +87,10 @@
 
 <script>
 import { Sent } from '@/api/weChat/QY'
+import UploadFileSingle from '@/components/Upload/UploadFileSingle'
+import SingleImg from '@/components/Upload/SingleImg'
 export default {
+  components: { UploadFileSingle, SingleImg },
   data() {
     return {
       visible: false,

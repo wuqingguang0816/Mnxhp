@@ -100,8 +100,10 @@
 import { TreeViewUsers, Preview, Sent } from '@/api/weChat/MPMessage'
 import { TagsTree } from '@/api/weChat/MPTag'
 import userBox from './UserBox'
+import UploadFileSingle from '@/components/Upload/UploadFileSingle'
+import SingleImg from '@/components/Upload/SingleImg'
 export default {
-  components: { userBox },
+  components: { userBox, UploadFileSingle, SingleImg },
   data() {
     return {
       visible: false,
