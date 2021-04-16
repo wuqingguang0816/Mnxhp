@@ -91,6 +91,7 @@ export default {
   name: 'OfficeSupplies',
   data() {
     return {
+      billEnCode: 'WF_OfficeSuppliesNo',
       dataForm: {
         flowId: '',
         id: '',

@@ -107,6 +107,7 @@ export default {
   name: 'ViolationHandling',
   data() {
     return {
+      billEnCode: 'WF_ViolationHandlingNo',
       dataForm: {
         flowId: '',
         id: '',

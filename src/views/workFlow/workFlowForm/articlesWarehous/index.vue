@@ -91,6 +91,7 @@ export default {
   name: 'ArticlesWarehous',
   data() {
     return {
+      billEnCode: 'WF_ArticlesWarehousNo',
       dataForm: {
         flowId: '',
         id: '',

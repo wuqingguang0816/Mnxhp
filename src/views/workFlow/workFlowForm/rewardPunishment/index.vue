@@ -73,6 +73,7 @@ export default {
   name: 'RewardPunishment',
   data() {
     return {
+      billEnCode: 'WF_RewardPunishmentNo',
       dataForm: {
         flowId: '',
         id: '',

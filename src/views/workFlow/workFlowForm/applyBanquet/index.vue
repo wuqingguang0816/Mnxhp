@@ -91,6 +91,7 @@ export default {
   mixins: [comMinix],
   data() {
     return {
+      billEnCode: 'WF_ApplyBanquetNo',
       dataForm: {
         flowId: '',
         id: '',

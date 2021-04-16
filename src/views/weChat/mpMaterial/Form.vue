@@ -72,8 +72,10 @@
 
 <script>
 import { UploadForeverMedia } from '@/api/weChat/MPMaterial'
-import { TagsTree } from '@/api/weChat/MPTag'
+import UploadFileSingle from '@/components/Upload/UploadFileSingle'
+import SingleImg from '@/components/Upload/SingleImg'
 export default {
+  components: { UploadFileSingle, SingleImg },
   data() {
     return {
       visible: false,

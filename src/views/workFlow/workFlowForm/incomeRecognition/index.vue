@@ -115,6 +115,7 @@ export default {
   name: 'IncomeRecognition',
   data() {
     return {
+      billEnCode: 'WF_IncomeRecognitionNo',
       dataForm: {
         flowId: '',
         id: '',

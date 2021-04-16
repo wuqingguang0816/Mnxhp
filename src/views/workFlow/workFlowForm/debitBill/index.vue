@@ -114,6 +114,7 @@ export default {
   name: 'DebitBill',
   data() {
     return {
+      billEnCode: 'WF_DebitBillNo',
       dataForm: {
         flowId: '',
         id: '',

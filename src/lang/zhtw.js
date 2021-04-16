@@ -110,7 +110,7 @@ export default {
     "extend-schedule": "日程安排",
     "extend-email": "郵件收發",
     "extend-document": "知識管理",
-    "extend-documentPreview": "文件預覽",
+    "extend-documentPreview": "文檔預覽",
     "extend-barCode": "條碼示例",
     "extend-printData": "打印示例",
     "extend-map": "地圖示例",
