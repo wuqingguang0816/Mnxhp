@@ -88,56 +88,64 @@
         </el-col>
       </el-row>
     </el-form>
-    <div class="JNPF-common-title">
-      <h2>采购原材料</h2>
-    </div>
-    <el-table :data="dataForm.entryList" size='mini'>
-      <el-table-column type="index" width="50" label="序号" align="center" />
-      <el-table-column prop="goodsName" label="商品名称">
-        <template slot-scope="scope">
-          <el-input v-model="scope.row.goodsName"></el-input>
-        </template>
-      </el-table-column>
-      <el-table-column prop="specifications" label="规格型号">
-        <template slot-scope="scope">
-          <el-input v-model="scope.row.specifications"></el-input>
-        </template>
-      </el-table-column>
-      <el-table-column prop="unit" label="单位">
-        <template slot-scope="scope">
-          <el-input v-model="scope.row.unit"></el-input>
-        </template>
-      </el-table-column>
-      <el-table-column prop="qty" label="数量">
-        <template slot-scope="scope">
-          <el-input v-model="scope.row.qty" @change="count(scope.row)" type="number"></el-input>
-        </template>
-      </el-table-column>
-      <el-table-column prop="price" label="单价">
-        <template slot-scope="scope">
-          <el-input v-model="scope.row.price" @change="count(scope.row)" type="number"></el-input>
-        </template>
-      </el-table-column>
-      <el-table-column prop="amount" label="金额">
-        <template slot-scope="scope">
-          <el-input v-model="scope.row.amount" readonly></el-input>
-        </template>
-      </el-table-column>
-      <el-table-column prop="description" label="备注">
-        <template slot-scope="scope">
-          <el-input v-model="scope.row.description"></el-input>
-        </template>
-      </el-table-column>
-      <el-table-column label="操作" width="50" v-if="!setting.readonly">
-        <template slot-scope="scope">
-          <el-button size="mini" type="text" class="JNPF-table-delBtn"
-            @click="handleDel(scope.$index)">删除</el-button>
-        </template>
-      </el-table-column>
-    </el-table>
-    <div class="table-actions" @click="addHandle()" v-if="!setting.readonly">
-      <el-button type="text" icon="el-icon-plus" :disabled="setting.readonly">新增</el-button>
-    </div>
+    <template v-if="JudgeShow('entryList')">
+      <div class="JNPF-common-title">
+        <h2>采购原材料</h2>
+      </div>
+      <el-table :data="dataForm.entryList" size='mini'>
+        <el-table-column type="index" width="50" label="序号" align="center" />
+        <el-table-column prop="goodsName" label="商品名称">
+          <template slot-scope="scope">
+            <el-input v-model="scope.row.goodsName" :disabled="JudgeWrite('entryList')"></el-input>
+          </template>
+        </el-table-column>
+        <el-table-column prop="specifications" label="规格型号">
+          <template slot-scope="scope">
+            <el-input v-model="scope.row.specifications" :disabled="JudgeWrite('entryList')">
+            </el-input>
+          </template>
+        </el-table-column>
+        <el-table-column prop="unit" label="单位">
+          <template slot-scope="scope">
+            <el-input v-model="scope.row.unit" :disabled="JudgeWrite('entryList')"></el-input>
+          </template>
+        </el-table-column>
+        <el-table-column prop="qty" label="数量">
+          <template slot-scope="scope">
+            <el-input v-model="scope.row.qty" @change="count(scope.row)" type="number"
+              :disabled="JudgeWrite('entryList')"></el-input>
+          </template>
+        </el-table-column>
+        <el-table-column prop="price" label="单价">
+          <template slot-scope="scope">
+            <el-input v-model="scope.row.price" @change="count(scope.row)" type="number"
+              :disabled="JudgeWrite('entryList')"></el-input>
+          </template>
+        </el-table-column>
+        <el-table-column prop="amount" label="金额">
+          <template slot-scope="scope">
+            <el-input v-model="scope.row.amount" readonly :disabled="JudgeWrite('entryList')">
+            </el-input>
+          </template>
+        </el-table-column>
+        <el-table-column prop="description" label="备注">
+          <template slot-scope="scope">
+            <el-input v-model="scope.row.description" :disabled="JudgeWrite('entryList')">
+            </el-input>
+          </template>
+        </el-table-column>
+        <el-table-column label="操作" width="50" v-if="!setting.readonly && !JudgeWrite('entryList')">
+          <template slot-scope="scope">
+            <el-button size="mini" type="text" class="JNPF-table-delBtn"
+              @click="handleDel(scope.$index)">删除</el-button>
+          </template>
+        </el-table-column>
+      </el-table>
+      <div class="table-actions" @click="addHandle()"
+        v-if="!setting.readonly && !JudgeWrite('entryList')">
+        <el-button type="text" icon="el-icon-plus" :disabled="setting.readonly">新增</el-button>
+      </div>
+    </template>
     <UserBox v-if="userBoxVisible" ref="userBox" @submit="submit" />
   </div>
 </template>
