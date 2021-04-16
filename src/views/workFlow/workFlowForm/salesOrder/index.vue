@@ -88,8 +88,8 @@
           </el-form-item>
         </el-col>
         <el-col :span="24" v-if="JudgeShow('flowTfileJsonitle')">
-          <el-form-item label="相关附件">
-            <UploadFile v-model="fileList" :disabled="JudgeWrite('fileJson')" />
+          <el-form-item label="相关附件" prop="fileJson">
+            <JNPF-UploadFz v-model="fileList" type="workFlow" :disabled="JudgeWrite('fileJson')" />
           </el-form-item>
         </el-col>
         <el-col :span="24" v-if="JudgeShow('description')">

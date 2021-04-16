@@ -45,8 +45,7 @@
             <ul class="el-upload-list el-upload-list--text">
               <li class="el-upload-list__item" v-for="(item,i) in fileList" :key="i"
                 @click="download(item.fileId)">
-                <a class="el-upload-list__item-name"><i
-                    class="el-icon-document"></i>{{item.fileName}}
+                <a class="el-upload-list__item-name"><i class="el-icon-document"></i>{{item.name}}
                 </a>
               </li>
             </ul>

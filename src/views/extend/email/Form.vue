@@ -36,7 +36,7 @@
           <el-input v-model="dataForm.subject" placeholder="输入主题" />
         </el-form-item>
         <el-form-item label="附件" prop="attachment">
-          <UploadFile v-model="fileList" type="mail" />
+          <JNPF-UploadFz v-model="fileList" type="mail" />
         </el-form-item>
         <el-form-item label="正文" prop="bodyText">
           <JNPF-Quill v-model="dataForm.bodyText" />
@@ -104,9 +104,6 @@ export default {
             this.showCC = !!this.dataForm.cc.length
             this.showBCC = !!this.dataForm.bcc.length
             this.fileList = JSON.parse(res.data.attachment)
-            for (let i = 0; i < this.fileList.length; i++) {
-              this.$set(this.fileList[i], 'name', this.fileList[i].fileName)
-            }
           })
         }
       })
@@ -115,20 +112,11 @@ export default {
       this.$refs['dataForm'].validate((valid) => {
         if (valid) {
           isSend ? (this.sendLoading = true) : (this.saveLoading = true)
-          let list = this.fileList.map(o => ({
-            fileId: o.fileId || o.response.data.name,
-            fileName: o.fileName || o.name,
-            fileSize: o.fileSize || this.jnpf.toFileSize(o.raw.size),
-            fileTime: o.fileTime || o.raw.lastModifiedDate,
-            fileState: o.fileState || "success",
-            fileType: o.fileType || o.raw.type
-          }))
-          let attachment = JSON.stringify(list)
           let data = {
             recipient: this.dataForm.recipient.join(','),
             subject: this.dataForm.subject,
             bodyText: this.dataForm.bodyText,
-            attachment
+            attachment: JSON.stringify(this.fileList)
           }
           if (this.showCC) data = { ...data, cc: this.dataForm.cc.join(',') }
           if (this.showBCC) data = { ...data, bcc: this.dataForm.bcc.join(',') }

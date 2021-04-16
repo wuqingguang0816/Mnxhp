@@ -1,31 +1,32 @@
 <template>
   <div class="UploadFile-container">
+    <template v-if="fileList.length">
+      <transition-group class="el-upload-list el-upload-list--picture-card" tag="ul" name="el-list">
+        <li class="el-upload-list__item is-success" v-for="(file,index) in fileList"
+          :key="file.fileId">
+          <el-image :src="define.comUrl+file.url" class="el-upload-list__item-thumbnail"
+            :preview-src-list="getImgList(fileList)" :z-index="10000" :ref="'image'+index">
+          </el-image>
+          <span class="el-upload-list__item-actions">
+            <span class="el-upload-list__item-preview" @click="handlePictureCardPreview(index)">
+              <i class="el-icon-zoom-in"></i>
+            </span>
+            <span v-if="!disabled" class="el-upload-list__item-delete" @click="handleRemove(index)">
+              <i class="el-icon-delete"></i>
+            </span>
+          </span>
+        </li>
+      </transition-group>
+    </template>
     <el-upload :action="define.comUploadUrl+'/'+type" :headers="uploadHeaders"
-      :on-success="handleSuccess" :multiple="limit !==1" :file-list="fileList" accept="image/*"
+      :on-success="handleSuccess" :multiple="limit !==1" :show-file-list="false" accept="image/*"
       :before-upload="beforeUpload" :on-exceed="handleExceed" :disabled="disabled"
-      list-type="picture-card" :limit='limit'>
+      list-type="picture-card" :limit="limit" class="upload-btn">
       <i class="el-icon-plus"></i>
-      <div slot="tip" class="el-upload__tip" v-show="showTip">只能上传不超过 {{fileSize}}{{sizeUnit}}
-        的{{accept}}文件</div>
-      <div slot="file" slot-scope="{file}">
-        <img class="el-upload-list__item-thumbnail" :src="define.comUrl+file.url" alt="">
-        <span class="el-upload-list__item-actions">
-          <span class="el-upload-list__item-preview" @click="handlePictureCardPreview(file)">
-            <i class="el-icon-zoom-in"></i>
-          </span>
-          <!-- <span v-if="!disabled" class="el-upload-list__item-delete" @click="handleDownload(file)">
-            <i class="el-icon-download"></i>
-          </span> -->
-          <span v-if="!disabled" class="el-upload-list__item-delete" @click="handleRemove(file)">
-            <i class="el-icon-delete"></i>
-          </span>
-        </span>
+      <div slot="tip" class="el-upload__tip" v-show="showTip">
+        只能上传不超过{{fileSize}}{{sizeUnit}}的{{accept}}图片
       </div>
     </el-upload>
-    <el-dialog :visible.sync="dialogVisible" append-to-body width="600px"
-      class="JNPF-dialog JNPF-dialog_center enlarge-dialog">
-      <img width="100%" :src="dialogImageUrl" alt="">
-    </el-dialog>
   </div>
 </template>
 
@@ -35,9 +36,8 @@ const units = {
   MB: 1024 * 1024,
   GB: 1024 * 1024 * 1024
 }
-import { getDownloadUrl } from '@/api/common'
 export default {
-  name: 'UploadFile',
+  name: 'UploadImg',
   props: {
     value: {
       type: Array,
@@ -57,7 +57,7 @@ export default {
     },
     limit: {
       type: Number,
-      default: 9
+      default: 0
     },
     accept: {
       type: String,
@@ -73,27 +73,25 @@ export default {
   },
   data() {
     return {
-      dialogImageUrl: '',
-      dialogVisible: false,
-      fileList: this.value,
+      fileList: [],
       uploadHeaders: { Authorization: this.$store.getters.token }
     }
   },
   watch: {
-    value(val) {
-      this.fileList = val
+    value: {
+      immediate: true,
+      handler(val) {
+        this.fileList = val
+      }
     }
   },
-  created() { },
   methods: {
-    handlePreview(file) {
-    },
     beforeUpload(file) {
       const unitNum = units[this.sizeUnit];
       if (!this.fileSize) return true
       let isRightSize = file.size / unitNum < this.fileSize
       if (!isRightSize) {
-        this.$message.error(`文件大小超过 ${this.fileSize}${this.sizeUnit}`)
+        this.$message.error(`文件大小超过${this.fileSize}${this.sizeUnit}`)
       }
       return isRightSize;
     },
@@ -106,22 +104,23 @@ export default {
         })
         this.$emit('input', this.fileList)
       } else {
-        this.fileList = fileList.filter(o => o.uid != file.uid)
+        fileList.filter(o => o.uid != file.uid)
         this.$message({ message: res.msg, type: 'error', duration: 1500 })
       }
     },
     handleExceed(files, fileList) {
-      this.$message.warning(`当前限制最多可以上传 ${this.limit}张图片`);
+      this.$message.warning(`当前限制最多可以上传${this.limit}张图片`)
     },
-    handlePictureCardPreview(file) {
-      this.dialogImageUrl = this.define.comUrl + file.url;
-      this.dialogVisible = true;
+    handlePictureCardPreview(index) {
+      this.$refs['image' + index][0].clickHandler()
     },
-    handleRemove(file) {
-      this.fileList = this.fileList.filter(o => o.fileId !== file.fileId);
-      this.$emit("input", this.fileList);
+    handleRemove(index) {
+      this.fileList.splice(index, 1)
+      this.$emit("input", this.fileList)
     },
-    handleDownload(file) {
+    getImgList(list) {
+      const newList = list.map(o => this.define.comUrl + o.url)
+      return newList
     }
   }
 }
@@ -135,5 +134,8 @@ export default {
   width: 120px;
   height: 120px;
   line-height: 120px;
+}
+.upload-btn {
+  display: inline-block;
 }
 </style>
