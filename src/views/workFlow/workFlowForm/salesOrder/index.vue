@@ -169,7 +169,7 @@ export default {
   name: 'SalesOrder',
   data() {
     return {
-      activeTab: '',
+      billEnCode: 'WF_SalesOrderNo',
       dataForm: {
         flowId: '',
         id: '',

@@ -100,6 +100,7 @@ export default {
   name: 'MonthlyReport',
   data() {
     return {
+      billEnCode: 'WF_MonthlyReportNo',
       dataForm: {
         flowId: '',
         id: '',

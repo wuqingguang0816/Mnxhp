@@ -134,6 +134,7 @@ export default {
   name: 'PaymentApply',
   data() {
     return {
+      billEnCode: 'WF_PaymentApplyNo',
       dataForm: {
         flowId: '',
         id: '',

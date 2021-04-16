@@ -35,17 +35,14 @@ export default {
         } else {
           this.dataForm.flowId = data.flowId
           if (this.selfInit) this.selfInit(data)
-          if (data.enCode === 'crmOrder') {
-            BillNumber('OrderNumber').then(res => {
+          BillNumber(this.billEnCode).then(res => {
+            if (data.enCode === 'crmOrder') {
               this.dataForm.orderCode = res.data
-              this.loading = false
-            })
-          } else {
-            BillNumber(`WF_${data.enCode}No`).then(res => {
+            } else {
               this.dataForm.billNo = res.data
-              this.loading = false
-            })
-          }
+            }
+            this.loading = false
+          })
         }
       })
     },

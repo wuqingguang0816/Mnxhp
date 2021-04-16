@@ -154,6 +154,7 @@ export default {
   name: 'ContractApproval',
   data() {
     return {
+      billEnCode: 'WF_ContractApprovalNo',
       dataForm: {
         flowId: '',
         id: '',

@@ -109,7 +109,7 @@ export default {
       }
     }
     return {
-      activeTab: '',
+      billEnCode: 'WF_WorkContactSheetNo',
       dataForm: {
         flowId: '',
         id: '',

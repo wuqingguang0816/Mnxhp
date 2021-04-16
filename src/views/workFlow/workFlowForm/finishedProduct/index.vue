@@ -119,6 +119,7 @@ export default {
   name: 'FinishedProduct',
   data() {
     return {
+      billEnCode: 'WF_FinishedProductNo',
       dataForm: {
         flowId: '',
         id: '',

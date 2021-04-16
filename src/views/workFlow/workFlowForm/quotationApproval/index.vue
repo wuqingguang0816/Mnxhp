@@ -89,6 +89,7 @@ export default {
   name: 'QuotationApproval',
   data() {
     return {
+      billEnCode: 'WF_QuotationApprovalNo',
       dataForm: {
         flowId: '',
         id: '',

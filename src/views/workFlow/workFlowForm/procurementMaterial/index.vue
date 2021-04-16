@@ -157,6 +157,7 @@ export default {
   name: 'ProcurementMaterial',
   data() {
     return {
+      billEnCode: 'WF_ProcurementMaterialNo',
       dataForm: {
         flowId: '',
         id: '',

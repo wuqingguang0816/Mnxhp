@@ -117,6 +117,7 @@ export default {
       }
     }
     return {
+      billEnCode: 'WF_OutgoingApplyNo',
       dataForm: {
         flowId: '',
         id: '',

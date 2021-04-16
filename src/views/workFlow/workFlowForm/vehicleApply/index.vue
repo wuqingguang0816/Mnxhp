@@ -122,6 +122,7 @@ export default {
       }
     }
     return {
+      billEnCode: 'WF_VehicleApplyNo',
       dataForm: {
         flowId: '',
         id: '',

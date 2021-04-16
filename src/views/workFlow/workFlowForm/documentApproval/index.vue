@@ -83,6 +83,7 @@ export default {
   name: 'DocumentApproval',
   data() {
     return {
+      billEnCode: 'WF_DocumentApprovalNo',
       dataForm: {
         flowId: '',
         id: '',

@@ -246,6 +246,7 @@ export default {
   data() {
     return {
       activeName: 'goods',
+      billEnCode: 'OrderNumber',
       dataForm: {
         id: '',
         customerName: '',

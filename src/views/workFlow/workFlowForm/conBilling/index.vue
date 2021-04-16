@@ -114,6 +114,7 @@ export default {
   name: 'ConBilling',
   data() {
     return {
+      billEnCode: 'WF_ConBillingNo',
       dataForm: {
         flowId: '',
         id: '',

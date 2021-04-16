@@ -120,6 +120,7 @@ export default {
   name: 'PayDistribution',
   data() {
     return {
+      billEnCode: 'WF_PayDistributionNo',
       dataForm: {
         flowId: '',
         id: '',

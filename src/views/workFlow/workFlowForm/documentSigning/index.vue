@@ -98,6 +98,7 @@ export default {
   name: 'DocumentSigning',
   data() {
     return {
+      billEnCode: 'WF_DocumentSigningNo',
       dataForm: {
         flowId: '',
         id: '',

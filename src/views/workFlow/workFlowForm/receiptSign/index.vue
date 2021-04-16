@@ -71,6 +71,7 @@ export default {
   name: 'ReceiptSign',
   data() {
     return {
+      billEnCode: 'WF_ReceiptSignNo',
       dataForm: {
         flowId: '',
         id: '',

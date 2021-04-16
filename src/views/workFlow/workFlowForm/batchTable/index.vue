@@ -90,6 +90,7 @@ export default {
   name: 'BatchTable',
   data() {
     return {
+      billEnCode: 'WF_BatchTableNo',
       dataForm: {
         flowId: '',
         id: '',

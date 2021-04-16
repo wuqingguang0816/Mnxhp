@@ -149,7 +149,7 @@ export default {
   name: 'WarehouseReceipt',
   data() {
     return {
-      activeTab: '',
+      billEnCode: 'WF_WarehouseReceiptNo',
       dataForm: {
         flowId: '',
         id: '',

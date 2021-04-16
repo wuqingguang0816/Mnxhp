@@ -84,6 +84,7 @@ export default {
   name: 'PostBatchTab',
   data() {
     return {
+      billEnCode: 'WF_PostBatchTabNo',
       dataForm: {
         flowId: '',
         id: '',

@@ -217,6 +217,7 @@ export default {
       }
     }
     return {
+      billEnCode: 'WF_TravelReimbursementNo',
       dataForm: {
         flowId: '',
         id: '',

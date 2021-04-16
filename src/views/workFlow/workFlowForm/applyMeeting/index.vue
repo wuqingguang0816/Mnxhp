@@ -170,6 +170,7 @@ export default {
       }
     }
     return {
+      billEnCode: 'WF_ApplyMeetingNo',
       dataForm: {
         flowId: '',
         id: '',

@@ -165,6 +165,7 @@ export default {
       }
     }
     return {
+      billEnCode: 'WF_SalesSupportNo',
       dataForm: {
         flowId: '',
         id: '',

@@ -172,6 +172,7 @@ export default {
   name: 'ApplyDeliverGoods',
   data() {
     return {
+      billEnCode: 'WF_ApplyDeliverGoodsNo',
       dataForm: {
         flowId: '',
         id: '',

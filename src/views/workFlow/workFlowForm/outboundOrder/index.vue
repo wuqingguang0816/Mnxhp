@@ -137,6 +137,7 @@ export default {
   name: 'OutboundOrder',
   data() {
     return {
+      billEnCode: 'WF_OutboundOrderNo',
       dataForm: {
         flowId: '',
         id: '',

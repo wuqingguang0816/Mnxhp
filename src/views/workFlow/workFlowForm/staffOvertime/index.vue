@@ -114,6 +114,7 @@ export default {
       }
     }
     return {
+      billEnCode: 'WF_StaffOvertimeNo',
       dataForm: {
         flowId: '',
         id: '',

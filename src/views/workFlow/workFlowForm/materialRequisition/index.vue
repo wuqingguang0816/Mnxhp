@@ -132,6 +132,7 @@ export default {
   name: 'MaterialRequisition',
   data() {
     return {
+      billEnCode: 'WF_MaterialRequisitionNo',
       dataForm: {
         flowId: '',
         id: '',

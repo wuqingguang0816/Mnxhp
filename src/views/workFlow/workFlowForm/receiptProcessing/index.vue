@@ -66,6 +66,7 @@ export default {
   name: 'ReceiptProcessing',
   data() {
     return {
+      billEnCode: 'WF_ReceiptProcessingNo',
       dataForm: {
         flowId: '',
         id: '',

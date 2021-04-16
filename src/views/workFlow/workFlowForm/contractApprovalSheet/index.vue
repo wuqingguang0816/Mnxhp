@@ -188,6 +188,7 @@ export default {
       }
     }
     return {
+      billEnCode: 'WF_ContractApprovalSheetNo',
       dataForm: {
         flowId: '',
         id: '',

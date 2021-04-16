@@ -163,6 +163,7 @@ export default {
   name: 'PurchaseList',
   data() {
     return {
+      billEnCode: 'WF_PurchaseListNo',
       dataForm: {
         flowId: '',
         id: '',

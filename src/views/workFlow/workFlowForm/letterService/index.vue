@@ -84,6 +84,7 @@ export default {
   name: 'LetterService',
   data() {
     return {
+      billEnCode: 'WF_LetterServiceNo',
       dataForm: {
         flowId: '',
         id: '',
