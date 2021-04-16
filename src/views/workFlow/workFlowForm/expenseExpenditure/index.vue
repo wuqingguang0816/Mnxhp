@@ -112,6 +112,7 @@ export default {
   name: 'ExpenseExpenditure',
   data() {
     return {
+      billEnCode: 'WF_ExpenseExpenditureNo',
       dataForm: {
         flowId: '',
         id: '',

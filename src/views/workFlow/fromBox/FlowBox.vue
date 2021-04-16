@@ -2,32 +2,39 @@
   <transition name="el-zoom-in-center">
     <div class="JNPF-preview-main flow-form-main nohead">
       <div class="btns">
-        <template v-if="setting.isAudit">
-          <el-button type="warning" @click="transfer()">转 办</el-button>
-          <el-button type="primary" @click="approval('audit')">通 过</el-button>
-          <el-button type="danger" @click="approval('reject')">拒 绝</el-button>
+        <template v-if="setting.opType=='-1'">
+          <el-button type="primary" @click="eventLancher('submit')">提交审核
+          </el-button>
+          <el-button type="warning" @click="eventLancher('save')" :loading="btnLoading">保存草稿
+          </el-button>
         </template>
-        <template v-if="setting.isSelf && setting.status == 1">
+        <template v-if="setting.opType == 1">
+          <el-button type="warning" @click="transfer()">转 办</el-button>
+          <el-button type="primary" @click="eventLancher('audit')">通 过</el-button>
+          <el-button type="danger" @click="eventLancher('reject')">拒 绝</el-button>
+        </template>
+        <template v-if="setting.opType == 0 && setting.status == 1">
           <el-button type="primary" @click="press()">催 办</el-button>
           <el-button type="danger" @click="revoke()">撤 回</el-button>
         </template>
-        <el-button type="danger" v-if="setting.hasRecall" @click="recall()">撤 回</el-button>
+        <el-button type="danger" v-if="setting.opType == 2" @click="recall()">撤 回</el-button>
         <el-button type="danger" @click="cancel()"
-          v-if="setting.hasCancel && setting.status != 2 && setting.status != 5">
+          v-if="setting.opType == 4 && setting.status != 2 && setting.status != 5">
           终 止</el-button>
         <el-button @click="goBack()">{{$t('common.cancelButton')}}</el-button>
       </div>
-      <div class="approve-result" v-if="setting.showStatus && activeTab==='0'">
+      <div class="approve-result" v-if="(setting.opType==0||setting.opType==4) && activeTab==='0'">
         <div class="approve-result-img" :class="flowTaskInfo.status | flowStatus()"></div>
       </div>
       <el-tabs class="JNPF-el_tabs" v-model="activeTab">
         <el-tab-pane label="表单信息">
-          <component :is="currentView" @close="goBack" ref="form" @approval="handleApproval" />
+          <component :is="currentView" @close="goBack" ref="form" @eventReciver="eventReciver"
+            @setLoad="setLoad" />
         </el-tab-pane>
         <el-tab-pane label="流程信息">
           <Process :conf="flowTemplateJson" v-if="flowTemplateJson.nodeId" />
         </el-tab-pane>
-        <el-tab-pane label="流转记录">
+        <el-tab-pane label="流转记录" v-if="setting.opType!='-1'">
           <recordList :list='flowTaskOperatorRecordList' :endTime='endTime' />
         </el-tab-pane>
       </el-tabs>
@@ -43,7 +50,7 @@
         <el-input v-model="reason" placeholder="请输入审批意见（选填）" type="textarea" :rows="4" />
         <span slot="footer" class="dialog-footer">
           <el-button @click="visible = false">{{$t('common.cancelButton')}}</el-button>
-          <el-button type="primary" @click="dataFormSubmit()">{{$t('common.confirmButton')}}
+          <el-button type="primary" @click="addPeopleAudit()">{{$t('common.confirmButton')}}
           </el-button>
         </span>
       </el-dialog>
@@ -53,6 +60,7 @@
 </template>
 
 <script>
+import { FlowEngineInfo } from '@/api/workFlow/FlowEngine'
 import { FlowBeforeInfo, Audit, Reject, Transfer, Recall, Cancel } from '@/api/workFlow/FlowBefore'
 import { Revoke, Press } from '@/api/workFlow/FlowLaunch'
 import recordList from './RecordList'
@@ -69,7 +77,6 @@ export default {
       flowTaskInfo: {},
       flowTaskNodeList: [],
       flowTemplateJson: {},
-      flowTaskOperatorList: [],
       flowTaskOperatorRecordList: [],
       freeApprover: 0,
       endTime: 0,
@@ -78,8 +85,8 @@ export default {
       handleType: 1,
       handleId: '',
       treeData: [],
-      fullName: '',
-      activeTab: '0'
+      activeTab: '0',
+      btnLoading: false
     }
   },
   methods: {
@@ -94,21 +101,57 @@ export default {
         this.currentView = (resolve) => require([`@/views/workFlow/workFlowForm/dynamicForm`], resolve)
       }
       this.setting = data
-      this.getInfo(data)
+      /**
+       * opType
+       * -1 - 我发起的新建/编辑 
+       * 0 - 我发起的详情
+       * 1 - 待办事宜
+       * 2 - 已办事宜
+       * 3 - 抄送事宜
+       * 4 - 流程监控
+       */
+      if (this.setting.opType == '-1') {
+        this.getEngineInfo(data)
+      } else {
+        this.getBeforeInfo(data)
+      }
     },
-    getInfo(data) {
-      FlowBeforeInfo(data.id).then(res => {
+    getEngineInfo(data) {
+      FlowEngineInfo(data.flowId).then(res => {
+        data.freeApprover = res.data.freeApprover || 0
+        data.formConf = res.data.formData
+        this.flowTemplateJson = res.data.flowTemplateJson ? JSON.parse(res.data.flowTemplateJson) : null
+        this.flowTemplateJson.state = 'state-curr'
+        data.formOperates = []
+        if (this.flowTemplateJson && this.flowTemplateJson.properties && this.flowTemplateJson.properties.formOperates) {
+          data.formOperates = this.flowTemplateJson.properties.formOperates || []
+        }
+        setTimeout(() => {
+          this.$nextTick(() => {
+            this.$refs.form && this.$refs.form.init(data)
+          })
+        }, 100)
+      })
+    },
+    getBeforeInfo(data) {
+      FlowBeforeInfo(data.id, { taskNodeId: data.taskNodeId }).then(res => {
         this.flowFormInfo = res.data.flowFormInfo
         this.flowTaskInfo = res.data.flowTaskInfo
         this.flowTaskNodeList = res.data.flowTaskNodeList
         this.flowTemplateJson = this.flowTaskInfo.flowTemplateJson ? JSON.parse(this.flowTaskInfo.flowTemplateJson) : null
-        this.flowTaskOperatorList = res.data.flowTaskOperatorList
         this.flowTaskOperatorRecordList = res.data.flowTaskOperatorRecordList
-        this.fullName = this.flowTaskInfo.flowName
         this.freeApprover = res.data.freeApprover || 0
         this.endTime = this.flowTaskInfo.completion == 100 ? this.flowTaskInfo.endTime : 0
         data.formConf = res.data.flowFormInfo
-        data.formOperates = res.data.formOperates
+        if (data.opType != 1) data.readonly = true
+        data.formOperates = []
+        if (data.opType == 0) {
+          if (this.flowTemplateJson && this.flowTemplateJson.properties && this.flowTemplateJson.properties.formOperates) {
+            data.formOperates = this.flowTemplateJson.properties.formOperates || []
+          }
+        } else {
+          data.formOperates = res.data.formOperates || []
+        }
         if (this.flowTaskNodeList.length) {
           for (let i = 0; i < this.flowTaskNodeList.length; i++) {
             const nodeItem = this.flowTaskNodeList[i]
@@ -133,10 +176,10 @@ export default {
         }, 100)
       })
     },
-    approval(eventType) {
+    eventLancher(eventType) {
       this.$refs.form && this.$refs.form.dataFormSubmit(eventType)
     },
-    handleApproval(formData, eventType) {
+    eventReciver(formData, eventType) {
       this.formData = formData
       this[eventType]()
     },
@@ -152,7 +195,6 @@ export default {
         }).then(({ value }) => {
           let query = {
             handleOpinion: value,
-            delegateId: this.setting.delegateId,
             formData: this.formData,
             enCode: this.setting.enCode
           }
@@ -185,7 +227,6 @@ export default {
       }).then(({ value }) => {
         let query = {
           handleOpinion: value,
-          delegateId: this.setting.delegateId,
           formData: this.formData,
           enCode: this.setting.enCode
         }
@@ -200,11 +241,6 @@ export default {
           })
         })
       }).catch(() => { });
-    },
-    radioChange(val) {
-      if (val != 0) {
-        this.handleId = ''
-      }
     },
     revoke() {
       this.$prompt('', "撤回流程", {
@@ -300,7 +336,12 @@ export default {
         })
       })
     },
-    dataFormSubmit() {
+    radioChange(val) {
+      if (val != 0) {
+        this.handleId = ''
+      }
+    },
+    addPeopleAudit() {
       if (this.handleType == 0 && !this.handleId) {
         this.$message({
           type: 'error',
@@ -310,7 +351,6 @@ export default {
         return
       }
       let query = {
-        delegateId: this.setting.delegateId,
         handleOpinion: this.reason,
         freeApproverUserId: this.handleId,
         formData: this.formData,
@@ -327,6 +367,9 @@ export default {
           }
         })
       })
+    },
+    setLoad(val) {
+      this.btnLoading = !!val
     }
   }
 }

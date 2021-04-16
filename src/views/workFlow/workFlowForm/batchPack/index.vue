@@ -105,6 +105,7 @@ export default {
   name: 'BatchPack',
   data() {
     return {
+      billEnCode: 'WF_BatchPackNo',
       dataForm: {
         flowId: '',
         id: '',

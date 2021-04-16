@@ -83,10 +83,10 @@
               :disabled="JudgeWrite('performance')"></el-input>
           </el-form-item>
         </el-col>
-        <el-col :span="12" v-if="JudgeShow('unpaidAmount')">
-          <el-form-item label="加班费用" prop="unpaidAmount">
-            <el-input v-model="dataForm.unpaidAmount" placeholder="加班费用" type="number"
-              :disabled="JudgeWrite('unpaidAmount')"></el-input>
+        <el-col :span="12" v-if="JudgeShow('overtimePay')">
+          <el-form-item label="加班费用" prop="overtimePay">
+            <el-input v-model="dataForm.overtimePay" placeholder="加班费用" type="number"
+              :disabled="JudgeWrite('overtimePay')"></el-input>
           </el-form-item>
         </el-col>
         <el-col :span="12" v-if="JudgeShow('grossPay')">
@@ -120,6 +120,7 @@ export default {
   name: 'PayDistribution',
   data() {
     return {
+      billEnCode: 'WF_PayDistributionNo',
       dataForm: {
         flowId: '',
         id: '',
@@ -133,7 +134,7 @@ export default {
         actualAttendance: '',
         allowance: '',
         insurance: '',
-        unpaidAmount: '',
+        overtimePay: '',
         performance: '',
         grossPay: '',
         incomeTax: '',

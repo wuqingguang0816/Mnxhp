@@ -77,7 +77,7 @@
                 </el-form-item>
               </el-col>
               <el-col :span="24">
-                <el-form-item label="相关附件">
+                <el-form-item label="相关附件" prop="fileJson">
                   <ul class="el-upload-list el-upload-list--text">
                     <li class="el-upload-list__item" v-for="(item,i) in fileList" :key="i"
                       @click="download(item.fileId)">

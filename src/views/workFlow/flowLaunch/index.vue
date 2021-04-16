@@ -98,13 +98,13 @@
           </el-table-column>
           <el-table-column label="操作" width="150" fixed="right">
             <template slot-scope="scope">
-              <el-button size="mini" type="text" @click="addOrUpdateHandle(scope.row)"
+              <el-button size="mini" type="text" @click="toDetail(scope.row,'-1')"
                 :disabled="[1,2,5].indexOf(scope.row.status)>-1" v-has="'btn_edit'">编辑
               </el-button>
               <el-button size="mini" type="text" class="JNPF-table-delBtn"
                 @click="handleDel(scope.$index,scope.row.id)"
                 :disabled="[1,2,5].indexOf(scope.row.status)>-1" v-has="'btn_remove'">删除</el-button>
-              <el-button size="mini" type="text" @click="toDetail(scope.row)"
+              <el-button size="mini" type="text" @click="toDetail(scope.row,0)"
                 :disabled="scope.row.status==0" v-has="'btn_detail'">详情
               </el-button>
             </template>
@@ -115,22 +115,20 @@
       </div>
     </div>
     <flow v-show="flowVisible" ref="flow" @close="flowVisible=false" @chioceFlow="chioceFlow" />
-    <component :is="currentView" v-if="formVisible" @close="colseForm" ref="JNPFForm" />
+    <FlowBox v-if="formVisible" ref="FlowBox" @close="colseForm" />
   </div>
 </template>
 
 <script>
 import { FlowLaunchList, Delete } from '@/api/workFlow/FlowLaunch'
 import { FlowEngineListAll } from '@/api/workFlow/FlowEngine'
-import edit from '../fromBox/Edit'
-import audit from '../fromBox/Audit'
+import FlowBox from '../fromBox/FlowBox'
 import flow from './Flow'
 export default {
   name: 'workFlow-flowLaunch',
-  components: { edit, audit, flow },
+  components: { FlowBox, flow },
   data() {
     return {
-      currentView: 'edit',
       list: [],
       total: 0,
       showAll: false,
@@ -267,55 +265,30 @@ export default {
     },
     chioceFlow(item) {
       let data = {
+        id: '',
         enCode: item.enCode,
         flowId: item.id,
         formType: item.formType,
-        id: '',
+        opType: '-1'
       }
-      this.currentView = 'edit'
+      this.formVisible = true
       this.$nextTick(() => {
-        this.formVisible = true
-        this.$nextTick(() => {
-          this.$refs.JNPFForm.init(data)
-          this.flowVisible = false
-        })
+        this.$refs.FlowBox.init(data)
+        this.flowVisible = false
       })
     },
-    // 新增 / 修改
-    addOrUpdateHandle(item) {
+    toDetail(item, opType) {
       let data = {
-        enCode: item.flowCode,
-        flowId: item.flowId,
-        formType: item.formType,
-        id: item.id
-      }
-      this.currentView = 'edit'
-      this.$nextTick(() => {
-        this.formVisible = true
-        this.$nextTick(() => {
-          this.$refs.JNPFForm.init(data)
-          this.flowVisible = false
-        })
-      })
-    },
-    toDetail(item) {
-      let data = {
-        enCode: item.flowCode,
-        flowId: item.flowId,
-        delegateId: item.delegateId,
         id: item.id,
+        enCode: item.flowCode,
+        flowId: item.flowId,
         formType: item.formType,
-        isSelf: true,
-        status: item.status,
-        readonly: true,
-        showStatus: true
+        opType,
+        status: item.status
       }
-      this.currentView = 'audit'
+      this.formVisible = true
       this.$nextTick(() => {
-        this.formVisible = true
-        this.$nextTick(() => {
-          this.$refs.JNPFForm.init(data)
-        })
+        this.$refs.FlowBox.init(data)
       })
     },
     colseForm(isRefresh) {

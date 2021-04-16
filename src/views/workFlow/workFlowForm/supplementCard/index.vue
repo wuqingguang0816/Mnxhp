@@ -118,6 +118,7 @@ export default {
       }
     }
     return {
+      billEnCode: 'WF_SupplementCardNo',
       dataForm: {
         flowId: '',
         id: '',

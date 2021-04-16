@@ -9,10 +9,11 @@ export function FlowBeforeList(category, data) {
   })
 }
 // 获取待我审批信息
-export function FlowBeforeInfo(id) {
+export function FlowBeforeInfo(id, data) {
   return request({
     url: `/api/workflow/Engine/FlowBefore/${id}`,
-    method: 'get'
+    method: 'get',
+    data
   })
 }
 // 待我审核审核

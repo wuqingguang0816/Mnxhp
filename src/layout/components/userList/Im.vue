@@ -22,9 +22,11 @@
               <div class="chatList-arrow"></div>
               <p v-if="item.messageType=='text'" v-html="item.message" class="chatList__msg--text">
               </p>
-              <img :src="define.comUrl +'/api/file/Image/IM/' + item.message.path" alt=""
+              <el-image :src="define.comUrl +'/api/file/Image/IM/' + item.message.path"
                 class="chatList__msg--img" v-if="item.messageType=='image' && item.message.path"
-                @click="handleEvent('image',define.comUrl+'/api/file/Image/IM/' + item.message.path)">
+                :preview-src-list="[define.comUrl +'/api/file/Image/IM/' + item.message.path]"
+                :z-index="10000">
+              </el-image>
               <audio class="chatList__msg--audio" controls :src="define.comUrl + item.message.path"
                 v-if="item.messageType=='voice' && item.message.path"
                 @click="handleEvent('voice',define.comUrl + item.message.path)"></audio>
@@ -87,9 +89,11 @@
               <div class="chatList-text">
                 <div class="chatList-arrow"></div>
                 <span v-if="item.messageType=='text'" v-html="item.message"></span>
-                <img :src="define.comUrl +'/api/file/Image/IM/'+ item.message.path" alt=""
+                <el-image :src="define.comUrl +'/api/file/Image/IM/' + item.message.path"
                   class="chatList__msg--img" v-if="item.messageType=='image' && item.message.path"
-                  @click="handleEvent('image',define.comUrl +'/api/file/Image/IM/'+ item.message.path)">
+                  :preview-src-list="[define.comUrl +'/api/file/Image/IM/' + item.message.path]"
+                  :z-index="10000">
+                </el-image>
                 <audio class="chatList__msg--audio" controls
                   :src="define.comUrl + item.message.path"
                   v-if="item.messageType=='voice' && item.message.path"
@@ -223,7 +227,7 @@ export default {
       if (!this.showHistory) {
         this.list = list
         this.$nextTick(() => {
-          this.scroll(500)
+          this.scroll(800)
         })
       } else {
         this.historyList = [...this.historyList, ...list]
@@ -683,12 +687,21 @@ export default {
       background-color: #409eff;
       color: #fff;
     }
-    .chatList__msg--img,
     .chatList__msg--video,
     .chatList__msg--file {
       position: relative;
       max-width: 100%;
       min-width: 200px;
+      width: 100%;
+      margin: 10px 0;
+      overflow: hidden;
+      border-radius: 5px;
+      cursor: pointer;
+      display: block;
+    }
+    .chatList__msg--img {
+      position: relative;
+      max-width: 200px;
       width: 100%;
       margin: 10px 0;
       overflow: hidden;

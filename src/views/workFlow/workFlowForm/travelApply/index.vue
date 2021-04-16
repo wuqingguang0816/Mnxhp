@@ -124,6 +124,7 @@ export default {
       }
     }
     return {
+      billEnCode: 'WF_TravelApplyNo',
       dataForm: {
         flowId: '',
         id: '',
