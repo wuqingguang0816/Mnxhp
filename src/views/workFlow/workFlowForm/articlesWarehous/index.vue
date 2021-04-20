@@ -85,12 +85,13 @@
 </template>
 
 <script>
-import comMinix from '../minix';
+import comMixin from '../mixin';
 export default {
-  mixins: [comMinix],
+  mixins: [comMixin],
   name: 'ArticlesWarehous',
   data() {
     return {
+      billEnCode: 'WF_ArticlesWarehousNo',
       dataForm: {
         flowId: '',
         id: '',

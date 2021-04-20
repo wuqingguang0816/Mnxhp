@@ -93,8 +93,8 @@
           </el-form-item>
         </el-col>
         <el-col :span="24" v-if="JudgeShow('fileJson')">
-          <el-form-item label="相关附件">
-            <UploadFile v-model="fileList" :disabled="JudgeWrite('fileJson')" />
+          <el-form-item label="相关附件" prop="fileJson">
+            <JNPF-UploadFz v-model="fileList" type="workFlow" :disabled="JudgeWrite('fileJson')" />
           </el-form-item>
         </el-col>
       </el-row>
@@ -104,10 +104,10 @@
 </template>
 
 <script>
-import comMinix from '../minix';
+import comMixin from '../mixin';
 
 export default {
-  mixins: [comMinix],
+  mixins: [comMixin],
   name: 'LeaveApply',
   data() {
     var checkStartTime = (rule, value, callback) => {
@@ -134,6 +134,7 @@ export default {
       }
     }
     return {
+      billEnCode: 'WF_LeaveApplyNo',
       dataForm: {
         flowId: '',
         id: '',

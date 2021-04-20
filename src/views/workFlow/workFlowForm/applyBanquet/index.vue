@@ -85,12 +85,13 @@
 </template>
 
 <script>
-import comMinix from '../minix';
+import comMixin from '../mixin';
 export default {
   name: 'ApplyBanquet',
-  mixins: [comMinix],
+  mixins: [comMixin],
   data() {
     return {
+      billEnCode: 'WF_ApplyBanquetNo',
       dataForm: {
         flowId: '',
         id: '',
@@ -108,7 +109,7 @@ export default {
         description: '',
       },
       dataRule: {
-        destination: [
+        flowTitle: [
           { required: true, message: '流程标题不能为空', trigger: 'blur' },
         ],
         flowUrgent: [

@@ -101,15 +101,15 @@
         </el-form-item>
         <el-form-item label="浮点数小于0" prop="floatLtZero">
           <el-input v-model="dataForm.floatLtZero" placeholder="浮点数小于0" />
-          <span class="tip">浮点数只能小于0（不包含0，包含小数和负整数）</span>
+          <span class="tip">浮点数只能小于0</span>
         </el-form-item>
         <el-form-item label="浮点数大于0" prop="intGtZero">
           <el-input v-model="dataForm.intGtZero" placeholder="浮点数大于0" />
-          <span class="tip">浮点数只能大于0（不包含0，包含小数和负整数）</span>
+          <span class="tip">浮点数只能大于0</span>
         </el-form-item>
         <el-form-item label="浮点数不等于0" prop="intNEqZero">
           <el-input v-model="dataForm.intNEqZero" placeholder="浮点数不等于0" />
-          <span class="tip">浮点数大于或小于0（不包含0，包含小数和负整数）</span>
+          <span class="tip">浮点数大于或小于0（不包含0）</span>
         </el-form-item>
 
       </el-form>
@@ -221,19 +221,19 @@ export default {
           { pattern: /^[A-Za-z]$/, message: '请输入有效的英文字母如：A~Z,a~z', trigger: 'blur' }
         ],
         chinese: [
-          { pattern: /^[\u4E00-\u9FA5]$/, message: '请输入有效的汉字', trigger: 'blur' }
+          { pattern: /[\u4E00-\u9FA5]/, message: '请输入有效的汉字', trigger: 'blur' }
         ],
         date: [
           { pattern: /^\d{4}-\d{1,2}-\d{1,2}$/, message: '请输入有效的日期（1900-01-01）', trigger: 'blur' }
         ],
         floatLtZero: [
-          { pattern: /^[1-9]\d*\.\d*|0\.\d*[1-9]\d*$/, message: '浮点数只能小于0（不包含0，包含小数和负整数）', trigger: 'blur' }
+          { pattern: /^-([1-9]\d*\.\d*|0\.\d*[1-9]\d)*$/, message: '浮点数只能小于0', trigger: 'blur' }
         ],
         intGtZero: [
-          { pattern: /^-([1-9]\d*\.\d*|0\.\d*[1-9]\d*)$/, message: '浮点数只能大于0（不包含0，包含小数和负整数', trigger: 'blur' }
+          { pattern: /^[1-9]\d*\.\d*|0\.\d*[1-9]\d*$/, message: '浮点数只能大于0', trigger: 'blur' }
         ],
         intNEqZero: [
-          { pattern: /^(-?\d+)(\.\d+)?$ /, message: '浮点数大于或小于0（不包含0，包含小数和负整数）', trigger: 'blur' }
+          { pattern: /^-?([1-9]\d*\.\d*|0\.\d*[1-9]\d*|0?\.0+)$/, message: '浮点数大于或小于0（不包含0）', trigger: 'blur' }
         ]
       },
     }

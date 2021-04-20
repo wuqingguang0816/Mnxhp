@@ -89,8 +89,9 @@
             </el-form-item>
           </el-col>
           <el-col :span="24" v-if="JudgeShow('fileJson')">
-            <el-form-item label="相关附件">
-              <UploadFile v-model="fileList" :disabled="JudgeWrite('fileJson')" />
+            <el-form-item label="相关附件" prop="fileJson">
+              <JNPF-UploadFz v-model="fileList" type="workFlow"
+                :disabled="JudgeWrite('fileJson')" />
             </el-form-item>
           </el-col>
           <el-col :span="24" v-if="JudgeShow('description')">
@@ -105,108 +106,125 @@
         <el-tabs v-model="activeName">
           <el-tab-pane label="订单商品" name="goods">
             <el-table :data="dataForm.goodsList" size='mini' show-summary
-              :summary-method="getSummaries">
+              :summary-method="getSummaries" v-if="JudgeShow('goodsList')">
               <el-table-column type="index" width="50" label="序号" align="center" />
               <el-table-column prop="goodsName" label="商品名称" />
               <el-table-column prop="specifications" label="规格型号" width="80" />
               <el-table-column prop="unit" label="单位" width="80" />
               <el-table-column prop="qty" label="数量" width="80">
                 <template slot-scope="scope">
-                  <el-input v-model="scope.row.qty" @change="count(scope.row)"></el-input>
+                  <el-input v-model="scope.row.qty" @change="count(scope.row)"
+                    :disabled="JudgeWrite('goodsList')"></el-input>
                 </template>
               </el-table-column>
               <el-table-column prop="price" label="单价" width="80">
                 <template slot-scope="scope">
-                  <el-input v-model="scope.row.price" @change="count(scope.row)"></el-input>
+                  <el-input v-model="scope.row.price" @change="count(scope.row)"
+                    :disabled="JudgeWrite('goodsList')"></el-input>
                 </template>
               </el-table-column>
               <el-table-column prop="amount" label="金额" width="80">
                 <template slot-scope="scope">
-                  <el-input v-model="scope.row.amount" readonly></el-input>
+                  <el-input v-model="scope.row.amount" readonly :disabled="JudgeWrite('goodsList')">
+                  </el-input>
                 </template>
               </el-table-column>
               <el-table-column prop="discount" label="折扣%" width="90">
                 <template slot-scope="scope">
                   <el-input-number v-model="scope.row.discount" :precision="2" :step="0.1" :min="0"
-                    :max="100" @change="count(scope.row)" controls-position="right">
+                    :max="100" @change="count(scope.row)" controls-position="right"
+                    :disabled="JudgeWrite('goodsList')">
                   </el-input-number>
                 </template>
               </el-table-column>
               <el-table-column prop="cess" label="税率%" width="90">
                 <template slot-scope="scope">
                   <el-input-number v-model="scope.row.cess" :precision="2" :step="0.1" :min="0"
-                    :max="100" @change="count(scope.row)" controls-position="right">
+                    :max="100" @change="count(scope.row)" controls-position="right"
+                    :disabled="JudgeWrite('goodsList')">
                   </el-input-number>
                 </template>
               </el-table-column>
               <el-table-column prop="actualPrice" label="实际单价" width="80">
                 <template slot-scope="scope">
-                  <el-input v-model="scope.row.actualPrice" readonly>
+                  <el-input v-model="scope.row.actualPrice" readonly
+                    :disabled="JudgeWrite('goodsList')">
                   </el-input>
                 </template>
               </el-table-column>
               <el-table-column prop="actualAmount" label="实际金额" width="80">
                 <template slot-scope="scope">
-                  <el-input v-model="scope.row.actualAmount" readonly></el-input>
+                  <el-input v-model="scope.row.actualAmount" readonly
+                    :disabled="JudgeWrite('goodsList')"></el-input>
                 </template>
               </el-table-column>
               <el-table-column prop="description" label="备注" width="80">
                 <template slot-scope="scope">
-                  <el-input v-model="scope.row.description"></el-input>
+                  <el-input v-model="scope.row.description" :disabled="JudgeWrite('goodsList')">
+                  </el-input>
                 </template>
               </el-table-column>
-              <el-table-column label="操作" width="50" v-if="!setting.readonly">
+              <el-table-column label="操作" width="50"
+                v-if="!setting.readonly && !JudgeWrite('goodsList')">
                 <template slot-scope="scope">
                   <el-button size="mini" type="text" class="JNPF-table-delBtn"
                     @click="handleDel(scope.$index,scope.row)">删除</el-button>
                 </template>
               </el-table-column>
             </el-table>
-            <div class="table-actions" @click="choice" v-if="!setting.readonly">
+            <div class="table-actions" @click="choice"
+              v-if="!setting.readonly && !JudgeWrite('goodsList')">
               <el-button type="text" icon="el-icon-plus">新增商品</el-button>
             </div>
           </el-tab-pane>
           <el-tab-pane label="收款计划" name="plan">
             <el-table :data="dataForm.collectionPlanList" size='mini' show-summary
-              :summary-method="getSummaries">
+              :summary-method="getSummaries" v-if="JudgeShow('collectionPlanList')">
               <el-table-column type="index" width="50" label="序号" align="center" />
               <el-table-column prop="receivableDate" label="收款日期">
                 <template slot-scope="scope">
                   <el-date-picker v-model="scope.row.receivableDate" type="date"
-                    value-format="timestamp" :editable="false">
+                    value-format="timestamp" :editable="false"
+                    :disabled="JudgeWrite('collectionPlanList')">
                   </el-date-picker>
                 </template>
               </el-table-column>
               <el-table-column prop="receivableRate" label="收款比率%">
                 <template slot-scope="scope">
                   <el-input-number v-model="scope.row.receivableRate" :precision="2" :step="0.1"
-                    :min="0" :max="100" controls-position="right">
+                    :min="0" :max="100" controls-position="right"
+                    :disabled="JudgeWrite('collectionPlanList')">
                   </el-input-number>
                 </template>
               </el-table-column>
               <el-table-column prop="receivableMoney" label="收款金额">
                 <template slot-scope="scope">
-                  <el-input v-model="scope.row.receivableMoney"></el-input>
+                  <el-input v-model="scope.row.receivableMoney"
+                    :disabled="JudgeWrite('collectionPlanList')"></el-input>
                 </template>
               </el-table-column>
               <el-table-column prop="receivableMode" label="收款方式">
                 <template slot-scope="scope">
-                  <el-input v-model="scope.row.receivableMode"></el-input>
+                  <el-input v-model="scope.row.receivableMode"
+                    :disabled="JudgeWrite('collectionPlanList')"></el-input>
                 </template>
               </el-table-column>
               <el-table-column prop="abstract" label="收款摘要">
                 <template slot-scope="scope">
-                  <el-input v-model="scope.row.abstract"></el-input>
+                  <el-input v-model="scope.row.abstract"
+                    :disabled="JudgeWrite('collectionPlanList')"></el-input>
                 </template>
               </el-table-column>
-              <el-table-column label="操作" width="50" v-if="!setting.readonly">
+              <el-table-column label="操作" width="50"
+                v-if="!setting.readonly && !JudgeWrite('collectionPlanList')">
                 <template slot-scope="scope">
                   <el-button size="mini" type="text" class="JNPF-table-delBtn"
                     @click="handleDelPlan(scope.$index,scope.row)">删除</el-button>
                 </template>
               </el-table-column>
             </el-table>
-            <div class="table-actions" @click="addPlan" v-if="!setting.readonly">
+            <div class="table-actions" @click="addPlan"
+              v-if="!setting.readonly && !JudgeWrite('collectionPlanList')">
               <el-button type="text" icon="el-icon-plus">新增计划</el-button>
             </div>
           </el-tab-pane>
@@ -219,15 +237,16 @@
 </template>
 
 <script>
-import comMinix from '../minix'
+import comMixin from '../mixin'
 import { CustomerList } from '@/api/extend/order'
 import GoodsBox from '@/views/extend/order/GoodsBox'
 export default {
-  mixins: [comMinix],
+  mixins: [comMixin],
   components: { GoodsBox },
   data() {
     return {
       activeName: 'goods',
+      billEnCode: 'OrderNumber',
       dataForm: {
         id: '',
         customerName: '',

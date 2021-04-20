@@ -66,8 +66,8 @@
           </el-form-item>
         </el-col>
         <el-col :span="24" v-if="JudgeShow('fileJson')">
-          <el-form-item label="相关附件">
-            <UploadFile v-model="fileList" :disabled="JudgeWrite('fileJson')" />
+          <el-form-item label="相关附件" prop="fileJson">
+            <JNPF-UploadFz v-model="fileList" type="workFlow" :disabled="JudgeWrite('fileJson')" />
           </el-form-item>
         </el-col>
         <el-col :span="24" v-if="JudgeShow('custSituation')">
@@ -83,12 +83,13 @@
 </template>
 
 <script>
-import comMinix from '../minix';
+import comMixin from '../mixin';
 export default {
-  mixins: [comMinix],
+  mixins: [comMixin],
   name: 'QuotationApproval',
   data() {
     return {
+      billEnCode: 'WF_QuotationApprovalNo',
       dataForm: {
         flowId: '',
         id: '',

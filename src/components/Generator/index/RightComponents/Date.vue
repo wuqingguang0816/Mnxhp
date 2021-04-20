@@ -68,10 +68,10 @@ const dateTimeFormat = {
   monthrange: 'yyyy-MM',
   datetimerange: 'yyyy-MM-dd HH:mm:ss'
 }
-import comMinix from './minix';
+import comMixin from './mixin';
 export default {
   props: ['activeData'],
-  mixins: [comMinix],
+  mixins: [comMixin],
   data() {
     return {
       dateTypeOptions: [

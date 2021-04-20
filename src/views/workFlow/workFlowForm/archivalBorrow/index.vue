@@ -95,9 +95,9 @@
 </template>
 
 <script>
-import comMinix from '../minix';
+import comMixin from '../mixin';
 export default {
-  mixins: [comMinix],
+  mixins: [comMixin],
   name: 'ArchivalBorrow',
   data() {
     var checkStartTime = (rule, value, callback) => {
@@ -124,6 +124,7 @@ export default {
       }
     }
     return {
+      billEnCode: 'WF_ArchivalBorrowNo',
       dataForm: {
         flowId: '',
         id: '',

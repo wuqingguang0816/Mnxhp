@@ -29,26 +29,20 @@ export default {
             this.dataForm = res.data
             if (res.data.fileJson) {
               this.fileList = JSON.parse(res.data.fileJson)
-              for (let i = 0; i < this.fileList.length; i++) {
-                this.$set(this.fileList[i], 'name', this.fileList[i].fileName)
-              }
             }
             this.loading = false
           })
         } else {
           this.dataForm.flowId = data.flowId
           if (this.selfInit) this.selfInit(data)
-          if (data.enCode === 'crmOrder') {
-            BillNumber('OrderNumber').then(res => {
+          BillNumber(this.billEnCode).then(res => {
+            if (data.enCode === 'crmOrder') {
               this.dataForm.orderCode = res.data
-              this.loading = false
-            })
-          } else {
-            BillNumber(`WF_${data.enCode}No`).then(res => {
+            } else {
               this.dataForm.billNo = res.data
-              this.loading = false
-            })
-          }
+            }
+            this.loading = false
+          })
         }
       })
     },
@@ -62,16 +56,7 @@ export default {
         if (valid) {
           if (this.exist && !this.exist()) return
           if ('fileJson' in this.dataForm) {
-            let list = this.fileList.map(o => ({
-              fileId: o.fileId || o.response.data.name,
-              fileName: o.fileName || o.name,
-              fileSize: o.fileSize || this.jnpf.toFileSize(o.raw.size),
-              fileTime: o.fileTime || o.raw.lastModifiedDate,
-              fileState: o.fileState || "success",
-              fileType: o.fileType || o.raw.type
-            }))
-            let fileJson = JSON.stringify(list)
-            this.dataForm.fileJson = fileJson
+            this.dataForm.fileJson = JSON.stringify(this.fileList)
           }
           if (eventType === 'audit' || eventType === 'reject') {
             this.$emit('eventReciver', this.dataForm, eventType)
@@ -129,7 +114,7 @@ export default {
       return item.read
     },
     JudgeWrite(id) {
-      if (this.setting.readonly) return false
+      if (this.setting.readonly) return true
       if (!this.setting.formOperates || !this.setting.formOperates.length) return false
       let arr = this.setting.formOperates.filter(o => o.id === id) || []
       if (!arr.length) return true

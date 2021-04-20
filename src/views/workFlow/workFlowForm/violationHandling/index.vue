@@ -101,12 +101,13 @@
 </template>
 
 <script>
-import comMinix from '../minix';
+import comMixin from '../mixin';
 export default {
-  mixins: [comMinix],
+  mixins: [comMixin],
   name: 'ViolationHandling',
   data() {
     return {
+      billEnCode: 'WF_ViolationHandlingNo',
       dataForm: {
         flowId: '',
         id: '',

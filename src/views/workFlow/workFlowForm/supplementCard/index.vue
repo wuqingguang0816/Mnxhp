@@ -89,9 +89,9 @@
 </template>
 
 <script>
-import comMinix from '../minix';
+import comMixin from '../mixin';
 export default {
-  mixins: [comMinix],
+  mixins: [comMixin],
   name: 'SupplementCard',
   data() {
     var checkStartTime = (rule, value, callback) => {
@@ -118,6 +118,7 @@ export default {
       }
     }
     return {
+      billEnCode: 'WF_SupplementCardNo',
       dataForm: {
         flowId: '',
         id: '',
