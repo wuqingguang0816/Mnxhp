@@ -41,10 +41,10 @@
 </template>
 <script>
 import { getFeatureSelector, getFormDataFields } from '@/api/onlineDev/visualDev'
-import comMinix from './minix'
+import comMixin from './mixin'
 export default {
   props: ['activeData'],
-  mixins: [comMinix],
+  mixins: [comMixin],
   data() {
     return {
       treeData: [],

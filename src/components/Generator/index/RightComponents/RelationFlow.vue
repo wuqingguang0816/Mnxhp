@@ -34,10 +34,10 @@
 </template>
 <script>
 import { FlowEngineSelector } from '@/api/workFlow/FlowEngine'
-import comMinix from './minix'
+import comMixin from './mixin'
 export default {
   props: ['activeData'],
-  mixins: [comMinix],
+  mixins: [comMixin],
   data() {
     return {
       treeData: [],

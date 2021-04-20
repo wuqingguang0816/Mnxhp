@@ -99,10 +99,10 @@
 </template>
 <script>
 import iconBox from '@/components/JNPF-iconBox'
-import comMinix from './minix';
+import comMixin from './mixin';
 export default {
   props: ['activeData'],
-  mixins: [comMinix],
+  mixins: [comMixin],
   components: { iconBox },
   data() {
     return {

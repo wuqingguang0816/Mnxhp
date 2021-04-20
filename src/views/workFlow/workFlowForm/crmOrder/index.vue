@@ -237,11 +237,11 @@
 </template>
 
 <script>
-import comMinix from '../minix'
+import comMixin from '../mixin'
 import { CustomerList } from '@/api/extend/order'
 import GoodsBox from '@/views/extend/order/GoodsBox'
 export default {
-  mixins: [comMinix],
+  mixins: [comMixin],
   components: { GoodsBox },
   data() {
     return {
