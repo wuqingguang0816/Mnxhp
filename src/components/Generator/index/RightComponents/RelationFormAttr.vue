@@ -28,11 +28,11 @@
 </template>
 <script>
 import { getFormDataFields } from '@/api/onlineDev/visualDev'
-import comMinix from './minix'
+import comMixin from './mixin'
 import { getDrawingList } from '@/components/Generator/utils/db'
 export default {
   props: ['activeData'],
-  mixins: [comMinix],
+  mixins: [comMixin],
   data() {
     return {
       options: [],

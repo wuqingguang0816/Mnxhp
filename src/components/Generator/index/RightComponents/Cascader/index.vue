@@ -100,13 +100,13 @@
 </template>
 <script>
 
-import comMinix from '../minix';
+import comMixin from '../mixin';
 import TreeNodeDialog from './TreeNodeDialog'
 import { getDictionaryTypeSelector, getDictionaryDataSelector } from '@/api/systemData/dictionary'
 import { getDataInterfaceSelector, previewDataInterface } from '@/api/systemData/dataInterface'
 export default {
   props: ['activeData'],
-  mixins: [comMinix],
+  mixins: [comMixin],
   components: { TreeNodeDialog },
   data() {
     return {
