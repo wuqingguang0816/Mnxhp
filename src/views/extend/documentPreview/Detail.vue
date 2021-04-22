@@ -26,19 +26,17 @@ export default {
       this.$emit('close')
     },
     init(id, name) {
-      if (!id) {
-        this.goBack()
-      } else {
-        this.title = '文档预览 - ' + name
-        PreviewFile(id).then(res => {
-          if (res.data && res.data.filePath) {
-            this.url = 'https://view.officeapps.live.com/op/view.aspx?src=' + this.define.comUrl + res.data.filePath
-          } else {
-            this.$message.warning('文件不存在')
-            this.goBack()
-          }
-        })
-      }
+      this.url = ''
+      if (!id) return this.goBack()
+      this.title = '文档预览 - ' + name
+      PreviewFile(id).then(res => {
+        if (res.data) {
+          this.url = res.data
+        } else {
+          this.$message.warning('文件不存在')
+          this.goBack()
+        }
+      })
     }
   }
 }
