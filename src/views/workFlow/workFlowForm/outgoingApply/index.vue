@@ -88,9 +88,9 @@
 </template>
 
 <script>
-import comMinix from '../minix';
+import comMixin from '../mixin';
 export default {
-  mixins: [comMinix],
+  mixins: [comMixin],
   name: 'OutgoingApply',
   data() {
     var checkStartTime = (rule, value, callback) => {

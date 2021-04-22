@@ -78,13 +78,13 @@
   </el-row>
 </template>
 <script>
-import comMinix from './minix';
+import comMixin from './mixin';
 import { mergeNumberOfExps, validExp } from '@/components/Generator/utils'
 import { getDrawingList } from '@/components/Generator/utils/db'
 import { deepClone } from '@/utils'
 export default {
   props: ['activeData'],
-  mixins: [comMinix],
+  mixins: [comMixin],
   data() {
     return {
       expressionTemp: [],
