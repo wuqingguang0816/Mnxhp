@@ -152,9 +152,9 @@ export default {
         this.getColumnList()
         if (this.columnData.type === 3 || !this.columnData.hasPage) this.listQuery.pageSize = 10000
         if (this.columnData.type === 2) {
-          this.treeProps.value = this.columnData.treePropsValue
-          this.treeProps.label = this.columnData.treePropsLabel
-          this.treeProps.children = this.columnData.treePropsChildren
+          this.treeProps.value = this.columnData.treePropsValue || 'id'
+          this.treeProps.label = this.columnData.treePropsLabel || 'fullName'
+          this.treeProps.children = this.columnData.treePropsChildren || 'children'
           this.getTreeView()
         } else {
           this.initData()
