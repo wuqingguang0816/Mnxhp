@@ -31,14 +31,15 @@
         </div>
         <JNPF-table v-loading="listLoading" :data="list" row-key="id"
           :tree-props="{children: 'children', hasChildren: ''}" default-expand-all>
-          <el-table-column prop="fullName" label="连接名称" width="300" v-if="jnpf.hasP('fullName')">
+          <el-table-column prop="fullName" label="连接名称" min-width="200"
+            v-if="jnpf.hasP('fullName')">
             <template slot-scope="scope">
               <span v-if="scope.row.top"
                 style="font-weight:bold;">{{scope.row.name}}【{{scope.row.count}}】</span>
               <span v-else>{{scope.row.fullName}}</span>
             </template>
           </el-table-column>
-          <el-table-column prop="host" label="主机地址" v-if="jnpf.hasP('host')" />
+          <el-table-column prop="host" label="主机地址" width="200" v-if="jnpf.hasP('host')" />
           <el-table-column prop="port" label="端口" width="60" v-if="jnpf.hasP('port')" />
           <el-table-column prop="creatorTime" label="创建时间" width="120"
             :formatter="jnpf.tableDateFormat" v-if="jnpf.hasP('creatorTime')" />
@@ -74,7 +75,7 @@ export default {
       keyword: '',
       listLoading: true,
       formVisible: false,
-      listAll: [{ name: 'SqlServer', id: 'SqlServer' }, { name: 'MySql', id: 'MySql' }, { name: 'Oracle', id: 'Oracle' }]
+      listAll: [{ name: 'SqlServer', id: 'SqlServer' }, { name: 'MySql', id: 'MySql' }, { name: 'Oracle', id: 'Oracle' }, { name: 'DM', id: 'DM' }]
     }
   },
   created() {
