@@ -93,6 +93,9 @@ export default {
       }, {
         value: 'Oracle',
         label: 'Oracle'
+      }, {
+        value: 'DM',
+        label: 'DM'
       }],
       btnLoading: false,
       testLoad: false
@@ -142,6 +145,9 @@ export default {
           break;
         case 'Oracle':
           port = '1521'
+          break;
+        case 'DM':
+          port = '5236'
           break;
         default:
           port = ''
