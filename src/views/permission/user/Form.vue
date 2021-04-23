@@ -63,8 +63,8 @@
               <el-form-item label="角色" prop="roleId">
                 <el-select v-model="roleId" multiple placeholder="请选择" @change="roleIdChange"
                   filterable>
-                  <el-option-group v-for="group in roleTreeDataAll" :key="group.id"
-                    :label="group.fullName+'【'+group.count+'】'">
+                  <el-option-group v-for="group in roleTreeData" :key="group.id"
+                    :label="group.fullName+'【'+group.children.length+'】'">
                     <el-option v-for="item in group.children" :key="item.id" :label="item.fullName"
                       :value="item.id">
                     </el-option>
@@ -236,8 +236,6 @@ export default {
       nationTreeData: [],
       educationTreeData: [],
       certificatesTypeTreeData: [],
-      roleTypeList: [],
-      roleTreeDataAll: [],
       formLoading: false,
       genderProps: {
         value: 'enCode',
@@ -295,21 +293,10 @@ export default {
         })
 
         // 获取角色分类
-        this.$store.dispatch('base/getDictionaryData', { sort: 'RoleType' }).then(data => {
-          this.roleTypeList = data
-        }).then(() => {
-          // 获取角色
-          getRoleSelector().then(res => {
-            this.roleTreeData = res.data.list
-            this.roleTreeDataAll = JSON.parse(JSON.stringify(this.roleTypeList))
-            for (let i = 0; i < this.roleTreeDataAll.length; i++) {
-              let child = this.roleTreeData.filter(o => this.roleTreeDataAll[i].enCode === o.type)
-              let count = child.length
-              this.$set(this.roleTreeDataAll[i], 'children', child)
-              this.$set(this.roleTreeDataAll[i], 'count', count)
-            }
-            this.roleTreeDataAll = this.roleTreeDataAll.filter(o => o.children.length)
-          })
+
+        // 获取角色
+        getRoleSelector().then(res => {
+          this.roleTreeData = res.data.list
         })
 
         // 获取民族
