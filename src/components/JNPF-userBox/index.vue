@@ -1,5 +1,5 @@
 <template>
-  <el-dialog title="选择审批人" :close-on-click-modal="false" :visible.sync="visible"
+  <el-dialog :title="'选择'+title" :close-on-click-modal="false" :visible.sync="visible"
     class="JNPF-dialog JNPF-dialog_center JNPF-dialog-tree" lock-scroll append-to-body
     width='450px'>
     <el-input placeholder="输入姓名或者编号进行过滤" v-model="filterText" clearable>
@@ -23,6 +23,12 @@
 <script>
 export default {
   name: 'UserBox',
+  props: {
+    title: {
+      type: String,
+      default: '审批人'
+    }
+  },
   data() {
     return {
       visible: false,
@@ -64,7 +70,7 @@ export default {
     dataFormSubmit() {
       if (!this.id) {
         this.$message({
-          message: '请选择审批人员',
+          message: `请选择${this.title}`,
           type: 'error',
           duration: 1000,
         })

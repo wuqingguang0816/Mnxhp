@@ -13,8 +13,6 @@
 </template>
 
 <script>
-import { TreeView as userTreeView } from '@/api/permission/user'
-import { TreeView as positionTreeView } from '@/api/permission/position'
 import JNPFTransfer from '@/components/JNPF-transfer'
 
 export default {
@@ -61,6 +59,8 @@ export default {
       let res = null
       if (this.type == 'position') {
         res = await this.$store.dispatch('base/getPositionTree')
+      } else if (this.type == 'role') {
+        res = await this.$store.dispatch('base/getRoleTree')
       } else {
         res = await this.$store.dispatch('base/getUserTree')
       }

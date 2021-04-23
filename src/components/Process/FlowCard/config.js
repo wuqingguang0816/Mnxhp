@@ -6,12 +6,16 @@ export default {
       title: '发起节点',
       hasInitFunc: false,
       initInterfaceUrl: '',
-      initInterfaceType: 'POST',
+      initInterfaceType: 'GET',
       hasEndFunc: false,
       endInterfaceUrl: '',
-      endInterfaceType: 'POST',
+      endInterfaceType: 'GET',
+      hasFlowRecallFunc: false,
+      flowRecallInterfaceUrl: '',
       initiator: [],
-      initiatePos: []
+      initiatePos: [],
+      initiateRole: [],
+      formOperates: []
     }
   },
   approver: {

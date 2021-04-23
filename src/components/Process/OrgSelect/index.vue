@@ -88,12 +88,13 @@ export default {
     },
     getText(id) {
       let list = [], text = ''
-      if (this.type == 'position') {
-        list = this.$store.getters.positionList
+      if (this.type == 'position' || this.type == 'role') {
+        list = this.$store.getters[this.type + 'List']
         let arr = list.filter(o => o.id === id)
         if (!arr.length) return ''
         text = arr[0].fullName || ''
-      } else {
+      }
+      if (this.type == 'user') {
         list = this.$store.getters.userList
         let arr = list.filter(o => o.id === id)
         if (!arr.length) return ''

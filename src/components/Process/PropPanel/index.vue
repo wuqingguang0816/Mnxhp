@@ -3,7 +3,8 @@
   <el-drawer size="550px" class="drawer JNPF-common-drawer" :visible.sync="visible" @close="cancel"
     v-if="properties" append-to-body :wrapperClosable="false">
     <!-- 标题 -->
-    <header slot="title" class="header" v-if="value && value.type=='condition' && properties.title">
+    <header slot="title" class="header"
+      v-if="value && (value.type=='condition'|| value.type=='approver') && properties.title">
       <el-input size="mini" v-model="properties.title" style="z-index:9;max-width: 200px;">
       </el-input>
     </header>
@@ -45,8 +46,9 @@
               </el-option>
             </el-select>
           </el-col>
-          <el-col :span="2"><i class="el-icon-delete" style="cursor: pointer;"
-              @click="onDelCondition(index)"></i></el-col>
+          <el-col :span="2">
+            <i class="el-icon-delete" style="cursor: pointer;" @click="onDelCondition(index)"></i>
+          </el-col>
         </el-row>
       </template>
       <div style="padding-left:4px;margin-top:10px;">
@@ -63,7 +65,6 @@
         <el-col :span="24">
           <el-form label-position="top">
             <el-form-item label="时间设置">
-              <!-- <el-switch v-model="properties.hasInitFunc" /> -->
               <div class="mb-10">
                 <el-input-number :min="0" v-model="properties.day" :precision="0" />
                 <span>天</span>
@@ -87,7 +88,7 @@
     </section>
 
     <!-- 发起人 -->
-    <section class="approver-pane" style="height:100%;" v-if="value && isStartNode()">
+    <section class="approver-pane" v-if="value && isStartNode()">
       <el-tabs style="height:100%;">
         <el-tab-pane label="发起人">
           <el-row style="padding: 10px;">
@@ -96,6 +97,8 @@
               默认所有人,需要设置请选择
             </el-col>
             <div class="option-box">
+              <org-select ref="start-role-org" type="role" v-model="initiateRole" title="添加角色"
+                class="mb-10" buttonType="button" />
               <org-select ref="start-position-org" type="position" v-model="initiatePos"
                 title="添加岗位" class="mb-10" buttonType="button" />
               <org-select ref="start-user-org" type="user" v-model="initiator" title="添加用户"
@@ -153,68 +156,163 @@
       </el-tabs>
     </section>
     <!-- 审批人 -->
-    <section class="approver-pane" style="height:100%;" v-if="value && isApproverNode()">
+    <section class="approver-pane" v-if="value && isApproverNode()">
       <el-tabs v-model="activeName" style="height:100%;">
-        <el-tab-pane label="审批人" name="config">
-          <div>
-            <div style="padding: 10px;">
-              <el-radio-group v-model="approverForm.assigneeType" style="line-height: 32px;"
-                @change="resetOrgColl">
+        <el-tab-pane label="基础设置" name="config">
+          <el-form label-position="top" :model="approverForm" class="pd-10">
+            <el-form-item label="审批设置">
+              <el-radio-group v-model="approverForm.assigneeType" @change="resetOrgColl">
                 <el-radio v-for="item in assigneeTypeOptions" :label="item.value" :key="item.value"
-                  :disabled="item.disabled" class="radio-item">{{item.label}}</el-radio>
+                  :disabled="item.disabled" class="radio-item">{{item.label}}
+                </el-radio>
               </el-radio-group>
-            </div>
-            <div style="border-bottom: 1px solid #dcdfe6;padding-bottom: 1rem;">
-              <div v-if="approverForm.assigneeType === 3" class="option-box"
-                style="color: #a5a5a5;">发起人自己将作为审批人处理审批单</div>
-              <div v-else-if="approverForm.assigneeType === 2" class="option-box"
-                style="color: #a5a5a5;">发起人的部门主管将作为审批人处理审批单</div>
-              <div v-else-if="approverForm.assigneeType === 1" class="option-box"
-                style="color: #a5a5a5;">发起人主管将作为审批人处理审批单</div>
-              <div v-else-if="approverForm.assigneeType === 7" class="option-box"
-                style="color: #a5a5a5;">将由流程表单中的人员进行审批</div>
-              <div v-else class="option-box">
-                <org-select ref="approver-position-org" buttonType="button"
-                  v-model="approverForm.approverPos" title="添加岗位" type="position"
-                  @change="onOrgChange" class="mb-10" />
-                <org-select ref="approver-user-org" buttonType="button"
-                  v-model="approverForm.approvers" title="添加用户" @change="onOrgChange" />
-              </div>
-            </div>
-            <el-form label-position="top" :model="approverForm" class="pd-10">
-              <el-form-item label="节点名称" required>
-                <el-input v-model="properties.title"></el-input>
-              </el-form-item>
-              <el-form-item label="进度选择" required>
-                <el-select v-model="approverForm.progress" placeholder="请选择" style="width:100%">
-                  <el-option v-for="item in progressOptions" :key="item" :label="item+'%'"
-                    :value="item">
-                  </el-option>
-                </el-select>
-              </el-form-item>
-              <el-form-item label="驳回步骤">
-                <el-select v-model="approverForm.rejectStep" placeholder="请选择" style="width:100%">
-                  <el-option v-for="item in rejectStepOptions" :key="item.nodeId"
-                    :label="item.properties.title" :value="item.nodeId">
-                  </el-option>
-                </el-select>
-              </el-form-item>
-              <el-form-item label="说明">
-                <el-input v-model="approverForm.description" type="textarea" :rows="3"></el-input>
-              </el-form-item>
-            </el-form>
-          </div>
-        </el-tab-pane>
-        <el-tab-pane label="抄送人" name="copy">
-          <div class="pd-10">
-            <div class="option-box">
+              <div v-if="approverForm.assigneeType === 1" class="option-box-tip">
+                发起人主管将作为审批人处理审批单</div>
+              <div v-if="approverForm.assigneeType === 2" class="option-box-tip">
+                发起人的部门主管将作为审批人处理审批单</div>
+              <div v-if="approverForm.assigneeType === 3" class="option-box-tip">
+                发起人自己将作为审批人处理审批单</div>
+              <div v-if="approverForm.assigneeType === 4" class="option-box-tip">
+                选择流程表单字段的值作为审批人</div>
+              <div v-if="approverForm.assigneeType === 5" class="option-box-tip">
+                设置审批人为审批流程中某个环节的审批人</div>
+              <div v-if="approverForm.assigneeType === 6" class="option-box-tip">
+                任何一个审批人有审批操作，则节点审批完成</div>
+              <div v-if="approverForm.assigneeType === 7" class="option-box-tip">
+                将由流程表单中的人员进行审批</div>
+              <div v-if="approverForm.assigneeType === 8" class="option-box-tip">
+                无序会签，当审批达到会签比例时，则该审批通过，一人不同意则驳回</div>
+              <div v-if="approverForm.assigneeType === 9" class="option-box-tip">
+                通过第三方调用从目标服务中获取审批人</div>
+              <el-alert type="warning" :closable="false" v-if="approverForm.assigneeType === 9">
+                <div slot="title" class="tips">
+                  <p>请求方式：GET</p>
+                  <p>请求参数：taskId、taskNodeId</p>
+                </div>
+              </el-alert>
+            </el-form-item>
+            <el-form-item label="发起人的" v-if="approverForm.assigneeType === 1">
+              <el-select v-model="approverForm.managerLevel">
+                <el-option v-for="item in 10" :key="item" :label="item===1?'直接主管':'第'+item+'级主管'"
+                  :value="item">
+                </el-option>
+              </el-select>
+            </el-form-item>
+            <el-form-item label="表单字段" v-if="approverForm.assigneeType === 4">
+              <el-select v-model="approverForm.formField" placeholder="请选择字段">
+                <el-option v-for="item in usedFormItems" :key="item.__vModel__"
+                  :label="item.__config__.label" :value="item.__vModel__">
+                </el-option>
+              </el-select>
+            </el-form-item>
+            <el-form-item label="审批节点" v-if="approverForm.assigneeType === 5">
+              <el-select v-model="approverForm.nodeId" placeholder="请选择节点">
+                <el-option v-for="item in nodeOptions" :key="item.nodeId"
+                  :label="item.properties.title" :value="item.nodeId">
+                </el-option>
+              </el-select>
+            </el-form-item>
+            <el-form-item label="请求路径" v-if="approverForm.assigneeType === 9">
+              <el-input v-model="properties.getUserUrl" placeholder="请输入接口路径"></el-input>
+            </el-form-item>
+            <el-form-item v-if="approverForm.assigneeType === 6|| approverForm.assigneeType === 8">
+              <org-select ref="approver-role-org" type="role" v-model="approverForm.approverRole"
+                title="添加角色" class="mb-10" buttonType="button" />
+              <org-select ref="approver-position-org" buttonType="button"
+                v-model="approverForm.approverPos" title="添加岗位" type="position"
+                @change="onOrgChange" class="mb-10" />
+              <org-select ref="approver-user-org" buttonType="button"
+                v-model="approverForm.approvers" title="添加用户" @change="onOrgChange" />
+            </el-form-item>
+            <el-form-item label="会签比例" v-if="approverForm.assigneeType === 8">
+              <el-select v-model="approverForm.countersignRatio">
+                <el-option v-for="item in 10" :key="item*10" :label="item*10+'%'" :value="item*10">
+                </el-option>
+              </el-select>
+            </el-form-item>
+            <el-form-item label="审批人为空时">
+              <el-checkbox v-model="approverForm.noApproverHandler">自动通过</el-checkbox>
+            </el-form-item>
+            <el-form-item label="进度选择" required>
+              <el-select v-model="approverForm.progress" placeholder="请选择">
+                <el-option v-for="item in progressOptions" :key="item" :label="item+'%'"
+                  :value="item">
+                </el-option>
+              </el-select>
+            </el-form-item>
+            <el-form-item label="抄送设置">
+              <org-select ref="approver-copy-role-org" type="role"
+                v-model="approverForm.circulateRole" title="添加抄送角色" class="mb-10"
+                buttonType="button" />
               <org-select ref="approver-copy-position-org" buttonType="button"
                 v-model="approverForm.circulatePosition" title="添加抄送岗位" type="position"
                 @change="onOrgChange" class="mb-10" />
               <org-select ref="approver-copy-user-org" buttonType="button"
-                v-model="approverForm.circulateUser" title="添加抄送用户" @change="onOrgChange" />
-            </div>
-          </div>
+                v-model="approverForm.circulateUser" title="添加抄送用户" @change="onOrgChange"
+                class="mb-10" />
+              <el-checkbox v-model="approverForm.isCustomCopy">自定义抄送人</el-checkbox>
+            </el-form-item>
+          </el-form>
+        </el-tab-pane>
+        <el-tab-pane label="高级设置" name="senior">
+          <el-form label-position="top" class="pd-10">
+            <el-form-item label="操作权限">
+              <div class="per-cell">
+                <el-checkbox v-model="approverForm.hasAuditBtn">同意</el-checkbox>
+                <el-input v-model="approverForm.auditBtnText" />
+              </div>
+              <div class="per-cell">
+                <el-checkbox v-model="approverForm.hasRejectBtn">驳回</el-checkbox>
+                <el-input v-model="approverForm.rejectBtnText" />
+              </div>
+              <div class="per-cell">
+                <el-checkbox v-model="approverForm.hasRevokeBtn">撤回</el-checkbox>
+                <el-input v-model="approverForm.revokeBtnText" />
+              </div>
+              <div class="per-cell">
+                <el-checkbox v-model="approverForm.hasTransferBtn">转办</el-checkbox>
+                <el-input v-model="approverForm.transferBtnText" />
+              </div>
+              <div class="per-cell">
+                <el-checkbox v-model="approverForm.hasSign">签名</el-checkbox>
+              </div>
+            </el-form-item>
+            <el-form-item label="超时设置">
+              <el-switch v-model="approverForm.timeoutConfig.on" class="mr-10" />
+              <template v-if="approverForm.timeoutConfig.on">
+                <el-input-number v-model="approverForm.timeoutConfig.quantity"
+                  controls-position="right" :min="1" class="mr-10"></el-input-number>
+                <el-select v-model="approverForm.timeoutConfig.type" class="timeout-select mr-10">
+                  <el-option label="天" value="day"></el-option>
+                  <el-option label="小时" value="hour"></el-option>
+                  <el-option label="分钟" value="minute"></el-option>
+                </el-select>
+                <el-radio-group v-model="approverForm.timeoutConfig.handler">
+                  <el-radio :label="1">同意</el-radio>
+                  <el-radio :label="2">驳回</el-radio>
+                </el-radio-group>
+              </template>
+            </el-form-item>
+            <el-form-item label="驳回步骤">
+              <el-select v-model="approverForm.rejectStep" placeholder="请选择">
+                <el-option v-for="item in rejectStepOptions" :key="item.nodeId"
+                  :label="item.properties.title" :value="item.nodeId">
+                </el-option>
+              </el-select>
+            </el-form-item>
+            <el-form-item label="通知设置">
+              <el-checkbox-group v-model="approverForm.messageType">
+                <el-checkbox :label="1">站内信</el-checkbox>
+                <el-checkbox :label="2">邮箱</el-checkbox>
+                <el-checkbox :label="3">短信</el-checkbox>
+                <el-checkbox :label="4">钉钉</el-checkbox>
+                <el-checkbox :label="5">企业微信</el-checkbox>
+              </el-checkbox-group>
+            </el-form-item>
+            <el-form-item label="说明">
+              <el-input v-model="approverForm.description" type="textarea" :rows="3"></el-input>
+            </el-form-item>
+          </el-form>
         </el-tab-pane>
         <el-tab-pane label="表单权限" name="formAuth">
           <div class="form-auth-table">
@@ -269,26 +367,41 @@ import { NodeUtils } from "../FlowCard/util.js"
 import { getDrawingList } from '@/components/Generator/utils/db'
 import OrgSelect from '../OrgSelect'
 
-const defaultInitForm = {
-  hasInitFunc: false,
-  initInterfaceUrl: '',
-  initInterfaceType: 'GET',
-  hasEndFunc: false,
-  endInterfaceUrl: '',
-  endInterfaceType: 'GET',
-  hasFlowRecallFunc: false,
-  flowRecallInterfaceUrl: ''
-}
 const defaultApproverForm = {
   approvers: [], // 审批人集合
-  approverPos: [], // 审批角色集合
+  approverPos: [], // 审批岗位集合
+  approverRole: [], // 审批角色集合
   assigneeType: 6, // 指定审批人
   formOperates: [], // 表单权限集合
-  circulatePosition: [],   // 抄送角色集合
+  circulateRole: [],   // 抄送角色集合
+  circulatePosition: [],   // 抄送岗位集合
   circulateUser: [],  // 抄送人集合
+  isCustomCopy: false,
   progress: '50',  // 进度
   rejectStep: '0',  // 驳回步骤
   description: '',  // 节点描述
+  managerLevel: 1,
+  countersignRatio: 100,
+  formField: '',
+  nodeId: '',
+  getUserUrl: '',
+  noApproverHandler: true,
+  hasAuditBtn: true,
+  auditBtnText: '通 过',
+  hasRejectBtn: true,
+  rejectBtnText: '拒 绝',
+  hasRevokeBtn: true,
+  revokeBtnText: '撤 回',
+  hasTransferBtn: true,
+  transferBtnText: '转 办',
+  hasSign: false,
+  timeoutConfig: {
+    on: false,
+    quantity: 1,
+    type: 'day',
+    handler: 1
+  },
+  messageType: [1],
   hasApproverFunc: false,
   approverInterfaceUrl: '',
   approverInterfaceType: 'GET',
@@ -321,9 +434,8 @@ export default {
       // 发起人  start节点和condition节点需要
       initiator: [],
       initiatePos: [],
+      initiateRole: [],
       priorityLength: 0, // 当为条件节点时  显示节点优先级选项的数据
-      useDirectorProxy: true, // 找不到主管时 上级主管代理审批
-      directorLevel: 1,  // 审批主管级别
       startForm: {
         formOperates: []
       },
@@ -334,24 +446,36 @@ export default {
           value: 2
         },
         {
-          label: '发起者主管',
+          label: '发起人主管',
           value: 1
         },
         {
-          label: '发起者本人',
+          label: '发起人',
           value: 3
+        },
+        {
+          label: '或签',
+          value: 6
+        },
+        {
+          label: '会签',
+          value: 8
         },
         {
           label: '加签',
           value: 7
         },
         {
-          label: '或签（一名审批人同意或拒绝即可）',
-          value: 6
+          label: '变量',
+          value: 4
         },
         {
-          label: '会签（需所有审批人同意）',
-          value: 8
+          label: '环节',
+          value: 5
+        },
+        {
+          label: '服务',
+          value: 9
         }],
       rejectStepOptions: [],
       progressOptions: ['10', '20', '30', '40', '50', '60', '70', '80', '90'],
@@ -389,6 +513,7 @@ export default {
           label: '或者',
           value: "||"
         }],
+      nodeOptions: []
     };
   },
   computed: {
@@ -422,6 +547,7 @@ export default {
     resetOrgColl() {
       this.approverForm.approvers = []
       this.approverForm.approverPos = []
+      this.approverForm.approverRole = []
     },
     onOrgChange(data) {
       // console.log(data)
@@ -462,7 +588,7 @@ export default {
         }
         loop(getDrawingList())
         const formItems = list
-        if (this.isStartNode()) {
+        if (NodeUtils.isStartNode(target)) {
           res = formItems.map(t => ({
             id: t.__vModel__,
             name: t.__config__.label,
@@ -471,7 +597,7 @@ export default {
             write: true
           }))
         }
-        if (this.isApproverNode()) {
+        if (NodeUtils.isApproverNode(target)) {
           res = formItems.map(t => ({
             id: t.__vModel__,
             name: t.__config__.label,
@@ -485,8 +611,7 @@ export default {
       return res
     },
     initCopyNode() {
-      // this.properties = this.value.properties
-      this.properties = Object.assign(defaultInitForm, this.value.properties)
+      this.properties = this.value.properties
     },
 
     initStartNodeData() {
@@ -522,13 +647,17 @@ export default {
     startNodeComfirm() {
       this.properties.initiator = this.initiator
       this.properties.initiatePos = this.initiatePos
+      this.properties.initiateRole = this.initiateRole
       let content = '',
         initiatorText = this.getOrgSelectLabel('start-user'),
-        initiatorPosText = this.getOrgSelectLabel('start-position')
-      if (!initiatorText && !initiatorPosText) {
+        initiatorPosText = this.getOrgSelectLabel('start-position'),
+        initiatorRoleText = this.getOrgSelectLabel('start-role')
+      if (!initiatorRoleText && !initiatorText && !initiatorPosText) {
         content = "所有人"
       } else {
-        content = initiatorPosText + (initiatorText && initiatorPosText ? ',' : '') + initiatorText
+        content += initiatorRoleText
+        content += (content && initiatorPosText ? ',' : '') + initiatorPosText
+        content += (content && initiatorText ? ',' : '') + initiatorText
       }
       Object.assign(this.properties, this.startForm)
       this.$emit("confirm", this.properties, content);
@@ -562,7 +691,7 @@ export default {
       const assigneeType = this.approverForm.assigneeType
       let content = ''
       if ([6, 8].includes(assigneeType)) {
-        if (!this.approverForm.approvers.length && !this.approverForm.approverPos.length) {
+        if (!this.approverForm.approvers.length && !this.approverForm.approverPos.length && !this.approverForm.approverRole.length) {
           this.$message({
             message: '请设置审批人',
             type: 'error',
@@ -571,10 +700,34 @@ export default {
         }
         // approver
         let approverText = this.getOrgSelectLabel('approver-user'),
-          approverPosText = this.getOrgSelectLabel('approver-position')
-        content = approverPosText + (approverText && approverPosText ? ',' : '') + approverText
+          approverPosText = this.getOrgSelectLabel('approver-position'),
+          approverRoleText = this.getOrgSelectLabel('approver-role')
+        content += approverRoleText
+        content += (content && approverPosText ? ',' : '') + approverPosText
+        content += (content && approverText ? ',' : '') + approverText
       } else {
         content = this.assigneeTypeOptions.find(t => t.value === assigneeType).label
+      }
+      if (assigneeType == 4 && !this.properties.formField) {
+        this.$message({
+          message: '请选择表单字段',
+          type: 'error',
+        })
+        return
+      }
+      if (assigneeType == 5 && !this.properties.nodeId) {
+        this.$message({
+          message: '请选择节点',
+          type: 'error',
+        })
+        return
+      }
+      if (assigneeType == 9 && !this.properties.getUserUrl) {
+        this.$message({
+          message: '请输入接口路径',
+          type: 'error',
+        })
+        return
       }
       // let copyContent = '', copyText = this.getOrgSelectLabel('approver-copy-user'),
       //   copyPosText = this.getOrgSelectLabel('approver-copy-position')
@@ -647,14 +800,14 @@ export default {
     * 初始化审批节点所需数据
     */
     initApproverNodeData() {
-      this.assigneeTypeOptions[3].disabled = this.value.isInterflow
+      this.assigneeTypeOptions[5].disabled = this.value.isInterflow
       this.activeName = 'config'
       Object.assign(this.approverForm, this.value.properties)
-      this.getRejectStepOption()
+      this.getNodeOption()
       this.approverForm.formOperates = this.initFormOperates(this.value)
     },
     // 获取驳回步骤选项
-    getRejectStepOption() {
+    getNodeOption() {
       let list = [], _this = this
       const loop = data => {
         if (Array.isArray(data)) data.forEach(d => loop(d))
@@ -669,6 +822,8 @@ export default {
         realList.push(list[i])
       }
       this.rejectStepOptions = [...defaultStep, ...realList]
+      let nodeOptions = list.filter(o => o.nodeId !== _this.value.nodeId)
+      this.nodeOptions = nodeOptions
     },
     /**
      * 初始化条件节点数据
@@ -748,6 +903,9 @@ export default {
         this.approverForm = JSON.parse(JSON.stringify(defaultApproverForm)) // 重置数据为默认状态
         return
       }
+      if (!this.processData.properties.formOperates || !this.processData.properties.formOperates.length) {
+        this.processData.properties.formOperates = this.initFormOperates(this.processData)
+      }
       this.isStartNode() && this.initStartNodeData()
       this.isApproverNode() && this.initApproverNodeData()
       this.isConditionNode() && this.initConditionNodeData()
@@ -780,6 +938,12 @@ export default {
     padding-bottom: 62px;
     overflow: hidden;
   }
+  .el-select {
+    width: 100%;
+    &.timeout-select {
+      width: 80px;
+    }
+  }
 
   >>> .el-tabs--top .el-tabs__item.is-top:nth-child(2) {
     padding-left: 20px;
@@ -792,6 +956,9 @@ export default {
   >>> .el-tabs__header {
     margin-bottom: 0;
   }
+}
+.mr-10 {
+  margin-right: 10px;
 }
 
 .header {
@@ -809,8 +976,8 @@ export default {
 }
 
 .radio-item {
-  // width: 110px;
-  padding: 5px;
+  line-height: 30px;
+  width: calc(33.33% - 30px);
 }
 
 .priority-select {
@@ -853,11 +1020,31 @@ export default {
 }
 
 .approver-pane {
-  overflow-y: auto;
-  overflow-x: hidden;
+  height: 100%;
+  overflow: hidden;
+  .option-box-tip {
+    font-size: 14px;
+    color: #a5a5a5;
+  }
   .option-box {
     font-size: 14px;
     padding-left: 1rem;
+  }
+  >>> .el-tabs__content {
+    height: calc(100% - 40px);
+    .el-tab-pane {
+      height: 100%;
+      overflow-x: hidden;
+      overflow-y: auto;
+    }
+  }
+  .per-cell {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+    .el-checkbox {
+      margin-right: 40px;
+    }
   }
 }
 

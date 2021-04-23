@@ -9,7 +9,7 @@
           </el-button>
         </template>
         <template v-if="setting.opType == 1">
-          <el-button type="warning" @click="transfer()">转 办</el-button>
+          <el-button type="warning" @click="openUserBox('transfer')">转 办</el-button>
           <el-button type="primary" @click="eventLancher('audit')">通 过</el-button>
           <el-button type="danger" @click="eventLancher('reject')">拒 绝</el-button>
         </template>
@@ -18,9 +18,12 @@
           <el-button type="danger" @click="revoke()">撤 回</el-button>
         </template>
         <el-button type="danger" v-if="setting.opType == 2" @click="recall()">撤 回</el-button>
-        <el-button type="danger" @click="cancel()"
-          v-if="setting.opType == 4 && setting.status != 2 && setting.status != 5">
-          终 止</el-button>
+        <template v-if="setting.opType == 4">
+          <el-button type="primary" @click="openUserBox('appoint')" v-if="setting.status ==1">指 派
+          </el-button>
+          <el-button type="danger" v-if="setting.status != 2 && setting.status != 5"
+            @click="cancel()">终 止</el-button>
+        </template>
         <el-button @click="goBack()">{{$t('common.cancelButton')}}</el-button>
       </div>
       <div class="approve-result" v-if="(setting.opType==0||setting.opType==4) && activeTab==='0'">
@@ -54,7 +57,7 @@
           </el-button>
         </span>
       </el-dialog>
-      <UserBox v-if="userBoxVisible" ref="userBox" @submit="transferSubmit" />
+      <UserBox v-if="userBoxVisible" ref="userBox" :title="userBoxTitle" @submit="userBoxSubmit" />
     </div>
   </transition>
 </template>
@@ -70,6 +73,8 @@ export default {
   data() {
     return {
       userBoxVisible: false,
+      userBoxTitle: '审批人',
+      userBoxType: '',
       currentView: '',
       formData: {},
       setting: {},
@@ -318,13 +323,20 @@ export default {
         })
       }).catch(() => { })
     },
-    transfer() {
+    openUserBox(type) {
+      this.userBoxType = type
+      if (type === 'appoint') {
+        this.userBoxTitle = '指派人'
+      } else {
+        this.userBoxTitle = '审批人'
+      }
       this.userBoxVisible = true
       this.$nextTick(() => {
         this.$refs.userBox.init()
       })
     },
-    transferSubmit(freeApproverUserId) {
+    appoint(freeApproverUserId) { },
+    transfer(freeApproverUserId) {
       Transfer(this.setting.taskId, { freeApproverUserId }).then(res => {
         this.$message({
           type: 'success',
@@ -335,6 +347,9 @@ export default {
           }
         })
       })
+    },
+    userBoxSubmit(freeApproverUserId) {
+      this[this.userBoxType](freeApproverUserId)
     },
     radioChange(val) {
       if (val != 0) {

@@ -386,10 +386,10 @@ export class NodeUtils {
       isEmptyArray(props.conditions) &&
       (valid = false)
 
-    const customSettings = [1, 2, 3, 7]
+    const customSettings = [6, 8]
     this.isApproverNode(node) &&
-      !customSettings.includes(props.assigneeType) &&
-      (isEmptyArray(props.approvers) && isEmptyArray(props.approverPos)) &&
+      customSettings.includes(props.assigneeType) &&
+      (isEmptyArray(props.approvers) && isEmptyArray(props.approverPos) && isEmptyArray(props.approverRole)) &&
       (valid = false)
     return valid
   }
