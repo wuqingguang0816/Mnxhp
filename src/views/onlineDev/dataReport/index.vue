@@ -31,7 +31,8 @@
         </div>
         <JNPF-table v-loading="listLoading" :data="tableListAll" row-key="id" default-expand-all
           :tree-props="{children: 'children', hasChildren: ''}">
-          <el-table-column prop="fullName" label="报表名称" v-if="jnpf.hasP('fullName')">
+          <el-table-column prop="fullName" label="报表名称" min-width="200"
+            v-if="jnpf.hasP('fullName')">
             <template slot-scope="scope">
               <span v-if="scope.row.top" style="font-weight:bold;">
                 {{scope.row.fullName}}【{{scope.row.count}}】
@@ -39,7 +40,7 @@
               <span v-else>{{ scope.row.fullName }}</span>
             </template>
           </el-table-column>
-          <el-table-column prop="enCode" label="编码" v-if="jnpf.hasP('enCode')">
+          <el-table-column prop="enCode" label="编码" width="200" v-if="jnpf.hasP('enCode')">
             <template slot-scope="scope">
               <span v-if="!scope.row.top">{{ scope.row.enCode }}</span>
             </template>

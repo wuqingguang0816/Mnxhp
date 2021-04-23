@@ -31,7 +31,7 @@
         </div>
         <JNPF-table v-loading="listLoading" :data="listAll" row-key="id"
           :tree-props="{children: 'children', hasChildren: ''}" default-expand-all>
-          <el-table-column prop="fullName" label="名称" show-overflow-tooltip width="200"
+          <el-table-column prop="fullName" label="名称" show-overflow-tooltip min-width="200"
             v-if="jnpf.hasP('fullName')">
             <template slot-scope="scope">
               <span v-if="scope.row.top"
@@ -50,8 +50,6 @@
             v-if="jnpf.hasP('lastmodifyuser')" />
           <el-table-column prop="lastmodifytime" label="最后修改时间" :formatter="jnpf.tableDateFormat"
             width="120" v-if="jnpf.hasP('lastmodifytime')" />
-          <el-table-column prop="description" label="说明" show-overflow-tooltip
-            v-if="jnpf.hasP('description')" />
           <el-table-column label="操作" fixed="right" width="150">
             <template slot-scope="scope" v-if="!scope.row.top">
               <tableOpts @edit="addOrUpdateHandle(scope.row.id)" @del="handleDel(scope.row.id)">
