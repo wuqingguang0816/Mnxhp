@@ -41,19 +41,29 @@
           <recordList :list='flowTaskOperatorRecordList' :endTime='endTime' />
         </el-tab-pane>
       </el-tabs>
-      <el-dialog title="审批通过" :close-on-click-modal="false" :visible.sync="visible"
-        class="JNPF-dialog JNPF-dialog_center" lock-scroll append-to-body width='450px'>
-        <el-radio-group v-model="handleType" @change="radioChange">
-          <el-radio :label="1" class="radio-audit">审核结束</el-radio>
-          <el-radio :label="0" class="radio-audit">
-            <JNPF-TreeSelect :options="treeData" v-model="handleId" placeholder="选择下一审批人" lastLevel
-              lastLevelKey='type' lastLevelValue='user' :disabled="handleType!=0"></JNPF-TreeSelect>
-          </el-radio>
-        </el-radio-group>
-        <el-input v-model="reason" placeholder="请输入审批意见（选填）" type="textarea" :rows="4" />
+      <el-dialog :title="eventType==='audit'?'审批通过':'审批拒绝'" :close-on-click-modal="false"
+        :visible.sync="visible" class="JNPF-dialog JNPF-dialog_center" lock-scroll append-to-body
+        width='600'>
+        <el-form label-width="80px">
+          <el-form-item v-if="eventType==='audit'&& freeApprover == 1">
+            <el-radio-group v-model="handleType" @change="radioChange">
+              <el-radio :label="1" class="radio-audit">审核结束</el-radio>
+              <el-radio :label="0">
+                <JNPF-TreeSelect :options="treeData" v-model="handleId" placeholder="选择下一审批人"
+                  lastLevel lastLevelKey='type' lastLevelValue='user' :disabled="handleType!=0" />
+              </el-radio>
+            </el-radio-group>
+          </el-form-item>
+          <el-form-item label="审批意见">
+            <el-input v-model="reason" placeholder="请输入审批意见（选填）" type="textarea" :rows="4" />
+          </el-form-item>
+          <!-- <el-form-item label="业务名称" prop="fullName">
+            <el-input v-model="dataForm.fullName" placeholder="输入名称" />
+          </el-form-item>-->
+        </el-form>
         <span slot="footer" class="dialog-footer">
           <el-button @click="visible = false">{{$t('common.cancelButton')}}</el-button>
-          <el-button type="primary" @click="addPeopleAudit()">{{$t('common.confirmButton')}}
+          <el-button type="primary" @click="handleApproval()">{{$t('common.confirmButton')}}
           </el-button>
         </span>
       </el-dialog>
@@ -91,7 +101,8 @@ export default {
       handleId: '',
       treeData: [],
       activeTab: '0',
-      btnLoading: false
+      btnLoading: false,
+      eventType: ''
     }
   },
   methods: {
@@ -186,66 +197,18 @@ export default {
     },
     eventReciver(formData, eventType) {
       this.formData = formData
-      this[eventType]()
-    },
-    audit() {
-      if (this.freeApprover == 0) {
-        this.$prompt('', "审批通过", {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          inputPlaceholder: '请输入审批意见（选填）',
-          inputType: 'textarea',
-          inputValue: "",
-          closeOnClickModal: false
-        }).then(({ value }) => {
-          let query = {
-            handleOpinion: value,
-            formData: this.formData,
-            enCode: this.setting.enCode
-          }
-          Audit(this.setting.taskId, query).then(res => {
-            this.$message({
-              type: 'success',
-              message: res.msg,
-              duration: 1000,
-              onClose: () => {
-                this.$emit('close', true)
-              }
-            })
+      this.eventType = eventType
+      if (eventType === 'audit' || eventType === 'reject') {
+        if (eventType === 'audit' && this.freeApprover == 1) {
+          this.$store.dispatch('base/getUserTree').then(res => {
+            this.treeData = res
           })
-        }).catch(() => { });
-      } else {
-        this.$store.dispatch('base/getUserTree').then(res => {
-          this.treeData = res
-          this.visible = true
-        })
-      }
-    },
-    reject() {
-      this.$prompt('', "审批拒绝", {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        inputPlaceholder: '请输入审批意见（选填）',
-        inputType: 'textarea',
-        inputValue: "",
-        closeOnClickModal: false
-      }).then(({ value }) => {
-        let query = {
-          handleOpinion: value,
-          formData: this.formData,
-          enCode: this.setting.enCode
+          this.handleType = 1
+          this.handleId = ''
         }
-        Reject(this.setting.taskId, query).then(res => {
-          this.$message({
-            type: 'success',
-            message: res.msg,
-            duration: 1000,
-            onClose: () => {
-              this.$emit('close', true)
-            }
-          })
-        })
-      }).catch(() => { });
+        this.reason = ''
+        this.visible = true
+      }
     },
     revoke() {
       this.$prompt('', "撤回流程", {
@@ -351,27 +314,27 @@ export default {
     userBoxSubmit(freeApproverUserId) {
       this[this.userBoxType](freeApproverUserId)
     },
-    radioChange(val) {
-      if (val != 0) {
-        this.handleId = ''
-      }
-    },
-    addPeopleAudit() {
-      if (this.handleType == 0 && !this.handleId) {
-        this.$message({
-          type: 'error',
-          message: '请选择下一审批人',
-          duration: 1000
-        })
-        return
+    handleApproval() {
+      if (this.freeApprover == 1) {
+        if (this.handleType == 0 && !this.handleId) {
+          this.$message({
+            type: 'error',
+            message: '请选择下一审批人',
+            duration: 1000
+          })
+          return
+        }
       }
       let query = {
         handleOpinion: this.reason,
-        freeApproverUserId: this.handleId,
         formData: this.formData,
         enCode: this.setting.enCode
       }
-      Audit(this.setting.taskId, query).then(res => {
+      if (this.eventType === 'audit' && this.freeApprover == 1) {
+        query = { freeApproverUserId: this.handleId, ...query }
+      }
+      const approvalMethod = this.eventType === 'audit' ? Audit : Reject
+      approvalMethod(this.setting.taskId, query).then(res => {
         this.$message({
           type: 'success',
           message: res.msg,
@@ -382,6 +345,9 @@ export default {
           }
         })
       })
+    },
+    radioChange(val) {
+      if (val != 0) this.handleId = ''
     },
     setLoad(val) {
       this.btnLoading = !!val
