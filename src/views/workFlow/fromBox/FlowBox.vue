@@ -57,9 +57,25 @@
           <el-form-item label="审批意见">
             <el-input v-model="reason" placeholder="请输入审批意见（选填）" type="textarea" :rows="4" />
           </el-form-item>
-          <!-- <el-form-item label="业务名称" prop="fullName">
-            <el-input v-model="dataForm.fullName" placeholder="输入名称" />
-          </el-form-item>-->
+          <!-- <el-form-item>
+            <div class="sign-main">
+              <div class="sign-head">
+                <div class="sign-tip">请在这里输入你的签名</div>
+                <div class="sign-action">
+                  <el-button class="clear-btn" size="mini" @click="handleReset">清空</el-button>
+                  <el-button class="sure-btn" size="mini" @click="handleGenerate"
+                    :disabled="!!signImg">确定签名</el-button>
+                </div>
+              </div>
+              <div class="sign-box">
+                <vue-esign ref="esign" :height="280" v-if="!signImg" :lineWidth="5" />
+                <img :src="signImg" alt="" v-if="signImg" class="sign-img">
+              </div>
+            </div>
+          </el-form-item>
+          <el-form-item label="抄送给">
+            <user-select v-model="copyIds" placeholder="请选择" multiple />
+          </el-form-item> -->
         </el-form>
         <span slot="footer" class="dialog-footer">
           <el-button @click="visible = false">{{$t('common.cancelButton')}}</el-button>
@@ -78,8 +94,9 @@ import { FlowBeforeInfo, Audit, Reject, Transfer, Recall, Cancel } from '@/api/w
 import { Revoke, Press } from '@/api/workFlow/FlowLaunch'
 import recordList from './RecordList'
 import Process from '@/components/Process/Preview'
+import vueEsign from 'vue-esign'
 export default {
-  components: { recordList, Process },
+  components: { recordList, Process, vueEsign },
   data() {
     return {
       userBoxVisible: false,
@@ -102,7 +119,9 @@ export default {
       treeData: [],
       activeTab: '0',
       btnLoading: false,
-      eventType: ''
+      eventType: '',
+      signImg: '',
+      copyIds: ''
     }
   },
   methods: {
@@ -207,6 +226,8 @@ export default {
           this.handleId = ''
         }
         this.reason = ''
+        this.copyIds = ''
+        this.handleReset()
         this.visible = true
       }
     },
@@ -349,6 +370,22 @@ export default {
     radioChange(val) {
       if (val != 0) this.handleId = ''
     },
+    handleReset() {
+      this.signImg = ''
+      this.$nextTick(() => {
+        this.$refs.esign && this.$refs.esign.reset()
+      })
+    },
+    handleGenerate() {
+      this.$refs.esign.generate().then(res => {
+        if (res) this.signImg = res
+      }).catch(err => {
+        this.$message({
+          message: '请签名',
+          type: 'warning'
+        })
+      })
+    },
     setLoad(val) {
       this.btnLoading = !!val
     }
@@ -359,5 +396,36 @@ export default {
 .radio-audit {
   display: block;
   margin-bottom: 20px;
+}
+.sign-main {
+  border: 1px solid #dcdfe6;
+  border-radius: 4px;
+  overflow: hidden;
+  .sign-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px;
+    border-bottom: 1px solid #dcdfe6;
+    .sign-tip {
+      color: #606266;
+      font-size: 12px;
+    }
+    .sign-action {
+      display: flex;
+      align-items: center;
+      .clear-btn,
+      .sure-btn {
+        margin-left: 5px;
+      }
+    }
+  }
+  .sign-box {
+    border-top: 0;
+    height: 100px;
+  }
+  .sign-img {
+    width: 100%;
+  }
 }
 </style>
