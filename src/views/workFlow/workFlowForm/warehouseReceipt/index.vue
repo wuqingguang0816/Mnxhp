@@ -72,12 +72,6 @@
             </el-date-picker>
           </el-form-item>
         </el-col>
-        <el-col :span="24" v-if="JudgeShow('description')">
-          <el-form-item label="备注" prop="description">
-            <el-input v-model="dataForm.description" placeholder="备注" type="textarea" :rows="3"
-              :disabled="JudgeWrite('description')" />
-          </el-form-item>
-        </el-col>
       </el-row>
     </el-form>
     <template v-if="JudgeShow('entryList')">
@@ -162,7 +156,6 @@ export default {
         deliveryNo: '',
         warehouseNo: '',
         warehousDate: '',
-        description: '',
         contactPhone: '',
         warehousCategory: '',
         entryList: []
