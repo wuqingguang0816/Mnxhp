@@ -63,6 +63,9 @@ export default {
       }, {
         label: 'Oracle',
         children: []
+      }, {
+        label: 'DM',
+        children: []
       }],
       dataRule: {
         dbConnectionFrom: [
@@ -90,6 +93,8 @@ export default {
             this.options[1].children.push(element)
           } else if (element.dbType == 'Oracle') {
             this.options[2].children.push(element)
+          } else if (element.dbType == 'DM') {
+            this.options[3].children.push(element)
           }
         }
         this.options = this.options.filter(o => o.children.length)
