@@ -154,6 +154,9 @@ const defaultOptions = [{
 }, {
   label: 'Oracle',
   children: []
+}, {
+  label: 'DM',
+  children: []
 }]
 
 export default {
@@ -274,6 +277,8 @@ export default {
               this.dbOptions[2].children.push(element)
             } else if (element.dbType === 'Oracle') {
               this.dbOptions[3].children.push(element)
+            } else if (element.dbType == 'DM') {
+              this.options[4].children.push(element)
             }
           }
           this.dbOptions = this.dbOptions.filter(o => o.children.length)
