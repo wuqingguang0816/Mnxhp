@@ -174,7 +174,7 @@ export default {
       }).catch(() => { });
     },
     preview(id) {
-      this.$router.push(`/previewModel?id=${id}`)
+      this.$router.push(`/previewModel?isPreview=1&id=${id}`)
     },
     // 新增 / 修改
     addOrUpdateHandle(id, type) {

@@ -34,7 +34,7 @@ const baseRouter = [{
   },
   {
     path: '/previewModel',
-    component: (resolve) => require(['@/views/basic/previewModel'], resolve),
+    component: (resolve) => require(['@/views/basic/dynamicModel'], resolve),
     name: 'previewModel',
     meta: {
       title: 'previewModel',
