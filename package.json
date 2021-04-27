@@ -9,6 +9,7 @@
     "build": "cross-env NODE_ENV=production vue-cli-service build",
     "build:staging": "cross-env NODE_ENV=production vue-cli-service build --mode staging",
     "build:javaBootTest": "cross-env NODE_ENV=production vue-cli-service build --mode javaBootTest",
+    "build:javaBootTestDM": "cross-env NODE_ENV=production vue-cli-service build --mode javaBootTestDM",
     "build:javaCloudDev": "cross-env NODE_ENV=production vue-cli-service build --mode javaCloudDev",
     "build:javaCloudTest": "cross-env NODE_ENV=production vue-cli-service build --mode javaCloudTest",
     "preview": "node build/index.js --preview",
