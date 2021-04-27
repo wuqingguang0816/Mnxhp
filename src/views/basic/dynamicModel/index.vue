@@ -41,9 +41,16 @@
         <JNPF-table v-loading="listLoading" :data="list" row-key="id" default-expand-all
           :tree-props="{children: 'children', hasChildren: ''}" @sort-change='sortChange'
           :has-c="hasBatchBtn" @selection-change="handleSelectionChange" v-if="refreshTable">
-          <el-table-column :prop="item.prop" :label="item.label" :align="item.align"
-            :width="item.width" v-for="(item, i) in columnList" :key="i"
-            :sortable="item.sortable?'custom':item.sortable" />
+          <template v-if="isPreview">
+            <el-table-column :prop="item.prop" :label="item.label" :align="item.align"
+              :width="item.width" v-for="(item, i) in columnData.columnList" :key="i"
+              :sortable="item.sortable?'custom':item.sortable" />
+          </template>
+          <template v-else>
+            <el-table-column :prop="item.prop" :label="item.label" :align="item.align"
+              :width="item.width" v-for="(item, i) in columnList" :key="i"
+              :sortable="item.sortable?'custom':item.sortable" />
+          </template>
           <el-table-column label="操作" fixed="right" :width="columnData.columnBtnsList.length*50"
             v-if="columnData.columnBtnsList.length">
             <template slot-scope="scope" v-if="!scope.row.top">
