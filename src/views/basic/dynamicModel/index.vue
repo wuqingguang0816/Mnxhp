@@ -20,11 +20,10 @@
         <div class="JNPF-common-head">
           <div v-if="isPreview">
             <el-button :type="i==0?'primary':'text'" :icon="item.icon"
-              @click="headBtnsHandel(item.value)" v-for="(item, i) in columnData.btnsList"
-              :class="{'JNPF-table-delBtn':item.value=='batchRemove' && i!=0 }" :key="i">
+              @click="headBtnsHandel(item.value)" v-for="(item, i) in columnData.btnsList" :key="i">
               {{item.label}}</el-button>
           </div>
-          <div v-else>
+          <div>
             <el-button :type="i==0?'primary':'text'" :icon="item.icon" v-has="'btn_'+item.value"
               @click="headBtnsHandel(item.value)" v-for="(item, i) in columnData.btnsList"
               :class="{'JNPF-table-delBtn':item.value=='batchRemove' && i!=0 }" :key="i">
@@ -38,11 +37,16 @@
             <screenfull />
           </div>
         </div>
-        <JNPF-table v-loading="listLoading" :data="list" row-key="id" default-expand-all
-          :tree-props="{children: 'children', hasChildren: ''}" @sort-change='sortChange'
-          :has-c="hasBatchBtn" @selection-change="handleSelectionChange" v-if="refreshTable">
-          <el-table-column :prop="item.prop" :label="item.label" :align="item.align"
-            :width="item.width" v-for="(item, i) in columnList" :key="i" />
+        <JNPF-table v-loading="listLoading" :data="list" row-key="id"
+          :tree-props="{children: 'children', hasChildren: ''}" default-expand-all>
+          <template v-if="isPreview">
+            <el-table-column :prop="item.prop" :label="item.label" :align="item.align"
+              :width="item.width" v-for="(item, i) in columnData.columnList" :key="i" />
+          </template>
+          <template v-else>
+            <el-table-column :prop="item.prop" :label="item.label" :align="item.align"
+              :width="item.width" v-for="(item, i) in columnList" :key="i" />
+          </template>
           <el-table-column label="操作" fixed="right" :width="columnData.columnBtnsList.length*50"
             v-if="columnData.columnBtnsList.length">
             <template slot-scope="scope" v-if="!scope.row.top">
@@ -107,6 +111,7 @@ export default {
       },
       formData: {},
       columnList: [],
+      isPreview: false
     }
   },
   created() {
