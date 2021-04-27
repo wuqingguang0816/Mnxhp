@@ -280,7 +280,6 @@
 </template>
 
 <script>
-import { isArray } from "util"
 import { isNumberStr } from "@/components/Generator/utils"
 import draggable from "vuedraggable"
 import { getDictionaryTypeSelector, getDictionaryDataSelector } from "@/api/systemData/dictionary"
@@ -378,7 +377,7 @@ export default {
       return val
     },
     onDefaultValueInput(str) {
-      if (isArray(this.activeData.__config__.defaultValue)) {
+      if (Array.isArray(this.activeData.__config__.defaultValue)) {
         // 数组
         this.$set(
           this.activeData.__config__,
