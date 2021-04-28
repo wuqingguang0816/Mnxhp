@@ -213,7 +213,7 @@
               </el-select>
             </el-form-item>
             <el-form-item label="请求路径" v-if="approverForm.assigneeType === 9">
-              <el-input v-model="properties.getUserUrl" placeholder="请输入接口路径"></el-input>
+              <el-input v-model="approverForm.getUserUrl" placeholder="请输入接口路径"></el-input>
             </el-form-item>
             <el-form-item v-if="approverForm.assigneeType === 6|| approverForm.assigneeType === 8">
               <org-select ref="approver-role-org" type="role" v-model="approverForm.approverRole"
@@ -708,21 +708,21 @@ export default {
       } else {
         content = this.assigneeTypeOptions.find(t => t.value === assigneeType).label
       }
-      if (assigneeType == 4 && !this.properties.formField) {
+      if (assigneeType == 4 && !this.approverForm.formField) {
         this.$message({
           message: '请选择表单字段',
           type: 'error',
         })
         return
       }
-      if (assigneeType == 5 && !this.properties.nodeId) {
+      if (assigneeType == 5 && !this.approverForm.nodeId) {
         this.$message({
           message: '请选择节点',
           type: 'error',
         })
         return
       }
-      if (assigneeType == 9 && !this.properties.getUserUrl) {
+      if (assigneeType == 9 && !this.approverForm.getUserUrl) {
         this.$message({
           message: '请输入接口路径',
           type: 'error',
