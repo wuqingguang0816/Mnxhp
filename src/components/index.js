@@ -11,6 +11,7 @@ import JNPFQuill from '@/components/JNPFEditor/quill'
 import JNPFText from '@/components/Generator/components/JNPFText'
 import JNPFUploadFz from '@/components/Generator/components/Upload/UploadFz'
 import JNPFUploadImg from '@/components/Generator/components/Upload/UploadImg'
+import PopupSelect from '@/components/Generator/components/PopupSelect'
 import ComSelect from '@/components/Generator/components/ComSelect'
 import DepSelect from '@/components/Generator/components/DepSelect'
 import PosSelect from '@/components/Generator/components/PosSelect'
@@ -37,6 +38,7 @@ export default {
     Vue.component('JNPFText', JNPFText)
     Vue.component('JNPFUploadFz', JNPFUploadFz)
     Vue.component('JNPFUploadImg', JNPFUploadImg)
+    Vue.component('PopupSelect', PopupSelect)
     Vue.component('ComSelect', ComSelect)
     Vue.component('DepSelect', DepSelect)
     Vue.component('PosSelect', PosSelect)
