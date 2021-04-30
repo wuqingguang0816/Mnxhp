@@ -18,7 +18,7 @@
       <Search ref="Search" :list="columnData.searchList" @reset="reset" @search="search" />
       <div class="JNPF-common-layout-main JNPF-flex-main">
         <div class="JNPF-common-head">
-          <div v-if="isPreview">
+          <div v-if="isPreview || !columnData.useBtnPermission">
             <el-button :type="i==0?'primary':'text'" :icon="item.icon"
               @click="headBtnsHandel(item.value)" v-for="(item, i) in columnData.btnsList"
               :class="{'JNPF-table-delBtn':item.value=='batchRemove' && i!=0 }" :key="i">
@@ -41,7 +41,7 @@
         <JNPF-table v-loading="listLoading" :data="list" row-key="id" default-expand-all
           :tree-props="{children: 'children', hasChildren: ''}" @sort-change='sortChange'
           :has-c="hasBatchBtn" @selection-change="handleSelectionChange" v-if="refreshTable">
-          <template v-if="isPreview">
+          <template v-if="isPreview || !columnData.useColumnPermission">
             <el-table-column :prop="item.prop" :label="item.label" :align="item.align"
               :width="item.width" v-for="(item, i) in columnData.columnList" :key="i"
               :sortable="item.sortable?'custom':item.sortable" />
@@ -54,10 +54,18 @@
           <el-table-column label="操作" fixed="right" :width="columnData.columnBtnsList.length*50"
             v-if="columnData.columnBtnsList.length">
             <template slot-scope="scope" v-if="!scope.row.top">
-              <el-button size="mini" type="text" v-for="(item, i) in columnData.columnBtnsList"
-                :key="i" :class="{'JNPF-table-delBtn':item.value=='remove'}"
-                @click="columnBtnsHandel(item.value,scope.row.id,scope.$index)"
-                v-has="'btn_'+item.value">{{item.label}}</el-button>
+              <template v-if="isPreview || !columnData.useBtnPermission">
+                <el-button size="mini" type="text" v-for="(item, i) in columnData.columnBtnsList"
+                  :key="i" :class="{'JNPF-table-delBtn':item.value=='remove'}"
+                  @click="columnBtnsHandel(item.value,scope.row.id,scope.$index)">{{item.label}}
+                </el-button>
+              </template>
+              <template v-else>
+                <el-button size="mini" type="text" v-for="(item, i) in columnData.columnBtnsList"
+                  :key="i" :class="{'JNPF-table-delBtn':item.value=='remove'}"
+                  @click="columnBtnsHandel(item.value,scope.row.id,scope.$index)"
+                  v-has="'btn_'+item.value">{{item.label}}</el-button>
+              </template>
             </template>
           </el-table-column>
         </JNPF-table>

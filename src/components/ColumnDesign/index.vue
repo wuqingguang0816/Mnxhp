@@ -177,6 +177,16 @@
                 <el-input v-model="item.label" size="mini"></el-input>
               </el-checkbox>
             </el-checkbox-group>
+            <el-divider>权限设置</el-divider>
+            <el-form-item label="列表权限">
+              <el-switch v-model="columnData.useColumnPermission"></el-switch>
+            </el-form-item>
+            <el-form-item label="按钮权限">
+              <el-switch v-model="columnData.useBtnPermission"></el-switch>
+            </el-form-item>
+            <el-form-item label="数据权限">
+              <el-switch v-model="columnData.useDataPermission"></el-switch>
+            </el-form-item>
           </el-form>
         </div>
       </div>
@@ -207,6 +217,9 @@ const defaultColumnData = {
   treePropsChildren: 'children',  // 子级字段
   treePropsLabel: 'fullName',  // 显示字段
   groupField: '',  // 分组字段
+  useColumnPermission: false,
+  useBtnPermission: false,
+  useDataPermission: false,
   btnsList: [
     { value: 'add', icon: 'el-icon-plus', label: '新增' }
   ],  // 按钮
