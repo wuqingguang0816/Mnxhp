@@ -32,10 +32,10 @@ export function DataModelDelete(linkId, id) {
   })
 }
 // 获取数据库表字段列表
-export function DataModelFieldList(linkId, table) {
+export function DataModelFieldList(linkId, table, type) {
   return request({
-    url: `/api/system/Base/DataModel/${linkId}/Tables/${table}/Fields`,
-    method: 'get',
+    url: `/api/system/Base/DataModel/${linkId}/Tables/${table}/Fields?type=${type}`,
+    method: 'get'
   })
 }
 //  获取数据表
