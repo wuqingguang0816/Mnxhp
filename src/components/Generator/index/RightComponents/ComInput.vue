@@ -94,7 +94,7 @@
             {{item.label}}</el-dropdown-item>
         </el-dropdown-menu>
       </el-dropdown>
-      <el-button type="primary" @click="addReg">
+      <el-button type="primary" @click="addReg" style="margin-left:10px">
         自定义规则
       </el-button>
     </div>
