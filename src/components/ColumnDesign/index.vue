@@ -13,6 +13,11 @@
           </el-table-column>
           <el-table-column prop="__config__.label" label="列名" />
           <el-table-column prop="__vModel__" label="字段" />
+          <el-table-column prop="searchType" label="类型">
+            <template slot-scope="scope">
+              {{scope.row.searchType===3?'范围查询':scope.row.searchType===2?'模糊查询':'等于查询'}}
+            </template>
+          </el-table-column>
         </el-table>
       </div>
       <el-divider></el-divider>
@@ -196,9 +201,18 @@
 <script>
 import Sortable from 'sortablejs'
 import { getDrawingList } from '@/components/Generator/utils/db'
-import { deepClone } from '@/utils'
-import { noColumnShowList, noSearchList } from '@/components/Generator/generator/comConfig'
+import { noColumnShowList, noSearchList, useInputList, useDateList } from '@/components/Generator/generator/comConfig'
 import { getDataInterfaceSelector } from '@/api/systemData/dataInterface'
+
+const getSearchType = item => {
+  const jnpfKey = item.__config__.jnpfKey
+  // 等于-1  模糊-2  范围-3
+  const fuzzyList = [...useInputList]
+  const RangeList = [...useDateList, 'time', 'date', 'numInput']
+  if (RangeList.includes(jnpfKey)) return 3
+  if (fuzzyList.includes(jnpfKey)) return 2
+  return 1
+}
 
 const defaultColumnData = {
   searchList: [], // 查询条件
@@ -324,7 +338,7 @@ export default {
       sortable: false,
       width: null
     }));
-    this.searchOptions = searchOptions.map(o => ({ ...o, value: '' }));
+    this.searchOptions = searchOptions.map(o => ({ ...o, value: '', searchType: getSearchType(o) }));
     if (typeof this.conf === 'object' && this.conf !== null) {
       this.columnData = Object.assign({}, defaultColumnData, this.conf)
     }
@@ -340,7 +354,7 @@ export default {
       this.columnData.columnList.forEach(row => {
         this.$refs.columnTable.toggleRowSelection(row, true);
       })
-      this.setValue(this.columnData.searchList, this.searchOptions, "__vModel__")
+      this.setValue(this.searchOptions, this.columnData.searchList, "__vModel__")
       this.columnData.searchList.forEach(row => {
         this.$refs.searchTable.toggleRowSelection(row, true);
       })

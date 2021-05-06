@@ -8,9 +8,9 @@
               class="item">
             </el-input>
           </template>
-          <template v-else-if="useTimeList.indexOf(item.__config__.jnpfKey)>-1">
-            <el-date-picker v-model="item.value" placeholder="选择时间" value-format="timestamp"
-              format="yyyy-MM-dd" class="item" />
+          <template v-else-if="useDateList.indexOf(item.__config__.jnpfKey)>-1">
+            <el-date-picker v-model="item.value" value-format="timestamp" format="yyyy-MM-dd"
+              start-placeholder="开始日期" end-placeholder="结束日期" class="item" type="daterange" />
           </template>
           <template v-else-if="useSelectList.indexOf(item.__config__.jnpfKey)>-1">
             <el-select v-model="item.value" :placeholder="'请选择'+item.__config__.label" clearable
@@ -26,21 +26,16 @@
                 :show-all-levels="item['show-all-levels']" :props="item.props.props" filterable
                 :placeholder="'请选择'+item.__config__.label" class="item"></el-cascader>
             </template>
-            <template v-if="item.__config__.jnpfKey==='time'">
-              <el-time-picker v-model="item.value" :picker-options="item['picker-options']"
-                placeholder="选择时间" clearable :value-format="item['value-format']"
-                :format="item.format" class="item">
-              </el-time-picker>
-            </template>
-            <template v-if="item.__config__.jnpfKey==='timeRange'">
+            <template
+              v-if="item.__config__.jnpfKey==='time'|| item.__config__.jnpfKey==='timeRange'">
               <el-time-picker v-model="item.value" start-placeholder="开始时间" end-placeholder="结束时间"
                 clearable :value-format="item['value-format']" :format="item.format" is-range
-                class="item">
-              </el-time-picker>
+                class="item" />
             </template>
             <template v-if="item.__config__.jnpfKey==='date'">
-              <el-date-picker v-model="item.value" :type="item.type" placeholder="选择日期"
-                :value-format="item['value-format']" :format="item.format" class="item">
+              <el-date-picker v-model="item.value" :type="item.type+'range'"
+                :value-format="item['value-format']" :format="item.format" start-placeholder="开始日期"
+                end-placeholder="结束日期" class="item">
               </el-date-picker>
             </template>
             <template v-if="item.__config__.jnpfKey==='dateRange'">
@@ -85,7 +80,7 @@
 
 <script>
 import { deepClone } from '@/utils'
-import { dyOptionsList, useInputList, useTimeList, useSelectList } from '@/components/Generator/generator/comConfig'
+import { dyOptionsList, useInputList, useDateList, useSelectList } from '@/components/Generator/generator/comConfig'
 import { getDictionaryDataSelector } from '@/api/systemData/dictionary'
 import { previewDataInterface } from '@/api/systemData/dataInterface'
 export default {
@@ -96,7 +91,7 @@ export default {
       searchList: [],
       commonList: ['comSelect', 'depSelect', 'posSelect', 'userSelect', 'dicSelect'],
       useInputList,
-      useTimeList,
+      useDateList,
       useSelectList
     }
   },
@@ -130,11 +125,16 @@ export default {
     },
     search() {
       let obj = {}
+      let transferList = ['numInput', 'time', 'data', ...this.useDateList]
       for (let i = 0; i < this.searchList.length; i++) {
         const e = this.searchList[i]
         if (e.value) {
-          if (Array.isArray(e.value)) {
-            if (e.value.length) obj[e.__vModel__] = e.value
+          if (Array.isArray(e.value) && e.value.length) {
+            if (transferList.includes(e.__config__.jnpfKey)) {
+              obj[e.__vModel__] = e.value.join(',')
+            } else {
+              obj[e.__vModel__] = e.value
+            }
           } else {
             obj[e.__vModel__] = e.value
           }

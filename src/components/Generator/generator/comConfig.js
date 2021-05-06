@@ -34,8 +34,8 @@ const noColumnShowList = ['PsdInput', 'colorPicker', 'rate', 'slider', 'divider'
 const noSearchList = [...noColumnShowList, 'switch', 'timeRange', 'dateRange', 'relationForm', 'relationFlow', 'popupSelect']
 // 搜索时控件为input
 const useInputList = ['comInput', 'textarea', 'JNPFText', 'numInput', 'JNPFAmount', 'billRule', 'createUser', 'modifyUser', 'currOrganize', 'currDept', 'currPosition', 'calculate']
-// 搜索时控件为时间选择器
-const useTimeList = ['createTime', 'modifyTime']
+// 搜索时控件为日期选择器
+const useDateList = ['createTime', 'modifyTime']
 // 搜索时控件为下拉选择器
 const useSelectList = ['radio', 'checkbox', 'select']
 // 在线开发-功能设计/流程设计独有组件
@@ -160,4 +160,4 @@ const flowPeculiarList = [{
     relationField: ''
   }
 ]
-export { ruleTrigger, dyOptionsList, noVModelList, noTableAllowList, noColumnShowList, noSearchList, webPeculiarList, flowPeculiarList, useInputList, useTimeList, useSelectList }
+export { ruleTrigger, dyOptionsList, noVModelList, noTableAllowList, noColumnShowList, noSearchList, webPeculiarList, flowPeculiarList, useInputList, useDateList, useSelectList }
