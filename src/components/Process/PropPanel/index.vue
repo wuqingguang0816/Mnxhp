@@ -230,9 +230,9 @@
                 </el-option>
               </el-select>
             </el-form-item>
-            <el-form-item label="审批人为空时">
+            <!-- <el-form-item label="审批人为空时">
               <el-checkbox v-model="approverForm.noApproverHandler">自动通过</el-checkbox>
-            </el-form-item>
+            </el-form-item> -->
             <el-form-item label="进度选择" required>
               <el-select v-model="approverForm.progress" placeholder="请选择">
                 <el-option v-for="item in progressOptions" :key="item" :label="item+'%'"
