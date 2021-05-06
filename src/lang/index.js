@@ -30,6 +30,7 @@ export function getLanguage() {
 
   // if has not choose language
   const language = (navigator.language || navigator.browserLanguage).toLowerCase()
+  if (language.indexOf('tw') > -1) return 'zhtw'
   const locales = Object.keys(messages)
   for (const locale of locales) {
     if (language.indexOf(locale) > -1) {

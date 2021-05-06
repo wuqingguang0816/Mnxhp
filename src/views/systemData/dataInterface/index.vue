@@ -84,7 +84,7 @@
           @pagination="initData" />
       </div>
     </div>
-    <Form v-show="formVisible" ref="Form" @close="colseForm" />
+    <Form v-if="formVisible" ref="Form" @close="colseForm" />
     <Preview v-if="previewVisible" ref="Preview" @close="colsePreview" />
   </div>
 </template>

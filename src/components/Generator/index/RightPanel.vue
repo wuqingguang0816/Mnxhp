@@ -446,7 +446,7 @@ export default {
     },
     fieldChange(val) {
       if (!val) return
-      const drawingList = getDrawingList()
+      const drawingList = getDrawingList() || []
       let boo = false
       const loop = list => {
         for (let i = 0; i < list.length; i++) {
