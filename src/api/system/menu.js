@@ -3,7 +3,7 @@ import request from '@/utils/request'
 // 获取菜单列表
 export const getMenuList = (data) => {
   return request({
-    url: '/api/system/Base/Menu',
+    url: '/api/system/Menu',
     method: 'GET',
     data
   })
@@ -12,7 +12,7 @@ export const getMenuList = (data) => {
 // 获取上级菜单下拉框
 export const getMenuSelector = (data) => {
   return request({
-    url: '/api/system/Base/Menu/Selector',
+    url: '/api/system/Menu/Selector',
     method: 'GET',
     data
   })
@@ -20,7 +20,7 @@ export const getMenuSelector = (data) => {
 // 获取菜单列表（下拉框）
 export const getSelectorAll = data => {
   return request({
-    url: '/api/system/Base/Menu/Selector/All',
+    url: '/api/system/Menu/Selector/All',
     method: 'GET',
     data
   })
@@ -29,7 +29,7 @@ export const getSelectorAll = data => {
 // 添加菜单
 export const createMenu = (data) => {
   return request({
-    url: '/api/system/Base/Menu',
+    url: '/api/system/Menu',
     method: 'POST',
     data
   })
@@ -38,7 +38,7 @@ export const createMenu = (data) => {
 // 修改菜单
 export const updateMenu = (data) => {
   return request({
-    url: `/api/system/Base/Menu/${data.id}`,
+    url: `/api/system/Menu/${data.id}`,
     method: 'PUT',
     data
   })
@@ -47,7 +47,7 @@ export const updateMenu = (data) => {
 // 获取菜单信息
 export const getMenuInfo = (id) => {
   return request({
-    url: `/api/system/Base/Menu/${id}`,
+    url: `/api/system/Menu/${id}`,
     method: 'GET'
   })
 }
@@ -55,7 +55,7 @@ export const getMenuInfo = (id) => {
 // 删除菜单
 export const delMenu = (id) => {
   return request({
-    url: `/api/system/Base/Menu/${id}`,
+    url: `/api/system/Menu/${id}`,
     method: 'DELETE'
   })
 }
@@ -63,7 +63,7 @@ export const delMenu = (id) => {
 // 更新菜单状态
 export const updateMenuState = (id) => {
   return request({
-    url: `/api/system/Base/Menu/${id}/Actions/State`,
+    url: `/api/system/Menu/${id}/Actions/State`,
     method: 'PUT'
   })
 }
@@ -71,7 +71,7 @@ export const updateMenuState = (id) => {
 //获取菜单分类
 export const getMenuType = () => {
   return request({
-    url: `/api/system/Base/DictionaryData/e3ca5fe13c484a74bf0a4ea69eec1afd/Data/Selector`,
+    url: `/api/system/DictionaryData/e3ca5fe13c484a74bf0a4ea69eec1afd/Data/Selector`,
     method: 'GET'
   })
 }
