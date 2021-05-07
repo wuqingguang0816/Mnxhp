@@ -150,14 +150,15 @@
 
 <script>
 import { FlowEngineInfo, Update, Create } from '@/api/workFlow/FlowEngine'
-import { DataModelFieldList } from '@/api/systemData/dataModel'
 import iconBox from '@/components/JNPF-iconBox'
 import Process from "@/components/Process"
 import Generator from '@/components/Generator/index/Home'
 import FieldForm from './FieldForm'
 import TableForm from '@/views/generator/TableForm'
+import mixin from '@/mixins/generator/form'
 
 export default {
+  mixins: [mixin],
   components: { iconBox, Process, Generator, FieldForm, TableForm },
   data() {
     return {
@@ -274,13 +275,6 @@ export default {
         err.msg && this.$message.warning(err.msg)
       })
     },
-    closeDialog(isRefresh) {
-      this.visible = false
-      this.$emit('close', isRefresh)
-    },
-    prve() {
-      this.activeStep -= 1
-    },
     next() {
       if (this.activeStep < 1) {
         this.$refs['dataForm'].validate((valid) => {
@@ -312,10 +306,6 @@ export default {
         })
       }
     },
-    stepChick(key) {
-      if (this.activeStep <= key) return
-      this.activeStep = key
-    },
     typeChange(val) {
       if (val == 1) {
         this.dataForm.icon = ''
@@ -331,90 +321,6 @@ export default {
     },
     onDrawingListChange() {
       this.flowTemplateJson = {}
-    },
-    async colseForm(data) {
-      let list = []
-      let checkList = []
-      if (!this.tables.length) {
-        for (let i = 0; i < data.length; i++) {
-          const e = data[i];
-          let relationTable = data[0].table
-          let typeId = i == 0 ? "1" : "0"
-          let res = await DataModelFieldList('0', e.table)
-          let fields = res.data.list.map(o => ({ field: o.field, fieldName: o.fieldName, dataType: o.dataType }))
-          let item = {
-            relationField: "", relationTable: i == 0 ? '' : relationTable, table: e.table, tableName: e.tableName, tableField: '', typeId, fields
-          }
-          checkList.push(item)
-        }
-        this.relationTable = checkList[0].table
-        this.mainTableFields = checkList[0].fields
-        this.tables = checkList
-      } else {
-        for (let i = 0; i < data.length; i++) {
-          const e = data[i];
-          let boo = this.tables.some(o => o.table == e.table)
-          if (!boo) {
-            let res = await DataModelFieldList('0', e.table)
-            let fields = res.data.list.map(o => ({ field: o.field, fieldName: o.fieldName, dataType: o.dataType }))
-            let item = {
-              relationField: "", relationTable: this.relationTable, table: e.table, tableName: e.tableName, tableField: '', typeId: "0", fields
-            }
-            checkList.push(item)
-          }
-        }
-        this.tables = [...this.tables, ...checkList]
-      }
-    },
-    delItem(row, index) {
-      this.tables.splice(index, 1);
-      if (row.typeId == '1' && this.tables.length) {
-        this.tables[0].typeId = '1'
-        this.tables[0].relationTable = ''
-        this.mainTableFields = this.tables[0].fields
-        this.relationTable = this.tables[0].table
-      }
-    },
-    changeTable(row) {
-      this.relationTable = row.table
-      this.mainTableFields = row.fields
-      for (let i = 0; i < this.tables.length; i++) {
-        this.$set(this.tables[i], "typeId", this.tables[i].table === row.table ? '1' : '0')
-        this.$set(this.tables[i], "relationTable", this.tables[i].table === row.table ? '' : this.relationTable)
-        this.$set(this.tables[i], "relationField", "")
-        this.$set(this.tables[i], "tableField", "")
-      }
-    },
-    exist() {
-      let isOk = true;
-      for (let i = 0; i < this.tables.length; i++) {
-        const e = this.tables[i];
-        if (e.typeId == '0') {
-          if (!e.tableField) {
-            this.$message({
-              showClose: true,
-              message: `表${e.table}外键字段不能为空`,
-              type: 'warning',
-              duration: 1000
-            });
-            isOk = false
-            break
-          }
-        }
-        if (e.typeId == '0') {
-          if (!e.relationField) {
-            this.$message({
-              showClose: true,
-              message: `表${e.table}关联主键不能为空`,
-              type: 'warning',
-              duration: 1000
-            });
-            isOk = false
-            break
-          }
-        }
-      }
-      return isOk;
     }
   }
 }

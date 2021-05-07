@@ -83,110 +83,21 @@
 </template>
 
 <script>
-import { getVisualDevList, Delete, Copy } from '@/api/onlineDev/visualDev'
 import Form from './Form'
+import mixin from '@/mixins/generator/index'
 export default {
   name: 'onlineDev-webDesign',
-  components: {
-    Form
-  },
+  mixins: [mixin],
+  components: { Form },
   data() {
     return {
       query: { keyword: '', type: 1 },
-      list: [],
-      listLoading: false,
-      listQuery: {
-        currentPage: 1,
-        pageSize: 20,
-        sort: 'desc',
-        sidx: ''
-      },
-      formVisible: false,
-      categoryList: [],
-      listAll: []
+      sort: 'webDesign'
     }
   },
-  created() {
-    this.getDictionaryData()
-  },
   methods: {
-    search() {
-      this.initData()
-    },
-    reset() {
-      this.query.keyword = ''
-      this.initData()
-    },
-    getDictionaryData() {
-      this.$store.dispatch('base/getDictionaryData', { sort: 'webDesign' }).then((res) => {
-        this.categoryList = JSON.parse(JSON.stringify(res))
-        this.initData()
-      })
-    },
-    initData() {
-      this.listLoading = true
-      getVisualDevList(this.query).then(res => {
-        this.list = res.data.list
-        this.listAll = JSON.parse(JSON.stringify(this.categoryList))
-        for (let i = 0; i < this.listAll.length; i++) {
-          let child = this.list.filter(o => this.listAll[i].id === o.category)
-          let count = child.length
-          this.$set(this.listAll[i], 'children', child)
-          this.$set(this.listAll[i], 'count', count)
-          this.$set(this.listAll[i], 'top', true)
-        }
-        this.listAll = this.listAll.filter(o => o.children.length)
-        this.listLoading = false
-      })
-    },
-    handleDel(id) {
-      this.$confirm(this.$t('common.delTip'), this.$t('common.tipTitle'), {
-        type: 'warning'
-      }).then(() => {
-        Delete(id).then(res => {
-          this.$message({
-            type: 'success',
-            message: res.msg,
-            duration: 1000,
-            onClose: () => {
-              this.initData()
-            }
-          });
-        })
-      }).catch(() => { });
-    },
-    copy(id) {
-      this.$confirm('您确定要复制该功能表单, 是否继续?', '提示', {
-        type: 'warning'
-      }).then(() => {
-        Copy(id).then(res => {
-          this.$message({
-            type: 'success',
-            message: res.msg,
-            duration: 1000,
-            onClose: () => {
-              this.initData()
-            }
-          });
-        })
-      }).catch(() => { });
-    },
     preview(id) {
       this.$router.push(`/previewModel?isPreview=1&id=${id}`)
-    },
-    // 新增 / 修改
-    addOrUpdateHandle(id, type) {
-      this.formVisible = true
-      this.$nextTick(() => {
-        this.$refs.Form.init(this.categoryList, id, type)
-      })
-    },
-    colseForm(isRefresh) {
-      this.formVisible = false
-      if (isRefresh) {
-        this.query.keyword = ''
-        this.initData()
-      }
     }
   }
 }

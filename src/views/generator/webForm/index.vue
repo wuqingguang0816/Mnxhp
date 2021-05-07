@@ -20,7 +20,7 @@
       </el-row>
       <div class="JNPF-common-layout-main JNPF-flex-main">
         <div class="JNPF-common-head">
-          <topOpts @add="addOrUpdateHandle()" addText="新建模板"></topOpts>
+          <topOpts @add="addOrUpdateHandle('',4)" addText="新建模板"></topOpts>
           <div class="JNPF-common-head-right">
             <el-tooltip effect="dark" :content="$t('common.refresh')" placement="top">
               <el-link icon="icon-ym icon-ym-Refresh JNPF-common-head-icon" :underline="false"
@@ -84,90 +84,23 @@
 </template>
 
 <script>
-import { getVisualDevList, Delete, Copy } from '@/api/onlineDev/visualDev'
 import Form from './Form'
 import DownloadForm from '../DownloadForm'
 import Preview from '../Preview'
+import mixin from '@/mixins/generator/index'
 export default {
   name: 'generator-webForm',
+  mixins: [mixin],
   components: { Form, DownloadForm, Preview },
   data() {
     return {
       query: { keyword: '', type: 4 },
-      list: [],
-      listLoading: false,
-      formVisible: false,
       previewVisible: false,
       downloadFormVisible: false,
-      categoryList: [],
-      listAll: []
+      sort: 'webForm'
     }
   },
-  created() {
-    this.getDictionaryData()
-  },
   methods: {
-    search() {
-      this.initData()
-    },
-    reset() {
-      this.query.keyword = ''
-      this.initData()
-    },
-    getDictionaryData() {
-      this.$store.dispatch('base/getDictionaryData', { sort: 'webForm' }).then((res) => {
-        this.categoryList = JSON.parse(JSON.stringify(res))
-        this.initData()
-      })
-    },
-    initData() {
-      this.listLoading = true
-      getVisualDevList(this.query).then(res => {
-        this.list = res.data.list
-        this.listAll = JSON.parse(JSON.stringify(this.categoryList))
-        for (let i = 0; i < this.listAll.length; i++) {
-          let child = this.list.filter(o => this.listAll[i].id === o.category)
-          let count = child.length
-          this.$set(this.listAll[i], 'children', child)
-          this.$set(this.listAll[i], 'count', count)
-          this.$set(this.listAll[i], 'top', true)
-        }
-        this.listAll = this.listAll.filter(o => o.children.length)
-        this.listLoading = false
-      })
-    },
-    handleDel(id) {
-      this.$confirm(this.$t('common.delTip'), this.$t('common.tipTitle'), {
-        type: 'warning'
-      }).then(() => {
-        Delete(id).then(res => {
-          this.$message({
-            type: 'success',
-            message: res.msg,
-            duration: 1000,
-            onClose: () => {
-              this.initData()
-            }
-          });
-        })
-      }).catch(() => { });
-    },
-    copy(id) {
-      this.$confirm('您确定要复制该功能表单, 是否继续?', '提示', {
-        type: 'warning'
-      }).then(() => {
-        Copy(id).then(res => {
-          this.$message({
-            type: 'success',
-            message: res.msg,
-            duration: 1000,
-            onClose: () => {
-              this.initData()
-            }
-          });
-        })
-      }).catch(() => { });
-    },
     download(row) {
       this.downloadFormVisible = true
       this.$nextTick(() => {
@@ -179,20 +112,6 @@ export default {
       this.$nextTick(() => {
         this.$refs.preview.init(row.tables, row.id)
       })
-    },
-    // 新增 / 修改
-    addOrUpdateHandle(id) {
-      this.formVisible = true
-      this.$nextTick(() => {
-        this.$refs.Form.init(this.categoryList, id)
-      })
-    },
-    colseForm(isRefresh) {
-      this.formVisible = false
-      if (isRefresh) {
-        this.query.keyword = ''
-        this.initData()
-      }
     }
   }
 }
