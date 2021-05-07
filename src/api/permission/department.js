@@ -3,7 +3,7 @@ import request from '@/utils/request'
 // 获取部门列表
 export const getDepartmentList = (companyId, data) => {
   return request({
-    url: `/api/system/Permission/Organize/${companyId}/Department`,
+    url: `/api/permission/Organize/${companyId}/Department`,
     method: 'GET',
     data
   })
@@ -12,7 +12,7 @@ export const getDepartmentList = (companyId, data) => {
 // 获取部门下拉框列表(公司+部门)
 export const getDepartmentSelector = () => {
   return request({
-    url: '/api/system/Permission/Organize/Department/Selector',
+    url: '/api/permission/Organize/Department/Selector',
     method: 'GET'
   })
 }
@@ -20,7 +20,7 @@ export const getDepartmentSelector = () => {
 // 新建部门
 export const createDepartment = (data) => {
   return request({
-    url: '/api/system/Permission/Organize/Department',
+    url: '/api/permission/Organize/Department',
     method: 'POST',
     data
   })
@@ -29,7 +29,7 @@ export const createDepartment = (data) => {
 // 修改部门
 export const updateDepartment = (data) => {
   return request({
-    url: `/api/system/Permission/Organize/Department/${data.id}`,
+    url: `/api/permission/Organize/Department/${data.id}`,
     method: 'PUT',
     data
   })
@@ -38,7 +38,7 @@ export const updateDepartment = (data) => {
 // 获取部门信息
 export const getDepartmentInfo = (id) => {
   return request({
-    url: `/api/system/Permission/Organize/Department/${id}`,
+    url: `/api/permission/Organize/Department/${id}`,
     method: 'GET'
   })
 }
@@ -46,7 +46,7 @@ export const getDepartmentInfo = (id) => {
 // 删除部门
 export const delDepartment = (id) => {
   return request({
-    url: `/api/system/Permission/Organize/Department/${id}`,
+    url: `/api/permission/Organize/Department/${id}`,
     method: 'DELETE'
   })
 }
@@ -54,7 +54,7 @@ export const delDepartment = (id) => {
 // 更新部门状态
 export const updateDepartmentState = (id) => {
   return request({
-    url: `/api/system/Permission/Organize/Department/${id}/Actions/State`,
+    url: `/api/permission/Organize/Department/${id}/Actions/State`,
     method: 'PUT'
   })
 }
