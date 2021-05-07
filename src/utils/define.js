@@ -4,7 +4,7 @@ const APIURl = 'http://192.168.0.18:7004'
 module.exports = {
   APIURl: APIURl,
   timeout: process.env.NODE_ENV === 'development' ? 10000 : 1000000,
-  WebSocketUrl: process.env.NODE_ENV === 'development' ? APIURl.replace('http', 'ws') + '/api/system/Message/websocket' : process.env.VUE_APP_BASE_WSS,
+  WebSocketUrl: process.env.NODE_ENV === 'development' ? APIURl.replace('http', 'ws') + '/api/message/websocket' : process.env.VUE_APP_BASE_WSS,
   comUploadUrl: process.env.VUE_APP_BASE_API + '/api/file/Uploader',
   comUrl: process.env.VUE_APP_BASE_API,
   // 大屏应用前端路径

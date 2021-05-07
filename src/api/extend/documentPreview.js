@@ -9,9 +9,9 @@ export function DocumentPreviewList(data) {
   })
 }
 // 文件在线预览
-export function PreviewFile(fileId) {
+export function PreviewFile(fileId, type) {
   return request({
-    url: `/api/extend/DocumentPreview/${fileId}/Preview`,
+    url: `/api/extend/DocumentPreview/${fileId}/Preview?previewType=${type}`,
     method: 'get'
   })
 }

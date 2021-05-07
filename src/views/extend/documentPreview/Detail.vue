@@ -25,11 +25,11 @@ export default {
     goBack() {
       this.$emit('close')
     },
-    init(id, name) {
+    init(id, name, type) {
       this.url = ''
       if (!id) return this.goBack()
       this.title = '文档预览 - ' + name
-      PreviewFile(id).then(res => {
+      PreviewFile(id, type).then(res => {
         if (res.data) {
           this.url = res.data
         } else {

@@ -3,7 +3,7 @@ import request from '@/utils/request'
 // 获取数据备份列表(带分页)
 export function getDataBackupList(data) {
   return request({
-    url: '/api/system/Base/DataBackup',
+    url: '/api/system/DataBackup',
     method: 'GET',
     data
   })
@@ -12,7 +12,7 @@ export function getDataBackupList(data) {
 // 添加数据备份
 export function createDataBackup() {
   return request({
-    url: '/api/system/Base/DataBackup',
+    url: '/api/system/DataBackup',
     method: 'POST'
   })
 }
@@ -20,7 +20,7 @@ export function createDataBackup() {
 // 删除数据备份
 export function delDataBackup(id) {
   return request({
-    url: `/api/system/Base/DataBackup/${id}`,
+    url: `/api/system/DataBackup/${id}`,
     method: 'DELETE'
   })
 }
