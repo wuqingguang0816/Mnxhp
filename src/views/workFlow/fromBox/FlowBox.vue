@@ -9,17 +9,21 @@
           </el-button>
         </template>
         <template v-if="setting.opType == 1">
-          <el-button type="warning" @click="openUserBox('transfer')">转 办</el-button>
-          <el-button type="primary" @click="eventLancher('audit')">通 过</el-button>
-          <el-button type="danger" @click="eventLancher('reject')">拒 绝</el-button>
+          <el-button type="warning" @click="openUserBox('transfer')"
+            v-if="properties.hasTransferBtn">{{properties.transferBtnText||'转 办'}}</el-button>
+          <el-button type="primary" @click="eventLancher('audit')" v-if="properties.hasAuditBtn">
+            {{properties.auditBtnText||'通 过'}}</el-button>
+          <el-button type="danger" @click="eventLancher('reject')" v-if="properties.hasRejectBtn">
+            {{properties.rejectBtnText||'拒 绝'}}</el-button>
         </template>
         <template v-if="setting.opType == 0 && setting.status == 1">
           <el-button type="primary" @click="press()">催 办</el-button>
           <el-button type="danger" @click="revoke()">撤 回</el-button>
         </template>
-        <el-button type="danger" v-if="setting.opType == 2" @click="recall()">撤 回</el-button>
+        <el-button type="danger" v-if="setting.opType == 2 && properties.hasRevokeBtn"
+          @click="recall()">{{properties.revokeBtnText||'撤 回'}}</el-button>
         <template v-if="setting.opType == 4">
-          <el-button type="primary" @click="openUserBox('appoint')" v-if="setting.status ==1">指 派
+          <el-button type="primary" @click="openAppointBox" v-if="setting.status ==1">指 派
           </el-button>
           <el-button type="danger" v-if="setting.status != 2 && setting.status != 5"
             @click="cancel()">终 止</el-button>
@@ -43,7 +47,7 @@
       </el-tabs>
       <el-dialog :title="eventType==='audit'?'审批通过':'审批拒绝'" :close-on-click-modal="false"
         :visible.sync="visible" class="JNPF-dialog JNPF-dialog_center" lock-scroll append-to-body
-        width='600'>
+        width='600px'>
         <el-form label-width="80px">
           <el-form-item v-if="eventType==='audit'&& freeApprover == 1">
             <el-radio-group v-model="handleType" @change="radioChange">
@@ -57,7 +61,7 @@
           <el-form-item label="审批意见">
             <el-input v-model="reason" placeholder="请输入审批意见（选填）" type="textarea" :rows="4" />
           </el-form-item>
-          <!-- <el-form-item>
+          <el-form-item v-if="properties.hasSign">
             <div class="sign-main">
               <div class="sign-head">
                 <div class="sign-tip">请在这里输入你的签名</div>
@@ -68,14 +72,14 @@
                 </div>
               </div>
               <div class="sign-box">
-                <vue-esign ref="esign" :height="280" v-if="!signImg" :lineWidth="5" />
+                <vue-esign ref="esign" :height="330" v-if="!signImg" :lineWidth="5" />
                 <img :src="signImg" alt="" v-if="signImg" class="sign-img">
               </div>
             </div>
           </el-form-item>
-          <el-form-item label="抄送给">
+          <el-form-item label="抄送给" v-if="properties.isCustomCopy">
             <user-select v-model="copyIds" placeholder="请选择" multiple />
-          </el-form-item> -->
+          </el-form-item>
         </el-form>
         <span slot="footer" class="dialog-footer">
           <el-button @click="visible = false">{{$t('common.cancelButton')}}</el-button>
@@ -83,7 +87,26 @@
           </el-button>
         </span>
       </el-dialog>
-      <UserBox v-if="userBoxVisible" ref="userBox" :title="userBoxTitle" @submit="userBoxSubmit" />
+      <el-dialog title="指派" :close-on-click-modal="false" :visible.sync="appointVisible"
+        class="JNPF-dialog JNPF-dialog_center" lock-scroll append-to-body width='600px'>
+        <el-form label-width="80px" :model="appointForm" :rules="appointRules" ref="appointForm">
+          <el-form-item label="指派节点" prop="nodeCode">
+            <el-select v-model="appointForm.nodeCode" placeholder="请选择指派节点">
+              <el-option v-for="item in appointNodeList" :key="item.nodeCode" :label="item.nodeName"
+                :value="item.nodeCode" />
+            </el-select>
+          </el-form-item>
+          <el-form-item label="指派人" prop="freeApproverUserId">
+            <user-select v-model="appointForm.freeApproverUserId" placeholder="请选择指派人" />
+          </el-form-item>
+        </el-form>
+        <span slot="footer" class="dialog-footer">
+          <el-button @click="appointVisible = false">{{$t('common.cancelButton')}}</el-button>
+          <el-button type="primary" @click="handleAppoint()">{{$t('common.confirmButton')}}
+          </el-button>
+        </span>
+      </el-dialog>
+      <UserBox v-if="userBoxVisible" ref="userBox" :title="userBoxTitle" @submit="handleTransfer" />
     </div>
   </transition>
 </template>
@@ -101,7 +124,20 @@ export default {
     return {
       userBoxVisible: false,
       userBoxTitle: '审批人',
-      userBoxType: '',
+      appointVisible: false,
+      appointForm: {
+        nodeCode: '',
+        freeApproverUserId: ''
+      },
+      appointRules: {
+        nodeCode: [
+          { required: true, message: '请选择指派节点', trigger: 'change' }
+        ],
+        freeApproverUserId: [
+          { required: true, message: '请选择指派人', trigger: 'change' }
+        ]
+      },
+      appointNodeList: [],
       currentView: '',
       formData: {},
       setting: {},
@@ -110,6 +146,7 @@ export default {
       flowTaskNodeList: [],
       flowTemplateJson: {},
       flowTaskOperatorRecordList: [],
+      properties: {},
       freeApprover: 0,
       endTime: 0,
       visible: false,
@@ -175,6 +212,7 @@ export default {
         this.flowTaskNodeList = res.data.flowTaskNodeList
         this.flowTemplateJson = this.flowTaskInfo.flowTemplateJson ? JSON.parse(this.flowTaskInfo.flowTemplateJson) : null
         this.flowTaskOperatorRecordList = res.data.flowTaskOperatorRecordList
+        this.properties = res.data.approversProperties || {}
         this.freeApprover = res.data.freeApprover || 0
         this.endTime = this.flowTaskInfo.completion == 100 ? this.flowTaskInfo.endTime : 0
         data.formConf = res.data.flowFormInfo
@@ -188,8 +226,10 @@ export default {
           data.formOperates = res.data.formOperates || []
         }
         if (this.flowTaskNodeList.length) {
+          let appointNodeList = []
           for (let i = 0; i < this.flowTaskNodeList.length; i++) {
             const nodeItem = this.flowTaskNodeList[i]
+            data.opType == 4 && nodeItem.type == 1 && appointNodeList.push(nodeItem)
             const loop = data => {
               if (Array.isArray(data)) data.forEach(d => loop(d))
               if (data.nodeId === nodeItem.nodeCode) {
@@ -203,6 +243,7 @@ export default {
             }
             loop(this.flowTemplateJson)
           }
+          this.appointNodeList = appointNodeList
         }
         setTimeout(() => {
           this.$nextTick(() => {
@@ -308,19 +349,12 @@ export default {
       }).catch(() => { })
     },
     openUserBox(type) {
-      this.userBoxType = type
-      if (type === 'appoint') {
-        this.userBoxTitle = '指派人'
-      } else {
-        this.userBoxTitle = '审批人'
-      }
       this.userBoxVisible = true
       this.$nextTick(() => {
         this.$refs.userBox.init()
       })
     },
-    appoint(freeApproverUserId) { },
-    transfer(freeApproverUserId) {
+    handleTransfer(freeApproverUserId) {
       Transfer(this.setting.taskId, { freeApproverUserId }).then(res => {
         this.$message({
           type: 'success',
@@ -332,8 +366,16 @@ export default {
         })
       })
     },
-    userBoxSubmit(freeApproverUserId) {
-      this[this.userBoxType](freeApproverUserId)
+    openAppointBox() {
+      this.appointVisible = true
+      this.$nextTick(() => {
+        this.$refs['appointForm'].resetFields()
+      })
+    },
+    handleAppoint() {
+      this.$refs['appointForm'].validate((valid) => {
+        if (!valid) return
+      })
     },
     handleApproval() {
       if (this.freeApprover == 1) {
@@ -346,10 +388,19 @@ export default {
           return
         }
       }
+      if (this.properties.hasSign && !this.signImg) {
+        this.$message({
+          message: '请签名',
+          type: 'error'
+        })
+        return
+      }
       let query = {
         handleOpinion: this.reason,
         formData: this.formData,
-        enCode: this.setting.enCode
+        enCode: this.setting.enCode,
+        signImg: this.signImg,
+        copyIds: this.copyIds
       }
       if (this.eventType === 'audit' && this.freeApprover == 1) {
         query = { freeApproverUserId: this.handleId, ...query }
