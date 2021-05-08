@@ -109,7 +109,7 @@
           </div>
         </div>
         <div class="add-item" @click="addFlow(2)">
-          <i class="add-icon icon-ym icon-ym icon-ym-generator-company"></i>
+          <i class="add-icon icon-ym icon-ym-generator-company"></i>
           <div class="add-txt">
             <p class="add-title">自定义表单</p>
             <p class="add-desc">自定义设计流程表单</p>
