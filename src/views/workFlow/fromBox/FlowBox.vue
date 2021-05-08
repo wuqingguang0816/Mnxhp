@@ -23,7 +23,7 @@
         <el-button type="danger" v-if="setting.opType == 2 && properties.hasRevokeBtn"
           @click="recall()">{{properties.revokeBtnText||'撤 回'}}</el-button>
         <template v-if="setting.opType == 4">
-          <el-button type="primary" @click="openAppointBox" v-if="setting.status ==1">指 派
+          <el-button type="primary" @click="openAssignBox" v-if="setting.status ==1">指 派
           </el-button>
           <el-button type="danger" v-if="setting.status != 2 && setting.status != 5"
             @click="cancel()">终 止</el-button>
@@ -87,22 +87,22 @@
           </el-button>
         </span>
       </el-dialog>
-      <el-dialog title="指派" :close-on-click-modal="false" :visible.sync="appointVisible"
+      <el-dialog title="指派" :close-on-click-modal="false" :visible.sync="assignVisible"
         class="JNPF-dialog JNPF-dialog_center" lock-scroll append-to-body width='600px'>
-        <el-form label-width="80px" :model="appointForm" :rules="appointRules" ref="appointForm">
+        <el-form label-width="80px" :model="assignForm" :rules="assignRules" ref="assignForm">
           <el-form-item label="指派节点" prop="nodeCode">
-            <el-select v-model="appointForm.nodeCode" placeholder="请选择指派节点">
-              <el-option v-for="item in appointNodeList" :key="item.nodeCode" :label="item.nodeName"
+            <el-select v-model="assignForm.nodeCode" placeholder="请选择指派节点">
+              <el-option v-for="item in assignNodeList" :key="item.nodeCode" :label="item.nodeName"
                 :value="item.nodeCode" />
             </el-select>
           </el-form-item>
           <el-form-item label="指派人" prop="freeApproverUserId">
-            <user-select v-model="appointForm.freeApproverUserId" placeholder="请选择指派人" />
+            <user-select v-model="assignForm.freeApproverUserId" placeholder="请选择指派人" />
           </el-form-item>
         </el-form>
         <span slot="footer" class="dialog-footer">
-          <el-button @click="appointVisible = false">{{$t('common.cancelButton')}}</el-button>
-          <el-button type="primary" @click="handleAppoint()">{{$t('common.confirmButton')}}
+          <el-button @click="assignVisible = false">{{$t('common.cancelButton')}}</el-button>
+          <el-button type="primary" @click="handleAssign()">{{$t('common.confirmButton')}}
           </el-button>
         </span>
       </el-dialog>
@@ -113,7 +113,7 @@
 
 <script>
 import { FlowEngineInfo } from '@/api/workFlow/FlowEngine'
-import { FlowBeforeInfo, Audit, Reject, Transfer, Recall, Cancel } from '@/api/workFlow/FlowBefore'
+import { FlowBeforeInfo, Audit, Reject, Transfer, Recall, Cancel, Assign } from '@/api/workFlow/FlowBefore'
 import { Revoke, Press } from '@/api/workFlow/FlowLaunch'
 import recordList from './RecordList'
 import Process from '@/components/Process/Preview'
@@ -124,12 +124,12 @@ export default {
     return {
       userBoxVisible: false,
       userBoxTitle: '审批人',
-      appointVisible: false,
-      appointForm: {
+      assignVisible: false,
+      assignForm: {
         nodeCode: '',
         freeApproverUserId: ''
       },
-      appointRules: {
+      assignRules: {
         nodeCode: [
           { required: true, message: '请选择指派节点', trigger: 'change' }
         ],
@@ -137,7 +137,7 @@ export default {
           { required: true, message: '请选择指派人', trigger: 'change' }
         ]
       },
-      appointNodeList: [],
+      assignNodeList: [],
       currentView: '',
       formData: {},
       setting: {},
@@ -226,10 +226,10 @@ export default {
           data.formOperates = res.data.formOperates || []
         }
         if (this.flowTaskNodeList.length) {
-          let appointNodeList = []
+          let assignNodeList = []
           for (let i = 0; i < this.flowTaskNodeList.length; i++) {
             const nodeItem = this.flowTaskNodeList[i]
-            data.opType == 4 && nodeItem.type == 1 && appointNodeList.push(nodeItem)
+            data.opType == 4 && nodeItem.type == 1 && assignNodeList.push(nodeItem)
             const loop = data => {
               if (Array.isArray(data)) data.forEach(d => loop(d))
               if (data.nodeId === nodeItem.nodeCode) {
@@ -243,7 +243,7 @@ export default {
             }
             loop(this.flowTemplateJson)
           }
-          this.appointNodeList = appointNodeList
+          this.assignNodeList = assignNodeList
         }
         setTimeout(() => {
           this.$nextTick(() => {
@@ -366,15 +366,25 @@ export default {
         })
       })
     },
-    openAppointBox() {
-      this.appointVisible = true
+    openAssignBox() {
+      this.assignVisible = true
       this.$nextTick(() => {
-        this.$refs['appointForm'].resetFields()
+        this.$refs['assignForm'].resetFields()
       })
     },
-    handleAppoint() {
-      this.$refs['appointForm'].validate((valid) => {
+    handleAssign() {
+      this.$refs['assignForm'].validate((valid) => {
         if (!valid) return
+        Assign(this.setting.taskId, this.assignForm).then(res => {
+          this.$message({
+            type: 'success',
+            message: res.msg,
+            duration: 1000,
+            onClose: () => {
+              this.$emit('close', true)
+            }
+          })
+        })
       })
     },
     handleApproval() {

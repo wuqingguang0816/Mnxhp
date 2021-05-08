@@ -56,3 +56,11 @@ export function Transfer(id, data) {
     data
   })
 }
+// 流程监控指派
+export function Assign(id, data) {
+  return request({
+    url: `/api/workflow/Engine/FlowBefore/Assign/${id}`,
+    method: 'post',
+    data
+  })
+}
