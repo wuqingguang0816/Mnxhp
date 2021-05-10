@@ -91,8 +91,7 @@
         </el-col>
       </el-row>
       <template v-if="activeStep==1">
-        <Generator ref="generator" :conf="formData" @drawingListChange="onDrawingListChange"
-          :modelType="3" />
+        <Generator ref="generator" :conf="formData" :modelType="3" />
       </template>
     </div>
     <TableForm :visible.sync="formVisible" ref="tableForm" @closeForm="colseForm" />

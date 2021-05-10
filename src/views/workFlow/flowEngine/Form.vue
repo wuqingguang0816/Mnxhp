@@ -128,14 +128,12 @@
         <template v-if="dataForm.formType==1">
           <el-row type="flex" justify="center" align="middle" class="basic-box">
             <el-col :xs="12" :sm="12" :md="12" :lg="12" :xl="10" class="basicForm">
-              <FieldForm ref="fieldForm" :conf="formData" :enCode="dataForm.enCode"
-                @drawingListChange="onDrawingListChange" />
+              <FieldForm ref="fieldForm" :conf="formData" :enCode="dataForm.enCode" />
             </el-col>
           </el-row>
         </template>
         <template v-if="dataForm.formType==2">
-          <Generator ref="generator" :conf="formData" @drawingListChange="onDrawingListChange"
-            :modelType="6" />
+          <Generator ref="generator" :conf="formData" :modelType="6" />
         </template>
       </template>
       <template v-if="activeStep==2">
@@ -318,9 +316,6 @@ export default {
     },
     onStartChange(node) {
       // console.log(node);
-    },
-    onDrawingListChange() {
-      this.flowTemplateJson = {}
     }
   }
 }

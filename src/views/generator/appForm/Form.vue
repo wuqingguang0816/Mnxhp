@@ -92,7 +92,7 @@
         </el-col>
       </el-row>
       <template v-if="activeStep==1">
-        <Generator ref="generator" :conf="formData" @drawingListChange="onDrawingListChange" />
+        <Generator ref="generator" :conf="formData" />
       </template>
       <template v-if="activeStep==2">
         <columnDesign ref="columnDesign" :conf="columnData" />
