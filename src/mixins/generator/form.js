@@ -122,9 +122,6 @@ export default {
           err.msg && this.$message.warning(err.msg)
         })
       }
-    },
-    onDrawingListChange() {
-      this.columnData = null
     }
   }
 }
