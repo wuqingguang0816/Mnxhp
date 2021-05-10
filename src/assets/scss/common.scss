@@ -1084,6 +1084,14 @@
       justify-items: flex-start;
       flex-shrink: 0;
 
+      &.steps2 {
+        width: 300px;
+      }
+
+      &.steps4 {
+        width: 600px;
+      }
+
       .el-step__title {
         cursor: pointer;
       }

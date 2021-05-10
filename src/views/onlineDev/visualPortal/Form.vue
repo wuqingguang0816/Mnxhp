@@ -6,7 +6,7 @@
         <img src="@/assets/images/jnpf.png" class="header-logo" />
         <p class="header-txt"> · 门户设计</p>
       </div>
-      <el-steps :active="activeStep" finish-status="success" simple class="steps">
+      <el-steps :active="activeStep" finish-status="success" simple class="steps steps2">
         <el-step title="基础设置" @click.native="stepChick(0)"></el-step>
         <el-step title="门户设计" @click.native="stepChick(1)"></el-step>
       </el-steps>
@@ -154,8 +154,3 @@ export default {
   }
 }
 </script>
-<style lang="scss" scoped>
->>> .steps {
-  width: 300px !important;
-}
-</style>
