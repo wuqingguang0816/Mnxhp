@@ -2,7 +2,8 @@
 
 ## 环境要求
 
-- Node.js 12.8.x+
+- Node.js 最新版本
+- git
 
 ## 使用说明
 ### 安装依赖
@@ -25,10 +26,10 @@ npm run dev
 
 ### 测试生产发布
 ```bash
-# 构建测试环境
+# 构建测试环境,对应.env.staging文件配置
 npm run build:staging
 
-# 构建生产环境
+# 构建生产环境，对应.env.production文件配置
 npm run build
 ```
 
