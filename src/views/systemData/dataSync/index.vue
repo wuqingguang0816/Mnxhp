@@ -7,7 +7,7 @@
       @submit.native.prevent class="mt-10">
       <el-form-item label="数据库连接 From" prop="dbConnectionFrom">
         <el-select v-model="dataForm.dbConnectionFrom" placeholder="请选择连接">
-          <el-option-group v-for="group in options" :key="group.label" :label="group.label">
+          <el-option-group v-for="group in dbOptions" :key="group.fullName" :label="group.fullName">
             <el-option v-for="item in group.children" :key="item.id" :label="item.fullName"
               :value="item.id" />
           </el-option-group>
@@ -15,12 +15,12 @@
       </el-form-item>
       <el-form-item label="数据库连接 To" prop="dbConnectionTo">
         <el-select v-model="dataForm.dbConnectionTo" placeholder="请选择连接">
-          <el-option-group v-for="group in options" :key="group.label" :label="group.label">
+          <el-option-group v-for="group in dbOptions" :key="group.fullName" :label="group.fullName">
             <el-option v-for="item in group.children" :key="item.id" :label="item.fullName"
               :value="item.id" />
           </el-option-group>
         </el-select>
-        <el-button type="primary" @click="check">验证连接</el-button>
+        <el-button type="primary" @click="check" style="margin-left:10px">验证连接</el-button>
       </el-form-item>
     </el-form>
     <div class="JNPF-common-title">
@@ -54,19 +54,7 @@ export default {
         dbConnectionFrom: '',
         dbConnectionTo: ''
       },
-      options: [{
-        label: 'SqlServer',
-        children: []
-      }, {
-        label: 'MySql',
-        children: []
-      }, {
-        label: 'Oracle',
-        children: []
-      }, {
-        label: 'DM',
-        children: []
-      }],
+      dbOptions: [],
       dataRule: {
         dbConnectionFrom: [
           { required: true, message: '数据库连接 From不能为空', trigger: 'blur' }
@@ -85,19 +73,7 @@ export default {
   methods: {
     initData() {
       getDataSourceListAll().then(res => {
-        for (let i = 0; i < res.data.list.length; i++) {
-          const element = res.data.list[i];
-          if (element.dbType == 'SqlServer') {
-            this.options[0].children.push(element)
-          } else if (element.dbType == 'MySql') {
-            this.options[1].children.push(element)
-          } else if (element.dbType == 'Oracle') {
-            this.options[2].children.push(element)
-          } else if (element.dbType == 'DM') {
-            this.options[3].children.push(element)
-          }
-        }
-        this.options = this.options.filter(o => o.children.length)
+        this.dbOptions = res.data.list.filter(o => o.children && o.children.length)
       })
     },
     check() {

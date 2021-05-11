@@ -79,8 +79,8 @@
               <el-col :span="24">
                 <el-form-item label="数据连接" prop="executeContent.database">
                   <el-select v-model="dataForm.executeContent.database" placeholder="请选择数据库">
-                    <el-option-group v-for="group in dbOptions" :key="group.label"
-                      :label="group.label">
+                    <el-option-group v-for="group in dbOptions" :key="group.fullName"
+                      :label="group.fullName">
                       <el-option v-for="item in group.children" :key="item.id"
                         :label="item.fullName" :value="item.id" />
                     </el-option-group>
@@ -142,27 +142,8 @@
 <script>
 import { TimeTaskInfo, TimeTaskUpdate, TimeTaskCreate } from '@/api/system/timeTask'
 import { getDataSourceListAll } from '@/api/systemData/dataSource'
-import { deepClone } from '@/utils'
 import vcrontab from "vcrontab"
-const defaultOptions = [{
-  label: '',
-  children: [{
-    fullName: '默认数据库',
-    id: '0'
-  }]
-}, {
-  label: 'SqlServer',
-  children: []
-}, {
-  label: 'MySql',
-  children: []
-}, {
-  label: 'Oracle',
-  children: []
-}, {
-  label: 'DM',
-  children: []
-}]
+
 export default {
   components: { vcrontab },
   data() {
@@ -231,23 +212,18 @@ export default {
         }
       }
       this.dataForm.id = id || ''
-      this.dbOptions = deepClone(defaultOptions)
       this.$nextTick(() => {
         this.$refs['dataForm'].resetFields()
         getDataSourceListAll().then(res => {
-          for (let i = 0; i < res.data.list.length; i++) {
-            const element = res.data.list[i];
-            if (element.dbType == 'SqlServer') {
-              this.dbOptions[1].children.push(element)
-            } else if (element.dbType == 'MySql') {
-              this.dbOptions[2].children.push(element)
-            } else if (element.dbType == 'Oracle') {
-              this.dbOptions[3].children.push(element)
-            } else if (element.dbType == 'DM') {
-              this.dbOptions[4].children.push(element)
-            }
+          const defaultItem = {
+            fullName: '',
+            children: [{
+              fullName: '默认数据库',
+              id: '0'
+            }]
           }
-          this.dbOptions = this.dbOptions.filter(o => o.children.length)
+          const list = [defaultItem, ...res.data.list]
+          this.dbOptions = list.filter(o => o.children && o.children.length)
           if (this.dataForm.id) {
             TimeTaskInfo(this.dataForm.id).then(res => {
               this.dataForm.description = res.data.description

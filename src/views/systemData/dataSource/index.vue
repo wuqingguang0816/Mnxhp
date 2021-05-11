@@ -35,7 +35,7 @@
             v-if="jnpf.hasP('fullName')">
             <template slot-scope="scope">
               <span v-if="scope.row.top"
-                style="font-weight:bold;">{{scope.row.name}}【{{scope.row.count}}】</span>
+                style="font-weight:bold;">{{scope.row.fullName}}【{{scope.row.num}}】</span>
               <span v-else>{{scope.row.fullName}}</span>
             </template>
           </el-table-column>
@@ -74,8 +74,7 @@ export default {
       list: [],
       keyword: '',
       listLoading: true,
-      formVisible: false,
-      listAll: [{ name: 'SqlServer', id: 'SqlServer' }, { name: 'MySql', id: 'MySql' }, { name: 'Oracle', id: 'Oracle' }, { name: 'DM', id: 'DM' }]
+      formVisible: false
     }
   },
   created() {
@@ -89,16 +88,7 @@ export default {
     initData() {
       this.listLoading = true
       getDataSourceList({ keyword: this.keyword }).then(res => {
-        let list = res.data.list
-        this.list = JSON.parse(JSON.stringify(this.listAll))
-        for (let i = 0; i < this.list.length; i++) {
-          let child = list.filter(o => this.list[i].name === o.dbType)
-          let count = child.length
-          this.$set(this.list[i], 'children', child)
-          this.$set(this.list[i], 'count', count)
-          this.$set(this.list[i], 'top', true)
-        }
-        this.list = this.list.filter(o => o.children.length)
+        this.list = res.data.list.map(o => ({ top: true, ...o }))
         this.listLoading = false
       })
     },
@@ -112,7 +102,6 @@ export default {
         })
       }).catch(() => { });
     },
-    // 新增 / 修改
     addOrUpdateHandle(id) {
       this.formVisible = true
       this.$nextTick(() => {

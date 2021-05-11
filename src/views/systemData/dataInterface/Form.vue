@@ -51,7 +51,8 @@
           <div class="tableData">
             <el-select v-model="dataForm.dbLinkId" filterable placeholder="选择数据库"
               style="width: 100%" @change="handleSelectTable">
-              <el-option-group v-for="group in dbOptions" :key="group.label" :label="group.label">
+              <el-option-group v-for="group in dbOptions" :key="group.fullName"
+                :label="group.fullName">
                 <el-option v-for="item in group.children" :key="item.id" :label="item.fullName"
                   :value="item.id" />
               </el-option-group>
@@ -133,28 +134,8 @@ import {
 } from '@/api/systemData/dataInterface'
 import { getDataSourceListAll } from '@/api/systemData/dataSource'
 import { DataModelList } from '@/api/systemData/dataModel'
-import { deepClone } from '@/utils'
 import SQLEditor from '@/components/JNPFEditor/monaco'
 import JSONEditor from '@/components/JNPFEditor/monaco'
-const defaultOptions = [{
-  label: '',
-  children: [{
-    fullName: '默认数据库',
-    id: '0'
-  }]
-}, {
-  label: 'SqlServer',
-  children: []
-}, {
-  label: 'MySql',
-  children: []
-}, {
-  label: 'Oracle',
-  children: []
-}, {
-  label: 'DM',
-  children: []
-}]
 
 export default {
   components: {
@@ -256,7 +237,6 @@ export default {
       this.active = 0
       this.dataForm.id = id || ''
       this.formLoading = true
-      this.dbOptions = deepClone(defaultOptions)
       this.$nextTick(() => {
 
         this.$refs['dataForm'].resetFields()
@@ -266,19 +246,15 @@ export default {
         })
         // 获取数据库
         getDataSourceListAll().then(res => {
-          for (let i = 0; i < res.data.list.length; i++) {
-            const element = res.data.list[i];
-            if (element.dbType === 'SqlServer') {
-              this.dbOptions[1].children.push(element)
-            } else if (element.dbType === 'MySql') {
-              this.dbOptions[2].children.push(element)
-            } else if (element.dbType === 'Oracle') {
-              this.dbOptions[3].children.push(element)
-            } else if (element.dbType == 'DM') {
-              this.dbOptions[4].children.push(element)
-            }
+          const defaultItem = {
+            fullName: '',
+            children: [{
+              fullName: '默认数据库',
+              id: '0'
+            }]
           }
-          this.dbOptions = this.dbOptions.filter(o => o.children.length)
+          const list = [defaultItem, ...res.data.list]
+          this.dbOptions = list.filter(o => o.children && o.children.length)
           this.getTableList(this.dataForm.dbLinkId)
           if (this.dataForm.id) {
             this.getFormData()
