@@ -342,27 +342,21 @@ export default {
     if (typeof this.conf === 'object' && this.conf !== null) {
       this.columnData = Object.assign({}, defaultColumnData, this.conf)
     }
-    this.setValue(this.columnData.btnsList, this.btnsOption, 'value')
-    this.setValue(this.columnData.columnBtnsList, this.columnBtnsOption, 'value')
+    this.setBtnValue(this.columnData.btnsList, this.btnsOption)
+    this.setBtnValue(this.columnData.columnBtnsList, this.columnBtnsOption)
     this.btnsList = this.columnData.btnsList.map(o => o.value)
     this.columnBtnsList = this.columnData.columnBtnsList.map(o => o.value)
   },
   mounted() {
     this.setSort()
     this.$nextTick(() => {
-      this.setValue(this.columnData.columnList, this.columnOptions)
-      this.columnData.columnList.forEach(row => {
-        this.$refs.columnTable.toggleRowSelection(row, true);
-      })
-      this.setValue(this.searchOptions, this.columnData.searchList, "__vModel__")
-      this.columnData.searchList.forEach(row => {
-        this.$refs.searchTable.toggleRowSelection(row, true);
-      })
+      this.setListValue(this.columnData.columnList, this.columnOptions, 'column')
+      this.setListValue(this.columnData.searchList, this.searchOptions, "search")
     })
   },
   methods: {
-    setValue(replacedData, data, key) {
-      key = key ? key : 'prop'
+    setBtnValue(replacedData, data, key) {
+      key = key ? key : 'value'
       outer: for (let i = 0; i < replacedData.length; i++) {
         inter: for (let ii = 0; ii < data.length; ii++) {
           if (replacedData[i][key] === data[ii][key]) {
@@ -371,6 +365,25 @@ export default {
           }
         }
       }
+    },
+    setListValue(replacedData, data, type) {
+      const key = type === 'column' ? 'prop' : '__vModel__'
+      let res = []
+      outer: for (let i = 0; i < replacedData.length; i++) {
+        inter: for (let ii = 0; ii < data.length; ii++) {
+          if (replacedData[i][key] === data[ii][key]) {
+            if (type === 'column') {
+              data[ii].align = replacedData[i].align
+              data[ii].width = replacedData[i].width
+            }
+            res.push(data[ii])
+            break inter
+          }
+        }
+      }
+      res.forEach(row => {
+        this.$refs[type + 'Table'].toggleRowSelection(row, true)
+      })
     },
     /**
       * 供父组件使用 获取列表JSON

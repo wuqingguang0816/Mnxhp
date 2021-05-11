@@ -576,38 +576,29 @@ export default {
     initFormOperates(target) {
       const formOperates = target.properties && target.properties.formOperates || []
       let res = []
-      if (!formOperates.length) {
-        let list = []
-        const loop = (data, parent) => {
-          if (!data) return
-          if (data.__config__ && data.__config__.jnpfKey !== 'table' && data.__config__.children && Array.isArray(data.__config__.children)) {
-            loop(data.__config__.children, data)
-          }
-          if (Array.isArray(data)) data.forEach(d => loop(d, parent))
-          if (data.__vModel__) list.push(data)
-        }
-        loop(getDrawingList())
-        const formItems = list
-        if (NodeUtils.isStartNode(target)) {
-          res = formItems.map(t => ({
-            id: t.__vModel__,
-            name: t.__config__.label,
-            required: t.__config__.required,
-            read: true,
-            write: true
-          }))
-        }
-        if (NodeUtils.isApproverNode(target)) {
-          res = formItems.map(t => ({
-            id: t.__vModel__,
-            name: t.__config__.label,
-            read: true,
-            write: false
-          }))
-        }
-      } else {
-        res = formOperates
+      const getWriteById = id => {
+        const arr = formOperates.filter(o => o.id === id)
+        return arr.length ? arr[0].write : NodeUtils.isStartNode(target)
       }
+      const getReadById = id => {
+        const arr = formOperates.filter(o => o.id === id)
+        return arr.length ? arr[0].read : true
+      }
+      const loop = (data, parent) => {
+        if (!data) return
+        if (data.__config__ && data.__config__.jnpfKey !== 'table' && data.__config__.children && Array.isArray(data.__config__.children)) {
+          loop(data.__config__.children, data)
+        }
+        if (Array.isArray(data)) data.forEach(d => loop(d, parent))
+        if (data.__vModel__) res.push({
+          id: data.__vModel__,
+          name: data.__config__.label,
+          required: data.__config__.required,
+          read: getReadById(data.__vModel__),
+          write: getWriteById(data.__vModel__)
+        })
+      }
+      loop(getDrawingList())
       return res
     },
     initCopyNode() {

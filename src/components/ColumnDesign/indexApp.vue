@@ -166,7 +166,8 @@ export default {
     this.searchOptions = options.map(o => ({
       label: o.__config__.label,
       prop: o.__vModel__,
-      jnpfKey: o.__config__.jnpfKey
+      jnpfKey: o.__config__.jnpfKey,
+      ...o
     }));
     this.sortOptions = options.map(o => ({
       label: o.__config__.label,
@@ -179,31 +180,26 @@ export default {
   mounted() {
     this.setSort()
     this.$nextTick(() => {
-      this.setValue(this.columnData.columnList, this.columnOptions)
-      this.columnData.columnList.forEach(row => {
-        this.$refs.columnTable.toggleRowSelection(row, true);
-      })
-      this.setValue(this.columnData.searchList, this.searchOptions)
-      this.columnData.searchList.forEach(row => {
-        this.$refs.searchTable.toggleRowSelection(row, true);
-      })
-      this.setValue(this.columnData.sortList, this.sortOptions)
-      this.columnData.sortList.forEach(row => {
-        this.$refs.sortTable.toggleRowSelection(row, true);
-      })
+      this.setListValue(this.columnData.columnList, this.columnOptions, 'column')
+      this.setListValue(this.columnData.searchList, this.searchOptions, 'search')
+      this.setListValue(this.columnData.sortList, this.sortOptions, 'sort')
     })
   },
   methods: {
-    setValue(replacedData, data, key) {
-      key = key ? key : 'prop'
+    setListValue(replacedData, data, type) {
+      const key = 'prop'
+      let res = []
       outer: for (let i = 0; i < replacedData.length; i++) {
         inter: for (let ii = 0; ii < data.length; ii++) {
           if (replacedData[i][key] === data[ii][key]) {
-            data[ii] = replacedData[i]
+            res.push(data[ii])
             break inter
           }
         }
       }
+      res.forEach(row => {
+        this.$refs[type + 'Table'].toggleRowSelection(row, true)
+      })
     },
     /**
       * 供父组件使用 获取列表JSON
