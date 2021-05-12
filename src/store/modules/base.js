@@ -59,13 +59,15 @@ const actions = {
         list = state.dictionaryList
       }
       if (info.sort) {
-        data = list.filter(o => o.enCode === info.sort)[0]
+        let arr = list.filter(o => o.enCode === info.sort)
+        if (!arr.length) return resolve([])
+        data = arr[0]
         if (!info.id) {
           json = data.dictionaryList
         } else {
           let rowData = [];
           if (!data.isTree) {
-            rowData = data.dictionaryList.fliter(v => v.id == info.id)
+            rowData = data.dictionaryList.fliter(o => o.id == info.id)
           } else {
             function findData(list) {
               for (let i = 0; i < list.length; i++) {
