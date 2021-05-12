@@ -3,7 +3,7 @@ import request from '@/utils/request'
 // 获取列表
 export function MPMaterialList(type, data) {
   return request({
-    url: `/api/WeChat/MPMaterial/${type}`,
+    url: `/api/third/WeChat/MPMaterial/${type}`,
     method: 'get',
     data
   })
@@ -11,7 +11,7 @@ export function MPMaterialList(type, data) {
 // 上传素材
 export function UploadForeverMedia(data) {
   return request({
-    url: `/api/WeChat/MPMaterial`,
+    url: `/api/third/WeChat/MPMaterial`,
     method: 'post',
     data
   })
@@ -19,7 +19,7 @@ export function UploadForeverMedia(data) {
 // 删除素材
 export function DeleteForeverMedia(mediaId) {
   return request({
-    url: `/api/WeChat/MPMaterial/${mediaId}`,
+    url: `/api/third/WeChat/MPMaterial/${mediaId}`,
     method: 'DELETE'
   })
 }
