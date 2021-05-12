@@ -2,28 +2,28 @@ import request from '@/utils/request'
 // 获取标签列表
 export function MPTagList() {
   return request({
-    url: `/api/WeChat/MPTag`,
+    url: `/api/third/WeChat/MPTag`,
     method: 'get'
   })
 }
 // 获取标签树
 export function TagsTree() {
   return request({
-    url: `/api/WeChat/MPTag/Tree`,
+    url: `/api/third/WeChat/MPTag/Tree`,
     method: 'get'
   })
 }
 // (待定)列表
 export function Tags() {
   return request({
-    url: `/api/WeChat/MPTag/Tags`,
+    url: `/api/third/WeChat/MPTag/Tags`,
     method: 'get'
   })
 }
 // 创建标签
 export function CreateTag(fullName) {
   return request({
-    url: `/api/WeChat/MPTag`,
+    url: `/api/third/WeChat/MPTag`,
     method: 'post',
     data: { fullName }
   })
