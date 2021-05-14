@@ -23,8 +23,8 @@ const checkStatus = (response) => {
 }
 
 // 获取报表列表
-export const getDataReportList = data => {
-  return axios.get(`/api/datareport`, { data }).then(checkStatus)
+export const getDataReportList = keyword => {
+  return axios.get(`/api/datareport`, { params:  keyword }).then(checkStatus)
 }
 
 // 获取报表下拉列表
