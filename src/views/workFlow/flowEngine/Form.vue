@@ -74,54 +74,63 @@
               <el-input v-model="dataForm.description" placeholder="流程说明" type="textarea"
                 :rows="3" />
             </el-form-item>
+            <template v-if="dataForm.formType == 2">
+              <div class="JNPF-common-title noBorder">
+                <h2>绑定数据库表</h2>
+              </div>
+              <el-form-item label="数据库">
+                <el-select v-model="dataForm.dbLinkId" placeholder="请选择数据库" @change="onDbChange">
+                  <el-option-group v-for="group in dbOptions" :key="group.fullName"
+                    :label="group.fullName">
+                    <el-option v-for="item in group.children" :key="item.id" :label="item.fullName"
+                      :value="item.id" />
+                  </el-option-group>
+                </el-select>
+              </el-form-item>
+              <el-table :data="tables" class="JNPF-common-table"
+                empty-text="点击“新增”可选择 1 条（单表）或 2 条以上（多表）">
+                <el-table-column type="index" label="序号" width="50" align="center" />
+                <el-table-column prop="typeId" label="类别" width="65">
+                  <template slot-scope="scope">
+                    <el-tag v-if="scope.row.typeId=='1'">主表</el-tag>
+                    <el-tag type="warning" v-else @click="changeTable(scope.row)"
+                      style="cursor:pointer" title="点击设置成主表">子表</el-tag>
+                  </template>
+                </el-table-column>
+                <el-table-column prop="tableName" label="说明" />
+                <el-table-column prop="table" label="表名" />
+                <el-table-column prop="tableField" label="外键字段">
+                  <template slot-scope="scope" v-if="scope.row.typeId !=='1'">
+                    <el-select v-model="scope.row.tableField" placeholder="请选择">
+                      <el-option v-for="item in scope.row.fields" :key="item.field"
+                        :label="item.field" :value="item.field">
+                      </el-option>
+                    </el-select>
+                  </template>
+                </el-table-column>
+                <!-- <el-table-column prop="relationTable" label="关联主表" /> -->
+                <el-table-column prop="relationField" label="关联主键">
+                  <template slot-scope="scope" v-if="scope.row.typeId !=='1'">
+                    <el-select v-model="scope.row.relationField" placeholder="请选择">
+                      <el-option v-for="item in mainTableFields" :key="item.field"
+                        :label="item.field" :value="item.field">
+                      </el-option>
+                    </el-select>
+                  </template>
+                </el-table-column>
+                <el-table-column label="操作" fixed="right" width="50">
+                  <template slot-scope="scope">
+                    <el-button size="mini" type="text" class="JNPF-table-delBtn"
+                      @click="delItem(scope.row,scope.$index)">删除
+                    </el-button>
+                  </template>
+                </el-table-column>
+              </el-table>
+              <div class="table-actions" @click="openTableBox">
+                <el-button type="text" icon="el-icon-plus">新增一行</el-button>
+              </div>
+            </template>
           </el-form>
-          <template v-if="dataForm.formType == 2">
-            <div class="JNPF-common-title">
-              <h2>绑定数据库表</h2>
-            </div>
-            <el-table :data="tables" class="JNPF-common-table"
-              empty-text="点击“新增”可选择 1 条（单表）或 2 条以上（多表）">
-              <el-table-column type="index" label="序号" width="50" align="center" />
-              <el-table-column prop="typeId" label="类别" width="65">
-                <template slot-scope="scope">
-                  <el-tag v-if="scope.row.typeId=='1'">主表</el-tag>
-                  <el-tag type="warning" v-else @click="changeTable(scope.row)"
-                    style="cursor:pointer" title="点击设置成主表">子表</el-tag>
-                </template>
-              </el-table-column>
-              <el-table-column prop="tableName" label="说明" />
-              <el-table-column prop="table" label="表名" />
-              <el-table-column prop="tableField" label="外键字段">
-                <template slot-scope="scope" v-if="scope.row.typeId !=='1'">
-                  <el-select v-model="scope.row.tableField" placeholder="请选择">
-                    <el-option v-for="item in scope.row.fields" :key="item.field"
-                      :label="item.field" :value="item.field">
-                    </el-option>
-                  </el-select>
-                </template>
-              </el-table-column>
-              <!-- <el-table-column prop="relationTable" label="关联主表" /> -->
-              <el-table-column prop="relationField" label="关联主键">
-                <template slot-scope="scope" v-if="scope.row.typeId !=='1'">
-                  <el-select v-model="scope.row.relationField" placeholder="请选择">
-                    <el-option v-for="item in mainTableFields" :key="item.field" :label="item.field"
-                      :value="item.field">
-                    </el-option>
-                  </el-select>
-                </template>
-              </el-table-column>
-              <el-table-column label="操作" fixed="right" width="50">
-                <template slot-scope="scope">
-                  <el-button size="mini" type="text" class="JNPF-table-delBtn"
-                    @click="delItem(scope.row,scope.$index)">删除
-                  </el-button>
-                </template>
-              </el-table-column>
-            </el-table>
-            <div class="table-actions" @click="formVisible = true">
-              <el-button type="text" icon="el-icon-plus">新增一行</el-button>
-            </div>
-          </template>
         </el-col>
       </el-row>
       <template v-if="activeStep==1">
@@ -142,12 +151,14 @@
     </div>
     <icon-box :visible.sync="iconBoxVisible" ref="iconBox" :current="dataForm.icon"
       @choiceIcon="choiceIcon" />
-    <TableForm :visible.sync="formVisible" ref="tableForm" @closeForm="colseForm" />
+    <TableForm :visible.sync="formVisible" ref="tableForm" @closeForm="colseForm"
+      :dbLinkId="dataForm.dbLinkId" />
   </el-dialog>
 </template>
 
 <script>
 import { FlowEngineInfo, Update, Create } from '@/api/workFlow/FlowEngine'
+import { getDataSourceListAll } from '@/api/systemData/dataSource'
 import iconBox from '@/components/JNPF-iconBox'
 import Process from "@/components/Process"
 import Generator from '@/components/Generator/index/Home'
@@ -172,6 +183,7 @@ export default {
         formData: '',
         description: '',
         formType: 1,
+        dbLinkId: '',
         enabledMark: 1,
         sortCode: 0,
         icon: '',
@@ -215,6 +227,7 @@ export default {
       loading: false,
       categoryList: [],
       formList: [],
+      dbOptions: [],
       formType: '系统表单'
     }
   },
@@ -228,17 +241,28 @@ export default {
       this.loading = true
       this.$nextTick(() => {
         this.$refs['dataForm'].resetFields()
+        getDataSourceListAll().then(res => {
+          const defaultItem = {
+            fullName: '',
+            children: [{
+              fullName: '默认数据库',
+              id: '0'
+            }]
+          }
+          const list = [defaultItem, ...res.data.list]
+          this.dbOptions = list.filter(o => o.children && o.children.length)
+        })
         if (this.dataForm.id) {
           this.loading = true
           FlowEngineInfo(this.dataForm.id).then(res => {
             this.loading = false
             this.dataForm = res.data
             this.formType = this.dataForm.formType == 1 ? '系统表单' : '自定义表单'
-            this.loading = false
             this.dataForm.flowTemplateJson && (this.flowTemplateJson = JSON.parse(this.dataForm.flowTemplateJson))
             this.dataForm.formData && (this.formData = JSON.parse(this.dataForm.formData))
             this.tables = this.dataForm.tables && JSON.parse(this.dataForm.tables) || []
             if (!this.tables.length) return
+            this.dataForm.dbLinkId = this.dataForm.dbLinkId || '0'
             let mainTable = this.tables.filter(o => o.typeId == '1')[0]
             this.mainTableFields = mainTable.fields
             this.relationTable = mainTable.table

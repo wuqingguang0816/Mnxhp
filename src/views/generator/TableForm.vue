@@ -42,6 +42,7 @@
 <script>
 import { DataModelList } from '@/api/systemData/dataModel'
 export default {
+  props: ['dbLinkId'],
   data() {
     return {
       listLoading: true,
@@ -63,8 +64,8 @@ export default {
     },
     initData() {
       this.listLoading = true
-      let query = { keyword: this.keyword }
-      DataModelList('0', { keyword: this.keyword }).then(res => {
+      const dbLinkId = this.dbLinkId || '0'
+      DataModelList(dbLinkId, { keyword: this.keyword }).then(res => {
         this.list = res.data.list
         this.listLoading = false
       })

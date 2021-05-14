@@ -15,6 +15,20 @@ export default {
       if (this.activeStep <= key) return
       this.activeStep = key
     },
+    onDbChange() {
+      this.tables = []
+    },
+    openTableBox() {
+      if (!this.dataForm.dbLinkId) {
+        this.$message({
+          message: '请先选择数据库',
+          type: 'error',
+          duration: 1000
+        })
+        return
+      }
+      this.formVisible = true
+    },
     async colseForm(data) {
       const type = this.dataForm.type
       let queryType = 0

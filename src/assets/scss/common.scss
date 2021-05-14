@@ -335,6 +335,10 @@
   color: #606266;
   align-items: center;
 
+  &.noBorder {
+    border: none;
+  }
+
   h2 {
     font-size: 16px;
     line-height: 50px;
