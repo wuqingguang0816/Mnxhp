@@ -6,6 +6,13 @@
   "description": "",
   "glyphs": [
     {
+      "icon_id": "21596734",
+      "name": "subFlow",
+      "font_class": "generator-subFlow",
+      "unicode": "e61b",
+      "unicode_decimal": 58907
+    },
+    {
       "icon_id": "19076709",
       "name": "node",
       "font_class": "node",

@@ -4,7 +4,8 @@
   "font_family": "ym-custom",
   "css_prefix_text": "ym-custom-",
   "description": "",
-  "glyphs": [{
+  "glyphs": [
+    {
       "icon_id": "1444008",
       "name": "battery-charging-40",
       "font_class": "battery-charging-3",

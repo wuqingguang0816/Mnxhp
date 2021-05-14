@@ -1,12 +1,8 @@
 @font-face {
-  font-family: 'icon-ym';
-  /* project id 2011706 */
-  src: url('./iconfont.eot');
-  src: url('./iconfont.eot?#iefix') format('embedded-opentype'),
-    url('./iconfont.woff2') format('woff2'),
-    url('./iconfont.woff') format('woff'),
-    url('./iconfont.ttf') format('truetype'),
-    url('./iconfont.svg#icon-ym') format('svg');
+  font-family: "icon-ym"; /* Project id 2011706 */
+  src: url('iconfont.woff2?t=1620962744960') format('woff2'),
+       url('iconfont.woff?t=1620962744960') format('woff'),
+       url('iconfont.ttf?t=1620962744960') format('truetype');
 }
 
 .icon-ym {
@@ -15,6 +11,10 @@
   font-style: normal;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-ym-generator-subFlow:before {
+  content: "\e61b";
 }
 
 .icon-ym-node:before {

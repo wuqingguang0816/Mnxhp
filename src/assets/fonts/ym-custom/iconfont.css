@@ -1,12 +1,9 @@
 @font-face {
-  font-family: 'ym-custom';
-  /* project id 2016749 */
-  src: url('./iconfont.eot');
-  src: url('./iconfont.eot?#iefix') format('embedded-opentype'),
-    url('./iconfont.woff2') format('woff2'),
-    url('./iconfont.woff') format('woff'),
-    url('./iconfont.ttf') format('truetype'),
-    url('./iconfont.svg#ym-custom') format('svg');
+  font-family: "ym-custom";
+  /* Project id 2016749 */
+  src: url('iconfont.woff2?t=1620963811584') format('woff2'),
+    url('iconfont.woff?t=1620963811584') format('woff'),
+    url('iconfont.ttf?t=1620963811584') format('truetype');
 }
 
 .ym-custom {
