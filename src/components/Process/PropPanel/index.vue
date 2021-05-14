@@ -59,7 +59,7 @@
 
     <!-- 定时器  -->
     <section class="condition-pane pd-10" v-if="value && isTimerNode()">
-      <el-row style="padding: 10px;">
+      <el-row>
         <el-col :span="24" style="font-size: 14px;line-height:32px;color: #a5a5a5;">
           添加定时器后，审批节点将根据设置的时间流转</el-col>
         <el-col :span="24">
@@ -91,7 +91,7 @@
     <section class="approver-pane" v-if="value && isStartNode()">
       <el-tabs style="height:100%;">
         <el-tab-pane label="发起人">
-          <el-row style="padding: 10px;">
+          <el-row class="pd-10">
             <el-col :span="4" style="font-size: 14px;line-height:32px">谁可以发起</el-col>
             <el-col :span="20" style="font-size: 14px;line-height:32px;margin-bottom:10px">
               默认所有人,需要设置请选择
@@ -178,8 +178,6 @@
                 设置审批人为审批流程中某个环节的审批人</div>
               <div v-if="approverForm.assigneeType === 6" class="option-box-tip">
                 任何一个审批人有审批操作，则节点审批完成</div>
-              <div v-if="approverForm.assigneeType === 7" class="option-box-tip">
-                将由流程表单中的人员进行审批</div>
               <div v-if="approverForm.assigneeType === 8" class="option-box-tip">
                 无序会签，当审批达到会签比例时，则该审批通过，一人不同意则驳回</div>
               <div v-if="approverForm.assigneeType === 9" class="option-box-tip">
@@ -230,10 +228,10 @@
                 </el-option>
               </el-select>
             </el-form-item>
-            <!-- <el-form-item label="审批人为空时">
-              <el-checkbox v-model="approverForm.noApproverHandler">自动通过</el-checkbox>
-            </el-form-item> -->
-            <el-form-item label="进度选择" required>
+            <el-form-item label="加签设置">
+              <el-checkbox v-model="approverForm.hasFreeApprover">允许加签</el-checkbox>
+            </el-form-item>
+            <el-form-item label="进度设置" required>
               <el-select v-model="approverForm.progress" placeholder="请选择">
                 <el-option v-for="item in progressOptions" :key="item" :label="item+'%'"
                   :value="item">
@@ -386,6 +384,7 @@ const defaultApproverForm = {
   nodeId: '',
   getUserUrl: '',
   noApproverHandler: true,
+  hasFreeApprover: false,
   hasAuditBtn: true,
   auditBtnText: '通 过',
   hasRejectBtn: true,
@@ -421,12 +420,9 @@ export default {
   data() {
     return {
       visible: false,  // 控制面板显隐
-      globalFormOperate: null,  // 统一设置节点表单权限
-      titleInputVisible: false, // 是否显示标题输入框  startNode 不显示
       activeName: "config", // or formAuth  Tab面板key
       showingPCons: [], // 用户选择了得条件  被选中的才会被展示在面板上编辑
       pconditions: [], // 从vuex中获取的可以作为流程图条件的集合
-      dialogVisible: false, // 控制流程条件选项Dialog显隐
       // 当前节点数据
       properties: {
         title: ''
@@ -442,8 +438,12 @@ export default {
       approverForm: JSON.parse(JSON.stringify(defaultApproverForm)),
       assigneeTypeOptions: [
         {
-          label: '部门主管',
-          value: 2
+          label: '或签',
+          value: 6
+        },
+        {
+          label: '会签',
+          value: 8
         },
         {
           label: '发起人主管',
@@ -454,16 +454,8 @@ export default {
           value: 3
         },
         {
-          label: '或签',
-          value: 6
-        },
-        {
-          label: '会签',
-          value: 8
-        },
-        {
-          label: '加签',
-          value: 7
+          label: '部门主管',
+          value: 2
         },
         {
           label: '变量',
@@ -791,7 +783,6 @@ export default {
     * 初始化审批节点所需数据
     */
     initApproverNodeData() {
-      this.assigneeTypeOptions[5].disabled = this.value.isInterflow
       this.activeName = 'config'
       Object.assign(this.approverForm, this.value.properties)
       this.getNodeOption()
@@ -968,7 +959,7 @@ export default {
 
 .radio-item {
   line-height: 30px;
-  width: calc(33.33% - 30px);
+  width: calc(25% - 30px);
 }
 
 .priority-select {

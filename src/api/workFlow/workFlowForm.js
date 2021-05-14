@@ -31,7 +31,7 @@ export function DynamicInfo(id) {
   })
 }
 // 新建动态表单
-export function DynamicCreate(data) {
+export function DynamicCreate(key, data) {
   return request({
     url: `/api/workflow/Engine/FlowTask`,
     method: 'post',
@@ -39,7 +39,7 @@ export function DynamicCreate(data) {
   })
 }
 // 修改动态表单
-export function DynamicUpdate(data) {
+export function DynamicUpdate(key, data) {
   return request({
     url: `/api/workflow/Engine/FlowTask/${data.id}`,
     method: 'put',

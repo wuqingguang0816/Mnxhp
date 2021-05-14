@@ -1,5 +1,5 @@
 import { mapGetters } from "vuex"
-import { Info, Create, Update } from '@/api/workFlow/workFlowForm'
+import { Info } from '@/api/workFlow/workFlowForm'
 import { BillNumber } from '@/api/system/billRule'
 
 export default {
@@ -13,7 +13,6 @@ export default {
       setting: {},
       eventType: '',
       loading: true,
-      userBoxVisible: false
     }
   },
   methods: {
@@ -58,51 +57,14 @@ export default {
           if ('fileJson' in this.dataForm) {
             this.dataForm.fileJson = JSON.stringify(this.fileList)
           }
-          if (eventType === 'audit' || eventType === 'reject') {
-            this.$emit('eventReciver', this.dataForm, eventType)
-            return
-          }
-          this.dataForm.status = eventType === 'submit' ? 0 : 1
-          this.eventType = eventType
-          if (this.eventType === 'submit') {
-            if (this.setting.freeApprover == 0) {
-              this.$confirm('您确定要提交当前流程吗, 是否继续?', '提示', {
-                type: 'warning'
-              }).then(() => {
-                this.submit()
-              }).catch(() => {});
-            } else {
-              this.userBoxVisible = true
-              this.$nextTick(() => {
-                this.$refs.userBox.init()
-              })
+          if (eventType === 'save' || eventType === 'submit') {
+            if (this.selfSubmit && typeof this.selfSubmit === "function") {
+              this.selfSubmit(this.dataForm)
+              return
             }
-          } else {
-            this.request()
           }
+          this.$emit('eventReciver', this.dataForm, eventType)
         }
-      })
-    },
-    submit(freeApproverUserId) {
-      if (freeApproverUserId) this.dataForm.freeApproverUserId = freeApproverUserId
-      this.request()
-    },
-    request() {
-      if (!this.dataForm.id) delete(this.dataForm.id)
-      if (this.eventType === 'save') this.$emit('setLoad', true)
-      const formMethod = this.dataForm.id ? Update : Create
-      formMethod(this.setting.enCode, this.dataForm).then(res => {
-        this.$message({
-          message: res.msg,
-          type: 'success',
-          duration: 1500,
-          onClose: () => {
-            if (this.eventType === 'save') this.$emit('setLoad')
-            this.$emit('close', true)
-          }
-        })
-      }).catch(() => {
-        if (this.eventType === 'save') this.$emit('setLoad')
       })
     },
     JudgeShow(id) {

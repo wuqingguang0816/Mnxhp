@@ -136,7 +136,6 @@
         </el-col>
       </el-row>
     </el-form>
-    <UserBox v-if="userBoxVisible" ref="userBox" @submit="submit" />
   </div>
 </template>
 

@@ -49,14 +49,8 @@
         :visible.sync="visible" class="JNPF-dialog JNPF-dialog_center" lock-scroll append-to-body
         width='600px'>
         <el-form label-width="80px">
-          <el-form-item v-if="eventType==='audit'&& freeApprover == 1">
-            <el-radio-group v-model="handleType" @change="radioChange">
-              <el-radio :label="1" class="radio-audit">审核结束</el-radio>
-              <el-radio :label="0">
-                <JNPF-TreeSelect :options="treeData" v-model="handleId" placeholder="选择下一审批人"
-                  lastLevel lastLevelKey='type' lastLevelValue='user' :disabled="handleType!=0" />
-              </el-radio>
-            </el-radio-group>
+          <el-form-item label="加签人员" v-if="eventType==='audit'&& properties.hasFreeApprover">
+            <user-select v-model="handleId" placeholder="请选择加签人员,不选即该节点审核结束" />
           </el-form-item>
           <el-form-item label="审批意见">
             <el-input v-model="reason" placeholder="请输入审批意见（选填）" type="textarea" :rows="4" />
@@ -77,7 +71,7 @@
               </div>
             </div>
           </el-form-item>
-          <el-form-item label="抄送给" v-if="properties.isCustomCopy">
+          <el-form-item label="抄送人员" v-if="properties.isCustomCopy">
             <user-select v-model="copyIds" placeholder="请选择" multiple />
           </el-form-item>
         </el-form>
@@ -115,6 +109,7 @@
 import { FlowEngineInfo } from '@/api/workFlow/FlowEngine'
 import { FlowBeforeInfo, Audit, Reject, Transfer, Recall, Cancel, Assign } from '@/api/workFlow/FlowBefore'
 import { Revoke, Press } from '@/api/workFlow/FlowLaunch'
+import { Create, Update, DynamicCreate, DynamicUpdate } from '@/api/workFlow/workFlowForm'
 import recordList from './RecordList'
 import Process from '@/components/Process/Preview'
 import vueEsign from 'vue-esign'
@@ -147,13 +142,10 @@ export default {
       flowTemplateJson: {},
       flowTaskOperatorRecordList: [],
       properties: {},
-      freeApprover: 0,
       endTime: 0,
       visible: false,
       reason: '',
-      handleType: 1,
       handleId: '',
-      treeData: [],
       activeTab: '0',
       btnLoading: false,
       eventType: '',
@@ -190,7 +182,6 @@ export default {
     },
     getEngineInfo(data) {
       FlowEngineInfo(data.flowId).then(res => {
-        data.freeApprover = res.data.freeApprover || 0
         data.formConf = res.data.formData
         this.flowTemplateJson = res.data.flowTemplateJson ? JSON.parse(res.data.flowTemplateJson) : null
         this.flowTemplateJson.state = 'state-curr'
@@ -213,7 +204,6 @@ export default {
         this.flowTemplateJson = this.flowTaskInfo.flowTemplateJson ? JSON.parse(this.flowTaskInfo.flowTemplateJson) : null
         this.flowTaskOperatorRecordList = res.data.flowTaskOperatorRecordList
         this.properties = res.data.approversProperties || {}
-        this.freeApprover = res.data.freeApprover || 0
         this.endTime = this.flowTaskInfo.completion == 100 ? this.flowTaskInfo.endTime : 0
         data.formConf = res.data.flowFormInfo
         if (data.opType != 1) data.readonly = true
@@ -258,19 +248,48 @@ export default {
     eventReciver(formData, eventType) {
       this.formData = formData
       this.eventType = eventType
+      if (eventType === 'save' || eventType === 'submit') {
+        return this.submitOrSave()
+      }
       if (eventType === 'audit' || eventType === 'reject') {
-        if (eventType === 'audit' && this.freeApprover == 1) {
-          this.$store.dispatch('base/getUserTree').then(res => {
-            this.treeData = res
-          })
-          this.handleType = 1
-          this.handleId = ''
-        }
+        this.handleId = ''
         this.reason = ''
         this.copyIds = ''
         this.handleReset()
         this.visible = true
       }
+    },
+    submitOrSave() {
+      this.formData.status = this.eventType === 'submit' ? 0 : 1
+      if (this.eventType === 'save') return this.handleRequest()
+      this.$confirm('您确定要提交当前流程吗, 是否继续?', '提示', {
+        type: 'warning'
+      }).then(() => {
+        this.handleRequest()
+      }).catch(() => { });
+    },
+    handleRequest() {
+      if (!this.formData.id) delete (this.formData.id)
+      if (this.eventType === 'save') this.btnLoading = true
+      let formMethod = null
+      if (this.setting.formType == 1) {
+        formMethod = this.formData.id ? Update : Create
+      } else {
+        formMethod = this.formData.id ? DynamicUpdate : DynamicCreate
+      }
+      formMethod(this.setting.enCode, this.formData).then(res => {
+        this.$message({
+          message: res.msg,
+          type: 'success',
+          duration: 1500,
+          onClose: () => {
+            if (this.eventType === 'save') this.btnLoading = false
+            this.$emit('close', true)
+          }
+        })
+      }).catch(() => {
+        if (this.eventType === 'save') this.btnLoading = false
+      })
     },
     revoke() {
       this.$prompt('', "撤回流程", {
@@ -388,16 +407,6 @@ export default {
       })
     },
     handleApproval() {
-      if (this.freeApprover == 1) {
-        if (this.handleType == 0 && !this.handleId) {
-          this.$message({
-            type: 'error',
-            message: '请选择下一审批人',
-            duration: 1000
-          })
-          return
-        }
-      }
       if (this.properties.hasSign && !this.signImg) {
         this.$message({
           message: '请签名',
@@ -412,7 +421,7 @@ export default {
         signImg: this.signImg,
         copyIds: this.copyIds
       }
-      if (this.eventType === 'audit' && this.freeApprover == 1) {
+      if (this.eventType === 'audit' && this.properties.hasFreeApprover) {
         query = { freeApproverUserId: this.handleId, ...query }
       }
       const approvalMethod = this.eventType === 'audit' ? Audit : Reject
@@ -427,9 +436,6 @@ export default {
           }
         })
       })
-    },
-    radioChange(val) {
-      if (val != 0) this.handleId = ''
     },
     handleReset() {
       this.signImg = ''

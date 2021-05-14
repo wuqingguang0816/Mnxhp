@@ -228,7 +228,6 @@
       </el-tabs>
     </div>
     <GoodsBox v-if="goodsBoxVisible" ref="goodsBox" @refreshDataList="initList" />
-    <UserBox v-if="userBoxVisible" ref="userBox" @submit="submit" />
   </div>
 </template>
 
