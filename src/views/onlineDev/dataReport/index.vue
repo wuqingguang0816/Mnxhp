@@ -190,7 +190,8 @@ export default {
       link.click();
     },
     search() {
-      this.getDictionaryData()
+      const keyword = this.params.keyword
+      this.getDictionaryData(keyword)
     },
     reset() {
       this.params.keyword = ''
