@@ -50,6 +50,8 @@
             <p class="timeline-cell">审核人员：{{item.userName}}</p>
             <p class="timeline-cell" v-if="item.handleOpinion">
               审核意见：{{item.handleOpinion}}</p>
+            <p class="timeline-cell" v-if="item.signImg">
+              审核签名：<img :src="item.signImg" class="signImg"></p>
           </el-card>
         </el-timeline-item>
       </template>
