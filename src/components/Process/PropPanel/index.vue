@@ -4,8 +4,9 @@
     v-if="properties" append-to-body :wrapperClosable="false">
     <!-- 标题 -->
     <header slot="title" class="header"
-      v-if="value && (value.type=='condition'|| value.type=='approver') && properties.title">
-      <el-input size="mini" v-model="properties.title" style="z-index:9;max-width: 200px;">
+      v-if="value && (value.type=='condition'|| value.type=='approver' || value.type=='subFlow' )">
+      <el-input size="mini" v-model="properties.title" style="z-index:9;max-width: 200px;"
+        placeholder="请输入">
       </el-input>
     </header>
     <header slot="title" class="header" v-else>{{properties.title}}</header>
@@ -85,6 +86,60 @@
           </el-form>
         </el-col>
       </el-row>
+    </section>
+
+    <!-- 子流程  -->
+    <section class="condition-pane pd-10" v-if="value && isSubFlowNode()">
+      <el-form label-position="top" :model="subFlowForm">
+        <el-form-item label="审批设置">
+          <el-radio-group v-model="subFlowForm.initiateType">
+            <el-radio :label="i+1" v-for="(item,i) in initiateTypeOptions" :key="i">{{item}}
+            </el-radio>
+          </el-radio-group>
+          <div v-if="subFlowForm.initiateType === 1" class="option-box-tip">
+            所指定的成员将作为子流程发起人，多人时，发起多个子流程</div>
+          <div v-if="subFlowForm.initiateType === 2" class="option-box-tip">
+            发起人的部门主管将作为子流程发起人</div>
+          <div v-if="subFlowForm.initiateType === 3" class="option-box-tip">
+            发起人的主管将作为子流程发起人</div>
+          <div v-if="subFlowForm.initiateType === 4" class="option-box-tip">
+            发起人自己将作为子流程发起人</div>
+        </el-form-item>
+        <el-form-item v-if="subFlowForm.initiateType === 1">
+          <org-select ref="subFlow-role-org" type="role" v-model="subFlowForm.initiateRole"
+            title="添加角色" class="mb-10" buttonType="button" />
+          <org-select ref="subFlow-position-org" buttonType="button"
+            v-model="subFlowForm.initiatePos" title="添加岗位" type="position" class="mb-10" />
+          <org-select ref="subFlow-user-org" buttonType="button" v-model="subFlowForm.initiator"
+            title="添加用户" />
+        </el-form-item>
+        <el-form-item label="发起人的" v-if="subFlowForm.initiateType === 3">
+          <el-select v-model="subFlowForm.managerLevel">
+            <el-option v-for="item in 10" :key="item" :label="item===1?'直接主管':'第'+item+'级主管'"
+              :value="item">
+            </el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="子流程表单">
+          <JNPF-TreeSelect :options="flowOptions" v-model="subFlowForm.flowId"
+            placeholder="请选择子流程表单" lastLevel clearable @getValue="subFlowForm.assignList=[]" />
+        </el-form-item>
+        <el-form-item label="数据传递">
+          <div @click="openRuleBox">
+            <el-input :value="subFlowForm.assignList.length?'已设置':''" placeholder="请设置数据传递规则"
+              suffix-icon="el-icon-arrow-down" readonly />
+          </div>
+        </el-form-item>
+        <el-form-item label="通知设置">
+          <el-checkbox-group v-model="subFlowForm.messageType">
+            <el-checkbox :label="1">站内信</el-checkbox>
+            <el-checkbox :label="2">邮箱</el-checkbox>
+            <el-checkbox :label="3">短信</el-checkbox>
+            <el-checkbox :label="4">钉钉</el-checkbox>
+            <el-checkbox :label="5">企业微信</el-checkbox>
+          </el-checkbox-group>
+        </el-form-item>
+      </el-form>
     </section>
 
     <!-- 发起人 -->
@@ -358,13 +413,55 @@
       <el-button size="small" @click="cancel">取消</el-button>
       <el-button size="small" type="primary" @click="confirm">确定</el-button>
     </div>
+    <el-dialog title="数据传递" :close-on-click-modal="false" :visible.sync="ruleVisible"
+      class="JNPF-dialog JNPF-dialog_center rule-dialog" lock-scroll append-to-body width='700px'>
+      <div class="option-box-tip">当父流程流转到子流程时，将对应的字段赋值给子流程</div>
+      <el-row :gutter="10" v-for="(item,i) in assignList" :key="i" class="mb-10">
+        <el-col :span="2" class="rule-cell">父流程</el-col>
+        <el-col :span="7" class="rule-cell">
+          <el-select v-model="item.parentField" placeholder="请选择字段">
+            <el-option v-for="item in usedFormItems" :key="item.__vModel__"
+              :label="item.__config__.label" :value="item.__vModel__" />
+          </el-select>
+        </el-col>
+        <el-col :span="4" class="rule-cell mid">赋值给</el-col>
+        <el-col :span="2" class="rule-cell">子流程</el-col>
+        <el-col :span="7" class="rule-cell">
+          <el-select v-model="item.childField" placeholder="请选择字段">
+            <el-option v-for="item in childFieldOptions" :key="item.vmodel" :label="item.label"
+              :value="item.vmodel" />
+          </el-select>
+        </el-col>
+        <el-col :span="2" class="rule-cell">
+          <el-button type="danger" icon="el-icon-close" @click="delRule(i)">
+          </el-button>
+        </el-col>
+      </el-row>
+      <div class="table-actions" @click="addRule">
+        <el-button type="text" icon="el-icon-plus">新增规则</el-button>
+      </div>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="ruleVisible = false">取消</el-button>
+        <el-button type="primary" @click="saveRule">确定</el-button>
+      </span>
+    </el-dialog>
   </el-drawer>
 </template>
 <script>
+import { FlowEngineSelector, getFormDataFields } from '@/api/workFlow/FlowEngine'
 import { NodeUtils } from "../FlowCard/util.js"
 import { getDrawingList } from '@/components/Generator/utils/db'
 import OrgSelect from '../OrgSelect'
-
+const defaultSubFlowForm = {
+  initiateType: 1,
+  managerLevel: 1,
+  initiator: [],
+  initiatePos: [],
+  initiateRole: [],
+  flowId: '',
+  assignList: [],
+  messageType: [1],
+}
 const defaultApproverForm = {
   approvers: [], // 审批人集合
   approverPos: [], // 审批岗位集合
@@ -435,7 +532,10 @@ export default {
       startForm: {
         formOperates: []
       },
+      ruleVisible: false,
+      subFlowForm: JSON.parse(JSON.stringify(defaultSubFlowForm)),
       approverForm: JSON.parse(JSON.stringify(defaultApproverForm)),
+      initiateTypeOptions: ['指定成员', '部门主管', '发起者主管', '发起者本人'],
       assigneeTypeOptions: [
         {
           label: '或签',
@@ -505,6 +605,9 @@ export default {
           label: '或者',
           value: "||"
         }],
+      assignList: [],
+      flowOptions: [],
+      childFieldOptions: [],
       nodeOptions: []
     };
   },
@@ -661,6 +764,49 @@ export default {
       this.visible = false;
     },
     /**
+     * 子流程节点确认保存
+     */
+    subFlowNodeComfirm() {
+      if (!this.properties.title) {
+        this.$message({
+          message: '请输入子流程名称',
+          type: 'error',
+        })
+        return
+      }
+      let content = ''
+      if (this.subFlowForm.initiateType === 1) {
+        if (!this.subFlowForm.initiator.length && !this.subFlowForm.initiatePos.length && !this.subFlowForm.initiateRole.length) {
+          this.$message({
+            message: '请设置发起人',
+            type: 'error',
+          })
+          return
+        }
+        let initiatorText = this.getOrgSelectLabel('subFlow-user'),
+          initiatePosText = this.getOrgSelectLabel('subFlow-position'),
+          initiateRoleText = this.getOrgSelectLabel('subFlow-role')
+        content += initiateRoleText
+        content += (content && initiatePosText ? ',' : '') + initiatePosText
+        content += (content && initiatorText ? ',' : '') + initiatorText
+      } else {
+        content = this.initiateTypeOptions[this.subFlowForm.initiateType - 1]
+      }
+      if (!this.subFlowForm.flowId) {
+        this.$message({
+          message: '请选择子流程表单',
+          type: 'error',
+        })
+        return
+      }
+      let titleObj = {
+        title: this.properties.title
+      }
+      Object.assign(this.properties, this.subFlowForm, titleObj)
+      this.$emit("confirm", this.properties, content);
+      this.visible = false;
+    },
+    /**
      * 审批节点确认保存
      */
     approverNodeComfirm() {
@@ -731,6 +877,7 @@ export default {
       this.isCopyNode() && this.copyNodeConfirm()
       this.isStartNode() && this.startNodeComfirm()
       this.isTimerNode() && this.timerNodeComfirm()
+      this.isSubFlowNode() && this.subFlowNodeComfirm()
       this.isApproverNode() && this.approverNodeComfirm()
       this.isConditionNode() && this.conditionNodeComfirm()
     },
@@ -773,6 +920,9 @@ export default {
     isTimerNode() {
       return this.value ? NodeUtils.isTimerNode(this.value) : false
     },
+    isSubFlowNode() {
+      return this.value ? NodeUtils.isSubFlowNode(this.value) : false
+    },
     // 初始化发起人节点
     initInitiator() {
       this.initiator = this.value.properties && this.value.properties.initiator
@@ -787,6 +937,64 @@ export default {
       Object.assign(this.approverForm, this.value.properties)
       this.getNodeOption()
       this.approverForm.formOperates = this.initFormOperates(this.value)
+    },
+    initSubFlowData() {
+      this.getFlowOptions()
+      Object.assign(this.subFlowForm, this.value.properties)
+    },
+    openRuleBox() {
+      if (!this.subFlowForm.flowId) {
+        this.$message({
+          message: '请选择子流程表单',
+          type: 'error',
+        })
+        return
+      }
+      getFormDataFields(this.subFlowForm.flowId).then(res => {
+        this.childFieldOptions = res.data.list
+        this.assignList = this.subFlowForm.assignList
+        this.ruleVisible = true
+      })
+    },
+    addRule() {
+      this.assignList.push({
+        parentField: '',
+        childField: ''
+      })
+    },
+    delRule(i) {
+      this.assignList.splice(i, 1)
+    },
+    saveRule() {
+      let boo = true
+      for (let i = 0; i < this.assignList.length; i++) {
+        const element = this.assignList[i];
+        if (!element.parentField) {
+          boo = false
+          this.$message({
+            message: '请选择父流程字段',
+            type: 'error',
+          })
+          break
+        }
+        if (!element.childField) {
+          boo = false
+          this.$message({
+            message: '请选择子流程字段',
+            type: 'error',
+          })
+          break
+        }
+      }
+      if (!boo) return
+      this.subFlowForm.assignList = this.assignList
+      this.ruleVisible = false
+      this.assignList = []
+    },
+    getFlowOptions() {
+      FlowEngineSelector().then(res => {
+        this.flowOptions = res.data.list
+      })
     },
     // 获取驳回步骤选项
     getNodeOption() {
@@ -883,12 +1091,14 @@ export default {
     visible(val) {
       if (!val) {
         this.approverForm = JSON.parse(JSON.stringify(defaultApproverForm)) // 重置数据为默认状态
+        this.subFlowForm = JSON.parse(JSON.stringify(defaultSubFlowForm))
         return
       }
       if (!this.processData.properties.formOperates || !this.processData.properties.formOperates.length) {
         this.processData.properties.formOperates = this.initFormOperates(this.processData)
       }
       this.isStartNode() && this.initStartNodeData()
+      this.isSubFlowNode() && this.initSubFlowData()
       this.isApproverNode() && this.initApproverNodeData()
       this.isConditionNode() && this.initConditionNodeData()
     },
@@ -1004,14 +1214,6 @@ export default {
 .approver-pane {
   height: 100%;
   overflow: hidden;
-  .option-box-tip {
-    font-size: 14px;
-    color: #a5a5a5;
-  }
-  .option-box {
-    font-size: 14px;
-    padding-left: 1rem;
-  }
   >>> .el-tabs__content {
     height: calc(100% - 40px);
     .el-tab-pane {
@@ -1029,6 +1231,14 @@ export default {
     }
   }
 }
+.option-box-tip {
+  font-size: 14px;
+  color: #a5a5a5;
+}
+.option-box {
+  font-size: 14px;
+  padding-left: 1rem;
+}
 
 .condition-pane {
   height: 100%;
@@ -1044,6 +1254,22 @@ export default {
     .el-input,
     .el-select {
       width: 100%;
+    }
+  }
+}
+.rule-dialog {
+  >>> .el-dialog__body {
+    min-height: 300px !important;
+    padding: 20px 20px 10px !important;
+  }
+  .option-box-tip {
+    margin-bottom: 20px;
+  }
+  .rule-cell {
+    line-height: 32px;
+    &.mid {
+      color: #1890ff;
+      text-align: center;
     }
   }
 }

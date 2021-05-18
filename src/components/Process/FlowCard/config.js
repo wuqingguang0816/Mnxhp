@@ -45,6 +45,13 @@ export default {
       second: 0
     }
   },
+  subFlow: {
+    type: 'subFlow',
+    content: '请设置发起人',
+    properties: {
+      title: '子流程'
+    }
+  },
   interflow: {
     type: "approver",
     content: "请设置审批人",

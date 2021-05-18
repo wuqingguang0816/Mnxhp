@@ -184,7 +184,8 @@ $bg-color: #fff;
         box-shadow: 0 0 0 2px #b6b6b6, 0 0 5px 4px rgb(0 0 0 / 20%);
       }
       &.start-node,
-      &.approver {
+      &.approver,
+      &.subFlow {
         &:hover {
           box-shadow: 0 0 0 2px #b6b6b6, 0 0 5px 4px rgb(0 0 0 / 20%);
         }
