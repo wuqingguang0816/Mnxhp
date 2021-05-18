@@ -51,7 +51,7 @@
         <el-form-item label="数据接口">
           <JNPF-TreeSelect :options="dataInterfaceSelector" v-model="activeData.__config__.propsUrl"
             placeholder="请选择数据接口" lastLevel lastLevelKey='categoryId' lastLevelValue='1'
-            @getValue="propsUrlChange" clearable />
+            @change="propsUrlChange" clearable />
         </el-form-item>
         <el-form-item label="标签键名">
           <el-input v-model="activeData.props.props.label" placeholder="请输入标签键名" />

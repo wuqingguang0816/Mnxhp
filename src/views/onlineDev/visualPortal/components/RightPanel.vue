@@ -12,7 +12,7 @@
             <div v-for="(item, index) in activeData.list" :key="index" class="select-item">
               <JNPF-TreeSelect :options="menuList" v-model="item.id" placeholder="请选择菜单" lastLevel
                 lastLevelKey='type' :lastLevelValue='2' clearable
-                @getValue="getSelectValue(arguments,index)">
+                @change="getSelectValue(arguments,index)">
               </JNPF-TreeSelect>
               <div class="close-btn select-line-icon" @click="delSelectItem(index)">
                 <i class="el-icon-remove-outline" />

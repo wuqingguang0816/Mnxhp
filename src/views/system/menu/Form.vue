@@ -47,7 +47,7 @@
       <el-form-item v-if="[3,4,5,6,8].indexOf(dataForm.type)>-1" label="关联"
         prop="propertyJson.moduleId">
         <JNPF-TreeSelect v-model="dataForm.propertyJson.moduleId" :options="tempData"
-          placeholder="请选择" lastLevel @getValue="handleSelectModule" />
+          placeholder="请选择" lastLevel @change="handleSelectModule" />
       </el-form-item>
       <el-form-item label="排序" prop="sortCode">
         <el-input-number :min="0" :max="9999" v-model="dataForm.sortCode" />

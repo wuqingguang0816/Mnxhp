@@ -5,7 +5,7 @@
       v-loading="loading">
       <el-form-item label="被委托人" prop="toUserId">
         <JNPF-TreeSelect :options="treeData" v-model="dataForm.toUserId" placeholder="选择被委托人"
-          lastLevel @getValue="getValue" lastLevelKey='type' lastLevelValue='user'>
+          lastLevel @change="getValue" lastLevelKey='type' lastLevelValue='user'>
         </JNPF-TreeSelect>
       </el-form-item>
       <el-form-item label="委托流程" prop="flowId">

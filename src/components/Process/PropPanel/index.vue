@@ -122,7 +122,7 @@
         </el-form-item>
         <el-form-item label="子流程表单">
           <JNPF-TreeSelect :options="flowOptions" v-model="subFlowForm.flowId"
-            placeholder="请选择子流程表单" lastLevel clearable @getValue="subFlowForm.assignList=[]" />
+            placeholder="请选择子流程表单" lastLevel clearable @change="subFlowForm.assignList=[]" />
         </el-form-item>
         <el-form-item label="数据传递">
           <div @click="openRuleBox">

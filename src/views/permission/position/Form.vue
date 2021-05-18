@@ -5,8 +5,7 @@
     <el-form ref="dataForm" v-loading="formLoading" :model="dataForm" :rules="dataRule"
       label-width="90px">
       <el-form-item label="所属组织" prop="organizeId">
-        <JNPF-TreeSelect v-model="dataForm.organizeId" :options="treeData" @getValue="getValue"
-          placeholder="选择所属组织" />
+        <JNPF-TreeSelect v-model="dataForm.organizeId" :options="treeData" placeholder="选择所属组织" />
       </el-form-item>
       <el-form-item label="岗位名称" prop="fullName">
         <el-input v-model="dataForm.fullName" placeholder="输入名称" />
@@ -64,7 +63,6 @@ export default {
         description: ''
       },
       treeData: [],
-      usersTreeData: [],
       dataRule: {
         organizeId: [
           { required: true, message: '所属组织不能为空', trigger: 'input' }
@@ -108,9 +106,6 @@ export default {
         }
         this.formLoading = false
       })
-    },
-    getValue(value) {
-      this.dataForm.parentId = value
     },
     dataFormSubmit() {
       this.$refs['dataForm'].validate((valid) => {

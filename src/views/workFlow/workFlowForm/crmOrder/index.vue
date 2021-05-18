@@ -15,7 +15,7 @@
         </el-col>
         <el-col :span="6" v-if="JudgeShow('salesmanId')">
           <el-form-item label="业务人员" prop="salesmanId">
-            <JNPF-TreeSelect :options="treeData" v-model="dataForm.salesmanId" @getValue="getValue"
+            <JNPF-TreeSelect :options="treeData" v-model="dataForm.salesmanId" @change="getValue"
               placeholder="选择人员" lastLevel lastLevelKey='type' lastLevelValue='user'
               :disabled="JudgeWrite('salesmanId')">
             </JNPF-TreeSelect>
