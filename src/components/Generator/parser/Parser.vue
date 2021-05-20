@@ -26,7 +26,7 @@ const layouts = {
   rowFormItem(h, scheme) {
     let child = renderChildren.apply(this, arguments)
     if (scheme.__config__.jnpfKey === 'table') {
-      this.tableRefs[scheme.__vModel__] = scheme
+      if (!scheme.__config__.noShow) this.tableRefs[scheme.__vModel__] = scheme
       const param = { ...scheme, config: scheme }
       return layouts.colFormItem.call(this, h, param)
     }
