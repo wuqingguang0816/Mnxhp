@@ -82,7 +82,7 @@
 </template>
 
 <script>
-import { getConfigData, getModelList, deteleModel, exportModel } from '@/api/onlineDev/visualDev'
+import { getConfigData, getModelList, deteleModel, batchDelete, exportModel } from '@/api/onlineDev/visualDev'
 import { getDictionaryDataSelector } from '@/api/systemData/dictionary'
 import { previewDataInterface } from '@/api/systemData/dataInterface'
 import Form from './Form'
@@ -294,20 +294,20 @@ export default {
         })
         return
       }
-      const data = { ids: this.multipleSelection }
+      const ids = this.multipleSelection.join()
       this.$confirm('您确定要删除这些数据吗, 是否继续？', '提示', {
         type: 'warning'
       }).then(() => {
-        // deteleModel(this.modelId, id).then(res => {
-        //   this.$message({
-        //     type: 'success',
-        //     message: res.msg,
-        //     duration: 1500,
-        //     onClose: () => {
-        //       this.initData()
-        //     }
-        //   })
-        // })
+        batchDelete(this.modelId, ids).then(res => {
+          this.$message({
+            type: 'success',
+            message: res.msg,
+            duration: 1500,
+            onClose: () => {
+              this.initData()
+            }
+          })
+        })
       }).catch(() => { })
     },
     download(data) {

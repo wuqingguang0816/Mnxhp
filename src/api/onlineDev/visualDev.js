@@ -152,6 +152,14 @@ export function deteleModel(modelId, id) {
     method: 'DELETE'
   })
 }
+// 批量删除数据
+export function batchDelete(modelId, ids) {
+  return request({
+    url: `/api/visualdev/OnlineDev/batchDelete/${modelId}`,
+    method: 'DELETE',
+    data: { ids }
+  })
+}
 // 导出
 export function exportModel(modelId, data) {
   return request({
