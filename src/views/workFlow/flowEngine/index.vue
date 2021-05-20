@@ -208,7 +208,7 @@ export default {
         enCode: row.enCode,
         fullName: row.fullName,
         formType: row.formType,
-        formConf: row.formData
+        flowId: row.id
       }
       this.previewVisible = true
       this.$nextTick(() => {
