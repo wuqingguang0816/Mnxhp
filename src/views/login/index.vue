@@ -48,6 +48,11 @@
 </template>
 
 <script>
+import axios from 'axios'
+axios.defaults.headers = {
+  'Content-Type': 'application/x-www-form-urlencoded'
+}
+
 export default {
   name: 'Login',
   data() {
@@ -102,11 +107,6 @@ export default {
     }
   },
   mounted() {
-    // if (this.loginForm.account === '') {
-    //   this.$refs.account.focus()
-    // } else if (this.loginForm.password === '') {
-    //   this.$refs.password.focus()
-    // }
     this.$store.commit('user/SET_LOGIN_LOADING', false)
   },
   destroyed() {

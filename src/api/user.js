@@ -5,13 +5,7 @@ export function login(data) {
   return request({
     url: '/api/oauth/Login',
     method: 'post',
-    data,
-    params: {
-      client_id: 'admin',
-      client_secret: '123456',
-      scope: 'all',
-      grant_type: 'password'
-    }
+    data
   })
 }
 
