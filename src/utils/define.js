@@ -10,7 +10,7 @@ module.exports = {
   comUploadUrl: process.env.VUE_APP_BASE_API + '/api/file/Uploader',
   comUrl: process.env.VUE_APP_BASE_API,
   // 本地文件预览
-  filePreviewServer: process.env.NODE_ENV === 'development' ? 'http://localhost:30090' : process.env.VUE_APP_BASE_API + '/FileServer/preview',
+  filePreviewServer: process.env.NODE_ENV === 'development' ? 'http://localhost:30090' : process.env.VUE_APP_BASE_API + '/FileServer',
   // 大屏应用前端路径
   dataV: process.env.NODE_ENV === 'development' ? 'http://localhost:8100/DataV' : process.env.VUE_APP_BASE_API + '/DataV',
   // 数据报表
