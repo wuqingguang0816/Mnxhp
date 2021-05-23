@@ -24,12 +24,12 @@ const checkStatus = (response) => {
 
 // 获取报表列表
 export const getDataReportList = keyword => {
-  return axios.get(`/api/datareport`, { params:  keyword }).then(checkStatus)
+  return axios.get(`/api/datareport/Data`, { params:  keyword }).then(checkStatus)
 }
 
 // 获取报表下拉列表
 export const getDataReportSelector = () => {
-  return axios.get(`/api/datareport/Selector`).then(checkStatus)
+  return axios.get(`/api/datareport/Data/Selector`).then(checkStatus)
 }
 
 // 删除报表
