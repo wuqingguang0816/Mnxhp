@@ -58,6 +58,7 @@
     "fuse.js": "3.4.4",
     "highcharts": "7.1.3",
     "highcharts-vue": "^1.3.5",
+    "js-base64": "^3.6.0",
     "js-md5": "^0.7.3",
     "jsbarcode": "^3.11.0",
     "jsencrypt": "^3.0.0-rc.1",

@@ -3,7 +3,7 @@ import request from '@/utils/request'
 // 获取数据字典分类
 export function getDictionaryType() {
   return request({
-    url: '/api/system/Base/DictionaryType',
+    url: '/api/system/DictionaryType',
     method: 'GET'
   })
 }
@@ -11,7 +11,7 @@ export function getDictionaryType() {
 // 获取字典分类下拉框列表
 export function getDictionaryTypeSelector() {
   return request({
-    url: '/api/system/Base/DictionaryType/Selector',
+    url: '/api/system/DictionaryType/Selector',
     method: 'GET'
   })
 }
@@ -19,7 +19,7 @@ export function getDictionaryTypeSelector() {
 // 添加数据字典分类
 export function createDictionaryType(data) {
   return request({
-    url: `/api/system/Base/DictionaryType`,
+    url: `/api/system/DictionaryType`,
     method: 'POST',
     data
   })
@@ -28,7 +28,7 @@ export function createDictionaryType(data) {
 // 修改数据字典分类
 export function updateDictionaryType(data) {
   return request({
-    url: `/api/system/Base/DictionaryType/${data.id}`,
+    url: `/api/system/DictionaryType/${data.id}`,
     method: 'PUT',
     data
   })
@@ -37,7 +37,7 @@ export function updateDictionaryType(data) {
 // 获取数据字典分类信息
 export function getDictionaryTypeInfo(id) {
   return request({
-    url: `/api/system/Base/DictionaryType/${id}`,
+    url: `/api/system/DictionaryType/${id}`,
     method: 'GET'
   })
 }
@@ -45,7 +45,7 @@ export function getDictionaryTypeInfo(id) {
 // 删除数据字典分类
 export function delDictionaryType(id) {
   return request({
-    url: `/api/system/Base/DictionaryType/${id}`,
+    url: `/api/system/DictionaryType/${id}`,
     method: 'DELETE'
   })
 }
@@ -53,7 +53,7 @@ export function delDictionaryType(id) {
 // 获取数据字典列表
 export function getDictionaryDataList(typeId, data) {
   return request({
-    url: `/api/system/Base/DictionaryData/${typeId}`,
+    url: `/api/system/DictionaryData/${typeId}`,
     method: 'GET',
     data
   })
@@ -62,7 +62,7 @@ export function getDictionaryDataList(typeId, data) {
 // 获取数据字典列表(分类+内容)
 export function getDictionaryAll() {
   return request({
-    url: `/api/system/Base/DictionaryData/All`,
+    url: `/api/system/DictionaryData/All`,
     method: 'GET'
   })
 }
@@ -70,7 +70,7 @@ export function getDictionaryAll() {
 // 获取字典分类下拉框(项目上级)
 export function getDictionaryDataTypeSelector(dictionaryTypeId, isTree) {
   return request({
-    url: `/api/system/Base/DictionaryData/${dictionaryTypeId}/Selector`,
+    url: `/api/system/DictionaryData/${dictionaryTypeId}/Selector`,
     method: 'GET',
     data: { isTree }
   })
@@ -79,7 +79,7 @@ export function getDictionaryDataTypeSelector(dictionaryTypeId, isTree) {
 // 获取字典数据下拉框列表
 export function getDictionaryDataSelector(dictionaryTypeId) {
   return request({
-    url: `/api/system/Base/DictionaryData/${dictionaryTypeId}/Data/Selector`,
+    url: `/api/system/DictionaryData/${dictionaryTypeId}/Data/Selector`,
     method: 'GET'
   })
 }
@@ -87,7 +87,7 @@ export function getDictionaryDataSelector(dictionaryTypeId) {
 // 添加数据字典
 export function createDictionaryData(data) {
   return request({
-    url: '/api/system/Base/DictionaryData',
+    url: '/api/system/DictionaryData',
     method: 'POST',
     data
   })
@@ -96,7 +96,7 @@ export function createDictionaryData(data) {
 // 修改数据字典
 export function updateDictionaryData(data) {
   return request({
-    url: `/api/system/Base/DictionaryData/${data.id}`,
+    url: `/api/system/DictionaryData/${data.id}`,
     method: 'PUT',
     data
   })
@@ -105,7 +105,7 @@ export function updateDictionaryData(data) {
 // 获取数据字典信息
 export function getDictionaryDataInfo(id) {
   return request({
-    url: `/api/system/Base/DictionaryData/${id}/Info`,
+    url: `/api/system/DictionaryData/${id}/Info`,
     method: 'GET'
   })
 }
@@ -113,7 +113,7 @@ export function getDictionaryDataInfo(id) {
 // 删除数据字典信息
 export function delDictionaryData(id) {
   return request({
-    url: `/api/system/Base/DictionaryData/${id}`,
+    url: `/api/system/DictionaryData/${id}`,
     method: 'DELETE'
   })
 }
@@ -121,7 +121,7 @@ export function delDictionaryData(id) {
 // 更新字典状态
 export function updateDictionaryState(id) {
   return request({
-    url: `/api/system/Base/DictionaryData/${id}/Actions/State`,
+    url: `/api/system/DictionaryData/${id}/Actions/State`,
     method: 'PUT'
   })
 }

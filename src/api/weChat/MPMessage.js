@@ -3,7 +3,7 @@ import request from '@/utils/request'
 // 获取消息列表
 export function MPMessageList(data) {
   return request({
-    url: `/api/WeChat/MPMessage`,
+    url: `/api/third/WeChat/MPMessage`,
     method: 'get',
     data
   })
@@ -18,7 +18,7 @@ export function TreeViewUsers() {
 // 预览
 export function Preview(openId, data) {
   return request({
-    url: `/api/WeChat/MPMessage/${openId}/Actions/Preview`,
+    url: `/api/third/WeChat/MPMessage/${openId}/Actions/Preview`,
     method: 'post',
     data
   })
@@ -26,7 +26,7 @@ export function Preview(openId, data) {
 // 消息发送
 export function Sent(data) {
   return request({
-    url: `/api/WeChat/MPMessage`,
+    url: `/api/third/WeChat/MPMessage`,
     method: 'post',
     data
   })

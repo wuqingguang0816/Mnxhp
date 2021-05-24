@@ -315,6 +315,7 @@ export default {
     },
     handlePrevStep() {
       this.active -= 1
+      this.$refs['dataForm'].clearValidate()
     },
     handleNextStep() {
       this.$refs['dataForm'].validate(valid => {

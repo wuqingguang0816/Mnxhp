@@ -95,7 +95,7 @@
         </el-col>
       </el-row>
       <template v-if="activeStep==1">
-        <Generator ref="generator" :conf="formData" @drawingListChange="onDrawingListChange" />
+        <Generator ref="generator" :conf="formData" />
       </template>
       <template v-if="activeStep==2">
         <columnDesign ref="columnDesign" :conf="columnData" />
@@ -237,9 +237,6 @@ export default {
     stepChick(key) {
       if (this.activeStep <= key) return
       this.activeStep = key
-    },
-    onDrawingListChange() {
-      this.columnData = null
     },
     async colseForm(data) {
       let list = []

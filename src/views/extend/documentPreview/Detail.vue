@@ -13,6 +13,7 @@
 </template>
 
 <script>
+import { filePreviewServer } from '@/utils/define'
 import { PreviewFile } from '@/api/extend/documentPreview'
 export default {
   data() {
@@ -25,12 +26,17 @@ export default {
     goBack() {
       this.$emit('close')
     },
-    init(id, name) {
+    init(id, name, type) {
+      let Base64 = require('js-base64').Base64;
       this.url = ''
       if (!id) return this.goBack()
       this.title = '文档预览 - ' + name
-      PreviewFile(id).then(res => {
+      PreviewFile(id, type).then(res => {
         if (res.data) {
+          if( type === 'localPreview') {
+            this.url = `${filePreviewServer}/onlinePreview?url=`+encodeURIComponent(Base64.encode(res.data))
+            return
+          }
           this.url = res.data
         } else {
           this.$message.warning('文件不存在')
