@@ -15,6 +15,7 @@
 </template>
 
 <script>
+import { FlowEngineInfo } from '@/api/workFlow/FlowEngine'
 export default {
   data() {
     return {
@@ -33,11 +34,15 @@ export default {
       } else {
         this.currentView = (resolve) => require([`@/views/workFlow/workFlowForm/dynamicForm`], resolve)
       }
-      setTimeout(() => {
-        this.$nextTick(() => {
-          this.$refs.form && this.$refs.form.init(data)
-        })
-      }, 100)
+      FlowEngineInfo(data.flowId).then(res => {
+        if (!res.data || !res.data.formData) return
+        data.formConf = res.data.formData
+        setTimeout(() => {
+          this.$nextTick(() => {
+            this.$refs.form && this.$refs.form.init(data)
+          })
+        }, 100)
+      })
     },
   }
 }

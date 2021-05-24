@@ -185,11 +185,12 @@ export default {
     },
     handleExport(id, type) {
       let link = document.createElement('a')
-      link.href = `${reportServer}/api/DataReport/${id}/Actions/Export/${type}`
+      link.href = `${reportServer}/api/datareport/Data/${id}/Actions/Export/${type}`
       link.click();
     },
     search() {
-      this.getDictionaryData()
+      const keyword = this.params.keyword
+      this.getDictionaryData(keyword)
     },
     reset() {
       this.params.keyword = ''
