@@ -34,5 +34,5 @@ export const getDataReportSelector = () => {
 
 // 删除报表
 export const delDataReport = id => {
-  return axios.delete(`/api/datareport/${id}`).then(checkStatus)
+  return axios.delete(`/api/datareport/Data/${id}`).then(checkStatus)
 }

@@ -33,7 +33,7 @@ export default {
       this.title = '文档预览 - ' + name
       PreviewFile(id, type).then(res => {
         if (res.data) {
-          if( type==='localPreview') {
+          if( type === 'localPreview') {
             this.url = `${filePreviewServer}/onlinePreview?url=`+encodeURIComponent(Base64.encode(res.data))
             return
           }
