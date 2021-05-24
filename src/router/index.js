@@ -50,11 +50,6 @@ export const constantRoutes = [{
     hidden: true
   },
   {
-    path: '/jump',
-    component: (resolve) => require(['@/views/login/jump'], resolve),
-    hidden: true
-  },
-  {
     path: '/lockScreen',
     component: (resolve) => require(['@/views/basic/lockScreen'], resolve),
     hidden: true

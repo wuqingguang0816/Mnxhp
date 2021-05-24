@@ -1,6 +1,7 @@
 import { login, logout, getInfo, unlock } from '@/api/user'
 import { setLock, getLock, removeLock, getToken, setToken, removeToken } from '@/utils/auth'
 import { resetRouter } from '@/router'
+import qs from 'qs'
 import md5 from 'js-md5';
 const define = require('@/utils/define')
 
@@ -72,7 +73,14 @@ const actions = {
   login({ commit }, userInfo) {
     const { account, password } = userInfo
     return new Promise((resolve, reject) => {
-      login({ account: account.trim(), password: md5(password) }).then(response => {
+      login(qs.stringify({ 
+        account: account.trim(), 
+        password: md5(password), 
+        client_id: 'admin',
+        client_secret: '123456',
+        scope: 'all',
+        grant_type: 'password'
+      })).then(response => {
         const { data } = response
         const layoutList = ['classic', 'functional', 'plain']
         let layoutType = data.theme && layoutList.indexOf(data.theme) > -1 ? data.theme : 'classic'
