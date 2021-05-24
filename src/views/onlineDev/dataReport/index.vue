@@ -186,7 +186,7 @@ export default {
     },
     handleExport(id, type) {
       let link = document.createElement('a')
-      link.href = `${reportServer}/api/datareport/${id}/Actions/Export/${type}`
+      link.href = `${reportServer}/api/datareport/Data/${id}/Actions/Export/${type}`
       link.click();
     },
     search() {
