@@ -25,3 +25,55 @@ export function testEmail(data) {
     data
   })
 }
+// 测试企业微信配置的连接
+export function testQy(data, type) {
+  return request({
+    url: `/api/system/SysConfig/${type}/testQyWebChatConnect`,
+    method: 'POST',
+    data
+  })
+}
+// 测试企业微信配置的连接
+export function testDing(data) {
+  return request({
+    url: '/api/system/SysConfig/testDingTalkConnect',
+    method: 'POST',
+    data
+  })
+}
+// 获取第三方(如：企业微信、钉钉)的组织与用户同步统计信息 
+// thirdType: 1-企业微信; 2-钉钉
+export function getSynThirdTotal(thirdType) {
+  return request({
+    url: `/api/system/SynThirdInfo/getSynThirdTotal/${thirdType}`,
+    method: 'GET'
+  })
+}
+// 本地所有组织信息(包含公司和部门)同步到钉钉
+export function synAllOrganizeSysToDing() {
+  return request({
+    url: '/api/system/SynThirdInfo/synAllOrganizeSysToDing',
+    method: 'GET'
+  })
+}
+// 本地所有用户信息同步到钉钉
+export function synAllUserSysToDing() {
+  return request({
+    url: '/api/system/SynThirdInfo/synAllUserSysToDing',
+    method: 'GET'
+  })
+}
+// 本地所有组织信息(包含公司和部门)同步到企业微信
+export function synAllOrganizeSysToQy() {
+  return request({
+    url: '/api/system/SynThirdInfo/synAllOrganizeSysToQy',
+    method: 'GET'
+  })
+}
+// 本地所有用户信息同步到企业微信
+export function synAllUserSysToQy() {
+  return request({
+    url: '/api/system/SynThirdInfo/synAllUserSysToQy',
+    method: 'GET'
+  })
+}
