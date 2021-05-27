@@ -15,7 +15,7 @@
     </template>
     <el-form-item label="控件宽度" v-if="activeData.__config__.isSubTable">
       <el-input-number v-model="activeData.__config__.columnWidth" placeholder="控件宽度" :min="0"
-        :precision="0" /> px
+        :precision="0" controls-position="right" /> px
     </el-form-item>
     <el-form-item label="计算公式">
       <div @click="expDialogVisible = true" class="pane-calc-preview">

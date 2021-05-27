@@ -18,7 +18,7 @@
     </template>
     <el-form-item label="控件宽度" v-if="activeData.__config__.isSubTable">
       <el-input-number v-model="activeData.__config__.columnWidth" placeholder="控件宽度" :min="0"
-        :precision="0" /> px
+        :precision="0" controls-position="right" /> px
     </el-form-item>
     <el-divider>弹窗数据</el-divider>
     <el-alert title="默认首字段为显示字段" type="warning" :closable="false" show-icon />

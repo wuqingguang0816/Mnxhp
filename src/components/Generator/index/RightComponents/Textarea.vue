@@ -25,10 +25,12 @@
         @input="onDefaultValueInput" />
     </el-form-item>
     <el-form-item v-if="activeData.autosize" label="最小行数">
-      <el-input-number v-model="activeData.autosize.minRows" :min="1" placeholder="最小行数" />
+      <el-input-number v-model="activeData.autosize.minRows" :min="1" placeholder="最小行数"
+        controls-position="right" />
     </el-form-item>
     <el-form-item v-if="activeData.autosize" label="最大行数">
-      <el-input-number v-model="activeData.autosize.maxRows" :min="1" placeholder="最大行数" />
+      <el-input-number v-model="activeData.autosize.maxRows" :min="1" placeholder="最大行数"
+        controls-position="right" />
     </el-form-item>
     <el-form-item label="最多输入">
       <el-input v-model="activeData.maxlength" placeholder="请输入字符长度" type="number">

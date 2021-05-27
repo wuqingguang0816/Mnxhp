@@ -21,7 +21,8 @@
         </el-select>
       </el-form-item>
       <el-form-item label="排序" prop="sortCode">
-        <el-input-number :min="0" :max="9999" v-model="dataForm.sortCode" />
+        <el-input-number :min="0" :max="9999" v-model="dataForm.sortCode"
+          controls-position="right" />
       </el-form-item>
       <el-form-item label="岗位说明" prop="description">
         <el-input v-model="dataForm.description" type="textarea" :rows="6" />

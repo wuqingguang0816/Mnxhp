@@ -17,8 +17,8 @@
         </el-select>
       </el-form-item>
       <el-form-item label="长度" prop="dataLength">
-        <el-input-number v-model="dataForm.dataLength" :min="1" :max="10000" label="输入长度">
-        </el-input-number>
+        <el-input-number v-model="dataForm.dataLength" :min="1" :max="10000" label="输入长度"
+          controls-position="right" />
       </el-form-item>
       <el-form-item label="允许空" prop="allowNull">
         <el-switch v-model="dataForm.allowNull" :active-value="1" :inactive-value="0" />

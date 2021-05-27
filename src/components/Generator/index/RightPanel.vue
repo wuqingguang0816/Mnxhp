@@ -164,7 +164,8 @@
             <el-form-item
               v-if="activeData.__config__.layout==='rowFormItem'&&activeData.gutter!==undefined"
               label="栅格间隔">
-              <el-input-number v-model="activeData.gutter" :min="0" placeholder="栅格间隔" />
+              <el-input-number v-model="activeData.gutter" :min="0" placeholder="栅格间隔"
+                controls-position="right" />
             </el-form-item>
           </template>
         </el-form>
@@ -190,7 +191,8 @@
             <el-input v-model.number="formConf.labelWidth" type="number" placeholder="请输入标题宽度" />
           </el-form-item>
           <el-form-item label="栅格间隔">
-            <el-input-number v-model="formConf.gutter" :min="0" placeholder="栅格间隔" />
+            <el-input-number v-model="formConf.gutter" :min="0" placeholder="栅格间隔"
+              controls-position="right" />
           </el-form-item>
           <el-form-item label="弹窗类型" v-if="modelType != 3 && modelType!=6">
             <el-select v-model="formConf.popupType" placeholder="请选择">

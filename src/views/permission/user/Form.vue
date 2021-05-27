@@ -74,7 +74,8 @@
             </el-col>
             <el-col :span="12">
               <el-form-item label="排序" prop="sortCode">
-                <el-input-number :min="0" :max="9999" v-model="dataForm.sortCode" />
+                <el-input-number :min="0" :max="9999" v-model="dataForm.sortCode"
+                  controls-position="right" />
               </el-form-item>
             </el-col>
             <el-col :span="12">

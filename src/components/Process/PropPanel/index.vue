@@ -67,19 +67,23 @@
           <el-form label-position="top">
             <el-form-item label="时间设置">
               <div class="mb-10">
-                <el-input-number :min="0" v-model="properties.day" :precision="0" />
+                <el-input-number :min="0" v-model="properties.day" :precision="0"
+                  controls-position="right" />
                 <span>天</span>
               </div>
               <div class="mb-10">
-                <el-input-number :min="0" v-model="properties.hour" :precision="0" />
+                <el-input-number :min="0" v-model="properties.hour" :precision="0"
+                  controls-position="right" />
                 <span>小时</span>
               </div>
               <div class="mb-10">
-                <el-input-number :min="0" v-model="properties.minute" :precision="0" />
+                <el-input-number :min="0" v-model="properties.minute" :precision="0"
+                  controls-position="right" />
                 <span>分钟</span>
               </div>
               <div>
-                <el-input-number :min="0" v-model="properties.second" :precision="0" />
+                <el-input-number :min="0" v-model="properties.second" :precision="0"
+                  controls-position="right" />
                 <span>秒</span>
               </div>
             </el-form-item>
@@ -334,7 +338,7 @@
               <el-switch v-model="approverForm.timeoutConfig.on" class="mr-10" />
               <template v-if="approverForm.timeoutConfig.on">
                 <el-input-number v-model="approverForm.timeoutConfig.quantity"
-                  controls-position="right" :min="1" class="mr-10"></el-input-number>
+                  controls-position="right" :min="1" class="mr-10" />
                 <el-select v-model="approverForm.timeoutConfig.type" class="timeout-select mr-10">
                   <el-option label="天" value="day"></el-option>
                   <el-option label="小时" value="hour"></el-option>
