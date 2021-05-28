@@ -67,7 +67,7 @@
           <el-table-column prop="sum" label="总数" width="150" sortable />
           <el-table-column prop="size" label="大小" width="150" sortable />
           <el-table-column prop="tableName" label="说明" width="200" sortable />
-          <el-table-column label="操作" width="150" fixed="right">
+          <el-table-column label="操作" width="160" fixed="right">
             <template slot-scope="scope">
               <tableOpts @edit="addOrUpdateHandle(scope.row.table)"
                 @del="handleDel(scope.$index,scope.row.table)">
