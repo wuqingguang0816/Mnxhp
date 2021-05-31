@@ -4,14 +4,14 @@
     <el-row>
       <el-col :span="12" class="grid-content">
         <p>下载导入模板，填写数据</p>
-        <img src="../../../assets/images/xsl1.png" alt="">
+        <img src="@/assets/images/xsl1.png" alt="">
         <p>
           <el-button type="primary" round @click="downLoad()">下载导入模板</el-button>
         </p>
       </el-col>
       <el-col :span="12" class="grid-content">
         <p>上传填写好的文件</p>
-        <img src="../../../assets/images/xsl1.png" alt="">
+        <img src="@/assets/images/xsl1.png" alt="">
         <p>
           <el-upload
             :action="define.comUrl+'/api/VisualDevelopment/Model/'+ modelId +'/Actions/Uploader'"

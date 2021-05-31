@@ -88,7 +88,7 @@ export default {
   data() {
     return {
       showAll: false,
-      searchList: [],
+      // searchList: [],
       commonList: ['comSelect', 'depSelect', 'posSelect', 'userSelect', 'dicSelect'],
       useInputList,
       useDateList,
@@ -96,9 +96,13 @@ export default {
     }
   },
   watch: {
-    list(val) {
-      this.searchList = deepClone(val)
+    searchList(val) {
       this.buildOptions(this.searchList)
+    }
+  },
+  computed: {
+    searchList() {
+      return deepClone(this.list)
     }
   },
   methods: {
