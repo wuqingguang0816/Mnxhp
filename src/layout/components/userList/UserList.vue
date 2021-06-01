@@ -17,7 +17,7 @@
                     <el-badge :value="item.unreadMessage" :hidden="!item.unreadMessage" />
                   </p>
                   <p class="name">
-                    <span>{{item.latestMessage}}</span>
+                    <span>{{getMsgText(item.latestMessage,item.messageType)}}</span>
                     <span class="time">{{item.latestDate| toDateText()}}</span>
                   </p>
                 </div>
@@ -144,6 +144,7 @@ export default {
         if (data.formUserId === this.replyList[i].id) {
           if (isAdd) this.replyList[i].unreadMessage += 1
           this.replyList[i].latestMessage = data.formMessage
+          this.replyList[i].messageType = data.messageType
           this.replyList[i].latestDate = data.latestDate
           boo = true
           break
@@ -161,6 +162,7 @@ export default {
       for (let i = 0; i < len; i++) {
         if (data.toUserId === this.replyList[i].id) {
           this.replyList[i].latestMessage = data.toMessage
+          this.replyList[i].messageType = data.messageType
           this.replyList[i].latestDate = data.latestDate
           boo = true
           break
@@ -215,6 +217,21 @@ export default {
       }
       socket.send(JSON.stringify(messageList));
       this.$refs.JNPFIm.init(item)
+    },
+    getMsgText(text, type) {
+      let message = ''
+      switch (type) {
+        case 'voice':
+          message = '[语音]'
+          break;
+        case 'image':
+          message = '[图片]'
+          break;
+        default:
+          message = text
+          break;
+      }
+      return message
     },
     handleClose(done) {
       this.$refs.JNPFIm.colseIM()
