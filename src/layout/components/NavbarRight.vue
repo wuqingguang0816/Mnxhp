@@ -93,8 +93,6 @@ import Settings from './settings'
 import UserList from './userList/UserList'
 import elDragDialog from "@/directive/el-drag-dialog";
 import ReconnectingWebSocket from 'reconnecting-websocket'
-import { UserListAll } from '@/api/permission/user'
-import { deepClone } from '@/utils'
 
 export default {
   directives: { elDragDialog },
@@ -124,7 +122,7 @@ export default {
     }
   },
   created() {
-    this.getUserList()
+    this.initWebSocket()
   },
   destroyed() {
     if (this.socket) {
@@ -135,19 +133,6 @@ export default {
     }
   },
   methods: {
-    getUserList() {
-      UserListAll().then(res => {
-        this.$store.commit('base/SET_USER_LIST', res.data.list || [])
-        let list = deepClone(res.data.list).filter(o => o.id !== this.userInfo.userId)
-        for (let i = 0; i < list.length; i++) {
-          let e = list[i];
-          this.$set(e, 'isOnline', false)
-          this.$set(e, 'unreadNum', 0)
-        }
-        this.userList = list
-        this.initWebSocket()
-      })
-    },
     initWebSocket() {
       this.socket = this.$store.getters.socket || null
       if ('WebSocket' in window) {
@@ -167,29 +152,18 @@ export default {
           let data = JSON.parse(event.data)
           if (data.method == 'initMessage') {
             this.messageCount = data.unreadMessageCount + data.unreadNoticeCount
-            if (data.unreadNums.length) {
-              this.isTwinkle = true
-            } else {
-              this.isTwinkle = false
-            }
-            this.$refs.UserList.handleList(this.userList, data.onlineUsers, data.unreadNums)
+            this.isTwinkle = !!data.unreadNums.length
           }
           //用户在线
           if (data.method == 'Online') {
-            // let list = []
-            // list.push(data.userId)
-            // this.$refs.UserList.handleList(this.userList, list, [])
           }
           //用户离线
           if (data.method == 'Offline') {
-            // this.$refs.UserList.updateOffLine(data.userId)
           }
+          //消息推送（消息公告用的）
           if (data.method == 'messagePush') {
-            //消息推送（消息公告用的）
             this.messageCount += data.unreadNoticeCount
-            if (this.$refs.MessageList.visible) {
-              this.$refs.MessageList.init()
-            }
+            if (this.$refs.MessageList.visible) this.$refs.MessageList.init()
           }
           //用户过期
           if (data.method == 'logout') {
@@ -223,13 +197,14 @@ export default {
                   token: this.$store.getters.token
                 }
                 socket.send(JSON.stringify(updateReadMessage))
+                this.$refs.UserList.updateReply(data)
               } else {
-                this.$refs.UserList.updateUnreadNum(data.formUserId)
-                this.$refs.UserList.isblink()
+                this.$refs.UserList.updateReply(data, 1)
+                this.isTwinkle = true
               }
             } else {
-              this.$refs.UserList.updateUnreadNum(data.formUserId)
-              this.$refs.UserList.isblink()
+              this.$refs.UserList.updateReply(data, 1)
+              this.isTwinkle = true
             }
           }
           //显示自己发送的消息
@@ -242,6 +217,7 @@ export default {
               message: data.toMessage,
               dateTime: this.jnpf.toDate(data.dateTime)
             }
+            this.$refs.UserList.updateLatestMessage(data)
             this.$refs.UserList.$refs.JNPFIm.addItem(messIitem)
           }
           //消息列表

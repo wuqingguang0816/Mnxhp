@@ -1,29 +1,55 @@
 <template>
   <div>
     <el-drawer title="内部聊天" :visible.sync="drawer" direction="rtl"
-      class="JNPF-messageList JNPF-common-drawer" size="280px" :modal="true"
-      :wrapperClosable="false" :before-close="handleClose" ref="drawer">
-      <el-input v-model="keyword" placeholder="搜索：请输入关键词" clearable @input="initData">
-        <!-- @change="initData()" -->
-        <i slot="suffix" class="el-input__icon el-icon-search" @click="initData()" />
-      </el-input>
-      <el-scrollbar class="JNPF-messageList-box" v-loading="loading">
-        <div v-if="list.length">
-          <div v-for="(item,i) in list" :key="i" class="JNPF-messageList-item"
-            @click="readInfo(item)">
-            <el-avatar :size="36" :src="define.comUrl+ item.headIcon">
-            </el-avatar>
-            <div class="JNPF-messageList-txt">
-              <p class="title">{{item.realName}}/{{item.account}}</p>
-              <p class="name">
-                <span>{{item.department}}</span>
-              </p>
+      class="contacts-drawer JNPF-common-drawer" size="280px" :modal="true" :wrapperClosable="false"
+      :before-close="handleClose" ref="drawer">
+      <el-tabs v-model="activeTab">
+        <el-tab-pane label="消息" name="reply">
+          <div class="userList replyList" v-loading="replyLoading && listQuery.currentPage==1">
+            <div v-if="replyList.length">
+              <div v-for="(item,i) in replyList" :key="i" class="userList-item"
+                @click="readInfo(item,true)">
+                <el-avatar :size="36" :src="define.comUrl+item.headIcon">
+                </el-avatar>
+                <div class="userList-txt">
+                  <p class="title">
+                    <span>{{item.realName}}/{{item.account}}</span>
+                    <el-badge :value="item.unreadMessage" :hidden="!item.unreadMessage" />
+                  </p>
+                  <p class="name">
+                    <span>{{item.latestMessage}}</span>
+                    <span class="time">{{item.latestDate| toDateText()}}</span>
+                  </p>
+                </div>
+                <!-- <el-badge :value="item.unreadMessage" :hidden="!item.unreadMessage"></el-badge> -->
+              </div>
             </div>
-            <el-badge :value="item.unreadNum" :hidden="!item.unreadNum"></el-badge>
+            <p class="noData-txt" v-else>{{$t('common.noData')}}</p>
           </div>
-        </div>
-        <p class="noData-txt" v-else>{{$t('common.noData')}}</p>
-      </el-scrollbar>
+        </el-tab-pane>
+        <el-tab-pane label="联系人" name="contacts">
+          <el-input v-model="listQuery.keyword" placeholder="搜索：请输入关键词" clearable
+            class="search-input">
+            <i slot="suffix" class="el-input__icon el-icon-search" @click="search" title="搜索" />
+          </el-input>
+          <div class="userList" v-loading="loading && listQuery.currentPage==1" ref="userList">
+            <div v-if="userList.length">
+              <div v-for="(item,i) in userList" :key="i" class="userList-item"
+                @click="readInfo(item)">
+                <el-avatar :size="36" :src="define.comUrl+item.headIcon">
+                </el-avatar>
+                <div class="userList-txt">
+                  <p class="title">{{item.realName}}/{{item.account}}</p>
+                  <p class="name">
+                    <span>{{item.department}}</span>
+                  </p>
+                </div>
+              </div>
+            </div>
+            <p class="noData-txt" v-else>{{$t('common.noData')}}</p>
+          </div>
+        </el-tab-pane>
+      </el-tabs>
     </el-drawer>
     <Im ref="JNPFIm" append-to-body />
   </div>
@@ -31,7 +57,8 @@
 
 <script>
 import { mapGetters } from 'vuex'
-import { UserListAll } from '@/api/permission/user'
+import { getImUser } from '@/api/permission/user'
+import { getIMReply } from '@/api/system/message'
 import Im from './Im'
 export default {
   name: 'UserList',
@@ -39,111 +66,124 @@ export default {
   data() {
     return {
       drawer: false,
-      list: [],
-      defaultList: [],
-      activeItem: {},
+      activeTab: 'reply',
+      userList: [],
+      replyList: [],
       loading: false,
+      replyLoading: false,
       visible: false,
-      info: {},
-      keyword: ''
+      finish: false,
+      listQuery: {
+        keyword: '',
+        currentPage: 1,
+        pageSize: 20
+      }
     }
   },
   created() { },
   computed: {
     ...mapGetters(['userInfo']),
   },
+  watch: {
+    activeTab(val) {
+      if (val === 'contacts' && !this.userList.length) {
+        this.getUserList()
+      }
+    }
+  },
   methods: {
-    initData() {
-      if (!this.keyword) {
-        this.list = this.defaultList
-      } else {
-        this.list = this.defaultList.filter(o => o.realName.indexOf(this.keyword) > -1 || o.account.indexOf(this.keyword) > -1 || o.quickQuery.indexOf(this.keyword) > -1)
-      }
-    },
-    handleList(userList, onlineUsers, unreadNums) {
-      if (!this.defaultList.length) this.defaultList = userList
-      this.updateList(onlineUsers, unreadNums)
-    },
-    updateList(onlineUsers, unreadNums) {
-      if (unreadNums && unreadNums.length) {
-        outer: for (let i = 0; i < unreadNums.length; i++) {
-          let currUser = unreadNums[i];
-          inner: for (let j = 0; j < this.defaultList.length; j++) {
-            let user = this.defaultList[j];
-            if (user.id == currUser.sendUserId) {
-              user.unreadNum = currUser.unreadNum
-              break inner
-            }
-          }
-        }
-      }
-      this.defaultList = this.numSort(this.defaultList)
-      if (this.drawer) this.list = this.defaultList
-      // if (onlineUsers && onlineUsers.length) {
-      //   let delArr = []
-      //   outer: for (let i = 0; i < onlineUsers.length; i++) {
-      //     let onlineUser = onlineUsers[i];
-      //     let length = this.defaultList.length;
-      //     inner: for (let j = 0; j < length; j++) {
-      //       let user = this.defaultList[j];
-      //       if (user.id === onlineUser) {
-      //         user.isOnline = true
-      //         this.defaultList.splice(j, 1);
-      //         delArr.push(user)
-      //         length--
-      //         j--
-      //         break inner
-      //       }
-      //     }
-      //   }
-      //   delArr = this.numSort(delArr)
-      //   this.defaultList = this.numSort(this.defaultList)
-      //   this.defaultList = [...delArr, ...this.defaultList]
-      //   if (this.drawer) this.list = this.defaultList
-      // }
-    },
-    updateOffLine(user) {
-      let delArr = []
-      let length = this.defaultList.length;
-      for (let i = 0; i < length; i++) {
-        if (this.defaultList[i].id === user) this.defaultList[i].isOnline = false
-      }
-      this.defaultList = this.numSort(this.defaultList)
-      this.defaultList.sort((a, b) => {
-        if (a.isOnline && !b.isOnline) {
-          return -1
-        } else if ((a.isOnline && b.isOnline) || (!a.isOnline && !b.isOnline)) {
-          return 0
-        } else {
-          return 1
-        }
+    init() {
+      this.finish = false
+      this.drawer = true
+      this.listQuery.currentPage = 1
+      this.listQuery.keyword = ''
+      this.activeTab = 'reply'
+      this.userList = []
+      this.replyList = []
+      this.getReplyList()
+      this.$nextTick(() => {
+        this.bindScroll()
       })
-      if (this.drawer) this.list = this.defaultList
     },
-    numSort(list) {
-      list.sort((a, b) => { return b.unreadNum - a.unreadNum })
-      return list
+    bindScroll() {
+      let _this = this,
+        vBody = _this.$refs.userList;
+      vBody.addEventListener("scroll", function () {
+        if (vBody.scrollHeight - vBody.clientHeight - vBody.scrollTop <= 300 && !_this.loading && !_this.finish) {
+          _this.listQuery.currentPage += 1
+          _this.getUserList()
+        }
+      });
     },
-    updateUnreadNum(user) {
-      let length = this.defaultList.length;
-      for (let i = 0; i < length; i++) {
-        if (this.defaultList[i].id === user) {
-          this.defaultList[i].unreadNum += 1
+    getReplyList() {
+      this.replyLoading = true
+      getIMReply().then(res => {
+        this.replyList = res.data.list
+        this.replyLoading = false
+      })
+    },
+    getUserList() {
+      this.loading = true
+      getImUser(this.listQuery).then(res => {
+        if (res.data.list.length < this.listQuery.pageSize) this.finish = true
+        this.userList = [...this.userList, ...res.data.list]
+        this.loading = false
+      })
+    },
+    search() {
+      this.userList = []
+      this.finish = false
+      this.listQuery.currentPage = 1
+      this.listQuery.pageSize = 20
+      this.getUserList()
+    },
+    updateReply(data, isAdd) {
+      let boo = false
+      const len = this.replyList.length
+      for (let i = 0; i < len; i++) {
+        if (data.formUserId === this.replyList[i].id) {
+          if (isAdd) this.replyList[i].unreadMessage += 1
+          this.replyList[i].latestMessage = data.formMessage
+          this.replyList[i].latestDate = data.latestDate
+          boo = true
+          break
         }
       }
-      this.defaultList = this.numSort(this.defaultList)
-      if (this.drawer) this.list = this.defaultList
+      if (boo) return
+      if (isAdd) data.unreadMessage = 1
+      data.latestMessage = data.formMessage
+      data.id = data.formUserId
+      this.replyList.unshift(data)
     },
-    isblink() {
-      let boo = this.defaultList.some(o => o.unreadNum)
+    updateLatestMessage(data) {
+      let boo = false
+      const len = this.replyList.length
+      for (let i = 0; i < len; i++) {
+        if (data.toUserId === this.replyList[i].id) {
+          this.replyList[i].latestMessage = data.toMessage
+          this.replyList[i].latestDate = data.latestDate
+          boo = true
+          break
+        }
+      }
+      if (boo) return
+      const item = {
+        account: data.toAccount,
+        headIcon: data.toHeadIcon,
+        id: data.toUserId,
+        latestDate: data.latestDate,
+        latestMessage: data.toMessage,
+        messageType: data.messageType,
+        realName: data.toRealName,
+        unreadMessage: 0
+      }
+      this.replyList.unshift(item)
+    },
+    toggleBlink() {
+      const boo = this.replyList.some(o => o.unreadMessage)
       this.$emit('changeTwinkle', boo)
     },
-    init() {
-      this.drawer = true
-      this.keyword = ''
-      this.list = this.defaultList
-    },
-    readInfo(item) {
+    readInfo(item, isReply) {
       let socket = this.$store.getters.socket
       let updateReadMessage = {
         method: "UpdateReadMessage",
@@ -151,8 +191,17 @@ export default {
         token: this.$store.getters.token
       }
       socket.send(JSON.stringify(updateReadMessage));
-      item.unreadNum = 0
-      this.isblink()
+      if (isReply) {
+        item.unreadMessage = 0
+      } else {
+        for (let i = 0; i < this.replyList.length; i++) {
+          if (item.id === this.replyList[i].id) {
+            this.replyList[i].unreadMessage = 0
+            break
+          }
+        }
+      }
+      this.toggleBlink()
       this.$refs.JNPFIm.list = []
       //获取消息列表
       var messageList = {
@@ -169,6 +218,8 @@ export default {
     },
     handleClose(done) {
       this.$refs.JNPFIm.colseIM()
+      let vBody = this.$refs.userList;
+      vBody.removeEventListener("scroll", function () { });
       done();
     }
   }
@@ -176,15 +227,48 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.JNPF-messageList {
-  .el-input {
+.contacts-drawer {
+  >>> .el-tabs {
+    height: 100%;
+    .el-tabs__header {
+      margin-bottom: 0 !important;
+    }
+
+    .el-tabs__item {
+      width: 50%;
+      text-align: center;
+    }
+
+    .el-tabs__nav {
+      width: 100%;
+    }
+    .el-tabs__content {
+      height: calc(100% - 40px);
+    }
+    .el-tab-pane {
+      height: 100%;
+      overflow: hidden;
+    }
+  }
+  .noData-txt {
+    font-size: 14px;
+    color: #909399;
+    line-height: 20px;
+    text-align: center;
+    padding-top: 20px;
+  }
+  .search-input {
     >>> .el-input__inner {
       border-radius: 0;
       border-right: none;
       border-left: none;
+      border-top: none;
     }
     .el-input__icon {
       cursor: pointer;
+      &:hover {
+        color: #1890ff;
+      }
     }
   }
   >>> .el-drawer__header {
@@ -192,43 +276,29 @@ export default {
   }
   >>> .el-drawer__body {
     overflow: hidden;
-    display: flex;
-    flex-direction: column;
-    position: relative;
-    .tool {
-      height: 30px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 0 20px;
-      background: #fff;
-    }
-    .JNPF-messageList-box {
+    .userList {
       overflow: auto;
       overflow-x: hidden;
       position: relative;
-      flex: 1;
+      height: calc(100% - 32px);
+      &.replyList {
+        height: 100%;
+        .title {
+          overflow: auto;
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          height: 20px;
+        }
+      }
       .el-badge {
-        position: absolute;
-        right: 12px;
-        top: 26px;
+        margin-top: 10px;
       }
       >>> .el-loading-mask {
         top: 100px;
       }
-      .el-scrollbar__wrap {
-        overflow: auto;
-        overflow-x: hidden;
-      }
-      .noData-txt {
-        font-size: 14px;
-        color: #909399;
-        line-height: 20px;
-        text-align: center;
-        padding-top: 20px;
-      }
     }
-    .JNPF-messageList-item {
+    .userList-item {
       position: relative;
       display: block;
       padding: 0 20px;
@@ -244,7 +314,7 @@ export default {
       &:hover {
         background-color: #f5f7f9;
       }
-      .JNPF-messageList-txt {
+      .userList-txt {
         margin-left: 14px;
         overflow: hidden;
         flex: 1;
@@ -256,6 +326,7 @@ export default {
           font-size: 14px;
           color: #333;
           margin-bottom: 5px;
+          line-height: 20px;
         }
         .name {
           font-size: 12px;

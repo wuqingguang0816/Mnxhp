@@ -76,9 +76,11 @@ export const updateUserState = (id) => {
   })
 }
 
-export const TreeView = () => {
+// IM通讯获取用户
+export const getImUser = data => {
   return request({
-    url: '/api/permission/User/TreeView',
-    method: 'GET'
+    url: '/api/permission/Users/ImUser',
+    method: 'GET',
+    data
   })
 }
