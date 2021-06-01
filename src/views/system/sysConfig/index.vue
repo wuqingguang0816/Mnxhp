@@ -239,7 +239,7 @@
                     <el-table :data="wxResults" border>
                       <el-table-column prop="synType" label="同步类型" />
                       <el-table-column prop="recordTotal" label="总数" />
-                      <el-table-column prop="synFailCount" label="同步成功数" />
+                      <el-table-column prop="synSuccessCount" label="同步成功数" />
                       <el-table-column prop="synFailCount" label="同步失败数" />
                       <el-table-column prop="unSynCount" label="未同步数" />
                       <el-table-column prop="synDate" label="同步时间"
@@ -299,7 +299,7 @@
                     <el-table :data="ddResults" border>
                       <el-table-column prop="synType" label="同步类型" />
                       <el-table-column prop="recordTotal" label="总数" />
-                      <el-table-column prop="synFailCount" label="同步成功数" />
+                      <el-table-column prop="synSuccessCount" label="同步成功数" />
                       <el-table-column prop="synFailCount" label="同步失败数" />
                       <el-table-column prop="unSynCount" label="未同步数" />
                       <el-table-column prop="synDate" label="同步时间"
