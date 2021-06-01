@@ -22,7 +22,8 @@
     </template>
     <el-dropdown class="avatar-container right-menu-item hover-effect" trigger="hover">
       <div class="avatar-wrapper">
-        <img :src="define.comUrl + userInfo.headIcon" class="user-avatar" v-if="userInfo.headIcon">
+        <el-avatar :size="26" :src="define.comUrl + userInfo.headIcon" class="user-avatar"
+          v-if="userInfo.headIcon" />
         <span>{{userInfo.userName}}</span>
         <i class="el-icon-arrow-down"></i>
       </div>
@@ -314,11 +315,9 @@ export default {
 
         .user-avatar {
           cursor: pointer;
-          width: 26px;
-          height: 26px;
-          border-radius: 50%;
           vertical-align: top;
           margin-top: 18px;
+          margin-right: 2px;
         }
 
         .el-icon-caret-bottom {
