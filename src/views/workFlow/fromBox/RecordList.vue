@@ -47,7 +47,7 @@
                 </p>
               </el-col>
             </el-row>
-            <p class="timeline-cell">审核人员：{{item.userName}}</p>
+            <p class="timeline-cell">审核人员：{{item.userName}}{{item.status?'(加签)':''}}</p>
             <p class="timeline-cell" v-if="item.handleOpinion">
               审核意见：{{item.handleOpinion}}</p>
             <p class="timeline-cell" v-if="item.signImg">
