@@ -127,6 +127,9 @@
                     <el-input v-model="baseForm.smsKeySecret" show-password clearable
                       placeholder="用户秘钥" />
                   </el-form-item>
+                  <el-form-item label="签名内容" prop="smsSignName">
+                    <el-input v-model="baseForm.smsSignName" clearable placeholder="签名内容" />
+                  </el-form-item>
                   <el-form-item label="模板编号" prop="smsTemplateId">
                     <el-input v-model="baseForm.smsTemplateId" clearable placeholder="模板编号" />
                   </el-form-item>
@@ -381,6 +384,7 @@ export default {
         smsCompany: '1',
         smsKeyId: '',
         smsKeySecret: '',
+        smsSignName: '',
         qyhCorpId: '',
         qyhAgentId: '',
         qyhAgentSecret: '',
