@@ -156,7 +156,7 @@ export function deteleModel(modelId, id) {
 export function batchDelete(modelId, ids) {
   return request({
     url: `/api/visualdev/OnlineDev/batchDelete/${modelId}`,
-    method: 'DELETE',
+    method: 'post',
     data: { ids }
   })
 }
