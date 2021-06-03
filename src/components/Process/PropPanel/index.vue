@@ -931,6 +931,7 @@ export default {
     initInitiator() {
       this.initiator = this.value.properties && this.value.properties.initiator
       this.initiatePos = this.value.properties && this.value.properties.initiatePos
+      this.initiateRole = this.value.properties && this.value.properties.initiateRole
       this.startForm.formOperates = this.initFormOperates(this.value)
     },
     /**
