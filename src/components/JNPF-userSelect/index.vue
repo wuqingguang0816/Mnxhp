@@ -195,6 +195,9 @@ export default {
           display: inline-block;
         }
       }
+      >>> input {
+        cursor: not-allowed;
+      }
     }
     >>> input {
       cursor: pointer;
