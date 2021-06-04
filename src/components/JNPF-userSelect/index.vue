@@ -79,10 +79,6 @@ export default {
       default: true
     }
   },
-  model: {
-    prop: 'value',
-    event: 'change'
-  },
   data() {
     return {
       visible: false,
@@ -104,12 +100,16 @@ export default {
       this.setDefault()
     }
   },
+  created() {
+    this.setDefault()
+  },
   methods: {
     clear() {
       if (this.disabled) return
       this.innerValue = ''
       this.selectedData = []
-      this.$emit('change', '')
+      this.$emit('input', '')
+      this.$emit('change', '', '')
     },
     openDialog() {
       if (this.disabled) return
@@ -125,10 +125,12 @@ export default {
         ids += (i ? ',' : '') + this.selectedData[i].id
       }
       this.innerValue = txt
+      this.$emit('input', ids)
       this.$emit('change', ids, this.selectedData)
       this.visible = false
     },
     setDefault() {
+      this.selectedData = []
       if (!this.value) return this.innerValue = ''
       const arr = this.value.split(',')
       getUserInfoList(arr).then(res => {
