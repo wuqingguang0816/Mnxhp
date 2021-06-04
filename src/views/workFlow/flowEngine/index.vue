@@ -123,7 +123,7 @@
 <script>
 import { FlowEngineList, Delete, Release, Stop, Copy } from '@/api/workFlow/FlowEngine'
 import Form from './Form'
-import preview from '../fromBox/Preview'
+import preview from '../components/Preview'
 export default {
   name: 'workFlow-flowEngine',
   components: { Form, preview },

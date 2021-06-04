@@ -112,7 +112,7 @@
 <script>
 import { FlowBeforeList } from '@/api/workFlow/FlowBefore'
 import { FlowEngineListAll } from '@/api/workFlow/FlowEngine'
-import FlowBox from '../fromBox/FlowBox'
+import FlowBox from '../components/FlowBox'
 export default {
   name: 'workFlow-flowDone',
   components: { FlowBox },
