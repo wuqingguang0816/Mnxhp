@@ -290,7 +290,7 @@
             <el-form-item label="加签设置">
               <el-checkbox v-model="approverForm.hasFreeApprover">允许加签</el-checkbox>
             </el-form-item>
-            <el-form-item label="进度设置" required>
+            <el-form-item label="进度设置">
               <el-select v-model="approverForm.progress" placeholder="请选择">
                 <el-option v-for="item in progressOptions" :key="item" :label="item+'%'"
                   :value="item">
