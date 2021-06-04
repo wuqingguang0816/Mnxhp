@@ -187,12 +187,6 @@ export default {
           this.initData()
         })
       }
-      if (this.columnData.treeDataSource === "user") {
-        this.$store.dispatch('base/getUserTree').then(res => {
-          this.treeData = res
-          this.initData()
-        })
-      }
       if (this.columnData.treeDataSource === "api") {
         if (!this.columnData.treePropsUrl) return
         previewDataInterface(this.columnData.treePropsUrl).then(res => {

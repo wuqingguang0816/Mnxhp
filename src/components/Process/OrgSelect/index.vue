@@ -18,6 +18,7 @@
 </template>
 <script>
 import OrgTransfer from '../OrgTransfer'
+import { getUserInfoList } from '@/api/permission/user'
 export default {
   model: {
     prop: 'value',
@@ -103,10 +104,17 @@ export default {
       return text
     },
     async initSelectedData() {
-      this.selectedData = this.innerValue.map(t => ({
-        id: t,
-        fullName: this.getText(t)
-      }))
+      if (this.type === 'user') {
+        if (!this.innerValue.length) return
+        getUserInfoList(this.innerValue).then(res => {
+          this.selectedData = res.data.list
+        })
+      } else {
+        this.selectedData = this.innerValue.map(t => ({
+          id: t,
+          fullName: this.getText(t)
+        }))
+      }
     },
     onClose(item, i) {
       this.innerValue.splice(i, 1)

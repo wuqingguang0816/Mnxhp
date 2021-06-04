@@ -2,12 +2,12 @@
   <el-dialog :title="'选择'+title" :close-on-click-modal="false" :visible.sync="visible"
     class="JNPF-dialog JNPF-dialog_center JNPF-dialog-tree" lock-scroll append-to-body
     width='450px'>
-    <el-input placeholder="输入姓名或者编号进行过滤" v-model="filterText" clearable>
+    <el-input placeholder="输入姓名或者编号进行过滤" v-model="keyword" clearable>
+      <el-button slot="append" icon="el-icon-search" @click="getList"></el-button>
     </el-input>
-    <el-tree :data="treeData" :props="defaultProps" default-expand-all highlight-current
-      ref="treeBox" :expand-on-click-node="false" check-on-click-node @node-click="handleNodeClick"
-      class="JNPF-common-el-tree" node-key="id" v-loading="loading"
-      :filter-node-method="filterNode">
+    <el-tree :data="treeData" :props="props" highlight-current :expand-on-click-node="false"
+      check-on-click-node @node-click="handleNodeClick" class="JNPF-common-el-tree" node-key="id"
+      v-loading="loading" lazy :load="loadNode">
       <span class="custom-tree-node" slot-scope="{ node, data }">
         <i :class="data.icon"></i>
         <span class="text">{{node.label}}</span>
@@ -21,6 +21,7 @@
 </template>
 
 <script>
+import { getImUserSelector } from '@/api/permission/user'
 export default {
   name: 'UserBox',
   props: {
@@ -33,38 +34,45 @@ export default {
     return {
       visible: false,
       id: '',
-      defaultProps: {
+      nodeId: '0',
+      props: {
         children: 'children',
-        label: 'fullName'
+        label: 'fullName',
+        value: 'id',
+        isLeaf: 'isLeaf'
       },
       treeData: [],
       loading: false,
-      filterText: ''
-    }
-  },
-  watch: {
-    filterText(val) {
-      this.$refs.treeBox.filter(val);
+      keyword: ''
     }
   },
   methods: {
-    init(id) {
+    init() {
       this.visible = true
+      this.keyword = ''
+      this.nodeId = '0'
+      this.getList()
+    },
+    getList() {
       this.loading = true
-      this.filterText = ''
-      this.$nextTick(() => {
-        this.$store.dispatch('base/getUserTree').then(res => {
-          this.treeData = res
-          this.loading = false
-        })
+      if (this.keyword) this.nodeId = '0'
+      getImUserSelector(this.nodeId, this.keyword).then(res => {
+        this.treeData = res.data.list
+        this.loading = false
       })
     },
-    filterNode(value, data) {
-      if (!value) return true;
-      return data.fullName.indexOf(value) !== -1;
+    loadNode(node, resolve) {
+      if (node.level === 0) {
+        this.nodeId = '0'
+        return resolve(this.treeData)
+      }
+      this.nodeId = node.data.id
+      getImUserSelector(this.nodeId).then(res => {
+        resolve(res.data.list)
+      })
     },
     handleNodeClick(data) {
-      if (data.hasChildren) return
+      if (data.type !== 'user') return
       this.id = data.id
     },
     dataFormSubmit() {

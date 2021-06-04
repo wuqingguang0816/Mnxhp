@@ -125,10 +125,9 @@
                 <el-select v-model="columnData.treeDataSource" placeholder="请选择数据来源"
                   @change="dataTypeChange">
                   <el-option label="数据字典" value="dictionary"></el-option>
+                  <el-option label="远端数据" value="api"></el-option>
                   <el-option label="公司数据" value="organize"></el-option>
                   <el-option label="部门数据" value="department"></el-option>
-                  <el-option label="人员数据" value="user"></el-option>
-                  <el-option label="远端数据" value="api"></el-option>
                 </el-select>
               </el-form-item>
               <template v-if="columnData.treeDataSource==='dictionary'">

@@ -40,8 +40,7 @@
             </el-col>
             <el-col :span="6">
               <el-form-item label="发起人员">
-                <JNPF-TreeSelect :options="treeData" v-model="creatorUserId" placeholder="选择发起人员"
-                  lastLevel lastLevelKey='type' lastLevelValue='user' clearable></JNPF-TreeSelect>
+                <user-select v-model="creatorUserId" placeholder="选择发起人员" />
               </el-form-item>
             </el-col>
           </template>
@@ -178,7 +177,6 @@ export default {
       categoryList: [],
       flowEngineList: [],
       flowEngineListAll: [],
-      treeData: [],
       multipleSelection: []
     }
   },
@@ -190,7 +188,6 @@ export default {
   },
   created() {
     this.getDictionaryData()
-    this.getUserList()
     this.initData()
   },
   methods: {
@@ -228,10 +225,6 @@ export default {
         this.categoryList = res
         this.getFlowEngineList()
       })
-    },
-    async getUserList() {
-      let res = await this.$store.dispatch('base/getUserTree')
-      this.treeData = res
     },
     initData() {
       this.listLoading = true

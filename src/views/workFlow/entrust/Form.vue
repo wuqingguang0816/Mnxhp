@@ -4,9 +4,7 @@
     <el-form ref="dataForm" :model="dataForm" :rules="dataRule" label-width="100px"
       v-loading="loading">
       <el-form-item label="被委托人" prop="toUserId">
-        <JNPF-TreeSelect :options="treeData" v-model="dataForm.toUserId" placeholder="选择被委托人"
-          lastLevel @change="getValue" lastLevelKey='type' lastLevelValue='user'>
-        </JNPF-TreeSelect>
+        <user-select v-model="dataForm.toUserId" placeholder="选择被委托人" @change="onChange" />
       </el-form-item>
       <el-form-item label="委托流程" prop="flowId">
         <el-select v-model="dataForm.flowId" placeholder="请选择流程" @change="handleChange" filterable>
@@ -88,7 +86,7 @@ export default {
       },
       dataRule: {
         toUserId: [
-          { required: true, message: '被委托人不能为空', trigger: 'blur' }
+          { required: true, message: '被委托人不能为空', trigger: 'change' }
         ],
         flowId: [
           { required: true, message: '委托流程不能为空', trigger: 'change' }
@@ -102,7 +100,6 @@ export default {
           { validator: checkEndTime, trigger: 'change' }
         ],
       },
-      treeData: [],
       loading: false,
       btnLoading: false,
       categoryList: [],
@@ -110,19 +107,6 @@ export default {
     }
   },
   methods: {
-    async getUser() {
-      let res = await this.$store.dispatch('base/getUserTree')
-      this.treeData = res
-      this.$nextTick(() => {
-        this.$refs['dataForm'].resetFields()
-        if (this.dataForm.id) {
-          FlowDelegateInfo(this.dataForm.id).then(res => {
-            this.dataForm = res.data
-          })
-        }
-        this.loading = false
-      })
-    },
     getFlowEngineList() {
       FlowEngineListAll().then((res) => {
         this.flowEngineList = res.data.list
@@ -133,7 +117,15 @@ export default {
           this.$set(this.categoryList[i], 'count', count)
         }
         this.categoryList = this.categoryList.filter(o => o.count)
-        this.getUser()
+        this.$nextTick(() => {
+          this.$refs['dataForm'].resetFields()
+          if (this.dataForm.id) {
+            FlowDelegateInfo(this.dataForm.id).then(res => {
+              this.dataForm = res.data
+            })
+          }
+          this.loading = false
+        })
       })
     },
     getDictionaryData() {
@@ -173,8 +165,9 @@ export default {
       this.dataForm.flowName = item.fullName + '/' + item.enCode
       this.dataForm.flowCategory = item.category
     },
-    getValue(val, item) {
-      this.dataForm.toUserName = item.fullName
+    onChange(ids, selectedData) {
+      if (!selectedData.length) return
+      this.dataForm.toUserName = selectedData[0].fullName
     }
   }
 }

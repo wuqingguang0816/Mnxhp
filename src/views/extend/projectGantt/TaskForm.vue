@@ -3,7 +3,8 @@
     <el-dialog :title="!dataForm.id ? '新建任务' : '编辑任务'" :close-on-click-modal="false"
       :visible.sync="visible" class="JNPF-dialog JNPF-dialog_center" lock-scrol append-to-body
       width="600px">
-      <el-form ref="dataForm" :model="dataForm" :rules="dataRule" label-width="100px">
+      <el-form ref="dataForm" :model="dataForm" :rules="dataRule" label-width="100px"
+        v-loading="loading">
         <el-form-item label="上级任务" prop="parentId">
           <JNPF-TreeSelect :options="taskTreeData" v-model="dataForm.parentId" placeholder="选择上级任务">
           </JNPF-TreeSelect>
@@ -28,9 +29,8 @@
         </el-form-item>
         <el-form-item label="参与人员" prop="managerIds">
           <el-select v-model="managerIds" placeholder="请选择参与人员" multiple @change="handleChange">
-            <el-option v-for="item in options" :key="item.value" :label="item.label"
-              :value="item.value">
-            </el-option>
+            <el-option v-for="item in options" :key="item.id" :label="item.fullName"
+              :value="item.id" />
           </el-select>
         </el-form-item>
         <el-form-item label="完成进度" prop="schedule">
@@ -58,6 +58,7 @@
 
 <script>
 import { TaskInfo, TaskCreate, TaskUpdate, TaskTreeView } from '@/api/extend/projectGantt'
+import { getUserInfoList } from '@/api/permission/user'
 export default {
   data() {
     var checkStartTime = (rule, value, callback) => {
@@ -86,12 +87,11 @@ export default {
     return {
       visible: false,
       btnLoading: false,
+      loading: false,
       dataForm: {
         id: 0,
         parentId: '',
-        // type: 2,
         fullName: '',
-        // enCode: '',
         managerIds: '',
         startTime: '',
         endTime: '',
@@ -108,9 +108,6 @@ export default {
         fullName: [
           { required: true, message: '任务名称不能为空', trigger: 'blur' }
         ],
-        // enCode: [
-        //   { required: true, message: '项目编码不能为空', trigger: 'blur' }
-        // ],
         managerIds: [
           { required: true, message: '参与人员不能为空', trigger: 'change' }
         ],
@@ -131,17 +128,11 @@ export default {
       },
       managerIds: [],
       taskTreeData: [],
-      treeData: [],
       projectId: '',
       options: [],
     }
   },
   methods: {
-    getTreeData() {
-      this.$store.dispatch('base/getUserTree').then(res => {
-        this.treeData = res
-      })
-    },
     init(projectId, id, managerIds) {
       this.projectId = projectId
       this.dataForm.id = id || ''
@@ -150,6 +141,7 @@ export default {
       this.visible = true
       this.$nextTick(async () => {
         this.$refs['dataForm'].resetFields()
+        this.loading = true
         let res = await TaskTreeView(this.projectId)
         this.taskTreeData = res.data.list
         this.changeUser(managerIds)
@@ -188,17 +180,12 @@ export default {
       this.dataForm.managerIds = val.join(',')
     },
     async changeUser(value) {
+      if (!value) return this.loading = false
       let ids = value.split(',')
-      let namesList = []
-      for (let i = 0; i < ids.length; i++) {
-        let res = await this.$store.dispatch('base/getUserInfo', ids[i])
-        if (!res) return
-        namesList.push({
-          value: res.id,
-          label: res.realName + '/' + res.account
-        })
-      }
-      this.options = namesList
+      let res = await getUserInfoList(ids)
+      if (!res) return
+      this.options = res.data.list
+      this.loading = false
     }
   }
 }

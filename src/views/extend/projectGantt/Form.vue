@@ -10,9 +10,7 @@
           <el-input v-model="dataForm.enCode" placeholder="项目编码" />
         </el-form-item>
         <el-form-item label="参与人员" prop="managerIds">
-          <JNPF-TreeSelect :options="treeData" v-model="dataForm.managerIds" placeholder="参与人员"
-            multiple clearable lastLevel lastLevelKey='type' lastLevelValue='user'>
-          </JNPF-TreeSelect>
+          <user-select v-model="dataForm.managerIds" placeholder="参与人员" />
         </el-form-item>
         <el-form-item label="开始日期" prop="startTime">
           <el-date-picker v-model="dataForm.startTime" type="date" placeholder="选择日期"
@@ -84,8 +82,6 @@ export default {
       visible: false,
       dataForm: {
         id: '',
-        // parentId: '0',
-        // type: 1,
         fullName: '',
         enCode: '',
         managerIds: '',
@@ -122,24 +118,15 @@ export default {
           { required: true, message: '完成进度不能为空', trigger: 'blur' }
         ],
       },
-      treeData: [],
-      props: {
-        value: 'id',
-        label: 'fullName',
-        children: 'children',
-        disabled: this.checkDisabled
-      },
-      btnLoading: false,
+      btnLoading: false
     }
   },
   methods: {
     init(id) {
       this.dataForm.id = id || ''
-      this.dataForm.managerIds = ''
       this.visible = true
       this.$nextTick(async () => {
         this.$refs['dataForm'].resetFields()
-        this.treeData = await this.$store.dispatch('base/getUserTree')
         if (this.dataForm.id) {
           ProjectGanttInfo(this.dataForm.id).then(res => {
             this.dataForm = res.data
@@ -166,27 +153,6 @@ export default {
           }).catch(() => { this.btnLoading = false })
         }
       })
-    },
-    checkDisabled(data, node) {
-      let tree = node.data
-      if (tree.type == 'user') {
-        return false
-      } else {
-        let boo = true
-        function findUser(tree) {
-          outer: for (let i = 0; i < tree.length; i++) {
-            if (tree[i].type == 'user') {
-              boo = false
-              break outer
-            }
-            if (tree[i].children && tree[i].children.length) {
-              findUser(tree[i].children)
-            }
-          }
-        }
-        findUser(tree)
-        return boo
-      }
     }
   }
 }

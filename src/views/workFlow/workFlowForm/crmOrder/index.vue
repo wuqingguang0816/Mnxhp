@@ -15,10 +15,8 @@
         </el-col>
         <el-col :span="6" v-if="JudgeShow('salesmanId')">
           <el-form-item label="业务人员" prop="salesmanId">
-            <JNPF-TreeSelect :options="treeData" v-model="dataForm.salesmanId" @change="getValue"
-              placeholder="选择人员" lastLevel lastLevelKey='type' lastLevelValue='user'
-              :disabled="JudgeWrite('salesmanId')">
-            </JNPF-TreeSelect>
+            <user-select v-model="dataForm.salesmanId" placeholder="选择人员"
+              :disabled="JudgeWrite('salesmanId')" @change="onChange" />
           </el-form-item>
         </el-col>
         <el-col :span="6" v-if="JudgeShow('orderDate')">
@@ -267,7 +265,7 @@ export default {
           { required: true, message: '客户名称不能为空', trigger: 'click' },
         ],
         salesmanId: [
-          { required: true, message: '业务人员不能为空', trigger: 'blur' }
+          { required: true, message: '业务人员不能为空', trigger: 'change' }
         ],
         orderDate: [
           { required: true, message: '订单日期不能为空', trigger: 'change' }
@@ -278,7 +276,6 @@ export default {
       },
       options: ['现金', '转帐', '汇票'],
       transportOptions: ['快递', '物流', '配送', '自提'],
-      treeData: [],
       goodsBoxVisible: false
     }
   },
@@ -295,17 +292,10 @@ export default {
       deep: true
     }
   },
-  created() {
-    this.initData()
-  },
   methods: {
-    initData() {
-      this.$store.dispatch('base/getUserTree').then(res => {
-        this.treeData = res
-      })
-    },
-    getValue(value, node) {
-      this.dataForm.salesmanName = node.fullName
+    onChange(ids, selectedData) {
+      if (!selectedData.length) return
+      this.dataForm.salesmanName = selectedData[0].fullName
     },
     querySearchAsync(queryString, cb) {
       CustomerList(queryString).then(res => {

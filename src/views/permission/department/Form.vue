@@ -15,8 +15,7 @@
         <el-input v-model="dataForm.enCode" placeholder="输入编码" />
       </el-form-item>
       <el-form-item label="部门主管" prop="managerId">
-        <JNPF-TreeSelect v-model="dataForm.managerId" :options="usersTreeData" lastLevel
-          lastLevelKey='type' lastLevelValue='user' placeholder="选择所属部门主管" />
+        <user-select v-model="dataForm.managerId" placeholder="选择所属部门主管" />
       </el-form-item>
       <el-form-item label="排序" prop="sortCode">
         <el-input-number :min="0" :max="9999" v-model="dataForm.sortCode"
@@ -41,9 +40,6 @@ import {
   updateDepartment,
   getDepartmentInfo
 } from '@/api/permission/department'
-import {
-  getUserSelector
-} from '@/api/permission/user'
 
 export default {
   data() {
@@ -92,9 +88,6 @@ export default {
         this.$refs['dataForm'].resetFields()
         getDepartmentSelector().then(res => {
           this.treeData = res.data.list
-        })
-        getUserSelector().then(res => {
-          this.usersTreeData = res.data.list
         })
         if (this.dataForm.id) {
           getDepartmentInfo(this.dataForm.id).then(res => {
