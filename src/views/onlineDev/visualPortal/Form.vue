@@ -38,7 +38,7 @@
                   v-for="item in categoryList" />
               </el-select>
             </el-form-item>
-            <el-form-item label="状态" prop="enabledMark">
+            <el-form-item label="门户状态" prop="enabledMark">
               <el-switch v-model="dataForm.enabledMark" :active-value="1" :inactive-value="0" />
             </el-form-item>
             <el-form-item label="门户说明" prop="description">
@@ -85,7 +85,7 @@ export default {
           { required: true, message: '门户分类不能为空', trigger: 'change' },
         ],
         enabledMark: [
-          { required: true, message: '状态不能为空', trigger: 'blur' },
+          { required: true, message: '门户状态不能为空', trigger: 'blur' },
         ]
       },
       formVisible: false,
