@@ -24,6 +24,7 @@ export default {
         this.$refs['dataForm'].resetFields()
         if (this.beforeInit) this.beforeInit()
         if (data.id) {
+          if (this.selfGetInfo && typeof this.selfGetInfo === "function") return this.selfGetInfo()
           Info(this.setting.enCode, data.id).then(res => {
             this.dataForm = res.data
             if (res.data.fileJson) {
@@ -51,6 +52,7 @@ export default {
       })
     },
     dataFormSubmit(eventType) {
+      this.eventType = eventType
       this.$refs['dataForm'].validate((valid) => {
         if (valid) {
           if (this.exist && !this.exist()) return
