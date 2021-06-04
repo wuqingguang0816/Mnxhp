@@ -113,6 +113,7 @@
                   <el-radio-button :label="20">20条</el-radio-button>
                   <el-radio-button :label="50">50条</el-radio-button>
                   <el-radio-button :label="100">100条</el-radio-button>
+                  <el-radio-button :label="500">500条</el-radio-button>
                 </el-radio-group>
               </el-form-item>
             </template>
