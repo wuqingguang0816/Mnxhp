@@ -78,8 +78,10 @@ export default {
       this.selectedData = []
       this.ids = this.value
       this.nodeId = '0'
-      this.getList()
-      this.getSelectList()
+      this.$nextTick(() => {
+        this.getList()
+        this.getSelectList()
+      })
     },
     getSelectList() {
       this.allLoading = true

@@ -33,6 +33,7 @@ export default {
       this.visible = true
       this.dataForm.objectId = id
       this.dataForm.objectType = type
+      this.dataForm.userIds = []
       this.$nextTick(() => {
         if (type === 'Position') {
           this.pageTitle = this.$t(`position.postMember`) + '- ' + fullName
