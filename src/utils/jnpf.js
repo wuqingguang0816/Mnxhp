@@ -15,7 +15,7 @@ const jnpf = {
     let month = day * 30;
     let now = new Date().getTime(); //获取当前时间毫秒
     let diffValue = now - dateTimeStamp; //时间差
-    if (diffValue < 0) return
+    if (diffValue < 0) return "刚刚"
     let minC = diffValue / minute; //计算时间差的分，时，天，周，月
     let hourC = diffValue / hour;
     let dayC = diffValue / day;
