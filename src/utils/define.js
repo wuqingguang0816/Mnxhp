@@ -16,5 +16,5 @@ module.exports = {
   // 数据报表
   reportServer: process.env.NODE_ENV === 'development' ? 'http://localhost:30007' : process.env.VUE_APP_BASE_API + '/ReportServer',
   report: process.env.NODE_ENV === 'development' ? 'http://localhost:8200' : process.env.VUE_APP_BASE_API + '/Report',
-  version: '3.1.3'
+  version: '3.2'
 }
