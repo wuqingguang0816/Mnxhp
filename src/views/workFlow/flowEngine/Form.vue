@@ -79,15 +79,6 @@
               <div class="JNPF-common-title noBorder">
                 <h2>绑定数据库表</h2>
               </div>
-              <el-form-item label="数据库">
-                <el-select v-model="dataForm.dbLinkId" placeholder="请选择数据库" @change="onDbChange">
-                  <el-option-group v-for="group in dbOptions" :key="group.fullName"
-                    :label="group.fullName">
-                    <el-option v-for="item in group.children" :key="item.id" :label="item.fullName"
-                      :value="item.id" />
-                  </el-option-group>
-                </el-select>
-              </el-form-item>
               <el-table :data="tables" class="JNPF-common-table"
                 empty-text="点击“新增”可选择 1 条（单表）或 2 条以上（多表）">
                 <el-table-column type="index" label="序号" width="50" align="center" />
