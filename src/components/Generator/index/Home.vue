@@ -163,10 +163,10 @@ export default {
       handler(val) {
         this.saveDrawingListDebounce(val)
         if (val.length === 0) this.idGlobal = 100
-        if (!this.isDrawingListChange) {
-          this.isDrawingListChange = true
-          return
-        }
+        // if (!this.isDrawingListChange) {
+        //   this.isDrawingListChange = true
+        //   return
+        // }
         this.$emit('drawingListChange')
       },
       deep: true

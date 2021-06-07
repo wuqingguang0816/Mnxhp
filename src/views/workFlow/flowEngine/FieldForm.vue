@@ -63,10 +63,10 @@ export default {
           __vModel__: o.filedId
         }))
         this.saveDrawingListDebounce(list)
-        if (!this.isDrawingListChange) {
-          this.isDrawingListChange = true
-          return
-        }
+        // if (!this.isDrawingListChange) {
+        //   this.isDrawingListChange = true
+        //   return
+        // }
         this.$emit('drawingListChange')
       },
       deep: true
