@@ -17,7 +17,7 @@
                     <el-badge :value="item.unreadMessage" :hidden="!item.unreadMessage" />
                   </p>
                   <p class="name">
-                    <span>{{getMsgText(item.latestMessage,item.messageType)}}</span>
+                    <span class="content">{{getMsgText(item.latestMessage,item.messageType)}}</span>
                     <span class="time">{{item.latestDate| toDateText()}}</span>
                   </p>
                 </div>
@@ -348,6 +348,13 @@ export default {
         .name {
           font-size: 12px;
           color: #999;
+          .content {
+            display: inline-block;
+            width: 120px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+          }
           .time {
             float: right;
           }
