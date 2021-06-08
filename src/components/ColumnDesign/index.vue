@@ -375,6 +375,7 @@ export default {
             if (type === 'column') {
               data[ii].align = replacedData[i].align
               data[ii].width = replacedData[i].width
+              data[ii].sortable = replacedData[i].sortable
             }
             res.push(data[ii])
             break inter
