@@ -77,7 +77,6 @@ export default {
     init() {
       this.selectedData = []
       this.keyword = ''
-      this.ids = this.value
       this.nodeId = '0'
       this.$nextTick(() => {
         this.getList()
@@ -89,6 +88,7 @@ export default {
       if (!this.value.length) return this.allLoading = false
       getUserInfoList(this.value).then(res => {
         this.selectedData = res.data.list
+        this.ids = this.value
         this.allLoading = false
       })
     },
