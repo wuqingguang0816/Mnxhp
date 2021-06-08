@@ -96,9 +96,10 @@
             </el-form-item>
             <el-form-item label="排序类型">
               <el-radio-group v-model="columnData.pageSize">
-                <el-radio-button :label="30">30条</el-radio-button>
+                <el-radio-button :label="20">20条</el-radio-button>
                 <el-radio-button :label="50">50条</el-radio-button>
                 <el-radio-button :label="100">100条</el-radio-button>
+                <el-radio-button :label="500">500条</el-radio-button>
               </el-radio-group>
             </el-form-item>
           </el-form>
@@ -120,7 +121,7 @@ const defaultColumnData = {
   defaultSidx: '', // 默认排序字段
   sort: 'desc',   // 排序类型
   hasPage: true,  // 列表分页
-  pageSize: 30,  // 分页条数
+  pageSize: 20,  // 分页条数
 }
 export default {
   name: 'columnDesign',

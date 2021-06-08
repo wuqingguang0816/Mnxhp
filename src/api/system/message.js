@@ -75,3 +75,10 @@ export function releaseNotice(id) {
     method: 'PUT'
   })
 }
+// 获取IM对话列表
+export function getIMReply() {
+  return request({
+    url: '/api/message/imreply',
+    method: 'GET'
+  })
+}

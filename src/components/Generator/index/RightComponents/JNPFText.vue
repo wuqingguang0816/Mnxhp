@@ -14,12 +14,12 @@
       <el-switch v-model="activeData.__config__.showLabel" />
     </el-form-item> -->
     <el-form-item label="行高">
-      <el-input-number v-model="activeData.textStyle['line-height']" :min="12"
-        placeholder="请输入行高" /> px
+      <el-input-number v-model="activeData.textStyle['line-height']" :min="12" placeholder="请输入行高"
+        controls-position="right" /> px
     </el-form-item>
     <el-form-item label="字体大小">
-      <el-input-number v-model="activeData.textStyle['font-size']" :min="12"
-        placeholder="请输入字体大小" /> px
+      <el-input-number v-model="activeData.textStyle['font-size']" :min="12" placeholder="请输入字体大小"
+        controls-position="right" /> px
     </el-form-item>
     <el-form-item label="对齐方式">
       <el-radio-group v-model="activeData.textStyle['text-align']">

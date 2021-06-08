@@ -118,7 +118,7 @@
 <script>
 import { OrderList, Delete, OrderEntryList, OrderReceivableList } from '@/api/extend/order'
 import Detail from './Detail'
-import FlowBox from '@/views/workFlow/fromBox/FlowBox'
+import FlowBox from '@/views/workFlow/components/FlowBox'
 export default {
   name: 'extend-order',
   components: { Detail, FlowBox },

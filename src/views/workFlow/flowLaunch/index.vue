@@ -122,7 +122,7 @@
 <script>
 import { FlowLaunchList, Delete } from '@/api/workFlow/FlowLaunch'
 import { FlowEngineListAll } from '@/api/workFlow/FlowEngine'
-import FlowBox from '../fromBox/FlowBox'
+import FlowBox from '../components/FlowBox'
 import flow from './Flow'
 export default {
   name: 'workFlow-flowLaunch',

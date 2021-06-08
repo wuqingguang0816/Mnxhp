@@ -133,8 +133,8 @@ const actions = {
               }
               routerList.push(newObj)
             }
-            // 功能、字典、报表
-            if ([3, 4, 5].indexOf(e.type) > -1) {
+            // 功能、字典、报表、门户
+            if ([3, 4, 5, 8].indexOf(e.type) > -1) {
               let propertyJson = e.propertyJson ? JSON.parse(e.propertyJson) : null,
                 relationId = '',
                 isTree = 0,
@@ -147,8 +147,10 @@ const actions = {
                 componentUrl = 'dynamicModel'
               } else if (e.type == 4) {
                 componentUrl = 'dynamicDictionary'
-              } else {
+              } else if (e.type == 5) {
                 componentUrl = 'dynamicDataReport'
+              } else {
+                componentUrl = 'dynamicPortal'
               }
               e.path = '/' + e.urlAddress
               let newObj = {

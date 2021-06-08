@@ -23,19 +23,20 @@
     <el-form-item label="默认值">
       <el-input-number v-model="activeData.__config__.defaultValue" placeholder="默认值"
         :min="activeData.min" :max="activeData.max" :step="activeData.step"
-        :precision="activeData.precision" style="width:100%" />
+        :precision="activeData.precision" style="width:100%" controls-position="right" />
     </el-form-item>
     <!-- <el-form-item label="最小值">
-      <el-input-number v-model="activeData.min" placeholder="最小值" />
+      <el-input-number v-model="activeData.min" placeholder="最小值" controls-position="right" />
     </el-form-item>
     <el-form-item label="最大值">
-      <el-input-number v-model="activeData.max" placeholder="最大值" />
+      <el-input-number v-model="activeData.max" placeholder="最大值" controls-position="right" />
     </el-form-item>
     <el-form-item label="步长">
-      <el-input-number v-model="activeData.step" placeholder="步数" :min="1" />
+      <el-input-number v-model="activeData.step" placeholder="步数" :min="1" controls-position="right" />
     </el-form-item> -->
     <el-form-item label="精度">
-      <el-input-number v-model="activeData.precision" :min="0" placeholder="精度" />
+      <el-input-number v-model="activeData.precision" :min="0" placeholder="精度"
+        controls-position="right" />
     </el-form-item>
     <el-form-item label="按钮位置">
       <el-radio-group v-model="activeData['controls-position']">

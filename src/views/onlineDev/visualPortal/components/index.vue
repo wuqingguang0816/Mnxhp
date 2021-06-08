@@ -37,18 +37,21 @@
             <HNotice v-if="item.jnpfKey==='notice'" :title="item.title" />
             <HEmail v-if="item.jnpfKey==='email'" :title="item.title" />
             <DataBoard v-if="item.jnpfKey==='dataBoard'" :title="item.title" :list="item.list" />
-            <HBarChart v-if="item.jnpfKey==='barChart'" :title="item.title" :option=" item.option"
-              :ref="'eChart'+item.i" />
+            <HBarChart v-if="item.jnpfKey==='barChart'" :title="item.title" :option="item.option"
+              :dataType="item.dataType" :propsApi="item.propsApi" :ref="'eChart'+item.i" />
             <HAnnularChart v-if="item.jnpfKey==='annularChart'" :title="item.title"
-              :option=" item.option" :ref="'eChart'+item.i" />
-            <HAreaChart v-if="item.jnpfKey==='areaChart'" :title="item.title" :option=" item.option"
+              :option="item.option" :dataType="item.dataType" :propsApi="item.propsApi"
               :ref="'eChart'+item.i" />
-            <HLineChart v-if="item.jnpfKey==='lineChart'" :title="item.title" :option=" item.option"
-              :ref="'eChart'+item.i" />
-            <HPieChart v-if="item.jnpfKey==='pieChart'" :title="item.title" :option=" item.option"
-              :ref="'eChart'+item.i" />
+            <HAreaChart v-if="item.jnpfKey==='areaChart'" :title="item.title" :option="item.option"
+              :dataType="item.dataType" :propsApi="item.propsApi" :ref="'eChart'+item.i" />
+            <HLineChart v-if="item.jnpfKey==='lineChart'" :title="item.title" :option="item.option"
+              :dataType="item.dataType" :propsApi="item.propsApi" :ref="'eChart'+item.i" />
+
+            <HPieChart v-if="item.jnpfKey==='pieChart'" :title="item.title" :option="item.option"
+              :dataType="item.dataType" :propsApi="item.propsApi" :ref="'eChart'+item.i" />
             <HRadarChart v-if="item.jnpfKey==='radarChart'" :title="item.title"
-              :option=" item.option" :ref="'eChart'+item.i" />
+              :option="item.option" :dataType="item.dataType" :propsApi="item.propsApi"
+              :ref="'eChart'+item.i" />
             <div class="mask"></div>
             <span title="复制" class="drawing-item-copy" @click="addComponent(item)">
               <i class="el-icon-copy-document"></i></span>

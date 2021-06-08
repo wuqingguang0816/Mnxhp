@@ -32,7 +32,7 @@
           </el-select>
         </el-form-item>
         <el-form-item label="树形下拉框">
-          <JNPF-TreeSelect :options="treeData" v-model="dataForm.parentId" @getValue="getValue"
+          <JNPF-TreeSelect :options="treeData" v-model="dataForm.parentId" @change="getValue"
             placeholder="请选择">
             <template slot-scope="{data}">
               <i :class="data.data.icon"></i>

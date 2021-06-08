@@ -335,6 +335,10 @@
   color: #606266;
   align-items: center;
 
+  &.noBorder {
+    border: none;
+  }
+
   h2 {
     font-size: 16px;
     line-height: 50px;
@@ -704,6 +708,11 @@
 
   .timeline-cell {
     line-height: 30px;
+
+    .signImg {
+      width: 300px;
+      vertical-align: top;
+    }
   }
 
   .timeline-icon {
@@ -1083,6 +1092,14 @@
       background: #fff;
       justify-items: flex-start;
       flex-shrink: 0;
+
+      &.steps2 {
+        width: 300px;
+      }
+
+      &.steps4 {
+        width: 600px;
+      }
 
       .el-step__title {
         cursor: pointer;
@@ -1556,4 +1573,63 @@ textarea.el-textarea__inner {
 
 .el-dropdown-menu__item .icon-ym {
   vertical-align: -1px;
+}
+
+.transfer__body {
+  line-height: 32px;
+  display: flex;
+  justify-content: space-around;
+  padding-top: 10px;
+  height: 380px;
+
+  .transfer-pane {
+    width: 360px;
+  }
+
+  .transfer-pane__tools {
+    margin-bottom: 8px;
+    height: 32px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .transfer-pane__body {
+    position: relative;
+    width: 100%;
+    height: calc(100% - 40px);
+    overflow: auto;
+    overflow-x: hidden;
+    font-size: 14px;
+    border: 1px solid #dcdfe6;
+  }
+
+  .right-pane {
+    box-sizing: border-box;
+    overflow: auto;
+    border: 1px solid #dcdfe6;
+
+    .selected-item {
+      padding: 0px 12px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+
+      &:hover {
+        background-color: #f5f7fa;
+      }
+
+      span {
+        max-width: 90%;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+
+      i:hover {
+        color: #f56c6c;
+        cursor: pointer;
+      }
+    }
+  }
 }

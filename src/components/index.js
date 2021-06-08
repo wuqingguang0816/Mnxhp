@@ -7,14 +7,15 @@ import UserBox from '@/components/JNPF-userBox'
 import Screenfull from '@/components/Screenfull'
 import ColumnSettings from '@/components/ColumnSettings'
 import JNPFQuill from '@/components/JNPFEditor/quill'
+import UserSelect from '@/components/JNPF-userSelect'
 // 代码生成器专供
 import JNPFText from '@/components/Generator/components/JNPFText'
 import JNPFUploadFz from '@/components/Generator/components/Upload/UploadFz'
 import JNPFUploadImg from '@/components/Generator/components/Upload/UploadImg'
+import PopupSelect from '@/components/Generator/components/PopupSelect'
 import ComSelect from '@/components/Generator/components/ComSelect'
 import DepSelect from '@/components/Generator/components/DepSelect'
 import PosSelect from '@/components/Generator/components/PosSelect'
-import UserSelect from '@/components/Generator/components/UserSelect'
 import DicSelect from '@/components/Generator/components/DicSelect'
 import BillRule from '@/components/Generator/components/BillRule'
 import JNPFInputTable from '@/components/Generator/components/InputTable'
@@ -37,6 +38,7 @@ export default {
     Vue.component('JNPFText', JNPFText)
     Vue.component('JNPFUploadFz', JNPFUploadFz)
     Vue.component('JNPFUploadImg', JNPFUploadImg)
+    Vue.component('PopupSelect', PopupSelect)
     Vue.component('ComSelect', ComSelect)
     Vue.component('DepSelect', DepSelect)
     Vue.component('PosSelect', PosSelect)

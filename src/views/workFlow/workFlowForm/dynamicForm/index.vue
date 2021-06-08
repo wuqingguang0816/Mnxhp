@@ -2,13 +2,11 @@
   <div class="flow-form" :style="{margin: '0 auto',width:formConf.fullScreenWidth}">
     <parser :form-conf="formConf" @submit="sumbitForm" :key="key" ref="dynamicForm"
       v-if="!loading" />
-    <UserBox v-if="userBoxVisible" ref="userBox" @submit="submit" />
   </div>
 </template>
 <script>
-import { DynamicInfo, DynamicCreate, DynamicUpdate } from '@/api/workFlow/workFlowForm'
+import { DynamicInfo } from '@/api/workFlow/workFlowForm'
 import Parser from '@/components/Generator/parser/Parser'
-import { deepClone } from '@/utils'
 export default {
   components: { Parser },
   data() {
@@ -18,7 +16,6 @@ export default {
       key: +new Date(),
       loading: true,
       eventType: '',
-      userBoxVisible: false,
       dataForm: {
         id: '',
         data: '',
@@ -88,53 +85,11 @@ export default {
     sumbitForm(data) {
       if (!data) return
       this.dataForm.data = JSON.stringify(data)
-      if (this.eventType === 'audit' || this.eventType === 'reject') {
-        this.$emit('eventReciver', this.dataForm, this.eventType)
-        return
-      }
-      this.dataForm.status = this.eventType === 'submit' ? 0 : 1
-      if (this.eventType === 'submit') {
-        if (this.setting.freeApprover == 0) {
-          this.$confirm('您确定要提交当前流程吗, 是否继续?', '提示', {
-            type: 'warning'
-          }).then(() => {
-            this.submit()
-          }).catch(() => { });
-        } else {
-          this.userBoxVisible = true
-          this.$nextTick(() => {
-            this.$refs.userBox.init()
-          })
-        }
-      } else {
-        this.request()
-      }
+      this.$emit('eventReciver', this.dataForm, this.eventType)
     },
     dataFormSubmit(eventType) {
       this.eventType = eventType
       this.$refs.dynamicForm && this.$refs.dynamicForm.submitForm()
-    },
-    submit(freeApproverUserId) {
-      if (freeApproverUserId) this.dataForm.freeApproverUserId = freeApproverUserId
-      this.request()
-    },
-    request() {
-      if (!this.dataForm.id) delete (this.dataForm.id)
-      if (this.eventType === 'save') this.$emit('setLoad', true)
-      const formMethod = this.dataForm.id ? DynamicUpdate : DynamicCreate
-      formMethod(this.dataForm).then(res => {
-        this.$message({
-          message: res.msg,
-          type: 'success',
-          duration: 1500,
-          onClose: () => {
-            if (this.eventType === 'save') this.$emit('setLoad')
-            this.$emit('close', true)
-          }
-        })
-      }).catch(() => {
-        if (this.eventType === 'save') this.$emit('setLoad')
-      })
     }
   }
 }

@@ -79,10 +79,8 @@ export default {
         column: [],
         resource: []
       },
-      roleTreeData: [],
       roleTreeAllData: [],
       roleAllIds: [],
-      roleTypeList: [],
       positionTreeData: [],
       authorizeTreeData: [],
       moduleAuthorizeTree: [],
@@ -110,23 +108,18 @@ export default {
       Object.assign(this.$data, this.$options.data())
       this.getAuthorizeList()
     },
-    getDictionaryData() {
-      this.$store.dispatch('base/getDictionaryData', { sort: 'RoleType' }).then(res => {
-        this.roleTypeList = JSON.parse(JSON.stringify(res))
-        this.getRoleList()
-      })
-    },
     getRoleList() {
       this.roleTreeLoading = true
       getRoleSelector().then(res => {
-        this.roleAllIds = res.data.list.map(e => e.id)
-        this.roleTreeData = res.data.list
-        this.roleTreeAllData = JSON.parse(JSON.stringify(this.roleTypeList))
-        for (let i = 0; i < this.roleTreeAllData.length; i++) {
-          let child = this.roleTreeData.filter(o => this.roleTreeAllData[i].enCode === o.type)
-          this.$set(this.roleTreeAllData[i], 'children', child)
+        let ids = []
+        for (let i = 0; i < res.data.list.length; i++) {
+          const item = res.data.list[i]
+          for (let j = 0; j < item.children.length; j++) {
+            ids.push(item.children[j].id)
+          }
         }
-        this.roleTreeAllData = this.roleTreeAllData.filter(o => o.children.length)
+        this.roleAllIds = ids
+        this.roleTreeAllData = res.data.list
         this.roleTreeLoading = false
       }).catch(() => {
         this.roleTreeLoading = false
@@ -250,7 +243,7 @@ export default {
           this.params.moduleIds = (this.moduleIdsTemp).toString()
           break
         case 4:
-          this.getDictionaryData()
+          this.getRoleList()
           this.$nextTick(() => {
             this.$refs.roleTree.setCheckedKeys(this.dataForm.roleIds)
           })

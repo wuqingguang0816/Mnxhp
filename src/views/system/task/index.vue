@@ -40,7 +40,7 @@
             :formatter="jnpf.tableDateFormat" v-if="jnpf.hasP('lastRunTime')" />
           <el-table-column prop="nextRunTime" label="下次运行时间" sortable width="120"
             :formatter="jnpf.tableDateFormat" v-if="jnpf.hasP('nextRunTime')" />
-          <el-table-column prop="description" label="执行说明" show-overflow-tooltip
+          <el-table-column prop="description" label="任务说明" show-overflow-tooltip
             v-if="jnpf.hasP('description')" />
           <el-table-column label="状态" prop="enabledMark" width="70" align="center"
             v-if="jnpf.hasP('enabledMark')">

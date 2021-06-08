@@ -1,130 +1,129 @@
 <template>
-  <transition name="el-zoom-in-center">
-    <div class="JNPF-preview-main form-main">
-      <div class="JNPF-common-page-header">
-        <el-page-header @back="goBack" content="" />
-        <el-steps :active="active" finish-status="success" simple class="steps">
-          <el-step title="基本信息"></el-step>
-          <el-step title="数据配置"></el-step>
-        </el-steps>
-        <div class="options">
-          <el-button :disabled="active <= 0" @click="handlePrevStep">{{$t('common.prev')}}
-          </el-button>
-          <el-button :disabled="active >= 1" @click="handleNextStep">{{$t('common.next')}}
-          </el-button>
-          <el-button type="primary" :loading="btnLoading" :disabled="active < 1"
-            @click="dataFormSubmit()">{{$t('common.confirmButton')}}</el-button>
-          <el-button @click="goBack">{{$t('common.cancelButton')}}</el-button>
-        </div>
+  <div class="JNPF-preview-main form-main">
+    <div class="JNPF-common-page-header">
+      <el-page-header @back="goBack" content="" />
+      <el-steps :active="active" finish-status="success" simple class="steps">
+        <el-step title="基本信息"></el-step>
+        <el-step title="数据配置"></el-step>
+      </el-steps>
+      <div class="options">
+        <el-button :disabled="active <= 0" @click="handlePrevStep">{{$t('common.prev')}}
+        </el-button>
+        <el-button :disabled="active >= 1" @click="handleNextStep">{{$t('common.next')}}
+        </el-button>
+        <el-button type="primary" :loading="btnLoading" :disabled="active < 1"
+          @click="dataFormSubmit()">{{$t('common.confirmButton')}}</el-button>
+        <el-button @click="goBack">{{$t('common.cancelButton')}}</el-button>
       </div>
-      <el-form ref="dataForm" :model="dataForm" :rules="dataRule" v-loading="formLoading"
-        label-width="90px">
-        <el-row>
-          <el-col :span="14" :offset="5" class="baseInfo mt-20" v-if="active === 0">
-            <el-form-item label="名称" prop="fullName" maxlength="50">
-              <el-input v-model="dataForm.fullName" placeholder="输入名称" />
-            </el-form-item>
-            <el-form-item label="编码" prop="enCode" maxlength="50">
-              <el-input v-model="dataForm.enCode" placeholder="输入编码" />
-            </el-form-item>
-            <el-form-item label="分类" prop="categoryId">
-              <JNPF-TreeSelect v-model="dataForm.categoryId" :options="selectData"
-                placeholder="选择分类" clearable />
-            </el-form-item>
-            <el-form-item label="类型" prop="dataType">
-              <el-radio-group v-model="dataForm.dataType">
-                <el-radio :label="2">静态数据</el-radio>
-                <el-radio :label="1">SQL数据</el-radio>
-                <el-radio :label="3">Api数据</el-radio>
-              </el-radio-group>
-            </el-form-item>
-            <el-form-item label="排序" prop="sortCode">
-              <el-input-number :min="0" :max="9999" v-model="dataForm.sortCode" />
-            </el-form-item>
-            <el-form-item label="状态" prop="enabledMark">
-              <el-switch v-model="dataForm.enabledMark" :active-value="1" :inactive-value="0" />
-            </el-form-item>
-            <el-form-item label="说明" prop="description">
-              <el-input v-model="dataForm.description" type="textarea" :rows="6" />
-            </el-form-item>
-          </el-col>
-          <el-col class="mt-20 config" v-if="active === 1 && dataForm.dataType === 1">
-            <div class="tableData">
-              <el-select v-model="dataForm.dbLinkId" filterable placeholder="选择数据库"
-                style="width: 100%" @change="handleSelectTable">
-                <el-option-group v-for="group in dbOptions" :key="group.label" :label="group.label">
-                  <el-option v-for="item in group.children" :key="item.id" :label="item.fullName"
-                    :value="item.id" />
-                </el-option-group>
-              </el-select>
-              <div class="box">
-                <el-tree :data="treeData" node-key="index" v-loading="treeLoading"
-                  :element-loading-text="$t('common.loadingText')" :props="defaultProps"
-                  @node-click="handleNodeClick" />
-              </div>
+    </div>
+    <el-form ref="dataForm" :model="dataForm" :rules="dataRule" v-loading="formLoading"
+      label-width="90px">
+      <el-row>
+        <el-col :span="14" :offset="5" class="baseInfo mt-20" v-if="active === 0">
+          <el-form-item label="名称" prop="fullName" maxlength="50">
+            <el-input v-model="dataForm.fullName" placeholder="输入名称" />
+          </el-form-item>
+          <el-form-item label="编码" prop="enCode" maxlength="50">
+            <el-input v-model="dataForm.enCode" placeholder="输入编码" />
+          </el-form-item>
+          <el-form-item label="分类" prop="categoryId">
+            <JNPF-TreeSelect v-model="dataForm.categoryId" :options="selectData" placeholder="选择分类"
+              clearable />
+          </el-form-item>
+          <el-form-item label="类型" prop="dataType">
+            <el-radio-group v-model="dataForm.dataType">
+              <el-radio :label="2">静态数据</el-radio>
+              <el-radio :label="1">SQL数据</el-radio>
+              <el-radio :label="3">Api数据</el-radio>
+            </el-radio-group>
+          </el-form-item>
+          <el-form-item label="排序" prop="sortCode">
+            <el-input-number :min="0" :max="9999" v-model="dataForm.sortCode"
+              controls-position="right" />
+          </el-form-item>
+          <el-form-item label="状态" prop="enabledMark">
+            <el-switch v-model="dataForm.enabledMark" :active-value="1" :inactive-value="0" />
+          </el-form-item>
+          <el-form-item label="说明" prop="description">
+            <el-input v-model="dataForm.description" type="textarea" :rows="6" />
+          </el-form-item>
+        </el-col>
+        <el-col class="mt-20 config" v-if="active === 1 && dataForm.dataType === 1">
+          <div class="tableData">
+            <el-select v-model="dataForm.dbLinkId" filterable placeholder="选择数据库"
+              style="width: 100%" @change="handleSelectTable">
+              <el-option-group v-for="group in dbOptions" :key="group.fullName"
+                :label="group.fullName">
+                <el-option v-for="item in group.children" :key="item.id" :label="item.fullName"
+                  :value="item.id" />
+              </el-option-group>
+            </el-select>
+            <div class="box">
+              <el-tree :data="treeData" node-key="index" v-loading="treeLoading"
+                :element-loading-text="$t('common.loadingText')" :props="defaultProps"
+                @node-click="handleNodeClick" />
             </div>
-            <div class="detail">
-              <el-tabs v-model="activeName">
-                <el-tab-pane label="查询SQL" name="query">
-                  <el-form-item label-width="0" prop="query">
-                    <div class="sql-box">
-                      <SQLEditor v-model="dataForm.query" :options="sqlOptions"
-                        ref="SQLEditorRef" />
-                    </div>
-                  </el-form-item>
-                  <div class="tips">
-                    <p><span>@user</span>当前用户</p>
-                    <p><span>@organize</span>当前用户所在公司</p>
-                    <p><span>@department</span>当前用户所在部门</p>
-                    <p><span>@postion</span>当前用户所在岗位</p>
+          </div>
+          <div class="detail">
+            <el-tabs v-model="activeName">
+              <el-tab-pane label="查询SQL" name="query">
+                <el-form-item label-width="0" prop="query">
+                  <div class="sql-box">
+                    <SQLEditor v-model="dataForm.query" :options="sqlOptions" ref="SQLEditorRef" />
                   </div>
-                </el-tab-pane>
-              </el-tabs>
+                </el-form-item>
+                <div class="tips">
+                  <p><span>@user</span>当前用户</p>
+                  <p><span>@organize</span>当前用户所在公司</p>
+                  <p><span>@department</span>当前用户所在部门</p>
+                  <p><span>@postion</span>当前用户所在岗位</p>
+                </div>
+              </el-tab-pane>
+            </el-tabs>
+          </div>
+        </el-col>
+        <el-col class="staticData" v-if="active === 1 && dataForm.dataType === 2">
+          <el-form-item label-width="0" prop="query">
+            <div style="background-color: #fff; height: 1px; overflow: hidden"></div>
+            <div class="json-box">
+              <JSONEditor v-model="dataForm.query" :options="jsonOptions" ref="JSONEditorRef" />
             </div>
-          </el-col>
-          <el-col class="staticData" v-if="active === 1 && dataForm.dataType === 2">
-            <el-form-item label-width="0" prop="query">
-              <div style="background-color: #fff; height: 1px; overflow: hidden"></div>
-              <div class="json-box">
-                <JSONEditor v-model="dataForm.query" :options="jsonOptions" ref="JSONEditorRef" />
-              </div>
-            </el-form-item>
-          </el-col>
-          <el-col :span="14" :offset="5" class="mt-20 baseInfo"
-            v-if="active === 1 && dataForm.dataType === 3">
-            <el-form-item label="接口路径" prop="path" maxlength="50">
-              <el-input v-model="dataForm.path" placeholder="输入接口路径" />
-            </el-form-item>
-            <el-form-item v-for="(item, index) in dataForm.requestParameters" :key="item.index"
-              :label="'接口参数' + (index+1)" required>
-              <el-row class="parameBox">
-                <el-col :span="7" style="margin-right: 10px">
-                  <el-form-item :prop="'requestParameters.' + index + '.field'" :rules="{
+          </el-form-item>
+        </el-col>
+        <el-col :span="14" :offset="5" class="mt-20 baseInfo"
+          v-if="active === 1 && dataForm.dataType === 3">
+          <el-form-item label="接口路径" prop="path" maxlength="50">
+            <el-input v-model="dataForm.path" placeholder="输入接口路径" />
+          </el-form-item>
+          <el-form-item v-for="(item, index) in dataForm.requestParameters" :key="item.index"
+            :label="'接口参数' + (index+1)" required>
+            <el-row class="parameBox">
+              <el-col :span="7" style="margin-right: 10px">
+                <el-form-item :prop="'requestParameters.' + index + '.field'" :rules="{
                       required: true, message: '参数名称不能为空', trigger: 'blur'
                     }">
-                    <el-input v-model="item.field" placeholder="参数名称" />
-                  </el-form-item>
-                </el-col>
-                <el-col :span="7" style="margin-right: 10px">
-                  <el-form-item :prop="'requestParameters.' + index + '.value'" :rules="{
+                  <el-input v-model="item.field" placeholder="参数名称" />
+                </el-form-item>
+              </el-col>
+              <el-col :span="7" style="margin-right: 10px">
+                <el-form-item :prop="'requestParameters.' + index + '.value'" :rules="{
                       required: true, message: '参数值不能为空', trigger: 'blur'
                     }">
-                    <el-input v-model="item.value" placeholder="参数值" />
-                  </el-form-item>
-                </el-col>
-                <el-col :span="2">
-                  <el-button @click.prevent="removeParame(item)">删除</el-button>
-                </el-col>
-              </el-row>
-            </el-form-item>
-            <el-form-item>
-              <el-button type="primary" @click="addParame" class="el-icon-plus">添加参数</el-button>
-            </el-form-item>
-          </el-col>
-        </el-row>
-      </el-form>
-    </div>
-  </transition>
+                  <el-input v-model="item.value" placeholder="参数值" />
+                </el-form-item>
+              </el-col>
+              <el-col :span="2">
+                <el-button @click.prevent="removeParame(item)">删除</el-button>
+              </el-col>
+            </el-row>
+          </el-form-item>
+          <el-form-item>
+            <el-button type="primary" @click="addParame" class="el-icon-plus">添加参数</el-button>
+          </el-form-item>
+        </el-col>
+      </el-row>
+    </el-form>
+  </div>
 </template>
 
 <script>
@@ -136,28 +135,8 @@ import {
 } from '@/api/systemData/dataInterface'
 import { getDataSourceListAll } from '@/api/systemData/dataSource'
 import { DataModelList } from '@/api/systemData/dataModel'
-import { deepClone } from '@/utils'
 import SQLEditor from '@/components/JNPFEditor/monaco'
 import JSONEditor from '@/components/JNPFEditor/monaco'
-const defaultOptions = [{
-  label: '',
-  children: [{
-    fullName: '默认数据库',
-    id: '0'
-  }]
-}, {
-  label: 'SqlServer',
-  children: []
-}, {
-  label: 'MySql',
-  children: []
-}, {
-  label: 'Oracle',
-  children: []
-}, {
-  label: 'DM',
-  children: []
-}]
 
 export default {
   components: {
@@ -259,7 +238,6 @@ export default {
       this.active = 0
       this.dataForm.id = id || ''
       this.formLoading = true
-      this.dbOptions = deepClone(defaultOptions)
       this.$nextTick(() => {
 
         this.$refs['dataForm'].resetFields()
@@ -269,19 +247,15 @@ export default {
         })
         // 获取数据库
         getDataSourceListAll().then(res => {
-          for (let i = 0; i < res.data.list.length; i++) {
-            const element = res.data.list[i];
-            if (element.dbType === 'SqlServer') {
-              this.dbOptions[1].children.push(element)
-            } else if (element.dbType === 'MySql') {
-              this.dbOptions[2].children.push(element)
-            } else if (element.dbType === 'Oracle') {
-              this.dbOptions[3].children.push(element)
-            } else if (element.dbType == 'DM') {
-              this.dbOptions[4].children.push(element)
-            }
+          const defaultItem = {
+            fullName: '',
+            children: [{
+              fullName: '默认数据库',
+              id: '0'
+            }]
           }
-          this.dbOptions = this.dbOptions.filter(o => o.children.length)
+          const list = [defaultItem, ...res.data.list]
+          this.dbOptions = list.filter(o => o.children && o.children.length)
           this.getTableList(this.dataForm.dbLinkId)
           if (this.dataForm.id) {
             this.getFormData()

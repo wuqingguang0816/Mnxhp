@@ -121,7 +121,6 @@
         <el-button type="text" icon="el-icon-plus" :disabled="setting.readonly">新增</el-button>
       </div>
     </template>
-    <UserBox v-if="userBoxVisible" ref="userBox" @submit="submit" />
   </div>
 </template>
 

@@ -24,11 +24,11 @@
     </el-form-item>
     <el-form-item label="至少应选">
       <el-input-number :value="activeData.min" :min="0" placeholder="至少应选"
-        @input="$set(activeData, 'min', $event?$event:undefined)" />
+        @input="$set(activeData, 'min', $event?$event:undefined)" controls-position="right" />
     </el-form-item>
     <el-form-item label="最多可选">
       <el-input-number :value="activeData.max" :min="0" placeholder="最多可选"
-        @input="$set(activeData, 'max', $event?$event:undefined)" />
+        @input="$set(activeData, 'max', $event?$event:undefined)" controls-position="right" />
     </el-form-item>
     <el-divider>选项</el-divider>
     <el-form-item label="" label-width="40px">
@@ -68,7 +68,7 @@
       <el-form-item label="数据接口">
         <JNPF-TreeSelect :options="dataInterfaceSelector" v-model="activeData.__config__.propsUrl"
           placeholder="请选择数据接口" lastLevel lastLevelKey='categoryId' lastLevelValue='1'
-          @getValue="propsUrlChange" clearable>
+          @change="propsUrlChange" clearable>
         </JNPF-TreeSelect>
       </el-form-item>
       <el-form-item label="值">

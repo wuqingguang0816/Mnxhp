@@ -15,10 +15,8 @@
         </el-col>
         <el-col :span="6" v-if="JudgeShow('salesmanId')">
           <el-form-item label="业务人员" prop="salesmanId">
-            <JNPF-TreeSelect :options="treeData" v-model="dataForm.salesmanId" @getValue="getValue"
-              placeholder="选择人员" lastLevel lastLevelKey='type' lastLevelValue='user'
-              :disabled="JudgeWrite('salesmanId')">
-            </JNPF-TreeSelect>
+            <user-select v-model="dataForm.salesmanId" placeholder="选择人员"
+              :disabled="JudgeWrite('salesmanId')" @change="onChange" />
           </el-form-item>
         </el-col>
         <el-col :span="6" v-if="JudgeShow('orderDate')">
@@ -228,7 +226,6 @@
       </el-tabs>
     </div>
     <GoodsBox v-if="goodsBoxVisible" ref="goodsBox" @refreshDataList="initList" />
-    <UserBox v-if="userBoxVisible" ref="userBox" @submit="submit" />
   </div>
 </template>
 
@@ -236,6 +233,7 @@
 import comMixin from '../mixin'
 import { CustomerList } from '@/api/extend/order'
 import GoodsBox from '@/views/extend/order/GoodsBox'
+import { Info, Update, Create } from '@/api/extend/order'
 export default {
   mixins: [comMixin],
   components: { GoodsBox },
@@ -268,7 +266,7 @@ export default {
           { required: true, message: '客户名称不能为空', trigger: 'click' },
         ],
         salesmanId: [
-          { required: true, message: '业务人员不能为空', trigger: 'blur' }
+          { required: true, message: '业务人员不能为空', trigger: 'change' }
         ],
         orderDate: [
           { required: true, message: '订单日期不能为空', trigger: 'change' }
@@ -279,7 +277,6 @@ export default {
       },
       options: ['现金', '转帐', '汇票'],
       transportOptions: ['快递', '物流', '配送', '自提'],
-      treeData: [],
       goodsBoxVisible: false
     }
   },
@@ -296,17 +293,46 @@ export default {
       deep: true
     }
   },
-  created() {
-    this.initData()
-  },
   methods: {
-    initData() {
-      this.$store.dispatch('base/getUserTree').then(res => {
-        this.treeData = res
+    selfGetInfo() {
+      Info(this.setting.id).then(res => {
+        this.dataForm = res.data
+        if (res.data.fileJson) {
+          this.fileList = JSON.parse(res.data.fileJson)
+        }
+        this.loading = false
       })
     },
-    getValue(value, node) {
-      this.dataForm.salesmanName = node.fullName
+    selfSubmit() {
+      this.dataForm.status = this.eventType === 'submit' ? 0 : 1
+      if (this.eventType === 'save') return this.selfHandleRequest()
+      this.$confirm('您确定要提交当前流程吗, 是否继续?', '提示', {
+        type: 'warning'
+      }).then(() => {
+        this.selfHandleRequest()
+      }).catch(() => { });
+    },
+    selfHandleRequest() {
+      if (!this.dataForm.id) delete (this.dataForm.id)
+      if (this.eventType === 'save') this.$emit('setLoad', true)
+      const formMethod = this.dataForm.id ? Update : Create
+      formMethod(this.dataForm).then(res => {
+        this.$message({
+          message: res.msg,
+          type: 'success',
+          duration: 1500,
+          onClose: () => {
+            if (this.eventType === 'save') this.$emit('setLoad', false)
+            this.$emit('close', true)
+          }
+        })
+      }).catch(() => {
+        if (this.eventType === 'save') this.$emit('setLoad', false)
+      })
+    },
+    onChange(ids, selectedData) {
+      if (!selectedData.length) return
+      this.dataForm.salesmanName = selectedData[0].fullName
     },
     querySearchAsync(queryString, cb) {
       CustomerList(queryString).then(res => {

@@ -15,6 +15,7 @@ const getters = {
   dictionaryList: state => state.base.dictionaryList,
   userList: state => state.base.userList,
   positionList: state => state.base.positionList,
+  roleList: state => state.base.roleList,
   socket: state => state.user.socket,
   hasTable: state => state.generator.hasTable,
 }
