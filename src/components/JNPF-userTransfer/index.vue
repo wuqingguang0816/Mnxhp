@@ -88,7 +88,7 @@ export default {
       if (!this.value.length) return this.allLoading = false
       getUserInfoList(this.value).then(res => {
         this.selectedData = res.data.list
-        this.ids = this.value
+        this.ids = this.selectedData.map(o => o.id)
         this.allLoading = false
       })
     },
