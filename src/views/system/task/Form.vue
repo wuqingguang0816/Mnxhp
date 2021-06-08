@@ -114,8 +114,8 @@
               </el-col>
             </template>
             <el-col :span="24">
-              <el-form-item label="功能描述" prop="description">
-                <el-input v-model="dataForm.description" placeholder="功能描述" type="textarea"
+              <el-form-item label="任务说明" prop="description">
+                <el-input v-model="dataForm.description" placeholder="任务说明" type="textarea"
                   :rows="3" />
               </el-form-item>
             </el-col>
