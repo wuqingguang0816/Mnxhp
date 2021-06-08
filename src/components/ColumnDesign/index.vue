@@ -85,33 +85,6 @@
                 <p class="item-name">{{item.name}}</p>
               </div>
             </div>
-            <el-divider class="typeLine">排序设置</el-divider>
-            <el-form-item label="排序字段">
-              <el-select v-model="columnData.defaultSidx" placeholder="请选择排序字段">
-                <el-option :label="item.__config__.label" :value="item.__vModel__"
-                  v-for="(item, i) in list" :key="i"></el-option>
-              </el-select>
-            </el-form-item>
-            <el-form-item label="排序类型">
-              <el-select v-model="columnData.sort" placeholder="请选择排序类型">
-                <el-option label="正序" value="asc"></el-option>
-                <el-option label="倒序" value="desc"></el-option>
-              </el-select>
-            </el-form-item>
-            <template v-if="columnData.type !==3">
-              <el-divider>分页设置</el-divider>
-              <el-form-item label="列表分页">
-                <el-switch v-model="columnData.hasPage"></el-switch>
-              </el-form-item>
-              <el-form-item label="分页条数">
-                <el-radio-group v-model="columnData.pageSize">
-                  <el-radio-button :label="20">20条</el-radio-button>
-                  <el-radio-button :label="50">50条</el-radio-button>
-                  <el-radio-button :label="100">100条</el-radio-button>
-                  <el-radio-button :label="500">500条</el-radio-button>
-                </el-radio-group>
-              </el-form-item>
-            </template>
             <template v-if="columnData.type==2">
               <el-divider>左侧设置</el-divider>
               <el-form-item label="左侧标题">
@@ -158,6 +131,33 @@
                   <el-option :label="item.__config__.label" :value="item.__vModel__"
                     v-for="(item, i) in list" :key="i"></el-option>
                 </el-select>
+              </el-form-item>
+            </template>
+            <el-divider class="typeLine">排序设置</el-divider>
+            <el-form-item label="排序字段">
+              <el-select v-model="columnData.defaultSidx" placeholder="请选择排序字段">
+                <el-option :label="item.__config__.label" :value="item.__vModel__"
+                  v-for="(item, i) in list" :key="i"></el-option>
+              </el-select>
+            </el-form-item>
+            <el-form-item label="排序类型">
+              <el-select v-model="columnData.sort" placeholder="请选择排序类型">
+                <el-option label="正序" value="asc"></el-option>
+                <el-option label="倒序" value="desc"></el-option>
+              </el-select>
+            </el-form-item>
+            <template v-if="columnData.type !==3">
+              <el-divider>分页设置</el-divider>
+              <el-form-item label="列表分页">
+                <el-switch v-model="columnData.hasPage"></el-switch>
+              </el-form-item>
+              <el-form-item label="分页条数">
+                <el-radio-group v-model="columnData.pageSize">
+                  <el-radio-button :label="20">20条</el-radio-button>
+                  <el-radio-button :label="50">50条</el-radio-button>
+                  <el-radio-button :label="100">100条</el-radio-button>
+                  <el-radio-button :label="500">500条</el-radio-button>
+                </el-radio-group>
               </el-form-item>
             </template>
             <el-divider>按钮配置</el-divider>
