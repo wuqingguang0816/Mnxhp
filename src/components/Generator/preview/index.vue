@@ -1,8 +1,8 @@
 <template>
   <div class="test-form">
     <el-dialog v-bind="$attrs" :close-on-click-modal="false" :modal-append-to-body="false"
-      v-on="$listeners" @open="onOpen" @close="onClose" class="JNPF-dialog JNPF-dialog_center"
-      title="预览">
+      append-to-body v-on="$listeners" @open="onOpen" @close="onClose"
+      class="JNPF-dialog JNPF-dialog_center" title="预览">
       <parser :form-conf="formConf" @submit="sumbitForm" :key="key" ref="dynamicForm" />
       <div slot="footer">
         <el-button @click="close">{{formConf.cancelButtonText||'取 消'}}</el-button>

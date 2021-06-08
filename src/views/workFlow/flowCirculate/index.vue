@@ -40,8 +40,7 @@
             </el-col>
             <el-col :span="6">
               <el-form-item label="发起人员">
-                <JNPF-TreeSelect :options="treeData" v-model="creatorUserId" placeholder="选择发起人员"
-                  lastLevel lastLevelKey='type' lastLevelValue='user' clearable></JNPF-TreeSelect>
+                <user-select v-model="creatorUserId" placeholder="选择发起人员" />
               </el-form-item>
             </el-col>
           </template>
@@ -116,7 +115,7 @@
 <script>
 import { FlowBeforeList } from '@/api/workFlow/FlowBefore'
 import { FlowEngineListAll } from '@/api/workFlow/FlowEngine'
-import FlowBox from '../fromBox/FlowBox'
+import FlowBox from '../components/FlowBox'
 export default {
   name: 'workFlow-flowCirculate',
   components: { FlowBox },
@@ -170,7 +169,6 @@ export default {
       categoryList: [],
       flowEngineList: [],
       flowEngineListAll: [],
-      treeData: []
     }
   },
   filters: {
@@ -181,7 +179,6 @@ export default {
   },
   created() {
     this.getDictionaryData()
-    this.getUserList()
     this.initData()
   },
   methods: {
@@ -219,10 +216,6 @@ export default {
         this.categoryList = res
         this.getFlowEngineList()
       })
-    },
-    async getUserList() {
-      let res = await this.$store.dispatch('base/getUserTree')
-      this.treeData = res
     },
     initData() {
       this.listLoading = true

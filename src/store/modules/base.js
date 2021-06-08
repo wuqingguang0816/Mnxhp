@@ -1,6 +1,7 @@
 import { getDictionaryAll } from '@/api/systemData/dictionary'
 import { UserListAll, getUserSelector } from '@/api/permission/user'
 import { getPositionListAll, getPositionSelector } from '@/api/permission/position'
+import { getRoleSelector } from '@/api/permission/role'
 
 const state = {
   dictionaryList: [],
@@ -8,6 +9,8 @@ const state = {
   userTree: [],
   positionList: [],
   positionTree: [],
+  roleList: [],
+  roleTree: []
 }
 
 const mutations = {
@@ -26,6 +29,12 @@ const mutations = {
   SET_POSITION_TREE: (state, positionTree) => {
     state.positionTree = positionTree
   },
+  SET_ROLE_LIST: (state, roleList) => {
+    state.roleList = roleList
+  },
+  SET_ROLE_TREE: (state, roleTree) => {
+    state.roleTree = roleTree
+  }
 }
 
 const actions = {
@@ -50,13 +59,15 @@ const actions = {
         list = state.dictionaryList
       }
       if (info.sort) {
-        data = list.filter(o => o.enCode === info.sort)[0]
+        let arr = list.filter(o => o.enCode === info.sort)
+        if (!arr.length) return resolve([])
+        data = arr[0]
         if (!info.id) {
           json = data.dictionaryList
         } else {
           let rowData = [];
           if (!data.isTree) {
-            rowData = data.dictionaryList.fliter(v => v.id == info.id)
+            rowData = data.dictionaryList.fliter(o => o.id == info.id)
           } else {
             function findData(list) {
               for (let i = 0; i < list.length; i++) {
@@ -110,6 +121,41 @@ const actions = {
         })
       } else {
         resolve(state.positionTree)
+      }
+    })
+  },
+  getRoleList({ state, commit, dispatch }) {
+    return new Promise((resolve, reject) => {
+      if (!state.roleList.length) {
+        dispatch('getRoleTree').then(res => {
+          let list = []
+          for (let i = 0; i < res.length; i++) {
+            const item = res[i]
+            for (let j = 0; j < item.children.length; j++) {
+              list.push(item.children[j])
+            }
+          }
+          commit('SET_ROLE_LIST', list)
+          resolve(list)
+        }).catch(error => {
+          reject(error)
+        })
+      } else {
+        resolve(state.roleList)
+      }
+    })
+  },
+  getRoleTree({ state, commit }) {
+    return new Promise((resolve, reject) => {
+      if (!state.roleTree.length) {
+        getRoleSelector().then(res => {
+          commit('SET_ROLE_TREE', res.data.list)
+          resolve(res.data.list)
+        }).catch(error => {
+          reject(error)
+        })
+      } else {
+        resolve(state.roleTree)
       }
     })
   },

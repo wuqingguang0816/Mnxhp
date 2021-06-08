@@ -17,7 +17,9 @@
           ref="treeBox" :expand-on-click-node="false" @node-click="handleNodeClick"
           class="JNPF-common-el-tree" node-key="fileName">
           <span class="custom-tree-node" slot-scope="{ node }">
-            <span class="text">{{node.label}}</span>
+            <el-tooltip :content="node.label" placement="right">
+              <span class="text">{{node.label}}</span>
+            </el-tooltip>
           </span>
         </el-tree>
       </div>

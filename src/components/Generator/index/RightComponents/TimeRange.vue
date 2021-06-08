@@ -23,8 +23,8 @@
       </el-form-item>
     </template>
     <el-form-item label="控件宽度" v-if="activeData.__config__.isSubTable">
-      <el-input-number v-model="activeData.__config__.columnWidth" placeholder="控件宽度" :min="0"
-        :precision="0" /> px
+      <el-input-number controls-position="right" v-model="activeData.__config__.columnWidth"
+        placeholder="控件宽度" :min="0" :precision="0" /> px
     </el-form-item>
     <!-- <el-form-item label="组件宽度">
       <el-input v-model="activeData.style.width" placeholder="请输入组件宽度" clearable />

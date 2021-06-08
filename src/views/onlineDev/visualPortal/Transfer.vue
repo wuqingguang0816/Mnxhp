@@ -3,8 +3,8 @@
   <el-dialog title="选择角色" :close-on-click-modal="false"
     class="JNPF-dialog JNPF-dialog_center transfer-dialog" lock-scroll append-to-body
     v-bind="$attrs" width="800px" :modal-append-to-body="false" v-on="$listeners" @open="onOpen">
-    <JNPFTransfer :loading="loading" :treeData="treeData" v-model="selectedData"
-      ref="JNPFTransfer" />
+    <JNPFTransfer :loading="loading" :treeData="treeData" v-model="selectedData" ref="JNPFTransfer"
+      type="role" />
     <span slot="footer" class="dialog-footer">
       <el-button @click="closeTransfer">{{$t('common.cancelButton')}}</el-button>
       <el-button type="primary" @click="confirm">{{$t('common.confirmButton')}}</el-button>
@@ -59,20 +59,11 @@ export default {
       this.$nextTick(() => {
         this.$refs.JNPFTransfer && (this.$refs.JNPFTransfer.filterText = '')
       })
-      this.$store.dispatch('base/getDictionaryData', { sort: 'RoleType' }).then(data => {
-        this.treeData = JSON.parse(JSON.stringify(data))
-        getRoleSelector().then(res => {
-          let roleTreeData = res.data.list
-          for (let i = 0; i < this.treeData.length; i++) {
-            let child = roleTreeData.filter(o => this.treeData[i].enCode === o.type)
-            let count = child.length
-            this.$set(this.treeData[i], 'children', child)
-            this.$set(this.treeData[i], 'count', count)
-          }
-          getModelData(this.id, 'Role').then(res => {
-            this.selectedData = res.data.ids
-            this.loading = false
-          })
+      getRoleSelector().then(res => {
+        this.treeData = res.data.list
+        getModelData(this.id, 'Role').then(res => {
+          this.selectedData = res.data.ids
+          this.loading = false
         })
       })
     },

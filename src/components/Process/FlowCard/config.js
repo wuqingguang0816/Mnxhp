@@ -6,12 +6,16 @@ export default {
       title: '发起节点',
       hasInitFunc: false,
       initInterfaceUrl: '',
-      initInterfaceType: 'POST',
+      initInterfaceType: 'GET',
       hasEndFunc: false,
       endInterfaceUrl: '',
-      endInterfaceType: 'POST',
+      endInterfaceType: 'GET',
+      hasFlowRecallFunc: false,
+      flowRecallInterfaceUrl: '',
       initiator: [],
-      initiatePos: []
+      initiatePos: [],
+      initiateRole: [],
+      formOperates: []
     }
   },
   approver: {
@@ -39,6 +43,13 @@ export default {
       hour: 0,
       minute: 0,
       second: 0
+    }
+  },
+  subFlow: {
+    type: 'subFlow',
+    content: '请设置发起人',
+    properties: {
+      title: '子流程'
     }
   },
   interflow: {

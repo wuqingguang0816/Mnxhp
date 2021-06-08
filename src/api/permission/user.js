@@ -76,9 +76,29 @@ export const updateUserState = (id) => {
   })
 }
 
-export const TreeView = () => {
+// IM通讯获取用户
+export const getImUser = data => {
   return request({
-    url: '/api/permission/User/TreeView',
-    method: 'GET'
+    url: '/api/permission/Users/ImUser',
+    method: 'GET',
+    data
+  })
+}
+
+// 获取用户下拉框列表
+export const getImUserSelector = (organizeId, keyword) => {
+  return request({
+    url: `/api/permission/Users/ImUser/Selector/${organizeId}`,
+    method: 'post',
+    data: { keyword }
+  })
+}
+
+// 获取用户基本信息
+export const getUserInfoList = userId => {
+  return request({
+    url: '/api/permission/Users/getUserList',
+    method: 'post',
+    data: { userId }
   })
 }

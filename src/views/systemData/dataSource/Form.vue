@@ -3,11 +3,10 @@
     :visible.sync="visible" class="JNPF-dialog JNPF-dialog_center" lock-scroll width="600px">
     <el-form ref="dataForm" :model="dataForm" :rules="dataRule" label-width="100px">
       <el-form-item label="连接驱动" prop="dbType">
-        <el-select v-model="dataForm.dbType" placeholder="请选择" :disabled='!!dataForm.id' clearable
+        <el-select v-model="dataForm.dbType" placeholder="请选择" :disabled='!!dataForm.id'
           @change='handleChange'>
-          <el-option v-for="item in options" :key="item.value" :label="item.label"
-            :value="item.value">
-          </el-option>
+          <el-option v-for="item in dbOptions" :key="item.enCode" :label="item.fullName"
+            :value="item.enCode" />
         </el-select>
       </el-form-item>
       <el-form-item label="连接名称" prop="fullName">
@@ -31,7 +30,8 @@
         </el-input>
       </el-form-item>
       <el-form-item label="排序" prop="sortCode">
-        <el-input-number :min="0" :max="9999" v-model="dataForm.sortCode" />
+        <el-input-number :min="0" :max="9999" v-model="dataForm.sortCode"
+          controls-position="right" />
       </el-form-item>
     </el-form>
     <span slot="footer" class="dialog-footer">
@@ -84,19 +84,7 @@ export default {
           { required: true, message: '库名不能为空', trigger: 'blur' }
         ],
       },
-      options: [{
-        value: 'SqlServer',
-        label: 'SqlServer'
-      }, {
-        value: 'MySql',
-        label: 'MySql'
-      }, {
-        value: 'Oracle',
-        label: 'Oracle'
-      }, {
-        value: 'DM',
-        label: 'DM'
-      }],
+      dbOptions: [],
       btnLoading: false,
       testLoad: false
     }
@@ -105,8 +93,10 @@ export default {
     init(id) {
       this.dataForm.id = id || 0
       this.visible = true
-      this.$nextTick(() => {
+      this.$nextTick(async () => {
         this.$refs['dataForm'].resetFields()
+        const res = await this.$store.dispatch('base/getDictionaryData', { sort: 'dbType' })
+        this.dbOptions = JSON.parse(JSON.stringify(res))
         if (this.dataForm.id) {
           DataSourceInfo(this.dataForm.id).then(res => {
             this.dataForm = res.data

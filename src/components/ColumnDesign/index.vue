@@ -85,32 +85,6 @@
                 <p class="item-name">{{item.name}}</p>
               </div>
             </div>
-            <el-divider class="typeLine">排序设置</el-divider>
-            <el-form-item label="排序字段">
-              <el-select v-model="columnData.defaultSidx" placeholder="请选择排序字段">
-                <el-option :label="item.__config__.label" :value="item.__vModel__"
-                  v-for="(item, i) in list" :key="i"></el-option>
-              </el-select>
-            </el-form-item>
-            <el-form-item label="排序类型">
-              <el-select v-model="columnData.sort" placeholder="请选择排序类型">
-                <el-option label="正序" value="asc"></el-option>
-                <el-option label="倒序" value="desc"></el-option>
-              </el-select>
-            </el-form-item>
-            <template v-if="columnData.type !==3">
-              <el-divider>分页设置</el-divider>
-              <el-form-item label="列表分页">
-                <el-switch v-model="columnData.hasPage"></el-switch>
-              </el-form-item>
-              <el-form-item label="分页条数">
-                <el-radio-group v-model="columnData.pageSize">
-                  <el-radio-button :label="20">20条</el-radio-button>
-                  <el-radio-button :label="50">50条</el-radio-button>
-                  <el-radio-button :label="100">100条</el-radio-button>
-                </el-radio-group>
-              </el-form-item>
-            </template>
             <template v-if="columnData.type==2">
               <el-divider>左侧设置</el-divider>
               <el-form-item label="左侧标题">
@@ -120,10 +94,6 @@
                 <el-select v-model="columnData.treeDataSource" placeholder="请选择数据来源"
                   @change="dataTypeChange">
                   <el-option label="数据字典" value="dictionary"></el-option>
-                  <el-option label="公司数据" value="organize"></el-option>
-                  <el-option label="部门数据" value="department"></el-option>
-                  <el-option label="人员数据" value="user"></el-option>
-                  <el-option label="远端数据" value="api"></el-option>
                 </el-select>
               </el-form-item>
               <template v-if="columnData.treeDataSource==='dictionary'">
@@ -163,6 +133,33 @@
                 </el-select>
               </el-form-item>
             </template>
+            <el-divider class="typeLine">排序设置</el-divider>
+            <el-form-item label="排序字段">
+              <el-select v-model="columnData.defaultSidx" placeholder="请选择排序字段">
+                <el-option :label="item.__config__.label" :value="item.__vModel__"
+                  v-for="(item, i) in list" :key="i"></el-option>
+              </el-select>
+            </el-form-item>
+            <el-form-item label="排序类型">
+              <el-select v-model="columnData.sort" placeholder="请选择排序类型">
+                <el-option label="正序" value="asc"></el-option>
+                <el-option label="倒序" value="desc"></el-option>
+              </el-select>
+            </el-form-item>
+            <template v-if="columnData.type !==3">
+              <el-divider>分页设置</el-divider>
+              <el-form-item label="列表分页">
+                <el-switch v-model="columnData.hasPage"></el-switch>
+              </el-form-item>
+              <el-form-item label="分页条数">
+                <el-radio-group v-model="columnData.pageSize">
+                  <el-radio-button :label="20">20条</el-radio-button>
+                  <el-radio-button :label="50">50条</el-radio-button>
+                  <el-radio-button :label="100">100条</el-radio-button>
+                  <el-radio-button :label="500">500条</el-radio-button>
+                </el-radio-group>
+              </el-form-item>
+            </template>
             <el-divider>按钮配置</el-divider>
             <el-checkbox-group v-model="btnsList" class="btnsList" size="medium">
               <el-checkbox :label="item.value" border v-for="item in btnsOption" :key="item.value">
@@ -177,6 +174,16 @@
                 <el-input v-model="item.label" size="mini"></el-input>
               </el-checkbox>
             </el-checkbox-group>
+            <el-divider>权限设置</el-divider>
+            <el-form-item label="列表权限">
+              <el-switch v-model="columnData.useColumnPermission"></el-switch>
+            </el-form-item>
+            <el-form-item label="按钮权限">
+              <el-switch v-model="columnData.useBtnPermission"></el-switch>
+            </el-form-item>
+            <el-form-item label="数据权限">
+              <el-switch v-model="columnData.useDataPermission"></el-switch>
+            </el-form-item>
           </el-form>
         </div>
       </div>
@@ -186,9 +193,18 @@
 <script>
 import Sortable from 'sortablejs'
 import { getDrawingList } from '@/components/Generator/utils/db'
-import { deepClone } from '@/utils'
-import { noColumnShowList, noSearchList } from '@/components/Generator/generator/comConfig'
+import { noColumnShowList, noSearchList, useInputList, useDateList } from '@/components/Generator/generator/comConfig'
 import { getDataInterfaceSelector } from '@/api/systemData/dataInterface'
+
+const getSearchType = item => {
+  const jnpfKey = item.__config__.jnpfKey
+  // 等于-1  模糊-2  范围-3
+  const fuzzyList = [...useInputList]
+  const RangeList = [...useDateList, 'time', 'date', 'numInput']
+  if (RangeList.includes(jnpfKey)) return 3
+  if (fuzzyList.includes(jnpfKey)) return 2
+  return 1
+}
 
 const defaultColumnData = {
   searchList: [], // 查询条件
@@ -207,6 +223,9 @@ const defaultColumnData = {
   treePropsChildren: 'children',  // 子级字段
   treePropsLabel: 'fullName',  // 显示字段
   groupField: '',  // 分组字段
+  useColumnPermission: false,
+  useBtnPermission: false,
+  useDataPermission: false,
   btnsList: [
     { value: 'add', icon: 'el-icon-plus', label: '新增' }
   ],  // 按钮
@@ -235,7 +254,6 @@ export default {
       btnsOption: [
         { value: 'add', icon: 'el-icon-plus', label: '新增' },
         { value: 'download', icon: 'el-icon-download', label: '导出' },
-        { value: 'batchRemove', icon: 'el-icon-delete', label: '批量删除' },
       ],
       columnBtnsOption: [
         { value: 'edit', icon: 'el-icon-edit', label: '编辑' },
@@ -311,7 +329,7 @@ export default {
       sortable: false,
       width: null
     }));
-    this.searchOptions = searchOptions.map(o => ({ ...o, value: '' }));
+    this.searchOptions = searchOptions.map(o => ({ ...o, value: '', searchType: getSearchType(o) }));
     if (typeof this.conf === 'object' && this.conf !== null) {
       this.columnData = Object.assign({}, defaultColumnData, this.conf)
     }
@@ -348,6 +366,7 @@ export default {
             if (type === 'column') {
               data[ii].align = replacedData[i].align
               data[ii].width = replacedData[i].width
+              data[ii].sortable = replacedData[i].sortable
             }
             res.push(data[ii])
             break inter

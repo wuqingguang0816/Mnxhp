@@ -25,13 +25,13 @@
       <el-switch v-model="activeData.__config__.showLabel" />
     </el-form-item> -->
     <el-form-item label="最小值">
-      <el-input-number v-model="activeData.min" placeholder="最小值" />
+      <el-input-number v-model="activeData.min" placeholder="最小值" controls-position="right" />
     </el-form-item>
     <el-form-item label="最大值">
-      <el-input-number v-model="activeData.max" placeholder="最大值" />
+      <el-input-number v-model="activeData.max" placeholder="最大值" controls-position="right" />
     </el-form-item>
     <el-form-item label="步长">
-      <el-input-number v-model="activeData.step" placeholder="步数" />
+      <el-input-number v-model="activeData.step" placeholder="步数" controls-position="right" />
     </el-form-item>
     <el-form-item v-if="activeData['show-stops'] !== undefined" label="显示间断点">
       <el-switch v-model="activeData['show-stops']" />

@@ -20,15 +20,7 @@
       </el-row>
       <div class="JNPF-common-layout-main JNPF-flex-main">
         <div class="JNPF-common-head">
-          <!-- <topOpts  @add="addOrUpdateHandle()" addText="新建流程"></topOpts> -->
-          <el-dropdown v-has="'btn_add'">
-            <el-button type="primary" icon="el-icon-plus">{{$t('common.addBtn')}}<i
-                class="el-icon-arrow-down el-icon--right"></i></el-button>
-            <el-dropdown-menu>
-              <el-dropdown-item @click.native="addOrUpdateHandle('',2)">自定义表单</el-dropdown-item>
-              <el-dropdown-item @click.native="addOrUpdateHandle('',1)">系统表单</el-dropdown-item>
-            </el-dropdown-menu>
-          </el-dropdown>
+          <topOpts @add="dialogVisible=true" />
           <div class="JNPF-common-head-right">
             <el-tooltip effect="dark" :content="$t('common.refresh')" placement="top">
               <el-link icon="icon-ym icon-ym-Refresh JNPF-common-head-icon" :underline="false"
@@ -72,9 +64,6 @@
             v-if="jnpf.hasP('creatorUser')" />
           <el-table-column prop="creatorTime" label="创建时间" :formatter="jnpf.tableDateFormat"
             width="120" v-if="jnpf.hasP('creatorTime')" />
-          <!-- <el-table-column prop="lastModifyUser" label="最后修改人" width="120" />
-      <el-table-column prop="lastModifyTime" label="最后修改时间" :formatter="jnpf.tableDateFormat"
-        width="120" /> -->
           <el-table-column prop="sortCode" label="排序" width="70" align="center"
             v-if="jnpf.hasP('sortCode')" />
           <el-table-column label="状态" width="70" align="center" v-if="jnpf.hasP('enabledMark')">
@@ -84,7 +73,6 @@
                 class="table-switch" />
             </template>
           </el-table-column>
-          <!-- <el-table-column prop="description" label="流程说明" show-overflow-tooltip /> -->
           <el-table-column label="操作" fixed="right" width="150">
             <template slot-scope="scope" v-if="!scope.row.top">
               <tableOpts @edit="addOrUpdateHandle(scope.row.id,scope.row.formType)"
@@ -102,10 +90,6 @@
                       预览表单 </el-dropdown-item>
                   </el-dropdown-menu>
                 </el-dropdown>
-                <!-- <el-button size="mini" type="text" v-if="!scope.row.enabledMark"
-              @click="handleUpdate(scope.row)" v-has="'btn_release'">发布</el-button>
-            <el-button size="mini" type="text" v-else @click="handleUpdate(scope.row)"
-              v-has="'btn_stop'">停止</el-button> -->
               </tableOpts>
             </template>
           </el-table-column>
@@ -114,13 +98,32 @@
     </div>
     <Form v-if="formVisible" ref="Form" @close="colseForm" />
     <preview v-if="previewVisible" ref="preview" @close="previewVisible=false" />
+    <el-dialog title="新建表单" :visible.sync="dialogVisible" class="JNPF-dialog JNPF-dialog_center"
+      lock-scroll width="600px">
+      <div class="add-main">
+        <div class="add-item add-item-sys" @click="addFlow(1)">
+          <i class="add-icon el-icon-document"></i>
+          <div class="add-txt">
+            <p class="add-title">系统表单</p>
+            <p class="add-desc">关联系统原有表单，便捷设计</p>
+          </div>
+        </div>
+        <div class="add-item" @click="addFlow(2)">
+          <i class="add-icon icon-ym icon-ym-generator-company"></i>
+          <div class="add-txt">
+            <p class="add-title">自定义表单</p>
+            <p class="add-desc">自定义设计流程表单</p>
+          </div>
+        </div>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
 <script>
 import { FlowEngineList, Delete, Release, Stop, Copy } from '@/api/workFlow/FlowEngine'
 import Form from './Form'
-import preview from '../fromBox/Preview'
+import preview from '../components/Preview'
 export default {
   name: 'workFlow-flowEngine',
   components: { Form, preview },
@@ -129,6 +132,7 @@ export default {
       keyword: '',
       list: [],
       listLoading: true,
+      dialogVisible: false,
       formVisible: false,
       previewVisible: false,
       categoryList: [],
@@ -179,6 +183,10 @@ export default {
           });
         })
       }).catch(() => { });
+    },
+    addFlow(formType) {
+      this.dialogVisible = false
+      this.addOrUpdateHandle('', formType)
     },
     // 新增 / 修改
     addOrUpdateHandle(id, formType) {
@@ -252,3 +260,57 @@ export default {
   }
 }
 </script>
+<style lang="scss" scoped>
+.JNPF-dialog {
+  >>> .el-dialog__body {
+    padding: 50px 30px !important;
+  }
+}
+.add-main {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  .add-item {
+    width: 255px;
+    height: 136px;
+    background: #eff9ff;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    padding-left: 20px;
+    &.add-item-sys {
+      background: #f1f5ff;
+      .add-icon {
+        background: #ccd9ff;
+        color: #537eff;
+      }
+    }
+    .add-icon {
+      width: 56px;
+      height: 56px;
+      margin-right: 10px;
+      background: #ceeaff;
+      border-radius: 10px;
+      color: #46adfe;
+      flex-shrink: 0;
+      font-size: 30px;
+      line-height: 56px;
+      text-align: center;
+    }
+    .add-txt {
+      height: 56px;
+      P {
+        line-height: 28px;
+      }
+      .add-title {
+        font-size: 18px;
+        font-weight: bold;
+      }
+      .add-desc {
+        color: #8d8989;
+        font-size: 12px;
+      }
+    }
+  }
+}
+</style>

@@ -18,6 +18,7 @@
 </template>
 <script>
 import OrgTransfer from '../OrgTransfer'
+import { getUserInfoList } from '@/api/permission/user'
 export default {
   model: {
     prop: 'value',
@@ -88,12 +89,13 @@ export default {
     },
     getText(id) {
       let list = [], text = ''
-      if (this.type == 'position') {
-        list = this.$store.getters.positionList
+      if (this.type == 'position' || this.type == 'role') {
+        list = this.$store.getters[this.type + 'List']
         let arr = list.filter(o => o.id === id)
         if (!arr.length) return ''
         text = arr[0].fullName || ''
-      } else {
+      }
+      if (this.type == 'user') {
         list = this.$store.getters.userList
         let arr = list.filter(o => o.id === id)
         if (!arr.length) return ''
@@ -102,10 +104,17 @@ export default {
       return text
     },
     async initSelectedData() {
-      this.selectedData = this.innerValue.map(t => ({
-        id: t,
-        fullName: this.getText(t)
-      }))
+      if (this.type === 'user') {
+        if (!this.innerValue.length) return
+        getUserInfoList(this.innerValue).then(res => {
+          this.selectedData = res.data.list
+        })
+      } else {
+        this.selectedData = this.innerValue.map(t => ({
+          id: t,
+          fullName: this.getText(t)
+        }))
+      }
     },
     onClose(item, i) {
       this.innerValue.splice(i, 1)

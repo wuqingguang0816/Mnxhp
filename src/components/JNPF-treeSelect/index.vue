@@ -139,7 +139,7 @@ export default {
         if (this.lastLevel && node[this.lastLevelKey] && node[this.lastLevelKey] != this.lastLevelValue) return
         this.valueTitle = node[this.props.label]
         this.$emit('input', node[this.props.value], node)
-        this.$emit('getValue', node[this.props.value], node)
+        this.$emit('change', node[this.props.value], node)
         this.defaultExpandedKey = []
         this.$refs.elSelect.blur()
       }
@@ -167,7 +167,7 @@ export default {
       }
       this.valueTitle = titleList.join(',')
       this.$emit('input', selectedData.join(','), selectedTextData)
-      this.$emit('getValue', selectedData.join(','), selectedTextData)
+      this.$emit('change', selectedData.join(','), selectedTextData)
     },
     // 清除选中
     clearHandle() {
@@ -176,7 +176,6 @@ export default {
       this.$emit('change', null)
       this.defaultExpandedKey = []
       this.clearSelected()
-      this.$emit('getValue', null)
       if (this.multiple) this.$refs.selectTree.setCheckedKeys([])
     },
     // 清空选中样式

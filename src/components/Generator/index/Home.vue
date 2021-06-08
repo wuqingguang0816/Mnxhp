@@ -163,10 +163,10 @@ export default {
       handler(val) {
         this.saveDrawingListDebounce(val)
         if (val.length === 0) this.idGlobal = 100
-        if (!this.isDrawingListChange) {
-          this.isDrawingListChange = true
-          return
-        }
+        // if (!this.isDrawingListChange) {
+        //   this.isDrawingListChange = true
+        //   return
+        // }
         this.$emit('drawingListChange')
       },
       deep: true
@@ -208,7 +208,6 @@ export default {
           reject({ msg: '表单不允许为空', target: 1 })
           return
         }
-        let hasBill = false
         const loop = list => {
           for (let i = 0; i < list.length; i++) {
             const e = list[i]
@@ -222,7 +221,6 @@ export default {
                 reject({ msg: '单据组件“选择规则”属性为必填项', target: 1 })
                 break
               }
-              hasBill = true
             }
             if (config.jnpfKey === 'relationForm') {
               if (!e.modelId) {
@@ -248,10 +246,6 @@ export default {
           }
         }
         loop(this.drawingList)
-        if ((this.modelType == 3 || this.modelType == 6) && !hasBill) {
-          reject({ msg: '缺少“单据组件”设定', target: 1 })
-          return
-        }
         this.AssembleFormData()
         resolve({ formData: this.formData, target: 1 })
       })

@@ -13,6 +13,7 @@ function createNormalCard(ctx, conf, h) {
   const isApprNode = afterTrue(NodeUtils.isApproverNode(conf), 'approver')
   const isCopyNode = afterTrue(NodeUtils.isCopyNode(conf), 'copy')
   const isTimerNode = afterTrue(NodeUtils.isTimerNode(conf), 'timer')
+  const isSubFlowNode = afterTrue(NodeUtils.isSubFlowNode(conf), 'subFlow')
   return (
     <section class={classList.join(' ')} onClick={this.eventLancher.bind(ctx, "edit", conf)} >
       <header class="header">
@@ -33,6 +34,7 @@ let nodes = {
   approver: createFunc,
   copy: createFunc,
   timer: createFunc,
+  subFlow: createFunc,
   interflow: createFunc,
   empty: _ => '',
   condition: function (ctx, conf, h) {

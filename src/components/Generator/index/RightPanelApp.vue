@@ -72,13 +72,16 @@
             <template
               v-if="activeData.__config__.jnpfKey === 'numInput' ||activeData.__config__.jnpfKey === 'slider'">
               <el-form-item label="最小值">
-                <el-input-number v-model="activeData.min" placeholder="最小值" />
+                <el-input-number v-model="activeData.min" placeholder="最小值"
+                  controls-position="right" />
               </el-form-item>
               <el-form-item label="最大值">
-                <el-input-number v-model="activeData.max" placeholder="最大值" />
+                <el-input-number v-model="activeData.max" placeholder="最大值"
+                  controls-position="right" />
               </el-form-item>
               <el-form-item label="步长">
-                <el-input-number v-model="activeData.step" placeholder="步数" :min="1" />
+                <el-input-number v-model="activeData.step" placeholder="步数" :min="1"
+                  controls-position="right" />
               </el-form-item>
             </template>
             <template
@@ -176,11 +179,11 @@
               </el-form-item>
               <el-form-item label="行高">
                 <el-input-number v-model="activeData.textStyle['line-height']" :min="12"
-                  placeholder="请输入行高" /> rpx
+                  placeholder="请输入行高" controls-position="right" /> rpx
               </el-form-item>
               <el-form-item label="字体大小">
                 <el-input-number v-model="activeData.textStyle['font-size']" :min="12"
-                  placeholder="请输入字体大小" /> rpx
+                  placeholder="请输入字体大小" controls-position="right" /> rpx
               </el-form-item>
               <el-form-item label="对齐方式">
                 <el-radio-group v-model="activeData.textStyle['text-align']">
@@ -280,7 +283,6 @@
 </template>
 
 <script>
-import { isArray } from "util"
 import { isNumberStr } from "@/components/Generator/utils"
 import draggable from "vuedraggable"
 import { getDictionaryTypeSelector, getDictionaryDataSelector } from "@/api/systemData/dictionary"
@@ -378,7 +380,7 @@ export default {
       return val
     },
     onDefaultValueInput(str) {
-      if (isArray(this.activeData.__config__.defaultValue)) {
+      if (Array.isArray(this.activeData.__config__.defaultValue)) {
         // 数组
         this.$set(
           this.activeData.__config__,

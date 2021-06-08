@@ -98,6 +98,8 @@
               :active-data="activeData" ref="relationFlowAttr" />
             <JNPFCalculate v-if="activeData.__config__.jnpfKey==='calculate'"
               :active-data="activeData" ref="calculate" />
+            <PopupSelect v-if="activeData.__config__.jnpfKey==='popupSelect'"
+              :active-data="activeData" />
             <template v-if="isSystem">
               <el-form-item label="标题名">
                 <el-input v-model="activeData.__config__.label" placeholder="请输入标题名" />
@@ -162,7 +164,8 @@
             <el-form-item
               v-if="activeData.__config__.layout==='rowFormItem'&&activeData.gutter!==undefined"
               label="栅格间隔">
-              <el-input-number v-model="activeData.gutter" :min="0" placeholder="栅格间隔" />
+              <el-input-number v-model="activeData.gutter" :min="0" placeholder="栅格间隔"
+                controls-position="right" />
             </el-form-item>
           </template>
         </el-form>
@@ -188,7 +191,8 @@
             <el-input v-model.number="formConf.labelWidth" type="number" placeholder="请输入标题宽度" />
           </el-form-item>
           <el-form-item label="栅格间隔">
-            <el-input-number v-model="formConf.gutter" :min="0" placeholder="栅格间隔" />
+            <el-input-number v-model="formConf.gutter" :min="0" placeholder="栅格间隔"
+              controls-position="right" />
           </el-form-item>
           <el-form-item label="弹窗类型" v-if="modelType != 3 && modelType!=6">
             <el-select v-model="formConf.popupType" placeholder="请选择">
@@ -230,7 +234,6 @@
 </template>
 
 <script>
-import { isArray, log } from 'util'
 import { isNumberStr } from '@/components/Generator/utils'
 import { saveFormConf, getDrawingList } from '@/components/Generator/utils/db'
 import JNPFComInput from './RightComponents/ComInput'
@@ -263,6 +266,7 @@ import RelationFormAttr from './RightComponents/RelationFormAttr'
 import RelationFlow from './RightComponents/RelationFlow'
 import RelationFlowAttr from './RightComponents/RelationFlowAttr'
 import JNPFCalculate from './RightComponents/Calculate'
+import PopupSelect from './RightComponents/PopupSelect'
 
 const commonRightList = ['comSelect', 'depSelect', 'posSelect', 'userSelect', 'dicSelect', 'editor']
 const systemList = ['createUser', 'createTime', 'modifyUser', 'modifyTime', 'currOrganize', 'currDept', 'currPosition', 'billRule']
@@ -298,7 +302,8 @@ export default {
     RelationFormAttr,
     RelationFlow,
     RelationFlowAttr,
-    JNPFCalculate
+    JNPFCalculate,
+    PopupSelect
   },
   props: ['showField', 'activeData', 'formConf', 'modelType'],
   data() {
@@ -408,7 +413,7 @@ export default {
       return val
     },
     onDefaultValueInput(str) {
-      if (isArray(this.activeData.__config__.defaultValue)) {
+      if (Array.isArray(this.activeData.__config__.defaultValue)) {
         // 数组
         this.$set(
           this.activeData.__config__,

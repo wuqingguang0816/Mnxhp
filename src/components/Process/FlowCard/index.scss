@@ -159,7 +159,8 @@ $base-size : 12px;
     }
   }
 
-  &.approver {
+  &.approver,
+  &.subFlow {
     &:hover {
       box-shadow: 0 0 0 2px #1890ff, 0 0 5px 4px rgba(0, 0, 0, 0.2);
     }

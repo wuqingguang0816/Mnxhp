@@ -6,7 +6,7 @@
         <img src="@/assets/images/jnpf.png" class="header-logo" />
         <p class="header-txt"> · 门户设计</p>
       </div>
-      <el-steps :active="activeStep" finish-status="success" simple class="steps">
+      <el-steps :active="activeStep" finish-status="success" simple class="steps steps2">
         <el-step title="基础设置" @click.native="stepChick(0)"></el-step>
         <el-step title="门户设计" @click.native="stepChick(1)"></el-step>
       </el-steps>
@@ -38,7 +38,7 @@
                   v-for="item in categoryList" />
               </el-select>
             </el-form-item>
-            <el-form-item label="状态" prop="enabledMark">
+            <el-form-item label="门户状态" prop="enabledMark">
               <el-switch v-model="dataForm.enabledMark" :active-value="1" :inactive-value="0" />
             </el-form-item>
             <el-form-item label="门户说明" prop="description">
@@ -85,7 +85,7 @@ export default {
           { required: true, message: '门户分类不能为空', trigger: 'change' },
         ],
         enabledMark: [
-          { required: true, message: '状态不能为空', trigger: 'blur' },
+          { required: true, message: '门户状态不能为空', trigger: 'blur' },
         ]
       },
       formVisible: false,
@@ -154,8 +154,3 @@ export default {
   }
 }
 </script>
-<style lang="scss" scoped>
->>> .steps {
-  width: 300px !important;
-}
-</style>

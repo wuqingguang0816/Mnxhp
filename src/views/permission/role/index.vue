@@ -30,12 +30,12 @@
             <screenfull />
           </div>
         </div>
-        <JNPF-table v-loading="listLoading" :data="tableListAll" row-key="id" default-expand-all
+        <JNPF-table v-loading="listLoading" :data="tableList" row-key="id" default-expand-all
           :tree-props="{children: 'children', hasChildren: ''}">
           <el-table-column prop="fullName" label="名称" v-if="jnpf.hasP('fullName')">
             <template slot-scope="scope">
               <span v-if="scope.row.top"
-                style="font-weight:bold;">{{scope.row.fullName}}【{{scope.row.count}}】</span>
+                style="font-weight:bold;">{{scope.row.fullName}}【{{scope.row.num}}】</span>
               <span v-else>{{scope.row.fullName}}</span>
             </template>
           </el-table-column>
@@ -113,9 +113,6 @@ export default {
         keyword: '',
       },
       tableList: [],
-      roleTypeList: [],
-      tableListAll: [],
-      btnLoading: false,
       listLoading: true,
       formVisible: false,
       authorizeFormVisible: false,
@@ -123,39 +120,18 @@ export default {
     }
   },
   created() {
-    this.getDictionaryData()
+    this.initData()
   },
   methods: {
     initData() {
-      this.loading = true
+      this.listLoading = true
       let query = { keyword: this.params.keyword }
       getRoleList(query).then(res => {
-        this.tableList = res.data.list
-        this.tableListAll = JSON.parse(JSON.stringify(this.roleTypeList))
-        for (let i = 0; i < this.tableListAll.length; i++) {
-          let child = this.tableList.filter(o => this.tableListAll[i].enCode === o.type)
-          let count = child.length
-          this.$set(this.tableListAll[i], 'children', child)
-          this.$set(this.tableListAll[i], 'count', count)
-          this.$set(this.tableListAll[i], 'top', true)
-        }
-        this.tableListAll = this.tableListAll.filter(o => o.children.length)
+        this.tableList = res.data.list.map(o => ({ top: true, ...o }))
         this.listLoading = false
-        this.btnLoading = false
       }).catch(() => {
         this.listLoading = false
-        this.btnLoading = false
       })
-    },
-    getDictionaryData() {
-      this.$store.dispatch('base/getDictionaryData', { sort: 'RoleType' }).then(res => {
-        this.roleTypeList = JSON.parse(JSON.stringify(res))
-        this.initData()
-      })
-    },
-    handleReLoad() {
-      this.btnLoading = true
-      this.initData()
     },
     handleAddEdit(id) {
       this.formVisible = true

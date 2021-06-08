@@ -6,52 +6,53 @@
           <el-row :gutter="20">
             <el-col :span="12">
               <el-form-item label="系统名称" prop="sysName">
-                <el-input v-model="baseForm.sysName" clearable />
+                <el-input v-model="baseForm.sysName" clearable placeholder="系统名称" />
               </el-form-item>
             </el-col>
             <el-col :span="12">
               <el-form-item label="系统版本" prop="sysVersion">
-                <el-input v-model="baseForm.sysVersion" clearable />
+                <el-input v-model="baseForm.sysVersion" clearable placeholder="系统版本" />
               </el-form-item>
             </el-col>
             <el-col :span="12">
               <el-form-item label="公司名称" prop="companyName">
-                <el-input v-model="baseForm.companyName" clearable />
+                <el-input v-model="baseForm.companyName" clearable placeholder="公司名称" />
               </el-form-item>
             </el-col>
             <el-col :span="12">
               <el-form-item label="版权信息" prop="copyright">
-                <el-input v-model="baseForm.copyright" clearable />
+                <el-input v-model="baseForm.copyright" clearable placeholder="版权信息" />
               </el-form-item>
             </el-col>
             <el-col :span="12">
               <el-form-item label="公司简称" prop="companyCode">
-                <el-input v-model="baseForm.companyCode" clearable />
+                <el-input v-model="baseForm.companyCode" clearable placeholder="公司简称" />
               </el-form-item>
             </el-col>
             <el-col :span="12">
               <el-form-item label="公司地址" prop="companyAddress">
-                <el-input v-model="baseForm.companyAddress" clearable />
+                <el-input v-model="baseForm.companyAddress" clearable placeholder="公司地址" />
               </el-form-item>
             </el-col>
             <el-col :span="12">
               <el-form-item label="公司法人" prop="companyContacts">
-                <el-input v-model="baseForm.companyContacts" clearable />
+                <el-input v-model="baseForm.companyContacts" clearable placeholder="公司法人" />
               </el-form-item>
             </el-col>
             <el-col :span="12">
               <el-form-item label="公司电话" prop="companyTelePhone">
-                <el-input v-model="baseForm.companyTelePhone" clearable />
+                <el-input v-model="baseForm.companyTelePhone" clearable placeholder="公司电话" />
               </el-form-item>
             </el-col>
             <el-col :span="12">
               <el-form-item label="公司邮箱" prop="companyEmail">
-                <el-input v-model="baseForm.companyEmail" clearable />
+                <el-input v-model="baseForm.companyEmail" clearable placeholder="公司邮箱" />
               </el-form-item>
             </el-col>
             <el-col>
               <el-form-item label="系统描述" prop="sysDescription">
-                <el-input v-model="baseForm.sysDescription" type="textarea" :rows="6" />
+                <el-input v-model="baseForm.sysDescription" type="textarea" :rows="6"
+                  placeholder="系统描述" />
               </el-form-item>
               <el-form-item>
                 <el-button type="primary" size="small" :loading="btnLoading" class="saveBtn"
@@ -98,7 +99,7 @@
                   :inactive-value="0" />
               </el-form-item>
               <el-form-item label="允许访问IP">
-                <el-input v-model="baseForm.whitelistIP" />
+                <el-input v-model="baseForm.whiteListIp" placeholder="允许访问IP" />
               </el-form-item>
               <el-form-item>
                 <el-button type="primary" size="small" :loading="btnLoading" class="saveBtn"
@@ -107,80 +108,223 @@
             </el-col>
           </el-row>
         </el-tab-pane>
-        <el-tab-pane label="邮箱设置" name="third">
-          <el-alert title="注意：系统邮件设置成功后所有邮件会由此邮箱发出" type="warning" :closable="false" show-icon />
-          <el-row :gutter="20" style="margin-top: 15px">
-            <el-col :span="12">
-              <el-form-item label="POP3服务" prop="emailPOP3Host">
-                <el-input v-model="baseForm.emailPOP3Host" clearable />
-              </el-form-item>
-            </el-col>
-            <el-col :span="12">
-              <el-form-item label="SMTP服务" prop="emailSMTPHost">
-                <el-input v-model="baseForm.emailSMTPHost" clearable />
-              </el-form-item>
-            </el-col>
-            <el-col :span="12">
-              <el-form-item label="POP3端口" prop="emailPOP3Port">
-                <el-input-number v-model="baseForm.emailPOP3Port" controls-position="right" />
-              </el-form-item>
-            </el-col>
-            <el-col :span="12">
-              <el-form-item label="SMTP端口" prop="emailSMTPPort">
-                <el-input-number v-model="baseForm.emailSMTPPort" controls-position="right" />
-              </el-form-item>
-            </el-col>
-            <el-col :span="12" :offset="6" :pull="6">
-              <el-form-item label="显示名称">
-                <el-input v-model="baseForm.emailSenderName" clearable />
-              </el-form-item>
-            </el-col>
-            <el-col :span="12" :offset="6" :pull="6">
-              <el-form-item label="邮箱账户" prop="emailAccount">
-                <el-input v-model="baseForm.emailAccount" clearable />
-              </el-form-item>
-            </el-col>
-            <el-col :span="12" :offset="6" :pull="6">
-              <el-form-item label="邮箱密码" prop="emailPassword">
-                <el-input v-model="baseForm.emailPassword" show-password>
-                  <el-button slot="append" @click="checkEmailStauts" :loading="testLoading">测试连接
-                  </el-button>
-                </el-input>
-              </el-form-item>
-            </el-col>
-            <el-col>
-              <el-form-item label="SSL登录" prop="emailSsl">
-                <el-switch v-model="baseForm.emailSsl" :active-value="1" :inactive-value="0" />
-              </el-form-item>
-              <el-form-item>
-                <el-button type="primary" size="small" :loading="btnLoading" class="saveBtn"
-                  @click="submitForm()" v-has="'btn_save'">保 存</el-button>
-              </el-form-item>
-            </el-col>
-          </el-row>
-        </el-tab-pane>
-        <el-tab-pane label="短信设置" name="fourth">
-          <el-alert title="注意：请在短信厂家官网网站开通申请" type="warning" :closable="false" show-icon />
-          <el-row style="margin-top: 15px">
-            <el-col :span="12">
-              <el-form-item label="短信厂家" prop="smsCompany" label-width="120px">
-                <el-radio-group v-model="baseForm.smsCompany">
-                  <el-radio-button label="1">阿里</el-radio-button>
-                  <el-radio-button label="2">腾讯</el-radio-button>
-                </el-radio-group>
-              </el-form-item>
-              <el-form-item label="accessKeyId" prop="accessKeyId" label-width="120px">
-                <el-input v-model="baseForm.accessKeyId" clearable />
-              </el-form-item>
-              <el-form-item label="accessKeySecret" prop="accessKeySecret" label-width="120px">
-                <el-input v-model="baseForm.accessKeySecret" show-password clearable />
-              </el-form-item>
-              <el-form-item>
-                <el-button type="primary" size="small" :loading="btnLoading" class="saveBtn"
-                  @click="submitForm()" v-has="'btn_save'">保 存</el-button>
-              </el-form-item>
-            </el-col>
-          </el-row>
+        <el-tab-pane label="第三方设置" name="third">
+          <el-tabs tab-position="left" style="height:100%" v-model="thirdTab">
+            <el-tab-pane label="短信">
+              <el-alert title="注意：请在短信厂家官网网站开通申请" type="warning" :closable="false" show-icon />
+              <el-row style="margin-top: 15px">
+                <el-col :span="12">
+                  <el-form-item label="短信厂家" prop="smsCompany">
+                    <el-radio-group v-model="baseForm.smsCompany">
+                      <el-radio-button label="1">阿里</el-radio-button>
+                      <el-radio-button label="2">腾讯</el-radio-button>
+                    </el-radio-group>
+                  </el-form-item>
+                  <el-form-item label="用户编号" prop="smsKeyId">
+                    <el-input v-model="baseForm.smsKeyId" clearable placeholder="用户编号" />
+                  </el-form-item>
+                  <el-form-item label="用户秘钥" prop="smsKeySecret">
+                    <el-input v-model="baseForm.smsKeySecret" show-password clearable
+                      placeholder="用户秘钥" />
+                  </el-form-item>
+                  <el-form-item label="签名内容" prop="smsSignName">
+                    <el-input v-model="baseForm.smsSignName" clearable placeholder="签名内容" />
+                  </el-form-item>
+                  <el-form-item label="模板编号" prop="smsTemplateId">
+                    <el-input v-model="baseForm.smsTemplateId" clearable placeholder="模板编号" />
+                  </el-form-item>
+                  <el-form-item label="应用编号" prop="smsAppId" v-if="baseForm.smsCompany=='2'">
+                    <el-input v-model="baseForm.smsAppId" clearable placeholder="应用编号" />
+                  </el-form-item>
+                  <el-form-item>
+                    <el-button type="primary" size="small" :loading="btnLoading" class="saveBtn"
+                      @click="submitForm()" v-has="'btn_save'">保 存</el-button>
+                  </el-form-item>
+                </el-col>
+              </el-row>
+            </el-tab-pane>
+            <el-tab-pane label="邮箱">
+              <el-alert title="注意：系统邮件设置成功后所有邮件会由此邮箱发出" type="warning" :closable="false"
+                show-icon />
+              <el-row :gutter="20" style="margin-top: 15px">
+                <el-col :span="12">
+                  <el-form-item label="POP3服务" prop="emailPop3Host">
+                    <el-input v-model="baseForm.emailPop3Host" clearable placeholder="POP3服务" />
+                  </el-form-item>
+                </el-col>
+                <el-col :span="12">
+                  <el-form-item label="SMTP服务" prop="emailSmtpHost">
+                    <el-input v-model="baseForm.emailSmtpHost" clearable placeholder="SMTP服务" />
+                  </el-form-item>
+                </el-col>
+                <el-col :span="12">
+                  <el-form-item label="POP3端口" prop="emailPop3Port">
+                    <el-input-number v-model="baseForm.emailPop3Port" controls-position="right" />
+                  </el-form-item>
+                </el-col>
+                <el-col :span="12">
+                  <el-form-item label="SMTP端口" prop="emailSmtpPort">
+                    <el-input-number v-model="baseForm.emailSmtpPort" controls-position="right" />
+                  </el-form-item>
+                </el-col>
+                <el-col :span="12" :offset="6" :pull="6">
+                  <el-form-item label="显示名称" prop="emailSenderName">
+                    <el-input v-model="baseForm.emailSenderName" clearable placeholder="显示名称" />
+                  </el-form-item>
+                </el-col>
+                <el-col :span="12" :offset="6" :pull="6">
+                  <el-form-item label="邮箱账户" prop="emailAccount">
+                    <el-input v-model="baseForm.emailAccount" clearable placeholder="邮箱账户" />
+                  </el-form-item>
+                </el-col>
+                <el-col :span="12" :offset="6" :pull="6">
+                  <el-form-item label="邮箱密码" prop="emailPassword">
+                    <el-input v-model="baseForm.emailPassword" show-password placeholder="邮箱密码">
+                      <el-button slot="append" @click="checkEmailStauts" :loading="testLoading">测试连接
+                      </el-button>
+                    </el-input>
+                  </el-form-item>
+                </el-col>
+                <el-col>
+                  <el-form-item label="SSL登录" prop="emailSsl">
+                    <el-switch v-model="baseForm.emailSsl" :active-value="1" :inactive-value="0" />
+                  </el-form-item>
+                  <el-form-item>
+                    <el-button type="primary" size="small" :loading="btnLoading" class="saveBtn"
+                      @click="submitForm()" v-has="'btn_save'">保 存</el-button>
+                  </el-form-item>
+                </el-col>
+              </el-row>
+            </el-tab-pane>
+            <el-tab-pane label="企业微信">
+              <el-row :gutter="20" style="margin-top: 15px">
+                <el-col :span="12" :offset="6" :pull="6">
+                  <el-form-item label="企业号Id" prop="qyhCorpId">
+                    <el-input v-model="baseForm.qyhCorpId" clearable placeholder="企业号Id" />
+                  </el-form-item>
+                </el-col>
+                <el-col :span="12" :offset="6" :pull="6">
+                  <el-form-item label="应用凭证" prop="qyhAgentId">
+                    <el-input v-model="baseForm.qyhAgentId" clearable placeholder="应用凭证" />
+                  </el-form-item>
+                </el-col>
+                <el-col :span="12" :offset="6" :pull="6">
+                  <el-form-item label="凭证密钥" prop="qyhAgentSecret">
+                    <el-input v-model="baseForm.qyhAgentSecret" placeholder="凭证密钥">
+                      <el-button slot="append" @click="checkQy(0)" :loading="testQyLoading">连接测试
+                      </el-button>
+                    </el-input>
+                  </el-form-item>
+                </el-col>
+                <el-col :span="12" :offset="6" :pull="6">
+                  <el-form-item label="同步密钥" prop="qyhCorpSecret">
+                    <el-input v-model="baseForm.qyhCorpSecret" placeholder="同步密钥">
+                      <el-button slot="append" @click="checkQy(1)" :loading="testSyncLoading">同步测试
+                      </el-button>
+                    </el-input>
+                  </el-form-item>
+                </el-col>
+                <el-col>
+                  <el-form-item label="触发事件">
+                    <el-table :data="wxEvents" border>
+                      <el-table-column prop="select" label="" width="50" align="center">
+                        <template slot-scope="scope">
+                          <el-checkbox v-model='scope.row.select' />
+                        </template>
+                      </el-table-column>
+                      <el-table-column prop="title" label="触发事件" width="200" />
+                      <el-table-column prop="desc" label="描述" />
+                    </el-table>
+                  </el-form-item>
+                </el-col>
+                <el-col>
+                  <el-form-item label="同步反馈">
+                    <el-table :data="wxResults" border>
+                      <el-table-column prop="synType" label="同步类型" />
+                      <el-table-column prop="recordTotal" label="总数" />
+                      <el-table-column prop="synSuccessCount" label="同步成功数" />
+                      <el-table-column prop="synFailCount" label="同步失败数" />
+                      <el-table-column prop="unSynCount" label="未同步数" />
+                      <el-table-column prop="synDate" label="同步时间"
+                        :formatter="jnpf.tableDateFormat" />
+                      <el-table-column label="操作" width="70">
+                        <template slot-scope="scope">
+                          <el-button size="mini" type="text" @click="syncQy(scope.row)"
+                            :loading="scope.row.loading">同步</el-button>
+                        </template>
+                      </el-table-column>
+                    </el-table>
+                  </el-form-item>
+                </el-col>
+                <el-col>
+                  <el-form-item>
+                    <el-button type="primary" size="small" :loading="btnLoading" class="saveBtn"
+                      @click="submitForm()" v-has="'btn_save'">保 存</el-button>
+                  </el-form-item>
+                </el-col>
+              </el-row>
+            </el-tab-pane>
+            <el-tab-pane label="钉钉">
+              <el-row :gutter="20" style="margin-top: 15px">
+                <el-col :span="12" :offset="6" :pull="6">
+                  <el-form-item label="企业号Id" prop="dingAgentId">
+                    <el-input v-model="baseForm.dingAgentId" clearable placeholder="企业号Id" />
+                  </el-form-item>
+                </el-col>
+                <el-col :span="12" :offset="6" :pull="6">
+                  <el-form-item label="应用凭证" prop="dingSynAppKey">
+                    <el-input v-model="baseForm.dingSynAppKey" clearable placeholder="应用凭证" />
+                  </el-form-item>
+                </el-col>
+                <el-col :span="12" :offset="6" :pull="6">
+                  <el-form-item label="凭证密钥" prop="dingSynAppSecret">
+                    <el-input v-model="baseForm.dingSynAppSecret" placeholder="凭证密钥">
+                      <el-button slot="append" @click="checkDing" :loading="testDingLoading">连接测试
+                      </el-button>
+                    </el-input>
+                  </el-form-item>
+                </el-col>
+                <el-col>
+                  <el-form-item label="触发事件">
+                    <el-table :data="ddEvents" border>
+                      <el-table-column prop="select" label="" width="50" align="center">
+                        <template slot-scope="scope">
+                          <el-checkbox v-model='scope.row.select' />
+                        </template>
+                      </el-table-column>
+                      <el-table-column prop="title" label="触发事件" width="200" />
+                      <el-table-column prop="desc" label="描述" />
+                    </el-table>
+                  </el-form-item>
+                </el-col>
+                <el-col>
+                  <el-form-item label="同步反馈">
+                    <el-table :data="ddResults" border>
+                      <el-table-column prop="synType" label="同步类型" />
+                      <el-table-column prop="recordTotal" label="总数" />
+                      <el-table-column prop="synSuccessCount" label="同步成功数" />
+                      <el-table-column prop="synFailCount" label="同步失败数" />
+                      <el-table-column prop="unSynCount" label="未同步数" />
+                      <el-table-column prop="synDate" label="同步时间"
+                        :formatter="jnpf.tableDateFormat" />
+                      <el-table-column label="操作" width="70">
+                        <template slot-scope="scope">
+                          <el-button size="mini" type="text" @click="syncDing(scope.row)"
+                            :loading="scope.row.loading">同步</el-button>
+                        </template>
+                      </el-table-column>
+                    </el-table>
+                  </el-form-item>
+                </el-col>
+                <el-col>
+                  <el-form-item>
+                    <el-button type="primary" size="small" :loading="btnLoading" class="saveBtn"
+                      @click="submitForm()" v-has="'btn_save'">保 存</el-button>
+                  </el-form-item>
+                </el-col>
+              </el-row>
+            </el-tab-pane>
+          </el-tabs>
         </el-tab-pane>
       </el-tabs>
     </el-form>
@@ -191,7 +335,14 @@
 import {
   getSystemConfig,
   updateSystemConfig,
-  testEmail
+  testEmail,
+  testQy,
+  testDing,
+  getSynThirdTotal,
+  synAllOrganizeSysToDing,
+  synAllUserSysToDing,
+  synAllOrganizeSysToQy,
+  synAllUserSysToQy
 } from '@/api/system/sysConfig'
 
 export default {
@@ -202,6 +353,10 @@ export default {
       listLoading: false,
       btnLoading: false,
       testLoading: false,
+      testQyLoading: false,
+      testSyncLoading: false,
+      testDingLoading: false,
+      thirdTab: '0',
       baseForm: {
         sysName: '',
         sysDescription: '',
@@ -217,18 +372,86 @@ export default {
         tokenTimeout: '1',
         lastLoginTimeSwitch: 1,
         whitelistSwitch: 1,
-        whitelistIP: '',
-        emailPOP3Host: '',
-        emailPOP3Port: '110',
-        emailSMTPHost: '',
-        emailSMTPPort: '25',
+        whiteListIp: '',
+        emailPop3Host: '',
+        emailPop3Port: '110',
+        emailSmtpHost: '',
+        emailSmtpPort: '25',
         emailSenderName: '',
         emailAccount: '',
         emailPassword: '',
         emailSsl: 0,
         smsCompany: '1',
-        accessKeyId: '',
-        accessKeySecret: '',
+        smsKeyId: '',
+        smsKeySecret: '',
+        smsSignName: '',
+        qyhCorpId: '',
+        qyhAgentId: '',
+        qyhAgentSecret: '',
+        qyhCorpSecret: '',
+        qyhIsSynOrg: 0,
+        qyhIsSynUser: 0,
+        dingSynAppKey: '',
+        dingSynAppSecret: '',
+        dingAgentId: '',
+        dingSynIsSynOrg: 0,
+        dingSynIsSynUser: 0
+      },
+      wxEvents: [{
+        select: false,
+        title: '启用同步组织',
+        desc: '新增、删除、修改组织信息触发同步组织事件'
+      }, {
+        select: false,
+        title: '启用同步用户',
+        desc: '新增、删除、修改用户信息触发同步用户事件'
+      }],
+      wxResults: [{
+        recordTotal: '',
+        synDate: '',
+        synFailCount: '',
+        synSuccessCount: '',
+        synType: '组织',
+        unSynCount: '',
+      }, {
+        recordTotal: '',
+        synDate: '',
+        synFailCount: '',
+        synSuccessCount: '',
+        synType: '用户',
+        unSynCount: '',
+      }],
+      ddEvents: [{
+        select: false,
+        title: '启用同步组织',
+        desc: '新增、删除、修改组织信息触发同步组织事件'
+      }, {
+        select: false,
+        title: '启用同步用户',
+        desc: '新增、删除、修改用户信息触发同步用户事件'
+      }],
+      ddResults: [{
+        recordTotal: '',
+        synDate: '',
+        synFailCount: '',
+        synSuccessCount: '',
+        synType: '组织',
+        unSynCount: '',
+      }, {
+        recordTotal: '',
+        synDate: '',
+        synFailCount: '',
+        synSuccessCount: '',
+        synType: '用户',
+        unSynCount: '',
+      }]
+    }
+  },
+  watch: {
+    thirdTab(val) {
+      if (val == 2 || val == 3) {
+        const type = val == 2 ? 1 : 2
+        this.getSynThirdTotal(type)
       }
     }
   },
@@ -241,6 +464,10 @@ export default {
       this.$nextTick(() => {
         getSystemConfig().then(res => {
           this.baseForm = res.data
+          this.wxEvents[0].select = this.baseForm.qyhIsSynOrg ? true : false
+          this.wxEvents[1].select = this.baseForm.qyhIsSynUser ? true : false
+          this.ddEvents[0].select = this.baseForm.dingSynIsSynOrg ? true : false
+          this.ddEvents[1].select = this.baseForm.dingSynIsSynUser ? true : false
           this.listLoading = false
         }).catch(() => {
           this.listLoading = false
@@ -248,52 +475,134 @@ export default {
       })
     },
     checkEmailStauts() {
-      this.$refs['baseForm'].validate((valid) => {
-        if (valid) {
-          this.testLoading = true
-          const data = {
-            account: this.baseForm.emailAccount,
-            password: this.baseForm.emailPassword,
-            pop3Host: this.baseForm.emailPOP3Host,
-            pop3Port: this.baseForm.emailPOP3Port,
-            smtpHost: this.baseForm.emailSMTPHost,
-            smtpPort: this.baseForm.emailSMTPPort,
-            ssl: this.baseForm.emailSsl
-          }
-          testEmail(data).then(res => {
-            this.$message({
-              message: res.msg,
-              type: 'success',
-              duration: 1500,
-              onClose: () => {
-                this.testLoading = false
-              }
-            })
-          }).catch(() => {
+      this.testLoading = true
+      const data = {
+        account: this.baseForm.emailAccount,
+        password: this.baseForm.emailPassword,
+        pop3Host: this.baseForm.emailPop3Host,
+        pop3Port: this.baseForm.emailPop3Port,
+        smtpHost: this.baseForm.emailSmtpHost,
+        smtpPort: this.baseForm.emailSmtpPort,
+        ssl: this.baseForm.emailSsl
+      }
+      testEmail(data).then(res => {
+        this.$message({
+          message: res.msg,
+          type: 'success',
+          duration: 1500,
+          onClose: () => {
             this.testLoading = false
-          })
-        }
+          }
+        })
+      }).catch(() => {
+        this.testLoading = false
+      })
+    },
+    checkQy(type) {
+      type === 1 ? this.testSyncLoading = true : this.testQyLoading = true
+      const data = {
+        qyhAgentId: this.baseForm.qyhAgentId,
+        qyhAgentSecret: this.baseForm.qyhAgentSecret,
+        qyhCorpId: this.baseForm.qyhCorpId,
+        qyhCorpSecret: this.baseForm.qyhCorpSecret
+      }
+      testQy(data, type).then(res => {
+        this.$message({
+          message: res.msg,
+          type: 'success',
+          duration: 1500,
+          onClose: () => {
+            type === 1 ? this.testSyncLoading = false : this.testQyLoading = false
+          }
+        })
+      }).catch(() => {
+        type === 1 ? this.testSyncLoading = false : this.testQyLoading = false
+      })
+    },
+    checkDing() {
+      this.testDingLoading = true
+      const data = {
+        dingAgentId: this.baseForm.dingAgentId,
+        dingSynAppKey: this.baseForm.dingSynAppKey,
+        dingSynAppSecret: this.baseForm.dingSynAppSecret
+      }
+      testDing(data).then(res => {
+        this.$message({
+          message: res.msg,
+          type: 'success',
+          duration: 1500,
+          onClose: () => {
+            this.testDingLoading = false
+          }
+        })
+      }).catch(() => {
+        this.testDingLoading = false
+      })
+    },
+    getSynThirdTotal(type) {
+      getSynThirdTotal(type).then(res => {
+        let list = res.data.map(o => ({ loading: false, ...o }))
+        type == 1 ? this.wxResults = list : this.ddResults = list
+      })
+    },
+    syncQy(row) {
+      row.loading = true
+      const method = row.synType == '组织' ? synAllOrganizeSysToQy : synAllUserSysToQy
+      method().then(res => {
+        row.recordTotal = res.data.recordTotal
+        row.synDate = res.data.synDate
+        row.synFailCount = res.data.synFailCount
+        row.synSuccessCount = res.data.synSuccessCount
+        row.synType = res.data.synType
+        row.unSynCount = res.data.unSynCount
+        row.loading = false
+        this.$message({
+          message: '同步成功',
+          type: 'success',
+          duration: 1500,
+        })
+      }).catch(() => {
+        row.loading = false
+      })
+    },
+    syncDing(row) {
+      row.loading = true
+      const method = row.synType == '组织' ? synAllOrganizeSysToDing : synAllUserSysToDing
+      method().then(res => {
+        row.recordTotal = res.data.recordTotal
+        row.synDate = res.data.synDate
+        row.synFailCount = res.data.synFailCount
+        row.synSuccessCount = res.data.synSuccessCount
+        row.synType = res.data.synType
+        row.unSynCount = res.data.unSynCount
+        row.loading = false
+        this.$message({
+          message: '同步成功',
+          type: 'success',
+          duration: 1500,
+        })
+      }).catch(() => {
+        row.loading = false
       })
     },
     submitForm() {
-      this.$refs['baseForm'].validate((valid) => {
-        if (valid) {
-          const data = { ...this.baseForm }
-          this.btnLoading = true
-          updateSystemConfig(data).then(res => {
-            this.$message({
-              message: res.msg,
-              type: 'success',
-              duration: 1500,
-              onClose: () => {
-                this.btnLoading = false
-                this.initData()
-              }
-            })
-          }).catch(() => {
+      this.btnLoading = true
+      this.baseForm.qyhIsSynOrg = this.wxEvents[0].select ? 1 : 0
+      this.baseForm.qyhIsSynUser = this.wxEvents[1].select ? 1 : 0
+      this.baseForm.dingSynIsSynOrg = this.ddEvents[0].select ? 1 : 0
+      this.baseForm.dingSynIsSynUser = this.ddEvents[1].select ? 1 : 0
+      updateSystemConfig(this.baseForm).then(res => {
+        this.$message({
+          message: res.msg,
+          type: 'success',
+          duration: 1500,
+          onClose: () => {
             this.btnLoading = false
-          })
-        }
+            this.initData()
+          }
+        })
+      }).catch(() => {
+        this.btnLoading = false
       })
     }
   }
@@ -314,6 +623,9 @@ export default {
   }
   .saveBtn {
     width: 100px;
+  }
+  .el-table >>> th {
+    line-height: 23px;
   }
 }
 </style>

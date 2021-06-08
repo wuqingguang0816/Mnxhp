@@ -114,6 +114,7 @@ export default {
   },
   render: function (h) {
     this.$store.dispatch('base/getPositionList')
+    this.$store.dispatch('base/getRoleList')
     return (
       <div class="flow-container">
         <div class="scale-slider">

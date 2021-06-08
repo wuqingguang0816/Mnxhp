@@ -32,7 +32,7 @@
               </el-col>
             </el-form>
             <div class="JNPF-common-search-box-right">
-              <el-button @click="addFolder()">新建文件夹</el-button>
+              <el-button @click="addFolder()" style="margin-right:10px">新建文件夹</el-button>
               <el-upload :action="uploadUrl" :headers="uploadHeaders" :on-success="handleSuccess"
                 :data='{parentId: parentId}' multiple :show-file-list="false" class="upload-box"
                 :before-upload="beforeUpload">

@@ -12,6 +12,7 @@ function createNormalCard(ctx, conf, h) {
   const isApprNode = afterTrue(NodeUtils.isApproverNode(conf), 'approver')
   const isCopyNode = afterTrue(NodeUtils.isCopyNode(conf), 'copy')
   const isTimerNode = afterTrue(NodeUtils.isTimerNode(conf), 'timer')
+  const isSubFlowNode = afterTrue(NodeUtils.isSubFlowNode(conf), 'subFlow')
   return (
     <section class={classList.join(' ')} onClick={this.eventLancher.bind(ctx, "edit", conf)} >
       <header class="header">
@@ -43,6 +44,7 @@ let nodes = {
   approver: createFunc,
   copy: createFunc,
   timer: createFunc,
+  subFlow: createFunc,
   interflow: createFunc,
   empty: _ => '',
   condition: function (ctx, conf, h) {
@@ -119,24 +121,14 @@ function addNodeButton(ctx, data, h, isBranch = false) {
   return (
     <div class="add-node-btn-box flex justify-center">
       <div class="add-node-btn">
-        <el-popover placement="right" trigger="click" width="330">
+        <el-popover placement="right" trigger="click" width="380">
           <div class="condition-box">
             <div>
               <div class="condition-icon" onClick={ctx.eventLancher.bind(ctx, "addApprovalNode", data, isBranch)} >
-                <i class="icon-ym icon-ym-flowCirculate"></i>
+                <i class="icon-ym icon-ym-flowTodo"></i>
               </div>
               审批节点
             </div>
-
-            {
-              //   <div>
-              //   <div class="condition-icon" onClick={ctx.eventLancher.bind(ctx, "addCopyNode", data, isBranch)} >
-              //     <i class="iconfont icon-ym-workflow-flowcirculate" style="vertical-align: middle;"></i>
-              //   </div>
-              //   抄送人
-              // </div>
-            }
-
             <div class={{ 'condition-disabled': !canAddAppendBranch }}>
               <div class="condition-icon" onClick={this.eventLancher.bind(ctx, "appendBranch", data, isBranch, !canAddAppendBranch)}>
                 <i class="ym-custom ym-custom-sitemap"></i>
@@ -171,7 +163,7 @@ function NodeFactory(ctx, data, h) {
   const showErrorTip = ctx.verifyMode && NodeUtils.checkNode(data) === false
   let res = [],
     branchNode = "",
-    content = NodeUtils.isConditionNode(data) ? "未设置条件" : "未设置审批人",
+    content = NodeUtils.isConditionNode(data) ? "未设置条件" : NodeUtils.isSubFlowNode(data) ? "未设置发起人" : "未设置审批人",
     selfNode = (
       <div class="node-wrap">
         <div class={`node-wrap-box ${data.type} ${NodeUtils.isInterflowNode(data) ? 'interflow' : ''} ${showErrorTip ? 'error' : ''}`}>

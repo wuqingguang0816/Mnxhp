@@ -1,7 +1,7 @@
 <template>
   <div class="im-container" v-if="visible">
     <div class="header">
-      <el-avatar :size="30" :src="define.comUrl + info.headIcon" />
+      <el-avatar :size="30" :src="define.comUrl+info.headIcon" />
       <span class="name">{{info.realName}}/{{info.account}}</span>
       <el-link icon="el-icon-close" :underline="false" @click="visible=false"></el-link>
     </div>
@@ -10,26 +10,26 @@
         <div class="chatList" ref="chatList">
           <div class="chatList-item" v-for="(item,index) in list" :key="index"
             :class="{'chatList-item--mine': item.userId==userInfo.userId}">
-            <div class="chatList-user" v-if="item.userId ==userInfo.userId">
-              <img :src="define.comUrl+ userInfo.headIcon" />
+            <div class="chatList-user" v-if="item.userId==userInfo.userId">
+              <el-avatar :size="40" :src="define.comUrl+userInfo.headIcon" />
               <cite><i>{{item.dateTime}}</i>我</cite>
             </div>
             <div class="chatList-user" v-else>
-              <img :src="define.comUrl + info.headIcon" />
+              <el-avatar :size="40" :src="define.comUrl+info.headIcon" />
               <cite>{{info.realName}}<i>{{item.dateTime}}</i></cite>
             </div>
             <div class="chatList-text">
               <div class="chatList-arrow"></div>
               <p v-if="item.messageType=='text'" v-html="item.message" class="chatList__msg--text">
               </p>
-              <el-image :src="define.comUrl +'/api/file/Image/IM/' + item.message.path"
+              <el-image :src="define.comUrl+'/api/file/Image/IM/'+item.message.path"
                 class="chatList__msg--img" v-if="item.messageType=='image' && item.message.path"
-                :preview-src-list="[define.comUrl +'/api/file/Image/IM/' + item.message.path]"
+                :preview-src-list="[define.comUrl +'/api/file/Image/IM/'+item.message.path]"
                 :z-index="10000">
               </el-image>
-              <audio class="chatList__msg--audio" controls :src="define.comUrl + item.message.path"
+              <audio class="chatList__msg--audio" controls :src="define.comUrl+item.message.path"
                 v-if="item.messageType=='voice' && item.message.path"
-                @click="handleEvent('voice',define.comUrl + item.message.path)"></audio>
+                @click="handleEvent('voice',define.comUrl+item.message.path)"></audio>
               <video :src="item.message" controls class="chatList__msg--video"
                 v-if="item.messageType=='video'" @click="handleEvent('video',item.message)"></video>
             </div>
@@ -78,26 +78,26 @@
         <div class="historyList-box" ref="historyListBox">
           <div class="chatList historyList">
             <div class="chatList-item" v-for="(item,index) in historyList" :key="index">
-              <div class="chatList-user" v-if="item.userId ==userInfo.userId">
-                <img :src="define.comUrl+userInfo.headIcon" />
+              <div class="chatList-user" v-if="item.userId==userInfo.userId">
+                <el-avatar :size="40" :src="define.comUrl+userInfo.headIcon" />
                 <cite>我<i>{{item.dateTime}}</i></cite>
               </div>
               <div class="chatList-user" v-else>
-                <img :src="define.comUrl + info.headIcon" />
+                <el-avatar :size="40" :src="define.comUrl+info.headIcon" />
                 <cite>{{info.realName}}<i>{{item.dateTime}}</i></cite>
               </div>
               <div class="chatList-text">
                 <div class="chatList-arrow"></div>
                 <span v-if="item.messageType=='text'" v-html="item.message"></span>
-                <el-image :src="define.comUrl +'/api/file/Image/IM/' + item.message.path"
+                <el-image :src="define.comUrl+'/api/file/Image/IM/'+item.message.path"
                   class="chatList__msg--img" v-if="item.messageType=='image' && item.message.path"
-                  :preview-src-list="[define.comUrl +'/api/file/Image/IM/' + item.message.path]"
+                  :preview-src-list="[define.comUrl+'/api/file/Image/IM/'+item.message.path]"
                   :z-index="10000">
                 </el-image>
                 <audio class="chatList__msg--audio" controls
                   :src="define.comUrl + item.message.path"
                   v-if="item.messageType=='voice' && item.message.path"
-                  @click="handleEvent('voice',define.comUrl + item.message.path)"></audio>
+                  @click="handleEvent('voice',define.comUrl+item.message.path)"></audio>
                 <video :src="item.message" controls class="chatList__msg--video"
                   v-if="item.messageType=='video'"
                   @click="handleEvent('video',item.message)"></video>
@@ -109,7 +109,6 @@
     </div>
     <el-dialog :visible.sync="show" width="40%" :before-close="handleClose"
       class="JNPF-dialog JNPF-dialog_center" lock-scroll style="z-index:3000">
-      <img :src="imgSrc" v-if="imgSrc" style="width:100%;object-fit: cover;" />
       <video :src="videoSrc" v-if="videoSrc" style="width:100%;object-fit: cover;"
         controls="controls"></video>
       <audio :src="audioSrc" v-if="audioSrc" style="width:100%;object-fit: cover;"
@@ -120,7 +119,6 @@
 
 <script>
 import { mapGetters } from 'vuex'
-import emojiParser from 'wechat-emoji-parser'
 import emojiList from 'static/emoji.json';
 export default {
   name: 'im',
@@ -564,9 +562,6 @@ export default {
     }
 
     .chatList-user img {
-      width: 40px;
-      height: 40px;
-      border-radius: 100%;
       &.offLine {
         filter: grayscale(1);
       }

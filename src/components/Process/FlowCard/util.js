@@ -43,6 +43,9 @@ export class NodeUtils {
   static isTimerNode(node) {
     return node && node.type === 'timer'
   }
+  static isSubFlowNode(node) {
+    return node && node.type === 'subFlow'
+  }
   static isInterflowNode(node) {
     return node && node.type === 'approver' && node.isInterflow
   }
@@ -190,6 +193,10 @@ export class NodeUtils {
   static addTimerNode(data, isBranchAction) {
     // 复用addApprovalNode  因为和审批人基本一致
     this.addApprovalNode(data, isBranchAction, this.createNode('timer', data.nodeId))
+  }
+  static addSubFlowNode(data, isBranchAction) {
+    // 复用addApprovalNode  因为和审批人基本一致
+    this.addApprovalNode(data, isBranchAction, this.createNode('subFlow', data.nodeId))
   }
   /**
    * 添加条件节点 condition 通过点击添加条件进入该操作
@@ -374,7 +381,6 @@ export class NodeUtils {
    * @param {Node} node - 节点数据
    */
   static checkNode(node, parent) {
-    // 抄送人应该可以默认自选
     let valid = true
     const props = node.properties
     this.isStartNode(node) &&
@@ -386,10 +392,14 @@ export class NodeUtils {
       isEmptyArray(props.conditions) &&
       (valid = false)
 
-    const customSettings = [1, 2, 3, 7]
+    this.isSubFlowNode(node) &&
+      (!props.flowId || props.initiateType === 1 && (isEmptyArray(props.initiator) && isEmptyArray(props.initiatePos) && isEmptyArray(props.initiateRole))) &&
+      (valid = false)
+
+    const customSettings = [6, 8]
     this.isApproverNode(node) &&
-      !customSettings.includes(props.assigneeType) &&
-      (isEmptyArray(props.approvers) && isEmptyArray(props.approverPos)) &&
+      (!props.assigneeType || customSettings.includes(props.assigneeType)) &&
+      (isEmptyArray(props.approvers) && isEmptyArray(props.approverPos) && isEmptyArray(props.approverRole)) &&
       (valid = false)
     return valid
   }

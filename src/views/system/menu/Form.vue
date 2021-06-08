@@ -44,13 +44,14 @@
           </el-select>
         </el-input>
       </el-form-item>
-      <el-form-item v-if="[3,4,5,6].indexOf(dataForm.type)>-1" label="关联"
+      <el-form-item v-if="[3,4,5,6,8].indexOf(dataForm.type)>-1" label="关联"
         prop="propertyJson.moduleId">
         <JNPF-TreeSelect v-model="dataForm.propertyJson.moduleId" :options="tempData"
-          placeholder="请选择" lastLevel @getValue="handleSelectModule" />
+          placeholder="请选择" lastLevel @change="handleSelectModule" />
       </el-form-item>
       <el-form-item label="排序" prop="sortCode">
-        <el-input-number :min="0" :max="9999" v-model="dataForm.sortCode" />
+        <el-input-number :min="0" :max="9999" v-model="dataForm.sortCode"
+          controls-position="right" />
       </el-form-item>
       <el-form-item label="状态" prop="enabledMark">
         <el-switch v-model="dataForm.enabledMark" :active-value="1" :inactive-value="0" />
@@ -75,6 +76,7 @@ import { getFeatureSelector } from '@/api/onlineDev/visualDev'
 import { getDictionaryType } from '@/api/systemData/dictionary'
 import { getDataReportSelector } from '@/api/onlineDev/dataReport'
 import { getDataVSelector } from '@/api/onlineDev/dataV'
+import { getPortalSelector } from '@/api/onlineDev/portal'
 import iconBox from '@/components/JNPF-iconBox'
 const typeData = [{
   enCode: 1,
@@ -97,6 +99,9 @@ const typeData = [{
 }, {
   enCode: 7,
   fullName: "外链"
+}, {
+  enCode: 8,
+  fullName: "门户"
 }]
 
 export default {
@@ -113,6 +118,7 @@ export default {
       dictionaryData: [],
       reportData: [],
       screenData: [],
+      portalData: [],
       tempData: [],
       labelName: '',
       related: false,
@@ -219,41 +225,29 @@ export default {
     },
     // 功能列表
     fetchFeatureList() {
-      // WEB设计分类
-      if (this.dataForm.category === 'Web') {
-        if (this.featureWebData.length === 0) {
-          getFeatureSelector({ type: 1 }).then(res => {
-            this.featureWebData = res.data.list
-            this.tempData = this.featureWebData
-          })
-        }
-        this.tempData = this.featureWebData
+      if (!this.featureWebData.length) {
+        getFeatureSelector({ type: this.dataForm.category === 'Web' ? 1 : 2 }).then(res => {
+          this.featureWebData = res.data.list
+          this.tempData = this.featureWebData
+        })
+        return
       }
-      // APP设计分类
-      if (this.dataForm.category === 'App') {
-        if (this.featureAppData.length === 0) {
-          getFeatureSelector({ type: 2 }).then(res => {
-            this.featureAppData = res.data.list
-            this.tempData = this.featureAppData
-          })
-        }
-        this.tempData = this.featureAppData
-      }
+      this.tempData = this.featureWebData
     },
     // 字典类型
     fetchDictionaryType() {
-      if (this.dictionaryData.length === 0) {
+      if (!this.dictionaryData.length) {
         getDictionaryType().then(res => {
           this.dictionaryData = res.data.list
           this.tempData = this.dictionaryData
         })
-      } else {
-        this.tempData = this.dictionaryData
+        return
       }
+      this.tempData = this.dictionaryData
     },
     // 报表列表
     fetchDataReportList() {
-      if (this.reportData.length === 0) {
+      if (!this.reportData.length) {
         this.$store.dispatch('base/getDictionaryData', { sort: 'ReportSort' }).then(t => {
           const ReportSortTypeList = JSON.parse(JSON.stringify(t))
 
@@ -270,19 +264,31 @@ export default {
             })
           })
         })
-      } else {
-        this.tempData = this.reportData
+        return
       }
+      this.tempData = this.reportData
     },
     // 大屏列表
     fetchDataVList() {
-      if (this.screenData.length === 0) {
+      if (!this.screenData.length) {
         getDataVSelector().then(res => {
           this.screenData = res.data.list
           this.tempData = this.screenData
         })
+        return
       }
       this.tempData = this.screenData
+    },
+    // 门户列表
+    fetchPortalList() {
+      if (!this.portalData.length) {
+        getPortalSelector().then(res => {
+          this.portalData = res.data.list
+          this.tempData = this.portalData
+        })
+        return
+      }
+      this.tempData = this.portalData
     },
     switchType(val) {
       switch (val) {
@@ -298,6 +304,9 @@ export default {
         case 6:
           this.fetchDataVList()
           break
+        case 8:
+          this.fetchPortalList()
+          break
       }
     },
     // 切换类型
@@ -306,6 +315,20 @@ export default {
       this.dataForm.propertyJson.moduleId = ''
       const menuId = this.dataForm.id
       if (menuId) this.dataForm.urlAddress = ''
+      if (this.dataForm.category === 'Web' && [2, 3, 4].includes(val)) {
+        this.dataForm.isButtonAuthorize = 1
+        this.dataForm.isColumnAuthorize = 1
+        this.dataForm.isDataAuthorize = 1
+      } else {
+        this.dataForm.isButtonAuthorize = 0
+        this.dataForm.isColumnAuthorize = 0
+        this.dataForm.isDataAuthorize = 0
+      }
+      if (val == 6) {
+        this.dataForm.linkTarget = '_blank'
+      } else {
+        this.dataForm.linkTarget = '_self'
+      }
       this.switchType(this.dataForm.type)
     },
     // 树转数组
@@ -337,33 +360,20 @@ export default {
 
         if (this.dataForm.category === 'Web') {
           switch (this.dataForm.type) {
-            case 2:
-              this.dataForm.isButtonAuthorize = 1
-              this.dataForm.isColumnAuthorize = 1
-              this.dataForm.isDataAuthorize = 1
-              this.dataForm.linkTarget = '_self'
-              break
             case 3: // 功能
-              this.dataForm.isButtonAuthorize = 1
-              this.dataForm.isColumnAuthorize = 1
-              this.dataForm.isDataAuthorize = 1
               this.dataForm.urlAddress = `model/${menuEnCode}`
-              this.dataForm.linkTarget = '_self'
               break
             case 4: // 字典
-              this.dataForm.isButtonAuthorize = 1
-              this.dataForm.isColumnAuthorize = 1
-              this.dataForm.isDataAuthorize = 1
               this.dataForm.urlAddress = `dictionary/${menuEnCode}`
-              this.dataForm.linkTarget = '_self'
               break
             case 5: // 报表
               this.dataForm.urlAddress = `dataReport/${menuEnCode}`
-              this.dataForm.linkTarget = '_self'
               break
             case 6: // 大屏
               this.dataForm.urlAddress = `dataScreen/${menuEnCode}`
-              this.dataForm.linkTarget = '_blank'
+              break
+            case 8: // 门户
+              this.dataForm.urlAddress = `portal/${menuEnCode}`
               break
           }
         } else {

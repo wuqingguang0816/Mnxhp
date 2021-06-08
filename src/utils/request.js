@@ -16,7 +16,7 @@ const service = axios.create({
 service.interceptors.request.use(
   config => {
     // 部分接口timeout时间单独处理
-    if (config.url.indexOf('Synchronization') > -1 || config.url.indexOf('extend/Email/Receive') > -1 ||
+    if (config.url.indexOf('SynThirdInfo') > -1 || config.url.indexOf('extend/Email/Receive') > -1 ||
       config.url.indexOf('Permission/Authority/Data') > -1 || config.url.indexOf('DataSync/Actions/Execute') > -1) {
       config.timeout = 100000
     }

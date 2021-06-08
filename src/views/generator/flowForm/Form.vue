@@ -6,7 +6,7 @@
         <img src="@/assets/images/jnpf.png" class="header-logo" />
         <p class="header-txt"> · 代码生成器</p>
       </div>
-      <el-steps :active="activeStep" finish-status="success" simple class="steps">
+      <el-steps :active="activeStep" finish-status="success" simple class="steps steps2">
         <el-step title="基础设置" @click.native="stepChick(0)"></el-step>
         <el-step title="表单设计" @click.native="stepChick(1)"></el-step>
       </el-steps>
@@ -100,26 +100,14 @@
 
 <script>
 import { getVisualDevInfo, Update, Create } from '@/api/onlineDev/visualDev'
-import { DataModelFieldList } from '@/api/systemData/dataModel'
 import Generator from '@/components/Generator/index/Home'
 import TableForm from '../TableForm'
+import mixin from '@/mixins/generator/form'
 export default {
+  mixins: [mixin],
   components: { Generator, TableForm },
   data() {
     return {
-      visible: false,
-      loading: false,
-      activeStep: 0,
-      dataForm: {
-        id: '',
-        fullName: '',
-        enCode: '',
-        type: 3,
-        state: 1,
-        category: '',
-        description: "",
-        tables: ''
-      },
       dataRule: {
         fullName: [
           { required: true, message: '模板名称不能为空', trigger: 'blur' },
@@ -134,39 +122,10 @@ export default {
         state: [
           { required: true, message: '状态不能为空', trigger: 'blur' },
         ],
-      },
-      tables: [],
-      formVisible: false,
-      btnLoading: false,
-      formData: null,
-      categoryList: [],
-      mainTableFields: [],
-      relationTable: ""
+      }
     }
   },
   methods: {
-    init(categoryList, id, type) {
-      this.categoryList = categoryList
-      this.activeStep = 0
-      this.dataForm.id = id || ''
-      this.tables = []
-      this.visible = true
-      this.$nextTick(() => {
-        this.$refs['dataForm'].resetFields()
-        if (this.dataForm.id) {
-          this.loading = true
-          getVisualDevInfo(this.dataForm.id).then(res => {
-            this.loading = false
-            this.dataForm = res.data
-            this.formData = JSON.parse(this.dataForm.formData)
-            this.tables = this.dataForm.tables && JSON.parse(this.dataForm.tables)
-            let mainTable = this.tables.filter(o => o.typeId == '1')[0]
-            this.mainTableFields = mainTable.fields
-            this.relationTable = mainTable.table
-          }).catch(() => { this.loading = false })
-        }
-      })
-    },
     dataFormSubmit() {
       this.$refs['generator'].getData().then(res => {
         this.btnLoading = true
@@ -187,125 +146,7 @@ export default {
       }).catch(err => {
         err.msg && this.$message.warning(err.msg)
       })
-    },
-    closeDialog(isRefresh) {
-      this.visible = false
-      this.$emit('close', isRefresh)
-    },
-    prve() {
-      this.activeStep -= 1
-    },
-    next() {
-      if (this.activeStep < 1) {
-        this.$refs['dataForm'].validate((valid) => {
-          if (valid) {
-            if (!this.tables.length) {
-              this.$message.warning('请至少选择一个数据表')
-              return
-            }
-            if (!this.exist()) return
-            let subTable = this.tables.filter(o => o.typeId == '0')
-            this.$store.commit('generator/UPDATE_SUB_TABLE', subTable)
-            this.$store.commit('generator/SET_TABLE', true)
-            this.$store.commit('generator/UPDATE_FORMITEM_LIST', this.mainTableFields)
-            this.activeStep += 1
-          }
-        })
-      }
-    },
-    stepChick(key) {
-      if (this.activeStep <= key) return
-      this.activeStep = key
-    },
-    async colseForm(data) {
-      let list = []
-      let checkList = []
-      if (!this.tables.length) {
-        for (let i = 0; i < data.length; i++) {
-          const e = data[i];
-          let relationTable = data[0].table
-          let typeId = i == 0 ? "1" : "0"
-          let res = await DataModelFieldList('0', e.table, 1)
-          let fields = res.data.list.map(o => ({ field: o.field, fieldName: o.fieldName, dataType: o.dataType }))
-          let item = {
-            relationField: "", relationTable: i == 0 ? '' : relationTable, table: e.table, tableName: e.tableName, tableField: '', typeId, fields
-          }
-          checkList.push(item)
-        }
-        this.relationTable = checkList[0].table
-        this.mainTableFields = checkList[0].fields
-        this.tables = checkList
-      } else {
-        for (let i = 0; i < data.length; i++) {
-          const e = data[i];
-          let boo = this.tables.some(o => o.table == e.table)
-          if (!boo) {
-            let res = await DataModelFieldList('0', e.table, 1)
-            let fields = res.data.list.map(o => ({ field: o.field, fieldName: o.fieldName, dataType: o.dataType }))
-            let item = {
-              relationField: "", relationTable: this.relationTable, table: e.table, tableName: e.tableName, tableField: '', typeId: "0", fields
-            }
-            checkList.push(item)
-          }
-        }
-        this.tables = [...this.tables, ...checkList]
-      }
-    },
-    delItem(row, index) {
-      this.tables.splice(index, 1);
-      if (row.typeId == '1' && this.tables.length) {
-        this.tables[0].typeId = '1'
-        this.tables[0].relationTable = ''
-        this.mainTableFields = this.tables[0].fields
-        this.relationTable = this.tables[0].table
-      }
-    },
-    changeTable(row) {
-      this.relationTable = row.table
-      this.mainTableFields = row.fields
-      for (let i = 0; i < this.tables.length; i++) {
-        this.$set(this.tables[i], "typeId", this.tables[i].table === row.table ? '1' : '0')
-        this.$set(this.tables[i], "relationTable", this.tables[i].table === row.table ? '' : this.relationTable)
-        this.$set(this.tables[i], "relationField", "")
-        this.$set(this.tables[i], "tableField", "")
-      }
-    },
-    exist() {
-      let isOk = true;
-      for (let i = 0; i < this.tables.length; i++) {
-        const e = this.tables[i];
-        if (e.typeId == '0') {
-          if (!e.tableField) {
-            this.$message({
-              showClose: true,
-              message: `表${e.table}外键字段不能为空`,
-              type: 'warning',
-              duration: 1000
-            });
-            isOk = false
-            break
-          }
-        }
-        if (e.typeId == '0') {
-          if (!e.relationField) {
-            this.$message({
-              showClose: true,
-              message: `表${e.table}关联主键不能为空`,
-              type: 'warning',
-              duration: 1000
-            });
-            isOk = false
-            break
-          }
-        }
-      }
-      return isOk;
     }
   }
 }
 </script>
-<style lang="scss" scoped>
->>> .steps {
-  width: 300px !important;
-}
-</style>
