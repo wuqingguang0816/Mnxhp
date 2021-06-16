@@ -120,7 +120,6 @@
 
 <script>
 import { mapGetters } from 'vuex'
-import emojiParser from 'wechat-emoji-parser'
 import emojiList from 'static/emoji.json';
 export default {
   name: 'im',
