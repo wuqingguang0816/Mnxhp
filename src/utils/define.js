@@ -12,7 +12,7 @@ module.exports = {
   // 本地文件预览
   filePreviewServer: process.env.NODE_ENV === 'development' ? 'http://localhost:30090' : process.env.VUE_APP_BASE_API + '/FileServer',
   // 大屏应用前端路径
-  dataV: process.env.NODE_ENV === 'development' ? 'http://localhost:8100/DataV' : process.env.VUE_APP_BASE_API + '/DataV',
+  dataV: process.env.NODE_ENV === 'development' ? 'http://localhost:8100' : process.env.VUE_APP_BASE_API + '/DataV',
   // 数据报表
   reportServer: process.env.NODE_ENV === 'development' ? 'http://localhost:30007' : process.env.VUE_APP_BASE_API + '/ReportServer',
   report: process.env.NODE_ENV === 'development' ? 'http://localhost:8200' : process.env.VUE_APP_BASE_API + '/Report',

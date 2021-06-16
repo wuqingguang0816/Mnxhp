@@ -73,9 +73,9 @@ const actions = {
   login({ commit }, userInfo) {
     const { account, password } = userInfo
     return new Promise((resolve, reject) => {
-      login(qs.stringify({ 
-        account: account.trim(), 
-        password: md5(password), 
+      login(qs.stringify({
+        account: account.trim(),
+        password: md5(password),
         client_id: 'admin',
         client_secret: '123456',
         scope: 'all',
@@ -191,7 +191,8 @@ const actions = {
                 }
                 routerList.push(newObj)
               } else {
-                e.path = e.urlAddress
+                const path = e.urlAddress.replace(/\${dataV}/g, define.dataV).replace(/\${jnpfToken}/g, getToken())
+                e.path = path
               }
             }
           }
