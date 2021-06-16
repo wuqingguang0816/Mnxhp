@@ -96,7 +96,7 @@ export function getFormData(modelId) {
 export function getModelList(modelId, data) {
   return request({
     url: `/api/visualdev/OnlineDev/${modelId}/List`,
-    method: 'get',
+    method: 'post',
     data
   })
 }
