@@ -141,7 +141,7 @@
                 </el-select>
               </el-form-item>
             </template>
-            <el-divider class="typeLine">排序设置</el-divider>
+            <el-divider>排序设置</el-divider>
             <el-form-item label="排序字段">
               <el-select v-model="columnData.defaultSidx" placeholder="请选择排序字段">
                 <el-option :label="item.__config__.label" :value="item.__vModel__"
@@ -183,11 +183,11 @@
               </el-checkbox>
             </el-checkbox-group>
             <el-divider>权限设置</el-divider>
-            <el-form-item label="列表权限">
-              <el-switch v-model="columnData.useColumnPermission"></el-switch>
-            </el-form-item>
             <el-form-item label="按钮权限">
               <el-switch v-model="columnData.useBtnPermission"></el-switch>
+            </el-form-item>
+            <el-form-item label="列表权限">
+              <el-switch v-model="columnData.useColumnPermission"></el-switch>
             </el-form-item>
             <el-form-item label="数据权限">
               <el-switch v-model="columnData.useDataPermission"></el-switch>
