@@ -17,7 +17,7 @@
         <el-input v-model="dataForm.className" placeholder="功能类名" />
       </el-form-item>
       <el-form-item :label="item.placeholderText" :prop="'subClassName.' + i + '.fullName'"
-        v-for="(item,i) in dataForm.subClassName" :key="item.fullName" :rules="item.rules">
+        v-for="(item,i) in dataForm.subClassName" :key="i" :rules="item.rules">
         <el-input v-model="item.fullName" :placeholder="item.placeholderText" />
       </el-form-item>
     </el-form>
