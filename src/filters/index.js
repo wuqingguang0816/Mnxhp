@@ -143,6 +143,7 @@ export function toFileSize(size) {
 
 // 代码生成器数据匹配
 export function dynamicText(value, options) {
+  if (!value) return ''
   if (Array.isArray(value)) {
     if (!options || !Array.isArray(options)) return value.join()
     let textList = []
@@ -163,6 +164,8 @@ export function dynamicText(value, options) {
 }
 
 export function dynamicTreeText(value, options) {
+  if (!value) return ''
+
   function transfer(data) {
     let textList = []
 

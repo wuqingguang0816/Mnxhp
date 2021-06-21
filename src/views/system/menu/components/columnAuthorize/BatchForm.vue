@@ -1,5 +1,5 @@
 <template>
-  <el-dialog title="批量新增字段" :close-on-click-modal="false" :close-on-press-escape="false"
+  <el-dialog title="批量新增" :close-on-click-modal="false" :close-on-press-escape="false"
     :visible.sync="visible" lock-scroll class="JNPF-dialog JNPF-dialog_center" width="600px">
     <el-form ref="dataForm" :model="dataForm" :rules="dataRule" label-width="80px"
       label-position="top" v-loading="formLoading">
@@ -9,6 +9,17 @@
       <!--      <el-form-item label="表格描述" prop="bindTableName">-->
       <!--        <el-input v-model="dataForm.bindTableName" placeholder="绑定表格描述" />-->
       <!--      </el-form-item>-->
+      <div class="json-demo">
+        <pre>
+          // 示例
+          [
+            {
+              "fullName":"名称",
+              "enCode":"fullName"
+            }
+          ]
+        </pre>
+      </div>
       <el-form-item label="字段Json" prop="columnJson">
         <div class="formCodeEditor">
           <JNPFCodeEditor :options="options" v-model="content" />
@@ -93,5 +104,16 @@ export default {
   padding: 0;
   border: 1px solid #c0c4cc;
   overflow: hidden;
+}
+.json-demo {
+  width: 100%;
+  background: #f4f4f5;
+  border-radius: 4px;
+  color: #909399;
+  padding-top: 10px;
+  pre {
+    margin-left: -40px;
+    font-size: 12px;
+  }
 }
 </style>

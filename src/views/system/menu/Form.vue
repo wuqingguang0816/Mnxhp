@@ -8,7 +8,8 @@
         <el-input v-model="dataForm.category" disabled />
       </el-form-item>
       <el-form-item label="上级" prop="parentId">
-        <JNPF-TreeSelect v-model="dataForm.parentId" :options="treeData" placeholder="选择上级菜单" />
+        <JNPF-TreeSelect v-model="dataForm.parentId" :options="treeData" placeholder="选择上级菜单"
+          @change="onChange" />
       </el-form-item>
       <el-form-item label="名称" prop="fullName">
         <el-input v-model="dataForm.fullName" placeholder="输入名称" />
@@ -78,7 +79,7 @@ import { getDataReportSelector } from '@/api/onlineDev/dataReport'
 import { getDataVSelector } from '@/api/onlineDev/dataV'
 import { getPortalSelector } from '@/api/onlineDev/portal'
 import iconBox from '@/components/JNPF-iconBox'
-const typeData = [{
+const appTypeData = [{
   enCode: 1,
   fullName: "目录"
 }, {
@@ -88,21 +89,35 @@ const typeData = [{
   enCode: 3,
   fullName: "功能"
 }, {
-  enCode: 4,
-  fullName: "字典"
-}, {
-  enCode: 5,
-  fullName: "报表"
-}, {
-  enCode: 6,
-  fullName: "大屏"
-}, {
   enCode: 7,
   fullName: "外链"
-}, {
-  enCode: 8,
-  fullName: "门户"
 }]
+const typeData = [
+  {
+    enCode: 1,
+    fullName: "目录"
+  }, {
+    enCode: 2,
+    fullName: "页面"
+  }, {
+    enCode: 3,
+    fullName: "功能"
+  }, {
+    enCode: 4,
+    fullName: "字典"
+  }, {
+    enCode: 5,
+    fullName: "报表"
+  }, {
+    enCode: 6,
+    fullName: "大屏"
+  }, {
+    enCode: 7,
+    fullName: "外链"
+  }, {
+    enCode: 8,
+    fullName: "门户"
+  }]
 
 export default {
   components: { iconBox },
@@ -197,7 +212,7 @@ export default {
         })
 
         // 获取菜单类型
-        this.fetchMenuTypeList()
+        this.typeData = this.dataForm.category === 'App' ? appTypeData : typeData
 
         // 获取表单数据
         if (this.dataForm.id) {
@@ -214,14 +229,6 @@ export default {
         }
 
       })
-    },
-    // 获取类型
-    fetchMenuTypeList() {
-      let newType = typeData
-      if (this.dataForm.category === 'App') {
-        newType = typeData.filter(o => [1, 2, 3, 7].includes(o.enCode))
-      }
-      this.typeData = newType
     },
     // 功能列表
     fetchFeatureList() {
@@ -307,6 +314,16 @@ export default {
         case 8:
           this.fetchPortalList()
           break
+      }
+    },
+    onChange(val) {
+      if (this.dataForm.category !== 'App') return
+      if (val === '-1') {
+        this.typeData = appTypeData.filter(o => o.enCode == 1)
+        if (this.dataForm.type != 1) this.dataForm.type = ''
+      } else {
+        this.typeData = appTypeData.filter(o => o.enCode != 1)
+        if (this.dataForm.type == 1) this.dataForm.type = ''
       }
     },
     // 切换类型
