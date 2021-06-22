@@ -103,11 +103,11 @@
           <div v-if="subFlowForm.initiateType === 1" class="option-box-tip">
             所指定的成员将作为子流程发起人，多人时，发起多个子流程</div>
           <div v-if="subFlowForm.initiateType === 2" class="option-box-tip">
-            发起人的部门主管将作为子流程发起人</div>
+            发起者的部门主管将作为子流程发起人</div>
           <div v-if="subFlowForm.initiateType === 3" class="option-box-tip">
-            发起人的主管将作为子流程发起人</div>
+            发起者的主管将作为子流程发起人</div>
           <div v-if="subFlowForm.initiateType === 4" class="option-box-tip">
-            发起人自己将作为子流程发起人</div>
+            发起者自己将作为子流程发起人</div>
         </el-form-item>
         <el-form-item v-if="subFlowForm.initiateType === 1">
           <org-select ref="subFlow-role-org" type="role" v-model="subFlowForm.initiateRole"
@@ -117,7 +117,7 @@
           <org-select ref="subFlow-user-org" buttonType="button" v-model="subFlowForm.initiator"
             title="添加用户" />
         </el-form-item>
-        <el-form-item label="发起人的" v-if="subFlowForm.initiateType === 3">
+        <el-form-item label="发起者的" v-if="subFlowForm.initiateType === 3">
           <el-select v-model="subFlowForm.managerLevel">
             <el-option v-for="item in 10" :key="item" :label="item===1?'直接主管':'第'+item+'级主管'"
               :value="item">
@@ -226,11 +226,11 @@
                 </el-radio>
               </el-radio-group>
               <div v-if="approverForm.assigneeType === 1" class="option-box-tip">
-                发起人主管将作为审批人处理审批单</div>
+                发起者主管将作为审批人处理审批单</div>
               <div v-if="approverForm.assigneeType === 2" class="option-box-tip">
-                发起人的部门主管将作为审批人处理审批单</div>
+                发起者的部门主管将作为审批人处理审批单</div>
               <div v-if="approverForm.assigneeType === 3" class="option-box-tip">
-                发起人自己将作为审批人处理审批单</div>
+                发起者自己将作为审批人处理审批单</div>
               <div v-if="approverForm.assigneeType === 4" class="option-box-tip">
                 选择流程表单字段的值作为审批人</div>
               <div v-if="approverForm.assigneeType === 5" class="option-box-tip">
@@ -248,7 +248,7 @@
                 </div>
               </el-alert>
             </el-form-item>
-            <el-form-item label="发起人的" v-if="approverForm.assigneeType === 1">
+            <el-form-item label="发起者的" v-if="approverForm.assigneeType === 1">
               <el-select v-model="approverForm.managerLevel">
                 <el-option v-for="item in 10" :key="item" :label="item===1?'直接主管':'第'+item+'级主管'"
                   :value="item">
@@ -299,13 +299,13 @@
             </el-form-item>
             <el-form-item label="抄送设置">
               <org-select ref="approver-copy-role-org" type="role"
-                v-model="approverForm.circulateRole" title="添加抄送角色" class="mb-10"
+                v-model="approverForm.circulateRole" title="添加角色" class="mb-10"
                 buttonType="button" />
               <org-select ref="approver-copy-position-org" buttonType="button"
-                v-model="approverForm.circulatePosition" title="添加抄送岗位" type="position"
+                v-model="approverForm.circulatePosition" title="添加岗位" type="position"
                 @change="onOrgChange" class="mb-10" />
               <org-select ref="approver-copy-user-org" buttonType="button"
-                v-model="approverForm.circulateUser" title="添加抄送用户" @change="onOrgChange"
+                v-model="approverForm.circulateUser" title="添加用户" @change="onOrgChange"
                 class="mb-10" />
               <el-checkbox v-model="approverForm.isCustomCopy">自定义抄送人</el-checkbox>
             </el-form-item>
@@ -313,7 +313,7 @@
         </el-tab-pane>
         <el-tab-pane label="高级设置" name="senior">
           <el-form label-position="top" class="pd-10">
-            <el-form-item label="操作权限">
+            <el-form-item label="操作设置">
               <div class="per-cell">
                 <el-checkbox v-model="approverForm.hasAuditBtn">同意</el-checkbox>
                 <el-input v-model="approverForm.auditBtnText" />
@@ -334,7 +334,7 @@
                 <el-checkbox v-model="approverForm.hasSign">签名</el-checkbox>
               </div>
             </el-form-item>
-            <el-form-item label="驳回步骤">
+            <el-form-item label="驳回设置">
               <el-select v-model="approverForm.rejectStep" placeholder="请选择">
                 <el-option v-for="item in rejectStepOptions" :key="item.nodeId"
                   :label="item.properties.title" :value="item.nodeId">
@@ -534,11 +534,11 @@ export default {
           value: 8
         },
         {
-          label: '发起人主管',
+          label: '发起者主管',
           value: 1
         },
         {
-          label: '发起人',
+          label: '发起者',
           value: 3
         },
         {
