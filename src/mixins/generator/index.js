@@ -6,6 +6,7 @@ export default {
       list: [],
       listLoading: false,
       formVisible: false,
+      addVisible: false,
       categoryList: [],
       listAll: []
     }
@@ -75,10 +76,13 @@ export default {
         })
       }).catch(() => {});
     },
-    addOrUpdateHandle(id, type) {
+    handleAdd(webType) {
+      this.addOrUpdateHandle('', webType)
+    },
+    addOrUpdateHandle(id, webType) {
       this.formVisible = true
       this.$nextTick(() => {
-        this.$refs.Form.init(this.categoryList, id, type)
+        this.$refs.Form.init(this.categoryList, id, this.query.type, webType)
       })
     },
     colseForm(isRefresh) {

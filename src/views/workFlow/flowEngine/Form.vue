@@ -80,7 +80,8 @@
                 <h2>绑定数据库表</h2>
               </div>
               <el-form-item label="数据库">
-                <el-select v-model="dataForm.dbLinkId" placeholder="请选择数据库" @change="onDbChange">
+                <el-select v-model="dataForm.dbLinkId" placeholder="请选择数据库" @change="onDbChange"
+                  clearable>
                   <el-option-group v-for="group in dbOptions" :key="group.fullName"
                     :label="group.fullName">
                     <el-option v-for="item in group.children" :key="item.id" :label="item.fullName"
@@ -242,16 +243,18 @@ export default {
       this.loading = true
       this.$nextTick(() => {
         this.$refs['dataForm'].resetFields()
+        const defaultItem = {
+          fullName: '',
+          children: [{
+            fullName: '默认数据库',
+            id: '0'
+          }]
+        }
         getDataSourceListAll().then(res => {
-          const defaultItem = {
-            fullName: '',
-            children: [{
-              fullName: '默认数据库',
-              id: '0'
-            }]
-          }
           const list = [defaultItem, ...res.data.list]
           this.dbOptions = list.filter(o => o.children && o.children.length)
+        }).catch(() => {
+          this.dbOptions = [defaultItem]
         })
         if (this.dataForm.id) {
           this.loading = true

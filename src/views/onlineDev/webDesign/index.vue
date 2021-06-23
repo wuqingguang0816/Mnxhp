@@ -20,7 +20,7 @@
       </el-row>
       <div class="JNPF-common-layout-main JNPF-flex-main">
         <div class="JNPF-common-head">
-          <topOpts @add="addOrUpdateHandle('',1)" addText="新建表单"></topOpts>
+          <topOpts @add="addVisible=true" />
           <div class="JNPF-common-head-right">
             <el-tooltip effect="dark" :content="$t('common.refresh')" placement="top">
               <el-link icon="icon-ym icon-ym-Refresh JNPF-common-head-icon" :underline="false"
@@ -79,16 +79,18 @@
       </div>
     </div>
     <Form v-if="formVisible" ref="Form" @close="colseForm" />
+    <AddBox :visible.sync="addVisible" @add="handleAdd" />
   </div>
 </template>
 
 <script>
 import Form from './Form'
+import AddBox from '@/views/generator/AddBox'
 import mixin from '@/mixins/generator/index'
 export default {
   name: 'onlineDev-webDesign',
   mixins: [mixin],
-  components: { Form },
+  components: { Form, AddBox },
   data() {
     return {
       query: { keyword: '', type: 1 },

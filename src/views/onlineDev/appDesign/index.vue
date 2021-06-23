@@ -20,7 +20,7 @@
       </el-row>
       <div class="JNPF-common-layout-main JNPF-flex-main">
         <div class="JNPF-common-head">
-          <topOpts @add="addOrUpdateHandle('',2)" addText="新建表单"></topOpts>
+          <topOpts @add="addVisible=true" />
           <div class="JNPF-common-head-right">
             <el-tooltip effect="dark" :content="$t('common.refresh')" placement="top">
               <el-link icon="icon-ym icon-ym-Refresh JNPF-common-head-icon" :underline="false"
@@ -79,6 +79,7 @@
       </div>
     </div>
     <Form v-if="formVisible" ref="Form" @close="colseForm" />
+    <AddBox :visible.sync="addVisible" @add="handleAdd" />
     <el-dialog :close-on-click-modal="false" :modal-append-to-body="false"
       :visible.sync="previewVisible" class="JNPF-dialog JNPF-dialog_center code-dialog" title="预览"
       width="400px" @opened="getQRimg">
@@ -92,12 +93,13 @@
 
 <script>
 import Form from './Form'
+import AddBox from '@/views/generator/AddBox'
 import QRCode from 'qrcodejs2'
 import mixin from '@/mixins/generator/index'
 export default {
   name: 'onlineDev-appDesign',
   mixins: [mixin],
-  components: { Form },
+  components: { Form, AddBox },
   data() {
     return {
       query: { keyword: '', type: 2 },
