@@ -96,6 +96,8 @@ export default {
           getDictionaryTypeInfo(this.dataForm.id).then(res => {
             this.dataForm = res.data
           })
+        } else {
+          this.treeDisabled = false
         }
         this.formLoading = false
       })
