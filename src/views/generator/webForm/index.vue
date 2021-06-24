@@ -20,7 +20,7 @@
       </el-row>
       <div class="JNPF-common-layout-main JNPF-flex-main">
         <div class="JNPF-common-head">
-          <topOpts @add="addOrUpdateHandle('',4)" addText="新建模板"></topOpts>
+          <topOpts @add="addVisible=true" addText="新建模板" />
           <div class="JNPF-common-head-right">
             <el-tooltip effect="dark" :content="$t('common.refresh')" placement="top">
               <el-link icon="icon-ym icon-ym-Refresh JNPF-common-head-icon" :underline="false"
@@ -77,6 +77,7 @@
       </div>
     </div>
     <Form v-if="formVisible" ref="Form" @close="colseForm" />
+    <AddBox :visible.sync="addVisible" @add="handleAdd" />
     <Preview v-if="previewVisible" ref="preview" @close="previewVisible=false" />
     <DownloadForm v-if="downloadFormVisible" ref="downloadForm"
       @close="downloadFormVisible=false" />
@@ -85,13 +86,14 @@
 
 <script>
 import Form from './Form'
+import AddBox from '@/views/generator/AddBox'
 import DownloadForm from '../DownloadForm'
 import Preview from '../Preview'
 import mixin from '@/mixins/generator/index'
 export default {
   name: 'generator-webForm',
   mixins: [mixin],
-  components: { Form, DownloadForm, Preview },
+  components: { Form, AddBox, DownloadForm, Preview },
   data() {
     return {
       query: { keyword: '', type: 4 },
