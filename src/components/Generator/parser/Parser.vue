@@ -203,6 +203,9 @@ export default {
     resetForm() {
       this.formConfCopy = deepClone(this.formConf)
       this.$refs[this.formConf.formRef].resetFields()
+      Object.keys(this.tableRefs).forEach(vModel => {
+        this.$refs[vModel].$children[0].resetTable()
+      })
     },
     checkTableData() {
       let valid = true

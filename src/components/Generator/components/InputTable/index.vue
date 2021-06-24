@@ -251,6 +251,11 @@ export default {
       });
       return sums;
     },
+    resetTable() {
+      this.tableData = this.config.__config__.children
+      this.tableFormData = []
+      this.addRow()
+    },
     reset() {
       this.tableData.map((t) => {
         let index = this.tableFormData[0].findIndex(c => c.vModel === t.vModel)
