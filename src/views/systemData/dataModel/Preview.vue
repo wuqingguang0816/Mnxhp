@@ -93,7 +93,7 @@ export default {
         DataModelFieldList(dataBase, table).then(res => {
           this.options = res.data.list
           this.queryJson.field = this.options[0].field
-          this.initData()
+          this.reset()
         })
       })
     },
