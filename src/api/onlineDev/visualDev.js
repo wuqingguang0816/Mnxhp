@@ -47,7 +47,7 @@ export function Copy(id) {
     method: 'POST'
   })
 }
-// 获取命名空间
+// 获取模块命名
 export function getAreasName() {
   return request({
     url: `/api/visualdev/Generater/AreasName`,

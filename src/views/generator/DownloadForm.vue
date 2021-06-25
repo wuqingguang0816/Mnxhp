@@ -2,9 +2,10 @@
   <el-dialog title="输出设置" :close-on-click-modal="false" :visible.sync="visible"
     class="JNPF-dialog JNPF-dialog_center" lock-scroll width="600px">
     <el-form ref="dataForm" label-width="100px" :model="dataForm">
-      <el-form-item label="命名空间" prop="module" v-if="type!=3"
-        :rules="[{ required: true,message: '请选择命名空间', trigger: 'change' }]">
-        <el-select v-model="dataForm.module" placeholder="请选择命名空间">
+      <el-form-item label="模块命名" prop="module" v-if="type!=3"
+        :rules="[{ required: true,message: '请选择模块命名', trigger: 'change' }]">
+        <el-select v-model="dataForm.module" placeholder="请选择模块命名" filterable allow-create
+          default-first-option clearable>
           <el-option v-for="item in moduleList" :key="item" :label="item" :value="item" />
         </el-select>
       </el-form-item>
