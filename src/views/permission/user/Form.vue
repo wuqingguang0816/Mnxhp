@@ -324,7 +324,7 @@ export default {
           this.formLoading = true
           getUserInfo(this.dataForm.id).then(res => {
             this.dataForm = res.data
-            this.roleId = this.dataForm.roleId.split(',')
+            if (this.dataForm.roleId) this.roleId = this.dataForm.roleId.split(',')
             this.formLoading = false
           }).catch(() => this.formLoading = false)
         } else {
