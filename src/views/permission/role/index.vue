@@ -188,7 +188,7 @@ export default {
             message: res.msg,
             duration: 1500,
             onClose: () => {
-              this.getDictionaryData()
+              this.initData()
             }
           })
         })
