@@ -65,8 +65,6 @@
               <el-avatar :size="30" :src="define.comUrl+img.headIcon"
                 v-for="(img,i) in scope.row.managersInfo" :key="i" :title="img.account"
                 style="margin-right: 6px;"></el-avatar>
-              <!-- <img :src="define.comUrl+img.headIcon" v-for="(img,i) in scope.row.managersInfo" :key="i"
-            :title="img.account" class="managerImg"> -->
             </template>
           </el-table-column>
           <el-table-column label="操作" fixed="right" width="150">
