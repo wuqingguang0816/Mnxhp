@@ -29,7 +29,9 @@
       </el-row>
       <div class="JNPF-common-layout-main JNPF-flex-main">
         <div class="JNPF-common-head">
-          <topOpts @add="handleAddEdit()" />
+          <topOpts @add="handleAddEdit()">
+            <upload-btn url="/api/system/DataInterface/Action/Import" @on-success="getList" />
+          </topOpts>
           <div class="JNPF-common-head-right">
             <el-tooltip effect="dark" :content="$t('common.refresh')" placement="top">
               <el-link icon="icon-ym icon-ym-Refresh JNPF-common-head-icon" :underline="false"
@@ -74,6 +76,9 @@
                       @click.native="handlePreview(scope.row.id, scope.row.enabledMark)"
                       v-has="'btn_preview'">预览
                     </el-dropdown-item>
+                    <el-dropdown-item @click.native="exportData(scope.row.id)">
+                      导出
+                    </el-dropdown-item>
                   </el-dropdown-menu>
                 </el-dropdown>
               </tableOpts>
@@ -93,7 +98,8 @@ import {
   getDataInterfaceTypeSelector,
   getDataInterfaceList,
   updateDataInterfaceState,
-  delDataInterface
+  delDataInterface,
+  exportData
 } from '@/api/systemData/dataInterface'
 import Form from './Form'
 import Preview from './Preview'
@@ -230,6 +236,11 @@ export default {
       if (isRefresh) {
         this.reset()
       }
+    },
+    exportData(id) {
+      exportData(id).then(res => {
+        if (res.data.url) window.location.href = this.define.comUrl + res.data.url
+      })
     }
   }
 }

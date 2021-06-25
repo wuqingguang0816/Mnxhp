@@ -24,7 +24,9 @@
           <el-tab-pane label="App菜单" name="App"></el-tab-pane>
           <div class="box">
             <div class="JNPF-common-head">
-              <topOpts @add="handleAddEdit()" />
+              <topOpts @add="handleAddEdit()">
+                <upload-btn url="/api/system/Menu/Action/Import" @on-success="initData" />
+              </topOpts>
               <div class="JNPF-common-head-right">
                 <el-tooltip effect="dark" content="展开" placement="top">
                   <el-link v-show="!expands" type="text"
@@ -76,8 +78,11 @@
               <el-table-column label="操作" width="150">
                 <template slot-scope="scope">
                   <tableOpts @edit="handleAddEdit(scope.row.id)" @del="handleDel(scope.row.id)">
-                    <template
-                      v-if="params.category==='Web' && [2,3,4].indexOf(scope.row.type)>-1&& (scope.row.isButtonAuthorize === 1 || scope.row.isColumnAuthorize === 1 || scope.row.isDataAuthorize === 1)">
+                    <template v-if="params.category==='App' && scope.row.type && scope.row.type!=1">
+                      <el-button type="text" size="mini" @click="exportMenu(scope.row.id)">导出模板
+                      </el-button>
+                    </template>
+                    <template v-if="params.category==='Web' && scope.row.type && scope.row.type!=1">
                       <el-dropdown v-has="'btn_more'">
                         <span class="el-dropdown-link">
                           <el-button type="text" size="mini">{{$t('common.moreBtn')}}<i
@@ -85,18 +90,23 @@
                           </el-button>
                         </span>
                         <el-dropdown-menu slot="dropdown">
-                          <el-dropdown-item v-if="scope.row.isButtonAuthorize === 1"
-                            @click.native="handleButtonAuthorize(scope.row)" v-has="'btn_btnPer'">
-                            按钮权限
-                          </el-dropdown-item>
-                          <el-dropdown-item v-if="scope.row.isColumnAuthorize === 1"
-                            @click.native="handleColumnAuthorize(scope.row)"
-                            v-has="'btn_columnPer'">
-                            列表权限
-                          </el-dropdown-item>
-                          <el-dropdown-item v-if="scope.row.isDataAuthorize === 1"
-                            @click.native="handleDataAuthorize(scope.row)" v-has="'btn_dataPer'">
-                            数据权限
+                          <template v-if="[2,3,4].indexOf(scope.row.type)>-1">
+                            <el-dropdown-item v-if="scope.row.isButtonAuthorize === 1"
+                              @click.native="handleButtonAuthorize(scope.row)" v-has="'btn_btnPer'">
+                              按钮权限
+                            </el-dropdown-item>
+                            <el-dropdown-item v-if="scope.row.isColumnAuthorize === 1"
+                              @click.native="handleColumnAuthorize(scope.row)"
+                              v-has="'btn_columnPer'">
+                              列表权限
+                            </el-dropdown-item>
+                            <el-dropdown-item v-if="scope.row.isDataAuthorize === 1"
+                              @click.native="handleDataAuthorize(scope.row)" v-has="'btn_dataPer'">
+                              数据权限
+                            </el-dropdown-item>
+                          </template>
+                          <el-dropdown-item @click.native="exportMenu(scope.row.id)">
+                            导出模板
                           </el-dropdown-item>
                         </el-dropdown-menu>
                       </el-dropdown>
@@ -116,7 +126,7 @@
   </div>
 </template>
 <script>
-import { getMenuList, updateMenuState, delMenu } from '@/api/system/menu'
+import { getMenuList, updateMenuState, delMenu, exportMenu } from '@/api/system/menu'
 import Form from './Form'
 import ButtonAuthorizeListDrawer from './components/buttonAuthorize/index'
 import ColumnAuthorizeListDrawer from './components/columnAuthorize/index'
@@ -241,6 +251,11 @@ export default {
       this.dataAuthorizeListDrawer = true
       this.$nextTick(() => {
         this.$refs.DataAuthorizeList.init(moduleId, fullName)
+      })
+    },
+    exportMenu(id) {
+      exportMenu(id).then(res => {
+        if (res.data.url) window.location.href = this.define.comUrl + res.data.url
       })
     }
   }

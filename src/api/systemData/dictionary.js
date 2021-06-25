@@ -125,3 +125,11 @@ export function updateDictionaryState(id) {
     method: 'PUT'
   })
 }
+
+// 导出数据字典数据
+export function exportData(id) {
+  return request({
+    url: `/api/system/DictionaryData/${id}/Action/Export`,
+    method: 'GET'
+  })
+}

@@ -74,3 +74,11 @@ export function previewDataInterface(id) {
     method: 'GET'
   })
 }
+
+// 导出数据接口数据
+export function exportData(id) {
+  return request({
+    url: `/api/system/DataInterface/${id}/Action/Export`,
+    method: 'GET'
+  })
+}
