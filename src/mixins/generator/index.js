@@ -7,12 +7,12 @@ export default {
       listLoading: false,
       formVisible: false,
       addVisible: false,
-      categoryList: [],
-      listAll: []
+      categoryList: []
     }
   },
   created() {
     this.getDictionaryData()
+    this.initData()
   },
   methods: {
     search() {
@@ -24,23 +24,13 @@ export default {
     },
     getDictionaryData() {
       this.$store.dispatch('base/getDictionaryData', { sort: this.sort }).then((res) => {
-        this.categoryList = JSON.parse(JSON.stringify(res))
-        this.initData()
+        this.categoryList = res
       })
     },
     initData() {
       this.listLoading = true
       getVisualDevList(this.query).then(res => {
-        this.list = res.data.list
-        this.listAll = JSON.parse(JSON.stringify(this.categoryList))
-        for (let i = 0; i < this.listAll.length; i++) {
-          let child = this.list.filter(o => this.listAll[i].id === o.category)
-          let count = child.length
-          this.$set(this.listAll[i], 'children', child)
-          this.$set(this.listAll[i], 'count', count)
-          this.$set(this.listAll[i], 'top', true)
-        }
-        this.listAll = this.listAll.filter(o => o.children.length)
+        this.list = res.data.list.map(o => ({ top: true, ...o }))
         this.listLoading = false
       })
     },

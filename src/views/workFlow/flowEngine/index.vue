@@ -29,21 +29,17 @@
             <screenfull />
           </div>
         </div>
-        <JNPF-table v-loading="listLoading" :data="flowEngineListAll" row-key="id"
+        <JNPF-table v-loading="listLoading" :data="flowEngineList" row-key="id"
           :tree-props="{children: 'children', hasChildren: ''}" default-expand-all>
           <el-table-column prop="fullName" label="流程名称" min-width="150"
             v-if="jnpf.hasP('fullName')">
             <template slot-scope="scope">
               <span v-if="scope.row.top"
-                style="font-weight:bold;">{{scope.row.fullName}}【{{scope.row.count}}】</span>
+                style="font-weight:bold;">{{scope.row.fullName}}【{{scope.row.num}}】</span>
               <span v-else>{{scope.row.fullName}}</span>
             </template>
           </el-table-column>
-          <el-table-column prop="enCode" label="流程编码" width="200" v-if="jnpf.hasP('enCode')">
-            <template slot-scope="scope">
-              <span v-if="!scope.row.top">{{ scope.row.enCode }}</span>
-            </template>
-          </el-table-column>
+          <el-table-column prop="enCode" label="流程编码" width="200" v-if="jnpf.hasP('enCode')" />
           <el-table-column prop="formType" label="表单类型" width="100" v-if="jnpf.hasP('formType')">
             <template slot-scope="scope">
               <span v-if="!scope.row.top">{{ scope.row.formType == 1? "系统表单" : "自定义表单" }}</span>
@@ -136,12 +132,12 @@ export default {
       formVisible: false,
       previewVisible: false,
       categoryList: [],
-      flowEngineList: [],
-      flowEngineListAll: []
+      flowEngineList: []
     }
   },
   created() {
     this.getDictionaryData()
+    this.initData()
   },
   methods: {
     reset() {
@@ -152,23 +148,13 @@ export default {
       this.listLoading = true
       let query = { keyword: this.keyword }
       FlowEngineList(query).then((res) => {
-        this.flowEngineList = res.data.list
-        this.flowEngineListAll = JSON.parse(JSON.stringify(this.categoryList))
-        for (let i = 0; i < this.flowEngineListAll.length; i++) {
-          let child = this.flowEngineList.filter(o => this.flowEngineListAll[i].enCode === o.category)
-          let count = child.length
-          this.$set(this.flowEngineListAll[i], 'children', child)
-          this.$set(this.flowEngineListAll[i], 'count', count)
-          this.$set(this.flowEngineListAll[i], 'top', true)
-        }
-        this.flowEngineListAll = this.flowEngineListAll.filter(o => o.children.length)
+        this.flowEngineList = res.data.list.map(o => ({ top: true, ...o }))
         this.listLoading = false
       })
     },
     getDictionaryData() {
       this.$store.dispatch('base/getDictionaryData', { sort: 'WorkFlowCategory' }).then((res) => {
-        this.categoryList = JSON.parse(JSON.stringify(res))
-        this.initData()
+        this.categoryList = res
       })
     },
     handleDel(id) {
