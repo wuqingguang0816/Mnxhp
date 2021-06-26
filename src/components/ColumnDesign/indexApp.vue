@@ -77,7 +77,7 @@
         </div>
         <div class="setting-box" v-show="currentTab==='column'">
           <el-form :model="columnData" label-width="80px">
-            <el-divider class="typeLine">排序设置</el-divider>
+            <el-divider>排序设置</el-divider>
             <el-form-item label="排序字段">
               <el-select v-model="columnData.defaultSidx" placeholder="请选择排序字段">
                 <el-option :label="item.__config__.label" :value="item.__vModel__"

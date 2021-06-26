@@ -48,3 +48,15 @@ npm run lint
 # 代码格式检查并自动修复
 npm run lint -- --fix
 ```
+## 常见问题
+
+- 出现`
+npm ERR! fatal: unable to access 'https://github.com/nhn/raphael.git/': Failed connect to github.com:443; Connection timed out`报错
+
+Windows环境下，打开`C:\Windows\System32\drivers\etc\host`文件，添加以下内容
+
+```bash
+52.74.223.119  github.com
+```
+
+参考文档`https://hknaruto.blog.csdn.net/article/details/105134485`
