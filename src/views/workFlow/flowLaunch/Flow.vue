@@ -16,7 +16,9 @@
                 <div class="box-icon" :style="{backgroundColor:child.iconBackground||'#008cff'}">
                   <i :class="child.icon"></i>
                 </div>
-                <p class="box-title">{{child.fullName}}</p>
+                <el-tooltip :content="child.fullName">
+                  <p class="box-title">{{child.fullName}}</p>
+                </el-tooltip>
               </div>
             </div>
           </div>
@@ -62,6 +64,7 @@ export default {
     .cap {
       font-size: 14px;
       margin-bottom: 6px;
+      font-weight: bold;
     }
     .item {
       &::after {
@@ -104,6 +107,9 @@ export default {
       .box-title {
         text-align: center;
         font-size: 12px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
       }
     }
   }

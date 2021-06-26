@@ -68,8 +68,7 @@
           </el-table-column>
           <el-table-column prop="allowNull" label="允许空" width="60" align="center">
             <template slot-scope="scope">
-              <el-checkbox :checked="scope.row.allowNull==1"
-                @change='scope.row.allowNull==1?scope.row.allowNull=0:scope.row.allowNull=1' />
+              <el-checkbox v-model="scope.row.allowNull" :true-label="1" :false-label="0" />
             </template>
           </el-table-column>
           <el-table-column prop="fieldName" label="说明">

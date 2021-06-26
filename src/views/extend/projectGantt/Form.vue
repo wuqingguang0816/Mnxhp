@@ -10,7 +10,7 @@
           <el-input v-model="dataForm.enCode" placeholder="项目编码" />
         </el-form-item>
         <el-form-item label="参与人员" prop="managerIds">
-          <user-select v-model="dataForm.managerIds" placeholder="参与人员" />
+          <user-select v-model="dataForm.managerIds" placeholder="参与人员" multiple />
         </el-form-item>
         <el-form-item label="开始日期" prop="startTime">
           <el-date-picker v-model="dataForm.startTime" type="date" placeholder="选择日期"
