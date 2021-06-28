@@ -29,8 +29,8 @@
             <el-col :span="6">
               <el-form-item label="所属流程">
                 <el-select v-model="flowId" placeholder="选择所属流程" clearable>
-                  <el-option-group v-for="group in flowEngineListAll" :key="group.id"
-                    :label="group.fullName+'【'+group.count+'】'">
+                  <el-option-group v-for="group in flowEngineList" :key="group.id"
+                    :label="group.fullName+'【'+group.num+'】'">
                     <el-option v-for="item in group.children" :key="item.id" :label="item.fullName"
                       :value="item.id">
                     </el-option>
@@ -176,7 +176,6 @@ export default {
       creatorUserId: '',
       categoryList: [],
       flowEngineList: [],
-      flowEngineListAll: [],
       multipleSelection: []
     }
   },
@@ -188,6 +187,7 @@ export default {
   },
   created() {
     this.getDictionaryData()
+    this.getFlowEngineList()
     this.initData()
   },
   methods: {
@@ -210,20 +210,11 @@ export default {
     getFlowEngineList() {
       FlowEngineListAll().then((res) => {
         this.flowEngineList = res.data.list
-        this.flowEngineListAll = JSON.parse(JSON.stringify(this.categoryList))
-        for (let i = 0; i < this.flowEngineListAll.length; i++) {
-          let child = this.flowEngineList.filter(o => this.flowEngineListAll[i].enCode === o.category)
-          let count = child.length
-          this.$set(this.flowEngineListAll[i], 'children', child)
-          this.$set(this.flowEngineListAll[i], 'count', count)
-        }
-        this.flowEngineListAll = this.flowEngineListAll.filter(o => o.children.length)
       })
     },
     getDictionaryData() {
       this.$store.dispatch('base/getDictionaryData', { sort: 'WorkFlowCategory' }).then((res) => {
         this.categoryList = res
-        this.getFlowEngineList()
       })
     },
     initData() {
