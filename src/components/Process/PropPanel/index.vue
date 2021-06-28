@@ -825,7 +825,7 @@ export default {
       }
       const assigneeType = this.approverForm.assigneeType
       let content = ''
-      if ([6, 8].includes(assigneeType)) {
+      if (assigneeType == 6) {
         if (!this.approverForm.approvers.length && !this.approverForm.approverPos.length && !this.approverForm.approverRole.length) {
           this.$message({
             message: '请设置审批人',
