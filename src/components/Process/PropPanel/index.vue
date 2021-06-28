@@ -236,9 +236,7 @@
               <div v-if="approverForm.assigneeType === 5" class="option-box-tip">
                 设置审批人为审批流程中某个环节的审批人</div>
               <div v-if="approverForm.assigneeType === 6" class="option-box-tip">
-                任何一个审批人有审批操作，则节点审批完成</div>
-              <div v-if="approverForm.assigneeType === 8" class="option-box-tip">
-                无序会签，当审批达到会签比例时，则该审批通过，一人不同意则驳回</div>
+                指定审批人处理审批单</div>
               <div v-if="approverForm.assigneeType === 9" class="option-box-tip">
                 通过第三方调用从目标服务中获取审批人</div>
               <el-alert type="warning" :closable="false" v-if="approverForm.assigneeType === 9">
@@ -272,7 +270,7 @@
             <el-form-item label="请求路径" v-if="approverForm.assigneeType === 9">
               <el-input v-model="approverForm.getUserUrl" placeholder="请输入接口路径"></el-input>
             </el-form-item>
-            <el-form-item v-if="approverForm.assigneeType === 6|| approverForm.assigneeType === 8">
+            <el-form-item v-if="approverForm.assigneeType === 6">
               <org-select ref="approver-role-org" type="role" v-model="approverForm.approverRole"
                 title="添加角色" class="mb-10" buttonType="button" />
               <org-select ref="approver-position-org" buttonType="button"
@@ -281,7 +279,14 @@
               <org-select ref="approver-user-org" buttonType="button"
                 v-model="approverForm.approvers" title="添加用户" @change="onOrgChange" />
             </el-form-item>
-            <el-form-item label="会签比例" v-if="approverForm.assigneeType === 8">
+            <el-form-item label="审批方式">
+              <el-radio v-model="approverForm.counterSign" :label="0">
+                或签（一名审批人同意或拒绝即可）</el-radio>
+              <br>
+              <el-radio v-model="approverForm.counterSign" :label="1">
+                会签（无序会签，当审批达到会签比例时，则该审批通过）</el-radio>
+            </el-form-item>
+            <el-form-item label="会签比例" v-if="approverForm.counterSign">
               <el-select v-model="approverForm.countersignRatio">
                 <el-option v-for="item in 10" :key="item*10" :label="item*10+'%'" :value="item*10">
                 </el-option>
@@ -484,6 +489,7 @@ const defaultApproverForm = {
   formField: '',
   nodeId: '',
   getUserUrl: '',
+  counterSign: 0,
   noApproverHandler: true,
   hasFreeApprover: false,
   hasAuditBtn: true,
@@ -542,12 +548,8 @@ export default {
       initiateTypeOptions: ['指定成员', '部门主管', '发起者主管', '发起者本人'],
       assigneeTypeOptions: [
         {
-          label: '或签',
+          label: '指定人',
           value: 6
-        },
-        {
-          label: '会签',
-          value: 8
         },
         {
           label: '发起者主管',
