@@ -46,7 +46,7 @@
                 <el-radio-button label="dynamic">远端数据</el-radio-button>
               </el-radio-group>
             </el-form-item>
-            <el-form-item label="数据源" v-if="activeData.dataType==='static'">
+            <el-form-item label="数据设置" v-if="activeData.dataType==='static'">
               <el-button @click="showData(activeData.option)">查看</el-button>
             </el-form-item>
             <el-form-item label="数据接口" v-if="activeData.dataType==='dynamic'">

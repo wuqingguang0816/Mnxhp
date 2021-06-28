@@ -1,5 +1,5 @@
 <template>
-  <el-dialog title="数据源" :close-on-click-modal="false" :visible.sync="visible"
+  <el-dialog title="数据设置" :close-on-click-modal="false" :visible.sync="visible"
     class="JNPF-dialog JNPF-dialog_center" lock-scroll width="600px" append-to-body>
     <JSONEditor v-model="responseData" class="preview" />
     <span slot="footer" class="dialog-footer">
