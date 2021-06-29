@@ -59,16 +59,6 @@
                 <template slot="append">个字符</template>
               </el-input>
             </el-form-item>
-            <template v-if="activeData.__config__.jnpfKey === 'comInput'">
-              <el-form-item v-if="activeData.type !== undefined" label="类型">
-                <el-select v-model="activeData.type" placeholder="请选择类型">
-                  <el-option label="文本输入键盘" value="text"></el-option>
-                  <el-option label="数字输入键盘" value="number"></el-option>
-                  <el-option label="身份证输入键盘" value="idcard"></el-option>
-                  <el-option label="带小数点的数字键盘" value="digit"></el-option>
-                </el-select>
-              </el-form-item>
-            </template>
             <template
               v-if="activeData.__config__.jnpfKey === 'numInput' ||activeData.__config__.jnpfKey === 'slider'">
               <el-form-item label="最小值">
