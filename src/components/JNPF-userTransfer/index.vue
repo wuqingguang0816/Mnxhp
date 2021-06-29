@@ -76,6 +76,7 @@ export default {
   methods: {
     init() {
       this.selectedData = []
+      this.ids = []
       this.keyword = ''
       this.nodeId = '0'
       this.$nextTick(() => {
