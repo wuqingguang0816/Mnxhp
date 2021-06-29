@@ -58,6 +58,10 @@
       <span>{{$t('settings.search')}}</span>
       <el-switch v-model="showSearch" class="drawer-switch" />
     </div>
+    <div class="drawer-item">
+      <span>{{$t('settings.cache')}}</span>
+      <el-switch v-model="useCache" class="drawer-switch" />
+    </div>
   </el-drawer>
 </template>
 
@@ -189,6 +193,17 @@ export default {
       set(val) {
         this.$store.dispatch("settings/changeSetting", {
           key: "showSearch",
+          value: val
+        });
+      }
+    },
+    useCache: {
+      get() {
+        return this.$store.state.settings.useCache;
+      },
+      set(val) {
+        this.$store.dispatch("settings/changeSetting", {
+          key: "useCache",
           value: val
         });
       }

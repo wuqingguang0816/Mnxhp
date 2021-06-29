@@ -179,7 +179,8 @@ export default {
     tagsView: '開啟多頁簽',
     tagsViewIcon: '多頁簽顯示圖標',
     language: '顯示多語言選擇',
-    search: '顯示頁面搜索框'
+    search: '顯示頁面搜索框',
+    cache:'緩存頁面'
   },
   common: {
     addBtn: '新建',
