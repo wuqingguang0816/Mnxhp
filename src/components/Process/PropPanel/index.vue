@@ -339,22 +339,6 @@
                 <el-checkbox v-model="approverForm.hasSign">签名</el-checkbox>
               </div>
             </el-form-item>
-            <el-form-item label="超时设置">
-              <el-switch v-model="approverForm.timeoutConfig.on" class="mr-10" />
-              <template v-if="approverForm.timeoutConfig.on">
-                <el-input-number v-model="approverForm.timeoutConfig.quantity"
-                  controls-position="right" :min="1" class="mr-10" />
-                <el-select v-model="approverForm.timeoutConfig.type" class="timeout-select mr-10">
-                  <el-option label="天" value="day"></el-option>
-                  <el-option label="小时" value="hour"></el-option>
-                  <el-option label="分钟" value="minute"></el-option>
-                </el-select>
-                <el-radio-group v-model="approverForm.timeoutConfig.handler">
-                  <el-radio :label="1">同意</el-radio>
-                  <el-radio :label="2">驳回</el-radio>
-                </el-radio-group>
-              </template>
-            </el-form-item>
             <el-form-item label="驳回设置">
               <el-select v-model="approverForm.rejectStep" placeholder="请选择">
                 <el-option v-for="item in rejectStepOptions" :key="item.nodeId"
