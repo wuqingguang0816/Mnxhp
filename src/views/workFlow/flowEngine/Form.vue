@@ -185,7 +185,7 @@ export default {
         formData: '',
         description: '',
         formType: 1,
-        dbLinkId: '0',
+        dbLinkId: '',
         enabledMark: 1,
         sortCode: 0,
         icon: '',

@@ -96,6 +96,27 @@ const webPeculiarList = [{
     },
     expression: []
   },
+  {
+    __config__: {
+      jnpfKey: 'popupSelect',
+      label: '弹窗选择',
+      labelWidth: null,
+      showLabel: true,
+      required: false,
+      tag: 'popupSelect',
+      tagIcon: 'icon-ym icon-ym-generator-checkbox',
+      defaultValue: '',
+      layout: 'colFormItem',
+      span: 24,
+      dragDisabled: false,
+      regList: []
+    },
+    interfaceId: '',
+    columnOptions: [],
+    propsValue: 'id',
+    disabled: false,
+    clearable: true,
+  }
 ]
 // 在线开发-流程设计独有组件
 const flowPeculiarList = [{
