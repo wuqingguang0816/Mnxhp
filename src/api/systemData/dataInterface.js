@@ -82,3 +82,12 @@ export function exportData(id) {
     method: 'GET'
   })
 }
+
+// 获取数据接口调用日志列表
+export function getDataInterfaceLog(id, data) {
+  return request({
+    url: `/api/system/DataInterfaceLog/${id}`,
+    method: 'GET',
+    data
+  })
+}

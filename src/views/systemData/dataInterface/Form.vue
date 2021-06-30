@@ -20,15 +20,25 @@
       label-width="90px">
       <el-row>
         <el-col :span="14" :offset="5" class="baseInfo mt-20" v-if="active === 0">
-          <el-form-item label="名称" prop="fullName" maxlength="50">
-            <el-input v-model="dataForm.fullName" placeholder="输入名称" />
+          <el-form-item label="名称" prop="fullName">
+            <el-input v-model="dataForm.fullName" placeholder="输入名称" maxlength="50" />
           </el-form-item>
-          <el-form-item label="编码" prop="enCode" maxlength="50">
-            <el-input v-model="dataForm.enCode" placeholder="输入编码" />
+          <el-form-item label="编码" prop="enCode">
+            <el-input v-model="dataForm.enCode" placeholder="输入编码" maxlength="50" />
           </el-form-item>
           <el-form-item label="分类" prop="categoryId">
             <JNPF-TreeSelect v-model="dataForm.categoryId" :options="selectData" placeholder="选择分类"
               clearable />
+          </el-form-item>
+          <el-form-item label="规则" prop="checkType">
+            <el-radio-group v-model="dataForm.checkType">
+              <el-radio :label="0">忽略验证</el-radio>
+              <el-radio :label="1">鉴权验证</el-radio>
+              <el-radio :label="2">跨域验证</el-radio>
+            </el-radio-group>
+          </el-form-item>
+          <el-form-item prop="requestHeaders" v-if="dataForm.checkType===2">
+            <el-input v-model="dataForm.requestHeaders" placeholder="请输入域名，多个域名用逗号隔开" />
           </el-form-item>
           <el-form-item label="类型" prop="dataType">
             <el-radio-group v-model="dataForm.dataType">
@@ -162,6 +172,8 @@ export default {
         categoryId: '',
         dbLinkId: '0',
         dataType: 2,
+        checkType: 0,
+        requestHeaders: '',
         requestMethod: 'get',
         responseType: 'json',
         sortCode: 0,
@@ -227,6 +239,8 @@ export default {
         categoryId: '',
         dbLinkId: '0',
         dataType: 2,
+        checkType: 0,
+        requestHeaders: '',
         requestMethod: 'get',
         responseType: 'json',
         sortCode: 0,

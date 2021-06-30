@@ -76,6 +76,9 @@
                       @click.native="handlePreview(scope.row.id, scope.row.enabledMark)"
                       v-has="'btn_preview'">预览
                     </el-dropdown-item>
+                    <el-dropdown-item @click.native="viewLog(scope.row)">
+                      日志
+                    </el-dropdown-item>
                     <el-dropdown-item @click.native="exportData(scope.row.id)">
                       导出
                     </el-dropdown-item>
@@ -90,6 +93,7 @@
       </div>
     </div>
     <Form v-if="formVisible" ref="Form" @close="colseForm" />
+    <Log v-show="logVisible" ref="Log" @close="logVisible=false" />
     <Preview v-if="previewVisible" ref="Preview" @close="colsePreview" />
   </div>
 </template>
@@ -103,10 +107,10 @@ import {
 } from '@/api/systemData/dataInterface'
 import Form from './Form'
 import Preview from './Preview'
-
+import Log from './Log'
 export default {
   name: 'systemData-dataInterface',
-  components: { Form, Preview },
+  components: { Form, Preview, Log },
   data() {
     return {
       defaultProps: {
@@ -126,6 +130,7 @@ export default {
       btnLoading: false,
       treeData: [],
       tableData: [],
+      logVisible: false,
       formVisible: false,
       previewVisible: false
     }
@@ -158,6 +163,12 @@ export default {
       }).catch(() => {
         this.listLoading = false
         this.btnLoading = false
+      })
+    },
+    viewLog(row) {
+      this.logVisible = true
+      this.$nextTick(() => {
+        this.$refs.Log.init(row.id, row.fullName)
       })
     },
     handleUpdateState(row) {
