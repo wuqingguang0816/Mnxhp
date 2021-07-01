@@ -18,7 +18,7 @@
         </li>
       </transition-group>
     </template>
-    <el-upload :action="define.comUploadUrl+'/'+type" :headers="uploadHeaders"
+    <el-upload :action="define.comUploadUrl+'/'+type" :headers="uploadHeaders" :file-list="fileList"
       :on-success="handleSuccess" :multiple="limit !==1" :show-file-list="false" accept="image/*"
       :before-upload="beforeUpload" :on-exceed="handleExceed" :disabled="disabled"
       list-type="picture-card" :limit="limit" class="upload-btn">
