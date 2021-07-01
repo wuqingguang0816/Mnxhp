@@ -20,8 +20,8 @@
       </el-row>
       <div class="JNPF-common-layout-main JNPF-flex-main">
         <div class="JNPF-common-head">
-          <el-button type="primary" icon="el-icon-plus" @click="addOrUpdateHandle()"
-            v-has="'btn_add'">新建项目</el-button>
+          <el-button type="primary" icon="el-icon-plus" @click="addOrUpdateHandle()">新建项目
+          </el-button>
           <div class="JNPF-common-head-right">
             <el-tooltip effect="dark" :content="$t('common.refresh')" placement="top">
               <el-link icon="icon-ym icon-ym-Refresh JNPF-common-head-icon" :underline="false"
@@ -69,11 +69,11 @@
           </el-table-column>
           <el-table-column label="操作" fixed="right" width="150">
             <template slot-scope="scope">
-              <el-button size="mini" type="text" @click="addOrUpdateHandle(scope.row.id)"
-                v-has="'btn_edit'">编辑</el-button>
-              <el-button size="mini" type="text" class="JNPF-table-delBtn" v-has="'btn_remove'"
+              <el-button size="mini" type="text" @click="addOrUpdateHandle(scope.row.id)">编辑
+              </el-button>
+              <el-button size="mini" type="text" class="JNPF-table-delBtn"
                 @click="handleDel(scope.$index,scope.row.id)">删除</el-button>
-              <el-button size="mini" type="text" @click="toTask(scope.row)" v-has="'btn_task'">
+              <el-button size="mini" type="text" @click="toTask(scope.row)">
                 项目任务</el-button>
             </template>
           </el-table-column>

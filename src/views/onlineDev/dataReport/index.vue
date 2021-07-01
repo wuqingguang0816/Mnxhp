@@ -31,8 +31,7 @@
         </div>
         <JNPF-table v-loading="listLoading" :data="tableListAll" row-key="id" default-expand-all
           :tree-props="{children: 'children', hasChildren: ''}">
-          <el-table-column prop="fullName" label="报表名称" min-width="200"
-            v-if="jnpf.hasP('fullName')">
+          <el-table-column prop="fullName" label="报表名称" min-width="200">
             <template slot-scope="scope">
               <span v-if="scope.row.top" style="font-weight:bold;">
                 {{scope.row.fullName}}【{{scope.row.count}}】
@@ -40,31 +39,29 @@
               <span v-else>{{ scope.row.fullName }}</span>
             </template>
           </el-table-column>
-          <el-table-column prop="enCode" label="编码" width="200" v-if="jnpf.hasP('enCode')">
+          <el-table-column prop="enCode" label="编码" width="200">
             <template slot-scope="scope">
               <span v-if="!scope.row.top">{{ scope.row.enCode }}</span>
             </template>
           </el-table-column>
-          <el-table-column prop="creatorUser" label="创建人" width="120"
-            v-if="jnpf.hasP('creatorUser')">
+          <el-table-column prop="creatorUser" label="创建人" width="120">
             <template slot-scope="scope">
               <span v-if="!scope.row.top">{{scope.row.creatorUser}}</span>
             </template>
           </el-table-column>
           <el-table-column prop="creatorTime" label="创建时间" :formatter="jnpf.tableDateFormat"
-            width="120" v-if="jnpf.hasP('creatorTime')" />
-          <el-table-column prop="lastModifyUser" label="修改人" width="120"
-            v-if="jnpf.hasP('lastModifyUser')">
+            width="120" />
+          <el-table-column prop="lastModifyUser" label="修改人" width="120">
             <template slot-scope="scope">
               <span v-if="!scope.row.top">{{scope.row.lastModifyUser}}</span>
             </template>
           </el-table-column>
           <el-table-column prop="lastModifyTime" label="最后修改时间" :formatter="jnpf.tableDateFormat"
-            width="120" v-if="jnpf.hasP('lastModifyTime')" />
+            width="120" />
           <el-table-column label="操作" width="150">
             <template slot-scope="scope" v-if="!scope.row.top">
               <tableOpts @edit="handleAddEdit(scope.row.id)" @del="handleDel(scope.row.id)">
-                <el-dropdown hide-on-click v-has="'btn_more'">
+                <el-dropdown hide-on-click>
                   <span class="el-dropdown-link">
                     <el-button type="text" size="mini">
                       {{$t('common.moreBtn')}}<i class="el-icon-arrow-down el-icon--right"></i>
@@ -72,14 +69,14 @@
                   </span>
                   <el-dropdown-menu slot="dropdown">
                     <el-dropdown-item
-                      @click.native="handlePreview(scope.row.id, scope.row.fullName)"
-                      v-has="'btn_preview'">预览</el-dropdown-item>
-                    <el-dropdown-item @click.native="handleExport(scope.row.id,'pdf')"
-                      v-has="'btn_preview'">导出PDF</el-dropdown-item>
-                    <el-dropdown-item @click.native="handleExport(scope.row.id,'excel')"
-                      v-has="'btn_exportExcel'">导出Excel</el-dropdown-item>
-                    <el-dropdown-item @click.native="handleExport(scope.row.id,'word')"
-                      v-has="'btn_exportWord'">导出Word</el-dropdown-item>
+                      @click.native="handlePreview(scope.row.id, scope.row.fullName)">预览
+                    </el-dropdown-item>
+                    <el-dropdown-item @click.native="handleExport(scope.row.id,'pdf')">导出PDF
+                    </el-dropdown-item>
+                    <el-dropdown-item @click.native="handleExport(scope.row.id,'excel')">导出Excel
+                    </el-dropdown-item>
+                    <el-dropdown-item @click.native="handleExport(scope.row.id,'word')">导出Word
+                    </el-dropdown-item>
                   </el-dropdown-menu>
                 </el-dropdown>
               </tableOpts>

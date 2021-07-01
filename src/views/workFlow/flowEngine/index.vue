@@ -31,38 +31,34 @@
         </div>
         <JNPF-table v-loading="listLoading" :data="flowEngineList" row-key="id"
           :tree-props="{children: 'children', hasChildren: ''}" default-expand-all>
-          <el-table-column prop="fullName" label="流程名称" min-width="150"
-            v-if="jnpf.hasP('fullName')">
+          <el-table-column prop="fullName" label="流程名称" min-width="150">
             <template slot-scope="scope">
               <span v-if="scope.row.top"
                 style="font-weight:bold;">{{scope.row.fullName}}【{{scope.row.num}}】</span>
               <span v-else>{{scope.row.fullName}}</span>
             </template>
           </el-table-column>
-          <el-table-column prop="enCode" label="流程编码" width="200" v-if="jnpf.hasP('enCode')" />
-          <el-table-column prop="formType" label="表单类型" width="100" v-if="jnpf.hasP('formType')">
+          <el-table-column prop="enCode" label="流程编码" width="200" />
+          <el-table-column prop="formType" label="表单类型" width="100">
             <template slot-scope="scope">
               <span v-if="!scope.row.top">{{ scope.row.formType == 1? "系统表单" : "自定义表单" }}</span>
             </template>
           </el-table-column>
-          <el-table-column prop="type" label="流程类型" width="80" v-if="jnpf.hasP('type')">
+          <el-table-column prop="type" label="流程类型" width="80">
             <template slot-scope="scope">
               <span v-if="!scope.row.top">{{ scope.row.type == 0? "发起流程" : "功能流程" }}</span>
             </template>
           </el-table-column>
-          <el-table-column prop="visibleType" label="可见范围" width="80"
-            v-if="jnpf.hasP('visibleType')">
+          <el-table-column prop="visibleType" label="可见范围" width="80">
             <template slot-scope="scope">
               <span v-if="!scope.row.top">{{ scope.row.visibleType ==  0 ? "全部可见" : "部分可见" }}</span>
             </template>
           </el-table-column>
-          <el-table-column prop="creatorUser" label="创建人" width="120"
-            v-if="jnpf.hasP('creatorUser')" />
+          <el-table-column prop="creatorUser" label="创建人" width="120" />
           <el-table-column prop="creatorTime" label="创建时间" :formatter="jnpf.tableDateFormat"
-            width="120" v-if="jnpf.hasP('creatorTime')" />
-          <el-table-column prop="sortCode" label="排序" width="70" align="center"
-            v-if="jnpf.hasP('sortCode')" />
-          <el-table-column label="状态" width="70" align="center" v-if="jnpf.hasP('enabledMark')">
+            width="120" />
+          <el-table-column prop="sortCode" label="排序" width="70" align="center" />
+          <el-table-column label="状态" width="70" align="center">
             <template slot-scope="scope">
               <el-switch v-model="scope.row.enabledMark" :active-value="1" :inactive-value="0"
                 v-if="!scope.row.top" @click.native="handleUpdate(scope.row)" disabled
@@ -73,17 +69,17 @@
             <template slot-scope="scope" v-if="!scope.row.top">
               <tableOpts @edit="addOrUpdateHandle(scope.row.id,scope.row.formType)"
                 @del="handleDel(scope.row.id)">
-                <el-dropdown v-has="'btn_more'">
+                <el-dropdown>
                   <span class="el-dropdown-link">
                     <el-button type="text" size="mini">{{$t('common.moreBtn')}}<i
                         class="el-icon-arrow-down el-icon--right"></i>
                     </el-button>
                   </span>
                   <el-dropdown-menu slot="dropdown">
-                    <el-dropdown-item @click.native="copy(scope.row.id)" v-has="'btn_copy'">
+                    <el-dropdown-item @click.native="copy(scope.row.id)">
                       复制流程</el-dropdown-item>
-                    <el-dropdown-item @click.native="preview(scope.row)" v-has="'btn_preview'">
-                      预览表单 </el-dropdown-item>
+                    <el-dropdown-item @click.native="preview(scope.row)">
+                      预览表单</el-dropdown-item>
                   </el-dropdown-menu>
                 </el-dropdown>
               </tableOpts>

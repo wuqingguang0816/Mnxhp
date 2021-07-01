@@ -3,8 +3,7 @@
     size="700px" :before-close="handleDrawerClose" class="JNPF-common-drawer">
     <div class="JNPF-flex-main">
       <div class="JNPF-common-head">
-        <topOpts @refresh="handleRefreshData()" @add="handleAddEditType()" :loading="btnLoading"
-          addPerCode="btn_type_add" />
+        <topOpts @refresh="handleRefreshData()" @add="handleAddEditType()" />
         <div class="JNPF-common-head-right">
           <el-tooltip effect="dark" :content="$t('common.refresh')" placement="top">
             <el-link icon="icon-ym icon-ym-Refresh
@@ -25,8 +24,7 @@
         </el-table-column>
         <el-table-column label="操作" width="90">
           <template slot-scope="scope">
-            <tableOpts @edit="handleAddEditType(scope.row.id)" @del="handleDel(scope.row.id)"
-              editPerCode="btn_type_edit" delPerCode="btn_type_remove" />
+            <tableOpts @edit="handleAddEditType(scope.row.id)" @del="handleDel(scope.row.id)" />
           </template>
         </el-table-column>
       </JNPF-table>

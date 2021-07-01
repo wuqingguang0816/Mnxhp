@@ -56,7 +56,7 @@
               </el-form-item>
               <el-form-item>
                 <el-button type="primary" size="small" :loading="btnLoading" class="saveBtn"
-                  @click="submitForm()" v-has="'btn_save'">保 存</el-button>
+                  @click="submitForm()">保 存</el-button>
               </el-form-item>
             </el-col>
           </el-row>
@@ -103,7 +103,7 @@
               </el-form-item>
               <el-form-item>
                 <el-button type="primary" size="small" :loading="btnLoading" class="saveBtn"
-                  @click="submitForm()" v-has="'btn_save'">保 存</el-button>
+                  @click="submitForm()">保 存</el-button>
               </el-form-item>
             </el-col>
           </el-row>
@@ -138,7 +138,7 @@
                   </el-form-item>
                   <el-form-item>
                     <el-button type="primary" size="small" :loading="btnLoading" class="saveBtn"
-                      @click="submitForm()" v-has="'btn_save'">保 存</el-button>
+                      @click="submitForm()">保 存</el-button>
                   </el-form-item>
                 </el-col>
               </el-row>
@@ -191,7 +191,7 @@
                   </el-form-item>
                   <el-form-item>
                     <el-button type="primary" size="small" :loading="btnLoading" class="saveBtn"
-                      @click="submitForm()" v-has="'btn_save'">保 存</el-button>
+                      @click="submitForm()">保 存</el-button>
                   </el-form-item>
                 </el-col>
               </el-row>
@@ -259,7 +259,7 @@
                 <el-col>
                   <el-form-item>
                     <el-button type="primary" size="small" :loading="btnLoading" class="saveBtn"
-                      @click="submitForm()" v-has="'btn_save'">保 存</el-button>
+                      @click="submitForm()">保 存</el-button>
                   </el-form-item>
                 </el-col>
               </el-row>
@@ -319,7 +319,7 @@
                 <el-col>
                   <el-form-item>
                     <el-button type="primary" size="small" :loading="btnLoading" class="saveBtn"
-                      @click="submitForm()" v-has="'btn_save'">保 存</el-button>
+                      @click="submitForm()">保 存</el-button>
                   </el-form-item>
                 </el-col>
               </el-row>

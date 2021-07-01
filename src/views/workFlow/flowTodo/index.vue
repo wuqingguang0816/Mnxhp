@@ -70,19 +70,17 @@
           </div>
         </div>
         <JNPF-table v-loading="listLoading" :data="list">
-          <el-table-column prop="fullName" label="流程标题" show-overflow-tooltip
-            v-if="jnpf.hasP('fullName')" min-width="150" />
-          <el-table-column prop="flowName" label="所属流程" width="130" v-if="jnpf.hasP('flowName')" />
+          <el-table-column prop="fullName" label="流程标题" show-overflow-tooltip min-width="150" />
+          <el-table-column prop="flowName" label="所属流程" width="130" />
           <el-table-column prop="startTime" label="发起时间" width="130"
-            :formatter="jnpf.tableDateFormat" v-if="jnpf.hasP('startTime')" />
-          <el-table-column prop="userName" label="发起人员" width="130" v-if="jnpf.hasP('userName')" />
-          <el-table-column prop="flowUrgent" label="紧急程度" sortable width="130"
-            v-if="jnpf.hasP('flowUrgent')">
+            :formatter="jnpf.tableDateFormat" />
+          <el-table-column prop="userName" label="发起人员" width="130" />
+          <el-table-column prop="flowUrgent" label="紧急程度" sortable width="130">
             <template slot-scope="scope">
               {{ scope.row.flowUrgent | urgentText() }}
             </template>
           </el-table-column>
-          <el-table-column prop="status" label="流程状态" width="130" v-if="jnpf.hasP('status')">
+          <el-table-column prop="status" label="流程状态" width="130">
             <template slot-scope="scope">
               <el-tag type="success" v-if="scope.row.status==2">审核通过</el-tag>
               <el-tag type="danger" v-else-if="scope.row.status==3">审核驳回</el-tag>
@@ -91,16 +89,14 @@
               <el-tag type="primary" v-else>等待审核</el-tag>
             </template>
           </el-table-column>
-          <el-table-column prop="creatorTime" label="接收时间" width="130"
-            v-if="jnpf.hasP('creatorTime')">
+          <el-table-column prop="creatorTime" label="接收时间" width="130">
             <template slot-scope="scope">
               {{scope.row.creatorTime | toDate() }}
             </template>
           </el-table-column>
           <el-table-column label="操作" width="50" fixed="right">
             <template slot-scope="scope">
-              <el-button size="mini" type="text" @click="toDetail(scope.row)" v-has="'btn_audit'">审批
-              </el-button>
+              <el-button size="mini" type="text" @click="toDetail(scope.row)">审批</el-button>
             </template>
           </el-table-column>
         </JNPF-table>

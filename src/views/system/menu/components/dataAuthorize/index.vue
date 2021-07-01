@@ -7,7 +7,7 @@
           class="JNPF-flex-tabs">
           <el-tab-pane label="方案管理" name="dataAuthorizeScheme">
             <div class="JNPF-common-head">
-              <topOpts @add="handleAddEdit('')" addPerCode="btn_btnPer_add" />
+              <topOpts @add="handleAddEdit('')" />
               <div class="JNPF-common-head-right">
                 <el-tooltip effect="dark" :content="$t('common.refresh')" placement="top">
                   <el-link icon="icon-ym icon-ym-Refresh
@@ -21,16 +21,14 @@
               <el-table-column prop="conditionText" label="过滤条件" />
               <el-table-column label="操作" width="100">
                 <template slot-scope="scope">
-                  <tableOpts @edit="handleAddEdit(scope.row.id)" @del="handleDel(scope.row.id)"
-                    editPerCode="btn_dataPer_edit" delPerCode="btn_dataPer_remove">
-                  </tableOpts>
+                  <tableOpts @edit="handleAddEdit(scope.row.id)" @del="handleDel(scope.row.id)" />
                 </template>
               </el-table-column>
             </JNPF-table>
           </el-tab-pane>
           <el-tab-pane label="字段管理" name="dataAuthorize">
             <div class="JNPF-common-head">
-              <topOpts @add="handleAddEdit('')" addPerCode="btn_btnPer_add" />
+              <topOpts @add="handleAddEdit('')" />
               <div class="JNPF-common-head-right">
                 <el-tooltip effect="dark" :content="$t('common.refresh')" placement="top">
                   <el-link icon="icon-ym icon-ym-Refresh
@@ -55,9 +53,7 @@
               </el-table-column>
               <el-table-column label="操作" width="100">
                 <template slot-scope="scope">
-                  <tableOpts @edit="handleAddEdit(scope.row.id)" @del="handleDel(scope.row.id)"
-                    editPerCode="btn_dataPer_edit" delPerCode="btn_dataPer_remove">
-                  </tableOpts>
+                  <tableOpts @edit="handleAddEdit(scope.row.id)" @del="handleDel(scope.row.id)" />
                 </template>
               </el-table-column>
             </JNPF-table>

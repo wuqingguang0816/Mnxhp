@@ -65,20 +65,17 @@
           </div>
         </div>
         <JNPF-table v-loading="listLoading" :data="list">
-          <el-table-column prop="fullName" label="流程标题" show-overflow-tooltip
-            v-if="jnpf.hasP('fullName')" min-width="150" />
-          <el-table-column prop="flowName" label="所属流程" width="130" v-if="jnpf.hasP('flowName')" />
+          <el-table-column prop="fullName" label="流程标题" show-overflow-tooltip min-width="150" />
+          <el-table-column prop="flowName" label="所属流程" width="130" />
           <el-table-column prop="startTime" label="发起时间" width="130"
-            :formatter="jnpf.tableDateFormat" v-if="jnpf.hasP('startTime')" />
-          <el-table-column prop="thisStep" label="当前节点" width="150" v-if="jnpf.hasP('thisStep')" />
-          <el-table-column prop="flowUrgent" label="紧急程度" width="130"
-            v-if="jnpf.hasP('flowUrgent')">
+            :formatter="jnpf.tableDateFormat" />
+          <el-table-column prop="thisStep" label="当前节点" width="150" />
+          <el-table-column prop="flowUrgent" label="紧急程度" width="130">
             <template slot-scope="scope">
               {{ scope.row.flowUrgent | urgentText() }}
             </template>
           </el-table-column>
-          <el-table-column prop="status" label="流程状态" sortable width="150"
-            v-if="jnpf.hasP('status')">
+          <el-table-column prop="status" label="流程状态" sortable width="150">
             <template slot-scope="scope">
               <el-tag type="primary" v-if="scope.row.status==1">等待审核</el-tag>
               <el-tag type="success" v-else-if="scope.row.status==2">审核通过</el-tag>
@@ -88,8 +85,7 @@
               <el-tag v-else type="info">等待提交</el-tag>
             </template>
           </el-table-column>
-          <el-table-column prop="completion" label="流程进度" width="150"
-            v-if="jnpf.hasP('completion')">
+          <el-table-column prop="completion" label="流程进度" width="150">
             <template slot-scope="scope">
               <p class="text-grey" v-if="scope.row.status==5 || scope.row.completion == 0">----</p>
               <p v-else-if=" scope.row.completion == 100">已完成</p>
@@ -99,13 +95,13 @@
           <el-table-column label="操作" width="150" fixed="right">
             <template slot-scope="scope">
               <el-button size="mini" type="text" @click="toDetail(scope.row,'-1')"
-                :disabled="[1,2,5].indexOf(scope.row.status)>-1" v-has="'btn_edit'">编辑
+                :disabled="[1,2,5].indexOf(scope.row.status)>-1">编辑
               </el-button>
               <el-button size="mini" type="text" class="JNPF-table-delBtn"
                 @click="handleDel(scope.$index,scope.row.id)"
-                :disabled="[1,2,5].indexOf(scope.row.status)>-1" v-has="'btn_remove'">删除</el-button>
+                :disabled="[1,2,5].indexOf(scope.row.status)>-1">删除</el-button>
               <el-button size="mini" type="text" @click="toDetail(scope.row,0)"
-                :disabled="scope.row.status==0" v-has="'btn_detail'">详情
+                :disabled="scope.row.status==0">详情
               </el-button>
             </template>
           </el-table-column>

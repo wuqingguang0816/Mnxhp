@@ -51,19 +51,18 @@
           </div>
         </div>
         <JNPF-table v-loading="listLoading" :data="tableData">
-          <el-table-column prop="account" label="账号" width="100" v-if="jnpf.hasP('account')" />
-          <el-table-column prop="realName" label="姓名" width="100" v-if="jnpf.hasP('realName')" />
-          <el-table-column label="性别" width="90" align="center" v-if="jnpf.hasP('gender')">
+          <el-table-column prop="account" label="账号" width="100" />
+          <el-table-column prop="realName" label="姓名" width="100" />
+          <el-table-column label="性别" width="90" align="center">
             <template slot-scope="scope" sortable>
               <span>{{ scope.row.gender ==1 ? '男': ( scope.row.gender == 2 ? '女' : '保密') }}</span>
             </template>
           </el-table-column>
-          <el-table-column prop="mobilePhone" label="手机" v-if="jnpf.hasP('mobilePhone')" />
-          <el-table-column prop="department" label="部门" v-if="jnpf.hasP('department')" />
-          <el-table-column prop="position" label="岗位" v-if="jnpf.hasP('position')" />
-          <el-table-column prop="sortCode" label="排序" width="70" align="center"
-            v-if="jnpf.hasP('sortCode')" />
-          <el-table-column label="状态" width="70" align="center" v-if="jnpf.hasP('enabledMark')">
+          <el-table-column prop="mobilePhone" label="手机" />
+          <el-table-column prop="department" label="部门" />
+          <el-table-column prop="position" label="岗位" />
+          <el-table-column prop="sortCode" label="排序" width="70" align="center" />
+          <el-table-column label="状态" width="70" align="center">
             <template slot-scope="scope">
               <el-switch v-model="scope.row.enabledMark" :active-value="1" :inactive-value="0"
                 @click.native="handleUpdateState(scope.row)" disabled class="table-switch" />
@@ -72,7 +71,7 @@
           <el-table-column label="操作" width="150">
             <template slot-scope="scope" v-if="!scope.row.isAdministrator">
               <tableOpts @edit="handleAddEdit(scope.row.id)" @del="handleDel(scope.row.id)">
-                <el-dropdown hide-on-click v-has="'btn_more'">
+                <el-dropdown hide-on-click>
                   <span class="el-dropdown-link">
                     <el-button size="mini" type="text">
                       {{$t('common.moreBtn')}}<i class="el-icon-arrow-down el-icon--right"></i>
@@ -80,8 +79,8 @@
                   </span>
                   <el-dropdown-menu slot="dropdown">
                     <el-dropdown-item
-                      @click.native="handleResetPwd(scope.row.id, scope.row.account)"
-                      v-has="'btn_password'">{{$t('user.resetPassword')}}
+                      @click.native="handleResetPwd(scope.row.id, scope.row.account)">
+                      {{$t('user.resetPassword')}}
                     </el-dropdown-item>
                   </el-dropdown-menu>
                 </el-dropdown>

@@ -41,22 +41,20 @@
           </div>
         </div>
         <JNPF-table v-loading="listLoading" :data="tableData">
-          <el-table-column prop="fullName" label="接口名称" v-if="jnpf.hasP('fullName')" />
-          <el-table-column prop="enCode" label="编码" v-if="jnpf.hasP('enCode')" />
-          <el-table-column label="接口类型" v-if="jnpf.hasP('dataType')">
+          <el-table-column prop="fullName" label="接口名称" />
+          <el-table-column prop="enCode" label="编码" />
+          <el-table-column label="接口类型">
             <template slot-scope="scope">
               <span v-if="scope.row.dataType === 1">SQL数据</span>
               <span v-if="scope.row.dataType === 2">静态数据</span>
               <span v-if="scope.row.dataType === 3">Api数据</span>
             </template>
           </el-table-column>
-          <el-table-column prop="creatorUser" label="创建人" width="120"
-            v-if="jnpf.hasP('creatorUser')" />
+          <el-table-column prop="creatorUser" label="创建人" width="120" />
           <el-table-column prop="creatorTime" label="创建时间" :formatter="jnpf.tableDateFormat"
-            width="120" v-if="jnpf.hasP('creatorTime')" />
-          <el-table-column prop="sortCode" label="排序" width="70" align="center"
-            v-if="jnpf.hasP('sortCode')" />
-          <el-table-column label="状态" width="70" align="center" v-if="jnpf.hasP('enabledMark')">
+            width="120" />
+          <el-table-column prop="sortCode" label="排序" width="70" align="center" />
+          <el-table-column label="状态" width="70" align="center">
             <template slot-scope="scope">
               <el-switch v-model="scope.row.enabledMark" :active-value="1" :inactive-value="0"
                 @click.native="handleUpdateState(scope.row)" disabled class="table-switch" />
@@ -65,7 +63,7 @@
           <el-table-column label="操作" width="150">
             <template slot-scope="scope">
               <tableOpts @edit="handleAddEdit(scope.row.id)" @del="handleDel(scope.row.id)">
-                <el-dropdown hide-on-click v-has="'btn_more'">
+                <el-dropdown hide-on-click>
                   <span class="el-dropdown-link">
                     <el-button type="text" size="mini">{{$t('common.moreBtn')}}<i
                         class="el-icon-arrow-down el-icon--right"></i>
@@ -73,8 +71,7 @@
                   </span>
                   <el-dropdown-menu slot="dropdown">
                     <el-dropdown-item
-                      @click.native="handlePreview(scope.row.id, scope.row.enabledMark)"
-                      v-has="'btn_preview'">预览
+                      @click.native="handlePreview(scope.row.id, scope.row.enabledMark)">预览
                     </el-dropdown-item>
                     <el-dropdown-item @click.native="viewLog(scope.row)">
                       日志

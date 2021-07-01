@@ -31,17 +31,14 @@
           </div>
         </div>
         <JNPF-table v-loading="listLoading" :data="tableDataList" max-height="100%">
-          <el-table-column prop="userName" label="用户名" width="120" v-if="jnpf.hasP('userName')" />
-          <el-table-column prop="loginIPAddress" label="IP" width="120"
-            v-if="jnpf.hasP('loginIPAddress')" />
-          <el-table-column prop="loginTime" label="登录时间" width="150"
-            v-if="jnpf.hasP('loginTime')" />
-          <el-table-column prop="loginPlatForm" label="登录设备" show-overflow-tooltip
-            v-if="jnpf.hasP('loginPlatForm')" />
+          <el-table-column prop="userName" label="用户名" width="120" />
+          <el-table-column prop="loginIPAddress" label="IP" width="120" />
+          <el-table-column prop="loginTime" label="登录时间" width="150" />
+          <el-table-column prop="loginPlatForm" label="登录设备" show-overflow-tooltip />
           <el-table-column label="操作" width="90">
             <template slot-scope="scope">
               <el-button slot="reference" type="text" class="JNPF-table-delBtn"
-                @click="handleDel(scope.row.userId)" v-has="'btn_remove'">
+                @click="handleDel(scope.row.userId)">
                 {{$t('userOnline.forcedOffline')}}
               </el-button>
             </template>
