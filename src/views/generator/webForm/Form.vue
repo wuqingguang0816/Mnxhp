@@ -45,10 +45,8 @@
               <el-input v-model="dataForm.description" placeholder="模板说明" type="textarea"
                 :rows="3" />
             </el-form-item>
-            <div class="JNPF-common-title noBorder">
-              <h2>绑定数据库表</h2>
-            </div>
-            <el-form-item label="数据库">
+            <group-title content="数据库表" class="mb-20" />
+            <el-form-item label="数据连接">
               <el-select v-model="dataForm.dbLinkId" placeholder="请选择数据库" @change="onDbChange"
                 clearable>
                 <el-option-group v-for="group in dbOptions" :key="group.fullName"
