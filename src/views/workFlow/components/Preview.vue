@@ -46,7 +46,7 @@ export default {
           this.$nextTick(() => {
             this.$refs.form && this.$refs.form.init(data)
           })
-        }, 200)
+        }, 300)
       })
     },
   }

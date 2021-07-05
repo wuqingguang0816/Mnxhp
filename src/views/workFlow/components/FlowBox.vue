@@ -198,7 +198,7 @@ export default {
           this.$nextTick(() => {
             this.$refs.form && this.$refs.form.init(data)
           })
-        }, 300)
+        }, 500)
       })
     },
     getBeforeInfo(data) {
@@ -254,7 +254,7 @@ export default {
           this.$nextTick(() => {
             this.$refs.form && this.$refs.form.init(data)
           })
-        }, 300)
+        }, 500)
       })
     },
     eventLancher(eventType) {
