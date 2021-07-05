@@ -129,7 +129,7 @@ export default {
     },
     search() {
       let obj = {}
-      let transferList = ['numInput', 'time', 'data', ...this.useDateList]
+      let transferList = ['numInput']
       for (let i = 0; i < this.searchList.length; i++) {
         const e = this.searchList[i]
         if (e.value) {
