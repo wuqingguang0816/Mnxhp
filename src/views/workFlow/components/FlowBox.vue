@@ -159,11 +159,6 @@ export default {
     },
     init(data) {
       this.activeTab = '0'
-      if (data.formType == 1) {
-        this.currentView = (resolve) => require([`@/views/workFlow/workFlowForm/${data.enCode}`], resolve)
-      } else {
-        this.currentView = (resolve) => require([`@/views/workFlow/workFlowForm/dynamicForm`], resolve)
-      }
       this.setting = data
       /**
        * opType
@@ -182,6 +177,16 @@ export default {
     },
     getEngineInfo(data) {
       FlowEngineInfo(data.flowId).then(res => {
+        data.type = res.data.type
+        if (data.formType == 1) {
+          if (res.data.formUrl) {
+            this.currentView = (resolve) => require([`@/views/${res.data.formUrl}`], resolve)
+          } else {
+            this.currentView = (resolve) => require([`@/views/workFlow/workFlowForm/${data.enCode}`], resolve)
+          }
+        } else {
+          this.currentView = (resolve) => require([`@/views/workFlow/workFlowForm/dynamicForm`], resolve)
+        }
         data.formConf = res.data.formData
         this.flowTemplateJson = res.data.flowTemplateJson ? JSON.parse(res.data.flowTemplateJson) : null
         this.flowTemplateJson.state = 'state-curr'
@@ -193,13 +198,23 @@ export default {
           this.$nextTick(() => {
             this.$refs.form && this.$refs.form.init(data)
           })
-        }, 100)
+        }, 300)
       })
     },
     getBeforeInfo(data) {
       FlowBeforeInfo(data.id, { taskNodeId: data.taskNodeId }).then(res => {
         this.flowFormInfo = res.data.flowFormInfo
         this.flowTaskInfo = res.data.flowTaskInfo
+        data.type = this.flowTaskInfo.type
+        if (data.formType == 1) {
+          if (this.flowTaskInfo.formUrl) {
+            this.currentView = (resolve) => require([`@/views/${this.flowTaskInfo.formUrl}`], resolve)
+          } else {
+            this.currentView = (resolve) => require([`@/views/workFlow/workFlowForm/${data.enCode}`], resolve)
+          }
+        } else {
+          this.currentView = (resolve) => require([`@/views/workFlow/workFlowForm/dynamicForm`], resolve)
+        }
         this.flowTaskNodeList = res.data.flowTaskNodeList
         this.flowTemplateJson = this.flowTaskInfo.flowTemplateJson ? JSON.parse(this.flowTaskInfo.flowTemplateJson) : null
         this.flowTaskOperatorRecordList = res.data.flowTaskOperatorRecordList
@@ -239,7 +254,7 @@ export default {
           this.$nextTick(() => {
             this.$refs.form && this.$refs.form.init(data)
           })
-        }, 100)
+        }, 300)
       })
     },
     eventLancher(eventType) {

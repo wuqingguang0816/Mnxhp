@@ -7,12 +7,10 @@
         <p class="header-txt"> · 流程设计</p>
       </div>
       <el-steps :active="activeStep" finish-status="success" simple class="steps">
-        <el-step title="基础信息" @click.native="stepChick(0)"></el-step>
-        <el-step title="表单字段" @click.native="stepChick(1)" v-if="dataForm.formType == 1">
-        </el-step>
-        <el-step title="表单设计" @click.native="stepChick(1)" v-if="dataForm.formType == 2">
-        </el-step>
-        <el-step title="流程设计" @click.native="stepChick(2)"></el-step>
+        <el-step title="基础信息" @click.native="stepChick(0)" />
+        <el-step title="表单字段" @click.native="stepChick(1)" v-if="dataForm.formType == 1" />
+        <el-step title="表单设计" @click.native="stepChick(1)" v-if="dataForm.formType == 2" />
+        <el-step title="流程设计" @click.native="stepChick(2)" />
       </el-steps>
       <div class="options">
         <el-button @click="prve" :disabled="activeStep<=0">{{$t('common.prev')}}</el-button>
@@ -64,6 +62,16 @@
             <el-form-item label="表单类型" prop="formType">
               <el-input v-model="formType" maxlength="50" disabled></el-input>
             </el-form-item>
+            <template v-if="dataForm.formType == 1">
+              <el-form-item label="表单地址" prop="formUrl">
+                <el-input v-model="dataForm.formUrl" placeholder="表单地址">
+                  <template slot="prepend">@/views/</template>
+                </el-input>
+              </el-form-item>
+              <el-form-item label="app地址" prop="appFormUrl">
+                <el-input v-model="dataForm.appFormUrl" placeholder="app地址" />
+              </el-form-item>
+            </template>
             <el-form-item label="排序" prop="sortCode">
               <el-input-number :min="0" :max="9999" v-model="dataForm.sortCode"
                 controls-position="right" />
@@ -76,10 +84,8 @@
                 :rows="3" />
             </el-form-item>
             <template v-if="dataForm.formType == 2">
-              <div class="JNPF-common-title noBorder">
-                <h2>绑定数据库表</h2>
-              </div>
-              <el-form-item label="数据库">
+              <group-title content="数据库表" class="mb-20" />
+              <el-form-item label="数据连接">
                 <el-select v-model="dataForm.dbLinkId" placeholder="请选择数据库" @change="onDbChange"
                   clearable>
                   <el-option-group v-for="group in dbOptions" :key="group.fullName"
@@ -184,6 +190,8 @@ export default {
         type: 0,
         formData: '',
         description: '',
+        formUrl: '',
+        appFormUrl: '',
         formType: 1,
         dbLinkId: '',
         enabledMark: 1,
