@@ -51,16 +51,16 @@
       <el-switch v-model="tagsIcon" class="drawer-switch" />
     </div>
     <div class="drawer-item">
+      <span>{{$t('settings.cache')}}</span>
+      <el-switch v-model="useCache" class="drawer-switch" />
+    </div>
+    <div class="drawer-item">
       <span>{{$t('settings.language')}}</span>
       <el-switch v-model="showLanguage" class="drawer-switch" />
     </div>
     <div class="drawer-item">
       <span>{{$t('settings.search')}}</span>
       <el-switch v-model="showSearch" class="drawer-switch" />
-    </div>
-    <div class="drawer-item">
-      <span>{{$t('settings.cache')}}</span>
-      <el-switch v-model="useCache" class="drawer-switch" />
     </div>
   </el-drawer>
 </template>

@@ -37,6 +37,6 @@ module.exports = {
   tagsIcon: false,
   showLanguage: true,
   showSearch: true,
-  useCache: false,
+  useCache: true,
   errorLog: 'production'
 }

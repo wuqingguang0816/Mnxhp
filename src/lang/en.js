@@ -180,7 +180,7 @@ export default {
     tagsViewIcon: 'Show Tags-View Icon',
     language: 'Show Language Select',
     search: 'Show Search',
-    cache:'Cache Page'
+    cache: 'Cache Page'
   },
   common: {
     addBtn: 'Add',
