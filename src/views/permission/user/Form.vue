@@ -48,8 +48,7 @@
             </el-col>
             <el-col :sm="12" :xs="24">
               <el-form-item label="直属主管" prop="managerId">
-                <JNPF-TreeSelect v-model="dataForm.managerId" :options="managerTreeData" lastLevel
-                  lastLevelKey='type' lastLevelValue='user' placeholder="选择直属主管" clearable />
+                <user-select v-model="dataForm.managerId" placeholder="选择直属主管" />
               </el-form-item>
             </el-col>
             <el-col :sm="12" :xs="24">
@@ -64,7 +63,7 @@
                 <el-select v-model="roleId" multiple placeholder="请选择" @change="roleIdChange"
                   filterable>
                   <el-option-group v-for="group in roleTreeData" :key="group.id"
-                    :label="group.fullName+'【'+group.children.length+'】'">
+                    :label="group.fullName+(group.num?'【'+group.num+'】':'')">
                     <el-option v-for="item in group.children" :key="item.id" :label="item.fullName"
                       :value="item.id">
                     </el-option>
@@ -193,7 +192,7 @@
 import { getDepartmentSelector } from '@/api/permission/department'
 import { getPositionSelector } from '@/api/permission/position'
 import { getRoleSelector } from '@/api/permission/role'
-import { getUserSelector, createUser, updateUser, getUserInfo } from '@/api/permission/user'
+import { createUser, updateUser, getUserInfo } from '@/api/permission/user'
 
 export default {
   data() {
@@ -230,7 +229,6 @@ export default {
       },
       roleId: [],
       departmentTreeData: [],
-      managerTreeData: [],
       positionTreeData: [],
       roleTreeData: [],
       genderTreeData: [],
@@ -283,17 +281,11 @@ export default {
         getDepartmentSelector().then(res => {
           this.departmentTreeData = res.data.list
         })
-        // 获取主管
-        getUserSelector().then(res => {
-          this.managerTreeData = res.data.list
-        })
 
         // 获取岗位
         getPositionSelector().then(res => {
           this.positionTreeData = res.data.list
         })
-
-        // 获取角色分类
 
         // 获取角色
         getRoleSelector().then(res => {

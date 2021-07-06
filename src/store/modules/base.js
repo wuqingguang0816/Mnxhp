@@ -131,8 +131,10 @@ const actions = {
           let list = []
           for (let i = 0; i < res.length; i++) {
             const item = res[i]
-            for (let j = 0; j < item.children.length; j++) {
-              list.push(item.children[j])
+            if (item.children && item.children.length) {
+              for (let j = 0; j < item.children.length; j++) {
+                list.push(item.children[j])
+              }
             }
           }
           commit('SET_ROLE_LIST', list)
