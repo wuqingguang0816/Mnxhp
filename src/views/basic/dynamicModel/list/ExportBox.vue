@@ -57,7 +57,7 @@ export default {
       this.isIndeterminate = checkedCount > 0 && checkedCount < this.columnList.length;
     },
     downLoad() {
-      this.$emit('download', { dataType: this.type, selectKey: this.columns.join(',') })
+      this.$emit('download', { dataType: this.type, selectKey: this.columns })
     }
   }
 }
