@@ -12,7 +12,7 @@
       <div class="transfer__body" :element-loading-text="$t('common.loadingText')">
         <div class="transfer-pane">
           <div class="transfer-pane__tools">
-            <el-input placeholder="输入关键词进行搜索" v-model="keyword">
+            <el-input placeholder="输入关键词进行搜索" v-model="keyword" @keyup.enter.native="getList">
               <el-button slot="append" icon="el-icon-search" @click="getList"></el-button>
             </el-input>
           </div>
