@@ -270,11 +270,10 @@ export default {
         })
         return
       }
-      const ids = this.multipleSelection.join()
       this.$confirm('您确定要删除这些数据吗, 是否继续？', '提示', {
         type: 'warning'
       }).then(() => {
-        batchDelete(this.modelId, ids).then(res => {
+        batchDelete(this.modelId, this.multipleSelection).then(res => {
           this.$message({
             type: 'success',
             message: res.msg,
