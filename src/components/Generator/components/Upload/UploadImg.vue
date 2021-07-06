@@ -105,6 +105,7 @@ export default {
         this.$emit('input', this.fileList)
       } else {
         fileList.filter(o => o.uid != file.uid)
+        this.$emit('input', this.fileList)
         this.$message({ message: res.msg, type: 'error', duration: 1500 })
       }
     },
