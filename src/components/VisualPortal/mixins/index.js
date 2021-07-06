@@ -48,7 +48,6 @@ export default {
       if (!val) return
       previewDataInterface(val).then(res => {
         this.currOption = res.data
-        console.log(111);
         this.resetChart()
       })
     }
