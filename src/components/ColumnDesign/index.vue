@@ -150,8 +150,8 @@
             </el-form-item>
             <el-form-item label="排序类型">
               <el-select v-model="columnData.sort" placeholder="请选择排序类型">
-                <el-option label="正序" value="asc"></el-option>
-                <el-option label="倒序" value="desc"></el-option>
+                <el-option label="升序" value="asc"></el-option>
+                <el-option label="降序" value="desc"></el-option>
               </el-select>
             </el-form-item>
             <template v-if="columnData.type !==3">
