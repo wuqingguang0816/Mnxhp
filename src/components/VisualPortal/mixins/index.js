@@ -48,6 +48,7 @@ export default {
       if (!val) return
       previewDataInterface(val).then(res => {
         this.currOption = res.data
+        console.log(111);
         this.resetChart()
       })
     }
@@ -64,7 +65,7 @@ export default {
     },
     resetChart() {
       this.isEmpty = JSON.stringify(this.currOption) === "{}"
-      this.chart.dispose()
+      this.chart && this.chart.dispose()
       this.chart = null
       if (!this.isEmpty) this.initChart()
     }
