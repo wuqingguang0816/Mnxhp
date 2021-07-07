@@ -19,7 +19,7 @@
         <el-input v-model.number="dataForm.port" placeholder="端口" />
       </el-form-item>
       <el-form-item label="用户" prop="userName">
-        <el-input v-model="dataForm.userName" placeholder="用户" />
+        <el-input v-model="dataForm.userName" placeholder="用户即模式" />
       </el-form-item>
       <el-form-item label="密码" prop="password">
         <el-input v-model="dataForm.password" placeholder="密码" />
