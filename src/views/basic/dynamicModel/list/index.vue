@@ -51,20 +51,62 @@
               :width="item.width" v-for="(item, i) in columnList" :key="i"
               :sortable="item.sortable?'custom':item.sortable" />
           </template>
+          <el-table-column prop="flowState" label="状态" width="100" v-if="config.webType == 3">
+            <template slot-scope="scope">
+              <el-tag v-if="scope.row.flowState==1">等待审核</el-tag>
+              <el-tag type="success" v-else-if="scope.row.flowState==2">审核通过</el-tag>
+              <el-tag type="danger" v-else-if="scope.row.flowState==3">审核驳回</el-tag>
+              <el-tag type="danger" v-else-if="scope.row.flowState==4">审核撤回</el-tag>
+              <el-tag type="warning" v-else-if="scope.row.flowState==5">审核终止</el-tag>
+              <el-tag type="info" v-else>等待提交</el-tag>
+            </template>
+          </el-table-column>
           <el-table-column label="操作" fixed="right" :width="columnData.columnBtnsList.length*50"
             v-if="columnData.columnBtnsList.length">
             <template slot-scope="scope" v-if="!scope.row.top">
               <template v-if="isPreview || !columnData.useBtnPermission">
-                <el-button size="mini" type="text" v-for="(item, i) in columnData.columnBtnsList"
-                  :key="i" :class="{'JNPF-table-delBtn':item.value=='remove'}"
-                  @click="columnBtnsHandel(item.value,scope.row.id,scope.$index)">{{item.label}}
-                </el-button>
+                <template v-for="(item, i) in columnData.columnBtnsList">
+                  <template v-if="item.value=='edit'">
+                    <el-button size="mini" type="text" :key="i"
+                      :disabled="config.webType == 3 && [1,2,5].indexOf(scope.row.flowState)>-1"
+                      @click="columnBtnsHandel(item.value,scope.row)">
+                      {{item.label}}</el-button>
+                  </template>
+                  <template v-if="item.value=='remove'">
+                    <el-button size="mini" type="text" :key="i" class="JNPF-table-delBtn"
+                      :disabled="config.webType == 3 && scope.row.flowState>0"
+                      @click="columnBtnsHandel(item.value,scope.row)">
+                      {{item.label}}</el-button>
+                  </template>
+                  <template v-if="item.value=='detail'">
+                    <el-button size="mini" type="text" :key="i"
+                      :disabled="config.webType == 3 && !scope.row.flowState"
+                      @click="columnBtnsHandel(item.value,scope.row)">
+                      {{item.label}}</el-button>
+                  </template>
+                </template>
               </template>
               <template v-else>
-                <el-button size="mini" type="text" v-for="(item, i) in columnData.columnBtnsList"
-                  :key="i" :class="{'JNPF-table-delBtn':item.value=='remove'}"
-                  @click="columnBtnsHandel(item.value,scope.row.id,scope.$index)"
-                  v-has="'btn_'+item.value">{{item.label}}</el-button>
+                <template v-for="(item, i) in columnData.columnBtnsList">
+                  <template v-if="item.value=='edit'">
+                    <el-button size="mini" type="text" :key="i"
+                      :disabled="config.webType == 3 && [1,2,5].indexOf(scope.row.flowState)>-1"
+                      @click="columnBtnsHandel(item.value,scope.row)" v-has="'btn_'+item.value">
+                      {{item.label}}</el-button>
+                  </template>
+                  <template v-if="item.value=='remove'">
+                    <el-button size="mini" type="text" :key="i" class="JNPF-table-delBtn"
+                      :disabled="config.webType == 3 && scope.row.flowState>0"
+                      @click="columnBtnsHandel(item.value,scope.row)" v-has="'btn_'+item.value">
+                      {{item.label}}</el-button>
+                  </template>
+                  <template v-if="item.value=='detail'">
+                    <el-button size="mini" type="text" :key="i"
+                      :disabled="config.webType == 3 && !scope.row.flowState"
+                      @click="columnBtnsHandel(item.value,scope.row)" v-has="'btn_'+item.value">
+                      {{item.label}}</el-button>
+                  </template>
+                </template>
               </template>
             </template>
           </el-table-column>
@@ -75,6 +117,7 @@
         </template>
       </div>
     </div>
+    <FlowBox v-if="flowVisible" ref="FlowBox" @close="colseFlow" />
     <Form v-show="formVisible" ref="Form" @refreshDataList="refresh" />
     <Detail v-show="detailVisible" ref="Detail" @close="detailVisible = false" />
     <ExportBox v-if="exportBoxVisible" ref="ExportBox" @download="download" />
@@ -86,12 +129,13 @@ import { getModelList, deteleModel, batchDelete, exportModel } from '@/api/onlin
 import { getDictionaryDataSelector } from '@/api/systemData/dictionary'
 import { previewDataInterface } from '@/api/systemData/dataInterface'
 import Form from './Form'
+import FlowBox from '@/views/workFlow/components/FlowBox'
 import Detail from './detail'
 import ExportBox from './ExportBox'
 import Search from './Search'
 export default {
   name: 'dynamicModel',
-  components: { Form, ExportBox, Search, Detail },
+  components: { Form, ExportBox, Search, Detail, FlowBox },
   props: ['config', 'modelId', 'isPreview'],
   data() {
     return {
@@ -111,6 +155,7 @@ export default {
         sidx: '',
         json: ''
       },
+      flowVisible: false,
       formVisible: false,
       detailVisible: false,
       importBoxVisible: false,
@@ -222,7 +267,7 @@ export default {
       let json = { [this.columnData.treeRelation]: data[this.treeProps.value] }
       this.search(JSON.stringify(json))
     },
-    handleDel(id, index) {
+    handleDel(id) {
       this.$confirm(this.$t('common.delTip'), this.$t('common.tipTitle'), {
         type: 'warning'
       }).then(() => {
@@ -231,16 +276,33 @@ export default {
             type: 'success',
             message: res.msg,
             duration: 1000,
-            onClose: () => { this.list.splice(index, 1) }
+            onClose: () => { this.initData() }
           });
         })
       }).catch(() => { });
     },
-    addOrUpdateHandle(id) {
-      this.formVisible = true
-      this.$nextTick(() => {
-        this.$refs.Form.init(this.formData, this.modelId, id, this.isPreview)
-      })
+    addOrUpdateHandle(id, flowState) {
+      if (this.config.webType == 3) {
+        let data = {
+          id: id || '',
+          enCode: this.config.flowEnCode,
+          flowId: this.config.flowId,
+          formType: 2,
+          type: 1,
+          opType: '-1',
+          modelId: this.modelId,
+          isPreview: this.isPreview
+        }
+        this.flowVisible = true
+        this.$nextTick(() => {
+          this.$refs.FlowBox.init(data)
+        })
+      } else {
+        this.formVisible = true
+        this.$nextTick(() => {
+          this.$refs.Form.init(this.formData, this.modelId, id, this.isPreview)
+        })
+      }
     },
     headBtnsHandel(key) {
       if (key === 'add') {
@@ -295,18 +357,39 @@ export default {
         this.exportBoxVisible = false
       })
     },
-    columnBtnsHandel(key, id, index) {
+    columnBtnsHandel(key, row) {
       if (key === 'edit') {
-        this.addOrUpdateHandle(id)
+        this.addOrUpdateHandle(row.id)
       }
       if (key === 'detail') {
+        this.goDetail(row.id, row.flowState)
+      }
+      if (key == 'remove') {
+        this.handleDel(row.id)
+      }
+    },
+    goDetail(id, flowState) {
+      if (this.config.webType == 3) {
+        let data = {
+          id,
+          enCode: this.config.flowEnCode,
+          flowId: this.config.flowId,
+          formType: 2,
+          type: 1,
+          opType: 0,
+          modelId: this.modelId,
+          isPreview: this.isPreview,
+          status: flowState
+        }
+        this.flowVisible = true
+        this.$nextTick(() => {
+          this.$refs.FlowBox.init(data)
+        })
+      } else {
         this.detailVisible = true
         this.$nextTick(() => {
           this.$refs.Detail.init(this.formData, this.modelId, id)
         })
-      }
-      if (key == 'remove') {
-        this.handleDel(id, index)
       }
     },
     sortChange({ column, prop, order }) {
@@ -314,9 +397,13 @@ export default {
       this.listQuery.sidx = !order ? '' : prop
       this.initData()
     },
-    refresh(isrRefresh) {
+    refresh(isRefresh) {
       this.formVisible = false
-      if (isrRefresh) this.initData()
+      if (isRefresh) this.initData()
+    },
+    colseFlow(isRefresh) {
+      this.flowVisible = false
+      if (isRefresh) this.initData()
     },
     reset() {
       this.listQuery.sort = 'desc'
