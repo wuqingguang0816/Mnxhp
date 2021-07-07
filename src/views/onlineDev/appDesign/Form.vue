@@ -48,7 +48,6 @@
               <el-input v-model="dataForm.description" placeholder="功能说明" type="textarea"
                 :rows="3" />
             </el-form-item>
-            <group-title content="数据库表" class="mb-20" />
             <el-form-item label="数据连接">
               <el-select v-model="dataForm.dbLinkId" placeholder="请选择数据库" @change="onDbChange"
                 clearable>

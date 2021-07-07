@@ -84,7 +84,6 @@
                 :rows="3" />
             </el-form-item>
             <template v-if="dataForm.formType == 2">
-              <group-title content="数据库表" class="mb-20" />
               <el-form-item label="数据连接">
                 <el-select v-model="dataForm.dbLinkId" placeholder="请选择数据库" @change="onDbChange"
                   clearable>
