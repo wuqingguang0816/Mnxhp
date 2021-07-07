@@ -2,6 +2,7 @@
   <div class="JNPF-common-layout">
     <div class="JNPF-preview-main">
       <div class="JNPF-common-page-header">
+        <p>{{config.fullName}}</p>
         <div class="options">
           <el-button type="primary" @click="dataFormSubmit()" :loading="btnLoading">
             {{formData.confirmButtonText||'确 定'}}</el-button>
