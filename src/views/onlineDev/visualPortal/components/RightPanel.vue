@@ -98,20 +98,20 @@ export default {
     },
     getSelectValue(data, i) {
       if (!data[0]) {
-        this.activeData.list[i] = { fullName: '', id: '', urlAddress: '', icon: '', iconBackgroundColor: '' }
+        this.$set(this.activeData.list, i, { fullName: '', id: '', urlAddress: '', icon: '', iconBackgroundColor: '' })
       } else {
         let iconBackgroundColor = ''
         if (data[1].propertyJson) {
           let propertyJson = JSON.parse(data[1].propertyJson)
           iconBackgroundColor = propertyJson.iconBackgroundColor || ''
         }
-        this.activeData.list[i] = {
+        this.$set(this.activeData.list, i, {
           fullName: data[1].fullName,
           id: data[1].id,
           urlAddress: data[1].urlAddress,
           icon: data[1].icon,
           iconBackgroundColor: iconBackgroundColor
-        }
+        })
       }
     },
     addSelectItem() {
