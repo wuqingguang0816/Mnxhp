@@ -326,7 +326,7 @@ export default {
       }
       span {
         font-size: 12px;
-        color: #707070;
+        color: #606266;
         margin-top: 10px;
       }
     }
@@ -342,7 +342,7 @@ export default {
   }
 
   .drawer-item {
-    color: #707070;
+    color: #606266;
     font-size: 14px;
     padding: 12px 0;
   }
