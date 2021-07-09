@@ -41,11 +41,7 @@
       </el-row>
       <div class="JNPF-common-layout-main JNPF-flex-main">
         <div class="JNPF-common-head">
-          <topOpts @add="handleAddEdit()">
-            <upload-btn url="/api/system/DictionaryData/Action/Import"
-              @on-success="getDictionaryList" />
-            <el-button type="text" icon="el-icon-download" @click="exportData">导出</el-button>
-          </topOpts>
+          <topOpts @add="handleAddEdit()" />
           <div class="JNPF-common-head-right">
             <el-tooltip effect="dark" :content="$t('common.refresh')" placement="top">
               <el-link icon="icon-ym icon-ym-Refresh JNPF-common-head-icon" :underline="false"
@@ -83,8 +79,7 @@ import {
   getDictionaryType,
   getDictionaryDataList,
   delDictionaryData,
-  updateDictionaryState,
-  exportData
+  updateDictionaryState
 } from '@/api/systemData/dictionary'
 import Form from './Form'
 import TypeList from './components/index'
@@ -203,11 +198,6 @@ export default {
           })
         })
       }).catch(() => { })
-    },
-    exportData() {
-      exportData(this.typeId).then(res => {
-        if (res.data.url) window.location.href = this.define.comUrl + res.data.url
-      })
     }
   }
 }

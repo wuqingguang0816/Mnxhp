@@ -3,7 +3,10 @@
     size="700px" :before-close="handleDrawerClose" class="JNPF-common-drawer">
     <div class="JNPF-flex-main">
       <div class="JNPF-common-head">
-        <topOpts @refresh="handleRefreshData()" @add="handleAddEditType()" />
+        <topOpts @refresh="getDictionaryTypeList()" @add="handleAddEditType()">
+          <upload-btn url="/api/system/DictionaryData/Action/Import"
+            @on-success="getDictionaryTypeList" />
+        </topOpts>
         <div class="JNPF-common-head-right">
           <el-tooltip effect="dark" :content="$t('common.refresh')" placement="top">
             <el-link icon="icon-ym icon-ym-Refresh
@@ -22,9 +25,12 @@
             <el-tag v-else type="danger" size="mini">否</el-tag>
           </template>
         </el-table-column>
-        <el-table-column label="操作" width="90">
+        <el-table-column label="操作" width="130">
           <template slot-scope="scope">
-            <tableOpts @edit="handleAddEditType(scope.row.id)" @del="handleDel(scope.row.id)" />
+            <tableOpts @edit="handleAddEditType(scope.row.id)" @del="handleDel(scope.row.id)">
+              <el-button size="mini" type="text" @click="exportData(scope.row.id)">导出
+              </el-button>
+            </tableOpts>
           </template>
         </el-table-column>
       </JNPF-table>
@@ -35,7 +41,8 @@
 <script>
 import {
   getDictionaryType,
-  delDictionaryType
+  delDictionaryType,
+  exportData
 } from '@/api/systemData/dictionary'
 import TypeForm from './Form'
 
@@ -64,15 +71,9 @@ export default {
       getDictionaryType().then(res => {
         this.tableData = res.data.list
         this.listLoading = false
-        this.btnLoading = false
       }).catch(() => {
         this.listLoading = false
-        this.btnLoading = false
       })
-    },
-    handleRefreshData() {
-      this.btnLoading = true
-      this.getDictionaryTypeList()
     },
     handleAddEditType(id) {
       this.typeFormVisible = true
@@ -104,6 +105,11 @@ export default {
       done();
       this.$emit('refreshDataList')
     },
+    exportData(id) {
+      exportData(id).then(res => {
+        if (res.data.url) window.location.href = this.define.comUrl + res.data.url
+      })
+    }
   }
 }
 </script>
