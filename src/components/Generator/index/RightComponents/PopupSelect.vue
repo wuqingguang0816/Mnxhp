@@ -27,8 +27,8 @@
         placeholder="请选择数据接口" lastLevel lastLevelKey='categoryId' lastLevelValue='1' clearable>
       </JNPF-TreeSelect>
     </el-form-item>
-    <el-form-item label="键值">
-      <el-input v-model.number="activeData.propsValue" placeholder="请输入键值" />
+    <el-form-item label="存储字段">
+      <el-input v-model.number="activeData.propsValue" placeholder="请输入存储字段" />
     </el-form-item>
     <draggable :list="activeData.columnOptions" :animation="340" group="selectItem"
       handle=".option-drag">
