@@ -52,7 +52,7 @@
               :sortable="item.sortable?'custom':item.sortable" />
           </template>
           <el-table-column prop="flowState" label="状态" width="100" v-if="config.webType == 3">
-            <template slot-scope="scope">
+            <template slot-scope="scope" v-if="!scope.row.top">
               <el-tag v-if="scope.row.flowState==1">等待审核</el-tag>
               <el-tag type="success" v-else-if="scope.row.flowState==2">审核通过</el-tag>
               <el-tag type="danger" v-else-if="scope.row.flowState==3">审核驳回</el-tag>
