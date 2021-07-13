@@ -40,6 +40,7 @@ export default {
               this.fillFormData(this.formConf, this.formData)
               this.$nextTick(() => {
                 this.loading = false
+                this.$emit('setPageLoad')
               })
             })
           } else {
@@ -50,6 +51,7 @@ export default {
               this.fillFormData(this.formConf, this.formData)
               this.$nextTick(() => {
                 this.loading = false
+                this.$emit('setPageLoad')
               })
             })
           }
@@ -58,6 +60,7 @@ export default {
           this.fillFormData(this.formConf, this.formData)
           this.$nextTick(() => {
             this.loading = false
+            this.$emit('setPageLoad')
           })
           this.dataForm.flowId = data.flowId
         }

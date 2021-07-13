@@ -300,7 +300,7 @@ export default {
         if (res.data.fileJson) {
           this.fileList = JSON.parse(res.data.fileJson)
         }
-        this.loading = false
+        this.$emit('setPageLoad')
       })
     },
     selfSubmit() {

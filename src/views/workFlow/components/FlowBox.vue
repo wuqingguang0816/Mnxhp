@@ -1,6 +1,6 @@
 <template>
   <transition name="el-zoom-in-center">
-    <div class="JNPF-preview-main flow-form-main nohead">
+    <div class="JNPF-preview-main flow-form-main nohead" v-loading="loading">
       <div class="btns">
         <template v-if="setting.opType=='-1'">
           <el-button type="primary" @click="eventLancher('submit')">提交审核
@@ -36,7 +36,7 @@
       <el-tabs class="JNPF-el_tabs" v-model="activeTab">
         <el-tab-pane label="表单信息">
           <component :is="currentView" @close="goBack" ref="form" @eventReciver="eventReciver"
-            @setLoad="setLoad" />
+            @setLoad="setLoad" @setPageLoad="setPageLoad" />
         </el-tab-pane>
         <el-tab-pane label="流程信息">
           <Process :conf="flowTemplateJson" v-if="flowTemplateJson.nodeId" />
@@ -147,6 +147,7 @@ export default {
       reason: '',
       handleId: '',
       activeTab: '0',
+      loading: false,
       btnLoading: false,
       eventType: '',
       signImg: '',
@@ -158,6 +159,7 @@ export default {
       this.$emit('close', isRefresh)
     },
     init(data) {
+      this.loading = true
       this.activeTab = '0'
       this.setting = data
       /**
@@ -467,6 +469,9 @@ export default {
           type: 'warning'
         })
       })
+    },
+    setPageLoad(val) {
+      this.loading = !!val
     },
     setLoad(val) {
       this.btnLoading = !!val
