@@ -20,7 +20,10 @@
       </el-row>
       <div class="JNPF-common-layout-main JNPF-flex-main">
         <div class="JNPF-common-head">
-          <topOpts @add="addOrUpdateHandle()" addText="新建门户"></topOpts>
+          <topOpts @add="addOrUpdateHandle()" addText="新建门户">
+            <upload-btn url="/api/visualdev/Portal/Model/Actions/ImportData"
+              @on-success="initData" />
+          </topOpts>
           <div class="JNPF-common-head-right">
             <el-tooltip effect="dark" :content="$t('common.refresh')" placement="top">
               <el-link icon="icon-ym icon-ym-Refresh JNPF-common-head-icon" :underline="false"
@@ -65,6 +68,8 @@
                     <el-dropdown-item @click.native="preview(scope.row.id)">预览</el-dropdown-item>
                     <el-dropdown-item @click.native="distribute(scope.row.id)">权限分配
                     </el-dropdown-item>
+                    <el-dropdown-item @click.native="exportTemplate(scope.row.id)">导出
+                    </el-dropdown-item>
                   </el-dropdown-menu>
                 </el-dropdown>
               </tableOpts>
@@ -80,7 +85,7 @@
 </template>
 
 <script>
-import { getPortalList, Delete, Copy } from '@/api/onlineDev/portal'
+import { getPortalList, Delete, Copy, exportTemplate } from '@/api/onlineDev/portal'
 import Form from './Form'
 import Preview from './IndexPreview'
 import Transfer from './Transfer'
@@ -160,6 +165,11 @@ export default {
       if (!id) return
       this.activeId = id
       this.previewVisible = true
+    },
+    exportTemplate(id) {
+      exportTemplate(id).then(res => {
+        if (res.data.url) window.location.href = this.define.comUrl + res.data.url
+      })
     },
     distribute(id) {
       this.transferId = id

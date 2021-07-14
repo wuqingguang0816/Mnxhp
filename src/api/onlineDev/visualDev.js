@@ -138,11 +138,10 @@ export function getFormDataFields(modelId) {
   })
 }
 // 获取表单主表属性下拉框
-export function getFieldDataSelect(modelId, data) {
+export function getFieldDataSelect(modelId) {
   return request({
     url: `/api/visualdev/Base/${modelId}/FieldDataSelect`,
-    method: 'GET',
-    data
+    method: 'GET'
   })
 }
 // 删除数据
@@ -189,5 +188,12 @@ export function Preview(data) {
     url: `/api/visualdev/OnlineDev/App/Preview`,
     method: 'post',
     data: { data }
+  })
+}
+// 导出模板
+export function exportData(modelId) {
+  return request({
+    url: `/api/visualdev/OnlineDev/${modelId}/Actions/ExportData`,
+    method: 'post'
   })
 }

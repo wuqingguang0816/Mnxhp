@@ -20,7 +20,13 @@
       </el-row>
       <div class="JNPF-common-layout-main JNPF-flex-main">
         <div class="JNPF-common-head">
-          <topOpts addText="新建报表" @add="handleAddEdit()" />
+          <topOpts addText="新建报表" @add="handleAddEdit()">
+            <el-upload :action="define.reportServer+'/api/datareport/Data/Action/Import'"
+              :headers="{ Authorization: $store.getters.token}" :on-success="handleSuccess"
+              :before-upload="()=>{btnLoading = true}" :show-file-list="false" class="upload-btn">
+              <el-button type="text" icon="el-icon-upload2" :loading="btnLoading">导入</el-button>
+            </el-upload>
+          </topOpts>
           <div class="JNPF-common-head-right">
             <el-tooltip effect="dark" :content="$t('common.refresh')" placement="top">
               <el-link icon="icon-ym icon-ym-Refresh JNPF-common-head-icon" :underline="false"
@@ -71,11 +77,7 @@
                     <el-dropdown-item
                       @click.native="handlePreview(scope.row.id, scope.row.fullName)">预览
                     </el-dropdown-item>
-                    <el-dropdown-item @click.native="handleExport(scope.row.id,'pdf')">导出PDF
-                    </el-dropdown-item>
-                    <el-dropdown-item @click.native="handleExport(scope.row.id,'excel')">导出Excel
-                    </el-dropdown-item>
-                    <el-dropdown-item @click.native="handleExport(scope.row.id,'word')">导出Word
+                    <el-dropdown-item @click.native="handleExport(scope.row.id)">导出
                     </el-dropdown-item>
                   </el-dropdown-menu>
                 </el-dropdown>
@@ -128,7 +130,6 @@ export default {
   methods: {
     initData() {
       this.listLoading = true
-      // 列表
       getDataReportList(this.params).then(res => {
         this.tableList = res.data.list
         this.tableListAll = JSON.parse(JSON.stringify(this.reportTypeList))
@@ -141,10 +142,8 @@ export default {
         }
         this.tableListAll = this.tableListAll.filter(o => o.children.length)
         this.listLoading = false
-        this.btnLoading = false
       }).catch(() => {
         this.listLoading = false
-        this.btnLoading = false
       })
     },
     getDictionaryData() {
@@ -181,10 +180,27 @@ export default {
         this.$refs.Preview.init(id)
       })
     },
-    handleExport(id, type) {
+    handleExport(id) {
       let link = document.createElement('a')
-      link.href = `${reportServer}/api/datareport/Data/${id}/Actions/Export/${type}`
+      link.href = `${reportServer}/api/datareport/Data/${id}/Actions/Export`
       link.click();
+    },
+    handleSuccess(res) {
+      this.btnLoading = false
+      if (res.code == 200) {
+        this.$message({
+          message: res.msg,
+          type: 'success',
+          duration: 1000
+        })
+        this.initData()
+      } else {
+        this.$message({
+          message: res.msg,
+          type: 'error',
+          duration: 1000
+        })
+      }
     },
     search() {
       const keyword = this.params.keyword
@@ -197,3 +213,9 @@ export default {
   }
 }
 </script>
+<style lang="scss" scoped>
+.upload-btn {
+  display: inline-block;
+  margin: 0 10px;
+}
+</style>

@@ -45,6 +45,13 @@ export function Copy(id) {
     method: 'POST'
   })
 }
+// 导出门户
+export function exportTemplate(id) {
+  return request({
+    url: `/api/visualdev/Portal/${id}/Actions/ExportData`,
+    method: 'POST'
+  })
+}
 // 获取门户下拉框列表
 export function getPortalSelector(type) {
   return request({

@@ -20,7 +20,10 @@
       </el-row>
       <div class="JNPF-common-layout-main JNPF-flex-main">
         <div class="JNPF-common-head">
-          <topOpts @add="addVisible=true" />
+          <topOpts @add="addVisible=true">
+            <upload-btn url="/api/visualdev/OnlineDev/Model/Actions/ImportData"
+              @on-success="initData" />
+          </topOpts>
           <div class="JNPF-common-head-right">
             <el-tooltip effect="dark" :content="$t('common.refresh')" placement="top">
               <el-link icon="icon-ym icon-ym-Refresh JNPF-common-head-icon" :underline="false"
@@ -63,6 +66,8 @@
                   <el-dropdown-menu slot="dropdown">
                     <el-dropdown-item @click.native="copy(scope.row.id)">复制</el-dropdown-item>
                     <el-dropdown-item @click.native="preview(scope.row.id)">预览</el-dropdown-item>
+                    <el-dropdown-item @click.native="exportModel(scope.row.id)">导出
+                    </el-dropdown-item>
                   </el-dropdown-menu>
                 </el-dropdown>
               </tableOpts>
