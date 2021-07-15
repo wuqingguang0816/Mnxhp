@@ -21,7 +21,7 @@
       <div class="JNPF-common-layout-main JNPF-flex-main">
         <div class="JNPF-common-head">
           <topOpts @add="addVisible=true">
-            <upload-btn url="/api/visualdev/OnlineDev/Model/Actions/ImportData"
+            <upload-btn url="/api/visualdev/OnlineDev/App/Model/Actions/ImportData"
               @on-success="initData" />
           </topOpts>
           <div class="JNPF-common-head-right">
