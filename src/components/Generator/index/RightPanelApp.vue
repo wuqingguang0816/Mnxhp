@@ -59,16 +59,6 @@
                 <template slot="append">个字符</template>
               </el-input>
             </el-form-item>
-            <template v-if="activeData.__config__.jnpfKey === 'comInput'">
-              <el-form-item v-if="activeData.type !== undefined" label="类型">
-                <el-select v-model="activeData.type" placeholder="请选择类型">
-                  <el-option label="文本输入键盘" value="text"></el-option>
-                  <el-option label="数字输入键盘" value="number"></el-option>
-                  <el-option label="身份证输入键盘" value="idcard"></el-option>
-                  <el-option label="带小数点的数字键盘" value="digit"></el-option>
-                </el-select>
-              </el-form-item>
-            </template>
             <template
               v-if="activeData.__config__.jnpfKey === 'numInput' ||activeData.__config__.jnpfKey === 'slider'">
               <el-form-item label="最小值">
@@ -254,35 +244,35 @@
             <el-form-item v-if="activeData.__config__.required !== undefined" label="是否必填">
               <el-switch v-model="activeData.__config__.required" />
             </el-form-item>
-          </template>
-          <template v-if="activeData.__config__.jnpfKey === 'comInput'">
-            <el-divider>校验</el-divider>
-            <div v-for="(item, index) in activeData.__config__.regList" :key="index"
-              class="reg-item">
-              <span class="close-btn" @click="activeData.__config__.regList.splice(index, 1)">
-                <i class="el-icon-close" />
-              </span>
-              <el-form-item label="表达式">
-                <el-input v-model="item.pattern" placeholder="请输入正则" />
-              </el-form-item>
-              <el-form-item label="错误提示" style="margin-bottom:0">
-                <el-input v-model="item.message" placeholder="请输入错误提示" />
-              </el-form-item>
-            </div>
-            <div class="mt-10">
-              <el-dropdown>
-                <el-button type="primary">添加常用校验<i class="el-icon-arrow-down el-icon--right"></i>
+            <template v-if="activeData.__config__.jnpfKey === 'comInput'">
+              <el-divider>校验</el-divider>
+              <div v-for="(item, index) in activeData.__config__.regList" :key="index"
+                class="reg-item">
+                <span class="close-btn" @click="activeData.__config__.regList.splice(index, 1)">
+                  <i class="el-icon-close" />
+                </span>
+                <el-form-item label="表达式">
+                  <el-input v-model="item.pattern" placeholder="请输入正则" />
+                </el-form-item>
+                <el-form-item label="错误提示" style="margin-bottom:0">
+                  <el-input v-model="item.message" placeholder="请输入错误提示" />
+                </el-form-item>
+              </div>
+              <div class="mt-10">
+                <el-dropdown>
+                  <el-button type="primary">添加常用校验<i class="el-icon-arrow-down el-icon--right"></i>
+                  </el-button>
+                  <el-dropdown-menu slot="dropdown">
+                    <el-dropdown-item @click.native="addRuleHandle(item)"
+                      v-for="(item,i) in ruleList" :key="i">
+                      {{item.label}}</el-dropdown-item>
+                  </el-dropdown-menu>
+                </el-dropdown>
+                <el-button type="primary" @click="addReg" style="margin-left:10px">
+                  自定义规则
                 </el-button>
-                <el-dropdown-menu slot="dropdown">
-                  <el-dropdown-item @click.native="addRuleHandle(item)" v-for="(item,i) in ruleList"
-                    :key="i">
-                    {{item.label}}</el-dropdown-item>
-                </el-dropdown-menu>
-              </el-dropdown>
-              <el-button type="primary" @click="addReg" style="margin-left:10px">
-                自定义规则
-              </el-button>
-            </div>
+              </div>
+            </template>
           </template>
         </el-form>
         <!-- 表单属性 -->
