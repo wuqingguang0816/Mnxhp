@@ -4,9 +4,8 @@
       :wrapperClosable="false" ref="drawer" size="700px" class="JNPF-common-drawer">
       <div class="JNPF-flex-main">
         <div class="JNPF-common-head">
-          <topOpts @add="handleAddEdit('')" addPerCode="btn_columnPer_add">
-            <el-button type="text" icon="el-icon-copy-document" @click="handleBatchAdd"
-              v-has="'btn_columnPer_batchAdd'">
+          <topOpts @add="handleAddEdit('')">
+            <el-button type="text" icon="el-icon-copy-document" @click="handleBatchAdd">
               批量新增
             </el-button>
           </topOpts>
@@ -29,8 +28,7 @@
           </el-table-column>
           <el-table-column label="操作" width="100">
             <template slot-scope="scope">
-              <tableOpts @edit="handleAddEdit(scope.row.id)" @del="handleDel(scope.row.id)"
-                editPerCode="btn_columnPer_edit" delPerCode="btn_columnPer_remove" />
+              <tableOpts @edit="handleAddEdit(scope.row.id)" @del="handleDel(scope.row.id)" />
             </template>
           </el-table-column>
         </JNPF-table>

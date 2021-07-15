@@ -17,10 +17,10 @@
           </el-col>
           <el-col :span="8">
             <el-form-item>
-              <el-button type="primary" icon="el-icon-search" @click="getData()">
+              <el-button type="primary" icon="el-icon-search" @click="search()">
                 {{$t('common.search')}}
               </el-button>
-              <el-button icon="el-icon-refresh-right" @click="refresh()">{{$t('common.reset')}}
+              <el-button icon="el-icon-refresh-right" @click="reset()">{{$t('common.reset')}}
               </el-button>
             </el-form-item>
           </el-col>
@@ -32,7 +32,7 @@
           </el-tooltip>
         </div>
       </el-row>
-      <JNPF-table v-loading="listLoading" :data="list" :border="false" highlight-current-row
+      <JNPF-table v-loading="listLoading" :data="filteredList" :border="false" highlight-current-row
         @row-click="rowClick" :hasNO="false">
         <el-table-column width="35">
           <template slot-scope="scope">
@@ -92,6 +92,7 @@ export default {
   data() {
     return {
       list: [],
+      filteredList: [],
       innerValue: '',
       keyword: '',
       checked: '',
@@ -119,9 +120,21 @@ export default {
       this.listLoading = true
       previewDataInterface(this.interfaceId).then(res => {
         this.list = res.data
+        this.filteredList = this.list
         this.listLoading = false
         this.setDefault()
       }).catch(() => { this.listLoading = false })
+    },
+    search() {
+      if (!this.keyword) {
+        this.filteredList = this.list
+        return
+      }
+      this.filteredList = this.list.filter(o => this.columnOptions.some(option => o[option.value].indexOf(this.keyword) > -1))
+    },
+    reset() {
+      this.keyword = ''
+      this.filteredList = this.list
     },
     refresh() {
       this.keyword = ''
@@ -132,6 +145,11 @@ export default {
       this.keyword = ''
       this.checked = this.value
       this.visible = true
+      if (!this.list.length) {
+        this.getData()
+      } else {
+        this.filteredList = this.list
+      }
     },
     clear() {
       this.checked = ''

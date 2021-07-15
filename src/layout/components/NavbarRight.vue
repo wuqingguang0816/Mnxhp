@@ -60,9 +60,7 @@
         <i class="icon-ym icon-ym-header-pannel"></i>
       </div>
     </el-tooltip>
-    <!-- 关于平台弹窗 -->
-    <!-- v-el-drag-dialog -->
-    <el-dialog title="关于平台" :close-on-click-modal="false" :visible.sync="visible"
+    <el-dialog title="关于平台" :close-on-click-modal="false" :visible.sync="visible" v-drag-dialog
       class="JNPF-dialog JNPF-dialog_center about-dialog" lock-scroll width="400px">
       <div class="about-dialog-main">
         <div>
@@ -92,11 +90,11 @@ import Search from '@/components/HeaderSearch'
 import MessageList from './MessageList'
 import Settings from './settings'
 import UserList from './userList/UserList'
-import elDragDialog from "@/directive/el-drag-dialog";
+import dragDialog from "@/directive/el-drag-dialog";
 import ReconnectingWebSocket from 'reconnecting-websocket'
 
 export default {
-  directives: { elDragDialog },
+  directives: { dragDialog },
   components: {
     Screenfull,
     SizeSelect,

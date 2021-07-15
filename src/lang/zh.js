@@ -176,10 +176,11 @@ export default {
     orange: '阳橙',
     red: '热情',
     otherSet: '其他设置',
-    tagsView: '开启多页签',
+    tagsView: '多页签开启模式',
     tagsViewIcon: '多页签显示图标',
     language: '显示多语言选择',
-    search: '显示页面搜索框'
+    search: '显示页面搜索框',
+    cache: '多页签缓存页面'
   },
   common: {
     addBtn: '新建',

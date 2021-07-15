@@ -32,13 +32,12 @@
         </div>
         <JNPF-table v-loading="listLoading" :data="treeList" row-key="id" default-expand-all
           :tree-props="{children: 'children', hasChildren: ''}">
-          <el-table-column prop="fullName" label="名称" v-if="jnpf.hasP('fullName')" />
-          <el-table-column prop="enCode" label="编码" v-if="jnpf.hasP('enCode')" />
-          <el-table-column prop="description" label="备注" v-if="jnpf.hasP('description')" />
+          <el-table-column prop="fullName" label="名称" />
+          <el-table-column prop="enCode" label="编码" />
+          <el-table-column prop="description" label="备注" />
           <el-table-column prop="creatorTime" :formatter="jnpf.tableDateFormat" label="创建时间"
-            width="120" v-if="jnpf.hasP('creatorTime')" />
-          <el-table-column prop="sortCode" label="排序" width="70" align="center"
-            v-if="jnpf.hasP('sortCode')" />
+            width="120" />
+          <el-table-column prop="sortCode" label="排序" width="70" align="center" />
           <el-table-column label="操作" width="100">
             <template slot-scope="scope">
               <tableOpts @edit="handleAddEdit(scope.row.id)" @del="handleDel(scope.row.id)" />

@@ -19,13 +19,21 @@
         <el-input v-model.number="dataForm.port" placeholder="端口" />
       </el-form-item>
       <el-form-item label="用户" prop="userName">
-        <el-input v-model="dataForm.userName" placeholder="用户" />
+        <el-input v-model="dataForm.userName" placeholder="用户即模式" />
       </el-form-item>
       <el-form-item label="密码" prop="password">
         <el-input v-model="dataForm.password" placeholder="密码" />
       </el-form-item>
-      <el-form-item label="库名" prop="serviceName">
+      <el-form-item label="库名" prop="serviceName"
+        v-if="dataForm.dbType!=='DM'&&dataForm.dbType!=='Oracle'">
         <el-input v-model="dataForm.serviceName" placeholder="库名">
+          <el-button slot="append" @click="test" :loading="testLoad"
+            v-if="dataForm.dbType!=='KingBase'">测试连接</el-button>
+        </el-input>
+      </el-form-item>
+      <el-form-item label="表空间" prop="tableSpace"
+        v-if="dataForm.dbType==='DM'||dataForm.dbType==='Oracle'||dataForm.dbType==='KingBase'">
+        <el-input v-model="dataForm.tableSpace" placeholder="表空间">
           <el-button slot="append" @click="test" :loading="testLoad">测试连接</el-button>
         </el-input>
       </el-form-item>
@@ -57,6 +65,7 @@ export default {
         userName: '',
         password: '',
         serviceName: '',
+        tableSpace: '',
         sortCode: 0,
         enabledMark: 1
       },
@@ -83,6 +92,9 @@ export default {
         serviceName: [
           { required: true, message: '库名不能为空', trigger: 'blur' }
         ],
+        tableSpace: [
+          { required: true, message: '表空间不能为空', trigger: 'blur' }
+        ]
       },
       dbOptions: [],
       btnLoading: false,
@@ -146,9 +158,9 @@ export default {
       this.dataForm.port = port
     },
     test() {
-      this.testLoad = true
       this.$refs['dataForm'].validate((valid) => {
         if (valid) {
+          this.testLoad = true
           TestDbConnection(this.dataForm).then(res => {
             if (res.code == 200) {
               this.$message({

@@ -12,12 +12,11 @@ export default {
       fileList: [],
       setting: {},
       eventType: '',
-      loading: true,
+      loading: false,
     }
   },
   methods: {
     init(data) {
-      this.loading = true
       this.dataForm.id = data.id || ''
       this.setting = data
       this.$nextTick(() => {
@@ -30,7 +29,7 @@ export default {
             if (res.data.fileJson) {
               this.fileList = JSON.parse(res.data.fileJson)
             }
-            this.loading = false
+            this.$emit('setPageLoad')
           })
         } else {
           this.dataForm.flowId = data.flowId
@@ -41,7 +40,7 @@ export default {
             } else {
               this.dataForm.billNo = res.data
             }
-            this.loading = false
+            this.$emit('setPageLoad')
           })
         }
       })

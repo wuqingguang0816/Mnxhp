@@ -30,13 +30,11 @@
           </div>
         </div>
         <JNPF-table v-loading="listLoading" :data="list" max-height="100%">
-          <el-table-column prop="title" label="标题" show-overflow-tooltip
-            v-if="jnpf.hasP('title')" />
-          <el-table-column prop="creatorUser" label="发布人员" width="120"
-            v-if="jnpf.hasP('creatorUser')" />
+          <el-table-column prop="title" label="标题" show-overflow-tooltip />
+          <el-table-column prop="creatorUser" label="发布人员" width="120" />
           <el-table-column prop="lastModifyTime" label="发布时间" :formatter="jnpf.tableDateFormat"
-            width="120" v-if="jnpf.hasP('lastModifyTime')" />
-          <el-table-column label="状态" width="100" v-if="jnpf.hasP('enabledMark')">
+            width="120" />
+          <el-table-column label="状态" width="100">
             <template slot-scope="scope">
               <el-tag :type="scope.row.enabledMark == 1 ? 'success' : 'danger'" disable-transitions>
                 {{ scope.row.enabledMark==1?'已发送':'存草稿' }}
@@ -47,19 +45,19 @@
             <template slot-scope="scope">
               <tableOpts @edit="handleAddEdit(scope.row.id)" @del="handleDel(scope.row.id)"
                 :editDisabled="scope.row.enabledMark != 0">
-                <el-dropdown v-if="scope.row.enabledMark == 0" v-has="'btn_more'">
+                <el-dropdown v-if="scope.row.enabledMark == 0">
                   <el-button type="text" size="mini">
                     {{$t('common.moreBtn')}}<i class="el-icon-arrow-down el-icon--right" />
                   </el-button>
                   <el-dropdown-menu slot="dropdown">
-                    <el-dropdown-item @click.native="handleView(scope.row.id)" v-has="'btn_detail'">
+                    <el-dropdown-item @click.native="handleView(scope.row.id)">
                       详情</el-dropdown-item>
-                    <el-dropdown-item @click.native="handlePublish(scope.row.id)"
-                      v-has="'btn_release'">发布</el-dropdown-item>
+                    <el-dropdown-item @click.native="handlePublish(scope.row.id)">发布
+                    </el-dropdown-item>
                   </el-dropdown-menu>
                 </el-dropdown>
                 <el-button v-if="scope.row.enabledMark == 1" type="text" size="mini"
-                  @click="handleView(scope.row.id)" v-has="'btn_detail'">详情</el-button>
+                  @click="handleView(scope.row.id)">详情</el-button>
               </tableOpts>
             </template>
           </el-table-column>

@@ -47,19 +47,18 @@
           </div>
         </div>
         <JNPF-table v-loading="listLoading" :data="tableData">
-          <el-table-column prop="fullName" label="岗位名称" v-if="jnpf.hasP('fullName')" />
-          <el-table-column prop="enCode" label="岗位编码" v-if="jnpf.hasP('enCode')" />
-          <el-table-column prop="department" label="所属组织" v-if="jnpf.hasP('department')" />
-          <el-table-column prop="type" label="岗位类型" v-if="jnpf.hasP('type')" />
-          <el-table-column prop="description" label="岗位说明" v-if="jnpf.hasP('description')" />
+          <el-table-column prop="fullName" label="岗位名称" />
+          <el-table-column prop="enCode" label="岗位编码" />
+          <el-table-column prop="department" label="所属组织" />
+          <el-table-column prop="type" label="岗位类型" />
+          <el-table-column prop="description" label="岗位说明" />
           <el-table-column prop="creatorTime" :formatter="jnpf.tableDateFormat" label="创建时间"
-            width="120" v-if="jnpf.hasP('creatorTime')" />
-          <el-table-column prop="sortCode" label="排序" width="70" align="center"
-            v-if="jnpf.hasP('sortCode')" />
+            width="120" />
+          <el-table-column prop="sortCode" label="排序" width="70" align="center" />
           <el-table-column label="操作" width="150">
             <template slot-scope="scope">
               <tableOpts @edit="handleAddEdit(scope.row.id)" @del="handleDel(scope.row.id)">
-                <el-dropdown hide-on-click v-has="'btn_more'">
+                <el-dropdown hide-on-click>
                   <span class="el-dropdown-link">
                     <el-button type="text" size="mini">
                       {{$t('common.moreBtn')}}<i class="el-icon-arrow-down el-icon--right"></i>
@@ -67,8 +66,7 @@
                   </span>
                   <el-dropdown-menu slot="dropdown">
                     <el-dropdown-item
-                      @click.native="handleUserRelation(scope.row.id, scope.row.fullName)"
-                      v-has="'btn_member'">
+                      @click.native="handleUserRelation(scope.row.id, scope.row.fullName)">
                       {{$t('position.postMember')}}
                     </el-dropdown-item>
                   </el-dropdown-menu>

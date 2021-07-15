@@ -64,7 +64,7 @@ export default {
     },
     resetChart() {
       this.isEmpty = JSON.stringify(this.currOption) === "{}"
-      this.chart.dispose()
+      this.chart && this.chart.dispose()
       this.chart = null
       if (!this.isEmpty) this.initChart()
     }

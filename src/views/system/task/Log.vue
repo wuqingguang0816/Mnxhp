@@ -1,6 +1,6 @@
 <template>
   <transition name="el-zoom-in-center">
-    <div class="JNPF-preview-main flow-form-main">
+    <div class="JNPF-preview-main">
       <div class="JNPF-common-page-header">
         <el-page-header @back="goBack" :content="title" />
         <div class="options">
@@ -8,6 +8,33 @@
         </div>
       </div>
       <div class="main">
+        <el-row class="JNPF-common-search-box" :gutter="16">
+          <el-form @submit.native.prevent>
+            <el-col :span="6">
+              <el-form-item label="执行时间">
+                <el-date-picker v-model="pickerVal" type="daterange" start-placeholder="开始日期"
+                  end-placeholder="结束日期" :picker-options="pickerOptions" value-format="timestamp"
+                  clearable :editable="false" />
+              </el-form-item>
+            </el-col>
+            <el-col :span="6">
+              <el-form-item label="执行结果">
+                <el-select v-model="listQuery.runResult" placeholder="选择执行结果" clearable>
+                  <el-option label="成功" :value="0"></el-option>
+                  <el-option label="失败" :value="1"></el-option>
+                </el-select>
+              </el-form-item>
+            </el-col>
+            <el-col :span="6">
+              <el-form-item>
+                <el-button type="primary" icon="el-icon-search" @click="search()">
+                  {{$t('common.search')}}</el-button>
+                <el-button icon="el-icon-refresh-right" @click="reset()">{{$t('common.reset')}}
+                </el-button>
+              </el-form-item>
+            </el-col>
+          </el-form>
+        </el-row>
         <JNPF-table v-loading="listLoading" :data="list">
           <el-table-column prop="runTime" label="执行时间" :formatter="jnpf.tableDateFormat"
             width="130" />
@@ -28,6 +55,16 @@
 
 <script>
 import { TimeTaskTaskLogList } from '@/api/system/timeTask'
+import { deepClone } from '@/utils'
+const listQuery = {
+  runResult: '',
+  startTime: '',
+  endTime: '',
+  currentPage: 1,
+  pageSize: 20,
+  sort: 'desc',
+  sidx: ''
+}
 export default {
   data() {
     return {
@@ -36,12 +73,35 @@ export default {
       list: [],
       total: 0,
       listLoading: true,
-      listQuery: {
-        currentPage: 1,
-        pageSize: 20,
-        sort: 'desc',
-        sidx: ''
-      }
+      listQuery: {},
+      pickerOptions: {
+        shortcuts: [{
+          text: '最近一周',
+          onClick(picker) {
+            const end = new Date();
+            const start = new Date();
+            start.setTime(start.getTime() - 3600 * 1000 * 24 * 7);
+            picker.$emit('pick', [start, end]);
+          }
+        }, {
+          text: '最近一个月',
+          onClick(picker) {
+            const end = new Date();
+            const start = new Date();
+            start.setTime(start.getTime() - 3600 * 1000 * 24 * 30);
+            picker.$emit('pick', [start, end]);
+          }
+        }, {
+          text: '最近三个月',
+          onClick(picker) {
+            const end = new Date();
+            const start = new Date();
+            start.setTime(start.getTime() - 3600 * 1000 * 24 * 90);
+            picker.$emit('pick', [start, end]);
+          }
+        }]
+      },
+      pickerVal: []
     }
   },
   methods: {
@@ -52,7 +112,7 @@ export default {
       if (!id) return this.$emit('close')
       this.id = id
       this.title = title
-      this.initData()
+      this.reset()
     },
     initData() {
       this.listLoading = true
@@ -61,6 +121,24 @@ export default {
         this.total = res.data.pagination.total
         this.listLoading = false
       })
+    },
+    reset() {
+      this.pickerVal = []
+      this.listQuery = deepClone(listQuery)
+      this.initData()
+    },
+    search() {
+      const runResult = this.listQuery.runResult
+      this.listQuery = deepClone(listQuery)
+      this.listQuery.runResult = runResult
+      if (this.pickerVal && this.pickerVal.length) {
+        this.listQuery.startTime = this.pickerVal[0]
+        this.listQuery.endTime = this.pickerVal[1]
+      } else {
+        this.listQuery.startTime = ''
+        this.listQuery.endTime = ''
+      }
+      this.initData()
     }
   }
 }

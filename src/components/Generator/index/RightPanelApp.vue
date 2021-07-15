@@ -59,16 +59,6 @@
                 <template slot="append">个字符</template>
               </el-input>
             </el-form-item>
-            <template v-if="activeData.__config__.jnpfKey === 'comInput'">
-              <el-form-item v-if="activeData.type !== undefined" label="类型">
-                <el-select v-model="activeData.type" placeholder="请选择类型">
-                  <el-option label="文本输入键盘" value="text"></el-option>
-                  <el-option label="数字输入键盘" value="number"></el-option>
-                  <el-option label="身份证输入键盘" value="idcard"></el-option>
-                  <el-option label="带小数点的数字键盘" value="digit"></el-option>
-                </el-select>
-              </el-form-item>
-            </template>
             <template
               v-if="activeData.__config__.jnpfKey === 'numInput' ||activeData.__config__.jnpfKey === 'slider'">
               <el-form-item label="最小值">
@@ -254,6 +244,35 @@
             <el-form-item v-if="activeData.__config__.required !== undefined" label="是否必填">
               <el-switch v-model="activeData.__config__.required" />
             </el-form-item>
+            <template v-if="activeData.__config__.jnpfKey === 'comInput'">
+              <el-divider>校验</el-divider>
+              <div v-for="(item, index) in activeData.__config__.regList" :key="index"
+                class="reg-item">
+                <span class="close-btn" @click="activeData.__config__.regList.splice(index, 1)">
+                  <i class="el-icon-close" />
+                </span>
+                <el-form-item label="表达式">
+                  <el-input v-model="item.pattern" placeholder="请输入正则" />
+                </el-form-item>
+                <el-form-item label="错误提示" style="margin-bottom:0">
+                  <el-input v-model="item.message" placeholder="请输入错误提示" />
+                </el-form-item>
+              </div>
+              <div class="mt-10">
+                <el-dropdown>
+                  <el-button type="primary">添加常用校验<i class="el-icon-arrow-down el-icon--right"></i>
+                  </el-button>
+                  <el-dropdown-menu slot="dropdown">
+                    <el-dropdown-item @click.native="addRuleHandle(item)"
+                      v-for="(item,i) in ruleList" :key="i">
+                      {{item.label}}</el-dropdown-item>
+                  </el-dropdown-menu>
+                </el-dropdown>
+                <el-button type="primary" @click="addReg" style="margin-left:10px">
+                  自定义规则
+                </el-button>
+              </div>
+            </template>
           </template>
         </el-form>
         <!-- 表单属性 -->
@@ -323,6 +342,43 @@ export default {
           label: "space-between",
           value: "space-between"
         }
+      ],
+      ruleList: [
+        {
+          pattern: '/^\\d+$/',
+          message: '请输入正确的数字',
+          label: '数字'
+        },
+        {
+          pattern: '/^[1-9]\\d*\\.\\d*|0\\.\\d*[1-9]\\d*|0?\\.0+|0$/',
+          message: '请输入正确的金额',
+          label: '金额'
+        },
+        {
+          pattern: '/^0\\d{2,3}-?\\d{7,8}$/',
+          message: '请输入正确的电话号码',
+          label: '电话'
+        },
+        {
+          pattern: '/^1[3456789]\\d{9}$/',
+          message: '请输入正确的手机号码',
+          label: '手机'
+        },
+        {
+          pattern: '/^1[3456789]\\d{9}$|^0\\d{2,3}-?\\d{7,8}$/',
+          message: '请输入正确的联系方式',
+          label: '电话/手机'
+        },
+        {
+          pattern: '/^[a-z0-9]+([._\\-]*[a-z0-9])*@([a-z0-9]+[-a-z0-9]*[a-z0-9]+.){1,63}[a-z0-9]+$/',
+          message: '请输入正确的邮箱',
+          label: '邮箱'
+        },
+        {
+          pattern: '/^[1-9]\\d{5}(18|19|([23]\\d))\\d{2}((0[1-9])|(10|11|12))(([0-2][1-9])|10|20|30|31)\\d{3}[0-9Xx]$/',
+          message: '请输入正确的身份证号码',
+          label: '身份证'
+        },
       ],
       props: {
         value: "id",
@@ -503,6 +559,12 @@ export default {
           </span>
         </div>
       )
+    },
+    addRuleHandle(row) {
+      this.activeData.__config__.regList.push({
+        pattern: row.pattern,
+        message: row.message
+      })
     },
     addTreeItem() {
       this.dialogVisible = true

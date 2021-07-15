@@ -1,6 +1,6 @@
 <template>
   <div class="UploadFile-container">
-    <el-upload :action="define.comUploadUrl+'/'+type" :headers="uploadHeaders"
+    <el-upload :action="define.comUploadUrl+'/'+type" :headers="uploadHeaders" :file-list="fileList"
       :on-success="handleSuccess" :multiple="limit !==1" :show-file-list="false" :accept="accept"
       :before-upload="beforeUpload" :on-exceed="handleExceed" :disabled="disabled" :limit="limit">
       <el-button size="small" icon="el-icon-upload" :disabled="disabled">{{buttonText}}</el-button>
@@ -110,6 +110,7 @@ export default {
         this.$emit('input', this.fileList)
       } else {
         fileList.filter(o => o.uid != file.uid)
+        this.$emit('input', this.fileList)
         this.$message({ message: res.msg, type: 'error', duration: 1500 })
       }
     },

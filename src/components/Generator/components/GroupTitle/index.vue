@@ -1,5 +1,5 @@
 <template>
-  <h1 class="groupTitle" :style="{'text-align':contentPosition}">{{content}}</h1>
+  <p class="groupTitle" :style="{'text-align':contentPosition}">{{content}}</p>
 </template>
 <script>
 export default {
@@ -22,6 +22,6 @@ export default {
   color: #606266;
   font-size: 16px;
   line-height: 50px;
-  margin: 0;
+  font-weight: 600;
 }
 </style>

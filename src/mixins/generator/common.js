@@ -39,7 +39,7 @@ export default {
           const e = data[i];
           let relationTable = data[0].table
           let typeId = i == 0 ? "1" : "0"
-          let res = await DataModelFieldList('0', e.table, queryType)
+          let res = await DataModelFieldList(this.dataForm.dbLinkId, e.table, queryType)
           let fields = res.data.list.map(o => ({ field: o.field, fieldName: o.fieldName, dataType: o.dataType }))
           let item = {
             relationField: "",

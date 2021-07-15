@@ -8,8 +8,8 @@
       </el-form-item>
       <el-form-item label="委托流程" prop="flowId">
         <el-select v-model="dataForm.flowId" placeholder="请选择流程" @change="handleChange" filterable>
-          <el-option-group v-for="group in categoryList" :key="group.id"
-            :label="group.fullName+'【'+group.count+'】'">
+          <el-option-group v-for="group in flowEngineList" :key="group.id"
+            :label="group.fullName+'【'+group.num+'】'">
             <el-option v-for="item in group.children" :key="item.id"
               :label="item.fullName+'/'+item.enCode" :value="item.id">
             </el-option>
@@ -102,21 +102,13 @@ export default {
       },
       loading: false,
       btnLoading: false,
-      categoryList: [],
-      flowEngineList: [],
+      flowEngineList: []
     }
   },
   methods: {
     getFlowEngineList() {
       FlowEngineListAll().then((res) => {
         this.flowEngineList = res.data.list
-        for (let i = 0; i < this.categoryList.length; i++) {
-          let child = this.flowEngineList.filter(o => this.categoryList[i].enCode === o.category)
-          let count = child.length
-          this.$set(this.categoryList[i], 'children', child)
-          this.$set(this.categoryList[i], 'count', count)
-        }
-        this.categoryList = this.categoryList.filter(o => o.count)
         this.$nextTick(() => {
           this.$refs['dataForm'].resetFields()
           if (this.dataForm.id) {
@@ -128,17 +120,11 @@ export default {
         })
       })
     },
-    getDictionaryData() {
-      this.$store.dispatch('base/getDictionaryData', { sort: 'WorkFlowCategory' }).then((res) => {
-        this.categoryList = JSON.parse(JSON.stringify(res))
-        this.getFlowEngineList()
-      })
-    },
     init(id) {
       this.dataForm.id = id || ''
       this.visible = true
       this.loading = true
-      this.getDictionaryData()
+      this.getFlowEngineList()
     },
     dataFormSubmit() {
       this.$refs['dataForm'].validate((valid) => {
@@ -161,9 +147,25 @@ export default {
       })
     },
     handleChange(val) {
-      let item = this.flowEngineList.filter(o => o.id === val)[0]
-      this.dataForm.flowName = item.fullName + '/' + item.enCode
-      this.dataForm.flowCategory = item.category
+      if (!val) {
+        this.dataForm.flowName = ''
+        this.dataForm.flowCategory = ''
+        return
+      }
+      let active = {}
+      for (let i = 0; i < this.flowEngineList.length; i++) {
+        const item = this.flowEngineList[i];
+        if (item.children && item.children.length) {
+          for (let j = 0; j < item.children.length; j++) {
+            if (item.children[j].id === val) {
+              active = item.children[j]
+              break
+            }
+          }
+        }
+      }
+      this.dataForm.flowName = active.fullName + '/' + active.enCode
+      this.dataForm.flowCategory = active.category
     },
     onChange(ids, selectedData) {
       if (!selectedData.length) return

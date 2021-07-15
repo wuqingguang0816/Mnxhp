@@ -32,8 +32,8 @@
       <div class="JNPF-common-layout-main JNPF-flex-main">
         <div class="JNPF-common-head">
           <topOpts @add="addOrUpdateHandle()" addText="新建表名">
-            <el-button type="text" icon="el-icon-menu" @click="handleFieldsManage()"
-              v-has="'btn_field'">常用字段</el-button>
+            <el-button type="text" icon="el-icon-menu" @click="handleFieldsManage()">常用字段
+            </el-button>
           </topOpts>
           <div class="JNPF-common-head-right">
             <el-tooltip effect="dark" :content="$t('common.refresh')" placement="top">
@@ -71,8 +71,8 @@
             <template slot-scope="scope">
               <tableOpts @edit="addOrUpdateHandle(scope.row.table)"
                 @del="handleDel(scope.$index,scope.row.table)">
-                <el-button size="mini" type="text" @click="openData(scope.row.table)"
-                  v-has="'btn_openData'">打开数据</el-button>
+                <el-button size="mini" type="text" @click="openData(scope.row.table)">打开数据
+                </el-button>
               </tableOpts>
             </template>
           </el-table-column>

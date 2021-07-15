@@ -20,7 +20,7 @@
       </el-row>
       <div class="JNPF-common-layout-main JNPF-flex-main">
         <div class="JNPF-common-head">
-          <el-button type="danger" icon="el-icon-delete" @click="ClearAll()" v-has="'btn_clearAll'">
+          <el-button type="danger" icon="el-icon-delete" @click="ClearAll()">
             清空所有</el-button>
           <div class="JNPF-common-head-right">
             <el-tooltip effect="dark" :content="$t('common.refresh')" placement="top">
@@ -43,7 +43,7 @@
           <el-table-column label="操作" fixed="right" width="50">
             <template slot-scope="scope">
               <el-button size="mini" type="text" class="JNPF-table-delBtn"
-                @click="handleDel(scope.$index,scope.row.name)" v-has="'btn_clear'">删除</el-button>
+                @click="handleDel(scope.$index,scope.row.name)">删除</el-button>
             </template>
           </el-table-column>
         </JNPF-table>

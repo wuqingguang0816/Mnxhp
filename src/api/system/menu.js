@@ -75,3 +75,11 @@ export const getMenuType = () => {
     method: 'GET'
   })
 }
+
+// 导出系统菜单数据
+export const exportMenu = id => {
+  return request({
+    url: `/api/system/Menu/${id}/Action/Export`,
+    method: 'GET'
+  })
+}

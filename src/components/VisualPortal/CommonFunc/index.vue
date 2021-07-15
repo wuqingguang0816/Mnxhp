@@ -23,7 +23,7 @@ export default {
     }
   },
   created() {
-    this.menuList = this.list
+    this.menuList = this.list.filter(o => o.id)
   },
   watch: {
     list: {

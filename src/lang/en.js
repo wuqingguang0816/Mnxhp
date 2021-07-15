@@ -179,7 +179,8 @@ export default {
     tagsView: 'Open Tags-View',
     tagsViewIcon: 'Show Tags-View Icon',
     language: 'Show Language Select',
-    search: 'Show Search'
+    search: 'Show Search',
+    cache: 'Cache Page'
   },
   common: {
     addBtn: 'Add',

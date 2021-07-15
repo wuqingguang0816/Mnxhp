@@ -1,9 +1,5 @@
 <template>
   <div class="fieldFrom">
-    <div class="JNPF-common-title" style="border:none">
-      <h2>表单地址</h2>
-    </div>
-    <el-input :value="`workFlow/workFlowForm/${enCode}/index.vue`" disabled />
     <div class="JNPF-common-title">
       <h2>字段设置</h2>
     </div>

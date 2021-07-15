@@ -176,10 +176,11 @@ export default {
     orange: '陽橙',
     red: '熱情',
     otherSet: '其他設置',
-    tagsView: '開啟多頁簽',
+    tagsView: '多頁簽開啟模式',
     tagsViewIcon: '多頁簽顯示圖標',
     language: '顯示多語言選擇',
-    search: '顯示頁面搜索框'
+    search: '顯示頁面搜索框',
+    cache: '多頁簽緩存頁面'
   },
   common: {
     addBtn: '新建',
