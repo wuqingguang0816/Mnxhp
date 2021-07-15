@@ -1,4 +1,4 @@
-import { getVisualDevList, Delete, Copy, exportData } from '@/api/onlineDev/visualDev'
+import { getVisualDevList, Delete, Copy, exportData, exportAppData } from '@/api/onlineDev/visualDev'
 
 export default {
   data() {
@@ -67,7 +67,14 @@ export default {
       }).catch(() => {});
     },
     exportModel(id) {
-      exportData(id).then(res => {
+      let method = null
+      if (this.query.type == 1) {
+        method = exportData
+      }
+      if (this.query.type == 2) {
+        method = exportAppData
+      }
+      method(id).then(res => {
         if (res.data.url) window.location.href = this.define.comUrl + res.data.url
       })
     },

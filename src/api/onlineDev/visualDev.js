@@ -197,3 +197,10 @@ export function exportData(modelId) {
     method: 'post'
   })
 }
+// 导出App
+export function exportAppData(modelId) {
+  return request({
+    url: `/api/visualdev/OnlineDev/App/${modelId}/Actions/ExportData`,
+    method: 'post'
+  })
+}
