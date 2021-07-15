@@ -86,15 +86,15 @@
             </el-form-item>
             <el-form-item label="排序类型">
               <el-select v-model="columnData.sort" placeholder="请选择排序类型">
-                <el-option label="正序" value="asc"></el-option>
-                <el-option label="倒序" value="desc"></el-option>
+                <el-option label="升序" value="asc"></el-option>
+                <el-option label="降序" value="desc"></el-option>
               </el-select>
             </el-form-item>
             <el-divider>分页设置</el-divider>
             <el-form-item label="列表分页">
               <el-switch v-model="columnData.hasPage"></el-switch>
             </el-form-item>
-            <el-form-item label="排序类型">
+            <el-form-item label="分页条数">
               <el-radio-group v-model="columnData.pageSize">
                 <el-radio-button :label="20">20条</el-radio-button>
                 <el-radio-button :label="50">50条</el-radio-button>
