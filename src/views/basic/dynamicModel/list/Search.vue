@@ -21,6 +21,9 @@
             </el-select>
           </template>
           <template v-else>
+            <template v-if="item.__config__.jnpfKey==='numInput'">
+              <num-range v-model="item.value"></num-range>
+            </template>
             <template v-if="item.__config__.jnpfKey==='cascader'">
               <el-cascader v-model="item.value" :options="item.options" clearable
                 :show-all-levels="item['show-all-levels']" :props="item.props.props" filterable
@@ -129,16 +132,11 @@ export default {
     },
     search() {
       let obj = {}
-      let transferList = ['numInput', 'time', 'data', ...this.useDateList]
       for (let i = 0; i < this.searchList.length; i++) {
         const e = this.searchList[i]
         if (e.value) {
-          if (Array.isArray(e.value) && e.value.length) {
-            if (transferList.includes(e.__config__.jnpfKey)) {
-              obj[e.__vModel__] = e.value.join(',')
-            } else {
-              obj[e.__vModel__] = e.value
-            }
+          if (Array.isArray(e.value)) {
+            if (e.value.length) obj[e.__vModel__] = e.value
           } else {
             obj[e.__vModel__] = e.value
           }

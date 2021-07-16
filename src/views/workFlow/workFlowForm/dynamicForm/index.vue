@@ -6,6 +6,7 @@
 </template>
 <script>
 import { DynamicInfo } from '@/api/workFlow/workFlowForm'
+import { createModel, updateModel, getModelInfo } from '@/api/onlineDev/visualDev'
 import Parser from '@/components/Generator/parser/Parser'
 export default {
   components: { Parser },
@@ -31,20 +32,35 @@ export default {
       this.loading = true
       this.$nextTick(() => {
         if (this.dataForm.id) {
-          DynamicInfo(this.dataForm.id).then(res => {
-            this.dataForm = res.data
-            if (!this.dataForm.data) return
-            this.formData = JSON.parse(this.dataForm.data)
-            this.fillFormData(this.formConf, this.formData)
-            this.$nextTick(() => {
-              this.loading = false
+          if (data.type == 1) {
+            getModelInfo(data.flowId, this.dataForm.id).then(res => {
+              this.dataForm = res.data
+              if (!this.dataForm.data) return
+              this.formData = JSON.parse(this.dataForm.data)
+              this.fillFormData(this.formConf, this.formData)
+              this.$nextTick(() => {
+                this.loading = false
+                this.$emit('setPageLoad')
+              })
             })
-          })
+          } else {
+            DynamicInfo(this.dataForm.id).then(res => {
+              this.dataForm = res.data
+              if (!this.dataForm.data) return
+              this.formData = JSON.parse(this.dataForm.data)
+              this.fillFormData(this.formConf, this.formData)
+              this.$nextTick(() => {
+                this.loading = false
+                this.$emit('setPageLoad')
+              })
+            })
+          }
         } else {
           this.formData = {}
           this.fillFormData(this.formConf, this.formData)
           this.$nextTick(() => {
             this.loading = false
+            this.$emit('setPageLoad')
           })
           this.dataForm.flowId = data.flowId
         }
@@ -85,9 +101,45 @@ export default {
     sumbitForm(data) {
       if (!data) return
       this.dataForm.data = JSON.stringify(data)
-      this.$emit('eventReciver', this.dataForm, this.eventType)
+      if (this.setting.type == 1) {
+        if (this.eventType === 'save' || this.eventType === 'submit') {
+          this.selfSubmit()
+          return
+        }
+        this.$emit('eventReciver', this.dataForm, this.eventType)
+      } else {
+        this.$emit('eventReciver', this.dataForm, this.eventType)
+      }
+    },
+    selfSubmit() {
+      this.dataForm.status = this.eventType === 'submit' ? 0 : 1
+      if (this.eventType === 'save') return this.selfHandleRequest()
+      this.$confirm('您确定要提交当前流程吗, 是否继续?', '提示', {
+        type: 'warning'
+      }).then(() => {
+        this.selfHandleRequest()
+      }).catch(() => { });
+    },
+    selfHandleRequest() {
+      if (!this.dataForm.id) delete (this.dataForm.id)
+      if (this.eventType === 'save') this.$emit('setLoad', true)
+      const formMethod = this.dataForm.id ? updateModel : createModel
+      formMethod(this.setting.flowId, this.dataForm).then(res => {
+        this.$message({
+          message: res.msg,
+          type: 'success',
+          duration: 1500,
+          onClose: () => {
+            if (this.eventType === 'save') this.$emit('setLoad', false)
+            this.$emit('close', true)
+          }
+        })
+      }).catch(() => {
+        if (this.eventType === 'save') this.$emit('setLoad', false)
+      })
     },
     dataFormSubmit(eventType) {
+      if (this.setting.isPreview) return this.$message({ message: '功能预览不支持数据保存', type: 'warning' })
       this.eventType = eventType
       this.$refs.dynamicForm && this.$refs.dynamicForm.submitForm()
     }

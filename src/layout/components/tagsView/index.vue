@@ -260,7 +260,7 @@ export default {
       height: 38px;
       line-height: 38px;
       border-right: 1px solid #e8eaec;
-      color: #666;
+      color: #606266;
       background-color: #fff;
       padding: 0 18px;
       font-size: 14px;

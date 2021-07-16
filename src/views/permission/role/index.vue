@@ -32,24 +32,23 @@
         </div>
         <JNPF-table v-loading="listLoading" :data="tableList" row-key="id" default-expand-all
           :tree-props="{children: 'children', hasChildren: ''}">
-          <el-table-column prop="fullName" label="名称" v-if="jnpf.hasP('fullName')">
+          <el-table-column prop="fullName" label="名称">
             <template slot-scope="scope">
               <span v-if="scope.row.top"
                 style="font-weight:bold;">{{scope.row.fullName}}【{{scope.row.num}}】</span>
               <span v-else>{{scope.row.fullName}}</span>
             </template>
           </el-table-column>
-          <el-table-column prop="enCode" label="编码" v-if="jnpf.hasP('enCode')">
+          <el-table-column prop="enCode" label="编码">
             <template slot-scope="scope">
               <span v-if="!scope.row.top">{{ scope.row.enCode }}</span>
             </template>
           </el-table-column>
-          <el-table-column prop="description" label="描述" v-if="jnpf.hasP('description')" />
+          <el-table-column prop="description" label="描述" />
           <el-table-column prop="creatorTime" label="创建时间" :formatter="jnpf.tableDateFormat"
-            width="120" v-if="jnpf.hasP('creatorTime')" />
-          <el-table-column prop="sortCode" label="排序" width="70" align="center"
-            v-if="jnpf.hasP('sortCode')" />
-          <el-table-column label="状态" width="70" align="center" v-if="jnpf.hasP('enabledMark')">
+            width="120" />
+          <el-table-column prop="sortCode" label="排序" width="70" align="center" />
+          <el-table-column label="状态" width="70" align="center">
             <template slot-scope="scope" v-if="!scope.row.top">
               <el-switch v-model="scope.row.enabledMark" :active-value="1" :inactive-value="0"
                 @click.native="handleUpdateState(scope.row)" disabled class="table-switch" />
@@ -58,7 +57,7 @@
           <el-table-column label="操作" width="150">
             <template slot-scope="scope" v-if="!scope.row.top">
               <tableOpts @edit="handleAddEdit(scope.row.id)" @del="handleDel(scope.row.id)">
-                <el-dropdown hide-on-click v-has="'btn_more'">
+                <el-dropdown hide-on-click>
                   <span class="el-dropdown-link">
                     <el-button type="text" size="mini">
                       {{$t('common.moreBtn')}}<i class="el-icon-arrow-down el-icon--right"></i>
@@ -66,13 +65,11 @@
                   </span>
                   <el-dropdown-menu slot="dropdown">
                     <el-dropdown-item
-                      @click.native="handleUserRelation(scope.row.id, scope.row.fullName)"
-                      v-has="'btn_member'">
+                      @click.native="handleUserRelation(scope.row.id, scope.row.fullName)">
                       {{$t('role.roleMember')}}
                     </el-dropdown-item>
                     <el-dropdown-item
-                      @click.native="handleAuthorize(scope.row.id, scope.row.fullName)"
-                      v-has="'btn_authorize'">
+                      @click.native="handleAuthorize(scope.row.id, scope.row.fullName)">
                       {{$t('role.rolePermission')}}
                     </el-dropdown-item>
                   </el-dropdown-menu>
@@ -188,7 +185,7 @@ export default {
             message: res.msg,
             duration: 1500,
             onClose: () => {
-              this.getDictionaryData()
+              this.initData()
             }
           })
         })

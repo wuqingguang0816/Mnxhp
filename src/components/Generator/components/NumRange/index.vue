@@ -1,0 +1,51 @@
+<template>
+  <div class="numRange">
+    <el-input-number v-model="min" :min="0" :controls="false" placeholder="最小值"
+      @change="onChange" />
+    <span class="separator">-</span>
+    <el-input-number v-model="max" :min="0" :controls="false" placeholder="最大值"
+      @change="onChange" />
+  </div>
+</template>
+<script>
+export default {
+  model: {
+    prop: 'value',
+    event: 'change'
+  },
+  props: ["value"],
+  name: 'numRange',
+  data() {
+    return {
+      min: undefined,
+      max: undefined
+    }
+  },
+  methods: {
+    onChange() {
+      if (!this.min && !this.max) return this.$emit('change', '')
+      this.$emit('change', [this.min, this.max])
+    }
+  }
+}
+</script>
+<style lang="scss" scoped>
+.numRange {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  max-width: 220px;
+  .el-input-number {
+    flex: 1;
+    width: auto;
+    >>> .el-input__inner {
+      text-align: left;
+    }
+  }
+  .separator {
+    margin: 0 5px;
+    flex-shrink: 0;
+  }
+}
+</style>

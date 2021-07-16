@@ -10,7 +10,11 @@
         :base-path="child.path" class="nest-menu" />
     </el-submenu>
     <template v-else>
-      <app-link :to="item.path">
+      <el-menu-item :index="item.path" :class="{'submenu-title-noDropdown':!isNest}"
+        v-if="item.type===1">
+        <item :icon="item.icon" :title="generateTitle(item.vueName,item.fullName)" />
+      </el-menu-item>
+      <app-link :to="item.path" v-else>
         <el-menu-item :index="item.path" :class="{'submenu-title-noDropdown':!isNest}">
           <item :icon="item.icon" :title="generateTitle(item.vueName,item.fullName)" />
           <!-- <div class="zdyTitle">{{item.fullName}}</div> -->

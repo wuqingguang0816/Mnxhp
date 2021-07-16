@@ -33,7 +33,7 @@ const noColumnShowList = ['PsdInput', 'colorPicker', 'rate', 'slider', 'divider'
 // 不可以添加到搜索
 const noSearchList = [...noColumnShowList, 'switch', 'timeRange', 'dateRange', 'relationForm', 'relationFlow', 'popupSelect']
 // 搜索时控件为input
-const useInputList = ['comInput', 'textarea', 'JNPFText', 'numInput', 'JNPFAmount', 'billRule', 'createUser', 'modifyUser', 'currOrganize', 'currDept', 'currPosition', 'calculate']
+const useInputList = ['comInput', 'textarea', 'JNPFText', 'billRule', 'createUser', 'modifyUser', 'currOrganize', 'currDept', 'currPosition', 'calculate']
 // 搜索时控件为日期选择器
 const useDateList = ['createTime', 'modifyTime']
 // 搜索时控件为下拉选择器
@@ -96,6 +96,27 @@ const webPeculiarList = [{
     },
     expression: []
   },
+  {
+    __config__: {
+      jnpfKey: 'popupSelect',
+      label: '弹窗选择',
+      labelWidth: null,
+      showLabel: true,
+      required: false,
+      tag: 'popupSelect',
+      tagIcon: 'icon-ym icon-ym-generator-checkbox',
+      defaultValue: '',
+      layout: 'colFormItem',
+      span: 24,
+      dragDisabled: false,
+      regList: []
+    },
+    interfaceId: '',
+    columnOptions: [],
+    propsValue: 'id',
+    disabled: false,
+    clearable: true,
+  }
 ]
 // 在线开发-流程设计独有组件
 const flowPeculiarList = [{

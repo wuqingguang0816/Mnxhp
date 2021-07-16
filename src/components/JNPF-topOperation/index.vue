@@ -45,7 +45,7 @@ export default {
     // 是否开启权限判断
     isJudgePer: {
       type: Boolean,
-      default: true
+      default: false
     }
   },
   data() {

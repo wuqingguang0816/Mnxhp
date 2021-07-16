@@ -51,12 +51,12 @@
             </el-col>
             <el-col>
               <el-form-item label="系统描述" prop="sysDescription">
-                <el-input v-model="baseForm.sysDescription" type="textarea" :rows="6"
-                  placeholder="系统描述" />
+                <el-input v-model="baseForm.sysDescription" type="textarea"
+                  :autosize="{ minRows: 5, maxRows: 10}" placeholder="系统描述" />
               </el-form-item>
               <el-form-item>
                 <el-button type="primary" size="small" :loading="btnLoading" class="saveBtn"
-                  @click="submitForm()" v-has="'btn_save'">保 存</el-button>
+                  @click="submitForm()">保 存</el-button>
               </el-form-item>
             </el-col>
           </el-row>
@@ -99,11 +99,12 @@
                   :inactive-value="0" />
               </el-form-item>
               <el-form-item label="允许访问IP">
-                <el-input v-model="baseForm.whiteListIp" placeholder="允许访问IP" />
+                <el-input type="textarea" :autosize="{ minRows: 3, maxRows: 10}"
+                  v-model="baseForm.whiteListIp" placeholder="允许访问IP" />
               </el-form-item>
               <el-form-item>
                 <el-button type="primary" size="small" :loading="btnLoading" class="saveBtn"
-                  @click="submitForm()" v-has="'btn_save'">保 存</el-button>
+                  @click="submitForm()">保 存</el-button>
               </el-form-item>
             </el-col>
           </el-row>
@@ -138,7 +139,7 @@
                   </el-form-item>
                   <el-form-item>
                     <el-button type="primary" size="small" :loading="btnLoading" class="saveBtn"
-                      @click="submitForm()" v-has="'btn_save'">保 存</el-button>
+                      @click="submitForm()">保 存</el-button>
                   </el-form-item>
                 </el-col>
               </el-row>
@@ -191,7 +192,7 @@
                   </el-form-item>
                   <el-form-item>
                     <el-button type="primary" size="small" :loading="btnLoading" class="saveBtn"
-                      @click="submitForm()" v-has="'btn_save'">保 存</el-button>
+                      @click="submitForm()">保 存</el-button>
                   </el-form-item>
                 </el-col>
               </el-row>
@@ -259,7 +260,7 @@
                 <el-col>
                   <el-form-item>
                     <el-button type="primary" size="small" :loading="btnLoading" class="saveBtn"
-                      @click="submitForm()" v-has="'btn_save'">保 存</el-button>
+                      @click="submitForm()">保 存</el-button>
                   </el-form-item>
                 </el-col>
               </el-row>
@@ -319,7 +320,7 @@
                 <el-col>
                   <el-form-item>
                     <el-button type="primary" size="small" :loading="btnLoading" class="saveBtn"
-                      @click="submitForm()" v-has="'btn_save'">保 存</el-button>
+                      @click="submitForm()">保 存</el-button>
                   </el-form-item>
                 </el-col>
               </el-row>

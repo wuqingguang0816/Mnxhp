@@ -29,8 +29,8 @@
             <el-col :span="6">
               <el-form-item label="所属流程">
                 <el-select v-model="flowId" placeholder="选择所属流程" clearable>
-                  <el-option-group v-for="group in flowEngineListAll" :key="group.id"
-                    :label="group.fullName+'【'+group.count+'】'">
+                  <el-option-group v-for="group in flowEngineList" :key="group.id"
+                    :label="group.fullName+'【'+group.num+'】'">
                     <el-option v-for="item in group.children" :key="item.id" :label="item.fullName"
                       :value="item.id">
                     </el-option>
@@ -70,19 +70,17 @@
           </div>
         </div>
         <JNPF-table v-loading="listLoading" :data="list">
-          <el-table-column prop="fullName" label="流程标题" show-overflow-tooltip
-            v-if="jnpf.hasP('fullName')" min-width="150" />
-          <el-table-column prop="flowName" label="所属流程" width="130" v-if="jnpf.hasP('flowName')" />
+          <el-table-column prop="fullName" label="流程标题" show-overflow-tooltip min-width="150" />
+          <el-table-column prop="flowName" label="所属流程" width="130" />
           <el-table-column prop="startTime" label="发起时间" width="130"
-            :formatter="jnpf.tableDateFormat" v-if="jnpf.hasP('startTime')" />
-          <el-table-column prop="userName" label="发起人员" width="130" v-if="jnpf.hasP('userName')" />
-          <el-table-column prop="flowUrgent" label="紧急程度" sortable width="130"
-            v-if="jnpf.hasP('flowUrgent')">
+            :formatter="jnpf.tableDateFormat" />
+          <el-table-column prop="userName" label="发起人员" width="130" />
+          <el-table-column prop="flowUrgent" label="紧急程度" sortable width="130">
             <template slot-scope="scope">
               {{ scope.row.flowUrgent | urgentText() }}
             </template>
           </el-table-column>
-          <el-table-column prop="status" label="流程状态" width="130" v-if="jnpf.hasP('status')">
+          <el-table-column prop="status" label="流程状态" width="130">
             <template slot-scope="scope">
               <el-tag type="success" v-if="scope.row.status==2">审核通过</el-tag>
               <el-tag type="danger" v-else-if="scope.row.status==3">审核驳回</el-tag>
@@ -91,15 +89,14 @@
               <el-tag type="primary" v-else>等待审核</el-tag>
             </template>
           </el-table-column>
-          <el-table-column prop="creatorTime" label="抄送时间" width="130"
-            v-if="jnpf.hasP('creatorTime')">
+          <el-table-column prop="creatorTime" label="抄送时间" width="130">
             <template slot-scope="scope">
               {{scope.row.creatorTime | toDate() }}
             </template>
           </el-table-column>
           <el-table-column label="操作" width="50" fixed="right">
             <template slot-scope="scope">
-              <el-button size="mini" type="text" @click="toDetail(scope.row)" v-has="'btn_detail'">
+              <el-button size="mini" type="text" @click="toDetail(scope.row)">
                 详情</el-button>
             </template>
           </el-table-column>
@@ -167,8 +164,7 @@ export default {
       flowCategory: '',
       creatorUserId: '',
       categoryList: [],
-      flowEngineList: [],
-      flowEngineListAll: [],
+      flowEngineList: []
     }
   },
   filters: {
@@ -179,6 +175,7 @@ export default {
   },
   created() {
     this.getDictionaryData()
+    this.getFlowEngineList()
     this.initData()
   },
   methods: {
@@ -201,20 +198,11 @@ export default {
     getFlowEngineList() {
       FlowEngineListAll().then((res) => {
         this.flowEngineList = res.data.list
-        this.flowEngineListAll = JSON.parse(JSON.stringify(this.categoryList))
-        for (let i = 0; i < this.flowEngineListAll.length; i++) {
-          let child = this.flowEngineList.filter(o => this.flowEngineListAll[i].enCode === o.category)
-          let count = child.length
-          this.$set(this.flowEngineListAll[i], 'children', child)
-          this.$set(this.flowEngineListAll[i], 'count', count)
-        }
-        this.flowEngineListAll = this.flowEngineListAll.filter(o => o.children.length)
       })
     },
     getDictionaryData() {
       this.$store.dispatch('base/getDictionaryData', { sort: 'WorkFlowCategory' }).then((res) => {
         this.categoryList = res
-        this.getFlowEngineList()
       })
     },
     initData() {

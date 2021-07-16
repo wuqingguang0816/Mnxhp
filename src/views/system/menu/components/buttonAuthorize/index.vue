@@ -5,7 +5,7 @@
       <div class="JNPF-flex-main">
         <div class="JNPF-common-head">
           <div>
-            <topOpts @add="handleAddEdit('')" addPerCode="btn_btnPer_add" />
+            <topOpts @add="handleAddEdit('')" />
             <el-dropdown style="margin-left: 10px">
               <el-button icon="el-icon-plus" :loading="loading" type="text">
                 常用按钮权限<i class="el-icon-arrow-down el-icon--right"></i>
@@ -36,8 +36,7 @@
           </el-table-column>
           <el-table-column label="操作" width="100">
             <template slot-scope="scope">
-              <tableOpts @edit="handleAddEdit(scope.row.id)" @del="handleDel(scope.row.id)"
-                editPerCode="btn_btnPer_edit" delPerCode="btn_btnPer_remove" />
+              <tableOpts @edit="handleAddEdit(scope.row.id)" @del="handleDel(scope.row.id)" />
             </template>
           </el-table-column>
         </JNPF-table>

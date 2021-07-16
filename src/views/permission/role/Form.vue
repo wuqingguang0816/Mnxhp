@@ -11,8 +11,8 @@
           </el-option>
         </el-select>
       </el-form-item>
-      <el-form-item label="角色名称" prop="fullName" maxlength="50">
-        <el-input v-model="dataForm.fullName" placeholder="输入角色名称" />
+      <el-form-item label="角色名称" prop="fullName">
+        <el-input v-model="dataForm.fullName" placeholder="输入角色名称" maxlength="50" />
       </el-form-item>
       <el-form-item label="角色编码" prop="enCode">
         <el-input v-model="dataForm.enCode" placeholder="输入角色编码" />

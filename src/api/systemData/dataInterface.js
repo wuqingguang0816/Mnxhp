@@ -74,3 +74,20 @@ export function previewDataInterface(id) {
     method: 'GET'
   })
 }
+
+// 导出数据接口数据
+export function exportData(id) {
+  return request({
+    url: `/api/system/DataInterface/${id}/Action/Export`,
+    method: 'GET'
+  })
+}
+
+// 获取数据接口调用日志列表
+export function getDataInterfaceLog(id, data) {
+  return request({
+    url: `/api/system/DataInterfaceLog/${id}`,
+    method: 'GET',
+    data
+  })
+}

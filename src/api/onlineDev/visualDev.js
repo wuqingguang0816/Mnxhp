@@ -47,7 +47,7 @@ export function Copy(id) {
     method: 'POST'
   })
 }
-// 获取命名空间
+// 获取模块命名
 export function getAreasName() {
   return request({
     url: `/api/visualdev/Generater/AreasName`,
@@ -189,5 +189,19 @@ export function Preview(data) {
     url: `/api/visualdev/OnlineDev/App/Preview`,
     method: 'post',
     data: { data }
+  })
+}
+// 导出模板
+export function exportData(modelId) {
+  return request({
+    url: `/api/visualdev/OnlineDev/${modelId}/Actions/ExportData`,
+    method: 'post'
+  })
+}
+// 导出App
+export function exportAppData(modelId) {
+  return request({
+    url: `/api/visualdev/OnlineDev/App/${modelId}/Actions/ExportData`,
+    method: 'post'
   })
 }

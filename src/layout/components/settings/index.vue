@@ -51,6 +51,10 @@
       <el-switch v-model="tagsIcon" class="drawer-switch" />
     </div>
     <div class="drawer-item">
+      <span>{{$t('settings.cache')}}</span>
+      <el-switch v-model="useCache" class="drawer-switch" />
+    </div>
+    <div class="drawer-item">
       <span>{{$t('settings.language')}}</span>
       <el-switch v-model="showLanguage" class="drawer-switch" />
     </div>
@@ -193,6 +197,17 @@ export default {
         });
       }
     },
+    useCache: {
+      get() {
+        return this.$store.state.settings.useCache;
+      },
+      set(val) {
+        this.$store.dispatch("settings/changeSetting", {
+          key: "useCache",
+          value: val
+        });
+      }
+    },
     slideClass: {
       get() {
         return this.$store.state.settings.slideClass;
@@ -311,7 +326,7 @@ export default {
       }
       span {
         font-size: 12px;
-        color: #707070;
+        color: #606266;
         margin-top: 10px;
       }
     }
@@ -327,7 +342,7 @@ export default {
   }
 
   .drawer-item {
-    color: #707070;
+    color: #606266;
     font-size: 14px;
     padding: 12px 0;
   }

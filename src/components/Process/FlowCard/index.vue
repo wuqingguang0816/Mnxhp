@@ -129,6 +129,12 @@ function addNodeButton(ctx, data, h, isBranch = false) {
               </div>
               审批节点
             </div>
+            <div>
+              <div class="condition-icon" onClick={ctx.eventLancher.bind(ctx, "addSubFlowNode", data, isBranch)} >
+                <i class="icon-ym icon-ym-generator-subFlow"></i>
+              </div>
+              子流程
+            </div>
             <div class={{ 'condition-disabled': !canAddAppendBranch }}>
               <div class="condition-icon" onClick={this.eventLancher.bind(ctx, "appendBranch", data, isBranch, !canAddAppendBranch)}>
                 <i class="ym-custom ym-custom-sitemap"></i>

@@ -20,15 +20,25 @@
       label-width="90px">
       <el-row>
         <el-col :span="14" :offset="5" class="baseInfo mt-20" v-if="active === 0">
-          <el-form-item label="名称" prop="fullName" maxlength="50">
-            <el-input v-model="dataForm.fullName" placeholder="输入名称" />
+          <el-form-item label="名称" prop="fullName">
+            <el-input v-model="dataForm.fullName" placeholder="输入名称" maxlength="50" />
           </el-form-item>
-          <el-form-item label="编码" prop="enCode" maxlength="50">
-            <el-input v-model="dataForm.enCode" placeholder="输入编码" />
+          <el-form-item label="编码" prop="enCode">
+            <el-input v-model="dataForm.enCode" placeholder="输入编码" maxlength="50" />
           </el-form-item>
           <el-form-item label="分类" prop="categoryId">
             <JNPF-TreeSelect v-model="dataForm.categoryId" :options="selectData" placeholder="选择分类"
               clearable />
+          </el-form-item>
+          <el-form-item label="规则" prop="checkType">
+            <el-radio-group v-model="dataForm.checkType">
+              <el-radio :label="0">忽略验证</el-radio>
+              <el-radio :label="1">鉴权验证</el-radio>
+              <el-radio :label="2">跨域验证</el-radio>
+            </el-radio-group>
+          </el-form-item>
+          <el-form-item prop="requestHeaders" v-if="dataForm.checkType===2">
+            <el-input v-model="dataForm.requestHeaders" placeholder="请输入域名，多个域名用逗号隔开" />
           </el-form-item>
           <el-form-item label="类型" prop="dataType">
             <el-radio-group v-model="dataForm.dataType">
@@ -93,10 +103,12 @@
         <el-col :span="14" :offset="5" class="mt-20 baseInfo"
           v-if="active === 1 && dataForm.dataType === 3">
           <el-form-item label="接口路径" prop="path" maxlength="50">
-            <el-input v-model="dataForm.path" placeholder="输入接口路径" />
+            <el-input v-model="dataForm.path" placeholder="输入接口路径">
+              <template slot="prepend">GET</template>
+            </el-input>
           </el-form-item>
           <el-form-item v-for="(item, index) in dataForm.requestParameters" :key="item.index"
-            :label="'接口参数' + (index+1)" required>
+            label="接口参数" required>
             <el-row class="parameBox">
               <el-col :span="7" style="margin-right: 10px">
                 <el-form-item :prop="'requestParameters.' + index + '.field'" :rules="{
@@ -162,6 +174,8 @@ export default {
         categoryId: '',
         dbLinkId: '0',
         dataType: 2,
+        checkType: 0,
+        requestHeaders: '',
         requestMethod: 'get',
         responseType: 'json',
         sortCode: 0,
@@ -227,6 +241,8 @@ export default {
         categoryId: '',
         dbLinkId: '0',
         dataType: 2,
+        checkType: 0,
+        requestHeaders: '',
         requestMethod: 'get',
         responseType: 'json',
         sortCode: 0,

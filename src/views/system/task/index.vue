@@ -31,19 +31,15 @@
         </div>
         <JNPF-table v-loading="listLoading" :data="list">
           <el-table-column prop="fullName" label="任务标题" sortable show-overflow-tooltip
-            v-if="jnpf.hasP('fullName')" min-width="150" />
-          <el-table-column prop="enCode" label="任务编码" sortable width="200"
-            v-if="jnpf.hasP('enCode')" />
-          <el-table-column prop="runCount" label="执行次数" sortable width="100"
-            v-if="jnpf.hasP('runCount')" />
+            min-width="150" />
+          <el-table-column prop="enCode" label="任务编码" sortable width="200" />
+          <el-table-column prop="runCount" label="执行次数" sortable width="100" />
           <el-table-column prop="lastRunTime" label="最后执行时间" sortable width="120"
-            :formatter="jnpf.tableDateFormat" v-if="jnpf.hasP('lastRunTime')" />
+            :formatter="jnpf.tableDateFormat" />
           <el-table-column prop="nextRunTime" label="下次运行时间" sortable width="120"
-            :formatter="jnpf.tableDateFormat" v-if="jnpf.hasP('nextRunTime')" />
-          <el-table-column prop="description" label="任务说明" show-overflow-tooltip
-            v-if="jnpf.hasP('description')" />
-          <el-table-column label="状态" prop="enabledMark" width="70" align="center"
-            v-if="jnpf.hasP('enabledMark')">
+            :formatter="jnpf.tableDateFormat" />
+          <el-table-column prop="description" label="任务说明" show-overflow-tooltip />
+          <el-table-column label="状态" prop="enabledMark" width="70" align="center">
             <template slot-scope="scope">
               <el-switch v-model="scope.row.enabledMark" :active-value="1" :inactive-value="0"
                 @click.native="handleUpdateState(scope.row)" disabled class="table-switch" />

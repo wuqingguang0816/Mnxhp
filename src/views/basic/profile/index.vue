@@ -36,7 +36,8 @@
         :headers="uploadHeaders" :on-success="handleSuccess" :show-file-list="false"
         accept="image/*">
         <div class="avatar-box">
-          <img :src="define.comUrl+ user.avatar" class="avatar" ref="avatar" v-if="user.avatar">
+          <el-avatar :size="50" :src="define.comUrl + user.avatar" class="avatar"
+            v-if="user.avatar" />
           <div class="avatar-hover">更换头像</div>
         </div>
       </el-upload>

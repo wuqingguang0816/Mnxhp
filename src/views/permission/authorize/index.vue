@@ -21,7 +21,7 @@
         <el-button :disabled="active <= 0" @click="handlePrevStep">{{$t('common.prev')}}</el-button>
         <el-button :disabled="active >= 4" @click="handleNextStep">{{$t('common.next')}}</el-button>
         <el-button type="primary" :loading="btnLoading" :disabled="active < 4"
-          @click="handleConfirm()" v-has="'btn_save'">{{$t('common.confirmButton')}}</el-button>
+          @click="handleConfirm()">{{$t('common.confirmButton')}}</el-button>
       </div>
     </div>
     <el-steps :active="active" finish-status="success" simple>

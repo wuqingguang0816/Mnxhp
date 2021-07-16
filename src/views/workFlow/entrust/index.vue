@@ -30,28 +30,25 @@
           </div>
         </div>
         <JNPF-table v-loading="listLoading" :data="list">
-          <el-table-column prop="toUserName" label="被委托人" width="150" sortable
-            v-if="jnpf.hasP('toUserName')" />
-          <el-table-column prop="flowName" label="委托流程" width="250" sortable
-            v-if="jnpf.hasP('flowName')" />
-          <el-table-column prop="flowCategory" label="流程分类" width="100" sortable
-            v-if="jnpf.hasP('flowCategory')">
+          <el-table-column prop="toUserName" label="被委托人" width="150" sortable />
+          <el-table-column prop="flowName" label="委托流程" width="250" sortable />
+          <el-table-column prop="flowCategory" label="流程分类" width="100" sortable>
             <template slot-scope="scope">
               {{ scope.row.flowCategory|getCategoryText(categoryList) }}
             </template>
           </el-table-column>
           <el-table-column prop="startTime" label="开始时间" sortable width="120"
-            :formatter="jnpf.tableDateFormat" v-if="jnpf.hasP('startTime')" />
+            :formatter="jnpf.tableDateFormat" />
           <el-table-column prop="endTime" label="结束时间" sortable width="120"
-            :formatter="jnpf.tableDateFormat" v-if="jnpf.hasP('endTime')" />
-          <el-table-column label="状态" width="100" prop="status" v-if="jnpf.hasP('status')">
+            :formatter="jnpf.tableDateFormat" />
+          <el-table-column label="状态" width="100" prop="status">
             <template slot-scope="scope">
               <el-tag type="info" v-if='scope.row.status==1'>未开始</el-tag>
               <el-tag type="danger" v-else-if='scope.row.status==2'>已失效</el-tag>
               <el-tag type="primary" v-else>委托中</el-tag>
             </template>
           </el-table-column>
-          <el-table-column prop="description" label="委托说明" v-if="jnpf.hasP('description')" />
+          <el-table-column prop="description" label="委托说明" />
           <el-table-column label="操作" fixed="right" width="100">
             <template slot-scope="scope">
               <tableOpts @edit="addOrUpdateHandle(scope.row.id)"

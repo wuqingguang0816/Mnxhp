@@ -13,6 +13,11 @@
           </el-table-column>
           <el-table-column prop="__config__.label" label="列名" />
           <el-table-column prop="__vModel__" label="字段" />
+          <el-table-column prop="searchType" label="类型">
+            <template slot-scope="scope">
+              {{scope.row.searchType===3?'范围查询':scope.row.searchType===2?'模糊查询':'等于查询'}}
+            </template>
+          </el-table-column>
         </el-table>
       </div>
       <el-divider></el-divider>
@@ -94,6 +99,9 @@
                 <el-select v-model="columnData.treeDataSource" placeholder="请选择数据来源"
                   @change="dataTypeChange">
                   <el-option label="数据字典" value="dictionary"></el-option>
+                  <el-option label="远端数据" value="api"></el-option>
+                  <el-option label="公司数据" value="organize"></el-option>
+                  <el-option label="部门数据" value="department"></el-option>
                 </el-select>
               </el-form-item>
               <template v-if="columnData.treeDataSource==='dictionary'">
@@ -142,8 +150,8 @@
             </el-form-item>
             <el-form-item label="排序类型">
               <el-select v-model="columnData.sort" placeholder="请选择排序类型">
-                <el-option label="正序" value="asc"></el-option>
-                <el-option label="倒序" value="desc"></el-option>
+                <el-option label="升序" value="asc"></el-option>
+                <el-option label="降序" value="desc"></el-option>
               </el-select>
             </el-form-item>
             <template v-if="columnData.type !==3">
@@ -254,6 +262,7 @@ export default {
       btnsOption: [
         { value: 'add', icon: 'el-icon-plus', label: '新增' },
         { value: 'download', icon: 'el-icon-download', label: '导出' },
+        { value: 'batchRemove', icon: 'el-icon-delete', label: '批量删除' },
       ],
       columnBtnsOption: [
         { value: 'edit', icon: 'el-icon-edit', label: '编辑' },

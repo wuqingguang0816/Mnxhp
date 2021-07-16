@@ -4,7 +4,7 @@
       <div class="JNPF-common-title">
         <h2>字典分类</h2>
         <span class="options">
-          <el-tooltip content="分类管理" placement="top" v-has="'btn_type'">
+          <el-tooltip content="分类管理" placement="top">
             <el-link icon="el-icon-menu" :underline="false" @click="handleTypeManage" />
           </el-tooltip>
         </span>
@@ -41,7 +41,7 @@
       </el-row>
       <div class="JNPF-common-layout-main JNPF-flex-main">
         <div class="JNPF-common-head">
-          <topOpts @add="handleAddEdit()"></topOpts>
+          <topOpts @add="handleAddEdit()" />
           <div class="JNPF-common-head-right">
             <el-tooltip effect="dark" :content="$t('common.refresh')" placement="top">
               <el-link icon="icon-ym icon-ym-Refresh JNPF-common-head-icon" :underline="false"
@@ -52,11 +52,10 @@
         </div>
         <JNPF-table v-loading="listLoading" :data="tableData" row-key="id" default-expand-all
           :tree-props="{children: 'children', hasChildren: ''}">
-          <el-table-column prop="fullName" label="名称" v-if="jnpf.hasP('fullName')" />
-          <el-table-column prop="enCode" label="编码" v-if="jnpf.hasP('enCode')" />
-          <el-table-column prop="sortCode" label="排序" width="70" align="center"
-            v-if="jnpf.hasP('sortCode')" />
-          <el-table-column label="状态" width="70" align="center" v-if="jnpf.hasP('enabledMark')">
+          <el-table-column prop="fullName" label="名称" />
+          <el-table-column prop="enCode" label="编码" />
+          <el-table-column prop="sortCode" label="排序" width="70" align="center" />
+          <el-table-column label="状态" width="70" align="center">
             <template slot-scope="scope">
               <el-switch v-model="scope.row.enabledMark" :active-value="1" :inactive-value="0"
                 @click.native="handleUpdateState(scope.row)" disabled class="table-switch" />

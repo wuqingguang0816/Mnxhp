@@ -9,8 +9,8 @@
       </div>
       <div class="main">
         <div class="flowList">
-          <div class="item" v-for="(item,i) in categoryList" :key="i">
-            <p class="cap">{{item.fullName}}【{{item.count}}】</p>
+          <div class="item" v-for="(item,i) in flowEngineList" :key="i">
+            <p class="cap">{{item.fullName}}【{{item.num}}】</p>
             <div class="iconList">
               <div class="iconbox" v-for="(child,i) in item.children" :key="i" @click="jump(child)">
                 <div class="box-icon" :style="{backgroundColor:child.iconBackground||'#008cff'}">
@@ -32,15 +32,15 @@
 export default {
   data() {
     return {
-      categoryList: []
+      flowEngineList: []
     }
   },
   methods: {
     goBack() {
       this.$emit('close')
     },
-    init(categoryList) {
-      this.categoryList = categoryList.filter(o => o.children.length)
+    init(flowEngineList) {
+      this.flowEngineList = flowEngineList.filter(o => o.children.length)
     },
     jump(item) {
       if (!item.enCode) {
