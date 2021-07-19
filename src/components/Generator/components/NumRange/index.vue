@@ -21,6 +21,17 @@ export default {
       max: undefined
     }
   },
+  watch: {
+    value(val) {
+      if (Array.isArray(val) && val.length === 2) {
+        this.min = val[0]
+        this.max = val[1]
+      } else {
+        this.min = undefined
+        this.max = undefined
+      }
+    }
+  },
   methods: {
     onChange() {
       if (!this.min && !this.max) return this.$emit('change', '')
