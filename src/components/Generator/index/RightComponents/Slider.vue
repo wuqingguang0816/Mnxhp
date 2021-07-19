@@ -36,9 +36,6 @@
     <el-form-item v-if="activeData['show-stops'] !== undefined" label="显示间断点">
       <el-switch v-model="activeData['show-stops']" />
     </el-form-item>
-    <el-form-item v-if="activeData.range !== undefined" label="范围选择">
-      <el-switch v-model="activeData.range" @change="rangeChange" />
-    </el-form-item>
     <el-form-item label="是否禁用">
       <el-switch v-model="activeData.disabled" />
     </el-form-item>
@@ -56,14 +53,6 @@ export default {
     return {}
   },
   created() { },
-  methods: {
-    rangeChange(val) {
-      this.$set(
-        this.activeData.__config__,
-        'defaultValue',
-        val ? [this.activeData.min, this.activeData.max] : this.activeData.min
-      )
-    },
-  }
+  methods: {}
 }
 </script>
