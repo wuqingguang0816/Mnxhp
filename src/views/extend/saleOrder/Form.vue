@@ -131,7 +131,7 @@
             <template slot-scope="scope">
               <el-autocomplete v-model="scope.row.productCode" :fetch-suggestions="goodsSearchAsync"
                 placeholder="商品编码" @select="goodsSelect($event,scope.row)" style="width:100%"
-                popper-class="sale-order-popper">
+                popper-class="sale-order-popper goods-popper">
                 <template slot-scope="{ item }">
                   <div class="sale-order-popper-item">
                     <span>{{ item.code }}</span>
@@ -344,6 +344,9 @@ export default {
 >>> .el-tabs__header {
   margin-bottom: 0;
 }
+>>> .el-select {
+  width: 100%;
+}
 .box {
   position: relative;
 }
@@ -385,5 +388,8 @@ export default {
       color: #1890ff;
     }
   }
+}
+.goods-popper {
+  width: 400px !important;
 }
 </style>
