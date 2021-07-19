@@ -66,10 +66,6 @@
             <el-button type="primary" icon="el-icon-plus" @click="handleAdd()">新建</el-button>
             <el-button type="text" icon="el-icon-edit" @click="handleEdit()">编辑</el-button>
             <el-button type="text" icon="el-icon-close" @click="handleDel()">删除</el-button>
-            <el-button type="text" icon="el-icon-download">审核</el-button>
-            <el-button type="text" icon="el-icon-upload2">反审核</el-button>
-            <el-button type="text" icon="el-icon-phone-outline">发货通知</el-button>
-            <el-button type="text" icon="el-icon-check">订单确认</el-button>
             <el-button type="text" icon="el-icon-arrow-down">更多</el-button>
           </div>
           <div class="JNPF-common-head-right">

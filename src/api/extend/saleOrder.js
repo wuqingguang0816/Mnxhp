@@ -23,6 +23,13 @@ export function getGoodsList(data) {
     data
   })
 }
+// 商品列表(通过type)
+export function GoodsList(type) {
+  return request({
+    url: `/api/extend/saleOrder/Goods/getGoodList?type=${type}`,
+    method: 'get'
+  })
+}
 // 订单列表
 export function getOrderList(data) {
   return request({
