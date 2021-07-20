@@ -122,7 +122,8 @@
           <el-col :span="6">
             <el-form label-width="120px">
               <el-form-item label="订货类型">
-                <el-select v-model="orderType" placeholder="选择订货类型" @change="onTypeChange">
+                <el-select v-model="orderType" placeholder="选择订货类型" @change="onTypeChange"
+                  clearable>
                   <el-option label="1" value="1" />
                   <el-option label="2" value="2" />
                   <el-option label="3" value="3" />
@@ -383,7 +384,8 @@ export default {
     flex-direction: column;
   }
   .add-btn {
-    margin-bottom: 10px;
+    margin-top: 20px;
+    margin-bottom: -10px;
   }
   .order-footer {
     margin-top: 10px;
