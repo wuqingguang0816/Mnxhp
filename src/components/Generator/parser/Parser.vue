@@ -201,6 +201,7 @@ export default {
       })
     },
     resetForm() {
+      this.$store.commit('generator/UPDATE_RELATION_DATA', {})
       this.formConfCopy = deepClone(this.formConf)
       this.$refs[this.formConf.formRef].resetFields()
       Object.keys(this.tableRefs).forEach(vModel => {
