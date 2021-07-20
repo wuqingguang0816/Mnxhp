@@ -1,10 +1,8 @@
 <template>
   <div class="numRange">
-    <el-input-number v-model="min" :min="0" :controls="false" placeholder="最小值"
-      @change="onChange" />
+    <el-input-number v-model="min" :controls="false" placeholder="最小值" @change="onChange" />
     <span class="separator">-</span>
-    <el-input-number v-model="max" :min="0" :controls="false" placeholder="最大值"
-      @change="onChange" />
+    <el-input-number v-model="max" :controls="false" placeholder="最大值" @change="onChange" />
   </div>
 </template>
 <script>
@@ -34,7 +32,7 @@ export default {
   },
   methods: {
     onChange() {
-      if (!this.min && !this.max) return this.$emit('change', '')
+      if ((!this.min && this.min !== 0) && (!this.max && this.max !== 0)) return this.$emit('change', [])
       this.$emit('change', [this.min, this.max])
     }
   }
