@@ -269,6 +269,9 @@ export default {
       return isOk;
     },
     changeKey(val, row) {
+      row.allowNull = 0
+      row.dataType = 'varchar'
+      row.dataLength = '50'
       if (!val) return
       for (let i = 0; i < this.list.length; i++) {
         if (row.field != this.list[i].field) {
