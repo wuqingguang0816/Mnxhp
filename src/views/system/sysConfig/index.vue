@@ -630,6 +630,9 @@ export default {
   }
   .thirdTab >>> .el-tabs__content {
     height: 100%;
+    .el-tab-pane {
+      height: auto;
+    }
   }
 }
 </style>
