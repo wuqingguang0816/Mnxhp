@@ -1,5 +1,4 @@
 import { getVisualDevInfo, Update, Create } from '@/api/onlineDev/visualDev'
-import { getDataSourceListAll } from '@/api/systemData/dataSource'
 import commonMixin from '@/mixins/generator/common'
 export default {
   mixins: [commonMixin],
@@ -62,7 +61,6 @@ export default {
         if (this.dataForm.id) {
           this.loading = true
           getVisualDevInfo(this.dataForm.id).then(res => {
-            this.loading = false
             this.dataForm = res.data
             this.dataForm.webType = this.dataForm.webType || 2
             this.maxStep = parseInt(this.dataForm.webType)
@@ -70,11 +68,8 @@ export default {
             this.columnData = this.dataForm.columnData && JSON.parse(this.dataForm.columnData)
             this.flowTemplateJson = this.dataForm.flowTemplateJson && JSON.parse(this.dataForm.flowTemplateJson)
             this.tables = this.dataForm.tables && JSON.parse(this.dataForm.tables) || []
-            if (!this.tables.length) return
-            this.dataForm.dbLinkId = this.dataForm.dbLinkId || '0'
-            let mainTable = this.tables.filter(o => o.typeId == '1')[0]
-            this.mainTableFields = mainTable.fields
-            this.relationTable = mainTable.table
+            this.updateFields()
+            this.loading = false
           }).catch(() => { this.loading = false })
         } else {
           this.dataForm.type = type
@@ -150,21 +145,6 @@ export default {
           err.msg && this.$message.warning(err.msg)
         })
       }
-    },
-    getDbOptions() {
-      const defaultItem = {
-        fullName: '',
-        children: [{
-          fullName: '默认数据库',
-          id: '0'
-        }]
-      }
-      getDataSourceListAll().then(res => {
-        const list = [defaultItem, ...res.data.list]
-        this.dbOptions = list.filter(o => o.children && o.children.length)
-      }).catch(() => {
-        this.dbOptions = [defaultItem]
-      })
     },
     getComponent() {
       const webType = this.dataForm.webType || 2

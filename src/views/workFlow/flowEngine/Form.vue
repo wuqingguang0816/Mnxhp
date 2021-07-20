@@ -171,7 +171,7 @@ import Process from "@/components/Process"
 import Generator from '@/components/Generator/index/Home'
 import FieldForm from './FieldForm'
 import TableForm from '@/views/generator/TableForm'
-import mixin from '@/mixins/generator/form'
+import mixin from '@/mixins/generator/common'
 
 export default {
   mixins: [mixin],
@@ -246,37 +246,19 @@ export default {
       this.activeStep = 0
       this.tables = []
       this.dataForm.id = id || ''
+      this.getDbOptions()
       this.visible = true
       this.loading = true
       this.$nextTick(() => {
-        this.$refs['dataForm'].resetFields()
-        const defaultItem = {
-          fullName: '',
-          children: [{
-            fullName: '默认数据库',
-            id: '0'
-          }]
-        }
-        getDataSourceListAll().then(res => {
-          const list = [defaultItem, ...res.data.list]
-          this.dbOptions = list.filter(o => o.children && o.children.length)
-        }).catch(() => {
-          this.dbOptions = [defaultItem]
-        })
         if (this.dataForm.id) {
-          this.loading = true
           FlowEngineInfo(this.dataForm.id).then(res => {
-            this.loading = false
             this.dataForm = res.data
             this.formType = this.dataForm.formType == 1 ? '系统表单' : '自定义表单'
             this.dataForm.flowTemplateJson && (this.flowTemplateJson = JSON.parse(this.dataForm.flowTemplateJson))
             this.dataForm.formData && (this.formData = JSON.parse(this.dataForm.formData))
             this.tables = this.dataForm.tables && JSON.parse(this.dataForm.tables) || []
-            if (!this.tables.length) return
-            this.dataForm.dbLinkId = this.dataForm.dbLinkId || '0'
-            let mainTable = this.tables.filter(o => o.typeId == '1')[0]
-            this.mainTableFields = mainTable.fields
-            this.relationTable = mainTable.table
+            this.updateFields()
+            this.loading = false
           }).catch(() => { this.loading = false })
         } else {
           this.dataForm.formType = formType
