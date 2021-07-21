@@ -294,9 +294,9 @@ export default {
     },
     onTypeChange(val) {
       if (!val) return
-      GoodsList(val).then(res => {
-        this.choice(res.data.list)
-      })
+      for (let i = 0; i < this.dataForm.productEntryList.length; i++) {
+        this.dataForm.productEntryList[i].type = val
+      }
     },
     choice(list) {
       for (let i = 0; i < list.length; i++) {
