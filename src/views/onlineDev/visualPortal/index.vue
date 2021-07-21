@@ -167,9 +167,13 @@ export default {
       this.previewVisible = true
     },
     exportTemplate(id) {
-      exportTemplate(id).then(res => {
-        if (res.data.url) window.location.href = this.define.comUrl + res.data.url
-      })
+      this.$confirm('您确定要导出该门户, 是否继续?', '提示', {
+        type: 'warning'
+      }).then(() => {
+        exportTemplate(id).then(res => {
+          if (res.data.url) window.location.href = this.define.comUrl + res.data.url
+        })
+      }).catch(() => { });
     },
     distribute(id) {
       this.transferId = id
