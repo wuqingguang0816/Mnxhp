@@ -22,15 +22,13 @@
               <div class="chatList-arrow"></div>
               <p v-if="item.messageType=='text'" v-html="item.message" class="chatList__msg--text">
               </p>
-              <el-image :src="define.comUrl+'/api/file/Image/IM/'+item.message.path"
-                class="chatList__msg--img" v-if="item.messageType=='image' && item.message.path"
-                :preview-src-list="[define.comUrl +'/api/file/Image/IM/'+item.message.path]"
-                :z-index="10000">
+              <el-image :src="define.comUrl+item.message.path" class="chatList__msg--img"
+                v-if="item.messageType=='image' && item.message.path"
+                :preview-src-list="[define.comUrl+item.message.path]" :z-index="10000">
               </el-image>
-              <audio class="chatList__msg--audio" controls
-                :src="define.comUrl+'/api/file/Image/IM/'+item.message.path"
+              <audio class="chatList__msg--audio" controls :src="define.comUrl+item.message.path"
                 v-if="item.messageType=='voice' && item.message.path"
-                @click="handleEvent('voice',define.comUrl+'/api/file/Image/IM/'+item.message.path)"></audio>
+                @click="handleEvent('voice',define.comUrl+item.message.path)"></audio>
               <video :src="item.message" controls class="chatList__msg--video"
                 v-if="item.messageType=='video'" @click="handleEvent('video',item.message)"></video>
             </div>
@@ -92,15 +90,13 @@
               <div class="chatList-text">
                 <div class="chatList-arrow"></div>
                 <span v-if="item.messageType=='text'" v-html="item.message"></span>
-                <el-image :src="define.comUrl+'/api/file/Image/IM/'+item.message.path"
-                  class="chatList__msg--img" v-if="item.messageType=='image' && item.message.path"
-                  :preview-src-list="[define.comUrl+'/api/file/Image/IM/'+item.message.path]"
-                  :z-index="10000">
+                <el-image :src="define.comUrl+item.message.path" class="chatList__msg--img"
+                  v-if="item.messageType=='image' && item.message.path"
+                  :preview-src-list="[define.comUrl+item.message.path]" :z-index="10000">
                 </el-image>
-                <audio class="chatList__msg--audio" controls
-                  :src="define.comUrl+'/api/file/Image/IM/' + item.message.path"
+                <audio class="chatList__msg--audio" controls :src="define.comUrl+item.message.path"
                   v-if="item.messageType=='voice' && item.message.path"
-                  @click="handleEvent('voice',define.comUrl+'/api/file/Image/IM/'+item.message.path)"></audio>
+                  @click="handleEvent('voice',define.comUrl+item.message.path)"></audio>
                 <video :src="item.message" controls class="chatList__msg--video"
                   v-if="item.messageType=='video'"
                   @click="handleEvent('video',item.message)"></video>
