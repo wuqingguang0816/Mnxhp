@@ -36,7 +36,7 @@
         <div class="select-line-icon option-drag">
           <i class="el-icon-s-operation" />
         </div>
-        <el-input v-model="item.label" placeholder="字段名称" size="small" />
+        <el-input v-model="item.label" placeholder="列名" size="small" />
         <el-input v-model="item.value" placeholder="字段" size="small" />
         <div class="close-btn select-line-icon" @click="activeData.columnOptions.splice(index, 1)">
           <i class="el-icon-remove-outline" />
