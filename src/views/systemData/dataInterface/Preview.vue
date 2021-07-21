@@ -41,7 +41,7 @@ export default {
 
       this.responseData = ''
       this.$nextTick(() => {
-        this.title = `接口地址：${this.define.comUrl}/api/DataInterface/${id}/Actions/Response`
+        this.title = `接口地址：${this.define.comUrl}/api/system/DataInterface/${id}/Actions/Response`
         // 获取数据
         previewDataInterface(this.id).then(res => {
           this.responseData = JSON.stringify(res, null, 4)
