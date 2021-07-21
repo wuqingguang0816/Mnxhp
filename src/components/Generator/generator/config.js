@@ -859,6 +859,7 @@ export const layoutComponents = [{
       dragDisabled: false,
       children: [],
     },
+    header: '',
     shadow: 'always'
   },
   {

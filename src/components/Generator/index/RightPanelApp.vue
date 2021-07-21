@@ -273,6 +273,11 @@
                 </el-button>
               </div>
             </template>
+            <template v-if="activeData.__config__.jnpfKey==='card'">
+              <el-form-item label="卡片标题">
+                <el-input v-model="activeData.header" placeholder="请输入卡片标题" />
+              </el-form-item>
+            </template>
           </template>
         </el-form>
         <!-- 表单属性 -->

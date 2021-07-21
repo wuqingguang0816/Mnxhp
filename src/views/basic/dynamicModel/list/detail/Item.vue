@@ -78,7 +78,7 @@
     </template>
     <template v-else>
       <template v-if="item.__config__.jnpfKey==='card'">
-        <el-card :shadow="item.shadow" class="mb-20">
+        <el-card :shadow="item.shadow" :header="item.header" class="mb-20">
           <Item v-for="(childItem, childIndex) in item.__config__.children" :key="childIndex"
             :item="childItem" v-bind="$props" v-on="$listeners" />
         </el-card>

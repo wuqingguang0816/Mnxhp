@@ -143,6 +143,9 @@
                 <el-slider v-model="activeData.__config__.span" :max="24" :min="6" show-stops
                   :step="2" show-tooltip />
               </el-form-item>
+              <el-form-item label="卡片标题" label-width="76px">
+                <el-input v-model="activeData.header" placeholder="请输入卡片标题" />
+              </el-form-item>
               <el-form-item label="显示阴影" label-width="76px">
                 <el-radio-group v-model="activeData.shadow" size="small">
                   <el-radio-button label="always">一直显示</el-radio-button>

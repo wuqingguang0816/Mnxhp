@@ -33,7 +33,7 @@ const layouts = {
     if (scheme.__config__.jnpfKey === 'card') {
       return (
         <el-col span={scheme.__config__.span} class="item-card">
-          <el-card shadow={scheme.shadow} class="mb-20">
+          <el-card shadow={scheme.shadow} header={scheme.header} class="mb-20">
             {child}
           </el-card>
         </el-col>

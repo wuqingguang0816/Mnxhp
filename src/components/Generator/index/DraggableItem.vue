@@ -107,7 +107,7 @@ const layouts = {
         <el-col span={element.__config__.span}>
           <el-row gutter={element.__config__.gutter} class={className}
             nativeOnClick={event => { activeItem(element); event.stopPropagation() }}>
-            <el-card shadow={element.shadow}>
+            <el-card shadow={element.shadow} header={element.header}>
               <el-col>
                 <el-row gutter={element.__config__.gutter} class={className}
                   nativeOnClick={event => { activeItem(element); event.stopPropagation() }}>
