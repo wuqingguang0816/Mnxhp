@@ -131,7 +131,7 @@
         <el-form-item label="数据传递">
           <div @click="openRuleBox">
             <el-input :value="subFlowForm.assignList.length?'已设置':''" placeholder="请设置数据传递规则"
-              suffix-icon="el-icon-arrow-down" readonly />
+              suffix-icon="el-icon-arrow-down" readonly class="hand" />
           </div>
         </el-form-item>
         <el-form-item label="通知设置">
@@ -1129,6 +1129,9 @@ export default {
 }
 </style>
 <style lang="scss" scoped>
+.hand >>> input {
+  cursor: pointer;
+}
 .tips p {
   line-height: 24px;
 }
