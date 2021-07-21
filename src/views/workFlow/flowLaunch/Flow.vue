@@ -40,7 +40,7 @@ export default {
       this.$emit('close')
     },
     init(flowEngineList) {
-      this.flowEngineList = flowEngineList.filter(o => o.children.length)
+      this.flowEngineList = flowEngineList.filter(o => o.children && Array.isArray(o.children) && o.children.length)
     },
     jump(item) {
       if (!item.enCode) {
