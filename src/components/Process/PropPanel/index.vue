@@ -548,7 +548,7 @@ export default {
       initiateTypeOptions: ['指定成员', '部门主管', '发起者主管', '发起者本人'],
       assigneeTypeOptions: [
         {
-          label: '指定人',
+          label: '指定成员',
           value: 6
         },
         {
@@ -556,7 +556,7 @@ export default {
           value: 1
         },
         {
-          label: '发起者',
+          label: '发起者本人',
           value: 3
         },
         {
