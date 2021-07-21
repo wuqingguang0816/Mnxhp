@@ -27,9 +27,10 @@
                 :preview-src-list="[define.comUrl +'/api/file/Image/IM/'+item.message.path]"
                 :z-index="10000">
               </el-image>
-              <audio class="chatList__msg--audio" controls :src="define.comUrl+item.message.path"
+              <audio class="chatList__msg--audio" controls
+                :src="define.comUrl+'/api/file/Image/IM/'+item.message.path"
                 v-if="item.messageType=='voice' && item.message.path"
-                @click="handleEvent('voice',define.comUrl+item.message.path)"></audio>
+                @click="handleEvent('voice',define.comUrl+'/api/file/Image/IM/'+item.message.path)"></audio>
               <video :src="item.message" controls class="chatList__msg--video"
                 v-if="item.messageType=='video'" @click="handleEvent('video',item.message)"></video>
             </div>
@@ -95,9 +96,9 @@
                   :z-index="10000">
                 </el-image>
                 <audio class="chatList__msg--audio" controls
-                  :src="define.comUrl + item.message.path"
+                  :src="define.comUrl+'/api/file/Image/IM/' + item.message.path"
                   v-if="item.messageType=='voice' && item.message.path"
-                  @click="handleEvent('voice',define.comUrl+item.message.path)"></audio>
+                  @click="handleEvent('voice',define.comUrl+'/api/file/Image/IM/'+item.message.path)"></audio>
                 <video :src="item.message" controls class="chatList__msg--video"
                   v-if="item.messageType=='video'"
                   @click="handleEvent('video',item.message)"></video>
