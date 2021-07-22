@@ -20,14 +20,12 @@
         <div class="JNPF-common-head">
           <div v-if="isPreview || !columnData.useBtnPermission">
             <el-button :type="i==0?'primary':'text'" :icon="item.icon"
-              @click="headBtnsHandel(item.value)" v-for="(item, i) in columnData.btnsList"
-              :class="{'JNPF-table-delBtn':item.value=='batchRemove' && i!=0 }" :key="i">
+              @click="headBtnsHandel(item.value)" v-for="(item, i) in columnData.btnsList" :key="i">
               {{item.label}}</el-button>
           </div>
           <div v-else>
             <el-button :type="i==0?'primary':'text'" :icon="item.icon" v-has="'btn_'+item.value"
-              @click="headBtnsHandel(item.value)" v-for="(item, i) in columnData.btnsList"
-              :class="{'JNPF-table-delBtn':item.value=='batchRemove' && i!=0 }" :key="i">
+              @click="headBtnsHandel(item.value)" v-for="(item, i) in columnData.btnsList" :key="i">
               {{item.label}}</el-button>
           </div>
           <div class="JNPF-common-head-right">
