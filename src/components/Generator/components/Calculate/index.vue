@@ -46,7 +46,7 @@ export default {
           if (typeof this.rowIndex === 'number') {
             return this.rootFormData[tabelVModel][this.rowIndex][cmpVModel] || 0
           } else {
-            return this.rootFormData[tabelVModel].reduce((sum, c) => (c[cmpVModel] || 0) + sum, 0)
+            return this.rootFormData[tabelVModel].reduce((sum, c) => (c[cmpVModel] ? Number(c[cmpVModel]) : 0) + sum, 0)
           }
         }
         return this.rootFormData[vModel] || 0
