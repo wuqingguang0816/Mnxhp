@@ -45,6 +45,13 @@ export function Copy(id) {
     method: 'post'
   })
 }
+// 导出流程表单
+export function exportData(id) {
+  return request({
+    url: `/api/workflow/Engine/FlowEngine/${id}/Actions/ExportData`,
+    method: 'GET'
+  })
+}
 // 发布流程引擎
 export function Release(id) {
   return request({
