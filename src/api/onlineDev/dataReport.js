@@ -1,38 +1,25 @@
 import { reportServer } from '@/utils/define'
-import axios from 'axios'
-import { Message } from 'element-ui'
-import { getToken } from '@/utils/auth'
-
-axios.defaults.baseURL = reportServer
-axios.defaults.headers['Authorization'] = getToken()
-
-// 请求过滤
-const checkStatus = (response) => {
-  let responseData = { ...response.data }
-  if(response.status === 200) {
-    if(responseData.code === 200) {
-      return responseData
-    } else {
-      Message({ message: responseData.msg || '请求出错，请重试', type: 'error', duration: 1500 })
-      return Promise.reject(new Error(responseData.msg || 'Error'))
-    }
-  } else{
-    Message({ message: responseData.msg || '请求出错，请重试', type: 'error', duration: 1500 })
-    return Promise.reject(new Error(responseData.msg || 'Error'))
-  }
-}
+import request from '@/utils/request'
 
 // 获取报表列表
-export const getDataReportList = keyword => {
-  return axios.get(`/api/datareport/Data`, { params:  keyword }).then(checkStatus)
+export const getDataReportList = data => {
+  return request({
+    url: reportServer + '/api/datareport/Data',
+    method: 'GET',
+    data
+  })
 }
-
 // 获取报表下拉列表
 export const getDataReportSelector = () => {
-  return axios.get(`/api/datareport/Data/Selector`).then(checkStatus)
+  return request({
+    url: reportServer + '/api/datareport/Data/Selector',
+    method: 'GET'
+  })
 }
-
 // 删除报表
 export const delDataReport = id => {
-  return axios.delete(`/api/datareport/Data/${id}`).then(checkStatus)
+  return request({
+    url: `${reportServer}/api/datareport/Data/${id}`,
+    method: 'delete'
+  })
 }
