@@ -86,8 +86,9 @@ export default {
             } else {
               isDisabled = false
             }
+            isDisabled = item.disabled ? item.disabled : isDisabled
+            noShow = item.__config__.noShow ? item.__config__.noShow : noShow
             if (this.setting.readonly) isDisabled = true
-            if (this.setting.opType == 4) noShow = false
             this.$set(item, 'disabled', isDisabled)
             this.$set(item.__config__, 'noShow', noShow)
           }
