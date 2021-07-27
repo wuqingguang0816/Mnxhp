@@ -39,16 +39,9 @@
         <JNPF-table v-loading="listLoading" :data="list" row-key="id" default-expand-all
           :tree-props="{children: 'children', hasChildren: ''}" @sort-change='sortChange'
           :has-c="hasBatchBtn" @selection-change="handleSelectionChange" v-if="refreshTable">
-          <template v-if="isPreview || !columnData.useColumnPermission">
-            <el-table-column :prop="item.prop" :label="item.label" :align="item.align"
-              :width="item.width" v-for="(item, i) in columnData.columnList" :key="i"
-              :sortable="item.sortable?'custom':item.sortable" />
-          </template>
-          <template v-else>
-            <el-table-column :prop="item.prop" :label="item.label" :align="item.align"
-              :width="item.width" v-for="(item, i) in columnList" :key="i"
-              :sortable="item.sortable?'custom':item.sortable" />
-          </template>
+          <el-table-column :prop="item.prop" :label="item.label" :align="item.align"
+            :width="item.width" v-for="(item, i) in columnList" :key="i"
+            :sortable="item.sortable?'custom':item.sortable" />
           <el-table-column prop="flowState" label="状态" width="100" v-if="config.webType == 3">
             <template slot-scope="scope" v-if="!scope.row.top">
               <el-tag v-if="scope.row.flowState==1">等待审核</el-tag>
@@ -186,11 +179,11 @@ export default {
         this.refreshTable = true
       })
       this.formData = JSON.parse(this.config.formData)
+      this.getColumnList()
       if (this.isPreview) return
       this.listQuery.pageSize = this.columnData.pageSize
       this.listQuery.sort = this.columnData.sort
       this.listQuery.sidx = this.columnData.defaultSidx
-      this.getColumnList()
       if (this.columnData.type === 3 || !this.columnData.hasPage) this.listQuery.pageSize = 10000
       if (this.columnData.type === 2) {
         this.treeProps.value = this.columnData.treePropsValue || 'id'
@@ -243,20 +236,24 @@ export default {
       }
     },
     getColumnList() {
-      const permissionList = this.$store.getters.permissionList
-      const modelId = this.$route.meta.modelId
-      const list = permissionList.filter(o => o.modelId === modelId)
-      const columnList = list[0] && list[0].column ? list[0].column : []
-      let realList = []
-      for (let i = 0; i < columnList.length; i++) {
-        inner: for (let j = 0; j < this.columnData.columnList.length; j++) {
-          if (columnList[i].enCode === this.columnData.columnList[j].prop) {
-            realList.push(this.columnData.columnList[j])
-            break inner
+      if (this.isPreview || !this.columnData.useColumnPermission) {
+        this.columnList = this.columnData.columnList
+      } else {
+        const permissionList = this.$store.getters.permissionList
+        const modelId = this.$route.meta.modelId
+        const list = permissionList.filter(o => o.modelId === modelId)
+        const columnList = list[0] && list[0].column ? list[0].column : []
+        let realList = []
+        for (let i = 0; i < columnList.length; i++) {
+          inner: for (let j = 0; j < this.columnData.columnList.length; j++) {
+            if (columnList[i].enCode === this.columnData.columnList[j].prop) {
+              realList.push(this.columnData.columnList[j])
+              break inner
+            }
           }
         }
+        this.columnList = realList
       }
-      this.columnList = realList
     },
     handleNodeClick(data) {
       if (this.treeActiveId == data[this.treeProps.value]) return
@@ -309,7 +306,7 @@ export default {
       if (key == 'download') {
         this.exportBoxVisible = true
         this.$nextTick(() => {
-          this.$refs.ExportBox.init(this.columnData.columnList)
+          this.$refs.ExportBox.init(this.columnList)
         })
       }
       if (this.isPreview) return
