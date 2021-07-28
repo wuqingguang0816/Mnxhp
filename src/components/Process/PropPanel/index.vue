@@ -218,103 +218,106 @@
     <section class="approver-pane" v-if="value && isApproverNode()">
       <el-tabs v-model="activeName" style="height:100%;">
         <el-tab-pane label="基础设置" name="config">
-          <el-form label-position="top" :model="approverForm" class="pd-10">
-            <el-form-item label="审批设置">
-              <el-radio-group v-model="approverForm.assigneeType" @change="resetOrgColl">
-                <el-radio v-for="item in assigneeTypeOptions" :label="item.value" :key="item.value"
-                  :disabled="item.disabled" class="radio-item">{{item.label}}
-                </el-radio>
-              </el-radio-group>
-              <div v-if="approverForm.assigneeType === 1" class="option-box-tip">
-                发起者主管将作为审批人处理审批单</div>
-              <div v-if="approverForm.assigneeType === 2" class="option-box-tip">
-                发起者的部门主管将作为审批人处理审批单</div>
-              <div v-if="approverForm.assigneeType === 3" class="option-box-tip">
-                发起者自己将作为审批人处理审批单</div>
-              <div v-if="approverForm.assigneeType === 4" class="option-box-tip">
-                选择流程表单字段的值作为审批人</div>
-              <div v-if="approverForm.assigneeType === 5" class="option-box-tip">
-                设置审批人为审批流程中某个环节的审批人</div>
-              <div v-if="approverForm.assigneeType === 6" class="option-box-tip">
-                指定审批人处理审批单</div>
-              <div v-if="approverForm.assigneeType === 9" class="option-box-tip">
-                通过第三方调用从目标服务中获取审批人</div>
-              <el-alert type="warning" :closable="false" v-if="approverForm.assigneeType === 9">
-                <div slot="title" class="tips">
-                  <p>请求方式：GET</p>
-                  <p>请求参数：taskId、taskNodeId</p>
-                </div>
-              </el-alert>
-            </el-form-item>
-            <el-form-item label="发起者的" v-if="approverForm.assigneeType === 1">
-              <el-select v-model="approverForm.managerLevel">
-                <el-option v-for="item in 10" :key="item" :label="item===1?'直接主管':'第'+item+'级主管'"
-                  :value="item">
-                </el-option>
-              </el-select>
-            </el-form-item>
-            <el-form-item label="表单字段" v-if="approverForm.assigneeType === 4">
-              <el-select v-model="approverForm.formField" placeholder="请选择字段">
-                <el-option v-for="item in usedFormItems" :key="item.__vModel__"
-                  :label="item.__config__.label" :value="item.__vModel__">
-                </el-option>
-              </el-select>
-            </el-form-item>
-            <el-form-item label="审批节点" v-if="approverForm.assigneeType === 5">
-              <el-select v-model="approverForm.nodeId" placeholder="请选择节点">
-                <el-option v-for="item in nodeOptions" :key="item.nodeId"
-                  :label="item.properties.title" :value="item.nodeId">
-                </el-option>
-              </el-select>
-            </el-form-item>
-            <el-form-item label="请求路径" v-if="approverForm.assigneeType === 9">
-              <el-input v-model="approverForm.getUserUrl" placeholder="请输入接口路径"></el-input>
-            </el-form-item>
-            <el-form-item v-if="approverForm.assigneeType === 6">
-              <org-select ref="approver-role-org" type="role" v-model="approverForm.approverRole"
-                title="添加角色" class="mb-10" buttonType="button" />
-              <org-select ref="approver-position-org" buttonType="button"
-                v-model="approverForm.approverPos" title="添加岗位" type="position"
-                @change="onOrgChange" class="mb-10" />
-              <org-select ref="approver-user-org" buttonType="button"
-                v-model="approverForm.approvers" title="添加用户" @change="onOrgChange" />
-            </el-form-item>
-            <el-form-item label="审批方式">
-              <el-radio v-model="approverForm.counterSign" :label="0">
-                或签（一名审批人同意或拒绝即可）</el-radio>
-              <br>
-              <el-radio v-model="approverForm.counterSign" :label="1">
-                会签（无序会签，当审批达到会签比例时，则该审批通过）</el-radio>
-            </el-form-item>
-            <el-form-item label="会签比例" v-if="approverForm.counterSign">
-              <el-select v-model="approverForm.countersignRatio">
-                <el-option v-for="item in 10" :key="item*10" :label="item*10+'%'" :value="item*10">
-                </el-option>
-              </el-select>
-            </el-form-item>
-            <el-form-item label="加签设置">
-              <el-checkbox v-model="approverForm.hasFreeApprover">允许加签</el-checkbox>
-            </el-form-item>
-            <el-form-item label="进度设置">
-              <el-select v-model="approverForm.progress" placeholder="请选择">
-                <el-option v-for="item in progressOptions" :key="item" :label="item+'%'"
-                  :value="item">
-                </el-option>
-              </el-select>
-            </el-form-item>
-            <el-form-item label="抄送设置">
-              <org-select ref="approver-copy-role-org" type="role"
-                v-model="approverForm.circulateRole" title="添加角色" class="mb-10"
-                buttonType="button" />
-              <org-select ref="approver-copy-position-org" buttonType="button"
-                v-model="approverForm.circulatePosition" title="添加岗位" type="position"
-                @change="onOrgChange" class="mb-10" />
-              <org-select ref="approver-copy-user-org" buttonType="button"
-                v-model="approverForm.circulateUser" title="添加用户" @change="onOrgChange"
-                class="mb-10" />
-              <el-checkbox v-model="approverForm.isCustomCopy">自定义抄送人</el-checkbox>
-            </el-form-item>
-          </el-form>
+          <el-scrollbar class="config-scrollbar">
+            <el-form label-position="top" :model="approverForm" class="pd-10">
+              <el-form-item label="审批设置">
+                <el-radio-group v-model="approverForm.assigneeType" @change="resetOrgColl">
+                  <el-radio v-for="item in assigneeTypeOptions" :label="item.value"
+                    :key="item.value" :disabled="item.disabled" class="radio-item">{{item.label}}
+                  </el-radio>
+                </el-radio-group>
+                <div v-if="approverForm.assigneeType === 1" class="option-box-tip">
+                  发起者主管将作为审批人处理审批单</div>
+                <div v-if="approverForm.assigneeType === 2" class="option-box-tip">
+                  发起者的部门主管将作为审批人处理审批单</div>
+                <div v-if="approverForm.assigneeType === 3" class="option-box-tip">
+                  发起者自己将作为审批人处理审批单</div>
+                <div v-if="approverForm.assigneeType === 4" class="option-box-tip">
+                  选择流程表单字段的值作为审批人</div>
+                <div v-if="approverForm.assigneeType === 5" class="option-box-tip">
+                  设置审批人为审批流程中某个环节的审批人</div>
+                <div v-if="approverForm.assigneeType === 6" class="option-box-tip">
+                  指定审批人处理审批单</div>
+                <div v-if="approverForm.assigneeType === 9" class="option-box-tip">
+                  通过第三方调用从目标服务中获取审批人</div>
+                <el-alert type="warning" :closable="false" v-if="approverForm.assigneeType === 9">
+                  <div slot="title" class="tips">
+                    <p>请求方式：GET</p>
+                    <p>请求参数：taskId、taskNodeId</p>
+                  </div>
+                </el-alert>
+              </el-form-item>
+              <el-form-item label="发起者的" v-if="approverForm.assigneeType === 1">
+                <el-select v-model="approverForm.managerLevel">
+                  <el-option v-for="item in 10" :key="item" :label="item===1?'直接主管':'第'+item+'级主管'"
+                    :value="item">
+                  </el-option>
+                </el-select>
+              </el-form-item>
+              <el-form-item label="表单字段" v-if="approverForm.assigneeType === 4">
+                <el-select v-model="approverForm.formField" placeholder="请选择字段">
+                  <el-option v-for="item in usedFormItems" :key="item.__vModel__"
+                    :label="item.__config__.label" :value="item.__vModel__">
+                  </el-option>
+                </el-select>
+              </el-form-item>
+              <el-form-item label="审批节点" v-if="approverForm.assigneeType === 5">
+                <el-select v-model="approverForm.nodeId" placeholder="请选择节点">
+                  <el-option v-for="item in nodeOptions" :key="item.nodeId"
+                    :label="item.properties.title" :value="item.nodeId">
+                  </el-option>
+                </el-select>
+              </el-form-item>
+              <el-form-item label="请求路径" v-if="approverForm.assigneeType === 9">
+                <el-input v-model="approverForm.getUserUrl" placeholder="请输入接口路径"></el-input>
+              </el-form-item>
+              <el-form-item v-if="approverForm.assigneeType === 6">
+                <org-select ref="approver-role-org" type="role" v-model="approverForm.approverRole"
+                  title="添加角色" class="mb-10" buttonType="button" />
+                <org-select ref="approver-position-org" buttonType="button"
+                  v-model="approverForm.approverPos" title="添加岗位" type="position"
+                  @change="onOrgChange" class="mb-10" />
+                <org-select ref="approver-user-org" buttonType="button"
+                  v-model="approverForm.approvers" title="添加用户" @change="onOrgChange" />
+              </el-form-item>
+              <el-form-item label="审批方式">
+                <el-radio v-model="approverForm.counterSign" :label="0">
+                  或签（一名审批人同意或拒绝即可）</el-radio>
+                <br>
+                <el-radio v-model="approverForm.counterSign" :label="1">
+                  会签（无序会签，当审批达到会签比例时，则该审批通过）</el-radio>
+              </el-form-item>
+              <el-form-item label="会签比例" v-if="approverForm.counterSign">
+                <el-select v-model="approverForm.countersignRatio">
+                  <el-option v-for="item in 10" :key="item*10" :label="item*10+'%'"
+                    :value="item*10">
+                  </el-option>
+                </el-select>
+              </el-form-item>
+              <el-form-item label="加签设置">
+                <el-checkbox v-model="approverForm.hasFreeApprover">允许加签</el-checkbox>
+              </el-form-item>
+              <el-form-item label="进度设置">
+                <el-select v-model="approverForm.progress" placeholder="请选择">
+                  <el-option v-for="item in progressOptions" :key="item" :label="item+'%'"
+                    :value="item">
+                  </el-option>
+                </el-select>
+              </el-form-item>
+              <el-form-item label="抄送设置">
+                <org-select ref="approver-copy-role-org" type="role"
+                  v-model="approverForm.circulateRole" title="添加角色" class="mb-10"
+                  buttonType="button" />
+                <org-select ref="approver-copy-position-org" buttonType="button"
+                  v-model="approverForm.circulatePosition" title="添加岗位" type="position"
+                  @change="onOrgChange" class="mb-10" />
+                <org-select ref="approver-copy-user-org" buttonType="button"
+                  v-model="approverForm.circulateUser" title="添加用户" @change="onOrgChange"
+                  class="mb-10" />
+                <el-checkbox v-model="approverForm.isCustomCopy">自定义抄送人</el-checkbox>
+              </el-form-item>
+            </el-form>
+          </el-scrollbar>
         </el-tab-pane>
         <el-tab-pane label="高级设置" name="senior">
           <el-form label-position="top" class="pd-10">
@@ -1228,8 +1231,9 @@ export default {
     height: calc(100% - 40px);
     .el-tab-pane {
       height: 100%;
-      overflow-x: hidden;
-      overflow-y: auto;
+      .config-scrollbar {
+        height: 100%;
+      }
     }
   }
   .per-cell {
