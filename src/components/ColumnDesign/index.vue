@@ -48,7 +48,8 @@
           </el-table-column>
           <el-table-column prop="width" label="宽度">
             <template slot-scope="scope">
-              <el-input v-model.number="scope.row.width" type="number" placeholder="宽度" />
+              <el-input-number v-model="scope.row.width" placeholder="宽度" :min="0" :precision="0"
+                controls-position="right" style="width:100%" />
             </template>
           </el-table-column>
         </el-table>

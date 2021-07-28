@@ -12,15 +12,15 @@
           <template v-if="activeData.__config__">
             <template v-if="$store.getters.hasTable">
               <template v-if="activeData.__config__.jnpfKey==='table'">
-                <el-form-item v-if="activeData.__vModel__!==undefined" label="字段名">
-                  <el-input v-model="activeData.__vModel__" placeholder="请输入字段名（v-model）"
+                <el-form-item v-if="activeData.__vModel__!==undefined" label="控件字段">
+                  <el-input v-model="activeData.__vModel__" placeholder="请输入控件字段（v-model）"
                     disabled />
                 </el-form-item>
               </template>
               <template v-else>
                 <template v-if="!activeData.__config__.isSubTable">
-                  <el-form-item v-if="activeData.__vModel__!==undefined" label="字段名">
-                    <el-select v-model="activeData.__vModel__" placeholder="请选择字段名（v-model）"
+                  <el-form-item v-if="activeData.__vModel__!==undefined" label="控件字段">
+                    <el-select v-model="activeData.__vModel__" placeholder="请选择控件字段（v-model）"
                       clearable @change="fieldChange">
                       <el-option v-for="item in formItemList" :key="item.field" :value="item.field"
                         :label="item.fieldName?item.field+'('+item.fieldName+')':item.field">
@@ -29,8 +29,8 @@
                   </el-form-item>
                 </template>
                 <template v-if="activeData.__config__.isSubTable && subTable.length">
-                  <el-form-item v-if="activeData.__vModel__!==undefined" label="字段名">
-                    <el-select v-model="activeData.__vModel__" placeholder="请选择字段名（v-model）"
+                  <el-form-item v-if="activeData.__vModel__!==undefined" label="控件字段">
+                    <el-select v-model="activeData.__vModel__" placeholder="请选择控件字段（v-model）"
                       clearable @change="fieldChange1">
                       <el-option
                         v-for="item in getSubTalebFiled(activeData.__config__.relationTable)"
@@ -43,8 +43,8 @@
               </template>
             </template>
             <template v-else>
-              <el-form-item v-if="activeData.__vModel__!==undefined" label="字段名">
-                <el-input v-model="activeData.__vModel__" placeholder="请输入字段名（v-model）" disabled />
+              <el-form-item v-if="activeData.__vModel__!==undefined" label="控件字段">
+                <el-input v-model="activeData.__vModel__" placeholder="请输入控件字段（v-model）" disabled />
               </el-form-item>
             </template>
             <JNPFComInput v-if="activeData.__config__.jnpfKey==='comInput'"
@@ -101,16 +101,16 @@
             <PopupSelect v-if="activeData.__config__.jnpfKey==='popupSelect'"
               :active-data="activeData" />
             <template v-if="isSystem">
-              <el-form-item label="标题名">
-                <el-input v-model="activeData.__config__.label" placeholder="请输入标题名" />
+              <el-form-item label="控件标题">
+                <el-input v-model="activeData.__config__.label" placeholder="请输入控件标题" />
               </el-form-item>
               <el-form-item label="控件栅格">
                 <el-slider v-model="activeData.__config__.span" :max="24" :min="6" show-stops
                   :step="2" show-tooltip />
               </el-form-item>
               <el-form-item label="标题宽度">
-                <el-input v-model.number="activeData.__config__.labelWidth" type="number"
-                  placeholder="请输入标题宽度" />
+                <el-input-number v-model="activeData.__config__.labelWidth" placeholder="标题宽度"
+                  :min="0" :precision="0" controls-position="right" />
               </el-form-item>
               <el-form-item label="是否隐藏" v-if="activeData.__config__.jnpfKey !=='billRule'">
                 <el-switch v-model="activeData.__config__.noShow" />
@@ -128,8 +128,8 @@
                   </el-option>
                 </el-select>
               </el-form-item>
-              <el-form-item label="标题名">
-                <el-input v-model="activeData.__config__.label" placeholder="请输入标题名" />
+              <el-form-item label="控件标题">
+                <el-input v-model="activeData.__config__.label" placeholder="请输入控件标题" />
               </el-form-item>
               <el-form-item label="显示标题">
                 <el-switch v-model="activeData.__config__.showTitle" />
@@ -191,7 +191,8 @@
             </el-radio-group>
           </el-form-item>
           <el-form-item label="标题宽度">
-            <el-input v-model.number="formConf.labelWidth" type="number" placeholder="请输入标题宽度" />
+            <el-input-number v-model="formConf.labelWidth" :min="0" placeholder="标题宽度"
+              controls-position="right" />
           </el-form-item>
           <el-form-item label="栅格间隔">
             <el-input-number v-model="formConf.gutter" :min="0" placeholder="栅格间隔"

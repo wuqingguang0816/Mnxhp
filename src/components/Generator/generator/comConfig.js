@@ -43,7 +43,7 @@ const webPeculiarList = [{
     __config__: {
       jnpfKey: 'relationForm',
       label: '关联表单',
-      labelWidth: null,
+      labelWidth: undefined,
       showLabel: true,
       tag: 'relationForm',
       tagIcon: 'icon-ym icon-ym-generator-menu',
@@ -58,6 +58,7 @@ const webPeculiarList = [{
     placeholder: '请选择',
     flowId: '',
     relationField: '',
+    columnOptions: [],
     clearable: true,
     filterable: false,
     disabled: false
@@ -66,7 +67,7 @@ const webPeculiarList = [{
     __config__: {
       jnpfKey: 'relationFormAttr',
       label: '关联表单属性',
-      labelWidth: null,
+      labelWidth: undefined,
       showLabel: true,
       tag: 'relationFormAttr',
       tagIcon: 'icon-ym icon-ym-generator-nature',
@@ -83,7 +84,7 @@ const webPeculiarList = [{
     __config__: {
       jnpfKey: 'calculate',
       label: '计算公式',
-      labelWidth: null,
+      labelWidth: undefined,
       showLabel: true,
       required: false,
       tag: 'calculate',
@@ -100,7 +101,7 @@ const webPeculiarList = [{
     __config__: {
       jnpfKey: 'popupSelect',
       label: '弹窗选择',
-      labelWidth: null,
+      labelWidth: undefined,
       showLabel: true,
       required: false,
       tag: 'popupSelect',
@@ -123,7 +124,7 @@ const flowPeculiarList = [{
     __config__: {
       jnpfKey: 'relationFlow',
       label: '关联流程表单',
-      labelWidth: null,
+      labelWidth: undefined,
       showLabel: true,
       tag: 'relationFlow',
       tagIcon: 'icon-ym icon-ym-generator-flow',
@@ -146,7 +147,7 @@ const flowPeculiarList = [{
     __config__: {
       jnpfKey: 'relationFlowAttr',
       label: '关联流程属性',
-      labelWidth: null,
+      labelWidth: undefined,
       showLabel: true,
       tag: 'relationFlowAttr',
       tagIcon: 'icon-ym icon-ym-generator-nature',

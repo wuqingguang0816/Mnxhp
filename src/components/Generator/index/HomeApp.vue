@@ -215,7 +215,7 @@ export default {
             const e = list[i]
             const config = e.__config__
             if (this.$store.getters.hasTable && config.layout === "colFormItem" && !noVModelList.includes(config.jnpfKey) && !e.__vModel__) {
-              reject({ msg: `请选择${config.label}的字段名`, target: 1 })
+              reject({ msg: `请选择${config.label}的控件字段`, target: 1 })
               break
             }
             if (config.jnpfKey === 'billRule') {
