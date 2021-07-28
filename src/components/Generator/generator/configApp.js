@@ -257,6 +257,7 @@ export const inputComponents = [{
       span: 24,
       dragDisabled: false
     },
+    type: 'date',
     placeholder: '请选择',
     disabled: false
   },

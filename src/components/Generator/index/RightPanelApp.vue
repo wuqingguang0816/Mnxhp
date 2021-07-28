@@ -226,6 +226,14 @@
                 </el-radio-group>
               </el-form-item>
             </template>
+            <template v-if="activeData.__config__.jnpfKey === 'date'">
+              <el-form-item label="时间类型">
+                <el-select v-model="activeData.type" placeholder="请选择时间类型">
+                  <el-option label="日(date)" value="date" />
+                  <el-option label="日期时间(datetime)" value="datetime" />
+                </el-select>
+              </el-form-item>
+            </template>
             <el-form-item v-if="activeData.__config__.rule !== undefined" label="选择规则">
               <BillRule v-model="activeData.__config__.rule" placeholder="选择规则" />
             </el-form-item>
