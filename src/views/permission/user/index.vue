@@ -60,7 +60,8 @@
           </el-table-column>
           <el-table-column prop="mobilePhone" label="手机" />
           <el-table-column prop="department" label="部门" />
-          <el-table-column prop="position" label="岗位" />
+          <el-table-column prop="creatorTime" label="创建时间" :formatter="jnpf.tableDateFormat"
+            width="120" />
           <el-table-column prop="sortCode" label="排序" width="70" align="center" />
           <el-table-column label="状态" width="70" align="center">
             <template slot-scope="scope">

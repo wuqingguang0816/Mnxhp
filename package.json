@@ -17,6 +17,7 @@
     "build:javaCloudTest": "cross-env NODE_ENV=production vue-cli-service build --mode javaCloudTest",
     "build:javaCloudRelease": "cross-env NODE_ENV=production vue-cli-service build --mode javaCloudRelease",
     "build:javaCloudTenantTest": "cross-env NODE_ENV=production vue-cli-service build --mode javaCloudTenantTest",
+    "build:dotNetTest": "cross-env NODE_ENV=production vue-cli-service build --mode dotNetTest",
     "preview": "node build/index.js --preview",
     "lint": "eslint --ext .js,.vue src",
     "test:unit": "jest --clearCache && vue-cli-service test:unit",

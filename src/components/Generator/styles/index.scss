@@ -46,6 +46,10 @@ textarea {
 .right-scrollbar {
   .el-scrollbar__view {
     padding: 10px;
+
+    .el-input-number {
+      width: 100%;
+    }
   }
 }
 

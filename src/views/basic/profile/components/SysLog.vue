@@ -143,6 +143,7 @@ export default {
       this.initData()
     },
     reset() {
+      this.keyword = ''
       this.list = []
       this.pickerVal = []
       this.startTime = ''

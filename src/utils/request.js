@@ -15,6 +15,7 @@ const service = axios.create({
 // request interceptor
 service.interceptors.request.use(
   config => {
+    if (config.url.indexOf('http') > -1) config.baseURL = ''
     // 部分接口timeout时间单独处理
     if (config.url.indexOf('SynThirdInfo') > -1 || config.url.indexOf('extend/Email/Receive') > -1 ||
       config.url.indexOf('Permission/Authority/Data') > -1 || config.url.indexOf('DataSync/Actions/Execute') > -1) {
