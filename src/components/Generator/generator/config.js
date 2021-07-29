@@ -849,7 +849,7 @@ export const layoutComponents = [{
   {
     __config__: {
       jnpfKey: 'card',
-      label: '卡片',
+      label: '卡片容器',
       showLabel: false,
       tag: 'el-card',
       tagIcon: 'icon-ym icon-ym-generator-card',
@@ -859,13 +859,13 @@ export const layoutComponents = [{
       dragDisabled: false,
       children: [],
     },
-    header: '',
+    header: '卡片容器',
     shadow: 'always'
   },
   {
     __config__: {
       jnpfKey: 'row',
-      label: '栅格布局',
+      label: '栅格容器',
       tagIcon: 'icon-ym icon-ym-generator-layout',
       layout: 'rowFormItem',
       span: '24',

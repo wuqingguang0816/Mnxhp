@@ -653,7 +653,7 @@ export const layoutComponents = [{
   {
     __config__: {
       jnpfKey: 'card',
-      label: '卡片',
+      label: '卡片容器',
       showLabel: false,
       tag: 'el-card',
       tagIcon: 'icon-ym icon-ym-generator-card',
@@ -662,7 +662,7 @@ export const layoutComponents = [{
       dragDisabled: false,
       children: []
     },
-    header: '',
+    header: '卡片容器',
     shadow: 'always'
   }
 ]
