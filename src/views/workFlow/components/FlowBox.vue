@@ -201,7 +201,7 @@ export default {
             this.$refs.form && this.$refs.form.init(data)
           })
         }, 500)
-      })
+      }).catch(() => { this.loading = false })
     },
     getBeforeInfo(data) {
       FlowBeforeInfo(data.id, { taskNodeId: data.taskNodeId }).then(res => {
@@ -257,7 +257,7 @@ export default {
             this.$refs.form && this.$refs.form.init(data)
           })
         }, 500)
-      })
+      }).catch(() => { this.loading = false })
     },
     eventLancher(eventType) {
       this.$refs.form && this.$refs.form.dataFormSubmit(eventType)
