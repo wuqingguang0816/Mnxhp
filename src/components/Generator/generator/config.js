@@ -47,6 +47,7 @@ export const inputComponents = [{
     'suffix-icon': '',
     maxlength: null,
     'show-word-limit': false,
+    'show-password': false,
     readonly: false,
     disabled: false
   },

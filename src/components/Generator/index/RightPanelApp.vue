@@ -234,6 +234,9 @@
                 </el-select>
               </el-form-item>
             </template>
+            <el-form-item label="是否密码" v-if="activeData['show-password'] !== undefined">
+              <el-switch v-model="activeData['show-password']" />
+            </el-form-item>
             <el-form-item v-if="activeData.__config__.rule !== undefined" label="选择规则">
               <BillRule v-model="activeData.__config__.rule" placeholder="选择规则" />
             </el-form-item>
