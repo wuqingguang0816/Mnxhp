@@ -28,11 +28,11 @@
         v-if="dataForm.dbType!=='DM8'&&dataForm.dbType!=='Oracle'">
         <el-input v-model="dataForm.serviceName" placeholder="库名">
           <el-button slot="append" @click="test" :loading="testLoad"
-            v-if="dataForm.dbType!=='KingBaseES'">测试连接</el-button>
+            v-if="dataForm.dbType!=='KingbaseES'">测试连接</el-button>
         </el-input>
       </el-form-item>
       <el-form-item label="表空间" prop="tableSpace"
-        v-if="dataForm.dbType==='DM8'||dataForm.dbType==='Oracle'||dataForm.dbType==='KingBaseES'">
+        v-if="dataForm.dbType==='DM8'||dataForm.dbType==='Oracle'||dataForm.dbType==='KingbaseES'">
         <el-input v-model="dataForm.tableSpace" placeholder="表空间">
           <el-button slot="append" @click="test" :loading="testLoad">测试连接</el-button>
         </el-input>
@@ -151,7 +151,7 @@ export default {
         case 'DM8':
           port = '5232'
           break;
-        case 'KingBaseES':
+        case 'KingbaseES':
           port = '54321'
           break;
         case 'PostgreSQL':
