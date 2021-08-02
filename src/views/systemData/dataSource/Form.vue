@@ -25,14 +25,14 @@
         <el-input v-model="dataForm.password" placeholder="密码" />
       </el-form-item>
       <el-form-item label="库名" prop="serviceName"
-        v-if="dataForm.dbType!=='DM'&&dataForm.dbType!=='Oracle'">
+        v-if="dataForm.dbType!=='DM8'&&dataForm.dbType!=='Oracle'">
         <el-input v-model="dataForm.serviceName" placeholder="库名">
           <el-button slot="append" @click="test" :loading="testLoad"
-            v-if="dataForm.dbType!=='KingBase'">测试连接</el-button>
+            v-if="dataForm.dbType!=='KingBaseES'">测试连接</el-button>
         </el-input>
       </el-form-item>
       <el-form-item label="表空间" prop="tableSpace"
-        v-if="dataForm.dbType==='DM'||dataForm.dbType==='Oracle'||dataForm.dbType==='KingBase'">
+        v-if="dataForm.dbType==='DM8'||dataForm.dbType==='Oracle'||dataForm.dbType==='KingBaseES'">
         <el-input v-model="dataForm.tableSpace" placeholder="表空间">
           <el-button slot="append" @click="test" :loading="testLoad">测试连接</el-button>
         </el-input>
@@ -139,17 +139,23 @@ export default {
     handleChange(val) {
       let port = ''
       switch (val) {
-        case 'SqlServer':
+        case 'SQLServer':
           port = '1433'
           break;
-        case 'MySql':
+        case 'MySQL':
           port = '3306'
           break;
         case 'Oracle':
           port = '1521'
           break;
-        case 'DM':
-          port = '5236'
+        case 'DM8':
+          port = '5232'
+          break;
+        case 'KingBaseES':
+          port = '54321'
+          break;
+        case 'PostgreSQL':
+          port = '5432'
           break;
         default:
           port = ''
