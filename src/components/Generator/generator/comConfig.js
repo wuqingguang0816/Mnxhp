@@ -33,7 +33,7 @@ const noColumnShowList = ['PsdInput', 'colorPicker', 'rate', 'slider', 'divider'
 // 不可以添加到搜索
 const noSearchList = [...noColumnShowList, 'switch', 'timeRange', 'dateRange', 'relationForm', 'relationFlow', 'popupSelect']
 // 搜索时控件为input
-const useInputList = ['comInput', 'textarea', 'JNPFText', 'billRule', 'createUser', 'modifyUser', 'currOrganize', 'currDept', 'currPosition', 'calculate']
+const useInputList = ['comInput', 'textarea', 'JNPFText', 'billRule']
 // 搜索时控件为日期选择器
 const useDateList = ['createTime', 'modifyTime']
 // 搜索时控件为下拉选择器

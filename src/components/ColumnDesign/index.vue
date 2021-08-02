@@ -208,7 +208,7 @@ const getSearchType = item => {
   const jnpfKey = item.__config__.jnpfKey
   // 等于-1  模糊-2  范围-3
   const fuzzyList = [...useInputList]
-  const RangeList = [...useDateList, 'time', 'date', 'numInput']
+  const RangeList = [...useDateList, 'time', 'date', 'numInput', 'calculate']
   if (RangeList.includes(jnpfKey)) return 3
   if (fuzzyList.includes(jnpfKey)) return 2
   return 1

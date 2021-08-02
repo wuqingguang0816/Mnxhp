@@ -135,6 +135,12 @@ $lighterBlue: #409EFF;
   background: #fff;
   border-radius: 4px;
   overflow: hidden;
+
+  .jnpf-editor-quill {
+    .ql-editor {
+      min-height: 100px !important;
+    }
+  }
 }
 
 .empty-info {

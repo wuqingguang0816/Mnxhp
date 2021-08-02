@@ -1,16 +1,14 @@
 <template>
-  <div class="test-form">
-    <el-dialog v-bind="$attrs" :close-on-click-modal="false" :modal-append-to-body="false"
-      append-to-body v-on="$listeners" @open="onOpen" @close="onClose"
-      class="JNPF-dialog JNPF-dialog_center" title="预览">
-      <parser :form-conf="formConf" @submit="sumbitForm" :key="key" ref="dynamicForm" />
-      <div slot="footer">
-        <el-button @click="close">{{formConf.cancelButtonText||'取 消'}}</el-button>
-        <el-button type="primary" @click="handelConfirm">{{formConf.confirmButtonText||'确 定'}}
-        </el-button>
-      </div>
-    </el-dialog>
-  </div>
+  <el-dialog v-bind="$attrs" :close-on-click-modal="false" :modal-append-to-body="false"
+    append-to-body v-on="$listeners" @open="onOpen" @close="onClose"
+    class="JNPF-dialog JNPF-dialog_center" title="预览" :width="formConf.generalWidth">
+    <parser :form-conf="formConf" @submit="sumbitForm" :key="key" ref="dynamicForm" />
+    <div slot="footer">
+      <el-button @click="close">{{formConf.cancelButtonText||'取 消'}}</el-button>
+      <el-button type="primary" @click="handelConfirm">{{formConf.confirmButtonText||'确 定'}}
+      </el-button>
+    </div>
+  </el-dialog>
 </template>
 
 <script>
@@ -58,11 +56,3 @@ export default {
   }
 }
 </script>
-
-<style lang="scss" scoped>
-.test-form {
-  margin: 15px auto;
-  width: 800px;
-  padding: 15px;
-}
-</style>
