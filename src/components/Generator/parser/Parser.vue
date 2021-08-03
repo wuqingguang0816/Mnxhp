@@ -24,6 +24,26 @@ const layouts = {
     }
   },
   rowFormItem(h, scheme) {
+    if (scheme.__config__.jnpfKey === 'tab') {
+      return (
+        <el-col span={scheme.__config__.span} class="mb-10">
+          <el-tabs type={scheme.type} tab-position={scheme['tab-position']} vModel={scheme.__config__.active}>
+            {
+              scheme.__config__.children.map((item, i) => {
+                let child = renderChildren.call(this, h, item)
+                return (
+                  <el-tab-pane key={item.name} label={item.title} name={item.name} >
+                    <el-row>
+                      {child}
+                    </el-row>
+                  </el-tab-pane>
+                )
+              })
+            }
+          </el-tabs>
+        </el-col>
+      )
+    }
     let child = renderChildren.apply(this, arguments)
     if (scheme.__config__.jnpfKey === 'table') {
       if (!scheme.__config__.noShow) this.tableRefs[scheme.__vModel__] = scheme

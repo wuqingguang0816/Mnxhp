@@ -878,4 +878,32 @@ export const layoutComponents = [{
     justify: 'start',
     align: 'top'
   },
+  {
+    __config__: {
+      jnpfKey: 'tab',
+      label: '标签页',
+      showLabel: false,
+      tag: 'el-tab',
+      tagIcon: 'icon-ym icon-ym-generator-label',
+      layout: 'rowFormItem',
+      span: '24',
+      dragDisabled: false,
+      children: [{
+        title: 'Tab 1',
+        name: '1',
+        __config__: {
+          children: []
+        }
+      }, {
+        title: 'Tab 2',
+        name: '2',
+        __config__: {
+          children: []
+        }
+      }],
+      active: '1'
+    },
+    type: '',
+    "tab-position": "top"
+  },
 ]
