@@ -234,4 +234,7 @@ export default {
   position: absolute;
   top: 40px;
 }
+.tab-tip {
+  top: 60px;
+}
 </style>
