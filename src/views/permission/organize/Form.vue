@@ -24,7 +24,7 @@
             </el-col>
             <el-col :sm="12" :xs="24">
               <el-form-item label="公司名称" prop="fullName">
-                <el-input v-model="dataForm.fullName" placeholder="输入名称" />
+                <el-input v-model="dataForm.fullName" placeholder="输入名称" maxlength="50" />
               </el-form-item>
             </el-col>
             <el-col :sm="12" :xs="24">
@@ -188,9 +188,7 @@ export default {
           { required: true, message: '上级公司不能为空', trigger: 'input' }
         ],
         fullName: [
-          { required: true, message: '请输入公司名称', trigger: 'blur' },
-          { validator: this.formValidate('fullName', '公司名称不能含有特殊符号'), trigger: 'blur' },
-          { max: 50, message: '公司名称最多为50个字符！', trigger: 'blur' }
+          { required: true, message: '请输入公司名称', trigger: 'blur' }
         ],
         enCode: [
           { required: true, message: '请输入公司编码', trigger: 'blur' },
