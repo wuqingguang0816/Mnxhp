@@ -242,7 +242,7 @@ export default {
               if (data.nodeId === nodeItem.nodeCode) {
                 if (nodeItem.type == 0) data.state = 'state-past'
                 if (nodeItem.type == 1) data.state = 'state-curr'
-                if (nodeItem.nodeType === 'approver' || nodeItem.nodeType === 'start') data.content = nodeItem.userName
+                if (nodeItem.nodeType === 'approver' || nodeItem.nodeType === 'start' || nodeItem.nodeType === 'subFlow') data.content = nodeItem.userName
                 return
               }
               if (data.conditionNodes && Array.isArray(data.conditionNodes)) loop(data.conditionNodes)
