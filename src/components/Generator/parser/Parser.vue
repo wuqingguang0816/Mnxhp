@@ -44,6 +44,26 @@ const layouts = {
         </el-col>
       )
     }
+    if (scheme.__config__.jnpfKey === 'collapse') {
+      return (
+        <el-col span={scheme.__config__.span} class="mb-20">
+          <el-collapse vModel={scheme.__config__.active} accordion={scheme.accordion}>
+            {
+              scheme.__config__.children.map((item, i) => {
+                let child = renderChildren.call(this, h, item)
+                return (
+                  <el-collapse-item key={item.name} title={item.title} name={item.name} >
+                    <el-row>
+                      {child}
+                    </el-row>
+                  </el-collapse-item>
+                )
+              })
+            }
+          </el-collapse>
+        </el-col>
+      )
+    }
     let child = renderChildren.apply(this, arguments)
     if (scheme.__config__.jnpfKey === 'table') {
       if (!scheme.__config__.noShow) this.tableRefs[scheme.__vModel__] = scheme
