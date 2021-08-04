@@ -38,11 +38,24 @@ export default {
   },
   created() { },
   methods: {
+    idGenerator() {
+      let qutient = (new Date() - new Date('2020-08-01'))
+      qutient += Math.ceil(Math.random() * 1000)
+      const chars = '0123456789ABCDEFGHIGKLMNOPQRSTUVWXYZabcdefghigklmnopqrstuvwxyz';
+      const charArr = chars.split("")
+      const radix = chars.length;
+      const res = []
+      do {
+        let mod = qutient % radix;
+        qutient = (qutient - mod) / radix;
+        res.push(charArr[mod])
+      } while (qutient);
+      return res.join('')
+    },
     addItem() {
-      let length = this.activeData.__config__.children.length
       this.activeData.__config__.children.push({
         title: '新面板',
-        name: 'Collapse' + (length + 1),
+        name: this.idGenerator(),
         __config__: {
           children: []
         }
