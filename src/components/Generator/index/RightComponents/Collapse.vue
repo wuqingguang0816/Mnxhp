@@ -39,10 +39,8 @@ export default {
   created() { },
   methods: {
     addItem() {
-      let length = this.activeData.__config__.children.length
       this.activeData.__config__.children.push({
         title: '新面板',
-        name: 'Collapse' + (length + 1),
         __config__: {
           children: []
         }

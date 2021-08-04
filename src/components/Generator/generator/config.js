@@ -890,13 +890,11 @@ export const layoutComponents = [{
       dragDisabled: false,
       children: [{
         title: 'Tab 1',
-        name: '1',
         __config__: {
           children: []
         }
       }, {
         title: 'Tab 2',
-        name: '2',
         __config__: {
           children: []
         }
@@ -918,13 +916,11 @@ export const layoutComponents = [{
       dragDisabled: false,
       children: [{
         title: '面板1',
-        name: '1',
         __config__: {
           children: []
         }
       }, {
         title: '面板2',
-        name: '2',
         __config__: {
           children: []
         }
