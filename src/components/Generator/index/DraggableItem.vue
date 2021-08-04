@@ -65,7 +65,7 @@ const layouts = {
                     tip = <div class="table-tip tab-tip">请将组件拖到此区域(可拖多个组件)</div>
                   }
                   return (
-                    <el-tab-pane key={item.name} label={item.title} name={item.name} >
+                    <el-tab-pane key={item.name} label={item.title} >
                       <el-col >
                         {tip}
                         <el-row gutter={element.__config__.gutter} class={className}>
