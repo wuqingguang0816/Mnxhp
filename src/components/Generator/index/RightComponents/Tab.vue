@@ -51,8 +51,10 @@ export default {
   created() { },
   methods: {
     addItem() {
+      let length = this.activeData.__config__.children.length
       this.activeData.__config__.children.push({
         title: 'New Tab',
+        name: 'Tab' + (length + 1),
         __config__: {
           children: []
         }

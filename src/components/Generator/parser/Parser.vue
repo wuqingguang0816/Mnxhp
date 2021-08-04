@@ -32,7 +32,7 @@ const layouts = {
               scheme.__config__.children.map((item, i) => {
                 let child = renderChildren.call(this, h, item)
                 return (
-                  <el-tab-pane key={item.name} label={item.title} >
+                  <el-tab-pane key={item.name} label={item.title} name={item.name} >
                     <el-row>
                       {child}
                     </el-row>
@@ -52,7 +52,7 @@ const layouts = {
               scheme.__config__.children.map((item, i) => {
                 let child = renderChildren.call(this, h, item)
                 return (
-                  <el-collapse-item key={item.name} title={item.title} >
+                  <el-collapse-item key={item.name} title={item.title} name={item.name} >
                     <el-row>
                       {child}
                     </el-row>

@@ -103,7 +103,8 @@
       <template v-if="item.__config__.jnpfKey==='tab'">
         <el-tabs :type="item.type" :tab-position="item['tab-position']"
           v-model="item.__config__.active" class="mb-10">
-          <el-tab-pane v-for="(pane,i) in item.__config__.children" :key="i" :label="pane.title">
+          <el-tab-pane v-for="(pane,i) in item.__config__.children" :key="i" :label="pane.title"
+            :name="pane.name">
             <Item v-for="(childItem, childIndex) in pane.__config__.children" :key="childIndex"
               :item="childItem" v-bind="$props" v-on="$listeners" />
           </el-tab-pane>
@@ -112,7 +113,7 @@
       <template v-if="item.__config__.jnpfKey==='collapse'">
         <el-collapse :accordion="item.accordion" v-model="item.__config__.active" class="mb-20">
           <el-collapse-item v-for="(pane,i) in item.__config__.children" :key="i"
-            :title="pane.title">
+            :title="pane.title" :name="pane.name">
             <Item v-for="(childItem, childIndex) in pane.__config__.children" :key="childIndex"
               :item="childItem" v-bind="$props" v-on="$listeners" />
           </el-collapse-item>

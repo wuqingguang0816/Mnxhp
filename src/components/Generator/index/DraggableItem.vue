@@ -65,7 +65,7 @@ const layouts = {
                     tip = <div class="table-tip tab-tip">请将组件拖到此区域(可拖多个组件)</div>
                   }
                   return (
-                    <el-tab-pane key={item.name} label={item.title} >
+                    <el-tab-pane key={item.name} label={item.title} name={item.name} >
                       <el-col >
                         {tip}
                         <el-row gutter={element.__config__.gutter} class={className}>
@@ -95,7 +95,7 @@ const layouts = {
                   let child = renderChildren.apply(this, [h, item, i, element])
                   let childgroup = { name: 'componentsGroup', put: (...arg) => put(...arg, item) }
                   return (
-                    <el-collapse-item key={item.name} title={item.title} >
+                    <el-collapse-item key={item.name} title={item.title} name={item.name} >
                       <el-col >
                         <el-row gutter={element.__config__.gutter} class={className}>
                           <draggable list={item.__config__.children} animation={340} group={childgroup} class="drag-wrapper">
