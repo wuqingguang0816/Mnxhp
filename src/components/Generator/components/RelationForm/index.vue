@@ -159,7 +159,6 @@ export default {
       if (!this.checked) return
       this.innerValue = this.checkedTxt
       this.$emit('input', this.checked)
-      this.getItemValue(this.checked)
       this.visible = false
     },
     rowClick(row) {
@@ -168,6 +167,7 @@ export default {
     },
     setDefault() {
       if (!this.value) return this.innerValue = ''
+      this.getItemValue(this.value)
       for (let i = 0; i < this.list.length; i++) {
         if (this.list[i].id === this.value) {
           this.innerValue = this.list[i][this.relationField]
