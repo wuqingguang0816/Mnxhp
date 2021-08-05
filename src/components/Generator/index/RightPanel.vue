@@ -117,8 +117,8 @@
               <el-form-item label="是否隐藏" v-if="activeData.__config__.jnpfKey !=='billRule'">
                 <el-switch v-model="activeData.__config__.noShow" />
               </el-form-item>
-              <el-form-item label="选择规则" v-if="activeData.__config__.jnpfKey==='billRule'">
-                <BillRule v-model="activeData.__config__.rule" placeholder="选择规则" />
+              <el-form-item label="选择模板" v-if="activeData.__config__.jnpfKey==='billRule'">
+                <BillRule v-model="activeData.__config__.rule" placeholder="选择模板" />
               </el-form-item>
             </template>
             <template v-if="activeData.__config__.jnpfKey==='table'">
