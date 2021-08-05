@@ -676,35 +676,6 @@ export default {
     couldShowIt(item, ...tag) {
       return tag.includes(item.tag) && this.showingPCons.includes(item.formId);
     },
-
-    initFormOperates(target) {
-      const formOperates = target.properties && target.properties.formOperates || []
-      let res = []
-      const getWriteById = id => {
-        const arr = formOperates.filter(o => o.id === id)
-        return arr.length ? arr[0].write : NodeUtils.isStartNode(target)
-      }
-      const getReadById = id => {
-        const arr = formOperates.filter(o => o.id === id)
-        return arr.length ? arr[0].read : true
-      }
-      const loop = (data, parent) => {
-        if (!data) return
-        if (data.__config__ && data.__config__.jnpfKey !== 'table' && data.__config__.children && Array.isArray(data.__config__.children)) {
-          loop(data.__config__.children, data)
-        }
-        if (Array.isArray(data)) data.forEach(d => loop(d, parent))
-        if (data.__vModel__) res.push({
-          id: data.__vModel__,
-          name: data.__config__.label,
-          required: data.__config__.required,
-          read: getReadById(data.__vModel__),
-          write: getWriteById(data.__vModel__)
-        })
-      }
-      loop(getDrawingList())
-      return res
-    },
     initCopyNode() {
       this.properties = this.value.properties
     },
@@ -937,7 +908,7 @@ export default {
       this.initiator = this.value.properties && this.value.properties.initiator
       this.initiatePos = this.value.properties && this.value.properties.initiatePos
       this.initiateRole = this.value.properties && this.value.properties.initiateRole
-      this.startForm.formOperates = this.initFormOperates(this.value)
+      this.startForm.formOperates = this.value.properties && this.value.properties.formOperates
     },
     /**
     * 初始化审批节点所需数据
@@ -946,7 +917,7 @@ export default {
       this.activeName = 'config'
       Object.assign(this.approverForm, this.value.properties)
       this.getNodeOption()
-      this.approverForm.formOperates = this.initFormOperates(this.value)
+      this.approverForm.formOperates = this.value.properties.formOperates
     },
     initSubFlowData() {
       this.getFlowOptions()
@@ -1103,9 +1074,6 @@ export default {
         this.approverForm = JSON.parse(JSON.stringify(defaultApproverForm)) // 重置数据为默认状态
         this.subFlowForm = JSON.parse(JSON.stringify(defaultSubFlowForm))
         return
-      }
-      if (!this.processData.properties.formOperates || !this.processData.properties.formOperates.length) {
-        this.processData.properties.formOperates = this.initFormOperates(this.processData)
       }
       this.isStartNode() && this.initStartNodeData()
       this.isSubFlowNode() && this.initSubFlowData()

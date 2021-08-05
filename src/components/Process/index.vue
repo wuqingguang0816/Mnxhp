@@ -2,6 +2,7 @@
 import FlowCard from "./FlowCard/index.vue";
 import PropPanel from "./PropPanel/index.vue";
 import { NodeUtils, getMockData } from "./FlowCard/util.js";
+import { getDrawingList } from '@/components/Generator/utils/db'
 
 export default {
   name: 'Process',
@@ -13,6 +14,7 @@ export default {
     } else {
       data = getMockData()
     }
+    this.updateFiled(data)
     return {
       data, // 流程图数据
       scaleVal: 100, // 流程图缩放比例 100%
@@ -24,6 +26,45 @@ export default {
     };
   },
   methods: {
+    updateFiled(flowTemplateJson) {
+      const loop = data => {
+        if (Array.isArray(data)) data.forEach(d => loop(d))
+        if (data.type === 'approver' || data.type === 'start') {
+          this.initFormOperates(data)
+        }
+        if (data.conditionNodes && Array.isArray(data.conditionNodes)) loop(data.conditionNodes)
+        if (data.childNode) loop(data.childNode)
+      }
+      loop(flowTemplateJson)
+    },
+    initFormOperates(target) {
+      const formOperates = target.properties && target.properties.formOperates || []
+      let res = []
+      const getWriteById = id => {
+        const arr = formOperates.filter(o => o.id === id)
+        return arr.length ? arr[0].write : NodeUtils.isStartNode(target)
+      }
+      const getReadById = id => {
+        const arr = formOperates.filter(o => o.id === id)
+        return arr.length ? arr[0].read : true
+      }
+      const loop = (data, parent) => {
+        if (!data) return
+        if (data.__config__ && data.__config__.jnpfKey !== 'table' && data.__config__.children && Array.isArray(data.__config__.children)) {
+          loop(data.__config__.children, data)
+        }
+        if (Array.isArray(data)) data.forEach(d => loop(d, parent))
+        if (data.__vModel__) res.push({
+          id: data.__vModel__,
+          name: data.__config__.label,
+          required: data.__config__.required,
+          read: getReadById(data.__vModel__),
+          write: getWriteById(data.__vModel__)
+        })
+      }
+      loop(getDrawingList())
+      target.properties.formOperates = res
+    },
     // 给父级组件提供的获取流程数据得方法
     getData() {
       this.verifyMode = true
