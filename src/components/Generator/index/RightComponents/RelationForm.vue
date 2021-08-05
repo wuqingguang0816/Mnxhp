@@ -25,6 +25,29 @@
           :value="item.vmodel" />
       </el-select>
     </el-form-item>
+    <el-divider>列表字段</el-divider>
+    <draggable :list="activeData.columnOptions" :animation="340" group="selectItem"
+      handle=".option-drag">
+      <div v-for="(item, index) in activeData.columnOptions" :key="index" class="select-item">
+        <div class="select-line-icon option-drag">
+          <i class="el-icon-s-operation" />
+        </div>
+        <el-select v-model="item.value" placeholder="请选择显示字段" @visible-change="visibleChange"
+          clearable @change="onChange($event,item)">
+          <el-option v-for="item in fieldOptions" :key="item.vmodel" :label="item.label"
+            :value="item.vmodel" />
+        </el-select>
+        <div class="close-btn select-line-icon" @click="activeData.columnOptions.splice(index, 1)">
+          <i class="el-icon-remove-outline" />
+        </div>
+      </div>
+    </draggable>
+    <div style="margin-left: 29px;">
+      <el-button style="padding-bottom: 0" icon="el-icon-circle-plus-outline" type="text"
+        @click="addSelectItem">
+        添加字段
+      </el-button>
+    </div>
     <el-form-item label="能否清空">
       <el-switch v-model="activeData.clearable" />
     </el-form-item>
@@ -41,10 +64,12 @@
 </template>
 <script>
 import { getFeatureSelector, getFormDataFields } from '@/api/onlineDev/visualDev'
+import draggable from 'vuedraggable'
 import comMixin from './mixin'
 export default {
   props: ['activeData'],
   mixins: [comMixin],
+  components: { draggable },
   data() {
     return {
       treeData: [],
@@ -81,6 +106,18 @@ export default {
     visibleChange(val) {
       if (!val) return
       if (!this.activeData.modelId) this.$message.warning('请先选择关联功能')
+    },
+    onChange(val, item) {
+      const list = this.fieldOptions.filter(o => o.vmodel === val) || []
+      if (!list.length) return
+      const active = list[0]
+      item.label = active.label
+    },
+    addSelectItem() {
+      this.activeData.columnOptions.push({
+        value: '',
+        label: ''
+      })
     }
   }
 }

@@ -47,6 +47,7 @@ export const inputComponents = [{
     'suffix-icon': '',
     maxlength: null,
     'show-word-limit': false,
+    'show-password': false,
     readonly: false,
     disabled: false
   },
@@ -877,4 +878,57 @@ export const layoutComponents = [{
     justify: 'start',
     align: 'top'
   },
+  {
+    __config__: {
+      jnpfKey: 'tab',
+      label: '标签页',
+      showLabel: false,
+      tag: 'el-tab',
+      tagIcon: 'icon-ym icon-ym-generator-label',
+      layout: 'rowFormItem',
+      span: '24',
+      dragDisabled: false,
+      children: [{
+        title: 'Tab 1',
+        __config__: {
+          children: []
+        }
+      }, {
+        title: 'Tab 2',
+        __config__: {
+          children: []
+        }
+      }],
+      active: '1'
+    },
+    type: '',
+    "tab-position": "top"
+  },
+  {
+    __config__: {
+      jnpfKey: 'collapse',
+      label: '折叠面板',
+      showLabel: false,
+      tag: 'el-collapse',
+      tagIcon: 'icon-ym icon-ym-generator-fold',
+      layout: 'rowFormItem',
+      span: '24',
+      dragDisabled: false,
+      children: [{
+        title: '面板1',
+        name: '1',
+        __config__: {
+          children: []
+        }
+      }, {
+        title: '面板2',
+        name: '2',
+        __config__: {
+          children: []
+        }
+      }],
+      active: ['1']
+    },
+    accordion: false
+  }
 ]

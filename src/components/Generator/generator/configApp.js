@@ -34,6 +34,7 @@ export const inputComponents = [{
     placeholder: '请输入',
     maxlength: null,
     disabled: false,
+    'show-password': false,
     type: 'text'
   },
   {

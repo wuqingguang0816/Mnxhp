@@ -100,6 +100,8 @@
               :active-data="activeData" ref="calculate" />
             <PopupSelect v-if="activeData.__config__.jnpfKey==='popupSelect'"
               :active-data="activeData" />
+            <Tab v-if="activeData.__config__.jnpfKey==='tab'" :active-data="activeData" />
+            <Collapse v-if="activeData.__config__.jnpfKey==='collapse'" :active-data="activeData" />
             <template v-if="isSystem">
               <el-form-item label="控件标题">
                 <el-input v-model="activeData.__config__.label" placeholder="请输入控件标题" />
@@ -271,6 +273,8 @@ import RelationFlow from './RightComponents/RelationFlow'
 import RelationFlowAttr from './RightComponents/RelationFlowAttr'
 import JNPFCalculate from './RightComponents/Calculate'
 import PopupSelect from './RightComponents/PopupSelect'
+import Tab from './RightComponents/Tab'
+import Collapse from './RightComponents/Collapse'
 
 const commonRightList = ['comSelect', 'depSelect', 'posSelect', 'userSelect', 'dicSelect', 'editor']
 const systemList = ['createUser', 'createTime', 'modifyUser', 'modifyTime', 'currOrganize', 'currDept', 'currPosition', 'billRule']
@@ -307,7 +311,9 @@ export default {
     RelationFlow,
     RelationFlowAttr,
     JNPFCalculate,
-    PopupSelect
+    PopupSelect,
+    Tab,
+    Collapse
   },
   props: ['showField', 'activeData', 'formConf', 'modelType'],
   data() {

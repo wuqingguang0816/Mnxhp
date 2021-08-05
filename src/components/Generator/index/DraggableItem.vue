@@ -50,6 +50,69 @@ const layouts = {
     const className = this.activeId === element.__config__.formId
       ? 'drawing-row-item active-from-item'
       : 'drawing-row-item'
+    if (element.__config__.jnpfKey === 'tab') {
+      return (
+        <el-col span={element.__config__.span}>
+          <el-row gutter={element.__config__.gutter} class={className}
+            nativeOnClick={event => { activeItem(element); event.stopPropagation() }}>
+            <el-tabs type={element.type} tab-position={element['tab-position']} vModel={element.__config__.active}>
+              {
+                element.__config__.children.map((item, i) => {
+                  let child = renderChildren.apply(this, [h, item, i, element])
+                  let childgroup = { name: 'componentsGroup', put: (...arg) => put(...arg, item) }
+                  let tip = ''
+                  if (!item.__config__.children.length) {
+                    tip = <div class="table-tip tab-tip">请将组件拖到此区域(可拖多个组件)</div>
+                  }
+                  return (
+                    <el-tab-pane key={item.name} label={item.title} >
+                      <el-col >
+                        {tip}
+                        <el-row gutter={element.__config__.gutter} class={className}>
+                          <draggable list={item.__config__.children} animation={340} group={childgroup} class="drag-wrapper">
+                            {child}
+                          </draggable>
+                        </el-row>
+                      </el-col>
+                    </el-tab-pane>
+                  )
+                })
+              }
+            </el-tabs>
+            {components.itemBtns.apply(this, arguments)}
+          </el-row>
+        </el-col>
+      )
+    }
+    if (element.__config__.jnpfKey === 'collapse') {
+      return (
+        <el-col span={element.__config__.span}>
+          <el-row gutter={element.__config__.gutter} class={className}
+            nativeOnClick={event => { activeItem(element); event.stopPropagation() }}>
+            <el-collapse vModel={element.__config__.active} accordion={element.accordion}>
+              {
+                element.__config__.children.map((item, i) => {
+                  let child = renderChildren.apply(this, [h, item, i, element])
+                  let childgroup = { name: 'componentsGroup', put: (...arg) => put(...arg, item) }
+                  return (
+                    <el-collapse-item key={item.name} title={item.title} name={item.name} >
+                      <el-col >
+                        <el-row gutter={element.__config__.gutter} class={className}>
+                          <draggable list={item.__config__.children} animation={340} group={childgroup} class="drag-wrapper">
+                            {child}
+                          </draggable>
+                        </el-row>
+                      </el-col>
+                    </el-collapse-item>
+                  )
+                })
+              }
+            </el-collapse>
+            {components.itemBtns.apply(this, arguments)}
+          </el-row>
+        </el-col>
+      )
+    }
     let child = renderChildren.apply(this, arguments)
     const group = { name: 'componentsGroup', put: (...arg) => put(...arg, element) }
     const onEnd = (...arg) => end(...arg, activeData, element)
@@ -199,5 +262,8 @@ export default {
   text-align: center;
   position: absolute;
   top: 40px;
+}
+.tab-tip {
+  top: 60px;
 }
 </style>
