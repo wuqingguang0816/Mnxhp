@@ -314,6 +314,14 @@ $lighterBlue: #409EFF;
   padding: 10px 2px;
   margin-bottom: 10px;
 
+  .drawing-item-copy {
+    right: 48px !important;
+  }
+
+  .drawing-item-delete {
+    right: 16px !important;
+  }
+
   .drawing-row-item {
     margin-bottom: 2px;
   }

@@ -15,11 +15,13 @@ const components = {
       }}>
         <i class="el-icon-copy-document" />
       </span>,
-      <span class="drawing-item-delete" title="删除" onClick={event => {
+      <el-popconfirm title="您确定要删除该组件吗？" class="drawing-item-delete" onConfirm={event => {
         deleteItem(index, parent); event.stopPropagation()
       }}>
-        <i class="el-icon-delete" />
-      </span>
+        <span title="删除" slot="reference" style="width:100%;height:100%;display:inline-block">
+          <i class="el-icon-delete" />
+        </span>
+      </el-popconfirm>
     ]
   }
 }
