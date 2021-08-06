@@ -899,7 +899,7 @@ export const layoutComponents = [{
           children: []
         }
       }],
-      active: '1'
+      active: 0
     },
     type: '',
     "tab-position": "top"
