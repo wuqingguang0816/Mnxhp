@@ -12,15 +12,15 @@
           <template v-if="activeData.__config__">
             <template v-if="$store.getters.hasTable">
               <template v-if="activeData.__config__.jnpfKey === 'table'">
-                <el-form-item v-if="activeData.__vModel__ !== undefined" label="字段名">
-                  <el-input v-model="activeData.__vModel__" placeholder="请输入字段名（v-model）"
+                <el-form-item v-if="activeData.__vModel__ !== undefined" label="控件字段">
+                  <el-input v-model="activeData.__vModel__" placeholder="请输入控件字段（v-model）"
                     disabled />
                 </el-form-item>
               </template>
               <template v-else>
                 <template v-if="!activeData.__config__.isSubTable">
-                  <el-form-item v-if="activeData.__vModel__ !== undefined" label="字段名">
-                    <el-select v-model="activeData.__vModel__" placeholder="请选择字段名（v-model）"
+                  <el-form-item v-if="activeData.__vModel__ !== undefined" label="控件字段">
+                    <el-select v-model="activeData.__vModel__" placeholder="请选择控件字段（v-model）"
                       clearable @change="fieldChange">
                       <el-option v-for="item in formItemList" :key="item.field" :value="item.field"
                         :label="item.fieldName?item.field+'('+item.fieldName+')':item.field">
@@ -29,8 +29,8 @@
                   </el-form-item>
                 </template>
                 <template v-if="activeData.__config__.isSubTable && subTable.length">
-                  <el-form-item v-if="activeData.__vModel__ !== undefined" label="字段名">
-                    <el-select v-model="activeData.__vModel__" placeholder="请选择字段名（v-model）"
+                  <el-form-item v-if="activeData.__vModel__ !== undefined" label="控件字段">
+                    <el-select v-model="activeData.__vModel__" placeholder="请选择控件字段（v-model）"
                       clearable @change="fieldChange1">
                       <el-option
                         v-for="item in getSubTalebFiled(activeData.__config__.relationTable)"
@@ -43,13 +43,13 @@
               </template>
             </template>
             <template v-else>
-              <el-form-item v-if="activeData.__vModel__ !== undefined" label="字段名">
-                <el-input v-model="activeData.__vModel__" placeholder="请输入字段名（v-model）" disabled />
+              <el-form-item v-if="activeData.__vModel__ !== undefined" label="控件字段">
+                <el-input v-model="activeData.__vModel__" placeholder="请输入控件字段（v-model）" disabled />
               </el-form-item>
             </template>
-            <el-form-item label="标题名"
+            <el-form-item label="控件标题"
               v-if="activeData.__config__.label !== undefined && !['JNPFText','card','groupTitle'].includes(activeData.__config__.jnpfKey)">
-              <el-input v-model="activeData.__config__.label" placeholder="请输入标题名" />
+              <el-input v-model="activeData.__config__.label" placeholder="请输入控件标题" />
             </el-form-item>
             <el-form-item v-if="activeData.placeholder !== undefined" label="占位提示">
               <el-input v-model="activeData.placeholder" placeholder="请输入占位提示" />
@@ -169,11 +169,11 @@
               </el-form-item>
               <el-form-item label="行高">
                 <el-input-number v-model="activeData.textStyle['line-height']" :min="12"
-                  placeholder="请输入行高" controls-position="right" /> rpx
+                  placeholder="请输入行高" controls-position="right" />
               </el-form-item>
               <el-form-item label="字体大小">
                 <el-input-number v-model="activeData.textStyle['font-size']" :min="12"
-                  placeholder="请输入字体大小" controls-position="right" /> rpx
+                  placeholder="请输入字体大小" controls-position="right" />
               </el-form-item>
               <el-form-item label="对齐方式">
                 <el-radio-group v-model="activeData.textStyle['text-align']">
@@ -226,8 +226,19 @@
                 </el-radio-group>
               </el-form-item>
             </template>
-            <el-form-item v-if="activeData.__config__.rule !== undefined" label="选择规则">
-              <BillRule v-model="activeData.__config__.rule" placeholder="选择规则" />
+            <template v-if="activeData.__config__.jnpfKey === 'date'">
+              <el-form-item label="时间类型">
+                <el-select v-model="activeData.type" placeholder="请选择时间类型">
+                  <el-option label="日(date)" value="date" />
+                  <el-option label="日期时间(datetime)" value="datetime" />
+                </el-select>
+              </el-form-item>
+            </template>
+            <el-form-item label="是否密码" v-if="activeData['show-password'] !== undefined">
+              <el-switch v-model="activeData['show-password']" />
+            </el-form-item>
+            <el-form-item v-if="activeData.__config__.rule !== undefined" label="选择模板">
+              <BillRule v-model="activeData.__config__.rule" placeholder="选择模板" />
             </el-form-item>
             <el-form-item v-if="activeData.__config__.noShow !== undefined" label="是否隐藏">
               <el-switch v-model="activeData.__config__.noShow" />
@@ -273,6 +284,11 @@
                 </el-button>
               </div>
             </template>
+            <template v-if="activeData.__config__.jnpfKey==='card'">
+              <el-form-item label="卡片标题">
+                <el-input v-model="activeData.header" placeholder="请输入卡片标题" />
+              </el-form-item>
+            </template>
           </template>
         </el-form>
         <!-- 表单属性 -->
@@ -286,7 +302,7 @@
             </el-radio-group>
           </el-form-item>
           <el-form-item label="标题宽度">
-            <el-input v-model.number="formConf.labelWidth" type="number" placeholder="请输入标题宽度" />
+            <el-input v-model.number="formConf.labelWidth" type="number" placeholder="标题宽度" />
           </el-form-item>
           <el-form-item label="取消按钮文本">
             <el-input v-model="formConf.cancelButtonText" placeholder="默认为‘取 消’" />

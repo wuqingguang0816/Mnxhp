@@ -79,7 +79,7 @@
           </el-table-column>
           <el-table-column label="交互时间" width="230">
             <template slot-scope="scope">
-              <el-date-picker v-model="scope.row.registerDate" type="date" :editable="false"
+              <el-date-picker v-model="scope.row.interactionDate" type="date" :editable="false"
                 :clearable="false" value-format="timestamp" format="yyyy-MM-dd"
                 v-if="tabClickId==scope.row.id" />
               <span v-else>{{scope.row.interactionDate | toDate("yyyy-MM-dd")}}</span>

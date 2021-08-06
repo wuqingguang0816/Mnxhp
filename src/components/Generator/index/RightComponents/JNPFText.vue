@@ -1,8 +1,5 @@
 <template>
   <el-row>
-    <!-- <el-form-item label="字段名">
-      <el-input v-model="activeData.__vModel__" placeholder="请输入字段名" readonly />
-    </el-form-item> -->
     <el-form-item label="控件栅格">
       <el-slider v-model="activeData.__config__.span" :max="24" :min="6" show-stops :step="2"
         show-tooltip />
@@ -15,11 +12,11 @@
     </el-form-item> -->
     <el-form-item label="行高">
       <el-input-number v-model="activeData.textStyle['line-height']" :min="12" placeholder="请输入行高"
-        controls-position="right" /> px
+        controls-position="right" />
     </el-form-item>
     <el-form-item label="字体大小">
       <el-input-number v-model="activeData.textStyle['font-size']" :min="12" placeholder="请输入字体大小"
-        controls-position="right" /> px
+        controls-position="right" />
     </el-form-item>
     <el-form-item label="对齐方式">
       <el-radio-group v-model="activeData.textStyle['text-align']">

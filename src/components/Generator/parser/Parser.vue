@@ -24,6 +24,46 @@ const layouts = {
     }
   },
   rowFormItem(h, scheme) {
+    if (scheme.__config__.jnpfKey === 'tab') {
+      return (
+        <el-col span={scheme.__config__.span} class="mb-10">
+          <el-tabs type={scheme.type} tab-position={scheme['tab-position']} vModel={scheme.__config__.active}>
+            {
+              scheme.__config__.children.map((item, i) => {
+                let child = renderChildren.call(this, h, item)
+                return (
+                  <el-tab-pane key={item.name} label={item.title} >
+                    <el-row>
+                      {child}
+                    </el-row>
+                  </el-tab-pane>
+                )
+              })
+            }
+          </el-tabs>
+        </el-col>
+      )
+    }
+    if (scheme.__config__.jnpfKey === 'collapse') {
+      return (
+        <el-col span={scheme.__config__.span} class="mb-20">
+          <el-collapse vModel={scheme.__config__.active} accordion={scheme.accordion}>
+            {
+              scheme.__config__.children.map((item, i) => {
+                let child = renderChildren.call(this, h, item)
+                return (
+                  <el-collapse-item key={item.name} title={item.title} name={item.name} >
+                    <el-row>
+                      {child}
+                    </el-row>
+                  </el-collapse-item>
+                )
+              })
+            }
+          </el-collapse>
+        </el-col>
+      )
+    }
     let child = renderChildren.apply(this, arguments)
     if (scheme.__config__.jnpfKey === 'table') {
       if (!scheme.__config__.noShow) this.tableRefs[scheme.__vModel__] = scheme
@@ -33,7 +73,7 @@ const layouts = {
     if (scheme.__config__.jnpfKey === 'card') {
       return (
         <el-col span={scheme.__config__.span} class="item-card">
-          <el-card shadow={scheme.shadow} class="mb-20">
+          <el-card shadow={scheme.shadow} header={scheme.header} class="mb-20">
             {child}
           </el-card>
         </el-col>
@@ -201,6 +241,7 @@ export default {
       })
     },
     resetForm() {
+      this.$store.commit('generator/UPDATE_RELATION_DATA', {})
       this.formConfCopy = deepClone(this.formConf)
       this.$refs[this.formConf.formRef].resetFields()
       Object.keys(this.tableRefs).forEach(vModel => {

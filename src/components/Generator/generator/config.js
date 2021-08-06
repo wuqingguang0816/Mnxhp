@@ -2,7 +2,7 @@
 export const formConf = {
   formRef: 'elForm',
   formModel: 'dataForm',
-  size: 'medium',
+  size: 'small',
   labelPosition: 'right',
   labelWidth: 100,
   formRules: 'rules',
@@ -24,7 +24,7 @@ export const inputComponents = [{
     __config__: {
       jnpfKey: 'comInput',
       label: '单行输入',
-      labelWidth: null,
+      labelWidth: undefined,
       showLabel: true,
       tag: 'el-input',
       tagIcon: 'icon-ym icon-ym-generator-input',
@@ -47,6 +47,7 @@ export const inputComponents = [{
     'suffix-icon': '',
     maxlength: null,
     'show-word-limit': false,
+    'show-password': false,
     readonly: false,
     disabled: false
   },
@@ -54,7 +55,7 @@ export const inputComponents = [{
     __config__: {
       jnpfKey: 'textarea',
       label: '多行输入',
-      labelWidth: null,
+      labelWidth: undefined,
       showLabel: true,
       tag: 'el-input',
       tagIcon: 'icon-ym icon-ym-generator-textarea',
@@ -83,7 +84,7 @@ export const inputComponents = [{
       jnpfKey: 'numInput',
       label: '数字输入',
       showLabel: true,
-      labelWidth: null,
+      labelWidth: undefined,
       tag: 'el-input-number',
       tagIcon: 'icon-ym icon-ym-generator-number',
       defaultValue: undefined,
@@ -107,7 +108,7 @@ export const inputComponents = [{
     __config__: {
       jnpfKey: 'switch',
       label: '开关',
-      labelWidth: null,
+      labelWidth: undefined,
       showLabel: true,
       tag: 'el-switch',
       tagIcon: 'icon-ym icon-ym-generator-switch',
@@ -131,7 +132,7 @@ export const inputComponents = [{
     __config__: {
       jnpfKey: 'radio',
       label: '单选框组',
-      labelWidth: null,
+      labelWidth: undefined,
       showLabel: true,
       tag: 'el-radio-group',
       tagIcon: 'icon-ym icon-ym-generator-radio',
@@ -169,7 +170,7 @@ export const inputComponents = [{
     __config__: {
       jnpfKey: 'checkbox',
       label: '多选框组',
-      labelWidth: null,
+      labelWidth: undefined,
       showLabel: true,
       tag: 'el-checkbox-group',
       tagIcon: 'icon-ym icon-ym-generator-checkbox',
@@ -209,7 +210,7 @@ export const inputComponents = [{
     __config__: {
       jnpfKey: 'select',
       label: '下拉选择',
-      labelWidth: null,
+      labelWidth: undefined,
       showLabel: true,
       tag: 'el-select',
       tagIcon: 'icon-ym icon-ym-generator-select',
@@ -248,7 +249,7 @@ export const inputComponents = [{
     __config__: {
       jnpfKey: 'cascader',
       label: '级联选择',
-      labelWidth: null,
+      labelWidth: undefined,
       showLabel: true,
       tag: 'el-cascader',
       tagIcon: 'icon-ym icon-ym-generator-cascader',
@@ -291,7 +292,7 @@ export const inputComponents = [{
     __config__: {
       jnpfKey: 'time',
       label: '时间选择',
-      labelWidth: null,
+      labelWidth: undefined,
       showLabel: true,
       tag: 'el-time-picker',
       tagIcon: 'icon-ym icon-ym-generator-time',
@@ -318,7 +319,7 @@ export const inputComponents = [{
     __config__: {
       jnpfKey: 'date',
       label: '日期选择',
-      labelWidth: null,
+      labelWidth: undefined,
       showLabel: true,
       tag: 'el-date-picker',
       tagIcon: 'icon-ym icon-ym-generator-date',
@@ -343,7 +344,7 @@ export const inputComponents = [{
     __config__: {
       jnpfKey: 'uploadFz',
       label: '文件上传',
-      labelWidth: null,
+      labelWidth: undefined,
       showLabel: true,
       tag: 'JNPF-UploadFz',
       tagIcon: 'icon-ym icon-ym-generator-upload',
@@ -367,7 +368,7 @@ export const inputComponents = [{
     __config__: {
       jnpfKey: 'uploadImg',
       label: '图片上传',
-      labelWidth: null,
+      labelWidth: undefined,
       showLabel: true,
       tag: 'JNPF-UploadImg',
       tagIcon: 'icon-ym icon-ym-generator-upload',
@@ -390,7 +391,7 @@ export const inputComponents = [{
     __config__: {
       jnpfKey: 'colorPicker',
       label: '颜色选择',
-      labelWidth: null,
+      labelWidth: undefined,
       showLabel: true,
       tag: 'el-color-picker',
       tagIcon: 'icon-ym icon-ym-generator-color',
@@ -411,7 +412,7 @@ export const inputComponents = [{
     __config__: {
       jnpfKey: 'rate',
       label: '评分',
-      labelWidth: null,
+      labelWidth: undefined,
       showLabel: true,
       tag: 'el-rate',
       tagIcon: 'icon-ym icon-ym-generator-rate',
@@ -434,11 +435,11 @@ export const inputComponents = [{
     __config__: {
       jnpfKey: 'slider',
       label: '滑块',
-      labelWidth: null,
+      labelWidth: undefined,
       showLabel: true,
       tag: 'el-slider',
       tagIcon: 'icon-ym icon-ym-generator-slider',
-      defaultValue: null,
+      defaultValue: undefined,
       required: false,
       layout: 'colFormItem',
       span: 24,
@@ -457,7 +458,7 @@ export const inputComponents = [{
     __config__: {
       jnpfKey: 'divider',
       label: '分割线',
-      labelWidth: null,
+      labelWidth: undefined,
       showLabel: false,
       tag: 'el-divider',
       tagIcon: 'icon-ym icon-ym-generator-divider',
@@ -476,7 +477,7 @@ export const inputComponents = [{
     __config__: {
       jnpfKey: 'JNPFText',
       label: '文本',
-      labelWidth: null,
+      labelWidth: undefined,
       showLabel: false,
       tag: 'JNPF-Text',
       tagIcon: 'icon-ym icon-ym-generator-textarea',
@@ -501,7 +502,7 @@ export const inputComponents = [{
     __config__: {
       jnpfKey: 'editor',
       label: '富文本',
-      labelWidth: null,
+      labelWidth: undefined,
       showLabel: true,
       tag: 'JNPF-Quill',
       tagIcon: 'icon-ym icon-ym-generator-rich-text',
@@ -522,7 +523,7 @@ export const selectComponents = [{
     __config__: {
       jnpfKey: 'comSelect',
       label: '公司组件',
-      labelWidth: null,
+      labelWidth: undefined,
       showLabel: true,
       tag: 'com-select',
       tagIcon: 'icon-ym icon-ym-generator-company',
@@ -541,7 +542,7 @@ export const selectComponents = [{
     __config__: {
       jnpfKey: 'depSelect',
       label: '部门组件',
-      labelWidth: null,
+      labelWidth: undefined,
       showLabel: true,
       tag: 'dep-select',
       tagIcon: 'icon-ym icon-ym-generator-department',
@@ -560,7 +561,7 @@ export const selectComponents = [{
     __config__: {
       jnpfKey: 'posSelect',
       label: '岗位组件',
-      labelWidth: null,
+      labelWidth: undefined,
       showLabel: true,
       tag: 'pos-select',
       tagIcon: 'icon-ym icon-ym-generator-jobs',
@@ -580,7 +581,7 @@ export const selectComponents = [{
     __config__: {
       jnpfKey: 'userSelect',
       label: '用户组件',
-      labelWidth: null,
+      labelWidth: undefined,
       showLabel: true,
       tag: 'user-select',
       tagIcon: 'icon-ym icon-ym-generator-user',
@@ -600,7 +601,7 @@ export const selectComponents = [{
     __config__: {
       jnpfKey: 'treeSelect',
       label: '树形选择',
-      labelWidth: null,
+      labelWidth: undefined,
       showLabel: true,
       tag: 'JNPFTreeSelect',
       tagIcon: 'icon-ym icon-ym-generator-tree',
@@ -639,7 +640,7 @@ export const selectComponents = [{
     __config__: {
       jnpfKey: 'billRule',
       label: '单据组件',
-      labelWidth: null,
+      labelWidth: undefined,
       showLabel: true,
       tag: 'el-input',
       defaultValue: '',
@@ -681,7 +682,7 @@ export const selectComponents = [{
     __config__: {
       jnpfKey: 'address',
       label: '省市区联动',
-      labelWidth: null,
+      labelWidth: undefined,
       showLabel: true,
       tag: 'JNPF-Address',
       tagIcon: 'icon-ym icon-ym-generator-Provinces',
@@ -704,7 +705,7 @@ export const systemComponents = [{
     __config__: {
       jnpfKey: 'createUser',
       label: '创建人员',
-      labelWidth: null,
+      labelWidth: undefined,
       showLabel: true,
       tag: 'el-input',
       tagIcon: 'icon-ym icon-ym-generator-founder',
@@ -722,7 +723,7 @@ export const systemComponents = [{
     __config__: {
       jnpfKey: 'createTime',
       label: '创建时间',
-      labelWidth: null,
+      labelWidth: undefined,
       showLabel: true,
       tag: 'el-input',
       tagIcon: 'icon-ym icon-ym-generator-createtime',
@@ -740,7 +741,7 @@ export const systemComponents = [{
     __config__: {
       jnpfKey: 'modifyUser',
       label: '修改人员',
-      labelWidth: null,
+      labelWidth: undefined,
       showLabel: true,
       tag: 'el-input',
       tagIcon: 'icon-ym icon-ym-generator-modifier',
@@ -758,7 +759,7 @@ export const systemComponents = [{
     __config__: {
       jnpfKey: 'modifyTime',
       label: '修改时间',
-      labelWidth: null,
+      labelWidth: undefined,
       showLabel: true,
       tag: 'el-input',
       tagIcon: 'icon-ym icon-ym-generator-modifytime',
@@ -776,7 +777,7 @@ export const systemComponents = [{
     __config__: {
       jnpfKey: 'currOrganize',
       label: '所属公司',
-      labelWidth: null,
+      labelWidth: undefined,
       showLabel: true,
       tag: 'el-input',
       tagIcon: 'icon-ym icon-ym-generator-company',
@@ -794,7 +795,7 @@ export const systemComponents = [{
     __config__: {
       jnpfKey: 'currDept',
       label: '所属部门',
-      labelWidth: null,
+      labelWidth: undefined,
       showLabel: true,
       tag: 'el-input',
       tagIcon: 'icon-ym icon-ym-generator-department',
@@ -812,7 +813,7 @@ export const systemComponents = [{
     __config__: {
       jnpfKey: 'currPosition',
       label: '所属岗位',
-      labelWidth: null,
+      labelWidth: undefined,
       showLabel: true,
       tag: 'el-input',
       tagIcon: 'icon-ym icon-ym-generator-station',
@@ -833,7 +834,7 @@ export const layoutComponents = [{
     __config__: {
       jnpfKey: 'groupTitle',
       label: '分组标题',
-      labelWidth: null,
+      labelWidth: undefined,
       showLabel: false,
       tag: 'groupTitle',
       tagIcon: 'icon-ym icon-ym-generator-group',
@@ -849,7 +850,7 @@ export const layoutComponents = [{
   {
     __config__: {
       jnpfKey: 'card',
-      label: '卡片',
+      label: '卡片容器',
       showLabel: false,
       tag: 'el-card',
       tagIcon: 'icon-ym icon-ym-generator-card',
@@ -859,12 +860,13 @@ export const layoutComponents = [{
       dragDisabled: false,
       children: [],
     },
+    header: '卡片容器',
     shadow: 'always'
   },
   {
     __config__: {
       jnpfKey: 'row',
-      label: '栅格布局',
+      label: '栅格容器',
       tagIcon: 'icon-ym icon-ym-generator-layout',
       layout: 'rowFormItem',
       span: '24',
@@ -876,4 +878,57 @@ export const layoutComponents = [{
     justify: 'start',
     align: 'top'
   },
+  {
+    __config__: {
+      jnpfKey: 'tab',
+      label: '标签页',
+      showLabel: false,
+      tag: 'el-tab',
+      tagIcon: 'icon-ym icon-ym-generator-label',
+      layout: 'rowFormItem',
+      span: '24',
+      dragDisabled: false,
+      children: [{
+        title: 'Tab 1',
+        __config__: {
+          children: []
+        }
+      }, {
+        title: 'Tab 2',
+        __config__: {
+          children: []
+        }
+      }],
+      active: 0
+    },
+    type: '',
+    "tab-position": "top"
+  },
+  {
+    __config__: {
+      jnpfKey: 'collapse',
+      label: '折叠面板',
+      showLabel: false,
+      tag: 'el-collapse',
+      tagIcon: 'icon-ym icon-ym-generator-fold',
+      layout: 'rowFormItem',
+      span: '24',
+      dragDisabled: false,
+      children: [{
+        title: '面板1',
+        name: '1',
+        __config__: {
+          children: []
+        }
+      }, {
+        title: '面板2',
+        name: '2',
+        __config__: {
+          children: []
+        }
+      }],
+      active: ['1']
+    },
+    accordion: false
+  }
 ]

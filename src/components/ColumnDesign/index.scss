@@ -72,30 +72,32 @@
     }
 
     .btnsList {
-      box-sizing: border-box;
-      width: 100%;
 
-      >>>.el-checkbox.is-bordered+.el-checkbox.is-bordered {
-        margin: 0 10px 5px;
+      .btn-label {
+        width: 80px;
+        display: inline-block;
+        line-height: 32px;
       }
 
       >>>.el-checkbox {
-        width: 136px;
-        margin: 0 10px;
-        display: inline-block;
-        box-sizing: border-box;
+        width: 100%;
+        margin-bottom: 10px;
+        margin-right: 0;
 
-        .el-input {
-          width: 80%;
+        .el-checkbox__input {
+          line-height: 28px;
+        }
 
-          .el-input__inner {
-            border: none;
-            height: 20px;
-            line-height: 20px;
-            padding: 0;
-            // width: 80%;
-            background: transparent;
-          }
+        .el-checkbox__label {
+          width: 226px;
+        }
+      }
+    }
+
+    .columnBtnList {
+      >>>.el-checkbox {
+        &:last-child {
+          margin-bottom: 0;
         }
       }
     }

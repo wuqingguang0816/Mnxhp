@@ -115,13 +115,28 @@
             </el-col>
           </el-row>
         </el-form>
-        <div class="add-btn">
-          <el-button type="primary" icon="el-icon-plus" @click="openGoodsBox">选择产品</el-button>
-        </div>
+        <el-row class="add-btn">
+          <el-col :span="18">
+            <el-button type="primary" icon="el-icon-plus" @click="openGoodsBox">选择产品</el-button>
+          </el-col>
+          <el-col :span="6">
+            <el-form label-width="120px">
+              <el-form-item label="订货类型">
+                <el-select v-model="orderType" placeholder="选择订货类型" @change="onTypeChange"
+                  clearable>
+                  <el-option label="1" value="1" />
+                  <el-option label="2" value="2" />
+                  <el-option label="3" value="3" />
+                </el-select>
+              </el-form-item>
+            </el-form>
+          </el-col>
+        </el-row>
         <JNPF-table :data="dataForm.productEntryList" size='small'>
           <el-table-column label="操作" width="80">
             <template slot-scope="scope">
-              <el-button size="mini" type="text" icon="el-icon-plus" @click="addItem"></el-button>
+              <el-button size="mini" type="text" icon="el-icon-plus" @click="addItem(scope.$index)">
+              </el-button>
               <el-button size="mini" type="text" class="JNPF-table-delBtn" icon="el-icon-minus"
                 @click="delItem(scope.$index)">
               </el-button>
@@ -131,7 +146,7 @@
             <template slot-scope="scope">
               <el-autocomplete v-model="scope.row.productCode" :fetch-suggestions="goodsSearchAsync"
                 placeholder="商品编码" @select="goodsSelect($event,scope.row)" style="width:100%"
-                popper-class="sale-order-popper">
+                popper-class="sale-order-popper goods-popper">
                 <template slot-scope="{ item }">
                   <div class="sale-order-popper-item">
                     <span>{{ item.code }}</span>
@@ -144,6 +159,7 @@
           </el-table-column>
           <el-table-column prop="productName" label="商品名称" />
           <el-table-column prop="productSpecification" label="规格型号" width="100" />
+          <el-table-column prop="type" label="订货类型" width="100" />
           <el-table-column prop="qty" label="数量" width="120">
             <template slot-scope="scope">
               <el-input-number v-model="scope.row.qty" @change="count(scope.row)" :controls="false"
@@ -177,7 +193,7 @@
 </template>
 
 <script>
-import { orderInfo, createOrder, updateOrder, getGoodsSelector, getCustomer } from '@/api/extend/saleOrder'
+import { orderInfo, createOrder, updateOrder, getGoodsSelector, getCustomer, GoodsList } from '@/api/extend/saleOrder'
 import GoodsBox from './GoodsBox'
 export default {
   components: { GoodsBox },
@@ -212,7 +228,8 @@ export default {
       options: ['现金', '转帐', '汇票'],
       storeOptions: ['仓库1', '仓库2', '仓库3'],
       goodsBoxVisible: false,
-      btnLoading: false
+      btnLoading: false,
+      orderType: ''
     }
   },
   watch: {
@@ -248,7 +265,7 @@ export default {
         }
       })
     },
-    addItem() {
+    addItem(index) {
       let item = {
         productId: '',
         productCode: '',
@@ -257,9 +274,10 @@ export default {
         qty: 1,
         money: 0,
         amount: 0,
-        description: ''
+        description: '',
+        type: ''
       }
-      this.dataForm.productEntryList.push(item)
+      this.dataForm.productEntryList.splice(index + 1, 0, item)
     },
 
     delItem(index) {
@@ -274,6 +292,12 @@ export default {
         this.$refs.goodsBox.init()
       })
     },
+    onTypeChange(val) {
+      if (!val) return
+      for (let i = 0; i < this.dataForm.productEntryList.length; i++) {
+        this.dataForm.productEntryList[i].type = val
+      }
+    },
     choice(list) {
       for (let i = 0; i < list.length; i++) {
         const e = list[i];
@@ -285,7 +309,8 @@ export default {
           qty: 1,
           money: e.money,
           amount: e.money,
-          description: ''
+          description: '',
+          type: e.type
         }
         this.dataForm.productEntryList.push(item)
       }
@@ -306,6 +331,7 @@ export default {
       row.productName = item.fullName
       row.productSpecification = item.productSpecification
       row.money = item.money
+      row.type = item.type
       row.amount = this.jnpf.toDecimal(parseFloat(row.money) * parseFloat(row.qty))
     },
     handleSelect(item) {
@@ -344,6 +370,9 @@ export default {
 >>> .el-tabs__header {
   margin-bottom: 0;
 }
+>>> .el-select {
+  width: 100%;
+}
 .box {
   position: relative;
 }
@@ -355,7 +384,8 @@ export default {
     flex-direction: column;
   }
   .add-btn {
-    margin-bottom: 10px;
+    margin-top: 20px;
+    margin-bottom: -10px;
   }
   .order-footer {
     margin-top: 10px;
@@ -385,5 +415,8 @@ export default {
       color: #1890ff;
     }
   }
+}
+.goods-popper {
+  width: 400px !important;
 }
 </style>

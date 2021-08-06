@@ -45,8 +45,8 @@
           <el-table-column prop="creatorUser" label="创建人" width="120" />
           <el-table-column prop="creatorTime" label="创建时间" :formatter="jnpf.tableDateFormat"
             width="120" />
-          <el-table-column prop="lastmodifyuser" label="最后修改人" width="120" />
-          <el-table-column prop="lastmodifytime" label="最后修改时间" :formatter="jnpf.tableDateFormat"
+          <el-table-column prop="lastModifyUser" label="最后修改人" width="120" />
+          <el-table-column prop="lastModifyTime" label="最后修改时间" :formatter="jnpf.tableDateFormat"
             width="120" />
           <el-table-column label="状态" width="70" align="center">
             <template slot-scope="scope" v-if="!scope.row.top">
@@ -66,10 +66,9 @@
                   <el-dropdown-menu slot="dropdown">
                     <el-dropdown-item @click.native="copy(scope.row.id)">复制</el-dropdown-item>
                     <el-dropdown-item @click.native="preview(scope.row.id)">预览</el-dropdown-item>
-                    <el-dropdown-item @click.native="distribute(scope.row.id)">权限分配
-                    </el-dropdown-item>
                     <el-dropdown-item @click.native="exportTemplate(scope.row.id)">导出
                     </el-dropdown-item>
+                    <el-dropdown-item @click.native="distribute(scope.row.id)">授权</el-dropdown-item>
                   </el-dropdown-menu>
                 </el-dropdown>
               </tableOpts>
@@ -167,9 +166,13 @@ export default {
       this.previewVisible = true
     },
     exportTemplate(id) {
-      exportTemplate(id).then(res => {
-        if (res.data.url) window.location.href = this.define.comUrl + res.data.url
-      })
+      this.$confirm('您确定要导出该门户, 是否继续?', '提示', {
+        type: 'warning'
+      }).then(() => {
+        exportTemplate(id).then(res => {
+          if (res.data.url) window.location.href = this.define.comUrl + res.data.url
+        })
+      }).catch(() => { });
     },
     distribute(id) {
       this.transferId = id

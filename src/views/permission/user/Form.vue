@@ -256,16 +256,7 @@ export default {
         ],
         organizeId: [
           { required: true, message: '请选择部门', trigger: 'change' }
-        ],
-        managerId: [
-          { required: true, message: '请选择直属主管', trigger: 'change' }
-        ],
-        positionId: [
-          { required: true, message: '请选择岗位', trigger: 'blur' }
-        ],
-        roleId: [
-          { required: true, message: '请选择角色', trigger: 'change' }
-        ],
+        ]
       }
     }
   },

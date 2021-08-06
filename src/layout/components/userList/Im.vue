@@ -22,10 +22,9 @@
               <div class="chatList-arrow"></div>
               <p v-if="item.messageType=='text'" v-html="item.message" class="chatList__msg--text">
               </p>
-              <el-image :src="define.comUrl+'/api/file/Image/IM/'+item.message.path"
-                class="chatList__msg--img" v-if="item.messageType=='image' && item.message.path"
-                :preview-src-list="[define.comUrl +'/api/file/Image/IM/'+item.message.path]"
-                :z-index="10000">
+              <el-image :src="define.comUrl+item.message.path" class="chatList__msg--img"
+                v-if="item.messageType=='image' && item.message.path"
+                :preview-src-list="[define.comUrl+item.message.path]" :z-index="10000">
               </el-image>
               <audio class="chatList__msg--audio" controls :src="define.comUrl+item.message.path"
                 v-if="item.messageType=='voice' && item.message.path"
@@ -50,8 +49,10 @@
                 slot="reference">
               </el-link>
             </el-popover>
-            <el-upload :show-file-list="false" action='' :limit="1" class="uploadImg-btn"
-              :auto-upload="false" :on-change="getFile" ref="upload" accept="image/*">
+            <el-upload :show-file-list="false" :action="define.comUploadUrl+'/IM'" :limit="1"
+              class="uploadImg-btn" :headers="{ Authorization: $store.getters.token }"
+              :on-success="handleSuccess" :before-upload="beforeUpload" ref="upload"
+              accept="image/*">
               <el-link icon="ym-custom ym-custom-image" :underline="false" title="发送图片">
               </el-link>
             </el-upload>
@@ -89,13 +90,11 @@
               <div class="chatList-text">
                 <div class="chatList-arrow"></div>
                 <span v-if="item.messageType=='text'" v-html="item.message"></span>
-                <el-image :src="define.comUrl+'/api/file/Image/IM/'+item.message.path"
-                  class="chatList__msg--img" v-if="item.messageType=='image' && item.message.path"
-                  :preview-src-list="[define.comUrl+'/api/file/Image/IM/'+item.message.path]"
-                  :z-index="10000">
+                <el-image :src="define.comUrl+item.message.path" class="chatList__msg--img"
+                  v-if="item.messageType=='image' && item.message.path"
+                  :preview-src-list="[define.comUrl+item.message.path]" :z-index="10000">
                 </el-image>
-                <audio class="chatList__msg--audio" controls
-                  :src="define.comUrl + item.message.path"
+                <audio class="chatList__msg--audio" controls :src="define.comUrl+item.message.path"
                   v-if="item.messageType=='voice' && item.message.path"
                   @click="handleEvent('voice',define.comUrl+item.message.path)"></audio>
                 <video :src="item.message" controls class="chatList__msg--video"
@@ -309,32 +308,43 @@ export default {
       }
       socket.send(JSON.stringify(messageList));
     },
-    // 发送图片
-    getFile(file) {
-      let isRightSize = file.size < 1024 * 1024 * 5
-      if (!isRightSize) return this.$message.error(`图片大小不能超过5M`)
-      this.getBase64(file.raw).then(res => {
-        let data = res
-        this.getImgSize(data.e).then(res => {
-          let messageContent = {
-            base64: data.base64,
-            width: res.width,
-            height: res.height
-          }
-          let sendMessage = {
-            method: "SendMessage",
-            toUserId: this.info.id,
-            messageType: "image",
-            messageContent,
-            token: this.$store.getters.token,
-          }
-          this.socket.send(JSON.stringify(sendMessage))
-          this.$refs.upload.clearFiles()
-          this.$nextTick(() => {
-            this.scroll(500)
+    handleSuccess(res, file, fileList) {
+      if (res.code == 200) {
+        if (!res.data || !res.data.name) return
+        const name = res.data.name
+        this.getBase64(file.raw).then(res => {
+          let data = res
+          this.getImgSize(data.e).then(res => {
+            let messageContent = {
+              name,
+              width: res.width,
+              height: res.height
+            }
+            let sendMessage = {
+              method: "SendMessage",
+              toUserId: this.info.id,
+              messageType: "image",
+              messageContent,
+              token: this.$store.getters.token,
+            }
+            this.socket.send(JSON.stringify(sendMessage))
+            this.$nextTick(() => {
+              this.scroll(500)
+            })
           })
         })
-      })
+      } else {
+        fileList = []
+        this.$message({ message: res.msg, type: 'error', duration: 1500 })
+      }
+      this.$refs.upload.clearFiles()
+    },
+    beforeUpload(file) {
+      let isRightSize = file.size < 1024 * 1024 * 5
+      if (!isRightSize) {
+        this.$message.error(`图片大小不能超过5M`)
+      }
+      return isRightSize;
     },
     getBase64(file) {
       let _this = this

@@ -12,15 +12,15 @@
           <template v-if="activeData.__config__">
             <template v-if="$store.getters.hasTable">
               <template v-if="activeData.__config__.jnpfKey==='table'">
-                <el-form-item v-if="activeData.__vModel__!==undefined" label="字段名">
-                  <el-input v-model="activeData.__vModel__" placeholder="请输入字段名（v-model）"
+                <el-form-item v-if="activeData.__vModel__!==undefined" label="控件字段">
+                  <el-input v-model="activeData.__vModel__" placeholder="请输入控件字段（v-model）"
                     disabled />
                 </el-form-item>
               </template>
               <template v-else>
                 <template v-if="!activeData.__config__.isSubTable">
-                  <el-form-item v-if="activeData.__vModel__!==undefined" label="字段名">
-                    <el-select v-model="activeData.__vModel__" placeholder="请选择字段名（v-model）"
+                  <el-form-item v-if="activeData.__vModel__!==undefined" label="控件字段">
+                    <el-select v-model="activeData.__vModel__" placeholder="请选择控件字段（v-model）"
                       clearable @change="fieldChange">
                       <el-option v-for="item in formItemList" :key="item.field" :value="item.field"
                         :label="item.fieldName?item.field+'('+item.fieldName+')':item.field">
@@ -29,8 +29,8 @@
                   </el-form-item>
                 </template>
                 <template v-if="activeData.__config__.isSubTable && subTable.length">
-                  <el-form-item v-if="activeData.__vModel__!==undefined" label="字段名">
-                    <el-select v-model="activeData.__vModel__" placeholder="请选择字段名（v-model）"
+                  <el-form-item v-if="activeData.__vModel__!==undefined" label="控件字段">
+                    <el-select v-model="activeData.__vModel__" placeholder="请选择控件字段（v-model）"
                       clearable @change="fieldChange1">
                       <el-option
                         v-for="item in getSubTalebFiled(activeData.__config__.relationTable)"
@@ -43,8 +43,8 @@
               </template>
             </template>
             <template v-else>
-              <el-form-item v-if="activeData.__vModel__!==undefined" label="字段名">
-                <el-input v-model="activeData.__vModel__" placeholder="请输入字段名（v-model）" disabled />
+              <el-form-item v-if="activeData.__vModel__!==undefined" label="控件字段">
+                <el-input v-model="activeData.__vModel__" placeholder="请输入控件字段（v-model）" disabled />
               </el-form-item>
             </template>
             <JNPFComInput v-if="activeData.__config__.jnpfKey==='comInput'"
@@ -100,23 +100,25 @@
               :active-data="activeData" ref="calculate" />
             <PopupSelect v-if="activeData.__config__.jnpfKey==='popupSelect'"
               :active-data="activeData" />
+            <Tab v-if="activeData.__config__.jnpfKey==='tab'" :active-data="activeData" />
+            <Collapse v-if="activeData.__config__.jnpfKey==='collapse'" :active-data="activeData" />
             <template v-if="isSystem">
-              <el-form-item label="标题名">
-                <el-input v-model="activeData.__config__.label" placeholder="请输入标题名" />
+              <el-form-item label="控件标题">
+                <el-input v-model="activeData.__config__.label" placeholder="请输入控件标题" />
               </el-form-item>
               <el-form-item label="控件栅格">
                 <el-slider v-model="activeData.__config__.span" :max="24" :min="6" show-stops
                   :step="2" show-tooltip />
               </el-form-item>
               <el-form-item label="标题宽度">
-                <el-input v-model.number="activeData.__config__.labelWidth" type="number"
-                  placeholder="请输入标题宽度" />
+                <el-input-number v-model="activeData.__config__.labelWidth" placeholder="标题宽度"
+                  :min="0" :precision="0" controls-position="right" />
               </el-form-item>
               <el-form-item label="是否隐藏" v-if="activeData.__config__.jnpfKey !=='billRule'">
                 <el-switch v-model="activeData.__config__.noShow" />
               </el-form-item>
-              <el-form-item label="选择规则" v-if="activeData.__config__.jnpfKey==='billRule'">
-                <BillRule v-model="activeData.__config__.rule" placeholder="选择规则" />
+              <el-form-item label="选择模板" v-if="activeData.__config__.jnpfKey==='billRule'">
+                <BillRule v-model="activeData.__config__.rule" placeholder="选择模板" />
               </el-form-item>
             </template>
             <template v-if="activeData.__config__.jnpfKey==='table'">
@@ -128,8 +130,8 @@
                   </el-option>
                 </el-select>
               </el-form-item>
-              <el-form-item label="标题名">
-                <el-input v-model="activeData.__config__.label" placeholder="请输入标题名" />
+              <el-form-item label="控件标题">
+                <el-input v-model="activeData.__config__.label" placeholder="请输入控件标题" />
               </el-form-item>
               <el-form-item label="显示标题">
                 <el-switch v-model="activeData.__config__.showTitle" />
@@ -142,6 +144,9 @@
               <el-form-item label="控件栅格" label-width="76px">
                 <el-slider v-model="activeData.__config__.span" :max="24" :min="6" show-stops
                   :step="2" show-tooltip />
+              </el-form-item>
+              <el-form-item label="卡片标题" label-width="76px">
+                <el-input v-model="activeData.header" placeholder="请输入卡片标题" />
               </el-form-item>
               <el-form-item label="显示阴影" label-width="76px">
                 <el-radio-group v-model="activeData.shadow" size="small">
@@ -188,7 +193,8 @@
             </el-radio-group>
           </el-form-item>
           <el-form-item label="标题宽度">
-            <el-input v-model.number="formConf.labelWidth" type="number" placeholder="请输入标题宽度" />
+            <el-input-number v-model="formConf.labelWidth" :min="0" placeholder="标题宽度"
+              controls-position="right" />
           </el-form-item>
           <el-form-item label="栅格间隔">
             <el-input-number v-model="formConf.gutter" :min="0" placeholder="栅格间隔"
@@ -267,6 +273,8 @@ import RelationFlow from './RightComponents/RelationFlow'
 import RelationFlowAttr from './RightComponents/RelationFlowAttr'
 import JNPFCalculate from './RightComponents/Calculate'
 import PopupSelect from './RightComponents/PopupSelect'
+import Tab from './RightComponents/Tab'
+import Collapse from './RightComponents/Collapse'
 
 const commonRightList = ['comSelect', 'depSelect', 'posSelect', 'userSelect', 'dicSelect', 'editor']
 const systemList = ['createUser', 'createTime', 'modifyUser', 'modifyTime', 'currOrganize', 'currDept', 'currPosition', 'billRule']
@@ -303,7 +311,9 @@ export default {
     RelationFlow,
     RelationFlowAttr,
     JNPFCalculate,
-    PopupSelect
+    PopupSelect,
+    Tab,
+    Collapse
   },
   props: ['showField', 'activeData', 'formConf', 'modelType'],
   data() {

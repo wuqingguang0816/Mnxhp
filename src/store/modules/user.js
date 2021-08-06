@@ -119,10 +119,12 @@ const actions = {
               }
             }
             if (e.type == 2) {
+              let path = e.urlAddress
+              if (path.indexOf("?") > -1) path = path.split("?")[0]
               e.path = '/' + e.urlAddress
               let newObj = {
-                path: '/' + e.urlAddress,
-                component: (resolve) => require([`@/views/${e.urlAddress}`], resolve),
+                path: '/' + path,
+                component: (resolve) => require([`@/views/${path}`], resolve),
                 name: name,
                 meta: {
                   title: name,

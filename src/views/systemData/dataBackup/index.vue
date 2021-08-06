@@ -34,7 +34,7 @@
           <el-table-column prop="fileSize" label="文件大小" sortable width="120" />
           <el-table-column prop="creatorTime" :formatter="jnpf.tableDateFormat" sortable
             label="备份时间" width="120" />
-          <el-table-column label="操作" width="100">
+          <el-table-column label="操作" width="130">
             <template slot-scope="scope">
               <tableOpts @del="handleDel(scope.row.id)">
                 <el-button type="text" @click="handleDownload(scope.row.fileUrl)">下载</el-button>
