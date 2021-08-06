@@ -5,6 +5,9 @@
     <el-table-column type="selection" width="50" v-if="hasC" align="center" />
     <el-table-column type="index" width="50" label="序号" v-if="hasNO" align="center" />
     <slot></slot>
+    <template slot="empty">
+      <el-empty description="暂无数据" :image-size="120"></el-empty>
+    </template>
   </el-table>
 </template>
 
