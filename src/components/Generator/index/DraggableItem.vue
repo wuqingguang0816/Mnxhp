@@ -68,7 +68,7 @@ const layouts = {
                     <el-tab-pane key={item.name} label={item.title} >
                       <el-col >
                         {tip}
-                        <el-row gutter={element.__config__.gutter} class={className}>
+                        <el-row gutter={element.__config__.gutter} style="padding-top:15px">
                           <draggable list={item.__config__.children} animation={340} group={childgroup} class="drag-wrapper">
                             {child}
                           </draggable>
@@ -94,10 +94,15 @@ const layouts = {
                 element.__config__.children.map((item, i) => {
                   let child = renderChildren.apply(this, [h, item, i, element])
                   let childgroup = { name: 'componentsGroup', put: (...arg) => put(...arg, item) }
+                  let tip = ''
+                  if (!item.__config__.children.length) {
+                    tip = <div class="table-tip card-tip">请将组件拖到此区域(可拖多个组件)</div>
+                  }
                   return (
                     <el-collapse-item key={item.name} title={item.title} name={item.name} >
-                      <el-col >
-                        <el-row gutter={element.__config__.gutter} class={className}>
+                      <el-col style="position:relative">
+                        {tip}
+                        <el-row gutter={element.__config__.gutter} style="padding-top:15px">
                           <draggable list={item.__config__.children} animation={340} group={childgroup} class="drag-wrapper">
                             {child}
                           </draggable>
@@ -132,7 +137,7 @@ const layouts = {
             nativeOnClick={event => { activeItem(element); event.stopPropagation() }}>
             <span class="component-name">{element.__config__.componentName}</span>
             {tip}
-            <draggable list={element.__config__.children} animation={340} group={group} class="drag-wrapper">
+            <draggable list={element.__config__.children} animation={340} group={group} class="drag-wrapper" style="margin-top:20px">
               {child}
             </draggable>
             {components.itemBtns.apply(this, arguments)}
@@ -147,7 +152,7 @@ const layouts = {
       }
       return (
         <el-col span={element.__config__.span}>
-          <el-row gutter={element.__config__.gutter} class={className}
+          <el-row gutter={element.__config__.gutter} class={className + ' drawing-row-item-table'}
             nativeOnClick={event => { activeItem(element); event.stopPropagation() }}>
             <span class="component-name">{element.__config__.label}</span>
             {tip}
@@ -164,7 +169,7 @@ const layouts = {
     if (element.__config__.jnpfKey === 'card') {
       let tip = ''
       if (!element.__config__.children.length) {
-        tip = <div class="table-tip">请将组件拖到此区域(可拖多个组件)</div>
+        tip = <div class="table-tip card-tip">请将组件拖到此区域(可拖多个组件)</div>
       }
       return (
         <el-col span={element.__config__.span}>
@@ -172,7 +177,7 @@ const layouts = {
             nativeOnClick={event => { activeItem(element); event.stopPropagation() }}>
             <el-card shadow={element.shadow} header={element.header}>
               <el-col>
-                <el-row gutter={element.__config__.gutter} class={className}
+                <el-row gutter={element.__config__.gutter}
                   nativeOnClick={event => { activeItem(element); event.stopPropagation() }}>
                   {tip}
                   <draggable list={element.__config__.children} animation={340} group={group} class="drag-wrapper">
@@ -261,9 +266,12 @@ export default {
   color: #999;
   text-align: center;
   position: absolute;
-  top: 40px;
+  top: 60px;
 }
 .tab-tip {
-  top: 60px;
+  top: 45px;
+}
+.card-tip {
+  top: 30px;
 }
 </style>

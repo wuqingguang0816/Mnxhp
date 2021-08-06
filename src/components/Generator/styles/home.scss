@@ -318,8 +318,12 @@ $lighterBlue: #409EFF;
     margin-bottom: 2px;
   }
 
-  .el-col {
-    margin-top: 15px;
+  &.drawing-row-item-table {
+    padding-top: 15px;
+
+    .el-col {
+      margin-top: 15px;
+    }
   }
 
   .el-form-item {
