@@ -3,6 +3,11 @@
     <div class="JNPF-common-layout-left">
       <div class="JNPF-common-title">
         <h2>{{$t('common.organization')}}</h2>
+        <span class="options">
+          <el-tooltip content="组织架构图" placement="top">
+            <el-link icon="el-icon-menu" :underline="false" @click="showDiagram" />
+          </el-tooltip>
+        </span>
       </div>
       <el-scrollbar class="JNPF-common-el-tree-scrollbar">
         <el-tree ref="treeBox" v-loading="treeLoading"
@@ -80,6 +85,7 @@
       </div>
     </div>
     <Form v-if="formVisible" ref="Form" @refreshDataList="initData" />
+    <Diagram v-if="diagramVisible" ref="Diagram" @close="diagramVisible = false" />
     <UserRelationList v-if="userRelationListVisible" ref="UserRelationList"
       @refreshDataList="getOrganizeList" />
   </div>
@@ -89,11 +95,12 @@
 import { getDepartmentSelector } from '@/api/permission/department'
 import { getPositionList, delPosition } from '@/api/permission/position'
 import Form from './Form'
+import Diagram from '@/views/permission/user/Diagram'
 import UserRelationList from '@/views/permission/userRelation/Selector'
 
 export default {
   name: 'permission-position',
-  components: { Form, UserRelationList },
+  components: { Form, UserRelationList, Diagram },
   data() {
     return {
       treeData: [],
@@ -114,6 +121,7 @@ export default {
         label: 'fullName'
       },
       total: 0,
+      diagramVisible: false,
       formVisible: false
     }
   },
@@ -121,6 +129,12 @@ export default {
     this.getOrganizeList()
   },
   methods: {
+    showDiagram() {
+      this.diagramVisible = true
+      this.$nextTick(() => {
+        this.$refs.Diagram.init()
+      })
+    },
     getOrganizeList() {
       this.treeLoading = true
       getDepartmentSelector().then(res => {
