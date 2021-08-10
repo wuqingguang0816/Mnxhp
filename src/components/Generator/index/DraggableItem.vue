@@ -16,7 +16,7 @@ const components = {
         <i class="el-icon-copy-document" />
       </span>,
       <el-popconfirm title="您确定要删除该组件吗？" class="drawing-item-delete" onConfirm={event => {
-        deleteItem(index, parent); event.stopPropagation()
+        deleteItem(index, parent)
       }}>
         <span title="删除" slot="reference" style="width:100%;height:100%;display:inline-block">
           <i class="el-icon-delete" />
@@ -262,18 +262,3 @@ export default {
   }
 }
 </script>
-<style lang="scss" scoped>
-.table-tip {
-  width: 100%;
-  color: #999;
-  text-align: center;
-  position: absolute;
-  top: 60px;
-}
-.tab-tip {
-  top: 45px;
-}
-.card-tip {
-  top: 30px;
-}
-</style>

@@ -4,15 +4,17 @@
       <div class="JNPF-common-title">
         <h2>{{$t('common.organization')}}</h2>
       </div>
-      <el-tree ref="treeBox" v-loading="treeLoading"
-        :element-loading-text="$t('common.loadingText')" :data="treeData" :props="defaultProps"
-        default-expand-all highlight-current :expand-on-click-node="false" node-key="id"
-        @node-click="handleNodeClick" class="JNPF-common-el-tree">
-        <span class="custom-tree-node" slot-scope="{ data }">
-          <i :class="data.icon" />
-          <span class="text">{{data.fullName}}</span>
-        </span>
-      </el-tree>
+      <el-scrollbar class="JNPF-common-el-tree-scrollbar">
+        <el-tree ref="treeBox" v-loading="treeLoading"
+          :element-loading-text="$t('common.loadingText')" :data="treeData" :props="defaultProps"
+          default-expand-all highlight-current :expand-on-click-node="false" node-key="id"
+          @node-click="handleNodeClick" class="JNPF-common-el-tree">
+          <span class="custom-tree-node" slot-scope="{ data }">
+            <i :class="data.icon" />
+            <span class="text">{{data.fullName}}</span>
+          </span>
+        </el-tree>
+      </el-scrollbar>
     </div>
     <div class="JNPF-common-layout-center JNPF-flex-main">
       <el-row class="JNPF-common-search-box" :gutter="16">

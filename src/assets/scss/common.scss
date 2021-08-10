@@ -34,7 +34,6 @@
 
   .JNPF-common-layout-left {
     width: 220px;
-    padding: 0 10px;
     background-color: #fff;
     flex-shrink: 0;
     height: 100%;
@@ -44,6 +43,7 @@
 
     .JNPF-common-title {
       flex-shrink: 0;
+      padding: 0 10px;
     }
 
     .JNPF-common-el-tree-scrollbar {
@@ -1393,6 +1393,10 @@ textarea.el-textarea__inner {
 
 .el-input-number.is-controls-right .el-input__inner {
   text-align: left !important;
+}
+
+.el-popconfirm__main {
+  margin: 14px 0;
 }
 
 .word-form {
