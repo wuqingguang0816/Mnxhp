@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { Message } from 'element-ui'
+import { message } from '@/utils/message'
 import store from '@/store'
 import { getToken } from '@/utils/auth'
 import define from '@/utils/define'
@@ -54,7 +54,7 @@ service.interceptors.response.use(
     // 特殊接口处理
     if (url.indexOf('/Base/DataSource/Actions/Test') > -1 || (url.indexOf('Model') > -1 && url.indexOf('Config') > -1)) return res
     if (res.code !== 200) {
-      Message({
+      message({
         message: res.msg || '请求出错，请重试',
         type: 'error',
         duration: 1500,
@@ -77,7 +77,7 @@ service.interceptors.response.use(
     if (process.env.NODE_ENV === 'development') {
       console.log(error) // for debug
     }
-    Message({
+    message({
       message: '请求出错，请重试',
       type: 'error',
       duration: 1500
