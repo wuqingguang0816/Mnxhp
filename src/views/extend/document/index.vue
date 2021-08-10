@@ -18,8 +18,8 @@
           <el-row class="JNPF-common-search-box" :gutter="16">
             <el-form @submit.native.prevent>
               <el-col :span="6">
-                <el-form-item label="文件名">
-                  <el-input v-model="keyword" placeholder="搜索我的文件" clearable />
+                <el-form-item label="关键词">
+                  <el-input v-model="keyword" placeholder="请输入关键词查询" clearable />
                 </el-form-item>
               </el-col>
               <el-col :span="6">
