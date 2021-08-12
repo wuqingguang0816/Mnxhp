@@ -30,6 +30,7 @@
     <el-form-item label="存储字段">
       <el-input v-model.number="activeData.propsValue" placeholder="请输入存储字段" />
     </el-form-item>
+    <el-divider>列表字段</el-divider>
     <draggable :list="activeData.columnOptions" :animation="340" group="selectItem"
       handle=".option-drag">
       <div v-for="(item, index) in activeData.columnOptions" :key="index" class="select-item">
