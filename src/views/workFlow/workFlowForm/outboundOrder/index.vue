@@ -162,15 +162,13 @@ export default {
         outboundDate: [
           { required: true, message: '出库日期不能为空', trigger: 'change' },
         ],
-      },
-      paymentMethodOptions: []
+      }
     }
   },
   methods: {
     selfInit(data) {
       this.dataForm.flowTitle = this.userInfo.userName + "的出库单"
     },
-    beforeInit() { this.getPaymentMethodOptions() },
     addHandle() {
       let item = {
         goodsName: "", specifications: "", unit: "", qty: 0, price: 0, amount: 0, description: ""

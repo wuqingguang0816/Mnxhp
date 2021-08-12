@@ -161,15 +161,13 @@ export default {
         leadDate: [
           { required: true, message: '领料日期不能为空', trigger: 'change' },
         ],
-      },
-      paymentMethodOptions: []
+      }
     }
   },
   methods: {
     selfInit(data) {
       this.dataForm.flowTitle = this.userInfo.userName + "的领料单"
     },
-    beforeInit() { this.getPaymentMethodOptions() },
     addHandle() {
       let item = {
         goodsName: "", specifications: "", unit: "", materialDemand: 1, proportioning: 1, price: 0, amount: 0, description: ""
