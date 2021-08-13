@@ -12,11 +12,13 @@ const components = {
       }}>
         <i class="el-icon-copy-document" />
       </span>,
-      <span class="drawing-item-delete" title="删除" onClick={event => {
-        deleteItem(index, parent); event.stopPropagation()
+      <el-popconfirm title="您确定要删除该组件吗？" class="drawing-item-delete" onConfirm={event => {
+        deleteItem(index, parent)
       }}>
-        <i class="el-icon-delete" />
-      </span>
+        <span title="删除" slot="reference" style="width:100%;height:100%;display:inline-block">
+          <i class="el-icon-delete" />
+        </span>
+      </el-popconfirm>
     ]
   }
 }
@@ -82,7 +84,7 @@ const layouts = {
       }
       return (
         <el-col span={element.__config__.span}>
-          <el-row gutter={element.__config__.gutter} class={className}
+          <el-row gutter={element.__config__.gutter} class={className} style="padding-top:30px"
             nativeOnClick={event => { activeItem(element); event.stopPropagation() }}>
             <span class="component-name">{element.__config__.componentName}</span>
             {tip}
@@ -101,7 +103,7 @@ const layouts = {
       }
       return (
         <el-col span={element.__config__.span}>
-          <el-row gutter={element.__config__.gutter} class={className}
+          <el-row gutter={element.__config__.gutter} class={className} style="padding-top:30px"
             nativeOnClick={event => { activeItem(element); event.stopPropagation() }}>
             <span class="component-name">{element.__config__.label}</span>
             {tip}
@@ -120,7 +122,7 @@ const layouts = {
       }
       return (
         <el-col span={element.__config__.span}>
-          <el-row gutter={element.__config__.gutter} class={className}
+          <el-row gutter={element.__config__.gutter} class={className} style="padding-top:30px"
             nativeOnClick={event => { activeItem(element); event.stopPropagation() }}>
             <span class="component-name">{element.__config__.label}</span>
             {tip}
@@ -181,12 +183,3 @@ export default {
   }
 }
 </script>
-<style lang="scss" scoped>
-.table-tip {
-  width: 100%;
-  color: #999;
-  text-align: center;
-  position: absolute;
-  top: 40px;
-}
-</style>

@@ -3,16 +3,23 @@
     <div class="JNPF-common-layout-left">
       <div class="JNPF-common-title">
         <h2>{{$t('common.organization')}}</h2>
-      </div>
-      <el-tree ref="treeBox" v-loading="treeLoading"
-        :element-loading-text="$t('common.loadingText')" :data="treeData" :props="defaultProps"
-        default-expand-all highlight-current :expand-on-click-node="false" node-key="id"
-        @node-click="handleNodeClick" class="JNPF-common-el-tree">
-        <span class="custom-tree-node" slot-scope="{ data }">
-          <i :class="data.icon" />
-          <span class="text">{{data.fullName}}</span>
+        <span class="options">
+          <el-tooltip content="组织架构图" placement="top">
+            <el-link icon="el-icon-menu" :underline="false" @click="showDiagram" />
+          </el-tooltip>
         </span>
-      </el-tree>
+      </div>
+      <el-scrollbar class="JNPF-common-el-tree-scrollbar">
+        <el-tree ref="treeBox" v-loading="treeLoading"
+          :element-loading-text="$t('common.loadingText')" :data="treeData" :props="defaultProps"
+          default-expand-all highlight-current :expand-on-click-node="false" node-key="id"
+          @node-click="handleNodeClick" class="JNPF-common-el-tree">
+          <span class="custom-tree-node" slot-scope="{ data }">
+            <i :class="data.icon" />
+            <span class="text">{{data.fullName}}</span>
+          </span>
+        </el-tree>
+      </el-scrollbar>
     </div>
     <div class="JNPF-common-layout-center JNPF-flex-main">
       <el-row class="JNPF-common-search-box" :gutter="16">
@@ -62,6 +69,7 @@
       </div>
     </div>
     <Form v-if="formVisible" ref="Form" @refreshDataList="initData" />
+    <Diagram v-if="diagramVisible" ref="Diagram" @close="diagramVisible = false" />
   </div>
 </template>
 <script>
@@ -70,14 +78,12 @@ import {
   getDepartmentList,
   delDepartment
 } from '@/api/permission/department'
-
+import Diagram from '@/views/permission/user/Diagram'
 import Form from './Form'
 
 export default {
   name: 'permission-department',
-  components: {
-    Form
-  },
+  components: { Form, Diagram },
   data() {
     return {
       treeData: [],
@@ -94,6 +100,7 @@ export default {
         label: 'fullName'
       },
       formVisible: false,
+      diagramVisible: false,
       typeListVisible: false,
       typeVisible: false
     }
@@ -102,6 +109,12 @@ export default {
     this.getOrganizeList()
   },
   methods: {
+    showDiagram() {
+      this.diagramVisible = true
+      this.$nextTick(() => {
+        this.$refs.Diagram.init()
+      })
+    },
     getOrganizeList() {
       this.treeLoading = true
       getOrganizeTree().then(res => {
