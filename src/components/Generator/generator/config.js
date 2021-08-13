@@ -163,7 +163,7 @@ export const inputComponents = [{
       }]
     },
     style: {},
-    size: 'medium',
+    size: 'small',
     disabled: false
   },
   {
@@ -201,9 +201,7 @@ export const inputComponents = [{
       }]
     },
     style: {},
-    size: 'medium',
-    min: null,
-    max: null,
+    size: 'small',
     disabled: false
   },
   {
@@ -406,7 +404,7 @@ export const inputComponents = [{
     'show-alpha': false,
     'color-format': '',
     disabled: false,
-    size: 'medium'
+    size: 'small'
   },
   {
     __config__: {

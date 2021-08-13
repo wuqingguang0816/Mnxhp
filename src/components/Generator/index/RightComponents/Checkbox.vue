@@ -19,14 +19,6 @@
           {{item[activeData.__config__.props.label]}}</el-checkbox>
       </el-checkbox-group>
     </el-form-item>
-    <el-form-item label="至少应选">
-      <el-input-number :value="activeData.min" :min="0" placeholder="至少应选"
-        @input="$set(activeData, 'min', $event?$event:undefined)" controls-position="right" />
-    </el-form-item>
-    <el-form-item label="最多可选">
-      <el-input-number :value="activeData.max" :min="0" placeholder="最多可选"
-        @input="$set(activeData, 'max', $event?$event:undefined)" controls-position="right" />
-    </el-form-item>
     <el-divider>选项</el-divider>
     <el-form-item label="" label-width="40px">
       <el-radio-group v-model="activeData.__config__.dataType" size="small"
