@@ -3,9 +3,6 @@
     class="JNPF-dialog JNPF-dialog_center" lock-scroll append-to-body width="1000px">
     <div class="JNPF-common-layout">
       <div class="JNPF-common-layout-left">
-        <!-- <div class="JNPF-common-title">
-          <h2>分类</h2>
-        </div> -->
         <el-scrollbar class="JNPF-common-el-tree-scrollbar">
           <el-tree ref="treeBox" v-loading="treeLoading"
             :element-loading-text="$t('common.loadingText')" :data="treeData" :props="defaultProps"
@@ -158,11 +155,14 @@ export default {
 </script>
 <style lang="scss" scoped>
 >>> .el-dialog__body {
-  height: 70vh;
+  height: 60vh;
   padding: 0 0 10px !important;
   display: flex;
   flex-direction: column;
   overflow: hidden;
+  .JNPF-common-layout-left {
+    margin-right: 1px;
+  }
   .JNPF-common-search-box {
     margin-bottom: 0;
     .JNPF-common-search-box-right {

@@ -20,14 +20,12 @@
         <div class="JNPF-common-head">
           <div v-if="isPreview || !columnData.useBtnPermission">
             <el-button :type="i==0?'primary':'text'" :icon="item.icon"
-              @click="headBtnsHandel(item.value)" v-for="(item, i) in columnData.btnsList"
-              :class="{'JNPF-table-delBtn':item.value=='batchRemove' && i!=0 }" :key="i">
+              @click="headBtnsHandel(item.value)" v-for="(item, i) in columnData.btnsList" :key="i">
               {{item.label}}</el-button>
           </div>
           <div v-else>
             <el-button :type="i==0?'primary':'text'" :icon="item.icon" v-has="'btn_'+item.value"
-              @click="headBtnsHandel(item.value)" v-for="(item, i) in columnData.btnsList"
-              :class="{'JNPF-table-delBtn':item.value=='batchRemove' && i!=0 }" :key="i">
+              @click="headBtnsHandel(item.value)" v-for="(item, i) in columnData.btnsList" :key="i">
               {{item.label}}</el-button>
           </div>
           <div class="JNPF-common-head-right">
@@ -41,22 +39,15 @@
         <JNPF-table v-loading="listLoading" :data="list" row-key="id" default-expand-all
           :tree-props="{children: 'children', hasChildren: ''}" @sort-change='sortChange'
           :has-c="hasBatchBtn" @selection-change="handleSelectionChange" v-if="refreshTable">
-          <template v-if="isPreview || !columnData.useColumnPermission">
-            <el-table-column :prop="item.prop" :label="item.label" :align="item.align"
-              :width="item.width" v-for="(item, i) in columnData.columnList" :key="i"
-              :sortable="item.sortable?'custom':item.sortable" />
-          </template>
-          <template v-else>
-            <el-table-column :prop="item.prop" :label="item.label" :align="item.align"
-              :width="item.width" v-for="(item, i) in columnList" :key="i"
-              :sortable="item.sortable?'custom':item.sortable" />
-          </template>
+          <el-table-column :prop="item.prop" :label="item.label" :align="item.align"
+            :width="item.width" v-for="(item, i) in columnList" :key="i"
+            :sortable="item.sortable?'custom':item.sortable" />
           <el-table-column prop="flowState" label="状态" width="100" v-if="config.webType == 3">
             <template slot-scope="scope" v-if="!scope.row.top">
               <el-tag v-if="scope.row.flowState==1">等待审核</el-tag>
               <el-tag type="success" v-else-if="scope.row.flowState==2">审核通过</el-tag>
               <el-tag type="danger" v-else-if="scope.row.flowState==3">审核驳回</el-tag>
-              <el-tag type="danger" v-else-if="scope.row.flowState==4">审核撤回</el-tag>
+              <el-tag type="danger" v-else-if="scope.row.flowState==4">流程撤回</el-tag>
               <el-tag type="warning" v-else-if="scope.row.flowState==5">审核终止</el-tag>
               <el-tag type="info" v-else>等待提交</el-tag>
             </template>
@@ -74,7 +65,7 @@
                   </template>
                   <template v-if="item.value=='remove'">
                     <el-button size="mini" type="text" :key="i" class="JNPF-table-delBtn"
-                      :disabled="config.webType == 3 && scope.row.flowState>0"
+                      :disabled="config.webType == 3 && [1,2,3,5].indexOf(scope.row.flowState)>-1"
                       @click="columnBtnsHandel(item.value,scope.row)">
                       {{item.label}}</el-button>
                   </template>
@@ -96,7 +87,7 @@
                   </template>
                   <template v-if="item.value=='remove'">
                     <el-button size="mini" type="text" :key="i" class="JNPF-table-delBtn"
-                      :disabled="config.webType == 3 && scope.row.flowState>0"
+                      :disabled="config.webType == 3 && [1,2,3,5].indexOf(scope.row.flowState)>-1"
                       @click="columnBtnsHandel(item.value,scope.row)" v-has="'btn_'+item.value">
                       {{item.label}}</el-button>
                   </template>
@@ -188,11 +179,11 @@ export default {
         this.refreshTable = true
       })
       this.formData = JSON.parse(this.config.formData)
+      this.getColumnList()
       if (this.isPreview) return
       this.listQuery.pageSize = this.columnData.pageSize
       this.listQuery.sort = this.columnData.sort
       this.listQuery.sidx = this.columnData.defaultSidx
-      this.getColumnList()
       if (this.columnData.type === 3 || !this.columnData.hasPage) this.listQuery.pageSize = 10000
       if (this.columnData.type === 2) {
         this.treeProps.value = this.columnData.treePropsValue || 'id'
@@ -245,20 +236,24 @@ export default {
       }
     },
     getColumnList() {
-      const permissionList = this.$store.getters.permissionList
-      const modelId = this.$route.meta.modelId
-      const list = permissionList.filter(o => o.modelId === modelId)
-      const columnList = list[0] && list[0].column ? list[0].column : []
-      let realList = []
-      for (let i = 0; i < columnList.length; i++) {
-        inner: for (let j = 0; j < this.columnData.columnList.length; j++) {
-          if (columnList[i].enCode === this.columnData.columnList[j].prop) {
-            realList.push(this.columnData.columnList[j])
-            break inner
+      if (this.isPreview || !this.columnData.useColumnPermission) {
+        this.columnList = this.columnData.columnList
+      } else {
+        const permissionList = this.$store.getters.permissionList
+        const modelId = this.$route.meta.modelId
+        const list = permissionList.filter(o => o.modelId === modelId)
+        const columnList = list[0] && list[0].column ? list[0].column : []
+        let realList = []
+        for (let i = 0; i < columnList.length; i++) {
+          inner: for (let j = 0; j < this.columnData.columnList.length; j++) {
+            if (columnList[i].enCode === this.columnData.columnList[j].prop) {
+              realList.push(this.columnData.columnList[j])
+              break inner
+            }
           }
         }
+        this.columnList = realList
       }
-      this.columnList = realList
     },
     handleNodeClick(data) {
       if (this.treeActiveId == data[this.treeProps.value]) return
@@ -311,7 +306,7 @@ export default {
       if (key == 'download') {
         this.exportBoxVisible = true
         this.$nextTick(() => {
-          this.$refs.ExportBox.init(this.columnData.columnList)
+          this.$refs.ExportBox.init(this.columnList)
         })
       }
       if (this.isPreview) return

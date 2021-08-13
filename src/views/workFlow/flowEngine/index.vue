@@ -20,7 +20,10 @@
       </el-row>
       <div class="JNPF-common-layout-main JNPF-flex-main">
         <div class="JNPF-common-head">
-          <topOpts @add="dialogVisible=true" />
+          <topOpts @add="dialogVisible=true">
+            <upload-btn url="/api/workflow/Engine/FlowEngine/Actions/ImportData"
+              @on-success="initData" />
+          </topOpts>
           <div class="JNPF-common-head-right">
             <el-tooltip effect="dark" :content="$t('common.refresh')" placement="top">
               <el-link icon="icon-ym icon-ym-Refresh JNPF-common-head-icon" :underline="false"
@@ -78,6 +81,8 @@
                   <el-dropdown-menu slot="dropdown">
                     <el-dropdown-item @click.native="copy(scope.row.id)">
                       复制流程</el-dropdown-item>
+                    <el-dropdown-item @click.native="handleExport(scope.row.id)">
+                      导出流程</el-dropdown-item>
                     <el-dropdown-item @click.native="preview(scope.row)">
                       预览表单</el-dropdown-item>
                   </el-dropdown-menu>
@@ -113,7 +118,7 @@
 </template>
 
 <script>
-import { FlowEngineList, Delete, Release, Stop, Copy } from '@/api/workFlow/FlowEngine'
+import { FlowEngineList, Delete, Release, Stop, Copy, exportData } from '@/api/workFlow/FlowEngine'
 import Form from './Form'
 import preview from '../components/Preview'
 export default {
@@ -190,6 +195,15 @@ export default {
               this.initData()
             }
           });
+        })
+      }).catch(() => { });
+    },
+    handleExport(id) {
+      this.$confirm('您确定要导出该流程, 是否继续?', '提示', {
+        type: 'warning'
+      }).then(() => {
+        exportData(id).then(res => {
+          if (res.data.url) window.location.href = this.define.comUrl + res.data.url
         })
       }).catch(() => { });
     },

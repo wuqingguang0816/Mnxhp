@@ -251,9 +251,13 @@ export default {
       })
     },
     exportMenu(id) {
-      exportMenu(id).then(res => {
-        if (res.data.url) window.location.href = this.define.comUrl + res.data.url
-      })
+      this.$confirm('您确定要导出该菜单, 是否继续?', '提示', {
+        type: 'warning'
+      }).then(() => {
+        exportMenu(id).then(res => {
+          if (res.data.url) window.location.href = this.define.comUrl + res.data.url
+        })
+      }).catch(() => { });
     }
   }
 }

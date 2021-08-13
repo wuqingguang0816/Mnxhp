@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { Message } from 'element-ui'
+import { message } from '@/utils/message'
 import store from '@/store'
 import { getToken } from '@/utils/auth'
 import define from '@/utils/define'
@@ -15,6 +15,7 @@ const service = axios.create({
 // request interceptor
 service.interceptors.request.use(
   config => {
+    if (config.url.indexOf('http') > -1) config.baseURL = ''
     // 部分接口timeout时间单独处理
     if (config.url.indexOf('SynThirdInfo') > -1 || config.url.indexOf('extend/Email/Receive') > -1 ||
       config.url.indexOf('Permission/Authority/Data') > -1 || config.url.indexOf('DataSync/Actions/Execute') > -1) {
@@ -53,7 +54,7 @@ service.interceptors.response.use(
     // 特殊接口处理
     if (url.indexOf('/Base/DataSource/Actions/Test') > -1 || (url.indexOf('Model') > -1 && url.indexOf('Config') > -1)) return res
     if (res.code !== 200) {
-      Message({
+      message({
         message: res.msg || '请求出错，请重试',
         type: 'error',
         duration: 1500,
@@ -76,7 +77,7 @@ service.interceptors.response.use(
     if (process.env.NODE_ENV === 'development') {
       console.log(error) // for debug
     }
-    Message({
+    message({
       message: '请求出错，请重试',
       type: 'error',
       duration: 1500

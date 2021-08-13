@@ -395,7 +395,7 @@ export default {
           }
         } else {
           if (this.dataForm.type == 3) {
-            this.dataForm.urlAddress = `/pages/apply/apply/features/index?id=${moduleId}`
+            this.dataForm.urlAddress = `/pages/apply/dynamicModel/index?id=${moduleId}`
           }
         }
         if (valid) {

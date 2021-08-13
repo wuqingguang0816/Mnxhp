@@ -1,7 +1,7 @@
 <template>
   <el-row>
-    <el-form-item label="标题名">
-      <el-input v-model="activeData.__config__.label" placeholder="请输入标题名" />
+    <el-form-item label="控件标题">
+      <el-input v-model="activeData.__config__.label" placeholder="请输入控件标题" />
     </el-form-item>
     <el-form-item label="占位提示">
       <el-input v-model="activeData.placeholder" placeholder="请输入占位提示" />
@@ -12,13 +12,13 @@
           show-tooltip />
       </el-form-item>
       <el-form-item label="标题宽度">
-        <el-input v-model.number="activeData.__config__.labelWidth" type="number"
-          placeholder="请输入标题宽度" />
+        <el-input-number v-model="activeData.__config__.labelWidth" placeholder="标题宽度" :min="0"
+          :precision="0" controls-position="right" />
       </el-form-item>
     </template>
     <el-form-item label="控件宽度" v-if="activeData.__config__.isSubTable">
       <el-input-number v-model="activeData.__config__.columnWidth" placeholder="控件宽度" :min="0"
-        :precision="0" controls-position="right" /> px
+        :precision="0" controls-position="right" />
     </el-form-item>
     <el-divider>弹窗数据</el-divider>
     <el-alert title="默认首字段为显示字段" type="warning" :closable="false" show-icon />
@@ -30,13 +30,14 @@
     <el-form-item label="存储字段">
       <el-input v-model.number="activeData.propsValue" placeholder="请输入存储字段" />
     </el-form-item>
+    <el-divider>列表字段</el-divider>
     <draggable :list="activeData.columnOptions" :animation="340" group="selectItem"
       handle=".option-drag">
       <div v-for="(item, index) in activeData.columnOptions" :key="index" class="select-item">
         <div class="select-line-icon option-drag">
           <i class="el-icon-s-operation" />
         </div>
-        <el-input v-model="item.label" placeholder="字段名称" size="small" />
+        <el-input v-model="item.label" placeholder="列名" size="small" />
         <el-input v-model="item.value" placeholder="字段" size="small" />
         <div class="close-btn select-line-icon" @click="activeData.columnOptions.splice(index, 1)">
           <i class="el-icon-remove-outline" />

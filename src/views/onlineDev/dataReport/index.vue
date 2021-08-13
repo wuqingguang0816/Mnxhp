@@ -181,9 +181,13 @@ export default {
       })
     },
     handleExport(id) {
-      let link = document.createElement('a')
-      link.href = `${reportServer}/api/datareport/Data/${id}/Actions/Export`
-      link.click();
+      this.$confirm('您确定要导出该报表, 是否继续?', '提示', {
+        type: 'warning'
+      }).then(() => {
+        let link = document.createElement('a')
+        link.href = `${reportServer}/api/datareport/Data/${id}/Actions/Export`
+        link.click();
+      }).catch(() => { });
     },
     handleSuccess(res) {
       this.btnLoading = false

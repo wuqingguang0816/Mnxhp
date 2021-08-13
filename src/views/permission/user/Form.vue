@@ -96,8 +96,7 @@
               <el-form-item label="头像" prop="headIcon">
                 <el-upload class="avatar-uploader" :action="define.comUploadUrl+'/userAvatar'"
                   :show-file-list="false" :on-success="handleAvatarSuccess" accept="image/*">
-                  <img v-if="dataForm.headIcon"
-                    :src="define.comUrl +'/api/file/Image/userAvatar/' + dataForm.headIcon"
+                  <img v-if="dataForm.headIcon" :src="define.comUrl+dataForm.headIcon"
                     class="avatar">
                   <i v-else class="el-icon-plus avatar-uploader-icon" />
                 </el-upload>
@@ -256,16 +255,7 @@ export default {
         ],
         organizeId: [
           { required: true, message: '请选择部门', trigger: 'change' }
-        ],
-        managerId: [
-          { required: true, message: '请选择直属主管', trigger: 'change' }
-        ],
-        positionId: [
-          { required: true, message: '请选择岗位', trigger: 'blur' }
-        ],
-        roleId: [
-          { required: true, message: '请选择角色', trigger: 'change' }
-        ],
+        ]
       }
     }
   },
@@ -331,8 +321,8 @@ export default {
       this.dataForm.roleId = this.roleId.toString()
     },
     handleAvatarSuccess(res) {
-      if (res.code === 200) {
-        this.dataForm.headIcon = res.data.name
+      if (res.code === 200 && res.data && res.data.url) {
+        this.dataForm.headIcon = res.data.url
       } else {
         this.$message.error('头像上传失败');
       }

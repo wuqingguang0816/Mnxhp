@@ -141,15 +141,13 @@ export default {
         reservoirDate: [
           { required: true, message: '入库时间不能为空', trigger: 'change' },
         ],
-      },
-      paymentMethodOptions: []
+      }
     }
   },
   methods: {
     selfInit(data) {
       this.dataForm.flowTitle = this.userInfo.userName + "的成品入库单"
     },
-    beforeInit() { this.getPaymentMethodOptions() },
     addHandle() {
       let item = {
         goodsName: "", specifications: "", unit: "", qty: 0, price: 0, amount: 0, description: ""

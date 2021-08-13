@@ -67,16 +67,20 @@ export default {
       }).catch(() => {});
     },
     exportModel(id) {
-      let method = null
-      if (this.query.type == 1) {
-        method = exportData
-      }
-      if (this.query.type == 2) {
-        method = exportAppData
-      }
-      method(id).then(res => {
-        if (res.data.url) window.location.href = this.define.comUrl + res.data.url
-      })
+      this.$confirm('您确定要导出该功能表单, 是否继续?', '提示', {
+        type: 'warning'
+      }).then(() => {
+        let method = null
+        if (this.query.type == 1) {
+          method = exportData
+        }
+        if (this.query.type == 2) {
+          method = exportAppData
+        }
+        method(id).then(res => {
+          if (res.data.url) window.location.href = this.define.comUrl + res.data.url
+        })
+      }).catch(() => {});
     },
     handleAdd(webType) {
       this.addOrUpdateHandle('', webType)

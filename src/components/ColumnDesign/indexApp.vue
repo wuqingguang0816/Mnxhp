@@ -28,6 +28,11 @@
           </el-table-column>
           <el-table-column prop="label" label="列名" />
           <el-table-column prop="prop" label="字段" />
+          <el-table-column prop="searchType" label="类型">
+            <template slot-scope="scope">
+              {{scope.row.searchType===3?'范围查询':scope.row.searchType===2?'模糊查询':'等于查询'}}
+            </template>
+          </el-table-column>
         </el-table>
       </div>
       <el-divider></el-divider>
@@ -112,7 +117,16 @@
 import Sortable from 'sortablejs'
 import { getDrawingList } from '@/components/Generator/utils/db'
 import { deepClone } from '@/utils'
-import { noColumnShowList, noSearchList } from '@/components/Generator/generator/comConfig'
+import { noColumnShowList, noSearchList, useInputList, useDateList } from '@/components/Generator/generator/comConfig'
+const getSearchType = item => {
+  const jnpfKey = item.__config__.jnpfKey
+  // 等于-1  模糊-2  范围-3
+  const fuzzyList = [...useInputList]
+  const RangeList = [...useDateList, 'time', 'date', 'numInput', 'calculate']
+  if (RangeList.includes(jnpfKey)) return 3
+  if (fuzzyList.includes(jnpfKey)) return 2
+  return 1
+}
 const defaultColumnData = {
   searchList: [], // 查询条件
   columnList: [], // 字段列表
@@ -160,14 +174,16 @@ export default {
     loop(getDrawingList())
     this.list = list
     let options = list.filter(o => noColumnShowList.indexOf(o.__config__.jnpfKey) < 0)
+    let searchOptions = list.filter(o => noSearchList.indexOf(o.__config__.jnpfKey) < 0)
     this.columnOptions = options.map(o => ({
       label: o.__config__.label,
       prop: o.__vModel__
     }));
-    this.searchOptions = options.map(o => ({
+    this.searchOptions = searchOptions.map(o => ({
       label: o.__config__.label,
       prop: o.__vModel__,
       jnpfKey: o.__config__.jnpfKey,
+      searchType: getSearchType(o),
       ...o
     }));
     this.sortOptions = options.map(o => ({

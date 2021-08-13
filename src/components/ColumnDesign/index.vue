@@ -48,7 +48,8 @@
           </el-table-column>
           <el-table-column prop="width" label="宽度">
             <template slot-scope="scope">
-              <el-input v-model.number="scope.row.width" type="number" placeholder="宽度" />
+              <el-input-number v-model="scope.row.width" placeholder="宽度" :min="0" :precision="0"
+                controls-position="right" style="width:100%" />
             </template>
           </el-table-column>
         </el-table>
@@ -169,17 +170,16 @@
               </el-form-item>
             </template>
             <el-divider>按钮配置</el-divider>
-            <el-checkbox-group v-model="btnsList" class="btnsList" size="medium">
-              <el-checkbox :label="item.value" border v-for="item in btnsOption" :key="item.value">
-                <i :class="item.icon"></i>
-                <el-input v-model="item.label" size="mini"></el-input>
+            <el-checkbox-group v-model="btnsList" class="btnsList">
+              <el-checkbox :label="item.value" v-for="item in btnsOption" :key="item.value">
+                <span class="btn-label">{{ item.value | btnText }}</span>
+                <el-input v-model="item.label" />
               </el-checkbox>
             </el-checkbox-group>
-            <el-checkbox-group v-model="columnBtnsList" class="btnsList" size="medium">
-              <el-checkbox :label="item.value" border v-for="item in columnBtnsOption"
-                :key="item.value">
-                <i :class="item.icon"></i>
-                <el-input v-model="item.label" size="mini"></el-input>
+            <el-checkbox-group v-model="columnBtnsList" class="btnsList columnBtnList">
+              <el-checkbox :label="item.value" v-for="item in columnBtnsOption" :key="item.value">
+                <span class="btn-label">{{ item.value | btnText }}</span>
+                <el-input v-model="item.label" />
               </el-checkbox>
             </el-checkbox-group>
             <el-divider>权限设置</el-divider>
@@ -208,7 +208,7 @@ const getSearchType = item => {
   const jnpfKey = item.__config__.jnpfKey
   // 等于-1  模糊-2  范围-3
   const fuzzyList = [...useInputList]
-  const RangeList = [...useDateList, 'time', 'date', 'numInput']
+  const RangeList = [...useDateList, 'time', 'date', 'numInput', 'calculate']
   if (RangeList.includes(jnpfKey)) return 3
   if (fuzzyList.includes(jnpfKey)) return 2
   return 1
@@ -279,6 +279,32 @@ export default {
         { url: require('@/assets/images/generator/columnType3.png'), value: 3, name: '分组表格' },
       ],
       dataInterfaceSelector: []
+    }
+  },
+  filters: {
+    btnText(key) {
+      let text = ''
+      switch (key) {
+        case 'download':
+          text = '导出'
+          break;
+        case 'batchRemove':
+          text = '批量删除'
+          break;
+        case 'edit':
+          text = '编辑'
+          break;
+        case 'remove':
+          text = '删除'
+          break;
+        case 'detail':
+          text = '详情'
+          break;
+        default:
+          text = '新增'
+          break;
+      }
+      return text
     }
   },
   watch: {

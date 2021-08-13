@@ -1,4 +1,5 @@
 import { DataModelFieldList } from '@/api/systemData/dataModel'
+import { getDataSourceListAll } from '@/api/systemData/dataSource'
 export default {
   data() {
     return {}
@@ -60,7 +61,7 @@ export default {
           const e = data[i];
           let boo = this.tables.some(o => o.table == e.table)
           if (!boo) {
-            let res = await DataModelFieldList('0', e.table)
+            let res = await DataModelFieldList(this.dataForm.dbLinkId, e.table, queryType)
             let fields = res.data.list.map(o => ({ field: o.field, fieldName: o.fieldName, dataType: o.dataType }))
             let item = {
               relationField: "",
@@ -76,6 +77,37 @@ export default {
         }
         this.tables = [...this.tables, ...checkList]
       }
+    },
+    async updateFields() {
+      if (!this.tables.length) return
+      this.dataForm.dbLinkId = this.dataForm.dbLinkId || '0'
+      const type = this.dataForm.type
+      let queryType = 0
+      if (type == 3 || type == 4 || type == 5) queryType = 1
+      for (let i = 0; i < this.tables.length; i++) {
+        let res = await DataModelFieldList(this.dataForm.dbLinkId, this.tables[i].table, queryType)
+        let fields = res.data.list.map(o => ({ field: o.field, fieldName: o.fieldName, dataType: o.dataType }))
+        this.tables[i].fields = fields
+        if (this.tables[i].typeId == '1') {
+          this.mainTableFields = this.tables[i].fields
+          this.relationTable = this.tables[i].table
+        }
+      }
+    },
+    getDbOptions() {
+      const defaultItem = {
+        fullName: '',
+        children: [{
+          fullName: '默认数据库',
+          id: '0'
+        }]
+      }
+      getDataSourceListAll().then(res => {
+        const list = [defaultItem, ...res.data.list]
+        this.dbOptions = list.filter(o => o.children && o.children.length)
+      }).catch(() => {
+        this.dbOptions = [defaultItem]
+      })
     },
     delItem(row, index) {
       this.tables.splice(index, 1);

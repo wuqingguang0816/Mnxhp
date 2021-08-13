@@ -207,15 +207,13 @@ export default {
         contactPhone: [
           { pattern: /^1[3456789]\d{9}$|^0\d{2,3}-?\d{7,8}$/, message: '请输入正确的联系电话', trigger: 'blur' }
         ],
-      },
-      paymentMethodOptions: []
+      }
     }
   },
   methods: {
     selfInit(data) {
       this.dataForm.flowTitle = this.userInfo.userName + "的发货申请单"
     },
-    beforeInit() { this.getPaymentMethodOptions() },
     addHandle() {
       let item = {
         goodsName: "", specifications: "", unit: "", qty: 0, price: 0, amount: 0, description: ""

@@ -106,9 +106,13 @@ export default {
       this.$emit('refreshDataList')
     },
     exportData(id) {
-      exportData(id).then(res => {
-        if (res.data.url) window.location.href = this.define.comUrl + res.data.url
-      })
+      this.$confirm('您确定要导出该字典分类, 是否继续?', '提示', {
+        type: 'warning'
+      }).then(() => {
+        exportData(id).then(res => {
+          if (res.data.url) window.location.href = this.define.comUrl + res.data.url
+        })
+      }).catch(() => { });
     }
   }
 }

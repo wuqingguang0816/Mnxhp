@@ -130,7 +130,7 @@ export default {
         this.filteredList = this.list
         return
       }
-      this.filteredList = this.list.filter(o => this.columnOptions.some(option => o[option.value].indexOf(this.keyword) > -1))
+      this.filteredList = this.list.filter(o => this.columnOptions.some(option => option.value && o[option.value] && o[option.value].indexOf(this.keyword) > -1))
     },
     reset() {
       this.keyword = ''

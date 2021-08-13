@@ -172,15 +172,13 @@ export default {
         warehousDate: [
           { required: true, message: '入库日期不能为空', trigger: 'change' },
         ]
-      },
-      paymentMethodOptions: []
+      }
     }
   },
   methods: {
     selfInit(data) {
       this.dataForm.flowTitle = this.userInfo.userName + "的入库申请单"
     },
-    beforeInit() { this.getPaymentMethodOptions() },
     addHandle() {
       let item = {
         goodsName: "", specifications: "", unit: "", qty: 0, price: 0, amount: 0, description: ""

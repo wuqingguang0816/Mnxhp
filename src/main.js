@@ -18,6 +18,7 @@ import router from './router'
 import i18n from './lang' // internationalization
 import './permission' // permission control
 import './utils/error-log' // error log
+import { message } from './utils/message';
 
 import * as filters from './filters' // global filters
 
@@ -38,6 +39,7 @@ Object.assign(Vue.prototype, {
   define: require('./utils/define'), // 常量
   jnpf, // 公共方法
   formValidate: require('./utils/formValidate').default, // 表单验证
+  $message: message
 })
 
 // 全局注册过滤器

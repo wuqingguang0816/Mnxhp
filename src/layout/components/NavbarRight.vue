@@ -167,7 +167,7 @@ export default {
           //用户过期
           if (data.method == 'logout') {
             this.$message({
-              message: '登录过期,请重新登录',
+              message: data.msg || '登录过期,请重新登录',
               type: 'error',
               duration: 1000,
               onClose: () => {

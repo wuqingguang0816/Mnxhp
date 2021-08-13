@@ -1,6 +1,6 @@
 <template>
   <transition name="el-zoom-in-center">
-    <div class="JNPF-preview-main flow-form-main nohead" v-loading="loading">
+    <div class="JNPF-preview-main flow-form-main nohead">
       <div class="btns">
         <template v-if="setting.opType=='-1'">
           <el-button type="primary" @click="eventLancher('submit')">提交审核
@@ -34,14 +34,14 @@
         <div class="approve-result-img" :class="flowTaskInfo.status | flowStatus()"></div>
       </div>
       <el-tabs class="JNPF-el_tabs" v-model="activeTab">
-        <el-tab-pane label="表单信息">
+        <el-tab-pane label="表单信息" v-loading="loading">
           <component :is="currentView" @close="goBack" ref="form" @eventReciver="eventReciver"
             @setLoad="setLoad" @setPageLoad="setPageLoad" />
         </el-tab-pane>
-        <el-tab-pane label="流程信息">
+        <el-tab-pane label="流程信息" v-loading="loading">
           <Process :conf="flowTemplateJson" v-if="flowTemplateJson.nodeId" />
         </el-tab-pane>
-        <el-tab-pane label="流转记录" v-if="setting.opType!='-1'">
+        <el-tab-pane label="流转记录" v-if="setting.opType!='-1'" v-loading="loading">
           <recordList :list='flowTaskOperatorRecordList' :endTime='endTime' />
         </el-tab-pane>
       </el-tabs>
@@ -201,7 +201,7 @@ export default {
             this.$refs.form && this.$refs.form.init(data)
           })
         }, 500)
-      })
+      }).catch(() => { this.loading = false })
     },
     getBeforeInfo(data) {
       FlowBeforeInfo(data.id, { taskNodeId: data.taskNodeId }).then(res => {
@@ -242,7 +242,7 @@ export default {
               if (data.nodeId === nodeItem.nodeCode) {
                 if (nodeItem.type == 0) data.state = 'state-past'
                 if (nodeItem.type == 1) data.state = 'state-curr'
-                if (nodeItem.nodeType === 'approver' || nodeItem.nodeType === 'start') data.content = nodeItem.userName
+                if (nodeItem.nodeType === 'approver' || nodeItem.nodeType === 'start' || nodeItem.nodeType === 'subFlow') data.content = nodeItem.userName
                 return
               }
               if (data.conditionNodes && Array.isArray(data.conditionNodes)) loop(data.conditionNodes)
@@ -257,7 +257,7 @@ export default {
             this.$refs.form && this.$refs.form.init(data)
           })
         }, 500)
-      })
+      }).catch(() => { this.loading = false })
     },
     eventLancher(eventType) {
       this.$refs.form && this.$refs.form.dataFormSubmit(eventType)
