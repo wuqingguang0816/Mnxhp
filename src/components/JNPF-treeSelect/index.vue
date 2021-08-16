@@ -172,8 +172,8 @@ export default {
     // 清除选中
     clearHandle() {
       this.valueTitle = ''
-      this.$emit('input', null)
-      this.$emit('change', null)
+      this.$emit('input', '')
+      this.$emit('change', '')
       this.defaultExpandedKey = []
       this.clearSelected()
       if (this.multiple) this.$refs.selectTree.setCheckedKeys([])
