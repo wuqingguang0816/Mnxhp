@@ -676,6 +676,30 @@ export default {
     couldShowIt(item, ...tag) {
       return tag.includes(item.tag) && this.showingPCons.includes(item.formId);
     },
+    initFormOperates(target) {
+      const formOperates = target.properties && target.properties.formOperates || []
+      let res = []
+      if (!formOperates.length) {
+        const loop = (data, parent) => {
+          if (!data) return
+          if (data.__config__ && data.__config__.jnpfKey !== 'table' && data.__config__.children && Array.isArray(data.__config__.children)) {
+            loop(data.__config__.children, data)
+          }
+          if (Array.isArray(data)) data.forEach(d => loop(d, parent))
+          if (data.__vModel__) res.push({
+            id: data.__vModel__,
+            name: data.__config__.label,
+            required: data.__config__.required,
+            read: true,
+            write: false
+          })
+        }
+        loop(getDrawingList())
+      } else {
+        res = formOperates
+      }
+      return res
+    },
     initCopyNode() {
       this.properties = this.value.properties
     },
@@ -917,7 +941,7 @@ export default {
       this.activeName = 'config'
       Object.assign(this.approverForm, this.value.properties)
       this.getNodeOption()
-      this.approverForm.formOperates = this.value.properties.formOperates
+      this.approverForm.formOperates = this.initFormOperates(this.value)
     },
     initSubFlowData() {
       this.getFlowOptions()
