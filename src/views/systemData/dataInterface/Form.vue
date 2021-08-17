@@ -30,7 +30,7 @@
             <JNPF-TreeSelect v-model="dataForm.categoryId" :options="selectData" placeholder="选择分类"
               clearable />
           </el-form-item>
-          <el-form-item label="规则" prop="checkType">
+          <el-form-item label="授权" prop="checkType">
             <el-radio-group v-model="dataForm.checkType">
               <el-radio :label="0">忽略验证</el-radio>
               <el-radio :label="1">鉴权验证</el-radio>
