@@ -29,7 +29,6 @@
       :border="false">
       <el-table-column prop="table" label="表名" show-overflow-tooltip />
       <el-table-column prop="sum" label="总数" width="90" />
-      <el-table-column prop="size" label="大小" width="90" />
       <el-table-column prop="tableName" label="说明" width="150" show-overflow-tooltip />
     </JNPF-table>
     <span slot="footer" class="dialog-footer">

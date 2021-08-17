@@ -65,7 +65,6 @@
           <el-table-column type="index" width="50" label="序号" align="center" />
           <el-table-column prop="table" label="表名" sortable />
           <el-table-column prop="sum" label="总数" width="150" sortable />
-          <el-table-column prop="size" label="大小" width="150" sortable />
           <el-table-column prop="tableName" label="说明" width="200" sortable />
           <el-table-column label="操作" width="160" fixed="right">
             <template slot-scope="scope">
