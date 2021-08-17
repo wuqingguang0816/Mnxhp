@@ -1,8 +1,8 @@
 <template>
   <div class="UploadFile-container">
-    <el-upload :action="define.comUploadUrl+'/'+type" :headers="uploadHeaders" :file-list="fileList"
-      :on-success="handleSuccess" :multiple="limit !==1" :show-file-list="false" :accept="accept"
-      :before-upload="beforeUpload" :on-exceed="handleExceed" :disabled="disabled" :limit="limit">
+    <el-upload :action="define.comUploadUrl+'/'+type" :headers="uploadHeaders"
+      :on-success="handleSuccess" :multiple="limit!==1" :show-file-list="false" :accept="accept"
+      :before-upload="beforeUpload" :on-exceed="handleExceed" :disabled="disabled">
       <el-button size="small" icon="el-icon-upload" :disabled="disabled">{{buttonText}}</el-button>
       <div slot="tip" class="el-upload__tip" v-show="showTip">
         只能上传不超过{{fileSize}}{{sizeUnit}}的{{accept}}文件
@@ -88,6 +88,10 @@ export default {
   },
   methods: {
     beforeUpload(file) {
+      if (this.fileList.length >= this.limit) {
+        this.$message.warning(`当前限制最多可以上传${this.limit}个文件`)
+        return false
+      }
       const unitNum = units[this.sizeUnit];
       if (!this.fileSize) return true
       let isRightSize = file.size / unitNum < this.fileSize
@@ -102,6 +106,10 @@ export default {
     },
     handleSuccess(res, file, fileList) {
       if (res.code == 200) {
+        if (this.fileList.length >= this.limit) {
+          this.$message.warning(`当前限制最多可以上传${this.limit}个文件`)
+          return
+        }
         this.fileList.push({
           name: file.name,
           fileId: res.data.name,
