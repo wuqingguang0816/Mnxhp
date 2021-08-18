@@ -135,8 +135,8 @@ export default {
               this.initData()
             }
           })
-        }).catch(() => { })
-      })
+        })
+      }).catch(() => { })
     },
     handlePublish(id) {
       this.$confirm('您确定要发布当前公告, 是否继续?', '提示', {
