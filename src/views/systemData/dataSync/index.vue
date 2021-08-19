@@ -109,7 +109,7 @@ export default {
       }
       DataSync(data).then((res) => {
         if (res.data == 0) {
-          this.execute(row)
+          this.execute(row, res.data)
         } else if (res.data == 1) {
           this.$message({
             message: '初始库表中没有数据',
@@ -121,22 +121,23 @@ export default {
           this.$confirm('目标库中该表不存在，是否在目标库中创建该表，并同步数据?', '提示', {
             type: 'warning'
           }).then(() => {
-            this.execute(row)
+            this.execute(row, res.data)
           }).catch(() => { row.btnLoading = false });
         } else if (res.data == 3) {
           this.$confirm('目标表存在数据,是否自动清除并同步数据?', '提示', {
             type: 'warning'
           }).then(() => {
-            this.execute(row)
+            this.execute(row, res.data)
           }).catch(() => { row.btnLoading = false });
         }
       }).catch(() => {
         row.btnLoading = false
       })
     },
-    execute(row) {
+    execute(row, type) {
       row.result = ''
       let data = {
+        type,
         dbConnectionFrom: this.dataForm.dbConnectionFrom,
         dbConnectionTo: this.dataForm.dbConnectionTo,
         dbTable: row.table
