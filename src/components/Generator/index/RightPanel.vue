@@ -454,6 +454,32 @@ export default {
     },
     fieldChange1(val) {
       if (!val) return
+      const drawingList = getDrawingList() || []
+      let boo = false
+      const loop = list => {
+        for (let i = 0; i < list.length; i++) {
+          const e = list[i]
+          const config = e.__config__
+          if (config.jnpfKey === 'table' && config.tableName === this.activeData.__config__.relationTable) {
+            for (let j = 0; j < config.children.length; j++) {
+              const child = config.children[j]
+              if (child.__vModel__ === val) {
+                boo = true
+                break
+              }
+            }
+          }
+          if (config && config.jnpfKey != 'table' && config.children && Array.isArray(config.children)) {
+            loop(config.children)
+          }
+        }
+      }
+      loop(drawingList)
+      if (boo) {
+        this.$message.warning(`子表字段【${val}】已存在,请重新选择!`)
+        this.activeData.__vModel__ = ''
+        return
+      }
       let options = this.getSubTalebFiled(this.activeData.__config__.relationTable)
       let item = options.filter(o => o.field == val)[0]
       if (!item || !item.fieldName) return
@@ -478,7 +504,7 @@ export default {
       }
       loop(drawingList)
       if (boo) {
-        this.$message.warning(`字段【${val}】已存在,请重新选!`)
+        this.$message.warning(`字段【${val}】已存在,请重新选择!`)
         this.activeData.__vModel__ = ''
         return
       }
@@ -490,6 +516,28 @@ export default {
       this.formConf.span = val
     },
     onTableNameChange(tableName) {
+      if (!tableName) return
+      const drawingList = getDrawingList() || []
+      let boo = false
+      const loop = list => {
+        for (let i = 0; i < list.length; i++) {
+          const e = list[i]
+          const config = e.__config__
+          if (config.jnpfKey === 'table' && config.tableName === tableName) {
+            boo = true
+            break
+          }
+          if (config && config.jnpfKey != 'table' && config.children && Array.isArray(config.children)) {
+            loop(config.children)
+          }
+        }
+      }
+      loop(drawingList)
+      if (boo) {
+        this.$message.warning(`子表【${tableName}】已存在,请重新选择!`)
+        this.activeData.__config__.tableName = ''
+        return
+      }
       for (let i = 0; i < this.activeData.__config__.children.length; i++) {
         this.$set(this.activeData.__config__.children[i].__config__, 'relationTable', tableName)
         this.$set(this.activeData.__config__.children[i], '__vModel__', '')
