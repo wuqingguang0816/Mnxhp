@@ -88,7 +88,7 @@ export default {
   },
   methods: {
     beforeUpload(file) {
-      if (this.fileList.length >= this.limit) {
+      if (this.limit && this.fileList.length >= this.limit) {
         this.$message.warning(`当前限制最多可以上传${this.limit}个文件`)
         return false
       }
@@ -106,7 +106,7 @@ export default {
     },
     handleSuccess(res, file, fileList) {
       if (res.code == 200) {
-        if (this.fileList.length >= this.limit) {
+        if (this.limit && this.fileList.length >= this.limit) {
           this.$message.warning(`当前限制最多可以上传${this.limit}个文件`)
           return
         }
