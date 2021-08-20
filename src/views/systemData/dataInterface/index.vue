@@ -140,6 +140,7 @@ export default {
       this.treeLoading = true
       getDataInterfaceTypeSelector().then(res => {
         this.treeData = res.data.list
+        if (!this.treeData.length) return this.treeLoading = false
         this.$nextTick(() => {
           this.params.categoryId = this.treeData[0].id
           this.$refs.treeBox.setCurrentKey(this.params.categoryId)
