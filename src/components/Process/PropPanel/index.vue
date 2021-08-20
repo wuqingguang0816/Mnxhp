@@ -167,7 +167,7 @@
         </el-tab-pane>
         <el-tab-pane label="表单权限" name="formAuth">
           <div class="form-auth-table">
-            <el-table :data="getFormOperates()" class="JNPF-common-table" size="mini">
+            <el-table :data="getFormOperates()" class="JNPF-common-table" size="mini" height="100%">
               <el-table-column prop="name" label="表单字段" align="left"></el-table-column>
               <el-table-column prop="write" label="操作" align="center" width="200px">
                 <template slot-scope="scope">
@@ -381,7 +381,7 @@
         </el-tab-pane>
         <el-tab-pane label="表单权限" name="formAuth">
           <div class="form-auth-table">
-            <el-table :data="getFormOperates()" class="JNPF-common-table" size="mini">
+            <el-table :data="getFormOperates()" class="JNPF-common-table" size="mini" height="100%">
               <el-table-column prop="name" label="表单字段" align="left"></el-table-column>
               <el-table-column prop="write" label="操作" align="center" width="200px">
                 <template slot-scope="scope">
@@ -1184,6 +1184,7 @@ export default {
 }
 
 .form-auth-table {
+  height: 100%;
   font-size: 14px;
   .auth-table-header {
     background: #fafafa;
