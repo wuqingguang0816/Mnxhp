@@ -171,8 +171,8 @@
               <el-table-column prop="name" label="表单字段" align="left"></el-table-column>
               <el-table-column prop="write" label="操作" align="center" width="200px">
                 <template slot-scope="scope">
-                  <el-checkbox v-model="scope.row.read">可见</el-checkbox>
-                  <el-checkbox v-model="scope.row.write">可写</el-checkbox>
+                  <el-checkbox v-model="scope.row.read">查看</el-checkbox>
+                  <el-checkbox v-model="scope.row.write">编辑</el-checkbox>
                 </template>
               </el-table-column>
             </el-table>
@@ -385,8 +385,8 @@
               <el-table-column prop="name" label="表单字段" align="left"></el-table-column>
               <el-table-column prop="write" label="操作" align="center" width="200px">
                 <template slot-scope="scope">
-                  <el-checkbox v-model="scope.row.read">可见</el-checkbox>
-                  <el-checkbox v-model="scope.row.write">可写</el-checkbox>
+                  <el-checkbox v-model="scope.row.read">查看</el-checkbox>
+                  <el-checkbox v-model="scope.row.write">编辑</el-checkbox>
                 </template>
               </el-table-column>
             </el-table>
