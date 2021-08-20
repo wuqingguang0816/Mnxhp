@@ -76,6 +76,7 @@
             </template>
             <template
               v-if="['radio', 'checkbox', 'select'].indexOf(activeData.__config__.jnpfKey) > -1">
+              <el-divider>选项</el-divider>
               <el-form-item label="" label-width="40px">
                 <el-radio-group v-model="activeData.__config__.dataType" size="small"
                   style="text-align:center" @change="dataTypeChange">
@@ -123,9 +124,11 @@
                   <el-input v-model="activeData.__config__.props.label" placeholder="请输入标签" />
                 </el-form-item>
               </template>
+              <el-divider></el-divider>
             </template>
             <template
               v-if="activeData.__config__.jnpfKey === 'treeSelect' || activeData.__config__.jnpfKey === 'cascader'">
+              <el-divider>选项</el-divider>
               <el-form-item label="" label-width="40px">
                 <el-radio-group v-model="activeData.__config__.dataType" size="small"
                   style="text-align:center" @change="dataTypeChange">
@@ -162,6 +165,7 @@
                   <el-input v-model="activeData.props.props.children" placeholder="请输入子级键名" />
                 </el-form-item>
               </template>
+              <el-divider></el-divider>
             </template>
             <template v-if="activeData.__config__.jnpfKey === 'JNPFText'">
               <el-form-item label="文本内容">
@@ -252,11 +256,11 @@
             <el-form-item v-if="activeData.disabled !== undefined" label="是否禁用">
               <el-switch v-model="activeData.disabled" />
             </el-form-item>
-            <el-form-item v-if="activeData.__config__.required !== undefined" label="是否必填">
-              <el-switch v-model="activeData.__config__.required" />
-            </el-form-item>
             <template v-if="activeData.__config__.jnpfKey === 'comInput'">
               <el-divider>校验</el-divider>
+              <el-form-item label="是否必填">
+                <el-switch v-model="activeData.__config__.required" />
+              </el-form-item>
               <div v-for="(item, index) in activeData.__config__.regList" :key="index"
                 class="reg-item">
                 <span class="close-btn" @click="activeData.__config__.regList.splice(index, 1)">
@@ -283,6 +287,14 @@
                   自定义规则
                 </el-button>
               </div>
+            </template>
+            <template v-else>
+              <template v-if="activeData.__config__.required !== undefined">
+                <el-divider>校验</el-divider>
+                <el-form-item label="是否必填">
+                  <el-switch v-model="activeData.__config__.required" />
+                </el-form-item>
+              </template>
             </template>
             <template v-if="activeData.__config__.jnpfKey==='card'">
               <el-form-item label="卡片标题">
