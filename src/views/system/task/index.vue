@@ -135,7 +135,6 @@ export default {
       })
     },
     handleUpdateState(row) {
-      if (!this.jnpf.hasBtnP('btn_edit')) return this.$message.warning(this.$t('common.noPerTip'))
       const txt = row.enabledMark ? '停止' : '启用'
       this.$confirm(`您确定要${txt}该任务, 是否继续?`, '提示', {
         type: 'warning'
