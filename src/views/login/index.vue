@@ -6,7 +6,7 @@
     <div class="login-content">
       <div class="login-form">
         <img class="login-logo" src="../../assets/images/login_logo.png" alt="">
-        <div class="login-tab">
+        <div class="login-tab" :class="'active'+active">
           <a class="item" :class="{'active': active==1}" @click="active=1">{{$t('login.title')}}</a>
           <a class="item" :class="{'active': active==2}"
             @click="active=2">{{$t('login.scanTitle')}}</a>
