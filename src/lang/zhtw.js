@@ -132,9 +132,9 @@ export default {
     setting: '設置'
   },
   login: {
-    title: '賬戶登錄',
-    scanTitle: '掃碼登錄',
-    codeTitle: '驗證碼登錄',
+    title: '賬戶密碼登錄',
+    scanTitle: 'APP掃碼登錄',
+    codeTitle: '手機驗證登錄',
     logIn: '登錄',
     username: '請輸入用戶名/手機號',
     password: '請輸入密碼',

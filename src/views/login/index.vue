@@ -1,10 +1,9 @@
 <template>
   <div class="login-container">
     <div class="login-version">
-      <p class="login-version-text">{{$t('login.version')}} {{define.version}}</p>
+      <p class="login-version-text">{{$t('login.version')}}{{define.version}}</p>
     </div>
     <div class="login-content">
-      <img class="login-img" src="../../assets/images/login_content_img.png" alt="">
       <div class="login-form">
         <img class="login-logo" src="../../assets/images/login_logo.png" alt="">
         <div class="login-tab">
@@ -31,10 +30,6 @@
           </el-tooltip>
           <el-button :loading="loading" type="primary" class="login-btn" size="large"
             @click.native.prevent="handleLogin">{{ $t('login.logIn') }}</el-button>
-          <!-- <div class="foot">
-            <span class="register">立即注册</span>
-            <span class="forget">忘记密码</span>
-          </div> -->
         </el-form>
         <div v-show="active==2" class="login-form-QRCode">
           <img class="qrcode-img" src="../../assets/images/login_qr.png">
@@ -151,150 +146,5 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-$bg: #fff;
-$cursor: #fff;
-
-.login-container {
-  width: 100%;
-  overflow: hidden;
-  height: 100%;
-  background: url('../../assets/images/login_bg.png') no-repeat;
-  background-position: 0 0;
-  background-size: 57% 100%;
-  background-color: $bg;
-  text-align: center;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  .login-version {
-    position: fixed;
-    right: 0px;
-    top: 0px;
-    width: 94px;
-    height: 94px;
-    background: url('../../assets/images/login_version.png') no-repeat center;
-    background-size: 100%;
-    .login-version-text {
-      width: 94px;
-      height: 94px;
-      line-height: 52px;
-      text-align: center;
-      color: #fff;
-      font-size: 14px;
-      transform: rotate(45deg);
-    }
-  }
-  .login-content {
-    width: 1060px;
-    height: 500px;
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-    .login-img {
-      width: 500px;
-      height: 500px;
-    }
-  }
-  .login-form {
-    width: 420px;
-    padding-top: 30px;
-    .login-logo {
-      width: 320px;
-      height: 40px;
-      margin-bottom: 55px;
-    }
-    .login-tab {
-      height: 32px;
-      margin-bottom: 30px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 0 50px;
-      .item {
-        position: relative;
-        line-height: 32px;
-        font-size: 16px;
-        color: #334d65;
-        &::after {
-          display: block;
-          content: '';
-          overflow: hidden;
-          width: 28px;
-          height: 2px;
-          position: absolute;
-          left: 0;
-          bottom: 0;
-          background-color: transparent;
-          border-radius: 1px;
-        }
-        &.active {
-          &::after {
-            background-color: #1890ff;
-          }
-        }
-      }
-    }
-    .rule-tip {
-      color: #a0acb7;
-      font-size: 12px;
-      line-height: 12px;
-      text-align: left;
-      >>> .el-form-item__content {
-        line-height: 12px;
-      }
-    }
-    .el-form {
-      input:-webkit-autofill {
-        box-shadow: 0 0 0px 1000px #fff inset !important;
-        -webkit-text-fill-color: #606266 !important;
-      }
-      input::-webkit-input-placeholder {
-        color: #a0acb7;
-      }
-      .login-btn {
-        width: 100%;
-        font-size: 16px;
-        margin-bottom: 20px;
-        margin-top: 40px;
-      }
-      .foot {
-        width: 100%;
-        display: flex;
-        justify-content: space-between;
-        font-size: 12px;
-        color: #188ae2;
-        .register,
-        .forget {
-          cursor: pointer;
-        }
-      }
-    }
-    .login-form-QRCode {
-      width: 420px;
-      text-align: center;
-      .qrcode-img {
-        position: relative;
-        margin-bottom: 16px;
-        width: 240px;
-        height: 240px;
-      }
-      .qrcode-tip {
-        color: #334d65;
-        line-height: 22px;
-        font-size: 16px;
-      }
-    }
-  }
-  .login-foot {
-    position: absolute;
-    width: 1060px;
-    color: #999;
-    font-size: 12px;
-    position: fixed;
-    bottom: 20px;
-    left: 31%;
-    text-align: left;
-    margin-left: 110px;
-  }
-}
+@import './index.scss';
 </style>

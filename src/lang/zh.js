@@ -132,9 +132,9 @@ export default {
     setting: '设置'
   },
   login: {
-    title: '账户登录',
-    scanTitle: '扫码登录',
-    codeTitle: '验证码登录',
+    title: '账户密码登录',
+    scanTitle: 'APP扫码登录',
+    codeTitle: '手机验证登录',
     logIn: '登录',
     username: '请输入用户名/手机号',
     password: '请输入密码',
