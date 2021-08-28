@@ -43,7 +43,7 @@ export default {
         }
         loop(data)
         this.$nextTick(() => {
-          if (data.length > 1) {
+          if (data.length >= 1) {
             data = {
               name: '组织架构图',
               children: data

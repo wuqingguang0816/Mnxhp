@@ -5,7 +5,8 @@
         <el-form @submit.native.prevent>
           <el-col :span="6">
             <el-form-item label="关键词">
-              <el-input v-model="params.keyword" placeholder="请输入关键词查询" clearable />
+              <el-input v-model="params.keyword" placeholder="请输入关键词查询" clearable
+                @keyup.enter.native="search()" />
             </el-form-item>
           </el-col>
           <el-col :span="6">
@@ -135,8 +136,8 @@ export default {
               this.initData()
             }
           })
-        }).catch(() => { })
-      })
+        })
+      }).catch(() => { })
     },
     handlePublish(id) {
       this.$confirm('您确定要发布当前公告, 是否继续?', '提示', {

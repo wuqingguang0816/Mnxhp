@@ -167,12 +167,12 @@
         </el-tab-pane>
         <el-tab-pane label="表单权限" name="formAuth">
           <div class="form-auth-table">
-            <el-table :data="getFormOperates()" class="JNPF-common-table" size="mini">
+            <el-table :data="getFormOperates()" class="JNPF-common-table" size="mini" height="100%">
               <el-table-column prop="name" label="表单字段" align="left"></el-table-column>
               <el-table-column prop="write" label="操作" align="center" width="200px">
                 <template slot-scope="scope">
-                  <el-checkbox v-model="scope.row.read">可见</el-checkbox>
-                  <el-checkbox v-model="scope.row.write">可写</el-checkbox>
+                  <el-checkbox v-model="scope.row.read">查看</el-checkbox>
+                  <el-checkbox v-model="scope.row.write">编辑</el-checkbox>
                 </template>
               </el-table-column>
             </el-table>
@@ -381,12 +381,12 @@
         </el-tab-pane>
         <el-tab-pane label="表单权限" name="formAuth">
           <div class="form-auth-table">
-            <el-table :data="getFormOperates()" class="JNPF-common-table" size="mini">
+            <el-table :data="getFormOperates()" class="JNPF-common-table" size="mini" height="100%">
               <el-table-column prop="name" label="表单字段" align="left"></el-table-column>
               <el-table-column prop="write" label="操作" align="center" width="200px">
                 <template slot-scope="scope">
-                  <el-checkbox v-model="scope.row.read">可见</el-checkbox>
-                  <el-checkbox v-model="scope.row.write">可写</el-checkbox>
+                  <el-checkbox v-model="scope.row.read">查看</el-checkbox>
+                  <el-checkbox v-model="scope.row.write">编辑</el-checkbox>
                 </template>
               </el-table-column>
             </el-table>
@@ -676,6 +676,30 @@ export default {
     couldShowIt(item, ...tag) {
       return tag.includes(item.tag) && this.showingPCons.includes(item.formId);
     },
+    initFormOperates(target) {
+      const formOperates = target.properties && target.properties.formOperates || []
+      let res = []
+      if (!formOperates.length) {
+        const loop = (data, parent) => {
+          if (!data) return
+          if (data.__config__ && data.__config__.jnpfKey !== 'table' && data.__config__.children && Array.isArray(data.__config__.children)) {
+            loop(data.__config__.children, data)
+          }
+          if (Array.isArray(data)) data.forEach(d => loop(d, parent))
+          if (data.__vModel__) res.push({
+            id: data.__vModel__,
+            name: data.__config__.label,
+            required: data.__config__.required,
+            read: true,
+            write: false
+          })
+        }
+        loop(getDrawingList())
+      } else {
+        res = formOperates
+      }
+      return res
+    },
     initCopyNode() {
       this.properties = this.value.properties
     },
@@ -917,7 +941,7 @@ export default {
       this.activeName = 'config'
       Object.assign(this.approverForm, this.value.properties)
       this.getNodeOption()
-      this.approverForm.formOperates = this.value.properties.formOperates
+      this.approverForm.formOperates = this.initFormOperates(this.value)
     },
     initSubFlowData() {
       this.getFlowOptions()
@@ -1160,6 +1184,7 @@ export default {
 }
 
 .form-auth-table {
+  height: 100%;
   font-size: 14px;
   .auth-table-header {
     background: #fafafa;

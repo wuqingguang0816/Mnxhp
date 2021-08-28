@@ -95,8 +95,18 @@
             <h2>{{item.__config__.label}}</h2>
           </div>
           <JNPF-table :data="item.__config__.defaultValue">
-            <el-table-column v-for="(column,columnIndex) in item.__config__.children"
-              :key="columnIndex" :prop="column.__vModel__" :label="column.__config__.label" />
+            <template v-for="(column,columnIndex) in item.__config__.children">
+              <el-table-column :key="columnIndex" :prop="column.__vModel__"
+                :label="column.__config__.label" v-if="column.__config__.jnpfKey==='relationForm'">
+                <template slot-scope="scope">
+                  <el-link :underline="false" type="primary"
+                    @click.native="toTableDetail(column,scope.row[column.__vModel__+'_id'])">
+                    {{ scope.row[column.__vModel__] }}</el-link>
+                </template>
+              </el-table-column>
+              <el-table-column :key="columnIndex" :prop="column.__vModel__"
+                :label="column.__config__.label" v-else />
+            </template>
           </JNPF-table>
         </el-form-item>
       </template>
@@ -142,6 +152,10 @@ export default {
   },
   methods: {
     toDetail(item) {
+      this.$emit('toDetail', item)
+    },
+    toTableDetail(item, value) {
+      item.__config__.defaultValue = value
       this.$emit('toDetail', item)
     },
     downloadFile(file) {
