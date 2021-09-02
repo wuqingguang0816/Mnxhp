@@ -126,10 +126,7 @@ export default {
         ],
         category: [
           { required: true, message: '模板分类不能为空', trigger: 'change' },
-        ],
-        state: [
-          { required: true, message: '状态不能为空', trigger: 'blur' },
-        ],
+        ]
       }
     }
   },

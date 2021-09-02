@@ -38,6 +38,7 @@
     <el-form-item label="是否禁用" v-if="activeData.__config__.jnpfKey !=='editor'">
       <el-switch v-model="activeData.disabled" />
     </el-form-item>
+    <el-divider>校验</el-divider>
     <el-form-item label="是否必填">
       <el-switch v-model="activeData.__config__.required" />
     </el-form-item>

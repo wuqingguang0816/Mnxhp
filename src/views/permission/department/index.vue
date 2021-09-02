@@ -73,8 +73,8 @@
   </div>
 </template>
 <script>
-import { getOrganizeTree } from '@/api/permission/organize'
 import {
+  getDepartmentSelector,
   getDepartmentList,
   delDepartment
 } from '@/api/permission/department'
@@ -117,7 +117,7 @@ export default {
     },
     getOrganizeList() {
       this.treeLoading = true
-      getOrganizeTree().then(res => {
+      getDepartmentSelector().then(res => {
         this.treeData = res.data.list
         this.$nextTick(() => {
           if (!this.treeData.length) {

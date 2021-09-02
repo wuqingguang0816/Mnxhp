@@ -26,7 +26,8 @@
         <el-form @submit.native.prevent>
           <el-col :span="6">
             <el-form-item label="关键词">
-              <el-input v-model="params.keyword" placeholder="请输入关键词查询" clearable />
+              <el-input v-model="params.keyword" placeholder="请输入关键词查询" clearable
+                @keyup.enter.native="search()" />
             </el-form-item>
           </el-col>
           <el-col :span="6">
@@ -158,7 +159,6 @@ export default {
       this.reset()
     },
     handleUpdateState(row) {
-      if (!this.jnpf.hasBtnP('btn_edit')) return this.$message.warning(this.$t('common.noPerTip'))
       const txt = row.enabledMark ? '禁用' : '开启'
       this.$confirm(`您确定要${txt}当前数据吗, 是否继续?`, '提示', {
         type: 'warning'

@@ -12,7 +12,7 @@
         <el-input v-model="dataForm.fullName" placeholder="输入名称" />
       </el-form-item>
       <el-form-item label="字典编码" prop="enCode">
-        <el-input v-model="dataForm.enCode" placeholder="输入编码" :disabled="disabled" />
+        <el-input v-model="dataForm.enCode" placeholder="输入编码" />
       </el-form-item>
       <el-form-item label="排序" prop="sortCode">
         <el-input-number :min="0" :max="9999" v-model="dataForm.sortCode"
@@ -48,7 +48,6 @@ export default {
       formLoading: false,
       btnLoading: false,
       parentDisabled: false,
-      disabled: false,
       dataForm: {
         id: '',
         dictionaryTypeId: '',
@@ -81,7 +80,6 @@ export default {
       this.dataForm.id = id || ''
       this.dataForm.dictionaryTypeId = typeId
       this.formLoading = true
-      this.disabled = false
       this.$nextTick(() => {
         this.$refs['dataForm'].resetFields()
         if (isTree === 1) {
@@ -91,23 +89,23 @@ export default {
         }
         getDictionaryDataTypeSelector(this.dataForm.dictionaryTypeId, isTree).then(res => {
           this.treeData = res.data.list
-          this.dataForm.parentId = res.data.list[0].id
+          if (this.dataForm.id) {
+            getDictionaryDataInfo(this.dataForm.id).then(res => {
+              this.dataForm = res.data
+              this.formLoading = false
+            })
+          } else {
+            this.dataForm.parentId = res.data.list[0].id
+            this.formLoading = false
+          }
         })
-        if (this.dataForm.id) {
-          getDictionaryDataInfo(this.dataForm.id).then(res => {
-            this.dataForm = res.data
-            // 修改字典时，编码字段只读
-            this.disabled = true
-            this.dataForm.parentId = res.data.parentId === '0' ? this.dataForm.dictionaryTypeId : res.data.parentId
-          })
-        }
-        this.formLoading = false
       })
     },
     dataFormSubmit() {
       this.$refs['dataForm'].validate((valid) => {
         if (valid) {
           this.btnLoading = true
+          this.dataForm.parentId = this.dataForm.dictionaryTypeId === this.dataForm.parentId ? '0' : this.dataForm.parentId
           const formMethod = this.dataForm.id ? updateDictionaryData : createDictionaryData
           formMethod(this.dataForm).then(res => {
             this.$message({

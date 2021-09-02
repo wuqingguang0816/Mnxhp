@@ -401,7 +401,11 @@ export default {
         if (valid) {
           this.btnLoading = true
           const formMethod = this.dataForm.id ? updateMenu : createMenu
-          formMethod(this.dataForm).then(res => {
+          const query = {
+            ...this.dataForm,
+            propertyJson: JSON.stringify(this.dataForm.propertyJson)
+          }
+          formMethod(query).then(res => {
             this.$message({
               message: res.msg,
               type: 'success',
