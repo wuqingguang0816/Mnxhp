@@ -60,9 +60,22 @@
           <el-table-column prop="creatorTime" label="创建时间" :formatter="jnpf.tableDateFormat"
             width="120" />
           <el-table-column prop="sortCode" label="排序" width="70" align="center" />
-          <el-table-column label="操作" width="100">
+          <el-table-column label="操作" width="150">
             <template slot-scope="scope">
-              <tableOpts @edit="handleAddEdit(scope.row.id)" @del="handleDel(scope.row.id)" />
+              <tableOpts @edit="handleAddEdit(scope.row.id)" @del="handleDel(scope.row.id)">
+                <el-dropdown hide-on-click>
+                  <span class="el-dropdown-link">
+                    <el-button size="mini" type="text">
+                      {{$t('common.moreBtn')}}<i class="el-icon-arrow-down el-icon--right"></i>
+                    </el-button>
+                  </span>
+                  <el-dropdown-menu slot="dropdown">
+                    <el-dropdown-item @click.native="openGradeForm(scope.row)">
+                      分级管理
+                    </el-dropdown-item>
+                  </el-dropdown-menu>
+                </el-dropdown>
+              </tableOpts>
             </template>
           </el-table-column>
         </JNPF-table>
@@ -70,6 +83,7 @@
     </div>
     <Form v-if="formVisible" ref="Form" @refreshDataList="initData" />
     <Diagram v-if="diagramVisible" ref="Diagram" @close="diagramVisible = false" />
+    <gradeForm v-if="gradeFormVisible" ref="gradeForm" @close="gradeFormVisible=false" />
   </div>
 </template>
 <script>
@@ -80,10 +94,11 @@ import {
 } from '@/api/permission/department'
 import Diagram from '@/views/permission/user/Diagram'
 import Form from './Form'
+import GradeForm from '../organize/GradeForm'
 
 export default {
   name: 'permission-department',
-  components: { Form, Diagram },
+  components: { Form, Diagram, GradeForm },
   data() {
     return {
       treeData: [],
@@ -102,7 +117,8 @@ export default {
       formVisible: false,
       diagramVisible: false,
       typeListVisible: false,
-      typeVisible: false
+      typeVisible: false,
+      gradeFormVisible: false
     }
   },
   created() {
@@ -136,7 +152,6 @@ export default {
     },
     initData() {
       this.listLoading = true
-      let query = { keyword: this.keyword }
       getDepartmentList(this.companyId, this.params).then(res => {
         this.tableData = res.data.list
         this.listLoading = false
@@ -155,6 +170,12 @@ export default {
       this.formVisible = true
       this.$nextTick(() => {
         this.$refs.Form.init(id, this.companyId)
+      })
+    },
+    openGradeForm(row) {
+      this.gradeFormVisible = true
+      this.$nextTick(() => {
+        this.$refs.gradeForm.init(row.id, row.fullName)
       })
     },
     search() {
