@@ -218,9 +218,6 @@ export default {
         formType: [
           { required: true, message: '表单类型不能为空', trigger: 'blur' }
         ],
-        enabledMark: [
-          { required: true, message: '状态不能为空', trigger: 'change' }
-        ],
         icon: [
           { required: true, message: '流程图标不能为空', trigger: 'click' }
         ],
