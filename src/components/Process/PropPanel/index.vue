@@ -4,7 +4,7 @@
     v-if="properties" append-to-body :wrapperClosable="false">
     <!-- 标题 -->
     <header slot="title" class="header"
-      v-if="value && (value.type=='condition'|| value.type=='approver' || value.type=='subFlow' )">
+      v-if="value && (value.type=='condition'|| value.type=='approver' || value.type=='subFlow' || value.type=='start' )">
       <el-input size="mini" v-model="properties.title" style="z-index:9;max-width: 200px;"
         placeholder="请输入">
       </el-input>

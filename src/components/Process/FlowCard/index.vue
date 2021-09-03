@@ -18,7 +18,7 @@ function createNormalCard(ctx, conf, h) {
       <header class="header">
         <div class="title-box" style="height: 100%;width:190px;">
           <span class="title-text">{conf.properties.title}</span>
-          {(!isStartNode && !isTimerNode) && (
+          {(!isTimerNode) && (
             <input vModel_trim={conf.properties.title} class="title-input" onClick={stopPro} />
           )}
         </div>

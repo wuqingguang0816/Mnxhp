@@ -252,6 +252,12 @@ $base-size : 12px;
     }
   }
 
+  &.start-node:hover {
+    .title-text {
+      border-bottom: 1px dashed currentColor;
+    }
+  }
+
   .body {
     position: relative;
     padding: 10px;
