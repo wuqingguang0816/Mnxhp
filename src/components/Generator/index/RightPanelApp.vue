@@ -244,9 +244,6 @@
             <el-form-item v-if="activeData.__config__.rule !== undefined" label="选择模板">
               <BillRule v-model="activeData.__config__.rule" placeholder="选择模板" />
             </el-form-item>
-            <el-form-item v-if="activeData.__config__.noShow !== undefined" label="是否隐藏">
-              <el-switch v-model="activeData.__config__.noShow" />
-            </el-form-item>
             <el-form-item v-if="activeData.allowHalf !== undefined" label="允许半星">
               <el-switch v-model="activeData.allowHalf" />
             </el-form-item>
@@ -255,6 +252,9 @@
             </el-form-item>
             <el-form-item v-if="activeData.disabled !== undefined" label="是否禁用">
               <el-switch v-model="activeData.disabled" />
+            </el-form-item>
+            <el-form-item v-if="activeData.__config__.noShow !== undefined" label="是否隐藏">
+              <el-switch v-model="activeData.__config__.noShow" />
             </el-form-item>
             <template v-if="activeData.__config__.jnpfKey === 'comInput'">
               <el-divider>校验</el-divider>

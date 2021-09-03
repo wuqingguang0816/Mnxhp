@@ -33,6 +33,7 @@ export const inputComponents = [{
       layout: 'colFormItem',
       span: 24,
       dragDisabled: false,
+      noShow: false,
       regList: [],
       trigger: 'blur'
     },
@@ -648,6 +649,7 @@ export const selectComponents = [{
       required: false,
       span: 24,
       dragDisabled: false,
+      noShow: false,
       trigger: 'change',
       rule: ''
     },
