@@ -160,9 +160,10 @@ export default {
   },
   settings: {
     mode: '导航模式',
-    classic: '经典款',
-    functional: '功能款',
-    plain: '简约款',
+    classic: '侧边导航',
+    functional: '顶部导航',
+    plain: '简约导航',
+    blend: '混合导航',
     lightOrDark: '颜色区块',
     dark: '暗黑模式',
     lightWhite: '亮白模式',

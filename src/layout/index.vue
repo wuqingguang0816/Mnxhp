@@ -7,10 +7,11 @@ import { mapState, mapGetters } from "vuex";
 import classic from './classic/index.vue'
 import functional from './functional/index.vue'
 import plain from './plain/index.vue'
+import blend from './blend/index.vue'
 
 export default {
   name: 'Layout',
-  components: { classic, functional, plain },
+  components: { classic, functional, plain, blend },
   computed: {
     ...mapState({
       layoutType: state => state.settings.layoutType
