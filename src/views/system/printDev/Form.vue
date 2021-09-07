@@ -56,14 +56,13 @@
               <el-input v-model="dataForm.description" placeholder="模板说明" type="textarea"
                 :rows="3" />
             </el-form-item>
-            <!-- <group-title content="数据来源" class="mb-10" />
+            <group-title content="数据来源" class="mb-10" />
             <div class="mb-20">
               <el-alert title="默认打印的时候必须传业务主键@formId给SQL语句里面作为Where查询条件" type="warning" show-icon
                 :closable="false"></el-alert>
-            </div> -->
+            </div>
             <el-form-item label="数据连接" prop="dbLinkId">
-              <el-select v-model="dataForm.dbLinkId" placeholder="请选择数据库" @change="onDbChange"
-                clearable>
+              <el-select v-model="dataForm.dbLinkId" placeholder="请选择数据库" clearable>
                 <el-option-group v-for="group in dbOptions" :key="group.fullName"
                   :label="group.fullName">
                   <el-option v-for="item in group.children" :key="item.id" :label="item.fullName"
@@ -71,52 +70,20 @@
                 </el-option-group>
               </el-select>
             </el-form-item>
-            <!-- <el-form-item label="SQL语句" prop="leftFields">
-              <el-input v-model="dataForm.leftFields" placeholder="SQL语句" type="textarea"
-                :rows="10" />
-            </el-form-item> -->
-            <el-table :data="tables" class="JNPF-common-table"
-              empty-text="点击“新增”可选择 1 条（单表）或 2 条以上（多表）">
-              <el-table-column type="index" label="序号" width="50" align="center" />
-              <el-table-column prop="typeId" label="类别" width="65">
-                <template slot-scope="scope">
-                  <el-tag v-if="scope.row.typeId=='1'">主表</el-tag>
-                  <el-tag type="warning" v-else @click="changeTable(scope.row)"
-                    style="cursor:pointer" title="点击设置成主表">子表</el-tag>
-                </template>
-              </el-table-column>
-              <el-table-column prop="tableName" label="说明" />
-              <el-table-column prop="table" label="表名" />
-              <el-table-column prop="tableField" label="外键字段">
-                <template slot-scope="scope" v-if="scope.row.typeId !=='1'">
-                  <el-select v-model="scope.row.tableField" placeholder="请选择">
-                    <el-option v-for="item in scope.row.fields" :key="item.field"
-                      :label="item.field" :value="item.field">
-                    </el-option>
-                  </el-select>
-                </template>
-              </el-table-column>
-              <!-- <el-table-column prop="relationTable" label="关联主表" /> -->
-              <el-table-column prop="relationField" label="关联主键">
-                <template slot-scope="scope" v-if="scope.row.typeId !=='1'">
-                  <el-select v-model="scope.row.relationField" placeholder="请选择">
-                    <el-option v-for="item in mainTableFields" :key="item.field" :label="item.field"
-                      :value="item.field">
-                    </el-option>
-                  </el-select>
-                </template>
-              </el-table-column>
-              <el-table-column label="操作" fixed="right" width="50">
-                <template slot-scope="scope">
-                  <el-button size="mini" type="text" class="JNPF-table-delBtn"
-                    @click="delItem(scope.row,scope.$index)">删除
+            <el-form-item label="SQL语句" prop="sqlTemplate">
+              <el-button icon="el-icon-plus" @click="addSql()">新增SQL语句
+              </el-button>
+              <el-row v-for="(item,i) in sqlTemplate" :key="i" class="mt-10">
+                <el-col :span="20">
+                  <el-input v-model="item.sql" placeholder="SQL语句" type="textarea"
+                    :autosize="{ minRows: 3, maxRows: 10}" />
+                </el-col>
+                <el-col :span="3" :offset="1" class="delBtn">
+                  <el-button type="danger" icon="el-icon-close" @click="delSql(i)">
                   </el-button>
-                </template>
-              </el-table-column>
-            </el-table>
-            <div class="table-actions" @click="openTableBox">
-              <el-button type="text" icon="el-icon-plus">新增一行</el-button>
-            </div>
+                </el-col>
+              </el-row>
+            </el-form-item>
           </el-form>
         </el-col>
       </el-row>
@@ -125,19 +92,15 @@
           v-model="dataForm.printTemplate" />
       </template>
     </div>
-    <TableForm :visible.sync="formVisible" ref="tableForm" @closeForm="colseForm"
-      :dbLinkId="dataForm.dbLinkId" />
   </el-dialog>
 </template>
 
 <script>
 import { getPrintDevInfo, Update, Create } from '@/api/system/printDev'
+import { getDataSourceListAll } from '@/api/systemData/dataSource'
 import PrintTemplater from './ts-print-templater'
-import TableForm from '@/views/generator/TableForm'
-import mixin from '@/mixins/generator/common'
 export default {
-  mixins: [mixin],
-  components: { PrintTemplater, TableForm },
+  components: { PrintTemplater },
   data() {
     return {
       visible: false,
@@ -171,19 +134,15 @@ export default {
         dbLinkId: [
           { required: true, message: '数据连接不能为空', trigger: 'change' },
         ],
-        // leftFields: [
-        //   { required: true, message: 'SQL语句不能为空', trigger: 'blur' },
-        // ]
+        sqlTemplate: [
+          { required: true, message: 'SQL语句不能为空', trigger: 'click' },
+        ]
       },
       formVisible: false,
       btnLoading: false,
-      printTemplate: null,
-      tables: [],
+      sqlTemplate: [],
       categoryList: [],
-      dbOptions: [],
-      mainTableFields: [],
-      relationTable: "",
-      treeData: []
+      dbOptions: []
     }
   },
   methods: {
@@ -199,7 +158,7 @@ export default {
           this.loading = true
           getPrintDevInfo(this.dataForm.id).then(res => {
             this.dataForm = res.data
-            this.tables = this.dataForm.leftFields && JSON.parse(this.dataForm.leftFields) || []
+            this.sqlTemplate = this.dataForm.sqlTemplate && JSON.parse(this.dataForm.sqlTemplate) || []
             this.updateFields()
             this.loading = false
           }).catch(() => { this.loading = false })
@@ -208,7 +167,7 @@ export default {
     },
     dataFormSubmit() {
       this.btnLoading = true
-      this.dataForm.leftFields = JSON.stringify(this.tables)
+      // this.dataForm.sqlTemplate = JSON.stringify(this.sqlTemplate)
       const formMethod = this.dataForm.id ? Update : Create
       formMethod(this.dataForm).then((res) => {
         this.$message({
@@ -221,31 +180,48 @@ export default {
         })
       }).catch(() => { this.btnLoading = false })
     },
+    delSql(i) {
+      this.sqlTemplate.splice(i, 1)
+    },
+    addSql() {
+      let item = { sql: "" }
+      this.sqlTemplate.push(item)
+    },
     next() {
       if (this.activeStep < 1) {
+        this.dataForm.sqlTemplate = JSON.stringify(this.sqlTemplate)
         this.$refs['dataForm'].validate((valid) => {
           if (valid) {
-            if (!this.tables.length) {
-              this.$message.warning('请至少选择一个数据表')
-              return
-            }
-            if (!this.exist()) return
-            let mainTable = this.tables.filter(o => o.typeId == '1')[0]
-            let subTable = this.tables.filter(o => o.typeId == '0')
-            let treeData = mainTable.fields.map(o => ({ field: o.field, fieldName: o.fieldName }))
-            outer: for (let i = 0; i < subTable.length; i++) {
-              inner: for (let j = 0; j < treeData.length; j++) {
-                if (subTable[i].relationField === treeData[j].field) {
-                  treeData[j].children = subTable[i].fields.map(o => ({ field: o.field, fieldName: o.fieldName }))
-                  break inner
-                }
-              }
-            }
-            this.treeData = treeData
             this.activeStep += 1
           }
         })
       }
+    },
+    closeDialog(isRefresh) {
+      this.visible = false
+      this.$emit('close', isRefresh)
+    },
+    prve() {
+      this.activeStep -= 1
+    },
+    stepChick(key) {
+      if (this.activeStep <= key) return
+      this.activeStep = key
+    },
+    getDbOptions() {
+      const defaultItem = {
+        fullName: '',
+        children: [{
+          fullName: '默认数据库',
+          id: '0'
+        }]
+      }
+      getDataSourceListAll().then(res => {
+        const list = [defaultItem, ...res.data.list]
+        this.dbOptions = list.filter(o => o.children && o.children.length)
+      }).catch(() => {
+        this.dbOptions = [defaultItem]
+      })
     }
   }
 }
