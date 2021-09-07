@@ -47,9 +47,9 @@ export function TaskList(data, projectId) {
   })
 }
 // 获取项目任务树形（新建任务）
-export function TaskTreeView(projectId) {
+export function TaskTreeView(projectId, id) {
   return request({
-    url: `/api/extend/ProjectGantt/${projectId}/Task/Selector`,
+    url: `/api/extend/ProjectGantt/${projectId}/Task/Selector/${!!id ? id : 0}`,
     method: 'get'
   })
 }

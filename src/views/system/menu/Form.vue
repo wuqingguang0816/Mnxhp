@@ -201,7 +201,7 @@ export default {
         this.$refs['dataForm'].resetFields()
         this.dataForm.category = category
         // 获取上级菜单
-        getMenuSelector({ category }).then(res => {
+        getMenuSelector({ category }, id || 0).then(res => {
           let topItem = {
             fullName: "顶级节点",
             hasChildren: true,

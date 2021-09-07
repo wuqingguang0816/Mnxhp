@@ -10,9 +10,9 @@ export const getOrganizeList = (data) => {
 }
 
 // 获取组织/公司下拉框列表
-export const getOrganizeSelector = () => {
+export const getOrganizeSelector = (id) => {
   return request({
-    url: '/api/permission/Organize/Selector',
+    url: '/api/permission/Organize/Selector/' + (!!id ? id : 0),
     method: 'GET'
   })
 }

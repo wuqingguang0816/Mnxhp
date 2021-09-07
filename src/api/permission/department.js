@@ -10,9 +10,9 @@ export const getDepartmentList = (companyId, data) => {
 }
 
 // 获取部门下拉框列表(公司+部门)
-export const getDepartmentSelector = () => {
+export const getDepartmentSelector = (id) => {
   return request({
-    url: '/api/permission/Organize/Department/Selector',
+    url: '/api/permission/Organize/Department/Selector/' + (!!id ? id : 0),
     method: 'GET'
   })
 }

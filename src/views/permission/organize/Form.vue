@@ -205,7 +205,7 @@ export default {
       this.$nextTick(() => {
         this.$refs['dataForm'].resetFields()
         // 获取公司下拉列表
-        getOrganizeSelector().then(res => {
+        getOrganizeSelector(id || 0).then(res => {
           let topItem = {
             fullName: "顶级节点",
             hasChildren: true,

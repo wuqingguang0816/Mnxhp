@@ -9,9 +9,9 @@ export function getDictionaryType() {
 }
 
 // 获取字典分类下拉框列表
-export function getDictionaryTypeSelector() {
+export function getDictionaryTypeSelector(id) {
   return request({
-    url: '/api/system/DictionaryType/Selector',
+    url: '/api/system/DictionaryType/Selector/' + (!!id ? id : 0),
     method: 'GET'
   })
 }

@@ -24,9 +24,9 @@ export function Delete(id) {
   })
 }
 // 获取知识管理列表（文件夹树）
-export function FolderTree() {
+export function FolderTree(id) {
   return request({
-    url: '/api/extend/Document/FolderTree',
+    url: '/api/extend/Document/FolderTree/' + (!!id ? id : 0),
     method: 'get'
   })
 }
