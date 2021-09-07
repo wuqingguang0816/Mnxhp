@@ -4,7 +4,7 @@
     <div class="JNPF-full-dialog-header">
       <div class="header-title">
         <img src="@/assets/images/jnpf.png" class="header-logo" />
-        <p class="header-txt"> · 代码生成器</p>
+        <p class="header-txt"> · 代码生成</p>
       </div>
       <el-steps :active="activeStep" finish-status="success" simple class="steps steps2">
         <el-step title="基础设置" @click.native="stepChick(0)"></el-step>
