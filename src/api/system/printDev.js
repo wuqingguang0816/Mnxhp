@@ -66,3 +66,19 @@ export function setState(id) {
     method: 'PUT'
   })
 }
+// 获取表单字段
+export function getFields(data) {
+  return request({
+    url: `/api/system/printdev/Fields`,
+    method: 'get',
+    data
+  })
+}
+// 获取数据和打印模板
+export function getData(data) {
+  return request({
+    url: `/api/system/printdev/Data`,
+    method: 'get',
+    data
+  })
+}

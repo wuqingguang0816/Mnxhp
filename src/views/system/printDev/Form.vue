@@ -96,7 +96,7 @@
 </template>
 
 <script>
-import { getPrintDevInfo, Update, Create } from '@/api/system/printDev'
+import { getPrintDevInfo, Update, Create, getFields } from '@/api/system/printDev'
 import { getDataSourceListAll } from '@/api/systemData/dataSource'
 import PrintTemplater from './ts-print-templater'
 export default {
@@ -142,6 +142,7 @@ export default {
       btnLoading: false,
       sqlTemplate: [],
       categoryList: [],
+      treeData: [],
       dbOptions: []
     }
   },
@@ -192,7 +193,26 @@ export default {
         this.dataForm.sqlTemplate = JSON.stringify(this.sqlTemplate)
         this.$refs['dataForm'].validate((valid) => {
           if (valid) {
-            this.activeStep += 1
+            const query = {
+              dbLinkId: this.dataForm.dbLinkId,
+              sqlTemplate: this.dataForm.sqlTemplate
+            }
+            getFields(query).then(res => {
+              let treeData = res.data.headTable
+              for (let key in res.data) {
+                console.log(key + '---' + res.data[key])
+                if (key !== 'headTable') {
+                  let item = {
+                    field: key,
+                    fieldName: key,
+                    children: res.data[key]
+                  }
+                  treeData.push(item)
+                }
+              }
+              this.treeData = treeData
+              this.activeStep += 1
+            })
           }
         })
       }
