@@ -62,14 +62,14 @@ export function getPrintDevSelector() {
 // 导入
 export function setState(id) {
   return request({
-    url: `/api/system/printdev/${id}/Actions/State`,
+    url: `/api/system/printDev/${id}/Actions/State`,
     method: 'PUT'
   })
 }
 // 获取表单字段
 export function getFields(data) {
   return request({
-    url: `/api/system/printdev/Fields`,
+    url: `/api/system/printDev/Fields`,
     method: 'get',
     data
   })
@@ -77,7 +77,7 @@ export function getFields(data) {
 // 获取数据和打印模板
 export function getData(data) {
   return request({
-    url: `/api/system/printdev/Data`,
+    url: `/api/system/printDev/Data`,
     method: 'get',
     data
   })
