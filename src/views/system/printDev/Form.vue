@@ -200,7 +200,6 @@ export default {
             getFields(query).then(res => {
               let treeData = res.data.headTable
               for (let key in res.data) {
-                console.log(key + '---' + res.data[key])
                 if (key !== 'headTable') {
                   let item = {
                     field: key,
