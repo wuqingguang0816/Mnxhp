@@ -68,9 +68,9 @@ export function getDictionaryAll() {
 }
 
 // 获取字典分类下拉框(项目上级)
-export function getDictionaryDataTypeSelector(dictionaryTypeId, isTree) {
+export function getDictionaryDataTypeSelector(dictionaryTypeId, isTree, id) {
   return request({
-    url: `/api/system/DictionaryData/${dictionaryTypeId}/Selector`,
+    url: `/api/system/DictionaryData/${dictionaryTypeId}/Selector/` + (!!id ? id : 0),
     method: 'GET',
     data: { isTree }
   })
