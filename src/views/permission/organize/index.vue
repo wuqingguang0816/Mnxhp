@@ -123,7 +123,6 @@ export default {
       }
     },
     openGradeForm(row) {
-      console.log(row);
       this.gradeFormVisible = true
       this.$nextTick(() => {
         this.$refs.gradeForm.init(row.id, row.fullName)
