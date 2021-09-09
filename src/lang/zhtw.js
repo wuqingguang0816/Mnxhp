@@ -23,7 +23,7 @@ export default {
     "system-language": "翻譯管理",
     "system-menu": "菜單管理",
     "system-area": "行政區劃",
-    "system-billRule": "單據規則",
+    "system-billRule": "單據模板",
     "systemData": "數據應用",
     "systemData-dataSource": "數據連接",
     "systemData-dataModel": "數據建模",
