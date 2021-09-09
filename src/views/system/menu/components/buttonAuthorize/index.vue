@@ -159,7 +159,7 @@ export default {
             this.loading = false
           }
         })
-      })
+      }).catch(() => { this.loading = false })
     },
     handleDel(id) {
       this.$confirm(this.$t('common.delTip'), this.$t('common.tipTitle'), {
