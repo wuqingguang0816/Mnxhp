@@ -190,6 +190,10 @@ export default {
     },
     next() {
       if (this.activeStep < 1) {
+        if (!this.sqlTemplate.length) {
+          this.$message.error('请输入SQL语句')
+          return
+        }
         this.dataForm.sqlTemplate = JSON.stringify(this.sqlTemplate)
         this.$refs['dataForm'].validate((valid) => {
           if (valid) {
