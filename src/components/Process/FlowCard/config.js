@@ -3,19 +3,7 @@ export default {
     type: "start",
     content: "所有人",
     properties: {
-      title: '发起节点',
-      hasInitFunc: false,
-      initInterfaceUrl: '',
-      initInterfaceType: 'GET',
-      hasEndFunc: false,
-      endInterfaceUrl: '',
-      endInterfaceType: 'GET',
-      hasFlowRecallFunc: false,
-      flowRecallInterfaceUrl: '',
-      initiator: [],
-      initiatePos: [],
-      initiateRole: [],
-      formOperates: []
+      title: '发起节点'
     }
   },
   approver: {
