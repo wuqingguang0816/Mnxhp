@@ -77,7 +77,8 @@
         </el-form>
         <span slot="footer" class="dialog-footer">
           <el-button @click="visible = false">{{$t('common.cancelButton')}}</el-button>
-          <el-button type="primary" @click="handleApproval()">{{$t('common.confirmButton')}}
+          <el-button type="primary" @click="handleApproval()" :loading="approvalBtnLoading">
+            {{$t('common.confirmButton')}}
           </el-button>
         </span>
       </el-dialog>
@@ -149,6 +150,7 @@ export default {
       activeTab: '0',
       loading: false,
       btnLoading: false,
+      approvalBtnLoading: false,
       eventType: '',
       signImg: '',
       copyIds: ''
@@ -442,17 +444,19 @@ export default {
         query = { freeApproverUserId: this.handleId, ...query }
       }
       const approvalMethod = this.eventType === 'audit' ? Audit : Reject
+      this.approvalBtnLoading = true
       approvalMethod(this.setting.taskId, query).then(res => {
         this.$message({
           type: 'success',
           message: res.msg,
           duration: 1000,
           onClose: () => {
+            this.approvalBtnLoading = false
             this.visible = false
             this.$emit('close', true)
           }
         })
-      })
+      }).catch(() => { this.approvalBtnLoading = false })
     },
     handleReset() {
       this.signImg = ''
