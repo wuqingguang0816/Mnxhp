@@ -3,6 +3,9 @@ export default {
     type: "start",
     content: "所有人",
     properties: {
+      initiator: [],
+      initiatePos: [],
+      initiateRole: [],
       title: '发起节点'
     }
   },
