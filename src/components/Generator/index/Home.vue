@@ -51,7 +51,8 @@
       </el-scrollbar>
     </div>
     <right-panel :active-data="activeData" :form-conf="formConf" :show-field="!!drawingList.length"
-      @tag-change="tagChange" :modelType="modelType" @relationChange="relationChange" />
+      @tag-change="tagChange" :modelType="modelType" @relationChange="relationChange"
+      :key="activeData.__config__.renderKey" />
     <json-drawer size="550px" :visible.sync="jsonDrawerVisible" :jsonData="formData"
       @refresh="refreshJson" />
     <Preview :visible.sync="previewVisible" :form-data="formData" />
