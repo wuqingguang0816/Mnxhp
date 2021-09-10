@@ -184,14 +184,6 @@
                 <el-checkbox v-model="startForm.hasRevokeBtn">撤回</el-checkbox>
                 <el-input v-model="startForm.revokeBtnText" />
               </div>
-              <div class="per-cell">
-                <el-checkbox v-model="startForm.hasPrintBtn">打印</el-checkbox>
-                <el-input v-model="startForm.printBtnText" />
-              </div>
-            </el-form-item>
-            <el-form-item label="打印设置" v-if="startForm.hasPrintBtn">
-              <JNPF-TreeSelect :options="printTplList" v-model="startForm.printId"
-                placeholder="请选择打印模板" lastLevel clearable></JNPF-TreeSelect>
             </el-form-item>
           </el-form>
         </el-tab-pane>
@@ -371,14 +363,6 @@
               <div class="per-cell">
                 <el-checkbox v-model="approverForm.hasSign">签名</el-checkbox>
               </div>
-              <div class="per-cell">
-                <el-checkbox v-model="approverForm.hasPrintBtn">打印</el-checkbox>
-                <el-input v-model="approverForm.printBtnText" />
-              </div>
-            </el-form-item>
-            <el-form-item label="打印设置" v-if="approverForm.hasPrintBtn">
-              <JNPF-TreeSelect :options="printTplList" v-model="approverForm.printId"
-                placeholder="请选择打印模板" lastLevel clearable></JNPF-TreeSelect>
             </el-form-item>
             <!-- <el-form-item label="超时设置">
               <el-switch v-model="approverForm.timeoutConfig.on" class="mr-10" />
@@ -1183,7 +1167,6 @@ export default {
       this.isSubFlowNode() && this.initSubFlowData()
       this.isApproverNode() && this.initApproverNodeData()
       this.isConditionNode() && this.initConditionNodeData()
-      this.getPringTplList()
     },
     value(newVal) {
       if (newVal && newVal.properties) {
