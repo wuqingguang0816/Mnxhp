@@ -61,7 +61,9 @@
             <JNPFRadio v-if="activeData.__config__.jnpfKey==='radio'" :active-data="activeData" />
             <JNPFCheckbox v-if="activeData.__config__.jnpfKey==='checkbox'"
               :active-data="activeData" />
-            <JNPFSelect v-if="activeData.__config__.jnpfKey==='select'" :active-data="activeData" />
+            <JNPFSelect v-if="activeData.__config__.jnpfKey==='select'" :active-data="activeData"
+              :key="activeData.__config__.renderKey" :dictionaryOptions="dictionaryOptions"
+              :dataInterfaceOptions="dataInterfaceOptions" />
             <JNPFCascader v-if="activeData.__config__.jnpfKey==='cascader'"
               :active-data="activeData" />
             <JNPFTime v-if="activeData.__config__.jnpfKey==='time'" :active-data="activeData" />
@@ -242,6 +244,8 @@
 <script>
 import { isNumberStr } from '@/components/Generator/utils'
 import { saveFormConf, getDrawingList } from '@/components/Generator/utils/db'
+import { getDictionaryTypeSelector } from "@/api/systemData/dictionary"
+import { getDataInterfaceSelector } from "@/api/systemData/dataInterface"
 import JNPFComInput from './RightComponents/ComInput'
 import JNPFTextarea from './RightComponents/Textarea'
 import JNPFText from './RightComponents/JNPFText'
@@ -323,6 +327,8 @@ export default {
       dialogVisible: false,
       iconsVisible: false,
       currentIconModel: null,
+      dictionaryOptions: [],
+      dataInterfaceOptions: [],
       justifyOptions: [
         {
           label: 'start',
@@ -401,7 +407,8 @@ export default {
     }
   },
   created() {
-    // console.log(this.activeData)
+    this.getDictionaryType()
+    this.getDataInterfaceSelector()
   },
   methods: {
     addReg() {
@@ -542,7 +549,17 @@ export default {
         this.$set(this.activeData.__config__.children[i].__config__, 'relationTable', tableName)
         this.$set(this.activeData.__config__.children[i], '__vModel__', '')
       }
-    }
+    },
+    getDictionaryType() {
+      getDictionaryTypeSelector().then(res => {
+        this.dictionaryOptions = res.data.list
+      })
+    },
+    getDataInterfaceSelector() {
+      getDataInterfaceSelector().then(res => {
+        this.dataInterfaceOptions = res.data
+      })
+    },
   }
 }
 </script>

@@ -60,12 +60,12 @@
         </el-button>
       </div>
     </template>
-    <JNPF-TreeSelect :options="treeData" v-model="activeData.__config__.dictionaryType"
+    <JNPF-TreeSelect :options="dicOptions" v-model="activeData.__config__.dictionaryType"
       placeholder="选择数据字典" lastLevel v-if="activeData.__config__.dataType==='dictionary'" clearable>
     </JNPF-TreeSelect>
     <template v-if="activeData.__config__.dataType === 'dynamic'">
       <el-form-item label="远端数据">
-        <JNPF-TreeSelect :options="dataInterfaceSelector" v-model="activeData.__config__.propsUrl"
+        <JNPF-TreeSelect :options="dataInterfaceOptions" v-model="activeData.__config__.propsUrl"
           placeholder="请选择远端数据" lastLevel lastLevelKey='categoryId' lastLevelValue='1'
           @change="propsUrlChange" clearable>
         </JNPF-TreeSelect>
@@ -102,21 +102,24 @@
 <script>
 import comMixin from './mixin';
 import draggable from 'vuedraggable'
-import { getDictionaryTypeSelector, getDictionaryDataSelector } from '@/api/systemData/dictionary'
-import { getDataInterfaceSelector, previewDataInterface } from '@/api/systemData/dataInterface'
+import { getDictionaryDataSelector } from '@/api/systemData/dictionary'
+import { previewDataInterface } from '@/api/systemData/dataInterface'
 export default {
-  props: ['activeData'],
+  props: ['activeData', 'dictionaryOptions', 'dataInterfaceOptions'],
   mixins: [comMixin],
   components: { draggable },
   data() {
     return {
-      treeData: [],
-      dataInterfaceSelector: []
+
     }
   },
-  created() {
-    this.getDictionaryType()
-    this.getDataInterfaceSelector()
+  computed: {
+    dicOptions() {
+      return this.dictionaryOptions
+    },
+    interfaceOptions() {
+      return this.dataInterfaceOptions
+    },
   },
   watch: {
     'activeData.__config__.dictionaryType': function (val) {
@@ -130,16 +133,6 @@ export default {
     }
   },
   methods: {
-    getDictionaryType() {
-      getDictionaryTypeSelector().then(res => {
-        this.treeData = res.data.list
-      })
-    },
-    getDataInterfaceSelector() {
-      getDataInterfaceSelector().then(res => {
-        this.dataInterfaceSelector = res.data
-      })
-    },
     addSelectItem() {
       this.activeData.__slot__.options.push({
         fullName: '',
