@@ -9,6 +9,7 @@ const state = {
   token: getToken(),
   isLock: getLock() || 0,
   menuList: [],
+  leftMenuList: [],
   userInfo: {},
   permissionList: [],
   loginLoading: false,
@@ -24,6 +25,9 @@ const mutations = {
   },
   SET_MENULIST: (state, menuList) => {
     state.menuList = menuList
+  },
+  SET_LEFTMENULIST: (state, leftMenuList) => {
+    state.leftMenuList = leftMenuList
   },
   SET_USERINFO: (state, userInfo) => {
     state.userInfo = userInfo
@@ -82,7 +86,7 @@ const actions = {
         grant_type: 'password'
       })).then(response => {
         const { data } = response
-        const layoutList = ['classic', 'functional', 'plain']
+        const layoutList = ['classic', 'functional', 'plain', 'blend']
         let layoutType = data.theme && layoutList.indexOf(data.theme) > -1 ? data.theme : 'classic'
         commit('SET_TOKEN', data.token)
         commit('settings/CHANGE_SETTING', { key: "layoutType", value: layoutType }, { root: true })

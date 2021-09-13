@@ -6,7 +6,8 @@
       <el-form @submit.native.prevent>
         <el-col :span="10">
           <el-form-item label="关键词">
-            <el-input v-model="keyword" placeholder="请输入关键词查询" clearable />
+            <el-input v-model="keyword" placeholder="请输入关键词查询" clearable
+              @keyup.enter.native="initData()" />
           </el-form-item>
         </el-col>
         <el-col :span="8">
@@ -29,7 +30,6 @@
       :border="false">
       <el-table-column prop="table" label="表名" show-overflow-tooltip />
       <el-table-column prop="sum" label="总数" width="90" />
-      <el-table-column prop="size" label="大小" width="90" />
       <el-table-column prop="tableName" label="说明" width="150" show-overflow-tooltip />
     </JNPF-table>
     <span slot="footer" class="dialog-footer">

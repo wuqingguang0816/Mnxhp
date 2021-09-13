@@ -83,9 +83,6 @@ export default {
         ],
         category: [
           { required: true, message: '门户分类不能为空', trigger: 'change' },
-        ],
-        enabledMark: [
-          { required: true, message: '门户状态不能为空', trigger: 'blur' },
         ]
       },
       formVisible: false,

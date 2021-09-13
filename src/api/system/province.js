@@ -10,9 +10,9 @@ export function getProvinceList(nodeId, data) {
 }
 
 // 获取行政区划下拉框数据
-export function getProvinceSelector(id) {
+export function getProvinceSelector(id, currId) {
   return request({
-    url: `/api/system/Area/${id}/Selector`,
+    url: `/api/system/Area/${id}/Selector/${!!currId ? currId : 0}`,
     method: 'GET'
   })
 }

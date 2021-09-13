@@ -53,3 +53,10 @@ export function Execute(data) {
     data
   })
 }
+export function DataSync(data) {
+  return request({
+    url: `api/system/DataSync`,
+    method: 'post',
+    data
+  })
+}

@@ -142,7 +142,7 @@ export default {
       this.$nextTick(async () => {
         this.$refs['dataForm'].resetFields()
         this.loading = true
-        let res = await TaskTreeView(this.projectId)
+        let res = await TaskTreeView(this.projectId, id || 0)
         this.taskTreeData = res.data.list
         this.changeUser(managerIds)
         if (this.dataForm.id) {

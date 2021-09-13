@@ -61,7 +61,9 @@
             <JNPFRadio v-if="activeData.__config__.jnpfKey==='radio'" :active-data="activeData" />
             <JNPFCheckbox v-if="activeData.__config__.jnpfKey==='checkbox'"
               :active-data="activeData" />
-            <JNPFSelect v-if="activeData.__config__.jnpfKey==='select'" :active-data="activeData" />
+            <JNPFSelect v-if="activeData.__config__.jnpfKey==='select'" :active-data="activeData"
+              :key="activeData.__config__.renderKey" :dictionaryOptions="dictionaryOptions"
+              :dataInterfaceOptions="dataInterfaceOptions" />
             <JNPFCascader v-if="activeData.__config__.jnpfKey==='cascader'"
               :active-data="activeData" />
             <JNPFTime v-if="activeData.__config__.jnpfKey==='time'" :active-data="activeData" />
@@ -114,11 +116,11 @@
                 <el-input-number v-model="activeData.__config__.labelWidth" placeholder="标题宽度"
                   :min="0" :precision="0" controls-position="right" />
               </el-form-item>
-              <el-form-item label="是否隐藏" v-if="activeData.__config__.jnpfKey !=='billRule'">
-                <el-switch v-model="activeData.__config__.noShow" />
-              </el-form-item>
               <el-form-item label="选择模板" v-if="activeData.__config__.jnpfKey==='billRule'">
                 <BillRule v-model="activeData.__config__.rule" placeholder="选择模板" />
+              </el-form-item>
+              <el-form-item label="是否隐藏">
+                <el-switch v-model="activeData.__config__.noShow" />
               </el-form-item>
             </template>
             <template v-if="activeData.__config__.jnpfKey==='table'">
@@ -242,6 +244,8 @@
 <script>
 import { isNumberStr } from '@/components/Generator/utils'
 import { saveFormConf, getDrawingList } from '@/components/Generator/utils/db'
+import { getDictionaryTypeSelector } from "@/api/systemData/dictionary"
+import { getDataInterfaceSelector } from "@/api/systemData/dataInterface"
 import JNPFComInput from './RightComponents/ComInput'
 import JNPFTextarea from './RightComponents/Textarea'
 import JNPFText from './RightComponents/JNPFText'
@@ -323,6 +327,8 @@ export default {
       dialogVisible: false,
       iconsVisible: false,
       currentIconModel: null,
+      dictionaryOptions: [],
+      dataInterfaceOptions: [],
       justifyOptions: [
         {
           label: 'start',
@@ -401,7 +407,8 @@ export default {
     }
   },
   created() {
-    // console.log(this.activeData)
+    this.getDictionaryType()
+    this.getDataInterfaceSelector()
   },
   methods: {
     addReg() {
@@ -454,6 +461,32 @@ export default {
     },
     fieldChange1(val) {
       if (!val) return
+      const drawingList = getDrawingList() || []
+      let boo = false
+      const loop = list => {
+        for (let i = 0; i < list.length; i++) {
+          const e = list[i]
+          const config = e.__config__
+          if (config.jnpfKey === 'table' && config.tableName === this.activeData.__config__.relationTable) {
+            for (let j = 0; j < config.children.length; j++) {
+              const child = config.children[j]
+              if (child.__vModel__ === val) {
+                boo = true
+                break
+              }
+            }
+          }
+          if (config && config.jnpfKey != 'table' && config.children && Array.isArray(config.children)) {
+            loop(config.children)
+          }
+        }
+      }
+      loop(drawingList)
+      if (boo) {
+        this.$message.warning(`子表字段【${val}】已存在,请重新选择!`)
+        this.activeData.__vModel__ = ''
+        return
+      }
       let options = this.getSubTalebFiled(this.activeData.__config__.relationTable)
       let item = options.filter(o => o.field == val)[0]
       if (!item || !item.fieldName) return
@@ -478,7 +511,7 @@ export default {
       }
       loop(drawingList)
       if (boo) {
-        this.$message.warning(`字段【${val}】已存在,请重新选!`)
+        this.$message.warning(`字段【${val}】已存在,请重新选择!`)
         this.activeData.__vModel__ = ''
         return
       }
@@ -490,11 +523,43 @@ export default {
       this.formConf.span = val
     },
     onTableNameChange(tableName) {
+      if (!tableName) return
+      const drawingList = getDrawingList() || []
+      let boo = false
+      const loop = list => {
+        for (let i = 0; i < list.length; i++) {
+          const e = list[i]
+          const config = e.__config__
+          if (config.jnpfKey === 'table' && config.tableName === tableName) {
+            boo = true
+            break
+          }
+          if (config && config.jnpfKey != 'table' && config.children && Array.isArray(config.children)) {
+            loop(config.children)
+          }
+        }
+      }
+      loop(drawingList)
+      if (boo) {
+        this.$message.warning(`子表【${tableName}】已存在,请重新选择!`)
+        this.activeData.__config__.tableName = ''
+        return
+      }
       for (let i = 0; i < this.activeData.__config__.children.length; i++) {
         this.$set(this.activeData.__config__.children[i].__config__, 'relationTable', tableName)
         this.$set(this.activeData.__config__.children[i], '__vModel__', '')
       }
-    }
+    },
+    getDictionaryType() {
+      getDictionaryTypeSelector().then(res => {
+        this.dictionaryOptions = res.data.list
+      })
+    },
+    getDataInterfaceSelector() {
+      getDataInterfaceSelector().then(res => {
+        this.dataInterfaceOptions = res.data
+      })
+    },
   }
 }
 </script>

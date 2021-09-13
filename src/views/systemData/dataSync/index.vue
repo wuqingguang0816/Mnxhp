@@ -28,7 +28,6 @@
     </div>
     <JNPF-table v-loading="listLoading" :data="list">
       <el-table-column prop="table" label="表名" show-overflow-tooltip />
-      <el-table-column prop="size" label="大小" />
       <el-table-column prop="sum" label="总数" />
       <el-table-column prop="result" label="结果" />
       <el-table-column label="操作" fixed="right" width="100">
@@ -43,7 +42,7 @@
 </template>
 
 <script>
-import { getDataSourceListAll, Execute } from '@/api/systemData/dataSource'
+import { getDataSourceListAll, Execute, DataSync } from '@/api/systemData/dataSource'
 import { DataModelList } from '@/api/systemData/dataModel'
 export default {
   name: 'systemData-dataSync',
@@ -104,6 +103,41 @@ export default {
       row.btnLoading = true
       row.result = ''
       let data = {
+        dbConnectionFrom: this.dataForm.dbConnectionFrom,
+        dbConnectionTo: this.dataForm.dbConnectionTo,
+        dbTable: row.table
+      }
+      DataSync(data).then((res) => {
+        if (res.data == 0) {
+          this.execute(row, res.data)
+        } else if (res.data == 1) {
+          this.$message({
+            message: '初始库表中没有数据',
+            type: 'warning',
+            duration: 1000,
+          })
+          row.btnLoading = false
+        } else if (res.data == 2) {
+          this.$confirm('目标库中该表不存在，是否在目标库中创建该表，并同步数据?', '提示', {
+            type: 'warning'
+          }).then(() => {
+            this.execute(row, res.data)
+          }).catch(() => { row.btnLoading = false });
+        } else if (res.data == 3) {
+          this.$confirm('目标表存在数据,是否自动清除并同步数据?', '提示', {
+            type: 'warning'
+          }).then(() => {
+            this.execute(row, res.data)
+          }).catch(() => { row.btnLoading = false });
+        }
+      }).catch(() => {
+        row.btnLoading = false
+      })
+    },
+    execute(row, type) {
+      row.result = ''
+      let data = {
+        type,
         dbConnectionFrom: this.dataForm.dbConnectionFrom,
         dbConnectionTo: this.dataForm.dbConnectionTo,
         dbTable: row.table

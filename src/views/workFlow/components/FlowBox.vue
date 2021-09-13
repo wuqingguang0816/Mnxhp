@@ -3,10 +3,10 @@
     <div class="JNPF-preview-main flow-form-main nohead">
       <div class="btns">
         <template v-if="setting.opType=='-1'">
-          <el-button type="primary" @click="eventLancher('submit')">提交审核
-          </el-button>
-          <el-button type="warning" @click="eventLancher('save')" :loading="btnLoading">保存草稿
-          </el-button>
+          <el-button type="primary" @click="eventLancher('submit')">
+            {{properties.submitBtnText||'提交审核'}}</el-button>
+          <el-button type="warning" @click="eventLancher('save')" :loading="btnLoading">
+            {{properties.saveBtnText||'保存草稿'}}</el-button>
         </template>
         <template v-if="setting.opType == 1">
           <el-button type="warning" @click="openUserBox('transfer')"
@@ -17,8 +17,12 @@
             {{properties.rejectBtnText||'拒 绝'}}</el-button>
         </template>
         <template v-if="setting.opType == 0 && setting.status == 1">
-          <el-button type="primary" @click="press()">催 办</el-button>
-          <el-button type="danger" @click="revoke()">撤 回</el-button>
+          <el-button type="primary" @click="press()"
+            v-if="properties.hasPressBtn || properties.hasPressBtn===undefined">
+            {{properties.pressBtnText||'催 办'}}</el-button>
+          <el-button type="danger" @click="revoke()"
+            v-if="properties.hasRevokeBtn || properties.hasRevokeBtn===undefined">
+            {{properties.revokeBtnText||'撤 回'}}</el-button>
         </template>
         <el-button type="danger" v-if="setting.opType == 2 && properties.hasRevokeBtn"
           @click="recall()">{{properties.revokeBtnText||'撤 回'}}</el-button>
@@ -77,7 +81,8 @@
         </el-form>
         <span slot="footer" class="dialog-footer">
           <el-button @click="visible = false">{{$t('common.cancelButton')}}</el-button>
-          <el-button type="primary" @click="handleApproval()">{{$t('common.confirmButton')}}
+          <el-button type="primary" @click="handleApproval()" :loading="approvalBtnLoading">
+            {{$t('common.confirmButton')}}
           </el-button>
         </span>
       </el-dialog>
@@ -149,6 +154,7 @@ export default {
       activeTab: '0',
       loading: false,
       btnLoading: false,
+      approvalBtnLoading: false,
       eventType: '',
       signImg: '',
       copyIds: ''
@@ -193,6 +199,7 @@ export default {
         this.flowTemplateJson = res.data.flowTemplateJson ? JSON.parse(res.data.flowTemplateJson) : null
         this.flowTemplateJson.state = 'state-curr'
         data.formOperates = []
+        this.properties = this.flowTemplateJson && this.flowTemplateJson.properties || {}
         if (this.flowTemplateJson && this.flowTemplateJson.properties && this.flowTemplateJson.properties.formOperates) {
           data.formOperates = this.flowTemplateJson.properties.formOperates || []
         }
@@ -226,6 +233,7 @@ export default {
         if (data.opType != 1) data.readonly = true
         data.formOperates = []
         if (data.opType == 0) {
+          this.properties = this.flowTemplateJson && this.flowTemplateJson.properties || {}
           if (this.flowTemplateJson && this.flowTemplateJson.properties && this.flowTemplateJson.properties.formOperates) {
             data.formOperates = this.flowTemplateJson.properties.formOperates || []
           }
@@ -442,17 +450,19 @@ export default {
         query = { freeApproverUserId: this.handleId, ...query }
       }
       const approvalMethod = this.eventType === 'audit' ? Audit : Reject
+      this.approvalBtnLoading = true
       approvalMethod(this.setting.taskId, query).then(res => {
         this.$message({
           type: 'success',
           message: res.msg,
           duration: 1000,
           onClose: () => {
+            this.approvalBtnLoading = false
             this.visible = false
             this.$emit('close', true)
           }
         })
-      })
+      }).catch(() => { this.approvalBtnLoading = false })
     },
     handleReset() {
       this.signImg = ''

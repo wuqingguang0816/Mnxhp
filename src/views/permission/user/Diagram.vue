@@ -7,7 +7,7 @@
           <el-button @click="goBack">{{$t('common.cancelButton')}} </el-button>
         </div>
       </div>
-      <div class="main">
+      <div class="main" v-loading="loading">
         <organization-chart :datasource="ds"></organization-chart>
       </div>
     </div>
@@ -25,11 +25,13 @@ export default {
   },
   data() {
     return {
+      loading: false,
       ds: {}
     }
   },
   methods: {
     init() {
+      this.loading = true
       getDepartmentSelector().then(res => {
         let data = res.data.list
         let _this = this
@@ -43,15 +45,16 @@ export default {
         }
         loop(data)
         this.$nextTick(() => {
-          if (data.length > 1) {
+          if (data.length >= 1) {
             data = {
               name: '组织架构图',
               children: data
             }
           }
           this.ds = data
+          this.loading = false
         })
-      })
+      }).catch(() => { this.loading = false })
     },
     goBack() {
       this.$emit('close')

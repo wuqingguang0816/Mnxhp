@@ -101,7 +101,7 @@ export default {
         this.selectTreeClearHandle()
         this.$refs['dataForm'].resetFields()
         this.treeLoading = true
-        getProvinceSelector('-1').then(res => {
+        getProvinceSelector('-1', this.dataForm.id || 0).then(res => {
           let topItem = { fullName: "顶级节点", id: "-1", isLeaf: true }
           this.treeData = [topItem, ...res.data.list]
           this.treeLoading = false
@@ -123,7 +123,7 @@ export default {
     },
     getChildrenNode(node, resolve) {
       this.nodeId = node.data.id
-      getProvinceSelector(this.nodeId).then(res => {
+      getProvinceSelector(this.nodeId, this.dataForm.id || 0).then(res => {
         this.childrenList = res.data.list
         resolve(this.childrenList)
       })

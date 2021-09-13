@@ -98,7 +98,9 @@ export default {
      * @param { Object } val - 缩放增量 是step的倍数 可正可负
      */
     changeScale(val) {
-      if (this.scaleVal > 0 && this.scaleVal < 200) {
+      if (this.scaleVal >= 0 && this.scaleVal <= 200) {
+        if (this.scaleVal === 200 && this.scaleVal + val > 200) return
+        if (this.scaleVal === 0 && this.scaleVal + val < 0) return
         // 缩放介于0%~200%
         this.scaleVal += val;
       }

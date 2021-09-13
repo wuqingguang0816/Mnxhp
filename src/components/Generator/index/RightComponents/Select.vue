@@ -60,21 +60,21 @@
         </el-button>
       </div>
     </template>
-    <JNPF-TreeSelect :options="treeData" v-model="activeData.__config__.dictionaryType"
+    <JNPF-TreeSelect :options="dicOptions" v-model="activeData.__config__.dictionaryType"
       placeholder="选择数据字典" lastLevel v-if="activeData.__config__.dataType==='dictionary'" clearable>
     </JNPF-TreeSelect>
     <template v-if="activeData.__config__.dataType === 'dynamic'">
-      <el-form-item label="数据接口">
-        <JNPF-TreeSelect :options="dataInterfaceSelector" v-model="activeData.__config__.propsUrl"
-          placeholder="请选择数据接口" lastLevel lastLevelKey='categoryId' lastLevelValue='1'
+      <el-form-item label="远端数据">
+        <JNPF-TreeSelect :options="dataInterfaceOptions" v-model="activeData.__config__.propsUrl"
+          placeholder="请选择远端数据" lastLevel lastLevelKey='categoryId' lastLevelValue='1'
           @change="propsUrlChange" clearable>
         </JNPF-TreeSelect>
       </el-form-item>
-      <el-form-item label="值">
-        <el-input v-model="activeData.__config__.props.value" placeholder="请输入值" />
+      <el-form-item label="存储字段">
+        <el-input v-model="activeData.__config__.props.value" placeholder="请输入存储字段" />
       </el-form-item>
-      <el-form-item label="标签">
-        <el-input v-model="activeData.__config__.props.label" placeholder="请输入标签" />
+      <el-form-item label="显示字段">
+        <el-input v-model="activeData.__config__.props.label" placeholder="请输入显示字段" />
       </el-form-item>
     </template>
     <el-divider />
@@ -93,6 +93,7 @@
     <el-form-item label="是否多选">
       <el-switch v-model="activeData.multiple" @change="multipleChange" />
     </el-form-item>
+    <el-divider>校验</el-divider>
     <el-form-item label="是否必填">
       <el-switch v-model="activeData.__config__.required" />
     </el-form-item>
@@ -101,21 +102,24 @@
 <script>
 import comMixin from './mixin';
 import draggable from 'vuedraggable'
-import { getDictionaryTypeSelector, getDictionaryDataSelector } from '@/api/systemData/dictionary'
-import { getDataInterfaceSelector, previewDataInterface } from '@/api/systemData/dataInterface'
+import { getDictionaryDataSelector } from '@/api/systemData/dictionary'
+import { previewDataInterface } from '@/api/systemData/dataInterface'
 export default {
-  props: ['activeData'],
+  props: ['activeData', 'dictionaryOptions', 'dataInterfaceOptions'],
   mixins: [comMixin],
   components: { draggable },
   data() {
     return {
-      treeData: [],
-      dataInterfaceSelector: []
+
     }
   },
-  created() {
-    this.getDictionaryType()
-    this.getDataInterfaceSelector()
+  computed: {
+    dicOptions() {
+      return this.dictionaryOptions
+    },
+    interfaceOptions() {
+      return this.dataInterfaceOptions
+    },
   },
   watch: {
     'activeData.__config__.dictionaryType': function (val) {
@@ -129,16 +133,6 @@ export default {
     }
   },
   methods: {
-    getDictionaryType() {
-      getDictionaryTypeSelector().then(res => {
-        this.treeData = res.data.list
-      })
-    },
-    getDataInterfaceSelector() {
-      getDataInterfaceSelector().then(res => {
-        this.dataInterfaceSelector = res.data
-      })
-    },
     addSelectItem() {
       this.activeData.__slot__.options.push({
         fullName: '',

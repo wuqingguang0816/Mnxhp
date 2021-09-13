@@ -201,7 +201,7 @@ export default {
         this.$refs['dataForm'].resetFields()
         this.dataForm.category = category
         // 获取上级菜单
-        getMenuSelector({ category }).then(res => {
+        getMenuSelector({ category }, id || 0).then(res => {
           let topItem = {
             fullName: "顶级节点",
             hasChildren: true,
@@ -401,7 +401,11 @@ export default {
         if (valid) {
           this.btnLoading = true
           const formMethod = this.dataForm.id ? updateMenu : createMenu
-          formMethod(this.dataForm).then(res => {
+          const query = {
+            ...this.dataForm,
+            propertyJson: JSON.stringify(this.dataForm.propertyJson)
+          }
+          formMethod(query).then(res => {
             this.$message({
               message: res.msg,
               type: 'success',

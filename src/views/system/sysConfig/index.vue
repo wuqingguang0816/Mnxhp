@@ -265,7 +265,7 @@
                 </el-col>
               </el-row>
             </el-tab-pane>
-            <el-tab-pane label="钉钉">
+            <el-tab-pane label="阿里钉钉">
               <el-row :gutter="20" style="margin-top: 15px">
                 <el-col :span="12" :offset="6" :pull="6">
                   <el-form-item label="企业号Id" prop="dingAgentId">

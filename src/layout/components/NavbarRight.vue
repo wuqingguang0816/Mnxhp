@@ -11,7 +11,7 @@
       </el-tooltip>
       <el-tooltip :content="$t('navbar.notice')" placement="bottom">
         <div class="right-menu-item hover-effect" @click="$refs.MessageList.init()">
-          <el-badge :value="messageCount" :hidden="!messageCount">
+          <el-badge :value="messageCount" :hidden="!messageCount" :max="99">
             <i class="icon-ym icon-ym-header-message"></i>
           </el-badge>
         </div>
@@ -45,11 +45,6 @@
         <el-dropdown-item @click.native="lock">
           <i class="icon-ym icon-ym-header-lockScreen"></i>{{ $t('navbar.lockScreen') }}
         </el-dropdown-item>
-        <a href="https://docs.jnpfsoft.com/" target="_blank">
-          <el-dropdown-item>
-            <i class="icon-ym icon-ym-file-text"></i>{{ $t('navbar.documentation') }}
-          </el-dropdown-item>
-        </a>
         <el-dropdown-item divided @click.native="handleLogout">
           <i class="icon-ym icon-ym-header-loginOut"></i>{{ $t('navbar.logOut') }}
         </el-dropdown-item>

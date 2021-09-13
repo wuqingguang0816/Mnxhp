@@ -29,6 +29,7 @@ export const inputComponents = [{
       layout: 'colFormItem',
       span: 24,
       dragDisabled: false,
+      noShow: false,
       regList: []
     },
     placeholder: '请输入',
@@ -482,6 +483,7 @@ export const selectComponents = [{
       layout: 'colFormItem',
       span: 24,
       dragDisabled: false,
+      noShow: false,
       rule: ''
     }
   },

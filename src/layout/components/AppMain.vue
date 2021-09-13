@@ -38,6 +38,18 @@ export default {
   background: url('../../assets/images/loading-iframe.gif') no-repeat center
     center #ebeef5;
   background-size: 600px 450px;
+  &::before {
+    content: 'Copyright © 2021 引迈信息技术有限公司出品';
+    font-size: 14px;
+    text-align: center;
+    color: #999;
+    text-align: center;
+    width: 100%;
+    display: block;
+    position: absolute;
+    bottom: 20px;
+    left: 0;
+  }
 }
 
 .fixed-header + .app-main {

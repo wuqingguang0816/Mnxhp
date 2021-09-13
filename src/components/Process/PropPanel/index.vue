@@ -4,7 +4,7 @@
     v-if="properties" append-to-body :wrapperClosable="false">
     <!-- 标题 -->
     <header slot="title" class="header"
-      v-if="value && (value.type=='condition'|| value.type=='approver' || value.type=='subFlow' )">
+      v-if="value && (value.type=='condition'|| value.type=='approver' || value.type=='subFlow' || value.type=='start' )">
       <el-input size="mini" v-model="properties.title" style="z-index:9;max-width: 200px;"
         placeholder="请输入">
       </el-input>
@@ -165,14 +165,44 @@
             </div>
           </el-row>
         </el-tab-pane>
+        <el-tab-pane label="高级设置" name="config">
+          <el-form label-position="top" class="pd-10">
+            <el-form-item label="操作设置">
+              <div class="per-cell">
+                <el-checkbox v-model="startForm.hasSubimtBtn" disabled>提交</el-checkbox>
+                <el-input v-model="startForm.submitBtnText" />
+              </div>
+              <div class="per-cell">
+                <el-checkbox v-model="startForm.hasSaveBtn" disabled>草稿</el-checkbox>
+                <el-input v-model="startForm.saveBtnText" />
+              </div>
+              <div class="per-cell">
+                <el-checkbox v-model="startForm.hasPressBtn">催办</el-checkbox>
+                <el-input v-model="startForm.pressBtnText" />
+              </div>
+              <div class="per-cell">
+                <el-checkbox v-model="startForm.hasRevokeBtn">撤回</el-checkbox>
+                <el-input v-model="startForm.revokeBtnText" />
+              </div>
+              <div class="per-cell">
+                <el-checkbox v-model="startForm.hasPrintBtn">打印</el-checkbox>
+                <el-input v-model="startForm.printBtnText" />
+              </div>
+            </el-form-item>
+            <el-form-item label="打印设置" v-if="startForm.hasPrintBtn">
+              <JNPF-TreeSelect :options="printTplList" v-model="startForm.printId"
+                placeholder="请选择打印模板" lastLevel clearable></JNPF-TreeSelect>
+            </el-form-item>
+          </el-form>
+        </el-tab-pane>
         <el-tab-pane label="表单权限" name="formAuth">
           <div class="form-auth-table">
-            <el-table :data="getFormOperates()" class="JNPF-common-table" size="mini">
+            <el-table :data="getFormOperates()" class="JNPF-common-table" size="mini" height="100%">
               <el-table-column prop="name" label="表单字段" align="left"></el-table-column>
               <el-table-column prop="write" label="操作" align="center" width="200px">
                 <template slot-scope="scope">
-                  <el-checkbox v-model="scope.row.read">可见</el-checkbox>
-                  <el-checkbox v-model="scope.row.write">可写</el-checkbox>
+                  <el-checkbox v-model="scope.row.read">查看</el-checkbox>
+                  <el-checkbox v-model="scope.row.write">编辑</el-checkbox>
                 </template>
               </el-table-column>
             </el-table>
@@ -187,27 +217,27 @@
               </div>
             </el-alert>
             <el-form-item label="自定义发起事件">
-              <el-switch v-model="properties.hasInitFunc" />
+              <el-switch v-model="startForm.hasInitFunc" />
             </el-form-item>
-            <template v-if="properties.hasInitFunc">
+            <template v-if="startForm.hasInitFunc">
               <el-form-item label="发起事件请求路径">
-                <el-input v-model="properties.initInterfaceUrl" placeholder="请输入接口地址" />
+                <el-input v-model="startForm.initInterfaceUrl" placeholder="请输入接口地址" />
               </el-form-item>
             </template>
             <el-form-item label="自定义结束事件">
-              <el-switch v-model="properties.hasEndFunc" />
+              <el-switch v-model="startForm.hasEndFunc" />
             </el-form-item>
-            <template v-if="properties.hasEndFunc">
+            <template v-if="startForm.hasEndFunc">
               <el-form-item label="结束事件请求路径">
-                <el-input v-model="properties.endInterfaceUrl" placeholder="请输入接口地址" />
+                <el-input v-model="startForm.endInterfaceUrl" placeholder="请输入接口地址" />
               </el-form-item>
             </template>
             <el-form-item label="自定义撤回事件">
-              <el-switch v-model="properties.hasFlowRecallFunc" />
+              <el-switch v-model="startForm.hasFlowRecallFunc" />
             </el-form-item>
-            <template v-if="properties.hasFlowRecallFunc">
+            <template v-if="startForm.hasFlowRecallFunc">
               <el-form-item label="撤回事件请求路径">
-                <el-input v-model="properties.flowRecallInterfaceUrl" placeholder="请输入接口地址" />
+                <el-input v-model="startForm.flowRecallInterfaceUrl" placeholder="请输入接口地址" />
               </el-form-item>
             </template>
           </el-form>
@@ -341,6 +371,14 @@
               <div class="per-cell">
                 <el-checkbox v-model="approverForm.hasSign">签名</el-checkbox>
               </div>
+              <div class="per-cell">
+                <el-checkbox v-model="approverForm.hasPrintBtn">打印</el-checkbox>
+                <el-input v-model="approverForm.printBtnText" />
+              </div>
+            </el-form-item>
+            <el-form-item label="打印设置" v-if="approverForm.hasPrintBtn">
+              <JNPF-TreeSelect :options="printTplList" v-model="approverForm.printId"
+                placeholder="请选择打印模板" lastLevel clearable></JNPF-TreeSelect>
             </el-form-item>
             <!-- <el-form-item label="超时设置">
               <el-switch v-model="approverForm.timeoutConfig.on" class="mr-10" />
@@ -381,12 +419,12 @@
         </el-tab-pane>
         <el-tab-pane label="表单权限" name="formAuth">
           <div class="form-auth-table">
-            <el-table :data="getFormOperates()" class="JNPF-common-table" size="mini">
+            <el-table :data="getFormOperates()" class="JNPF-common-table" size="mini" height="100%">
               <el-table-column prop="name" label="表单字段" align="left"></el-table-column>
               <el-table-column prop="write" label="操作" align="center" width="200px">
                 <template slot-scope="scope">
-                  <el-checkbox v-model="scope.row.read">可见</el-checkbox>
-                  <el-checkbox v-model="scope.row.write">可写</el-checkbox>
+                  <el-checkbox v-model="scope.row.read">查看</el-checkbox>
+                  <el-checkbox v-model="scope.row.write">编辑</el-checkbox>
                 </template>
               </el-table-column>
             </el-table>
@@ -397,16 +435,23 @@
             <el-alert type="warning" :closable="false">
               <div slot="title" class="tips">
                 <p>请求方式：GET</p>
-                <p>请求参数：taskId、taskNodeId、handleStatus(撤回事件无此参数)</p>
-                <p>处理状态：0-拒绝、1-同意</p>
+                <p>请求参数：taskId、taskNodeId</p>
               </div>
             </el-alert>
-            <el-form-item label="自定义审批事件">
+            <el-form-item label="自定义同意事件">
               <el-switch v-model="approverForm.hasApproverFunc" />
             </el-form-item>
             <template v-if="approverForm.hasApproverFunc">
-              <el-form-item label="审批事件请求路径">
+              <el-form-item label="同意事件请求路径">
                 <el-input v-model="approverForm.approverInterfaceUrl" placeholder="请输入接口地址" />
+              </el-form-item>
+            </template>
+            <el-form-item label="自定义拒绝事件">
+              <el-switch v-model="approverForm.hasApproverRejectFunc" />
+            </el-form-item>
+            <template v-if="approverForm.hasApproverRejectFunc">
+              <el-form-item label="拒绝事件请求路径">
+                <el-input v-model="approverForm.approverRejectInterfaceUrl" placeholder="请输入接口地址" />
               </el-form-item>
             </template>
             <el-form-item label="自定义撤回事件">
@@ -464,6 +509,28 @@ import { FlowEngineSelector, getFormDataFields } from '@/api/workFlow/FlowEngine
 import { NodeUtils } from "../FlowCard/util.js"
 import { getDrawingList } from '@/components/Generator/utils/db'
 import OrgSelect from '../OrgSelect'
+const defaultStartForm = {
+  hasInitFunc: false,
+  initInterfaceUrl: '',
+  initInterfaceType: 'GET',
+  hasEndFunc: false,
+  endInterfaceUrl: '',
+  endInterfaceType: 'GET',
+  hasFlowRecallFunc: false,
+  flowRecallInterfaceUrl: '',
+  hasSubimtBtn: true,
+  submitBtnText: '提交审核',
+  hasSaveBtn: true,
+  saveBtnText: '保存草稿',
+  hasPressBtn: true,
+  pressBtnText: '催 办',
+  hasRevokeBtn: true,
+  revokeBtnText: '撤 回',
+  hasPrintBtn: false,
+  printBtnText: '打 印',
+  printId: '',
+  formOperates: []
+}
 const defaultSubFlowForm = {
   initiateType: 1,
   managerLevel: 1,
@@ -503,6 +570,9 @@ const defaultApproverForm = {
   revokeBtnText: '撤 回',
   hasTransferBtn: true,
   transferBtnText: '转 办',
+  hasPrintBtn: false,
+  printBtnText: '打 印',
+  printId: '', // 打印模板
   hasSign: false,
   timeoutConfig: {
     on: false,
@@ -513,6 +583,8 @@ const defaultApproverForm = {
   messageType: [1],
   hasApproverFunc: false,
   approverInterfaceUrl: '',
+  hasApproverRejectFunc: false,
+  approverRejectInterfaceUrl: '',
   approverInterfaceType: 'GET',
   hasRecallFunc: false,
   recallInterfaceUrl: ''
@@ -542,9 +614,7 @@ export default {
       initiatePos: [],
       initiateRole: [],
       priorityLength: 0, // 当为条件节点时  显示节点优先级选项的数据
-      startForm: {
-        formOperates: []
-      },
+      startForm: JSON.parse(JSON.stringify(defaultStartForm)),
       ruleVisible: false,
       subFlowForm: JSON.parse(JSON.stringify(defaultSubFlowForm)),
       approverForm: JSON.parse(JSON.stringify(defaultApproverForm)),
@@ -615,6 +685,7 @@ export default {
           value: "||"
         }],
       assignList: [],
+      printTplList: [],
       flowOptions: [],
       childFieldOptions: [],
       nodeOptions: []
@@ -676,6 +747,30 @@ export default {
     couldShowIt(item, ...tag) {
       return tag.includes(item.tag) && this.showingPCons.includes(item.formId);
     },
+    initFormOperates(target) {
+      const formOperates = target.properties && target.properties.formOperates || []
+      let res = []
+      if (!formOperates.length) {
+        const loop = (data, parent) => {
+          if (!data) return
+          if (data.__config__ && data.__config__.jnpfKey !== 'table' && data.__config__.children && Array.isArray(data.__config__.children)) {
+            loop(data.__config__.children, data)
+          }
+          if (Array.isArray(data)) data.forEach(d => loop(d, parent))
+          if (data.__vModel__) res.push({
+            id: data.__vModel__,
+            name: data.__config__.label,
+            required: data.__config__.required,
+            read: true,
+            write: false
+          })
+        }
+        loop(getDrawingList())
+      } else {
+        res = formOperates
+      }
+      return res
+    },
     initCopyNode() {
       this.properties = this.value.properties
     },
@@ -711,6 +806,10 @@ export default {
      * 开始节点确认保存
      */
     startNodeComfirm() {
+      let titleObj = {
+        title: this.properties.title
+      }
+      Object.assign(this.properties, this.startForm, titleObj)
       this.properties.initiator = this.initiator
       this.properties.initiatePos = this.initiatePos
       this.properties.initiateRole = this.initiateRole
@@ -725,7 +824,6 @@ export default {
         content += (content && initiatorPosText ? ',' : '') + initiatorPosText
         content += (content && initiatorText ? ',' : '') + initiatorText
       }
-      Object.assign(this.properties, this.startForm)
       this.$emit("confirm", this.properties, content);
       this.visible = false;
     },
@@ -908,7 +1006,7 @@ export default {
       this.initiator = this.value.properties && this.value.properties.initiator
       this.initiatePos = this.value.properties && this.value.properties.initiatePos
       this.initiateRole = this.value.properties && this.value.properties.initiateRole
-      this.startForm.formOperates = this.value.properties && this.value.properties.formOperates
+      Object.assign(this.startForm, this.value.properties)
     },
     /**
     * 初始化审批节点所需数据
@@ -917,7 +1015,7 @@ export default {
       this.activeName = 'config'
       Object.assign(this.approverForm, this.value.properties)
       this.getNodeOption()
-      this.approverForm.formOperates = this.value.properties.formOperates
+      this.approverForm.formOperates = this.initFormOperates(this.value)
     },
     initSubFlowData() {
       this.getFlowOptions()
@@ -1067,18 +1165,25 @@ export default {
       }
       return isOk;
     },
+    getPringTplList() {
+      this.$store.dispatch('base/getPrintTree').then(res => {
+        this.printTplList = res.filter(o => o.children && o.children.length)
+      })
+    }
   },
   watch: {
     visible(val) {
       if (!val) {
         this.approverForm = JSON.parse(JSON.stringify(defaultApproverForm)) // 重置数据为默认状态
         this.subFlowForm = JSON.parse(JSON.stringify(defaultSubFlowForm))
+        this.startForm = JSON.parse(JSON.stringify(defaultStartForm))
         return
       }
       this.isStartNode() && this.initStartNodeData()
       this.isSubFlowNode() && this.initSubFlowData()
       this.isApproverNode() && this.initApproverNodeData()
       this.isConditionNode() && this.initConditionNodeData()
+      this.getPringTplList()
     },
     value(newVal) {
       if (newVal && newVal.properties) {
@@ -1160,6 +1265,7 @@ export default {
 }
 
 .form-auth-table {
+  height: 100%;
   font-size: 14px;
   .auth-table-header {
     background: #fafafa;

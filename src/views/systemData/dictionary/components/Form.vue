@@ -82,7 +82,7 @@ export default {
       this.formLoading = true
       this.$nextTick(() => {
         this.$refs['dataForm'].resetFields()
-        getDictionaryTypeSelector().then(res => {
+        getDictionaryTypeSelector(id || 0).then(res => {
           let topItem = {
             fullName: "顶级节点",
             hasChildren: true,

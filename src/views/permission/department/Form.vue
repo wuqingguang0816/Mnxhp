@@ -83,7 +83,7 @@ export default {
       this.formLoading = true
       this.$nextTick(() => {
         this.$refs['dataForm'].resetFields()
-        getDepartmentSelector().then(res => {
+        getDepartmentSelector(id || 0).then(res => {
           this.treeData = res.data.list
         })
         if (this.dataForm.id) {

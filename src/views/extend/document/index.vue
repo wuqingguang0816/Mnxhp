@@ -19,7 +19,8 @@
             <el-form @submit.native.prevent>
               <el-col :span="6">
                 <el-form-item label="关键词">
-                  <el-input v-model="keyword" placeholder="请输入关键词查询" clearable />
+                  <el-input v-model="keyword" placeholder="请输入关键词查询" clearable
+                    @keyup.enter.native="search()" />
                 </el-form-item>
               </el-col>
               <el-col :span="6">
@@ -406,7 +407,7 @@ export default {
         inputPlaceholder: '输入名称',
         inputErrorMessage: '请正确输入文件夹名称',
         inputValue: inputValue,
-        inputPattern: /^[\u4e00-\u9fa5_a-zA-Z0-9]+$/,
+        // inputPattern: /^[\u4e00-\u9fa5_a-zA-Z0-9]+$/,
         closeOnClickModal: false
       }).then(({ value }) => {
         let data = {

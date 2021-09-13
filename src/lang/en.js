@@ -132,8 +132,8 @@ export default {
     setting: 'Setting'
   },
   login: {
-    title: 'Account Login',
-    scanTitle: 'Scan Login',
+    title: 'Account Password Login',
+    scanTitle: 'APP Scan Login',
     codeTitle: 'Verification Code Login',
     logIn: 'Login',
     username: 'Username / Mobile Number',
@@ -163,6 +163,7 @@ export default {
     classic: 'Classic',
     functional: 'Functional',
     plain: 'Plain',
+    blend: 'Blend',
     lightOrDark: 'Light&Dark',
     dark: 'Dark',
     lightWhite: 'Light',

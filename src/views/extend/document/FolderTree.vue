@@ -38,7 +38,7 @@ export default {
       this.toId = parentId != '0' ? parentId : "-1"
       this.visible = true
       this.$nextTick(() => {
-        FolderTree().then(res => {
+        FolderTree(id).then(res => {
           this.treeData = res.data.list
           this.$nextTick(() => {
             this.$refs.treeBox.setCurrentKey(this.toId);

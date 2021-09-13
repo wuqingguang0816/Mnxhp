@@ -76,6 +76,7 @@
             </template>
             <template
               v-if="['radio', 'checkbox', 'select'].indexOf(activeData.__config__.jnpfKey) > -1">
+              <el-divider>选项</el-divider>
               <el-form-item label="" label-width="40px">
                 <el-radio-group v-model="activeData.__config__.dataType" size="small"
                   style="text-align:center" @change="dataTypeChange">
@@ -123,9 +124,11 @@
                   <el-input v-model="activeData.__config__.props.label" placeholder="请输入标签" />
                 </el-form-item>
               </template>
+              <el-divider></el-divider>
             </template>
             <template
               v-if="activeData.__config__.jnpfKey === 'treeSelect' || activeData.__config__.jnpfKey === 'cascader'">
+              <el-divider>选项</el-divider>
               <el-form-item label="" label-width="40px">
                 <el-radio-group v-model="activeData.__config__.dataType" size="small"
                   style="text-align:center" @change="dataTypeChange">
@@ -162,6 +165,7 @@
                   <el-input v-model="activeData.props.props.children" placeholder="请输入子级键名" />
                 </el-form-item>
               </template>
+              <el-divider></el-divider>
             </template>
             <template v-if="activeData.__config__.jnpfKey === 'JNPFText'">
               <el-form-item label="文本内容">
@@ -240,9 +244,6 @@
             <el-form-item v-if="activeData.__config__.rule !== undefined" label="选择模板">
               <BillRule v-model="activeData.__config__.rule" placeholder="选择模板" />
             </el-form-item>
-            <el-form-item v-if="activeData.__config__.noShow !== undefined" label="是否隐藏">
-              <el-switch v-model="activeData.__config__.noShow" />
-            </el-form-item>
             <el-form-item v-if="activeData.allowHalf !== undefined" label="允许半星">
               <el-switch v-model="activeData.allowHalf" />
             </el-form-item>
@@ -252,11 +253,14 @@
             <el-form-item v-if="activeData.disabled !== undefined" label="是否禁用">
               <el-switch v-model="activeData.disabled" />
             </el-form-item>
-            <el-form-item v-if="activeData.__config__.required !== undefined" label="是否必填">
-              <el-switch v-model="activeData.__config__.required" />
+            <el-form-item v-if="activeData.__config__.noShow !== undefined" label="是否隐藏">
+              <el-switch v-model="activeData.__config__.noShow" />
             </el-form-item>
             <template v-if="activeData.__config__.jnpfKey === 'comInput'">
               <el-divider>校验</el-divider>
+              <el-form-item label="是否必填">
+                <el-switch v-model="activeData.__config__.required" />
+              </el-form-item>
               <div v-for="(item, index) in activeData.__config__.regList" :key="index"
                 class="reg-item">
                 <span class="close-btn" @click="activeData.__config__.regList.splice(index, 1)">
@@ -283,6 +287,14 @@
                   自定义规则
                 </el-button>
               </div>
+            </template>
+            <template v-else>
+              <template v-if="activeData.__config__.required !== undefined">
+                <el-divider>校验</el-divider>
+                <el-form-item label="是否必填">
+                  <el-switch v-model="activeData.__config__.required" />
+                </el-form-item>
+              </template>
             </template>
             <template v-if="activeData.__config__.jnpfKey==='card'">
               <el-form-item label="卡片标题">
@@ -483,6 +495,32 @@ export default {
     },
     fieldChange1(val) {
       if (!val) return
+      const drawingList = getDrawingList() || []
+      let boo = false
+      const loop = list => {
+        for (let i = 0; i < list.length; i++) {
+          const e = list[i]
+          const config = e.__config__
+          if (config.jnpfKey === 'table' && config.tableName === this.activeData.__config__.relationTable) {
+            for (let j = 0; j < config.children.length; j++) {
+              const child = config.children[j]
+              if (child.__vModel__ === val) {
+                boo = true
+                break
+              }
+            }
+          }
+          if (config && config.jnpfKey != 'table' && config.children && Array.isArray(config.children)) {
+            loop(config.children)
+          }
+        }
+      }
+      loop(drawingList)
+      if (boo) {
+        this.$message.warning(`子表字段【${val}】已存在,请重新选择!`)
+        this.activeData.__vModel__ = ''
+        return
+      }
       let options = this.getSubTalebFiled(this.activeData.__config__.relationTable)
       let item = options.filter(o => o.field == val)[0]
       if (!item || !item.fieldName) return
@@ -519,13 +557,31 @@ export default {
       this.formConf.span = val
     },
     onTableNameChange(tableName) {
+      if (!tableName) return
+      const drawingList = getDrawingList() || []
+      let boo = false
+      const loop = list => {
+        for (let i = 0; i < list.length; i++) {
+          const e = list[i]
+          const config = e.__config__
+          if (config.jnpfKey === 'table' && config.tableName === tableName) {
+            boo = true
+            break
+          }
+          if (config && config.jnpfKey != 'table' && config.children && Array.isArray(config.children)) {
+            loop(config.children)
+          }
+        }
+      }
+      loop(drawingList)
+      if (boo) {
+        this.$message.warning(`子表【${tableName}】已存在,请重新选择!`)
+        this.activeData.__config__.tableName = ''
+        return
+      }
       for (let i = 0; i < this.activeData.__config__.children.length; i++) {
-        this.$set(
-          this.activeData.__config__.children[i].__config__,
-          "relationTable",
-          tableName
-        )
-        this.$set(this.activeData.__config__.children[i], "__vModel__", "")
+        this.$set(this.activeData.__config__.children[i].__config__, 'relationTable', tableName)
+        this.$set(this.activeData.__config__.children[i], '__vModel__', '')
       }
     },
     getDictionaryType() {

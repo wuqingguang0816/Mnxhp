@@ -18,5 +18,6 @@ const getters = {
   roleList: state => state.base.roleList,
   socket: state => state.user.socket,
   hasTable: state => state.generator.hasTable,
+  leftMenuList: state => state.user.leftMenuList,
 }
 export default getters

@@ -10,9 +10,9 @@ export const getOrganizeList = (data) => {
 }
 
 // 获取组织/公司下拉框列表
-export const getOrganizeSelector = () => {
+export const getOrganizeSelector = (id) => {
   return request({
-    url: '/api/permission/Organize/Selector',
+    url: '/api/permission/Organize/Selector/' + (!!id ? id : 0),
     method: 'GET'
   })
 }
@@ -35,7 +35,7 @@ export const createOrganize = (data) => {
 }
 
 // 修改组织/公司
-export const updateOrganize = (data) =>{
+export const updateOrganize = (data) => {
   return request({
     url: `/api/permission/Organize/${data.id}`,
     method: 'PUT',
@@ -64,5 +64,20 @@ export const updateOrganizeState = (id) => {
   return request({
     url: `/api/permission/Organize/${id}/Actions/State`,
     method: 'PUT'
+  })
+}
+// 获取分级管理
+export const getOrganizeTrator = (organizeId) => {
+  return request({
+    url: `/api/permission/organizeAdminIsTrator/${organizeId}`,
+    method: 'get'
+  })
+}
+// 更新分级管理
+export const setOrganizeTrator = (data) => {
+  return request({
+    url: `/api/permission/organizeAdminIsTrator/${data.organizeId}`,
+    method: 'PUT',
+    data
   })
 }

@@ -2,6 +2,7 @@ import { getDictionaryAll } from '@/api/systemData/dictionary'
 import { UserListAll, getUserSelector } from '@/api/permission/user'
 import { getPositionListAll, getPositionSelector } from '@/api/permission/position'
 import { getRoleSelector } from '@/api/permission/role'
+import { getPrintDevSelector } from '@/api/system/printDev'
 
 const state = {
   dictionaryList: [],
@@ -10,7 +11,8 @@ const state = {
   positionList: [],
   positionTree: [],
   roleList: [],
-  roleTree: []
+  roleTree: [],
+  printTree: []
 }
 
 const mutations = {
@@ -34,6 +36,9 @@ const mutations = {
   },
   SET_ROLE_TREE: (state, roleTree) => {
     state.roleTree = roleTree
+  },
+  SET_PRINT_TREE: (state, printTree) => {
+    state.printTree = printTree
   }
 }
 
@@ -200,6 +205,20 @@ const actions = {
       let item = list.filter(o => o.id === id)[0]
       // let name = item.realName + '/' + item.account
       resolve(item || {})
+    })
+  },
+  getPrintTree({ state, commit }) {
+    return new Promise((resolve, reject) => {
+      if (!state.printTree.length) {
+        getPrintDevSelector().then(res => {
+          commit('SET_PRINT_TREE', res.data.list)
+          resolve(res.data.list)
+        }).catch(error => {
+          reject(error)
+        })
+      } else {
+        resolve(state.printTree)
+      }
     })
   },
 }

@@ -14,7 +14,8 @@
         <el-form @submit.native.prevent>
           <el-col :span="6">
             <el-form-item label="关键词">
-              <el-input v-model="params.keyword" placeholder="请输入关键词查询" clearable />
+              <el-input v-model="params.keyword" placeholder="请输入关键词查询" clearable
+                @keyup.enter.native="search()" />
             </el-form-item>
           </el-col>
           <el-col :span="6">
@@ -140,6 +141,7 @@ export default {
       this.treeLoading = true
       getDataInterfaceTypeSelector().then(res => {
         this.treeData = res.data.list
+        if (!this.treeData.length) return this.treeLoading = false
         this.$nextTick(() => {
           this.params.categoryId = this.treeData[0].id
           this.$refs.treeBox.setCurrentKey(this.params.categoryId)
@@ -169,7 +171,6 @@ export default {
       })
     },
     handleUpdateState(row) {
-      if (!this.jnpf.hasBtnP('btn_edit')) return this.$message.warning(this.$t('common.noPerTip'))
       const txt = row.enabledMark ? '禁用' : '开启'
       this.$confirm(`您确定要${txt}当前接口吗, 是否继续?`, '提示', {
         type: 'warning'

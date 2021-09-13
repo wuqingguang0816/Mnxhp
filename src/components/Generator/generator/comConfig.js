@@ -27,7 +27,7 @@ const dyOptionsList = ['radio', 'checkbox', 'select', 'cascader', 'treeSelect']
 // 不添加vModel
 const noVModelList = ['divider', 'JNPFText', 'groupTitle', 'relationFormAttr', 'relationFlowAttr']
 // 不可以添加到子表组件
-const noTableAllowList = ['textarea', 'JNPFText', 'JNPFAmount', 'divider', 'editor', 'uploadImg', 'uploadFz', 'radio', 'checkbox', 'relationForm', 'relationFormAttr', 'relationFlow', 'relationFlowAttr', 'groupTitle', 'createUser', 'createTime', 'modifyUser', 'modifyTime', 'currOrganize', 'currDept', 'currPosition', 'rate', 'slider', 'PsdInput', 'colorPicker']
+const noTableAllowList = ['textarea', 'JNPFText', 'JNPFAmount', 'divider', 'editor', 'uploadImg', 'uploadFz', 'radio', 'checkbox', 'relationFormAttr', 'relationFlow', 'relationFlowAttr', 'groupTitle', 'createUser', 'createTime', 'modifyUser', 'modifyTime', 'currOrganize', 'currDept', 'currPosition', 'rate', 'slider', 'PsdInput', 'colorPicker']
 // 不可以添加到列表展示
 const noColumnShowList = ['PsdInput', 'colorPicker', 'rate', 'slider', 'divider', 'uploadImg', 'uploadFz', 'editor', 'JNPFText', 'relationFormAttr', 'relationFlowAttr', 'groupTitle']
 // 不可以添加到搜索
