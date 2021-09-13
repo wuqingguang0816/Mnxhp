@@ -15,7 +15,7 @@
       <div class="JNPF-common-layout-left">
         <el-tree :data="treeData" :props="defaultProps" default-expand-all highlight-current
           ref="treeBox" :expand-on-click-node="false" @node-click="handleNodeClick"
-          class="JNPF-common-el-tree" node-key="fileName">
+          class="JNPF-common-el-tree" node-key="id">
           <span class="custom-tree-node" slot-scope="{ node }">
             <el-tooltip :content="node.label" placement="right">
               <span class="text">{{node.label}}</span>
