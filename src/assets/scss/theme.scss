@@ -35,8 +35,6 @@ $redSub: #FF5D65;
         background: $color !important;
       }
     }
-
-
   }
 }
 
@@ -212,6 +210,7 @@ $redSub: #FF5D65;
 @mixin mixinPopup($color) {
 
   &.classic.el-menu--vertical,
+  &.blend.el-menu--vertical,
   &.plain.el-menu--vertical {
 
     .el-submenu__title,
@@ -281,6 +280,7 @@ $redSub: #FF5D65;
 @mixin mixinSidebar($color) {
 
   &.classic,
+  &.blend,
   &.plain {
     .el-menu {
 
@@ -381,6 +381,7 @@ $redSub: #FF5D65;
 }
 
 .lightWhite.classic.el-menu--vertical,
+.lightWhite.blend.el-menu--vertical,
 .lightWhite.plain.el-menu--vertical {
   &>.el-menu--popup {
     background: #fff;

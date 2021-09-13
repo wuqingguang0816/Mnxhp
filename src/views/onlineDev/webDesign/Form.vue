@@ -139,9 +139,6 @@ export default {
         ],
         category: [
           { required: true, message: '功能分类不能为空', trigger: 'change' },
-        ],
-        state: [
-          { required: true, message: '功能状态不能为空', trigger: 'blur' },
         ]
       }
     }

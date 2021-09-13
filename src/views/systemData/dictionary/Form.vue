@@ -87,7 +87,7 @@ export default {
         } else {
           this.parentDisabled = true
         }
-        getDictionaryDataTypeSelector(this.dataForm.dictionaryTypeId, isTree).then(res => {
+        getDictionaryDataTypeSelector(this.dataForm.dictionaryTypeId, isTree, id || 0).then(res => {
           this.treeData = res.data.list
           if (this.dataForm.id) {
             getDictionaryDataInfo(this.dataForm.id).then(res => {

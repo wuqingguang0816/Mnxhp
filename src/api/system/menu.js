@@ -10,9 +10,9 @@ export const getMenuList = (data) => {
 }
 
 // 获取上级菜单下拉框
-export const getMenuSelector = (data) => {
+export const getMenuSelector = (data, id) => {
   return request({
-    url: '/api/system/Menu/Selector',
+    url: '/api/system/Menu/Selector/' + (!!id ? id : 0),
     method: 'GET',
     data
   })

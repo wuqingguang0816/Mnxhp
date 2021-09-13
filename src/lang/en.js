@@ -163,6 +163,7 @@ export default {
     classic: 'Classic',
     functional: 'Functional',
     plain: 'Plain',
+    blend: 'Blend',
     lightOrDark: 'Light&Dark',
     dark: 'Dark',
     lightWhite: 'Light',

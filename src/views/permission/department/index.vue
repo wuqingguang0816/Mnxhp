@@ -62,7 +62,8 @@
           <el-table-column prop="sortCode" label="排序" width="70" align="center" />
           <el-table-column label="操作" width="100">
             <template slot-scope="scope">
-              <tableOpts @edit="handleAddEdit(scope.row.id)" @del="handleDel(scope.row.id)" />
+              <tableOpts @edit="handleAddEdit(scope.row.id)" @del="handleDel(scope.row.id)">
+              </tableOpts>
             </template>
           </el-table-column>
         </JNPF-table>
@@ -73,8 +74,8 @@
   </div>
 </template>
 <script>
-import { getOrganizeTree } from '@/api/permission/organize'
 import {
+  getDepartmentSelector,
   getDepartmentList,
   delDepartment
 } from '@/api/permission/department'
@@ -102,7 +103,8 @@ export default {
       formVisible: false,
       diagramVisible: false,
       typeListVisible: false,
-      typeVisible: false
+      typeVisible: false,
+      gradeFormVisible: false
     }
   },
   created() {
@@ -117,7 +119,7 @@ export default {
     },
     getOrganizeList() {
       this.treeLoading = true
-      getOrganizeTree().then(res => {
+      getDepartmentSelector().then(res => {
         this.treeData = res.data.list
         this.$nextTick(() => {
           if (!this.treeData.length) {
@@ -136,7 +138,6 @@ export default {
     },
     initData() {
       this.listLoading = true
-      let query = { keyword: this.keyword }
       getDepartmentList(this.companyId, this.params).then(res => {
         this.tableData = res.data.list
         this.listLoading = false
@@ -155,6 +156,12 @@ export default {
       this.formVisible = true
       this.$nextTick(() => {
         this.$refs.Form.init(id, this.companyId)
+      })
+    },
+    openGradeForm(row) {
+      this.gradeFormVisible = true
+      this.$nextTick(() => {
+        this.$refs.gradeForm.init(row.id, row.fullName)
       })
     },
     search() {

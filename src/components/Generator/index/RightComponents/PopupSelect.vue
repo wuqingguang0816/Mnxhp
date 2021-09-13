@@ -22,9 +22,9 @@
     </el-form-item>
     <el-divider>弹窗数据</el-divider>
     <el-alert title="默认首字段为显示字段" type="warning" :closable="false" show-icon />
-    <el-form-item label="数据接口" class="mt-10">
+    <el-form-item label="远端数据" class="mt-10">
       <JNPF-TreeSelect :options="dataInterfaceSelector" v-model="activeData.interfaceId"
-        placeholder="请选择数据接口" lastLevel lastLevelKey='categoryId' lastLevelValue='1' clearable>
+        placeholder="请选择远端数据" lastLevel lastLevelKey='categoryId' lastLevelValue='1' clearable>
       </JNPF-TreeSelect>
     </el-form-item>
     <el-form-item label="存储字段">

@@ -40,7 +40,8 @@
           <el-table-column prop="sortCode" label="排序" width="70" align="center" />
           <el-table-column label="操作" width="100">
             <template slot-scope="scope">
-              <tableOpts @edit="handleAddEdit(scope.row.id)" @del="handleDel(scope.row.id)" />
+              <tableOpts @edit="handleAddEdit(scope.row.id)" @del="handleDel(scope.row.id)">
+              </tableOpts>
             </template>
           </el-table-column>
         </JNPF-table>
@@ -69,6 +70,7 @@ export default {
       btnLoading: false,
       listLoading: true,
       formVisible: false,
+      gradeFormVisible: false
     }
   },
   created() {
@@ -105,6 +107,12 @@ export default {
         this.keyword = ''
         this.initData()
       }
+    },
+    openGradeForm(row) {
+      this.gradeFormVisible = true
+      this.$nextTick(() => {
+        this.$refs.gradeForm.init(row.id, row.fullName)
+      })
     },
     handleDel(id) {
       this.$confirm(this.$t('common.delTip'), this.$t('common.tipTitle'), {

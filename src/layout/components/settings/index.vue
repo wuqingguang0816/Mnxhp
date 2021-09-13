@@ -79,17 +79,22 @@ export default {
       imgUrl1: [
         {
           imgrurl: require('@/assets/images/settings/classic.png'),
-          name: '经典款',
+          name: '侧边导航',
           layoutType: 'classic'
         },
         {
           imgrurl: require('@/assets/images/settings/functional.png'),
-          name: '功能款',
+          name: '顶部导航',
           layoutType: 'functional'
         },
         {
+          imgrurl: require('@/assets/images/settings/blend.png'),
+          name: '混合导航',
+          layoutType: 'blend'
+        },
+        {
           imgrurl: require('@/assets/images/settings/plain.png'),
-          name: '简约款',
+          name: '简约导航',
           layoutType: 'plain'
         }
       ],
@@ -280,7 +285,7 @@ export default {
   }
   >>> .nav_items {
     display: flex;
-    justify-content: space-around;
+    justify-content: space-between;
     flex-wrap: wrap;
     li {
       list-style: none;
