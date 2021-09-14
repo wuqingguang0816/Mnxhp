@@ -36,6 +36,16 @@ $redSub: #FF5D65;
       }
     }
   }
+
+  &.blend {
+    .navbar {
+      &.dark {
+        .el-tabs__item.is-active {
+          color: $color !important;
+        }
+      }
+    }
+  }
 }
 
 @mixin mixinCommon($color, $subColor) {
