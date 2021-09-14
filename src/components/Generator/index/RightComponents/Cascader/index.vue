@@ -118,6 +118,9 @@ export default {
     }
   },
   watch: {
+    'activeData.__config__.dataType': function (val) {
+      this.dataTypeChange()
+    },
     'activeData.__config__.dictionaryType': function (val) {
       this.activeData.__config__.defaultValue = ''
       if (!val) {

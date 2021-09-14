@@ -67,9 +67,6 @@
     <el-form-item label="是否禁用">
       <el-switch v-model="activeData.disabled" />
     </el-form-item>
-    <el-form-item label="是否禁用">
-      <el-switch v-model="activeData.disabled" />
-    </el-form-item>
     <el-form-item label="是否隐藏">
       <el-switch v-model="activeData.__config__.noShow" />
     </el-form-item>
