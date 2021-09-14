@@ -38,6 +38,7 @@
       </el-form-item>
       <el-form-item v-if="dataForm.type == 2 || dataForm.type == 7" label="地址" prop="urlAddress">
         <el-input v-model="dataForm.urlAddress" placeholder="填写地址">
+          <template slot="prepend" v-if="dataForm.category ==='Web' && dataForm.type == 2">@/views/</template>
           <el-select slot="append" v-model="dataForm.linkTarget" style="width: 90px;"
             v-if="dataForm.category ==='Web' && dataForm.type == 7">
             <el-option label="_self" value="_self" />
