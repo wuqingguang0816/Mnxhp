@@ -2,6 +2,12 @@
   <transition name="el-zoom-in-center">
     <div class="JNPF-preview-main flow-form-main nohead">
       <div class="btns">
+        <template
+          v-if="(setting.opType=='-1'&&setting.id)||setting.opType==0||setting.opType==1||setting.opType==2">
+          <el-button type="primary" @click="printBrowseVisible=true"
+            v-if="properties.hasPrintBtn && properties.printId">
+            {{properties.printBtnText||'打 印'}}</el-button>
+        </template>
         <template v-if="setting.opType=='-1'">
           <el-button type="primary" @click="eventLancher('submit')">
             {{properties.submitBtnText||'提交审核'}}</el-button>
@@ -106,6 +112,8 @@
         </span>
       </el-dialog>
       <UserBox v-if="userBoxVisible" ref="userBox" :title="userBoxTitle" @submit="handleTransfer" />
+      <print-browse :visible.sync="printBrowseVisible" :id="properties.printId" :formId="setting.id"
+        :fullName="setting.fullName" />
     </div>
   </transition>
 </template>
@@ -117,9 +125,10 @@ import { Revoke, Press } from '@/api/workFlow/FlowLaunch'
 import { Create, Update, DynamicCreate, DynamicUpdate } from '@/api/workFlow/workFlowForm'
 import recordList from './RecordList'
 import Process from '@/components/Process/Preview'
+import PrintBrowse from '@/components/PrintBrowse'
 import vueEsign from 'vue-esign'
 export default {
-  components: { recordList, Process, vueEsign },
+  components: { recordList, Process, vueEsign, PrintBrowse },
   data() {
     return {
       userBoxVisible: false,
@@ -155,6 +164,7 @@ export default {
       loading: false,
       btnLoading: false,
       approvalBtnLoading: false,
+      printBrowseVisible: false,
       eventType: '',
       signImg: '',
       copyIds: ''
@@ -186,6 +196,7 @@ export default {
     getEngineInfo(data) {
       FlowEngineInfo(data.flowId).then(res => {
         data.type = res.data.type
+        data.fullName = res.data.fullName
         if (data.formType == 1) {
           if (res.data.formUrl) {
             this.currentView = (resolve) => require([`@/views/${res.data.formUrl}`], resolve)
@@ -214,6 +225,7 @@ export default {
       FlowBeforeInfo(data.id, { taskNodeId: data.taskNodeId }).then(res => {
         this.flowFormInfo = res.data.flowFormInfo
         this.flowTaskInfo = res.data.flowTaskInfo
+        data.fullName = this.flowTaskInfo.fullName
         data.type = this.flowTaskInfo.type
         if (data.formType == 1) {
           if (this.flowTaskInfo.formUrl) {

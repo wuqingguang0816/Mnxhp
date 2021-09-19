@@ -1,7 +1,7 @@
 <template>
   <el-dialog v-bind="$attrs" :close-on-click-modal="false" :modal-append-to-body="false"
     v-on="$listeners" @open="onOpen" fullscreen lock-scroll class="JNPF-full-dialog"
-    :show-close="false" :modal="false">
+    :show-close="false" :modal="false" append-to-body>
     <div class="JNPF-full-dialog-header">
       <div class="header-title">
         <img src="@/assets/images/jnpf.png" class="header-logo" />
@@ -20,9 +20,13 @@
 </template>
 
 <script>
+import { mapGetters } from "vuex"
 import { getData } from '@/api/system/printDev'
 export default {
-  props: ['id'],
+  props: ['id', 'formId', 'fullName'],
+  computed: {
+    ...mapGetters(['userInfo'])
+  },
   data() {
     return {
       data: {},
@@ -32,16 +36,18 @@ export default {
   },
   methods: {
     onOpen() {
+      if (!this.id) return
       this.printTemplate = ''
       this.data = {}
       this.loading = true
       let query = {
         id: this.id,
-        formId: '111'
+        formId: this.formId
       }
       getData(query).then(res => {
+        if (!res.data) return
         this.printTemplate = res.data.printTemplate
-        this.data = res.data
+        this.data = res.data.printData
         this.$nextTick(() => {
           const tableList = this.$refs.tsPrint.getElementsByTagName('table')
           if (tableList.length) {
@@ -49,7 +55,7 @@ export default {
               const tableObj = tableList[j];
               let tds = []
               let newTable = []
-              table: for (let i = 0; i < tableObj.rows.length; i++) {
+              for (let i = 0; i < tableObj.rows.length; i++) {
                 tds = tableObj.rows[i]
                 const dataTag = this.isChildTable(tds.cells)
                 if (dataTag) {
@@ -66,6 +72,7 @@ export default {
           }
         })
         this.replaceValue(this.data)
+        this.replaceSysValue()
         this.loading = false
       })
     },
@@ -114,6 +121,14 @@ export default {
         }
       }
     },
+    replaceSysValue() {
+      const systemPrinter = this.userInfo.userName + '/' + this.userInfo.userAccount
+      const systemPrintTime = this.jnpf.toDate(new Date())
+      let systemApprovalContent = ''
+      this.printTemplate = this.replaceAll(this.printTemplate, '{systemPrinter}', systemPrinter)
+      this.printTemplate = this.replaceAll(this.printTemplate, '{systemPrintTime}', systemPrintTime)
+      this.printTemplate = this.replaceAll(this.printTemplate, '{systemApprovalContent}', systemApprovalContent)
+    },
     replaceValue(data) {
       for (let key in data) {
         this.printTemplate = this.replaceAll(this.printTemplate, `{${key}}`, data[key] || '')
@@ -147,7 +162,7 @@ export default {
       const blob = new Blob([print], {
         type: ''
       })
-      const name = '下载文档.doc'
+      const name = this.fullName ? `${this.fullName}.doc` : '下载文档.doc'
       this.downloadFile(blob, name)
     },
     downloadFile(data, name, type) {
