@@ -36,7 +36,7 @@
           <el-table-column prop="digit" label="流水位数" width="80" />
           <el-table-column prop="startNumber" label="流水起始" width="120" />
           <el-table-column prop="outputNumber" label="当前流水号" />
-          <el-table-column label="状态" width="100">
+          <el-table-column label="状态" width="70" align="center">
             <template slot-scope="scope">
               <el-switch v-model="scope.row.enabledMark" :active-value="1" :inactive-value="0"
                 @click.native="handleUpdateState(scope.row)" disabled class="table-switch" />
