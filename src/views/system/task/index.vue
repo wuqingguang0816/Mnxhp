@@ -31,13 +31,12 @@
           </div>
         </div>
         <JNPF-table v-loading="listLoading" :data="list">
-          <el-table-column prop="fullName" label="任务标题" sortable show-overflow-tooltip
-            min-width="150" />
-          <el-table-column prop="enCode" label="任务编码" sortable width="200" />
-          <el-table-column prop="runCount" label="执行次数" sortable width="100" />
-          <el-table-column prop="lastRunTime" label="最后执行时间" sortable width="120"
+          <el-table-column prop="fullName" label="任务标题" show-overflow-tooltip min-width="150" />
+          <el-table-column prop="enCode" label="任务编码" width="200" />
+          <el-table-column prop="runCount" label="执行次数" width="100" />
+          <el-table-column prop="lastRunTime" label="最后执行时间" width="120"
             :formatter="jnpf.tableDateFormat" />
-          <el-table-column prop="nextRunTime" label="下次运行时间" sortable width="120"
+          <el-table-column prop="nextRunTime" label="下次运行时间" width="120"
             :formatter="jnpf.tableDateFormat" />
           <el-table-column prop="description" label="任务说明" show-overflow-tooltip />
           <el-table-column label="状态" prop="enabledMark" width="70" align="center">

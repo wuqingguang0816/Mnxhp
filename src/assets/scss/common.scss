@@ -749,6 +749,7 @@
 
     &.dark {
       background: #031e39;
+      border-bottom: none;
 
       .functional-logo-container {
         background: #031e39;
@@ -1643,6 +1644,7 @@ textarea.el-textarea__inner {
   .navbar {
     &.dark {
       background: #031e39;
+      border-bottom: none;
 
       .right-menu {
         .right-menu-item {
