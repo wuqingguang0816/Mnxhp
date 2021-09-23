@@ -51,7 +51,8 @@
       </el-scrollbar>
     </div>
     <right-panel :active-data="activeData" :form-conf="formConf" :show-field="!!drawingList.length"
-      @tag-change="tagChange" :modelType="modelType" @relationChange="relationChange" />
+      @tag-change="tagChange" :modelType="modelType" @relationChange="relationChange"
+      :drawingList="drawingList" />
     <json-drawer size="550px" :visible.sync="jsonDrawerVisible" :jsonData="formData"
       @refresh="refreshJson" />
     <Preview :visible.sync="previewVisible" :form-data="formData" />
@@ -337,11 +338,13 @@ export default {
       if (config.layout === 'colFormItem') {
         if (!this.$store.getters.hasTable) {
           // 分割线和按钮不加vModel
-          if (noVModelList.indexOf(config.jnpfKey) > -1) return
-          item.__vModel__ = `${config.jnpfKey}Field${this.idGlobal}`
+          if (!noVModelList.indexOf(config.jnpfKey) > -1) {
+            item.__vModel__ = `${config.jnpfKey}Field${this.idGlobal}`
+          }
         } else {
-          if (noVModelList.indexOf(config.jnpfKey) > -1) return
-          item.__vModel__ = ""
+          if (!noVModelList.indexOf(config.jnpfKey) > -1) {
+            item.__vModel__ = ""
+          }
         }
       } else if (config.layout === 'rowFormItem') {
         if (config.jnpfKey === 'table') {
