@@ -67,6 +67,16 @@ export default {
     init(id, fullName) {
       this.visible = true
       this.fullName = fullName
+      this.dataForm = {
+        userId: '',
+        organizeId: '',
+        thisLayerAdd: 0,
+        thisLayerEdit: 0,
+        thisLayerDelete: 0,
+        subLayerAdd: 0,
+        subLayerEdit: 0,
+        subLayerDelete: 0
+      }
       this.dataForm.organizeId = id || ''
       this.formLoading = true
       this.$nextTick(() => {
