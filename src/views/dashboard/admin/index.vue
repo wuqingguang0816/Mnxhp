@@ -360,6 +360,9 @@ export default {
           color: #303133;
           padding: 10px 0;
           cursor: pointer;
+          &:hover{
+            color: #1890ff;
+          }
           p {
             width: calc(100% - 80px);
             white-space: nowrap;

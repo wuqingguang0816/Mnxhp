@@ -1236,6 +1236,9 @@
       line-height: 20px;
       font-size: 0;
       margin-bottom: 12px;
+      &:hover{
+        color: #1890ff;
+      }
 
       &::after {
         content: "";

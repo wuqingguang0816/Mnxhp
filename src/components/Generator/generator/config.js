@@ -357,7 +357,7 @@ export const inputComponents = [{
     },
     disabled: false,
     accept: '',
-    fileSize: 2,
+    fileSize: 5,
     sizeUnit: 'MB',
     buttonText: '点击上传',
     showTip: false,
@@ -382,7 +382,7 @@ export const inputComponents = [{
     disabled: false,
     accept: '',
     showTip: false,
-    fileSize: 2,
+    fileSize: 5,
     sizeUnit: 'MB',
     limit: 9
   },

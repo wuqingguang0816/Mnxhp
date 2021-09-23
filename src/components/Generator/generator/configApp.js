@@ -280,7 +280,7 @@ export const inputComponents = [{
     disabled: false,
     accept: '',
     showTip: false,
-    fileSize: 2,
+    fileSize: 5,
     sizeUnit: 'MB',
     limit: 9
   },

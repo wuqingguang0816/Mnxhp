@@ -68,7 +68,7 @@ export default {
       default: 'MB'
     },
     fileSize: {
-      default: 2
+      default: 5
     },
   },
   data() {
