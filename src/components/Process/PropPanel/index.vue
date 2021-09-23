@@ -1167,7 +1167,11 @@ export default {
     },
     getPringTplList() {
       this.$store.dispatch('base/getPrintTree').then(res => {
-        this.printTplList = res.filter(o => o.children && o.children.length)
+        let list = res.filter(o => o.children && o.children.length)
+        this.printTplList = list.map(o => ({
+          ...o,
+          hasChildren: true
+        }))
       })
     }
   },
