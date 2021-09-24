@@ -62,7 +62,7 @@
           <div class="no_left_massage">
             <ul>
               <li v-for="(item,index) in massageList" :key="index">
-                <p>{{item.title}}</p>
+                <p class="com-hover">{{item.title}}</p>
                 <span class="time">{{item.listDate}}</span>
               </li>
             </ul>
@@ -360,9 +360,6 @@ export default {
           color: #303133;
           padding: 10px 0;
           cursor: pointer;
-          &:hover{
-            color: #1890ff;
-          }
           p {
             width: calc(100% - 80px);
             white-space: nowrap;

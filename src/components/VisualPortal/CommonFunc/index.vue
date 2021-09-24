@@ -4,7 +4,8 @@
       <span>{{title}}</span>
     </div>
     <div class="commonFunc-box-body">
-      <router-link class="item" :to="'/'+item.urlAddress" v-for="(item,i) in menuList" :key="i">
+      <router-link class="item com-hover" :to="'/'+item.urlAddress" v-for="(item,i) in menuList"
+        :key="i">
         <i :class="item.icon" :style="{color:item.iconBackgroundColor||'#1890FF'}"></i>
         <p class="name">{{item.fullName}}</p>
       </router-link>

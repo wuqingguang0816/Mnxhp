@@ -49,6 +49,16 @@ $redSub: #FF5D65;
 }
 
 @mixin mixinCommon($color, $subColor) {
+  .com-hover:hover {
+    color: $color;
+  }
+
+  .todo-box .todo-box-body .item:hover {
+    .text .name {
+      color: $color;
+    }
+  }
+
   .tags-view-container .tags-view-wrapper .tags-view-item {
     &.active {
       color: $color;
