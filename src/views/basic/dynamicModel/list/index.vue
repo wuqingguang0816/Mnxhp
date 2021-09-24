@@ -144,6 +144,7 @@ export default {
         pageSize: 20,
         sort: 'desc',
         sidx: '',
+        menuId: '',
         json: ''
       },
       flowVisible: false,
@@ -168,6 +169,7 @@ export default {
   },
   methods: {
     init() {
+      this.listQuery.menuId = this.$route.meta.modelId
       this.refreshTable = false
       if (!this.config.columnData || !this.config.formData) return
       this.columnData = JSON.parse(this.config.columnData)
