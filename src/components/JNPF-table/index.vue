@@ -35,7 +35,7 @@ export default {
     },
     border: {
       type: Boolean,
-      default: true
+      default: false
     },
     height: {
       default: '100%'
