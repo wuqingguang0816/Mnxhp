@@ -53,18 +53,22 @@ export default {
       key: +new Date(),
       btnLoading: false,
       loading: true,
-      isPreview: false
+      isPreview: false,
+      useFormPermission: false,
+      formOperates: []
     }
   },
   methods: {
     goBack() {
       this.$emit('refreshDataList')
     },
-    init(formData, modelId, id, isPreview) {
+    init(formData, modelId, id, isPreview, useFormPermission) {
       this.formData = deepClone(formData)
       this.modelId = modelId
       this.isPreview = isPreview
+      this.useFormPermission = useFormPermission
       this.dataForm.id = id || ''
+      this.getFormOperates()
       this.loading = true
       this.$nextTick(() => {
         if (this.dataForm.id) {
@@ -86,6 +90,13 @@ export default {
         this.key = +new Date()
       })
     },
+    getFormOperates() {
+      if (this.isPreview || !this.useFormPermission) return
+      const permissionList = this.$store.getters.permissionList
+      const modelId = this.$route.meta.modelId
+      const list = permissionList.filter(o => o.modelId === modelId)
+      this.formOperates = list[0] && list[0].form ? list[0].form : []
+    },
     fillFormData(form, data) {
       const loop = list => {
         for (let i = 0; i < list.length; i++) {
@@ -93,6 +104,14 @@ export default {
           if (item.__vModel__) {
             const val = data[item.__vModel__]
             if (val) item.__config__.defaultValue = val
+            if (!this.isPreview && this.useFormPermission) {
+              let noShow = true
+              if (this.formOperates && this.formOperates.length) {
+                noShow = !this.formOperates.some(o => o.enCode === item.__vModel__)
+              }
+              noShow = item.__config__.noShow ? item.__config__.noShow : noShow
+              this.$set(item.__config__, 'noShow', noShow)
+            }
           }
           if (item.__config__ && item.__config__.jnpfKey !== 'table' && item.__config__.children && Array.isArray(item.__config__.children)) {
             loop(item.__config__.children)
