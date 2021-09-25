@@ -18,10 +18,10 @@
         </li>
       </transition-group>
     </template>
-    <el-upload :action="define.comUploadUrl+'/'+type" :headers="uploadHeaders"
+    <el-upload :action="define.comUploadUrl+'/'+type" :headers="uploadHeaders" ref="elUpload"
       :on-success="handleSuccess" :multiple="limit!==1" :show-file-list="false" accept="image/*"
       :before-upload="beforeUpload" :on-exceed="handleExceed" :disabled="disabled"
-      list-type="picture-card" class="upload-btn">
+      list-type="picture-card" :limit="limit" class="upload-btn">
       <i class="el-icon-plus"></i>
       <div slot="tip" class="el-upload__tip" v-show="showTip">
         只能上传不超过{{fileSize}}{{sizeUnit}}的{{accept}}图片
@@ -87,10 +87,6 @@ export default {
   },
   methods: {
     beforeUpload(file) {
-      if (this.limit && this.fileList.length >= this.limit) {
-        this.$message.warning(`当前限制最多可以上传${this.limit}张图片`)
-        return false
-      }
       const unitNum = units[this.sizeUnit];
       if (!this.fileSize) return true
       let isRightSize = file.size / unitNum < this.fileSize
@@ -101,10 +97,6 @@ export default {
     },
     handleSuccess(res, file, fileList) {
       if (res.code == 200) {
-        if (this.limit && this.fileList.length >= this.limit) {
-          this.$message.warning(`当前限制最多可以上传${this.limit}张图片`)
-          return
-        }
         this.fileList.push({
           name: file.name,
           fileId: res.data.name,
@@ -125,6 +117,7 @@ export default {
     },
     handleRemove(index) {
       this.fileList.splice(index, 1)
+      this.$refs.elUpload.uploadFiles.splice(index, 1)
       this.$emit("input", this.fileList)
     },
     getImgList(list) {
