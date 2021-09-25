@@ -38,7 +38,8 @@
       </el-form-item>
       <el-form-item v-if="dataForm.type == 2 || dataForm.type == 7" label="地址" prop="urlAddress">
         <el-input v-model="dataForm.urlAddress" placeholder="填写地址">
-          <template slot="prepend" v-if="dataForm.category ==='Web' && dataForm.type == 2">@/views/</template>
+          <template slot="prepend"
+            v-if="dataForm.category ==='Web' && dataForm.type == 2">@/views/</template>
           <el-select slot="append" v-model="dataForm.linkTarget" style="width: 90px;"
             v-if="dataForm.category ==='Web' && dataForm.type == 7">
             <el-option label="_self" value="_self" />
@@ -152,6 +153,7 @@ export default {
         linkTarget: '_self',
         isButtonAuthorize: 0,
         isColumnAuthorize: 0,
+        isFormAuthorize: 0,
         isDataAuthorize: 0,
         enabledMark: 1,
         description: '',
@@ -336,10 +338,12 @@ export default {
       if (this.dataForm.category === 'Web' && [2, 3, 4].includes(val)) {
         this.dataForm.isButtonAuthorize = 1
         this.dataForm.isColumnAuthorize = 1
+        this.dataForm.isFormAuthorize = 1
         this.dataForm.isDataAuthorize = 1
       } else {
         this.dataForm.isButtonAuthorize = 0
         this.dataForm.isColumnAuthorize = 0
+        this.dataForm.isFormAuthorize = 0
         this.dataForm.isDataAuthorize = 0
       }
       if (val == 6) {

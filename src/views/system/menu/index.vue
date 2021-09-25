@@ -98,6 +98,10 @@
                               @click.native="handleColumnAuthorize(scope.row)">
                               列表权限
                             </el-dropdown-item>
+                            <el-dropdown-item v-if="scope.row.isFormAuthorize === 1"
+                              @click.native="handleFormAuthorize(scope.row)">
+                              表单权限
+                            </el-dropdown-item>
                             <el-dropdown-item v-if="scope.row.isDataAuthorize === 1"
                               @click.native="handleDataAuthorize(scope.row)">
                               数据权限
@@ -120,6 +124,7 @@
     <Form v-if="formVisible" ref="Form" @refreshDataList="initData" />
     <ButtonAuthorizeListDrawer v-if="buttonAuthorizeListDrawer" ref="buttonAuthorizeList" />
     <ColumnAuthorizeListDrawer v-if="columnAuthorizeListDrawer" ref="ColumnAuthorizeList" />
+    <FormAuthorizeListDrawer v-if="formAuthorizeListDrawer" ref="FormAuthorizeList" />
     <DataAuthorizeListDrawer v-if="dataAuthorizeListDrawer" ref="DataAuthorizeList" />
   </div>
 </template>
@@ -128,6 +133,7 @@ import { getMenuList, updateMenuState, delMenu, exportMenu } from '@/api/system/
 import Form from './Form'
 import ButtonAuthorizeListDrawer from './components/buttonAuthorize/index'
 import ColumnAuthorizeListDrawer from './components/columnAuthorize/index'
+import FormAuthorizeListDrawer from './components/formAuthorize/index'
 import DataAuthorizeListDrawer from './components/dataAuthorize/index'
 
 export default {
@@ -136,6 +142,7 @@ export default {
     Form,
     ButtonAuthorizeListDrawer,
     ColumnAuthorizeListDrawer,
+    FormAuthorizeListDrawer,
     DataAuthorizeListDrawer
   },
   data() {
@@ -151,6 +158,7 @@ export default {
       formVisible: false,
       buttonAuthorizeListDrawer: false,
       columnAuthorizeListDrawer: false,
+      formAuthorizeListDrawer: false,
       dataAuthorizeListDrawer: false,
       expands: true,
       refreshTable: true
@@ -240,6 +248,14 @@ export default {
       this.columnAuthorizeListDrawer = true
       this.$nextTick(() => {
         this.$refs.ColumnAuthorizeList.init(moduleId, fullName)
+      })
+    },
+    handleFormAuthorize(row) {
+      const moduleId = row.id
+      const fullName = row.fullName
+      this.formAuthorizeListDrawer = true
+      this.$nextTick(() => {
+        this.$refs.FormAuthorizeList.init(moduleId, fullName)
       })
     },
     handleDataAuthorize(row) {
