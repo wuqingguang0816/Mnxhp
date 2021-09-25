@@ -50,8 +50,11 @@ export default {
         }
       })
     },
-    sumbitForm(data) {
+    sumbitForm(data, callback) {
       console.log('sumbitForm提交数据：', data)
+      if (callback && typeof callback === "function") {
+        callback()
+      }
     },
   }
 }

@@ -16,6 +16,7 @@ export const formConf = {
   cancelButtonText: '取 消',
   confirmButtonText: '确 定',
   formStyle: '',
+  script: "\n//加载事件\nonLoad:function(form){\n    \n},\n\n//表单提交校验\nonValidate:function(form){\n\n  // 继续执行返回true\n  return true\n},\n\n//表单提交前置事件\nbeforeSubmit:function(form){\n  \n  // 继续执行返回true\n  return true\n},\n \n//表单提交后置事件\nafterSubmit:function(form){\n\n  // 继续执行返回true\n  return true\n}\n",
   idGlobal: 100
 }
 
@@ -40,6 +41,12 @@ export const inputComponents = [{
     __slot__: {
       prepend: '',
       append: ''
+    },
+    on: {
+      blur: '',
+      focus: '',
+      change: '',
+      clear: '',
     },
     placeholder: '请输入',
     style: { width: '100%' },
@@ -236,6 +243,15 @@ export const inputComponents = [{
         fullName: '选项二',
         id: "2"
       }]
+    },
+    on: {
+      change: '',
+      // 'visible-change': '',
+      // 'remove-tag': '',
+      clear: '',
+      blur: '',
+      blur: '',
+      focus: '',
     },
     placeholder: '请选择',
     style: { width: '100%' },

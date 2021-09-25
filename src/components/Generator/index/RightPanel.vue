@@ -234,10 +234,16 @@
           <el-form-item label="确定按钮文本" v-if="modelType != 3 && modelType!=6">
             <el-input v-model="formConf.confirmButtonText" placeholder="默认为‘确 定’" />
           </el-form-item>
+          <el-form-item label="表单脚本" labelPosition="top" v-if="modelType==1||modelType==6">
+            <el-button style="width: 100%;" @click="formScriptVisible=true">表单脚本</el-button>
+          </el-form-item>
         </el-form>
       </el-scrollbar>
     </div>
-
+    <form-script :visible.sync="formScriptVisible" :tpl="formConf.script" :fields="drawingList"
+      @updateScript="updateScript" />
+    <com-script :visible.sync="comScriptVisible" :tpl="activeScript"
+      @updateScript="updateComScript" />
   </div>
 </template>
 
@@ -246,6 +252,8 @@ import { isNumberStr } from '@/components/Generator/utils'
 import { saveFormConf, getDrawingList } from '@/components/Generator/utils/db'
 import { getDictionaryTypeSelector } from "@/api/systemData/dictionary"
 import { getDataInterfaceSelector } from "@/api/systemData/dataInterface"
+import FormScript from './FormScript'
+import ComScript from './ComScript'
 import JNPFComInput from './RightComponents/ComInput'
 import JNPFTextarea from './RightComponents/Textarea'
 import JNPFText from './RightComponents/JNPFText'
@@ -285,6 +293,8 @@ const systemList = ['createUser', 'createTime', 'modifyUser', 'modifyTime', 'cur
 
 export default {
   components: {
+    FormScript,
+    ComScript,
     JNPFComInput,
     JNPFTextarea,
     JNPFText,
@@ -319,14 +329,18 @@ export default {
     Tab,
     Collapse
   },
-  props: ['showField', 'activeData', 'formConf', 'modelType'],
+  props: ['showField', 'activeData', 'formConf', 'modelType', 'drawingList'],
   data() {
     return {
       currentTab: 'field',
       currentNode: null,
       dialogVisible: false,
       iconsVisible: false,
+      formScriptVisible: false,
+      comScriptVisible: false,
       currentIconModel: null,
+      activeScript: '',
+      activeFunc: '',
       dictionaryOptions: [],
       dataInterfaceOptions: [],
       justifyOptions: [
@@ -560,6 +574,17 @@ export default {
         this.dataInterfaceOptions = res.data
       })
     },
+    updateScript(data) {
+      this.formConf.script = data
+    },
+    updateComScript(data) {
+      this.activeData.on[this.activeFunc] = data
+    },
+    editFunc(str, funcName) {
+      this.activeScript = str
+      this.activeFunc = funcName
+      this.comScriptVisible = true
+    }
   }
 }
 </script>

@@ -153,7 +153,6 @@ function buildListeners(scheme) {
   const config = scheme.__config__
   const methods = this.formConf.__methods__ || {}
   const listeners = {}
-
   // 给__methods__中的方法绑定this和event
   Object.keys(methods).forEach(key => {
     listeners[key] = event => methods[key].call(this, event)
@@ -181,10 +180,14 @@ export default {
       [this.formConf.formRules]: {},
       options: {},
       tableRefs: {},
+      dyMtehods: {}
     }
     this.initFormData(data.formConfCopy.fields, data[this.formConf.formModel])
     this.buildRules(data.formConfCopy.fields, data[this.formConf.formRules])
     this.buildOptions(data.formConfCopy.fields, data.options)
+    this.$nextTick(() => {
+      this.buildMethods(data.formConfCopy.script, data.dyMtehods, data[this.formConf.formModel])
+    })
     return data
   },
   methods: {
@@ -240,6 +243,19 @@ export default {
         if (config.children) this.buildRules(config.children, rules)
       })
     },
+    buildMethods(str, dyMtehods, formData) {
+      if (!str) return
+      try {
+        const obj = eval("({" + str + "})") || {}
+        for (const key in obj) {
+          dyMtehods[key] = obj[key]
+        }
+        dyMtehods = obj
+        if (dyMtehods && dyMtehods.onLoad) dyMtehods.onLoad.call(this, formData)
+      } catch (error) {
+        console.log(error);
+      }
+    },
     resetForm() {
       this.$store.commit('generator/UPDATE_RELATION_DATA', {})
       this.formConfCopy = deepClone(this.formConf)
@@ -247,6 +263,7 @@ export default {
       Object.keys(this.tableRefs).forEach(vModel => {
         this.$refs[vModel].$children[0].resetTable()
       })
+      if (this.dyMtehods && this.dyMtehods.onLoad && typeof this.dyMtehods.onLoad === "function") this.dyMtehods.onLoad(this[this.formConf.formModel])
     },
     checkTableData() {
       let valid = true
@@ -256,13 +273,38 @@ export default {
       })
       return valid
     },
+    beforeSubmit() {
+      let valid = true
+      if (this.dyMtehods && this.dyMtehods.beforeSubmit && typeof this.dyMtehods.beforeSubmit === "function") {
+        valid = this.dyMtehods.beforeSubmit(this[this.formConf.formModel])
+      }
+      return valid
+    },
+    onValidate() {
+      let valid = true
+      if (this.dyMtehods && this.dyMtehods.onValidate && typeof this.dyMtehods.onValidate === "function") {
+        valid = this.dyMtehods.onValidate(this[this.formConf.formModel])
+      }
+      return valid
+    },
+    afterSubmit() {
+      let valid = true
+      if (this.dyMtehods && this.dyMtehods.afterSubmit && typeof this.dyMtehods.afterSubmit === "function") {
+        valid = this.dyMtehods.afterSubmit(this[this.formConf.formModel])
+      }
+      return valid
+    },
     submitForm() {
+      const beforeSubmitValid = this.beforeSubmit()
+      if (!beforeSubmitValid) return false
       const isTableValid = this.checkTableData()
       this.$refs[this.formConf.formRef].validate(valid => {
         if (!valid) return false
         if (!isTableValid) return false
+        const onValidateValid = this.onValidate()
+        if (!onValidateValid) return false
         // 触发sumit事件
-        this.$emit('submit', this[this.formConf.formModel])
+        this.$emit('submit', this[this.formConf.formModel], this.afterSubmit)
         return true
       })
     }
