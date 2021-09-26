@@ -153,10 +153,17 @@ function buildListeners(scheme) {
   const config = scheme.__config__
   const methods = this.formConf.__methods__ || {}
   const listeners = {}
+  if (scheme.on) {
+    Object.keys(scheme.on).forEach(key => {
+      const str = scheme.on[key];
+      const func = new Function(str);
+      listeners[key] = event => func.call(this, event)
+    })
+  }
   // 给__methods__中的方法绑定this和event
-  Object.keys(methods).forEach(key => {
-    listeners[key] = event => methods[key].call(this, event)
-  })
+  // Object.keys(methods).forEach(key => {
+  //   listeners[key] = event => methods[key].call(this, event)
+  // })
   // 响应 render.js 中的 vModel $emit('input', val)
   listeners.input = event => setValue.call(this, event, config, scheme)
 

@@ -123,6 +123,25 @@
                 <el-switch v-model="activeData.__config__.noShow" />
               </el-form-item>
             </template>
+            <template v-if="activeData.on && (modelType==1||modelType==6)">
+              <el-divider>组件事件</el-divider>
+              <div v-for="(value,key) in activeData.on" :key="key">
+                <el-form-item :label="key+'事件'">
+                  <el-button style="width: 100%;" @click="editFunc(value,key)">
+                    事件脚本
+                  </el-button>
+                </el-form-item>
+              </div>
+            </template>
+            <!-- <template
+              v-if="activeData.__config__.jnpfKey==='select'&& activeData.on && (modelType==1||modelType==6)">
+              <el-divider>组件事件</el-divider>
+              <el-form-item label="change事件">
+                <el-button style="width: 100%;" @click="editFunc(activeData.on.change,'change')">
+                  事件脚本
+                </el-button>
+              </el-form-item>
+            </template> -->
             <template v-if="activeData.__config__.jnpfKey==='table'">
               <el-form-item label="关联子表" v-if="$store.getters.hasTable">
                 <el-select v-model="activeData.__config__.tableName" placeholder="请选择关联子表" clearable
