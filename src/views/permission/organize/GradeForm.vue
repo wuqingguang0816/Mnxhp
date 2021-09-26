@@ -6,7 +6,9 @@
       <el-form-item label="分级管理员" prop="userId">
         <user-select v-model="dataForm.userId" placeholder="选择分级管理员" multiple />
       </el-form-item>
-      <el-form-item label="组件名称">{{fullName}}</el-form-item>
+      <el-form-item label="组织名称">
+        <el-input v-model="fullName" readonly placeholder="组织名称" />
+      </el-form-item>
       <el-form-item label="组织操作权限(本层级)">
         <el-checkbox v-model="dataForm.thisLayerAdd" :true-label="1" :false-label="0">添加
         </el-checkbox>
