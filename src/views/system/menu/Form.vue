@@ -436,16 +436,3 @@ export default {
   }
 }
 </script>
-<style lang="scss" scoped>
-.menuForm {
-  >>> .el-input-group__prepend {
-    background-color: #fff;
-    padding: 0 10px;
-    i {
-      display: inline-block;
-      width: 20px;
-      font-size: 18px;
-    }
-  }
-}
-</style>
