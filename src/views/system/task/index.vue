@@ -49,7 +49,18 @@
             <template slot-scope="scope">
               <tableOpts @edit="addOrUpdateHandle(scope.row.id)"
                 @del="handleDel(scope.$index,scope.row.id)">
-                <el-button size="mini" type="text" @click="viewLog(scope.row)">日志</el-button>
+                <el-dropdown hide-on-click>
+                  <span class="el-dropdown-link">
+                    <el-button size="mini" type="text">
+                      {{$t('common.moreBtn')}}<i class="el-icon-arrow-down el-icon--right"></i>
+                    </el-button>
+                  </span>
+                  <el-dropdown-menu slot="dropdown">
+                    <el-dropdown-item @click.native="viewLog(scope.row)">
+                      任务日志
+                    </el-dropdown-item>
+                  </el-dropdown-menu>
+                </el-dropdown>
               </tableOpts>
             </template>
           </el-table-column>

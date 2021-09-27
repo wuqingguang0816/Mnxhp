@@ -10,9 +10,10 @@
         </span>
       </div>
       <el-scrollbar class="JNPF-common-el-tree-scrollbar">
-        <el-tree ref="treeBox" :data="treeData" :element-loading-text="$t('common.loadingText')"
-          :props="defaultProps" default-expand-all highlight-current :expand-on-click-node="false"
-          node-key="id" @node-click="handleNodeClick" class="JNPF-common-el-tree">
+        <el-tree ref="treeBox" v-loading="treeLoading" :data="treeData"
+          :element-loading-text="$t('common.loadingText')" :props="defaultProps" default-expand-all
+          highlight-current :expand-on-click-node="false" node-key="id"
+          @node-click="handleNodeClick" class="JNPF-common-el-tree">
           <span class="custom-tree-node" slot-scope="{ data, node }">
             <i :class="data.icon" />
             <span class="text">{{node.label}}</span>

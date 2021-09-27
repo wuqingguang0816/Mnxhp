@@ -71,8 +71,18 @@
             <template slot-scope="scope">
               <tableOpts @edit="addOrUpdateHandle(scope.row.table)"
                 @del="handleDel(scope.$index,scope.row.table)">
-                <el-button size="mini" type="text" @click="openData(scope.row.table)">打开数据
-                </el-button>
+                <el-dropdown hide-on-click>
+                  <span class="el-dropdown-link">
+                    <el-button size="mini" type="text">
+                      {{$t('common.moreBtn')}}<i class="el-icon-arrow-down el-icon--right"></i>
+                    </el-button>
+                  </span>
+                  <el-dropdown-menu slot="dropdown">
+                    <el-dropdown-item @click.native="openData(scope.row.table)">
+                      打开数据
+                    </el-dropdown-item>
+                  </el-dropdown-menu>
+                </el-dropdown>
               </tableOpts>
             </template>
           </el-table-column>
