@@ -20,13 +20,6 @@
       <el-input-number v-model="activeData.__config__.columnWidth" placeholder="控件宽度" :min="0"
         :precision="0" controls-position="right" />
     </el-form-item>
-    <el-form-item label="默认值">
-      <el-input :value="setDefaultValue(activeData.__config__.defaultValue)" placeholder="请输入默认值"
-        @input="onDefaultValueInput" />
-    </el-form-item>
-    <!-- <el-form-item label="显示标签">
-      <el-switch v-model="activeData.__config__.showLabel" />
-    </el-form-item> -->
     <el-form-item label="格式">
       <el-radio-group v-model="activeData.level" @change="levelChange" class="level">
         <el-radio :label="0">省</el-radio>
