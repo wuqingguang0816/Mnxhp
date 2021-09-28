@@ -44,8 +44,8 @@
               <el-col :span="24">
                 <el-form-item label="请求类型" prop="executeContent.interfaceType">
                   <el-radio-group v-model="dataForm.executeContent.interfaceType">
-                    <el-radio label="GET">Get</el-radio>
-                    <el-radio label="POST">Post</el-radio>
+                    <el-radio label="GET">GET</el-radio>
+                    <el-radio label="POST">POST</el-radio>
                   </el-radio-group>
                 </el-form-item>
               </el-col>

@@ -230,23 +230,6 @@ export const inputComponents = [{
   },
   {
     __config__: {
-      jnpfKey: 'time',
-      label: '时间选择',
-      labelWidth: undefined,
-      showLabel: true,
-      tag: 'el-time-picker',
-      tagIcon: 'icon-ym icon-ym-generator-time',
-      defaultValue: null,
-      required: false,
-      layout: 'colFormItem',
-      span: 24,
-      dragDisabled: false
-    },
-    placeholder: '请选择',
-    disabled: false
-  },
-  {
-    __config__: {
       jnpfKey: 'date',
       label: '日期选择',
       labelWidth: undefined,
@@ -260,6 +243,23 @@ export const inputComponents = [{
       dragDisabled: false
     },
     type: 'date',
+    placeholder: '请选择',
+    disabled: false
+  },
+  {
+    __config__: {
+      jnpfKey: 'time',
+      label: '时间选择',
+      labelWidth: undefined,
+      showLabel: true,
+      tag: 'el-time-picker',
+      tagIcon: 'icon-ym icon-ym-generator-time',
+      defaultValue: null,
+      required: false,
+      layout: 'colFormItem',
+      span: 24,
+      dragDisabled: false
+    },
     placeholder: '请选择',
     disabled: false
   },
@@ -511,7 +511,7 @@ export const selectComponents = [{
   {
     __config__: {
       jnpfKey: 'address',
-      label: '省市区联动',
+      label: '省市区',
       labelWidth: undefined,
       showLabel: true,
       tag: 'JNPF-Address',

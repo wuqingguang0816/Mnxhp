@@ -305,6 +305,31 @@ export const inputComponents = [{
   },
   {
     __config__: {
+      jnpfKey: 'date',
+      label: '日期选择',
+      labelWidth: undefined,
+      showLabel: true,
+      tag: 'el-date-picker',
+      tagIcon: 'icon-ym icon-ym-generator-date',
+      defaultValue: null,
+      required: false,
+      layout: 'colFormItem',
+      span: 24,
+      dragDisabled: false,
+      regList: [],
+      trigger: 'change'
+    },
+    placeholder: '请选择',
+    type: 'date',
+    style: { width: '100%' },
+    disabled: false,
+    clearable: true,
+    format: 'yyyy-MM-dd',
+    'value-format': 'timestamp',
+    readonly: false
+  },
+  {
+    __config__: {
       jnpfKey: 'time',
       label: '时间选择',
       labelWidth: undefined,
@@ -329,31 +354,6 @@ export const inputComponents = [{
     },
     format: 'HH:mm:ss',
     'value-format': 'HH:mm:ss'
-  },
-  {
-    __config__: {
-      jnpfKey: 'date',
-      label: '日期选择',
-      labelWidth: undefined,
-      showLabel: true,
-      tag: 'el-date-picker',
-      tagIcon: 'icon-ym icon-ym-generator-date',
-      defaultValue: null,
-      required: false,
-      layout: 'colFormItem',
-      span: 24,
-      dragDisabled: false,
-      regList: [],
-      trigger: 'change'
-    },
-    placeholder: '请选择',
-    type: 'date',
-    style: { width: '100%' },
-    disabled: false,
-    clearable: true,
-    format: 'yyyy-MM-dd',
-    'value-format': 'timestamp',
-    readonly: false
   },
   {
     __config__: {
@@ -697,7 +697,7 @@ export const selectComponents = [{
   {
     __config__: {
       jnpfKey: 'address',
-      label: '省市区联动',
+      label: '省市区',
       labelWidth: undefined,
       showLabel: true,
       tag: 'JNPF-Address',
@@ -897,7 +897,7 @@ export const layoutComponents = [{
   {
     __config__: {
       jnpfKey: 'tab',
-      label: '标签页',
+      label: '标签面板',
       showLabel: false,
       tag: 'el-tab',
       tagIcon: 'icon-ym icon-ym-generator-label',

@@ -212,7 +212,6 @@
           <el-form label-position="top" class="pd-10">
             <el-alert type="warning" :closable="false">
               <div slot="title" class="tips">
-                <p>请求方式：GET</p>
                 <p>请求参数：taskId、taskNodeId</p>
               </div>
             </el-alert>
@@ -221,7 +220,9 @@
             </el-form-item>
             <template v-if="startForm.hasInitFunc">
               <el-form-item label="发起事件请求路径">
-                <el-input v-model="startForm.initInterfaceUrl" placeholder="请输入接口地址" />
+                <el-input v-model="startForm.initInterfaceUrl" placeholder="请输入接口地址">
+                  <template slot="prepend">GET</template>
+                </el-input>
               </el-form-item>
             </template>
             <el-form-item label="自定义结束事件">
@@ -229,7 +230,9 @@
             </el-form-item>
             <template v-if="startForm.hasEndFunc">
               <el-form-item label="结束事件请求路径">
-                <el-input v-model="startForm.endInterfaceUrl" placeholder="请输入接口地址" />
+                <el-input v-model="startForm.endInterfaceUrl" placeholder="请输入接口地址">
+                  <template slot="prepend">GET</template>
+                </el-input>
               </el-form-item>
             </template>
             <el-form-item label="自定义撤回事件">
@@ -237,7 +240,9 @@
             </el-form-item>
             <template v-if="startForm.hasFlowRecallFunc">
               <el-form-item label="撤回事件请求路径">
-                <el-input v-model="startForm.flowRecallInterfaceUrl" placeholder="请输入接口地址" />
+                <el-input v-model="startForm.flowRecallInterfaceUrl" placeholder="请输入接口地址">
+                  <template slot="prepend">GET</template>
+                </el-input>
               </el-form-item>
             </template>
           </el-form>
@@ -434,7 +439,6 @@
           <el-form label-position="top" :model="approverForm" class="pd-10">
             <el-alert type="warning" :closable="false">
               <div slot="title" class="tips">
-                <p>请求方式：GET</p>
                 <p>请求参数：taskId、taskNodeId</p>
               </div>
             </el-alert>
@@ -443,7 +447,9 @@
             </el-form-item>
             <template v-if="approverForm.hasApproverFunc">
               <el-form-item label="同意事件请求路径">
-                <el-input v-model="approverForm.approverInterfaceUrl" placeholder="请输入接口地址" />
+                <el-input v-model="approverForm.approverInterfaceUrl" placeholder="请输入接口地址">
+                  <template slot="prepend">GET</template>
+                </el-input>
               </el-form-item>
             </template>
             <el-form-item label="自定义拒绝事件">
@@ -451,7 +457,9 @@
             </el-form-item>
             <template v-if="approverForm.hasApproverRejectFunc">
               <el-form-item label="拒绝事件请求路径">
-                <el-input v-model="approverForm.approverRejectInterfaceUrl" placeholder="请输入接口地址" />
+                <el-input v-model="approverForm.approverRejectInterfaceUrl" placeholder="请输入接口地址">
+                  <template slot="prepend">GET</template>
+                </el-input>
               </el-form-item>
             </template>
             <el-form-item label="自定义撤回事件">
@@ -459,7 +467,9 @@
             </el-form-item>
             <template v-if="approverForm.hasRecallFunc">
               <el-form-item label="撤回事件请求路径">
-                <el-input v-model="approverForm.recallInterfaceUrl" placeholder="请输入接口地址" />
+                <el-input v-model="approverForm.recallInterfaceUrl" placeholder="请输入接口地址">
+                  <template slot="prepend">GET</template>
+                </el-input>
               </el-form-item>
             </template>
           </el-form>
