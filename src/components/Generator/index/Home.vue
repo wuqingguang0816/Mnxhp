@@ -97,7 +97,7 @@ export default {
   data() {
     return {
       idGlobal: 100,
-      formConf,
+      formConf: deepClone(formConf),
       inputComponents,
       selectComponents,
       systemComponents,
