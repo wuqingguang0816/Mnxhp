@@ -67,6 +67,7 @@ export default {
       this.$refs['dataForm'].validate((valid) => {
         if (valid) {
           const rtnData = this.content
+          if (!rtnData) return this.$message.warning('请输入字段JSON')
           const fixedRtnData = rtnData.replace(/("\w+":)(?=[},])/g, '$1null')
           const jsonData = JSON.parse(fixedRtnData)
           this.dataForm.columnJson = jsonData
