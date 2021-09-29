@@ -133,15 +133,6 @@
                 </el-form-item>
               </div>
             </template>
-            <!-- <template
-              v-if="activeData.__config__.jnpfKey==='select'&& activeData.on && (modelType==1||modelType==6)">
-              <el-divider>组件事件</el-divider>
-              <el-form-item label="change事件">
-                <el-button style="width: 100%;" @click="editFunc(activeData.on.change,'change')">
-                  事件脚本
-                </el-button>
-              </el-form-item>
-            </template> -->
             <template v-if="activeData.__config__.jnpfKey==='table'">
               <el-form-item label="关联子表" v-if="$store.getters.hasTable">
                 <el-select v-model="activeData.__config__.tableName" placeholder="请选择关联子表" clearable
@@ -253,16 +244,31 @@
           <el-form-item label="确定按钮文本" v-if="modelType != 3 && modelType!=6">
             <el-input v-model="formConf.confirmButtonText" placeholder="默认为‘确 定’" />
           </el-form-item>
-          <el-form-item label="表单脚本" labelPosition="top" v-if="modelType==1||modelType==6">
-            <el-button style="width: 100%;" @click="formScriptVisible=true">表单脚本</el-button>
-          </el-form-item>
+          <template v-if="formConf.funcs && (modelType==1||modelType==6)">
+            <el-divider>表单事件</el-divider>
+            <el-form-item label="加载事件">
+              <el-button style="width: 100%;"
+                @click="editFunc(formConf.funcs.onLoad,'onLoad',true)">事件脚本
+              </el-button>
+            </el-form-item>
+            <el-form-item label="提交校验">
+              <el-button style="width: 100%;"
+                @click="editFunc(formConf.funcs.onValidate,'onValidate',true)">事件脚本</el-button>
+            </el-form-item>
+            <el-form-item label="提交前置事件">
+              <el-button style="width: 100%;"
+                @click="editFunc(formConf.funcs.beforeSubmit,'beforeSubmit',true)">事件脚本</el-button>
+            </el-form-item>
+            <el-form-item label="提交后置事件">
+              <el-button style="width: 100%;"
+                @click="editFunc(formConf.funcs.afterSubmit,'afterSubmit',true)">事件脚本</el-button>
+            </el-form-item>
+          </template>
         </el-form>
       </el-scrollbar>
     </div>
-    <form-script :visible.sync="formScriptVisible" :tpl="formConf.script" :fields="drawingList"
+    <form-script :visible.sync="formScriptVisible" :tpl="activeScript" :fields="drawingList"
       @updateScript="updateScript" />
-    <com-script :visible.sync="comScriptVisible" :tpl="activeScript"
-      @updateScript="updateComScript" />
   </div>
 </template>
 
@@ -272,7 +278,6 @@ import { saveFormConf, getDrawingList } from '@/components/Generator/utils/db'
 import { getDictionaryTypeSelector } from "@/api/systemData/dictionary"
 import { getDataInterfaceSelector } from "@/api/systemData/dataInterface"
 import FormScript from './FormScript'
-import ComScript from './ComScript'
 import JNPFComInput from './RightComponents/ComInput'
 import JNPFTextarea from './RightComponents/Textarea'
 import JNPFText from './RightComponents/JNPFText'
@@ -313,7 +318,6 @@ const systemList = ['createUser', 'createTime', 'modifyUser', 'modifyTime', 'cur
 export default {
   components: {
     FormScript,
-    ComScript,
     JNPFComInput,
     JNPFTextarea,
     JNPFText,
@@ -360,6 +364,7 @@ export default {
       currentIconModel: null,
       activeScript: '',
       activeFunc: '',
+      isConf: false,
       dictionaryOptions: [],
       dataInterfaceOptions: [],
       justifyOptions: [
@@ -594,15 +599,17 @@ export default {
       })
     },
     updateScript(data) {
-      this.formConf.script = data
+      if (this.isConf) {
+        this.formConf.funcs[this.activeFunc] = data
+      } else {
+        this.activeData.on[this.activeFunc] = data
+      }
     },
-    updateComScript(data) {
-      this.activeData.on[this.activeFunc] = data
-    },
-    editFunc(str, funcName) {
+    editFunc(str, funcName, isConf) {
       this.activeScript = str
       this.activeFunc = funcName
-      this.comScriptVisible = true
+      this.isConf = isConf || false
+      this.formScriptVisible = true
     }
   }
 }

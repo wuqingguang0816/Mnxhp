@@ -2,7 +2,8 @@
   <el-dialog v-bind="$attrs" :close-on-click-modal="false" :modal-append-to-body="false"
     append-to-body v-on="$listeners" @open="onOpen" @close="onClose"
     class="JNPF-dialog JNPF-dialog_center" title="预览" :width="formConf.generalWidth">
-    <parser :form-conf="formConf" @submit="sumbitForm" :key="key" ref="dynamicForm" />
+    <parser :form-conf="formConf" @submit="sumbitForm" :key="key" ref="dynamicForm"
+      :setFormData="setFormData" />
     <div slot="footer">
       <el-button @click="close">{{formConf.cancelButtonText||'取 消'}}</el-button>
       <el-button type="primary" @click="handelConfirm">{{formConf.confirmButtonText||'确 定'}}
@@ -13,16 +14,14 @@
 
 <script>
 import Parser from '@/components/Generator/parser/Parser'
-
+import ParserMixin from '@/components/Generator/parser/mixin'
 export default {
-  components: {
-    Parser
-  },
+  components: { Parser },
+  mixins: [ParserMixin],
   props: ['formData'],
   data() {
     return {
-      key: +new Date(),
-      formConf: {},
+
     }
   },
   computed: {},
@@ -43,12 +42,19 @@ export default {
       this.$refs.dynamicForm && this.$refs.dynamicForm.submitForm()
     },
     fillFormData(form, data) {
-      form.fields.forEach(item => {
-        const val = data[item.__vModel__]
-        if (val) {
-          item.__config__.defaultValue = val
+      const loop = list => {
+        for (let i = 0; i < list.length; i++) {
+          let item = list[i]
+          if (item.__vModel__) {
+            const val = data[item.__vModel__]
+            if (val !== undefined) item.__config__.defaultValue = val
+          }
+          if (item.__config__ && item.__config__.jnpfKey !== 'table' && item.__config__.children && Array.isArray(item.__config__.children)) {
+            loop(item.__config__.children)
+          }
         }
-      })
+      }
+      loop(form.fields)
     },
     sumbitForm(data, callback) {
       console.log('sumbitForm提交数据：', data)

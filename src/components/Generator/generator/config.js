@@ -16,7 +16,12 @@ export const formConf = {
   cancelButtonText: '取 消',
   confirmButtonText: '确 定',
   formStyle: '',
-  script: "\n//加载事件\nonLoad:function(form){\n    \n},\n\n//表单提交校验\nonValidate:function(form){\n\n  // 继续执行返回true\n  return true\n},\n\n//表单提交前置事件\nbeforeSubmit:function(form){\n  \n  // 继续执行返回true\n  return true\n},\n \n//表单提交后置事件\nafterSubmit:function(form){\n\n  // 继续执行返回true\n  return true\n}\n",
+  funcs: {
+    onLoad: '({ formData, setFormData, setRequired, setDisabled }) => {\n    // 在此编写代码\n    \n}',
+    onValidate: '({ formData, setFormData, setRequired, setDisabled }) => {\n    // 在此编写代码\n    \n}',
+    beforeSubmit: '({ formData, setFormData, setRequired, setDisabled }) => {\n    // 在此编写代码\n    \n}',
+    afterSubmit: '({ formData, setFormData, setRequired, setDisabled }) => {\n    // 在此编写代码\n    \n}',
+  },
   idGlobal: 100
 }
 
@@ -43,10 +48,10 @@ export const inputComponents = [{
       append: ''
     },
     on: {
-      blur: '',
-      focus: '',
-      change: '',
-      clear: '',
+      blur: '({ data, formData, setFormData, setRequired, setDisabled }) => {\n    // 在此编写代码\n    \n}',
+      focus: '({ data, formData, setFormData, setRequired, setDisabled }) => {\n    // 在此编写代码\n    \n}',
+      change: '({ data, formData, setFormData, setRequired, setDisabled }) => {\n    // 在此编写代码\n    \n}',
+      clear: '({ data, formData, setFormData, setRequired, setDisabled }) => {\n    // 在此编写代码\n    \n}',
     },
     placeholder: '请输入',
     style: { width: '100%' },
@@ -245,13 +250,10 @@ export const inputComponents = [{
       }]
     },
     on: {
-      change: '',
-      // 'visible-change': '',
-      // 'remove-tag': '',
-      clear: '',
-      blur: '',
-      blur: '',
-      focus: '',
+      change: '({ data, formData, setFormData, setRequired, setDisabled }) => {\n    // 在此编写代码\n    \n}',
+      clear: '({ data, formData, setFormData, setRequired, setDisabled }) => {\n    // 在此编写代码\n    \n}',
+      blur: '({ data, formData, setFormData, setRequired, setDisabled }) => {\n    // 在此编写代码\n    \n}',
+      focus: '({ data, formData, setFormData, setRequired, setDisabled }) => {\n    // 在此编写代码\n    \n}',
     },
     placeholder: '请选择',
     style: { width: '100%' },

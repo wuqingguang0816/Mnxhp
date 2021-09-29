@@ -1,14 +1,21 @@
 <template>
   <el-dialog title="表单脚本" :close-on-click-modal="false"
     class="JNPF-dialog JNPF-dialog_center form-script-dialog" lock-scroll append-to-body
-    v-bind="$attrs" width="950px" :modal-append-to-body="false" v-on="$listeners" @open="onOpen">
+    v-bind="$attrs" width="1000px" :modal-append-to-body="false" v-on="$listeners" @open="onOpen">
     <div class="form-script-dialog-body">
       <div class="left-tree">
         <el-tree :data="treeData" default-expand-all :expand-on-click-node="false"
           :props="treeProps" @node-click="handleNodeClick"></el-tree>
       </div>
       <div class="right-main">
-        <JNPFCodeEditor v-model="text" :options="options" ref="CodeEditor" />
+        <div class="codeEditor">
+          <JNPFCodeEditor v-model="text" :options="options" ref="CodeEditor" />
+        </div>
+        <div class="tips">
+          <p>请从左侧面板选择的字段名，支持JavaScript的脚本.参考编写脚本API。</p>
+          <p>formData为表单数据，setFormData设置表单某个组件数据,参数(prop,value)</p>
+          <p>setRequired设置必填项，setDisabled设置禁用项</p>
+        </div>
       </div>
     </div>
     <span slot="footer" class="dialog-footer">
@@ -23,6 +30,7 @@ import JNPFCodeEditor from '@/components/JNPFEditor/monaco'
 export default {
   components: { JNPFCodeEditor },
   props: ['tpl', 'fields'],
+  inject: ["getFormInfo"],
   data() {
     return {
       text: '',
@@ -33,7 +41,7 @@ export default {
       },
       treeData: [],
       options: {
-        language: 'vue'
+        language: 'javascript'
       },
     }
   },
@@ -90,7 +98,13 @@ export default {
         }
       }
       loop(this.fields)
-      this.treeData = list
+      let topItem = {
+        value: +new Date(),
+        label: this.getFormInfo().fullName,
+        top: true,
+        children: list
+      }
+      this.treeData = [topItem]
     },
     onClose() {
       this.$emit('updateScript', this.text)
@@ -100,6 +114,7 @@ export default {
       this.$emit('update:visible', false)
     },
     handleNodeClick(item, node) {
+      if (item.top) return
       this.$refs.CodeEditor.insert(item.value);
     }
   }
@@ -108,7 +123,7 @@ export default {
 <style lang="scss" scoped>
 .form-script-dialog {
   >>> .el-dialog .el-dialog__body {
-    padding: 10px 30px 2px;
+    padding: 20px 20px 10px;
   }
   .form-script-dialog-body {
     height: 600px;
@@ -118,11 +133,33 @@ export default {
       height: 600px;
       width: 220px;
       flex-shrink: 0;
+      margin-right: 10px;
     }
     .right-main {
       height: 600px;
       flex: 1;
-      border: 1px solid #ddd;
+      display: flex;
+      flex-direction: column;
+      .codeEditor {
+        flex: 1;
+        border: 1px solid #dcdfe6;
+      }
+      .tips {
+        flex-shrink: 0;
+        padding: 8px 16px;
+        background-color: #ecf8ff;
+        border-radius: 4px;
+        border-left: 5px solid #50bfff;
+        margin-top: 20px;
+        p {
+          line-height: 24px;
+          color: #5e6d82;
+          span {
+            display: inline-block;
+            padding-right: 10px;
+          }
+        }
+      }
     }
   }
 }

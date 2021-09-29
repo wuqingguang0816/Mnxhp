@@ -5,13 +5,13 @@
         <p>{{config.fullName}}</p>
         <div class="options">
           <el-button type="primary" @click="dataFormSubmit()" :loading="btnLoading">
-            {{formData.confirmButtonText||'确 定'}}</el-button>
+            {{formConf.confirmButtonText||'确 定'}}</el-button>
           <el-button type="warning" @click="resetForm()">重置</el-button>
         </div>
       </div>
-      <div class="dynamic-form-main" :style="{margin: '0 auto',width:formData.fullScreenWidth}">
-        <parser :form-conf="formData" @submit="sumbitForm" :key="key" ref="dynamicForm"
-          v-if="!loading" />
+      <div class="dynamic-form-main" :style="{margin: '0 auto',width:formConf.fullScreenWidth}">
+        <parser :form-conf="formConf" @submit="sumbitForm" :key="key" ref="dynamicForm"
+          :setFormData="setFormData" v-if="!loading" />
       </div>
     </div>
   </div>
@@ -20,8 +20,10 @@
 <script>
 import { createModel } from '@/api/onlineDev/visualDev'
 import Parser from '@/components/Generator/parser/Parser'
+import ParserMixin from '@/components/Generator/parser/mixin'
 export default {
   components: { Parser },
+  mixins: [ParserMixin],
   props: ['config', 'modelId', 'isPreview'],
   data() {
     return {
@@ -29,8 +31,6 @@ export default {
       dataForm: {
         data: ''
       },
-      formData: {},
-      key: +new Date(),
       btnLoading: false,
       loading: true,
     }
@@ -40,7 +40,7 @@ export default {
   },
   methods: {
     init() {
-      this.formData = JSON.parse(this.config.formData)
+      this.formConf = JSON.parse(this.config.formData)
       this.loading = true
       this.$nextTick(() => {
         this.visible = true
@@ -69,7 +69,10 @@ export default {
       this.$refs.dynamicForm && this.$refs.dynamicForm.submitForm()
     },
     resetForm() {
-      this.$refs.dynamicForm && this.$refs.dynamicForm.resetForm()
+      this.formConf = JSON.parse(this.config.formData)
+      this.$nextTick(() => {
+        this.$refs.dynamicForm && this.$refs.dynamicForm.resetForm()
+      })
     }
   }
 }

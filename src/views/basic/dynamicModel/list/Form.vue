@@ -1,32 +1,32 @@
 <template>
   <div>
-    <template v-if="formData.popupType==='general'">
+    <template v-if="formConf.popupType==='general'">
       <el-dialog :title="!dataForm.id ? '新建' : '编辑'" :close-on-click-modal="false"
         :visible.sync="visible" class="JNPF-dialog JNPF-dialog_center" lock-scroll
-        :width="formData.generalWidth">
-        <parser :form-conf="formData" @submit="sumbitForm" :key="key" ref="dynamicForm"
-          v-if="!loading" />
+        :width="formConf.generalWidth">
+        <parser :form-conf="formConf" @submit="sumbitForm" :key="key" ref="dynamicForm"
+          :setFormData="setFormData" v-if="!loading" />
         <span slot="footer" class="dialog-footer">
-          <el-button @click="visible = false">{{formData.cancelButtonText||'取 消'}}</el-button>
+          <el-button @click="visible = false">{{formConf.cancelButtonText||'取 消'}}</el-button>
           <el-button type="primary" @click="dataFormSubmit()" :loading="btnLoading">
-            {{formData.confirmButtonText||'确 定'}}</el-button>
+            {{formConf.confirmButtonText||'确 定'}}</el-button>
         </span>
       </el-dialog>
     </template>
-    <template v-if="formData.popupType==='fullScreen'">
+    <template v-if="formConf.popupType==='fullScreen'">
       <transition name="el-zoom-in-center">
         <div class="JNPF-preview-main">
           <div class="JNPF-common-page-header">
             <el-page-header @back="goBack" :content="!dataForm.id ? '新建' : '编辑'" />
             <div class="options">
               <el-button type="primary" @click="dataFormSubmit()" :loading="btnLoading">
-                {{formData.confirmButtonText||'确 定'}}</el-button>
-              <el-button @click="goBack">{{formData.cancelButtonText||'取 消'}}</el-button>
+                {{formConf.confirmButtonText||'确 定'}}</el-button>
+              <el-button @click="goBack">{{formConf.cancelButtonText||'取 消'}}</el-button>
             </div>
           </div>
-          <div class="dynamic-form-main" :style="{margin: '0 auto',width:formData.fullScreenWidth}">
-            <parser :form-conf="formData" @submit="sumbitForm" :key="key" ref="dynamicForm"
-              v-if="!loading" />
+          <div class="dynamic-form-main" :style="{margin: '0 auto',width:formConf.fullScreenWidth}">
+            <parser :form-conf="formConf" @submit="sumbitForm" :key="key" ref="dynamicForm"
+              :setFormData="setFormData" v-if="!loading" />
           </div>
         </div>
       </transition>
@@ -37,9 +37,11 @@
 <script>
 import { createModel, updateModel, getModelInfo } from '@/api/onlineDev/visualDev'
 import Parser from '@/components/Generator/parser/Parser'
+import ParserMixin from '@/components/Generator/parser/mixin'
 import { deepClone } from '@/utils'
 export default {
   components: { Parser },
+  mixins: [ParserMixin],
   data() {
     return {
       visible: false,
@@ -49,8 +51,6 @@ export default {
       },
       modelId: '',
       formData: {},
-      formValue: {},
-      key: +new Date(),
       btnLoading: false,
       loading: true,
       isPreview: false,
@@ -62,8 +62,8 @@ export default {
     goBack() {
       this.$emit('refreshDataList')
     },
-    init(formData, modelId, id, isPreview, useFormPermission) {
-      this.formData = deepClone(formData)
+    init(formConf, modelId, id, isPreview, useFormPermission) {
+      this.formConf = deepClone(formConf)
       this.modelId = modelId
       this.isPreview = isPreview
       this.useFormPermission = useFormPermission
@@ -75,15 +75,16 @@ export default {
           getModelInfo(modelId, this.dataForm.id).then(res => {
             this.dataForm = res.data
             if (!this.dataForm.data) return
-            this.formValue = JSON.parse(this.dataForm.data)
-            this.fillFormData(this.formData, this.formValue)
+            this.formData = JSON.parse(this.dataForm.data)
+            this.fillFormData(this.formConf, this.formData)
             this.$nextTick(() => {
               this.visible = true
               this.loading = false
             })
           })
         } else {
-          this.formValue = {}
+          this.formData = {}
+          this.fillFormData(this.formConf, this.formData)
           this.visible = true
           this.loading = false
         }
@@ -103,7 +104,7 @@ export default {
           let item = list[i]
           if (item.__vModel__) {
             const val = data[item.__vModel__]
-            if (val) item.__config__.defaultValue = val
+            if (val !== undefined) item.__config__.defaultValue = val
             if (!this.isPreview && this.useFormPermission) {
               let noShow = true
               if (this.formOperates && this.formOperates.length) {

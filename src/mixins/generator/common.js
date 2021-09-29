@@ -1,6 +1,11 @@
 import { DataModelFieldList } from '@/api/systemData/dataModel'
 import { getDataSourceListAll } from '@/api/systemData/dataSource'
 export default {
+  provide() {
+    return {
+      getFormInfo: this.getFormInfo
+    }
+  },
   data() {
     return {}
   },
@@ -127,6 +132,9 @@ export default {
         this.$set(this.tables[i], "relationField", "")
         this.$set(this.tables[i], "tableField", "")
       }
+    },
+    getFormInfo() {
+      return this.dataForm
     },
     exist() {
       let isOk = true;

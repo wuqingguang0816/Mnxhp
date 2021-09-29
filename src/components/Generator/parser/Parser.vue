@@ -149,21 +149,29 @@ function setValue(event, config, scheme) {
   this.$set(this[this.formConf.formModel], scheme.__vModel__, event)
 }
 
+function getFunc(str) {
+  let func = null
+  try {
+    func = eval(str)
+    return func
+  } catch (error) {
+    console.log(error);
+    return false
+  }
+}
+
 function buildListeners(scheme) {
   const config = scheme.__config__
-  const methods = this.formConf.__methods__ || {}
   const listeners = {}
   if (scheme.on) {
+    // 响应 组件事件
     Object.keys(scheme.on).forEach(key => {
       const str = scheme.on[key];
-      const func = new Function(str);
-      listeners[key] = event => func.call(this, event)
+      const func = getFunc(str);
+      if (!func) return
+      listeners[key] = event => func.call(this, { data: event, formData: this[this.formConf.formModel], setFormData: this.setFormData })
     })
   }
-  // 给__methods__中的方法绑定this和event
-  // Object.keys(methods).forEach(key => {
-  //   listeners[key] = event => methods[key].call(this, event)
-  // })
   // 响应 render.js 中的 vModel $emit('input', val)
   listeners.input = event => setValue.call(this, event, config, scheme)
 
@@ -175,6 +183,7 @@ export default {
     render
   },
   props: {
+    setFormData: Function,
     formConf: {
       type: Object,
       required: true
@@ -186,14 +195,13 @@ export default {
       [this.formConf.formModel]: {},
       [this.formConf.formRules]: {},
       options: {},
-      tableRefs: {},
-      dyMtehods: {}
+      tableRefs: {}
     }
     this.initFormData(data.formConfCopy.fields, data[this.formConf.formModel])
     this.buildRules(data.formConfCopy.fields, data[this.formConf.formRules])
     this.buildOptions(data.formConfCopy.fields, data.options)
     this.$nextTick(() => {
-      this.buildMethods(data.formConfCopy.script, data.dyMtehods, data[this.formConf.formModel])
+      this.buildMethods(data.formConfCopy, data[this.formConf.formModel])
     })
     return data
   },
@@ -224,6 +232,7 @@ export default {
               isTreeSelect ? cur.options = res.data : cur.__slot__.options = res.data
             })
           }
+          isTreeSelect ? data[cur.__vModel__ + 'Options'] = cur.options : data[cur.__vModel__ + 'Options'] = cur.__slot__.options
         }
         if (config.children && config.jnpfKey !== 'table') this.buildOptions(config.children, data)
       })
@@ -250,18 +259,11 @@ export default {
         if (config.children) this.buildRules(config.children, rules)
       })
     },
-    buildMethods(str, dyMtehods, formData) {
-      if (!str) return
-      try {
-        const obj = eval("({" + str + "})") || {}
-        for (const key in obj) {
-          dyMtehods[key] = obj[key]
-        }
-        dyMtehods = obj
-        if (dyMtehods && dyMtehods.onLoad) dyMtehods.onLoad.call(this, formData)
-      } catch (error) {
-        console.log(error);
-      }
+    buildMethods(formConfCopy, formData) {
+      if (!formConfCopy || !formConfCopy.funcs || !formConfCopy.funcs.onLoad) return
+      const onLoadFunc = getFunc(formConfCopy.funcs.onLoad)
+      if (!onLoadFunc) return
+      onLoadFunc({ formData, setFormData: this.setFormData })
     },
     resetForm() {
       this.$store.commit('generator/UPDATE_RELATION_DATA', {})
