@@ -11,7 +11,7 @@
       </div>
       <div class="dynamic-form-main" :style="{margin: '0 auto',width:formConf.fullScreenWidth}">
         <parser :form-conf="formConf" @submit="sumbitForm" :key="key" ref="dynamicForm"
-          :setFormData="setFormData" v-if="!loading" />
+          :setFormData="setFormData" :setShowOrHide="setShowOrHide" v-if="!loading" />
       </div>
     </div>
   </div>

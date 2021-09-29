@@ -162,6 +162,13 @@ function getFunc(str) {
 
 function buildListeners(scheme) {
   const config = scheme.__config__
+  const parameter = {
+    formData: this[this.formConf.formModel],
+    setFormData: this.setFormData,
+    setShowOrHide: this.setShowOrHide,
+    setRequired: this.setRequired,
+    setDisabled: this.setDisabled
+  }
   const listeners = {}
   if (scheme.on) {
     // 响应 组件事件
@@ -169,7 +176,7 @@ function buildListeners(scheme) {
       const str = scheme.on[key];
       const func = getFunc(str);
       if (!func) return
-      listeners[key] = event => func.call(this, { data: event, formData: this[this.formConf.formModel], setFormData: this.setFormData })
+      listeners[key] = event => func.call(this, { data: event, ...parameter })
     })
   }
   // 响应 render.js 中的 vModel $emit('input', val)
@@ -184,6 +191,7 @@ export default {
   },
   props: {
     setFormData: Function,
+    setShowOrHide: Function,
     formConf: {
       type: Object,
       required: true

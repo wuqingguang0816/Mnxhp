@@ -3,7 +3,7 @@
     append-to-body v-on="$listeners" @open="onOpen" @close="onClose"
     class="JNPF-dialog JNPF-dialog_center" title="预览" :width="formConf.generalWidth">
     <parser :form-conf="formConf" @submit="sumbitForm" :key="key" ref="dynamicForm"
-      :setFormData="setFormData" />
+      :setFormData="setFormData" :setShowOrHide="setShowOrHide" />
     <div slot="footer">
       <el-button @click="close">{{formConf.cancelButtonText||'取 消'}}</el-button>
       <el-button type="primary" @click="handelConfirm">{{formConf.confirmButtonText||'确 定'}}

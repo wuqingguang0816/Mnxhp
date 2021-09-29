@@ -5,7 +5,7 @@
         :visible.sync="visible" class="JNPF-dialog JNPF-dialog_center" lock-scroll
         :width="formConf.generalWidth">
         <parser :form-conf="formConf" @submit="sumbitForm" :key="key" ref="dynamicForm"
-          :setFormData="setFormData" v-if="!loading" />
+          :setFormData="setFormData" :setShowOrHide="setShowOrHide" v-if="!loading" />
         <span slot="footer" class="dialog-footer">
           <el-button @click="visible = false">{{formConf.cancelButtonText||'取 消'}}</el-button>
           <el-button type="primary" @click="dataFormSubmit()" :loading="btnLoading">
@@ -26,7 +26,7 @@
           </div>
           <div class="dynamic-form-main" :style="{margin: '0 auto',width:formConf.fullScreenWidth}">
             <parser :form-conf="formConf" @submit="sumbitForm" :key="key" ref="dynamicForm"
-              :setFormData="setFormData" v-if="!loading" />
+              :setFormData="setFormData" :setShowOrHide="setShowOrHide" v-if="!loading" />
           </div>
         </div>
       </transition>
