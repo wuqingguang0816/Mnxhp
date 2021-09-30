@@ -22,9 +22,9 @@
           </el-dropdown>
           <el-button :disabled="active <= 0" @click="handlePrevStep">{{$t('common.prev')}}
           </el-button>
-          <el-button :disabled="active >= 3" @click="handleNextStep">{{$t('common.next')}}
+          <el-button :disabled="active >= 4" @click="handleNextStep">{{$t('common.next')}}
           </el-button>
-          <el-button type="primary" :loading="btnLoading" :disabled="active < 3"
+          <el-button type="primary" :loading="btnLoading" :disabled="active < 4"
             @click="handleConfirm()">{{$t('common.confirmButton')}}</el-button>
           <el-button @click="goBack">{{$t('common.cancelButton')}}</el-button>
         </div>
@@ -33,6 +33,7 @@
         <el-step :title="$t('authorize.menuPermission')"></el-step>
         <el-step :title="$t('authorize.buttonPermission')"></el-step>
         <el-step :title="$t('authorize.listPermission')"></el-step>
+        <el-step :title="$t('authorize.formPermission')"></el-step>
         <el-step :title="$t('authorize.dataPermission')"></el-step>
       </el-steps>
       <div class="main">
@@ -74,6 +75,7 @@ export default {
         module: [],
         button: [],
         column: [],
+        form: [],
         resource: []
       },
       params: {
@@ -86,10 +88,12 @@ export default {
       moduleAuthorizeTree: [],
       buttonAuthorizeTree: [],
       columnAuthorizeTree: [],
+      formAuthorizeTree: [],
       resourceAuthorizeTree: [],
       moduleAllData: [],
       buttonAllData: [],
       columnAllData: [],
+      formAllData: [],
       resourceAllData: [],
       moduleIdsTemp: [],
       defaultProps: { // 配置项（必选）
@@ -145,6 +149,13 @@ export default {
             this.$refs.authorizeTree.setCheckedKeys(this.dataForm.column)
             break
           case 3:
+            this.formAuthorizeTree = res.data.list
+            this.formAllData = res.data.all
+            this.authorizeTreeData = this.formAuthorizeTree
+            this.dataForm.form = [...this.dataForm.form, ...res.data.ids, ...this.moduleIdsTemp]
+            this.$refs.authorizeTree.setCheckedKeys(this.dataForm.form)
+            break
+          case 4:
             this.resourceAuthorizeTree = res.data.list
             this.resourceAllData = res.data.all
             this.authorizeTreeData = this.resourceAuthorizeTree
@@ -175,6 +186,9 @@ export default {
             this.$refs.authorizeTree.setCheckedKeys(this.columnAllData)
             break
           case 3:
+            this.$refs.authorizeTree.setCheckedKeys(this.formAllData)
+            break
+          case 4:
             this.$refs.authorizeTree.setCheckedKeys(this.resourceAllData)
             break
         }
@@ -223,6 +237,10 @@ export default {
           this.params.moduleIds = (this.moduleIdsTemp).toString()
           break
         case 3:
+          this.params.type = 'form'
+          this.params.moduleIds = (this.moduleIdsTemp).toString()
+          break
+        case 4:
           this.params.type = 'resource'
           this.params.moduleIds = (this.moduleIdsTemp).toString()
           break
@@ -248,6 +266,9 @@ export default {
           this.dataForm.column = dataIds
           break
         case 3:
+          this.dataForm.form = dataIds
+          break
+        case 4:
           this.dataForm.resource = dataIds
           break
       }

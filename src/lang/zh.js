@@ -242,6 +242,7 @@ export default {
     menuPermission: '菜单权限',
     buttonPermission: '按钮权限',
     listPermission: '列表权限',
+    formPermission: '表单权限',
     dataPermission: '数据权限',
     selectRoles: '选择角色',
   },

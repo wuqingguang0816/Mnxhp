@@ -19,8 +19,8 @@
           </el-dropdown-menu>
         </el-dropdown>
         <el-button :disabled="active <= 0" @click="handlePrevStep">{{$t('common.prev')}}</el-button>
-        <el-button :disabled="active >= 4" @click="handleNextStep">{{$t('common.next')}}</el-button>
-        <el-button type="primary" :loading="btnLoading" :disabled="active < 4"
+        <el-button :disabled="active >= 5" @click="handleNextStep">{{$t('common.next')}}</el-button>
+        <el-button type="primary" :loading="btnLoading" :disabled="active < 5"
           @click="handleConfirm()">{{$t('common.confirmButton')}}</el-button>
       </div>
     </div>
@@ -28,11 +28,12 @@
       <el-step :title="$t('authorize.menuPermission')"></el-step>
       <el-step :title="$t('authorize.buttonPermission')"></el-step>
       <el-step :title="$t('authorize.listPermission')"></el-step>
+      <el-step :title="$t('authorize.formPermission')"></el-step>
       <el-step :title="$t('authorize.dataPermission')"></el-step>
       <el-step :title="$t('authorize.selectRoles')"></el-step>
     </el-steps>
     <div class="authorize-bd">
-      <div v-if="active < 4">
+      <div v-if="active < 5">
         <el-tree :data="authorizeTreeData" ref="authorizeTree" v-loading="treeLoading"
           :element-loading-text="$t('common.loadingText')" show-checkbox default-expand-all
           node-key="id" :check-strictly="checkStrictly" check-on-click-node :props="defaultProps"
@@ -77,6 +78,7 @@ export default {
         module: [],
         button: [],
         column: [],
+        form: [],
         resource: []
       },
       roleTreeAllData: [],
@@ -86,10 +88,12 @@ export default {
       moduleAuthorizeTree: [],
       buttonAuthorizeTree: [],
       columnAuthorizeTree: [],
+      formAuthorizeTree: [],
       resourceAuthorizeTree: [],
       moduleAllData: [],
       buttonAllData: [],
       columnAllData: [],
+      formAllData: [],
       resourceAllData: [],
       moduleIdsTemp: [],
       defaultProps: { // 配置项（必选）
@@ -153,6 +157,13 @@ export default {
             this.$refs.authorizeTree.setCheckedKeys(this.dataForm.column)
             break
           case 3:
+            this.formAuthorizeTree = res.data.list
+            this.formAllData = res.data.all
+            this.authorizeTreeData = this.formAuthorizeTree
+            this.dataForm.form = [...this.dataForm.form, ...res.data.ids, ...this.moduleIdsTemp]
+            this.$refs.authorizeTree.setCheckedKeys(this.dataForm.form)
+            break
+          case 4:
             this.resourceAuthorizeTree = res.data.list
             this.resourceAllData = res.data.all
             this.authorizeTreeData = this.resourceAuthorizeTree
@@ -180,14 +191,17 @@ export default {
             this.$refs.authorizeTree.setCheckedKeys(this.columnAllData)
             break
           case 3:
-            this.$refs.authorizeTree.setCheckedKeys(this.resourceAllData)
+            this.$refs.authorizeTree.setCheckedKeys(this.formAllData)
             break
           case 4:
+            this.$refs.authorizeTree.setCheckedKeys(this.resourceAllData)
+            break
+          case 5:
             this.$refs.roleTree.setCheckedKeys(this.roleAllIds)
         }
       }
       if (val === 'cancelCheckAll') {
-        if (this.active === 4) {
+        if (this.active === 5) {
           this.$refs.roleTree.setCheckedKeys([])
         } else {
           this.$refs.authorizeTree.setCheckedKeys([])
@@ -204,7 +218,7 @@ export default {
         result = false
       }
       let nodes
-      if (this.active === 4) {
+      if (this.active === 5) {
         nodes = this.$refs.roleTree.store.nodesMap
       } else {
         nodes = this.$refs.authorizeTree.store.nodesMap
@@ -220,7 +234,7 @@ export default {
     },
     // 下一步
     handleNextStep() {
-      if (this.active++ > 4) this.active = 0
+      if (this.active++ > 5) this.active = 0
       this.handleInitData()
     },
     handleInitData() {
@@ -239,23 +253,27 @@ export default {
           this.params.moduleIds = (this.moduleIdsTemp).toString()
           break
         case 3:
-          this.params.type = 'resource'
+          this.params.type = 'form'
           this.params.moduleIds = (this.moduleIdsTemp).toString()
           break
         case 4:
+          this.params.type = 'resource'
+          this.params.moduleIds = (this.moduleIdsTemp).toString()
+          break
+        case 5:
           this.getRoleList()
           this.$nextTick(() => {
             this.$refs.roleTree.setCheckedKeys(this.dataForm.roleIds)
           })
           break
       }
-      if (this.active !== 4) this.getAuthorizeList()
+      if (this.active !== 5) this.getAuthorizeList()
       this.treeLoading = false
     },
     // 设置数据
     selectTreeNodeClick() {
       let dataIds = []
-      if (this.active !== 4) {
+      if (this.active !== 5) {
         const parentIds = this.$refs.authorizeTree.getHalfCheckedKeys()
         const childrenIds = this.$refs.authorizeTree.getCheckedKeys()
         const newIds = [...parentIds, ...childrenIds]
@@ -273,9 +291,12 @@ export default {
           this.dataForm.column = dataIds
           break
         case 3:
-          this.dataForm.resource = dataIds
+          this.dataForm.form = dataIds
           break
         case 4:
+          this.dataForm.resource = dataIds
+          break
+        case 5:
           this.dataForm.roleIds = this.$refs.roleTree.getCheckedKeys()
           break
       }
