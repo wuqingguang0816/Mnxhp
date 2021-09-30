@@ -548,6 +548,8 @@ export const selectComponents = [{
       trigger: 'change'
     },
     placeholder: '请选择',
+    multiple: false,
+    clearable: true,
     disabled: false
   },
   {
@@ -567,6 +569,8 @@ export const selectComponents = [{
       trigger: 'change'
     },
     placeholder: '请选择',
+    multiple: false,
+    clearable: true,
     disabled: false
   },
   {
@@ -587,6 +591,7 @@ export const selectComponents = [{
     },
     placeholder: '请选择',
     multiple: false,
+    clearable: true,
     disabled: false
   },
   {
@@ -607,6 +612,7 @@ export const selectComponents = [{
     },
     placeholder: '请选择',
     multiple: false,
+    clearable: true,
     disabled: false
   },
   {

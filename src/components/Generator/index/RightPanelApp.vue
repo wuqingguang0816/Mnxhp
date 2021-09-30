@@ -316,6 +316,7 @@
           <el-form-item label="标题宽度">
             <el-input v-model.number="formConf.labelWidth" type="number" placeholder="标题宽度" />
           </el-form-item>
+          <el-divider>表单按钮</el-divider>
           <el-form-item label="取消按钮文本">
             <el-input v-model="formConf.cancelButtonText" placeholder="默认为‘取 消’" />
           </el-form-item>

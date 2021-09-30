@@ -238,6 +238,7 @@
                 :key="item" />
             </el-select>
           </el-form-item>
+          <el-divider>表单按钮</el-divider>
           <el-form-item label="取消按钮文本" v-if="modelType != 3 && modelType!=6">
             <el-input v-model="formConf.cancelButtonText" placeholder="默认为‘取 消’" />
           </el-form-item>

@@ -36,9 +36,9 @@
       <el-input :value="setDefaultValue(activeData.__config__.defaultValue)" placeholder="请输入默认值"
         @input="onDefaultValueInput" v-if="activeData.__config__.jnpfKey==='editor'" />
     </el-form-item>
-    <!-- <el-form-item label="显示标签">
-      <el-switch v-model="activeData.__config__.showLabel" />
-    </el-form-item> -->
+    <el-form-item label="能否清空">
+      <el-switch v-model="activeData.clearable" />
+    </el-form-item>
     <el-form-item label="是否多选" v-if="needMultiple">
       <el-switch v-model="activeData.multiple" @change="multipleChange" />
     </el-form-item>

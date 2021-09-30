@@ -12,9 +12,9 @@
           <JNPFCodeEditor v-model="text" :options="options" ref="CodeEditor" />
         </div>
         <div class="tips">
-          <p>请从左侧面板选择的字段名，支持JavaScript的脚本.参考编写脚本API。</p>
-          <p>formData为表单数据，setFormData设置表单某个组件数据,参数(prop,value)</p>
-          <p>setRequired设置必填项，setDisabled设置禁用项</p>
+          <p>请从左侧面板选择的字段名，支持JavaScript的脚本.参考编写脚本API</p>
+          <p>data为当前组件的选中值，formData为表单数据，setFormData设置表单某个组件数据,参数(prop,value)</p>
+          <p>setShowOrHide设置显示或隐藏,setRequired设置必填项，setDisabled设置禁用项，参数(prop,value)</p>
         </div>
       </div>
     </div>

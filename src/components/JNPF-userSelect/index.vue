@@ -2,8 +2,10 @@
   <div class="userSelect-container">
     <div class="userSelect-input" @click="openDialog">
       <el-input :placeholder="placeholder" v-model="innerValue" readonly :disabled="disabled">
-        <i slot="suffix" class="el-input__icon el-icon-circle-close" @click.stop="clear"></i>
-        <i slot="suffix" class="el-input__icon el-icon-arrow-down"></i>
+        <i slot="suffix" class="el-input__icon el-icon-circle-close" @click.stop="clear"
+          v-if="clearable"></i>
+        <i slot="suffix" class="el-input__icon el-icon-arrow-down"
+          :class="{'clearable':clearable}"></i>
       </el-input>
     </div>
     <el-dialog title="选择用户" :close-on-click-modal="false" :visible.sync="visible"
@@ -209,7 +211,7 @@ export default {
       .el-icon-circle-close {
         display: block;
       }
-      .el-icon-arrow-down {
+      .el-icon-arrow-down.clearable {
         display: none;
       }
     }
