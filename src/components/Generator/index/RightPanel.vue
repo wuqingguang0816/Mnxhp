@@ -126,9 +126,9 @@
             <template v-if="activeData.on && (modelType==1||modelType==6)">
               <el-divider>组件事件</el-divider>
               <div v-for="(value,key) in activeData.on" :key="key">
-                <el-form-item :label="key+'事件'">
+                <el-form-item :label="key">
                   <el-button style="width: 100%;" @click="editFunc(value,key)">
-                    事件脚本
+                    {{getTipText(key)}}
                   </el-button>
                 </el-form-item>
               </div>
@@ -246,22 +246,19 @@
           </el-form-item>
           <template v-if="formConf.funcs && (modelType==1||modelType==6)">
             <el-divider>表单事件</el-divider>
-            <el-form-item label="加载事件">
+            <el-form-item label="onLoad">
               <el-button style="width: 100%;"
-                @click="editFunc(formConf.funcs.onLoad,'onLoad',true)">事件脚本
+                @click="editFunc(formConf.funcs.onLoad,'onLoad',true)">表单加载触发
               </el-button>
             </el-form-item>
-            <el-form-item label="提交校验">
+            <el-form-item label="beforeSubmit">
               <el-button style="width: 100%;"
-                @click="editFunc(formConf.funcs.onValidate,'onValidate',true)">事件脚本</el-button>
+                @click="editFunc(formConf.funcs.beforeSubmit,'beforeSubmit',true)">提交前置触发
+              </el-button>
             </el-form-item>
-            <el-form-item label="提交前置事件">
+            <el-form-item label="afterSubmit">
               <el-button style="width: 100%;"
-                @click="editFunc(formConf.funcs.beforeSubmit,'beforeSubmit',true)">事件脚本</el-button>
-            </el-form-item>
-            <el-form-item label="提交后置事件">
-              <el-button style="width: 100%;"
-                @click="editFunc(formConf.funcs.afterSubmit,'afterSubmit',true)">事件脚本</el-button>
+                @click="editFunc(formConf.funcs.afterSubmit,'afterSubmit',true)">提交后置触发</el-button>
             </el-form-item>
           </template>
         </el-form>
@@ -597,6 +594,21 @@ export default {
       getDataInterfaceSelector().then(res => {
         this.dataInterfaceOptions = res.data
       })
+    },
+    getTipText(key) {
+      let text = ''
+      switch (key) {
+        case 'change':
+          text = '发生变化时触发'
+          break;
+        case 'blur':
+          text = '失去焦点时触发'
+          break;
+        default:
+          text = ''
+          break;
+      }
+      return text
     },
     updateScript(data) {
       if (this.isConf) {

@@ -18,7 +18,6 @@ export const formConf = {
   formStyle: '',
   funcs: {
     onLoad: '({ formData, setFormData, setRequired, setDisabled }) => {\n    // 在此编写代码\n    \n}',
-    onValidate: '({ formData, setFormData, setRequired, setDisabled }) => {\n    // 在此编写代码\n    \n}',
     beforeSubmit: '({ formData, setFormData, setRequired, setDisabled }) => {\n    // 在此编写代码\n    \n}',
     afterSubmit: '({ formData, setFormData, setRequired, setDisabled }) => {\n    // 在此编写代码\n    \n}',
   },
@@ -48,10 +47,8 @@ export const inputComponents = [{
       append: ''
     },
     on: {
-      blur: '({ data, formData, setFormData, setShowOrHide, setRequired, setDisabled }) => {\n    // 在此编写代码\n    \n}',
-      focus: '({ data, formData, setFormData, setShowOrHide, setRequired, setDisabled }) => {\n    // 在此编写代码\n    \n}',
       change: '({ data, formData, setFormData, setShowOrHide, setRequired, setDisabled }) => {\n    // 在此编写代码\n    \n}',
-      clear: '({ data, formData, setFormData, setShowOrHide, setRequired, setDisabled }) => {\n    // 在此编写代码\n    \n}',
+      blur: '({ data, formData, setFormData, setShowOrHide, setRequired, setDisabled }) => {\n    // 在此编写代码\n    \n}',
     },
     placeholder: '请输入',
     style: { width: '100%' },
@@ -251,9 +248,7 @@ export const inputComponents = [{
     },
     on: {
       change: '({ data, formData, setFormData, setShowOrHide, setRequired, setDisabled }) => {\n    // 在此编写代码\n    \n}',
-      clear: '({ data, formData, setFormData, setShowOrHide, setRequired, setDisabled }) => {\n    // 在此编写代码\n    \n}',
       blur: '({ data, formData, setFormData, setShowOrHide, setRequired, setDisabled }) => {\n    // 在此编写代码\n    \n}',
-      focus: '({ data, formData, setFormData, setShowOrHide, setRequired, setDisabled }) => {\n    // 在此编写代码\n    \n}',
     },
     placeholder: '请选择',
     style: { width: '100%' },
