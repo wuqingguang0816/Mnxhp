@@ -14,7 +14,7 @@
           ]
         </pre>
       </div>
-      <el-form-item label="字段Json" prop="columnJson">
+      <el-form-item label="字段Json" prop="formJson">
         <div class="formCodeEditor">
           <JNPFCodeEditor :options="options" v-model="content" />
         </div>
@@ -46,9 +46,7 @@ export default {
       content: '',
       dataForm: {
         moduleId: '',
-        bindTable: '',
-        bindTableName: '',
-        columnJson: []
+        formJson: []
       },
       dataRule: {}
     }
@@ -70,7 +68,7 @@ export default {
           if (!rtnData) return this.$message.warning('请输入字段JSON')
           const fixedRtnData = rtnData.replace(/("\w+":)(?=[},])/g, '$1null')
           const jsonData = JSON.parse(fixedRtnData)
-          this.dataForm.columnJson = jsonData
+          this.dataForm.formJson = jsonData
           this.btnLoading = true
           batchCreateForm(this.dataForm).then(res => {
             this.$message({
