@@ -90,7 +90,7 @@
         </el-row>
       </template>
       <template v-if="item.__config__.jnpfKey==='table'">
-        <el-form-item label-width="0">
+        <el-form-item label-width="0" v-if="!item.__config__.noShow">
           <div class="JNPF-common-title" v-if="item.__config__.showTitle">
             <h2>{{item.__config__.label}}</h2>
           </div>
