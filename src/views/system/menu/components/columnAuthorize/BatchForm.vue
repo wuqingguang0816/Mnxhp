@@ -22,7 +22,7 @@
       </div>
       <el-form-item label="字段Json" prop="columnJson">
         <div class="formCodeEditor">
-          <JNPFCodeEditor :options="options" v-model="content" />
+          <JNPFCodeEditor :options="options" v-model="content" ref="CodeEditor" />
         </div>
       </el-form-item>
     </el-form>
@@ -65,7 +65,12 @@ export default {
       this.visible = true
       this.formLoading = true
       this.$nextTick(() => {
+        this.content = ''
         this.$refs['dataForm'].resetFields()
+        this.$refs.CodeEditor.changeEditor({
+          value: '',
+          options: this.options
+        })
         this.formLoading = false
       })
     },
