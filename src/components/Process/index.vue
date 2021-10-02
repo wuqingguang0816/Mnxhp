@@ -6,7 +6,7 @@ import { getDrawingList } from '@/components/Generator/utils/db'
 
 export default {
   name: 'Process',
-  props: ['tabName', 'conf'],
+  props: ['tabName', 'conf', 'flowType'],
   data() {
     let data = {}
     if (typeof this.conf === 'object' && this.conf !== null && JSON.stringify(this.conf) !== '{}') {
@@ -176,6 +176,7 @@ export default {
         />
         <PropPanel
           value={this.activeData}
+          flowType={this.flowType || 0}
           processData={this.data}
           onConfirm={this.onPropEditConfirm}
           onCancel={this.onClosePanel}

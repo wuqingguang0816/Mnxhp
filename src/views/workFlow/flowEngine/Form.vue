@@ -153,7 +153,8 @@
         </template>
       </template>
       <template v-if="activeStep==2">
-        <Process ref="processDesign" :conf="flowTemplateJson" @startNodeChange="onStartChange" />
+        <Process ref="processDesign" :conf="flowTemplateJson" @startNodeChange="onStartChange"
+          :flowType="dataForm.type" />
       </template>
     </div>
     <icon-box :visible.sync="iconBoxVisible" ref="iconBox" :current="dataForm.icon"

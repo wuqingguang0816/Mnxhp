@@ -149,7 +149,7 @@
     <!-- 发起人 -->
     <section class="approver-pane" v-if="value && isStartNode()">
       <el-tabs style="height:100%;">
-        <el-tab-pane label="发起人">
+        <el-tab-pane label="发起人" v-if="flowType!=1">
           <el-row class="pd-10">
             <el-col :span="4" style="font-size: 14px;line-height:32px">谁可以发起</el-col>
             <el-col :span="20" style="font-size: 14px;line-height:32px;margin-bottom:10px">
@@ -165,7 +165,7 @@
             </div>
           </el-row>
         </el-tab-pane>
-        <el-tab-pane label="高级设置" name="config">
+        <el-tab-pane label="高级设置">
           <el-form label-position="top" class="pd-10">
             <el-form-item label="操作设置">
               <div class="per-cell">
@@ -195,7 +195,7 @@
             </el-form-item>
           </el-form>
         </el-tab-pane>
-        <el-tab-pane label="表单权限" name="formAuth">
+        <el-tab-pane label="表单权限">
           <div class="form-auth-table">
             <el-table :data="getFormOperates()" class="JNPF-common-table" size="mini" height="100%">
               <el-table-column prop="name" label="表单字段" align="left"></el-table-column>
@@ -607,7 +607,7 @@ const defaultStep = [{
   properties: { title: '发起人' }
 }]
 export default {
-  props: [/*当前节点数据*/"value", /*整个节点数据*/"processData"],
+  props: [/*当前节点数据*/"value", /*整个节点数据*/"processData", "flowType"],
   components: { OrgSelect },
   data() {
     return {
