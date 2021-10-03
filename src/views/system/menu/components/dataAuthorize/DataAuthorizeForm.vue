@@ -7,8 +7,8 @@
       <el-form-item label="字段名称" prop="enCode">
         <el-input v-model="dataForm.enCode" placeholder="输入字段名称" />
       </el-form-item>
-      <el-form-item label="字段注解" prop="fullName">
-        <el-input v-model="dataForm.fullName" placeholder="输入字段注解" />
+      <el-form-item label="字段说明" prop="fullName">
+        <el-input v-model="dataForm.fullName" placeholder="输入字段说明" />
       </el-form-item>
       <el-form-item label="字段类型" prop="type">
         <el-select v-model="dataForm.type" placeholder="请选择" clearable>
@@ -31,7 +31,7 @@
           </el-option>
         </el-select>
       </el-form-item>
-      <el-form-item label="字段说明" prop="bodyText">
+      <el-form-item label="备注" prop="bodyText">
         <el-input v-model="dataForm.description" type="textarea" :rows="6" />
       </el-form-item>
     </el-form>
@@ -118,7 +118,7 @@ export default {
           { required: true, message: '字段名称不能为空', trigger: 'blur' }
         ],
         fullName: [
-          { required: true, message: '字段注解不能为空', trigger: 'blur' }
+          { required: true, message: '字段说明不能为空', trigger: 'blur' }
         ],
         type: [
           { required: true, message: '请选择字段类型', trigger: 'blur' }

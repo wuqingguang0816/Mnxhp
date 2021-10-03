@@ -39,7 +39,7 @@
             <JNPF-table v-loading="dataListLoading" :data="dataAuthorizeList" row-key="id"
               default-expand-all :tree-props="{children: 'children', hasChildren: ''}">
               <el-table-column prop="enCode" label="字段名称" />
-              <el-table-column prop="fullName" label="字段注解" show-overflow-tooltip />
+              <el-table-column prop="fullName" label="字段说明" show-overflow-tooltip />
               <el-table-column prop="type" label="字段类型" width="70" />
               <el-table-column prop="conditionSymbol" label="条件符号" show-overflow-tooltip />
               <el-table-column label="条件内容" width="70">
