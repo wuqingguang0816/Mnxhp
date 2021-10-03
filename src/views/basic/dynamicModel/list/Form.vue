@@ -7,7 +7,7 @@
         <parser :form-conf="formConf" @submit="sumbitForm" :key="key" ref="dynamicForm"
           :setFormData="setFormData" :setShowOrHide="setShowOrHide" v-if="!loading" />
         <span slot="footer" class="dialog-footer">
-          <template v-if="formConf.hasPrintBtn && formConf.printId && dataForm.id">
+          <template v-if="formConf.hasPrintBtn && formConf.printId && dataForm.id && false">
             <el-button type="primary" @click="print">
               {{formConf.printButtonText||'打 印'}}
             </el-button>
@@ -24,7 +24,7 @@
           <div class="JNPF-common-page-header">
             <el-page-header @back="goBack" :content="!dataForm.id ? '新建' : '编辑'" />
             <div class="options">
-              <template v-if="formConf.hasPrintBtn && formConf.printId && dataForm.id">
+              <template v-if="formConf.hasPrintBtn && formConf.printId && dataForm.id && false">
                 <el-button type="primary" @click="print">
                   {{formConf.printButtonText||'打 印'}}
                 </el-button>
