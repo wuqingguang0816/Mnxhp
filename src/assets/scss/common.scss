@@ -744,7 +744,8 @@
   padding: 10px;
 }
 
-.functional {
+.functional,
+.blend {
   .navbar {
 
     &.dark {
@@ -815,7 +816,7 @@
         // width: 120px;
         float: left;
         text-align: center;
-        background: transparent;
+        background: transparent !important;
         color: #333;
 
         i {
