@@ -10,6 +10,11 @@
             v-if="!loading" />
         </div>
         <span slot="footer" class="dialog-footer">
+          <template v-if="formData.hasPrintBtn && formData.printId">
+            <el-button type="primary" @click="printBrowseVisible=true">
+              {{formData.printButtonText||'打 印'}}
+            </el-button>
+          </template>
           <el-button @click="visible = false">{{$t('common.cancelButton')}}</el-button>
         </span>
       </el-dialog>
@@ -20,6 +25,11 @@
           <div class="JNPF-common-page-header">
             <el-page-header @back="goBack" content="详情" />
             <div class="options">
+              <template v-if="formData.hasPrintBtn && formData.printId">
+                <el-button type="primary" @click="printBrowseVisible=true">
+                  {{formData.printButtonText||'打 印'}}
+                </el-button>
+              </template>
               <el-button @click="goBack">{{$t('common.cancelButton')}}</el-button>
             </div>
           </div>
@@ -33,6 +43,7 @@
       </transition>
     </template>
     <Detail v-if="detailVisible" ref="Detail" @close="detailVisible = false" />
+    <print-browse :visible.sync="printBrowseVisible" :id="formData.printId" :formId="dataForm.id" />
   </div>
 </template>
 
@@ -40,9 +51,10 @@
 import { getDataChange, getConfigData } from '@/api/onlineDev/visualDev'
 import { deepClone } from '@/utils'
 import Parser from './Parser'
+import PrintBrowse from '@/components/PrintBrowse'
 export default {
   name: 'Detail',
-  components: { Parser },
+  components: { Parser, PrintBrowse },
   data() {
     return {
       visible: false,
@@ -58,6 +70,7 @@ export default {
       detailVisible: false,
       relationData: {},
       useFormPermission: false,
+      printBrowseVisible: false,
       formOperates: []
     }
   },

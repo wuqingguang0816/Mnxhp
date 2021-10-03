@@ -10,7 +10,9 @@ export const formConf = {
   disabled: false,
   span: 24,
   formBtns: true,
+  hasCancelBtn: true,
   cancelButtonText: '取 消',
+  hasConfirmBtn: true,
   confirmButtonText: '确 定',
   idGlobal: 100
 }

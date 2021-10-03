@@ -13,8 +13,13 @@ export const formConf = {
   disabled: false,
   span: 24,
   formBtns: false,
+  hasCancelBtn: true,
   cancelButtonText: '取 消',
+  hasConfirmBtn: true,
   confirmButtonText: '确 定',
+  hasPrintBtn: false,
+  printButtonText: '打 印',
+  printId: '',
   formStyle: '',
   funcs: {
     onLoad: '({ formData, setFormData, setRequired, setDisabled }) => {\n    // 在此编写代码\n    \n}',

@@ -240,12 +240,24 @@
           </el-form-item>
           <template v-if="modelType != 3 && modelType!=6">
             <el-divider>表单按钮</el-divider>
-            <el-form-item label="取消按钮文本">
-              <el-input v-model="formConf.cancelButtonText" placeholder="默认为‘取 消’" />
-            </el-form-item>
-            <el-form-item label="确定按钮文本">
-              <el-input v-model="formConf.confirmButtonText" placeholder="默认为‘确 定’" />
-            </el-form-item>
+            <div class="per-cell">
+              <el-checkbox v-model="formConf.hasConfirmBtn" disabled>确定</el-checkbox>
+              <el-input v-model="formConf.confirmButtonText" />
+            </div>
+            <div class="per-cell">
+              <el-checkbox v-model="formConf.hasCancelBtn" disabled>取消</el-checkbox>
+              <el-input v-model="formConf.cancelButtonText" />
+            </div>
+            <template v-if="modelType==1">
+              <div class="per-cell" :class="{'last':!formConf.hasPrintBtn}">
+                <el-checkbox v-model="formConf.hasPrintBtn">打印</el-checkbox>
+                <el-input v-model="formConf.printButtonText" />
+              </div>
+              <el-form-item label="打印设置" v-if="formConf.hasPrintBtn">
+                <JNPF-TreeSelect :options="printTplList" v-model="formConf.printId"
+                  placeholder="请选择打印模板" lastLevel clearable></JNPF-TreeSelect>
+              </el-form-item>
+            </template>
           </template>
           <template v-if="formConf.funcs && (modelType==1||modelType==6)">
             <el-divider>表单事件</el-divider>
@@ -365,6 +377,7 @@ export default {
       activeScript: '',
       activeFunc: '',
       isConf: false,
+      printTplList: [],
       dictionaryOptions: [],
       dataInterfaceOptions: [],
       justifyOptions: [
@@ -447,6 +460,7 @@ export default {
   created() {
     this.getDictionaryType()
     this.getDataInterfaceSelector()
+    this.getPringTplList()
   },
   methods: {
     addReg() {
@@ -598,6 +612,15 @@ export default {
         this.dataInterfaceOptions = res.data
       })
     },
+    getPringTplList() {
+      this.$store.dispatch('base/getPrintTree').then(res => {
+        let list = res.filter(o => o.children && o.children.length)
+        this.printTplList = list.map(o => ({
+          ...o,
+          hasChildren: true
+        }))
+      })
+    },
     getTipText(key) {
       let text = ''
       switch (key) {
@@ -625,7 +648,7 @@ export default {
       this.activeFunc = funcName
       this.isConf = isConf || false
       this.formScriptVisible = true
-    }
+    },
   }
 }
 </script>
@@ -715,6 +738,17 @@ export default {
     >>> .el-select {
       width: 100%;
     }
+  }
+}
+.per-cell {
+  display: flex;
+  align-items: center;
+  margin-bottom: 18px;
+  .el-checkbox {
+    width: 146px;
+  }
+  &.last {
+    margin-bottom: 0;
   }
 }
 </style>

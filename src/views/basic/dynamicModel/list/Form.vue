@@ -7,6 +7,11 @@
         <parser :form-conf="formConf" @submit="sumbitForm" :key="key" ref="dynamicForm"
           :setFormData="setFormData" :setShowOrHide="setShowOrHide" v-if="!loading" />
         <span slot="footer" class="dialog-footer">
+          <template v-if="formConf.hasPrintBtn && formConf.printId">
+            <el-button type="primary" @click="print">
+              {{formConf.printButtonText||'打 印'}}
+            </el-button>
+          </template>
           <el-button @click="visible = false">{{formConf.cancelButtonText||'取 消'}}</el-button>
           <el-button type="primary" @click="dataFormSubmit()" :loading="btnLoading">
             {{formConf.confirmButtonText||'确 定'}}</el-button>
@@ -19,6 +24,11 @@
           <div class="JNPF-common-page-header">
             <el-page-header @back="goBack" :content="!dataForm.id ? '新建' : '编辑'" />
             <div class="options">
+              <template v-if="formConf.hasPrintBtn && formConf.printId">
+                <el-button type="primary" @click="print">
+                  {{formConf.printButtonText||'打 印'}}
+                </el-button>
+              </template>
               <el-button type="primary" @click="dataFormSubmit()" :loading="btnLoading">
                 {{formConf.confirmButtonText||'确 定'}}</el-button>
               <el-button @click="goBack">{{formConf.cancelButtonText||'取 消'}}</el-button>
@@ -31,6 +41,7 @@
         </div>
       </transition>
     </template>
+    <print-browse :visible.sync="printBrowseVisible" :id="formConf.printId" :formId="dataForm.id" />
   </div>
 </template>
 
@@ -38,9 +49,10 @@
 import { createModel, updateModel, getModelInfo } from '@/api/onlineDev/visualDev'
 import Parser from '@/components/Generator/parser/Parser'
 import ParserMixin from '@/components/Generator/parser/mixin'
+import PrintBrowse from '@/components/PrintBrowse'
 import { deepClone } from '@/utils'
 export default {
-  components: { Parser },
+  components: { Parser, PrintBrowse },
   mixins: [ParserMixin],
   data() {
     return {
@@ -55,12 +67,17 @@ export default {
       loading: true,
       isPreview: false,
       useFormPermission: false,
+      printBrowseVisible: false,
       formOperates: []
     }
   },
   methods: {
     goBack() {
       this.$emit('refreshDataList')
+    },
+    print() {
+      if (this.isPreview) return
+      this.printBrowseVisible = true
     },
     init(formConf, modelId, id, isPreview, useFormPermission) {
       this.formConf = deepClone(formConf)

@@ -5,6 +5,9 @@
     <parser :form-conf="formConf" @submit="sumbitForm" :key="key" ref="dynamicForm"
       :setFormData="setFormData" :setShowOrHide="setShowOrHide" />
     <div slot="footer">
+      <el-button type="primary" v-if="formConf.hasPrintBtn && formConf.printId">
+        {{formConf.printButtonText||'打 印'}}
+      </el-button>
       <el-button @click="close">{{formConf.cancelButtonText||'取 消'}}</el-button>
       <el-button type="primary" @click="handelConfirm">{{formConf.confirmButtonText||'确 定'}}
       </el-button>
