@@ -7,7 +7,7 @@
         <parser :form-conf="formConf" @submit="sumbitForm" :key="key" ref="dynamicForm"
           :setFormData="setFormData" :setShowOrHide="setShowOrHide" v-if="!loading" />
         <span slot="footer" class="dialog-footer">
-          <template v-if="formConf.hasPrintBtn && formConf.printId">
+          <template v-if="formConf.hasPrintBtn && formConf.printId && dataForm.id">
             <el-button type="primary" @click="print">
               {{formConf.printButtonText||'打 印'}}
             </el-button>
@@ -24,7 +24,7 @@
           <div class="JNPF-common-page-header">
             <el-page-header @back="goBack" :content="!dataForm.id ? '新建' : '编辑'" />
             <div class="options">
-              <template v-if="formConf.hasPrintBtn && formConf.printId">
+              <template v-if="formConf.hasPrintBtn && formConf.printId && dataForm.id">
                 <el-button type="primary" @click="print">
                   {{formConf.printButtonText||'打 印'}}
                 </el-button>
@@ -76,7 +76,7 @@ export default {
       this.$emit('refreshDataList')
     },
     print() {
-      if (this.isPreview) return
+      if (this.isPreview) return this.$message({ message: '功能预览不支持打印', type: 'warning' })
       this.printBrowseVisible = true
     },
     init(formConf, modelId, id, isPreview, useFormPermission) {
