@@ -810,7 +810,7 @@ export default {
     },
 
     getOrgSelectLabel(type) {
-      return this.$refs[type + '-org']['selectedLabels']
+      return this.$refs[type + '-org'] && this.$refs[type + '-org']['selectedLabels']
     },
     /**
      * 开始节点确认保存
