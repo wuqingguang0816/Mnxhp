@@ -53,10 +53,11 @@ export function exportTpl(id) {
   })
 }
 // 获取下拉框列表
-export function getPrintDevSelector() {
+export function getPrintDevSelector(type) {
   return request({
     url: '/api/system/printDev/Selector',
-    method: 'GET'
+    method: 'GET',
+    data: { type }
   })
 }
 // 导入
