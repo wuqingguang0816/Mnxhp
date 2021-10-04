@@ -5,7 +5,8 @@
         :visible.sync="visible" class="JNPF-dialog JNPF-dialog_center" lock-scroll
         :width="formConf.generalWidth">
         <parser :form-conf="formConf" @submit="sumbitForm" :key="key" ref="dynamicForm"
-          :setFormData="setFormData" :setShowOrHide="setShowOrHide" v-if="!loading" />
+          :setFormData="setFormData" :setShowOrHide="setShowOrHide" :setRequired="setRequired"
+          :setDisabled="setDisabled" :setFieldOptions="setFieldOptions" v-if="!loading" />
         <span slot="footer" class="dialog-footer">
           <template v-if="formConf.hasPrintBtn && formConf.printId && dataForm.id && false">
             <el-button type="primary" @click="print">
@@ -36,7 +37,8 @@
           </div>
           <div class="dynamic-form-main" :style="{margin: '0 auto',width:formConf.fullScreenWidth}">
             <parser :form-conf="formConf" @submit="sumbitForm" :key="key" ref="dynamicForm"
-              :setFormData="setFormData" :setShowOrHide="setShowOrHide" v-if="!loading" />
+              :setFormData="setFormData" :setShowOrHide="setShowOrHide" :setRequired="setRequired"
+              :setDisabled="setDisabled" :setFieldOptions="setFieldOptions" v-if="!loading" />
           </div>
         </div>
       </transition>
@@ -138,7 +140,7 @@ export default {
       }
       loop(form.fields)
     },
-    sumbitForm(data) {
+    sumbitForm(data, callback) {
       if (!data) return
       this.btnLoading = true
       this.dataForm.data = JSON.stringify(data)
@@ -149,6 +151,7 @@ export default {
           type: 'success',
           duration: 1500,
           onClose: () => {
+            if (callback && typeof callback === "function") callback()
             this.visible = false
             this.btnLoading = false
             this.$emit('refreshDataList', true)

@@ -1,7 +1,8 @@
 <template >
   <div class="flow-form" :style="{margin: '0 auto',width:formConf.fullScreenWidth}">
     <parser :form-conf="formConf" @submit="sumbitForm" :key="key" ref="dynamicForm"
-      :setFormData="setFormData" :setShowOrHide="setShowOrHide" v-if="!loading" />
+      :setFormData="setFormData" :setShowOrHide="setShowOrHide" :setRequired="setRequired"
+      :setDisabled="setDisabled" :setFieldOptions="setFieldOptions" v-if="!loading" />
   </div>
 </template>
 <script>
@@ -99,9 +100,10 @@ export default {
       }
       loop(form.fields)
     },
-    sumbitForm(data) {
+    sumbitForm(data, callback) {
       if (!data) return
       this.dataForm.data = JSON.stringify(data)
+      if (callback && typeof callback === "function") callback()
       if (this.setting.type == 1) {
         if (this.eventType === 'save' || this.eventType === 'submit') {
           this.selfSubmit()

@@ -3,7 +3,8 @@
     append-to-body v-on="$listeners" @open="onOpen" @close="onClose"
     class="JNPF-dialog JNPF-dialog_center" title="预览" :width="formConf.generalWidth">
     <parser :form-conf="formConf" @submit="sumbitForm" :key="key" ref="dynamicForm"
-      :setFormData="setFormData" :setShowOrHide="setShowOrHide" />
+      :setFormData="setFormData" :setShowOrHide="setShowOrHide" :setRequired="setRequired"
+      :setDisabled="setDisabled" :setFieldOptions="setFieldOptions" />
     <div slot="footer">
       <el-button type="primary" v-if="formConf.hasPrintBtn && formConf.printId">
         {{formConf.printButtonText||'打 印'}}

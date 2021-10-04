@@ -1,7 +1,7 @@
 <template>
   <el-dialog title="表单脚本" :close-on-click-modal="false"
     class="JNPF-dialog JNPF-dialog_center form-script-dialog" lock-scroll append-to-body
-    v-bind="$attrs" width="1000px" :modal-append-to-body="false" v-on="$listeners" @open="onOpen">
+    v-bind="$attrs" width="1100px" :modal-append-to-body="false" v-on="$listeners" @open="onOpen">
     <div class="form-script-dialog-body">
       <div class="left-tree">
         <el-tree :data="treeData" default-expand-all :expand-on-click-node="false"
@@ -12,9 +12,14 @@
           <JNPFCodeEditor v-model="text" :options="options" ref="CodeEditor" />
         </div>
         <div class="tips">
-          <p>请从左侧面板选择的字段名，支持JavaScript的脚本.参考编写脚本API</p>
-          <p>data为当前组件的选中值，formData为表单数据，setFormData设置表单某个组件数据,参数(prop,value)</p>
-          <p>setShowOrHide设置显示或隐藏,setRequired设置必填项，setDisabled设置禁用项，参数(prop,value)</p>
+          <p>请从左侧面板选择的字段名，支持JavaScript的脚本，参考编写脚本API</p>
+          <p>data--当前组件的选中值，formData--表单数据，setFormData--设置表单某个组件数据(prop,value)</p>
+          <p>
+            setShowOrHide--设置显示或隐藏(prop,value)，setRequired--设置必填项(prop,value)，setDisabled--设置禁用项(prop,value)
+          </p>
+          <p>
+            request--异步请求(url,method,data)，getFieldOptions--获取选项(prop)，setFieldOptions--设置选项(prop,value)
+          </p>
         </div>
       </div>
     </div>

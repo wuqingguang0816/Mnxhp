@@ -22,9 +22,9 @@ export const formConf = {
   printId: '',
   formStyle: '',
   funcs: {
-    onLoad: '({ formData, setFormData, setRequired, setDisabled }) => {\n    // 在此编写代码\n    \n}',
-    beforeSubmit: '({ formData, setFormData, setRequired, setDisabled }) => {\n    // 在此编写代码\n    \n}',
-    afterSubmit: '({ formData, setFormData, setRequired, setDisabled }) => {\n    // 在此编写代码\n    \n}',
+    onLoad: '({ formData, request}) => {\n    // 在此编写代码\n    \n}',
+    beforeSubmit: '({ formData, setFormData, setShowOrHide, setRequired, setDisabled, request, getFieldOptions, setFieldOptions }) => {\n    // 在此编写代码\n\n    // 继续执行返回true\n    return true\n}',
+    afterSubmit: '({ formData, setFormData, setShowOrHide, setRequired, setDisabled, request, getFieldOptions, setFieldOptions }) => {\n    // 在此编写代码\n    \n}',
   },
   idGlobal: 100
 }
@@ -52,8 +52,8 @@ export const inputComponents = [{
       append: ''
     },
     on: {
-      change: '({ data, formData, setFormData, setShowOrHide, setRequired, setDisabled }) => {\n    // 在此编写代码\n    \n}',
-      blur: '({ data, formData, setFormData, setShowOrHide, setRequired, setDisabled }) => {\n    // 在此编写代码\n    \n}',
+      change: '({ data, formData, setFormData, setShowOrHide, setRequired, setDisabled, request, getFieldOptions, setFieldOptions }) => {\n    // 在此编写代码\n    \n}',
+      blur: '({ data, formData, setFormData, setShowOrHide, setRequired, setDisabled, request, getFieldOptions, setFieldOptions }) => {\n    // 在此编写代码\n    \n}',
     },
     placeholder: '请输入',
     style: { width: '100%' },
@@ -83,6 +83,9 @@ export const inputComponents = [{
       trigger: 'blur'
     },
     type: 'textarea',
+    on: {
+      change: '({ data, formData, setFormData, setShowOrHide, setRequired, setDisabled, request, getFieldOptions, setFieldOptions }) => {\n    // 在此编写代码\n    \n}',
+    },
     placeholder: '请输入',
     autosize: {
       minRows: 4,
@@ -110,6 +113,9 @@ export const inputComponents = [{
       regList: [],
       trigger: ['blur', 'change']
     },
+    on: {
+      change: '({ data, formData, setFormData, setShowOrHide, setRequired, setDisabled, request, getFieldOptions, setFieldOptions }) => {\n    // 在此编写代码\n    \n}',
+    },
     placeholder: '数字文本',
     min: undefined,
     max: undefined,
@@ -134,6 +140,9 @@ export const inputComponents = [{
       dragDisabled: false,
       regList: [],
       trigger: 'change'
+    },
+    on: {
+      change: '({ data, formData, setFormData, setShowOrHide, setRequired, setDisabled, request, getFieldOptions, setFieldOptions }) => {\n    // 在此编写代码\n    \n}',
     },
     disabled: false,
     'active-text': '',
@@ -177,6 +186,9 @@ export const inputComponents = [{
         id: "2"
       }]
     },
+    on: {
+      change: '({ data, formData, setFormData, setShowOrHide, setRequired, setDisabled, request, getFieldOptions, setFieldOptions }) => {\n    // 在此编写代码\n    \n}',
+    },
     style: {},
     size: 'small',
     disabled: false
@@ -215,6 +227,9 @@ export const inputComponents = [{
         id: "2"
       }]
     },
+    on: {
+      change: '({ data, formData, setFormData, setShowOrHide, setRequired, setDisabled, request, getFieldOptions, setFieldOptions }) => {\n    // 在此编写代码\n    \n}',
+    },
     style: {},
     size: 'small',
     disabled: false
@@ -252,8 +267,8 @@ export const inputComponents = [{
       }]
     },
     on: {
-      change: '({ data, formData, setFormData, setShowOrHide, setRequired, setDisabled }) => {\n    // 在此编写代码\n    \n}',
-      blur: '({ data, formData, setFormData, setShowOrHide, setRequired, setDisabled }) => {\n    // 在此编写代码\n    \n}',
+      change: '({ data, formData, setFormData, setShowOrHide, setRequired, setDisabled, request, getFieldOptions, setFieldOptions }) => {\n    // 在此编写代码\n    \n}',
+      blur: '({ data, formData, setFormData, setShowOrHide, setRequired, setDisabled, request, getFieldOptions, setFieldOptions }) => {\n    // 在此编写代码\n    \n}',
     },
     placeholder: '请选择',
     style: { width: '100%' },
@@ -289,6 +304,9 @@ export const inputComponents = [{
         fullName: '选项1-1'
       }]
     }],
+    on: {
+      change: '({ data, formData, setFormData, setShowOrHide, setRequired, setDisabled, request, getFieldOptions, setFieldOptions }) => {\n    // 在此编写代码\n    \n}',
+    },
     placeholder: '请选择',
     style: { width: '100%' },
     props: {
@@ -321,6 +339,9 @@ export const inputComponents = [{
       regList: [],
       trigger: 'change'
     },
+    on: {
+      change: '({ data, formData, setFormData, setShowOrHide, setRequired, setDisabled, request, getFieldOptions, setFieldOptions }) => {\n    // 在此编写代码\n    \n}',
+    },
     placeholder: '请选择',
     type: 'date',
     style: { width: '100%' },
@@ -345,6 +366,9 @@ export const inputComponents = [{
       dragDisabled: false,
       regList: [],
       trigger: 'change'
+    },
+    on: {
+      change: '({ data, formData, setFormData, setShowOrHide, setRequired, setDisabled, request, getFieldOptions, setFieldOptions }) => {\n    // 在此编写代码\n    \n}',
     },
     placeholder: '请选择',
     style: { width: '100%' },
@@ -441,6 +465,9 @@ export const inputComponents = [{
       regList: [],
       trigger: 'change'
     },
+    on: {
+      change: '({ data, formData, setFormData, setShowOrHide, setRequired, setDisabled, request, getFieldOptions, setFieldOptions }) => {\n    // 在此编写代码\n    \n}',
+    },
     style: {},
     max: 5,
     'allow-half': false,
@@ -463,6 +490,9 @@ export const inputComponents = [{
       dragDisabled: false,
       regList: [],
       trigger: 'change'
+    },
+    on: {
+      change: '({ data, formData, setFormData, setShowOrHide, setRequired, setDisabled, request, getFieldOptions, setFieldOptions }) => {\n    // 在此编写代码\n    \n}',
     },
     disabled: false,
     min: 0,
@@ -552,6 +582,9 @@ export const selectComponents = [{
       regList: [],
       trigger: 'change'
     },
+    on: {
+      change: '({ data, formData, setFormData, setShowOrHide, setRequired, setDisabled, request, getFieldOptions, setFieldOptions }) => {\n    // 在此编写代码\n    \n}',
+    },
     placeholder: '请选择',
     multiple: false,
     clearable: true,
@@ -572,6 +605,9 @@ export const selectComponents = [{
       dragDisabled: false,
       regList: [],
       trigger: 'change'
+    },
+    on: {
+      change: '({ data, formData, setFormData, setShowOrHide, setRequired, setDisabled, request, getFieldOptions, setFieldOptions }) => {\n    // 在此编写代码\n    \n}',
     },
     placeholder: '请选择',
     multiple: false,
@@ -594,6 +630,9 @@ export const selectComponents = [{
       regList: [],
       trigger: 'change'
     },
+    on: {
+      change: '({ data, formData, setFormData, setShowOrHide, setRequired, setDisabled, request, getFieldOptions, setFieldOptions }) => {\n    // 在此编写代码\n    \n}',
+    },
     placeholder: '请选择',
     multiple: false,
     clearable: true,
@@ -614,6 +653,9 @@ export const selectComponents = [{
       dragDisabled: false,
       regList: [],
       trigger: 'change'
+    },
+    on: {
+      change: '({ data, formData, setFormData, setShowOrHide, setRequired, setDisabled, request, getFieldOptions, setFieldOptions }) => {\n    // 在此编写代码\n    \n}',
     },
     placeholder: '请选择',
     multiple: false,
@@ -638,6 +680,9 @@ export const selectComponents = [{
       dataType: 'static',
       dictionaryType: '',
       propsUrl: ''
+    },
+    on: {
+      change: '({ data, formData, setFormData, setShowOrHide, setRequired, setDisabled, request, getFieldOptions, setFieldOptions }) => {\n    // 在此编写代码\n    \n}',
     },
     placeholder: '请选择',
     props: {
@@ -717,6 +762,9 @@ export const selectComponents = [{
       dragDisabled: false,
       regList: [],
       trigger: 'change'
+    },
+    on: {
+      change: '({ data, formData, setFormData, setShowOrHide, setRequired, setDisabled, request, getFieldOptions, setFieldOptions }) => {\n    // 在此编写代码\n    \n}',
     },
     placeholder: '请选择',
     disabled: false,

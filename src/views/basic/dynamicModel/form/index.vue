@@ -11,7 +11,8 @@
       </div>
       <div class="dynamic-form-main" :style="{margin: '0 auto',width:formConf.fullScreenWidth}">
         <parser :form-conf="formConf" @submit="sumbitForm" :key="key" ref="dynamicForm"
-          :setFormData="setFormData" :setShowOrHide="setShowOrHide" v-if="!loading" />
+          :setFormData="setFormData" :setShowOrHide="setShowOrHide" :setRequired="setRequired"
+          :setDisabled="setDisabled" :setFieldOptions="setFieldOptions" v-if="!loading" />
       </div>
     </div>
   </div>
@@ -48,7 +49,7 @@ export default {
         this.key = +new Date()
       })
     },
-    sumbitForm(data) {
+    sumbitForm(data, callback) {
       if (!data) return
       this.btnLoading = true
       this.dataForm.data = JSON.stringify(data)
@@ -58,6 +59,7 @@ export default {
           type: 'success',
           duration: 1500,
           onClose: () => {
+            if (callback && typeof callback === "function") callback()
             this.btnLoading = false
             this.resetForm()
           }

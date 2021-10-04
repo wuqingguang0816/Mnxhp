@@ -4,6 +4,7 @@ import render from '@/components/Generator/render/render.js'
 import { ruleTrigger, dyOptionsList } from '@/components/Generator/generator/comConfig'
 import { getDictionaryDataSelector } from '@/api/systemData/dictionary'
 import { previewDataInterface } from '@/api/systemData/dataInterface'
+import request from '@/utils/request'
 
 const layouts = {
   colFormItem(h, scheme) {
@@ -162,13 +163,6 @@ function getFunc(str) {
 
 function buildListeners(scheme) {
   const config = scheme.__config__
-  const parameter = {
-    formData: this[this.formConf.formModel],
-    setFormData: this.setFormData,
-    setShowOrHide: this.setShowOrHide,
-    setRequired: this.setRequired,
-    setDisabled: this.setDisabled
-  }
   const listeners = {}
   if (scheme.on) {
     // 响应 组件事件
@@ -176,7 +170,7 @@ function buildListeners(scheme) {
       const str = scheme.on[key];
       const func = getFunc(str);
       if (!func) return
-      listeners[key] = event => func.call(this, { data: event, ...parameter })
+      listeners[key] = event => func.call(this, { data: event, ...this.parameter })
     })
   }
   // 响应 render.js 中的 vModel $emit('input', val)
@@ -192,6 +186,9 @@ export default {
   props: {
     setFormData: Function,
     setShowOrHide: Function,
+    setRequired: Function,
+    setDisabled: Function,
+    setFieldOptions: Function,
     formConf: {
       type: Object,
       required: true
@@ -209,9 +206,23 @@ export default {
     this.buildRules(data.formConfCopy.fields, data[this.formConf.formRules])
     this.buildOptions(data.formConfCopy.fields, data.options)
     this.$nextTick(() => {
-      this.buildMethods(data.formConfCopy, data[this.formConf.formModel])
+      this.onLoad(data.formConfCopy, data[this.formConf.formModel])
     })
     return data
+  },
+  computed: {
+    parameter() {
+      return {
+        formData: this[this.formConf.formModel],
+        setFormData: this.setFormData,
+        setShowOrHide: this.setShowOrHide,
+        setRequired: this.setRequired,
+        setDisabled: this.setDisabled,
+        request: this.request,
+        getFieldOptions: this.getFieldOptions,
+        setFieldOptions: this.setFieldOptions
+      }
+    }
   },
   methods: {
     initFormData(componentList, formData) {
@@ -267,11 +278,11 @@ export default {
         if (config.children) this.buildRules(config.children, rules)
       })
     },
-    buildMethods(formConfCopy, formData) {
+    onLoad(formConfCopy, formData) {
       if (!formConfCopy || !formConfCopy.funcs || !formConfCopy.funcs.onLoad) return
       const onLoadFunc = getFunc(formConfCopy.funcs.onLoad)
       if (!onLoadFunc) return
-      onLoadFunc({ formData, setFormData: this.setFormData })
+      onLoadFunc({ formData, request: this.request })
     },
     resetForm() {
       this.$store.commit('generator/UPDATE_RELATION_DATA', {})
@@ -280,7 +291,6 @@ export default {
       Object.keys(this.tableRefs).forEach(vModel => {
         this.$refs[vModel].$children[0].resetTable()
       })
-      if (this.dyMtehods && this.dyMtehods.onLoad && typeof this.dyMtehods.onLoad === "function") this.dyMtehods.onLoad(this[this.formConf.formModel])
     },
     checkTableData() {
       let valid = true
@@ -290,26 +300,31 @@ export default {
       })
       return valid
     },
+    request(url, method, data) {
+      if (!url) return
+      return request({
+        url: url,
+        method: method || 'GET',
+        data: data || {}
+      })
+    },
+    getFieldOptions(prop) {
+      if (!prop) return []
+      return this.options[prop + 'Options'] || []
+    },
     beforeSubmit() {
       let valid = true
-      if (this.dyMtehods && this.dyMtehods.beforeSubmit && typeof this.dyMtehods.beforeSubmit === "function") {
-        valid = this.dyMtehods.beforeSubmit(this[this.formConf.formModel])
-      }
-      return valid
-    },
-    onValidate() {
-      let valid = true
-      if (this.dyMtehods && this.dyMtehods.onValidate && typeof this.dyMtehods.onValidate === "function") {
-        valid = this.dyMtehods.onValidate(this[this.formConf.formModel])
-      }
+      if (!this.formConfCopy || !this.formConfCopy.funcs || !this.formConfCopy.funcs.beforeSubmit) return valid
+      const func = getFunc(this.formConfCopy.funcs.beforeSubmit)
+      if (!func) return valid
+      valid = func(this.parameter)
       return valid
     },
     afterSubmit() {
-      let valid = true
-      if (this.dyMtehods && this.dyMtehods.afterSubmit && typeof this.dyMtehods.afterSubmit === "function") {
-        valid = this.dyMtehods.afterSubmit(this[this.formConf.formModel])
-      }
-      return valid
+      if (!this.formConfCopy || !this.formConfCopy.funcs || !this.formConfCopy.funcs.afterSubmit) return
+      const func = getFunc(this.formConfCopy.funcs.afterSubmit)
+      if (!func) return
+      func(this.parameter)
     },
     submitForm() {
       const beforeSubmitValid = this.beforeSubmit()
@@ -318,8 +333,6 @@ export default {
       this.$refs[this.formConf.formRef].validate(valid => {
         if (!valid) return false
         if (!isTableValid) return false
-        const onValidateValid = this.onValidate()
-        if (!onValidateValid) return false
         // 触发sumit事件
         this.$emit('submit', this[this.formConf.formModel], this.afterSubmit)
         return true
