@@ -93,7 +93,7 @@
           </el-table-column>
         </JNPF-table>
         <pagination :total="total" :page.sync="params.currentPage" :limit.sync="params.pageSize"
-          @pagination="initData" />
+          @pagination="getList" />
       </div>
     </div>
     <Form v-if="formVisible" ref="Form" @close="colseForm" />
