@@ -120,8 +120,10 @@ export default {
         let ids = []
         for (let i = 0; i < res.data.list.length; i++) {
           const item = res.data.list[i]
-          for (let j = 0; j < item.children.length; j++) {
-            ids.push(item.children[j].id)
+          if (item.children && item.children.length) {
+            for (let j = 0; j < item.children.length; j++) {
+              ids.push(item.children[j].id)
+            }
           }
         }
         this.roleAllIds = ids
