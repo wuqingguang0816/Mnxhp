@@ -270,8 +270,11 @@ export default {
           })
           break
       }
-      if (this.active !== 5) this.getAuthorizeList()
-      else this.treeLoading = false
+      if (this.active !== 5) {
+        this.getAuthorizeList()
+      } else {
+        this.treeLoading = false
+      }
     },
     // 设置数据
     selectTreeNodeClick() {
