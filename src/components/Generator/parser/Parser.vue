@@ -6,6 +6,8 @@ import { getDictionaryDataSelector } from '@/api/systemData/dictionary'
 import { previewDataInterface } from '@/api/systemData/dataInterface'
 import request from '@/utils/request'
 
+const hasOptionsList = [...dyOptionsList, 'popupSelect']
+
 const layouts = {
   colFormItem(h, scheme) {
     const config = scheme.__config__
@@ -25,10 +27,11 @@ const layouts = {
     }
   },
   rowFormItem(h, scheme) {
+    const listeners = buildListeners.call(this, scheme)
     if (scheme.__config__.jnpfKey === 'tab') {
       return (
         <el-col span={scheme.__config__.span} class="mb-10">
-          <el-tabs type={scheme.type} tab-position={scheme['tab-position']} vModel={scheme.__config__.active}>
+          <el-tabs type={scheme.type} tab-position={scheme['tab-position']} vModel={scheme.__config__.active} {...{ on: listeners }}>
             {
               scheme.__config__.children.map((item, i) => {
                 let child = renderChildren.call(this, h, item)
@@ -48,7 +51,7 @@ const layouts = {
     if (scheme.__config__.jnpfKey === 'collapse') {
       return (
         <el-col span={scheme.__config__.span} class="mb-20">
-          <el-collapse vModel={scheme.__config__.active} accordion={scheme.accordion}>
+          <el-collapse vModel={scheme.__config__.active} accordion={scheme.accordion} {...{ on: listeners }}>
             {
               scheme.__config__.children.map((item, i) => {
                 let child = renderChildren.call(this, h, item)
@@ -243,15 +246,23 @@ export default {
             if (!config.dictionaryType) return
             getDictionaryDataSelector(config.dictionaryType).then(res => {
               isTreeSelect ? cur.options = res.data.list : cur.__slot__.options = res.data.list
+              isTreeSelect ? data[cur.__vModel__ + 'Options'] = cur.options : data[cur.__vModel__ + 'Options'] = cur.__slot__.options
             })
           }
           if (config.dataType === 'dynamic') {
             if (!config.propsUrl) return
             previewDataInterface(config.propsUrl).then(res => {
               isTreeSelect ? cur.options = res.data : cur.__slot__.options = res.data
+              isTreeSelect ? data[cur.__vModel__ + 'Options'] = cur.options : data[cur.__vModel__ + 'Options'] = cur.__slot__.options
             })
           }
-          isTreeSelect ? data[cur.__vModel__ + 'Options'] = cur.options : data[cur.__vModel__ + 'Options'] = cur.__slot__.options
+        }
+        if (config.jnpfKey === 'popupSelect') {
+          if (!cur.interfaceId) return
+          previewDataInterface(cur.interfaceId).then(res => {
+            cur.options = res.data
+            data[cur.__vModel__ + 'Options'] = res.data
+          })
         }
         if (config.children && config.jnpfKey !== 'table') this.buildOptions(config.children, data)
       })

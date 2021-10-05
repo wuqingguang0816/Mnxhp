@@ -112,6 +112,7 @@ export const inputComponents = [{
     },
     on: {
       change: '({ data, formData, setFormData, setShowOrHide, setRequired, setDisabled, request, getFieldOptions, setFieldOptions }) => {\n    // 在此编写代码\n    \n}',
+      blur: '({ data, formData, setFormData, setShowOrHide, setRequired, setDisabled, request, getFieldOptions, setFieldOptions }) => {\n    // 在此编写代码\n    \n}',
     },
     placeholder: '数字文本',
     min: undefined,
@@ -303,6 +304,7 @@ export const inputComponents = [{
     }],
     on: {
       change: '({ data, formData, setFormData, setShowOrHide, setRequired, setDisabled, request, getFieldOptions, setFieldOptions }) => {\n    // 在此编写代码\n    \n}',
+      blur: '({ data, formData, setFormData, setShowOrHide, setRequired, setDisabled, request, getFieldOptions, setFieldOptions }) => {\n    // 在此编写代码\n    \n}',
     },
     placeholder: '请选择',
     style: { width: '100%' },
@@ -338,6 +340,7 @@ export const inputComponents = [{
     },
     on: {
       change: '({ data, formData, setFormData, setShowOrHide, setRequired, setDisabled, request, getFieldOptions, setFieldOptions }) => {\n    // 在此编写代码\n    \n}',
+      blur: '({ data, formData, setFormData, setShowOrHide, setRequired, setDisabled, request, getFieldOptions, setFieldOptions }) => {\n    // 在此编写代码\n    \n}',
     },
     placeholder: '请选择',
     type: 'date',
@@ -366,6 +369,7 @@ export const inputComponents = [{
     },
     on: {
       change: '({ data, formData, setFormData, setShowOrHide, setRequired, setDisabled, request, getFieldOptions, setFieldOptions }) => {\n    // 在此编写代码\n    \n}',
+      blur: '({ data, formData, setFormData, setShowOrHide, setRequired, setDisabled, request, getFieldOptions, setFieldOptions }) => {\n    // 在此编写代码\n    \n}',
     },
     placeholder: '请选择',
     style: { width: '100%' },
@@ -976,6 +980,9 @@ export const layoutComponents = [{
       }],
       active: 0
     },
+    on: {
+      "tab-click": '({ data, formData, setFormData, setShowOrHide, setRequired, setDisabled, request, getFieldOptions, setFieldOptions }) => {\n    // 在此编写代码\n    \n}',
+    },
     type: '',
     "tab-position": "top"
   },
@@ -1003,6 +1010,9 @@ export const layoutComponents = [{
         }
       }],
       active: ['1']
+    },
+    on: {
+      change: '({ data, formData, setFormData, setShowOrHide, setRequired, setDisabled, request, getFieldOptions, setFieldOptions }) => {\n    // 在此编写代码\n    \n}',
     },
     accordion: false
   }

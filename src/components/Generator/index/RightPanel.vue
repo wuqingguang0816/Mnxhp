@@ -630,6 +630,9 @@ export default {
         case 'blur':
           text = '失去焦点时触发'
           break;
+        case 'tab-click':
+          text = '面板点击时触发'
+          break;
         default:
           text = ''
           break;
