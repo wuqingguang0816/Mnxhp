@@ -71,7 +71,7 @@ export function setState(id) {
 export function getFields(data) {
   return request({
     url: `/api/system/printDev/Fields`,
-    method: 'get',
+    method: 'post',
     data
   })
 }
