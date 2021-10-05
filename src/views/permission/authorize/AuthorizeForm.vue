@@ -22,7 +22,8 @@
           </el-dropdown>
           <el-button :disabled="active <= 0" @click="handlePrevStep">{{$t('common.prev')}}
           </el-button>
-          <el-button :disabled="active >= 4" @click="handleNextStep">{{$t('common.next')}}
+          <el-button :disabled="active >= 4 || treeLoading" @click="handleNextStep">
+            {{$t('common.next')}}
           </el-button>
           <el-button type="primary" :loading="btnLoading" :disabled="active < 4"
             @click="handleConfirm()">{{$t('common.confirmButton')}}</el-button>
@@ -123,6 +124,7 @@ export default {
     },
     getAuthorizeList() {
       this.treeLoading = true
+      this.authorizeTreeData = []
       getAuthorizeValues(this.objectId, this.params).then(res => {
         switch (this.active) {
           case 0:
@@ -246,7 +248,6 @@ export default {
           break
       }
       this.getAuthorizeList()
-      this.treeLoading = false
     },
     // 设置数据
     selectTreeNodeClick() {
