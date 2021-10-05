@@ -60,7 +60,7 @@ export function getPrintDevSelector(type) {
     data: { type }
   })
 }
-// 导入
+// 更新状态
 export function setState(id) {
   return request({
     url: `/api/system/printDev/${id}/Actions/State`,
