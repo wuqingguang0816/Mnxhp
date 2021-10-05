@@ -238,7 +238,7 @@
                 :key="item" />
             </el-select>
           </el-form-item>
-          <template v-if="modelType != 3 && modelType!=6">
+          <template v-if="modelType!=3 && modelType!=6 && webType!=3">
             <el-divider>表单按钮</el-divider>
             <div class="per-cell">
               <el-checkbox v-model="formConf.hasConfirmBtn" disabled>确定</el-checkbox>
@@ -248,7 +248,7 @@
               <el-checkbox v-model="formConf.hasCancelBtn" disabled>取消</el-checkbox>
               <el-input v-model="formConf.cancelButtonText" />
             </div>
-            <template v-if="modelType==1">
+            <template v-if="modelType==1 && webType==2">
               <div class="per-cell" :class="{'last':!formConf.hasPrintBtn}">
                 <el-checkbox v-model="formConf.hasPrintBtn">打印</el-checkbox>
                 <el-input v-model="formConf.printButtonText" />
@@ -364,7 +364,7 @@ export default {
     Tab,
     Collapse
   },
-  props: ['showField', 'activeData', 'formConf', 'modelType', 'drawingList'],
+  props: ['showField', 'activeData', 'formConf', 'modelType', 'webType', 'drawingList'],
   data() {
     return {
       currentTab: 'field',

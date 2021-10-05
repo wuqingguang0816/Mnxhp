@@ -5,7 +5,7 @@
     <div class="JNPF-full-dialog-header">
       <div class="header-title">
         <img src="@/assets/images/jnpf.png" class="header-logo" />
-        <p class="header-txt"> · 打印</p>
+        <p class="header-txt"> · 打印预览</p>
       </div>
       <div class="options">
         <el-button type="primary" size="small" @click="word">Word下载</el-button>

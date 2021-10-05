@@ -28,7 +28,13 @@
         <el-radio :label="3">省市区-街道</el-radio>
       </el-radio-group>
     </el-form-item>
-    <el-form-item label="是否禁用" v-if="activeData.__config__.jnpfKey !=='editor'">
+    <el-form-item label="能否清空">
+      <el-switch v-model="activeData.clearable" />
+    </el-form-item>
+    <el-form-item label="能否搜索">
+      <el-switch v-model="activeData.filterable" />
+    </el-form-item>
+    <el-form-item label="是否禁用">
       <el-switch v-model="activeData.disabled" />
     </el-form-item>
     <el-divider>校验</el-divider>

@@ -68,17 +68,17 @@
       </template>
       <el-divider />
     </template>
-    <el-form-item label="是否多选">
-      <el-switch v-model="activeData.props.props.multiple" />
-    </el-form-item>
     <el-form-item label="展示全路径">
       <el-switch v-model="activeData['show-all-levels']" />
     </el-form-item>
-    <el-form-item label="可否筛选">
-      <el-switch v-model="activeData.filterable" />
-    </el-form-item>
     <el-form-item label="能否清空">
       <el-switch v-model="activeData.clearable" />
+    </el-form-item>
+    <el-form-item label="能否搜索">
+      <el-switch v-model="activeData.filterable" />
+    </el-form-item>
+    <el-form-item label="能否多选">
+      <el-switch v-model="activeData.props.props.multiple" />
     </el-form-item>
     <el-form-item label="是否禁用">
       <el-switch v-model="activeData.disabled" />

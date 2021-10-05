@@ -83,9 +83,6 @@ export const inputComponents = [{
       trigger: 'blur'
     },
     type: 'textarea',
-    on: {
-      change: '({ data, formData, setFormData, setShowOrHide, setRequired, setDisabled, request, getFieldOptions, setFieldOptions }) => {\n    // 在此编写代码\n    \n}',
-    },
     placeholder: '请输入',
     autosize: {
       minRows: 4,
@@ -588,6 +585,7 @@ export const selectComponents = [{
     placeholder: '请选择',
     multiple: false,
     clearable: true,
+    filterable: false,
     disabled: false
   },
   {
@@ -612,6 +610,7 @@ export const selectComponents = [{
     placeholder: '请选择',
     multiple: false,
     clearable: true,
+    filterable: false,
     disabled: false
   },
   {
@@ -636,6 +635,7 @@ export const selectComponents = [{
     placeholder: '请选择',
     multiple: false,
     clearable: true,
+    filterable: false,
     disabled: false
   },
   {
@@ -702,6 +702,7 @@ export const selectComponents = [{
     }],
     multiple: false,
     clearable: true,
+    filterable: false,
     disabled: false
   },
   {
@@ -768,6 +769,8 @@ export const selectComponents = [{
     },
     placeholder: '请选择',
     disabled: false,
+    clearable: true,
+    filterable: false,
     level: 2
   },
 ]

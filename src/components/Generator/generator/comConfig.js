@@ -96,6 +96,7 @@ const webPeculiarList = [{
       layout: 'colFormItem',
       span: 24,
       dragDisabled: false,
+      noShow: false,
       regList: []
     },
     expression: []

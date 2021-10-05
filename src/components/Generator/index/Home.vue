@@ -51,8 +51,8 @@
       </el-scrollbar>
     </div>
     <right-panel :active-data="activeData" :form-conf="formConf" :show-field="!!drawingList.length"
-      @tag-change="tagChange" :modelType="modelType" @relationChange="relationChange"
-      :drawingList="drawingList" />
+      @tag-change="tagChange" :modelType="modelType" :webType="webType"
+      @relationChange="relationChange" :drawingList="drawingList" />
     <json-drawer size="550px" :visible.sync="jsonDrawerVisible" :jsonData="formData"
       @refresh="refreshJson" />
     <Preview :visible.sync="previewVisible" :form-data="formData" />
@@ -93,7 +93,7 @@ export default {
     DraggableItem,
     Preview
   },
-  props: ['conf', 'modelType'],
+  props: ['conf', 'modelType', 'webType'],
   data() {
     return {
       idGlobal: 100,

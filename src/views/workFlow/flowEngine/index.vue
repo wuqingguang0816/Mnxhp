@@ -184,7 +184,7 @@ export default {
       })
     },
     copy(id) {
-      this.$confirm('您确定要复制该流程表单, 是否继续?', '提示', {
+      this.$confirm('您确定要复制该流程, 是否继续?', '提示', {
         type: 'warning'
       }).then(() => {
         Copy(id).then(res => {

@@ -102,7 +102,7 @@ export default {
     },
     handleUpdateState(row) {
       const txt = row.enabledMark ? '禁用' : '开启'
-      this.$confirm(`您确定要${txt}当前规则吗, 是否继续?`, '提示', {
+      this.$confirm(`您确定要${txt}当前单据吗, 是否继续?`, '提示', {
         type: 'warning'
       }).then(() => {
         updateBillRuleState(row.id).then(res => {
