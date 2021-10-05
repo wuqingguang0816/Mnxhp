@@ -20,7 +20,8 @@
               </el-dropdown-item>
             </el-dropdown-menu>
           </el-dropdown>
-          <el-button :disabled="active <= 0" @click="handlePrevStep">{{$t('common.prev')}}
+          <el-button :disabled="active <= 0 || treeLoading" @click="handlePrevStep">
+            {{$t('common.prev')}}
           </el-button>
           <el-button :disabled="active >= 4 || treeLoading" @click="handleNextStep">
             {{$t('common.next')}}
