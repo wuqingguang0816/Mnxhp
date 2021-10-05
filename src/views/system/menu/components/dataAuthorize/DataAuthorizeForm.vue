@@ -31,7 +31,7 @@
           </el-option>
         </el-select>
       </el-form-item>
-      <el-form-item label="备注" prop="bodyText">
+      <el-form-item label="备注" prop="description">
         <el-input v-model="dataForm.description" type="textarea" :rows="6" />
       </el-form-item>
     </el-form>
