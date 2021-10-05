@@ -21,7 +21,9 @@
       </el-row>
       <div class="JNPF-common-layout-main JNPF-flex-main">
         <div class="JNPF-common-head">
-          <topOpts @add="handleAddEdit()" />
+          <topOpts @add="handleAddEdit()">
+            <upload-btn url="/api/system/BillRule/Action/Import" @on-success="initData" />
+          </topOpts>
           <div class="JNPF-common-head-right">
             <el-tooltip effect="dark" :content="$t('common.refresh')" placement="top">
               <el-link icon="icon-ym icon-ym-Refresh JNPF-common-head-icon" :underline="false"
@@ -42,9 +44,21 @@
                 @click.native="handleUpdateState(scope.row)" disabled class="table-switch" />
             </template>
           </el-table-column>
-          <el-table-column label="操作" width="100">
+          <el-table-column label="操作" width="150">
             <template slot-scope="scope">
               <tableOpts @edit="handleAddEdit(scope.row.id)" @del="handleDel(scope.row.id)">
+                <el-dropdown>
+                  <span class="el-dropdown-link">
+                    <el-button type="text" size="mini">{{$t('common.moreBtn')}}<i
+                        class="el-icon-arrow-down el-icon--right"></i>
+                    </el-button>
+                  </span>
+                  <el-dropdown-menu slot="dropdown">
+                    <el-dropdown-item @click.native="exportTpl(scope.row.id)">
+                      导出
+                    </el-dropdown-item>
+                  </el-dropdown-menu>
+                </el-dropdown>
               </tableOpts>
             </template>
           </el-table-column>
@@ -61,7 +75,8 @@
 import {
   getBillRuleList,
   delBillRule,
-  updateBillRuleState
+  updateBillRuleState,
+  exportTpl
 } from '@/api/system/billRule'
 import Form from './Form'
 
@@ -138,6 +153,15 @@ export default {
           })
         })
       }).catch(() => { })
+    },
+    exportTpl(id) {
+      this.$confirm('您确定要导出该单据, 是否继续?', '提示', {
+        type: 'warning'
+      }).then(() => {
+        exportTpl(id).then(res => {
+          if (res.data.url) window.location.href = this.define.comUrl + res.data.url
+        })
+      }).catch(() => { });
     },
     search() {
       this.params.currentPage = 1

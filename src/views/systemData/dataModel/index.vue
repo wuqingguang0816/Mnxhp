@@ -33,6 +33,7 @@
       <div class="JNPF-common-layout-main JNPF-flex-main">
         <div class="JNPF-common-head">
           <topOpts @add="addOrUpdateHandle()" addText="新建表名">
+            <upload-btn url="/api/system/DataModel/Action/Import" @on-success="getTabelData" />
             <el-button type="text" icon="el-icon-menu" @click="handleFieldsManage()">常用字段
             </el-button>
           </topOpts>
@@ -81,6 +82,9 @@
                     <el-dropdown-item @click.native="openData(scope.row.table)">
                       打开数据
                     </el-dropdown-item>
+                    <el-dropdown-item @click.native="exportTpl(scope.row.table)">
+                      导出表
+                    </el-dropdown-item>
                   </el-dropdown-menu>
                 </el-dropdown>
               </tableOpts>
@@ -97,7 +101,7 @@
 
 <script>
 import { getDataSourceListAll } from '@/api/systemData/dataSource'
-import { DataModelList, DataModelDelete, DataModelFieldList } from '@/api/systemData/dataModel'
+import { DataModelList, DataModelDelete, DataModelFieldList, exportTpl } from '@/api/systemData/dataModel'
 import Form from './Form'
 import Preview from './Preview'
 import FieldsList from './fields/index'
@@ -170,6 +174,15 @@ export default {
           message: res.msg
         });
       })
+    },
+    exportTpl(id) {
+      this.$confirm('您确定要导出该表, 是否继续?', '提示', {
+        type: 'warning'
+      }).then(() => {
+        exportTpl(id).then(res => {
+          if (res.data.url) window.location.href = this.define.comUrl + res.data.url
+        })
+      }).catch(() => { });
     },
     // 新增 / 修改
     addOrUpdateHandle(id) {
