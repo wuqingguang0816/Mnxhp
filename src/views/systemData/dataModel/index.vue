@@ -33,7 +33,8 @@
       <div class="JNPF-common-layout-main JNPF-flex-main">
         <div class="JNPF-common-head">
           <topOpts @add="addOrUpdateHandle()" addText="新建表名">
-            <upload-btn url="/api/system/DataModel/Action/Import" @on-success="getTabelData" />
+            <upload-btn :url="'/api/system/DataModel/'+dataBase+'/Action/Import'"
+              @on-success="getTabelData" />
             <el-button type="text" icon="el-icon-menu" @click="handleFieldsManage()">常用字段
             </el-button>
           </topOpts>
@@ -83,7 +84,7 @@
                       打开数据
                     </el-dropdown-item>
                     <el-dropdown-item @click.native="exportTpl(scope.row.table)">
-                      导出表
+                      导出
                     </el-dropdown-item>
                   </el-dropdown-menu>
                 </el-dropdown>
@@ -179,7 +180,7 @@ export default {
       this.$confirm('您确定要导出该表, 是否继续?', '提示', {
         type: 'warning'
       }).then(() => {
-        exportTpl(id).then(res => {
+        exportTpl(this.dataBase, id).then(res => {
           if (res.data.url) window.location.href = this.define.comUrl + res.data.url
         })
       }).catch(() => { });
