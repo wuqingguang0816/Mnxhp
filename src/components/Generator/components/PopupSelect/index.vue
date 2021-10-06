@@ -4,7 +4,8 @@
       <el-input :placeholder="placeholder" v-model="innerValue" readonly>
         <i slot="suffix" class="el-input__icon el-icon-circle-close" @click.stop="clear"
           v-if="clearable"></i>
-        <i slot="suffix" class="el-input__icon el-icon-edit" :class="{'clearable':clearable}"></i>
+        <i slot="suffix" class="el-input__icon el-icon-arrow-down"
+          :class="{'clearable':clearable}"></i>
       </el-input>
     </div>
     <el-dialog title="选择数据" :close-on-click-modal="false" :visible.sync="visible" v-if="visible"
@@ -198,7 +199,7 @@ export default {
       .el-icon-circle-close {
         display: block;
       }
-      .el-icon-edit.clearable {
+      .el-icon-arrow-down.clearable {
         display: none;
       }
     }
