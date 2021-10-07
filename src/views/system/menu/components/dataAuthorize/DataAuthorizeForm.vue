@@ -74,10 +74,7 @@ export default {
         label: '当前用户'
       }, {
         value: '@organizeId',
-        label: '当前公司'
-      }, {
-        value: '@dempmentId',
-        label: '当前部门'
+        label: '当前组织'
       }, {
         value: '@subordinateId',
         label: '我的下属'

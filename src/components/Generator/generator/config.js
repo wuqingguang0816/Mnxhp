@@ -855,29 +855,11 @@ export const systemComponents = [{
   {
     __config__: {
       jnpfKey: 'currOrganize',
-      label: '所属公司',
+      label: '所属组织',
       labelWidth: undefined,
       showLabel: true,
       tag: 'el-input',
       tagIcon: 'icon-ym icon-ym-generator-company',
-      defaultValue: '',
-      required: false,
-      layout: 'colFormItem',
-      span: 24,
-      dragDisabled: false,
-      noShow: false
-    },
-    readonly: true,
-    placeholder: '系统自动生成'
-  },
-  {
-    __config__: {
-      jnpfKey: 'currDept',
-      label: '所属部门',
-      labelWidth: undefined,
-      showLabel: true,
-      tag: 'el-input',
-      tagIcon: 'icon-ym icon-ym-generator-department',
       defaultValue: '',
       required: false,
       layout: 'colFormItem',
