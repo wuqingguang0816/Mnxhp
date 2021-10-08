@@ -77,11 +77,7 @@
               <el-table-column label="操作" width="150">
                 <template slot-scope="scope">
                   <tableOpts @edit="handleAddEdit(scope.row.id)" @del="handleDel(scope.row.id)">
-                    <template v-if="params.category==='App' && scope.row.type && scope.row.type!=1">
-                      <el-button type="text" size="mini" @click="exportMenu(scope.row.id)">导出模板
-                      </el-button>
-                    </template>
-                    <template v-if="params.category==='Web' && scope.row.type && scope.row.type!=1">
+                    <template v-if="scope.row.type && scope.row.type!=1">
                       <el-dropdown>
                         <span class="el-dropdown-link">
                           <el-button type="text" size="mini">{{$t('common.moreBtn')}}<i
@@ -89,7 +85,8 @@
                           </el-button>
                         </span>
                         <el-dropdown-menu slot="dropdown">
-                          <template v-if="[2,3,4].indexOf(scope.row.type)>-1">
+                          <template
+                            v-if="params.category==='Web' && [2,3,4].indexOf(scope.row.type)>-1">
                             <el-dropdown-item v-if="scope.row.isButtonAuthorize === 1"
                               @click.native="handleButtonAuthorize(scope.row)">
                               按钮权限
