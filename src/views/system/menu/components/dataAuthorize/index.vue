@@ -42,12 +42,14 @@
               <el-table-column prop="fullName" label="字段说明" show-overflow-tooltip />
               <el-table-column prop="type" label="字段类型" width="70" />
               <el-table-column prop="conditionSymbol" label="条件符号" show-overflow-tooltip />
-              <el-table-column label="条件内容" width="70">
+              <el-table-column label="条件内容" width="120">
                 <template slot-scope="scope">
                   <span v-if="scope.row.conditionText === 'text'">任意文本</span>
                   <span v-if="scope.row.conditionText === '@userId'">当前用户</span>
                   <span v-if="scope.row.conditionText === '@organizeId'">当前组织</span>
-                  <span v-if="scope.row.conditionText === '@subordinateId'">我的下属</span>
+                  <span
+                    v-if="scope.row.conditionText === '@organizationAndSuborganization'">当前组织及子组织</span>
+                  <span v-if="scope.row.conditionText === '@userAraSubordinates'">当前用户及下属</span>
                 </template>
               </el-table-column>
               <el-table-column label="操作" width="100">

@@ -70,16 +70,18 @@ export default {
         value: 'text',
         label: '任意文本'
       }, {
-        value: '@userId',
-        label: '当前用户'
-      }, {
         value: '@organizeId',
         label: '当前组织'
       }, {
-        value: '@subordinateId',
-        label: '我的下属'
-      }
-      ],
+        value: '@organizationAndSuborganization',
+        label: '当前组织及子组织'
+      }, {
+        value: '@userId',
+        label: '当前用户'
+      }, {
+        value: '@userAraSubordinates',
+        label: '当前用户及下属'
+      }],
       conditionSymbolOptions: [{
         value: 'Equal',
         label: '等于'
