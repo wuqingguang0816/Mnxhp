@@ -37,8 +37,8 @@
           <el-table-column prop="sortCode" label="排序" width="70" align="center" />
           <el-table-column label="状态" width="70" align="center">
             <template slot-scope="scope">
-              <el-switch v-model="scope.row.enabledMark" :active-value="1" :inactive-value="0"
-                @click.native="handleUpdateState(scope.row)" disabled class="table-switch" />
+              <el-tag :type="scope.row.enabledMark == 1 ? 'success' : 'danger'" disable-transitions>
+                {{scope.row.enabledMark==1?'正常':'停用'}}</el-tag>
             </template>
           </el-table-column>
           <el-table-column label="操作" width="100">
