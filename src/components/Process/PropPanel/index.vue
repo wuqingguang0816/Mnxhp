@@ -277,7 +277,6 @@
                   通过第三方调用从目标服务中获取审批人</div>
                 <el-alert type="warning" :closable="false" v-if="approverForm.assigneeType === 9">
                   <div slot="title" class="tips">
-                    <p>请求方式：GET</p>
                     <p>请求参数：taskId、taskNodeId</p>
                   </div>
                 </el-alert>
@@ -304,7 +303,9 @@
                 </el-select>
               </el-form-item>
               <el-form-item label="请求路径" v-if="approverForm.assigneeType === 9">
-                <el-input v-model="approverForm.getUserUrl" placeholder="请输入接口路径"></el-input>
+                <el-input v-model="approverForm.getUserUrl" placeholder="请输入接口地址">
+                  <template slot="prepend">GET</template>
+                </el-input>
               </el-form-item>
               <el-form-item v-if="approverForm.assigneeType === 6">
                 <org-select ref="approver-role-org" type="role" v-model="approverForm.approverRole"
