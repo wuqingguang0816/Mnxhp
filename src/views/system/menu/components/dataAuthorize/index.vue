@@ -198,11 +198,16 @@ export default {
   }
 }
 .JNPF-flex-tabs {
-  >>> .el-table__body-wrapper {
-    height: 100vh !important;
-  }
-  >>> .el-tabs__nav-scroll {
-    padding-left: 20px;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  >>> .el-tabs__content {
+    flex: 1;
+    .el-tab-pane {
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+    }
   }
 }
 </style>
