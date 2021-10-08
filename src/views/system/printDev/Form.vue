@@ -13,7 +13,8 @@
       </el-steps>
       <div class="options">
         <el-button @click="prve" :disabled="activeStep<=0">{{$t('common.prev')}}</el-button>
-        <el-button @click="next" :disabled="activeStep>=1 || loading">{{$t('common.next')}}
+        <el-button @click="next" :disabled="activeStep>=1 || loading" :loading="nextBtnLoading">
+          {{$t('common.next')}}
         </el-button>
         <el-button type="primary" @click="dataFormSubmit()" :disabled="activeStep!=1"
           :loading="btnLoading">{{$t('common.confirmButton')}}</el-button>
@@ -101,6 +102,7 @@ export default {
     return {
       visible: false,
       loading: false,
+      nextBtnLoading: false,
       activeStep: 0,
       dataForm: {
         id: '',
@@ -193,6 +195,7 @@ export default {
         this.dataForm.sqlTemplate = JSON.stringify(this.sqlTemplate)
         this.$refs['dataForm'].validate((valid) => {
           if (valid) {
+            this.nextBtnLoading = true
             const query = {
               dbLinkId: this.dataForm.dbLinkId,
               sqlTemplate: this.dataForm.sqlTemplate
@@ -211,6 +214,9 @@ export default {
               }
               this.treeData = treeData
               this.activeStep += 1
+              this.nextBtnLoading = false
+            }).catch(() => {
+              this.nextBtnLoading = false
             })
           }
         })
