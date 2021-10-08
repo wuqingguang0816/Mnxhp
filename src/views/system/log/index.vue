@@ -73,7 +73,13 @@
               <el-table-column prop="userName" label="创建用户" width="120" />
               <el-table-column prop="ipaddress" label="异常IP" width="120" />
               <el-table-column prop="moduleName" label="异常功能" width="120" />
-              <el-table-column prop="json" label="异常描述" show-overflow-tooltip />
+              <el-table-column prop="json" label="异常描述">
+                <template slot-scope="scope">
+                  <el-link @click="goDetail(scope.row.json)" style="font-size:12px">
+                    <p class="line1">{{ scope.row.json }}</p>
+                  </el-link>
+                </template>
+              </el-table-column>
             </JNPF-table>
           </el-tab-pane>
           <pagination :total="total" :page.sync="params.currentPage" :limit.sync="params.pageSize"
@@ -81,18 +87,19 @@
         </el-tabs>
       </div>
     </div>
+    <Form v-show="formVisible" ref="Form" @close="formVisible=false" />
   </div>
 </template>
 
 <script>
 import { getLogList, delLog } from '@/api/system/log'
-
+import Form from './Form'
 export default {
   name: 'system-log',
+  components: { Form },
   data() {
     return {
-      delBtn: false,
-      visible: false,
+      formVisible: false,
       listLoading: true,
       startTime: '',
       endTime: '',
@@ -159,6 +166,12 @@ export default {
     handleTabClick() {
       this.reset()
     },
+    goDetail(data) {
+      this.formVisible = true
+      this.$nextTick(() => {
+        this.$refs.Form.init(data)
+      })
+    },
     handleSelectionChange(val) {
       const res = val.map(item => item.id)
       this.multipleSelection = res
@@ -224,6 +237,12 @@ export default {
   }
   .logTabs {
     height: 100%;
+  }
+  .line1 {
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    word-break: break-all;
   }
   >>> .el-tabs__content {
     height: calc(100% - 40px);
