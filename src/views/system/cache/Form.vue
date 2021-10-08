@@ -11,7 +11,7 @@
         <el-form-item label="STRING" prop="name">
           <el-input v-model="dataForm.name" placeholder="STRING" />
         </el-form-item>
-        <el-form-item label="VALUE" prop="value">
+        <el-form-item label="VALUE" prop="value" class="value-item">
           <el-input v-model="dataForm.value" placeholder="VALUE" type="textarea" :rows="30" />
         </el-form-item>
       </el-form>
@@ -52,3 +52,22 @@ export default {
   }
 }
 </script>
+<style lang="scss" scoped>
+.main {
+  display: flex;
+  flex-direction: column;
+  .value-item {
+    flex: 1;
+    margin-bottom: 0;
+    >>> .el-form-item__content {
+      height: 100%;
+      .el-textarea {
+        height: 100%;
+        .el-textarea__inner {
+          height: 100%;
+        }
+      }
+    }
+  }
+}
+</style>
