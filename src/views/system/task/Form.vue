@@ -9,7 +9,7 @@
           <el-button @click="goBack()">{{$t('common.cancelButton')}}</el-button>
         </div>
       </div>
-      <el-row>
+      <el-row class="main">
         <el-col :span="14" :offset="5">
           <el-form :model="dataForm" :rules="dataRule" ref="dataForm" class="mt-20"
             label-width="100px" @submit.native.prevent>
