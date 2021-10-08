@@ -7,67 +7,67 @@
     <el-form ref="dataForm" :model="dataForm" :rules="dataRule" label-width="100px"
       :disabled="setting.readonly">
       <el-row>
-        <el-col :span="12" v-if="JudgeShow('flowTitle')">
+        <el-col :span="12" v-if="judgeShow('flowTitle')">
           <el-form-item label="流程标题" prop="flowTitle">
             <el-input v-model="dataForm.flowTitle" placeholder="流程标题"
-              :disabled="JudgeWrite('flowTitle')"></el-input>
+              :disabled="judgeWrite('flowTitle')"></el-input>
           </el-form-item>
         </el-col>
-        <el-col :span="12" v-if="JudgeShow('flowUrgent')">
+        <el-col :span="12" v-if="judgeShow('flowUrgent')">
           <el-form-item label="紧急程度" prop="flowUrgent">
             <el-select v-model="dataForm.flowUrgent" placeholder="选择紧急程度"
-              :disabled="JudgeWrite('flowUrgent')">
+              :disabled="judgeWrite('flowUrgent')">
               <el-option :key="item.value" :label="item.label" :value="item.value"
                 v-for="item in flowUrgentOptions" />
             </el-select>
           </el-form-item>
         </el-col>
-        <el-col :span="12" v-if="JudgeShow('fileName')">
+        <el-col :span="12" v-if="judgeShow('fileName')">
           <el-form-item label="文件名称" prop="fileName">
             <el-input v-model="dataForm.fileName" placeholder="文件名称"
-              :disabled="JudgeWrite('fileName')"></el-input>
+              :disabled="judgeWrite('fileName')"></el-input>
           </el-form-item>
         </el-col>
-        <el-col :span="12" v-if="JudgeShow('draftedPerson')">
+        <el-col :span="12" v-if="judgeShow('draftedPerson')">
           <el-form-item label="拟稿人" prop="draftedPerson">
             <el-input v-model="dataForm.draftedPerson" placeholder="拟稿人"
-              :disabled="JudgeWrite('draftedPerson')"></el-input>
+              :disabled="judgeWrite('draftedPerson')"></el-input>
           </el-form-item>
         </el-col>
-        <el-col :span="12" v-if="JudgeShow('serviceUnit')">
+        <el-col :span="12" v-if="judgeShow('serviceUnit')">
           <el-form-item label="发文单位" prop="serviceUnit">
             <el-input v-model="dataForm.serviceUnit" placeholder="发文单位"
-              :disabled="JudgeWrite('serviceUnit')"></el-input>
+              :disabled="judgeWrite('serviceUnit')"></el-input>
           </el-form-item>
         </el-col>
-        <el-col :span="12" v-if="JudgeShow('fillPreparation')">
+        <el-col :span="12" v-if="judgeShow('fillPreparation')">
           <el-form-item label="文件拟办" prop="fillPreparation">
             <el-input v-model="dataForm.fillPreparation" placeholder="文件拟办"
-              :disabled="JudgeWrite('fillPreparation')"></el-input>
+              :disabled="judgeWrite('fillPreparation')"></el-input>
           </el-form-item>
         </el-col>
-        <el-col :span="12" v-if="JudgeShow('fillNum')">
+        <el-col :span="12" v-if="judgeShow('fillNum')">
           <el-form-item label="文件编码" prop="fillNum">
             <el-input v-model="dataForm.fillNum" placeholder="文件编码"
-              :disabled="JudgeWrite('fillNum')"></el-input>
+              :disabled="judgeWrite('fillNum')"></el-input>
           </el-form-item>
         </el-col>
-        <el-col :span="12" v-if="JudgeShow('receiptDate')">
+        <el-col :span="12" v-if="judgeShow('receiptDate')">
           <el-form-item label="收文日期" prop="receiptDate">
             <el-date-picker v-model="dataForm.receiptDate" type="datetime" placeholder="选择日期"
               value-format="timestamp" format="yyyy-MM-dd HH:mm" :editable='false'
-              :disabled="JudgeWrite('receiptDate')">
+              :disabled="judgeWrite('receiptDate')">
             </el-date-picker>
           </el-form-item>
         </el-col>
-        <el-col :span="24" v-if="JudgeShow('fileJson')">
+        <el-col :span="24" v-if="judgeShow('fileJson')">
           <el-form-item label="相关附件" prop="fileJson">
-            <JNPF-UploadFz v-model="fileList" type="workFlow" :disabled="JudgeWrite('fileJson')" />
+            <JNPF-UploadFz v-model="fileList" type="workFlow" :disabled="judgeWrite('fileJson')" />
           </el-form-item>
         </el-col>
-        <el-col :span="24" v-if="JudgeShow('modifyOpinion')">
+        <el-col :span="24" v-if="judgeShow('modifyOpinion')">
           <el-form-item label="修改意见" prop="modifyOpinion">
-            <JNPF-Quill v-model="dataForm.modifyOpinion" :disabled="JudgeWrite('modifyOpinion')" />
+            <JNPF-Quill v-model="dataForm.modifyOpinion" :disabled="judgeWrite('modifyOpinion')" />
           </el-form-item>
         </el-col>
       </el-row>

@@ -7,104 +7,104 @@
     <el-form ref="dataForm" :model="dataForm" :rules="dataRule" label-width="100px"
       :disabled="setting.readonly">
       <el-row>
-        <el-col :span="12" v-if="JudgeShow('flowTitle')">
+        <el-col :span="12" v-if="judgeShow('flowTitle')">
           <el-form-item label="流程标题" prop="flowTitle">
             <el-input v-model="dataForm.flowTitle" placeholder="流程标题"
-              :disabled="JudgeWrite('flowTitle')"></el-input>
+              :disabled="judgeWrite('flowTitle')"></el-input>
           </el-form-item>
         </el-col>
-        <el-col :span="12" v-if="JudgeShow('flowUrgent')">
+        <el-col :span="12" v-if="judgeShow('flowUrgent')">
           <el-form-item label="紧急程度" prop="flowUrgent">
             <el-select v-model="dataForm.flowUrgent" placeholder="选择紧急程度"
-              :disabled="JudgeWrite('flowUrgent')">
+              :disabled="judgeWrite('flowUrgent')">
               <el-option :key="item.value" :label="item.label" :value="item.value"
                 v-for="item in flowUrgentOptions" />
             </el-select>
           </el-form-item>
         </el-col>
-        <el-col :span="12" v-if="JudgeShow('month')">
+        <el-col :span="12" v-if="judgeShow('month')">
           <el-form-item label="所属月份" prop="month">
-            <el-input v-model="dataForm.month" placeholder="所属月份" :disabled="JudgeWrite('month')">
+            <el-input v-model="dataForm.month" placeholder="所属月份" :disabled="judgeWrite('month')">
             </el-input>
           </el-form-item>
         </el-col>
-        <el-col :span="12" v-if="JudgeShow('issuingUnit')">
+        <el-col :span="12" v-if="judgeShow('issuingUnit')">
           <el-form-item label="发放单位" prop="issuingUnit">
             <el-input v-model="dataForm.issuingUnit" placeholder="发放单位"
-              :disabled="JudgeWrite('issuingUnit')"></el-input>
+              :disabled="judgeWrite('issuingUnit')"></el-input>
           </el-form-item>
         </el-col>
-        <el-col :span="12" v-if="JudgeShow('department')">
+        <el-col :span="12" v-if="judgeShow('department')">
           <el-form-item label="员工部门" prop="department">
             <el-input v-model="dataForm.department" placeholder="员工部门"
-              :disabled="JudgeWrite('department')"></el-input>
+              :disabled="judgeWrite('department')"></el-input>
           </el-form-item>
         </el-col>
-        <el-col :span="12" v-if="JudgeShow('position')">
+        <el-col :span="12" v-if="judgeShow('position')">
           <el-form-item label="员工职位" prop="position">
             <el-input v-model="dataForm.position" placeholder="员工职位"
-              :disabled="JudgeWrite('position')"></el-input>
+              :disabled="judgeWrite('position')"></el-input>
           </el-form-item>
         </el-col>
-        <el-col :span="12" v-if="JudgeShow('baseSalary')">
+        <el-col :span="12" v-if="judgeShow('baseSalary')">
           <el-form-item label="基本薪资" prop="baseSalary">
             <el-input v-model="dataForm.baseSalary" placeholder="基本薪资" type="number"
-              :disabled="JudgeWrite('baseSalary')"></el-input>
+              :disabled="judgeWrite('baseSalary')"></el-input>
           </el-form-item>
         </el-col>
-        <el-col :span="12" v-if="JudgeShow('actualAttendance')">
+        <el-col :span="12" v-if="judgeShow('actualAttendance')">
           <el-form-item label="出勤天数" prop="actualAttendance">
             <el-input v-model="dataForm.actualAttendance" placeholder="出勤天数" type="number"
-              :disabled="JudgeWrite('actualAttendance')">
+              :disabled="judgeWrite('actualAttendance')">
             </el-input>
           </el-form-item>
         </el-col>
-        <el-col :span="12" v-if="JudgeShow('allowance')">
+        <el-col :span="12" v-if="judgeShow('allowance')">
           <el-form-item label="员工津贴" prop="allowance">
             <el-input v-model="dataForm.allowance" placeholder="员工津贴" type="number"
-              :disabled="JudgeWrite('allowance')"></el-input>
+              :disabled="judgeWrite('allowance')"></el-input>
           </el-form-item>
         </el-col>
-        <el-col :span="12" v-if="JudgeShow('incomeTax')">
+        <el-col :span="12" v-if="judgeShow('incomeTax')">
           <el-form-item label="所得税" prop="incomeTax">
             <el-input v-model="dataForm.incomeTax" placeholder="所得税" type="number"
-              :disabled="JudgeWrite('incomeTax')"></el-input>
+              :disabled="judgeWrite('incomeTax')"></el-input>
           </el-form-item>
         </el-col>
-        <el-col :span="12" v-if="JudgeShow('insurance')">
+        <el-col :span="12" v-if="judgeShow('insurance')">
           <el-form-item label="员工保险" prop="insurance">
             <el-input v-model="dataForm.insurance" placeholder="员工保险" type="number"
-              :disabled="JudgeWrite('insurance')"></el-input>
+              :disabled="judgeWrite('insurance')"></el-input>
           </el-form-item>
         </el-col>
-        <el-col :span="12" v-if="JudgeShow('performance')">
+        <el-col :span="12" v-if="judgeShow('performance')">
           <el-form-item label="员工绩效" prop="performance">
             <el-input v-model="dataForm.performance" placeholder="员工绩效" type="number"
-              :disabled="JudgeWrite('performance')"></el-input>
+              :disabled="judgeWrite('performance')"></el-input>
           </el-form-item>
         </el-col>
-        <el-col :span="12" v-if="JudgeShow('overtimePay')">
+        <el-col :span="12" v-if="judgeShow('overtimePay')">
           <el-form-item label="加班费用" prop="overtimePay">
             <el-input v-model="dataForm.overtimePay" placeholder="加班费用" type="number"
-              :disabled="JudgeWrite('overtimePay')"></el-input>
+              :disabled="judgeWrite('overtimePay')"></el-input>
           </el-form-item>
         </el-col>
-        <el-col :span="12" v-if="JudgeShow('grossPay')">
+        <el-col :span="12" v-if="judgeShow('grossPay')">
           <el-form-item label="应发工资" prop="grossPay">
             <el-input v-model="dataForm.grossPay" placeholder="应发工资" type="number"
-              :disabled="JudgeWrite('grossPay')"></el-input>
+              :disabled="judgeWrite('grossPay')"></el-input>
           </el-form-item>
         </el-col>
-        <el-col :span="12" v-if="JudgeShow('payroll')">
+        <el-col :span="12" v-if="judgeShow('payroll')">
           <el-form-item label="实发工资" prop="payroll">
             <el-input v-model="dataForm.payroll" placeholder="实发工资" type="number"
-              :disabled="JudgeWrite('payroll')"></el-input>
+              :disabled="judgeWrite('payroll')"></el-input>
           </el-form-item>
         </el-col>
-        <el-col :span="24" v-if="JudgeShow('description')">
+        <el-col :span="24" v-if="judgeShow('description')">
           <el-form-item label="备注" prop="description">
             <el-input v-model="dataForm.description" placeholder="备注" type="textarea" :rows="3"
-              :disabled="JudgeWrite('description')" />
+              :disabled="judgeWrite('description')" />
           </el-form-item>
         </el-col>
       </el-row>

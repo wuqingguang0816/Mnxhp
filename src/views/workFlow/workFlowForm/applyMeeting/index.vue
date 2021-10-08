@@ -7,131 +7,131 @@
     <el-form ref="dataForm" :model="dataForm" :rules="dataRule" label-width="100px"
       :disabled="setting.readonly">
       <el-row>
-        <el-col :span="12" v-if="JudgeShow('flowTitle')">
+        <el-col :span="12" v-if="judgeShow('flowTitle')">
           <el-form-item label="流程标题" prop="flowTitle">
             <el-input v-model="dataForm.flowTitle" placeholder="流程标题"
-              :disabled="JudgeWrite('flowTitle')"></el-input>
+              :disabled="judgeWrite('flowTitle')"></el-input>
           </el-form-item>
         </el-col>
-        <el-col :span="12" v-if="JudgeShow('flowUrgent')">
+        <el-col :span="12" v-if="judgeShow('flowUrgent')">
           <el-form-item label="紧急程度" prop="flowUrgent">
             <el-select v-model="dataForm.flowUrgent" placeholder="选择紧急程度"
-              :disabled="JudgeWrite('flowUrgent')">
+              :disabled="judgeWrite('flowUrgent')">
               <el-option :key="item.value" :label="item.label" :value="item.value"
                 v-for="item in flowUrgentOptions" />
             </el-select>
           </el-form-item>
         </el-col>
-        <el-col :span="12" v-if="JudgeShow('applyUser')">
+        <el-col :span="12" v-if="judgeShow('applyUser')">
           <el-form-item label="申请人员" prop="applyUser">
             <el-input v-model="dataForm.applyUser" placeholder="申请人员" readonly
-              :disabled="JudgeWrite('applyUser')"></el-input>
+              :disabled="judgeWrite('applyUser')"></el-input>
           </el-form-item>
         </el-col>
-        <el-col :span="12" v-if="JudgeShow('position')">
+        <el-col :span="12" v-if="judgeShow('position')">
           <el-form-item label="所属职务" prop="position">
             <el-input v-model="dataForm.position" placeholder="所属职务" readonly
-              :disabled="JudgeWrite('position')"></el-input>
+              :disabled="judgeWrite('position')"></el-input>
           </el-form-item>
         </el-col>
-        <el-col :span="12" v-if="JudgeShow('conferenceName')">
+        <el-col :span="12" v-if="judgeShow('conferenceName')">
           <el-form-item label="会议名称" prop="conferenceName">
             <el-input v-model="dataForm.conferenceName" placeholder="会议名称"
-              :disabled="JudgeWrite('conferenceName')"></el-input>
+              :disabled="judgeWrite('conferenceName')"></el-input>
           </el-form-item>
         </el-col>
-        <el-col :span="12" v-if="JudgeShow('conferenceTheme')">
+        <el-col :span="12" v-if="judgeShow('conferenceTheme')">
           <el-form-item label="会议主题" prop="conferenceTheme">
             <el-input v-model="dataForm.conferenceTheme" placeholder="会议主题"
-              :disabled="JudgeWrite('conferenceTheme')"></el-input>
+              :disabled="judgeWrite('conferenceTheme')"></el-input>
           </el-form-item>
         </el-col>
-        <el-col :span="12" v-if="JudgeShow('conferenceType')">
+        <el-col :span="12" v-if="judgeShow('conferenceType')">
           <el-form-item label="会议类型" prop="conferenceType">
             <el-input v-model="dataForm.conferenceType" placeholder="会议类型"
-              :disabled="JudgeWrite('conferenceType')"></el-input>
+              :disabled="judgeWrite('conferenceType')"></el-input>
           </el-form-item>
         </el-col>
-        <el-col :span="12" v-if="JudgeShow('estimatePeople')">
+        <el-col :span="12" v-if="judgeShow('estimatePeople')">
           <el-form-item label="预计人数" prop="estimatePeople">
             <el-input v-model="dataForm.estimatePeople" placeholder="预计人数" type="number"
-              :disabled="JudgeWrite('estimatePeople')"></el-input>
+              :disabled="judgeWrite('estimatePeople')"></el-input>
           </el-form-item>
         </el-col>
-        <el-col :span="12" v-if="JudgeShow('conferenceRoom')">
+        <el-col :span="12" v-if="judgeShow('conferenceRoom')">
           <el-form-item label="会议室" prop="conferenceRoom">
             <el-input v-model="dataForm.conferenceRoom" placeholder="会议室"
-              :disabled="JudgeWrite('conferenceRoom')"></el-input>
+              :disabled="judgeWrite('conferenceRoom')"></el-input>
           </el-form-item>
         </el-col>
-        <el-col :span="12" v-if="JudgeShow('administrator')">
+        <el-col :span="12" v-if="judgeShow('administrator')">
           <el-form-item label="管理人" prop="administrator">
             <el-input v-model="dataForm.administrator" placeholder="管理人"
-              :disabled="JudgeWrite('administrator')"></el-input>
+              :disabled="judgeWrite('administrator')"></el-input>
           </el-form-item>
         </el-col>
-        <el-col :span="12" v-if="JudgeShow('lookPeople')">
+        <el-col :span="12" v-if="judgeShow('lookPeople')">
           <el-form-item label="查看人" prop="lookPeople">
             <el-input v-model="dataForm.lookPeople" placeholder="查看人"
-              :disabled="JudgeWrite('lookPeople')"></el-input>
+              :disabled="judgeWrite('lookPeople')"></el-input>
           </el-form-item>
         </el-col>
-        <el-col :span="12" v-if="JudgeShow('memo')">
+        <el-col :span="12" v-if="judgeShow('memo')">
           <el-form-item label="纪要员" prop="memo">
-            <el-input v-model="dataForm.memo" placeholder="纪要员" :disabled="JudgeWrite('memo')">
+            <el-input v-model="dataForm.memo" placeholder="纪要员" :disabled="judgeWrite('memo')">
             </el-input>
           </el-form-item>
         </el-col>
-        <el-col :span="12" v-if="JudgeShow('attendees')">
+        <el-col :span="12" v-if="judgeShow('attendees')">
           <el-form-item label="出席人" prop="attendees">
             <el-input v-model="dataForm.attendees" placeholder="出席人"
-              :disabled="JudgeWrite('attendees')"></el-input>
+              :disabled="judgeWrite('attendees')"></el-input>
           </el-form-item>
         </el-col>
-        <el-col :span="12" v-if="JudgeShow('applyMaterial')">
+        <el-col :span="12" v-if="judgeShow('applyMaterial')">
           <el-form-item label="申请材料" prop="applyMaterial">
             <el-input v-model="dataForm.applyMaterial" placeholder="申请材料"
-              :disabled="JudgeWrite('applyMaterial')"></el-input>
+              :disabled="judgeWrite('applyMaterial')"></el-input>
           </el-form-item>
         </el-col>
-        <el-col :span="12" v-if="JudgeShow('estimatedAmount')">
+        <el-col :span="12" v-if="judgeShow('estimatedAmount')">
           <el-form-item label="预计金额" prop="estimatedAmount">
             <el-input v-model="dataForm.estimatedAmount" placeholder="预计金额" type="number"
-              :disabled="JudgeWrite('estimatedAmount')">
+              :disabled="judgeWrite('estimatedAmount')">
             </el-input>
           </el-form-item>
         </el-col>
-        <el-col :span="12" v-if="JudgeShow('otherAttendee')">
+        <el-col :span="12" v-if="judgeShow('otherAttendee')">
           <el-form-item label="其他出席人" prop="otherAttendee">
             <el-input v-model="dataForm.otherAttendee" placeholder="其他出席人"
-              :disabled="JudgeWrite('otherAttendee')"></el-input>
+              :disabled="judgeWrite('otherAttendee')"></el-input>
           </el-form-item>
         </el-col>
-        <el-col :span="12" v-if="JudgeShow('startDate')">
+        <el-col :span="12" v-if="judgeShow('startDate')">
           <el-form-item label="开始时间" prop="startDate">
             <el-date-picker v-model="dataForm.startDate" type="datetime" placeholder="选择日期"
               value-format="timestamp" format="yyyy-MM-dd HH:mm" :editable='false'
-              :disabled="JudgeWrite('startDate')">
+              :disabled="judgeWrite('startDate')">
             </el-date-picker>
           </el-form-item>
         </el-col>
-        <el-col :span="12" v-if="JudgeShow('endDate')">
+        <el-col :span="12" v-if="judgeShow('endDate')">
           <el-form-item label="结束时间" prop="endDate">
             <el-date-picker v-model="dataForm.endDate" type="datetime" placeholder="选择日期"
               value-format="timestamp" format="yyyy-MM-dd HH:mm" :editable='false'
-              :disabled="JudgeWrite('endDate')">
+              :disabled="judgeWrite('endDate')">
             </el-date-picker>
           </el-form-item>
         </el-col>
-        <el-col :span="24" v-if="JudgeShow('fileJson')">
+        <el-col :span="24" v-if="judgeShow('fileJson')">
           <el-form-item label="相关附件" prop="fileJson">
-            <JNPF-UploadFz v-model="fileList" type="workFlow" :disabled="JudgeWrite('fileJson')" />
+            <JNPF-UploadFz v-model="fileList" type="workFlow" :disabled="judgeWrite('fileJson')" />
           </el-form-item>
         </el-col>
-        <el-col :span="24" v-if="JudgeShow('describe')">
+        <el-col :span="24" v-if="judgeShow('describe')">
           <el-form-item label="会议描述" prop="describe">
             <el-input v-model="dataForm.describe" placeholder="会议描述" type="textarea" :rows="3"
-              :disabled="JudgeWrite('describe')" />
+              :disabled="judgeWrite('describe')" />
           </el-form-item>
         </el-col>
       </el-row>

@@ -7,74 +7,74 @@
     <el-form ref="dataForm" :model="dataForm" :rules="dataRule" label-width="100px"
       :disabled="setting.readonly">
       <el-row>
-        <el-col :span="12" v-if="JudgeShow('flowTitle')">
+        <el-col :span="12" v-if="judgeShow('flowTitle')">
           <el-form-item label="流程标题" prop="flowTitle">
             <el-input v-model="dataForm.flowTitle" placeholder="流程标题"
-              :disabled="JudgeWrite('flowTitle')"></el-input>
+              :disabled="judgeWrite('flowTitle')"></el-input>
           </el-form-item>
         </el-col>
-        <el-col :span="12" v-if="JudgeShow('flowUrgent')">
+        <el-col :span="12" v-if="judgeShow('flowUrgent')">
           <el-form-item label="紧急程度" prop="flowUrgent">
             <el-select v-model="dataForm.flowUrgent" placeholder="选择紧急程度"
-              :disabled="JudgeWrite('flowUrgent')">
+              :disabled="judgeWrite('flowUrgent')">
               <el-option :key="item.value" :label="item.label" :value="item.value"
                 v-for="item in flowUrgentOptions" />
             </el-select>
           </el-form-item>
         </el-col>
-        <el-col :span="12" v-if="JudgeShow('applyUser')">
+        <el-col :span="12" v-if="judgeShow('applyUser')">
           <el-form-item label="申请人" prop="applyUser">
             <el-input v-model="dataForm.applyUser" placeholder="申请人" readonly
-              :disabled="JudgeWrite('applyUser')"></el-input>
+              :disabled="judgeWrite('applyUser')"></el-input>
           </el-form-item>
         </el-col>
-        <el-col :span="12" v-if="JudgeShow('borrowingDepartment')">
+        <el-col :span="12" v-if="judgeShow('borrowingDepartment')">
           <el-form-item label="借阅部门" prop="borrowingDepartment">
             <el-input v-model="dataForm.borrowingDepartment" placeholder="借阅部门" readonly
-              :disabled="JudgeWrite('borrowingDepartment')"></el-input>
+              :disabled="judgeWrite('borrowingDepartment')"></el-input>
           </el-form-item>
         </el-col>
-        <el-col :span="12" v-if="JudgeShow('archivesName')">
+        <el-col :span="12" v-if="judgeShow('archivesName')">
           <el-form-item label="档案名称" prop="archivesName">
             <el-input v-model="dataForm.archivesName" placeholder="档案名称"
-              :disabled="JudgeWrite('archivesName')"></el-input>
+              :disabled="judgeWrite('archivesName')"></el-input>
           </el-form-item>
         </el-col>
-        <el-col :span="12" v-if="JudgeShow('archivesId')">
+        <el-col :span="12" v-if="judgeShow('archivesId')">
           <el-form-item label="档案编码" prop="archivesId">
             <el-input v-model="dataForm.archivesId" placeholder="档案编码"
-              :disabled="JudgeWrite('archivesId')"></el-input>
+              :disabled="judgeWrite('archivesId')"></el-input>
           </el-form-item>
         </el-col>
-        <el-col :span="12" v-if="JudgeShow('borrowingDate')">
+        <el-col :span="12" v-if="judgeShow('borrowingDate')">
           <el-form-item label="借阅时间" prop="borrowingDate">
             <el-date-picker v-model="dataForm.borrowingDate" type="datetime" placeholder="选择日期"
               value-format="timestamp" format="yyyy-MM-dd HH:mm" :editable='false'
-              :disabled="JudgeWrite('borrowingDate')">
+              :disabled="judgeWrite('borrowingDate')">
             </el-date-picker>
           </el-form-item>
         </el-col>
-        <el-col :span="12" v-if="JudgeShow('returnDate')">
+        <el-col :span="12" v-if="judgeShow('returnDate')">
           <el-form-item label="归还时间" prop="returnDate">
             <el-date-picker v-model="dataForm.returnDate" type="datetime" placeholder="选择日期"
               value-format="timestamp" format="yyyy-MM-dd HH:mm" :editable='false'
-              :disabled="JudgeWrite('returnDate')">
+              :disabled="judgeWrite('returnDate')">
             </el-date-picker>
           </el-form-item>
         </el-col>
-        <el-col :span="12" v-if="JudgeShow('archivalAttributes')">
+        <el-col :span="12" v-if="judgeShow('archivalAttributes')">
           <el-form-item label="档案属性" prop="archivalAttributes">
             <el-radio-group v-model="dataForm.archivalAttributes"
-              :disabled="JudgeWrite('archivalAttributes')">
+              :disabled="judgeWrite('archivalAttributes')">
               <el-radio label="原件">原件</el-radio>
               <el-radio label="复印件">复印件</el-radio>
               <el-radio label="其他">其他</el-radio>
             </el-radio-group>
           </el-form-item>
         </el-col>
-        <el-col :span="12" v-if="JudgeShow('borrowMode')">
+        <el-col :span="12" v-if="judgeShow('borrowMode')">
           <el-form-item label="借阅方式" prop="borrowMode">
-            <el-radio-group v-model="dataForm.borrowMode" :disabled="JudgeWrite('borrowMode')">
+            <el-radio-group v-model="dataForm.borrowMode" :disabled="judgeWrite('borrowMode')">
               <el-radio label="查阅">查阅</el-radio>
               <el-radio label="复印">复印</el-radio>
               <el-radio label="外借">外借</el-radio>
@@ -82,10 +82,10 @@
             </el-radio-group>
           </el-form-item>
         </el-col>
-        <el-col :span="24" v-if="JudgeShow('applyReason')">
+        <el-col :span="24" v-if="judgeShow('applyReason')">
           <el-form-item label="申请原因" prop="applyReason">
             <el-input v-model="dataForm.applyReason" placeholder="申请原因" type="textarea" :rows="3"
-              :disabled="JudgeWrite('applyReason')" />
+              :disabled="judgeWrite('applyReason')" />
           </el-form-item>
         </el-col>
       </el-row>

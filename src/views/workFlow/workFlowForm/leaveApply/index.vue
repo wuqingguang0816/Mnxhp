@@ -7,94 +7,94 @@
     <el-form ref="dataForm" :model="dataForm" :rules="dataRule" label-width="100px"
       :disabled="setting.readonly">
       <el-row>
-        <el-col :span="12" v-if="JudgeShow('flowTitle')">
+        <el-col :span="12" v-if="judgeShow('flowTitle')">
           <el-form-item label="流程标题" prop="flowTitle">
             <el-input v-model="dataForm.flowTitle" placeholder="流程标题"
-              :disabled="JudgeWrite('flowTitle')"></el-input>
+              :disabled="judgeWrite('flowTitle')"></el-input>
           </el-form-item>
         </el-col>
-        <el-col :span="12" v-if="JudgeShow('flowUrgent')">
+        <el-col :span="12" v-if="judgeShow('flowUrgent')">
           <el-form-item label="紧急程度" prop="flowUrgent">
             <el-select v-model="dataForm.flowUrgent" placeholder="选择紧急程度"
-              :disabled="JudgeWrite('flowUrgent')">
+              :disabled="judgeWrite('flowUrgent')">
               <el-option :key="item.value" :label="item.label" :value="item.value"
                 v-for="item in flowUrgentOptions" />
             </el-select>
           </el-form-item>
         </el-col>
-        <el-col :span="12" v-if="JudgeShow('applyUser')">
+        <el-col :span="12" v-if="judgeShow('applyUser')">
           <el-form-item label="申请人员" prop="applyUser">
             <el-input v-model="dataForm.applyUser" placeholder="申请人员" readonly
-              :disabled="JudgeWrite('applyUser')"></el-input>
+              :disabled="judgeWrite('applyUser')"></el-input>
           </el-form-item>
         </el-col>
-        <el-col :span="12" v-if="JudgeShow('applyDate')">
+        <el-col :span="12" v-if="judgeShow('applyDate')">
           <el-form-item label="申请日期" prop="applyDate">
             <el-date-picker v-model="dataForm.applyDate" type="date" placeholder="选择日期"
               value-format="timestamp" format="yyyy-MM-dd" :editable="false" readonly
-              :disabled="JudgeWrite('applyDate')">
+              :disabled="judgeWrite('applyDate')">
             </el-date-picker>
           </el-form-item>
         </el-col>
-        <el-col :span="12" v-if="JudgeShow('applyDept')">
+        <el-col :span="12" v-if="judgeShow('applyDept')">
           <el-form-item label="申请部门" prop="applyDept">
             <el-input v-model="dataForm.applyDept" placeholder="申请部门" readonly
-              :disabled="JudgeWrite('applyDept')"></el-input>
+              :disabled="judgeWrite('applyDept')"></el-input>
           </el-form-item>
         </el-col>
-        <el-col :span="12" v-if="JudgeShow('applyPost')">
+        <el-col :span="12" v-if="judgeShow('applyPost')">
           <el-form-item label="申请职位" prop="applyPost">
             <el-input v-model="dataForm.applyPost" placeholder="申请职位" readonly
-              :disabled="JudgeWrite('applyPost')"></el-input>
+              :disabled="judgeWrite('applyPost')"></el-input>
           </el-form-item>
         </el-col>
-        <el-col :span="24" v-if="JudgeShow('leaveType')">
+        <el-col :span="24" v-if="judgeShow('leaveType')">
           <el-form-item label="请假类别" prop="leaveType">
-            <el-radio-group v-model="dataForm.leaveType" :disabled="JudgeWrite('leaveType')">
+            <el-radio-group v-model="dataForm.leaveType" :disabled="judgeWrite('leaveType')">
               <el-radio :label="item" v-for="item in leaveTypeOptions" :key="item">{{item}}
               </el-radio>
             </el-radio-group>
           </el-form-item>
         </el-col>
-        <el-col :span="24" v-if="JudgeShow('leaveReason')">
+        <el-col :span="24" v-if="judgeShow('leaveReason')">
           <el-form-item label="请假原因" prop="leaveReason">
             <el-input v-model="dataForm.leaveReason" placeholder="请假原因" type="textarea" :rows="3"
-              :disabled="JudgeWrite('leaveReason')" />
+              :disabled="judgeWrite('leaveReason')" />
           </el-form-item>
         </el-col>
-        <el-col :span="12" v-if="JudgeShow('leaveStartTime')">
+        <el-col :span="12" v-if="judgeShow('leaveStartTime')">
           <el-form-item label="起始时间" prop="leaveStartTime">
             <el-date-picker v-model="dataForm.leaveStartTime" type="datetime" placeholder="选择日期"
               value-format="timestamp" format="yyyy-MM-dd HH:mm" :editable='false'
-              :disabled="JudgeWrite('leaveStartTime')">
+              :disabled="judgeWrite('leaveStartTime')">
             </el-date-picker>
           </el-form-item>
         </el-col>
-        <el-col :span="12" v-if="JudgeShow('leaveEndTime')">
+        <el-col :span="12" v-if="judgeShow('leaveEndTime')">
           <el-form-item label="结束时间" prop="leaveEndTime">
             <el-date-picker v-model="dataForm.leaveEndTime" type="datetime" placeholder="选择日期"
               value-format="timestamp" format="yyyy-MM-dd HH:mm" :editable='false'
-              :disabled="JudgeWrite('leaveEndTime')">
+              :disabled="judgeWrite('leaveEndTime')">
             </el-date-picker>
           </el-form-item>
         </el-col>
-        <el-col :span="12" v-if="JudgeShow('leaveDayCount')">
+        <el-col :span="12" v-if="judgeShow('leaveDayCount')">
           <el-form-item label="请假天数" prop="leaveDayCount">
             <el-input v-model="dataForm.leaveDayCount" placeholder="请假天数"
-              :disabled="JudgeWrite('leaveDayCount')">
+              :disabled="judgeWrite('leaveDayCount')">
               <template slot="append">天</template>
             </el-input>
           </el-form-item>
         </el-col>
-        <el-col :span="12" v-if="JudgeShow('leaveHour')">
+        <el-col :span="12" v-if="judgeShow('leaveHour')">
           <el-form-item label="请假小时" prop="leaveHour">
             <el-input v-model="dataForm.leaveHour" placeholder="请假小时"
-              :disabled="JudgeWrite('leaveHour')"></el-input>
+              :disabled="judgeWrite('leaveHour')"></el-input>
           </el-form-item>
         </el-col>
-        <el-col :span="24" v-if="JudgeShow('fileJson')">
+        <el-col :span="24" v-if="judgeShow('fileJson')">
           <el-form-item label="相关附件" prop="fileJson">
-            <JNPF-UploadFz v-model="fileList" type="workFlow" :disabled="JudgeWrite('fileJson')" />
+            <JNPF-UploadFz v-model="fileList" type="workFlow" :disabled="judgeWrite('fileJson')" />
           </el-form-item>
         </el-col>
       </el-row>
