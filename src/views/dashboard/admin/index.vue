@@ -62,7 +62,7 @@
           <div class="no_left_massage">
             <ul>
               <li v-for="(item,index) in massageList" :key="index">
-                <p>{{item.title}}</p>
+                <p class="com-hover">{{item.title}}</p>
                 <span class="time">{{item.listDate}}</span>
               </li>
             </ul>

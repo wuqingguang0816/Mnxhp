@@ -189,6 +189,9 @@
             <el-form-item label="列表权限">
               <el-switch v-model="columnData.useColumnPermission"></el-switch>
             </el-form-item>
+            <el-form-item label="表单权限">
+              <el-switch v-model="columnData.useFormPermission"></el-switch>
+            </el-form-item>
             <el-form-item label="数据权限">
               <el-switch v-model="columnData.useDataPermission"></el-switch>
             </el-form-item>
@@ -232,6 +235,7 @@ const defaultColumnData = {
   treePropsLabel: 'fullName',  // 显示字段
   groupField: '',  // 分组字段
   useColumnPermission: false,
+  useFormPermission: false,
   useBtnPermission: false,
   useDataPermission: false,
   btnsList: [

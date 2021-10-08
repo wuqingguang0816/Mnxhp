@@ -42,23 +42,29 @@
           </div>
         </div>
         <JNPF-table v-loading="listLoading" :data="tableData">
-          <el-table-column prop="fullName" label="接口名称" />
+          <el-table-column prop="fullName" label="名称" />
           <el-table-column prop="enCode" label="编码" />
-          <el-table-column label="接口类型">
+          <el-table-column label="授权" width="100">
+            <template slot-scope="scope">
+              <span v-if="scope.row.checkType === 0">忽略验证</span>
+              <span v-if="scope.row.checkType === 1">鉴权验证</span>
+              <span v-if="scope.row.checkType === 2">跨域验证</span>
+            </template>
+          </el-table-column>
+          <el-table-column label="类型" width="100">
             <template slot-scope="scope">
               <span v-if="scope.row.dataType === 1">SQL数据</span>
               <span v-if="scope.row.dataType === 2">静态数据</span>
               <span v-if="scope.row.dataType === 3">Api数据</span>
             </template>
           </el-table-column>
-          <el-table-column prop="creatorUser" label="创建人" width="120" />
           <el-table-column prop="creatorTime" label="创建时间" :formatter="jnpf.tableDateFormat"
             width="120" />
           <el-table-column prop="sortCode" label="排序" width="70" align="center" />
           <el-table-column label="状态" width="70" align="center">
             <template slot-scope="scope">
-              <el-switch v-model="scope.row.enabledMark" :active-value="1" :inactive-value="0"
-                @click.native="handleUpdateState(scope.row)" disabled class="table-switch" />
+              <el-tag :type="scope.row.enabledMark == 1 ? 'success' : 'danger'" disable-transitions>
+                {{scope.row.enabledMark==1?'正常':'停用'}}</el-tag>
             </template>
           </el-table-column>
           <el-table-column label="操作" width="150">
@@ -87,7 +93,7 @@
           </el-table-column>
         </JNPF-table>
         <pagination :total="total" :page.sync="params.currentPage" :limit.sync="params.pageSize"
-          @pagination="initData" />
+          @pagination="getList" />
       </div>
     </div>
     <Form v-if="formVisible" ref="Form" @close="colseForm" />

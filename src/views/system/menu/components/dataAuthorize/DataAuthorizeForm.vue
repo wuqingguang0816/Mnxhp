@@ -7,8 +7,8 @@
       <el-form-item label="字段名称" prop="enCode">
         <el-input v-model="dataForm.enCode" placeholder="输入字段名称" />
       </el-form-item>
-      <el-form-item label="字段注解" prop="fullName">
-        <el-input v-model="dataForm.fullName" placeholder="输入字段注解" />
+      <el-form-item label="字段说明" prop="fullName">
+        <el-input v-model="dataForm.fullName" placeholder="输入字段说明" />
       </el-form-item>
       <el-form-item label="字段类型" prop="type">
         <el-select v-model="dataForm.type" placeholder="请选择" clearable>
@@ -31,7 +31,7 @@
           </el-option>
         </el-select>
       </el-form-item>
-      <el-form-item label="字段说明" prop="bodyText">
+      <el-form-item label="备注" prop="description">
         <el-input v-model="dataForm.description" type="textarea" :rows="6" />
       </el-form-item>
     </el-form>
@@ -70,19 +70,18 @@ export default {
         value: 'text',
         label: '任意文本'
       }, {
+        value: '@organizeId',
+        label: '当前组织'
+      }, {
+        value: '@organizationAndSuborganization',
+        label: '当前组织及子组织'
+      }, {
         value: '@userId',
         label: '当前用户'
       }, {
-        value: '@organizeId',
-        label: '当前公司'
-      }, {
-        value: '@dempmentId',
-        label: '当前部门'
-      }, {
-        value: '@subordinateId',
-        label: '我的下属'
-      }
-      ],
+        value: '@userAraSubordinates',
+        label: '当前用户及下属'
+      }],
       conditionSymbolOptions: [{
         value: 'Equal',
         label: '等于'
@@ -118,7 +117,7 @@ export default {
           { required: true, message: '字段名称不能为空', trigger: 'blur' }
         ],
         fullName: [
-          { required: true, message: '字段注解不能为空', trigger: 'blur' }
+          { required: true, message: '字段说明不能为空', trigger: 'blur' }
         ],
         type: [
           { required: true, message: '请选择字段类型', trigger: 'blur' }

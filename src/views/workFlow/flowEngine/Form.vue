@@ -63,13 +63,13 @@
               <el-input v-model="formType" maxlength="50" disabled></el-input>
             </el-form-item>
             <template v-if="dataForm.formType == 1">
-              <el-form-item label="表单地址" prop="formUrl">
-                <el-input v-model="dataForm.formUrl" placeholder="表单地址">
+              <el-form-item label="Web地址" prop="formUrl">
+                <el-input v-model="dataForm.formUrl" placeholder="Web地址">
                   <template slot="prepend">@/views/</template>
                 </el-input>
               </el-form-item>
-              <el-form-item label="app地址" prop="appFormUrl">
-                <el-input v-model="dataForm.appFormUrl" placeholder="app地址" />
+              <el-form-item label="App地址" prop="appFormUrl">
+                <el-input v-model="dataForm.appFormUrl" placeholder="App地址" />
               </el-form-item>
             </template>
             <el-form-item label="排序" prop="sortCode">
@@ -153,7 +153,8 @@
         </template>
       </template>
       <template v-if="activeStep==2">
-        <Process ref="processDesign" :conf="flowTemplateJson" @startNodeChange="onStartChange" />
+        <Process ref="processDesign" :conf="flowTemplateJson" @startNodeChange="onStartChange"
+          :flowType="dataForm.type" />
       </template>
     </div>
     <icon-box :visible.sync="iconBoxVisible" ref="iconBox" :current="dataForm.icon"

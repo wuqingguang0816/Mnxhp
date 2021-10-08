@@ -1,14 +1,21 @@
 <template>
   <div class="functional-logo-container">
     <router-link class="sidebar-logo-link" to="/">
-      <img src="@/assets/images/jnpf1.png" class="sidebar-logo" />
+      <img src="@/assets/images/jnpf2.png" class="sidebar-logo" v-if="slideClass==='lightWhite'" />
+      <img src="@/assets/images/jnpf1.png" class="sidebar-logo" v-else />
     </router-link>
   </div>
 </template>
 
 <script>
+import { mapState } from 'vuex'
 export default {
-  name: 'SidebarLogo'
+  name: 'SidebarLogo',
+  computed: {
+    ...mapState({
+      slideClass: state => state.settings.slideClass,
+    })
+  },
 }
 </script>
 

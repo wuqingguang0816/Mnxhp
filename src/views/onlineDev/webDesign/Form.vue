@@ -104,13 +104,14 @@
         </el-col>
       </el-row>
       <template v-if="activeStep==1">
-        <Generator ref="generator" :conf="formData" :modelType="dataForm.type" />
+        <Generator ref="generator" :conf="formData" :modelType="dataForm.type"
+          :webType="dataForm.webType" />
       </template>
       <template v-if="activeStep==2">
         <columnDesign ref="columnDesign" :conf="columnData" />
       </template>
       <template v-if="activeStep==3">
-        <Process ref="process" :conf="flowTemplateJson" />
+        <Process ref="process" :conf="flowTemplateJson" :flowType="1" />
       </template>
     </div>
     <TableForm :visible.sync="formVisible" ref="tableForm" @closeForm="colseForm"

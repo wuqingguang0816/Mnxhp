@@ -69,7 +69,7 @@ export default {
         }
       })
     },
-    JudgeShow(id) {
+    judgeShow(id) {
       if (this.setting.opType == 4) return true
       if (!this.setting.formOperates || !this.setting.formOperates.length) return true
       let arr = this.setting.formOperates.filter(o => o.id === id) || []
@@ -77,7 +77,7 @@ export default {
       let item = arr[0]
       return item.read
     },
-    JudgeWrite(id) {
+    judgeWrite(id) {
       if (this.setting.readonly) return true
       if (!this.setting.formOperates || !this.setting.formOperates.length) return false
       let arr = this.setting.formOperates.filter(o => o.id === id) || []

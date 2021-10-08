@@ -70,18 +70,15 @@
               <el-table-column prop="sortCode" label="排序" width="70" align="center" />
               <el-table-column label="状态" width="70" align="center">
                 <template slot-scope="scope">
-                  <el-switch v-model="scope.row.enabledMark" :active-value="1" :inactive-value="0"
-                    @click.native="handleUpdateState(scope.row)" disabled class="table-switch" />
+                  <el-tag :type="scope.row.enabledMark == 1 ? 'success' : 'danger'"
+                    disable-transitions>
+                    {{scope.row.enabledMark==1?'正常':'停用'}}</el-tag>
                 </template>
               </el-table-column>
               <el-table-column label="操作" width="150">
                 <template slot-scope="scope">
                   <tableOpts @edit="handleAddEdit(scope.row.id)" @del="handleDel(scope.row.id)">
-                    <template v-if="params.category==='App' && scope.row.type && scope.row.type!=1">
-                      <el-button type="text" size="mini" @click="exportMenu(scope.row.id)">导出模板
-                      </el-button>
-                    </template>
-                    <template v-if="params.category==='Web' && scope.row.type && scope.row.type!=1">
+                    <template v-if="scope.row.type && scope.row.type!=1">
                       <el-dropdown>
                         <span class="el-dropdown-link">
                           <el-button type="text" size="mini">{{$t('common.moreBtn')}}<i
@@ -89,7 +86,8 @@
                           </el-button>
                         </span>
                         <el-dropdown-menu slot="dropdown">
-                          <template v-if="[2,3,4].indexOf(scope.row.type)>-1">
+                          <template
+                            v-if="params.category==='Web' && [2,3,4].indexOf(scope.row.type)>-1">
                             <el-dropdown-item v-if="scope.row.isButtonAuthorize === 1"
                               @click.native="handleButtonAuthorize(scope.row)">
                               按钮权限
@@ -97,6 +95,10 @@
                             <el-dropdown-item v-if="scope.row.isColumnAuthorize === 1"
                               @click.native="handleColumnAuthorize(scope.row)">
                               列表权限
+                            </el-dropdown-item>
+                            <el-dropdown-item v-if="scope.row.isFormAuthorize === 1"
+                              @click.native="handleFormAuthorize(scope.row)">
+                              表单权限
                             </el-dropdown-item>
                             <el-dropdown-item v-if="scope.row.isDataAuthorize === 1"
                               @click.native="handleDataAuthorize(scope.row)">
@@ -120,6 +122,7 @@
     <Form v-if="formVisible" ref="Form" @refreshDataList="initData" />
     <ButtonAuthorizeListDrawer v-if="buttonAuthorizeListDrawer" ref="buttonAuthorizeList" />
     <ColumnAuthorizeListDrawer v-if="columnAuthorizeListDrawer" ref="ColumnAuthorizeList" />
+    <FormAuthorizeListDrawer v-if="formAuthorizeListDrawer" ref="FormAuthorizeList" />
     <DataAuthorizeListDrawer v-if="dataAuthorizeListDrawer" ref="DataAuthorizeList" />
   </div>
 </template>
@@ -128,6 +131,7 @@ import { getMenuList, updateMenuState, delMenu, exportMenu } from '@/api/system/
 import Form from './Form'
 import ButtonAuthorizeListDrawer from './components/buttonAuthorize/index'
 import ColumnAuthorizeListDrawer from './components/columnAuthorize/index'
+import FormAuthorizeListDrawer from './components/formAuthorize/index'
 import DataAuthorizeListDrawer from './components/dataAuthorize/index'
 
 export default {
@@ -136,6 +140,7 @@ export default {
     Form,
     ButtonAuthorizeListDrawer,
     ColumnAuthorizeListDrawer,
+    FormAuthorizeListDrawer,
     DataAuthorizeListDrawer
   },
   data() {
@@ -151,6 +156,7 @@ export default {
       formVisible: false,
       buttonAuthorizeListDrawer: false,
       columnAuthorizeListDrawer: false,
+      formAuthorizeListDrawer: false,
       dataAuthorizeListDrawer: false,
       expands: true,
       refreshTable: true
@@ -240,6 +246,14 @@ export default {
       this.columnAuthorizeListDrawer = true
       this.$nextTick(() => {
         this.$refs.ColumnAuthorizeList.init(moduleId, fullName)
+      })
+    },
+    handleFormAuthorize(row) {
+      const moduleId = row.id
+      const fullName = row.fullName
+      this.formAuthorizeListDrawer = true
+      this.$nextTick(() => {
+        this.$refs.FormAuthorizeList.init(moduleId, fullName)
       })
     },
     handleDataAuthorize(row) {

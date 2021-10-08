@@ -2,7 +2,7 @@
   <div class="navbar" :class="slideClass">
     <hamburger id="hamburger-container" :is-active="sidebar.opened" class="hamburger-container"
       @toggleClick="toggleSideBar" />
-    <TopMenu class="top-menu" />
+    <Menu class="main-menu top-menu" />
     <NavbarRight />
   </div>
 </template>
@@ -10,9 +10,9 @@
 import { mapGetters, mapState } from 'vuex'
 import Hamburger from '@/components/Hamburger'
 import NavbarRight from '../components/NavbarRight'
-import TopMenu from './topMenu'
+import Menu from './menu'
 export default {
-  components: { Hamburger, NavbarRight, TopMenu },
+  components: { Hamburger, NavbarRight, Menu },
   computed: {
     ...mapState({
       slideClass: state => state.settings.slideClass,

@@ -4,6 +4,7 @@
       <el-tab-pane label="菜单权限" name="module"></el-tab-pane>
       <el-tab-pane label="按钮权限" name="button"></el-tab-pane>
       <el-tab-pane label="列表权限" name="column"></el-tab-pane>
+      <el-tab-pane label="表单权限" name="form"></el-tab-pane>
       <el-tab-pane label="数据权限" name="resource"></el-tab-pane>
       <el-tree :data="treeData" :props="defaultProps" default-expand-all highlight-current
         ref="treeBox" :expand-on-click-node="false" class="JNPF-common-el-tree" node-key="id"

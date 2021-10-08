@@ -47,15 +47,15 @@ export default {
       systemData: [
         {
           fieldName: '打印人员',
-          field: 'printer',
+          field: 'systemPrinter',
         },
         {
           fieldName: '打印时间',
-          field: 'printTime',
+          field: 'systemPrintTime',
         },
         {
           fieldName: '审批内容',
-          field: 'approvalContent',
+          field: 'systemApprovalContent',
         }
       ],
       defaultProps: {

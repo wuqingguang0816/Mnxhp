@@ -100,7 +100,7 @@ export default {
   data() {
     return {
       idGlobal: 100,
-      formConf,
+      formConf: deepClone(formConf),
       inputComponents,
       selectComponents,
       systemComponents,
@@ -342,11 +342,13 @@ export default {
       if (config.layout === 'colFormItem') {
         if (!this.$store.getters.hasTable) {
           // 分割线和按钮不加vModel
-          if (noVModelList.indexOf(config.jnpfKey) > -1) return
-          item.__vModel__ = `${config.jnpfKey}Field${this.idGlobal}`
+          if (noVModelList.indexOf(config.jnpfKey) < 0) {
+            item.__vModel__ = `${config.jnpfKey}Field${this.idGlobal}`
+          }
         } else {
-          if (noVModelList.indexOf(config.jnpfKey) > -1) return
-          item.__vModel__ = ""
+          if (noVModelList.indexOf(config.jnpfKey) < 0) {
+            item.__vModel__ = ""
+          }
         }
       } else if (config.layout === 'rowFormItem') {
         if (config.jnpfKey === 'table') {

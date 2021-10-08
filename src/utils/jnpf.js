@@ -298,6 +298,18 @@ const jnpf = {
     if (hasPermission) return true
     return false
   },
+  hasFormP(enCode) {
+    const permissionList = store.getters && store.getters.permissionList
+    const modelId = context.$route.meta.modelId || ''
+    if (!modelId) return false
+    const list = permissionList.filter(o => o.modelId === modelId)
+    if (!list.length) return false
+    const formList = list[0] && list[0].form ? list[0].form : []
+    if (!formList.length) return false
+    const hasPermission = formList.some(form => form.enCode === enCode)
+    if (hasPermission) return true
+    return false
+  },
   hasBtnP(enCode) {
     const permissionList = store.getters && store.getters.permissionList
     const modelId = context.$route.meta.modelId || ''

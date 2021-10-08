@@ -53,13 +53,14 @@ export function exportTpl(id) {
   })
 }
 // 获取下拉框列表
-export function getPrintDevSelector() {
+export function getPrintDevSelector(type) {
   return request({
     url: '/api/system/printDev/Selector',
-    method: 'GET'
+    method: 'GET',
+    data: { type }
   })
 }
-// 导入
+// 更新状态
 export function setState(id) {
   return request({
     url: `/api/system/printDev/${id}/Actions/State`,
@@ -70,7 +71,7 @@ export function setState(id) {
 export function getFields(data) {
   return request({
     url: `/api/system/printDev/Fields`,
-    method: 'get',
+    method: 'post',
     data
   })
 }

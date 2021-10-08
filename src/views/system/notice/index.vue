@@ -46,19 +46,18 @@
             <template slot-scope="scope">
               <tableOpts @edit="handleAddEdit(scope.row.id)" @del="handleDel(scope.row.id)"
                 :editDisabled="scope.row.enabledMark != 0">
-                <el-dropdown v-if="scope.row.enabledMark == 0">
+                <el-dropdown>
                   <el-button type="text" size="mini">
                     {{$t('common.moreBtn')}}<i class="el-icon-arrow-down el-icon--right" />
                   </el-button>
                   <el-dropdown-menu slot="dropdown">
                     <el-dropdown-item @click.native="handleView(scope.row.id)">
                       详情</el-dropdown-item>
-                    <el-dropdown-item @click.native="handlePublish(scope.row.id)">发布
+                    <el-dropdown-item v-if="scope.row.enabledMark == 0"
+                      @click.native="handlePublish(scope.row.id)">发布
                     </el-dropdown-item>
                   </el-dropdown-menu>
                 </el-dropdown>
-                <el-button v-if="scope.row.enabledMark == 1" type="text" size="mini"
-                  @click="handleView(scope.row.id)">详情</el-button>
               </tableOpts>
             </template>
           </el-table-column>

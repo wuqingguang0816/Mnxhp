@@ -9,7 +9,7 @@
           <el-button @click="goBack()">{{$t('common.cancelButton')}}</el-button>
         </div>
       </div>
-      <el-row>
+      <el-row class="main">
         <el-col :span="14" :offset="5">
           <el-form :model="dataForm" :rules="dataRule" ref="dataForm" class="mt-20"
             label-width="100px" @submit.native.prevent>
@@ -44,8 +44,8 @@
               <el-col :span="24">
                 <el-form-item label="请求类型" prop="executeContent.interfaceType">
                   <el-radio-group v-model="dataForm.executeContent.interfaceType">
-                    <el-radio label="GET">Get</el-radio>
-                    <el-radio label="POST">Post</el-radio>
+                    <el-radio label="GET">GET</el-radio>
+                    <el-radio label="POST">POST</el-radio>
                   </el-radio-group>
                 </el-form-item>
               </el-col>

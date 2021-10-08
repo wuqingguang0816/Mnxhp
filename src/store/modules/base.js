@@ -12,7 +12,8 @@ const state = {
   positionTree: [],
   roleList: [],
   roleTree: [],
-  printTree: []
+  printFlowTree: [],
+  printFormTree: []
 }
 
 const mutations = {
@@ -37,8 +38,11 @@ const mutations = {
   SET_ROLE_TREE: (state, roleTree) => {
     state.roleTree = roleTree
   },
-  SET_PRINT_TREE: (state, printTree) => {
-    state.printTree = printTree
+  SET_PRINT_FLOW_TREE: (state, printTree) => {
+    state.printFlowTree = printTree
+  },
+  SET_PRINT_FORM_TREE: (state, printTree) => {
+    state.printFormTree = printTree
   }
 }
 
@@ -207,17 +211,31 @@ const actions = {
       resolve(item || {})
     })
   },
-  getPrintTree({ state, commit }) {
+  getPrintFlowTree({ state, commit }) {
     return new Promise((resolve, reject) => {
-      if (!state.printTree.length) {
-        getPrintDevSelector().then(res => {
-          commit('SET_PRINT_TREE', res.data.list)
+      if (!state.printFlowTree.length) {
+        getPrintDevSelector(1).then(res => {
+          commit('SET_PRINT_FLOW_TREE', res.data.list)
           resolve(res.data.list)
         }).catch(error => {
           reject(error)
         })
       } else {
-        resolve(state.printTree)
+        resolve(state.printFlowTree)
+      }
+    })
+  },
+  getPrintFormTree({ state, commit }) {
+    return new Promise((resolve, reject) => {
+      if (!state.printFormTree.length) {
+        getPrintDevSelector(2).then(res => {
+          commit('SET_PRINT_FORM_TREE', res.data.list)
+          resolve(res.data.list)
+        }).catch(error => {
+          reject(error)
+        })
+      } else {
+        resolve(state.printFormTree)
       }
     })
   },

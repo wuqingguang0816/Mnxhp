@@ -21,7 +21,9 @@
       </el-row>
       <div class="JNPF-common-layout-main JNPF-flex-main">
         <div class="JNPF-common-head">
-          <topOpts @add="handleAddEdit()" />
+          <topOpts @add="handleAddEdit()">
+            <upload-btn url="/api/system/BillRule/Action/Import" @on-success="initData" />
+          </topOpts>
           <div class="JNPF-common-head-right">
             <el-tooltip effect="dark" :content="$t('common.refresh')" placement="top">
               <el-link icon="icon-ym icon-ym-Refresh JNPF-common-head-icon" :underline="false"
@@ -36,15 +38,27 @@
           <el-table-column prop="digit" label="流水位数" width="80" />
           <el-table-column prop="startNumber" label="流水起始" width="120" />
           <el-table-column prop="outputNumber" label="当前流水号" />
-          <el-table-column label="状态" width="100">
+          <el-table-column label="状态" width="70" align="center">
             <template slot-scope="scope">
-              <el-switch v-model="scope.row.enabledMark" :active-value="1" :inactive-value="0"
-                @click.native="handleUpdateState(scope.row)" disabled class="table-switch" />
+              <el-tag :type="scope.row.enabledMark == 1 ? 'success' : 'danger'" disable-transitions>
+                {{scope.row.enabledMark==1?'正常':'停用'}}</el-tag>
             </template>
           </el-table-column>
-          <el-table-column label="操作" width="100">
+          <el-table-column label="操作" width="150">
             <template slot-scope="scope">
               <tableOpts @edit="handleAddEdit(scope.row.id)" @del="handleDel(scope.row.id)">
+                <el-dropdown>
+                  <span class="el-dropdown-link">
+                    <el-button type="text" size="mini">{{$t('common.moreBtn')}}<i
+                        class="el-icon-arrow-down el-icon--right"></i>
+                    </el-button>
+                  </span>
+                  <el-dropdown-menu slot="dropdown">
+                    <el-dropdown-item @click.native="exportTpl(scope.row.id)">
+                      导出
+                    </el-dropdown-item>
+                  </el-dropdown-menu>
+                </el-dropdown>
               </tableOpts>
             </template>
           </el-table-column>
@@ -61,7 +75,8 @@
 import {
   getBillRuleList,
   delBillRule,
-  updateBillRuleState
+  updateBillRuleState,
+  exportTpl
 } from '@/api/system/billRule'
 import Form from './Form'
 
@@ -102,7 +117,7 @@ export default {
     },
     handleUpdateState(row) {
       const txt = row.enabledMark ? '禁用' : '开启'
-      this.$confirm(`您确定要${txt}当前规则吗, 是否继续?`, '提示', {
+      this.$confirm(`您确定要${txt}当前单据吗, 是否继续?`, '提示', {
         type: 'warning'
       }).then(() => {
         updateBillRuleState(row.id).then(res => {
@@ -138,6 +153,15 @@ export default {
           })
         })
       }).catch(() => { })
+    },
+    exportTpl(id) {
+      this.$confirm('您确定要导出该单据, 是否继续?', '提示', {
+        type: 'warning'
+      }).then(() => {
+        exportTpl(id).then(res => {
+          if (res.data.url) window.location.href = this.define.comUrl + res.data.url
+        })
+      }).catch(() => { });
     },
     search() {
       this.params.currentPage = 1

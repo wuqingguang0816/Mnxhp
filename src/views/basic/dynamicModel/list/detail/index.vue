@@ -10,6 +10,11 @@
             v-if="!loading" />
         </div>
         <span slot="footer" class="dialog-footer">
+          <template v-if="formData.hasPrintBtn && formData.printId">
+            <el-button type="primary" @click="printBrowseVisible=true">
+              {{formData.printButtonText||'打 印'}}
+            </el-button>
+          </template>
           <el-button @click="visible = false">{{$t('common.cancelButton')}}</el-button>
         </span>
       </el-dialog>
@@ -20,6 +25,11 @@
           <div class="JNPF-common-page-header">
             <el-page-header @back="goBack" content="详情" />
             <div class="options">
+              <template v-if="formData.hasPrintBtn && formData.printId">
+                <el-button type="primary" @click="printBrowseVisible=true">
+                  {{formData.printButtonText||'打 印'}}
+                </el-button>
+              </template>
               <el-button @click="goBack">{{$t('common.cancelButton')}}</el-button>
             </div>
           </div>
@@ -33,6 +43,7 @@
       </transition>
     </template>
     <Detail v-if="detailVisible" ref="Detail" @close="detailVisible = false" />
+    <print-browse :visible.sync="printBrowseVisible" :id="formData.printId" :formId="dataForm.id" />
   </div>
 </template>
 
@@ -40,9 +51,10 @@
 import { getDataChange, getConfigData } from '@/api/onlineDev/visualDev'
 import { deepClone } from '@/utils'
 import Parser from './Parser'
+import PrintBrowse from '@/components/PrintBrowse'
 export default {
   name: 'Detail',
-  components: { Parser },
+  components: { Parser, PrintBrowse },
   data() {
     return {
       visible: false,
@@ -56,17 +68,22 @@ export default {
       loading: true,
       mainLoading: false,
       detailVisible: false,
-      relationData: {}
+      relationData: {},
+      useFormPermission: false,
+      printBrowseVisible: false,
+      formOperates: []
     }
   },
   methods: {
     goBack() {
       this.$emit('close')
     },
-    init(formData, modelId, id) {
+    init(formData, modelId, id, useFormPermission) {
       this.formData = deepClone(formData)
       this.modelId = modelId
+      this.useFormPermission = useFormPermission
       this.dataForm.id = id || ''
+      this.getFormOperates()
       this.loading = true
       this.relationData = {}
       this.$nextTick(() => {
@@ -138,6 +155,13 @@ export default {
         })
       }).catch(() => { this.mainLoading = false })
     },
+    getFormOperates() {
+      if (!this.useFormPermission) return
+      const permissionList = this.$store.getters.permissionList
+      const modelId = this.$route.meta.modelId
+      const list = permissionList.filter(o => o.modelId === modelId)
+      this.formOperates = list[0] && list[0].form ? list[0].form : []
+    },
     fillFormData(form, data) {
       let relationFormAttrList = []
       const loop = list => {
@@ -151,6 +175,14 @@ export default {
             } else {
               const val = data[item.__vModel__]
               if (val) item.__config__.defaultValue = val
+            }
+            if (this.useFormPermission) {
+              let noShow = true
+              if (this.formOperates && this.formOperates.length) {
+                noShow = !this.formOperates.some(o => o.enCode === item.__vModel__)
+              }
+              noShow = item.__config__.noShow ? item.__config__.noShow : noShow
+              this.$set(item.__config__, 'noShow', noShow)
             }
           }
           if (item.__config__.jnpfKey === 'relationFormAttr') relationFormAttrList.push(item)

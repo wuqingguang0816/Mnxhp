@@ -316,12 +316,15 @@
           <el-form-item label="标题宽度">
             <el-input v-model.number="formConf.labelWidth" type="number" placeholder="标题宽度" />
           </el-form-item>
-          <el-form-item label="取消按钮文本">
-            <el-input v-model="formConf.cancelButtonText" placeholder="默认为‘取 消’" />
-          </el-form-item>
-          <el-form-item label="确定按钮文本">
-            <el-input v-model="formConf.confirmButtonText" placeholder="默认为‘保 存’" />
-          </el-form-item>
+          <el-divider>表单按钮</el-divider>
+          <div class="per-cell">
+            <el-checkbox v-model="formConf.hasConfirmBtn" disabled>确定</el-checkbox>
+            <el-input v-model="formConf.confirmButtonText" />
+          </div>
+          <div class="per-cell">
+            <el-checkbox v-model="formConf.hasCancelBtn" disabled>取消</el-checkbox>
+            <el-input v-model="formConf.cancelButtonText" />
+          </div>
         </el-form>
       </el-scrollbar>
     </div>
@@ -766,6 +769,17 @@ export default {
   }
   .el-icon-delete {
     color: #157a0c;
+  }
+}
+.per-cell {
+  display: flex;
+  align-items: center;
+  margin-bottom: 18px;
+  .el-checkbox {
+    width: 146px;
+  }
+  &.last {
+    margin-bottom: 0;
   }
 }
 </style>

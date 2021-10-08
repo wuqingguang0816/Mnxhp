@@ -19,12 +19,12 @@
       <el-form-item label="提醒设置">
         <el-input-number v-model="dataForm.early" placeholder="默认1小时" controls-position="right" />
       </el-form-item>
-      <el-form-item label="提醒方式">
+      <!-- <el-form-item label="提醒方式">
         <el-checkbox v-model="appAlert">APP提醒</el-checkbox>
         <el-checkbox v-model="weChatAlert">微信提醒</el-checkbox>
         <el-checkbox v-model="mailAlert">邮件提醒</el-checkbox>
         <el-checkbox v-model="mobileAlert">短信提醒</el-checkbox>
-      </el-form-item>
+      </el-form-item> -->
       <el-form-item label="标签颜色">
         <el-color-picker v-model="dataForm.colour"
           :predefine="['#188ae2', '#35b8e0', '#26bf8c','#f9c851','#ff5b5b', '#5b69bc', '#ff8acc', '#3b3e47','#282828' ]" />

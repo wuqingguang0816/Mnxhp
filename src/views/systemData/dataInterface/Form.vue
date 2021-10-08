@@ -107,30 +107,21 @@
               <template slot="prepend">GET</template>
             </el-input>
           </el-form-item>
-          <el-form-item v-for="(item, index) in dataForm.requestParameters" :key="item.index"
-            label="接口参数" required>
-            <el-row class="parameBox">
-              <el-col :span="7" style="margin-right: 10px">
-                <el-form-item :prop="'requestParameters.' + index + '.field'" :rules="{
-                      required: true, message: '参数名称不能为空', trigger: 'blur'
-                    }">
-                  <el-input v-model="item.field" placeholder="参数名称" />
-                </el-form-item>
+          <el-form-item label="接口参数">
+            <el-button @click="addParame" class="el-icon-plus">添加参数</el-button>
+            <el-row v-for="(item, index) in dataForm.requestParameters" :key="item.index"
+              class="mt-10">
+              <el-col :span="10">
+                <el-input v-model="item.field" placeholder="参数名称" />
               </el-col>
-              <el-col :span="7" style="margin-right: 10px">
-                <el-form-item :prop="'requestParameters.' + index + '.value'" :rules="{
-                      required: true, message: '参数值不能为空', trigger: 'blur'
-                    }">
-                  <el-input v-model="item.value" placeholder="参数值" />
-                </el-form-item>
+              <el-col :span="10" :offset="1">
+                <el-input v-model="item.value" placeholder="参数值" />
               </el-col>
-              <el-col :span="2">
-                <el-button @click.prevent="removeParame(item)">删除</el-button>
+              <el-col :span="2" :offset="1">
+                <el-button type="danger" icon="el-icon-close" @click="removeParame(index)">
+                </el-button>
               </el-col>
             </el-row>
-          </el-form-item>
-          <el-form-item>
-            <el-button type="primary" @click="addParame" class="el-icon-plus">添加参数</el-button>
           </el-form-item>
         </el-col>
       </el-row>
@@ -331,11 +322,8 @@ export default {
         }
       })
     },
-    removeParame(item) {
-      let index = this.dataForm.requestParameters.indexOf(item)
-      if (index !== -1) {
-        this.dataForm.requestParameters.splice(index, 1)
-      }
+    removeParame(index) {
+      this.dataForm.requestParameters.splice(index, 1)
     },
     addParame() {
       this.dataForm.requestParameters.push({
@@ -377,13 +365,6 @@ export default {
   .el-tabs__header {
     padding: 0;
   }
-  .parameBox {
-    .el-form-item--mini.el-form-item,
-    .el-form-item--small.el-form-item {
-      margin-bottom: 0;
-    }
-  }
-
   .config {
     padding: 0 20px;
     display: flex;

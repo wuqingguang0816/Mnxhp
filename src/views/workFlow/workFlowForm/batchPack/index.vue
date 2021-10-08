@@ -7,89 +7,89 @@
     <el-form ref="dataForm" :model="dataForm" :rules="dataRule" label-width="100px"
       :disabled="setting.readonly">
       <el-row>
-        <el-col :span="12" v-if="JudgeShow('flowTitle')">
+        <el-col :span="12" v-if="judgeShow('flowTitle')">
           <el-form-item label="流程标题" prop="flowTitle">
             <el-input v-model="dataForm.flowTitle" placeholder="流程标题"
-              :disabled="JudgeWrite('flowTitle')"></el-input>
+              :disabled="judgeWrite('flowTitle')"></el-input>
           </el-form-item>
         </el-col>
-        <el-col :span="12" v-if="JudgeShow('flowUrgent')">
+        <el-col :span="12" v-if="judgeShow('flowUrgent')">
           <el-form-item label="紧急程度" prop="flowUrgent">
             <el-select v-model="dataForm.flowUrgent" placeholder="选择紧急程度"
-              :disabled="JudgeWrite('flowUrgent')">
+              :disabled="judgeWrite('flowUrgent')">
               <el-option :key="item.value" :label="item.label" :value="item.value"
                 v-for="item in flowUrgentOptions" />
             </el-select>
           </el-form-item>
         </el-col>
-        <el-col :span="12" v-if="JudgeShow('productName')">
+        <el-col :span="12" v-if="judgeShow('productName')">
           <el-form-item label="产品名称" prop="productName">
             <el-input v-model="dataForm.productName" placeholder="产品名称"
-              :disabled="JudgeWrite('productName')"></el-input>
+              :disabled="judgeWrite('productName')"></el-input>
           </el-form-item>
         </el-col>
-        <el-col :span="12" v-if="JudgeShow('production')">
+        <el-col :span="12" v-if="judgeShow('production')">
           <el-form-item label="生产车间" prop="production">
             <el-input v-model="dataForm.production" placeholder="生产车间"
-              :disabled="JudgeWrite('production')"></el-input>
+              :disabled="judgeWrite('production')"></el-input>
           </el-form-item>
         </el-col>
-        <el-col :span="12" v-if="JudgeShow('compactor')">
+        <el-col :span="12" v-if="judgeShow('compactor')">
           <el-form-item label="编制人员" prop="compactor">
             <el-input v-model="dataForm.compactor" placeholder="编制人员"
-              :disabled="JudgeWrite('compactor')"></el-input>
+              :disabled="judgeWrite('compactor')"></el-input>
           </el-form-item>
         </el-col>
-        <el-col :span="12" v-if="JudgeShow('compactorDate')">
+        <el-col :span="12" v-if="judgeShow('compactorDate')">
           <el-form-item label="编制日期" prop="compactorDate">
             <el-date-picker v-model="dataForm.compactorDate" type="datetime" placeholder="选择日期"
               value-format="timestamp" format="yyyy-MM-dd HH:mm" :editable='false'
-              :disabled="JudgeWrite('compactorDate')">
+              :disabled="judgeWrite('compactorDate')">
             </el-date-picker>
           </el-form-item>
         </el-col>
-        <el-col :span="12" v-if="JudgeShow('standard')">
+        <el-col :span="12" v-if="judgeShow('standard')">
           <el-form-item label="产品规格" prop="standard">
             <el-input v-model="dataForm.standard" placeholder="产品规格"
-              :disabled="JudgeWrite('standard')"></el-input>
+              :disabled="judgeWrite('standard')"></el-input>
           </el-form-item>
         </el-col>
-        <el-col :span="12" v-if="JudgeShow('warehousNo')">
+        <el-col :span="12" v-if="judgeShow('warehousNo')">
           <el-form-item label="入库序号" prop="warehousNo">
             <el-input v-model="dataForm.warehousNo" placeholder="入库序号"
-              :disabled="JudgeWrite('warehousNo')"></el-input>
+              :disabled="judgeWrite('warehousNo')"></el-input>
           </el-form-item>
         </el-col>
-        <el-col :span="12" v-if="JudgeShow('productionQuty')">
+        <el-col :span="12" v-if="judgeShow('productionQuty')">
           <el-form-item label="批产数量" prop="productionQuty">
             <el-input v-model="dataForm.productionQuty" placeholder="批产数量"
-              :disabled="JudgeWrite('productionQuty')"></el-input>
+              :disabled="judgeWrite('productionQuty')"></el-input>
           </el-form-item>
         </el-col>
-        <el-col :span="12" v-if="JudgeShow('operationDate')">
+        <el-col :span="12" v-if="judgeShow('operationDate')">
           <el-form-item label="操作日期" prop="operationDate">
             <el-date-picker v-model="dataForm.operationDate" type="datetime" placeholder="选择日期"
               value-format="timestamp" format="yyyy-MM-dd HH:mm" :editable='false'
-              :disabled="JudgeWrite('operationDate')">
+              :disabled="judgeWrite('operationDate')">
             </el-date-picker>
           </el-form-item>
         </el-col>
-        <el-col :span="12" v-if="JudgeShow('regulations')">
+        <el-col :span="12" v-if="judgeShow('regulations')">
           <el-form-item label="工艺规程" prop="regulations">
             <el-input v-model="dataForm.regulations" placeholder="工艺规程"
-              :disabled="JudgeWrite('regulations')"></el-input>
+              :disabled="judgeWrite('regulations')"></el-input>
           </el-form-item>
         </el-col>
-        <el-col :span="12" v-if="JudgeShow('packing')">
+        <el-col :span="12" v-if="judgeShow('packing')">
           <el-form-item label="包装规格" prop="packing">
             <el-input v-model="dataForm.packing" placeholder="包装规格"
-              :disabled="JudgeWrite('packing')"></el-input>
+              :disabled="judgeWrite('packing')"></el-input>
           </el-form-item>
         </el-col>
-        <el-col :span="24" v-if="JudgeShow('description')">
+        <el-col :span="24" v-if="judgeShow('description')">
           <el-form-item label="备注" prop="description">
             <el-input v-model="dataForm.description" placeholder="备注" type="textarea" :rows="3"
-              :disabled="JudgeWrite('description')" />
+              :disabled="judgeWrite('description')" />
           </el-form-item>
         </el-col>
       </el-row>

@@ -39,16 +39,17 @@
             <JNPF-table v-loading="dataListLoading" :data="dataAuthorizeList" row-key="id"
               default-expand-all :tree-props="{children: 'children', hasChildren: ''}">
               <el-table-column prop="enCode" label="字段名称" />
-              <el-table-column prop="fullName" label="字段注解" show-overflow-tooltip />
+              <el-table-column prop="fullName" label="字段说明" show-overflow-tooltip />
               <el-table-column prop="type" label="字段类型" width="70" />
               <el-table-column prop="conditionSymbol" label="条件符号" show-overflow-tooltip />
-              <el-table-column label="条件内容" width="70">
+              <el-table-column label="条件内容" width="120">
                 <template slot-scope="scope">
                   <span v-if="scope.row.conditionText === 'text'">任意文本</span>
                   <span v-if="scope.row.conditionText === '@userId'">当前用户</span>
-                  <span v-if="scope.row.conditionText === '@organizeId'">当前公司</span>
-                  <span v-if="scope.row.conditionText === '@dempmentId'">当前部门</span>
-                  <span v-if="scope.row.conditionText === '@subordinateId'">我的下属</span>
+                  <span v-if="scope.row.conditionText === '@organizeId'">当前组织</span>
+                  <span
+                    v-if="scope.row.conditionText === '@organizationAndSuborganization'">当前组织及子组织</span>
+                  <span v-if="scope.row.conditionText === '@userAraSubordinates'">当前用户及下属</span>
                 </template>
               </el-table-column>
               <el-table-column label="操作" width="100">
@@ -199,11 +200,16 @@ export default {
   }
 }
 .JNPF-flex-tabs {
-  >>> .el-table__body-wrapper {
-    height: 100vh !important;
-  }
-  >>> .el-tabs__nav-scroll {
-    padding-left: 20px;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  >>> .el-tabs__content {
+    flex: 1;
+    .el-tab-pane {
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+    }
   }
 }
 </style>

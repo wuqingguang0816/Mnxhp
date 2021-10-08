@@ -123,6 +123,16 @@
                 <el-switch v-model="activeData.__config__.noShow" />
               </el-form-item>
             </template>
+            <template v-if="activeData.on && (modelType==1||modelType==6)">
+              <el-divider>组件事件</el-divider>
+              <div v-for="(value,key) in activeData.on" :key="key">
+                <el-form-item :label="key">
+                  <el-button style="width: 100%;" @click="editFunc(value,key)">
+                    {{getTipText(key)}}
+                  </el-button>
+                </el-form-item>
+              </div>
+            </template>
             <template v-if="activeData.__config__.jnpfKey==='table'">
               <el-form-item label="关联子表" v-if="$store.getters.hasTable">
                 <el-select v-model="activeData.__config__.tableName" placeholder="请选择关联子表" clearable
@@ -228,16 +238,49 @@
                 :key="item" />
             </el-select>
           </el-form-item>
-          <el-form-item label="取消按钮文本" v-if="modelType != 3 && modelType!=6">
-            <el-input v-model="formConf.cancelButtonText" placeholder="默认为‘取 消’" />
-          </el-form-item>
-          <el-form-item label="确定按钮文本" v-if="modelType != 3 && modelType!=6">
-            <el-input v-model="formConf.confirmButtonText" placeholder="默认为‘确 定’" />
-          </el-form-item>
+          <template v-if="modelType!=3 && modelType!=6 && webType!=3">
+            <el-divider>表单按钮</el-divider>
+            <div class="per-cell">
+              <el-checkbox v-model="formConf.hasConfirmBtn" disabled>确定</el-checkbox>
+              <el-input v-model="formConf.confirmButtonText" />
+            </div>
+            <div class="per-cell">
+              <el-checkbox v-model="formConf.hasCancelBtn" disabled>取消</el-checkbox>
+              <el-input v-model="formConf.cancelButtonText" />
+            </div>
+            <template v-if="modelType==1 && webType==2">
+              <div class="per-cell" :class="{'last':!formConf.hasPrintBtn}">
+                <el-checkbox v-model="formConf.hasPrintBtn">打印</el-checkbox>
+                <el-input v-model="formConf.printButtonText" />
+              </div>
+              <el-form-item label="打印设置" v-if="formConf.hasPrintBtn">
+                <JNPF-TreeSelect :options="printTplList" v-model="formConf.printId"
+                  placeholder="请选择打印模板" lastLevel clearable></JNPF-TreeSelect>
+              </el-form-item>
+            </template>
+          </template>
+          <template v-if="formConf.funcs && (modelType==1||modelType==6)">
+            <el-divider>表单事件</el-divider>
+            <el-form-item label="onLoad">
+              <el-button style="width: 100%;"
+                @click="editFunc(formConf.funcs.onLoad,'onLoad',true)">表单加载触发
+              </el-button>
+            </el-form-item>
+            <el-form-item label="beforeSubmit">
+              <el-button style="width: 100%;"
+                @click="editFunc(formConf.funcs.beforeSubmit,'beforeSubmit',true)">提交前置触发
+              </el-button>
+            </el-form-item>
+            <el-form-item label="afterSubmit">
+              <el-button style="width: 100%;"
+                @click="editFunc(formConf.funcs.afterSubmit,'afterSubmit',true)">提交后置触发</el-button>
+            </el-form-item>
+          </template>
         </el-form>
       </el-scrollbar>
     </div>
-
+    <form-script :visible.sync="formScriptVisible" :tpl="activeScript" :fields="drawingList"
+      @updateScript="updateScript" />
   </div>
 </template>
 
@@ -246,6 +289,7 @@ import { isNumberStr } from '@/components/Generator/utils'
 import { saveFormConf, getDrawingList } from '@/components/Generator/utils/db'
 import { getDictionaryTypeSelector } from "@/api/systemData/dictionary"
 import { getDataInterfaceSelector } from "@/api/systemData/dataInterface"
+import FormScript from './FormScript'
 import JNPFComInput from './RightComponents/ComInput'
 import JNPFTextarea from './RightComponents/Textarea'
 import JNPFText from './RightComponents/JNPFText'
@@ -285,6 +329,7 @@ const systemList = ['createUser', 'createTime', 'modifyUser', 'modifyTime', 'cur
 
 export default {
   components: {
+    FormScript,
     JNPFComInput,
     JNPFTextarea,
     JNPFText,
@@ -319,14 +364,20 @@ export default {
     Tab,
     Collapse
   },
-  props: ['showField', 'activeData', 'formConf', 'modelType'],
+  props: ['showField', 'activeData', 'formConf', 'modelType', 'webType', 'drawingList'],
   data() {
     return {
       currentTab: 'field',
       currentNode: null,
       dialogVisible: false,
       iconsVisible: false,
+      formScriptVisible: false,
+      comScriptVisible: false,
       currentIconModel: null,
+      activeScript: '',
+      activeFunc: '',
+      isConf: false,
+      printTplList: [],
       dictionaryOptions: [],
       dataInterfaceOptions: [],
       justifyOptions: [
@@ -409,6 +460,7 @@ export default {
   created() {
     this.getDictionaryType()
     this.getDataInterfaceSelector()
+    this.getPringTplList()
   },
   methods: {
     addReg() {
@@ -560,6 +612,46 @@ export default {
         this.dataInterfaceOptions = res.data
       })
     },
+    getPringTplList() {
+      this.$store.dispatch('base/getPrintFormTree').then(res => {
+        let list = res.filter(o => o.children && o.children.length)
+        this.printTplList = list.map(o => ({
+          ...o,
+          hasChildren: true
+        }))
+      })
+    },
+    getTipText(key) {
+      let text = ''
+      switch (key) {
+        case 'change':
+          text = '发生变化时触发'
+          break;
+        case 'blur':
+          text = '失去焦点时触发'
+          break;
+        case 'tab-click':
+          text = '面板点击时触发'
+          break;
+        default:
+          text = ''
+          break;
+      }
+      return text
+    },
+    updateScript(data) {
+      if (this.isConf) {
+        this.formConf.funcs[this.activeFunc] = data
+      } else {
+        this.activeData.on[this.activeFunc] = data
+      }
+    },
+    editFunc(str, funcName, isConf) {
+      this.activeScript = str
+      this.activeFunc = funcName
+      this.isConf = isConf || false
+      this.formScriptVisible = true
+    },
   }
 }
 </script>
@@ -649,6 +741,17 @@ export default {
     >>> .el-select {
       width: 100%;
     }
+  }
+}
+.per-cell {
+  display: flex;
+  align-items: center;
+  margin-bottom: 18px;
+  .el-checkbox {
+    width: 146px;
+  }
+  &.last {
+    margin-bottom: 0;
   }
 }
 </style>

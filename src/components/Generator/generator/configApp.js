@@ -10,7 +10,9 @@ export const formConf = {
   disabled: false,
   span: 24,
   formBtns: true,
+  hasCancelBtn: true,
   cancelButtonText: '取 消',
+  hasConfirmBtn: true,
   confirmButtonText: '确 定',
   idGlobal: 100
 }
@@ -230,23 +232,6 @@ export const inputComponents = [{
   },
   {
     __config__: {
-      jnpfKey: 'time',
-      label: '时间选择',
-      labelWidth: undefined,
-      showLabel: true,
-      tag: 'el-time-picker',
-      tagIcon: 'icon-ym icon-ym-generator-time',
-      defaultValue: null,
-      required: false,
-      layout: 'colFormItem',
-      span: 24,
-      dragDisabled: false
-    },
-    placeholder: '请选择',
-    disabled: false
-  },
-  {
-    __config__: {
       jnpfKey: 'date',
       label: '日期选择',
       labelWidth: undefined,
@@ -260,6 +245,23 @@ export const inputComponents = [{
       dragDisabled: false
     },
     type: 'date',
+    placeholder: '请选择',
+    disabled: false
+  },
+  {
+    __config__: {
+      jnpfKey: 'time',
+      label: '时间选择',
+      labelWidth: undefined,
+      showLabel: true,
+      tag: 'el-time-picker',
+      tagIcon: 'icon-ym icon-ym-generator-time',
+      defaultValue: null,
+      required: false,
+      layout: 'colFormItem',
+      span: 24,
+      dragDisabled: false
+    },
     placeholder: '请选择',
     disabled: false
   },
@@ -280,7 +282,7 @@ export const inputComponents = [{
     disabled: false,
     accept: '',
     showTip: false,
-    fileSize: 2,
+    fileSize: 5,
     sizeUnit: 'MB',
     limit: 9
   },
@@ -511,7 +513,7 @@ export const selectComponents = [{
   {
     __config__: {
       jnpfKey: 'address',
-      label: '省市区联动',
+      label: '省市区',
       labelWidth: undefined,
       showLabel: true,
       tag: 'JNPF-Address',
@@ -592,26 +594,11 @@ export const systemComponents = [{
   {
     __config__: {
       jnpfKey: 'currOrganize',
-      label: '所属公司',
+      label: '所属组织',
       labelWidth: undefined,
       showLabel: true,
       tag: 'el-input',
       tagIcon: 'icon-ym icon-ym-generator-company',
-      defaultValue: '',
-      layout: 'colFormItem',
-      span: 24,
-      dragDisabled: false,
-      noShow: false
-    }
-  },
-  {
-    __config__: {
-      jnpfKey: 'currDept',
-      label: '所属部门',
-      labelWidth: undefined,
-      showLabel: true,
-      tag: 'el-input',
-      tagIcon: 'icon-ym icon-ym-generator-department',
       defaultValue: '',
       layout: 'colFormItem',
       span: 24,

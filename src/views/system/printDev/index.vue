@@ -22,7 +22,7 @@
       <div class="JNPF-common-layout-main JNPF-flex-main">
         <div class="JNPF-common-head">
           <topOpts @add="addOrUpdateHandle()">
-            <upload-btn url="/api/system/printdev/Actions/ImportData" @on-success="initData" />
+            <upload-btn url="/api/system/printDev/Actions/ImportData" @on-success="initData" />
           </topOpts>
           <div class="JNPF-common-head-right">
             <el-tooltip effect="dark" :content="$t('common.refresh')" placement="top">

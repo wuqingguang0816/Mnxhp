@@ -1,20 +1,21 @@
 <template >
   <div class="flow-form" :style="{margin: '0 auto',width:formConf.fullScreenWidth}">
     <parser :form-conf="formConf" @submit="sumbitForm" :key="key" ref="dynamicForm"
-      v-if="!loading" />
+      :setFormData="setFormData" :setShowOrHide="setShowOrHide" :setRequired="setRequired"
+      :setDisabled="setDisabled" :setFieldOptions="setFieldOptions" v-if="!loading" />
   </div>
 </template>
 <script>
 import { DynamicInfo } from '@/api/workFlow/workFlowForm'
 import { createModel, updateModel, getModelInfo } from '@/api/onlineDev/visualDev'
 import Parser from '@/components/Generator/parser/Parser'
+import ParserMixin from '@/components/Generator/parser/mixin'
 export default {
   components: { Parser },
+  mixins: [ParserMixin],
   data() {
     return {
-      formConf: {},
       formData: {},
-      key: +new Date(),
       loading: true,
       eventType: '',
       dataForm: {
@@ -74,7 +75,7 @@ export default {
           let item = list[i]
           if (item.__vModel__) {
             const val = data[item.__vModel__]
-            if (val) item.__config__.defaultValue = val
+            if (val !== undefined) item.__config__.defaultValue = val
             let noShow = false, isDisabled = true
             if (this.setting.formOperates && this.setting.formOperates.length) {
               let arr = this.setting.formOperates.filter(o => o.id === item.__vModel__) || []
@@ -99,9 +100,10 @@ export default {
       }
       loop(form.fields)
     },
-    sumbitForm(data) {
+    sumbitForm(data, callback) {
       if (!data) return
       this.dataForm.data = JSON.stringify(data)
+      if (callback && typeof callback === "function") callback()
       if (this.setting.type == 1) {
         if (this.eventType === 'save' || this.eventType === 'submit') {
           this.selfSubmit()
