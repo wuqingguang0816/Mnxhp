@@ -174,7 +174,7 @@ export default {
     selfInit(data) {
       this.dataForm.flowTitle = this.userInfo.userName + "的档案借阅申请"
       this.dataForm.applyUser = this.userInfo.userName + '/' + this.userInfo.userAccount
-      this.dataForm.borrowingDepartment = this.userInfo.departmentName
+      this.dataForm.borrowingDepartment = this.userInfo.organizeName
     }
   }
 }

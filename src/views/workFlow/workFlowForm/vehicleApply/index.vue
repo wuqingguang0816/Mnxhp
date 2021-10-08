@@ -164,7 +164,7 @@ export default {
     selfInit(data) {
       this.dataForm.flowTitle = this.userInfo.userName + "的车辆申请"
       this.dataForm.carMan = this.userInfo.userName + '/' + this.userInfo.userAccount
-      this.dataForm.department = this.userInfo.departmentName
+      this.dataForm.department = this.userInfo.organizeName
     }
   }
 }

@@ -107,7 +107,7 @@ export default {
       this.dataForm.fillFromDate = new Date().getTime()
       this.dataForm.flowTitle = this.userInfo.userName + "的行政赏罚单"
       this.dataForm.fullName = this.userInfo.userName + '/' + this.userInfo.userAccount
-      this.dataForm.department = this.userInfo.departmentName
+      this.dataForm.department = this.userInfo.organizeName
       if (this.userInfo.positionIds && this.userInfo.positionIds.length) {
         let list = this.userInfo.positionIds.map(o => o.name)
         this.dataForm.position = list.join(',')

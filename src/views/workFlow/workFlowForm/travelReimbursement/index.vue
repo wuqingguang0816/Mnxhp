@@ -278,7 +278,7 @@ export default {
       this.dataForm.applyDate = new Date().getTime()
       this.dataForm.flowTitle = this.userInfo.userName + "的差旅报销申请表"
       this.dataForm.applyUser = this.userInfo.userName + '/' + this.userInfo.userAccount
-      this.dataForm.departmental = this.userInfo.departmentName
+      this.dataForm.departmental = this.userInfo.organizeName
     }
   }
 }

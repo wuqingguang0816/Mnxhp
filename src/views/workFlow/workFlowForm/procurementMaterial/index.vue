@@ -194,7 +194,7 @@ export default {
       this.dataForm.applyDate = new Date().getTime()
       this.dataForm.flowTitle = this.userInfo.userName + "的采购原材料"
       this.dataForm.applyUser = this.userInfo.userName + '/' + this.userInfo.userAccount
-      this.dataForm.departmental = this.userInfo.departmentName
+      this.dataForm.departmental = this.userInfo.organizeName
     },
     beforeInit() { this.getPaymentMethodOptions() },
     addHandle() {

@@ -125,7 +125,7 @@ export default {
       this.dataForm.applyDate = new Date().getTime()
       this.dataForm.flowTitle = this.userInfo.userName + "的用品入库申请表"
       this.dataForm.applyUser = this.userInfo.userName + '/' + this.userInfo.userAccount
-      this.dataForm.department = this.userInfo.departmentName
+      this.dataForm.department = this.userInfo.organizeName
     }
   }
 }

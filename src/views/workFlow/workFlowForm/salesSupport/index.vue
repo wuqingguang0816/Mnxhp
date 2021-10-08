@@ -218,7 +218,7 @@ export default {
       this.dataForm.applyDate = new Date().getTime()
       this.dataForm.flowTitle = this.userInfo.userName + "的销售支持表"
       this.dataForm.applyUser = this.userInfo.userName + '/' + this.userInfo.userAccount
-      this.dataForm.applyDept = this.userInfo.departmentName
+      this.dataForm.applyDept = this.userInfo.organizeName
     }
   }
 }
