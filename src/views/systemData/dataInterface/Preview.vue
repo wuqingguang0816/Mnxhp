@@ -1,14 +1,21 @@
 <template>
-  <div class="JNPF-preview-main form-main">
+  <div class="JNPF-preview-main">
     <div class="JNPF-common-page-header">
-      <el-page-header @back="goBack" :content="title" />
+      <el-page-header @back="goBack" content="接口预览" />
       <div class="options">
         <el-button @click="goBack">{{$t('common.cancelButton')}}</el-button>
       </div>
     </div>
-    <div class="main" v-loading="formLoading" :element-loading-text="$t('common.loadingText')">
-      <JNPFCodeEditor v-model="responseData" :options="options" ref="CodeEditor" />
-    </div>
+    <el-form ref="dataForm" class="main" label-position="top" v-loading="formLoading">
+      <el-form-item label="Request URL">
+        <el-input v-model="url">
+          <template slot="prepend">GET</template>
+        </el-input>
+      </el-form-item>
+      <el-form-item label="Response body" class="value-item">
+        <el-input v-model="responseData" type="textarea" :rows="30" />
+      </el-form-item>
+    </el-form>
   </div>
 </template>
 
@@ -25,6 +32,7 @@ export default {
       title: '',
       formLoading: false,
       responseData: '',
+      url: '',
       options: {
         readOnly: true,
         language: 'json'
@@ -38,17 +46,11 @@ export default {
     init(id) {
       this.id = id || ''
       this.formLoading = true
-
       this.responseData = ''
       this.$nextTick(() => {
-        this.title = `接口地址：${this.define.comUrl}/api/system/DataInterface/${id}/Actions/Response`
-        // 获取数据
+        this.url = `${this.define.comUrl}/api/system/DataInterface/${id}/Actions/Response`
         previewDataInterface(this.id).then(res => {
           this.responseData = JSON.stringify(res, null, 4)
-          this.$refs.CodeEditor.changeEditor({
-            value: this.responseData,
-            options: this.options
-          })
           this.formLoading = false
         }).catch(() => {
           this.formLoading = false
@@ -61,7 +63,22 @@ export default {
 </script>
 <style lang="scss" scoped>
 .main {
-  overflow: auto;
-  padding: 0;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  .value-item {
+    flex: 1;
+    margin-bottom: 0;
+    >>> .el-form-item__content {
+      height: calc(100% - 32px);
+      .el-textarea {
+        height: 100%;
+        .el-textarea__inner {
+          height: 100%;
+        }
+      }
+    }
+  }
 }
 </style>
