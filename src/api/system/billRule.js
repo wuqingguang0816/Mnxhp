@@ -65,3 +65,10 @@ export function BillNumber(enCode) {
     method: 'GET'
   })
 }
+// 导出
+export function exportTpl(id) {
+  return request({
+    url: `/api/system/BillRule/${id}/Action/Export`,
+    method: 'get'
+  })
+}

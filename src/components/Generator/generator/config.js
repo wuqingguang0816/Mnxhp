@@ -13,9 +13,19 @@ export const formConf = {
   disabled: false,
   span: 24,
   formBtns: false,
+  hasCancelBtn: true,
   cancelButtonText: '取 消',
+  hasConfirmBtn: true,
   confirmButtonText: '确 定',
+  hasPrintBtn: false,
+  printButtonText: '打 印',
+  printId: '',
   formStyle: '',
+  funcs: {
+    onLoad: '({ formData, request}) => {\n    // 在此编写代码\n    \n}',
+    beforeSubmit: '({ formData, setFormData, setShowOrHide, setRequired, setDisabled, request, getFieldOptions, setFieldOptions }) => {\n    // 在此编写代码\n\n    // 继续执行返回true\n    return true\n}',
+    afterSubmit: '({ formData, setFormData, setShowOrHide, setRequired, setDisabled, request, getFieldOptions, setFieldOptions }) => {\n    // 在此编写代码\n    \n}',
+  },
   idGlobal: 100
 }
 
@@ -40,6 +50,10 @@ export const inputComponents = [{
     __slot__: {
       prepend: '',
       append: ''
+    },
+    on: {
+      change: '({ data, formData, setFormData, setShowOrHide, setRequired, setDisabled, request, getFieldOptions, setFieldOptions }) => {\n    // 在此编写代码\n    \n}',
+      blur: '({ data, formData, setFormData, setShowOrHide, setRequired, setDisabled, request, getFieldOptions, setFieldOptions }) => {\n    // 在此编写代码\n    \n}',
     },
     placeholder: '请输入',
     style: { width: '100%' },
@@ -96,6 +110,10 @@ export const inputComponents = [{
       regList: [],
       trigger: ['blur', 'change']
     },
+    on: {
+      change: '({ data, formData, setFormData, setShowOrHide, setRequired, setDisabled, request, getFieldOptions, setFieldOptions }) => {\n    // 在此编写代码\n    \n}',
+      blur: '({ data, formData, setFormData, setShowOrHide, setRequired, setDisabled, request, getFieldOptions, setFieldOptions }) => {\n    // 在此编写代码\n    \n}',
+    },
     placeholder: '数字文本',
     min: undefined,
     max: undefined,
@@ -120,6 +138,9 @@ export const inputComponents = [{
       dragDisabled: false,
       regList: [],
       trigger: 'change'
+    },
+    on: {
+      change: '({ data, formData, setFormData, setShowOrHide, setRequired, setDisabled, request, getFieldOptions, setFieldOptions }) => {\n    // 在此编写代码\n    \n}',
     },
     disabled: false,
     'active-text': '',
@@ -163,6 +184,9 @@ export const inputComponents = [{
         id: "2"
       }]
     },
+    on: {
+      change: '({ data, formData, setFormData, setShowOrHide, setRequired, setDisabled, request, getFieldOptions, setFieldOptions }) => {\n    // 在此编写代码\n    \n}',
+    },
     style: {},
     size: 'small',
     disabled: false
@@ -201,6 +225,9 @@ export const inputComponents = [{
         id: "2"
       }]
     },
+    on: {
+      change: '({ data, formData, setFormData, setShowOrHide, setRequired, setDisabled, request, getFieldOptions, setFieldOptions }) => {\n    // 在此编写代码\n    \n}',
+    },
     style: {},
     size: 'small',
     disabled: false
@@ -237,6 +264,10 @@ export const inputComponents = [{
         id: "2"
       }]
     },
+    on: {
+      change: '({ data, formData, setFormData, setShowOrHide, setRequired, setDisabled, request, getFieldOptions, setFieldOptions }) => {\n    // 在此编写代码\n    \n}',
+      blur: '({ data, formData, setFormData, setShowOrHide, setRequired, setDisabled, request, getFieldOptions, setFieldOptions }) => {\n    // 在此编写代码\n    \n}',
+    },
     placeholder: '请选择',
     style: { width: '100%' },
     clearable: true,
@@ -271,6 +302,10 @@ export const inputComponents = [{
         fullName: '选项1-1'
       }]
     }],
+    on: {
+      change: '({ data, formData, setFormData, setShowOrHide, setRequired, setDisabled, request, getFieldOptions, setFieldOptions }) => {\n    // 在此编写代码\n    \n}',
+      blur: '({ data, formData, setFormData, setShowOrHide, setRequired, setDisabled, request, getFieldOptions, setFieldOptions }) => {\n    // 在此编写代码\n    \n}',
+    },
     placeholder: '请选择',
     style: { width: '100%' },
     props: {
@@ -289,33 +324,6 @@ export const inputComponents = [{
   },
   {
     __config__: {
-      jnpfKey: 'time',
-      label: '时间选择',
-      labelWidth: undefined,
-      showLabel: true,
-      tag: 'el-time-picker',
-      tagIcon: 'icon-ym icon-ym-generator-time',
-      defaultValue: null,
-      required: false,
-      layout: 'colFormItem',
-      span: 24,
-      dragDisabled: false,
-      regList: [],
-      trigger: 'change'
-    },
-    placeholder: '请选择',
-    style: { width: '100%' },
-    disabled: false,
-    clearable: true,
-    readonly: false,
-    'picker-options': {
-      selectableRange: '00:00:00-23:59:59'
-    },
-    format: 'HH:mm:ss',
-    'value-format': 'HH:mm:ss'
-  },
-  {
-    __config__: {
       jnpfKey: 'date',
       label: '日期选择',
       labelWidth: undefined,
@@ -330,6 +338,10 @@ export const inputComponents = [{
       regList: [],
       trigger: 'change'
     },
+    on: {
+      change: '({ data, formData, setFormData, setShowOrHide, setRequired, setDisabled, request, getFieldOptions, setFieldOptions }) => {\n    // 在此编写代码\n    \n}',
+      blur: '({ data, formData, setFormData, setShowOrHide, setRequired, setDisabled, request, getFieldOptions, setFieldOptions }) => {\n    // 在此编写代码\n    \n}',
+    },
     placeholder: '请选择',
     type: 'date',
     style: { width: '100%' },
@@ -338,6 +350,37 @@ export const inputComponents = [{
     format: 'yyyy-MM-dd',
     'value-format': 'timestamp',
     readonly: false
+  },
+  {
+    __config__: {
+      jnpfKey: 'time',
+      label: '时间选择',
+      labelWidth: undefined,
+      showLabel: true,
+      tag: 'el-time-picker',
+      tagIcon: 'icon-ym icon-ym-generator-time',
+      defaultValue: null,
+      required: false,
+      layout: 'colFormItem',
+      span: 24,
+      dragDisabled: false,
+      regList: [],
+      trigger: 'change'
+    },
+    on: {
+      change: '({ data, formData, setFormData, setShowOrHide, setRequired, setDisabled, request, getFieldOptions, setFieldOptions }) => {\n    // 在此编写代码\n    \n}',
+      blur: '({ data, formData, setFormData, setShowOrHide, setRequired, setDisabled, request, getFieldOptions, setFieldOptions }) => {\n    // 在此编写代码\n    \n}',
+    },
+    placeholder: '请选择',
+    style: { width: '100%' },
+    disabled: false,
+    clearable: true,
+    readonly: false,
+    'picker-options': {
+      selectableRange: '00:00:00-23:59:59'
+    },
+    format: 'HH:mm:ss',
+    'value-format': 'HH:mm:ss'
   },
   {
     __config__: {
@@ -357,7 +400,7 @@ export const inputComponents = [{
     },
     disabled: false,
     accept: '',
-    fileSize: 2,
+    fileSize: 5,
     sizeUnit: 'MB',
     buttonText: '点击上传',
     showTip: false,
@@ -382,7 +425,7 @@ export const inputComponents = [{
     disabled: false,
     accept: '',
     showTip: false,
-    fileSize: 2,
+    fileSize: 5,
     sizeUnit: 'MB',
     limit: 9
   },
@@ -423,6 +466,9 @@ export const inputComponents = [{
       regList: [],
       trigger: 'change'
     },
+    on: {
+      change: '({ data, formData, setFormData, setShowOrHide, setRequired, setDisabled, request, getFieldOptions, setFieldOptions }) => {\n    // 在此编写代码\n    \n}',
+    },
     style: {},
     max: 5,
     'allow-half': false,
@@ -445,6 +491,9 @@ export const inputComponents = [{
       dragDisabled: false,
       regList: [],
       trigger: 'change'
+    },
+    on: {
+      change: '({ data, formData, setFormData, setShowOrHide, setRequired, setDisabled, request, getFieldOptions, setFieldOptions }) => {\n    // 在此编写代码\n    \n}',
     },
     disabled: false,
     min: 0,
@@ -534,7 +583,13 @@ export const selectComponents = [{
       regList: [],
       trigger: 'change'
     },
+    on: {
+      change: '({ data, formData, setFormData, setShowOrHide, setRequired, setDisabled, request, getFieldOptions, setFieldOptions }) => {\n    // 在此编写代码\n    \n}',
+    },
     placeholder: '请选择',
+    multiple: false,
+    clearable: true,
+    filterable: false,
     disabled: false
   },
   {
@@ -553,7 +608,13 @@ export const selectComponents = [{
       regList: [],
       trigger: 'change'
     },
+    on: {
+      change: '({ data, formData, setFormData, setShowOrHide, setRequired, setDisabled, request, getFieldOptions, setFieldOptions }) => {\n    // 在此编写代码\n    \n}',
+    },
     placeholder: '请选择',
+    multiple: false,
+    clearable: true,
+    filterable: false,
     disabled: false
   },
   {
@@ -572,8 +633,13 @@ export const selectComponents = [{
       regList: [],
       trigger: 'change'
     },
+    on: {
+      change: '({ data, formData, setFormData, setShowOrHide, setRequired, setDisabled, request, getFieldOptions, setFieldOptions }) => {\n    // 在此编写代码\n    \n}',
+    },
     placeholder: '请选择',
     multiple: false,
+    clearable: true,
+    filterable: false,
     disabled: false
   },
   {
@@ -592,8 +658,12 @@ export const selectComponents = [{
       regList: [],
       trigger: 'change'
     },
+    on: {
+      change: '({ data, formData, setFormData, setShowOrHide, setRequired, setDisabled, request, getFieldOptions, setFieldOptions }) => {\n    // 在此编写代码\n    \n}',
+    },
     placeholder: '请选择',
     multiple: false,
+    clearable: true,
     disabled: false
   },
   {
@@ -615,6 +685,9 @@ export const selectComponents = [{
       dictionaryType: '',
       propsUrl: ''
     },
+    on: {
+      change: '({ data, formData, setFormData, setShowOrHide, setRequired, setDisabled, request, getFieldOptions, setFieldOptions }) => {\n    // 在此编写代码\n    \n}',
+    },
     placeholder: '请选择',
     props: {
       props: {
@@ -633,6 +706,7 @@ export const selectComponents = [{
     }],
     multiple: false,
     clearable: true,
+    filterable: false,
     disabled: false
   },
   {
@@ -681,7 +755,7 @@ export const selectComponents = [{
   {
     __config__: {
       jnpfKey: 'address',
-      label: '省市区联动',
+      label: '省市区',
       labelWidth: undefined,
       showLabel: true,
       tag: 'JNPF-Address',
@@ -694,8 +768,13 @@ export const selectComponents = [{
       regList: [],
       trigger: 'change'
     },
+    on: {
+      change: '({ data, formData, setFormData, setShowOrHide, setRequired, setDisabled, request, getFieldOptions, setFieldOptions }) => {\n    // 在此编写代码\n    \n}',
+    },
     placeholder: '请选择',
     disabled: false,
+    clearable: true,
+    filterable: false,
     level: 2
   },
 ]
@@ -776,29 +855,11 @@ export const systemComponents = [{
   {
     __config__: {
       jnpfKey: 'currOrganize',
-      label: '所属公司',
+      label: '所属组织',
       labelWidth: undefined,
       showLabel: true,
       tag: 'el-input',
       tagIcon: 'icon-ym icon-ym-generator-company',
-      defaultValue: '',
-      required: false,
-      layout: 'colFormItem',
-      span: 24,
-      dragDisabled: false,
-      noShow: false
-    },
-    readonly: true,
-    placeholder: '系统自动生成'
-  },
-  {
-    __config__: {
-      jnpfKey: 'currDept',
-      label: '所属部门',
-      labelWidth: undefined,
-      showLabel: true,
-      tag: 'el-input',
-      tagIcon: 'icon-ym icon-ym-generator-department',
       defaultValue: '',
       required: false,
       layout: 'colFormItem',
@@ -881,7 +942,7 @@ export const layoutComponents = [{
   {
     __config__: {
       jnpfKey: 'tab',
-      label: '标签页',
+      label: '标签面板',
       showLabel: false,
       tag: 'el-tab',
       tagIcon: 'icon-ym icon-ym-generator-label',
@@ -900,6 +961,9 @@ export const layoutComponents = [{
         }
       }],
       active: 0
+    },
+    on: {
+      "tab-click": '({ data, formData, setFormData, setShowOrHide, setRequired, setDisabled, request, getFieldOptions, setFieldOptions }) => {\n    // 在此编写代码\n    \n}',
     },
     type: '',
     "tab-position": "top"
@@ -928,6 +992,9 @@ export const layoutComponents = [{
         }
       }],
       active: ['1']
+    },
+    on: {
+      change: '({ data, formData, setFormData, setShowOrHide, setRequired, setDisabled, request, getFieldOptions, setFieldOptions }) => {\n    // 在此编写代码\n    \n}',
     },
     accordion: false
   }

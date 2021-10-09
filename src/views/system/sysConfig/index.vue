@@ -122,20 +122,20 @@
                     </el-radio-group>
                   </el-form-item>
                   <el-form-item label="用户编号" prop="smsKeyId">
-                    <el-input v-model="baseForm.smsKeyId" clearable placeholder="用户编号" />
+                    <el-input v-model="baseForm.smsKeyId" clearable placeholder="请输入AccessKeyId" />
                   </el-form-item>
                   <el-form-item label="用户秘钥" prop="smsKeySecret">
                     <el-input v-model="baseForm.smsKeySecret" show-password clearable
-                      placeholder="用户秘钥" />
+                      placeholder="请输入AccessKeySec" />
                   </el-form-item>
                   <el-form-item label="签名内容" prop="smsSignName">
-                    <el-input v-model="baseForm.smsSignName" clearable placeholder="签名内容" />
+                    <el-input v-model="baseForm.smsSignName" clearable placeholder="请输入SignName" />
                   </el-form-item>
                   <el-form-item label="模板编号" prop="smsTemplateId">
-                    <el-input v-model="baseForm.smsTemplateId" clearable placeholder="模板编号" />
+                    <el-input v-model="baseForm.smsTemplateId" clearable placeholder="请输入TemplateId" />
                   </el-form-item>
                   <el-form-item label="应用编号" prop="smsAppId" v-if="baseForm.smsCompany=='2'">
-                    <el-input v-model="baseForm.smsAppId" clearable placeholder="应用编号" />
+                    <el-input v-model="baseForm.smsAppId" clearable placeholder="请输入AppId" />
                   </el-form-item>
                   <el-form-item>
                     <el-button type="primary" size="small" :loading="btnLoading" class="saveBtn"
@@ -201,17 +201,17 @@
               <el-row :gutter="20" style="margin-top: 15px">
                 <el-col :span="12" :offset="6" :pull="6">
                   <el-form-item label="企业号Id" prop="qyhCorpId">
-                    <el-input v-model="baseForm.qyhCorpId" clearable placeholder="企业号Id" />
+                    <el-input v-model="baseForm.qyhCorpId" clearable placeholder="请输入CorpId" />
                   </el-form-item>
                 </el-col>
                 <el-col :span="12" :offset="6" :pull="6">
                   <el-form-item label="应用凭证" prop="qyhAgentId">
-                    <el-input v-model="baseForm.qyhAgentId" clearable placeholder="应用凭证" />
+                    <el-input v-model="baseForm.qyhAgentId" clearable placeholder="请输入AgentId" />
                   </el-form-item>
                 </el-col>
                 <el-col :span="12" :offset="6" :pull="6">
                   <el-form-item label="凭证密钥" prop="qyhAgentSecret">
-                    <el-input v-model="baseForm.qyhAgentSecret" placeholder="凭证密钥">
+                    <el-input v-model="baseForm.qyhAgentSecret" placeholder="请输入AppSecret">
                       <el-button slot="append" @click="checkQy(0)" :loading="testQyLoading">连接测试
                       </el-button>
                     </el-input>
@@ -219,7 +219,7 @@
                 </el-col>
                 <el-col :span="12" :offset="6" :pull="6">
                   <el-form-item label="同步密钥" prop="qyhCorpSecret">
-                    <el-input v-model="baseForm.qyhCorpSecret" placeholder="同步密钥">
+                    <el-input v-model="baseForm.qyhCorpSecret" placeholder="请输入CorpSecret">
                       <el-button slot="append" @click="checkQy(1)" :loading="testSyncLoading">同步测试
                       </el-button>
                     </el-input>
@@ -269,17 +269,17 @@
               <el-row :gutter="20" style="margin-top: 15px">
                 <el-col :span="12" :offset="6" :pull="6">
                   <el-form-item label="企业号Id" prop="dingAgentId">
-                    <el-input v-model="baseForm.dingAgentId" clearable placeholder="企业号Id" />
+                    <el-input v-model="baseForm.dingAgentId" clearable placeholder="请输入AgentId" />
                   </el-form-item>
                 </el-col>
                 <el-col :span="12" :offset="6" :pull="6">
                   <el-form-item label="应用凭证" prop="dingSynAppKey">
-                    <el-input v-model="baseForm.dingSynAppKey" clearable placeholder="应用凭证" />
+                    <el-input v-model="baseForm.dingSynAppKey" clearable placeholder="请输入AppKey" />
                   </el-form-item>
                 </el-col>
                 <el-col :span="12" :offset="6" :pull="6">
                   <el-form-item label="凭证密钥" prop="dingSynAppSecret">
-                    <el-input v-model="baseForm.dingSynAppSecret" placeholder="凭证密钥">
+                    <el-input v-model="baseForm.dingSynAppSecret" placeholder="请输入AppSecret">
                       <el-button slot="append" @click="checkDing" :loading="testDingLoading">连接测试
                       </el-button>
                     </el-input>

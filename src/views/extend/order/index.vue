@@ -44,7 +44,7 @@
           :hasNO="false" @sort-change="sortChange">
           <el-table-column type="expand" width="40">
             <template slot-scope="props">
-              <el-tabs>
+              <el-tabs v-model="props.row.activeName">
                 <el-tab-pane label="订单商品">
                   <el-table :data="props.row.childTable" stripe size='mini' show-summary
                     :element-loading-text="$t('common.loadingText')">
@@ -203,6 +203,7 @@ export default {
         this.total = res.data.pagination.total
         for (let i = 0; i < this.list.length; i++) {
           this.$set(this.list[i], 'isExpanded', false)
+          this.$set(this.list[i], 'activeName', '0')
           this.$set(this.list[i], 'childTable', [])
           this.$set(this.list[i], 'childTable1', [])
         }

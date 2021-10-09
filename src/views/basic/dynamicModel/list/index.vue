@@ -144,6 +144,7 @@ export default {
         pageSize: 20,
         sort: 'desc',
         sidx: '',
+        menuId: '',
         json: ''
       },
       flowVisible: false,
@@ -168,6 +169,7 @@ export default {
   },
   methods: {
     init() {
+      this.listQuery.menuId = this.$route.meta.modelId
       this.refreshTable = false
       if (!this.config.columnData || !this.config.formData) return
       this.columnData = JSON.parse(this.config.columnData)
@@ -295,7 +297,7 @@ export default {
       } else {
         this.formVisible = true
         this.$nextTick(() => {
-          this.$refs.Form.init(this.formData, this.modelId, id, this.isPreview)
+          this.$refs.Form.init(this.formData, this.modelId, id, this.isPreview, this.columnData.useFormPermission)
         })
       }
     },
@@ -383,7 +385,7 @@ export default {
       } else {
         this.detailVisible = true
         this.$nextTick(() => {
-          this.$refs.Detail.init(this.formData, this.modelId, id)
+          this.$refs.Detail.init(this.formData, this.modelId, id, this.columnData.useFormPermission)
         })
       }
     },

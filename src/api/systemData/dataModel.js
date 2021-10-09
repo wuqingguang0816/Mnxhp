@@ -53,3 +53,10 @@ export function DataModelUpdate(linkId, data) {
     data
   })
 }
+// 导出
+export function exportTpl(linkId, id) {
+  return request({
+    url: `/api/system/DataModel/${linkId}/Table/${id}/Action/Export`,
+    method: 'get'
+  })
+}

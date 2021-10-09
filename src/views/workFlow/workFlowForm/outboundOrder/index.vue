@@ -7,68 +7,68 @@
     <el-form ref="dataForm" :model="dataForm" :rules="dataRule" label-width="100px"
       :disabled="setting.readonly">
       <el-row>
-        <el-col :span="12" v-if="JudgeShow('flowTitle')">
+        <el-col :span="12" v-if="judgeShow('flowTitle')">
           <el-form-item label="流程标题" prop="flowTitle">
             <el-input v-model="dataForm.flowTitle" placeholder="流程标题"
-              :disabled="JudgeWrite('flowTitle')"></el-input>
+              :disabled="judgeWrite('flowTitle')"></el-input>
           </el-form-item>
         </el-col>
-        <el-col :span="12" v-if="JudgeShow('flowUrgent')">
+        <el-col :span="12" v-if="judgeShow('flowUrgent')">
           <el-form-item label="紧急程度" prop="flowUrgent">
             <el-select v-model="dataForm.flowUrgent" placeholder="选择紧急程度"
-              :disabled="JudgeWrite('flowUrgent')">
+              :disabled="judgeWrite('flowUrgent')">
               <el-option :key="item.value" :label="item.label" :value="item.value"
                 v-for="item in flowUrgentOptions" />
             </el-select>
           </el-form-item>
         </el-col>
-        <el-col :span="12" v-if="JudgeShow('customerName')">
+        <el-col :span="12" v-if="judgeShow('customerName')">
           <el-form-item label="客户名称" prop="customerName">
             <el-input v-model="dataForm.customerName" placeholder="客户名称"
-              :disabled="JudgeWrite('customerName')"></el-input>
+              :disabled="judgeWrite('customerName')"></el-input>
           </el-form-item>
         </el-col>
-        <el-col :span="12" v-if="JudgeShow('warehouse')">
+        <el-col :span="12" v-if="judgeShow('warehouse')">
           <el-form-item label="仓库" prop="warehouse">
             <el-input v-model="dataForm.warehouse" placeholder="仓库"
-              :disabled="JudgeWrite('warehouse')"></el-input>
+              :disabled="judgeWrite('warehouse')"></el-input>
           </el-form-item>
         </el-col>
-        <el-col :span="12" v-if="JudgeShow('outStorage')">
+        <el-col :span="12" v-if="judgeShow('outStorage')">
           <el-form-item label="出库人" prop="outStorage">
             <el-input v-model="dataForm.outStorage" placeholder="出库人"
-              :disabled="JudgeWrite('outStorage')"></el-input>
+              :disabled="judgeWrite('outStorage')"></el-input>
           </el-form-item>
         </el-col>
-        <el-col :span="12" v-if="JudgeShow('businessPeople')">
+        <el-col :span="12" v-if="judgeShow('businessPeople')">
           <el-form-item label="业务人员" prop="businessPeople">
             <el-input v-model="dataForm.businessPeople" placeholder="业务人员"
-              :disabled="JudgeWrite('businessPeople')"></el-input>
+              :disabled="judgeWrite('businessPeople')"></el-input>
           </el-form-item>
         </el-col>
-        <el-col :span="12" v-if="JudgeShow('businessType')">
+        <el-col :span="12" v-if="judgeShow('businessType')">
           <el-form-item label="业务类型" prop="businessType">
             <el-input v-model="dataForm.businessType" placeholder="业务类型"
-              :disabled="JudgeWrite('businessType')"></el-input>
+              :disabled="judgeWrite('businessType')"></el-input>
           </el-form-item>
         </el-col>
-        <el-col :span="12" v-if="JudgeShow('outboundDate')">
+        <el-col :span="12" v-if="judgeShow('outboundDate')">
           <el-form-item label="出库日期" prop="outboundDate">
             <el-date-picker v-model="dataForm.outboundDate" type="datetime" placeholder="选择日期"
               value-format="timestamp" format="yyyy-MM-dd HH:mm" :editable='false'
-              :disabled="JudgeWrite('outboundDate')">
+              :disabled="judgeWrite('outboundDate')">
             </el-date-picker>
           </el-form-item>
         </el-col>
-        <el-col :span="24" v-if="JudgeShow('description')">
+        <el-col :span="24" v-if="judgeShow('description')">
           <el-form-item label="备注" prop="description">
             <el-input v-model="dataForm.description" placeholder="备注" type="textarea" :rows="3"
-              :disabled="JudgeWrite('description')" />
+              :disabled="judgeWrite('description')" />
           </el-form-item>
         </el-col>
       </el-row>
     </el-form>
-    <template v-if="JudgeShow('entryList')">
+    <template v-if="judgeShow('entryList')">
       <div class="JNPF-common-title">
         <h2>出库明细</h2>
       </div>
@@ -76,45 +76,45 @@
         <el-table-column type="index" width="50" label="序号" align="center" />
         <el-table-column prop="goodsName" label="商品名称">
           <template slot-scope="scope">
-            <el-input v-model="scope.row.goodsName" :disabled="JudgeWrite('entryList')"></el-input>
+            <el-input v-model="scope.row.goodsName" :disabled="judgeWrite('entryList')"></el-input>
           </template>
         </el-table-column>
         <el-table-column prop="specifications" label="规格型号">
           <template slot-scope="scope">
-            <el-input v-model="scope.row.specifications" :disabled="JudgeWrite('entryList')">
+            <el-input v-model="scope.row.specifications" :disabled="judgeWrite('entryList')">
             </el-input>
           </template>
         </el-table-column>
         <el-table-column prop="unit" label="单位">
           <template slot-scope="scope">
-            <el-input v-model="scope.row.unit" :disabled="JudgeWrite('entryList')"></el-input>
+            <el-input v-model="scope.row.unit" :disabled="judgeWrite('entryList')"></el-input>
           </template>
         </el-table-column>
         <el-table-column prop="qty" label="数量">
           <template slot-scope="scope">
             <el-input v-model="scope.row.qty" @change="count(scope.row)" type="number"
-              :disabled="JudgeWrite('entryList')"></el-input>
+              :disabled="judgeWrite('entryList')"></el-input>
           </template>
         </el-table-column>
         <el-table-column prop="price" label="单价">
           <template slot-scope="scope">
             <el-input v-model="scope.row.price" @change="count(scope.row)" type="number"
-              :disabled="JudgeWrite('entryList')"></el-input>
+              :disabled="judgeWrite('entryList')"></el-input>
           </template>
         </el-table-column>
         <el-table-column prop="amount" label="金额">
           <template slot-scope="scope">
-            <el-input v-model="scope.row.amount" readonly :disabled="JudgeWrite('entryList')">
+            <el-input v-model="scope.row.amount" readonly :disabled="judgeWrite('entryList')">
             </el-input>
           </template>
         </el-table-column>
         <el-table-column prop="description" label="备注">
           <template slot-scope="scope">
-            <el-input v-model="scope.row.description" :disabled="JudgeWrite('entryList')">
+            <el-input v-model="scope.row.description" :disabled="judgeWrite('entryList')">
             </el-input>
           </template>
         </el-table-column>
-        <el-table-column label="操作" width="50" v-if="!setting.readonly && !JudgeWrite('entryList')">
+        <el-table-column label="操作" width="50" v-if="!setting.readonly && !judgeWrite('entryList')">
           <template slot-scope="scope">
             <el-button size="mini" type="text" class="JNPF-table-delBtn"
               @click="handleDel(scope.$index)">删除</el-button>
@@ -122,7 +122,7 @@
         </el-table-column>
       </el-table>
       <div class="table-actions" @click="addHandle()"
-        v-if="!setting.readonly && !JudgeWrite('entryList')">
+        v-if="!setting.readonly && !judgeWrite('entryList')">
         <el-button type="text" icon="el-icon-plus" :disabled="setting.readonly">新增</el-button>
       </div>
     </template>

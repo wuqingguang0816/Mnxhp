@@ -5,15 +5,23 @@
         <img src="@/assets/images/jnpf.png" class="sidebar-logo" />
       </router-link>
       <router-link v-else key="expand" class="sidebar-logo-link" to="/">
-        <img src="@/assets/images/jnpf1.png" class="sidebar-logo" />
+        <img src="@/assets/images/jnpf2.png" class="sidebar-logo"
+          v-if="slideClass==='lightWhite'" />
+        <img src="@/assets/images/jnpf1.png" class="sidebar-logo" v-else />
       </router-link>
     </transition>
   </div>
 </template>
 
 <script>
+import { mapState } from 'vuex'
 export default {
   name: 'SidebarLogo',
+  computed: {
+    ...mapState({
+      slideClass: state => state.settings.slideClass,
+    })
+  },
   props: {
     collapse: {
       type: Boolean,

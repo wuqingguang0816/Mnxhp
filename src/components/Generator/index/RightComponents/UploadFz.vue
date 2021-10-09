@@ -12,7 +12,7 @@
         :precision="0" controls-position="right" />
     </el-form-item>
     <el-form-item label="文件类型">
-      <el-select v-model="activeData.accept" placeholder="请选择文件类型" clearable>
+      <el-select v-model="activeData.accept" placeholder="不限制" clearable>
         <el-option label="图片" value="image/*" />
         <el-option label="视频" value="video/*" />
         <el-option label="音频" value="audio/*" />

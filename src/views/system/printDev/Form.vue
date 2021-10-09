@@ -13,7 +13,8 @@
       </el-steps>
       <div class="options">
         <el-button @click="prve" :disabled="activeStep<=0">{{$t('common.prev')}}</el-button>
-        <el-button @click="next" :disabled="activeStep>=1 || loading">{{$t('common.next')}}
+        <el-button @click="next" :disabled="activeStep>=1 || loading" :loading="nextBtnLoading">
+          {{$t('common.next')}}
         </el-button>
         <el-button type="primary" @click="dataFormSubmit()" :disabled="activeStep!=1"
           :loading="btnLoading">{{$t('common.confirmButton')}}</el-button>
@@ -44,10 +45,6 @@
                 <el-option :key="item.id" :label="item.fullName" :value="item.enCode"
                   v-for="item in categoryList" />
               </el-select>
-            </el-form-item>
-            <el-form-item label="排序" prop="sortCode">
-              <el-input-number :min="0" :max="9999" v-model="dataForm.sortCode"
-                controls-position="right" />
             </el-form-item>
             <el-form-item label="模板状态" prop="enabledMark">
               <el-switch v-model="dataForm.enabledMark" :active-value="1" :inactive-value="0" />
@@ -105,6 +102,7 @@ export default {
     return {
       visible: false,
       loading: false,
+      nextBtnLoading: false,
       activeStep: 0,
       dataForm: {
         id: '',
@@ -197,6 +195,7 @@ export default {
         this.dataForm.sqlTemplate = JSON.stringify(this.sqlTemplate)
         this.$refs['dataForm'].validate((valid) => {
           if (valid) {
+            this.nextBtnLoading = true
             const query = {
               dbLinkId: this.dataForm.dbLinkId,
               sqlTemplate: this.dataForm.sqlTemplate
@@ -215,6 +214,9 @@ export default {
               }
               this.treeData = treeData
               this.activeStep += 1
+              this.nextBtnLoading = false
+            }).catch(() => {
+              this.nextBtnLoading = false
             })
           }
         })

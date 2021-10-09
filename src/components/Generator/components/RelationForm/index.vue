@@ -2,8 +2,10 @@
   <div class="popupSelect-container">
     <div class="popupSelect-input" @click="openDialog">
       <el-input :placeholder="placeholder" v-model="innerValue" readonly>
-        <i slot="suffix" class="el-input__icon el-icon-circle-close" @click.stop="clear"></i>
-        <i slot="suffix" class="el-input__icon el-icon-edit"></i>
+        <i slot="suffix" class="el-input__icon el-icon-circle-close" @click.stop="clear"
+          v-if="clearable"></i>
+        <i slot="suffix" class="el-input__icon el-icon-arrow-down"
+          :class="{'clearable':clearable}"></i>
       </el-input>
     </div>
     <el-dialog title="选择数据" :close-on-click-modal="false" :visible.sync="visible" v-if="visible"
@@ -87,7 +89,7 @@ export default {
     },
     clearable: {
       type: Boolean,
-      default: false
+      default: true
     }
   },
   model: {
@@ -155,11 +157,13 @@ export default {
       this.checked = ''
       this.innerValue = ''
       this.$emit('input', this.checked)
+      this.$emit('change', this.checked)
     },
     select() {
       if (!this.checked) return
       this.innerValue = this.checkedTxt
       this.$emit('input', this.checked)
+      this.$emit('change', this.checked)
       this.visible = false
     },
     rowClick(row) {
@@ -210,7 +214,7 @@ export default {
       .el-icon-circle-close {
         display: block;
       }
-      .el-icon-edit {
+      .el-icon-arrow-down.clearable {
         display: none;
       }
     }

@@ -36,9 +36,29 @@ $redSub: #FF5D65;
       }
     }
   }
+
+  &.blend {
+    .navbar {
+      &.dark {
+        .el-tabs__item.is-active {
+          color: $color !important;
+        }
+      }
+    }
+  }
 }
 
 @mixin mixinCommon($color, $subColor) {
+  .com-hover:hover {
+    color: $color;
+  }
+
+  .todo-box .todo-box-body .item:hover {
+    .text .name {
+      color: $color;
+    }
+  }
+
   .tags-view-container .tags-view-wrapper .tags-view-item {
     &.active {
       color: $color;
@@ -234,7 +254,8 @@ $redSub: #FF5D65;
     }
   }
 
-  &.functional.el-menu--horizontal {
+  &.functional.el-menu--horizontal,
+  &.blend.el-menu--horizontal {
     .el-menu .nest-menu {
       .el-submenu {
         &.is-active {
@@ -260,7 +281,7 @@ $redSub: #FF5D65;
         }
 
         &.is-active {
-          color: $color;
+          color: $color !important;
 
           i {
             color: $color !important;
@@ -317,6 +338,25 @@ $redSub: #FF5D65;
       }
     }
 
+    .main-menu {
+
+      .el-submenu__title,
+      .el-menu-item {
+        &.is-active {
+          background-color: #fff;
+
+          &:hover {
+            color: $color;
+            background-color: #fff;
+
+            i {
+              color: $color;
+            }
+          }
+        }
+      }
+    }
+
     .lightWhite {
       .el-menu {
 
@@ -325,6 +365,19 @@ $redSub: #FF5D65;
 
           &.is-active {
             background-color: $color !important;
+          }
+        }
+      }
+
+      .main-menu {
+        .el-menu {
+
+          .el-submenu__title,
+          .el-menu-item {
+
+            &.is-active {
+              background-color: #fff !important;
+            }
           }
         }
       }

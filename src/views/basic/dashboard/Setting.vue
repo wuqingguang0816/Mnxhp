@@ -48,9 +48,9 @@ export default {
       }).catch(() => { this.loading = false })
     },
     selectItem(id) {
+      if (this.activeId == id) return
       this.loading = true
       this.loadingText = '切换门户中'
-      if (this.activeId == id) return
       SetDefault(id).then(res => {
         this.activeId = id
         this.$emit('refresh', id)

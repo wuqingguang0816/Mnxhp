@@ -28,6 +28,9 @@
         <span v-else class="placeholder-text">编辑计算公式</span>
       </div>
     </el-form-item>
+    <el-form-item label="是否隐藏">
+      <el-switch v-model="activeData.__config__.noShow" />
+    </el-form-item>
     <el-dialog title="编辑计算公式" custom-class="calc-dialog" :visible.sync="expDialogVisible"
       width="600px" class="JNPF-dialog JNPF-dialog_center" @open="onOpen" append-to-body>
       <div class="calc-box">

@@ -7,126 +7,126 @@
     <el-form ref="dataForm" :model="dataForm" :rules="dataRule" label-width="100px"
       :disabled="setting.readonly">
       <el-row>
-        <el-col :span="12" v-if="JudgeShow('flowTitle')">
+        <el-col :span="12" v-if="judgeShow('flowTitle')">
           <el-form-item label="流程标题" prop="flowTitle">
             <el-input v-model="dataForm.flowTitle" placeholder="流程标题"
-              :disabled="JudgeWrite('flowTitle')"></el-input>
+              :disabled="judgeWrite('flowTitle')"></el-input>
           </el-form-item>
         </el-col>
-        <el-col :span="12" v-if="JudgeShow('flowUrgent')">
+        <el-col :span="12" v-if="judgeShow('flowUrgent')">
           <el-form-item label="紧急程度" prop="flowUrgent">
             <el-select v-model="dataForm.flowUrgent" placeholder="选择紧急程度"
-              :disabled="JudgeWrite('flowUrgent')">
+              :disabled="judgeWrite('flowUrgent')">
               <el-option :key="item.value" :label="item.label" :value="item.value"
                 v-for="item in flowUrgentOptions" />
             </el-select>
           </el-form-item>
         </el-col>
-        <el-col :span="12" v-if="JudgeShow('applyUser')">
+        <el-col :span="12" v-if="judgeShow('applyUser')">
           <el-form-item label="申请人员" prop="applyUser">
             <el-input v-model="dataForm.applyUser" placeholder="申请人员" readonly
-              :disabled="JudgeWrite('applyUser')"></el-input>
+              :disabled="judgeWrite('applyUser')"></el-input>
           </el-form-item>
         </el-col>
-        <el-col :span="12" v-if="JudgeShow('flowTitle')">
+        <el-col :span="12" v-if="judgeShow('flowTitle')">
           <el-form-item label="申请日期" prop="applyDate">
             <el-date-picker v-model="dataForm.applyDate" type="date" placeholder="选择日期"
               value-format="timestamp" format="yyyy-MM-dd" :editable="false" readonly
-              :disabled="JudgeWrite('flowTitle')">
+              :disabled="judgeWrite('flowTitle')">
             </el-date-picker>
           </el-form-item>
         </el-col>
-        <el-col :span="12" v-if="JudgeShow('applyDept')">
+        <el-col :span="12" v-if="judgeShow('applyDept')">
           <el-form-item label="申请部门" prop="applyDept">
             <el-input v-model="dataForm.applyDept" placeholder="申请部门" readonly
-              :disabled="JudgeWrite('applyDept')"></el-input>
+              :disabled="judgeWrite('applyDept')"></el-input>
           </el-form-item>
         </el-col>
-        <el-col :span="12" v-if="JudgeShow('customer')">
+        <el-col :span="12" v-if="judgeShow('customer')">
           <el-form-item label="相关客户" prop="customer">
             <el-input v-model="dataForm.customer" placeholder="相关客户"
-              :disabled="JudgeWrite('customer')"></el-input>
+              :disabled="judgeWrite('customer')"></el-input>
           </el-form-item>
         </el-col>
-        <el-col :span="12" v-if="JudgeShow('project')">
+        <el-col :span="12" v-if="judgeShow('project')">
           <el-form-item label="相关项目" prop="project">
             <el-input v-model="dataForm.project" placeholder="相关项目"
-              :disabled="JudgeWrite('project')"></el-input>
+              :disabled="judgeWrite('project')"></el-input>
           </el-form-item>
         </el-col>
-        <el-col :span="12" v-if="JudgeShow('psaleSupInfo')">
+        <el-col :span="12" v-if="judgeShow('psaleSupInfo')">
           <el-form-item label="售前支持" prop="psaleSupInfo">
             <el-input v-model="dataForm.psaleSupInfo" placeholder="售前支持"
-              :disabled="JudgeWrite('psaleSupInfo')"></el-input>
+              :disabled="judgeWrite('psaleSupInfo')"></el-input>
           </el-form-item>
         </el-col>
-        <el-col :span="12" v-if="JudgeShow('startDate')">
+        <el-col :span="12" v-if="judgeShow('startDate')">
           <el-form-item label="开始时间" prop="startDate">
             <el-date-picker v-model="dataForm.startDate" type="datetime" placeholder="选择日期"
               value-format="timestamp" format="yyyy-MM-dd HH:mm" :editable='false'
-              :disabled="JudgeWrite('startDate')">
+              :disabled="judgeWrite('startDate')">
             </el-date-picker>
           </el-form-item>
         </el-col>
-        <el-col :span="12" v-if="JudgeShow('endDate')">
+        <el-col :span="12" v-if="judgeShow('endDate')">
           <el-form-item label="结束时间" prop="endDate">
             <el-date-picker v-model="dataForm.endDate" type="datetime" placeholder="选择日期"
               value-format="timestamp" format="yyyy-MM-dd HH:mm" :editable='false'
-              :disabled="JudgeWrite('endDate')">
+              :disabled="judgeWrite('endDate')">
             </el-date-picker>
           </el-form-item>
         </el-col>
-        <el-col :span="12" v-if="JudgeShow('psaleSupDays')">
+        <el-col :span="12" v-if="judgeShow('psaleSupDays')">
           <el-form-item label="支持天数" prop="psaleSupDays">
             <el-input v-model="dataForm.psaleSupDays" placeholder="支持天数" type="number"
-              :disabled="JudgeWrite('psaleSupDays')"></el-input>
+              :disabled="judgeWrite('psaleSupDays')"></el-input>
           </el-form-item>
         </el-col>
-        <el-col :span="12" v-if="JudgeShow('psalePreDays')">
+        <el-col :span="12" v-if="judgeShow('psalePreDays')">
           <el-form-item label="准备天数" prop="psalePreDays">
             <el-input v-model="dataForm.psalePreDays" placeholder="准备天数" type="number"
-              :disabled="JudgeWrite('psalePreDays')"></el-input>
+              :disabled="judgeWrite('psalePreDays')"></el-input>
           </el-form-item>
         </el-col>
-        <el-col :span="12" v-if="JudgeShow('consulManager')">
+        <el-col :span="12" v-if="judgeShow('consulManager')">
           <el-form-item label="机构咨询" prop="consulManager">
             <el-input v-model="dataForm.consulManager" placeholder="机构咨询"
-              :disabled="JudgeWrite('consulManager')"></el-input>
+              :disabled="judgeWrite('consulManager')"></el-input>
           </el-form-item>
         </el-col>
-        <el-col :span="12" v-if="JudgeShow('psalSupConsul')">
+        <el-col :span="12" v-if="judgeShow('psalSupConsul')">
           <el-form-item label="售前顾问" prop="psalSupConsul">
             <el-input v-model="dataForm.psalSupConsul" placeholder="售前顾问"
-              :disabled="JudgeWrite('psalSupConsul')"></el-input>
+              :disabled="judgeWrite('psalSupConsul')"></el-input>
           </el-form-item>
         </el-col>
-        <el-col :span="24" v-if="JudgeShow('fileJson')">
+        <el-col :span="24" v-if="judgeShow('fileJson')">
           <el-form-item label="相关附件" prop="fileJson">
-            <JNPF-UploadFz v-model="fileList" type="workFlow" :disabled="JudgeWrite('fileJson')" />
+            <JNPF-UploadFz v-model="fileList" type="workFlow" :disabled="judgeWrite('fileJson')" />
           </el-form-item>
         </el-col>
-        <el-col :span="24" v-if="JudgeShow('salSupConclu')">
+        <el-col :span="24" v-if="judgeShow('salSupConclu')">
           <el-form-item label="销售总结" prop="salSupConclu">
             <el-input v-model="dataForm.salSupConclu" placeholder="销售总结" type="textarea" :rows="3"
-              :disabled="JudgeWrite('salSupConclu')" />
+              :disabled="judgeWrite('salSupConclu')" />
           </el-form-item>
         </el-col>
-        <el-col :span="24" v-if="JudgeShow('consultResult')">
+        <el-col :span="24" v-if="judgeShow('consultResult')">
           <el-form-item label="交付说明" prop="consultResult">
             <el-input v-model="dataForm.consultResult" placeholder="交付说明" type="textarea" :rows="3"
-              :disabled="JudgeWrite('consultResult')" />
+              :disabled="judgeWrite('consultResult')" />
           </el-form-item>
         </el-col>
-        <el-col :span="24" v-if="JudgeShow('ievaluation')">
+        <el-col :span="24" v-if="judgeShow('ievaluation')">
           <el-form-item label="咨询评价" prop="ievaluation">
             <el-input v-model="dataForm.ievaluation" placeholder="咨询评价" type="textarea" :rows="3"
-              :disabled="JudgeWrite('ievaluation')" />
+              :disabled="judgeWrite('ievaluation')" />
           </el-form-item>
         </el-col>
-        <el-col :span="24" v-if="JudgeShow('conclusion')">
+        <el-col :span="24" v-if="judgeShow('conclusion')">
           <el-form-item label="发起人总结" prop="conclusion">
             <el-input v-model="dataForm.conclusion" placeholder="发起人总结" type="textarea" :rows="3"
-              :disabled="JudgeWrite('conclusion')" />
+              :disabled="judgeWrite('conclusion')" />
           </el-form-item>
         </el-col>
       </el-row>
@@ -218,7 +218,7 @@ export default {
       this.dataForm.applyDate = new Date().getTime()
       this.dataForm.flowTitle = this.userInfo.userName + "的销售支持表"
       this.dataForm.applyUser = this.userInfo.userName + '/' + this.userInfo.userAccount
-      this.dataForm.applyDept = this.userInfo.departmentName
+      this.dataForm.applyDept = this.userInfo.organizeName
     }
   }
 }

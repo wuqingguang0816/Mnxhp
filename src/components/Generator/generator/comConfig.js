@@ -55,6 +55,9 @@ const webPeculiarList = [{
       regList: [],
       trigger: 'change'
     },
+    on: {
+      change: '({ data, formData, setFormData, setShowOrHide, setRequired, setDisabled, request, getFieldOptions, setFieldOptions }) => {\n    // 在此编写代码\n    \n}',
+    },
     placeholder: '请选择',
     flowId: '',
     relationField: '',
@@ -93,6 +96,7 @@ const webPeculiarList = [{
       layout: 'colFormItem',
       span: 24,
       dragDisabled: false,
+      noShow: false,
       regList: []
     },
     expression: []
@@ -111,6 +115,9 @@ const webPeculiarList = [{
       span: 24,
       dragDisabled: false,
       regList: []
+    },
+    on: {
+      change: '({ data, formData, setFormData, setShowOrHide, setRequired, setDisabled, request, getFieldOptions, setFieldOptions }) => {\n    // 在此编写代码\n    \n}',
     },
     interfaceId: '',
     columnOptions: [],

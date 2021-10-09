@@ -56,6 +56,7 @@ export default {
         language: 'java'
       },
       currentName: '',
+      currentId: '',
       currentContent: ''
     }
   },
@@ -83,6 +84,7 @@ export default {
         CodePreview(id, this.dataForm).then(res => {
           this.treeData = res.data.list
           this.currentName = this.treeData[0].children[0].fileName
+          this.currentId = this.treeData[0].children[0].currentId
           this.currentContent = this.treeData[0].children[0].fileContent
           this.$nextTick(() => {
             this.$refs.treeBox.setCurrentKey(this.currentName);
@@ -103,9 +105,10 @@ export default {
       this.$emit('close')
     },
     handleNodeClick(data) {
-      if (this.currentName == data.fileName) return
+      if (this.currentName == data.fileName && this.currentId == data.id ) return
       this.options.language = data.fileType === 'vue' ? 'html' : 'java'
       this.currentName = data.fileName
+      this.currentId = data.id
       this.currentContent = data.fileContent
       this.$refs.CodeEditor.changeEditor({
         value: this.currentContent,

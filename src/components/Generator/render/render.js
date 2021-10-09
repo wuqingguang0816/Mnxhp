@@ -39,8 +39,8 @@ function emitEvents(confClone) {
     const eventKeyList = Object.keys(confClone[attr] || {})
     eventKeyList.forEach(key => {
       const val = confClone[attr][key]
-      if (typeof val === 'string') {
-        confClone[attr][key] = event => this.$emit(val, event)
+      if (typeof key === 'string') {
+        confClone[attr][key] = event => this.$emit(key, event)
       }
     })
   })

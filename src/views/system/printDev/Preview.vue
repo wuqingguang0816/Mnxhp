@@ -78,6 +78,7 @@ export default {
   margin: 0 auto;
   border-radius: 4px;
   width: 600px;
-  min-height: 100%;
+  height: 100%;
+  overflow: hidden;
 }
 </style>

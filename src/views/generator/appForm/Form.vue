@@ -107,7 +107,7 @@
         <columnDesign ref="columnDesign" :conf="columnData" />
       </template>
       <template v-if="activeStep==3">
-        <Process ref="process" :conf="flowTemplateJson" />
+        <Process ref="process" :conf="flowTemplateJson" :flowType="1" />
       </template>
     </div>
     <TableForm :visible.sync="formVisible" ref="tableForm" @closeForm="colseForm"

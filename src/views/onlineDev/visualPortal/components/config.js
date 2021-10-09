@@ -68,7 +68,7 @@ export const basicComponents = [{
   },
   {
     icon: 'icon-ym icon-ym-generator-Panel',
-    label: '数据计算',
+    label: '数据面板',
     jnpfKey: 'dataBoard',
     list: [
       { fullName: "新增客户（个）", num: 262, icon: "icon-ym icon-ym-wf-contractApproval" },

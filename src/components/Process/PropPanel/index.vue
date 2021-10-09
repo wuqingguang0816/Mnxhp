@@ -149,7 +149,7 @@
     <!-- 发起人 -->
     <section class="approver-pane" v-if="value && isStartNode()">
       <el-tabs style="height:100%;">
-        <el-tab-pane label="发起人">
+        <el-tab-pane label="发起人" v-if="flowType!=1">
           <el-row class="pd-10">
             <el-col :span="4" style="font-size: 14px;line-height:32px">谁可以发起</el-col>
             <el-col :span="20" style="font-size: 14px;line-height:32px;margin-bottom:10px">
@@ -165,7 +165,7 @@
             </div>
           </el-row>
         </el-tab-pane>
-        <el-tab-pane label="高级设置" name="config">
+        <el-tab-pane label="高级设置">
           <el-form label-position="top" class="pd-10">
             <el-form-item label="操作设置">
               <div class="per-cell">
@@ -195,7 +195,7 @@
             </el-form-item>
           </el-form>
         </el-tab-pane>
-        <el-tab-pane label="表单权限" name="formAuth">
+        <el-tab-pane label="表单权限">
           <div class="form-auth-table">
             <el-table :data="getFormOperates()" class="JNPF-common-table" size="mini" height="100%">
               <el-table-column prop="name" label="表单字段" align="left"></el-table-column>
@@ -212,7 +212,6 @@
           <el-form label-position="top" class="pd-10">
             <el-alert type="warning" :closable="false">
               <div slot="title" class="tips">
-                <p>请求方式：GET</p>
                 <p>请求参数：taskId、taskNodeId</p>
               </div>
             </el-alert>
@@ -221,7 +220,9 @@
             </el-form-item>
             <template v-if="startForm.hasInitFunc">
               <el-form-item label="发起事件请求路径">
-                <el-input v-model="startForm.initInterfaceUrl" placeholder="请输入接口地址" />
+                <el-input v-model="startForm.initInterfaceUrl" placeholder="请输入接口地址">
+                  <template slot="prepend">GET</template>
+                </el-input>
               </el-form-item>
             </template>
             <el-form-item label="自定义结束事件">
@@ -229,7 +230,9 @@
             </el-form-item>
             <template v-if="startForm.hasEndFunc">
               <el-form-item label="结束事件请求路径">
-                <el-input v-model="startForm.endInterfaceUrl" placeholder="请输入接口地址" />
+                <el-input v-model="startForm.endInterfaceUrl" placeholder="请输入接口地址">
+                  <template slot="prepend">GET</template>
+                </el-input>
               </el-form-item>
             </template>
             <el-form-item label="自定义撤回事件">
@@ -237,7 +240,9 @@
             </el-form-item>
             <template v-if="startForm.hasFlowRecallFunc">
               <el-form-item label="撤回事件请求路径">
-                <el-input v-model="startForm.flowRecallInterfaceUrl" placeholder="请输入接口地址" />
+                <el-input v-model="startForm.flowRecallInterfaceUrl" placeholder="请输入接口地址">
+                  <template slot="prepend">GET</template>
+                </el-input>
               </el-form-item>
             </template>
           </el-form>
@@ -272,7 +277,6 @@
                   通过第三方调用从目标服务中获取审批人</div>
                 <el-alert type="warning" :closable="false" v-if="approverForm.assigneeType === 9">
                   <div slot="title" class="tips">
-                    <p>请求方式：GET</p>
                     <p>请求参数：taskId、taskNodeId</p>
                   </div>
                 </el-alert>
@@ -299,7 +303,9 @@
                 </el-select>
               </el-form-item>
               <el-form-item label="请求路径" v-if="approverForm.assigneeType === 9">
-                <el-input v-model="approverForm.getUserUrl" placeholder="请输入接口路径"></el-input>
+                <el-input v-model="approverForm.getUserUrl" placeholder="请输入接口地址">
+                  <template slot="prepend">GET</template>
+                </el-input>
               </el-form-item>
               <el-form-item v-if="approverForm.assigneeType === 6">
                 <org-select ref="approver-role-org" type="role" v-model="approverForm.approverRole"
@@ -434,7 +440,6 @@
           <el-form label-position="top" :model="approverForm" class="pd-10">
             <el-alert type="warning" :closable="false">
               <div slot="title" class="tips">
-                <p>请求方式：GET</p>
                 <p>请求参数：taskId、taskNodeId</p>
               </div>
             </el-alert>
@@ -443,7 +448,9 @@
             </el-form-item>
             <template v-if="approverForm.hasApproverFunc">
               <el-form-item label="同意事件请求路径">
-                <el-input v-model="approverForm.approverInterfaceUrl" placeholder="请输入接口地址" />
+                <el-input v-model="approverForm.approverInterfaceUrl" placeholder="请输入接口地址">
+                  <template slot="prepend">GET</template>
+                </el-input>
               </el-form-item>
             </template>
             <el-form-item label="自定义拒绝事件">
@@ -451,7 +458,9 @@
             </el-form-item>
             <template v-if="approverForm.hasApproverRejectFunc">
               <el-form-item label="拒绝事件请求路径">
-                <el-input v-model="approverForm.approverRejectInterfaceUrl" placeholder="请输入接口地址" />
+                <el-input v-model="approverForm.approverRejectInterfaceUrl" placeholder="请输入接口地址">
+                  <template slot="prepend">GET</template>
+                </el-input>
               </el-form-item>
             </template>
             <el-form-item label="自定义撤回事件">
@@ -459,7 +468,9 @@
             </el-form-item>
             <template v-if="approverForm.hasRecallFunc">
               <el-form-item label="撤回事件请求路径">
-                <el-input v-model="approverForm.recallInterfaceUrl" placeholder="请输入接口地址" />
+                <el-input v-model="approverForm.recallInterfaceUrl" placeholder="请输入接口地址">
+                  <template slot="prepend">GET</template>
+                </el-input>
               </el-form-item>
             </template>
           </el-form>
@@ -597,7 +608,7 @@ const defaultStep = [{
   properties: { title: '发起人' }
 }]
 export default {
-  props: [/*当前节点数据*/"value", /*整个节点数据*/"processData"],
+  props: [/*当前节点数据*/"value", /*整个节点数据*/"processData", "flowType"],
   components: { OrgSelect },
   data() {
     return {
@@ -800,7 +811,7 @@ export default {
     },
 
     getOrgSelectLabel(type) {
-      return this.$refs[type + '-org']['selectedLabels']
+      return this.$refs[type + '-org'] && this.$refs[type + '-org']['selectedLabels']
     },
     /**
      * 开始节点确认保存
@@ -1166,8 +1177,12 @@ export default {
       return isOk;
     },
     getPringTplList() {
-      this.$store.dispatch('base/getPrintTree').then(res => {
-        this.printTplList = res.filter(o => o.children && o.children.length)
+      this.$store.dispatch('base/getPrintFlowTree').then(res => {
+        let list = res.filter(o => o.children && o.children.length)
+        this.printTplList = list.map(o => ({
+          ...o,
+          hasChildren: true
+        }))
       })
     }
   },

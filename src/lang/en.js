@@ -242,6 +242,7 @@ export default {
     menuPermission: 'Menu Permission',
     buttonPermission: 'Button Permission',
     listPermission: 'List Permission',
+    formPermission: 'Form Permission',
     dataPermission: 'Data Permission',
     selectRoles: 'Select Role',
   },

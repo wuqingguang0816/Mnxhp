@@ -1,8 +1,8 @@
 <template>
   <div class="comSelect-container">
-    <JNPF-TreeSelect :options="treeData" v-model="innerValue" :placeholder="placeholder" clearable
-      :disabled="disabled" v-on="$listeners" lastLevel lastLevelKey='type' :multiple="multiple"
-      lastLevelValue='position'>
+    <JNPF-TreeSelect :options="treeData" v-model="innerValue" :placeholder="placeholder"
+      :clearable="clearable" :filterable="filterable" :disabled="disabled" v-on="$listeners"
+      lastLevel lastLevelKey='type' :multiple="multiple" lastLevelValue='position'>
     </JNPF-TreeSelect>
   </div>
 </template>
@@ -10,7 +10,7 @@
 <script>
 export default {
   name: 'posSelect',
-  props: ["value", "disabled", "placeholder", "multiple"],
+  props: ["value", "disabled", "placeholder", "multiple", "clearable", "filterable"],
   model: {
     prop: 'value',
     event: 'input'

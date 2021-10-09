@@ -1,6 +1,6 @@
 <template>
   <el-cascader :props="props" v-model="innerValue" :options="options" v-bind="$attrs"
-    v-on="$listeners" clearable class="address-cascader" />
+    v-on="$listeners" class="address-cascader" />
 </template>
 
 <script>

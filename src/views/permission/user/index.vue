@@ -10,9 +10,10 @@
         </span>
       </div>
       <el-scrollbar class="JNPF-common-el-tree-scrollbar">
-        <el-tree ref="treeBox" :data="treeData" :element-loading-text="$t('common.loadingText')"
-          :props="defaultProps" default-expand-all highlight-current :expand-on-click-node="false"
-          node-key="id" @node-click="handleNodeClick" class="JNPF-common-el-tree">
+        <el-tree ref="treeBox" v-loading="treeLoading" :data="treeData"
+          :element-loading-text="$t('common.loadingText')" :props="defaultProps" default-expand-all
+          highlight-current :expand-on-click-node="false" node-key="id"
+          @node-click="handleNodeClick" class="JNPF-common-el-tree">
           <span class="custom-tree-node" slot-scope="{ data, node }">
             <i :class="data.icon" />
             <span class="text">{{node.label}}</span>
@@ -59,14 +60,14 @@
             </template>
           </el-table-column>
           <el-table-column prop="mobilePhone" label="手机" />
-          <el-table-column prop="department" label="部门" />
+          <el-table-column prop="department" label="组织" />
           <el-table-column prop="creatorTime" label="创建时间" :formatter="jnpf.tableDateFormat"
             width="120" />
           <el-table-column prop="sortCode" label="排序" width="70" align="center" />
           <el-table-column label="状态" width="70" align="center">
             <template slot-scope="scope">
-              <el-switch v-model="scope.row.enabledMark" :active-value="1" :inactive-value="0"
-                @click.native="handleUpdateState(scope.row)" disabled class="table-switch" />
+              <el-tag :type="scope.row.enabledMark == 1 ? 'success' : 'danger'" disable-transitions>
+                {{scope.row.enabledMark==1?'正常':'停用'}}</el-tag>
             </template>
           </el-table-column>
           <el-table-column label="操作" width="150">

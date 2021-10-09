@@ -5,7 +5,7 @@
     </div>
     <div class="portal-todoList-box-body">
       <template v-if="list.length">
-        <router-link class="item" to="/messageRecord" v-for="(item, i) in list" :key="i">
+        <router-link class="item com-hover" to="/messageRecord" v-for="(item, i) in list" :key="i">
           <span class="name">{{item.fullName}}</span>
           <span class="time">{{item.creatorTime | toDate('yyyy-MM-dd')}}</span>
         </router-link>

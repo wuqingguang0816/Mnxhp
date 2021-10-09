@@ -64,7 +64,22 @@ export default {
     changeEditor(data) {
       this.monacoEditor.setValue(data.value)
       this.monacoEditor.updateOptions({ ...data.options })
-    }
+    },
+    insert(text) {
+      text = text || ''
+      var position = this.monacoEditor.getPosition();
+      this.monacoEditor.executeEdits('', [
+        {
+          range: {
+            startLineNumber: position.lineNumber,
+            startColumn: position.column,
+            endLineNumber: position.lineNumber,
+            endColumn: position.column
+          },
+          text: text
+        }
+      ]);
+    },
   }
 }
 

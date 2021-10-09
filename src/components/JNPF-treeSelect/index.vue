@@ -1,7 +1,8 @@
 <template>
   <el-select :value="valueTitle" :clearable="clearable" :disabled="disabled" @clear="clearHandle"
     ref='elSelect' :placeholder="placeholder" :popper-class="`JNPF-select-tree ${themeClass}`"
-    @focus="selectFocus" filterable :filter-method="selectFilter" class="JNPF-selectTree">
+    @focus="selectFocus" :filterable="filterable" :filter-method="selectFilter"
+    class="JNPF-selectTree">
     <el-option :value="valueTitle" :label="valueTitle" class="options">
       <el-tree id="tree-option" ref="selectTree" :accordion="accordion" :data="options"
         :default-expand-all="defaultExpandAll" :props="props" :node-key="props.value"
@@ -50,6 +51,8 @@ export default {
     value: '',
     // 可清空选项
     clearable: { type: Boolean, default: false },
+    // 能否搜索
+    filterable: { type: Boolean, default: false },
     // 只能选择最后一层的数值
     lastLevel: { type: Boolean, default: false },
     // 只能选择最后一层的数值时，需要根据 lastLevelKey来判断是否最后一层

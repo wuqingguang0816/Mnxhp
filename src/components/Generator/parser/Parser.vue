@@ -4,6 +4,9 @@ import render from '@/components/Generator/render/render.js'
 import { ruleTrigger, dyOptionsList } from '@/components/Generator/generator/comConfig'
 import { getDictionaryDataSelector } from '@/api/systemData/dictionary'
 import { previewDataInterface } from '@/api/systemData/dataInterface'
+import request from '@/utils/request'
+
+const hasOptionsList = [...dyOptionsList, 'popupSelect']
 
 const layouts = {
   colFormItem(h, scheme) {
@@ -24,10 +27,11 @@ const layouts = {
     }
   },
   rowFormItem(h, scheme) {
+    const listeners = buildListeners.call(this, scheme)
     if (scheme.__config__.jnpfKey === 'tab') {
       return (
         <el-col span={scheme.__config__.span} class="mb-10">
-          <el-tabs type={scheme.type} tab-position={scheme['tab-position']} vModel={scheme.__config__.active}>
+          <el-tabs type={scheme.type} tab-position={scheme['tab-position']} vModel={scheme.__config__.active} {...{ on: listeners }}>
             {
               scheme.__config__.children.map((item, i) => {
                 let child = renderChildren.call(this, h, item)
@@ -47,7 +51,7 @@ const layouts = {
     if (scheme.__config__.jnpfKey === 'collapse') {
       return (
         <el-col span={scheme.__config__.span} class="mb-20">
-          <el-collapse vModel={scheme.__config__.active} accordion={scheme.accordion}>
+          <el-collapse vModel={scheme.__config__.active} accordion={scheme.accordion} {...{ on: listeners }}>
             {
               scheme.__config__.children.map((item, i) => {
                 let child = renderChildren.call(this, h, item)
@@ -149,15 +153,29 @@ function setValue(event, config, scheme) {
   this.$set(this[this.formConf.formModel], scheme.__vModel__, event)
 }
 
+function getFunc(str) {
+  let func = null
+  try {
+    func = eval(str)
+    return func
+  } catch (error) {
+    console.log(error);
+    return false
+  }
+}
+
 function buildListeners(scheme) {
   const config = scheme.__config__
-  const methods = this.formConf.__methods__ || {}
   const listeners = {}
-
-  // 给__methods__中的方法绑定this和event
-  Object.keys(methods).forEach(key => {
-    listeners[key] = event => methods[key].call(this, event)
-  })
+  if (scheme.on) {
+    // 响应 组件事件
+    Object.keys(scheme.on).forEach(key => {
+      const str = scheme.on[key];
+      const func = getFunc(str);
+      if (!func) return
+      listeners[key] = event => func.call(this, { data: event, ...this.parameter })
+    })
+  }
   // 响应 render.js 中的 vModel $emit('input', val)
   listeners.input = event => setValue.call(this, event, config, scheme)
 
@@ -169,6 +187,11 @@ export default {
     render
   },
   props: {
+    setFormData: Function,
+    setShowOrHide: Function,
+    setRequired: Function,
+    setDisabled: Function,
+    setFieldOptions: Function,
     formConf: {
       type: Object,
       required: true
@@ -180,12 +203,29 @@ export default {
       [this.formConf.formModel]: {},
       [this.formConf.formRules]: {},
       options: {},
-      tableRefs: {},
+      tableRefs: {}
     }
     this.initFormData(data.formConfCopy.fields, data[this.formConf.formModel])
     this.buildRules(data.formConfCopy.fields, data[this.formConf.formRules])
     this.buildOptions(data.formConfCopy.fields, data.options)
+    this.$nextTick(() => {
+      this.onLoad(data.formConfCopy, data[this.formConf.formModel])
+    })
     return data
+  },
+  computed: {
+    parameter() {
+      return {
+        formData: this[this.formConf.formModel],
+        setFormData: this.setFormData,
+        setShowOrHide: this.setShowOrHide,
+        setRequired: this.setRequired,
+        setDisabled: this.setDisabled,
+        request: this.request,
+        getFieldOptions: this.getFieldOptions,
+        setFieldOptions: this.setFieldOptions
+      }
+    }
   },
   methods: {
     initFormData(componentList, formData) {
@@ -206,14 +246,23 @@ export default {
             if (!config.dictionaryType) return
             getDictionaryDataSelector(config.dictionaryType).then(res => {
               isTreeSelect ? cur.options = res.data.list : cur.__slot__.options = res.data.list
+              isTreeSelect ? data[cur.__vModel__ + 'Options'] = cur.options : data[cur.__vModel__ + 'Options'] = cur.__slot__.options
             })
           }
           if (config.dataType === 'dynamic') {
             if (!config.propsUrl) return
             previewDataInterface(config.propsUrl).then(res => {
               isTreeSelect ? cur.options = res.data : cur.__slot__.options = res.data
+              isTreeSelect ? data[cur.__vModel__ + 'Options'] = cur.options : data[cur.__vModel__ + 'Options'] = cur.__slot__.options
             })
           }
+        }
+        if (config.jnpfKey === 'popupSelect') {
+          if (!cur.interfaceId) return
+          previewDataInterface(cur.interfaceId).then(res => {
+            cur.options = res.data
+            data[cur.__vModel__ + 'Options'] = res.data
+          })
         }
         if (config.children && config.jnpfKey !== 'table') this.buildOptions(config.children, data)
       })
@@ -240,6 +289,12 @@ export default {
         if (config.children) this.buildRules(config.children, rules)
       })
     },
+    onLoad(formConfCopy, formData) {
+      if (!formConfCopy || !formConfCopy.funcs || !formConfCopy.funcs.onLoad) return
+      const onLoadFunc = getFunc(formConfCopy.funcs.onLoad)
+      if (!onLoadFunc) return
+      onLoadFunc({ formData, request: this.request })
+    },
     resetForm() {
       this.$store.commit('generator/UPDATE_RELATION_DATA', {})
       this.formConfCopy = deepClone(this.formConf)
@@ -256,13 +311,41 @@ export default {
       })
       return valid
     },
+    request(url, method, data) {
+      if (!url) return
+      return request({
+        url: url,
+        method: method || 'GET',
+        data: data || {}
+      })
+    },
+    getFieldOptions(prop) {
+      if (!prop) return []
+      return this.options[prop + 'Options'] || []
+    },
+    beforeSubmit() {
+      let valid = true
+      if (!this.formConfCopy || !this.formConfCopy.funcs || !this.formConfCopy.funcs.beforeSubmit) return valid
+      const func = getFunc(this.formConfCopy.funcs.beforeSubmit)
+      if (!func) return valid
+      valid = func(this.parameter)
+      return valid
+    },
+    afterSubmit() {
+      if (!this.formConfCopy || !this.formConfCopy.funcs || !this.formConfCopy.funcs.afterSubmit) return
+      const func = getFunc(this.formConfCopy.funcs.afterSubmit)
+      if (!func) return
+      func(this.parameter)
+    },
     submitForm() {
+      const beforeSubmitValid = this.beforeSubmit()
+      if (!beforeSubmitValid) return false
       const isTableValid = this.checkTableData()
       this.$refs[this.formConf.formRef].validate(valid => {
         if (!valid) return false
         if (!isTableValid) return false
         // 触发sumit事件
-        this.$emit('submit', this[this.formConf.formModel])
+        this.$emit('submit', this[this.formConf.formModel], this.afterSubmit)
         return true
       })
     }

@@ -243,6 +243,7 @@ export default {
     menuPermission: '菜單權限',
     buttonPermission: '按鈕權限',
     listPermission: '列表權限',
+    formPermission: '表單權限',
     dataPermission: '數據權限',
     selectRoles: '選擇角色',
   },

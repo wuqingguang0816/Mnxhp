@@ -33,6 +33,8 @@
       <div class="JNPF-common-layout-main JNPF-flex-main">
         <div class="JNPF-common-head">
           <topOpts @add="addOrUpdateHandle()" addText="新建表名">
+            <upload-btn :url="'/api/system/DataModel/'+dataBase+'/Action/Import'"
+              @on-success="getTabelData" />
             <el-button type="text" icon="el-icon-menu" @click="handleFieldsManage()">常用字段
             </el-button>
           </topOpts>
@@ -71,8 +73,21 @@
             <template slot-scope="scope">
               <tableOpts @edit="addOrUpdateHandle(scope.row.table)"
                 @del="handleDel(scope.$index,scope.row.table)">
-                <el-button size="mini" type="text" @click="openData(scope.row.table)">打开数据
-                </el-button>
+                <el-dropdown hide-on-click>
+                  <span class="el-dropdown-link">
+                    <el-button size="mini" type="text">
+                      {{$t('common.moreBtn')}}<i class="el-icon-arrow-down el-icon--right"></i>
+                    </el-button>
+                  </span>
+                  <el-dropdown-menu slot="dropdown">
+                    <el-dropdown-item @click.native="openData(scope.row.table)">
+                      打开数据
+                    </el-dropdown-item>
+                    <el-dropdown-item @click.native="exportTpl(scope.row.table)">
+                      导出
+                    </el-dropdown-item>
+                  </el-dropdown-menu>
+                </el-dropdown>
               </tableOpts>
             </template>
           </el-table-column>
@@ -87,7 +102,7 @@
 
 <script>
 import { getDataSourceListAll } from '@/api/systemData/dataSource'
-import { DataModelList, DataModelDelete, DataModelFieldList } from '@/api/systemData/dataModel'
+import { DataModelList, DataModelDelete, DataModelFieldList, exportTpl } from '@/api/systemData/dataModel'
 import Form from './Form'
 import Preview from './Preview'
 import FieldsList from './fields/index'
@@ -160,6 +175,15 @@ export default {
           message: res.msg
         });
       })
+    },
+    exportTpl(id) {
+      this.$confirm('您确定要导出该表, 是否继续?', '提示', {
+        type: 'warning'
+      }).then(() => {
+        exportTpl(this.dataBase, id).then(res => {
+          if (res.data.url) window.location.href = this.define.comUrl + res.data.url
+        })
+      }).catch(() => { });
     },
     // 新增 / 修改
     addOrUpdateHandle(id) {
