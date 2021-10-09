@@ -2,9 +2,7 @@
   <el-dialog v-bind="$attrs" :close-on-click-modal="false" :modal-append-to-body="false"
     append-to-body v-on="$listeners" @open="onOpen" @close="onClose"
     class="JNPF-dialog JNPF-dialog_center" title="预览" :width="formConf.generalWidth">
-    <parser :form-conf="formConf" @submit="sumbitForm" :key="key" ref="dynamicForm"
-      :setFormData="setFormData" :setShowOrHide="setShowOrHide" :setRequired="setRequired"
-      :setDisabled="setDisabled" :setFieldOptions="setFieldOptions" />
+    <parser :form-conf="formConf" @submit="sumbitForm" :key="key" ref="dynamicForm" />
     <div slot="footer">
       <el-button @click="close">{{formConf.cancelButtonText||'取 消'}}</el-button>
       <el-button type="primary" @click="handelConfirm">{{formConf.confirmButtonText||'确 定'}}
@@ -15,14 +13,13 @@
 
 <script>
 import Parser from '@/components/Generator/parser/Parser'
-import ParserMixin from '@/components/Generator/parser/mixin'
 export default {
   components: { Parser },
-  mixins: [ParserMixin],
   props: ['formData'],
   data() {
     return {
-
+      key: +new Date(),
+      formConf: {}
     }
   },
   computed: {},
