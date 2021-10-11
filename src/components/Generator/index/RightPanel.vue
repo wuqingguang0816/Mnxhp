@@ -224,15 +224,13 @@
               <el-option label="公文风格" value="word-form"></el-option>
             </el-select>
           </el-form-item>
-          <el-form-item label="表单宽度"
-            v-if="formConf.popupType==='general' && modelType != 3 && modelType!=6">
+          <el-form-item label="表单宽度" v-if="formConf.popupType==='general'">
             <el-select v-model="formConf.generalWidth" placeholder="请选择">
               <el-option v-for="item in generalWidthOptions" :label="item" :value="item"
                 :key="item" />
             </el-select>
           </el-form-item>
-          <el-form-item label="表单宽度"
-            v-if="formConf.popupType==='fullScreen' || modelType == 3 || modelType ==6">
+          <el-form-item label="表单宽度" v-if="formConf.popupType==='fullScreen'">
             <el-select v-model="formConf.fullScreenWidth" placeholder="请选择">
               <el-option v-for="item in fullScreenWidthOptions" :label="item" :value="item"
                 :key="item" />

@@ -192,7 +192,7 @@ export default {
       this.idGlobal = 100
     }
     if (this.modelType == 1 || this.modelType == 6) this.leftComponents[1].list = [...this.leftComponents[1].list, ...webPeculiarList]
-    if (this.webType != 2) this.formConf.popupType = 'fullScreen'
+    if (this.webType != 2 || this.modelType == 3 || this.modelType == 6) this.formConf.popupType = 'fullScreen'
   },
   mounted() {
     // fix: firefox 下 拖拽 会新打卡一个选项卡
