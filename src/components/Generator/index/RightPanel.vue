@@ -212,7 +212,7 @@
             <el-input-number v-model="formConf.gutter" :min="0" placeholder="栅格间隔"
               controls-position="right" />
           </el-form-item>
-          <el-form-item label="弹窗类型" v-if="modelType != 3 && modelType!=6">
+          <el-form-item label="弹窗类型" v-if="modelType != 3 && modelType!=6 && webType==2">
             <el-select v-model="formConf.popupType" placeholder="请选择">
               <el-option label="普通弹窗" value="general"></el-option>
               <el-option label="全屏弹窗" value="fullScreen"></el-option>
