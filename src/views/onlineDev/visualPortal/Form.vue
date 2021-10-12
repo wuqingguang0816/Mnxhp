@@ -38,6 +38,10 @@
                   v-for="item in categoryList" />
               </el-select>
             </el-form-item>
+            <el-form-item label="门户排序" prop="sortCode">
+              <el-input-number :min="0" :max="9999" v-model="dataForm.sortCode"
+                controls-position="right" />
+            </el-form-item>
             <el-form-item label="门户状态" prop="enabledMark">
               <el-switch v-model="dataForm.enabledMark" :active-value="1" :inactive-value="0" />
             </el-form-item>
@@ -69,6 +73,7 @@ export default {
         id: '',
         fullName: '',
         enCode: '',
+        sortCode: 0,
         enabledMark: 1,
         category: '',
         description: ""
