@@ -56,7 +56,6 @@
           <el-table-column prop="fullName" label="名称" />
           <el-table-column prop="enCode" label="编码" />
           <el-table-column prop="manager" label="部门主管" />
-          <el-table-column prop="description" label="备注" />
           <el-table-column prop="creatorTime" label="创建时间" :formatter="jnpf.tableDateFormat"
             width="120" />
           <el-table-column prop="sortCode" label="排序" width="70" align="center" />

@@ -5,8 +5,7 @@
         :visible.sync="visible" class="JNPF-dialog JNPF-dialog_center" lock-scroll
         :width="formConf.generalWidth">
         <parser :form-conf="formConf" @submit="sumbitForm" :key="key" ref="dynamicForm"
-          :setFormData="setFormData" :setShowOrHide="setShowOrHide" :setRequired="setRequired"
-          :setDisabled="setDisabled" :setFieldOptions="setFieldOptions" v-if="!loading" />
+          v-if="!loading" />
         <span slot="footer" class="dialog-footer">
           <template v-if="formConf.hasPrintBtn && formConf.printId && dataForm.id && false">
             <el-button type="primary" @click="print">
@@ -37,8 +36,7 @@
           </div>
           <div class="dynamic-form-main" :style="{margin: '0 auto',width:formConf.fullScreenWidth}">
             <parser :form-conf="formConf" @submit="sumbitForm" :key="key" ref="dynamicForm"
-              :setFormData="setFormData" :setShowOrHide="setShowOrHide" :setRequired="setRequired"
-              :setDisabled="setDisabled" :setFieldOptions="setFieldOptions" v-if="!loading" />
+              v-if="!loading" />
           </div>
         </div>
       </transition>
@@ -50,15 +48,15 @@
 <script>
 import { createModel, updateModel, getModelInfo } from '@/api/onlineDev/visualDev'
 import Parser from '@/components/Generator/parser/Parser'
-import ParserMixin from '@/components/Generator/parser/mixin'
 import PrintBrowse from '@/components/PrintBrowse'
 import { deepClone } from '@/utils'
 export default {
   components: { Parser, PrintBrowse },
-  mixins: [ParserMixin],
   data() {
     return {
       visible: false,
+      key: +new Date(),
+      formConf: {},
       dataForm: {
         id: '',
         data: ''

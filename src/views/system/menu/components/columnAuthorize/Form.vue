@@ -16,6 +16,10 @@
       <el-form-item label="字段说明" prop="fullName">
         <el-input v-model="dataForm.fullName" placeholder="输入字段说明" />
       </el-form-item>
+      <el-form-item label="排序" prop="sortCode">
+        <el-input-number :min="0" :max="9999" v-model="dataForm.sortCode"
+          controls-position="right" />
+      </el-form-item>
       <el-form-item label="状态" prop="enabledMark">
         <el-switch v-model="dataForm.enabledMark" :active-value="1" :inactive-value="0" />
       </el-form-item>
@@ -51,6 +55,7 @@ export default {
         bindTableName: '',
         fullName: '',
         enCode: '',
+        sortCode: 0,
         enabledMark: 1,
         description: ''
       },

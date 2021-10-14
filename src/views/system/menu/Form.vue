@@ -114,11 +114,11 @@ const typeData = [
     enCode: 6,
     fullName: "大屏"
   }, {
-    enCode: 7,
-    fullName: "外链"
-  }, {
     enCode: 8,
     fullName: "门户"
+  }, {
+    enCode: 7,
+    fullName: "外链"
   }]
 
 export default {
