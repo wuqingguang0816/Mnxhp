@@ -11,8 +11,7 @@
       </div>
       <div class="dynamic-form-main" :style="{margin: '0 auto',width:formConf.fullScreenWidth}">
         <parser :form-conf="formConf" @submit="sumbitForm" :key="key" ref="dynamicForm"
-          :setFormData="setFormData" :setShowOrHide="setShowOrHide" :setRequired="setRequired"
-          :setDisabled="setDisabled" :setFieldOptions="setFieldOptions" v-if="!loading" />
+          v-if="!loading" />
       </div>
     </div>
   </div>
@@ -21,10 +20,8 @@
 <script>
 import { createModel } from '@/api/onlineDev/visualDev'
 import Parser from '@/components/Generator/parser/Parser'
-import ParserMixin from '@/components/Generator/parser/mixin'
 export default {
   components: { Parser },
-  mixins: [ParserMixin],
   props: ['config', 'modelId', 'isPreview'],
   data() {
     return {
@@ -34,6 +31,8 @@ export default {
       },
       btnLoading: false,
       loading: true,
+      key: +new Date(),
+      formConf: {}
     }
   },
   created() {

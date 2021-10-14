@@ -41,6 +41,10 @@
                   v-for="item in categoryList" />
               </el-select>
             </el-form-item>
+            <el-form-item label="功能排序" prop="sortCode">
+              <el-input-number :min="0" :max="9999" v-model="dataForm.sortCode"
+                controls-position="right" />
+            </el-form-item>
             <el-form-item label="功能状态" prop="state">
               <el-switch v-model="dataForm.state" :active-value="1" :inactive-value="0" />
             </el-form-item>
@@ -68,8 +72,13 @@
                     style="cursor:pointer" title="点击设置成主表">子表</el-tag>
                 </template>
               </el-table-column>
-              <el-table-column prop="tableName" label="说明" />
-              <el-table-column prop="table" label="表名" />
+              <el-table-column prop="table" label="表名">
+                <template slot-scope="scope">
+                  <el-tooltip :content="scope.row.tableName||scope.row.table" placement="top">
+                    <span>{{scope.row.table}}</span>
+                  </el-tooltip>
+                </template>
+              </el-table-column>
               <el-table-column prop="tableField" label="外键字段">
                 <template slot-scope="scope" v-if="scope.row.typeId !=='1'">
                   <el-select v-model="scope.row.tableField" placeholder="请选择">

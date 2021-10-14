@@ -21,12 +21,8 @@
 
 <script>
 import { previewDataInterface } from '@/api/systemData/dataInterface'
-import JNPFCodeEditor from '@/components/JNPFEditor/monaco'
 
 export default {
-  components: {
-    JNPFCodeEditor
-  },
   data() {
     return {
       title: '',

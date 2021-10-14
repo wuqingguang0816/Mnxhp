@@ -65,8 +65,13 @@
                     style="cursor:pointer" title="点击设置成主表">子表</el-tag>
                 </template>
               </el-table-column>
-              <el-table-column prop="tableName" label="说明" />
-              <el-table-column prop="table" label="表名" />
+              <el-table-column prop="table" label="表名">
+                <template slot-scope="scope">
+                  <el-tooltip :content="scope.row.tableName||scope.row.table" placement="top">
+                    <span>{{scope.row.table}}</span>
+                  </el-tooltip>
+                </template>
+              </el-table-column>
               <el-table-column prop="tableField" label="外键字段">
                 <template slot-scope="scope" v-if="scope.row.typeId !=='1'">
                   <el-select v-model="scope.row.tableField" placeholder="请选择">

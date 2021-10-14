@@ -1,23 +1,22 @@
 <template >
   <div class="flow-form" :style="{margin: '0 auto',width:formConf.fullScreenWidth}">
     <parser :form-conf="formConf" @submit="sumbitForm" :key="key" ref="dynamicForm"
-      :setFormData="setFormData" :setShowOrHide="setShowOrHide" :setRequired="setRequired"
-      :setDisabled="setDisabled" :setFieldOptions="setFieldOptions" v-if="!loading" />
+      v-if="!loading" />
   </div>
 </template>
 <script>
 import { DynamicInfo } from '@/api/workFlow/workFlowForm'
 import { createModel, updateModel, getModelInfo } from '@/api/onlineDev/visualDev'
 import Parser from '@/components/Generator/parser/Parser'
-import ParserMixin from '@/components/Generator/parser/mixin'
 export default {
   components: { Parser },
-  mixins: [ParserMixin],
   data() {
     return {
       formData: {},
       loading: true,
       eventType: '',
+      key: +new Date(),
+      formConf: {},
       dataForm: {
         id: '',
         data: '',

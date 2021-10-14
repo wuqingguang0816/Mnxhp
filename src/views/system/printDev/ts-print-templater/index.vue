@@ -288,7 +288,7 @@ export default {
   }
 }
 .system-view-nav {
-  width: 220px;
+  width: 300px;
   position: relative;
   background: #fff;
   margin-right: 10px;

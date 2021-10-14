@@ -14,6 +14,7 @@ export default {
         type: 1,
         webType: 2,
         dbLinkId: '',
+        sortCode: 0,
         state: 1,
         category: '',
         description: "",

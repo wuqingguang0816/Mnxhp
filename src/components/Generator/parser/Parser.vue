@@ -6,8 +6,6 @@ import { getDictionaryDataSelector } from '@/api/systemData/dictionary'
 import { previewDataInterface } from '@/api/systemData/dataInterface'
 import request from '@/utils/request'
 
-const hasOptionsList = [...dyOptionsList, 'popupSelect']
-
 const layouts = {
   colFormItem(h, scheme) {
     const config = scheme.__config__
@@ -20,7 +18,7 @@ const layouts = {
         <el-col span={config.span}>
           <el-form-item label-width={labelWidth} prop={scheme.__vModel__}
             label={config.showLabel ? config.label : ''}>
-            <render formData={this[this.formConf.formModel]} conf={scheme} {...{ on: listeners }} ref={config.rowType === 'table' ? scheme.__vModel__ : undefined} />
+            <render formData={this[this.formConf.formModel]} conf={scheme} {...{ on: listeners }} ref={config.rowType === 'table' ? scheme.__vModel__ : undefined} key={scheme.__config__.renderKey} />
           </el-form-item>
         </el-col>
       )
@@ -187,11 +185,6 @@ export default {
     render
   },
   props: {
-    setFormData: Function,
-    setShowOrHide: Function,
-    setRequired: Function,
-    setDisabled: Function,
-    setFieldOptions: Function,
     formConf: {
       type: Object,
       required: true
@@ -209,7 +202,7 @@ export default {
     this.buildRules(data.formConfCopy.fields, data[this.formConf.formRules])
     this.buildOptions(data.formConfCopy.fields, data.options)
     this.$nextTick(() => {
-      this.onLoad(data.formConfCopy, data[this.formConf.formModel])
+      this.onLoad(data.formConfCopy)
     })
     return data
   },
@@ -289,11 +282,11 @@ export default {
         if (config.children) this.buildRules(config.children, rules)
       })
     },
-    onLoad(formConfCopy, formData) {
+    onLoad(formConfCopy) {
       if (!formConfCopy || !formConfCopy.funcs || !formConfCopy.funcs.onLoad) return
       const onLoadFunc = getFunc(formConfCopy.funcs.onLoad)
       if (!onLoadFunc) return
-      onLoadFunc({ formData, request: this.request })
+      onLoadFunc(this.parameter)
     },
     resetForm() {
       this.$store.commit('generator/UPDATE_RELATION_DATA', {})
@@ -322,6 +315,57 @@ export default {
     getFieldOptions(prop) {
       if (!prop) return []
       return this.options[prop + 'Options'] || []
+    },
+    setFormData(prop, value) {
+      if (!prop) return
+      this.comSet('defaultValue', prop, value)
+    },
+    setShowOrHide(prop, value) {
+      const newVal = !!value
+      this.comSet('noShow', prop, !newVal)
+    },
+    setRequired(prop, value) {
+      const newVal = !!value
+      this.comSet('required', prop, newVal)
+      this.buildRules(this.formConfCopy.fields, this[this.formConf.formRules])
+    },
+    setDisabled(prop, value) {
+      const newVal = !!value
+      this.comSet('disabled', prop, newVal)
+    },
+    setFieldOptions(prop, value) {
+      const newVal = Array.isArray(value) ? value : []
+      this.comSet('options', prop, newVal)
+    },
+    comSet(field, prop, value) {
+      if (!prop) return
+      const loop = list => {
+        for (let i = 0; i < list.length; i++) {
+          let item = list[i]
+          if (item.__vModel__ && item.__vModel__ === prop) {
+            switch (field) {
+              case 'disabled':
+                item[field] = value
+                break;
+              case 'options':
+                if (dyOptionsList.indexOf(item.__config__.jnpfKey) > -1) {
+                  let isTreeSelect = item.__config__.jnpfKey === 'treeSelect' || item.__config__.jnpfKey === 'cascader'
+                  isTreeSelect ? item.options = value : item.__slot__.options = value
+                }
+                break;
+              default:
+                item.__config__[field] = value
+                break;
+            }
+            item.__config__.renderKey = +new Date() + item.__vModel__
+            break;
+          }
+          if (item.__config__ && item.__config__.jnpfKey !== 'table' && item.__config__.children && Array.isArray(item.__config__.children)) {
+            loop(item.__config__.children)
+          }
+        }
+      }
+      loop(this.formConfCopy.fields)
     },
     beforeSubmit() {
       let valid = true
