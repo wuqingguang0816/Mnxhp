@@ -13,7 +13,7 @@ export default {
         enCode: '',
         type: 1,
         webType: 2,
-        dbLinkId: '',
+        dbLinkId: '0',
         sortCode: 0,
         state: 1,
         category: '',
