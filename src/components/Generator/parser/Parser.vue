@@ -241,13 +241,14 @@ export default {
               isTreeSelect ? cur.options = res.data.list : cur.__slot__.options = res.data.list
               isTreeSelect ? data[cur.__vModel__ + 'Options'] = cur.options : data[cur.__vModel__ + 'Options'] = cur.__slot__.options
             })
-          }
-          if (config.dataType === 'dynamic') {
+          } else if (config.dataType === 'dynamic') {
             if (!config.propsUrl) return
             previewDataInterface(config.propsUrl).then(res => {
               isTreeSelect ? cur.options = res.data : cur.__slot__.options = res.data
               isTreeSelect ? data[cur.__vModel__ + 'Options'] = cur.options : data[cur.__vModel__ + 'Options'] = cur.__slot__.options
             })
+          } else {
+            isTreeSelect ? data[cur.__vModel__ + 'Options'] = cur.options : data[cur.__vModel__ + 'Options'] = cur.__slot__.options
           }
         }
         if (config.jnpfKey === 'popupSelect') {

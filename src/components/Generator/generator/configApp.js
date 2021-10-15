@@ -31,6 +31,7 @@ export const inputComponents = [{
       layout: 'colFormItem',
       span: 24,
       dragDisabled: false,
+      tableName: '',
       noShow: false,
       regList: []
     },
@@ -53,6 +54,7 @@ export const inputComponents = [{
       layout: 'colFormItem',
       span: 24,
       dragDisabled: false,
+      tableName: '',
     },
     placeholder: '请输入',
     maxlength: null,
@@ -70,6 +72,7 @@ export const inputComponents = [{
       required: false,
       layout: 'colFormItem',
       span: 24,
+      tableName: '',
       dragDisabled: false
     },
     min: undefined,
@@ -89,6 +92,7 @@ export const inputComponents = [{
       required: false,
       layout: 'colFormItem',
       span: 24,
+      tableName: '',
       dragDisabled: false
     },
     disabled: false
@@ -105,6 +109,7 @@ export const inputComponents = [{
       required: false,
       layout: 'colFormItem',
       span: 24,
+      tableName: '',
       dragDisabled: false,
       optionType: 'default',
       border: false,
@@ -139,6 +144,7 @@ export const inputComponents = [{
       required: false,
       layout: 'colFormItem',
       span: 24,
+      tableName: '',
       dragDisabled: false,
       optionType: 'default',
       border: false,
@@ -173,6 +179,7 @@ export const inputComponents = [{
       required: false,
       layout: 'colFormItem',
       span: 24,
+      tableName: '',
       dragDisabled: false,
       dataType: 'static',
       dictionaryType: '',
@@ -206,6 +213,7 @@ export const inputComponents = [{
       required: false,
       layout: 'colFormItem',
       span: 24,
+      tableName: '',
       dragDisabled: false,
       dataType: 'static',
       dictionaryType: '',
@@ -242,6 +250,7 @@ export const inputComponents = [{
       required: false,
       layout: 'colFormItem',
       span: 24,
+      tableName: '',
       dragDisabled: false
     },
     type: 'date',
@@ -260,6 +269,7 @@ export const inputComponents = [{
       required: false,
       layout: 'colFormItem',
       span: 24,
+      tableName: '',
       dragDisabled: false
     },
     placeholder: '请选择',
@@ -277,6 +287,7 @@ export const inputComponents = [{
       required: false,
       layout: 'colFormItem',
       span: 24,
+      tableName: '',
       dragDisabled: false
     },
     disabled: false,
@@ -298,6 +309,7 @@ export const inputComponents = [{
       required: false,
       layout: 'colFormItem',
       span: 24,
+      tableName: '',
       dragDisabled: false
     },
     max: 5,
@@ -317,6 +329,7 @@ export const inputComponents = [{
       required: false,
       layout: 'colFormItem',
       span: 24,
+      tableName: '',
       dragDisabled: false
     },
     disabled: false,
@@ -360,6 +373,7 @@ export const inputComponents = [{
       required: false,
       layout: 'colFormItem',
       span: 24,
+      tableName: '',
       dragDisabled: false
     },
     placeholder: '请输入'
@@ -379,6 +393,7 @@ export const selectComponents = [{
       required: false,
       layout: 'colFormItem',
       span: 24,
+      tableName: '',
       dragDisabled: false
     },
     placeholder: '请选择',
@@ -396,6 +411,7 @@ export const selectComponents = [{
       required: false,
       layout: 'colFormItem',
       span: 24,
+      tableName: '',
       dragDisabled: false
     },
     placeholder: '请选择',
@@ -413,6 +429,7 @@ export const selectComponents = [{
       required: false,
       layout: 'colFormItem',
       span: 24,
+      tableName: '',
       dragDisabled: false
     },
     placeholder: '请选择',
@@ -431,6 +448,7 @@ export const selectComponents = [{
       required: false,
       layout: 'colFormItem',
       span: 24,
+      tableName: '',
       dragDisabled: false
     },
     placeholder: '请选择',
@@ -449,6 +467,7 @@ export const selectComponents = [{
       required: false,
       layout: 'colFormItem',
       span: 24,
+      tableName: '',
       dragDisabled: false,
       dataType: 'static',
       dictionaryType: '',
@@ -484,6 +503,7 @@ export const selectComponents = [{
       defaultValue: '',
       layout: 'colFormItem',
       span: 24,
+      tableName: '',
       dragDisabled: false,
       noShow: false,
       rule: ''
@@ -522,6 +542,7 @@ export const selectComponents = [{
       required: false,
       layout: 'colFormItem',
       span: 24,
+      tableName: '',
       dragDisabled: false
     },
     placeholder: '请选择',
@@ -542,6 +563,7 @@ export const systemComponents = [{
       defaultValue: '',
       layout: 'colFormItem',
       span: 24,
+      tableName: '',
       dragDisabled: false,
       noShow: false
     }
@@ -557,6 +579,7 @@ export const systemComponents = [{
       defaultValue: '',
       layout: 'colFormItem',
       span: 24,
+      tableName: '',
       dragDisabled: false,
       noShow: false
     }
@@ -572,6 +595,7 @@ export const systemComponents = [{
       defaultValue: '',
       layout: 'colFormItem',
       span: 24,
+      tableName: '',
       dragDisabled: false,
       noShow: false
     }
@@ -587,6 +611,7 @@ export const systemComponents = [{
       defaultValue: '',
       layout: 'colFormItem',
       span: 24,
+      tableName: '',
       dragDisabled: false,
       noShow: false
     }
@@ -602,6 +627,7 @@ export const systemComponents = [{
       defaultValue: '',
       layout: 'colFormItem',
       span: 24,
+      tableName: '',
       dragDisabled: false,
       noShow: false
     }
@@ -617,6 +643,7 @@ export const systemComponents = [{
       defaultValue: '',
       layout: 'colFormItem',
       span: 24,
+      tableName: '',
       dragDisabled: false,
       noShow: false
     }

@@ -13,16 +13,25 @@
             <template v-if="$store.getters.hasTable">
               <template v-if="activeData.__config__.jnpfKey==='table'">
                 <el-form-item v-if="activeData.__vModel__!==undefined" label="控件字段">
-                  <el-input v-model="activeData.__vModel__" placeholder="请输入控件字段（v-model）"
+                  <el-input v-model="activeData.__vModel__" placeholder="请输入控件字段(v-model)"
                     disabled />
                 </el-form-item>
               </template>
               <template v-else>
                 <template v-if="!activeData.__config__.isSubTable">
+                  <el-form-item v-if="activeData.__vModel__!==undefined" label="数据库表">
+                    <el-select v-model="activeData.__config__.tableName" placeholder="请选择数据库表"
+                      @change="tableChange">
+                      <el-option v-for="item in allTable" :key="item.table" :value="item.table"
+                        :label="item.tableName?item.table+'('+item.tableName+')':item.table">
+                      </el-option>
+                    </el-select>
+                  </el-form-item>
                   <el-form-item v-if="activeData.__vModel__!==undefined" label="控件字段">
-                    <el-select v-model="activeData.__vModel__" placeholder="请选择控件字段（v-model）"
+                    <el-select v-model="activeData.__vModel__" placeholder="请选择控件字段(v-model)"
                       clearable @change="fieldChange">
-                      <el-option v-for="item in formItemList" :key="item.field" :value="item.field"
+                      <el-option v-for="item in fieldOptions" :key="item.realField"
+                        :value="item.realField"
                         :label="item.fieldName?item.field+'('+item.fieldName+')':item.field">
                       </el-option>
                     </el-select>
@@ -30,7 +39,7 @@
                 </template>
                 <template v-if="activeData.__config__.isSubTable && subTable.length">
                   <el-form-item v-if="activeData.__vModel__!==undefined" label="控件字段">
-                    <el-select v-model="activeData.__vModel__" placeholder="请选择控件字段（v-model）"
+                    <el-select v-model="activeData.__vModel__" placeholder="请选择控件字段(v-model)"
                       clearable @change="fieldChange1">
                       <el-option
                         v-for="item in getSubTalebFiled(activeData.__config__.relationTable)"
@@ -44,7 +53,7 @@
             </template>
             <template v-else>
               <el-form-item v-if="activeData.__vModel__!==undefined" label="控件字段">
-                <el-input v-model="activeData.__vModel__" placeholder="请输入控件字段（v-model）" disabled />
+                <el-input v-model="activeData.__vModel__" placeholder="请输入控件字段(v-model)" disabled />
               </el-form-item>
             </template>
             <JNPFComInput v-if="activeData.__config__.jnpfKey==='comInput'"
@@ -137,7 +146,8 @@
               <el-form-item label="关联子表" v-if="$store.getters.hasTable">
                 <el-select v-model="activeData.__config__.tableName" placeholder="请选择关联子表" clearable
                   @change="onTableNameChange">
-                  <el-option v-for="item in subTable" :key="item.table" :label="item.table"
+                  <el-option v-for="item in subTable" :key="item.table"
+                    :label="item.tableName?item.table+'('+item.tableName+')':item.table"
                     :value="item.table">
                   </el-option>
                 </el-select>
@@ -376,6 +386,7 @@ export default {
       activeFunc: '',
       isConf: false,
       printTplList: [],
+      fieldOptions: [],
       dictionaryOptions: [],
       dataInterfaceOptions: [],
       justifyOptions: [
@@ -420,6 +431,15 @@ export default {
     subTable() {
       return this.$store.state.generator.subTable || []
     },
+    allTable() {
+      return this.$store.state.generator.allTable || []
+    },
+    mainTable() {
+      let allTable = this.$store.state.generator.allTable
+      let item = allTable.filter(o => o.typeId == '1')[0]
+      if (!item || !item.table) return ''
+      return item.table
+    },
     isCommon() {
       return commonRightList.indexOf(this.activeData.__config__.jnpfKey) > -1
     },
@@ -453,9 +473,18 @@ export default {
           this.$refs.calculate && this.$refs.calculate.reloadExpressionTemp()
         })
       }
+      if (!val.__config__.tableName && val.__config__.jnpfKey !== 'table') {
+        val.__config__.tableName = this.mainTable
+      }
+      this.setDefaultOptions()
     }
   },
   created() {
+    if (!this.activeData || !this.activeData.__config__) return
+    if (!this.activeData.__config__.tableName && this.activeData.__config__.jnpfKey !== 'table') {
+      this.activeData.__config__.tableName = this.mainTable
+    }
+    this.setDefaultOptions()
     this.getDictionaryType()
     this.getDataInterfaceSelector()
     this.getPringTplList()
@@ -565,9 +594,32 @@ export default {
         this.activeData.__vModel__ = ''
         return
       }
-      let item = this.formItemList.filter(o => o.field == val)[0]
+      let item = this.fieldOptions.filter(o => o.realField == val)[0]
       if (!item || !item.fieldName) return
       this.activeData.__config__.label = item.fieldName
+    },
+    tableChange() {
+      this.activeData.__vModel__ = ''
+      this.setDefaultOptions()
+    },
+    setDefaultOptions() {
+      if (!this.activeData.__config__.tableName || this.activeData.__config__.tableName === this.mainTable) {
+        this.fieldOptions = this.formItemList.map(o => ({ ...o, realField: o.field }))
+      } else {
+        let list = this.allTable.filter(o => o.table === this.activeData.__config__.tableName)
+        if (!list.length) {
+          this.activeData.__config__.tableName = this.mainTable
+          this.fieldOptions = this.formItemList.map(o => ({ ...o, realField: o.field }))
+          this.activeData.__vModel__ = ''
+        } else {
+          let item = list[0]
+          let options = item.fields.map(o => ({
+            ...o,
+            realField: 'jnpf_' + this.activeData.__config__.tableName + '_jnpf_' + o.field,
+          }))
+          this.fieldOptions = options
+        }
+      }
     },
     spanChange(val) {
       this.formConf.span = val

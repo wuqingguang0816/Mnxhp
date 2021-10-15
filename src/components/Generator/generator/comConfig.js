@@ -52,6 +52,7 @@ const webPeculiarList = [{
       layout: 'colFormItem',
       span: 24,
       dragDisabled: false,
+      tableName: '',
       regList: [],
       trigger: 'change'
     },
@@ -96,6 +97,7 @@ const webPeculiarList = [{
       layout: 'colFormItem',
       span: 24,
       dragDisabled: false,
+      tableName: '',
       noShow: false,
       regList: []
     },
@@ -114,6 +116,7 @@ const webPeculiarList = [{
       layout: 'colFormItem',
       span: 24,
       dragDisabled: false,
+      tableName: '',
       regList: []
     },
     on: {
@@ -140,6 +143,7 @@ const flowPeculiarList = [{
       layout: 'colFormItem',
       span: 24,
       dragDisabled: false,
+      tableName: '',
       regList: [],
       trigger: 'change'
     },
