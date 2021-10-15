@@ -34,17 +34,17 @@
               <el-input v-model="dataForm.enCode" placeholder="模板编码" maxlength="50">
               </el-input>
             </el-form-item>
-            <el-form-item label="模板类型" prop="type">
-              <el-radio-group v-model="dataForm.type">
-                <el-radio :label="1">流程表单</el-radio>
-                <el-radio :label="2">功能表单</el-radio>
-              </el-radio-group>
-            </el-form-item>
             <el-form-item label="模板分类" prop="category">
               <el-select v-model="dataForm.category" placeholder="选择分类">
                 <el-option :key="item.id" :label="item.fullName" :value="item.enCode"
                   v-for="item in categoryList" />
               </el-select>
+            </el-form-item>
+            <el-form-item label="模板类型" prop="type">
+              <el-radio-group v-model="dataForm.type">
+                <el-radio :label="1">流程表单</el-radio>
+                <el-radio :label="2">功能表单</el-radio>
+              </el-radio-group>
             </el-form-item>
             <el-form-item label="模板排序" prop="sortCode">
               <el-input-number :min="0" :max="9999" v-model="dataForm.sortCode"
