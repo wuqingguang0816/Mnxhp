@@ -130,6 +130,7 @@ export default {
     buildOptions(componentList) {
       componentList.forEach(cur => {
         const config = cur.__config__
+        if (config.jnpfKey === 'cascader') cur.props.props.multiple = false
         if (dyOptionsList.indexOf(config.jnpfKey) > -1) {
           let isTreeSelect = config.jnpfKey === 'treeSelect' || config.jnpfKey === 'cascader'
           if (config.dataType === 'dictionary') {
