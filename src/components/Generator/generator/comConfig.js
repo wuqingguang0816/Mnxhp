@@ -41,34 +41,6 @@ const useSelectList = ['radio', 'checkbox', 'select']
 // 在线开发-功能设计/流程设计独有组件
 const webPeculiarList = [{
     __config__: {
-      jnpfKey: 'relationForm',
-      label: '关联表单',
-      labelWidth: undefined,
-      showLabel: true,
-      tag: 'relationForm',
-      tagIcon: 'icon-ym icon-ym-generator-menu',
-      defaultValue: '',
-      required: false,
-      layout: 'colFormItem',
-      span: 24,
-      dragDisabled: false,
-      tableName: '',
-      regList: [],
-      trigger: 'change'
-    },
-    on: {
-      change: '({ data, formData, setFormData, setShowOrHide, setRequired, setDisabled, request, getFieldOptions, setFieldOptions }) => {\n    // 在此编写代码\n    \n}',
-    },
-    placeholder: '请选择',
-    flowId: '',
-    relationField: '',
-    columnOptions: [],
-    clearable: true,
-    filterable: false,
-    disabled: false
-  },
-  {
-    __config__: {
       jnpfKey: 'relationFormAttr',
       label: '关联表单属性',
       labelWidth: undefined,
@@ -102,31 +74,6 @@ const webPeculiarList = [{
       regList: []
     },
     expression: []
-  },
-  {
-    __config__: {
-      jnpfKey: 'popupSelect',
-      label: '弹窗选择',
-      labelWidth: undefined,
-      showLabel: true,
-      required: false,
-      tag: 'popupSelect',
-      tagIcon: 'icon-ym icon-ym-generator-checkbox',
-      defaultValue: '',
-      layout: 'colFormItem',
-      span: 24,
-      dragDisabled: false,
-      tableName: '',
-      regList: []
-    },
-    on: {
-      change: '({ data, formData, setFormData, setShowOrHide, setRequired, setDisabled, request, getFieldOptions, setFieldOptions }) => {\n    // 在此编写代码\n    \n}',
-    },
-    interfaceId: '',
-    columnOptions: [],
-    propsValue: 'id',
-    disabled: false,
-    clearable: true,
   }
 ]
 

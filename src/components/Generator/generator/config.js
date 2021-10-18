@@ -801,6 +801,60 @@ export const selectComponents = [{
     filterable: false,
     level: 2
   },
+  {
+    __config__: {
+      jnpfKey: 'relationForm',
+      label: '关联表单',
+      labelWidth: undefined,
+      showLabel: true,
+      tag: 'relationForm',
+      tagIcon: 'icon-ym icon-ym-generator-menu',
+      defaultValue: '',
+      required: false,
+      layout: 'colFormItem',
+      span: 24,
+      dragDisabled: false,
+      tableName: '',
+      regList: [],
+      trigger: 'change'
+    },
+    on: {
+      change: '({ data, formData, setFormData, setShowOrHide, setRequired, setDisabled, request, getFieldOptions, setFieldOptions }) => {\n    // 在此编写代码\n    \n}',
+    },
+    placeholder: '请选择',
+    flowId: '',
+    relationField: '',
+    columnOptions: [],
+    clearable: true,
+    filterable: false,
+    disabled: false
+  },
+  {
+    __config__: {
+      jnpfKey: 'popupSelect',
+      label: '弹窗选择',
+      labelWidth: undefined,
+      showLabel: true,
+      required: false,
+      tag: 'popupSelect',
+      tagIcon: 'icon-ym icon-ym-generator-checkbox',
+      defaultValue: '',
+      layout: 'colFormItem',
+      span: 24,
+      dragDisabled: false,
+      tableName: '',
+      regList: []
+    },
+    on: {
+      change: '({ data, formData, setFormData, setShowOrHide, setRequired, setDisabled, request, getFieldOptions, setFieldOptions }) => {\n    // 在此编写代码\n    \n}',
+    },
+    placeholder: '请选择',
+    interfaceId: '',
+    columnOptions: [],
+    propsValue: 'id',
+    disabled: false,
+    clearable: true
+  }
 ]
 
 // 系统控件 【左面板】

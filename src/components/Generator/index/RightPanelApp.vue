@@ -248,6 +248,82 @@
                 </el-select>
               </el-form-item>
             </template>
+            <template v-if="activeData.__config__.jnpfKey === 'relationForm'">
+              <el-form-item label="关联功能">
+                <JNPF-TreeSelect :options="featureData" v-model="activeData.modelId"
+                  placeholder="请选择关联功能" lastLevel clearable @change="onModelIdChange" />
+              </el-form-item>
+              <el-form-item label="显示字段">
+                <el-select v-model="activeData.relationField" placeholder="请选择显示字段"
+                  @visible-change="visibleChange" clearable>
+                  <el-option v-for="item in fieldOptions" :key="item.vmodel" :label="item.label"
+                    :value="item.vmodel" />
+                </el-select>
+              </el-form-item>
+              <el-divider>列表字段</el-divider>
+              <draggable :list="activeData.columnOptions" :animation="340" group="selectItem"
+                handle=".option-drag">
+                <div v-for="(item, index) in activeData.columnOptions" :key="index"
+                  class="select-item">
+                  <div class="select-line-icon option-drag">
+                    <i class="el-icon-s-operation" />
+                  </div>
+                  <el-select v-model="item.value" placeholder="请选择显示字段"
+                    @visible-change="visibleChange" clearable
+                    @change="onColumnfieldChange($event,item)">
+                    <el-option v-for="item in fieldOptions" :key="item.vmodel" :label="item.label"
+                      :value="item.vmodel" />
+                  </el-select>
+                  <div class="close-btn select-line-icon"
+                    @click="activeData.columnOptions.splice(index, 1)">
+                    <i class="el-icon-remove-outline" />
+                  </div>
+                </div>
+              </draggable>
+              <div style="margin-left: 29px;">
+                <el-button style="padding-bottom: 0" icon="el-icon-circle-plus-outline" type="text"
+                  @click="addColumnOptionsItem">
+                  添加字段
+                </el-button>
+              </div>
+              <el-divider />
+            </template>
+            <template v-if="activeData.__config__.jnpfKey === 'popupSelect'">
+              <el-divider>弹窗数据</el-divider>
+              <el-alert title="默认首字段为显示字段" type="warning" :closable="false" show-icon />
+              <el-form-item label="远端数据" class="mt-10">
+                <JNPF-TreeSelect :options="dataInterfaceSelector" v-model="activeData.interfaceId"
+                  placeholder="请选择远端数据" lastLevel lastLevelKey='categoryId' lastLevelValue='1'
+                  clearable>
+                </JNPF-TreeSelect>
+              </el-form-item>
+              <el-form-item label="存储字段">
+                <el-input v-model.number="activeData.propsValue" placeholder="请输入存储字段" />
+              </el-form-item>
+              <el-divider>列表字段</el-divider>
+              <draggable :list="activeData.columnOptions" :animation="340" group="selectItem"
+                handle=".option-drag">
+                <div v-for="(item, index) in activeData.columnOptions" :key="index"
+                  class="select-item">
+                  <div class="select-line-icon option-drag">
+                    <i class="el-icon-s-operation" />
+                  </div>
+                  <el-input v-model="item.label" placeholder="列名" size="small" />
+                  <el-input v-model="item.value" placeholder="字段" size="small" />
+                  <div class="close-btn select-line-icon"
+                    @click="activeData.columnOptions.splice(index, 1)">
+                    <i class="el-icon-remove-outline" />
+                  </div>
+                </div>
+              </draggable>
+              <div style="margin-left: 29px;">
+                <el-button style="padding-bottom: 0" icon="el-icon-circle-plus-outline" type="text"
+                  @click="addColumnOptionsItem">
+                  添加字段
+                </el-button>
+              </div>
+              <el-divider />
+            </template>
             <el-form-item label="是否密码" v-if="activeData['show-password'] !== undefined">
               <el-switch v-model="activeData['show-password']" />
             </el-form-item>
@@ -345,6 +421,7 @@
 <script>
 import { isNumberStr } from "@/components/Generator/utils"
 import draggable from "vuedraggable"
+import { getFeatureSelector, getFormDataFields } from '@/api/onlineDev/visualDev'
 import { getDictionaryTypeSelector, getDictionaryDataSelector } from "@/api/systemData/dictionary"
 import { getDataInterfaceSelector, previewDataInterface } from "@/api/systemData/dataInterface"
 import { saveFormConf, getDrawingList } from "@/components/Generator/utils/db"
@@ -361,6 +438,7 @@ export default {
       iconsVisible: false,
       currentIconModel: null,
       treeData: [],
+      featureData: [],
       dataInterfaceSelector: [],
       fieldOptions: [],
       justifyOptions: [
@@ -470,13 +548,15 @@ export default {
     }
   },
   created() {
+    this.getDictionaryType()
+    this.getDataInterfaceSelector()
+    this.getFeatureSelector()
+    this.getFieldOptions()
     if (!this.activeData || !this.activeData.__config__) return
     if (!this.activeData.__config__.tableName && this.activeData.__config__.jnpfKey !== 'table') {
       this.activeData.__config__.tableName = this.mainTable
     }
     this.setDefaultOptions()
-    this.getDictionaryType()
-    this.getDataInterfaceSelector()
   },
   methods: {
     addReg() {
@@ -715,6 +795,41 @@ export default {
       const children = parent.data.children || parent.data
       const index = children.findIndex(d => d.id === data.id)
       children.splice(index, 1)
+    },
+    getFeatureSelector() {
+      getFeatureSelector({ type: 1 }).then(res => {
+        this.featureData = res.data.list
+      })
+    },
+    getFieldOptions() {
+      if (!this.activeData.modelId) return
+      getFormDataFields(this.activeData.modelId).then(res => {
+        this.fieldOptions = res.data.list
+      })
+    },
+    visibleChange(val) {
+      if (!val) return
+      if (!this.activeData.modelId) this.$message.warning('请先选择关联功能')
+    },
+    onModelIdChange(val) {
+      this.activeData.relationField = ''
+      if (!val) {
+        this.fieldOptions = []
+        return
+      }
+      this.getFieldOptions()
+    },
+    addColumnOptionsItem() {
+      this.activeData.columnOptions.push({
+        value: '',
+        label: ''
+      })
+    },
+    onColumnfieldChange(val, item) {
+      const list = this.fieldOptions.filter(o => o.vmodel === val) || []
+      if (!list.length) return
+      const active = list[0]
+      item.label = active.label
     }
   }
 }
