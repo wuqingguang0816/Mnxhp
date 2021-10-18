@@ -57,7 +57,8 @@
           </el-table-column>
           <el-table-column prop="dataLength" label="长度">
             <template slot-scope="scope">
-              <el-input v-model="scope.row.dataLength" placeholder="请输入长度" />
+              <el-input v-model="scope.row.dataLength" placeholder="请输入长度"
+                :disabled="scope.row.dataType!=='varchar'" />
             </template>
           </el-table-column>
           <el-table-column prop="primaryKey" label="是否主键" width="70" align="center">
