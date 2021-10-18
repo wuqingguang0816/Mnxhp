@@ -129,7 +129,5 @@ const webPeculiarList = [{
     clearable: true,
   }
 ]
-  }
-]
 
 export { ruleTrigger, dyOptionsList, noVModelList, noTableAllowList, noColumnShowList, noSearchList, webPeculiarList, useInputList, useDateList, useSelectList }
