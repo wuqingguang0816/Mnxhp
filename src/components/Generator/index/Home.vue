@@ -69,7 +69,7 @@ import Preview from '../preview'
 import {
   inputComponents, selectComponents, systemComponents, layoutComponents, formConf
 } from '@/components/Generator/generator/config'
-import { noVModelList, noTableAllowList, webPeculiarList, flowPeculiarList } from '@/components/Generator/generator/comConfig'
+import { noVModelList, noTableAllowList, webPeculiarList } from '@/components/Generator/generator/comConfig'
 import {
   exportDefault, beautifierConf, isNumberStr, titleCase, deepClone
 } from '@/components/Generator/utils'

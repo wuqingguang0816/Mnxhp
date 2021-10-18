@@ -129,47 +129,7 @@ const webPeculiarList = [{
     clearable: true,
   }
 ]
-// 在线开发-流程设计独有组件
-const flowPeculiarList = [{
-    __config__: {
-      jnpfKey: 'relationFlow',
-      label: '关联流程表单',
-      labelWidth: undefined,
-      showLabel: true,
-      tag: 'relationFlow',
-      tagIcon: 'icon-ym icon-ym-generator-flow',
-      defaultValue: '',
-      required: false,
-      layout: 'colFormItem',
-      span: 24,
-      dragDisabled: false,
-      tableName: '',
-      regList: [],
-      trigger: 'change'
-    },
-    placeholder: '请选择',
-    modelId: '',
-    relationField: '',
-    clearable: true,
-    filterable: false,
-    disabled: false
-  },
-  {
-    __config__: {
-      jnpfKey: 'relationFlowAttr',
-      label: '关联流程属性',
-      labelWidth: undefined,
-      showLabel: true,
-      tag: 'relationFlowAttr',
-      tagIcon: 'icon-ym icon-ym-generator-nature',
-      defaultValue: '',
-      required: false,
-      layout: 'colFormItem',
-      span: 24,
-      dragDisabled: false
-    },
-    showField: '',
-    relationField: ''
   }
 ]
-export { ruleTrigger, dyOptionsList, noVModelList, noTableAllowList, noColumnShowList, noSearchList, webPeculiarList, flowPeculiarList, useInputList, useDateList, useSelectList }
+
+export { ruleTrigger, dyOptionsList, noVModelList, noTableAllowList, noColumnShowList, noSearchList, webPeculiarList, useInputList, useDateList, useSelectList }
