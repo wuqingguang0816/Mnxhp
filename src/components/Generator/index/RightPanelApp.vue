@@ -544,6 +544,9 @@ export default {
       if (!val.__config__.tableName && val.__config__.jnpfKey !== 'table') {
         val.__config__.tableName = this.mainTable
       }
+      if (val.__config__.jnpfKey == 'relationForm') {
+        this.getFieldOptions()
+      }
       this.setDefaultOptions()
     }
   },
