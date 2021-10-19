@@ -10,11 +10,11 @@
             <el-form-item label="所属组织">
               <el-input v-model="form.organize" readonly />
             </el-form-item>
-            <el-form-item label="岗位">
-              <el-input v-model="form.position" readonly />
-            </el-form-item>
             <el-form-item label="直属主管">
               <el-input v-model="form.manager" readonly />
+            </el-form-item>
+            <el-form-item label="岗位">
+              <el-input v-model="form.position" readonly />
             </el-form-item>
             <el-form-item label="角色">
               <el-input v-model="form.roleId" readonly />
