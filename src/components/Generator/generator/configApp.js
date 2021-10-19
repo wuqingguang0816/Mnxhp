@@ -568,7 +568,7 @@ export const selectComponents = [{
       change: '({ data, formData, setFormData, setShowOrHide, setRequired, setDisabled, request, getFieldOptions, setFieldOptions }) => {\n    // 在此编写代码\n    \n}',
     },
     placeholder: '请选择',
-    flowId: '',
+    modelId: '',
     relationField: '',
     columnOptions: [],
     filterable: false,
