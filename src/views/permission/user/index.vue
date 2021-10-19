@@ -59,7 +59,7 @@
               <span>{{ scope.row.gender ==1 ? '男': ( scope.row.gender == 2 ? '女' : '保密') }}</span>
             </template>
           </el-table-column>
-          <el-table-column prop="mobilePhone" label="手机" />
+          <el-table-column prop="mobilePhone" label="手机" width="120" />
           <el-table-column prop="department" label="所属组织" />
           <el-table-column prop="creatorTime" label="创建时间" :formatter="jnpf.tableDateFormat"
             width="120" />
