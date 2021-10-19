@@ -7,7 +7,7 @@
             <el-form-item label="账户">
               <el-input v-model="form.account" readonly />
             </el-form-item>
-            <el-form-item label="组织">
+            <el-form-item label="所属组织">
               <el-input v-model="form.organize" readonly />
             </el-form-item>
             <el-form-item label="岗位">
