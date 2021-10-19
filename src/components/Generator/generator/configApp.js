@@ -9,7 +9,7 @@ export const formConf = {
   gutter: 15,
   disabled: false,
   span: 24,
-  formBtns: true,
+  formBtns: false,
   hasCancelBtn: true,
   cancelButtonText: '取 消',
   hasConfirmBtn: true,

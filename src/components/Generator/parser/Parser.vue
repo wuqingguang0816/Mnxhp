@@ -113,7 +113,9 @@ function renderFrom(h) {
         rules={this[formConfCopy.formRules]}
       >
         {renderFormItem.call(this, h, formConfCopy.fields)}
-        {formConfCopy.formBtns && formBtns.call(this, h)}
+        {
+          // {formConfCopy.formBtns && formBtns.call(this, h)}
+        }
       </el-form>
     </el-row>
   )
