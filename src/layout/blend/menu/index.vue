@@ -90,26 +90,35 @@ export default {
   methods: {
     setDefault() {
       const currPath = this.$route.path
-      const modelId = this.$route.meta.modelId || ''
-      if (!modelId) return
-      for (let i = 0; i < this.menuList.length; i++) {
-        const e = this.menuList[i];
-        let boo = false
-        const loop = data => {
-          if (modelId === data.id) {
-            boo = true
-            this.activeName = e.path
-            if (e.type === 1) this.$store.commit('user/SET_LEFTMENULIST', e.children || [])
-            return
-          }
-          if (data.children && Array.isArray(data.children) && data.children.length) {
-            for (let j = 0; j < data.children.length; j++) {
-              loop(data.children[j])
+      if (currPath === '/home' || currPath === '/dashboard') {
+        if (!this.menuList.length) return
+        let item = this.menuList[0]
+        if (item.type === 1) {
+          this.activeName = item.path
+          this.$store.commit('user/SET_LEFTMENULIST', item.children || [])
+        }
+      } else {
+        const modelId = this.$route.meta.modelId || ''
+        if (!modelId) return
+        for (let i = 0; i < this.menuList.length; i++) {
+          const e = this.menuList[i];
+          let boo = false
+          const loop = data => {
+            if (modelId === data.id) {
+              boo = true
+              this.activeName = e.path
+              if (e.type === 1) this.$store.commit('user/SET_LEFTMENULIST', e.children || [])
+              return
+            }
+            if (data.children && Array.isArray(data.children) && data.children.length) {
+              for (let j = 0; j < data.children.length; j++) {
+                loop(data.children[j])
+              }
             }
           }
+          loop(e)
+          if (boo) break
         }
-        loop(e)
-        if (boo) break
       }
     }
   },
