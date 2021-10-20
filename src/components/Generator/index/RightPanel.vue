@@ -480,14 +480,14 @@ export default {
     }
   },
   created() {
+    this.getDictionaryType()
+    this.getDataInterfaceSelector()
+    this.getPringTplList()
     if (!this.activeData || !this.activeData.__config__) return
     if (!this.activeData.__config__.tableName && this.activeData.__config__.jnpfKey !== 'table') {
       this.activeData.__config__.tableName = this.mainTable
     }
     this.setDefaultOptions()
-    this.getDictionaryType()
-    this.getDataInterfaceSelector()
-    this.getPringTplList()
   },
   methods: {
     addReg() {
