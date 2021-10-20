@@ -10,23 +10,47 @@
     </div>
     <el-dialog title="选择用户" :close-on-click-modal="false" :visible.sync="visible"
       class="JNPF-dialog JNPF-dialog_center transfer-dialog" lock-scroll append-to-body
-      width="800px" :modal-append-to-body="false">
+      width="800px" :modal-append-to-body="false" @close="onClose">
       <div class="transfer__body" :element-loading-text="$t('common.loadingText')">
         <div class="transfer-pane">
           <div class="transfer-pane__tools">
-            <el-input placeholder="输入关键词进行搜索" v-model="keyword" @keyup.enter.native="getList">
-              <el-button slot="append" icon="el-icon-search" @click="getList"></el-button>
+            <el-input placeholder="请输入关键词查询" v-model="keyword" @keyup.enter.native="getData">
+              <el-button slot="append" icon="el-icon-search" @click="getData"></el-button>
             </el-input>
           </div>
           <div class="transfer-pane__body">
-            <el-tree :data="treeData" :props="props" highlight-current :expand-on-click-node="false"
-              check-on-click-node @node-click="handleNodeClick" class="JNPF-common-el-tree"
-              node-key="id" v-loading="loading" lazy :load="loadNode">
-              <span class="custom-tree-node" slot-scope="{ node, data }">
-                <i :class="data.icon"></i>
-                <span class="text">{{node.label}}</span>
-              </span>
-            </el-tree>
+            <el-tabs v-model="activeName" class="transfer-pane__body-tab">
+              <el-tab-pane label="全部数据" name="all">
+                <el-tree :data="treeData" :props="props" highlight-current check-on-click-node
+                  @node-click="handleNodeClick" class="JNPF-common-el-tree" node-key="id"
+                  v-loading="loading" lazy :load="loadNode">
+                  <span class="custom-tree-node" slot-scope="{ node, data }">
+                    <i :class="data.icon"></i>
+                    <span class="text">{{node.label}}</span>
+                  </span>
+                </el-tree>
+              </el-tab-pane>
+              <el-tab-pane label="当前组织" name="department">
+                <el-tree :data="treeData2" :props="props" highlight-current
+                  :expand-on-click-node="false" check-on-click-node @node-click="handleNodeClick2"
+                  class="JNPF-common-el-tree" node-key="id" v-loading="loading">
+                  <span class="custom-tree-node" slot-scope="{ node }">
+                    <i class="icon-ym icon-ym-tree-user2"></i>
+                    <span class="text">{{node.label}}</span>
+                  </span>
+                </el-tree>
+              </el-tab-pane>
+              <el-tab-pane label="我的下属" name="subordinates">
+                <el-tree :data="treeData3" :props="props" highlight-current
+                  :expand-on-click-node="false" check-on-click-node @node-click="handleNodeClick2"
+                  class="JNPF-common-el-tree" node-key="id" v-loading="loading">
+                  <span class="custom-tree-node" slot-scope="{ node }">
+                    <i class="icon-ym icon-ym-tree-user2"></i>
+                    <span class="text">{{node.label}}</span>
+                  </span>
+                </el-tree>
+              </el-tab-pane>
+            </el-tabs>
           </div>
         </div>
         <div class="transfer-pane">
@@ -53,7 +77,7 @@
 </template>
 
 <script>
-import { getImUserSelector, getUserInfoList } from '@/api/permission/user'
+import { getImUserSelector, getUserInfoList, getSubordinates, getOrganization } from '@/api/permission/user'
 export default {
   name: 'userSelect',
   props: {
@@ -85,6 +109,7 @@ export default {
     return {
       visible: false,
       keyword: '',
+      activeName: '',
       nodeId: '',
       innerValue: '',
       loading: false,
@@ -94,18 +119,32 @@ export default {
         isLeaf: 'isLeaf'
       },
       treeData: [],
+      treeData2: [],
+      treeData3: [],
       selectedData: [],
     }
   },
   watch: {
     value(val) {
       this.setDefault()
+    },
+    activeName(val) {
+      this.keyword = ''
+      if (!val) return
+      this.nodeId = '0'
+      this.treeData = []
+      this.treeData2 = []
+      this.treeData3 = []
+      this.getData()
     }
   },
   created() {
     this.setDefault()
   },
   methods: {
+    onClose() {
+      this.activeName = ''
+    },
     clear() {
       if (this.disabled) return
       this.innerValue = ''
@@ -116,9 +155,9 @@ export default {
     openDialog() {
       if (this.disabled) return
       this.visible = true
+      this.activeName = 'all'
       this.keyword = ''
       this.nodeId = '0'
-      this.getList()
     },
     confirm() {
       let txt = '', ids = ''
@@ -145,7 +184,24 @@ export default {
         this.innerValue = txt
       })
     },
-    getList() {
+    getData() {
+      if (this.activeName === 'all') {
+        this.getAllList()
+      } else if (this.activeName === 'department') {
+        this.loading = true
+        getOrganization(this.keyword).then(res => {
+          this.treeData2 = res.data
+          this.loading = false
+        })
+      } else {
+        this.loading = true
+        getSubordinates(this.keyword).then(res => {
+          this.treeData3 = res.data
+          this.loading = false
+        })
+      }
+    },
+    getAllList() {
       this.loading = true
       if (this.keyword) this.nodeId = '0'
       getImUserSelector(this.nodeId, this.keyword).then(res => {
@@ -165,6 +221,15 @@ export default {
     },
     handleNodeClick(data) {
       if (data.type !== 'user') return
+      const boo = this.selectedData.some(o => o.id === data.id)
+      if (boo) return
+      const item = {
+        id: data.id,
+        fullName: data.fullName
+      }
+      this.multiple ? this.selectedData.push(item) : this.selectedData = [item]
+    },
+    handleNodeClick2(data) {
       const boo = this.selectedData.some(o => o.id === data.id)
       if (boo) return
       const item = {

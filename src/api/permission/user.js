@@ -102,3 +102,20 @@ export const getUserInfoList = userId => {
     data: { userId }
   })
 }
+
+// 获取我的下属
+export const getSubordinates = (keyword) => {
+  return request({
+    url: '/api/permission/Users/getSubordinates',
+    method: 'post',
+    data: { keyword }
+  })
+}
+// 获取当前组织用户
+export const getOrganization = (keyword) => {
+  return request({
+    url: '/api/permission/Users/getOrganization',
+    method: 'post',
+    data: { keyword }
+  })
+}
