@@ -607,7 +607,7 @@ export default {
         item = list[0]
       }
       let arr = []
-      if (item && item.fields) arr = item.fields
+      if (item && item.fields) arr = item.fields.filter(o => o.primaryKey != 1)
       return arr
     },
     fieldChange1(val) {
@@ -676,12 +676,14 @@ export default {
     },
     setDefaultOptions() {
       if (!this.activeData.__config__.tableName || this.activeData.__config__.tableName === this.mainTable) {
-        this.fieldOptions = this.formItemList.map(o => ({ ...o, realField: o.field }))
+        let fieldOptions = this.formItemList.map(o => ({ ...o, realField: o.field }))
+        this.fieldOptions = fieldOptions.filter(o => o.primaryKey != 1)
       } else {
         let list = this.allTable.filter(o => o.table === this.activeData.__config__.tableName)
         if (!list.length) {
           this.activeData.__config__.tableName = this.mainTable
-          this.fieldOptions = this.formItemList.map(o => ({ ...o, realField: o.field }))
+          let fieldOptions = this.formItemList.map(o => ({ ...o, realField: o.field }))
+          this.fieldOptions = fieldOptions.filter(o => o.primaryKey != 1)
           this.activeData.__vModel__ = ''
         } else {
           let item = list[0]
@@ -689,7 +691,7 @@ export default {
             ...o,
             realField: 'jnpf_' + this.activeData.__config__.tableName + '_jnpf_' + o.field,
           }))
-          this.fieldOptions = options
+          this.fieldOptions = options.filter(o => o.primaryKey != 1)
         }
       }
     },
