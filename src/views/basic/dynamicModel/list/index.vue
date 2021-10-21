@@ -329,7 +329,7 @@ export default {
         })
         return
       }
-      this.$confirm('您确定要删除这些数据吗, 是否继续？', '提示', {
+      this.$confirm('您确定要删除这些数据吗, 是否继续?', '提示', {
         type: 'warning'
       }).then(() => {
         batchDelete(this.modelId, this.multipleSelection).then(res => {
