@@ -100,7 +100,7 @@
             <GroupTitle v-if="activeData.__config__.jnpfKey==='groupTitle'"
               :active-data="activeData" />
             <RelationForm v-if="activeData.__config__.jnpfKey==='relationForm'"
-              :active-data="activeData" v-on="$listeners" />
+              :active-data="activeData" v-on="$listeners" :key="activeData.__config__.renderKey" />
             <RelationFormAttr v-if="activeData.__config__.jnpfKey==='relationFormAttr'"
               :active-data="activeData" ref="relationFormAttr" />
             <RelationFlow v-if="activeData.__config__.jnpfKey==='relationFlow'"
