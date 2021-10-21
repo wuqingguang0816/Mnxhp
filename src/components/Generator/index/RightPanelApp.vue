@@ -387,6 +387,16 @@
                 <el-input v-model="activeData.header" placeholder="请输入卡片标题" />
               </el-form-item>
             </template>
+            <template v-if="activeData.on && modelType==2">
+              <el-divider>组件事件</el-divider>
+              <div v-for="(value,key) in activeData.on" :key="key">
+                <el-form-item :label="key">
+                  <el-button style="width: 100%;" @click="editFunc(value,key)">
+                    {{getTipText(key)}}
+                  </el-button>
+                </el-form-item>
+              </div>
+            </template>
           </template>
         </el-form>
         <!-- 表单属性 -->
@@ -402,19 +412,40 @@
           <el-form-item label="标题宽度">
             <el-input v-model.number="formConf.labelWidth" type="number" placeholder="标题宽度" />
           </el-form-item>
-          <el-divider>表单按钮</el-divider>
-          <div class="per-cell">
-            <el-checkbox v-model="formConf.hasConfirmBtn" disabled>确定</el-checkbox>
-            <el-input v-model="formConf.confirmButtonText" />
-          </div>
-          <div class="per-cell">
-            <el-checkbox v-model="formConf.hasCancelBtn" disabled>取消</el-checkbox>
-            <el-input v-model="formConf.cancelButtonText" />
-          </div>
+          <template v-if="webType!=3">
+            <el-divider>表单按钮</el-divider>
+            <div class="per-cell">
+              <el-checkbox v-model="formConf.hasConfirmBtn" disabled>确定</el-checkbox>
+              <el-input v-model="formConf.confirmButtonText" />
+            </div>
+            <div class="per-cell">
+              <el-checkbox v-model="formConf.hasCancelBtn" disabled>取消</el-checkbox>
+              <el-input v-model="formConf.cancelButtonText" />
+            </div>
+          </template>
+          <template v-if="formConf.funcs && modelType==2">
+            <el-divider>表单事件</el-divider>
+            <el-form-item label="onLoad">
+              <el-button style="width: 100%;"
+                @click="editFunc(formConf.funcs.onLoad,'onLoad',true)">表单加载触发
+              </el-button>
+            </el-form-item>
+            <el-form-item label="beforeSubmit">
+              <el-button style="width: 100%;"
+                @click="editFunc(formConf.funcs.beforeSubmit,'beforeSubmit',true)">提交前置触发
+              </el-button>
+            </el-form-item>
+            <el-form-item label="afterSubmit">
+              <el-button style="width: 100%;"
+                @click="editFunc(formConf.funcs.afterSubmit,'afterSubmit',true)">提交后置触发</el-button>
+            </el-form-item>
+          </template>
         </el-form>
       </el-scrollbar>
     </div>
     <treeNode-dialog :visible.sync="dialogVisible" title="添加选项" @commit="addNode" />
+    <form-script :visible.sync="formScriptVisible" :tpl="activeScript" :fields="drawingList"
+      @updateScript="updateScript" />
   </div>
 </template>
 
@@ -426,17 +457,21 @@ import { getDictionaryTypeSelector, getDictionaryDataSelector } from "@/api/syst
 import { getDataInterfaceSelector, previewDataInterface } from "@/api/systemData/dataInterface"
 import { saveFormConf, getDrawingList } from "@/components/Generator/utils/db"
 import TreeNodeDialog from "./RightComponents/TreeSelect/TreeNodeDialog"
+import FormScript from './FormScript'
 
 export default {
-  components: { draggable, TreeNodeDialog },
-  props: ["showField", "activeData", "formConf"],
+  components: { FormScript, draggable, TreeNodeDialog },
+  props: ["showField", "activeData", "formConf", "modelType", 'webType', 'drawingList'],
   data() {
     return {
       currentTab: "field",
       currentNode: null,
       dialogVisible: false,
       iconsVisible: false,
+      formScriptVisible: false,
       currentIconModel: null,
+      activeScript: '',
+      activeFunc: '',
       treeData: [],
       featureData: [],
       dataInterfaceSelector: [],
@@ -835,7 +870,38 @@ export default {
       if (!list.length) return
       const active = list[0]
       item.label = active.label
-    }
+    },
+    getTipText(key) {
+      let text = ''
+      switch (key) {
+        case 'change':
+          text = '发生变化时触发'
+          break;
+        case 'blur':
+          text = '失去焦点时触发'
+          break;
+        case 'tab-click':
+          text = '面板点击时触发'
+          break;
+        default:
+          text = ''
+          break;
+      }
+      return text
+    },
+    updateScript(data) {
+      if (this.isConf) {
+        this.formConf.funcs[this.activeFunc] = data
+      } else {
+        this.activeData.on[this.activeFunc] = data
+      }
+    },
+    editFunc(str, funcName, isConf) {
+      this.activeScript = str
+      this.activeFunc = funcName
+      this.isConf = isConf || false
+      this.formScriptVisible = true
+    },
   }
 }
 </script>

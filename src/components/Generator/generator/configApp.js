@@ -14,6 +14,11 @@ export const formConf = {
   cancelButtonText: '取 消',
   hasConfirmBtn: true,
   confirmButtonText: '确 定',
+  funcs: {
+    onLoad: '({ formData, setFormData, setShowOrHide, setRequired, setDisabled, request, getFieldOptions, setFieldOptions }) => {\n    // 在此编写代码\n    \n}',
+    beforeSubmit: '({ formData, setFormData, setShowOrHide, setRequired, setDisabled, request, getFieldOptions, setFieldOptions }) => {\n    // 在此编写代码\n\n    // 继续执行返回true\n    return true\n}',
+    afterSubmit: '({ formData, setFormData, setShowOrHide, setRequired, setDisabled, request, getFieldOptions, setFieldOptions }) => {\n    // 在此编写代码\n    \n}',
+  },
   idGlobal: 100
 }
 
@@ -34,6 +39,10 @@ export const inputComponents = [{
       tableName: '',
       noShow: false,
       regList: []
+    },
+    on: {
+      change: '({ data, formData, setFormData, setShowOrHide, setRequired, setDisabled, request, getFieldOptions, setFieldOptions }) => {\n    // 在此编写代码\n    \n}',
+      blur: '({ data, formData, setFormData, setShowOrHide, setRequired, setDisabled, request, getFieldOptions, setFieldOptions }) => {\n    // 在此编写代码\n    \n}',
     },
     placeholder: '请输入',
     maxlength: null,
@@ -75,6 +84,10 @@ export const inputComponents = [{
       tableName: '',
       dragDisabled: false
     },
+    on: {
+      change: '({ data, formData, setFormData, setShowOrHide, setRequired, setDisabled, request, getFieldOptions, setFieldOptions }) => {\n    // 在此编写代码\n    \n}',
+      blur: '({ data, formData, setFormData, setShowOrHide, setRequired, setDisabled, request, getFieldOptions, setFieldOptions }) => {\n    // 在此编写代码\n    \n}',
+    },
     min: undefined,
     max: undefined,
     step: 1,
@@ -94,6 +107,9 @@ export const inputComponents = [{
       span: 24,
       tableName: '',
       dragDisabled: false
+    },
+    on: {
+      change: '({ data, formData, setFormData, setShowOrHide, setRequired, setDisabled, request, getFieldOptions, setFieldOptions }) => {\n    // 在此编写代码\n    \n}',
     },
     disabled: false
   },
@@ -130,6 +146,9 @@ export const inputComponents = [{
         id: "2"
       }]
     },
+    on: {
+      change: '({ data, formData, setFormData, setShowOrHide, setRequired, setDisabled, request, getFieldOptions, setFieldOptions }) => {\n    // 在此编写代码\n    \n}',
+    },
     disabled: false
   },
   {
@@ -165,6 +184,9 @@ export const inputComponents = [{
         id: "2"
       }]
     },
+    on: {
+      change: '({ data, formData, setFormData, setShowOrHide, setRequired, setDisabled, request, getFieldOptions, setFieldOptions }) => {\n    // 在此编写代码\n    \n}',
+    },
     disabled: false
   },
   {
@@ -197,6 +219,10 @@ export const inputComponents = [{
         fullName: '选项二',
         id: "2"
       }]
+    },
+    on: {
+      change: '({ data, formData, setFormData, setShowOrHide, setRequired, setDisabled, request, getFieldOptions, setFieldOptions }) => {\n    // 在此编写代码\n    \n}',
+      blur: '({ data, formData, setFormData, setShowOrHide, setRequired, setDisabled, request, getFieldOptions, setFieldOptions }) => {\n    // 在此编写代码\n    \n}',
     },
     placeholder: '请选择',
     disabled: false
@@ -236,6 +262,10 @@ export const inputComponents = [{
         children: 'children'
       }
     },
+    on: {
+      change: '({ data, formData, setFormData, setShowOrHide, setRequired, setDisabled, request, getFieldOptions, setFieldOptions }) => {\n    // 在此编写代码\n    \n}',
+      blur: '({ data, formData, setFormData, setShowOrHide, setRequired, setDisabled, request, getFieldOptions, setFieldOptions }) => {\n    // 在此编写代码\n    \n}',
+    },
     disabled: false
   },
   {
@@ -252,6 +282,10 @@ export const inputComponents = [{
       span: 24,
       tableName: '',
       dragDisabled: false
+    },
+    on: {
+      change: '({ data, formData, setFormData, setShowOrHide, setRequired, setDisabled, request, getFieldOptions, setFieldOptions }) => {\n    // 在此编写代码\n    \n}',
+      blur: '({ data, formData, setFormData, setShowOrHide, setRequired, setDisabled, request, getFieldOptions, setFieldOptions }) => {\n    // 在此编写代码\n    \n}',
     },
     type: 'date',
     placeholder: '请选择',
@@ -271,6 +305,10 @@ export const inputComponents = [{
       span: 24,
       tableName: '',
       dragDisabled: false
+    },
+    on: {
+      change: '({ data, formData, setFormData, setShowOrHide, setRequired, setDisabled, request, getFieldOptions, setFieldOptions }) => {\n    // 在此编写代码\n    \n}',
+      blur: '({ data, formData, setFormData, setShowOrHide, setRequired, setDisabled, request, getFieldOptions, setFieldOptions }) => {\n    // 在此编写代码\n    \n}',
     },
     placeholder: '请选择',
     disabled: false
@@ -312,6 +350,9 @@ export const inputComponents = [{
       tableName: '',
       dragDisabled: false
     },
+    on: {
+      change: '({ data, formData, setFormData, setShowOrHide, setRequired, setDisabled, request, getFieldOptions, setFieldOptions }) => {\n    // 在此编写代码\n    \n}',
+    },
     max: 5,
     allowHalf: false,
     readonly: false,
@@ -331,6 +372,9 @@ export const inputComponents = [{
       span: 24,
       tableName: '',
       dragDisabled: false
+    },
+    on: {
+      change: '({ data, formData, setFormData, setShowOrHide, setRequired, setDisabled, request, getFieldOptions, setFieldOptions }) => {\n    // 在此编写代码\n    \n}',
     },
     disabled: false,
     min: 0,
@@ -396,6 +440,9 @@ export const selectComponents = [{
       tableName: '',
       dragDisabled: false
     },
+    on: {
+      change: '({ data, formData, setFormData, setShowOrHide, setRequired, setDisabled, request, getFieldOptions, setFieldOptions }) => {\n    // 在此编写代码\n    \n}',
+    },
     placeholder: '请选择',
     disabled: false
   },
@@ -413,6 +460,9 @@ export const selectComponents = [{
       span: 24,
       tableName: '',
       dragDisabled: false
+    },
+    on: {
+      change: '({ data, formData, setFormData, setShowOrHide, setRequired, setDisabled, request, getFieldOptions, setFieldOptions }) => {\n    // 在此编写代码\n    \n}',
     },
     placeholder: '请选择',
     disabled: false
@@ -432,6 +482,9 @@ export const selectComponents = [{
       tableName: '',
       dragDisabled: false
     },
+    on: {
+      change: '({ data, formData, setFormData, setShowOrHide, setRequired, setDisabled, request, getFieldOptions, setFieldOptions }) => {\n    // 在此编写代码\n    \n}',
+    },
     placeholder: '请选择',
     multiple: false,
     disabled: false
@@ -450,6 +503,9 @@ export const selectComponents = [{
       span: 24,
       tableName: '',
       dragDisabled: false
+    },
+    on: {
+      change: '({ data, formData, setFormData, setShowOrHide, setRequired, setDisabled, request, getFieldOptions, setFieldOptions }) => {\n    // 在此编写代码\n    \n}',
     },
     placeholder: '请选择',
     multiple: false,
@@ -472,6 +528,9 @@ export const selectComponents = [{
       dataType: 'static',
       dictionaryType: '',
       propsUrl: ''
+    },
+    on: {
+      change: '({ data, formData, setFormData, setShowOrHide, setRequired, setDisabled, request, getFieldOptions, setFieldOptions }) => {\n    // 在此编写代码\n    \n}',
     },
     placeholder: '请选择',
     props: {
@@ -544,6 +603,9 @@ export const selectComponents = [{
       span: 24,
       tableName: '',
       dragDisabled: false
+    },
+    on: {
+      change: '({ data, formData, setFormData, setShowOrHide, setRequired, setDisabled, request, getFieldOptions, setFieldOptions }) => {\n    // 在此编写代码\n    \n}',
     },
     placeholder: '请选择',
     disabled: false,

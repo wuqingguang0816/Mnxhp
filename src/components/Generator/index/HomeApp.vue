@@ -56,7 +56,8 @@
       </div>
     </div>
     <right-panel :active-data="activeData" :form-conf="formConf" :show-field="!!drawingList.length"
-      @tag-change="tagChange" @relationChange="relationChange" />
+      @tag-change="tagChange" :modelType="modelType" :webType="webType"
+      @relationChange="relationChange" :drawingList="drawingList" />
     <json-drawer size="550px" :visible.sync="jsonDrawerVisible" :jsonData="formData"
       @refresh="refreshJson" />
   </div>
@@ -96,7 +97,7 @@ export default {
     RightPanel,
     DraggableItem
   },
-  props: ['conf'],
+  props: ['conf', 'modelType', 'webType'],
   data() {
     return {
       idGlobal: 100,
