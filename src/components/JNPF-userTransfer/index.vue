@@ -3,19 +3,43 @@
     :element-loading-text="$t('common.loadingText')" :style="{height}">
     <div class="transfer-pane">
       <div class="transfer-pane__tools">
-        <el-input placeholder="输入关键词进行搜索" v-model="keyword">
-          <el-button slot="append" icon="el-icon-search" @click="getList"></el-button>
+        <el-input placeholder="输入关键词进行搜索" v-model="keyword" @keyup.enter.native="getData" clearable>
+          <el-button slot="append" icon="el-icon-search" @click="getData"></el-button>
         </el-input>
       </div>
       <div class="transfer-pane__body">
-        <el-tree :data="treeData" :props="props" highlight-current :expand-on-click-node="false"
-          check-on-click-node @node-click="handleNodeClick" class="JNPF-common-el-tree"
-          node-key="id" v-loading="loading" lazy :load="loadNode">
-          <span class="custom-tree-node" slot-scope="{ node, data }">
-            <i :class="data.icon"></i>
-            <span class="text">{{node.label}}</span>
-          </span>
-        </el-tree>
+        <el-tabs v-model="activeName" class="transfer-pane__body-tab">
+          <el-tab-pane label="全部数据" name="all">
+            <el-tree :data="treeData" :props="props" highlight-current check-on-click-node
+              @node-click="handleNodeClick" class="JNPF-common-el-tree" node-key="id"
+              v-loading="loading" lazy :load="loadNode">
+              <span class="custom-tree-node" slot-scope="{ node, data }">
+                <i :class="data.icon"></i>
+                <span class="text">{{node.label}}</span>
+              </span>
+            </el-tree>
+          </el-tab-pane>
+          <el-tab-pane label="当前组织" name="department">
+            <el-tree :data="treeData2" :props="props" highlight-current
+              :expand-on-click-node="false" check-on-click-node @node-click="handleNodeClick2"
+              class="JNPF-common-el-tree" node-key="id" v-loading="loading">
+              <span class="custom-tree-node" slot-scope="{ node }">
+                <i class="icon-ym icon-ym-tree-user2"></i>
+                <span class="text">{{node.label}}</span>
+              </span>
+            </el-tree>
+          </el-tab-pane>
+          <el-tab-pane label="我的下属" name="subordinates">
+            <el-tree :data="treeData3" :props="props" highlight-current
+              :expand-on-click-node="false" check-on-click-node @node-click="handleNodeClick2"
+              class="JNPF-common-el-tree" node-key="id" v-loading="loading">
+              <span class="custom-tree-node" slot-scope="{ node }">
+                <i class="icon-ym icon-ym-tree-user2"></i>
+                <span class="text">{{node.label}}</span>
+              </span>
+            </el-tree>
+          </el-tab-pane>
+        </el-tabs>
       </div>
     </div>
     <div class="transfer-pane">
@@ -36,14 +60,17 @@
 </template>
 
 <script>
-import { getImUserSelector, getUserInfoList } from '@/api/permission/user'
+import { getImUserSelector, getUserInfoList, getSubordinates, getOrganization } from '@/api/permission/user'
 export default {
   name: 'JNPF-userTransfer',
   data() {
     return {
       allLoading: false,
       loading: false,
+      activeName: '',
       treeData: [],
+      treeData2: [],
+      treeData3: [],
       selectedData: [],
       props: {
         children: 'children',
@@ -73,16 +100,45 @@ export default {
       default: false
     },
   },
+  watch: {
+    activeName(val) {
+      this.keyword = ''
+      if (!val) return
+      this.nodeId = '0'
+      this.treeData = []
+      this.treeData2 = []
+      this.treeData3 = []
+      this.getData()
+    }
+  },
   methods: {
     init() {
       this.selectedData = []
       this.ids = []
       this.keyword = ''
+      this.activeName = ''
       this.nodeId = '0'
       this.$nextTick(() => {
-        this.getList()
+        this.activeName = 'all'
         this.getSelectList()
       })
+    },
+    getData() {
+      if (this.activeName === 'all') {
+        this.getList()
+      } else if (this.activeName === 'department') {
+        this.loading = true
+        getOrganization(this.keyword).then(res => {
+          this.treeData2 = res.data
+          this.loading = false
+        })
+      } else {
+        this.loading = true
+        getSubordinates(this.keyword).then(res => {
+          this.treeData3 = res.data
+          this.loading = false
+        })
+      }
     },
     getSelectList() {
       this.allLoading = true
@@ -113,6 +169,18 @@ export default {
     },
     handleNodeClick(data) {
       if (data.type !== 'user') return
+      const boo = this.selectedData.some(o => o.id === data.id)
+      if (boo) return
+      const item = {
+        id: data.id,
+        fullName: data.fullName
+      }
+      this.multiple ? this.selectedData.push(item) : this.selectedData = [item]
+      this.multiple ? this.ids.push(item.id) : this.ids = [item.id]
+      this.$emit('input', this.ids)
+      this.$emit('getValue', this.ids, this.selectedData)
+    },
+    handleNodeClick2(data) {
       const boo = this.selectedData.some(o => o.id === data.id)
       if (boo) return
       const item = {
