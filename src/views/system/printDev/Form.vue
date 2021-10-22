@@ -89,8 +89,8 @@
         </el-col>
       </el-row>
       <template v-if="activeStep==1">
-        <print-templater ref="printTemplater" :treeData="treeData"
-          v-model="dataForm.printTemplate" />
+        <print-templater ref="printTemplater" :treeData="treeData" v-model="dataForm.printTemplate"
+          :type="dataForm.type" />
       </template>
     </div>
   </el-dialog>
