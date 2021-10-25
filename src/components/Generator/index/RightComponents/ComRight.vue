@@ -36,10 +36,11 @@
       <el-input :value="setDefaultValue(activeData.__config__.defaultValue)" placeholder="请输入默认值"
         @input="onDefaultValueInput" v-if="activeData.__config__.jnpfKey==='editor'" />
     </el-form-item>
-    <el-form-item label="能否清空">
+    <el-form-item label="能否清空" v-if="activeData.__config__.jnpfKey!=='editor'">
       <el-switch v-model="activeData.clearable" />
     </el-form-item>
-    <el-form-item label="能否搜索" v-if="activeData.__config__.jnpfKey!=='userSelect'">
+    <el-form-item label="能否搜索"
+      v-if="activeData.__config__.jnpfKey!=='userSelect'&& activeData.__config__.jnpfKey!=='editor'">
       <el-switch v-model="activeData.filterable" />
     </el-form-item>
     <el-form-item label="能否多选" v-if="needMultiple">
