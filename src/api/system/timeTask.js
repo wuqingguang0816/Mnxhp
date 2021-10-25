@@ -3,7 +3,7 @@ import request from '@/utils/request'
 // 获取任务调度列表
 export function TimeTaskList(data) {
   return request({
-    url: '/api/scheduletask',
+    url: '/api/scheduletask/list',
     method: 'get',
     data
   })
