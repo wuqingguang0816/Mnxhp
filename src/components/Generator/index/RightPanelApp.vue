@@ -376,7 +376,6 @@
             </template>
             <template v-else>
               <template v-if="activeData.__config__.required !== undefined">
-                <el-divider>校验</el-divider>
                 <el-form-item label="是否必填">
                   <el-switch v-model="activeData.__config__.required" />
                 </el-form-item>
