@@ -1698,4 +1698,9 @@ textarea.el-textarea__inner {
       }
     }
   }
+
+  #topMenu .el-menu-item.submenu-title-noDropdown,
+  #topMenu .el-menu .el-submenu>.el-submenu__title {
+    padding: 0 20px !important;
+  }
 }
