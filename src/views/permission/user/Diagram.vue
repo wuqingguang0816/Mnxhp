@@ -65,11 +65,11 @@ export default {
 <style lang="scss" scoped>
 .main {
   padding-bottom: 0;
+  overflow: hidden;
 }
 >>> .orgchart-container {
   height: 100%;
   border: none !important;
-  overflow-y: hidden;
   padding: 0;
   width: 100%;
   .orgchart {
