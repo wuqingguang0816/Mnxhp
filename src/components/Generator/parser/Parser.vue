@@ -260,6 +260,21 @@ export default {
             data[cur.__vModel__ + 'Options'] = res.data
           })
         }
+        if (config.jnpfKey === 'comSelect') {
+          this.$store.dispatch('generator/getCompanyTree').then(res => {
+            data[cur.__vModel__ + 'Options'] = res
+          })
+        }
+        if (config.jnpfKey === 'depSelect') {
+          this.$store.dispatch('generator/getDepTree').then(res => {
+            data[cur.__vModel__ + 'Options'] = res
+          })
+        }
+        if (config.jnpfKey === 'posSelect') {
+          this.$store.dispatch('base/getPositionTree').then(res => {
+            data[cur.__vModel__ + 'Options'] = res
+          })
+        }
         if (config.children && config.jnpfKey !== 'table') this.buildOptions(config.children, data)
       })
     },
@@ -282,7 +297,7 @@ export default {
             return item
           })
         }
-        if (config.children) this.buildRules(config.children, rules)
+        if (config.children && config.jnpfKey !== 'table') this.buildRules(config.children, rules)
       })
     },
     onLoad(formConfCopy) {
@@ -322,6 +337,7 @@ export default {
     setFormData(prop, value) {
       if (!prop) return
       this.comSet('defaultValue', prop, value)
+      this[this.formConf.formModel][prop] = value
     },
     setShowOrHide(prop, value) {
       const newVal = !!value

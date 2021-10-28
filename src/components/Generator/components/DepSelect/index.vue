@@ -31,7 +31,7 @@ export default {
   },
   watch: {
     innerValue(val) {
-      val && this.$emit('change', val)
+      // val && this.$emit('change', val)
     },
     value(val) {
       this.innerValue = val
