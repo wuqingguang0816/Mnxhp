@@ -289,9 +289,7 @@
               <el-divider />
             </template>
             <template v-if="activeData.__config__.jnpfKey === 'popupSelect'">
-              <el-divider>弹窗数据</el-divider>
-              <el-alert title="默认首字段为显示字段" type="warning" :closable="false" show-icon />
-              <el-form-item label="远端数据" class="mt-10">
+              <el-form-item label="远端数据">
                 <JNPF-TreeSelect :options="dataInterfaceSelector" v-model="activeData.interfaceId"
                   placeholder="请选择远端数据" lastLevel lastLevelKey='categoryId' lastLevelValue='1'
                   clearable>
@@ -299,6 +297,9 @@
               </el-form-item>
               <el-form-item label="存储字段">
                 <el-input v-model.number="activeData.propsValue" placeholder="请输入存储字段" />
+              </el-form-item>
+              <el-form-item label="显示字段">
+                <el-input v-model="activeData.relationField" placeholder="请输入显示字段" />
               </el-form-item>
               <el-divider>列表字段</el-divider>
               <draggable :list="activeData.columnOptions" :animation="340" group="selectItem"

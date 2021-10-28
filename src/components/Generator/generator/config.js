@@ -852,6 +852,7 @@ export const selectComponents = [{
     interfaceId: '',
     columnOptions: [],
     propsValue: 'id',
+    relationField: 'fullName',
     disabled: false,
     clearable: true
   }

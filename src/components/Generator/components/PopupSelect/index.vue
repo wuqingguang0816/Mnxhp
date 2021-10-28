@@ -75,6 +75,10 @@ export default {
       type: String,
       default: 'id'
     },
+    relationField: {
+      type: String,
+      default: 'fullName'
+    },
     columnOptions: {
       type: Array,
       default: () => []
@@ -169,13 +173,13 @@ export default {
     },
     rowClick(row) {
       this.checked = row[this.propsValue]
-      this.checkedTxt = row[this.propsLabel]
+      this.checkedTxt = row[this.relationField]
     },
     setDefault() {
       if (!this.value) return this.innerValue = ''
       for (let i = 0; i < this.list.length; i++) {
         if (this.list[i][this.propsValue] === this.value) {
-          this.innerValue = this.list[i][this.propsLabel]
+          this.innerValue = this.list[i][this.relationField]
           break
         }
       }
