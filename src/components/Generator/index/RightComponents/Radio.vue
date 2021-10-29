@@ -18,7 +18,7 @@
           {{item[activeData.__config__.props.label]}}</el-radio>
       </el-radio-group>
     </el-form-item>
-    <el-divider>选项</el-divider>
+    <el-divider>数据选项</el-divider>
     <el-form-item label="" label-width="40px">
       <el-radio-group v-model="activeData.__config__.dataType" size="small"
         style="text-align:center" @change="dataTypeChange">

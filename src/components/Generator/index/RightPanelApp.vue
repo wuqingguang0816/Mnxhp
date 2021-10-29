@@ -57,7 +57,7 @@
               </el-form-item>
             </template>
             <el-form-item label="控件标题"
-              v-if="activeData.__config__.label !== undefined && !['JNPFText','card','groupTitle'].includes(activeData.__config__.jnpfKey)">
+              v-if="activeData.__config__.label !== undefined && !['JNPFText','card','groupTitle','tab','collapse'].includes(activeData.__config__.jnpfKey)">
               <el-input v-model="activeData.__config__.label" placeholder="请输入控件标题" />
             </el-form-item>
             <el-form-item v-if="activeData.placeholder !== undefined" label="占位提示">
@@ -85,7 +85,7 @@
             </template>
             <template
               v-if="['radio', 'checkbox', 'select'].indexOf(activeData.__config__.jnpfKey) > -1">
-              <el-divider>选项</el-divider>
+              <el-divider>数据选项</el-divider>
               <el-form-item label="" label-width="40px">
                 <el-radio-group v-model="activeData.__config__.dataType" size="small"
                   style="text-align:center" @change="dataTypeChange">
@@ -137,7 +137,7 @@
             </template>
             <template
               v-if="activeData.__config__.jnpfKey === 'treeSelect' || activeData.__config__.jnpfKey === 'cascader'">
-              <el-divider>选项</el-divider>
+              <el-divider>数据选项</el-divider>
               <el-form-item label="" label-width="40px">
                 <el-radio-group v-model="activeData.__config__.dataType" size="small"
                   style="text-align:center" @change="dataTypeChange">
@@ -386,6 +386,53 @@
               <el-form-item label="卡片标题">
                 <el-input v-model="activeData.header" placeholder="请输入卡片标题" />
               </el-form-item>
+            </template>
+            <template v-if="activeData.__config__.jnpfKey==='tab'">
+              <el-divider>标签页配置</el-divider>
+              <draggable :list="activeData.__config__.children" :animation="340" group="selectItem"
+                handle=".option-drag">
+                <div v-for="(item, index) in activeData.__config__.children" :key="index"
+                  class="select-item">
+                  <div class="select-line-icon option-drag">
+                    <i class="el-icon-s-operation" />
+                  </div>
+                  <el-input v-model="item.title" placeholder="标签名称" size="small" />
+                  <div class="close-btn select-line-icon" @click="delTabItem(index,item)">
+                    <i class="el-icon-remove-outline" />
+                  </div>
+                </div>
+              </draggable>
+              <div style="margin-left: 29px;">
+                <el-button style="padding-bottom: 0" icon="el-icon-circle-plus-outline" type="text"
+                  @click="addTabItem">
+                  添加标签页
+                </el-button>
+              </div>
+            </template>
+            <template v-if="activeData.__config__.jnpfKey==='collapse'">
+              <el-form-item label="是否手风琴">
+                <el-switch v-model="activeData.accordion" />
+              </el-form-item>
+              <el-divider>面板配置</el-divider>
+              <draggable :list="activeData.__config__.children" :animation="340" group="selectItem"
+                handle=".option-drag">
+                <div v-for="(item, index) in activeData.__config__.children" :key="index"
+                  class="select-item">
+                  <div class="select-line-icon option-drag">
+                    <i class="el-icon-s-operation" />
+                  </div>
+                  <el-input v-model="item.title" placeholder="标签名称" size="small" />
+                  <div class="close-btn select-line-icon" @click="delCollapseItem(index,item)">
+                    <i class="el-icon-remove-outline" />
+                  </div>
+                </div>
+              </draggable>
+              <div style="margin-left: 29px;">
+                <el-button style="padding-bottom: 0" icon="el-icon-circle-plus-outline" type="text"
+                  @click="addCollapseItem">
+                  添加面板
+                </el-button>
+              </div>
             </template>
             <template v-if="activeData.on && modelType==2">
               <el-divider>组件事件</el-divider>
@@ -902,6 +949,77 @@ export default {
       this.isConf = isConf || false
       this.formScriptVisible = true
     },
+    addTabItem() {
+      this.activeData.__config__.children.push({
+        title: 'New Tab',
+        __config__: {
+          children: []
+        }
+      })
+    },
+    delTabItem(index, item) {
+      let list = this.activeData.__config__.children
+      let length = list.length
+      if (length < 2) {
+        this.$message({
+          message: '最后一项不能删除',
+          type: 'warning'
+        });
+        return
+      }
+      this.$confirm('删除后不能撤销，确定要删除吗?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        if (this.activeData.__config__.active === item.name) {
+          let nextTab = list[index + 1] || list[index - 1];
+          if (nextTab) this.activeData.__config__.active = nextTab.name;
+        }
+        this.activeData.__config__.children.splice(index, 1)
+      }).catch(() => { });
+    },
+    idGenerator() {
+      let qutient = (new Date() - new Date('2020-08-01'))
+      qutient += Math.ceil(Math.random() * 1000)
+      const chars = '0123456789ABCDEFGHIGKLMNOPQRSTUVWXYZabcdefghigklmnopqrstuvwxyz';
+      const charArr = chars.split("")
+      const radix = chars.length;
+      const res = []
+      do {
+        let mod = qutient % radix;
+        qutient = (qutient - mod) / radix;
+        res.push(charArr[mod])
+      } while (qutient);
+      return res.join('')
+    },
+    addCollapseItem() {
+      this.activeData.__config__.children.push({
+        title: '新面板',
+        name: this.idGenerator(),
+        __config__: {
+          children: []
+        }
+      })
+    },
+    delCollapseItem(index, item) {
+      let list = this.activeData.__config__.children
+      let length = list.length
+      if (length < 2) {
+        this.$message({
+          message: '最后一项不能删除',
+          type: 'warning'
+        });
+        return
+      }
+      this.$confirm('删除后不能撤销，确定要删除吗?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        this.activeData.__config__.children.splice(index, 1)
+      }).catch(() => { });
+    }
   }
 }
 </script>

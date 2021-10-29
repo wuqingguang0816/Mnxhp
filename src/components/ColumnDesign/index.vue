@@ -78,7 +78,7 @@
         </div>
         <div class="setting-box" v-show="currentTab==='column'">
           <el-form :model="columnData" label-width="80px">
-            <el-divider>列表布局</el-divider>
+            <!-- <el-divider>列表布局</el-divider> -->
             <div class="typeList">
               <div class="item" v-for="(item, index) in typeList" :key="index"
                 @click="columnData.type=item.value">
