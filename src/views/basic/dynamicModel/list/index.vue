@@ -214,7 +214,7 @@ export default {
         })
       }
       if (this.columnData.treeDataSource === "organize") {
-        this.$store.dispatch('generator/getCompanyTree').then(res => {
+        this.$store.dispatch('generator/getDepTree').then(res => {
           this.treeData = res
           this.initData()
         })
