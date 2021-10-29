@@ -149,7 +149,7 @@ export default {
           port = '1521'
           break;
         case 'DM8':
-          port = '5232'
+          port = '5236'
           break;
         case 'KingbaseES':
           port = '54321'
