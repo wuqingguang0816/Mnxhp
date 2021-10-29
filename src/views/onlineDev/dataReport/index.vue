@@ -80,6 +80,7 @@
                     </el-dropdown-item>
                     <el-dropdown-item @click.native="handleExport(scope.row.id)">导出
                     </el-dropdown-item>
+                    <el-dropdown-item @click.native="handleCopy(scope.row.id)">复制</el-dropdown-item>
                   </el-dropdown-menu>
                 </el-dropdown>
               </tableOpts>
@@ -95,6 +96,7 @@
 <script>
 import {
   getDataReportList,
+  copyDataReport,
   delDataReport
 } from '@/api/onlineDev/dataReport'
 import { reportServer } from '@/utils/define'
@@ -180,6 +182,22 @@ export default {
       this.$nextTick(() => {
         this.$refs.Preview.init(id)
       })
+    },
+    handleCopy(id) {
+      this.$confirm('您确定要复制该报表, 是否继续?', '提示', {
+        type: 'warning'
+      }).then(() => {
+        copyDataReport(id).then(res => {
+          this.$message({
+            type: 'success',
+            message: res.msg,
+            duration: 1000,
+            onClose: () => {
+              this.initData()
+            }
+          });
+        })
+      }).catch(() => { });
     },
     handleExport(id) {
       this.$confirm('您确定要导出该报表, 是否继续?', '提示', {
