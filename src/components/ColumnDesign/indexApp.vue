@@ -159,6 +159,7 @@ export default {
   },
   created() {
     let list = []
+    let list1 = []
     const loop = (data, parent) => {
       if (!data) return
       if (data.__config__ && data.__config__.jnpfKey !== 'table' && data.__config__.children && Array.isArray(data.__config__.children)) {
@@ -169,12 +170,16 @@ export default {
         if (data.__config__.layout === "colFormItem" && data.__vModel__) {
           list.push(data)
         }
+        if (data.__config__.layout === "colFormItem" && data.__vModel__ && data.__vModel__.indexOf('_jnpf_') < 0) {
+          list1.push(data)
+        }
       }
     }
     loop(getDrawingList())
     this.list = list
     let options = list.filter(o => noColumnShowList.indexOf(o.__config__.jnpfKey) < 0)
     let searchOptions = list.filter(o => noSearchList.indexOf(o.__config__.jnpfKey) < 0)
+    let sortOptions = list1.filter(o => noColumnShowList.indexOf(o.__config__.jnpfKey) < 0)
     this.columnOptions = options.map(o => ({
       label: o.__config__.label,
       prop: o.__vModel__
@@ -186,7 +191,7 @@ export default {
       searchType: getSearchType(o),
       ...o
     }));
-    this.sortOptions = options.map(o => ({
+    this.sortOptions = sortOptions.map(o => ({
       label: o.__config__.label,
       prop: o.__vModel__
     }));
