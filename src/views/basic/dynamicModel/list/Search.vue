@@ -58,7 +58,7 @@
             </template>
             <template v-if="item.__config__.jnpfKey==='treeSelect'">
               <JNPF-TreeSelect v-model="item.value" :placeholder="'请选择'+item.__config__.label"
-                :options="item.options" :multiple="item.multiple" class="item" clearable />
+                :options="item.options" class="item" clearable />
             </template>
             <template
               v-if="item.__config__.jnpfKey==='createUser'||item.__config__.jnpfKey==='modifyUser'">
