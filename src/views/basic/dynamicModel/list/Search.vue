@@ -66,8 +66,8 @@
                 class="item" />
             </template>
             <template v-if="item.__config__.jnpfKey==='currOrganize'">
-              <comSelect v-model="item.value" :placeholder="'请选择'+item.__config__.label"
-                class="item" />
+              <depSelect v-model="item.value" :placeholder="'请选择'+item.__config__.label"
+                :lastLevel="false" class="item" />
             </template>
             <template v-if="item.__config__.jnpfKey==='currDept'">
               <depSelect v-model="item.value" :placeholder="'请选择'+item.__config__.label"
