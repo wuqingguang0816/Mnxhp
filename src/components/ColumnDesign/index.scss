@@ -56,11 +56,14 @@
       .el-tabs__item {
         width: 33%;
         text-align: center;
+        padding: 0;
       }
 
       &.top-tabs_app {
         .el-tabs__item {
           width: 25%;
+          text-align: center;
+          padding: 0;
         }
       }
     }
