@@ -57,6 +57,10 @@
           <div class="error-tip" v-show="!tableFormData[scope.$index][cindex].valid">
             不能为空
           </div>
+          <div class="error-tip"
+            v-show="tableFormData[scope.$index][cindex].valid && !tableFormData[scope.$index][cindex].regValid">
+            {{tableFormData[scope.$index][cindex].regErrorText}}
+          </div>
         </template>
       </el-table-column>
     </el-table>
@@ -141,6 +145,7 @@ export default {
       if (this.isAddRow) return
       const data = this.tableFormData[rowIndex][colIndex]
       data.required && (data.valid = this.checkData(data))
+      data.regList && data.regList.length && (data.regValid = this.checkRegData(data))
       if (['JNPF-Amount', 'el-input-number'].includes(tag)) { // 金额变动 更新数据 触发计算公式更新
         const newVal = this.tableFormData.map(row => row.reduce((p, c) => (p[c.__vModel__] = c.value, p), {}))
         this.$emit('input', newVal)
@@ -168,14 +173,29 @@ export default {
       }
       return count > 0
     },
+    checkRegData(col) {
+      let res = true
+      for (let i = 0; i < col.regList.length; i++) {
+        const item = col.regList[i];
+        let pattern = eval(item.pattern)
+        if (!pattern.test(col.value)) {
+          res = false
+          col.regErrorText = item.message
+          break
+        }
+      }
+      return res
+    },
     /**
      * 校验表格数据必填项
      */
     submit() {
       let res = true
-      const checkCol = col => col.required && !this.checkData(col) && (res = col.valid = false)
+      const checkCol = col => {
+        col.required && !this.checkData(col) && (res = col.valid = false)
+        col.regList && col.regList.length && !this.checkRegData(col) && (res = col.regValid = false)
+      }
       this.tableFormData.forEach(row => row.forEach(checkCol))
-      // console.log(this.tableFormData);
       return res ? this.tableFormData.map(row => row.reduce((p, c) => (p[c.__vModel__] = c.value, p), {})) : false
     },
     /**
@@ -208,7 +228,11 @@ export default {
           value: val && val[t.__vModel__] || t.__config__.defaultValue,
           options: t.__slot__ && t.__slot__.options && t.__slot__.options || [], // 下拉 单选 多选
           valid: true,
+          regValid: true,
+          regErrorText: '',
+          on: t.on || {},
           __vModel__: t.__vModel__,
+          regList: t.__config__.regList || [],
           required: t.__config__.required
         }
         // if (t.tag === 'el-upload') this.$set(res, 'value', t.defaultValue)
