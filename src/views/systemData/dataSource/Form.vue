@@ -24,11 +24,11 @@
       <el-form-item label="密码" prop="password">
         <el-input v-model="dataForm.password" placeholder="密码" />
       </el-form-item>
-      <el-form-item label="库名" prop="serviceName"
-        v-if="dataForm.dbType!=='DM8'&&dataForm.dbType!=='Oracle'">
+      <el-form-item label="库名" prop="serviceName">
         <el-input v-model="dataForm.serviceName" placeholder="库名">
           <el-button slot="append" @click="test" :loading="testLoad"
-            v-if="dataForm.dbType!=='KingbaseES'">测试连接</el-button>
+            v-if="dataForm.dbType!=='DM8'&&dataForm.dbType!=='Oracle'
+            &&dataForm.dbType!=='KingbaseES'">测试连接</el-button>
         </el-input>
       </el-form-item>
       <el-form-item label="表空间" prop="tableSpace"
