@@ -60,7 +60,7 @@ export default {
       fullName: '',
       dataRule: {
         userId: [
-          { required: true, message: '分级管理员不能为空', trigger: 'change' }
+          { required: true, message: '分级管理员不能为空', trigger: 'click' }
         ]
       }
     }
