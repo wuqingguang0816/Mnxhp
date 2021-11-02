@@ -51,7 +51,7 @@
         </el-table>
       </div>
     </div>
-    <el-scrollbar class="right-board">
+    <div class="right-board">
       <el-tabs v-model="currentTab" class="top-tabs top-tabs_app">
         <el-tab-pane label="排序字段" name="sort" />
         <el-tab-pane label="查询字段" name="search" />
@@ -59,58 +59,60 @@
         <el-tab-pane label="列表属性" name="column" />
       </el-tabs>
       <div class="field-box">
-        <div v-show="currentTab==='sort'">
-          <el-table :data="sortOptions" class="JNPF-common-table"
+        <div class="columnList" v-show="currentTab==='sort'">
+          <el-table :data="sortOptions" class="JNPF-common-table" height="100%"
             @selection-change="sortSelectionChange" ref="sortTable">
             <el-table-column prop="label" label="排序字段" />
             <el-table-column type="selection" width="55" align="center" />
           </el-table>
         </div>
-        <div v-show="currentTab==='search'">
-          <el-table :data="searchOptions" class="JNPF-common-table"
+        <div class="columnList" v-show="currentTab==='search'">
+          <el-table :data="searchOptions" class="JNPF-common-table" height="100%"
             @selection-change="searchSelectionChange" ref="searchTable">
             <el-table-column prop="label" label="查询字段" />
             <el-table-column type="selection" width="55" align="center" />
           </el-table>
         </div>
         <div class="columnList" v-show="currentTab==='field'">
-          <el-table :data="columnOptions" class="JNPF-common-table"
+          <el-table :data="columnOptions" class="JNPF-common-table" height="100%"
             @selection-change="columnSelectionChange" ref="columnTable">
             <el-table-column prop="label" label="列表字段" />
             <el-table-column type="selection" width="55" align="center" />
           </el-table>
         </div>
-        <div class="setting-box" v-show="currentTab==='column'">
-          <el-form :model="columnData" label-width="80px">
-            <el-divider>排序设置</el-divider>
-            <el-form-item label="排序字段">
-              <el-select v-model="columnData.defaultSidx" placeholder="请选择排序字段">
-                <el-option :label="item.__config__.label" :value="item.__vModel__"
-                  v-for="(item, i) in list" :key="i"></el-option>
-              </el-select>
-            </el-form-item>
-            <el-form-item label="排序类型">
-              <el-select v-model="columnData.sort" placeholder="请选择排序类型">
-                <el-option label="升序" value="asc"></el-option>
-                <el-option label="降序" value="desc"></el-option>
-              </el-select>
-            </el-form-item>
-            <el-divider>分页设置</el-divider>
-            <el-form-item label="列表分页">
-              <el-switch v-model="columnData.hasPage"></el-switch>
-            </el-form-item>
-            <el-form-item label="分页条数">
-              <el-radio-group v-model="columnData.pageSize">
-                <el-radio-button :label="20">20条</el-radio-button>
-                <el-radio-button :label="50">50条</el-radio-button>
-                <el-radio-button :label="100">100条</el-radio-button>
-                <el-radio-button :label="500">500条</el-radio-button>
-              </el-radio-group>
-            </el-form-item>
-          </el-form>
-        </div>
+        <el-scrollbar class="right-scrollbar" v-show="currentTab==='column'">
+          <div class="setting-box">
+            <el-form :model="columnData" label-width="80px">
+              <el-divider>排序设置</el-divider>
+              <el-form-item label="排序字段">
+                <el-select v-model="columnData.defaultSidx" placeholder="请选择排序字段">
+                  <el-option :label="item.__config__.label" :value="item.__vModel__"
+                    v-for="(item, i) in list" :key="i"></el-option>
+                </el-select>
+              </el-form-item>
+              <el-form-item label="排序类型">
+                <el-select v-model="columnData.sort" placeholder="请选择排序类型">
+                  <el-option label="升序" value="asc"></el-option>
+                  <el-option label="降序" value="desc"></el-option>
+                </el-select>
+              </el-form-item>
+              <el-divider>分页设置</el-divider>
+              <el-form-item label="列表分页">
+                <el-switch v-model="columnData.hasPage"></el-switch>
+              </el-form-item>
+              <el-form-item label="分页条数">
+                <el-radio-group v-model="columnData.pageSize">
+                  <el-radio-button :label="20">20条</el-radio-button>
+                  <el-radio-button :label="50">50条</el-radio-button>
+                  <el-radio-button :label="100">100条</el-radio-button>
+                  <el-radio-button :label="500">500条</el-radio-button>
+                </el-radio-group>
+              </el-form-item>
+            </el-form>
+          </div>
+        </el-scrollbar>
       </div>
-    </el-scrollbar>
+    </div>
   </div>
 </template>
 <script>
