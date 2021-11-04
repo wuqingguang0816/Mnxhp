@@ -47,7 +47,7 @@
           :key="i" />
       </JNPF-table>
       <pagination :total="total" :page.sync="listQuery.currentPage" :limit.sync="listQuery.pageSize"
-        @pagination="initData" />
+        @pagination="initData" v-if="hasPage" />
       <span slot="footer" class="dialog-footer">
         <el-button @click="visible = false" size="small">{{$t('common.cancelButton')}}</el-button>
         <el-button type="primary" @click="select()" size="small">{{$t('common.confirmButton')}}
