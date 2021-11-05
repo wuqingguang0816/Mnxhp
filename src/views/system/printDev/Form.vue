@@ -190,12 +190,30 @@ export default {
       let item = { sql: "" }
       this.sqlTemplate.push(item)
     },
+    exist() {
+      if (!this.sqlTemplate.length) {
+        this.$message.error('请输入SQL语句')
+        return false
+      }
+      let isOk = true;
+      //  遍历数组，判断非空
+      for (let i = 0; i < this.sqlTemplate.length; i++) {
+        const e = this.sqlTemplate[i];
+        if (!e.sql) {
+          this.$message({
+            message: `第${i + 1}行SQL语句不能为空`,
+            type: 'error',
+            duration: 1000
+          });
+          isOk = false
+          break
+        }
+      }
+      return isOk;
+    },
     next() {
       if (this.activeStep < 1) {
-        if (!this.sqlTemplate.length) {
-          this.$message.error('请输入SQL语句')
-          return
-        }
+        if (!this.exist()) return
         this.dataForm.sqlTemplate = JSON.stringify(this.sqlTemplate)
         this.$refs['dataForm'].validate((valid) => {
           if (valid) {

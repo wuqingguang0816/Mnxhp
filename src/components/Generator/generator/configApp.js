@@ -631,6 +631,8 @@ export const selectComponents = [{
     placeholder: '请选择',
     modelId: '',
     relationField: '',
+    hasPage: false,
+    pageSize: 20,
     columnOptions: [],
     filterable: false,
     disabled: false
@@ -655,6 +657,8 @@ export const selectComponents = [{
     },
     placeholder: '请选择',
     interfaceId: '',
+    hasPage: false,
+    pageSize: 20,
     columnOptions: [],
     propsValue: 'id',
     relationField: 'fullName',

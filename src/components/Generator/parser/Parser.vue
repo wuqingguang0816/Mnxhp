@@ -253,13 +253,13 @@ export default {
             isTreeSelect ? data[cur.__vModel__ + 'Options'] = cur.options : data[cur.__vModel__ + 'Options'] = cur.__slot__.options
           }
         }
-        if (config.jnpfKey === 'popupSelect') {
-          if (!cur.interfaceId) return
-          previewDataInterface(cur.interfaceId).then(res => {
-            cur.options = res.data
-            data[cur.__vModel__ + 'Options'] = res.data
-          })
-        }
+        // if (config.jnpfKey === 'popupSelect') {
+        //   if (!cur.interfaceId) return
+        //   previewDataInterface(cur.interfaceId).then(res => {
+        //     cur.options = res.data
+        //     data[cur.__vModel__ + 'Options'] = res.data
+        //   })
+        // }
         if (config.jnpfKey === 'comSelect') {
           this.$store.dispatch('generator/getCompanyTree').then(res => {
             data[cur.__vModel__ + 'Options'] = res

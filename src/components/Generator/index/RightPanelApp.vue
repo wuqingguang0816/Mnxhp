@@ -286,6 +286,18 @@
                   添加字段
                 </el-button>
               </div>
+              <el-divider>分页设置</el-divider>
+              <el-form-item label="列表分页">
+                <el-switch v-model="activeData.hasPage"></el-switch>
+              </el-form-item>
+              <el-form-item label="分页条数" label-width="80px">
+                <el-radio-group v-model="activeData.pageSize">
+                  <el-radio-button :label="20">20条</el-radio-button>
+                  <el-radio-button :label="50">50条</el-radio-button>
+                  <el-radio-button :label="100">100条</el-radio-button>
+                  <el-radio-button :label="500">500条</el-radio-button>
+                </el-radio-group>
+              </el-form-item>
               <el-divider />
             </template>
             <template v-if="activeData.__config__.jnpfKey === 'popupSelect'">
@@ -323,6 +335,18 @@
                   添加字段
                 </el-button>
               </div>
+              <el-divider>分页设置</el-divider>
+              <el-form-item label="列表分页">
+                <el-switch v-model="activeData.hasPage"></el-switch>
+              </el-form-item>
+              <el-form-item label="分页条数" label-width="80px">
+                <el-radio-group v-model="activeData.pageSize">
+                  <el-radio-button :label="20">20条</el-radio-button>
+                  <el-radio-button :label="50">50条</el-radio-button>
+                  <el-radio-button :label="100">100条</el-radio-button>
+                  <el-radio-button :label="500">500条</el-radio-button>
+                </el-radio-group>
+              </el-form-item>
               <el-divider />
             </template>
             <el-form-item label="是否密码" v-if="activeData['show-password'] !== undefined">

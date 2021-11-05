@@ -100,6 +100,7 @@ import {
   delDataReport
 } from '@/api/onlineDev/dataReport'
 import { reportServer } from '@/utils/define'
+import { getToken } from '@/utils/auth'
 import Form from './Form'
 import Preview from './Preview'
 
@@ -203,8 +204,9 @@ export default {
       this.$confirm('您确定要导出该报表, 是否继续?', '提示', {
         type: 'warning'
       }).then(() => {
+        const token = getToken()
         let link = document.createElement('a')
-        link.href = `${reportServer}/api/datareport/Data/${id}/Actions/Export`
+        link.href = `${reportServer}/api/datareport/Data/${id}/Actions/Export?token=${token}`
         link.click();
       }).catch(() => { });
     },

@@ -9,12 +9,12 @@
       </el-input>
     </div>
     <el-dialog title="选择数据" :close-on-click-modal="false" :visible.sync="visible" v-if="visible"
-      class="JNPF-dialog JNPF-dialog_center" lock-scroll append-to-body width='700px'>
+      class="JNPF-dialog JNPF-dialog_center" lock-scroll append-to-body width='800px'>
       <el-row class="JNPF-common-search-box" :gutter="16">
         <el-form @submit.native.prevent>
           <el-col :span="10">
             <el-form-item label="关键词">
-              <el-input v-model="keyword" placeholder="请输入关键词查询" clearable
+              <el-input v-model="listQuery.keyword" placeholder="请输入关键词查询" clearable
                 @keyup.enter.native="search()" />
             </el-form-item>
           </el-col>
@@ -31,11 +31,11 @@
         <div class="JNPF-common-search-box-right">
           <el-tooltip effect="dark" :content="$t('common.refresh')" placement="top">
             <el-link icon="icon-ym icon-ym-Refresh JNPF-common-head-icon" :underline="false"
-              @click="refresh()" />
+              @click="reset()" />
           </el-tooltip>
         </div>
       </el-row>
-      <JNPF-table v-loading="listLoading" :data="filteredList" :border="false" highlight-current-row
+      <JNPF-table v-loading="listLoading" :data="list" :border="false" highlight-current-row
         @row-click="rowClick" :hasNO="false">
         <el-table-column width="35">
           <template slot-scope="scope">
@@ -46,6 +46,8 @@
         <el-table-column :prop="item.value" :label="item.label" v-for="(item,i) in columnOptions"
           :key="i" />
       </JNPF-table>
+      <pagination :total="total" :page.sync="listQuery.currentPage" :limit.sync="listQuery.pageSize"
+        @pagination="initData" v-if="hasPage" />
       <span slot="footer" class="dialog-footer">
         <el-button @click="visible = false" size="small">{{$t('common.cancelButton')}}</el-button>
         <el-button type="primary" @click="select()" size="small">{{$t('common.confirmButton')}}
@@ -56,7 +58,7 @@
 </template>
 
 <script>
-import { previewDataInterface } from '@/api/systemData/dataInterface'
+import { getDataInterfaceDataSelect, getDataInterfaceDataInfo } from '@/api/systemData/dataInterface'
 export default {
   name: 'PopupSelect',
   props: {
@@ -83,6 +85,14 @@ export default {
       type: Array,
       default: () => []
     },
+    hasPage: {
+      type: Boolean,
+      default: false
+    },
+    pageSize: {
+      type: Number,
+      default: 20
+    },
     disabled: {
       type: Boolean,
       default: false
@@ -99,9 +109,13 @@ export default {
   data() {
     return {
       list: [],
-      filteredList: [],
       innerValue: '',
-      keyword: '',
+      listQuery: {
+        keyword: '',
+        currentPage: 1,
+        pageSize: 20
+      },
+      total: 0,
       checked: '',
       checkedTxt: '',
       listLoading: false,
@@ -119,44 +133,42 @@ export default {
     }
   },
   created() {
-    this.getData()
+    this.listQuery.pageSize = this.hasPage ? this.pageSize : 10000
+    // this.reset()
+    this.setDefault()
   },
   methods: {
-    getData() {
+    initData() {
       if (!this.interfaceId) return
       this.listLoading = true
-      previewDataInterface(this.interfaceId).then(res => {
-        this.list = res.data
-        this.filteredList = this.list
+      let query = {
+        ...this.listQuery,
+        interfaceId: this.interfaceId,
+        propsValue: this.propsValue,
+        relationField: this.relationField,
+      }
+      getDataInterfaceDataSelect(this.interfaceId, query).then(res => {
+        this.list = res.data.list
+        this.total = res.data.pagination.total
         this.listLoading = false
-        this.setDefault()
       }).catch(() => { this.listLoading = false })
     },
     search() {
-      if (!this.keyword) {
-        this.filteredList = this.list
-        return
-      }
-      this.filteredList = this.list.filter(o => this.columnOptions.some(option => option.value && o[option.value] && o[option.value].indexOf(this.keyword) > -1))
+      this.initData()
+      this.listQuery.currentPage = 1
+      this.listQuery.pageSize = this.hasPage ? this.pageSize : 10000
     },
     reset() {
-      this.keyword = ''
-      this.filteredList = this.list
-    },
-    refresh() {
-      this.keyword = ''
-      this.getData()
+      this.listQuery.keyword = ''
+      this.listQuery.currentPage = 1
+      this.listQuery.pageSize = this.hasPage ? this.pageSize : 10000
+      this.initData()
     },
     openDialog() {
       if (this.disabled) return
-      this.keyword = ''
       this.checked = this.value
       this.visible = true
-      if (!this.list.length) {
-        this.getData()
-      } else {
-        this.filteredList = this.list
-      }
+      this.reset()
     },
     clear() {
       this.checked = ''
@@ -177,12 +189,15 @@ export default {
     },
     setDefault() {
       if (!this.value) return this.innerValue = ''
-      for (let i = 0; i < this.list.length; i++) {
-        if (this.list[i][this.propsValue] === this.value) {
-          this.innerValue = this.list[i][this.relationField]
-          break
-        }
+      let query = {
+        id: this.value,
+        interfaceId: this.interfaceId,
+        propsValue: this.propsValue,
+        relationField: this.relationField,
       }
+      getDataInterfaceDataInfo(this.interfaceId, query).then(res => {
+        this.innerValue = res.data[this.relationField]
+      })
     }
   }
 }

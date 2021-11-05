@@ -1195,8 +1195,25 @@
     }
   }
 
+  .el-drawer__body {
+    overflow: hidden;
+  }
+
   .JNPF-flex-main {
     height: calc(100vh - 60px);
+
+    .dynamicForm {
+      flex: 1;
+      padding: 10px;
+      overflow: auto;
+    }
+
+    .drawer-footer {
+      padding: 10px 20px 20px;
+      width: 100%;
+      box-sizing: border-box;
+      text-align: right;
+    }
   }
 }
 

@@ -14,7 +14,7 @@
           :element-loading-text="$t('common.loadingText')" :props="defaultProps" default-expand-all
           highlight-current :expand-on-click-node="false" node-key="id"
           @node-click="handleNodeClick" class="JNPF-common-el-tree">
-          <span class="custom-tree-node" slot-scope="{ data, node }">
+          <span class="custom-tree-node" slot-scope="{ data, node }" :title="data.fullName">
             <i :class="data.icon" />
             <span class="text">{{node.label}}</span>
           </span>
