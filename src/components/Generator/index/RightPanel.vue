@@ -21,7 +21,7 @@
                 <template v-if="!activeData.__config__.isSubTable">
                   <el-form-item v-if="activeData.__vModel__!==undefined" label="数据库表">
                     <el-select v-model="activeData.__config__.tableName" placeholder="请选择数据库表"
-                      @change="tableChange">
+                      @change="tableChange" filterable>
                       <el-option v-for="item in allTable" :key="item.table" :value="item.table"
                         :label="item.tableName?item.table+'('+item.tableName+')':item.table">
                       </el-option>
@@ -29,7 +29,7 @@
                   </el-form-item>
                   <el-form-item v-if="activeData.__vModel__!==undefined" label="控件字段">
                     <el-select v-model="activeData.__vModel__" placeholder="请选择控件字段(v-model)"
-                      clearable @change="fieldChange">
+                      clearable @change="fieldChange" filterable>
                       <el-option v-for="item in fieldOptions" :key="item.realField"
                         :value="item.realField"
                         :label="item.fieldName?item.field+'('+item.fieldName+')':item.field">
@@ -40,7 +40,7 @@
                 <template v-if="activeData.__config__.isSubTable && subTable.length">
                   <el-form-item v-if="activeData.__vModel__!==undefined" label="控件字段">
                     <el-select v-model="activeData.__vModel__" placeholder="请选择控件字段(v-model)"
-                      clearable @change="fieldChange1">
+                      clearable @change="fieldChange1" filterable>
                       <el-option
                         v-for="item in getSubTalebFiled(activeData.__config__.relationTable)"
                         :key="item.field" :value="item.field"
