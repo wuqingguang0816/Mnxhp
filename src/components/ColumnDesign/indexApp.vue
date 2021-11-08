@@ -197,6 +197,9 @@ export default {
       label: o.__config__.label,
       prop: o.__vModel__
     }));
+    if (!this.columnOptions.length) this.columnData.columnList = []
+    if (!this.searchOptions.length) this.columnData.searchList = []
+    if (!this.sortOptions.length) this.columnData.sortList = []
     if (typeof this.conf === 'object' && this.conf !== null) {
       this.columnData = Object.assign({}, defaultColumnData, this.conf)
     }
