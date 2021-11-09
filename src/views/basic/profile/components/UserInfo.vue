@@ -35,7 +35,7 @@
         <el-form ref="dataForm" :model="form2" label-width="100px">
           <el-row>
             <el-col :span="12">
-              <el-form-item label="户名">
+              <el-form-item label="姓名">
                 <el-input v-model="form2.realName" />
               </el-form-item>
             </el-col>

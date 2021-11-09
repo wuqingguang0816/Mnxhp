@@ -216,12 +216,18 @@ export default {
     align-items: center;
     .el-avatar {
       margin-right: 14px;
+      flex-shrink: 0;
     }
 
     .text {
       font-size: 12px;
+      width: calc(100% - 54px);
       p {
         line-height: 20px;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        overflow: hidden;
+        word-break: break-all;
       }
     }
   }
