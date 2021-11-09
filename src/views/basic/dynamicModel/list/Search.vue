@@ -148,6 +148,12 @@ export default {
         }
       })
     },
+    setProps(componentList) {
+      componentList.forEach(cur => {
+        const config = cur.__config__
+        if (config.jnpfKey === 'cascader') cur.props.props.multiple = false
+      })
+    },
     search() {
       let obj = {}
       for (let i = 0; i < this.searchList.length; i++) {
@@ -165,10 +171,12 @@ export default {
     },
     reset() {
       this.searchList = deepClone(this.list)
+      this.setProps(this.searchList)
       this.$emit('search', '')
     },
     treeReset() {
       this.searchList = deepClone(this.list)
+      this.setProps(this.searchList)
     }
   }
 }
