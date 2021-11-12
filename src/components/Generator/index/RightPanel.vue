@@ -143,6 +143,9 @@
               </div>
             </template>
             <template v-if="activeData.__config__.jnpfKey==='table'">
+              <el-form-item label="控件标题">
+                <el-input v-model="activeData.__config__.label" placeholder="请输入控件标题" />
+              </el-form-item>
               <el-form-item label="关联子表" v-if="$store.getters.hasTable">
                 <el-select v-model="activeData.__config__.tableName" placeholder="请选择关联子表" clearable
                   @change="onTableNameChange">
@@ -151,9 +154,6 @@
                     :value="item.table">
                   </el-option>
                 </el-select>
-              </el-form-item>
-              <el-form-item label="控件标题">
-                <el-input v-model="activeData.__config__.label" placeholder="请输入控件标题" />
               </el-form-item>
               <el-form-item label="显示标题">
                 <el-switch v-model="activeData.__config__.showTitle" />

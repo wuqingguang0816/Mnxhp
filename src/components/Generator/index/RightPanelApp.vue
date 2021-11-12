@@ -121,9 +121,9 @@
                 placeholder="选择数据字典" v-if="activeData.__config__.dataType === 'dictionary'"
                 lastLevel clearable />
               <template v-if="activeData.__config__.dataType === 'dynamic'">
-                <el-form-item label="数据接口">
+                <el-form-item label="远端数据">
                   <JNPF-TreeSelect :options="dataInterfaceSelector"
-                    v-model="activeData.__config__.propsUrl" placeholder="请选择数据接口" lastLevel
+                    v-model="activeData.__config__.propsUrl" placeholder="请选择远端数据" lastLevel
                     lastLevelKey="categoryId" lastLevelValue="1" clearable />
                 </el-form-item>
                 <el-form-item label="值">
@@ -159,9 +159,9 @@
                 placeholder="选择数据字典" v-if="activeData.__config__.dataType === 'dictionary'"
                 lastLevel clearable />
               <template v-if="activeData.__config__.dataType === 'dynamic'">
-                <el-form-item label="数据接口">
+                <el-form-item label="远端数据">
                   <JNPF-TreeSelect :options="dataInterfaceSelector"
-                    v-model="activeData.__config__.propsUrl" placeholder="请选择数据接口" lastLevel
+                    v-model="activeData.__config__.propsUrl" placeholder="请选择远端数据" lastLevel
                     lastLevelKey="categoryId" lastLevelValue="1" clearable />
                 </el-form-item>
                 <el-form-item label="标签键名">
