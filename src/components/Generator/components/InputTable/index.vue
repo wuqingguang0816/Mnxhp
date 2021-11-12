@@ -248,7 +248,7 @@ export default {
       for (let i = 0; i < col.regList.length; i++) {
         const item = col.regList[i];
         let pattern = eval(item.pattern)
-        if (!pattern.test(col.value)) {
+        if (col.value && !pattern.test(col.value)) {
           res = false
           col.regErrorText = item.message
           break
