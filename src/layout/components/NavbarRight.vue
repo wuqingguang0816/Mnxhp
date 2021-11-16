@@ -43,7 +43,7 @@
           <i class="icon-ym icon-ym-header-about"></i>{{ $t('navbar.about') }}
         </el-dropdown-item>
         <el-dropdown-item @click.native="visible2 = true">
-          <i class="el-icon el-icon-reading"></i>{{ '官方声明' }}
+          <i class="icon-ym icon-ym-file-text"></i>{{ $t('navbar.statement') }}
         </el-dropdown-item>
         <el-dropdown-item @click.native="lock">
           <i class="icon-ym icon-ym-header-lockScreen"></i>{{ $t('navbar.lockScreen') }}

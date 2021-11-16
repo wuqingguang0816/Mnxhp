@@ -2,7 +2,7 @@
   <div class="userInfo">
     <el-tabs class="JNPF-el_tabs">
       <el-tab-pane label="基本信息">
-        <el-col :span="18">
+        <el-col :span="12">
           <el-form :model="form" label-width="100px">
             <el-form-item label="账户">
               <el-input v-model="form.account" readonly />

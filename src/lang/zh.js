@@ -124,6 +124,7 @@ export default {
     profile: '个人信息',
     feedback: '反馈问题',
     about: '关于平台',
+    statement: '官方声明',
     lockScreen: '锁住屏幕',
     documentation: '帮助文档',
     logOut: '退出系统',

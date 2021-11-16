@@ -4,7 +4,7 @@
       <h2 class="bold">修改密码</h2>
     </div>
     <el-row>
-      <el-col :span="16">
+      <el-col :span="12">
         <el-form ref="dataForm" :model="dataForm" :rules="dataRule" label-width="100px">
           <el-form-item label="旧密码" prop="oldPassword">
             <el-input v-model="dataForm.oldPassword" placeholder="旧密码" show-password />
