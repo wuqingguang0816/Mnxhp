@@ -82,6 +82,11 @@ export default {
       immediate: true,
       handler(val) {
         this.fileList = val
+        this.$nextTick(() => {
+          if (!val.length) {
+            this.$refs.elUpload && this.$refs.elUpload.uploadFiles.splice(0)
+          }
+        })
       }
     }
   },
