@@ -12,14 +12,18 @@
           <template v-if="activeData.__config__">
             <template v-if="$store.getters.hasTable">
               <template v-if="activeData.__config__.jnpfKey === 'table'">
-                <el-form-item v-if="activeData.__vModel__ !== undefined" label="控件字段">
+                <el-form-item
+                  v-if="activeData.__vModel__ !== undefined && !noVModelList.includes(activeData.__config__.jnpfKey)"
+                  label="控件字段">
                   <el-input v-model="activeData.__vModel__" placeholder="请输入控件字段(v-model)"
                     disabled />
                 </el-form-item>
               </template>
               <template v-else>
                 <template v-if="!activeData.__config__.isSubTable">
-                  <el-form-item v-if="activeData.__vModel__!==undefined" label="数据库表">
+                  <el-form-item
+                    v-if="activeData.__vModel__!==undefined && !noVModelList.includes(activeData.__config__.jnpfKey)"
+                    label="数据库表">
                     <el-select v-model="activeData.__config__.tableName" placeholder="请选择数据库表"
                       @change="tableChange">
                       <el-option v-for="item in allTable" :key="item.table" :value="item.table"
@@ -27,7 +31,9 @@
                       </el-option>
                     </el-select>
                   </el-form-item>
-                  <el-form-item v-if="activeData.__vModel__ !== undefined" label="控件字段">
+                  <el-form-item
+                    v-if="activeData.__vModel__ !== undefined && !noVModelList.includes(activeData.__config__.jnpfKey)"
+                    label="控件字段">
                     <el-select v-model="activeData.__vModel__" placeholder="请选择控件字段(v-model)"
                       clearable @change="fieldChange">
                       <el-option v-for="item in fieldOptions" :key="item.realField"
@@ -38,7 +44,9 @@
                   </el-form-item>
                 </template>
                 <template v-if="activeData.__config__.isSubTable && subTable.length">
-                  <el-form-item v-if="activeData.__vModel__ !== undefined" label="控件字段">
+                  <el-form-item
+                    v-if="activeData.__vModel__ !== undefined && !noVModelList.includes(activeData.__config__.jnpfKey)"
+                    label="控件字段">
                     <el-select v-model="activeData.__vModel__" placeholder="请选择控件字段(v-model)"
                       clearable @change="fieldChange1">
                       <el-option
@@ -52,7 +60,9 @@
               </template>
             </template>
             <template v-else>
-              <el-form-item v-if="activeData.__vModel__ !== undefined" label="控件字段">
+              <el-form-item
+                v-if="activeData.__vModel__ !== undefined && !noVModelList.includes(activeData.__config__.jnpfKey)"
+                label="控件字段">
                 <el-input v-model="activeData.__vModel__" placeholder="请输入控件字段(v-model)" disabled />
               </el-form-item>
             </template>
@@ -521,6 +531,7 @@
 </template>
 
 <script>
+import { noVModelList } from '@/components/Generator/generator/comConfig'
 import { isNumberStr } from "@/components/Generator/utils"
 import draggable from "vuedraggable"
 import { getFeatureSelector, getFormDataFields } from '@/api/onlineDev/visualDev'
@@ -543,6 +554,7 @@ export default {
       currentIconModel: null,
       activeScript: '',
       activeFunc: '',
+      noVModelList,
       treeData: [],
       featureData: [],
       dataInterfaceSelector: [],
