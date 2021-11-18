@@ -72,11 +72,11 @@
                 <el-input v-model="dataForm.appFormUrl" placeholder="App地址" />
               </el-form-item>
             </template>
-            <el-form-item label="排序" prop="sortCode">
+            <el-form-item label="流程排序" prop="sortCode">
               <el-input-number :min="0" :max="9999" v-model="dataForm.sortCode"
                 controls-position="right" />
             </el-form-item>
-            <el-form-item label="状态" prop="enabledMark">
+            <el-form-item label="流程状态" prop="enabledMark">
               <el-switch v-model="dataForm.enabledMark" :active-value="1" :inactive-value="0" />
             </el-form-item>
             <el-form-item label="流程说明" prop="description">
@@ -198,7 +198,7 @@ export default {
         formUrl: '',
         appFormUrl: '',
         formType: 1,
-        dbLinkId: '',
+        dbLinkId: '0',
         enabledMark: 1,
         sortCode: 0,
         icon: '',
@@ -303,6 +303,7 @@ export default {
               if (!this.exist()) return
               let subTable = this.tables.filter(o => o.typeId == '0')
               this.$store.commit('generator/UPDATE_SUB_TABLE', subTable)
+              this.$store.commit('generator/SET_ALL_TABLE', this.tables)
               this.$store.commit('generator/SET_TABLE', true)
               this.$store.commit('generator/UPDATE_FORMITEM_LIST', this.mainTableFields)
             }

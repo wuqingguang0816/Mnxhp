@@ -34,17 +34,17 @@
               <el-input v-model="dataForm.enCode" placeholder="模板编码" maxlength="50">
               </el-input>
             </el-form-item>
-            <el-form-item label="模板类型" prop="type">
-              <el-radio-group v-model="dataForm.type">
-                <el-radio :label="1">流程表单</el-radio>
-                <el-radio :label="2">功能表单</el-radio>
-              </el-radio-group>
-            </el-form-item>
             <el-form-item label="模板分类" prop="category">
               <el-select v-model="dataForm.category" placeholder="选择分类">
                 <el-option :key="item.id" :label="item.fullName" :value="item.enCode"
                   v-for="item in categoryList" />
               </el-select>
+            </el-form-item>
+            <el-form-item label="模板类型" prop="type">
+              <el-radio-group v-model="dataForm.type">
+                <el-radio :label="1">流程表单</el-radio>
+                <el-radio :label="2">功能表单</el-radio>
+              </el-radio-group>
             </el-form-item>
             <el-form-item label="模板排序" prop="sortCode">
               <el-input-number :min="0" :max="9999" v-model="dataForm.sortCode"
@@ -89,8 +89,8 @@
         </el-col>
       </el-row>
       <template v-if="activeStep==1">
-        <print-templater ref="printTemplater" :treeData="treeData"
-          v-model="dataForm.printTemplate" />
+        <print-templater ref="printTemplater" :treeData="treeData" v-model="dataForm.printTemplate"
+          :type="dataForm.type" />
       </template>
     </div>
   </el-dialog>
@@ -190,12 +190,30 @@ export default {
       let item = { sql: "" }
       this.sqlTemplate.push(item)
     },
+    exist() {
+      if (!this.sqlTemplate.length) {
+        this.$message.error('请输入SQL语句')
+        return false
+      }
+      let isOk = true;
+      //  遍历数组，判断非空
+      for (let i = 0; i < this.sqlTemplate.length; i++) {
+        const e = this.sqlTemplate[i];
+        if (!e.sql) {
+          this.$message({
+            message: `第${i + 1}行SQL语句不能为空`,
+            type: 'error',
+            duration: 1000
+          });
+          isOk = false
+          break
+        }
+      }
+      return isOk;
+    },
     next() {
       if (this.activeStep < 1) {
-        if (!this.sqlTemplate.length) {
-          this.$message.error('请输入SQL语句')
-          return
-        }
+        if (!this.exist()) return
         this.dataForm.sqlTemplate = JSON.stringify(this.sqlTemplate)
         this.$refs['dataForm'].validate((valid) => {
           if (valid) {

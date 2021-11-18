@@ -48,14 +48,14 @@
             </div>
             <JNPF-table v-loading="listLoading" :data="treeList" row-key="id" v-if="refreshTable"
               :default-expand-all="expands" :tree-props="{children: 'children', hasChildren: ''}">
-              <el-table-column label="菜单名称" width="260">
+              <el-table-column label="菜单名称" prop="fullName" width="260" />
+              <el-table-column prop="urlAddress" label="菜单地址" show-overflow-tooltip />
+              <el-table-column label="图标" prop="icon" width="50" align="center">
                 <template slot-scope="scope">
                   <i :class="scope.row.icon+' table-icon'" />
-                  <label>{{ scope.row.fullName }}</label>
                 </template>
               </el-table-column>
-              <el-table-column prop="urlAddress" label="菜单地址" show-overflow-tooltip />
-              <el-table-column label="类型" width="90" align="center">
+              <el-table-column label="类型" width="70" align="center">
                 <template slot-scope="scope">
                   <span v-if="scope.row.type === 1">目录</span>
                   <span v-if="scope.row.type === 2">页面</span>
@@ -280,6 +280,7 @@ export default {
 .menu-list {
   .table-icon {
     vertical-align: middle;
+    font-size: 16px;
   }
   .JNPF-common-layout-main {
     padding: 0;

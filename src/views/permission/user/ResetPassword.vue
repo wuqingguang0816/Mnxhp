@@ -33,10 +33,11 @@ import md5 from 'js-md5'
 export default {
   data() {
     const validateUserPassword = (rule, value, callback) => {
+      const passwordreg = /(?=.*\d)(?=.*[a-zA-Z])(?=.*[^a-zA-Z0-9]).{6,16}/
       if (!value) {
         callback(new Error('请输入新密码'));
-      } else if (value.toString().length < 6 || value.toString().length > 18) {
-        callback(new Error('密码长度为6 - 18个字符'))
+      } else if (!passwordreg.test(value)) {
+        callback(new Error('密码必须由数字、字母、特殊字符组合,请输入6-16位'))
       } else {
         if (this.dataForm.userPassword !== '') {
           this.$refs.dataForm.validateField('validatePassword');

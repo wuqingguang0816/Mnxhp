@@ -12,25 +12,42 @@
           <template v-if="activeData.__config__">
             <template v-if="$store.getters.hasTable">
               <template v-if="activeData.__config__.jnpfKey === 'table'">
-                <el-form-item v-if="activeData.__vModel__ !== undefined" label="控件字段">
-                  <el-input v-model="activeData.__vModel__" placeholder="请输入控件字段（v-model）"
+                <el-form-item
+                  v-if="activeData.__vModel__ !== undefined && !noVModelList.includes(activeData.__config__.jnpfKey)"
+                  label="控件字段">
+                  <el-input v-model="activeData.__vModel__" placeholder="请输入控件字段(v-model)"
                     disabled />
                 </el-form-item>
               </template>
               <template v-else>
                 <template v-if="!activeData.__config__.isSubTable">
-                  <el-form-item v-if="activeData.__vModel__ !== undefined" label="控件字段">
-                    <el-select v-model="activeData.__vModel__" placeholder="请选择控件字段（v-model）"
+                  <el-form-item
+                    v-if="activeData.__vModel__!==undefined && !noVModelList.includes(activeData.__config__.jnpfKey)"
+                    label="数据库表">
+                    <el-select v-model="activeData.__config__.tableName" placeholder="请选择数据库表"
+                      @change="tableChange">
+                      <el-option v-for="item in allTable" :key="item.table" :value="item.table"
+                        :label="item.tableName?item.table+'('+item.tableName+')':item.table">
+                      </el-option>
+                    </el-select>
+                  </el-form-item>
+                  <el-form-item
+                    v-if="activeData.__vModel__ !== undefined && !noVModelList.includes(activeData.__config__.jnpfKey)"
+                    label="控件字段">
+                    <el-select v-model="activeData.__vModel__" placeholder="请选择控件字段(v-model)"
                       clearable @change="fieldChange">
-                      <el-option v-for="item in formItemList" :key="item.field" :value="item.field"
+                      <el-option v-for="item in fieldOptions" :key="item.realField"
+                        :value="item.realField"
                         :label="item.fieldName?item.field+'('+item.fieldName+')':item.field">
                       </el-option>
                     </el-select>
                   </el-form-item>
                 </template>
                 <template v-if="activeData.__config__.isSubTable && subTable.length">
-                  <el-form-item v-if="activeData.__vModel__ !== undefined" label="控件字段">
-                    <el-select v-model="activeData.__vModel__" placeholder="请选择控件字段（v-model）"
+                  <el-form-item
+                    v-if="activeData.__vModel__ !== undefined && !noVModelList.includes(activeData.__config__.jnpfKey)"
+                    label="控件字段">
+                    <el-select v-model="activeData.__vModel__" placeholder="请选择控件字段(v-model)"
                       clearable @change="fieldChange1">
                       <el-option
                         v-for="item in getSubTalebFiled(activeData.__config__.relationTable)"
@@ -43,12 +60,14 @@
               </template>
             </template>
             <template v-else>
-              <el-form-item v-if="activeData.__vModel__ !== undefined" label="控件字段">
-                <el-input v-model="activeData.__vModel__" placeholder="请输入控件字段（v-model）" disabled />
+              <el-form-item
+                v-if="activeData.__vModel__ !== undefined && !noVModelList.includes(activeData.__config__.jnpfKey)"
+                label="控件字段">
+                <el-input v-model="activeData.__vModel__" placeholder="请输入控件字段(v-model)" disabled />
               </el-form-item>
             </template>
             <el-form-item label="控件标题"
-              v-if="activeData.__config__.label !== undefined && !['JNPFText','card','groupTitle'].includes(activeData.__config__.jnpfKey)">
+              v-if="activeData.__config__.label !== undefined && !['JNPFText','card','groupTitle','tab','collapse'].includes(activeData.__config__.jnpfKey)">
               <el-input v-model="activeData.__config__.label" placeholder="请输入控件标题" />
             </el-form-item>
             <el-form-item v-if="activeData.placeholder !== undefined" label="占位提示">
@@ -76,7 +95,7 @@
             </template>
             <template
               v-if="['radio', 'checkbox', 'select'].indexOf(activeData.__config__.jnpfKey) > -1">
-              <el-divider>选项</el-divider>
+              <el-divider>数据选项</el-divider>
               <el-form-item label="" label-width="40px">
                 <el-radio-group v-model="activeData.__config__.dataType" size="small"
                   style="text-align:center" @change="dataTypeChange">
@@ -112,9 +131,9 @@
                 placeholder="选择数据字典" v-if="activeData.__config__.dataType === 'dictionary'"
                 lastLevel clearable />
               <template v-if="activeData.__config__.dataType === 'dynamic'">
-                <el-form-item label="数据接口">
+                <el-form-item label="远端数据">
                   <JNPF-TreeSelect :options="dataInterfaceSelector"
-                    v-model="activeData.__config__.propsUrl" placeholder="请选择数据接口" lastLevel
+                    v-model="activeData.__config__.propsUrl" placeholder="请选择远端数据" lastLevel
                     lastLevelKey="categoryId" lastLevelValue="1" clearable />
                 </el-form-item>
                 <el-form-item label="值">
@@ -128,7 +147,7 @@
             </template>
             <template
               v-if="activeData.__config__.jnpfKey === 'treeSelect' || activeData.__config__.jnpfKey === 'cascader'">
-              <el-divider>选项</el-divider>
+              <el-divider>数据选项</el-divider>
               <el-form-item label="" label-width="40px">
                 <el-radio-group v-model="activeData.__config__.dataType" size="small"
                   style="text-align:center" @change="dataTypeChange">
@@ -150,9 +169,9 @@
                 placeholder="选择数据字典" v-if="activeData.__config__.dataType === 'dictionary'"
                 lastLevel clearable />
               <template v-if="activeData.__config__.dataType === 'dynamic'">
-                <el-form-item label="数据接口">
+                <el-form-item label="远端数据">
                   <JNPF-TreeSelect :options="dataInterfaceSelector"
-                    v-model="activeData.__config__.propsUrl" placeholder="请选择数据接口" lastLevel
+                    v-model="activeData.__config__.propsUrl" placeholder="请选择远端数据" lastLevel
                     lastLevelKey="categoryId" lastLevelValue="1" clearable />
                 </el-form-item>
                 <el-form-item label="标签键名">
@@ -209,7 +228,8 @@
               <el-form-item label="关联子表" v-if="$store.getters.hasTable">
                 <el-select v-model="activeData.__config__.tableName" placeholder="请选择关联子表" clearable
                   @change="onTableNameChange">
-                  <el-option v-for="item in subTable" :key="item.table" :label="item.table"
+                  <el-option v-for="item in subTable" :key="item.table"
+                    :label="item.tableName?item.table+'('+item.tableName+')':item.table"
                     :value="item.table">
                   </el-option>
                 </el-select>
@@ -237,6 +257,107 @@
                   <el-option label="日期时间(datetime)" value="datetime" />
                 </el-select>
               </el-form-item>
+            </template>
+            <template v-if="activeData.__config__.jnpfKey === 'relationForm'">
+              <el-form-item label="关联功能">
+                <JNPF-TreeSelect :options="featureData" v-model="activeData.modelId"
+                  placeholder="请选择关联功能" lastLevel clearable @change="onModelIdChange" />
+              </el-form-item>
+              <el-form-item label="显示字段">
+                <el-select v-model="activeData.relationField" placeholder="请选择显示字段"
+                  @visible-change="visibleChange" clearable>
+                  <el-option v-for="item in fieldOptions" :key="item.vmodel" :label="item.label"
+                    :value="item.vmodel" />
+                </el-select>
+              </el-form-item>
+              <el-divider>列表字段</el-divider>
+              <draggable :list="activeData.columnOptions" :animation="340" group="selectItem"
+                handle=".option-drag">
+                <div v-for="(item, index) in activeData.columnOptions" :key="index"
+                  class="select-item">
+                  <div class="select-line-icon option-drag">
+                    <i class="el-icon-s-operation" />
+                  </div>
+                  <el-select v-model="item.value" placeholder="请选择显示字段"
+                    @visible-change="visibleChange" clearable
+                    @change="onColumnfieldChange($event,item)">
+                    <el-option v-for="item in fieldOptions" :key="item.vmodel" :label="item.label"
+                      :value="item.vmodel" />
+                  </el-select>
+                  <div class="close-btn select-line-icon"
+                    @click="activeData.columnOptions.splice(index, 1)">
+                    <i class="el-icon-remove-outline" />
+                  </div>
+                </div>
+              </draggable>
+              <div style="margin-left: 29px;">
+                <el-button style="padding-bottom: 0" icon="el-icon-circle-plus-outline" type="text"
+                  @click="addColumnOptionsItem">
+                  添加字段
+                </el-button>
+              </div>
+              <el-divider>分页设置</el-divider>
+              <el-form-item label="列表分页">
+                <el-switch v-model="activeData.hasPage"></el-switch>
+              </el-form-item>
+              <el-form-item label="分页条数" label-width="80px">
+                <el-radio-group v-model="activeData.pageSize">
+                  <el-radio-button :label="20">20条</el-radio-button>
+                  <el-radio-button :label="50">50条</el-radio-button>
+                  <el-radio-button :label="100">100条</el-radio-button>
+                  <el-radio-button :label="500">500条</el-radio-button>
+                </el-radio-group>
+              </el-form-item>
+              <el-divider />
+            </template>
+            <template v-if="activeData.__config__.jnpfKey === 'popupSelect'">
+              <el-form-item label="远端数据">
+                <JNPF-TreeSelect :options="dataInterfaceSelector" v-model="activeData.interfaceId"
+                  placeholder="请选择远端数据" lastLevel lastLevelKey='categoryId' lastLevelValue='1'
+                  clearable>
+                </JNPF-TreeSelect>
+              </el-form-item>
+              <el-form-item label="存储字段">
+                <el-input v-model.number="activeData.propsValue" placeholder="请输入存储字段" />
+              </el-form-item>
+              <el-form-item label="显示字段">
+                <el-input v-model="activeData.relationField" placeholder="请输入显示字段" />
+              </el-form-item>
+              <el-divider>列表字段</el-divider>
+              <draggable :list="activeData.columnOptions" :animation="340" group="selectItem"
+                handle=".option-drag">
+                <div v-for="(item, index) in activeData.columnOptions" :key="index"
+                  class="select-item">
+                  <div class="select-line-icon option-drag">
+                    <i class="el-icon-s-operation" />
+                  </div>
+                  <el-input v-model="item.label" placeholder="列名" size="small" />
+                  <el-input v-model="item.value" placeholder="字段" size="small" />
+                  <div class="close-btn select-line-icon"
+                    @click="activeData.columnOptions.splice(index, 1)">
+                    <i class="el-icon-remove-outline" />
+                  </div>
+                </div>
+              </draggable>
+              <div style="margin-left: 29px;">
+                <el-button style="padding-bottom: 0" icon="el-icon-circle-plus-outline" type="text"
+                  @click="addColumnOptionsItem">
+                  添加字段
+                </el-button>
+              </div>
+              <el-divider>分页设置</el-divider>
+              <el-form-item label="列表分页">
+                <el-switch v-model="activeData.hasPage"></el-switch>
+              </el-form-item>
+              <el-form-item label="分页条数" label-width="80px">
+                <el-radio-group v-model="activeData.pageSize">
+                  <el-radio-button :label="20">20条</el-radio-button>
+                  <el-radio-button :label="50">50条</el-radio-button>
+                  <el-radio-button :label="100">100条</el-radio-button>
+                  <el-radio-button :label="500">500条</el-radio-button>
+                </el-radio-group>
+              </el-form-item>
+              <el-divider />
             </template>
             <el-form-item label="是否密码" v-if="activeData['show-password'] !== undefined">
               <el-switch v-model="activeData['show-password']" />
@@ -290,7 +411,6 @@
             </template>
             <template v-else>
               <template v-if="activeData.__config__.required !== undefined">
-                <el-divider>校验</el-divider>
                 <el-form-item label="是否必填">
                   <el-switch v-model="activeData.__config__.required" />
                 </el-form-item>
@@ -300,6 +420,63 @@
               <el-form-item label="卡片标题">
                 <el-input v-model="activeData.header" placeholder="请输入卡片标题" />
               </el-form-item>
+            </template>
+            <template v-if="activeData.__config__.jnpfKey==='tab'">
+              <el-divider>标签页配置</el-divider>
+              <draggable :list="activeData.__config__.children" :animation="340" group="selectItem"
+                handle=".option-drag">
+                <div v-for="(item, index) in activeData.__config__.children" :key="index"
+                  class="select-item">
+                  <div class="select-line-icon option-drag">
+                    <i class="el-icon-s-operation" />
+                  </div>
+                  <el-input v-model="item.title" placeholder="标签名称" size="small" />
+                  <div class="close-btn select-line-icon" @click="delTabItem(index,item)">
+                    <i class="el-icon-remove-outline" />
+                  </div>
+                </div>
+              </draggable>
+              <div style="margin-left: 29px;">
+                <el-button style="padding-bottom: 0" icon="el-icon-circle-plus-outline" type="text"
+                  @click="addTabItem">
+                  添加标签页
+                </el-button>
+              </div>
+            </template>
+            <template v-if="activeData.__config__.jnpfKey==='collapse'">
+              <el-form-item label="是否手风琴">
+                <el-switch v-model="activeData.accordion" />
+              </el-form-item>
+              <el-divider>面板配置</el-divider>
+              <draggable :list="activeData.__config__.children" :animation="340" group="selectItem"
+                handle=".option-drag">
+                <div v-for="(item, index) in activeData.__config__.children" :key="index"
+                  class="select-item">
+                  <div class="select-line-icon option-drag">
+                    <i class="el-icon-s-operation" />
+                  </div>
+                  <el-input v-model="item.title" placeholder="标签名称" size="small" />
+                  <div class="close-btn select-line-icon" @click="delCollapseItem(index,item)">
+                    <i class="el-icon-remove-outline" />
+                  </div>
+                </div>
+              </draggable>
+              <div style="margin-left: 29px;">
+                <el-button style="padding-bottom: 0" icon="el-icon-circle-plus-outline" type="text"
+                  @click="addCollapseItem">
+                  添加面板
+                </el-button>
+              </div>
+            </template>
+            <template v-if="activeData.on && modelType==2">
+              <el-divider>组件事件</el-divider>
+              <div v-for="(value,key) in activeData.on" :key="key">
+                <el-form-item :label="key">
+                  <el-button style="width: 100%;" @click="editFunc(value,key)">
+                    {{getTipText(key)}}
+                  </el-button>
+                </el-form-item>
+              </div>
             </template>
           </template>
         </el-form>
@@ -316,42 +493,72 @@
           <el-form-item label="标题宽度">
             <el-input v-model.number="formConf.labelWidth" type="number" placeholder="标题宽度" />
           </el-form-item>
-          <el-divider>表单按钮</el-divider>
-          <div class="per-cell">
-            <el-checkbox v-model="formConf.hasConfirmBtn" disabled>确定</el-checkbox>
-            <el-input v-model="formConf.confirmButtonText" />
-          </div>
-          <div class="per-cell">
-            <el-checkbox v-model="formConf.hasCancelBtn" disabled>取消</el-checkbox>
-            <el-input v-model="formConf.cancelButtonText" />
-          </div>
+          <template v-if="webType!=3">
+            <el-divider>表单按钮</el-divider>
+            <div class="per-cell">
+              <el-checkbox v-model="formConf.hasConfirmBtn" disabled>确定</el-checkbox>
+              <el-input v-model="formConf.confirmButtonText" />
+            </div>
+            <div class="per-cell">
+              <el-checkbox v-model="formConf.hasCancelBtn" disabled>取消</el-checkbox>
+              <el-input v-model="formConf.cancelButtonText" />
+            </div>
+          </template>
+          <template v-if="formConf.funcs && modelType==2">
+            <el-divider>表单事件</el-divider>
+            <el-form-item label="onLoad">
+              <el-button style="width: 100%;"
+                @click="editFunc(formConf.funcs.onLoad,'onLoad',true)">表单加载触发
+              </el-button>
+            </el-form-item>
+            <el-form-item label="beforeSubmit">
+              <el-button style="width: 100%;"
+                @click="editFunc(formConf.funcs.beforeSubmit,'beforeSubmit',true)">提交前置触发
+              </el-button>
+            </el-form-item>
+            <el-form-item label="afterSubmit">
+              <el-button style="width: 100%;"
+                @click="editFunc(formConf.funcs.afterSubmit,'afterSubmit',true)">提交后置触发</el-button>
+            </el-form-item>
+          </template>
         </el-form>
       </el-scrollbar>
     </div>
     <treeNode-dialog :visible.sync="dialogVisible" title="添加选项" @commit="addNode" />
+    <form-script :visible.sync="formScriptVisible" :tpl="activeScript" :fields="drawingList"
+      @updateScript="updateScript" />
   </div>
 </template>
 
 <script>
+import { noVModelList } from '@/components/Generator/generator/comConfig'
 import { isNumberStr } from "@/components/Generator/utils"
 import draggable from "vuedraggable"
+import { getFeatureSelector, getFormDataFields } from '@/api/onlineDev/visualDev'
 import { getDictionaryTypeSelector, getDictionaryDataSelector } from "@/api/systemData/dictionary"
 import { getDataInterfaceSelector, previewDataInterface } from "@/api/systemData/dataInterface"
 import { saveFormConf, getDrawingList } from "@/components/Generator/utils/db"
 import TreeNodeDialog from "./RightComponents/TreeSelect/TreeNodeDialog"
+import FormScript from './FormScript'
 
 export default {
-  components: { draggable, TreeNodeDialog },
-  props: ["showField", "activeData", "formConf"],
+  components: { FormScript, draggable, TreeNodeDialog },
+  props: ["showField", "activeData", "formConf", "modelType", 'webType', 'drawingList'],
   data() {
     return {
       currentTab: "field",
       currentNode: null,
       dialogVisible: false,
       iconsVisible: false,
+      formScriptVisible: false,
       currentIconModel: null,
+      activeScript: '',
+      activeFunc: '',
+      noVModelList,
       treeData: [],
+      featureData: [],
       dataInterfaceSelector: [],
+      fieldOptions: [],
       justifyOptions: [
         {
           label: "start",
@@ -433,7 +640,16 @@ export default {
     },
     subTable() {
       return this.$store.state.generator.subTable || []
-    }
+    },
+    allTable() {
+      return this.$store.state.generator.allTable || []
+    },
+    mainTable() {
+      let allTable = this.$store.state.generator.allTable
+      let item = allTable.filter(o => o.typeId == '1')[0]
+      if (!item || !item.table) return ''
+      return item.table
+    },
   },
   watch: {
     formConf: {
@@ -441,11 +657,27 @@ export default {
         // saveFormConf(val)
       },
       deep: true
+    },
+    activeData(val) {
+      if (!val.__config__.tableName && val.__config__.jnpfKey !== 'table') {
+        val.__config__.tableName = this.mainTable
+      }
+      if (val.__config__.jnpfKey == 'relationForm') {
+        this.getFieldOptions()
+      }
+      this.setDefaultOptions()
     }
   },
   created() {
     this.getDictionaryType()
     this.getDataInterfaceSelector()
+    this.getFeatureSelector()
+    this.getFieldOptions()
+    if (!this.activeData || !this.activeData.__config__) return
+    if (!this.activeData.__config__.tableName && this.activeData.__config__.jnpfKey !== 'table') {
+      this.activeData.__config__.tableName = this.mainTable
+    }
+    this.setDefaultOptions()
   },
   methods: {
     addReg() {
@@ -493,7 +725,7 @@ export default {
         item = list[0]
       }
       let arr = []
-      if (item && item.fields) arr = item.fields
+      if (item && item.fields) arr = item.fields.filter(o => o.primaryKey != 1)
       return arr
     },
     fieldChange1(val) {
@@ -552,9 +784,36 @@ export default {
         this.activeData.__vModel__ = ''
         return
       }
-      let item = this.formItemList.filter(o => o.field == val)[0]
+      let item = this.fieldOptions.filter(o => o.realField == val)[0]
       if (!item || !item.fieldName) return
       this.activeData.__config__.label = item.fieldName
+    },
+    tableChange() {
+      this.activeData.__vModel__ = ''
+      this.setDefaultOptions()
+    },
+    setDefaultOptions() {
+      if (!this.$store.getters.hasTable) return
+      if (this.activeData.__vModel__ === undefined) return
+      if (!this.activeData.__config__.tableName || this.activeData.__config__.tableName === this.mainTable) {
+        let fieldOptions = this.formItemList.map(o => ({ ...o, realField: o.field }))
+        this.fieldOptions = fieldOptions.filter(o => o.primaryKey != 1)
+      } else {
+        let list = this.allTable.filter(o => o.table === this.activeData.__config__.tableName)
+        if (!list.length) {
+          this.activeData.__config__.tableName = this.mainTable
+          let fieldOptions = this.formItemList.map(o => ({ ...o, realField: o.field }))
+          this.fieldOptions = fieldOptions.filter(o => o.primaryKey != 1)
+          this.activeData.__vModel__ = ''
+        } else {
+          let item = list[0]
+          let options = item.fields.map(o => ({
+            ...o,
+            realField: 'jnpf_' + this.activeData.__config__.tableName + '_jnpf_' + o.field,
+          }))
+          this.fieldOptions = options.filter(o => o.primaryKey != 1)
+        }
+      }
     },
     spanChange(val) {
       this.formConf.span = val
@@ -661,6 +920,143 @@ export default {
       const children = parent.data.children || parent.data
       const index = children.findIndex(d => d.id === data.id)
       children.splice(index, 1)
+    },
+    getFeatureSelector() {
+      getFeatureSelector({ type: 1 }).then(res => {
+        this.featureData = res.data.list
+      })
+    },
+    getFieldOptions() {
+      if (!this.activeData.modelId) return
+      getFormDataFields(this.activeData.modelId).then(res => {
+        this.fieldOptions = res.data.list
+      })
+    },
+    visibleChange(val) {
+      if (!val) return
+      if (!this.activeData.modelId) this.$message.warning('请先选择关联功能')
+    },
+    onModelIdChange(val) {
+      this.activeData.relationField = ''
+      if (!val) {
+        this.fieldOptions = []
+        return
+      }
+      this.getFieldOptions()
+    },
+    addColumnOptionsItem() {
+      this.activeData.columnOptions.push({
+        value: '',
+        label: ''
+      })
+    },
+    onColumnfieldChange(val, item) {
+      const list = this.fieldOptions.filter(o => o.vmodel === val) || []
+      if (!list.length) return
+      const active = list[0]
+      item.label = active.label
+    },
+    getTipText(key) {
+      let text = ''
+      switch (key) {
+        case 'change':
+          text = '发生变化时触发'
+          break;
+        case 'blur':
+          text = '失去焦点时触发'
+          break;
+        case 'tab-click':
+          text = '面板点击时触发'
+          break;
+        default:
+          text = ''
+          break;
+      }
+      return text
+    },
+    updateScript(data) {
+      if (this.isConf) {
+        this.formConf.funcs[this.activeFunc] = data
+      } else {
+        this.activeData.on[this.activeFunc] = data
+      }
+    },
+    editFunc(str, funcName, isConf) {
+      this.activeScript = str
+      this.activeFunc = funcName
+      this.isConf = isConf || false
+      this.formScriptVisible = true
+    },
+    addTabItem() {
+      this.activeData.__config__.children.push({
+        title: 'New Tab',
+        __config__: {
+          children: []
+        }
+      })
+    },
+    delTabItem(index, item) {
+      let list = this.activeData.__config__.children
+      let length = list.length
+      if (length < 2) {
+        this.$message({
+          message: '最后一项不能删除',
+          type: 'warning'
+        });
+        return
+      }
+      this.$confirm('删除后不能撤销，确定要删除吗?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        if (this.activeData.__config__.active === item.name) {
+          let nextTab = list[index + 1] || list[index - 1];
+          if (nextTab) this.activeData.__config__.active = nextTab.name;
+        }
+        this.activeData.__config__.children.splice(index, 1)
+      }).catch(() => { });
+    },
+    idGenerator() {
+      let qutient = (new Date() - new Date('2020-08-01'))
+      qutient += Math.ceil(Math.random() * 1000)
+      const chars = '0123456789ABCDEFGHIGKLMNOPQRSTUVWXYZabcdefghigklmnopqrstuvwxyz';
+      const charArr = chars.split("")
+      const radix = chars.length;
+      const res = []
+      do {
+        let mod = qutient % radix;
+        qutient = (qutient - mod) / radix;
+        res.push(charArr[mod])
+      } while (qutient);
+      return res.join('')
+    },
+    addCollapseItem() {
+      this.activeData.__config__.children.push({
+        title: '新面板',
+        name: this.idGenerator(),
+        __config__: {
+          children: []
+        }
+      })
+    },
+    delCollapseItem(index, item) {
+      let list = this.activeData.__config__.children
+      let length = list.length
+      if (length < 2) {
+        this.$message({
+          message: '最后一项不能删除',
+          type: 'warning'
+        });
+        return
+      }
+      this.$confirm('删除后不能撤销，确定要删除吗?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        this.activeData.__config__.children.splice(index, 1)
+      }).catch(() => { });
     }
   }
 }

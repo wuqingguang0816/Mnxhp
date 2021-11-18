@@ -110,7 +110,8 @@
           :webType="dataForm.webType" />
       </template>
       <template v-if="activeStep==2">
-        <columnDesign ref="columnDesign" :conf="columnData" :modelType="dataForm.type" />
+        <columnDesign ref="columnDesign" :conf="columnData" :modelType="dataForm.type"
+          :webType="dataForm.webType" />
       </template>
       <template v-if="activeStep==3">
         <Process ref="process" :conf="flowTemplateJson" :flowType="1" />

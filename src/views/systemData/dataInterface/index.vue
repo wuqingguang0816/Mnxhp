@@ -78,7 +78,8 @@
                   </span>
                   <el-dropdown-menu slot="dropdown">
                     <el-dropdown-item
-                      @click.native="handlePreview(scope.row.id, scope.row.enabledMark)">预览
+                      @click.native="handlePreview(scope.row.id, scope.row.enabledMark,scope.row.tenantId||'')">
+                      预览
                     </el-dropdown-item>
                     <el-dropdown-item @click.native="viewLog(scope.row)">
                       日志
@@ -201,7 +202,7 @@ export default {
     handleAddEdit(id) {
       this.formVisible = true
       this.$nextTick(() => {
-        this.$refs.Form.init(id)
+        this.$refs.Form.init(id, this.params.categoryId)
       })
     },
     handleDel(id) {
@@ -220,13 +221,13 @@ export default {
         })
       }).catch(() => { })
     },
-    handlePreview(id, enabledMark) {
+    handlePreview(id, enabledMark, tenantId) {
       if (enabledMark === 0) {
         this.$message.error('接口已被禁用，请先开启接口')
       } else {
         this.previewVisible = true
         this.$nextTick(() => {
-          this.$refs.Preview.init(id)
+          this.$refs.Preview.init(id, tenantId)
         })
       }
     },

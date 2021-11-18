@@ -116,7 +116,7 @@ export default {
       })
     },
     getDictionaryData() {
-      this.$store.dispatch('base/getDictionaryData', { sort: 'printdev' }).then((res) => {
+      this.$store.dispatch('base/getDictionaryData', { sort: 'printDev' }).then((res) => {
         this.categoryList = res
       })
     },

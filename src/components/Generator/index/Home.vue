@@ -69,7 +69,7 @@ import Preview from '../preview'
 import {
   inputComponents, selectComponents, systemComponents, layoutComponents, formConf
 } from '@/components/Generator/generator/config'
-import { noVModelList, noTableAllowList, webPeculiarList, flowPeculiarList } from '@/components/Generator/generator/comConfig'
+import { noVModelList, noTableAllowList, webPeculiarList } from '@/components/Generator/generator/comConfig'
 import {
   exportDefault, beautifierConf, isNumberStr, titleCase, deepClone
 } from '@/components/Generator/utils'
@@ -231,6 +231,20 @@ export default {
               }
               if (!e.relationField) {
                 reject({ msg: '关联表单控件“显示字段”属性为必填项', target: 1 })
+                break
+              }
+            }
+            if (config.jnpfKey === 'popupSelect') {
+              if (!e.interfaceId) {
+                reject({ msg: '弹窗选择控件“远端数据”属性为必填项', target: 1 })
+                break
+              }
+              if (!e.propsValue) {
+                reject({ msg: '弹窗选择控件“储存字段”属性为必填项', target: 1 })
+                break
+              }
+              if (!e.relationField) {
+                reject({ msg: '弹窗选择控件“显示字段”属性为必填项', target: 1 })
                 break
               }
             }

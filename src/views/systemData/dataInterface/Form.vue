@@ -225,7 +225,7 @@ export default {
     goBack() {
       this.$emit('close')
     },
-    init(id) {
+    init(id, categoryId) {
       this.dataForm = {
         fullName: '',
         enCode: '',
@@ -266,6 +266,8 @@ export default {
           this.getTableList(this.dataForm.dbLinkId)
           if (this.dataForm.id) {
             this.getFormData()
+          } else {
+            this.dataForm.categoryId = categoryId
           }
           this.formLoading = false
         })

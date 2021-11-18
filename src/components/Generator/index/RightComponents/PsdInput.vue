@@ -64,12 +64,10 @@
         </el-form-item>
       </el-col>
     </el-row>
-    <el-divider>校验</el-divider>
     <el-form-item label="是否必填">
       <el-switch v-model="activeData.__config__.required" />
     </el-form-item>
-    <!-- <el-divider>校验</el-divider>
-    <el-form-item label="是否必填">
+    <!-- <el-form-item label="是否必填">
       <el-switch v-model="activeData.__config__.required" />
     </el-form-item> -->
     <!-- <div v-for="(item, index) in activeData.__config__.regList" :key="index" class="reg-item">

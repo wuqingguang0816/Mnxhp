@@ -46,7 +46,7 @@ export default {
           let relationTable = data[0].table
           let typeId = i == 0 ? "1" : "0"
           let res = await DataModelFieldList(this.dataForm.dbLinkId, e.table, queryType)
-          let fields = res.data.list.map(o => ({ field: o.field, fieldName: o.fieldName, dataType: o.dataType }))
+          let fields = res.data.list
           let item = {
             relationField: "",
             relationTable: i == 0 ? '' : relationTable,
@@ -67,7 +67,7 @@ export default {
           let boo = this.tables.some(o => o.table == e.table)
           if (!boo) {
             let res = await DataModelFieldList(this.dataForm.dbLinkId, e.table, queryType)
-            let fields = res.data.list.map(o => ({ field: o.field, fieldName: o.fieldName, dataType: o.dataType }))
+            let fields = res.data.list
             let item = {
               relationField: "",
               relationTable: this.relationTable,
@@ -91,7 +91,7 @@ export default {
       if (type == 3 || type == 4 || type == 5) queryType = 1
       for (let i = 0; i < this.tables.length; i++) {
         let res = await DataModelFieldList(this.dataForm.dbLinkId, this.tables[i].table, queryType)
-        let fields = res.data.list.map(o => ({ field: o.field, fieldName: o.fieldName, dataType: o.dataType }))
+        let fields = res.data.list
         this.tables[i].fields = fields
         if (this.tables[i].typeId == '1') {
           this.mainTableFields = this.tables[i].fields

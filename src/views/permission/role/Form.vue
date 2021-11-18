@@ -4,8 +4,8 @@
     lock-scroll width="600px">
     <el-form ref="dataForm" :model="dataForm" :rules="dataRule" v-loading="formLoading"
       label-width="100px">
-      <el-form-item label="角色类型" prop="type">
-        <el-select v-model="dataForm.type" placeholder="请选择类型">
+      <el-form-item label="角色分类" prop="type">
+        <el-select v-model="dataForm.type" placeholder="请选择角色分类">
           <el-option v-for="item in typeOptions" :key="item.enCode" :label="item.fullName"
             :value="item.enCode">
           </el-option>
@@ -71,7 +71,7 @@ export default {
           { max: 50, message: '角色编码最多为50个字符！', trigger: 'blur' }
         ],
         type: [
-          { required: true, message: '请选择角色类型', trigger: 'blur' }
+          { required: true, message: '请选择角色分类', trigger: 'blur' }
         ]
       }
     }
@@ -84,7 +84,7 @@ export default {
       this.$nextTick(() => {
         this.$refs['dataForm'].resetFields()
 
-        // 角色类型
+        // 角色分类
         getRoleTypeSelector().then(res => {
           this.typeOptions = res.data.list
         })

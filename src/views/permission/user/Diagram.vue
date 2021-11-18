@@ -63,11 +63,18 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
+.main {
+  padding-bottom: 0;
+  overflow: hidden;
+}
 >>> .orgchart-container {
-  height: 95%;
+  height: 100%;
   border: none !important;
+  padding: 0;
+  width: 100%;
   .orgchart {
     background: none !important;
+    padding: 0;
     .node {
       &:hover {
         background-color: transparent !important;

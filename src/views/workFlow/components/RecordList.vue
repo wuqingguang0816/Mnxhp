@@ -1,5 +1,5 @@
 <template>
-  <el-col :span="18" style="padding-left:20px; overflow: auto;">
+  <el-col :span="12" style="padding-left:20px; overflow: auto;">
     <el-timeline reverse>
       <template v-for="(item, i) in list">
         <el-timeline-item :timestamp="item.handleTime | toDate()" placement="top" :key="i"

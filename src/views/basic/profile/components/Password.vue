@@ -4,7 +4,7 @@
       <h2 class="bold">修改密码</h2>
     </div>
     <el-row>
-      <el-col :span="16">
+      <el-col :span="12">
         <el-form ref="dataForm" :model="dataForm" :rules="dataRule" label-width="100px">
           <el-form-item label="旧密码" prop="oldPassword">
             <el-input v-model="dataForm.oldPassword" placeholder="旧密码" show-password />
@@ -41,8 +41,11 @@ import { UpdatePassword } from '@/api/permission/userSetting'
 export default {
   data() {
     var validatePass = (rule, value, callback) => {
+      const passwordreg = /(?=.*\d)(?=.*[a-zA-Z])(?=.*[^a-zA-Z0-9]).{6,16}/
       if (value === '') {
         callback(new Error('新密码不能为空'));
+      } else if (!passwordreg.test(value)) {
+        callback(new Error('密码必须由数字、字母、特殊字符组合,请输入6-16位'))
       } else {
         if (this.dataForm.password2 !== '') {
           this.$refs.dataForm.validateField('password2');

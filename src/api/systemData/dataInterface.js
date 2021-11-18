@@ -91,3 +91,20 @@ export function getDataInterfaceLog(id, data) {
     data
   })
 }
+
+// 获取接口列表数据
+export function getDataInterfaceDataSelect(id, data) {
+  return request({
+    url: `/api/system/DataInterface/${id}/Action/List`,
+    method: 'GET',
+    data
+  })
+}
+// 获取单条接口数据
+export function getDataInterfaceDataInfo(id, data) {
+  return request({
+    url: `/api/system/DataInterface/${id}/Action/Info`,
+    method: 'GET',
+    data
+  })
+}

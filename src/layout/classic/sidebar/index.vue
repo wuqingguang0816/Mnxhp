@@ -3,7 +3,7 @@
     <logo v-if="showLogo" :collapse="isCollapse" />
     <el-scrollbar wrap-class="scrollbar-wrapper">
       <el-menu :default-active="activeMenu" :collapse="isCollapse" :unique-opened="true"
-        :collapse-transition="false" mode="vertical">
+        :collapse-transition="false" mode="vertical" :default-openeds="defaultOpeneds">
         <sidebar-item v-for="route in menuList" :key="route.enCode" :item="route"
           :base-path="route.path" />
       </el-menu>
@@ -19,6 +19,11 @@ import variables from '@/styles/variables.scss'
 
 export default {
   components: { SidebarItem, Logo },
+  data() {
+    return {
+      defaultOpeneds: []
+    }
+  },
   computed: {
     ...mapGetters([
       'permission_routes',
@@ -52,7 +57,19 @@ export default {
       return !this.sidebar.opened
     }
   },
-  created() { }
+  created() {
+    this.setDefaultOpeneds()
+  },
+  methods: {
+    setDefaultOpeneds() {
+      const currPath = this.$route.path
+      if (currPath === '/home' || currPath === '/dashboard' || currPath === '/404') {
+        if (this.menuList.length && this.menuList[0].type === 1) {
+          this.defaultOpeneds.push(this.menuList[0].path)
+        }
+      }
+    },
+  },
 }
 </script>
 <style lang="scss" >

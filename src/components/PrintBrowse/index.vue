@@ -31,6 +31,7 @@ export default {
     return {
       data: {},
       printTemplate: '',
+      recordList: [],
       loading: false
     }
   },
@@ -48,6 +49,7 @@ export default {
         if (!res.data) return
         this.printTemplate = res.data.printTemplate
         this.data = res.data.printData
+        this.recordList = res.data.operatorRecordList || []
         this.$nextTick(() => {
           const tableList = this.$refs.tsPrint.getElementsByTagName('table')
           if (tableList.length) {
@@ -122,9 +124,21 @@ export default {
       }
     },
     replaceSysValue() {
+      const recordList = this.recordList.filter(o => o.handleStatus == 0 || o.handleStatus == 1)
       const systemPrinter = this.userInfo.userName + '/' + this.userInfo.userAccount
       const systemPrintTime = this.jnpf.toDate(new Date())
       let systemApprovalContent = ''
+      if (recordList.length) {
+        systemApprovalContent += '<table style="border-collapse: collapse; width: 100%;" border="1" data-mce-style="border-collapse: collapse; width: 100%;"><tbody><tr><td style="width:30%;" data-mce-style="width: 30%;">审批节点</td><td style="width: 70%;" data-mce-style="width: 70%;">审批内容</td></tr>'
+        let content = ''
+        for (let i = 0; i < recordList.length; i++) {
+          const record = recordList[i];
+          let desc = (record.userName || record.handleId) + '于' + this.jnpf.toDate(record.handleTime) + (record.handleStatus == 1 ? '审批通过' : '审批拒绝') + (record.handleOpinion ? '，审批意见：' + record.handleOpinion : '')
+          content += `<tr><td style="width: 30%;" data-mce-style="width: 30%;"><span class="wk-print-tag-wukong wk-tiny-color--common" contenteditable="false">${record.nodeName}</span></td><td style="width: 70%;" data-mce-style="width: 70%;"><span class="wk-print-tag-wukong wk-tiny-color--common" contenteditable="false">${desc}</span></td></tr>`
+        }
+        systemApprovalContent += content
+        systemApprovalContent += '</tbody></table>'
+      }
       this.printTemplate = this.replaceAll(this.printTemplate, '{systemPrinter}', systemPrinter)
       this.printTemplate = this.replaceAll(this.printTemplate, '{systemPrintTime}', systemPrintTime)
       this.printTemplate = this.replaceAll(this.printTemplate, '{systemApprovalContent}', systemApprovalContent)

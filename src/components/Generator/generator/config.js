@@ -9,6 +9,7 @@ export const formConf = {
   popupType: 'general',
   generalWidth: '600px',
   fullScreenWidth: '100%',
+  drawerWidth: '600px',
   gutter: 15,
   disabled: false,
   span: 24,
@@ -43,6 +44,7 @@ export const inputComponents = [{
       layout: 'colFormItem',
       span: 24,
       dragDisabled: false,
+      tableName: '',
       noShow: false,
       regList: [],
       trigger: 'blur'
@@ -79,6 +81,7 @@ export const inputComponents = [{
       layout: 'colFormItem',
       span: 24,
       dragDisabled: false,
+      tableName: '',
       regList: [],
       trigger: 'blur'
     },
@@ -107,6 +110,7 @@ export const inputComponents = [{
       layout: 'colFormItem',
       span: 24,
       dragDisabled: false,
+      tableName: '',
       regList: [],
       trigger: ['blur', 'change']
     },
@@ -136,6 +140,7 @@ export const inputComponents = [{
       layout: 'colFormItem',
       span: 24,
       dragDisabled: false,
+      tableName: '',
       regList: [],
       trigger: 'change'
     },
@@ -163,6 +168,7 @@ export const inputComponents = [{
       layout: 'colFormItem',
       span: 24,
       dragDisabled: false,
+      tableName: '',
       regList: [],
       trigger: 'change',
       optionType: 'default',
@@ -204,6 +210,7 @@ export const inputComponents = [{
       layout: 'colFormItem',
       span: 24,
       dragDisabled: false,
+      tableName: '',
       regList: [],
       trigger: 'change',
       optionType: 'default',
@@ -245,6 +252,7 @@ export const inputComponents = [{
       layout: 'colFormItem',
       span: 24,
       dragDisabled: false,
+      tableName: '',
       regList: [],
       trigger: 'change',
       dataType: 'static',
@@ -288,6 +296,7 @@ export const inputComponents = [{
       layout: 'colFormItem',
       span: 24,
       dragDisabled: false,
+      tableName: '',
       regList: [],
       trigger: 'change',
       dataType: 'static',
@@ -335,6 +344,7 @@ export const inputComponents = [{
       layout: 'colFormItem',
       span: 24,
       dragDisabled: false,
+      tableName: '',
       regList: [],
       trigger: 'change'
     },
@@ -364,6 +374,7 @@ export const inputComponents = [{
       layout: 'colFormItem',
       span: 24,
       dragDisabled: false,
+      tableName: '',
       regList: [],
       trigger: 'change'
     },
@@ -395,6 +406,7 @@ export const inputComponents = [{
       layout: 'colFormItem',
       span: 24,
       dragDisabled: false,
+      tableName: '',
       regList: [],
       trigger: 'click'
     },
@@ -419,6 +431,7 @@ export const inputComponents = [{
       layout: 'colFormItem',
       span: 24,
       dragDisabled: false,
+      tableName: '',
       regList: [],
       trigger: 'click'
     },
@@ -442,6 +455,7 @@ export const inputComponents = [{
       layout: 'colFormItem',
       span: 24,
       dragDisabled: false,
+      tableName: '',
       regList: [],
       trigger: 'change'
     },
@@ -463,6 +477,7 @@ export const inputComponents = [{
       layout: 'colFormItem',
       span: 24,
       dragDisabled: false,
+      tableName: '',
       regList: [],
       trigger: 'change'
     },
@@ -489,6 +504,7 @@ export const inputComponents = [{
       layout: 'colFormItem',
       span: 24,
       dragDisabled: false,
+      tableName: '',
       regList: [],
       trigger: 'change'
     },
@@ -559,6 +575,7 @@ export const inputComponents = [{
       layout: 'colFormItem',
       span: 24,
       dragDisabled: false,
+      tableName: '',
       regList: [],
       trigger: 'blur'
     },
@@ -580,6 +597,7 @@ export const selectComponents = [{
       layout: 'colFormItem',
       span: 24,
       dragDisabled: false,
+      tableName: '',
       regList: [],
       trigger: 'change'
     },
@@ -605,6 +623,7 @@ export const selectComponents = [{
       layout: 'colFormItem',
       span: 24,
       dragDisabled: false,
+      tableName: '',
       regList: [],
       trigger: 'change'
     },
@@ -630,6 +649,7 @@ export const selectComponents = [{
       layout: 'colFormItem',
       span: 24,
       dragDisabled: false,
+      tableName: '',
       regList: [],
       trigger: 'change'
     },
@@ -655,8 +675,9 @@ export const selectComponents = [{
       layout: 'colFormItem',
       span: 24,
       dragDisabled: false,
+      tableName: '',
       regList: [],
-      trigger: 'change'
+      trigger: 'click'
     },
     on: {
       change: '({ data, formData, setFormData, setShowOrHide, setRequired, setDisabled, request, getFieldOptions, setFieldOptions }) => {\n    // 在此编写代码\n    \n}',
@@ -679,6 +700,7 @@ export const selectComponents = [{
       layout: 'colFormItem',
       span: 24,
       dragDisabled: false,
+      tableName: '',
       regList: [],
       trigger: 'change',
       dataType: 'static',
@@ -723,6 +745,7 @@ export const selectComponents = [{
       required: false,
       span: 24,
       dragDisabled: false,
+      tableName: '',
       noShow: false,
       trigger: 'change',
       rule: ''
@@ -765,6 +788,7 @@ export const selectComponents = [{
       layout: 'colFormItem',
       span: 24,
       dragDisabled: false,
+      tableName: '',
       regList: [],
       trigger: 'change'
     },
@@ -777,6 +801,65 @@ export const selectComponents = [{
     filterable: false,
     level: 2
   },
+  {
+    __config__: {
+      jnpfKey: 'relationForm',
+      label: '关联表单',
+      labelWidth: undefined,
+      showLabel: true,
+      tag: 'relationForm',
+      tagIcon: 'icon-ym icon-ym-generator-menu',
+      defaultValue: '',
+      required: false,
+      layout: 'colFormItem',
+      span: 24,
+      dragDisabled: false,
+      tableName: '',
+      regList: [],
+      trigger: 'change'
+    },
+    on: {
+      change: '({ data, formData, setFormData, setShowOrHide, setRequired, setDisabled, request, getFieldOptions, setFieldOptions }) => {\n    // 在此编写代码\n    \n}',
+    },
+    placeholder: '请选择',
+    modelId: '',
+    relationField: '',
+    hasPage: false,
+    pageSize: 20,
+    columnOptions: [],
+    clearable: true,
+    filterable: false,
+    disabled: false
+  },
+  {
+    __config__: {
+      jnpfKey: 'popupSelect',
+      label: '弹窗选择',
+      labelWidth: undefined,
+      showLabel: true,
+      required: false,
+      tag: 'popupSelect',
+      tagIcon: 'icon-ym icon-ym-generator-checkbox',
+      defaultValue: '',
+      layout: 'colFormItem',
+      span: 24,
+      dragDisabled: false,
+      tableName: '',
+      regList: []
+    },
+    on: {
+      change: '({ data, formData, setFormData, setShowOrHide, setRequired, setDisabled, request, getFieldOptions, setFieldOptions }) => {\n    // 在此编写代码\n    \n}',
+    },
+    placeholder: '请选择',
+    interfaceId: '',
+    hasPage: false,
+    pageSize: 20,
+    columnOptions: [],
+    propsValue: 'id',
+    relationField: 'fullName',
+    disabled: false,
+    clearable: true
+  }
 ]
 
 // 系统控件 【左面板】
@@ -793,6 +876,7 @@ export const systemComponents = [{
       layout: 'colFormItem',
       span: 24,
       dragDisabled: false,
+      tableName: '',
       noShow: false
     },
     readonly: true,
@@ -811,6 +895,7 @@ export const systemComponents = [{
       required: false,
       span: 24,
       dragDisabled: false,
+      tableName: '',
       noShow: false
     },
     readonly: true,
@@ -829,6 +914,7 @@ export const systemComponents = [{
       layout: 'colFormItem',
       span: 24,
       dragDisabled: false,
+      tableName: '',
       noShow: false
     },
     readonly: true,
@@ -847,6 +933,7 @@ export const systemComponents = [{
       layout: 'colFormItem',
       span: 24,
       dragDisabled: false,
+      tableName: '',
       noShow: false
     },
     readonly: true,
@@ -865,6 +952,7 @@ export const systemComponents = [{
       layout: 'colFormItem',
       span: 24,
       dragDisabled: false,
+      tableName: '',
       noShow: false
     },
     readonly: true,
@@ -883,6 +971,7 @@ export const systemComponents = [{
       layout: 'colFormItem',
       span: 24,
       dragDisabled: false,
+      tableName: '',
       noShow: false
     },
     readonly: true,
