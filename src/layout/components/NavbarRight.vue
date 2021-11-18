@@ -98,6 +98,8 @@ import Settings from './settings'
 import UserList from './userList/UserList'
 import dragDialog from "@/directive/el-drag-dialog";
 import ReconnectingWebSocket from 'reconnecting-websocket'
+import Notify from '@/utils/notify';
+let notify = null
 
 export default {
   directives: { dragDialog },
@@ -127,8 +129,18 @@ export default {
       userList: []
     }
   },
+  watch: {
+    isTwinkle(val) {
+      if (val) {
+        notify.setTitle(true)
+      } else {
+        notify.setTitle()
+      }
+    }
+  },
   created() {
     this.initWebSocket()
+    this.initNotify()
   },
   destroyed() {
     if (this.socket) {
@@ -267,7 +279,15 @@ export default {
     },
     changeTwinkle(boo) {
       this.isTwinkle = boo
-    }
+    },
+    initNotify() {
+      notify = new Notify({
+        message: '您有新消息',
+        effect: 'flash', // flash | scroll
+        interval: 1000,
+        icon: 'https://mat1.gtimg.com/sports/nba/logo/1602/27.png'
+      });
+    },
   }
 }
 </script>
