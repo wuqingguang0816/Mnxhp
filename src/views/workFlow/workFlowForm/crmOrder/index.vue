@@ -266,7 +266,7 @@ export default {
           { required: true, message: '客户名称不能为空', trigger: 'click' },
         ],
         salesmanId: [
-          { required: true, message: '业务人员不能为空', trigger: 'change' }
+          { required: true, message: '业务人员不能为空', trigger: 'click' }
         ],
         orderDate: [
           { required: true, message: '订单日期不能为空', trigger: 'change' }
