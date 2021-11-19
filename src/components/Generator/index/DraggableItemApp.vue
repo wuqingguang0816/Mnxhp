@@ -79,6 +79,7 @@ const layouts = {
                 element.__config__.children.map((item, i) => {
                   let child = renderChildren.apply(this, [h, item, i, element])
                   let childgroup = { name: 'componentsGroup', put: (...arg) => put(...arg, item) }
+                  const onChildEnd = (...arg) => end(...arg, activeData, item)
                   let tip = ''
                   if (!item.__config__.children.length) {
                     tip = <div class="table-tip tab-tip">请将组件拖到此区域(可拖多个组件)</div>
@@ -88,7 +89,7 @@ const layouts = {
                       <el-col >
                         {tip}
                         <el-row gutter={element.__config__.gutter} style="padding-top:15px">
-                          <draggable list={item.__config__.children} animation={340} group={childgroup} class="drag-wrapper">
+                          <draggable list={item.__config__.children} animation={340} group={childgroup} onEnd={onChildEnd} class="drag-wrapper">
                             {child}
                           </draggable>
                         </el-row>
@@ -113,6 +114,7 @@ const layouts = {
                 element.__config__.children.map((item, i) => {
                   let child = renderChildren.apply(this, [h, item, i, element])
                   let childgroup = { name: 'componentsGroup', put: (...arg) => put(...arg, item) }
+                  const onChildEnd = (...arg) => end(...arg, activeData, item)
                   let tip = ''
                   if (!item.__config__.children.length) {
                     tip = <div class="table-tip card-tip">请将组件拖到此区域(可拖多个组件)</div>
@@ -122,7 +124,7 @@ const layouts = {
                       <el-col style="position:relative">
                         {tip}
                         <el-row gutter={element.__config__.gutter} style="padding-top:15px">
-                          <draggable list={item.__config__.children} animation={340} group={childgroup} class="drag-wrapper">
+                          <draggable list={item.__config__.children} animation={340} group={childgroup} onEnd={onChildEnd} class="drag-wrapper">
                             {child}
                           </draggable>
                         </el-row>
@@ -156,7 +158,7 @@ const layouts = {
             nativeOnClick={event => { activeItem(element); event.stopPropagation() }}>
             <span class="component-name">{element.__config__.componentName}</span>
             {tip}
-            <draggable list={element.__config__.children} animation={340} group={group} class="drag-wrapper">
+            <draggable list={element.__config__.children} animation={340} group={group} onEnd={onEnd} class="drag-wrapper">
               {child}
             </draggable>
             {components.itemBtns.apply(this, arguments)}
@@ -175,7 +177,7 @@ const layouts = {
             nativeOnClick={event => { activeItem(element); event.stopPropagation() }}>
             <span class="component-name">{element.__config__.label}</span>
             {tip}
-            <draggable list={element.__config__.children} animation={340} group={group} class="drag-wrapper">
+            <draggable list={element.__config__.children} animation={340} group={group} onEnd={onEnd} class="drag-wrapper">
               {child}
             </draggable>
             {components.itemBtns.apply(this, arguments)}
