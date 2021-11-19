@@ -24,7 +24,7 @@
         <el-input-number :min="0" :max="9999" v-model="dataForm.sortCode"
           controls-position="right" />
       </el-form-item>
-      <el-form-item label="岗位说明" prop="description">
+      <el-form-item label="说明" prop="description">
         <el-input v-model="dataForm.description" type="textarea" :rows="6" />
       </el-form-item>
     </el-form>

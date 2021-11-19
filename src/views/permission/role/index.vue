@@ -44,7 +44,7 @@
               <span v-if="!scope.row.top">{{ scope.row.enCode }}</span>
             </template>
           </el-table-column>
-          <el-table-column prop="description" label="描述" />
+          <el-table-column prop="description" label="说明" />
           <el-table-column prop="creatorTime" label="创建时间" :formatter="jnpf.tableDateFormat"
             width="120" />
           <el-table-column prop="sortCode" label="排序" width="70" align="center" />
