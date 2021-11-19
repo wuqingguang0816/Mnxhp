@@ -99,7 +99,6 @@ import UserList from './userList/UserList'
 import dragDialog from "@/directive/el-drag-dialog";
 import ReconnectingWebSocket from 'reconnecting-websocket'
 import Notify from '@/utils/notify';
-let notify = null
 
 export default {
   directives: { dragDialog },
@@ -126,15 +125,16 @@ export default {
       visible2: false,
       isTwinkle: false,
       messageCount: 0,
+      notify: null,
       userList: []
     }
   },
   watch: {
     isTwinkle(val) {
       if (val) {
-        notify.setTitle(true)
+        this.notify.setTitle(true)
       } else {
-        notify.setTitle()
+        this.notify.setTitle()
       }
     }
   },
@@ -281,7 +281,7 @@ export default {
       this.isTwinkle = boo
     },
     initNotify() {
-      notify = new Notify({
+      this.notify = new Notify({
         message: '您有新消息',
         effect: 'flash', // flash | scroll
         interval: 1000,
