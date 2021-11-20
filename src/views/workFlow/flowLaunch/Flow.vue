@@ -37,7 +37,8 @@
         </el-row>
         <el-scrollbar class="list" v-loading="listLoading">
           <el-row :gutter="20">
-            <el-col :span="6" v-for="(item,i) in list" :key="i" class="item" @click="jump(item)">
+            <el-col :span="6" v-for="(item,i) in list" :key="i" class="item"
+              @click.native="jump(item)">
               <el-card shadow="hover">
                 <div class="box-icon" :style="{backgroundColor:item.iconBackground||'#008cff'}">
                   <i :class="item.icon"></i>
