@@ -131,11 +131,11 @@ export default {
   },
   watch: {
     isTwinkle(val) {
-      if (val) {
-        this.notify.setTitle(true)
-      } else {
-        this.notify.setTitle()
-      }
+      // if (val) {
+      //   this.notify.setTitle(true)
+      // } else {
+      //   this.notify.setTitle()
+      // }
     }
   },
   created() {
@@ -281,11 +281,11 @@ export default {
       this.isTwinkle = boo
     },
     initNotify() {
-      this.notify = new Notify({
-        message: '您有新消息',
-        effect: 'flash', // flash | scroll
-        interval: 1000
-      });
+      // this.notify = new Notify({
+      //   message: '您有新消息',
+      //   effect: 'flash', // flash | scroll
+      //   interval: 1000
+      // });
     },
   }
 }
