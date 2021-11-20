@@ -11,7 +11,7 @@
           </el-col>
           <el-col :span="6">
             <el-form-item label="连接驱动">
-              <el-select v-model="category" placeholder="请选择连接驱动" clearable>
+              <el-select v-model="dbType" placeholder="请选择连接驱动" clearable>
                 <el-option v-for="item in categoryList" :key="item.enCode" :label="item.fullName"
                   :value="item.enCode">
                 </el-option>
@@ -41,7 +41,7 @@
         </div>
         <JNPF-table v-loading="listLoading" :data="list">
           <el-table-column prop="fullName" label="连接名称" min-width="200" />
-          <el-table-column prop="category" label="连接驱动" width="150" />
+          <el-table-column prop="dbType" label="连接驱动" width="150" />
           <el-table-column prop="host" label="主机地址" width="200" />
           <el-table-column prop="port" label="端口" width="60" />
           <el-table-column prop="creatorTime" label="创建时间" width="120"
@@ -76,7 +76,7 @@ export default {
       list: [],
       categoryList: [],
       keyword: '',
-      category: '',
+      dbType: '',
       listQuery: {
         currentPage: 1,
         pageSize: 20,
@@ -95,7 +95,7 @@ export default {
   methods: {
     reset() {
       this.keyword = ''
-      this.category = ''
+      this.dbType = ''
       this.search()
     },
     search() {
@@ -117,7 +117,7 @@ export default {
       let query = {
         ...this.listQuery,
         keyword: this.keyword,
-        category: this.category
+        dbType: this.dbType
       }
       getDataSourceList(query).then(res => {
         this.list = res.data.list
