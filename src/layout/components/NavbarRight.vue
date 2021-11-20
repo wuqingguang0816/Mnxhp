@@ -284,8 +284,7 @@ export default {
       this.notify = new Notify({
         message: '您有新消息',
         effect: 'flash', // flash | scroll
-        interval: 1000,
-        icon: 'https://mat1.gtimg.com/sports/nba/logo/1602/27.png'
+        interval: 1000
       });
     },
   }
