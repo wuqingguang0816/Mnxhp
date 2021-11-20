@@ -98,7 +98,7 @@ import Settings from './settings'
 import UserList from './userList/UserList'
 import dragDialog from "@/directive/el-drag-dialog";
 import ReconnectingWebSocket from 'reconnecting-websocket'
-import Notify from '@/utils/notify';
+// import Notify from '@/utils/notify';
 
 export default {
   directives: { dragDialog },
