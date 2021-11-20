@@ -128,9 +128,9 @@
       this.audio = config.audio || '';
       // this.favicon = getFavicon(this.updateFavicon);
       // this.cloneFavicon = this.favicon.cloneNode(true);
-      iconURL = config.notification && config.notification.icon ? config.notification.icon : config.icon ? config.icon : this.favicon.href;
-      defaultNotification.icon = iconURL;
-      this.notification = config.notification || defaultNotification; // 初始化生成声音文件节点
+      // iconURL = config.notification && config.notification.icon ? config.notification.icon : config.icon ? config.icon : this.favicon.href;
+      // defaultNotification.icon = iconURL;
+      // this.notification = config.notification || defaultNotification; // 初始化生成声音文件节点
 
       if (this.audio && this.audio.file) {
         this.setURL(this.audio.file);
