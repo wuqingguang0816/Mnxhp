@@ -208,6 +208,11 @@ export default {
     })
     return data
   },
+  provide() {
+    return {
+      parameter: this.parameter
+    }
+  },
   computed: {
     parameter() {
       return {
@@ -332,29 +337,60 @@ export default {
     },
     getFieldOptions(prop) {
       if (!prop) return []
-      return this.options[prop + 'Options'] || []
+      const isChildTable = prop.indexOf('.') > -1
+      if (isChildTable) {
+        const list = prop.split('.')
+        if (this.$refs[list[0]] && this.$refs[list[0]].$children[0]) {
+          let res = this.$refs[list[0]].$children[0].getTableFieldOptions(list[1])
+          return res
+        } else {
+          return []
+        }
+      } else {
+        return this.options[prop + 'Options'] || []
+      }
     },
     setFormData(prop, value) {
       if (!prop) return
-      this.comSet('defaultValue', prop, value)
-      this[this.formConf.formModel][prop] = value
+      const isChildTable = prop.indexOf('.') > -1
+      if (isChildTable) {
+        const list = prop.split('.')
+        if (this.$refs[list[0]] && this.$refs[list[0]].$children[0]) {
+          this.$refs[list[0]].$children[0].setTableFormData(list[1], value)
+        }
+      } else {
+        this.comSet('defaultValue', prop, value)
+        this[this.formConf.formModel][prop] = value
+      }
     },
     setShowOrHide(prop, value) {
       const newVal = !!value
-      this.comSet('noShow', prop, !newVal)
+      const isChildTable = prop.indexOf('.') > -1
+      if (!isChildTable) {
+        this.comSet('noShow', prop, !newVal)
+      }
     },
     setRequired(prop, value) {
       const newVal = !!value
-      this.comSet('required', prop, newVal)
-      this.buildRules(this.formConfCopy.fields, this[this.formConf.formRules])
+      const isChildTable = prop.indexOf('.') > -1
+      if (!isChildTable) {
+        this.comSet('required', prop, newVal)
+        this.buildRules(this.formConfCopy.fields, this[this.formConf.formRules])
+      }
     },
     setDisabled(prop, value) {
       const newVal = !!value
-      this.comSet('disabled', prop, newVal)
+      const isChildTable = prop.indexOf('.') > -1
+      if (!isChildTable) {
+        this.comSet('disabled', prop, newVal)
+      }
     },
     setFieldOptions(prop, value) {
       const newVal = Array.isArray(value) ? value : []
-      this.comSet('options', prop, newVal)
+      const isChildTable = prop.indexOf('.') > -1
+      if (!isChildTable) {
+        this.comSet('options', prop, newVal)
+      }
     },
     comSet(field, prop, value) {
       if (!prop) return

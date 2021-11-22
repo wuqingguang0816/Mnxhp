@@ -375,6 +375,8 @@ export default {
     if (typeof this.conf === 'object' && this.conf !== null) {
       this.columnData = Object.assign({}, defaultColumnData, this.conf)
     }
+    if (!this.columnOptions.length) this.columnData.columnList = []
+    if (!this.searchOptions.length) this.columnData.searchList = []
     this.setBtnValue(this.columnData.btnsList, this.btnsOption)
     this.setBtnValue(this.columnData.columnBtnsList, this.columnBtnsOption)
     this.btnsList = this.columnData.btnsList.map(o => o.value)

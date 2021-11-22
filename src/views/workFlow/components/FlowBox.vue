@@ -143,7 +143,7 @@ export default {
           { required: true, message: '请选择指派节点', trigger: 'change' }
         ],
         freeApproverUserId: [
-          { required: true, message: '请选择指派人', trigger: 'change' }
+          { required: true, message: '请选择指派人', trigger: 'click' }
         ]
       },
       assignNodeList: [],

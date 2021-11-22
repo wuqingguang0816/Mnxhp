@@ -5,7 +5,7 @@
     </div>
     <el-table :data="tableFormData" class="JNPF-common-table" @cell-click="focusInput"
       v-bind="config.tableConf || {}" :show-summary="config['show-summary']"
-      :summary-method="getTableSummaries" size="mini">
+      :summary-method="getTableSummaries" size="mini" ref="formTable">
       <el-table-column width="50" align="center" label="序号">
         <!-- 序号 -->
         <template slot-scope="scope">
@@ -16,53 +16,57 @@
         </template>
       </el-table-column>
       <!-- 组件列 -->
-      <el-table-column v-for="(head, cindex) in tableData" :key="head.__config__.formId"
-        :min-width="head['min-width']" :prop="head.__vModel__" :width="head.__config__.columnWidth">
-        <template slot="header">
-          <span style="color: #f56c6c;" v-if="head.__config__.required">*</span>
-          {{head.__config__['label']}}
-        </template>
-        <template slot-scope="scope">
-          <!-- 单选框组 多选框组 都替换成下拉 并添加options -->
-          <template v-if="['select', 'checkbox','radio'].includes(head.__config__.jnpfKey)">
-            <el-select v-model="tableFormData[scope.$index][cindex].value"
-              v-bind="getConfById(head.__config__.formId)" :rowIndex="scope.$index"
-              @change="onFormDataChange(scope.$index, cindex, 'el-select')">
-              <el-option v-for="(opt,oindex) in head.__slot__.options" :key="oindex"
-                :label="opt[head.__config__.props.label]" :value="opt[head.__config__.props.value]">
-              </el-option>
-            </el-select>
+      <template v-for="(head, cindex) in tableData">
+        <el-table-column :key="head.__config__.formId" :min-width="head['min-width']"
+          :prop="head.__vModel__" :width="head.__config__.columnWidth"
+          v-if="!head.__config__.noShow">
+          <template slot="header">
+            <span style="color: #f56c6c;" v-if="head.__config__.required">*</span>
+            {{head.__config__['label']}}
           </template>
-          <!-- 单行输入 -->
-          <template v-else-if="head.__config__.jnpfKey==='comInput'">
-            <el-input v-model="tableFormData[scope.$index][cindex].value"
-              v-bind="getConfById(head.__config__.formId)" :rowIndex="scope.$index"
-              @change="onFormDataChange(scope.$index, cindex, 'el-input')">
-              <template v-if="head.__slot__">
-                <template slot="prepend" v-if="head.__slot__.prepend">
-                  {{head.__slot__.prepend}}
+          <template slot-scope="scope">
+            <!-- 单选框组 多选框组 都替换成下拉 并添加options -->
+            <template v-if="['select', 'checkbox','radio'].includes(head.__config__.jnpfKey)">
+              <el-select v-model="tableFormData[scope.$index][cindex].value"
+                v-bind="getConfById(head.__config__.formId)" :rowIndex="scope.$index"
+                @change="onFormDataChange(scope.$index, cindex, 'el-select')">
+                <el-option v-for="(opt,oindex) in head.__slot__.options" :key="oindex"
+                  :label="opt[head.__config__.props.label]"
+                  :value="opt[head.__config__.props.value]">
+                </el-option>
+              </el-select>
+            </template>
+            <!-- 单行输入 -->
+            <template v-else-if="head.__config__.jnpfKey==='comInput'">
+              <el-input v-model="tableFormData[scope.$index][cindex].value"
+                v-bind="getConfById(head.__config__.formId)" :rowIndex="scope.$index"
+                @change="onFormDataChange(scope.$index, cindex, 'el-input')">
+                <template v-if="head.__slot__">
+                  <template slot="prepend" v-if="head.__slot__.prepend">
+                    {{head.__slot__.prepend}}
+                  </template>
+                  <template slot="append" v-if="head.__slot__.append">
+                    {{head.__slot__.append}}
+                  </template>
                 </template>
-                <template slot="append" v-if="head.__slot__.append">
-                  {{head.__slot__.append}}
-                </template>
-              </template>
-            </el-input>
+              </el-input>
+            </template>
+            <!-- 其他 -->
+            <component v-else :is="head.__config__.tag" :rowIndex="scope.$index"
+              v-model="tableFormData[scope.$index][cindex].value"
+              v-bind="getConfById(head.__config__.formId)" :formData="formData"
+              @change="onFormDataChange(scope.$index, cindex, head.__config__.tag)">
+            </component>
+            <div class="error-tip" v-show="!tableFormData[scope.$index][cindex].valid">
+              不能为空
+            </div>
+            <div class="error-tip"
+              v-show="tableFormData[scope.$index][cindex].valid && !tableFormData[scope.$index][cindex].regValid">
+              {{tableFormData[scope.$index][cindex].regErrorText}}
+            </div>
           </template>
-          <!-- 其他 -->
-          <component v-else :is="head.__config__.tag" :rowIndex="scope.$index"
-            v-model="tableFormData[scope.$index][cindex].value"
-            v-bind="getConfById(head.__config__.formId)" :formData="formData"
-            @change="onFormDataChange(scope.$index, cindex, head.__config__.tag)">
-          </component>
-          <div class="error-tip" v-show="!tableFormData[scope.$index][cindex].valid">
-            不能为空
-          </div>
-          <div class="error-tip"
-            v-show="tableFormData[scope.$index][cindex].valid && !tableFormData[scope.$index][cindex].regValid">
-            {{tableFormData[scope.$index][cindex].regErrorText}}
-          </div>
-        </template>
-      </el-table-column>
+        </el-table-column>
+      </template>
     </el-table>
     <div class="table-actions" @click="addRow" v-if="!disabled">
       <el-button type="text" icon="el-icon-plus"> {{ config.actionText }}</el-button>
@@ -75,6 +79,7 @@ import { getDictionaryDataSelector } from '@/api/systemData/dictionary'
 import { previewDataInterface } from '@/api/systemData/dataInterface'
 export default {
   name: "input-table",
+  inject: ["parameter"],
   props: {
     config: {
       type: Object,
@@ -94,6 +99,7 @@ export default {
     return {
       tableFormData: [],
       tableData: [],
+      activeRowIndex: 0,
       isAddRow: true // list类型下 添加行数据 number类型组件会进行校验 产生不需要的结果 在这里进行添加行数据判断 hack
     };
   },
@@ -141,9 +147,73 @@ export default {
       const input = child && child.querySelector('input')
       input && input.focus()
     },
+    getFunc(str) {
+      let func = null
+      try {
+        func = eval(str)
+        return func
+      } catch (error) {
+        console.log(error);
+        return false
+      }
+    },
+    setTableFormData(prop, value) {
+      let activeRow = this.tableFormData[this.activeRowIndex]
+      for (let i = 0; i < activeRow.length; i++) {
+        if (activeRow[i].__vModel__ === prop) {
+          activeRow[i].value = value
+          break
+        }
+      }
+    },
+    getTableFieldOptions(prop) {
+      let res = []
+      for (let i = 0; i < this.tableData.length; i++) {
+        if (this.tableData[i].__vModel__ === prop) {
+          let item = this.tableData[i]
+          let isTreeSelect = item.__config__.jnpfKey === 'treeSelect' || item.__config__.jnpfKey === 'cascader'
+          isTreeSelect ? res = item.options || [] : res = item.__slot__.options || []
+          break
+        }
+      }
+      return res
+    },
+    // setTableShowOrHide(prop, value) {
+    //   for (let i = 0; i < this.tableData.length; i++) {
+    //     if (this.tableData[i].__vModel__ === prop) {
+    //       this.tableData[i].__config__.noShow = value
+    //       break
+    //     }
+    //   }
+    // },
+    // setTableRequired(prop, value) {
+    //   for (let i = 0; i < this.tableData.length; i++) {
+    //     if (this.tableData[i].__vModel__ === prop) {
+    //       this.tableData[i].__config__.required = value
+    //       break
+    //     }
+    //   }
+    // },
+    // setTableDisabled(prop, value) {
+    //   for (let i = 0; i < this.tableData.length; i++) {
+    //     if (this.tableData[i].__vModel__ === prop) {
+    //       this.tableData[i].disabled = value
+    //       break
+    //     }
+    //   }
+    // },
     onFormDataChange(rowIndex, colIndex, tag) {
       if (this.isAddRow) return
       const data = this.tableFormData[rowIndex][colIndex]
+      this.activeRowIndex = rowIndex
+      if (data && data.on && data.on.change) {
+        const func = this.getFunc(data.on.change);
+        if (!func) return
+        func.call(this, {
+          data: data.value,
+          ...this.parameter
+        })
+      }
       data.required && (data.valid = this.checkData(data))
       data.regList && data.regList.length && (data.regValid = this.checkRegData(data))
       if (['JNPF-Amount', 'el-input-number'].includes(tag)) { // 金额变动 更新数据 触发计算公式更新
@@ -178,7 +248,7 @@ export default {
       for (let i = 0; i < col.regList.length; i++) {
         const item = col.regList[i];
         let pattern = eval(item.pattern)
-        if (!pattern.test(col.value)) {
+        if (col.value && !pattern.test(col.value)) {
           res = false
           col.regErrorText = item.message
           break

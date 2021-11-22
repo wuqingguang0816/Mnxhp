@@ -677,7 +677,7 @@ export const selectComponents = [{
       dragDisabled: false,
       tableName: '',
       regList: [],
-      trigger: 'change'
+      trigger: 'click'
     },
     on: {
       change: '({ data, formData, setFormData, setShowOrHide, setRequired, setDisabled, request, getFieldOptions, setFieldOptions }) => {\n    // 在此编写代码\n    \n}',

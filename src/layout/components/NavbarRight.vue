@@ -42,6 +42,9 @@
         <el-dropdown-item @click.native="visible = true">
           <i class="icon-ym icon-ym-header-about"></i>{{ $t('navbar.about') }}
         </el-dropdown-item>
+        <el-dropdown-item @click.native="visible2 = true">
+          <i class="icon-ym icon-ym-generator-card"></i>{{ $t('navbar.statement') }}
+        </el-dropdown-item>
         <el-dropdown-item @click.native="lock">
           <i class="icon-ym icon-ym-header-lockScreen"></i>{{ $t('navbar.lockScreen') }}
         </el-dropdown-item>
@@ -70,6 +73,14 @@
       </div>
       <p class="about-dialog-main-tip">解放90%重复性的代码编写工作，让你更加专注于业务和体验！</p>
     </el-dialog>
+    <el-dialog title="官方声明" :close-on-click-modal="false" :visible.sync="visible2" v-drag-dialog
+      class="JNPF-dialog JNPF-dialog_center about-dialog" lock-scroll width="400px">
+      <div class="about-dialog-main">
+        <div>
+          JNPF是对外开放性体验产品，平台内所有数据为我司虚构的测试数据，是随机生成非敏感数据，所以严禁任何人在JNPF平台上修改数据内容、扭曲数据目的、传播或售卖测试数据，特此警告。
+        </div>
+      </div>
+    </el-dialog>
     <MessageList ref="MessageList" @read='read' />
     <Settings ref="Settings" />
     <UserList ref="UserList" @changeTwinkle='changeTwinkle' />
@@ -87,6 +98,7 @@ import Settings from './settings'
 import UserList from './userList/UserList'
 import dragDialog from "@/directive/el-drag-dialog";
 import ReconnectingWebSocket from 'reconnecting-websocket'
+// import Notify from '@/utils/notify';
 
 export default {
   directives: { dragDialog },
@@ -110,13 +122,25 @@ export default {
   data() {
     return {
       visible: false,
+      visible2: false,
       isTwinkle: false,
       messageCount: 0,
+      notify: null,
       userList: []
+    }
+  },
+  watch: {
+    isTwinkle(val) {
+      // if (val) {
+      //   this.notify.setTitle(true)
+      // } else {
+      //   this.notify.setTitle()
+      // }
     }
   },
   created() {
     this.initWebSocket()
+    this.initNotify()
   },
   destroyed() {
     if (this.socket) {
@@ -255,7 +279,14 @@ export default {
     },
     changeTwinkle(boo) {
       this.isTwinkle = boo
-    }
+    },
+    initNotify() {
+      // this.notify = new Notify({
+      //   message: '您有新消息',
+      //   effect: 'flash', // flash | scroll
+      //   interval: 1000
+      // });
+    },
   }
 }
 </script>

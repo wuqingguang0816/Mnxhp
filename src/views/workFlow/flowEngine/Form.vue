@@ -68,9 +68,9 @@
                   <template slot="prepend">@/views/</template>
                 </el-input>
               </el-form-item>
-              <el-form-item label="App地址" prop="appFormUrl">
+              <!-- <el-form-item label="App地址" prop="appFormUrl">
                 <el-input v-model="dataForm.appFormUrl" placeholder="App地址" />
-              </el-form-item>
+              </el-form-item> -->
             </template>
             <el-form-item label="流程排序" prop="sortCode">
               <el-input-number :min="0" :max="9999" v-model="dataForm.sortCode"

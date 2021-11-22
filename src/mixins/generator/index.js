@@ -4,6 +4,14 @@ export default {
   data() {
     return {
       list: [],
+      category: '',
+      listQuery: {
+        currentPage: 1,
+        pageSize: 20,
+        sort: 'desc',
+        sidx: ''
+      },
+      total: 0,
       listLoading: false,
       formVisible: false,
       addVisible: false,
@@ -16,11 +24,18 @@ export default {
   },
   methods: {
     search() {
+      this.listQuery = {
+        currentPage: 1,
+        pageSize: 20,
+        sort: 'desc',
+        sidx: ''
+      }
       this.initData()
     },
     reset() {
       this.query.keyword = ''
-      this.initData()
+      this.category = ''
+      this.search()
     },
     getDictionaryData() {
       this.$store.dispatch('base/getDictionaryData', { sort: this.sort }).then((res) => {
@@ -29,8 +44,14 @@ export default {
     },
     initData() {
       this.listLoading = true
-      getVisualDevList(this.query).then(res => {
-        this.list = res.data.list.map(o => ({ top: true, ...o }))
+      let query = {
+        ...this.listQuery,
+        ...this.query,
+        category: this.category
+      }
+      getVisualDevList(query).then(res => {
+        this.list = res.data.list
+        this.total = res.data.pagination.total
         this.listLoading = false
       })
     },
@@ -94,8 +115,7 @@ export default {
     colseForm(isRefresh) {
       this.formVisible = false
       if (isRefresh) {
-        this.query.keyword = ''
-        this.initData()
+        this.reset()
       }
     }
   }

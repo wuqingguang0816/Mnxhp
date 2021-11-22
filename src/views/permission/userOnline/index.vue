@@ -31,8 +31,8 @@
           </div>
         </div>
         <JNPF-table v-loading="listLoading" :data="tableDataList" max-height="100%">
-          <el-table-column prop="userName" label="用户名" width="120" />
-          <el-table-column prop="loginIPAddress" label="IP" width="120" />
+          <el-table-column prop="userName" label="在线用户" width="120" />
+          <el-table-column prop="loginIPAddress" label="登录IP" width="120" />
           <el-table-column prop="loginTime" label="登录时间" width="150" />
           <el-table-column prop="loginPlatForm" label="登录设备" show-overflow-tooltip />
           <el-table-column label="操作" width="90">

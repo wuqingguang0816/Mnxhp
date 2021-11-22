@@ -80,7 +80,7 @@ export default {
         if (valid) {
           if (this.dataForm.dbConnectionFrom === this.dataForm.dbConnectionTo) {
             this.$message({
-              message: '不能已数据库连接 From 相同',
+              message: '不能与数据库连接 From 相同',
               type: 'error',
               duration: 1000,
             })

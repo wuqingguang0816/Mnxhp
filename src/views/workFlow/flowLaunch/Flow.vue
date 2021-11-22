@@ -8,39 +8,111 @@
         </div>
       </div>
       <div class="main">
-        <div class="flowList">
-          <div class="item" v-for="(item,i) in flowEngineList" :key="i">
-            <p class="cap">{{item.fullName}}【{{item.num}}】</p>
-            <div class="iconList">
-              <div class="iconbox" v-for="(child,i) in item.children" :key="i" @click="jump(child)">
-                <div class="box-icon" :style="{backgroundColor:child.iconBackground||'#008cff'}">
-                  <i :class="child.icon"></i>
+        <el-row class="JNPF-common-search-box" :gutter="16">
+          <el-form @submit.native.prevent>
+            <el-col :span="6">
+              <el-form-item label="关键词">
+                <el-input v-model="keyword" placeholder="请输入关键词查询" clearable
+                  @keyup.enter.native="search()" />
+              </el-form-item>
+            </el-col>
+            <el-col :span="6">
+              <el-form-item label="流程分类">
+                <el-select v-model="category" placeholder="请选择流程分类" clearable>
+                  <el-option v-for="item in categoryList" :key="item.enCode" :label="item.fullName"
+                    :value="item.enCode">
+                  </el-option>
+                </el-select>
+              </el-form-item>
+            </el-col>
+            <el-col :span="6">
+              <el-form-item>
+                <el-button type="primary" icon="el-icon-search" @click="search()">
+                  {{$t('common.search')}}</el-button>
+                <el-button icon="el-icon-refresh-right" @click="reset()">{{$t('common.reset')}}
+                </el-button>
+              </el-form-item>
+            </el-col>
+          </el-form>
+        </el-row>
+        <el-scrollbar class="list" v-loading="listLoading">
+          <el-row :gutter="20">
+            <el-col :span="6" v-for="(item,i) in list" :key="i" class="item"
+              @click.native="jump(item)">
+              <el-card shadow="hover">
+                <div class="box-icon" :style="{backgroundColor:item.iconBackground||'#008cff'}">
+                  <i :class="item.icon"></i>
                 </div>
-                <el-tooltip :content="child.fullName">
-                  <p class="box-title">{{child.fullName}}</p>
-                </el-tooltip>
-              </div>
-            </div>
-          </div>
-        </div>
+                <span class="title">{{item.fullName}}</span>
+              </el-card>
+            </el-col>
+          </el-row>
+        </el-scrollbar>
+        <pagination :total="total" :page.sync="listQuery.currentPage"
+          :limit.sync="listQuery.pageSize" @pagination="initData" />
       </div>
     </div>
   </transition>
 </template>
 
 <script>
+import { FlowEnginePageList } from '@/api/workFlow/FlowEngine'
 export default {
   data() {
     return {
-      flowEngineList: []
+      keyword: '',
+      category: '',
+      listQuery: {
+        currentPage: 1,
+        pageSize: 50,
+        sort: 'desc',
+        sidx: ''
+      },
+      total: 0,
+      list: [],
+      listLoading: true,
+      categoryList: []
     }
   },
   methods: {
     goBack() {
       this.$emit('close')
     },
-    init(flowEngineList) {
-      this.flowEngineList = flowEngineList.filter(o => o.children && Array.isArray(o.children) && o.children.length)
+    init() {
+      this.getDictionaryData()
+      this.initData()
+    },
+    reset() {
+      this.keyword = ''
+      this.category = ''
+      this.search()
+    },
+    search() {
+      this.listQuery = {
+        currentPage: 1,
+        pageSize: 50,
+        sort: 'desc',
+        sidx: ''
+      }
+      this.initData()
+    },
+    initData() {
+      this.listLoading = true
+      let query = {
+        ...this.listQuery,
+        keyword: this.keyword,
+        category: this.category
+      }
+      FlowEnginePageList(query).then((res) => {
+        this.list = res.data.list
+        this.total = res.data.pagination.total
+        this.listLoading = false
+      })
+    },
+    getDictionaryData() {
+      this.$store.dispatch('base/getDictionaryData', { sort: 'WorkFlowCategory' }).then((res) => {
+        this.categoryList = res
+      })
     },
     jump(item) {
       if (!item.enCode) {
@@ -57,46 +129,36 @@ export default {
 </script>
 <style lang="scss" scoped>
 .main {
-  padding: 10px 0 0;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  padding: 0 10px 10px;
   color: #606266;
-  .flowList {
-    margin: 16px;
-    .cap {
-      font-size: 14px;
-      margin-bottom: 6px;
-      font-weight: bold;
-    }
+  >>> .is-horizontal {
+    display: none;
+  }
+  >>> .el-scrollbar__view {
+    overflow: hidden;
+  }
+  .list {
+    flex: 1;
+    margin-top: 10px;
+    overflow: hidden;
     .item {
-      &::after {
-        content: '';
-        display: block;
-        clear: both;
-      }
-    }
-    .iconbox {
-      cursor: pointer;
-      width: 90px;
-      height: 90px;
-      overflow: hidden;
-      float: left;
-      margin: 10px;
-      margin-left: 0px;
       margin-bottom: 20px;
-      &:hover {
-        opacity: 0.8;
-        .iconbox:hover .box-icon {
-          box-shadow: 0 0 6px 1px rgba(0, 0, 0, 0.1);
-        }
+      cursor: pointer;
+      >>> .el-card__body {
+        display: flex;
+        align-items: center;
       }
       .box-icon {
         width: 50px;
         height: 50px;
         border-radius: 12px;
         text-align: center;
-        margin: 0 auto;
-        margin-top: 10px;
-        margin-bottom: 10px;
         background-color: #ccc;
+        display: inline-block;
+        margin-right: 20px;
         i {
           text-align: center;
           font-size: 38px;
@@ -104,12 +166,19 @@ export default {
           line-height: 50px;
         }
       }
-      .box-title {
-        text-align: center;
-        font-size: 12px;
+      .title {
+        display: inline-block;
+        width: calc(100% - 70px);
+        text-overflow: -o-ellipsis-lastline;
         overflow: hidden;
         text-overflow: ellipsis;
-        white-space: nowrap;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        line-clamp: 2;
+        -webkit-box-orient: vertical;
+        word-break: break-all;
+        line-height: 25px;
+        font-size: 17px;
       }
     }
   }

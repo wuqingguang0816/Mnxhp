@@ -132,7 +132,8 @@
                     <el-input v-model="baseForm.smsSignName" clearable placeholder="请输入SignName" />
                   </el-form-item>
                   <el-form-item label="模板编号" prop="smsTemplateId">
-                    <el-input v-model="baseForm.smsTemplateId" clearable placeholder="请输入TemplateId" />
+                    <el-input v-model="baseForm.smsTemplateId" clearable
+                      placeholder="请输入TemplateId" />
                   </el-form-item>
                   <el-form-item label="应用编号" prop="smsAppId" v-if="baseForm.smsCompany=='2'">
                     <el-input v-model="baseForm.smsAppId" clearable placeholder="请输入AppId" />
@@ -144,7 +145,7 @@
                 </el-col>
               </el-row>
             </el-tab-pane>
-            <el-tab-pane label="邮箱">
+            <el-tab-pane label="电子邮箱">
               <el-alert title="注意：系统邮件设置成功后所有邮件会由此邮箱发出" type="warning" :closable="false"
                 show-icon />
               <el-row :gutter="20" style="margin-top: 15px">

@@ -21,7 +21,7 @@
       <el-form-item label="状态" prop="enabledMark">
         <el-switch v-model="dataForm.enabledMark" :active-value="1" :inactive-value="0" />
       </el-form-item>
-      <el-form-item label="字典说明" prop="description">
+      <el-form-item label="说明" prop="description">
         <el-input v-model="dataForm.description" type="textarea" :rows="6" />
       </el-form-item>
     </el-form>
