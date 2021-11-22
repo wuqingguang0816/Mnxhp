@@ -56,7 +56,6 @@
           <el-table-column prop="creatorUser" label="创建人" width="120" />
           <el-table-column prop="creatorTime" label="创建时间" :formatter="jnpf.tableDateFormat"
             width="120" />
-          <el-table-column prop="lastModifyUser" label="修改人" width="120" />
           <el-table-column prop="lastModifyTime" label="最后修改时间" :formatter="jnpf.tableDateFormat"
             width="120" />
           <el-table-column label="操作" width="150">

@@ -177,8 +177,7 @@ export default {
         line-clamp: 2;
         -webkit-box-orient: vertical;
         word-break: break-all;
-        line-height: 25px;
-        font-size: 17px;
+        font-size: 14px;
       }
     }
   }
