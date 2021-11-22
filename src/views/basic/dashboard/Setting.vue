@@ -8,7 +8,7 @@
           <div class="item-list">
             <div class="item-list-item" v-for="(child,ii) in  item.children" :key="ii"
               @click="selectItem(child.id)" :class="{'active':activeId === child.id}">
-              <p>{{child.fullName}}</p>
+              <p class="com-hover">{{child.fullName}}</p>
               <i class="el-icon-success"></i>
             </div>
           </div>

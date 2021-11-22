@@ -39,9 +39,26 @@
     .field-box {
       position: relative;
       height: calc(100% - 42px);
-      overflow: auto;
-      overflow-x: hidden;
-      padding: 10px;
+      overflow: hidden;
+      box-sizing: border-box;
+
+      .el-scrollbar {
+        height: 100%;
+        overflow-x: hidden; //隐藏水平滚动条
+
+        .el-scrollbar__view {
+          padding: 10px;
+        }
+
+        >>>.el-scrollbar__bar.is-vertical {
+          width: 6px !important;
+        }
+      }
+
+      .searchList,
+      .columnList {
+        height: 100%;
+      }
     }
 
     >>>.top-tabs {
@@ -56,11 +73,14 @@
       .el-tabs__item {
         width: 33%;
         text-align: center;
+        padding: 0;
       }
 
       &.top-tabs_app {
         .el-tabs__item {
           width: 25%;
+          text-align: center;
+          padding: 0;
         }
       }
     }

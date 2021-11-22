@@ -8,6 +8,7 @@ const state = {
   dicTree: [],
   formItemList: [],
   subTable: [],
+  allTable: [],
   hasTable: false,
   relationData: {}
 }
@@ -27,6 +28,9 @@ const mutations = {
   },
   UPDATE_SUB_TABLE(state, subTable) {
     state.subTable = subTable
+  },
+  SET_ALL_TABLE(state, allTable) {
+    state.allTable = allTable
   },
   SET_TABLE(state, val) {
     state.hasTable = val

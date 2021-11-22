@@ -188,7 +188,7 @@ export default {
       const data = {
         ids: this.multipleSelection
       }
-      this.$confirm('您确定要删除这些数据吗, 是否继续？?', '提示', {
+      this.$confirm('您确定要删除这些数据吗, 是否继续?', '提示', {
         type: 'warning'
       }).then(() => {
         delLog(data).then(res => {

@@ -23,3 +23,10 @@ export const delDataReport = id => {
     method: 'delete'
   })
 }
+// 复制报表
+export const copyDataReport = id => {
+  return request({
+    url: `${reportServer}/api/datareport/Data/Copy/${id}`,
+    method: 'post'
+  })
+}

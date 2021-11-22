@@ -4,10 +4,12 @@
       <div class="JNPF-common-title">
         <h2>接口分类</h2>
       </div>
-      <el-tree ref="treeBox" v-loading="treeLoading"
-        :element-loading-text="$t('common.loadingText')" :data="treeData" :props="defaultProps"
-        default-expand-all highlight-current :expand-on-click-node="false" node-key="id"
-        @node-click="handleNodeClick" class="JNPF-common-el-tree" />
+      <el-scrollbar class="JNPF-common-el-tree-scrollbar" v-loading="treeLoading"
+        :element-loading-text="$t('common.loadingText')">
+        <el-tree ref="treeBox" :data="treeData" :props="defaultProps" default-expand-all
+          highlight-current :expand-on-click-node="false" node-key="id"
+          @node-click="handleNodeClick" class="JNPF-common-el-tree" />
+      </el-scrollbar>
     </div>
     <div class="JNPF-common-layout-center">
       <el-row class="JNPF-common-search-box" :gutter="16">
@@ -78,7 +80,8 @@
                   </span>
                   <el-dropdown-menu slot="dropdown">
                     <el-dropdown-item
-                      @click.native="handlePreview(scope.row.id, scope.row.enabledMark)">预览
+                      @click.native="handlePreview(scope.row.id, scope.row.enabledMark,scope.row.tenantId||'')">
+                      预览
                     </el-dropdown-item>
                     <el-dropdown-item @click.native="viewLog(scope.row)">
                       日志
@@ -201,7 +204,7 @@ export default {
     handleAddEdit(id) {
       this.formVisible = true
       this.$nextTick(() => {
-        this.$refs.Form.init(id)
+        this.$refs.Form.init(id, this.params.categoryId)
       })
     },
     handleDel(id) {
@@ -220,13 +223,13 @@ export default {
         })
       }).catch(() => { })
     },
-    handlePreview(id, enabledMark) {
+    handlePreview(id, enabledMark, tenantId) {
       if (enabledMark === 0) {
         this.$message.error('接口已被禁用，请先开启接口')
       } else {
         this.previewVisible = true
         this.$nextTick(() => {
-          this.$refs.Preview.init(id)
+          this.$refs.Preview.init(id, tenantId)
         })
       }
     },

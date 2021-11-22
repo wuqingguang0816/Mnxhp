@@ -20,15 +20,16 @@
       <el-input-number v-model="activeData.__config__.columnWidth" placeholder="控件宽度" :min="0"
         :precision="0" controls-position="right" />
     </el-form-item>
-    <el-divider>弹窗数据</el-divider>
-    <el-alert title="默认首字段为显示字段" type="warning" :closable="false" show-icon />
-    <el-form-item label="远端数据" class="mt-10">
+    <el-form-item label="远端数据">
       <JNPF-TreeSelect :options="dataInterfaceSelector" v-model="activeData.interfaceId"
         placeholder="请选择远端数据" lastLevel lastLevelKey='categoryId' lastLevelValue='1' clearable>
       </JNPF-TreeSelect>
     </el-form-item>
     <el-form-item label="存储字段">
-      <el-input v-model.number="activeData.propsValue" placeholder="请输入存储字段" />
+      <el-input v-model="activeData.propsValue" placeholder="请输入存储字段" />
+    </el-form-item>
+    <el-form-item label="显示字段">
+      <el-input v-model="activeData.relationField" placeholder="请输入显示字段" />
     </el-form-item>
     <el-divider>列表字段</el-divider>
     <draggable :list="activeData.columnOptions" :animation="340" group="selectItem"
@@ -50,6 +51,18 @@
         添加字段
       </el-button>
     </div>
+    <el-divider>分页设置</el-divider>
+    <el-form-item label="列表分页">
+      <el-switch v-model="activeData.hasPage"></el-switch>
+    </el-form-item>
+    <el-form-item label="分页条数" label-width="80px">
+      <el-radio-group v-model="activeData.pageSize">
+        <el-radio-button :label="20">20条</el-radio-button>
+        <el-radio-button :label="50">50条</el-radio-button>
+        <el-radio-button :label="100">100条</el-radio-button>
+        <el-radio-button :label="500">500条</el-radio-button>
+      </el-radio-group>
+    </el-form-item>
     <el-divider />
     <el-form-item label="能否清空">
       <el-switch v-model="activeData.clearable" />
@@ -57,7 +70,6 @@
     <el-form-item label="是否禁用">
       <el-switch v-model="activeData.disabled" />
     </el-form-item>
-    <el-divider>校验</el-divider>
     <el-form-item label="是否必填">
       <el-switch v-model="activeData.__config__.required" />
     </el-form-item>

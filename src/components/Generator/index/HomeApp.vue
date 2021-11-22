@@ -56,7 +56,8 @@
       </div>
     </div>
     <right-panel :active-data="activeData" :form-conf="formConf" :show-field="!!drawingList.length"
-      @tag-change="tagChange" @relationChange="relationChange" />
+      @tag-change="tagChange" :modelType="modelType" :webType="webType"
+      @relationChange="relationChange" :drawingList="drawingList" />
     <json-drawer size="550px" :visible.sync="jsonDrawerVisible" :jsonData="formData"
       @refresh="refreshJson" />
   </div>
@@ -96,7 +97,7 @@ export default {
     RightPanel,
     DraggableItem
   },
-  props: ['conf'],
+  props: ['conf', 'modelType', 'webType'],
   data() {
     return {
       idGlobal: 100,
@@ -234,6 +235,20 @@ export default {
                 break
               }
             }
+            if (config.jnpfKey === 'popupSelect') {
+              if (!e.interfaceId) {
+                reject({ msg: '弹窗选择控件“远端数据”属性为必填项', target: 1 })
+                break
+              }
+              if (!e.propsValue) {
+                reject({ msg: '弹窗选择控件“储存字段”属性为必填项', target: 1 })
+                break
+              }
+              if (!e.relationField) {
+                reject({ msg: '弹窗选择控件“显示字段”属性为必填项', target: 1 })
+                break
+              }
+            }
             if (config.jnpfKey === 'relationFlow' && !e.flowId) {
               reject({ msg: '关联流程表单控件“关联流程”属性为必填项', target: 1 })
               break
@@ -318,6 +333,12 @@ export default {
       if (obj.to.className.indexOf('table') < 0) {
         this.$set(this.activeItem.__config__, 'isSubTable', false)
         if (this.$store.getters.hasTable) this.activeItem.__vModel__ = ''
+      } else {
+        this.$set(this.activeItem.__config__, 'isSubTable', true)
+        if (this.$store.getters.hasTable) {
+          this.$set(this.activeItem.__config__, 'relationTable', this.activeTableItem.__config__.tableName)
+          this.activeItem.__vModel__ = ''
+        }
       }
     },
     addComponent(item) {

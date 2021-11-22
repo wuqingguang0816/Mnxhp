@@ -111,7 +111,7 @@
           :limit.sync="listQuery.pageSize" @pagination="initData" />
       </div>
     </div>
-    <flow v-show="flowVisible" ref="flow" @close="flowVisible=false" @chioceFlow="chioceFlow" />
+    <flow v-if="flowVisible" ref="flow" @close="flowVisible=false" @chioceFlow="chioceFlow" />
     <FlowBox v-if="formVisible" ref="FlowBox" @close="colseForm" />
   </div>
 </template>
@@ -248,7 +248,7 @@ export default {
     addFlow() {
       this.flowVisible = true
       this.$nextTick(() => {
-        this.$refs.flow.init(this.flowEngineList)
+        this.$refs.flow.init()
       })
     },
     chioceFlow(item) {

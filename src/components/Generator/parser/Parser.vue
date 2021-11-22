@@ -113,7 +113,9 @@ function renderFrom(h) {
         rules={this[formConfCopy.formRules]}
       >
         {renderFormItem.call(this, h, formConfCopy.fields)}
-        {formConfCopy.formBtns && formBtns.call(this, h)}
+        {
+          // {formConfCopy.formBtns && formBtns.call(this, h)}
+        }
       </el-form>
     </el-row>
   )
@@ -206,6 +208,11 @@ export default {
     })
     return data
   },
+  provide() {
+    return {
+      parameter: this.parameter
+    }
+  },
   computed: {
     parameter() {
       return {
@@ -241,20 +248,36 @@ export default {
               isTreeSelect ? cur.options = res.data.list : cur.__slot__.options = res.data.list
               isTreeSelect ? data[cur.__vModel__ + 'Options'] = cur.options : data[cur.__vModel__ + 'Options'] = cur.__slot__.options
             })
-          }
-          if (config.dataType === 'dynamic') {
+          } else if (config.dataType === 'dynamic') {
             if (!config.propsUrl) return
             previewDataInterface(config.propsUrl).then(res => {
               isTreeSelect ? cur.options = res.data : cur.__slot__.options = res.data
               isTreeSelect ? data[cur.__vModel__ + 'Options'] = cur.options : data[cur.__vModel__ + 'Options'] = cur.__slot__.options
             })
+          } else {
+            isTreeSelect ? data[cur.__vModel__ + 'Options'] = cur.options : data[cur.__vModel__ + 'Options'] = cur.__slot__.options
           }
         }
-        if (config.jnpfKey === 'popupSelect') {
-          if (!cur.interfaceId) return
-          previewDataInterface(cur.interfaceId).then(res => {
-            cur.options = res.data
-            data[cur.__vModel__ + 'Options'] = res.data
+        // if (config.jnpfKey === 'popupSelect') {
+        //   if (!cur.interfaceId) return
+        //   previewDataInterface(cur.interfaceId).then(res => {
+        //     cur.options = res.data
+        //     data[cur.__vModel__ + 'Options'] = res.data
+        //   })
+        // }
+        if (config.jnpfKey === 'comSelect') {
+          this.$store.dispatch('generator/getCompanyTree').then(res => {
+            data[cur.__vModel__ + 'Options'] = res
+          })
+        }
+        if (config.jnpfKey === 'depSelect') {
+          this.$store.dispatch('generator/getDepTree').then(res => {
+            data[cur.__vModel__ + 'Options'] = res
+          })
+        }
+        if (config.jnpfKey === 'posSelect') {
+          this.$store.dispatch('base/getPositionTree').then(res => {
+            data[cur.__vModel__ + 'Options'] = res
           })
         }
         if (config.children && config.jnpfKey !== 'table') this.buildOptions(config.children, data)
@@ -279,7 +302,7 @@ export default {
             return item
           })
         }
-        if (config.children) this.buildRules(config.children, rules)
+        if (config.children && config.jnpfKey !== 'table') this.buildRules(config.children, rules)
       })
     },
     onLoad(formConfCopy) {
@@ -314,28 +337,60 @@ export default {
     },
     getFieldOptions(prop) {
       if (!prop) return []
-      return this.options[prop + 'Options'] || []
+      const isChildTable = prop.indexOf('.') > -1
+      if (isChildTable) {
+        const list = prop.split('.')
+        if (this.$refs[list[0]] && this.$refs[list[0]].$children[0]) {
+          let res = this.$refs[list[0]].$children[0].getTableFieldOptions(list[1])
+          return res
+        } else {
+          return []
+        }
+      } else {
+        return this.options[prop + 'Options'] || []
+      }
     },
     setFormData(prop, value) {
       if (!prop) return
-      this.comSet('defaultValue', prop, value)
+      const isChildTable = prop.indexOf('.') > -1
+      if (isChildTable) {
+        const list = prop.split('.')
+        if (this.$refs[list[0]] && this.$refs[list[0]].$children[0]) {
+          this.$refs[list[0]].$children[0].setTableFormData(list[1], value)
+        }
+      } else {
+        this.comSet('defaultValue', prop, value)
+        this[this.formConf.formModel][prop] = value
+      }
     },
     setShowOrHide(prop, value) {
       const newVal = !!value
-      this.comSet('noShow', prop, !newVal)
+      const isChildTable = prop.indexOf('.') > -1
+      if (!isChildTable) {
+        this.comSet('noShow', prop, !newVal)
+      }
     },
     setRequired(prop, value) {
       const newVal = !!value
-      this.comSet('required', prop, newVal)
-      this.buildRules(this.formConfCopy.fields, this[this.formConf.formRules])
+      const isChildTable = prop.indexOf('.') > -1
+      if (!isChildTable) {
+        this.comSet('required', prop, newVal)
+        this.buildRules(this.formConfCopy.fields, this[this.formConf.formRules])
+      }
     },
     setDisabled(prop, value) {
       const newVal = !!value
-      this.comSet('disabled', prop, newVal)
+      const isChildTable = prop.indexOf('.') > -1
+      if (!isChildTable) {
+        this.comSet('disabled', prop, newVal)
+      }
     },
     setFieldOptions(prop, value) {
       const newVal = Array.isArray(value) ? value : []
-      this.comSet('options', prop, newVal)
+      const isChildTable = prop.indexOf('.') > -1
+      if (!isChildTable) {
+        this.comSet('options', prop, newVal)
+      }
     },
     comSet(field, prop, value) {
       if (!prop) return

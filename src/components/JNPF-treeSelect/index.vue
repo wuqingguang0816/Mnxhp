@@ -52,7 +52,7 @@ export default {
     // 可清空选项
     clearable: { type: Boolean, default: false },
     // 能否搜索
-    filterable: { type: Boolean, default: false },
+    filterable: { type: Boolean, default: true },
     // 只能选择最后一层的数值
     lastLevel: { type: Boolean, default: false },
     // 只能选择最后一层的数值时，需要根据 lastLevelKey来判断是否最后一层

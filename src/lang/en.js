@@ -124,6 +124,7 @@ export default {
     profile: 'Profile',
     feedback: 'Feedback',
     about: 'About',
+    statement: 'Statement',
     lockScreen: 'Lock Screen',
     documentation: 'Documentation',
     logOut: 'Log Out',

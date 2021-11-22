@@ -69,7 +69,7 @@ import Preview from '../preview'
 import {
   inputComponents, selectComponents, systemComponents, layoutComponents, formConf
 } from '@/components/Generator/generator/config'
-import { noVModelList, noTableAllowList, webPeculiarList, flowPeculiarList } from '@/components/Generator/generator/comConfig'
+import { noVModelList, noTableAllowList, webPeculiarList } from '@/components/Generator/generator/comConfig'
 import {
   exportDefault, beautifierConf, isNumberStr, titleCase, deepClone
 } from '@/components/Generator/utils'
@@ -234,6 +234,20 @@ export default {
                 break
               }
             }
+            if (config.jnpfKey === 'popupSelect') {
+              if (!e.interfaceId) {
+                reject({ msg: '弹窗选择控件“远端数据”属性为必填项', target: 1 })
+                break
+              }
+              if (!e.propsValue) {
+                reject({ msg: '弹窗选择控件“储存字段”属性为必填项', target: 1 })
+                break
+              }
+              if (!e.relationField) {
+                reject({ msg: '弹窗选择控件“显示字段”属性为必填项', target: 1 })
+                break
+              }
+            }
             if (config.jnpfKey === 'relationFlow' && !e.flowId) {
               reject({ msg: '关联流程表单控件“关联流程”属性为必填项', target: 1 })
               break
@@ -315,6 +329,12 @@ export default {
       if (obj.to.className.indexOf('table') < 0) {
         this.$set(this.activeItem.__config__, 'isSubTable', false)
         if (this.$store.getters.hasTable) this.activeItem.__vModel__ = ''
+      } else {
+        this.$set(this.activeItem.__config__, 'isSubTable', true)
+        if (this.$store.getters.hasTable) {
+          this.$set(this.activeItem.__config__, 'relationTable', this.activeTableItem.__config__.tableName)
+          this.activeItem.__vModel__ = ''
+        }
       }
     },
     addComponent(item) {

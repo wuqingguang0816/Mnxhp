@@ -9,12 +9,12 @@
           </el-tooltip>
         </span>
       </div>
-      <el-scrollbar class="JNPF-common-el-tree-scrollbar">
-        <el-tree ref="treeBox" v-loading="treeLoading" :data="treeData"
-          :element-loading-text="$t('common.loadingText')" :props="defaultProps" default-expand-all
+      <el-scrollbar class="JNPF-common-el-tree-scrollbar" v-loading="treeLoading"
+        :element-loading-text="$t('common.loadingText')">
+        <el-tree ref="treeBox" :data="treeData" :props="defaultProps" default-expand-all
           highlight-current :expand-on-click-node="false" node-key="id"
           @node-click="handleNodeClick" class="JNPF-common-el-tree">
-          <span class="custom-tree-node" slot-scope="{ data, node }">
+          <span class="custom-tree-node" slot-scope="{ data, node }" :title="data.fullName">
             <i :class="data.icon" />
             <span class="text">{{node.label}}</span>
           </span>
@@ -59,8 +59,8 @@
               <span>{{ scope.row.gender ==1 ? '男': ( scope.row.gender == 2 ? '女' : '保密') }}</span>
             </template>
           </el-table-column>
-          <el-table-column prop="mobilePhone" label="手机" />
-          <el-table-column prop="department" label="组织" />
+          <el-table-column prop="mobilePhone" label="手机" width="120" />
+          <el-table-column prop="department" label="所属组织" />
           <el-table-column prop="creatorTime" label="创建时间" :formatter="jnpf.tableDateFormat"
             width="120" />
           <el-table-column prop="sortCode" label="排序" width="70" align="center" />

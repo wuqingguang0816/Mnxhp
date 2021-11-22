@@ -8,11 +8,11 @@
           </div>
           <el-tree :data="newData" default-expand-all :expand-on-click-node="false"
             :props="defaultProps" @node-click="handleNodeClick"></el-tree>
-          <!-- <div class="JNPF-common-title">
+          <div class="JNPF-common-title">
             <h2>系统字段</h2>
           </div>
-          <el-tree :data="systemData" default-expand-all :expand-on-click-node="false"
-            :props="defaultProps" @node-click="handleNodeClick"></el-tree> -->
+          <el-tree :data="newSysData" default-expand-all :expand-on-click-node="false"
+            :props="defaultProps" @node-click="handleNodeClick"></el-tree>
         </el-scrollbar>
       </div>
       <div class="system-view-content">
@@ -30,6 +30,7 @@ export default {
   components: { TsDesignerTinymce },
   props: {
     value: String,
+    type: Number,
     treeData: {
       type: Array,
       default: () => []
@@ -84,6 +85,13 @@ export default {
     },
     newData() {
       return this.treeData
+    },
+    newSysData() {
+      let data = this.systemData
+      if (this.type == 2) {
+        data = this.systemData.filter(o => o.field !== 'systemApprovalContent')
+      }
+      return data
     }
   },
   methods: {

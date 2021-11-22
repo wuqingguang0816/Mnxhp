@@ -55,150 +55,153 @@
         </el-table>
       </div>
     </div>
-    <el-scrollbar class="right-board">
+    <div class="right-board">
       <el-tabs v-model="currentTab" class="top-tabs">
         <el-tab-pane label="查询字段" name="search" />
         <el-tab-pane label="列表字段" name="field" />
         <el-tab-pane label="列表属性" name="column" />
       </el-tabs>
       <div class="field-box">
+
         <div class="searchList" v-show="currentTab==='search'">
-          <el-table :data="searchOptions" class="JNPF-common-table"
+          <el-table :data="searchOptions" class="JNPF-common-table" height="100%"
             @selection-change="searchSelectionChange" ref="searchTable">
             <el-table-column prop="__config__.label" label="查询条件" />
             <el-table-column type="selection" width="55" align="center" />
           </el-table>
         </div>
         <div class="columnList" v-show="currentTab==='field'">
-          <el-table :data="columnOptions" class="JNPF-common-table"
+          <el-table :data="columnOptions" class="JNPF-common-table" height="100%"
             @selection-change="columnSelectionChange" ref="columnTable">
             <el-table-column prop="label" label="列表字段" />
             <el-table-column type="selection" width="55" align="center" />
           </el-table>
         </div>
-        <div class="setting-box" v-show="currentTab==='column'">
-          <el-form :model="columnData" label-width="80px">
-            <el-divider>列表布局</el-divider>
-            <div class="typeList">
-              <div class="item" v-for="(item, index) in typeList" :key="index"
-                @click="columnData.type=item.value">
-                <div class="item-img" :class="{'checked':columnData.type==item.value}">
-                  <img :src="item.url" alt="">
-                  <div class="icon-checked" v-if="columnData.type==item.value">
-                    <i class="el-icon-check"></i>
+        <el-scrollbar class="right-scrollbar" v-show="currentTab==='column'">
+          <div class="setting-box">
+            <el-form :model="columnData" label-width="80px">
+              <!-- <el-divider>列表布局</el-divider> -->
+              <div class="typeList">
+                <div class="item" v-for="(item, index) in typeList" :key="index"
+                  @click="columnData.type=item.value">
+                  <div class="item-img" :class="{'checked':columnData.type==item.value}">
+                    <img :src="item.url" alt="">
+                    <div class="icon-checked" v-if="columnData.type==item.value">
+                      <i class="el-icon-check"></i>
+                    </div>
                   </div>
+                  <p class="item-name">{{item.name}}</p>
                 </div>
-                <p class="item-name">{{item.name}}</p>
               </div>
-            </div>
-            <template v-if="columnData.type==2">
-              <el-divider>左侧设置</el-divider>
-              <el-form-item label="左侧标题">
-                <el-input v-model="columnData.treeTitle" placeholder="树形标题"></el-input>
-              </el-form-item>
-              <el-form-item label="数据来源">
-                <el-select v-model="columnData.treeDataSource" placeholder="请选择数据来源"
-                  @change="dataTypeChange">
-                  <el-option label="数据字典" value="dictionary"></el-option>
-                  <el-option label="远端数据" value="api"></el-option>
-                  <el-option label="公司数据" value="organize"></el-option>
-                  <el-option label="部门数据" value="department"></el-option>
-                </el-select>
-              </el-form-item>
-              <template v-if="columnData.treeDataSource==='dictionary'">
-                <el-form-item label="数据字典">
-                  <DicSelect v-model="columnData.treeDictionary" placeholder="请选择数据字典" />
+              <template v-if="columnData.type==2">
+                <el-divider>左侧设置</el-divider>
+                <el-form-item label="左侧标题">
+                  <el-input v-model="columnData.treeTitle" placeholder="树形标题"></el-input>
+                </el-form-item>
+                <el-form-item label="数据来源">
+                  <el-select v-model="columnData.treeDataSource" placeholder="请选择数据来源"
+                    @change="dataTypeChange">
+                    <el-option label="数据字典" value="dictionary"></el-option>
+                    <el-option label="远端数据" value="api"></el-option>
+                    <el-option label="公司数据" value="organize"></el-option>
+                    <el-option label="部门数据" value="department"></el-option>
+                  </el-select>
+                </el-form-item>
+                <template v-if="columnData.treeDataSource==='dictionary'">
+                  <el-form-item label="数据字典">
+                    <DicSelect v-model="columnData.treeDictionary" placeholder="请选择数据字典" />
+                  </el-form-item>
+                </template>
+                <template v-if="columnData.treeDataSource==='api'">
+                  <el-form-item label="数据接口">
+                    <JNPF-TreeSelect :options="dataInterfaceSelector"
+                      v-model="columnData.treePropsUrl" placeholder="请选择数据接口" lastLevel
+                      lastLevelKey='categoryId' lastLevelValue='1' clearable />
+                  </el-form-item>
+                  <el-form-item label="主键字段">
+                    <el-input v-model="columnData.treePropsValue" placeholder="主键字段" />
+                  </el-form-item>
+                  <el-form-item label="显示字段">
+                    <el-input v-model="columnData.treePropsLabel" placeholder="显示字段" />
+                  </el-form-item>
+                  <el-form-item label="子级字段">
+                    <el-input v-model="columnData.treePropsChildren" placeholder="子级字段" />
+                  </el-form-item>
+                </template>
+                <el-form-item label="关联字段">
+                  <el-select v-model="columnData.treeRelation" placeholder="请选择关联字段">
+                    <el-option :label="item.__config__.label" :value="item.__vModel__"
+                      v-for="(item, index) in list" :key="index"></el-option>
+                  </el-select>
                 </el-form-item>
               </template>
-              <template v-if="columnData.treeDataSource==='api'">
-                <el-form-item label="数据接口">
-                  <JNPF-TreeSelect :options="dataInterfaceSelector"
-                    v-model="columnData.treePropsUrl" placeholder="请选择数据接口" lastLevel
-                    lastLevelKey='categoryId' lastLevelValue='1' clearable />
-                </el-form-item>
-                <el-form-item label="主键字段">
-                  <el-input v-model="columnData.treePropsValue" placeholder="主键字段" />
-                </el-form-item>
-                <el-form-item label="显示字段">
-                  <el-input v-model="columnData.treePropsLabel" placeholder="显示字段" />
-                </el-form-item>
-                <el-form-item label="子级字段">
-                  <el-input v-model="columnData.treePropsChildren" placeholder="子级字段" />
+              <template v-if="columnData.type==3">
+                <el-divider>分组设置</el-divider>
+                <el-form-item label="分组字段">
+                  <el-select v-model="columnData.groupField" placeholder="请选择分组字段">
+                    <el-option :label="item.__config__.label" :value="item.__vModel__"
+                      v-for="(item, i) in list" :key="i"></el-option>
+                  </el-select>
                 </el-form-item>
               </template>
-              <el-form-item label="关联字段">
-                <el-select v-model="columnData.treeRelation" placeholder="请选择关联字段">
-                  <el-option :label="item.__config__.label" :value="item.__vModel__"
-                    v-for="(item, index) in list" :key="index"></el-option>
-                </el-select>
-              </el-form-item>
-            </template>
-            <template v-if="columnData.type==3">
-              <el-divider>分组设置</el-divider>
-              <el-form-item label="分组字段">
-                <el-select v-model="columnData.groupField" placeholder="请选择分组字段">
+              <el-divider>排序设置</el-divider>
+              <el-form-item label="排序字段">
+                <el-select v-model="columnData.defaultSidx" placeholder="请选择排序字段">
                   <el-option :label="item.__config__.label" :value="item.__vModel__"
                     v-for="(item, i) in list" :key="i"></el-option>
                 </el-select>
               </el-form-item>
-            </template>
-            <el-divider>排序设置</el-divider>
-            <el-form-item label="排序字段">
-              <el-select v-model="columnData.defaultSidx" placeholder="请选择排序字段">
-                <el-option :label="item.__config__.label" :value="item.__vModel__"
-                  v-for="(item, i) in list" :key="i"></el-option>
-              </el-select>
-            </el-form-item>
-            <el-form-item label="排序类型">
-              <el-select v-model="columnData.sort" placeholder="请选择排序类型">
-                <el-option label="升序" value="asc"></el-option>
-                <el-option label="降序" value="desc"></el-option>
-              </el-select>
-            </el-form-item>
-            <template v-if="columnData.type !==3">
-              <el-divider>分页设置</el-divider>
-              <el-form-item label="列表分页">
-                <el-switch v-model="columnData.hasPage"></el-switch>
+              <el-form-item label="排序类型">
+                <el-select v-model="columnData.sort" placeholder="请选择排序类型">
+                  <el-option label="升序" value="asc"></el-option>
+                  <el-option label="降序" value="desc"></el-option>
+                </el-select>
               </el-form-item>
-              <el-form-item label="分页条数">
-                <el-radio-group v-model="columnData.pageSize">
-                  <el-radio-button :label="20">20条</el-radio-button>
-                  <el-radio-button :label="50">50条</el-radio-button>
-                  <el-radio-button :label="100">100条</el-radio-button>
-                  <el-radio-button :label="500">500条</el-radio-button>
-                </el-radio-group>
+              <template v-if="columnData.type !==3">
+                <el-divider>分页设置</el-divider>
+                <el-form-item label="列表分页">
+                  <el-switch v-model="columnData.hasPage"></el-switch>
+                </el-form-item>
+                <el-form-item label="分页条数">
+                  <el-radio-group v-model="columnData.pageSize">
+                    <el-radio-button :label="20">20条</el-radio-button>
+                    <el-radio-button :label="50">50条</el-radio-button>
+                    <el-radio-button :label="100">100条</el-radio-button>
+                    <el-radio-button :label="500">500条</el-radio-button>
+                  </el-radio-group>
+                </el-form-item>
+              </template>
+              <el-divider>按钮配置</el-divider>
+              <el-checkbox-group v-model="btnsList" class="btnsList">
+                <el-checkbox :label="item.value" v-for="item in btnsOption" :key="item.value">
+                  <span class="btn-label">{{ item.value | btnText }}</span>
+                  <el-input v-model="item.label" />
+                </el-checkbox>
+              </el-checkbox-group>
+              <el-checkbox-group v-model="columnBtnsList" class="btnsList columnBtnList">
+                <el-checkbox :label="item.value" v-for="item in columnBtnsOption" :key="item.value">
+                  <span class="btn-label">{{ item.value | btnText }}</span>
+                  <el-input v-model="item.label" />
+                </el-checkbox>
+              </el-checkbox-group>
+              <el-divider>权限设置</el-divider>
+              <el-form-item label="按钮权限">
+                <el-switch v-model="columnData.useBtnPermission"></el-switch>
               </el-form-item>
-            </template>
-            <el-divider>按钮配置</el-divider>
-            <el-checkbox-group v-model="btnsList" class="btnsList">
-              <el-checkbox :label="item.value" v-for="item in btnsOption" :key="item.value">
-                <span class="btn-label">{{ item.value | btnText }}</span>
-                <el-input v-model="item.label" />
-              </el-checkbox>
-            </el-checkbox-group>
-            <el-checkbox-group v-model="columnBtnsList" class="btnsList columnBtnList">
-              <el-checkbox :label="item.value" v-for="item in columnBtnsOption" :key="item.value">
-                <span class="btn-label">{{ item.value | btnText }}</span>
-                <el-input v-model="item.label" />
-              </el-checkbox>
-            </el-checkbox-group>
-            <el-divider>权限设置</el-divider>
-            <el-form-item label="按钮权限">
-              <el-switch v-model="columnData.useBtnPermission"></el-switch>
-            </el-form-item>
-            <el-form-item label="列表权限">
-              <el-switch v-model="columnData.useColumnPermission"></el-switch>
-            </el-form-item>
-            <el-form-item label="表单权限">
-              <el-switch v-model="columnData.useFormPermission"></el-switch>
-            </el-form-item>
-            <el-form-item label="数据权限">
-              <el-switch v-model="columnData.useDataPermission"></el-switch>
-            </el-form-item>
-          </el-form>
-        </div>
+              <el-form-item label="列表权限">
+                <el-switch v-model="columnData.useColumnPermission"></el-switch>
+              </el-form-item>
+              <el-form-item label="表单权限">
+                <el-switch v-model="columnData.useFormPermission"></el-switch>
+              </el-form-item>
+              <el-form-item label="数据权限">
+                <el-switch v-model="columnData.useDataPermission"></el-switch>
+              </el-form-item>
+            </el-form>
+          </div>
+        </el-scrollbar>
       </div>
-    </el-scrollbar>
+    </div>
   </div>
 </template>
 <script>
@@ -372,6 +375,8 @@ export default {
     if (typeof this.conf === 'object' && this.conf !== null) {
       this.columnData = Object.assign({}, defaultColumnData, this.conf)
     }
+    if (!this.columnOptions.length) this.columnData.columnList = []
+    if (!this.searchOptions.length) this.columnData.searchList = []
     this.setBtnValue(this.columnData.btnsList, this.btnsOption)
     this.setBtnValue(this.columnData.columnBtnsList, this.columnBtnsOption)
     this.btnsList = this.columnData.btnsList.map(o => o.value)

@@ -9,11 +9,16 @@ export const formConf = {
   gutter: 15,
   disabled: false,
   span: 24,
-  formBtns: true,
+  formBtns: false,
   hasCancelBtn: true,
   cancelButtonText: '取 消',
   hasConfirmBtn: true,
   confirmButtonText: '确 定',
+  funcs: {
+    onLoad: '({ formData, setFormData, setShowOrHide, setRequired, setDisabled, request, getFieldOptions, setFieldOptions }) => {\n    // 在此编写代码\n    \n}',
+    beforeSubmit: '({ formData, setFormData, setShowOrHide, setRequired, setDisabled, request, getFieldOptions, setFieldOptions }) => {\n    // 在此编写代码\n\n    // 继续执行返回true\n    return true\n}',
+    afterSubmit: '({ formData, setFormData, setShowOrHide, setRequired, setDisabled, request, getFieldOptions, setFieldOptions }) => {\n    // 在此编写代码\n    \n}',
+  },
   idGlobal: 100
 }
 
@@ -31,8 +36,13 @@ export const inputComponents = [{
       layout: 'colFormItem',
       span: 24,
       dragDisabled: false,
+      tableName: '',
       noShow: false,
       regList: []
+    },
+    on: {
+      change: '({ data, formData, setFormData, setShowOrHide, setRequired, setDisabled, request, getFieldOptions, setFieldOptions }) => {\n    // 在此编写代码\n    \n}',
+      blur: '({ data, formData, setFormData, setShowOrHide, setRequired, setDisabled, request, getFieldOptions, setFieldOptions }) => {\n    // 在此编写代码\n    \n}',
     },
     placeholder: '请输入',
     maxlength: null,
@@ -53,6 +63,7 @@ export const inputComponents = [{
       layout: 'colFormItem',
       span: 24,
       dragDisabled: false,
+      tableName: '',
     },
     placeholder: '请输入',
     maxlength: null,
@@ -70,7 +81,12 @@ export const inputComponents = [{
       required: false,
       layout: 'colFormItem',
       span: 24,
+      tableName: '',
       dragDisabled: false
+    },
+    on: {
+      change: '({ data, formData, setFormData, setShowOrHide, setRequired, setDisabled, request, getFieldOptions, setFieldOptions }) => {\n    // 在此编写代码\n    \n}',
+      blur: '({ data, formData, setFormData, setShowOrHide, setRequired, setDisabled, request, getFieldOptions, setFieldOptions }) => {\n    // 在此编写代码\n    \n}',
     },
     min: undefined,
     max: undefined,
@@ -89,7 +105,11 @@ export const inputComponents = [{
       required: false,
       layout: 'colFormItem',
       span: 24,
+      tableName: '',
       dragDisabled: false
+    },
+    on: {
+      change: '({ data, formData, setFormData, setShowOrHide, setRequired, setDisabled, request, getFieldOptions, setFieldOptions }) => {\n    // 在此编写代码\n    \n}',
     },
     disabled: false
   },
@@ -105,6 +125,7 @@ export const inputComponents = [{
       required: false,
       layout: 'colFormItem',
       span: 24,
+      tableName: '',
       dragDisabled: false,
       optionType: 'default',
       border: false,
@@ -124,6 +145,9 @@ export const inputComponents = [{
         fullName: '选项二',
         id: "2"
       }]
+    },
+    on: {
+      change: '({ data, formData, setFormData, setShowOrHide, setRequired, setDisabled, request, getFieldOptions, setFieldOptions }) => {\n    // 在此编写代码\n    \n}',
     },
     disabled: false
   },
@@ -139,6 +163,7 @@ export const inputComponents = [{
       required: false,
       layout: 'colFormItem',
       span: 24,
+      tableName: '',
       dragDisabled: false,
       optionType: 'default',
       border: false,
@@ -159,6 +184,9 @@ export const inputComponents = [{
         id: "2"
       }]
     },
+    on: {
+      change: '({ data, formData, setFormData, setShowOrHide, setRequired, setDisabled, request, getFieldOptions, setFieldOptions }) => {\n    // 在此编写代码\n    \n}',
+    },
     disabled: false
   },
   {
@@ -173,6 +201,7 @@ export const inputComponents = [{
       required: false,
       layout: 'colFormItem',
       span: 24,
+      tableName: '',
       dragDisabled: false,
       dataType: 'static',
       dictionaryType: '',
@@ -190,6 +219,10 @@ export const inputComponents = [{
         fullName: '选项二',
         id: "2"
       }]
+    },
+    on: {
+      change: '({ data, formData, setFormData, setShowOrHide, setRequired, setDisabled, request, getFieldOptions, setFieldOptions }) => {\n    // 在此编写代码\n    \n}',
+      blur: '({ data, formData, setFormData, setShowOrHide, setRequired, setDisabled, request, getFieldOptions, setFieldOptions }) => {\n    // 在此编写代码\n    \n}',
     },
     placeholder: '请选择',
     disabled: false
@@ -206,6 +239,7 @@ export const inputComponents = [{
       required: false,
       layout: 'colFormItem',
       span: 24,
+      tableName: '',
       dragDisabled: false,
       dataType: 'static',
       dictionaryType: '',
@@ -228,6 +262,10 @@ export const inputComponents = [{
         children: 'children'
       }
     },
+    on: {
+      change: '({ data, formData, setFormData, setShowOrHide, setRequired, setDisabled, request, getFieldOptions, setFieldOptions }) => {\n    // 在此编写代码\n    \n}',
+      blur: '({ data, formData, setFormData, setShowOrHide, setRequired, setDisabled, request, getFieldOptions, setFieldOptions }) => {\n    // 在此编写代码\n    \n}',
+    },
     disabled: false
   },
   {
@@ -242,7 +280,12 @@ export const inputComponents = [{
       required: false,
       layout: 'colFormItem',
       span: 24,
+      tableName: '',
       dragDisabled: false
+    },
+    on: {
+      change: '({ data, formData, setFormData, setShowOrHide, setRequired, setDisabled, request, getFieldOptions, setFieldOptions }) => {\n    // 在此编写代码\n    \n}',
+      blur: '({ data, formData, setFormData, setShowOrHide, setRequired, setDisabled, request, getFieldOptions, setFieldOptions }) => {\n    // 在此编写代码\n    \n}',
     },
     type: 'date',
     placeholder: '请选择',
@@ -260,7 +303,12 @@ export const inputComponents = [{
       required: false,
       layout: 'colFormItem',
       span: 24,
+      tableName: '',
       dragDisabled: false
+    },
+    on: {
+      change: '({ data, formData, setFormData, setShowOrHide, setRequired, setDisabled, request, getFieldOptions, setFieldOptions }) => {\n    // 在此编写代码\n    \n}',
+      blur: '({ data, formData, setFormData, setShowOrHide, setRequired, setDisabled, request, getFieldOptions, setFieldOptions }) => {\n    // 在此编写代码\n    \n}',
     },
     placeholder: '请选择',
     disabled: false
@@ -277,6 +325,7 @@ export const inputComponents = [{
       required: false,
       layout: 'colFormItem',
       span: 24,
+      tableName: '',
       dragDisabled: false
     },
     disabled: false,
@@ -298,11 +347,14 @@ export const inputComponents = [{
       required: false,
       layout: 'colFormItem',
       span: 24,
+      tableName: '',
       dragDisabled: false
+    },
+    on: {
+      change: '({ data, formData, setFormData, setShowOrHide, setRequired, setDisabled, request, getFieldOptions, setFieldOptions }) => {\n    // 在此编写代码\n    \n}',
     },
     max: 5,
     allowHalf: false,
-    readonly: false,
     disabled: false
   },
   {
@@ -317,7 +369,11 @@ export const inputComponents = [{
       required: false,
       layout: 'colFormItem',
       span: 24,
+      tableName: '',
       dragDisabled: false
+    },
+    on: {
+      change: '({ data, formData, setFormData, setShowOrHide, setRequired, setDisabled, request, getFieldOptions, setFieldOptions }) => {\n    // 在此编写代码\n    \n}',
     },
     disabled: false,
     min: 0,
@@ -360,6 +416,7 @@ export const inputComponents = [{
       required: false,
       layout: 'colFormItem',
       span: 24,
+      tableName: '',
       dragDisabled: false
     },
     placeholder: '请输入'
@@ -379,7 +436,11 @@ export const selectComponents = [{
       required: false,
       layout: 'colFormItem',
       span: 24,
+      tableName: '',
       dragDisabled: false
+    },
+    on: {
+      change: '({ data, formData, setFormData, setShowOrHide, setRequired, setDisabled, request, getFieldOptions, setFieldOptions }) => {\n    // 在此编写代码\n    \n}',
     },
     placeholder: '请选择',
     disabled: false
@@ -396,7 +457,11 @@ export const selectComponents = [{
       required: false,
       layout: 'colFormItem',
       span: 24,
+      tableName: '',
       dragDisabled: false
+    },
+    on: {
+      change: '({ data, formData, setFormData, setShowOrHide, setRequired, setDisabled, request, getFieldOptions, setFieldOptions }) => {\n    // 在此编写代码\n    \n}',
     },
     placeholder: '请选择',
     disabled: false
@@ -413,7 +478,11 @@ export const selectComponents = [{
       required: false,
       layout: 'colFormItem',
       span: 24,
+      tableName: '',
       dragDisabled: false
+    },
+    on: {
+      change: '({ data, formData, setFormData, setShowOrHide, setRequired, setDisabled, request, getFieldOptions, setFieldOptions }) => {\n    // 在此编写代码\n    \n}',
     },
     placeholder: '请选择',
     multiple: false,
@@ -431,7 +500,11 @@ export const selectComponents = [{
       required: false,
       layout: 'colFormItem',
       span: 24,
+      tableName: '',
       dragDisabled: false
+    },
+    on: {
+      change: '({ data, formData, setFormData, setShowOrHide, setRequired, setDisabled, request, getFieldOptions, setFieldOptions }) => {\n    // 在此编写代码\n    \n}',
     },
     placeholder: '请选择',
     multiple: false,
@@ -449,10 +522,14 @@ export const selectComponents = [{
       required: false,
       layout: 'colFormItem',
       span: 24,
+      tableName: '',
       dragDisabled: false,
       dataType: 'static',
       dictionaryType: '',
       propsUrl: ''
+    },
+    on: {
+      change: '({ data, formData, setFormData, setShowOrHide, setRequired, setDisabled, request, getFieldOptions, setFieldOptions }) => {\n    // 在此编写代码\n    \n}',
     },
     placeholder: '请选择',
     props: {
@@ -484,6 +561,7 @@ export const selectComponents = [{
       defaultValue: '',
       layout: 'colFormItem',
       span: 24,
+      tableName: '',
       dragDisabled: false,
       noShow: false,
       rule: ''
@@ -522,11 +600,69 @@ export const selectComponents = [{
       required: false,
       layout: 'colFormItem',
       span: 24,
+      tableName: '',
       dragDisabled: false
+    },
+    on: {
+      change: '({ data, formData, setFormData, setShowOrHide, setRequired, setDisabled, request, getFieldOptions, setFieldOptions }) => {\n    // 在此编写代码\n    \n}',
     },
     placeholder: '请选择',
     disabled: false,
     level: 2
+  },
+  {
+    __config__: {
+      jnpfKey: 'relationForm',
+      label: '关联表单',
+      labelWidth: undefined,
+      showLabel: true,
+      tag: 'relationForm',
+      tagIcon: 'icon-ym icon-ym-generator-menu',
+      defaultValue: '',
+      required: false,
+      layout: 'colFormItem',
+      span: 24,
+      dragDisabled: false,
+      tableName: '',
+    },
+    on: {
+      change: '({ data, formData, setFormData, setShowOrHide, setRequired, setDisabled, request, getFieldOptions, setFieldOptions }) => {\n    // 在此编写代码\n    \n}',
+    },
+    placeholder: '请选择',
+    modelId: '',
+    relationField: '',
+    hasPage: false,
+    pageSize: 20,
+    columnOptions: [],
+    filterable: false,
+    disabled: false
+  },
+  {
+    __config__: {
+      jnpfKey: 'popupSelect',
+      label: '弹窗选择',
+      labelWidth: undefined,
+      showLabel: true,
+      required: false,
+      tag: 'popupSelect',
+      tagIcon: 'icon-ym icon-ym-generator-checkbox',
+      defaultValue: '',
+      layout: 'colFormItem',
+      span: 24,
+      dragDisabled: false,
+      tableName: ''
+    },
+    on: {
+      change: '({ data, formData, setFormData, setShowOrHide, setRequired, setDisabled, request, getFieldOptions, setFieldOptions }) => {\n    // 在此编写代码\n    \n}',
+    },
+    placeholder: '请选择',
+    interfaceId: '',
+    hasPage: false,
+    pageSize: 20,
+    columnOptions: [],
+    propsValue: 'id',
+    relationField: 'fullName',
+    disabled: false,
   }
 ]
 
@@ -542,6 +678,7 @@ export const systemComponents = [{
       defaultValue: '',
       layout: 'colFormItem',
       span: 24,
+      tableName: '',
       dragDisabled: false,
       noShow: false
     }
@@ -557,6 +694,7 @@ export const systemComponents = [{
       defaultValue: '',
       layout: 'colFormItem',
       span: 24,
+      tableName: '',
       dragDisabled: false,
       noShow: false
     }
@@ -572,6 +710,7 @@ export const systemComponents = [{
       defaultValue: '',
       layout: 'colFormItem',
       span: 24,
+      tableName: '',
       dragDisabled: false,
       noShow: false
     }
@@ -587,6 +726,7 @@ export const systemComponents = [{
       defaultValue: '',
       layout: 'colFormItem',
       span: 24,
+      tableName: '',
       dragDisabled: false,
       noShow: false
     }
@@ -602,6 +742,7 @@ export const systemComponents = [{
       defaultValue: '',
       layout: 'colFormItem',
       span: 24,
+      tableName: '',
       dragDisabled: false,
       noShow: false
     }
@@ -617,6 +758,7 @@ export const systemComponents = [{
       defaultValue: '',
       layout: 'colFormItem',
       span: 24,
+      tableName: '',
       dragDisabled: false,
       noShow: false
     }
@@ -654,5 +796,64 @@ export const layoutComponents = [{
     },
     header: '卡片容器',
     shadow: 'always'
+  },
+  {
+    __config__: {
+      jnpfKey: 'tab',
+      label: '标签面板',
+      showLabel: false,
+      tag: 'el-tab',
+      tagIcon: 'icon-ym icon-ym-generator-label',
+      layout: 'rowFormItem',
+      span: '24',
+      dragDisabled: false,
+      children: [{
+        title: 'Tab 1',
+        __config__: {
+          children: []
+        }
+      }, {
+        title: 'Tab 2',
+        __config__: {
+          children: []
+        }
+      }],
+      active: 0
+    },
+    on: {
+      "tab-click": '({ data, formData, setFormData, setShowOrHide, setRequired, setDisabled, request, getFieldOptions, setFieldOptions }) => {\n    // 在此编写代码\n    \n}',
+    },
+    type: '',
+    "tab-position": "top"
+  },
+  {
+    __config__: {
+      jnpfKey: 'collapse',
+      label: '折叠面板',
+      showLabel: false,
+      tag: 'el-collapse',
+      tagIcon: 'icon-ym icon-ym-generator-fold',
+      layout: 'rowFormItem',
+      span: '24',
+      dragDisabled: false,
+      children: [{
+        title: '面板1',
+        name: '1',
+        __config__: {
+          children: []
+        }
+      }, {
+        title: '面板2',
+        name: '2',
+        __config__: {
+          children: []
+        }
+      }],
+      active: ['1']
+    },
+    on: {
+      change: '({ data, formData, setFormData, setShowOrHide, setRequired, setDisabled, request, getFieldOptions, setFieldOptions }) => {\n    // 在此编写代码\n    \n}',
+    },
+    accordion: false
   }
 ]

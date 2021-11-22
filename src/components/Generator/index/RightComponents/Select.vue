@@ -29,7 +29,7 @@
         </el-option>
       </el-select>
     </el-form-item>
-    <el-divider>选项</el-divider>
+    <el-divider>数据选项</el-divider>
     <el-form-item label="" label-width="40px">
       <el-radio-group v-model="activeData.__config__.dataType" size="small"
         style="text-align:center" @change="dataTypeChange">
@@ -93,7 +93,6 @@
     <el-form-item label="是否禁用">
       <el-switch v-model="activeData.disabled" />
     </el-form-item>
-    <el-divider>校验</el-divider>
     <el-form-item label="是否必填">
       <el-switch v-model="activeData.__config__.required" />
     </el-form-item>

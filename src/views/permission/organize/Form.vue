@@ -84,7 +84,7 @@
               </el-form-item>
             </el-col>
             <el-col :span="24">
-              <el-form-item label="公司备注" prop="description">
+              <el-form-item label="说明" prop="description">
                 <el-input v-model="dataForm.description" type="textarea" :rows="6" />
               </el-form-item>
             </el-col>

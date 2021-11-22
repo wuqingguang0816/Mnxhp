@@ -5,8 +5,17 @@
         <el-form @submit.native.prevent>
           <el-col :span="6">
             <el-form-item :label="$t('common.keyWord')">
-              <el-input v-model="params.keyword" :placeholder="$t('common.enterKeyword')"
-                clearable />
+              <el-input v-model="keyword" :placeholder="$t('common.enterKeyword')" clearable
+                @keyup.enter.native="search()" />
+            </el-form-item>
+          </el-col>
+          <el-col :span="6">
+            <el-form-item label="角色类型">
+              <el-select v-model="category" placeholder="请选择角色类型" clearable>
+                <el-option v-for="item in categoryList" :key="item.enCode" :label="item.fullName"
+                  :value="item.enCode">
+                </el-option>
+              </el-select>
             </el-form-item>
           </el-col>
           <el-col :span="6">
@@ -25,37 +34,27 @@
           <div class="JNPF-common-head-right">
             <el-tooltip effect="dark" :content="$t('common.refresh')" placement="top">
               <el-link icon="icon-ym icon-ym-Refresh JNPF-common-head-icon" :underline="false"
-                @click="reset()" />
+                @click="initData()" />
             </el-tooltip>
             <screenfull />
           </div>
         </div>
-        <JNPF-table v-loading="listLoading" :data="tableList" row-key="id" default-expand-all
-          :tree-props="{children: 'children', hasChildren: ''}">
-          <el-table-column prop="fullName" label="名称">
-            <template slot-scope="scope">
-              <span v-if="scope.row.top"
-                style="font-weight:bold;">{{scope.row.fullName}}【{{scope.row.num}}】</span>
-              <span v-else>{{scope.row.fullName}}</span>
-            </template>
-          </el-table-column>
-          <el-table-column prop="enCode" label="编码">
-            <template slot-scope="scope">
-              <span v-if="!scope.row.top">{{ scope.row.enCode }}</span>
-            </template>
-          </el-table-column>
-          <el-table-column prop="description" label="描述" />
+        <JNPF-table v-loading="listLoading" :data="list">
+          <el-table-column prop="fullName" label="名称" />
+          <el-table-column prop="enCode" label="编码" />
+          <el-table-column prop="type" label="类型" width="150" />
+          <el-table-column prop="description" label="说明" />
           <el-table-column prop="creatorTime" label="创建时间" :formatter="jnpf.tableDateFormat"
             width="120" />
           <el-table-column prop="sortCode" label="排序" width="70" align="center" />
           <el-table-column label="状态" width="70" align="center">
-            <template slot-scope="scope" v-if="!scope.row.top">
+            <template slot-scope="scope">
               <el-tag :type="scope.row.enabledMark == 1 ? 'success' : 'danger'" disable-transitions>
                 {{scope.row.enabledMark==1?'正常':'停用'}}</el-tag>
             </template>
           </el-table-column>
           <el-table-column label="操作" width="150">
-            <template slot-scope="scope" v-if="!scope.row.top">
+            <template slot-scope="scope">
               <tableOpts @edit="handleAddEdit(scope.row.id)" @del="handleDel(scope.row.id)">
                 <el-dropdown hide-on-click>
                   <span class="el-dropdown-link">
@@ -78,6 +77,8 @@
             </template>
           </el-table-column>
         </JNPF-table>
+        <pagination :total="total" :page.sync="listQuery.currentPage"
+          :limit.sync="listQuery.pageSize" @pagination="initData" />
       </div>
       <Form v-if="formVisible" ref="Form" @refreshDataList="initData" />
       <AuthorizeForm v-if="authorizeFormVisible" ref="AuthorizeForm" @close="removeAuthorizeForm" />
@@ -91,6 +92,7 @@
 import {
   getRoleList,
   delRole,
+  getRoleTypeSelector,
   updateRoleState
 } from '@/api/permission/role'
 import Form from './Form'
@@ -106,10 +108,17 @@ export default {
   name: 'permission-role',
   data() {
     return {
-      params: {
-        keyword: '',
+      list: [],
+      categoryList: [],
+      keyword: '',
+      category: '',
+      listQuery: {
+        currentPage: 1,
+        pageSize: 20,
+        sort: 'desc',
+        sidx: ''
       },
-      tableList: [],
+      total: 0,
       listLoading: true,
       formVisible: false,
       authorizeFormVisible: false,
@@ -117,17 +126,42 @@ export default {
     }
   },
   created() {
+    this.getDictionaryData()
     this.initData()
   },
   methods: {
+    reset() {
+      this.keyword = ''
+      this.category = ''
+      this.search()
+    },
+    search() {
+      this.listQuery = {
+        currentPage: 1,
+        pageSize: 20,
+        sort: 'desc',
+        sidx: ''
+      }
+      this.initData()
+    },
     initData() {
       this.listLoading = true
-      let query = { keyword: this.params.keyword }
+      let query = {
+        ...this.listQuery,
+        keyword: this.keyword,
+        category: this.category
+      }
       getRoleList(query).then(res => {
-        this.tableList = res.data.list.map(o => ({ top: true, ...o }))
+        this.list = res.data.list
+        this.total = res.data.pagination.total
         this.listLoading = false
       }).catch(() => {
         this.listLoading = false
+      })
+    },
+    getDictionaryData() {
+      getRoleTypeSelector().then(res => {
+        this.categoryList = res.data.list
       })
     },
     handleAddEdit(id) {
@@ -139,23 +173,14 @@ export default {
     removeAuthorizeForm(isRefresh) {
       this.authorizeFormVisible = false
       if (isRefresh) {
-        this.keyword = ''
         this.initData()
       }
     },
     removeUserRelationList(isRefresh) {
       this.userRelationListVisible = false
       if (isRefresh) {
-        this.keyword = ''
         this.initData()
       }
-    },
-    search() {
-      this.initData()
-    },
-    reset() {
-      this.params.keyword = ''
-      this.initData()
     },
     handleUpdateState(row) {
       const txt = row.enabledMark ? '禁用' : '开启'

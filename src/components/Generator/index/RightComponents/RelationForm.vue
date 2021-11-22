@@ -16,7 +16,7 @@
     </el-form-item>
     <el-form-item label="关联功能">
       <JNPF-TreeSelect :options="treeData" v-model="activeData.modelId" placeholder="请选择关联功能"
-        lastLevel clearable />
+        lastLevel clearable @change="onModeIdChange" />
     </el-form-item>
     <el-form-item label="显示字段">
       <el-select v-model="activeData.relationField" placeholder="请选择显示字段"
@@ -48,6 +48,18 @@
         添加字段
       </el-button>
     </div>
+    <el-divider>分页设置</el-divider>
+    <el-form-item label="列表分页">
+      <el-switch v-model="activeData.hasPage"></el-switch>
+    </el-form-item>
+    <el-form-item label="分页条数" label-width="80px">
+      <el-radio-group v-model="activeData.pageSize">
+        <el-radio-button :label="20">20条</el-radio-button>
+        <el-radio-button :label="50">50条</el-radio-button>
+        <el-radio-button :label="100">100条</el-radio-button>
+        <el-radio-button :label="500">500条</el-radio-button>
+      </el-radio-group>
+    </el-form-item>
     <el-divider />
     <el-form-item label="能否清空">
       <el-switch v-model="activeData.clearable" />
@@ -55,7 +67,6 @@
     <el-form-item label="是否禁用">
       <el-switch v-model="activeData.disabled" />
     </el-form-item>
-    <el-divider>校验</el-divider>
     <el-form-item label="是否必填">
       <el-switch v-model="activeData.__config__.required" />
     </el-form-item>
@@ -73,17 +84,6 @@ export default {
     return {
       treeData: [],
       fieldOptions: []
-    }
-  },
-  watch: {
-    'activeData.modelId': function (val) {
-      this.activeData.relationField = ''
-      this.$emit('relationChange', this.activeData.__vModel__)
-      if (!val) {
-        this.fieldOptions = []
-        return
-      }
-      this.getFieldOptions()
     }
   },
   created() {
@@ -105,6 +105,15 @@ export default {
     visibleChange(val) {
       if (!val) return
       if (!this.activeData.modelId) this.$message.warning('请先选择关联功能')
+    },
+    onModeIdChange(val) {
+      this.activeData.relationField = ''
+      this.$emit('relationChange', this.activeData.__vModel__)
+      if (!val) {
+        this.fieldOptions = []
+        return
+      }
+      this.getFieldOptions()
     },
     onChange(val, item) {
       const list = this.fieldOptions.filter(o => o.vmodel === val) || []

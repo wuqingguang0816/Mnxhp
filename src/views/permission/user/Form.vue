@@ -40,9 +40,9 @@
               </el-form-item>
             </el-col>
             <el-col :sm="12" :xs="24">
-              <el-form-item label="组织" prop="organizeId">
+              <el-form-item label="所属组织" prop="organizeId">
                 <JNPF-TreeSelect v-model="dataForm.organizeId" :options="departmentTreeData"
-                  placeholder="选择组织" clearable />
+                  placeholder="选择所属组织" clearable />
               </el-form-item>
             </el-col>
             <el-col :sm="12" :xs="24">
@@ -82,7 +82,7 @@
               </el-form-item>
             </el-col>
             <el-col :span="24">
-              <el-form-item label="备注" prop="description">
+              <el-form-item label="说明" prop="description">
                 <el-input v-model="dataForm.description" type="textarea" :rows="6" />
               </el-form-item>
             </el-col>
@@ -253,7 +253,7 @@ export default {
           { required: true, message: '请选择性别', trigger: 'change' }
         ],
         organizeId: [
-          { required: true, message: '请选择组织', trigger: 'change' }
+          { required: true, message: '请选择所属组织', trigger: 'change' }
         ]
       }
     }
