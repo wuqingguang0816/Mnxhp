@@ -34,7 +34,7 @@
           :tree-props="{children: 'children', hasChildren: ''}">
           <el-table-column prop="fullName" label="名称" />
           <el-table-column prop="enCode" label="编码" />
-          <el-table-column prop="description" label="备注" />
+          <el-table-column prop="description" label="说明" />
           <el-table-column prop="creatorTime" :formatter="jnpf.tableDateFormat" label="创建时间"
             width="120" />
           <el-table-column prop="sortCode" label="排序" width="70" align="center" />

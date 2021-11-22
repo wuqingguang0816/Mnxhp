@@ -4,10 +4,12 @@
       <div class="JNPF-common-title">
         <h2>接口分类</h2>
       </div>
-      <el-tree ref="treeBox" v-loading="treeLoading"
-        :element-loading-text="$t('common.loadingText')" :data="treeData" :props="defaultProps"
-        default-expand-all highlight-current :expand-on-click-node="false" node-key="id"
-        @node-click="handleNodeClick" class="JNPF-common-el-tree" />
+      <el-scrollbar class="JNPF-common-el-tree-scrollbar" v-loading="treeLoading"
+        :element-loading-text="$t('common.loadingText')">
+        <el-tree ref="treeBox" :data="treeData" :props="defaultProps" default-expand-all
+          highlight-current :expand-on-click-node="false" node-key="id"
+          @node-click="handleNodeClick" class="JNPF-common-el-tree" />
+      </el-scrollbar>
     </div>
     <div class="JNPF-common-layout-center">
       <el-row class="JNPF-common-search-box" :gutter="16">

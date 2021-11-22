@@ -73,6 +73,14 @@ export function FlowEngineListAll() {
     method: 'get'
   })
 }
+// 列表ListAll
+export function FlowEnginePageList(data) {
+  return request({
+    url: `/api/workflow/Engine/FlowEngine/PageListAll`,
+    method: 'get',
+    data
+  })
+}
 // 流程引擎下拉框
 export function FlowEngineSelector(type) {
   return request({
