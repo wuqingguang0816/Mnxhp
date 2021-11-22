@@ -46,7 +46,7 @@
           </div>
         </div>
         <JNPF-table v-loading="listLoading" :data="list">
-          <el-table-column prop="fullName" label="报表名称" min-width="200" />
+          <el-table-column prop="fullName" label="名称" min-width="200" />
           <el-table-column prop="enCode" label="编码" width="200" />
           <el-table-column prop="categoryId" label="分类" width="150">
             <template slot-scope="scope">

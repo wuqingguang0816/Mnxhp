@@ -15,7 +15,7 @@
         <el-input v-model="dataForm.enCode" placeholder="输入编码" />
       </el-form-item>
       <el-form-item label="部门主管" prop="managerId">
-        <user-select v-model="dataForm.managerId" placeholder="选择所属部门主管" />
+        <user-select v-model="dataForm.managerId" placeholder="选择部门主管" />
       </el-form-item>
       <el-form-item label="排序" prop="sortCode">
         <el-input-number :min="0" :max="9999" v-model="dataForm.sortCode"

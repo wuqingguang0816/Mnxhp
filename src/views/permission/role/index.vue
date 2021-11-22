@@ -10,8 +10,8 @@
             </el-form-item>
           </el-col>
           <el-col :span="6">
-            <el-form-item label="角色分类">
-              <el-select v-model="category" placeholder="请选择角色分类" clearable>
+            <el-form-item label="角色类型">
+              <el-select v-model="category" placeholder="请选择角色类型" clearable>
                 <el-option v-for="item in categoryList" :key="item.enCode" :label="item.fullName"
                   :value="item.enCode">
                 </el-option>
@@ -42,7 +42,7 @@
         <JNPF-table v-loading="listLoading" :data="list">
           <el-table-column prop="fullName" label="名称" />
           <el-table-column prop="enCode" label="编码" />
-          <el-table-column prop="type" label="分类" width="150" />
+          <el-table-column prop="type" label="类型" width="150" />
           <el-table-column prop="description" label="说明" />
           <el-table-column prop="creatorTime" label="创建时间" :formatter="jnpf.tableDateFormat"
             width="120" />
