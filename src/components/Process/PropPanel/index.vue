@@ -1042,7 +1042,7 @@ export default {
       }
       getFormDataFields(this.subFlowForm.flowId).then(res => {
         this.childFieldOptions = res.data.list
-        this.assignList = this.subFlowForm.assignList
+        this.assignList = JSON.parse(JSON.stringify(this.subFlowForm.assignList))
         this.ruleVisible = true
       })
     },
