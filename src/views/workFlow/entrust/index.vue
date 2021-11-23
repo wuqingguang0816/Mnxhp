@@ -31,16 +31,16 @@
           </div>
         </div>
         <JNPF-table v-loading="listLoading" :data="list">
-          <el-table-column prop="toUserName" label="被委托人" width="150" sortable />
-          <el-table-column prop="flowName" label="委托流程" width="250" sortable />
-          <el-table-column prop="flowCategory" label="流程分类" width="100" sortable>
+          <el-table-column prop="toUserName" label="被委托人" width="150" />
+          <el-table-column prop="flowName" label="委托流程" width="250" />
+          <el-table-column prop="flowCategory" label="流程分类" width="100">
             <template slot-scope="scope">
               {{ scope.row.flowCategory|getCategoryText(categoryList) }}
             </template>
           </el-table-column>
-          <el-table-column prop="startTime" label="开始时间" sortable width="120"
+          <el-table-column prop="startTime" label="开始时间" width="120"
             :formatter="jnpf.tableDateFormat" />
-          <el-table-column prop="endTime" label="结束时间" sortable width="120"
+          <el-table-column prop="endTime" label="结束时间" width="120"
             :formatter="jnpf.tableDateFormat" />
           <el-table-column label="状态" width="100" prop="status">
             <template slot-scope="scope">
