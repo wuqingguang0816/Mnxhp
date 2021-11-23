@@ -414,11 +414,10 @@ export default {
       this.listQuery.sort = this.defaultListQuery.sort
       this.listQuery.sidx = this.defaultListQuery.sidx
       if (this.columnData.type === 2) {
-        this.$refs.Search.treeReset()
-        let json = { [this.columnData.treeRelation]: data[this.treeProps.value] }
+        let json = { [this.columnData.treeRelation]: this.treeActiveId }
         this.search(JSON.stringify(json))
       } else {
-        this.$refs.Search.reset()
+        this.search('')
       }
     },
     search(json) {
