@@ -136,9 +136,11 @@ export default {
     initData() {
       if (!this.modelId || !this.relationField) return
       this.listLoading = true
+      let columnOptionsList = this.columnOptions.map(o => o.value)
       let query = {
         ...this.listQuery,
         relationField: this.relationField,
+        columnOptions: columnOptionsList.join(',')
       }
       getFieldDataSelect(this.modelId, query).then(res => {
         this.list = res.data.list

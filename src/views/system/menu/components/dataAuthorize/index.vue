@@ -7,7 +7,7 @@
           class="JNPF-flex-tabs">
           <el-tab-pane label="方案管理" name="dataAuthorizeScheme">
             <div class="JNPF-common-head">
-              <topOpts @add="handleAddEdit('')" />
+              <topOpts @add="addOrUpdateHandle('')" />
               <div class="JNPF-common-head-right">
                 <el-tooltip effect="dark" :content="$t('common.refresh')" placement="top">
                   <el-link icon="icon-ym icon-ym-Refresh
@@ -21,14 +21,15 @@
               <el-table-column prop="conditionText" label="过滤条件" />
               <el-table-column label="操作" width="100">
                 <template slot-scope="scope">
-                  <tableOpts @edit="handleAddEdit(scope.row.id)" @del="handleDel(scope.row.id)" />
+                  <tableOpts @edit="addOrUpdateHandle(scope.row.id)"
+                    @del="handleDel(scope.row.id)" />
                 </template>
               </el-table-column>
             </JNPF-table>
           </el-tab-pane>
           <el-tab-pane label="字段管理" name="dataAuthorize">
             <div class="JNPF-common-head">
-              <topOpts @add="handleAddEdit('')" />
+              <topOpts @add="addOrUpdateHandle('')" />
               <div class="JNPF-common-head-right">
                 <el-tooltip effect="dark" :content="$t('common.refresh')" placement="top">
                   <el-link icon="icon-ym icon-ym-Refresh
@@ -54,7 +55,8 @@
               </el-table-column>
               <el-table-column label="操作" width="100">
                 <template slot-scope="scope">
-                  <tableOpts @edit="handleAddEdit(scope.row.id)" @del="handleDel(scope.row.id)" />
+                  <tableOpts @edit="addOrUpdateHandle(scope.row.id)"
+                    @del="handleDel(scope.row.id)" />
                 </template>
               </el-table-column>
             </JNPF-table>
@@ -155,7 +157,7 @@ export default {
         this.getAuthorizeList()
       }
     },
-    handleAddEdit(id) {
+    addOrUpdateHandle(id) {
       const activeTab = this.tabActiveName
       if (activeTab === 'dataAuthorizeScheme') {
         this.dataSchemeFormVisible = true

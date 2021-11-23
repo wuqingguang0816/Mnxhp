@@ -30,7 +30,7 @@
       </el-row>
       <div class="JNPF-common-layout-main JNPF-flex-main">
         <div class="JNPF-common-head">
-          <topOpts addText="新建报表" @add="handleAddEdit()">
+          <topOpts addText="新建报表" @add="addOrUpdateHandle()">
             <el-upload :action="define.reportServer+'/api/datareport/Data/Action/Import'"
               :headers="{ Authorization: $store.getters.token}" :on-success="handleSuccess"
               :before-upload="()=>{btnLoading = true}" :show-file-list="false" class="upload-btn">
@@ -60,7 +60,7 @@
             width="120" />
           <el-table-column label="操作" width="150">
             <template slot-scope="scope">
-              <tableOpts @edit="handleAddEdit(scope.row.id)" @del="handleDel(scope.row.id)">
+              <tableOpts @edit="addOrUpdateHandle(scope.row.id)" @del="handleDel(scope.row.id)">
                 <el-dropdown hide-on-click>
                   <span class="el-dropdown-link">
                     <el-button type="text" size="mini">
@@ -169,7 +169,7 @@ export default {
         this.initData()
       })
     },
-    handleAddEdit(id) {
+    addOrUpdateHandle(id) {
       this.formVisible = true
       this.$nextTick(() => {
         this.$refs.Form.init(id)
