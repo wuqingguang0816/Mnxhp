@@ -147,6 +147,11 @@ export default {
         menuId: '',
         json: ''
       },
+      defaultListQuery: {
+        pageSize: 20,
+        sort: 'desc',
+        sidx: '',
+      },
       flowVisible: false,
       formVisible: false,
       detailVisible: false,
@@ -186,6 +191,9 @@ export default {
       this.listQuery.pageSize = this.columnData.pageSize
       this.listQuery.sort = this.columnData.sort
       this.listQuery.sidx = this.columnData.defaultSidx
+      this.defaultListQuery.pageSize = this.columnData.pageSize
+      this.defaultListQuery.sort = this.columnData.sort
+      this.defaultListQuery.sidx = this.columnData.defaultSidx
       if (this.columnData.type === 3 || !this.columnData.hasPage) this.listQuery.pageSize = 10000
       if (this.columnData.type === 2) {
         this.treeProps.value = this.columnData.treePropsValue || 'id'
@@ -403,9 +411,15 @@ export default {
       if (isRefresh) this.initData()
     },
     reset() {
-      this.listQuery.sort = 'desc'
-      this.listQuery.sidx = ''
-      this.$refs.Search.reset()
+      this.listQuery.sort = this.defaultListQuery.sort
+      this.listQuery.sidx = this.defaultListQuery.sidx
+      if (this.columnData.type === 2) {
+        this.$refs.Search.treeReset()
+        let json = { [this.columnData.treeRelation]: data[this.treeProps.value] }
+        this.search(JSON.stringify(json))
+      } else {
+        this.$refs.Search.reset()
+      }
     },
     search(json) {
       if (this.isPreview) return
