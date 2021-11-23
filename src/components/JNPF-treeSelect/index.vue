@@ -2,7 +2,7 @@
   <el-select :value="valueTitle" :clearable="clearable" :disabled="disabled" @clear="clearHandle"
     ref='elSelect' :placeholder="placeholder" :popper-class="`JNPF-select-tree ${themeClass}`"
     @focus="selectFocus" :filterable="filterable" :filter-method="selectFilter"
-    class="JNPF-selectTree">
+    class="JNPF-selectTree" @visible-change="visibleChange">
     <el-option :value="valueTitle" :label="valueTitle" class="options">
       <el-tree id="tree-option" ref="selectTree" :accordion="accordion" :data="options"
         :default-expand-all="defaultExpandAll" :props="props" :node-key="props.value"
@@ -80,6 +80,9 @@ export default {
     }
   },
   methods: {
+    visibleChange(val) {
+      this.$emit('visible-change', val)
+    },
     selectFilter(val) {
       if (this.options.length) this.$refs.selectTree.filter(val);
     },
