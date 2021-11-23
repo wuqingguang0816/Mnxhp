@@ -3,7 +3,7 @@
     size="700px" :before-close="handleDrawerClose" class="JNPF-common-drawer">
     <div class="JNPF-flex-main">
       <div class="JNPF-common-head">
-        <topOpts @refresh="getDictionaryTypeList()" @add="handleAddEditType()">
+        <topOpts @refresh="getDictionaryTypeList()" @add="addOrUpdateHandle()">
           <upload-btn url="/api/system/DictionaryData/Action/Import"
             @on-success="getDictionaryTypeList" />
         </topOpts>
@@ -27,7 +27,7 @@
         </el-table-column>
         <el-table-column label="操作" width="130">
           <template slot-scope="scope">
-            <tableOpts @edit="handleAddEditType(scope.row.id)" @del="handleDel(scope.row.id)">
+            <tableOpts @edit="addOrUpdateHandle(scope.row.id)" @del="handleDel(scope.row.id)">
               <el-button size="mini" type="text" @click="exportData(scope.row.id)">导出
               </el-button>
             </tableOpts>
@@ -75,7 +75,7 @@ export default {
         this.listLoading = false
       })
     },
-    handleAddEditType(id) {
+    addOrUpdateHandle(id) {
       this.typeFormVisible = true
       this.$nextTick(() => {
         this.$refs.TypeForm.init(id)

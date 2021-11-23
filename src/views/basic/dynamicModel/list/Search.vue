@@ -172,7 +172,7 @@ export default {
     reset() {
       this.searchList = deepClone(this.list)
       this.setProps(this.searchList)
-      this.$emit('search', '')
+      this.$emit('reset')
     },
     treeReset() {
       this.searchList = deepClone(this.list)
