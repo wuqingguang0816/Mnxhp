@@ -170,13 +170,13 @@ export default {
       this.$emit('search', json)
     },
     reset() {
-      this.searchList = deepClone(this.list)
-      this.setProps(this.searchList)
+      this.treeReset()
       this.$emit('reset')
     },
     treeReset() {
-      this.searchList = deepClone(this.list)
-      this.setProps(this.searchList)
+      for (let i = 0; i < this.searchList.length; i++) {
+        this.searchList[i].value = ''
+      }
     }
   }
 }
