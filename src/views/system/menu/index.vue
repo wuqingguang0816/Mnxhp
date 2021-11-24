@@ -25,7 +25,7 @@
           <el-tab-pane label="App菜单" name="App"></el-tab-pane>
           <div class="box">
             <div class="JNPF-common-head">
-              <topOpts @add="handleAddEdit()">
+              <topOpts @add="addOrUpdateHandle()">
                 <upload-btn url="/api/system/Menu/Action/Import" @on-success="initData" />
               </topOpts>
               <div class="JNPF-common-head-right">
@@ -77,7 +77,7 @@
               </el-table-column>
               <el-table-column label="操作" width="150">
                 <template slot-scope="scope">
-                  <tableOpts @edit="handleAddEdit(scope.row.id)" @del="handleDel(scope.row.id)">
+                  <tableOpts @edit="addOrUpdateHandle(scope.row.id)" @del="handleDel(scope.row.id)">
                     <template v-if="scope.row.type && scope.row.type!=1">
                       <el-dropdown>
                         <span class="el-dropdown-link">
@@ -193,7 +193,7 @@ export default {
         this.refreshTable = true
       })
     },
-    handleAddEdit(id) {
+    addOrUpdateHandle(id) {
       this.formVisible = true
       this.$nextTick(() => {
         this.$refs.Form.init(id, this.params.category)

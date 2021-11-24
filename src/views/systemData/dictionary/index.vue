@@ -9,10 +9,10 @@
           </el-tooltip>
         </span>
       </div>
-      <el-scrollbar class="JNPF-common-el-tree-scrollbar">
-        <el-tree ref="treeBox" v-loading="treeLoading"
-          :element-loading-text="$t('common.loadingText')" :data="treeData" :props="defaultProps"
-          default-expand-all highlight-current :expand-on-click-node="false" node-key="id"
+      <el-scrollbar class="JNPF-common-el-tree-scrollbar" v-loading="treeLoading"
+        :element-loading-text="$t('common.loadingText')">
+        <el-tree ref="treeBox" :data="treeData" :props="defaultProps" default-expand-all
+          highlight-current :expand-on-click-node="false" node-key="id"
           @node-click="handleNodeClick" class="JNPF-common-el-tree">
           <span class="custom-tree-node" slot-scope="{ node }">
             <i class="el-icon-notebook-2" />
@@ -42,7 +42,7 @@
       </el-row>
       <div class="JNPF-common-layout-main JNPF-flex-main">
         <div class="JNPF-common-head">
-          <topOpts @add="handleAddEdit()" />
+          <topOpts @add="addOrUpdateHandle()" />
           <div class="JNPF-common-head-right">
             <el-tooltip effect="dark" :content="$t('common.refresh')" placement="top">
               <el-link icon="icon-ym icon-ym-Refresh JNPF-common-head-icon" :underline="false"
@@ -64,7 +64,7 @@
           </el-table-column>
           <el-table-column label="操作" width="100">
             <template slot-scope="scope">
-              <tableOpts @edit="handleAddEdit(scope.row.id)" @del="handleDel(scope.row.id)" />
+              <tableOpts @edit="addOrUpdateHandle(scope.row.id)" @del="handleDel(scope.row.id)" />
             </template>
           </el-table-column>
         </JNPF-table>
@@ -176,7 +176,7 @@ export default {
         })
       }).catch(() => { })
     },
-    handleAddEdit(id) {
+    addOrUpdateHandle(id) {
       this.formVisible = true
       this.$nextTick(() => {
         this.$refs.Form.init(id, this.typeId, this.params.isTree)

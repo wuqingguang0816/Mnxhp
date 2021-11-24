@@ -4,10 +4,12 @@
       <div class="JNPF-common-title">
         <h2>接口分类</h2>
       </div>
-      <el-tree ref="treeBox" v-loading="treeLoading"
-        :element-loading-text="$t('common.loadingText')" :data="treeData" :props="defaultProps"
-        default-expand-all highlight-current :expand-on-click-node="false" node-key="id"
-        @node-click="handleNodeClick" class="JNPF-common-el-tree" />
+      <el-scrollbar class="JNPF-common-el-tree-scrollbar" v-loading="treeLoading"
+        :element-loading-text="$t('common.loadingText')">
+        <el-tree ref="treeBox" :data="treeData" :props="defaultProps" default-expand-all
+          highlight-current :expand-on-click-node="false" node-key="id"
+          @node-click="handleNodeClick" class="JNPF-common-el-tree" />
+      </el-scrollbar>
     </div>
     <div class="JNPF-common-layout-center">
       <el-row class="JNPF-common-search-box" :gutter="16">
@@ -30,7 +32,7 @@
       </el-row>
       <div class="JNPF-common-layout-main JNPF-flex-main">
         <div class="JNPF-common-head">
-          <topOpts @add="handleAddEdit()">
+          <topOpts @add="addOrUpdateHandle()">
             <upload-btn url="/api/system/DataInterface/Action/Import" @on-success="getList" />
           </topOpts>
           <div class="JNPF-common-head-right">
@@ -69,7 +71,7 @@
           </el-table-column>
           <el-table-column label="操作" width="150">
             <template slot-scope="scope">
-              <tableOpts @edit="handleAddEdit(scope.row.id)" @del="handleDel(scope.row.id)">
+              <tableOpts @edit="addOrUpdateHandle(scope.row.id)" @del="handleDel(scope.row.id)">
                 <el-dropdown hide-on-click>
                   <span class="el-dropdown-link">
                     <el-button type="text" size="mini">{{$t('common.moreBtn')}}<i
@@ -199,7 +201,7 @@ export default {
       this.params.categoryId = data.id
       this.reset()
     },
-    handleAddEdit(id) {
+    addOrUpdateHandle(id) {
       this.formVisible = true
       this.$nextTick(() => {
         this.$refs.Form.init(id, this.params.categoryId)

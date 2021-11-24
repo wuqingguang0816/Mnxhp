@@ -10,8 +10,8 @@
             </el-form-item>
           </el-col>
           <el-col :span="6">
-            <el-form-item label="角色分类">
-              <el-select v-model="category" placeholder="请选择角色分类" clearable>
+            <el-form-item label="角色类型">
+              <el-select v-model="category" placeholder="请选择角色类型" clearable>
                 <el-option v-for="item in categoryList" :key="item.enCode" :label="item.fullName"
                   :value="item.enCode">
                 </el-option>
@@ -30,7 +30,7 @@
       </el-row>
       <div class="JNPF-common-layout-main JNPF-flex-main">
         <div class="JNPF-common-head">
-          <topOpts @add="handleAddEdit()"></topOpts>
+          <topOpts @add="addOrUpdateHandle()"></topOpts>
           <div class="JNPF-common-head-right">
             <el-tooltip effect="dark" :content="$t('common.refresh')" placement="top">
               <el-link icon="icon-ym icon-ym-Refresh JNPF-common-head-icon" :underline="false"
@@ -42,7 +42,7 @@
         <JNPF-table v-loading="listLoading" :data="list">
           <el-table-column prop="fullName" label="名称" />
           <el-table-column prop="enCode" label="编码" />
-          <el-table-column prop="type" label="分类" width="150" />
+          <el-table-column prop="type" label="类型" width="150" />
           <el-table-column prop="description" label="说明" />
           <el-table-column prop="creatorTime" label="创建时间" :formatter="jnpf.tableDateFormat"
             width="120" />
@@ -55,7 +55,7 @@
           </el-table-column>
           <el-table-column label="操作" width="150">
             <template slot-scope="scope">
-              <tableOpts @edit="handleAddEdit(scope.row.id)" @del="handleDel(scope.row.id)">
+              <tableOpts @edit="addOrUpdateHandle(scope.row.id)" @del="handleDel(scope.row.id)">
                 <el-dropdown hide-on-click>
                   <span class="el-dropdown-link">
                     <el-button type="text" size="mini">
@@ -164,7 +164,7 @@ export default {
         this.categoryList = res.data.list
       })
     },
-    handleAddEdit(id) {
+    addOrUpdateHandle(id) {
       this.formVisible = true
       this.$nextTick(() => {
         this.$refs.Form.init(id)

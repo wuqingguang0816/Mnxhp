@@ -30,7 +30,7 @@
       </el-row>
       <div class="JNPF-common-layout-main JNPF-flex-main">
         <div class="JNPF-common-head">
-          <topOpts addText="新建报表" @add="handleAddEdit()">
+          <topOpts addText="新建报表" @add="addOrUpdateHandle()">
             <el-upload :action="define.reportServer+'/api/datareport/Data/Action/Import'"
               :headers="{ Authorization: $store.getters.token}" :on-success="handleSuccess"
               :before-upload="()=>{btnLoading = true}" :show-file-list="false" class="upload-btn">
@@ -46,7 +46,7 @@
           </div>
         </div>
         <JNPF-table v-loading="listLoading" :data="list">
-          <el-table-column prop="fullName" label="报表名称" min-width="200" />
+          <el-table-column prop="fullName" label="名称" min-width="200" />
           <el-table-column prop="enCode" label="编码" width="200" />
           <el-table-column prop="categoryId" label="分类" width="150">
             <template slot-scope="scope">
@@ -56,12 +56,11 @@
           <el-table-column prop="creatorUser" label="创建人" width="120" />
           <el-table-column prop="creatorTime" label="创建时间" :formatter="jnpf.tableDateFormat"
             width="120" />
-          <el-table-column prop="lastModifyUser" label="修改人" width="120" />
           <el-table-column prop="lastModifyTime" label="最后修改时间" :formatter="jnpf.tableDateFormat"
             width="120" />
           <el-table-column label="操作" width="150">
             <template slot-scope="scope">
-              <tableOpts @edit="handleAddEdit(scope.row.id)" @del="handleDel(scope.row.id)">
+              <tableOpts @edit="addOrUpdateHandle(scope.row.id)" @del="handleDel(scope.row.id)">
                 <el-dropdown hide-on-click>
                   <span class="el-dropdown-link">
                     <el-button type="text" size="mini">
@@ -170,7 +169,7 @@ export default {
         this.initData()
       })
     },
-    handleAddEdit(id) {
+    addOrUpdateHandle(id) {
       this.formVisible = true
       this.$nextTick(() => {
         this.$refs.Form.init(id)

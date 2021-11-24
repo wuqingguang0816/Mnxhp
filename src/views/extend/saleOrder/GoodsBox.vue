@@ -3,10 +3,10 @@
     class="JNPF-dialog JNPF-dialog_center" lock-scroll append-to-body width="1000px">
     <div class="JNPF-common-layout">
       <div class="JNPF-common-layout-left">
-        <el-scrollbar class="JNPF-common-el-tree-scrollbar">
-          <el-tree ref="treeBox" v-loading="treeLoading"
-            :element-loading-text="$t('common.loadingText')" :data="treeData" :props="defaultProps"
-            default-expand-all highlight-current :expand-on-click-node="false" node-key="id"
+        <el-scrollbar class="JNPF-common-el-tree-scrollbar" v-loading="treeLoading"
+          :element-loading-text="$t('common.loadingText')">
+          <el-tree ref="treeBox" :data="treeData" :props="defaultProps" default-expand-all
+            highlight-current :expand-on-click-node="false" node-key="id"
             @node-click="handleNodeClick" class="JNPF-common-el-tree">
             <span class="custom-tree-node" slot-scope="{ node }">
               <i class="el-icon-notebook-2" />

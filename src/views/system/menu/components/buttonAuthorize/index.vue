@@ -5,7 +5,7 @@
       <div class="JNPF-flex-main">
         <div class="JNPF-common-head">
           <div>
-            <topOpts @add="handleAddEdit('')" />
+            <topOpts @add="addOrUpdateHandle('')" />
             <el-dropdown style="margin-left: 10px">
               <el-button icon="el-icon-plus" :loading="loading" type="text">
                 常用按钮权限<i class="el-icon-arrow-down el-icon--right"></i>
@@ -36,7 +36,7 @@
           </el-table-column>
           <el-table-column label="操作" width="100">
             <template slot-scope="scope">
-              <tableOpts @edit="handleAddEdit(scope.row.id)" @del="handleDel(scope.row.id)" />
+              <tableOpts @edit="addOrUpdateHandle(scope.row.id)" @del="handleDel(scope.row.id)" />
             </template>
           </el-table-column>
         </JNPF-table>
@@ -131,7 +131,7 @@ export default {
         })
       }).catch(() => { })
     },
-    handleAddEdit(id) {
+    addOrUpdateHandle(id) {
       this.buttonAuthorizeFormVisible = true
       this.$nextTick(() => {
         this.$refs.ButtonAuthorizeForm.init(this.moduleId, id)

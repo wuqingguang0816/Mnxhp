@@ -79,12 +79,12 @@
             :formatter="jnpf.tableDateFormat" />
           <el-table-column prop="userName" label="发起人员" width="130" />
           <el-table-column prop="thisStep" label="当前节点" width="130" />
-          <el-table-column prop="flowUrgent" label="紧急程度" sortable width="130">
+          <el-table-column prop="flowUrgent" label="紧急程度" width="130">
             <template slot-scope="scope">
               {{ scope.row.flowUrgent | urgentText() }}
             </template>
           </el-table-column>
-          <el-table-column prop="status" label="流程状态" sortable width="130">
+          <el-table-column prop="status" label="流程状态" width="130">
             <template slot-scope="scope">
               <el-tag type="primary" v-if="scope.row.status==1">等待审核</el-tag>
               <el-tag type="success" v-else-if="scope.row.status==2">审核通过</el-tag>
@@ -94,7 +94,7 @@
               <el-tag v-else type="info">等待提交</el-tag>
             </template>
           </el-table-column>
-          <el-table-column prop="completion" label="流程进度" sortable width="150">
+          <el-table-column prop="completion" label="流程进度" width="150">
             <template slot-scope="scope">
               <p class="text-grey" v-if="scope.row.status==5 || scope.row.completion == 0">----</p>
               <p v-else-if=" scope.row.completion == 100">已完成</p>

@@ -8,48 +8,48 @@
         </div>
       </div>
       <div class="main">
-        <el-row class="JNPF-common-search-box" :gutter="16">
-          <el-form @submit.native.prevent>
-            <el-col :span="6">
-              <el-form-item label="关键词">
-                <el-input v-model="keyword" placeholder="请输入关键词查询" clearable
-                  @keyup.enter.native="search()" />
-              </el-form-item>
-            </el-col>
-            <el-col :span="6">
-              <el-form-item label="流程分类">
-                <el-select v-model="category" placeholder="请选择流程分类" clearable>
-                  <el-option v-for="item in categoryList" :key="item.enCode" :label="item.fullName"
-                    :value="item.enCode">
-                  </el-option>
-                </el-select>
-              </el-form-item>
-            </el-col>
-            <el-col :span="6">
-              <el-form-item>
-                <el-button type="primary" icon="el-icon-search" @click="search()">
-                  {{$t('common.search')}}</el-button>
-                <el-button icon="el-icon-refresh-right" @click="reset()">{{$t('common.reset')}}
-                </el-button>
-              </el-form-item>
-            </el-col>
-          </el-form>
-        </el-row>
-        <el-scrollbar class="list" v-loading="listLoading">
-          <el-row :gutter="20">
-            <el-col :span="6" v-for="(item,i) in list" :key="i" class="item"
-              @click.native="jump(item)">
-              <el-card shadow="hover">
-                <div class="box-icon" :style="{backgroundColor:item.iconBackground||'#008cff'}">
-                  <i :class="item.icon"></i>
-                </div>
-                <span class="title">{{item.fullName}}</span>
-              </el-card>
-            </el-col>
-          </el-row>
-        </el-scrollbar>
-        <pagination :total="total" :page.sync="listQuery.currentPage"
-          :limit.sync="listQuery.pageSize" @pagination="initData" />
+        <el-tabs tab-position="left" style="height:100%" v-model="category" class="flow-tabs">
+          <el-tab-pane label="全部流程" name=""></el-tab-pane>
+          <el-tab-pane :label="item.fullName" :name="item.enCode" v-for="item in categoryList"
+            :key="item.enCode"></el-tab-pane>
+          <div class="box">
+            <el-row class="JNPF-common-search-box" :gutter="16">
+              <el-form @submit.native.prevent>
+                <el-col :span="6">
+                  <el-form-item label="关键词">
+                    <el-input v-model="keyword" placeholder="请输入关键词查询" clearable
+                      @keyup.enter.native="search()" />
+                  </el-form-item>
+                </el-col>
+                <el-col :span="6">
+                  <el-form-item>
+                    <el-button type="primary" icon="el-icon-search" @click="search()">
+                      {{$t('common.search')}}</el-button>
+                    <el-button icon="el-icon-refresh-right" @click="reset()">{{$t('common.reset')}}
+                    </el-button>
+                  </el-form-item>
+                </el-col>
+              </el-form>
+            </el-row>
+            <el-scrollbar class="list" v-loading="listLoading"
+              :element-loading-text="$t('common.loadingText')">
+              <el-row :gutter="20" v-if="list.length">
+                <el-col :span="6" v-for="(item,i) in list" :key="i" class="item"
+                  @click.native="jump(item)">
+                  <el-card shadow="hover">
+                    <div class="box-icon" :style="{backgroundColor:item.iconBackground||'#008cff'}">
+                      <i :class="item.icon"></i>
+                    </div>
+                    <span class="title">{{item.fullName}}</span>
+                  </el-card>
+                </el-col>
+              </el-row>
+              <el-empty description="暂无数据" :image-size="120" v-else></el-empty>
+            </el-scrollbar>
+            <pagination :total="total" :page.sync="listQuery.currentPage"
+              :limit.sync="listQuery.pageSize" @pagination="initData" />
+          </div>
+        </el-tabs>
       </div>
     </div>
   </transition>
@@ -74,17 +74,21 @@ export default {
       categoryList: []
     }
   },
+  watch: {
+    category(val) {
+      this.reset()
+    }
+  },
   methods: {
     goBack() {
       this.$emit('close')
     },
     init() {
       this.getDictionaryData()
-      this.initData()
+      // this.initData()
     },
     reset() {
       this.keyword = ''
-      this.category = ''
       this.search()
     },
     search() {
@@ -101,7 +105,7 @@ export default {
       let query = {
         ...this.listQuery,
         keyword: this.keyword,
-        category: this.category
+        category: this.category == 0 ? '' : this.category
       }
       FlowEnginePageList(query).then((res) => {
         this.list = res.data.list
@@ -132,13 +136,31 @@ export default {
   height: 100%;
   display: flex;
   flex-direction: column;
-  padding: 0 10px 10px;
   color: #606266;
+  .flow-tabs {
+    >>> .el-tabs__item {
+      text-align: left !important;
+      width: 160px !important;
+    }
+    >>> .el-tabs__content {
+      height: 100%;
+
+      .el-tab-pane {
+        height: 0;
+        display: none !important;
+      }
+    }
+  }
   >>> .is-horizontal {
     display: none;
   }
   >>> .el-scrollbar__view {
     overflow: hidden;
+  }
+  .box {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
   }
   .list {
     flex: 1;
@@ -150,25 +172,26 @@ export default {
       >>> .el-card__body {
         display: flex;
         align-items: center;
+        padding: 15px;
       }
       .box-icon {
-        width: 50px;
-        height: 50px;
-        border-radius: 12px;
+        width: 48px;
+        height: 48px;
+        border-radius: 10px;
         text-align: center;
         background-color: #ccc;
         display: inline-block;
-        margin-right: 20px;
+        margin-right: 15px;
         i {
           text-align: center;
-          font-size: 38px;
+          font-size: 36px;
           color: #fff;
-          line-height: 50px;
+          line-height: 48px;
         }
       }
       .title {
         display: inline-block;
-        width: calc(100% - 70px);
+        width: calc(100% - 63px);
         text-overflow: -o-ellipsis-lastline;
         overflow: hidden;
         text-overflow: ellipsis;
@@ -177,8 +200,7 @@ export default {
         line-clamp: 2;
         -webkit-box-orient: vertical;
         word-break: break-all;
-        line-height: 25px;
-        font-size: 17px;
+        font-size: 14px;
       }
     }
   }

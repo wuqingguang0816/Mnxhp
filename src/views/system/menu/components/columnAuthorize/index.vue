@@ -4,7 +4,7 @@
       :wrapperClosable="false" ref="drawer" size="700px" class="JNPF-common-drawer">
       <div class="JNPF-flex-main">
         <div class="JNPF-common-head">
-          <topOpts @add="handleAddEdit('')">
+          <topOpts @add="addOrUpdateHandle('')">
             <el-button type="text" icon="el-icon-copy-document" @click="handleBatchAdd">
               批量新增
             </el-button>
@@ -29,7 +29,7 @@
           </el-table-column>
           <el-table-column label="操作" width="100">
             <template slot-scope="scope">
-              <tableOpts @edit="handleAddEdit(scope.row.id)" @del="handleDel(scope.row.id)" />
+              <tableOpts @edit="addOrUpdateHandle(scope.row.id)" @del="handleDel(scope.row.id)" />
             </template>
           </el-table-column>
         </JNPF-table>
@@ -117,7 +117,7 @@ export default {
         })
       }).catch(() => { })
     },
-    handleAddEdit(id) {
+    addOrUpdateHandle(id) {
       this.columnAuthorizeFormVisible = true
       this.$nextTick(() => {
         this.$refs.ColumnAuthorizeForm.init(this.moduleId, id)
