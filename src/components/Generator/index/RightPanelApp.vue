@@ -794,7 +794,7 @@ export default {
     },
     setDefaultOptions() {
       if (!this.$store.getters.hasTable) return
-      if (this.activeData.__vModel__ === undefined) return
+      if (this.activeData.__vModel__ === undefined || this.activeData.__config__.jnpfKey === 'table') return
       if (!this.activeData.__config__.tableName || this.activeData.__config__.tableName === this.mainTable) {
         let fieldOptions = this.formItemList.map(o => ({ ...o, realField: o.field }))
         this.fieldOptions = fieldOptions.filter(o => o.primaryKey != 1)
