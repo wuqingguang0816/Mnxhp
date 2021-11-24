@@ -213,10 +213,7 @@ export default {
     },
     colseForm(isRefresh) {
       this.formVisible = false
-      if (isRefresh) {
-        this.query.keyword = ''
-        this.initData()
-      }
+      if (isRefresh) this.reset()
     }
   }
 }
