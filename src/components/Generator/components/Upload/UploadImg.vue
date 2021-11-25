@@ -97,8 +97,14 @@ export default {
       let isRightSize = file.size / unitNum < this.fileSize
       if (!isRightSize) {
         this.$message.error(`文件大小超过${this.fileSize}${this.sizeUnit}`)
+        return isRightSize;
       }
-      return isRightSize;
+      let isAccept = new RegExp('image/*').test(file.type)
+      if (!isAccept) {
+        this.$message.error(`请选择图片`)
+        return isAccept;
+      }
+      return isRightSize && isAccept;
     },
     handleSuccess(res, file, fileList) {
       if (res.code == 200) {
