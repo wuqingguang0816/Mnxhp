@@ -254,10 +254,10 @@ export default {
         const list = permissionList.filter(o => o.modelId === modelId)
         const columnList = list[0] && list[0].column ? list[0].column : []
         let realList = []
-        for (let i = 0; i < columnList.length; i++) {
-          inner: for (let j = 0; j < this.columnData.columnList.length; j++) {
-            if (columnList[i].enCode === this.columnData.columnList[j].prop) {
-              realList.push(this.columnData.columnList[j])
+        for (let i = 0; i < this.columnData.columnList.length; i++) {
+          inner: for (let j = 0; j < columnList.length; j++) {
+            if (this.columnData.columnList[i].prop === columnList[j].enCode) {
+              realList.push(this.columnData.columnList[i])
               break inner
             }
           }

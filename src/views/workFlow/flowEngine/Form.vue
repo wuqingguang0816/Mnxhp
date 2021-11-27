@@ -73,7 +73,7 @@
               </el-form-item> -->
             </template>
             <el-form-item label="流程排序" prop="sortCode">
-              <el-input-number :min="0" :max="9999" v-model="dataForm.sortCode"
+              <el-input-number :min="0" :max="999999" v-model="dataForm.sortCode"
                 controls-position="right" />
             </el-form-item>
             <el-form-item label="流程状态" prop="enabledMark">

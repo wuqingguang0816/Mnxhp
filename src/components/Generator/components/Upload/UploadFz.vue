@@ -5,7 +5,7 @@
       :before-upload="beforeUpload" :on-exceed="handleExceed" :disabled="disabled" :limit="limit">
       <el-button size="small" icon="el-icon-upload" :disabled="disabled">{{buttonText}}</el-button>
       <div slot="tip" class="el-upload__tip" v-show="showTip">
-        只能上传不超过{{fileSize}}{{sizeUnit}}的{{accept}}文件
+        只能上传不超过{{fileSize}}{{sizeUnit}}的{{acceptText}}文件
       </div>
     </el-upload>
     <template v-if="fileList.length">
@@ -78,6 +78,35 @@ export default {
       uploadHeaders: { Authorization: this.$store.getters.token }
     }
   },
+  computed: {
+    acceptText() {
+      let txt = ''
+      switch (this.accept) {
+        case 'image/*':
+          txt = '图片'
+          break;
+        case 'video/*':
+          txt = '视频'
+          break;
+        case 'audio/*':
+          txt = '音频'
+          break;
+        case '.xls,.xlsx':
+          txt = 'excel'
+          break;
+        case '.doc,.docx':
+          txt = 'word'
+          break;
+        case '.pdf':
+          txt = 'pdf'
+          break;
+        default:
+          txt = 'txt'
+          break;
+      }
+      return txt
+    }
+  },
   watch: {
     value: {
       immediate: true,
@@ -98,12 +127,14 @@ export default {
       let isRightSize = file.size / unitNum < this.fileSize
       if (!isRightSize) {
         this.$message.error(`文件大小超过${this.fileSize}${this.sizeUnit}`)
+        return isRightSize;
       }
-      // let isAccept = new RegExp(this.accept).test(file.type)
-      // if (!isAccept) {
-      //   this.$message.error(`应该选择${this.accept}类型的文件`)
-      // }
-      return isRightSize;
+      let isAccept = new RegExp(this.accept).test(file.type)
+      if (!isAccept) {
+        this.$message.error(`请选择${this.acceptText}类型的文件`)
+        return isAccept;
+      }
+      return isRightSize && isAccept;
     },
     handleSuccess(res, file, fileList) {
       if (res.code == 200) {

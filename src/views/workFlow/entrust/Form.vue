@@ -86,7 +86,7 @@ export default {
       },
       dataRule: {
         toUserId: [
-          { required: true, message: '被委托人不能为空', trigger: 'change' }
+          { required: true, message: '被委托人不能为空', trigger: 'click' }
         ],
         flowId: [
           { required: true, message: '委托流程不能为空', trigger: 'change' }
