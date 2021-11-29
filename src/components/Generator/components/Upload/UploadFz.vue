@@ -100,8 +100,11 @@ export default {
         case '.pdf':
           txt = 'pdf'
           break;
-        default:
+        case '.txt':
           txt = 'txt'
+          break;
+        default:
+          txt = ''
           break;
       }
       return txt
