@@ -414,8 +414,9 @@ export default {
       this.listQuery.sort = this.defaultListQuery.sort
       this.listQuery.sidx = this.defaultListQuery.sidx
       if (this.columnData.type === 2) {
-        let json = { [this.columnData.treeRelation]: this.treeActiveId }
-        this.search(JSON.stringify(json))
+        let obj = { [this.columnData.treeRelation]: this.treeActiveId }
+        let json = this.treeActiveId ? JSON.stringify(obj) : ''
+        this.search(json)
       } else {
         this.search('')
       }

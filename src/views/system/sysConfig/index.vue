@@ -470,6 +470,7 @@ export default {
           this.wxEvents[1].select = this.baseForm.qyhIsSynUser ? true : false
           this.ddEvents[0].select = this.baseForm.dingSynIsSynOrg ? true : false
           this.ddEvents[1].select = this.baseForm.dingSynIsSynUser ? true : false
+          this.baseForm.smsCompany = this.baseForm.smsCompany ? this.baseForm.smsCompany : '1'
           this.listLoading = false
         }).catch(() => {
           this.listLoading = false

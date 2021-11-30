@@ -137,7 +137,7 @@ export default {
     scanTitle: 'APP Scan Login',
     codeTitle: 'Verification Code Login',
     logIn: 'Login',
-    username: 'Username / Mobile Number',
+    username: 'Username',
     password: 'Password',
     rule: 'Sub Account: mobile@account example:18577778888@101001',
     version: 'V',
