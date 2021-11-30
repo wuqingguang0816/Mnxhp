@@ -132,12 +132,12 @@ export default {
         this.$message.error(`文件大小超过${this.fileSize}${this.sizeUnit}`)
         return isRightSize;
       }
-      let isAccept = new RegExp(this.accept).test(file.type)
-      if (!isAccept) {
-        this.$message.error(`请选择${this.acceptText}类型的文件`)
-        return isAccept;
-      }
-      return isRightSize && isAccept;
+      // let isAccept = new RegExp(this.accept).test(file.type)
+      // if (!isAccept) {
+      //   this.$message.error(`请选择${this.acceptText}类型的文件`)
+      //   return isAccept;
+      // }
+      return isRightSize;
     },
     handleSuccess(res, file, fileList) {
       if (res.code == 200) {
