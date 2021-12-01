@@ -213,10 +213,8 @@ export default {
           }
           this.treeData = [topItem]
         })
-
         // 获取菜单类型
         this.typeData = this.dataForm.category === 'App' ? appTypeData : typeData
-
         // 获取表单数据
         if (this.dataForm.id) {
           this.formLoading = true
@@ -225,12 +223,17 @@ export default {
             const propertyJson = res.data.propertyJson ? JSON.parse(res.data.propertyJson) : null
             this.dataForm.propertyJson = propertyJson || { moduleId: '', iconBackgroundColor: '' }
             const menuType = this.dataForm.type
+            if ([2, 3, 4].includes(menuType)) {
+              this.dataForm.isButtonAuthorize = 1
+              this.dataForm.isColumnAuthorize = 1
+              this.dataForm.isFormAuthorize = 1
+              this.dataForm.isDataAuthorize = 1
+            }
             this.oldUrlAddress = res.data.urlAddress
             this.switchType(menuType)
             this.$nextTick(() => { this.formLoading = false })
           }).catch(() => { })
         }
-
       })
     },
     // 功能列表
@@ -260,7 +263,6 @@ export default {
       if (!this.reportData.length) {
         this.$store.dispatch('base/getDictionaryData', { sort: 'ReportSort' }).then(t => {
           const ReportSortTypeList = JSON.parse(JSON.stringify(t))
-
           getDataReportSelector().then(res => {
             let reportData = res.data.list
             this.reportData = ReportSortTypeList
@@ -335,7 +337,7 @@ export default {
       this.dataForm.propertyJson.moduleId = ''
       const menuId = this.dataForm.id
       if (menuId) this.dataForm.urlAddress = ''
-      if (this.dataForm.category === 'Web' && [2, 3, 4].includes(val)) {
+      if ([2, 3, 4].includes(val)) {
         this.dataForm.isButtonAuthorize = 1
         this.dataForm.isColumnAuthorize = 1
         this.dataForm.isFormAuthorize = 1
@@ -375,11 +377,9 @@ export default {
       }
     },
     dataFormSubmit() {
-
       this.$refs['dataForm'].validate((valid) => {
         const menuEnCode = (this.dataForm.enCode).replace('.', '')
         const moduleId = this.dataForm.propertyJson.moduleId
-
         if (this.dataForm.category === 'Web') {
           switch (this.dataForm.type) {
             case 3: // 功能

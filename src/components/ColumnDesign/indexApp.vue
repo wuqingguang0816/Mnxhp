@@ -108,6 +108,10 @@
                   <el-radio-button :label="500">500条</el-radio-button>
                 </el-radio-group>
               </el-form-item>
+              <el-divider>权限设置</el-divider>
+              <el-form-item label="数据权限">
+                <el-switch v-model="columnData.useDataPermission"></el-switch>
+              </el-form-item>
             </el-form>
           </div>
         </el-scrollbar>
@@ -138,6 +142,7 @@ const defaultColumnData = {
   sort: 'desc',   // 排序类型
   hasPage: true,  // 列表分页
   pageSize: 20,  // 分页条数
+  useDataPermission: false,
 }
 export default {
   name: 'columnDesign',
