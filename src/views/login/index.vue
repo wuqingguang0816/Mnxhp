@@ -4,7 +4,6 @@
       <p class="login-version-text">{{$t('login.version')}}{{define.version}}</p>
     </div> -->
     <div class="login-content">
-      <div></div>
       <div class="login-form">
         <img class="login-logo" src="../../assets/images/login_logo.png" alt="">
         <div class="login-tab" :class="'active'+active">

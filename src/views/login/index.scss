@@ -33,17 +33,28 @@
   .login-content {
     width: 1200px;
     display: flex;
-    justify-content: space-between;
+    justify-content: flex-end;
     align-items: center;
   }
 
   .login-form {
     width: 510px;
     margin-right: 70px;
-    height: 530px;
     padding: 50px 60px;
     border-radius: 6px;
     background-color: #fff;
+
+    .sms-input {
+      width: 240px;
+    }
+
+    .sms-right {
+      width: 120px;
+
+      .smsBtn {
+        width: 100%;
+      }
+    }
 
     .login-logo {
       width: 100%;
@@ -92,7 +103,6 @@
         display: inline-block;
         height: 58px;
         text-align: center;
-        font-weight: 600;
 
         &.active {
           color: #1890ff;
