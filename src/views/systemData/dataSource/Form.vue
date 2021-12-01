@@ -191,6 +191,7 @@ export default {
           port = ''
           break;
       }
+      this.dataForm.serviceName = '';
       this.dataForm.port = port
       this.dataForm.dbSchema = dbSchema
     },
