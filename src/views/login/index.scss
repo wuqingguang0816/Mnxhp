@@ -7,8 +7,7 @@
   position: relative;
   display: flex;
   justify-content: center;
-  align-items: flex-start;
-  padding-top: 200px;
+  align-items: center;
 
   .login-version {
     position: fixed;
@@ -38,11 +37,11 @@
   }
 
   .login-form {
+    height: 530px;
     width: 510px;
     margin-right: 70px;
     padding: 50px 60px;
     border-radius: 6px;
-    background-color: #fff;
 
     .sms-input {
       width: 240px;
