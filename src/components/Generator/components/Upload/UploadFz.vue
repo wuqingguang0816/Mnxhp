@@ -124,6 +124,12 @@ export default {
     }
   },
   methods: {
+    getType(filename) {
+      const index1 = filename.lastIndexOf(".");
+      const index2 = filename.length;
+      const type = filename.substring(index1, index2);
+      return type;
+    },
     beforeUpload(file) {
       const unitNum = units[this.sizeUnit];
       if (!this.fileSize) return true
@@ -132,12 +138,20 @@ export default {
         this.$message.error(`文件大小超过${this.fileSize}${this.sizeUnit}`)
         return isRightSize;
       }
-      // let isAccept = new RegExp(this.accept).test(file.type)
-      // if (!isAccept) {
-      //   this.$message.error(`请选择${this.acceptText}类型的文件`)
-      //   return isAccept;
-      // }
-      return isRightSize;
+      let type = ''
+      let isAccept = true
+      if (this.accept === '.xls,.xlsx' || this.accept === '.doc,.docx' || this.accept === '.pdf' || this.accept === '.txt') {
+        type = this.getType(file.name)
+        isAccept = this.accept.indexOf(type) > -1
+      } else {
+        type = file.type
+        isAccept = new RegExp(this.accept).test(type)
+      }
+      if (!isAccept) {
+        this.$message.error(`请选择${this.acceptText}类型的文件`)
+        return isAccept;
+      }
+      return isRightSize && isAccept;
     },
     handleSuccess(res, file, fileList) {
       if (res.code == 200) {
@@ -147,9 +161,11 @@ export default {
           url: res.data.url
         })
         this.$emit('input', this.fileList)
+        this.$emit('change', this.fileList)
       } else {
         fileList.filter(o => o.uid != file.uid)
         this.$emit('input', this.fileList)
+        this.$emit('change', this.fileList)
         this.$message({ message: res.msg, type: 'error', duration: 1500 })
       }
     },
@@ -160,6 +176,7 @@ export default {
       this.fileList.splice(index, 1)
       this.$refs.elUpload.uploadFiles.splice(index, 1)
       this.$emit("input", this.fileList)
+      this.$emit('change', this.fileList)
       // this.$confirm(`确定移除${file.name}？`, '提示').then(() => {
       // }).catch(() => { })
     },
