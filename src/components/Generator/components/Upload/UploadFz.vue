@@ -143,7 +143,7 @@ export default {
       if (this.accept === '.xls,.xlsx' || this.accept === '.doc,.docx' || this.accept === '.pdf' || this.accept === '.txt') {
         type = this.getType(file.name)
         isAccept = this.accept.indexOf(type) > -1
-      } else {
+      } else if (this.accept === '*') { } else {
         type = file.type
         isAccept = new RegExp(this.accept).test(type)
       }
