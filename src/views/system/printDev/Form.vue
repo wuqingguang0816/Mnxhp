@@ -72,8 +72,7 @@
               </el-select>
             </el-form-item>
             <el-form-item label="SQL语句" prop="sqlTemplate">
-              <el-button icon="el-icon-plus" @click="addSql()">新增SQL语句
-              </el-button>
+              <el-button icon="el-icon-plus" @click="addSql()">新增SQL</el-button>
               <el-row v-for="(item,i) in sqlTemplate" :key="i" class="mt-10">
                 <el-col :span="20">
                   <el-input v-model="item.sql" placeholder="SQL语句" type="textarea"
