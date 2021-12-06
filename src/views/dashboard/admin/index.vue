@@ -183,6 +183,7 @@ export default {
         font-size: 16px;
         font-weight: bold;
         color: #333;
+        margin-right: 10px;
       }
       &:nth-child(2) {
         color: #999;
