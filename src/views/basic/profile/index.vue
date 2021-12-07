@@ -12,7 +12,7 @@
         <div class="JNPF-common-title mb-20">
           <h2 class="bold">我的下属</h2>
         </div>
-        <el-row :gutter="12">
+        <el-row :gutter="12" v-if="subordinateIds.length">
           <el-col :span="6" v-for="(item,i) in subordinateIds" :key="i" class="subordinate-item">
             <el-card shadow="hover">
               <el-avatar :size="40" :src="define.comUrl+ item.avatar"></el-avatar>
@@ -23,6 +23,7 @@
             </el-card>
           </el-col>
         </el-row>
+        <el-empty description="暂无数据" :image-size="120" v-else></el-empty>
       </el-tab-pane>
       <el-tab-pane label="系统权限" name="authorize" class="el-tab-pane-authorize">
         <Authorize ref="authorize" v-if="visible.authorize" />
