@@ -141,4 +141,9 @@ export default {
 .tox-tinymce-aux {
   z-index: 10001 !important;
 }
+.tox .tox-toolbar,
+.tox .tox-toolbar__overflow,
+.tox .tox-toolbar__primary {
+  background-color: #fff !important;
+}
 </style>
