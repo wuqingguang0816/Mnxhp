@@ -301,6 +301,8 @@ export default {
   position: relative;
   background: #fff;
   margin-right: 10px;
+  border-radius: 4px;
+  overflow: hidden;
   .left-scrollbar {
     height: 100%;
     ::v-deep .el-scrollbar__wrap {
@@ -323,6 +325,7 @@ export default {
   display: flex;
   flex-direction: column;
   overflow-x: auto;
+  border-radius: 4px;
   ::v-deep .tox-tinymce {
     border: none;
   }
