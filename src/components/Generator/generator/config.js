@@ -410,6 +410,9 @@ export const inputComponents = [{
       regList: [],
       trigger: 'click'
     },
+    on: {
+      change: '({ data, formData, setFormData, setShowOrHide, setRequired, setDisabled, request, getFieldOptions, setFieldOptions }) => {\n    // 在此编写代码\n    \n}',
+    },
     disabled: false,
     accept: '',
     fileSize: 5,
@@ -434,6 +437,9 @@ export const inputComponents = [{
       tableName: '',
       regList: [],
       trigger: 'click'
+    },
+    on: {
+      change: '({ data, formData, setFormData, setShowOrHide, setRequired, setDisabled, request, getFieldOptions, setFieldOptions }) => {\n    // 在此编写代码\n    \n}',
     },
     disabled: false,
     accept: '',
