@@ -6,6 +6,41 @@
   "description": "",
   "glyphs": [
     {
+      "icon_id": "26318656",
+      "name": "report-icon-align-center",
+      "font_class": "report-icon-align-center",
+      "unicode": "e638",
+      "unicode_decimal": 58936
+    },
+    {
+      "icon_id": "26318657",
+      "name": "report-icon-font",
+      "font_class": "report-icon-font",
+      "unicode": "e65c",
+      "unicode_decimal": 58972
+    },
+    {
+      "icon_id": "26318658",
+      "name": "report-icon-align-left",
+      "font_class": "report-icon-align-left",
+      "unicode": "e65d",
+      "unicode_decimal": 58973
+    },
+    {
+      "icon_id": "26318659",
+      "name": "report-icon-import-excel",
+      "font_class": "report-icon-import-excel",
+      "unicode": "e65e",
+      "unicode_decimal": 58974
+    },
+    {
+      "icon_id": "26318660",
+      "name": "report-icon-align-right",
+      "font_class": "report-icon-align-right",
+      "unicode": "e65f",
+      "unicode_decimal": 58975
+    },
+    {
       "icon_id": "26304443",
       "name": "message",
       "font_class": "message",
@@ -151,13 +186,6 @@
       "font_class": "report-icon-horizontal-column",
       "unicode": "e637",
       "unicode_decimal": 58935
-    },
-    {
-      "icon_id": "26287446",
-      "name": "report-icon-font",
-      "font_class": "report-icon-font",
-      "unicode": "e638",
-      "unicode_decimal": 58936
     },
     {
       "icon_id": "26287447",

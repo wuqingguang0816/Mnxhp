@@ -1,9 +1,9 @@
 @font-face {
   font-family: "icon-ym";
   /* Project id 2011706 */
-  src: url('iconfont.woff2?t=1638929066542') format('woff2'),
-    url('iconfont.woff?t=1638929066542') format('woff'),
-    url('iconfont.ttf?t=1638929066542') format('truetype');
+  src: url('iconfont.woff2?t=1638948220693') format('woff2'),
+    url('iconfont.woff?t=1638948220693') format('woff'),
+    url('iconfont.ttf?t=1638948220693') format('truetype');
 }
 
 .icon-ym {
@@ -12,6 +12,26 @@
   font-style: normal;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-ym-report-icon-align-center:before {
+  content: "\e638";
+}
+
+.icon-ym-report-icon-font:before {
+  content: "\e65c";
+}
+
+.icon-ym-report-icon-align-left:before {
+  content: "\e65d";
+}
+
+.icon-ym-report-icon-import-excel:before {
+  content: "\e65e";
+}
+
+.icon-ym-report-icon-align-right:before {
+  content: "\e65f";
 }
 
 .icon-ym-message:before {
@@ -96,10 +116,6 @@
 
 .icon-ym-report-icon-horizontal-column:before {
   content: "\e637";
-}
-
-.icon-ym-report-icon-font:before {
-  content: "\e638";
 }
 
 .icon-ym-report-icon-align-middle2:before {
