@@ -328,6 +328,9 @@ export const inputComponents = [{
       tableName: '',
       dragDisabled: false
     },
+    on: {
+      change: '({ data, formData, setFormData, setShowOrHide, setRequired, setDisabled, request, getFieldOptions, setFieldOptions }) => {\n    // 在此编写代码\n    \n}',
+    },
     disabled: false,
     accept: '',
     showTip: false,
