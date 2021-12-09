@@ -213,7 +213,7 @@ export default {
     },
     colseForm(isRefresh) {
       this.formVisible = false
-      if (isRefresh) this.reset()
+      if (isRefresh) this.initData()
     }
   }
 }
