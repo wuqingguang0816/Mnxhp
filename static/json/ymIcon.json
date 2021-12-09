@@ -6,6 +6,48 @@
   "description": "",
   "glyphs": [
     {
+      "icon_id": "26364747",
+      "name": "generator-button",
+      "font_class": "generator-button",
+      "unicode": "e661",
+      "unicode_decimal": 58977
+    },
+    {
+      "icon_id": "26364742",
+      "name": "scanCode1",
+      "font_class": "scanCode1",
+      "unicode": "e651",
+      "unicode_decimal": 58961
+    },
+    {
+      "icon_id": "26364743",
+      "name": "generator-qrcode",
+      "font_class": "generator-qrcode",
+      "unicode": "e658",
+      "unicode_decimal": 58968
+    },
+    {
+      "icon_id": "26364744",
+      "name": "generator-barcode",
+      "font_class": "generator-barcode",
+      "unicode": "e659",
+      "unicode_decimal": 58969
+    },
+    {
+      "icon_id": "26364745",
+      "name": "generator-popup",
+      "font_class": "generator-popup",
+      "unicode": "e65b",
+      "unicode_decimal": 58971
+    },
+    {
+      "icon_id": "26364746",
+      "name": "generator-popup-attr",
+      "font_class": "generator-popup-attr",
+      "unicode": "e660",
+      "unicode_decimal": 58976
+    },
+    {
       "icon_id": "26318656",
       "name": "report-icon-align-center",
       "font_class": "report-icon-align-center",
@@ -48,13 +90,6 @@
       "unicode_decimal": 58934
     },
     {
-      "icon_id": "26304209",
-      "name": "icon-ym-generator-popup-attr",
-      "font_class": "icon-ym-generator-popup-attr",
-      "unicode": "e658",
-      "unicode_decimal": 58968
-    },
-    {
       "icon_id": "26303056",
       "name": "information",
       "font_class": "information",
@@ -62,32 +97,11 @@
       "unicode_decimal": 58926
     },
     {
-      "icon_id": "26303058",
-      "name": "icon-ym-generator-button",
-      "font_class": "icon-ym-generator-button",
-      "unicode": "e651",
-      "unicode_decimal": 58961
-    },
-    {
-      "icon_id": "26303060",
-      "name": "icon-ym-generator-code",
-      "font_class": "icon-ym-generator-code",
-      "unicode": "e659",
-      "unicode_decimal": 58969
-    },
-    {
       "icon_id": "26303061",
       "name": "group",
       "font_class": "group",
       "unicode": "e65a",
       "unicode_decimal": 58970
-    },
-    {
-      "icon_id": "26303062",
-      "name": "icon-ym-generator-popup",
-      "font_class": "icon-ym-generator-popup",
-      "unicode": "e65b",
-      "unicode_decimal": 58971
     },
     {
       "icon_id": "26288795",
