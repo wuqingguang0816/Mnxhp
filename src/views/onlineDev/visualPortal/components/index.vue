@@ -237,6 +237,7 @@ $lighterBlue: #409eff;
         border-radius: 4px;
         margin-bottom: 30px;
         overflow: hidden;
+        padding: 0;
         .list {
           margin-right: -10px;
           padding: 0 10px 0;
