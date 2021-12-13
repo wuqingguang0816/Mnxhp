@@ -67,7 +67,7 @@ function buildDataObject(confClone, dataObject, formData) {
   if (confClone.__config__.jnpfKey === 'JNPFText') {
     vModel.call(this, dataObject, confClone.__config__.defaultValue)
   }
-  if (confClone.__config__.jnpfKey === 'calculate' || confClone.__config__.jnpfKey === 'table') {
+  if (['calculate', 'table', 'barcode', 'qrcode'].includes(confClone.__config__.jnpfKey)) {
     dataObject.attrs['formData'] = formData
   }
   if (confClone.__config__.jnpfKey === 'relationForm' || confClone.__config__.jnpfKey === 'relationFlow') {

@@ -25,9 +25,9 @@ const ruleTrigger = {
 // 动态options
 const dyOptionsList = ['radio', 'checkbox', 'select', 'cascader', 'treeSelect']
 // 不添加vModel
-const noVModelList = ['divider', 'JNPFText', 'groupTitle', 'relationFormAttr', 'relationFlowAttr']
+const noVModelList = ['divider', 'JNPFText', 'groupTitle', 'relationFormAttr', 'relationFlowAttr', 'button', 'barcode', 'qrcode']
 // 不可以添加到子表组件
-const noTableAllowList = ['textarea', 'JNPFText', 'JNPFAmount', 'divider', 'editor', 'uploadImg', 'uploadFz', 'radio', 'checkbox', 'relationFormAttr', 'relationFlow', 'relationFlowAttr', 'groupTitle', 'createUser', 'createTime', 'modifyUser', 'modifyTime', 'currOrganize', 'currDept', 'currPosition', 'rate', 'slider', 'PsdInput', 'colorPicker']
+const noTableAllowList = [...noVModelList, 'textarea', 'editor', 'uploadImg', 'uploadFz', 'radio', 'checkbox', 'relationFlow', 'createUser', 'createTime', 'modifyUser', 'modifyTime', 'currOrganize', 'currDept', 'currPosition', 'rate', 'slider', 'PsdInput', 'colorPicker']
 // 不可以添加到列表展示
 const noColumnShowList = ['PsdInput', 'colorPicker', 'rate', 'slider', 'divider', 'uploadImg', 'uploadFz', 'editor', 'JNPFText', 'relationFormAttr', 'relationFlowAttr', 'groupTitle']
 // 不可以添加到搜索
@@ -74,7 +74,55 @@ const webPeculiarList = [{
       regList: []
     },
     expression: []
-  }
+  },
+  {
+    __config__: {
+      jnpfKey: 'barcode',
+      label: '条形码',
+      labelWidth: undefined,
+      showLabel: true,
+      tag: 'jnpf-barcode',
+      tagIcon: 'icon-ym icon-ym-generator-barcode',
+      defaultValue: '',
+      required: false,
+      layout: 'colFormItem',
+      span: 24,
+      dragDisabled: false,
+      tableName: '',
+      regList: [],
+    },
+    format: 'code128',
+    lineColor: '#000',
+    background: '#fff',
+    width: 4,
+    height: 40,
+    dataType: 'static',
+    staticText: '',
+    relationField: '',
+  },
+  {
+    __config__: {
+      jnpfKey: 'qrcode',
+      label: '二维码',
+      labelWidth: undefined,
+      showLabel: true,
+      tag: 'jnpf-qrcode',
+      tagIcon: 'icon-ym icon-ym-generator-qrcode',
+      defaultValue: '',
+      required: false,
+      layout: 'colFormItem',
+      span: 24,
+      dragDisabled: false,
+      tableName: '',
+      regList: [],
+    },
+    background: '#fff',
+    foreground: '#000',
+    size: 100,
+    dataType: 'static',
+    staticText: '',
+    relationField: '',
+  },
 ]
 
 export { ruleTrigger, dyOptionsList, noVModelList, noTableAllowList, noColumnShowList, noSearchList, webPeculiarList, useInputList, useDateList, useSelectList }
