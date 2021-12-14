@@ -12,11 +12,11 @@ export default {
       type: String,
       default: 'static'
     },
-    foreground: {
+    colorLight: {
       type: String,
       default: '#000'
     },
-    background: {
+    colorDark: {
       type: String,
       default: '#fff'
     },
@@ -81,10 +81,10 @@ export default {
         this.getQRimg()
       })
     },
-    foreground() {
+    colorLight() {
       this.getQRimg()
     },
-    background() {
+    colorDark() {
       this.getQRimg()
     },
     size() {
@@ -105,8 +105,8 @@ export default {
         height: this.size,
         text: this.qrcode, // 二维码内容
         // render: 'canvas' // 设置渲染方式（有两种方式 table和canvas，默认是canvas）
-        colorDark: this.background,
-        colorLight: this.foreground,
+        colorDark: this.colorDark,
+        colorLight: this.colorLight,
         correctLevel: QRCode.CorrectLevel.H //容错级别 容错级别有：（1）QRCode.CorrectLevel.L （2）QRCode.CorrectLevel.M （3）QRCode.CorrectLevel.Q （4）QRCode.CorrectLevel.H
       })
     }

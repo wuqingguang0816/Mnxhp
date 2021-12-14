@@ -75,7 +75,9 @@ const webPeculiarList = [{
     },
     expression: []
   },
-  {
+]
+// 在线开发-功能设计/流程设计/移动设计独有组件
+const onlinePeculiarList = [{
     __config__: {
       jnpfKey: 'barcode',
       label: '条形码',
@@ -84,7 +86,6 @@ const webPeculiarList = [{
       tag: 'jnpf-barcode',
       tagIcon: 'icon-ym icon-ym-generator-barcode',
       defaultValue: '',
-      required: false,
       layout: 'colFormItem',
       span: 24,
       dragDisabled: false,
@@ -109,15 +110,14 @@ const webPeculiarList = [{
       tag: 'jnpf-qrcode',
       tagIcon: 'icon-ym icon-ym-generator-qrcode',
       defaultValue: '',
-      required: false,
       layout: 'colFormItem',
       span: 24,
       dragDisabled: false,
       tableName: '',
       regList: [],
     },
-    background: '#fff',
-    foreground: '#000',
+    colorDark: '#000',
+    colorLight: '#fff',
     size: 100,
     dataType: 'static',
     staticText: '',
@@ -125,4 +125,4 @@ const webPeculiarList = [{
   },
 ]
 
-export { ruleTrigger, dyOptionsList, noVModelList, noTableAllowList, noColumnShowList, noSearchList, webPeculiarList, useInputList, useDateList, useSelectList }
+export { ruleTrigger, dyOptionsList, noVModelList, noTableAllowList, noColumnShowList, noSearchList, webPeculiarList, onlinePeculiarList, useInputList, useDateList, useSelectList }

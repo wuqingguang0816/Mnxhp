@@ -186,10 +186,10 @@
                   :min="0" :precision="0" controls-position="right" />
               </el-form-item>
               <el-form-item label="背景颜色">
-                <el-color-picker v-model="activeData.background"></el-color-picker>
+                <el-color-picker v-model="activeData.colorLight"></el-color-picker>
               </el-form-item>
               <el-form-item label="实点颜色">
-                <el-color-picker v-model="activeData.foreground"></el-color-picker>
+                <el-color-picker v-model="activeData.colorDark"></el-color-picker>
               </el-form-item>
               <el-form-item label="尺寸">
                 <el-input-number v-model="activeData.size" placeholder="尺寸" :min="0" :precision="0"
