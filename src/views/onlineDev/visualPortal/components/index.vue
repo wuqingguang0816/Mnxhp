@@ -217,7 +217,7 @@ $lighterBlue: #409eff;
     }
   }
   .left-box {
-    background-color: #ebeef5;
+    background-color: #fff;
     border-radius: 4px;
     overflow: hidden;
     .components-list {
@@ -226,18 +226,21 @@ $lighterBlue: #409eff;
       .components-title {
         font-size: 14px;
         color: #043254;
-        line-height: 30px;
+        line-height: 42px;
         margin-bottom: 10px;
         font-weight: bold;
+        padding-left: 10px;
+        border-bottom: 1px solid #dcdfe6;
       }
       .components-part {
         background: #fff;
         border-radius: 4px;
-        padding: 10px 10px 0;
-        margin-bottom: 10px;
+        margin-bottom: 30px;
         overflow: hidden;
+        padding: 0;
         .list {
           margin-right: -10px;
+          padding: 0 10px 0;
         }
 
         &:last-child {

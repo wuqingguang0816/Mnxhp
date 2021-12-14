@@ -254,6 +254,7 @@ export default {
     .el-tabs__item {
       width: 50%;
       text-align: center;
+      color: #303133 !important;
     }
 
     .el-tabs__nav {

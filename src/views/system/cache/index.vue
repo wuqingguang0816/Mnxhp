@@ -41,6 +41,9 @@
           </el-table-column>
           <el-table-column prop="overdueTime" label="过期" sortable width="160"
             :formatter="jnpf.tableDateFormat" />
+          <el-table-column prop="cacheSize" label="大小" width="90">
+            <template slot-scope="scope">{{scope.row.cacheSize | toFileSize()}}</template>
+          </el-table-column>
           <el-table-column label="操作" fixed="right" width="50">
             <template slot-scope="scope">
               <el-button size="mini" type="text" class="JNPF-table-delBtn"

@@ -1,8 +1,7 @@
 <template>
   <div class="comSelect-container">
-    <JNPF-TreeSelect :options="treeData" v-model="innerValue" :placeholder="placeholder"
-      :clearable="clearable" :filterable="filterable" :disabled="disabled" v-on="$listeners"
-      :lastLevel="lastLevel" lastLevelKey='type' lastLevelValue='department' :multiple="multiple">
+    <JNPF-TreeSelect :options="treeData" v-model="innerValue" v-on="$listeners" v-bind="$attrs"
+      :lastLevel="lastLevel" lastLevelKey='type' lastLevelValue='department'>
     </JNPF-TreeSelect>
   </div>
 </template>
@@ -11,12 +10,9 @@
 export default {
   name: 'depSelect',
   props: {
-    value: defaultStatus,
-    disabled: defaultStatus,
-    placeholder: defaultStatus,
-    multiple: defaultStatus,
-    clearable: defaultStatus,
-    filterable: defaultStatus,
+    value: {
+      default: ''
+    },
     lastLevel: {
       type: Boolean,
       default: true

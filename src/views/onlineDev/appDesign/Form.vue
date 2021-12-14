@@ -42,7 +42,7 @@
               </el-select>
             </el-form-item>
             <el-form-item label="功能排序" prop="sortCode">
-              <el-input-number :min="0" :max="9999" v-model="dataForm.sortCode"
+              <el-input-number :min="0" :max="999999" v-model="dataForm.sortCode"
                 controls-position="right" />
             </el-form-item>
             <el-form-item label="功能状态" prop="state">

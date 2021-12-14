@@ -1,6 +1,6 @@
 <template>
   <el-aside width="300px" class="right-box">
-    <div class="cap-wrapper">控件属性</div>
+    <div class="cap-wrapper">组件属性</div>
     <el-scrollbar class="aside-scrollbar">
       <el-form size="small" label-width="80px" labelPosition="left">
         <template v-if="activeData">

@@ -437,9 +437,9 @@ export default {
       func(this.parameter)
     },
     submitForm() {
+      const isTableValid = this.checkTableData()
       const beforeSubmitValid = this.beforeSubmit()
       if (!beforeSubmitValid) return false
-      const isTableValid = this.checkTableData()
       this.$refs[this.formConf.formRef].validate(valid => {
         if (!valid) return false
         if (!isTableValid) return false

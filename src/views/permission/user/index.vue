@@ -26,8 +26,8 @@
         <el-form @submit.native.prevent>
           <el-col :span="6">
             <el-form-item :label="$t('common.keyWord')">
-              <el-input v-model="params.keyword" :placeholder="$t('common.enterKeyword')"
-                clearable />
+              <el-input v-model="params.keyword" :placeholder="$t('common.enterKeyword')" clearable
+                @keyup.enter.native="search()" />
             </el-form-item>
           </el-col>
           <el-col :span="6">

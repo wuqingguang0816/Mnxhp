@@ -111,16 +111,17 @@ export default {
         toolbar_sticky: true,
         statusbar: false,
         // extended_valid_elements: 'span[class|title|wktag|style|contenteditable]',
-        content_style: `html {height: 100%; background: #ebeef5;padding: 20px 0;box-sizing: border-box;}
+        content_style: `html {height: 100%; background: #fff;padding: 20px 0;box-sizing: border-box;}
         body {
           font-family: simsun, serif, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
           padding: 40px 30px;
           width: 600px;
           margin: 0 auto !important;
-          border: 1px solid rgb(210, 213, 216);
+          // border: 1px solid rgb(210, 213, 216);
           background: white;
           min-height: 100%;
           box-sizing: border-box;
+          box-shadow: 0 2px 12px 0 rgb(0 0 0 / 10%);
         }
         .wk-tiny-color--customer {
           color: #005AF3;
@@ -300,6 +301,8 @@ export default {
   position: relative;
   background: #fff;
   margin-right: 10px;
+  border-radius: 4px;
+  overflow: hidden;
   .left-scrollbar {
     height: 100%;
     ::v-deep .el-scrollbar__wrap {
@@ -309,8 +312,10 @@ export default {
   .JNPF-common-title {
     padding: 0 10px;
     margin-bottom: 10px;
+    height: 39px;
     h2 {
-      font-weight: 600;
+      font-size: 14px;
+      line-height: 39px;
     }
   }
 }
@@ -320,6 +325,7 @@ export default {
   display: flex;
   flex-direction: column;
   overflow-x: auto;
+  border-radius: 4px;
   ::v-deep .tox-tinymce {
     border: none;
   }

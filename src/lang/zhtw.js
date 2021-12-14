@@ -137,7 +137,7 @@ export default {
     scanTitle: 'APP掃碼登錄',
     codeTitle: '手機驗證登錄',
     logIn: '登錄',
-    username: '請輸入用戶名/手機號',
+    username: '請輸入賬號',
     password: '請輸入密碼',
     rule: '子賬戶規則：手機號@賬戶 例：18577778888@101001',
     version: '版本',
