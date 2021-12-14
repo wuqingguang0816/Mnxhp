@@ -17,7 +17,7 @@ export default {
     },
     format: {
       type: String,
-      default: 'CODE128'
+      default: 'code128'
     },
     lineColor: {
       type: String,
