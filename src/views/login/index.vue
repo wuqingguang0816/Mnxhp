@@ -1,8 +1,8 @@
 <template>
   <div class="login-container">
-    <div class="login-version">
+    <!-- <div class="login-version">
       <p class="login-version-text">{{$t('login.version')}}{{define.version}}</p>
-    </div>
+    </div> -->
     <div class="login-content">
       <div class="login-form">
         <img class="login-logo" src="../../assets/images/login_logo.png" alt="">
@@ -33,7 +33,7 @@
         </el-form>
         <div v-show="active==2" class="login-form-QRCode">
           <img class="qrcode-img" src="../../assets/images/login_qr.png">
-          <p class="qrcode-tip">{{ $t('login.scanTip') }}</p>
+          <p class="qrcode-tip">正在测试,稍后上线</p>
         </div>
       </div>
     </div>

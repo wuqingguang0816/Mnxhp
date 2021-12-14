@@ -23,7 +23,7 @@
                 <template v-if="!activeData.__config__.isSubTable">
                   <el-form-item
                     v-if="activeData.__vModel__!==undefined && !noVModelList.includes(activeData.__config__.jnpfKey)"
-                    label="数据库表">
+                    label="数据库表" filterable>
                     <el-select v-model="activeData.__config__.tableName" placeholder="请选择数据库表"
                       @change="tableChange">
                       <el-option v-for="item in allTable" :key="item.table" :value="item.table"
@@ -35,7 +35,7 @@
                     v-if="activeData.__vModel__ !== undefined && !noVModelList.includes(activeData.__config__.jnpfKey)"
                     label="控件字段">
                     <el-select v-model="activeData.__vModel__" placeholder="请选择控件字段(v-model)"
-                      clearable @change="fieldChange">
+                      clearable @change="fieldChange" filterable>
                       <el-option v-for="item in fieldOptions" :key="item.realField"
                         :value="item.realField"
                         :label="item.fieldName?item.field+'('+item.fieldName+')':item.field">
@@ -48,7 +48,7 @@
                     v-if="activeData.__vModel__ !== undefined && !noVModelList.includes(activeData.__config__.jnpfKey)"
                     label="控件字段">
                     <el-select v-model="activeData.__vModel__" placeholder="请选择控件字段(v-model)"
-                      clearable @change="fieldChange1">
+                      clearable @change="fieldChange1" filterable>
                       <el-option
                         v-for="item in getSubTalebFiled(activeData.__config__.relationTable)"
                         :key="item.field" :value="item.field"
@@ -794,7 +794,7 @@ export default {
     },
     setDefaultOptions() {
       if (!this.$store.getters.hasTable) return
-      if (this.activeData.__vModel__ === undefined) return
+      if (this.activeData.__vModel__ === undefined || this.activeData.__config__.jnpfKey === 'table') return
       if (!this.activeData.__config__.tableName || this.activeData.__config__.tableName === this.mainTable) {
         let fieldOptions = this.formItemList.map(o => ({ ...o, realField: o.field }))
         this.fieldOptions = fieldOptions.filter(o => o.primaryKey != 1)

@@ -248,7 +248,6 @@ export default {
     colseForm(isRefresh) {
       this.formVisible = false
       if (isRefresh) {
-        this.keyword = ''
         this.initData()
       }
     },

@@ -37,22 +37,34 @@
   }
 
   .login-form {
-    width: 500px;
     height: 530px;
-    padding: 50px 50px 0;
+    width: 510px;
+    padding: 50px 60px;
     border-radius: 6px;
-    background-color: #fff;
+
+    .sms-input {
+      width: 240px;
+    }
+
+    .sms-right {
+      width: 120px;
+
+      .smsBtn {
+        width: 100%;
+      }
+    }
 
     .login-logo {
       width: 100%;
       height: auto;
-      margin-bottom: 50px;
+      margin-bottom: 35px;
     }
 
     .login-tab {
-      height: 44px;
+      height: 58px;
       margin-bottom: 30px;
       position: relative;
+      border-bottom: 1px solid #CBCBCB;
 
       &::after {
         position: absolute;
@@ -61,7 +73,7 @@
         height: 2px;
         content: '';
         display: block;
-        bottom: 0;
+        bottom: -1px;
         background-color: #1890ff;
         z-index: 100;
         transition: .5s;
@@ -84,10 +96,10 @@
         position: relative;
         width: 50%;
         font-size: 20px;
-        line-height: 44px;
+        line-height: 58px;
         color: #666;
         display: inline-block;
-        height: 44px;
+        height: 58px;
         text-align: center;
 
         &.active {
@@ -120,8 +132,7 @@
       .login-btn {
         width: 100%;
         font-size: 16px;
-        margin-bottom: 20px;
-        margin-top: 20px;
+        margin-top: 12px;
       }
 
       .foot {

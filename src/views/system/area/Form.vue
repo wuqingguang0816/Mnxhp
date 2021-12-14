@@ -25,7 +25,7 @@
         <el-input v-model="dataForm.enCode" placeholder="输入编码" />
       </el-form-item>
       <el-form-item label="排序" prop="sortCode">
-        <el-input-number :min="0" :max="9999" v-model="dataForm.sortCode"
+        <el-input-number :min="0" :max="999999" v-model="dataForm.sortCode"
           controls-position="right" />
       </el-form-item>
       <el-form-item label="状态" prop="enabledMark">

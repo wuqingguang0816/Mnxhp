@@ -115,7 +115,7 @@ export default {
     colseForm(isRefresh) {
       this.formVisible = false
       if (isRefresh) {
-        this.reset()
+        this.initData()
       }
     }
   }

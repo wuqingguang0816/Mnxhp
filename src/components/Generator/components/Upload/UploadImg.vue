@@ -96,9 +96,15 @@ export default {
       if (!this.fileSize) return true
       let isRightSize = file.size / unitNum < this.fileSize
       if (!isRightSize) {
-        this.$message.error(`文件大小超过${this.fileSize}${this.sizeUnit}`)
+        this.$message.error(`图片大小超过${this.fileSize}${this.sizeUnit}`)
+        return isRightSize;
       }
-      return isRightSize;
+      let isAccept = new RegExp('image/*').test(file.type)
+      if (!isAccept) {
+        this.$message.error(`请上传图片`)
+        return isAccept;
+      }
+      return isRightSize && isAccept;
     },
     handleSuccess(res, file, fileList) {
       if (res.code == 200) {
@@ -108,9 +114,11 @@ export default {
           url: res.data.url
         })
         this.$emit('input', this.fileList)
+        this.$emit('change', this.fileList)
       } else {
         fileList.filter(o => o.uid != file.uid)
         this.$emit('input', this.fileList)
+        this.$emit('change', this.fileList)
         this.$message({ message: res.msg, type: 'error', duration: 1500 })
       }
     },
@@ -124,6 +132,7 @@ export default {
       this.fileList.splice(index, 1)
       this.$refs.elUpload.uploadFiles.splice(index, 1)
       this.$emit("input", this.fileList)
+      this.$emit('change', this.fileList)
     },
     getImgList(list) {
       const newList = list.map(o => this.define.comUrl + o.url)

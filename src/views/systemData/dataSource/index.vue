@@ -60,7 +60,7 @@
           :limit.sync="listQuery.pageSize" @pagination="initData" />
       </div>
     </div>
-    <Form v-if="formVisible" ref="Form" @refreshDataList="reset" />
+    <Form v-if="formVisible" ref="Form" @refreshDataList="initData" />
   </div>
 </template>
 

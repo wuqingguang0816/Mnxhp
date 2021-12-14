@@ -188,17 +188,20 @@ export default {
       this.getItemValue(this.value)
     },
     getItemValue(val) {
-      if (!this.field || !this.modelId) return
-      let relationData = this.$store.state.generator.relationData
+      if (!this.modelId) return
       if (val) {
         getDataChange(this.modelId, val).then(res => {
           if (!res.data || !res.data.data) return
           let data = JSON.parse(res.data.data)
-          this.$set(relationData, this.field, data)
           this.innerValue = data[this.relationField]
+          if (!this.field) return
+          let relationData = this.$store.state.generator.relationData
+          this.$set(relationData, this.field, data)
           this.$store.commit('generator/UPDATE_RELATION_DATA', relationData)
         })
       } else {
+        if (!this.field) return
+        let relationData = this.$store.state.generator.relationData
         this.$set(relationData, this.field, {})
         this.$store.commit('generator/UPDATE_RELATION_DATA', relationData)
       }

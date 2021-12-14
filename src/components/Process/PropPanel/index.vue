@@ -149,7 +149,7 @@
     <!-- 发起人 -->
     <section class="approver-pane" v-if="value && isStartNode()">
       <el-tabs style="height:100%;">
-        <el-tab-pane label="发起人" v-if="flowType!=1">
+        <el-tab-pane label="基础设置" v-if="flowType!=1">
           <el-row class="pd-10">
             <el-col :span="4" style="font-size: 14px;line-height:32px">谁可以发起</el-col>
             <el-col :span="20" style="font-size: 14px;line-height:32px;margin-bottom:10px">

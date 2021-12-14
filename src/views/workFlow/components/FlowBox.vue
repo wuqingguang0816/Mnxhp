@@ -101,8 +101,8 @@
                 :value="item.nodeCode" />
             </el-select>
           </el-form-item>
-          <el-form-item label="指派人" prop="freeApproverUserId">
-            <user-select v-model="assignForm.freeApproverUserId" placeholder="请选择指派人" />
+          <el-form-item label="指派给谁" prop="freeApproverUserId">
+            <user-select v-model="assignForm.freeApproverUserId" placeholder="请选择指派给谁" />
           </el-form-item>
         </el-form>
         <span slot="footer" class="dialog-footer">
@@ -143,7 +143,7 @@ export default {
           { required: true, message: '请选择指派节点', trigger: 'change' }
         ],
         freeApproverUserId: [
-          { required: true, message: '请选择指派人', trigger: 'click' }
+          { required: true, message: '请选择指派给谁', trigger: 'click' }
         ]
       },
       assignNodeList: [],

@@ -20,7 +20,7 @@
       <el-tab-pane name="setAccount">
         <span slot="label"><i class="icon-ym icon-ym-extend-cog"></i>邮箱配置</span>
       </el-tab-pane>
-      <el-tab-pane disabled name="line"></el-tab-pane>
+      <!-- <el-tab-pane disabled name="line"></el-tab-pane>
       <el-tab-pane label="我的文件夹" name="subordinate" disabled>
       </el-tab-pane>
       <el-tab-pane name="Personal">
@@ -42,7 +42,7 @@
         <el-link slot="label" :underline="false" type="success"><i
             class="ym-custom ym-custom-checkbox-blank-circle"></i>Clients
         </el-link>
-      </el-tab-pane>
+      </el-tab-pane> -->
       <div class="main JNPF-flex-main">
         <el-row class="JNPF-common-search-box" :gutter="16">
           <el-form @submit.native.prevent>
@@ -402,6 +402,7 @@ export default {
   }
   >>> .el-tabs__item {
     text-align: left !important;
+    width: 160px !important;
     .icon-ym {
       font-size: 14px;
       margin-right: 8px;
