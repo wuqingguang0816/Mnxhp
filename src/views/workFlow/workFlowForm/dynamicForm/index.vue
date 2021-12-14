@@ -32,6 +32,11 @@ export default {
       this.loading = true
       this.$nextTick(() => {
         if (this.dataForm.id) {
+          let extra = {
+            modelId,
+            id
+          }
+          this.$store.commit('generator/SET_DYNAMIC_MODEL_EXTRA', extra)
           if (data.type == 1) {
             getModelInfo(data.flowId, this.dataForm.id).then(res => {
               this.dataForm = res.data
@@ -56,6 +61,7 @@ export default {
             })
           }
         } else {
+          this.$store.commit('generator/SET_DYNAMIC_MODEL_EXTRA', {})
           this.formData = {}
           this.fillFormData(this.formConf, this.formData)
           this.$nextTick(() => {

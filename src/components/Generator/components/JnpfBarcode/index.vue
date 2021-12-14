@@ -36,11 +36,11 @@ export default {
     },
     width: {
       type: Number,
-      default: 40
+      default: 4
     },
     height: {
       type: Number,
-      default: 4
+      default: 40
     },
     staticText: {
       type: String,

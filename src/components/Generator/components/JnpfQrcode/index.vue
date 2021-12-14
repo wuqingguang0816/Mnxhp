@@ -20,9 +20,6 @@ export default {
       type: String,
       default: '#fff'
     },
-    formData: {
-      type: Object
-    },
     size: {
       type: Number,
       default: 40
