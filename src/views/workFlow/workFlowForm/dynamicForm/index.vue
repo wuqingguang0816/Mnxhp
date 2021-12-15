@@ -33,8 +33,8 @@ export default {
       this.$nextTick(() => {
         if (this.dataForm.id) {
           let extra = {
-            modelId,
-            id
+            modelId: data.flowId,
+            id: this.dataForm.id
           }
           this.$store.commit('generator/SET_DYNAMIC_MODEL_EXTRA', extra)
           if (data.type == 1) {

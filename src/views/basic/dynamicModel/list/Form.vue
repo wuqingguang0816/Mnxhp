@@ -105,6 +105,7 @@ export default {
             })
           })
         } else {
+          this.$store.commit('generator/SET_DYNAMIC_MODEL_EXTRA', {})
           this.formData = {}
           this.fillFormData(this.formConf, this.formData)
           this.visible = true
