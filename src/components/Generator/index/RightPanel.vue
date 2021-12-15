@@ -203,8 +203,7 @@
                 </el-select>
               </el-form-item>
               <el-form-item label="文本输入" v-if="activeData.dataType==='static'">
-                <el-input v-model="activeData.staticText" placeholder="请输入文本输入"
-                  @change="onBarcodeTextChange" />
+                <el-input v-model="activeData.staticText" placeholder="请输入文本输入" />
               </el-form-item>
               <el-form-item label="组件选择" v-if="activeData.dataType==='relation'">
                 <el-select v-model="activeData.relationField" placeholder="请选择" clearable
