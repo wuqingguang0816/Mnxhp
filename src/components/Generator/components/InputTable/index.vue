@@ -222,7 +222,14 @@ export default {
       data.required && (data.valid = this.checkData(data))
       data.regList && data.regList.length && (data.regValid = this.checkRegData(data))
       if (['JNPF-Amount', 'el-input-number'].includes(tag)) { // 金额变动 更新数据 触发计算公式更新
-        const newVal = this.tableFormData.map(row => row.reduce((p, c) => (p[c.__vModel__] = c.value, p), {}))
+        const newVal = this.tableFormData.map(row => row.reduce((p, c) => {
+          let str = c.__vModel__
+          if (c.__vModel__ && c.__vModel__.indexOf('_jnpfRelation_') >= 0) {
+            str = c.__vModel__.substring(0, c.__vModel__.indexOf('_jnpfRelation_'))
+          }
+          p[str] = c.value
+          return p
+        }, {}))
         this.$emit('input', newVal)
       }
     },
@@ -338,6 +345,15 @@ export default {
       }
       this.tableFormData.push(this.getEmptyRow(val, this.tableFormData.length))
       this.clearAddRowFlag()
+      const newVal = this.tableFormData.map(row => row.reduce((p, c) => {
+        let str = c.__vModel__
+        if (c.__vModel__ && c.__vModel__.indexOf('_jnpfRelation_') >= 0) {
+          str = c.__vModel__.substring(0, c.__vModel__.indexOf('_jnpfRelation_'))
+        }
+        p[str] = c.value
+        return p
+      }, {}))
+      this.$emit('input', newVal)
     },
     getCmpValOfRow(row, key) {
       // 获取数字相关组件的输入值
