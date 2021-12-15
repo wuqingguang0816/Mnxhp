@@ -40,6 +40,7 @@
             <template v-else-if="head.__config__.jnpfKey==='comInput'">
               <el-input v-model="tableFormData[scope.$index][cindex].value"
                 v-bind="getConfById(head.__config__.formId)" :rowIndex="scope.$index"
+                @blur="onFormBlur(scope.$index, cindex, 'el-input')"
                 @change="onFormDataChange(scope.$index, cindex, 'el-input')">
                 <template v-if="head.__slot__">
                   <template slot="prepend" v-if="head.__slot__.prepend">
@@ -55,6 +56,7 @@
             <component v-else :is="head.__config__.tag" :rowIndex="scope.$index"
               v-model="tableFormData[scope.$index][cindex].value"
               v-bind="getConfById(head.__config__.formId,scope.$index)" :formData="formData"
+              @blur="onFormBlur(scope.$index, cindex, head.__config__.tag)"
               @change="onFormDataChange(scope.$index, cindex, head.__config__.tag)">
             </component>
             <div class="error-tip" v-show="!tableFormData[scope.$index][cindex].valid">
@@ -207,6 +209,17 @@ export default {
     //     }
     //   }
     // },
+    onFormBlur(rowIndex, colIndex, tag) {
+      const data = this.tableFormData[rowIndex][colIndex]
+      if (data && data.on && data.on.blur) {
+        const func = this.getFunc(data.on.blur)
+        if (!func) return
+        func.call(this, {
+          data: null,
+          ...this.parameter
+        })
+      }
+    },
     onFormDataChange(rowIndex, colIndex, tag) {
       if (this.isAddRow) return
       const data = this.tableFormData[rowIndex][colIndex]
