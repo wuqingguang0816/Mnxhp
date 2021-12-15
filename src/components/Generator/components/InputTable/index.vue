@@ -1,7 +1,7 @@
 <template>
   <div class="jnpf-table-box" :class="[config.__config__.type]">
     <div class="JNPF-common-title" v-if="config.__config__.showTitle && config.__config__.label">
-      <h2>{{config.__config__.label}}</h2>
+      <h2>{{ config.__config__.label }}</h2>
     </div>
     <el-table :data="tableFormData" class="JNPF-common-table" @cell-click="focusInput"
       v-bind="config.tableConf || {}" :show-summary="config['show-summary']"
@@ -10,7 +10,7 @@
         <!-- 序号 -->
         <template slot-scope="scope">
           <div class="row-action">
-            <span class="index" :class="{'btn-disabled':disabled}"> {{scope.$index + 1}}</span>
+            <span class="index" :class="{'btn-disabled':disabled}"> {{ scope.$index + 1 }}</span>
             <i class="el-icon-delete delete-btn" @click="removeRow(scope.$index)"></i>
           </div>
         </template>
@@ -22,7 +22,7 @@
           v-if="!head.__config__.noShow">
           <template slot="header">
             <span style="color: #f56c6c;" v-if="head.__config__.required">*</span>
-            {{head.__config__['label']}}
+            {{ head.__config__['label'] }}
           </template>
           <template slot-scope="scope">
             <!-- 单选框组 多选框组 都替换成下拉 并添加options -->
@@ -43,10 +43,10 @@
                 @change="onFormDataChange(scope.$index, cindex, 'el-input')">
                 <template v-if="head.__slot__">
                   <template slot="prepend" v-if="head.__slot__.prepend">
-                    {{head.__slot__.prepend}}
+                    {{ head.__slot__.prepend }}
                   </template>
                   <template slot="append" v-if="head.__slot__.append">
-                    {{head.__slot__.append}}
+                    {{ head.__slot__.append }}
                   </template>
                 </template>
               </el-input>
@@ -54,7 +54,7 @@
             <!-- 其他 -->
             <component v-else :is="head.__config__.tag" :rowIndex="scope.$index"
               v-model="tableFormData[scope.$index][cindex].value"
-              v-bind="getConfById(head.__config__.formId)" :formData="formData"
+              v-bind="getConfById(head.__config__.formId,scope.$index)" :formData="formData"
               @change="onFormDataChange(scope.$index, cindex, head.__config__.tag)">
             </component>
             <div class="error-tip" v-show="!tableFormData[scope.$index][cindex].valid">
@@ -62,7 +62,7 @@
             </div>
             <div class="error-tip"
               v-show="tableFormData[scope.$index][cindex].valid && !tableFormData[scope.$index][cindex].regValid">
-              {{tableFormData[scope.$index][cindex].regErrorText}}
+              {{ tableFormData[scope.$index][cindex].regErrorText }}
             </div>
           </template>
         </el-table-column>
@@ -77,9 +77,10 @@
 import { dyOptionsList } from '@/components/Generator/generator/comConfig'
 import { getDictionaryDataSelector } from '@/api/systemData/dictionary'
 import { previewDataInterface } from '@/api/systemData/dataInterface'
+
 export default {
-  name: "input-table",
-  inject: ["parameter"],
+  name: 'input-table',
+  inject: ['parameter'],
   props: {
     config: {
       type: Object,
@@ -101,7 +102,7 @@ export default {
       tableData: [],
       activeRowIndex: 0,
       isAddRow: true // list类型下 添加行数据 number类型组件会进行校验 产生不需要的结果 在这里进行添加行数据判断 hack
-    };
+    }
   },
   created() {
     this.tableData = this.config.__config__.children
@@ -153,14 +154,18 @@ export default {
         func = eval(str)
         return func
       } catch (error) {
-        console.log(error);
+        console.log(error)
         return false
       }
     },
     setTableFormData(prop, value) {
       let activeRow = this.tableFormData[this.activeRowIndex]
       for (let i = 0; i < activeRow.length; i++) {
-        if (activeRow[i].__vModel__ === prop) {
+        let vModel = activeRow[i].__vModel__
+        if (activeRow[i].__vModel__.indexOf('_jnpfRelation_') >= 0) {
+          vModel = activeRow[i].__vModel__.substring(0, activeRow[i].__vModel__.indexOf('_jnpfRelation_'))
+        }
+        if (vModel === prop) {
           activeRow[i].value = value
           break
         }
@@ -207,7 +212,7 @@ export default {
       const data = this.tableFormData[rowIndex][colIndex]
       this.activeRowIndex = rowIndex
       if (data && data.on && data.on.change) {
-        const func = this.getFunc(data.on.change);
+        const func = this.getFunc(data.on.change)
         if (!func) return
         func.call(this, {
           data: data.value,
@@ -246,7 +251,7 @@ export default {
     checkRegData(col) {
       let res = true
       for (let i = 0; i < col.regList.length; i++) {
-        const item = col.regList[i];
+        const item = col.regList[i]
         let pattern = eval(item.pattern)
         if (col.value && !pattern.test(col.value)) {
           res = false
@@ -266,13 +271,21 @@ export default {
         col.regList && col.regList.length && !this.checkRegData(col) && (res = col.regValid = false)
       }
       this.tableFormData.forEach(row => row.forEach(checkCol))
-      return res ? this.tableFormData.map(row => row.reduce((p, c) => (p[c.__vModel__] = c.value, p), {})) : false
+      return res ? this.tableFormData.map(row => row.reduce((p, c) => {
+        let str = c.__vModel__
+        if (c.__vModel__ && c.__vModel__.indexOf('_jnpfRelation_') >= 0) {
+          str = c.__vModel__.substring(0, c.__vModel__.indexOf('_jnpfRelation_'))
+        }
+        p[str] = c.value
+        return p
+      }, {})) : false
     },
     /**
      * 根据formid获取完整组件配置
      */
-    getConfById(formId) {
+    getConfById(formId, rowIndex) {
       let item = this.tableData.find(t => t.__config__.formId === formId)
+      let itemConfig = item.__config__
       let newObj = {}
       for (const key in item) {
         if (key != '__config__' && key != '__slot__' && key != '__vModel__') {
@@ -284,14 +297,20 @@ export default {
         if (key === 'disabled') {
           newObj[key] = this.disabled || item[key][key]
         }
+        if (key === '__vModel__') {
+          newObj['field'] = item[key] + '_jnpfRelation_' + rowIndex
+        }
+      }
+      if (itemConfig.tag === 'relationFormAttr') {
+        newObj['relationField'] = newObj['relationField'] + '_jnpfRelation_' + rowIndex
       }
       return newObj
     },
     /**
      * 获取默认行数据
      */
-    getEmptyRow(val) {
-      return this.tableData.map((t) => {
+    getEmptyRow(val, rowIndex) {
+      return this.tableData.map((t, index) => {
         let res = {
           tag: t.__config__.tag,
           formId: t.__config__.formId,
@@ -301,7 +320,7 @@ export default {
           regValid: true,
           regErrorText: '',
           on: t.on || {},
-          __vModel__: t.__vModel__,
+          __vModel__: t.__config__.jnpfKey === 'relationForm' ? t.__vModel__ + '_jnpfRelation_' + rowIndex : t.__vModel__,
           regList: t.__config__.regList || [],
           required: t.__config__.required
         }
@@ -317,7 +336,7 @@ export default {
       if (!Array.isArray(this.tableFormData)) {
         this.tableFormData = []
       }
-      this.tableFormData.push(this.getEmptyRow(val))
+      this.tableFormData.push(this.getEmptyRow(val, this.tableFormData.length))
       this.clearAddRowFlag()
     },
     getCmpValOfRow(row, key) {
@@ -332,8 +351,8 @@ export default {
      * 对表格进行合计 目前只支持数字，金额，滑块
      */
     getTableSummaries(param) {
-      const { columns, data } = param;
-      const sums = [];
+      const { columns, data } = param
+      const sums = []
       if (this.tableData.length + 1 !== columns.length) return []  // 防止多次加载
       columns.forEach((column, index) => {
         if (index === 0) {
@@ -342,8 +361,8 @@ export default {
         }
         const sumVal = data.reduce((sum, d) => sum + this.getCmpValOfRow(d, column.property), 0)
         sums[index] = Number.isNaN(sumVal) ? '' : sumVal
-      });
-      return sums;
+      })
+      return sums
     },
     resetTable() {
       this.tableData = this.config.__config__.children
@@ -360,7 +379,7 @@ export default {
       })
     }
   }
-};
+}
 </script>
 <style lang="scss" scoped>
 .jnpf-table-box {
