@@ -1,5 +1,5 @@
 <template>
-  <div class="jnpf-qrcode" :style="{height:size+'px'}">
+  <div class="jnpf-qrcode">
     <div ref="qrcode" class="qrcode"></div>
   </div>
 </template>
@@ -115,5 +115,9 @@ export default {
   width: 100%;
   padding: 0;
   min-height: 40px;
+  max-width: 100% !important;
+  >>> img {
+    max-width: 100% !important;
+  }
 }
 </style>
