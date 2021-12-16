@@ -29,6 +29,7 @@
             <template v-if="['select', 'checkbox','radio'].includes(head.__config__.jnpfKey)">
               <el-select v-model="tableFormData[scope.$index][cindex].value"
                 v-bind="getConfById(head.__config__.formId)" :rowIndex="scope.$index"
+                @blur="onFormBlur(scope.$index, cindex, 'el-select')"
                 @change="onFormDataChange(scope.$index, cindex, 'el-select')">
                 <el-option v-for="(opt,oindex) in head.__slot__.options" :key="oindex"
                   :label="opt[head.__config__.props.label]"
