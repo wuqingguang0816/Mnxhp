@@ -163,6 +163,7 @@ export default {
         this.$emit('input', this.fileList)
         this.$emit('change', this.fileList)
       } else {
+        this.$refs.elUpload.uploadFiles.splice(fileList.length - 1, 1)
         fileList.filter(o => o.uid != file.uid)
         this.$emit('input', this.fileList)
         this.$emit('change', this.fileList)

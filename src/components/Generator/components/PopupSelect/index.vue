@@ -118,6 +118,7 @@ export default {
       total: 0,
       checked: '',
       checkedTxt: '',
+      checkedRow: {},
       listLoading: false,
       visible: false
     }
@@ -173,19 +174,21 @@ export default {
     clear() {
       this.checked = ''
       this.innerValue = ''
+      this.checkedRow = {}
       this.$emit('input', this.checked)
-      this.$emit('change', this.checked)
+      this.$emit('change', this.checked, this.checkedRow)
     },
     select() {
       if (!this.checked) return
       this.innerValue = this.checkedTxt
       this.$emit('input', this.checked)
-      this.$emit('change', this.checked)
+      this.$emit('change', this.checked, this.checkedRow)
       this.visible = false
     },
     rowClick(row) {
       this.checked = row[this.propsValue]
       this.checkedTxt = row[this.relationField]
+      this.checkedRow = row
     },
     setDefault() {
       if (!this.value) return this.innerValue = ''
