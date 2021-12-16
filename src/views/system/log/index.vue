@@ -39,7 +39,6 @@
                 <el-link icon="icon-ym icon-ym-Refresh JNPF-common-head-icon" :underline="false"
                   @click="reset()" />
               </el-tooltip>
-              <screenfull />
             </div>
           </div>
           <el-tab-pane label="登录日志" name="1">
