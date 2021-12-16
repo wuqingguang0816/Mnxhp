@@ -30,7 +30,7 @@
               <el-select v-model="tableFormData[scope.$index][cindex].value"
                 v-bind="getConfById(head.__config__.formId)" :rowIndex="scope.$index"
                 @blur="onFormBlur(scope.$index, cindex, 'el-select')"
-                @change="onFormDataChange(scope.$index, cindex, 'el-select')">
+                @change="onFormDataChange(scope.$index, cindex, 'el-select',arguments)">
                 <el-option v-for="(opt,oindex) in head.__slot__.options" :key="oindex"
                   :label="opt[head.__config__.props.label]"
                   :value="opt[head.__config__.props.value]">
@@ -42,7 +42,7 @@
               <el-input v-model="tableFormData[scope.$index][cindex].value"
                 v-bind="getConfById(head.__config__.formId)" :rowIndex="scope.$index"
                 @blur="onFormBlur(scope.$index, cindex, 'el-input')"
-                @change="onFormDataChange(scope.$index, cindex, 'el-input')">
+                @change="onFormDataChange(scope.$index, cindex, 'el-input',arguments)">
                 <template v-if="head.__slot__">
                   <template slot="prepend" v-if="head.__slot__.prepend">
                     {{ head.__slot__.prepend }}
@@ -58,7 +58,7 @@
               v-model="tableFormData[scope.$index][cindex].value"
               v-bind="getConfById(head.__config__.formId,scope.$index)" :formData="formData"
               @blur="onFormBlur(scope.$index, cindex, head.__config__.tag)"
-              @change="onFormDataChange(scope.$index, cindex, head.__config__.tag)">
+              @change="onFormDataChange(scope.$index, cindex, head.__config__.tag,arguments)">
             </component>
             <div class="error-tip" v-show="!tableFormData[scope.$index][cindex].valid">
               不能为空
@@ -221,15 +221,42 @@ export default {
         })
       }
     },
-    onFormDataChange(rowIndex, colIndex, tag) {
+    onFormDataChange(rowIndex, colIndex, tag, params) {
       if (this.isAddRow) return
       const data = this.tableFormData[rowIndex][colIndex]
       this.activeRowIndex = rowIndex
       if (data && data.on && data.on.change) {
         const func = this.getFunc(data.on.change)
         if (!func) return
+        let value = ''
+        if (['select', 'radio', 'checkbox'].includes(data.jnpfKey)) {
+          const options = data.options
+          if (data.config.multiple || data.jnpfKey === 'checkbox') {
+            let _value = []
+            outer: for (let i = 0; i < params[0].length; i++) {
+              inner: for (let j = 0; j < options.length; j++) {
+                if (params[0][i] === options[j][data.config.__config__.props.value]) {
+                  _value.push(options[j])
+                  break inner
+                }
+              }
+            }
+            value = _value
+          } else {
+            let _value = {}
+            for (let i = 0; i < options.length; i++) {
+              if (params[0] === options[i][data.config.__config__.props.value]) {
+                _value = options[i]
+                break
+              }
+            }
+            value = _value
+          }
+        } else {
+          value = params.length > 1 ? params[1] : params[0]
+        }
         func.call(this, {
-          data: data.value,
+          data: value,
           ...this.parameter
         })
       }
@@ -341,9 +368,11 @@ export default {
           regValid: true,
           regErrorText: '',
           on: t.on || {},
+          jnpfKey: t.__config__.jnpfKey,
           __vModel__: t.__config__.jnpfKey === 'relationForm' ? t.__vModel__ + '_jnpfRelation_' + rowIndex : t.__vModel__,
           regList: t.__config__.regList || [],
-          required: t.__config__.required
+          required: t.__config__.required,
+          config: t
         }
         // if (t.tag === 'el-upload') this.$set(res, 'value', t.defaultValue)
         return res

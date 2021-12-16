@@ -173,7 +173,41 @@ function buildListeners(scheme) {
       const str = scheme.on[key];
       const func = getFunc(str);
       if (!func) return
-      listeners[key] = event => func.call(this, { data: event, ...this.parameter })
+      listeners[key] = params => {
+        if (key === 'change') {
+          let data = ''
+          if (['select', 'radio', 'checkbox'].includes(config.jnpfKey)) {
+            const options = scheme.__slot__.options
+            if (scheme.multiple || config.jnpfKey === 'checkbox') {
+              let _data = []
+              outer: for (let i = 0; i < params[0].length; i++) {
+                inner: for (let j = 0; j < options.length; j++) {
+                  if (params[0][i] === options[j][config.props.value]) {
+                    _data.push(options[j])
+                    break inner
+                  }
+                }
+              }
+              data = _data
+            } else {
+              let _data = {}
+              for (let i = 0; i < options.length; i++) {
+                if (params[0] === options[i][config.props.value]) {
+                  _data = options[i]
+                  break
+                }
+              }
+              data = _data
+            }
+          } else {
+            data = params.length > 1 ? params[1] : params[0]
+          }
+          console.log(data);
+          func.call(this, { data, ...this.parameter })
+        } else {
+          func.call(this, { data: params[0], ...this.parameter })
+        }
+      }
     })
   }
   // 响应 render.js 中的 vModel $emit('input', val)
