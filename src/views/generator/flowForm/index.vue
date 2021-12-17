@@ -36,7 +36,6 @@
               <el-link icon="icon-ym icon-ym-Refresh JNPF-common-head-icon" :underline="false"
                 @click="initData()" />
             </el-tooltip>
-            <screenfull />
           </div>
         </div>
         <JNPF-table v-loading="listLoading" :data="list">

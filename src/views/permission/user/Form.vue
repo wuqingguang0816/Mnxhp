@@ -59,7 +59,7 @@
             </el-col>
             <el-col :sm="12" :xs="24">
               <el-form-item label="角色" prop="roleId">
-                <el-select v-model="roleId" multiple placeholder="请选择" @change="roleIdChange"
+                <el-select v-model="roleId" multiple placeholder="选择角色" @change="roleIdChange"
                   filterable>
                   <el-option-group v-for="group in roleTreeData" :key="group.id"
                     :label="group.fullName+(group.num?'【'+group.num+'】':'')">
