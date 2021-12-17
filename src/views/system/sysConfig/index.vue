@@ -122,21 +122,20 @@
                     </el-radio-group>
                   </el-form-item>
                   <el-form-item label="用户编号" prop="smsKeyId">
-                    <el-input v-model="baseForm.smsKeyId" clearable placeholder="请输入AccessKeyId" />
+                    <el-input v-model="baseForm.smsKeyId" clearable placeholder="请输入用户编号" />
                   </el-form-item>
                   <el-form-item label="用户秘钥" prop="smsKeySecret">
                     <el-input v-model="baseForm.smsKeySecret" show-password clearable
-                      placeholder="请输入AccessKeySec" />
+                      placeholder="请输入用户秘钥" />
                   </el-form-item>
-                  <el-form-item label="签名内容" prop="smsSignName">
-                    <el-input v-model="baseForm.smsSignName" clearable placeholder="请输入SignName" />
+                  <el-form-item label="访问域名" prop="domain">
+                    <el-input v-model="baseForm.domain" clearable placeholder="请输入访问域名" />
                   </el-form-item>
-                  <el-form-item label="模板编号" prop="smsTemplateId">
-                    <el-input v-model="baseForm.smsTemplateId" clearable
-                      placeholder="请输入TemplateId" />
+                  <el-form-item label="支持地域" prop="region">
+                    <el-input v-model="baseForm.region" clearable placeholder="请输入支持地域" />
                   </el-form-item>
-                  <el-form-item label="应用编号" prop="smsAppId" v-if="baseForm.smsCompany=='2'">
-                    <el-input v-model="baseForm.smsAppId" clearable placeholder="请输入AppId" />
+                  <el-form-item label="版本号" prop="version">
+                    <el-input v-model="baseForm.version" clearable placeholder="请输入版本号" />
                   </el-form-item>
                   <el-form-item>
                     <el-button type="primary" size="small" :loading="btnLoading" class="saveBtn"
