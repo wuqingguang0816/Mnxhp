@@ -118,6 +118,7 @@ export default {
       total: 0,
       checked: '',
       checkedTxt: '',
+      checkedRow: {},
       listLoading: false,
       visible: false
     }
@@ -169,27 +170,28 @@ export default {
     clear() {
       this.checked = ''
       this.innerValue = ''
+      this.checkedRow = {}
       this.$emit('input', this.checked)
-      this.$emit('change', this.checked)
+      this.$emit('change', this.checked, this.checkedRow)
     },
     select() {
       if (!this.checked) return
       this.innerValue = this.checkedTxt
       this.$emit('input', this.checked)
-      this.$emit('change', this.checked)
+      this.$emit('change', this.checked, this.checkedRow)
       this.visible = false
     },
     rowClick(row) {
       this.checked = row.id
       this.checkedTxt = row[this.relationField]
+      this.checkedRow = row
     },
     setDefault() {
-      if (!this.value) return this.innerValue = ''
       this.getItemValue(this.value)
     },
     getItemValue(val) {
-      if (!this.modelId) return
       if (val) {
+        if (!this.modelId) return
         getDataChange(this.modelId, val).then(res => {
           if (!res.data || !res.data.data) return
           let data = JSON.parse(res.data.data)
@@ -200,6 +202,7 @@ export default {
           this.$store.commit('generator/UPDATE_RELATION_DATA', relationData)
         })
       } else {
+        this.innerValue = ''
         if (!this.field) return
         let relationData = this.$store.state.generator.relationData
         this.$set(relationData, this.field, {})

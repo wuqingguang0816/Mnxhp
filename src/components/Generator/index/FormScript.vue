@@ -92,7 +92,9 @@ export default {
             if (data.__config__.children && Array.isArray(data.__config__.children) && data.__config__.children.length) {
               for (let i = 0; i < data.__config__.children.length; i++) {
                 const child = data.__config__.children[i]
-                children.push({ value: data.__vModel__ + '.' + child.__vModel__, label: child.__config__.label })
+                if (child.__vModel__) {
+                  children.push({ value: data.__vModel__ + '.' + child.__vModel__, label: child.__config__.label })
+                }
               }
             }
             item.children = children

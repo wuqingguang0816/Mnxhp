@@ -28,7 +28,6 @@
               <el-link icon="icon-ym icon-ym-Refresh JNPF-common-head-icon" :underline="false"
                 @click="refresh()" />
             </el-tooltip>
-            <screenfull />
             <ColumnSettings v-model="columnList" :data="columnOptions" />
           </div>
         </div>
