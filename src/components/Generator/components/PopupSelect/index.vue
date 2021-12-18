@@ -206,27 +206,6 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
-.popupSelect-container {
-  width: 100%;
-  .popupSelect-input {
-    width: 100%;
-    cursor: pointer;
-    >>> input {
-      cursor: pointer;
-    }
-    .el-icon-circle-close {
-      display: none;
-    }
-    &:hover {
-      .el-icon-circle-close {
-        display: block;
-      }
-      .el-icon-arrow-down.clearable {
-        display: none;
-      }
-    }
-  }
-}
 >>> .el-dialog__body {
   height: 70vh;
   padding: 0 0 10px !important;

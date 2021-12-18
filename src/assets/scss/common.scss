@@ -1266,6 +1266,10 @@
       text-align: right;
     }
   }
+
+  .JNPF-common-search-box .JNPF-common-search-box-right {
+    padding: 10px 10px 0 0;
+  }
 }
 
 .portal-common-title {
@@ -1770,5 +1774,32 @@ textarea.el-textarea__inner {
   #topMenu .el-menu-item.submenu-title-noDropdown,
   #topMenu .el-menu .el-submenu>.el-submenu__title {
     padding: 0 20px !important;
+  }
+}
+
+.popupSelect-container {
+  width: 100%;
+
+  .popupSelect-input {
+    width: 100%;
+    cursor: pointer;
+
+    >>>input {
+      cursor: pointer;
+    }
+
+    .el-icon-circle-close {
+      display: none;
+    }
+
+    &:hover {
+      .el-icon-circle-close {
+        display: block;
+      }
+
+      .el-icon-arrow-down.clearable {
+        display: none;
+      }
+    }
   }
 }
