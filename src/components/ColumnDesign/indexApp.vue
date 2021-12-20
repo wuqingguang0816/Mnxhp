@@ -109,6 +109,15 @@
                 </el-radio-group>
               </el-form-item>
               <el-divider>权限设置</el-divider>
+              <el-form-item label="按钮权限">
+                <el-switch v-model="columnData.useBtnPermission"></el-switch>
+              </el-form-item>
+              <el-form-item label="列表权限">
+                <el-switch v-model="columnData.useColumnPermission"></el-switch>
+              </el-form-item>
+              <el-form-item label="表单权限">
+                <el-switch v-model="columnData.useFormPermission"></el-switch>
+              </el-form-item>
               <el-form-item label="数据权限">
                 <el-switch v-model="columnData.useDataPermission"></el-switch>
               </el-form-item>
@@ -142,6 +151,9 @@ const defaultColumnData = {
   sort: 'desc',   // 排序类型
   hasPage: true,  // 列表分页
   pageSize: 20,  // 分页条数
+  useColumnPermission: false,
+  useFormPermission: false,
+  useBtnPermission: false,
   useDataPermission: false,
 }
 export default {
