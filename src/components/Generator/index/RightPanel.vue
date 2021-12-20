@@ -165,7 +165,7 @@
                 <el-input v-model="activeData.staticText" placeholder="请输入固定值"
                   @change="onBarcodeTextChange" />
               </el-form-item>
-              <el-form-item label="组件选择" v-if="activeData.dataType==='relation'">
+              <el-form-item label="选择组件" v-if="activeData.dataType==='relation'">
                 <el-select v-model="activeData.relationField" placeholder="请选择" clearable
                   filterable>
                   <el-option :label="item.__config__.label" :value="item.__vModel__"
@@ -197,15 +197,15 @@
               </el-form-item>
               <el-form-item label="默认值">
                 <el-select v-model="activeData.dataType" placeholder="请选择">
-                  <el-option label="文本输入" value="static"></el-option>
+                  <el-option label="固定值" value="static"></el-option>
                   <el-option label="组件联动" value="relation"></el-option>
                   <el-option label="当前表单路径" value="form"></el-option>
                 </el-select>
               </el-form-item>
-              <el-form-item label="文本输入" v-if="activeData.dataType==='static'">
-                <el-input v-model="activeData.staticText" placeholder="请输入文本输入" />
+              <el-form-item label="固定值" v-if="activeData.dataType==='static'">
+                <el-input v-model="activeData.staticText" placeholder="请输入固定值" />
               </el-form-item>
-              <el-form-item label="组件选择" v-if="activeData.dataType==='relation'">
+              <el-form-item label="选择组件" v-if="activeData.dataType==='relation'">
                 <el-select v-model="activeData.relationField" placeholder="请选择" clearable
                   filterable>
                   <el-option :label="item.__config__.label" :value="item.__vModel__"
