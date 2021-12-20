@@ -430,7 +430,7 @@ export const inputComponents = [{
 export const selectComponents = [{
     __config__: {
       jnpfKey: 'comSelect',
-      label: '公司组件',
+      label: '组织组件',
       labelWidth: undefined,
       showLabel: true,
       tag: 'com-select',
@@ -748,7 +748,8 @@ export const systemComponents = [{
       tableName: '',
       dragDisabled: false,
       noShow: false
-    }
+    },
+    showLevel: 'last',
   },
   {
     __config__: {
