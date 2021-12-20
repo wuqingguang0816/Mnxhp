@@ -78,6 +78,14 @@
                 <template slot="append">个字符</template>
               </el-input>
             </el-form-item>
+            <template v-if="activeData.__config__.jnpfKey === 'switch'">
+              <el-form-item label="开启展示值">
+                <el-input v-model="activeData.activeTxt" placeholder="请输入开启展示值" />
+              </el-form-item>
+              <el-form-item label="关闭展示值">
+                <el-input v-model="activeData.inactiveTxt" placeholder="请输入关闭展示值" />
+              </el-form-item>
+            </template>
             <template
               v-if="activeData.__config__.jnpfKey === 'numInput' ||activeData.__config__.jnpfKey === 'slider'">
               <el-form-item label="最小值">

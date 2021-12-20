@@ -17,6 +17,12 @@
       <el-input-number v-model="activeData.__config__.columnWidth" placeholder="控件宽度" :min="0"
         :precision="0" controls-position="right" />
     </el-form-item>
+    <el-form-item label="开启展示值">
+      <el-input v-model="activeData.activeTxt" placeholder="请输入开启展示值" />
+    </el-form-item>
+    <el-form-item label="关闭展示值">
+      <el-input v-model="activeData.inactiveTxt" placeholder="请输入关闭展示值" />
+    </el-form-item>
     <el-form-item label="默认值">
       <el-switch v-model="activeData.__config__.defaultValue"
         :active-value="activeData['active-value']" :inactive-value="activeData['inactive-value']" />

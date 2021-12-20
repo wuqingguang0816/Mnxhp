@@ -111,6 +111,8 @@ export const inputComponents = [{
     on: {
       change: '({ data, formData, setFormData, setShowOrHide, setRequired, setDisabled, request, getFieldOptions, setFieldOptions }) => {\n    // 在此编写代码\n    \n}',
     },
+    activeTxt: '开',
+    inactiveTxt: '关',
     disabled: false
   },
   {
