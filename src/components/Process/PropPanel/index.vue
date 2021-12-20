@@ -409,15 +409,6 @@
                 </el-option>
               </el-select>
             </el-form-item>
-            <el-form-item label="通知设置">
-              <el-checkbox-group v-model="approverForm.messageType">
-                <el-checkbox :label="1">站内信</el-checkbox>
-                <el-checkbox :label="2">邮箱</el-checkbox>
-                <el-checkbox :label="3">短信</el-checkbox>
-                <el-checkbox :label="4">钉钉</el-checkbox>
-                <el-checkbox :label="5">企业微信</el-checkbox>
-              </el-checkbox-group>
-            </el-form-item>
             <el-form-item label="说明">
               <el-input v-model="approverForm.description" type="textarea" :rows="3"></el-input>
             </el-form-item>
@@ -475,6 +466,167 @@
             </template>
           </el-form>
         </el-tab-pane>
+        <el-tab-pane label="通知设置">
+          <el-scrollbar class="config-scrollbar">
+            <el-form :model="approverForm" class="pd-10" label-width="80px" label-position="left">
+              <el-form-item label="等待审核">
+                <el-switch v-model="approverForm.waitApproveMsgConfig.on" />
+              </el-form-item>
+              <template v-if="approverForm.waitApproveMsgConfig.on">
+                <el-form-item label="模板设置" style="margin-bottom: 0;"></el-form-item>
+                <el-form-item label="消息模板" style="padding-left: 40px;">
+                  <msg-dialog v-model="approverForm.waitApproveMsgConfig.msgId"
+                    :title="approverForm.waitApproveMsgConfig.msgName"
+                    @change="onMsgChange('waitApproveMsgConfig',arguments)" />
+                </el-form-item>
+                <el-form-item label="参数设置" style="margin-bottom: 0;"></el-form-item>
+                <el-table :data="approverForm.waitApproveMsgConfig.templateJson">
+                  <el-table-column type="index" width="50" label="序号" align="center" />
+                  <el-table-column prop="fieldId" label="参数名称" width="150">
+                    <template slot-scope="scope">
+                      {{scope.row.fieldName?scope.row.fieldId+'('+scope.row.fieldName+')':scope.row.fieldId}}
+                    </template>
+                  </el-table-column>
+                  <el-table-column prop="value" label="表单字段">
+                    <template slot-scope="scope">
+                      <el-select v-model="scope.row.relationField" placeholder="请选择表单字段" clearable
+                        filterable>
+                        <el-option v-for="item in usedFormItems" :key="item.__vModel__"
+                          :label="item.__config__.label?item.__vModel__+'('+item.__config__.label+')':item.__vModel__"
+                          :value="item.__vModel__">
+                        </el-option>
+                      </el-select>
+                    </template>
+                  </el-table-column>
+                </el-table>
+              </template>
+              <el-form-item label="审核通过">
+                <el-switch v-model="approverForm.approveMsgConfig.on" />
+              </el-form-item>
+              <template v-if="approverForm.approveMsgConfig.on">
+                <el-form-item label="模板设置" style="margin-bottom: 0;"></el-form-item>
+                <el-form-item label="消息模板" style="padding-left: 40px;">
+                  <msg-dialog v-model="approverForm.approveMsgConfig.msgId"
+                    :title="approverForm.approveMsgConfig.msgName"
+                    @change="onMsgChange('approveMsgConfig',arguments)" />
+                </el-form-item>
+                <el-form-item label="参数设置" style="margin-bottom: 0;"></el-form-item>
+                <el-table :data="approverForm.approveMsgConfig.templateJson">
+                  <el-table-column type="index" width="50" label="序号" align="center" />
+                  <el-table-column prop="fieldId" label="参数名称" width="150">
+                    <template slot-scope="scope">
+                      {{scope.row.fieldName?scope.row.fieldId+'('+scope.row.fieldName+')':scope.row.fieldId}}
+                    </template>
+                  </el-table-column>
+                  <el-table-column prop="value" label="表单字段">
+                    <template slot-scope="scope">
+                      <el-select v-model="scope.row.relationField" placeholder="请选择表单字段" clearable
+                        filterable>
+                        <el-option v-for="item in usedFormItems" :key="item.__vModel__"
+                          :label="item.__config__.label?item.__vModel__+'('+item.__config__.label+')':item.__vModel__"
+                          :value="item.__vModel__">
+                        </el-option>
+                      </el-select>
+                    </template>
+                  </el-table-column>
+                </el-table>
+              </template>
+              <el-form-item label="审核驳回">
+                <el-switch v-model="approverForm.rejectMsgConfig.on" />
+              </el-form-item>
+              <template v-if="approverForm.rejectMsgConfig.on">
+                <el-form-item label="模板设置" style="margin-bottom: 0;"></el-form-item>
+                <el-form-item label="消息模板" style="padding-left: 40px;">
+                  <msg-dialog v-model="approverForm.rejectMsgConfig.msgId"
+                    :title="approverForm.rejectMsgConfig.msgName"
+                    @change="onMsgChange('rejectMsgConfig',arguments)" />
+                </el-form-item>
+                <el-form-item label="参数设置" style="margin-bottom: 0;"></el-form-item>
+                <el-table :data="approverForm.rejectMsgConfig.templateJson">
+                  <el-table-column type="index" width="50" label="序号" align="center" />
+                  <el-table-column prop="fieldId" label="参数名称" width="150">
+                    <template slot-scope="scope">
+                      {{scope.row.fieldName?scope.row.fieldId+'('+scope.row.fieldName+')':scope.row.fieldId}}
+                    </template>
+                  </el-table-column>
+                  <el-table-column prop="value" label="表单字段">
+                    <template slot-scope="scope">
+                      <el-select v-model="scope.row.relationField" placeholder="请选择表单字段" clearable
+                        filterable>
+                        <el-option v-for="item in usedFormItems" :key="item.__vModel__"
+                          :label="item.__config__.label?item.__vModel__+'('+item.__config__.label+')':item.__vModel__"
+                          :value="item.__vModel__">
+                        </el-option>
+                      </el-select>
+                    </template>
+                  </el-table-column>
+                </el-table>
+              </template>
+              <el-form-item label="审核撤回">
+                <el-switch v-model="approverForm.revokeMsgConfig.on" />
+              </el-form-item>
+              <template v-if="approverForm.revokeMsgConfig.on">
+                <el-form-item label="模板设置" style="margin-bottom: 0;"></el-form-item>
+                <el-form-item label="消息模板" style="padding-left: 40px;">
+                  <msg-dialog v-model="approverForm.revokeMsgConfig.msgId"
+                    :title="approverForm.revokeMsgConfig.msgName"
+                    @change="onMsgChange('revokeMsgConfig',arguments)" />
+                </el-form-item>
+                <el-form-item label="参数设置" style="margin-bottom: 0;"></el-form-item>
+                <el-table :data="approverForm.revokeMsgConfig.templateJson">
+                  <el-table-column type="index" width="50" label="序号" align="center" />
+                  <el-table-column prop="fieldId" label="参数名称" width="150">
+                    <template slot-scope="scope">
+                      {{scope.row.fieldName?scope.row.fieldId+'('+scope.row.fieldName+')':scope.row.fieldId}}
+                    </template>
+                  </el-table-column>
+                  <el-table-column prop="value" label="表单字段">
+                    <template slot-scope="scope">
+                      <el-select v-model="scope.row.relationField" placeholder="请选择表单字段" clearable
+                        filterable>
+                        <el-option v-for="item in usedFormItems" :key="item.__vModel__"
+                          :label="item.__config__.label?item.__vModel__+'('+item.__config__.label+')':item.__vModel__"
+                          :value="item.__vModel__">
+                        </el-option>
+                      </el-select>
+                    </template>
+                  </el-table-column>
+                </el-table>
+              </template>
+              <el-form-item label="审核催办">
+                <el-switch v-model="approverForm.pressMsgConfig.on" />
+              </el-form-item>
+              <template v-if="approverForm.pressMsgConfig.on">
+                <el-form-item label="模板设置" style="margin-bottom: 0;"></el-form-item>
+                <el-form-item label="消息模板" style="padding-left: 40px;">
+                  <msg-dialog v-model="approverForm.pressMsgConfig.msgId"
+                    :title="approverForm.pressMsgConfig.msgName"
+                    @change="onMsgChange('pressMsgConfig',arguments)" />
+                </el-form-item>
+                <el-form-item label="参数设置" style="margin-bottom: 0;"></el-form-item>
+                <el-table :data="approverForm.pressMsgConfig.templateJson">
+                  <el-table-column type="index" width="50" label="序号" align="center" />
+                  <el-table-column prop="fieldId" label="参数名称" width="150">
+                    <template slot-scope="scope">
+                      {{scope.row.fieldName?scope.row.fieldId+'('+scope.row.fieldName+')':scope.row.fieldId}}
+                    </template>
+                  </el-table-column>
+                  <el-table-column prop="value" label="表单字段">
+                    <template slot-scope="scope">
+                      <el-select v-model="scope.row.relationField" placeholder="请选择表单字段" clearable
+                        filterable>
+                        <el-option v-for="item in usedFormItems" :key="item.__vModel__"
+                          :label="item.__config__.label?item.__vModel__+'('+item.__config__.label+')':item.__vModel__"
+                          :value="item.__vModel__">
+                        </el-option>
+                      </el-select>
+                    </template>
+                  </el-table-column>
+                </el-table>
+              </template>
+            </el-form>
+          </el-scrollbar>
+        </el-tab-pane>
       </el-tabs>
     </section>
     <div class="actions">
@@ -520,6 +672,7 @@ import { FlowEngineSelector, getFormDataFields } from '@/api/workFlow/FlowEngine
 import { NodeUtils } from "../FlowCard/util.js"
 import { getDrawingList } from '@/components/Generator/utils/db'
 import OrgSelect from '../OrgSelect'
+import MsgDialog from './msgDialog'
 const defaultStartForm = {
   hasInitFunc: false,
   initInterfaceUrl: '',
@@ -591,7 +744,36 @@ const defaultApproverForm = {
     type: 'day',
     handler: 1
   },
-  messageType: [1],
+  waitApproveMsgConfig: {
+    on: false,
+    msgId: '',
+    msgName: '',
+    templateJson: []
+  },
+  approveMsgConfig: {
+    on: false,
+    msgId: '',
+    msgName: '',
+    templateJson: []
+  },
+  rejectMsgConfig: {
+    on: false,
+    msgId: '',
+    msgName: '',
+    templateJson: []
+  },
+  revokeMsgConfig: {
+    on: false,
+    msgId: '',
+    msgName: '',
+    templateJson: []
+  },
+  pressMsgConfig: {
+    on: false,
+    msgId: '',
+    msgName: '',
+    templateJson: []
+  },
   hasApproverFunc: false,
   approverInterfaceUrl: '',
   hasApproverRejectFunc: false,
@@ -609,7 +791,7 @@ const defaultStep = [{
 }]
 export default {
   props: [/*当前节点数据*/"value", /*整个节点数据*/"processData", "flowType"],
-  components: { OrgSelect },
+  components: { OrgSelect, MsgDialog },
   data() {
     return {
       visible: false,  // 控制面板显隐
@@ -1184,6 +1366,21 @@ export default {
           hasChildren: true
         }))
       })
+    },
+    onMsgChange(key, params) {
+      const [id, item] = params
+      if (!id) {
+        this.approverForm[key].msgName = ''
+        this.approverForm[key].templateJson = []
+        return
+      }
+      this.approverForm[key].msgName = item.fullName
+      if (!item.templateJson) return
+      let templateJson = JSON.parse(item.templateJson)
+      this.approverForm[key].templateJson = templateJson.map(o => ({
+        ...o,
+        relationField: ''
+      }))
     }
   },
   watch: {
