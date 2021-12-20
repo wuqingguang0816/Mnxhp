@@ -393,7 +393,7 @@ export class NodeUtils {
       (valid = false)
 
     this.isSubFlowNode(node) &&
-      (!props.flowId || props.initiateType === 1 && (isEmptyArray(props.initiator) && isEmptyArray(props.initiatePos) && isEmptyArray(props.initiateRole))) &&
+      (!props.flowId || props.initiateType === 6 && (isEmptyArray(props.initiator) && isEmptyArray(props.initiatePos) && isEmptyArray(props.initiateRole))) &&
       (valid = false)
 
     const customSettings = [6, 8]

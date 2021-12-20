@@ -95,21 +95,59 @@
     <!-- 子流程  -->
     <section class="condition-pane pd-10" v-if="value && isSubFlowNode()">
       <el-form label-position="top" :model="subFlowForm">
-        <el-form-item label="审批设置">
+        <el-form-item label="发起设置">
           <el-radio-group v-model="subFlowForm.initiateType">
-            <el-radio :label="i+1" v-for="(item,i) in initiateTypeOptions" :key="i">{{item}}
+            <el-radio v-for="item in initiateTypeOptions" :label="item.value" :key="item.value"
+              :disabled="item.disabled" class="radio-item">{{item.label}}
             </el-radio>
           </el-radio-group>
           <div v-if="subFlowForm.initiateType === 1" class="option-box-tip">
-            所指定的成员将作为子流程发起人，多人时，发起多个子流程</div>
+            发起者的主管将作为子流程发起人</div>
           <div v-if="subFlowForm.initiateType === 2" class="option-box-tip">
             发起者的部门主管将作为子流程发起人</div>
           <div v-if="subFlowForm.initiateType === 3" class="option-box-tip">
-            发起者的主管将作为子流程发起人</div>
-          <div v-if="subFlowForm.initiateType === 4" class="option-box-tip">
             发起者自己将作为子流程发起人</div>
+          <div v-if="subFlowForm.initiateType === 4" class="option-box-tip">
+            选择表单字段的值作为子流程发起人</div>
+          <div v-if="subFlowForm.initiateType === 5" class="option-box-tip">
+            设置审批流程中某个环节的审批人作为子流程发起人</div>
+          <div v-if="subFlowForm.initiateType === 6" class="option-box-tip">
+            所指定的成员将作为子流程发起人，多人时，发起多个子流程</div>
+          <div v-if="subFlowForm.initiateType === 9" class="option-box-tip">
+            通过第三方调用从目标服务中获取子流程发起人</div>
+          <el-alert type="warning" :closable="false" v-if="subFlowForm.initiateType === 9">
+            <div slot="title" class="tips">
+              <p>请求参数：taskId、taskNodeId</p>
+            </div>
+          </el-alert>
         </el-form-item>
-        <el-form-item v-if="subFlowForm.initiateType === 1">
+        <el-form-item label="发起者的" v-if="subFlowForm.initiateType === 1">
+          <el-select v-model="subFlowForm.managerLevel">
+            <el-option v-for="item in 10" :key="item" :label="item===1?'直接主管':'第'+item+'级主管'"
+              :value="item">
+            </el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="表单字段" v-if="subFlowForm.initiateType === 4">
+          <el-select v-model="subFlowForm.formField" placeholder="请选择字段">
+            <el-option v-for="item in usedFormItems" :key="item.__vModel__"
+              :label="item.__config__.label" :value="item.__vModel__">
+            </el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="审批节点" v-if="subFlowForm.initiateType === 5">
+          <el-select v-model="subFlowForm.nodeId" placeholder="请选择节点">
+            <el-option v-for="item in nodeOptions" :key="item.nodeId" :label="item.properties.title"
+              :value="item.nodeId">
+            </el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="请求路径" v-if="subFlowForm.initiateType === 9">
+          <el-input v-model="subFlowForm.getUserUrl" placeholder="请输入接口地址">
+            <template slot="prepend">GET</template>
+          </el-input>
+        </el-form-item>
+        <el-form-item v-if="subFlowForm.initiateType === 6">
           <org-select ref="subFlow-role-org" type="role" v-model="subFlowForm.initiateRole"
             title="添加角色" class="mb-10" buttonType="button" />
           <org-select ref="subFlow-position-org" buttonType="button"
@@ -117,12 +155,11 @@
           <org-select ref="subFlow-user-org" buttonType="button" v-model="subFlowForm.initiator"
             title="添加用户" />
         </el-form-item>
-        <el-form-item label="发起者的" v-if="subFlowForm.initiateType === 3">
-          <el-select v-model="subFlowForm.managerLevel">
-            <el-option v-for="item in 10" :key="item" :label="item===1?'直接主管':'第'+item+'级主管'"
-              :value="item">
-            </el-option>
-          </el-select>
+        <el-form-item label="子流程类型">
+          <el-radio-group v-model="subFlowForm.isAsync">
+            <el-radio :label="false">同步</el-radio>
+            <el-radio :label="true">异步</el-radio>
+          </el-radio-group>
         </el-form-item>
         <el-form-item label="子流程表单">
           <JNPF-TreeSelect :options="flowOptions" v-model="subFlowForm.flowId"
@@ -696,14 +733,18 @@ const defaultStartForm = {
   formOperates: []
 }
 const defaultSubFlowForm = {
-  initiateType: 1,
+  initiateType: 6,
   managerLevel: 1,
+  formField: '',
+  nodeId: '',
+  getUserUrl: '',
   initiator: [],
   initiatePos: [],
   initiateRole: [],
   flowId: '',
   assignList: [],
   messageType: [1],
+  isAsync: false
 }
 const defaultApproverForm = {
   approvers: [], // 审批人集合
@@ -789,6 +830,35 @@ const defaultStep = [{
   nodeId: '0',
   properties: { title: '发起人' }
 }]
+const typeOptions = [
+  {
+    label: '指定成员',
+    value: 6
+  },
+  {
+    label: '发起者主管',
+    value: 1
+  },
+  {
+    label: '发起者本人',
+    value: 3
+  },
+  {
+    label: '部门主管',
+    value: 2
+  },
+  {
+    label: '变量',
+    value: 4
+  },
+  {
+    label: '环节',
+    value: 5
+  },
+  {
+    label: '服务',
+    value: 9
+  }]
 export default {
   props: [/*当前节点数据*/"value", /*整个节点数据*/"processData", "flowType"],
   components: { OrgSelect, MsgDialog },
@@ -811,36 +881,8 @@ export default {
       ruleVisible: false,
       subFlowForm: JSON.parse(JSON.stringify(defaultSubFlowForm)),
       approverForm: JSON.parse(JSON.stringify(defaultApproverForm)),
-      initiateTypeOptions: ['指定成员', '部门主管', '发起者主管', '发起者本人'],
-      assigneeTypeOptions: [
-        {
-          label: '指定成员',
-          value: 6
-        },
-        {
-          label: '发起者主管',
-          value: 1
-        },
-        {
-          label: '发起者本人',
-          value: 3
-        },
-        {
-          label: '部门主管',
-          value: 2
-        },
-        {
-          label: '变量',
-          value: 4
-        },
-        {
-          label: '环节',
-          value: 5
-        },
-        {
-          label: '服务',
-          value: 9
-        }],
+      initiateTypeOptions: typeOptions,
+      assigneeTypeOptions: typeOptions,
       rejectStepOptions: [],
       progressOptions: ['10', '20', '30', '40', '50', '60', '70', '80', '90'],
       symbolOptions: [
@@ -1046,7 +1088,7 @@ export default {
         return
       }
       let content = ''
-      if (this.subFlowForm.initiateType === 1) {
+      if (this.subFlowForm.initiateType === 6) {
         if (!this.subFlowForm.initiator.length && !this.subFlowForm.initiatePos.length && !this.subFlowForm.initiateRole.length) {
           this.$message({
             message: '请设置发起人',
@@ -1061,7 +1103,28 @@ export default {
         content += (content && initiatePosText ? ',' : '') + initiatePosText
         content += (content && initiatorText ? ',' : '') + initiatorText
       } else {
-        content = this.initiateTypeOptions[this.subFlowForm.initiateType - 1]
+        content = this.initiateTypeOptions.find(t => t.value === this.subFlowForm.initiateType).label
+      }
+      if (this.subFlowForm.initiateType == 4 && !this.subFlowForm.formField) {
+        this.$message({
+          message: '请选择表单字段',
+          type: 'error',
+        })
+        return
+      }
+      if (this.subFlowForm.initiateType == 5 && !this.subFlowForm.nodeId) {
+        this.$message({
+          message: '请选择节点',
+          type: 'error',
+        })
+        return
+      }
+      if (this.subFlowForm.initiateType == 9 && !this.subFlowForm.getUserUrl) {
+        this.$message({
+          message: '请输入接口路径',
+          type: 'error',
+        })
+        return
       }
       if (!this.subFlowForm.flowId) {
         this.$message({
@@ -1212,6 +1275,7 @@ export default {
     },
     initSubFlowData() {
       this.getFlowOptions()
+      this.getNodeOption()
       Object.assign(this.subFlowForm, this.value.properties)
     },
     openRuleBox() {

@@ -232,12 +232,26 @@ $base-size : 12px;
       top: 0;
       visibility: hidden;
     }
+
+    >.async-state {
+      position: absolute;
+      right: 25px;
+      top: 5px;
+    }
   }
 
   &.timer:hover {
     .actions {
       visibility: visible;
       margin-right: 4px;
+    }
+  }
+
+  &.subFlow {
+    .header {
+      .title-box {
+        width: 140px !important;
+      }
     }
   }
 
