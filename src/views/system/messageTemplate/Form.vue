@@ -154,6 +154,7 @@ export default {
       this.$emit('close')
     },
     init(id) {
+      this.templateJson = []
       this.dataForm.isStationLetter = 0
       this.dataForm.isEmail = 0
       this.dataForm.isWecom = 0
