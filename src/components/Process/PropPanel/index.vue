@@ -310,6 +310,8 @@
                   设置审批人为审批流程中某个环节的审批人</div>
                 <div v-if="approverForm.assigneeType === 6" class="option-box-tip">
                   指定审批人处理审批单</div>
+                <div v-if="approverForm.assigneeType === 7" class="option-box-tip">
+                  指定可供选择的候选人处理审批单</div>
                 <div v-if="approverForm.assigneeType === 9" class="option-box-tip">
                   通过第三方调用从目标服务中获取审批人</div>
                 <el-alert type="warning" :closable="false" v-if="approverForm.assigneeType === 9">
@@ -344,7 +346,8 @@
                   <template slot="prepend">GET</template>
                 </el-input>
               </el-form-item>
-              <el-form-item v-if="approverForm.assigneeType === 6">
+              <el-form-item
+                v-if="approverForm.assigneeType === 6 ||approverForm.assigneeType === 7">
                 <org-select ref="approver-role-org" type="role" v-model="approverForm.approverRole"
                   title="添加角色" class="mb-10" buttonType="button" />
                 <org-select ref="approver-position-org" buttonType="button"
@@ -396,6 +399,10 @@
           <el-form label-position="top" class="pd-10">
             <el-form-item label="操作设置">
               <div class="per-cell">
+                <el-checkbox v-model="approverForm.hasSaveBtn">草稿</el-checkbox>
+                <el-input v-model="approverForm.saveBtnText" />
+              </div>
+              <div class="per-cell">
                 <el-checkbox v-model="approverForm.hasAuditBtn">同意</el-checkbox>
                 <el-input v-model="approverForm.auditBtnText" />
               </div>
@@ -445,6 +452,9 @@
                   :label="item.properties.title" :value="item.nodeId">
                 </el-option>
               </el-select>
+            </el-form-item>
+            <el-form-item label="流程评论">
+              <el-switch v-model="approverForm.isComment" />
             </el-form-item>
             <el-form-item label="说明">
               <el-input v-model="approverForm.description" type="textarea" :rows="3"></el-input>
@@ -765,8 +775,11 @@ const defaultApproverForm = {
   nodeId: '',
   getUserUrl: '',
   counterSign: 0,
+  isComment: false,
   noApproverHandler: true,
   hasFreeApprover: false,
+  hasSaveBtn: false,
+  saveBtnText: '保存草稿',
   hasAuditBtn: true,
   auditBtnText: '通 过',
   hasRejectBtn: true,
@@ -859,6 +872,10 @@ const typeOptions = [
     label: '服务',
     value: 9
   }]
+const assigneeTypeOptions = [...typeOptions, {
+  label: '候选人员',
+  value: 7
+}]
 export default {
   props: [/*当前节点数据*/"value", /*整个节点数据*/"processData", "flowType"],
   components: { OrgSelect, MsgDialog },
@@ -882,7 +899,7 @@ export default {
       subFlowForm: JSON.parse(JSON.stringify(defaultSubFlowForm)),
       approverForm: JSON.parse(JSON.stringify(defaultApproverForm)),
       initiateTypeOptions: typeOptions,
-      assigneeTypeOptions: typeOptions,
+      assigneeTypeOptions: assigneeTypeOptions,
       rejectStepOptions: [],
       progressOptions: ['10', '20', '30', '40', '50', '60', '70', '80', '90'],
       symbolOptions: [
