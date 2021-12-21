@@ -171,15 +171,40 @@
               suffix-icon="el-icon-arrow-down" readonly class="hand" />
           </div>
         </el-form-item>
-        <el-form-item label="通知设置">
-          <el-checkbox-group v-model="subFlowForm.messageType">
-            <el-checkbox :label="1">站内信</el-checkbox>
-            <el-checkbox :label="2">邮箱</el-checkbox>
-            <el-checkbox :label="3">短信</el-checkbox>
-            <el-checkbox :label="4">钉钉</el-checkbox>
-            <el-checkbox :label="5">企业微信</el-checkbox>
-          </el-checkbox-group>
+      </el-form>
+      <el-form :model="subFlowForm" label-width="100px" label-position="left">
+        <el-form-item label="通知设置"></el-form-item>
+        <el-form-item label="子流程发起">
+          <el-switch v-model="subFlowForm.launchMsgConfig.on" />
         </el-form-item>
+        <template v-if="subFlowForm.launchMsgConfig.on">
+          <el-form-item label="模板设置" style="margin-bottom: 0;"></el-form-item>
+          <el-form-item label="消息模板" style="padding-left: 40px;">
+            <msg-dialog v-model="subFlowForm.launchMsgConfig.msgId"
+              :title="subFlowForm.launchMsgConfig.msgName"
+              @change="onMsgChange('launchMsgConfig',arguments)" />
+          </el-form-item>
+          <el-form-item label="参数设置" style="margin-bottom: 0;"></el-form-item>
+          <el-table :data="subFlowForm.launchMsgConfig.templateJson">
+            <el-table-column type="index" width="50" label="序号" align="center" />
+            <el-table-column prop="fieldId" label="参数名称" width="150">
+              <template slot-scope="scope">
+                {{scope.row.fieldName?scope.row.fieldId+'('+scope.row.fieldName+')':scope.row.fieldId}}
+              </template>
+            </el-table-column>
+            <el-table-column prop="value" label="表单字段">
+              <template slot-scope="scope">
+                <el-select v-model="scope.row.relationField" placeholder="请选择表单字段" clearable
+                  filterable>
+                  <el-option v-for="item in usedFormItems" :key="item.__vModel__"
+                    :label="item.__config__.label?item.__vModel__+'('+item.__config__.label+')':item.__vModel__"
+                    :value="item.__vModel__">
+                  </el-option>
+                </el-select>
+              </template>
+            </el-table-column>
+          </el-table>
+        </template>
       </el-form>
     </section>
 
@@ -610,37 +635,6 @@
                   </el-table-column>
                 </el-table>
               </template>
-              <el-form-item label="审核撤回">
-                <el-switch v-model="approverForm.revokeMsgConfig.on" />
-              </el-form-item>
-              <template v-if="approverForm.revokeMsgConfig.on">
-                <el-form-item label="模板设置" style="margin-bottom: 0;"></el-form-item>
-                <el-form-item label="消息模板" style="padding-left: 40px;">
-                  <msg-dialog v-model="approverForm.revokeMsgConfig.msgId"
-                    :title="approverForm.revokeMsgConfig.msgName"
-                    @change="onMsgChange('revokeMsgConfig',arguments)" />
-                </el-form-item>
-                <el-form-item label="参数设置" style="margin-bottom: 0;"></el-form-item>
-                <el-table :data="approverForm.revokeMsgConfig.templateJson">
-                  <el-table-column type="index" width="50" label="序号" align="center" />
-                  <el-table-column prop="fieldId" label="参数名称" width="150">
-                    <template slot-scope="scope">
-                      {{scope.row.fieldName?scope.row.fieldId+'('+scope.row.fieldName+')':scope.row.fieldId}}
-                    </template>
-                  </el-table-column>
-                  <el-table-column prop="value" label="表单字段">
-                    <template slot-scope="scope">
-                      <el-select v-model="scope.row.relationField" placeholder="请选择表单字段" clearable
-                        filterable>
-                        <el-option v-for="item in usedFormItems" :key="item.__vModel__"
-                          :label="item.__config__.label?item.__vModel__+'('+item.__config__.label+')':item.__vModel__"
-                          :value="item.__vModel__">
-                        </el-option>
-                      </el-select>
-                    </template>
-                  </el-table-column>
-                </el-table>
-              </template>
               <el-form-item label="审核催办">
                 <el-switch v-model="approverForm.pressMsgConfig.on" />
               </el-form-item>
@@ -755,7 +749,12 @@ const defaultSubFlowForm = {
   initiateRole: [],
   flowId: '',
   assignList: [],
-  messageType: [1],
+  launchMsgConfig: {
+    on: false,
+    msgId: '',
+    msgName: '',
+    templateJson: []
+  },
   isAsync: false
 }
 const defaultApproverForm = {
@@ -812,12 +811,6 @@ const defaultApproverForm = {
     templateJson: []
   },
   rejectMsgConfig: {
-    on: false,
-    msgId: '',
-    msgName: '',
-    templateJson: []
-  },
-  revokeMsgConfig: {
     on: false,
     msgId: '',
     msgName: '',
@@ -1456,13 +1449,23 @@ export default {
         this.approverForm[key].templateJson = []
         return
       }
-      this.approverForm[key].msgName = item.fullName
-      if (!item.templateJson) return
-      let templateJson = JSON.parse(item.templateJson)
-      this.approverForm[key].templateJson = templateJson.map(o => ({
-        ...o,
-        relationField: ''
-      }))
+      if (key === 'launchMsgConfig') {
+        this.subFlowForm[key].msgName = item.fullName
+        if (!item.templateJson) return
+        let templateJson = JSON.parse(item.templateJson)
+        this.subFlowForm[key].templateJson = templateJson.map(o => ({
+          ...o,
+          relationField: ''
+        }))
+      } else {
+        this.approverForm[key].msgName = item.fullName
+        if (!item.templateJson) return
+        let templateJson = JSON.parse(item.templateJson)
+        this.approverForm[key].templateJson = templateJson.map(o => ({
+          ...o,
+          relationField: ''
+        }))
+      }
     }
   },
   watch: {
