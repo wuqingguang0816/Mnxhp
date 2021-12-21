@@ -230,6 +230,10 @@
               <JNPF-TreeSelect :options="printTplList" v-model="startForm.printId"
                 placeholder="请选择打印模板" lastLevel clearable></JNPF-TreeSelect>
             </el-form-item>
+            <el-form-item label="流程评论">
+              <el-switch v-model="startForm.isComment" />
+              <div class="option-box-tip">*打开流程评论后，流程内涉及的用户均可进行意见评论</div>
+            </el-form-item>
           </el-form>
         </el-tab-pane>
         <el-tab-pane label="表单权限">
@@ -452,9 +456,6 @@
                   :label="item.properties.title" :value="item.nodeId">
                 </el-option>
               </el-select>
-            </el-form-item>
-            <el-form-item label="流程评论">
-              <el-switch v-model="approverForm.isComment" />
             </el-form-item>
             <el-form-item label="说明">
               <el-input v-model="approverForm.description" type="textarea" :rows="3"></el-input>
@@ -740,6 +741,7 @@ const defaultStartForm = {
   hasPrintBtn: false,
   printBtnText: '打 印',
   printId: '',
+  isComment: false,
   formOperates: []
 }
 const defaultSubFlowForm = {
@@ -775,7 +777,6 @@ const defaultApproverForm = {
   nodeId: '',
   getUserUrl: '',
   counterSign: 0,
-  isComment: false,
   noApproverHandler: true,
   hasFreeApprover: false,
   hasSaveBtn: false,
