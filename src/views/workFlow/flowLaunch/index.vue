@@ -39,6 +39,15 @@
                 </el-select>
               </el-form-item>
             </el-col>
+            <el-col :span="6">
+              <el-form-item label="流程状态">
+                <el-select v-model="status" placeholder="选择流程状态" clearable>
+                  <el-option v-for="(item,i) in statusList" :key="i" :label="item.fullName"
+                    :value="item.id">
+                  </el-option>
+                </el-select>
+              </el-form-item>
+            </el-col>
           </template>
           <el-col :span="6">
             <el-form-item>
@@ -164,11 +173,31 @@ export default {
           }
         }]
       },
+      statusList: [{
+        id: 0,
+        fullName: '等待提交'
+      }, {
+        id: 1,
+        fullName: '等待审核'
+      }, {
+        id: 2,
+        fullName: '审核通过'
+      }, {
+        id: 3,
+        fullName: '审核驳回'
+      }, {
+        id: 4,
+        fullName: '流程撤回'
+      }, {
+        id: 5,
+        fullName: '审核终止'
+      }],
       keyword: '',
       pickerVal: [],
       startTime: '',
       endTime: '',
       flowId: '',
+      status: '',
       flowCategory: '',
       categoryList: [],
       flowEngineList: []
@@ -220,6 +249,7 @@ export default {
         startTime: this.startTime,
         endTime: this.endTime,
         flowId: this.flowId,
+        status: this.status,
         flowCategory: this.flowCategory
       }
       FlowLaunchList(query).then(res => {
@@ -288,6 +318,7 @@ export default {
       this.endTime = ''
       this.keyword = ''
       this.flowId = ''
+      this.status = ''
       this.flowCategory = ''
       this.listQuery = {
         currentPage: 1,
