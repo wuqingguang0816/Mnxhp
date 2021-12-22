@@ -245,6 +245,16 @@
               <el-form-item v-if="activeData.actionText !== undefined" label="动作文字">
                 <el-input v-model="activeData.actionText" placeholder="请输入动作文字" />
               </el-form-item>
+              <el-form-item label="是否合计">
+                <el-switch v-model="activeData['show-summary']" />
+              </el-form-item>
+              <el-form-item label="合计字段" v-if="activeData['show-summary']">
+                <el-select v-model="activeData.summaryField" multiple placeholder="请选择合计字段">
+                  <el-option v-for="item in activeData.__config__.children" :key="item.__vModel__"
+                    :label="item.__config__.label" :value="item.__vModel__">
+                  </el-option>
+                </el-select>
+              </el-form-item>
             </template>
             <template v-if="activeData.__config__.jnpfKey === 'groupTitle'">
               <el-form-item label="标题">

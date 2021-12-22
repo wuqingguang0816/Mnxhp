@@ -778,6 +778,7 @@ export const selectComponents = [{
     disabled: false,
     actionText: '添加',
     'show-summary': false,
+    summaryField: [],
     tableConf: {},
     defaultValue: []
   },

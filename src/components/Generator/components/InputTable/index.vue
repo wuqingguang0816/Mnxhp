@@ -19,7 +19,7 @@
       <template v-for="(head, cindex) in tableData">
         <el-table-column :key="head.__config__.formId" :min-width="head['min-width']"
           :prop="head.__vModel__" :width="head.__config__.columnWidth"
-          v-if="!head.__config__.noShow">
+          v-if="!head.__config__.noShow" align="center">
           <template slot="header">
             <span style="color: #f56c6c;" v-if="head.__config__.required">*</span>
             {{ head.__config__['label'] }}
@@ -402,10 +402,12 @@ export default {
     },
     getCmpValOfRow(row, key) {
       // 获取数字相关组件的输入值
-      const isNumCmp = tag => ['fc-amount', 'el-input-number', 'el-slider'].includes(tag)
-      const target = row.find(t => t.vModel === key)
+      // const isNumCmp = tag => ['fc-amount', 'el-input-number', 'el-slider'].includes(tag)
+      if (!this.config.summaryField.length) return NaN
+      const isSummary = key => this.config.summaryField.includes(key)
+      const target = row.find(t => t.__vModel__ === key)
       if (!target) return NaN
-      if (isNumCmp(target.tag)) return target.value || 0
+      if (isSummary(key)) return target.value || 0
       return NaN
     },
     /**
