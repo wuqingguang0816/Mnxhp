@@ -396,7 +396,7 @@ export class NodeUtils {
       (!props.flowId || props.initiateType === 6 && (isEmptyArray(props.initiator) && isEmptyArray(props.initiatePos) && isEmptyArray(props.initiateRole))) &&
       (valid = false)
 
-    const customSettings = [6, 8]
+    const customSettings = [6, 7]
     this.isApproverNode(node) &&
       (!props.assigneeType || customSettings.includes(props.assigneeType)) &&
       (isEmptyArray(props.approvers) && isEmptyArray(props.approverPos) && isEmptyArray(props.approverRole)) &&
