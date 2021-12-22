@@ -300,11 +300,13 @@ export default {
       let res = true
       for (let i = 0; i < col.regList.length; i++) {
         const item = col.regList[i]
-        let pattern = eval(item.pattern)
-        if (col.value && !pattern.test(col.value)) {
-          res = false
-          col.regErrorText = item.message
-          break
+        if (item.pattern) {
+          let pattern = eval(item.pattern)
+          if (col.value && !pattern.test(col.value)) {
+            res = false
+            col.regErrorText = item.message
+            break
+          }
         }
       }
       return res
