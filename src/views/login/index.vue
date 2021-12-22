@@ -1,11 +1,19 @@
 <template>
   <div class="login-container">
-    <!-- <div class="login-version">
-      <p class="login-version-text">{{$t('login.version')}}{{define.version}}</p>
-    </div> -->
+    <div class="login-version">
+      <p class="login-version-text">V {{define.version}}</p>
+    </div>
+    <div class="login-left">
+      <div class="login-logo">
+        <img class="login-logo-img" src="../../assets/images/login_logo.png" alt="">
+      </div>
+      <img class="login-banner" src="../../assets/images/login-banner.png" alt="">
+      <p class="title1">在线自动化，可视化系统开发，零代码实现80%的基础功能</p>
+      <p class="title2">已帮助<span>21370</span>家企业完成数据化转型升级</p>
+    </div>
     <div class="login-content">
       <div class="login-form">
-        <img class="login-logo" src="../../assets/images/login_logo.png" alt="">
+        <p class="login-cap">欢迎登录</p>
         <div class="login-tab" :class="'active'+active">
           <a class="item" :class="{'active': active==1}" @click="active=1">{{$t('login.title')}}</a>
           <a class="item" :class="{'active': active==2}"
