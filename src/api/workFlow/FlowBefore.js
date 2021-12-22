@@ -24,6 +24,14 @@ export function Audit(id, data) {
     data
   })
 }
+// 待我审核保存草稿
+export function SaveAudit(id, data) {
+  return request({
+    url: `/api/workflow/Engine/FlowBefore/SaveAudit/${id}`,
+    method: 'post',
+    data
+  })
+}
 // 待我审核驳回
 export function Reject(id, data) {
   return request({
@@ -62,5 +70,13 @@ export function Assign(id, data) {
     url: `/api/workflow/Engine/FlowBefore/Assign/${id}`,
     method: 'post',
     data
+  })
+}
+// 审批汇总
+export function getRecordList(id, category) {
+  return request({
+    url: `/api/workflow/Engine/FlowBefore/RecordList/${id}`,
+    method: 'get',
+    data: { category }
   })
 }

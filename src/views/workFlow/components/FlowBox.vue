@@ -2,6 +2,7 @@
   <transition name="el-zoom-in-center">
     <div class="JNPF-preview-main flow-form-main nohead">
       <div class="btns">
+        <el-button type="primary" @click="addComment" v-if="activeTab==='comment'">评 论</el-button>
         <template
           v-if="(setting.opType=='-1'&&setting.id)||setting.opType==0||setting.opType==1||setting.opType==2">
           <el-button type="primary" @click="printBrowseVisible=true"
@@ -19,6 +20,8 @@
             v-if="properties.hasTransferBtn">{{properties.transferBtnText||'转 办'}}</el-button>
           <el-button type="primary" @click="eventLancher('audit')" v-if="properties.hasAuditBtn">
             {{properties.auditBtnText||'通 过'}}</el-button>
+          <el-button type="warning" @click="eventLancher('saveAudit')" v-if="properties.hasSaveBtn"
+            :loading="btnLoading">{{properties.saveBtnText||'保存草稿'}}</el-button>
           <el-button type="danger" @click="eventLancher('reject')" v-if="properties.hasRejectBtn">
             {{properties.rejectBtnText||'拒 绝'}}</el-button>
         </template>
@@ -53,6 +56,14 @@
         </el-tab-pane>
         <el-tab-pane label="流转记录" v-if="setting.opType!='-1'" v-loading="loading">
           <recordList :list='flowTaskOperatorRecordList' :endTime='endTime' />
+        </el-tab-pane>
+        <el-tab-pane label="审批汇总" v-if="setting.opType!='-1'" v-loading="loading"
+          name="recordSummary">
+          <RecordSummary :id='setting.id' ref="recordSummary" />
+        </el-tab-pane>
+        <el-tab-pane label="流程评论" v-if="setting.opType!='-1' && isComment" v-loading="loading"
+          name="comment">
+          <Comment :id='setting.id' ref="comment" />
         </el-tab-pane>
       </el-tabs>
       <el-dialog :title="eventType==='audit'?'审批通过':'审批拒绝'" :close-on-click-modal="false"
@@ -120,15 +131,17 @@
 
 <script>
 import { FlowEngineInfo } from '@/api/workFlow/FlowEngine'
-import { FlowBeforeInfo, Audit, Reject, Transfer, Recall, Cancel, Assign } from '@/api/workFlow/FlowBefore'
+import { FlowBeforeInfo, Audit, Reject, Transfer, Recall, Cancel, Assign, SaveAudit } from '@/api/workFlow/FlowBefore'
 import { Revoke, Press } from '@/api/workFlow/FlowLaunch'
 import { Create, Update, DynamicCreate, DynamicUpdate } from '@/api/workFlow/workFlowForm'
 import recordList from './RecordList'
+import Comment from './Comment'
+import RecordSummary from './RecordSummary'
 import Process from '@/components/Process/Preview'
 import PrintBrowse from '@/components/PrintBrowse'
 import vueEsign from 'vue-esign'
 export default {
-  components: { recordList, Process, vueEsign, PrintBrowse },
+  components: { recordList, Process, vueEsign, PrintBrowse, Comment, RecordSummary },
   data() {
     return {
       userBoxVisible: false,
@@ -161,6 +174,7 @@ export default {
       reason: '',
       handleId: '',
       activeTab: '0',
+      isComment: false,
       loading: false,
       btnLoading: false,
       approvalBtnLoading: false,
@@ -168,6 +182,16 @@ export default {
       eventType: '',
       signImg: '',
       copyIds: ''
+    }
+  },
+  watch: {
+    activeTab(val) {
+      if (val === 'comment') {
+        this.$refs.comment && this.$refs.comment.init()
+      }
+      if (val === 'recordSummary') {
+        this.$refs.recordSummary && this.$refs.recordSummary.init()
+      }
     }
   },
   methods: {
@@ -238,6 +262,7 @@ export default {
         }
         this.flowTaskNodeList = res.data.flowTaskNodeList
         this.flowTemplateJson = this.flowTaskInfo.flowTemplateJson ? JSON.parse(this.flowTaskInfo.flowTemplateJson) : null
+        this.isComment = this.flowTemplateJson.properties.isComment
         this.flowTaskOperatorRecordList = res.data.flowTaskOperatorRecordList
         this.properties = res.data.approversProperties || {}
         this.endTime = this.flowTaskInfo.completion == 100 ? this.flowTaskInfo.endTime : 0
@@ -288,6 +313,9 @@ export default {
       if (eventType === 'save' || eventType === 'submit') {
         return this.submitOrSave()
       }
+      if (eventType === 'saveAudit') {
+        return this.saveAudit()
+      }
       if (eventType === 'audit' || eventType === 'reject') {
         this.handleId = ''
         this.reason = ''
@@ -295,6 +323,25 @@ export default {
         this.handleReset()
         this.visible = true
       }
+    },
+    saveAudit() {
+      this.btnLoading = true
+      let query = {
+        formData: this.formData
+      }
+      SaveAudit(this.setting.taskId, query).then(res => {
+        this.$message({
+          message: res.msg,
+          type: 'success',
+          duration: 1500,
+          onClose: () => {
+            this.btnLoading = false
+            this.$emit('close', true)
+          }
+        })
+      }).catch(() => {
+        this.btnLoading = false
+      })
     },
     submitOrSave() {
       this.formData.status = this.eventType === 'submit' ? 0 : 1
@@ -491,6 +538,9 @@ export default {
           type: 'warning'
         })
       })
+    },
+    addComment() {
+      this.$refs.comment && this.$refs.comment.showCommentDialog()
     },
     setPageLoad(val) {
       this.loading = !!val
