@@ -213,6 +213,35 @@
                 </el-select>
               </el-form-item>
             </template>
+            <template v-if="activeData.__config__.jnpfKey==='button'">
+              <el-form-item label="控件文本">
+                <el-input v-model="activeData.buttonText" placeholder="请输入控件文本" />
+              </el-form-item>
+              <el-form-item label="控件栅格">
+                <el-slider v-model="activeData.__config__.span" :max="24" :min="6" show-stops
+                  :step="2" show-tooltip />
+              </el-form-item>
+              <el-form-item label="位置">
+                <el-radio-group v-model="activeData.align">
+                  <el-radio-button label="left">居左</el-radio-button>
+                  <el-radio-button label="center">居中</el-radio-button>
+                  <el-radio-button label="right">居右</el-radio-button>
+                </el-radio-group>
+              </el-form-item>
+              <el-form-item label="控件样式">
+                <el-select v-model="activeData.type" placeholder="请选择">
+                  <el-option label="默认按钮" value=""></el-option>
+                  <el-option label="主要按钮" value="primary"></el-option>
+                  <el-option label="成功按钮" value="success"></el-option>
+                  <el-option label="信息按钮" value="info"></el-option>
+                  <el-option label="警告按钮" value="warning"></el-option>
+                  <el-option label="危险按钮" value="danger"></el-option>
+                </el-select>
+              </el-form-item>
+              <el-form-item label="是否禁用">
+                <el-switch v-model="activeData.disabled" />
+              </el-form-item>
+            </template>
             <template v-if="isSystem">
               <el-form-item label="控件标题">
                 <el-input v-model="activeData.__config__.label" placeholder="请输入控件标题" />
@@ -866,6 +895,9 @@ export default {
           break;
         case 'blur':
           text = '失去焦点时触发'
+          break;
+        case 'click':
+          text = '点击时触发'
           break;
         case 'tab-click':
           text = '面板点击时触发'

@@ -17,6 +17,12 @@
           <groupTitle :content="item.content" :content-position="item['content-position']" />
         </el-form-item>
       </template>
+      <template v-else-if="item.__config__.jnpfKey==='button'">
+        <el-form-item label-width="0">
+          <jnpf-button :align="item.align" :buttonText="item.buttonText" :type="item.type"
+            :disabled="item.disabled" />
+        </el-form-item>
+      </template>
       <template v-else>
         <el-form-item :prop="item.__vModel__"
           :label-width="item.__config__.labelWidth?`${item.__config__.labelWidth}px`: null"

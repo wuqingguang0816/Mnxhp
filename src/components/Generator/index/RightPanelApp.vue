@@ -67,7 +67,7 @@
               </el-form-item>
             </template>
             <el-form-item label="控件标题"
-              v-if="activeData.__config__.label !== undefined && !['JNPFText','card','groupTitle','tab','collapse'].includes(activeData.__config__.jnpfKey)">
+              v-if="activeData.__config__.label !== undefined && !['JNPFText','card','groupTitle','tab','collapse','button'].includes(activeData.__config__.jnpfKey)">
               <el-input v-model="activeData.__config__.label" placeholder="请输入控件标题" />
             </el-form-item>
             <el-form-item v-if="activeData.placeholder !== undefined" label="占位提示">
@@ -442,6 +442,28 @@
                   filterable>
                   <el-option :label="item.__config__.label" :value="item.__vModel__"
                     v-for="(item,i) in drawingOptions" :key="i"></el-option>
+                </el-select>
+              </el-form-item>
+            </template>
+            <template v-if="activeData.__config__.jnpfKey==='button'">
+              <el-form-item label="控件文本">
+                <el-input v-model="activeData.buttonText" placeholder="请输入控件文本" />
+              </el-form-item>
+              <el-form-item label="位置">
+                <el-radio-group v-model="activeData.align">
+                  <el-radio-button label="left">居左</el-radio-button>
+                  <el-radio-button label="center">居中</el-radio-button>
+                  <el-radio-button label="right">居右</el-radio-button>
+                </el-radio-group>
+              </el-form-item>
+              <el-form-item label="控件样式">
+                <el-select v-model="activeData.type" placeholder="请选择">
+                  <el-option label="默认按钮" value=""></el-option>
+                  <el-option label="主要按钮" value="primary"></el-option>
+                  <el-option label="成功按钮" value="success"></el-option>
+                  <el-option label="信息按钮" value="info"></el-option>
+                  <el-option label="警告按钮" value="warning"></el-option>
+                  <el-option label="危险按钮" value="danger"></el-option>
                 </el-select>
               </el-form-item>
             </template>
@@ -1121,6 +1143,9 @@ export default {
           break;
         case 'blur':
           text = '失去焦点时触发'
+          break;
+        case 'click':
+          text = '点击时触发'
           break;
         case 'tab-click':
           text = '面板点击时触发'

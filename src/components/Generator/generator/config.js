@@ -586,7 +586,31 @@ export const inputComponents = [{
       trigger: 'blur'
     },
     placeholder: '请输入内容...'
-  }
+  },
+  {
+    __config__: {
+      jnpfKey: 'button',
+      label: '按钮',
+      labelWidth: undefined,
+      showLabel: false,
+      tag: 'jnpf-button',
+      tagIcon: 'icon-ym icon-ym-generator-button',
+      defaultValue: null,
+      required: false,
+      layout: 'colFormItem',
+      span: 24,
+      dragDisabled: false,
+      regList: [],
+      trigger: 'click'
+    },
+    on: {
+      click: '({ data, formData, setFormData, setShowOrHide, setRequired, setDisabled, request, getFieldOptions, setFieldOptions }) => {\n    // 在此编写代码\n    \n}',
+    },
+    align: 'left',
+    buttonText: '按钮',
+    type: '',
+    disabled: false
+  },
 ]
 
 // 高级控件 【左面板】

@@ -76,6 +76,17 @@ const layouts = {
         </el-col>
       )
     }
+    if (config.jnpfKey === 'button') {
+      return (
+        <el-col span={config.span} class={className}
+          nativeOnClick={event => { activeItem(element); event.stopPropagation() }}>
+          <el-form-item label-width="0">
+            <jnpf-button align={element.align} buttonText={element.buttonText} type={element.type} disabled={element.disabled}></jnpf-button>
+          </el-form-item>
+          {components.itemBtns.apply(this, arguments)}
+        </el-col>
+      )
+    }
     return (
       <el-col span={config.span} class={className}
         nativeOnClick={event => { activeItem(element); event.stopPropagation() }}>
