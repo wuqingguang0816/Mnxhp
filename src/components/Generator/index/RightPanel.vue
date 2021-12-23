@@ -228,14 +228,14 @@
               <el-form-item label="选择模板" v-if="activeData.__config__.jnpfKey==='billRule'">
                 <BillRule v-model="activeData.__config__.rule" placeholder="选择模板" />
               </el-form-item>
-              <el-form-item label="是否隐藏">
-                <el-switch v-model="activeData.__config__.noShow" />
-              </el-form-item>
               <el-form-item label="显示内容" v-if="activeData.__config__.jnpfKey==='currOrganize'">
                 <el-select v-model="activeData.showLevel" placeholder="请选择显示内容">
                   <el-option label="显示组织" value="all"></el-option>
                   <el-option label="显示部门" value="last"></el-option>
                 </el-select>
+              </el-form-item>
+              <el-form-item label="是否隐藏">
+                <el-switch v-model="activeData.__config__.noShow" />
               </el-form-item>
             </template>
             <template v-if="activeData.on && (modelType==1||modelType==6)">

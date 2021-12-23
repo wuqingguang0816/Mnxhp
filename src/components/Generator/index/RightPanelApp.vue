@@ -445,6 +445,12 @@
                 </el-select>
               </el-form-item>
             </template>
+            <el-form-item label="显示内容" v-if="activeData.__config__.jnpfKey==='currOrganize'">
+              <el-select v-model="activeData.showLevel" placeholder="请选择显示内容">
+                <el-option label="显示组织" value="all"></el-option>
+                <el-option label="显示部门" value="last"></el-option>
+              </el-select>
+            </el-form-item>
             <el-form-item label="是否密码" v-if="activeData['show-password'] !== undefined">
               <el-switch v-model="activeData['show-password']" />
             </el-form-item>
@@ -462,12 +468,6 @@
             </el-form-item>
             <el-form-item v-if="activeData.__config__.noShow !== undefined" label="是否隐藏">
               <el-switch v-model="activeData.__config__.noShow" />
-            </el-form-item>
-            <el-form-item label="显示内容" v-if="activeData.__config__.jnpfKey==='currOrganize'">
-              <el-select v-model="activeData.showLevel" placeholder="请选择显示内容">
-                <el-option label="显示组织" value="all"></el-option>
-                <el-option label="显示部门" value="last"></el-option>
-              </el-select>
             </el-form-item>
             <template v-if="activeData.__config__.jnpfKey === 'comInput'">
               <el-divider>校验</el-divider>
