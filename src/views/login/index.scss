@@ -105,6 +105,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
+    position: relative;
 
     .login-cap {
       font-size: 26px;
@@ -121,7 +122,7 @@
     border-radius: 6px;
 
     .sms-input {
-      width: 240px;
+      width: 340px;
     }
 
     .sms-right {
@@ -260,12 +261,12 @@
   }
 }
 
-@media screen and (max-width: 1366px) {
-  .login-container .login-content {
-    width: 690px;
+// @media screen and (max-width: 1366px) {
+//   .login-container .login-content {
+//     width: 690px;
 
-    .login-form {
-      width: 420px;
-    }
-  }
-}
+//     .login-form {
+//       width: 420px;
+//     }
+//   }
+// }
