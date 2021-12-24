@@ -1,9 +1,9 @@
 @font-face {
   font-family: "icon-ym";
   /* Project id 2011706 */
-  src: url('iconfont.woff2?t=1640241950454') format('woff2'),
-    url('iconfont.woff?t=1640241950454') format('woff'),
-    url('iconfont.ttf?t=1640241950454') format('truetype');
+  src: url('iconfont.woff2?t=1640335254750') format('woff2'),
+    url('iconfont.woff?t=1640335254750') format('woff'),
+    url('iconfont.ttf?t=1640335254750') format('truetype');
 }
 
 .icon-ym {
@@ -12,6 +12,10 @@
   font-style: normal;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-ym-h5:before {
+  content: "\e682";
 }
 
 .icon-ym-report-icon-merge-cell:before {
@@ -36,10 +40,6 @@
 
 .icon-ym-ios:before {
   content: "\e681";
-}
-
-.icon-ym-h5:before {
-  content: "\e682";
 }
 
 .icon-ym-report-icon-scatter:before {
