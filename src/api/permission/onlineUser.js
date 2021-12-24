@@ -8,6 +8,14 @@ export const getOnlineUser = (data) => {
     data
   })
 }
+// 批量强制下线
+export const batchDelOnlineUser = (ids) => {
+  return request({
+    url: '/api/system/OnlineUser',
+    method: 'DELETE',
+    data: { ids }
+  })
+}
 // 强制下线
 export const deleteOnlineUser = (id) => {
   return request({
