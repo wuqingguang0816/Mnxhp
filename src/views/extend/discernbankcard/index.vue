@@ -4,21 +4,21 @@
       <el-row class="JNPF-common-search-box" :gutter="16">
         <el-form @submit.native.prevent>
           <el-col :span="6">
-            <el-form-item label="身份证号">
+            <el-form-item label="银行卡号">
               <el-input v-model="query.numvalue" placeholder="请输入" clearable>
               </el-input>
             </el-form-item>
           </el-col>
-          <el-col :span="6">
-            <el-form-item label="姓名">
-              <el-input
-                v-model="query.namevalue"
-                placeholder="请输入"
-                clearable
-              >
-              </el-input>
-            </el-form-item>
-          </el-col>
+<!--          <el-col :span="6">-->
+<!--            <el-form-item label="银行名">-->
+<!--              <el-input-->
+<!--                v-model="query.value5"-->
+<!--                placeholder="请输入"-->
+<!--                clearable-->
+<!--              >-->
+<!--              </el-input>-->
+<!--            </el-form-item>-->
+<!--          </el-col>-->
           <el-col :span="6">
             <el-form-item>
               <el-button type="primary" icon="el-icon-search" @click="search()"
