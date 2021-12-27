@@ -419,7 +419,7 @@
                 <org-select ref="approver-copy-user-org" buttonType="button"
                   v-model="approverForm.circulateUser" title="添加用户" @change="onOrgChange"
                   class="mb-10" />
-                <el-checkbox v-model="approverForm.isCustomCopy">自定义抄送人</el-checkbox>
+                <el-checkbox v-model="approverForm.isCustomCopy">允许自选抄送人</el-checkbox>
               </el-form-item>
             </el-form>
           </el-scrollbar>
@@ -832,10 +832,10 @@ const defaultApproverForm = {
 }
 const defaultStep = [{
   nodeId: '1',
-  properties: { title: '上一审批人' }
+  properties: { title: '上级审批节点' }
 }, {
   nodeId: '0',
-  properties: { title: '发起人' }
+  properties: { title: '发起节点' }
 }]
 const typeOptions = [
   {
