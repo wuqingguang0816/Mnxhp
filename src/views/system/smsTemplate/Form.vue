@@ -4,7 +4,6 @@
       <div class="JNPF-common-page-header">
         <el-page-header @back="goBack" :content="!dataForm.id ? '新建短信模板' : '编辑短信模板'" />
         <div class="options">
-          <el-button type="primary" @click="showDialog()" :loading="testLoading">测试</el-button>
           <el-button type="primary" @click="dataFormSubmit()" :loading="btnLoading">
             {{$t('common.confirmButton')}}</el-button>
           <el-button @click="goBack()">{{$t('common.cancelButton')}}</el-button>
@@ -31,6 +30,9 @@
             </el-form-item>
             <el-form-item label="应用编号" prop="appId" v-if="dataForm.company===2">
               <el-input v-model="dataForm.appId" placeholder="应用编号"></el-input>
+            </el-form-item>
+            <el-form-item label="模板验证">
+              <el-button @click="showDialog()" :loading="testLoading">测试</el-button>
             </el-form-item>
             <el-form-item label="状态" prop="enabledMark">
               <el-switch v-model="dataForm.enabledMark" :active-value="1" :inactive-value="0" />
