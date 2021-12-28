@@ -1,0 +1,61 @@
+<template>
+  <el-dialog title="提交审核" :close-on-click-modal="false"
+    class="JNPF-dialog JNPF-dialog_center form-script-dialog" lock-scroll append-to-body
+    v-bind="$attrs" width="600px" :modal-append-to-body="false" v-on="$listeners" @open="onOpen">
+    <el-form label-width="130px" ref="candidateForm" :model="candidateForm">
+      <el-form-item :label="item.label" :prop="'candidateList.' + i + '.value'"
+        v-for="(item,i) in candidateForm.candidateList" :key="i" :rules="item.rules">
+        <el-select v-model="item.value" multiple :placeholder="'请选择'+item.label" filterable>
+          <el-option v-for="option in item.candidateList" :key="option.userId"
+            :label="option.userName" :value="option.userId">
+          </el-option>
+        </el-select>
+      </el-form-item>
+    </el-form>
+    <span slot="footer" class="dialog-footer">
+      <el-button @click="closeDialog">{{$t('common.cancelButton')}}</el-button>
+      <el-button type="primary" @click="submitCandidate()">{{$t('common.confirmButton')}}
+      </el-button>
+    </span>
+  </el-dialog>
+</template>
+
+<script>
+export default {
+  props: ['candidateList'],
+  data() {
+    return {
+      candidateForm: {
+        candidateList: []
+      }
+    }
+  },
+  methods: {
+    onOpen() {
+      this.candidateForm.candidateList = this.candidateList.map(o => ({
+        ...o,
+        label: o.nodeName + '审批人',
+        value: [],
+        rules: [{ required: true, message: `${o.nodeName}审批人不能为空`, trigger: ['change', 'blur'], type: 'array' }]
+      }))
+      this.$nextTick(() => {
+        this.$refs['candidateForm'].resetFields()
+      })
+    },
+    submitCandidate() {
+      this.$refs['candidateForm'].validate((valid) => {
+        if (valid) {
+          let candidateList = this.candidateForm.candidateList.map(o => ({
+            nodeId: o.nodeId,
+            candidateList: o.value
+          }))
+          this.$emit('submitCandidate', candidateList)
+        }
+      })
+    },
+    closeDialog() {
+      this.$emit('update:visible', false)
+    },
+  }
+}
+</script>

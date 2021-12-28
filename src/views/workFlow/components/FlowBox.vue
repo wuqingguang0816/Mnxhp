@@ -10,7 +10,7 @@
             {{properties.printBtnText||'打 印'}}</el-button>
         </template>
         <template v-if="setting.opType=='-1'">
-          <el-button type="primary" @click="eventLancher('submit')">
+          <el-button type="primary" @click="eventLancher('submit')" :loading="candidateLoading">
             {{properties.submitBtnText||'提交审核'}}</el-button>
           <el-button type="warning" @click="eventLancher('save')" :loading="btnLoading">
             {{properties.saveBtnText||'保存草稿'}}</el-button>
@@ -18,8 +18,8 @@
         <template v-if="setting.opType == 1">
           <el-button type="warning" @click="openUserBox('transfer')"
             v-if="properties.hasTransferBtn">{{properties.transferBtnText||'转 办'}}</el-button>
-          <el-button type="primary" @click="eventLancher('audit')" v-if="properties.hasAuditBtn">
-            {{properties.auditBtnText||'通 过'}}</el-button>
+          <el-button type="primary" @click="eventLancher('audit')" :loading="candidateLoading"
+            v-if="properties.hasAuditBtn">{{properties.auditBtnText||'通 过'}}</el-button>
           <el-button type="warning" @click="eventLancher('saveAudit')" v-if="properties.hasSaveBtn"
             :loading="btnLoading">{{properties.saveBtnText||'保存草稿'}}</el-button>
           <el-button type="danger" @click="eventLancher('reject')" v-if="properties.hasRejectBtn">
@@ -49,7 +49,7 @@
       <el-tabs class="JNPF-el_tabs" v-model="activeTab">
         <el-tab-pane label="表单信息" v-loading="loading">
           <component :is="currentView" @close="goBack" ref="form" @eventReciver="eventReciver"
-            @setLoad="setLoad" @setPageLoad="setPageLoad" />
+            @setLoad="setLoad" @setCandidateLoad="setCandidateLoad" @setPageLoad="setPageLoad" />
         </el-tab-pane>
         <el-tab-pane label="流程信息" v-loading="loading">
           <Process :conf="flowTemplateJson" v-if="flowTemplateJson.nodeId" />
@@ -69,7 +69,17 @@
       <el-dialog :title="eventType==='audit'?'审批通过':'审批拒绝'" :close-on-click-modal="false"
         :visible.sync="visible" class="JNPF-dialog JNPF-dialog_center" lock-scroll append-to-body
         width='600px'>
-        <el-form label-width="80px">
+        <el-form label-width="130px" ref="candidateForm" :model="candidateForm">
+          <template v-if="eventType==='audit'">
+            <el-form-item :label="item.label" :prop="'candidateList.' + i + '.value'"
+              v-for="(item,i) in candidateForm.candidateList" :key="i" :rules="item.rules">
+              <el-select v-model="item.value" multiple :placeholder="'请选择'+item.label" filterable>
+                <el-option v-for="option in item.candidateList" :key="option.userId"
+                  :label="option.userName" :value="option.userId">
+                </el-option>
+              </el-select>
+            </el-form-item>
+          </template>
           <el-form-item label="加签人员" v-if="eventType==='audit'&& properties.hasFreeApprover">
             <user-select v-model="handleId" placeholder="请选择加签人员,不选即该节点审核结束" />
           </el-form-item>
@@ -125,23 +135,26 @@
       <UserBox v-if="userBoxVisible" ref="userBox" :title="userBoxTitle" @submit="handleTransfer" />
       <print-browse :visible.sync="printBrowseVisible" :id="properties.printId" :formId="setting.id"
         :fullName="setting.fullName" />
+      <candidate-form :visible.sync="candidateVisible" :candidateList="this.candidateList"
+        @submitCandidate="submitCandidate" />
     </div>
   </transition>
 </template>
 
 <script>
 import { FlowEngineInfo } from '@/api/workFlow/FlowEngine'
-import { FlowBeforeInfo, Audit, Reject, Transfer, Recall, Cancel, Assign, SaveAudit } from '@/api/workFlow/FlowBefore'
+import { FlowBeforeInfo, Audit, Reject, Transfer, Recall, Cancel, Assign, SaveAudit, Candidates } from '@/api/workFlow/FlowBefore'
 import { Revoke, Press } from '@/api/workFlow/FlowLaunch'
 import { Create, Update, DynamicCreate, DynamicUpdate } from '@/api/workFlow/workFlowForm'
 import recordList from './RecordList'
 import Comment from './Comment'
 import RecordSummary from './RecordSummary'
+import CandidateForm from './CandidateForm'
 import Process from '@/components/Process/Preview'
 import PrintBrowse from '@/components/PrintBrowse'
 import vueEsign from 'vue-esign'
 export default {
-  components: { recordList, Process, vueEsign, PrintBrowse, Comment, RecordSummary },
+  components: { recordList, Process, vueEsign, PrintBrowse, Comment, RecordSummary, CandidateForm },
   data() {
     return {
       userBoxVisible: false,
@@ -178,6 +191,12 @@ export default {
       loading: false,
       btnLoading: false,
       approvalBtnLoading: false,
+      candidateLoading: false,
+      candidateVisible: false,
+      candidateList: [],
+      candidateForm: {
+        candidateList: []
+      },
       printBrowseVisible: false,
       eventType: '',
       signImg: '',
@@ -321,7 +340,26 @@ export default {
         this.reason = ''
         this.copyIds = ''
         this.handleReset()
-        this.visible = true
+        if (eventType === 'reject') return this.visible = true
+        this.candidateLoading = true
+        Candidates(this.setting.taskId, { formData: this.formData }).then(res => {
+          let data = res.data
+          this.candidateLoading = false
+          if (Array.isArray(data) && data.length) {
+            this.candidateForm.candidateList = res.data.map(o => ({
+              ...o,
+              label: o.nodeName + '审批人',
+              value: [],
+              rules: [{ required: true, message: `${o.nodeName}审批人不能为空`, trigger: ['change', 'blur'], type: 'array' }]
+            }))
+            this.$nextTick(() => {
+              this.$refs['candidateForm'].resetFields()
+            })
+          }
+          this.visible = true
+        }).catch(() => {
+          this.candidateLoading = false
+        })
       }
     },
     saveAudit() {
@@ -346,13 +384,26 @@ export default {
     submitOrSave() {
       this.formData.status = this.eventType === 'submit' ? 0 : 1
       if (this.eventType === 'save') return this.handleRequest()
-      this.$confirm('您确定要提交当前流程吗, 是否继续?', '提示', {
-        type: 'warning'
-      }).then(() => {
-        this.handleRequest()
-      }).catch(() => { });
+      this.candidateLoading = true
+      Candidates(0, { formData: this.formData }).then(res => {
+        let data = res.data
+        this.candidateLoading = false
+        if (Array.isArray(data) && data.length) {
+          this.candidateList = res.data
+          this.candidateVisible = true
+        } else {
+          this.$confirm('您确定要提交当前流程吗, 是否继续?', '提示', {
+            type: 'warning'
+          }).then(() => {
+            this.handleRequest()
+          }).catch(() => { });
+        }
+      }).catch(() => {
+        this.candidateLoading = false
+      })
     },
-    handleRequest() {
+    handleRequest(candidateList) {
+      if (candidateList) this.formData.candidateList = candidateList
       if (!this.formData.id) delete (this.formData.id)
       if (this.eventType === 'save') this.btnLoading = true
       let formMethod = null
@@ -368,12 +419,16 @@ export default {
           duration: 1500,
           onClose: () => {
             if (this.eventType === 'save') this.btnLoading = false
+            this.candidateVisible = false
             this.$emit('close', true)
           }
         })
       }).catch(() => {
         if (this.eventType === 'save') this.btnLoading = false
       })
+    },
+    submitCandidate(data) {
+      this.handleRequest(data)
     },
     revoke() {
       this.$prompt('', "撤回流程", {
@@ -491,37 +546,48 @@ export default {
       })
     },
     handleApproval() {
-      if (this.properties.hasSign && !this.signImg) {
-        this.$message({
-          message: '请签名',
-          type: 'error'
-        })
-        return
-      }
-      let query = {
-        handleOpinion: this.reason,
-        formData: this.formData,
-        enCode: this.setting.enCode,
-        signImg: this.signImg,
-        copyIds: this.copyIds
-      }
-      if (this.eventType === 'audit' && this.properties.hasFreeApprover) {
-        query = { freeApproverUserId: this.handleId, ...query }
-      }
-      const approvalMethod = this.eventType === 'audit' ? Audit : Reject
-      this.approvalBtnLoading = true
-      approvalMethod(this.setting.taskId, query).then(res => {
-        this.$message({
-          type: 'success',
-          message: res.msg,
-          duration: 1000,
-          onClose: () => {
-            this.approvalBtnLoading = false
-            this.visible = false
-            this.$emit('close', true)
+      this.$refs['candidateForm'].validate((valid) => {
+        if (valid) {
+          if (this.candidateForm.candidateList.length) {
+            let candidateList = this.candidateForm.candidateList.map(o => ({
+              nodeId: o.nodeId,
+              candidateList: o.value
+            }))
+            this.formData.candidateList = candidateList
           }
-        })
-      }).catch(() => { this.approvalBtnLoading = false })
+          if (this.properties.hasSign && !this.signImg) {
+            this.$message({
+              message: '请签名',
+              type: 'error'
+            })
+            return
+          }
+          let query = {
+            handleOpinion: this.reason,
+            formData: this.formData,
+            enCode: this.setting.enCode,
+            signImg: this.signImg,
+            copyIds: this.copyIds
+          }
+          if (this.eventType === 'audit' && this.properties.hasFreeApprover) {
+            query = { freeApproverUserId: this.handleId, ...query }
+          }
+          const approvalMethod = this.eventType === 'audit' ? Audit : Reject
+          this.approvalBtnLoading = true
+          approvalMethod(this.setting.taskId, query).then(res => {
+            this.$message({
+              type: 'success',
+              message: res.msg,
+              duration: 1000,
+              onClose: () => {
+                this.approvalBtnLoading = false
+                this.visible = false
+                this.$emit('close', true)
+              }
+            })
+          }).catch(() => { this.approvalBtnLoading = false })
+        }
+      })
     },
     handleReset() {
       this.signImg = ''
@@ -544,6 +610,9 @@ export default {
     },
     setPageLoad(val) {
       this.loading = !!val
+    },
+    setCandidateLoad(val) {
+      this.candidateLoading = !!val
     },
     setLoad(val) {
       this.btnLoading = !!val
