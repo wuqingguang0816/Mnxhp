@@ -72,7 +72,7 @@
               {{ item.name }}</el-link>
           </template>
           <template v-else-if="item.__config__.jnpfKey==='relationFormAttr'">
-            <p class="dynamicDetail-text">
+            <p>
               {{ relationData[item.relationField] &&relationData[item.relationField][item.showField] ? relationData[item.relationField][item.showField] : '' }}
             </p>
           </template>
@@ -89,7 +89,7 @@
               :formData="formValue"></jnpf-qrcode>
           </template>
           <template v-else>
-            <p class="dynamicDetail-text">{{ getValue(item) }}</p>
+            <p>{{ getValue(item) }}</p>
           </template>
         </el-form-item>
       </template>
@@ -120,6 +120,12 @@
                   <el-link :underline="false" type="primary"
                     @click.native="toTableDetail(column,scope.row[column.__vModel__+'_id'])">
                     {{ scope.row[column.__vModel__] }}</el-link>
+                </template>
+              </el-table-column>
+              <el-table-column :key="columnIndex" :label="column.__config__.label"
+                v-else-if="column.__config__.jnpfKey==='relationFormAttr'">
+                <template slot-scope="scope">
+                  {{ scope.row[column.relationField+'_'+column.showField] }}
                 </template>
               </el-table-column>
               <el-table-column :key="columnIndex" :prop="column.__vModel__"
