@@ -107,6 +107,7 @@ export default {
   methods: {
     init(listQuery) {
       this.visible = true
+      this.checkAll = true
       this.btnLoading = false
       this.listQuery = listQuery
       this.columns = this.columnList.map(o => o.prop)
