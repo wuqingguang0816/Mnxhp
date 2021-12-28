@@ -45,11 +45,6 @@ export default {
     },
     closeDialog() {
       this.$emit('update:visible', false)
-    },
-    handleNodeClick(item, node) {
-      if (item.top) return
-      if (item.children) return
-      this.$refs.CodeEditor.insert(item.value);
     }
   }
 }

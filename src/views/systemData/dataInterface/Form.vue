@@ -128,8 +128,10 @@
               </el-table-column>
               <el-table-column prop="field" label="参数名称(注释)">
                 <template slot-scope="scope">
-                  <span
-                    class="sign">{{scope.row.required?'*':''}}</span>{{scope.row.field}}{{scope.row.fieldName?'('+scope.row.fieldName+')':''}}
+                  <p @click="handleItemClick(scope.row)" style="cursor:pointer">
+                    <span class="sign">{{scope.row.required?'*':''}}</span>
+                    {{scope.row.field}}{{scope.row.fieldName?'('+scope.row.fieldName+')':''}}
+                  </p>
                 </template>
               </el-table-column>
               <el-table-column prop="dataType" label="参数类型" width="70">
@@ -193,8 +195,10 @@
               </el-table-column>
               <el-table-column prop="field" label="参数名称(注释)">
                 <template slot-scope="scope">
-                  <span
-                    class="sign">{{scope.row.required?'*':''}}</span>{{scope.row.field}}{{scope.row.fieldName?'('+scope.row.fieldName+')':''}}
+                  <p>
+                    <span class="sign">{{scope.row.required?'*':''}}</span>
+                    {{scope.row.field}}{{scope.row.fieldName?'('+scope.row.fieldName+')':''}}
+                  </p>
                 </template>
               </el-table-column>
               <el-table-column prop="dataType" label="参数类型" width="70">
@@ -484,6 +488,10 @@ export default {
     },
     updateScript(data) {
       this.dataForm.dataProcessing = data
+    },
+    handleItemClick(item) {
+      if (!item.field) return
+      this.$refs.SQLEditorRef.insert('{' + item.field + '}')
     },
     dataFormSubmit() {
       this.$refs['dataForm'].validate(valid => {
