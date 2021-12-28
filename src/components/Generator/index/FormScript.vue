@@ -13,7 +13,7 @@
         </div>
         <div class="tips">
           <p>请从左侧面板选择的字段名，支持JavaScript的脚本，参考编写脚本API</p>
-          <p>data--当前组件的选中值，formData--表单数据，setFormData--设置表单某个组件数据(prop,value)</p>
+          <p>data--当前组件的选中数据，formData--表单数据，setFormData--设置表单某个组件数据(prop,value)</p>
           <p>
             setShowOrHide--设置显示或隐藏(prop,value)，setRequired--设置必填项(prop,value)，setDisabled--设置禁用项(prop,value)
           </p>
