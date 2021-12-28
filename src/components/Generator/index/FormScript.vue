@@ -50,18 +50,6 @@ export default {
       },
     }
   },
-  watch: {
-    keyword(val) {
-      this.search()
-    },
-    activeName(val) {
-      if (this.keyword) {
-        this.keyword = ''
-      } else {
-        this.search()
-      }
-    }
-  },
   methods: {
     onOpen() {
       this.text = this.tpl
