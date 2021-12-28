@@ -1,8 +1,19 @@
 <template>
   <div class="login-container">
-    <!-- <div class="login-version">
-      <p class="login-version-text">{{$t('login.version')}}{{define.version}}</p>
-    </div> -->
+    <div class="login-version">
+      <p class="login-version-text">V {{define.version}}</p>
+    </div>
+    <div class="login-left">
+      <a class="login-company-logo" target="_blank" href="https://www.jnpfsoft.com">
+        <img class="login-company-logo-img" src="../../assets/images/login-company-logo.png" alt="">
+      </a>
+      <img class="login-banner" src="../../assets/images/login-banner.png" alt="">
+      <div class="login-left-txt">
+        <p class="title1">在线自动化，可视化系统开发，零代码实现80%的基础功能</p>
+        <p class="title2">已帮助<span>20000+</span>家企业完成数据化转型升级</p>
+        <a class="link" target="_blank" href="https://www.jnpfsoft.com">了解更多</a>
+      </div>
+    </div>
     <div class="login-content">
       <div class="login-form">
         <img class="login-logo" src="../../assets/images/login_logo.png" alt="">

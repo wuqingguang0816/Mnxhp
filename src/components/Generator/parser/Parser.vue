@@ -202,7 +202,6 @@ function buildListeners(scheme) {
           } else {
             data = params.length > 1 ? params[1] : params[0]
           }
-          console.log(data);
           func.call(this, { data, ...this.parameter })
         } else {
           func.call(this, { data: params[0], ...this.parameter })
