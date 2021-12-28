@@ -54,11 +54,12 @@
           </el-table-column>
           <el-table-column label="类型" width="100">
             <template slot-scope="scope">
-              <span v-if="scope.row.dataType === 1">SQL数据</span>
+              <span v-if="scope.row.dataType === 1">SQL操作</span>
               <span v-if="scope.row.dataType === 2">静态数据</span>
               <span v-if="scope.row.dataType === 3">Api数据</span>
             </template>
           </el-table-column>
+          <el-table-column prop="requestMethod" label="类别" width="100" />
           <el-table-column prop="creatorTime" label="创建时间" :formatter="jnpf.tableDateFormat"
             width="120" />
           <el-table-column prop="sortCode" label="排序" width="70" align="center" />
