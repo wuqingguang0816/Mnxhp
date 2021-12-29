@@ -548,13 +548,6 @@ export default {
     handleApproval() {
       this.$refs['candidateForm'].validate((valid) => {
         if (valid) {
-          if (this.candidateForm.candidateList.length) {
-            let candidateList = {}
-            for (let i = 0; i < this.candidateForm.candidateList.length; i++) {
-              candidateList[this.candidateForm.candidateList[i].nodeId] = this.candidateForm.candidateList[i].value
-            }
-            this.formData.candidateList = candidateList
-          }
           if (this.properties.hasSign && !this.signImg) {
             this.$message({
               message: '请签名',
@@ -568,6 +561,13 @@ export default {
             enCode: this.setting.enCode,
             signImg: this.signImg,
             copyIds: this.copyIds
+          }
+          if (this.candidateForm.candidateList.length) {
+            let candidateList = {}
+            for (let i = 0; i < this.candidateForm.candidateList.length; i++) {
+              candidateList[this.candidateForm.candidateList[i].nodeId] = this.candidateForm.candidateList[i].value
+            }
+            query.candidateList = candidateList
           }
           if (this.eventType === 'audit' && this.properties.hasFreeApprover) {
             query = { freeApproverUserId: this.handleId, ...query }
