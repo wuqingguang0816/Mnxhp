@@ -53,6 +53,33 @@
           </el-input>
         </el-form-item>
       </div>
+      <div v-if="dataForm.dbType==='Oracle'">
+        <el-form-item label="更多" prop="oracleExtend" >
+          <label><input type="checkbox" v-model='dataForm.oracleExtend'></input></label>
+        </el-form-item>
+        <div v-if="dataForm.oracleExtend===true">
+          <el-form-item label="连接方式" prop="oracleLinkType">
+            <select v-model="dataForm.oracleLinkType">
+              <option value="SERVICE">SERVICE</option>
+              <option value="SID">SID</option>
+              <option value="SCHEMA">SCHEMA</option>
+              <option value="TNS">TNS</option>
+            </select>
+          </el-form-item>
+          <el-form-item label="角色" prop="oracleRole">
+            <select v-model="dataForm.oracleRole">
+              <option value="Default">Default</option>
+              <option value="SYSDBA">SYSDBA</option>
+              <option value="SYSOPER">SYSOPER</option>
+            </select>
+          </el-form-item>
+          <el-form-item label="服务名" prop="oracleService">
+              <el-input v-model="dataForm.oracleService">
+              </el-input>
+            </el-form-item>
+        </div>
+      </div>
+
 
       <!-- 暂时停用表空间，表空间是物理层分类一般不做操作（类似，静态资源放哪里，而用户只需要关心它展示端在哪个分类里，
             而不用关心实际它存储在哪里，navicat与数据库自带操作工具，也并没有指定表空间。），逻辑分类用模式。 -->
@@ -77,7 +104,9 @@
 
 <script>
 import { DataSourceInfo, DataSourceUpdate, DataSourceCreate, TestDbConnection } from '@/api/systemData/dataSource'
+import Select from "@/components/Generator/index/RightComponents/Select";
 export default {
+  components: {Select},
   data() {
     return {
       visible: false,
@@ -93,7 +122,11 @@ export default {
         dbSchema:'',
         tableSpace: '',
         sortCode: 0,
-        enabledMark: 1
+        enabledMark: 1,
+        oracleExtend: false,
+        oracleLinkType: 0,
+        oracleService: '',
+        oracleRole: ''
       },
       dataRule: {
         dbType: [
