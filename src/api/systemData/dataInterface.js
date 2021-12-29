@@ -108,3 +108,11 @@ export function getDataInterfaceDataInfo(id, data) {
     data
   })
 }
+// 获取接口列表(工作流选择时调用，带分页)
+export function getDataInterfaceSelectorList(data) {
+  return request({
+    url: '/api/system/DataInterface/getList',
+    method: 'GET',
+    data
+  })
+}
