@@ -1,6 +1,7 @@
 <template>
   <el-dialog title="选择产品" :close-on-click-modal="false" :visible.sync="visible"
-    class="JNPF-dialog JNPF-dialog_center" lock-scroll append-to-body width="1000px">
+    class="JNPF-dialog JNPF-dialog_center JNPF-dialog-tree" lock-scroll append-to-body
+    width="1000px">
     <div class="JNPF-common-layout">
       <div class="JNPF-common-layout-left">
         <el-scrollbar class="JNPF-common-el-tree-scrollbar" v-loading="treeLoading"
@@ -153,21 +154,3 @@ export default {
   }
 }
 </script>
-<style lang="scss" scoped>
->>> .el-dialog__body {
-  height: 60vh;
-  padding: 0 0 10px !important;
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
-  .JNPF-common-layout-left {
-    margin-right: 1px;
-  }
-  .JNPF-common-search-box {
-    margin-bottom: 0;
-    .JNPF-common-search-box-right {
-      padding: 10px 10px 0 0;
-    }
-  }
-}
-</style>

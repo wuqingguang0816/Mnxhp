@@ -187,9 +187,9 @@
           <el-form-item label="参数设置" style="margin-bottom: 0;"></el-form-item>
           <el-table :data="subFlowForm.launchMsgConfig.templateJson">
             <el-table-column type="index" width="50" label="序号" align="center" />
-            <el-table-column prop="fieldId" label="参数名称" width="150">
+            <el-table-column prop="field" label="参数名称" width="150">
               <template slot-scope="scope">
-                {{scope.row.fieldName?scope.row.fieldId+'('+scope.row.fieldName+')':scope.row.fieldId}}
+                {{scope.row.fieldName?scope.row.field+'('+scope.row.fieldName+')':scope.row.field}}
               </template>
             </el-table-column>
             <el-table-column prop="value" label="表单字段">
@@ -275,43 +275,139 @@
           </div>
         </el-tab-pane>
         <el-tab-pane label="流程事件">
-          <el-form label-position="top" class="pd-10">
-            <el-alert type="warning" :closable="false">
-              <div slot="title" class="tips">
-                <p>请求参数：taskId、taskNodeId</p>
-              </div>
-            </el-alert>
-            <el-form-item label="自定义发起事件">
-              <el-switch v-model="startForm.hasInitFunc" />
-            </el-form-item>
-            <template v-if="startForm.hasInitFunc">
-              <el-form-item label="发起事件请求路径">
-                <el-input v-model="startForm.initInterfaceUrl" placeholder="请输入接口地址">
-                  <template slot="prepend">GET</template>
-                </el-input>
+          <el-scrollbar class="config-scrollbar">
+            <el-form :model="startForm" class="pd-10" label-width="130px" label-position="left">
+              <el-form-item label="自定义发起事件">
+                <el-switch v-model="startForm.initFuncConfig.on" />
               </el-form-item>
-            </template>
-            <el-form-item label="自定义结束事件">
-              <el-switch v-model="startForm.hasEndFunc" />
-            </el-form-item>
-            <template v-if="startForm.hasEndFunc">
-              <el-form-item label="结束事件请求路径">
-                <el-input v-model="startForm.endInterfaceUrl" placeholder="请输入接口地址">
-                  <template slot="prepend">GET</template>
-                </el-input>
+              <template v-if="startForm.initFuncConfig.on">
+                <el-form-item label="事件设置" style="margin-bottom: 0;"></el-form-item>
+                <el-form-item label="发起事件请求路径">
+                  <interface-dialog v-model="startForm.initFuncConfig.interfaceId"
+                    :title="startForm.initFuncConfig.interfaceName"
+                    @change="onFuncChange('startForm','initFuncConfig',arguments)" />
+                </el-form-item>
+                <el-form-item label="参数设置" style="margin-bottom: 0;"></el-form-item>
+                <el-table :data="startForm.initFuncConfig.templateJson">
+                  <el-table-column type="index" width="50" label="序号" align="center" />
+                  <el-table-column prop="field" label="参数名称" width="150">
+                    <template slot-scope="scope">
+                      <span class="required-sign">{{scope.row.required?'*':''}}</span>
+                      {{scope.row.fieldName?scope.row.field+'('+scope.row.fieldName+')':scope.row.field}}
+                    </template>
+                  </el-table-column>
+                  <el-table-column prop="value" label="表单字段">
+                    <template slot-scope="scope">
+                      <template v-if="scope.row.required">
+                        <el-select v-model="scope.row.relationField" placeholder="请选择表单字段" clearable
+                          filterable>
+                          <el-option v-for="item in funcRequiredOptions" :key="item.__vModel__"
+                            :label="item.__config__.label?item.__vModel__+'('+item.__config__.label+')':item.__vModel__"
+                            :value="item.__vModel__">
+                          </el-option>
+                        </el-select>
+                      </template>
+                      <template v-else>
+                        <el-select v-model="scope.row.relationField" placeholder="请选择表单字段" clearable
+                          filterable>
+                          <el-option v-for="item in funcOptions" :key="item.__vModel__"
+                            :label="item.__config__.label?item.__vModel__+'('+item.__config__.label+')':item.__vModel__"
+                            :value="item.__vModel__">
+                          </el-option>
+                        </el-select>
+                      </template>
+                    </template>
+                  </el-table-column>
+                </el-table>
+              </template>
+              <el-form-item label="自定义结束事件">
+                <el-switch v-model="startForm.endFuncConfig.on" />
               </el-form-item>
-            </template>
-            <el-form-item label="自定义撤回事件">
-              <el-switch v-model="startForm.hasFlowRecallFunc" />
-            </el-form-item>
-            <template v-if="startForm.hasFlowRecallFunc">
-              <el-form-item label="撤回事件请求路径">
-                <el-input v-model="startForm.flowRecallInterfaceUrl" placeholder="请输入接口地址">
-                  <template slot="prepend">GET</template>
-                </el-input>
+              <template v-if="startForm.endFuncConfig.on">
+                <el-form-item label="事件设置" style="margin-bottom: 0;"></el-form-item>
+                <el-form-item label="结束事件请求路径">
+                  <interface-dialog v-model="startForm.endFuncConfig.interfaceId"
+                    :title="startForm.endFuncConfig.interfaceName"
+                    @change="onFuncChange('startForm','endFuncConfig',arguments)" />
+                </el-form-item>
+                <el-form-item label="参数设置" style="margin-bottom: 0;"></el-form-item>
+                <el-table :data="startForm.endFuncConfig.templateJson">
+                  <el-table-column type="index" width="50" label="序号" align="center" />
+                  <el-table-column prop="field" label="参数名称" width="150">
+                    <template slot-scope="scope">
+                      <span class="required-sign">{{scope.row.required?'*':''}}</span>
+                      {{scope.row.fieldName?scope.row.field+'('+scope.row.fieldName+')':scope.row.field}}
+                    </template>
+                  </el-table-column>
+                  <el-table-column prop="value" label="表单字段">
+                    <template slot-scope="scope">
+                      <template v-if="scope.row.required">
+                        <el-select v-model="scope.row.relationField" placeholder="请选择表单字段" clearable
+                          filterable>
+                          <el-option v-for="item in funcRequiredOptions" :key="item.__vModel__"
+                            :label="item.__config__.label?item.__vModel__+'('+item.__config__.label+')':item.__vModel__"
+                            :value="item.__vModel__">
+                          </el-option>
+                        </el-select>
+                      </template>
+                      <template v-else>
+                        <el-select v-model="scope.row.relationField" placeholder="请选择表单字段" clearable
+                          filterable>
+                          <el-option v-for="item in funcOptions" :key="item.__vModel__"
+                            :label="item.__config__.label?item.__vModel__+'('+item.__config__.label+')':item.__vModel__"
+                            :value="item.__vModel__">
+                          </el-option>
+                        </el-select>
+                      </template>
+                    </template>
+                  </el-table-column>
+                </el-table>
+              </template>
+              <el-form-item label="自定义撤回事件">
+                <el-switch v-model="startForm.flowRecallFuncConfig.on" />
               </el-form-item>
-            </template>
-          </el-form>
+              <template v-if="startForm.flowRecallFuncConfig.on">
+                <el-form-item label="事件设置" style="margin-bottom: 0;"></el-form-item>
+                <el-form-item label="撤回事件请求路径">
+                  <interface-dialog v-model="startForm.flowRecallFuncConfig.interfaceId"
+                    :title="startForm.flowRecallFuncConfig.interfaceName"
+                    @change="onFuncChange('startForm','flowRecallFuncConfig',arguments)" />
+                </el-form-item>
+                <el-form-item label="参数设置" style="margin-bottom: 0;"></el-form-item>
+                <el-table :data="startForm.flowRecallFuncConfig.templateJson">
+                  <el-table-column type="index" width="50" label="序号" align="center" />
+                  <el-table-column prop="field" label="参数名称" width="150">
+                    <template slot-scope="scope">
+                      <span class="required-sign">{{scope.row.required?'*':''}}</span>
+                      {{scope.row.fieldName?scope.row.field+'('+scope.row.fieldName+')':scope.row.field}}
+                    </template>
+                  </el-table-column>
+                  <el-table-column prop="value" label="表单字段">
+                    <template slot-scope="scope">
+                      <template v-if="scope.row.required">
+                        <el-select v-model="scope.row.relationField" placeholder="请选择表单字段" clearable
+                          filterable>
+                          <el-option v-for="item in funcRequiredOptions" :key="item.__vModel__"
+                            :label="item.__config__.label?item.__vModel__+'('+item.__config__.label+')':item.__vModel__"
+                            :value="item.__vModel__">
+                          </el-option>
+                        </el-select>
+                      </template>
+                      <template v-else>
+                        <el-select v-model="scope.row.relationField" placeholder="请选择表单字段" clearable
+                          filterable>
+                          <el-option v-for="item in funcOptions" :key="item.__vModel__"
+                            :label="item.__config__.label?item.__vModel__+'('+item.__config__.label+')':item.__vModel__"
+                            :value="item.__vModel__">
+                          </el-option>
+                        </el-select>
+                      </template>
+                    </template>
+                  </el-table-column>
+                </el-table>
+              </template>
+            </el-form>
+          </el-scrollbar>
         </el-tab-pane>
       </el-tabs>
     </section>
@@ -501,43 +597,139 @@
           </div>
         </el-tab-pane>
         <el-tab-pane label="节点事件">
-          <el-form label-position="top" :model="approverForm" class="pd-10">
-            <el-alert type="warning" :closable="false">
-              <div slot="title" class="tips">
-                <p>请求参数：taskId、taskNodeId</p>
-              </div>
-            </el-alert>
-            <el-form-item label="自定义同意事件">
-              <el-switch v-model="approverForm.hasApproverFunc" />
-            </el-form-item>
-            <template v-if="approverForm.hasApproverFunc">
-              <el-form-item label="同意事件请求路径">
-                <el-input v-model="approverForm.approverInterfaceUrl" placeholder="请输入接口地址">
-                  <template slot="prepend">GET</template>
-                </el-input>
+          <el-scrollbar class="config-scrollbar">
+            <el-form :model="approverForm" class="pd-10" label-width="130px" label-position="left">
+              <el-form-item label="自定义同意事件">
+                <el-switch v-model="approverForm.approveFuncConfig.on" />
               </el-form-item>
-            </template>
-            <el-form-item label="自定义拒绝事件">
-              <el-switch v-model="approverForm.hasApproverRejectFunc" />
-            </el-form-item>
-            <template v-if="approverForm.hasApproverRejectFunc">
-              <el-form-item label="拒绝事件请求路径">
-                <el-input v-model="approverForm.approverRejectInterfaceUrl" placeholder="请输入接口地址">
-                  <template slot="prepend">GET</template>
-                </el-input>
+              <template v-if="approverForm.approveFuncConfig.on">
+                <el-form-item label="事件设置" style="margin-bottom: 0;"></el-form-item>
+                <el-form-item label="同意事件请求路径">
+                  <interface-dialog v-model="approverForm.approveFuncConfig.interfaceId"
+                    :title="approverForm.approveFuncConfig.interfaceName"
+                    @change="onFuncChange('approverForm','approveFuncConfig',arguments)" />
+                </el-form-item>
+                <el-form-item label="参数设置" style="margin-bottom: 0;"></el-form-item>
+                <el-table :data="approverForm.approveFuncConfig.templateJson">
+                  <el-table-column type="index" width="50" label="序号" align="center" />
+                  <el-table-column prop="field" label="参数名称" width="150">
+                    <template slot-scope="scope">
+                      <span class="required-sign">{{scope.row.required?'*':''}}</span>
+                      {{scope.row.fieldName?scope.row.field+'('+scope.row.fieldName+')':scope.row.field}}
+                    </template>
+                  </el-table-column>
+                  <el-table-column prop="value" label="表单字段">
+                    <template slot-scope="scope">
+                      <template v-if="scope.row.required">
+                        <el-select v-model="scope.row.relationField" placeholder="请选择表单字段" clearable
+                          filterable>
+                          <el-option v-for="item in funcRequiredOptions" :key="item.__vModel__"
+                            :label="item.__config__.label?item.__vModel__+'('+item.__config__.label+')':item.__vModel__"
+                            :value="item.__vModel__">
+                          </el-option>
+                        </el-select>
+                      </template>
+                      <template v-else>
+                        <el-select v-model="scope.row.relationField" placeholder="请选择表单字段" clearable
+                          filterable>
+                          <el-option v-for="item in funcOptions" :key="item.__vModel__"
+                            :label="item.__config__.label?item.__vModel__+'('+item.__config__.label+')':item.__vModel__"
+                            :value="item.__vModel__">
+                          </el-option>
+                        </el-select>
+                      </template>
+                    </template>
+                  </el-table-column>
+                </el-table>
+              </template>
+              <el-form-item label="自定义拒绝事件">
+                <el-switch v-model="approverForm.rejectFuncConfig.on" />
               </el-form-item>
-            </template>
-            <el-form-item label="自定义撤回事件">
-              <el-switch v-model="approverForm.hasRecallFunc" />
-            </el-form-item>
-            <template v-if="approverForm.hasRecallFunc">
-              <el-form-item label="撤回事件请求路径">
-                <el-input v-model="approverForm.recallInterfaceUrl" placeholder="请输入接口地址">
-                  <template slot="prepend">GET</template>
-                </el-input>
+              <template v-if="approverForm.rejectFuncConfig.on">
+                <el-form-item label="事件设置" style="margin-bottom: 0;"></el-form-item>
+                <el-form-item label="拒绝事件请求路径">
+                  <interface-dialog v-model="approverForm.rejectFuncConfig.interfaceId"
+                    :title="approverForm.rejectFuncConfig.interfaceName"
+                    @change="onFuncChange('approverForm','rejectFuncConfig',arguments)" />
+                </el-form-item>
+                <el-form-item label="参数设置" style="margin-bottom: 0;"></el-form-item>
+                <el-table :data="approverForm.rejectFuncConfig.templateJson">
+                  <el-table-column type="index" width="50" label="序号" align="center" />
+                  <el-table-column prop="field" label="参数名称" width="150">
+                    <template slot-scope="scope">
+                      <span class="required-sign">{{scope.row.required?'*':''}}</span>
+                      {{scope.row.fieldName?scope.row.field+'('+scope.row.fieldName+')':scope.row.field}}
+                    </template>
+                  </el-table-column>
+                  <el-table-column prop="value" label="表单字段">
+                    <template slot-scope="scope">
+                      <template v-if="scope.row.required">
+                        <el-select v-model="scope.row.relationField" placeholder="请选择表单字段" clearable
+                          filterable>
+                          <el-option v-for="item in funcRequiredOptions" :key="item.__vModel__"
+                            :label="item.__config__.label?item.__vModel__+'('+item.__config__.label+')':item.__vModel__"
+                            :value="item.__vModel__">
+                          </el-option>
+                        </el-select>
+                      </template>
+                      <template v-else>
+                        <el-select v-model="scope.row.relationField" placeholder="请选择表单字段" clearable
+                          filterable>
+                          <el-option v-for="item in funcOptions" :key="item.__vModel__"
+                            :label="item.__config__.label?item.__vModel__+'('+item.__config__.label+')':item.__vModel__"
+                            :value="item.__vModel__">
+                          </el-option>
+                        </el-select>
+                      </template>
+                    </template>
+                  </el-table-column>
+                </el-table>
+              </template>
+              <el-form-item label="自定义撤回事件">
+                <el-switch v-model="approverForm.recallFuncConfig.on" />
               </el-form-item>
-            </template>
-          </el-form>
+              <template v-if="approverForm.recallFuncConfig.on">
+                <el-form-item label="事件设置" style="margin-bottom: 0;"></el-form-item>
+                <el-form-item label="撤回事件请求路径">
+                  <interface-dialog v-model="approverForm.recallFuncConfig.interfaceId"
+                    :title="approverForm.recallFuncConfig.interfaceName"
+                    @change="onFuncChange('approverForm','recallFuncConfig',arguments)" />
+                </el-form-item>
+                <el-form-item label="参数设置" style="margin-bottom: 0;"></el-form-item>
+                <el-table :data="approverForm.recallFuncConfig.templateJson">
+                  <el-table-column type="index" width="50" label="序号" align="center" />
+                  <el-table-column prop="field" label="参数名称" width="150">
+                    <template slot-scope="scope">
+                      <span class="required-sign">{{scope.row.required?'*':''}}</span>
+                      {{scope.row.fieldName?scope.row.field+'('+scope.row.fieldName+')':scope.row.field}}
+                    </template>
+                  </el-table-column>
+                  <el-table-column prop="value" label="表单字段">
+                    <template slot-scope="scope">
+                      <template v-if="scope.row.required">
+                        <el-select v-model="scope.row.relationField" placeholder="请选择表单字段" clearable
+                          filterable>
+                          <el-option v-for="item in funcRequiredOptions" :key="item.__vModel__"
+                            :label="item.__config__.label?item.__vModel__+'('+item.__config__.label+')':item.__vModel__"
+                            :value="item.__vModel__">
+                          </el-option>
+                        </el-select>
+                      </template>
+                      <template v-else>
+                        <el-select v-model="scope.row.relationField" placeholder="请选择表单字段" clearable
+                          filterable>
+                          <el-option v-for="item in funcOptions" :key="item.__vModel__"
+                            :label="item.__config__.label?item.__vModel__+'('+item.__config__.label+')':item.__vModel__"
+                            :value="item.__vModel__">
+                          </el-option>
+                        </el-select>
+                      </template>
+                    </template>
+                  </el-table-column>
+                </el-table>
+              </template>
+            </el-form>
+          </el-scrollbar>
         </el-tab-pane>
         <el-tab-pane label="通知设置">
           <el-scrollbar class="config-scrollbar">
@@ -555,9 +747,9 @@
                 <el-form-item label="参数设置" style="margin-bottom: 0;"></el-form-item>
                 <el-table :data="approverForm.waitApproveMsgConfig.templateJson">
                   <el-table-column type="index" width="50" label="序号" align="center" />
-                  <el-table-column prop="fieldId" label="参数名称" width="150">
+                  <el-table-column prop="field" label="参数名称" width="150">
                     <template slot-scope="scope">
-                      {{scope.row.fieldName?scope.row.fieldId+'('+scope.row.fieldName+')':scope.row.fieldId}}
+                      {{scope.row.fieldName?scope.row.field+'('+scope.row.fieldName+')':scope.row.field}}
                     </template>
                   </el-table-column>
                   <el-table-column prop="value" label="表单字段">
@@ -586,9 +778,9 @@
                 <el-form-item label="参数设置" style="margin-bottom: 0;"></el-form-item>
                 <el-table :data="approverForm.approveMsgConfig.templateJson">
                   <el-table-column type="index" width="50" label="序号" align="center" />
-                  <el-table-column prop="fieldId" label="参数名称" width="150">
+                  <el-table-column prop="field" label="参数名称" width="150">
                     <template slot-scope="scope">
-                      {{scope.row.fieldName?scope.row.fieldId+'('+scope.row.fieldName+')':scope.row.fieldId}}
+                      {{scope.row.fieldName?scope.row.field+'('+scope.row.fieldName+')':scope.row.field}}
                     </template>
                   </el-table-column>
                   <el-table-column prop="value" label="表单字段">
@@ -617,9 +809,9 @@
                 <el-form-item label="参数设置" style="margin-bottom: 0;"></el-form-item>
                 <el-table :data="approverForm.rejectMsgConfig.templateJson">
                   <el-table-column type="index" width="50" label="序号" align="center" />
-                  <el-table-column prop="fieldId" label="参数名称" width="150">
+                  <el-table-column prop="field" label="参数名称" width="150">
                     <template slot-scope="scope">
-                      {{scope.row.fieldName?scope.row.fieldId+'('+scope.row.fieldName+')':scope.row.fieldId}}
+                      {{scope.row.fieldName?scope.row.field+'('+scope.row.fieldName+')':scope.row.field}}
                     </template>
                   </el-table-column>
                   <el-table-column prop="value" label="表单字段">
@@ -648,9 +840,9 @@
                 <el-form-item label="参数设置" style="margin-bottom: 0;"></el-form-item>
                 <el-table :data="approverForm.pressMsgConfig.templateJson">
                   <el-table-column type="index" width="50" label="序号" align="center" />
-                  <el-table-column prop="fieldId" label="参数名称" width="150">
+                  <el-table-column prop="field" label="参数名称" width="150">
                     <template slot-scope="scope">
-                      {{scope.row.fieldName?scope.row.fieldId+'('+scope.row.fieldName+')':scope.row.fieldId}}
+                      {{scope.row.fieldName?scope.row.field+'('+scope.row.fieldName+')':scope.row.field}}
                     </template>
                   </el-table-column>
                   <el-table-column prop="value" label="表单字段">
@@ -715,15 +907,26 @@ import { NodeUtils } from "../FlowCard/util.js"
 import { getDrawingList } from '@/components/Generator/utils/db'
 import OrgSelect from '../OrgSelect'
 import MsgDialog from './msgDialog'
+import InterfaceDialog from './InterfaceDialog'
 const defaultStartForm = {
-  hasInitFunc: false,
-  initInterfaceUrl: '',
-  initInterfaceType: 'GET',
-  hasEndFunc: false,
-  endInterfaceUrl: '',
-  endInterfaceType: 'GET',
-  hasFlowRecallFunc: false,
-  flowRecallInterfaceUrl: '',
+  initFuncConfig: {
+    on: false,
+    interfaceId: '',
+    interfaceName: '',
+    templateJson: []
+  },
+  endFuncConfig: {
+    on: false,
+    interfaceId: '',
+    interfaceName: '',
+    templateJson: []
+  },
+  flowRecallFuncConfig: {
+    on: false,
+    interfaceId: '',
+    interfaceName: '',
+    templateJson: []
+  },
   hasSubimtBtn: true,
   submitBtnText: '提交审核',
   hasSaveBtn: true,
@@ -822,13 +1025,24 @@ const defaultApproverForm = {
     msgName: '',
     templateJson: []
   },
-  hasApproverFunc: false,
-  approverInterfaceUrl: '',
-  hasApproverRejectFunc: false,
-  approverRejectInterfaceUrl: '',
-  approverInterfaceType: 'GET',
-  hasRecallFunc: false,
-  recallInterfaceUrl: ''
+  approveFuncConfig: {
+    on: false,
+    interfaceId: '',
+    interfaceName: '',
+    templateJson: []
+  },
+  rejectFuncConfig: {
+    on: false,
+    interfaceId: '',
+    interfaceName: '',
+    templateJson: []
+  },
+  recallFuncConfig: {
+    on: false,
+    interfaceId: '',
+    interfaceName: '',
+    templateJson: []
+  },
 }
 const defaultStep = [{
   nodeId: '1',
@@ -872,7 +1086,7 @@ const assigneeTypeOptions = [...typeOptions, {
 }]
 export default {
   props: [/*当前节点数据*/"value", /*整个节点数据*/"processData", "flowType"],
-  components: { OrgSelect, MsgDialog },
+  components: { OrgSelect, MsgDialog, InterfaceDialog },
   data() {
     return {
       visible: false,  // 控制面板显隐
@@ -956,7 +1170,30 @@ export default {
       loop(getDrawingList())
       const formItems = list
       return formItems
-    }
+    },
+    funcOptions() {
+      let options = [{
+        __config__: {
+          label: '流程ID',
+          required: false
+        },
+        __vModel__: 'taskId',
+      },
+      {
+        __config__: {
+          label: '节点ID',
+          required: false
+        },
+        __vModel__: 'taskNodeId',
+      },
+      ...this.usedFormItems
+      ]
+      return options
+    },
+    funcRequiredOptions() {
+      let options = this.usedFormItems.filter(o => o.__config__ && o.__config__.required)
+      return options
+    },
   },
   methods: {
     getFormOperates() {
@@ -1473,6 +1710,19 @@ export default {
           relationField: ''
         }))
       }
+    },
+    onFuncChange(obj, key, params) {
+      const [id, item] = params
+      if (!id) {
+        this[obj][key].interfaceName = ''
+        this[obj][key].templateJson = []
+        return
+      }
+      this[obj][key].interfaceName = item.fullName
+      this[obj][key].templateJson = item.templateJson.map(o => ({
+        ...o,
+        relationField: ''
+      }))
     }
   },
   watch: {

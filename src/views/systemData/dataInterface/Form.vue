@@ -129,7 +129,7 @@
               <el-table-column prop="field" label="参数名称(注释)">
                 <template slot-scope="scope">
                   <p @click="handleItemClick(scope.row)" style="cursor:pointer">
-                    <span class="sign">{{scope.row.required?'*':''}}</span>
+                    <span class="required-sign">{{scope.row.required?'*':''}}</span>
                     {{scope.row.field}}{{scope.row.fieldName?'('+scope.row.fieldName+')':''}}
                   </p>
                 </template>
@@ -196,7 +196,7 @@
               <el-table-column prop="field" label="参数名称(注释)">
                 <template slot-scope="scope">
                   <p>
-                    <span class="sign">{{scope.row.required?'*':''}}</span>
+                    <span class="required-sign">{{scope.row.required?'*':''}}</span>
                     {{scope.row.field}}{{scope.row.fieldName?'('+scope.row.fieldName+')':''}}
                   </p>
                 </template>
@@ -579,9 +579,6 @@ export default {
     .json-box {
       height: calc(100vh - 210px);
     }
-  }
-  .sign {
-    color: #f56c6c;
   }
   .parameterList {
     padding-left: 90px;

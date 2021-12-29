@@ -357,6 +357,28 @@
         }
       }
     }
+
+    &.JNPF-dialog-tree {
+      .el-dialog__body {
+        height: 60vh;
+        padding: 0 0 10px !important;
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+
+        .JNPF-common-layout-left {
+          margin-right: 1px;
+        }
+
+        .JNPF-common-search-box {
+          margin-bottom: 0;
+
+          .JNPF-common-search-box-right {
+            padding: 6px 10px 0 0;
+          }
+        }
+      }
+    }
   }
 
   &.enlarge-dialog .el-dialog .el-dialog__header {
@@ -1806,4 +1828,8 @@ textarea.el-textarea__inner {
       }
     }
   }
+}
+
+.required-sign {
+  color: #f56c6c;
 }

@@ -48,9 +48,9 @@
             <el-form-item label="参数定义" prop="templateJson">
               <el-button icon="el-icon-plus" @click="showDialog()">添加参数</el-button>
               <div class="tag-list">
-                <el-tag v-for="(tag,index) in templateJson" :key="tag.fieldId" effect="plain"
+                <el-tag v-for="(tag,index) in templateJson" :key="tag.field" effect="plain"
                   :closable="tag.closable" @close="onTagClose(index)" @click="addContent(tag)">
-                  {{tag.fieldName?tag.fieldId+'('+tag.fieldName+')':tag.fieldId}}</el-tag>
+                  {{tag.fieldName?tag.field+'('+tag.fieldName+')':tag.field}}</el-tag>
               </div>
             </el-form-item>
             <el-form-item label="消息内容" prop="content">
@@ -62,8 +62,8 @@
       <el-dialog title="添加参数" :visible.sync="dialogVisible" :close-on-click-modal="false"
         class="JNPF-dialog JNPF-dialog_center" lock-scroll append-to-body width="600px">
         <el-form :model="fieldForm" :rules="fieldRule" ref="fieldForm" label-width="80px">
-          <el-form-item label="参数名" prop="fieldId">
-            <el-input v-model="fieldForm.fieldId" placeholder="参数名"></el-input>
+          <el-form-item label="参数名" prop="field">
+            <el-input v-model="fieldForm.field" placeholder="参数名"></el-input>
           </el-form-item>
           <el-form-item label="注释" prop="fieldName">
             <el-input v-model="fieldForm.fieldName" placeholder="注释"></el-input>
@@ -133,7 +133,7 @@ export default {
       }],
       templateJson: [],
       fieldRule: {
-        fieldId: [
+        field: [
           { required: true, message: '参数名不能为空', trigger: 'blur' },
         ],
         fieldName: [
@@ -141,7 +141,7 @@ export default {
         ],
       },
       fieldForm: {
-        fieldId: '',
+        field: '',
         fieldName: ''
       },
       dialogVisible: false,
@@ -205,7 +205,7 @@ export default {
     addParameter() {
       this.$refs['fieldForm'].validate((valid) => {
         if (valid) {
-          let boo = this.templateJson.some(o => o.fieldId === this.fieldForm.fieldId)
+          let boo = this.templateJson.some(o => o.field === this.fieldForm.field)
           if (boo) {
             this.$message({
               type: 'error',
@@ -225,7 +225,7 @@ export default {
       this.templateJson.splice(index, 1)
     },
     addContent(item) {
-      this.dataForm.content += '{' + item.fieldId + '}'
+      this.dataForm.content += '{' + item.field + '}'
     },
     onSmsChange(id, item) {
       if (!id) return this.dataForm.smsTemplateName = ''
@@ -233,14 +233,14 @@ export default {
       getTemplateParams(id).then(res => {
         if (!res.data) return
         let newList = res.data.map(o => ({
-          fieldId: o,
+          field: o,
           fieldName: '',
           closable: false
         }))
         let templateJson = this.templateJson.filter(o => o.closable)
         outer: for (let i = 0; i < newList.length; i++) {
           inner: for (let j = 0; j < templateJson.length; j++) {
-            if (newList[i].fieldId === templateJson[j].fieldId) {
+            if (newList[i].field === templateJson[j].field) {
               templateJson.splice(j, 1)
               break inner
             }
