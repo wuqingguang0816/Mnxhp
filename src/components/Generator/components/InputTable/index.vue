@@ -79,7 +79,7 @@
 <script>
 import { dyOptionsList } from '@/components/Generator/generator/comConfig'
 import { getDictionaryDataSelector } from '@/api/systemData/dictionary'
-import { previewDataInterface } from '@/api/systemData/dataInterface'
+import { getDataInterfaceRes } from '@/api/systemData/dataInterface'
 
 export default {
   name: 'input-table',
@@ -130,8 +130,13 @@ export default {
           }
           if (config.dataType === 'dynamic') {
             if (!config.propsUrl) return
-            previewDataInterface(config.propsUrl).then(res => {
-              isTreeSelect ? cur.options = res.data : cur.__slot__.options = res.data
+            getDataInterfaceRes(config.propsUrl).then(res => {
+              let realData = this.jnpf.interfaceDataHandler(res.data)
+              if (Array.isArray(realData)) {
+                isTreeSelect ? cur.options = realData : cur.__slot__.options = realData
+              } else {
+                isTreeSelect ? cur.options = [] : cur.__slot__.options = []
+              }
             })
           }
         }
@@ -150,16 +155,6 @@ export default {
       const child = cell.querySelector('.cell').firstElementChild
       const input = child && child.querySelector('input')
       input && input.focus()
-    },
-    getFunc(str) {
-      let func = null
-      try {
-        func = eval(str)
-        return func
-      } catch (error) {
-        console.log(error)
-        return false
-      }
     },
     setTableFormData(prop, value) {
       let activeRow = this.tableFormData[this.activeRowIndex]
@@ -213,7 +208,7 @@ export default {
     onFormBlur(rowIndex, colIndex, tag) {
       const data = this.tableFormData[rowIndex][colIndex]
       if (data && data.on && data.on.blur) {
-        const func = this.getFunc(data.on.blur)
+        const func = this.jnpf.getScriptFunc(data.on.blur)
         if (!func) return
         func.call(this, {
           data: null,
@@ -226,7 +221,7 @@ export default {
       const data = this.tableFormData[rowIndex][colIndex]
       this.activeRowIndex = rowIndex
       if (data && data.on && data.on.change) {
-        const func = this.getFunc(data.on.change)
+        const func = this.jnpf.getScriptFunc(data.on.change)
         if (!func) return
         let value = ''
         if (['select', 'radio', 'checkbox'].includes(data.jnpfKey)) {

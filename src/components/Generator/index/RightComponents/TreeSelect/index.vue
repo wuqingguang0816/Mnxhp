@@ -88,7 +88,7 @@
 import comMixin from '../mixin';
 import TreeNodeDialog from './TreeNodeDialog'
 import { getDictionaryTypeSelector, getDictionaryDataSelector } from '@/api/systemData/dictionary'
-import { getDataInterfaceSelector, previewDataInterface } from '@/api/systemData/dataInterface'
+import { getDataInterfaceSelector, getDataInterfaceRes } from '@/api/systemData/dataInterface'
 export default {
   props: ['activeData'],
   mixins: [comMixin],
@@ -197,13 +197,14 @@ export default {
         this.activeData.options = []
         return
       }
-      previewDataInterface(val).then(res => {
-        if (Array.isArray(res.data)) {
-          this.activeData.options = res.data
+      getDataInterfaceRes(val).then(res => {
+        let data = this.jnpf.interfaceDataHandler(res.data)
+        if (Array.isArray(data)) {
+          this.activeData.options = data
         } else {
           this.activeData.options = []
         }
-      }).catch(res => {
+      }).catch(() => {
         this.activeData.__config__.propsUrl = ''
         this.activeData.options = []
       })

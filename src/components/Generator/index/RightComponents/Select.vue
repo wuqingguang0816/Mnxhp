@@ -102,7 +102,7 @@
 import comMixin from './mixin';
 import draggable from 'vuedraggable'
 import { getDictionaryDataSelector } from '@/api/systemData/dictionary'
-import { previewDataInterface } from '@/api/systemData/dataInterface'
+import { getDataInterfaceRes } from '@/api/systemData/dataInterface'
 export default {
   props: ['activeData', 'dictionaryOptions', 'dataInterfaceOptions'],
   mixins: [comMixin],
@@ -166,9 +166,14 @@ export default {
         return
       }
       this.activeData.__config__.defaultValue = this.activeData.multiple ? [] : ''
-      previewDataInterface(val).then(res => {
-        this.activeData.__slot__.options = res.data
-      }).catch(res => {
+      getDataInterfaceRes(val).then(res => {
+        let data = this.jnpf.interfaceDataHandler(res.data)
+        if (Array.isArray(data)) {
+          this.activeData.__slot__.options = data
+        } else {
+          this.activeData.__slot__.options = []
+        }
+      }).catch(() => {
         this.activeData.__config__.propsUrl = ''
         this.activeData.__slot__.options = []
       })

@@ -3,7 +3,7 @@ import draggable from 'vuedraggable'
 import render from '@/components/Generator/render/render'
 import { dyOptionsList } from '@/components/Generator/generator/comConfig'
 import { getDictionaryDataSelector } from '@/api/systemData/dictionary'
-import { previewDataInterface } from '@/api/systemData/dataInterface'
+import { getDataInterfaceRes } from '@/api/systemData/dataInterface'
 
 let activeData = {}
 const components = {
@@ -229,8 +229,13 @@ function buildOptions(element) {
     }
     if (config.dataType === 'dynamic') {
       if (!config.propsUrl) return
-      previewDataInterface(config.propsUrl).then(res => {
-        isTreeSelect ? element.options = res.data : element.__slot__.options = res.data
+      getDataInterfaceRes(config.propsUrl).then(res => {
+        let data = this.jnpf.interfaceDataHandler(res.data)
+        if (Array.isArray(data)) {
+          isTreeSelect ? element.options = data : element.__slot__.options = data
+        } else {
+          isTreeSelect ? element.options = [] : element.__slot__.options = []
+        }
       })
     }
   }

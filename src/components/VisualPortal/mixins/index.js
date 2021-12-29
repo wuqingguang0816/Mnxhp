@@ -1,6 +1,6 @@
 import echarts from 'echarts'
 import resize from '@/components/Charts/mixins/resize'
-import { previewDataInterface } from '@/api/systemData/dataInterface'
+import { getDataInterfaceRes } from '@/api/systemData/dataInterface'
 
 export default {
   mixins: [resize],
@@ -20,8 +20,9 @@ export default {
   mounted() {
     if (this.dataType === 'dynamic') {
       if (!this.propsApi) return
-      previewDataInterface(this.propsApi).then(res => {
-        this.currOption = res.data
+      getDataInterfaceRes(this.propsApi).then(res => {
+        let data = this.jnpf.interfaceDataHandler(res.data)
+        this.currOption = data
         this.resetChart()
       })
     } else {
@@ -46,7 +47,7 @@ export default {
     propsApi(val) {
       if (this.dataType === 'static') return
       if (!val) return
-      previewDataInterface(val).then(res => {
+      getDataInterfaceRes(val).then(res => {
         this.currOption = res.data
         this.resetChart()
       })

@@ -650,7 +650,7 @@ import { isNumberStr } from "@/components/Generator/utils"
 import draggable from "vuedraggable"
 import { getFeatureSelector, getFormDataFields } from '@/api/onlineDev/visualDev'
 import { getDictionaryTypeSelector, getDictionaryDataSelector } from "@/api/systemData/dictionary"
-import { getDataInterfaceSelector, previewDataInterface } from "@/api/systemData/dataInterface"
+import { getDataInterfaceSelector, getDataInterfaceRes } from "@/api/systemData/dataInterface"
 import { saveFormConf, getDrawingList } from "@/components/Generator/utils/db"
 import TreeNodeDialog from "./RightComponents/TreeSelect/TreeNodeDialog"
 import FormScript from './FormScript'
