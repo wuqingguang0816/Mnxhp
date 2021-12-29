@@ -45,10 +45,10 @@ export default {
     submitCandidate() {
       this.$refs['candidateForm'].validate((valid) => {
         if (valid) {
-          let candidateList = this.candidateForm.candidateList.map(o => ({
-            nodeId: o.nodeId,
-            candidateList: o.value
-          }))
+          let candidateList = {}
+          for (let i = 0; i < this.candidateForm.candidateList.length; i++) {
+            candidateList[this.candidateForm.candidateList[i].nodeId] = this.candidateForm.candidateList[i].value
+          }
           this.$emit('submitCandidate', candidateList)
         }
       })
