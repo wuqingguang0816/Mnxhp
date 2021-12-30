@@ -69,6 +69,12 @@
                 {{scope.row.enabledMark==1?'正常':'停用'}}</el-tag>
             </template>
           </el-table-column>
+          <el-table-column label="锁定状态" width="80" align="center">
+            <template slot-scope="scope">
+              <el-tag :type="scope.row.lockMark == 1 ? 'warning' : 'success'" disable-transitions>
+                {{scope.row.lockMark==1?'已锁定':'未锁定'}}</el-tag>
+            </template>
+          </el-table-column>
           <el-table-column label="操作" width="150">
             <template slot-scope="scope" v-if="!scope.row.isAdministrator">
               <tableOpts @edit="addOrUpdateHandle(scope.row.id)" @del="handleDel(scope.row.id)">
@@ -83,6 +89,8 @@
                       @click.native="handleResetPwd(scope.row.id, scope.row.account)">
                       {{$t('user.resetPassword')}}
                     </el-dropdown-item>
+                    <el-dropdown-item @click.native="unlockUser(scope.row.id)"
+                      v-if="scope.row.lockMark == 1">解除锁定</el-dropdown-item>
                   </el-dropdown-menu>
                 </el-dropdown>
               </tableOpts>
@@ -105,6 +113,7 @@ import {
 import {
   getUserList,
   updateUserState,
+  unlockUser,
   delUser
 } from '@/api/permission/user'
 import Form from './Form'
@@ -241,7 +250,22 @@ export default {
           })
         })
       }).catch(() => { })
-
+    },
+    unlockUser(id) {
+      this.$confirm('此操作将解除该账户锁定, 是否继续?', '提示', {
+        type: 'warning'
+      }).then(() => {
+        unlockUser(id).then(res => {
+          this.$message({
+            type: 'success',
+            message: res.msg,
+            duration: 1500,
+            onClose: () => {
+              this.initData()
+            }
+          })
+        })
+      }).catch(() => { })
     },
     handleResetPwd(id, account) {
       this.resetFormVisible = true

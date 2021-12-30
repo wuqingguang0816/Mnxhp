@@ -76,6 +76,14 @@ export const updateUserState = (id) => {
   })
 }
 
+// 解除锁定
+export const unlockUser = (id) => {
+  return request({
+    url: `/api/permission/Users/${id}/Actions/unlock`,
+    method: 'PUT'
+  })
+}
+
 // IM通讯获取用户
 export const getImUser = data => {
   return request({
