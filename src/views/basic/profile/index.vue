@@ -240,6 +240,7 @@ export default {
   }
   .subordinate-tree {
     height: 100%;
+    margin: 0;
     .subordinate-tree-node {
       width: 260px;
     }
