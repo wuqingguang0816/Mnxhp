@@ -252,6 +252,8 @@ export default {
             }
             value = _value
           }
+        } else if (data.jnpfKey === 'numInput') {
+          value = params[0]
         } else {
           value = params.length > 1 ? params[1] : params[0]
         }
