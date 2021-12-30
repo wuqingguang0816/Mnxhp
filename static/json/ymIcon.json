@@ -6,6 +6,41 @@
   "description": "",
   "glyphs": [
     {
+      "icon_id": "26897628",
+      "name": "report-icon-page-preview",
+      "font_class": "report-icon-page-preview",
+      "unicode": "e668",
+      "unicode_decimal": 58984
+    },
+    {
+      "icon_id": "26897629",
+      "name": "report-icon-doughnut",
+      "font_class": "report-icon-doughnut",
+      "unicode": "e66e",
+      "unicode_decimal": 58990
+    },
+    {
+      "icon_id": "26897625",
+      "name": "report-icon-pie",
+      "font_class": "report-icon-pie",
+      "unicode": "e64d",
+      "unicode_decimal": 58957
+    },
+    {
+      "icon_id": "26897626",
+      "name": "report-icon-polar-plot",
+      "font_class": "report-icon-polar-plot",
+      "unicode": "e650",
+      "unicode_decimal": 58960
+    },
+    {
+      "icon_id": "26897627",
+      "name": "report-icon-preview",
+      "font_class": "report-icon-preview",
+      "unicode": "e655",
+      "unicode_decimal": 58965
+    },
+    {
       "icon_id": "26779489",
       "name": "h5",
       "font_class": "h5",
@@ -251,13 +286,6 @@
       "unicode_decimal": 58956
     },
     {
-      "icon_id": "26737130",
-      "name": "report-icon-doughnut",
-      "font_class": "report-icon-doughnut",
-      "unicode": "e64d",
-      "unicode_decimal": 58957
-    },
-    {
       "icon_id": "26737131",
       "name": "report-icon-preview-pagePre",
       "font_class": "report-icon-preview-pagePre",
@@ -270,13 +298,6 @@
       "font_class": "report-icon-border-left",
       "unicode": "e64f",
       "unicode_decimal": 58959
-    },
-    {
-      "icon_id": "26737133",
-      "name": "report-icon-pie",
-      "font_class": "report-icon-pie",
-      "unicode": "e650",
-      "unicode_decimal": 58960
     },
     {
       "icon_id": "26737134",
@@ -298,13 +319,6 @@
       "font_class": "report-icon-preview-pageIndex",
       "unicode": "e654",
       "unicode_decimal": 58964
-    },
-    {
-      "icon_id": "26737137",
-      "name": "report-icon-preview",
-      "font_class": "report-icon-preview",
-      "unicode": "e655",
-      "unicode_decimal": 58965
     },
     {
       "icon_id": "26737138",
@@ -391,13 +405,6 @@
       "unicode_decimal": 58983
     },
     {
-      "icon_id": "26737150",
-      "name": "report-icon-polar-plot",
-      "font_class": "report-icon-polar-plot",
-      "unicode": "e668",
-      "unicode_decimal": 58984
-    },
-    {
       "icon_id": "26737151",
       "name": "report-icon-preview-excel-paging",
       "font_class": "report-icon-preview-excel-paging",
@@ -431,13 +438,6 @@
       "font_class": "report-icon-picture",
       "unicode": "e66d",
       "unicode_decimal": 58989
-    },
-    {
-      "icon_id": "26737156",
-      "name": "report-icon-page-preview",
-      "font_class": "report-icon-page-preview",
-      "unicode": "e66e",
-      "unicode_decimal": 58990
     },
     {
       "icon_id": "26364747",
