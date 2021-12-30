@@ -12,22 +12,19 @@
       <el-row class="main" v-loading="loading" :element-loading-text="$t('common.loadingText')">
         <el-col :span="12" :offset="6">
           <el-form :model="dataForm" :rules="dataRule" ref="dataForm" class="mt-20"
-            label-width="100px" @submit.native.prevent>
+            label-width="80px" @submit.native.prevent>
             <el-form-item label="消息类型" prop="category">
-              <el-select v-model="dataForm.category" placeholder="选择消息类型" clearable>
-                <el-option v-for="item in categoryList" :key="item.value" :label="item.label"
-                  :value="item.value">
-                </el-option>
-              </el-select>
+              <el-radio-group v-model="dataForm.category">
+                <el-radio-button :label="item.value" :key="item.value" v-for="item in categoryList">
+                  {{item.label}}
+                </el-radio-button>
+              </el-radio-group>
             </el-form-item>
             <el-form-item label="模板名称" prop="fullName">
               <el-input v-model="dataForm.fullName" placeholder="模板名称"></el-input>
             </el-form-item>
             <el-form-item label="消息标题" prop="title">
               <el-input v-model="dataForm.title" placeholder="消息标题"></el-input>
-            </el-form-item>
-            <el-form-item label="状态" prop="enabledMark">
-              <el-switch v-model="dataForm.enabledMark" :active-value="1" :inactive-value="0" />
             </el-form-item>
             <el-form-item label="通知方式">
               <el-checkbox v-model="dataForm.isStationLetter" :true-label="1" :false-label="0">站内信
@@ -41,6 +38,10 @@
               <el-checkbox v-model="dataForm.isSms" :true-label="1" :false-label="0">短信
               </el-checkbox>
             </el-form-item>
+            <el-form-item label="状态" prop="enabledMark">
+              <el-switch v-model="dataForm.enabledMark" :active-value="1" :inactive-value="0" />
+            </el-form-item>
+            <group-title content="内容配置" class="mb-20" />
             <el-form-item label="短信通知" prop="smsId" v-if="dataForm.isSms">
               <sms-dialog v-model="dataForm.smsId" :title="dataForm.smsTemplateName"
                 @change="onSmsChange" />
