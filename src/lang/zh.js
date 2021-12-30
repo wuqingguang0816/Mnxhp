@@ -145,6 +145,8 @@ export default {
     scanTip: 'APP扫码登录',
     accountTip: '请输入账号',
     passwordTip: '请输入密码',
+    codeTip: '请输入验证码',
+    changeCode: '点击切换验证码',
     mobile: '请输入手机号',
     rightMobile: '请输入正确的手机号',
     smsCode: '请输入验证码',

@@ -68,6 +68,7 @@ service.interceptors.response.use(
           }
         }
       })
+      if (url.indexOf('/api/oauth/Login') > -1) return Promise.reject(res)
       return Promise.reject(new Error(res.msg || 'Error'))
     } else {
       return res

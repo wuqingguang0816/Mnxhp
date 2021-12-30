@@ -145,6 +145,8 @@ export default {
     scanTip: 'APP掃碼登錄',
     accountTip: '請輸入賬號',
     passwordTip: '請輸入密碼',
+    codeTip: '請輸入驗證碼',
+    changeCode: '點擊切換驗證碼',
     mobile: '請輸入手機號',
     rightMobile: '請輸入正確的手機號',
     smsCode: '請輸入驗證碼',

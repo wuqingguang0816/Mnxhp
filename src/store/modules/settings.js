@@ -18,6 +18,7 @@ const {
 
 const state = {
   theme: variables.theme,
+  loginNeedCode: jnpf.storageGet('loginNeedCode') === null ? false : jnpf.storageGet('loginNeedCode'),
   showSettings: showSettings,
   tagsView: jnpf.storageGet('tagsView') === null ? tagsView : jnpf.storageGet('tagsView'),
   tagsIcon: jnpf.storageGet('tagsIcon') === null ? tagsIcon : jnpf.storageGet('tagsIcon'),

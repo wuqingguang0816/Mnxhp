@@ -39,6 +39,21 @@
               <!-- @keyup.enter.native="handleLogin" -->
             </el-form-item>
           </el-tooltip>
+          <el-form-item prop="code" v-if="needCode">
+            <el-row type="flex" justify="space-between">
+              <el-col class="sms-input">
+                <el-input v-model="loginForm.code" :placeholder="$t('login.codeTip')" name="code"
+                  autocomplete="on" prefix-icon="el-icon-key" size="large">
+                </el-input>
+              </el-col>
+              <el-col class="sms-right code-right">
+                <el-tooltip :content="$t('login.changeCode')" placement="bottom">
+                  <img id="imgcode" :alt="$t('login.changeCode')" :src="define.comUrl+imgUrl"
+                    @click="changeImg">
+                </el-tooltip>
+              </el-col>
+            </el-row>
+          </el-form-item>
           <el-button :loading="loading" type="primary" class="login-btn" size="large"
             @click.native.prevent="handleLogin">{{ $t('login.logIn') }}</el-button>
         </el-form>
@@ -61,7 +76,8 @@ export default {
     return {
       loginForm: {
         account: '',
-        password: ''
+        password: '',
+        code: ''
       },
       loginRules: {
         account: [
@@ -69,8 +85,13 @@ export default {
         ],
         password: [
           { required: true, trigger: 'blur', message: this.$t('login.passwordTip') }
-        ]
+        ],
+        code: [
+          { required: true, trigger: 'blur', message: this.$t('login.codeTip') }
+        ],
       },
+      imgUrl: "",
+      timestamp: '',
       capsTooltip: false,
       loading: false,
       showDialog: false,
@@ -82,7 +103,18 @@ export default {
   computed: {
     loginLoading() {
       return this.$store.state.user.loginLoading
-    }
+    },
+    needCode: {
+      get() {
+        return this.$store.state.settings.loginNeedCode;
+      },
+      set(val) {
+        this.$store.dispatch("settings/changeSetting", {
+          key: "loginNeedCode",
+          value: val
+        });
+      }
+    },
   },
   watch: {
     loginLoading(val) {
@@ -107,6 +139,7 @@ export default {
         _this.handleLogin()
       }
     }
+    this.changeImg()
   },
   mounted() {
     this.$store.commit('user/SET_LOGIN_LOADING', false)
@@ -128,21 +161,29 @@ export default {
         if (valid) {
           this.loading = true
           this.$store.commit('user/SET_LOGIN_LOADING', true)
-          this.$store
-            .dispatch('user/login', this.loginForm)
-            .then(() => {
-              this.$router.push({
-                path: this.redirect || '/home',
-                query: this.otherQuery
-              })
+          const query = {
+            ...this.loginForm,
+            timestamp: this.timestamp
+          }
+          this.$store.dispatch('user/login', query).then(res => {
+            this.needCode = res.enableVerificationCode ? true : false
+            this.$router.push({
+              path: this.redirect || '/home',
+              query: this.otherQuery
             })
-            .catch(() => {
-              this.$store.commit('user/SET_LOGIN_LOADING', false)
-            })
+          }).catch(res => {
+            if (res.code === 10086) this.needCode = true
+            this.$store.commit('user/SET_LOGIN_LOADING', false)
+          })
         } else {
           return false
         }
       })
+    },
+    changeImg() {
+      let timestamp = Math.random()
+      this.timestamp = timestamp
+      this.imgUrl = `/api/oauth/ImageCode/${timestamp}`
     },
     getOtherQuery(query) {
       return Object.keys(query).reduce((acc, cur) => {

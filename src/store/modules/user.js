@@ -75,11 +75,13 @@ const actions = {
   },
   // user login
   login({ commit }, userInfo) {
-    const { account, password } = userInfo
+    const { account, password, code, timestamp } = userInfo
     return new Promise((resolve, reject) => {
       login(qs.stringify({
         account: account.trim(),
         password: md5(password),
+        code,
+        timestamp,
         client_id: 'admin',
         client_secret: '123456',
         scope: 'all',
@@ -91,13 +93,12 @@ const actions = {
         commit('SET_TOKEN', data.token)
         commit('settings/CHANGE_SETTING', { key: "layoutType", value: layoutType }, { root: true })
         setToken(data.token)
-        resolve()
+        resolve(data)
       }).catch(error => {
         reject(error)
       })
     })
   },
-
   // 获取用户信息
   getInfo({ commit }) {
     return new Promise((resolve, reject) => {

@@ -145,6 +145,8 @@ export default {
     scanTip: 'APP Scan code login',
     accountTip: 'Please enter the account number',
     passwordTip: 'Please enter your password',
+    codeTip: 'Please enter your verification code',
+    changeCode: 'Click to switch verification code',
     mobile: 'Please enter mobile number',
     rightMobile: 'Please enter the correct mobile number',
     smsCode: 'Please enter the verification code',
