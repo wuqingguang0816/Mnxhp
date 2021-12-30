@@ -250,9 +250,10 @@
               </el-form-item>
               <el-form-item label="合计字段" v-if="activeData['show-summary']">
                 <el-select v-model="activeData.summaryField" multiple placeholder="请选择合计字段">
-                  <el-option v-for="item in activeData.__config__.children" :key="item.__vModel__"
-                    :label="item.__config__.label" :value="item.__vModel__">
-                  </el-option>
+                  <template v-for="(item,i) in activeData.__config__.children">
+                    <el-option :key="i" :label="item.__config__.label" :value="item.__vModel__"
+                      v-if="['comInput','numInput','calculate'].includes(item.__config__.jnpfKey)" />
+                  </template>
                 </el-select>
               </el-form-item>
             </template>

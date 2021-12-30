@@ -404,7 +404,8 @@ export default {
       const isSummary = key => this.config.summaryField.includes(key)
       const target = row.find(t => t.__vModel__ === key)
       if (!target) return NaN
-      if (isSummary(key)) return target.value || 0
+      let data = isNaN(target.value) ? 0 : Number(target.value)
+      if (isSummary(key)) return data || 0
       return NaN
     },
     /**
