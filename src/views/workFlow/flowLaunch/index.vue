@@ -78,7 +78,7 @@
           <el-table-column prop="flowName" label="所属流程" width="130" />
           <el-table-column prop="startTime" label="发起时间" width="130"
             :formatter="jnpf.tableDateFormat" />
-          <el-table-column prop="thisStep" label="当前节点" width="150" />
+          <el-table-column prop="thisStep" label="审批节点" width="150" />
           <el-table-column prop="flowUrgent" label="紧急程度" width="130">
             <template slot-scope="scope">
               {{ scope.row.flowUrgent | urgentText() }}
