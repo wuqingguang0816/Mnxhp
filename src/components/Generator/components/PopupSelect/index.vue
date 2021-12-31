@@ -149,10 +149,16 @@ export default {
         relationField: this.relationField,
       }
       getDataInterfaceDataSelect(this.interfaceId, query).then(res => {
-        this.list = res.data.list
+        this.list = this.interfaceDataHandler(res.data)
         this.total = res.data.pagination.total
         this.listLoading = false
       }).catch(() => { this.listLoading = false })
+    },
+    interfaceDataHandler(data) {
+      if (!data.dataProcessing) return data.list
+      const dataHandler = this.jnpf.getScriptFunc(data.dataProcessing)
+      if (!dataHandler) return data.list
+      return dataHandler(data.list)
     },
     search() {
       this.initData()
