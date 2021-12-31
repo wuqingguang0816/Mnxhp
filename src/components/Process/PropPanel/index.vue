@@ -93,119 +93,126 @@
     </section>
 
     <!-- 子流程  -->
-    <section class="condition-pane pd-10" v-if="value && isSubFlowNode()">
-      <el-form label-position="top" :model="subFlowForm">
-        <el-form-item label="发起设置">
-          <el-radio-group v-model="subFlowForm.initiateType">
-            <el-radio v-for="item in initiateTypeOptions" :label="item.value" :key="item.value"
-              :disabled="item.disabled" class="radio-item">{{item.label}}
-            </el-radio>
-          </el-radio-group>
-          <div v-if="subFlowForm.initiateType === 1" class="option-box-tip">
-            发起者的主管将作为子流程发起人</div>
-          <div v-if="subFlowForm.initiateType === 2" class="option-box-tip">
-            发起者的部门主管将作为子流程发起人</div>
-          <div v-if="subFlowForm.initiateType === 3" class="option-box-tip">
-            发起者自己将作为子流程发起人</div>
-          <div v-if="subFlowForm.initiateType === 4" class="option-box-tip">
-            选择表单字段的值作为子流程发起人</div>
-          <div v-if="subFlowForm.initiateType === 5" class="option-box-tip">
-            设置审批流程中某个环节的审批人作为子流程发起人</div>
-          <div v-if="subFlowForm.initiateType === 6" class="option-box-tip">
-            所指定的成员将作为子流程发起人，多人时，发起多个子流程</div>
-          <div v-if="subFlowForm.initiateType === 9" class="option-box-tip">
-            通过第三方调用从目标服务中获取子流程发起人</div>
-          <el-alert type="warning" :closable="false" v-if="subFlowForm.initiateType === 9">
-            <div slot="title" class="tips">
-              <p>请求参数：taskId、taskNodeId</p>
-            </div>
-          </el-alert>
-        </el-form-item>
-        <el-form-item label="发起者的" v-if="subFlowForm.initiateType === 1">
-          <el-select v-model="subFlowForm.managerLevel">
-            <el-option v-for="item in 10" :key="item" :label="item===1?'直接主管':'第'+item+'级主管'"
-              :value="item">
-            </el-option>
-          </el-select>
-        </el-form-item>
-        <el-form-item label="表单字段" v-if="subFlowForm.initiateType === 4">
-          <el-select v-model="subFlowForm.formField" placeholder="请选择字段">
-            <el-option v-for="item in usedFormItems" :key="item.__vModel__"
-              :label="item.__config__.label" :value="item.__vModel__">
-            </el-option>
-          </el-select>
-        </el-form-item>
-        <el-form-item label="审批节点" v-if="subFlowForm.initiateType === 5">
-          <el-select v-model="subFlowForm.nodeId" placeholder="请选择节点">
-            <el-option v-for="item in nodeOptions" :key="item.nodeId" :label="item.properties.title"
-              :value="item.nodeId">
-            </el-option>
-          </el-select>
-        </el-form-item>
-        <el-form-item label="请求路径" v-if="subFlowForm.initiateType === 9">
-          <el-input v-model="subFlowForm.getUserUrl" placeholder="请输入接口地址">
-            <template slot="prepend">GET</template>
-          </el-input>
-        </el-form-item>
-        <el-form-item v-if="subFlowForm.initiateType === 6">
-          <org-select ref="subFlow-role-org" type="role" v-model="subFlowForm.initiateRole"
-            title="添加角色" class="mb-10" buttonType="button" />
-          <org-select ref="subFlow-position-org" buttonType="button"
-            v-model="subFlowForm.initiatePos" title="添加岗位" type="position" class="mb-10" />
-          <org-select ref="subFlow-user-org" buttonType="button" v-model="subFlowForm.initiator"
-            title="添加用户" />
-        </el-form-item>
-        <el-form-item label="子流程类型">
-          <el-radio-group v-model="subFlowForm.isAsync">
-            <el-radio :label="false">同步</el-radio>
-            <el-radio :label="true">异步</el-radio>
-          </el-radio-group>
-        </el-form-item>
-        <el-form-item label="子流程表单">
-          <JNPF-TreeSelect :options="flowOptions" v-model="subFlowForm.flowId"
-            placeholder="请选择子流程表单" lastLevel clearable @change="subFlowForm.assignList=[]" />
-        </el-form-item>
-        <el-form-item label="数据传递">
-          <div @click="openRuleBox">
-            <el-input :value="subFlowForm.assignList.length?'已设置':''" placeholder="请设置数据传递规则"
-              suffix-icon="el-icon-arrow-down" readonly class="hand" />
-          </div>
-        </el-form-item>
-      </el-form>
-      <el-form :model="subFlowForm" label-width="100px" label-position="left">
-        <el-form-item label="通知设置"></el-form-item>
-        <el-form-item label="子流程发起">
-          <el-switch v-model="subFlowForm.launchMsgConfig.on" />
-        </el-form-item>
-        <template v-if="subFlowForm.launchMsgConfig.on">
-          <el-form-item label="模板设置" style="margin-bottom: 0;"></el-form-item>
-          <el-form-item label="消息模板" style="padding-left: 40px;">
-            <msg-dialog v-model="subFlowForm.launchMsgConfig.msgId"
-              :title="subFlowForm.launchMsgConfig.msgName"
-              @change="onMsgChange('launchMsgConfig',arguments)" />
-          </el-form-item>
-          <el-form-item label="参数设置" style="margin-bottom: 0;"></el-form-item>
-          <el-table :data="subFlowForm.launchMsgConfig.templateJson">
-            <el-table-column type="index" width="50" label="序号" align="center" />
-            <el-table-column prop="field" label="参数名称" width="150">
-              <template slot-scope="scope">
-                {{scope.row.fieldName?scope.row.field+'('+scope.row.fieldName+')':scope.row.field}}
-              </template>
-            </el-table-column>
-            <el-table-column prop="value" label="表单字段">
-              <template slot-scope="scope">
-                <el-select v-model="scope.row.relationField" placeholder="请选择表单字段" clearable
-                  filterable>
-                  <el-option v-for="item in usedFormItems" :key="item.__vModel__"
-                    :label="item.__config__.label?item.__vModel__+'('+item.__config__.label+')':item.__vModel__"
-                    :value="item.__vModel__">
+    <section class="approver-pane" v-if="value && isSubFlowNode()">
+      <el-tabs style="height:100%;">
+        <el-tab-pane label="基础设置">
+          <el-scrollbar class="config-scrollbar">
+            <el-form label-position="top" :model="subFlowForm" class="pd-10">
+              <el-form-item label="发起设置">
+                <el-radio-group v-model="subFlowForm.initiateType">
+                  <el-radio v-for="item in initiateTypeOptions" :label="item.value"
+                    :key="item.value" :disabled="item.disabled" class="radio-item">{{item.label}}
+                  </el-radio>
+                </el-radio-group>
+                <div v-if="subFlowForm.initiateType === 1" class="option-box-tip">
+                  发起者的主管将作为子流程发起人</div>
+                <div v-if="subFlowForm.initiateType === 2" class="option-box-tip">
+                  发起者的部门主管将作为子流程发起人</div>
+                <div v-if="subFlowForm.initiateType === 3" class="option-box-tip">
+                  发起者自己将作为子流程发起人</div>
+                <div v-if="subFlowForm.initiateType === 4" class="option-box-tip">
+                  选择表单字段的值作为子流程发起人</div>
+                <div v-if="subFlowForm.initiateType === 5" class="option-box-tip">
+                  设置审批流程中某个环节的审批人作为子流程发起人</div>
+                <div v-if="subFlowForm.initiateType === 6" class="option-box-tip">
+                  所指定的成员将作为子流程发起人，多人时，发起多个子流程</div>
+                <div v-if="subFlowForm.initiateType === 9" class="option-box-tip">
+                  通过第三方调用从目标服务中获取子流程发起人</div>
+                <el-alert type="warning" :closable="false" v-if="subFlowForm.initiateType === 9">
+                  <div slot="title" class="tips">
+                    <p>请求参数：taskId、taskNodeId</p>
+                  </div>
+                </el-alert>
+              </el-form-item>
+              <el-form-item label="发起者的" v-if="subFlowForm.initiateType === 1">
+                <el-select v-model="subFlowForm.managerLevel">
+                  <el-option v-for="item in 10" :key="item" :label="item===1?'直接主管':'第'+item+'级主管'"
+                    :value="item">
                   </el-option>
                 </el-select>
-              </template>
-            </el-table-column>
-          </el-table>
-        </template>
-      </el-form>
+              </el-form-item>
+              <el-form-item label="表单字段" v-if="subFlowForm.initiateType === 4">
+                <el-select v-model="subFlowForm.formField" placeholder="请选择字段">
+                  <el-option v-for="item in usedFormItems" :key="item.__vModel__"
+                    :label="item.__config__.label" :value="item.__vModel__">
+                  </el-option>
+                </el-select>
+              </el-form-item>
+              <el-form-item label="审批节点" v-if="subFlowForm.initiateType === 5">
+                <el-select v-model="subFlowForm.nodeId" placeholder="请选择节点">
+                  <el-option v-for="item in nodeOptions" :key="item.nodeId"
+                    :label="item.properties.title" :value="item.nodeId">
+                  </el-option>
+                </el-select>
+              </el-form-item>
+              <el-form-item label="请求路径" v-if="subFlowForm.initiateType === 9">
+                <el-input v-model="subFlowForm.getUserUrl" placeholder="请输入接口地址">
+                  <template slot="prepend">GET</template>
+                </el-input>
+              </el-form-item>
+              <el-form-item v-if="subFlowForm.initiateType === 6">
+                <org-select ref="subFlow-role-org" type="role" v-model="subFlowForm.initiateRole"
+                  title="添加角色" class="mb-10" buttonType="button" />
+                <org-select ref="subFlow-position-org" buttonType="button"
+                  v-model="subFlowForm.initiatePos" title="添加岗位" type="position" class="mb-10" />
+                <org-select ref="subFlow-user-org" buttonType="button"
+                  v-model="subFlowForm.initiator" title="添加用户" />
+              </el-form-item>
+              <el-form-item label="子流程类型">
+                <el-radio-group v-model="subFlowForm.isAsync">
+                  <el-radio :label="false">同步</el-radio>
+                  <el-radio :label="true">异步</el-radio>
+                </el-radio-group>
+              </el-form-item>
+              <el-form-item label="子流程表单">
+                <JNPF-TreeSelect :options="flowOptions" v-model="subFlowForm.flowId"
+                  placeholder="请选择子流程表单" lastLevel clearable @change="subFlowForm.assignList=[]" />
+              </el-form-item>
+              <el-form-item label="数据传递">
+                <div @click="openRuleBox">
+                  <el-input :value="subFlowForm.assignList.length?'已设置':''" placeholder="请设置数据传递规则"
+                    suffix-icon="el-icon-arrow-down" readonly class="hand" />
+                </div>
+              </el-form-item>
+            </el-form>
+          </el-scrollbar>
+        </el-tab-pane>
+        <el-tab-pane label="通知设置">
+          <el-form :model="subFlowForm" label-width="100px" label-position="left" class="pd-10">
+            <el-form-item label="子流程发起">
+              <el-switch v-model="subFlowForm.launchMsgConfig.on" />
+            </el-form-item>
+            <template v-if="subFlowForm.launchMsgConfig.on">
+              <el-form-item label="消息模板" style="margin-bottom: 0;"></el-form-item>
+              <el-form-item label="" label-width="0">
+                <msg-dialog v-model="subFlowForm.launchMsgConfig.msgId"
+                  :title="subFlowForm.launchMsgConfig.msgName"
+                  @change="onMsgChange('launchMsgConfig',arguments)" />
+              </el-form-item>
+              <el-form-item label="参数设置" style="margin-bottom: 0;"></el-form-item>
+              <el-table :data="subFlowForm.launchMsgConfig.templateJson">
+                <el-table-column type="index" width="50" label="序号" align="center" />
+                <el-table-column prop="field" label="参数名称" width="150">
+                  <template slot-scope="scope">
+                    {{scope.row.fieldName?scope.row.field+'('+scope.row.fieldName+')':scope.row.field}}
+                  </template>
+                </el-table-column>
+                <el-table-column prop="value" label="表单字段">
+                  <template slot-scope="scope">
+                    <el-select v-model="scope.row.relationField" placeholder="请选择表单字段" clearable
+                      filterable>
+                      <el-option v-for="item in usedFormItems" :key="item.__vModel__"
+                        :label="item.__config__.label?item.__vModel__+'('+item.__config__.label+')':item.__vModel__"
+                        :value="item.__vModel__">
+                      </el-option>
+                    </el-select>
+                  </template>
+                </el-table-column>
+              </el-table>
+            </template>
+          </el-form>
+        </el-tab-pane>
+      </el-tabs>
     </section>
 
     <!-- 发起人 -->
@@ -282,7 +289,7 @@
               </el-form-item>
               <template v-if="startForm.initFuncConfig.on">
                 <el-form-item label="事件设置" style="margin-bottom: 0;"></el-form-item>
-                <el-form-item label="发起事件请求路径">
+                <el-form-item label-width="0">
                   <interface-dialog v-model="startForm.initFuncConfig.interfaceId"
                     :title="startForm.initFuncConfig.interfaceName"
                     @change="onFuncChange('startForm','initFuncConfig',arguments)" />
@@ -325,7 +332,7 @@
               </el-form-item>
               <template v-if="startForm.endFuncConfig.on">
                 <el-form-item label="事件设置" style="margin-bottom: 0;"></el-form-item>
-                <el-form-item label="结束事件请求路径">
+                <el-form-item label-width="0">
                   <interface-dialog v-model="startForm.endFuncConfig.interfaceId"
                     :title="startForm.endFuncConfig.interfaceName"
                     @change="onFuncChange('startForm','endFuncConfig',arguments)" />
@@ -368,7 +375,7 @@
               </el-form-item>
               <template v-if="startForm.flowRecallFuncConfig.on">
                 <el-form-item label="事件设置" style="margin-bottom: 0;"></el-form-item>
-                <el-form-item label="撤回事件请求路径">
+                <el-form-item label-width="0">
                   <interface-dialog v-model="startForm.flowRecallFuncConfig.interfaceId"
                     :title="startForm.flowRecallFuncConfig.interfaceName"
                     @change="onFuncChange('startForm','flowRecallFuncConfig',arguments)" />
@@ -604,7 +611,7 @@
               </el-form-item>
               <template v-if="approverForm.approveFuncConfig.on">
                 <el-form-item label="事件设置" style="margin-bottom: 0;"></el-form-item>
-                <el-form-item label="同意事件请求路径">
+                <el-form-item label-width="0">
                   <interface-dialog v-model="approverForm.approveFuncConfig.interfaceId"
                     :title="approverForm.approveFuncConfig.interfaceName"
                     @change="onFuncChange('approverForm','approveFuncConfig',arguments)" />
@@ -647,7 +654,7 @@
               </el-form-item>
               <template v-if="approverForm.rejectFuncConfig.on">
                 <el-form-item label="事件设置" style="margin-bottom: 0;"></el-form-item>
-                <el-form-item label="拒绝事件请求路径">
+                <el-form-item label-width="0">
                   <interface-dialog v-model="approverForm.rejectFuncConfig.interfaceId"
                     :title="approverForm.rejectFuncConfig.interfaceName"
                     @change="onFuncChange('approverForm','rejectFuncConfig',arguments)" />
@@ -690,7 +697,7 @@
               </el-form-item>
               <template v-if="approverForm.recallFuncConfig.on">
                 <el-form-item label="事件设置" style="margin-bottom: 0;"></el-form-item>
-                <el-form-item label="撤回事件请求路径">
+                <el-form-item label-width="0">
                   <interface-dialog v-model="approverForm.recallFuncConfig.interfaceId"
                     :title="approverForm.recallFuncConfig.interfaceName"
                     @change="onFuncChange('approverForm','recallFuncConfig',arguments)" />
@@ -738,8 +745,8 @@
                 <el-switch v-model="approverForm.waitApproveMsgConfig.on" />
               </el-form-item>
               <template v-if="approverForm.waitApproveMsgConfig.on">
-                <el-form-item label="模板设置" style="margin-bottom: 0;"></el-form-item>
-                <el-form-item label="消息模板" style="padding-left: 40px;">
+                <el-form-item label="消息模板" style="margin-bottom: 0;"></el-form-item>
+                <el-form-item label="" label-width="0">
                   <msg-dialog v-model="approverForm.waitApproveMsgConfig.msgId"
                     :title="approverForm.waitApproveMsgConfig.msgName"
                     @change="onMsgChange('waitApproveMsgConfig',arguments)" />
@@ -769,8 +776,8 @@
                 <el-switch v-model="approverForm.approveMsgConfig.on" />
               </el-form-item>
               <template v-if="approverForm.approveMsgConfig.on">
-                <el-form-item label="模板设置" style="margin-bottom: 0;"></el-form-item>
-                <el-form-item label="消息模板" style="padding-left: 40px;">
+                <el-form-item label="消息模板" style="margin-bottom: 0;"></el-form-item>
+                <el-form-item label="" label-width="0">
                   <msg-dialog v-model="approverForm.approveMsgConfig.msgId"
                     :title="approverForm.approveMsgConfig.msgName"
                     @change="onMsgChange('approveMsgConfig',arguments)" />
@@ -800,8 +807,8 @@
                 <el-switch v-model="approverForm.rejectMsgConfig.on" />
               </el-form-item>
               <template v-if="approverForm.rejectMsgConfig.on">
-                <el-form-item label="模板设置" style="margin-bottom: 0;"></el-form-item>
-                <el-form-item label="消息模板" style="padding-left: 40px;">
+                <el-form-item label="消息模板" style="margin-bottom: 0;"></el-form-item>
+                <el-form-item label="" label-width="0">
                   <msg-dialog v-model="approverForm.rejectMsgConfig.msgId"
                     :title="approverForm.rejectMsgConfig.msgName"
                     @change="onMsgChange('rejectMsgConfig',arguments)" />
@@ -831,8 +838,8 @@
                 <el-switch v-model="approverForm.pressMsgConfig.on" />
               </el-form-item>
               <template v-if="approverForm.pressMsgConfig.on">
-                <el-form-item label="模板设置" style="margin-bottom: 0;"></el-form-item>
-                <el-form-item label="消息模板" style="padding-left: 40px;">
+                <el-form-item label="消息模板" style="margin-bottom: 0;"></el-form-item>
+                <el-form-item label="" label-width="0">
                   <msg-dialog v-model="approverForm.pressMsgConfig.msgId"
                     :title="approverForm.pressMsgConfig.msgName"
                     @change="onMsgChange('pressMsgConfig',arguments)" />
