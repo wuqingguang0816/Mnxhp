@@ -94,6 +94,10 @@
                 <el-switch v-model="baseForm.enableVerificationCode" :active-value="1"
                   :inactive-value="0" />
               </el-form-item>
+              <el-form-item label="验证码位数" v-if="baseForm.enableVerificationCode">
+                <el-input-number v-model="baseForm.verificationCodeNumber" :min="3" :max="6"
+                  :precision="0" :step="1" controls-position="right" /> 位
+              </el-form-item>
               <el-form-item label="上次登录">
                 <el-switch v-model="baseForm.lastLoginTimeSwitch" :active-value="1"
                   :inactive-value="0" />
@@ -624,10 +628,6 @@ export default {
           type: 'success',
           duration: 1500,
           onClose: () => {
-            this.$store.dispatch("settings/changeSetting", {
-              key: "loginNeedCode",
-              value: this.baseForm.enableVerificationCode ? true : false
-            });
             this.btnLoading = false
             this.initData()
           }

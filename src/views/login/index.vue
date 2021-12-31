@@ -27,7 +27,7 @@
           <el-form-item prop="account">
             <el-input ref="account" v-model="loginForm.account" :placeholder="$t('login.username')"
               name="account" type="text" tabindex="1" autocomplete="on" prefix-icon="el-icon-user"
-              size="large"></el-input>
+              size="large" @change="getConfig"></el-input>
           </el-form-item>
           <el-form-item class="rule-tip">{{$t('login.rule')}}</el-form-item>
           <el-tooltip v-model="capsTooltip" :content="$t('login.upper')" placement="right" manual>
@@ -69,7 +69,7 @@
 </template>
 
 <script>
-
+import { getConfig } from '@/api/user'
 export default {
   name: 'Login',
   data() {
@@ -95,6 +95,8 @@ export default {
       capsTooltip: false,
       loading: false,
       showDialog: false,
+      needCode: false,
+      codeLength: 4,
       redirect: undefined,
       otherQuery: {},
       active: 1
@@ -103,18 +105,7 @@ export default {
   computed: {
     loginLoading() {
       return this.$store.state.user.loginLoading
-    },
-    needCode: {
-      get() {
-        return this.$store.state.settings.loginNeedCode;
-      },
-      set(val) {
-        this.$store.dispatch("settings/changeSetting", {
-          key: "loginNeedCode",
-          value: val
-        });
-      }
-    },
+    }
   },
   watch: {
     loginLoading(val) {
@@ -139,7 +130,7 @@ export default {
         _this.handleLogin()
       }
     }
-    this.changeImg()
+    if (this.needCode) this.changeImg()
   },
   mounted() {
     this.$store.commit('user/SET_LOGIN_LOADING', false)
@@ -155,6 +146,16 @@ export default {
       const { key } = e
       this.capsTooltip = key && key.length === 1 && key >= 'A' && key <= 'Z'
     },
+    getConfig(val) {
+      if (!val) return
+      getConfig(this.loginForm.account).then(res => {
+        this.needCode = !!res.data.enableVerificationCode
+        if (this.needCode) {
+          this.codeLength = res.data.verificationCodeNumber || 4
+          this.changeImg()
+        }
+      })
+    },
     handleLogin() {
       if (this.loading) return
       this.$refs.loginForm.validate(valid => {
@@ -166,13 +167,11 @@ export default {
             timestamp: this.timestamp
           }
           this.$store.dispatch('user/login', query).then(res => {
-            this.needCode = res.enableVerificationCode ? true : false
             this.$router.push({
               path: this.redirect || '/home',
               query: this.otherQuery
             })
-          }).catch(res => {
-            if (res.code === 10086) this.needCode = true
+          }).catch(() => {
             this.$store.commit('user/SET_LOGIN_LOADING', false)
           })
         } else {
@@ -183,7 +182,7 @@ export default {
     changeImg() {
       let timestamp = Math.random()
       this.timestamp = timestamp
-      this.imgUrl = `/api/oauth/ImageCode/${timestamp}`
+      this.imgUrl = `/api/oauth/ImageCode/${this.codeLength || 4}/${timestamp}`
     },
     getOtherQuery(query) {
       return Object.keys(query).reduce((acc, cur) => {
