@@ -42,7 +42,10 @@
       </el-row>
       <div class="JNPF-common-layout-main JNPF-flex-main">
         <div class="JNPF-common-head">
-          <topOpts @add="addOrUpdateHandle()"></topOpts>
+          <topOpts @add="addOrUpdateHandle()">
+            <el-button type="text" icon="el-icon-download" @click="exportForm">导出</el-button>
+            <el-button type="text" icon="el-icon-upload2" @click="uploadForm">导入</el-button>
+          </topOpts>
           <div class="JNPF-common-head-right">
             <el-tooltip effect="dark" :content="$t('common.refresh')" placement="top">
               <el-link icon="icon-ym icon-ym-Refresh JNPF-common-head-icon" :underline="false"
@@ -104,6 +107,8 @@
     <Form v-show="formVisible" ref="Form" @close="removeForm" />
     <Diagram v-if="diagramVisible" ref="Diagram" @close="diagramVisible = false" />
     <ResetPwdForm v-if="resetFormVisible" ref="ResetPwdForm" @refreshDataList="initData" />
+    <ExportForm v-if="exportFormVisible" ref="exportForm" />
+    <ImportForm v-if="importFormVisible" ref="importForm" @refresh="reset()" />
   </div>
 </template>
 <script>
@@ -119,13 +124,17 @@ import {
 import Form from './Form'
 import Diagram from './Diagram'
 import ResetPwdForm from './ResetPassword'
+import ImportForm from './ImportForm'
+import ExportForm from './ExportForm'
 
 export default {
   name: 'permission-user',
   components: {
     Form,
     Diagram,
-    ResetPwdForm
+    ResetPwdForm,
+    ExportForm,
+    ImportForm
   },
   data() {
     return {
@@ -149,7 +158,9 @@ export default {
       formVisible: false,
       diagramVisible: false,
       resetFormVisible: false,
-      authorizeFormVisible: false
+      authorizeFormVisible: false,
+      importFormVisible: false,
+      exportFormVisible: false
     }
   },
   created() {
@@ -252,7 +263,7 @@ export default {
       }).catch(() => { })
     },
     unlockUser(id) {
-      this.$confirm('此操作将解除该账户锁定, 是否继续?', '提示', {
+      this.$confirm('此操作将解除该账户锁定, 是否继续?', '解除锁定', {
         type: 'warning'
       }).then(() => {
         unlockUser(id).then(res => {
@@ -266,6 +277,18 @@ export default {
           })
         })
       }).catch(() => { })
+    },
+    exportForm() {
+      this.exportFormVisible = true
+      this.$nextTick(() => {
+        this.$refs.exportForm.init(this.listQuery)
+      })
+    },
+    uploadForm() {
+      this.importFormVisible = true
+      this.$nextTick(() => {
+        this.$refs.importForm.init()
+      })
     },
     handleResetPwd(id, account) {
       this.resetFormVisible = true

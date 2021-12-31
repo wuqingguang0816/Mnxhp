@@ -14,7 +14,7 @@
         <div class="up_right">
           <p class="title">上传填好的数据表</p>
           <p class="tip">文件后缀名必须是xls或xlsx，文件大小不超过500KB，最多支持导入1000条数据</p>
-          <el-upload :action="define.comUrl+'/api/extend/Employee/Uploader'"
+          <el-upload :action="define.comUrl+'/api/permission/Users/Uploader'"
             :headers="{ Authorization: $store.getters.token}" :on-success="handleSuccess"
             :on-remove="handleRemove" :before-remove="beforeRemove" :on-change="handleChange"
             :file-list="fileList" accept=".xls,.xlsx" :before-upload="beforeUpload"
@@ -36,14 +36,14 @@
     </div>
     <div class="import-main" v-show="active==2">
       <JNPF-table v-loading="listLoading" :data="list">
-        <el-table-column prop="enCode" label="工号" width="150">
+        <el-table-column prop="account" label="账户" width="150">
           <template slot-scope="scope">
-            <el-input v-model="scope.row.enCode" />
+            <el-input v-model="scope.row.account" />
           </template>
         </el-table-column>
-        <el-table-column prop="fullName" label="姓名" width="150">
+        <el-table-column prop="realName" label="姓名" width="150">
           <template slot-scope="scope">
-            <el-input v-model="scope.row.fullName" />
+            <el-input v-model="scope.row.realName" />
           </template>
         </el-table-column>
         <el-table-column prop="gender" label="性别" width="150">
@@ -51,29 +51,74 @@
             <el-input v-model="scope.row.gender" />
           </template>
         </el-table-column>
-        <el-table-column prop="departmentName" label="部门" width="150">
+        <el-table-column prop="email" label="电子邮箱" width="150">
           <template slot-scope="scope">
-            <el-input v-model="scope.row.departmentName" />
+            <el-input v-model="scope.row.email" />
           </template>
         </el-table-column>
-        <el-table-column prop="positionName" label="岗位" width="150">
+        <el-table-column prop="organizeId" label="所属组织" width="150">
           <template slot-scope="scope">
-            <el-input v-model="scope.row.positionName" />
+            <el-input v-model="scope.row.organizeId" />
           </template>
         </el-table-column>
-        <el-table-column prop="workingNature" label="用工性质" width="150">
+        <el-table-column prop="managerId" label="直属主管" width="150">
           <template slot-scope="scope">
-            <el-input v-model="scope.row.workingNature" />
+            <el-input v-model="scope.row.managerId" />
           </template>
         </el-table-column>
-        <el-table-column prop="idNumber" label="身份证号" width="150">
+        <el-table-column prop="positionId" label="岗位" width="150">
           <template slot-scope="scope">
-            <el-input v-model="scope.row.idNumber" />
+            <el-input v-model="scope.row.positionId" />
           </template>
         </el-table-column>
-        <el-table-column prop="telephone" label="联系电话" width="150">
+        <el-table-column prop="roleId" label="角色" width="150">
           <template slot-scope="scope">
-            <el-input v-model="scope.row.telephone" />
+            <el-input v-model="scope.row.roleId" />
+          </template>
+        </el-table-column>
+        <el-table-column prop="sortCode" label="排序" width="150">
+          <template slot-scope="scope">
+            <el-input v-model="scope.row.sortCode" />
+          </template>
+        </el-table-column>
+        <el-table-column prop="enabledMark" label="状态" width="150">
+          <template slot-scope="scope">
+            <el-input v-model="scope.row.enabledMark" />
+          </template>
+        </el-table-column>
+        <el-table-column prop="description" label="说明" width="150">
+          <template slot-scope="scope">
+            <el-input v-model="scope.row.description" />
+          </template>
+        </el-table-column>
+        <el-table-column prop="nation" label="民族" width="150">
+          <template slot-scope="scope">
+            <el-input v-model="scope.row.nation" />
+          </template>
+        </el-table-column>
+        <el-table-column prop="nativePlace" label="籍贯" width="150">
+          <template slot-scope="scope">
+            <el-input v-model="scope.row.nativePlace" />
+          </template>
+        </el-table-column>
+        <el-table-column prop="entryDate" label="入职时间" width="150">
+          <template slot-scope="scope">
+            <el-input v-model="scope.row.entryDate" />
+          </template>
+        </el-table-column>
+        <el-table-column prop="certificatesType" label="证件类型" width="150">
+          <template slot-scope="scope">
+            <el-input v-model="scope.row.certificatesType" />
+          </template>
+        </el-table-column>
+        <el-table-column prop="certificatesNumber" label="证件号码" width="150">
+          <template slot-scope="scope">
+            <el-input v-model="scope.row.certificatesNumber" />
+          </template>
+        </el-table-column>
+        <el-table-column prop="education" label="文化程度" width="150">
+          <template slot-scope="scope">
+            <el-input v-model="scope.row.education" />
           </template>
         </el-table-column>
         <el-table-column prop="birthday" label="出生年月" width="150">
@@ -81,29 +126,34 @@
             <el-input v-model="scope.row.birthday" />
           </template>
         </el-table-column>
-        <el-table-column prop="attendWorkTime" label="参加工作" width="150">
+        <el-table-column prop="telePhone" label="办公电话" width="150">
           <template slot-scope="scope">
-            <el-input v-model="scope.row.attendWorkTime" />
+            <el-input v-model="scope.row.telePhone" />
           </template>
         </el-table-column>
-        <el-table-column prop="education" label="最高学历" width="150">
+        <el-table-column prop="landline" label="办公座机" width="150">
           <template slot-scope="scope">
-            <el-input v-model="scope.row.education" />
+            <el-input v-model="scope.row.landline" />
           </template>
         </el-table-column>
-        <el-table-column prop="major" label="所学专业" width="150">
+        <el-table-column prop="mobilePhone" label="手机号码" width="150">
           <template slot-scope="scope">
-            <el-input v-model="scope.row.major" />
+            <el-input v-model="scope.row.mobilePhone" />
           </template>
         </el-table-column>
-        <el-table-column prop="graduationAcademy" label="毕业院校" width="150">
+        <el-table-column prop="urgentContacts" label="紧急联系" width="150">
           <template slot-scope="scope">
-            <el-input v-model="scope.row.graduationAcademy" />
+            <el-input v-model="scope.row.urgentContacts" />
           </template>
         </el-table-column>
-        <el-table-column prop="graduationTime" label="毕业时间" width="150">
+        <el-table-column prop="urgentTelePhone" label="紧急电话" width="150">
           <template slot-scope="scope">
-            <el-input v-model="scope.row.graduationTime" />
+            <el-input v-model="scope.row.urgentTelePhone" />
+          </template>
+        </el-table-column>
+        <el-table-column prop="postalAddress" label="通讯地址" width="150">
+          <template slot-scope="scope">
+            <el-input v-model="scope.row.postalAddress" />
           </template>
         </el-table-column>
         <el-table-column label="操作" fixed="right" width="50">
@@ -135,22 +185,36 @@
             </p>
           </div>
         </div>
-        <p class="contips">以下文件数据为导入异常数据</p>
+        <div class="contips">
+          <p>以下文件数据为导入异常数据</p>
+          <el-button type="text" icon="el-icon-upload2" @click="exportExceptionData">导出异常数据
+          </el-button>
+        </div>
         <JNPF-table :data="resultList" height="280px">
-          <el-table-column prop="enCode" label="工号" width="100" />
-          <el-table-column prop="fullName" label="姓名" width="100" />
-          <el-table-column prop="gender" label="性别" width="80" />
-          <el-table-column prop="departmentName" label="部门" width="120" />
-          <el-table-column prop="positionName" label="岗位" width="120" />
-          <el-table-column prop="workingNature" label="用工性质" width="100" />
-          <el-table-column prop="idNumber" label="身份证号" width="150" />
-          <el-table-column prop="telephone" label="联系电话" width="100" />
-          <el-table-column prop="birthday" label="出生年月" width="100" />
-          <el-table-column prop="attendWorkTime" label="参加工作" width="100" />
-          <el-table-column prop="education" label="最高学历" width="100" />
-          <el-table-column prop="major" label="所学专业" width="120" />
-          <el-table-column prop="graduationAcademy" label="毕业院校" width="150" />
-          <el-table-column prop="graduationTime" label="毕业时间" width="100" />
+          <el-table-column prop="account" label="账户" width="150" />
+          <el-table-column prop="realName" label="姓名" width="150" />
+          <el-table-column prop="gender" label="性别" width="150" />
+          <el-table-column prop="email" label="电子邮箱" width="150" />
+          <el-table-column prop="organizeId" label="所属组织" width="150" />
+          <el-table-column prop="managerId" label="直属主管" width="150" />
+          <el-table-column prop="positionId" label="岗位" width="150" />
+          <el-table-column prop="roleId" label="角色" width="150" />
+          <el-table-column prop="sortCode" label="排序" width="150" />
+          <el-table-column prop="enabledMark" label="状态" width="150" />
+          <el-table-column prop="description" label="说明" width="150" />
+          <el-table-column prop="nation" label="民族" width="150" />
+          <el-table-column prop="nativePlace" label="籍贯" width="150" />
+          <el-table-column prop="entryDate" label="入职时间" width="150" />
+          <el-table-column prop="certificatesType" label="证件类型" width="150" />
+          <el-table-column prop="certificatesNumber" label="证件号码" width="150" />
+          <el-table-column prop="education" label="文化程度" width="150" />
+          <el-table-column prop="birthday" label="出生年月" width="150" />
+          <el-table-column prop="telePhone" label="办公电话" width="150" />
+          <el-table-column prop="landline" label="办公座机" width="150" />
+          <el-table-column prop="mobilePhone" label="手机号码" width="150" />
+          <el-table-column prop="urgentContacts" label="紧急联系" width="150" />
+          <el-table-column prop="urgentTelePhone" label="紧急电话" width="150" />
+          <el-table-column prop="postalAddress" label="通讯地址" width="150" />
         </JNPF-table>
       </div>
     </div>
@@ -166,7 +230,7 @@
 </template>
 
 <script>
-import { TemplateDownload, ImportData, ImportPreview } from '@/api/extend/employee'
+import { TemplateDownload, ImportData, ImportPreview, ExportExceptionData } from '@/api/permission/user'
 export default {
   data() {
     return {
@@ -226,6 +290,12 @@ export default {
     },
     templateDownload() {
       TemplateDownload().then(res => {
+        if (!res.data.url) return
+        window.location.href = this.define.comUrl + res.data.url
+      })
+    },
+    exportExceptionData() {
+      ExportExceptionData({ list: this.resultList }).then(res => {
         if (!res.data.url) return
         window.location.href = this.define.comUrl + res.data.url
       })

@@ -127,3 +127,43 @@ export const getOrganization = (keyword) => {
     data: { keyword }
   })
 }
+// 导出Excel
+export function ExportExcel(data) {
+  return request({
+    url: '/api/permission/Users/ExportExcel',
+    method: 'get',
+    data
+  })
+}
+// 模板下载
+export function TemplateDownload(data) {
+  return request({
+    url: '/api/permission/Users/TemplateDownload',
+    method: 'get',
+    data
+  })
+}
+// 导入
+export function ImportData(data) {
+  return request({
+    url: '/api/permission/Users/ImportData',
+    method: 'post',
+    data
+  })
+}
+// 导入预览
+export function ImportPreview(data) {
+  return request({
+    url: '/api/permission/Users/ImportPreview',
+    method: 'get',
+    data
+  })
+}
+// 导出错误数据
+export function ExportExceptionData(data) {
+  return request({
+    url: '/api/permission/Users/ExportExceptionData',
+    method: 'post',
+    data
+  })
+}
