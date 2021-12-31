@@ -84,10 +84,11 @@
                   <el-radio :label="1">账号锁定</el-radio>
                   <el-radio :label="2">延时登录</el-radio>
                 </el-radio-group>
-              </el-form-item>
-              <el-form-item label="延迟时间" v-if="baseForm.lockType===2">
-                <el-input-number v-model="baseForm.lockTime" :min="1" :precision="0" :step="1"
-                  controls-position="right" /> 分钟
+                <div v-if="baseForm.lockType===2">
+                  <span class="lockTime">延迟时间</span>
+                  <el-input-number v-model="baseForm.lockTime" :min="1" :precision="0" :step="1"
+                    controls-position="right" /> 分钟
+                </div>
               </el-form-item>
               <el-form-item label="验证码">
                 <el-switch v-model="baseForm.enableVerificationCode" :active-value="1"
@@ -666,6 +667,12 @@ export default {
   .tip {
     font-size: 14px;
     color: #a5a5a5;
+  }
+  .lockTime {
+    line-height: 32px;
+    padding-right: 12px;
+    color: #606266;
+    font-size: 14px;
   }
 }
 </style>
