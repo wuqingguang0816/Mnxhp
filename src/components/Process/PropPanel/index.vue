@@ -257,10 +257,11 @@
                 <el-checkbox v-model="startForm.hasPrintBtn">打印</el-checkbox>
                 <el-input v-model="startForm.printBtnText" />
               </div>
-            </el-form-item>
-            <el-form-item label="打印设置" v-if="startForm.hasPrintBtn">
-              <JNPF-TreeSelect :options="printTplList" v-model="startForm.printId"
-                placeholder="请选择打印模板" lastLevel clearable></JNPF-TreeSelect>
+              <div class="per-cell" v-if="startForm.hasPrintBtn">
+                <p style="width:112px"></p>
+                <JNPF-TreeSelect :options="printTplList" v-model="startForm.printId"
+                  placeholder="请选择打印模板" lastLevel clearable></JNPF-TreeSelect>
+              </div>
             </el-form-item>
             <el-form-item label="流程评论">
               <el-switch v-model="startForm.isComment" />
@@ -557,10 +558,11 @@
                 <el-checkbox v-model="approverForm.hasPrintBtn">打印</el-checkbox>
                 <el-input v-model="approverForm.printBtnText" />
               </div>
-            </el-form-item>
-            <el-form-item label="打印设置" v-if="approverForm.hasPrintBtn">
-              <JNPF-TreeSelect :options="printTplList" v-model="approverForm.printId"
-                placeholder="请选择打印模板" lastLevel clearable></JNPF-TreeSelect>
+              <div class="per-cell" v-if="approverForm.hasPrintBtn">
+                <p style="width:112px"></p>
+                <JNPF-TreeSelect :options="printTplList" v-model="approverForm.printId"
+                  placeholder="请选择打印模板" lastLevel clearable></JNPF-TreeSelect>
+              </div>
             </el-form-item>
             <!-- <el-form-item label="超时设置">
               <el-switch v-model="approverForm.timeoutConfig.on" class="mr-10" />
