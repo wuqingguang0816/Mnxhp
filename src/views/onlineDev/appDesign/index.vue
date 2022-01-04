@@ -89,7 +89,7 @@
       <div class="qrcode-img">
         <div id="qrcode" ref="qrCode"></div>
       </div>
-      <p class="tip">打开手机引迈开发平台APP扫码预览</p>
+      <p class="tip">打开手机APP扫码预览</p>
     </el-dialog>
   </div>
 </template>

@@ -407,7 +407,7 @@
                 <el-checkbox v-model="formConf.hasPrintBtn">打印</el-checkbox>
                 <el-input v-model="formConf.printButtonText" />
               </div>
-              <el-form-item label="打印设置" v-if="formConf.hasPrintBtn">
+              <el-form-item label="" v-if="formConf.hasPrintBtn">
                 <JNPF-TreeSelect :options="printTplList" v-model="formConf.printId"
                   placeholder="请选择打印模板" lastLevel clearable></JNPF-TreeSelect>
               </el-form-item>
