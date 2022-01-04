@@ -456,7 +456,7 @@ export const inputComponents = [{
 export const selectComponents = [{
     __config__: {
       jnpfKey: 'comSelect',
-      label: '组织组件',
+      label: '组织选择',
       labelWidth: undefined,
       showLabel: true,
       tag: 'com-select',
@@ -478,7 +478,7 @@ export const selectComponents = [{
   {
     __config__: {
       jnpfKey: 'depSelect',
-      label: '部门组件',
+      label: '部门选择',
       labelWidth: undefined,
       showLabel: true,
       tag: 'dep-select',
@@ -500,7 +500,7 @@ export const selectComponents = [{
   {
     __config__: {
       jnpfKey: 'posSelect',
-      label: '岗位组件',
+      label: '岗位选择',
       labelWidth: undefined,
       showLabel: true,
       tag: 'pos-select',
@@ -522,7 +522,7 @@ export const selectComponents = [{
   {
     __config__: {
       jnpfKey: 'userSelect',
-      label: '用户组件',
+      label: '用户选择',
       labelWidth: undefined,
       showLabel: true,
       tag: 'user-select',
