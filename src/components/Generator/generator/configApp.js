@@ -227,7 +227,8 @@ export const inputComponents = [{
       blur: '({ data, formData, setFormData, setShowOrHide, setRequired, setDisabled, request, getFieldOptions, setFieldOptions }) => {\n    // 在此编写代码\n    \n}',
     },
     placeholder: '请选择',
-    disabled: false
+    disabled: false,
+    multiple: false
   },
   {
     __config__: {
@@ -471,7 +472,8 @@ export const selectComponents = [{
       change: '({ data, formData, setFormData, setShowOrHide, setRequired, setDisabled, request, getFieldOptions, setFieldOptions }) => {\n    // 在此编写代码\n    \n}',
     },
     placeholder: '请选择',
-    disabled: false
+    disabled: false,
+    multiple: false
   },
   {
     __config__: {
@@ -492,7 +494,8 @@ export const selectComponents = [{
       change: '({ data, formData, setFormData, setShowOrHide, setRequired, setDisabled, request, getFieldOptions, setFieldOptions }) => {\n    // 在此编写代码\n    \n}',
     },
     placeholder: '请选择',
-    disabled: false
+    disabled: false,
+    multiple: false
   },
   {
     __config__: {
@@ -575,7 +578,8 @@ export const selectComponents = [{
         fullName: '选项1-1'
       }]
     }],
-    disabled: false
+    disabled: false,
+    multiple: false
   },
   {
     __config__: {
@@ -637,6 +641,7 @@ export const selectComponents = [{
     },
     placeholder: '请选择',
     disabled: false,
+    multiple: false,
     level: 2
   },
   {

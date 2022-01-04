@@ -486,6 +486,9 @@
             <el-form-item v-if="activeData.readonly !== undefined" label="是否只读">
               <el-switch v-model="activeData.readonly" />
             </el-form-item>
+            <el-form-item label="能否多选" v-if="activeData.multiple !== undefined">
+              <el-switch v-model="activeData.multiple" />
+            </el-form-item>
             <el-form-item v-if="activeData.disabled !== undefined" label="是否禁用">
               <el-switch v-model="activeData.disabled" />
             </el-form-item>

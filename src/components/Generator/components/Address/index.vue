@@ -7,7 +7,7 @@
 import { getProvinceSelector } from '@/api/system/province'
 export default {
   name: 'JNPF-Address',
-  props: ["value", "level"],
+  props: ["value", "level", "multiple"],
   model: {
     prop: 'value',
     event: 'change'
@@ -22,6 +22,7 @@ export default {
         label: 'label',
         children: 'children',
         leaf: 'leaf',
+        multiple: that.multiple,
         lazyLoad(node, resolve) {
           const { data, level } = node;
           let id = level === 0 ? -1 : data.value
@@ -41,9 +42,6 @@ export default {
   methods: {},
   created() { },
   watch: {
-    innerValue(val) {
-      // val && this.$emit('change', val)
-    },
     value(val) {
       this.innerValue = val
     }

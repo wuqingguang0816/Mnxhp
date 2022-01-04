@@ -830,6 +830,7 @@ export const selectComponents = [{
     disabled: false,
     clearable: true,
     filterable: false,
+    multiple: false,
     level: 2
   },
   {

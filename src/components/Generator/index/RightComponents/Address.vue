@@ -34,6 +34,9 @@
     <el-form-item label="能否搜索">
       <el-switch v-model="activeData.filterable" />
     </el-form-item>
+    <el-form-item label="能否多选">
+      <el-switch v-model="activeData.multiple" @change="levelChange" />
+    </el-form-item>
     <el-form-item label="是否禁用">
       <el-switch v-model="activeData.disabled" />
     </el-form-item>
