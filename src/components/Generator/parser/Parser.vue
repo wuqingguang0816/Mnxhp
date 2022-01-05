@@ -199,6 +199,8 @@ function buildListeners(scheme) {
               }
               data = _data
             }
+          } else if (config.jnpfKey === 'numInput') {
+            data = params[0]
           } else {
             data = params.length > 1 ? params[1] : params[0]
           }

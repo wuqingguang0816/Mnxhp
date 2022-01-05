@@ -249,6 +249,9 @@ export default {
           if (this.flowTemplateJson && this.flowTemplateJson.properties && this.flowTemplateJson.properties.formOperates) {
             data.formOperates = this.flowTemplateJson.properties.formOperates || []
           }
+          for (let i = 0; i < data.formOperates.length; i++) {
+            data.formOperates[i].write = false
+          }
         } else {
           data.formOperates = res.data.formOperates || []
         }

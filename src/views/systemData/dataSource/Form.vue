@@ -25,35 +25,60 @@
         <el-input v-model="dataForm.password" placeholder="密码" />
       </el-form-item>
       <!-- ==============不同数据库之间差异的部分================ -->
-      <div v-if="dataForm.dbType==='MySQL'">
+      <template v-if="dataForm.dbType==='MySQL'">
         <el-form-item label="库名" prop="serviceName">
           <el-input v-model="dataForm.serviceName" placeholder="库名">
             <el-button slot="append" @click="test" :loading="testLoad">测试连接</el-button>
           </el-input>
         </el-form-item>
-      </div>
-      <div v-if="dataForm.dbType==='SQLServer'||dataForm.dbType==='PostgreSQL'||dataForm.dbType==='KingbaseES'">
+      </template>
+      <template
+        v-if="dataForm.dbType==='SQLServer'||dataForm.dbType==='PostgreSQL'||dataForm.dbType==='KingbaseES'">
         <el-form-item label="库名" prop="serviceName">
           <el-input v-model="dataForm.serviceName" placeholder="库名"></el-input>
         </el-form-item>
         <el-form-item label="模式" prop="dbSchema">
           <el-input v-model="dataForm.dbSchema" :disabled="true"
-                    v-if="dataForm.dbType==='SQLServer'||dataForm.dbType==='PostgreSQL'">
+            v-if="dataForm.dbType==='SQLServer'||dataForm.dbType==='PostgreSQL'">
             <el-button slot="append" @click="test" :loading="testLoad">测试连接</el-button>
           </el-input>
           <el-input v-model="dataForm.dbSchema" v-if="dataForm.dbType==='KingbaseES'">
             <el-button slot="append" @click="test" :loading="testLoad">测试连接</el-button>
           </el-input>
         </el-form-item>
-      </div>
-      <div v-if="dataForm.dbType==='Oracle'||dataForm.dbType==='DM8'">
+      </template>
+      <template v-if="dataForm.dbType==='Oracle'||dataForm.dbType==='DM8'">
         <el-form-item label="模式" prop="dbSchema">
           <el-input v-model="dataForm.dbSchema" :disabled="true" placeholder="与用户同名">
             <el-button slot="append" @click="test" :loading="testLoad">测试连接</el-button>
           </el-input>
         </el-form-item>
-      </div>
-
+      </template>
+      <template v-if="dataForm.dbType==='Oracle'">
+        <el-form-item label="更多" prop="oracleExtend">
+          <el-switch v-model="dataForm.oracleExtend"></el-switch>
+        </el-form-item>
+        <template v-if="dataForm.oracleExtend">
+          <el-form-item label="连接方式" prop="oracleLinkType">
+            <el-select v-model="dataForm.oracleLinkType" placeholder="请选择">
+              <el-option label="SERVICE" value="SERVICE"></el-option>
+              <el-option label="SID" value="SID"></el-option>
+              <el-option label="SCHEMA" value="SCHEMA"></el-option>
+              <el-option label="TNS" value="TNS"></el-option>
+            </el-select>
+          </el-form-item>
+          <el-form-item label="角色" prop="oracleRole">
+            <el-select v-model="dataForm.oracleRole" placeholder="请选择">
+              <el-option label="Default" value="Default"></el-option>
+              <el-option label="SYSDBA" value="SYSDBA"></el-option>
+              <el-option label="SYSOPER" value="SYSOPER"></el-option>
+            </el-select>
+          </el-form-item>
+          <el-form-item label="服务名" prop="oracleService">
+            <el-input v-model="dataForm.oracleService" placeholder="服务名"></el-input>
+          </el-form-item>
+        </template>
+      </template>
       <!-- 暂时停用表空间，表空间是物理层分类一般不做操作（类似，静态资源放哪里，而用户只需要关心它展示端在哪个分类里，
             而不用关心实际它存储在哪里，navicat与数据库自带操作工具，也并没有指定表空间。），逻辑分类用模式。 -->
       <!--<el-form-item label="表空间" prop="tableSpace"
@@ -90,10 +115,14 @@ export default {
         userName: '',
         password: '',
         serviceName: '',
-        dbSchema:'',
+        dbSchema: '',
         tableSpace: '',
         sortCode: 0,
-        enabledMark: 1
+        enabledMark: 1,
+        oracleExtend: false,
+        oracleLinkType: '',
+        oracleService: '',
+        oracleRole: ''
       },
       dataRule: {
         dbType: [

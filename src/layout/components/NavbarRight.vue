@@ -196,6 +196,14 @@ export default {
               }
             })
           }
+          //断开websocket连接
+          if (data.method == 'closeSocket') {
+            if (this.socket) {
+              this.socket.close()
+              this.socket = null
+              this.$store.commit('user/SET_SOCKET', this.socket)
+            }
+          }
           //接收对方发送的消息
           if (data.method == 'receiveMessage') {
             //判断是否打开窗口
