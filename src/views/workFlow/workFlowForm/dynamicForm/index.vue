@@ -43,6 +43,15 @@ export default {
             id: this.dataForm.id
           }
           this.$store.commit('generator/SET_DYNAMIC_MODEL_EXTRA', extra)
+          if (data.draftData) {
+            this.formData = data.draftData
+            this.fillFormData(this.formConf, this.formData)
+            this.$nextTick(() => {
+              this.loading = false
+              this.$emit('setPageLoad')
+            })
+            return
+          }
           if (data.type == 1) {
             getModelInfo(data.flowId, this.dataForm.id).then(res => {
               this.dataForm = res.data

@@ -270,6 +270,7 @@ export default {
         this.flowTaskInfo = res.data.flowTaskInfo
         data.fullName = this.flowTaskInfo.fullName
         data.type = this.flowTaskInfo.type
+        data.draftData = res.data.draftData || null
         if (data.formType == 1) {
           if (this.flowTaskInfo.formUrl) {
             this.currentView = (resolve) => require([`@/views/${this.flowTaskInfo.formUrl}`], resolve)
