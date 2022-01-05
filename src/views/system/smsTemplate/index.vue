@@ -33,8 +33,12 @@
           <el-table-column prop="company" label="短信厂家" width="100" />
           <el-table-column prop="templateId" label="模板编号" width="200" />
           <el-table-column prop="templateName" label="模板名称" show-overflow-tooltip min-width="150" />
-          <el-table-column prop="appId" label="应用编号" width="200" />
           <el-table-column prop="signContent" label="签名内容" show-overflow-tooltip />
+          <el-table-column prop="creatorUser" label="创建人" width="120" />
+          <el-table-column prop="creatorTime" label="创建时间" :formatter="jnpf.tableDateFormat"
+            width="120" />
+          <el-table-column prop="lastModifyTime" label="最后修改时间" :formatter="jnpf.tableDateFormat"
+            width="120" />
           <el-table-column prop="enabledMark" label="状态" width="70" align="center">
             <template slot-scope="scope">
               <el-tag :type="scope.row.enabledMark == 1 ? 'success' : 'danger'" disable-transitions>

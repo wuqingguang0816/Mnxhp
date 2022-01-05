@@ -35,6 +35,11 @@
           <el-table-column prop="noticeMethod" label="通知方式" width="250" />
           <el-table-column prop="title" label="消息标题" width="200" />
           <el-table-column prop="content" label="消息内容" show-overflow-tooltip />
+          <el-table-column prop="creatorUser" label="创建人" width="120" />
+          <el-table-column prop="creatorTime" label="创建时间" :formatter="jnpf.tableDateFormat"
+            width="120" />
+          <el-table-column prop="lastModifyTime" label="最后修改时间" :formatter="jnpf.tableDateFormat"
+            width="120" />
           <el-table-column prop="enabledMark" label="状态" width="70" align="center">
             <template slot-scope="scope">
               <el-tag :type="scope.row.enabledMark == 1 ? 'success' : 'danger'" disable-transitions>
