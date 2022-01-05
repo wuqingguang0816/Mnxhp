@@ -26,7 +26,7 @@
         <el-form @submit.native.prevent>
           <el-col :span="6">
             <el-form-item label="关键词">
-              <el-input v-model="params.keyword" placeholder="请输入关键词查询" clearable
+              <el-input v-model="listQuery.keyword" placeholder="请输入关键词查询" clearable
                 @keyup.enter.native="search()" />
             </el-form-item>
           </el-col>
@@ -96,7 +96,7 @@ export default {
         children: 'children',
         label: 'fullName'
       },
-      params: {
+      listQuery: {
         keyword: '',
         isTree: 0
       },
@@ -117,7 +117,7 @@ export default {
       this.getDictionaryList()
     },
     reset() {
-      this.params.keyword = ''
+      this.listQuery.keyword = ''
       this.getDictionaryList()
     },
     initData() {
@@ -126,7 +126,7 @@ export default {
         this.treeData = res.data.list
         this.$nextTick(() => {
           this.typeId = this.treeData[0].id
-          this.params.isTree = this.treeData[0].isTree
+          this.listQuery.isTree = this.treeData[0].isTree
           this.$refs.treeBox.setCurrentKey(this.typeId)
           this.treeLoading = false
           this.typeId && this.getDictionaryList()
@@ -137,7 +137,7 @@ export default {
     },
     getDictionaryList() {
       this.listLoading = true
-      getDictionaryDataList(this.typeId, this.params).then(res => {
+      getDictionaryDataList(this.typeId, this.listQuery).then(res => {
         this.tableData = res.data.list
         this.listLoading = false
       }).catch(() => {
@@ -154,7 +154,7 @@ export default {
     handleNodeClick(data) {
       if (this.typeId === data.id) return
       this.typeId = data.id
-      this.params.isTree = data.isTree
+      this.listQuery.isTree = data.isTree
       this.reset()
     },
     handleUpdateState(row) {
@@ -178,7 +178,7 @@ export default {
     addOrUpdateHandle(id) {
       this.formVisible = true
       this.$nextTick(() => {
-        this.$refs.Form.init(id, this.typeId, this.params.isTree)
+        this.$refs.Form.init(id, this.typeId, this.listQuery.isTree)
       })
     },
     handleDel(id) {

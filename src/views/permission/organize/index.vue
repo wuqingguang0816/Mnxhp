@@ -5,8 +5,8 @@
         <el-form @submit.native.prevent>
           <el-col :span="6">
             <el-form-item :label="$t('common.keyWord')">
-              <el-input v-model="params.keyword" :placeholder="$t('common.enterKeyword')" clearable
-                @keyup.enter.native="search()" />
+              <el-input v-model="listQuery.keyword" :placeholder="$t('common.enterKeyword')"
+                clearable @keyup.enter.native="search()" />
             </el-form-item>
           </el-col>
           <el-col :span="6">
@@ -76,7 +76,7 @@ export default {
   components: { Form, GradeForm },
   data() {
     return {
-      params: {
+      listQuery: {
         keyword: ''
       },
       treeList: [],
@@ -92,7 +92,7 @@ export default {
   methods: {
     initData() {
       this.loading = true
-      getOrganizeList(this.params).then(res => {
+      getOrganizeList(this.listQuery).then(res => {
         this.treeList = res.data.list
         this.listLoading = false
         this.btnLoading = false
@@ -105,7 +105,7 @@ export default {
       this.initData()
     },
     reset() {
-      this.params.keyword = ''
+      this.listQuery.keyword = ''
       this.initData()
     },
     addOrUpdateHandle(id) {

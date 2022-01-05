@@ -16,7 +16,7 @@
         <el-form @submit.native.prevent>
           <el-col :span="6">
             <el-form-item label="关键词">
-              <el-input v-model="params.keyword" placeholder="请输入关键词查询" clearable
+              <el-input v-model="listQuery.keyword" placeholder="请输入关键词查询" clearable
                 @keyup.enter.native="search()" />
             </el-form-item>
           </el-col>
@@ -95,8 +95,8 @@
             </template>
           </el-table-column>
         </JNPF-table>
-        <pagination :total="total" :page.sync="params.currentPage" :limit.sync="params.pageSize"
-          @pagination="getList" />
+        <pagination :total="total" :page.sync="listQuery.currentPage"
+          :limit.sync="listQuery.pageSize" @pagination="getList" />
       </div>
     </div>
     <Form v-if="formVisible" ref="Form" @close="colseForm" />
@@ -124,7 +124,7 @@ export default {
         children: 'children',
         label: 'fullName'
       },
-      params: {
+      listQuery: {
         keyword: '',
         currentPage: 1,
         pageSize: 20,
@@ -152,8 +152,8 @@ export default {
         this.treeData = res.data.list
         if (!this.treeData.length) return this.treeLoading = false
         this.$nextTick(() => {
-          this.params.categoryId = this.treeData[0].id
-          this.$refs.treeBox.setCurrentKey(this.params.categoryId)
+          this.listQuery.categoryId = this.treeData[0].id
+          this.$refs.treeBox.setCurrentKey(this.listQuery.categoryId)
           this.treeLoading = false
           this.getList()
         })
@@ -163,7 +163,7 @@ export default {
     },
     getList() {
       this.listLoading = true
-      getDataInterfaceList(this.params).then(res => {
+      getDataInterfaceList(this.listQuery).then(res => {
         this.tableData = res.data.list
         this.total = res.data.pagination.total
         this.listLoading = false
@@ -197,14 +197,14 @@ export default {
       }).catch(() => { })
     },
     handleNodeClick(data) {
-      if (this.params.categoryId === data.id) return
-      this.params.categoryId = data.id
+      if (this.listQuery.categoryId === data.id) return
+      this.listQuery.categoryId = data.id
       this.reset()
     },
     addOrUpdateHandle(id) {
       this.formVisible = true
       this.$nextTick(() => {
-        this.$refs.Form.init(id, this.params.categoryId)
+        this.$refs.Form.init(id, this.listQuery.categoryId)
       })
     },
     handleDel(id) {
@@ -234,13 +234,13 @@ export default {
       }
     },
     search() {
-      this.params.currentPage = 1
-      this.params.pageSize = 20
-      this.params.sort = 'desc'
+      this.listQuery.currentPage = 1
+      this.listQuery.pageSize = 20
+      this.listQuery.sort = 'desc'
       this.getList()
     },
     reset() {
-      this.params.keyword = ''
+      this.listQuery.keyword = ''
       this.search()
     },
     colseForm(isRefresh) {

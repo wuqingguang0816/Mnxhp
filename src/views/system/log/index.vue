@@ -5,7 +5,7 @@
         <el-form @submit.native.prevent>
           <el-col :span="6">
             <el-form-item label="关键词">
-              <el-input v-model="params.keyword" placeholder="请输入关键词查询" clearable
+              <el-input v-model="listQuery.keyword" placeholder="请输入关键词查询" clearable
                 @keyup.enter.native="search()" />
             </el-form-item>
           </el-col>
@@ -81,8 +81,8 @@
               </el-table-column>
             </JNPF-table>
           </el-tab-pane>
-          <pagination :total="total" :page.sync="params.currentPage" :limit.sync="params.pageSize"
-            @pagination="initData" />
+          <pagination :total="total" :page.sync="listQuery.currentPage"
+            :limit.sync="listQuery.pageSize" @pagination="initData" />
         </el-tabs>
       </div>
     </div>
@@ -108,7 +108,7 @@ export default {
       requestLogData: [],
       multipleSelection: [],
       total: 0,
-      params: {
+      listQuery: {
         keyword: '',
         startTime: '',
         endTime: '',
@@ -152,7 +152,7 @@ export default {
     initData() {
       const activeId = this.activeName
       this.listLoading = true
-      getLogList(activeId, this.params).then(res => {
+      getLogList(activeId, this.listQuery).then(res => {
         if (activeId === '1') this.loginLogData = res.data.list
         if (activeId === '5') this.requestLogData = res.data.list
         if (activeId === '4') this.errorLogData = res.data.list
@@ -204,25 +204,25 @@ export default {
     },
     search() {
       if (this.pickerVal && this.pickerVal.length) {
-        this.params.startTime = this.pickerVal[0]
-        this.params.endTime = this.pickerVal[1]
+        this.listQuery.startTime = this.pickerVal[0]
+        this.listQuery.endTime = this.pickerVal[1]
       } else {
-        this.params.startTime = ''
-        this.params.endTime = ''
+        this.listQuery.startTime = ''
+        this.listQuery.endTime = ''
       }
-      this.params.currentPage = 1
-      this.params.pageSize = 20
-      this.params.sort = 'desc'
+      this.listQuery.currentPage = 1
+      this.listQuery.pageSize = 20
+      this.listQuery.sort = 'desc'
       this.initData()
     },
     reset() {
       this.pickerVal = []
-      this.params.keyword = ''
-      this.params.startTime = ''
-      this.params.endTime = ''
-      this.params.currentPage = 1
-      this.params.pageSize = 20
-      this.params.sort = 'desc'
+      this.listQuery.keyword = ''
+      this.listQuery.startTime = ''
+      this.listQuery.endTime = ''
+      this.listQuery.currentPage = 1
+      this.listQuery.pageSize = 20
+      this.listQuery.sort = 'desc'
       this.initData()
     }
   }

@@ -59,7 +59,7 @@ export default {
       formVisible: false,
       batchFormVisible: false,
       dialogTitle: '',
-      params: {
+      listQuery: {
         keyword: ''
       },
       moduleId: '',
@@ -75,13 +75,13 @@ export default {
       this.moduleId = moduleId
       this.dialogTitle = `表单权限 - ${fullName}`
       this.$nextTick(() => {
-        this.params.keyword = ''
+        this.listQuery.keyword = ''
         this.getList()
       })
     },
     getList() {
       this.listLoading = true
-      getFormAuthorizeList(this.moduleId, this.params).then(res => {
+      getFormAuthorizeList(this.moduleId, this.listQuery).then(res => {
         this.treeList = res.data.list
         this.listLoading = false
         this.btnLoading = false

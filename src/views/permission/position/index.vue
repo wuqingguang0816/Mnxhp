@@ -26,8 +26,8 @@
         <el-form @submit.native.prevent>
           <el-col :span="6">
             <el-form-item :label="$t('common.keyWord')">
-              <el-input v-model="params.keyword" :placeholder="$t('common.enterKeyword')" clearable
-                @keyup.enter.native="search()" />
+              <el-input v-model="listQuery.keyword" :placeholder="$t('common.enterKeyword')"
+                clearable @keyup.enter.native="search()" />
             </el-form-item>
           </el-col>
           <el-col :span="6">
@@ -78,8 +78,8 @@
             </template>
           </el-table-column>
         </JNPF-table>
-        <pagination :total="total" :page.sync="params.currentPage" :limit.sync="params.pageSize"
-          @pagination="initData" />
+        <pagination :total="total" :page.sync="listQuery.currentPage"
+          :limit.sync="listQuery.pageSize" @pagination="initData" />
       </div>
     </div>
     <Form v-if="formVisible" ref="Form" @refreshDataList="initData" />
@@ -108,7 +108,7 @@ export default {
       authorizeFormVisible: false,
       userRelationListVisible: false,
       type: '',
-      params: {
+      listQuery: {
         organizeId: '',
         keyword: '',
         currentPage: 1,
@@ -147,7 +147,7 @@ export default {
     },
     initData() {
       this.listLoading = true
-      getPositionList(this.params).then(res => {
+      getPositionList(this.listQuery).then(res => {
         this.tableData = res.data.list
         this.total = res.data.pagination.total
         this.listLoading = false
@@ -156,27 +156,27 @@ export default {
       })
     },
     search() {
-      this.params = {
-        ...this.params,
+      this.listQuery = {
+        ...this.listQuery,
         currentPage: 1,
         pageSize: 20
       }
       this.initData()
     },
     reset() {
-      this.params.keyword = ''
+      this.listQuery.keyword = ''
       this.search()
     },
     handleNodeClick(data) {
-      if (this.params.organizeId === data.id) return
-      this.params.organizeId = data.id
+      if (this.listQuery.organizeId === data.id) return
+      this.listQuery.organizeId = data.id
       this.type = data.type
       this.reset()
     },
     addOrUpdateHandle(id) {
       this.formVisible = true
       this.$nextTick(() => {
-        this.$refs.Form.init(id, this.type === 'department' ? this.params.organizeId : '')
+        this.$refs.Form.init(id, this.type === 'department' ? this.listQuery.organizeId : '')
       })
     },
     removeUserRelationList(isRefresh) {

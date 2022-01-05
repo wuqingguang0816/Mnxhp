@@ -5,8 +5,8 @@
         <el-form @submit.native.prevent>
           <el-col :span="6">
             <el-form-item :label="$t('common.keyWord')">
-              <el-input v-model="params.keyword" :placeholder="$t('common.enterKeyword')" clearable
-                @change="initData()" />
+              <el-input v-model="listQuery.keyword" :placeholder="$t('common.enterKeyword')"
+                clearable @change="initData()" />
             </el-form-item>
           </el-col>
           <el-col :span="6">
@@ -67,7 +67,7 @@ export default {
       refreshLoading: false,
       listLoading: true,
       multipleSelection: [],
-      params: {
+      listQuery: {
         keyword: ''
       }
     }
@@ -77,7 +77,7 @@ export default {
   },
   methods: {
     reset() {
-      this.params.keyword = ''
+      this.listQuery.keyword = ''
       this.initData()
     },
     initData() {
@@ -86,7 +86,7 @@ export default {
         ...this.listQuery,
         keyword: this.keyword
       }
-      getOnlineUser(this.params).then(res => {
+      getOnlineUser(this.listQuery).then(res => {
         this.tableDataList = res.data
         this.listLoading = false
         this.refreshLoading = false
