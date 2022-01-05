@@ -53,7 +53,6 @@
               <el-radio label="2">修改</el-radio>
               <el-radio label="3">查询</el-radio>
               <el-radio label="4">删除</el-radio>
-              <el-radio label="5">存储</el-radio>
             </el-radio-group>
           </el-form-item>
           <el-form-item label="类型" prop="requestMethod" v-if="dataForm.dataType===3">
