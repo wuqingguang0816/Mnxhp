@@ -1,9 +1,9 @@
 @font-face {
   font-family: "icon-ym";
   /* Project id 2011706 */
-  src: url('iconfont.woff2?t=1640335254750') format('woff2'),
-    url('iconfont.woff?t=1640335254750') format('woff'),
-    url('iconfont.ttf?t=1640335254750') format('truetype');
+  src: url('iconfont.woff2?t=1640846808546') format('woff2'),
+    url('iconfont.woff?t=1640846808546') format('woff'),
+    url('iconfont.ttf?t=1640846808546') format('truetype');
 }
 
 .icon-ym {
@@ -12,6 +12,26 @@
   font-style: normal;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-ym-report-icon-page-preview:before {
+  content: "\e668";
+}
+
+.icon-ym-report-icon-doughnut:before {
+  content: "\e66e";
+}
+
+.icon-ym-report-icon-pie:before {
+  content: "\e64d";
+}
+
+.icon-ym-report-icon-polar-plot:before {
+  content: "\e650";
+}
+
+.icon-ym-report-icon-preview:before {
+  content: "\e655";
 }
 
 .icon-ym-h5:before {
@@ -154,20 +174,12 @@
   content: "\e64c";
 }
 
-.icon-ym-report-icon-doughnut:before {
-  content: "\e64d";
-}
-
 .icon-ym-report-icon-preview-pagePre:before {
   content: "\e64e";
 }
 
 .icon-ym-report-icon-border-left:before {
   content: "\e64f";
-}
-
-.icon-ym-report-icon-pie:before {
-  content: "\e650";
 }
 
 .icon-ym-report-icon-font:before {
@@ -180,10 +192,6 @@
 
 .icon-ym-report-icon-preview-pageIndex:before {
   content: "\e654";
-}
-
-.icon-ym-report-icon-preview:before {
-  content: "\e655";
 }
 
 .icon-ym-report-icon-background-color:before {
@@ -234,10 +242,6 @@
   content: "\e667";
 }
 
-.icon-ym-report-icon-polar-plot:before {
-  content: "\e668";
-}
-
 .icon-ym-report-icon-preview-excel-paging:before {
   content: "\e669";
 }
@@ -256,10 +260,6 @@
 
 .icon-ym-report-icon-picture:before {
   content: "\e66d";
-}
-
-.icon-ym-report-icon-page-preview:before {
-  content: "\e66e";
 }
 
 .icon-ym-generator-button:before {
