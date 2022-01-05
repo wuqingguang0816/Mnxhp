@@ -265,7 +265,7 @@ export default {
       }).catch(() => { this.loading = false })
     },
     getBeforeInfo(data) {
-      FlowBeforeInfo(data.id, { taskNodeId: data.taskNodeId }).then(res => {
+      FlowBeforeInfo(data.id, { taskNodeId: data.taskNodeId, taskOperatorId: data.taskId }).then(res => {
         this.flowFormInfo = res.data.flowFormInfo
         this.flowTaskInfo = res.data.flowTaskInfo
         data.fullName = this.flowTaskInfo.fullName
@@ -386,6 +386,7 @@ export default {
     },
     submitOrSave() {
       this.formData.status = this.eventType === 'submit' ? 0 : 1
+      this.formData.flowId = this.setting.flowId
       if (this.eventType === 'save') return this.handleRequest()
       this.candidateLoading = true
       Candidates(0, { formData: this.formData }).then(res => {
