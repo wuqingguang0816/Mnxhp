@@ -149,7 +149,7 @@
                   <el-button type="text" @click="addOrUpdateHandle(scope.row)"
                     icon="el-icon-edit-outline"></el-button>
                   <el-button type="text" class="JNPF-table-delBtn" icon="el-icon-delete"
-                    @click="removeParameter(scope.row.$index)"></el-button>
+                    @click="removeParameter(scope.$index)"></el-button>
                 </template>
               </el-table-column>
             </el-table>
@@ -217,7 +217,7 @@
                   <el-button type="text" @click="addOrUpdateHandle(scope.row)"
                     icon="el-icon-edit-outline"></el-button>
                   <el-button type="text" class="JNPF-table-delBtn" icon="el-icon-delete"
-                    @click="removeParameter(scope.row.$index)"></el-button>
+                    @click="removeParameter(scope.$index)"></el-button>
                 </template>
               </el-table-column>
             </el-table>
