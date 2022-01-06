@@ -338,15 +338,18 @@ export default {
       this.formConfCopy = deepClone(this.formConf)
       this.$refs[this.formConf.formRef].resetFields()
       Object.keys(this.tableRefs).forEach(vModel => {
-        this.$refs[vModel].$children[0].resetTable()
+        this.$refs[vModel] && this.$refs[vModel].$children && this.$refs[vModel].$children[0].resetTable()
       })
     },
     checkTableData() {
       let valid = true
       Object.keys(this.tableRefs).forEach(vModel => {
-        const res = this.$refs[vModel].$children[0].submit()  // 返回false或表单数据
-        res ? (this[this.formConf.formModel][vModel] = res) : (valid = false)
+        if (this.$refs[vModel] && this.$refs[vModel].$children) {
+          const res = this.$refs[vModel].$children[0].submit()  // 返回false或表单数据
+          res ? (this[this.formConf.formModel][vModel] = res) : (valid = false)
+        }
       })
+      console.log(valid);
       return valid
     },
     request(url, method, data) {
