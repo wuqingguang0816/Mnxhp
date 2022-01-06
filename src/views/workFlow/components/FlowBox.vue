@@ -332,6 +332,7 @@ export default {
     },
     eventReciver(formData, eventType) {
       this.formData = formData
+      this.formData.flowId = this.setting.flowId
       this.eventType = eventType
       if (eventType === 'save' || eventType === 'submit') {
         return this.submitOrSave()
@@ -387,7 +388,6 @@ export default {
     },
     submitOrSave() {
       this.formData.status = this.eventType === 'submit' ? 0 : 1
-      this.formData.flowId = this.setting.flowId
       if (this.eventType === 'save') return this.handleRequest()
       this.candidateLoading = true
       Candidates(0, { formData: this.formData }).then(res => {
