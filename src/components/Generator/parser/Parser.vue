@@ -349,7 +349,6 @@ export default {
           res ? (this[this.formConf.formModel][vModel] = res) : (valid = false)
         }
       })
-      console.log(valid);
       return valid
     },
     request(url, method, data) {
