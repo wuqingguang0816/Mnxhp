@@ -31,10 +31,9 @@
         </div>
         <JNPF-table v-loading="listLoading" :data="list">
           <el-table-column prop="category" label="消息类型" width="100" />
-          <el-table-column prop="fullName" label="模板名称" show-overflow-tooltip width="200" />
+          <el-table-column prop="fullName" label="模板名称" show-overflow-tooltip min-width="200" />
           <el-table-column prop="noticeMethod" label="通知方式" width="250" />
           <el-table-column prop="title" label="消息标题" width="200" />
-          <el-table-column prop="content" label="消息内容" show-overflow-tooltip />
           <el-table-column prop="creatorUser" label="创建人" width="120" />
           <el-table-column prop="creatorTime" label="创建时间" :formatter="jnpf.tableDateFormat"
             width="120" />
