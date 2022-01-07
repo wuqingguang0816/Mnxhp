@@ -23,9 +23,6 @@
             <el-form-item label="模板名称" prop="fullName">
               <el-input v-model="dataForm.fullName" placeholder="模板名称"></el-input>
             </el-form-item>
-            <el-form-item label="消息标题" prop="title">
-              <el-input v-model="dataForm.title" placeholder="消息标题"></el-input>
-            </el-form-item>
             <el-form-item label="通知方式">
               <el-checkbox v-model="dataForm.isStationLetter" :true-label="1" :false-label="0">站内信
               </el-checkbox>
@@ -53,6 +50,9 @@
                   :closable="tag.closable" @close="onTagClose(index)" @click="addContent(tag)">
                   {{tag.fieldName?tag.field+'('+tag.fieldName+')':tag.field}}</el-tag>
               </div>
+            </el-form-item>
+            <el-form-item label="消息标题" prop="title">
+              <el-input v-model="dataForm.title" placeholder="消息标题"></el-input>
             </el-form-item>
             <el-form-item label="消息内容" prop="content">
               <el-input v-model="dataForm.content" placeholder="消息内容" type="textarea" :rows="3" />
