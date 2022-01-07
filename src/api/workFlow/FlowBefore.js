@@ -80,10 +80,18 @@ export function getRecordList(id, category) {
     data: { category }
   })
 }
-// 审批汇总
+// 判断是否有候选人
 export function Candidates(id, data) {
   return request({
     url: `api/workflow/Engine/FlowBefore/Candidates/${id}`,
+    method: 'post',
+    data
+  })
+}
+// 获取候选人列表（分页）
+export function CandidateUser(id, data) {
+  return request({
+    url: `api/workflow/Engine/FlowBefore/CandidateUser/${id}`,
     method: 'post',
     data
   })
