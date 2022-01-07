@@ -201,7 +201,7 @@
                   <template slot-scope="scope">
                     <el-select v-model="scope.row.relationField" placeholder="请选择表单字段" clearable
                       filterable>
-                      <el-option v-for="item in usedFormItems" :key="item.__vModel__"
+                      <el-option v-for="item in funcOptions" :key="item.__vModel__"
                         :label="item.__config__.label?item.__vModel__+'('+item.__config__.label+')':item.__vModel__"
                         :value="item.__vModel__">
                       </el-option>
@@ -479,15 +479,27 @@
                   <template slot="prepend">GET</template>
                 </el-input>
               </el-form-item>
-              <el-form-item
-                v-if="approverForm.assigneeType === 6 ||approverForm.assigneeType === 7">
-                <org-select ref="approver-role-org" type="role" v-model="approverForm.approverRole"
-                  title="添加角色" class="mb-10" buttonType="button" />
+              <el-form-item v-if="approverForm.assigneeType === 6">
+                <org-select ref="approver-role-org" type="role" title="添加角色" buttonType="button"
+                  v-model="approverForm.approverRole" class="mb-10" />
+                <org-select ref="approver-position-org" buttonType="button"
+                  v-model="approverForm.approverPos" title="添加岗位" type="position" class="mb-10" />
+                <org-select ref="approver-user-org" title="添加用户" buttonType="button"
+                  v-model="approverForm.approvers" />
+              </el-form-item>
+              <el-form-item v-if="approverForm.assigneeType === 7">
+                <el-radio-group v-model="approverForm.userType" @change="onUserTypeChange">
+                  <el-radio label="role">指定角色</el-radio>
+                  <el-radio label="position">指定岗位</el-radio>
+                  <el-radio label="user">指定用户</el-radio>
+                </el-radio-group>
+                <org-select ref="approver-role-org" type="role" title="添加角色" buttonType="button"
+                  v-model="approverForm.approverRole" v-if="approverForm.userType==='role'" />
                 <org-select ref="approver-position-org" buttonType="button"
                   v-model="approverForm.approverPos" title="添加岗位" type="position"
-                  @change="onOrgChange" class="mb-10" />
-                <org-select ref="approver-user-org" buttonType="button"
-                  v-model="approverForm.approvers" title="添加用户" @change="onOrgChange" />
+                  v-if="approverForm.userType==='position'" />
+                <org-select ref="approver-user-org" title="添加用户" buttonType="button"
+                  v-model="approverForm.approvers" v-if="approverForm.userType==='user'" />
               </el-form-item>
               <el-form-item label="审批方式">
                 <el-radio v-model="approverForm.counterSign" :label="0">
@@ -519,10 +531,9 @@
                   buttonType="button" />
                 <org-select ref="approver-copy-position-org" buttonType="button"
                   v-model="approverForm.circulatePosition" title="添加岗位" type="position"
-                  @change="onOrgChange" class="mb-10" />
-                <org-select ref="approver-copy-user-org" buttonType="button"
-                  v-model="approverForm.circulateUser" title="添加用户" @change="onOrgChange"
                   class="mb-10" />
+                <org-select ref="approver-copy-user-org" buttonType="button"
+                  v-model="approverForm.circulateUser" title="添加用户" class="mb-10" />
                 <el-checkbox v-model="approverForm.isCustomCopy">允许自选抄送人</el-checkbox>
               </el-form-item>
             </el-form>
@@ -765,7 +776,7 @@
                     <template slot-scope="scope">
                       <el-select v-model="scope.row.relationField" placeholder="请选择表单字段" clearable
                         filterable>
-                        <el-option v-for="item in usedFormItems" :key="item.__vModel__"
+                        <el-option v-for="item in funcOptions" :key="item.__vModel__"
                           :label="item.__config__.label?item.__vModel__+'('+item.__config__.label+')':item.__vModel__"
                           :value="item.__vModel__">
                         </el-option>
@@ -796,7 +807,7 @@
                     <template slot-scope="scope">
                       <el-select v-model="scope.row.relationField" placeholder="请选择表单字段" clearable
                         filterable>
-                        <el-option v-for="item in usedFormItems" :key="item.__vModel__"
+                        <el-option v-for="item in funcOptions" :key="item.__vModel__"
                           :label="item.__config__.label?item.__vModel__+'('+item.__config__.label+')':item.__vModel__"
                           :value="item.__vModel__">
                         </el-option>
@@ -827,7 +838,7 @@
                     <template slot-scope="scope">
                       <el-select v-model="scope.row.relationField" placeholder="请选择表单字段" clearable
                         filterable>
-                        <el-option v-for="item in usedFormItems" :key="item.__vModel__"
+                        <el-option v-for="item in funcOptions" :key="item.__vModel__"
                           :label="item.__config__.label?item.__vModel__+'('+item.__config__.label+')':item.__vModel__"
                           :value="item.__vModel__">
                         </el-option>
@@ -858,7 +869,7 @@
                     <template slot-scope="scope">
                       <el-select v-model="scope.row.relationField" placeholder="请选择表单字段" clearable
                         filterable>
-                        <el-option v-for="item in usedFormItems" :key="item.__vModel__"
+                        <el-option v-for="item in funcOptions" :key="item.__vModel__"
                           :label="item.__config__.label?item.__vModel__+'('+item.__config__.label+')':item.__vModel__"
                           :value="item.__vModel__">
                         </el-option>
@@ -974,6 +985,7 @@ const defaultApproverForm = {
   approverPos: [], // 审批岗位集合
   approverRole: [], // 审批角色集合
   assigneeType: 6, // 指定审批人
+  userType: 'role', //role,position,user
   formOperates: [], // 表单权限集合
   circulateRole: [],   // 抄送角色集合
   circulatePosition: [],   // 抄送岗位集合
@@ -1184,23 +1196,30 @@ export default {
       let options = [{
         __config__: {
           label: '流程ID',
-          required: false
+          required: true
         },
-        __vModel__: 'taskId',
+        __vModel__: 'jnpfTaskId',
       },
       {
         __config__: {
           label: '节点ID',
-          required: false
+          required: true
         },
-        __vModel__: 'taskNodeId',
+        __vModel__: 'jnpfTaskNodeId',
+      },
+      {
+        __config__: {
+          label: '当前操作用户',
+          required: true
+        },
+        __vModel__: 'jnpfFlowOperatorId',
       },
       ...this.usedFormItems
       ]
       return options
     },
     funcRequiredOptions() {
-      let options = this.usedFormItems.filter(o => o.__config__ && o.__config__.required)
+      let options = this.funcOptions.filter(o => o.__config__ && o.__config__.required)
       return options
     },
   },
@@ -1216,8 +1235,13 @@ export default {
       this.approverForm.approverPos = []
       this.approverForm.approverRole = []
     },
-    onOrgChange(data) {
-      // console.log(data)
+    onUserTypeChange() {
+      this.approverForm.approvers = []
+      this.approverForm.approverPos = []
+      this.approverForm.approverRole = []
+    },
+    onOrgChange(data, key) {
+
     },
     timeTangeLabel(item) {
       const index = ['fc-time-duration', 'fc-date-duration'].findIndex(t => t === item.tag)

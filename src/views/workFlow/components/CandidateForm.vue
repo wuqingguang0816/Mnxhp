@@ -5,11 +5,8 @@
     <el-form label-width="130px" ref="candidateForm" :model="candidateForm">
       <el-form-item :label="item.label" :prop="'candidateList.' + i + '.value'"
         v-for="(item,i) in candidateForm.candidateList" :key="i" :rules="item.rules">
-        <el-select v-model="item.value" multiple :placeholder="'请选择'+item.label" filterable>
-          <el-option v-for="option in item.candidateList" :key="option.userId"
-            :label="option.userName" :value="option.userId">
-          </el-option>
-        </el-select>
+        <candidate-user-select v-model="item.value" multiple :placeholder="'请选择'+item.label"
+          :taskId="taskId" :formData="formData" :nodeId="item.nodeId" />
       </el-form-item>
     </el-form>
     <span slot="footer" class="dialog-footer">
@@ -21,8 +18,10 @@
 </template>
 
 <script>
+import CandidateUserSelect from './CandidateUserSelect'
 export default {
-  props: ['candidateList'],
+  components: { CandidateUserSelect },
+  props: ['candidateList', 'taskId', 'formData'],
   data() {
     return {
       candidateForm: {
@@ -36,7 +35,7 @@ export default {
         ...o,
         label: o.nodeName + '审批人',
         value: [],
-        rules: [{ required: true, message: `${o.nodeName}审批人不能为空`, trigger: ['change', 'blur'], type: 'array' }]
+        rules: [{ required: true, message: `${o.nodeName}审批人不能为空`, trigger: 'click' }]
       }))
       this.$nextTick(() => {
         this.$refs['candidateForm'].resetFields()
@@ -47,7 +46,7 @@ export default {
         if (valid) {
           let candidateList = {}
           for (let i = 0; i < this.candidateForm.candidateList.length; i++) {
-            candidateList[this.candidateForm.candidateList[i].nodeId] = this.candidateForm.candidateList[i].value
+            candidateList[this.candidateForm.candidateList[i].nodeId] = this.candidateForm.candidateList[i].value.split(',')
           }
           this.$emit('submitCandidate', candidateList)
         }

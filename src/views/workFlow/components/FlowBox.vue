@@ -73,11 +73,8 @@
           <template v-if="eventType==='audit'">
             <el-form-item :label="item.label" :prop="'candidateList.' + i + '.value'"
               v-for="(item,i) in candidateForm.candidateList" :key="i" :rules="item.rules">
-              <el-select v-model="item.value" multiple :placeholder="'请选择'+item.label" filterable>
-                <el-option v-for="option in item.candidateList" :key="option.userId"
-                  :label="option.userName" :value="option.userId">
-                </el-option>
-              </el-select>
+              <candidate-user-select v-model="item.value" multiple :placeholder="'请选择'+item.label"
+                :taskId="setting.taskId" :formData="formData" :nodeId="item.nodeId" />
             </el-form-item>
           </template>
           <el-form-item label="加签人员" v-if="eventType==='audit'&& properties.hasFreeApprover">
@@ -135,26 +132,27 @@
       <UserBox v-if="userBoxVisible" ref="userBox" :title="userBoxTitle" @submit="handleTransfer" />
       <print-browse :visible.sync="printBrowseVisible" :id="properties.printId" :formId="setting.id"
         :fullName="setting.fullName" />
-      <candidate-form :visible.sync="candidateVisible" :candidateList="this.candidateList"
-        @submitCandidate="submitCandidate" />
+      <candidate-form :visible.sync="candidateVisible" :candidateList="candidateList"
+        :taskId="setting.taskId" :formData="formData" @submitCandidate="submitCandidate" />
     </div>
   </transition>
 </template>
 
 <script>
 import { FlowEngineInfo } from '@/api/workFlow/FlowEngine'
-import { FlowBeforeInfo, Audit, Reject, Transfer, Recall, Cancel, Assign, SaveAudit, Candidates } from '@/api/workFlow/FlowBefore'
+import { FlowBeforeInfo, Audit, Reject, Transfer, Recall, Cancel, Assign, SaveAudit, Candidates, CandidateUser } from '@/api/workFlow/FlowBefore'
 import { Revoke, Press } from '@/api/workFlow/FlowLaunch'
 import { Create, Update, DynamicCreate, DynamicUpdate } from '@/api/workFlow/workFlowForm'
 import recordList from './RecordList'
 import Comment from './Comment'
 import RecordSummary from './RecordSummary'
 import CandidateForm from './CandidateForm'
+import CandidateUserSelect from './CandidateUserSelect'
 import Process from '@/components/Process/Preview'
 import PrintBrowse from '@/components/PrintBrowse'
 import vueEsign from 'vue-esign'
 export default {
-  components: { recordList, Process, vueEsign, PrintBrowse, Comment, RecordSummary, CandidateForm },
+  components: { recordList, Process, vueEsign, PrintBrowse, Comment, RecordSummary, CandidateForm, CandidateUserSelect },
   data() {
     return {
       userBoxVisible: false,
@@ -355,7 +353,7 @@ export default {
               ...o,
               label: o.nodeName + '审批人',
               value: [],
-              rules: [{ required: true, message: `${o.nodeName}审批人不能为空`, trigger: ['change', 'blur'], type: 'array' }]
+              rules: [{ required: true, message: `${o.nodeName}审批人不能为空`, trigger: 'click' }]
             }))
             this.$nextTick(() => {
               this.$refs['candidateForm'].resetFields()
@@ -570,7 +568,7 @@ export default {
           if (this.candidateForm.candidateList.length) {
             let candidateList = {}
             for (let i = 0; i < this.candidateForm.candidateList.length; i++) {
-              candidateList[this.candidateForm.candidateList[i].nodeId] = this.candidateForm.candidateList[i].value
+              candidateList[this.candidateForm.candidateList[i].nodeId] = this.candidateForm.candidateList[i].value.split(',')
             }
             query.candidateList = candidateList
           }
