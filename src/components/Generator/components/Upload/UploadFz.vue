@@ -16,6 +16,8 @@
           <a class="el-upload-list__item-name" @click="handleClick(file)">
             <i class="el-icon-document"></i>{{file.name}}
           </a>
+          <i class="el-icon-view" @click="handlePreview(file)"></i>
+          <i class="el-icon-download" @click="handleClick(file)"></i>
           <label class="el-upload-list__item-status-label">
             <i class="el-icon-upload-success el-icon-circle-check"></i>
           </label>
@@ -23,6 +25,7 @@
         </li>
       </transition-group>
     </template>
+    <Preview :visible.sync="previewVisible" :file="activeFile" />
   </div>
 </template>
 
@@ -33,8 +36,10 @@ const units = {
   GB: 1024 * 1024 * 1024
 }
 import { getDownloadUrl } from '@/api/common'
+import Preview from './Preview'
 export default {
   name: 'UploadFile',
+  components: { Preview },
   props: {
     value: {
       type: Array,
@@ -75,6 +80,8 @@ export default {
   data() {
     return {
       fileList: this.value,
+      previewVisible: false,
+      activeFile: {},
       uploadHeaders: { Authorization: this.$store.getters.token }
     }
   },
@@ -187,7 +194,36 @@ export default {
       getDownloadUrl(this.type, file.fileId).then(res => {
         if (res.data.url) window.location.href = this.define.comUrl + res.data.url
       })
+    },
+    handlePreview(file) {
+      this.activeFile = file
+      this.previewVisible = true
     }
   }
 }
 </script>
+<style lang="scss" scoped>
+.el-upload-list__item {
+  .el-upload-list__item-name {
+    margin-right: 70px;
+  }
+  .el-icon-download {
+    display: inline-block;
+    position: absolute;
+    top: 5px;
+    right: 25px;
+    cursor: pointer;
+    opacity: 0.75;
+    color: #606266;
+  }
+  .el-icon-view {
+    display: inline-block;
+    position: absolute;
+    top: 5px;
+    right: 45px;
+    cursor: pointer;
+    opacity: 0.75;
+    color: #606266;
+  }
+}
+</style>

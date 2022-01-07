@@ -7,3 +7,12 @@ export function getDownloadUrl(type, fileName) {
     method: 'get'
   })
 }
+
+// 预览文件
+export function PreviewFile(fileUrl) {
+  return request({
+    url: `/api/file/Uploader/Preview`,
+    method: 'get',
+    data: { fileUrl }
+  })
+}
