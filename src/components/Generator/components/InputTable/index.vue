@@ -55,6 +55,7 @@
             </template>
             <!-- 其他 -->
             <component v-else :is="head.__config__.tag" :rowIndex="scope.$index"
+              :tableVModel="config.__vModel__" :componentVModel="head.__vModel__"
               v-model="tableFormData[scope.$index][cindex].value"
               v-bind="getConfById(head.__config__.formId,scope.$index)" :formData="formData"
               @blur="onFormBlur(scope.$index, cindex, head.__config__.tag)"
@@ -259,7 +260,7 @@ export default {
       }
       data.required && (data.valid = this.checkData(data))
       data.regList && data.regList.length && (data.regValid = this.checkRegData(data))
-      if (['JNPF-Amount', 'el-input-number'].includes(tag)) { // 金额变动 更新数据 触发计算公式更新
+      if (['JNPF-Amount', 'el-input-number', 'calculate'].includes(tag)) { // 金额变动 更新数据 触发计算公式更新
         const newVal = this.tableFormData.map(row => row.reduce((p, c) => {
           let str = c.__vModel__
           if (c.__vModel__ && c.__vModel__.indexOf('_jnpfRelation_') >= 0) {
