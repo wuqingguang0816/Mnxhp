@@ -51,12 +51,6 @@
               :allow-half="item['allow-half']" :show-text="item['show-text']"
               :show-score="item['show-score']" disabled />
           </template>
-          <template v-else-if="item.__config__.jnpfKey==='switch'">
-            <el-switch v-model="item.__config__.defaultValue" :active-value="item['active-value']"
-              :active-color="item['active-color']" :active-text="item['active-text']"
-              :inactive-color="item['inactive-color']" :inactive-text="item['inactive-text']"
-              :inactive-value="item['inactive-value']" disabled />
-          </template>
           <template v-else-if="item.__config__.jnpfKey==='slider'">
             <div class="slider-box">
               <el-slider v-model="item.__config__.defaultValue" :range='item.range'
