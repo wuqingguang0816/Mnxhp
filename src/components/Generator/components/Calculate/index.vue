@@ -12,6 +12,8 @@ export default {
     "value",
     "formData",
     "expression",
+    "tableVModel",
+    "componentVModel",
     "rowIndex" // 计算公式放在表格中时， 需要获取在表格中的行位置
   ],
   name: 'calculate',
@@ -63,6 +65,11 @@ export default {
       this.innerValue = calcRPN(temp)
       if (isNaN(this.innerValue)) this.innerValue = 0
       this.$emit('input', this.innerValue)
+      if (this.rowIndex >= 0 && this.componentVModel && this.tableVModel) {
+        if (this.rootFormData[this.tableVModel][this.rowIndex][this.componentVModel] !== this.innerValue) {
+          this.$emit('change', this.innerValue)
+        }
+      }
     }
   },
   watch: {
