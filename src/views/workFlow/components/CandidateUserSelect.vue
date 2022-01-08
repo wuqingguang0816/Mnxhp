@@ -15,7 +15,7 @@
         <div class="transfer-pane">
           <div class="transfer-pane__tools">
             <el-input placeholder="请输入关键词查询" v-model="listQuery.keyword"
-              @keyup.enter.native="search" clearable>
+              @keyup.enter.native="search" clearable class="search-input">
               <el-button slot="append" icon="el-icon-search" @click="search"></el-button>
             </el-input>
           </div>
@@ -168,7 +168,7 @@ export default {
         formData: this.formData,
         nodeCode: this.nodeId
       }
-      CandidateUser(0, query).then((res) => {
+      CandidateUser(this.taskId || 0, query).then((res) => {
         if (res.data.list.length < this.listQuery.pageSize) {
           this.finish = true
         }

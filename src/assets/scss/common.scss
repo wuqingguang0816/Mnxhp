@@ -1929,9 +1929,19 @@ textarea.el-textarea__inner {
         display: block;
       }
 
+      .el-input__validateIcon {
+        display: none;
+      }
+
       .el-icon-arrow-down.clearable {
         display: none;
       }
+    }
+  }
+
+  .search-input {
+    .el-input__validateIcon {
+      display: none !important;
     }
   }
 }
