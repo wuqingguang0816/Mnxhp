@@ -156,9 +156,9 @@ export default {
       if (!node.isLeaf) return
       const nodePath = this.getNodePath(node)
       let currId = nodePath.map(o => o.id)
-      let currData = nodePath.map(o => o.fullName).join('/')
+      let currData = nodePath.map(o => o.fullName).join(' / ')
       if (this.multiple) {
-        const boo = this.selectedIds.some(o => o.join('/') === currId.join('/'))
+        const boo = this.selectedIds.some(o => o.join(' / ') === currId.join(' / '))
         if (boo) return
         this.selectedIds.push(currId)
         this.selectedData.push(currData)
@@ -180,7 +180,7 @@ export default {
       let selectedData = []
       for (let i = 0; i < this.selectedIds.length; i++) {
         let item = []
-        let selectedNames = this.selectedData[i].split('/')
+        let selectedNames = this.selectedData[i].split(' / ')
         for (let j = 0; j < this.selectedIds[i].length; j++) {
           item.push({
             id: this.selectedIds[i][j],
@@ -208,7 +208,7 @@ export default {
       this.selectedIds = this.multiple ? this.value : [this.value]
       GetAreaByIds(this.selectedIds).then(res => {
         if (!this.selectedData.length && !this.innerValue) {
-          this.selectedData = res.data.map(o => o.join('/'))
+          this.selectedData = res.data.map(o => o.join(' / '))
           this.innerValue = this.selectedData.join(',')
         }
       })
