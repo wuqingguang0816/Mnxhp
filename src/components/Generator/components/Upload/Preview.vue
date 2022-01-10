@@ -34,7 +34,7 @@ export default {
     },
     onOpen() {
       this.title = '文档预览 - ' + this.file.name
-      PreviewFile(this.file.name).then(res => {
+      PreviewFile(this.file.fileId).then(res => {
         if (res.data) {
           this.url = res.data
         } else {

@@ -1,18 +1,21 @@
 <template>
   <div class="UploadFile-container">
-    <el-upload :action="define.comUploadUrl+'/'+type" :headers="uploadHeaders" ref="elUpload"
-      :on-success="handleSuccess" :multiple="limit!==1" :show-file-list="false" :accept="accept"
-      :before-upload="beforeUpload" :on-exceed="handleExceed" :disabled="disabled" :limit="limit">
-      <el-button size="small" icon="el-icon-upload" :disabled="disabled">{{buttonText}}</el-button>
-      <div slot="tip" class="el-upload__tip" v-show="showTip">
-        只能上传不超过{{fileSize}}{{sizeUnit}}的{{acceptText}}文件
-      </div>
-    </el-upload>
+    <template v-if="!detailed">
+      <el-upload :action="define.comUploadUrl+'/'+type" :headers="uploadHeaders" ref="elUpload"
+        :on-success="handleSuccess" :multiple="limit!==1" :show-file-list="false" :accept="accept"
+        :before-upload="beforeUpload" :on-exceed="handleExceed" :disabled="disabled" :limit="limit">
+        <el-button size="small" icon="el-icon-upload" :disabled="disabled">{{buttonText}}
+        </el-button>
+        <div slot="tip" class="el-upload__tip" v-show="showTip">
+          只能上传不超过{{fileSize}}{{sizeUnit}}的{{acceptText}}文件
+        </div>
+      </el-upload>
+    </template>
     <template v-if="fileList.length">
       <transition-group class="el-upload-list el-upload-list el-upload-list--text" tag="ul"
         name="el-list">
         <li class="el-upload-list__item is-success" v-for="(file,index) in fileList"
-          :key="file.fileId">
+          :key="file.fileId" :class="{'el-upload-list__item_detail':detailed}">
           <a class="el-upload-list__item-name" @click="handleClick(file)">
             <i class="el-icon-document"></i>{{file.name}}
           </a>
@@ -54,6 +57,10 @@ export default {
       default: false
     },
     showTip: {
+      type: Boolean,
+      default: false
+    },
+    detailed: {
       type: Boolean,
       default: false
     },
@@ -204,6 +211,9 @@ export default {
 </script>
 <style lang="scss" scoped>
 .el-upload-list__item {
+  &.el-upload-list__item_detail:first-child {
+    margin-top: 5px !important;
+  }
   .el-upload-list__item-name {
     margin-right: 70px;
   }

@@ -29,12 +29,7 @@
           :label="item.__config__.showLabel ? item.__config__.label : '' "
           v-if="!item.__config__.noShow">
           <template v-if="item.__config__.jnpfKey==='uploadFz'">
-            <div class="dy-fileList">
-              <el-link :underline="false" class="dy-fileList-item"
-                v-for="(cItem,ci) in item.__config__.defaultValue" :key="ci"
-                @click="downloadFile(cItem)"><i class="el-icon-document"></i>{{cItem.name}}
-              </el-link>
-            </div>
+            <JNPFUploadFz v-model="item.__config__.defaultValue" detailed disabled />
           </template>
           <template v-else-if="item.__config__.jnpfKey==='uploadImg'">
             <el-image :src="define.comUrl+cItem.url" class="dy-img"
