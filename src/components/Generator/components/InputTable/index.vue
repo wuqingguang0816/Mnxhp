@@ -19,7 +19,7 @@
       <template v-for="(head, cindex) in tableData">
         <el-table-column :key="head.__config__.formId" :min-width="head['min-width']"
           :prop="head.__vModel__" :width="head.__config__.columnWidth"
-          v-if="!head.__config__.noShow" align="center">
+          v-if="!head.__config__.noShow">
           <template slot="header">
             <span style="color: #f56c6c;" v-if="head.__config__.required">*</span>
             {{ head.__config__['label'] }}
@@ -564,6 +564,7 @@ export default {
     td {
       padding: 2px 0;
       background: #fff !important;
+      vertical-align: top;
       .error-tip {
         font-size: 12px;
         padding-left: 6px;
