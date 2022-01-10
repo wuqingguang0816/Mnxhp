@@ -31,9 +31,6 @@
     <el-form-item label="能否清空">
       <el-switch v-model="activeData.clearable" />
     </el-form-item>
-    <el-form-item label="能否搜索">
-      <el-switch v-model="activeData.filterable" />
-    </el-form-item>
     <el-form-item label="能否多选">
       <el-switch v-model="activeData.multiple" @change="levelChange" />
     </el-form-item>
