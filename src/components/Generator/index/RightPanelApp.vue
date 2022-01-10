@@ -154,11 +154,11 @@
                     v-model="activeData.__config__.propsUrl" placeholder="请选择远端数据" lastLevel
                     lastLevelKey="categoryId" lastLevelValue="1" clearable />
                 </el-form-item>
-                <el-form-item label="值">
-                  <el-input v-model="activeData.__config__.props.value" placeholder="请输入值" />
+                <el-form-item label="存储字段">
+                  <el-input v-model="activeData.__config__.props.value" placeholder="请输入存储字段" />
                 </el-form-item>
-                <el-form-item label="标签">
-                  <el-input v-model="activeData.__config__.props.label" placeholder="请输入标签" />
+                <el-form-item label="显示字段">
+                  <el-input v-model="activeData.__config__.props.label" placeholder="请输入显示字段" />
                 </el-form-item>
               </template>
               <el-divider></el-divider>
@@ -202,14 +202,14 @@
                     v-model="activeData.__config__.propsUrl" placeholder="请选择远端数据" lastLevel
                     lastLevelKey="categoryId" lastLevelValue="1" clearable />
                 </el-form-item>
-                <el-form-item label="标签键名">
-                  <el-input v-model="activeData.props.props.label" placeholder="请输入标签键名" />
+                <el-form-item label="存储字段">
+                  <el-input v-model="activeData.props.props.value" placeholder="请输入存储字段" />
                 </el-form-item>
-                <el-form-item label="值键名">
-                  <el-input v-model="activeData.props.props.value" placeholder="请输入值键名" />
+                <el-form-item label="显示字段">
+                  <el-input v-model="activeData.props.props.label" placeholder="请输入显示字段" />
                 </el-form-item>
-                <el-form-item label="子级键名">
-                  <el-input v-model="activeData.props.props.children" placeholder="请输入子级键名" />
+                <el-form-item label="子级字段">
+                  <el-input v-model="activeData.props.props.children" placeholder="请输入子级字段" />
                 </el-form-item>
               </template>
               <el-divider></el-divider>
