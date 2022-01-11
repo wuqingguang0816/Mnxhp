@@ -141,9 +141,6 @@
                     v-for="(item,i) in barcodeFormatOptions" :key="i"></el-option>
                 </el-select>
               </el-form-item>
-              <el-form-item label="背景颜色">
-                <el-color-picker v-model="activeData.background"></el-color-picker>
-              </el-form-item>
               <el-form-item label="条码颜色">
                 <el-color-picker v-model="activeData.lineColor"></el-color-picker>
               </el-form-item>
@@ -184,9 +181,6 @@
               <el-form-item label="标题宽度">
                 <el-input-number v-model="activeData.__config__.labelWidth" placeholder="标题宽度"
                   :min="0" :precision="0" controls-position="right" />
-              </el-form-item>
-              <el-form-item label="背景颜色">
-                <el-color-picker v-model="activeData.colorLight"></el-color-picker>
               </el-form-item>
               <el-form-item label="实点颜色">
                 <el-color-picker v-model="activeData.colorDark"></el-color-picker>
