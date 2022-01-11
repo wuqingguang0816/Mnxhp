@@ -494,12 +494,14 @@
                   <el-radio label="user">指定用户</el-radio>
                 </el-radio-group>
                 <org-select ref="approver-role-org" type="role" title="添加角色" buttonType="button"
-                  v-model="approverForm.approverRole" v-if="approverForm.userType==='role'" />
+                  v-model="approverForm.approverRole" v-if="approverForm.userType==='role'"
+                  key="role7" />
                 <org-select ref="approver-position-org" buttonType="button"
                   v-model="approverForm.approverPos" title="添加岗位" type="position"
-                  v-if="approverForm.userType==='position'" />
+                  v-if="approverForm.userType==='position'" key="position7" />
                 <org-select ref="approver-user-org" title="添加用户" buttonType="button"
-                  v-model="approverForm.approvers" v-if="approverForm.userType==='user'" />
+                  v-model="approverForm.approvers" v-if="approverForm.userType==='user'"
+                  key="user7" />
               </el-form-item>
               <el-form-item label="审批方式">
                 <el-radio v-model="approverForm.counterSign" :label="0">
