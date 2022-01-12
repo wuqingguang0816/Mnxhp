@@ -3,7 +3,7 @@
     <parser :form-conf="formConf" @submit="sumbitForm" :key="key" ref="dynamicForm"
       v-if="!loading" />
     <candidate-form :visible.sync="candidateVisible" :candidateList="this.candidateList"
-      @submitCandidate="selfHandleRequest" />
+      @submitCandidate="selfHandleRequest" :formData="dataForm"  />
   </div>
 </template>
 <script>
