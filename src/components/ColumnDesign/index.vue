@@ -343,7 +343,6 @@ export default {
   created() {
     this.getDataInterfaceSelector()
     if (this.modelType == 4) {
-      this.columnBtnsOption = this.columnBtnsOption.filter(o => o.value != 'detail')
       this.typeList = this.typeList.filter(o => o.value != 3)
     }
     let list = []
