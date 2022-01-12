@@ -424,7 +424,7 @@ export default {
           if (item.__vModel__ && item.__vModel__ === prop) {
             switch (field) {
               case 'disabled':
-                item[field] = value
+                this.$set(item, field, value)
                 break;
               case 'options':
                 if (dyOptionsList.indexOf(item.__config__.jnpfKey) > -1) {
@@ -433,7 +433,7 @@ export default {
                 }
                 break;
               default:
-                item.__config__[field] = value
+                this.$set(item.__config__, field, value)
                 break;
             }
             item.__config__.renderKey = +new Date() + item.__vModel__
