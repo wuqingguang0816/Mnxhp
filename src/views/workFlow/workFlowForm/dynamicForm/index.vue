@@ -3,7 +3,7 @@
     <parser :form-conf="formConf" @submit="sumbitForm" :key="key" ref="dynamicForm"
       v-if="!loading" />
     <candidate-form :visible.sync="candidateVisible" :candidateList="this.candidateList"
-      @submitCandidate="selfHandleRequest" :formData="dataForm"  />
+      @submitCandidate="selfHandleRequest" :formData="dataForm" />
   </div>
 </template>
 <script>
@@ -136,6 +136,7 @@ export default {
     },
     selfSubmit() {
       this.dataForm.status = this.eventType === 'submit' ? 0 : 1
+      this.dataForm.flowId = this.setting.flowId
       if (this.eventType === 'save') return this.selfHandleRequest()
       this.$emit('setCandidateLoad', true)
       Candidates(0, { formData: this.dataForm }).then(res => {
