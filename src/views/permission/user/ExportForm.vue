@@ -72,6 +72,7 @@ export default {
     init(listQuery) {
       this.visible = true
       this.checkAll = true
+      this.isIndeterminate = false
       this.btnLoading = false
       this.listQuery = listQuery
       this.columns = this.columnList.map(o => o.prop)
@@ -86,6 +87,7 @@ export default {
       this.isIndeterminate = checkedCount > 0 && checkedCount < this.columnList.length;
     },
     downLoad() {
+      if (!this.columns.length) return this.$message.warning(`请至少选择一个导出字段`)
       this.btnLoading = true
       let query = {
         ...this.listQuery,

@@ -44,6 +44,8 @@ export default {
   methods: {
     init(columnList) {
       this.visible = true
+      this.checkAll = true
+      this.isIndeterminate = false
       this.columnList = columnList
       this.columns = columnList.map(o => o.prop)
     },
@@ -57,6 +59,7 @@ export default {
       this.isIndeterminate = checkedCount > 0 && checkedCount < this.columnList.length;
     },
     downLoad() {
+      if (!this.columns.length) return this.$message.warning(`请至少选择一个导出字段`)
       this.$emit('download', { dataType: this.type, selectKey: this.columns })
     }
   }
