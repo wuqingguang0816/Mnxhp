@@ -19,8 +19,8 @@
               <el-button slot="append" icon="el-icon-search" @click="search"></el-button>
             </el-input>
           </div>
-          <div class="transfer-pane__body">
-            <div class="candidate-list" ref="candidate">
+          <div class="transfer-pane__body left-pane">
+            <div class="single-list" ref="candidate">
               <template v-if="list.length">
                 <div v-for="(item, index) in list" :key="index" class="selected-item"
                   @click="handleNodeClick(item)">
@@ -191,18 +191,3 @@ export default {
   },
 }
 </script>
-<style lang="scss" scoped>
-.candidate-list {
-  height: 100%;
-  overflow: auto;
-  overflow-x: hidden;
-  .selected-item {
-    padding: 0px 12px;
-    cursor: pointer;
-
-    &:hover {
-      background-color: #f5f7fa;
-    }
-  }
-}
-</style>

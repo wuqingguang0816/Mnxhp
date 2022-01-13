@@ -190,7 +190,7 @@ export default {
         this.getAllList()
       } else if (this.activeName === 'department') {
         this.loading = true
-        getOrganization(this.keyword).then(res => {
+        getOrganization({ keyword: this.keyword, organizeId: '0' }).then(res => {
           this.treeData2 = res.data
           this.loading = false
         })

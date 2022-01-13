@@ -120,11 +120,11 @@ export const getSubordinates = (keyword) => {
   })
 }
 // 获取当前组织用户
-export const getOrganization = (keyword) => {
+export const getOrganization = (data) => {
   return request({
     url: '/api/permission/Users/getOrganization',
-    method: 'post',
-    data: { keyword }
+    method: 'get',
+    data
   })
 }
 // 导出Excel

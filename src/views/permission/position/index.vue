@@ -69,7 +69,7 @@
                   </span>
                   <el-dropdown-menu slot="dropdown">
                     <el-dropdown-item
-                      @click.native="handleUserRelation(scope.row.id, scope.row.fullName)">
+                      @click.native="handleUserRelation(scope.row.id, scope.row.fullName,scope.row.organizeId)">
                       {{$t('position.postMember')}}
                     </el-dropdown-item>
                   </el-dropdown-menu>
@@ -94,7 +94,7 @@ import { getDepartmentSelector } from '@/api/permission/department'
 import { getPositionList, delPosition } from '@/api/permission/position'
 import Form from './Form'
 import Diagram from '@/views/permission/user/Diagram'
-import UserRelationList from '@/views/permission/userRelation/Selector'
+import UserRelationList from './userRelation'
 
 export default {
   name: 'permission-position',
@@ -209,10 +209,10 @@ export default {
         })
       }).catch(() => { })
     },
-    handleUserRelation(id, fullName) {
+    handleUserRelation(id, fullName, organizeId) {
       this.userRelationListVisible = true
       this.$nextTick(() => {
-        this.$refs.UserRelationList.init(id, fullName, 'Position')
+        this.$refs.UserRelationList.init(id, fullName, organizeId)
       })
     }
   }
