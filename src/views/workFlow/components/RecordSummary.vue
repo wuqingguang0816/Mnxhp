@@ -1,7 +1,6 @@
 <template>
   <el-tabs tab-position="left" style="height: 100%;" v-model="activeTab" class="recordSummary">
     <el-tab-pane label="按部门汇总" name="1"></el-tab-pane>
-    <el-tab-pane label="按角色汇总" name="2"></el-tab-pane>
     <el-tab-pane label="按岗位汇总" name="3"></el-tab-pane>
     <div class="recordSummary-list" v-loading="loading"
       :element-loading-text="$t('common.loadingText')">
