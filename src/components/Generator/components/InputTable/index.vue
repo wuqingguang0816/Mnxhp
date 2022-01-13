@@ -57,6 +57,7 @@
             <component v-else :is="head.__config__.tag" :rowIndex="scope.$index"
               :tableVModel="config.__vModel__" :componentVModel="head.__vModel__"
               v-model="tableFormData[scope.$index][cindex].value"
+              :key="head.__vModel__+scope.$index"
               v-bind="getConfById(head.__config__.formId,scope.$index)" :formData="formData"
               @blur="onFormBlur(scope.$index, cindex, head.__config__.tag)"
               @change="onFormDataChange(scope.$index, cindex, head.__config__.tag,arguments)">

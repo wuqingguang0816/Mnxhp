@@ -7,7 +7,9 @@
         <p class="header-txt">{{title}}</p>
       </div>
       <div class="options">
-        <el-button @click="goBack()">{{$t('common.cancelButton')}}</el-button>
+        <el-form>
+          <el-button @click="goBack()" :disabled="false">{{$t('common.cancelButton')}}</el-button>
+        </el-form>
       </div>
     </div>
     <div class="main">
