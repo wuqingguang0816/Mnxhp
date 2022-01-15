@@ -116,7 +116,7 @@ export default {
   },
   methods: {
     preview(id) {
-      let text = { type: 'appDesignPreview', id }
+      let text = { t: 'ADP', id }
       this.qrCodeText = JSON.stringify(text)
       this.previewVisible = true
     },

@@ -40,7 +40,12 @@ export default {
         if (this.dataForm.id) {
           let extra = {
             modelId: data.flowId,
-            id: this.dataForm.id
+            id: this.dataForm.id,
+            type: data.type,
+            flowId: data.flowId,
+            processId: data.id,
+            taskId: data.taskId,
+            opType: data.opType
           }
           this.$store.commit('generator/SET_DYNAMIC_MODEL_EXTRA', extra)
           if (data.draftData) {

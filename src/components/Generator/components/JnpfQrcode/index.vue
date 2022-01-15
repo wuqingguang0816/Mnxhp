@@ -50,9 +50,14 @@ export default {
       } else {
         if (this.formData && this.dynamicModelExtra && this.dynamicModelExtra.id && this.dynamicModelExtra.modelId) {
           const json = {
-            type: 'dynamicFormDetail',
+            t: 'DFD',
             id: this.dynamicModelExtra.id,
-            modelId: this.dynamicModelExtra.modelId
+            mid: this.dynamicModelExtra.modelId,
+            mt: this.dynamicModelExtra.type,
+            fid: this.dynamicModelExtra.flowId || '',
+            pid: this.dynamicModelExtra.processId || '',
+            ftid: this.dynamicModelExtra.taskId || '',
+            opt: this.dynamicModelExtra.opType
           }
           return JSON.stringify(json)
         }
@@ -104,7 +109,7 @@ export default {
         // render: 'canvas' // 设置渲染方式（有两种方式 table和canvas，默认是canvas）
         colorDark: this.colorDark,
         colorLight: this.colorLight,
-        correctLevel: QRCode.CorrectLevel.H //容错级别 容错级别有：（1）QRCode.CorrectLevel.L （2）QRCode.CorrectLevel.M （3）QRCode.CorrectLevel.Q （4）QRCode.CorrectLevel.H
+        correctLevel: QRCode.CorrectLevel.L //容错级别 容错级别有：（1）QRCode.CorrectLevel.L （2）QRCode.CorrectLevel.M （3）QRCode.CorrectLevel.Q （4）QRCode.CorrectLevel.H
       })
     }
   },
