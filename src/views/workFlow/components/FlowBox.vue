@@ -57,9 +57,9 @@
         <el-tab-pane label="流转记录" v-if="setting.opType!='-1'" v-loading="loading">
           <recordList :list='flowTaskOperatorRecordList' :endTime='endTime' />
         </el-tab-pane>
-        <el-tab-pane label="审批汇总" v-if="setting.opType!='-1'" v-loading="loading"
+        <el-tab-pane label="审批汇总" v-if="setting.opType!='-1' && isSummary" v-loading="loading"
           name="recordSummary">
-          <RecordSummary :id='setting.id' ref="recordSummary" />
+          <RecordSummary :id='setting.id' :summaryType="summaryType" ref="recordSummary" />
         </el-tab-pane>
         <el-tab-pane label="流程评论" v-if="setting.opType!='-1' && isComment" v-loading="loading"
           name="comment">
@@ -186,6 +186,8 @@ export default {
       handleId: '',
       activeTab: '0',
       isComment: false,
+      isSummary: false,
+      summaryType: 0,
       loading: false,
       btnLoading: false,
       approvalBtnLoading: false,
@@ -281,6 +283,8 @@ export default {
         this.flowTaskNodeList = res.data.flowTaskNodeList
         this.flowTemplateJson = this.flowTaskInfo.flowTemplateJson ? JSON.parse(this.flowTaskInfo.flowTemplateJson) : null
         this.isComment = this.flowTemplateJson.properties.isComment
+        this.isSummary = this.flowTemplateJson.properties.isSummary
+        this.summaryType = this.flowTemplateJson.properties.summaryType
         this.flowTaskOperatorRecordList = res.data.flowTaskOperatorRecordList
         this.properties = res.data.approversProperties || {}
         this.endTime = this.flowTaskInfo.completion == 100 ? this.flowTaskInfo.endTime : 0

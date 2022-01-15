@@ -9,7 +9,7 @@
       </el-input>
     </div>
     <el-dialog title="接口模板" :close-on-click-modal="false" :visible.sync="visible"
-      class="JNPF-dialog JNPF-dialog_center JNPF-dialog-tree" lock-scroll append-to-body
+      class="JNPF-dialog JNPF-dialog_center JNPF-dialog-tree-select" lock-scroll append-to-body
       width="1000px">
       <div class="JNPF-common-layout">
         <div class="JNPF-common-layout-left">

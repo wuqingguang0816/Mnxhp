@@ -10,17 +10,99 @@
             <div class="cap">{{item.fullName}}意见</div>
             <div class="content">
               <div class="child-item" v-for="(child,j) in item.list" :key="j">
-                <div class="child-item-title">
-                  <div>{{item.fullName}} {{child.userName}} 于{{child.handleTime | toDate()}}</div>
-                  <div class="status">
-                    <el-link :underline="false" type="success" v-if='child.handleStatus==1'>审核通过
-                    </el-link>
-                    <el-link :underline="false" type="danger" v-else>审核拒绝</el-link>
+                <template v-if="child.handleStatus==0">
+                  <div class="child-item-title">
+                    <div>{{item.fullName}} {{child.userName}} 于 {{child.handleTime | toDate()}}
+                    </div>
+                    <div class="status">
+                      <el-link :underline="false" type="danger">审核拒绝</el-link>
+                    </div>
                   </div>
-                </div>
-                <div class="child-item-option">
-                  审批意见：{{child.handleOpinion}}
-                </div>
+                  <div class="child-item-option">
+                    审批意见：{{child.handleOpinion}}
+                  </div>
+                </template>
+                <template v-if="child.handleStatus==1">
+                  <div class="child-item-title">
+                    <div>{{item.fullName}} {{child.userName}} 于 {{child.handleTime | toDate()}}
+                    </div>
+                    <div class="status">
+                      <el-link :underline="false" type="success">审核通过</el-link>
+                    </div>
+                  </div>
+                  <div class="child-item-option">
+                    审批意见：{{child.handleOpinion}}
+                  </div>
+                </template>
+                <template v-if="child.handleStatus==2">
+                  <div class="child-item-title">
+                    <div>{{item.fullName}} {{child.userName}} 于 {{child.handleTime | toDate()}}
+                    </div>
+                    <div class="status">
+                      <el-link :underline="false" type="primary">发起</el-link>
+                    </div>
+                  </div>
+                </template>
+                <template v-if="child.handleStatus==3">
+                  <div class="child-item-title">
+                    <div>{{item.fullName}} {{child.userName}} 于 {{child.handleTime | toDate()}}
+                    </div>
+                    <div class="status">
+                      <el-link :underline="false" type="info">撤回</el-link>
+                    </div>
+                  </div>
+                  <div class="child-item-option">
+                    撤回原因：{{child.handleOpinion}}
+                  </div>
+                </template>
+                <template v-if="child.handleStatus==4">
+                  <div class="child-item-title">
+                    <div>{{item.fullName}} {{child.userName}} 于 {{child.handleTime | toDate()}}
+                    </div>
+                    <div class="status">
+                      <el-link :underline="false" type="danger">流程终止</el-link>
+                    </div>
+                  </div>
+                  <div class=" child-item-option">
+                    终止原因：{{child.handleOpinion}}
+                  </div>
+                </template>
+                <template v-if="child.handleStatus==5">
+                  <div class="child-item-title">
+                    <div>{{item.fullName}} {{child.userName}} 于 {{child.handleTime | toDate()}}
+                    </div>
+                    <div class="status">
+                      <el-link :underline="false" type="primary">指派</el-link>
+                    </div>
+                  </div>
+                  <div class=" child-item-option">
+                    指派人员：{{child.operatorId}}
+                  </div>
+                </template>
+                <template v-if="child.handleStatus==6">
+                  <div class="child-item-title">
+                    <div>{{item.fullName}} {{child.userName}} 于 {{child.handleTime | toDate()}}
+                    </div>
+                    <div class="status">
+                      <el-link :underline="false" type="primary">加签</el-link>
+                    </div>
+                  </div>
+                  <div class=" child-item-option">
+                    加签人员：{{child.operatorId}}
+                  </div>
+                </template>
+                <template v-if="child.handleStatus==7">
+                  <div class="child-item-title">
+                    <div>{{item.fullName}} {{child.userName}} 于 {{child.handleTime | toDate()}}
+                    </div>
+                    <div class="status">
+                      <el-link :underline="false" type="primary">转办</el-link>
+                    </div>
+                  </div>
+                  <div class=" child-item-option">
+                    转办人员：{{child.operatorId}}
+                  </div>
+                </template>
               </div>
             </div>
           </div>
@@ -37,6 +119,7 @@ export default {
   name: 'comments',
   props: {
     id: { type: String, default: '' },
+    summaryType: { default: '0' },
   },
   data() {
     return {
@@ -53,7 +136,11 @@ export default {
   methods: {
     init() {
       this.loading = true
-      getRecordList(this.id, this.activeTab).then(res => {
+      const query = {
+        category: this.activeTab,
+        type: this.summaryType
+      }
+      getRecordList(this.id, query).then(res => {
         this.list = res.data
         this.loading = false
       }).catch(() => {

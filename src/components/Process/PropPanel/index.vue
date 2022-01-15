@@ -263,6 +263,18 @@
                   placeholder="请选择打印模板" lastLevel clearable></JNPF-TreeSelect>
               </div>
             </el-form-item>
+          </el-form>
+          <el-form class="pd-10" style="margin-top:-20px">
+            <el-form-item label="审核汇总">
+              <el-switch v-model="startForm.isSummary" />
+            </el-form-item>
+            <el-form-item label="汇总设置" v-if="startForm.isSummary">
+              <el-select v-model="startForm.summaryType" placeholder="请选择">
+                <el-option label="汇总全部流转记录" :value="0"></el-option>
+                <el-option label="汇总通过及拒绝流转记录" :value="1"></el-option>
+              </el-select>
+              <div class="option-box-tip">*打开审核汇总后，流程流转记录会按部门及岗位进行汇总展示</div>
+            </el-form-item>
             <el-form-item label="流程评论">
               <el-switch v-model="startForm.isComment" />
               <div class="option-box-tip">*打开流程评论后，流程内涉及的用户均可进行意见评论</div>
@@ -961,6 +973,8 @@ const defaultStartForm = {
   printBtnText: '打 印',
   printId: '',
   isComment: false,
+  isSummary: false,
+  summaryType: 0,
   formOperates: []
 }
 const defaultSubFlowForm = {

@@ -73,11 +73,11 @@ export function Assign(id, data) {
   })
 }
 // 审批汇总
-export function getRecordList(id, category) {
+export function getRecordList(id, data) {
   return request({
     url: `/api/workflow/Engine/FlowBefore/RecordList/${id}`,
     method: 'get',
-    data: { category }
+    data
   })
 }
 // 判断是否有候选人
