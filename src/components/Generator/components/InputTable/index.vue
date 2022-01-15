@@ -57,7 +57,6 @@
             <component v-else :is="head.__config__.tag" :rowIndex="scope.$index"
               :tableVModel="config.__vModel__" :componentVModel="head.__vModel__"
               v-model="tableFormData[scope.$index][cindex].value"
-              :key="head.__vModel__+scope.$index"
               v-bind="getConfById(head.__config__.formId,scope.$index)" :formData="formData"
               @blur="onFormBlur(scope.$index, cindex, head.__config__.tag)"
               @change="onFormDataChange(scope.$index, cindex, head.__config__.tag,arguments)">
@@ -337,20 +336,20 @@ export default {
       let itemConfig = item.__config__
       let newObj = {}
       for (const key in item) {
-        if (key != '__config__' && key != '__slot__' && key != '__vModel__') {
+        if (!['__config__', '__slot__', '__vModel__', 'props', 'on'].includes(key)) {
           newObj[key] = item[key]
         }
         if (key === 'props') {
           newObj[key] = item[key][key]
         }
         if (key === 'disabled') {
-          newObj[key] = this.disabled || item[key][key]
-        }
-        if (key === '__vModel__') {
-          newObj['field'] = item[key] + '_jnpfRelation_' + rowIndex
+          newObj[key] = this.disabled || item[key]
         }
       }
-      if (itemConfig.tag === 'relationFormAttr') {
+      if (itemConfig.jnpfKey === 'relationForm') {
+        newObj['field'] = item.__vModel__ + '_jnpfRelation_' + rowIndex
+      }
+      if (itemConfig.jnpfKey === 'relationFormAttr') {
         newObj['relationField'] = newObj['relationField'] + '_jnpfRelation_' + rowIndex
       }
       return newObj
@@ -387,7 +386,7 @@ export default {
       if (!Array.isArray(this.tableFormData)) {
         this.tableFormData = []
       }
-      this.tableFormData.push(this.getEmptyRow(val, this.tableFormData.length))
+      this.tableFormData.push(JSON.parse(JSON.stringify(this.getEmptyRow(val, this.tableFormData.length))))
       this.clearAddRowFlag()
       const newVal = this.tableFormData.map(row => row.reduce((p, c) => {
         let str = c.__vModel__
