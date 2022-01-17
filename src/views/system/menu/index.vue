@@ -87,17 +87,17 @@
                         <el-dropdown-menu slot="dropdown">
                           <template v-if="[2,3,4].indexOf(scope.row.type)>-1">
                             <el-dropdown-item
-                              v-if="params.category==='Web' && scope.row.isButtonAuthorize === 1"
+                              v-if="listQuery.category==='Web' && scope.row.isButtonAuthorize === 1"
                               @click.native="handleButtonAuthorize(scope.row)">
                               按钮权限
                             </el-dropdown-item>
                             <el-dropdown-item
-                              v-if="params.category==='Web' && scope.row.isColumnAuthorize === 1"
+                              v-if="listQuery.category==='Web' && scope.row.isColumnAuthorize === 1"
                               @click.native="handleColumnAuthorize(scope.row)">
                               列表权限
                             </el-dropdown-item>
                             <el-dropdown-item
-                              v-if="params.category==='Web' && scope.row.isFormAuthorize === 1"
+                              v-if="listQuery.category==='Web' && scope.row.isFormAuthorize === 1"
                               @click.native="handleFormAuthorize(scope.row)">
                               表单权限
                             </el-dropdown-item>
