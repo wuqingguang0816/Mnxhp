@@ -91,7 +91,8 @@ export default {
         if (this.dataForm.id) {
           let extra = {
             modelId,
-            id
+            id,
+            type: 2
           }
           this.$store.commit('generator/SET_DYNAMIC_MODEL_EXTRA', extra)
           getModelInfo(modelId, this.dataForm.id).then(res => {
