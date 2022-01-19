@@ -77,7 +77,8 @@ export default {
       loginForm: {
         account: '',
         password: '',
-        code: ''
+        code: '',
+        origin: 'password'
       },
       loginRules: {
         account: [

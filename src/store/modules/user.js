@@ -75,11 +75,12 @@ const actions = {
   },
   // user login
   login({ commit }, userInfo) {
-    const { account, password, code, timestamp } = userInfo
+    const { account, password, code, timestamp, origin } = userInfo
     return new Promise((resolve, reject) => {
       login(qs.stringify({
         account: account.trim(),
         password: md5(password),
+        origin,
         code,
         timestamp,
         client_id: 'admin',
