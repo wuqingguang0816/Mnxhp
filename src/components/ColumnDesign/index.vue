@@ -111,6 +111,12 @@
                   <el-form-item label="数据字典">
                     <DicSelect v-model="columnData.treeDictionary" placeholder="请选择数据字典" />
                   </el-form-item>
+                  <el-form-item label="主键字段">
+                    <el-select v-model="columnData.treePropsValue" placeholder="请选择主键字段">
+                      <el-option label="id" value="id"></el-option>
+                      <el-option label="enCode" value="enCode"></el-option>
+                    </el-select>
+                  </el-form-item>
                 </template>
                 <template v-if="columnData.treeDataSource==='api'">
                   <el-form-item label="数据接口">
