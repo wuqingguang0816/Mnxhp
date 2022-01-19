@@ -1641,6 +1641,17 @@ textarea.el-textarea__inner {
   margin: 14px 0;
 }
 
+// 布局错位问题修正 
+.el-col {
+  .el-form-item--small .el-form-item__label {
+    line-height: 33px;
+  }
+
+  .el-form-item--mini .el-form-item__label {
+    line-height: 29px;
+  }
+}
+
 .word-form {
   padding: 0 !important;
   margin: 0 !important;
