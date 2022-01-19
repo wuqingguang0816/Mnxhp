@@ -77,6 +77,7 @@ export default {
       this.dataForm.userIds = []
       this.list = []
       this.selectedData = []
+      this.listQuery.keyword = ''
       this.listQuery.organizeId = organizeId || '0'
       this.$nextTick(() => {
         this.pageTitle = this.$t(`position.postMember`) + '- ' + fullName
