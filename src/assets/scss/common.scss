@@ -1510,6 +1510,10 @@ textarea.el-textarea__inner {
   .el-form-item--small .el-form-item__label {
     line-height: 33px;
   }
+
+  .el-form-item--mini .el-form-item__label {
+    line-height: 29px;
+  }
 }
 
 .word-form {
