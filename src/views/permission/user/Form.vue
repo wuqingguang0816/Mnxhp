@@ -294,23 +294,19 @@ export default {
         // 获取民族
         this.$store.dispatch('base/getDictionaryData', { sort: 'Nation' }).then(res => {
           this.nationTreeData = res
+          // 获取学历
+          this.$store.dispatch('base/getDictionaryData', { sort: 'Education' }).then(res => {
+            this.educationTreeData = res
+          })
+          // 获取证件类型
+          this.$store.dispatch('base/getDictionaryData', { sort: 'certificateType' }).then(res => {
+            this.certificatesTypeTreeData = res
+          })
+          // 获取性别
+          this.$store.dispatch('base/getDictionaryData', { sort: 'sex' }).then(res => {
+            this.genderTreeData = res
+          })
         })
-
-        // 获取学历
-        this.$store.dispatch('base/getDictionaryData', { sort: 'Education' }).then(res => {
-          this.educationTreeData = res
-        })
-
-        // 获取证件类型
-        this.$store.dispatch('base/getDictionaryData', { sort: 'certificateType' }).then(res => {
-          this.certificatesTypeTreeData = res
-        })
-
-        // 获取性别
-        this.$store.dispatch('base/getDictionaryData', { sort: 'sex' }).then(res => {
-          this.genderTreeData = res
-        })
-
         if (this.dataForm.id) {
           this.formLoading = true
           getUserInfo(this.dataForm.id).then(res => {

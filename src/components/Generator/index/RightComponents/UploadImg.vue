@@ -16,7 +16,6 @@
         <el-select slot="append" v-model="activeData.sizeUnit" :style="{ width: '66px' }">
           <el-option label="KB" value="KB" />
           <el-option label="MB" value="MB" />
-          <el-option label="GB" value="GB" />
         </el-select>
       </el-input>
     </el-form-item>

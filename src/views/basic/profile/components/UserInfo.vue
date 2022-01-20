@@ -199,15 +199,15 @@ export default {
     getOptions() {
       this.$store.dispatch('base/getDictionaryData', { sort: 'Education' }).then((res) => {
         this.educationOptions = JSON.parse(JSON.stringify(res))
-      })
-      this.$store.dispatch('base/getDictionaryData', { sort: 'certificateType' }).then((res) => {
-        this.certificatesTypeOptions = JSON.parse(JSON.stringify(res))
-      })
-      this.$store.dispatch('base/getDictionaryData', { sort: 'sex' }).then(res => {
-        this.genderOptions = JSON.parse(JSON.stringify(res))
-      })
-      this.$store.dispatch('base/getDictionaryData', { sort: 'Nation' }).then(res => {
-        this.nationOptions = JSON.parse(JSON.stringify(res))
+        this.$store.dispatch('base/getDictionaryData', { sort: 'certificateType' }).then((res) => {
+          this.certificatesTypeOptions = JSON.parse(JSON.stringify(res))
+        })
+        this.$store.dispatch('base/getDictionaryData', { sort: 'sex' }).then(res => {
+          this.genderOptions = JSON.parse(JSON.stringify(res))
+        })
+        this.$store.dispatch('base/getDictionaryData', { sort: 'Nation' }).then(res => {
+          this.nationOptions = JSON.parse(JSON.stringify(res))
+        })
       })
     },
     getInfo() {
