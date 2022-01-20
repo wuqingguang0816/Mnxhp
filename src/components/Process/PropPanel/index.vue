@@ -267,6 +267,8 @@
           <el-form class="pd-10" style="margin-top:-20px">
             <el-form-item label="审核汇总">
               <el-switch v-model="startForm.isSummary" />
+              <div class="option-box-tip" v-if="!startForm.isSummary">*打开审核汇总后，流程流转记录会按部门及岗位进行汇总展示
+              </div>
             </el-form-item>
             <el-form-item label="汇总设置" v-if="startForm.isSummary">
               <el-select v-model="startForm.summaryType" placeholder="请选择">
