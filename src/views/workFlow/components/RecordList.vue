@@ -147,3 +147,8 @@ export default {
   name: 'recordList'
 }
 </script>
+<style lang="scss" scoped>
+.timeline-cell .el-link {
+  cursor: auto !important;
+}
+</style>

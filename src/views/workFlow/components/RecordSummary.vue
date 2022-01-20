@@ -192,6 +192,9 @@ export default {
                 justify-content: space-between;
                 .status {
                   flex-shrink: 0;
+                  .el-link {
+                    cursor: auto !important;
+                  }
                 }
               }
             }
