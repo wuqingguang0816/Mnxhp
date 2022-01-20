@@ -66,10 +66,10 @@
           <el-row>
             <el-col :span="18">
               <el-divider content-position="left">登录设置</el-divider>
-              <el-form-item label="单一登录">
+              <el-form-item label="登录方式">
                 <el-select v-model="baseForm.singleLogin" placeholder="请选择">
-                  <el-option label="后登录踢出先登录" value="1" />
-                  <el-option label="账号可同时登录" value="2" />
+                  <el-option label="单一登录" value="1" />
+                  <el-option label="同时登录" value="2" />
                 </el-select>
               </el-form-item>
               <el-form-item label="超时登出">
