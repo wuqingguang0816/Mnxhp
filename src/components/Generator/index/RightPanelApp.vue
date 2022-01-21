@@ -87,6 +87,35 @@
               </el-form-item>
             </template>
             <template
+              v-if="activeData.__config__.jnpfKey === 'uploadFz'||activeData.__config__.jnpfKey === 'uploadImg'">
+              <el-form-item label="文件类型" v-if="activeData.__config__.jnpfKey === 'uploadFz'">
+                <el-select v-model="activeData.accept" placeholder="不限制" clearable>
+                  <el-option label="图片" value="image/*" />
+                  <el-option label="视频" value="video/*" />
+                  <el-option label="音频" value="audio/*" />
+                  <el-option label="excel" value=".xls,.xlsx" />
+                  <el-option label="word" value=".doc,.docx" />
+                  <el-option label="pdf" value=".pdf" />
+                  <el-option label="txt" value=".txt" />
+                </el-select>
+              </el-form-item>
+              <el-form-item label="文件大小">
+                <el-input v-model.number="activeData.fileSize" placeholder="请输入文件大小">
+                  <el-select slot="append" v-model="activeData.sizeUnit" :style="{ width: '66px' }">
+                    <el-option label="KB" value="KB" />
+                    <el-option label="MB" value="MB" />
+                  </el-select>
+                </el-input>
+              </el-form-item>
+              <el-form-item label="按钮文字" v-if="activeData.__config__.jnpfKey === 'uploadFz'">
+                <el-input v-model="activeData.buttonText" placeholder="请输入按钮文字" />
+              </el-form-item>
+              <el-form-item label="最大上传数">
+                <el-input-number v-model="activeData.limit" :min="0" placeholder="最大上传数" :step="1"
+                  controls-position="right" />
+              </el-form-item>
+            </template>
+            <template
               v-if="activeData.__config__.jnpfKey === 'numInput' ||activeData.__config__.jnpfKey === 'slider'">
               <el-form-item label="最小值">
                 <el-input-number v-model="activeData.min" placeholder="最小值"

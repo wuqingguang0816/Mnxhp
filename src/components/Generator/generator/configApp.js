@@ -318,6 +318,32 @@ export const inputComponents = [{
   },
   {
     __config__: {
+      jnpfKey: 'uploadFz',
+      label: '文件上传',
+      labelWidth: undefined,
+      showLabel: true,
+      tag: 'JNPF-UploadFz',
+      tagIcon: 'icon-ym icon-ym-generator-upload',
+      defaultValue: [],
+      required: false,
+      layout: 'colFormItem',
+      span: 24,
+      dragDisabled: false,
+      tableName: ''
+    },
+    on: {
+      change: '({ data, formData, setFormData, setShowOrHide, setRequired, setDisabled, request, getFieldOptions, setFieldOptions }) => {\n    // 在此编写代码\n    \n}',
+    },
+    disabled: false,
+    accept: '',
+    fileSize: 5,
+    sizeUnit: 'MB',
+    buttonText: '点击上传',
+    showTip: false,
+    limit: 9
+  },
+  {
+    __config__: {
       jnpfKey: 'uploadImg',
       label: '图片上传',
       labelWidth: undefined,
