@@ -113,7 +113,7 @@ export default {
     },
     clearable: {
       type: Boolean,
-      default: true
+      default: false
     },
     size: String,
   },
@@ -311,6 +311,7 @@ export default {
         this.innerValue = ''
         this.selectedIds = []
         this.selectedData = []
+        this.tagsList = []
         return
       }
       this.selectedIds = this.multiple ? this.value : [this.value]
