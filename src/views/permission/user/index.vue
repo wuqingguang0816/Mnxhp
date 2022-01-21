@@ -25,7 +25,7 @@
       <el-row class="JNPF-common-search-box" :gutter="16">
         <el-form @submit.native.prevent>
           <el-col :span="6">
-            <el-form-item :label="$t('common.keyWord')">
+            <el-form-item :label="$t('common.keyword')">
               <el-input v-model="listQuery.keyword" :placeholder="$t('common.enterKeyword')"
                 clearable @keyup.enter.native="search()" />
             </el-form-item>

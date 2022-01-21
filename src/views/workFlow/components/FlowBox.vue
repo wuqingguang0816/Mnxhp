@@ -48,6 +48,7 @@
       </div>
       <el-tabs class="JNPF-el_tabs" v-model="activeTab">
         <el-tab-pane label="表单信息" v-loading="loading">
+          <span slot="label" :title="fullName+'-'+(thisStep?thisStep:'发起节点')">表单信息</span>
           <component :is="currentView" @close="goBack" ref="form" @eventReciver="eventReciver"
             @setLoad="setLoad" @setCandidateLoad="setCandidateLoad" @setPageLoad="setPageLoad" />
         </el-tab-pane>
@@ -200,7 +201,9 @@ export default {
       printBrowseVisible: false,
       eventType: '',
       signImg: '',
-      copyIds: ''
+      copyIds: '',
+      fullName: '',
+      thisStep: ''
     }
   },
   watch: {
@@ -240,6 +243,7 @@ export default {
       FlowEngineInfo(data.flowId).then(res => {
         data.type = res.data.type
         data.fullName = res.data.fullName
+        this.fullName = res.data.fullName
         if (data.formType == 1) {
           if (res.data.formUrl) {
             this.currentView = (resolve) => require([`@/views/${res.data.formUrl}`], resolve)
@@ -269,6 +273,8 @@ export default {
         this.flowFormInfo = res.data.flowFormInfo
         this.flowTaskInfo = res.data.flowTaskInfo
         data.fullName = this.flowTaskInfo.fullName
+        this.fullName = this.flowTaskInfo.fullName
+        this.thisStep = this.flowTaskInfo.thisStep
         data.type = this.flowTaskInfo.type
         data.draftData = res.data.draftData || null
         if (data.formType == 1) {
