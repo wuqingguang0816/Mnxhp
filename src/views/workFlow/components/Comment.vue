@@ -64,7 +64,7 @@
             name="el-list">
             <li class="el-upload-list__item is-success" v-for="(file,index) in dataForm.file"
               :key="file.fileId">
-              <a class="el-upload-list__item-name" @click="handleClick(file)">
+              <a class="el-upload-list__item-name" @click="handleFileClick(file)">
                 <i class="el-icon-document"></i>{{file.name}}
               </a>
               <i class="el-icon-view" @click="handleFilePreview(file)"></i>
