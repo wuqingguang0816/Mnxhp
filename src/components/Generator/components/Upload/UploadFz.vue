@@ -21,7 +21,7 @@
           </a>
           <i class="el-icon-view" @click="handlePreview(file)"></i>
           <i class="el-icon-download" @click="handleClick(file)"></i>
-          <label class="el-upload-list__item-status-label">
+          <label class="el-upload-list__item-status-label" :class="{'disabled':disabled}">
             <i class="el-icon-upload-success el-icon-circle-check"></i>
           </label>
           <i class="el-icon-close" v-if="!disabled" @click="handleRemove(file,index)"></i>
@@ -216,6 +216,11 @@ export default {
   }
   .el-upload-list__item-name {
     margin-right: 70px;
+  }
+  &:hover {
+    .el-upload-list__item-status-label.disabled {
+      display: block !important;
+    }
   }
   .el-icon-download {
     display: inline-block;
