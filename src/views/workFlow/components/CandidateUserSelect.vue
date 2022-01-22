@@ -129,6 +129,7 @@ export default {
       this.visible = true
       this.finish = false
       this.listQuery.keyword = ''
+      this.selectedData = []
       this.$nextTick(() => {
         this.bindScroll()
         this.search()
