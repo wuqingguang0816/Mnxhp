@@ -1,13 +1,18 @@
 <template>
   <div class="comment-container">
-    <el-scrollbar class="comment-list" v-loading="listLoading"
-      :element-loading-text="$t('common.loadingText')">
+    <div class="comment-list" v-loading="listLoading && listQuery.currentPage==1"
+      :element-loading-text="$t('common.loadingText')" ref="infiniteBody">
       <template v-if="list.length">
         <div v-for="(item,i) in list" :key="i" class="item">
-          <el-avatar :size="40" :src="define.comUrl + item.creatorUserHeadIcon" class="avatar" />
-          <div class="item-right">
-            <p class="username">{{item.creatorUserName}}</p>
-            <p class="content">{{item.text}}</p>
+          <div class="head">
+            <el-avatar :size="40" :src="define.comUrl + item.creatorUserHeadIcon" class="avatar" />
+            <p class="username">{{item.creatorUserName}}/{{item.creatorUserId}}</p>
+            <el-link :underline="false" class="del-btn" @click="delComment(item.id,i)" type="danger"
+              v-if="item.isDel">删除</el-link>
+            <span class="time">{{item.creatorTime|toDate()}}</span>
+          </div>
+          <div class="content">
+            <p class="text">{{item.text}}</p>
             <div class="img-list" v-if="item.imageList.length">
               <el-image :src="define.comUrl+cItem.url" class="img-item"
                 v-for="(cItem,ci) in item.imageList" :key="ci"
@@ -15,31 +20,61 @@
               </el-image>
             </div>
             <div class="file-List" v-if="item.fileList.length">
-              <el-link :underline="false" class="file-item" v-for="(cItem,ci) in item.fileList"
-                :key="ci" @click="downloadFile(cItem)">
-                <i class="el-icon-document"></i>{{cItem.name}}
-              </el-link>
+              <JNPF-UploadFz v-model="item.fileList" detailed disabled></JNPF-UploadFz>
             </div>
-            <el-link :underline="false" class="del-btn" @click="delComment(item.id,i)" type="danger"
-              v-if="item.isDel">删除</el-link>
           </div>
         </div>
       </template>
       <el-empty description="暂无数据" :image-size="120" v-else></el-empty>
-    </el-scrollbar>
-    <pagination :total="total" :page.sync="listQuery.currentPage" :limit.sync="listQuery.pageSize"
-      @pagination="initData" />
+    </div>
     <el-dialog title="流程评论" :visible.sync="dialogVisible" :close-on-click-modal="false"
       class="JNPF-dialog JNPF-dialog_center" lock-scroll append-to-body width="600px">
-      <el-form :model="dataForm" :rules="dataRule" ref="dataForm" label-width="80px">
-        <el-form-item label="评论内容" prop="text">
-          <el-input v-model="dataForm.text" placeholder="请输入评论内容" type="textarea" :rows="4" />
+      <el-form :model="dataForm" :rules="dataRule" ref="dataForm" label-width="0">
+        <el-form-item prop="text">
+          <el-input v-model="dataForm.text" placeholder="请输入评论" type="textarea" :rows="4" />
         </el-form-item>
-        <el-form-item label="图片" prop="image">
-          <JNPF-UploadImg :limit="9" v-model="dataForm.image" />
+        <el-form-item>
+          <el-upload :action="define.comUploadUrl+'/annexpic'" :headers="uploadHeaders"
+            ref="elUploadImg" :on-success="handleImgSuccess" multiple :show-file-list="false"
+            accept="image/*" :before-upload="beforeImgUpload" :on-exceed="handleImgExceed"
+            :limit="9" :disabled="imgUploading" class="upload-btn">
+            <el-button size="small" icon="el-icon-picture" :loading="imgUploading">图片</el-button>
+          </el-upload>
+          <el-upload :action="define.comUploadUrl+'/annex'" :headers="uploadHeaders"
+            ref="elUploadFile" :on-success="handleFileSuccess" multiple :show-file-list="false"
+            :accept="fielAccept" :before-upload="beforeFileUpload" :on-exceed="handleFileExceed"
+            :limit="9" :disabled="fileUploading" class="upload-btn">
+            <el-button size="small" icon="el-icon-upload" :disabled="fileUploading">附件</el-button>
+          </el-upload>
         </el-form-item>
-        <el-form-item label="文件" prop="file">
-          <JNPF-UploadFz v-model="dataForm.file" />
+        <el-form-item prop="image" v-if="dataForm.image.length">
+          <div class="img-list">
+            <div class="img-item" v-for="(item,i) in dataForm.image" :key="i">
+              <el-image :src="define.comUrl+item.url" class=""
+                :preview-src-list="getImgList(dataForm.image)" :z-index="100">
+              </el-image>
+              <div class="badge" @click.stop="handleImgRemove(i)">
+                <i class="el-icon-close"></i>
+              </div>
+            </div>
+          </div>
+        </el-form-item>
+        <el-form-item prop="file" v-if="dataForm.file.length">
+          <transition-group class="el-upload-list el-upload-list el-upload-list--text" tag="ul"
+            name="el-list">
+            <li class="el-upload-list__item is-success" v-for="(file,index) in dataForm.file"
+              :key="file.fileId">
+              <a class="el-upload-list__item-name" @click="handleClick(file)">
+                <i class="el-icon-document"></i>{{file.name}}
+              </a>
+              <i class="el-icon-view" @click="handleFilePreview(file)"></i>
+              <i class="el-icon-download" @click="handleFileClick(file)"></i>
+              <label class="el-upload-list__item-status-label">
+                <i class="el-icon-upload-success el-icon-circle-check"></i>
+              </label>
+              <i class="el-icon-close" @click="handleFileRemove(file,index)"></i>
+            </li>
+          </transition-group>
         </el-form-item>
       </el-form>
       <span slot="footer" class="dialog-footer">
@@ -49,15 +84,18 @@
           {{$t('common.confirmButton')}}</el-button>
       </span>
     </el-dialog>
+    <Preview :visible.sync="previewVisible" :file="activeFile" />
   </div>
 </template>
 
 <script>
 import { getCommentList, createComment, delComment } from '@/api/workFlow/FlowEngine'
 import { getDownloadUrl } from '@/api/common'
+import Preview from '@/components/Generator/components/Upload/Preview'
 
 export default {
   name: 'comments',
+  components: { Preview },
   props: {
     id: { type: String, default: '' },
   },
@@ -66,7 +104,7 @@ export default {
       list: [],
       listQuery: {
         currentPage: 1,
-        pageSize: 50,
+        pageSize: 20,
         sort: 'desc',
         sidx: ''
       },
@@ -80,11 +118,39 @@ export default {
         image: [],
       },
       dialogVisible: false,
+      finish: false,
+      uploadHeaders: { Authorization: this.$store.getters.token },
+      imgUploading: false,
+      fileUploading: false,
+      previewVisible: false,
+      fielAccept: '.xls,.xlsx,.doc,.docx,.pdf,.txt,.ppt,.pptx',
+      activeFile: {}
     }
   },
   methods: {
     init() {
+      this.list = []
+      this.listQuery = {
+        currentPage: 1,
+        pageSize: 20,
+        sort: 'desc',
+        sidx: ''
+      }
+      this.finish = false
       this.initData()
+      this.$nextTick(() => {
+        this.bindScroll()
+      })
+    },
+    bindScroll() {
+      let _this = this,
+        vBody = _this.$refs.infiniteBody;
+      vBody.addEventListener("scroll", function () {
+        if (vBody.scrollHeight - vBody.clientHeight - vBody.scrollTop <= 600 && !_this.listLoading && !_this.finish) {
+          _this.listQuery.currentPage += 1
+          _this.initData()
+        }
+      });
     },
     initData() {
       this.listLoading = true
@@ -93,11 +159,15 @@ export default {
         taskId: this.id
       }
       getCommentList(query).then(res => {
-        this.list = res.data.list.map(o => ({
+        let list = res.data.list.map(o => ({
           ...o,
           fileList: o.file ? JSON.parse(o.file) : [],
           imageList: o.image ? JSON.parse(o.image) : [],
         }))
+        if (res.data.list.length < this.listQuery.pageSize) {
+          this.finish = true
+        }
+        this.list = [...this.list, ...list]
         this.total = res.data.pagination.total
         this.listLoading = false
       }).catch(() => {
@@ -106,19 +176,17 @@ export default {
     },
     showCommentDialog() {
       this.dialogVisible = true
+      this.dataForm.image = []
+      this.dataForm.file = []
       this.$nextTick(() => {
+        this.$refs.elUploadImg.uploadFiles = []
+        this.$refs.elUploadFile.uploadFiles = []
         this.$refs['dataForm'].resetFields()
       })
     },
     getImgList(list) {
       const newList = list.map(o => this.define.comUrl + o.url)
       return newList
-    },
-    downloadFile(file) {
-      if (!file.fileId) return
-      getDownloadUrl('annex', file.fileId).then(res => {
-        if (res.data.url) window.location.href = this.define.comUrl + res.data.url
-      })
     },
     addComment() {
       this.$refs['dataForm'].validate((valid) => {
@@ -138,7 +206,7 @@ export default {
               onClose: () => {
                 this.dialogVisible = false
                 this.btnLoading = false
-                this.initData()
+                this.init()
               }
             })
           }).catch(() => { this.btnLoading = false })
@@ -157,6 +225,93 @@ export default {
           })
         })
       }).catch(() => { });
+    },
+    beforeImgUpload(file) {
+      let isRightSize = file.size < 50 * 1024 * 1024
+      if (!isRightSize) {
+        this.$message.error(`图片大小超过50MB`)
+        return isRightSize;
+      }
+      let isAccept = new RegExp('image/*').test(file.type)
+      if (!isAccept) {
+        this.$message.error(`请上传图片`)
+        return isAccept;
+      }
+      if (isRightSize && isAccept) this.imgUploading = true
+      return isRightSize && isAccept;
+    },
+    handleImgSuccess(res, file, fileList) {
+      if (res.code == 200) {
+        this.dataForm.image.push({
+          name: file.name,
+          fileId: res.data.name,
+          url: res.data.url
+        })
+      } else {
+        this.$refs.elUploadImg.uploadFiles.splice(fileList.length - 1, 1)
+        fileList.filter(o => o.uid != file.uid)
+        this.$message({ message: res.msg, type: 'error', duration: 1500 })
+      }
+      this.imgUploading = false
+    },
+    handleImgExceed(files, fileList) {
+      this.$message.warning(`当前限制最多可以上传9张图片`)
+    },
+    handleImgRemove(index) {
+      this.dataForm.image.splice(index, 1)
+      this.$refs.elUploadImg.uploadFiles.splice(index, 1)
+    },
+    getType(filename) {
+      const index1 = filename.lastIndexOf(".");
+      const index2 = filename.length;
+      const type = filename.substring(index1, index2);
+      return type;
+    },
+    beforeFileUpload(file) {
+      let isRightSize = file.size < 50 * 1024 * 1024
+      if (!isRightSize) {
+        this.$message.error(`文件大小超过50MB`)
+        return isRightSize;
+      }
+      let type = this.getType(file.name)
+      let isAccept = this.fielAccept.indexOf(type) > -1
+      if (!isAccept) {
+        this.$message.error(`请选择${this.fielAccept}类型的文件`)
+        return isAccept;
+      }
+      if (isRightSize && isAccept) this.fileUploading = true
+      return isRightSize && isAccept;
+    },
+    handleFileSuccess(res, file, fileList) {
+      if (res.code == 200) {
+        this.dataForm.file.push({
+          name: file.name,
+          fileId: res.data.name,
+          url: res.data.url
+        })
+      } else {
+        this.$refs.elUploadFile.uploadFiles.splice(fileList.length - 1, 1)
+        fileList.filter(o => o.uid != file.uid)
+        this.$message({ message: res.msg, type: 'error', duration: 1500 })
+      }
+      this.fileUploading = false
+    },
+    handleFileExceed(files, fileList) {
+      this.$message.warning(`当前限制最多可以上传9个文件`);
+    },
+    handleFileRemove(file, index) {
+      this.dataForm.file.splice(index, 1)
+      this.$refs.elUploadFile.uploadFiles.splice(index, 1)
+    },
+    handleFileClick(file) {
+      if (!file.fileId) return
+      getDownloadUrl('annex', file.fileId).then(res => {
+        if (res.data.url) window.location.href = this.define.comUrl + res.data.url
+      })
+    },
+    handleFilePreview(file) {
+      this.activeFile = file
+      this.previewVisible = true
     }
   }
 }
@@ -164,33 +319,45 @@ export default {
 <style lang="scss" scoped>
 .comment-container {
   height: 100%;
-  display: flex;
-  flex-direction: column;
+  overflow: hidden;
   .comment-list {
-    flex: 1;
+    height: 100%;
+    overflow: auto;
     .item {
-      padding: 0 50px;
+      padding: 0 30px;
       margin-bottom: 20px;
-      display: flex;
-      position: relative;
-      .avatar {
-        flex-shrink: 0;
-        margin-right: 20px;
-      }
-      .item-right {
-        flex: 1;
-        font-size: 14px;
-        padding-right: 50px;
+      .head {
+        display: flex;
+        align-items: center;
+        .avatar {
+          flex-shrink: 0;
+          margin-right: 20px;
+        }
         .username {
           line-height: 40px;
           color: #333;
+          flex: 1;
         }
-        .content {
+        .head-right {
+          flex-shrink: 0;
+        }
+        .time {
+          flex-shrink: 0;
+          font-size: 14px;
+          color: #666;
+          margin-left: 20px;
+        }
+      }
+
+      .content {
+        font-size: 14px;
+        padding-left: 60px;
+        .text {
           line-height: 30px;
-          margin-bottom: 6px;
           color: #666;
         }
         .img-list {
+          margin-top: 6px;
           .img-item {
             width: 80px;
             height: 80px;
@@ -200,35 +367,67 @@ export default {
             border-radius: 6px;
           }
         }
-        .file-list {
-          .file-item {
-            color: #606266;
-            display: block;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            transition: color 0.3s;
-            white-space: nowrap;
-            cursor: pointer;
-            margin-top: 10px;
-            line-height: 25px;
-
-            .el-icon-document {
-              margin-right: 7px;
-              line-height: inherit;
-            }
-
-            &:hover {
-              background-color: #f5f7fa;
-            }
-          }
-        }
-        .del-btn {
-          position: absolute;
-          right: 50px;
-          top: 0;
-          line-height: 40px;
-        }
       }
+    }
+  }
+}
+.JNPF-dialog {
+  .upload-btn {
+    display: inline-block;
+    margin-right: 20px;
+  }
+  .img-list {
+    display: flex;
+
+    .img-item {
+      width: 40px;
+      height: 40px;
+      position: relative;
+      margin-right: 10px;
+      .el-image {
+        width: 100%;
+        height: 100%;
+      }
+      .badge {
+        background-color: #f56c6c;
+        border-radius: 10px;
+        color: #fff;
+        display: block;
+        font-size: 12px;
+        height: 18px;
+        width: 18px;
+        line-height: 18px;
+        text-align: center;
+        border: 1px solid #fff;
+        position: absolute;
+        right: -9px;
+        top: -9px;
+        cursor: pointer;
+        z-index: 10001;
+      }
+    }
+  }
+  .el-upload-list__item {
+    .el-upload-list__item-name {
+      margin-right: 70px;
+    }
+    .el-icon-download {
+      display: inline-block;
+      position: absolute;
+      top: 5px;
+      right: 25px;
+      cursor: pointer;
+      opacity: 0.75;
+      color: #606266;
+    }
+    .el-icon-view {
+      display: inline-block;
+      position: absolute;
+      top: 5px;
+      right: 45px;
+      cursor: pointer;
+      opacity: 0.75;
+      color: #606266;
     }
   }
 }
