@@ -40,10 +40,9 @@
               </el-form-item>
             </el-col>
             <el-col :sm="12" :xs="24">
-              <el-form-item label="所属组织" prop="organizeId">
-                <el-cascader v-model="organizeIdTree" :options="departmentTreeData"
-                  :props="departmentProps" placeholder="选择所属组织" clearable
-                  @change="onOrganizeChange" />
+              <el-form-item label="所属组织" prop="organizeIdTree">
+                <ComSelect v-model="dataForm.organizeIdTree" placeholder="选择所属组织" multiple
+                  @change="onOrganizeChange" clearable />
               </el-form-item>
             </el-col>
             <el-col :sm="12" :xs="24">
@@ -54,21 +53,24 @@
             <el-col :sm="12" :xs="24">
               <el-form-item label="岗位" prop="positionId">
                 <el-select v-model="positionId" multiple placeholder="选择岗位" @change="positionChange"
-                  @visible-change="positionVisibleChange" filterable>
-                  <el-option v-for="item in positionTreeData" :key="item.id" :label="item.fullName"
-                    :value="item.id">
-                  </el-option>
+                  @visible-change="visibleChange" filterable>
+                  <el-option-group v-for="group in positionTreeData" :key="group.id"
+                    :label="group.fullName+(group.num?'【'+group.num+'】':'')">
+                    <el-option v-for="item in group.children" :key="group.id+item.id"
+                      :label="item.fullName" :value="item.id">
+                    </el-option>
+                  </el-option-group>
                 </el-select>
               </el-form-item>
             </el-col>
             <el-col :sm="12" :xs="24">
               <el-form-item label="角色" prop="roleId">
                 <el-select v-model="roleId" multiple placeholder="选择角色" @change="roleIdChange"
-                  filterable>
+                  @visible-change="visibleChange" filterable>
                   <el-option-group v-for="group in roleTreeData" :key="group.id"
                     :label="group.fullName+(group.num?'【'+group.num+'】':'')">
-                    <el-option v-for="item in group.children" :key="item.id" :label="item.fullName"
-                      :value="item.id">
+                    <el-option v-for="item in group.children" :key="group.id+item.id"
+                      :label="item.fullName" :value="item.id">
                     </el-option>
                   </el-option-group>
                 </el-select>
@@ -191,9 +193,8 @@
 </template>
 
 <script>
-import { getDepartmentSelector } from '@/api/permission/department'
 import { getPositionByOrganize } from '@/api/permission/position'
-import { getRoleSelector } from '@/api/permission/role'
+import { getRoleByOrganize } from '@/api/permission/role'
 import { createUser, updateUser, getUserInfo } from '@/api/permission/user'
 
 export default {
@@ -208,7 +209,7 @@ export default {
         account: '',
         realName: '',
         organizeId: '',
-        organizeIdTree: '',
+        organizeIdTree: [],
         managerId: '',
         positionId: '',
         roleId: '',
@@ -232,8 +233,6 @@ export default {
       },
       roleId: [],
       positionId: [],
-      organizeIdTree: [],
-      departmentTreeData: [],
       positionTreeData: [],
       roleTreeData: [],
       genderTreeData: [],
@@ -244,12 +243,6 @@ export default {
       genderProps: {
         value: 'enCode',
         label: 'fullName'
-      },
-      departmentProps: {
-        value: 'id',
-        label: 'fullName',
-        children: 'children',
-        checkStrictly: true
       },
       dataRule: {
         account: [
@@ -265,32 +258,22 @@ export default {
         gender: [
           { required: true, message: '请选择性别', trigger: 'change' }
         ],
-        organizeId: [
-          { required: true, message: '请选择所属组织', trigger: 'change' }
+        organizeIdTree: [
+          { required: true, message: '请选择所属组织', trigger: 'change', type: 'array' }
         ]
       }
     }
   },
   methods: {
-    init(id, organizeId) {
+    init(id) {
       this.visible = true
       this.dataForm.id = id || ''
       this.roleId = []
       this.positionId = []
-      this.organizeIdTree = []
+      this.dataForm.organizeIdTree = []
       this.$nextTick(() => {
+        this.formLoading = true
         this.$refs['dataForm'].resetFields()
-
-        // 获取公司+部门
-        getDepartmentSelector().then(res => {
-          this.departmentTreeData = res.data.list
-        })
-
-        // 获取角色
-        getRoleSelector().then(res => {
-          this.roleTreeData = res.data.list
-        })
-
         // 获取民族
         this.$store.dispatch('base/getDictionaryData', { sort: 'Nation' }).then(res => {
           this.nationTreeData = res
@@ -308,21 +291,17 @@ export default {
           })
         })
         if (this.dataForm.id) {
-          this.formLoading = true
           getUserInfo(this.dataForm.id).then(res => {
             this.dataForm = res.data
             if (this.dataForm.roleId) this.roleId = this.dataForm.roleId.split(',')
             if (this.dataForm.positionId) this.positionId = this.dataForm.positionId.split(',')
-            if (this.dataForm.organizeIdTree) this.organizeIdTree = this.dataForm.organizeIdTree.split(',')
-            if (this.dataForm.organizeId) {
-              getPositionByOrganize(this.dataForm.organizeId).then(res => {
-                this.positionTreeData = res.data
-              })
+            if (this.dataForm.organizeIdTree && this.dataForm.organizeIdTree.length) {
+              this.getOptionsByOrgIds(this.dataForm.organizeIdTree)
             }
             this.formLoading = false
           }).catch(() => this.formLoading = false)
         } else {
-          this.dataForm.organizeId = organizeId
+          this.formLoading = false
         }
       })
     },
@@ -336,18 +315,27 @@ export default {
       this.dataForm.positionId = this.positionId.join()
     },
     onOrganizeChange(val) {
-      if (!val) return this.dataForm.organizeId = ''
-      this.dataForm.organizeId = val[val.length - 1]
-      this.dataForm.organizeIdTree = val.join(',')
       this.dataForm.positionId = ''
+      this.dataForm.roleId = ''
+      this.dataForm.organizeId = ''
       this.positionId = []
-      getPositionByOrganize(this.dataForm.organizeId).then(res => {
+      this.roleId = []
+      if (!val || !val.length) return
+      this.getOptionsByOrgIds(val)
+    },
+    getOptionsByOrgIds(organizeIdTree) {
+      const organizeIds = organizeIdTree.map(o => o[o.length - 1])
+      this.dataForm.organizeId = organizeIds.join()
+      getPositionByOrganize(organizeIds).then(res => {
         this.positionTreeData = res.data
       })
+      getRoleByOrganize(organizeIds).then(res => {
+        this.roleTreeData = res.data
+      })
     },
-    positionVisibleChange(val) {
+    visibleChange(val) {
       if (!val) return
-      if (!this.dataForm.organizeId) this.$message.warning('请先选择所属组织')
+      if (!this.dataForm.organizeIdTree || !this.dataForm.organizeIdTree.length) this.$message.warning('请先选择所属组织')
     },
     handleAvatarSuccess(res) {
       if (res.code === 200 && res.data && res.data.url) {

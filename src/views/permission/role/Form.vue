@@ -10,12 +10,14 @@
       <el-form-item label="角色编码" prop="enCode">
         <el-input v-model="dataForm.enCode" placeholder="输入角色编码" />
       </el-form-item>
-      <el-form-item label="角色类型" prop="type">
-        <el-select v-model="dataForm.type" placeholder="请选择角色类型">
-          <el-option v-for="item in typeOptions" :key="item.enCode" :label="item.fullName"
-            :value="item.enCode">
-          </el-option>
+      <el-form-item label="角色类型" prop="globalMark">
+        <el-select v-model="dataForm.globalMark" placeholder="请选择角色类型">
+          <el-option label="全局" :value="1"></el-option>
+          <el-option label="组织" :value="0"></el-option>
         </el-select>
+      </el-form-item>
+      <el-form-item label="所属组织" prop="organizeIdsTree" v-if="dataForm.globalMark===0">
+        <ComSelect v-model="dataForm.organizeIdsTree" placeholder="选择所属组织" multiple clearable />
       </el-form-item>
       <el-form-item label="排序" prop="sortCode">
         <el-input-number :min="0" :max="999999" v-model="dataForm.sortCode"
@@ -37,12 +39,7 @@
 </template>
 
 <script>
-import {
-  getRoleInfo,
-  createRole,
-  updateRole,
-  getRoleTypeSelector
-} from '@/api/permission/role'
+import { getRoleInfo, createRole, updateRole } from '@/api/permission/role'
 
 export default {
   data() {
@@ -50,12 +47,13 @@ export default {
       visible: false,
       formLoading: false,
       btnLoading: false,
-      typeOptions: [],
       dataForm: {
         fullName: '',
         enCode: '',
         type: '',
         enabledMark: 1,
+        globalMark: null,
+        organizeIdsTree: [],
         sortCode: 0,
         description: ''
       },
@@ -70,8 +68,11 @@ export default {
           { validator: this.formValidate('enCode', '角色编码只能输入英文、数字和小数点且小数点不能放在首尾'), trigger: 'blur' },
           { max: 50, message: '角色编码最多为50个字符！', trigger: 'blur' }
         ],
-        type: [
-          { required: true, message: '请选择角色类型', trigger: 'blur' }
+        globalMark: [
+          { required: true, message: '请选择角色类型', trigger: 'change' }
+        ],
+        organizeIdsTree: [
+          { required: true, message: '请选择所属组织', trigger: 'change', type: 'array' }
         ]
       }
     }
@@ -80,22 +81,17 @@ export default {
     init(id) {
       this.dataForm.id = id || ''
       this.visible = true
-      this.formLoading = true
       this.$nextTick(() => {
         this.$refs['dataForm'].resetFields()
-
-        // 角色类型
-        getRoleTypeSelector().then(res => {
-          this.typeOptions = res.data.list
-        })
-
         if (this.dataForm.id) {
+          this.formLoading = true
           getRoleInfo(this.dataForm.id).then(res => {
             this.dataForm = res.data
+            this.formLoading = false
           })
         }
       })
-      this.formLoading = false
+
     },
     dataFormSubmit() {
       this.$refs['dataForm'].validate((valid) => {

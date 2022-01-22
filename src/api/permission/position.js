@@ -68,9 +68,10 @@ export const getPositionListAll = () => {
 }
 
 // 通过组织id获取岗位列表
-export const getPositionByOrganize = (organizeId) => {
+export const getPositionByOrganize = (organizeIds) => {
   return request({
-    url: `/api/permission/Position/getList/${organizeId}`,
-    method: 'GET'
+    url: `/api/permission/Position/getListByOrgIds`,
+    method: 'post',
+    data: { organizeIds }
   })
 }

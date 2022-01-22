@@ -1,21 +1,33 @@
 <template>
-  <div class="JNPF-common-layout JNPF-flex-main">
+  <div class="JNPF-common-layout">
+    <div class="JNPF-common-layout-left">
+      <div class="JNPF-common-title">
+        <h2>{{$t('common.organization')}}</h2>
+        <span class="options">
+          <el-tooltip content="组织架构图" placement="top">
+            <el-link icon="el-icon-menu" :underline="false" @click="showDiagram" />
+          </el-tooltip>
+        </span>
+      </div>
+      <el-scrollbar class="JNPF-common-el-tree-scrollbar" v-loading="treeLoading"
+        :element-loading-text="$t('common.loadingText')">
+        <el-tree ref="treeBox" :data="treeData" :props="defaultProps" default-expand-all
+          highlight-current :expand-on-click-node="false" node-key="id"
+          @node-click="handleNodeClick" class="JNPF-common-el-tree">
+          <span class="custom-tree-node" slot-scope="{ data }" :title="data.fullName">
+            <i :class="data.icon" />
+            <span class="text">{{data.fullName}}</span>
+          </span>
+        </el-tree>
+      </el-scrollbar>
+    </div>
     <div class="JNPF-common-layout-center">
       <el-row class="JNPF-common-search-box" :gutter="16">
         <el-form @submit.native.prevent>
           <el-col :span="6">
             <el-form-item :label="$t('common.keyword')">
-              <el-input v-model="keyword" :placeholder="$t('common.enterKeyword')" clearable
-                @keyup.enter.native="search()" />
-            </el-form-item>
-          </el-col>
-          <el-col :span="6">
-            <el-form-item label="角色类型">
-              <el-select v-model="category" placeholder="请选择角色类型" clearable>
-                <el-option v-for="item in categoryList" :key="item.enCode" :label="item.fullName"
-                  :value="item.enCode">
-                </el-option>
-              </el-select>
+              <el-input v-model="listQuery.keyword" :placeholder="$t('common.enterKeyword')"
+                clearable @keyup.enter.native="search()" />
             </el-form-item>
           </el-col>
           <el-col :span="6">
@@ -39,10 +51,11 @@
           </div>
         </div>
         <JNPF-table v-loading="listLoading" :data="list">
-          <el-table-column prop="fullName" label="名称" />
-          <el-table-column prop="enCode" label="编码" />
-          <el-table-column prop="type" label="类型" width="150" />
-          <el-table-column prop="description" label="说明" />
+          <el-table-column prop="fullName" label="名称" width="200" />
+          <el-table-column prop="enCode" label="编码" width="200" />
+          <el-table-column prop="type" label="类型" width="70" />
+          <el-table-column prop="organizeInfo" label="组织" show-overflow-tooltip />
+          <el-table-column prop="description" label="说明" width="150" />
           <el-table-column prop="creatorTime" label="创建时间" :formatter="jnpf.tableDateFormat"
             width="120" />
           <el-table-column prop="sortCode" label="排序" width="70" align="center" />
@@ -52,7 +65,7 @@
                 {{scope.row.enabledMark==1?'正常':'停用'}}</el-tag>
             </template>
           </el-table-column>
-          <el-table-column label="操作" width="150">
+          <el-table-column label="操作" width="150" fixed="right">
             <template slot-scope="scope">
               <tableOpts @edit="addOrUpdateHandle(scope.row.id)" @del="handleDel(scope.row.id)">
                 <el-dropdown hide-on-click>
@@ -80,6 +93,7 @@
           :limit.sync="listQuery.pageSize" @pagination="initData" />
       </div>
       <Form v-if="formVisible" ref="Form" @refreshDataList="initData" />
+      <Diagram v-if="diagramVisible" ref="Diagram" @close="diagramVisible = false" />
       <AuthorizeForm v-if="authorizeFormVisible" ref="AuthorizeForm" @close="removeAuthorizeForm" />
       <UserRelationList v-if="userRelationListVisible" ref="UserRelationList"
         @refreshDataList="initData" />
@@ -88,30 +102,26 @@
 </template>
 
 <script>
-import {
-  getRoleList,
-  delRole,
-  getRoleTypeSelector,
-  updateRoleState
-} from '@/api/permission/role'
+import { getRoleList, delRole, updateRoleState } from '@/api/permission/role'
 import Form from './Form'
 import AuthorizeForm from '@/views/permission/authorize/AuthorizeForm'
 import UserRelationList from '@/views/permission/userRelation/Selector'
+import Diagram from '@/views/permission/user/Diagram'
 
 export default {
-  components: {
-    Form,
-    AuthorizeForm,
-    UserRelationList
-  },
+  components: { Form, AuthorizeForm, UserRelationList, Diagram },
   name: 'permission-role',
   data() {
     return {
+      treeData: [],
+      defaultProps: {
+        children: 'children',
+        label: 'fullName'
+      },
       list: [],
-      categoryList: [],
-      keyword: '',
-      category: '',
       listQuery: {
+        organizeId: '',
+        keyword: '',
         currentPage: 1,
         pageSize: 20,
         sort: 'desc',
@@ -119,23 +129,24 @@ export default {
       },
       total: 0,
       listLoading: true,
+      treeLoading: false,
       formVisible: false,
+      diagramVisible: false,
       authorizeFormVisible: false,
       userRelationListVisible: false
     }
   },
   created() {
-    this.getDictionaryData()
-    this.initData()
+    this.getOrganizeList()
   },
   methods: {
     reset() {
-      this.keyword = ''
-      this.category = ''
+      this.listQuery.keyword = ''
       this.search()
     },
     search() {
       this.listQuery = {
+        ...this.listQuery,
         currentPage: 1,
         pageSize: 20,
         sort: 'desc',
@@ -143,14 +154,36 @@ export default {
       }
       this.initData()
     },
+    showDiagram() {
+      this.diagramVisible = true
+      this.$nextTick(() => {
+        this.$refs.Diagram.init()
+      })
+    },
+    getOrganizeList() {
+      this.treeLoading = true
+      this.$store.dispatch('generator/getDepTree').then(res => {
+        let firstItem = {
+          fullName: "全局",
+          hasChildren: false,
+          id: "0",
+          parentId: "-1",
+          icon: 'icon-ym icon-ym-tree-organization3'
+        }
+        this.treeData = [firstItem, ...res]
+        this.$nextTick(() => {
+          this.listQuery.organizeId = this.treeData[0].id
+          this.$refs.treeBox.setCurrentKey(this.listQuery.organizeId)
+          this.treeLoading = false
+          this.initData()
+        })
+      }).catch(() => {
+        this.treeLoading = false
+      })
+    },
     initData() {
       this.listLoading = true
-      let query = {
-        ...this.listQuery,
-        keyword: this.keyword,
-        category: this.category
-      }
-      getRoleList(query).then(res => {
+      getRoleList(this.listQuery).then(res => {
         this.list = res.data.list
         this.total = res.data.pagination.total
         this.listLoading = false
@@ -158,16 +191,16 @@ export default {
         this.listLoading = false
       })
     },
-    getDictionaryData() {
-      getRoleTypeSelector().then(res => {
-        this.categoryList = res.data.list
-      })
-    },
     addOrUpdateHandle(id) {
       this.formVisible = true
       this.$nextTick(() => {
         this.$refs.Form.init(id)
       })
+    },
+    handleNodeClick(data) {
+      if (this.listQuery.organizeId === data.id) return
+      this.listQuery.organizeId = data.id
+      this.reset()
     },
     removeAuthorizeForm(isRefresh) {
       this.authorizeFormVisible = false

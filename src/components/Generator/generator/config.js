@@ -622,7 +622,7 @@ export const selectComponents = [{
       showLabel: true,
       tag: 'com-select',
       tagIcon: 'icon-ym icon-ym-generator-company',
-      defaultValue: null,
+      defaultValue: [],
       required: false,
       layout: 'colFormItem',
       span: 24,
