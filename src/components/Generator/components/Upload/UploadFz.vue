@@ -172,6 +172,7 @@ export default {
         this.fileList.push({
           name: file.name,
           fileId: res.data.name,
+          fileVersionId: res.data.fileVersionId,
           url: res.data.url
         })
         this.$emit('input', this.fileList)
