@@ -327,10 +327,10 @@ export default {
       const organizeIds = organizeIdTree.map(o => o[o.length - 1])
       this.dataForm.organizeId = organizeIds.join()
       getPositionByOrganize(organizeIds).then(res => {
-        this.positionTreeData = res.data.list
+        this.positionTreeData = res.data.list.filter(o => o.children && Array.isArray(o.children) && o.children.length)
       })
       getRoleByOrganize(organizeIds).then(res => {
-        this.roleTreeData = res.data.list
+        this.roleTreeData = res.data.list.filter(o => o.children && Array.isArray(o.children) && o.children.length)
       })
     },
     visibleChange(val) {

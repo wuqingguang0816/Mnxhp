@@ -49,8 +49,12 @@
       <div class="authorize-selectbox" v-else>
         <el-tree :data="roleTreeAllData" ref="roleTree" v-loading="roleTreeLoading"
           :element-loading-text="$t('common.loadingText')" show-checkbox default-expand-all
-          node-key="id" :props="defaultProps" check-on-click-node :expand-on-click-node="false"
+          node-key="onlyId" :props="defaultProps" check-on-click-node :expand-on-click-node="false"
           @check-change="selectTreeNodeClick">
+          <span slot-scope="{ node, data }">
+            <i :class="data.icon" />
+            <span style="padding-left: 4px;">{{ node.label }}</span>
+          </span>
         </el-tree>
       </div>
     </div>
@@ -305,7 +309,8 @@ export default {
           this.dataForm.resource = dataIds
           break
         case 5:
-          this.dataForm.roleIds = this.$refs.roleTree.getCheckedKeys()
+          let nodes = this.$refs.roleTree.getCheckedNodes()
+          this.dataForm.roleIds = nodes.map(o => o.id)
           break
       }
     },
