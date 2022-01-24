@@ -9,10 +9,10 @@ export function getDownloadUrl(type, fileName) {
 }
 
 // 预览文件
-export function PreviewFile(fileName) {
+export function PreviewFile(data) {
   return request({
     url: `/api/file/Uploader/Preview`,
     method: 'get',
-    data: { fileName }
+    data
   })
 }
