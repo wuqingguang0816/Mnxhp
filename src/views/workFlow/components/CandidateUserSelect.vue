@@ -110,10 +110,11 @@ export default {
   },
   watch: {
     value(val) {
+      this.setDefault()
     }
   },
   created() {
-
+    this.setDefault()
   },
   methods: {
     onClose() { },
@@ -132,6 +133,7 @@ export default {
       this.$nextTick(() => {
         this.bindScroll()
         this.search()
+        this.setDefault()
       })
     },
     confirm() {
@@ -188,6 +190,12 @@ export default {
     removeData(index) {
       this.selectedData.splice(index, 1)
     },
+    setDefault() {
+      if (!this.value || !this.value.length) {
+        this.innerValue = ''
+        this.selectedData = []
+      }
+    }
   },
 }
 </script>

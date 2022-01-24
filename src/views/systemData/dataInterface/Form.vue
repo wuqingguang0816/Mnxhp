@@ -47,7 +47,7 @@
               <el-radio :label="3">Api数据</el-radio>
             </el-radio-group>
           </el-form-item>
-          <el-form-item label="类型" prop="requestMethod" v-if="dataForm.dataType===1">
+          <el-form-item label="类别" prop="requestMethod" v-if="dataForm.dataType===1">
             <el-radio-group v-model="dataForm.requestMethod" @change="onMethodChange($event,'sql')">
               <el-radio label="1">增加</el-radio>
               <el-radio label="2">修改</el-radio>
@@ -55,7 +55,7 @@
               <el-radio label="4">删除</el-radio>
             </el-radio-group>
           </el-form-item>
-          <el-form-item label="类型" prop="requestMethod" v-if="dataForm.dataType===3">
+          <el-form-item label="类别" prop="requestMethod" v-if="dataForm.dataType===3">
             <el-radio-group v-model="dataForm.requestMethod" @change="onMethodChange($event,'api')">
               <el-radio label="6">GET请求</el-radio>
               <el-radio label="7">POST请求</el-radio>
