@@ -191,7 +191,7 @@ export default {
       this.selectedData.splice(index, 1)
     },
     setDefault() {
-      if (!this.value) {
+      if (!this.value || !this.value.length) {
         this.innerValue = ''
         this.selectedData = []
       }
