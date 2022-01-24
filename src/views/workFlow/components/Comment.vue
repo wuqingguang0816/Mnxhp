@@ -37,14 +37,14 @@
           <el-upload :action="define.comUploadUrl+'/annexpic'" :headers="uploadHeaders"
             ref="elUploadImg" :on-success="handleImgSuccess" multiple :show-file-list="false"
             accept="image/*" :before-upload="beforeImgUpload" :on-exceed="handleImgExceed"
-            :limit="9" :disabled="imgUploading" class="upload-btn">
-            <el-button size="small" icon="el-icon-picture" :loading="imgUploading">图片</el-button>
+            :limit="9" class="upload-btn">
+            <el-button size="small" icon="el-icon-picture">图片</el-button>
           </el-upload>
           <el-upload :action="define.comUploadUrl+'/annex'" :headers="uploadHeaders"
             ref="elUploadFile" :on-success="handleFileSuccess" multiple :show-file-list="false"
             :accept="fielAccept" :before-upload="beforeFileUpload" :on-exceed="handleFileExceed"
-            :limit="9" :disabled="fileUploading" class="upload-btn">
-            <el-button size="small" icon="el-icon-upload" :disabled="fileUploading">附件</el-button>
+            :limit="9" class="upload-btn">
+            <el-button size="small" icon="el-icon-upload">附件</el-button>
           </el-upload>
         </el-form-item>
         <el-form-item prop="image" v-if="dataForm.image.length">
