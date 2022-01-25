@@ -19,10 +19,54 @@
               <el-avatar :size="50" :src="define.comUrl+ data.avatar"></el-avatar>
               <div class="text">
                 <p>{{data.userName}}</p>
-                <p>{{data.department}}/{{data.position}}</p>
+                <p>{{data.department}}{{data.position?'/'+data.position:''}}</p>
               </div>
             </el-card>
           </el-tree>
+        </div>
+      </el-tab-pane>
+      <el-tab-pane label="我的组织" name="organize">
+        <div class="JNPF-common-title mb-10">
+          <h2 class="bold">我的组织</h2>
+        </div>
+        <div class="organize-list">
+          <template v-if="organizeList.length">
+            <el-radio-group v-model="activeOrganize" @change="changeMajor($event,'Organize')">
+              <el-row :gutter="100">
+                <el-col :span="12" class="organize-item" v-for="(item,i) in organizeList" :key="i">
+                  <el-radio :label="item.id" border>
+                    <div class="organize-name">
+                      <p>{{item.fullName}}</p>
+                    </div>
+                    <p class="btn">默认</p>
+                  </el-radio>
+                </el-col>
+              </el-row>
+            </el-radio-group>
+          </template>
+          <el-empty description="暂无数据" :image-size="120" v-else></el-empty>
+        </div>
+      </el-tab-pane>
+      <el-tab-pane label="我的岗位" name="position">
+        <div class="JNPF-common-title mb-10">
+          <h2 class="bold">我的岗位</h2>
+        </div>
+        <div class="organize-list">
+          <template v-if="positionList.length">
+            <el-radio-group v-model="activePosition" @change="changeMajor($event,'Position')">
+              <el-row :gutter="100">
+                <el-col :span="12" class="organize-item" v-for="(item,i) in positionList" :key="i">
+                  <el-radio :label="item.id" border>
+                    <div class="organize-name">
+                      <p>{{item.fullName}}</p>
+                    </div>
+                    <p class="btn">主岗</p>
+                  </el-radio>
+                </el-col>
+              </el-row>
+            </el-radio-group>
+          </template>
+          <el-empty description="暂无数据" :image-size="120" v-else></el-empty>
         </div>
       </el-tab-pane>
       <el-tab-pane label="系统权限" name="authorize" class="el-tab-pane-authorize">
@@ -48,8 +92,7 @@
 </template>
 
 <script>
-import { UserSettingInfo, getSubordinate, UpdateAvatar, UpdateLanguage } from '@/api/permission/userSetting'
-import { mapGetters } from 'vuex'
+import { UserSettingInfo, getSubordinate, UpdateAvatar, UpdateLanguage, getUserOrganizes, getUserPositions, setMajor } from '@/api/permission/userSetting'
 import UserInfo from './components/UserInfo'
 import Password from './components/Password'
 import Authorize from './components/Authorize'
@@ -63,6 +106,12 @@ export default {
       user: {},
       treeData: [],
       activeTab: '',
+      organizeList: [],
+      positionList: [],
+      activeOrganize: '',
+      oldOrganize: '',
+      activePosition: '',
+      oldPosition: '',
       visible: {
         user: true,
         password: false,
@@ -89,10 +138,18 @@ export default {
       if (val === 'subordinate') {
         this.nodeId = '0'
         this.getSubordinate()
+        return
+      }
+      if (val === 'organize') {
+        this.getUserOrganizes()
+        return
+      }
+      if (val === 'position') {
+        this.getUserPositions()
+        return
       }
     }
   },
-
   created() {
     this.getInfo()
   },
@@ -140,6 +197,45 @@ export default {
           type: 'success',
           duration: 1000,
         })
+      })
+    },
+    getUserOrganizes() {
+      getUserOrganizes().then(res => {
+        this.organizeList = res.data || []
+        const list = this.organizeList.filter(o => o.isDefault)
+        if (!list.length) return this.activeOrganize = ''
+        const activeItem = list[0]
+        this.activeOrganize = activeItem.id
+        this.oldOrganize = activeItem.id
+      })
+    },
+    getUserPositions() {
+      getUserPositions().then(res => {
+        this.positionList = res.data || []
+        const list = this.positionList.filter(o => o.isDefault)
+        if (!list.length) return this.activePosition = ''
+        const activeItem = list[0]
+        this.activePosition = activeItem.id
+        this.oldPosition = activeItem.id
+      })
+    },
+    changeMajor(majorId, majorType) {
+      let query = {
+        majorId,
+        majorType
+      }
+      setMajor(query).then(res => {
+        this['old' + majorType] = this['active' + majorType]
+        this.$message({
+          message: res.msg,
+          type: 'success',
+          duration: 1500,
+          onClose() {
+            location.reload()
+          }
+        })
+      }).catch(() => {
+        this['active' + majorType] = this['old' + majorType]
       })
     }
   }
@@ -285,6 +381,46 @@ export default {
     .subordinate-list {
       flex: 1;
       overflow: auto;
+    }
+  }
+  .organize-list {
+    width: 100%;
+    padding: 50px;
+    .el-radio-group {
+      width: 100%;
+    }
+    .organize-item {
+      margin-bottom: 30px;
+      .el-radio {
+        width: 100%;
+        height: 70px;
+        >>> .el-radio__input {
+          position: absolute;
+          right: 50px;
+          bottom: 4px;
+        }
+        .btn {
+          position: absolute;
+          right: 20px;
+          bottom: 5px;
+          font-size: 12px;
+        }
+        .organize-name {
+          position: absolute;
+          height: 70px;
+          display: flex;
+          align-items: center;
+          left: 0;
+          right: 0;
+          top: 0;
+          padding: 0 20px;
+          p {
+            line-height: 22px;
+            font-size: 14px;
+            white-space: normal;
+          }
+        }
+      }
     }
   }
 }

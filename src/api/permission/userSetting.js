@@ -68,3 +68,35 @@ export function LogList(data) {
     data
   })
 }
+// 获取当前用户所有组织
+export function getUserOrganizes(data) {
+  return request({
+    url: `/api/permission/Users/Current/getUserOrganizes`,
+    method: 'GET',
+    data
+  })
+}
+// 获取当前用户所有岗位
+export function getUserPositions(data) {
+  return request({
+    url: `/api/permission/Users/Current/getUserPositions`,
+    method: 'GET',
+    data
+  })
+}
+// 获取当前用户所有角色
+export function getUserRoles(data) {
+  return request({
+    url: `/api/permission/Users/Current/getUserRoles`,
+    method: 'GET',
+    data
+  })
+}
+// 设置主要组织、主要岗位
+export function setMajor(data) {
+  return request({
+    url: `/api/permission/Users/Current/major`,
+    method: 'put',
+    data
+  })
+}
