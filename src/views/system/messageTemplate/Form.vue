@@ -63,11 +63,11 @@
       <el-dialog title="添加参数" :visible.sync="dialogVisible" :close-on-click-modal="false"
         class="JNPF-dialog JNPF-dialog_center" lock-scroll append-to-body width="600px">
         <el-form :model="fieldForm" :rules="fieldRule" ref="fieldForm" label-width="80px">
-          <el-form-item label="参数名" prop="field">
-            <el-input v-model="fieldForm.field" placeholder="参数名"></el-input>
+          <el-form-item label="参数名称" prop="field">
+            <el-input v-model="fieldForm.field" placeholder="参数名称"></el-input>
           </el-form-item>
-          <el-form-item label="注释" prop="fieldName">
-            <el-input v-model="fieldForm.fieldName" placeholder="注释"></el-input>
+          <el-form-item label="参数说明" prop="fieldName">
+            <el-input v-model="fieldForm.fieldName" placeholder="参数说明"></el-input>
           </el-form-item>
         </el-form>
         <span slot="footer" class="dialog-footer">

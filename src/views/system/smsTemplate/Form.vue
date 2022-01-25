@@ -45,7 +45,7 @@
         <el-form :model="testForm" :rules="testRule" ref="testForm" label-width="80px"
           :element-loading-text="$t('common.loadingText')">
           <JNPF-table :data="testList">
-            <el-table-column prop="field" label="参数名" width="100" />
+            <el-table-column prop="field" label="参数名称" width="100" />
             <el-table-column prop="value" label="参数赋值">
               <template slot-scope="scope">
                 <el-input v-model="scope.row.value" placeholder="参数赋值"></el-input>

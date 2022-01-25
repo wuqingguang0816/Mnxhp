@@ -59,7 +59,7 @@
               <span v-if="scope.row.dataType === 3">Api数据</span>
             </template>
           </el-table-column>
-          <el-table-column prop="requestMethod" label="类别" width="100" />
+          <el-table-column prop="requestMethod" label="动作" width="100" />
           <el-table-column prop="creatorTime" label="创建时间" :formatter="jnpf.tableDateFormat"
             width="120" />
           <el-table-column prop="sortCode" label="排序" width="70" align="center" />

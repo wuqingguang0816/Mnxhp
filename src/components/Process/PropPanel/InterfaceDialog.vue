@@ -63,7 +63,7 @@
               <el-table-column type="expand" width="40">
                 <template slot-scope="scope">
                   <el-table :data="scope.row.templateJson" size='mini'>
-                    <el-table-column prop="field" label="参数名称(注释)">
+                    <el-table-column prop="field" label="参数名称(说明)">
                       <template slot-scope="scope">
                         <p>
                           <span class="required-sign">{{scope.row.required?'*':''}}</span>
@@ -89,7 +89,7 @@
               <el-table-column prop="fullName" label="名称" />
               <el-table-column prop="enCode" label="编码" />
               <el-table-column prop="dataType" label="类型" width="100" />
-              <el-table-column prop="requestMethod" label="类别" width="100" />
+              <el-table-column prop="requestMethod" label="动作" width="100" />
             </JNPF-table>
             <pagination :total="total" :page.sync="listQuery.currentPage"
               :limit.sync="listQuery.pageSize" @pagination="initData" />
