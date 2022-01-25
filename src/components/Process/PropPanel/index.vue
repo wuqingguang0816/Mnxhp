@@ -299,7 +299,7 @@
         <el-tab-pane label="流程事件">
           <el-scrollbar class="config-scrollbar">
             <el-form :model="startForm" class="pd-10" label-width="130px" label-position="left">
-              <el-form-item label="自定义发起事件">
+              <el-form-item label="发起事件">
                 <el-switch v-model="startForm.initFuncConfig.on" />
               </el-form-item>
               <template v-if="startForm.initFuncConfig.on">
@@ -342,7 +342,7 @@
                   </el-table-column>
                 </el-table>
               </template>
-              <el-form-item label="自定义结束事件">
+              <el-form-item label="结束事件">
                 <el-switch v-model="startForm.endFuncConfig.on" />
               </el-form-item>
               <template v-if="startForm.endFuncConfig.on">
@@ -385,7 +385,7 @@
                   </el-table-column>
                 </el-table>
               </template>
-              <el-form-item label="自定义撤回事件">
+              <el-form-item label="撤回事件">
                 <el-switch v-model="startForm.flowRecallFuncConfig.on" />
               </el-form-item>
               <template v-if="startForm.flowRecallFuncConfig.on">
@@ -635,7 +635,7 @@
         <el-tab-pane label="节点事件">
           <el-scrollbar class="config-scrollbar">
             <el-form :model="approverForm" class="pd-10" label-width="130px" label-position="left">
-              <el-form-item label="自定义同意事件">
+              <el-form-item label="同意事件">
                 <el-switch v-model="approverForm.approveFuncConfig.on" />
               </el-form-item>
               <template v-if="approverForm.approveFuncConfig.on">
@@ -678,7 +678,7 @@
                   </el-table-column>
                 </el-table>
               </template>
-              <el-form-item label="自定义拒绝事件">
+              <el-form-item label="拒绝事件">
                 <el-switch v-model="approverForm.rejectFuncConfig.on" />
               </el-form-item>
               <template v-if="approverForm.rejectFuncConfig.on">
@@ -721,7 +721,7 @@
                   </el-table-column>
                 </el-table>
               </template>
-              <el-form-item label="自定义撤回事件">
+              <el-form-item label="撤回事件">
                 <el-switch v-model="approverForm.recallFuncConfig.on" />
               </el-form-item>
               <template v-if="approverForm.recallFuncConfig.on">
