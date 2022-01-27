@@ -88,7 +88,7 @@
       <el-switch v-model="activeData.filterable" />
     </el-form-item>
     <el-form-item label="能否多选">
-      <el-switch v-model="activeData.props.props.multiple" />
+      <el-switch v-model="activeData.props.props.multiple" @change="onChange" />
     </el-form-item>
     <el-form-item label="是否禁用">
       <el-switch v-model="activeData.disabled" />
@@ -131,7 +131,7 @@ export default {
       this.dataTypeChange()
     },
     'activeData.__config__.dictionaryType': function (val) {
-      this.activeData.__config__.defaultValue = ''
+      this.activeData.__config__.defaultValue = []
       if (!val) {
         this.activeData.options = []
         return
@@ -193,6 +193,11 @@ export default {
       const children = parent.data.children || parent.data
       const index = children.findIndex(d => d.id === data.id)
       children.splice(index, 1)
+    },
+    onChange() {
+      this.cascaderKey = +new Date()
+      this.activeData.__config__.renderKey = +new Date()
+      this.activeData.__config__.defaultValue = []
     },
     dataTypeChange() {
       this.cascaderKey = +new Date()

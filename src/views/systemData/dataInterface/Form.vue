@@ -47,15 +47,15 @@
               <el-radio :label="3">Api数据</el-radio>
             </el-radio-group>
           </el-form-item>
-          <el-form-item label="类别" prop="requestMethod" v-if="dataForm.dataType===1">
+          <el-form-item label="动作" prop="requestMethod" v-if="dataForm.dataType===1">
             <el-radio-group v-model="dataForm.requestMethod" @change="onMethodChange($event,'sql')">
+              <el-radio label="3">查询</el-radio>
               <el-radio label="1">增加</el-radio>
               <el-radio label="2">修改</el-radio>
-              <el-radio label="3">查询</el-radio>
               <el-radio label="4">删除</el-radio>
             </el-radio-group>
           </el-form-item>
-          <el-form-item label="类别" prop="requestMethod" v-if="dataForm.dataType===3">
+          <el-form-item label="动作" prop="requestMethod" v-if="dataForm.dataType===3">
             <el-radio-group v-model="dataForm.requestMethod" @change="onMethodChange($event,'api')">
               <el-radio label="6">GET请求</el-radio>
               <el-radio label="7">POST请求</el-radio>
@@ -112,9 +112,6 @@
         <div class="right-pane-list">
           <div class="cap">
             <span>参数定义</span>
-            <!-- <div class="add-btn" @click="addOrUpdateHandle()">
-              <el-button icon="el-icon-plus">添加参数</el-button>
-            </div> -->
           </div>
           <div class="list">
             <el-table :data="requestParameters" ref="dragTable" row-key="id" size='mini'
@@ -125,7 +122,7 @@
                     title='点击拖动' />
                 </template>
               </el-table-column>
-              <el-table-column prop="field" label="参数名称(注释)">
+              <el-table-column prop="field" label="参数名称(说明)">
                 <template slot-scope="scope">
                   <p @click="handleItemClick(scope.row)" style="cursor:pointer">
                     <span class="required-sign">{{scope.row.required?'*':''}}</span>
@@ -192,7 +189,7 @@
                     title='点击拖动' />
                 </template>
               </el-table-column>
-              <el-table-column prop="field" label="参数名称(注释)">
+              <el-table-column prop="field" label="参数名称(说明)">
                 <template slot-scope="scope">
                   <p>
                     <span class="required-sign">{{scope.row.required?'*':''}}</span>
@@ -290,7 +287,7 @@ export default {
         query: ''
       },
       requestParameters: [],
-      sqlRequestMethod: '1',
+      sqlRequestMethod: '3',
       apiRequestMethod: '6',
       dbOptions: [],
       treeData: [],
@@ -386,8 +383,14 @@ export default {
       })
     },
     onDataTypeChange(val) {
-      if (val === 1) this.dataForm.requestMethod = this.sqlRequestMethod
-      if (val === 3) this.dataForm.requestMethod = this.apiRequestMethod
+      if (val === 1) {
+        this.dataForm.requestMethod = this.sqlRequestMethod
+      } else if (val === 3) {
+        this.dataForm.requestMethod = this.apiRequestMethod
+      } else {
+        this.dataForm.requestMethod = ''
+      }
+      this.requestParameters = []
     },
     onMethodChange(val, key) {
       this[key + 'RequestMethod'] = val
@@ -404,7 +407,7 @@ export default {
       })
     },
     handleNodeClick(data) {
-      console.log(data.table)
+      this.$refs.SQLEditorRef && this.$refs.SQLEditorRef.insert(data.table)
     },
     handlePrevStep() {
       this.active -= 1
