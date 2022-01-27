@@ -33,14 +33,17 @@ const layouts = {
     if (this.formConf.unFocusedComponentBorder) className += ' unfocus-bordered'
     let labelWidth = config.labelWidth ? `${config.labelWidth}px` : null
     if (config.showLabel === false) labelWidth = '0'
+    const Item = config.jnpfKey === 'cascader'
+      ? <el-cascader v-model={config.defaultValue} placeholder={element.placeholder} options={element.options}
+        props={element.props} disabled={element.disabled} show-all-levels={element['show-all-levels']} separator={element.separator}
+        style={element.style} clearable={element.clearable} filterable={element.filterable} key={config.renderKey}></el-cascader>
+      : <render key={config.renderKey} conf={element} onInput={event => { this.$set(config, 'defaultValue', event) }} />
     return (
       <el-col span={config.span} class={className}
         nativeOnClick={event => { activeItem(element); event.stopPropagation() }}>
         <el-form-item label-width={labelWidth}
           label={config.showLabel ? config.label : ''} required={config.required}>
-          <render key={config.renderKey} conf={element} onInput={event => {
-            this.$set(config, 'defaultValue', event)
-          }} />
+          {Item}
         </el-form-item>
         {components.itemBtns.apply(this, arguments)}
       </el-col>

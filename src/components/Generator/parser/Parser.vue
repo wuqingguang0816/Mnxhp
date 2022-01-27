@@ -13,12 +13,20 @@ const layouts = {
 
     let labelWidth = config.labelWidth ? `${config.labelWidth}px` : null
     if (config.showLabel === false) labelWidth = '0'
+    const Item = config.jnpfKey === 'cascader'
+      ? <el-cascader v-model={this[this.formConf.formModel][scheme.__vModel__]} placeholder={scheme.placeholder} options={scheme.options}
+        props={scheme.props} disabled={scheme.disabled} show-all-levels={scheme['show-all-levels']} separator={scheme.separator}
+        style={scheme.style} clearable={scheme.clearable} filterable={scheme.filterable}
+        onChange={val => this.onCascaderChange(val, scheme.on)} onBlur={val => this.onCascaderBlur(val, scheme.on)}
+        key={scheme.__config__.renderKey}></el-cascader>
+      : <render formData={this[this.formConf.formModel]} conf={scheme} {...{ on: listeners }} ref={config.rowType === 'table' ? scheme.__vModel__ : undefined}
+        key={scheme.__config__.renderKey} />
     if (!config.noShow) {
       return (
         <el-col span={config.span}>
           <el-form-item label-width={labelWidth} prop={scheme.__vModel__}
             label={config.showLabel ? config.label : ''}>
-            <render formData={this[this.formConf.formModel]} conf={scheme} {...{ on: listeners }} ref={config.rowType === 'table' ? scheme.__vModel__ : undefined} key={scheme.__config__.renderKey} />
+            {Item}
           </el-form-item>
         </el-col>
       )
@@ -471,6 +479,18 @@ export default {
         this.$emit('submit', this[this.formConf.formModel], this.afterSubmit)
         return true
       })
+    },
+    onCascaderChange(data, on) {
+      if (!on || !on.change) return
+      const func = this.jnpf.getScriptFunc(on.change)
+      if (!func) return
+      func.call(this, { data, ...this.parameter })
+    },
+    onCascaderBlur(data, on) {
+      if (!on || !on.blur) return
+      const func = this.jnpf.getScriptFunc(on.blur)
+      if (!func) return
+      func.call(this, { data, ...this.parameter })
     }
   },
   render(h) {
