@@ -287,6 +287,7 @@ export default {
         this.dataForm.file.push({
           name: file.name,
           fileId: res.data.name,
+          fileVersionId: res.data.fileVersionId,
           url: res.data.url
         })
       } else {
