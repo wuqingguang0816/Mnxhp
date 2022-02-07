@@ -47,9 +47,19 @@
             @click="addTreeItem">添加父级</el-button>
         </div>
       </template>
-      <JNPF-TreeSelect :options="treeData" v-model="activeData.__config__.dictionaryType"
-        placeholder="选择数据字典" lastLevel v-if="activeData.__config__.dataType==='dictionary'"
-        clearable />
+      <template v-if="activeData.__config__.dataType === 'dictionary'">
+        <el-form-item label="远端数据">
+          <JNPF-TreeSelect :options="treeData" v-model="activeData.__config__.dictionaryType"
+            placeholder="请选择数据字典" lastLevel clearable>
+          </JNPF-TreeSelect>
+        </el-form-item>
+        <el-form-item label="存储字段">
+          <el-select v-model="activeData.props.props.value" placeholder="请选择存储字段">
+            <el-option label="id" value="id"></el-option>
+            <el-option label="enCode" value="enCode"></el-option>
+          </el-select>
+        </el-form-item>
+      </template>
       <template v-if="activeData.__config__.dataType === 'dynamic'">
         <el-form-item label="远端数据">
           <JNPF-TreeSelect :options="dataInterfaceSelector" v-model="activeData.__config__.propsUrl"
@@ -57,10 +67,10 @@
             @change="propsUrlChange" clearable />
         </el-form-item>
         <el-form-item label="存储字段">
-          <el-input v-model="activeData.props.props.label" placeholder="请输入存储字段" />
+          <el-input v-model="activeData.props.props.value" placeholder="请输入存储字段" />
         </el-form-item>
         <el-form-item label="显示字段">
-          <el-input v-model="activeData.props.props.value" placeholder="请输入显示字段" />
+          <el-input v-model="activeData.props.props.label" placeholder="请输入显示字段" />
         </el-form-item>
         <el-form-item label="子级字段">
           <el-input v-model="activeData.props.props.children" placeholder="请输入子级字段" />
@@ -78,7 +88,7 @@
       <el-switch v-model="activeData.filterable" />
     </el-form-item>
     <el-form-item label="能否多选">
-      <el-switch v-model="activeData.props.props.multiple" />
+      <el-switch v-model="activeData.props.props.multiple" @change="onChange" />
     </el-form-item>
     <el-form-item label="是否禁用">
       <el-switch v-model="activeData.disabled" />
@@ -97,7 +107,7 @@
 import comMixin from '../mixin';
 import TreeNodeDialog from './TreeNodeDialog'
 import { getDictionaryTypeSelector, getDictionaryDataSelector } from '@/api/systemData/dictionary'
-import { getDataInterfaceSelector, previewDataInterface } from '@/api/systemData/dataInterface'
+import { getDataInterfaceSelector, getDataInterfaceRes } from '@/api/systemData/dataInterface'
 export default {
   props: ['activeData'],
   mixins: [comMixin],
@@ -121,7 +131,7 @@ export default {
       this.dataTypeChange()
     },
     'activeData.__config__.dictionaryType': function (val) {
-      this.activeData.__config__.defaultValue = ''
+      this.activeData.__config__.defaultValue = []
       if (!val) {
         this.activeData.options = []
         return
@@ -184,6 +194,11 @@ export default {
       const index = children.findIndex(d => d.id === data.id)
       children.splice(index, 1)
     },
+    onChange() {
+      this.cascaderKey = +new Date()
+      this.activeData.__config__.renderKey = +new Date()
+      this.activeData.__config__.defaultValue = []
+    },
     dataTypeChange() {
       this.cascaderKey = +new Date()
       this.activeData.__config__.renderKey = +new Date()
@@ -201,13 +216,14 @@ export default {
         this.activeData.options = []
         return
       }
-      previewDataInterface(val).then(res => {
-        if (Array.isArray(res.data)) {
-          this.activeData.options = res.data
+      getDataInterfaceRes(val).then(res => {
+        let data = this.jnpf.interfaceDataHandler(res.data)
+        if (Array.isArray(data)) {
+          this.activeData.options = data
         } else {
           this.activeData.options = []
         }
-      }).catch(res => {
+      }).catch(() => {
         this.activeData.__config__.propsUrl = ''
         this.activeData.options = []
       })

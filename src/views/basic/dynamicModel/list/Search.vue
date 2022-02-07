@@ -58,7 +58,7 @@
             </template>
             <template v-if="item.__config__.jnpfKey==='treeSelect'">
               <JNPF-TreeSelect v-model="item.value" :placeholder="'请选择'+item.__config__.label"
-                :options="item.options" class="item" clearable />
+                :options="item.options" :props="item.props.props" class="item" clearable />
             </template>
             <template
               v-if="item.__config__.jnpfKey==='createUser'||item.__config__.jnpfKey==='modifyUser'">
@@ -103,7 +103,7 @@
 import { deepClone } from '@/utils'
 import { dyOptionsList, useInputList, useDateList, useSelectList } from '@/components/Generator/generator/comConfig'
 import { getDictionaryDataSelector } from '@/api/systemData/dictionary'
-import { previewDataInterface } from '@/api/systemData/dataInterface'
+import { getDataInterfaceRes } from '@/api/systemData/dataInterface'
 export default {
   props: ['list'],
   data() {
@@ -141,8 +141,13 @@ export default {
           }
           if (config.dataType === 'dynamic') {
             if (!config.propsUrl) return
-            previewDataInterface(config.propsUrl).then(res => {
-              isTreeSelect ? cur.options = res.data : cur.__slot__.options = res.data
+            getDataInterfaceRes(config.propsUrl).then(res => {
+              let data = this.jnpf.interfaceDataHandler(res.data)
+              if (Array.isArray(data)) {
+                isTreeSelect ? cur.options = data : cur.__slot__.options = data
+              } else {
+                isTreeSelect ? cur.options = [] : cur.__slot__.options = []
+              }
             })
           }
         }

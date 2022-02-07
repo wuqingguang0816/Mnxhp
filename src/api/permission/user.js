@@ -76,6 +76,14 @@ export const updateUserState = (id) => {
   })
 }
 
+// 解除锁定
+export const unlockUser = (id) => {
+  return request({
+    url: `/api/permission/Users/${id}/Actions/unlock`,
+    method: 'PUT'
+  })
+}
+
 // IM通讯获取用户
 export const getImUser = data => {
   return request({
@@ -112,10 +120,50 @@ export const getSubordinates = (keyword) => {
   })
 }
 // 获取当前组织用户
-export const getOrganization = (keyword) => {
+export const getOrganization = (data) => {
   return request({
     url: '/api/permission/Users/getOrganization',
+    method: 'get',
+    data
+  })
+}
+// 导出Excel
+export function ExportExcel(data) {
+  return request({
+    url: '/api/permission/Users/ExportExcel',
+    method: 'get',
+    data
+  })
+}
+// 模板下载
+export function TemplateDownload(data) {
+  return request({
+    url: '/api/permission/Users/TemplateDownload',
+    method: 'get',
+    data
+  })
+}
+// 导入
+export function ImportData(data) {
+  return request({
+    url: '/api/permission/Users/ImportData',
     method: 'post',
-    data: { keyword }
+    data
+  })
+}
+// 导入预览
+export function ImportPreview(data) {
+  return request({
+    url: '/api/permission/Users/ImportPreview',
+    method: 'get',
+    data
+  })
+}
+// 导出错误数据
+export function ExportExceptionData(data) {
+  return request({
+    url: '/api/permission/Users/ExportExceptionData',
+    method: 'post',
+    data
   })
 }

@@ -25,9 +25,9 @@
       <el-row class="JNPF-common-search-box" :gutter="16">
         <el-form @submit.native.prevent>
           <el-col :span="6">
-            <el-form-item :label="$t('common.keyWord')">
-              <el-input v-model="params.keyword" :placeholder="$t('common.enterKeyword')" clearable
-                @keyup.enter.native="search()" />
+            <el-form-item :label="$t('common.keyword')">
+              <el-input v-model="listQuery.keyword" :placeholder="$t('common.enterKeyword')"
+                clearable @keyup.enter.native="search()" />
             </el-form-item>
           </el-col>
           <el-col :span="6">
@@ -42,7 +42,10 @@
       </el-row>
       <div class="JNPF-common-layout-main JNPF-flex-main">
         <div class="JNPF-common-head">
-          <topOpts @add="addOrUpdateHandle()"></topOpts>
+          <topOpts @add="addOrUpdateHandle()">
+            <el-button type="text" icon="el-icon-download" @click="exportForm">导出</el-button>
+            <el-button type="text" icon="el-icon-upload2" @click="uploadForm">导入</el-button>
+          </topOpts>
           <div class="JNPF-common-head-right">
             <el-tooltip effect="dark" :content="$t('common.refresh')" placement="top">
               <el-link icon="icon-ym icon-ym-Refresh JNPF-common-head-icon" :underline="false"
@@ -59,7 +62,7 @@
             </template>
           </el-table-column>
           <el-table-column prop="mobilePhone" label="手机" width="120" />
-          <el-table-column prop="department" label="所属组织" />
+          <el-table-column prop="department" label="所属部门" />
           <el-table-column prop="creatorTime" label="创建时间" :formatter="jnpf.tableDateFormat"
             width="120" />
           <el-table-column prop="sortCode" label="排序" width="70" align="center" />
@@ -67,6 +70,12 @@
             <template slot-scope="scope">
               <el-tag :type="scope.row.enabledMark == 1 ? 'success' : 'danger'" disable-transitions>
                 {{scope.row.enabledMark==1?'正常':'停用'}}</el-tag>
+            </template>
+          </el-table-column>
+          <el-table-column label="锁定状态" width="80" align="center">
+            <template slot-scope="scope">
+              <el-tag :type="scope.row.lockMark == 1 ? 'warning' : 'success'" disable-transitions>
+                {{scope.row.lockMark==1?'已锁定':'未锁定'}}</el-tag>
             </template>
           </el-table-column>
           <el-table-column label="操作" width="150">
@@ -83,19 +92,23 @@
                       @click.native="handleResetPwd(scope.row.id, scope.row.account)">
                       {{$t('user.resetPassword')}}
                     </el-dropdown-item>
+                    <el-dropdown-item @click.native="unlockUser(scope.row.id)"
+                      v-if="scope.row.lockMark == 1">解除锁定</el-dropdown-item>
                   </el-dropdown-menu>
                 </el-dropdown>
               </tableOpts>
             </template>
           </el-table-column>
         </JNPF-table>
-        <pagination :total="total" :page.sync="params.currentPage" :limit.sync="params.pageSize"
-          @pagination="initData" />
+        <pagination :total="total" :page.sync="listQuery.currentPage"
+          :limit.sync="listQuery.pageSize" @pagination="initData" />
       </div>
     </div>
     <Form v-show="formVisible" ref="Form" @close="removeForm" />
     <Diagram v-if="diagramVisible" ref="Diagram" @close="diagramVisible = false" />
     <ResetPwdForm v-if="resetFormVisible" ref="ResetPwdForm" @refreshDataList="initData" />
+    <ExportForm v-if="exportFormVisible" ref="exportForm" />
+    <ImportForm v-if="importFormVisible" ref="importForm" @refresh="reset()" />
   </div>
 </template>
 <script>
@@ -105,18 +118,23 @@ import {
 import {
   getUserList,
   updateUserState,
+  unlockUser,
   delUser
 } from '@/api/permission/user'
 import Form from './Form'
 import Diagram from './Diagram'
 import ResetPwdForm from './ResetPassword'
+import ImportForm from './ImportForm'
+import ExportForm from './ExportForm'
 
 export default {
   name: 'permission-user',
   components: {
     Form,
     Diagram,
-    ResetPwdForm
+    ResetPwdForm,
+    ExportForm,
+    ImportForm
   },
   data() {
     return {
@@ -125,7 +143,7 @@ export default {
       tableData: [],
       treeLoading: false,
       listLoading: true,
-      params: {
+      listQuery: {
         organizeId: '',
         keyword: '',
         currentPage: 1,
@@ -140,7 +158,9 @@ export default {
       formVisible: false,
       diagramVisible: false,
       resetFormVisible: false,
-      authorizeFormVisible: false
+      authorizeFormVisible: false,
+      importFormVisible: false,
+      exportFormVisible: false
     }
   },
   created() {
@@ -154,13 +174,13 @@ export default {
       })
     },
     search() {
-      this.params.currentPage = 1
-      this.params.pageSize = 20
-      this.params.sort = 'desc'
+      this.listQuery.currentPage = 1
+      this.listQuery.pageSize = 20
+      this.listQuery.sort = 'desc'
       this.initData()
     },
     reset() {
-      this.params.keyword = ''
+      this.listQuery.keyword = ''
       this.search()
     },
     getOrganizeList() {
@@ -175,7 +195,7 @@ export default {
     },
     initData() {
       this.listLoading = true
-      getUserList(this.params).then(res => {
+      getUserList(this.listQuery).then(res => {
         this.tableData = res.data.list
         this.total = res.data.pagination.total
         this.listLoading = false
@@ -184,15 +204,15 @@ export default {
       })
     },
     handleNodeClick(data) {
-      if (this.params.organizeId === data.id) return
-      this.params.organizeId = data.id
+      if (this.listQuery.organizeId === data.id) return
+      this.listQuery.organizeId = data.id
       this.type = data.type
       this.reset()
     },
     addOrUpdateHandle(id) {
       this.formVisible = true
       this.$nextTick(() => {
-        this.$refs.Form.init(id, this.type === 'department' ? this.params.organizeId : '')
+        this.$refs.Form.init(id, this.type === 'department' ? this.listQuery.organizeId : '')
       })
     },
     removeForm(isRefresh) {
@@ -241,7 +261,34 @@ export default {
           })
         })
       }).catch(() => { })
-
+    },
+    unlockUser(id) {
+      this.$confirm('此操作将解除该账户锁定, 是否继续?', '解除锁定', {
+        type: 'warning'
+      }).then(() => {
+        unlockUser(id).then(res => {
+          this.$message({
+            type: 'success',
+            message: res.msg,
+            duration: 1500,
+            onClose: () => {
+              this.initData()
+            }
+          })
+        })
+      }).catch(() => { })
+    },
+    exportForm() {
+      this.exportFormVisible = true
+      this.$nextTick(() => {
+        this.$refs.exportForm.init(this.listQuery)
+      })
+    },
+    uploadForm() {
+      this.importFormVisible = true
+      this.$nextTick(() => {
+        this.$refs.importForm.init()
+      })
     },
     handleResetPwd(id, account) {
       this.resetFormVisible = true

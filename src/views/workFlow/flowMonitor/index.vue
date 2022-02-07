@@ -44,6 +44,15 @@
                 <user-select v-model="creatorUserId" placeholder="选择发起人员" />
               </el-form-item>
             </el-col>
+            <el-col :span="6">
+              <el-form-item label="流程状态">
+                <el-select v-model="status" placeholder="选择流程状态" clearable>
+                  <el-option v-for="(item,i) in statusList" :key="i" :label="item.fullName"
+                    :value="item.id">
+                  </el-option>
+                </el-select>
+              </el-form-item>
+            </el-col>
           </template>
           <el-col :span="6">
             <el-form-item>
@@ -77,7 +86,7 @@
           <el-table-column prop="startTime" label="发起时间" width="130"
             :formatter="jnpf.tableDateFormat" />
           <el-table-column prop="userName" label="发起人员" width="130" />
-          <el-table-column prop="thisStep" label="当前节点" width="130" />
+          <el-table-column prop="thisStep" label="审批节点" width="130" />
           <el-table-column prop="flowUrgent" label="紧急程度" width="130">
             <template slot-scope="scope">
               {{ scope.row.flowUrgent | urgentText() }}
@@ -161,11 +170,31 @@ export default {
           }
         }]
       },
+      statusList: [{
+        id: 0,
+        fullName: '等待提交'
+      }, {
+        id: 1,
+        fullName: '等待审核'
+      }, {
+        id: 2,
+        fullName: '审核通过'
+      }, {
+        id: 3,
+        fullName: '审核驳回'
+      }, {
+        id: 4,
+        fullName: '流程撤回'
+      }, {
+        id: 5,
+        fullName: '审核终止'
+      }],
       keyword: '',
       pickerVal: [],
       startTime: '',
       endTime: '',
       flowId: '',
+      status: '',
       flowCategory: '',
       creatorUserId: '',
       categoryList: [],
@@ -219,6 +248,7 @@ export default {
         startTime: this.startTime,
         endTime: this.endTime,
         flowId: this.flowId,
+        status: this.status,
         flowCategory: this.flowCategory,
         creatorUserId: this.creatorUserId
       }
@@ -276,6 +306,7 @@ export default {
       this.endTime = ''
       this.keyword = ''
       this.flowId = ''
+      this.status = ''
       this.flowCategory = ''
       this.creatorUserId = ''
       this.listQuery = {

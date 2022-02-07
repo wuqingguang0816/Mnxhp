@@ -49,9 +49,19 @@
         </el-button>
       </div>
     </template>
-    <JNPF-TreeSelect :options="treeData" v-model="activeData.__config__.dictionaryType"
-      placeholder="选择数据字典" lastLevel v-if="activeData.__config__.dataType==='dictionary'" clearable>
-    </JNPF-TreeSelect>
+    <template v-if="activeData.__config__.dataType === 'dictionary'">
+      <el-form-item label="远端数据">
+        <JNPF-TreeSelect :options="treeData" v-model="activeData.__config__.dictionaryType"
+          placeholder="请选择数据字典" lastLevel clearable>
+        </JNPF-TreeSelect>
+      </el-form-item>
+      <el-form-item label="存储字段">
+        <el-select v-model="activeData.__config__.props.value" placeholder="请选择存储字段">
+          <el-option label="id" value="id"></el-option>
+          <el-option label="enCode" value="enCode"></el-option>
+        </el-select>
+      </el-form-item>
+    </template>
     <template v-if="activeData.__config__.dataType === 'dynamic'">
       <el-form-item label="远端数据">
         <JNPF-TreeSelect :options="dataInterfaceSelector" v-model="activeData.__config__.propsUrl"
@@ -109,7 +119,7 @@
 import comMixin from './mixin';
 import draggable from 'vuedraggable'
 import { getDictionaryTypeSelector, getDictionaryDataSelector } from '@/api/systemData/dictionary'
-import { getDataInterfaceSelector, previewDataInterface } from '@/api/systemData/dataInterface'
+import { getDataInterfaceSelector, getDataInterfaceRes } from '@/api/systemData/dataInterface'
 export default {
   props: ['activeData'],
   mixins: [comMixin],
@@ -177,9 +187,14 @@ export default {
         return
       }
       this.activeData.__config__.defaultValue = ''
-      previewDataInterface(val).then(res => {
-        this.activeData.__slot__.options = res.data
-      }).catch(res => {
+      getDataInterfaceRes(val).then(res => {
+        let data = this.jnpf.interfaceDataHandler(res.data)
+        if (Array.isArray(data)) {
+          this.activeData.__slot__.options = data
+        } else {
+          this.activeData.__slot__.options = []
+        }
+      }).catch(() => {
         this.activeData.__config__.propsUrl = ''
         this.activeData.__slot__.options = []
       })

@@ -3,7 +3,7 @@ import { deepClone } from '@/utils'
 import render from '@/components/Generator/render/render.js'
 import { ruleTrigger, dyOptionsList } from '@/components/Generator/generator/comConfig'
 import { getDictionaryDataSelector } from '@/api/systemData/dictionary'
-import { previewDataInterface } from '@/api/systemData/dataInterface'
+import { getDataInterfaceRes } from '@/api/systemData/dataInterface'
 import request from '@/utils/request'
 
 const layouts = {
@@ -13,12 +13,20 @@ const layouts = {
 
     let labelWidth = config.labelWidth ? `${config.labelWidth}px` : null
     if (config.showLabel === false) labelWidth = '0'
+    const Item = config.jnpfKey === 'cascader'
+      ? <el-cascader v-model={this[this.formConf.formModel][scheme.__vModel__]} placeholder={scheme.placeholder} options={scheme.options}
+        props={scheme.props} disabled={scheme.disabled} show-all-levels={scheme['show-all-levels']} separator={scheme.separator}
+        style={scheme.style} clearable={scheme.clearable} filterable={scheme.filterable}
+        onChange={val => this.onCascaderChange(val, scheme.on)} onBlur={val => this.onCascaderBlur(val, scheme.on)}
+        key={scheme.__config__.renderKey}></el-cascader>
+      : <render formData={this[this.formConf.formModel]} conf={scheme} {...{ on: listeners }} ref={config.rowType === 'table' ? scheme.__vModel__ : undefined}
+        key={scheme.__config__.renderKey} />
     if (!config.noShow) {
       return (
         <el-col span={config.span}>
           <el-form-item label-width={labelWidth} prop={scheme.__vModel__}
             label={config.showLabel ? config.label : ''}>
-            <render formData={this[this.formConf.formModel]} conf={scheme} {...{ on: listeners }} ref={config.rowType === 'table' ? scheme.__vModel__ : undefined} key={scheme.__config__.renderKey} />
+            {Item}
           </el-form-item>
         </el-col>
       )
@@ -153,17 +161,6 @@ function setValue(event, config, scheme) {
   this.$set(this[this.formConf.formModel], scheme.__vModel__, event)
 }
 
-function getFunc(str) {
-  let func = null
-  try {
-    func = eval(str)
-    return func
-  } catch (error) {
-    console.log(error);
-    return false
-  }
-}
-
 function buildListeners(scheme) {
   const config = scheme.__config__
   const listeners = {}
@@ -171,7 +168,7 @@ function buildListeners(scheme) {
     // 响应 组件事件
     Object.keys(scheme.on).forEach(key => {
       const str = scheme.on[key];
-      const func = getFunc(str);
+      const func = this.jnpf.getScriptFunc(str);
       if (!func) return
       listeners[key] = params => {
         if (key === 'change') {
@@ -285,21 +282,19 @@ export default {
             })
           } else if (config.dataType === 'dynamic') {
             if (!config.propsUrl) return
-            previewDataInterface(config.propsUrl).then(res => {
-              isTreeSelect ? cur.options = res.data : cur.__slot__.options = res.data
+            getDataInterfaceRes(config.propsUrl).then(res => {
+              let realData = this.jnpf.interfaceDataHandler(res.data)
+              if (Array.isArray(realData)) {
+                isTreeSelect ? cur.options = realData : cur.__slot__.options = realData
+              } else {
+                isTreeSelect ? cur.options = [] : cur.__slot__.options = []
+              }
               isTreeSelect ? data[cur.__vModel__ + 'Options'] = cur.options : data[cur.__vModel__ + 'Options'] = cur.__slot__.options
             })
           } else {
             isTreeSelect ? data[cur.__vModel__ + 'Options'] = cur.options : data[cur.__vModel__ + 'Options'] = cur.__slot__.options
           }
         }
-        // if (config.jnpfKey === 'popupSelect') {
-        //   if (!cur.interfaceId) return
-        //   previewDataInterface(cur.interfaceId).then(res => {
-        //     cur.options = res.data
-        //     data[cur.__vModel__ + 'Options'] = res.data
-        //   })
-        // }
         if (config.jnpfKey === 'comSelect') {
           this.$store.dispatch('generator/getCompanyTree').then(res => {
             data[cur.__vModel__ + 'Options'] = res
@@ -342,7 +337,7 @@ export default {
     },
     onLoad(formConfCopy) {
       if (!formConfCopy || !formConfCopy.funcs || !formConfCopy.funcs.onLoad) return
-      const onLoadFunc = getFunc(formConfCopy.funcs.onLoad)
+      const onLoadFunc = this.jnpf.getScriptFunc(formConfCopy.funcs.onLoad)
       if (!onLoadFunc) return
       onLoadFunc(this.parameter)
     },
@@ -437,7 +432,7 @@ export default {
           if (item.__vModel__ && item.__vModel__ === prop) {
             switch (field) {
               case 'disabled':
-                item[field] = value
+                this.$set(item, field, value)
                 break;
               case 'options':
                 if (dyOptionsList.indexOf(item.__config__.jnpfKey) > -1) {
@@ -446,7 +441,7 @@ export default {
                 }
                 break;
               default:
-                item.__config__[field] = value
+                this.$set(item.__config__, field, value)
                 break;
             }
             item.__config__.renderKey = +new Date() + item.__vModel__
@@ -462,14 +457,14 @@ export default {
     beforeSubmit() {
       let valid = true
       if (!this.formConfCopy || !this.formConfCopy.funcs || !this.formConfCopy.funcs.beforeSubmit) return valid
-      const func = getFunc(this.formConfCopy.funcs.beforeSubmit)
+      const func = this.jnpf.getScriptFunc(this.formConfCopy.funcs.beforeSubmit)
       if (!func) return valid
       valid = func(this.parameter)
       return valid
     },
     afterSubmit() {
       if (!this.formConfCopy || !this.formConfCopy.funcs || !this.formConfCopy.funcs.afterSubmit) return
-      const func = getFunc(this.formConfCopy.funcs.afterSubmit)
+      const func = this.jnpf.getScriptFunc(this.formConfCopy.funcs.afterSubmit)
       if (!func) return
       func(this.parameter)
     },
@@ -484,6 +479,18 @@ export default {
         this.$emit('submit', this[this.formConf.formModel], this.afterSubmit)
         return true
       })
+    },
+    onCascaderChange(data, on) {
+      if (!on || !on.change) return
+      const func = this.jnpf.getScriptFunc(on.change)
+      if (!func) return
+      func.call(this, { data, ...this.parameter })
+    },
+    onCascaderBlur(data, on) {
+      if (!on || !on.blur) return
+      const func = this.jnpf.getScriptFunc(on.blur)
+      if (!func) return
+      func.call(this, { data, ...this.parameter })
     }
   },
   render(h) {

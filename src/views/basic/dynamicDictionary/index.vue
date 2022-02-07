@@ -5,7 +5,7 @@
         <el-form @submit.native.prevent>
           <el-col :span="6">
             <el-form-item label="关键词">
-              <el-input v-model="params.keyword" placeholder="请输入关键词查询" clearable
+              <el-input v-model="listQuery.keyword" placeholder="请输入关键词查询" clearable
                 @keyup.enter.native="search()" />
             </el-form-item>
           </el-col>
@@ -61,7 +61,7 @@ export default {
   components: { Form },
   data() {
     return {
-      params: {
+      listQuery: {
         keyword: '',
         isTree: 0
       },
@@ -74,7 +74,7 @@ export default {
   },
   created() {
     this.typeId = this.$route.meta.relationId
-    this.params.isTree = this.$route.meta.isTree || 0
+    this.listQuery.isTree = this.$route.meta.isTree || 0
     if (!this.typeId) return
     this.getDictionaryList()
   },
@@ -83,12 +83,12 @@ export default {
       this.getDictionaryList()
     },
     reset() {
-      this.params.keyword = ''
+      this.listQuery.keyword = ''
       this.getDictionaryList()
     },
     getDictionaryList() {
       this.listLoading = true
-      getDictionaryDataList(this.typeId, this.params).then(res => {
+      getDictionaryDataList(this.typeId, this.listQuery).then(res => {
         this.tableData = res.data.list
         this.listLoading = false
       }).catch(() => {
@@ -98,7 +98,7 @@ export default {
     handleNodeClick(data) {
       this.listLoading = true
       this.typeId = data.id
-      this.params.isTree = data.isTree
+      this.listQuery.isTree = data.isTree
       this.getDictionaryList()
     },
     handleUpdateState(row) {
@@ -122,7 +122,7 @@ export default {
     addOrUpdateHandle(id) {
       this.formVisible = true
       this.$nextTick(() => {
-        this.$refs.Form.init(id, this.typeId, this.params.isTree)
+        this.$refs.Form.init(id, this.typeId, this.listQuery.isTree)
       })
     },
     handleDel(id) {

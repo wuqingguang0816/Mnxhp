@@ -149,10 +149,16 @@ export default {
         relationField: this.relationField,
       }
       getDataInterfaceDataSelect(this.interfaceId, query).then(res => {
-        this.list = res.data.list
+        this.list = this.interfaceDataHandler(res.data)
         this.total = res.data.pagination.total
         this.listLoading = false
       }).catch(() => { this.listLoading = false })
+    },
+    interfaceDataHandler(data) {
+      if (!data.dataProcessing) return data.list
+      const dataHandler = this.jnpf.getScriptFunc(data.dataProcessing)
+      if (!dataHandler) return data.list
+      return dataHandler(data.list)
     },
     search() {
       this.initData()
@@ -206,27 +212,6 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
-.popupSelect-container {
-  width: 100%;
-  .popupSelect-input {
-    width: 100%;
-    cursor: pointer;
-    >>> input {
-      cursor: pointer;
-    }
-    .el-icon-circle-close {
-      display: none;
-    }
-    &:hover {
-      .el-icon-circle-close {
-        display: block;
-      }
-      .el-icon-arrow-down.clearable {
-        display: none;
-      }
-    }
-  }
-}
 >>> .el-dialog__body {
   height: 70vh;
   padding: 0 0 10px !important;

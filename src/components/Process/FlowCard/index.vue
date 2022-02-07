@@ -25,6 +25,9 @@ function createNormalCard(ctx, conf, h) {
         <div class="actions">
           <i class="el-icon-close icon" onClick={this.eventLancher.bind(ctx, "deleteNode", conf, ctx.data)} ></i>
         </div>
+        {(isSubFlowNode) && (
+          <el-tag class="async-state" size="mini" effect="plain">{conf.properties.isAsync ? '异步' : '同步'}</el-tag>
+        )}
       </header>
       <div class="body">
         <span class="text">{conf.content}</span>

@@ -8,8 +8,7 @@
       </div>
       <el-steps :active="activeStep" finish-status="success" simple class="steps">
         <el-step title="基础信息" @click.native="stepChick(0)" />
-        <el-step title="表单字段" @click.native="stepChick(1)" v-if="dataForm.formType == 1" />
-        <el-step title="表单设计" @click.native="stepChick(1)" v-if="dataForm.formType == 2" />
+        <el-step title="表单设计" @click.native="stepChick(1)" />
         <el-step title="流程设计" @click.native="stepChick(2)" />
       </el-steps>
       <div class="options">

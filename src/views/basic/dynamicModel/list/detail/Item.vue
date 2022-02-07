@@ -17,18 +17,19 @@
           <groupTitle :content="item.content" :content-position="item['content-position']" />
         </el-form-item>
       </template>
+      <template v-else-if="item.__config__.jnpfKey==='button'">
+        <el-form-item label-width="0">
+          <jnpf-button :align="item.align" :buttonText="item.buttonText" :type="item.type"
+            :disabled="item.disabled" />
+        </el-form-item>
+      </template>
       <template v-else>
         <el-form-item :prop="item.__vModel__"
           :label-width="item.__config__.labelWidth?`${item.__config__.labelWidth}px`: null"
           :label="item.__config__.showLabel ? item.__config__.label : '' "
           v-if="!item.__config__.noShow">
           <template v-if="item.__config__.jnpfKey==='uploadFz'">
-            <div class="dy-fileList">
-              <el-link :underline="false" class="dy-fileList-item"
-                v-for="(cItem,ci) in item.__config__.defaultValue" :key="ci"
-                @click="downloadFile(cItem)"><i class="el-icon-document"></i>{{cItem.name}}
-              </el-link>
-            </div>
+            <JNPFUploadFz v-model="item.__config__.defaultValue" detailed disabled />
           </template>
           <template v-else-if="item.__config__.jnpfKey==='uploadImg'">
             <el-image :src="define.comUrl+cItem.url" class="dy-img"
@@ -44,12 +45,6 @@
             <el-rate v-model="item.__config__.defaultValue" :max="item.max"
               :allow-half="item['allow-half']" :show-text="item['show-text']"
               :show-score="item['show-score']" disabled />
-          </template>
-          <template v-else-if="item.__config__.jnpfKey==='switch'">
-            <el-switch v-model="item.__config__.defaultValue" :active-value="item['active-value']"
-              :active-color="item['active-color']" :active-text="item['active-text']"
-              :inactive-color="item['inactive-color']" :inactive-text="item['inactive-text']"
-              :inactive-value="item['inactive-value']" disabled />
           </template>
           <template v-else-if="item.__config__.jnpfKey==='slider'">
             <div class="slider-box">
@@ -69,6 +64,18 @@
             <p>
               {{ relationData[item.relationField] &&relationData[item.relationField][item.showField] ? relationData[item.relationField][item.showField] : '' }}
             </p>
+          </template>
+          <template v-else-if="item.__config__.jnpfKey==='barcode'">
+            <jnpf-barcode :format="item.format" :lineColor="item.lineColor"
+              :background="item.background" :width="item.width" :height="item.height"
+              :staticText="item.staticText" :dataType="item.dataType"
+              :relationField="item.relationField+'_id'" :formData="formValue"></jnpf-barcode>
+          </template>
+          <template v-else-if="item.__config__.jnpfKey==='qrcode'">
+            <jnpf-qrcode :format="item.format" :colorLight="item.colorLight"
+              :colorDark="item.colorDark" :size="item.size" :staticText="item.staticText"
+              :dataType="item.dataType" :relationField="item.relationField+'_id'"
+              :formData="formValue"></jnpf-qrcode>
           </template>
           <template v-else>
             <p>{{ getValue(item) }}</p>
@@ -94,7 +101,9 @@
           <div class="JNPF-common-title" v-if="item.__config__.showTitle">
             <h2>{{item.__config__.label}}</h2>
           </div>
-          <JNPF-table :data="item.__config__.defaultValue">
+          <JNPF-table :data="item.__config__.defaultValue"
+            :show-summary="!!item.__config__.defaultValue.length && item['show-summary'] && (item.summaryField && !!item.summaryField.length)"
+            :summary-method="getSummaries">
             <template v-for="(column,columnIndex) in item.__config__.children">
               <el-table-column :key="columnIndex" :prop="column.__vModel__"
                 :label="column.__config__.label" v-if="column.__config__.jnpfKey==='relationForm'">
@@ -108,6 +117,12 @@
                 v-else-if="column.__config__.jnpfKey==='relationFormAttr'">
                 <template slot-scope="scope">
                   {{ scope.row[column.relationField+'_'+column.showField] }}
+                </template>
+              </el-table-column>
+              <el-table-column :key="columnIndex" :label="column.__config__.label"
+                v-else-if="column.__config__.jnpfKey==='uploadFz'">
+                <template slot-scope="scope">
+                  <JNPFUploadFz v-model="scope.row[column.__vModel__]" detailed disabled />
                 </template>
               </el-table-column>
               <el-table-column :key="columnIndex" :prop="column.__vModel__"
@@ -151,6 +166,9 @@ export default {
       type: Object,
       required: true
     },
+    formValue: {
+      type: Object,
+    },
     relationData: {
       type: Object,
       default: () => { }
@@ -182,6 +200,35 @@ export default {
         return item.__config__.defaultValue.join()
       }
       return item.__config__.defaultValue
+    },
+    getSummaries(param) {
+      const summaryField = this.item.summaryField
+      const { columns, data } = param;
+      const sums = [];
+      columns.forEach((column, index) => {
+        if (index === 0) {
+          sums[index] = '合计';
+          return;
+        }
+        if (!summaryField.includes(column.property)) {
+          sums[index] = '';
+          return;
+        }
+        const values = data.map(item => Number(item[column.property]));
+        if (!values.every(value => isNaN(value))) {
+          sums[index] = values.reduce((prev, curr) => {
+            const value = Number(curr);
+            if (!isNaN(value)) {
+              return prev + curr;
+            } else {
+              return prev;
+            }
+          }, 0);
+        } else {
+          sums[index] = '';
+        }
+      });
+      return sums
     }
   }
 }

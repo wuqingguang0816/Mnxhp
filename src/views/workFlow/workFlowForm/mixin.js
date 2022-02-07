@@ -23,6 +23,14 @@ export default {
         this.$refs['dataForm'].resetFields()
         if (this.beforeInit) this.beforeInit()
         if (data.id) {
+          if (data.draftData) {
+            this.dataForm = data.draftData
+            if (this.dataForm.fileJson) {
+              this.fileList = JSON.parse(this.dataForm.fileJson)
+            }
+            this.$emit('setPageLoad')
+            return
+          }
           if (this.selfGetInfo && typeof this.selfGetInfo === "function") return this.selfGetInfo()
           Info(this.setting.enCode, data.id).then(res => {
             this.dataForm = res.data

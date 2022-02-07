@@ -202,6 +202,36 @@ const jnpf = {
   getAuth() {
     return store.getters.token;
   },
+  idGenerator() {
+    let qutient = (new Date() - new Date('2020-08-01'))
+    qutient += Math.ceil(Math.random() * 1000)
+    const chars = '0123456789ABCDEFGHIGKLMNOPQRSTUVWXYZabcdefghigklmnopqrstuvwxyz';
+    const charArr = chars.split("")
+    const radix = chars.length;
+    const res = []
+    do {
+      let mod = qutient % radix;
+      qutient = (qutient - mod) / radix;
+      res.push(charArr[mod])
+    } while (qutient);
+    return res.join('')
+  },
+  getScriptFunc(str) {
+    let func = null
+    try {
+      func = eval(str)
+      return func
+    } catch (error) {
+      console.log(error);
+      return false
+    }
+  },
+  interfaceDataHandler(data) {
+    if (!data.dataProcessing) return data.data
+    const dataHandler = this.getScriptFunc(data.dataProcessing)
+    if (!dataHandler) return data.data
+    return dataHandler(data.data)
+  },
   // 基于dayjs日期格式化,时间戳(毫秒)转日期
   dateFormat(date, format) {
     format = format || 'YYYY-MM-DD HH:mm'

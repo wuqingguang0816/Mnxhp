@@ -15,7 +15,7 @@
           <el-col :span="10">
             <el-form-item label="关键词">
               <el-input v-model="listQuery.keyword" placeholder="请输入关键词查询" clearable
-                @keyup.enter.native="search()" />
+                @keyup.enter.native="search()" class="search-input" />
             </el-form-item>
           </el-col>
           <el-col :span="8">
@@ -213,27 +213,6 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
-.popupSelect-container {
-  width: 100%;
-  .popupSelect-input {
-    width: 100%;
-    cursor: pointer;
-    >>> input {
-      cursor: pointer;
-    }
-    .el-icon-circle-close {
-      display: none;
-    }
-    &:hover {
-      .el-icon-circle-close {
-        display: block;
-      }
-      .el-icon-arrow-down.clearable {
-        display: none;
-      }
-    }
-  }
-}
 >>> .el-dialog__body {
   height: 70vh;
   padding: 0 0 10px !important;

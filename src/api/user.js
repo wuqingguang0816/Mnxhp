@@ -36,3 +36,11 @@ export function unlock(data) {
     data
   })
 }
+
+// 获取默认配置
+export function getConfig(account) {
+  return request({
+    url: `/api/oauth/getConfig/${account}`,
+    method: 'get'
+  })
+}

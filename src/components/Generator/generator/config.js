@@ -148,8 +148,8 @@ export const inputComponents = [{
       change: '({ data, formData, setFormData, setShowOrHide, setRequired, setDisabled, request, getFieldOptions, setFieldOptions }) => {\n    // 在此编写代码\n    \n}',
     },
     disabled: false,
-    'active-text': '',
-    'inactive-text': '',
+    'activeTxt': '开',
+    'inactiveTxt': '关',
     'active-color': null,
     'inactive-color': null,
     'active-value': 1,
@@ -586,14 +586,38 @@ export const inputComponents = [{
       trigger: 'blur'
     },
     placeholder: '请输入内容...'
-  }
+  },
+  {
+    __config__: {
+      jnpfKey: 'button',
+      label: '按钮',
+      labelWidth: undefined,
+      showLabel: false,
+      tag: 'jnpf-button',
+      tagIcon: 'icon-ym icon-ym-generator-button',
+      defaultValue: null,
+      required: false,
+      layout: 'colFormItem',
+      span: 24,
+      dragDisabled: false,
+      regList: [],
+      trigger: 'click'
+    },
+    on: {
+      click: '({ data, formData, setFormData, setShowOrHide, setRequired, setDisabled, request, getFieldOptions, setFieldOptions }) => {\n    // 在此编写代码\n    \n}',
+    },
+    align: 'left',
+    buttonText: '按钮',
+    type: '',
+    disabled: false
+  },
 ]
 
 // 高级控件 【左面板】
 export const selectComponents = [{
     __config__: {
       jnpfKey: 'comSelect',
-      label: '公司组件',
+      label: '组织选择',
       labelWidth: undefined,
       showLabel: true,
       tag: 'com-select',
@@ -619,7 +643,7 @@ export const selectComponents = [{
   {
     __config__: {
       jnpfKey: 'depSelect',
-      label: '部门组件',
+      label: '部门选择',
       labelWidth: undefined,
       showLabel: true,
       tag: 'dep-select',
@@ -645,7 +669,7 @@ export const selectComponents = [{
   {
     __config__: {
       jnpfKey: 'posSelect',
-      label: '岗位组件',
+      label: '岗位选择',
       labelWidth: undefined,
       showLabel: true,
       tag: 'pos-select',
@@ -671,7 +695,7 @@ export const selectComponents = [{
   {
     __config__: {
       jnpfKey: 'userSelect',
-      label: '用户组件',
+      label: '用户选择',
       labelWidth: undefined,
       showLabel: true,
       tag: 'user-select',
@@ -778,6 +802,7 @@ export const selectComponents = [{
     disabled: false,
     actionText: '添加',
     'show-summary': false,
+    summaryField: [],
     tableConf: {},
     defaultValue: []
   },
@@ -805,6 +830,7 @@ export const selectComponents = [{
     disabled: false,
     clearable: true,
     filterable: false,
+    multiple: false,
     level: 2
   },
   {
@@ -963,6 +989,7 @@ export const systemComponents = [{
       noShow: false
     },
     readonly: true,
+    showLevel: 'last',
     placeholder: '系统自动生成'
   },
   {

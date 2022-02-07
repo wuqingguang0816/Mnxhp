@@ -1,6 +1,6 @@
 <template>
   <el-dialog title="批量导入" :close-on-click-modal="false" :visible.sync="visible"
-    class="JNPF-dialog JNPF-dialog_center" lock-scroll width="1000px">
+    class="JNPF-dialog JNPF-dialog_center JNPF-dialog-import" lock-scroll width="1000px">
     <el-steps :active="active" align-center>
       <el-step title="上传文件"></el-step>
       <el-step title="数据预览"></el-step>
@@ -157,7 +157,8 @@
     <span slot="footer" class="dialog-footer">
       <el-button @click="cancle()" v-if="active == 1">取 消</el-button>
       <el-button @click="prev" v-if="active == 2">上一步</el-button>
-      <el-button @click="next" type="primary" v-if="active < 3" :loading="btnLoading">下一步
+      <el-button @click="next" type="primary" v-if="active < 3" :loading="btnLoading"
+        :disabled="active == 1 && !fileName">下一步
       </el-button>
       <el-button @click="cancle(true)" type="primary" v-else>关 闭</el-button>
     </span>
@@ -194,7 +195,6 @@ export default {
         if (!this.list.length) return this.$message({ message: '导入数据为空', type: 'warning' })
         this.btnLoading = true
         ImportData({ list: this.list }).then(res => {
-          console.log(res);
           this.result = res.data
           this.resultList = res.data.failResult
           this.btnLoading = false
@@ -256,91 +256,3 @@ export default {
   }
 }
 </script>
-<style lang="scss" scoped>
-::v-deep .el-dialog__body {
-  padding: 20px 40px 2px !important;
-}
-.import-main {
-  height: 500px;
-  margin-top: 20px;
-  overflow: hidden;
-  position: relative;
-  .upload {
-    display: flex;
-    border: 1px solid #dcdfe6;
-    margin-bottom: 25px;
-    &.error-show {
-      margin-top: 10px;
-      margin-bottom: 15px;
-      .up_left {
-        height: 120px;
-      }
-      .up_right {
-        padding-top: 20px;
-        font-size: 16px;
-        ::v-deep .el-link {
-          font-size: 16px;
-        }
-      }
-    }
-    .up_left {
-      width: 126px;
-      height: 140px;
-      background: #f9f9f9;
-      text-align: center;
-      padding-top: 20px;
-      flex-shrink: 0;
-      img {
-        width: 80px;
-        height: 80px;
-      }
-    }
-
-    .up_right {
-      color: #333;
-      margin-left: 30px;
-      font-size: 14px;
-      padding-top: 30px;
-      flex: 1;
-
-      .title {
-        font-size: 18px;
-        font-weight: bold;
-      }
-      .tip {
-        margin: 15px 0;
-      }
-    }
-    .upload-area {
-      display: flex;
-      padding-right: 200px;
-      ::v-deep {
-        .el-upload {
-          margin-right: 50px;
-          flex-shrink: 0;
-        }
-        .el-upload-list {
-          flex: 1;
-        }
-        .el-upload-list__item:first-child {
-          margin-top: 5px;
-        }
-      }
-    }
-  }
-  .success {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    margin-top: 110px;
-    .success-title {
-      margin: 20px 0;
-      font-size: 18px;
-      font-weight: bold;
-    }
-  }
-  .contips {
-    margin-bottom: 15px;
-  }
-}
-</style>

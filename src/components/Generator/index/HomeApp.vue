@@ -72,7 +72,7 @@ import RightPanel from './RightPanelApp'
 import {
   inputComponents, selectComponents, systemComponents, layoutComponents, formConf
 } from '@/components/Generator/generator/configApp'
-import { noVModelList, noTableAllowList } from '@/components/Generator/generator/comConfig'
+import { noVModelList, noTableAllowList, onlinePeculiarList } from '@/components/Generator/generator/comConfig'
 import {
   exportDefault, beautifierConf, isNumberStr, titleCase, deepClone
 } from '@/components/Generator/utils'
@@ -194,6 +194,7 @@ export default {
       this.drawingList = []
       this.idGlobal = 100
     }
+    if (this.modelType == 2) this.leftComponents[1].list = [...this.leftComponents[1].list, ...onlinePeculiarList]
   },
   mounted() {
     // fix: firefox 下 拖拽 会新打卡一个选项卡
