@@ -47,9 +47,9 @@ export function UpdateLanguage(data) {
   })
 }
 // 获取我的下属
-export function getSubordinate() {
+export function getSubordinate(id) {
   return request({
-    url: `/api/permission/Users/Current/Subordinate`,
+    url: `/api/permission/Users/Current/Subordinate/${id?id:'0'}`,
     method: 'GET'
   })
 }

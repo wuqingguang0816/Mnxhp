@@ -6,6 +6,20 @@
   "description": "",
   "glyphs": [
     {
+      "icon_id": "27371027",
+      "name": "systemTemplate",
+      "font_class": "systemTemplate",
+      "unicode": "e683",
+      "unicode_decimal": 59011
+    },
+    {
+      "icon_id": "27172163",
+      "name": "report-icon-preview",
+      "font_class": "report-icon-preview",
+      "unicode": "e655",
+      "unicode_decimal": 58965
+    },
+    {
       "icon_id": "26897628",
       "name": "report-icon-page-preview",
       "font_class": "report-icon-page-preview",
@@ -32,13 +46,6 @@
       "font_class": "report-icon-polar-plot",
       "unicode": "e650",
       "unicode_decimal": 58960
-    },
-    {
-      "icon_id": "26897627",
-      "name": "report-icon-preview",
-      "font_class": "report-icon-preview",
-      "unicode": "e655",
-      "unicode_decimal": 58965
     },
     {
       "icon_id": "26779489",

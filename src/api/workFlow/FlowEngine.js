@@ -110,3 +110,26 @@ export function getFlowTaskData(flowId, id) {
     method: 'get'
   })
 }
+// 获取流程评论列表
+export function getCommentList(data) {
+  return request({
+    url: `/api/workflow/Engine/FlowComment`,
+    method: 'get',
+    data
+  })
+}
+// 新建流程评论
+export function createComment(data) {
+  return request({
+    url: `/api/workflow/Engine/FlowComment`,
+    method: 'post',
+    data
+  })
+}
+// 删除流程评论
+export function delComment(id) {
+  return request({
+    url: `/api/workflow/Engine/FlowComment/${id}`,
+    method: 'delete'
+  })
+}

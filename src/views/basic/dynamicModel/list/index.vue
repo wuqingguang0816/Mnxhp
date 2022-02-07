@@ -117,7 +117,7 @@
 <script>
 import { getModelList, deteleModel, batchDelete, exportModel } from '@/api/onlineDev/visualDev'
 import { getDictionaryDataSelector } from '@/api/systemData/dictionary'
-import { previewDataInterface } from '@/api/systemData/dataInterface'
+import { getDataInterfaceRes } from '@/api/systemData/dataInterface'
 import Form from './Form'
 import FlowBox from '@/views/workFlow/components/FlowBox'
 import Detail from './detail'
@@ -234,9 +234,10 @@ export default {
       }
       if (this.columnData.treeDataSource === "api") {
         if (!this.columnData.treePropsUrl) return
-        previewDataInterface(this.columnData.treePropsUrl).then(res => {
-          if (Array.isArray(res.data)) {
-            this.treeData = res.data
+        getDataInterfaceRes(this.columnData.treePropsUrl).then(res => {
+          let data = this.jnpf.interfaceDataHandler(res.data)
+          if (Array.isArray(data)) {
+            this.treeData = data
           } else {
             this.treeData = []
           }

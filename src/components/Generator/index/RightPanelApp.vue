@@ -67,7 +67,7 @@
               </el-form-item>
             </template>
             <el-form-item label="控件标题"
-              v-if="activeData.__config__.label !== undefined && !['JNPFText','card','groupTitle','tab','collapse'].includes(activeData.__config__.jnpfKey)">
+              v-if="activeData.__config__.label !== undefined && !['JNPFText','card','groupTitle','tab','collapse','button'].includes(activeData.__config__.jnpfKey)">
               <el-input v-model="activeData.__config__.label" placeholder="请输入控件标题" />
             </el-form-item>
             <el-form-item v-if="activeData.placeholder !== undefined" label="占位提示">
@@ -78,6 +78,43 @@
                 <template slot="append">个字符</template>
               </el-input>
             </el-form-item>
+            <template v-if="activeData.__config__.jnpfKey === 'switch'">
+              <el-form-item label="开启展示值">
+                <el-input v-model="activeData.activeTxt" placeholder="请输入开启展示值" />
+              </el-form-item>
+              <el-form-item label="关闭展示值">
+                <el-input v-model="activeData.inactiveTxt" placeholder="请输入关闭展示值" />
+              </el-form-item>
+            </template>
+            <template
+              v-if="activeData.__config__.jnpfKey === 'uploadFz'||activeData.__config__.jnpfKey === 'uploadImg'">
+              <el-form-item label="文件类型" v-if="activeData.__config__.jnpfKey === 'uploadFz'">
+                <el-select v-model="activeData.accept" placeholder="不限制" clearable>
+                  <el-option label="图片" value="image/*" />
+                  <el-option label="视频" value="video/*" />
+                  <el-option label="音频" value="audio/*" />
+                  <el-option label="excel" value=".xls,.xlsx" />
+                  <el-option label="word" value=".doc,.docx" />
+                  <el-option label="pdf" value=".pdf" />
+                  <el-option label="txt" value=".txt" />
+                </el-select>
+              </el-form-item>
+              <el-form-item label="文件大小">
+                <el-input v-model.number="activeData.fileSize" placeholder="请输入文件大小">
+                  <el-select slot="append" v-model="activeData.sizeUnit" :style="{ width: '66px' }">
+                    <el-option label="KB" value="KB" />
+                    <el-option label="MB" value="MB" />
+                  </el-select>
+                </el-input>
+              </el-form-item>
+              <el-form-item label="按钮文字" v-if="activeData.__config__.jnpfKey === 'uploadFz'">
+                <el-input v-model="activeData.buttonText" placeholder="请输入按钮文字" />
+              </el-form-item>
+              <el-form-item label="最大上传数">
+                <el-input-number v-model="activeData.limit" :min="0" placeholder="最大上传数" :step="1"
+                  controls-position="right" />
+              </el-form-item>
+            </template>
             <template
               v-if="activeData.__config__.jnpfKey === 'numInput' ||activeData.__config__.jnpfKey === 'slider'">
               <el-form-item label="最小值">
@@ -127,20 +164,30 @@
                   </el-button>
                 </div>
               </template>
-              <JNPF-TreeSelect :options="treeData" v-model="activeData.__config__.dictionaryType"
-                placeholder="选择数据字典" v-if="activeData.__config__.dataType === 'dictionary'"
-                lastLevel clearable />
+              <template v-if="activeData.__config__.dataType === 'dictionary'">
+                <el-form-item label="远端数据">
+                  <JNPF-TreeSelect v-model="activeData.__config__.dictionaryType"
+                    :options="treeData" placeholder="请选择数据字典" lastLevel clearable>
+                  </JNPF-TreeSelect>
+                </el-form-item>
+                <el-form-item label="存储字段">
+                  <el-select v-model="activeData.__config__.props.value" placeholder="请选择存储字段">
+                    <el-option label="id" value="id"></el-option>
+                    <el-option label="enCode" value="enCode"></el-option>
+                  </el-select>
+                </el-form-item>
+              </template>
               <template v-if="activeData.__config__.dataType === 'dynamic'">
                 <el-form-item label="远端数据">
                   <JNPF-TreeSelect :options="dataInterfaceSelector"
                     v-model="activeData.__config__.propsUrl" placeholder="请选择远端数据" lastLevel
                     lastLevelKey="categoryId" lastLevelValue="1" clearable />
                 </el-form-item>
-                <el-form-item label="值">
-                  <el-input v-model="activeData.__config__.props.value" placeholder="请输入值" />
+                <el-form-item label="存储字段">
+                  <el-input v-model="activeData.__config__.props.value" placeholder="请输入存储字段" />
                 </el-form-item>
-                <el-form-item label="标签">
-                  <el-input v-model="activeData.__config__.props.label" placeholder="请输入标签" />
+                <el-form-item label="显示字段">
+                  <el-input v-model="activeData.__config__.props.label" placeholder="请输入显示字段" />
                 </el-form-item>
               </template>
               <el-divider></el-divider>
@@ -165,23 +212,33 @@
                     type="text" @click="addTreeItem">添加父级</el-button>
                 </div>
               </template>
-              <JNPF-TreeSelect :options="treeData" v-model="activeData.__config__.dictionaryType"
-                placeholder="选择数据字典" v-if="activeData.__config__.dataType === 'dictionary'"
-                lastLevel clearable />
+              <template v-if="activeData.__config__.dataType === 'dictionary'">
+                <el-form-item label="远端数据">
+                  <JNPF-TreeSelect v-model="activeData.__config__.dictionaryType"
+                    :options="treeData" placeholder="请选择数据字典" lastLevel clearable>
+                  </JNPF-TreeSelect>
+                </el-form-item>
+                <el-form-item label="存储字段">
+                  <el-select v-model="activeData.props.props.value" placeholder="请选择存储字段">
+                    <el-option label="id" value="id"></el-option>
+                    <el-option label="enCode" value="enCode"></el-option>
+                  </el-select>
+                </el-form-item>
+              </template>
               <template v-if="activeData.__config__.dataType === 'dynamic'">
                 <el-form-item label="远端数据">
                   <JNPF-TreeSelect :options="dataInterfaceSelector"
                     v-model="activeData.__config__.propsUrl" placeholder="请选择远端数据" lastLevel
                     lastLevelKey="categoryId" lastLevelValue="1" clearable />
                 </el-form-item>
-                <el-form-item label="标签键名">
-                  <el-input v-model="activeData.props.props.label" placeholder="请输入标签键名" />
+                <el-form-item label="存储字段">
+                  <el-input v-model="activeData.props.props.value" placeholder="请输入存储字段" />
                 </el-form-item>
-                <el-form-item label="值键名">
-                  <el-input v-model="activeData.props.props.value" placeholder="请输入值键名" />
+                <el-form-item label="显示字段">
+                  <el-input v-model="activeData.props.props.label" placeholder="请输入显示字段" />
                 </el-form-item>
-                <el-form-item label="子级键名">
-                  <el-input v-model="activeData.props.props.children" placeholder="请输入子级键名" />
+                <el-form-item label="子级字段">
+                  <el-input v-model="activeData.props.props.children" placeholder="请输入子级字段" />
                 </el-form-item>
               </template>
               <el-divider></el-divider>
@@ -236,6 +293,17 @@
               </el-form-item>
               <el-form-item v-if="activeData.actionText !== undefined" label="动作文字">
                 <el-input v-model="activeData.actionText" placeholder="请输入动作文字" />
+              </el-form-item>
+              <el-form-item label="是否合计">
+                <el-switch v-model="activeData['show-summary']" />
+              </el-form-item>
+              <el-form-item label="合计字段" v-if="activeData['show-summary']">
+                <el-select v-model="activeData.summaryField" multiple placeholder="请选择合计字段">
+                  <template v-for="(item,i) in activeData.__config__.children">
+                    <el-option :key="i" :label="item.__config__.label" :value="item.__vModel__"
+                      v-if="['comInput','numInput','calculate'].includes(item.__config__.jnpfKey)" />
+                  </template>
+                </el-select>
               </el-form-item>
             </template>
             <template v-if="activeData.__config__.jnpfKey === 'groupTitle'">
@@ -359,6 +427,96 @@
               </el-form-item>
               <el-divider />
             </template>
+            <template v-if="activeData.__config__.jnpfKey==='barcode'">
+              <el-form-item label="编码格式">
+                <el-select v-model="activeData.format" placeholder="请选择">
+                  <el-option :label="item.label" :value="item.value"
+                    v-for="(item,i) in barcodeFormatOptions" :key="i"></el-option>
+                </el-select>
+              </el-form-item>
+              <el-form-item label="条码颜色">
+                <el-color-picker v-model="activeData.lineColor"></el-color-picker>
+              </el-form-item>
+              <el-form-item label="宽度">
+                <el-input-number v-model="activeData.width" placeholder="宽度" :min="0" :precision="0"
+                  controls-position="right" />
+              </el-form-item>
+              <el-form-item label="高度">
+                <el-input-number v-model="activeData.height" placeholder="高度" :min="0"
+                  :precision="0" controls-position="right" />
+              </el-form-item>
+              <el-form-item label="默认值">
+                <el-select v-model="activeData.dataType" placeholder="请选择">
+                  <el-option label="固定值" value="static"></el-option>
+                  <el-option label="组件联动" value="relation"></el-option>
+                </el-select>
+              </el-form-item>
+              <el-form-item label="固定值" v-if="activeData.dataType==='static'">
+                <el-input v-model="activeData.staticText" placeholder="请输入固定值"
+                  @change="onBarcodeTextChange" />
+              </el-form-item>
+              <el-form-item label="选择组件" v-if="activeData.dataType==='relation'">
+                <el-select v-model="activeData.relationField" placeholder="请选择" clearable
+                  filterable>
+                  <el-option :label="item.__config__.label" :value="item.__vModel__"
+                    v-for="(item,i) in drawingOptions" :key="i"></el-option>
+                </el-select>
+              </el-form-item>
+            </template>
+            <template v-if="activeData.__config__.jnpfKey==='qrcode'">
+              <el-form-item label="实点颜色">
+                <el-color-picker v-model="activeData.colorDark"></el-color-picker>
+              </el-form-item>
+              <el-form-item label="尺寸">
+                <el-input-number v-model="activeData.size" placeholder="尺寸" :min="0" :precision="0"
+                  controls-position="right" />
+              </el-form-item>
+              <el-form-item label="默认值">
+                <el-select v-model="activeData.dataType" placeholder="请选择">
+                  <el-option label="固定值" value="static"></el-option>
+                  <el-option label="组件联动" value="relation"></el-option>
+                  <el-option label="当前表单路径" value="form"></el-option>
+                </el-select>
+              </el-form-item>
+              <el-form-item label="固定值" v-if="activeData.dataType==='static'">
+                <el-input v-model="activeData.staticText" placeholder="请输入固定值" />
+              </el-form-item>
+              <el-form-item label="选择组件" v-if="activeData.dataType==='relation'">
+                <el-select v-model="activeData.relationField" placeholder="请选择" clearable
+                  filterable>
+                  <el-option :label="item.__config__.label" :value="item.__vModel__"
+                    v-for="(item,i) in drawingOptions" :key="i"></el-option>
+                </el-select>
+              </el-form-item>
+            </template>
+            <template v-if="activeData.__config__.jnpfKey==='button'">
+              <el-form-item label="控件文本">
+                <el-input v-model="activeData.buttonText" placeholder="请输入控件文本" />
+              </el-form-item>
+              <el-form-item label="位置">
+                <el-radio-group v-model="activeData.align">
+                  <el-radio-button label="left">居左</el-radio-button>
+                  <el-radio-button label="center">居中</el-radio-button>
+                  <el-radio-button label="right">居右</el-radio-button>
+                </el-radio-group>
+              </el-form-item>
+              <el-form-item label="控件样式">
+                <el-select v-model="activeData.type" placeholder="请选择">
+                  <el-option label="默认按钮" value=""></el-option>
+                  <el-option label="主要按钮" value="primary"></el-option>
+                  <el-option label="成功按钮" value="success"></el-option>
+                  <el-option label="信息按钮" value="info"></el-option>
+                  <el-option label="警告按钮" value="warning"></el-option>
+                  <el-option label="危险按钮" value="danger"></el-option>
+                </el-select>
+              </el-form-item>
+            </template>
+            <el-form-item label="显示内容" v-if="activeData.__config__.jnpfKey==='currOrganize'">
+              <el-select v-model="activeData.showLevel" placeholder="请选择显示内容">
+                <el-option label="显示组织" value="all"></el-option>
+                <el-option label="显示部门" value="last"></el-option>
+              </el-select>
+            </el-form-item>
             <el-form-item label="是否密码" v-if="activeData['show-password'] !== undefined">
               <el-switch v-model="activeData['show-password']" />
             </el-form-item>
@@ -370,6 +528,9 @@
             </el-form-item>
             <el-form-item v-if="activeData.readonly !== undefined" label="是否只读">
               <el-switch v-model="activeData.readonly" />
+            </el-form-item>
+            <el-form-item label="能否多选" v-if="activeData.multiple !== undefined">
+              <el-switch v-model="activeData.multiple" />
             </el-form-item>
             <el-form-item v-if="activeData.disabled !== undefined" label="是否禁用">
               <el-switch v-model="activeData.disabled" />
@@ -536,7 +697,7 @@ import { isNumberStr } from "@/components/Generator/utils"
 import draggable from "vuedraggable"
 import { getFeatureSelector, getFormDataFields } from '@/api/onlineDev/visualDev'
 import { getDictionaryTypeSelector, getDictionaryDataSelector } from "@/api/systemData/dictionary"
-import { getDataInterfaceSelector, previewDataInterface } from "@/api/systemData/dataInterface"
+import { getDataInterfaceSelector, getDataInterfaceRes } from "@/api/systemData/dataInterface"
 import { saveFormConf, getDrawingList } from "@/components/Generator/utils/db"
 import TreeNodeDialog from "./RightComponents/TreeSelect/TreeNodeDialog"
 import FormScript from './FormScript'
@@ -579,6 +740,56 @@ export default {
         {
           label: "space-between",
           value: "space-between"
+        }
+      ],
+      barcodeFormatOptions: [
+        {
+          label: 'code128',
+          value: 'code128'
+        },
+        {
+          label: 'ean13',
+          value: 'ean13'
+        },
+        {
+          label: 'ean8',
+          value: 'ean8'
+        },
+        {
+          label: 'ean5',
+          value: 'ean5'
+        },
+        {
+          label: 'ean2',
+          value: 'ean2'
+        },
+        {
+          label: 'code39',
+          value: 'code39'
+        },
+        {
+          label: 'itf14',
+          value: 'itf14'
+        },
+        {
+          label: 'msi10',
+          value: 'msi10'
+        },
+        {
+          label: 'msi11',
+          value: 'msi11'
+        },
+        {
+          label: 'pharmacode',
+          value: 'pharmacode'
+        },
+        {
+          label: 'upc',
+          value: 'upc'
+        },
+        {
+          label: 'codabar',
+          value: 'codabar'
         }
       ],
       ruleList: [
@@ -650,6 +861,21 @@ export default {
       if (!item || !item.table) return ''
       return item.table
     },
+    drawingOptions() {
+      let list = []
+      const loop = (data, parent) => {
+        if (!data) return
+        if (data.__config__ && data.__config__.jnpfKey !== 'table' && data.__config__.children && Array.isArray(data.__config__.children)) {
+          loop(data.__config__.children, data)
+        }
+        if (Array.isArray(data)) data.forEach(d => loop(d, parent))
+        if (data.__vModel__ && data.__config__.jnpfKey !== 'table') {
+          list.push(data)
+        }
+      }
+      loop(this.drawingList)
+      return list
+    }
   },
   watch: {
     formConf: {
@@ -965,6 +1191,9 @@ export default {
         case 'blur':
           text = '失去焦点时触发'
           break;
+        case 'click':
+          text = '点击时触发'
+          break;
         case 'tab-click':
           text = '面板点击时触发'
           break;
@@ -1057,6 +1286,17 @@ export default {
       }).then(() => {
         this.activeData.__config__.children.splice(index, 1)
       }).catch(() => { });
+    },
+    onBarcodeTextChange(val) {
+      if (!val) return
+      let reg = /^[A-Za-z0-9]+$/
+      if (!reg.test(val)) {
+        this.$message({
+          message: '固定值请输入数字或者英文字母',
+          type: 'error',
+          duration: 1500,
+        })
+      }
     }
   }
 }

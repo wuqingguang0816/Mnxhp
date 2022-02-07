@@ -10,7 +10,8 @@ const state = {
   subTable: [],
   allTable: [],
   hasTable: false,
-  relationData: {}
+  relationData: {},
+  dynamicModelExtra: {}
 }
 
 const mutations = {
@@ -37,7 +38,10 @@ const mutations = {
   },
   UPDATE_RELATION_DATA(state, val) {
     state.relationData = val
-  }
+  },
+  SET_DYNAMIC_MODEL_EXTRA(state, val) {
+    state.dynamicModelExtra = val
+  },
 }
 
 const actions = {

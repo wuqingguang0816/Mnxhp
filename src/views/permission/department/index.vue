@@ -25,9 +25,9 @@
       <el-row class="JNPF-common-search-box" :gutter="16">
         <el-form @submit.native.prevent>
           <el-col :span="6">
-            <el-form-item :label="$t('common.keyWord')">
-              <el-input v-model="params.keyword" :placeholder="$t('common.enterKeyword')" clearable
-                @keyup.enter.native="search()" />
+            <el-form-item :label="$t('common.keyword')">
+              <el-input v-model="listQuery.keyword" :placeholder="$t('common.enterKeyword')"
+                clearable @keyup.enter.native="search()" />
             </el-form-item>
           </el-col>
           <el-col :span="6">
@@ -105,7 +105,7 @@ export default {
       btnLoading: false,
       listLoading: true,
       companyId: '',
-      params: {
+      listQuery: {
         keyword: ''
       },
       defaultProps: {
@@ -150,7 +150,7 @@ export default {
     },
     initData() {
       this.listLoading = true
-      getDepartmentList(this.companyId, this.params).then(res => {
+      getDepartmentList(this.companyId, this.listQuery).then(res => {
         this.tableData = res.data.list
         this.listLoading = false
         this.btnLoading = false
@@ -180,7 +180,7 @@ export default {
       this.initData()
     },
     reset() {
-      this.params.keyword = ''
+      this.listQuery.keyword = ''
       this.initData()
     },
     handleDel(id) {

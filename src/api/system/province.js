@@ -17,6 +17,16 @@ export function getProvinceSelector(id, currId) {
   })
 }
 
+// 获取行政区划数据详情
+export function GetAreaByIds(idsList) {
+  return request({
+    url: `/api/system/Area/GetAreaByIds`,
+    method: 'post',
+    data: {
+      idsList
+    }
+  })
+}
 
 // 添加行政区划
 export function createProvince(data) {

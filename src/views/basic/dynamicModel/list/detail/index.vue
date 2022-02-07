@@ -7,7 +7,7 @@
         <div class="dynamicDetail" v-loading="loading || mainLoading"
           :element-loading-text="$t('common.loadingText')">
           <Parser :formConf="formData" :relationData="relationData" @toDetail="toDetail"
-            v-if="!loading" />
+            v-if="!loading" :formValue="formValue" />
         </div>
         <span slot="footer" class="dialog-footer">
           <template v-if="formData.hasPrintBtn && formData.printId">
@@ -37,7 +37,7 @@
             :style="{margin: '0 auto',width:formData.fullScreenWidth}"
             v-loading="loading || mainLoading" :element-loading-text="$t('common.loadingText')">
             <Parser :formConf="formData" :relationData="relationData" @toDetail="toDetail"
-              v-if="!loading" />
+              v-if="!loading" :formValue="formValue" />
           </div>
         </div>
       </transition>
@@ -88,6 +88,12 @@ export default {
       this.relationData = {}
       this.$nextTick(() => {
         if (this.dataForm.id) {
+          let extra = {
+            modelId,
+            id,
+            type: 2
+          }
+          this.$store.commit('generator/SET_DYNAMIC_MODEL_EXTRA', extra)
           getDataChange(modelId, this.dataForm.id).then(res => {
             this.dataForm = res.data
             if (!this.dataForm.data) return

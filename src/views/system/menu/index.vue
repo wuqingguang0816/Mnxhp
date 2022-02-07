@@ -5,7 +5,7 @@
         <el-form @submit.native.prevent>
           <el-col :span="6">
             <el-form-item label="关键词">
-              <el-input v-model="params.keyword" placeholder="请输入关键词查询" clearable
+              <el-input v-model="listQuery.keyword" placeholder="请输入关键词查询" clearable
                 @keyup.enter.native="initData()" />
             </el-form-item>
           </el-col>
@@ -20,7 +20,7 @@
         </el-form>
       </el-row>
       <div class="JNPF-common-layout-main JNPF-flex-main">
-        <el-tabs type="border-card" v-model="params.category" class="menu-tab">
+        <el-tabs type="border-card" v-model="listQuery.category" class="menu-tab">
           <el-tab-pane label="Web菜单" name="Web"></el-tab-pane>
           <el-tab-pane label="App菜单" name="App"></el-tab-pane>
           <div class="box">
@@ -87,17 +87,17 @@
                         <el-dropdown-menu slot="dropdown">
                           <template v-if="[2,3,4].indexOf(scope.row.type)>-1">
                             <el-dropdown-item
-                              v-if="params.category==='Web' && scope.row.isButtonAuthorize === 1"
+                              v-if="listQuery.category==='Web' && scope.row.isButtonAuthorize === 1"
                               @click.native="handleButtonAuthorize(scope.row)">
                               按钮权限
                             </el-dropdown-item>
                             <el-dropdown-item
-                              v-if="params.category==='Web' && scope.row.isColumnAuthorize === 1"
+                              v-if="listQuery.category==='Web' && scope.row.isColumnAuthorize === 1"
                               @click.native="handleColumnAuthorize(scope.row)">
                               列表权限
                             </el-dropdown-item>
                             <el-dropdown-item
-                              v-if="params.category==='Web' && scope.row.isFormAuthorize === 1"
+                              v-if="listQuery.category==='Web' && scope.row.isFormAuthorize === 1"
                               @click.native="handleFormAuthorize(scope.row)">
                               表单权限
                             </el-dropdown-item>
@@ -147,7 +147,7 @@ export default {
   data() {
     return {
       options: [],
-      params: {
+      listQuery: {
         keyword: '',
         category: 'Web'
       },
@@ -164,7 +164,7 @@ export default {
     }
   },
   watch: {
-    "params.category": function (val) {
+    "listQuery.category": function (val) {
       this.reset()
     }
   },
@@ -173,12 +173,12 @@ export default {
   },
   methods: {
     reset() {
-      this.params.keyword = ''
+      this.listQuery.keyword = ''
       this.initData()
     },
     initData() {
       this.listLoading = true
-      getMenuList(this.params).then(res => {
+      getMenuList(this.listQuery).then(res => {
         this.treeList = res.data.list
         this.listLoading = false
         this.btnLoading = false
@@ -197,7 +197,7 @@ export default {
     addOrUpdateHandle(id) {
       this.formVisible = true
       this.$nextTick(() => {
-        this.$refs.Form.init(id, this.params.category)
+        this.$refs.Form.init(id, this.listQuery.category)
       })
     },
     handleUpdateState(row) {

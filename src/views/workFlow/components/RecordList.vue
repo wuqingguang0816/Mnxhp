@@ -3,13 +3,53 @@
     <el-timeline reverse>
       <template v-for="(item, i) in list">
         <el-timeline-item :timestamp="item.handleTime | toDate()" placement="top" :key="i"
+          v-if="item.handleStatus==0">
+          <el-card>
+            <el-row>
+              <el-col :span='18'>
+                <p class="timeline-cell">审核节点：{{item.nodeName}}</p>
+              </el-col>
+              <el-col :span='6'>
+                <p class="timeline-cell" style="text-align:right">
+                  <el-link :underline="false" type="danger">审核拒绝</el-link>
+                </p>
+              </el-col>
+            </el-row>
+            <p class="timeline-cell">审核人员：{{item.userName}}</p>
+            <p class="timeline-cell" v-if="item.handleOpinion">
+              审核意见：{{item.handleOpinion}}</p>
+            <p class="timeline-cell" v-if="item.signImg">
+              审核签名：<img :src="item.signImg" class="signImg"></p>
+          </el-card>
+        </el-timeline-item>
+        <el-timeline-item :timestamp="item.handleTime | toDate()" placement="top" :key="i"
+          v-if="item.handleStatus==1">
+          <el-card>
+            <el-row>
+              <el-col :span='18'>
+                <p class="timeline-cell">审核节点：{{item.nodeName}}</p>
+              </el-col>
+              <el-col :span='6'>
+                <p class="timeline-cell" style="text-align:right">
+                  <el-link :underline="false" type="success">审核通过</el-link>
+                </p>
+              </el-col>
+            </el-row>
+            <p class="timeline-cell">审核人员：{{item.userName}}{{item.status==1?'(加签)':''}}</p>
+            <p class="timeline-cell" v-if="item.handleOpinion">
+              审核意见：{{item.handleOpinion}}</p>
+            <p class="timeline-cell" v-if="item.signImg">
+              审核签名：<img :src="item.signImg" class="signImg"></p>
+          </el-card>
+        </el-timeline-item>
+        <el-timeline-item :timestamp="item.handleTime | toDate()" placement="top" :key="i"
           v-if="item.handleStatus==2">
           <el-card>
             <p class="timeline-cell">发起人：{{item.userName}}</p>
           </el-card>
         </el-timeline-item>
         <el-timeline-item :timestamp="item.handleTime | toDate()" placement="top" :key="i"
-          v-else-if="item.handleStatus==3">
+          v-if="item.handleStatus==3">
           <el-card>
             <p class="timeline-cell">撤回节点：{{item.nodeName}}</p>
             <p class="timeline-cell">撤回人员：{{item.userName}}</p>
@@ -17,7 +57,7 @@
           </el-card>
         </el-timeline-item>
         <el-timeline-item :timestamp="item.handleTime | toDate()" placement="top" :key="i"
-          v-else-if="item.handleStatus==4">
+          v-if="item.handleStatus==4">
           <el-card>
             <el-row>
               <el-col :span='18'>
@@ -35,7 +75,7 @@
           </el-card>
         </el-timeline-item>
         <el-timeline-item :timestamp="item.handleTime | toDate()" placement="top" :key="i"
-          v-else-if="item.handleStatus==5">
+          v-if="item.handleStatus==5">
           <el-card>
             <el-row>
               <el-col :span='18'>
@@ -53,7 +93,7 @@
           </el-card>
         </el-timeline-item>
         <el-timeline-item :timestamp="item.handleTime | toDate()" placement="top" :key="i"
-          v-else-if="item.handleStatus==6">
+          v-if="item.handleStatus==6">
           <el-card>
             <el-row>
               <el-col :span='18'>
@@ -71,7 +111,7 @@
           </el-card>
         </el-timeline-item>
         <el-timeline-item :timestamp="item.handleTime | toDate()" placement="top" :key="i"
-          v-else-if="item.handleStatus==7">
+          v-if="item.handleStatus==7">
           <el-card>
             <el-row>
               <el-col :span='18'>
@@ -86,27 +126,6 @@
             <p class="timeline-cell">执行人员：{{item.userName}}</p>
             <p class="timeline-cell">执行动作：转办</p>
             <p class="timeline-cell">转办人员：{{item.operatorId}}</p>
-          </el-card>
-        </el-timeline-item>
-        <el-timeline-item :timestamp="item.handleTime | toDate()" placement="top" :key="i" v-else>
-          <el-card>
-            <el-row>
-              <el-col :span='18'>
-                <p class="timeline-cell">审核节点：{{item.nodeName}}</p>
-              </el-col>
-              <el-col :span='6'>
-                <p class="timeline-cell" style="text-align:right">
-                  <el-link :underline="false" type="success" v-if='item.handleStatus == 1'>审核通过
-                  </el-link>
-                  <el-link :underline="false" type="danger" v-else>审核拒绝</el-link>
-                </p>
-              </el-col>
-            </el-row>
-            <p class="timeline-cell">审核人员：{{item.userName}}{{item.status==1?'(加签)':''}}</p>
-            <p class="timeline-cell" v-if="item.handleOpinion">
-              审核意见：{{item.handleOpinion}}</p>
-            <p class="timeline-cell" v-if="item.signImg">
-              审核签名：<img :src="item.signImg" class="signImg"></p>
           </el-card>
         </el-timeline-item>
       </template>
@@ -128,3 +147,8 @@ export default {
   name: 'recordList'
 }
 </script>
+<style lang="scss" scoped>
+.timeline-cell .el-link {
+  cursor: auto !important;
+}
+</style>

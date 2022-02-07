@@ -52,6 +52,41 @@ const layouts = {
         </el-col>
       )
     }
+    if (config.jnpfKey === 'barcode') {
+      return (
+        <el-col span={config.span} class={className}
+          nativeOnClick={event => { activeItem(element); event.stopPropagation() }}>
+          <el-form-item label-width={labelWidth}
+            label={config.showLabel ? config.label : ''} required={config.required}>
+            <jnpf-barcode format={element.format} lineColor={element.lineColor} background={element.background} width={element.width} height={element.height} staticText={element.staticText}></jnpf-barcode>
+          </el-form-item>
+          {components.itemBtns.apply(this, arguments)}
+        </el-col>
+      )
+    }
+    if (config.jnpfKey === 'qrcode') {
+      return (
+        <el-col span={config.span} class={className}
+          nativeOnClick={event => { activeItem(element); event.stopPropagation() }}>
+          <el-form-item label-width={labelWidth}
+            label={config.showLabel ? config.label : ''} required={config.required}>
+            <jnpf-qrcode size={element.size} colorLight={element.colorLight} colorDark={element.colorDark} staticText={element.staticText}></jnpf-qrcode>
+          </el-form-item>
+          {components.itemBtns.apply(this, arguments)}
+        </el-col>
+      )
+    }
+    if (config.jnpfKey === 'button') {
+      return (
+        <el-col span={config.span} class={className}
+          nativeOnClick={event => { activeItem(element); event.stopPropagation() }}>
+          <el-form-item label-width="0">
+            <jnpf-button align={element.align} buttonText={element.buttonText} type={element.type} disabled={element.disabled}></jnpf-button>
+          </el-form-item>
+          {components.itemBtns.apply(this, arguments)}
+        </el-col>
+      )
+    }
     return (
       <el-col span={config.span} class={className}
         nativeOnClick={event => { activeItem(element); event.stopPropagation() }}>

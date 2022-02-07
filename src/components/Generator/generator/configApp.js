@@ -111,6 +111,8 @@ export const inputComponents = [{
     on: {
       change: '({ data, formData, setFormData, setShowOrHide, setRequired, setDisabled, request, getFieldOptions, setFieldOptions }) => {\n    // 在此编写代码\n    \n}',
     },
+    activeTxt: '开',
+    inactiveTxt: '关',
     disabled: false
   },
   {
@@ -225,7 +227,8 @@ export const inputComponents = [{
       blur: '({ data, formData, setFormData, setShowOrHide, setRequired, setDisabled, request, getFieldOptions, setFieldOptions }) => {\n    // 在此编写代码\n    \n}',
     },
     placeholder: '请选择',
-    disabled: false
+    disabled: false,
+    multiple: false
   },
   {
     __config__: {
@@ -312,6 +315,32 @@ export const inputComponents = [{
     },
     placeholder: '请选择',
     disabled: false
+  },
+  {
+    __config__: {
+      jnpfKey: 'uploadFz',
+      label: '文件上传',
+      labelWidth: undefined,
+      showLabel: true,
+      tag: 'JNPF-UploadFz',
+      tagIcon: 'icon-ym icon-ym-generator-upload',
+      defaultValue: [],
+      required: false,
+      layout: 'colFormItem',
+      span: 24,
+      dragDisabled: false,
+      tableName: ''
+    },
+    on: {
+      change: '({ data, formData, setFormData, setShowOrHide, setRequired, setDisabled, request, getFieldOptions, setFieldOptions }) => {\n    // 在此编写代码\n    \n}',
+    },
+    disabled: false,
+    accept: '',
+    fileSize: 5,
+    sizeUnit: 'MB',
+    buttonText: '点击上传',
+    showTip: false,
+    limit: 9
   },
   {
     __config__: {
@@ -423,14 +452,37 @@ export const inputComponents = [{
       dragDisabled: false
     },
     placeholder: '请输入'
-  }
+  },
+  {
+    __config__: {
+      jnpfKey: 'button',
+      label: '按钮',
+      labelWidth: undefined,
+      showLabel: false,
+      tag: 'jnpf-button',
+      tagIcon: 'icon-ym icon-ym-generator-button',
+      defaultValue: null,
+      layout: 'colFormItem',
+      span: 24,
+      dragDisabled: false,
+      regList: [],
+      trigger: 'click'
+    },
+    on: {
+      click: '({ data, formData, setFormData, setShowOrHide, setRequired, setDisabled, request, getFieldOptions, setFieldOptions }) => {\n    // 在此编写代码\n    \n}',
+    },
+    align: 'left',
+    buttonText: '按钮',
+    type: '',
+    disabled: false
+  },
 ]
 
 // 高级控件 【左面板】
 export const selectComponents = [{
     __config__: {
       jnpfKey: 'comSelect',
-      label: '公司组件',
+      label: '组织选择',
       labelWidth: undefined,
       showLabel: true,
       tag: 'com-select',
@@ -446,12 +498,13 @@ export const selectComponents = [{
       change: '({ data, formData, setFormData, setShowOrHide, setRequired, setDisabled, request, getFieldOptions, setFieldOptions }) => {\n    // 在此编写代码\n    \n}',
     },
     placeholder: '请选择',
-    disabled: false
+    disabled: false,
+    multiple: false
   },
   {
     __config__: {
       jnpfKey: 'depSelect',
-      label: '部门组件',
+      label: '部门选择',
       labelWidth: undefined,
       showLabel: true,
       tag: 'dep-select',
@@ -467,12 +520,13 @@ export const selectComponents = [{
       change: '({ data, formData, setFormData, setShowOrHide, setRequired, setDisabled, request, getFieldOptions, setFieldOptions }) => {\n    // 在此编写代码\n    \n}',
     },
     placeholder: '请选择',
-    disabled: false
+    disabled: false,
+    multiple: false
   },
   {
     __config__: {
       jnpfKey: 'posSelect',
-      label: '岗位组件',
+      label: '岗位选择',
       labelWidth: undefined,
       showLabel: true,
       tag: 'pos-select',
@@ -494,7 +548,7 @@ export const selectComponents = [{
   {
     __config__: {
       jnpfKey: 'userSelect',
-      label: '用户组件',
+      label: '用户选择',
       labelWidth: undefined,
       showLabel: true,
       tag: 'user-select',
@@ -550,7 +604,8 @@ export const selectComponents = [{
         fullName: '选项1-1'
       }]
     }],
-    disabled: false
+    disabled: false,
+    multiple: false
   },
   {
     __config__: {
@@ -588,6 +643,7 @@ export const selectComponents = [{
     },
     actionText: '添加',
     'show-summary': false,
+    summaryField: [],
     tableConf: {},
     defaultValue: []
   },
@@ -611,6 +667,7 @@ export const selectComponents = [{
     },
     placeholder: '请选择',
     disabled: false,
+    multiple: false,
     level: 2
   },
   {
@@ -748,7 +805,8 @@ export const systemComponents = [{
       tableName: '',
       dragDisabled: false,
       noShow: false
-    }
+    },
+    showLevel: 'last',
   },
   {
     __config__: {

@@ -1,9 +1,9 @@
 @font-face {
   font-family: "icon-ym";
   /* Project id 2011706 */
-  src: url('iconfont.woff2?t=1640846808546') format('woff2'),
-    url('iconfont.woff?t=1640846808546') format('woff'),
-    url('iconfont.ttf?t=1640846808546') format('truetype');
+  src: url('iconfont.woff2?t=1642746036081') format('woff2'),
+    url('iconfont.woff?t=1642746036081') format('woff'),
+    url('iconfont.ttf?t=1642746036081') format('truetype');
 }
 
 .icon-ym {
@@ -12,6 +12,14 @@
   font-style: normal;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-ym-systemTemplate:before {
+  content: "\e683";
+}
+
+.icon-ym-report-icon-preview:before {
+  content: "\e655";
 }
 
 .icon-ym-report-icon-page-preview:before {
@@ -28,10 +36,6 @@
 
 .icon-ym-report-icon-polar-plot:before {
   content: "\e650";
-}
-
-.icon-ym-report-icon-preview:before {
-  content: "\e655";
 }
 
 .icon-ym-h5:before {

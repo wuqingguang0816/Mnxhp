@@ -123,6 +123,119 @@
               :active-data="activeData" />
             <Tab v-if="activeData.__config__.jnpfKey==='tab'" :active-data="activeData" />
             <Collapse v-if="activeData.__config__.jnpfKey==='collapse'" :active-data="activeData" />
+            <template v-if="activeData.__config__.jnpfKey==='barcode'">
+              <el-form-item label="控件标题">
+                <el-input v-model="activeData.__config__.label" placeholder="请输入控件标题" />
+              </el-form-item>
+              <el-form-item label="控件栅格">
+                <el-slider v-model="activeData.__config__.span" :max="24" :min="6" show-stops
+                  :step="2" show-tooltip />
+              </el-form-item>
+              <el-form-item label="标题宽度">
+                <el-input-number v-model="activeData.__config__.labelWidth" placeholder="标题宽度"
+                  :min="0" :precision="0" controls-position="right" />
+              </el-form-item>
+              <el-form-item label="编码格式">
+                <el-select v-model="activeData.format" placeholder="请选择">
+                  <el-option :label="item.label" :value="item.value"
+                    v-for="(item,i) in barcodeFormatOptions" :key="i"></el-option>
+                </el-select>
+              </el-form-item>
+              <el-form-item label="条码颜色">
+                <el-color-picker v-model="activeData.lineColor"></el-color-picker>
+              </el-form-item>
+              <el-form-item label="宽度">
+                <el-input-number v-model="activeData.width" placeholder="宽度" :min="0" :precision="0"
+                  controls-position="right" />
+              </el-form-item>
+              <el-form-item label="高度">
+                <el-input-number v-model="activeData.height" placeholder="高度" :min="0"
+                  :precision="0" controls-position="right" />
+              </el-form-item>
+              <el-form-item label="默认值">
+                <el-select v-model="activeData.dataType" placeholder="请选择">
+                  <el-option label="固定值" value="static"></el-option>
+                  <el-option label="组件联动" value="relation"></el-option>
+                </el-select>
+              </el-form-item>
+              <el-form-item label="固定值" v-if="activeData.dataType==='static'">
+                <el-input v-model="activeData.staticText" placeholder="请输入固定值"
+                  @change="onBarcodeTextChange" />
+              </el-form-item>
+              <el-form-item label="选择组件" v-if="activeData.dataType==='relation'">
+                <el-select v-model="activeData.relationField" placeholder="请选择" clearable
+                  filterable>
+                  <el-option :label="item.__config__.label" :value="item.__vModel__"
+                    v-for="(item,i) in drawingOptions" :key="i"></el-option>
+                </el-select>
+              </el-form-item>
+            </template>
+            <template v-if="activeData.__config__.jnpfKey==='qrcode'">
+              <el-form-item label="控件标题">
+                <el-input v-model="activeData.__config__.label" placeholder="请输入控件标题" />
+              </el-form-item>
+              <el-form-item label="控件栅格">
+                <el-slider v-model="activeData.__config__.span" :max="24" :min="6" show-stops
+                  :step="2" show-tooltip />
+              </el-form-item>
+              <el-form-item label="标题宽度">
+                <el-input-number v-model="activeData.__config__.labelWidth" placeholder="标题宽度"
+                  :min="0" :precision="0" controls-position="right" />
+              </el-form-item>
+              <el-form-item label="实点颜色">
+                <el-color-picker v-model="activeData.colorDark"></el-color-picker>
+              </el-form-item>
+              <el-form-item label="尺寸">
+                <el-input-number v-model="activeData.size" placeholder="尺寸" :min="0" :precision="0"
+                  controls-position="right" />
+              </el-form-item>
+              <el-form-item label="默认值">
+                <el-select v-model="activeData.dataType" placeholder="请选择">
+                  <el-option label="固定值" value="static"></el-option>
+                  <el-option label="组件联动" value="relation"></el-option>
+                  <el-option label="当前表单路径" value="form"></el-option>
+                </el-select>
+              </el-form-item>
+              <el-form-item label="固定值" v-if="activeData.dataType==='static'">
+                <el-input v-model="activeData.staticText" placeholder="请输入固定值" />
+              </el-form-item>
+              <el-form-item label="选择组件" v-if="activeData.dataType==='relation'">
+                <el-select v-model="activeData.relationField" placeholder="请选择" clearable
+                  filterable>
+                  <el-option :label="item.__config__.label" :value="item.__vModel__"
+                    v-for="(item,i) in drawingOptions" :key="i"></el-option>
+                </el-select>
+              </el-form-item>
+            </template>
+            <template v-if="activeData.__config__.jnpfKey==='button'">
+              <el-form-item label="控件文本">
+                <el-input v-model="activeData.buttonText" placeholder="请输入控件文本" />
+              </el-form-item>
+              <el-form-item label="控件栅格">
+                <el-slider v-model="activeData.__config__.span" :max="24" :min="6" show-stops
+                  :step="2" show-tooltip />
+              </el-form-item>
+              <el-form-item label="位置">
+                <el-radio-group v-model="activeData.align">
+                  <el-radio-button label="left">居左</el-radio-button>
+                  <el-radio-button label="center">居中</el-radio-button>
+                  <el-radio-button label="right">居右</el-radio-button>
+                </el-radio-group>
+              </el-form-item>
+              <el-form-item label="控件样式">
+                <el-select v-model="activeData.type" placeholder="请选择">
+                  <el-option label="默认按钮" value=""></el-option>
+                  <el-option label="主要按钮" value="primary"></el-option>
+                  <el-option label="成功按钮" value="success"></el-option>
+                  <el-option label="信息按钮" value="info"></el-option>
+                  <el-option label="警告按钮" value="warning"></el-option>
+                  <el-option label="危险按钮" value="danger"></el-option>
+                </el-select>
+              </el-form-item>
+              <el-form-item label="是否禁用">
+                <el-switch v-model="activeData.disabled" />
+              </el-form-item>
+            </template>
             <template v-if="isSystem">
               <el-form-item label="控件标题">
                 <el-input v-model="activeData.__config__.label" placeholder="请输入控件标题" />
@@ -137,6 +250,12 @@
               </el-form-item>
               <el-form-item label="选择模板" v-if="activeData.__config__.jnpfKey==='billRule'">
                 <BillRule v-model="activeData.__config__.rule" placeholder="选择模板" />
+              </el-form-item>
+              <el-form-item label="显示内容" v-if="activeData.__config__.jnpfKey==='currOrganize'">
+                <el-select v-model="activeData.showLevel" placeholder="请选择显示内容">
+                  <el-option label="显示组织" value="all"></el-option>
+                  <el-option label="显示部门" value="last"></el-option>
+                </el-select>
               </el-form-item>
               <el-form-item label="是否隐藏">
                 <el-switch v-model="activeData.__config__.noShow" />
@@ -165,12 +284,7 @@
                   </el-option>
                 </el-select>
               </el-form-item>
-              <el-form-item label="显示标题">
-                <el-switch v-model="activeData.__config__.showTitle" />
-              </el-form-item>
-              <el-form-item v-if="activeData.actionText !== undefined" label="动作文字">
-                <el-input v-model="activeData.actionText" placeholder="请输入动作文字" />
-              </el-form-item>
+              <table-config :active-data="activeData"  />
             </template>
             <template v-if="activeData.__config__.jnpfKey==='card'">
               <el-form-item label="控件栅格" label-width="76px">
@@ -266,12 +380,12 @@
               <el-checkbox v-model="formConf.hasCancelBtn" disabled>取消</el-checkbox>
               <el-input v-model="formConf.cancelButtonText" />
             </div>
-            <template v-if="modelType==1 && webType==2">
+            <template v-if="webType==2">
               <div class="per-cell" :class="{'last':!formConf.hasPrintBtn}">
                 <el-checkbox v-model="formConf.hasPrintBtn">打印</el-checkbox>
                 <el-input v-model="formConf.printButtonText" />
               </div>
-              <el-form-item label="打印设置" v-if="formConf.hasPrintBtn">
+              <el-form-item label="" v-if="formConf.hasPrintBtn">
                 <JNPF-TreeSelect :options="printTplList" v-model="formConf.printId"
                   placeholder="请选择打印模板" lastLevel clearable></JNPF-TreeSelect>
               </el-form-item>
@@ -342,6 +456,7 @@ import JNPFCalculate from './RightComponents/Calculate'
 import PopupSelect from './RightComponents/PopupSelect'
 import Tab from './RightComponents/Tab'
 import Collapse from './RightComponents/Collapse'
+import TableConfig from './RightComponents/table'
 
 const commonRightList = ['comSelect', 'depSelect', 'posSelect', 'userSelect', 'dicSelect', 'editor']
 const systemList = ['createUser', 'createTime', 'modifyUser', 'modifyTime', 'currOrganize', 'currDept', 'currPosition', 'billRule']
@@ -381,7 +496,8 @@ export default {
     JNPFCalculate,
     PopupSelect,
     Tab,
-    Collapse
+    Collapse,
+    TableConfig
   },
   props: ['showField', 'activeData', 'formConf', 'modelType', 'webType', 'drawingList'],
   data() {
@@ -423,6 +539,56 @@ export default {
           value: 'space-between'
         }
       ],
+      barcodeFormatOptions: [
+        {
+          label: 'code128',
+          value: 'code128'
+        },
+        {
+          label: 'ean13',
+          value: 'ean13'
+        },
+        {
+          label: 'ean8',
+          value: 'ean8'
+        },
+        {
+          label: 'ean5',
+          value: 'ean5'
+        },
+        {
+          label: 'ean2',
+          value: 'ean2'
+        },
+        {
+          label: 'code39',
+          value: 'code39'
+        },
+        {
+          label: 'itf14',
+          value: 'itf14'
+        },
+        {
+          label: 'msi10',
+          value: 'msi10'
+        },
+        {
+          label: 'msi11',
+          value: 'msi11'
+        },
+        {
+          label: 'pharmacode',
+          value: 'pharmacode'
+        },
+        {
+          label: 'upc',
+          value: 'upc'
+        },
+        {
+          label: 'codabar',
+          value: 'codabar'
+        }
+      ],
       generalWidthOptions: ['600px', '800px', '1000px', '40%', '50%', '60%', '70%', '80%'],
       fullScreenWidthOptions: ['800px', '1000px', '1200px', '1400px', '50%', '60%', '70%', '80%', '90%', '100%'],
       layoutTreeProps: {
@@ -458,6 +624,21 @@ export default {
     isSystem() {
       return systemList.indexOf(this.activeData.__config__.jnpfKey) > -1
     },
+    drawingOptions() {
+      let list = []
+      const loop = (data, parent) => {
+        if (!data) return
+        if (data.__config__ && data.__config__.jnpfKey !== 'table' && data.__config__.children && Array.isArray(data.__config__.children)) {
+          loop(data.__config__.children, data)
+        }
+        if (Array.isArray(data)) data.forEach(d => loop(d, parent))
+        if (data.__vModel__ && data.__config__.jnpfKey !== 'table') {
+          list.push(data)
+        }
+      }
+      loop(this.drawingList)
+      return list
+    }
   },
   watch: {
     formConf: {
@@ -696,6 +877,9 @@ export default {
         case 'blur':
           text = '失去焦点时触发'
           break;
+        case 'click':
+          text = '点击时触发'
+          break;
         case 'tab-click':
           text = '面板点击时触发'
           break;
@@ -718,6 +902,17 @@ export default {
       this.isConf = isConf || false
       this.formScriptVisible = true
     },
+    onBarcodeTextChange(val) {
+      if (!val) return
+      let reg = /^[A-Za-z0-9]+$/
+      if (!reg.test(val)) {
+        this.$message({
+          message: '固定值请输入数字或者英文字母',
+          type: 'error',
+          duration: 1500,
+        })
+      }
+    }
   }
 }
 </script>

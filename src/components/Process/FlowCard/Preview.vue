@@ -20,6 +20,9 @@ function createNormalCard(ctx, conf, h) {
         <div class="title-box" style="height: 100%;width:190px;">
           <span class="title-text">{conf.properties.title}</span>
         </div>
+        {(isSubFlowNode) && (
+          <el-tag class="async-state" size="mini" effect="plain" style="right:10px">{conf.properties.isAsync ? '异步' : '同步'}</el-tag>
+        )}
       </header>
       <div class="body">
         <span class="text">{conf.content}</span>

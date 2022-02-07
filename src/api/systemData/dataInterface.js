@@ -68,9 +68,17 @@ export function getDataInterfaceTypeSelector() {
 }
 
 // 获取接口数据
-export function previewDataInterface(id) {
+export function getDataInterfaceRes(id) {
   return request({
     url: `/api/system/DataInterface/${id}/Actions/Response`,
+    method: 'GET'
+  })
+}
+
+// 预览接口数据
+export function previewDataInterface(id) {
+  return request({
+    url: `/api/system/DataInterface/${id}/Preview`,
     method: 'GET'
   })
 }
@@ -104,6 +112,14 @@ export function getDataInterfaceDataSelect(id, data) {
 export function getDataInterfaceDataInfo(id, data) {
   return request({
     url: `/api/system/DataInterface/${id}/Action/Info`,
+    method: 'GET',
+    data
+  })
+}
+// 获取接口列表(工作流选择时调用，带分页)
+export function getDataInterfaceSelectorList(data) {
+  return request({
+    url: '/api/system/DataInterface/getList',
     method: 'GET',
     data
   })

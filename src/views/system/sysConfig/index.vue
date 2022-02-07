@@ -1,6 +1,6 @@
 <template>
   <div class="app-container JNPF-flex-main systemConfig">
-    <el-form ref="baseForm" :model="baseForm" label-width="90px">
+    <el-form ref="baseForm" :model="baseForm" label-width="100px">
       <el-tabs v-model="activeName" type="border-card" class="JNPF-el_tabs">
         <el-tab-pane label="基本设置" name="first">
           <el-row :gutter="20">
@@ -66,20 +66,43 @@
           <el-row>
             <el-col :span="18">
               <el-divider content-position="left">登录设置</el-divider>
-              <el-form-item label="单一登录">
+              <el-form-item label="登录方式">
                 <el-select v-model="baseForm.singleLogin" placeholder="请选择">
-                  <el-option label="后登录踢出先登录" value="1" />
+                  <el-option label="单一登录" value="1" />
+                  <el-option label="同时登录" value="2" />
                 </el-select>
               </el-form-item>
               <el-form-item label="超时登出">
                 <el-input-number v-model="baseForm.tokenTimeout" :min="1" :precision="0" :step="1"
                   controls-position="right" /> 分钟
               </el-form-item>
+              <el-form-item label="密码错误次数">
+                <el-input-number v-model="baseForm.passwordErrorsNumber" :min="0" :precision="0"
+                  :step="1" controls-position="right" /> 次
+                <div class="tip">输入密码错误将用户锁定，设置3以下值表示不启动该功能</div>
+                <el-radio-group v-model="baseForm.lockType">
+                  <el-radio :label="1">账号锁定</el-radio>
+                  <el-radio :label="2">延时登录</el-radio>
+                </el-radio-group>
+                <div v-if="baseForm.lockType===2">
+                  <span class="lockTime">延迟时间</span>
+                  <el-input-number v-model="baseForm.lockTime" :min="1" :precision="0" :step="1"
+                    controls-position="right" /> 分钟
+                </div>
+              </el-form-item>
+              <el-form-item label="验证码">
+                <el-switch v-model="baseForm.enableVerificationCode" :active-value="1"
+                  :inactive-value="0" />
+              </el-form-item>
+              <el-form-item label="验证码位数" v-if="baseForm.enableVerificationCode">
+                <el-input-number v-model="baseForm.verificationCodeNumber" :min="3" :max="6"
+                  :precision="0" :step="1" controls-position="right" /> 位
+              </el-form-item>
               <el-form-item label="上次登录">
                 <el-switch v-model="baseForm.lastLoginTimeSwitch" :active-value="1"
                   :inactive-value="0" />
               </el-form-item>
-              <el-form-item>
+              <el-form-item v-if="baseForm.lastLoginTimeSwitch">
                 <el-card class="box-card" shadow="never" style="width: 300px;"
                   :body-style="{ padding: '0px 20px' }">
                   <div slot="header">
@@ -98,7 +121,7 @@
                 <el-switch v-model="baseForm.whitelistSwitch" :active-value="1"
                   :inactive-value="0" />
               </el-form-item>
-              <el-form-item label="允许访问IP">
+              <el-form-item label="允许访问IP" v-if="baseForm.whitelistSwitch">
                 <el-input type="textarea" :autosize="{ minRows: 3, maxRows: 10}"
                   v-model="baseForm.whiteListIp" placeholder="允许访问IP" />
               </el-form-item>
@@ -122,21 +145,20 @@
                     </el-radio-group>
                   </el-form-item>
                   <el-form-item label="用户编号" prop="smsKeyId">
-                    <el-input v-model="baseForm.smsKeyId" clearable placeholder="请输入AccessKeyId" />
+                    <el-input v-model="baseForm.smsKeyId" clearable placeholder="请输入用户编号" />
                   </el-form-item>
                   <el-form-item label="用户秘钥" prop="smsKeySecret">
                     <el-input v-model="baseForm.smsKeySecret" show-password clearable
-                      placeholder="请输入AccessKeySec" />
+                      placeholder="请输入用户秘钥" />
                   </el-form-item>
-                  <el-form-item label="签名内容" prop="smsSignName">
-                    <el-input v-model="baseForm.smsSignName" clearable placeholder="请输入SignName" />
+                  <el-form-item label="访问域名" prop="domain">
+                    <el-input v-model="baseForm.domain" clearable placeholder="请输入访问域名" />
                   </el-form-item>
-                  <el-form-item label="模板编号" prop="smsTemplateId">
-                    <el-input v-model="baseForm.smsTemplateId" clearable
-                      placeholder="请输入TemplateId" />
+                  <el-form-item label="支持地域" prop="region">
+                    <el-input v-model="baseForm.region" clearable placeholder="请输入支持地域" />
                   </el-form-item>
-                  <el-form-item label="应用编号" prop="smsAppId" v-if="baseForm.smsCompany=='2'">
-                    <el-input v-model="baseForm.smsAppId" clearable placeholder="请输入AppId" />
+                  <el-form-item label="版本号" prop="version">
+                    <el-input v-model="baseForm.version" clearable placeholder="请输入版本号" />
                   </el-form-item>
                   <el-form-item>
                     <el-button type="primary" size="small" :loading="btnLoading" class="saveBtn"
@@ -397,7 +419,11 @@ export default {
         dingSynAppSecret: '',
         dingAgentId: '',
         dingSynIsSynOrg: 0,
-        dingSynIsSynUser: 0
+        dingSynIsSynUser: 0,
+        passwordErrorsNumber: 0,
+        lockType: 1,
+        lockTime: 10,
+        enableVerificationCode: 0
       },
       wxEvents: [{
         select: false,
@@ -471,6 +497,8 @@ export default {
           this.ddEvents[0].select = this.baseForm.dingSynIsSynOrg ? true : false
           this.ddEvents[1].select = this.baseForm.dingSynIsSynUser ? true : false
           this.baseForm.smsCompany = this.baseForm.smsCompany ? this.baseForm.smsCompany : '1'
+          this.baseForm.lockType = this.baseForm.lockType ? this.baseForm.lockType : 1
+          this.baseForm.lockTime = this.baseForm.lockTime ? this.baseForm.lockTime : 10
           this.listLoading = false
         }).catch(() => {
           this.listLoading = false
@@ -635,6 +663,16 @@ export default {
     .el-tab-pane {
       height: auto;
     }
+  }
+  .tip {
+    font-size: 14px;
+    color: #a5a5a5;
+  }
+  .lockTime {
+    line-height: 32px;
+    padding-right: 12px;
+    color: #606266;
+    font-size: 14px;
   }
 }
 </style>

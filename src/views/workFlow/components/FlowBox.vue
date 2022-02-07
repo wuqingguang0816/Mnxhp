@@ -2,6 +2,7 @@
   <transition name="el-zoom-in-center">
     <div class="JNPF-preview-main flow-form-main nohead">
       <div class="btns">
+        <el-button type="primary" @click="addComment" v-if="activeTab==='comment'">评 论</el-button>
         <template
           v-if="(setting.opType=='-1'&&setting.id)||setting.opType==0||setting.opType==1||setting.opType==2">
           <el-button type="primary" @click="printBrowseVisible=true"
@@ -9,7 +10,7 @@
             {{properties.printBtnText||'打 印'}}</el-button>
         </template>
         <template v-if="setting.opType=='-1'">
-          <el-button type="primary" @click="eventLancher('submit')">
+          <el-button type="primary" @click="eventLancher('submit')" :loading="candidateLoading">
             {{properties.submitBtnText||'提交审核'}}</el-button>
           <el-button type="warning" @click="eventLancher('save')" :loading="btnLoading">
             {{properties.saveBtnText||'保存草稿'}}</el-button>
@@ -17,8 +18,10 @@
         <template v-if="setting.opType == 1">
           <el-button type="warning" @click="openUserBox('transfer')"
             v-if="properties.hasTransferBtn">{{properties.transferBtnText||'转 办'}}</el-button>
-          <el-button type="primary" @click="eventLancher('audit')" v-if="properties.hasAuditBtn">
-            {{properties.auditBtnText||'通 过'}}</el-button>
+          <el-button type="primary" @click="eventLancher('audit')" :loading="candidateLoading"
+            v-if="properties.hasAuditBtn">{{properties.auditBtnText||'通 过'}}</el-button>
+          <el-button type="warning" @click="eventLancher('saveAudit')" v-if="properties.hasSaveBtn"
+            :loading="btnLoading">{{properties.saveBtnText||'保存草稿'}}</el-button>
           <el-button type="danger" @click="eventLancher('reject')" v-if="properties.hasRejectBtn">
             {{properties.rejectBtnText||'拒 绝'}}</el-button>
         </template>
@@ -45,8 +48,9 @@
       </div>
       <el-tabs class="JNPF-el_tabs" v-model="activeTab">
         <el-tab-pane label="表单信息" v-loading="loading">
+          <span slot="label" :title="fullName+'-'+(thisStep?thisStep:'发起节点')">表单信息</span>
           <component :is="currentView" @close="goBack" ref="form" @eventReciver="eventReciver"
-            @setLoad="setLoad" @setPageLoad="setPageLoad" />
+            @setLoad="setLoad" @setCandidateLoad="setCandidateLoad" @setPageLoad="setPageLoad" />
         </el-tab-pane>
         <el-tab-pane label="流程信息" v-loading="loading">
           <Process :conf="flowTemplateJson" v-if="flowTemplateJson.nodeId" />
@@ -54,11 +58,26 @@
         <el-tab-pane label="流转记录" v-if="setting.opType!='-1'" v-loading="loading">
           <recordList :list='flowTaskOperatorRecordList' :endTime='endTime' />
         </el-tab-pane>
+        <el-tab-pane label="审批汇总" v-if="setting.opType!='-1' && isSummary" v-loading="loading"
+          name="recordSummary">
+          <RecordSummary :id='setting.id' :summaryType="summaryType" ref="recordSummary" />
+        </el-tab-pane>
+        <el-tab-pane label="流程评论" v-if="setting.opType!='-1' && isComment" v-loading="loading"
+          name="comment">
+          <Comment :id='setting.id' ref="comment" />
+        </el-tab-pane>
       </el-tabs>
       <el-dialog :title="eventType==='audit'?'审批通过':'审批拒绝'" :close-on-click-modal="false"
         :visible.sync="visible" class="JNPF-dialog JNPF-dialog_center" lock-scroll append-to-body
         width='600px'>
-        <el-form label-width="80px">
+        <el-form label-width="130px" ref="candidateForm" :model="candidateForm">
+          <template v-if="eventType==='audit'">
+            <el-form-item :label="item.label" :prop="'candidateList.' + i + '.value'"
+              v-for="(item,i) in candidateForm.candidateList" :key="i" :rules="item.rules">
+              <candidate-user-select v-model="item.value" multiple :placeholder="'请选择'+item.label"
+                :taskId="setting.taskId" :formData="formData" :nodeId="item.nodeId" />
+            </el-form-item>
+          </template>
           <el-form-item label="加签人员" v-if="eventType==='audit'&& properties.hasFreeApprover">
             <user-select v-model="handleId" placeholder="请选择加签人员,不选即该节点审核结束" />
           </el-form-item>
@@ -114,21 +133,27 @@
       <UserBox v-if="userBoxVisible" ref="userBox" :title="userBoxTitle" @submit="handleTransfer" />
       <print-browse :visible.sync="printBrowseVisible" :id="properties.printId" :formId="setting.id"
         :fullName="setting.fullName" />
+      <candidate-form :visible.sync="candidateVisible" :candidateList="candidateList"
+        :taskId="setting.taskId" :formData="formData" @submitCandidate="submitCandidate" />
     </div>
   </transition>
 </template>
 
 <script>
 import { FlowEngineInfo } from '@/api/workFlow/FlowEngine'
-import { FlowBeforeInfo, Audit, Reject, Transfer, Recall, Cancel, Assign } from '@/api/workFlow/FlowBefore'
+import { FlowBeforeInfo, Audit, Reject, Transfer, Recall, Cancel, Assign, SaveAudit, Candidates, CandidateUser } from '@/api/workFlow/FlowBefore'
 import { Revoke, Press } from '@/api/workFlow/FlowLaunch'
 import { Create, Update, DynamicCreate, DynamicUpdate } from '@/api/workFlow/workFlowForm'
 import recordList from './RecordList'
+import Comment from './Comment'
+import RecordSummary from './RecordSummary'
+import CandidateForm from './CandidateForm'
+import CandidateUserSelect from './CandidateUserSelect'
 import Process from '@/components/Process/Preview'
 import PrintBrowse from '@/components/PrintBrowse'
 import vueEsign from 'vue-esign'
 export default {
-  components: { recordList, Process, vueEsign, PrintBrowse },
+  components: { recordList, Process, vueEsign, PrintBrowse, Comment, RecordSummary, CandidateForm, CandidateUserSelect },
   data() {
     return {
       userBoxVisible: false,
@@ -161,13 +186,34 @@ export default {
       reason: '',
       handleId: '',
       activeTab: '0',
+      isComment: false,
+      isSummary: false,
+      summaryType: 0,
       loading: false,
       btnLoading: false,
       approvalBtnLoading: false,
+      candidateLoading: false,
+      candidateVisible: false,
+      candidateList: [],
+      candidateForm: {
+        candidateList: []
+      },
       printBrowseVisible: false,
       eventType: '',
       signImg: '',
-      copyIds: ''
+      copyIds: '',
+      fullName: '',
+      thisStep: ''
+    }
+  },
+  watch: {
+    activeTab(val) {
+      if (val === 'comment') {
+        this.$refs.comment && this.$refs.comment.init()
+      }
+      if (val === 'recordSummary') {
+        this.$refs.recordSummary && this.$refs.recordSummary.init()
+      }
     }
   },
   methods: {
@@ -197,6 +243,7 @@ export default {
       FlowEngineInfo(data.flowId).then(res => {
         data.type = res.data.type
         data.fullName = res.data.fullName
+        this.fullName = res.data.fullName
         if (data.formType == 1) {
           if (res.data.formUrl) {
             this.currentView = (resolve) => require([`@/views/${res.data.formUrl}`], resolve)
@@ -222,11 +269,14 @@ export default {
       }).catch(() => { this.loading = false })
     },
     getBeforeInfo(data) {
-      FlowBeforeInfo(data.id, { taskNodeId: data.taskNodeId }).then(res => {
+      FlowBeforeInfo(data.id, { taskNodeId: data.taskNodeId, taskOperatorId: data.taskId }).then(res => {
         this.flowFormInfo = res.data.flowFormInfo
         this.flowTaskInfo = res.data.flowTaskInfo
         data.fullName = this.flowTaskInfo.fullName
+        this.fullName = this.flowTaskInfo.fullName
+        this.thisStep = this.flowTaskInfo.thisStep
         data.type = this.flowTaskInfo.type
+        data.draftData = res.data.draftData || null
         if (data.formType == 1) {
           if (this.flowTaskInfo.formUrl) {
             this.currentView = (resolve) => require([`@/views/${this.flowTaskInfo.formUrl}`], resolve)
@@ -238,6 +288,9 @@ export default {
         }
         this.flowTaskNodeList = res.data.flowTaskNodeList
         this.flowTemplateJson = this.flowTaskInfo.flowTemplateJson ? JSON.parse(this.flowTaskInfo.flowTemplateJson) : null
+        this.isComment = this.flowTemplateJson.properties.isComment
+        this.isSummary = this.flowTemplateJson.properties.isSummary
+        this.summaryType = this.flowTemplateJson.properties.summaryType
         this.flowTaskOperatorRecordList = res.data.flowTaskOperatorRecordList
         this.properties = res.data.approversProperties || {}
         this.endTime = this.flowTaskInfo.completion == 100 ? this.flowTaskInfo.endTime : 0
@@ -287,28 +340,83 @@ export default {
     },
     eventReciver(formData, eventType) {
       this.formData = formData
+      this.formData.flowId = this.setting.flowId
       this.eventType = eventType
       if (eventType === 'save' || eventType === 'submit') {
         return this.submitOrSave()
+      }
+      if (eventType === 'saveAudit') {
+        return this.saveAudit()
       }
       if (eventType === 'audit' || eventType === 'reject') {
         this.handleId = ''
         this.reason = ''
         this.copyIds = ''
         this.handleReset()
-        this.visible = true
+        if (eventType === 'reject') return this.visible = true
+        this.candidateLoading = true
+        Candidates(this.setting.taskId, { formData: this.formData }).then(res => {
+          let data = res.data
+          this.candidateLoading = false
+          if (Array.isArray(data) && data.length) {
+            this.candidateForm.candidateList = res.data.map(o => ({
+              ...o,
+              label: o.nodeName + '审批人',
+              value: [],
+              rules: [{ required: true, message: `${o.nodeName}审批人不能为空`, trigger: 'click' }]
+            }))
+            this.$nextTick(() => {
+              this.$refs['candidateForm'].resetFields()
+            })
+          }
+          this.visible = true
+        }).catch(() => {
+          this.candidateLoading = false
+        })
       }
+    },
+    saveAudit() {
+      this.btnLoading = true
+      let query = {
+        formData: this.formData
+      }
+      SaveAudit(this.setting.taskId, query).then(res => {
+        this.$message({
+          message: res.msg,
+          type: 'success',
+          duration: 1500,
+          onClose: () => {
+            this.btnLoading = false
+            this.$emit('close', true)
+          }
+        })
+      }).catch(() => {
+        this.btnLoading = false
+      })
     },
     submitOrSave() {
       this.formData.status = this.eventType === 'submit' ? 0 : 1
       if (this.eventType === 'save') return this.handleRequest()
-      this.$confirm('您确定要提交当前流程吗, 是否继续?', '提示', {
-        type: 'warning'
-      }).then(() => {
-        this.handleRequest()
-      }).catch(() => { });
+      this.candidateLoading = true
+      Candidates(0, { formData: this.formData }).then(res => {
+        let data = res.data
+        this.candidateLoading = false
+        if (Array.isArray(data) && data.length) {
+          this.candidateList = res.data
+          this.candidateVisible = true
+        } else {
+          this.$confirm('您确定要提交当前流程吗, 是否继续?', '提示', {
+            type: 'warning'
+          }).then(() => {
+            this.handleRequest()
+          }).catch(() => { });
+        }
+      }).catch(() => {
+        this.candidateLoading = false
+      })
     },
-    handleRequest() {
+    handleRequest(candidateList) {
+      if (candidateList) this.formData.candidateList = candidateList
       if (!this.formData.id) delete (this.formData.id)
       if (this.eventType === 'save') this.btnLoading = true
       let formMethod = null
@@ -324,12 +432,16 @@ export default {
           duration: 1500,
           onClose: () => {
             if (this.eventType === 'save') this.btnLoading = false
+            this.candidateVisible = false
             this.$emit('close', true)
           }
         })
       }).catch(() => {
         if (this.eventType === 'save') this.btnLoading = false
       })
+    },
+    submitCandidate(data) {
+      this.handleRequest(data)
     },
     revoke() {
       this.$prompt('', "撤回流程", {
@@ -447,37 +559,48 @@ export default {
       })
     },
     handleApproval() {
-      if (this.properties.hasSign && !this.signImg) {
-        this.$message({
-          message: '请签名',
-          type: 'error'
-        })
-        return
-      }
-      let query = {
-        handleOpinion: this.reason,
-        formData: this.formData,
-        enCode: this.setting.enCode,
-        signImg: this.signImg,
-        copyIds: this.copyIds
-      }
-      if (this.eventType === 'audit' && this.properties.hasFreeApprover) {
-        query = { freeApproverUserId: this.handleId, ...query }
-      }
-      const approvalMethod = this.eventType === 'audit' ? Audit : Reject
-      this.approvalBtnLoading = true
-      approvalMethod(this.setting.taskId, query).then(res => {
-        this.$message({
-          type: 'success',
-          message: res.msg,
-          duration: 1000,
-          onClose: () => {
-            this.approvalBtnLoading = false
-            this.visible = false
-            this.$emit('close', true)
+      this.$refs['candidateForm'].validate((valid) => {
+        if (valid) {
+          if (this.properties.hasSign && !this.signImg) {
+            this.$message({
+              message: '请签名',
+              type: 'error'
+            })
+            return
           }
-        })
-      }).catch(() => { this.approvalBtnLoading = false })
+          let query = {
+            handleOpinion: this.reason,
+            formData: this.formData,
+            enCode: this.setting.enCode,
+            signImg: this.signImg,
+            copyIds: this.copyIds
+          }
+          if (this.candidateForm.candidateList.length) {
+            let candidateList = {}
+            for (let i = 0; i < this.candidateForm.candidateList.length; i++) {
+              candidateList[this.candidateForm.candidateList[i].nodeId] = this.candidateForm.candidateList[i].value.split(',')
+            }
+            query.candidateList = candidateList
+          }
+          if (this.eventType === 'audit' && this.properties.hasFreeApprover) {
+            query = { freeApproverUserId: this.handleId, ...query }
+          }
+          const approvalMethod = this.eventType === 'audit' ? Audit : Reject
+          this.approvalBtnLoading = true
+          approvalMethod(this.setting.taskId, query).then(res => {
+            this.$message({
+              type: 'success',
+              message: res.msg,
+              duration: 1000,
+              onClose: () => {
+                this.approvalBtnLoading = false
+                this.visible = false
+                this.$emit('close', true)
+              }
+            })
+          }).catch(() => { this.approvalBtnLoading = false })
+        }
+      })
     },
     handleReset() {
       this.signImg = ''
@@ -495,8 +618,14 @@ export default {
         })
       })
     },
+    addComment() {
+      this.$refs.comment && this.$refs.comment.showCommentDialog()
+    },
     setPageLoad(val) {
       this.loading = !!val
+    },
+    setCandidateLoad(val) {
+      this.candidateLoading = !!val
     },
     setLoad(val) {
       this.btnLoading = !!val

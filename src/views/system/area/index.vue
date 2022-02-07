@@ -5,7 +5,7 @@
         <el-form @submit.native.prevent>
           <el-col :span="6">
             <el-form-item label="关键词">
-              <el-input v-model="params.keyword" placeholder="请输入关键词查询" clearable />
+              <el-input v-model="listQuery.keyword" placeholder="请输入关键词查询" clearable />
             </el-form-item>
           </el-col>
           <el-col :span="6">
@@ -65,7 +65,7 @@ export default {
       treeList: [],
       btnLoading: false,
       listLoading: true,
-      params: {
+      listQuery: {
         keyword: ''
       },
       nodeId: -1,
@@ -78,13 +78,13 @@ export default {
   },
   methods: {
     reset() {
-      this.params.keyword = ''
+      this.listQuery.keyword = ''
       this.initData()
     },
     initData() {
       this.listLoading = true
       this.treeList = []
-      getProvinceList(this.nodeId, this.params).then(res => {
+      getProvinceList(this.nodeId, this.listQuery).then(res => {
         this.refreshTable = false
         this.treeList = res.data.list
         this.listLoading = false

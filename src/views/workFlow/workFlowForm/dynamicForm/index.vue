@@ -2,14 +2,18 @@
   <div class="flow-form" :style="{margin: '0 auto',width:formConf.fullScreenWidth}">
     <parser :form-conf="formConf" @submit="sumbitForm" :key="key" ref="dynamicForm"
       v-if="!loading" />
+    <candidate-form :visible.sync="candidateVisible" :candidateList="this.candidateList"
+      @submitCandidate="selfHandleRequest" :formData="dataForm" />
   </div>
 </template>
 <script>
 import { DynamicInfo } from '@/api/workFlow/workFlowForm'
 import { createModel, updateModel, getModelInfo } from '@/api/onlineDev/visualDev'
+import { Candidates } from '@/api/workFlow/FlowBefore'
 import Parser from '@/components/Generator/parser/Parser'
+import CandidateForm from '@/views/workFlow/components/CandidateForm'
 export default {
-  components: { Parser },
+  components: { Parser, CandidateForm },
   data() {
     return {
       formData: {},
@@ -17,6 +21,8 @@ export default {
       eventType: '',
       key: +new Date(),
       formConf: {},
+      candidateVisible: false,
+      candidateList: [],
       dataForm: {
         id: '',
         data: '',
@@ -32,6 +38,25 @@ export default {
       this.loading = true
       this.$nextTick(() => {
         if (this.dataForm.id) {
+          let extra = {
+            modelId: data.flowId,
+            id: this.dataForm.id,
+            type: data.type,
+            flowId: data.flowId,
+            processId: data.id,
+            taskId: data.taskId,
+            opType: data.opType
+          }
+          this.$store.commit('generator/SET_DYNAMIC_MODEL_EXTRA', extra)
+          if (data.draftData) {
+            this.formData = data.draftData
+            this.fillFormData(this.formConf, this.formData)
+            this.$nextTick(() => {
+              this.loading = false
+              this.$emit('setPageLoad')
+            })
+            return
+          }
           if (data.type == 1) {
             getModelInfo(data.flowId, this.dataForm.id).then(res => {
               this.dataForm = res.data
@@ -56,6 +81,7 @@ export default {
             })
           }
         } else {
+          this.$store.commit('generator/SET_DYNAMIC_MODEL_EXTRA', {})
           this.formData = {}
           this.fillFormData(this.formConf, this.formData)
           this.$nextTick(() => {
@@ -115,14 +141,28 @@ export default {
     },
     selfSubmit() {
       this.dataForm.status = this.eventType === 'submit' ? 0 : 1
+      this.dataForm.flowId = this.setting.flowId
       if (this.eventType === 'save') return this.selfHandleRequest()
-      this.$confirm('您确定要提交当前流程吗, 是否继续?', '提示', {
-        type: 'warning'
-      }).then(() => {
-        this.selfHandleRequest()
-      }).catch(() => { });
+      this.$emit('setCandidateLoad', true)
+      Candidates(0, { formData: this.dataForm }).then(res => {
+        let data = res.data
+        this.$emit('setCandidateLoad', false)
+        if (Array.isArray(data) && data.length) {
+          this.candidateList = res.data
+          this.candidateVisible = true
+        } else {
+          this.$confirm('您确定要提交当前流程吗, 是否继续?', '提示', {
+            type: 'warning'
+          }).then(() => {
+            this.selfHandleRequest()
+          }).catch(() => { });
+        }
+      }).catch(() => {
+        this.$emit('setCandidateLoad', false)
+      })
     },
-    selfHandleRequest() {
+    selfHandleRequest(candidateList) {
+      if (candidateList) this.dataForm.candidateList = candidateList
       if (!this.dataForm.id) delete (this.dataForm.id)
       if (this.eventType === 'save') this.$emit('setLoad', true)
       const formMethod = this.dataForm.id ? updateModel : createModel
@@ -133,6 +173,7 @@ export default {
           duration: 1500,
           onClose: () => {
             if (this.eventType === 'save') this.$emit('setLoad', false)
+            this.candidateVisible = false
             this.$emit('close', true)
           }
         })

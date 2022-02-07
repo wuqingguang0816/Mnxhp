@@ -41,8 +41,9 @@
             </el-col>
             <el-col :sm="12" :xs="24">
               <el-form-item label="所属组织" prop="organizeId">
-                <JNPF-TreeSelect v-model="dataForm.organizeId" :options="departmentTreeData"
-                  placeholder="选择所属组织" clearable />
+                <el-cascader v-model="organizeIdTree" :options="departmentTreeData"
+                  :props="departmentProps" placeholder="选择所属组织" clearable
+                  @change="onOrganizeChange" />
               </el-form-item>
             </el-col>
             <el-col :sm="12" :xs="24">
@@ -52,9 +53,12 @@
             </el-col>
             <el-col :sm="12" :xs="24">
               <el-form-item label="岗位" prop="positionId">
-                <JNPF-TreeSelect v-model="dataForm.positionId" :options="positionTreeData" multiple
-                  lastLevel lastLevelKey='type' lastLevelValue='position' placeholder="选择岗位"
-                  clearable />
+                <el-select v-model="positionId" multiple placeholder="选择岗位" @change="positionChange"
+                  @visible-change="positionVisibleChange" filterable>
+                  <el-option v-for="item in positionTreeData" :key="item.id" :label="item.fullName"
+                    :value="item.id">
+                  </el-option>
+                </el-select>
               </el-form-item>
             </el-col>
             <el-col :sm="12" :xs="24">
@@ -188,7 +192,7 @@
 
 <script>
 import { getDepartmentSelector } from '@/api/permission/department'
-import { getPositionSelector } from '@/api/permission/position'
+import { getPositionByOrganize } from '@/api/permission/position'
 import { getRoleSelector } from '@/api/permission/role'
 import { createUser, updateUser, getUserInfo } from '@/api/permission/user'
 
@@ -204,6 +208,7 @@ export default {
         account: '',
         realName: '',
         organizeId: '',
+        organizeIdTree: '',
         managerId: '',
         positionId: '',
         roleId: '',
@@ -226,6 +231,8 @@ export default {
         postalAddress: ''
       },
       roleId: [],
+      positionId: [],
+      organizeIdTree: [],
       departmentTreeData: [],
       positionTreeData: [],
       roleTreeData: [],
@@ -237,6 +244,12 @@ export default {
       genderProps: {
         value: 'enCode',
         label: 'fullName'
+      },
+      departmentProps: {
+        value: 'id',
+        label: 'fullName',
+        children: 'children',
+        checkStrictly: true
       },
       dataRule: {
         account: [
@@ -263,17 +276,14 @@ export default {
       this.visible = true
       this.dataForm.id = id || ''
       this.roleId = []
+      this.positionId = []
+      this.organizeIdTree = []
       this.$nextTick(() => {
         this.$refs['dataForm'].resetFields()
 
         // 获取公司+部门
         getDepartmentSelector().then(res => {
           this.departmentTreeData = res.data.list
-        })
-
-        // 获取岗位
-        getPositionSelector().then(res => {
-          this.positionTreeData = res.data.list
         })
 
         // 获取角色
@@ -284,28 +294,31 @@ export default {
         // 获取民族
         this.$store.dispatch('base/getDictionaryData', { sort: 'Nation' }).then(res => {
           this.nationTreeData = res
+          // 获取学历
+          this.$store.dispatch('base/getDictionaryData', { sort: 'Education' }).then(res => {
+            this.educationTreeData = res
+          })
+          // 获取证件类型
+          this.$store.dispatch('base/getDictionaryData', { sort: 'certificateType' }).then(res => {
+            this.certificatesTypeTreeData = res
+          })
+          // 获取性别
+          this.$store.dispatch('base/getDictionaryData', { sort: 'sex' }).then(res => {
+            this.genderTreeData = res
+          })
         })
-
-        // 获取学历
-        this.$store.dispatch('base/getDictionaryData', { sort: 'Education' }).then(res => {
-          this.educationTreeData = res
-        })
-
-        // 获取证件类型
-        this.$store.dispatch('base/getDictionaryData', { sort: 'certificateType' }).then(res => {
-          this.certificatesTypeTreeData = res
-        })
-
-        // 获取性别
-        this.$store.dispatch('base/getDictionaryData', { sort: 'sex' }).then(res => {
-          this.genderTreeData = res
-        })
-
         if (this.dataForm.id) {
           this.formLoading = true
           getUserInfo(this.dataForm.id).then(res => {
             this.dataForm = res.data
             if (this.dataForm.roleId) this.roleId = this.dataForm.roleId.split(',')
+            if (this.dataForm.positionId) this.positionId = this.dataForm.positionId.split(',')
+            if (this.dataForm.organizeIdTree) this.organizeIdTree = this.dataForm.organizeIdTree.split(',')
+            if (this.dataForm.organizeId) {
+              getPositionByOrganize(this.dataForm.organizeId).then(res => {
+                this.positionTreeData = res.data
+              })
+            }
             this.formLoading = false
           }).catch(() => this.formLoading = false)
         } else {
@@ -317,7 +330,24 @@ export default {
       this.$emit('close')
     },
     roleIdChange() {
-      this.dataForm.roleId = this.roleId.toString()
+      this.dataForm.roleId = this.roleId.join()
+    },
+    positionChange() {
+      this.dataForm.positionId = this.positionId.join()
+    },
+    onOrganizeChange(val) {
+      if (!val) return this.dataForm.organizeId = ''
+      this.dataForm.organizeId = val[val.length - 1]
+      this.dataForm.organizeIdTree = val.join(',')
+      this.dataForm.positionId = ''
+      this.positionId = []
+      getPositionByOrganize(this.dataForm.organizeId).then(res => {
+        this.positionTreeData = res.data
+      })
+    },
+    positionVisibleChange(val) {
+      if (!val) return
+      if (!this.dataForm.organizeId) this.$message.warning('请先选择所属组织')
     },
     handleAvatarSuccess(res) {
       if (res.code === 200 && res.data && res.data.url) {
@@ -357,6 +387,7 @@ export default {
     padding: 10px 30px 0;
   }
   >>> .el-select,
+  >>> .el-cascader,
   >>> .el-date-editor {
     width: 100%;
   }

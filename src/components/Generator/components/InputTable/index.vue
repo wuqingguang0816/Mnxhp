@@ -80,7 +80,7 @@
 <script>
 import { dyOptionsList } from '@/components/Generator/generator/comConfig'
 import { getDictionaryDataSelector } from '@/api/systemData/dictionary'
-import { previewDataInterface } from '@/api/systemData/dataInterface'
+import { getDataInterfaceRes } from '@/api/systemData/dataInterface'
 
 export default {
   name: 'input-table',
@@ -131,8 +131,13 @@ export default {
           }
           if (config.dataType === 'dynamic') {
             if (!config.propsUrl) return
-            previewDataInterface(config.propsUrl).then(res => {
-              isTreeSelect ? cur.options = res.data : cur.__slot__.options = res.data
+            getDataInterfaceRes(config.propsUrl).then(res => {
+              let realData = this.jnpf.interfaceDataHandler(res.data)
+              if (Array.isArray(realData)) {
+                isTreeSelect ? cur.options = realData : cur.__slot__.options = realData
+              } else {
+                isTreeSelect ? cur.options = [] : cur.__slot__.options = []
+              }
             })
           }
         }
@@ -151,16 +156,6 @@ export default {
       const child = cell.querySelector('.cell').firstElementChild
       const input = child && child.querySelector('input')
       input && input.focus()
-    },
-    getFunc(str) {
-      let func = null
-      try {
-        func = eval(str)
-        return func
-      } catch (error) {
-        console.log(error)
-        return false
-      }
     },
     setTableFormData(prop, value) {
       let activeRow = this.tableFormData[this.activeRowIndex]
@@ -214,7 +209,7 @@ export default {
     onFormBlur(rowIndex, colIndex, tag) {
       const data = this.tableFormData[rowIndex][colIndex]
       if (data && data.on && data.on.blur) {
-        const func = this.getFunc(data.on.blur)
+        const func = this.jnpf.getScriptFunc(data.on.blur)
         if (!func) return
         func.call(this, {
           data: null,
@@ -227,7 +222,7 @@ export default {
       const data = this.tableFormData[rowIndex][colIndex]
       this.activeRowIndex = rowIndex
       if (data && data.on && data.on.change) {
-        const func = this.getFunc(data.on.change)
+        const func = this.jnpf.getScriptFunc(data.on.change)
         if (!func) return
         let value = ''
         if (['select', 'radio', 'checkbox'].includes(data.jnpfKey)) {
@@ -303,11 +298,13 @@ export default {
       let res = true
       for (let i = 0; i < col.regList.length; i++) {
         const item = col.regList[i]
-        let pattern = eval(item.pattern)
-        if (col.value && !pattern.test(col.value)) {
-          res = false
-          col.regErrorText = item.message
-          break
+        if (item.pattern) {
+          let pattern = eval(item.pattern)
+          if (col.value && !pattern.test(col.value)) {
+            res = false
+            col.regErrorText = item.message
+            break
+          }
         }
       }
       return res
@@ -339,20 +336,20 @@ export default {
       let itemConfig = item.__config__
       let newObj = {}
       for (const key in item) {
-        if (key != '__config__' && key != '__slot__' && key != '__vModel__') {
+        if (!['__config__', '__slot__', '__vModel__', 'props', 'on'].includes(key)) {
           newObj[key] = item[key]
         }
         if (key === 'props') {
           newObj[key] = item[key][key]
         }
         if (key === 'disabled') {
-          newObj[key] = this.disabled || item[key][key]
-        }
-        if (key === '__vModel__') {
-          newObj['field'] = item[key] + '_jnpfRelation_' + rowIndex
+          newObj[key] = this.disabled || item[key]
         }
       }
-      if (itemConfig.tag === 'relationFormAttr') {
+      if (itemConfig.jnpfKey === 'relationForm') {
+        newObj['field'] = item.__vModel__ + '_jnpfRelation_' + rowIndex
+      }
+      if (itemConfig.jnpfKey === 'relationFormAttr') {
         newObj['relationField'] = newObj['relationField'] + '_jnpfRelation_' + rowIndex
       }
       return newObj
@@ -389,7 +386,7 @@ export default {
       if (!Array.isArray(this.tableFormData)) {
         this.tableFormData = []
       }
-      this.tableFormData.push(this.getEmptyRow(val, this.tableFormData.length))
+      this.tableFormData.push(JSON.parse(JSON.stringify(this.getEmptyRow(val, this.tableFormData.length))))
       this.clearAddRowFlag()
       const newVal = this.tableFormData.map(row => row.reduce((p, c) => {
         let str = c.__vModel__
@@ -403,10 +400,13 @@ export default {
     },
     getCmpValOfRow(row, key) {
       // 获取数字相关组件的输入值
-      const isNumCmp = tag => ['fc-amount', 'el-input-number', 'el-slider'].includes(tag)
-      const target = row.find(t => t.vModel === key)
+      // const isNumCmp = tag => ['fc-amount', 'el-input-number', 'el-slider'].includes(tag)
+      if (!this.config.summaryField.length) return NaN
+      const isSummary = key => this.config.summaryField.includes(key)
+      const target = row.find(t => t.__vModel__ === key)
       if (!target) return NaN
-      if (isNumCmp(target.tag)) return target.value || 0
+      let data = isNaN(target.value) ? 0 : Number(target.value)
+      if (isSummary(key)) return data || 0
       return NaN
     },
     /**
@@ -564,6 +564,7 @@ export default {
     td {
       padding: 2px 0;
       background: #fff !important;
+      vertical-align: top;
       .error-tip {
         font-size: 12px;
         padding-left: 6px;

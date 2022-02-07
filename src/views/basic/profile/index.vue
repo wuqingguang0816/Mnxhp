@@ -9,21 +9,21 @@
       </el-tab-pane>
       <el-tab-pane disabled name="line"></el-tab-pane>
       <el-tab-pane label="我的下属" name="subordinate">
-        <div class="JNPF-common-title mb-20">
+        <div class="JNPF-common-title mb-10">
           <h2 class="bold">我的下属</h2>
         </div>
-        <el-row :gutter="12" v-if="subordinateIds.length">
-          <el-col :span="6" v-for="(item,i) in subordinateIds" :key="i" class="subordinate-item">
-            <el-card shadow="hover">
-              <el-avatar :size="40" :src="define.comUrl+ item.avatar"></el-avatar>
+        <div class="subordinate-list">
+          <el-tree :data="treeData" :props="props" check-on-click-node node-key="id" lazy
+            v-loading="loading" :load="loadNode" class="JNPF-common-el-tree subordinate-tree">
+            <el-card class="subordinate-tree-node" shadow="never" slot-scope="{ data }">
+              <el-avatar :size="50" :src="define.comUrl+ data.avatar"></el-avatar>
               <div class="text">
-                <p>{{item.userName}}</p>
-                <p>{{item.department}}</p>
+                <p>{{data.userName}}</p>
+                <p>{{data.department}}/{{data.position}}</p>
               </div>
             </el-card>
-          </el-col>
-        </el-row>
-        <el-empty description="暂无数据" :image-size="120" v-else></el-empty>
+          </el-tree>
+        </div>
       </el-tab-pane>
       <el-tab-pane label="系统权限" name="authorize" class="el-tab-pane-authorize">
         <Authorize ref="authorize" v-if="visible.authorize" />
@@ -61,7 +61,7 @@ export default {
   data() {
     return {
       user: {},
-      subordinateIds: [],
+      treeData: [],
       activeTab: '',
       visible: {
         user: true,
@@ -70,6 +70,13 @@ export default {
         authorize: false,
         sysLog: false,
       },
+      props: {
+        children: 'children',
+        label: 'userName',
+        isLeaf: 'isLeaf'
+      },
+      loading: false,
+      nodeId: '0',
       uploadHeaders: { Authorization: this.$store.getters.token }
     }
   },
@@ -79,7 +86,10 @@ export default {
         this.visible[key] = false
       }
       this.visible[val] = true
-      if (val === 'subordinate') this.getSubordinate()
+      if (val === 'subordinate') {
+        this.nodeId = '0'
+        this.getSubordinate()
+      }
     }
   },
 
@@ -94,8 +104,20 @@ export default {
       })
     },
     getSubordinate() {
-      getSubordinate().then(res => {
-        this.subordinateIds = res.data
+      this.loading = true
+      getSubordinate(this.nodeId).then(res => {
+        this.treeData = res.data
+        this.loading = false
+      })
+    },
+    loadNode(node, resolve) {
+      if (node.level === 0) {
+        this.nodeId = '0'
+        return resolve(this.treeData)
+      }
+      this.nodeId = node.data.id
+      getSubordinate(this.nodeId).then(res => {
+        resolve(res.data)
       })
     },
     handleSuccess(res, file) {
@@ -211,33 +233,59 @@ export default {
       font-size: 12px;
     }
   }
-  >>> .el-card__body {
-    display: flex;
-    padding: 10px 20px;
-    align-items: center;
-    .el-avatar {
-      margin-right: 14px;
-      flex-shrink: 0;
-    }
 
-    .text {
-      font-size: 12px;
-      width: calc(100% - 54px);
-      p {
-        line-height: 20px;
-        white-space: nowrap;
-        text-overflow: ellipsis;
-        overflow: hidden;
-        word-break: break-all;
-      }
-    }
-  }
   >>> .el-select,
   >>> .el-date-editor {
     width: 100%;
   }
-  .subordinate-item {
-    margin-bottom: 10px;
+  .subordinate-tree {
+    height: 100%;
+    margin: 0;
+    .subordinate-tree-node {
+      width: 260px;
+    }
+    >>> .el-tree-node:focus > .el-tree-node__content {
+      background-color: #fff;
+    }
+    >>> .el-tree-node__expand-icon.el-icon-caret-right {
+      font-size: 20px;
+    }
+    >>> .el-tree-node__content {
+      height: 80px;
+      &:hover {
+        background: #fff;
+      }
+    }
+    >>> .el-card__body {
+      display: flex;
+      padding: 10px 10px;
+      align-items: center;
+      .el-avatar {
+        margin-right: 10px;
+        flex-shrink: 0;
+      }
+
+      .text {
+        font-size: 14px;
+        width: calc(100% - 60px);
+        p {
+          line-height: 25px;
+          white-space: nowrap;
+          text-overflow: ellipsis;
+          overflow: hidden;
+          word-break: break-all;
+        }
+      }
+    }
+  }
+  #pane-subordinate {
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    .subordinate-list {
+      flex: 1;
+      overflow: auto;
+    }
   }
 }
 </style>

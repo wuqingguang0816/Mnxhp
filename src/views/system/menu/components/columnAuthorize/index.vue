@@ -65,7 +65,7 @@ export default {
       columnAuthorizeFormVisible: false,
       columnAuthorizeBatchFormVisible: false,
       dialogTitle: '',
-      params: {
+      listQuery: {
         keyword: ''
       },
       moduleId: '',
@@ -81,13 +81,13 @@ export default {
       this.moduleId = moduleId
       this.dialogTitle = `列表权限 - ${fullName}`
       this.$nextTick(() => {
-        this.params.keyword = ''
+        this.listQuery.keyword = ''
         this.getList()
       })
     },
     getList() {
       this.listLoading = true
-      getColumnAuthorizeList(this.moduleId, this.params).then(res => {
+      getColumnAuthorizeList(this.moduleId, this.listQuery).then(res => {
         this.treeList = res.data.list
         this.listLoading = false
         this.btnLoading = false

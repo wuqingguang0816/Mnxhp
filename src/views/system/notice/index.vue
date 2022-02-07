@@ -5,7 +5,7 @@
         <el-form @submit.native.prevent>
           <el-col :span="6">
             <el-form-item label="关键词">
-              <el-input v-model="params.keyword" placeholder="请输入关键词查询" clearable
+              <el-input v-model="listQuery.keyword" placeholder="请输入关键词查询" clearable
                 @keyup.enter.native="search()" />
             </el-form-item>
           </el-col>
@@ -61,8 +61,8 @@
             </template>
           </el-table-column>
         </JNPF-table>
-        <pagination :total="total" :page.sync="params.currentPage" :limit.sync="params.pageSize"
-          @pagination="initData" />
+        <pagination :total="total" :page.sync="listQuery.currentPage"
+          :limit.sync="listQuery.pageSize" @pagination="initData" />
       </div>
     </div>
     <Form v-show="formVisible" ref="Form" @close="formVisible=false" @refreshDataList="initData" />
@@ -84,7 +84,7 @@ export default {
       total: 0,
       btnLoading: false,
       listLoading: true,
-      params: {
+      listQuery: {
         keyword: '',
         currentPage: 1,
         pageSize: 20
@@ -99,7 +99,7 @@ export default {
   methods: {
     initData() {
       this.listLoading = true
-      getNoticeList(this.params).then(res => {
+      getNoticeList(this.listQuery).then(res => {
         this.list = res.data.list
         this.total = res.data.pagination.total
         this.listLoading = false
@@ -154,13 +154,13 @@ export default {
       }).catch(() => { })
     },
     search() {
-      this.params.currentPage = 1
-      this.params.pageSize = 20
-      this.params.sort = 'desc'
+      this.listQuery.currentPage = 1
+      this.listQuery.pageSize = 20
+      this.listQuery.sort = 'desc'
       this.initData()
     },
     reset() {
-      this.params.keyword = ''
+      this.listQuery.keyword = ''
       this.search()
     }
   }
