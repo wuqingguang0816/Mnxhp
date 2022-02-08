@@ -302,7 +302,7 @@
               <el-form-item label="发起事件">
                 <el-switch v-model="startForm.initFuncConfig.on" />
               </el-form-item>
-              <template v-if="startForm.initFuncConfig.on">
+              <div style="margin-bottom: 18px;" v-if="startForm.initFuncConfig.on">
                 <el-form-item label="事件设置" style="margin-bottom: 0;"></el-form-item>
                 <el-form-item label-width="0">
                   <interface-dialog v-model="startForm.initFuncConfig.interfaceId"
@@ -341,11 +341,11 @@
                     </template>
                   </el-table-column>
                 </el-table>
-              </template>
+              </div>
               <el-form-item label="结束事件">
                 <el-switch v-model="startForm.endFuncConfig.on" />
               </el-form-item>
-              <template v-if="startForm.endFuncConfig.on">
+              <div style="margin-bottom: 18px;" v-if="startForm.endFuncConfig.on">
                 <el-form-item label="事件设置" style="margin-bottom: 0;"></el-form-item>
                 <el-form-item label-width="0">
                   <interface-dialog v-model="startForm.endFuncConfig.interfaceId"
@@ -384,11 +384,11 @@
                     </template>
                   </el-table-column>
                 </el-table>
-              </template>
+              </div>
               <el-form-item label="撤回事件">
                 <el-switch v-model="startForm.flowRecallFuncConfig.on" />
               </el-form-item>
-              <template v-if="startForm.flowRecallFuncConfig.on">
+              <div v-if="startForm.flowRecallFuncConfig.on">
                 <el-form-item label="事件设置" style="margin-bottom: 0;"></el-form-item>
                 <el-form-item label-width="0">
                   <interface-dialog v-model="startForm.flowRecallFuncConfig.interfaceId"
@@ -427,7 +427,7 @@
                     </template>
                   </el-table-column>
                 </el-table>
-              </template>
+              </div>
             </el-form>
           </el-scrollbar>
         </el-tab-pane>
@@ -638,7 +638,7 @@
               <el-form-item label="同意事件">
                 <el-switch v-model="approverForm.approveFuncConfig.on" />
               </el-form-item>
-              <template v-if="approverForm.approveFuncConfig.on">
+              <div style="margin-bottom: 18px;" v-if="approverForm.approveFuncConfig.on">
                 <el-form-item label="事件设置" style="margin-bottom: 0;"></el-form-item>
                 <el-form-item label-width="0">
                   <interface-dialog v-model="approverForm.approveFuncConfig.interfaceId"
@@ -677,11 +677,11 @@
                     </template>
                   </el-table-column>
                 </el-table>
-              </template>
+              </div>
               <el-form-item label="拒绝事件">
                 <el-switch v-model="approverForm.rejectFuncConfig.on" />
               </el-form-item>
-              <template v-if="approverForm.rejectFuncConfig.on">
+              <div style="margin-bottom: 18px;" v-if="approverForm.rejectFuncConfig.on">
                 <el-form-item label="事件设置" style="margin-bottom: 0;"></el-form-item>
                 <el-form-item label-width="0">
                   <interface-dialog v-model="approverForm.rejectFuncConfig.interfaceId"
@@ -720,11 +720,11 @@
                     </template>
                   </el-table-column>
                 </el-table>
-              </template>
+              </div>
               <el-form-item label="撤回事件">
                 <el-switch v-model="approverForm.recallFuncConfig.on" />
               </el-form-item>
-              <template v-if="approverForm.recallFuncConfig.on">
+              <div v-if="approverForm.recallFuncConfig.on">
                 <el-form-item label="事件设置" style="margin-bottom: 0;"></el-form-item>
                 <el-form-item label-width="0">
                   <interface-dialog v-model="approverForm.recallFuncConfig.interfaceId"
@@ -763,7 +763,7 @@
                     </template>
                   </el-table-column>
                 </el-table>
-              </template>
+              </div>
             </el-form>
           </el-scrollbar>
         </el-tab-pane>
@@ -773,7 +773,7 @@
               <el-form-item label="等待审核">
                 <el-switch v-model="approverForm.waitApproveMsgConfig.on" />
               </el-form-item>
-              <template v-if="approverForm.waitApproveMsgConfig.on">
+              <div style="margin-bottom: 18px;" v-if="approverForm.waitApproveMsgConfig.on">
                 <el-form-item label="消息模板" style="margin-bottom: 0;"></el-form-item>
                 <el-form-item label="" label-width="0">
                   <msg-dialog v-model="approverForm.waitApproveMsgConfig.msgId"
@@ -800,11 +800,11 @@
                     </template>
                   </el-table-column>
                 </el-table>
-              </template>
+              </div>
               <el-form-item label="审核通过">
                 <el-switch v-model="approverForm.approveMsgConfig.on" />
               </el-form-item>
-              <template v-if="approverForm.approveMsgConfig.on">
+              <div style="margin-bottom: 18px;" v-if="approverForm.approveMsgConfig.on">
                 <el-form-item label="消息模板" style="margin-bottom: 0;"></el-form-item>
                 <el-form-item label="" label-width="0">
                   <msg-dialog v-model="approverForm.approveMsgConfig.msgId"
@@ -831,11 +831,11 @@
                     </template>
                   </el-table-column>
                 </el-table>
-              </template>
+              </div>
               <el-form-item label="审核驳回">
                 <el-switch v-model="approverForm.rejectMsgConfig.on" />
               </el-form-item>
-              <template v-if="approverForm.rejectMsgConfig.on">
+              <div style="margin-bottom: 18px;" v-if="approverForm.rejectMsgConfig.on">
                 <el-form-item label="消息模板" style="margin-bottom: 0;"></el-form-item>
                 <el-form-item label="" label-width="0">
                   <msg-dialog v-model="approverForm.rejectMsgConfig.msgId"
@@ -862,11 +862,11 @@
                     </template>
                   </el-table-column>
                 </el-table>
-              </template>
+              </div>
               <el-form-item label="审核催办">
                 <el-switch v-model="approverForm.pressMsgConfig.on" />
               </el-form-item>
-              <template v-if="approverForm.pressMsgConfig.on">
+              <div v-if="approverForm.pressMsgConfig.on">
                 <el-form-item label="消息模板" style="margin-bottom: 0;"></el-form-item>
                 <el-form-item label="" label-width="0">
                   <msg-dialog v-model="approverForm.pressMsgConfig.msgId"
@@ -893,7 +893,7 @@
                     </template>
                   </el-table-column>
                 </el-table>
-              </template>
+              </div>
             </el-form>
           </el-scrollbar>
         </el-tab-pane>
