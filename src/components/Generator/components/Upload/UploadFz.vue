@@ -118,6 +118,12 @@ export default {
         this.$nextTick(() => {
           if (!val.length) {
             this.$refs.elUpload && this.$refs.elUpload.uploadFiles.splice(0)
+          } else {
+            if (!this.$refs.elUpload) return
+            this.$refs.elUpload.uploadFiles = val.map(o => ({
+              ...o,
+              uid: o.fileId
+            }))
           }
         })
       }
