@@ -53,7 +53,7 @@
             <el-col :sm="12" :xs="24">
               <el-form-item label="岗位" prop="positionId">
                 <el-select v-model="positionId" multiple placeholder="选择岗位" @change="positionChange"
-                  @visible-change="visibleChange" filterable>
+                  @visible-change="visibleChange" filterable clearable>
                   <el-option-group v-for="group in positionTreeData" :key="group.id"
                     :label="group.fullName+(group.num?'【'+group.num+'】':'')">
                     <el-option v-for="item in group.children" :key="group.id+item.id"
@@ -66,7 +66,7 @@
             <el-col :sm="12" :xs="24">
               <el-form-item label="角色" prop="roleId">
                 <el-select v-model="roleId" multiple placeholder="选择角色" @change="roleIdChange"
-                  @visible-change="visibleChange" filterable>
+                  @visible-change="visibleChange" filterable clearable>
                   <el-option-group v-for="group in roleTreeData" :key="group.id"
                     :label="group.fullName+(group.num?'【'+group.num+'】':'')">
                     <el-option v-for="item in group.children" :key="group.id+item.id"
