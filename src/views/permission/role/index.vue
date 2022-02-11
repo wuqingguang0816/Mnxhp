@@ -172,8 +172,6 @@ export default {
         }
         this.treeData = [firstItem, ...res]
         this.$nextTick(() => {
-          this.listQuery.organizeId = this.treeData[0].id
-          this.$refs.treeBox.setCurrentKey(this.listQuery.organizeId)
           this.treeLoading = false
           this.initData()
         })
