@@ -239,6 +239,7 @@ export default {
     },
     openDialog() {
       if (this.selectDisabled) return
+      this.setDefault()
       this.visible = true
     },
     getNodePath(node) {
@@ -305,10 +306,11 @@ export default {
         this.tagsList = []
         return
       }
-      this.selectedIds = this.multiple ? this.value : [this.value]
+      let selectedIds = this.multiple ? this.value : [this.value]
+      this.selectedIds = JSON.parse(JSON.stringify(selectedIds))
       let textList = []
-      for (let i = 0; i < this.selectedIds.length; i++) {
-        const item = this.selectedIds[i];
+      for (let i = 0; i < selectedIds.length; i++) {
+        const item = selectedIds[i];
         let textItem = JSON.parse(JSON.stringify(item))
         for (let j = 0; j < item.length; j++) {
           inner: for (let ii = 0; ii < this.allList.length; ii++) {
