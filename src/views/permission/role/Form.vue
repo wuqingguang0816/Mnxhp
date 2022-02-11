@@ -11,7 +11,8 @@
         <el-input v-model="dataForm.enCode" placeholder="输入角色编码" />
       </el-form-item>
       <el-form-item label="角色类型" prop="globalMark">
-        <el-select v-model="dataForm.globalMark" placeholder="请选择角色类型">
+        <el-select v-model="dataForm.globalMark" placeholder="请选择角色类型"
+          @change="dataForm.organizeIdsTree = []">
           <el-option label="全局" :value="1"></el-option>
           <el-option label="组织" :value="0"></el-option>
         </el-select>
@@ -91,7 +92,6 @@ export default {
           })
         }
       })
-
     },
     dataFormSubmit() {
       this.$refs['dataForm'].validate((valid) => {
