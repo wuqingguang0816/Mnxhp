@@ -114,7 +114,7 @@ export default {
     if (this.value && this.value.length) {
       this.value.forEach(t => this.addRow(t))
     } else {
-      this.addRow()
+      // this.addRow()
     }
   },
   methods: {
