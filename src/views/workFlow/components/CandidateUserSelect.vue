@@ -161,6 +161,7 @@ export default {
       this.listQuery.currentPage = 1
       this.listQuery.pageSize = 20
       this.list = []
+      this.finish = false
       this.initData()
     },
     initData() {
