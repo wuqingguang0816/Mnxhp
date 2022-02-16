@@ -73,7 +73,7 @@ export default {
               return
             }
           }
-          this.$emit('eventReciver', this.dataForm, eventType)
+          this.$emit('eventReceiver', this.dataForm, eventType)
         }
       })
     },

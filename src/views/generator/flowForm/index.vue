@@ -70,7 +70,7 @@
           :limit.sync="listQuery.pageSize" @pagination="initData" />
       </div>
     </div>
-    <Form v-if="formVisible" ref="Form" @close="colseForm" />
+    <Form v-if="formVisible" ref="Form" @close="closeForm" />
     <Preview v-if="previewVisible" ref="preview" @close="previewVisible=false" />
     <DownloadForm v-if="downloadFormVisible" ref="downloadForm"
       @close="downloadFormVisible=false" />

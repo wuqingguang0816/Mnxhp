@@ -14,7 +14,7 @@ export default {
       this.visible = false
       this.$emit('close', isRefresh)
     },
-    prve() {
+    prev() {
       this.activeStep -= 1
     },
     stepChick(key) {
@@ -35,7 +35,7 @@ export default {
       }
       this.formVisible = true
     },
-    async colseForm(data) {
+    async closeForm(data) {
       const type = this.dataForm.type
       let queryType = 0
       if (type == 3 || type == 4 || type == 5) queryType = 1

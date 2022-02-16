@@ -78,7 +78,7 @@ export default {
      * 接收所有FlowCard事件触发
      * @param { Object } data - 含有event(事件名称)/args(参数)两个属性
      */
-    eventReciver({ event, args }) {
+    eventReceiver({ event, args }) {
       if (event === "edit") {
         this.activeData = args[0]; // 打开属性面板
         return;
@@ -171,7 +171,7 @@ export default {
           verifyMode={this.verifyMode}
           key={this.updateId}
           data={this.data}
-          onEmits={this.eventReciver}
+          onEmits={this.eventReceiver}
           style={{ transform: `scale(${this.scaleVal / 100})` }}
         />
         <PropPanel

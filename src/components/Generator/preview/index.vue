@@ -2,7 +2,7 @@
   <el-dialog v-bind="$attrs" :close-on-click-modal="false" :modal-append-to-body="false"
     append-to-body v-on="$listeners" @open="onOpen" @close="onClose"
     class="JNPF-dialog JNPF-dialog_center" title="预览" :width="formConf.generalWidth">
-    <parser :form-conf="formConf" @submit="sumbitForm" :key="key" ref="dynamicForm" />
+    <parser :form-conf="formConf" @submit="submitForm" :key="key" ref="dynamicForm" />
     <div slot="footer">
       <el-button @click="close">{{formConf.cancelButtonText||'取 消'}}</el-button>
       <el-button type="primary" @click="handelConfirm">{{formConf.confirmButtonText||'确 定'}}
@@ -54,8 +54,8 @@ export default {
       }
       loop(form.fields)
     },
-    sumbitForm(data, callback) {
-      console.log('sumbitForm提交数据：', data)
+    submitForm(data, callback) {
+      console.log('submitForm提交数据：', data)
       if (callback && typeof callback === "function") {
         callback()
       }

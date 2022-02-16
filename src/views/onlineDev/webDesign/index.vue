@@ -81,7 +81,7 @@
           :limit.sync="listQuery.pageSize" @pagination="initData" />
       </div>
     </div>
-    <Form v-if="formVisible" ref="Form" @close="colseForm" />
+    <Form v-if="formVisible" ref="Form" @close="closeForm" />
     <AddBox :visible.sync="addVisible" @add="handleAdd" />
   </div>
 </template>

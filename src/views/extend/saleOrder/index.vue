@@ -129,7 +129,7 @@
         </div>
       </div>
     </div>
-    <Form v-if="formVisible" ref="form" @close="colseForm" />
+    <Form v-if="formVisible" ref="form" @close="closeForm" />
   </div>
 </template>
 
@@ -237,7 +237,7 @@ export default {
         this.$refs.form.init(id)
       })
     },
-    colseForm(isRefresh) {
+    closeForm(isRefresh) {
       this.formVisible = false
       if (isRefresh) this.refresh()
     },

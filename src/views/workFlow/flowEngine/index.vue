@@ -96,7 +96,7 @@
           :limit.sync="listQuery.pageSize" @pagination="initData" />
       </div>
     </div>
-    <Form v-if="formVisible" ref="Form" @close="colseForm" />
+    <Form v-if="formVisible" ref="Form" @close="closeForm" />
     <preview v-if="previewVisible" ref="preview" @close="previewVisible=false" />
     <el-dialog title="新建表单" :visible.sync="dialogVisible" class="JNPF-dialog JNPF-dialog_center"
       lock-scroll width="600px">
@@ -244,7 +244,7 @@ export default {
         this.$refs.preview.init(data)
       })
     },
-    colseForm(isRefresh) {
+    closeForm(isRefresh) {
       this.formVisible = false
       if (isRefresh) {
         this.initData()
