@@ -11,7 +11,7 @@
         <el-step title="门户设计" @click.native="stepChick(1)"></el-step>
       </el-steps>
       <div class="options">
-        <el-button @click="prve" :disabled="activeStep<=0">{{$t('common.prev')}}</el-button>
+        <el-button @click="prev" :disabled="activeStep<=0">{{$t('common.prev')}}</el-button>
         <el-button @click="next" :disabled="activeStep>=1 || loading">{{$t('common.next')}}
         </el-button>
         <el-button type="primary" @click="dataFormSubmit()" :disabled="activeStep!=1"
@@ -139,7 +139,7 @@ export default {
       this.visible = false
       this.$emit('close', isRefresh)
     },
-    prve() {
+    prev() {
       this.activeStep -= 1
     },
     next() {

@@ -1,6 +1,6 @@
 <template >
   <div class="flow-form" :style="{margin: '0 auto',width:formConf.fullScreenWidth}">
-    <parser :form-conf="formConf" @submit="sumbitForm" :key="key" ref="dynamicForm"
+    <parser :form-conf="formConf" @submit="submitForm" :key="key" ref="dynamicForm"
       v-if="!loading" />
     <candidate-form :visible.sync="candidateVisible" :candidateList="this.candidateList"
       @submitCandidate="selfHandleRequest" :formData="dataForm" />
@@ -125,7 +125,7 @@ export default {
       }
       loop(form.fields)
     },
-    sumbitForm(data, callback) {
+    submitForm(data, callback) {
       if (!data) return
       this.dataForm.data = JSON.stringify(data)
       if (callback && typeof callback === "function") callback()
@@ -134,9 +134,9 @@ export default {
           this.selfSubmit()
           return
         }
-        this.$emit('eventReciver', this.dataForm, this.eventType)
+        this.$emit('eventReceiver', this.dataForm, this.eventType)
       } else {
-        this.$emit('eventReciver', this.dataForm, this.eventType)
+        this.$emit('eventReceiver', this.dataForm, this.eventType)
       }
     },
     selfSubmit() {

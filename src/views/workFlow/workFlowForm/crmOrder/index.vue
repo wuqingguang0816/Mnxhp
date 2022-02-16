@@ -305,6 +305,7 @@ export default {
     },
     selfSubmit() {
       this.dataForm.status = this.eventType === 'submit' ? 0 : 1
+      this.dataForm.flowId = this.setting.flowId
       if (this.eventType === 'save') return this.selfHandleRequest()
       this.$confirm('您确定要提交当前流程吗, 是否继续?', '提示', {
         type: 'warning'

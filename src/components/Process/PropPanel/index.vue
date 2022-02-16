@@ -178,39 +178,41 @@
           </el-scrollbar>
         </el-tab-pane>
         <el-tab-pane label="通知设置">
-          <el-form :model="subFlowForm" label-width="100px" label-position="left" class="pd-10">
-            <el-form-item label="子流程发起">
-              <el-switch v-model="subFlowForm.launchMsgConfig.on" />
-            </el-form-item>
-            <template v-if="subFlowForm.launchMsgConfig.on">
-              <el-form-item label="消息模板" style="margin-bottom: 0;"></el-form-item>
-              <el-form-item label="" label-width="0">
-                <msg-dialog v-model="subFlowForm.launchMsgConfig.msgId"
-                  :title="subFlowForm.launchMsgConfig.msgName"
-                  @change="onMsgChange('launchMsgConfig',arguments)" />
+          <el-scrollbar class="config-scrollbar">
+            <el-form :model="subFlowForm" label-width="100px" label-position="left" class="pd-10">
+              <el-form-item label="子流程发起">
+                <el-switch v-model="subFlowForm.launchMsgConfig.on" />
               </el-form-item>
-              <el-form-item label="参数设置" style="margin-bottom: 0;"></el-form-item>
-              <el-table :data="subFlowForm.launchMsgConfig.templateJson">
-                <el-table-column type="index" width="50" label="序号" align="center" />
-                <el-table-column prop="field" label="参数名称" width="150">
-                  <template slot-scope="scope">
-                    {{scope.row.fieldName?scope.row.field+'('+scope.row.fieldName+')':scope.row.field}}
-                  </template>
-                </el-table-column>
-                <el-table-column prop="value" label="表单字段">
-                  <template slot-scope="scope">
-                    <el-select v-model="scope.row.relationField" placeholder="请选择表单字段" clearable
-                      filterable>
-                      <el-option v-for="item in funcOptions" :key="item.__vModel__"
-                        :label="item.__config__.label?item.__vModel__+'('+item.__config__.label+')':item.__vModel__"
-                        :value="item.__vModel__">
-                      </el-option>
-                    </el-select>
-                  </template>
-                </el-table-column>
-              </el-table>
-            </template>
-          </el-form>
+              <template v-if="subFlowForm.launchMsgConfig.on">
+                <el-form-item label="消息模板" style="margin-bottom: 0;"></el-form-item>
+                <el-form-item label="" label-width="0">
+                  <msg-dialog v-model="subFlowForm.launchMsgConfig.msgId"
+                    :title="subFlowForm.launchMsgConfig.msgName"
+                    @change="onMsgChange('launchMsgConfig',arguments)" />
+                </el-form-item>
+                <el-form-item label="参数设置" style="margin-bottom: 0;"></el-form-item>
+                <el-table :data="subFlowForm.launchMsgConfig.templateJson">
+                  <el-table-column type="index" width="50" label="序号" align="center" />
+                  <el-table-column prop="field" label="参数名称" width="150">
+                    <template slot-scope="scope">
+                      {{scope.row.fieldName?scope.row.field+'('+scope.row.fieldName+')':scope.row.field}}
+                    </template>
+                  </el-table-column>
+                  <el-table-column prop="value" label="表单字段">
+                    <template slot-scope="scope">
+                      <el-select v-model="scope.row.relationField" placeholder="请选择表单字段" clearable
+                        filterable>
+                        <el-option v-for="item in funcOptions" :key="item.__vModel__"
+                          :label="item.__config__.label?item.__vModel__+'('+item.__config__.label+')':item.__vModel__"
+                          :value="item.__vModel__">
+                        </el-option>
+                      </el-select>
+                    </template>
+                  </el-table-column>
+                </el-table>
+              </template>
+            </el-form>
+          </el-scrollbar>
         </el-tab-pane>
       </el-tabs>
     </section>
@@ -219,69 +221,73 @@
     <section class="approver-pane" v-if="value && isStartNode()">
       <el-tabs style="height:100%;">
         <el-tab-pane label="基础设置" v-if="flowType!=1">
-          <el-row class="pd-10">
-            <el-col :span="4" style="font-size: 14px;line-height:32px">谁可以发起</el-col>
-            <el-col :span="20" style="font-size: 14px;line-height:32px;margin-bottom:10px">
-              默认所有人,需要设置请选择
-            </el-col>
-            <div class="option-box">
-              <org-select ref="start-role-org" type="role" v-model="initiateRole" title="添加角色"
-                class="mb-10" buttonType="button" />
-              <org-select ref="start-position-org" type="position" v-model="initiatePos"
-                title="添加岗位" class="mb-10" buttonType="button" />
-              <org-select ref="start-user-org" type="user" v-model="initiator" title="添加用户"
-                buttonType="button" />
-            </div>
-          </el-row>
+          <el-scrollbar class="config-scrollbar">
+            <el-row class="pd-10">
+              <el-col :span="4" style="font-size: 14px;line-height:32px">谁可以发起</el-col>
+              <el-col :span="20" style="font-size: 14px;line-height:32px;margin-bottom:10px">
+                默认所有人,需要设置请选择
+              </el-col>
+              <div class="option-box">
+                <org-select ref="start-role-org" type="role" v-model="initiateRole" title="添加角色"
+                  class="mb-10" buttonType="button" />
+                <org-select ref="start-position-org" type="position" v-model="initiatePos"
+                  title="添加岗位" class="mb-10" buttonType="button" />
+                <org-select ref="start-user-org" type="user" v-model="initiator" title="添加用户"
+                  buttonType="button" />
+              </div>
+            </el-row>
+          </el-scrollbar>
         </el-tab-pane>
         <el-tab-pane label="高级设置">
-          <el-form label-position="top" class="pd-10">
-            <el-form-item label="操作设置">
-              <div class="per-cell">
-                <el-checkbox v-model="startForm.hasSubimtBtn" disabled>提交</el-checkbox>
-                <el-input v-model="startForm.submitBtnText" />
-              </div>
-              <div class="per-cell">
-                <el-checkbox v-model="startForm.hasSaveBtn" disabled>草稿</el-checkbox>
-                <el-input v-model="startForm.saveBtnText" />
-              </div>
-              <div class="per-cell">
-                <el-checkbox v-model="startForm.hasPressBtn">催办</el-checkbox>
-                <el-input v-model="startForm.pressBtnText" />
-              </div>
-              <div class="per-cell">
-                <el-checkbox v-model="startForm.hasRevokeBtn">撤回</el-checkbox>
-                <el-input v-model="startForm.revokeBtnText" />
-              </div>
-              <div class="per-cell">
-                <el-checkbox v-model="startForm.hasPrintBtn">打印</el-checkbox>
-                <el-input v-model="startForm.printBtnText" />
-              </div>
-              <div class="per-cell" v-if="startForm.hasPrintBtn">
-                <p style="width:112px"></p>
-                <JNPF-TreeSelect :options="printTplList" v-model="startForm.printId"
-                  placeholder="请选择打印模板" lastLevel clearable></JNPF-TreeSelect>
-              </div>
-            </el-form-item>
-          </el-form>
-          <el-form class="pd-10" style="margin-top:-20px">
-            <el-form-item label="审核汇总">
-              <el-switch v-model="startForm.isSummary" />
-              <div class="option-box-tip" v-if="!startForm.isSummary">*打开审核汇总后，流程流转记录会按部门及岗位进行汇总展示
-              </div>
-            </el-form-item>
-            <el-form-item label="汇总设置" v-if="startForm.isSummary">
-              <el-select v-model="startForm.summaryType" placeholder="请选择">
-                <el-option label="汇总全部流转记录" :value="0"></el-option>
-                <el-option label="汇总通过及拒绝流转记录" :value="1"></el-option>
-              </el-select>
-              <div class="option-box-tip">*打开审核汇总后，流程流转记录会按部门及岗位进行汇总展示</div>
-            </el-form-item>
-            <el-form-item label="流程评论">
-              <el-switch v-model="startForm.isComment" />
-              <div class="option-box-tip">*打开流程评论后，流程内涉及的用户均可进行意见评论</div>
-            </el-form-item>
-          </el-form>
+          <el-scrollbar class="config-scrollbar">
+            <el-form label-position="top" class="pd-10">
+              <el-form-item label="操作设置">
+                <div class="per-cell">
+                  <el-checkbox v-model="startForm.hasSubimtBtn" disabled>提交</el-checkbox>
+                  <el-input v-model="startForm.submitBtnText" />
+                </div>
+                <div class="per-cell">
+                  <el-checkbox v-model="startForm.hasSaveBtn" disabled>草稿</el-checkbox>
+                  <el-input v-model="startForm.saveBtnText" />
+                </div>
+                <div class="per-cell">
+                  <el-checkbox v-model="startForm.hasPressBtn">催办</el-checkbox>
+                  <el-input v-model="startForm.pressBtnText" />
+                </div>
+                <div class="per-cell">
+                  <el-checkbox v-model="startForm.hasRevokeBtn">撤回</el-checkbox>
+                  <el-input v-model="startForm.revokeBtnText" />
+                </div>
+                <div class="per-cell">
+                  <el-checkbox v-model="startForm.hasPrintBtn">打印</el-checkbox>
+                  <el-input v-model="startForm.printBtnText" />
+                </div>
+                <div class="per-cell" v-if="startForm.hasPrintBtn">
+                  <p style="width:112px"></p>
+                  <JNPF-TreeSelect :options="printTplList" v-model="startForm.printId"
+                    placeholder="请选择打印模板" lastLevel clearable></JNPF-TreeSelect>
+                </div>
+              </el-form-item>
+            </el-form>
+            <el-form class="pd-10" style="margin-top:-20px">
+              <el-form-item label="审核汇总">
+                <el-switch v-model="startForm.isSummary" />
+                <div class="option-box-tip" v-if="!startForm.isSummary">*打开审核汇总后，流程流转记录会按部门及岗位进行汇总展示
+                </div>
+              </el-form-item>
+              <el-form-item label="汇总设置" v-if="startForm.isSummary">
+                <el-select v-model="startForm.summaryType" placeholder="请选择">
+                  <el-option label="汇总全部流转记录" :value="0"></el-option>
+                  <el-option label="汇总通过及拒绝流转记录" :value="1"></el-option>
+                </el-select>
+                <div class="option-box-tip">*打开审核汇总后，流程流转记录会按部门及岗位进行汇总展示</div>
+              </el-form-item>
+              <el-form-item label="流程评论">
+                <el-switch v-model="startForm.isComment" />
+                <div class="option-box-tip">*打开流程评论后，流程内涉及的用户均可进行意见评论</div>
+              </el-form-item>
+            </el-form>
+          </el-scrollbar>
         </el-tab-pane>
         <el-tab-pane label="表单权限">
           <div class="form-auth-table">
@@ -556,68 +562,70 @@
           </el-scrollbar>
         </el-tab-pane>
         <el-tab-pane label="高级设置" name="senior">
-          <el-form label-position="top" class="pd-10">
-            <el-form-item label="操作设置">
-              <div class="per-cell">
-                <el-checkbox v-model="approverForm.hasSaveBtn">草稿</el-checkbox>
-                <el-input v-model="approverForm.saveBtnText" />
-              </div>
-              <div class="per-cell">
-                <el-checkbox v-model="approverForm.hasAuditBtn">同意</el-checkbox>
-                <el-input v-model="approverForm.auditBtnText" />
-              </div>
-              <div class="per-cell">
-                <el-checkbox v-model="approverForm.hasRejectBtn">驳回</el-checkbox>
-                <el-input v-model="approverForm.rejectBtnText" />
-              </div>
-              <div class="per-cell">
-                <el-checkbox v-model="approverForm.hasRevokeBtn">撤回</el-checkbox>
-                <el-input v-model="approverForm.revokeBtnText" />
-              </div>
-              <div class="per-cell">
-                <el-checkbox v-model="approverForm.hasTransferBtn">转办</el-checkbox>
-                <el-input v-model="approverForm.transferBtnText" />
-              </div>
-              <div class="per-cell">
-                <el-checkbox v-model="approverForm.hasSign">签名</el-checkbox>
-              </div>
-              <div class="per-cell">
-                <el-checkbox v-model="approverForm.hasPrintBtn">打印</el-checkbox>
-                <el-input v-model="approverForm.printBtnText" />
-              </div>
-              <div class="per-cell" v-if="approverForm.hasPrintBtn">
-                <p style="width:112px"></p>
-                <JNPF-TreeSelect :options="printTplList" v-model="approverForm.printId"
-                  placeholder="请选择打印模板" lastLevel clearable></JNPF-TreeSelect>
-              </div>
-            </el-form-item>
-            <!-- <el-form-item label="超时设置">
-              <el-switch v-model="approverForm.timeoutConfig.on" class="mr-10" />
-              <template v-if="approverForm.timeoutConfig.on">
-                <el-input-number v-model="approverForm.timeoutConfig.quantity"
-                  controls-position="right" :min="1" class="mr-10" />
-                <el-select v-model="approverForm.timeoutConfig.type" class="timeout-select mr-10">
-                  <el-option label="天" value="day"></el-option>
-                  <el-option label="小时" value="hour"></el-option>
-                  <el-option label="分钟" value="minute"></el-option>
+          <el-scrollbar class="config-scrollbar">
+            <el-form label-position="top" class="pd-10">
+              <el-form-item label="操作设置">
+                <div class="per-cell">
+                  <el-checkbox v-model="approverForm.hasSaveBtn">草稿</el-checkbox>
+                  <el-input v-model="approverForm.saveBtnText" />
+                </div>
+                <div class="per-cell">
+                  <el-checkbox v-model="approverForm.hasAuditBtn">同意</el-checkbox>
+                  <el-input v-model="approverForm.auditBtnText" />
+                </div>
+                <div class="per-cell">
+                  <el-checkbox v-model="approverForm.hasRejectBtn">驳回</el-checkbox>
+                  <el-input v-model="approverForm.rejectBtnText" />
+                </div>
+                <div class="per-cell">
+                  <el-checkbox v-model="approverForm.hasRevokeBtn">撤回</el-checkbox>
+                  <el-input v-model="approverForm.revokeBtnText" />
+                </div>
+                <div class="per-cell">
+                  <el-checkbox v-model="approverForm.hasTransferBtn">转办</el-checkbox>
+                  <el-input v-model="approverForm.transferBtnText" />
+                </div>
+                <div class="per-cell">
+                  <el-checkbox v-model="approverForm.hasSign">签名</el-checkbox>
+                </div>
+                <div class="per-cell">
+                  <el-checkbox v-model="approverForm.hasPrintBtn">打印</el-checkbox>
+                  <el-input v-model="approverForm.printBtnText" />
+                </div>
+                <div class="per-cell" v-if="approverForm.hasPrintBtn">
+                  <p style="width:112px"></p>
+                  <JNPF-TreeSelect :options="printTplList" v-model="approverForm.printId"
+                    placeholder="请选择打印模板" lastLevel clearable></JNPF-TreeSelect>
+                </div>
+              </el-form-item>
+              <!-- <el-form-item label="超时设置">
+                <el-switch v-model="approverForm.timeoutConfig.on" class="mr-10" />
+                <template v-if="approverForm.timeoutConfig.on">
+                  <el-input-number v-model="approverForm.timeoutConfig.quantity"
+                    controls-position="right" :min="1" class="mr-10" />
+                  <el-select v-model="approverForm.timeoutConfig.type" class="timeout-select mr-10">
+                    <el-option label="天" value="day"></el-option>
+                    <el-option label="小时" value="hour"></el-option>
+                    <el-option label="分钟" value="minute"></el-option>
+                  </el-select>
+                  <el-radio-group v-model="approverForm.timeoutConfig.handler">
+                    <el-radio :label="1">同意</el-radio>
+                    <el-radio :label="2">驳回</el-radio>
+                  </el-radio-group>
+                </template>
+              </el-form-item> -->
+              <el-form-item label="驳回设置">
+                <el-select v-model="approverForm.rejectStep" placeholder="请选择">
+                  <el-option v-for="item in rejectStepOptions" :key="item.nodeId"
+                    :label="item.properties.title" :value="item.nodeId">
+                  </el-option>
                 </el-select>
-                <el-radio-group v-model="approverForm.timeoutConfig.handler">
-                  <el-radio :label="1">同意</el-radio>
-                  <el-radio :label="2">驳回</el-radio>
-                </el-radio-group>
-              </template>
-            </el-form-item> -->
-            <el-form-item label="驳回设置">
-              <el-select v-model="approverForm.rejectStep" placeholder="请选择">
-                <el-option v-for="item in rejectStepOptions" :key="item.nodeId"
-                  :label="item.properties.title" :value="item.nodeId">
-                </el-option>
-              </el-select>
-            </el-form-item>
-            <el-form-item label="说明">
-              <el-input v-model="approverForm.description" type="textarea" :rows="3"></el-input>
-            </el-form-item>
-          </el-form>
+              </el-form-item>
+              <el-form-item label="说明">
+                <el-input v-model="approverForm.description" type="textarea" :rows="3"></el-input>
+              </el-form-item>
+            </el-form>
+          </el-scrollbar>
         </el-tab-pane>
         <el-tab-pane label="表单权限" name="formAuth">
           <div class="form-auth-table">

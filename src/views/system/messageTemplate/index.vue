@@ -55,7 +55,7 @@
         </JNPF-table>
         <pagination :total="total" :page.sync="listQuery.currentPage"
           :limit.sync="listQuery.pageSize" @pagination="initData" />
-        <Form v-show="formVisible" ref="Form" @close="colseForm" />
+        <Form v-show="formVisible" ref="Form" @close="closeForm" />
       </div>
     </div>
   </div>
@@ -150,7 +150,7 @@ export default {
         this.$refs.Form.init(id)
       })
     },
-    colseForm(isRefresh) {
+    closeForm(isRefresh) {
       this.formVisible = false
       if (isRefresh) this.initData()
     }

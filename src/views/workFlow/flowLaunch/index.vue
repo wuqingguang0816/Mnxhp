@@ -119,8 +119,8 @@
           :limit.sync="listQuery.pageSize" @pagination="initData" />
       </div>
     </div>
-    <flow v-if="flowVisible" ref="flow" @close="flowVisible=false" @chioceFlow="chioceFlow" />
-    <FlowBox v-if="formVisible" ref="FlowBox" @close="colseForm" />
+    <flow v-if="flowVisible" ref="flow" @close="flowVisible=false" @choiceFlow="choiceFlow" />
+    <FlowBox v-if="formVisible" ref="FlowBox" @close="closeForm" />
   </div>
 </template>
 
@@ -280,7 +280,7 @@ export default {
         this.$refs.flow.init()
       })
     },
-    chioceFlow(item) {
+    choiceFlow(item) {
       let data = {
         id: '',
         enCode: item.enCode,
@@ -308,7 +308,7 @@ export default {
         this.$refs.FlowBox.init(data)
       })
     },
-    colseForm(isRefresh) {
+    closeForm(isRefresh) {
       this.formVisible = false
       if (isRefresh) this.refresh()
     },

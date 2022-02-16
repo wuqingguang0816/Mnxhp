@@ -82,7 +82,7 @@
           :limit.sync="listQuery.pageSize" @pagination="initData" />
       </div>
     </div>
-    <Form v-if="formVisible" ref="Form" @close="colseForm" />
+    <Form v-if="formVisible" ref="Form" @close="closeForm" />
     <Preview :visible.sync="previewVisible" :id="activeId" />
     <Transfer ref="transfer" :visible.sync="transferShow" :id="transferId" />
   </div>
@@ -210,7 +210,7 @@ export default {
         this.$refs.Form.init(this.categoryList, id)
       })
     },
-    colseForm(isRefresh) {
+    closeForm(isRefresh) {
       this.formVisible = false
       if (isRefresh) this.initData()
     }

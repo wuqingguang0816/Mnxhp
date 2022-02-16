@@ -162,6 +162,8 @@ export default {
       this.dataForm.isDingTalk = 0
       this.dataForm.isSms = 0
       this.dataForm.id = id || ''
+      this.dataForm.smsTemplateName = ''
+      this.dataForm.smsId = ''
       this.$nextTick(() => {
         this.$refs['dataForm'].resetFields()
         if (this.dataForm.id) {

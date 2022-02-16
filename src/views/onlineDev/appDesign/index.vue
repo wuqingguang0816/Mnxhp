@@ -81,7 +81,7 @@
           :limit.sync="listQuery.pageSize" @pagination="initData" />
       </div>
     </div>
-    <Form v-if="formVisible" ref="Form" @close="colseForm" />
+    <Form v-if="formVisible" ref="Form" @close="closeForm" />
     <AddBox :visible.sync="addVisible" @add="handleAdd" />
     <el-dialog :close-on-click-modal="false" :modal-append-to-body="false"
       :visible.sync="previewVisible" class="JNPF-dialog JNPF-dialog_center code-dialog" title="预览"

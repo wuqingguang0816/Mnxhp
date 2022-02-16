@@ -107,7 +107,7 @@
         </template>
       </div>
     </div>
-    <FlowBox v-if="flowVisible" ref="FlowBox" @close="colseFlow" />
+    <FlowBox v-if="flowVisible" ref="FlowBox" @close="closeFlow" />
     <Form v-show="formVisible" ref="Form" @refreshDataList="refresh" />
     <Detail v-show="detailVisible" ref="Detail" @close="detailVisible = false" />
     <ExportBox v-if="exportBoxVisible" ref="ExportBox" @download="download" />
@@ -406,7 +406,7 @@ export default {
       this.formVisible = false
       if (isRefresh) this.initData()
     },
-    colseFlow(isRefresh) {
+    closeFlow(isRefresh) {
       this.flowVisible = false
       if (isRefresh) this.initData()
     },

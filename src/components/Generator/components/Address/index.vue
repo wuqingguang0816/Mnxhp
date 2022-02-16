@@ -223,7 +223,7 @@ export default {
       if (this.selectDisabled) return
       this.visible = true
       this.nodeId = '-1'
-
+      this.setDefault()
     },
     loadNode(node, resolve) {
       if (node.level === 0) {
@@ -314,16 +314,15 @@ export default {
         this.tagsList = []
         return
       }
-      this.selectedIds = this.multiple ? this.value : [this.value]
-      GetAreaByIds(this.selectedIds).then(res => {
-        if (!this.selectedData.length && !this.innerValue) {
-          this.selectedData = res.data.map(o => o.join(' / '))
-          if (this.multiple) {
-            this.innerValue = ''
-            this.tagsList = JSON.parse(JSON.stringify(this.selectedData))
-          } else {
-            this.innerValue = this.selectedData.join(',')
-          }
+      let selectedIds = this.multiple ? this.value : [this.value]
+      GetAreaByIds(selectedIds).then(res => {
+        this.selectedIds = JSON.parse(JSON.stringify(selectedIds))
+        this.selectedData = res.data.map(o => o.join(' / '))
+        if (this.multiple) {
+          this.innerValue = ''
+          this.tagsList = JSON.parse(JSON.stringify(this.selectedData))
+        } else {
+          this.innerValue = this.selectedData.join(',')
         }
         this.$nextTick(() => {
           if (this.multiple) {

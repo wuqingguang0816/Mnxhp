@@ -12,7 +12,7 @@
         <el-step title="打印设计" @click.native="stepChick(1)" />
       </el-steps>
       <div class="options">
-        <el-button @click="prve" :disabled="activeStep<=0">{{$t('common.prev')}}</el-button>
+        <el-button @click="prev" :disabled="activeStep<=0">{{$t('common.prev')}}</el-button>
         <el-button @click="next" :disabled="activeStep>=1 || loading" :loading="nextBtnLoading">
           {{$t('common.next')}}
         </el-button>
@@ -247,7 +247,7 @@ export default {
       this.visible = false
       this.$emit('close', isRefresh)
     },
-    prve() {
+    prev() {
       this.activeStep -= 1
     },
     stepChick(key) {

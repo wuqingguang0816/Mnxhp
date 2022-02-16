@@ -9,7 +9,7 @@
             <el-button icon="el-icon-download" @click="exportExcel">导出</el-button>
           </el-button-group>
           <el-button-group>
-            <el-button icon="el-icon-arrow-left" @click="prve">前单</el-button>
+            <el-button icon="el-icon-arrow-left" @click="prev">前单</el-button>
             <el-button @click="next">
               后单<i class="el-icon-arrow-right el-icon--right"></i>
             </el-button>
@@ -226,7 +226,7 @@ export default {
         }
       })
     },
-    prve() {
+    prev() {
       this.loading = true
       PrevInfo(this.dataForm.id).then(res => {
         if (!res.data) {
