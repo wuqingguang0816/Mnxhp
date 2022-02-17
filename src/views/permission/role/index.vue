@@ -105,7 +105,7 @@
 import { getRoleList, delRole, updateRoleState } from '@/api/permission/role'
 import Form from './Form'
 import AuthorizeForm from '@/views/permission/authorize/AuthorizeForm'
-import UserRelationList from '@/views/permission/userRelation/Selector'
+import UserRelationList from './userRelation'
 import Diagram from '@/views/permission/user/Diagram'
 
 export default {
@@ -248,7 +248,7 @@ export default {
     handleUserRelation(id, fullName) {
       this.userRelationListVisible = true
       this.$nextTick(() => {
-        this.$refs.UserRelationList.init(id, fullName, 'Role')
+        this.$refs.UserRelationList.init(id, fullName)
       })
     },
     handleAuthorize(id, fullName) {
