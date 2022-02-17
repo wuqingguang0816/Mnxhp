@@ -475,7 +475,7 @@ export default {
       this.$refs[this.formConf.formRef].validate(valid => {
         if (!valid) return false
         if (!isTableValid) return false
-        // 触发sumit事件
+        // 触发submit事件
         this.$emit('submit', this[this.formConf.formModel], this.afterSubmit)
         return true
       })

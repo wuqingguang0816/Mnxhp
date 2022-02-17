@@ -50,7 +50,7 @@
                     <el-select v-model="activeData.__vModel__" placeholder="请选择控件字段(v-model)"
                       clearable @change="fieldChange1" filterable>
                       <el-option
-                        v-for="item in getSubTalebFiled(activeData.__config__.relationTable)"
+                        v-for="item in getSubTableFiled(activeData.__config__.relationTable)"
                         :key="item.field" :value="item.field"
                         :label="item.fieldName?item.field+'('+item.fieldName+')':item.field">
                       </el-option>
@@ -284,7 +284,7 @@
                   </el-option>
                 </el-select>
               </el-form-item>
-              <table-config :active-data="activeData"  />
+              <table-config :active-data="activeData" />
             </template>
             <template v-if="activeData.__config__.jnpfKey==='card'">
               <el-form-item label="控件栅格" label-width="76px">
@@ -675,7 +675,7 @@ export default {
   created() {
     this.getDictionaryType()
     this.getDataInterfaceSelector()
-    this.getPringTplList()
+    this.getPrintTplList()
     if (!this.activeData || !this.activeData.__config__) return
     if (!this.activeData.__config__.tableName && this.activeData.__config__.jnpfKey !== 'table') {
       this.activeData.__config__.tableName = this.mainTable
@@ -721,7 +721,7 @@ export default {
         )
       }
     },
-    getSubTalebFiled(key) {
+    getSubTableFiled(key) {
       let item = {}
       let list = this.subTable.filter(o => o.table === key)
       if (list.length) {
@@ -759,7 +759,7 @@ export default {
         this.activeData.__vModel__ = ''
         return
       }
-      let options = this.getSubTalebFiled(this.activeData.__config__.relationTable)
+      let options = this.getSubTableFiled(this.activeData.__config__.relationTable)
       let item = options.filter(o => o.field == val)[0]
       if (!item || !item.fieldName) return
       this.activeData.__config__.label = item.fieldName
@@ -859,7 +859,7 @@ export default {
         this.dataInterfaceOptions = res.data
       })
     },
-    getPringTplList() {
+    getPrintTplList() {
       this.$store.dispatch('base/getPrintFormTree').then(res => {
         let list = res.filter(o => o.children && o.children.length)
         this.printTplList = list.map(o => ({

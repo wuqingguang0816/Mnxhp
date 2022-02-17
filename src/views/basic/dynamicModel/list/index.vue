@@ -115,7 +115,7 @@
 </template>
 
 <script>
-import { getModelList, deteleModel, batchDelete, exportModel } from '@/api/onlineDev/visualDev'
+import { getModelList, deleteModel, batchDelete, exportModel } from '@/api/onlineDev/visualDev'
 import { getDictionaryDataSelector } from '@/api/systemData/dictionary'
 import { getDataInterfaceRes } from '@/api/systemData/dataInterface'
 import Form from './Form'
@@ -276,7 +276,7 @@ export default {
       this.$confirm(this.$t('common.delTip'), this.$t('common.tipTitle'), {
         type: 'warning'
       }).then(() => {
-        deteleModel(this.modelId, id).then(res => {
+        deleteModel(this.modelId, id).then(res => {
           this.$message({
             type: 'success',
             message: res.msg,
