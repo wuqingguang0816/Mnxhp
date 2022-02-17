@@ -146,7 +146,7 @@ export function getFieldDataSelect(modelId, data) {
   })
 }
 // 删除数据
-export function deteleModel(modelId, id) {
+export function deleteModel(modelId, id) {
   return request({
     url: `/api/visualdev/OnlineDev/${modelId}/${id}`,
     method: 'DELETE'

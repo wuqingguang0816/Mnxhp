@@ -155,12 +155,12 @@
       </div>
     </div>
     <span slot="footer" class="dialog-footer">
-      <el-button @click="cancle()" v-if="active == 1">取 消</el-button>
+      <el-button @click="cancel()" v-if="active == 1">取 消</el-button>
       <el-button @click="prev" v-if="active == 2">上一步</el-button>
       <el-button @click="next" type="primary" v-if="active < 3" :loading="btnLoading"
         :disabled="active == 1 && !fileName">下一步
       </el-button>
-      <el-button @click="cancle(true)" type="primary" v-else>关 闭</el-button>
+      <el-button @click="cancel(true)" type="primary" v-else>关 闭</el-button>
     </span>
   </el-dialog>
 </template>
@@ -211,7 +211,7 @@ export default {
         }).catch(() => { this.btnLoading = false })
       }
     },
-    cancle(isRefresh) {
+    cancel(isRefresh) {
       this.visible = false
       if (isRefresh) this.$emit('refresh')
     },

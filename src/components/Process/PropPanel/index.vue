@@ -243,7 +243,7 @@
             <el-form label-position="top" class="pd-10">
               <el-form-item label="操作设置">
                 <div class="per-cell">
-                  <el-checkbox v-model="startForm.hasSubimtBtn" disabled>提交</el-checkbox>
+                  <el-checkbox v-model="startForm.hasSubmitBtn" disabled>提交</el-checkbox>
                   <el-input v-model="startForm.submitBtnText" />
                 </div>
                 <div class="per-cell">
@@ -971,7 +971,7 @@ const defaultStartForm = {
     interfaceName: '',
     templateJson: []
   },
-  hasSubimtBtn: true,
+  hasSubmitBtn: true,
   submitBtnText: '提交审核',
   hasSaveBtn: true,
   saveBtnText: '保存草稿',
@@ -1347,7 +1347,7 @@ export default {
     /**
      * 开始节点确认保存
      */
-    startNodeComfirm() {
+    startNodeConfirm() {
       let titleObj = {
         title: this.properties.title
       }
@@ -1736,7 +1736,7 @@ export default {
       }
       return isOk;
     },
-    getPringTplList() {
+    getPrintTplList() {
       this.$store.dispatch('base/getPrintFlowTree').then(res => {
         let list = res.filter(o => o.children && o.children.length)
         this.printTplList = list.map(o => ({
@@ -1796,7 +1796,7 @@ export default {
       this.isSubFlowNode() && this.initSubFlowData()
       this.isApproverNode() && this.initApproverNodeData()
       this.isConditionNode() && this.initConditionNodeData()
-      this.getPringTplList()
+      this.getPrintTplList()
     },
     value(newVal) {
       if (newVal && newVal.properties) {

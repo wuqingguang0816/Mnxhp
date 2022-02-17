@@ -50,7 +50,7 @@
                     <el-select v-model="activeData.__vModel__" placeholder="请选择控件字段(v-model)"
                       clearable @change="fieldChange1" filterable>
                       <el-option
-                        v-for="item in getSubTalebFiled(activeData.__config__.relationTable)"
+                        v-for="item in getSubTableFiled(activeData.__config__.relationTable)"
                         :key="item.field" :value="item.field"
                         :label="item.fieldName?item.field+'('+item.fieldName+')':item.field">
                       </el-option>
@@ -348,7 +348,7 @@
                   </div>
                   <el-select v-model="item.value" placeholder="请选择显示字段"
                     @visible-change="visibleChange" clearable
-                    @change="onColumnfieldChange($event,item)">
+                    @change="onColumnFieldChange($event,item)">
                     <el-option v-for="item in fieldOptions" :key="item.vmodel" :label="item.label"
                       :value="item.vmodel" />
                   </el-select>
@@ -944,7 +944,7 @@ export default {
         )
       }
     },
-    getSubTalebFiled(key) {
+    getSubTableFiled(key) {
       let item = {}
       let list = this.subTable.filter(o => o.table === key)
       if (list.length) {
@@ -982,7 +982,7 @@ export default {
         this.activeData.__vModel__ = ''
         return
       }
-      let options = this.getSubTalebFiled(this.activeData.__config__.relationTable)
+      let options = this.getSubTableFiled(this.activeData.__config__.relationTable)
       let item = options.filter(o => o.field == val)[0]
       if (!item || !item.fieldName) return
       this.activeData.__config__.label = item.fieldName
@@ -1176,7 +1176,7 @@ export default {
         label: ''
       })
     },
-    onColumnfieldChange(val, item) {
+    onColumnFieldChange(val, item) {
       const list = this.fieldOptions.filter(o => o.vmodel === val) || []
       if (!list.length) return
       const active = list[0]
@@ -1246,24 +1246,10 @@ export default {
         this.activeData.__config__.children.splice(index, 1)
       }).catch(() => { });
     },
-    idGenerator() {
-      let qutient = (new Date() - new Date('2020-08-01'))
-      qutient += Math.ceil(Math.random() * 1000)
-      const chars = '0123456789ABCDEFGHIGKLMNOPQRSTUVWXYZabcdefghigklmnopqrstuvwxyz';
-      const charArr = chars.split("")
-      const radix = chars.length;
-      const res = []
-      do {
-        let mod = qutient % radix;
-        qutient = (qutient - mod) / radix;
-        res.push(charArr[mod])
-      } while (qutient);
-      return res.join('')
-    },
     addCollapseItem() {
       this.activeData.__config__.children.push({
         title: '新面板',
-        name: this.idGenerator(),
+        name: this.jnpf.idGenerator(),
         __config__: {
           children: []
         }
