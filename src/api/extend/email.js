@@ -54,7 +54,7 @@ export function ReceiveYesStarred(id) {
 // 设置取消标星
 export function ReceiveNoStarred(id) {
   return request({
-    url: `/api/extend/Email/${id}/Actions/Unstar `,
+    url: `/api/extend/Email/${id}/Actions/Unstar`,
     method: 'PUT'
   })
 }
