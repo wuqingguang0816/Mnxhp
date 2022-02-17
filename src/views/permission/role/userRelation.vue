@@ -83,6 +83,7 @@ export default {
       this.selectedData = []
       this.finish = false
       this.listQuery.keyword = ''
+      this.listQuery.currentPage = 1
       this.listQuery.roleId = id
       this.$nextTick(() => {
         this.pageTitle = this.$t(`role.roleMember`) + '- ' + fullName
