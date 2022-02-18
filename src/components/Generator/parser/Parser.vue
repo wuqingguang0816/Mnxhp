@@ -168,7 +168,7 @@ function buildListeners(scheme) {
     // 响应 组件事件
     Object.keys(scheme.on).forEach(key => {
       const str = scheme.on[key];
-      const func = this.jnpf.getScriptFunc(str);
+      const func = this.jnpf.getScriptFunc.call(this, str);
       if (!func) return
       listeners[key] = params => {
         if (key === 'change') {
@@ -337,7 +337,7 @@ export default {
     },
     onLoad(formConfCopy) {
       if (!formConfCopy || !formConfCopy.funcs || !formConfCopy.funcs.onLoad) return
-      const onLoadFunc = this.jnpf.getScriptFunc(formConfCopy.funcs.onLoad)
+      const onLoadFunc = this.jnpf.getScriptFunc.call(this, formConfCopy.funcs.onLoad)
       if (!onLoadFunc) return
       onLoadFunc(this.parameter)
     },
@@ -457,14 +457,14 @@ export default {
     beforeSubmit() {
       let valid = true
       if (!this.formConfCopy || !this.formConfCopy.funcs || !this.formConfCopy.funcs.beforeSubmit) return valid
-      const func = this.jnpf.getScriptFunc(this.formConfCopy.funcs.beforeSubmit)
+      const func = this.jnpf.getScriptFunc.call(this, this.formConfCopy.funcs.beforeSubmit)
       if (!func) return valid
       valid = func(this.parameter)
       return valid
     },
     afterSubmit() {
       if (!this.formConfCopy || !this.formConfCopy.funcs || !this.formConfCopy.funcs.afterSubmit) return
-      const func = this.jnpf.getScriptFunc(this.formConfCopy.funcs.afterSubmit)
+      const func = this.jnpf.getScriptFunc.call(this, this.formConfCopy.funcs.afterSubmit)
       if (!func) return
       func(this.parameter)
     },
@@ -482,13 +482,13 @@ export default {
     },
     onCascaderChange(data, on) {
       if (!on || !on.change) return
-      const func = this.jnpf.getScriptFunc(on.change)
+      const func = this.jnpf.getScriptFunc.call(this, on.change)
       if (!func) return
       func.call(this, { data, ...this.parameter })
     },
     onCascaderBlur(data, on) {
       if (!on || !on.blur) return
-      const func = this.jnpf.getScriptFunc(on.blur)
+      const func = this.jnpf.getScriptFunc.call(this, on.blur)
       if (!func) return
       func.call(this, { data, ...this.parameter })
     }
