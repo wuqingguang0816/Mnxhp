@@ -234,7 +234,7 @@ export default {
       return message
     },
     handleClose(done) {
-      this.$refs.JNPFIm.colseIM()
+      this.$refs.JNPFIm.closeIM()
       let vBody = this.$refs.userList;
       vBody.removeEventListener("scroll", function () { });
       done();

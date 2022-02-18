@@ -107,7 +107,7 @@
         </template>
       </div>
     </div>
-    <FlowBox v-if="flowVisible" ref="FlowBox" @close="colseFlow" />
+    <FlowBox v-if="flowVisible" ref="FlowBox" @close="closeFlow" />
     <Form v-show="formVisible" ref="Form" @refreshDataList="refresh" />
     <Detail v-show="detailVisible" ref="Detail" @close="detailVisible = false" />
     <ExportBox v-if="exportBoxVisible" ref="ExportBox" @download="download" />
@@ -115,7 +115,7 @@
 </template>
 
 <script>
-import { getModelList, deteleModel, batchDelete, exportModel } from '@/api/onlineDev/visualDev'
+import { getModelList, deleteModel, batchDelete, exportModel } from '@/api/onlineDev/visualDev'
 import { getDictionaryDataSelector } from '@/api/systemData/dictionary'
 import { getDataInterfaceRes } from '@/api/systemData/dataInterface'
 import Form from './Form'
@@ -276,7 +276,7 @@ export default {
       this.$confirm(this.$t('common.delTip'), this.$t('common.tipTitle'), {
         type: 'warning'
       }).then(() => {
-        deteleModel(this.modelId, id).then(res => {
+        deleteModel(this.modelId, id).then(res => {
           this.$message({
             type: 'success',
             message: res.msg,
@@ -406,7 +406,7 @@ export default {
       this.formVisible = false
       if (isRefresh) this.initData()
     },
-    colseFlow(isRefresh) {
+    closeFlow(isRefresh) {
       this.flowVisible = false
       if (isRefresh) this.initData()
     },

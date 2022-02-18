@@ -99,9 +99,9 @@
           :limit.sync="listQuery.pageSize" @pagination="getList" />
       </div>
     </div>
-    <Form v-if="formVisible" ref="Form" @close="colseForm" />
+    <Form v-if="formVisible" ref="Form" @close="closeForm" />
     <Log v-show="logVisible" ref="Log" @close="logVisible=false" />
-    <Preview v-if="previewVisible" ref="Preview" @close="colsePreview" />
+    <Preview v-if="previewVisible" ref="Preview" @close="closePreview" />
   </div>
 </template>
 <script>
@@ -243,13 +243,13 @@ export default {
       this.listQuery.keyword = ''
       this.search()
     },
-    colseForm(isRefresh) {
+    closeForm(isRefresh) {
       this.formVisible = false
       if (isRefresh) {
         this.reset()
       }
     },
-    colsePreview(isRefresh) {
+    closePreview(isRefresh) {
       this.previewVisible = false
       if (isRefresh) {
         this.reset()

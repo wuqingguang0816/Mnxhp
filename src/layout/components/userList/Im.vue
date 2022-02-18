@@ -178,7 +178,7 @@ export default {
         })
       }, num || 0);
     },
-    colseIM() {
+    closeIM() {
       this.showHistory = false
       this.visible = false
     },

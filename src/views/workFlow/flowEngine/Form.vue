@@ -12,7 +12,7 @@
         <el-step title="流程设计" @click.native="stepChick(2)" />
       </el-steps>
       <div class="options">
-        <el-button @click="prve" :disabled="activeStep<=0">{{$t('common.prev')}}</el-button>
+        <el-button @click="prev" :disabled="activeStep<=0">{{$t('common.prev')}}</el-button>
         <el-button @click="next" :disabled="activeStep>=2 || loading">{{$t('common.next')}}
         </el-button>
         <el-button type="primary" @click="dataFormSubmit()" :disabled="activeStep<2"
@@ -163,7 +163,7 @@
     </div>
     <icon-box :visible.sync="iconBoxVisible" ref="iconBox" :current="dataForm.icon"
       @choiceIcon="choiceIcon" />
-    <TableForm :visible.sync="formVisible" ref="tableForm" @closeForm="colseForm"
+    <TableForm :visible.sync="formVisible" ref="tableForm" @closeForm="closeForm"
       :dbLinkId="dataForm.dbLinkId" />
   </el-dialog>
 </template>

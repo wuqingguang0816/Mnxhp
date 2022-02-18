@@ -1,7 +1,7 @@
 <template>
   <div class="test-form">
-    <parser :form-conf="formConf" @submit="sumbitForm1" />
-    <parser :key="key2" :form-conf="formConf" @submit="sumbitForm2" />
+    <parser :form-conf="formConf" @submit="submitForm1" />
+    <parser :key="key2" :form-conf="formConf" @submit="submitForm2" />
     <el-button @click="change">
       change
     </el-button>
@@ -305,11 +305,11 @@ export default {
       this.formConf = this.formConf2
       this.formConf2 = t
     },
-    sumbitForm1(data) {
-      console.log('sumbitForm1提交数据：', data)
+    submitForm1(data) {
+      console.log('submitForm1提交数据：', data)
     },
-    sumbitForm2(data) {
-      console.log('sumbitForm2提交数据：', data)
+    submitForm2(data) {
+      console.log('submitForm2提交数据：', data)
     }
   }
 }

@@ -15,7 +15,7 @@ function createNormalCard(ctx, conf, h) {
   const isTimerNode = afterTrue(NodeUtils.isTimerNode(conf), 'timer')
   const isSubFlowNode = afterTrue(NodeUtils.isSubFlowNode(conf), 'subFlow')
   return (
-    <section class={classList.join(' ')} onClick={this.eventLancher.bind(ctx, "edit", conf)} >
+    <section class={classList.join(' ')} onClick={this.eventLauncher.bind(ctx, "edit", conf)} >
       <header class="header">
         <div class="title-box" style="height: 100%;width:190px;">
           <span class="title-text">{conf.properties.title}</span>
@@ -134,7 +134,7 @@ export default {
      *事件触发器 统筹本组件所有事件并转发到父组件中
      * @param { Object } 包含event（事件名）和args（事件参数）两个参数
      */
-    eventLancher(event, ...args) {
+    eventLauncher(event, ...args) {
       // args.slice(0,-1) vue 会注入MouseEvent到最后一个参数 去除事件对象
       let param = { event, args: args.slice(0, -1) };
       this.$emit("emits", param);
