@@ -1329,7 +1329,7 @@ export default {
     /**
      * 条件节点确认保存得回调
      */
-    conditionNodeComfirm() {
+    conditionNodeConfirm() {
       if (!this.exist()) return
       let nodeContent = ''
       this.properties.conditions = this.pconditions
@@ -1372,7 +1372,7 @@ export default {
     /**
      * 定时器节点确认保存
      */
-    timerNodeComfirm() {
+    timerNodeConfirm() {
       let content = ''
       let { day, hour, minute, second } = this.properties
       if (!day && !hour && !minute && !second) {
@@ -1386,7 +1386,7 @@ export default {
     /**
      * 子流程节点确认保存
      */
-    subFlowNodeComfirm() {
+    subFlowNodeConfirm() {
       if (!this.properties.title) {
         this.$message({
           message: '请输入子流程名称',
@@ -1450,7 +1450,7 @@ export default {
     /**
      * 审批节点确认保存
      */
-    approverNodeComfirm() {
+    approverNodeConfirm() {
       if (!this.properties.title) {
         this.$message({
           message: '请输入节点名称',
@@ -1523,11 +1523,11 @@ export default {
     // 确认修改
     confirm() {
       this.isCopyNode() && this.copyNodeConfirm()
-      this.isStartNode() && this.startNodeComfirm()
-      this.isTimerNode() && this.timerNodeComfirm()
-      this.isSubFlowNode() && this.subFlowNodeComfirm()
-      this.isApproverNode() && this.approverNodeComfirm()
-      this.isConditionNode() && this.conditionNodeComfirm()
+      this.isStartNode() && this.startNodeConfirm()
+      this.isTimerNode() && this.timerNodeConfirm()
+      this.isSubFlowNode() && this.subFlowNodeConfirm()
+      this.isApproverNode() && this.approverNodeConfirm()
+      this.isConditionNode() && this.conditionNodeConfirm()
     },
     // 关闭抽屉
     cancel() {
