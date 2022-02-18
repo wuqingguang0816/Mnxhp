@@ -209,7 +209,7 @@ export default {
     onFormBlur(rowIndex, colIndex, tag) {
       const data = this.tableFormData[rowIndex][colIndex]
       if (data && data.on && data.on.blur) {
-        const func = this.jnpf.getScriptFunc(data.on.blur)
+        const func = this.jnpf.getScriptFunc.call(this, data.on.blur)
         if (!func) return
         func.call(this, {
           data: null,
@@ -222,7 +222,7 @@ export default {
       const data = this.tableFormData[rowIndex][colIndex]
       this.activeRowIndex = rowIndex
       if (data && data.on && data.on.change) {
-        const func = this.jnpf.getScriptFunc(data.on.change)
+        const func = this.jnpf.getScriptFunc.call(this, data.on.change)
         if (!func) return
         let value = ''
         if (['select', 'radio', 'checkbox'].includes(data.jnpfKey)) {
