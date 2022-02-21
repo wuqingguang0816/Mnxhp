@@ -8,52 +8,106 @@
           :class="{'clearable':clearable && !disabled}"></i>
       </el-input>
     </div>
-    <el-dialog title="选择数据" :close-on-click-modal="false" :visible.sync="visible" v-if="visible"
-      class="JNPF-dialog JNPF-dialog_center" lock-scroll append-to-body width='800px'>
-      <el-row class="JNPF-common-search-box" :gutter="16">
-        <el-form @submit.native.prevent>
-          <el-col :span="10">
-            <el-form-item label="关键词">
-              <el-input v-model="listQuery.keyword" placeholder="请输入关键词查询" clearable
-                @keyup.enter.native="search()" />
-            </el-form-item>
-          </el-col>
-          <el-col :span="8">
-            <el-form-item>
-              <el-button type="primary" icon="el-icon-search" @click="search()">
-                {{$t('common.search')}}
-              </el-button>
-              <el-button icon="el-icon-refresh-right" @click="reset()">{{$t('common.reset')}}
-              </el-button>
-            </el-form-item>
-          </el-col>
-        </el-form>
-        <div class="JNPF-common-search-box-right">
-          <el-tooltip effect="dark" :content="$t('common.refresh')" placement="top">
-            <el-link icon="icon-ym icon-ym-Refresh JNPF-common-head-icon" :underline="false"
-              @click="reset()" />
-          </el-tooltip>
+    <template v-if="popupType==='dialog'">
+      <el-dialog :title="popupTitle" :close-on-click-modal="false" :visible.sync="visible"
+        v-if="visible" class="JNPF-dialog JNPF-dialog_center" lock-scroll append-to-body
+        :width='popupWidth'>
+        <el-row class="JNPF-common-search-box" :gutter="16">
+          <el-form @submit.native.prevent>
+            <el-col :span="10">
+              <el-form-item label="关键词">
+                <el-input v-model="listQuery.keyword" placeholder="请输入关键词查询" clearable
+                  @keyup.enter.native="search()" class="search-input" />
+              </el-form-item>
+            </el-col>
+            <el-col :span="8">
+              <el-form-item>
+                <el-button type="primary" icon="el-icon-search" @click="search()">
+                  {{$t('common.search')}}
+                </el-button>
+                <el-button icon="el-icon-refresh-right" @click="reset()">{{$t('common.reset')}}
+                </el-button>
+              </el-form-item>
+            </el-col>
+          </el-form>
+          <div class="JNPF-common-search-box-right">
+            <el-tooltip effect="dark" :content="$t('common.refresh')" placement="top">
+              <el-link icon="icon-ym icon-ym-Refresh JNPF-common-head-icon" :underline="false"
+                @click="reset()" />
+            </el-tooltip>
+          </div>
+        </el-row>
+        <JNPF-table v-loading="listLoading" :data="list" :border="false" highlight-current-row
+          @row-click="rowClick" :hasNO="false">
+          <el-table-column width="35">
+            <template slot-scope="scope">
+              <el-radio :label="scope.row[propsValue]" v-model="checked">&nbsp;</el-radio>
+            </template>
+          </el-table-column>
+          <el-table-column type="index" width="50" label="序号" align="center" />
+          <el-table-column :prop="item.value" :label="item.label" v-for="(item,i) in columnOptions"
+            :key="i" />
+        </JNPF-table>
+        <pagination :total="total" :page.sync="listQuery.currentPage"
+          :limit.sync="listQuery.pageSize" @pagination="initData" v-if="hasPage" />
+        <span slot="footer" class="dialog-footer">
+          <el-button @click="visible = false" size="small">{{$t('common.cancelButton')}}</el-button>
+          <el-button type="primary" @click="select()" size="small">{{$t('common.confirmButton')}}
+          </el-button>
+        </span>
+      </el-dialog>
+    </template>
+    <template v-if="popupType ==='drawer'">
+      <el-drawer :title="popupTitle" :visible.sync="visible" :wrapperClosable="false" ref="drawer"
+        :size='popupWidth' append-to-body class="JNPF-common-drawer">
+        <div class="JNPF-flex-main">
+          <el-row class="JNPF-common-search-box" :gutter="16">
+            <el-form @submit.native.prevent>
+              <el-col :span="10">
+                <el-form-item label="关键词">
+                  <el-input v-model="listQuery.keyword" placeholder="请输入关键词查询" clearable
+                    @keyup.enter.native="search()" class="search-input" />
+                </el-form-item>
+              </el-col>
+              <el-col :span="8">
+                <el-form-item>
+                  <el-button type="primary" icon="el-icon-search" @click="search()">
+                    {{$t('common.search')}}
+                  </el-button>
+                  <el-button icon="el-icon-refresh-right" @click="reset()">{{$t('common.reset')}}
+                  </el-button>
+                </el-form-item>
+              </el-col>
+            </el-form>
+            <div class="JNPF-common-search-box-right">
+              <el-tooltip effect="dark" :content="$t('common.refresh')" placement="top">
+                <el-link icon="icon-ym icon-ym-Refresh JNPF-common-head-icon" :underline="false"
+                  @click="reset()" />
+              </el-tooltip>
+            </div>
+          </el-row>
+          <JNPF-table v-loading="listLoading" :data="list" :border="false" highlight-current-row
+            @row-click="rowClick" :hasNO="false">
+            <el-table-column width="35">
+              <template slot-scope="scope">
+                <el-radio :label="scope.row[propsValue]" v-model="checked">&nbsp;</el-radio>
+              </template>
+            </el-table-column>
+            <el-table-column type="index" width="50" label="序号" align="center" />
+            <el-table-column :prop="item.value" :label="item.label"
+              v-for="(item,i) in columnOptions" :key="i" />
+          </JNPF-table>
+          <pagination :total="total" :page.sync="listQuery.currentPage"
+            :limit.sync="listQuery.pageSize" @pagination="initData" v-if="hasPage" />
+          <div class="drawer-footer">
+            <el-button @click="visible = false" size="small">{{$t('common.cancelButton')}}
+            </el-button>
+            <el-button type="primary" @click="select()" size="small">{{$t('common.confirmButton')}}
+            </el-button>
+          </div>
         </div>
-      </el-row>
-      <JNPF-table v-loading="listLoading" :data="list" :border="false" highlight-current-row
-        @row-click="rowClick" :hasNO="false">
-        <el-table-column width="35">
-          <template slot-scope="scope">
-            <el-radio :label="scope.row[propsValue]" v-model="checked">&nbsp;</el-radio>
-          </template>
-        </el-table-column>
-        <el-table-column type="index" width="50" label="序号" align="center" />
-        <el-table-column :prop="item.value" :label="item.label" v-for="(item,i) in columnOptions"
-          :key="i" />
-      </JNPF-table>
-      <pagination :total="total" :page.sync="listQuery.currentPage" :limit.sync="listQuery.pageSize"
-        @pagination="initData" v-if="hasPage" />
-      <span slot="footer" class="dialog-footer">
-        <el-button @click="visible = false" size="small">{{$t('common.cancelButton')}}</el-button>
-        <el-button type="primary" @click="select()" size="small">{{$t('common.confirmButton')}}
-        </el-button>
-      </span>
-    </el-dialog>
+      </el-drawer>
+    </template>
   </div>
 </template>
 
@@ -80,6 +134,18 @@ export default {
     relationField: {
       type: String,
       default: 'fullName'
+    },
+    popupType: {
+      type: String,
+      default: 'dialog'
+    },
+    popupTitle: {
+      type: String,
+      default: '选择数据'
+    },
+    popupWidth: {
+      type: String,
+      default: '800px'
     },
     columnOptions: {
       type: Array,

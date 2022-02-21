@@ -890,6 +890,9 @@ export const selectComponents = [{
     columnOptions: [],
     propsValue: 'id',
     relationField: 'fullName',
+    popupType: 'dialog',
+    popupTitle: '选择数据',
+    popupWidth: '800px',
     disabled: false,
     clearable: true
   }
