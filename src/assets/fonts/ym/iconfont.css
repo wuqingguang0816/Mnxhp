@@ -1,9 +1,9 @@
 @font-face {
   font-family: "icon-ym";
   /* Project id 2011706 */
-  src: url('iconfont.woff2?t=1642746036081') format('woff2'),
-    url('iconfont.woff?t=1642746036081') format('woff'),
-    url('iconfont.ttf?t=1642746036081') format('truetype');
+  src: url('iconfont.woff2?t=1645516936683') format('woff2'),
+    url('iconfont.woff?t=1645516936683') format('woff'),
+    url('iconfont.ttf?t=1645516936683') format('truetype');
 }
 
 .icon-ym {
@@ -12,6 +12,14 @@
   font-style: normal;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-ym-pageDesign:before {
+  content: "\e684";
+}
+
+.icon-ym-customUrl:before {
+  content: "\e685";
 }
 
 .icon-ym-systemTemplate:before {
