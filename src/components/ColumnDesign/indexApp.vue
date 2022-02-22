@@ -108,7 +108,29 @@
                   <el-radio-button :label="500">500条</el-radio-button>
                 </el-radio-group>
               </el-form-item>
+              <el-divider>按钮配置</el-divider>
+              <el-checkbox-group v-model="btnsList" class="btnsList">
+                <el-checkbox :label="item.value" v-for="item in btnsOption" :key="item.value">
+                  <span class="btn-label">{{ item.value | btnText }}</span>
+                  <el-input v-model="item.label" />
+                </el-checkbox>
+              </el-checkbox-group>
+              <el-checkbox-group v-model="columnBtnsList" class="btnsList columnBtnList">
+                <el-checkbox :label="item.value" v-for="item in columnBtnsOption" :key="item.value">
+                  <span class="btn-label">{{ item.value | btnText }}</span>
+                  <el-input v-model="item.label" />
+                </el-checkbox>
+              </el-checkbox-group>
               <el-divider>权限设置</el-divider>
+              <el-form-item label="按钮权限">
+                <el-switch v-model="columnData.useBtnPermission"></el-switch>
+              </el-form-item>
+              <el-form-item label="列表权限">
+                <el-switch v-model="columnData.useColumnPermission"></el-switch>
+              </el-form-item>
+              <el-form-item label="表单权限">
+                <el-switch v-model="columnData.useFormPermission"></el-switch>
+              </el-form-item>
               <el-form-item label="数据权限">
                 <el-switch v-model="columnData.useDataPermission"></el-switch>
               </el-form-item>
@@ -142,7 +164,17 @@ const defaultColumnData = {
   sort: 'desc',   // 排序类型
   hasPage: true,  // 列表分页
   pageSize: 20,  // 分页条数
+  useColumnPermission: false,
+  useFormPermission: false,
+  useBtnPermission: false,
   useDataPermission: false,
+  btnsList: [
+    { value: 'add', icon: 'el-icon-plus', label: '新增' }
+  ],  // 按钮
+  columnBtnsList: [
+    { value: 'edit', icon: 'el-icon-edit', label: '编辑' },
+    { value: 'remove', icon: 'el-icon-delete', label: '删除' }
+  ] // 列按钮
 }
 export default {
   name: 'columnDesign',
@@ -158,11 +190,67 @@ export default {
       alignOptions: ['left', 'center', 'right'],
       list: [],
       columnData: JSON.parse(JSON.stringify(defaultColumnData)),
+      btnsOption: [
+        { value: 'add', icon: 'el-icon-plus', label: '新增' }
+      ],
+      columnBtnsOption: [
+        { value: 'detail', icon: 'el-icon-tickets', label: '详情' },
+        { value: 'edit', icon: 'el-icon-edit', label: '编辑' },
+        { value: 'remove', icon: 'el-icon-delete', label: '删除' }
+      ],
       columnOptions: [],
       searchOptions: [],
       sortOptions: [],
-      sortList: []
+      sortList: [],
+      btnsList: [],
+      columnBtnsList: [],
     }
+  },
+  filters: {
+    btnText(key) {
+      let text = ''
+      switch (key) {
+        case 'edit':
+          text = '编辑'
+          break;
+        case 'remove':
+          text = '删除'
+          break;
+        case 'detail':
+          text = '详情'
+          break;
+        default:
+          text = '新增'
+          break;
+      }
+      return text
+    }
+  },
+  watch: {
+    btnsList(val) {
+      let list = []
+      outer: for (let i = 0; i < this.btnsOption.length; i++) {
+        inter: for (let ii = 0; ii < val.length; ii++) {
+          if (val[ii] === this.btnsOption[i].value) {
+            list.push(this.btnsOption[i])
+            break inter;
+          }
+        }
+      }
+      this.columnData.btnsList = list
+    },
+    columnBtnsList(val) {
+      let list = []
+      outer: for (let i = 0; i < this.columnBtnsOption.length; i++) {
+        inter: for (let ii = 0; ii < val.length; ii++) {
+          if (val[ii] === this.columnBtnsOption[i].value) {
+            list.push(this.columnBtnsOption[i])
+            break inter;
+          }
+        }
+      }
+      this.columnData.columnBtnsList = list
+    },
   },
   created() {
     let list = []
@@ -202,12 +290,16 @@ export default {
       label: o.__config__.label,
       prop: o.__vModel__
     }));
-    if (!this.columnOptions.length) this.columnData.columnList = []
-    if (!this.searchOptions.length) this.columnData.searchList = []
-    if (!this.sortOptions.length) this.columnData.sortList = []
     if (typeof this.conf === 'object' && this.conf !== null) {
       this.columnData = Object.assign({}, defaultColumnData, this.conf)
     }
+    if (!this.columnOptions.length) this.columnData.columnList = []
+    if (!this.searchOptions.length) this.columnData.searchList = []
+    if (!this.sortOptions.length) this.columnData.sortList = []
+    this.setBtnValue(this.columnData.btnsList, this.btnsOption)
+    this.setBtnValue(this.columnData.columnBtnsList, this.columnBtnsOption)
+    this.btnsList = this.columnData.btnsList.map(o => o.value)
+    this.columnBtnsList = this.columnData.columnBtnsList.map(o => o.value)
   },
   mounted() {
     this.setSort()
@@ -218,6 +310,17 @@ export default {
     })
   },
   methods: {
+    setBtnValue(replacedData, data, key) {
+      key = key ? key : 'value'
+      outer: for (let i = 0; i < replacedData.length; i++) {
+        inter: for (let ii = 0; ii < data.length; ii++) {
+          if (replacedData[i][key] === data[ii][key]) {
+            data[ii] = replacedData[i]
+            break inter
+          }
+        }
+      }
+    },
     setListValue(replacedData, data, type) {
       const key = 'prop'
       let res = []
