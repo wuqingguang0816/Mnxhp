@@ -54,8 +54,7 @@
           <el-table-column prop="fullName" label="名称" width="200" />
           <el-table-column prop="enCode" label="编码" width="200" />
           <el-table-column prop="type" label="类型" width="70" />
-          <el-table-column prop="organizeInfo" label="组织" show-overflow-tooltip />
-          <el-table-column prop="description" label="说明" width="150" />
+          <el-table-column prop="organizeInfo" label="所属组织" show-overflow-tooltip />
           <el-table-column prop="creatorTime" label="创建时间" :formatter="jnpf.tableDateFormat"
             width="120" />
           <el-table-column prop="sortCode" label="排序" width="70" align="center" />

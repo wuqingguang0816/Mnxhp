@@ -232,9 +232,6 @@
                   <el-option label="危险按钮" value="danger"></el-option>
                 </el-select>
               </el-form-item>
-              <el-form-item label="是否禁用">
-                <el-switch v-model="activeData.disabled" />
-              </el-form-item>
             </template>
             <template v-if="isSystem">
               <el-form-item label="控件标题">

@@ -29,8 +29,6 @@
         v-if="activeData.__config__.jnpfKey==='posSelect'" :multiple="activeData.multiple" />
       <user-select v-model="activeData.__config__.defaultValue" placeholder="选择默认值"
         v-if="activeData.__config__.jnpfKey==='userSelect'" :multiple="activeData.multiple" />
-      <dic-select v-model="activeData.__config__.defaultValue" placeholder="选择默认值"
-        v-if="activeData.__config__.jnpfKey==='dicSelect'" />
       <BillRule v-model="activeData.__config__.defaultValue" placeholder="选择默认值"
         v-if="activeData.__config__.jnpfKey==='billRule'" />
       <el-input :value="setDefaultValue(activeData.__config__.defaultValue)" placeholder="请输入默认值"
@@ -40,7 +38,7 @@
       <el-switch v-model="activeData.clearable" />
     </el-form-item>
     <el-form-item label="能否搜索"
-      v-if="activeData.__config__.jnpfKey!=='userSelect'&& activeData.__config__.jnpfKey!=='editor'">
+      v-if="['depSelect','posSelect'].includes(activeData.__config__.jnpfKey)">
       <el-switch v-model="activeData.filterable" />
     </el-form-item>
     <el-form-item label="能否多选" v-if="needMultiple">
