@@ -532,7 +532,9 @@
             <el-form-item label="能否多选" v-if="activeData.multiple !== undefined">
               <el-switch v-model="activeData.multiple" />
             </el-form-item>
-            <el-form-item v-if="activeData.disabled !== undefined" label="是否禁用">
+            <el-form-item
+              v-if="activeData.disabled !== undefined && activeData.__config__.jnpfKey!=='button'"
+              label="是否禁用">
               <el-switch v-model="activeData.disabled" />
             </el-form-item>
             <el-form-item v-if="activeData.__config__.noShow !== undefined" label="是否隐藏">
