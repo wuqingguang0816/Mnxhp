@@ -286,6 +286,10 @@
                 <el-switch v-model="startForm.isComment" />
                 <div class="option-box-tip">*打开流程评论后，流程内涉及的用户均可进行意见评论</div>
               </el-form-item>
+              <el-form-item label="批量审批">
+                <el-switch v-model="startForm.isBatchApproval" />
+                <div class="option-box-tip">*打开批量审批后，该流程待审批工单可进行批量操作</div>
+              </el-form-item>
             </el-form>
           </el-scrollbar>
         </el-tab-pane>
@@ -983,6 +987,7 @@ const defaultStartForm = {
   printBtnText: '打 印',
   printId: '',
   isComment: false,
+  isBatchApproval: false,
   isSummary: false,
   summaryType: 0,
   formOperates: []
