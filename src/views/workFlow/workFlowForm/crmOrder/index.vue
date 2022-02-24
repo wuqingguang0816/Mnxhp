@@ -331,9 +331,9 @@ export default {
         if (this.eventType === 'save') this.$emit('setLoad', false)
       })
     },
-    onChange(ids, selectedData) {
-      if (!selectedData.length) return
-      this.dataForm.salesmanName = selectedData[0].fullName
+    onChange(id, selectedData) {
+      if (!id) return this.dataForm.salesmanName = ''
+      this.dataForm.salesmanName = selectedData.fullName
     },
     querySearchAsync(queryString, cb) {
       CustomerList(queryString).then(res => {

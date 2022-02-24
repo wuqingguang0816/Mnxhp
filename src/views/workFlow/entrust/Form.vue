@@ -167,9 +167,9 @@ export default {
       this.dataForm.flowName = active.fullName + '/' + active.enCode
       this.dataForm.flowCategory = active.category
     },
-    onChange(ids, selectedData) {
-      if (!selectedData.length) return
-      this.dataForm.toUserName = selectedData[0].fullName
+    onChange(id, selectedData) {
+      if (!id) return this.dataForm.toUserName = ''
+      this.dataForm.toUserName = selectedData.fullName
     }
   }
 }

@@ -201,7 +201,7 @@ export default {
       printBrowseVisible: false,
       eventType: '',
       signImg: '',
-      copyIds: '',
+      copyIds: [],
       fullName: '',
       thisStep: ''
     }
@@ -351,7 +351,7 @@ export default {
       if (eventType === 'audit' || eventType === 'reject') {
         this.handleId = ''
         this.reason = ''
-        this.copyIds = ''
+        this.copyIds = []
         this.handleReset()
         if (eventType === 'reject') return this.visible = true
         this.candidateLoading = true
@@ -573,7 +573,7 @@ export default {
             formData: this.formData,
             enCode: this.setting.enCode,
             signImg: this.signImg,
-            copyIds: this.copyIds
+            copyIds: this.copyIds.join(',')
           }
           if (this.candidateForm.candidateList.length) {
             let candidateList = {}
