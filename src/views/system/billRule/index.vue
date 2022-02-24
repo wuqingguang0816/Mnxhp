@@ -32,11 +32,15 @@
           </div>
         </div>
         <JNPF-table v-loading="listLoading" :data="tableList">
-          <el-table-column prop="fullName" label="业务名称" width="200" />
+          <el-table-column prop="fullName" label="业务名称" min-width="200" />
           <el-table-column prop="enCode" label="业务编码" width="200" />
-          <el-table-column prop="digit" label="流水位数" width="80" />
           <el-table-column prop="startNumber" label="流水起始" width="120" />
-          <el-table-column prop="outputNumber" label="当前流水号" />
+          <el-table-column prop="outputNumber" label="当前流水号" width="300" />
+          <el-table-column prop="creatorUser" label="创建人" width="120" />
+          <el-table-column prop="creatorTime" label="创建时间" :formatter="jnpf.tableDateFormat"
+            width="120" />
+          <el-table-column prop="lastModifyTime" label="最后修改时间" :formatter="jnpf.tableDateFormat"
+            width="120" />
           <el-table-column prop="sortCode" label="排序" width="70" align="center" />
           <el-table-column label="状态" width="70" align="center">
             <template slot-scope="scope">
@@ -44,7 +48,7 @@
                 {{scope.row.enabledMark==1?'正常':'停用'}}</el-tag>
             </template>
           </el-table-column>
-          <el-table-column label="操作" width="150">
+          <el-table-column label="操作" width="150" fixed="right">
             <template slot-scope="scope">
               <tableOpts @edit="addOrUpdateHandle(scope.row.id)" @del="handleDel(scope.row.id)">
                 <el-dropdown>
