@@ -164,11 +164,8 @@ export default {
       } else {
         ReadInfo(item.id).then(res => {
           item.isRead = '1'
-          let body = res.data.bodyText ? JSON.parse(res.data.bodyText) : {}
-          let url = 'flowLaunch'
-          if (body.type == 2) url = 'flowTodo'
-          if (body.type == 3) url = 'flowCirculate'
-          this.$router.push(`/workFlow/${url}`)
+          if (!res.data.bodyText) return
+          this.$router.push('/workFlowDetail?config=' + res.data.bodyText)
         })
       }
     }

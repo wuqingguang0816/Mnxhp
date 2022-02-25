@@ -105,12 +105,9 @@ export default {
         if (item.type == 1) {
           this.visible = true
         } else {
-          let body = this.info.bodyText ? JSON.parse(this.info.bodyText) : {}
-          let url = 'flowLaunch'
-          if (body.type == 2) url = 'flowTodo'
-          if (body.type == 3) url = 'flowCirculate'
+          if (!res.data.bodyText) return
           this.drawer = false
-          this.$router.push(`/workFlow/${url}`)
+          this.$router.push('/workFlowDetail?config=' + res.data.bodyText)
         }
       })
     },

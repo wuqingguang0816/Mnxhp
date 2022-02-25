@@ -41,7 +41,8 @@
           <el-button type="danger" v-if="setting.status != 2 && setting.status != 5"
             @click="cancel()">终 止</el-button>
         </template>
-        <el-button @click="goBack()">{{$t('common.cancelButton')}}</el-button>
+        <el-button @click="goBack()" v-if="!setting.hideCancelBtn">{{$t('common.cancelButton')}}
+        </el-button>
       </div>
       <div class="approve-result" v-if="(setting.opType==0||setting.opType==4) && activeTab==='0'">
         <div class="approve-result-img" :class="flowTaskInfo.status | flowStatus()"></div>
