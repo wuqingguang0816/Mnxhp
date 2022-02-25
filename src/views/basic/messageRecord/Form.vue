@@ -1,6 +1,6 @@
 <template>
   <el-dialog title="查看消息" :close-on-click-modal="false" :visible.sync="visible"
-    class="JNPF-dialog JNPF-dialog_center" lock-scroll width="80%">
+    class="JNPF-dialog JNPF-dialog_center" lock-scroll width="80%" append-to-body>
     <div class="notice-wapper" v-loading="loading">
       <h1 class="title">{{info.title}}</h1>
       <div class="info">
