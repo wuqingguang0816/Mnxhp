@@ -1,11 +1,14 @@
 <template>
   <div class="popupSelect-container">
-    <div class="popupSelect-input" @click="openDialog">
-      <el-input :placeholder="placeholder" v-model="innerValue" readonly>
-        <i slot="suffix" class="el-input__icon el-icon-circle-close" @click.stop="clear"
-          v-if="clearable && !disabled"></i>
-        <i slot="suffix" class="el-input__icon el-icon-arrow-down"
-          :class="{'clearable':clearable && !disabled}"></i>
+    <div class="el-select" @click="openDialog">
+      <el-input :placeholder="placeholder" v-model="innerValue" readonly :validate-event="false"
+        @mouseenter.native="inputHovering = true" @mouseleave.native="inputHovering = false">
+        <template slot="suffix">
+          <i v-show="!showClose"
+            :class="['el-select__caret', 'el-input__icon', 'el-icon-arrow-down']"></i>
+          <i v-if="showClose" class="el-select__caret el-input__icon el-icon-circle-close"
+            @click="clear"></i>
+        </template>
       </el-input>
     </div>
     <template v-if="popupType==='dialog'">
@@ -147,6 +150,10 @@ export default {
       type: String,
       default: '800px'
     },
+    field: {
+      type: String,
+      default: ''
+    },
     columnOptions: {
       type: Array,
       default: () => []
@@ -158,6 +165,10 @@ export default {
     pageSize: {
       type: Number,
       default: 20
+    },
+    multiple: {
+      type: Boolean,
+      default: false
     },
     disabled: {
       type: Boolean,
@@ -186,7 +197,8 @@ export default {
       checkedTxt: '',
       checkedRow: {},
       listLoading: false,
-      visible: false
+      visible: false,
+      inputHovering: false,
     }
   },
   watch: {
@@ -195,6 +207,16 @@ export default {
     }
   },
   computed: {
+    showClose() {
+      let hasValue = this.multiple
+        ? Array.isArray(this.value) && this.value.length > 0
+        : this.value !== undefined && this.value !== null && this.value !== '';
+      let criteria = this.clearable &&
+        !this.disabled &&
+        this.inputHovering &&
+        hasValue;
+      return criteria;
+    },
     propsLabel() {
       return this.columnOptions[0].value
     }
@@ -243,12 +265,13 @@ export default {
       this.visible = true
       this.reset()
     },
-    clear() {
+    clear(event) {
       this.checked = ''
       this.innerValue = ''
       this.checkedRow = {}
       this.$emit('input', this.checked)
       this.$emit('change', this.checked, this.checkedRow)
+      event.stopPropagation();
     },
     select() {
       if (!this.checked) return
@@ -263,16 +286,28 @@ export default {
       this.checkedRow = row
     },
     setDefault() {
-      if (!this.value) return this.innerValue = ''
-      let query = {
-        id: this.value,
-        interfaceId: this.interfaceId,
-        propsValue: this.propsValue,
-        relationField: this.relationField,
+      if (this.value) {
+        if (!this.interfaceId) return
+        let query = {
+          id: this.value,
+          interfaceId: this.interfaceId,
+          propsValue: this.propsValue,
+          relationField: this.relationField,
+        }
+        getDataInterfaceDataInfo(this.interfaceId, query).then(res => {
+          this.innerValue = res.data[this.relationField]
+          if (!this.field) return
+          let relationData = this.$store.state.generator.relationData
+          this.$set(relationData, this.field, res.data)
+          this.$store.commit('generator/UPDATE_RELATION_DATA', relationData)
+        })
+      } else {
+        this.innerValue = ''
+        if (!this.field) return
+        let relationData = this.$store.state.generator.relationData
+        this.$set(relationData, this.field, {})
+        this.$store.commit('generator/UPDATE_RELATION_DATA', relationData)
       }
-      getDataInterfaceDataInfo(this.interfaceId, query).then(res => {
-        this.innerValue = res.data[this.relationField]
-      })
     }
   }
 }

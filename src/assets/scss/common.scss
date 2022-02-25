@@ -1477,6 +1477,7 @@
       line-height: 20px;
       font-size: 0;
       margin-bottom: 12px;
+      cursor: pointer;
 
       &::after {
         content: "";
@@ -1940,31 +1941,8 @@ textarea.el-textarea__inner {
 .popupSelect-container {
   width: 100%;
 
-  .popupSelect-input {
+  &>.el-select {
     width: 100%;
-    cursor: pointer;
-
-    input {
-      cursor: pointer;
-    }
-
-    .el-icon-circle-close {
-      display: none;
-    }
-
-    &:hover {
-      .el-icon-circle-close {
-        display: block;
-      }
-
-      .el-input__validateIcon {
-        display: none;
-      }
-
-      .el-icon-arrow-down.clearable {
-        display: none;
-      }
-    }
   }
 
   .search-input {

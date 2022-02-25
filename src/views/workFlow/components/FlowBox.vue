@@ -578,7 +578,7 @@ export default {
           if (this.candidateForm.candidateList.length) {
             let candidateList = {}
             for (let i = 0; i < this.candidateForm.candidateList.length; i++) {
-              candidateList[this.candidateForm.candidateList[i].nodeId] = this.candidateForm.candidateList[i].value.split(',')
+              candidateList[this.candidateForm.candidateList[i].nodeId] = this.candidateForm.candidateList[i].value
             }
             query.candidateList = candidateList
           }

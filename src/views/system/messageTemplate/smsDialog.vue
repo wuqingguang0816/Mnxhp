@@ -1,11 +1,14 @@
 <template>
   <div class="popupSelect-container">
-    <div class="popupSelect-input" @click="openDialog">
-      <el-input placeholder="请选择短信模板" :value="title" readonly>
-        <i slot="suffix" class="el-input__icon el-icon-circle-close" @click.stop="clear"
-          v-if="clearable"></i>
-        <i slot="suffix" class="el-input__icon el-icon-arrow-down"
-          :class="{'clearable':clearable}"></i>
+    <div class="el-select" @click="openDialog">
+      <el-input placeholder="请选择短信模板" v-model="title" readonly :validate-event="false"
+        @mouseenter.native="inputHovering = true" @mouseleave.native="inputHovering = false">
+        <template slot="suffix">
+          <i v-show="!showClose"
+            :class="['el-select__caret', 'el-input__icon', 'el-icon-arrow-down']"></i>
+          <i v-if="showClose" class="el-select__caret el-input__icon el-icon-circle-close"
+            @click.stop="clear"></i>
+        </template>
       </el-input>
     </div>
     <el-dialog title="短信模板" :close-on-click-modal="false" :visible.sync="visible"
@@ -69,7 +72,18 @@ export default {
       checked: '',
       checkedRow: {},
       listLoading: false,
+      inputHovering: false,
       visible: false
+    }
+  },
+  computed: {
+    showClose() {
+      let hasValue = this.value !== undefined && this.value !== null && this.value !== '';
+      let criteria = this.clearable &&
+        !this.disabled &&
+        this.inputHovering &&
+        hasValue;
+      return criteria;
     }
   },
   methods: {
