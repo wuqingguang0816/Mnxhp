@@ -350,6 +350,22 @@
             </el-tab-pane>
           </el-tabs>
         </el-tab-pane>
+        <el-tab-pane label="超级管理员" name="fourth">
+          <el-alert title="注意：设为超级管理员后该用户拥有系统最高权限" type="warning" :closable="false" show-icon />
+          <el-row :gutter="20" style="margin-top: 15px">
+            <el-col :span="12">
+              <el-form-item label="超级管理员">
+                <user-select v-model="adminIds" placeholder="请选择超级管理员" multiple />
+              </el-form-item>
+            </el-col>
+            <el-col>
+              <el-form-item>
+                <el-button type="primary" size="small" :loading="btnLoading" class="saveBtn"
+                  @click="setAdminList()">保 存</el-button>
+              </el-form-item>
+            </el-col>
+          </el-row>
+        </el-tab-pane>
       </el-tabs>
     </el-form>
   </div>
@@ -366,7 +382,9 @@ import {
   synAllOrganizeSysToDing,
   synAllUserSysToDing,
   synAllOrganizeSysToQy,
-  synAllUserSysToQy
+  synAllUserSysToQy,
+  getAdminList,
+  setAdminList
 } from '@/api/system/sysConfig'
 
 export default {
@@ -472,7 +490,8 @@ export default {
         synSuccessCount: '',
         synType: '用户',
         unSynCount: '',
-      }]
+      }],
+      adminIds: []
     }
   },
   watch: {
@@ -480,6 +499,11 @@ export default {
       if (val == 2 || val == 3) {
         const type = val == 2 ? 1 : 2
         this.getSynThirdTotal(type)
+      }
+    },
+    activeName(val) {
+      if (val === 'fourth') {
+        this.getAdminList()
       }
     }
   },
@@ -634,6 +658,25 @@ export default {
         })
       }).catch(() => {
         this.btnLoading = false
+      })
+    },
+    getAdminList() {
+      getAdminList().then(res => {
+        if (!res.data) return
+        this.adminIds = res.data.map(o => o.id)
+      })
+    },
+    setAdminList() {
+      this.btnLoading = true
+      setAdminList(this.adminIds).then(res => {
+        this.$message({
+          message: res.msg,
+          type: 'success',
+          duration: 1500,
+          onClose: () => {
+            this.btnLoading = false
+          }
+        })
       })
     }
   }
