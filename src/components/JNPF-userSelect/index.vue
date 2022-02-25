@@ -1,5 +1,5 @@
 <template>
-  <div class="userSelect-container">
+  <div class="popupSelect-container">
     <div class="el-select" @click.stop="openDialog">
       <div class="el-select__tags" v-if="multiple" ref="tags"
         :style="{ 'max-width': inputWidth - 32 + 'px', width: '100%',cursor:'pointer' }">
@@ -400,8 +400,3 @@ export default {
   },
 }
 </script>
-<style lang="scss" scoped>
-.userSelect-container {
-  width: 100%;
-}
-</style>
