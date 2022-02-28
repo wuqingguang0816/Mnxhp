@@ -1,6 +1,6 @@
 <template>
-  <el-row :gutter="10" class="dataBoard">
-    <el-col :span="6" class="dataBoard-item" v-for="(item,i) in menuList" :key="i">
+  <el-row :gutter="10" class="dataBoard" type="flex" justify="space-between">
+    <el-col class="dataBoard-item" v-for="(item,i) in realList" :key="i">
       <el-card shadow="never">
         <div class="dataBoard-body">
           <i :class="item.icon+' dataBoard-body-item dataBoard-body-item'+(i+1)"></i>
@@ -14,6 +14,7 @@
   </el-row>
 </template>
 <script>
+import { getDataInterfaceRes } from '@/api/systemData/dataInterface'
 export default {
   props: {
     title: { type: String, default: '' },
@@ -21,18 +22,33 @@ export default {
   },
   data() {
     return {
-      menuList: []
+      realList: []
     }
   },
   created() {
-    this.menuList = this.list
+    this.dealData()
   },
   watch: {
     list: {
       handler(val) {
-        this.menuList = val
+        this.dealData()
       },
       deep: true
+    }
+  },
+  methods: {
+    dealData() {
+      let list = JSON.parse(JSON.stringify(this.list))
+      for (let i = 0; i < list.length; i++) {
+        if (list[i].dataType === 'dynamic') {
+          list[i].num = ''
+          if (!list[i].propsApi) return
+          getDataInterfaceRes(list[i].propsApi).then(res => {
+            list[i].num = this.jnpf.interfaceDataHandler(res.data)
+          })
+        }
+      }
+      this.realList = list
     }
   }
 }
@@ -82,6 +98,14 @@ export default {
         background: #fff2f5;
         color: #fc5b87;
       }
+      &.dataBoard-body-item5 {
+        background: rgba(51, 185, 50, 0.1);
+        color: #33b932;
+      }
+      &.dataBoard-body-item6 {
+        background: rgba(255, 59, 59, 0.1);
+        color: #ff3b3b;
+      }
     }
     .text {
       display: inline-block;
@@ -89,6 +113,7 @@ export default {
       .num {
         font-size: 20px;
         line-height: 36px;
+        height: 36px;
       }
       .name {
         font-size: 14px;
