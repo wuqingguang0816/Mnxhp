@@ -42,6 +42,26 @@
         </div>
       </transition>
     </template>
+    <template v-if="formData.popupType==='drawer'">
+      <el-drawer title="详情" :visible.sync="visible" :wrapperClosable="false"
+        :size='formData.drawerWidth' append-to-body class="JNPF-common-drawer">
+        <div class="JNPF-flex-main">
+          <div class="dynamicForm dynamicDetail" v-loading="loading || mainLoading"
+            :element-loading-text="$t('common.loadingText')">
+            <Parser :formConf="formData" :relationData="relationData" @toDetail="toDetail"
+              v-if="!loading" :formValue="formValue" />
+          </div>
+          <div class="drawer-footer">
+            <template v-if="formData.hasPrintBtn && formData.printId">
+              <el-button type="primary" @click="printBrowseVisible=true">
+                {{formData.printButtonText||'打 印'}}
+              </el-button>
+            </template>
+            <el-button @click="visible = false">{{$t('common.cancelButton')}}</el-button>
+          </div>
+        </div>
+      </el-drawer>
+    </template>
     <Detail v-if="detailVisible" ref="Detail" @close="detailVisible = false" />
     <print-browse :visible.sync="printBrowseVisible" :id="formData.printId" :formId="dataForm.id" />
   </div>
