@@ -329,7 +329,7 @@ export default {
       }, {})) : false
     },
     /**
-     * 根据formid获取完整组件配置
+     * 根据formId获取完整组件配置
      */
     getConfById(formId, rowIndex) {
       let item = this.tableData.find(t => t.__config__.formId === formId)
@@ -346,10 +346,10 @@ export default {
           newObj[key] = this.disabled || item[key]
         }
       }
-      if (itemConfig.jnpfKey === 'relationForm') {
+      if (['relationForm', 'popupSelect'].includes(itemConfig.jnpfKey)) {
         newObj['field'] = item.__vModel__ + '_jnpfRelation_' + rowIndex
       }
-      if (itemConfig.jnpfKey === 'relationFormAttr') {
+      if (['relationFormAttr', 'popupAttr'].includes(itemConfig.jnpfKey)) {
         newObj['relationField'] = newObj['relationField'] + '_jnpfRelation_' + rowIndex
       }
       return newObj
@@ -369,7 +369,7 @@ export default {
           regErrorText: '',
           on: t.on || {},
           jnpfKey: t.__config__.jnpfKey,
-          __vModel__: t.__config__.jnpfKey === 'relationForm' ? t.__vModel__ + '_jnpfRelation_' + rowIndex : t.__vModel__,
+          __vModel__: ['relationForm', 'popupSelect'].includes(t.__config__.jnpfKey) ? t.__vModel__ + '_jnpfRelation_' + rowIndex : t.__vModel__,
           regList: t.__config__.regList || [],
           required: t.__config__.required,
           config: t

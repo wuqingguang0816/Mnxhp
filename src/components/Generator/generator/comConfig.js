@@ -25,11 +25,11 @@ const ruleTrigger = {
 // 动态options
 const dyOptionsList = ['radio', 'checkbox', 'select', 'cascader', 'treeSelect']
 // 不添加vModel
-const noVModelList = ['divider', 'JNPFText', 'groupTitle', 'relationFormAttr', 'relationFlowAttr', 'button', 'barcode', 'qrcode']
+const noVModelList = ['divider', 'JNPFText', 'groupTitle', 'relationFormAttr', 'popupAttr', 'relationFlowAttr', 'button', 'barcode', 'qrcode']
 // 不可以添加到子表组件
 const noTableAllowList = ['divider', 'JNPFText', 'groupTitle', 'button', 'barcode', 'qrcode', 'editor', 'uploadImg', 'radio', 'checkbox', 'relationFlow', 'createUser', 'createTime', 'modifyUser', 'modifyTime', 'currOrganize', 'currDept', 'currPosition', 'rate', 'slider', 'PsdInput', 'colorPicker']
 // 不可以添加到列表展示
-const noColumnShowList = ['PsdInput', 'colorPicker', 'rate', 'slider', 'divider', 'uploadImg', 'uploadFz', 'editor', 'JNPFText', 'relationFormAttr', 'relationFlowAttr', 'groupTitle']
+const noColumnShowList = ['PsdInput', 'colorPicker', 'rate', 'slider', 'divider', 'uploadImg', 'uploadFz', 'editor', 'JNPFText', 'relationFormAttr', 'popupAttr', 'relationFlowAttr', 'groupTitle']
 // 不可以添加到搜索
 const noSearchList = [...noColumnShowList, 'switch', 'timeRange', 'dateRange', 'relationForm', 'relationFlow', 'popupSelect']
 // 搜索时控件为input
@@ -47,6 +47,23 @@ const webPeculiarList = [{
       showLabel: true,
       tag: 'relationFormAttr',
       tagIcon: 'icon-ym icon-ym-generator-nature',
+      defaultValue: '',
+      required: false,
+      layout: 'colFormItem',
+      span: 24,
+      dragDisabled: false
+    },
+    showField: '',
+    relationField: ''
+  },
+  {
+    __config__: {
+      jnpfKey: 'popupAttr',
+      label: '弹窗选择属性',
+      labelWidth: undefined,
+      showLabel: true,
+      tag: 'popupAttr',
+      tagIcon: 'icon-ym icon-ym-generator-popup-attr',
       defaultValue: '',
       required: false,
       layout: 'colFormItem',

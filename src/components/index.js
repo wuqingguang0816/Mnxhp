@@ -17,6 +17,7 @@ import JnpfButton from '@/components/Generator/components/JnpfButton'
 import JNPFUploadFz from '@/components/Generator/components/Upload/UploadFz'
 import JNPFUploadImg from '@/components/Generator/components/Upload/UploadImg'
 import PopupSelect from '@/components/Generator/components/PopupSelect'
+import PopupAttr from '@/components/Generator/components/PopupAttr'
 import NumRange from '@/components/Generator/components/NumRange'
 import ComSelect from '@/components/Generator/components/ComSelect'
 import DepSelect from '@/components/Generator/components/DepSelect'
@@ -48,6 +49,7 @@ export default {
     Vue.component('JNPFUploadFz', JNPFUploadFz)
     Vue.component('JNPFUploadImg', JNPFUploadImg)
     Vue.component('PopupSelect', PopupSelect)
+    Vue.component('PopupAttr', PopupAttr)
     Vue.component('NumRange', NumRange)
     Vue.component('ComSelect', ComSelect)
     Vue.component('DepSelect', DepSelect)

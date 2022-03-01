@@ -69,6 +69,7 @@
 
 <script>
 import { getDataChange, getConfigData } from '@/api/onlineDev/visualDev'
+import { getDataInterfaceDataInfo } from '@/api/systemData/dataInterface'
 import { deepClone } from '@/utils'
 import Parser from './Parser'
 import PrintBrowse from '@/components/PrintBrowse'
@@ -131,19 +132,22 @@ export default {
     },
     unique(arr, attrName) {
       const res = new Map()
+      // 根据对象的某个属性值去重
       return arr.filter(o => !res.has(o[attrName]) && res.set(o[attrName], 1))
     },
     handleAttrList(list) {
       let realList = this.unique(list, 'relationField')
       for (let i = 0; i < realList.length; i++) {
         const item = realList[i];
-        let modelId = '', id = "", field = ""
+        let modelId = '', id = "", field = "", jnpfKey = '', activeItem = {}
         const loop = list => {
           for (let i = 0; i < list.length; i++) {
             if (item.relationField === list[i].__vModel__) {
-              modelId = list[i].modelId
+              jnpfKey = list[i].__config__.jnpfKey
+              modelId = list[i].__config__.jnpfKey === 'relationForm' ? list[i].modelId : list[i].interfaceId
               id = list[i].__config__.defaultValue
               field = list[i].__vModel__
+              activeItem = list[i]
               break
             }
             if (list[i].__config__ && list[i].__config__.jnpfKey !== 'table' && list[i].__config__.children && Array.isArray(list[i].__config__.children)) {
@@ -156,14 +160,28 @@ export default {
           this.$set(this.relationData, field, "")
           continue
         }
-        getDataChange(modelId, id).then(res => {
-          if (!res.data || !res.data.data) {
-            this.$set(this.relationData, field, "")
-            return
+        if (jnpfKey === 'relationForm') {
+          getDataChange(modelId, id).then(res => {
+            if (!res.data || !res.data.data) {
+              this.$set(this.relationData, field, "")
+              return
+            }
+            let data = JSON.parse(res.data.data)
+            this.$set(this.relationData, field, data)
+          }).catch(() => { this.$set(this.relationData, field, "") })
+        }
+        if (jnpfKey === 'popupSelect') {
+          let query = {
+            id: id,
+            interfaceId: modelId,
+            propsValue: activeItem.propsValue,
+            relationField: activeItem.relationField,
           }
-          let data = JSON.parse(res.data.data)
-          this.$set(this.relationData, field, data)
-        }).catch(() => { this.$set(this.relationData, field, "") })
+          getDataInterfaceDataInfo(modelId, query).then(res => {
+            if (!res.data) return this.$set(this.relationData, field, "")
+            this.$set(this.relationData, field, res.data)
+          }).catch(() => { this.$set(this.relationData, field, "") })
+        }
       }
     },
     toDetail(item) {
@@ -211,7 +229,7 @@ export default {
               this.$set(item.__config__, 'noShow', noShow)
             }
           }
-          if (item.__config__.jnpfKey === 'relationFormAttr') relationFormAttrList.push(item)
+          if (['relationFormAttr', 'popupAttr'].includes(item.__config__.jnpfKey)) relationFormAttrList.push(item)
           if (item.__config__ && item.__config__.jnpfKey !== 'table' && item.__config__.children && Array.isArray(item.__config__.children)) {
             loop(item.__config__.children)
           }

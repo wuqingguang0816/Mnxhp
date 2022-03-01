@@ -121,6 +121,8 @@
               :active-data="activeData" ref="calculate" />
             <PopupSelect v-if="activeData.__config__.jnpfKey==='popupSelect'"
               :active-data="activeData" />
+            <PopupAttr v-if="activeData.__config__.jnpfKey==='popupAttr'" :active-data="activeData"
+              ref="popupAttr" />
             <Tab v-if="activeData.__config__.jnpfKey==='tab'" :active-data="activeData" />
             <Collapse v-if="activeData.__config__.jnpfKey==='collapse'" :active-data="activeData" />
             <template v-if="activeData.__config__.jnpfKey==='barcode'">
@@ -458,6 +460,7 @@ import RelationFlow from './RightComponents/RelationFlow'
 import RelationFlowAttr from './RightComponents/RelationFlowAttr'
 import JNPFCalculate from './RightComponents/Calculate'
 import PopupSelect from './RightComponents/PopupSelect'
+import PopupAttr from './RightComponents/PopupAttr'
 import Tab from './RightComponents/Tab'
 import Collapse from './RightComponents/Collapse'
 import TableConfig from './RightComponents/table'
@@ -499,6 +502,7 @@ export default {
     RelationFlowAttr,
     JNPFCalculate,
     PopupSelect,
+    PopupAttr,
     Tab,
     Collapse,
     TableConfig
@@ -663,6 +667,11 @@ export default {
       if (val.__config__.jnpfKey === 'relationFlowAttr') {
         this.$nextTick(() => {
           this.$refs.relationFlowAttr && this.$refs.relationFlowAttr.getOptions()
+        })
+      }
+      if (val.__config__.jnpfKey === 'popupAttr') {
+        this.$nextTick(() => {
+          this.$refs.popupAttr && this.$refs.popupAttr.getOptions()
         })
       }
       if (val.__config__.jnpfKey !== 'calculate') {
