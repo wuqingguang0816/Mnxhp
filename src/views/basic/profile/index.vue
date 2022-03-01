@@ -30,20 +30,19 @@
           <h2 class="bold">我的组织</h2>
         </div>
         <div class="organize-list">
-          <template v-if="organizeList.length">
-            <el-radio-group v-model="activeOrganize" @change="changeMajor($event,'Organize')">
-              <el-row :gutter="100">
-                <el-col :span="12" class="organize-item" v-for="(item,i) in organizeList" :key="i">
-                  <el-radio :label="item.id" border>
-                    <div class="organize-name">
-                      <p>{{item.fullName}}</p>
-                    </div>
-                    <p class="btn">默认</p>
-                  </el-radio>
-                </el-col>
-              </el-row>
-            </el-radio-group>
-          </template>
+          <el-row :gutter="80" v-if="organizeList.length">
+            <el-col :span="12" class="organize-item" v-for="(item,i) in organizeList" :key="i">
+              <div class="organize-item-main" :class="{active:activeOrganize===item.id}"
+                @click="changeMajor(item.id,'Organize')">
+                <i class="icon-ym icon-ym-organization"></i>
+                <p class="organize-name">{{item.fullName}}</p>
+                <p class="btn">默认</p>
+                <div class="icon-checked">
+                  <i class="el-icon-check"></i>
+                </div>
+              </div>
+            </el-col>
+          </el-row>
           <el-empty description="暂无数据" :image-size="120" v-else></el-empty>
         </div>
       </el-tab-pane>
@@ -52,20 +51,19 @@
           <h2 class="bold">我的岗位</h2>
         </div>
         <div class="organize-list">
-          <template v-if="positionList.length">
-            <el-radio-group v-model="activePosition" @change="changeMajor($event,'Position')">
-              <el-row :gutter="100">
-                <el-col :span="12" class="organize-item" v-for="(item,i) in positionList" :key="i">
-                  <el-radio :label="item.id" border>
-                    <div class="organize-name">
-                      <p>{{item.fullName}}</p>
-                    </div>
-                    <p class="btn">主岗</p>
-                  </el-radio>
-                </el-col>
-              </el-row>
-            </el-radio-group>
-          </template>
+          <el-row :gutter="80" v-if="positionList.length">
+            <el-col :span="12" class="organize-item" v-for="(item,i) in positionList" :key="i">
+              <div class="organize-item-main" :class="{active:activePosition===item.id}"
+                @click="changeMajor(item.id,'Position')">
+                <i class="icon-ym icon-ym-wf-outgoingApply"></i>
+                <p class="organize-name">{{item.fullName}}</p>
+                <p class="btn">主岗</p>
+                <div class="icon-checked">
+                  <i class="el-icon-check"></i>
+                </div>
+              </div>
+            </el-col>
+          </el-row>
           <el-empty description="暂无数据" :image-size="120" v-else></el-empty>
         </div>
       </el-tab-pane>
@@ -109,9 +107,7 @@ export default {
       organizeList: [],
       positionList: [],
       activeOrganize: '',
-      oldOrganize: '',
       activePosition: '',
-      oldPosition: '',
       visible: {
         user: true,
         password: false,
@@ -206,7 +202,6 @@ export default {
         if (!list.length) return this.activeOrganize = ''
         const activeItem = list[0]
         this.activeOrganize = activeItem.id
-        this.oldOrganize = activeItem.id
       })
     },
     getUserPositions() {
@@ -216,16 +211,16 @@ export default {
         if (!list.length) return this.activePosition = ''
         const activeItem = list[0]
         this.activePosition = activeItem.id
-        this.oldPosition = activeItem.id
       })
     },
     changeMajor(majorId, majorType) {
+      if (this['active' + majorType] === majorId) return
       let query = {
         majorId,
         majorType
       }
       setMajor(query).then(res => {
-        this['old' + majorType] = this['active' + majorType]
+        this['active' + majorType] = majorId
         this.$message({
           message: res.msg,
           type: 'success',
@@ -234,8 +229,6 @@ export default {
             location.reload()
           }
         })
-      }).catch(() => {
-        this['active' + majorType] = this['old' + majorType]
       })
     }
   }
@@ -386,38 +379,61 @@ export default {
   .organize-list {
     width: 100%;
     padding: 50px;
-    .el-radio-group {
-      width: 100%;
-    }
     .organize-item {
       margin-bottom: 30px;
-      .el-radio {
-        width: 100%;
+      .organize-item-main {
         height: 70px;
-        >>> .el-radio__input {
-          position: absolute;
-          right: 50px;
-          bottom: 4px;
+        position: relative;
+        border-radius: 4px;
+        border: 1px solid #dcdfe6;
+        display: flex;
+        align-items: center;
+        padding: 0 20px;
+        cursor: pointer;
+        box-shadow: 0 0 6px rgba(0, 0, 0, 0.16);
+        color: #606266;
+        &.active {
+          border: 1px solid #1890ff;
+          box-shadow: 0 0 6px rgba(6, 58, 108, 0.26);
+          color: #1890ff;
+          .btn,
+          .icon-checked {
+            display: block;
+          }
         }
-        .btn {
-          position: absolute;
-          right: 20px;
-          bottom: 5px;
-          font-size: 12px;
+        .icon-ym {
+          font-size: 24px;
+          margin-right: 10px;
         }
         .organize-name {
+          line-height: 24px;
+          font-size: 14px;
+        }
+        .btn {
+          display: none;
           position: absolute;
-          height: 70px;
-          display: flex;
-          align-items: center;
-          left: 0;
-          right: 0;
-          top: 0;
-          padding: 0 20px;
-          p {
-            line-height: 22px;
-            font-size: 14px;
-            white-space: normal;
+          right: 45px;
+          bottom: 7px;
+          font-size: 12px;
+        }
+        .icon-checked {
+          display: none;
+          width: 20px;
+          height: 20px;
+          border: 20px solid #1890ff;
+          border-left: 20px solid transparent;
+          border-top: 20px solid transparent;
+          border-bottom-right-radius: 2px;
+          position: absolute;
+          transform: scale(0.9);
+          right: -2px;
+          bottom: -2px;
+          i {
+            position: absolute;
+            top: -2px;
+            left: -3px;
+            font-size: 20px;
+            color: #fff;
           }
         }
       }
