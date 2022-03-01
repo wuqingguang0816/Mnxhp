@@ -90,7 +90,7 @@
                     controls-position="right" /> 分钟
                 </div>
               </el-form-item>
-              <el-form-item label="验证码">
+              <el-form-item label="登录验证码">
                 <el-switch v-model="baseForm.enableVerificationCode" :active-value="1"
                   :inactive-value="0" />
               </el-form-item>
