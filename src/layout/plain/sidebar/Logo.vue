@@ -1,14 +1,21 @@
 <template>
   <div class="sidebar-logo-container">
     <router-link class="sidebar-logo-link" to="/">
-      <img src="@/assets/images/jnpf.png" class="sidebar-logo" />
+      <img :src="define.comUrl+sysConfig.logoIcon" class="sidebar-logo"
+        v-if="sysConfig && sysConfig.logoIcon" />
+      <img src="@/assets/images/jnpf.png" class="sidebar-logo" v-else />
     </router-link>
   </div>
 </template>
 
 <script>
 export default {
-  name: 'SidebarLogo'
+  name: 'SidebarLogo',
+  computed: {
+    sysConfig() {
+      return this.$store.state.settings.sysConfig
+    }
+  }
 }
 </script>
 

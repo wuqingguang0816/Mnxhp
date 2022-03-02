@@ -132,7 +132,7 @@
         </div>
       </el-col>
     </el-row>
-    <p class="componey">Copyright © 2021 引迈信息技术有限公司出品</p>
+    <p class="componey">{{sysConfig.copyright}}</p>
   </div>
 </template>
 
@@ -164,6 +164,11 @@ export default {
         { title: '【通知】公司技术交流培训课通知', listDate: '2020-09-12' },
         { title: '【通知】关于公司组织员工秋季旅游通知', listDate: '2020-09-11' },
       ]
+    }
+  },
+  computed: {
+    sysConfig() {
+      return this.$store.state.settings.sysConfig
     }
   },
   methods: {}

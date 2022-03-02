@@ -2,12 +2,18 @@
   <div class="sidebar-logo-container" :class="{'collapse':collapse}">
     <transition name="sidebarLogoFade">
       <router-link v-if="collapse" key="collapse" class="sidebar-logo-link" to="/">
-        <img src="@/assets/images/jnpf.png" class="sidebar-logo" />
+        <img :src="define.comUrl+sysConfig.logoIcon" class="sidebar-logo"
+          v-if="sysConfig && sysConfig.logoIcon" />
+        <img src="@/assets/images/jnpf.png" class="sidebar-logo" v-else />
       </router-link>
       <router-link v-else key="expand" class="sidebar-logo-link" to="/">
-        <img src="@/assets/images/jnpf2.png" class="sidebar-logo"
-          v-if="slideClass==='lightWhite'" />
-        <img src="@/assets/images/jnpf1.png" class="sidebar-logo" v-else />
+        <img :src="define.comUrl+sysConfig.navigationIcon" class="sidebar-logo"
+          v-if="sysConfig && sysConfig.navigationIcon" />
+        <template v-else>
+          <img src="@/assets/images/jnpf2.png" class="sidebar-logo"
+            v-if="slideClass==='lightWhite'" />
+          <img src="@/assets/images/jnpf1.png" class="sidebar-logo" v-else />
+        </template>
       </router-link>
     </transition>
   </div>
@@ -20,7 +26,10 @@ export default {
   computed: {
     ...mapState({
       slideClass: state => state.settings.slideClass,
-    })
+    }),
+    sysConfig() {
+      return this.$store.state.settings.sysConfig
+    }
   },
   props: {
     collapse: {

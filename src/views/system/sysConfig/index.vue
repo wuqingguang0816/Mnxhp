@@ -4,6 +4,16 @@
       <el-tabs v-model="activeName" type="border-card" class="JNPF-el_tabs">
         <el-tab-pane label="基本设置" name="first">
           <el-row :gutter="20">
+            <el-col :span="24">
+              <el-form-item label="系统图标">
+                <div class="img-list">
+                  <single-img v-model="baseForm.loginIcon" tip="登录图标" />
+                  <single-img v-model="baseForm.navigationIcon" tip="导航图标" />
+                  <single-img v-model="baseForm.logoIcon" tip="logo图标" />
+                  <single-img v-model="baseForm.appIcon" tip="APP图标" />
+                </div>
+              </el-form-item>
+            </el-col>
             <el-col :span="12">
               <el-form-item label="系统名称" prop="sysName">
                 <el-input v-model="baseForm.sysName" clearable placeholder="系统名称" />
@@ -204,7 +214,7 @@
                 <el-col :span="12" :offset="6" :pull="6">
                   <el-form-item label="邮箱密码" prop="emailPassword">
                     <el-input v-model="baseForm.emailPassword" show-password placeholder="邮箱密码">
-                      <el-button slot="append" @click="checkEmailStauts" :loading="testLoading">测试连接
+                      <el-button slot="append" @click="checkEmailStatus" :loading="testLoading">测试连接
                       </el-button>
                     </el-input>
                   </el-form-item>
@@ -386,9 +396,11 @@ import {
   getAdminList,
   setAdminList
 } from '@/api/system/sysConfig'
+import singleImg from '@/components/Upload/SingleImg'
 
 export default {
   name: 'system-sysConfig',
+  components: { singleImg },
   data() {
     return {
       activeName: 'first',
@@ -403,6 +415,10 @@ export default {
         sysName: '',
         sysDescription: '',
         sysVersion: '',
+        loginIcon: '',
+        navigationIcon: '',
+        logoIcon: '',
+        appIcon: '',
         copyright: '',
         companyName: '',
         companyCode: '',
@@ -529,7 +545,7 @@ export default {
         })
       })
     },
-    checkEmailStauts() {
+    checkEmailStatus() {
       this.testLoading = true
       const data = {
         account: this.baseForm.emailAccount,
@@ -653,6 +669,17 @@ export default {
           duration: 1500,
           onClose: () => {
             this.btnLoading = false
+            const sysConfig = {
+              sysName: this.baseForm.sysName,
+              sysVersion: this.baseForm.sysVersion,
+              loginIcon: this.baseForm.loginIcon,
+              copyright: this.baseForm.copyright,
+              companyName: this.baseForm.companyName,
+              navigationIcon: this.baseForm.navigationIcon,
+              logoIcon: this.baseForm.logoIcon,
+              appIcon: this.baseForm.appIcon
+            }
+            this.$store.commit('settings/CHANGE_SETTING', { key: "sysConfig", value: sysConfig })
             this.initData()
           }
         })
@@ -716,6 +743,15 @@ export default {
     padding-right: 12px;
     color: #606266;
     font-size: 14px;
+  }
+  .img-list {
+    display: flex;
+    >>> .singleImg-container {
+      margin-right: 20px;
+      :last-child {
+        margin-right: 0;
+      }
+    }
   }
 }
 </style>

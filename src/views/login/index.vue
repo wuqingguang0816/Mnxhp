@@ -1,7 +1,7 @@
 <template>
   <div class="login-container">
-    <div class="login-version">
-      <p class="login-version-text">V {{define.version}}</p>
+    <div class="login-version" v-if="sysConfig && sysConfig.sysVersion">
+      <p class="login-version-text">{{sysConfig.sysVersion}}</p>
     </div>
     <div class="login-left">
       <a class="login-company-logo" target="_blank" href="https://www.jnpfsoft.com">
@@ -16,7 +16,9 @@
     </div>
     <div class="login-content">
       <div class="login-form">
-        <img class="login-logo" src="../../assets/images/login_logo.png" alt="">
+        <img class="login-logo" :src="define.comUrl+sysConfig.loginIcon"
+          v-if="sysConfig && sysConfig.loginIcon">
+        <img class="login-logo" src="../../assets/images/login_logo.png" alt="" v-else>
         <div class="login-tab" :class="'active'+active">
           <a class="item" :class="{'active': active==1}" @click="active=1">{{$t('login.title')}}</a>
           <a class="item" :class="{'active': active==2}"
@@ -104,6 +106,9 @@ export default {
     }
   },
   computed: {
+    sysConfig() {
+      return this.$store.state.settings.sysConfig
+    },
     loginLoading() {
       return this.$store.state.user.loginLoading
     }

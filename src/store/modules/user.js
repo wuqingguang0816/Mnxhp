@@ -1,6 +1,7 @@
 import { login, logout, getInfo, unlock } from '@/api/user'
 import { setLock, getLock, removeLock, getToken, setToken, removeToken } from '@/utils/auth'
 import { resetRouter } from '@/router'
+import defaultSettings from '@/settings'
 import qs from 'qs'
 import md5 from 'js-md5';
 const define = require('@/utils/define')
@@ -211,6 +212,8 @@ const actions = {
         commit('SET_MENULIST', menuList)
         commit('SET_USERINFO', userInfo)
         commit('SET_PERMISSION_LIST', permissionList)
+        const sysConfigInfo = data.sysConfigInfo || defaultSettings.sysConfig
+        commit('settings/CHANGE_SETTING', { key: "sysConfig", value: sysConfigInfo }, { root: true })
         resolve(routerList)
       }).catch(error => {
         reject(error)
