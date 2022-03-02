@@ -33,7 +33,7 @@ module.exports = {
    */
   sysConfig: {
     sysVersion: 'V3.3',
-    copyright: 'Copyright @ 2020 引迈信息技术有限公司版权所有',
+    copyright: 'Copyright @ 2022 引迈信息技术有限公司版权所有',
     navigationIcon: '',
     logoIcon: '',
     loginIcon: '',
