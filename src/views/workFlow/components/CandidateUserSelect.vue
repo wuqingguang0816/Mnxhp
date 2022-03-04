@@ -314,6 +314,7 @@ export default {
         this.innerValue = ''
         this.selectedData = []
         this.tagsList = []
+        return
       }
       const arr = this.multiple ? this.value : [this.value]
       getUserInfoList(arr).then(res => {
