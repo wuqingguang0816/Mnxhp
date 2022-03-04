@@ -212,7 +212,7 @@ export default {
         for (let i = 0; i < list.length; i++) {
           let item = list[i]
           if (item.__vModel__) {
-            if (item.__config__.jnpfKey === 'relationForm') {
+            if (item.__config__.jnpfKey === 'relationForm' || item.__config__.jnpfKey === 'popupSelect') {
               let id = data[item.__vModel__ + '_id']
               if (id) item.__config__.defaultValue = id
               this.$set(item, 'name', data[item.__vModel__] || '')

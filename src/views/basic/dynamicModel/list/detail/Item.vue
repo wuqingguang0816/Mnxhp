@@ -60,6 +60,9 @@
             <el-link :underline="false" @click.native="toDetail(item)" type="primary">
               {{ item.name }}</el-link>
           </template>
+          <template v-else-if="item.__config__.jnpfKey==='popupSelect'">
+            <p>{{ item.name }}</p>
+          </template>
           <template v-else-if="['relationFormAttr','popupAttr'].includes(item.__config__.jnpfKey)">
             <p>
               {{ relationData[item.relationField] && relationData[item.relationField][item.showField] ? relationData[item.relationField][item.showField] : '' }}
