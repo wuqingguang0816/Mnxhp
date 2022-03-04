@@ -635,10 +635,6 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
-.radio-audit {
-  display: block;
-  margin-bottom: 20px;
-}
 .sign-main {
   border: 1px solid #dcdfe6;
   border-radius: 4px;

@@ -25,7 +25,6 @@ export default {
   watch: {
     config: {
       handler(val) {
-        console.log(22);
         this.toDetail(val)
       },
       deep: true
