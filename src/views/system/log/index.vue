@@ -61,7 +61,7 @@
               <el-table-column prop="platForm" label="请求设备" width="120" show-overflow-tooltip />
               <el-table-column prop="requestURL" label="请求地址" show-overflow-tooltip />
               <el-table-column prop="requestMethod" label="请求类型" width="120" />
-              <el-table-column prop="requestDuration" label="请求耗时" width="120" />
+              <el-table-column prop="requestDuration" label="请求耗时(毫秒)" width="120" />
             </JNPF-table>
           </el-tab-pane>
           <el-tab-pane label="异常日志" name="4">
