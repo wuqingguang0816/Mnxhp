@@ -33,7 +33,7 @@
           <el-table-column prop="invokIp" label="请求IP" />
           <el-table-column prop="invokDevice" label="请求设备" show-overflow-tooltip />
           <el-table-column prop="invokType" label="请求类型" />
-          <el-table-column prop="invokWasteTime" label="请求耗时" />
+          <el-table-column prop="invokWasteTime" label="请求耗时(毫秒)" />
         </JNPF-table>
         <pagination :total="total" :page.sync="listQuery.currentPage"
           :limit.sync="listQuery.pageSize" @pagination="initData" />
