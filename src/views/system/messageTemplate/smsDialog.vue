@@ -5,7 +5,7 @@
         @mouseenter.native="inputHovering = true" @mouseleave.native="inputHovering = false">
         <template slot="suffix">
           <i v-show="!showClose"
-            :class="['el-select__caret', 'el-input__icon', 'el-icon-arrow-down']"></i>
+            :class="['el-select__caret', 'el-input__icon', 'el-icon-arrow-up']"></i>
           <i v-if="showClose" class="el-select__caret el-input__icon el-icon-circle-close"
             @click.stop="clear"></i>
         </template>
