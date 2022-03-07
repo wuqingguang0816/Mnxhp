@@ -117,7 +117,7 @@
                 </template>
               </el-table-column>
               <el-table-column :key="columnIndex" :label="column.__config__.label"
-                v-else-if="column.__config__.jnpfKey==='relationFormAttr'">
+                v-else-if="['relationFormAttr','popupAttr'].includes(column.__config__.jnpfKey)">
                 <template slot-scope="scope">
                   {{ scope.row[column.relationField+'_'+column.showField] }}
                 </template>
