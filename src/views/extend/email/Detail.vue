@@ -21,7 +21,7 @@
         <el-divider></el-divider>
         <el-form-item label="时间">
           <p class="text" v-if="isSend">{{dataForm.creatorTime|toDate()}}</p>
-          <p class="text" v-if="!isSend">{{dataForm.date|toDate()}}</p>
+          <p class="text" v-if="!isSend">{{dataForm.fdate|toDate()}}</p>
         </el-form-item>
         <el-divider></el-divider>
         <el-form-item label="收件人">
@@ -77,7 +77,7 @@ export default {
         sender: '',
         senderName: '',
         creatorTime: '',
-        date: '',
+        fdate: '',
       },
       fileList: [],
       loading: false

@@ -112,7 +112,7 @@ export default {
         this.$refs.Form.init(this.categoryList, id, this.query.type, webType)
       })
     },
-    colseForm(isRefresh) {
+    closeForm(isRefresh) {
       this.formVisible = false
       if (isRefresh) {
         this.initData()

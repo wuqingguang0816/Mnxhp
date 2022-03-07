@@ -126,7 +126,7 @@ export default {
         });
         return
       }
-      this.$emit('chioceFlow', item)
+      this.$emit('choiceFlow', item)
     }
   }
 }

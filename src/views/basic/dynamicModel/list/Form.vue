@@ -4,7 +4,7 @@
       <el-dialog :title="!dataForm.id ? '新建' : '编辑'" :close-on-click-modal="false"
         :visible.sync="visible" class="JNPF-dialog JNPF-dialog_center" lock-scroll
         :width="formConf.generalWidth">
-        <parser :form-conf="formConf" @submit="sumbitForm" :key="key" ref="dynamicForm"
+        <parser :form-conf="formConf" @submit="submitForm" :key="key" ref="dynamicForm"
           v-if="!loading" />
         <span slot="footer" class="dialog-footer">
           <template v-if="formConf.hasPrintBtn && formConf.printId && dataForm.id && false">
@@ -35,7 +35,7 @@
             </div>
           </div>
           <div class="dynamic-form-main" :style="{margin: '0 auto',width:formConf.fullScreenWidth}">
-            <parser :form-conf="formConf" @submit="sumbitForm" :key="key" ref="dynamicForm"
+            <parser :form-conf="formConf" @submit="submitForm" :key="key" ref="dynamicForm"
               v-if="!loading" />
           </div>
         </div>
@@ -145,7 +145,7 @@ export default {
       }
       loop(form.fields)
     },
-    sumbitForm(data, callback) {
+    submitForm(data, callback) {
       if (!data) return
       this.btnLoading = true
       this.dataForm.data = JSON.stringify(data)

@@ -79,7 +79,7 @@
           :limit.sync="listQuery.pageSize" @pagination="initData" />
       </div>
     </div>
-    <Form v-if="formVisible" ref="Form" @close="colseForm" />
+    <Form v-if="formVisible" ref="Form" @close="closeForm" />
     <Preview :visible.sync="previewVisible" :id="activeId" />
   </div>
 </template>
@@ -186,7 +186,7 @@ export default {
       this.activeId = id
       this.previewVisible = true
     },
-    colseForm(isRefresh) {
+    closeForm(isRefresh) {
       this.formVisible = false
       if (isRefresh) {
         this.initData()

@@ -8,17 +8,17 @@ export class NodeUtils {
    * @returns 64进制id字符串
    */
   static idGenerator() {
-    let qutient = (new Date() - new Date('2020-08-01'))
-    qutient += Math.ceil(Math.random() * 1000) // 防止重複
+    let quotient = (new Date() - new Date('2020-08-01'))
+    quotient += Math.ceil(Math.random() * 1000) // 防止重複
     const chars = '0123456789ABCDEFGHIGKLMNOPQRSTUVWXYZabcdefghigklmnopqrstuvwxyz';
     const charArr = chars.split("")
     const radix = chars.length;
     const res = []
     do {
-      let mod = qutient % radix;
-      qutient = (qutient - mod) / radix;
+      let mod = quotient % radix;
+      quotient = (quotient - mod) / radix;
       res.push(charArr[mod])
-    } while (qutient);
+    } while (quotient);
     return res.join('')
   }
 

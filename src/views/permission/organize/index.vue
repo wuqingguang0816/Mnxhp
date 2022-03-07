@@ -58,7 +58,7 @@
         </JNPF-table>
       </div>
     </div>
-    <Form v-show="formVisible" ref="Form" @close="colseForm" />
+    <Form v-show="formVisible" ref="Form" @close="closeForm" />
     <gradeForm v-if="gradeFormVisible" ref="gradeForm" @close="gradeFormVisible=false" />
   </div>
 </template>
@@ -114,7 +114,7 @@ export default {
         this.$refs.Form.init(id)
       })
     },
-    colseForm(isRefresh) {
+    closeForm(isRefresh) {
       this.formVisible = false
       if (isRefresh) {
         this.keyword = ''

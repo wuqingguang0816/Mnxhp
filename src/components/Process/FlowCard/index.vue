@@ -14,7 +14,7 @@ function createNormalCard(ctx, conf, h) {
   const isTimerNode = afterTrue(NodeUtils.isTimerNode(conf), 'timer')
   const isSubFlowNode = afterTrue(NodeUtils.isSubFlowNode(conf), 'subFlow')
   return (
-    <section class={classList.join(' ')} onClick={this.eventLancher.bind(ctx, "edit", conf)} >
+    <section class={classList.join(' ')} onClick={this.eventLauncher.bind(ctx, "edit", conf)} >
       <header class="header">
         <div class="title-box" style="height: 100%;width:190px;">
           <span class="title-text">{conf.properties.title}</span>
@@ -23,7 +23,7 @@ function createNormalCard(ctx, conf, h) {
           )}
         </div>
         <div class="actions">
-          <i class="el-icon-close icon" onClick={this.eventLancher.bind(ctx, "deleteNode", conf, ctx.data)} ></i>
+          <i class="el-icon-close icon" onClick={this.eventLauncher.bind(ctx, "deleteNode", conf, ctx.data)} ></i>
         </div>
         {(isSubFlowNode) && (
           <el-tag class="async-state" size="mini" effect="plain">{conf.properties.isAsync ? '异步' : '同步'}</el-tag>
@@ -53,12 +53,12 @@ let nodes = {
   condition: function (ctx, conf, h) {
     // <i
     //    class="el-icon-document-copy icon"
-    //    onClick={this.eventLancher.bind(ctx, "copyNode", conf, ctx.data)}
+    //    onClick={this.eventLauncher.bind(ctx, "copyNode", conf, ctx.data)}
     //  ></i>
     return (
       <section
         class="flow-path-card condition"
-        onClick={this.eventLancher.bind(ctx, "edit", conf)}
+        onClick={this.eventLauncher.bind(ctx, "edit", conf)}
       >
         <header class="header">
           <div class="title-box" style="height:20px;width:160px;">
@@ -69,7 +69,7 @@ let nodes = {
             // <span class="priority">优先级{conf.properties.priority + 1}</span> 
           }
           <div class="actions">
-            <i class="el-icon-close icon" onClick={this.eventLancher.bind(ctx, "deleteNode", conf, ctx.data)}></i>
+            <i class="el-icon-close icon" onClick={this.eventLauncher.bind(ctx, "deleteNode", conf, ctx.data)}></i>
           </div>
         </header>
         <div class="body">
@@ -78,7 +78,7 @@ let nodes = {
         {
           //  <div
           //   class="icon-wrapper left"
-          //   onClick={ctx.eventLancher.bind(
+          //   onClick={ctx.eventLauncher.bind(
           //     ctx,
           //     "increasePriority",
           //     conf,
@@ -89,7 +89,7 @@ let nodes = {
           // </div>
           //  <div
           //   class="icon-wrapper right"
-          //   onClick={ctx.eventLancher.bind(
+          //   onClick={ctx.eventLauncher.bind(
           //     ctx,
           //     "decreasePriority",
           //     conf,
@@ -127,31 +127,31 @@ function addNodeButton(ctx, data, h, isBranch = false) {
         <el-popover placement="right" trigger="click" width="380">
           <div class="condition-box">
             <div>
-              <div class="condition-icon" onClick={ctx.eventLancher.bind(ctx, "addApprovalNode", data, isBranch)} >
+              <div class="condition-icon" onClick={ctx.eventLauncher.bind(ctx, "addApprovalNode", data, isBranch)} >
                 <i class="icon-ym icon-ym-flowTodo"></i>
               </div>
               审批节点
             </div>
             <div>
-              <div class="condition-icon" onClick={ctx.eventLancher.bind(ctx, "addSubFlowNode", data, isBranch)} >
+              <div class="condition-icon" onClick={ctx.eventLauncher.bind(ctx, "addSubFlowNode", data, isBranch)} >
                 <i class="icon-ym icon-ym-generator-subFlow"></i>
               </div>
               子流程
             </div>
             <div class={{ 'condition-disabled': !canAddAppendBranch }}>
-              <div class="condition-icon" onClick={this.eventLancher.bind(ctx, "appendBranch", data, isBranch, !canAddAppendBranch)}>
+              <div class="condition-icon" onClick={this.eventLauncher.bind(ctx, "appendBranch", data, isBranch, !canAddAppendBranch)}>
                 <i class="ym-custom ym-custom-sitemap"></i>
               </div>
               条件分支
             </div>
             <div class={{ 'condition-disabled': !canAddAppendInterflow }}>
-              <div class="condition-icon" onClick={this.eventLancher.bind(ctx, "appendInterflowBranch", data, isBranch, !canAddAppendInterflow)}>
+              <div class="condition-icon" onClick={this.eventLauncher.bind(ctx, "appendInterflowBranch", data, isBranch, !canAddAppendInterflow)}>
                 <i class="icon-ym icon-ym-node"></i>
               </div>
               分流/合流
             </div>
             <div class={{ 'condition-disabled': !canAddTimerNode }}>
-              <div class="condition-icon" onClick={ctx.eventLancher.bind(ctx, "addTimerNode", data, isBranch, !canAddTimerNode)} >
+              <div class="condition-icon" onClick={ctx.eventLauncher.bind(ctx, "addTimerNode", data, isBranch, !canAddTimerNode)} >
                 <i class="el-icon-timer" style="vertical-align: middle;"></i>
               </div>
               定时器
@@ -177,7 +177,7 @@ function NodeFactory(ctx, data, h) {
       <div class="node-wrap">
         <div class={`node-wrap-box ${data.type} ${NodeUtils.isInterflowNode(data) ? 'interflow' : ''} ${showErrorTip ? 'error' : ''}`}>
           <el-tooltip content={content} placement="top" effect="dark">
-            <div class="error-tip" onClick={this.eventLancher.bind(ctx, "edit", data)}>!!!</div>
+            <div class="error-tip" onClick={this.eventLauncher.bind(ctx, "edit", data)}>!!!</div>
           </el-tooltip>
           {nodes[data.type].call(ctx, ctx, data, h)}
           {addNodeButton.call(ctx, ctx, data, h)}
@@ -193,7 +193,7 @@ function NodeFactory(ctx, data, h) {
         <div class="branch-wrap">
           <div class="branch-box-wrap">
             <div class="branch-box flex justify-center relative">
-              <button onClick={this.eventLancher.bind(ctx, "appendConditionNode", data)}
+              <button onClick={this.eventLauncher.bind(ctx, "appendConditionNode", data)}
                 class="btn">
                 添加条件
               </button>
@@ -209,7 +209,7 @@ function NodeFactory(ctx, data, h) {
         <div class="branch-wrap">
           <div class="branch-box-wrap">
             <div class="branch-box flex justify-center relative">
-              <button onClick={this.eventLancher.bind(ctx, "appendInterflowNode", data)}
+              <button onClick={this.eventLauncher.bind(ctx, "appendInterflowNode", data)}
                 class="btn">
                 添加分流
               </button>
@@ -258,7 +258,7 @@ export default {
      *事件触发器 统筹本组件所有事件并转发到父组件中
      * @param { Object } 包含event（事件名）和args（事件参数）两个参数
      */
-    eventLancher(event, ...args) {
+    eventLauncher(event, ...args) {
       let list = ['appendBranch', 'appendInterflowBranch', 'addTimerNode']
       if (list.includes(event) && args[args.length - 2]) return
       // args.slice(0,-1) vue 会注入MouseEvent到最后一个参数 去除事件对象

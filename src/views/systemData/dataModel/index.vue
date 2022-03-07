@@ -93,7 +93,7 @@
         </JNPF-table>
       </div>
     </div>
-    <Form v-show="formVisible" ref="Form" @close="colseForm" />
+    <Form v-show="formVisible" ref="Form" @close="closeForm" />
     <Preview v-show="showData" ref="preview" @close="closeData" />
     <FieldsList v-if="drawer" ref="fieldsList" />
   </div>
@@ -206,7 +206,7 @@ export default {
     closeData() {
       this.showData = false
     },
-    colseForm(isRefresh) {
+    closeForm(isRefresh) {
       this.formVisible = false
       if (isRefresh) {
         this.keyword = ''

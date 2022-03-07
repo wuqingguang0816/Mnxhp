@@ -66,7 +66,7 @@
         </JNPF-table>
         <pagination :total="total" :page.sync="listQuery.currentPage"
           :limit.sync="listQuery.pageSize" @pagination="initData" />
-        <Form v-show="formVisible" ref="Form" @close="colseForm" />
+        <Form v-show="formVisible" ref="Form" @close="closeForm" />
         <Log v-show="logVisible" ref="Log" @close="logVisible=false" />
       </div>
     </div>
@@ -169,7 +169,7 @@ export default {
         this.$refs.Form.init(id)
       })
     },
-    colseForm(isRefresh) {
+    closeForm(isRefresh) {
       this.formVisible = false
       if (isRefresh) {
         this.keyword = ''

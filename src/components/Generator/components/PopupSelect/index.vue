@@ -156,7 +156,7 @@ export default {
     },
     interfaceDataHandler(data) {
       if (!data.dataProcessing) return data.list
-      const dataHandler = this.jnpf.getScriptFunc(data.dataProcessing)
+      const dataHandler = this.jnpf.getScriptFunc.call(this, data.dataProcessing)
       if (!dataHandler) return data.list
       return dataHandler(data.list)
     },

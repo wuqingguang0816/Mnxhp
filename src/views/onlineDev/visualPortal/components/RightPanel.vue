@@ -58,7 +58,7 @@
         </template>
       </el-form>
     </el-scrollbar>
-    <JSONArea v-if="areaVisible" ref="JSONArea" @refresh="updataOption" />
+    <JSONArea v-if="areaVisible" ref="JSONArea" @refresh="updateOption" />
     <iconBox :visible.sync="iconsVisible" :current="current" @choiceIcon="setIcon" />
   </el-aside>
 </template>
@@ -141,7 +141,7 @@ export default {
         this.$refs.JSONArea.init(option)
       })
     },
-    updataOption(data) {
+    updateOption(data) {
       let option = data ? JSON.parse(data) : {}
       this.activeData.option = option
     },

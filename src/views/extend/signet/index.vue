@@ -74,7 +74,7 @@
             alt="">
           <div class="signBtn">
             <el-button @click="signclick" v-if="showBtn">确认</el-button>
-            <el-button @click="canclesign" v-if="showBtn">取消</el-button>
+            <el-button @click="cancelSign" v-if="showBtn">取消</el-button>
           </div>
         </VueDragResize>
       </div>
@@ -180,11 +180,11 @@ export default {
       this.showSign = false
       this.showBtn = false
     },
-    canclesign() {
+    cancelSign() {
       this.showsin = false
     }
   }
-} 
+}
 </script>
 
 <style lang="scss" scoped>

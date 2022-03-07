@@ -10,7 +10,7 @@
         </div>
       </div>
       <div class="dynamic-form-main" :style="{margin: '0 auto',width:formConf.fullScreenWidth}">
-        <parser :form-conf="formConf" @submit="sumbitForm" :key="key" ref="dynamicForm"
+        <parser :form-conf="formConf" @submit="submitForm" :key="key" ref="dynamicForm"
           v-if="!loading" />
       </div>
     </div>
@@ -48,7 +48,7 @@ export default {
         this.key = +new Date()
       })
     },
-    sumbitForm(data, callback) {
+    submitForm(data, callback) {
       if (!data) return
       this.btnLoading = true
       this.dataForm.data = JSON.stringify(data)

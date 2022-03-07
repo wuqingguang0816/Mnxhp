@@ -101,7 +101,7 @@
           :limit.sync="listQuery.pageSize" @pagination="initData" />
       </div>
     </div>
-    <FlowBox v-if="formVisible" ref="FlowBox" @close="colseForm" />
+    <FlowBox v-if="formVisible" ref="FlowBox" @close="closeForm" />
   </div>
 </template>
 
@@ -233,7 +233,7 @@ export default {
         this.$refs.FlowBox.init(data)
       })
     },
-    colseForm(isRefresh) {
+    closeForm(isRefresh) {
       this.formVisible = false
       if (isRefresh) this.refresh()
     },

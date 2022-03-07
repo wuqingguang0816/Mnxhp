@@ -10,19 +10,19 @@
             {{properties.printBtnText||'打 印'}}</el-button>
         </template>
         <template v-if="setting.opType=='-1'">
-          <el-button type="primary" @click="eventLancher('submit')" :loading="candidateLoading">
+          <el-button type="primary" @click="eventLauncher('submit')" :loading="candidateLoading">
             {{properties.submitBtnText||'提交审核'}}</el-button>
-          <el-button type="warning" @click="eventLancher('save')" :loading="btnLoading">
+          <el-button type="warning" @click="eventLauncher('save')" :loading="btnLoading">
             {{properties.saveBtnText||'保存草稿'}}</el-button>
         </template>
         <template v-if="setting.opType == 1">
           <el-button type="warning" @click="openUserBox('transfer')"
             v-if="properties.hasTransferBtn">{{properties.transferBtnText||'转 办'}}</el-button>
-          <el-button type="primary" @click="eventLancher('audit')" :loading="candidateLoading"
+          <el-button type="primary" @click="eventLauncher('audit')" :loading="candidateLoading"
             v-if="properties.hasAuditBtn">{{properties.auditBtnText||'通 过'}}</el-button>
-          <el-button type="warning" @click="eventLancher('saveAudit')" v-if="properties.hasSaveBtn"
+          <el-button type="warning" @click="eventLauncher('saveAudit')" v-if="properties.hasSaveBtn"
             :loading="btnLoading">{{properties.saveBtnText||'保存草稿'}}</el-button>
-          <el-button type="danger" @click="eventLancher('reject')" v-if="properties.hasRejectBtn">
+          <el-button type="danger" @click="eventLauncher('reject')" v-if="properties.hasRejectBtn">
             {{properties.rejectBtnText||'拒 绝'}}</el-button>
         </template>
         <template v-if="setting.opType == 0 && setting.status == 1">
@@ -49,7 +49,7 @@
       <el-tabs class="JNPF-el_tabs" v-model="activeTab">
         <el-tab-pane label="表单信息" v-loading="loading">
           <span slot="label" :title="fullName+'-'+(thisStep?thisStep:'发起节点')">表单信息</span>
-          <component :is="currentView" @close="goBack" ref="form" @eventReciver="eventReciver"
+          <component :is="currentView" @close="goBack" ref="form" @eventReceiver="eventReceiver"
             @setLoad="setLoad" @setCandidateLoad="setCandidateLoad" @setPageLoad="setPageLoad" />
         </el-tab-pane>
         <el-tab-pane label="流程信息" v-loading="loading">
@@ -335,10 +335,10 @@ export default {
         }, 500)
       }).catch(() => { this.loading = false })
     },
-    eventLancher(eventType) {
+    eventLauncher(eventType) {
       this.$refs.form && this.$refs.form.dataFormSubmit(eventType)
     },
-    eventReciver(formData, eventType) {
+    eventReceiver(formData, eventType) {
       this.formData = formData
       this.formData.flowId = this.setting.flowId
       this.eventType = eventType
