@@ -222,7 +222,7 @@
                   <el-radio-button label="right">居右</el-radio-button>
                 </el-radio-group>
               </el-form-item>
-              <el-form-item label="控件样式">
+              <el-form-item label="样式">
                 <el-select v-model="activeData.type" placeholder="请选择">
                   <el-option label="默认按钮" value=""></el-option>
                   <el-option label="主要按钮" value="primary"></el-option>
