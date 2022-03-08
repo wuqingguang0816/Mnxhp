@@ -179,18 +179,19 @@ export default {
         BatchCandidate(query).then(res => {
           let data = res.data
           this.btnLoading = false
+          let candidateList = []
           if (Array.isArray(data) && data.length) {
-            const candidateList = res.data.map(o => ({
+            candidateList = res.data.map(o => ({
               ...o,
               label: o.nodeName + '审批人',
               value: [],
               rules: [{ required: true, message: `${o.nodeName}审批人不能为空`, trigger: 'click' }]
             }))
-            this.approveVisible = true
-            this.$nextTick(() => {
-              this.$refs.approveDialog.init(properties, item.id, 'audit', candidateList, item.flowId)
-            })
           }
+          this.approveVisible = true
+          this.$nextTick(() => {
+            this.$refs.approveDialog.init(properties, item.id, 'audit', candidateList, item.flowId)
+          })
         }).catch(() => {
           this.btnLoading = false
         })
@@ -200,7 +201,7 @@ export default {
         if (!properties.hasRejectBtn) return this.$message.error('当前审批节点无拒绝权限')
         this.approveVisible = true
         this.$nextTick(() => {
-          this.$refs.approveDialog.init(properties, item.id, '', [])
+          this.$refs.approveDialog.init(properties, item.id, '', [], item.flowId)
         })
         return
       }
