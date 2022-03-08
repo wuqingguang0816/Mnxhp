@@ -40,59 +40,24 @@ const useDateList = ['createTime', 'modifyTime']
 const useSelectList = ['radio', 'checkbox', 'select']
 // 在线开发-功能设计/流程设计独有组件
 const webPeculiarList = [{
-    __config__: {
-      jnpfKey: 'relationFormAttr',
-      label: '关联表单属性',
-      labelWidth: undefined,
-      showLabel: true,
-      tag: 'relationFormAttr',
-      tagIcon: 'icon-ym icon-ym-generator-nature',
-      defaultValue: '',
-      required: false,
-      layout: 'colFormItem',
-      span: 24,
-      dragDisabled: false
-    },
-    showField: '',
-    relationField: ''
+  __config__: {
+    jnpfKey: 'calculate',
+    label: '计算公式',
+    labelWidth: undefined,
+    showLabel: true,
+    required: false,
+    tag: 'calculate',
+    tagIcon: 'icon-ym icon-ym-generator-count',
+    defaultValue: null,
+    layout: 'colFormItem',
+    span: 24,
+    dragDisabled: false,
+    tableName: '',
+    noShow: false,
+    regList: []
   },
-  {
-    __config__: {
-      jnpfKey: 'popupAttr',
-      label: '弹窗选择属性',
-      labelWidth: undefined,
-      showLabel: true,
-      tag: 'popupAttr',
-      tagIcon: 'icon-ym icon-ym-generator-popup-attr',
-      defaultValue: '',
-      required: false,
-      layout: 'colFormItem',
-      span: 24,
-      dragDisabled: false
-    },
-    showField: '',
-    relationField: ''
-  },
-  {
-    __config__: {
-      jnpfKey: 'calculate',
-      label: '计算公式',
-      labelWidth: undefined,
-      showLabel: true,
-      required: false,
-      tag: 'calculate',
-      tagIcon: 'icon-ym icon-ym-generator-count',
-      defaultValue: null,
-      layout: 'colFormItem',
-      span: 24,
-      dragDisabled: false,
-      tableName: '',
-      noShow: false,
-      regList: []
-    },
-    expression: []
-  },
-]
+  expression: []
+}]
 // 在线开发-功能设计/流程设计/移动设计独有组件
 const onlinePeculiarList = [{
     __config__: {

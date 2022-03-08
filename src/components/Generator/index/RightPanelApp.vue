@@ -427,6 +427,33 @@
               </el-form-item>
               <el-divider />
             </template>
+            <template v-if="activeData.__config__.jnpfKey==='relationFormAttr'">
+              <el-form-item label="关联功能">
+                <el-select v-model="activeData.relationField" placeholder="请选择关联功能" clearable
+                  @change="onRelationFieldChange">
+                  <el-option v-for="item in relationFormOptions" :key="item.__vModel__"
+                    :label="item.__config__.label" :value="item.__vModel__" />
+                </el-select>
+              </el-form-item>
+              <el-form-item label="关联字段">
+                <el-select v-model="activeData.showField" placeholder="请选择关联字段"
+                  @visible-change="visibleRelationChange" clearable>
+                  <el-option v-for="item in relationFieldOptions" :key="item.vmodel"
+                    :label="item.label" :value="item.vmodel" />
+                </el-select>
+              </el-form-item>
+            </template>
+            <template v-if="activeData.__config__.jnpfKey==='popupAttr'">
+              <el-form-item label="关联弹窗">
+                <el-select v-model="activeData.relationField" placeholder="请选择关联弹窗" clearable>
+                  <el-option v-for="item in popupOptions" :key="item.__vModel__"
+                    :label="item.__config__.label" :value="item.__vModel__" />
+                </el-select>
+              </el-form-item>
+              <el-form-item label="关联字段">
+                <el-input v-model="activeData.showField" placeholder="请输入关联字段" />
+              </el-form-item>
+            </template>
             <template v-if="activeData.__config__.jnpfKey==='barcode'">
               <el-form-item label="编码格式">
                 <el-select v-model="activeData.format" placeholder="请选择">
@@ -836,6 +863,9 @@ export default {
         label: "fullName",
         children: "children"
       },
+      relationFormOptions: [],
+      relationFieldOptions: [],
+      popupOptions: [],
       layoutTreeProps: {
         label(data, node) {
           const config = data.__config__
@@ -893,6 +923,8 @@ export default {
       if (val.__config__.jnpfKey == 'relationForm') {
         this.getFieldOptions()
       }
+      if (val.__config__.jnpfKey === 'relationFormAttr') this.getRelationFormOptions()
+      if (val.__config__.jnpfKey === 'popupAttr') this.getPopupOptions()
       this.setDefaultOptions()
     }
   },
@@ -1159,6 +1191,63 @@ export default {
       getFormDataFields(this.activeData.modelId).then(res => {
         this.fieldOptions = res.data.list
       })
+    },
+    getRelationFormOptions() {
+      const drawingList = getDrawingList() || []
+      let list = []
+      const loop = (data, parent) => {
+        if (!data) return
+        if (data.__config__ && data.__config__.children && Array.isArray(data.__config__.children)) {
+          loop(data.__config__.children, data)
+        }
+        if (Array.isArray(data)) data.forEach(d => loop(d, parent))
+        if (data.__config__ && data.__config__.jnpfKey) {
+          if (data.__config__.jnpfKey === 'relationForm' && data.__vModel__) {
+            list.push(data)
+          }
+        }
+      }
+      loop(drawingList)
+      this.relationFormOptions = list
+      this.getRelationFieldOptions()
+    },
+    getRelationFieldOptions() {
+      if (!this.activeData.relationField || !this.relationFormOptions.length) return
+      let item = this.relationFormOptions.filter(o => o.__vModel__ === this.activeData.relationField)[0]
+      if (!item.modelId) return
+      getFormDataFields(item.modelId).then(res => {
+        this.relationFieldOptions = res.data.list
+      })
+    },
+    onRelationFieldChange(val) {
+      this.activeData.showField = ''
+      if (!val) {
+        this.fieldOptions = []
+        return
+      }
+      this.getRelationFieldOptions()
+    },
+    visibleRelationChange(val) {
+      if (!val) return
+      if (!this.activeData.relationField) this.$message.warning('请先选择关联功能')
+    },
+    getPopupOptions() {
+      const drawingList = getDrawingList() || []
+      let list = []
+      const loop = (data, parent) => {
+        if (!data) return
+        if (data.__config__ && data.__config__.children && Array.isArray(data.__config__.children)) {
+          loop(data.__config__.children, data)
+        }
+        if (Array.isArray(data)) data.forEach(d => loop(d, parent))
+        if (data.__config__ && data.__config__.jnpfKey) {
+          if (data.__config__.jnpfKey === 'popupSelect' && data.__vModel__) {
+            list.push(data)
+          }
+        }
+      }
+      loop(drawingList)
+      this.popupOptions = list
     },
     visibleChange(val) {
       if (!val) return
