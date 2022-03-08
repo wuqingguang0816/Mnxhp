@@ -51,51 +51,89 @@
               <el-tag type="info" v-else>等待提交</el-tag>
             </template>
           </el-table-column>
-          <el-table-column label="操作" fixed="right" :width="columnData.columnBtnsList.length*50"
-            v-if="columnData.columnBtnsList.length">
+          <el-table-column label="操作" fixed="right" :width="operationWidth"
+            v-if="columnBtnsList.length || customBtnsList.length">
             <template slot-scope="scope" v-if="!scope.row.top">
               <template v-if="isPreview || !columnData.useBtnPermission">
-                <template v-for="(item, i) in columnData.columnBtnsList">
+                <template v-for="(item, i) in columnBtnsList">
                   <template v-if="item.value=='edit'">
                     <el-button size="mini" type="text" :key="i"
                       :disabled="config.webType == 3 && [1,2,5].indexOf(scope.row.flowState)>-1"
                       @click="columnBtnsHandel(item.value,scope.row)">
                       {{item.label}}</el-button>
                   </template>
-                  <template v-if="item.value=='remove'">
+                  <template v-else-if="item.value=='remove'">
                     <el-button size="mini" type="text" :key="i" class="JNPF-table-delBtn"
                       :disabled="config.webType == 3 && [1,2,3,5].indexOf(scope.row.flowState)>-1"
                       @click="columnBtnsHandel(item.value,scope.row)">
                       {{item.label}}</el-button>
                   </template>
-                  <template v-if="item.value=='detail'">
+                  <template v-else-if="item.value=='detail'">
                     <el-button size="mini" type="text" :key="i"
                       :disabled="config.webType == 3 && !scope.row.flowState"
                       @click="columnBtnsHandel(item.value,scope.row)">
+                      {{item.label}}</el-button>
+                  </template>
+                  <template v-else>
+                    <el-button size="mini" type="text" :key="i"
+                      @click="customBtnsHandel(item,scope.row,scope.$index)">
                       {{item.label}}</el-button>
                   </template>
                 </template>
+                <template v-if="customBtnsList.length">
+                  <el-dropdown hide-on-click>
+                    <span class="el-dropdown-link">
+                      <el-button type="text" size="mini">
+                        {{$t('common.moreBtn')}}<i class="el-icon-arrow-down el-icon--right"></i>
+                      </el-button>
+                    </span>
+                    <el-dropdown-menu slot="dropdown">
+                      <el-dropdown-item v-for="(item, i) in customBtnsList" :key="i"
+                        @click.native="customBtnsHandel(item,scope.row,scope.$index)">
+                        {{item.label}}</el-dropdown-item>
+                    </el-dropdown-menu>
+                  </el-dropdown>
+                </template>
               </template>
               <template v-else>
-                <template v-for="(item, i) in columnData.columnBtnsList">
+                <template v-for="(item, i) in columnBtnsList">
                   <template v-if="item.value=='edit'">
                     <el-button size="mini" type="text" :key="i"
                       :disabled="config.webType == 3 && [1,2,5].indexOf(scope.row.flowState)>-1"
                       @click="columnBtnsHandel(item.value,scope.row)" v-has="'btn_'+item.value">
                       {{item.label}}</el-button>
                   </template>
-                  <template v-if="item.value=='remove'">
+                  <template v-else-if="item.value=='remove'">
                     <el-button size="mini" type="text" :key="i" class="JNPF-table-delBtn"
                       :disabled="config.webType == 3 && [1,2,3,5].indexOf(scope.row.flowState)>-1"
                       @click="columnBtnsHandel(item.value,scope.row)" v-has="'btn_'+item.value">
                       {{item.label}}</el-button>
                   </template>
-                  <template v-if="item.value=='detail'">
+                  <template v-else-if="item.value=='detail'">
                     <el-button size="mini" type="text" :key="i"
                       :disabled="config.webType == 3 && !scope.row.flowState"
                       @click="columnBtnsHandel(item.value,scope.row)" v-has="'btn_'+item.value">
                       {{item.label}}</el-button>
                   </template>
+                  <template v-else>
+                    <el-button size="mini" type="text" :key="i"
+                      @click="customBtnsHandel(item,scope.row,scope.$index)">
+                      {{item.label}}</el-button>
+                  </template>
+                </template>
+                <template v-if="customBtnsList.length">
+                  <el-dropdown hide-on-click>
+                    <span class="el-dropdown-link">
+                      <el-button type="text" size="mini">
+                        {{$t('common.moreBtn')}}<i class="el-icon-arrow-down el-icon--right"></i>
+                      </el-button>
+                    </span>
+                    <el-dropdown-menu slot="dropdown">
+                      <el-dropdown-item v-for="(item, i) in customBtnsList" :key="i"
+                        @click.native="customBtnsHandel(item,scope.row,scope.$index)">
+                        {{item.label}}</el-dropdown-item>
+                    </el-dropdown-menu>
+                  </el-dropdown>
                 </template>
               </template>
             </template>
@@ -118,6 +156,7 @@
 import { getModelList, deleteModel, batchDelete, exportModel } from '@/api/onlineDev/visualDev'
 import { getDictionaryDataSelector } from '@/api/systemData/dictionary'
 import { getDataInterfaceRes } from '@/api/systemData/dataInterface'
+import request from '@/utils/request'
 import Form from './Form'
 import FlowBox from '@/views/workFlow/components/FlowBox'
 import Detail from './detail'
@@ -163,9 +202,17 @@ export default {
       },
       formData: {},
       columnList: [],
+      columnBtnsList: [],
+      customBtnsList: [],
       hasBatchBtn: false,
       refreshTable: true,
       multipleSelection: []
+    }
+  },
+  computed: {
+    operationWidth() {
+      const customWidth = this.customBtnsList.length ? 50 : 0
+      return this.columnBtnsList.length * 50 + customWidth
     }
   },
   created() {
@@ -185,6 +232,8 @@ export default {
         this.refreshTable = true
       })
       this.formData = JSON.parse(this.config.formData)
+      this.customBtnsList = this.columnData.customBtnsList || []
+      this.columnBtnsList = this.columnData.columnBtnsList || []
       this.getColumnList()
       if (this.isPreview) return
       this.listQuery.pageSize = this.columnData.pageSize
@@ -286,7 +335,7 @@ export default {
         })
       }).catch(() => { });
     },
-    addOrUpdateHandle(id, flowState) {
+    addOrUpdateHandle(id) {
       if (this.config.webType == 3) {
         let data = {
           id: id || '',
@@ -367,13 +416,13 @@ export default {
         this.addOrUpdateHandle(row.id)
       }
       if (key === 'detail') {
-        this.goDetail(row.id, row.flowState)
+        this.goDetail(row.id, row)
       }
       if (key == 'remove') {
         this.handleDel(row.id)
       }
     },
-    goDetail(id, flowState) {
+    goDetail(id, row) {
       if (this.config.webType == 3) {
         let data = {
           id,
@@ -384,7 +433,7 @@ export default {
           opType: 0,
           modelId: this.modelId,
           isPreview: this.isPreview,
-          status: flowState
+          status: row.flowState
         }
         this.flowVisible = true
         this.$nextTick(() => {
@@ -427,6 +476,26 @@ export default {
       this.listQuery.json = json
       this.listQuery.currentPage = 1
       this.initData()
+    },
+    customBtnsHandel(item, row, index) {
+      const parameter = {
+        data: row,
+        index,
+        request: this.request,
+        toast: this.$message,
+        refresh: this.initData
+      }
+      const func = this.jnpf.getScriptFunc.call(this, item.func)
+      if (!func) return
+      func.call(this, parameter)
+    },
+    request(url, method, data) {
+      if (!url) return
+      return request({
+        url: url,
+        method: method || 'GET',
+        data: data || {}
+      })
     }
   }
 }
