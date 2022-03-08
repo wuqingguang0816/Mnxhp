@@ -368,6 +368,8 @@ export default {
             this.$nextTick(() => {
               this.$refs['candidateForm'].resetFields()
             })
+          } else {
+            this.candidateForm.candidateList = []
           }
           this.visible = true
         }).catch(() => {
