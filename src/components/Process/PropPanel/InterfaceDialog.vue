@@ -32,7 +32,7 @@
                     @keyup.enter.native="search()" class="search-input" />
                 </el-form-item>
               </el-col>
-              <el-col :span="8">
+              <el-col :span="8" v-if="!dataType">
                 <el-form-item label="类型">
                   <el-select v-model="query.dataType" placeholder="请选择" clearable>
                     <el-option label="SQL操作" :value="1"></el-option>
@@ -118,6 +118,10 @@ export default {
       type: String,
       default: ''
     },
+    dataType: {
+      type: Number,
+      default: 0
+    },
     clearable: {
       type: Boolean,
       default: true
@@ -175,7 +179,8 @@ export default {
       this.listLoading = true
       const query = {
         ...this.listQuery,
-        ...this.query
+        ...this.query,
+        dataType: this.dataType === 0 ? this.query.dataType : this.dataType
       }
       getDataInterfaceSelectorList(query).then(res => {
         this.list = res.data.list.map(o => {
@@ -217,7 +222,7 @@ export default {
           this.query.categoryId = this.treeData[0].id
           this.$refs.treeBox.setCurrentKey(this.query.categoryId)
           this.treeLoading = false
-          this.initData()
+          this.reset()
         })
       }).catch(() => {
         this.treeLoading = false
