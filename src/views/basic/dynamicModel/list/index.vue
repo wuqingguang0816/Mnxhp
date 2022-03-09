@@ -265,11 +265,27 @@ export default {
         this.columnList = realList
       }
     },
-    handleNodeClick(data) {
+    getNodePath(node) {
+      let fullPath = []
+      const loop = (node) => {
+        if (node.level) fullPath.unshift(node.data)
+        if (node.parent) loop(node.parent)
+      }
+      loop(node)
+      return fullPath
+    },
+    handleNodeClick(data, node) {
       if (this.treeActiveId == data[this.treeProps.value]) return
       this.treeActiveId = data[this.treeProps.value]
       this.$refs.Search.treeReset()
-      let json = { [this.columnData.treeRelation]: data[this.treeProps.value] }
+      let json = {}
+      if (this.columnData.treeDataSource === "organize") {
+        const nodePath = this.getNodePath(node)
+        const currValue = nodePath.map(o => o[this.treeProps.value])
+        json = { [this.columnData.treeRelation]: currValue }
+      } else {
+        json = { [this.columnData.treeRelation]: data[this.treeProps.value] }
+      }
       this.search(JSON.stringify(json))
     },
     handleDel(id) {
