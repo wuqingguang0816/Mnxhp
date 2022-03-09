@@ -33,7 +33,7 @@
             width="120" />
           <el-table-column prop="userName" label="登录用户" width="120" />
           <el-table-column prop="ipaddress" label="登录IP" width="120" />
-          <el-table-column prop="platForm" label="登录摘要" show-overflow-tooltip />
+          <el-table-column prop="platForm" label="登录设备" show-overflow-tooltip />
         </JNPF-table>
       </el-tab-pane>
       <el-tab-pane label="请求日志" name="5">
