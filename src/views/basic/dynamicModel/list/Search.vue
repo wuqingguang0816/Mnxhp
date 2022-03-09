@@ -10,7 +10,8 @@
           </template>
           <template v-else-if="useDateList.indexOf(item.__config__.jnpfKey)>-1">
             <el-date-picker v-model="item.value" value-format="timestamp" format="yyyy-MM-dd"
-              start-placeholder="开始日期" end-placeholder="结束日期" class="item" type="daterange" />
+              start-placeholder="开始日期" end-placeholder="结束日期" class="item" type="daterange"
+              clearable />
           </template>
           <template v-else-if="useSelectList.indexOf(item.__config__.jnpfKey)>-1">
             <el-select v-model="item.value" :placeholder="'请选择'+item.__config__.label" clearable
@@ -37,19 +38,19 @@
                 class="item" />
             </template>
             <template v-if="item.__config__.jnpfKey==='date'">
-              <el-date-picker v-model="item.value" :type="item.type+'range'"
+              <el-date-picker v-model="item.value" :type="item.type+'range'" clearable
                 :value-format="item['value-format']" :format="item.format" start-placeholder="开始日期"
                 end-placeholder="结束日期" class="item">
               </el-date-picker>
             </template>
             <template v-if="item.__config__.jnpfKey==='dateRange'">
-              <el-date-picker v-model="item.value" :type="item.type"
+              <el-date-picker v-model="item.value" :type="item.type" clearable
                 :value-format="item['value-format']" :format="item.format" start-placeholder="开始日期"
                 end-placeholder="结束日期" class="item">
               </el-date-picker>
             </template>
             <template v-if="commonList.includes(item.__config__.jnpfKey)">
-              <component :is="item.__config__.tag" v-model="item.value"
+              <component :is="item.__config__.tag" v-model="item.value" clearable
                 :placeholder="'请选择'+item.__config__.label" class="item" />
             </template>
             <template v-if="item.__config__.jnpfKey==='address'">
@@ -62,19 +63,19 @@
             </template>
             <template
               v-if="item.__config__.jnpfKey==='createUser'||item.__config__.jnpfKey==='modifyUser'">
-              <userSelect v-model="item.value" :placeholder="'请选择'+item.__config__.label"
+              <userSelect v-model="item.value" :placeholder="'请选择'+item.__config__.label" clearable
                 class="item" />
             </template>
             <template v-if="item.__config__.jnpfKey==='currOrganize'">
-              <depSelect v-model="item.value" :placeholder="'请选择'+item.__config__.label"
-                :lastLevel="false" class="item" />
+              <comSelect v-model="item.value" :placeholder="'请选择'+item.__config__.label" clearable
+                class="item" />
             </template>
             <template v-if="item.__config__.jnpfKey==='currDept'">
-              <depSelect v-model="item.value" :placeholder="'请选择'+item.__config__.label"
+              <depSelect v-model="item.value" :placeholder="'请选择'+item.__config__.label" clearable
                 class="item" />
             </template>
             <template v-if="item.__config__.jnpfKey==='currPosition'">
-              <posSelect v-model="item.value" :placeholder="'请选择'+item.__config__.label"
+              <posSelect v-model="item.value" :placeholder="'请选择'+item.__config__.label" clearable
                 class="item" />
             </template>
           </template>

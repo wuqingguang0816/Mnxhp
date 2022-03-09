@@ -12,7 +12,8 @@
         :precision="0" controls-position="right" />
     </el-form-item>
     <el-form-item label="关联功能">
-      <el-select v-model="activeData.relationField" placeholder="请选择关联功能" clearable>
+      <el-select v-model="activeData.relationField" placeholder="请选择关联功能" clearable
+        @change="onRelationFieldChange">
         <el-option v-for="item in options" :key="item.__vModel__" :label="item.__config__.label"
           :value="item.__vModel__" />
       </el-select>
@@ -37,16 +38,6 @@ export default {
     return {
       options: [],
       fieldOptions: [],
-    }
-  },
-  watch: {
-    'activeData.relationField': function (val) {
-      this.activeData.showField = ''
-      if (!val) {
-        this.fieldOptions = []
-        return
-      }
-      this.getFieldOptions()
     }
   },
   methods: {
@@ -77,6 +68,11 @@ export default {
       getFormDataFields(item.modelId).then(res => {
         this.fieldOptions = res.data.list
       })
+    },
+    onRelationFieldChange(val) {
+      this.activeData.showField = ''
+      if (!val) return this.fieldOptions = []
+      this.getFieldOptions()
     },
     visibleChange(val) {
       if (!val) return
