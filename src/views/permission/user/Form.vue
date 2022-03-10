@@ -84,7 +84,11 @@
             </el-col>
             <el-col :span="12">
               <el-form-item label="状态" prop="enabledMark">
-                <el-switch v-model="dataForm.enabledMark" :active-value="1" :inactive-value="0" />
+                <el-select v-model="dataForm.enabledMark" placeholder="选择状态">
+                  <el-option label="正常" :value="1" />
+                  <el-option label="锁定" :value="2" />
+                  <el-option label="禁用" :value="0" />
+                </el-select>
               </el-form-item>
             </el-col>
             <el-col :span="24">
