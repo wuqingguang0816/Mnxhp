@@ -53,7 +53,7 @@
         <JNPF-table v-loading="listLoading" :data="list">
           <el-table-column prop="fullName" label="角色名称" width="200" />
           <el-table-column prop="enCode" label="角色编码" width="200" />
-          <el-table-column prop="type" label="类型" width="70" />
+          <el-table-column prop="type" label="角色类型" width="70" align="center" />
           <el-table-column prop="organizeInfo" label="所属组织" show-overflow-tooltip />
           <el-table-column prop="creatorTime" label="创建时间" :formatter="jnpf.tableDateFormat"
             width="120" />
