@@ -297,10 +297,12 @@
           <div class="form-auth-table">
             <el-table :data="getFormOperates()" class="JNPF-common-table" size="mini" height="100%">
               <el-table-column prop="name" label="表单字段" align="left"></el-table-column>
-              <el-table-column prop="write" label="操作" align="center" width="200px">
+              <el-table-column prop="write" label="操作" align="center" width="250">
                 <template slot-scope="scope">
                   <el-checkbox v-model="scope.row.read">查看</el-checkbox>
                   <el-checkbox v-model="scope.row.write">编辑</el-checkbox>
+                  <el-checkbox v-model="scope.row.required" :disabled="scope.row.requiredDisabled">
+                    必填</el-checkbox>
                 </template>
               </el-table-column>
             </el-table>
@@ -635,10 +637,12 @@
           <div class="form-auth-table">
             <el-table :data="getFormOperates()" class="JNPF-common-table" size="mini" height="100%">
               <el-table-column prop="name" label="表单字段" align="left"></el-table-column>
-              <el-table-column prop="write" label="操作" align="center" width="200px">
+              <el-table-column prop="write" label="操作" align="center" width="250">
                 <template slot-scope="scope">
                   <el-checkbox v-model="scope.row.read">查看</el-checkbox>
                   <el-checkbox v-model="scope.row.write">编辑</el-checkbox>
+                  <el-checkbox v-model="scope.row.required" :disabled="scope.row.requiredDisabled">
+                    必填</el-checkbox>
                 </template>
               </el-table-column>
             </el-table>
@@ -1274,7 +1278,7 @@ export default {
     onOrgChange(data, key) {
 
     },
-    timeTangeLabel(item) {
+    timeRangeLabel(item) {
       const index = ['fc-time-duration', 'fc-date-duration'].findIndex(t => t === item.tag)
       if (index > -1) {
         return '时长' + ['(小时)', '(天)'][index]

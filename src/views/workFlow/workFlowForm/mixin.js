@@ -19,6 +19,7 @@ export default {
     init(data) {
       this.dataForm.id = data.id || ''
       this.setting = data
+      this.updateDataRule()
       this.$nextTick(() => {
         this.$refs['dataForm'].resetFields()
         if (this.beforeInit) this.beforeInit()
@@ -76,6 +77,30 @@ export default {
           this.$emit('eventReceiver', this.dataForm, eventType)
         }
       })
+    },
+    updateDataRule() {
+      let newRules = {}
+      for (let i = 0; i < this.setting.formOperates.length; i++) {
+        const item = this.setting.formOperates[i]
+        const newRulesItem = {
+          required: item.required,
+          message: item.name + '不能为空',
+          trigger: item.trigger || 'blur'
+        }
+        if (!this.dataRule.hasOwnProperty(item.id)) {
+          if (item.required) this.$set(newRules, item.id, [newRulesItem])
+        } else {
+          let withoutRequiredItem = true
+          for (let i = 0; i < this.dataRule[item.id].length; i++) {
+            if (this.dataRule[item.id][i].hasOwnProperty('required')) {
+              this.dataRule[item.id][i].required = item.required
+              withoutRequiredItem = false
+            }
+          }
+          if (withoutRequiredItem && item.required) this.dataRule[item.id].push(newRulesItem)
+        }
+      }
+      this.dataRule = { ...this.dataRule, ...newRules }
     },
     judgeShow(id) {
       if (this.setting.opType == 4) return true

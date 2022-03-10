@@ -14,9 +14,9 @@ export default {
     } else {
       data = getMockData()
     }
+    this.updateFiled(data)
     this.$store.dispatch('base/getPositionList')
     this.$store.dispatch('base/getRoleList')
-    this.updateFiled(data)
     return {
       data, // 流程图数据
       scaleVal: 100, // 流程图缩放比例 100%
@@ -50,6 +50,10 @@ export default {
         const arr = formOperates.filter(o => o.id === id)
         return arr.length ? arr[0].read : true
       }
+      const getRequiredById = (id) => {
+        const arr = formOperates.filter(o => o.id === id)
+        return arr.length ? arr[0].required : false
+      }
       const loop = (data, parent) => {
         if (!data) return
         if (data.__config__ && data.__config__.jnpfKey !== 'table' && data.__config__.children && Array.isArray(data.__config__.children)) {
@@ -59,7 +63,8 @@ export default {
         if (data.__vModel__) res.push({
           id: data.__vModel__,
           name: data.__config__.label,
-          required: data.__config__.required,
+          required: data.__config__.required || getRequiredById(data.__vModel__),
+          requiredDisabled: data.__config__.required,
           read: getReadById(data.__vModel__),
           write: getWriteById(data.__vModel__)
         })
