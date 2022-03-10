@@ -6,6 +6,13 @@
   "description": "",
   "glyphs": [
     {
+      "icon_id": "28168769",
+      "name": "group",
+      "font_class": "group",
+      "unicode": "e65a",
+      "unicode_decimal": 58970
+    },
+    {
       "icon_id": "27761298",
       "name": "pageDesign",
       "font_class": "pageDesign",
@@ -515,13 +522,6 @@
       "font_class": "information",
       "unicode": "e62e",
       "unicode_decimal": 58926
-    },
-    {
-      "icon_id": "26303061",
-      "name": "group",
-      "font_class": "group",
-      "unicode": "e65a",
-      "unicode_decimal": 58970
     },
     {
       "icon_id": "22001620",
