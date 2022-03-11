@@ -52,6 +52,7 @@ export default {
     "permission-position": "岗位管理",
     "permission-user": "用户管理",
     "permission-role": "角色管理",
+    "permission-group": "分组管理",
     "permission-authorize": "权限管理",
     "permission-userOnline": "在线用户",
     "workFlow": "工作流程",

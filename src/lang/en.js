@@ -52,6 +52,7 @@ export default {
     "permission-position": "Position",
     "permission-user": "User",
     "permission-role": "Role",
+    "permission-group": "Group",
     "permission-authorize": "Authorize",
     "permission-userOnline": "UserOnline",
     "workFlow": "WorkFlow",

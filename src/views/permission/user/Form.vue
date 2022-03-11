@@ -52,8 +52,8 @@
             </el-col>
             <el-col :sm="12" :xs="24">
               <el-form-item label="岗位" prop="positionId">
-                <el-select v-model="positionId" multiple placeholder="选择岗位" @change="positionChange"
-                  @visible-change="visibleChange" filterable clearable>
+                <el-select v-model="positionId" placeholder="选择岗位" @change="onChange('positionId')"
+                  @visible-change="visibleChange" multiple filterable clearable>
                   <el-option-group v-for="group in positionTreeData" :key="group.id"
                     :label="group.fullName+(group.num?'【'+group.num+'】':'')">
                     <el-option v-for="item in group.children" :key="group.id+item.id"
@@ -65,13 +65,25 @@
             </el-col>
             <el-col :sm="12" :xs="24">
               <el-form-item label="角色" prop="roleId">
-                <el-select v-model="roleId" multiple placeholder="选择角色" @change="roleIdChange"
-                  @visible-change="visibleChange" filterable clearable>
+                <el-select v-model="roleId" placeholder="选择角色" @change="onChange('roleId')"
+                  @visible-change="visibleChange" multiple filterable clearable>
                   <el-option-group v-for="group in roleTreeData" :key="group.id"
                     :label="group.fullName+(group.num?'【'+group.num+'】':'')">
                     <el-option v-for="item in group.children" :key="group.id+item.id"
                       :label="item.fullName" :value="item.id">
                     </el-option>
+                  </el-option-group>
+                </el-select>
+              </el-form-item>
+            </el-col>
+            <el-col :sm="12" :xs="24">
+              <el-form-item label="分组" prop="groupId">
+                <el-select v-model="groupId" placeholder="选择分组" @change="onChange('groupId')"
+                  multiple filterable clearable>
+                  <el-option-group v-for="group in groupTreeData" :key="group.id"
+                    :label="group.fullName+(group.num?'【'+group.num+'】':'')">
+                    <el-option v-for="item in group.children" :key="item.id" :label="item.fullName"
+                      :value="item.id" />
                   </el-option-group>
                 </el-select>
               </el-form-item>
@@ -199,6 +211,7 @@
 <script>
 import { getPositionByOrganize } from '@/api/permission/position'
 import { getRoleByOrganize } from '@/api/permission/role'
+import { getGroupSelector } from '@/api/permission/group'
 import { createUser, updateUser, getUserInfo } from '@/api/permission/user'
 
 export default {
@@ -217,6 +230,7 @@ export default {
         managerId: '',
         positionId: '',
         roleId: '',
+        groupId: '',
         description: '',
         headIcon: '',
         gender: null,
@@ -236,9 +250,11 @@ export default {
         postalAddress: ''
       },
       roleId: [],
+      groupId: [],
       positionId: [],
       positionTreeData: [],
       roleTreeData: [],
+      groupTreeData: [],
       genderTreeData: [],
       nationTreeData: [],
       educationTreeData: [],
@@ -273,11 +289,16 @@ export default {
       this.visible = true
       this.dataForm.id = id || ''
       this.roleId = []
+      this.groupId = []
       this.positionId = []
       this.dataForm.organizeIdTree = []
       this.$nextTick(() => {
         this.formLoading = true
         this.$refs['dataForm'].resetFields()
+        // 获取分组下拉列表
+        getGroupSelector().then(res => {
+          this.groupTreeData = res.data
+        })
         // 获取民族
         this.$store.dispatch('base/getDictionaryData', { sort: 'Nation' }).then(res => {
           this.nationTreeData = res
@@ -298,6 +319,7 @@ export default {
           getUserInfo(this.dataForm.id).then(res => {
             this.dataForm = res.data
             if (this.dataForm.roleId) this.roleId = this.dataForm.roleId.split(',')
+            if (this.dataForm.groupId) this.groupId = this.dataForm.groupId.split(',')
             if (this.dataForm.positionId) this.positionId = this.dataForm.positionId.split(',')
             if (this.dataForm.organizeIdTree && this.dataForm.organizeIdTree.length) {
               this.getOptionsByOrgIds(this.dataForm.organizeIdTree)
@@ -312,11 +334,8 @@ export default {
     goBack() {
       this.$emit('close')
     },
-    roleIdChange() {
-      this.dataForm.roleId = this.roleId.join()
-    },
-    positionChange() {
-      this.dataForm.positionId = this.positionId.join()
+    onChange(key) {
+      this.dataForm[key] = this[key].join()
     },
     onOrganizeChange(val) {
       this.dataForm.positionId = ''
