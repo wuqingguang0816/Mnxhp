@@ -42,8 +42,8 @@ export default {
   methods: {
     handleSuccess(res, file) {
       if (res.code == 200) {
-        this.imageUrl = res.data.name;
-        this.$emit('input', res.data.name)
+        this.imageUrl = res.data.url;
+        this.$emit('input', res.data.url)
       } else {
         this.$message({ message: res.msg, type: 'error', duration: 1500 })
       }
@@ -96,7 +96,7 @@ export default {
     width: 100px;
     height: 100px;
     display: block;
-    object-fit: cover;
+    object-fit: contain;
   }
 }
 </style>
