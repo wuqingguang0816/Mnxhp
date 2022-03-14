@@ -390,6 +390,42 @@
   }
 }
 
+.JNPF-dialog-notice {
+  .el-dialog__body {
+    padding: 0 20px !important;
+  }
+
+  .notice-wrapper {
+    .title {
+      font-size: 18px;
+      font-weight: normal;
+      text-align: center;
+    }
+
+    .info {
+      line-height: 35px;
+      border-bottom: 1px solid #dcdfe6;
+      text-align: center;
+
+      span {
+        padding: 0 10px;
+      }
+    }
+
+    .main {
+      margin: 10px 0;
+      line-height: 22px;
+      min-height: 300px;
+      overflow: auto;
+    }
+
+    .file-list {
+      padding-top: 10px;
+      border-top: 1px solid #dcdfe6;
+    }
+  }
+}
+
 .JNPF-dialog-tree {
   .el-dialog {
     .el-dialog__body {
