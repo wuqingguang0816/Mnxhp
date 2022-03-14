@@ -244,6 +244,7 @@ export default {
     },
     reset() {
       this.list = []
+      this.nodeOptions = []
       this.listQuery = {
         keyword: '',
         flowId: '',
