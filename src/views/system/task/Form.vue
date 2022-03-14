@@ -192,6 +192,18 @@ export default {
     dataFormSubmit() {
       this.$refs['dataForm'].validate((valid) => {
         if (valid) {
+          if (this.dataForm.executeType === '1' || this.dataForm.executeType === '2') {
+            let boo = false
+            for (let i = 0; i < this.dataForm.executeContent.parameter.length; i++) {
+              const item = this.dataForm.executeContent.parameter[i]
+              if (item.required && !item.value) {
+                this.$message.error(`${item.field}的参数值为必填`)
+                boo = true
+                break
+              }
+            }
+            if (boo) return
+          }
           this.btnLoading = true
           let executeContent = JSON.stringify(this.dataForm.executeContent)
           let query = { ...this.dataForm, executeContent }
