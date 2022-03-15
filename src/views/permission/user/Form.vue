@@ -103,8 +103,9 @@
           <el-row :gutter="20" class="custom-row">
             <el-col :span="24">
               <el-form-item label="头像" prop="headIcon">
-                <el-upload class="avatar-uploader" :action="define.comUploadUrl+'/userAvatar'"
-                  :show-file-list="false" :on-success="handleAvatarSuccess" accept="image/*">
+                <el-upload class="avatar-uploader" :headers="uploadHeaders"
+                  :action="define.comUploadUrl+'/userAvatar'" :show-file-list="false"
+                  :on-success="handleAvatarSuccess" accept="image/*">
                   <img v-if="dataForm.headIcon" :src="define.comUrl+dataForm.headIcon"
                     class="avatar">
                   <i v-else class="el-icon-plus avatar-uploader-icon" />
@@ -247,6 +248,7 @@ export default {
       nationTreeData: [],
       educationTreeData: [],
       certificatesTypeTreeData: [],
+      uploadHeaders: { Authorization: this.$store.getters.token },
       formLoading: false,
       genderProps: {
         value: 'enCode',
