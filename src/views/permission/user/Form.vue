@@ -76,18 +76,6 @@
                 </el-select>
               </el-form-item>
             </el-col>
-            <el-col :sm="12" :xs="24">
-              <el-form-item label="分组" prop="groupId">
-                <el-select v-model="groupId" placeholder="选择分组" @change="onChange('groupId')"
-                  multiple filterable clearable>
-                  <el-option-group v-for="group in groupTreeData" :key="group.id"
-                    :label="group.fullName+(group.num?'【'+group.num+'】':'')">
-                    <el-option v-for="item in group.children" :key="item.id" :label="item.fullName"
-                      :value="item.id" />
-                  </el-option-group>
-                </el-select>
-              </el-form-item>
-            </el-col>
             <el-col :span="12">
               <el-form-item label="排序" prop="sortCode">
                 <el-input-number :min="0" :max="999999" v-model="dataForm.sortCode"
