@@ -116,7 +116,7 @@
                       {{item.label}}</el-button>
                   </template>
                   <template v-else>
-                    <el-button size="mini" type="text" :key="i"
+                    <el-button size="mini" type="text" :key="i" v-has="item.value"
                       @click="customBtnsHandel(item,scope.row,scope.$index)">
                       {{item.label}}</el-button>
                   </template>
@@ -130,8 +130,8 @@
                     </span>
                     <el-dropdown-menu slot="dropdown">
                       <el-dropdown-item v-for="(item, i) in customBtnsList" :key="i"
-                        @click.native="customBtnsHandel(item,scope.row,scope.$index)">
-                        {{item.label}}</el-dropdown-item>
+                        @click.native="customBtnsHandel(item,scope.row,scope.$index)"
+                        v-has="item.value">{{item.label}}</el-dropdown-item>
                     </el-dropdown-menu>
                   </el-dropdown>
                 </template>

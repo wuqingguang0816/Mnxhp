@@ -200,6 +200,7 @@
                       <div class="custom-line-icon option-drag">
                         <i class="el-icon-s-operation" />
                       </div>
+                      <p class="custom-line-value">{{item.value}}</p>
                       <el-input v-model="item.label" placeholder="按钮名称" size="small" />
                       <el-button class="custom-btn" @click="editFunc(item)">脚本事件</el-button>
                       <div class="close-btn custom-line-icon"
@@ -523,9 +524,10 @@ export default {
       this.columnData.treePropsLabel = 'fullName'
     },
     addCustomBtn() {
+      const id = this.jnpf.idGenerator()
       this.columnData.customBtnsList.push({
-        value: '',
-        label: '',
+        value: 'btn_' + id,
+        label: '按钮' + id,
         func: ''
       })
     },
