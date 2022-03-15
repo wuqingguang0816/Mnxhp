@@ -167,7 +167,7 @@ export default {
           hasChildren: false,
           id: "0",
           parentId: "-1",
-          icon: 'icon-ym icon-ym-tree-organization3'
+          icon: 'icon-ym icon-ym-global-role'
         }
         this.treeData = [firstItem, ...res]
         this.$nextTick(() => {
