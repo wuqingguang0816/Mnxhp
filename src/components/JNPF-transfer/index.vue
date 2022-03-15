@@ -3,7 +3,10 @@
     :style="{height}">
     <div class="transfer-pane">
       <div class="transfer-pane__tools">
-        <el-input placeholder="输入关键词进行搜索" v-model="filterText" />
+        <el-input placeholder="输入关键词进行搜索" v-model="filterText" @keyup.enter.native="search"
+          clearable>
+          <el-button slot="append" icon="el-icon-search" @click="search"></el-button>
+        </el-input>
       </div>
       <div class="transfer-pane__body">
         <el-tree :data="treeData" :props="props" default-expand-all highlight-current ref="treeBox"
@@ -73,9 +76,6 @@ export default {
     }
   },
   watch: {
-    filterText(val) {
-      this.$refs.treeBox.filter(val);
-    },
     value(val) {
       this.initHandle()
     },
@@ -93,6 +93,9 @@ export default {
         this.selectedTextData = []
         this.selectedData = []
       }
+    },
+    search() {
+      this.$refs.treeBox.filter(this.filterText);
     },
     filterNode(value, data) {
       if (!value) return true;
