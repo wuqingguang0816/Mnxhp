@@ -122,14 +122,16 @@ export default {
       this.roleTreeLoading = true
       getRoleSelector().then(res => {
         let ids = []
-        for (let i = 0; i < res.data.list.length; i++) {
-          const item = res.data.list[i]
-          if (item.children && item.children.length) {
-            for (let j = 0; j < item.children.length; j++) {
-              ids.push(item.children[j].id)
+        const loop = list => {
+          for (let i = 0; i < list.length; i++) {
+            const item = list[i]
+            ids.push(item.onlyId)
+            if (item.children && item.children.length) {
+              loop(item.children)
             }
           }
         }
+        loop(res.data.list)
         this.roleAllIds = ids
         this.roleTreeAllData = res.data.list
         this.roleTreeLoading = false
