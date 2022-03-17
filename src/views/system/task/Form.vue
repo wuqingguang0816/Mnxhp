@@ -29,7 +29,8 @@
                 <el-radio-group v-model="dataForm.executeType" @change="onExecuteTypeChange">
                   <el-radio label="1">Api数据</el-radio>
                   <el-radio label="2">SQL操作</el-radio>
-                  <el-radio label="3">本地任务(获取在程序中事先写好的本地方法)</el-radio>
+                  <el-radio label="3">本地任务(<i class="el-icon-warning-outline"></i>获取在程序中事先写好的本地方法)
+                  </el-radio>
                 </el-radio-group>
               </el-form-item>
             </el-col>
