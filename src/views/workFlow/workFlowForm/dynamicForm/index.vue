@@ -118,7 +118,7 @@ export default {
             if (this.setting.readonly) isDisabled = true
             this.$set(item, 'disabled', isDisabled)
             this.$set(item.__config__, 'noShow', noShow)
-            this.$set(item.__config__, 'required', required)
+            this.$set(item.__config__, 'required', required || false)
           }
           if (item.__config__ && item.__config__.jnpfKey !== 'table' && item.__config__.children && Array.isArray(item.__config__.children)) {
             loop(item.__config__.children)
