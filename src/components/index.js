@@ -29,8 +29,6 @@ import JNPFAddress from '@/components/Generator/components/Address'
 import GroupTitle from '@/components/Generator/components/GroupTitle'
 import RelationForm from '@/components/Generator/components/RelationForm'
 import RelationFormAttr from '@/components/Generator/components/RelationFormAttr'
-import RelationFlow from '@/components/Generator/components/RelationFlow'
-import RelationFlowAttr from '@/components/Generator/components/RelationFlowAttr'
 import Calculate from '@/components/Generator/components/Calculate'
 
 export default {
@@ -62,8 +60,6 @@ export default {
     Vue.component('GroupTitle', GroupTitle)
     Vue.component('RelationForm', RelationForm)
     Vue.component('RelationFormAttr', RelationFormAttr)
-    Vue.component('RelationFlow', RelationFlow)
-    Vue.component('RelationFlowAttr', RelationFlowAttr)
     Vue.component('Calculate', Calculate)
     Vue.component('JNPFQuill', JNPFQuill)
     Vue.component('Screenfull', Screenfull)

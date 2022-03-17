@@ -113,10 +113,6 @@
               :active-data="activeData" v-on="$listeners" :key="activeData.__config__.renderKey" />
             <RelationFormAttr v-if="activeData.__config__.jnpfKey==='relationFormAttr'"
               :active-data="activeData" ref="relationFormAttr" />
-            <RelationFlow v-if="activeData.__config__.jnpfKey==='relationFlow'"
-              :active-data="activeData" v-on="$listeners" />
-            <RelationFlowAttr v-if="activeData.__config__.jnpfKey==='relationFlowAttr'"
-              :active-data="activeData" ref="relationFlowAttr" />
             <JNPFCalculate v-if="activeData.__config__.jnpfKey==='calculate'"
               :active-data="activeData" ref="calculate" />
             <PopupSelect v-if="activeData.__config__.jnpfKey==='popupSelect'"
@@ -456,8 +452,6 @@ import TreeSelect from './RightComponents/TreeSelect'
 import GroupTitle from './RightComponents/GroupTitle'
 import RelationForm from './RightComponents/RelationForm'
 import RelationFormAttr from './RightComponents/RelationFormAttr'
-import RelationFlow from './RightComponents/RelationFlow'
-import RelationFlowAttr from './RightComponents/RelationFlowAttr'
 import JNPFCalculate from './RightComponents/Calculate'
 import PopupSelect from './RightComponents/PopupSelect'
 import PopupAttr from './RightComponents/PopupAttr'
@@ -498,8 +492,6 @@ export default {
     GroupTitle,
     RelationForm,
     RelationFormAttr,
-    RelationFlow,
-    RelationFlowAttr,
     JNPFCalculate,
     PopupSelect,
     PopupAttr,
@@ -662,11 +654,6 @@ export default {
       if (val.__config__.jnpfKey === 'relationFormAttr') {
         this.$nextTick(() => {
           this.$refs.relationFormAttr && this.$refs.relationFormAttr.getOptions()
-        })
-      }
-      if (val.__config__.jnpfKey === 'relationFlowAttr') {
-        this.$nextTick(() => {
-          this.$refs.relationFlowAttr && this.$refs.relationFlowAttr.getOptions()
         })
       }
       if (val.__config__.jnpfKey === 'popupAttr') {

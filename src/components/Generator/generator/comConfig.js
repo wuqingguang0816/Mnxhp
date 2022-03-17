@@ -25,13 +25,13 @@ const ruleTrigger = {
 // 动态options
 const dyOptionsList = ['radio', 'checkbox', 'select', 'cascader', 'treeSelect']
 // 不添加vModel
-const noVModelList = ['divider', 'JNPFText', 'groupTitle', 'relationFormAttr', 'popupAttr', 'relationFlowAttr', 'button', 'barcode', 'qrcode']
+const noVModelList = ['divider', 'JNPFText', 'groupTitle', 'relationFormAttr', 'popupAttr', 'button', 'barcode', 'qrcode']
 // 不可以添加到子表组件
-const noTableAllowList = ['divider', 'JNPFText', 'groupTitle', 'button', 'barcode', 'qrcode', 'editor', 'uploadImg', 'radio', 'checkbox', 'relationFlow', 'createUser', 'createTime', 'modifyUser', 'modifyTime', 'currOrganize', 'currDept', 'currPosition', 'rate', 'slider', 'PsdInput', 'colorPicker']
+const noTableAllowList = ['divider', 'JNPFText', 'groupTitle', 'button', 'barcode', 'qrcode', 'editor', 'uploadImg', 'radio', 'checkbox', 'createUser', 'createTime', 'modifyUser', 'modifyTime', 'currOrganize', 'currDept', 'currPosition', 'rate', 'slider', 'PsdInput', 'colorPicker']
 // 不可以添加到列表展示
-const noColumnShowList = ['PsdInput', 'colorPicker', 'rate', 'slider', 'divider', 'uploadImg', 'uploadFz', 'editor', 'JNPFText', 'relationFormAttr', 'popupAttr', 'relationFlowAttr', 'groupTitle']
+const noColumnShowList = ['PsdInput', 'colorPicker', 'rate', 'slider', 'divider', 'uploadImg', 'uploadFz', 'editor', 'JNPFText', 'relationFormAttr', 'popupAttr', 'groupTitle']
 // 不可以添加到搜索
-const noSearchList = [...noColumnShowList, 'switch', 'timeRange', 'dateRange', 'relationForm', 'relationFlow', 'popupSelect']
+const noSearchList = [...noColumnShowList, 'switch', 'timeRange', 'dateRange', 'relationForm', 'popupSelect']
 // 搜索时控件为input
 const useInputList = ['comInput', 'textarea', 'JNPFText', 'billRule']
 // 搜索时控件为日期选择器
