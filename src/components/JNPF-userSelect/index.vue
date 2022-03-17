@@ -46,7 +46,7 @@
           <div class="transfer-pane__body">
             <el-tabs v-model="activeName" class="transfer-pane__body-tab">
               <el-tab-pane label="全部数据" name="all">
-                <el-tree :data="treeData" :props="props" highlight-current check-on-click-node
+                <el-tree :data="treeData" :props="props" check-on-click-node
                   @node-click="handleNodeClick" class="JNPF-common-el-tree" node-key="id"
                   v-loading="loading" lazy :load="loadNode">
                   <span class="custom-tree-node" slot-scope="{ node, data }">
@@ -56,9 +56,9 @@
                 </el-tree>
               </el-tab-pane>
               <el-tab-pane label="当前组织" name="department">
-                <el-tree :data="treeData2" :props="props" highlight-current
-                  :expand-on-click-node="false" check-on-click-node @node-click="handleNodeClick2"
-                  class="JNPF-common-el-tree" node-key="id" v-loading="loading">
+                <el-tree :data="treeData2" :props="props" :expand-on-click-node="false"
+                  check-on-click-node @node-click="handleNodeClick2" class="JNPF-common-el-tree"
+                  node-key="id" v-loading="loading">
                   <span class="custom-tree-node" slot-scope="{ node }">
                     <i class="icon-ym icon-ym-tree-user2"></i>
                     <span class="text">{{node.label}}</span>
@@ -66,9 +66,9 @@
                 </el-tree>
               </el-tab-pane>
               <el-tab-pane label="我的下属" name="subordinates">
-                <el-tree :data="treeData3" :props="props" highlight-current
-                  :expand-on-click-node="false" check-on-click-node @node-click="handleNodeClick2"
-                  class="JNPF-common-el-tree" node-key="id" v-loading="loading">
+                <el-tree :data="treeData3" :props="props" :expand-on-click-node="false"
+                  check-on-click-node @node-click="handleNodeClick2" class="JNPF-common-el-tree"
+                  node-key="id" v-loading="loading">
                   <span class="custom-tree-node" slot-scope="{ node }">
                     <i class="icon-ym icon-ym-tree-user2"></i>
                     <span class="text">{{node.label}}</span>

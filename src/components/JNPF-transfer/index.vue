@@ -9,7 +9,7 @@
         </el-input>
       </div>
       <div class="transfer-pane__body">
-        <el-tree :data="treeData" :props="props" default-expand-all highlight-current ref="treeBox"
+        <el-tree :data="treeData" :props="props" default-expand-all ref="treeBox"
           :expand-on-click-node="false" check-on-click-node class="JNPF-common-el-tree"
           node-key="id" show-checkbox v-loading="loading" :filter-node-method="filterNode"
           @check="onCheck">

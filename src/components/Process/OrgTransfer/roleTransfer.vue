@@ -10,10 +10,10 @@
       <div class="transfer-pane__body">
         <el-tabs v-model="activeName" class="transfer-pane__body-tab">
           <el-tab-pane label="全局" name="all">
-            <el-tree :data="treeData" :props="props" highlight-current ref="tree1"
-              default-expand-all :filter-node-method="filterNode" :expand-on-click-node="false"
-              check-on-click-node @node-click="handleNodeClick" class="JNPF-common-el-tree"
-              node-key="onlyId" v-loading="loading">
+            <el-tree :data="treeData" :props="props" ref="tree1" default-expand-all
+              :filter-node-method="filterNode" :expand-on-click-node="false" check-on-click-node
+              @node-click="handleNodeClick" class="JNPF-common-el-tree" node-key="onlyId"
+              v-loading="loading">
               <span class="custom-tree-node" slot-scope="{ node,data }">
                 <i :class="data.icon" />
                 <span class="text">{{node.label}}</span>
@@ -21,10 +21,10 @@
             </el-tree>
           </el-tab-pane>
           <el-tab-pane label="组织" name="organize">
-            <el-tree :data="treeData2" :props="props" highlight-current ref="tree2"
-              default-expand-all :filter-node-method="filterNode" :expand-on-click-node="false"
-              check-on-click-node @node-click="handleNodeClick" class="JNPF-common-el-tree"
-              node-key="onlyId" v-loading="loading">
+            <el-tree :data="treeData2" :props="props" ref="tree2" default-expand-all
+              :filter-node-method="filterNode" :expand-on-click-node="false" check-on-click-node
+              @node-click="handleNodeClick" class="JNPF-common-el-tree" node-key="onlyId"
+              v-loading="loading">
               <span class="custom-tree-node" slot-scope="{ node,data }">
                 <i :class="data.icon" />
                 <span class="text">{{node.label}}</span>
