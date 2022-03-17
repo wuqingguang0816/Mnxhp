@@ -72,7 +72,7 @@ function buildDataObject(confClone, dataObject, formData) {
     dataObject.attrs['formData'] = formData
   }
   if (['relationForm', 'popupSelect'].includes(jnpfKey)) {
-    dataObject.attrs['field'] = confClone.__vModel__
+    dataObject.attrs['field'] = confClone.__config__.tableName ? confClone.__vModel__ + '_jnpfTable_' + confClone.__config__.tableName + (confClone.__config__.isSubTable ? '0' : "1") : confClone.__vModel__
   }
 
   // 清理属性

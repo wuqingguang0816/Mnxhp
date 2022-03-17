@@ -13,8 +13,8 @@
     </el-form-item>
     <el-form-item label="关联弹窗">
       <el-select v-model="activeData.relationField" placeholder="请选择关联弹窗" clearable>
-        <el-option v-for="item in options" :key="item.__vModel__" :label="item.__config__.label"
-          :value="item.__vModel__" />
+        <el-option v-for="(item,i) in options" :key="i" :label="item.__config__.label"
+          :value="item.prop" />
       </el-select>
     </el-form-item>
     <el-form-item label="关联字段">
@@ -51,7 +51,10 @@ export default {
         }
       }
       loop(drawingList)
-      this.options = list
+      this.options = list.map(o => ({
+        ...o,
+        prop: o.__config__ && o.__config__.tableName ? o.__vModel__ + '_jnpfTable_' + o.__config__.tableName + (o.__config__.isSubTable ? '0' : "1") : o.__vModel__
+      }))
     }
   }
 }

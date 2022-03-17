@@ -431,8 +431,8 @@
               <el-form-item label="关联功能">
                 <el-select v-model="activeData.relationField" placeholder="请选择关联功能" clearable
                   @change="onRelationFieldChange">
-                  <el-option v-for="item in relationFormOptions" :key="item.__vModel__"
-                    :label="item.__config__.label" :value="item.__vModel__" />
+                  <el-option v-for="(item,i) in relationFormOptions" :key="i"
+                    :label="item.__config__.label" :value="item.prop" />
                 </el-select>
               </el-form-item>
               <el-form-item label="关联字段">
@@ -446,8 +446,8 @@
             <template v-if="activeData.__config__.jnpfKey==='popupAttr'">
               <el-form-item label="关联弹窗">
                 <el-select v-model="activeData.relationField" placeholder="请选择关联弹窗" clearable>
-                  <el-option v-for="item in popupOptions" :key="item.__vModel__"
-                    :label="item.__config__.label" :value="item.__vModel__" />
+                  <el-option v-for="(item,i) in popupOptions" :key="i"
+                    :label="item.__config__.label" :value="item.prop" />
                 </el-select>
               </el-form-item>
               <el-form-item label="关联字段">
@@ -1208,12 +1208,18 @@ export default {
         }
       }
       loop(drawingList)
-      this.relationFormOptions = list
+      this.relationFormOptions = list.map(o => ({
+        ...o,
+        prop: o.__config__ && o.__config__.tableName ? o.__vModel__ + '_jnpfTable_' + o.__config__.tableName + (o.__config__.isSubTable ? '0' : "1") : o.__vModel__
+      }))
       this.getRelationFieldOptions()
     },
     getRelationFieldOptions() {
       if (!this.activeData.relationField || !this.relationFormOptions.length) return
-      let item = this.relationFormOptions.filter(o => o.__vModel__ === this.activeData.relationField)[0]
+      let prop = this.activeData.relationField.split('_jnpfTable_')[0]
+      let list = this.relationFormOptions.filter(o => o.__vModel__ === prop)
+      if (!list.length) return
+      let item = list[0]
       if (!item.modelId) return
       getFormDataFields(item.modelId).then(res => {
         this.relationFieldOptions = res.data.list
@@ -1247,7 +1253,10 @@ export default {
         }
       }
       loop(drawingList)
-      this.popupOptions = list
+      this.popupOptions = list.map(o => ({
+        ...o,
+        prop: o.__config__ && o.__config__.tableName ? o.__vModel__ + '_jnpfTable_' + o.__config__.tableName + (o.__config__.isSubTable ? '0' : "1") : o.__vModel__
+      }))
     },
     visibleChange(val) {
       if (!val) return
