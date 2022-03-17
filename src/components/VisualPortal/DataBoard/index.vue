@@ -42,7 +42,7 @@ export default {
       for (let i = 0; i < list.length; i++) {
         if (list[i].dataType === 'dynamic') {
           list[i].num = ''
-          if (!list[i].propsApi) return
+          if (!list[i].propsApi) continue
           getDataInterfaceRes(list[i].propsApi).then(res => {
             list[i].num = this.jnpf.interfaceDataHandler(res.data)
           })
