@@ -78,6 +78,7 @@ export default {
       this.taskId = taskId
       this.eventType = eventType || ''
       this.dataForm.candidateList = candidateList || []
+      this.dataForm.handleOpinion = ''
       this.formData.flowId = flowId
       this.copyIds = []
       this.signImg = ''
