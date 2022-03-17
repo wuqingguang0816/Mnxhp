@@ -83,7 +83,7 @@ export default {
       for (let i = 0; i < this.setting.formOperates.length; i++) {
         const item = this.setting.formOperates[i]
         const newRulesItem = {
-          required: item.required,
+          required: item.required || false,
           message: item.name + '不能为空',
           trigger: item.trigger || 'blur'
         }
@@ -93,7 +93,7 @@ export default {
           let withoutRequiredItem = true
           for (let i = 0; i < this.dataRule[item.id].length; i++) {
             if (this.dataRule[item.id][i].hasOwnProperty('required')) {
-              this.dataRule[item.id][i].required = item.required
+              this.dataRule[item.id][i].required = item.required || false
               withoutRequiredItem = false
             }
           }
