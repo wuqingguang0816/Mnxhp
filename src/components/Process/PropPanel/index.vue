@@ -783,7 +783,7 @@
             </el-form>
           </el-scrollbar>
         </el-tab-pane>
-        <el-tab-pane label="通知设置">
+        <el-tab-pane label="节点通知">
           <el-scrollbar class="config-scrollbar">
             <el-form :model="approverForm" class="pd-10" label-width="80px" label-position="left">
               <el-form-item label="等待审核">

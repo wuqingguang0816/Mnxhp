@@ -30,9 +30,9 @@
           </div>
         </div>
         <JNPF-table v-loading="listLoading" :data="list">
-          <el-table-column prop="fullName" label="名称" />
-          <el-table-column prop="enCode" label="编码" />
-          <el-table-column prop="type" label="类型" width="150" />
+          <el-table-column prop="fullName" label="分组名称" />
+          <el-table-column prop="enCode" label="分组编码" />
+          <el-table-column prop="type" label="分组类型" width="150" />
           <el-table-column prop="description" label="说明" />
           <el-table-column prop="creatorTime" label="创建时间" :formatter="jnpf.tableDateFormat"
             width="120" />
