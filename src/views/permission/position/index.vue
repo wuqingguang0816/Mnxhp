@@ -51,7 +51,7 @@
           </div>
         </div>
         <JNPF-table v-loading="listLoading" :data="tableData">
-          <el-table-column prop="fullName" label="岗位名称" />
+          <el-table-column prop="fullName" label="岗位名称" min-width="200" />
           <el-table-column prop="enCode" label="岗位编码" width="150" />
           <el-table-column prop="type" label="岗位类型" width="100" />
           <el-table-column prop="department" label="所属组织" show-overflow-tooltip />
