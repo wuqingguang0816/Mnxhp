@@ -33,14 +33,19 @@
               <el-link icon="icon-ym icon-ym-Refresh JNPF-common-head-icon" :underline="false"
                 @click="initData()" />
             </el-tooltip>
+            <ColumnSettings v-model="columnList" />
           </div>
         </div>
         <JNPF-table v-loading="listLoading" :data="list" row-key="id" default-expand-all
           :tree-props="{children: 'children', hasChildren: ''}" @sort-change='sortChange'
-          :has-c="hasBatchBtn" @selection-change="handleSelectionChange" v-if="refreshTable">
-          <el-table-column :prop="item.prop" :label="item.label" :align="item.align"
-            :width="item.width" v-for="(item, i) in columnList" :key="i"
-            :sortable="item.sortable?'custom':item.sortable" />
+          :has-c="hasBatchBtn" @selection-change="handleSelectionChange" v-if="refreshTable"
+          :columnData="columnList">
+          <template v-for="(item, i) in columnList">
+            <template v-if="item.visible">
+              <el-table-column :prop="item.prop" :label="item.label" :align="item.align"
+                :width="item.width" :key="i" :sortable="item.sortable?'custom':item.sortable" />
+            </template>
+          </template>
           <el-table-column prop="flowState" label="状态" width="100" v-if="config.webType == 3">
             <template slot-scope="scope" v-if="!scope.row.top">
               <el-tag v-if="scope.row.flowState==1">等待审核</el-tag>
@@ -156,16 +161,19 @@
 import { getModelList, deleteModel, batchDelete, exportModel } from '@/api/onlineDev/visualDev'
 import { getDictionaryDataSelector } from '@/api/systemData/dictionary'
 import { getDataInterfaceRes } from '@/api/systemData/dataInterface'
+import { getColumnsByModuleId } from '@/api/common'
 import request from '@/utils/request'
 import Form from './Form'
 import FlowBox from '@/views/workFlow/components/FlowBox'
 import Detail from './detail'
 import ExportBox from './ExportBox'
 import Search from './Search'
+import commonMixin from '@/mixins/commonMixin'
 export default {
   name: 'dynamicModel',
   components: { Form, ExportBox, Search, Detail, FlowBox },
   props: ['config', 'modelId', 'isPreview'],
+  mixins: [commonMixin],
   data() {
     return {
       keyword: '',
@@ -206,7 +214,8 @@ export default {
       customBtnsList: [],
       hasBatchBtn: false,
       refreshTable: true,
-      multipleSelection: []
+      multipleSelection: [],
+      settingsColumnList: []
     }
   },
   computed: {
@@ -219,7 +228,7 @@ export default {
     this.init()
   },
   methods: {
-    init() {
+    async init() {
       this.listQuery.menuId = this.$route.meta.modelId
       this.refreshTable = false
       if (!this.config.columnData || !this.config.formData) return
@@ -234,8 +243,12 @@ export default {
       this.formData = JSON.parse(this.config.formData)
       this.customBtnsList = this.columnData.customBtnsList || []
       this.columnBtnsList = this.columnData.columnBtnsList || []
+      this.listLoading = true
+      if (this.isPreview) this.listQuery.menuId = "270579315303777093"
+      let res = await getColumnsByModuleId(this.listQuery.menuId)
+      this.settingsColumnList = res.data || []
       this.getColumnList()
-      if (this.isPreview) return
+      if (this.isPreview) return this.listLoading = false
       this.listQuery.pageSize = this.columnData.pageSize
       this.listQuery.sort = this.columnData.sort
       this.listQuery.sidx = this.columnData.defaultSidx
@@ -295,24 +308,54 @@ export default {
       }
     },
     getColumnList() {
-      if (this.isPreview || !this.columnData.useColumnPermission) {
-        this.columnList = this.columnData.columnList
+      if (this.isPreview) {
+        this.columnList = this.columnData.columnList.map(o => ({
+          ...o,
+          visible: true
+        }))
+        return
+      }
+      let columnPermissionList = []
+      if (!this.columnData.useColumnPermission) {
+        columnPermissionList = this.columnData.columnList
       } else {
         const permissionList = this.$store.getters.permissionList
         const modelId = this.$route.meta.modelId
         const list = permissionList.filter(o => o.modelId === modelId)
         const columnList = list[0] && list[0].column ? list[0].column : []
-        let realList = []
         for (let i = 0; i < this.columnData.columnList.length; i++) {
           inner: for (let j = 0; j < columnList.length; j++) {
             if (this.columnData.columnList[i].prop === columnList[j].enCode) {
-              realList.push(this.columnData.columnList[i])
+              columnPermissionList.push(this.columnData.columnList[i])
               break inner
             }
           }
         }
-        this.columnList = realList
       }
+      let list = []
+      if (!this.settingsColumnList.length) {
+        list = columnPermissionList.map(o => ({
+          ...o,
+          visible: true
+        }))
+      } else {
+        outer: for (let i = 0; i < columnPermissionList.length; i++) {
+          let hasItem = false,
+            visible = true
+          inner: for (let j = 0; j < this.settingsColumnList.length; j++) {
+            if (columnPermissionList[i].prop === this.settingsColumnList[j].prop) {
+              hasItem = true
+              visible = this.settingsColumnList[j].visible
+              break inner
+            }
+          }
+          list.push({
+            ...columnPermissionList[i],
+            visible: hasItem ? visible : true
+          })
+        }
+      }
+      this.columnList = list
     },
     getNodePath(node) {
       let fullPath = []
