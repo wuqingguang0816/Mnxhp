@@ -4,7 +4,7 @@
       <el-link icon="icon-ym icon-ym-options JNPF-common-head-icon" :underline="false"
         @click="showDrawer" />
     </el-tooltip>
-    <el-drawer title="表格显示设置" :visible.sync="drawerVisible" :wrapperClosable="false" size="320px"
+    <el-drawer title="列表显示设置" :visible.sync="drawerVisible" :wrapperClosable="false" size="320px"
       append-to-body class="JNPF-common-drawer columnSettings-drawer">
       <div class="JNPF-flex-main">
         <div class="columnSetting-head">

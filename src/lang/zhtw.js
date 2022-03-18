@@ -199,7 +199,7 @@ export default {
     search: '查詢',
     reset: '重置',
     refresh: '刷新',
-    columnSettings: '列設置',
+    columnSettings: '表頭設置',
     fullScreen: '全屏',
     outFullScreen: '退出全屏',
     confirmButton: '確 定',
