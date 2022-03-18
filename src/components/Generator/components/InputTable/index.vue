@@ -350,7 +350,8 @@ export default {
         newObj['field'] = item.__vModel__ + '_jnpfRelation_' + rowIndex
       }
       if (['relationFormAttr', 'popupAttr'].includes(itemConfig.jnpfKey)) {
-        newObj['relationField'] = newObj['relationField'] + '_jnpfRelation_' + rowIndex
+        let prop = newObj['relationField'].split('_jnpfTable_')[0]
+        newObj['relationField'] = prop + '_jnpfRelation_' + rowIndex
       }
       return newObj
     },
