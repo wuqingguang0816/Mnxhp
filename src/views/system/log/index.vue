@@ -103,10 +103,11 @@
                 width="120" />
               <el-table-column prop="userName" label="请求用户" width="120" />
               <el-table-column prop="ipaddress" label="请求IP" width="120" />
-              <el-table-column prop="platForm" label="请求设备" width="120" show-overflow-tooltip />
-              <el-table-column prop="requestURL" label="请求地址" show-overflow-tooltip />
-              <el-table-column prop="requestMethod" label="请求类型" width="120" />
-              <el-table-column prop="requestDuration" label="请求耗时(毫秒)" width="120" />
+              <el-table-column prop="platForm" label="请求设备" min-width="200" show-overflow-tooltip />
+              <el-table-column prop="requestURL" label="请求地址" min-width="200"
+                show-overflow-tooltip />
+              <el-table-column prop="requestMethod" label="请求类型" width="80" align="center" />
+              <el-table-column prop="requestDuration" label="请求耗时(毫秒)" width="100" />
             </JNPF-table>
           </el-tab-pane>
           <el-tab-pane label="操作日志" name="3">
@@ -117,8 +118,8 @@
               <el-table-column prop="ipaddress" label="操作IP" width="120" />
               <el-table-column prop="userName" label="操作用户" width="120" />
               <el-table-column prop="moduleName" label="操作模块" width="160" />
-              <el-table-column prop="requestMethod" label="操作类型" width="120" />
-              <el-table-column prop="requestDuration" label="操作耗时（毫秒）" width="120" />
+              <el-table-column prop="requestMethod" label="操作类型" width="80" align="center" />
+              <el-table-column prop="requestDuration" label="操作耗时(毫秒)" width="100" />
               <el-table-column prop="json" label="操作记录" min-width="200">
                 <template slot-scope="scope">
                   <el-link @click="goDetail(scope.row.json,'操作记录')" style="font-size:12px">
