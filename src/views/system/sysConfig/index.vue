@@ -9,7 +9,7 @@
                 <div class="img-list">
                   <single-img v-model="baseForm.loginIcon" tip="登录图标" />
                   <single-img v-model="baseForm.navigationIcon" tip="导航图标" />
-                  <single-img v-model="baseForm.logoIcon" tip="logo图标" />
+                  <single-img v-model="baseForm.logoIcon" tip="LOGO图标" />
                   <single-img v-model="baseForm.appIcon" tip="APP图标" />
                 </div>
               </el-form-item>
