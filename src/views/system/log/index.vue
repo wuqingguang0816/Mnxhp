@@ -109,23 +109,6 @@
               <el-table-column prop="requestDuration" label="请求耗时(毫秒)" width="120" />
             </JNPF-table>
           </el-tab-pane>
-          <el-tab-pane label="异常日志" name="4">
-            <JNPF-table v-loading="listLoading" :data="errorLogData" has-c
-              @selection-change="handleSelectionChange">
-              <el-table-column prop="creatorTime" :formatter="jnpf.tableDateFormat" label="创建时间"
-                width="120" />
-              <el-table-column prop="userName" label="创建用户" width="120" />
-              <el-table-column prop="ipaddress" label="异常IP" width="120" />
-              <el-table-column prop="moduleName" label="异常功能" width="120" />
-              <el-table-column prop="json" label="异常描述">
-                <template slot-scope="scope">
-                  <el-link @click="goDetail(scope.row.json)" style="font-size:12px">
-                    <p class="line1">{{ scope.row.json }}</p>
-                  </el-link>
-                </template>
-              </el-table-column>
-            </JNPF-table>
-          </el-tab-pane>
           <el-tab-pane label="操作日志" name="3">
             <JNPF-table v-loading="listLoading" :data="operationLogData" has-c
               @selection-change="handleSelectionChange">
@@ -136,7 +119,30 @@
               <el-table-column prop="moduleName" label="操作模块" width="160" />
               <el-table-column prop="requestMethod" label="操作类型" width="120" />
               <el-table-column prop="requestDuration" label="操作耗时（毫秒）" width="120" />
-              <el-table-column prop="json" label="操作记录" min-width="200" show-overflow-tooltip />
+              <el-table-column prop="json" label="操作记录" min-width="200">
+                <template slot-scope="scope">
+                  <el-link @click="goDetail(scope.row.json,'操作记录')" style="font-size:12px">
+                    <p class="line1">{{ scope.row.json }}</p>
+                  </el-link>
+                </template>
+              </el-table-column>
+            </JNPF-table>
+          </el-tab-pane>
+          <el-tab-pane label="异常日志" name="4">
+            <JNPF-table v-loading="listLoading" :data="errorLogData" has-c
+              @selection-change="handleSelectionChange">
+              <el-table-column prop="creatorTime" :formatter="jnpf.tableDateFormat" label="创建时间"
+                width="120" />
+              <el-table-column prop="userName" label="创建用户" width="120" />
+              <el-table-column prop="ipaddress" label="异常IP" width="120" />
+              <el-table-column prop="moduleName" label="异常功能" width="120" />
+              <el-table-column prop="json" label="异常描述" min-width="200">
+                <template slot-scope="scope">
+                  <el-link @click="goDetail(scope.row.json,'异常描述')" style="font-size:12px">
+                    <p class="line1">{{ scope.row.json }}</p>
+                  </el-link>
+                </template>
+              </el-table-column>
             </JNPF-table>
           </el-tab-pane>
           <pagination :total="total" :page.sync="listQuery.currentPage"
@@ -239,10 +245,10 @@ export default {
     handleTabClick() {
       this.reset()
     },
-    goDetail(data) {
+    goDetail(data, title) {
       this.formVisible = true
       this.$nextTick(() => {
-        this.$refs.Form.init(data)
+        this.$refs.Form.init(data, title)
       })
     },
     handleSelectionChange(val) {
