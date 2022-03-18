@@ -8,7 +8,7 @@
         <img class="login-company-logo-img" src="../../assets/images/login-company-logo.png" alt="">
       </a>
       <img class="login-banner" src="../../assets/images/login-banner.png" alt="">
-      <div class="login-left-txt">
+      <div class="login-left-txt" v-if="showTxt">
         <p class="title1">在线自动化，可视化系统开发，零代码实现80%的基础功能</p>
         <p class="title2">已帮助<span>20000+</span>家企业完成数字化转型升级</p>
         <a class="link" target="_blank" href="https://www.jnpfsoft.com">了解更多</a>
@@ -101,6 +101,7 @@ export default {
       needCode: false,
       codeLength: 4,
       redirect: undefined,
+      showTxt: false,
       otherQuery: {},
       active: 1
     }
@@ -140,6 +141,10 @@ export default {
   },
   mounted() {
     this.$store.commit('user/SET_LOGIN_LOADING', false)
+    this.setShowTxt()
+    window.onresize = () => {
+      this.setShowTxt()
+    }
   },
   destroyed() {
     document.onkeydown = function (e) {
@@ -148,6 +153,13 @@ export default {
     }
   },
   methods: {
+    setShowTxt() {
+      if (document.documentElement.clientHeight <= 840) {
+        this.showTxt = false
+      } else {
+        this.showTxt = true
+      }
+    },
     checkCapslock(e) {
       const { key } = e
       this.capsTooltip = key && key.length === 1 && key >= 'A' && key <= 'Z'
