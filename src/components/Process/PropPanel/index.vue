@@ -310,7 +310,7 @@
         </el-tab-pane>
         <el-tab-pane label="流程事件">
           <el-scrollbar class="config-scrollbar">
-            <el-form :model="startForm" class="pd-10" label-width="130px" label-position="left">
+            <el-form :model="startForm" class="pd-10" label-position="left">
               <el-form-item label="发起事件">
                 <el-switch v-model="startForm.initFuncConfig.on" />
               </el-form-item>
@@ -650,7 +650,7 @@
         </el-tab-pane>
         <el-tab-pane label="节点事件">
           <el-scrollbar class="config-scrollbar">
-            <el-form :model="approverForm" class="pd-10" label-width="130px" label-position="left">
+            <el-form :model="approverForm" class="pd-10" label-position="left">
               <el-form-item label="同意事件">
                 <el-switch v-model="approverForm.approveFuncConfig.on" />
               </el-form-item>
@@ -785,7 +785,7 @@
         </el-tab-pane>
         <el-tab-pane label="节点通知">
           <el-scrollbar class="config-scrollbar">
-            <el-form :model="approverForm" class="pd-10" label-width="80px" label-position="left">
+            <el-form :model="approverForm" class="pd-10" label-position="left">
               <el-form-item label="等待审核">
                 <el-switch v-model="approverForm.waitApproveMsgConfig.on" />
               </el-form-item>
