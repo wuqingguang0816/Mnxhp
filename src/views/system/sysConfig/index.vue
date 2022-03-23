@@ -21,7 +21,8 @@
             </el-col>
             <el-col :span="12">
               <el-form-item label="系统版本" prop="sysVersion">
-                <el-input v-model="baseForm.sysVersion" clearable placeholder="系统版本" />
+                <el-input v-model="baseForm.sysVersion" maxlength="8" clearable
+                  placeholder="系统版本" />
               </el-form-item>
             </el-col>
             <el-col :span="12">
