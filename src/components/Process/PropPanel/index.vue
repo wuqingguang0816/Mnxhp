@@ -478,56 +478,60 @@
                     <p>请求参数：taskId、taskNodeId</p>
                   </div>
                 </el-alert>
-              </el-form-item>
-              <el-form-item label="发起者的" v-if="approverForm.assigneeType === 1">
-                <el-select v-model="approverForm.managerLevel">
-                  <el-option v-for="item in 10" :key="item" :label="item===1?'直接主管':'第'+item+'级主管'"
-                    :value="item">
-                  </el-option>
-                </el-select>
-              </el-form-item>
-              <el-form-item label="表单字段" v-if="approverForm.assigneeType === 4">
-                <el-select v-model="approverForm.formField" placeholder="请选择字段">
-                  <el-option v-for="item in usedFormItems" :key="item.__vModel__"
-                    :label="item.__config__.label" :value="item.__vModel__">
-                  </el-option>
-                </el-select>
-              </el-form-item>
-              <el-form-item label="审批节点" v-if="approverForm.assigneeType === 5">
-                <el-select v-model="approverForm.nodeId" placeholder="请选择节点">
-                  <el-option v-for="item in nodeOptions" :key="item.nodeId"
-                    :label="item.properties.title" :value="item.nodeId">
-                  </el-option>
-                </el-select>
-              </el-form-item>
-              <el-form-item label="请求路径" v-if="approverForm.assigneeType === 9">
-                <el-input v-model="approverForm.getUserUrl" placeholder="请输入接口地址">
-                  <template slot="prepend">GET</template>
-                </el-input>
-              </el-form-item>
-              <el-form-item v-if="approverForm.assigneeType === 6">
-                <org-select ref="approver-role-org" type="role" title="添加角色" buttonType="button"
-                  v-model="approverForm.approverRole" class="mb-10" />
-                <org-select ref="approver-position-org" buttonType="button"
-                  v-model="approverForm.approverPos" title="添加岗位" type="position" class="mb-10" />
-                <org-select ref="approver-user-org" title="添加用户" buttonType="button"
-                  v-model="approverForm.approvers" />
-              </el-form-item>
-              <el-form-item v-if="approverForm.assigneeType === 7">
-                <el-radio-group v-model="approverForm.userType" @change="onUserTypeChange">
-                  <el-radio label="role">指定角色</el-radio>
-                  <el-radio label="position">指定岗位</el-radio>
-                  <el-radio label="user">指定用户</el-radio>
-                </el-radio-group>
-                <org-select ref="approver-role-org" type="role" title="添加角色" buttonType="button"
-                  v-model="approverForm.approverRole" v-if="approverForm.userType==='role'"
-                  key="role7" />
-                <org-select ref="approver-position-org" buttonType="button"
-                  v-model="approverForm.approverPos" title="添加岗位" type="position"
-                  v-if="approverForm.userType==='position'" key="position7" />
-                <org-select ref="approver-user-org" title="添加用户" buttonType="button"
-                  v-model="approverForm.approvers" v-if="approverForm.userType==='user'"
-                  key="user7" />
+                <el-form-item label="发起者的" style="margin-bottom:0;"
+                  v-if="approverForm.assigneeType === 1">
+                  <el-select v-model="approverForm.managerLevel">
+                    <el-option v-for="item in 10" :key="item"
+                      :label="item===1?'直接主管':'第'+item+'级主管'" :value="item">
+                    </el-option>
+                  </el-select>
+                </el-form-item>
+                <el-form-item label="表单字段" style="margin-bottom:0;"
+                  v-if="approverForm.assigneeType === 4">
+                  <el-select v-model="approverForm.formField" placeholder="请选择字段">
+                    <el-option v-for="item in usedFormItems" :key="item.__vModel__"
+                      :label="item.__config__.label" :value="item.__vModel__">
+                    </el-option>
+                  </el-select>
+                </el-form-item>
+                <el-form-item label="审批节点" style="margin-bottom:0;"
+                  v-if="approverForm.assigneeType === 5">
+                  <el-select v-model="approverForm.nodeId" placeholder="请选择节点">
+                    <el-option v-for="item in nodeOptions" :key="item.nodeId"
+                      :label="item.properties.title" :value="item.nodeId">
+                    </el-option>
+                  </el-select>
+                </el-form-item>
+                <el-form-item label="请求路径" style="margin-bottom:0;"
+                  v-if="approverForm.assigneeType === 9">
+                  <el-input v-model="approverForm.getUserUrl" placeholder="请输入接口地址">
+                    <template slot="prepend">GET</template>
+                  </el-input>
+                </el-form-item>
+                <el-form-item style="margin-bottom:0;" v-if="approverForm.assigneeType === 6">
+                  <org-select ref="approver-role-org" type="role" title="添加角色" buttonType="button"
+                    v-model="approverForm.approverRole" class="mb-10" />
+                  <org-select ref="approver-position-org" buttonType="button"
+                    v-model="approverForm.approverPos" title="添加岗位" type="position" class="mb-10" />
+                  <org-select ref="approver-user-org" title="添加用户" buttonType="button"
+                    v-model="approverForm.approvers" />
+                </el-form-item>
+                <el-form-item style="margin-bottom:0;" v-if="approverForm.assigneeType === 7">
+                  <el-radio-group v-model="approverForm.userType" @change="onUserTypeChange">
+                    <el-radio label="role">指定角色</el-radio>
+                    <el-radio label="position">指定岗位</el-radio>
+                    <el-radio label="user">指定用户</el-radio>
+                  </el-radio-group>
+                  <org-select ref="approver-role-org" type="role" title="添加角色" buttonType="button"
+                    v-model="approverForm.approverRole" v-if="approverForm.userType==='role'"
+                    key="role7" />
+                  <org-select ref="approver-position-org" buttonType="button"
+                    v-model="approverForm.approverPos" title="添加岗位" type="position"
+                    v-if="approverForm.userType==='position'" key="position7" />
+                  <org-select ref="approver-user-org" title="添加用户" buttonType="button"
+                    v-model="approverForm.approvers" v-if="approverForm.userType==='user'"
+                    key="user7" />
+                </el-form-item>
               </el-form-item>
               <el-form-item label="审批方式">
                 <el-radio v-model="approverForm.counterSign" :label="0">
