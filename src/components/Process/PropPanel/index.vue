@@ -547,7 +547,12 @@
                   </el-option>
                 </el-select>
               </el-form-item>
-              <el-form-item label="加签设置">
+              <el-form-item>
+                <div slot="label">加签设置
+                  <el-tooltip content="开启后审批单可以新增临时审批人" placement="top">
+                    <a class="el-icon-warning-outline"></a>
+                  </el-tooltip>
+                </div>
                 <el-checkbox v-model="approverForm.hasFreeApprover">允许加签</el-checkbox>
               </el-form-item>
               <el-form-item label="进度设置">
@@ -1129,7 +1134,7 @@ const typeOptions = [
     value: 2
   },
   {
-    label: '变量',
+    label: '表单变量',
     value: 4
   },
   {
@@ -1893,6 +1898,9 @@ export default {
 .form-auth-table {
   height: 100%;
   font-size: 14px;
+  >>> .el-checkbox__label {
+    font-size: 12px;
+  }
   .auth-table-header {
     background: #fafafa;
     line-height: 40px;
