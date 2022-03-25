@@ -19,11 +19,11 @@
                 <el-radio-button :label="2">腾讯</el-radio-button>
               </el-radio-group>
             </el-form-item>
-            <el-form-item label="模板编号" prop="templateId">
-              <el-input v-model="dataForm.templateId" placeholder="模板编号"></el-input>
-            </el-form-item>
             <el-form-item label="模板名称" prop="templateName">
               <el-input v-model="dataForm.templateName" placeholder="模板名称"></el-input>
+            </el-form-item>
+            <el-form-item label="模板编号" prop="templateId">
+              <el-input v-model="dataForm.templateId" placeholder="模板编号"></el-input>
             </el-form-item>
             <el-form-item label="签名内容" prop="signContent">
               <el-input v-model="dataForm.signContent" placeholder="签名内容"></el-input>
