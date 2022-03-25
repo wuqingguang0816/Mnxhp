@@ -38,12 +38,16 @@
       <div class="transfer__body" :element-loading-text="$t('common.loadingText')">
         <div class="transfer-pane">
           <div class="transfer-pane__tools">
-            <span>全部数据</span>
+            <el-input placeholder="请输入关键词查询" v-model="keyword" @keyup.enter.native="search"
+              clearable class="search-input">
+              <el-button slot="append" icon="el-icon-search" @click="search"></el-button>
+            </el-input>
           </div>
           <div class="transfer-pane__body">
-            <el-tree :data="treeData" :props="props" highlight-current check-on-click-node
+            <el-tree :data="treeData" :props="props" check-on-click-node
               :expand-on-click-node="false" default-expand-all @node-click="handleNodeClick"
-              class="JNPF-common-el-tree" node-key="id" v-loading="loading">
+              class="JNPF-common-el-tree" node-key="id" v-loading="loading" ref="tree"
+              :filter-node-method="filterNode">
               <span class="custom-tree-node" slot-scope="{ node, data }">
                 <i :class="data.icon"></i>
                 <span class="text">{{node.label}}</span>
@@ -116,6 +120,7 @@ export default {
     return {
       treeData: [],
       allList: [],
+      keyword: '',
       innerValue: '',
       visible: false,
       loading: false,
@@ -239,8 +244,17 @@ export default {
     },
     openDialog() {
       if (this.selectDisabled) return
+      this.keyword = ''
+      this.search()
       this.setDefault()
       this.visible = true
+    },
+    search() {
+      this.$refs.tree && this.$refs.tree.filter(this.keyword)
+    },
+    filterNode(value, data) {
+      if (!value) return true;
+      return data[this.props.label].indexOf(value) !== -1;
     },
     getNodePath(node) {
       let fullPath = []
