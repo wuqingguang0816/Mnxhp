@@ -115,8 +115,8 @@
               @selection-change="handleSelectionChange">
               <el-table-column prop="creatorTime" :formatter="jnpf.tableDateFormat" label="操作时间"
                 width="120" />
-              <el-table-column prop="ipaddress" label="操作IP" width="120" />
               <el-table-column prop="userName" label="操作用户" width="120" />
+              <el-table-column prop="ipaddress" label="操作IP" width="120" />
               <el-table-column prop="moduleName" label="操作模块" width="160" />
               <el-table-column prop="requestMethod" label="操作类型" width="80" align="center" />
               <el-table-column prop="requestDuration" label="耗时(毫秒)" width="80" />
