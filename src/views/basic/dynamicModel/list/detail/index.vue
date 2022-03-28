@@ -140,13 +140,14 @@ export default {
       for (let i = 0; i < realList.length; i++) {
         const item = realList[i];
         let modelId = '', id = "", field = "", jnpfKey = '', activeItem = {}
+        let prop = item.relationField.split('_jnpfTable_')[0]
         const loop = list => {
           for (let i = 0; i < list.length; i++) {
-            if (item.relationField === list[i].__vModel__) {
+            if (prop === list[i].__vModel__) {
               jnpfKey = list[i].__config__.jnpfKey
               modelId = list[i].__config__.jnpfKey === 'relationForm' ? list[i].modelId : list[i].interfaceId
               id = list[i].__config__.defaultValue
-              field = list[i].__vModel__
+              field = list[i].__config__.tableName ? list[i].__vModel__ + '_jnpfTable_' + list[i].__config__.tableName + (list[i].__config__.isSubTable ? '0' : "1") : list[i].__vModel__
               activeItem = list[i]
               break
             }
