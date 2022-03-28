@@ -247,7 +247,8 @@ export default {
         this.fullName = res.data.fullName
         if (data.formType == 1) {
           if (res.data.formUrl) {
-            this.currentView = (resolve) => require([`@/views/${res.data.formUrl}`], resolve)
+            const formUrl = res.data.formUrl.replace(/\s*/g, "")
+            this.currentView = (resolve) => require([`@/views/${formUrl}`], resolve)
           } else {
             this.currentView = (resolve) => require([`@/views/workFlow/workFlowForm/${data.enCode}`], resolve)
           }
