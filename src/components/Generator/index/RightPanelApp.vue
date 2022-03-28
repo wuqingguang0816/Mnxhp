@@ -1216,8 +1216,7 @@ export default {
     },
     getRelationFieldOptions() {
       if (!this.activeData.relationField || !this.relationFormOptions.length) return
-      let prop = this.activeData.relationField.split('_jnpfTable_')[0]
-      let list = this.relationFormOptions.filter(o => o.__vModel__ === prop)
+      let list = this.relationFormOptions.filter(o => o.prop === this.activeData.relationField)
       if (!list.length) return
       let item = list[0]
       if (!item.modelId) return
