@@ -290,14 +290,12 @@ export default {
     },
     templateDownload() {
       TemplateDownload().then(res => {
-        if (!res.data.url) return
-        window.location.href = this.define.comUrl + res.data.url
+        this.jnpf.downloadFile(res.data.url)
       })
     },
     exportExceptionData() {
       ExportExceptionData({ list: this.resultList }).then(res => {
-        if (!res.data.url) return
-        window.location.href = this.define.comUrl + res.data.url
+        this.jnpf.downloadFile(res.data.url)
       })
     },
     beforeUpload(file) {

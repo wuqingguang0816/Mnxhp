@@ -297,7 +297,7 @@ export default {
     exportExcel() {
       ExportExcel(this.dataForm.id).then(res => {
         if (res.data && res.data.url) {
-          window.location.href = this.define.comUrl + res.data.url
+          this.jnpf.downloadFile(res.data.url)
         } else {
           this.$message({ message: '导出失败', type: 'error', duration: 1500 })
         }
@@ -373,7 +373,7 @@ export default {
     },
     download(id) {
       getDownloadUrl('workFlow', id).then(res => {
-        if (res.data.url) window.location.href = this.define.comUrl + res.data.url
+        this.jnpf.downloadFile(res.data.url)
       })
     }
   }

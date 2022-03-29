@@ -40,7 +40,7 @@ export default {
       // 点击下载文件
       // if (!file.fileId) return
       // getDownloadUrl(this.type, file.fileId).then(res => {
-      //   window.location.href = this.define.comUrl + res.data.url
+      //   this.jnpf.downloadFile(res.data.url)
       // })
     },
     handleRemove(file, fileList) {

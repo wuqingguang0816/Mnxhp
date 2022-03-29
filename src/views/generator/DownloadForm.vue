@@ -88,7 +88,7 @@ export default {
           }
           DownloadCode(this.id, query).then(res => {
             if (!res.data || !res.data.url) return
-            window.location.href = this.define.comUrl + res.data.url
+            this.jnpf.downloadFile(res.data.url)
             this.$emit('close')
           })
         }

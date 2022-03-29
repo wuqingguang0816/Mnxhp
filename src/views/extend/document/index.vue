@@ -456,7 +456,7 @@ export default {
     // 下载文件
     handleDownLoad(id) {
       Download(id).then(res => {
-        window.location.href = this.define.comUrl + res.data.url
+        this.jnpf.downloadFile(res.data.url)
       })
     },
     // 打开文件夹

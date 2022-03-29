@@ -116,8 +116,7 @@ export default {
       }).catch(() => { })
     },
     handleDownload(fileUrl) {
-      if (!fileUrl) return
-      window.location.href = this.define.comUrl + fileUrl
+      this.jnpf.downloadFile(fileUrl)
     },
     search() {
       this.listQuery.currentPage = 1
