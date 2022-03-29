@@ -62,7 +62,6 @@
         <el-tab-pane label="列表属性" name="column" />
       </el-tabs>
       <div class="field-box">
-
         <div class="searchList" v-show="currentTab==='search'">
           <el-table :data="searchOptions" class="JNPF-common-table" height="100%"
             @selection-change="searchSelectionChange" ref="searchTable">
@@ -103,7 +102,7 @@
                     @change="dataTypeChange">
                     <el-option label="数据字典" value="dictionary"></el-option>
                     <el-option label="远端数据" value="api"></el-option>
-                    <el-option label="公司数据" value="organize"></el-option>
+                    <el-option label="组织数据" value="organize"></el-option>
                     <el-option label="部门数据" value="department"></el-option>
                   </el-select>
                 </el-form-item>
@@ -178,6 +177,7 @@
                 </el-form-item>
               </template>
               <el-divider>按钮配置</el-divider>
+              <p class="mb-10">系统按钮区</p>
               <el-checkbox-group v-model="btnsList" class="btnsList">
                 <el-checkbox :label="item.value" v-for="item in btnsOption" :key="item.value">
                   <span class="btn-label">{{ item.value | btnText }}</span>
@@ -190,6 +190,30 @@
                   <el-input v-model="item.label" />
                 </el-checkbox>
               </el-checkbox-group>
+              <template v-if="modelType==1">
+                <p class="mt-10 mb-10">自定义按钮区</p>
+                <div class="custom-btns-list">
+                  <draggable :list="columnData.customBtnsList" :animation="340" group="customItem"
+                    handle=".option-drag">
+                    <div v-for="(item, index) in columnData.customBtnsList" :key="index"
+                      class="custom-item">
+                      <div class="custom-line-icon option-drag">
+                        <i class="el-icon-s-operation" />
+                      </div>
+                      <p class="custom-line-value">{{item.value}}</p>
+                      <el-input v-model="item.label" placeholder="按钮名称" size="small" />
+                      <el-button class="custom-btn" @click="editFunc(item)">脚本事件</el-button>
+                      <div class="close-btn custom-line-icon"
+                        @click="columnData.customBtnsList.splice(index, 1)">
+                        <i class="el-icon-remove-outline" />
+                      </div>
+                    </div>
+                  </draggable>
+                </div>
+                <div>
+                  <el-button type="text" icon="el-icon-plus" @click="addCustomBtn">添加按钮</el-button>
+                </div>
+              </template>
               <el-divider>权限设置</el-divider>
               <el-form-item label="按钮权限">
                 <el-switch v-model="columnData.useBtnPermission"></el-switch>
@@ -208,10 +232,14 @@
         </el-scrollbar>
       </div>
     </div>
+    <form-script :visible.sync="formScriptVisible" :value="activeItem.func"
+      @updateScript="updateScript" />
   </div>
 </template>
 <script>
 import Sortable from 'sortablejs'
+import draggable from 'vuedraggable'
+import FormScript from './FormScript'
 import { getDrawingList } from '@/components/Generator/utils/db'
 import { noColumnShowList, noSearchList, useInputList, useDateList } from '@/components/Generator/generator/comConfig'
 import { getDataInterfaceSelector } from '@/api/systemData/dataInterface'
@@ -225,6 +253,8 @@ const getSearchType = item => {
   if (fuzzyList.includes(jnpfKey)) return 2
   return 1
 }
+
+const defaultFunc = '({ data, index, request, toast, refresh }) => {\r\n   \r\n}'
 
 const defaultColumnData = {
   searchList: [], // 查询条件
@@ -247,6 +277,7 @@ const defaultColumnData = {
   useFormPermission: false,
   useBtnPermission: false,
   useDataPermission: false,
+  customBtnsList: [],
   btnsList: [
     { value: 'add', icon: 'el-icon-plus', label: '新增' }
   ],  // 按钮
@@ -264,6 +295,7 @@ export default {
     },
     modelType: ''
   },
+  components: { draggable, FormScript },
   data() {
     return {
       currentTab: 'column',
@@ -291,7 +323,9 @@ export default {
         { url: require('@/assets/images/generator/columnType2.png'), value: 2, name: '左侧树形+普通表格' },
         { url: require('@/assets/images/generator/columnType3.png'), value: 3, name: '分组表格' },
       ],
-      dataInterfaceSelector: []
+      dataInterfaceSelector: [],
+      formScriptVisible: false,
+      activeItem: {}
     }
   },
   filters: {
@@ -488,6 +522,24 @@ export default {
       this.columnData.treePropsValue = 'id'
       this.columnData.treePropsChildren = 'children'
       this.columnData.treePropsLabel = 'fullName'
+    },
+    addCustomBtn() {
+      const id = this.jnpf.idGenerator()
+      this.columnData.customBtnsList.push({
+        value: 'btn_' + id,
+        label: '按钮' + id,
+        func: ''
+      })
+    },
+    editFunc(item) {
+      if (!item.func) item.func = defaultFunc
+      this.activeItem = item
+      this.$nextTick(() => {
+        this.formScriptVisible = true
+      })
+    },
+    updateScript(func) {
+      this.activeItem.func = func
     }
   }
 }

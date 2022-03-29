@@ -86,18 +86,15 @@
                         </span>
                         <el-dropdown-menu slot="dropdown">
                           <template v-if="[2,3,4].indexOf(scope.row.type)>-1">
-                            <el-dropdown-item
-                              v-if="listQuery.category==='Web' && scope.row.isButtonAuthorize === 1"
+                            <el-dropdown-item v-if="scope.row.isButtonAuthorize === 1"
                               @click.native="handleButtonAuthorize(scope.row)">
                               按钮权限
                             </el-dropdown-item>
-                            <el-dropdown-item
-                              v-if="listQuery.category==='Web' && scope.row.isColumnAuthorize === 1"
+                            <el-dropdown-item v-if="scope.row.isColumnAuthorize === 1"
                               @click.native="handleColumnAuthorize(scope.row)">
                               列表权限
                             </el-dropdown-item>
-                            <el-dropdown-item
-                              v-if="listQuery.category==='Web' && scope.row.isFormAuthorize === 1"
+                            <el-dropdown-item v-if="scope.row.isFormAuthorize === 1"
                               @click.native="handleFormAuthorize(scope.row)">
                               表单权限
                             </el-dropdown-item>
@@ -270,7 +267,7 @@ export default {
         type: 'warning'
       }).then(() => {
         exportMenu(id).then(res => {
-          if (res.data.url) window.location.href = this.define.comUrl + res.data.url
+          this.jnpf.downloadFile(res.data.url)
         })
       }).catch(() => { });
     }

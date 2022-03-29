@@ -15,12 +15,12 @@
           <el-input v-model="scope.row.filedId" placeholder="输入字段"></el-input>
         </template>
       </el-table-column>
-      <!-- <el-table-column prop="required" label="必填" width="50">
+      <el-table-column prop="required" label="必填" width="50" align="center">
         <template slot-scope="scope">
           <el-checkbox :checked="scope.row.required"
             @change='scope.row.required?scope.row.required=false:scope.row.required=true' />
         </template>
-      </el-table-column> -->
+      </el-table-column>
       <el-table-column label="操作" width="50">
         <template slot-scope="scope">
           <el-button size="mini" type="text" class="JNPF-table-delBtn"

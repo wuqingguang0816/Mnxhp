@@ -1,6 +1,7 @@
 import store from '@/store'
 import dayjs from 'dayjs'
 import context from '@/main'
+import define from '@/utils/define'
 const STORAGEPREFIX = 'jnpf_'
 const STORAGETYPE = window.localStorage
 
@@ -351,6 +352,14 @@ const jnpf = {
     const hasPermission = btnList.some(btn => btn.enCode === enCode)
     if (hasPermission) return true
     return false
+  },
+  downloadFile(url) {
+    if (!url) return
+    const baseUrl = url.indexOf('http') > -1 ? '' : define.comUrl
+    const a = document.createElement('a')
+    a.setAttribute('download', '')
+    a.setAttribute('href', baseUrl + url)
+    a.click()
   }
 }
 export default jnpf

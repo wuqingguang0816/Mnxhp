@@ -1,5 +1,5 @@
 <template>
-  <section class="app-main">
+  <section class="app-main" :copyright="sysConfig.copyright">
     <transition name="fade-transform" mode="out-in">
       <keep-alive :include="useCache?cachedViews:[]">
         <router-view :key="key" />
@@ -20,6 +20,9 @@ export default {
     },
     key() {
       return this.$route.path
+    },
+    sysConfig() {
+      return this.$store.state.settings.sysConfig
     }
   }
 }
@@ -39,7 +42,7 @@ export default {
     center #ebeef5;
   background-size: 600px 450px;
   &::before {
-    content: 'Copyright © 2021 引迈信息技术有限公司出品';
+    content: attr(copyright);
     font-size: 14px;
     text-align: center;
     color: #999;

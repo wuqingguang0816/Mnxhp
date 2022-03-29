@@ -75,6 +75,9 @@ export default {
         enCode: '',
         sortCode: 0,
         enabledMark: 1,
+        type: 0,
+        linkType: null,
+        customUrl: '',
         category: '',
         description: ""
       },

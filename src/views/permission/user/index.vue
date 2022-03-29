@@ -56,26 +56,23 @@
         <JNPF-table v-loading="listLoading" :data="tableData">
           <el-table-column prop="account" label="账号" width="100" />
           <el-table-column prop="realName" label="姓名" width="100" />
-          <el-table-column label="性别" width="90" align="center">
+          <el-table-column prop="gender" label="性别" width="90" align="center">
             <template slot-scope="scope" sortable>
               <span>{{ scope.row.gender ==1 ? '男': ( scope.row.gender == 2 ? '女' : '保密') }}</span>
             </template>
           </el-table-column>
           <el-table-column prop="mobilePhone" label="手机" width="120" />
-          <el-table-column prop="department" label="所属部门" />
+          <el-table-column prop="organize" label="所属组织" min-width="200" show-overflow-tooltip />
           <el-table-column prop="creatorTime" label="创建时间" :formatter="jnpf.tableDateFormat"
             width="120" />
           <el-table-column prop="sortCode" label="排序" width="70" align="center" />
-          <el-table-column label="状态" width="70" align="center">
+          <el-table-column prop="enabledMark" label="状态" width="70" align="center">
             <template slot-scope="scope">
-              <el-tag :type="scope.row.enabledMark == 1 ? 'success' : 'danger'" disable-transitions>
-                {{scope.row.enabledMark==1?'正常':'停用'}}</el-tag>
-            </template>
-          </el-table-column>
-          <el-table-column label="锁定状态" width="80" align="center">
-            <template slot-scope="scope">
-              <el-tag :type="scope.row.lockMark == 1 ? 'warning' : 'success'" disable-transitions>
-                {{scope.row.lockMark==1?'已锁定':'未锁定'}}</el-tag>
+              <el-tag type="success" disable-transitions v-if="scope.row.enabledMark == 1">正常
+              </el-tag>
+              <el-tag type="warning" disable-transitions v-else-if="scope.row.enabledMark == 2">锁定
+              </el-tag>
+              <el-tag type="danger" disable-transitions v-else>禁用</el-tag>
             </template>
           </el-table-column>
           <el-table-column label="操作" width="150">
@@ -93,7 +90,7 @@
                       {{$t('user.resetPassword')}}
                     </el-dropdown-item>
                     <el-dropdown-item @click.native="unlockUser(scope.row.id)"
-                      v-if="scope.row.lockMark == 1">解除锁定</el-dropdown-item>
+                      v-if="scope.row.enabledMark == 2">解除锁定</el-dropdown-item>
                   </el-dropdown-menu>
                 </el-dropdown>
               </tableOpts>

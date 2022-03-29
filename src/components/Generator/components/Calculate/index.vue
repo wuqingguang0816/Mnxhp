@@ -62,7 +62,7 @@ export default {
      */
     execRPN() {
       const temp = this.RPN_EXP.map(t => typeof t === 'object' ? this.getFormVal(t.__vModel__) : t)
-      this.innerValue = calcRPN(temp)
+      this.innerValue = Number.parseFloat(calcRPN(temp)).toFixed(2)
       if (isNaN(this.innerValue)) this.innerValue = 0
       this.$emit('input', this.innerValue)
       if (this.rowIndex >= 0 && this.componentVModel && this.tableVModel) {

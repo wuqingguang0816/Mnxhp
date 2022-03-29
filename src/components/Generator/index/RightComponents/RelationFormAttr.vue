@@ -12,9 +12,10 @@
         :precision="0" controls-position="right" />
     </el-form-item>
     <el-form-item label="关联功能">
-      <el-select v-model="activeData.relationField" placeholder="请选择关联功能" clearable>
-        <el-option v-for="item in options" :key="item.__vModel__" :label="item.__config__.label"
-          :value="item.__vModel__" />
+      <el-select v-model="activeData.relationField" placeholder="请选择关联功能" clearable
+        @change="onRelationFieldChange">
+        <el-option v-for="(item,i) in options" :key="i" :label="item.__config__.label"
+          :value="item.prop" />
       </el-select>
     </el-form-item>
     <el-form-item label="关联字段">
@@ -39,16 +40,6 @@ export default {
       fieldOptions: [],
     }
   },
-  watch: {
-    'activeData.relationField': function (val) {
-      this.activeData.showField = ''
-      if (!val) {
-        this.fieldOptions = []
-        return
-      }
-      this.getFieldOptions()
-    }
-  },
   methods: {
     getOptions() {
       const drawingList = getDrawingList() || []
@@ -66,17 +57,26 @@ export default {
         }
       }
       loop(drawingList)
-      this.options = list
+      this.options = list.map(o => ({
+        ...o,
+        prop: o.__config__ && o.__config__.tableName ? o.__vModel__ + '_jnpfTable_' + o.__config__.tableName + (o.__config__.isSubTable ? '0' : "1") : o.__vModel__
+      }))
       this.getFieldOptions()
     },
     getFieldOptions() {
       if (!this.activeData.relationField || !this.options.length) return
-      let item = this.options.filter(o => o.__vModel__ === this.activeData.relationField)[0]
+      let list = this.options.filter(o => o.prop === this.activeData.relationField)
+      if (!list.length) return
+      let item = list[0]
       if (!item.modelId) return
-      // this.$message.warning('请先选择关联表单的‘关联功能’属性')
       getFormDataFields(item.modelId).then(res => {
         this.fieldOptions = res.data.list
       })
+    },
+    onRelationFieldChange(val) {
+      this.activeData.showField = ''
+      if (!val) return this.fieldOptions = []
+      this.getFieldOptions()
     },
     visibleChange(val) {
       if (!val) return

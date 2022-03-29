@@ -47,6 +47,7 @@ function emitEvents(confClone) {
 }
 
 function buildDataObject(confClone, dataObject, formData) {
+  const jnpfKey = confClone.__config__.jnpfKey
   Object.keys(confClone).forEach(key => {
     const val = confClone[key]
     if (key === '__vModel__') {
@@ -64,14 +65,14 @@ function buildDataObject(confClone, dataObject, formData) {
       dataObject.attrs[key] = val
     }
   })
-  if (confClone.__config__.jnpfKey === 'JNPFText') {
+  if (jnpfKey === 'JNPFText') {
     vModel.call(this, dataObject, confClone.__config__.defaultValue)
   }
-  if (['calculate', 'table', 'barcode', 'qrcode'].includes(confClone.__config__.jnpfKey)) {
+  if (['calculate', 'table', 'barcode', 'qrcode'].includes(jnpfKey)) {
     dataObject.attrs['formData'] = formData
   }
-  if (confClone.__config__.jnpfKey === 'relationForm' || confClone.__config__.jnpfKey === 'relationFlow') {
-    dataObject.attrs['field'] = confClone.__vModel__
+  if (['relationForm', 'popupSelect'].includes(jnpfKey)) {
+    dataObject.attrs['field'] = confClone.__config__.tableName ? confClone.__vModel__ + '_jnpfTable_' + confClone.__config__.tableName + (confClone.__config__.isSubTable ? '0' : "1") : confClone.__vModel__
   }
 
   // 清理属性

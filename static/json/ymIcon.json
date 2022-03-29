@@ -6,6 +6,34 @@
   "description": "",
   "glyphs": [
     {
+      "icon_id": "28238387",
+      "name": "global-role",
+      "font_class": "global-role",
+      "unicode": "e686",
+      "unicode_decimal": 59014
+    },
+    {
+      "icon_id": "28168769",
+      "name": "group",
+      "font_class": "group",
+      "unicode": "e65a",
+      "unicode_decimal": 58970
+    },
+    {
+      "icon_id": "27761298",
+      "name": "pageDesign",
+      "font_class": "pageDesign",
+      "unicode": "e684",
+      "unicode_decimal": 59012
+    },
+    {
+      "icon_id": "27761299",
+      "name": "customUrl",
+      "font_class": "customUrl",
+      "unicode": "e685",
+      "unicode_decimal": 59013
+    },
+    {
       "icon_id": "27371027",
       "name": "systemTemplate",
       "font_class": "systemTemplate",
@@ -501,13 +529,6 @@
       "font_class": "information",
       "unicode": "e62e",
       "unicode_decimal": 58926
-    },
-    {
-      "icon_id": "26303061",
-      "name": "group",
-      "font_class": "group",
-      "unicode": "e65a",
-      "unicode_decimal": 58970
     },
     {
       "icon_id": "22001620",

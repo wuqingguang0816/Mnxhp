@@ -19,5 +19,6 @@ const getters = {
   socket: state => state.user.socket,
   hasTable: state => state.generator.hasTable,
   leftMenuList: state => state.user.leftMenuList,
+  sysConfig: state => state.settings.sysConfig,
 }
 export default getters

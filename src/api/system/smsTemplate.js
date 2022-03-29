@@ -54,10 +54,11 @@ export function getTemplateParams(id) {
   })
 }
 // 获取下拉框列表
-export function getSelector() {
+export function getSelector(data) {
   return request({
     url: '/api/system/SmsTemplate/Selector',
-    method: 'GET'
+    method: 'GET',
+    data
   })
 }
 // 更新状态

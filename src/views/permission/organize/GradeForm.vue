@@ -4,7 +4,7 @@
     <el-form ref="dataForm" v-loading="formLoading" :model="dataForm" :rules="dataRule"
       label-position="top">
       <el-form-item label="分级管理员" prop="userId">
-        <user-select v-model="dataForm.userId" placeholder="选择分级管理员" multiple />
+        <user-select v-model="userId" placeholder="选择分级管理员" multiple @change="onChange" />
       </el-form-item>
       <el-form-item label="组织名称">
         <el-input v-model="fullName" readonly placeholder="组织名称" />
@@ -57,6 +57,7 @@ export default {
         subLayerDelete: 0,
         // description: ''
       },
+      userId: [],
       fullName: '',
       dataRule: {
         userId: [
@@ -69,6 +70,7 @@ export default {
     init(id, fullName) {
       this.visible = true
       this.fullName = fullName
+      this.userId = []
       this.dataForm = {
         userId: '',
         organizeId: '',
@@ -86,9 +88,14 @@ export default {
         getOrganizeTrator(id).then(res => {
           if (!res.data) return this.formLoading = false
           this.dataForm = res.data
+          this.userId = this.dataForm.userId ? this.dataForm.userId.split(',') : []
           this.formLoading = false
         })
       })
+    },
+    onChange(val) {
+      if (!val) return this.dataForm.userId = ''
+      this.dataForm.userId = val.join(',')
     },
     dataFormSubmit() {
       this.$refs['dataForm'].validate((valid) => {

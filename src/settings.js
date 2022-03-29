@@ -31,6 +31,14 @@ module.exports = {
    * The default is only used in the production env
    * If you want to also use it in dev, you can pass ['production', 'development']
    */
+  sysConfig: {
+    sysVersion: 'V3.3',
+    copyright: 'Copyright @ 2022 引迈信息技术有限公司版权所有',
+    navigationIcon: '',
+    logoIcon: '',
+    loginIcon: '',
+    sysName: 'JNPF快速开发平台'
+  },
   themeClass: 'blue',
   layoutType: 'classic',
   slideClass: 'dark',

@@ -1,9 +1,12 @@
 <template>
-  <el-select :value="valueTitle" :clearable="clearable" :disabled="disabled" @clear="clearHandle"
+  <el-select v-model="valueTitle" :clearable="clearable" :disabled="disabled" @clear="clearHandle"
     ref='elSelect' :placeholder="placeholder" :popper-class="`JNPF-select-tree ${themeClass}`"
     @focus="selectFocus" :filterable="filterable" :filter-method="selectFilter"
-    class="JNPF-selectTree" @visible-change="visibleChange">
-    <el-option :value="valueTitle" :label="valueTitle" class="options">
+    class="JNPF-selectTree" @visible-change="visibleChange" :multiple="multiple"
+    :collapse-tags="collapseTags" @remove-tag="removeTag" :key="key">
+    <el-option v-for="item in selectOptions" :key="item.id" :label="item[props.label]"
+      :value="item[props.value]" style="display:none"></el-option>
+    <el-option :value="optionTitle" :label="optionTitle" class="options">
       <el-tree id="tree-option" ref="selectTree" :accordion="accordion" :data="options"
         :default-expand-all="defaultExpandAll" :props="props" :node-key="props.value"
         :default-expanded-keys="defaultExpandedKey" @node-click="handleNodeClick"
@@ -48,7 +51,9 @@ export default {
     options: { type: Array, default: () => [] },
     placeholder: { type: String, default: '请选择' },
     // 初始值
-    value: '',
+    value: {
+      type: [String, Array]
+    },
     // 可清空选项
     clearable: { type: Boolean, default: false },
     // 能否搜索
@@ -62,6 +67,10 @@ export default {
     accordion: { type: Boolean, default: false },
     defaultExpandAll: { type: Boolean, default: true },
     multiple: { type: Boolean, default: false }, // 是否多选，默认单选
+    collapseTags: {
+      type: Boolean,
+      default: false
+    },
   },
   computed: {
     ...mapState({
@@ -71,7 +80,10 @@ export default {
   data() {
     return {
       valueTitle: '',
-      defaultExpandedKey: []
+      defaultExpandedKey: [],
+      selectOptions: [],
+      optionTitle: "",
+      key: +new Date()
     }
   },
   mounted() {
@@ -99,14 +111,15 @@ export default {
       if (this.value) {
         if (this.multiple) {
           setTimeout(() => {
-            let arr = this.value.split(','), titleList = []
-            this.$refs.selectTree.setCheckedKeys(arr)
+            let titleList = []
+            this.$refs.selectTree.setCheckedKeys(this.value)
             if (this.lastLevel) {
-              titleList = this.$refs.selectTree.getCheckedNodes(true).map(o => o[this.props.label])
+              titleList = this.$refs.selectTree.getCheckedNodes(true)
             } else {
-              titleList = this.$refs.selectTree.getCheckedNodes().map(o => o[this.props.label])
+              titleList = this.$refs.selectTree.getCheckedNodes()
             }
-            this.valueTitle = titleList.join(',')
+            this.selectOptions = titleList
+            this.valueTitle = titleList.map(o => o[this.props.value])
           }, 10)
         } else {
           setTimeout(() => {
@@ -116,10 +129,11 @@ export default {
           }, 10);
         }
       } else {
-        this.valueTitle = ''
         if (this.multiple) {
+          this.valueTitle = []
           this.$refs.selectTree.setCheckedKeys([])
         } else {
+          this.valueTitle = ''
           this.$refs.selectTree.setCurrentKey(null)
         }
       }
@@ -171,18 +185,27 @@ export default {
           titleList.push(e[this.props.label])
         }
       }
-      this.valueTitle = titleList.join(',')
-      this.$emit('input', selectedData.join(','), selectedTextData)
-      this.$emit('change', selectedData.join(','), selectedTextData)
+      this.$emit('input', selectedData, selectedTextData)
+      this.$emit('change', selectedData, selectedTextData)
+    },
+    removeTag(tag) {
+      this.$refs.selectTree.setChecked(tag, false)
+      this.check()
     },
     // 清除选中
     clearHandle() {
-      this.valueTitle = ''
-      this.$emit('input', '')
-      this.$emit('change', '')
+      if (this.multiple) {
+        this.valueTitle = []
+        this.$emit('input', [])
+        this.$emit('change', [])
+        this.$refs.selectTree.setCheckedKeys([])
+      } else {
+        this.valueTitle = ''
+        this.$emit('input', '')
+        this.$emit('change', '')
+      }
       this.defaultExpandedKey = []
       this.clearSelected()
-      if (this.multiple) this.$refs.selectTree.setCheckedKeys([])
     },
     // 清空选中样式
     clearSelected() {
@@ -195,6 +218,9 @@ export default {
   watch: {
     value(val) {
       this.initHandle()
+    },
+    multiple(val) {
+      this.key = +new Date()
     },
     options(val) {
       if (this.value) this.initHandle()

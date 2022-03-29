@@ -316,22 +316,21 @@ export default {
     buildRules(componentList, rules) {
       componentList.forEach(cur => {
         const config = cur.__config__
-        if (Array.isArray(config.regList)) {
-          if (config.required) {
-            const required = { required: config.required, message: cur.placeholder }
-            if (Array.isArray(config.defaultValue)) {
-              required.type = 'array'
-              required.message = `请至少选择一个${config.label}`
-            }
-            required.message === undefined && (required.message = `${config.label}不能为空`)
-            config.regList.push(required)
+        if (!Array.isArray(config.regList)) config.regList = []
+        if (config.required) {
+          const required = { required: config.required, message: cur.placeholder }
+          if (Array.isArray(config.defaultValue)) {
+            required.type = 'array'
+            required.message = `请至少选择一个${config.label}`
           }
-          rules[cur.__vModel__] = config.regList.map(item => {
-            item.pattern && (item.pattern = eval(item.pattern))
-            item.trigger = config.trigger || 'blur'
-            return item
-          })
+          required.message === undefined && (required.message = `${config.label}不能为空`)
+          config.regList.push(required)
         }
+        rules[cur.__vModel__] = config.regList.map(item => {
+          item.pattern && (item.pattern = eval(item.pattern))
+          item.trigger = config.trigger || 'blur'
+          return item
+        })
         if (config.children && config.jnpfKey !== 'table') this.buildRules(config.children, rules)
       })
     },

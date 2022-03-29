@@ -96,3 +96,33 @@ export function CandidateUser(id, data) {
     data
   })
 }
+// 批量通过、拒绝、转办  batchType 0-通过 1-拒绝 2-转办
+export function BatchOperation(data) {
+  return request({
+    url: `api/workflow/Engine/FlowBefore/BatchOperation`,
+    method: 'post',
+    data
+  })
+}
+// 获取批量审批流程
+export function getBatchFlowSelector() {
+  return request({
+    url: `api/workflow/Engine/FlowBefore/BatchFlowSelector`,
+    method: 'get'
+  })
+}
+// 获取流程节点列表
+export function getNodeSelector(id) {
+  return request({
+    url: `api/workflow/Engine/FlowBefore/NodeSelector/${id}`,
+    method: 'get'
+  })
+}
+// 获取批量审批候选人
+export function BatchCandidate(data) {
+  return request({
+    url: `api/workflow/Engine/FlowBefore/BatchCandidate`,
+    method: 'get',
+    data
+  })
+}

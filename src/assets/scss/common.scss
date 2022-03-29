@@ -390,6 +390,42 @@
   }
 }
 
+.JNPF-dialog-notice {
+  .el-dialog__body {
+    padding: 0 20px !important;
+  }
+
+  .notice-wrapper {
+    .title {
+      font-size: 18px;
+      font-weight: normal;
+      text-align: center;
+    }
+
+    .info {
+      line-height: 35px;
+      border-bottom: 1px solid #dcdfe6;
+      text-align: center;
+
+      span {
+        padding: 0 10px;
+      }
+    }
+
+    .main {
+      margin: 10px 0;
+      line-height: 22px;
+      min-height: 300px;
+      overflow: auto;
+    }
+
+    .file-list {
+      padding-top: 10px;
+      border-top: 1px solid #dcdfe6;
+    }
+  }
+}
+
 .JNPF-dialog-tree {
   .el-dialog {
     .el-dialog__body {
@@ -1477,6 +1513,7 @@
       line-height: 20px;
       font-size: 0;
       margin-bottom: 12px;
+      cursor: pointer;
 
       &::after {
         content: "";
@@ -1940,31 +1977,8 @@ textarea.el-textarea__inner {
 .popupSelect-container {
   width: 100%;
 
-  .popupSelect-input {
+  &>.el-select {
     width: 100%;
-    cursor: pointer;
-
-    input {
-      cursor: pointer;
-    }
-
-    .el-icon-circle-close {
-      display: none;
-    }
-
-    &:hover {
-      .el-icon-circle-close {
-        display: block;
-      }
-
-      .el-input__validateIcon {
-        display: none;
-      }
-
-      .el-icon-arrow-down.clearable {
-        display: none;
-      }
-    }
   }
 
   .search-input {

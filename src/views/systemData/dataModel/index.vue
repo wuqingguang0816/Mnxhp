@@ -180,7 +180,7 @@ export default {
         type: 'warning'
       }).then(() => {
         exportTpl(this.dataBase, id).then(res => {
-          if (res.data.url) window.location.href = this.define.comUrl + res.data.url
+          this.jnpf.downloadFile(res.data.url)
         })
       }).catch(() => { });
     },

@@ -184,7 +184,6 @@ export default {
   data() {
     return {
       visible: false,
-      loading: false,
       activeStep: 0,
       dataForm: {
         id: '',

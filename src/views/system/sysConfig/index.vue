@@ -4,6 +4,16 @@
       <el-tabs v-model="activeName" type="border-card" class="JNPF-el_tabs">
         <el-tab-pane label="基本设置" name="first">
           <el-row :gutter="20">
+            <el-col :span="24">
+              <el-form-item label="系统图标">
+                <div class="img-list">
+                  <single-img v-model="baseForm.loginIcon" tip="登录图标" />
+                  <single-img v-model="baseForm.navigationIcon" tip="导航图标" />
+                  <single-img v-model="baseForm.logoIcon" tip="LOGO图标" />
+                  <single-img v-model="baseForm.appIcon" tip="APP图标" />
+                </div>
+              </el-form-item>
+            </el-col>
             <el-col :span="12">
               <el-form-item label="系统名称" prop="sysName">
                 <el-input v-model="baseForm.sysName" clearable placeholder="系统名称" />
@@ -11,7 +21,8 @@
             </el-col>
             <el-col :span="12">
               <el-form-item label="系统版本" prop="sysVersion">
-                <el-input v-model="baseForm.sysVersion" clearable placeholder="系统版本" />
+                <el-input v-model="baseForm.sysVersion" maxlength="8" clearable
+                  placeholder="系统版本" />
               </el-form-item>
             </el-col>
             <el-col :span="12">
@@ -90,7 +101,7 @@
                     controls-position="right" /> 分钟
                 </div>
               </el-form-item>
-              <el-form-item label="验证码">
+              <el-form-item label="登录验证码">
                 <el-switch v-model="baseForm.enableVerificationCode" :active-value="1"
                   :inactive-value="0" />
               </el-form-item>
@@ -204,7 +215,7 @@
                 <el-col :span="12" :offset="6" :pull="6">
                   <el-form-item label="邮箱密码" prop="emailPassword">
                     <el-input v-model="baseForm.emailPassword" show-password placeholder="邮箱密码">
-                      <el-button slot="append" @click="checkEmailStauts" :loading="testLoading">测试连接
+                      <el-button slot="append" @click="checkEmailStatus" :loading="testLoading">测试连接
                       </el-button>
                     </el-input>
                   </el-form-item>
@@ -350,6 +361,22 @@
             </el-tab-pane>
           </el-tabs>
         </el-tab-pane>
+        <el-tab-pane label="超级管理员" name="fourth">
+          <el-alert title="注意：设为超级管理员后该用户拥有系统最高权限" type="warning" :closable="false" show-icon />
+          <el-row :gutter="20" style="margin-top: 15px">
+            <el-col :span="12">
+              <el-form-item label="超级管理员">
+                <user-select v-model="adminIds" placeholder="请选择超级管理员" multiple />
+              </el-form-item>
+            </el-col>
+            <el-col>
+              <el-form-item>
+                <el-button type="primary" size="small" :loading="btnLoading" class="saveBtn"
+                  @click="setAdminList()">保 存</el-button>
+              </el-form-item>
+            </el-col>
+          </el-row>
+        </el-tab-pane>
       </el-tabs>
     </el-form>
   </div>
@@ -366,11 +393,15 @@ import {
   synAllOrganizeSysToDing,
   synAllUserSysToDing,
   synAllOrganizeSysToQy,
-  synAllUserSysToQy
+  synAllUserSysToQy,
+  getAdminList,
+  setAdminList
 } from '@/api/system/sysConfig'
+import singleImg from '@/components/Upload/SingleImg'
 
 export default {
   name: 'system-sysConfig',
+  components: { singleImg },
   data() {
     return {
       activeName: 'first',
@@ -385,6 +416,10 @@ export default {
         sysName: '',
         sysDescription: '',
         sysVersion: '',
+        loginIcon: '',
+        navigationIcon: '',
+        logoIcon: '',
+        appIcon: '',
         copyright: '',
         companyName: '',
         companyCode: '',
@@ -472,7 +507,8 @@ export default {
         synSuccessCount: '',
         synType: '用户',
         unSynCount: '',
-      }]
+      }],
+      adminIds: []
     }
   },
   watch: {
@@ -480,6 +516,11 @@ export default {
       if (val == 2 || val == 3) {
         const type = val == 2 ? 1 : 2
         this.getSynThirdTotal(type)
+      }
+    },
+    activeName(val) {
+      if (val === 'fourth') {
+        this.getAdminList()
       }
     }
   },
@@ -505,7 +546,7 @@ export default {
         })
       })
     },
-    checkEmailStauts() {
+    checkEmailStatus() {
       this.testLoading = true
       const data = {
         account: this.baseForm.emailAccount,
@@ -629,11 +670,41 @@ export default {
           duration: 1500,
           onClose: () => {
             this.btnLoading = false
+            const sysConfig = {
+              sysName: this.baseForm.sysName,
+              sysVersion: this.baseForm.sysVersion,
+              loginIcon: this.baseForm.loginIcon,
+              copyright: this.baseForm.copyright,
+              companyName: this.baseForm.companyName,
+              navigationIcon: this.baseForm.navigationIcon,
+              logoIcon: this.baseForm.logoIcon,
+              appIcon: this.baseForm.appIcon
+            }
+            this.$store.commit('settings/CHANGE_SETTING', { key: "sysConfig", value: sysConfig })
             this.initData()
           }
         })
       }).catch(() => {
         this.btnLoading = false
+      })
+    },
+    getAdminList() {
+      getAdminList().then(res => {
+        if (!res.data) return
+        this.adminIds = res.data.map(o => o.id)
+      })
+    },
+    setAdminList() {
+      this.btnLoading = true
+      setAdminList(this.adminIds).then(res => {
+        this.$message({
+          message: res.msg,
+          type: 'success',
+          duration: 1500,
+          onClose: () => {
+            this.btnLoading = false
+          }
+        })
       })
     }
   }
@@ -673,6 +744,15 @@ export default {
     padding-right: 12px;
     color: #606266;
     font-size: 14px;
+  }
+  .img-list {
+    display: flex;
+    >>> .singleImg-container {
+      margin-right: 20px;
+      :last-child {
+        margin-right: 0;
+      }
+    }
   }
 }
 </style>

@@ -622,7 +622,7 @@ export const selectComponents = [{
       showLabel: true,
       tag: 'com-select',
       tagIcon: 'icon-ym icon-ym-generator-company',
-      defaultValue: null,
+      defaultValue: [],
       required: false,
       layout: 'colFormItem',
       span: 24,
@@ -871,7 +871,7 @@ export const selectComponents = [{
       showLabel: true,
       required: false,
       tag: 'popupSelect',
-      tagIcon: 'icon-ym icon-ym-generator-checkbox',
+      tagIcon: 'icon-ym icon-ym-generator-popup',
       defaultValue: '',
       layout: 'colFormItem',
       span: 24,
@@ -890,8 +890,45 @@ export const selectComponents = [{
     columnOptions: [],
     propsValue: 'id',
     relationField: 'fullName',
+    popupType: 'dialog',
+    popupTitle: '选择数据',
+    popupWidth: '800px',
     disabled: false,
     clearable: true
+  },
+  {
+    __config__: {
+      jnpfKey: 'relationFormAttr',
+      label: '关联表单属性',
+      labelWidth: undefined,
+      showLabel: true,
+      tag: 'relationFormAttr',
+      tagIcon: 'icon-ym icon-ym-generator-nature',
+      defaultValue: '',
+      required: false,
+      layout: 'colFormItem',
+      span: 24,
+      dragDisabled: false
+    },
+    showField: '',
+    relationField: ''
+  },
+  {
+    __config__: {
+      jnpfKey: 'popupAttr',
+      label: '弹窗选择属性',
+      labelWidth: undefined,
+      showLabel: true,
+      tag: 'popupAttr',
+      tagIcon: 'icon-ym icon-ym-generator-popup-attr',
+      defaultValue: '',
+      required: false,
+      layout: 'colFormItem',
+      span: 24,
+      dragDisabled: false
+    },
+    showField: '',
+    relationField: ''
   }
 ]
 

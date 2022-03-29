@@ -41,6 +41,28 @@
         </div>
       </transition>
     </template>
+    <template v-if="formConf.popupType==='drawer'">
+      <el-drawer :title="!dataForm.id ? '新建' : '编辑'" :visible.sync="visible"
+        :wrapperClosable="false" :size='formConf.drawerWidth' append-to-body
+        class="JNPF-common-drawer">
+        <div class="JNPF-flex-main">
+          <div class="dynamicForm">
+            <parser :form-conf="formConf" @submit="submitForm" :key="key" ref="dynamicForm"
+              v-if="!loading" />
+          </div>
+          <div class="drawer-footer">
+            <template v-if="formConf.hasPrintBtn && formConf.printId && dataForm.id && false">
+              <el-button type="primary" @click="print">
+                {{formConf.printButtonText||'打 印'}}
+              </el-button>
+            </template>
+            <el-button @click="visible = false">{{formConf.cancelButtonText||'取 消'}}</el-button>
+            <el-button type="primary" @click="dataFormSubmit()" :loading="btnLoading">
+              {{formConf.confirmButtonText||'确 定'}}</el-button>
+          </div>
+        </div>
+      </el-drawer>
+    </template>
     <print-browse :visible.sync="printBrowseVisible" :id="formConf.printId" :formId="dataForm.id" />
   </div>
 </template>

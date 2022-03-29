@@ -41,7 +41,8 @@
           <el-button type="danger" v-if="setting.status != 2 && setting.status != 5"
             @click="cancel()">终 止</el-button>
         </template>
-        <el-button @click="goBack()">{{$t('common.cancelButton')}}</el-button>
+        <el-button @click="goBack()" v-if="!setting.hideCancelBtn">{{$t('common.cancelButton')}}
+        </el-button>
       </div>
       <div class="approve-result" v-if="(setting.opType==0||setting.opType==4) && activeTab==='0'">
         <div class="approve-result-img" :class="flowTaskInfo.status | flowStatus()"></div>
@@ -201,7 +202,7 @@ export default {
       printBrowseVisible: false,
       eventType: '',
       signImg: '',
-      copyIds: '',
+      copyIds: [],
       fullName: '',
       thisStep: ''
     }
@@ -246,7 +247,8 @@ export default {
         this.fullName = res.data.fullName
         if (data.formType == 1) {
           if (res.data.formUrl) {
-            this.currentView = (resolve) => require([`@/views/${res.data.formUrl}`], resolve)
+            const formUrl = res.data.formUrl.replace(/\s*/g, "")
+            this.currentView = (resolve) => require([`@/views/${formUrl}`], resolve)
           } else {
             this.currentView = (resolve) => require([`@/views/workFlow/workFlowForm/${data.enCode}`], resolve)
           }
@@ -351,7 +353,7 @@ export default {
       if (eventType === 'audit' || eventType === 'reject') {
         this.handleId = ''
         this.reason = ''
-        this.copyIds = ''
+        this.copyIds = []
         this.handleReset()
         if (eventType === 'reject') return this.visible = true
         this.candidateLoading = true
@@ -368,6 +370,8 @@ export default {
             this.$nextTick(() => {
               this.$refs['candidateForm'].resetFields()
             })
+          } else {
+            this.candidateForm.candidateList = []
           }
           this.visible = true
         }).catch(() => {
@@ -573,12 +577,12 @@ export default {
             formData: this.formData,
             enCode: this.setting.enCode,
             signImg: this.signImg,
-            copyIds: this.copyIds
+            copyIds: this.copyIds.join(',')
           }
           if (this.candidateForm.candidateList.length) {
             let candidateList = {}
             for (let i = 0; i < this.candidateForm.candidateList.length; i++) {
-              candidateList[this.candidateForm.candidateList[i].nodeId] = this.candidateForm.candidateList[i].value.split(',')
+              candidateList[this.candidateForm.candidateList[i].nodeId] = this.candidateForm.candidateList[i].value
             }
             query.candidateList = candidateList
           }
@@ -634,10 +638,6 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
-.radio-audit {
-  display: block;
-  margin-bottom: 20px;
-}
 .sign-main {
   border: 1px solid #dcdfe6;
   border-radius: 4px;

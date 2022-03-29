@@ -38,7 +38,7 @@
               </el-col>
             </el-row>
           </el-tab-pane>
-          <el-tab-pane label="ymCustom 图标">
+          <el-tab-pane label="更多图标">
             <el-row>
               <el-col :span="6" v-for="(item,i) of ymCustomList" :key="i"
                 @click.native="handleClipboard(generateYmCustomCode(item),$event)"

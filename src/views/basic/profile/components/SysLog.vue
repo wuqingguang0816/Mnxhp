@@ -33,7 +33,7 @@
             width="120" />
           <el-table-column prop="userName" label="登录用户" width="120" />
           <el-table-column prop="ipaddress" label="登录IP" width="120" />
-          <el-table-column prop="platForm" label="登录摘要" show-overflow-tooltip />
+          <el-table-column prop="platForm" label="登录设备" show-overflow-tooltip />
         </JNPF-table>
       </el-tab-pane>
       <el-tab-pane label="请求日志" name="5">
@@ -42,10 +42,10 @@
             width="120" />
           <el-table-column prop="userName" label="请求用户" width="120" />
           <el-table-column prop="ipaddress" label="请求IP" width="120" />
-          <el-table-column prop="platForm" label="请求设备" width="120" show-overflow-tooltip />
-          <el-table-column prop="requestURL" label="请求地址" show-overflow-tooltip />
-          <el-table-column prop="requestMethod" label="请求类型" width="120" />
-          <el-table-column prop="requestDuration" label="请求耗时" width="120" />
+          <el-table-column prop="platForm" label="请求设备" min-width="200" show-overflow-tooltip />
+          <el-table-column prop="requestURL" label="请求地址" min-width="200" show-overflow-tooltip />
+          <el-table-column prop="requestMethod" label="请求类型" width="80" align="center" />
+          <el-table-column prop="requestDuration" label="耗时(毫秒)" width="80" />
         </JNPF-table>
       </el-tab-pane>
       <pagination :total="total" :page.sync="listQuery.currentPage" :limit.sync="listQuery.pageSize"

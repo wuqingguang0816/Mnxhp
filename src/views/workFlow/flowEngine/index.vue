@@ -86,6 +86,8 @@
                       导出流程</el-dropdown-item>
                     <el-dropdown-item @click.native="preview(scope.row)">
                       预览表单</el-dropdown-item>
+                    <el-dropdown-item @click.native="previewApp(scope.row.id)">
+                      移动预览</el-dropdown-item>
                   </el-dropdown-menu>
                 </el-dropdown>
               </tableOpts>
@@ -117,6 +119,14 @@
         </div>
       </div>
     </el-dialog>
+    <el-dialog :close-on-click-modal="false" :modal-append-to-body="false"
+      :visible.sync="previewAppVisible" class="JNPF-dialog JNPF-dialog_center code-dialog"
+      title="预览" width="400px" @opened="getQRimg">
+      <div class="qrcode-img">
+        <div id="qrcode" ref="qrCode"></div>
+      </div>
+      <p class="tip">打开手机APP扫码预览</p>
+    </el-dialog>
   </div>
 </template>
 
@@ -124,6 +134,7 @@
 import { FlowEngineList, Delete, Release, Stop, Copy, exportData } from '@/api/workFlow/FlowEngine'
 import Form from './Form'
 import preview from '../components/Preview'
+import QRCode from 'qrcodejs2'
 export default {
   name: 'workFlow-flowEngine',
   components: { Form, preview },
@@ -143,6 +154,8 @@ export default {
       dialogVisible: false,
       formVisible: false,
       previewVisible: false,
+      previewAppVisible: false,
+      qrCodeText: '',
       categoryList: []
     }
   },
@@ -228,7 +241,7 @@ export default {
         type: 'warning'
       }).then(() => {
         exportData(id).then(res => {
-          if (res.data.url) window.location.href = this.define.comUrl + res.data.url
+          this.jnpf.downloadFile(res.data.url)
         })
       }).catch(() => { });
     },
@@ -242,6 +255,21 @@ export default {
       this.previewVisible = true
       this.$nextTick(() => {
         this.$refs.preview.init(data)
+      })
+    },
+    previewApp(id) {
+      let text = { t: 'WFP', id }
+      this.qrCodeText = JSON.stringify(text)
+      this.previewAppVisible = true
+    },
+    getQRimg() {
+      if (!this.qrCodeText) return
+      this.$refs.qrCode.innerHTML = "";
+      let qrcode = new QRCode(this.$refs.qrCode, {
+        width: 260,
+        height: 260,
+        text: this.qrCodeText,
+        correctLevel: QRCode.CorrectLevel.H
       })
     },
     closeForm(isRefresh) {
@@ -329,6 +357,24 @@ export default {
       .add-desc {
         color: #8d8989;
         font-size: 12px;
+      }
+    }
+  }
+}
+.code-dialog {
+  ::v-deep {
+    .el-dialog__body {
+      padding: 20px 50px 2px !important;
+      .qrcode-img {
+        width: 300px;
+        height: 300px;
+        padding: 20px;
+      }
+      .tip {
+        text-align: center;
+        font-size: 18px;
+        margin-top: 10px;
+        margin-bottom: 20px;
       }
     }
   }

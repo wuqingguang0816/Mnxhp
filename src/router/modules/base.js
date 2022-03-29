@@ -53,6 +53,28 @@ const baseRouter = [{
       zhTitle: '个人信息',
       icon: 'icon-ym icon-ym-user',
     }
+  },
+  {
+    path: '/emailDetail',
+    component: (resolve) => require(['@/views/extend/email/DetailPage'], resolve),
+    name: 'emailDetail',
+    meta: {
+      title: 'emailDetail',
+      affix: false,
+      zhTitle: '查看邮件',
+      icon: 'icon-ym icon-ym-emailExample',
+    }
+  },
+  {
+    path: '/workFlowDetail',
+    component: (resolve) => require(['@/views/workFlow/workFlowDetail'], resolve),
+    name: 'workFlowDetail',
+    meta: {
+      title: 'workFlowDetail',
+      affix: false,
+      zhTitle: '流程详情',
+      icon: 'icon-ym icon-ym-workFlow',
+    }
   }
 ]
 export default baseRouter

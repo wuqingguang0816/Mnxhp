@@ -17,7 +17,7 @@
       </div>
     </div>
     <el-form ref="dataForm" :model="dataForm" :rules="dataRule" v-loading="formLoading"
-      label-width="90px" v-if="active === 0">
+      label-width="100px" v-if="active === 0">
       <el-row>
         <el-col :span="14" :offset="5" class="baseInfo mt-20">
           <el-form-item label="名称" prop="fullName">
@@ -37,8 +37,8 @@
               <el-radio :label="2">跨域验证</el-radio>
             </el-radio-group>
           </el-form-item>
-          <el-form-item prop="requestHeaders" v-if="dataForm.checkType===2">
-            <el-input v-model="dataForm.requestHeaders" placeholder="请输入域名，多个域名用逗号隔开" />
+          <el-form-item prop="ipAddress" v-if="dataForm.checkType===2">
+            <el-input v-model="dataForm.ipAddress" placeholder="请输入域名，多个域名用逗号隔开" />
           </el-form-item>
           <el-form-item label="类型" prop="dataType">
             <el-radio-group v-model="dataForm.dataType" @change="onDataTypeChange">
@@ -92,7 +92,7 @@
       <div class="detail">
         <el-tabs v-model="activeName">
           <el-tab-pane label="查询SQL" name="query">
-            <el-form ref="dataForm" :model="dataForm" :rules="dataRule" label-width="90px">
+            <el-form ref="dataForm" :model="dataForm" :rules="dataRule" label-width="100px">
               <el-form-item label-width="0" prop="query">
                 <div class="sql-box">
                   <SQLEditor v-model="dataForm.query" :options="sqlOptions" ref="SQLEditorRef" />
@@ -103,7 +103,7 @@
               <p><span>@user</span>当前用户</p>
               <p><span>@organize</span>当前用户所在公司</p>
               <p><span>@department</span>当前用户所在部门</p>
-              <p><span>@postion</span>当前用户所在岗位</p>
+              <p><span>@position</span>当前用户所在岗位</p>
             </div>
           </el-tab-pane>
         </el-tabs>
@@ -160,7 +160,7 @@
       </div>
     </div>
     <div class="staticData" v-if="active === 1 && dataForm.dataType === 2">
-      <el-form ref="dataForm" :model="dataForm" :rules="dataRule" label-width="90px">
+      <el-form ref="dataForm" :model="dataForm" :rules="dataRule" label-width="100px">
         <el-form-item label-width="0" prop="query">
           <div class="json-box">
             <JSONEditor v-model="dataForm.query" :options="jsonOptions" ref="JSONEditorRef" />
@@ -168,7 +168,7 @@
         </el-form-item>
       </el-form>
     </div>
-    <el-form ref="dataForm" :model="dataForm" :rules="dataRule" label-width="90px"
+    <el-form ref="dataForm" :model="dataForm" :rules="dataRule" label-width="100px"
       v-if="active === 1 && dataForm.dataType === 3">
       <el-row>
         <el-col :span="14" :offset="5" class="mt-20 baseInfo">
@@ -176,6 +176,23 @@
             <el-input v-model="dataForm.path" placeholder="输入接口路径">
               <template slot="prepend">{{dataForm.requestMethod=='6'?'GET':'POST'}}</template>
             </el-input>
+          </el-form-item>
+          <el-form-item label="接口headers" prop="requestHeaders">
+            <el-button @click="addHeaders()" class="el-icon-plus" size="mini">添加headers
+            </el-button>
+            <el-row v-for="(item, index) in requestHeaders" :key="item.index" class="mt-10">
+              <el-col :span="10">
+                <el-autocomplete v-model="item.field" :fetch-suggestions="querySearch"
+                  placeholder="key" clearable style="width:100%" />
+              </el-col>
+              <el-col :span="10" :offset="1">
+                <el-input v-model="item.defaultValue" placeholder="value" clearable />
+              </el-col>
+              <el-col :span="2" :offset="1">
+                <el-button type="danger" icon="el-icon-close" @click="removeHeaders(index)">
+                </el-button>
+              </el-col>
+            </el-row>
           </el-form-item>
           <el-form-item label="接口参数">
             <el-button @click="addOrUpdateHandle()" class="el-icon-plus" size="mini">添加参数
@@ -276,6 +293,7 @@ export default {
         dbLinkId: '0',
         dataType: 2,
         checkType: 0,
+        ipAddress: '',
         requestHeaders: '',
         requestMethod: '1',
         responseType: 'json',
@@ -286,6 +304,15 @@ export default {
         requestParameters: '',
         query: ''
       },
+      restaurants: [
+        { "value": "Postman-Token" },
+        { "value": "Host" },
+        { "value": "User-Agent" },
+        { "value": "Accept" },
+        { "value": "Accept-Encoding" },
+        { "value": "Connection" }
+      ],
+      requestHeaders: [],
       requestParameters: [],
       sqlRequestMethod: '3',
       apiRequestMethod: '6',
@@ -375,8 +402,8 @@ export default {
       getDataInterfaceInfo(this.dataForm.id).then(res => {
         this.dataForm = res.data
         this.dataForm.query = res.data.query
-        if (res.data.requestParameters) this.requestParameters = JSON.parse(res.data.requestParameters)
-        this.requestParameters = this.requestParameters || []
+        if (res.data.requestParameters) this.requestParameters = JSON.parse(res.data.requestParameters) || []
+        if (res.data.requestHeaders) this.requestHeaders = JSON.parse(res.data.requestHeaders) || []
         if (res.data.dataType === 1) this.sqlRequestMethod = this.dataForm.requestMethod
         if (res.data.dataType === 3) this.apiRequestMethod = this.dataForm.requestMethod
         this.formLoading = false
@@ -440,6 +467,26 @@ export default {
         }
       })
     },
+    querySearch(queryString, cb) {
+      const restaurants = this.restaurants;
+      const results = queryString ? restaurants.filter(this.createFilter(queryString)) : restaurants;
+      // 调用 callback 返回建议列表的数据
+      cb(results);
+    },
+    createFilter(queryString) {
+      return (restaurant) => {
+        return (restaurant.value.toLowerCase().indexOf(queryString.toLowerCase()) === 0);
+      };
+    },
+    removeHeaders(index) {
+      this.requestHeaders.splice(index, 1)
+    },
+    addHeaders() {
+      this.requestHeaders.push({
+        field: '',
+        defaultValue: ''
+      })
+    },
     removeParameter(index) {
       this.$confirm('此操作删除该参数, 是否继续?', '提示', {
         type: 'warning'
@@ -499,6 +546,7 @@ export default {
       this.$refs['dataForm'].validate(valid => {
         if (valid) {
           this.btnLoading = true
+          this.dataForm.requestHeaders = JSON.stringify(this.requestHeaders)
           this.dataForm.requestParameters = JSON.stringify(this.requestParameters)
           const formMethod = this.dataForm.id ? updateDataInterface : createDataInterface
           formMethod(this.dataForm).then(res => {

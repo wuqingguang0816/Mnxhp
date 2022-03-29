@@ -2,7 +2,7 @@
   <transition name="el-zoom-in-center">
     <div class="JNPF-preview-main">
       <div class="JNPF-common-page-header">
-        <el-page-header @back="goBack" content="异常描述" />
+        <el-page-header @back="goBack" :content="title" />
         <div class="options">
           <el-button @click="goBack()">{{$t('common.cancelButton')}}</el-button>
         </div>
@@ -21,12 +21,14 @@ export default {
   data() {
     return {
       visible: false,
-      data: ''
+      data: '',
+      title: '异常描述'
     }
   },
   methods: {
-    init(data) {
+    init(data, title) {
       this.data = data || ''
+      this.title = title
       this.visible = true
     },
     goBack() {

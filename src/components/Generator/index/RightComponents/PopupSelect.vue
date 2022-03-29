@@ -20,6 +20,20 @@
       <el-input-number v-model="activeData.__config__.columnWidth" placeholder="控件宽度" :min="0"
         :precision="0" controls-position="right" />
     </el-form-item>
+    <el-form-item label="弹窗标题">
+      <el-input v-model="activeData.popupTitle" placeholder="请输入弹窗标题" />
+    </el-form-item>
+    <el-form-item label="弹窗类型">
+      <el-select v-model="activeData.popupType" placeholder="请选择弹窗类型">
+        <el-option label="居中弹窗" value="dialog"></el-option>
+        <el-option label="右侧弹窗" value="drawer"></el-option>
+      </el-select>
+    </el-form-item>
+    <el-form-item label="弹窗宽度">
+      <el-select v-model="activeData.popupWidth" placeholder="请选择弹窗宽度">
+        <el-option v-for="item in popupWidthOptions" :label="item" :value="item" :key="item" />
+      </el-select>
+    </el-form-item>
     <el-form-item label="远端数据">
       <JNPF-TreeSelect :options="dataInterfaceSelector" v-model="activeData.interfaceId"
         placeholder="请选择远端数据" lastLevel lastLevelKey='categoryId' lastLevelValue='1' clearable>
@@ -85,6 +99,7 @@ export default {
   components: { draggable },
   data() {
     return {
+      popupWidthOptions: ['600px', '800px', '1000px', '40%', '50%', '60%', '70%', '80%'],
       treeData: [],
       dataInterfaceSelector: []
     }

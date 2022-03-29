@@ -21,7 +21,8 @@
         </el-select>
       </el-form-item>
       <el-form-item label="流水位数" prop="digit">
-        <el-input v-model.number="dataForm.digit" maxlength="1" @keyup.native="handleChange" />
+        <el-input v-model.number="dataForm.digit" maxlength="1" placeholder="流水位数"
+          @keyup.native="handleChange" />
       </el-form-item>
       <el-form-item label="流水起始" prop="startNumber">
         <el-input v-model="dataForm.startNumber" placeholder="不允许输入0或特殊字符"
@@ -59,6 +60,11 @@ import dayjs from 'dayjs'
 
 export default {
   data() {
+    var validateZero = (rule, value, callback) => {
+      let str = value.replace(/0/g, '')
+      if (!str) callback(new Error(`流水起始不能为${value}`));
+      callback()
+    };
     return {
       visible: false,
       formLoading: false,
@@ -97,7 +103,8 @@ export default {
         ],
         startNumber: [
           { required: true, message: '只能输入数字', trigger: 'blur' },
-          { pattern: /^[0-9]*$/, message: '只能输入数字', trigger: 'blur' }
+          { pattern: /^[0-9]*$/, message: '只能输入数字', trigger: 'blur' },
+          { validator: validateZero }
         ]
       }
     }

@@ -1,14 +1,14 @@
 <template>
   <div class="login-container">
-    <div class="login-version">
-      <p class="login-version-text">V {{define.version}}</p>
+    <div class="login-version" v-if="sysConfig && sysConfig.sysVersion">
+      <p class="login-version-text">{{sysConfig.sysVersion}}</p>
     </div>
     <div class="login-left">
       <a class="login-company-logo" target="_blank" href="https://www.jnpfsoft.com">
         <img class="login-company-logo-img" src="../../assets/images/login-company-logo.png" alt="">
       </a>
       <img class="login-banner" src="../../assets/images/login-banner.png" alt="">
-      <div class="login-left-txt">
+      <div class="login-left-txt" v-if="showTxt">
         <p class="title1">在线自动化，可视化系统开发，零代码实现80%的基础功能</p>
         <p class="title2">已帮助<span>20000+</span>家企业完成数字化转型升级</p>
         <a class="link" target="_blank" href="https://www.jnpfsoft.com">了解更多</a>
@@ -16,7 +16,9 @@
     </div>
     <div class="login-content">
       <div class="login-form">
-        <img class="login-logo" src="../../assets/images/login_logo.png" alt="">
+        <img class="login-logo" :src="define.comUrl+sysConfig.loginIcon"
+          v-if="sysConfig && sysConfig.loginIcon">
+        <img class="login-logo" src="../../assets/images/login_logo.png" alt="" v-else>
         <div class="login-tab" :class="'active'+active">
           <a class="item" :class="{'active': active==1}" @click="active=1">{{$t('login.title')}}</a>
           <a class="item" :class="{'active': active==2}"
@@ -99,11 +101,15 @@ export default {
       needCode: false,
       codeLength: 4,
       redirect: undefined,
+      showTxt: false,
       otherQuery: {},
       active: 1
     }
   },
   computed: {
+    sysConfig() {
+      return this.$store.state.settings.sysConfig
+    },
     loginLoading() {
       return this.$store.state.user.loginLoading
     }
@@ -135,6 +141,10 @@ export default {
   },
   mounted() {
     this.$store.commit('user/SET_LOGIN_LOADING', false)
+    this.setShowTxt()
+    window.onresize = () => {
+      this.setShowTxt()
+    }
   },
   destroyed() {
     document.onkeydown = function (e) {
@@ -143,6 +153,13 @@ export default {
     }
   },
   methods: {
+    setShowTxt() {
+      if (document.documentElement.clientHeight <= 840) {
+        this.showTxt = false
+      } else {
+        this.showTxt = true
+      }
+    },
     checkCapslock(e) {
       const { key } = e
       this.capsTooltip = key && key.length === 1 && key >= 'A' && key <= 'Z'

@@ -60,3 +60,10 @@ export function TimeTaskUpdate(data) {
     data
   })
 }
+// 获取本地任务下拉列表
+export function getTaskMethods() {
+  return request({
+    url: `/api/scheduletask/TaskMethods`,
+    method: 'get'
+  })
+}

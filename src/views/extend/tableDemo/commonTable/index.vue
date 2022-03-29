@@ -28,29 +28,31 @@
               <el-link icon="icon-ym icon-ym-Refresh JNPF-common-head-icon" :underline="false"
                 @click="refresh()" />
             </el-tooltip>
-            <ColumnSettings v-model="columnList" :data="columnOptions" />
+            <ColumnSettings v-model="columnList" />
           </div>
         </div>
         <JNPF-table v-loading="listLoading" :data="list" :columnData="columnList">
           <template v-for="(item,index) in columnList">
-            <template v-if="item.prop==='projectType'">
-              <el-table-column :prop="item.prop" :label="item.label" sortable :key="index"
-                width="100">
-                <template slot-scope="scope">
-                  {{ scope.row[item.prop] | getTypeText(industryTypeList) }}
-                </template>
-              </el-table-column>
-            </template>
-            <template v-else-if="item.prop==='interactionDate' || item.prop==='registerDate'">
-              <el-table-column :prop="item.prop" :label="item.label" sortable :key="index"
-                width="100">
-                <template slot-scope="scope">
-                  {{ scope.row[item.prop] | toDate("yyyy-MM-dd") }}
-                </template>
-              </el-table-column>
-            </template>
-            <template v-else>
-              <el-table-column :prop="item.prop" :label="item.label" sortable :key="index" />
+            <template v-if="item.visible">
+              <template v-if="item.prop==='projectType'">
+                <el-table-column :prop="item.prop" :label="item.label" sortable :key="index"
+                  width="100">
+                  <template slot-scope="scope">
+                    {{ scope.row[item.prop] | getTypeText(industryTypeList) }}
+                  </template>
+                </el-table-column>
+              </template>
+              <template v-else-if="item.prop==='interactionDate' || item.prop==='registerDate'">
+                <el-table-column :prop="item.prop" :label="item.label" sortable :key="index"
+                  width="100">
+                  <template slot-scope="scope">
+                    {{ scope.row[item.prop] | toDate("yyyy-MM-dd") }}
+                  </template>
+                </el-table-column>
+              </template>
+              <template v-else>
+                <el-table-column :prop="item.prop" :label="item.label" sortable :key="index" />
+              </template>
             </template>
           </template>
           <el-table-column label="操作" width="100" fixed="right">
@@ -72,9 +74,12 @@
 
 <script>
 import { TableExampleList, TableExampleDelete } from '@/api/extend/tableExample'
+import { getColumnsByModuleId } from '@/api/common'
 import JNPFForm from '../commonForm'
+import commonMixin from '@/mixins/commonMixin'
 export default {
   name: 'extend-tableDemo-commonTable',
+  mixins: [commonMixin],
   components: {
     JNPFForm
   },
@@ -91,7 +96,7 @@ export default {
       },
       formVisible: false,
       industryTypeList: [],
-      columnOptions: [
+      defaultColumnOptions: [
         {
           label: '项目名称',
           prop: 'projectName'
@@ -149,11 +154,12 @@ export default {
           prop: 'description'
         }
       ],
+      useColumnPermission: false,
       columnList: []
     }
   },
   created() {
-    this.getDictionaryData()
+    this.getColumnsByModuleId()
   },
   filters: {
     getTypeText(id, industryTypeList) {
@@ -162,6 +168,17 @@ export default {
     }
   },
   methods: {
+    getColumnsByModuleId() {
+      if (!this.currMenuId) return
+      this.listLoading = true
+      getColumnsByModuleId(this.currMenuId).then(res => {
+        this.settingsColumnList = res.data || []
+        this.getRealColumnList()
+        this.$nextTick(() => {
+          this.getDictionaryData()
+        })
+      })
+    },
     getDictionaryData() {
       this.$store.dispatch('base/getDictionaryData', { sort: 'IndustryType' }).then((res) => {
         this.industryTypeList = res

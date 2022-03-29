@@ -42,6 +42,26 @@
         </div>
       </transition>
     </template>
+    <template v-if="formData.popupType==='drawer'">
+      <el-drawer title="详情" :visible.sync="visible" :wrapperClosable="false"
+        :size='formData.drawerWidth' append-to-body class="JNPF-common-drawer">
+        <div class="JNPF-flex-main">
+          <div class="dynamicForm dynamicDetail" v-loading="loading || mainLoading"
+            :element-loading-text="$t('common.loadingText')">
+            <Parser :formConf="formData" :relationData="relationData" @toDetail="toDetail"
+              v-if="!loading" :formValue="formValue" />
+          </div>
+          <div class="drawer-footer">
+            <template v-if="formData.hasPrintBtn && formData.printId">
+              <el-button type="primary" @click="printBrowseVisible=true">
+                {{formData.printButtonText||'打 印'}}
+              </el-button>
+            </template>
+            <el-button @click="visible = false">{{$t('common.cancelButton')}}</el-button>
+          </div>
+        </div>
+      </el-drawer>
+    </template>
     <Detail v-if="detailVisible" ref="Detail" @close="detailVisible = false" />
     <print-browse :visible.sync="printBrowseVisible" :id="formData.printId" :formId="dataForm.id" />
   </div>
@@ -49,6 +69,7 @@
 
 <script>
 import { getDataChange, getConfigData } from '@/api/onlineDev/visualDev'
+import { getDataInterfaceDataInfo } from '@/api/systemData/dataInterface'
 import { deepClone } from '@/utils'
 import Parser from './Parser'
 import PrintBrowse from '@/components/PrintBrowse'
@@ -111,19 +132,23 @@ export default {
     },
     unique(arr, attrName) {
       const res = new Map()
+      // 根据对象的某个属性值去重
       return arr.filter(o => !res.has(o[attrName]) && res.set(o[attrName], 1))
     },
     handleAttrList(list) {
       let realList = this.unique(list, 'relationField')
       for (let i = 0; i < realList.length; i++) {
         const item = realList[i];
-        let modelId = '', id = "", field = ""
+        let modelId = '', id = "", field = "", jnpfKey = '', activeItem = {}
+        let prop = item.relationField.split('_jnpfTable_')[0]
         const loop = list => {
           for (let i = 0; i < list.length; i++) {
-            if (item.relationField === list[i].__vModel__) {
-              modelId = list[i].modelId
+            if (prop === list[i].__vModel__) {
+              jnpfKey = list[i].__config__.jnpfKey
+              modelId = list[i].__config__.jnpfKey === 'relationForm' ? list[i].modelId : list[i].interfaceId
               id = list[i].__config__.defaultValue
-              field = list[i].__vModel__
+              field = list[i].__config__.tableName ? list[i].__vModel__ + '_jnpfTable_' + list[i].__config__.tableName + (list[i].__config__.isSubTable ? '0' : "1") : list[i].__vModel__
+              activeItem = list[i]
               break
             }
             if (list[i].__config__ && list[i].__config__.jnpfKey !== 'table' && list[i].__config__.children && Array.isArray(list[i].__config__.children)) {
@@ -136,14 +161,28 @@ export default {
           this.$set(this.relationData, field, "")
           continue
         }
-        getDataChange(modelId, id).then(res => {
-          if (!res.data || !res.data.data) {
-            this.$set(this.relationData, field, "")
-            return
+        if (jnpfKey === 'relationForm') {
+          getDataChange(modelId, id).then(res => {
+            if (!res.data || !res.data.data) {
+              this.$set(this.relationData, field, "")
+              return
+            }
+            let data = JSON.parse(res.data.data)
+            this.$set(this.relationData, field, data)
+          }).catch(() => { this.$set(this.relationData, field, "") })
+        }
+        if (jnpfKey === 'popupSelect') {
+          let query = {
+            id: id,
+            interfaceId: modelId,
+            propsValue: activeItem.propsValue,
+            relationField: activeItem.relationField,
           }
-          let data = JSON.parse(res.data.data)
-          this.$set(this.relationData, field, data)
-        }).catch(() => { this.$set(this.relationData, field, "") })
+          getDataInterfaceDataInfo(modelId, query).then(res => {
+            if (!res.data) return this.$set(this.relationData, field, "")
+            this.$set(this.relationData, field, res.data)
+          }).catch(() => { this.$set(this.relationData, field, "") })
+        }
       }
     },
     toDetail(item) {
@@ -174,7 +213,7 @@ export default {
         for (let i = 0; i < list.length; i++) {
           let item = list[i]
           if (item.__vModel__) {
-            if (item.__config__.jnpfKey === 'relationForm') {
+            if (item.__config__.jnpfKey === 'relationForm' || item.__config__.jnpfKey === 'popupSelect') {
               let id = data[item.__vModel__ + '_id']
               if (id) item.__config__.defaultValue = id
               this.$set(item, 'name', data[item.__vModel__] || '')
@@ -191,7 +230,7 @@ export default {
               this.$set(item.__config__, 'noShow', noShow)
             }
           }
-          if (item.__config__.jnpfKey === 'relationFormAttr') relationFormAttrList.push(item)
+          if (['relationFormAttr', 'popupAttr'].includes(item.__config__.jnpfKey)) relationFormAttrList.push(item)
           if (item.__config__ && item.__config__.jnpfKey !== 'table' && item.__config__.children && Array.isArray(item.__config__.children)) {
             loop(item.__config__.children)
           }

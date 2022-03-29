@@ -101,13 +101,14 @@ export default {
           if (item.__vModel__) {
             const val = data[item.__vModel__]
             if (val !== undefined) item.__config__.defaultValue = val
-            let noShow = false, isDisabled = true
+            let noShow = false, isDisabled = true, required = false
             if (this.setting.formOperates && this.setting.formOperates.length) {
               let arr = this.setting.formOperates.filter(o => o.id === item.__vModel__) || []
               if (arr.length) {
                 let obj = arr[0]
                 noShow = !obj.read
                 isDisabled = !obj.write
+                required = obj.required ? obj.required : item.__config__.required
               }
             } else {
               isDisabled = false
@@ -117,6 +118,7 @@ export default {
             if (this.setting.readonly) isDisabled = true
             this.$set(item, 'disabled', isDisabled)
             this.$set(item.__config__, 'noShow', noShow)
+            this.$set(item.__config__, 'required', required || false)
           }
           if (item.__config__ && item.__config__.jnpfKey !== 'table' && item.__config__.children && Array.isArray(item.__config__.children)) {
             loop(item.__config__.children)

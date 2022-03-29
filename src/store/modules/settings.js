@@ -13,7 +13,8 @@ const {
   sidebarLogo,
   themeClass,
   slideClass,
-  layoutType
+  layoutType,
+  sysConfig
 } = defaultSettings
 
 const state = {
@@ -29,7 +30,8 @@ const state = {
   sidebarLogo: jnpf.storageGet('sidebarLogo') === null ? sidebarLogo : jnpf.storageGet('sidebarLogo'),
   themeClass: jnpf.storageGet('themeClass') === null ? themeClass : jnpf.storageGet('themeClass'),
   slideClass: jnpf.storageGet('slideClass') === null ? slideClass : jnpf.storageGet('slideClass'),
-  layoutType: jnpf.storageGet('layoutType') === null ? layoutType : jnpf.storageGet('layoutType')
+  layoutType: jnpf.storageGet('layoutType') === null ? layoutType : jnpf.storageGet('layoutType'),
+  sysConfig: jnpf.storageGet('sysConfig') === null ? sysConfig : jnpf.storageGet('sysConfig')
 }
 
 const mutations = {
