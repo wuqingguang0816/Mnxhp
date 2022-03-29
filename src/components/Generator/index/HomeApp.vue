@@ -250,10 +250,6 @@ export default {
                 break
               }
             }
-            if (config.jnpfKey === 'relationFlow' && !e.flowId) {
-              reject({ msg: '关联流程表单控件“关联流程”属性为必填项', target: 1 })
-              break
-            }
             if (config.layout === 'rowFormItem' && !config.children.length) {
               reject({ msg: `您的${config.label}控件中没有组件`, target: 1 })
               break

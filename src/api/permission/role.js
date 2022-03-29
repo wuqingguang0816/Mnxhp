@@ -59,10 +59,11 @@ export const updateRoleState = (id) => {
   })
 }
 
-// 获取角色类型
-export const getRoleTypeSelector = () => {
+// 通过组织id获取角色列表
+export const getRoleByOrganize = (organizeIds) => {
   return request({
-    url: '/api/system/DictionaryData/4501f6f26a384757bce12d4c4b03342c/Data/Selector',
-    method: 'GET'
+    url: `/api/permission/Role/getListByOrgIds`,
+    method: 'post',
+    data: { organizeIds }
   })
 }

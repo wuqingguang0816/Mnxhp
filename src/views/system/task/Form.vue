@@ -34,82 +34,48 @@
             </el-col>
             <el-col :span="24">
               <el-form-item label="任务类型" prop="executeType">
-                <el-radio-group v-model="dataForm.executeType">
-                  <el-radio label="1">请求接口</el-radio>
-                  <el-radio label="2">存储过程</el-radio>
+                <el-radio-group v-model="dataForm.executeType" @change="onExecuteTypeChange">
+                  <el-radio label="1">Api数据</el-radio>
+                  <el-radio label="2">SQL操作</el-radio>
+                  <el-radio label="3">本地任务
+                    <el-tooltip content="获取在程序中事先写好的本地方法" placement="top">
+                      <i class="el-icon-warning-outline"></i>
+                    </el-tooltip>
+                  </el-radio>
                 </el-radio-group>
               </el-form-item>
             </el-col>
-            <template v-if="dataForm.executeType=='1'">
+            <template v-if="dataForm.executeType=='1'||dataForm.executeType=='2'">
               <el-col :span="24">
-                <el-form-item label="请求类型" prop="executeContent.interfaceType">
-                  <el-radio-group v-model="dataForm.executeContent.interfaceType">
-                    <el-radio label="GET">GET</el-radio>
-                    <el-radio label="POST">POST</el-radio>
-                  </el-radio-group>
-                </el-form-item>
-              </el-col>
-              <el-col :span="24">
-                <el-form-item label="请求路径" prop="executeContent.interfaceUrl">
-                  <el-input v-model="dataForm.executeContent.interfaceUrl" placeholder="请求路径">
-                  </el-input>
+                <el-form-item label="接口选择" prop="executeContent.interfaceId">
+                  <interface-dialog v-model="dataForm.executeContent.interfaceId"
+                    :title="dataForm.executeContent.interfaceName" :dataType="dataType"
+                    @change="onFuncChange" />
                 </el-form-item>
               </el-col>
               <el-col :span="24">
                 <el-form-item label="请求参数" prop="executeContent.parameter">
-                  <el-button icon="el-icon-plus" @click="addParameter()">新增参数
-                  </el-button>
                   <el-row v-for="(item,i) in dataForm.executeContent.parameter" :key="i"
-                    class="mt-10">
-                    <el-col :span="10">
-                      <el-input v-model="item.key" placeholder="请求参数名称"></el-input>
+                    class="mb-10">
+                    <el-col :span="11">
+                      <span
+                        class="required-sign">{{item.required?'*':''}}</span>{{item.fieldName?item.field+'('+item.fieldName+')':item.field}}
                     </el-col>
-                    <el-col :span="10" :offset="1">
-                      <el-input v-model="item.value" placeholder="请求参数值"></el-input>
-                    </el-col>
-                    <el-col :span="2" :offset="1" class="delBtn">
-                      <el-button type="danger" icon="el-icon-close" @click="delParameter(i)">
-                      </el-button>
+                    <el-col :span="12" :offset="1">
+                      <el-input v-model="item.value" placeholder="请求参数值" clearable />
                     </el-col>
                   </el-row>
                 </el-form-item>
               </el-col>
             </template>
-            <template v-if="dataForm.executeType=='2'">
+            <template v-if="dataForm.executeType=='3'">
               <el-col :span="24">
-                <el-form-item label="数据连接" prop="executeContent.database">
-                  <el-select v-model="dataForm.executeContent.database" placeholder="请选择数据库">
-                    <el-option-group v-for="group in dbOptions" :key="group.fullName"
-                      :label="group.fullName">
-                      <el-option v-for="item in group.children" :key="item.id"
-                        :label="item.fullName" :value="item.id" />
-                    </el-option-group>
+                <el-form-item label="方法选择" prop="executeContent.localHostTaskId">
+                  <el-select v-model="dataForm.executeContent.localHostTaskId" placeholder="请选择"
+                    @change="onLocalHostTaskIdChange">
+                    <el-option v-for="item in taskOptions" :key="item.id" :label="item.fullName"
+                      :value="item.id" />
                   </el-select>
-                </el-form-item>
-              </el-col>
-              <el-col :span="24">
-                <el-form-item label="存储名称" prop="executeContent.stored">
-                  <el-input v-model="dataForm.executeContent.stored" placeholder="存储名称">
-                  </el-input>
-                </el-form-item>
-              </el-col>
-              <el-col :span="24">
-                <el-form-item label="请求参数" prop="executeContent.storedParameter">
-                  <el-button icon="el-icon-plus" @click="addStoredParameter()">新增参数
-                  </el-button>
-                  <el-row v-for="(item,i) in dataForm.executeContent.storedParameter" :key="i"
-                    class="mt-10">
-                    <el-col :span="10">
-                      <el-input v-model="item.key" placeholder="请求参数名称"></el-input>
-                    </el-col>
-                    <el-col :span="10" :offset="1">
-                      <el-input v-model="item.value" placeholder="请求参数值"></el-input>
-                    </el-col>
-                    <el-col :span="2" :offset="1" class="delBtn">
-                      <el-button type="danger" icon="el-icon-close" @click="delStoredParameter(i)">
-                      </el-button>
-                    </el-col>
-                  </el-row>
                 </el-form-item>
               </el-col>
             </template>
@@ -140,12 +106,12 @@
 </template>
 
 <script>
-import { TimeTaskInfo, TimeTaskUpdate, TimeTaskCreate } from '@/api/system/timeTask'
-import { getDataSourceListAll } from '@/api/systemData/dataSource'
+import { TimeTaskInfo, TimeTaskUpdate, TimeTaskCreate, getTaskMethods } from '@/api/system/timeTask'
 import vcrontab from "vcrontab"
+import InterfaceDialog from '@/components/Process/PropPanel/InterfaceDialog'
 
 export default {
-  components: { vcrontab },
+  components: { vcrontab, InterfaceDialog },
   data() {
     return {
       showCron: false,
@@ -158,12 +124,10 @@ export default {
         description: '',
         executeContent: {
           cron: '',
-          interfaceType: 'GET',
-          interfaceUrl: '',
+          interfaceId: '',
+          interfaceName: '',
           parameter: [],
-          stored: '',
-          database: '0',
-          storedParameter: []
+          localHostTaskId: '',
         }
       },
       dataRule: {
@@ -177,17 +141,24 @@ export default {
         'executeContent.cron': [
           { required: true, message: 'Cron表达式不能为空', trigger: 'click' }
         ],
-        'executeContent.interfaceUrl': [
-          { required: true, message: '请求路径不能为空', trigger: 'blur' },
-          { type: 'url', message: '请输入正确的请求路径', trigger: 'blur' }
+        'executeContent.interfaceId': [
+          { required: true, message: '接口选择不能为空', trigger: 'click' }
         ],
-        'executeContent.stored': [
-          { required: true, message: '存储名称不能为空', trigger: 'blur' }
+        'executeContent.localHostTaskId': [
+          { required: true, message: '方法选择不能为空', trigger: 'change' }
         ]
       },
       formVisible: false,
       btnLoading: false,
-      dbOptions: []
+      taskOptions: []
+    }
+  },
+  computed: {
+    dataType() {
+      let dataType = 0
+      if (this.dataForm.executeType === '1') dataType = 3
+      if (this.dataForm.executeType === '2') dataType = 1
+      return dataType
     }
   },
   methods: {
@@ -203,38 +174,22 @@ export default {
         description: '',
         executeContent: {
           cron: '',
-          interfaceType: 'GET',
-          interfaceUrl: '',
+          interfaceId: '',
+          interfaceName: '',
           parameter: [],
-          stored: '',
-          database: '0',
-          storedParameter: []
+          localHostTaskId: '',
         }
       }
       this.dataForm.id = id || ''
       this.$nextTick(() => {
         this.$refs['dataForm'].resetFields()
-        getDataSourceListAll().then(res => {
-          const defaultItem = {
-            fullName: '',
-            children: [{
-              fullName: '默认数据库',
-              id: '0'
-            }]
-          }
-          const list = [defaultItem, ...res.data.list]
-          this.dbOptions = list.filter(o => o.children && o.children.length)
+        getTaskMethods().then(res => {
+          this.taskOptions = res.data || []
           if (this.dataForm.id) {
             TimeTaskInfo(this.dataForm.id).then(res => {
-              this.dataForm.description = res.data.description
+              this.dataForm = res.data
               this.dataForm.executeContent = JSON.parse(res.data.executeContent)
-              this.dataForm.fullName = res.data.fullName
-              this.dataForm.executeType = res.data.executeType
-              this.dataForm.enCode = res.data.enCode
-              this.dataForm.sortCode = res.data.sortCode
             })
-          } else {
-            this.dataForm.enCode = ''
           }
         })
       })
@@ -242,6 +197,18 @@ export default {
     dataFormSubmit() {
       this.$refs['dataForm'].validate((valid) => {
         if (valid) {
+          if (this.dataForm.executeType === '1' || this.dataForm.executeType === '2') {
+            let boo = false
+            for (let i = 0; i < this.dataForm.executeContent.parameter.length; i++) {
+              const item = this.dataForm.executeContent.parameter[i]
+              if (item.required && !item.value) {
+                this.$message.error(`${item.field}的参数值为必填`)
+                boo = true
+                break
+              }
+            }
+            if (boo) return
+          }
           this.btnLoading = true
           let executeContent = JSON.stringify(this.dataForm.executeContent)
           let query = { ...this.dataForm, executeContent }
@@ -261,19 +228,26 @@ export default {
         }
       })
     },
-    delParameter(i) {
-      this.dataForm.executeContent.parameter.splice(i, 1)
+    onFuncChange(id, row) {
+      this.dataForm.executeContent.interfaceName = row.fullName
+      this.dataForm.executeContent.parameter = row.templateJson.map(o => ({
+        ...o,
+        value: ''
+      }))
     },
-    addParameter() {
-      let item = { key: "", value: "" }
-      this.dataForm.executeContent.parameter.push(item)
+    onExecuteTypeChange() {
+      this.dataForm.executeContent.interfaceId = ''
+      this.dataForm.executeContent.interfaceName = ''
+      this.dataForm.executeContent.parameter = []
+      this.dataForm.executeContent.localHostTaskId = ''
     },
-    delStoredParameter(i) {
-      this.dataForm.executeContent.storedParameter.splice(i, 1)
-    },
-    addStoredParameter() {
-      let item = { key: "", value: "" }
-      this.dataForm.executeContent.storedParameter.push(item)
+    onLocalHostTaskIdChange(val) {
+      if (!val) return
+      let list = this.taskOptions.filter(o => o.id === val)
+      if (!list.length) return
+      let item = list[0]
+      if (!item.cron) return
+      this.dataForm.executeContent.cron = item.cron
     },
     getCrontabValue() {
       this.$refs.vcrontab && this.$refs.vcrontab.submitFill()

@@ -21,18 +21,20 @@
         :precision="0" controls-position="right" />
     </el-form-item>
     <el-form-item label="默认值">
-      <com-select v-model="activeData.__config__.defaultValue" placeholder="选择默认值"
-        v-if="activeData.__config__.jnpfKey==='comSelect'" :multiple="activeData.multiple" />
-      <dep-select v-model="activeData.__config__.defaultValue" placeholder="选择默认值"
-        v-if="activeData.__config__.jnpfKey==='depSelect'" :multiple="activeData.multiple" />
-      <pos-select v-model="activeData.__config__.defaultValue" placeholder="选择默认值"
-        v-if="activeData.__config__.jnpfKey==='posSelect'" :multiple="activeData.multiple" />
-      <user-select v-model="activeData.__config__.defaultValue" placeholder="选择默认值"
-        v-if="activeData.__config__.jnpfKey==='userSelect'" :multiple="activeData.multiple" />
-      <dic-select v-model="activeData.__config__.defaultValue" placeholder="选择默认值"
-        v-if="activeData.__config__.jnpfKey==='dicSelect'" />
-      <BillRule v-model="activeData.__config__.defaultValue" placeholder="选择默认值"
-        v-if="activeData.__config__.jnpfKey==='billRule'" />
+      <com-select v-model="activeData.__config__.defaultValue" placeholder="选择默认值" clearable
+        v-if="activeData.__config__.jnpfKey==='comSelect'" :multiple="activeData.multiple"
+        :key="key" />
+      <dep-select v-model="activeData.__config__.defaultValue" placeholder="选择默认值" clearable
+        v-if="activeData.__config__.jnpfKey==='depSelect'" :multiple="activeData.multiple"
+        :key="key" />
+      <pos-select v-model="activeData.__config__.defaultValue" placeholder="选择默认值" clearable
+        v-if="activeData.__config__.jnpfKey==='posSelect'" :multiple="activeData.multiple"
+        :key="key" />
+      <user-select v-model="activeData.__config__.defaultValue" placeholder="选择默认值" clearable
+        v-if="activeData.__config__.jnpfKey==='userSelect'" :multiple="activeData.multiple"
+        :key="key" />
+      <BillRule v-model="activeData.__config__.defaultValue" placeholder="选择默认值" clearable
+        v-if="activeData.__config__.jnpfKey==='billRule'" :key="key" />
       <el-input :value="setDefaultValue(activeData.__config__.defaultValue)" placeholder="请输入默认值"
         @input="onDefaultValueInput" v-if="activeData.__config__.jnpfKey==='editor'" />
     </el-form-item>
@@ -40,7 +42,7 @@
       <el-switch v-model="activeData.clearable" />
     </el-form-item>
     <el-form-item label="能否搜索"
-      v-if="activeData.__config__.jnpfKey!=='userSelect'&& activeData.__config__.jnpfKey!=='editor'">
+      v-if="['depSelect','posSelect'].includes(activeData.__config__.jnpfKey)">
       <el-switch v-model="activeData.filterable" />
     </el-form-item>
     <el-form-item label="能否多选" v-if="needMultiple">
@@ -60,7 +62,9 @@ export default {
   props: ['activeData'],
   mixins: [comMixin],
   data() {
-    return {}
+    return {
+      key: +new Date()
+    }
   },
   computed: {
     needMultiple() {
@@ -70,7 +74,9 @@ export default {
   created() { },
   methods: {
     multipleChange(val) {
-      this.$set(this.activeData.__config__, 'defaultValue', '')
+      this.$set(this.activeData.__config__, 'defaultValue', val ? [] : '')
+      this.activeData.__config__.renderKey = +new Date()
+      this.key = +new Date()
     }
   }
 }

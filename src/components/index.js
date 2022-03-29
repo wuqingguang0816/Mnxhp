@@ -17,6 +17,7 @@ import JnpfButton from '@/components/Generator/components/JnpfButton'
 import JNPFUploadFz from '@/components/Generator/components/Upload/UploadFz'
 import JNPFUploadImg from '@/components/Generator/components/Upload/UploadImg'
 import PopupSelect from '@/components/Generator/components/PopupSelect'
+import PopupAttr from '@/components/Generator/components/PopupAttr'
 import NumRange from '@/components/Generator/components/NumRange'
 import ComSelect from '@/components/Generator/components/ComSelect'
 import DepSelect from '@/components/Generator/components/DepSelect'
@@ -28,8 +29,6 @@ import JNPFAddress from '@/components/Generator/components/Address'
 import GroupTitle from '@/components/Generator/components/GroupTitle'
 import RelationForm from '@/components/Generator/components/RelationForm'
 import RelationFormAttr from '@/components/Generator/components/RelationFormAttr'
-import RelationFlow from '@/components/Generator/components/RelationFlow'
-import RelationFlowAttr from '@/components/Generator/components/RelationFlowAttr'
 import Calculate from '@/components/Generator/components/Calculate'
 
 export default {
@@ -48,6 +47,7 @@ export default {
     Vue.component('JNPFUploadFz', JNPFUploadFz)
     Vue.component('JNPFUploadImg', JNPFUploadImg)
     Vue.component('PopupSelect', PopupSelect)
+    Vue.component('PopupAttr', PopupAttr)
     Vue.component('NumRange', NumRange)
     Vue.component('ComSelect', ComSelect)
     Vue.component('DepSelect', DepSelect)
@@ -60,8 +60,6 @@ export default {
     Vue.component('GroupTitle', GroupTitle)
     Vue.component('RelationForm', RelationForm)
     Vue.component('RelationFormAttr', RelationFormAttr)
-    Vue.component('RelationFlow', RelationFlow)
-    Vue.component('RelationFlowAttr', RelationFlowAttr)
     Vue.component('Calculate', Calculate)
     Vue.component('JNPFQuill', JNPFQuill)
     Vue.component('Screenfull', Screenfull)

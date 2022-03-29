@@ -39,7 +39,7 @@
               <el-switch v-model="dataForm.enabledMark" :active-value="1" :inactive-value="0" />
             </el-form-item>
             <group-title content="内容配置" class="mb-20" />
-            <el-form-item label="短信通知" prop="smsId" v-if="dataForm.isSms">
+            <el-form-item label="短信模板" prop="smsId" v-if="dataForm.isSms">
               <sms-dialog v-model="dataForm.smsId" :title="dataForm.smsTemplateName"
                 @change="onSmsChange" />
             </el-form-item>

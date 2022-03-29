@@ -11,23 +11,18 @@
       <el-input-number v-model="activeData.__config__.labelWidth" placeholder="标题宽度" :min="0"
         :precision="0" controls-position="right" />
     </el-form-item>
-    <el-form-item label="关联流程">
-      <el-select v-model="activeData.relationField" placeholder="请选择关联流程" clearable>
-        <el-option v-for="item in options" :key="item.__vModel__" :label="item.__config__.label"
-          :value="item.__vModel__" />
+    <el-form-item label="关联弹窗">
+      <el-select v-model="activeData.relationField" placeholder="请选择关联弹窗" clearable>
+        <el-option v-for="(item,i) in options" :key="i" :label="item.__config__.label"
+          :value="item.prop" />
       </el-select>
     </el-form-item>
     <el-form-item label="关联字段">
-      <el-select v-model="activeData.showField" placeholder="请选择关联字段"
-        @visible-change="visibleChange" clearable>
-        <el-option v-for="item in fieldOptions" :key="item.vmodel" :label="item.label"
-          :value="item.vmodel" />
-      </el-select>
+      <el-input v-model="activeData.showField" placeholder="请输入关联字段" />
     </el-form-item>
   </el-row>
 </template>
 <script>
-import { getFormDataFields } from '@/api/workFlow/FlowEngine'
 import comMixin from './mixin'
 import { getDrawingList } from '@/components/Generator/utils/db'
 export default {
@@ -37,16 +32,6 @@ export default {
     return {
       options: [],
       fieldOptions: [],
-    }
-  },
-  watch: {
-    'activeData.relationField': function (val) {
-      this.activeData.showField = ''
-      if (!val) {
-        this.fieldOptions = []
-        return
-      }
-      this.getFieldOptions()
     }
   },
   methods: {
@@ -60,26 +45,16 @@ export default {
         }
         if (Array.isArray(data)) data.forEach(d => loop(d, parent))
         if (data.__config__ && data.__config__.jnpfKey) {
-          if (data.__config__.jnpfKey === 'relationFlow' && data.__vModel__) {
+          if (data.__config__.jnpfKey === 'popupSelect' && data.__vModel__) {
             list.push(data)
           }
         }
       }
       loop(drawingList)
-      this.options = list
-      this.getFieldOptions()
-    },
-    getFieldOptions() {
-      if (!this.activeData.relationField || !this.options.length) return
-      let item = this.options.filter(o => o.__vModel__ === this.activeData.relationField)[0]
-      if (!item.flowId) return
-      getFormDataFields(item.flowId).then(res => {
-        this.fieldOptions = res.data.list
-      })
-    },
-    visibleChange(val) {
-      if (!val) return
-      if (!this.activeData.relationField) this.$message.warning('请先选择关联流程')
+      this.options = list.map(o => ({
+        ...o,
+        prop: o.__config__ && o.__config__.tableName ? o.__vModel__ + '_jnpfTable_' + o.__config__.tableName + (o.__config__.isSubTable ? '0' : "1") : o.__vModel__
+      }))
     }
   }
 }

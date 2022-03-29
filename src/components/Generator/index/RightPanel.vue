@@ -113,14 +113,12 @@
               :active-data="activeData" v-on="$listeners" :key="activeData.__config__.renderKey" />
             <RelationFormAttr v-if="activeData.__config__.jnpfKey==='relationFormAttr'"
               :active-data="activeData" ref="relationFormAttr" />
-            <RelationFlow v-if="activeData.__config__.jnpfKey==='relationFlow'"
-              :active-data="activeData" v-on="$listeners" />
-            <RelationFlowAttr v-if="activeData.__config__.jnpfKey==='relationFlowAttr'"
-              :active-data="activeData" ref="relationFlowAttr" />
             <JNPFCalculate v-if="activeData.__config__.jnpfKey==='calculate'"
               :active-data="activeData" ref="calculate" />
             <PopupSelect v-if="activeData.__config__.jnpfKey==='popupSelect'"
               :active-data="activeData" />
+            <PopupAttr v-if="activeData.__config__.jnpfKey==='popupAttr'" :active-data="activeData"
+              ref="popupAttr" />
             <Tab v-if="activeData.__config__.jnpfKey==='tab'" :active-data="activeData" />
             <Collapse v-if="activeData.__config__.jnpfKey==='collapse'" :active-data="activeData" />
             <template v-if="activeData.__config__.jnpfKey==='barcode'">
@@ -222,7 +220,7 @@
                   <el-radio-button label="right">居右</el-radio-button>
                 </el-radio-group>
               </el-form-item>
-              <el-form-item label="控件样式">
+              <el-form-item label="样式">
                 <el-select v-model="activeData.type" placeholder="请选择">
                   <el-option label="默认按钮" value=""></el-option>
                   <el-option label="主要按钮" value="primary"></el-option>
@@ -231,9 +229,6 @@
                   <el-option label="警告按钮" value="warning"></el-option>
                   <el-option label="危险按钮" value="danger"></el-option>
                 </el-select>
-              </el-form-item>
-              <el-form-item label="是否禁用">
-                <el-switch v-model="activeData.disabled" />
               </el-form-item>
             </template>
             <template v-if="isSystem">
@@ -348,7 +343,8 @@
           </el-form-item>
           <el-form-item label="弹窗类型" v-if="modelType != 3 && modelType!=6 && webType==2">
             <el-select v-model="formConf.popupType" placeholder="请选择">
-              <el-option label="普通弹窗" value="general"></el-option>
+              <el-option label="居中弹窗" value="general"></el-option>
+              <el-option label="右侧弹窗" value="drawer"></el-option>
               <el-option label="全屏弹窗" value="fullScreen"></el-option>
             </el-select>
           </el-form-item>
@@ -367,6 +363,12 @@
           <el-form-item label="表单宽度" v-if="formConf.popupType==='fullScreen'">
             <el-select v-model="formConf.fullScreenWidth" placeholder="请选择">
               <el-option v-for="item in fullScreenWidthOptions" :label="item" :value="item"
+                :key="item" />
+            </el-select>
+          </el-form-item>
+          <el-form-item label="表单宽度" v-if="formConf.popupType==='drawer'">
+            <el-select v-model="formConf.drawerWidth" placeholder="请选择">
+              <el-option v-for="item in generalWidthOptions" :label="item" :value="item"
                 :key="item" />
             </el-select>
           </el-form-item>
@@ -450,10 +452,9 @@ import TreeSelect from './RightComponents/TreeSelect'
 import GroupTitle from './RightComponents/GroupTitle'
 import RelationForm from './RightComponents/RelationForm'
 import RelationFormAttr from './RightComponents/RelationFormAttr'
-import RelationFlow from './RightComponents/RelationFlow'
-import RelationFlowAttr from './RightComponents/RelationFlowAttr'
 import JNPFCalculate from './RightComponents/Calculate'
 import PopupSelect from './RightComponents/PopupSelect'
+import PopupAttr from './RightComponents/PopupAttr'
 import Tab from './RightComponents/Tab'
 import Collapse from './RightComponents/Collapse'
 import TableConfig from './RightComponents/table'
@@ -491,10 +492,9 @@ export default {
     GroupTitle,
     RelationForm,
     RelationFormAttr,
-    RelationFlow,
-    RelationFlowAttr,
     JNPFCalculate,
     PopupSelect,
+    PopupAttr,
     Tab,
     Collapse,
     TableConfig
@@ -656,9 +656,9 @@ export default {
           this.$refs.relationFormAttr && this.$refs.relationFormAttr.getOptions()
         })
       }
-      if (val.__config__.jnpfKey === 'relationFlowAttr') {
+      if (val.__config__.jnpfKey === 'popupAttr') {
         this.$nextTick(() => {
-          this.$refs.relationFlowAttr && this.$refs.relationFlowAttr.getOptions()
+          this.$refs.popupAttr && this.$refs.popupAttr.getOptions()
         })
       }
       if (val.__config__.jnpfKey !== 'calculate') {

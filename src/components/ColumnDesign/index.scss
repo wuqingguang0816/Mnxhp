@@ -182,4 +182,60 @@
       }
     }
   }
+
+  .custom-btns-list {
+    .custom-item {
+      display: flex;
+      border: 1px dashed #fff;
+      box-sizing: border-box;
+
+      & .close-btn {
+        cursor: pointer;
+        color: #f56c6c;
+      }
+
+      & .el-input+.el-input {
+        margin-left: 4px;
+      }
+    }
+
+    .custom-item+.custom-item {
+      margin-top: 4px;
+    }
+
+    .custom-item.sortable-chosen {
+      border: 1px dashed #409eff;
+    }
+
+    .custom-line-icon {
+      line-height: 32px;
+      font-size: 22px;
+      padding: 0 4px;
+      color: #777;
+
+      &.option-drag {
+        padding-left: 0;
+      }
+
+      &.close-btn {
+        padding-right: 0;
+      }
+    }
+
+    .custom-line-value {
+      width: 85px;
+      flex-shrink: 0;
+      line-height: 32px;
+      font-size: 14px;
+    }
+
+    .custom-btn {
+      margin-left: 5px;
+      padding: 9px 10px;
+    }
+
+    .option-drag {
+      cursor: move;
+    }
+  }
 }

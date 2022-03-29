@@ -52,8 +52,8 @@
         </div>
         <JNPF-table v-loading="listLoading" :data="tableData" row-key="id" default-expand-all
           :tree-props="{children: 'children', hasChildren: ''}">
-          <el-table-column prop="fullName" label="名称" />
-          <el-table-column prop="enCode" label="编码" />
+          <el-table-column prop="fullName" label="部门名称" />
+          <el-table-column prop="enCode" label="部门编码" />
           <el-table-column prop="manager" label="部门主管" />
           <el-table-column prop="creatorTime" label="创建时间" :formatter="jnpf.tableDateFormat"
             width="120" />

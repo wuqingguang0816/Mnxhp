@@ -71,10 +71,10 @@ export const basicComponents = [{
     label: '数据面板',
     jnpfKey: 'dataBoard',
     list: [
-      { fullName: "新增客户（个）", num: 262, icon: "icon-ym icon-ym-wf-contractApproval" },
-      { fullName: "新增商机（个）", num: 199, icon: "icon-ym icon-ym-wf-outgoingApply" },
-      { fullName: "合同金额（元）", num: 1236263.05, icon: "icon-ym icon-ym-wf-payDistribution" },
-      { fullName: "回款金额（元）", num: 6223.23, icon: "icon-ym icon-ym-wf-incomeRecognition" }
+      { fullName: "新增客户（个）", num: 262, dataType: 'static', propsApi: '', icon: "icon-ym icon-ym-wf-contractApproval" },
+      { fullName: "新增商机（个）", num: 199, dataType: 'static', propsApi: '', icon: "icon-ym icon-ym-wf-outgoingApply" },
+      { fullName: "合同金额（元）", num: 126263.5, dataType: 'static', propsApi: '', icon: "icon-ym icon-ym-wf-payDistribution" },
+      { fullName: "回款金额（元）", num: 6223.2, dataType: 'static', propsApi: '', icon: "icon-ym icon-ym-wf-incomeRecognition" }
     ],
     w: 12,
     h: 3,

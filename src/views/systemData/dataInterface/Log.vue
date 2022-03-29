@@ -28,12 +28,12 @@
         </el-row>
         <JNPF-table v-loading="listLoading" :data="list">
           <el-table-column prop="invokTime" label="请求时间" :formatter="jnpf.tableDateFormat"
-            width="130" />
-          <el-table-column prop="userId" label="请求用户" />
-          <el-table-column prop="invokIp" label="请求IP" />
+            width="120" />
+          <el-table-column prop="userId" label="请求用户" width="120" />
+          <el-table-column prop="invokIp" label="请求IP" width="120" />
           <el-table-column prop="invokDevice" label="请求设备" show-overflow-tooltip />
-          <el-table-column prop="invokType" label="请求类型" />
-          <el-table-column prop="invokWasteTime" label="请求耗时" />
+          <el-table-column prop="invokType" label="请求类型" width="80" align="center" />
+          <el-table-column prop="invokWasteTime" label="耗时(毫秒)" width="80" />
         </JNPF-table>
         <pagination :total="total" :page.sync="listQuery.currentPage"
           :limit.sync="listQuery.pageSize" @pagination="initData" />

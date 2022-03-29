@@ -1,27 +1,61 @@
 <template>
   <div class="popupSelect-container">
-    <div class="popupSelect-input" @click="openDialog">
-      <el-input placeholder="请选择消息模板" :value="title" readonly>
-        <i slot="suffix" class="el-input__icon el-icon-circle-close" @click.stop="clear"
-          v-if="clearable"></i>
-        <i slot="suffix" class="el-input__icon el-icon-arrow-down"
-          :class="{'clearable':clearable}"></i>
+    <div class="el-select" @click="openDialog">
+      <el-input placeholder="请选择消息模板" v-model="title" readonly :validate-event="false"
+        @mouseenter.native="inputHovering = true" @mouseleave.native="inputHovering = false">
+        <template slot="suffix">
+          <i v-show="!showClose"
+            :class="['el-select__caret', 'el-input__icon', 'el-icon-arrow-up']"></i>
+          <i v-if="showClose" class="el-select__caret el-input__icon el-icon-circle-close"
+            @click.stop="clear"></i>
+        </template>
       </el-input>
     </div>
     <el-dialog title="消息模板" :close-on-click-modal="false" :visible.sync="visible"
-      class="JNPF-dialog JNPF-dialog_center" lock-scroll append-to-body width='600px'>
-      <JNPF-table v-loading="listLoading" :data="list" :border="false" highlight-current-row
-        @row-click="rowClick" :hasNO="false">
-        <el-table-column width="35">
-          <template slot-scope="scope">
-            <el-radio :label="scope.row.id" v-model="checked">&nbsp;</el-radio>
-          </template>
-        </el-table-column>
-        <el-table-column type="index" width="50" label="序号" align="center" />
-        <el-table-column prop="fullName" label="模板名称" width="150" />
-        <el-table-column prop="category" label="消息类型" width="100" />
-        <el-table-column prop="title" label="消息标题" show-overflow-tooltip />
-      </JNPF-table>
+      class="JNPF-dialog JNPF-dialog_center JNPF-dialog-tree-select" lock-scroll append-to-body
+      width='600px'>
+      <div class="JNPF-common-layout">
+        <div class="JNPF-common-layout-center">
+          <el-row class="JNPF-common-search-box" :gutter="16">
+            <el-form @submit.native.prevent>
+              <el-col :span="10">
+                <el-form-item label="关键词">
+                  <el-input v-model="listQuery.keyword" placeholder="请输入关键词查询" clearable
+                    @keyup.enter.native="search()" class="search-input" />
+                </el-form-item>
+              </el-col>
+              <el-col :span="8">
+                <el-form-item>
+                  <el-button type="primary" icon="el-icon-search" @click="search()">查询</el-button>
+                  <el-button icon="el-icon-refresh-right" @click="reset()">重置</el-button>
+                </el-form-item>
+              </el-col>
+            </el-form>
+            <div class="JNPF-common-search-box-right">
+              <el-tooltip effect="dark" content="刷新" placement="top">
+                <el-link icon="icon-ym icon-ym-Refresh JNPF-common-head-icon" :underline="false"
+                  @click="initData()" />
+              </el-tooltip>
+            </div>
+          </el-row>
+          <div class="JNPF-common-layout-main JNPF-flex-main">
+            <JNPF-table v-loading="listLoading" :data="list" :border="false" highlight-current-row
+              @row-click="rowClick" :hasNO="false">
+              <el-table-column width="35">
+                <template slot-scope="scope">
+                  <el-radio :label="scope.row.id" v-model="checked">&nbsp;</el-radio>
+                </template>
+              </el-table-column>
+              <el-table-column type="index" width="50" label="序号" align="center" />
+              <el-table-column prop="fullName" label="模板名称" width="150" />
+              <el-table-column prop="category" label="消息类型" width="100" />
+              <el-table-column prop="title" label="消息标题" show-overflow-tooltip />
+            </JNPF-table>
+            <pagination :total="total" :page.sync="listQuery.currentPage"
+              :limit.sync="listQuery.pageSize" @pagination="initData" />
+          </div>
+        </div>
+      </div>
       <span slot="footer" class="dialog-footer">
         <el-button @click="visible = false" size="small">{{$t('common.cancelButton')}}</el-button>
         <el-button type="primary" @click="select()" size="small">{{$t('common.confirmButton')}}
@@ -69,14 +103,26 @@ export default {
       checked: '',
       checkedRow: {},
       listLoading: false,
+      inputHovering: false,
       visible: false
+    }
+  },
+  computed: {
+    showClose() {
+      let hasValue = this.value !== undefined && this.value !== null && this.value !== '';
+      let criteria = this.clearable &&
+        !this.disabled &&
+        this.inputHovering &&
+        hasValue;
+      return criteria;
     }
   },
   methods: {
     initData() {
       this.listLoading = true
-      getSelector().then(res => {
+      getSelector(this.listQuery).then(res => {
         this.list = res.data.list
+        this.total = res.data.pagination.total
         this.listLoading = false
       }).catch(() => { this.listLoading = false })
     },
@@ -84,6 +130,15 @@ export default {
       if (this.disabled) return
       this.checked = this.value
       this.visible = true
+      this.reset()
+    },
+    reset() {
+      this.listQuery.keyword = ''
+      this.search()
+    },
+    search() {
+      this.listQuery.currentPage = 1
+      this.listQuery.pageSize = 20
       this.initData()
     },
     clear() {

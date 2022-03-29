@@ -1,11 +1,14 @@
 <template>
   <div class="popupSelect-container">
-    <div class="popupSelect-input" @click="openDialog">
-      <el-input :placeholder="placeholder" v-model="innerValue" readonly>
-        <i slot="suffix" class="el-input__icon el-icon-circle-close" @click.stop="clear"
-          v-if="clearable && !disabled"></i>
-        <i slot="suffix" class="el-input__icon el-icon-arrow-down"
-          :class="{'clearable':clearable && !disabled}"></i>
+    <div class="el-select" @click="openDialog">
+      <el-input :placeholder="placeholder" v-model="innerValue" readonly :validate-event="false"
+        @mouseenter.native="inputHovering = true" @mouseleave.native="inputHovering = false">
+        <template slot="suffix">
+          <i v-show="!showClose"
+            :class="['el-select__caret', 'el-input__icon', 'el-icon-arrow-up']"></i>
+          <i v-if="showClose" class="el-select__caret el-input__icon el-icon-circle-close"
+            @click.stop="clear"></i>
+        </template>
       </el-input>
     </div>
     <el-dialog title="选择数据" :close-on-click-modal="false" :visible.sync="visible" v-if="visible"
@@ -97,6 +100,10 @@ export default {
       type: Boolean,
       default: false
     },
+    multiple: {
+      type: Boolean,
+      default: false
+    },
     clearable: {
       type: Boolean,
       default: true
@@ -120,6 +127,7 @@ export default {
       checkedTxt: '',
       checkedRow: {},
       listLoading: false,
+      inputHovering: false,
       visible: false
     }
   },
@@ -128,9 +136,20 @@ export default {
       this.setDefault()
     }
   },
+  computed: {
+    showClose() {
+      let hasValue = this.multiple
+        ? Array.isArray(this.value) && this.value.length > 0
+        : this.value !== undefined && this.value !== null && this.value !== '';
+      let criteria = this.clearable &&
+        !this.disabled &&
+        this.inputHovering &&
+        hasValue;
+      return criteria;
+    }
+  },
   created() {
     this.listQuery.pageSize = this.hasPage ? this.pageSize : 10000
-    // this.reset()
     this.setDefault()
   },
   methods: {

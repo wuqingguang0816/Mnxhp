@@ -39,6 +39,8 @@ export default {
           this.pageTitle = this.$t(`position.postMember`) + '- ' + fullName
         } else if (type === 'Role') {
           this.pageTitle = this.$t(`role.roleMember`) + ' - ' + fullName
+        } else if (type === 'Group') {
+          this.pageTitle = '组内成员 - ' + fullName
         }
         this.$refs.userTransfer && (this.$refs.userTransfer.allLoading = true)
         getUserRelationList(this.dataForm.objectId).then(res => {

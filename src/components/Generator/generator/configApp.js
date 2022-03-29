@@ -705,7 +705,7 @@ export const selectComponents = [{
       showLabel: true,
       required: false,
       tag: 'popupSelect',
-      tagIcon: 'icon-ym icon-ym-generator-checkbox',
+      tagIcon: 'icon-ym icon-ym-generator-popup',
       defaultValue: '',
       layout: 'colFormItem',
       span: 24,
@@ -723,6 +723,38 @@ export const selectComponents = [{
     propsValue: 'id',
     relationField: 'fullName',
     disabled: false,
+  },
+  {
+    __config__: {
+      jnpfKey: 'relationFormAttr',
+      label: '关联表单属性',
+      labelWidth: undefined,
+      showLabel: true,
+      tag: 'relationFormAttr',
+      tagIcon: 'icon-ym icon-ym-generator-nature',
+      defaultValue: '',
+      layout: 'colFormItem',
+      span: 24,
+      dragDisabled: false
+    },
+    showField: '',
+    relationField: ''
+  },
+  {
+    __config__: {
+      jnpfKey: 'popupAttr',
+      label: '弹窗选择属性',
+      labelWidth: undefined,
+      showLabel: true,
+      tag: 'popupAttr',
+      tagIcon: 'icon-ym icon-ym-generator-popup-attr',
+      defaultValue: '',
+      layout: 'colFormItem',
+      span: 24,
+      dragDisabled: false
+    },
+    showField: '',
+    relationField: ''
   }
 ]
 

@@ -33,14 +33,19 @@
               <el-link icon="icon-ym icon-ym-Refresh JNPF-common-head-icon" :underline="false"
                 @click="initData()" />
             </el-tooltip>
+            <ColumnSettings v-model="columnList" />
           </div>
         </div>
         <JNPF-table v-loading="listLoading" :data="list" row-key="id" default-expand-all
           :tree-props="{children: 'children', hasChildren: ''}" @sort-change='sortChange'
-          :has-c="hasBatchBtn" @selection-change="handleSelectionChange" v-if="refreshTable">
-          <el-table-column :prop="item.prop" :label="item.label" :align="item.align"
-            :width="item.width" v-for="(item, i) in columnList" :key="i"
-            :sortable="item.sortable?'custom':item.sortable" />
+          :has-c="hasBatchBtn" @selection-change="handleSelectionChange" v-if="refreshTable"
+          :columnData="columnList">
+          <template v-for="(item, i) in columnList">
+            <template v-if="item.visible">
+              <el-table-column :prop="item.prop" :label="item.label" :align="item.align"
+                :width="item.width" :key="i" :sortable="item.sortable?'custom':item.sortable" />
+            </template>
+          </template>
           <el-table-column prop="flowState" label="状态" width="100" v-if="config.webType == 3">
             <template slot-scope="scope" v-if="!scope.row.top">
               <el-tag v-if="scope.row.flowState==1">等待审核</el-tag>
@@ -51,51 +56,89 @@
               <el-tag type="info" v-else>等待提交</el-tag>
             </template>
           </el-table-column>
-          <el-table-column label="操作" fixed="right" :width="columnData.columnBtnsList.length*50"
-            v-if="columnData.columnBtnsList.length">
+          <el-table-column label="操作" fixed="right" :width="operationWidth"
+            v-if="columnBtnsList.length || customBtnsList.length">
             <template slot-scope="scope" v-if="!scope.row.top">
               <template v-if="isPreview || !columnData.useBtnPermission">
-                <template v-for="(item, i) in columnData.columnBtnsList">
+                <template v-for="(item, i) in columnBtnsList">
                   <template v-if="item.value=='edit'">
                     <el-button size="mini" type="text" :key="i"
                       :disabled="config.webType == 3 && [1,2,5].indexOf(scope.row.flowState)>-1"
                       @click="columnBtnsHandel(item.value,scope.row)">
                       {{item.label}}</el-button>
                   </template>
-                  <template v-if="item.value=='remove'">
+                  <template v-else-if="item.value=='remove'">
                     <el-button size="mini" type="text" :key="i" class="JNPF-table-delBtn"
                       :disabled="config.webType == 3 && [1,2,3,5].indexOf(scope.row.flowState)>-1"
                       @click="columnBtnsHandel(item.value,scope.row)">
                       {{item.label}}</el-button>
                   </template>
-                  <template v-if="item.value=='detail'">
+                  <template v-else-if="item.value=='detail'">
                     <el-button size="mini" type="text" :key="i"
                       :disabled="config.webType == 3 && !scope.row.flowState"
                       @click="columnBtnsHandel(item.value,scope.row)">
+                      {{item.label}}</el-button>
+                  </template>
+                  <template v-else>
+                    <el-button size="mini" type="text" :key="i"
+                      @click="customBtnsHandel(item,scope.row,scope.$index)">
                       {{item.label}}</el-button>
                   </template>
                 </template>
+                <template v-if="customBtnsList.length">
+                  <el-dropdown hide-on-click>
+                    <span class="el-dropdown-link">
+                      <el-button type="text" size="mini">
+                        {{$t('common.moreBtn')}}<i class="el-icon-arrow-down el-icon--right"></i>
+                      </el-button>
+                    </span>
+                    <el-dropdown-menu slot="dropdown">
+                      <el-dropdown-item v-for="(item, i) in customBtnsList" :key="i"
+                        @click.native="customBtnsHandel(item,scope.row,scope.$index)">
+                        {{item.label}}</el-dropdown-item>
+                    </el-dropdown-menu>
+                  </el-dropdown>
+                </template>
               </template>
               <template v-else>
-                <template v-for="(item, i) in columnData.columnBtnsList">
+                <template v-for="(item, i) in columnBtnsList">
                   <template v-if="item.value=='edit'">
                     <el-button size="mini" type="text" :key="i"
                       :disabled="config.webType == 3 && [1,2,5].indexOf(scope.row.flowState)>-1"
                       @click="columnBtnsHandel(item.value,scope.row)" v-has="'btn_'+item.value">
                       {{item.label}}</el-button>
                   </template>
-                  <template v-if="item.value=='remove'">
+                  <template v-else-if="item.value=='remove'">
                     <el-button size="mini" type="text" :key="i" class="JNPF-table-delBtn"
                       :disabled="config.webType == 3 && [1,2,3,5].indexOf(scope.row.flowState)>-1"
                       @click="columnBtnsHandel(item.value,scope.row)" v-has="'btn_'+item.value">
                       {{item.label}}</el-button>
                   </template>
-                  <template v-if="item.value=='detail'">
+                  <template v-else-if="item.value=='detail'">
                     <el-button size="mini" type="text" :key="i"
                       :disabled="config.webType == 3 && !scope.row.flowState"
                       @click="columnBtnsHandel(item.value,scope.row)" v-has="'btn_'+item.value">
                       {{item.label}}</el-button>
                   </template>
+                  <template v-else>
+                    <el-button size="mini" type="text" :key="i" v-has="item.value"
+                      @click="customBtnsHandel(item,scope.row,scope.$index)">
+                      {{item.label}}</el-button>
+                  </template>
+                </template>
+                <template v-if="customBtnsList.length">
+                  <el-dropdown hide-on-click>
+                    <span class="el-dropdown-link">
+                      <el-button type="text" size="mini">
+                        {{$t('common.moreBtn')}}<i class="el-icon-arrow-down el-icon--right"></i>
+                      </el-button>
+                    </span>
+                    <el-dropdown-menu slot="dropdown">
+                      <el-dropdown-item v-for="(item, i) in customBtnsList" :key="i"
+                        @click.native="customBtnsHandel(item,scope.row,scope.$index)"
+                        v-has="item.value">{{item.label}}</el-dropdown-item>
+                    </el-dropdown-menu>
+                  </el-dropdown>
                 </template>
               </template>
             </template>
@@ -118,15 +161,19 @@
 import { getModelList, deleteModel, batchDelete, exportModel } from '@/api/onlineDev/visualDev'
 import { getDictionaryDataSelector } from '@/api/systemData/dictionary'
 import { getDataInterfaceRes } from '@/api/systemData/dataInterface'
+import { getColumnsByModuleId } from '@/api/common'
+import request from '@/utils/request'
 import Form from './Form'
 import FlowBox from '@/views/workFlow/components/FlowBox'
 import Detail from './detail'
 import ExportBox from './ExportBox'
 import Search from './Search'
+import commonMixin from '@/mixins/commonMixin'
 export default {
   name: 'dynamicModel',
   components: { Form, ExportBox, Search, Detail, FlowBox },
   props: ['config', 'modelId', 'isPreview'],
+  mixins: [commonMixin],
   data() {
     return {
       keyword: '',
@@ -163,16 +210,25 @@ export default {
       },
       formData: {},
       columnList: [],
+      columnBtnsList: [],
+      customBtnsList: [],
       hasBatchBtn: false,
       refreshTable: true,
-      multipleSelection: []
+      multipleSelection: [],
+      settingsColumnList: []
+    }
+  },
+  computed: {
+    operationWidth() {
+      const customWidth = this.customBtnsList.length ? 50 : 0
+      return this.columnBtnsList.length * 50 + customWidth
     }
   },
   created() {
     this.init()
   },
   methods: {
-    init() {
+    async init() {
       this.listQuery.menuId = this.$route.meta.modelId
       this.refreshTable = false
       if (!this.config.columnData || !this.config.formData) return
@@ -185,8 +241,14 @@ export default {
         this.refreshTable = true
       })
       this.formData = JSON.parse(this.config.formData)
+      this.customBtnsList = this.columnData.customBtnsList || []
+      this.columnBtnsList = this.columnData.columnBtnsList || []
+      this.listLoading = true
+      if (this.isPreview) this.listQuery.menuId = "270579315303777093"
+      let res = await getColumnsByModuleId(this.listQuery.menuId)
+      this.settingsColumnList = res.data || []
       this.getColumnList()
-      if (this.isPreview) return
+      if (this.isPreview) return this.listLoading = false
       this.listQuery.pageSize = this.columnData.pageSize
       this.listQuery.sort = this.columnData.sort
       this.listQuery.sidx = this.columnData.defaultSidx
@@ -246,30 +308,76 @@ export default {
       }
     },
     getColumnList() {
-      if (this.isPreview || !this.columnData.useColumnPermission) {
-        this.columnList = this.columnData.columnList
+      if (this.isPreview) {
+        this.columnList = this.columnData.columnList.map(o => ({
+          ...o,
+          visible: true
+        }))
+        return
+      }
+      let columnPermissionList = []
+      if (!this.columnData.useColumnPermission) {
+        columnPermissionList = this.columnData.columnList
       } else {
         const permissionList = this.$store.getters.permissionList
         const modelId = this.$route.meta.modelId
         const list = permissionList.filter(o => o.modelId === modelId)
         const columnList = list[0] && list[0].column ? list[0].column : []
-        let realList = []
         for (let i = 0; i < this.columnData.columnList.length; i++) {
           inner: for (let j = 0; j < columnList.length; j++) {
             if (this.columnData.columnList[i].prop === columnList[j].enCode) {
-              realList.push(this.columnData.columnList[i])
+              columnPermissionList.push(this.columnData.columnList[i])
               break inner
             }
           }
         }
-        this.columnList = realList
       }
+      let list = []
+      if (!this.settingsColumnList.length) {
+        list = columnPermissionList.map(o => ({
+          ...o,
+          visible: true
+        }))
+      } else {
+        outer: for (let i = 0; i < columnPermissionList.length; i++) {
+          let hasItem = false,
+            visible = true
+          inner: for (let j = 0; j < this.settingsColumnList.length; j++) {
+            if (columnPermissionList[i].prop === this.settingsColumnList[j].prop) {
+              hasItem = true
+              visible = this.settingsColumnList[j].visible
+              break inner
+            }
+          }
+          list.push({
+            ...columnPermissionList[i],
+            visible: hasItem ? visible : true
+          })
+        }
+      }
+      this.columnList = list
     },
-    handleNodeClick(data) {
+    getNodePath(node) {
+      let fullPath = []
+      const loop = (node) => {
+        if (node.level) fullPath.unshift(node.data)
+        if (node.parent) loop(node.parent)
+      }
+      loop(node)
+      return fullPath
+    },
+    handleNodeClick(data, node) {
       if (this.treeActiveId == data[this.treeProps.value]) return
       this.treeActiveId = data[this.treeProps.value]
       this.$refs.Search.treeReset()
-      let json = { [this.columnData.treeRelation]: data[this.treeProps.value] }
+      let json = {}
+      if (this.columnData.treeDataSource === "organize") {
+        const nodePath = this.getNodePath(node)
+        const currValue = nodePath.map(o => o[this.treeProps.value])
+        json = { [this.columnData.treeRelation]: currValue }
+      } else {
+        json = { [this.columnData.treeRelation]: data[this.treeProps.value] }
+      }
       this.search(JSON.stringify(json))
     },
     handleDel(id) {
@@ -286,7 +394,7 @@ export default {
         })
       }).catch(() => { });
     },
-    addOrUpdateHandle(id, flowState) {
+    addOrUpdateHandle(id) {
       if (this.config.webType == 3) {
         let data = {
           id: id || '',
@@ -357,7 +465,7 @@ export default {
       let query = { ...this.listQuery, ...data }
       exportModel(this.modelId, query).then(res => {
         if (!res.data.url) return
-        window.location.href = this.define.comUrl + res.data.url
+        this.jnpf.downloadFile(res.data.url)
         this.$refs.ExportBox.visible = false
         this.exportBoxVisible = false
       })
@@ -367,13 +475,13 @@ export default {
         this.addOrUpdateHandle(row.id)
       }
       if (key === 'detail') {
-        this.goDetail(row.id, row.flowState)
+        this.goDetail(row.id, row)
       }
       if (key == 'remove') {
         this.handleDel(row.id)
       }
     },
-    goDetail(id, flowState) {
+    goDetail(id, row) {
       if (this.config.webType == 3) {
         let data = {
           id,
@@ -384,7 +492,7 @@ export default {
           opType: 0,
           modelId: this.modelId,
           isPreview: this.isPreview,
-          status: flowState
+          status: row.flowState
         }
         this.flowVisible = true
         this.$nextTick(() => {
@@ -427,6 +535,26 @@ export default {
       this.listQuery.json = json
       this.listQuery.currentPage = 1
       this.initData()
+    },
+    customBtnsHandel(item, row, index) {
+      const parameter = {
+        data: row,
+        index,
+        request: this.request,
+        toast: this.$message,
+        refresh: this.initData
+      }
+      const func = this.jnpf.getScriptFunc.call(this, item.func)
+      if (!func) return
+      func.call(this, parameter)
+    },
+    request(url, method, data) {
+      if (!url) return
+      return request({
+        url: url,
+        method: method || 'GET',
+        data: data || {}
+      })
     }
   }
 }

@@ -20,29 +20,6 @@
       <el-tab-pane name="setAccount">
         <span slot="label"><i class="icon-ym icon-ym-extend-cog"></i>邮箱配置</span>
       </el-tab-pane>
-      <!-- <el-tab-pane disabled name="line"></el-tab-pane>
-      <el-tab-pane label="我的文件夹" name="subordinate" disabled>
-      </el-tab-pane>
-      <el-tab-pane name="Personal">
-        <el-link slot="label" :underline="false" type="warning"><i
-            class="ym-custom ym-custom-checkbox-blank-circle"></i>Personal
-        </el-link>
-      </el-tab-pane>
-      <el-tab-pane name="Work">
-        <el-link slot="label" :underline="false" type="primary"><i
-            class="ym-custom ym-custom-checkbox-blank-circle"></i>Work
-        </el-link>
-      </el-tab-pane>
-      <el-tab-pane name="Business">
-        <el-link slot="label" :underline="false" type="danger"><i
-            class="ym-custom ym-custom-checkbox-blank-circle"></i>Business
-        </el-link>
-      </el-tab-pane>
-      <el-tab-pane name="Clients">
-        <el-link slot="label" :underline="false" type="success"><i
-            class="ym-custom ym-custom-checkbox-blank-circle"></i>Clients
-        </el-link>
-      </el-tab-pane> -->
       <div class="main JNPF-flex-main">
         <el-row class="JNPF-common-search-box" :gutter="16">
           <el-form @submit.native.prevent>
@@ -129,21 +106,6 @@
           </el-table-column>
           <el-table-column label="操作" fixed="right" width="50">
             <template slot-scope="scope">
-              <!-- <el-dropdown>
-                <el-button type="text" size="mini">
-                  移动到<i class="el-icon-arrow-down el-icon--right"></i>
-                </el-button>
-                <el-dropdown-menu slot="dropdown">
-                  <el-dropdown-item @click.native="move(scope.row.id,'Personal')">Personal
-                  </el-dropdown-item>
-                  <el-dropdown-item @click.native="move(scope.row.id,'Work')">Work
-                  </el-dropdown-item>
-                  <el-dropdown-item @click.native="move(scope.row.id,'Business')">Business
-                  </el-dropdown-item>
-                  <el-dropdown-item @click.native="move(scope.row.id,'Clients')">Clients
-                  </el-dropdown-item>
-                </el-dropdown-menu>
-              </el-dropdown> -->
               <el-button size="mini" type="text" class="JNPF-table-delBtn"
                 @click="handleDel(scope.$index,scope.row.id)">删除</el-button>
             </template>

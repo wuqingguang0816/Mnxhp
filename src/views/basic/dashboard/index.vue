@@ -2,7 +2,13 @@
   <div class="dashboard-container" v-loading="loading"
     :element-loading-text="$t('common.loadingText')">
     <template v-if="!ajaxing">
-      <PortalLayout :layout="layout" v-if="portalId" />
+      <template v-if="portalId">
+        <PortalLayout :layout="layout" v-if="type===0" />
+        <div class="custom-page" v-if="type===1">
+          <component :is="currentView" v-if="linkType===0" />
+          <embed :src="url" width="100%" height="100%" type="text/html" v-if="linkType===1" />
+        </div>
+      </template>
       <div class="portal-layout-nodata" v-else>
         <img src="@/assets/images/dashboard-nodata.png" alt="" class="layout-nodata-img">
         <p class="layout-nodata-txt">暂无数据</p>
@@ -27,6 +33,10 @@ export default {
     return {
       portalId: '',
       layout: [],
+      type: null,
+      linkType: null,
+      currentView: null,
+      url: '',
       ajaxing: true,
       loading: false
     }
@@ -48,9 +58,20 @@ export default {
         return
       }
       getAuthPortal(this.portalId).then(res => {
-        if (res.data && res.data.formData) {
-          let formData = JSON.parse(res.data.formData)
-          this.layout = formData.layout || []
+        this.type = res.data.type || 0
+        this.linkType = res.data.linkType || 0
+        this.url = res.data.customUrl
+        if (res.data) {
+          if (res.data.type === 1) {
+            if (res.data.customUrl && res.data.customUrl !== 1) {
+              this.currentView = (resolve) => require([`@/views/${res.data.customUrl}`], resolve)
+            }
+          } else {
+            if (res.data.formData) {
+              let formData = JSON.parse(res.data.formData)
+              this.layout = formData.layout || []
+            }
+          }
         }
         this.ajaxing = false
         setTimeout(() => {
@@ -75,6 +96,10 @@ export default {
   height: 100%;
   background: #ebeef5;
   position: relative;
+  .custom-page {
+    width: 100%;
+    height: 100%;
+  }
   >>> .layout-area {
     width: 100%;
     border-radius: 4px;

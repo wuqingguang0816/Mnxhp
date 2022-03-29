@@ -40,10 +40,9 @@
               </el-form-item>
             </el-col>
             <el-col :sm="12" :xs="24">
-              <el-form-item label="所属组织" prop="organizeId">
-                <el-cascader v-model="organizeIdTree" :options="departmentTreeData"
-                  :props="departmentProps" placeholder="选择所属组织" clearable
-                  @change="onOrganizeChange" />
+              <el-form-item label="所属组织" prop="organizeIdTree">
+                <ComSelect v-model="dataForm.organizeIdTree" placeholder="选择所属组织" multiple
+                  @change="onOrganizeChange" clearable />
               </el-form-item>
             </el-col>
             <el-col :sm="12" :xs="24">
@@ -53,22 +52,25 @@
             </el-col>
             <el-col :sm="12" :xs="24">
               <el-form-item label="岗位" prop="positionId">
-                <el-select v-model="positionId" multiple placeholder="选择岗位" @change="positionChange"
-                  @visible-change="positionVisibleChange" filterable>
-                  <el-option v-for="item in positionTreeData" :key="item.id" :label="item.fullName"
-                    :value="item.id">
-                  </el-option>
+                <el-select v-model="positionId" placeholder="选择岗位" @change="onChange('positionId')"
+                  @visible-change="visibleChange" multiple filterable clearable>
+                  <el-option-group v-for="group in positionTreeData" :key="group.id"
+                    :label="group.fullName+(group.num?'【'+group.num+'】':'')">
+                    <el-option v-for="item in group.children" :key="group.id+item.id"
+                      :label="item.fullName" :value="item.id">
+                    </el-option>
+                  </el-option-group>
                 </el-select>
               </el-form-item>
             </el-col>
             <el-col :sm="12" :xs="24">
               <el-form-item label="角色" prop="roleId">
-                <el-select v-model="roleId" multiple placeholder="选择角色" @change="roleIdChange"
-                  filterable>
+                <el-select v-model="roleId" placeholder="选择角色" @change="onChange('roleId')"
+                  @visible-change="visibleChange" multiple filterable clearable>
                   <el-option-group v-for="group in roleTreeData" :key="group.id"
                     :label="group.fullName+(group.num?'【'+group.num+'】':'')">
-                    <el-option v-for="item in group.children" :key="item.id" :label="item.fullName"
-                      :value="item.id">
+                    <el-option v-for="item in group.children" :key="group.id+item.id"
+                      :label="item.fullName" :value="item.id">
                     </el-option>
                   </el-option-group>
                 </el-select>
@@ -82,7 +84,11 @@
             </el-col>
             <el-col :span="12">
               <el-form-item label="状态" prop="enabledMark">
-                <el-switch v-model="dataForm.enabledMark" :active-value="1" :inactive-value="0" />
+                <el-select v-model="dataForm.enabledMark" placeholder="选择状态">
+                  <el-option label="正常" :value="1" />
+                  <el-option label="锁定" :value="2" />
+                  <el-option label="禁用" :value="0" />
+                </el-select>
               </el-form-item>
             </el-col>
             <el-col :span="24">
@@ -97,8 +103,9 @@
           <el-row :gutter="20" class="custom-row">
             <el-col :span="24">
               <el-form-item label="头像" prop="headIcon">
-                <el-upload class="avatar-uploader" :action="define.comUploadUrl+'/userAvatar'"
-                  :show-file-list="false" :on-success="handleAvatarSuccess" accept="image/*">
+                <el-upload class="avatar-uploader" :headers="uploadHeaders"
+                  :action="define.comUploadUrl+'/userAvatar'" :show-file-list="false"
+                  :on-success="handleAvatarSuccess" accept="image/*">
                   <img v-if="dataForm.headIcon" :src="define.comUrl+dataForm.headIcon"
                     class="avatar">
                   <i v-else class="el-icon-plus avatar-uploader-icon" />
@@ -191,9 +198,9 @@
 </template>
 
 <script>
-import { getDepartmentSelector } from '@/api/permission/department'
 import { getPositionByOrganize } from '@/api/permission/position'
-import { getRoleSelector } from '@/api/permission/role'
+import { getRoleByOrganize } from '@/api/permission/role'
+import { getGroupSelector } from '@/api/permission/group'
 import { createUser, updateUser, getUserInfo } from '@/api/permission/user'
 
 export default {
@@ -208,10 +215,11 @@ export default {
         account: '',
         realName: '',
         organizeId: '',
-        organizeIdTree: '',
+        organizeIdTree: [],
         managerId: '',
         positionId: '',
         roleId: '',
+        groupId: '',
         description: '',
         headIcon: '',
         gender: null,
@@ -231,25 +239,20 @@ export default {
         postalAddress: ''
       },
       roleId: [],
+      groupId: [],
       positionId: [],
-      organizeIdTree: [],
-      departmentTreeData: [],
       positionTreeData: [],
       roleTreeData: [],
+      groupTreeData: [],
       genderTreeData: [],
       nationTreeData: [],
       educationTreeData: [],
       certificatesTypeTreeData: [],
+      uploadHeaders: { Authorization: this.$store.getters.token },
       formLoading: false,
       genderProps: {
         value: 'enCode',
         label: 'fullName'
-      },
-      departmentProps: {
-        value: 'id',
-        label: 'fullName',
-        children: 'children',
-        checkStrictly: true
       },
       dataRule: {
         account: [
@@ -265,32 +268,27 @@ export default {
         gender: [
           { required: true, message: '请选择性别', trigger: 'change' }
         ],
-        organizeId: [
-          { required: true, message: '请选择所属组织', trigger: 'change' }
+        organizeIdTree: [
+          { required: true, message: '请选择所属组织', trigger: 'change', type: 'array' }
         ]
       }
     }
   },
   methods: {
-    init(id, organizeId) {
+    init(id) {
       this.visible = true
       this.dataForm.id = id || ''
       this.roleId = []
+      this.groupId = []
       this.positionId = []
-      this.organizeIdTree = []
+      this.dataForm.organizeIdTree = []
       this.$nextTick(() => {
+        this.formLoading = true
         this.$refs['dataForm'].resetFields()
-
-        // 获取公司+部门
-        getDepartmentSelector().then(res => {
-          this.departmentTreeData = res.data.list
+        // 获取分组下拉列表
+        getGroupSelector().then(res => {
+          this.groupTreeData = res.data
         })
-
-        // 获取角色
-        getRoleSelector().then(res => {
-          this.roleTreeData = res.data.list
-        })
-
         // 获取民族
         this.$store.dispatch('base/getDictionaryData', { sort: 'Nation' }).then(res => {
           this.nationTreeData = res
@@ -308,46 +306,49 @@ export default {
           })
         })
         if (this.dataForm.id) {
-          this.formLoading = true
           getUserInfo(this.dataForm.id).then(res => {
             this.dataForm = res.data
             if (this.dataForm.roleId) this.roleId = this.dataForm.roleId.split(',')
+            if (this.dataForm.groupId) this.groupId = this.dataForm.groupId.split(',')
             if (this.dataForm.positionId) this.positionId = this.dataForm.positionId.split(',')
-            if (this.dataForm.organizeIdTree) this.organizeIdTree = this.dataForm.organizeIdTree.split(',')
-            if (this.dataForm.organizeId) {
-              getPositionByOrganize(this.dataForm.organizeId).then(res => {
-                this.positionTreeData = res.data
-              })
+            if (this.dataForm.organizeIdTree && this.dataForm.organizeIdTree.length) {
+              this.getOptionsByOrgIds(this.dataForm.organizeIdTree)
             }
             this.formLoading = false
           }).catch(() => this.formLoading = false)
         } else {
-          this.dataForm.organizeId = organizeId
+          this.formLoading = false
         }
       })
     },
     goBack() {
       this.$emit('close')
     },
-    roleIdChange() {
-      this.dataForm.roleId = this.roleId.join()
-    },
-    positionChange() {
-      this.dataForm.positionId = this.positionId.join()
+    onChange(key) {
+      this.dataForm[key] = this[key].join()
     },
     onOrganizeChange(val) {
-      if (!val) return this.dataForm.organizeId = ''
-      this.dataForm.organizeId = val[val.length - 1]
-      this.dataForm.organizeIdTree = val.join(',')
       this.dataForm.positionId = ''
+      this.dataForm.roleId = ''
+      this.dataForm.organizeId = ''
       this.positionId = []
-      getPositionByOrganize(this.dataForm.organizeId).then(res => {
-        this.positionTreeData = res.data
+      this.roleId = []
+      if (!val || !val.length) return
+      this.getOptionsByOrgIds(val)
+    },
+    getOptionsByOrgIds(organizeIdTree) {
+      const organizeIds = organizeIdTree.map(o => o[o.length - 1])
+      this.dataForm.organizeId = organizeIds.join()
+      getPositionByOrganize(organizeIds).then(res => {
+        this.positionTreeData = res.data.list.filter(o => o.children && Array.isArray(o.children) && o.children.length)
+      })
+      getRoleByOrganize(organizeIds).then(res => {
+        this.roleTreeData = res.data.list.filter(o => o.children && Array.isArray(o.children) && o.children.length)
       })
     },
-    positionVisibleChange(val) {
+    visibleChange(val) {
       if (!val) return
-      if (!this.dataForm.organizeId) this.$message.warning('请先选择所属组织')
+      if (!this.dataForm.organizeIdTree || !this.dataForm.organizeIdTree.length) this.$message.warning('请先选择所属组织')
     },
     handleAvatarSuccess(res) {
       if (res.code === 200 && res.data && res.data.url) {

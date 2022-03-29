@@ -41,7 +41,7 @@
             <span>全部数据</span>
           </div>
           <div class="transfer-pane__body">
-            <el-tree :data="treeData" :props="props" highlight-current check-on-click-node
+            <el-tree :data="treeData" :props="props" check-on-click-node
               @node-click="handleNodeClick" class="JNPF-common-el-tree" node-key="id"
               v-loading="loading" lazy :load="loadNode">
               <span class="custom-tree-node" slot-scope="{ node, data }">

@@ -3,6 +3,7 @@ import { message } from '@/utils/message'
 import store from '@/store'
 import { getToken } from '@/utils/auth'
 import define from '@/utils/define'
+import context from '@/main'
 
 
 // create an axios instance
@@ -63,7 +64,8 @@ service.interceptors.response.use(
             // 600：登录过期,请重新登录  601: 您的帐号在其他地方已登录,被强制踢出 602: Token验证失败
             store.dispatch('user/resetToken').then(() => {
               if (window.location.pathname.indexOf('login') > -1) return
-              setTimeout(() => { location.reload() }, 100);
+              // setTimeout(() => { location.reload() }, 100);
+              context.$router.push(`/login`)
             })
           }
         }

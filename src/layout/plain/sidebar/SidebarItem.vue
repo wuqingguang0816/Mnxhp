@@ -6,7 +6,7 @@
       <template slot="title">
         <item :icon="item.icon" :title="generateTitle(item.vueName,item.fullName)" />
       </template>
-      <sidebar-item v-for="child in item.children" :key="child.enCode" :is-nest="true" :item="child"
+      <sidebar-item v-for="child in item.children" :key="child.id" :is-nest="true" :item="child"
         :base-path="child.path" class="nest-menu" />
     </el-submenu>
     <template v-else>

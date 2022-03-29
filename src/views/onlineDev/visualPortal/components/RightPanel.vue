@@ -18,17 +18,31 @@
                 <i class="el-icon-remove-outline" />
               </div>
             </div>
-            <el-button icon="el-icon-circle-plus-outline" type="text" @click="addSelectItem"
-              v-if="activeData.list.length<10">添加选项</el-button>
+            <div class="mt-10">
+              <el-button icon="el-icon-plus" @click="addSelectItem"
+                v-if="activeData.list.length<10">添加选项</el-button>
+            </div>
           </template>
           <template v-if="activeData.jnpfKey === 'dataBoard'">
             <div v-for="(item, index) in activeData.list" :key="index" class="dataBoard-item">
-              <el-divider v-if="index>0"></el-divider>
-              <p>选项{{index+1}}</p>
+              <p class="head"><span>选项{{index+1}}</span>
+                <a class="head-icon el-icon-close" @click="delDataBoardItem(index)"></a>
+              </p>
               <el-form-item label="标题">
                 <el-input v-model="item.fullName" placeholder="请输入标题" />
               </el-form-item>
-              <el-form-item label="数值">
+              <el-form-item label="数据类型">
+                <el-radio-group v-model="item.dataType">
+                  <el-radio-button label="static">静态数据</el-radio-button>
+                  <el-radio-button label="dynamic">远端数据</el-radio-button>
+                </el-radio-group>
+              </el-form-item>
+              <el-form-item label="数据接口" v-if="item.dataType==='dynamic'">
+                <JNPF-TreeSelect :options="dataInterfaceOptions" v-model="item.propsApi"
+                  placeholder="请选择数据接口" lastLevel lastLevelKey='categoryId' lastLevelValue='1'
+                  clearable />
+              </el-form-item>
+              <el-form-item label="数值" v-if="item.dataType==='static'">
                 <el-input v-model="item.num" placeholder="请输入数值" />
               </el-form-item>
               <el-form-item label="图标">
@@ -37,7 +51,10 @@
                     选择</el-button>
                 </el-input>
               </el-form-item>
+              <el-divider></el-divider>
             </div>
+            <el-button icon="el-icon-plus" @click="addDataBoardItem"
+              v-if="activeData.list.length<6">添加选项</el-button>
           </template>
           <template v-if="activeData.jnpfKey && activeData.jnpfKey.indexOf('Chart')>-1">
             <el-form-item label="数据类型">
@@ -127,6 +144,19 @@ export default {
       }
       this.activeData.list.splice(index, 1)
     },
+    addDataBoardItem() {
+      this.activeData.list.push({ fullName: "", num: '', dataType: 'static', propsApi: '', icon: "" })
+    },
+    delDataBoardItem(index) {
+      if (this.activeData.list.length < 3) {
+        this.$message({
+          message: '选项最少要保留两项',
+          type: 'warning'
+        });
+        return
+      }
+      this.activeData.list.splice(index, 1)
+    },
     openIconsDialog(index) {
       this.iconsVisible = true
       this.currentIndex = index
@@ -185,6 +215,14 @@ export default {
     }
     .el-divider--horizontal {
       margin: 14px 0;
+    }
+    .head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      .head-icon {
+        color: #f56c6c;
+      }
     }
   }
 }

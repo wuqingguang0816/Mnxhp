@@ -31,7 +31,7 @@
                 </el-col>
               </el-form>
             </el-row>
-            <el-scrollbar class="list" v-loading="listLoading"
+            <div class="list" ref="infiniteBody" v-loading="listLoading && listQuery.currentPage==1"
               :element-loading-text="$t('common.loadingText')">
               <el-row :gutter="20" v-if="list.length">
                 <el-col :span="6" v-for="(item,i) in list" :key="i" class="item"
@@ -45,9 +45,7 @@
                 </el-col>
               </el-row>
               <el-empty description="暂无数据" :image-size="120" v-else></el-empty>
-            </el-scrollbar>
-            <pagination :total="total" :page.sync="listQuery.currentPage"
-              :limit.sync="listQuery.pageSize" @pagination="initData" />
+            </div>
           </div>
         </el-tabs>
       </div>
@@ -69,6 +67,7 @@ export default {
         sidx: ''
       },
       total: 0,
+      finish: false,
       list: [],
       listLoading: true,
       categoryList: []
@@ -85,13 +84,17 @@ export default {
     },
     init() {
       this.getDictionaryData()
-      // this.initData()
+      this.$nextTick(() => {
+        this.bindScroll()
+      })
     },
     reset() {
       this.keyword = ''
       this.search()
     },
     search() {
+      this.list = []
+      this.finish = false
       this.listQuery = {
         currentPage: 1,
         pageSize: 50,
@@ -99,6 +102,16 @@ export default {
         sidx: ''
       }
       this.initData()
+    },
+    bindScroll() {
+      let _this = this,
+        vBody = _this.$refs.infiniteBody;
+      vBody.addEventListener("scroll", function () {
+        if (vBody.scrollHeight - vBody.clientHeight - vBody.scrollTop <= 200 && !_this.listLoading && !_this.finish) {
+          _this.listQuery.currentPage += 1
+          _this.initData()
+        }
+      });
     },
     initData() {
       this.listLoading = true
@@ -108,7 +121,10 @@ export default {
         category: this.category == 0 ? '' : this.category
       }
       FlowEnginePageList(query).then((res) => {
-        this.list = res.data.list
+        if (res.data.list.length < this.listQuery.pageSize) {
+          this.finish = true
+        }
+        this.list = [...this.list, ...res.data.list]
         this.total = res.data.pagination.total
         this.listLoading = false
       })
@@ -165,7 +181,7 @@ export default {
   .list {
     flex: 1;
     margin-top: 10px;
-    overflow: hidden;
+    overflow: hidden auto;
     .item {
       margin-bottom: 20px;
       cursor: pointer;

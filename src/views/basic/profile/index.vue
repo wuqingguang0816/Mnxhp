@@ -19,10 +19,52 @@
               <el-avatar :size="50" :src="define.comUrl+ data.avatar"></el-avatar>
               <div class="text">
                 <p>{{data.userName}}</p>
-                <p>{{data.department}}/{{data.position}}</p>
+                <p>{{data.department}}{{data.position?'/'+data.position:''}}</p>
               </div>
             </el-card>
           </el-tree>
+        </div>
+      </el-tab-pane>
+      <el-tab-pane label="我的组织" name="organize">
+        <div class="JNPF-common-title mb-10">
+          <h2 class="bold">我的组织</h2>
+        </div>
+        <div class="organize-list">
+          <el-row :gutter="80" v-if="organizeList.length">
+            <el-col :span="12" class="organize-item" v-for="(item,i) in organizeList" :key="i">
+              <div class="organize-item-main" :class="{active:activeOrganize===item.id}"
+                @click="changeMajor(item.id,'Organize')">
+                <i class="icon-ym icon-ym-organization"></i>
+                <p class="organize-name">{{item.fullName}}</p>
+                <p class="btn">默认</p>
+                <div class="icon-checked">
+                  <i class="el-icon-check"></i>
+                </div>
+              </div>
+            </el-col>
+          </el-row>
+          <el-empty description="暂无数据" :image-size="120" v-else></el-empty>
+        </div>
+      </el-tab-pane>
+      <el-tab-pane label="我的岗位" name="position">
+        <div class="JNPF-common-title mb-10">
+          <h2 class="bold">我的岗位</h2>
+        </div>
+        <div class="organize-list">
+          <el-row :gutter="80" v-if="positionList.length">
+            <el-col :span="12" class="organize-item" v-for="(item,i) in positionList" :key="i">
+              <div class="organize-item-main" :class="{active:activePosition===item.id}"
+                @click="changeMajor(item.id,'Position')">
+                <i class="icon-ym icon-ym-wf-outgoingApply"></i>
+                <p class="organize-name">{{item.fullName}}</p>
+                <p class="btn">主岗</p>
+                <div class="icon-checked">
+                  <i class="el-icon-check"></i>
+                </div>
+              </div>
+            </el-col>
+          </el-row>
+          <el-empty description="暂无数据" :image-size="120" v-else></el-empty>
         </div>
       </el-tab-pane>
       <el-tab-pane label="系统权限" name="authorize" class="el-tab-pane-authorize">
@@ -48,8 +90,7 @@
 </template>
 
 <script>
-import { UserSettingInfo, getSubordinate, UpdateAvatar, UpdateLanguage } from '@/api/permission/userSetting'
-import { mapGetters } from 'vuex'
+import { UserSettingInfo, getSubordinate, UpdateAvatar, UpdateLanguage, getUserOrganizes, getUserPositions, setMajor } from '@/api/permission/userSetting'
 import UserInfo from './components/UserInfo'
 import Password from './components/Password'
 import Authorize from './components/Authorize'
@@ -63,6 +104,10 @@ export default {
       user: {},
       treeData: [],
       activeTab: '',
+      organizeList: [],
+      positionList: [],
+      activeOrganize: '',
+      activePosition: '',
       visible: {
         user: true,
         password: false,
@@ -89,10 +134,18 @@ export default {
       if (val === 'subordinate') {
         this.nodeId = '0'
         this.getSubordinate()
+        return
+      }
+      if (val === 'organize') {
+        this.getUserOrganizes()
+        return
+      }
+      if (val === 'position') {
+        this.getUserPositions()
+        return
       }
     }
   },
-
   created() {
     this.getInfo()
   },
@@ -139,6 +192,42 @@ export default {
           message: res.msg,
           type: 'success',
           duration: 1000,
+        })
+      })
+    },
+    getUserOrganizes() {
+      getUserOrganizes().then(res => {
+        this.organizeList = res.data || []
+        const list = this.organizeList.filter(o => o.isDefault)
+        if (!list.length) return this.activeOrganize = ''
+        const activeItem = list[0]
+        this.activeOrganize = activeItem.id
+      })
+    },
+    getUserPositions() {
+      getUserPositions().then(res => {
+        this.positionList = res.data || []
+        const list = this.positionList.filter(o => o.isDefault)
+        if (!list.length) return this.activePosition = ''
+        const activeItem = list[0]
+        this.activePosition = activeItem.id
+      })
+    },
+    changeMajor(majorId, majorType) {
+      if (this['active' + majorType] === majorId) return
+      let query = {
+        majorId,
+        majorType
+      }
+      setMajor(query).then(res => {
+        this['active' + majorType] = majorId
+        this.$message({
+          message: res.msg,
+          type: 'success',
+          duration: 1500,
+          onClose() {
+            location.reload()
+          }
         })
       })
     }
@@ -285,6 +374,69 @@ export default {
     .subordinate-list {
       flex: 1;
       overflow: auto;
+    }
+  }
+  .organize-list {
+    width: 100%;
+    padding: 50px;
+    .organize-item {
+      margin-bottom: 30px;
+      .organize-item-main {
+        height: 70px;
+        position: relative;
+        border-radius: 4px;
+        border: 1px solid #dcdfe6;
+        display: flex;
+        align-items: center;
+        padding: 0 20px;
+        cursor: pointer;
+        box-shadow: 0 0 6px rgba(0, 0, 0, 0.16);
+        color: #606266;
+        &.active {
+          border: 1px solid #1890ff;
+          box-shadow: 0 0 6px rgba(6, 58, 108, 0.26);
+          color: #1890ff;
+          .btn,
+          .icon-checked {
+            display: block;
+          }
+        }
+        .icon-ym {
+          font-size: 24px;
+          margin-right: 10px;
+        }
+        .organize-name {
+          line-height: 24px;
+          font-size: 14px;
+        }
+        .btn {
+          display: none;
+          position: absolute;
+          right: 45px;
+          bottom: 7px;
+          font-size: 12px;
+        }
+        .icon-checked {
+          display: none;
+          width: 20px;
+          height: 20px;
+          border: 20px solid #1890ff;
+          border-left: 20px solid transparent;
+          border-top: 20px solid transparent;
+          border-bottom-right-radius: 2px;
+          position: absolute;
+          transform: scale(0.9);
+          right: -2px;
+          bottom: -2px;
+          i {
+            position: absolute;
+            top: -2px;
+            left: -3px;
+            font-size: 20px;
+            color: #fff;
+          }
+        }
+      }
     }
   }
 }

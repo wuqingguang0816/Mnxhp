@@ -77,3 +77,18 @@ export function synAllUserSysToQy() {
     method: 'GET'
   })
 }
+// 获取系统管理员
+export function getAdminList() {
+  return request({
+    url: 'api/system/SysConfig/getAdminList',
+    method: 'GET'
+  })
+}
+// 设置系统管理员
+export function setAdminList(adminIds) {
+  return request({
+    url: 'api/system/SysConfig/setAdminList',
+    method: 'PUT',
+    data: { adminIds }
+  })
+}

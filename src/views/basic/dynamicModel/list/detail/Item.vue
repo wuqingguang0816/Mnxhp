@@ -60,9 +60,12 @@
             <el-link :underline="false" @click.native="toDetail(item)" type="primary">
               {{ item.name }}</el-link>
           </template>
-          <template v-else-if="item.__config__.jnpfKey==='relationFormAttr'">
+          <template v-else-if="item.__config__.jnpfKey==='popupSelect'">
+            <p>{{ item.name }}</p>
+          </template>
+          <template v-else-if="['relationFormAttr','popupAttr'].includes(item.__config__.jnpfKey)">
             <p>
-              {{ relationData[item.relationField] &&relationData[item.relationField][item.showField] ? relationData[item.relationField][item.showField] : '' }}
+              {{ relationData[item.relationField] && relationData[item.relationField][item.showField] ? relationData[item.relationField][item.showField] : '' }}
             </p>
           </template>
           <template v-else-if="item.__config__.jnpfKey==='barcode'">
@@ -114,9 +117,9 @@
                 </template>
               </el-table-column>
               <el-table-column :key="columnIndex" :label="column.__config__.label"
-                v-else-if="column.__config__.jnpfKey==='relationFormAttr'">
+                v-else-if="['relationFormAttr','popupAttr'].includes(column.__config__.jnpfKey)">
                 <template slot-scope="scope">
-                  {{ scope.row[column.relationField+'_'+column.showField] }}
+                  {{ scope.row[column.relationField.split('_jnpfTable_')[0]+'_'+column.showField] }}
                 </template>
               </el-table-column>
               <el-table-column :key="columnIndex" :label="column.__config__.label"
@@ -185,7 +188,7 @@ export default {
     downloadFile(file) {
       if (!file.fileId) return
       getDownloadUrl('annex', file.fileId).then(res => {
-        if (res.data.url) window.location.href = this.define.comUrl + res.data.url
+        this.jnpf.downloadFile(res.data.url)
       })
     },
     getImgList(list) {

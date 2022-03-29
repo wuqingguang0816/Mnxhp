@@ -36,6 +36,7 @@ export default {
     },
     onOpen() {
       this.title = '文档预览 - ' + this.file.name
+      this.url = ''
       let query = {
         fileName: this.file.fileId,
         fileVersionId: this.file.fileVersionId

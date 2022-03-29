@@ -62,11 +62,14 @@
       class="JNPF-dialog JNPF-dialog_center about-dialog" lock-scroll width="400px">
       <div class="about-dialog-main">
         <div>
-          <img src="@/assets/images/jnpf.png" class="about-logo" />
+          <img :src="define.comUrl+sysConfig.logoIcon" class="about-logo"
+            v-if="sysConfig && sysConfig.logoIcon" />
+          <img src="@/assets/images/jnpf.png" class="about-logo" v-else />
         </div>
         <div>
-          <p class="title"><a href="https://www.jnpfsoft.com" target="_blank">JNPF快速开发平台</a></p>
-          <p>版本：{{define.version}}</p>
+          <p class="title"><a href="https://www.jnpfsoft.com"
+              target="_blank">{{sysConfig.sysName}}</a></p>
+          <p>版本：{{sysConfig.sysVersion}}</p>
           <p>作者：引迈软件</p>
           <p>引迈信息技术有限公司出品</p>
         </div>
@@ -118,6 +121,9 @@ export default {
       showSettings: state => state.settings.showSettings,
     }),
     ...mapGetters(['device', 'userInfo']),
+    sysConfig() {
+      return this.$store.state.settings.sysConfig
+    }
   },
   data() {
     return {

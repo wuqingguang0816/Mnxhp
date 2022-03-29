@@ -61,7 +61,9 @@
       </el-row>
       <div class="JNPF-common-layout-main JNPF-flex-main">
         <div class="JNPF-common-head">
-          <div></div>
+          <div>
+            <el-button type="primary" @click="goBatch">批量审批</el-button>
+          </div>
           <div class="JNPF-common-head-right">
             <el-tooltip effect="dark" :content="$t('common.refresh')" placement="top">
               <el-link icon="icon-ym icon-ym-Refresh JNPF-common-head-icon" :underline="false"
@@ -72,6 +74,7 @@
         <JNPF-table v-loading="listLoading" :data="list">
           <el-table-column prop="fullName" label="流程标题" show-overflow-tooltip min-width="150" />
           <el-table-column prop="flowName" label="所属流程" width="130" />
+          <el-table-column prop="nodeName" label="所属节点" width="130" />
           <el-table-column prop="startTime" label="发起时间" width="130"
             :formatter="jnpf.tableDateFormat" />
           <el-table-column prop="userName" label="发起人员" width="130" />
@@ -105,6 +108,7 @@
       </div>
     </div>
     <FlowBox v-if="formVisible" ref="FlowBox" @close="closeForm" />
+    <BatchList v-if="batchListVisible" ref="BatchList" @close="batchListVisible=false" />
   </div>
 </template>
 
@@ -112,9 +116,10 @@
 import { FlowBeforeList } from '@/api/workFlow/FlowBefore'
 import { FlowEngineListAll } from '@/api/workFlow/FlowEngine'
 import FlowBox from '../components/FlowBox'
+import BatchList from './BatchList'
 export default {
   name: 'workFlow-flowTodo',
-  components: { FlowBox },
+  components: { FlowBox, BatchList },
   data() {
     return {
       list: [],
@@ -128,6 +133,7 @@ export default {
         sidx: ''
       },
       formVisible: false,
+      batchListVisible: false,
       pickerOptions: {
         shortcuts: [{
           text: '最近一周',
@@ -234,6 +240,12 @@ export default {
       this.formVisible = true
       this.$nextTick(() => {
         this.$refs.FlowBox.init(data)
+      })
+    },
+    goBatch() {
+      this.batchListVisible = true
+      this.$nextTick(() => {
+        this.$refs.BatchList.init()
       })
     },
     closeForm(isRefresh) {

@@ -8,12 +8,25 @@ export function getLogList(id, data) {
     data
   })
 }
-
 // 删除或批量删除日志
 export function delLog(data) {
   return request({
     url: '/api/system/Log',
     method: 'DELETE',
     data
+  })
+}
+// 删除或批量删除日志
+export function getModuleName() {
+  return request({
+    url: '/api/system/Log/ModuleName',
+    method: 'GET'
+  })
+}
+// 一键清空
+export function batchDelLog(type) {
+  return request({
+    url: `/api/system/Log/${type}`,
+    method: 'DELETE'
   })
 }

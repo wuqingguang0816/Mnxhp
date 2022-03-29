@@ -49,8 +49,12 @@
       <div class="authorize-selectbox" v-else>
         <el-tree :data="roleTreeAllData" ref="roleTree" v-loading="roleTreeLoading"
           :element-loading-text="$t('common.loadingText')" show-checkbox default-expand-all
-          node-key="id" :props="defaultProps" check-on-click-node :expand-on-click-node="false"
+          node-key="onlyId" :props="defaultProps" check-on-click-node :expand-on-click-node="false"
           @check-change="selectTreeNodeClick">
+          <span slot-scope="{ node, data }">
+            <i :class="data.icon" />
+            <span style="padding-left: 4px;">{{ node.label }}</span>
+          </span>
         </el-tree>
       </div>
     </div>
@@ -118,14 +122,16 @@ export default {
       this.roleTreeLoading = true
       getRoleSelector().then(res => {
         let ids = []
-        for (let i = 0; i < res.data.list.length; i++) {
-          const item = res.data.list[i]
-          if (item.children && item.children.length) {
-            for (let j = 0; j < item.children.length; j++) {
-              ids.push(item.children[j].id)
+        const loop = list => {
+          for (let i = 0; i < list.length; i++) {
+            const item = list[i]
+            ids.push(item.onlyId)
+            if (item.children && item.children.length) {
+              loop(item.children)
             }
           }
         }
+        loop(res.data.list)
         this.roleAllIds = ids
         this.roleTreeAllData = res.data.list
         this.roleTreeLoading = false
@@ -305,7 +311,8 @@ export default {
           this.dataForm.resource = dataIds
           break
         case 5:
-          this.dataForm.roleIds = this.$refs.roleTree.getCheckedKeys()
+          let nodes = this.$refs.roleTree.getCheckedNodes()
+          this.dataForm.roleIds = nodes.map(o => o.id)
           break
       }
     },

@@ -138,14 +138,16 @@ const actions = {
       if (!state.roleList.length) {
         dispatch('getRoleTree').then(res => {
           let list = []
-          for (let i = 0; i < res.length; i++) {
-            const item = res[i]
-            if (item.children && item.children.length) {
-              for (let j = 0; j < item.children.length; j++) {
-                list.push(item.children[j])
+          const loop = (treeData) => {
+            for (let i = 0; i < treeData.length; i++) {
+              const item = treeData[i]
+              if (item.type === 'role') list.push(item)
+              if (item.hasChildren && item.children && Array.isArray(item.children)) {
+                loop(item.children)
               }
             }
           }
+          loop(res)
           commit('SET_ROLE_LIST', list)
           resolve(list)
         }).catch(error => {
@@ -207,7 +209,6 @@ const actions = {
         list = state.userList
       }
       let item = list.filter(o => o.id === id)[0]
-      // let name = item.realName + '/' + item.account
       resolve(item || {})
     })
   },

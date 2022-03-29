@@ -11,8 +11,14 @@
       </div>
       <el-form ref="dataForm" :model="dataForm" :rules="dataRule" v-loading="formLoading"
         label-width="60px" class="main">
+        <el-form-item label="用户" prop="toUserIds">
+          <user-select v-model="toUserIds" placeholder="全部用户" multiple clearable />
+        </el-form-item>
         <el-form-item label="标题" prop="title">
           <el-input v-model="dataForm.title" placeholder="公告标题" />
+        </el-form-item>
+        <el-form-item label="附件" prop="files">
+          <JNPF-UploadFz v-model="files" />
         </el-form-item>
         <el-form-item label="正文" prop="bodyText">
           <JNPFQuill v-model="dataForm.bodyText" />
@@ -35,9 +41,13 @@ export default {
       btnLoading: false,
       dataForm: {
         id: '',
+        toUserIds: '',
         title: '',
+        files: '',
         bodyText: ''
       },
+      toUserIds: [],
+      files: [],
       dataRule: {
         title: [
           { required: true, message: '公告标题不能为空', trigger: 'blur' }
@@ -54,6 +64,8 @@ export default {
     },
     init(id) {
       this.dataForm.id = id || 0
+      this.files = []
+      this.toUserIds = []
       this.visible = true
       this.formLoading = true
       this.$nextTick(() => {
@@ -61,6 +73,8 @@ export default {
         if (this.dataForm.id) {
           getNoticeInfo(this.dataForm.id).then(res => {
             this.dataForm = res.data
+            this.files = res.data.files ? JSON.parse(res.data.files) : []
+            this.toUserIds = res.data.toUserIds ? res.data.toUserIds.split(',') : []
           })
         }
         this.formLoading = false
@@ -70,6 +84,8 @@ export default {
       this.$refs['dataForm'].validate((valid) => {
         if (valid) {
           this.btnLoading = true
+          this.dataForm.files = JSON.stringify(this.files)
+          this.dataForm.toUserIds = this.toUserIds.join(',')
           const formMethod = this.dataForm.id ? updateNotice : createNotice
           formMethod(this.dataForm).then(res => {
             this.$message({

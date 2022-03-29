@@ -118,45 +118,48 @@
                   所指定的成员将作为子流程发起人，多人时，发起多个子流程</div>
                 <div v-if="subFlowForm.initiateType === 9" class="option-box-tip">
                   通过第三方调用从目标服务中获取子流程发起人</div>
-                <el-alert type="warning" :closable="false" v-if="subFlowForm.initiateType === 9">
-                  <div slot="title" class="tips">
-                    <p>请求参数：taskId、taskNodeId</p>
+                <el-form-item label="发起者的" style="margin-bottom:0;"
+                  v-if="subFlowForm.initiateType === 1">
+                  <el-select v-model="subFlowForm.managerLevel">
+                    <el-option v-for="item in 10" :key="item"
+                      :label="item===1?'直接主管':'第'+item+'级主管'" :value="item">
+                    </el-option>
+                  </el-select>
+                </el-form-item>
+                <el-form-item label="表单字段" style="margin-bottom:0;"
+                  v-if="subFlowForm.initiateType === 4">
+                  <el-select v-model="subFlowForm.formField" placeholder="请选择字段">
+                    <el-option v-for="item in usedFormItems" :key="item.__vModel__"
+                      :label="item.__config__.label" :value="item.__vModel__">
+                    </el-option>
+                  </el-select>
+                </el-form-item>
+                <el-form-item label="审批节点" style="margin-bottom:0;"
+                  v-if="subFlowForm.initiateType === 5">
+                  <el-select v-model="subFlowForm.nodeId" placeholder="请选择节点">
+                    <el-option v-for="item in nodeOptions" :key="item.nodeId"
+                      :label="item.properties.title" :value="item.nodeId">
+                    </el-option>
+                  </el-select>
+                </el-form-item>
+                <el-form-item style="margin-bottom:0;" v-if="subFlowForm.initiateType === 9">
+                  <div slot="label">请求路径
+                    <el-tooltip content="自带参数：taskId、taskNodeId" placement="top">
+                      <a class="el-icon-warning-outline"></a>
+                    </el-tooltip>
                   </div>
-                </el-alert>
-              </el-form-item>
-              <el-form-item label="发起者的" v-if="subFlowForm.initiateType === 1">
-                <el-select v-model="subFlowForm.managerLevel">
-                  <el-option v-for="item in 10" :key="item" :label="item===1?'直接主管':'第'+item+'级主管'"
-                    :value="item">
-                  </el-option>
-                </el-select>
-              </el-form-item>
-              <el-form-item label="表单字段" v-if="subFlowForm.initiateType === 4">
-                <el-select v-model="subFlowForm.formField" placeholder="请选择字段">
-                  <el-option v-for="item in usedFormItems" :key="item.__vModel__"
-                    :label="item.__config__.label" :value="item.__vModel__">
-                  </el-option>
-                </el-select>
-              </el-form-item>
-              <el-form-item label="审批节点" v-if="subFlowForm.initiateType === 5">
-                <el-select v-model="subFlowForm.nodeId" placeholder="请选择节点">
-                  <el-option v-for="item in nodeOptions" :key="item.nodeId"
-                    :label="item.properties.title" :value="item.nodeId">
-                  </el-option>
-                </el-select>
-              </el-form-item>
-              <el-form-item label="请求路径" v-if="subFlowForm.initiateType === 9">
-                <el-input v-model="subFlowForm.getUserUrl" placeholder="请输入接口地址">
-                  <template slot="prepend">GET</template>
-                </el-input>
-              </el-form-item>
-              <el-form-item v-if="subFlowForm.initiateType === 6">
-                <org-select ref="subFlow-role-org" type="role" v-model="subFlowForm.initiateRole"
-                  title="添加角色" class="mb-10" buttonType="button" />
-                <org-select ref="subFlow-position-org" buttonType="button"
-                  v-model="subFlowForm.initiatePos" title="添加岗位" type="position" class="mb-10" />
-                <org-select ref="subFlow-user-org" buttonType="button"
-                  v-model="subFlowForm.initiator" title="添加用户" />
+                  <el-input v-model="subFlowForm.getUserUrl" placeholder="请输入接口地址">
+                    <template slot="prepend">GET</template>
+                  </el-input>
+                </el-form-item>
+                <el-form-item style="margin-bottom:0;" v-if="subFlowForm.initiateType === 6">
+                  <org-select ref="subFlow-role-org" type="role" v-model="subFlowForm.initiateRole"
+                    title="添加角色" class="mb-10" buttonType="button" />
+                  <org-select ref="subFlow-position-org" buttonType="button"
+                    v-model="subFlowForm.initiatePos" title="添加岗位" type="position" class="mb-10" />
+                  <org-select ref="subFlow-user-org" buttonType="button"
+                    v-model="subFlowForm.initiator" title="添加用户" />
+                </el-form-item>
               </el-form-item>
               <el-form-item label="子流程类型">
                 <el-radio-group v-model="subFlowForm.isAsync">
@@ -286,6 +289,10 @@
                 <el-switch v-model="startForm.isComment" />
                 <div class="option-box-tip">*打开流程评论后，流程内涉及的用户均可进行意见评论</div>
               </el-form-item>
+              <el-form-item label="批量审批">
+                <el-switch v-model="startForm.isBatchApproval" />
+                <div class="option-box-tip">*打开批量审批后，该流程待审批工单可进行批量操作</div>
+              </el-form-item>
             </el-form>
           </el-scrollbar>
         </el-tab-pane>
@@ -293,10 +300,12 @@
           <div class="form-auth-table">
             <el-table :data="getFormOperates()" class="JNPF-common-table" size="mini" height="100%">
               <el-table-column prop="name" label="表单字段" align="left"></el-table-column>
-              <el-table-column prop="write" label="操作" align="center" width="200px">
+              <el-table-column prop="write" label="操作" align="center" width="250">
                 <template slot-scope="scope">
                   <el-checkbox v-model="scope.row.read">查看</el-checkbox>
                   <el-checkbox v-model="scope.row.write">编辑</el-checkbox>
+                  <el-checkbox v-model="scope.row.required" :disabled="scope.row.requiredDisabled">
+                    必填</el-checkbox>
                 </template>
               </el-table-column>
             </el-table>
@@ -304,7 +313,7 @@
         </el-tab-pane>
         <el-tab-pane label="流程事件">
           <el-scrollbar class="config-scrollbar">
-            <el-form :model="startForm" class="pd-10" label-width="130px" label-position="left">
+            <el-form :model="startForm" class="pd-10" label-position="left">
               <el-form-item label="发起事件">
                 <el-switch v-model="startForm.initFuncConfig.on" />
               </el-form-item>
@@ -467,61 +476,49 @@
                   指定可供选择的候选人处理审批单</div>
                 <div v-if="approverForm.assigneeType === 9" class="option-box-tip">
                   通过第三方调用从目标服务中获取审批人</div>
-                <el-alert type="warning" :closable="false" v-if="approverForm.assigneeType === 9">
-                  <div slot="title" class="tips">
-                    <p>请求参数：taskId、taskNodeId</p>
+                <el-form-item label="发起者的" style="margin-bottom:0;"
+                  v-if="approverForm.assigneeType === 1">
+                  <el-select v-model="approverForm.managerLevel">
+                    <el-option v-for="item in 10" :key="item"
+                      :label="item===1?'直接主管':'第'+item+'级主管'" :value="item">
+                    </el-option>
+                  </el-select>
+                </el-form-item>
+                <el-form-item label="表单字段" style="margin-bottom:0;"
+                  v-if="approverForm.assigneeType === 4">
+                  <el-select v-model="approverForm.formField" placeholder="请选择字段">
+                    <el-option v-for="item in usedFormItems" :key="item.__vModel__"
+                      :label="item.__config__.label" :value="item.__vModel__">
+                    </el-option>
+                  </el-select>
+                </el-form-item>
+                <el-form-item label="审批节点" style="margin-bottom:0;"
+                  v-if="approverForm.assigneeType === 5">
+                  <el-select v-model="approverForm.nodeId" placeholder="请选择节点">
+                    <el-option v-for="item in nodeOptions" :key="item.nodeId"
+                      :label="item.properties.title" :value="item.nodeId">
+                    </el-option>
+                  </el-select>
+                </el-form-item>
+                <el-form-item style="margin-bottom:0;" v-if="approverForm.assigneeType === 9">
+                  <div slot="label">请求路径
+                    <el-tooltip content="自带参数：taskId、taskNodeId" placement="top">
+                      <a class="el-icon-warning-outline"></a>
+                    </el-tooltip>
                   </div>
-                </el-alert>
-              </el-form-item>
-              <el-form-item label="发起者的" v-if="approverForm.assigneeType === 1">
-                <el-select v-model="approverForm.managerLevel">
-                  <el-option v-for="item in 10" :key="item" :label="item===1?'直接主管':'第'+item+'级主管'"
-                    :value="item">
-                  </el-option>
-                </el-select>
-              </el-form-item>
-              <el-form-item label="表单字段" v-if="approverForm.assigneeType === 4">
-                <el-select v-model="approverForm.formField" placeholder="请选择字段">
-                  <el-option v-for="item in usedFormItems" :key="item.__vModel__"
-                    :label="item.__config__.label" :value="item.__vModel__">
-                  </el-option>
-                </el-select>
-              </el-form-item>
-              <el-form-item label="审批节点" v-if="approverForm.assigneeType === 5">
-                <el-select v-model="approverForm.nodeId" placeholder="请选择节点">
-                  <el-option v-for="item in nodeOptions" :key="item.nodeId"
-                    :label="item.properties.title" :value="item.nodeId">
-                  </el-option>
-                </el-select>
-              </el-form-item>
-              <el-form-item label="请求路径" v-if="approverForm.assigneeType === 9">
-                <el-input v-model="approverForm.getUserUrl" placeholder="请输入接口地址">
-                  <template slot="prepend">GET</template>
-                </el-input>
-              </el-form-item>
-              <el-form-item v-if="approverForm.assigneeType === 6">
-                <org-select ref="approver-role-org" type="role" title="添加角色" buttonType="button"
-                  v-model="approverForm.approverRole" class="mb-10" />
-                <org-select ref="approver-position-org" buttonType="button"
-                  v-model="approverForm.approverPos" title="添加岗位" type="position" class="mb-10" />
-                <org-select ref="approver-user-org" title="添加用户" buttonType="button"
-                  v-model="approverForm.approvers" />
-              </el-form-item>
-              <el-form-item v-if="approverForm.assigneeType === 7">
-                <el-radio-group v-model="approverForm.userType" @change="onUserTypeChange">
-                  <el-radio label="role">指定角色</el-radio>
-                  <el-radio label="position">指定岗位</el-radio>
-                  <el-radio label="user">指定用户</el-radio>
-                </el-radio-group>
-                <org-select ref="approver-role-org" type="role" title="添加角色" buttonType="button"
-                  v-model="approverForm.approverRole" v-if="approverForm.userType==='role'"
-                  key="role7" />
-                <org-select ref="approver-position-org" buttonType="button"
-                  v-model="approverForm.approverPos" title="添加岗位" type="position"
-                  v-if="approverForm.userType==='position'" key="position7" />
-                <org-select ref="approver-user-org" title="添加用户" buttonType="button"
-                  v-model="approverForm.approvers" v-if="approverForm.userType==='user'"
-                  key="user7" />
+                  <el-input v-model="approverForm.getUserUrl" placeholder="请输入接口地址">
+                    <template slot="prepend">GET</template>
+                  </el-input>
+                </el-form-item>
+                <el-form-item style="margin-bottom:0;"
+                  v-if="approverForm.assigneeType === 6||approverForm.assigneeType === 7">
+                  <org-select ref="approver-role-org" type="role" title="添加角色" buttonType="button"
+                    v-model="approverForm.approverRole" class="mb-10" />
+                  <org-select ref="approver-position-org" buttonType="button"
+                    v-model="approverForm.approverPos" title="添加岗位" type="position" class="mb-10" />
+                  <org-select ref="approver-user-org" title="添加用户" buttonType="button"
+                    v-model="approverForm.approvers" />
+                </el-form-item>
               </el-form-item>
               <el-form-item label="审批方式">
                 <el-radio v-model="approverForm.counterSign" :label="0">
@@ -537,7 +534,12 @@
                   </el-option>
                 </el-select>
               </el-form-item>
-              <el-form-item label="加签设置">
+              <el-form-item>
+                <div slot="label">加签设置
+                  <el-tooltip content="开启后审批单可以新增临时审批人" placement="top">
+                    <a class="el-icon-warning-outline"></a>
+                  </el-tooltip>
+                </div>
                 <el-checkbox v-model="approverForm.hasFreeApprover">允许加签</el-checkbox>
               </el-form-item>
               <el-form-item label="进度设置">
@@ -586,9 +588,6 @@
                   <el-input v-model="approverForm.transferBtnText" />
                 </div>
                 <div class="per-cell">
-                  <el-checkbox v-model="approverForm.hasSign">签名</el-checkbox>
-                </div>
-                <div class="per-cell">
                   <el-checkbox v-model="approverForm.hasPrintBtn">打印</el-checkbox>
                   <el-input v-model="approverForm.printBtnText" />
                 </div>
@@ -597,6 +596,9 @@
                   <JNPF-TreeSelect :options="printTplList" v-model="approverForm.printId"
                     placeholder="请选择打印模板" lastLevel clearable></JNPF-TreeSelect>
                 </div>
+              </el-form-item>
+              <el-form-item label="签名设置">
+                <el-checkbox v-model="approverForm.hasSign">手写签名</el-checkbox>
               </el-form-item>
               <!-- <el-form-item label="超时设置">
                 <el-switch v-model="approverForm.timeoutConfig.on" class="mr-10" />
@@ -631,10 +633,12 @@
           <div class="form-auth-table">
             <el-table :data="getFormOperates()" class="JNPF-common-table" size="mini" height="100%">
               <el-table-column prop="name" label="表单字段" align="left"></el-table-column>
-              <el-table-column prop="write" label="操作" align="center" width="200px">
+              <el-table-column prop="write" label="操作" align="center" width="250">
                 <template slot-scope="scope">
                   <el-checkbox v-model="scope.row.read">查看</el-checkbox>
                   <el-checkbox v-model="scope.row.write">编辑</el-checkbox>
+                  <el-checkbox v-model="scope.row.required" :disabled="scope.row.requiredDisabled">
+                    必填</el-checkbox>
                 </template>
               </el-table-column>
             </el-table>
@@ -642,7 +646,7 @@
         </el-tab-pane>
         <el-tab-pane label="节点事件">
           <el-scrollbar class="config-scrollbar">
-            <el-form :model="approverForm" class="pd-10" label-width="130px" label-position="left">
+            <el-form :model="approverForm" class="pd-10" label-position="left">
               <el-form-item label="同意事件">
                 <el-switch v-model="approverForm.approveFuncConfig.on" />
               </el-form-item>
@@ -775,9 +779,9 @@
             </el-form>
           </el-scrollbar>
         </el-tab-pane>
-        <el-tab-pane label="通知设置">
+        <el-tab-pane label="节点通知">
           <el-scrollbar class="config-scrollbar">
-            <el-form :model="approverForm" class="pd-10" label-width="80px" label-position="left">
+            <el-form :model="approverForm" class="pd-10" label-position="left">
               <el-form-item label="等待审核">
                 <el-switch v-model="approverForm.waitApproveMsgConfig.on" />
               </el-form-item>
@@ -983,6 +987,7 @@ const defaultStartForm = {
   printBtnText: '打 印',
   printId: '',
   isComment: false,
+  isBatchApproval: false,
   isSummary: false,
   summaryType: 0,
   formOperates: []
@@ -1116,7 +1121,7 @@ const typeOptions = [
     value: 2
   },
   {
-    label: '变量',
+    label: '表单变量',
     value: 4
   },
   {
@@ -1261,15 +1266,10 @@ export default {
       this.approverForm.approverPos = []
       this.approverForm.approverRole = []
     },
-    onUserTypeChange() {
-      this.approverForm.approvers = []
-      this.approverForm.approverPos = []
-      this.approverForm.approverRole = []
-    },
     onOrgChange(data, key) {
 
     },
-    timeTangeLabel(item) {
+    timeRangeLabel(item) {
       const index = ['fc-time-duration', 'fc-date-duration'].findIndex(t => t === item.tag)
       if (index > -1) {
         return '时长' + ['(小时)', '(天)'][index]
@@ -1880,6 +1880,9 @@ export default {
 .form-auth-table {
   height: 100%;
   font-size: 14px;
+  >>> .el-checkbox__label {
+    font-size: 12px;
+  }
   .auth-table-header {
     background: #fafafa;
     line-height: 40px;

@@ -1,11 +1,14 @@
 <template>
   <div class="popupSelect-container">
-    <div class="popupSelect-input" @click="openDialog">
-      <el-input placeholder="请选择接口模板" :value="title" readonly>
-        <i slot="suffix" class="el-input__icon el-icon-circle-close" @click.stop="clear"
-          v-if="clearable"></i>
-        <i slot="suffix" class="el-input__icon el-icon-arrow-down"
-          :class="{'clearable':clearable}"></i>
+    <div class="el-select" @click="openDialog">
+      <el-input placeholder="请选择接口模板" v-model="title" readonly :validate-event="false"
+        @mouseenter.native="inputHovering = true" @mouseleave.native="inputHovering = false">
+        <template slot="suffix">
+          <i v-show="!showClose"
+            :class="['el-select__caret', 'el-input__icon', 'el-icon-arrow-up']"></i>
+          <i v-if="showClose" class="el-select__caret el-input__icon el-icon-circle-close"
+            @click.stop="clear"></i>
+        </template>
       </el-input>
     </div>
     <el-dialog title="接口模板" :close-on-click-modal="false" :visible.sync="visible"
@@ -29,7 +32,7 @@
                     @keyup.enter.native="search()" class="search-input" />
                 </el-form-item>
               </el-col>
-              <el-col :span="8">
+              <el-col :span="8" v-if="!dataType">
                 <el-form-item label="类型">
                   <el-select v-model="query.dataType" placeholder="请选择" clearable>
                     <el-option label="SQL操作" :value="1"></el-option>
@@ -115,6 +118,10 @@ export default {
       type: String,
       default: ''
     },
+    dataType: {
+      type: Number,
+      default: 0
+    },
     clearable: {
       type: Boolean,
       default: true
@@ -153,7 +160,18 @@ export default {
       },
       treeLoading: false,
       treeData: [],
+      inputHovering: false,
       visible: false
+    }
+  },
+  computed: {
+    showClose() {
+      let hasValue = this.value !== undefined && this.value !== null && this.value !== '';
+      let criteria = this.clearable &&
+        !this.disabled &&
+        this.inputHovering &&
+        hasValue;
+      return criteria;
     }
   },
   methods: {
@@ -161,7 +179,8 @@ export default {
       this.listLoading = true
       const query = {
         ...this.listQuery,
-        ...this.query
+        ...this.query,
+        dataType: this.dataType === 0 ? this.query.dataType : this.dataType
       }
       getDataInterfaceSelectorList(query).then(res => {
         this.list = res.data.list.map(o => {
@@ -203,7 +222,7 @@ export default {
           this.query.categoryId = this.treeData[0].id
           this.$refs.treeBox.setCurrentKey(this.query.categoryId)
           this.treeLoading = false
-          this.initData()
+          this.reset()
         })
       }).catch(() => {
         this.treeLoading = false
