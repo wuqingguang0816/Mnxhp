@@ -465,7 +465,7 @@ export default {
       let query = { ...this.listQuery, ...data }
       exportModel(this.modelId, query).then(res => {
         if (!res.data.url) return
-        window.location.href = this.define.comUrl + res.data.url
+        this.jnpf.downloadFile(res.data.url)
         this.$refs.ExportBox.visible = false
         this.exportBoxVisible = false
       })

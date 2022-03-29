@@ -45,7 +45,7 @@ export default {
     // 下载模板
     downLoad() {
       getTemplate(this.modelId).then(res => {
-        if (res.data.url) window.location.href = this.define.comUrl + res.data.url
+        this.jnpf.downloadFile(res.data.url)
       })
     },
     beforeUpload() { this.btnLoading = true },

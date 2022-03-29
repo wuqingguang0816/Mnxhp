@@ -334,8 +334,8 @@
               <el-form-item label="显示字段">
                 <el-select v-model="activeData.relationField" placeholder="请选择显示字段"
                   @visible-change="visibleChange" clearable>
-                  <el-option v-for="item in fieldOptions" :key="item.vmodel" :label="item.label"
-                    :value="item.vmodel" />
+                  <el-option v-for="item in relationFormFieldOptions" :key="item.vmodel"
+                    :label="item.label" :value="item.vmodel" />
                 </el-select>
               </el-form-item>
               <el-divider>列表字段</el-divider>
@@ -349,8 +349,8 @@
                   <el-select v-model="item.value" placeholder="请选择显示字段"
                     @visible-change="visibleChange" clearable
                     @change="onColumnFieldChange($event,item)">
-                    <el-option v-for="item in fieldOptions" :key="item.vmodel" :label="item.label"
-                      :value="item.vmodel" />
+                    <el-option v-for="item in relationFormFieldOptions" :key="item.vmodel"
+                      :label="item.label" :value="item.vmodel" />
                   </el-select>
                   <div class="close-btn select-line-icon"
                     @click="activeData.columnOptions.splice(index, 1)">
@@ -864,6 +864,7 @@ export default {
         children: "children"
       },
       relationFormOptions: [],
+      relationFormFieldOptions: [],
       relationFieldOptions: [],
       popupOptions: [],
       layoutTreeProps: {
@@ -921,7 +922,7 @@ export default {
         val.__config__.tableName = this.mainTable
       }
       if (val.__config__.jnpfKey == 'relationForm') {
-        this.getFieldOptions()
+        this.getRelationFormFieldOptions()
       }
       if (val.__config__.jnpfKey === 'relationFormAttr') this.getRelationFormOptions()
       if (val.__config__.jnpfKey === 'popupAttr') this.getPopupOptions()
@@ -932,7 +933,7 @@ export default {
     this.getDictionaryType()
     this.getDataInterfaceSelector()
     this.getFeatureSelector()
-    this.getFieldOptions()
+    this.getRelationFormFieldOptions()
     if (!this.activeData || !this.activeData.__config__) return
     if (!this.activeData.__config__.tableName && this.activeData.__config__.jnpfKey !== 'table') {
       this.activeData.__config__.tableName = this.mainTable
@@ -1186,10 +1187,10 @@ export default {
         this.featureData = res.data.list
       })
     },
-    getFieldOptions() {
+    getRelationFormFieldOptions() {
       if (!this.activeData.modelId) return
       getFormDataFields(this.activeData.modelId).then(res => {
-        this.fieldOptions = res.data.list
+        this.relationFormFieldOptions = res.data.list
       })
     },
     getRelationFormOptions() {
@@ -1267,7 +1268,7 @@ export default {
         this.fieldOptions = []
         return
       }
-      this.getFieldOptions()
+      this.getRelationFormFieldOptions()
     },
     addColumnOptionsItem() {
       this.activeData.columnOptions.push({

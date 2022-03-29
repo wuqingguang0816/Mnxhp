@@ -133,7 +133,7 @@ export default {
       ExportExcel(query).then(res => {
         this.btnLoading = false
         if (!res.data.url) return
-        window.location.href = this.define.comUrl + res.data.url
+        this.jnpf.downloadFile(res.data.url)
         this.visible = false
       }).catch(() => { this.btnLoading = false })
     }
