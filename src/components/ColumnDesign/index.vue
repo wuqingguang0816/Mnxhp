@@ -33,7 +33,7 @@
           </el-table-column>
           <el-table-column prop="label" label="列名" />
           <el-table-column prop="prop" label="字段" />
-          <el-table-column prop="sortable" label="排序" width="60">
+          <el-table-column prop="sortable" label="排序" width="60" align="center">
             <template slot-scope="scope">
               <el-checkbox v-model="scope.row.sortable" />
             </template>
@@ -198,7 +198,7 @@
                     <div v-for="(item, index) in columnData.customBtnsList" :key="index"
                       class="custom-item">
                       <div class="custom-line-icon option-drag">
-                        <i class="el-icon-s-operation" />
+                        <i class="icon-ym icon-ym-darg" />
                       </div>
                       <p class="custom-line-value">{{item.value}}</p>
                       <el-input v-model="item.label" placeholder="按钮名称" size="small" />

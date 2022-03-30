@@ -207,7 +207,7 @@ export default {
     line-height: 32px;
     font-size: 22px;
     padding: 0 4px;
-    color: #777;
+    color: #606266;
   }
   .dataBoard-item {
     .el-form-item--small.el-form-item {

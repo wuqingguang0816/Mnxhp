@@ -147,7 +147,7 @@
                   <div v-for="(item, index) in activeData.__slot__.options" :key="index"
                     class="select-item">
                     <div class="select-line-icon option-drag">
-                      <i class="el-icon-s-operation" />
+                      <i class="icon-ym icon-ym-darg" />
                     </div>
                     <el-input v-model="item.fullName" placeholder="选项名" size="small" />
                     <el-input v-model="item.id" placeholder="选项值" size="small" />
@@ -344,7 +344,7 @@
                 <div v-for="(item, index) in activeData.columnOptions" :key="index"
                   class="select-item">
                   <div class="select-line-icon option-drag">
-                    <i class="el-icon-s-operation" />
+                    <i class="icon-ym icon-ym-darg" />
                   </div>
                   <el-select v-model="item.value" placeholder="请选择显示字段"
                     @visible-change="visibleChange" clearable
@@ -397,7 +397,7 @@
                 <div v-for="(item, index) in activeData.columnOptions" :key="index"
                   class="select-item">
                   <div class="select-line-icon option-drag">
-                    <i class="el-icon-s-operation" />
+                    <i class="icon-ym icon-ym-darg" />
                   </div>
                   <el-input v-model="item.label" placeholder="列名" size="small" />
                   <el-input v-model="item.value" placeholder="字段" size="small" />
@@ -618,7 +618,7 @@
                 <div v-for="(item, index) in activeData.__config__.children" :key="index"
                   class="select-item">
                   <div class="select-line-icon option-drag">
-                    <i class="el-icon-s-operation" />
+                    <i class="icon-ym icon-ym-darg" />
                   </div>
                   <el-input v-model="item.title" placeholder="标签名称" size="small" />
                   <div class="close-btn select-line-icon" @click="delTabItem(index,item)">
@@ -643,7 +643,7 @@
                 <div v-for="(item, index) in activeData.__config__.children" :key="index"
                   class="select-item">
                   <div class="select-line-icon option-drag">
-                    <i class="el-icon-s-operation" />
+                    <i class="icon-ym icon-ym-darg" />
                   </div>
                   <el-input v-model="item.title" placeholder="标签名称" size="small" />
                   <div class="close-btn select-line-icon" @click="delCollapseItem(index,item)">
@@ -1408,33 +1408,38 @@ export default {
     height: 100%;
   }
 }
-
+>>> .select-item,
 .select-item {
   display: flex;
   border: 1px dashed #fff;
   box-sizing: border-box;
-  & .close-btn {
-    cursor: pointer;
-    color: #f56c6c;
-  }
   & .el-input + .el-input {
     margin-left: 4px;
   }
-}
-.select-item + .select-item {
-  margin-top: 4px;
-}
-.select-item.sortable-chosen {
-  border: 1px dashed #409eff;
-}
-.select-line-icon {
-  line-height: 32px;
-  font-size: 22px;
-  padding: 0 4px;
-  color: #777;
-}
-.option-drag {
-  cursor: move;
+  & + .select-item {
+    margin-top: 4px;
+  }
+  &.sortable-chosen {
+    border: 1px dashed #409eff;
+  }
+  .select-line-icon {
+    line-height: 32px;
+    font-size: 22px;
+    padding: 0 4px;
+    color: #606266;
+    .icon-ym-darg {
+      font-size: 20px;
+      line-height: 31px;
+      display: inline-block;
+    }
+  }
+  .close-btn {
+    cursor: pointer;
+    color: #f56c6c;
+  }
+  .option-drag {
+    cursor: move;
+  }
 }
 .time-range {
   .el-date-editor {

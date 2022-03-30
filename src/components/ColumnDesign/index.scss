@@ -211,7 +211,13 @@
       line-height: 32px;
       font-size: 22px;
       padding: 0 4px;
-      color: #777;
+      color: #606266;
+
+      .icon-ym {
+        font-size: 20px;
+        line-height: 32px;
+        display: inline-block;
+      }
 
       &.option-drag {
         padding-left: 0;
