@@ -25,6 +25,14 @@
               </el-form-item>
             </el-col>
             <el-col :span="24">
+              <el-form-item label="Cron表达式" prop="executeContent.cron">
+                <el-input v-model="dataForm.executeContent.cron" placeholder="Cron表达式" readonly>
+                  <el-button slot="append" icon="el-icon-edit-outline" @click="showDialog">
+                  </el-button>
+                </el-input>
+              </el-form-item>
+            </el-col>
+            <el-col :span="24">
               <el-form-item label="任务类型" prop="executeType">
                 <el-radio-group v-model="dataForm.executeType" @change="onExecuteTypeChange">
                   <el-radio label="1">Api数据</el-radio>
@@ -38,14 +46,6 @@
               </el-form-item>
             </el-col>
             <template v-if="dataForm.executeType=='1'||dataForm.executeType=='2'">
-              <el-col :span="24">
-                <el-form-item label="Cron表达式" prop="executeContent.cron">
-                  <el-input v-model="dataForm.executeContent.cron" placeholder="Cron表达式" readonly>
-                    <el-button slot="append" icon="el-icon-edit-outline" @click="showDialog">
-                    </el-button>
-                  </el-input>
-                </el-form-item>
-              </el-col>
               <el-col :span="24">
                 <el-form-item label="接口选择" prop="executeContent.interfaceId">
                   <interface-dialog v-model="dataForm.executeContent.interfaceId"
@@ -71,7 +71,8 @@
             <template v-if="dataForm.executeType=='3'">
               <el-col :span="24">
                 <el-form-item label="方法选择" prop="executeContent.localHostTaskId">
-                  <el-select v-model="dataForm.executeContent.localHostTaskId" placeholder="请选择">
+                  <el-select v-model="dataForm.executeContent.localHostTaskId" placeholder="请选择"
+                    @change="onLocalHostTaskIdChange">
                     <el-option v-for="item in taskOptions" :key="item.id" :label="item.fullName"
                       :value="item.id" />
                   </el-select>
@@ -239,7 +240,14 @@ export default {
       this.dataForm.executeContent.interfaceName = ''
       this.dataForm.executeContent.parameter = []
       this.dataForm.executeContent.localHostTaskId = ''
-      if (this.dataForm.executeType == '3') this.dataForm.executeContent.cron = ''
+    },
+    onLocalHostTaskIdChange(val) {
+      if (!val) return
+      let list = this.taskOptions.filter(o => o.id === val)
+      if (!list.length) return
+      let item = list[0]
+      if (!item.cron) return
+      this.dataForm.executeContent.cron = item.cron
     },
     getCrontabValue() {
       this.$refs.vcrontab && this.$refs.vcrontab.submitFill()

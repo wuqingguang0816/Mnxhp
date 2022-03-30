@@ -16,7 +16,7 @@
             <draggable :list="list" :animation="340" handle=".column-item-icon" @end="setColumn">
               <div class="column-item" v-for="item in list" :key="item.prop">
                 <div class="column-item-label">
-                  <i class="el-icon-s-operation column-item-icon"></i>
+                  <i class="icon-ym icon-ym-darg column-item-icon"></i>
                   <span>{{item.label}}</span>
                 </div>
                 <el-switch v-model="item.visible" size="small" @change="setColumn" />
@@ -123,7 +123,7 @@ export default {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 0 22px 0 3px;
+      padding: 0 22px 0 0;
       font-size: 14px;
       color: #303133;
       cursor: pointer;
@@ -135,9 +135,10 @@ export default {
       }
       .column-item-icon {
         width: 14px;
-        margin-right: 5px;
+        margin-right: 8px;
         color: #909399;
         cursor: move;
+        font-size: 20px;
       }
       .el-switch {
         transform: scale(0.8);
@@ -147,6 +148,8 @@ export default {
         white-space: nowrap;
         text-overflow: ellipsis;
         word-break: break-all;
+        display: flex;
+        align-items: center;
       }
     }
   }

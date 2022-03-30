@@ -43,7 +43,7 @@
         handle=".option-drag">
         <div v-for="(item, index) in activeData.__slot__.options" :key="index" class="select-item">
           <div class="select-line-icon option-drag">
-            <i class="el-icon-s-operation" />
+            <i class="icon-ym icon-ym-darg" />
           </div>
           <el-input v-model="item.fullName" placeholder="选项名" size="small" />
           <el-input v-model="item.id" placeholder="选项值" size="small" />
@@ -191,32 +191,3 @@ export default {
   }
 }
 </script>
-<style lang="scss">
-.select-item {
-  display: flex;
-  border: 1px dashed #fff;
-  box-sizing: border-box;
-  & .close-btn {
-    cursor: pointer;
-    color: #f56c6c;
-  }
-  & .el-input + .el-input {
-    margin-left: 4px;
-  }
-}
-.select-item + .select-item {
-  margin-top: 4px;
-}
-.select-item.sortable-chosen {
-  border: 1px dashed #409eff;
-}
-.select-line-icon {
-  line-height: 32px;
-  font-size: 22px;
-  padding: 0 4px;
-  color: #777;
-}
-.option-drag {
-  cursor: move;
-}
-</style>

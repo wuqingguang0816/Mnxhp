@@ -13,19 +13,10 @@
         <el-col :span="12" :offset="6">
           <el-form :model="dataForm" :rules="dataRule" ref="dataForm" class="mt-20"
             label-width="80px" @submit.native.prevent>
-            <!-- <el-form-item label="消息类型" prop="category">
-              <el-radio-group v-model="dataForm.category">
-                <el-radio-button :label="item.value" :key="item.value" v-for="item in categoryList">
-                  {{item.label}}
-                </el-radio-button>
-              </el-radio-group>
-            </el-form-item> -->
             <el-form-item label="模板名称" prop="fullName">
               <el-input v-model="dataForm.fullName" placeholder="模板名称"></el-input>
             </el-form-item>
             <el-form-item label="通知方式">
-              <el-checkbox v-model="dataForm.isStationLetter" :true-label="1" :false-label="0">站内信
-              </el-checkbox>
               <el-checkbox v-model="dataForm.isEmail" :true-label="1" :false-label="0">邮箱
               </el-checkbox>
               <el-checkbox v-model="dataForm.isWecom" :true-label="1" :false-label="0">企业微信
