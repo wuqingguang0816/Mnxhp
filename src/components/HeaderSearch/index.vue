@@ -185,3 +185,26 @@ export default {
   }
 }
 </style>
+<style lang="scss">
+.classic .lightWhite,
+.plain .lightWhite,
+.functional .dark,
+.blend .dark {
+  .header-search {
+    .el-input__inner {
+      background: transparent;
+      color: #fff;
+      border-color: #fff !important;
+    }
+    .el-input__inner::-webkit-input-placeholder {
+      color: #e7e7e7;
+    }
+    .el-input__inner::-moz-placeholder {
+      color: #e7e7e7;
+    }
+    .el-input__inner:-ms-input-placeholder {
+      color: #e7e7e7;
+    }
+  }
+}
+</style>
