@@ -25,14 +25,20 @@
     </div>
     <div class="center-board">
       <div class="action-bar">
-        <el-button icon="el-icon-video-play" type="text" @click="preview" size="medium">
-          预览</el-button>
-        <!-- <el-button icon="el-icon-view" type="text" @click="showJson" size="medium">
-          查看json</el-button> -->
-        <el-button class="delete-btn" icon="el-icon-delete" type="text" @click="empty"
-          size="medium">清空</el-button>
+        <el-button icon="icon-ym icon-ym-pc" :class="{'unActive-btn':showType!='pc'}" type="text"
+          @click="showType='pc'" size="medium"></el-button>
+        <el-button icon="icon-ym icon-ym-mobile" :class="{'unActive-btn':showType!='app'}"
+          type="text" @click="showType='app'" size="medium"></el-button>
+        <div class="action-bar-right">
+          <el-button icon="el-icon-video-play" type="text" @click="preview" size="medium">
+            预览</el-button>
+          <!-- <el-button icon="el-icon-view" type="text" @click="showJson" size="medium">
+            查看json</el-button> -->
+          <el-button class="delete-btn" icon="el-icon-delete" type="text" @click="empty"
+            size="medium">清空</el-button>
+        </div>
       </div>
-      <el-scrollbar class="center-scrollbar">
+      <el-scrollbar class="center-scrollbar" v-show="showType==='pc'">
         <el-row class="center-board-row" :gutter="formConf.gutter">
           <el-form :size="formConf.size" :label-position="formConf.labelPosition"
             :disabled="formConf.disabled" :label-width="formConf.labelWidth + 'px'">
@@ -49,6 +55,30 @@
           </el-form>
         </el-row>
       </el-scrollbar>
+      <div id="ipad" v-show="showType==='app'">
+        <div class="outeripad">
+          <div class="ipadbody">
+            <el-scrollbar class="center-scrollbar">
+              <el-row class="center-board-row" :gutter="formConf.gutter">
+                <el-form :size="formConf.size" :label-position="formConf.labelPosition"
+                  :disabled="formConf.disabled" :label-width="formConf.labelWidth + 'px'">
+                  <draggable class="drawing-board" :list="drawingList" :animation="340"
+                    group="componentsGroup" @end='onCenterEnd'>
+                    <draggable-item-app v-for="(element, index) in drawingList"
+                      :key="element.renderKey" :drawing-list="drawingList" :element="element"
+                      :index="index" :active-id="activeId" :form-conf="formConf"
+                      @activeItem="activeFormItem" @copyItem="drawingItemCopy"
+                      @deleteItem="drawingItemDelete" :put="shouldClone" :end='onTableEnd' />
+                  </draggable>
+                  <div v-show="!drawingList.length" class="empty-info app-empty-info">
+                    <img src="@/assets/images/emptyElement.png" alt="" class="empty-img">
+                  </div>
+                </el-form>
+              </el-row>
+            </el-scrollbar>
+          </div>
+        </div>
+      </div>
     </div>
     <right-panel :active-data="activeData" :form-conf="formConf" :show-field="!!drawingList.length"
       @tag-change="tagChange" :modelType="modelType" :webType="webType"
@@ -75,6 +105,7 @@ import {
 } from '@/components/Generator/utils'
 import drawingDefalut from '@/components/Generator/generator/drawingDefalut'
 import DraggableItem from './DraggableItem'
+import DraggableItemApp from './DraggableItemApp'
 import {
   getDrawingList, saveDrawingList, getIdGlobal, saveIdGlobal, getFormConf
 } from '@/components/Generator/utils/db'
@@ -91,6 +122,7 @@ export default {
     JsonDrawer,
     RightPanel,
     DraggableItem,
+    DraggableItemApp,
     Preview
   },
   props: ['conf', 'modelType', 'webType'],
@@ -120,6 +152,7 @@ export default {
       showTip: true,
       activeItem: {},
       activeTableItem: {},
+      showType: 'pc',
       leftComponents: [
         {
           title: '基础控件',
@@ -466,7 +499,6 @@ export default {
   }
 }
 </script>
-
 <style lang='scss'>
 @import '../styles/index';
 @import '../styles/home';

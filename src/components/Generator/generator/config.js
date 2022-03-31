@@ -44,6 +44,7 @@ export const inputComponents = [{
       layout: 'colFormItem',
       span: 24,
       dragDisabled: false,
+      visibility: ["pc", "app"],
       tableName: '',
       noShow: false,
       regList: [],
@@ -81,6 +82,7 @@ export const inputComponents = [{
       layout: 'colFormItem',
       span: 24,
       dragDisabled: false,
+      visibility: ["pc", "app"],
       tableName: '',
       regList: [],
       trigger: 'blur'
@@ -110,6 +112,7 @@ export const inputComponents = [{
       layout: 'colFormItem',
       span: 24,
       dragDisabled: false,
+      visibility: ["pc", "app"],
       tableName: '',
       regList: [],
       trigger: ['blur', 'change']
@@ -140,6 +143,7 @@ export const inputComponents = [{
       layout: 'colFormItem',
       span: 24,
       dragDisabled: false,
+      visibility: ["pc", "app"],
       tableName: '',
       regList: [],
       trigger: 'change'
@@ -168,6 +172,7 @@ export const inputComponents = [{
       layout: 'colFormItem',
       span: 24,
       dragDisabled: false,
+      visibility: ["pc", "app"],
       tableName: '',
       regList: [],
       trigger: 'change',
@@ -210,6 +215,7 @@ export const inputComponents = [{
       layout: 'colFormItem',
       span: 24,
       dragDisabled: false,
+      visibility: ["pc", "app"],
       tableName: '',
       regList: [],
       trigger: 'change',
@@ -252,6 +258,7 @@ export const inputComponents = [{
       layout: 'colFormItem',
       span: 24,
       dragDisabled: false,
+      visibility: ["pc", "app"],
       tableName: '',
       regList: [],
       trigger: 'change',
@@ -296,6 +303,7 @@ export const inputComponents = [{
       layout: 'colFormItem',
       span: 24,
       dragDisabled: false,
+      visibility: ["pc", "app"],
       tableName: '',
       regList: [],
       trigger: 'change',
@@ -344,6 +352,7 @@ export const inputComponents = [{
       layout: 'colFormItem',
       span: 24,
       dragDisabled: false,
+      visibility: ["pc", "app"],
       tableName: '',
       regList: [],
       trigger: 'change'
@@ -374,6 +383,7 @@ export const inputComponents = [{
       layout: 'colFormItem',
       span: 24,
       dragDisabled: false,
+      visibility: ["pc", "app"],
       tableName: '',
       regList: [],
       trigger: 'change'
@@ -406,6 +416,7 @@ export const inputComponents = [{
       layout: 'colFormItem',
       span: 24,
       dragDisabled: false,
+      visibility: ["pc", "app"],
       tableName: '',
       regList: [],
       trigger: 'click'
@@ -434,6 +445,7 @@ export const inputComponents = [{
       layout: 'colFormItem',
       span: 24,
       dragDisabled: false,
+      visibility: ["pc", "app"],
       tableName: '',
       regList: [],
       trigger: 'click'
@@ -461,6 +473,7 @@ export const inputComponents = [{
       layout: 'colFormItem',
       span: 24,
       dragDisabled: false,
+      visibility: ["pc", "app"],
       tableName: '',
       regList: [],
       trigger: 'change'
@@ -483,6 +496,7 @@ export const inputComponents = [{
       layout: 'colFormItem',
       span: 24,
       dragDisabled: false,
+      visibility: ["pc", "app"],
       tableName: '',
       regList: [],
       trigger: 'change'
@@ -510,6 +524,7 @@ export const inputComponents = [{
       layout: 'colFormItem',
       span: 24,
       dragDisabled: false,
+      visibility: ["pc", "app"],
       tableName: '',
       regList: [],
       trigger: 'change'
@@ -536,7 +551,8 @@ export const inputComponents = [{
       required: false,
       layout: 'colFormItem',
       span: 24,
-      dragDisabled: false
+      dragDisabled: false,
+      visibility: ["pc", "app"],
     },
     __slot__: {
       default: '我是分割线'
@@ -555,7 +571,8 @@ export const inputComponents = [{
       required: false,
       layout: 'colFormItem',
       span: 24,
-      dragDisabled: false
+      dragDisabled: false,
+      visibility: ["pc", "app"],
     },
     style: { width: '100%' },
     textStyle: {
@@ -581,6 +598,7 @@ export const inputComponents = [{
       layout: 'colFormItem',
       span: 24,
       dragDisabled: false,
+      visibility: ["pc", "app"],
       tableName: '',
       regList: [],
       trigger: 'blur'
@@ -600,6 +618,7 @@ export const inputComponents = [{
       layout: 'colFormItem',
       span: 24,
       dragDisabled: false,
+      visibility: ["pc", "app"],
       regList: [],
       trigger: 'click'
     },
@@ -627,6 +646,7 @@ export const selectComponents = [{
       layout: 'colFormItem',
       span: 24,
       dragDisabled: false,
+      visibility: ["pc", "app"],
       tableName: '',
       regList: [],
       trigger: 'change'
@@ -653,6 +673,7 @@ export const selectComponents = [{
       layout: 'colFormItem',
       span: 24,
       dragDisabled: false,
+      visibility: ["pc", "app"],
       tableName: '',
       regList: [],
       trigger: 'change'
@@ -679,6 +700,7 @@ export const selectComponents = [{
       layout: 'colFormItem',
       span: 24,
       dragDisabled: false,
+      visibility: ["pc", "app"],
       tableName: '',
       regList: [],
       trigger: 'change'
@@ -705,6 +727,7 @@ export const selectComponents = [{
       layout: 'colFormItem',
       span: 24,
       dragDisabled: false,
+      visibility: ["pc", "app"],
       tableName: '',
       regList: [],
       trigger: 'click'
@@ -730,6 +753,7 @@ export const selectComponents = [{
       layout: 'colFormItem',
       span: 24,
       dragDisabled: false,
+      visibility: ["pc", "app"],
       tableName: '',
       regList: [],
       trigger: 'change',
@@ -775,6 +799,7 @@ export const selectComponents = [{
       required: false,
       span: 24,
       dragDisabled: false,
+      visibility: ["pc", "app"],
       tableName: '',
       noShow: false,
       trigger: 'change',
@@ -793,6 +818,7 @@ export const selectComponents = [{
       defaultValue: [],
       layout: 'rowFormItem',
       dragDisabled: false,
+      visibility: ["pc", "app"],
       showTitle: true,
       type: 'table',
       rowType: 'table',
@@ -819,6 +845,7 @@ export const selectComponents = [{
       layout: 'colFormItem',
       span: 24,
       dragDisabled: false,
+      visibility: ["pc", "app"],
       tableName: '',
       regList: [],
       trigger: 'change'
@@ -846,6 +873,7 @@ export const selectComponents = [{
       layout: 'colFormItem',
       span: 24,
       dragDisabled: false,
+      visibility: ["pc", "app"],
       tableName: '',
       regList: [],
       trigger: 'change'
@@ -876,6 +904,7 @@ export const selectComponents = [{
       layout: 'colFormItem',
       span: 24,
       dragDisabled: false,
+      visibility: ["pc", "app"],
       tableName: '',
       regList: [],
       trigger: 'change'
@@ -908,7 +937,8 @@ export const selectComponents = [{
       required: false,
       layout: 'colFormItem',
       span: 24,
-      dragDisabled: false
+      dragDisabled: false,
+      visibility: ["pc", "app"],
     },
     showField: '',
     relationField: ''
@@ -925,7 +955,8 @@ export const selectComponents = [{
       required: false,
       layout: 'colFormItem',
       span: 24,
-      dragDisabled: false
+      dragDisabled: false,
+      visibility: ["pc", "app"],
     },
     showField: '',
     relationField: ''
@@ -946,6 +977,7 @@ export const systemComponents = [{
       layout: 'colFormItem',
       span: 24,
       dragDisabled: false,
+      visibility: ["pc", "app"],
       tableName: '',
       noShow: false
     },
@@ -965,6 +997,7 @@ export const systemComponents = [{
       required: false,
       span: 24,
       dragDisabled: false,
+      visibility: ["pc", "app"],
       tableName: '',
       noShow: false
     },
@@ -984,6 +1017,7 @@ export const systemComponents = [{
       layout: 'colFormItem',
       span: 24,
       dragDisabled: false,
+      visibility: ["pc", "app"],
       tableName: '',
       noShow: false
     },
@@ -1003,6 +1037,7 @@ export const systemComponents = [{
       layout: 'colFormItem',
       span: 24,
       dragDisabled: false,
+      visibility: ["pc", "app"],
       tableName: '',
       noShow: false
     },
@@ -1022,6 +1057,7 @@ export const systemComponents = [{
       layout: 'colFormItem',
       span: 24,
       dragDisabled: false,
+      visibility: ["pc", "app"],
       tableName: '',
       noShow: false
     },
@@ -1042,6 +1078,7 @@ export const systemComponents = [{
       layout: 'colFormItem',
       span: 24,
       dragDisabled: false,
+      visibility: ["pc", "app"],
       tableName: '',
       noShow: false
     },
@@ -1063,7 +1100,8 @@ export const layoutComponents = [{
       required: false,
       layout: 'colFormItem',
       span: 24,
-      dragDisabled: false
+      dragDisabled: false,
+      visibility: ["pc", "app"],
     },
     content: "分组标题",
     'content-position': "left"
@@ -1079,6 +1117,7 @@ export const layoutComponents = [{
       layout: 'rowFormItem',
       span: '24',
       dragDisabled: false,
+      visibility: ["pc", "app"],
       children: [],
     },
     header: '卡片容器',
@@ -1092,6 +1131,7 @@ export const layoutComponents = [{
       layout: 'rowFormItem',
       span: '24',
       dragDisabled: false,
+      visibility: ["pc", "app"],
       layoutTree: true,
       rowType: 'layout',
     },
@@ -1109,6 +1149,7 @@ export const layoutComponents = [{
       layout: 'rowFormItem',
       span: '24',
       dragDisabled: false,
+      visibility: ["pc", "app"],
       children: [{
         title: 'Tab 1',
         __config__: {
@@ -1138,6 +1179,7 @@ export const layoutComponents = [{
       layout: 'rowFormItem',
       span: '24',
       dragDisabled: false,
+      visibility: ["pc", "app"],
       children: [{
         title: '面板1',
         name: '1',

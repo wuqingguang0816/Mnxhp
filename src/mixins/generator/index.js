@@ -1,4 +1,4 @@
-import { getVisualDevList, Delete, Copy, exportData, exportAppData } from '@/api/onlineDev/visualDev'
+import { getVisualDevList, Delete, Copy, exportData } from '@/api/onlineDev/visualDev'
 
 export default {
   data() {
@@ -91,14 +91,7 @@ export default {
       this.$confirm('您确定要导出该功能表单, 是否继续?', '提示', {
         type: 'warning'
       }).then(() => {
-        let method = null
-        if (this.query.type == 1) {
-          method = exportData
-        }
-        if (this.query.type == 2) {
-          method = exportAppData
-        }
-        method(id).then(res => {
+        exportData(id).then(res => {
           this.jnpf.downloadFile(res.data.url)
         })
       }).catch(() => {});

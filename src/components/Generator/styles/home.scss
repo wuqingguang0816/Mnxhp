@@ -159,6 +159,44 @@ $lighterBlue: #409EFF;
     }
   }
 
+  #ipad {
+    height: calc(100% - 42px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 711px;
+
+    .outeripad {
+      background: url('../../../assets/images/iphoneBg.png');
+      width: 389px;
+      height: 711px;
+      padding: 65px 40px;
+
+      .ipadHead {
+        background: #f7f8f9;
+        text-align: center;
+
+        .ipadHead-img {
+          margin: 0 auto;
+          height: 20px;
+        }
+      }
+
+      .ipadbody {
+        height: 100%;
+
+        .center-board-row>.el-form {
+          height: 550px;
+        }
+
+        .center-scrollbar {
+          height: 100%;
+          overflow: hidden;
+        }
+      }
+    }
+  }
+
 }
 
 .empty-info {
@@ -185,13 +223,23 @@ $lighterBlue: #409EFF;
 .action-bar {
   position: relative;
   height: 42px;
-  text-align: right;
+  text-align: center;
   padding: 0 15px;
   box-sizing: border-box;
   border-bottom: 1px solid #dcdfe6;
 
   .delete-btn {
     color: #F56C6C !important;
+  }
+
+  .unActive-btn {
+    color: #606266 !important;
+  }
+
+  .action-bar-right {
+    position: absolute;
+    right: 15px;
+    top: 0;
   }
 }
 
@@ -233,12 +281,6 @@ $lighterBlue: #409EFF;
 
   .el-tabs__header {
     margin: 0;
-  }
-}
-
-.ipadbody {
-  .center-board-row>.el-form {
-    height: 550px;
   }
 }
 

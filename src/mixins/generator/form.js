@@ -39,6 +39,7 @@ export default {
       btnLoading: false,
       formData: null,
       columnData: null,
+      appColumnData: null,
       flowTemplateJson: null,
       categoryList: [],
       dbOptions: [],
@@ -64,6 +65,7 @@ export default {
             this.maxStep = parseInt(this.dataForm.webType)
             this.formData = this.dataForm.formData && JSON.parse(this.dataForm.formData)
             this.columnData = this.dataForm.columnData && JSON.parse(this.dataForm.columnData)
+            this.appColumnData = this.dataForm.appColumnData && JSON.parse(this.dataForm.appColumnData)
             this.flowTemplateJson = this.dataForm.flowTemplateJson && JSON.parse(this.dataForm.flowTemplateJson)
             this.tables = this.dataForm.tables && JSON.parse(this.dataForm.tables) || []
             this.updateFields()
@@ -86,11 +88,13 @@ export default {
           this.flowTemplateJson = res.formData
         } else {
           this.columnData = res.columnData
+          this.appColumnData = res.appColumnData
         }
         this.dataForm.tables = JSON.stringify(this.tables)
-        this.dataForm.formData = JSON.stringify(this.formData)
-        this.dataForm.columnData = JSON.stringify(this.columnData)
-        this.dataForm.flowTemplateJson = JSON.stringify(this.flowTemplateJson)
+        this.dataForm.formData = this.formData ? JSON.stringify(this.formData) : null
+        this.dataForm.columnData = this.columnData ? JSON.stringify(this.columnData) : null
+        this.dataForm.appColumnData = this.appColumnData ? JSON.stringify(this.appColumnData) : null
+        this.dataForm.flowTemplateJson = this.flowTemplateJson ? JSON.stringify(this.flowTemplateJson) : null
         const formMethod = this.dataForm.id ? Update : Create
         formMethod(this.dataForm).then((res) => {
           this.$message({

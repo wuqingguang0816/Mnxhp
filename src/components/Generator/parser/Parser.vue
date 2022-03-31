@@ -21,7 +21,8 @@ const layouts = {
         key={scheme.__config__.renderKey}></el-cascader>
       : <render formData={this[this.formConf.formModel]} conf={scheme} {...{ on: listeners }} ref={config.rowType === 'table' ? scheme.__vModel__ : undefined}
         key={scheme.__config__.renderKey} />
-    if (!config.noShow) {
+    const visibility = !config.visibility || (Array.isArray(config.visibility) && config.visibility.includes('pc'))
+    if (visibility && !config.noShow) {
       return (
         <el-col span={config.span}>
           <el-form-item label-width={labelWidth} prop={scheme.__vModel__}

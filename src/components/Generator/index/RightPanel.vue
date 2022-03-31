@@ -2,6 +2,7 @@
   <div class="right-board">
     <el-tabs v-model="currentTab" class="center-tabs">
       <el-tab-pane label="组件属性" name="field" />
+      <el-tab-pane label="组件样式" name="style" />
       <el-tab-pane label="表单属性" name="form" />
     </el-tabs>
     <div class="field-box">
@@ -125,14 +126,6 @@
               <el-form-item label="控件标题">
                 <el-input v-model="activeData.__config__.label" placeholder="请输入控件标题" />
               </el-form-item>
-              <el-form-item label="控件栅格">
-                <el-slider v-model="activeData.__config__.span" :max="24" :min="6" show-stops
-                  :step="2" show-tooltip />
-              </el-form-item>
-              <el-form-item label="标题宽度">
-                <el-input-number v-model="activeData.__config__.labelWidth" placeholder="标题宽度"
-                  :min="0" :precision="0" controls-position="right" />
-              </el-form-item>
               <el-form-item label="编码格式">
                 <el-select v-model="activeData.format" placeholder="请选择">
                   <el-option :label="item.label" :value="item.value"
@@ -172,14 +165,6 @@
               <el-form-item label="控件标题">
                 <el-input v-model="activeData.__config__.label" placeholder="请输入控件标题" />
               </el-form-item>
-              <el-form-item label="控件栅格">
-                <el-slider v-model="activeData.__config__.span" :max="24" :min="6" show-stops
-                  :step="2" show-tooltip />
-              </el-form-item>
-              <el-form-item label="标题宽度">
-                <el-input-number v-model="activeData.__config__.labelWidth" placeholder="标题宽度"
-                  :min="0" :precision="0" controls-position="right" />
-              </el-form-item>
               <el-form-item label="实点颜色">
                 <el-color-picker v-model="activeData.colorDark"></el-color-picker>
               </el-form-item>
@@ -209,10 +194,6 @@
               <el-form-item label="控件文本">
                 <el-input v-model="activeData.buttonText" placeholder="请输入控件文本" />
               </el-form-item>
-              <el-form-item label="控件栅格">
-                <el-slider v-model="activeData.__config__.span" :max="24" :min="6" show-stops
-                  :step="2" show-tooltip />
-              </el-form-item>
               <el-form-item label="位置">
                 <el-radio-group v-model="activeData.align">
                   <el-radio-button label="left">居左</el-radio-button>
@@ -232,17 +213,6 @@
               </el-form-item>
             </template>
             <template v-if="isSystem">
-              <el-form-item label="控件标题">
-                <el-input v-model="activeData.__config__.label" placeholder="请输入控件标题" />
-              </el-form-item>
-              <el-form-item label="控件栅格">
-                <el-slider v-model="activeData.__config__.span" :max="24" :min="6" show-stops
-                  :step="2" show-tooltip />
-              </el-form-item>
-              <el-form-item label="标题宽度">
-                <el-input-number v-model="activeData.__config__.labelWidth" placeholder="标题宽度"
-                  :min="0" :precision="0" controls-position="right" />
-              </el-form-item>
               <el-form-item label="选择模板" v-if="activeData.__config__.jnpfKey==='billRule'">
                 <BillRule v-model="activeData.__config__.rule" placeholder="选择模板" />
               </el-form-item>
@@ -282,10 +252,6 @@
               <table-config :active-data="activeData" />
             </template>
             <template v-if="activeData.__config__.jnpfKey==='card'">
-              <el-form-item label="控件栅格" label-width="76px">
-                <el-slider v-model="activeData.__config__.span" :max="24" :min="6" show-stops
-                  :step="2" show-tooltip />
-              </el-form-item>
               <el-form-item label="卡片标题" label-width="76px">
                 <el-input v-model="activeData.header" placeholder="请输入卡片标题" />
               </el-form-item>
@@ -302,16 +268,40 @@
               <el-form-item v-if="activeData.__config__.componentName!==undefined" label="组件名">
                 {{ activeData.__config__.componentName }}
               </el-form-item>
-              <el-form-item label="控件栅格">
-                <el-slider v-model="activeData.__config__.span" :max="24" :min="6" show-stops
-                  :step="2" show-tooltip />
-              </el-form-item>
             </template>
             <el-form-item
               v-if="activeData.__config__.layout==='rowFormItem'&&activeData.gutter!==undefined"
               label="栅格间隔">
               <el-input-number v-model="activeData.gutter" :min="0" placeholder="栅格间隔"
                 controls-position="right" />
+            </el-form-item>
+          </template>
+        </el-form>
+        <!-- 组件样式 -->
+        <el-form v-show="currentTab === 'style'" size="small" label-width="90px"
+          labelPosition="left">
+          <template v-if="activeData.__config__">
+            <template v-if="!activeData.__config__.isSubTable">
+              <el-form-item label="控件栅格">
+                <el-slider v-model="activeData.__config__.span" :max="24" :min="6" show-stops
+                  :step="2" show-tooltip />
+              </el-form-item>
+              <el-form-item label="标题宽度"
+                v-if="!['divider','JNPFText','button','table','groupTitle ','card','row','tab','collapse'].includes(activeData.__config__.jnpfKey)">
+                <el-input-number v-model="activeData.__config__.labelWidth" placeholder="标题宽度"
+                  :min="0" :precision="0" controls-position="right" />
+              </el-form-item>
+            </template>
+            <el-form-item label="控件宽度" v-if="activeData.__config__.isSubTable">
+              <el-input-number v-model="activeData.__config__.columnWidth" placeholder="控件宽度"
+                :min="0" :precision="0" controls-position="right" />
+            </el-form-item>
+            <el-form-item label="多端显示">
+              <el-checkbox-group v-model="activeData.__config__.visibility" size="mini"
+                class="visibility-checkbox">
+                <el-checkbox-button label="pc">PC</el-checkbox-button>
+                <el-checkbox-button label="app">移动</el-checkbox-button>
+              </el-checkbox-group>
             </el-form-item>
           </template>
         </el-form>
@@ -669,6 +659,7 @@ export default {
       if (!val.__config__.tableName && val.__config__.jnpfKey !== 'table') {
         val.__config__.tableName = this.mainTable
       }
+      if (!this.activeData.__config__.visibility) this.$set(this.activeData.__config__, "visibility", ["pc", "app"])
       this.setDefaultOptions()
     }
   },
@@ -677,6 +668,7 @@ export default {
     this.getDataInterfaceSelector()
     this.getPrintTplList()
     if (!this.activeData || !this.activeData.__config__) return
+    if (!this.activeData.__config__.visibility) this.$set(this.activeData.__config__, "visibility", ["pc", "app"])
     if (!this.activeData.__config__.tableName && this.activeData.__config__.jnpfKey !== 'table') {
       this.activeData.__config__.tableName = this.mainTable
     }
@@ -1018,6 +1010,16 @@ export default {
   }
   &.last {
     margin-bottom: 0;
+  }
+}
+.visibility-checkbox {
+  width: 100%;
+  >>> .el-checkbox-button {
+    width: 50%;
+    .el-checkbox-button__inner {
+      width: 100%;
+      text-align: center;
+    }
   }
 }
 </style>

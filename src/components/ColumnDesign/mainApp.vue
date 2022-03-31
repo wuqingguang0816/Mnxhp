@@ -340,13 +340,7 @@ export default {
       * 供父组件使用 获取列表JSON
     */
     getData() {
-      return new Promise((resolve, reject) => {
-        if (!this.columnData.columnList.length) {
-          reject({ msg: '列表字段不允许为空', target: 2 })
-          return
-        }
-        resolve({ columnData: this.columnData, target: 2 })
-      })
+      return this.columnData
     },
     setSort() {
       const el = this.$refs.dragTable.$el.querySelectorAll('.el-table__body-wrapper > table > tbody')[0]

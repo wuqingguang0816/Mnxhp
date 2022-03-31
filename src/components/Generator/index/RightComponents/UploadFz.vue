@@ -3,14 +3,6 @@
     <el-form-item label="控件标题">
       <el-input v-model="activeData.__config__.label" placeholder="请输入控件标题" />
     </el-form-item>
-    <el-form-item label="控件栅格">
-      <el-slider v-model="activeData.__config__.span" :max="24" :min="6" show-stops :step="2"
-        show-tooltip />
-    </el-form-item>
-    <el-form-item label="标题宽度">
-      <el-input-number v-model="activeData.__config__.labelWidth" placeholder="标题宽度" :min="0"
-        :precision="0" controls-position="right" />
-    </el-form-item>
     <el-form-item label="文件类型">
       <el-select v-model="activeData.accept" placeholder="不限制" clearable>
         <el-option label="图片" value="image/*" />
