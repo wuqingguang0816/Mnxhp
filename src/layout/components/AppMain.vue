@@ -1,10 +1,8 @@
 <template>
   <section class="app-main" :copyright="sysConfig.copyright">
-    <transition name="fade-transform" mode="out-in">
-      <keep-alive :include="useCache?cachedViews:[]">
-        <router-view :key="key" />
-      </keep-alive>
-    </transition>
+    <keep-alive :include="useCache?cachedViews:[]">
+      <router-view :key="key" />
+    </keep-alive>
   </section>
 </template>
 
