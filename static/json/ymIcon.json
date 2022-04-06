@@ -6,6 +6,13 @@
   "description": "",
   "glyphs": [
     {
+      "icon_id": "28756454",
+      "name": "dbLink",
+      "font_class": "dbLink",
+      "unicode": "e857",
+      "unicode_decimal": 59479
+    },
+    {
       "icon_id": "28543576",
       "name": "highchartsGauge",
       "font_class": "highchartsGauge",

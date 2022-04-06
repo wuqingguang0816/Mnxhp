@@ -1481,6 +1481,14 @@ export default {
         {
           label: '不等于',
           value: "<>"
+        },
+        {
+          label: '包含',
+          value: "like"
+        },
+        {
+          label: '不包含',
+          value: "notLike"
         }],
       logicOptions: [
         {
