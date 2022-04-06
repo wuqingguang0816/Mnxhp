@@ -304,6 +304,9 @@ export default {
   .JNPF-common-page-header {
     border-bottom: none;
   }
+  .el-steps {
+    border-radius: 0;
+  }
 }
 .main {
   padding: 20px;

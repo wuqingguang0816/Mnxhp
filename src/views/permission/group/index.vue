@@ -30,10 +30,10 @@
           </div>
         </div>
         <JNPF-table v-loading="listLoading" :data="list">
-          <el-table-column prop="fullName" label="分组名称" />
-          <el-table-column prop="enCode" label="分组编码" />
+          <el-table-column prop="fullName" label="分组名称" width="200" />
+          <el-table-column prop="enCode" label="分组编码" width="150" />
           <el-table-column prop="type" label="分组类型" width="150" />
-          <el-table-column prop="description" label="说明" />
+          <el-table-column prop="description" label="说明" min-width="100" show-overflow-tooltip />
           <el-table-column prop="creatorTime" label="创建时间" :formatter="jnpf.tableDateFormat"
             width="120" />
           <el-table-column prop="sortCode" label="排序" width="70" align="center" />

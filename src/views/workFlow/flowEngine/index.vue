@@ -85,7 +85,7 @@
                     <el-dropdown-item @click.native="handleExport(scope.row.id)">
                       导出流程</el-dropdown-item>
                     <el-dropdown-item @click.native="preview(scope.row)">
-                      预览表单</el-dropdown-item>
+                      表单预览</el-dropdown-item>
                     <el-dropdown-item @click.native="previewApp(scope.row.id)">
                       移动预览</el-dropdown-item>
                   </el-dropdown-menu>

@@ -339,6 +339,9 @@ export default {
 <style lang="scss" scoped>
 .authorize-container {
   padding: 0;
+  .el-steps {
+    border-radius: 0;
+  }
 }
 .authorize-bd {
   padding: 20px;

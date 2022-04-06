@@ -39,7 +39,8 @@ export default {
     },
     goDetail(item) {
       let config = JSON.stringify(item)
-      this.$router.push('/workFlowDetail?config=' + config)
+      const Base64 = require('js-base64').Base64
+      this.$router.push('/workFlowDetail?config=' + encodeURIComponent(Base64.encode(config)))
     }
   }
 }

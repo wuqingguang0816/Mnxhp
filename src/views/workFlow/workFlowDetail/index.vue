@@ -11,6 +11,7 @@
 
 <script>
 import FlowBox from '../components/FlowBox'
+const Base64 = require('js-base64').Base64
 export default {
   name: 'workFlowDetail',
   components: { FlowBox },
@@ -25,7 +26,7 @@ export default {
   watch: {
     config: {
       handler(val) {
-        this.toDetail(val)
+        this.toDetail()
       },
       deep: true
     },
@@ -37,13 +38,12 @@ export default {
   },
   methods: {
     initData() {
-      let config = this.$route.query.config
-      this.toDetail(config)
+      this.toDetail()
     },
     toDetail() {
       // type 1-我发起的 2-代办 3-抄送
       if (!this.config) return this.formVisible = false
-      let item = JSON.parse(this.config)
+      let item = JSON.parse(Base64.decode(this.config))
       let data = {
         id: item.processId,
         enCode: item.enCode,
