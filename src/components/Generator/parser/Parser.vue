@@ -35,6 +35,9 @@ const layouts = {
   },
   rowFormItem(h, scheme) {
     const listeners = buildListeners.call(this, scheme)
+    const config = scheme.__config__
+    const visibility = !config.visibility || (Array.isArray(config.visibility) && config.visibility.includes('pc'))
+    if (!visibility || config.noShow) return
     if (scheme.__config__.jnpfKey === 'tab') {
       return (
         <el-col span={scheme.__config__.span} class="mb-10">
