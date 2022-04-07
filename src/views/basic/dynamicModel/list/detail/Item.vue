@@ -1,6 +1,7 @@
 <template>
   <el-col :span="item.__config__.span"
-    :class="{'item-card':item.__config__.jnpfKey==='card','item-table':item.__config__.jnpfKey==='table'}">
+    :class="{'item-card':item.__config__.jnpfKey==='card','item-table':item.__config__.jnpfKey==='table'}"
+    v-if="!item.__config__.noShow && (!item.__config__.visibility || (Array.isArray(item.__config__.visibility) && item.__config__.visibility.includes('pc')))">
     <template v-if="item.__config__.layout==='colFormItem'">
       <template v-if="item.__config__.jnpfKey==='divider'">
         <el-divider :content-position="item['content-position']">{{item.__slot__.default}}
@@ -26,8 +27,7 @@
       <template v-else>
         <el-form-item :prop="item.__vModel__"
           :label-width="item.__config__.labelWidth?`${item.__config__.labelWidth}px`: null"
-          :label="item.__config__.showLabel ? item.__config__.label : '' "
-          v-if="!item.__config__.noShow">
+          :label="item.__config__.showLabel ? item.__config__.label : '' ">
           <template v-if="item.__config__.jnpfKey==='uploadFz'">
             <JNPFUploadFz v-model="item.__config__.defaultValue" detailed disabled />
           </template>
@@ -108,28 +108,32 @@
             :show-summary="!!item.__config__.defaultValue.length && item['show-summary'] && (item.summaryField && !!item.summaryField.length)"
             :summary-method="getSummaries">
             <template v-for="(column,columnIndex) in item.__config__.children">
-              <el-table-column :key="columnIndex" :prop="column.__vModel__"
-                :label="column.__config__.label" v-if="column.__config__.jnpfKey==='relationForm'">
-                <template slot-scope="scope">
-                  <el-link :underline="false" type="primary"
-                    @click.native="toTableDetail(column,scope.row[column.__vModel__+'_id'])">
-                    {{ scope.row[column.__vModel__] }}</el-link>
-                </template>
-              </el-table-column>
-              <el-table-column :key="columnIndex" :label="column.__config__.label"
-                v-else-if="['relationFormAttr','popupAttr'].includes(column.__config__.jnpfKey)">
-                <template slot-scope="scope">
-                  {{ scope.row[column.relationField.split('_jnpfTable_')[0]+'_'+column.showField] }}
-                </template>
-              </el-table-column>
-              <el-table-column :key="columnIndex" :label="column.__config__.label"
-                v-else-if="column.__config__.jnpfKey==='uploadFz'">
-                <template slot-scope="scope">
-                  <JNPFUploadFz v-model="scope.row[column.__vModel__]" detailed disabled />
-                </template>
-              </el-table-column>
-              <el-table-column :key="columnIndex" :prop="column.__vModel__"
-                :label="column.__config__.label" v-else />
+              <template
+                v-if="!column.__config__.noShow && (!column.__config__.visibility || (Array.isArray(column.__config__.visibility) && column.__config__.visibility.includes('pc')))">
+                <el-table-column :key="columnIndex" :prop="column.__vModel__"
+                  :label="column.__config__.label"
+                  v-if="column.__config__.jnpfKey==='relationForm'">
+                  <template slot-scope="scope">
+                    <el-link :underline="false" type="primary"
+                      @click.native="toTableDetail(column,scope.row[column.__vModel__+'_id'])">
+                      {{ scope.row[column.__vModel__] }}</el-link>
+                  </template>
+                </el-table-column>
+                <el-table-column :key="columnIndex" :label="column.__config__.label"
+                  v-else-if="['relationFormAttr','popupAttr'].includes(column.__config__.jnpfKey)">
+                  <template slot-scope="scope">
+                    {{ scope.row[column.relationField.split('_jnpfTable_')[0]+'_'+column.showField] }}
+                  </template>
+                </el-table-column>
+                <el-table-column :key="columnIndex" :label="column.__config__.label"
+                  v-else-if="column.__config__.jnpfKey==='uploadFz'">
+                  <template slot-scope="scope">
+                    <JNPFUploadFz v-model="scope.row[column.__vModel__]" detailed disabled />
+                  </template>
+                </el-table-column>
+                <el-table-column :key="columnIndex" :prop="column.__vModel__"
+                  :label="column.__config__.label" v-else />
+              </template>
             </template>
           </JNPF-table>
         </el-form-item>

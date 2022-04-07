@@ -19,7 +19,7 @@
       <template v-for="(head, cindex) in tableData">
         <el-table-column :key="head.__config__.formId" :min-width="head['min-width']"
           :prop="head.__vModel__" :width="head.__config__.columnWidth"
-          v-if="!head.__config__.noShow">
+          v-if="!head.__config__.noShow && (!head.__config__.visibility || (Array.isArray(head.__config__.visibility) && head.__config__.visibility.includes('pc')))">
           <template slot="header">
             <span style="color: #f56c6c;" v-if="head.__config__.required">*</span>
             {{ head.__config__['label'] }}
