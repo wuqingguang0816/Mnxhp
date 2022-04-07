@@ -1,7 +1,6 @@
 <template>
-  <el-table :data="data" ref="JNPFTable" class="JNPF-common-table" :height="height"
-    :element-loading-text="$t('common.loadingText')" v-bind="$attrs" v-on="$listeners"
-    :border="border">
+  <el-table :data="data" ref="JNPFTable" class="JNPF-common-table" :height="height" v-bind="$attrs"
+    v-on="$listeners" :border="border">
     <el-table-column type="selection" width="50" v-if="hasC" align="center" />
     <el-table-column type="index" width="50" label="序号" v-if="hasNO" align="center" />
     <slot></slot>

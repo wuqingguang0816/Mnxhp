@@ -260,17 +260,7 @@ export default {
       }
       data.required && (data.valid = this.checkData(data))
       data.regList && data.regList.length && (data.regValid = this.checkRegData(data))
-      if (['JNPF-Amount', 'el-input-number', 'calculate'].includes(tag)) { // 金额变动 更新数据 触发计算公式更新
-        const newVal = this.tableFormData.map(row => row.reduce((p, c) => {
-          let str = c.__vModel__
-          if (c.__vModel__ && c.__vModel__.indexOf('_jnpfRelation_') >= 0) {
-            str = c.__vModel__.substring(0, c.__vModel__.indexOf('_jnpfRelation_'))
-          }
-          p[str] = c.value
-          return p
-        }, {}))
-        this.$emit('input', newVal)
-      }
+      if (['el-input-number', 'calculate'].includes(tag)) this.updateParentData()
     },
     /**
      * 校验单个表单数据
@@ -319,14 +309,7 @@ export default {
         col.regList && col.regList.length && !this.checkRegData(col) && (res = col.regValid = false)
       }
       this.tableFormData.forEach(row => row.forEach(checkCol))
-      return res ? this.tableFormData.map(row => row.reduce((p, c) => {
-        let str = c.__vModel__
-        if (c.__vModel__ && c.__vModel__.indexOf('_jnpfRelation_') >= 0) {
-          str = c.__vModel__.substring(0, c.__vModel__.indexOf('_jnpfRelation_'))
-        }
-        p[str] = c.value
-        return p
-      }, {})) : false
+      return res ? this.getTableValue() : false
     },
     /**
      * 根据formId获取完整组件配置
@@ -379,8 +362,25 @@ export default {
         return res
       })
     },
+    // 获取表格数据
+    getTableValue() {
+      return this.tableFormData.map(row => row.reduce((p, c) => {
+        let str = c.__vModel__
+        if (c.__vModel__ && c.__vModel__.indexOf('_jnpfRelation_') >= 0) {
+          str = c.__vModel__.substring(0, c.__vModel__.indexOf('_jnpfRelation_'))
+        }
+        p[str] = c.value
+        return p
+      }, {}))
+    },
+    // 更新父级数据 触发计算公式更新
+    updateParentData() {
+      const newVal = this.getTableValue()
+      this.$emit('input', newVal)
+    },
     removeRow(index) {
       this.tableFormData.splice(index, 1)
+      this.updateParentData()
     },
     addRow(val) {
       this.isAddRow = true
@@ -389,15 +389,7 @@ export default {
       }
       this.tableFormData.push(JSON.parse(JSON.stringify(this.getEmptyRow(val, this.tableFormData.length))))
       this.clearAddRowFlag()
-      const newVal = this.tableFormData.map(row => row.reduce((p, c) => {
-        let str = c.__vModel__
-        if (c.__vModel__ && c.__vModel__.indexOf('_jnpfRelation_') >= 0) {
-          str = c.__vModel__.substring(0, c.__vModel__.indexOf('_jnpfRelation_'))
-        }
-        p[str] = c.value
-        return p
-      }, {}))
-      this.$emit('input', newVal)
+      this.updateParentData()
     },
     getCmpValOfRow(row, key) {
       // 获取数字相关组件的输入值
