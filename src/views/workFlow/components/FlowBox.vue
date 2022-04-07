@@ -11,9 +11,9 @@
         </template>
         <template v-if="setting.opType=='-1'">
           <el-button type="primary" @click="eventLauncher('submit')" :loading="candidateLoading">
-            {{properties.submitBtnText||'提交审核'}}</el-button>
+            {{properties.submitBtnText||'提 交'}}</el-button>
           <el-button type="warning" @click="eventLauncher('save')" :loading="btnLoading">
-            {{properties.saveBtnText||'保存草稿'}}</el-button>
+            {{properties.saveBtnText||'暂 存'}}</el-button>
         </template>
         <template v-if="setting.opType == 1">
           <el-button type="warning" @click="openUserBox('transfer')"
@@ -21,7 +21,7 @@
           <el-button type="primary" @click="eventLauncher('audit')" :loading="candidateLoading"
             v-if="properties.hasAuditBtn">{{properties.auditBtnText||'通 过'}}</el-button>
           <el-button type="warning" @click="eventLauncher('saveAudit')" v-if="properties.hasSaveBtn"
-            :loading="btnLoading">{{properties.saveBtnText||'保存草稿'}}</el-button>
+            :loading="btnLoading">{{properties.saveBtnText||'暂 存'}}</el-button>
           <el-button type="danger" @click="eventLauncher('reject')" v-if="properties.hasRejectBtn">
             {{properties.rejectBtnText||'拒 绝'}}</el-button>
         </template>

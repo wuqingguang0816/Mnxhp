@@ -259,7 +259,7 @@
                   <el-input v-model="startForm.submitBtnText" />
                 </div>
                 <div class="per-cell">
-                  <el-checkbox v-model="startForm.hasSaveBtn" disabled>草稿</el-checkbox>
+                  <el-checkbox v-model="startForm.hasSaveBtn" disabled>暂存</el-checkbox>
                   <el-input v-model="startForm.saveBtnText" />
                 </div>
                 <div class="per-cell">
@@ -775,7 +775,7 @@
             <el-form label-position="top" class="pd-10">
               <el-form-item label="操作设置">
                 <div class="per-cell">
-                  <el-checkbox v-model="approverForm.hasSaveBtn">草稿</el-checkbox>
+                  <el-checkbox v-model="approverForm.hasSaveBtn">暂存</el-checkbox>
                   <el-input v-model="approverForm.saveBtnText" />
                 </div>
                 <div class="per-cell">
@@ -1205,9 +1205,9 @@ const defaultStartForm = {
     templateJson: []
   },
   hasSubmitBtn: true,
-  submitBtnText: '提交审核',
+  submitBtnText: '提 交',
   hasSaveBtn: true,
-  saveBtnText: '保存草稿',
+  saveBtnText: '暂 存',
   hasPressBtn: true,
   pressBtnText: '催 办',
   hasRevokeBtn: true,
@@ -1263,7 +1263,7 @@ const defaultApproverForm = {
   noApproverHandler: true,
   hasFreeApprover: false,
   hasSaveBtn: false,
-  saveBtnText: '保存草稿',
+  saveBtnText: '暂 存',
   hasAuditBtn: true,
   auditBtnText: '通 过',
   hasRejectBtn: true,
