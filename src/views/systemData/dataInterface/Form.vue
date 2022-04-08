@@ -84,8 +84,7 @@
           </el-option-group>
         </el-select>
         <div class="box">
-          <el-tree :data="treeData" node-key="index" v-loading="treeLoading"
-            :element-loading-text="$t('common.loadingText')" :props="defaultProps"
+          <el-tree :data="treeData" node-key="index" v-loading="treeLoading" :props="defaultProps"
             @node-click="handleNodeClick" />
         </div>
       </div>

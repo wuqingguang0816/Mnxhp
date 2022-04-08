@@ -4,8 +4,7 @@
       <el-dialog title="详情" :close-on-click-modal="false" :visible.sync="visible"
         class="JNPF-dialog JNPF-dialog_center" lock-scroll :width="formData.generalWidth"
         append-to-body>
-        <div class="dynamicDetail" v-loading="loading || mainLoading"
-          :element-loading-text="$t('common.loadingText')">
+        <div class="dynamicDetail" v-loading="loading || mainLoading">
           <Parser :formConf="formData" :relationData="relationData" @toDetail="toDetail"
             v-if="!loading" :formValue="formValue" />
         </div>
@@ -35,7 +34,7 @@
           </div>
           <div class="dynamic-form-main dynamicDetail"
             :style="{margin: '0 auto',width:formData.fullScreenWidth}"
-            v-loading="loading || mainLoading" :element-loading-text="$t('common.loadingText')">
+            v-loading="loading || mainLoading">
             <Parser :formConf="formData" :relationData="relationData" @toDetail="toDetail"
               v-if="!loading" :formValue="formValue" />
           </div>
@@ -46,8 +45,7 @@
       <el-drawer title="详情" :visible.sync="visible" :wrapperClosable="false"
         :size='formData.drawerWidth' append-to-body class="JNPF-common-drawer">
         <div class="JNPF-flex-main">
-          <div class="dynamicForm dynamicDetail" v-loading="loading || mainLoading"
-            :element-loading-text="$t('common.loadingText')">
+          <div class="dynamicForm dynamicDetail" v-loading="loading || mainLoading">
             <Parser :formConf="formData" :relationData="relationData" @toDetail="toDetail"
               v-if="!loading" :formValue="formValue" />
           </div>

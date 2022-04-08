@@ -10,8 +10,7 @@
         <el-button @click="closeDialog()">{{$t('common.cancelButton')}}</el-button>
       </div>
     </div>
-    <div class="JNPF-common-layout main" v-loading="loading"
-      :element-loading-text="$t('common.loadingText')">
+    <div class="JNPF-common-layout main" v-loading="loading">
       <div class="JNPF-common-layout-left">
         <el-tree :data="treeData" :props="defaultProps" default-expand-all highlight-current
           ref="treeBox" :expand-on-click-node="false" @node-click="handleNodeClick"
@@ -105,7 +104,7 @@ export default {
       this.$emit('close')
     },
     handleNodeClick(data) {
-      if (this.currentName == data.fileName && this.currentId == data.id ) return
+      if (this.currentName == data.fileName && this.currentId == data.id) return
       this.options.language = data.fileType === 'vue' ? 'html' : 'java'
       this.currentName = data.fileName
       this.currentId = data.id

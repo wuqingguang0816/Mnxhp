@@ -50,7 +50,7 @@
           <el-table-column type="expand" width="40">
             <template slot-scope="props">
               <el-table v-loading="props.row.childTableLoading" :data="props.row.childTable" stripe
-                size='mini' :element-loading-text="$t('common.loadingText')">
+                size='mini'>
                 <el-table-column prop="field" label="字段" />
                 <el-table-column prop="fieldName" label="说明" />
                 <el-table-column prop="dataType" label="类型" />

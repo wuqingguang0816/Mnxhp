@@ -13,7 +13,7 @@
         <el-button @click="closeDialog()">{{$t('common.cancelButton')}}</el-button>
       </div>
     </div>
-    <div class="main" v-loading="loading" :element-loading-text="$t('common.loadingText')">
+    <div class="main" v-loading="loading">
       <div ref="tsPrint" class="print-content" v-html="data" />
     </div>
   </el-dialog>

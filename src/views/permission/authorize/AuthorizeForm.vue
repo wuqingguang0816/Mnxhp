@@ -42,9 +42,8 @@
         <el-form ref="dataForm" :model="dataForm" @keyup.enter.native="handleConfirm()">
           <el-form-item>
             <el-tree :data="authorizeTreeData" ref="authorizeTree" v-loading="treeLoading"
-              :element-loading-text="$t('common.loadingText')" show-checkbox default-expand-all
-              node-key="id" :check-strictly="checkStrictly" check-on-click-node
-              :props="defaultProps" :expand-on-click-node="false"
+              show-checkbox default-expand-all node-key="id" :check-strictly="checkStrictly"
+              check-on-click-node :props="defaultProps" :expand-on-click-node="false"
               @check-change="selectTreeNodeClick">
               <div slot-scope="{ node, data }">
                 <i :class="data.icon" />
