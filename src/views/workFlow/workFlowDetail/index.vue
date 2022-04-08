@@ -61,6 +61,8 @@ export default {
           this.$nextTick(() => {
             this.$refs.FlowBox.init(data)
           })
+        }).catch(() => {
+          this.formVisible = false
         })
       } else {
         this.formVisible = true
