@@ -31,10 +31,12 @@
         </div>
         <JNPF-table v-loading="listLoading" :data="list" max-height="100%">
           <el-table-column prop="title" label="标题" show-overflow-tooltip />
+          <el-table-column prop="creatorTime" label="创建时间" :formatter="jnpf.tableDateFormat"
+            width="120" />
           <el-table-column prop="creatorUser" label="发布人员" width="120" />
           <el-table-column prop="lastModifyTime" label="发布时间" :formatter="jnpf.tableDateFormat"
             width="120" />
-          <el-table-column label="状态" width="100">
+          <el-table-column label="状态" width="100" align="center">
             <template slot-scope="scope">
               <el-tag :type="scope.row.enabledMark == 1 ? 'success' : 'danger'" disable-transitions>
                 {{ scope.row.enabledMark==1?'已发送':'存草稿' }}
