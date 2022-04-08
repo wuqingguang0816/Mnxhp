@@ -344,6 +344,9 @@ export default {
   display: flex;
   flex-direction: column;
   padding: 0 0 10px;
+  .JNPF-common-search-box {
+    border-bottom: 1px solid #dcdfe6;
+  }
   >>> .el-table {
     flex: 1;
     border-top: none;

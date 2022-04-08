@@ -9,7 +9,7 @@
           <el-button @click="goBack()">{{$t('common.cancelButton')}}</el-button>
         </div>
       </div>
-      <el-row class="main" v-loading="loading" :element-loading-text="$t('common.loadingText')">
+      <el-row class="main" v-loading="loading">
         <el-col :span="12" :offset="6">
           <el-form :model="dataForm" :rules="dataRule" ref="dataForm" class="mt-20"
             label-width="100px" @submit.native.prevent>
@@ -42,8 +42,7 @@
       </el-row>
       <el-dialog title="测试" :visible.sync="testVisible" :close-on-click-modal="false"
         class="JNPF-dialog JNPF-dialog_center" lock-scroll append-to-body width="600px">
-        <el-form :model="testForm" :rules="testRule" ref="testForm" label-width="80px"
-          :element-loading-text="$t('common.loadingText')">
+        <el-form :model="testForm" :rules="testRule" ref="testForm" label-width="80px">
           <JNPF-table :data="testList">
             <el-table-column prop="field" label="参数名称" width="100" />
             <el-table-column prop="value" label="参数赋值">

@@ -2,8 +2,7 @@
   <el-dialog :title="pageTitle" :close-on-click-modal="false" :close-on-press-escape="false"
     :visible.sync="visible" lock-scroll append-to-body
     class="JNPF-dialog JNPF-dialog_center transfer-dialog" width="800px">
-    <div class="transfer__body" :element-loading-text="$t('common.loadingText')"
-      v-loading="allLoading">
+    <div class="transfer__body" v-loading="allLoading">
       <div class="transfer-pane">
         <div class="transfer-pane__tools">
           <el-input placeholder="请输入关键词查询" v-model="listQuery.keyword" @keyup.enter.native="search"

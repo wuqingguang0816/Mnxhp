@@ -4,8 +4,7 @@
       <div class="JNPF-common-title">
         <h2>接口分类</h2>
       </div>
-      <el-scrollbar class="JNPF-common-el-tree-scrollbar" v-loading="treeLoading"
-        :element-loading-text="$t('common.loadingText')">
+      <el-scrollbar class="JNPF-common-el-tree-scrollbar" v-loading="treeLoading">
         <el-tree ref="treeBox" :data="treeData" :props="defaultProps" default-expand-all
           highlight-current :expand-on-click-node="false" node-key="id"
           @node-click="handleNodeClick" class="JNPF-common-el-tree" />

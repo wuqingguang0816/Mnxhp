@@ -22,7 +22,8 @@
             v-if="properties.hasAuditBtn">{{properties.auditBtnText||'通 过'}}</el-button>
           <el-button type="warning" @click="eventLauncher('saveAudit')" v-if="properties.hasSaveBtn"
             :loading="btnLoading">{{properties.saveBtnText||'暂 存'}}</el-button>
-          <el-button type="danger" @click="eventLauncher('reject')" v-if="properties.hasRejectBtn">
+          <el-button type="danger" @click="eventReceiver({},'reject')"
+            v-if="properties.hasRejectBtn">
             {{properties.rejectBtnText||'拒 绝'}}</el-button>
         </template>
         <template v-if="setting.opType == 0 && setting.status == 1">

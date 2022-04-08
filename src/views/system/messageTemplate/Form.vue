@@ -9,7 +9,7 @@
           <el-button @click="goBack()">{{$t('common.cancelButton')}}</el-button>
         </div>
       </div>
-      <el-row class="main" v-loading="loading" :element-loading-text="$t('common.loadingText')">
+      <el-row class="main" v-loading="loading">
         <el-col :span="12" :offset="6">
           <el-form :model="dataForm" :rules="dataRule" ref="dataForm" class="mt-20"
             label-width="80px" @submit.native.prevent>
@@ -23,7 +23,8 @@
               </el-checkbox>
               <el-checkbox v-model="dataForm.isDingTalk" :true-label="1" :false-label="0">钉钉
               </el-checkbox>
-              <el-checkbox v-model="dataForm.isSms" :true-label="1" :false-label="0">短信
+              <el-checkbox v-model="dataForm.isSms" :true-label="1" :false-label="0"
+                @change="onIsSmsChange">短信
               </el-checkbox>
             </el-form-item>
             <el-form-item label="状态" prop="enabledMark">
@@ -221,6 +222,12 @@ export default {
     addContent(item) {
       this.dataForm.title += '{' + item.field + '}'
       this.dataForm.content += '{' + item.field + '}'
+    },
+    onIsSmsChange() {
+      if (this.dataForm.isSms) return
+      this.dataForm.smsId = ''
+      this.dataForm.smsTemplateName = ''
+      this.templateJson = this.templateJson.filter(o => o.closable)
     },
     onSmsChange(id, item) {
       if (!id) return this.dataForm.smsTemplateName = ''
