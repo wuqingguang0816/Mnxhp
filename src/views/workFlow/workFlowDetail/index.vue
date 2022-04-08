@@ -63,6 +63,7 @@ export default {
           })
         }).catch(() => {
           this.formVisible = false
+          this.closeForm()
         })
       } else {
         this.formVisible = true
