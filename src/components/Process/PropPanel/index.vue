@@ -854,6 +854,7 @@
         <el-tab-pane label="节点事件">
           <el-scrollbar class="config-scrollbar">
             <el-form :model="approverForm" class="pd-10" label-position="left">
+              <el-alert title="开启后可配置触发事件同时进行参数赋值" type="warning" :closable="false" show-icon />
               <el-form-item label="同意事件">
                 <el-switch v-model="approverForm.approveFuncConfig.on" />
               </el-form-item>

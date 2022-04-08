@@ -29,6 +29,9 @@
         <div class="JNPF-common-title mb-10">
           <h2 class="bold">我的组织</h2>
         </div>
+        <div class="organize-tips">
+          <el-alert title="用户可以自行切换组织信息，我的组织默认只能进行单选" type="warning" :closable="false" show-icon />
+        </div>
         <div class="organize-list">
           <el-row :gutter="80" v-if="organizeList.length">
             <el-col :span="12" class="organize-item" v-for="(item,i) in organizeList" :key="i">
@@ -49,6 +52,10 @@
       <el-tab-pane label="我的岗位" name="position">
         <div class="JNPF-common-title mb-10">
           <h2 class="bold">我的岗位</h2>
+        </div>
+        <div class="organize-tips">
+          <el-alert title="用户可以自行切换我的组织内的岗位信息，我的岗位默认只能进行单选" type="warning" :closable="false"
+            show-icon />
         </div>
         <div class="organize-list">
           <el-row :gutter="80" v-if="positionList.length">
@@ -378,7 +385,7 @@ export default {
   }
   .organize-list {
     width: 100%;
-    padding: 50px;
+    padding: 10px 50px 50px;
     .organize-item {
       margin-bottom: 30px;
       .organize-item-main {
@@ -438,6 +445,9 @@ export default {
         }
       }
     }
+  }
+  .organize-tips {
+    padding: 0 50px;
   }
 }
 </style>
