@@ -16,15 +16,15 @@
       <el-row class="condition-list">
         <el-col :span="6" class="label">字段名称</el-col>
         <el-col :span="5">比较</el-col>
-        <el-col :span="6">数据值</el-col>
-        <el-col :span="5">逻辑</el-col>
+        <el-col :span="7">数据值</el-col>
+        <el-col :span="4">逻辑</el-col>
         <el-col :span="2"></el-col>
       </el-row>
       <template v-for="(item, index) in pconditions">
         <el-row class="condition-list" :key="index">
           <el-col :span="6" class="label">
             <el-select v-model="item.field" placeholder="请选择"
-              @change="fieldNameChange($event,item)">
+              @change="fieldNameChange($event,item,index)">
               <el-option v-for="item in usedFormItems" :key="item.__vModel__"
                 :label="item.__config__.label" :value="item.__vModel__">
               </el-option>
@@ -37,10 +37,62 @@
               </el-option>
             </el-select>
           </el-col>
-          <el-col :span="6">
-            <el-input v-model="item.filedValue" placeholder="请输入内容"></el-input>
+          <el-col :span="7" class="filedValue">
+            <template v-if="['select','radio','checkbox'].includes(item.jnpfKey)">
+              <el-select v-model="item.filedValue" :placeholder="'请选择'" clearable filterable>
+                <el-option :label="oItem[item.__config__.props.label]"
+                  v-for="(oItem, i) in item.__slot__.options"
+                  :value="oItem[item.__config__.props.value]" :key="i"></el-option>
+              </el-select>
+            </template>
+            <template v-else-if="item.jnpfKey==='numInput'">
+              <el-input-number v-model="item.filedValue" placeholder="请输入"
+                :precision="item.precision" controls-position="right" />
+            </template>
+            <template v-else-if="item.jnpfKey==='calculate'">
+              <el-input-number v-model="item.filedValue" placeholder="请输入" :precision="2"
+                controls-position="right" />
+            </template>
+            <template v-else-if="['rate','slider'].includes(item.jnpfKey)">
+              <el-input-number v-model="item.filedValue" placeholder="请输入"
+                controls-position="right" />
+            </template>
+            <template v-else-if="item.jnpfKey==='switch'">
+              <el-switch v-model="item.filedValue" />
+            </template>
+            <template v-else-if="item.jnpfKey==='time'">
+              <el-time-picker v-model="item.filedValue" :picker-options="item['picker-options']"
+                placeholder="请选择" clearable :value-format="item['value-format']"
+                :format="item.format">
+              </el-time-picker>
+            </template>
+            <template v-else-if="['date','createTime', 'modifyTime'].includes(item.jnpfKey)">
+              <el-date-picker v-model="item.filedValue" :type="item.type||'datetime'" clearable
+                placeholder="请选择" value-format="timestamp"
+                :format="item.format||'yyyy-MM-dd HH:mm:ss'">
+              </el-date-picker>
+            </template>
+            <template v-else-if="['comSelect','currOrganize'].includes(item.jnpfKey)">
+              <comSelect v-model="item.filedValue" placeholder="请选择" clearable />
+            </template>
+            <template v-else-if="['depSelect'].includes(item.jnpfKey)">
+              <depSelect v-model="item.filedValue" placeholder="请选择" clearable />
+            </template>
+            <template v-else-if="['userSelect','createUser','modifyUser'].includes(item.jnpfKey)">
+              <userSelect v-model="item.filedValue" placeholder="请选择" hasSys clearable />
+            </template>
+            <template v-else-if="['posSelect','currPosition'].includes(item.jnpfKey)">
+              <posSelect v-model="item.filedValue" placeholder="请选择" clearable />
+            </template>
+            <template v-else-if="item.jnpfKey==='address'">
+              <JNPFAddress v-model="item.filedValue" placeholder="请选择" :level="item.level"
+                clearable />
+            </template>
+            <template v-else>
+              <el-input v-model="item.filedValue" placeholder="请输入"></el-input>
+            </template>
           </el-col>
-          <el-col :span="5">
+          <el-col :span="4">
             <el-select v-model="item.logic" placeholder="请选择" @change="logicChange($event,item)">
               <el-option v-for="item in logicOptions" :key="item.value" :label="item.label"
                 :value="item.value">
@@ -1970,12 +2022,17 @@ export default {
         field: '',
         symbol: '',
         logic: '&&',
+        jnpfKey: ''
       }
       this.pconditions.push(item)
     },
-    fieldNameChange(val, item) {
+    fieldNameChange(val, item, i) {
       let obj = this.usedFormItems.filter(o => o.__vModel__ == val)[0]
       item.fieldName = obj.__config__.label
+      item.jnpfKey = obj.__config__.jnpfKey
+      item = { ...item, ...obj }
+      item.filedValue = undefined
+      this.$set(this.pconditions, i, item)
     },
     symbolChange(val, item) {
       let obj = this.symbolOptions.filter(o => o.value == val)[0]
@@ -2005,16 +2062,6 @@ export default {
           this.$message({
             showClose: true,
             message: '比较不能为空',
-            type: 'error',
-            duration: 1000
-          });
-          isOk = false
-          break
-        }
-        if (!e.filedValue) {
-          this.$message({
-            showClose: true,
-            message: '数据值不能为空',
             type: 'error',
             duration: 1000
           });
@@ -2233,7 +2280,11 @@ export default {
   >>> .el-col {
     text-align: center;
     padding: 0 4px;
+    &.filedValue {
+      text-align: left;
+    }
     .el-input,
+    .el-input-number,
     .el-select {
       width: 100%;
     }
