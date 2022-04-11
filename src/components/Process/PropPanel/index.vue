@@ -741,13 +741,12 @@
                   </el-option>
                 </el-select>
               </el-form-item>
-              <el-form-item>
-                <div slot="label">加签设置
-                  <el-tooltip content="开启后审批单可以新增临时审批人" placement="top">
-                    <a class="el-icon-warning-outline"></a>
-                  </el-tooltip>
-                </div>
-                <el-checkbox v-model="approverForm.hasFreeApprover">允许加签</el-checkbox>
+              <el-form-item label="驳回设置">
+                <el-select v-model="approverForm.rejectStep" placeholder="请选择">
+                  <el-option v-for="item in rejectStepOptions" :key="item.nodeId"
+                    :label="item.properties.title" :value="item.nodeId">
+                  </el-option>
+                </el-select>
               </el-form-item>
               <el-form-item label="进度设置">
                 <el-select v-model="approverForm.progress" placeholder="请选择">
@@ -823,12 +822,13 @@
                   </el-radio-group>
                 </template>
               </el-form-item> -->
-              <el-form-item label="驳回设置">
-                <el-select v-model="approverForm.rejectStep" placeholder="请选择">
-                  <el-option v-for="item in rejectStepOptions" :key="item.nodeId"
-                    :label="item.properties.title" :value="item.nodeId">
-                  </el-option>
-                </el-select>
+              <el-form-item>
+                <div slot="label">加签设置
+                  <el-tooltip content="开启后审批单可以新增临时审批人" placement="top">
+                    <a class="el-icon-warning-outline"></a>
+                  </el-tooltip>
+                </div>
+                <el-checkbox v-model="approverForm.hasFreeApprover">允许加签</el-checkbox>
               </el-form-item>
               <el-form-item label="说明">
                 <el-input v-model="approverForm.description" type="textarea" :rows="3"></el-input>
@@ -855,7 +855,7 @@
           <el-scrollbar class="config-scrollbar">
             <el-form :model="approverForm" class="pd-10" label-position="left">
               <el-alert title="开启后可配置触发事件同时进行参数赋值" type="warning" :closable="false" show-icon />
-              <el-form-item label="同意事件">
+              <el-form-item label="同意事件" class="mt-10">
                 <el-switch v-model="approverForm.approveFuncConfig.on" />
               </el-form-item>
               <div style="margin-bottom: 18px;" v-if="approverForm.approveFuncConfig.on">
