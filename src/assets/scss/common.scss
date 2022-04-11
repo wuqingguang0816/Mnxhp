@@ -342,6 +342,12 @@
           }
         }
 
+        &.hasSys-tab {
+          .el-tabs__header .el-tabs__nav .el-tabs__item {
+            width: 25%;
+          }
+        }
+
         .el-tabs__content {
           flex: 1;
 
