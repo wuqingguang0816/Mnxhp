@@ -2,7 +2,7 @@
   <transition name="el-zoom-in-center">
     <div class="JNPF-preview-main flow-form-main">
       <div class="JNPF-common-page-header">
-        <el-page-header @back="goBack" :content="thisStep?fullName+'/'+thisStep:fullName" />
+        <el-page-header @back="goBack" :content="title" />
         <div class="options">
           <el-button type="primary" @click="addComment" v-if="activeTab==='comment'">评 论</el-button>
           <template
@@ -209,6 +209,12 @@ export default {
       copyIds: [],
       fullName: '',
       thisStep: ''
+    }
+  },
+  computed: {
+    title() {
+      if ([2, 3, 4].includes(this.setting.opType)) return this.fullName
+      return this.thisStep ? this.fullName + '/' + this.thisStep : this.fullName
     }
   },
   watch: {
