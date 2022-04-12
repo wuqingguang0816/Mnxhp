@@ -1,4 +1,4 @@
-import { getVisualDevList, Delete, Copy, exportData } from '@/api/onlineDev/visualDev'
+import { getVisualDevList, Delete, Copy, Release, exportData } from '@/api/onlineDev/visualDev'
 
 export default {
   data() {
@@ -83,6 +83,20 @@ export default {
             onClose: () => {
               this.initData()
             }
+          });
+        })
+      }).catch(() => {});
+    },
+    // 发布菜单
+    release(id) {
+      this.$confirm('此操作将该功能同步菜单, 是否继续?', '提示', {
+        type: 'warning'
+      }).then(() => {
+        Release(id).then(res => {
+          this.$message({
+            type: 'success',
+            message: res.msg,
+            duration: 1000,
           });
         })
       }).catch(() => {});

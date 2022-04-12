@@ -47,6 +47,13 @@ export function Copy(id) {
     method: 'POST'
   })
 }
+// 发布菜单
+export function Release(id) {
+  return request({
+    url: `/api/visualdev/Base/${id}/Actions/Release`,
+    method: 'POST'
+  })
+}
 // 获取模块命名
 export function getAreasName() {
   return request({
