@@ -804,6 +804,11 @@
                 </div>
               </el-form-item>
               <el-form-item label="签名设置">
+                <div slot="label">签名设置
+                  <el-tooltip content="审批人同意时需签名" placement="top">
+                    <a class="el-icon-warning-outline"></a>
+                  </el-tooltip>
+                </div>
                 <el-checkbox v-model="approverForm.hasSign">手写签名</el-checkbox>
               </el-form-item>
               <!-- <el-form-item label="超时设置">
@@ -824,7 +829,7 @@
               </el-form-item> -->
               <el-form-item>
                 <div slot="label">加签设置
-                  <el-tooltip content="开启后审批单可以新增临时审批人" placement="top">
+                  <el-tooltip content="允许在审批单中增加临时审批人" placement="top">
                     <a class="el-icon-warning-outline"></a>
                   </el-tooltip>
                 </div>
