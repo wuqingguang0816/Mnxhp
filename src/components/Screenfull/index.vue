@@ -2,7 +2,7 @@
   <el-tooltip effect="dark"
     :content="isFullscreen?$t('common.outFullScreen'):$t('common.fullScreen')" placement="top">
     <el-link
-      :icon="`icon-ym ${isFullscreen?'icon-ym-compress-screen1':'icon-ym-full-screen1'} JNPF-common-head-icon`"
+      :icon="`icon-ym ${isFullscreen?'icon-ym-compress-screen':'icon-ym-full-screen'} JNPF-common-head-icon`"
       :underline="false" @click="click()" />
   </el-tooltip>
 </template>

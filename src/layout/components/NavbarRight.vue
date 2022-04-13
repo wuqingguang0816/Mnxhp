@@ -340,9 +340,6 @@ export default {
       >>> .icon-ym {
         font-size: 18px;
       }
-      .icon-ym {
-        font-size: 20px;
-      }
     }
 
     .avatar-container {
