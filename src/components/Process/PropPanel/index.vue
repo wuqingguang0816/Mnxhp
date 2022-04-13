@@ -323,7 +323,8 @@
         <el-tab-pane label="流程事件">
           <el-scrollbar class="config-scrollbar">
             <el-form :model="startForm" class="pd-10" label-position="left">
-              <el-form-item label="发起事件">
+              <el-alert title="开启后可配置触发事件同时进行参数赋值" type="warning" :closable="false" show-icon />
+              <el-form-item label="发起事件" class="mt-10">
                 <el-switch v-model="startForm.initFuncConfig.on" />
               </el-form-item>
               <div style="margin-bottom: 18px;" v-if="startForm.initFuncConfig.on">
