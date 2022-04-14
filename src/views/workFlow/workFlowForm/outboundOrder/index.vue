@@ -74,43 +74,49 @@
       </div>
       <el-table :data="dataForm.entryList" size='mini'>
         <el-table-column type="index" width="50" label="序号" align="center" />
-        <el-table-column prop="goodsName" label="商品名称">
+        <el-table-column prop="goodsName" label="商品名称" v-if="judgeShow('entryList-goodsName')">
           <template slot-scope="scope">
-            <el-input v-model="scope.row.goodsName" :disabled="judgeWrite('entryList')"></el-input>
+            <el-input v-model="scope.row.goodsName"
+              :disabled="judgeWrite('entryList')||judgeWrite('entryList-goodsName')"></el-input>
           </template>
         </el-table-column>
-        <el-table-column prop="specifications" label="规格型号">
+        <el-table-column prop="specifications" label="规格型号"
+          v-if="judgeShow('entryList-specifications')">
           <template slot-scope="scope">
-            <el-input v-model="scope.row.specifications" :disabled="judgeWrite('entryList')">
+            <el-input v-model="scope.row.specifications"
+              :disabled="judgeWrite('entryList')||judgeWrite('entryList-specifications')">
             </el-input>
           </template>
         </el-table-column>
-        <el-table-column prop="unit" label="单位">
+        <el-table-column prop="unit" label="单位" v-if="judgeShow('entryList-unit')">
           <template slot-scope="scope">
-            <el-input v-model="scope.row.unit" :disabled="judgeWrite('entryList')"></el-input>
+            <el-input v-model="scope.row.unit"
+              :disabled="judgeWrite('entryList')||judgeWrite('entryList-unit')"></el-input>
           </template>
         </el-table-column>
-        <el-table-column prop="qty" label="数量">
+        <el-table-column prop="qty" label="数量" v-if="judgeShow('entryList-qty')">
           <template slot-scope="scope">
             <el-input v-model="scope.row.qty" @change="count(scope.row)" type="number"
-              :disabled="judgeWrite('entryList')"></el-input>
+              :disabled="judgeWrite('entryList')||judgeWrite('entryList-qty')"></el-input>
           </template>
         </el-table-column>
-        <el-table-column prop="price" label="单价">
+        <el-table-column prop="price" label="单价" v-if="judgeShow('entryList-price')">
           <template slot-scope="scope">
             <el-input v-model="scope.row.price" @change="count(scope.row)" type="number"
-              :disabled="judgeWrite('entryList')"></el-input>
+              :disabled="judgeWrite('entryList')||judgeWrite('entryList-price')"></el-input>
           </template>
         </el-table-column>
-        <el-table-column prop="amount" label="金额">
+        <el-table-column prop="amount" label="金额" v-if="judgeShow('entryList-amount')">
           <template slot-scope="scope">
-            <el-input v-model="scope.row.amount" readonly :disabled="judgeWrite('entryList')">
+            <el-input v-model="scope.row.amount" readonly
+              :disabled="judgeWrite('entryList')||judgeWrite('entryList-amount')">
             </el-input>
           </template>
         </el-table-column>
-        <el-table-column prop="description" label="备注">
+        <el-table-column prop="description" label="备注" v-if="judgeShow('entryList-description')">
           <template slot-scope="scope">
-            <el-input v-model="scope.row.description" :disabled="judgeWrite('entryList')">
+            <el-input v-model="scope.row.description"
+              :disabled="judgeWrite('entryList')||judgeWrite('entryList-description')">
             </el-input>
           </template>
         </el-table-column>

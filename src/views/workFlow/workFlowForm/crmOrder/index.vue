@@ -103,59 +103,69 @@
           <el-table :data="dataForm.goodsList" size='mini' show-summary
             :summary-method="getSummaries" v-if="judgeShow('goodsList')">
             <el-table-column type="index" width="50" label="序号" align="center" />
-            <el-table-column prop="goodsName" label="商品名称" />
-            <el-table-column prop="specifications" label="规格型号" width="80" />
-            <el-table-column prop="unit" label="单位" width="80" />
-            <el-table-column prop="qty" label="数量" width="80">
+            <el-table-column prop="goodsName" label="商品名称"
+              v-if="judgeShow('goodsList-goodsName')" />
+            <el-table-column prop="specifications" label="规格型号" width="80"
+              v-if="judgeShow('goodsList-specifications')" />
+            <el-table-column prop="unit" label="单位" width="80" v-if="judgeShow('goodsList-unit')" />
+            <el-table-column prop="qty" label="数量" width="80" v-if="judgeShow('goodsList-qty')">
               <template slot-scope="scope">
                 <el-input v-model="scope.row.qty" @change="count(scope.row)"
-                  :disabled="judgeWrite('goodsList')"></el-input>
+                  :disabled="judgeWrite('goodsList')||judgeWrite('goodsList-qty')"></el-input>
               </template>
             </el-table-column>
-            <el-table-column prop="price" label="单价" width="80">
+            <el-table-column prop="price" label="单价" width="80" v-if="judgeShow('goodsList-price')">
               <template slot-scope="scope">
                 <el-input v-model="scope.row.price" @change="count(scope.row)"
-                  :disabled="judgeWrite('goodsList')"></el-input>
+                  :disabled="judgeWrite('goodsList')||judgeWrite('goodsList-price')"></el-input>
               </template>
             </el-table-column>
-            <el-table-column prop="amount" label="金额" width="80">
+            <el-table-column prop="amount" label="金额" width="80"
+              v-if="judgeShow('goodsList-amount')">
               <template slot-scope="scope">
-                <el-input v-model="scope.row.amount" readonly :disabled="judgeWrite('goodsList')">
+                <el-input v-model="scope.row.amount" readonly
+                  :disabled="judgeWrite('goodsList')||judgeWrite('goodsList-amount')">
                 </el-input>
               </template>
             </el-table-column>
-            <el-table-column prop="discount" label="折扣%" width="90">
+            <el-table-column prop="discount" label="折扣%" width="90"
+              v-if="judgeShow('goodsList-discount')">
               <template slot-scope="scope">
                 <el-input-number v-model="scope.row.discount" :precision="2" :step="0.1" :min="0"
                   :max="100" @change="count(scope.row)" controls-position="right"
-                  :disabled="judgeWrite('goodsList')">
+                  :disabled="judgeWrite('goodsList')||judgeWrite('goodsList-discount')">
                 </el-input-number>
               </template>
             </el-table-column>
-            <el-table-column prop="cess" label="税率%" width="90">
+            <el-table-column prop="cess" label="税率%" width="90" v-if="judgeShow('goodsList-cess')">
               <template slot-scope="scope">
                 <el-input-number v-model="scope.row.cess" :precision="2" :step="0.1" :min="0"
                   :max="100" @change="count(scope.row)" controls-position="right"
-                  :disabled="judgeWrite('goodsList')">
+                  :disabled="judgeWrite('goodsList')||judgeWrite('goodsList-cess')">
                 </el-input-number>
               </template>
             </el-table-column>
-            <el-table-column prop="actualPrice" label="实际单价" width="80">
+            <el-table-column prop="actualPrice" label="实际单价" width="80"
+              v-if="judgeShow('goodsList-actualPrice')">
               <template slot-scope="scope">
                 <el-input v-model="scope.row.actualPrice" readonly
-                  :disabled="judgeWrite('goodsList')">
+                  :disabled="judgeWrite('goodsList')||judgeWrite('goodsList-actualPrice')">
                 </el-input>
               </template>
             </el-table-column>
-            <el-table-column prop="actualAmount" label="实际金额" width="80">
+            <el-table-column prop="actualAmount" label="实际金额" width="80"
+              v-if="judgeShow('goodsList-actualAmount')">
               <template slot-scope="scope">
                 <el-input v-model="scope.row.actualAmount" readonly
-                  :disabled="judgeWrite('goodsList')"></el-input>
+                  :disabled="judgeWrite('goodsList')||judgeWrite('goodsList-actualAmount')">
+                </el-input>
               </template>
             </el-table-column>
-            <el-table-column prop="description" label="备注" width="80">
+            <el-table-column prop="description" label="备注" width="80"
+              v-if="judgeShow('goodsList-description')">
               <template slot-scope="scope">
-                <el-input v-model="scope.row.description" :disabled="judgeWrite('goodsList')">
+                <el-input v-model="scope.row.description"
+                  :disabled="judgeWrite('goodsList')||judgeWrite('goodsList-description')">
                 </el-input>
               </template>
             </el-table-column>
@@ -176,37 +186,45 @@
           <el-table :data="dataForm.collectionPlanList" size='mini' show-summary
             :summary-method="getSummaries" v-if="judgeShow('collectionPlanList')">
             <el-table-column type="index" width="50" label="序号" align="center" />
-            <el-table-column prop="receivableDate" label="收款日期">
+            <el-table-column prop="receivableDate" label="收款日期"
+              v-if="judgeShow('collectionPlanList-receivableDate')">
               <template slot-scope="scope">
                 <el-date-picker v-model="scope.row.receivableDate" type="date"
                   value-format="timestamp" :editable="false"
-                  :disabled="judgeWrite('collectionPlanList')">
+                  :disabled="judgeWrite('collectionPlanList')||judgeWrite('collectionPlanList-receivableDate')">
                 </el-date-picker>
               </template>
             </el-table-column>
-            <el-table-column prop="receivableRate" label="收款比率%">
+            <el-table-column prop="receivableRate" label="收款比率%"
+              v-if="judgeShow('collectionPlanList-receivableRate')">
               <template slot-scope="scope">
                 <el-input-number v-model="scope.row.receivableRate" :precision="2" :step="0.1"
                   :min="0" :max="100" controls-position="right"
-                  :disabled="judgeWrite('collectionPlanList')">
+                  :disabled="judgeWrite('collectionPlanList')||judgeWrite('collectionPlanList-receivableRate')">
                 </el-input-number>
               </template>
             </el-table-column>
-            <el-table-column prop="receivableMoney" label="收款金额">
+            <el-table-column prop="receivableMoney" label="收款金额"
+              v-if="judgeShow('collectionPlanList-receivableMoney')">
               <template slot-scope="scope">
                 <el-input v-model="scope.row.receivableMoney"
-                  :disabled="judgeWrite('collectionPlanList')"></el-input>
+                  :disabled="judgeWrite('collectionPlanList')||judgeWrite('collectionPlanList-receivableMoney')">
+                </el-input>
               </template>
             </el-table-column>
-            <el-table-column prop="receivableMode" label="收款方式">
+            <el-table-column prop="receivableMode" label="收款方式"
+              v-if="judgeShow('collectionPlanList-receivableMode')">
               <template slot-scope="scope">
                 <el-input v-model="scope.row.receivableMode"
-                  :disabled="judgeWrite('collectionPlanList')"></el-input>
+                  :disabled="judgeWrite('collectionPlanList')||judgeWrite('collectionPlanList-receivableMode')">
+                </el-input>
               </template>
             </el-table-column>
-            <el-table-column prop="abstract" label="收款摘要">
+            <el-table-column prop="abstract" label="收款摘要"
+              v-if="judgeShow('collectionPlanList-abstract')">
               <template slot-scope="scope">
-                <el-input v-model="scope.row.abstract" :disabled="judgeWrite('collectionPlanList')">
+                <el-input v-model="scope.row.abstract"
+                  :disabled="judgeWrite('collectionPlanList')||judgeWrite('collectionPlanList-abstract')">
                 </el-input>
               </template>
             </el-table-column>

@@ -1638,17 +1638,21 @@ export default {
       if (!formOperates.length) {
         const loop = (data, parent) => {
           if (!data) return
-          if (data.__config__ && data.__config__.jnpfKey !== 'table' && data.__config__.children && Array.isArray(data.__config__.children)) {
-            loop(data.__config__.children, data)
+          if (data.__vModel__) {
+            const isTableChild = parent && parent.__config__ && parent.__config__.jnpfKey === 'table'
+            res.push({
+              id: isTableChild ? parent.__vModel__ + '-' + data.__vModel__ : data.__vModel__,
+              name: isTableChild ? parent.__config__.label + '-' + data.__config__.label : data.__config__.label,
+              required: data.__config__.required,
+              requiredDisabled: data.__config__.required,
+              read: true,
+              write: false
+            })
           }
           if (Array.isArray(data)) data.forEach(d => loop(d, parent))
-          if (data.__vModel__) res.push({
-            id: data.__vModel__,
-            name: data.__config__.label,
-            required: data.__config__.required,
-            read: true,
-            write: false
-          })
+          if (data.__config__ && data.__config__.children && Array.isArray(data.__config__.children)) {
+            loop(data.__config__.children, data)
+          }
         }
         loop(getDrawingList())
       } else {

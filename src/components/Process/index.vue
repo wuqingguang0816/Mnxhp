@@ -56,18 +56,22 @@ export default {
       }
       const loop = (data, parent) => {
         if (!data) return
-        if (data.__config__ && data.__config__.jnpfKey !== 'table' && data.__config__.children && Array.isArray(data.__config__.children)) {
-          loop(data.__config__.children, data)
+        if (data.__vModel__) {
+          const isTableChild = parent && parent.__config__ && parent.__config__.jnpfKey === 'table'
+          const id = isTableChild ? parent.__vModel__ + '-' + data.__vModel__ : data.__vModel__
+          res.push({
+            id: id,
+            name: isTableChild ? parent.__config__.label + '-' + data.__config__.label : data.__config__.label,
+            required: data.__config__.required || getRequiredById(id),
+            requiredDisabled: data.__config__.required,
+            read: getReadById(id),
+            write: getWriteById(id)
+          })
         }
         if (Array.isArray(data)) data.forEach(d => loop(d, parent))
-        if (data.__vModel__) res.push({
-          id: data.__vModel__,
-          name: data.__config__.label,
-          required: data.__config__.required || getRequiredById(data.__vModel__),
-          requiredDisabled: data.__config__.required,
-          read: getReadById(data.__vModel__),
-          write: getWriteById(data.__vModel__)
-        })
+        if (data.__config__ && data.__config__.children && Array.isArray(data.__config__.children)) {
+          loop(data.__config__.children, data)
+        }
       }
       loop(getDrawingList())
       target.properties.formOperates = res
