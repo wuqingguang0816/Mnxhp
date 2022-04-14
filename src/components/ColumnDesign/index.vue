@@ -177,7 +177,7 @@
                 </el-form-item>
               </template>
               <el-divider>按钮配置</el-divider>
-              <p class="mb-10">系统按钮区</p>
+              <p class="btn-cap mb-10">系统按钮区</p>
               <el-checkbox-group v-model="btnsList" class="btnsList">
                 <el-checkbox :label="item.value" v-for="item in btnsOption" :key="item.value">
                   <span class="btn-label">{{ item.value | btnText }}</span>
@@ -191,7 +191,7 @@
                 </el-checkbox>
               </el-checkbox-group>
               <template v-if="modelType==1">
-                <p class="mt-10 mb-10">自定义按钮区</p>
+                <p class="btn-cap mt-10 mb-10">自定义按钮区</p>
                 <div class="custom-btns-list">
                   <draggable :list="columnData.customBtnsList" :animation="340" group="customItem"
                     handle=".option-drag">
