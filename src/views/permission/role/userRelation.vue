@@ -5,21 +5,19 @@
     <div class="transfer__body" v-loading="allLoading">
       <div class="transfer-pane">
         <div class="transfer-pane__tools">
-          <el-input placeholder="请输入关键词查询" v-model="listQuery.keyword" @keyup.enter.native="search"
-            clearable class="search-input">
+          <el-input placeholder="请输入关键词查询" v-model="keyword" @keyup.enter.native="search" clearable
+            class="search-input">
             <el-button slot="append" icon="el-icon-search" @click="search"></el-button>
           </el-input>
         </div>
         <div class="transfer-pane__body left-pane">
-          <div class="single-list" ref="infiniteBody">
-            <template v-if="list.length">
-              <div v-for="(item, index) in list" :key="index" class="selected-item"
-                @click="handleNodeClick(item)">
-                <span>{{item.fullName}}</span>
-              </div>
-            </template>
-            <el-empty description="暂无数据" :image-size="120" v-else></el-empty>
-          </div>
+          <el-tree :data="treeData" :props="props" check-on-click-node @node-click="handleNodeClick"
+            class="JNPF-common-el-tree" node-key="id" v-loading="loading" lazy :load="loadNode">
+            <span class="custom-tree-node" slot-scope="{ node, data }">
+              <i :class="data.icon"></i>
+              <span class="text">{{node.label}}</span>
+            </span>
+          </el-tree>
         </div>
       </div>
       <div class="transfer-pane">
@@ -47,7 +45,7 @@
 </template>
 <script>
 import { getUserRelationList, createUserRelation } from '@/api/permission/userRelation'
-import { getUserInfoList, getUsersByRoleId } from '@/api/permission/user'
+import { getUserInfoList, getUsersByRoleId, getUsersByRoleOrgId } from '@/api/permission/user'
 
 export default {
   data() {
@@ -61,16 +59,22 @@ export default {
         objectType: 'Role',
         userIds: []
       },
-      list: [],
       selectedData: [],
-      listQuery: {
-        keyword: '',
-        roleId: '',
-        currentPage: 1,
-        pageSize: 20,
+      treeData: [],
+      nodeId: '0',
+      props: {
+        children: 'children',
+        label: 'fullName',
+        isLeaf: 'isLeaf'
       },
-      listLoading: true,
-      finish: false,
+      keyword: '',
+      loading: true
+    }
+  },
+  watch: {
+    visible(val) {
+      if (val) return
+      this.$emit('closeDialog')
     }
   },
   methods: {
@@ -78,17 +82,11 @@ export default {
       this.visible = true
       this.dataForm.objectId = id
       this.dataForm.userIds = []
-      this.list = []
       this.selectedData = []
-      this.finish = false
-      this.listQuery.keyword = ''
-      this.listQuery.currentPage = 1
-      this.listQuery.roleId = id
       this.$nextTick(() => {
-        this.pageTitle = this.$t(`role.roleMember`) + '- ' + fullName
+        this.pageTitle = this.$t(`role.roleMember`) + ' - ' + fullName
         this.allLoading = true
         this.initData()
-        this.bindScroll()
         getUserRelationList(this.dataForm.objectId).then(res => {
           this.dataForm.userIds = res.data.ids
           this.getSelectList()
@@ -103,40 +101,44 @@ export default {
       })
     },
     search() {
-      this.listQuery.currentPage = 1
-      this.listQuery.pageSize = 20
-      this.list = []
-      this.finish = false
       this.initData()
     },
-    bindScroll() {
-      let _this = this,
-        vBody = _this.$refs.infiniteBody;
-      vBody.addEventListener("scroll", function () {
-        if (vBody.scrollHeight - vBody.clientHeight - vBody.scrollTop <= 600 && !_this.listLoading && !_this.finish) {
-          _this.listQuery.currentPage += 1
-          _this.initData()
-        }
-      });
-    },
     initData() {
-      this.listLoading = true
-      getUsersByRoleId(this.listQuery).then(res => {
-        let list = res.data.list.map(o => ({
-          ...o,
-          fullName: o.realName + '/' + o.account
-        }))
-        if (list.length < this.listQuery.pageSize) {
-          this.finish = true
-        }
-        this.list = [...this.list, ...list]
-        this.total = res.data.pagination.total
-        this.listLoading = false
+      this.loading = true
+      if (this.keyword) this.nodeId = '0'
+      const query = {
+        keyword: this.keyword,
+        organizeId: this.nodeId,
+        roleId: this.dataForm.objectId
+      }
+      getUsersByRoleOrgId(query).then(res => {
+        this.treeData = res.data
+        this.loading = false
       })
     },
-    handleNodeClick(item) {
-      const boo = this.selectedData.some(o => o.id === item.id)
+    loadNode(node, resolve) {
+      if (node.level === 0) {
+        this.nodeId = '0'
+        return resolve(this.treeData)
+      }
+      this.nodeId = node.data.id
+      const query = {
+        keyword: this.keyword,
+        organizeId: this.nodeId,
+        roleId: this.dataForm.objectId
+      }
+      getUsersByRoleOrgId(query).then(res => {
+        resolve(res.data)
+      })
+    },
+    handleNodeClick(data) {
+      if (data.type !== 'user') return
+      const boo = this.selectedData.some(o => o.id === data.id)
       if (boo) return
+      const item = {
+        id: data.id,
+        fullName: data.fullName
+      }
       this.selectedData.push(item)
     },
     removeAll() {

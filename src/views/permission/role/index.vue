@@ -73,8 +73,7 @@
                     </el-button>
                   </span>
                   <el-dropdown-menu slot="dropdown">
-                    <el-dropdown-item
-                      @click.native="handleUserRelation(scope.row.id, scope.row.fullName)">
+                    <el-dropdown-item @click.native="handleUserRelation(scope.row)">
                       {{$t('role.roleMember')}}
                     </el-dropdown-item>
                     <el-dropdown-item
@@ -93,8 +92,8 @@
       <Form v-if="formVisible" ref="Form" @refreshDataList="initData" />
       <Diagram v-if="diagramVisible" ref="Diagram" @close="diagramVisible = false" />
       <AuthorizeForm v-if="authorizeFormVisible" ref="AuthorizeForm" @close="removeAuthorizeForm" />
-      <UserRelationList v-if="userRelationListVisible" ref="UserRelationList"
-        @refreshDataList="initData" />
+      <component :is="currentView" v-if="userRelationListVisible" ref="UserRelationList"
+        @refreshDataList="initData" @closeDialog="userRelationListVisible=false" />
     </div>
   </div>
 </template>
@@ -104,10 +103,11 @@ import { getRoleList, delRole, updateRoleState } from '@/api/permission/role'
 import Form from './Form'
 import AuthorizeForm from '@/views/permission/authorize/AuthorizeForm'
 import UserRelationList from './userRelation'
+import GlobalUserRelationList from '@/views/permission/userRelation/Selector'
 import Diagram from '@/views/permission/user/Diagram'
 
 export default {
-  components: { Form, AuthorizeForm, UserRelationList, Diagram },
+  components: { Form, AuthorizeForm, UserRelationList, GlobalUserRelationList, Diagram },
   name: 'permission-role',
   data() {
     return {
@@ -131,7 +131,8 @@ export default {
       formVisible: false,
       diagramVisible: false,
       authorizeFormVisible: false,
-      userRelationListVisible: false
+      userRelationListVisible: false,
+      currentView: null
     }
   },
   created() {
@@ -243,10 +244,13 @@ export default {
         })
       }).catch(() => { })
     },
-    handleUserRelation(id, fullName) {
-      this.userRelationListVisible = true
+    handleUserRelation(row) {
+      this.currentView = row.type === '全局' ? GlobalUserRelationList : UserRelationList
       this.$nextTick(() => {
-        this.$refs.UserRelationList.init(id, fullName)
+        this.userRelationListVisible = true
+        this.$nextTick(() => {
+          this.$refs.UserRelationList.init(row.id, row.fullName, 'Role')
+        })
       })
     },
     handleAuthorize(id, fullName) {

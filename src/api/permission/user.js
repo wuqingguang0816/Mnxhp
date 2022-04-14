@@ -135,6 +135,14 @@ export const getUsersByRoleId = (data) => {
     data
   })
 }
+// 通过角色id获取组织下的用户列表
+export const getUsersByRoleOrgId = (data) => {
+  return request({
+    url: `/api/permission/Users/GetUsersByRoleOrgId`,
+    method: 'get',
+    data
+  })
+}
 // 导出Excel
 export function ExportExcel(data) {
   return request({
