@@ -375,7 +375,8 @@
         <el-tab-pane label="流程事件">
           <el-scrollbar class="config-scrollbar">
             <el-form :model="startForm" class="pd-10" label-position="left">
-              <el-form-item label="发起事件">
+              <el-alert title="开启后可配置触发事件同时进行参数赋值" type="warning" :closable="false" show-icon />
+              <el-form-item label="发起事件" class="mt-10">
                 <el-switch v-model="startForm.initFuncConfig.on" />
               </el-form-item>
               <div style="margin-bottom: 18px;" v-if="startForm.initFuncConfig.on">
@@ -856,6 +857,11 @@
                 </div>
               </el-form-item>
               <el-form-item label="签名设置">
+                <div slot="label">签名设置
+                  <el-tooltip content="审批人同意时需签名" placement="top">
+                    <a class="el-icon-warning-outline"></a>
+                  </el-tooltip>
+                </div>
                 <el-checkbox v-model="approverForm.hasSign">手写签名</el-checkbox>
               </el-form-item>
               <!-- <el-form-item label="超时设置">
@@ -876,7 +882,7 @@
               </el-form-item> -->
               <el-form-item>
                 <div slot="label">加签设置
-                  <el-tooltip content="开启后审批单可以新增临时审批人" placement="top">
+                  <el-tooltip content="允许在审批单中增加临时审批人" placement="top">
                     <a class="el-icon-warning-outline"></a>
                   </el-tooltip>
                 </div>
