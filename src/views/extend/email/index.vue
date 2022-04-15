@@ -52,7 +52,7 @@
           </div>
         </el-row>
         <JNPF-table v-loading="listLoading" :data="list">
-          <el-table-column label="" width="40">
+          <el-table-column prop="isRead" label="" width="40">
             <template slot-scope="scope">
               <template v-if="activeTab==='inBox'|| activeTab==='star'">
                 <span v-if=" scope.row.isRead">
@@ -64,7 +64,7 @@
               <span v-else><i class="icon-ym icon-ym-extend-envelope-open-o i-default"></i></span>
             </template>
           </el-table-column>
-          <el-table-column label="" width="40" prop="attachment">
+          <el-table-column prop="attachment" label="" width="40">
             <template slot-scope="scope">
               <span v-if="scope.row.attachment && JSON.parse(scope.row.attachment).length"><i
                   class="icon-ym icon-ym-extend-paperclip i-default"></i></span>
@@ -86,7 +86,7 @@
               </el-link>
             </template>
           </el-table-column>
-          <el-table-column label="时间" width="120">
+          <el-table-column prop="creatorTime" label="时间" width="120">
             <template slot-scope="scope">
               <span v-if="activeTab==='inBox'|| activeTab==='star'">
                 {{ scope.row.fdate | toDate() }}</span>
@@ -95,7 +95,8 @@
               </span>
             </template>
           </el-table-column>
-          <el-table-column label="" width="40" v-if="activeTab==='inBox'|| activeTab==='star'">
+          <el-table-column prop="starred" label="" width="40"
+            v-if="activeTab==='inBox'|| activeTab==='star'">
             <template slot-scope="scope">
               <span v-if="scope.row.starred"><i
                   class="icon-ym icon-ym-extend-star text-warning img-star" title='点击取消星标'

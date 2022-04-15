@@ -31,7 +31,7 @@
                 :closable="false" show-icon v-else />
             </div>
             <JNPF-table v-loading="listLoading" :data="list">
-              <el-table-column label="文件名称">
+              <el-table-column prop="fileName" label="文件名称">
                 <template slot-scope="scope">
                   <el-link @click="readInfo(scope.row.fileId,scope.row.fileName)"
                     style="font-size:12px">

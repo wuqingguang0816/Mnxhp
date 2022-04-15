@@ -34,7 +34,7 @@
           <JNPF-table v-loading="listLoading" :data="list" id="myTable" ref="configurationTable">
             <el-table-column prop="projectName" label="项目名称" sortable width="200" />
             <el-table-column prop="projectCode" label="项目编码" sortable width="160" />
-            <el-table-column label="项目类型" sortable width="160" prop="projectType">
+            <el-table-column prop="projectType" label="项目类型" sortable width="160">
               <template slot-scope="scope">
                 {{ scope.row.projectType | getTypeText(industryTypeList) }}
               </template>

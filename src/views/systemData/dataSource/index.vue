@@ -43,7 +43,7 @@
           <el-table-column prop="dbType" label="连接驱动" width="150" />
           <el-table-column prop="host" label="主机地址" width="200" />
           <el-table-column prop="port" label="端口" width="60" />
-          <el-table-column label="创建人" prop="creatorUser" width="120" />
+          <el-table-column prop="creatorUser" label="创建人" width="120" />
           <el-table-column prop="creatorTime" label="创建时间" width="120"
             :formatter="jnpf.tableDateFormat" />
           <el-table-column prop="lastModifyTime" label="最后修改时间" width="120"

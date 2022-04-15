@@ -43,7 +43,7 @@
               <el-table-column prop="fullName" label="字段说明" show-overflow-tooltip />
               <el-table-column prop="type" label="字段类型" width="70" />
               <el-table-column prop="conditionSymbol" label="条件符号" show-overflow-tooltip />
-              <el-table-column label="条件内容" width="120">
+              <el-table-column prop="conditionText" label="条件内容" width="120">
                 <template slot-scope="scope">
                   <span v-if="scope.row.conditionText === 'text'">任意文本</span>
                   <span v-if="scope.row.conditionText === '@userId'">当前用户</span>
