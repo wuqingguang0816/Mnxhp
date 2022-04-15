@@ -62,7 +62,7 @@
       <div class="JNPF-common-layout-main JNPF-flex-main">
         <div class="JNPF-common-head">
           <div>
-            <el-button type="primary" @click="goBatch">批量审批</el-button>
+            <el-button type="primary" icon="el-icon-finished" @click="goBatch">批量审批</el-button>
           </div>
           <div class="JNPF-common-head-right">
             <el-tooltip effect="dark" :content="$t('common.refresh')" placement="top">
