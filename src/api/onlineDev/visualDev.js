@@ -48,10 +48,11 @@ export function Copy(id) {
   })
 }
 // 发布菜单
-export function Release(id) {
+export function Release(id, data) {
   return request({
     url: `/api/visualdev/Base/${id}/Actions/Release`,
-    method: 'POST'
+    method: 'POST',
+    data
   })
 }
 // 获取模块命名

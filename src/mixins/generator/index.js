@@ -15,6 +15,12 @@ export default {
       listLoading: false,
       formVisible: false,
       addVisible: false,
+      currWebType: '',
+      currId: '',
+      releaseQuery: {
+        pc: 1,
+        app: 1
+      },
       categoryList: []
     }
   },
@@ -87,19 +93,30 @@ export default {
         })
       }).catch(() => {});
     },
+    openReleaseDialog(id) {
+      this.currId = id
+      this.releaseDialogVisible = true
+      this.releaseQuery = {
+        pc: 1,
+        app: 1
+      }
+    },
+    selectToggle(key) {
+      this.releaseQuery[key] = this.releaseQuery[key] === 1 ? 0 : 1
+    },
     // 发布菜单
-    release(id) {
-      this.$confirm('此操作将该功能同步菜单, 是否继续?', '提示', {
-        type: 'warning'
-      }).then(() => {
-        Release(id).then(res => {
-          this.$message({
-            type: 'success',
-            message: res.msg,
-            duration: 1000,
-          });
-        })
-      }).catch(() => {});
+    release() {
+      if (!this.releaseQuery.pc && !this.releaseQuery.app) return this.$message.error('请至少选择一种菜单同步方式')
+      this.releaseBtnLoading = true
+      Release(this.currId, this.releaseQuery).then(res => {
+        this.releaseBtnLoading = false
+        this.releaseDialogVisible = false
+        this.$message({
+          type: 'success',
+          message: res.msg,
+          duration: 1000,
+        });
+      }).catch(() => { this.releaseBtnLoading = false })
     },
     exportModel(id) {
       this.$confirm('您确定要导出该功能表单, 是否继续?', '提示', {
@@ -110,13 +127,23 @@ export default {
         })
       }).catch(() => {});
     },
-    handleAdd(webType) {
-      this.addOrUpdateHandle('', webType)
+    toggleWebType(row) {
+      const { id, webType } = row
+      if (!webType) return
+      this.openAddBox(id, webType)
     },
-    addOrUpdateHandle(id, webType) {
+    openAddBox(id, webType) {
+      this.addVisible = true
+      this.currId = id || ''
+      this.currWebType = webType || ''
+    },
+    handleAdd(webType, isToggle) {
+      this.addOrUpdateHandle(this.currId, webType, isToggle)
+    },
+    addOrUpdateHandle(id, webType, isToggle) {
       this.formVisible = true
       this.$nextTick(() => {
-        this.$refs.Form.init(this.categoryList, id, this.query.type, webType)
+        this.$refs.Form.init(this.categoryList, id, this.query.type, webType, isToggle)
       })
     },
     closeForm(isRefresh) {

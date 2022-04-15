@@ -30,7 +30,7 @@
       </el-row>
       <div class="JNPF-common-layout-main JNPF-flex-main">
         <div class="JNPF-common-head">
-          <topOpts @add="addVisible=true" addText="新建模板" />
+          <topOpts @add="openAddBox()" addText="新建模板" />
           <div class="JNPF-common-head-right">
             <el-tooltip effect="dark" :content="$t('common.refresh')" placement="top">
               <el-link icon="icon-ym icon-ym-Refresh JNPF-common-head-icon" :underline="false"
@@ -42,6 +42,13 @@
           <el-table-column prop="fullName" label="名称" show-overflow-tooltip min-width="200" />
           <el-table-column prop="enCode" label="编码" width="200" />
           <el-table-column prop="category" label="分类" width="150" />
+          <el-table-column prop="webType" label="模式" width="70" align="center">
+            <template slot-scope="scope">
+              <span v-if="scope.row.webType == 1">表单</span>
+              <span v-if="scope.row.webType == 2">列表</span>
+              <span v-if="scope.row.webType == 3">流程</span>
+            </template>
+          </el-table-column>
           <el-table-column prop="creatorUser" label="创建人" width="120" />
           <el-table-column prop="creatorTime" label="创建时间" :formatter="jnpf.tableDateFormat"
             width="120" />
@@ -57,6 +64,8 @@
                     </el-button>
                   </span>
                   <el-dropdown-menu slot="dropdown">
+                    <el-dropdown-item @click.native="toggleWebType(scope.row)">更改模式
+                    </el-dropdown-item>
                     <el-dropdown-item @click.native="copy(scope.row.id)">复制模板</el-dropdown-item>
                     <el-dropdown-item @click.native="download(scope.row)">下载代码</el-dropdown-item>
                     <el-dropdown-item @click.native="preview(scope.row)">预览代码</el-dropdown-item>
@@ -71,7 +80,7 @@
       </div>
     </div>
     <Form v-if="formVisible" ref="Form" @close="closeForm" />
-    <AddBox :visible.sync="addVisible" @add="handleAdd" />
+    <AddBox :visible.sync="addVisible" :webType="currWebType" @add="handleAdd" />
     <Preview v-if="previewVisible" ref="preview" @close="previewVisible=false" />
     <DownloadForm v-if="downloadFormVisible" ref="downloadForm"
       @close="downloadFormVisible=false" />

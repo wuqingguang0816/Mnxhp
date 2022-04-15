@@ -48,7 +48,7 @@ export default {
     }
   },
   methods: {
-    init(categoryList, id, type, webType) {
+    init(categoryList, id, type, webType, isToggle) {
       this.categoryList = categoryList
       this.activeStep = 0
       this.tables = []
@@ -62,6 +62,7 @@ export default {
           getVisualDevInfo(this.dataForm.id).then(res => {
             this.dataForm = res.data
             this.dataForm.webType = this.dataForm.webType || 2
+            if (isToggle) this.dataForm.webType = webType
             this.maxStep = parseInt(this.dataForm.webType)
             this.formData = this.dataForm.formData && JSON.parse(this.dataForm.formData)
             this.columnData = this.dataForm.columnData && JSON.parse(this.dataForm.columnData)

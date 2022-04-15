@@ -30,7 +30,7 @@
       </el-row>
       <div class="JNPF-common-layout-main JNPF-flex-main">
         <div class="JNPF-common-head">
-          <topOpts @add="addVisible=true">
+          <topOpts @add="openAddBox()">
             <upload-btn url="/api/visualdev/OnlineDev/Model/Actions/ImportData"
               @on-success="initData" />
           </topOpts>
@@ -45,6 +45,13 @@
           <el-table-column prop="fullName" label="名称" show-overflow-tooltip min-width="200" />
           <el-table-column prop="enCode" label="编码" width="200" />
           <el-table-column prop="category" label="分类" width="150" />
+          <el-table-column prop="webType" label="模式" width="70" align="center">
+            <template slot-scope="scope">
+              <span v-if="scope.row.webType == 1">表单</span>
+              <span v-if="scope.row.webType == 2">列表</span>
+              <span v-if="scope.row.webType == 3">流程</span>
+            </template>
+          </el-table-column>
           <el-table-column prop="creatorUser" label="创建人" width="120" />
           <el-table-column prop="creatorTime" label="创建时间" :formatter="jnpf.tableDateFormat"
             width="120" />
@@ -67,7 +74,10 @@
                     </el-button>
                   </span>
                   <el-dropdown-menu slot="dropdown">
-                    <el-dropdown-item @click.native="release(scope.row.id)">同步菜单</el-dropdown-item>
+                    <el-dropdown-item @click.native="toggleWebType(scope.row)">更改模式
+                    </el-dropdown-item>
+                    <el-dropdown-item @click.native="openReleaseDialog(scope.row.id)">同步菜单
+                    </el-dropdown-item>
                     <el-dropdown-item @click.native="copy(scope.row.id)">复制模板</el-dropdown-item>
                     <el-dropdown-item @click.native="preview(scope.row.id)">预览模板</el-dropdown-item>
                     <el-dropdown-item @click.native="appPreview(scope.row.id)">移动预览
@@ -85,7 +95,31 @@
       </div>
     </div>
     <Form v-if="formVisible" ref="Form" @close="closeForm" />
-    <AddBox :visible.sync="addVisible" @add="handleAdd" />
+    <AddBox :visible.sync="addVisible" :webType="currWebType" @add="handleAdd" />
+    <el-dialog title="同步菜单" :visible.sync="releaseDialogVisible"
+      class="JNPF-dialog JNPF-dialog_center release-dialog" lock-scroll width="600px">
+      <div class="dialog-main">
+        <div class="item" :class="{'active':releaseQuery.pc===1}" @click="selectToggle('pc')">
+          <i class="item-icon icon-ym icon-ym-pc"></i>
+          <p class="item-title">同步Web端菜单</p>
+          <div class="icon-checked">
+            <i class="el-icon-check"></i>
+          </div>
+        </div>
+        <div class="item" :class="{'active':releaseQuery.app===1}" @click="selectToggle('app')">
+          <i class="item-icon icon-ym icon-ym-mobile"></i>
+          <p class="item-title">同步APP端菜单</p>
+          <div class="icon-checked">
+            <i class="el-icon-check"></i>
+          </div>
+        </div>
+      </div>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="releaseDialogVisible = false">{{$t('common.cancelButton')}}</el-button>
+        <el-button type="primary" :loading="releaseBtnLoading" @click="release">
+          {{$t('common.confirmButton')}}</el-button>
+      </span>
+    </el-dialog>
     <el-dialog :close-on-click-modal="false" :modal-append-to-body="false"
       :visible.sync="previewVisible" class="JNPF-dialog JNPF-dialog_center code-dialog" title="预览"
       width="400px" @opened="getQRimg">
@@ -111,6 +145,8 @@ export default {
       query: { keyword: '', type: 1 },
       sort: 'webDesign',
       previewVisible: false,
+      releaseDialogVisible: false,
+      releaseBtnLoading: false,
       qrCodeText: ''
     }
   },
@@ -150,6 +186,74 @@ export default {
         font-size: 18px;
         margin-top: 10px;
         margin-bottom: 20px;
+      }
+    }
+  }
+}
+.release-dialog {
+  >>> .el-dialog {
+    .el-dialog__body {
+      padding: 30px 55px;
+    }
+  }
+  .dialog-main {
+    display: flex;
+    justify-content: space-between;
+    .item {
+      position: relative;
+      width: 215px;
+      height: 127px;
+      cursor: pointer;
+      border: 1px solid #dcdfe6;
+      border-radius: 6px;
+      text-align: center;
+      padding-top: 20px;
+      color: #606266;
+      &.active {
+        border-color: #1890ff;
+        color: #1890ff;
+        box-shadow: 0 0 6px rgba(6, 58, 108, 0.1);
+        .item-icon {
+          border-color: #1890ff;
+        }
+        .icon-checked {
+          display: block;
+        }
+      }
+      .item-icon {
+        display: inline-block;
+        width: 44px;
+        height: 44px;
+        margin-bottom: 16px;
+        border: 2px solid #606266;
+        line-height: 40px;
+        font-size: 24px;
+        text-align: center;
+        border-radius: 50%;
+      }
+      .item-title {
+        font-size: 16px;
+        font-weight: 400;
+      }
+      .icon-checked {
+        display: none;
+        width: 18px;
+        height: 18px;
+        border: 18px solid #1890ff;
+        border-left: 18px solid transparent;
+        border-top: 18px solid transparent;
+        border-bottom-right-radius: 4px;
+        position: absolute;
+        right: 0px;
+        bottom: 0px;
+
+        i {
+          font-size: 16px;
+          position: absolute;
+          top: 0;
+          left: -2px;
+          color: #fff;
+        }
       }
     }
   }
