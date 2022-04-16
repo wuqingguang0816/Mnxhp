@@ -43,7 +43,7 @@
             </div>
           </el-row>
           <JNPF-table v-loading="listLoading" :data="list" empty-text="该文件夹为空" size="mini">
-            <el-table-column label="文件名">
+            <el-table-column prop="fullName" label="文件名">
               <template slot-scope="scope">
                 <span v-if="scope.row.type">
                   <i :class='"icon-ym " + toFileExt(scope.row.fileExtension) + " i-default"' />
@@ -55,7 +55,7 @@
                 </span>
               </template>
             </el-table-column>
-            <el-table-column label="" width="35">
+            <el-table-column prop="isShare" label="" width="35">
               <template slot-scope="scope">
                 <span v-if="scope.row.type && scope.row.isShare" title='共享文件'><i
                     class="icon-ym icon-ym-extend-thumbs-up i-default"></i></span>
@@ -119,7 +119,7 @@
             </el-form>
           </el-row>
           <JNPF-table v-loading="listLoading" :data="list" empty-text="该文件夹为空" size="mini">
-            <el-table-column label="文件名">
+            <el-table-column prop="fullName" label="文件名">
               <template slot-scope="scope">
                 <i :class='"icon-ym " + toFileExt(scope.row.fileExtension) + " i-default"' />
                 {{scope.row.fullName}}
@@ -165,7 +165,7 @@
             </el-form>
           </el-row>
           <JNPF-table v-loading="listLoading" :data="list" empty-text="该文件夹为空" size="mini">
-            <el-table-column label="文件名">
+            <el-table-column prop="fullName" label="文件名">
               <template slot-scope="scope">
                 <i :class='"icon-ym " + toFileExt(scope.row.fileExtension) + " i-default"' />
                 {{scope.row.fullName}}
@@ -176,7 +176,7 @@
             </el-table-column>
             <el-table-column prop="shareTime" label="共享日期" :formatter="jnpf.tableDateFormat"
               width="120" />
-            <el-table-column label="共享人员" width="120" prop="creatorUserId" />
+            <el-table-column prop="creatorUserId" label="共享人员" width="120" />
             <el-table-column label="操作" fixed="right" width="50">
               <template slot-scope="scope">
                 <el-button size="mini" type="text" @click="handleDownLoad(scope.row.id)">下载
@@ -212,7 +212,7 @@
             </el-form>
           </el-row>
           <JNPF-table v-loading="listLoading" :data="list" empty-text="该文件夹为空" size="mini">
-            <el-table-column label="文件名">
+            <el-table-column prop="fullName" label="文件名">
               <template slot-scope="scope">
                 <span v-if="scope.row.type">
                   <i :class='"icon-ym " + toFileExt(scope.row.fileExtension) + " i-default"' />

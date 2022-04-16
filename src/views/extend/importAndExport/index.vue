@@ -51,12 +51,12 @@
           <el-table-column prop="workingNature" label="用工性质" width="100" sortable />
           <el-table-column prop="idNumber" label="身份证号" width="150" sortable />
           <el-table-column prop="telephone" label="联系电话" width="100" sortable />
-          <el-table-column label="出生年月" sortable width="100">
+          <el-table-column prop="birthday" label="出生年月" sortable width="100">
             <template slot-scope="scope">
               {{ scope.row.birthday | toDate('yyyy-MM-dd') }}
             </template>
           </el-table-column>
-          <el-table-column label="参加工作" sortable width="100">
+          <el-table-column prop="attendWorkTime" label="参加工作" sortable width="100">
             <template slot-scope="scope">
               {{ scope.row.attendWorkTime | toDate('yyyy-MM-dd') }}
             </template>
@@ -64,12 +64,12 @@
           <el-table-column prop="education" label="最高学历" width="100" sortable />
           <el-table-column prop="major" label="所学专业" width="120" sortable />
           <el-table-column prop="graduationAcademy" label="毕业院校" width="150" sortable />
-          <el-table-column label="毕业时间" sortable width="100">
+          <el-table-column prop="graduationTime" label="毕业时间" sortable width="100">
             <template slot-scope="scope">
               {{ scope.row.graduationTime | toDate('yyyy-MM-dd') }}
             </template>
           </el-table-column>
-          <el-table-column label="创建时间" sortable width="150">
+          <el-table-column prop="creatorTime" label="创建时间" sortable width="150">
             <template slot-scope="scope">
               {{ scope.row.creatorTime | toDate() }}
             </template>

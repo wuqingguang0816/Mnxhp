@@ -1,53 +1,28 @@
 <template>
   <div>
-    <el-drawer
-      :title="dialogTitle"
-      :visible.sync="dataAuthorizeListDrawer"
-      :wrapperClosable="false"
-      ref="drawer"
-      size="700px"
-      class="JNPF-common-drawer"
-    >
+    <el-drawer :title="dialogTitle" :visible.sync="dataAuthorizeListDrawer" :wrapperClosable="false"
+      ref="drawer" size="700px" class="JNPF-common-drawer">
       <div class="JNPF-flex-main">
-        <el-tabs
-          type="border-card"
-          v-model="tabActiveName"
-          @tab-click="handleClick"
-          class="JNPF-flex-tabs"
-        >
+        <el-tabs type="border-card" v-model="tabActiveName" @tab-click="handleClick"
+          class="JNPF-flex-tabs">
           <el-tab-pane label="方案管理" name="dataAuthorizeScheme">
             <div class="JNPF-common-head">
               <topOpts @add="addOrUpdateHandle('')" />
               <div class="JNPF-common-head-right">
-                <el-tooltip
-                  effect="dark"
-                  :content="$t('common.refresh')"
-                  placement="top"
-                >
-                  <el-link
-                    icon="icon-ym icon-ym-Refresh
-                  JNPF-common-head-icon"
-                    :underline="false"
-                    @click="getAuthorizeSchemeList()"
-                  />
+                <el-tooltip effect="dark" :content="$t('common.refresh')" placement="top">
+                  <el-link icon="icon-ym icon-ym-Refresh
+                  JNPF-common-head-icon" :underline="false" @click="getAuthorizeSchemeList()" />
                 </el-tooltip>
               </div>
             </div>
-            <JNPF-table
-              v-loading="listLoading"
-              :data="dataAuthorizeSchemeList"
-              row-key="id"
-              default-expand-all
-              :tree-props="{ children: 'children', hasChildren: '' }"
-            >
+            <JNPF-table v-loading="listLoading" :data="dataAuthorizeSchemeList" row-key="id"
+              default-expand-all :tree-props="{ children: 'children', hasChildren: '' }">
               <el-table-column prop="fullName" label="方案名称" width="160" />
               <el-table-column prop="conditionText" label="过滤条件" />
               <el-table-column label="操作" width="100">
                 <template slot-scope="scope">
-                  <tableOpts
-                    @edit="addOrUpdateHandle(scope.row.id)"
-                    @del="handleDel(scope.row.id)"
-                  />
+                  <tableOpts @edit="addOrUpdateHandle(scope.row.id)"
+                    @del="handleDel(scope.row.id)" />
                 </template>
               </el-table-column>
             </JNPF-table>
@@ -55,79 +30,40 @@
           <el-tab-pane label="字段管理" name="dataAuthorize">
             <div class="JNPF-common-head">
               <topOpts @add="addOrUpdateHandle('')">
-                <el-button
-                  v-if="menuType === 2"
-                  type="text"
-                  icon="icon-ym icon-ym-dbLink"
-                  @click="addDataConnect"
-                >
+                <el-button v-if="menuType === 2" type="text" icon="icon-ym icon-ym-dbLink"
+                  @click="addDataConnect">
                   数据连接
                 </el-button>
               </topOpts>
               <div class="JNPF-common-head-right">
-                <el-tooltip
-                  effect="dark"
-                  :content="$t('common.refresh')"
-                  placement="top"
-                >
-                  <el-link
-                    icon="icon-ym icon-ym-Refresh
-                  JNPF-common-head-icon"
-                    :underline="false"
-                    @click="getAuthorizeList()"
-                  />
+                <el-tooltip effect="dark" :content="$t('common.refresh')" placement="top">
+                  <el-link icon="icon-ym icon-ym-Refresh
+                  JNPF-common-head-icon" :underline="false" @click="getAuthorizeList()" />
                 </el-tooltip>
               </div>
             </div>
-            <JNPF-table
-              v-loading="dataListLoading"
-              :data="dataAuthorizeList"
-              row-key="id"
-              default-expand-all
-              :tree-props="{ children: 'children', hasChildren: '' }"
-            >
+            <JNPF-table v-loading="dataListLoading" :data="dataAuthorizeList" row-key="id"
+              default-expand-all :tree-props="{ children: 'children', hasChildren: '' }">
               <el-table-column prop="enCode" label="字段名称" />
-              <el-table-column
-                prop="fullName"
-                label="字段说明"
-                show-overflow-tooltip
-              />
+              <el-table-column prop="fullName" label="字段说明" show-overflow-tooltip />
               <el-table-column prop="type" label="字段类型" width="70" />
-              <el-table-column
-                prop="conditionSymbol"
-                label="条件符号"
-                show-overflow-tooltip
-              />
-              <el-table-column label="条件内容" width="120">
+              <el-table-column prop="conditionSymbol" label="条件符号" show-overflow-tooltip />
+              <el-table-column prop="conditionText" label="条件内容" width="120">
                 <template slot-scope="scope">
-                  <span v-if="scope.row.conditionText === 'text'"
-                    >任意文本</span
-                  >
-                  <span v-if="scope.row.conditionText === '@userId'"
-                    >当前用户</span
-                  >
-                  <span v-if="scope.row.conditionText === '@organizeId'"
-                    >当前组织</span
-                  >
-                  <span
-                    v-if="
+                  <span v-if="scope.row.conditionText === 'text'">任意文本</span>
+                  <span v-if="scope.row.conditionText === '@userId'">当前用户</span>
+                  <span v-if="scope.row.conditionText === '@organizeId'">当前组织</span>
+                  <span v-if="
                       scope.row.conditionText ===
                       '@organizationAndSuborganization'
-                    "
-                    >当前组织及子组织</span
-                  >
-                  <span
-                    v-if="scope.row.conditionText === '@userAraSubordinates'"
-                    >当前用户及下属</span
-                  >
+                    ">当前组织及子组织</span>
+                  <span v-if="scope.row.conditionText === '@userAraSubordinates'">当前用户及下属</span>
                 </template>
               </el-table-column>
               <el-table-column label="操作" width="100">
                 <template slot-scope="scope">
-                  <tableOpts
-                    @edit="addOrUpdateHandle(scope.row.id)"
-                    @del="handleDel(scope.row.id)"
-                  />
+                  <tableOpts @edit="addOrUpdateHandle(scope.row.id)"
+                    @del="handleDel(scope.row.id)" />
                 </template>
               </el-table-column>
             </JNPF-table>
@@ -138,21 +74,12 @@
         <el-button @click="visible = false">关闭</el-button>
       </span>
     </el-drawer>
-    <DataSchemeForm
-      v-if="dataSchemeFormVisible"
-      ref="DataSchemeForm"
-      @refreshDataList="getAuthorizeSchemeList"
-    />
-    <DataAuthorizeForm
-      v-if="dataAuthorizeFormVisible"
-      ref="DataAuthorizeForm"
-      @refreshDataList="getAuthorizeList"
-    />
-    <DataConnectForm
-      v-if="dataConnectFormVisible"
-      ref="DataConnectForm"
-      @refreshDataList="getConnectList"
-    />
+    <DataSchemeForm v-if="dataSchemeFormVisible" ref="DataSchemeForm"
+      @refreshDataList="getAuthorizeSchemeList" />
+    <DataAuthorizeForm v-if="dataAuthorizeFormVisible" ref="DataAuthorizeForm"
+      @refreshDataList="getAuthorizeList" />
+    <DataConnectForm v-if="dataConnectFormVisible" ref="DataConnectForm"
+      @refreshDataList="getConnectList" />
   </div>
 </template>
 <script>
@@ -203,7 +130,7 @@ export default {
       this.dbList = []
       this.dbOptions = []
       this.$nextTick(() => {
-        if(this.$refs['DataConnectForm']){
+        if (this.$refs['DataConnectForm']) {
           this.$refs['DataConnectForm'].dataForm.dataSelect = '';
         }
         this.listLoading = true;
@@ -335,7 +262,7 @@ export default {
             });
           });
         })
-        .catch(() => {});
+        .catch(() => { });
     }
   },
 };

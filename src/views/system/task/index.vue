@@ -38,7 +38,7 @@
           <el-table-column prop="nextRunTime" label="下次运行时间" width="120"
             :formatter="jnpf.tableDateFormat" />
           <el-table-column prop="description" label="任务说明" show-overflow-tooltip />
-          <el-table-column label="状态" prop="enabledMark" width="70" align="center">
+          <el-table-column prop="enabledMark" label="状态" width="70" align="center">
             <template slot-scope="scope">
               <el-switch v-model="scope.row.enabledMark" :active-value="1" :inactive-value="0"
                 @click.native="handleUpdateState(scope.row)" disabled class="table-switch" />
