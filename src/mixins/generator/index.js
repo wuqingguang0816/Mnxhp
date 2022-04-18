@@ -78,7 +78,7 @@ export default {
       }).catch(() => {});
     },
     copy(id) {
-      this.$confirm('您确定要复制该功能表单, 是否继续?', '提示', {
+      this.$confirm('您确定要复制该功能模板, 是否继续?', '提示', {
         type: 'warning'
       }).then(() => {
         Copy(id).then(res => {
@@ -119,7 +119,7 @@ export default {
       }).catch(() => { this.releaseBtnLoading = false })
     },
     exportModel(id) {
-      this.$confirm('您确定要导出该功能表单, 是否继续?', '提示', {
+      this.$confirm('您确定要导出该功能模板, 是否继续?', '提示', {
         type: 'warning'
       }).then(() => {
         exportData(id).then(res => {

@@ -78,10 +78,10 @@
                     </el-dropdown-item>
                     <el-dropdown-item @click.native="openReleaseDialog(scope.row.id)">同步菜单
                     </el-dropdown-item>
-                    <el-dropdown-item @click.native="copy(scope.row.id)">复制模板</el-dropdown-item>
                     <el-dropdown-item @click.native="preview(scope.row.id)">预览模板</el-dropdown-item>
                     <el-dropdown-item @click.native="appPreview(scope.row.id)">移动预览
                     </el-dropdown-item>
+                    <el-dropdown-item @click.native="copy(scope.row.id)">复制模板</el-dropdown-item>
                     <el-dropdown-item @click.native="exportModel(scope.row.id)">导出模板
                     </el-dropdown-item>
                   </el-dropdown-menu>
