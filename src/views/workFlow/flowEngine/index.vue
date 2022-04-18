@@ -80,14 +80,14 @@
                     </el-button>
                   </span>
                   <el-dropdown-menu slot="dropdown">
-                    <el-dropdown-item @click.native="copy(scope.row.id)">
-                      复制流程</el-dropdown-item>
-                    <el-dropdown-item @click.native="handleExport(scope.row.id)">
-                      导出流程</el-dropdown-item>
                     <el-dropdown-item @click.native="preview(scope.row)">
                       表单预览</el-dropdown-item>
                     <el-dropdown-item @click.native="previewApp(scope.row.id)">
                       移动预览</el-dropdown-item>
+                    <el-dropdown-item @click.native="copy(scope.row.id)">
+                      复制流程</el-dropdown-item>
+                    <el-dropdown-item @click.native="handleExport(scope.row.id)">
+                      导出流程</el-dropdown-item>
                   </el-dropdown-menu>
                 </el-dropdown>
               </tableOpts>
