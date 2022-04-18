@@ -88,7 +88,7 @@ export function delDataAuthorize(id) {
 // 获取数据库表字段列表
 export function getDataModelFields(linkId, table) {
   return request({
-    url: `/api/system/DataModel/${linkId}/Tables/${table}/Fields`,
+    url: `/api/system/DataModel/${linkId}/Tables/${table}/Fields?type=1`,
     method: 'get'
   })
 }

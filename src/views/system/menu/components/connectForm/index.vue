@@ -53,7 +53,7 @@
                 :class="[
                   'el-select__caret',
                   'el-input__icon',
-                  'el-icon-arrow-up',
+                  'el-icon-arrow-up'
                 ]"
               ></i>
               <i
@@ -87,7 +87,6 @@
 <script>
 import { getDataModelFields } from "@/api/system/dataAuthorize";
 import DataTableForm from "@/views/generator/DataTableForm";
-import JsonDrawerVue from "@/components/Generator/index/JsonDrawer.vue";
 export default {
   components: { DataTableForm },
   data() {
@@ -100,17 +99,17 @@ export default {
       dataForm: {
         id: "",
         dbLinkId: "0",
-        dataSelect: "",
+        dataSelect: ""
       },
       dataRule: {
         dbLinkId: [
-          { required: true, message: "数据库不能为空", trigger: "blur" },
+          { required: true, message: "数据库不能为空", trigger: "blur" }
         ],
         dataSelect: [
-          { required: true, message: "数据表不能为空", trigger: "blur" },
-        ],
+          { required: true, message: "数据表不能为空", trigger: "blur" }
+        ]
       },
-      dbOptions: [],
+      dbOptions: []
     };
   },
   computed: {
@@ -121,7 +120,7 @@ export default {
         this.dataForm.dataSelect !== "";
       let criteria = this.inputHovering && hasValue;
       return criteria;
-    },
+    }
   },
   methods: {
     init(dbOptions) {
@@ -133,10 +132,10 @@ export default {
       this.dataForm.dataSelect = "";
     },
     dataFormSubmit() {
-      this.$refs["dataForm"].validate((valid) => {
+      this.$refs["dataForm"].validate(valid => {
         if (valid) {
           getDataModelFields(this.dataForm.dbLinkId, this.dataForm.dataSelect)
-            .then((res) => {
+            .then(res => {
               this.$emit("refreshDataList", res.data.list);
               this.visible = false;
             })
@@ -151,7 +150,7 @@ export default {
     closeForm(table, row) {
       //   let data = JSON.parse(JSON.stringify(dbData));
       this.dataForm.dataSelect = table;
-    },
-  },
+    }
+  }
 };
 </script>
