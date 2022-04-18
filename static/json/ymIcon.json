@@ -6,6 +6,27 @@
   "description": "",
   "glyphs": [
     {
+      "icon_id": "29050019",
+      "name": "mobile",
+      "font_class": "mobile",
+      "unicode": "e7dc",
+      "unicode_decimal": 59356
+    },
+    {
+      "icon_id": "29050020",
+      "name": "pc",
+      "font_class": "pc",
+      "unicode": "e7ee",
+      "unicode_decimal": 59374
+    },
+    {
+      "icon_id": "29050021",
+      "name": "video-play",
+      "font_class": "video-play",
+      "unicode": "e8a1",
+      "unicode_decimal": 59553
+    },
+    {
       "icon_id": "28946226",
       "name": "header-collapse1",
       "font_class": "header-collapse1",
@@ -2398,20 +2419,6 @@
       "font_class": "mac",
       "unicode": "e7db",
       "unicode_decimal": 59355
-    },
-    {
-      "icon_id": "28511096",
-      "name": "mobile",
-      "font_class": "mobile",
-      "unicode": "e7dc",
-      "unicode_decimal": 59356
-    },
-    {
-      "icon_id": "28511114",
-      "name": "pc",
-      "font_class": "pc",
-      "unicode": "e7ee",
-      "unicode_decimal": 59374
     },
     {
       "icon_id": "28510878",

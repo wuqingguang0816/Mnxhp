@@ -1,9 +1,9 @@
 @font-face {
   font-family: "icon-ym";
   /* Project id 3271933 */
-  src: url('iconfont.woff2?t=1649836176586') format('woff2'),
-    url('iconfont.woff?t=1649836176586') format('woff'),
-    url('iconfont.ttf?t=1649836176586') format('truetype');
+  src: url('iconfont.woff2?t=1650246247556') format('woff2'),
+    url('iconfont.woff?t=1650246247556') format('woff'),
+    url('iconfont.ttf?t=1650246247556') format('truetype');
 }
 
 .icon-ym {
@@ -12,6 +12,18 @@
   font-style: normal;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-ym-mobile:before {
+  content: "\e7dc";
+}
+
+.icon-ym-pc:before {
+  content: "\e7ee";
+}
+
+.icon-ym-video-play:before {
+  content: "\e8a1";
 }
 
 .icon-ym-header-collapse1:before {
@@ -1380,14 +1392,6 @@
 
 .icon-ym-mac:before {
   content: "\e7db";
-}
-
-.icon-ym-mobile:before {
-  content: "\e7dc";
-}
-
-.icon-ym-pc:before {
-  content: "\e7ee";
 }
 
 .icon-ym-appDesign:before {
