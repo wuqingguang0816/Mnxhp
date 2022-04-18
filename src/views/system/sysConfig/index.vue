@@ -1,6 +1,6 @@
 <template>
   <div class="app-container JNPF-flex-main systemConfig">
-    <el-form ref="baseForm" :model="baseForm" label-width="100px">
+    <el-form ref="baseForm" :model="baseForm" :rules="rules" label-width="100px">
       <el-tabs v-model="activeName" type="border-card" class="JNPF-el_tabs">
         <el-tab-pane label="基本设置" name="first">
           <el-row :gutter="20">
@@ -145,35 +145,52 @@
         </el-tab-pane>
         <el-tab-pane label="第三方设置" name="third">
           <el-tabs tab-position="left" style="height:100%" v-model="thirdTab" class="thirdTab">
-            <el-tab-pane label="短信配置">
-              <el-alert title="注意：请在短信厂家官网网站开通申请" type="warning" :closable="false" show-icon />
-              <el-row style="margin-top: 15px">
+            <el-tab-pane label="阿里短信">
+              <!-- <el-alert title="注意：请在短信厂家官网网站开通申请" type="warning" :closable="false" show-icon /> -->
+              <el-row style="margin-top: 15px" v-if="thirdTab=='0'">
                 <el-col :span="12">
-                  <el-form-item label="短信厂家" prop="smsCompany">
-                    <el-radio-group v-model="baseForm.smsCompany">
-                      <el-radio-button label="1">阿里</el-radio-button>
-                      <el-radio-button label="2">腾讯</el-radio-button>
-                    </el-radio-group>
-                  </el-form-item>
-                  <el-form-item label="用户编号" prop="smsKeyId">
-                    <el-input v-model="baseForm.smsKeyId" clearable placeholder="请输入用户编号" />
-                  </el-form-item>
-                  <el-form-item label="用户秘钥" prop="smsKeySecret">
-                    <el-input v-model="baseForm.smsKeySecret" show-password clearable
-                      placeholder="请输入用户秘钥" />
-                  </el-form-item>
-                  <el-form-item label="访问域名" prop="domain">
-                    <el-input v-model="baseForm.domain" clearable placeholder="请输入访问域名" />
-                  </el-form-item>
-                  <el-form-item label="支持地域" prop="region">
-                    <el-input v-model="baseForm.region" clearable placeholder="请输入支持地域" />
-                  </el-form-item>
-                  <el-form-item label="版本号" prop="version">
-                    <el-input v-model="baseForm.version" clearable placeholder="请输入版本号" />
-                  </el-form-item>
-                  <el-form-item>
+                  <jnpf-form-tip-item label="AccessKey ID" prop="aliAccessKey" label-width="180px"
+                    tip-label="授权ID，【AccessKey管理】中的 AccessKey ID">
+                    <el-input v-model="baseForm.aliAccessKey" clearable
+                      placeholder="请输入AccessKey ID" />
+                  </jnpf-form-tip-item>
+                  <jnpf-form-tip-item label="AccessKey Secret" prop="aliSecret" label-width="180px"
+                    tip-label="授权密钥,【AccessKey管理】中的 AccessKey Secret">
+                    <el-input v-model="baseForm.aliSecret" show-password clearable
+                      placeholder="请输入AccessKey Secret" />
+                  </jnpf-form-tip-item>
+                  <el-form-item label-width="180px">
                     <el-button type="primary" size="small" :loading="btnLoading" class="saveBtn"
-                      @click="submitForm()">保 存</el-button>
+                      @click="submitSmsForm()">保 存</el-button>
+                  </el-form-item>
+                </el-col>
+              </el-row>
+            </el-tab-pane>
+            <el-tab-pane label="腾讯短信">
+              <el-row style="margin-top: 15px" v-if="thirdTab=='1'">
+                <el-col :span="12">
+                  <jnpf-form-tip-item label="SecretId" prop="tencentSecretId" label-width="180px"
+                    tip-label="在【访问管理】-【访问密钥】- 【API密钥管理】中获取 SecretId">
+                    <el-input v-model="baseForm.tencentSecretId" clearable
+                      placeholder="请输入SecretId" />
+                  </jnpf-form-tip-item>
+                  <jnpf-form-tip-item label="SecretKey" prop="tencentSecretKey" label-width="180px"
+                    tip-label="在【访问管理】-【访问密钥】- 【API密钥管理】中获取 SecretKey">
+                    <el-input v-model="baseForm.tencentSecretKey" show-password clearable
+                      placeholder="请输入SecretKey" />
+                  </jnpf-form-tip-item>
+                  <jnpf-form-tip-item label="SDK AppID" prop="tencentAppId" label-width="180px"
+                    tip-label="【应⽤管理】-【应⽤列表】应⽤中的 SDK AppID">
+                    <el-input v-model="baseForm.tencentAppId" clearable
+                      placeholder="请输入SDK AppID" />
+                  </jnpf-form-tip-item>
+                  <jnpf-form-tip-item label="App Key" prop="tencentAppKey" label-width="180px"
+                    tip-label="【应⽤管理】-【应⽤列表】应⽤中的 App Key">
+                    <el-input v-model="baseForm.tencentAppKey" clearable placeholder="请输入App Key" />
+                  </jnpf-form-tip-item>
+                  <el-form-item label-width="180px">
+                    <el-button type="primary" size="small" :loading="btnLoading" class="saveBtn"
+                      @click="submitSmsForm()">保 存</el-button>
                   </el-form-item>
                 </el-col>
               </el-row>
@@ -440,10 +457,12 @@ export default {
         emailAccount: '',
         emailPassword: '',
         emailSsl: 0,
-        smsCompany: '1',
-        smsKeyId: '',
-        smsKeySecret: '',
-        smsSignName: '',
+        aliAccessKey: '',
+        aliSecret: '',
+        tencentSecretId: '',
+        tencentSecretKey: '',
+        tencentAppId: '',
+        tencentAppKey: '',
         qyhCorpId: '',
         qyhAgentId: '',
         qyhAgentSecret: '',
@@ -459,6 +478,26 @@ export default {
         lockType: 1,
         lockTime: 10,
         enableVerificationCode: 0
+      },
+      rules: {
+        aliAccessKey: [
+          { required: true, message: 'AccessKey ID不能为空', trigger: 'blur' }
+        ],
+        aliSecret: [
+          { required: true, message: 'AccessKey Secret不能为空', trigger: 'blur' }
+        ],
+        tencentSecretId: [
+          { required: true, message: 'SecretId不能为空', trigger: 'blur' }
+        ],
+        tencentSecretKey: [
+          { required: true, message: 'SecretKey不能为空', trigger: 'blur' }
+        ],
+        tencentAppId: [
+          { required: true, message: 'SDK AppID不能为空', trigger: 'blur' }
+        ],
+        tencentAppKey: [
+          { required: true, message: 'App Key不能为空', trigger: 'blur' }
+        ],
       },
       wxEvents: [{
         select: false,
@@ -513,8 +552,8 @@ export default {
   },
   watch: {
     thirdTab(val) {
-      if (val == 2 || val == 3) {
-        const type = val == 2 ? 1 : 2
+      if (val == 3 || val == 4) {
+        const type = val == 3 ? 1 : 2
         this.getSynThirdTotal(type)
       }
     },
@@ -655,6 +694,12 @@ export default {
         })
       }).catch(() => {
         row.loading = false
+      })
+    },
+    submitSmsForm() {
+      this.$refs['baseForm'].validate((valid) => {
+        if (!valid) return
+        this.submitForm()
       })
     },
     submitForm() {

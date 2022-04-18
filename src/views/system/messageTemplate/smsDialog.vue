@@ -47,10 +47,9 @@
                 </template>
               </el-table-column>
               <el-table-column type="index" width="50" label="序号" align="center" />
-              <el-table-column prop="templateName" label="模板名称" show-overflow-tooltip
-                min-width="150" />
-              <el-table-column prop="templateId" label="模板编号" width="200" />
-              <el-table-column prop="signContent" label="签名内容" show-overflow-tooltip />
+              <el-table-column prop="fullName" label="模板名称" show-overflow-tooltip />
+              <el-table-column prop="enCode" label="模板编码" />
+              <el-table-column prop="company" label="短信厂家" width="100" />
             </JNPF-table>
             <pagination :total="total" :page.sync="listQuery.currentPage"
               :limit.sync="listQuery.pageSize" @pagination="initData" />
