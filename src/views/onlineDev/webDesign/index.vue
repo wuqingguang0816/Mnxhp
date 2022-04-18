@@ -67,8 +67,8 @@
                     </el-button>
                   </span>
                   <el-dropdown-menu slot="dropdown">
-                    <el-dropdown-item @click.native="copy(scope.row.id)">复制</el-dropdown-item>
                     <el-dropdown-item @click.native="preview(scope.row.id)">预览</el-dropdown-item>
+                    <el-dropdown-item @click.native="copy(scope.row.id)">复制</el-dropdown-item>
                     <el-dropdown-item @click.native="exportModel(scope.row.id)">导出
                     </el-dropdown-item>
                   </el-dropdown-menu>
