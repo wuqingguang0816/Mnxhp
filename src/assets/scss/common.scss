@@ -1684,6 +1684,10 @@ textarea.el-textarea__inner {
   margin: 14px 0;
 }
 
+.el-button [class*=icon-ym-]+span {
+  margin-left: 5px;
+}
+
 // 布局错位问题修正 
 .el-col {
   .el-form-item--small .el-form-item__label {

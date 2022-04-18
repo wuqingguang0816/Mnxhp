@@ -5,12 +5,10 @@
     <column-main-app ref="columnMainApp" :conf="appColumnData" :modelType="modelType"
       v-show="currentTab==='app'" />
     <div class="head-tabs">
-      <div class="head-tabs-item" :class="{'active':currentTab==='pc'}" @click="currentTab='pc'">
-        桌面端<i class="icon-ym icon-ym-pc"></i></div>
-      <el-divider direction="vertical"></el-divider>
-      <div class="head-tabs-item" :class="{'active':currentTab==='app'}" @click="currentTab='app'">
-        移动端<i class="icon-ym icon-ym-mobile"></i>
-      </div>
+      <el-button icon="icon-ym icon-ym-pc" :class="{'unActive-btn':currentTab!=='pc'}" type="text"
+        @click="currentTab='pc'" size="medium">桌面端</el-button>
+      <el-button icon="icon-ym icon-ym-mobile" :class="{'unActive-btn':currentTab!=='app'}"
+        type="text" @click="currentTab='app'" size="medium">移动端</el-button>
     </div>
   </div>
 </template>
@@ -60,29 +58,29 @@ export default {
   position: relative;
   .head-tabs {
     position: absolute;
-    right: 20px;
+    left: 0;
     top: 0;
-    width: 300px;
-    height: 40px;
+    width: calc(100% - 350px);
+    height: 42px;
     border-bottom: 1px solid #dcdfe6;
     background: #fff;
     display: flex;
     align-items: center;
-    justify-content: space-around;
-    padding: 0 18px;
-    font-size: 20px;
-    .head-tabs-item {
-      text-align: center;
-      line-height: 30px;
-      font-size: 14px;
-      cursor: pointer;
-      .icon-ym {
-        font-size: 14px;
-        margin-left: 4px;
-      }
-      &.active {
-        color: #1890ff;
-      }
+    justify-content: flex-end;
+    padding: 0 10px;
+    z-index: 100;
+    border-radius: 4px 4px 0 0;
+    .el-button + .el-button {
+      margin-left: 15px;
+    }
+    .unActive-btn {
+      color: #606266 !important;
+    }
+    >>> i {
+      font-size: 20px;
+      vertical-align: middle;
+      position: relative;
+      top: -1px;
     }
   }
 }

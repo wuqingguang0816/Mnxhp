@@ -25,17 +25,17 @@
     </div>
     <div class="center-board">
       <div class="action-bar">
-        <el-button icon="icon-ym icon-ym-pc" :class="{'unActive-btn':showType!='pc'}" type="text"
-          @click="showType='pc'" size="medium"></el-button>
-        <el-button icon="icon-ym icon-ym-mobile" :class="{'unActive-btn':showType!='app'}"
-          type="text" @click="showType='app'" size="medium"></el-button>
         <div class="action-bar-right">
-          <el-button icon="el-icon-video-play" type="text" @click="preview" size="medium">
-            预览</el-button>
+          <el-button icon="icon-ym icon-ym-pc" :class="{'unActive-btn':showType!='pc'}" type="text"
+            @click="showType='pc'" size="medium">桌面端</el-button>
+          <el-button icon="icon-ym icon-ym-mobile" :class="{'unActive-btn':showType!='app'}"
+            type="text" @click="showType='app'" size="medium">移动端</el-button>
+          <el-button class="unActive-btn" icon="el-icon-video-play" type="text" @click="preview"
+            size="medium">预览</el-button>
           <!-- <el-button icon="el-icon-view" type="text" @click="showJson" size="medium">
             查看json</el-button> -->
-          <el-button class="delete-btn" icon="el-icon-delete" type="text" @click="empty"
-            size="medium">清空</el-button>
+          <el-button class="delete-btn unActive-btn" icon="el-icon-delete" type="text"
+            @click="empty" size="medium">清空</el-button>
         </div>
       </div>
       <el-scrollbar class="center-scrollbar" v-show="showType==='pc'">
