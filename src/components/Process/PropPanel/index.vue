@@ -38,14 +38,7 @@
             </el-select>
           </el-col>
           <el-col :span="7" class="filedValue">
-            <template v-if="['select','radio','checkbox'].includes(item.jnpfKey)">
-              <el-select v-model="item.filedValue" :placeholder="'请选择'" clearable filterable>
-                <el-option :label="oItem[item.__config__.props.label]"
-                  v-for="(oItem, i) in item.__slot__.options"
-                  :value="oItem[item.__config__.props.value]" :key="i"></el-option>
-              </el-select>
-            </template>
-            <template v-else-if="item.jnpfKey==='numInput'">
+            <template v-if="item.jnpfKey==='numInput'">
               <el-input-number v-model="item.filedValue" placeholder="请输入"
                 :precision="item.precision" controls-position="right" />
             </template>
@@ -58,7 +51,7 @@
                 controls-position="right" />
             </template>
             <template v-else-if="item.jnpfKey==='switch'">
-              <el-switch v-model="item.filedValue" />
+              <el-switch v-model="item.filedValue" :active-value="1" :inactive-value="0" />
             </template>
             <template v-else-if="item.jnpfKey==='time'">
               <el-time-picker v-model="item.filedValue" :picker-options="item['picker-options']"
@@ -69,24 +62,29 @@
             <template v-else-if="['date','createTime', 'modifyTime'].includes(item.jnpfKey)">
               <el-date-picker v-model="item.filedValue" :type="item.type||'datetime'" clearable
                 placeholder="请选择" value-format="timestamp"
+                @change="onConditionDateChange($event,item)"
                 :format="item.format||'yyyy-MM-dd HH:mm:ss'">
               </el-date-picker>
             </template>
             <template v-else-if="['comSelect','currOrganize'].includes(item.jnpfKey)">
-              <comSelect v-model="item.filedValue" placeholder="请选择" clearable />
+              <comSelect v-model="item.filedValue" placeholder="请选择" clearable
+                @change="onConditionListChange(arguments,item)" />
             </template>
             <template v-else-if="['depSelect'].includes(item.jnpfKey)">
-              <depSelect v-model="item.filedValue" placeholder="请选择" clearable />
+              <depSelect v-model="item.filedValue" placeholder="请选择" clearable
+                @change="onConditionObjChange(arguments,item)" />
             </template>
             <template v-else-if="['userSelect','createUser','modifyUser'].includes(item.jnpfKey)">
-              <userSelect v-model="item.filedValue" placeholder="请选择" hasSys clearable />
+              <userSelect v-model="item.filedValue" placeholder="请选择" hasSys clearable
+                @change="onConditionObjChange(arguments,item)" />
             </template>
             <template v-else-if="['posSelect','currPosition'].includes(item.jnpfKey)">
-              <posSelect v-model="item.filedValue" placeholder="请选择" clearable />
+              <posSelect v-model="item.filedValue" placeholder="请选择" clearable
+                @change="onConditionObjChange(arguments,item)" />
             </template>
             <template v-else-if="item.jnpfKey==='address'">
-              <JNPFAddress v-model="item.filedValue" placeholder="请选择" :level="item.level"
-                clearable />
+              <JNPFAddress v-model="item.filedValue" placeholder="请选择" :level="item.level" clearable
+                @change="onConditionListChange(arguments,item)" />
             </template>
             <template v-else>
               <el-input v-model="item.filedValue" placeholder="请输入"></el-input>
@@ -1682,7 +1680,7 @@ export default {
       this.properties.conditions = this.pconditions
       for (let i = 0; i < this.pconditions.length; i++) {
         const e = this.pconditions[i];
-        nodeContent += `[${e.fieldName} ${e.symbol} ${e.filedValue}] ${i + 1 == this.pconditions.length ? '' : e.logicName}` + '\n'
+        nodeContent += `[${e.fieldName} ${e.symbolName} ${e.filedLabel ? e.filedLabel : e.filedValue ? e.filedValue : ''}] ${i + 1 == this.pconditions.length ? '' : e.logicName}` + '\n'
       }
       this.$emit("confirm", this.properties, nodeContent || '请设置条件');
       this.visible = false;
@@ -2028,6 +2026,7 @@ export default {
         fieldName: '',
         symbolName: '',
         filedValue: '',
+        filedLabel: '',
         logicName: '并且',
         field: '',
         symbol: '',
@@ -2042,6 +2041,7 @@ export default {
       item.jnpfKey = obj.__config__.jnpfKey
       item = { ...item, ...obj }
       item.filedValue = undefined
+      item.filedLabel = ''
       this.$set(this.pconditions, i, item)
     },
     symbolChange(val, item) {
@@ -2117,6 +2117,21 @@ export default {
         ...o,
         relationField: ''
       }))
+    },
+    // 条件节点
+    onConditionDateChange(val, item) {
+      if (!val) return item.filedLabel = ''
+      let format = item.format || 'yyyy-MM-dd HH:mm:ss'
+      item.filedLabel = this.jnpf.toDate(val, format)
+    },
+    onConditionListChange(data, item) {
+      if (!data || !data[1]) return item.filedLabel = ''
+      let labelList = data[1].map(o => o.fullName)
+      item.filedLabel = labelList.join(' / ')
+    },
+    onConditionObjChange(data, item) {
+      if (!data || !data[1]) return item.filedLabel = ''
+      item.filedLabel = data[1].fullName || ''
     }
   },
   watch: {
