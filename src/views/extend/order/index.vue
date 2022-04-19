@@ -45,8 +45,7 @@
             <template slot-scope="props">
               <el-tabs v-model="props.row.activeName">
                 <el-tab-pane label="订单商品">
-                  <el-table :data="props.row.childTable" stripe size='mini' show-summary
-                    :element-loading-text="$t('common.loadingText')">
+                  <el-table :data="props.row.childTable" stripe size='mini' show-summary>
                     <el-table-column prop="goodsName" label="商品名称" />
                     <el-table-column prop="specifications" label="规格型号" width="80" />
                     <el-table-column prop="unit" label="单位" width="80" />
@@ -60,8 +59,7 @@
                   </el-table>
                 </el-tab-pane>
                 <el-tab-pane label="收款计划">
-                  <el-table :data="props.row.childTable1" stripe size='mini' show-summary
-                    :element-loading-text="$t('common.loadingText')">
+                  <el-table :data="props.row.childTable1" stripe size='mini' show-summary>
                     <el-table-column prop="receivableDate" label="收款日期"
                       :formatter="jnpf.tableDateFormat" width="120" />
                     <el-table-column prop="receivableRate" label="收款比率%" width="100" />

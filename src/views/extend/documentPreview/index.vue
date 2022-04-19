@@ -24,12 +24,14 @@
           <el-tab-pane label="本地预览" name="localPreview"></el-tab-pane>
           <el-tab-pane label="在线预览" name="yozoOnlinePreview"></el-tab-pane>
           <div class="box">
-            <el-alert title="本地预览支持doc/docx/xls/xlsx/ppt/pptx/pdf等办公文档。" type="warning"
-              :closable="false" v-if="activeTab==='localPreview'" />
-            <el-alert title="免责声明：永中文档预览组件不属于JNPF产品，只用于介绍第三方组件如何在《JNPF快速开发平台》中使用。" type="warning"
-              :closable="false" v-else />
+            <div class="tip">
+              <el-alert title="本地预览支持doc/docx/xls/xlsx/ppt/pptx/pdf等办公文档。" type="warning"
+                :closable="false" show-icon v-if="activeTab==='localPreview'" />
+              <el-alert title="免责声明：永中文档预览组件不属于JNPF产品，只用于介绍第三方组件如何在《JNPF快速开发平台》中使用。" type="warning"
+                :closable="false" show-icon v-else />
+            </div>
             <JNPF-table v-loading="listLoading" :data="list">
-              <el-table-column label="文件名称">
+              <el-table-column prop="fileName" label="文件名称">
                 <template slot-scope="scope">
                   <el-link @click="readInfo(scope.row.fileId,scope.row.fileName)"
                     style="font-size:12px">
@@ -92,8 +94,8 @@ export default {
 <style lang="scss" scoped>
 .JNPF-common-layout-main {
   padding: 0;
-  .el-alert {
-    margin: 10px 0;
+  .tip {
+    padding: 10px;
   }
 }
 .documentPreview-tab {

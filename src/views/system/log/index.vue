@@ -2,50 +2,7 @@
   <div class="JNPF-common-layout systemLogs">
     <div class="JNPF-common-layout-center">
       <el-row class="JNPF-common-search-box" :gutter="16">
-        <el-form @submit.native.prevent v-if="activeName==='3'">
-          <el-col :span="6">
-            <el-form-item label="操作用户">
-              <el-input v-model="listQuery.userName" placeholder="请输入" clearable
-                @keyup.enter.native="search()" />
-            </el-form-item>
-          </el-col>
-          <el-col :span="6">
-            <el-form-item label="操作IP">
-              <el-input v-model="listQuery.ipaddress" placeholder="请输入" clearable
-                @keyup.enter.native="search()" />
-            </el-form-item>
-          </el-col>
-          <el-col :span="6">
-            <el-form-item label="操作模块">
-              <el-select v-model="listQuery.moduleName" placeholder="请选择模块" clearable>
-                <el-option v-for="item in moduleList" :key="item.moduleName"
-                  :label="item.moduleName" :value="item.moduleName" />
-              </el-select>
-            </el-form-item>
-          </el-col>
-          <template v-if="showAll">
-            <el-col :span="6">
-              <el-form-item label="操作类型">
-                <el-select v-model="listQuery.requestMethod" placeholder="请选择类型" clearable>
-                  <el-option v-for="item in opTypeList" :key="item" :label="item" :value="item" />
-                </el-select>
-              </el-form-item>
-            </el-col>
-          </template>
-          <el-col :span="6">
-            <el-form-item>
-              <el-button type="primary" icon="el-icon-search" @click="search()">
-                {{$t('common.search')}}</el-button>
-              <el-button icon="el-icon-refresh-right" @click="reset()">{{$t('common.reset')}}
-              </el-button>
-              <el-button type="text" icon="el-icon-arrow-down" @click="showAll=true"
-                v-if="!showAll">展开</el-button>
-              <el-button type="text" icon="el-icon-arrow-up" @click="showAll=false" v-else>
-                收起</el-button>
-            </el-form-item>
-          </el-col>
-        </el-form>
-        <el-form @submit.native.prevent v-else>
+        <el-form @submit.native.prevent>
           <el-col :span="6">
             <el-form-item label="关键词">
               <el-input v-model="listQuery.keyword" placeholder="请输入关键词查询" clearable
@@ -76,8 +33,8 @@
             <div class="left-btn">
               <el-button type="danger" size="small" @click="handleDel" icon="el-icon-delete">删除
               </el-button>
-              <el-link type="danger" :underline="false" @click="batchDel" style="margin-left:10px"
-                v-if="activeName==='3'">一键清空</el-link>
+              <el-link type="danger" :underline="false" @click="batchDel" style="margin-left:10px">
+                一键清空</el-link>
             </div>
             <div class="JNPF-common-head-right">
               <el-tooltip effect="dark" :content="$t('common.refresh')" placement="top">
@@ -156,7 +113,7 @@
 </template>
 
 <script>
-import { getLogList, delLog, getModuleName, batchDelLog } from '@/api/system/log'
+import { getLogList, delLog, batchDelLog } from '@/api/system/log'
 import Form from './Form'
 export default {
   name: 'system-log',
@@ -165,25 +122,17 @@ export default {
     return {
       formVisible: false,
       listLoading: true,
-      startTime: '',
-      endTime: '',
       activeName: '1',
       loginLogData: [],
       errorLogData: [],
       requestLogData: [],
       operationLogData: [],
-      moduleList: [],
-      opTypeList: ['查询', '新增', '修改', '删除', '导入', '导出'],
       multipleSelection: [],
       total: 0,
       listQuery: {
         keyword: '',
         startTime: '',
         endTime: '',
-        userName: '',
-        ipaddress: '',
-        moduleName: '',
-        requestMethod: '',
         sort: 'desc',
         currentPage: 1,
         pageSize: 20
@@ -215,13 +164,11 @@ export default {
           }
         }]
       },
-      showAll: false,
       pickerVal: []
     }
   },
   created() {
     this.initData()
-    this.getModuleName()
   },
   methods: {
     initData() {
@@ -236,11 +183,6 @@ export default {
         this.listLoading = false
       }).catch(() => {
         this.listLoading = false
-      })
-    },
-    getModuleName() {
-      getModuleName().then(res => {
-        this.moduleList = res.data
       })
     },
     handleTabClick() {
@@ -284,7 +226,7 @@ export default {
       }).catch(() => { })
     },
     batchDel() {
-      this.$confirm('此操作会将所有操作日志删除，是否继续?', '提示', {
+      this.$confirm('此操作会将所有日志删除，是否继续?', '提示', {
         type: 'warning'
       }).then(() => {
         batchDelLog(this.activeName).then(res => {
@@ -314,10 +256,7 @@ export default {
     },
     reset() {
       this.pickerVal = []
-      this.listQuery.userName = ''
-      this.listQuery.ipaddress = ''
-      this.listQuery.moduleName = ''
-      this.listQuery.requestMethod = ''
+      this.listQuery.keyword = ''
       this.search()
     }
   }

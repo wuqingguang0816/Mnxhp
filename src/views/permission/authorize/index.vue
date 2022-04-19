@@ -36,10 +36,9 @@
     </el-steps>
     <div class="authorize-bd">
       <div v-if="active < 5">
-        <el-tree :data="authorizeTreeData" ref="authorizeTree" v-loading="treeLoading"
-          :element-loading-text="$t('common.loadingText')" show-checkbox default-expand-all
-          node-key="id" :check-strictly="checkStrictly" check-on-click-node :props="defaultProps"
-          :expand-on-click-node="false" @check-change="selectTreeNodeClick">
+        <el-tree :data="authorizeTreeData" ref="authorizeTree" v-loading="treeLoading" show-checkbox
+          default-expand-all node-key="id" :check-strictly="checkStrictly" check-on-click-node
+          :props="defaultProps" :expand-on-click-node="false" @check-change="selectTreeNodeClick">
           <span slot-scope="{ node, data }">
             <i :class="data.icon" />
             <span style="padding-left: 4px;">{{ node.label }}</span>
@@ -47,10 +46,9 @@
         </el-tree>
       </div>
       <div class="authorize-selectbox" v-else>
-        <el-tree :data="roleTreeAllData" ref="roleTree" v-loading="roleTreeLoading"
-          :element-loading-text="$t('common.loadingText')" show-checkbox default-expand-all
-          node-key="onlyId" :props="defaultProps" check-on-click-node :expand-on-click-node="false"
-          @check-change="selectTreeNodeClick">
+        <el-tree :data="roleTreeAllData" ref="roleTree" v-loading="roleTreeLoading" show-checkbox
+          default-expand-all node-key="onlyId" :props="defaultProps" check-on-click-node
+          :expand-on-click-node="false" @check-change="selectTreeNodeClick">
           <span slot-scope="{ node, data }">
             <i :class="data.icon" />
             <span style="padding-left: 4px;">{{ node.label }}</span>
@@ -339,6 +337,9 @@ export default {
 <style lang="scss" scoped>
 .authorize-container {
   padding: 0;
+  .el-steps {
+    border-radius: 0;
+  }
 }
 .authorize-bd {
   padding: 20px;

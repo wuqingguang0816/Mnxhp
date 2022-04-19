@@ -10,7 +10,7 @@
           <el-button @click="goBack">{{$t('common.cancelButton')}}</el-button>
         </div>
       </div>
-      <div class="main" v-loading="formLoading" :element-loading-text="$t('common.loadingText')">
+      <div class="main" v-loading="formLoading">
         <el-form ref="dataForm" :model="dataForm" :rules="dataRule" label-width="80px">
           <div class="JNPF-common-title mb-20">
             <h2 class="bold">基础信息</h2>

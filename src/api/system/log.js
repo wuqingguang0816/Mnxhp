@@ -16,13 +16,6 @@ export function delLog(data) {
     data
   })
 }
-// 删除或批量删除日志
-export function getModuleName() {
-  return request({
-    url: '/api/system/Log/ModuleName',
-    method: 'GET'
-  })
-}
 // 一键清空
 export function batchDelLog(type) {
   return request({

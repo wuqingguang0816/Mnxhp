@@ -105,7 +105,7 @@ export default {
     },
     async initSelectedData() {
       if (this.type === 'user') {
-        if (!this.innerValue.length) return
+        if (!this.innerValue.length) return this.selectedData = []
         getUserInfoList(this.innerValue).then(res => {
           this.selectedData = res.data.list
         })

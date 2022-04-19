@@ -165,7 +165,8 @@ export default {
         ReadInfo(item.id).then(res => {
           item.isRead = '1'
           if (!res.data.bodyText) return
-          this.$router.push('/workFlowDetail?config=' + res.data.bodyText)
+          const Base64 = require('js-base64').Base64
+          this.$router.push('/workFlowDetail?config=' + encodeURIComponent(Base64.encode(res.data.bodyText)))
         })
       }
     }

@@ -35,7 +35,7 @@
     <el-dialog title="组织选择" :close-on-click-modal="false" :visible.sync="visible"
       class="JNPF-dialog JNPF-dialog_center transfer-dialog" lock-scroll append-to-body
       width="800px" :modal-append-to-body="false" @close="onClose">
-      <div class="transfer__body" :element-loading-text="$t('common.loadingText')">
+      <div class="transfer__body">
         <div class="transfer-pane">
           <div class="transfer-pane__tools">
             <el-input placeholder="请输入关键词查询" v-model="keyword" @keyup.enter.native="search"

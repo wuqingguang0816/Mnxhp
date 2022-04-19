@@ -1,6 +1,5 @@
 <template>
-  <div class="transfer__body" v-loading="allLoading"
-    :element-loading-text="$t('common.loadingText')" :style="{height}">
+  <div class="transfer__body" v-loading="allLoading" :style="{height}">
     <div class="transfer-pane">
       <div class="transfer-pane__tools">
         <el-input placeholder="输入关键词进行搜索" v-model="keyword" @keyup.enter.native="getData" clearable>

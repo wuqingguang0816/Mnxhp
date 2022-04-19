@@ -1,55 +1,59 @@
 <template>
   <transition name="el-zoom-in-center">
-    <div class="JNPF-preview-main flow-form-main nohead">
-      <div class="btns">
-        <el-button type="primary" @click="addComment" v-if="activeTab==='comment'">评 论</el-button>
-        <template
-          v-if="(setting.opType=='-1'&&setting.id)||setting.opType==0||setting.opType==1||setting.opType==2">
-          <el-button type="primary" @click="printBrowseVisible=true"
-            v-if="properties.hasPrintBtn && properties.printId">
-            {{properties.printBtnText||'打 印'}}</el-button>
-        </template>
-        <template v-if="setting.opType=='-1'">
-          <el-button type="primary" @click="eventLauncher('submit')" :loading="candidateLoading">
-            {{properties.submitBtnText||'提交审核'}}</el-button>
-          <el-button type="warning" @click="eventLauncher('save')" :loading="btnLoading">
-            {{properties.saveBtnText||'保存草稿'}}</el-button>
-        </template>
-        <template v-if="setting.opType == 1">
-          <el-button type="warning" @click="openUserBox('transfer')"
-            v-if="properties.hasTransferBtn">{{properties.transferBtnText||'转 办'}}</el-button>
-          <el-button type="primary" @click="eventLauncher('audit')" :loading="candidateLoading"
-            v-if="properties.hasAuditBtn">{{properties.auditBtnText||'通 过'}}</el-button>
-          <el-button type="warning" @click="eventLauncher('saveAudit')" v-if="properties.hasSaveBtn"
-            :loading="btnLoading">{{properties.saveBtnText||'保存草稿'}}</el-button>
-          <el-button type="danger" @click="eventLauncher('reject')" v-if="properties.hasRejectBtn">
-            {{properties.rejectBtnText||'拒 绝'}}</el-button>
-        </template>
-        <template v-if="setting.opType == 0 && setting.status == 1">
-          <el-button type="primary" @click="press()"
-            v-if="properties.hasPressBtn || properties.hasPressBtn===undefined">
-            {{properties.pressBtnText||'催 办'}}</el-button>
-          <el-button type="danger" @click="revoke()"
-            v-if="properties.hasRevokeBtn || properties.hasRevokeBtn===undefined">
-            {{properties.revokeBtnText||'撤 回'}}</el-button>
-        </template>
-        <el-button type="danger" v-if="setting.opType == 2 && properties.hasRevokeBtn"
-          @click="recall()">{{properties.revokeBtnText||'撤 回'}}</el-button>
-        <template v-if="setting.opType == 4">
-          <el-button type="primary" @click="openAssignBox" v-if="setting.status ==1">指 派
+    <div class="JNPF-preview-main flow-form-main">
+      <div class="JNPF-common-page-header">
+        <el-page-header @back="goBack" :content="title" />
+        <div class="options">
+          <el-button type="primary" @click="addComment" v-if="activeTab==='comment'">评 论</el-button>
+          <template
+            v-if="(setting.opType=='-1'&&setting.id)||setting.opType==0||setting.opType==1||setting.opType==2">
+            <el-button type="primary" @click="printBrowseVisible=true"
+              v-if="properties.hasPrintBtn && properties.printId">
+              {{properties.printBtnText||'打 印'}}</el-button>
+          </template>
+          <template v-if="setting.opType=='-1'">
+            <el-button type="primary" @click="eventLauncher('submit')" :loading="candidateLoading">
+              {{properties.submitBtnText||'提 交'}}</el-button>
+            <el-button type="warning" @click="eventLauncher('save')" :loading="btnLoading">
+              {{properties.saveBtnText||'暂 存'}}</el-button>
+          </template>
+          <template v-if="setting.opType == 1">
+            <el-button type="warning" @click="openUserBox('transfer')"
+              v-if="properties.hasTransferBtn">{{properties.transferBtnText||'转 办'}}</el-button>
+            <el-button type="primary" @click="eventLauncher('audit')" :loading="candidateLoading"
+              v-if="properties.hasAuditBtn">{{properties.auditBtnText||'通 过'}}</el-button>
+            <el-button type="warning" @click="eventLauncher('saveAudit')"
+              v-if="properties.hasSaveBtn" :loading="btnLoading">{{properties.saveBtnText||'暂 存'}}
+            </el-button>
+            <el-button type="danger" @click="eventReceiver({},'reject')"
+              v-if="properties.hasRejectBtn">
+              {{properties.rejectBtnText||'拒 绝'}}</el-button>
+          </template>
+          <template v-if="setting.opType == 0 && setting.status == 1">
+            <el-button type="primary" @click="press()"
+              v-if="properties.hasPressBtn || properties.hasPressBtn===undefined">
+              {{properties.pressBtnText||'催 办'}}</el-button>
+            <el-button type="danger" @click="revoke()"
+              v-if="properties.hasRevokeBtn || properties.hasRevokeBtn===undefined">
+              {{properties.revokeBtnText||'撤 回'}}</el-button>
+          </template>
+          <el-button type="danger" v-if="setting.opType == 2 && properties.hasRevokeBtn"
+            @click="recall()">{{properties.revokeBtnText||'撤 回'}}</el-button>
+          <template v-if="setting.opType == 4">
+            <el-button type="primary" @click="openAssignBox" v-if="setting.status ==1">指 派
+            </el-button>
+            <el-button type="danger" v-if="setting.status != 2 && setting.status != 5"
+              @click="cancel()">终 止</el-button>
+          </template>
+          <el-button @click="goBack()" v-if="!setting.hideCancelBtn">{{$t('common.cancelButton')}}
           </el-button>
-          <el-button type="danger" v-if="setting.status != 2 && setting.status != 5"
-            @click="cancel()">终 止</el-button>
-        </template>
-        <el-button @click="goBack()" v-if="!setting.hideCancelBtn">{{$t('common.cancelButton')}}
-        </el-button>
+        </div>
       </div>
       <div class="approve-result" v-if="(setting.opType==0||setting.opType==4) && activeTab==='0'">
         <div class="approve-result-img" :class="flowTaskInfo.status | flowStatus()"></div>
       </div>
       <el-tabs class="JNPF-el_tabs" v-model="activeTab">
         <el-tab-pane label="表单信息" v-loading="loading">
-          <span slot="label" :title="fullName+'-'+(thisStep?thisStep:'发起节点')">表单信息</span>
           <component :is="currentView" @close="goBack" ref="form" @eventReceiver="eventReceiver"
             @setLoad="setLoad" @setCandidateLoad="setCandidateLoad" @setPageLoad="setPageLoad" />
         </el-tab-pane>
@@ -205,6 +209,12 @@ export default {
       copyIds: [],
       fullName: '',
       thisStep: ''
+    }
+  },
+  computed: {
+    title() {
+      if ([2, 3, 4].includes(this.setting.opType)) return this.fullName
+      return this.thisStep ? this.fullName + '/' + this.thisStep : this.fullName
     }
   },
   watch: {
@@ -667,6 +677,11 @@ export default {
   }
   .sign-img {
     width: 100%;
+  }
+}
+.flow-form-main {
+  .JNPF-el_tabs {
+    overflow: hidden;
   }
 }
 </style>

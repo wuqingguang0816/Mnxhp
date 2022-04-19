@@ -9,8 +9,7 @@
           </el-tooltip>
         </span>
       </div>
-      <el-scrollbar class="JNPF-common-el-tree-scrollbar" v-loading="treeLoading"
-        :element-loading-text="$t('common.loadingText')">
+      <el-scrollbar class="JNPF-common-el-tree-scrollbar" v-loading="treeLoading">
         <el-tree ref="treeBox" :data="treeData" :props="defaultProps" default-expand-all
           highlight-current :expand-on-click-node="false" node-key="id"
           @node-click="handleNodeClick" class="JNPF-common-el-tree">
@@ -55,7 +54,7 @@
           <el-table-column prop="fullName" label="名称" />
           <el-table-column prop="enCode" label="编码" />
           <el-table-column prop="sortCode" label="排序" width="70" align="center" />
-          <el-table-column label="状态" width="70" align="center">
+          <el-table-column prop="enabledMark" label="状态" width="70" align="center">
             <template slot-scope="scope">
               <el-tag :type="scope.row.enabledMark == 1 ? 'success' : 'danger'" disable-transitions>
                 {{scope.row.enabledMark==1?'正常':'停用'}}</el-tag>

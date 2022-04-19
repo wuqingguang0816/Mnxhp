@@ -30,7 +30,7 @@
       handle=".option-drag">
       <div v-for="(item, index) in activeData.columnOptions" :key="index" class="select-item">
         <div class="select-line-icon option-drag">
-          <i class="el-icon-s-operation" />
+          <i class="icon-ym icon-ym-darg" />
         </div>
         <el-select v-model="item.value" placeholder="请选择显示字段" @visible-change="visibleChange"
           clearable @change="onChange($event,item)">

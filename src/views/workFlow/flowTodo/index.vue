@@ -17,16 +17,16 @@
               </el-date-picker>
             </el-form-item>
           </el-col>
+          <el-col :span="6">
+            <el-form-item label="所属分类">
+              <el-select v-model="flowCategory" placeholder="选择所属分类" clearable>
+                <el-option v-for="item in categoryList" :key="item.enCode" :label="item.fullName"
+                  :value="item.enCode">
+                </el-option>
+              </el-select>
+            </el-form-item>
+          </el-col>
           <template v-if="showAll">
-            <el-col :span="6">
-              <el-form-item label="所属分类">
-                <el-select v-model="flowCategory" placeholder="选择所属分类" clearable>
-                  <el-option v-for="item in categoryList" :key="item.enCode" :label="item.fullName"
-                    :value="item.enCode">
-                  </el-option>
-                </el-select>
-              </el-form-item>
-            </el-col>
             <el-col :span="6">
               <el-form-item label="所属流程">
                 <el-select v-model="flowId" placeholder="选择所属流程" clearable>
@@ -62,7 +62,7 @@
       <div class="JNPF-common-layout-main JNPF-flex-main">
         <div class="JNPF-common-head">
           <div>
-            <el-button type="primary" @click="goBatch">批量审批</el-button>
+            <el-button type="primary" icon="el-icon-finished" @click="goBatch">批量审批</el-button>
           </div>
           <div class="JNPF-common-head-right">
             <el-tooltip effect="dark" :content="$t('common.refresh')" placement="top">
@@ -108,7 +108,8 @@
       </div>
     </div>
     <FlowBox v-if="formVisible" ref="FlowBox" @close="closeForm" />
-    <BatchList v-if="batchListVisible" ref="BatchList" @close="batchListVisible=false" />
+    <BatchList v-if="batchListVisible" :categoryList="categoryList" ref="BatchList"
+      @close="batchListVisible=false" />
   </div>
 </template>
 

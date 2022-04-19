@@ -3,7 +3,7 @@
     :close-on-press-escape="false" :visible.sync="visible" lock-scroll
     class="JNPF-dialog JNPF-dialog_center" width="600px">
     <el-form ref="dataForm" :model="dataForm" :rules="dataRule" label-width="80px"
-      v-loading="formLoading" :element-loading-text="$t('common.loadingText')" class="menuForm">
+      v-loading="formLoading" class="menuForm">
       <el-form-item label="分类" prop="category">
         <el-input v-model="dataForm.category" disabled />
       </el-form-item>

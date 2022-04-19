@@ -139,7 +139,7 @@ export default {
   },
   login: {
     title: '账户密码登录',
-    scanTitle: 'APP扫码登录',
+    scanTitle: '扫码登录',
     codeTitle: '手机验证登录',
     logIn: '登录',
     username: '请输入账号',
@@ -147,7 +147,7 @@ export default {
     rule: '子账户规则：手机号@账户 例：18577778888@101001',
     version: '版本',
     upper: '大写已锁定',
-    scanTip: 'APP扫码登录',
+    scanTip: '扫码登录',
     accountTip: '请输入账号',
     passwordTip: '请输入密码',
     codeTip: '请输入验证码',
