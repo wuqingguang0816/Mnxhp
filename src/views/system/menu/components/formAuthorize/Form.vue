@@ -133,7 +133,7 @@ export default {
     };
   },
   methods: {
-    init(moduleId, id, menuType, dbList) {
+    init(moduleId, id, menuType, dbList,tableName) {
       this.menuType = menuType;
       this.dataForm.id = id || "";
       this.dataForm.moduleId = moduleId;
@@ -142,6 +142,7 @@ export default {
       this.$nextTick(() => {
         this.$refs["dataForm"].resetFields();
         this.enCodeOptions = dbList;
+        this.dataForm.bindTable = tableName
         if (this.dataForm.id) {
           getFormInfo(this.dataForm.id).then((res) => {
             this.dataForm = res.data;

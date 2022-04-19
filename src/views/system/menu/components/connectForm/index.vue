@@ -136,7 +136,7 @@ export default {
         if (valid) {
           getDataModelFields(this.dataForm.dbLinkId, this.dataForm.dataSelect)
             .then(res => {
-              this.$emit("refreshDataList", res.data.list);
+              this.$emit("refreshDataList", res.data.list,this.dataForm.dataSelect);
               this.visible = false;
             })
             .catch(() => {});

@@ -84,6 +84,7 @@ export default {
       menuType: 2,
       dbOptions: [],
       dbList: [],
+      tableName:''
     };
   },
   methods: {
@@ -137,7 +138,8 @@ export default {
         this.$refs.FormConnectForm.init(this.dbOptions);
       });
     },
-    getConnectList(data) {
+    getConnectList(data,tableName) {
+       this.tableName = tableName || ''
       this.dbList = data;
     },
     getList() {
@@ -179,7 +181,7 @@ export default {
     addOrUpdateHandle(id) {
       this.formVisible = true;
       this.$nextTick(() => {
-        this.$refs.form.init(this.moduleId, id, this.menuType, this.dbList);
+        this.$refs.form.init(this.moduleId, id, this.menuType, this.dbList,this.tableName);
       });
     },
     handleBatchAdd() {

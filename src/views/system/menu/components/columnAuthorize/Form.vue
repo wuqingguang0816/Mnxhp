@@ -136,7 +136,7 @@ export default {
     };
   },
   methods: {
-    init(moduleId, id, menuType, dbList) {
+    init(moduleId, id, menuType, dbList,tableName) {
       this.menuType = menuType;
       this.dataForm.id = id || "";
       this.dataForm.moduleId = moduleId;
@@ -145,6 +145,7 @@ export default {
       this.$nextTick(() => {
         this.$refs["dataForm"].resetFields();
         this.enCodeOptions = dbList;
+        this.dataForm.bindTable = tableName
         // 获取字段数据
         if (this.dataForm.id) {
           getColumnInfo(this.dataForm.id).then((res) => {

@@ -37,7 +37,6 @@
 <script>
 import { batchCreateColumn } from '@/api/system/columnAuthorize'
 import JNPFCodeEditor from '@/components/JNPFEditor/monaco'
-
 export default {
   components: { JNPFCodeEditor },
   data() {

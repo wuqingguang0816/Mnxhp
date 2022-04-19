@@ -96,7 +96,6 @@
 <script>
 import { getDataModelFields } from "@/api/system/dataAuthorize";
 import DataTableForm from "@/views/generator/DataTableForm";
-import JsonDrawerVue from "@/components/Generator/index/JsonDrawer.vue";
 export default {
   components: { DataTableForm },
   data() {

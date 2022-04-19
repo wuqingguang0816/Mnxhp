@@ -194,7 +194,8 @@ export default {
       dataConnectFormVisible: false,
       menuType: 2,
       dbOptions: [],
-      dbList: []
+      dbList: [],
+      tableName:''
     };
   },
   methods: {
@@ -220,7 +221,8 @@ export default {
         });
       }
     },
-    getConnectList(data) {
+    getConnectList(data,tableName) {
+      this.tableName = tableName || ''
       this.dbList = data;
     },
 
@@ -313,7 +315,8 @@ export default {
             this.moduleId,
             id,
             this.menuType,
-            this.dbList
+            this.dbList,
+            this.tableName
           );
         });
       }
