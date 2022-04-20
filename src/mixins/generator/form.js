@@ -144,6 +144,7 @@ export default {
       } else {
         this.$refs['columnDesign'].getData().then(res => {
           this.columnData = res.columnData
+          this.appColumnData = res.appColumnData
           this.activeStep += 1
         }).catch(err => {
           err.msg && this.$message.warning(err.msg)
