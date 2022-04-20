@@ -35,6 +35,7 @@ export default {
       stepLoading: false,
       maxStep: 2,
       tables: [],
+      defaultTable: [],
       formVisible: false,
       btnLoading: false,
       formData: null,
@@ -52,6 +53,7 @@ export default {
       this.categoryList = categoryList
       this.activeStep = 0
       this.tables = []
+      this.defaultTable = []
       this.dataForm.id = id || ''
       this.getDbOptions()
       this.visible = true
@@ -69,6 +71,7 @@ export default {
             this.appColumnData = this.dataForm.appColumnData && JSON.parse(this.dataForm.appColumnData)
             this.flowTemplateJson = this.dataForm.flowTemplateJson && JSON.parse(this.dataForm.flowTemplateJson)
             this.tables = this.dataForm.tables && JSON.parse(this.dataForm.tables) || []
+            this.defaultTable = this.dataForm.tables && JSON.parse(this.dataForm.tables) || []
             this.updateFields()
             this.loading = false
           }).catch(() => { this.loading = false })
@@ -117,7 +120,7 @@ export default {
           if (valid) {
             const type = this.dataForm.type
             if (!this.tables.length) {
-              if (type == 3 || type == 4 || type == 5) {
+              if (this.defaultTable.length || type == 3 || type == 4) {
                 this.$message.warning('请至少选择一个数据表')
                 return
               }
