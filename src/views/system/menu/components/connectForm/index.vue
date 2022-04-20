@@ -86,7 +86,7 @@
 
 <script>
 import { getDataModelFields } from "@/api/system/dataAuthorize";
-import DataTableForm from "@/views/generator/DataTableForm";
+import DataTableForm from "./DataTableForm.vue";
 export default {
   components: { DataTableForm },
   data() {
