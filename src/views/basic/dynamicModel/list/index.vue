@@ -33,19 +33,14 @@
               <el-link icon="icon-ym icon-ym-Refresh JNPF-common-head-icon" :underline="false"
                 @click="initData()" />
             </el-tooltip>
-            <ColumnSettings v-model="columnList" />
           </div>
         </div>
         <JNPF-table v-loading="listLoading" :data="list" row-key="id" default-expand-all
           :tree-props="{children: 'children', hasChildren: ''}" @sort-change='sortChange'
-          :has-c="hasBatchBtn" @selection-change="handleSelectionChange" v-if="refreshTable"
-          :columnData="columnList">
-          <template v-for="(item, i) in columnList">
-            <template v-if="item.visible">
-              <el-table-column :prop="item.prop" :label="item.label" :align="item.align"
-                :width="item.width" :key="i" :sortable="item.sortable?'custom':item.sortable" />
-            </template>
-          </template>
+          :has-c="hasBatchBtn" @selection-change="handleSelectionChange" v-if="refreshTable">
+          <el-table-column :prop="item.prop" :label="item.label" :align="item.align"
+            :width="item.width" :key="i" :sortable="item.sortable?'custom':item.sortable"
+            v-for="(item, i) in columnList" />
           <el-table-column prop="flowState" label="状态" width="100" v-if="config.webType == 3">
             <template slot-scope="scope" v-if="!scope.row.top">
               <el-tag v-if="scope.row.flowState==1">等待审核</el-tag>
@@ -168,12 +163,10 @@ import FlowBox from '@/views/workFlow/components/FlowBox'
 import Detail from './detail'
 import ExportBox from './ExportBox'
 import Search from './Search'
-import commonMixin from '@/mixins/commonMixin'
 export default {
   name: 'dynamicModel',
   components: { Form, ExportBox, Search, Detail, FlowBox },
   props: ['config', 'modelId', 'isPreview'],
-  mixins: [commonMixin],
   data() {
     return {
       keyword: '',
@@ -332,30 +325,7 @@ export default {
           }
         }
       }
-      let list = []
-      if (!this.settingsColumnList.length) {
-        list = columnPermissionList.map(o => ({
-          ...o,
-          visible: true
-        }))
-      } else {
-        outer: for (let i = 0; i < columnPermissionList.length; i++) {
-          let hasItem = false,
-            visible = true
-          inner: for (let j = 0; j < this.settingsColumnList.length; j++) {
-            if (columnPermissionList[i].prop === this.settingsColumnList[j].prop) {
-              hasItem = true
-              visible = this.settingsColumnList[j].visible
-              break inner
-            }
-          }
-          list.push({
-            ...columnPermissionList[i],
-            visible: hasItem ? visible : true
-          })
-        }
-      }
-      this.columnList = list
+      this.columnList = columnPermissionList
     },
     getNodePath(node) {
       let fullPath = []

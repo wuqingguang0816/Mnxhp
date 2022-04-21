@@ -28,12 +28,11 @@
               <el-link icon="icon-ym icon-ym-Refresh JNPF-common-head-icon" :underline="false"
                 @click="refresh()" />
             </el-tooltip>
-            <ColumnSettings v-model="columnList" />
           </div>
         </div>
-        <JNPF-table v-loading="listLoading" :data="list" :columnData="columnList">
-          <template v-for="(item,index) in columnList">
-            <template v-if="item.visible">
+        <JNPF-table v-loading="listLoading" :data="list" custom-column>
+          <template v-for="(item,index) in defaultColumnOptions">
+            <template>
               <template v-if="item.prop==='projectType'">
                 <el-table-column :prop="item.prop" :label="item.label" sortable :key="index"
                   width="100">
@@ -76,10 +75,8 @@
 import { TableExampleList, TableExampleDelete } from '@/api/extend/tableExample'
 import { getColumnsByModuleId } from '@/api/common'
 import JNPFForm from '../commonForm'
-import commonMixin from '@/mixins/commonMixin'
 export default {
   name: 'extend-tableDemo-commonTable',
-  mixins: [commonMixin],
   components: {
     JNPFForm
   },
@@ -159,7 +156,7 @@ export default {
     }
   },
   created() {
-    this.getColumnsByModuleId()
+    this.getDictionaryData()
   },
   filters: {
     getTypeText(id, industryTypeList) {
