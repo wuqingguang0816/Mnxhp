@@ -235,7 +235,7 @@ export default {
     },
     onSmsChange(id, item) {
       if (!id) return this.dataForm.smsTemplateName = ''
-      this.dataForm.smsTemplateName = item.templateName
+      this.dataForm.smsTemplateName = item.fullName
       getTemplateParams(id).then(res => {
         if (!res.data) return
         let newList = res.data.map(o => ({
