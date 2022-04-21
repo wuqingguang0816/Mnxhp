@@ -166,7 +166,7 @@ import {
   delDataScheme,
   delDataAuthorize
 } from "@/api/system/dataAuthorize";
-import { dataAuthority } from "@/api/system/menu";
+import { getFieldNameList } from "@/api/system/menu";
 import { getDataSourceListAll } from "@/api/systemData/dataSource";
 import DataSchemeForm from "./DataSchemeForm";
 import DataAuthorizeForm from "./DataAuthorizeForm";
@@ -216,7 +216,7 @@ export default {
         this.getAuthorizeSchemeList();
       });
       if (this.menuType === 3) {
-        dataAuthority(this.moduleId).then(res => {
+        getFieldNameList(this.moduleId,'DataAuthorize').then(res => {
           this.dbList = res.data || [];
         });
       }

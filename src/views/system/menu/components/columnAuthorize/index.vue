@@ -107,7 +107,7 @@ import {
 } from "@/api/system/columnAuthorize";
 import ColumnAuthorizeForm from "./Form";
 import ColumnAuthorizeBatchForm from "./BatchForm";
-import { dataAuthority } from "@/api/system/menu";
+import { getFieldNameList } from "@/api/system/menu";
 import { getDataSourceListAll } from "@/api/systemData/dataSource";
 import ColumnConnectForm from "../connectForm";
 export default {
@@ -153,7 +153,7 @@ export default {
         this.getList();
       });
       if (this.menuType === 3) {
-        dataAuthority(this.moduleId).then(res => {
+        getFieldNameList(this.moduleId,'Column').then(res => {
           this.dbList = res.data || [];
         });
       } else {

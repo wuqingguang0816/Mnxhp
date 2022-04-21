@@ -85,9 +85,9 @@ export const exportMenu = id => {
 }
 
 // 数据权限字段名称
-export const dataAuthority = id => {
+export const getFieldNameList = (id,name) => {
   return request({
-    url: `/api/system/ModuleDataAuthorize/${id}/FieldList`,
+    url: `/api/system/Module${name}/${id}/FieldList`,
     method: 'GET'
   })
 }

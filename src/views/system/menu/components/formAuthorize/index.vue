@@ -58,7 +58,7 @@ import {
 import Form from "./Form";
 import BatchForm from "./BatchForm";
 import FormConnectForm from "../connectForm";
-import { dataAuthority } from "@/api/system/menu";
+import { getFieldNameList } from "@/api/system/menu";
 import { getDataSourceListAll } from "@/api/systemData/dataSource";
 export default {
   components: {
@@ -103,7 +103,7 @@ export default {
         this.getList();
       });
       if (this.menuType === 3) {
-        dataAuthority(this.moduleId).then((res) => {
+        getFieldNameList(this.moduleId,'Form').then((res) => {
           this.dbList = res.data || [];
         });
       } else {
