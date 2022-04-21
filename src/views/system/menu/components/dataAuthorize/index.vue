@@ -252,7 +252,7 @@ export default {
           this.btnLoading = false;
         });
     },
-    handleClick(tab, event) {
+    handleClick() {
       this.btnLoading = false;
       const activeTab = this.tabActiveName;
       if (activeTab === "dataAuthorizeScheme") {
@@ -297,7 +297,7 @@ export default {
     addDataConnect() {
       this.dataConnectFormVisible = true;
       this.$nextTick(() => {
-        this.$refs.DataConnectForm.init(this.dbOptions);
+        this.$refs.DataConnectForm.init(this.dbOptions,0);
       });
     },
     //新增,编辑

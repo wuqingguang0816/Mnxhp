@@ -109,7 +109,8 @@ export default {
           { required: true, message: "数据表不能为空", trigger: "blur" }
         ]
       },
-      dbOptions: []
+      dbOptions: [],
+      type:0
     };
   },
   computed: {
@@ -123,9 +124,9 @@ export default {
     }
   },
   methods: {
-    init(dbOptions) {
+    init(dbOptions,type) {
+      this.type = type != undefined ? type : 1
       this.visible = true;
-      // this.dataForm.dataSelect = ''
       this.dbOptions = dbOptions;
     },
     clear() {
@@ -134,7 +135,7 @@ export default {
     dataFormSubmit() {
       this.$refs["dataForm"].validate(valid => {
         if (valid) {
-          getDataModelFields(this.dataForm.dbLinkId, this.dataForm.dataSelect)
+          getDataModelFields(this.dataForm.dbLinkId,this.dataForm.dataSelect,this.type)
             .then(res => {
               this.$emit("refreshDataList", res.data.list,this.dataForm.dataSelect);
               this.visible = false;
