@@ -262,10 +262,11 @@ export default {
       }
       if (Array.isArray(data)) data.forEach(d => loop(d, parent))
       if (data.__config__ && data.__config__.jnpfKey) {
-        if (data.__config__.layout === "colFormItem" && data.__vModel__) {
+        const visibility = !data.__config__.visibility || (Array.isArray(data.__config__.visibility) && data.__config__.visibility.includes('app'))
+        if (data.__config__.layout === "colFormItem" && data.__vModel__ && visibility) {
           list.push(data)
         }
-        if (data.__config__.layout === "colFormItem" && data.__vModel__ && data.__vModel__.indexOf('_jnpf_') < 0) {
+        if (data.__config__.layout === "colFormItem" && data.__vModel__ && data.__vModel__.indexOf('_jnpf_') < 0 && visibility) {
           list1.push(data)
         }
       }

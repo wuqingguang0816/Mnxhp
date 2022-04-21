@@ -393,7 +393,8 @@ export default {
       }
       if (Array.isArray(data)) data.forEach(d => loop(d, parent))
       if (data.__config__ && data.__config__.jnpfKey) {
-        if (data.__config__.layout === "colFormItem" && data.__vModel__) {
+        const visibility = !data.__config__.visibility || (Array.isArray(data.__config__.visibility) && data.__config__.visibility.includes('pc'))
+        if (data.__config__.layout === "colFormItem" && data.__vModel__ && visibility) {
           list.push(data)
         }
       }
