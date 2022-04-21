@@ -378,7 +378,7 @@
             </el-tab-pane>
           </el-tabs>
         </el-tab-pane>
-        <el-tab-pane label="超级管理员" name="fourth">
+        <el-tab-pane label="管理员设置" name="fourth">
           <el-alert title="注意：设为超级管理员后该用户拥有系统最高权限" type="warning" :closable="false" show-icon />
           <el-row :gutter="20" style="margin-top: 15px">
             <el-col :span="12">

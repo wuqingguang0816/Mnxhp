@@ -1,8 +1,9 @@
 <template>
   <el-dialog title="分级管理" :close-on-click-modal="false" :close-on-press-escape="false"
     :visible.sync="visible" lock-scroll class="JNPF-dialog JNPF-dialog_center" width="600px">
+    <el-alert title="管理当前组织部门的管理员和相关操作权限" type="warning" :closable="false" show-icon />
     <el-form ref="dataForm" v-loading="formLoading" :model="dataForm" :rules="dataRule"
-      label-position="top">
+      label-position="top" class="mt-10">
       <el-form-item label="分级管理员" prop="userId">
         <user-select v-model="userId" placeholder="选择分级管理员" multiple @change="onChange" />
       </el-form-item>

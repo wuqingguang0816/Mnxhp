@@ -223,7 +223,7 @@ export default {
         description: '',
         headIcon: '',
         gender: null,
-        nationId: '',
+        nation: '',
         nativePlace: '',
         entryDate: null,
         certificatesType: '',
