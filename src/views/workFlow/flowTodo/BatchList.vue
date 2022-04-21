@@ -228,6 +228,8 @@ export default {
     handleBatch(batchType) {
       // batchType 0-通过 1-拒绝 2-转办
       if (!this.multipleSelection.length) return this.$message.error('请先选择数据')
+      let isDiffer = this.multipleSelection.some(o => o.flowVersion !== this.multipleSelection[0].flowVersion)
+      if (isDiffer) return this.$message.error('请选择相同的版本审批单')
       this.currentBatchType = batchType
       const item = this.multipleSelection[0]
       const properties = item.approversProperties ? JSON.parse(item.approversProperties) : {}
