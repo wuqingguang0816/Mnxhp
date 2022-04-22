@@ -94,13 +94,13 @@
                               @click.native="handleColumnAuthorize(scope.row)">
                               列表权限
                             </el-dropdown-item>
-                            <el-dropdown-item v-if="scope.row.isFormAuthorize === 1"
-                              @click.native="handleFormAuthorize(scope.row)">
-                              表单权限
-                            </el-dropdown-item>
                             <el-dropdown-item v-if="scope.row.isDataAuthorize === 1"
                               @click.native="handleDataAuthorize(scope.row)">
                               数据权限
+                            </el-dropdown-item>
+                            <el-dropdown-item v-if="scope.row.isFormAuthorize === 1"
+                              @click.native="handleFormAuthorize(scope.row)">
+                              表单权限
                             </el-dropdown-item>
                           </template>
                           <el-dropdown-item @click.native="exportMenu(scope.row.id)">

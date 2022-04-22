@@ -81,7 +81,7 @@
         />
       </el-form-item>
       <el-form-item label="备注" prop="description">
-        <el-input v-model="dataForm.description" type="textarea" :rows="6" />
+        <el-input v-model="dataForm.description" type="textarea" :rows="3" />
       </el-form-item>
     </el-form>
     <span slot="footer" class="dialog-footer">
