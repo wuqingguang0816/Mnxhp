@@ -1642,7 +1642,7 @@ export default {
               id: isTableChild ? parent.__vModel__ + '-' + data.__vModel__ : data.__vModel__,
               name: isTableChild ? parent.__config__.label + '-' + data.__config__.label : data.__config__.label,
               required: data.__config__.required,
-              requiredDisabled: data.__config__.required,
+              requiredDisabled: data.__config__.jnpfKey === 'table' || data.__config__.required,
               read: true,
               write: false
             })
