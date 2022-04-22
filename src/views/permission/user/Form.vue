@@ -93,7 +93,7 @@
             </el-col>
             <el-col :span="24">
               <el-form-item label="说明" prop="description">
-                <el-input v-model="dataForm.description" type="textarea" :rows="6" />
+                <el-input v-model="dataForm.description" type="textarea" :rows="3" />
               </el-form-item>
             </el-col>
           </el-row>
@@ -187,7 +187,7 @@
             </el-col>
             <el-col :span="24">
               <el-form-item label="通讯地址" prop="postalAddress">
-                <el-input v-model="dataForm.postalAddress" type="textarea" :rows="6" />
+                <el-input v-model="dataForm.postalAddress" type="textarea" :rows="3" />
               </el-form-item>
             </el-col>
           </el-row>

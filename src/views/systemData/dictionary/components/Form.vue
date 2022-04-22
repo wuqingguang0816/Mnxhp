@@ -22,7 +22,7 @@
           controls-position="right" />
       </el-form-item>
       <el-form-item label="说明" prop="description">
-        <el-input type="textarea" :rows="6" v-model="dataForm.description" />
+        <el-input type="textarea" :rows="3" v-model="dataForm.description" />
       </el-form-item>
     </el-form>
     <span slot="footer" class="dialog-footer">
