@@ -85,6 +85,7 @@
         <JNPF-table v-loading="listLoading" :data="list" has-c @selection-change="handleChange">
           <el-table-column prop="fullName" label="流程标题" show-overflow-tooltip min-width="150" />
           <el-table-column prop="flowName" label="所属流程" width="130" />
+          <el-table-column prop="flowVersion" label="流程版本" width="130" />
           <el-table-column prop="nodeName" label="所属节点" width="130" />
           <el-table-column prop="startTime" label="发起时间" width="130"
             :formatter="jnpf.tableDateFormat" />
