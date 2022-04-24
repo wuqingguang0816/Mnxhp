@@ -98,7 +98,7 @@ export default {
       const loop = (list, parent) => {
         for (let i = 0; i < list.length; i++) {
           let item = list[i]
-          if (item.__vModel__ && item.__config__.jnpfKey !== 'table') {
+          if (item.__vModel__) {
             const val = data[item.__vModel__]
             if (val !== undefined && !item.__config__.isSubTable) item.__config__.defaultValue = val
             let noShow = false, isDisabled = true, required = false
