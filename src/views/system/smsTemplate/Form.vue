@@ -206,6 +206,11 @@ export default {
     showDialog() {
       this.$refs['dataForm'].validate((valid) => {
         if (valid) {
+          if (this.dataForm.company == 2) {
+            this.dataForm.signContent = this.dataForm.signId
+            this.dataForm.templateId = this.dataForm.ttTemplateId
+            this.dataForm.endpoint = this.dataForm.domain
+          }
           this.testLoading = true
           getTemplate(this.dataForm).then(res => {
             this.testList = res.data.map(o => ({
