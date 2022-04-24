@@ -145,6 +145,10 @@ export default {
         this.formLoading = true
         getDataAuthorizeList(this.dataForm.moduleId).then(res => {
           this.fieldOptions = res.data.list
+          this.fieldOptions.map(o => {
+            o.enCode = o.enCode.replace('_jnpf_','.')
+            o.enCode = o.enCode.replace('jnpf_','')
+          });
           if (this.dataForm.id) {
             getDataSchemeInfo(this.dataForm.id).then(res => {
               this.dataForm = res.data
