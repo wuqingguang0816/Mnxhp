@@ -99,7 +99,7 @@
 import {
   createColumn,
   updateColumn,
-  getColumnInfo,
+  getColumnInfo
 } from "@/api/system/columnAuthorize";
 
 export default {
@@ -118,25 +118,25 @@ export default {
         sortCode: 0,
         enabledMark: 1,
         description: "",
-        fieldRule: 0,
+        fieldRule: 0
       },
       enCodeOptions: [],
       fieldRuleOptions: [
         { value: 0, label: "主表规则" },
-        { value: 1, label: "副表规则" },
+        { value: 1, label: "副表规则" }
       ],
       dataRule: {
         enCode: [
-          { required: true, message: "字段名称不能为空", trigger: "blur" },
+          { required: true, message: "字段名称不能为空", trigger: "blur" }
         ],
         fullName: [
-          { required: true, message: "字段说明不能为空", trigger: "blur" },
-        ],
-      },
+          { required: true, message: "字段说明不能为空", trigger: "blur" }
+        ]
+      }
     };
   },
   methods: {
-    init(moduleId, id, menuType, dbList,tableName) {
+    init(moduleId, id, menuType, dbList, tableName) {
       this.menuType = menuType;
       this.dataForm.id = id || "";
       this.dataForm.moduleId = moduleId;
@@ -145,10 +145,10 @@ export default {
       this.$nextTick(() => {
         this.$refs["dataForm"].resetFields();
         this.enCodeOptions = dbList;
-        this.dataForm.bindTable = tableName
+        this.dataForm.bindTable = tableName;
         // 获取字段数据
         if (this.dataForm.id) {
-          getColumnInfo(this.dataForm.id).then((res) => {
+          getColumnInfo(this.dataForm.id).then(res => {
             this.dataForm = res.data;
           });
         }
@@ -157,25 +157,29 @@ export default {
     },
     onEnCodeChange(e) {
       let objVal;
-      this.enCodeOptions.forEach((o) => {
-        if (o.field === e) {
-          objVal = {
-            fullName: o.fieldName,
-            type: o.dataType,
-          };
-          return objVal;
-        }
-      });
-      this.dataForm.fullName = objVal["fullName"];
-      this.dataForm.type = objVal["type"];
+      this.dataForm.fullName = "";
+      this.dataForm.type = "";
+      if (!!e) {
+        this.enCodeOptions.forEach(o => {
+          if (o.field === e) {
+            objVal = {
+              fullName: o.fieldName,
+              type: o.dataType
+            };
+            return objVal;
+          }
+        });
+        this.dataForm.fullName = objVal["fullName"];
+        this.dataForm.type = objVal["type"];
+      }
     },
     dataFormSubmit() {
-      this.$refs["dataForm"].validate((valid) => {
+      this.$refs["dataForm"].validate(valid => {
         if (valid) {
           this.btnLoading = true;
           const formMethod = this.dataForm.id ? updateColumn : createColumn;
           formMethod(this.dataForm)
-            .then((res) => {
+            .then(res => {
               this.$message({
                 message: res.msg,
                 type: "success",
@@ -184,7 +188,7 @@ export default {
                   this.visible = false;
                   this.btnLoading = false;
                   this.$emit("refreshDataList");
-                },
+                }
               });
             })
             .catch(() => {
@@ -192,10 +196,8 @@ export default {
             });
         }
       });
-    },
-  },
+    }
+  }
 };
 </script>
-<style lang="scss" scoped>
-</style>
-
+<style lang="scss" scoped></style>

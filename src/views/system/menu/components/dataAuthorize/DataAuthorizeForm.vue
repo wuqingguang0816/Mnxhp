@@ -114,7 +114,7 @@
 import {
   createDataAuthorize,
   updateDataAuthorize,
-  getDataAuthorizeInfo,
+  getDataAuthorizeInfo
 } from "@/api/system/dataAuthorize";
 
 export default {
@@ -126,84 +126,84 @@ export default {
       typeOptions: [
         {
           value: "string",
-          label: "string",
+          label: "string"
         },
         {
           value: "int",
-          label: "int",
+          label: "int"
         },
         {
           value: "double",
-          label: "double",
+          label: "double"
         },
         {
           value: "varchar",
-          label: "varchar",
+          label: "varchar"
         },
         {
           value: "datetime",
-          label: "datetime",
+          label: "datetime"
         },
         {
           value: "text",
-          label: "text",
+          label: "text"
         },
         {
           value: "bigint",
-          label: "bigint",
-        },
+          label: "bigint"
+        }
       ],
       fieldRuleOptions: [
         { value: 0, label: "主表规则" },
-        { value: 1, label: "副表规则" },
+        { value: 1, label: "副表规则" }
       ],
       conditionTextOptions: [
         {
           value: "text",
-          label: "任意文本",
+          label: "任意文本"
         },
         {
           value: "@organizeId",
-          label: "当前组织",
+          label: "当前组织"
         },
         {
           value: "@organizationAndSuborganization",
-          label: "当前组织及子组织",
+          label: "当前组织及子组织"
         },
         {
           value: "@userId",
-          label: "当前用户",
+          label: "当前用户"
         },
         {
           value: "@userAraSubordinates",
-          label: "当前用户及下属",
-        },
+          label: "当前用户及下属"
+        }
       ],
       conditionSymbolOptions: [
         {
           value: "Equal",
-          label: "等于",
+          label: "等于"
         },
         {
           value: "NotEqual",
-          label: "不等于",
+          label: "不等于"
         },
         {
           value: "GreaterThan",
-          label: "大于",
+          label: "大于"
         },
         {
           value: "GreaterThanOrEqual",
-          label: "大于等于",
+          label: "大于等于"
         },
         {
           value: "LessThan",
-          label: "小于",
+          label: "小于"
         },
         {
           value: "LessThanOrEqual",
-          label: "小于等于",
-        },
+          label: "小于等于"
+        }
       ],
       dataForm: {
         id: "",
@@ -214,33 +214,33 @@ export default {
         conditionSymbol: "",
         conditionText: "",
         description: "",
-        fieldRule: 0,
+        fieldRule: 0
       },
       conditionSymbol: [],
       menuType: 2,
       dataRule: {
         enCode: [
-          { required: true, message: "字段名称不能为空", trigger: "blur" },
+          { required: true, message: "字段名称不能为空", trigger: "blur" }
         ],
         fieldRule: [
-          { required: true, message: "主表规则不能为空", trigger: "blur" },
+          { required: true, message: "主表规则不能为空", trigger: "blur" }
         ],
         fullName: [
-          { required: true, message: "字段说明不能为空", trigger: "blur" },
+          { required: true, message: "字段说明不能为空", trigger: "blur" }
         ],
         type: [{ required: true, message: "请选择字段类型", trigger: "blur" }],
         conditionSymbol: [
-          { required: true, message: "请选择条件符号", trigger: "blur" },
+          { required: true, message: "请选择条件符号", trigger: "blur" }
         ],
         conditionText: [
-          { required: true, message: "请选择条件内容", trigger: "blur" },
-        ],
+          { required: true, message: "请选择条件内容", trigger: "blur" }
+        ]
       },
-      enCodeOptions: [],
+      enCodeOptions: []
     };
   },
   methods: {
-    init(moduleId, id, menuType, dbList,tableName) {
+    init(moduleId, id, menuType, dbList, tableName) {
       this.menuType = menuType;
       this.dataForm.id = id || "";
       this.dataForm.moduleId = moduleId;
@@ -250,10 +250,10 @@ export default {
       this.$nextTick(() => {
         this.$refs["dataForm"].resetFields();
         this.enCodeOptions = dbList;
-        this.dataForm.bindTable = tableName
+        this.dataForm.bindTable = tableName;
         // 获取字段数据
         if (this.dataForm.id) {
-          getDataAuthorizeInfo(this.dataForm.id).then((res) => {
+          getDataAuthorizeInfo(this.dataForm.id).then(res => {
             this.dataForm = res.data;
             this.conditionSymbol = res.data.conditionSymbol
               ? res.data.conditionSymbol.split(",")
@@ -265,28 +265,32 @@ export default {
     },
     onEnCodeChange(e) {
       let objVal;
-      this.enCodeOptions.forEach((o) => {
-        if (o.field === e){
-          objVal = {
-            'fullName' : o.fieldName,
-            'type': o.dataType
+      this.dataForm.fullName = "";
+      this.dataForm.type = "";
+      if (!!e) {
+        this.enCodeOptions.forEach(o => {
+          if (o.field === e) {
+            objVal = {
+              fullName: o.fieldName,
+              type: o.dataType
+            };
+            return objVal;
           }
-          return objVal
-        };
-      });
-      this.dataForm.fullName = objVal['fullName'];
-      this.dataForm.type = objVal['type'];
+        });
+        this.dataForm.fullName = objVal["fullName"];
+        this.dataForm.type = objVal["type"];
+      }
     },
     dataFormSubmit() {
       this.dataForm.conditionSymbol = this.conditionSymbol.join();
-      this.$refs["dataForm"].validate((valid) => {
+      this.$refs["dataForm"].validate(valid => {
         if (valid) {
           this.btnLoading = true;
           const formMethod = this.dataForm.id
             ? updateDataAuthorize
             : createDataAuthorize;
           formMethod(this.dataForm)
-            .then((res) => {
+            .then(res => {
               this.$message({
                 message: res.msg,
                 type: "success",
@@ -295,7 +299,7 @@ export default {
                   this.visible = false;
                   this.btnLoading = false;
                   this.$emit("refreshDataList");
-                },
+                }
               });
             })
             .catch(() => {
@@ -303,7 +307,7 @@ export default {
             });
         }
       });
-    },
-  },
+    }
+  }
 };
 </script>
