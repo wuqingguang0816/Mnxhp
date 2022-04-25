@@ -178,6 +178,10 @@
                 </el-form-item>
                 <el-form-item label="表单字段" style="margin-bottom:0;"
                   v-if="subFlowForm.initiateType === 4">
+                  <el-radio-group v-model="subFlowForm.formFieldType">
+                    <el-radio :label="1">用户</el-radio>
+                    <el-radio :label="2">部门</el-radio>
+                  </el-radio-group>
                   <el-select v-model="subFlowForm.formField" placeholder="请选择字段">
                     <el-option v-for="item in usedFormItems" :key="item.__vModel__"
                       :label="item.__config__.label" :value="item.__vModel__">
@@ -744,6 +748,10 @@
                 </el-form-item>
                 <el-form-item label="表单字段" style="margin-bottom:0;"
                   v-if="approverForm.assigneeType === 4">
+                  <el-radio-group v-model="approverForm.formFieldType">
+                    <el-radio :label="1">用户</el-radio>
+                    <el-radio :label="2">部门</el-radio>
+                  </el-radio-group>
                   <el-select v-model="approverForm.formField" placeholder="请选择字段">
                     <el-option v-for="item in usedFormItems" :key="item.__vModel__"
                       :label="item.__config__.label" :value="item.__vModel__">
@@ -1279,6 +1287,7 @@ const defaultStartForm = {
   formOperates: []
 }
 const defaultSubFlowForm = {
+  formFieldType: 1,// 表单字段审核方式的类型(1-用户 2-部门)
   initiateType: 6,
   managerLevel: 1,
   formField: '',
@@ -1298,6 +1307,7 @@ const defaultSubFlowForm = {
   isAsync: false
 }
 const defaultApproverForm = {
+  formFieldType: 1,// 表单字段审核方式的类型(1-用户 2-部门)
   approvers: [], // 审批人集合
   approverPos: [], // 审批岗位集合
   approverRole: [], // 审批角色集合
