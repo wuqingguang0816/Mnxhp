@@ -6,6 +6,41 @@
   "description": "",
   "glyphs": [
     {
+      "icon_id": "29279588",
+      "name": "flowDone-app",
+      "font_class": "flowDone-app",
+      "unicode": "e7a6",
+      "unicode_decimal": 59302
+    },
+    {
+      "icon_id": "29279589",
+      "name": "flowLaunch-app",
+      "font_class": "flowLaunch-app",
+      "unicode": "e7b3",
+      "unicode_decimal": 59315
+    },
+    {
+      "icon_id": "29279590",
+      "name": "addFlow",
+      "font_class": "addFlow",
+      "unicode": "e7b8",
+      "unicode_decimal": 59320
+    },
+    {
+      "icon_id": "29279591",
+      "name": "flowCopy-app",
+      "font_class": "flowCopy-app",
+      "unicode": "e7bf",
+      "unicode_decimal": 59327
+    },
+    {
+      "icon_id": "29279592",
+      "name": "flowTodo-app",
+      "font_class": "flowTodo-app",
+      "unicode": "e8a2",
+      "unicode_decimal": 59554
+    },
+    {
       "icon_id": "29050019",
       "name": "mobile",
       "font_class": "mobile",
@@ -2127,13 +2162,6 @@
       "unicode_decimal": 59301
     },
     {
-      "icon_id": "28934274",
-      "name": "flowLaunch-app",
-      "font_class": "flowLaunch-app",
-      "unicode": "e7a6",
-      "unicode_decimal": 59302
-    },
-    {
       "icon_id": "28934275",
       "name": "flowEntrust",
       "font_class": "flowEntrust",
@@ -2211,13 +2239,6 @@
       "unicode_decimal": 59314
     },
     {
-      "icon_id": "28934286",
-      "name": "flowCopy-app",
-      "font_class": "flowCopy-app",
-      "unicode": "e7b3",
-      "unicode_decimal": 59315
-    },
-    {
       "icon_id": "28934287",
       "name": "generator-barcode",
       "font_class": "generator-barcode",
@@ -2237,13 +2258,6 @@
       "font_class": "formExample1",
       "unicode": "e7b7",
       "unicode_decimal": 59319
-    },
-    {
-      "icon_id": "28934290",
-      "name": "flowDone-app",
-      "font_class": "flowDone-app",
-      "unicode": "e7b8",
-      "unicode_decimal": 59320
     },
     {
       "icon_id": "28934291",
@@ -2286,13 +2300,6 @@
       "font_class": "generator-bar",
       "unicode": "e7be",
       "unicode_decimal": 59326
-    },
-    {
-      "icon_id": "28934297",
-      "name": "flowTodo-app",
-      "font_class": "flowTodo-app",
-      "unicode": "e7bf",
-      "unicode_decimal": 59327
     },
     {
       "icon_id": "28934298",

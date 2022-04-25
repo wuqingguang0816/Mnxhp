@@ -1,9 +1,9 @@
 @font-face {
   font-family: "icon-ym";
   /* Project id 3271933 */
-  src: url('iconfont.woff2?t=1650246247556') format('woff2'),
-    url('iconfont.woff?t=1650246247556') format('woff'),
-    url('iconfont.ttf?t=1650246247556') format('truetype');
+  src: url('iconfont.woff2?t=1650873000708') format('woff2'),
+    url('iconfont.woff?t=1650873000708') format('woff'),
+    url('iconfont.ttf?t=1650873000708') format('truetype');
 }
 
 .icon-ym {
@@ -12,6 +12,26 @@
   font-style: normal;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-ym-flowDone-app:before {
+  content: "\e7a6";
+}
+
+.icon-ym-flowLaunch-app:before {
+  content: "\e7b3";
+}
+
+.icon-ym-addFlow:before {
+  content: "\e7b8";
+}
+
+.icon-ym-flowCopy-app:before {
+  content: "\e7bf";
+}
+
+.icon-ym-flowTodo-app:before {
+  content: "\e8a2";
 }
 
 .icon-ym-mobile:before {
@@ -1226,10 +1246,6 @@
   content: "\e7a5";
 }
 
-.icon-ym-flowLaunch-app:before {
-  content: "\e7a6";
-}
-
 .icon-ym-flowEntrust:before {
   content: "\e7a7";
 }
@@ -1274,10 +1290,6 @@
   content: "\e7b2";
 }
 
-.icon-ym-flowCopy-app:before {
-  content: "\e7b3";
-}
-
 .icon-ym-generator-barcode:before {
   content: "\e7b4";
 }
@@ -1288,10 +1300,6 @@
 
 .icon-ym-formExample1:before {
   content: "\e7b7";
-}
-
-.icon-ym-flowDone-app:before {
-  content: "\e7b8";
 }
 
 .icon-ym-file-xml:before {
@@ -1316,10 +1324,6 @@
 
 .icon-ym-generator-bar:before {
   content: "\e7be";
-}
-
-.icon-ym-flowTodo-app:before {
-  content: "\e7bf";
 }
 
 .icon-ym-generator-date-range:before {
