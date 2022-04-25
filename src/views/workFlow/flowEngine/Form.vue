@@ -206,8 +206,7 @@ export default {
       },
       dataRule: {
         fullName: [
-          { required: true, message: '流程名称不能为空', trigger: 'blur' },
-          { pattern: /^[\u4e00-\u9fa5_a-zA-Z0-9]+$/, message: '请输入正确的流程名称', trigger: 'blur' },
+          { required: true, message: '流程名称不能为空', trigger: 'blur' }
         ],
         enCode: [
           { required: true, message: '流程编码不能为空', trigger: 'blur' },
