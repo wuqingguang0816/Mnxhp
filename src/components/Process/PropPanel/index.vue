@@ -1690,7 +1690,7 @@ export default {
       this.properties.conditions = this.pconditions
       for (let i = 0; i < this.pconditions.length; i++) {
         const e = this.pconditions[i];
-        nodeContent += `[${e.fieldName} ${e.symbolName} ${e.filedLabel ? e.filedLabel : e.filedValue ? e.filedValue : ''}] ${i + 1 == this.pconditions.length ? '' : e.logicName}` + '\n'
+        nodeContent += `[${e.fieldName} ${e.symbolName} ${e.filedLabel ? e.filedLabel : (e.filedValue || e.filedValue === 0) ? e.filedValue : ''}] ${i + 1 == this.pconditions.length ? '' : e.logicName}` + '\n'
       }
       this.$emit("confirm", this.properties, nodeContent || '请设置条件');
       this.visible = false;
