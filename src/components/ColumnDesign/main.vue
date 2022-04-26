@@ -259,6 +259,7 @@ const defaultFunc = '({ data, index, request, toast, refresh }) => {\r\n   \r\n}
 const defaultColumnData = {
   searchList: [], // 查询条件
   columnList: [], // 字段列表
+  defaultColumnList: [], // 所有可选择字段列表
   type: 1, //列表类型
   defaultSidx: '', // 默认排序字段
   sort: 'desc',   // 排序类型
@@ -478,6 +479,10 @@ export default {
       if (this.columnData.type == 3) {
         if (!this.columnData.groupField) return this.$message.warning('请选择分组字段')
       }
+      this.columnData.defaultColumnList = this.columnOptions.map(o => ({
+        ...o,
+        checked: this.columnData.columnList.some(i => i.prop === o.prop)
+      }))
       return this.columnData
     },
     setSort() {

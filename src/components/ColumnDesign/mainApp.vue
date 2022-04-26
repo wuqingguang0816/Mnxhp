@@ -158,6 +158,7 @@ const getSearchType = item => {
 const defaultColumnData = {
   searchList: [], // 查询条件
   columnList: [], // 字段列表
+  defaultColumnList: [], // 所有可选择字段列表
   sortList: [], // 排序列表
   // type: 1, //列表类型
   defaultSidx: '', // 默认排序字段
@@ -341,6 +342,10 @@ export default {
       * 供父组件使用 获取列表JSON
     */
     getData() {
+      this.columnData.defaultColumnList = this.columnOptions.map(o => ({
+        ...o,
+        checked: this.columnData.columnList.some(i => i.prop === o.prop)
+      }))
       return this.columnData
     },
     setSort() {
