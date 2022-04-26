@@ -32,7 +32,7 @@
         <JNPF-table v-loading="listLoading" :data="list">
           <el-table-column prop="fullName" label="模板名称" show-overflow-tooltip />
           <el-table-column prop="enCode" label="模板编码" />
-          <el-table-column prop="company" label="短信厂家" width="100" align="center" />
+          <el-table-column prop="company" label="短信厂家" width="200" align="center" />
           <el-table-column prop="enabledMark" label="状态" width="70" align="center">
             <template slot-scope="scope">
               <el-tag :type="scope.row.enabledMark == 1 ? 'success' : 'danger'" disable-transitions>
