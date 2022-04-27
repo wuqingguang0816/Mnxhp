@@ -79,8 +79,6 @@
                     <el-dropdown-item @click.native="openReleaseDialog(scope.row.id)">同步菜单
                     </el-dropdown-item>
                     <el-dropdown-item @click.native="preview(scope.row.id)">预览模板</el-dropdown-item>
-                    <el-dropdown-item @click.native="appPreview(scope.row.id)">移动预览
-                    </el-dropdown-item>
                     <el-dropdown-item @click.native="copy(scope.row.id)">复制模板</el-dropdown-item>
                     <el-dropdown-item @click.native="exportModel(scope.row.id)">导出模板
                     </el-dropdown-item>
@@ -120,14 +118,7 @@
           {{$t('common.confirmButton')}}</el-button>
       </span>
     </el-dialog>
-    <el-dialog :close-on-click-modal="false" :modal-append-to-body="false"
-      :visible.sync="previewVisible" class="JNPF-dialog JNPF-dialog_center code-dialog" title="预览"
-      width="400px" @opened="getQRimg">
-      <div class="qrcode-img">
-        <div id="qrcode" ref="qrCode"></div>
-      </div>
-      <p class="tip">打开手机APP扫码预览</p>
-    </el-dialog>
+    <previewDialog :visible.sync="previewDialogVisible" :id="currId" type="webDesign" />
   </div>
 </template>
 
@@ -135,61 +126,31 @@
 import Form from './Form'
 import AddBox from '@/views/generator/AddBox'
 import mixin from '@/mixins/generator/index'
-import QRCode from 'qrcodejs2'
+import previewDialog from '@/components/PreviewDialog'
 export default {
   name: 'onlineDev-webDesign',
   mixins: [mixin],
-  components: { Form, AddBox },
+  components: { Form, AddBox, previewDialog },
   data() {
     return {
       query: { keyword: '', type: 1 },
       sort: 'webDesign',
-      previewVisible: false,
+      previewDialogVisible: false,
       releaseDialogVisible: false,
       releaseBtnLoading: false,
-      qrCodeText: ''
     }
   },
   methods: {
     preview(id) {
-      this.$router.push(`/previewModel?isPreview=1&id=${id}`)
-    },
-    appPreview(id) {
-      let text = { t: 'ADP', id }
-      this.qrCodeText = JSON.stringify(text)
-      this.previewVisible = true
-    },
-    getQRimg() {
-      if (!this.qrCodeText) return
-      this.$refs.qrCode.innerHTML = "";
-      let qrcode = new QRCode(this.$refs.qrCode, {
-        width: 260,
-        height: 260,
-        text: this.qrCodeText,
-        correctLevel: QRCode.CorrectLevel.H
+      this.currId = id
+      this.$nextTick(() => {
+        this.previewDialogVisible = true
       })
     }
   }
 }
 </script>
 <style lang="scss" scoped>
-.code-dialog {
-  ::v-deep {
-    .el-dialog__body {
-      .qrcode-img {
-        width: 300px;
-        height: 300px;
-        padding: 20px;
-      }
-      .tip {
-        text-align: center;
-        font-size: 18px;
-        margin-top: 10px;
-        margin-bottom: 20px;
-      }
-    }
-  }
-}
 .release-dialog {
   >>> .el-dialog {
     .el-dialog__body {

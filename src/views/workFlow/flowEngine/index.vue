@@ -82,8 +82,6 @@
                   <el-dropdown-menu slot="dropdown">
                     <el-dropdown-item @click.native="preview(scope.row)">
                       表单预览</el-dropdown-item>
-                    <el-dropdown-item @click.native="previewApp(scope.row.id)">
-                      移动预览</el-dropdown-item>
                     <el-dropdown-item @click.native="copy(scope.row.id)">
                       复制流程</el-dropdown-item>
                     <el-dropdown-item @click.native="handleExport(scope.row.id)">
@@ -100,6 +98,8 @@
     </div>
     <Form v-if="formVisible" ref="Form" @close="closeForm" />
     <preview v-if="previewVisible" ref="preview" @close="previewVisible=false" />
+    <previewDialog :visible.sync="previewDialogVisible" :id="currRow.id" type="flow"
+      @previewPc="previewPc" />
     <el-dialog title="新建表单" :visible.sync="dialogVisible" class="JNPF-dialog JNPF-dialog_center"
       lock-scroll width="600px">
       <div class="add-main">
@@ -119,14 +119,6 @@
         </div>
       </div>
     </el-dialog>
-    <el-dialog :close-on-click-modal="false" :modal-append-to-body="false"
-      :visible.sync="previewAppVisible" class="JNPF-dialog JNPF-dialog_center code-dialog"
-      title="预览" width="400px" @opened="getQRimg">
-      <div class="qrcode-img">
-        <div id="qrcode" ref="qrCode"></div>
-      </div>
-      <p class="tip">打开手机APP扫码预览</p>
-    </el-dialog>
   </div>
 </template>
 
@@ -134,10 +126,11 @@
 import { FlowEngineList, Delete, Release, Stop, Copy, exportData } from '@/api/workFlow/FlowEngine'
 import Form from './Form'
 import preview from '../components/Preview'
-import QRCode from 'qrcodejs2'
+import previewDialog from '@/components/PreviewDialog'
+
 export default {
   name: 'workFlow-flowEngine',
-  components: { Form, preview },
+  components: { Form, preview, previewDialog },
   data() {
     return {
       keyword: '',
@@ -154,8 +147,8 @@ export default {
       dialogVisible: false,
       formVisible: false,
       previewVisible: false,
-      previewAppVisible: false,
-      qrCodeText: '',
+      previewDialogVisible: false,
+      currRow: {},
       categoryList: []
     }
   },
@@ -246,30 +239,21 @@ export default {
       }).catch(() => { });
     },
     preview(row) {
+      this.currRow = row
+      this.$nextTick(() => {
+        this.previewDialogVisible = true
+      })
+    },
+    previewPc() {
       let data = {
-        enCode: row.enCode,
-        fullName: row.fullName,
-        formType: row.formType,
-        flowId: row.id
+        enCode: this.currRow.enCode,
+        fullName: this.currRow.fullName,
+        formType: this.currRow.formType,
+        flowId: this.currRow.id
       }
       this.previewVisible = true
       this.$nextTick(() => {
         this.$refs.preview.init(data)
-      })
-    },
-    previewApp(id) {
-      let text = { t: 'WFP', id }
-      this.qrCodeText = JSON.stringify(text)
-      this.previewAppVisible = true
-    },
-    getQRimg() {
-      if (!this.qrCodeText) return
-      this.$refs.qrCode.innerHTML = "";
-      let qrcode = new QRCode(this.$refs.qrCode, {
-        width: 260,
-        height: 260,
-        text: this.qrCodeText,
-        correctLevel: QRCode.CorrectLevel.H
       })
     },
     closeForm(isRefresh) {
@@ -357,24 +341,6 @@ export default {
       .add-desc {
         color: #8d8989;
         font-size: 12px;
-      }
-    }
-  }
-}
-.code-dialog {
-  ::v-deep {
-    .el-dialog__body {
-      padding: 20px 50px 2px !important;
-      .qrcode-img {
-        width: 300px;
-        height: 300px;
-        padding: 20px;
-      }
-      .tip {
-        text-align: center;
-        font-size: 18px;
-        margin-top: 10px;
-        margin-bottom: 20px;
       }
     }
   }
