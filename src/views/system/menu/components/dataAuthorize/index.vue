@@ -31,7 +31,7 @@
             <div class="JNPF-common-head">
               <topOpts @add="addOrUpdateHandle('')">
                 <el-button v-if="menuType === 2" type="text" icon="icon-ym icon-ym-dbLink"
-                  @click="addDataConnect">
+                  @click="addDataConnect" class="btn-sty">
                   数据连接
                 </el-button>
               </topOpts>
@@ -44,7 +44,7 @@
             </div>
             <JNPF-table v-loading="dataListLoading" :data="dataAuthorizeList" row-key="id"
               default-expand-all :tree-props="{ children: 'children', hasChildren: '' }">
-              <el-table-column prop="bindTable" label="数据库表" width="120" v-if="this.menuType == 2"/>
+              <el-table-column prop="bindTable" label="数据库表" width="120" v-if="menuType == 2"/>
               <el-table-column prop="enCode" label="字段名称" />
               <el-table-column prop="fullName" label="字段说明" show-overflow-tooltip />
               <el-table-column prop="type" label="字段类型" width="70" />
@@ -275,6 +275,12 @@ export default {
       padding: 0 !important;
     }
   }
+}
+.btn-sty{
+  vertical-align: top;
+    /* height: 33px; */
+    line-height: 29px;
+    padding: 0;
 }
 .JNPF-flex-tabs {
   height: 100%;
