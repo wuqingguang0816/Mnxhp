@@ -24,7 +24,7 @@ export default {
 
 <style scoped>
 .icon-ym {
-  font-size: 20px;
+  font-size: 18px;
   color: #666666;
 }
 </style>

@@ -1,6 +1,7 @@
 <template>
   <div class="app-container Profile-container">
-    <el-tabs tab-position="left" style="height:100%" v-model="activeTab" class="profile-tabs">
+    <el-tabs tab-position="left" style="height:100%" v-model="activeTab" class="profile-tabs"
+      v-loading="userLoading">
       <el-tab-pane label="个人资料" name="user">
         <UserInfo ref="user" :user='user' v-if="visible.user" />
       </el-tab-pane>
@@ -129,6 +130,7 @@ export default {
         isLeaf: 'isLeaf'
       },
       loading: false,
+      userLoading: false,
       nodeId: '0',
       uploadHeaders: { Authorization: this.$store.getters.token }
     }
@@ -159,9 +161,11 @@ export default {
   },
   methods: {
     getInfo() {
+      this.userLoading = true
       UserSettingInfo().then(res => {
         this.user = res.data
         this.activeTab = 'user'
+        this.userLoading = false
       })
     },
     getSubordinate() {
