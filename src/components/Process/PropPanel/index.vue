@@ -1419,7 +1419,7 @@ const typeOptions = [
     value: 5
   },
   {
-    label: '服务接口',
+    label: '接口服务',
     value: 9
   }]
 const assigneeTypeOptions = [...typeOptions, {
