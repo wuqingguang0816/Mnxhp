@@ -49,7 +49,12 @@
           default-expand-all
           :tree-props="{ children: 'children', hasChildren: '' }"
         >
-        <el-table-column prop="bindTable" label="数据库表" width="120"/>
+          <el-table-column
+            prop="bindTable"
+            label="数据库表"
+            width="120"
+            v-if="this.menuType == 2"
+          />
           <el-table-column prop="enCode" label="字段名称" width="160" />
           <el-table-column prop="fullName" label="字段说明" />
           <el-table-column
@@ -154,7 +159,7 @@ export default {
         this.getList();
       });
       if (this.menuType === 3) {
-        getFieldNameList(this.moduleId,'Column').then(res => {
+        getFieldNameList(this.moduleId, "Column").then(res => {
           this.dbList = res.data || [];
         });
       } else {
