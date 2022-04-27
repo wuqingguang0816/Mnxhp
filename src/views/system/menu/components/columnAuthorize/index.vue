@@ -53,7 +53,7 @@
             prop="bindTable"
             label="数据库表"
             width="120"
-            v-if="this.menuType == 2"
+            v-if="menuType == 2"
           />
           <el-table-column prop="enCode" label="字段名称" width="160" />
           <el-table-column prop="fullName" label="字段说明" />
