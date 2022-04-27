@@ -24,7 +24,6 @@
     "build:dotNetCloudTest": "cross-env NODE_ENV=production vue-cli-service build --mode dotNetCloudTest",
     "build:dotNetCloudRelease": "cross-env NODE_ENV=production vue-cli-service build --mode dotNetCloudRelease",
     "build:dotNetCloudSaas": "cross-env NODE_ENV=production vue-cli-service build --mode dotNetCloudSaas",
-    "build:rainbond": "cross-env NODE_ENV=production vue-cli-service build --mode rainbond",
     "preview": "node build/index.js --preview",
     "lint": "eslint --ext .js,.vue src",
     "test:unit": "jest --clearCache && vue-cli-service test:unit",
