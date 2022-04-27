@@ -56,6 +56,9 @@ export default {
     align-items: center;
     cursor: pointer;
     padding-left: 20px;
+    &:hover {
+      opacity: 0.9;
+    }
     &.add-item-form {
       background: #f1f5ff;
       .add-icon {

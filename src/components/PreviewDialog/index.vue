@@ -111,6 +111,9 @@ export default {
     align-items: center;
     cursor: pointer;
     padding-left: 30px;
+    &:hover {
+      opacity: 0.9;
+    }
     &.preview-item-pc {
       background: #edfbfd;
       .preview-icon {

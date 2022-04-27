@@ -248,7 +248,7 @@ export default {
       border-left: 1px solid #e8eaec;
     }
     >>> .icon-ym {
-      font-size: 20px;
+      font-size: 16px;
     }
   }
   .tags-view-wrapper {
@@ -266,7 +266,7 @@ export default {
       font-size: 14px;
       .tag-icon {
         vertical-align: middle;
-        font-size: 18px;
+        font-size: 16px;
       }
       .tag-icon + span {
         line-height: 38px;
