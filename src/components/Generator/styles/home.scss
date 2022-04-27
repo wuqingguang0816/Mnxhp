@@ -234,6 +234,10 @@ $lighterBlue: #409EFF;
 
   .unActive-btn {
     color: #606266 !important;
+
+    &:hover {
+      color: #1890ff !important;
+    }
   }
 
   .action-bar-right {
