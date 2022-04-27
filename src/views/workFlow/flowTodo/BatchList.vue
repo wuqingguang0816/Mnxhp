@@ -248,9 +248,9 @@ export default {
           if (Array.isArray(data) && data.length) {
             candidateList = res.data.map(o => ({
               ...o,
-              label: o.nodeName + '审批人',
+              label: '审批人',
               value: [],
-              rules: [{ required: true, message: `${o.nodeName}审批人不能为空`, trigger: 'click' }]
+              rules: [{ required: true, message: `审批人不能为空`, trigger: 'click' }]
             }))
           }
           this.approveVisible = true
