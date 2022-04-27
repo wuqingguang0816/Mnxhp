@@ -213,6 +213,9 @@
               </el-form-item>
             </template>
             <template v-if="isSystem">
+              <el-form-item label="控件标题">
+                <el-input v-model="activeData.__config__.label" placeholder="请输入控件标题" />
+              </el-form-item>
               <el-form-item label="选择模板" v-if="activeData.__config__.jnpfKey==='billRule'">
                 <BillRule v-model="activeData.__config__.rule" placeholder="选择模板" />
               </el-form-item>
