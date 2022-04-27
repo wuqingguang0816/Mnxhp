@@ -3,6 +3,9 @@ import FlowCard from "./FlowCard/index.vue";
 import PropPanel from "./PropPanel/index.vue";
 import { NodeUtils, getMockData } from "./FlowCard/util.js";
 import { getDrawingList } from '@/components/Generator/utils/db'
+const requiredDisabled = (jnpfKey) => {
+  return ['billRule', 'createUser', 'createTime', 'modifyTime', 'modifyUser', 'currPosition', 'currOrganize', 'table'].includes(jnpfKey)
+}
 
 export default {
   name: 'Process',
@@ -63,7 +66,7 @@ export default {
             id: id,
             name: isTableChild ? parent.__config__.label + '-' + data.__config__.label : data.__config__.label,
             required: data.__config__.required || getRequiredById(id),
-            requiredDisabled: data.__config__.jnpfKey === 'table' || data.__config__.required,
+            requiredDisabled: requiredDisabled(data.__config__.jnpfKey) || data.__config__.required,
             read: getReadById(id),
             write: getWriteById(id)
           })
