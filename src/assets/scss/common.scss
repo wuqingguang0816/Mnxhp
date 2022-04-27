@@ -1897,6 +1897,10 @@ textarea.el-textarea__inner {
     display: flex;
     justify-content: space-between;
     align-items: center;
+
+    .removeAllBtn {
+      color: #f56c6c;
+    }
   }
 
   .transfer-pane__body {
@@ -1907,6 +1911,10 @@ textarea.el-textarea__inner {
     overflow-x: hidden;
     font-size: 14px;
     border: 1px solid #dcdfe6;
+
+    .el-tab-pane {
+      padding: 10px 0 !important;
+    }
 
     &.left-pane {
       .single-list {
