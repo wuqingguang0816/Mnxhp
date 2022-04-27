@@ -44,6 +44,7 @@
             </div>
             <JNPF-table v-loading="dataListLoading" :data="dataAuthorizeList" row-key="id"
               default-expand-all :tree-props="{ children: 'children', hasChildren: '' }">
+              <el-table-column prop="bindTable" label="数据库表" width="120"/>
               <el-table-column prop="enCode" label="字段名称" />
               <el-table-column prop="fullName" label="字段说明" show-overflow-tooltip />
               <el-table-column prop="type" label="字段类型" width="70" />
