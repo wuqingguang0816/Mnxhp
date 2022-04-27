@@ -85,6 +85,7 @@
         <JNPF-table v-loading="listLoading" :data="list" has-c @selection-change="handleChange">
           <el-table-column prop="fullName" label="流程标题" show-overflow-tooltip min-width="150" />
           <el-table-column prop="flowName" label="所属流程" width="130" />
+          <el-table-column prop="flowVersion" label="流程版本" width="130" />
           <el-table-column prop="nodeName" label="所属节点" width="130" />
           <el-table-column prop="startTime" label="发起时间" width="130"
             :formatter="jnpf.tableDateFormat" />
@@ -228,6 +229,8 @@ export default {
     handleBatch(batchType) {
       // batchType 0-通过 1-拒绝 2-转办
       if (!this.multipleSelection.length) return this.$message.error('请先选择数据')
+      let isDiffer = this.multipleSelection.some(o => o.flowVersion !== this.multipleSelection[0].flowVersion)
+      if (isDiffer) return this.$message.error('请选择相同的版本审批单')
       this.currentBatchType = batchType
       const item = this.multipleSelection[0]
       const properties = item.approversProperties ? JSON.parse(item.approversProperties) : {}

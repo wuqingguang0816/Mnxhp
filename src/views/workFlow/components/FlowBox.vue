@@ -12,10 +12,10 @@
               {{properties.printBtnText||'打 印'}}</el-button>
           </template>
           <template v-if="setting.opType=='-1'">
-            <el-button type="primary" @click="eventLauncher('submit')" :loading="candidateLoading">
-              {{properties.submitBtnText||'提 交'}}</el-button>
-            <el-button type="warning" @click="eventLauncher('save')" :loading="btnLoading">
-              {{properties.saveBtnText||'暂 存'}}</el-button>
+            <el-button type="primary" @click="eventLauncher('submit')" :loading="candidateLoading"
+              :disabled="allBtnDisabled">{{properties.submitBtnText||'提 交'}}</el-button>
+            <el-button type="warning" @click="eventLauncher('save')" :loading="btnLoading"
+              :disabled="allBtnDisabled">{{properties.saveBtnText||'暂 存'}}</el-button>
           </template>
           <template v-if="setting.opType == 1">
             <el-button type="warning" @click="openUserBox('transfer')"
@@ -45,7 +45,8 @@
             <el-button type="danger" v-if="setting.status != 2 && setting.status != 5"
               @click="cancel()">终 止</el-button>
           </template>
-          <el-button @click="goBack()" v-if="!setting.hideCancelBtn">{{$t('common.cancelButton')}}
+          <el-button @click="goBack()" v-if="!setting.hideCancelBtn" :disabled="allBtnDisabled">
+            {{$t('common.cancelButton')}}
           </el-button>
         </div>
       </div>
@@ -208,7 +209,8 @@ export default {
       signImg: '',
       copyIds: [],
       fullName: '',
-      thisStep: ''
+      thisStep: '',
+      allBtnDisabled: false
     }
   },
   computed: {
@@ -433,6 +435,7 @@ export default {
       if (candidateList) this.formData.candidateList = candidateList
       if (!this.formData.id) delete (this.formData.id)
       if (this.eventType === 'save') this.btnLoading = true
+      this.allBtnDisabled = true
       let formMethod = null
       if (this.setting.formType == 1) {
         formMethod = this.formData.id ? Update : Create
@@ -447,11 +450,13 @@ export default {
           onClose: () => {
             if (this.eventType === 'save') this.btnLoading = false
             this.candidateVisible = false
+            this.allBtnDisabled = false
             this.$emit('close', true)
           }
         })
       }).catch(() => {
         if (this.eventType === 'save') this.btnLoading = false
+        this.allBtnDisabled = false
       })
     },
     submitCandidate(data) {
