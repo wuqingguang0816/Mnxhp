@@ -1,4 +1,4 @@
-import { getVisualDevList, Delete, Copy, Release, exportData } from '@/api/onlineDev/visualDev'
+import { getVisualDevList, Delete, Copy, exportData } from '@/api/onlineDev/visualDev'
 
 export default {
   data() {
@@ -14,13 +14,6 @@ export default {
       total: 0,
       listLoading: false,
       formVisible: false,
-      addVisible: false,
-      currWebType: '',
-      currId: '',
-      releaseQuery: {
-        pc: 1,
-        app: 1
-      },
       categoryList: []
     }
   },
@@ -93,31 +86,6 @@ export default {
         })
       }).catch(() => {});
     },
-    openReleaseDialog(id) {
-      this.currId = id
-      this.releaseDialogVisible = true
-      this.releaseQuery = {
-        pc: 1,
-        app: 1
-      }
-    },
-    selectToggle(key) {
-      this.releaseQuery[key] = this.releaseQuery[key] === 1 ? 0 : 1
-    },
-    // 发布菜单
-    release() {
-      if (!this.releaseQuery.pc && !this.releaseQuery.app) return this.$message.error('请至少选择一种菜单同步方式')
-      this.releaseBtnLoading = true
-      Release(this.currId, this.releaseQuery).then(res => {
-        this.releaseBtnLoading = false
-        this.releaseDialogVisible = false
-        this.$message({
-          type: 'success',
-          message: res.msg,
-          duration: 1000,
-        });
-      }).catch(() => { this.releaseBtnLoading = false })
-    },
     exportModel(id) {
       this.$confirm('您确定要导出该功能模板, 是否继续?', '提示', {
         type: 'warning'
@@ -126,11 +94,6 @@ export default {
           this.jnpf.downloadFile(res.data.url)
         })
       }).catch(() => {});
-    },
-    toggleWebType(row) {
-      const { id, webType } = row
-      if (!webType) return
-      this.openAddBox(id, webType)
     },
     openAddBox(id, webType) {
       this.addVisible = true

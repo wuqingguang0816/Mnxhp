@@ -76,7 +76,7 @@
                   <el-dropdown-menu slot="dropdown">
                     <el-dropdown-item @click.native="toggleWebType(scope.row)">更改模式
                     </el-dropdown-item>
-                    <el-dropdown-item @click.native="openReleaseDialog(scope.row.id)">同步菜单
+                    <el-dropdown-item @click.native="openReleaseDialog(scope.row)">同步菜单
                     </el-dropdown-item>
                     <el-dropdown-item @click.native="preview(scope.row.id)">预览模板</el-dropdown-item>
                     <el-dropdown-item @click.native="copy(scope.row.id)">复制模板</el-dropdown-item>
@@ -96,6 +96,7 @@
     <AddBox :visible.sync="addVisible" :webType="currWebType" @add="handleAdd" />
     <el-dialog title="同步菜单" :visible.sync="releaseDialogVisible"
       class="JNPF-dialog JNPF-dialog_center release-dialog" lock-scroll width="600px">
+      <el-alert title="将该功能的按钮、列表、表单及数据权限同步至系统菜单" type="warning" :closable="false" show-icon />
       <div class="dialog-main">
         <div class="item" :class="{'active':releaseQuery.pc===1}" @click="selectToggle('pc')">
           <i class="item-icon icon-ym icon-ym-pc"></i>
@@ -112,6 +113,23 @@
           </div>
         </div>
       </div>
+      <el-form class="dialog-form-main" :model="releaseQuery" :rules="releaseQueryRule"
+        label-position="right" label-width="50px" ref="releaseForm">
+        <template v-if="!currRow.pcIsRelease">
+          <el-form-item label="上级" prop="pcModuleParentId" v-if="releaseQuery.pc">
+            <JNPF-TreeSelect v-model="releaseQuery.pcModuleParentId" :options="treeData"
+              placeholder="选择上级菜单" />
+          </el-form-item>
+        </template>
+        <template v-if="!currRow.appIsRelease">
+          <el-form-item label="" v-if="(!releaseQuery.pc||currRow.pcIsRelease) && releaseQuery.app">
+          </el-form-item>
+          <el-form-item label="上级" prop="appModuleParentId" v-if="releaseQuery.app">
+            <JNPF-TreeSelect v-model="releaseQuery.appModuleParentId" :options="appTreeData"
+              placeholder="选择上级菜单" />
+          </el-form-item>
+        </template>
+      </el-form>
       <span slot="footer" class="dialog-footer">
         <el-button @click="releaseDialogVisible = false">{{$t('common.cancelButton')}}</el-button>
         <el-button type="primary" :loading="releaseBtnLoading" @click="release">
@@ -127,6 +145,8 @@ import Form from './Form'
 import AddBox from '@/views/generator/AddBox'
 import mixin from '@/mixins/generator/index'
 import previewDialog from '@/components/PreviewDialog'
+import { Release } from '@/api/onlineDev/visualDev'
+import { getMenuSelector } from '@/api/system/menu'
 export default {
   name: 'onlineDev-webDesign',
   mixins: [mixin],
@@ -138,6 +158,26 @@ export default {
       previewDialogVisible: false,
       releaseDialogVisible: false,
       releaseBtnLoading: false,
+      addVisible: false,
+      currWebType: '',
+      currId: '',
+      currRow: {},
+      releaseQuery: {
+        pc: 1,
+        app: 1,
+        pcModuleParentId: '',
+        appModuleParentId: '',
+      },
+      releaseQueryRule: {
+        pcModuleParentId: [
+          { required: true, message: '上级菜单不能为空', trigger: 'change' }
+        ],
+        appModuleParentId: [
+          { required: true, message: '上级菜单不能为空', trigger: 'change' }
+        ],
+      },
+      treeData: [],
+      appTreeData: []
     }
   },
   methods: {
@@ -145,6 +185,69 @@ export default {
       this.currId = id
       this.$nextTick(() => {
         this.previewDialogVisible = true
+      })
+    },
+    openReleaseDialog(row) {
+      this.currRow = row
+      this.releaseDialogVisible = true
+      this.releaseQuery = {
+        pc: 1,
+        app: 1,
+        pcModuleParentId: '',
+        appModuleParentId: '',
+      }
+      this.$nextTick(() => {
+        this.$refs['releaseForm'].resetFields()
+      })
+      this.getMenuSelector()
+      this.getAPPMenuSelector()
+    },
+    selectToggle(key) {
+      this.releaseQuery[key] = this.releaseQuery[key] === 1 ? 0 : 1
+    },
+    // 发布菜单
+    release() {
+      this.$refs['releaseForm'].validate((valid) => {
+        if (!valid) return
+        if (!this.releaseQuery.pc && !this.releaseQuery.app) return this.$message.error('请至少选择一种菜单同步方式')
+        this.releaseBtnLoading = true
+        Release(this.currRow.id, this.releaseQuery).then(res => {
+          this.releaseBtnLoading = false
+          this.releaseDialogVisible = false
+          this.initData()
+          this.$message({
+            type: 'success',
+            message: res.msg,
+            duration: 1000,
+          });
+        }).catch(() => { this.releaseBtnLoading = false })
+      })
+    },
+    toggleWebType(row) {
+      const { id, webType } = row
+      if (!webType) return
+      this.openAddBox(id, webType)
+    },
+    getMenuSelector() {
+      getMenuSelector({ category: 'Web' }, 0).then(res => {
+        let topItem = {
+          fullName: "顶级节点",
+          hasChildren: true,
+          id: "-1",
+          children: res.data.list
+        }
+        this.treeData = [topItem]
+      })
+    },
+    getAPPMenuSelector() {
+      getMenuSelector({ category: 'App' }, 0).then(res => {
+        let topItem = {
+          fullName: "顶级节点",
+          hasChildren: true,
+          id: "-1",
+          children: res.data.list
+        }
+        this.appTreeData = [topItem]
       })
     }
   }
@@ -154,10 +257,19 @@ export default {
 .release-dialog {
   >>> .el-dialog {
     .el-dialog__body {
-      padding: 30px 55px;
+      padding: 12px 55px;
+    }
+  }
+  .dialog-form-main {
+    margin-top: 20px;
+    display: flex;
+    justify-content: space-between;
+    >>> .el-form-item {
+      width: 215px;
     }
   }
   .dialog-main {
+    margin-top: 20px;
     display: flex;
     justify-content: space-between;
     .item {
