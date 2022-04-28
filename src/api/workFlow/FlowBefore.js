@@ -83,7 +83,7 @@ export function getRecordList(id, data) {
 // 判断是否有候选人
 export function Candidates(id, data) {
   return request({
-    url: `api/workflow/Engine/FlowBefore/Candidates/${id}`,
+    url: `/api/workflow/Engine/FlowBefore/Candidates/${id}`,
     method: 'post',
     data
   })
@@ -91,7 +91,7 @@ export function Candidates(id, data) {
 // 获取候选人列表（分页）
 export function CandidateUser(id, data) {
   return request({
-    url: `api/workflow/Engine/FlowBefore/CandidateUser/${id}`,
+    url: `/api/workflow/Engine/FlowBefore/CandidateUser/${id}`,
     method: 'post',
     data
   })
@@ -99,7 +99,7 @@ export function CandidateUser(id, data) {
 // 批量通过、拒绝、转办  batchType 0-通过 1-拒绝 2-转办
 export function BatchOperation(data) {
   return request({
-    url: `api/workflow/Engine/FlowBefore/BatchOperation`,
+    url: `/api/workflow/Engine/FlowBefore/BatchOperation`,
     method: 'post',
     data
   })
@@ -107,22 +107,29 @@ export function BatchOperation(data) {
 // 获取批量审批流程
 export function getBatchFlowSelector() {
   return request({
-    url: `api/workflow/Engine/FlowBefore/BatchFlowSelector`,
+    url: `/api/workflow/Engine/FlowBefore/BatchFlowSelector`,
     method: 'get'
   })
 }
 // 获取流程节点列表
 export function getNodeSelector(id) {
   return request({
-    url: `api/workflow/Engine/FlowBefore/NodeSelector/${id}`,
+    url: `/api/workflow/Engine/FlowBefore/NodeSelector/${id}`,
     method: 'get'
   })
 }
 // 获取批量审批候选人
 export function BatchCandidate(data) {
   return request({
-    url: `api/workflow/Engine/FlowBefore/BatchCandidate`,
+    url: `/api/workflow/Engine/FlowBefore/BatchCandidate`,
     method: 'get',
     data
+  })
+}
+// 判断是否有查看权限(消息通知用)
+export function checkInfo(taskOperatorId) {
+  return request({
+    url: `/api/workflow/Engine/FlowBefore/${taskOperatorId}/Info`,
+    method: 'get'
   })
 }

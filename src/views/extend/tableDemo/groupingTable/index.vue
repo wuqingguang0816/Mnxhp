@@ -40,7 +40,7 @@
             </template>
           </el-table-column>
           <el-table-column prop="projectCode" label="项目编码" width="160" />
-          <el-table-column label="项目类型" width="100">
+          <el-table-column prop="projectType" label="项目类型" width="100">
             <template slot-scope="scope">
               {{ scope.row.projectType | getTypeText(industryTypeList) }}
             </template>
@@ -49,7 +49,7 @@
           <el-table-column prop="customerName" label="客户名称" width="200" />
           <el-table-column prop="principal" label="负责人" width="80" />
           <el-table-column prop="jackStands" label="立项人" width="80" />
-          <el-table-column label="交互时间" width="100">
+          <el-table-column prop="interactionDate" label="交互时间" width="100">
             <template slot-scope="scope">
               {{ scope.row.interactionDate | toDate("yyyy-MM-dd") }}
             </template>
@@ -58,7 +58,7 @@
           <el-table-column prop="tunesAmount" label="已用金额" width="100" />
           <el-table-column prop="projectedIncome" label="预计收入" width="100" />
           <el-table-column prop="registrant" label="登记人" width="80" show-overflow-tooltip />
-          <el-table-column label="登记时间" width="120">
+          <el-table-column prop="registerDate" label="登记时间" width="120">
             <template slot-scope="scope">
               {{ scope.row.registerDate | toDate() }}
             </template>

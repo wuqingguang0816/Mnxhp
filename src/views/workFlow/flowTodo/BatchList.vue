@@ -34,12 +34,40 @@
                 </el-select>
               </el-form-item>
             </el-col>
+            <template v-if="showAll">
+              <el-col :span="6">
+                <el-form-item label="日期">
+                  <el-date-picker v-model="pickerVal" type="daterange" start-placeholder="开始日期"
+                    end-placeholder="结束日期" :picker-options="pickerOptions" value-format="timestamp"
+                    clearable :editable="false">
+                  </el-date-picker>
+                </el-form-item>
+              </el-col>
+              <el-col :span="6">
+                <el-form-item label="所属分类">
+                  <el-select v-model="listQuery.flowCategory" placeholder="选择所属分类" clearable>
+                    <el-option v-for="item in categoryList" :key="item.enCode"
+                      :label="item.fullName" :value="item.enCode">
+                    </el-option>
+                  </el-select>
+                </el-form-item>
+              </el-col>
+              <el-col :span="6">
+                <el-form-item label="发起人员">
+                  <user-select v-model="listQuery.creatorUserId" placeholder="选择发起人员" />
+                </el-form-item>
+              </el-col>
+            </template>
             <el-col :span="6">
               <el-form-item>
                 <el-button type="primary" icon="el-icon-search" @click="search()">
                   {{$t('common.search')}}</el-button>
                 <el-button icon="el-icon-refresh-right" @click="reset()">{{$t('common.reset')}}
                 </el-button>
+                <el-button type="text" icon="el-icon-arrow-down" @click="showAll=true"
+                  v-if="!showAll">展开</el-button>
+                <el-button type="text" icon="el-icon-arrow-up" @click="showAll=false" v-else>
+                  收起</el-button>
               </el-form-item>
             </el-col>
           </el-form>
@@ -57,6 +85,7 @@
         <JNPF-table v-loading="listLoading" :data="list" has-c @selection-change="handleChange">
           <el-table-column prop="fullName" label="流程标题" show-overflow-tooltip min-width="150" />
           <el-table-column prop="flowName" label="所属流程" width="130" />
+          <el-table-column prop="flowVersion" label="流程版本" width="130" />
           <el-table-column prop="nodeName" label="所属节点" width="130" />
           <el-table-column prop="startTime" label="发起时间" width="130"
             :formatter="jnpf.tableDateFormat" />
@@ -95,6 +124,7 @@ import { FlowBeforeList, getBatchFlowSelector, getNodeSelector, BatchCandidate, 
 import ApproveDialog from '@/views/workFlow/components/ApproveDialog'
 export default {
   components: { ApproveDialog },
+  props: ['categoryList'],
   data() {
     return {
       id: '',
@@ -107,6 +137,10 @@ export default {
         keyword: '',
         flowId: '',
         nodeCode: '',
+        flowCategory: '',
+        creatorUserId: '',
+        startTime: '',
+        endTime: '',
         currentPage: 1,
         pageSize: 20,
         sort: 'desc',
@@ -118,6 +152,35 @@ export default {
       currentBatchType: null,
       userBoxVisible: false,
       approveVisible: false,
+      pickerOptions: {
+        shortcuts: [{
+          text: '最近一周',
+          onClick(picker) {
+            const end = new Date();
+            const start = new Date();
+            start.setTime(start.getTime() - 3600 * 1000 * 24 * 7);
+            picker.$emit('pick', [start, end]);
+          }
+        }, {
+          text: '最近一个月',
+          onClick(picker) {
+            const end = new Date();
+            const start = new Date();
+            start.setTime(start.getTime() - 3600 * 1000 * 24 * 30);
+            picker.$emit('pick', [start, end]);
+          }
+        }, {
+          text: '最近三个月',
+          onClick(picker) {
+            const end = new Date();
+            const start = new Date();
+            start.setTime(start.getTime() - 3600 * 1000 * 24 * 90);
+            picker.$emit('pick', [start, end]);
+          }
+        }]
+      },
+      pickerVal: [],
+      showAll: false
     }
   },
   watch: {
@@ -166,6 +229,8 @@ export default {
     handleBatch(batchType) {
       // batchType 0-通过 1-拒绝 2-转办
       if (!this.multipleSelection.length) return this.$message.error('请先选择数据')
+      let isDiffer = this.multipleSelection.some(o => o.flowVersion !== this.multipleSelection[0].flowVersion)
+      if (isDiffer) return this.$message.error('请选择相同的版本审批单')
       this.currentBatchType = batchType
       const item = this.multipleSelection[0]
       const properties = item.approversProperties ? JSON.parse(item.approversProperties) : {}
@@ -201,7 +266,7 @@ export default {
         if (!properties.hasRejectBtn) return this.$message.error('当前审批节点无拒绝权限')
         this.approveVisible = true
         this.$nextTick(() => {
-          this.$refs.approveDialog.init(properties, item.id, '', [], item.flowId)
+          this.$refs.approveDialog.init(properties, item.id, 'reject', [], item.flowId)
         })
         return
       }
@@ -245,10 +310,15 @@ export default {
     reset() {
       this.list = []
       this.nodeOptions = []
+      this.pickerVal = []
       this.listQuery = {
         keyword: '',
         flowId: '',
         nodeCode: '',
+        flowCategory: '',
+        creatorUserId: '',
+        startTime: '',
+        endTime: '',
         currentPage: 1,
         pageSize: 20,
         sort: 'desc',
@@ -257,6 +327,13 @@ export default {
       this.initData()
     },
     search() {
+      if (this.pickerVal && this.pickerVal.length) {
+        this.listQuery.startTime = this.pickerVal[0]
+        this.listQuery.endTime = this.pickerVal[1]
+      } else {
+        this.listQuery.startTime = ''
+        this.listQuery.endTime = ''
+      }
       this.listQuery.currentPage = 1
       this.listQuery.pageSize = 20
       this.initData()
@@ -270,6 +347,9 @@ export default {
   display: flex;
   flex-direction: column;
   padding: 0 0 10px;
+  .JNPF-common-search-box {
+    border-bottom: 1px solid #dcdfe6;
+  }
   >>> .el-table {
     flex: 1;
     border-top: none;

@@ -1,6 +1,5 @@
 <template>
-  <div class="monitor-container" v-loading="loading"
-    :element-loading-text="$t('common.loadingText')">
+  <div class="monitor-container" v-loading="loading">
     <el-row :gutter="10">
       <el-col :span="24">
         <el-card shadow="never">

@@ -31,8 +31,8 @@
                 </el-col>
               </el-form>
             </el-row>
-            <div class="list" ref="infiniteBody" v-loading="listLoading && listQuery.currentPage==1"
-              :element-loading-text="$t('common.loadingText')">
+            <div class="list" ref="infiniteBody"
+              v-loading="listLoading && listQuery.currentPage==1">
               <el-row :gutter="20" v-if="list.length">
                 <el-col :span="6" v-for="(item,i) in list" :key="i" class="item"
                   @click.native="jump(item)">

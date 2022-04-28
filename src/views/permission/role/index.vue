@@ -9,8 +9,7 @@
           </el-tooltip>
         </span>
       </div>
-      <el-scrollbar class="JNPF-common-el-tree-scrollbar" v-loading="treeLoading"
-        :element-loading-text="$t('common.loadingText')">
+      <el-scrollbar class="JNPF-common-el-tree-scrollbar" v-loading="treeLoading">
         <el-tree ref="treeBox" :data="treeData" :props="defaultProps" default-expand-all
           highlight-current :expand-on-click-node="false" node-key="id"
           @node-click="handleNodeClick" class="JNPF-common-el-tree">
@@ -52,13 +51,13 @@
         </div>
         <JNPF-table v-loading="listLoading" :data="list">
           <el-table-column prop="fullName" label="角色名称" width="200" />
-          <el-table-column prop="enCode" label="角色编码" width="200" />
+          <el-table-column prop="enCode" label="角色编码" width="150" />
           <el-table-column prop="type" label="角色类型" width="70" align="center" />
-          <el-table-column prop="organizeInfo" label="所属组织" show-overflow-tooltip />
+          <el-table-column prop="organizeInfo" label="所属组织" min-width="150" show-overflow-tooltip />
           <el-table-column prop="creatorTime" label="创建时间" :formatter="jnpf.tableDateFormat"
             width="120" />
           <el-table-column prop="sortCode" label="排序" width="70" align="center" />
-          <el-table-column label="状态" width="70" align="center">
+          <el-table-column prop="enabledMark" label="状态" width="70" align="center">
             <template slot-scope="scope">
               <el-tag :type="scope.row.enabledMark == 1 ? 'success' : 'danger'" disable-transitions>
                 {{scope.row.enabledMark==1?'正常':'停用'}}</el-tag>

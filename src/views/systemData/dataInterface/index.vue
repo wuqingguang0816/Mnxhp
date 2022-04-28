@@ -4,8 +4,7 @@
       <div class="JNPF-common-title">
         <h2>接口分类</h2>
       </div>
-      <el-scrollbar class="JNPF-common-el-tree-scrollbar" v-loading="treeLoading"
-        :element-loading-text="$t('common.loadingText')">
+      <el-scrollbar class="JNPF-common-el-tree-scrollbar" v-loading="treeLoading">
         <el-tree ref="treeBox" :data="treeData" :props="defaultProps" default-expand-all
           highlight-current :expand-on-click-node="false" node-key="id"
           @node-click="handleNodeClick" class="JNPF-common-el-tree" />
@@ -45,14 +44,14 @@
         <JNPF-table v-loading="listLoading" :data="tableData">
           <el-table-column prop="fullName" label="名称" />
           <el-table-column prop="enCode" label="编码" />
-          <el-table-column label="授权" width="100">
+          <el-table-column prop="checkType" label="授权" width="100">
             <template slot-scope="scope">
               <span v-if="scope.row.checkType === 0">忽略验证</span>
               <span v-if="scope.row.checkType === 1">鉴权验证</span>
               <span v-if="scope.row.checkType === 2">跨域验证</span>
             </template>
           </el-table-column>
-          <el-table-column label="类型" width="100">
+          <el-table-column prop="dataType" label="类型" width="100">
             <template slot-scope="scope">
               <span v-if="scope.row.dataType === 1">SQL操作</span>
               <span v-if="scope.row.dataType === 2">静态数据</span>
@@ -63,7 +62,7 @@
           <el-table-column prop="creatorTime" label="创建时间" :formatter="jnpf.tableDateFormat"
             width="120" />
           <el-table-column prop="sortCode" label="排序" width="70" align="center" />
-          <el-table-column label="状态" width="70" align="center">
+          <el-table-column prop="enabledMark" label="状态" width="70" align="center">
             <template slot-scope="scope">
               <el-tag :type="scope.row.enabledMark == 1 ? 'success' : 'danger'" disable-transitions>
                 {{scope.row.enabledMark==1?'正常':'停用'}}</el-tag>

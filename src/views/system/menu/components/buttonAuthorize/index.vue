@@ -28,7 +28,7 @@
           <el-table-column prop="fullName" label="按钮名称" width="160" />
           <el-table-column prop="enCode" label="按钮编码" />
           <el-table-column prop="sortCode" label="排序" width="90" align="center" />
-          <el-table-column label="状态" width="90">
+          <el-table-column prop="enabledMark" label="状态" width="90">
             <template slot-scope="scope">
               <el-tag :type="scope.row.enabledMark == 1 ? 'success' : 'danger'" disable-transitions>
                 {{scope.row.enabledMark==1?'正常':'停用'}}</el-tag>

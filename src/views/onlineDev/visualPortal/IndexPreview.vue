@@ -11,8 +11,7 @@
         <el-button @click="closeDialog()">{{$t('common.cancelButton')}}</el-button>
       </div>
     </div>
-    <div class="main" style="padding:0" v-loading="loading"
-      :element-loading-text="$t('common.loadingText')">
+    <div class="main" style="padding:0" v-loading="loading">
       <div class="custom-page" v-if="type===1">
         <component :is="currentView" v-if="linkType===0" />
         <embed :src="url" width="100%" height="100%" type="text/html" v-if="linkType===1" />

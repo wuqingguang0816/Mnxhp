@@ -7,9 +7,8 @@
         <el-select ref="singleTree" v-model="singleSelectTreeVal" clearable
           popper-class="select-tree" value-key="id" @clear="selectTreeClearHandle">
           <el-option :value="singleSelectTreeKey" class="options">
-            <el-tree ref="singleSelectTree" :element-loading-text="$t('common.loadingText')"
-              :current-node-key="singleSelectTreeKey" :data="treeData" highlight-current
-              :expand-on-click-node="false" :props="props" node-key="id" lazy
+            <el-tree ref="singleSelectTree" :current-node-key="singleSelectTreeKey" :data="treeData"
+              highlight-current :expand-on-click-node="false" :props="props" node-key="id" lazy
               v-loading="treeLoading" :load="loadNode" @node-click="selectTreeNodeClick">
               <span slot-scope="{ node }" class="vab-custom-tree-node">
                 <span class="vab-tree-item">{{ node.data.fullName }}</span>
@@ -32,7 +31,7 @@
         <el-switch v-model="dataForm.enabledMark" :active-value="1" :inactive-value="0" />
       </el-form-item>
       <el-form-item label="说明" prop="description">
-        <el-input v-model="dataForm.description" type="textarea" :rows="6" />
+        <el-input v-model="dataForm.description" type="textarea" :rows="3" />
       </el-form-item>
     </el-form>
     <span slot="footer" class="dialog-footer">

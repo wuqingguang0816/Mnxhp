@@ -71,9 +71,9 @@
                     <el-dropdown-item
                       @click.native="handlePreview(scope.row.id, scope.row.fullName)">预览
                     </el-dropdown-item>
+                    <el-dropdown-item @click.native="handleCopy(scope.row.id)">复制</el-dropdown-item>
                     <el-dropdown-item @click.native="handleExport(scope.row.id)">导出
                     </el-dropdown-item>
-                    <el-dropdown-item @click.native="handleCopy(scope.row.id)">复制</el-dropdown-item>
                   </el-dropdown-menu>
                 </el-dropdown>
               </tableOpts>

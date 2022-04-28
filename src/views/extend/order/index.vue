@@ -45,8 +45,7 @@
             <template slot-scope="props">
               <el-tabs v-model="props.row.activeName">
                 <el-tab-pane label="订单商品">
-                  <el-table :data="props.row.childTable" stripe size='mini' show-summary
-                    :element-loading-text="$t('common.loadingText')">
+                  <el-table :data="props.row.childTable" stripe size='mini' show-summary>
                     <el-table-column prop="goodsName" label="商品名称" />
                     <el-table-column prop="specifications" label="规格型号" width="80" />
                     <el-table-column prop="unit" label="单位" width="80" />
@@ -60,8 +59,7 @@
                   </el-table>
                 </el-tab-pane>
                 <el-tab-pane label="收款计划">
-                  <el-table :data="props.row.childTable1" stripe size='mini' show-summary
-                    :element-loading-text="$t('common.loadingText')">
+                  <el-table :data="props.row.childTable1" stripe size='mini' show-summary>
                     <el-table-column prop="receivableDate" label="收款日期"
                       :formatter="jnpf.tableDateFormat" width="120" />
                     <el-table-column prop="receivableRate" label="收款比率%" width="100" />
@@ -87,8 +85,8 @@
               <el-tag v-if="scope.row.currentState==1">等待审核</el-tag>
               <el-tag type="success" v-else-if="scope.row.currentState==2">审核通过</el-tag>
               <el-tag type="danger" v-else-if="scope.row.currentState==3">审核驳回</el-tag>
-              <el-tag type="danger" v-else-if="scope.row.currentState==4">流程撤回</el-tag>
-              <el-tag type="warning" v-else-if="scope.row.currentState==5">审核终止</el-tag>
+              <el-tag type="warning" v-else-if="scope.row.currentState==4">流程撤回</el-tag>
+              <el-tag type="info" v-else-if="scope.row.currentState==5">审核终止</el-tag>
               <el-tag type="info" v-else>等待提交</el-tag>
             </template>
           </el-table-column>

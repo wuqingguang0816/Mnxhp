@@ -10,7 +10,7 @@
           <el-button @click="goBack">{{$t('common.cancelButton')}} </el-button>
         </div>
       </div>
-      <div class="main" v-loading="formLoading" :element-loading-text="$t('common.loadingText')">
+      <div class="main" v-loading="formLoading">
         <el-form ref="dataForm" :model="dataForm" :rules="dataRule" label-width="80px">
           <div class="JNPF-common-title mb-20">
             <h2 class="bold">基础信息</h2>
@@ -93,7 +93,7 @@
             </el-col>
             <el-col :span="24">
               <el-form-item label="说明" prop="description">
-                <el-input v-model="dataForm.description" type="textarea" :rows="6" />
+                <el-input v-model="dataForm.description" type="textarea" :rows="3" />
               </el-form-item>
             </el-col>
           </el-row>
@@ -187,7 +187,7 @@
             </el-col>
             <el-col :span="24">
               <el-form-item label="通讯地址" prop="postalAddress">
-                <el-input v-model="dataForm.postalAddress" type="textarea" :rows="6" />
+                <el-input v-model="dataForm.postalAddress" type="textarea" :rows="3" />
               </el-form-item>
             </el-col>
           </el-row>
@@ -223,7 +223,7 @@ export default {
         description: '',
         headIcon: '',
         gender: null,
-        nationId: '',
+        nation: '',
         nativePlace: '',
         entryDate: null,
         certificatesType: '',

@@ -47,14 +47,14 @@
             </div>
             <JNPF-table v-loading="listLoading" :data="treeList" row-key="id" v-if="refreshTable"
               :default-expand-all="expands" :tree-props="{children: 'children', hasChildren: ''}">
-              <el-table-column label="菜单名称" prop="fullName" width="260" />
+              <el-table-column prop="fullName" label="菜单名称" width="260" />
               <el-table-column prop="urlAddress" label="菜单地址" show-overflow-tooltip />
-              <el-table-column label="图标" prop="icon" width="50" align="center">
+              <el-table-column prop="icon" label="图标" width="50" align="center">
                 <template slot-scope="scope">
                   <i :class="scope.row.icon+' table-icon'" />
                 </template>
               </el-table-column>
-              <el-table-column label="类型" width="70" align="center">
+              <el-table-column prop="type" label="类型" width="70" align="center">
                 <template slot-scope="scope">
                   <span v-if="scope.row.type === 1">目录</span>
                   <span v-if="scope.row.type === 2">页面</span>
@@ -67,7 +67,7 @@
                 </template>
               </el-table-column>
               <el-table-column prop="sortCode" label="排序" width="70" align="center" />
-              <el-table-column label="状态" width="70" align="center">
+              <el-table-column prop="enabledMark" label="状态" width="70" align="center">
                 <template slot-scope="scope">
                   <el-tag :type="scope.row.enabledMark == 1 ? 'success' : 'danger'"
                     disable-transitions>
@@ -94,13 +94,13 @@
                               @click.native="handleColumnAuthorize(scope.row)">
                               列表权限
                             </el-dropdown-item>
-                            <el-dropdown-item v-if="scope.row.isFormAuthorize === 1"
-                              @click.native="handleFormAuthorize(scope.row)">
-                              表单权限
-                            </el-dropdown-item>
                             <el-dropdown-item v-if="scope.row.isDataAuthorize === 1"
                               @click.native="handleDataAuthorize(scope.row)">
                               数据权限
+                            </el-dropdown-item>
+                            <el-dropdown-item v-if="scope.row.isFormAuthorize === 1"
+                              @click.native="handleFormAuthorize(scope.row)">
+                              表单权限
                             </el-dropdown-item>
                           </template>
                           <el-dropdown-item @click.native="exportMenu(scope.row.id)">

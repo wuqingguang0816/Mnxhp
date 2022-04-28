@@ -31,19 +31,19 @@
           </div>
         </div>
         <JNPF-table v-loading="listLoading" :data="list" @cell-click="tabClick">
-          <el-table-column label="项目名称" width="200">
+          <el-table-column prop="projectName" label="项目名称" width="200">
             <template slot-scope="scope">
               <el-input v-model="scope.row.projectName" v-if="tabClickId==scope.row.id"></el-input>
               <span v-else>{{scope.row.projectName}}</span>
             </template>
           </el-table-column>
-          <el-table-column label="项目编码" width="160">
+          <el-table-column prop="projectCode" label="项目编码" width="160">
             <template slot-scope="scope">
               <el-input v-model="scope.row.projectCode" v-if="tabClickId==scope.row.id"></el-input>
               <span v-else>{{scope.row.projectCode}}</span>
             </template>
           </el-table-column>
-          <el-table-column label="项目类型" width="180">
+          <el-table-column prop="projectType" label="项目类型" width="180">
             <template slot-scope="scope">
               <el-select v-model="scope.row.projectType" v-if="tabClickId==scope.row.id">
                 <el-option v-for="item in industryTypeList" :key="item.id" :label="item.fullName"
@@ -53,31 +53,31 @@
               <span v-else>{{scope.row.projectType | getTypeText(industryTypeList)}}</span>
             </template>
           </el-table-column>
-          <el-table-column label="项目阶段" width="120">
+          <el-table-column prop="projectPhase" label="项目阶段" width="120">
             <template slot-scope="scope">
               <el-input v-model="scope.row.projectPhase" v-if="tabClickId==scope.row.id"></el-input>
               <span v-else>{{scope.row.projectPhase}}</span>
             </template>
           </el-table-column>
-          <el-table-column label="客户名称" width="200">
+          <el-table-column prop="customerName" label="客户名称" width="200">
             <template slot-scope="scope">
               <el-input v-model="scope.row.customerName" v-if="tabClickId==scope.row.id"></el-input>
               <span v-else>{{scope.row.customerName}}</span>
             </template>
           </el-table-column>
-          <el-table-column label="负责人" width="100">
+          <el-table-column prop="principal" label="负责人" width="100">
             <template slot-scope="scope">
               <el-input v-model="scope.row.principal" v-if="tabClickId==scope.row.id"></el-input>
               <span v-else>{{scope.row.principal}}</span>
             </template>
           </el-table-column>
-          <el-table-column label="立项人" width="100">
+          <el-table-column prop="jackStands" label="立项人" width="100">
             <template slot-scope="scope">
               <el-input v-model="scope.row.jackStands" v-if="tabClickId==scope.row.id"></el-input>
               <span v-else>{{scope.row.jackStands}}</span>
             </template>
           </el-table-column>
-          <el-table-column label="交互时间" width="230">
+          <el-table-column prop="interactionDate" label="交互时间" width="230">
             <template slot-scope="scope">
               <el-date-picker v-model="scope.row.interactionDate" type="date" :editable="false"
                 :clearable="false" value-format="timestamp" format="yyyy-MM-dd"
@@ -85,19 +85,19 @@
               <span v-else>{{scope.row.interactionDate | toDate("yyyy-MM-dd")}}</span>
             </template>
           </el-table-column>
-          <el-table-column label="费用金额" width="100">
+          <el-table-column prop="costAmount" label="费用金额" width="100">
             <template slot-scope="scope">
               <el-input v-model="scope.row.costAmount" v-if="tabClickId==scope.row.id"></el-input>
               <span v-else>{{scope.row.costAmount}}</span>
             </template>
           </el-table-column>
-          <el-table-column label="已用金额" width="100">
+          <el-table-column prop="tunesAmount" label="已用金额" width="100">
             <template slot-scope="scope">
               <el-input v-model="scope.row.tunesAmount" v-if="tabClickId==scope.row.id"></el-input>
               <span v-else>{{scope.row.tunesAmount}}</span>
             </template>
           </el-table-column>
-          <el-table-column label="预计收入" width="100">
+          <el-table-column prop="projectedIncome" label="预计收入" width="100">
             <template slot-scope="scope">
               <el-input v-model="scope.row.projectedIncome" v-if="tabClickId==scope.row.id">
               </el-input>
@@ -105,12 +105,12 @@
             </template>
           </el-table-column>
           <el-table-column prop="registrant" label="登记人" width="80" show-overflow-tooltip />
-          <el-table-column label="登记时间" width="120">
+          <el-table-column prop="registerDate" label="登记时间" width="120">
             <template slot-scope="scope">
               {{ scope.row.registerDate | toDate() }}
             </template>
           </el-table-column>
-          <el-table-column label="备注" width="300">
+          <el-table-column prop="description" label="备注" width="300">
             <template slot-scope="scope">
               <el-input v-model="scope.row.description" v-if="tabClickId==scope.row.id"></el-input>
               <span v-else>{{scope.row.description}}</span>

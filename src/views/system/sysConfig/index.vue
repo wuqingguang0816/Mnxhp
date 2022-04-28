@@ -145,7 +145,7 @@
         </el-tab-pane>
         <el-tab-pane label="第三方设置" name="third">
           <el-tabs tab-position="left" style="height:100%" v-model="thirdTab" class="thirdTab">
-            <el-tab-pane label="短信">
+            <el-tab-pane label="短信配置">
               <el-alert title="注意：请在短信厂家官网网站开通申请" type="warning" :closable="false" show-icon />
               <el-row style="margin-top: 15px">
                 <el-col :span="12">
@@ -361,7 +361,7 @@
             </el-tab-pane>
           </el-tabs>
         </el-tab-pane>
-        <el-tab-pane label="超级管理员" name="fourth">
+        <el-tab-pane label="管理员设置" name="fourth">
           <el-alert title="注意：设为超级管理员后该用户拥有系统最高权限" type="warning" :closable="false" show-icon />
           <el-row :gutter="20" style="margin-top: 15px">
             <el-col :span="12">

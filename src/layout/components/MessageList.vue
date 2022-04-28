@@ -112,7 +112,8 @@ export default {
         } else {
           if (!res.data.bodyText) return
           this.drawer = false
-          this.$router.push('/workFlowDetail?config=' + res.data.bodyText)
+          const Base64 = require('js-base64').Base64
+          this.$router.push('/workFlowDetail?config=' + encodeURIComponent(Base64.encode(res.data.bodyText)))
         }
       })
     },

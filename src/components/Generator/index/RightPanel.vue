@@ -937,33 +937,38 @@ export default {
     height: 100%;
   }
 }
-
+>>> .select-item,
 .select-item {
   display: flex;
   border: 1px dashed #fff;
   box-sizing: border-box;
-  & .close-btn {
-    cursor: pointer;
-    color: #f56c6c;
-  }
   & .el-input + .el-input {
     margin-left: 4px;
   }
-}
-.select-item + .select-item {
-  margin-top: 4px;
-}
-.select-item.sortable-chosen {
-  border: 1px dashed #409eff;
-}
-.select-line-icon {
-  line-height: 32px;
-  font-size: 22px;
-  padding: 0 4px;
-  color: #777;
-}
-.option-drag {
-  cursor: move;
+  & + .select-item {
+    margin-top: 4px;
+  }
+  &.sortable-chosen {
+    border: 1px dashed #409eff;
+  }
+  .select-line-icon {
+    line-height: 32px;
+    font-size: 22px;
+    padding: 0 4px;
+    color: #606266;
+    .icon-ym-darg {
+      font-size: 20px;
+      line-height: 31px;
+      display: inline-block;
+    }
+  }
+  .close-btn {
+    cursor: pointer;
+    color: #f56c6c;
+  }
+  .option-drag {
+    cursor: move;
+  }
 }
 .time-range {
   .el-date-editor {

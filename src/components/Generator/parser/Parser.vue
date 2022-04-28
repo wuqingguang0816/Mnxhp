@@ -24,7 +24,7 @@ const layouts = {
     if (!config.noShow) {
       return (
         <el-col span={config.span}>
-          <el-form-item label-width={labelWidth} prop={scheme.__vModel__}
+          <el-form-item label-width={labelWidth} prop={scheme.__vModel__} key={config.renderKey}
             label={config.showLabel ? config.label : ''}>
             {Item}
           </el-form-item>

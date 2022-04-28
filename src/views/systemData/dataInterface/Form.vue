@@ -69,7 +69,7 @@
             <el-switch v-model="dataForm.enabledMark" :active-value="1" :inactive-value="0" />
           </el-form-item>
           <el-form-item label="说明" prop="description">
-            <el-input v-model="dataForm.description" type="textarea" :rows="6" />
+            <el-input v-model="dataForm.description" type="textarea" :rows="3" />
           </el-form-item>
         </el-col>
       </el-row>
@@ -84,8 +84,7 @@
           </el-option-group>
         </el-select>
         <div class="box">
-          <el-tree :data="treeData" node-key="index" v-loading="treeLoading"
-            :element-loading-text="$t('common.loadingText')" :props="defaultProps"
+          <el-tree :data="treeData" node-key="index" v-loading="treeLoading" :props="defaultProps"
             @node-click="handleNodeClick" />
         </div>
       </div>

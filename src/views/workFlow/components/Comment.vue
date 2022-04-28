@@ -1,7 +1,7 @@
 <template>
   <div class="comment-container">
     <div class="comment-list" v-loading="listLoading && listQuery.currentPage==1"
-      :element-loading-text="$t('common.loadingText')" ref="infiniteBody">
+      ref="infiniteBody">
       <template v-if="list.length">
         <div v-for="(item,i) in list" :key="i" class="item">
           <div class="head">

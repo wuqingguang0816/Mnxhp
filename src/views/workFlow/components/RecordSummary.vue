@@ -2,8 +2,7 @@
   <el-tabs tab-position="left" style="height: 100%;" v-model="activeTab" class="recordSummary">
     <el-tab-pane label="按部门汇总" name="1"></el-tab-pane>
     <el-tab-pane label="按岗位汇总" name="3"></el-tab-pane>
-    <div class="recordSummary-list" v-loading="loading"
-      :element-loading-text="$t('common.loadingText')">
+    <div class="recordSummary-list" v-loading="loading">
       <template v-if="list.length">
         <el-card class="recordSummary-item" v-for="(item,i) in list" :key="i">
           <div class="recordSummary-item-main">

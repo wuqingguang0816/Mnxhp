@@ -1,6 +1,5 @@
 <template>
-  <div class="dynamicPortal-container" v-loading="loading"
-    :element-loading-text="$t('common.loadingText')">
+  <div class="dynamicPortal-container" v-loading="loading">
     <template v-if="!ajaxing">
       <template v-if="portalId">
         <PortalLayout :layout="layout" v-if="type===0" />

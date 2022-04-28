@@ -32,7 +32,7 @@
         <JNPF-table v-loading="listLoading" :data="list" :span-method="arraySpanMethod" border>
           <el-table-column prop="projectName" label="项目名称" sortable width="200" />
           <el-table-column prop="projectCode" label="项目编码" sortable width="160" />
-          <el-table-column label="项目类型" sortable width="100" prop="projectType">
+          <el-table-column prop="projectType" label="项目类型" sortable width="100">
             <template slot-scope="scope">
               {{ scope.row.projectType | getTypeText(industryTypeList) }}
             </template>
@@ -41,7 +41,7 @@
           <el-table-column prop="customerName" label="客户名称" sortable width="200" />
           <el-table-column prop="principal" label="负责人" sortable width="100" />
           <el-table-column prop="jackStands" label="立项人" sortable width="100" />
-          <el-table-column label="交互时间" sortable width="100" prop="interactionDate">
+          <el-table-column prop="interactionDate" label="交互时间" sortable width="100">
             <template slot-scope="scope">
               {{ scope.row.interactionDate | toDate("yyyy-MM-dd") }}
             </template>
@@ -51,7 +51,7 @@
           <el-table-column prop="projectedIncome" label="预计收入" sortable width="100" />
           <el-table-column prop="registrant" label="登记人" sortable width="100"
             show-overflow-tooltip />
-          <el-table-column label="登记时间" sortable width="120" prop="registerDate">
+          <el-table-column prop="registerDate" label="登记时间" sortable width="120">
             <template slot-scope="scope">
               {{ scope.row.registerDate | toDate() }}
             </template>

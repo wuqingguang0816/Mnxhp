@@ -33,7 +33,7 @@
           </el-table-column>
           <el-table-column prop="label" label="列名" />
           <el-table-column prop="prop" label="字段" />
-          <el-table-column prop="sortable" label="排序" width="60">
+          <el-table-column prop="sortable" label="排序" width="60" align="center">
             <template slot-scope="scope">
               <el-checkbox v-model="scope.row.sortable" />
             </template>
@@ -177,7 +177,7 @@
                 </el-form-item>
               </template>
               <el-divider>按钮配置</el-divider>
-              <p class="mb-10">系统按钮区</p>
+              <p class="btn-cap mb-10">系统按钮区</p>
               <el-checkbox-group v-model="btnsList" class="btnsList">
                 <el-checkbox :label="item.value" v-for="item in btnsOption" :key="item.value">
                   <span class="btn-label">{{ item.value | btnText }}</span>
@@ -191,14 +191,14 @@
                 </el-checkbox>
               </el-checkbox-group>
               <template v-if="modelType==1">
-                <p class="mt-10 mb-10">自定义按钮区</p>
+                <p class="btn-cap mt-10 mb-10">自定义按钮区</p>
                 <div class="custom-btns-list">
                   <draggable :list="columnData.customBtnsList" :animation="340" group="customItem"
                     handle=".option-drag">
                     <div v-for="(item, index) in columnData.customBtnsList" :key="index"
                       class="custom-item">
                       <div class="custom-line-icon option-drag">
-                        <i class="el-icon-s-operation" />
+                        <i class="icon-ym icon-ym-darg" />
                       </div>
                       <p class="custom-line-value">{{item.value}}</p>
                       <el-input v-model="item.label" placeholder="按钮名称" size="small" />
@@ -221,11 +221,11 @@
               <el-form-item label="列表权限">
                 <el-switch v-model="columnData.useColumnPermission"></el-switch>
               </el-form-item>
-              <el-form-item label="表单权限">
-                <el-switch v-model="columnData.useFormPermission"></el-switch>
-              </el-form-item>
               <el-form-item label="数据权限">
                 <el-switch v-model="columnData.useDataPermission"></el-switch>
+              </el-form-item>
+              <el-form-item label="表单权限">
+                <el-switch v-model="columnData.useFormPermission"></el-switch>
               </el-form-item>
             </el-form>
           </div>
