@@ -1,9 +1,9 @@
 @font-face {
   font-family: "icon-ym";
   /* Project id 3271933 */
-  src: url('iconfont.woff2?t=1650873000708') format('woff2'),
-    url('iconfont.woff?t=1650873000708') format('woff'),
-    url('iconfont.ttf?t=1650873000708') format('truetype');
+  src: url('iconfont.woff2?t=1651125957210') format('woff2'),
+    url('iconfont.woff?t=1651125957210') format('woff'),
+    url('iconfont.ttf?t=1651125957210') format('truetype');
 }
 
 .icon-ym {
@@ -12,6 +12,34 @@
   font-style: normal;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-ym-header-pannel:before {
+  content: "\e7cf";
+}
+
+.icon-ym-search:before {
+  content: "\e804";
+}
+
+.icon-ym-header-message:before {
+  content: "\e810";
+}
+
+.icon-ym-generator-jobs:before {
+  content: "\e819";
+}
+
+.icon-ym-clean:before {
+  content: "\e83e";
+}
+
+.icon-ym-header-IM:before {
+  content: "\e899";
+}
+
+.icon-ym-header-language:before {
+  content: "\e8a3";
 }
 
 .icon-ym-flowDone-app:before {
@@ -50,28 +78,8 @@
   content: "\e809";
 }
 
-.icon-ym-header-pannel:before {
-  content: "\e804";
-}
-
 .icon-ym-xitong:before {
   content: "\e814";
-}
-
-.icon-ym-search:before {
-  content: "\e819";
-}
-
-.icon-ym-header-IM:before {
-  content: "\e83e";
-}
-
-.icon-ym-header-language:before {
-  content: "\e899";
-}
-
-.icon-ym-generator-jobs:before {
-  content: "\e7cf";
 }
 
 .icon-ym-full-screen1:before {
@@ -304,10 +312,6 @@
 
 .icon-ym-highchartsArea:before {
   content: "\e80f";
-}
-
-.icon-ym-header-message:before {
-  content: "\e810";
 }
 
 .icon-ym-highchartsFunnel:before {

@@ -34,7 +34,7 @@
             size="medium">预览</el-button>
           <!-- <el-button icon="el-icon-view" type="text" @click="showJson" size="medium">
             查看json</el-button> -->
-          <el-button class="delete-btn unActive-btn" icon="el-icon-delete" type="text"
+          <el-button class="delete-btn unActive-btn" icon="icon-ym icon-ym-clean" type="text"
             @click="empty" size="medium">清空</el-button>
         </div>
       </div>

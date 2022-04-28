@@ -6,6 +6,55 @@
   "description": "",
   "glyphs": [
     {
+      "icon_id": "29375660",
+      "name": "header-pannel",
+      "font_class": "header-pannel",
+      "unicode": "e7cf",
+      "unicode_decimal": 59343
+    },
+    {
+      "icon_id": "29375661",
+      "name": "search",
+      "font_class": "search",
+      "unicode": "e804",
+      "unicode_decimal": 59396
+    },
+    {
+      "icon_id": "29375662",
+      "name": "header-message",
+      "font_class": "header-message",
+      "unicode": "e810",
+      "unicode_decimal": 59408
+    },
+    {
+      "icon_id": "29375663",
+      "name": "generator-jobs",
+      "font_class": "generator-jobs",
+      "unicode": "e819",
+      "unicode_decimal": 59417
+    },
+    {
+      "icon_id": "29375664",
+      "name": "clean",
+      "font_class": "clean",
+      "unicode": "e83e",
+      "unicode_decimal": 59454
+    },
+    {
+      "icon_id": "29375665",
+      "name": "header-IM",
+      "font_class": "header-IM",
+      "unicode": "e899",
+      "unicode_decimal": 59545
+    },
+    {
+      "icon_id": "29375666",
+      "name": "header-language",
+      "font_class": "header-language",
+      "unicode": "e8a3",
+      "unicode_decimal": 59555
+    },
+    {
       "icon_id": "29279588",
       "name": "flowDone-app",
       "font_class": "flowDone-app",
@@ -69,46 +118,11 @@
       "unicode_decimal": 59401
     },
     {
-      "icon_id": "28943110",
-      "name": "header-pannel",
-      "font_class": "header-pannel",
-      "unicode": "e804",
-      "unicode_decimal": 59396
-    },
-    {
       "icon_id": "28943111",
       "name": "xitong",
       "font_class": "xitong",
       "unicode": "e814",
       "unicode_decimal": 59412
-    },
-    {
-      "icon_id": "28943112",
-      "name": "search",
-      "font_class": "search",
-      "unicode": "e819",
-      "unicode_decimal": 59417
-    },
-    {
-      "icon_id": "28943113",
-      "name": "header-IM",
-      "font_class": "header-IM",
-      "unicode": "e83e",
-      "unicode_decimal": 59454
-    },
-    {
-      "icon_id": "28943114",
-      "name": "header-language",
-      "font_class": "header-language",
-      "unicode": "e899",
-      "unicode_decimal": 59545
-    },
-    {
-      "icon_id": "28934313",
-      "name": "generator-jobs",
-      "font_class": "generator-jobs",
-      "unicode": "e7cf",
-      "unicode_decimal": 59343
     },
     {
       "icon_id": "28934314",
@@ -515,13 +529,6 @@
       "font_class": "highchartsArea",
       "unicode": "e80f",
       "unicode_decimal": 59407
-    },
-    {
-      "icon_id": "28934373",
-      "name": "header-message",
-      "font_class": "header-message",
-      "unicode": "e810",
-      "unicode_decimal": 59408
     },
     {
       "icon_id": "28934374",
