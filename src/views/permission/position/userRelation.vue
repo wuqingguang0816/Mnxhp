@@ -5,21 +5,20 @@
     <div class="transfer__body" v-loading="allLoading">
       <div class="transfer-pane">
         <div class="transfer-pane__tools">
-          <el-input placeholder="请输入关键词查询" v-model="listQuery.keyword" @keyup.enter.native="search"
-            clearable class="search-input">
+          <el-input placeholder="请输入关键词查询" v-model="keyword" @keyup.enter.native="search" clearable
+            class="search-input">
             <el-button slot="append" icon="el-icon-search" @click="search"></el-button>
           </el-input>
         </div>
         <div class="transfer-pane__body left-pane">
-          <div class="single-list">
-            <template v-if="list.length">
-              <div v-for="(item, index) in list" :key="index" class="selected-item"
-                @click="handleNodeClick(item)">
-                <span>{{item.fullName}}</span>
-              </div>
-            </template>
-            <el-empty description="暂无数据" :image-size="120" v-else></el-empty>
-          </div>
+          <el-tree :data="treeData" :props="props" check-on-click-node @node-click="handleNodeClick"
+            class="JNPF-common-el-tree" node-key="id" v-loading="loading" default-expand-all
+            :filter-node-method="filterNode" ref="tree">
+            <span class="custom-tree-node" slot-scope="{ node, data }">
+              <i :class="data.icon"></i>
+              <span class="text">{{node.label}}</span>
+            </span>
+          </el-tree>
         </div>
       </div>
       <div class="transfer-pane">
@@ -47,12 +46,13 @@
 </template>
 <script>
 import { getUserRelationList, createUserRelation } from '@/api/permission/userRelation'
-import { getUserInfoList, getOrganization } from '@/api/permission/user'
+import { getUserInfoList, getUsersByPositionId } from '@/api/permission/user'
 
 export default {
   data() {
     return {
       visible: false,
+      loading: false,
       btnLoading: false,
       allLoading: false,
       pageTitle: '',
@@ -61,23 +61,24 @@ export default {
         objectType: 'Position',
         userIds: []
       },
-      list: [],
+      treeData: [],
       selectedData: [],
-      listQuery: {
-        keyword: '',
-        organizeId: ''
+      keyword: '',
+      props: {
+        children: 'children',
+        label: 'fullName',
+        isLeaf: 'isLeaf'
       },
     }
   },
   methods: {
-    init(id, fullName, organizeId) {
+    init(id, fullName) {
       this.visible = true
       this.dataForm.objectId = id
       this.dataForm.userIds = []
       this.list = []
       this.selectedData = []
-      this.listQuery.keyword = ''
-      this.listQuery.organizeId = organizeId || '0'
+      this.keyword = ''
       this.$nextTick(() => {
         this.pageTitle = this.$t(`position.postMember`) + '- ' + fullName
         this.allLoading = true
@@ -96,16 +97,27 @@ export default {
       })
     },
     search() {
-      this.initData()
+      this.$refs.tree && this.$refs.tree.filter(this.keyword)
+    },
+    filterNode(value, data) {
+      if (!value) return true;
+      return data[this.props.label].indexOf(value) !== -1;
     },
     initData() {
-      getOrganization(this.listQuery).then(res => {
-        this.list = res.data
+      this.loading = true
+      getUsersByPositionId({ positionId: this.dataForm.objectId }).then(res => {
+        this.treeData = res.data
+        this.loading = false
       })
     },
-    handleNodeClick(item) {
-      const boo = this.selectedData.some(o => o.id === item.id)
+    handleNodeClick(data) {
+      if (data.type !== 'user') return
+      const boo = this.selectedData.some(o => o.id === data.id)
       if (boo) return
+      const item = {
+        id: data.id,
+        fullName: data.fullName
+      }
       this.selectedData.push(item)
     },
     removeAll() {

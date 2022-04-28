@@ -68,7 +68,7 @@
                   </span>
                   <el-dropdown-menu slot="dropdown">
                     <el-dropdown-item
-                      @click.native="handleUserRelation(scope.row.id, scope.row.fullName,scope.row.organizeId)">
+                      @click.native="handleUserRelation(scope.row.id, scope.row.fullName)">
                       {{$t('position.postMember')}}
                     </el-dropdown-item>
                   </el-dropdown-menu>
@@ -208,10 +208,10 @@ export default {
         })
       }).catch(() => { })
     },
-    handleUserRelation(id, fullName, organizeId) {
+    handleUserRelation(id, fullName) {
       this.userRelationListVisible = true
       this.$nextTick(() => {
-        this.$refs.UserRelationList.init(id, fullName, organizeId)
+        this.$refs.UserRelationList.init(id, fullName)
       })
     }
   }
