@@ -266,6 +266,8 @@ export default {
             text += '【'
             for (let j = 0; j < e.groups.length; j++) {
               let ee = e.groups[j]
+              let item = this.fieldOptions.filter(o => o.id === ee.id)[0]
+                  ee.bindTable = item.bindTable
               if (!ee.field || !ee.id || !ee.op || !ee.value) {
                 this.$message.warning("过滤条件检查出格式错误")
                 conditionValid = false
