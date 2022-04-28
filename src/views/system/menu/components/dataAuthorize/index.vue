@@ -1,28 +1,65 @@
 <template>
   <div>
-    <el-drawer :title="dialogTitle" :visible.sync="dataAuthorizeListDrawer" :wrapperClosable="false"
-      ref="drawer" size="700px" class="JNPF-common-drawer">
+    <el-drawer
+      :title="dialogTitle"
+      :visible.sync="dataAuthorizeListDrawer"
+      :wrapperClosable="false"
+      ref="drawer"
+      size="700px"
+      class="JNPF-common-drawer"
+    >
       <div class="JNPF-flex-main">
-        <el-tabs type="border-card" v-model="tabActiveName" @tab-click="handleClick"
-          class="JNPF-flex-tabs">
+        <el-tabs
+          type="border-card"
+          v-model="tabActiveName"
+          @tab-click="handleClick"
+          class="JNPF-flex-tabs"
+        >
           <el-tab-pane label="方案管理" name="dataAuthorizeScheme">
             <div class="JNPF-common-head">
-              <topOpts @add="addOrUpdateHandle('')" />
+              <topOpts @add="addOrUpdateHandle('')">
+                <el-dropdown style="margin-left: 10px">
+                  <el-button icon="el-icon-plus" :loading="loading" type="text">
+                    常用方案<i class="el-icon-arrow-down el-icon--right"></i>
+                  </el-button>
+                  <el-dropdown-menu slot="dropdown">
+                    <el-dropdown-item @click.native="addHandle('allData')"
+                      >全部数据</el-dropdown-item
+                    >
+                  </el-dropdown-menu>
+                </el-dropdown>
+              </topOpts>
               <div class="JNPF-common-head-right">
-                <el-tooltip effect="dark" :content="$t('common.refresh')" placement="top">
-                  <el-link icon="icon-ym icon-ym-Refresh
-                  JNPF-common-head-icon" :underline="false" @click="getAuthorizeSchemeList()" />
+                <el-tooltip
+                  effect="dark"
+                  :content="$t('common.refresh')"
+                  placement="top"
+                >
+                  <el-link
+                    icon="icon-ym icon-ym-Refresh
+                  JNPF-common-head-icon"
+                    :underline="false"
+                    @click="getAuthorizeSchemeList()"
+                  />
                 </el-tooltip>
               </div>
             </div>
-            <JNPF-table v-loading="listLoading" :data="dataAuthorizeSchemeList" row-key="id"
-              default-expand-all :tree-props="{ children: 'children', hasChildren: '' }">
+            <JNPF-table
+              v-loading="listLoading"
+              :data="dataAuthorizeSchemeList"
+              row-key="id"
+              default-expand-all
+              :tree-props="{ children: 'children', hasChildren: '' }"
+            >
               <el-table-column prop="fullName" label="方案名称" width="160" />
               <el-table-column prop="conditionText" label="过滤条件" />
               <el-table-column label="操作" width="100">
                 <template slot-scope="scope">
-                  <tableOpts @edit="addOrUpdateHandle(scope.row.id)"
-                    @del="handleDel(scope.row.id)" />
+                  <tableOpts
+                    :editDisabled="scope.row.enCode === 'jnpf_alldata'"
+                    @edit="addOrUpdateHandle(scope.row.id)"
+                    @del="handleDel(scope.row.id)"
+                  />
                 </template>
               </el-table-column>
             </JNPF-table>
@@ -30,39 +67,90 @@
           <el-tab-pane label="字段管理" name="dataAuthorize">
             <div class="JNPF-common-head">
               <topOpts @add="addOrUpdateHandle('')">
-                <el-button v-if="menuType === 2" type="text" icon="icon-ym icon-ym-dbLink"
-                  @click="addDataConnect" class="btn-sty">
+                <el-button
+                  v-if="menuType === 2"
+                  type="text"
+                  icon="icon-ym icon-ym-dbLink"
+                  @click="addDataConnect"
+                  class="btn-sty"
+                >
                   数据连接
                 </el-button>
               </topOpts>
               <div class="JNPF-common-head-right">
-                <el-tooltip effect="dark" :content="$t('common.refresh')" placement="top">
-                  <el-link icon="icon-ym icon-ym-Refresh
-                  JNPF-common-head-icon" :underline="false" @click="getAuthorizeList()" />
+                <el-tooltip
+                  effect="dark"
+                  :content="$t('common.refresh')"
+                  placement="top"
+                >
+                  <el-link
+                    icon="icon-ym icon-ym-Refresh
+                  JNPF-common-head-icon"
+                    :underline="false"
+                    @click="getAuthorizeList()"
+                  />
                 </el-tooltip>
               </div>
             </div>
-            <JNPF-table v-loading="dataListLoading" :data="dataAuthorizeList" row-key="id"
-              default-expand-all :tree-props="{ children: 'children', hasChildren: '' }">
-              <el-table-column prop="bindTable" label="数据库表" width="120" v-if="menuType == 2"/>
+            <JNPF-table
+              v-loading="dataListLoading"
+              :data="dataAuthorizeList"
+              row-key="id"
+              default-expand-all
+              :tree-props="{ children: 'children', hasChildren: '' }"
+            >
+              <el-table-column
+                prop="bindTable"
+                label="数据库表"
+                width="120"
+                v-if="menuType == 2"
+              />
               <el-table-column prop="enCode" label="字段名称" />
-              <el-table-column prop="fullName" label="字段说明" show-overflow-tooltip />
+              <el-table-column
+                prop="fullName"
+                label="字段说明"
+                show-overflow-tooltip
+              />
               <el-table-column prop="type" label="字段类型" width="70" />
-              <el-table-column prop="conditionSymbolName" label="条件符号" show-overflow-tooltip />
-              <el-table-column prop="conditionText" label="条件内容" width="120">
+              <el-table-column
+                prop="conditionSymbolName"
+                label="条件符号"
+                show-overflow-tooltip
+              />
+              <el-table-column
+                prop="conditionText"
+                label="条件内容"
+                width="120"
+              >
                 <template slot-scope="scope">
-                  <span v-if="scope.row.conditionText === 'text'">任意文本</span>
-                  <span v-if="scope.row.conditionText === '@userId'">当前用户</span>
-                  <span v-if="scope.row.conditionText === '@organizeId'">当前组织</span>
+                  <span v-if="scope.row.conditionText === 'text'"
+                    >任意文本</span
+                  >
+                  <span v-if="scope.row.conditionText === '@userId'"
+                    >当前用户</span
+                  >
+                  <span v-if="scope.row.conditionText === '@organizeId'"
+                    >当前组织</span
+                  >
                   <span
-                    v-if="scope.row.conditionText ==='@organizationAndSuborganization'">当前组织及子组织</span>
-                  <span v-if="scope.row.conditionText === '@userAraSubordinates'">当前用户及下属</span>
+                    v-if="
+                      scope.row.conditionText ===
+                        '@organizationAndSuborganization'
+                    "
+                    >当前组织及子组织</span
+                  >
+                  <span
+                    v-if="scope.row.conditionText === '@userAraSubordinates'"
+                    >当前用户及下属</span
+                  >
                 </template>
               </el-table-column>
               <el-table-column label="操作" width="100">
                 <template slot-scope="scope">
-                  <tableOpts @edit="addOrUpdateHandle(scope.row.id)"
-                    @del="handleDel(scope.row.id)" />
+                  <tableOpts
+                    @edit="addOrUpdateHandle(scope.row.id)"
+                    @del="handleDel(scope.row.id)"
+                  />
                 </template>
               </el-table-column>
             </JNPF-table>
@@ -73,12 +161,21 @@
         <el-button @click="visible = false">关闭</el-button>
       </span>
     </el-drawer>
-    <DataSchemeForm v-if="dataSchemeFormVisible" ref="DataSchemeForm"
-      @refreshDataList="getAuthorizeSchemeList" />
-    <DataAuthorizeForm v-if="dataAuthorizeFormVisible" ref="DataAuthorizeForm"
-      @refreshDataList="getAuthorizeList" />
-    <DataConnectForm v-if="dataConnectFormVisible" ref="DataConnectForm"
-      @refreshDataList="getConnectList" />
+    <DataSchemeForm
+      v-if="dataSchemeFormVisible"
+      ref="DataSchemeForm"
+      @refreshDataList="getAuthorizeSchemeList"
+    />
+    <DataAuthorizeForm
+      v-if="dataAuthorizeFormVisible"
+      ref="DataAuthorizeForm"
+      @refreshDataList="getAuthorizeList"
+    />
+    <DataConnectForm
+      v-if="dataConnectFormVisible"
+      ref="DataConnectForm"
+      @refreshDataList="getConnectList"
+    />
   </div>
 </template>
 <script>
@@ -86,7 +183,8 @@ import {
   getDataAuthorizeSchemeList,
   getDataAuthorizeList,
   delDataScheme,
-  delDataAuthorize
+  delDataAuthorize,
+  createDataScheme
 } from "@/api/system/dataAuthorize";
 import { getFieldNameList } from "@/api/system/menu";
 import { getDataSourceListAll } from "@/api/systemData/dataSource";
@@ -117,7 +215,7 @@ export default {
       menuType: 2,
       dbOptions: [],
       dbList: [],
-      tableName: ''
+      tableName: ""
     };
   },
   methods: {
@@ -138,13 +236,13 @@ export default {
         this.getAuthorizeSchemeList();
       });
       if (this.menuType === 3) {
-        getFieldNameList(this.moduleId, 'DataAuthorize').then(res => {
+        getFieldNameList(this.moduleId, "DataAuthorize").then(res => {
           this.dbList = res.data || [];
         });
       }
     },
     getConnectList(data, tableName) {
-      this.tableName = tableName || ''
+      this.tableName = tableName || "";
       this.dbList = data;
     },
     getAuthorizeSchemeList() {
@@ -241,6 +339,39 @@ export default {
         });
       }
     },
+    addHandle() {
+      let isAllData = this.dataAuthorizeSchemeList.filter(
+        o => o.enCode === "jnpf_alldata"
+      );
+      if (!!isAllData.length)
+        return this.$message({
+          message: "该方案已新增，不可重复添加",
+          type: "error",
+          duration: 1500
+        });
+      if (this.tabActiveName === "dataAuthorizeScheme") {
+        let data = {
+          moduleId: this.moduleId,
+          enCode: "jnpf_alldata",
+          fullName: "全部数据"
+        };
+        createDataScheme(data)
+          .then(res => {
+            this.$message({
+              message: res.msg,
+              type: "success",
+              duration: 1500,
+              onClose: () => {
+                this.btnLoading = false;
+              }
+            });
+            this.getAuthorizeSchemeList();
+          })
+          .catch(() => {
+            this.btnLoading = false;
+          });
+      }
+    },
     handleDel(id) {
       this.$confirm(this.$t("common.delTip"), this.$t("common.tipTitle"), {
         type: "warning"
@@ -261,7 +392,7 @@ export default {
             });
           });
         })
-        .catch(() => { });
+        .catch(() => {});
     }
   }
 };
@@ -276,11 +407,11 @@ export default {
     }
   }
 }
-.btn-sty{
+.btn-sty {
   vertical-align: top;
-    /* height: 33px; */
-    line-height: 29px;
-    padding: 0;
+  /* height: 33px; */
+  line-height: 29px;
+  padding: 0;
 }
 .JNPF-flex-tabs {
   height: 100%;

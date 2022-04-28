@@ -15,7 +15,9 @@
           [
             {
               "fullName":"名称",
-              "enCode":"fullName"
+              "enCode":"fullName",
+              "bindTable":"数据库表名",
+              "fieldRule":"字段规则"
             }
           ]
         </pre>
