@@ -1914,7 +1914,8 @@ export default {
     */
     initApproverNodeData() {
       this.activeName = 'config'
-      Object.assign(this.approverForm, this.value.properties)
+      let properties = JSON.parse(JSON.stringify(this.value.properties))
+      this.approverForm = { ...this.approverForm, ...properties }
       this.getNodeOption()
       this.approverForm.formOperates = this.initFormOperates(this.value)
       this.approverForm.approveMsgConfig.on = typeof this.approverForm.approveMsgConfig.on === 'number' ? this.approverForm.approveMsgConfig.on : 2
@@ -1923,7 +1924,8 @@ export default {
     initSubFlowData() {
       this.getFlowOptions()
       this.getNodeOption()
-      Object.assign(this.subFlowForm, this.value.properties)
+      let properties = JSON.parse(JSON.stringify(this.value.properties))
+      Object.assign(this.subFlowForm, properties)
       this.subFlowForm.launchMsgConfig.on = typeof this.subFlowForm.launchMsgConfig.on === 'number' ? this.subFlowForm.launchMsgConfig.on : 0
     },
     openRuleBox() {
