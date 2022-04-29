@@ -6,6 +6,27 @@
   "description": "",
   "glyphs": [
     {
+      "icon_id": "29420127",
+      "name": "yingyong",
+      "font_class": "yingyong",
+      "unicode": "e81e",
+      "unicode_decimal": 59422
+    },
+    {
+      "icon_id": "29420128",
+      "name": "generator-section",
+      "font_class": "generator-section",
+      "unicode": "e853",
+      "unicode_decimal": 59475
+    },
+    {
+      "icon_id": "29420129",
+      "name": "lianxi",
+      "font_class": "lianxi",
+      "unicode": "e873",
+      "unicode_decimal": 59507
+    },
+    {
       "icon_id": "29418546",
       "name": "bigScreenExampl",
       "font_class": "bigScreenExampl",
@@ -256,13 +277,6 @@
       "font_class": "wf-finishedProduct",
       "unicode": "e852",
       "unicode_decimal": 59474
-    },
-    {
-      "icon_id": "29418582",
-      "name": "yingyong",
-      "font_class": "yingyong",
-      "unicode": "e853",
-      "unicode_decimal": 59475
     },
     {
       "icon_id": "29418583",
@@ -1012,13 +1026,6 @@
       "font_class": "group",
       "unicode": "e81d",
       "unicode_decimal": 59421
-    },
-    {
-      "icon_id": "28934387",
-      "name": "lianxi",
-      "font_class": "lianxi",
-      "unicode": "e81e",
-      "unicode_decimal": 59422
     },
     {
       "icon_id": "28934389",
@@ -2951,13 +2958,6 @@
       "font_class": "tree-organization1",
       "unicode": "e82e",
       "unicode_decimal": 59438
-    },
-    {
-      "icon_id": "17615278",
-      "name": "generator-section",
-      "font_class": "generator-section",
-      "unicode": "e873",
-      "unicode_decimal": 59507
     },
     {
       "icon_id": "17615283",

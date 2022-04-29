@@ -1,9 +1,9 @@
 @font-face {
   font-family: "icon-ym";
   /* Project id 3271933 */
-  src: url('iconfont.woff2?t=1651223627113') format('woff2'),
-    url('iconfont.woff?t=1651223627113') format('woff'),
-    url('iconfont.ttf?t=1651223627113') format('truetype');
+  src: url('iconfont.woff2?t=1651226621534') format('woff2'),
+    url('iconfont.woff?t=1651226621534') format('woff'),
+    url('iconfont.ttf?t=1651226621534') format('truetype');
 }
 
 .icon-ym {
@@ -12,6 +12,18 @@
   font-style: normal;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-ym-yingyong:before {
+  content: "\e81e";
+}
+
+.icon-ym-generator-section:before {
+  content: "\e853";
+}
+
+.icon-ym-lianxi:before {
+  content: "\e873";
 }
 
 .icon-ym-bigScreenExampl:before {
@@ -156,10 +168,6 @@
 
 .icon-ym-wf-finishedProduct:before {
   content: "\e852";
-}
-
-.icon-ym-yingyong:before {
-  content: "\e853";
 }
 
 .icon-ym-reportExample:before {
@@ -588,10 +596,6 @@
 
 .icon-ym-group:before {
   content: "\e81d";
-}
-
-.icon-ym-lianxi:before {
-  content: "\e81e";
 }
 
 .icon-ym-nav-close:before {
@@ -1696,10 +1700,6 @@
 
 .icon-ym-tree-organization1:before {
   content: "\e82e";
-}
-
-.icon-ym-generator-section:before {
-  content: "\e873";
 }
 
 .icon-ym-generator-documents:before {
