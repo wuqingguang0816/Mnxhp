@@ -30,3 +30,11 @@ export const setColumnsByModuleId = (data) => {
     data
   })
 }
+// 分片组装
+export const chunkMerge = (data) => {
+  return request({
+    url: `/api/file/merge`,
+    method: 'POST',
+    data
+  })
+}
