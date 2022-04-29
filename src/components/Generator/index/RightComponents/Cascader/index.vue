@@ -53,13 +53,16 @@
             @change="propsUrlChange" clearable />
         </el-form-item>
         <el-form-item label="存储字段">
-          <el-input v-model="activeData.props.props.value" placeholder="请输入存储字段" />
+          <el-input v-model="activeData.props.props.value" placeholder="请输入存储字段"
+            @change="onChange" />
         </el-form-item>
         <el-form-item label="显示字段">
-          <el-input v-model="activeData.props.props.label" placeholder="请输入显示字段" />
+          <el-input v-model="activeData.props.props.label" placeholder="请输入显示字段"
+            @change="onChange" />
         </el-form-item>
         <el-form-item label="子级字段">
-          <el-input v-model="activeData.props.props.children" placeholder="请输入子级字段" />
+          <el-input v-model="activeData.props.props.children" placeholder="请输入子级字段"
+            @change="onChange" />
         </el-form-item>
       </template>
       <el-divider />

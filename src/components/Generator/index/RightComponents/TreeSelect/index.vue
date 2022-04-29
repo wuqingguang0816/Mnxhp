@@ -9,7 +9,7 @@
     <el-form-item label="默认值">
       <JNPF-TreeSelect :options="activeData.options" v-model="activeData.__config__.defaultValue"
         placeholder="选择默认值" clearable :multiple="activeData.multiple"
-        :props="activeData.props.props" />
+        :props="activeData.props.props" :key="renderKey" />
     </el-form-item>
     <template>
       <el-divider>数据选项</el-divider>
@@ -50,13 +50,16 @@
             @change="propsUrlChange" clearable />
         </el-form-item>
         <el-form-item label="存储字段">
-          <el-input v-model="activeData.props.props.value" placeholder="请输入存储字段" />
+          <el-input v-model="activeData.props.props.value" placeholder="请输入存储字段"
+            @change="onChange" />
         </el-form-item>
         <el-form-item label="显示字段">
-          <el-input v-model="activeData.props.props.label" placeholder="请输入显示字段" />
+          <el-input v-model="activeData.props.props.label" placeholder="请输入显示字段"
+            @change="onChange" />
         </el-form-item>
         <el-form-item label="子级字段">
-          <el-input v-model="activeData.props.props.children" placeholder="请输入子级字段" />
+          <el-input v-model="activeData.props.props.children" placeholder="请输入子级字段"
+            @change="onChange" />
         </el-form-item>
       </template>
       <el-divider />
@@ -68,7 +71,7 @@
       <el-switch v-model="activeData.filterable" />
     </el-form-item>
     <el-form-item label="能否多选">
-      <el-switch v-model="activeData.multiple" @change="multipleChange" />
+      <el-switch v-model="activeData.multiple" @change="onChange" />
     </el-form-item>
     <el-form-item label="是否禁用">
       <el-switch v-model="activeData.disabled" />
@@ -99,7 +102,8 @@ export default {
         value: 'id',
         label: 'fullName',
         children: 'children',
-      }
+      },
+      renderKey: +new Date()
     }
   },
   watch: {
@@ -167,8 +171,10 @@ export default {
       const index = children.findIndex(d => d.id === data.id)
       children.splice(index, 1)
     },
-    multipleChange(val) {
-      this.$set(this.activeData.__config__, 'defaultValue', '')
+    onChange() {
+      this.renderKey = +new Date()
+      this.activeData.__config__.renderKey = +new Date()
+      this.activeData.__config__.defaultValue = this.activeData.multiple ? [] : ''
     },
     dataTypeChange(val) {
       this.activeData.__config__.defaultValue = ''
