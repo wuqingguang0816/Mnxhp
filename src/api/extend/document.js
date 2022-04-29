@@ -119,3 +119,11 @@ export function Download(id) {
     method: 'post'
   })
 }
+// 分片组装
+export function documentMerge(data) {
+  return request({
+    url: `/api/extend/Document/merge`,
+    method: 'post',
+    data
+  })
+}

@@ -33,13 +33,9 @@
               </el-col>
             </el-form>
             <div class="JNPF-common-search-box-right">
-              <el-button @click="addFolder()" style="margin-right:10px">新建文件夹</el-button>
-              <el-upload :action="uploadUrl" :headers="uploadHeaders" :on-success="handleSuccess"
-                :data='{parentId: parentId}' multiple :show-file-list="false" class="upload-box"
-                :before-upload="beforeUpload">
-                <el-button type="primary" icon="el-icon-upload2" :loading="receiveing">上传文件
-                </el-button>
-              </el-upload>
+              <el-button @click="addFolder()">新建文件夹</el-button>
+              <el-button type="primary" icon="el-icon-upload2" @click="uploadFile()">上传文件
+              </el-button>
             </div>
           </el-row>
           <JNPF-table v-loading="listLoading" :data="list" empty-text="该文件夹为空" size="mini">
@@ -243,21 +239,21 @@
     </el-tabs>
     <userBox v-if="userBoxVisible" ref="userBox" @refresh="initData" />
     <folderTree v-if="folderTreeVisible" ref="folderTree" @refresh="initData" />
+    <fileUploader ref="fileUploader" :parentId="parentId" @fileSuccess="fileSuccess" />
   </div>
-
 </template>
 
 <script>
 import { AllList, Create, Delete, Download, DocumentInfo, ShareCancel, ShareOutList, ShareTomeList, TrashDelete, TrashList, TrashRecovery, Update } from '@/api/extend/document'
 import userBox from './UserBox'
 import folderTree from './FolderTree'
+import FileUploader from './FileUploader'
 
 export default {
   name: 'extend-document',
-  components: { userBox, folderTree },
+  components: { userBox, folderTree, FileUploader },
   data() {
     return {
-      receiveing: false,
       userBoxVisible: false,
       folderTreeVisible: false,
       detailVisible: false,
@@ -269,9 +265,7 @@ export default {
       levelList: [{
         id: '0',
         fullName: '全部文档'
-      }],
-      uploadUrl: process.env.VUE_APP_BASE_API + '/api/extend/Document/Uploader',
-      uploadHeaders: { Authorization: this.$store.getters.token }
+      }]
     }
   },
   watch: {
@@ -435,24 +429,12 @@ export default {
         }
       }).catch(() => { });
     },
-    handleSuccess(res, file) {
-      this.receiveing = false
-      if (res.code == 200) {
-        this.$message({
-          message: res.msg,
-          type: 'success',
-          duration: 1000
-        })
-        this.reset()
-      } else {
-        this.$message({
-          message: res.msg,
-          type: 'error',
-          duration: 1000
-        })
-      }
+    uploadFile() {
+      this.$refs.fileUploader && this.$refs.fileUploader.openUploader()
     },
-    beforeUpload() { this.receiveing = true },
+    fileSuccess() {
+      this.reset()
+    },
     // 下载文件
     handleDownLoad(id) {
       Download(id).then(res => {
@@ -540,9 +522,6 @@ export default {
     .cursor-pointer {
       cursor: pointer;
     }
-  }
-  .upload-box {
-    display: inline-block;
   }
 }
 </style>

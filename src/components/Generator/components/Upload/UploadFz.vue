@@ -1,48 +1,41 @@
 <template>
   <div class="UploadFile-container">
     <template v-if="!detailed">
-      <el-upload :action="define.comUploadUrl+'/'+type" :headers="uploadHeaders" ref="elUpload"
-        :on-success="handleSuccess" :multiple="limit!==1" :show-file-list="false" :accept="accept"
-        :before-upload="beforeUpload" :on-exceed="handleExceed" :disabled="disabled" :limit="limit">
-        <el-button size="small" icon="el-icon-upload" :disabled="disabled">{{buttonText}}
-        </el-button>
-        <div slot="tip" class="el-upload__tip" v-show="showTip">
-          只能上传不超过{{fileSize}}{{sizeUnit}}的{{acceptText}}文件
-        </div>
-      </el-upload>
+      <el-button size="small" icon="el-icon-upload" @click="uploadFile" :disabled="disabled">
+        {{buttonText}}
+      </el-button>
+      <div class="el-upload__tip" v-if="showTip">
+        只能上传不超过{{fileSize}}{{sizeUnit}}的{{acceptText}}文件
+      </div>
     </template>
     <template v-if="fileList.length">
-      <transition-group class="el-upload-list el-upload-list el-upload-list--text" tag="ul"
-        name="el-list">
+      <ul class="el-upload-list el-upload-list el-upload-list--text">
         <li class="el-upload-list__item is-success" v-for="(file,index) in fileList"
           :key="file.fileId" :class="{'el-upload-list__item_detail':detailed}">
           <a class="el-upload-list__item-name" @click="handleClick(file)">
-            <i class="el-icon-document"></i>{{file.name}}
+            <i class="el-icon-paperclip"></i>{{file.name}}
           </a>
           <i class="el-icon-view" @click="handlePreview(file)"></i>
           <i class="el-icon-download" @click="handleClick(file)"></i>
           <label class="el-upload-list__item-status-label" :class="{'disabled':disabled}">
             <i class="el-icon-upload-success el-icon-circle-check"></i>
           </label>
-          <i class="el-icon-close" v-if="!disabled" @click="handleRemove(file,index)"></i>
+          <i class="el-icon-close" v-if="!disabled" @click="handleRemove(index)"></i>
         </li>
-      </transition-group>
+      </ul>
     </template>
+    <fileUploader ref="fileUploader" v-bind="$props" @fileSuccess="fileSuccess" />
     <Preview :visible.sync="previewVisible" :file="activeFile" />
   </div>
 </template>
 
 <script>
-const units = {
-  KB: 1024,
-  MB: 1024 * 1024,
-  GB: 1024 * 1024 * 1024
-}
 import { getDownloadUrl } from '@/api/common'
 import Preview from './Preview'
+import FileUploader from './vue-simple-uploader/fileUploader'
 export default {
   name: 'UploadFile',
-  components: { Preview },
+  components: { Preview, FileUploader },
   props: {
     value: {
       type: Array,
@@ -82,14 +75,13 @@ export default {
     },
     fileSize: {
       default: 5
-    },
+    }
   },
   data() {
     return {
       fileList: this.value,
       previewVisible: false,
       activeFile: {},
-      uploadHeaders: { Authorization: this.$store.getters.token }
     }
   },
   computed: {
@@ -129,78 +121,14 @@ export default {
       immediate: true,
       handler(val) {
         this.fileList = val
-        this.$nextTick(() => {
-          if (!val.length) {
-            this.$refs.elUpload && this.$refs.elUpload.uploadFiles.splice(0)
-          } else {
-            if (!this.$refs.elUpload) return
-            this.$refs.elUpload.uploadFiles = val.map(o => ({
-              ...o,
-              uid: o.fileId
-            }))
-          }
-        })
       }
     }
   },
   methods: {
-    getType(filename) {
-      const index1 = filename.lastIndexOf(".");
-      const index2 = filename.length;
-      const type = filename.substring(index1, index2);
-      return type;
-    },
-    beforeUpload(file) {
-      const unitNum = units[this.sizeUnit];
-      if (!this.fileSize) return true
-      let isRightSize = file.size / unitNum < this.fileSize
-      if (!isRightSize) {
-        this.$message.error(`文件大小超过${this.fileSize}${this.sizeUnit}`)
-        return isRightSize;
-      }
-      let type = ''
-      let isAccept = true
-      if (this.accept === '.xls,.xlsx' || this.accept === '.doc,.docx' || this.accept === '.pdf' || this.accept === '.txt') {
-        type = this.getType(file.name)
-        isAccept = this.accept.indexOf(type) > -1
-      } else if (this.accept === '*') { } else {
-        type = file.type
-        isAccept = new RegExp(this.accept).test(type)
-      }
-      if (!isAccept) {
-        this.$message.error(`请选择${this.acceptText}类型的文件`)
-        return isAccept;
-      }
-      return isRightSize && isAccept;
-    },
-    handleSuccess(res, file, fileList) {
-      if (res.code == 200) {
-        this.fileList.push({
-          name: file.name,
-          fileId: res.data.name,
-          fileVersionId: res.data.fileVersionId,
-          url: res.data.url
-        })
-        this.$emit('input', this.fileList)
-        this.$emit('change', this.fileList)
-      } else {
-        this.$refs.elUpload.uploadFiles.splice(fileList.length - 1, 1)
-        fileList.filter(o => o.uid != file.uid)
-        this.$emit('input', this.fileList)
-        this.$emit('change', this.fileList)
-        this.$message({ message: res.msg, type: 'error', duration: 1500 })
-      }
-    },
-    handleExceed(files, fileList) {
-      this.$message.warning(`当前限制最多可以上传${this.limit}个文件`);
-    },
-    handleRemove(file, index) {
+    handleRemove(index) {
       this.fileList.splice(index, 1)
-      this.$refs.elUpload.uploadFiles.splice(index, 1)
       this.$emit("input", this.fileList)
       this.$emit('change', this.fileList)
-      // this.$confirm(`确定移除${file.name}？`, '提示').then(() => {
-      // }).catch(() => { })
     },
     handleClick(file) {
       // 点击下载文件
@@ -212,11 +140,37 @@ export default {
     handlePreview(file) {
       this.activeFile = file
       this.previewVisible = true
+    },
+    uploadFile() {
+      const isTopLimit = this.limit ? this.value.length >= this.limit : false
+      if (isTopLimit) {
+        this.$message.error(`当前限制最多可以上传${this.limit}个文件`)
+        return false
+      }
+      this.$refs.fileUploader && this.$refs.fileUploader.openUploader()
+    },
+    fileSuccess(data) {
+      const isTopLimit = this.limit ? this.value.length >= this.limit : false
+      if (isTopLimit) {
+        this.$message.error(`当前限制最多可以上传${this.limit}个文件`)
+        return false
+      }
+      this.fileList.push(data)
+      this.$emit('input', this.fileList)
+      this.$emit('change', this.fileList)
     }
   }
 }
 </script>
 <style lang="scss" scoped>
+.UploadFile-container {
+  position: relative;
+  .el-upload__tip {
+    line-height: 1.2;
+    color: #a5a5a5;
+    margin-top: 5px;
+  }
+}
 .el-upload-list__item {
   &.el-upload-list__item_detail:first-child {
     margin-top: 5px !important;
