@@ -90,8 +90,8 @@
               <el-tag type="success" v-else-if="scope.row.status==2">审核通过</el-tag>
               <el-tag type="danger" v-else-if="scope.row.status==3">审核驳回</el-tag>
               <el-tag type="warning" v-else-if="scope.row.status==4">流程撤回</el-tag>
-              <el-tag v-else-if="scope.row.status==5" type="info">审核终止</el-tag>
-              <el-tag v-else type="info">等待提交</el-tag>
+              <el-tag type="info" v-else-if="scope.row.status==5">审核终止</el-tag>
+              <el-tag type="info" v-else>等待提交</el-tag>
             </template>
           </el-table-column>
           <el-table-column prop="completion" label="流程进度" width="150">
@@ -104,13 +104,13 @@
           <el-table-column label="操作" width="150" fixed="right">
             <template slot-scope="scope">
               <el-button size="mini" type="text" @click="toDetail(scope.row,'-1')"
-                :disabled="[1,2,5].indexOf(scope.row.status)>-1">编辑
+                :disabled="[1,2,4,5].indexOf(scope.row.status)>-1">编辑
               </el-button>
               <el-button size="mini" type="text" class="JNPF-table-delBtn"
-                @click="handleDel(scope.$index,scope.row.id)"
-                :disabled="[1,2,3,5].indexOf(scope.row.status)>-1">删除</el-button>
+                @click="handleDel(scope.$index,scope.row.id)" :disabled="!!scope.row.status">删除
+              </el-button>
               <el-button size="mini" type="text" @click="toDetail(scope.row,0)"
-                :disabled="scope.row.status==0">详情
+                :disabled="!scope.row.status">详情
               </el-button>
             </template>
           </el-table-column>

@@ -99,13 +99,13 @@
                 <template v-for="(item, i) in columnBtnsList">
                   <template v-if="item.value=='edit'">
                     <el-button size="mini" type="text" :key="i"
-                      :disabled="config.webType == 3 && [1,2,5].indexOf(scope.row.flowState)>-1"
+                      :disabled="config.webType == 3 && [1,2,4,5].indexOf(scope.row.flowState)>-1"
                       @click="columnBtnsHandel(item.value,scope.row)" v-has="'btn_'+item.value">
                       {{item.label}}</el-button>
                   </template>
                   <template v-else-if="item.value=='remove'">
                     <el-button size="mini" type="text" :key="i" class="JNPF-table-delBtn"
-                      :disabled="config.webType == 3 && [1,2,3,5].indexOf(scope.row.flowState)>-1"
+                      :disabled="config.webType == 3 && !!scope.row.flowState"
                       @click="columnBtnsHandel(item.value,scope.row)" v-has="'btn_'+item.value">
                       {{item.label}}</el-button>
                   </template>
