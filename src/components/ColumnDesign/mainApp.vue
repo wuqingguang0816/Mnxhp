@@ -279,18 +279,25 @@ export default {
     let sortOptions = list1.filter(o => noColumnShowList.indexOf(o.__config__.jnpfKey) < 0)
     this.columnOptions = options.map(o => ({
       label: o.__config__.label,
-      prop: o.__vModel__
+      prop: o.__vModel__,
+      align: 'left',
+      jnpfKey: o.__config__.jnpfKey,
+      sortable: false,
+      width: null
     }));
     this.searchOptions = searchOptions.map(o => ({
       label: o.__config__.label,
       prop: o.__vModel__,
       jnpfKey: o.__config__.jnpfKey,
+      value: '',
       searchType: getSearchType(o),
       ...o
     }));
     this.sortOptions = sortOptions.map(o => ({
       label: o.__config__.label,
-      prop: o.__vModel__
+      prop: o.__vModel__,
+      jnpfKey: o.__config__.jnpfKey,
+      ...o
     }));
     if (typeof this.conf === 'object' && this.conf !== null) {
       this.columnData = Object.assign({}, defaultColumnData, this.conf)

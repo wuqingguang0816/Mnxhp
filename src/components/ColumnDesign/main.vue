@@ -412,7 +412,14 @@ export default {
       sortable: false,
       width: null
     }));
-    this.searchOptions = searchOptions.map(o => ({ ...o, value: '', searchType: getSearchType(o) }));
+    this.searchOptions = searchOptions.map(o => ({
+      label: o.__config__.label,
+      prop: o.__vModel__,
+      jnpfKey: o.__config__.jnpfKey,
+      value: '',
+      searchType: getSearchType(o),
+      ...o
+    }));
     if (typeof this.conf === 'object' && this.conf !== null) {
       this.columnData = Object.assign({}, defaultColumnData, this.conf)
     }
