@@ -1,5 +1,5 @@
 <template>
-  <el-dialog title="预览" class="JNPF-dialog JNPF-dialog_center previewDialog" lock-scroll
+  <el-dialog :title="title" class="JNPF-dialog JNPF-dialog_center previewDialog" lock-scroll
     v-bind="$attrs" v-on="$listeners" width="600px">
     <div class="preview-main">
       <div class="preview-item preview-item-pc" @click="previewPc()">
@@ -17,7 +17,7 @@
     </div>
     <el-dialog :close-on-click-modal="false" :modal-append-to-body="false" append-to-body
       :visible.sync="previewAppVisible" class="JNPF-dialog JNPF-dialog_center code-dialog"
-      title="预览" width="400px" @opened="getQRimg">
+      :title="title" width="400px" @opened="getQRimg">
       <div class="qrcode-img">
         <div id="qrcode" ref="qrCode"></div>
       </div>
@@ -33,6 +33,11 @@ export default {
     return {
       previewAppVisible: false,
       qrCodeText: '',
+    }
+  },
+  computed: {
+    title() {
+      return this.type === 'flow' ? '表单预览' : '预览'
     }
   },
   methods: {
