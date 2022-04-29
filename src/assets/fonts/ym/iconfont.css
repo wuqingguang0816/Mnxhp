@@ -1,9 +1,9 @@
 @font-face {
   font-family: "icon-ym";
   /* Project id 3271933 */
-  src: url('iconfont.woff2?t=1651125957210') format('woff2'),
-    url('iconfont.woff?t=1651125957210') format('woff'),
-    url('iconfont.ttf?t=1651125957210') format('truetype');
+  src: url('iconfont.woff2?t=1651223627113') format('woff2'),
+    url('iconfont.woff?t=1651223627113') format('woff'),
+    url('iconfont.ttf?t=1651223627113') format('truetype');
 }
 
 .icon-ym {
@@ -12,6 +12,250 @@
   font-style: normal;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-ym-bigScreenExampl:before {
+  content: "\e755";
+}
+
+.icon-ym-appForm:before {
+  content: "\e756";
+}
+
+.icon-ym-authorize:before {
+  content: "\e75c";
+}
+
+.icon-ym-dataApplication:before {
+  content: "\e75d";
+}
+
+.icon-ym-dataDictionary:before {
+  content: "\e76c";
+}
+
+.icon-ym-codeGeneration:before {
+  content: "\e76f";
+}
+
+.icon-ym-documentPreviewExample:before {
+  content: "\e77b";
+}
+
+.icon-ym-dataInterface:before {
+  content: "\e78f";
+}
+
+.icon-ym-bigScreenDesign:before {
+  content: "\e7a7";
+}
+
+.icon-ym-dataSync:before {
+  content: "\e7ab";
+}
+
+.icon-ym-extend:before {
+  content: "\e7b1";
+}
+
+.icon-ym-flowForm:before {
+  content: "\e7b2";
+}
+
+.icon-ym-dataModel:before {
+  content: "\e7bb";
+}
+
+.icon-ym-formExample:before {
+  content: "\e7c8";
+}
+
+.icon-ym-department:before {
+  content: "\e812";
+}
+
+.icon-ym-dataSource:before {
+  content: "\e816";
+}
+
+.icon-ym-flowLaunch:before {
+  content: "\e81b";
+}
+
+.icon-ym-flowForm1:before {
+  content: "\e81f";
+}
+
+.icon-ym-formDesign:before {
+  content: "\e827";
+}
+
+.icon-ym-highchartsWordcloud:before {
+  content: "\e82c";
+}
+
+.icon-ym-dataBackup:before {
+  content: "\e830";
+}
+
+.icon-ym-flowEntrust:before {
+  content: "\e831";
+}
+
+.icon-ym-role:before {
+  content: "\e832";
+}
+
+.icon-ym-information:before {
+  content: "\e834";
+}
+
+.icon-ym-portalDesign:before {
+  content: "\e83b";
+}
+
+.icon-ym-highchartsColumn:before {
+  content: "\e83c";
+}
+
+.icon-ym-onlineUser:before {
+  content: "\e83f";
+}
+
+.icon-ym-sysMonitor:before {
+  content: "\e842";
+}
+
+.icon-ym-sysCache:before {
+  content: "\e843";
+}
+
+.icon-ym-organization:before {
+  content: "\e845";
+}
+
+.icon-ym-flowTodo:before {
+  content: "\e847";
+}
+
+.icon-ym-pause:before {
+  content: "\e849";
+}
+
+.icon-ym-report-icon-preview-pageIndex:before {
+  content: "\e84c";
+}
+
+.icon-ym-sysProvince:before {
+  content: "\e850";
+}
+
+.icon-ym-sysNotice:before {
+  content: "\e851";
+}
+
+.icon-ym-wf-finishedProduct:before {
+  content: "\e852";
+}
+
+.icon-ym-yingyong:before {
+  content: "\e853";
+}
+
+.icon-ym-reportExample:before {
+  content: "\e85d";
+}
+
+.icon-ym-wf-crmOrder:before {
+  content: "\e864";
+}
+
+.icon-ym-signetExample:before {
+  content: "\e866";
+}
+
+.icon-ym-position:before {
+  content: "\e867";
+}
+
+.icon-ym-permission:before {
+  content: "\e868";
+}
+
+.icon-ym-user:before {
+  content: "\e871";
+}
+
+.icon-ym-wf-expenseExpenditure:before {
+  content: "\e877";
+}
+
+.icon-ym-onlineDevelopment:before {
+  content: "\e87a";
+}
+
+.icon-ym-sysBillRule:before {
+  content: "\e88b";
+}
+
+.icon-ym-system:before {
+  content: "\e892";
+}
+
+.icon-ym-reportDesign:before {
+  content: "\e896";
+}
+
+.icon-ym-sysQuartz:before {
+  content: "\e897";
+}
+
+.icon-ym-workFlow:before {
+  content: "\e89e";
+}
+
+.icon-ym-sysIcon:before {
+  content: "\e8a4";
+}
+
+.icon-ym-huibao:before {
+  content: "\e8a5";
+}
+
+.icon-ym-webForm:before {
+  content: "\e8a6";
+}
+
+.icon-ym-wf-staffOvertime:before {
+  content: "\e8a7";
+}
+
+.icon-ym-tree-manage1:before {
+  content: "\e8a8";
+}
+
+.icon-ym-webDesign:before {
+  content: "\e8a9";
+}
+
+.icon-ym-wf-receiptSign:before {
+  content: "\e8aa";
+}
+
+.icon-ym-windows:before {
+  content: "\e8ab";
+}
+
+.icon-ym-systemTemplate:before {
+  content: "\e8ac";
+}
+
+.icon-ym-sysLog:before {
+  content: "\e8ad";
+}
+
+.icon-ym-sysConfig:before {
+  content: "\e8ae";
 }
 
 .icon-ym-header-pannel:before {
@@ -318,20 +562,12 @@
   content: "\e811";
 }
 
-.icon-ym-information:before {
-  content: "\e812";
-}
-
 .icon-ym-highcharts:before {
   content: "\e813";
 }
 
 .icon-ym-header-about:before {
   content: "\e815";
-}
-
-.icon-ym-highchartsColumn:before {
-  content: "\e816";
 }
 
 .icon-ym-importAndExportExample:before {
@@ -346,10 +582,6 @@
   content: "\e81a";
 }
 
-.icon-ym-huibao:before {
-  content: "\e81b";
-}
-
 .icon-ym-mpMenu:before {
   content: "\e81c";
 }
@@ -360,10 +592,6 @@
 
 .icon-ym-lianxi:before {
   content: "\e81e";
-}
-
-.icon-ym-highchartsWordcloud:before {
-  content: "\e81f";
 }
 
 .icon-ym-nav-close:before {
@@ -394,10 +622,6 @@
   content: "\e826";
 }
 
-.icon-ym-onlineUser:before {
-  content: "\e827";
-}
-
 .icon-ym-java:before {
   content: "\e828";
 }
@@ -414,10 +638,6 @@
   content: "\e82b";
 }
 
-.icon-ym-position:before {
-  content: "\e82c";
-}
-
 .icon-ym-nav-next:before {
   content: "\e82d";
 }
@@ -426,24 +646,8 @@
   content: "\e82f";
 }
 
-.icon-ym-portalDesign:before {
-  content: "\e830";
-}
-
-.icon-ym-reportDesign:before {
-  content: "\e831";
-}
-
-.icon-ym-organization:before {
-  content: "\e832";
-}
-
 .icon-ym-mapExample:before {
   content: "\e833";
-}
-
-.icon-ym-onlineDevelopment:before {
-  content: "\e834";
 }
 
 .icon-ym-qyUser:before {
@@ -470,20 +674,8 @@
   content: "\e83a";
 }
 
-.icon-ym-permission:before {
-  content: "\e83b";
-}
-
-.icon-ym-reportExample:before {
-  content: "\e83c";
-}
-
 .icon-ym-scheduleExample:before {
   content: "\e83d";
-}
-
-.icon-ym-role:before {
-  content: "\e83f";
 }
 
 .icon-ym-Refresh:before {
@@ -494,28 +686,12 @@
   content: "\e841";
 }
 
-.icon-ym-sysBillRule:before {
-  content: "\e842";
-}
-
-.icon-ym-signetExample:before {
-  content: "\e843";
-}
-
 .icon-ym-saolian:before {
   content: "\e844";
 }
 
-.icon-ym-sysLog:before {
-  content: "\e845";
-}
-
 .icon-ym-shezhi:before {
   content: "\e846";
-}
-
-.icon-ym-sysMonitor:before {
-  content: "\e847";
 }
 
 .icon-ym-sysMenu:before {
@@ -526,20 +702,8 @@
   content: "\e73b";
 }
 
-.icon-ym-sysCache:before {
-  content: "\e849";
-}
-
-.icon-ym-appForm:before {
-  content: "\e73c";
-}
-
 .icon-ym-sysLanguage:before {
   content: "\e84a";
-}
-
-.icon-ym-bigScreenDesign:before {
-  content: "\e73d";
 }
 
 .icon-ym-report-icon-pie:before {
@@ -550,20 +714,12 @@
   content: "\e73e";
 }
 
-.icon-ym-sysIcon:before {
-  content: "\e84c";
-}
-
 .icon-ym-bigDataExample:before {
   content: "\e73f";
 }
 
 .icon-ym-orderExample:before {
   content: "\e84d";
-}
-
-.icon-ym-bigScreenExampl:before {
-  content: "\e740";
 }
 
 .icon-ym-preview-excel-paging:before {
@@ -582,32 +738,12 @@
   content: "\e742";
 }
 
-.icon-ym-sysQuartz:before {
-  content: "\e850";
-}
-
 .icon-ym-btn-edit:before {
   content: "\e743";
 }
 
-.icon-ym-sysNotice:before {
-  content: "\e851";
-}
-
 .icon-ym-chartExample:before {
   content: "\e744";
-}
-
-.icon-ym-systemTemplate:before {
-  content: "\e852";
-}
-
-.icon-ym-authorize:before {
-  content: "\e745";
-}
-
-.icon-ym-system:before {
-  content: "\e853";
 }
 
 .icon-ym-btn-refresh:before {
@@ -650,10 +786,6 @@
   content: "\e85a";
 }
 
-.icon-ym-dataModel:before {
-  content: "\e74b";
-}
-
 .icon-ym-tree-organization3:before {
   content: "\e85b";
 }
@@ -664,14 +796,6 @@
 
 .icon-ym-tree-position2:before {
   content: "\e85c";
-}
-
-.icon-ym-codeGeneration:before {
-  content: "\e74d";
-}
-
-.icon-ym-sysConfig:before {
-  content: "\e85d";
 }
 
 .icon-ym-btn-expand:before {
@@ -698,10 +822,6 @@
   content: "\e860";
 }
 
-.icon-ym-dataApplication:before {
-  content: "\e751";
-}
-
 .icon-ym-tree-manage:before {
   content: "\e861";
 }
@@ -726,40 +846,16 @@
   content: "\e754";
 }
 
-.icon-ym-sysProvince:before {
-  content: "\e864";
-}
-
-.icon-ym-dataDictionary:before {
-  content: "\e755";
-}
-
 .icon-ym-tree-position1:before {
   content: "\e865";
-}
-
-.icon-ym-dataSource:before {
-  content: "\e756";
-}
-
-.icon-ym-tree-manage1:before {
-  content: "\e866";
 }
 
 .icon-ym-echartsColumn:before {
   content: "\e757";
 }
 
-.icon-ym-webForm:before {
-  content: "\e867";
-}
-
 .icon-ym-delete:before {
   content: "\e758";
-}
-
-.icon-ym-webDesign:before {
-  content: "\e868";
 }
 
 .icon-ym-echartsCandlestick:before {
@@ -786,16 +882,8 @@
   content: "\e86b";
 }
 
-.icon-ym-dataBackup:before {
-  content: "\e75c";
-}
-
 .icon-ym-tree-department-1:before {
   content: "\e86c";
-}
-
-.icon-ym-documentPreviewExample:before {
-  content: "\e75d";
 }
 
 .icon-ym-wf-articlesWarehous:before {
@@ -828,10 +916,6 @@
 
 .icon-ym-crm:before {
   content: "\e761";
-}
-
-.icon-ym-wf-crmOrder:before {
-  content: "\e871";
 }
 
 .icon-ym-extend-ambulance:before {
@@ -870,10 +954,6 @@
   content: "\e766";
 }
 
-.icon-ym-wf-finishedProduct:before {
-  content: "\e877";
-}
-
 .icon-ym-btn-copy:before {
   content: "\e767";
 }
@@ -884,10 +964,6 @@
 
 .icon-ym-documentExample:before {
   content: "\e768";
-}
-
-.icon-ym-wf-expenseExpenditure:before {
-  content: "\e87a";
 }
 
 .icon-ym-echartsLineBar:before {
@@ -914,10 +990,6 @@
   content: "\e87f";
 }
 
-.icon-ym-extend:before {
-  content: "\e76c";
-}
-
 .icon-ym-wf-letterService:before {
   content: "\e880";
 }
@@ -936,10 +1008,6 @@
 
 .icon-ym-wf-payDistribution:before {
   content: "\e882";
-}
-
-.icon-ym-dataInterface:before {
-  content: "\e76f";
 }
 
 .icon-ym-wf-incomeRecognition:before {
@@ -1006,10 +1074,6 @@
   content: "\e777";
 }
 
-.icon-ym-wf-receiptSign:before {
-  content: "\e88b";
-}
-
 .icon-ym-echartsPie:before {
   content: "\e778";
 }
@@ -1034,10 +1098,6 @@
   content: "\e88e";
 }
 
-.icon-ym-department:before {
-  content: "\e77b";
-}
-
 .icon-ym-wf-travelApply:before {
   content: "\e88f";
 }
@@ -1060,10 +1120,6 @@
 
 .icon-ym-extend-paper-plane:before {
   content: "\e77e";
-}
-
-.icon-ym-wf-staffOvertime:before {
-  content: "\e892";
 }
 
 .icon-ym-extend-history:before {
@@ -1094,16 +1150,8 @@
   content: "\e782";
 }
 
-.icon-ym-workFlow:before {
-  content: "\e896";
-}
-
 .icon-ym-file-blank:before {
   content: "\e783";
-}
-
-.icon-ym-windows:before {
-  content: "\e897";
 }
 
 .icon-ym-extend-folder-open:before {
@@ -1154,10 +1202,6 @@
   content: "\e78a";
 }
 
-.icon-ym-yingyong:before {
-  content: "\e89e";
-}
-
 .icon-ym-extend-motorcycle:before {
   content: "\e78b";
 }
@@ -1180,10 +1224,6 @@
 
 .icon-ym-extend-envelope-open-o:before {
   content: "\e78e";
-}
-
-.icon-ym-dataSync:before {
-  content: "\e78f";
 }
 
 .icon-ym-file-csv1:before {
@@ -1250,10 +1290,6 @@
   content: "\e7a5";
 }
 
-.icon-ym-flowEntrust:before {
-  content: "\e7a7";
-}
-
 .icon-ym-file-zip:before {
   content: "\e7a8";
 }
@@ -1264,10 +1300,6 @@
 
 .icon-ym-file-psd:before {
   content: "\e7aa";
-}
-
-.icon-ym-flowLaunch:before {
-  content: "\e7ab";
 }
 
 .icon-ym-gangwei2:before {
@@ -1290,10 +1322,6 @@
   content: "\e7b0";
 }
 
-.icon-ym-formExample:before {
-  content: "\e7b2";
-}
-
 .icon-ym-generator-barcode:before {
   content: "\e7b4";
 }
@@ -1312,10 +1340,6 @@
 
 .icon-ym-flowMonitor:before {
   content: "\e7ba";
-}
-
-.icon-ym-flowForm:before {
-  content: "\e7bb";
 }
 
 .icon-ym-extend-rocket:before {
@@ -1360,10 +1384,6 @@
 
 .icon-ym-generator-annular:before {
   content: "\e7c7";
-}
-
-.icon-ym-flowTodo:before {
-  content: "\e7c8";
 }
 
 .icon-ym-generator-button:before {
@@ -1446,10 +1466,6 @@
   content: "\e623";
 }
 
-.icon-ym-user:before {
-  content: "\e7b1";
-}
-
 .icon-ym-highcharts-Pie:before {
   content: "\e7b6";
 }
@@ -1528,10 +1544,6 @@
 
 .icon-ym-report-icon-border-top:before {
   content: "\e653";
-}
-
-.icon-ym-report-icon-preview-pageIndex:before {
-  content: "\e654";
 }
 
 .icon-ym-report-icon-background-color:before {
