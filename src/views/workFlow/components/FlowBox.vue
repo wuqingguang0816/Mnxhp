@@ -5,8 +5,7 @@
         <el-page-header @back="goBack" :content="title" />
         <div class="options">
           <el-button type="primary" @click="addComment" v-if="activeTab==='comment'">评 论</el-button>
-          <template
-            v-if="(setting.opType=='-1'&&setting.id)||setting.opType==0||setting.opType==1||setting.opType==2">
+          <template v-if="setting.opType!=4&&setting.id">
             <el-button type="primary" @click="printBrowseVisible=true"
               v-if="properties.hasPrintBtn && properties.printId">
               {{properties.printBtnText||'打 印'}}</el-button>
