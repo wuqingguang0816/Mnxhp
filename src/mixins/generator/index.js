@@ -14,6 +14,9 @@ export default {
       total: 0,
       listLoading: false,
       formVisible: false,
+      addVisible: false,
+      currWebType: '',
+      currId: '',
       categoryList: []
     }
   },
@@ -94,6 +97,11 @@ export default {
           this.jnpf.downloadFile(res.data.url)
         })
       }).catch(() => {});
+    },
+    toggleWebType(row) {
+      const { id, webType } = row
+      if (!webType) return
+      this.openAddBox(id, webType)
     },
     openAddBox(id, webType) {
       this.addVisible = true

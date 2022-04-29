@@ -158,9 +158,6 @@ export default {
       previewDialogVisible: false,
       releaseDialogVisible: false,
       releaseBtnLoading: false,
-      addVisible: false,
-      currWebType: '',
-      currId: '',
       currRow: {},
       releaseQuery: {
         pc: 1,
@@ -222,11 +219,6 @@ export default {
           });
         }).catch(() => { this.releaseBtnLoading = false })
       })
-    },
-    toggleWebType(row) {
-      const { id, webType } = row
-      if (!webType) return
-      this.openAddBox(id, webType)
     },
     getMenuSelector() {
       getMenuSelector({ category: 'Web' }, 0).then(res => {
