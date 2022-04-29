@@ -247,7 +247,7 @@
 import { AllList, Create, Delete, Download, DocumentInfo, ShareCancel, ShareOutList, ShareTomeList, TrashDelete, TrashList, TrashRecovery, Update } from '@/api/extend/document'
 import userBox from './UserBox'
 import folderTree from './FolderTree'
-import FileUploader from './FileUploader'
+import FileUploader from './fileUploader'
 
 export default {
   name: 'extend-document',
