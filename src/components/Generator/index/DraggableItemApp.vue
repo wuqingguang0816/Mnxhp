@@ -33,7 +33,7 @@ const layouts = {
     if (config.showLabel === false) labelWidth = '0'
     if (config.jnpfKey === 'JNPFText') {
       return (
-        <el-col span={config.span} class={className}
+        <el-col span={24} class={className}
           nativeOnClick={event => { activeItem(element); event.stopPropagation() }}>
           <el-form-item label-width={labelWidth}
             label={config.showLabel ? config.label : ''} required={config.required}>
@@ -45,7 +45,7 @@ const layouts = {
     }
     if (config.jnpfKey === 'groupTitle') {
       return (
-        <el-col span={config.span} class={className}
+        <el-col span={24} class={className}
           nativeOnClick={event => { activeItem(element); event.stopPropagation() }}>
           <el-form-item label-width="0">{element.content}</el-form-item>
           {components.itemBtns.apply(this, arguments)}
@@ -54,7 +54,7 @@ const layouts = {
     }
     if (config.jnpfKey === 'barcode') {
       return (
-        <el-col span={config.span} class={className}
+        <el-col span={24} class={className}
           nativeOnClick={event => { activeItem(element); event.stopPropagation() }}>
           <el-form-item label-width={labelWidth}
             label={config.showLabel ? config.label : ''} required={config.required}>
@@ -66,7 +66,7 @@ const layouts = {
     }
     if (config.jnpfKey === 'qrcode') {
       return (
-        <el-col span={config.span} class={className}
+        <el-col span={24} class={className}
           nativeOnClick={event => { activeItem(element); event.stopPropagation() }}>
           <el-form-item label-width={labelWidth}
             label={config.showLabel ? config.label : ''} required={config.required}>
@@ -78,7 +78,7 @@ const layouts = {
     }
     if (config.jnpfKey === 'button') {
       return (
-        <el-col span={config.span} class={className}
+        <el-col span={24} class={className}
           nativeOnClick={event => { activeItem(element); event.stopPropagation() }}>
           <el-form-item label-width="0">
             <jnpf-button align={element.align} buttonText={element.buttonText} type={element.type} disabled={element.disabled}></jnpf-button>
@@ -88,7 +88,7 @@ const layouts = {
       )
     }
     return (
-      <el-col span={config.span} class={className}
+      <el-col span={24} class={className}
         nativeOnClick={event => { activeItem(element); event.stopPropagation() }}>
         <el-form-item label-width={labelWidth}
           label={config.showLabel ? config.label : ''} required={config.required}>
