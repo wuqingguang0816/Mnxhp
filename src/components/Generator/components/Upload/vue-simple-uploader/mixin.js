@@ -66,7 +66,7 @@ export default {
     },
     onFileAdded(file) {
       if (this.beforeUpload && typeof this.beforeUpload === "function") {
-        if (!this.beforeUpload(file)) return
+        if (!this.beforeUpload(file)) return file.cancel()
       }
       // 自定义状态
       file.customStatus = 'check'
