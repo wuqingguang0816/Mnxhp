@@ -6,6 +6,18 @@ import { getDrawingList } from '@/components/Generator/utils/db'
 const requiredDisabled = (jnpfKey) => {
   return ['billRule', 'createUser', 'createTime', 'modifyTime', 'modifyUser', 'currPosition', 'currOrganize', 'table'].includes(jnpfKey)
 }
+const getDataType = (data) => {
+  if (!data.__config__ || !data.__config__.jnpfKey) return ''
+  const jnpfKey = data.__config__.jnpfKey
+  if (['numInput', 'date', 'rate', 'slider'].includes(jnpfKey)) {
+    return 'number'
+  } else if (['checkbox', 'uploadFz', 'uploadImg', 'cascader', 'comSelect', 'address'].includes(jnpfKey)) {
+    return 'array'
+  } else if (['select', 'depSelect', 'posSelect', 'userSelect', 'treeSelect'].includes(jnpfKey)) {
+    if (data.multiple) return 'array'
+  }
+  return ''
+}
 
 export default {
   name: 'Process',
@@ -67,6 +79,8 @@ export default {
             name: isTableChild ? parent.__config__.label + '-' + data.__config__.label : data.__config__.label,
             required: data.__config__.required || getRequiredById(id),
             requiredDisabled: requiredDisabled(data.__config__.jnpfKey) || data.__config__.required,
+            jnpfKey: data.__config__.jnpfKey,
+            dataType: getDataType(data),
             read: getReadById(id),
             write: getWriteById(id)
           })

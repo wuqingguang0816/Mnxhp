@@ -361,6 +361,12 @@ const jnpf = {
     const realUrl = baseUrl + url + (name ? '&name=' + name : '')
     a.setAttribute('href', realUrl)
     a.click()
+  },
+  isEmpty(data) {
+    return data === null || data === undefined || data === ''
+  },
+  isEmptyArray(data) {
+    return Array.isArray(data) ? data.length === 0 : true
   }
 }
 export default jnpf
