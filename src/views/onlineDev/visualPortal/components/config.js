@@ -17,11 +17,11 @@ export const basicComponents = [{
     jnpfKey: 'commonFunc',
     title: '常用功能',
     list: [
-      { fullName: "功能设计", id: "85cd7bca426e49ce83a061bf461b1447", urlAddress: "onlineDev/webDesign", icon: "icon-ym icon-ym-webDesign", iconBackgroundColor: "#FF3B3B" },
-      { fullName: "流程设计", id: "fe0150960dd542ec9328067e4495074b", urlAddress: "workFlow/flowEngine", icon: "icon-ym icon-ym-flowDesign", iconBackgroundColor: "#7B1AE1" },
-      { fullName: "权限管理", id: "9057d797550e4457b7ddf2456ce45882", urlAddress: "permission/authorize", icon: "icon-ym icon-ym-authorize", iconBackgroundColor: "#1890FF" },
-      { fullName: "报表设计", id: "c7159f97177b420d9fc8ec8c74ae541b", urlAddress: "onlineDev/dataReport", icon: "icon-ym icon-ym-reportDesign", iconBackgroundColor: "#F68900" },
-      { fullName: "门户设计", id: "232d7226f00446d882e1e1bd999f7b2d", urlAddress: "onlineDev/visualPortal", icon: "icon-ym icon-ym-portalDesign", iconBackgroundColor: "#33B932" }
+      { fullName: "功能设计", id: "85cd7bca426e49ce83a061bf461b1447", urlAddress: "onlineDev/webDesign", icon: "icon-ym icon-ym-webDesign", iconBackgroundColor: "#FF3B3B", type: 2 },
+      { fullName: "流程设计", id: "fe0150960dd542ec9328067e4495074b", urlAddress: "workFlow/flowEngine", icon: "icon-ym icon-ym-flowDesign", iconBackgroundColor: "#7B1AE1", type: 2 },
+      { fullName: "权限管理", id: "9057d797550e4457b7ddf2456ce45882", urlAddress: "permission/authorize", icon: "icon-ym icon-ym-authorize", iconBackgroundColor: "#1890FF", type: 2 },
+      { fullName: "报表设计", id: "c7159f97177b420d9fc8ec8c74ae541b", urlAddress: "onlineDev/dataReport", icon: "icon-ym icon-ym-reportDesign", iconBackgroundColor: "#F68900", type: 2 },
+      { fullName: "门户设计", id: "232d7226f00446d882e1e1bd999f7b2d", urlAddress: "onlineDev/visualPortal", icon: "icon-ym icon-ym-portalDesign", iconBackgroundColor: "#33B932", type: 2 }
     ],
     w: 6,
     h: 4,
