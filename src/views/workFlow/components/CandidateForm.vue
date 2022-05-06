@@ -3,7 +3,7 @@
     class="JNPF-dialog JNPF-dialog_center form-script-dialog" lock-scroll append-to-body
     v-bind="$attrs" width="600px" :modal-append-to-body="false" v-on="$listeners" @open="onOpen">
     <el-form label-width="130px" ref="candidateForm" :model="candidateForm">
-      <el-form-item :label="item.label" :prop="'candidateList.' + i + '.value'"
+      <el-form-item :label="item.nodeName+item.label" :prop="'candidateList.' + i + '.value'"
         v-for="(item,i) in candidateForm.candidateList" :key="i" :rules="item.rules">
         <candidate-user-select v-model="item.value" multiple :placeholder="'请选择'+item.label"
           :taskId="taskId" :formData="formData" :nodeId="item.nodeId" />
