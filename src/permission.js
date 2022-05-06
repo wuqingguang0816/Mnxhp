@@ -3,7 +3,7 @@ import store from './store'
 import { Message } from 'element-ui'
 import NProgress from 'nprogress' // progress bar
 import 'nprogress/nprogress.css' // progress bar style
-import { getToken, setToken } from '@/utils/auth'
+import { getToken } from '@/utils/auth'
 import getPageTitle from '@/utils/get-page-title'
 
 NProgress.configure({ showSpinner: false }) // NProgress Configuration
@@ -33,12 +33,6 @@ router.beforeEach(async (to, from, next) => {
       })
       NProgress.done()
     } else {
-      if (to.path === '/home') {
-        if (to.query.token) {
-          store.commit('user/SET_TOKEN', to.query.token)
-          setToken(to.query.token)
-        }
-      }
       const hasMenu = store.getters.menuList && store.getters.menuList.length > 0
       if (hasMenu) {
         next()
@@ -69,28 +63,6 @@ router.beforeEach(async (to, from, next) => {
     if (whiteList.indexOf(to.path) !== -1) {
       // in the free login whitelist, go directly
       next()
-    } else if (to.path === '/home') {
-      if (to.query.token) {
-        store.commit('user/SET_TOKEN', to.query.token)
-        setToken(to.query.token)
-        const hasMenu = store.getters.menuList && store.getters.menuList.length > 0
-        if (hasMenu) {
-          next()
-        } else {
-          try {
-            let res = await store.dispatch('user/getInfo')
-            const accessRoutes = await store.dispatch('permission/generateRoutes', res)
-            router.addRoutes(accessRoutes)
-            next('/home')
-          } catch (error) {
-            next(`/login`)
-            NProgress.done()
-          }
-        }
-      } else {
-        next(`/login`)
-        NProgress.done()
-      }
     } else {
       // other pages that do not have permissionEle to access are redirected to the login page.
       next(`/login?redirect=${to.path}`)
