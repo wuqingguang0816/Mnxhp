@@ -12,7 +12,7 @@
           <div v-for="(item,i) in list" :key="i" class="JNPF-messageList-item"
             @click="readInfo(item)" :title="item.title">
             <el-badge is-dot :hidden="item.isRead=='1'" type="warning">
-              <i class="el-icon-chat-dot-square JNPF-messageList-item-icon"></i>
+              <i class="icon-ym icon-ym-xitong JNPF-messageList-item-icon"></i>
             </el-badge>
             <div class="JNPF-messageList-txt">
               <p class="title">{{item.title}}</p>
