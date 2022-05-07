@@ -279,7 +279,11 @@ export default {
     start() {
       heartCheck.serverTimeoutObj = setInterval(() => {
         if (this.socket) {
-          this.socket.send('{"method":"heartCheck"}')
+          let message = {
+            method: "heartCheck",
+            token: this.$store.getters.token
+          }
+          this.socket.send(message)
           this.resetCheck()
         }
       }, heartCheck.timeout)
