@@ -283,7 +283,7 @@ export default {
             method: "heartCheck",
             token: this.$store.getters.token
           }
-          this.socket.send(message)
+          this.socket.send(JSON.stringify(message))
           this.resetCheck()
         }
       }, heartCheck.timeout)
