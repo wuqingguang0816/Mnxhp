@@ -106,7 +106,7 @@ const layouts = {
       : 'drawing-row-item'
     if (element.__config__.jnpfKey === 'tab') {
       return (
-        <el-col span={element.__config__.span}>
+        <el-col span={24}>
           <el-row gutter={element.__config__.gutter} class={className}
             nativeOnClick={event => { activeItem(element); event.stopPropagation() }}>
             <el-tabs type={element.type} tab-position={element['tab-position']} vModel={element.__config__.active}>
@@ -141,7 +141,7 @@ const layouts = {
     }
     if (element.__config__.jnpfKey === 'collapse') {
       return (
-        <el-col span={element.__config__.span}>
+        <el-col span={24}>
           <el-row gutter={element.__config__.gutter} class={className}
             nativeOnClick={event => { activeItem(element); event.stopPropagation() }}>
             <el-collapse vModel={element.__config__.active} accordion={element.accordion}>
@@ -188,7 +188,7 @@ const layouts = {
         tip = <div class="table-tip">请将组件拖到此区域(可拖多个组件)</div>
       }
       return (
-        <el-col span={element.__config__.span}>
+        <el-col span={24}>
           <el-row gutter={element.__config__.gutter} class={className} style="padding-top:30px"
             nativeOnClick={event => { activeItem(element); event.stopPropagation() }}>
             <span class="component-name">{element.__config__.componentName}</span>
@@ -207,7 +207,7 @@ const layouts = {
         tip = <div class="table-tip">请将组件拖到此区域(可拖多个组件)</div>
       }
       return (
-        <el-col span={element.__config__.span}>
+        <el-col span={24}>
           <el-row gutter={element.__config__.gutter} class={className} style="padding-top:30px"
             nativeOnClick={event => { activeItem(element); event.stopPropagation() }}>
             <span class="component-name">{element.__config__.label}</span>
@@ -226,7 +226,7 @@ const layouts = {
         tip = <div class="table-tip">请将组件拖到此区域(可拖多个组件)</div>
       }
       return (
-        <el-col span={element.__config__.span}>
+        <el-col span={24}>
           <el-row gutter={element.__config__.gutter} class={className} style="padding-top:30px"
             nativeOnClick={event => { activeItem(element); event.stopPropagation() }}>
             <span class="component-name">{element.__config__.label}</span>
