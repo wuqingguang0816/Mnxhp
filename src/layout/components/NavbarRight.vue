@@ -204,6 +204,7 @@ export default {
               this.$store.commit('user/SET_SOCKET', this.socket)
             }
             clearInterval(heartCheck.serverTimeoutObj);
+            heartCheck.serverTimeoutObj = null
             this.$message({
               message: data.msg || '登录过期,请重新登录',
               type: 'error',
@@ -222,6 +223,8 @@ export default {
               this.socket = null
               this.$store.commit('user/SET_SOCKET', this.socket)
             }
+            clearInterval(heartCheck.serverTimeoutObj);
+            heartCheck.serverTimeoutObj = null
           }
           //接收对方发送的消息
           if (data.method == 'receiveMessage') {
@@ -270,10 +273,15 @@ export default {
             this.$refs.UserList.$refs.JNPFIm.getList(data)
           }
         }
+        socket.onclose = () => {
+          clearInterval(heartCheck.serverTimeoutObj);
+          heartCheck.serverTimeoutObj = null
+        }
       }
     },
     resetCheck() {
       clearInterval(heartCheck.serverTimeoutObj);
+      heartCheck.serverTimeoutObj = null
       this.start()
     },
     start() {
