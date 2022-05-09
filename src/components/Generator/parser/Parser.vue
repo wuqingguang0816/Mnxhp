@@ -230,7 +230,8 @@ export default {
       [this.formConf.formModel]: {},
       [this.formConf.formRules]: {},
       options: {},
-      tableRefs: {}
+      tableRefs: {},
+      isTableValid: false
     }
     this.initFormData(data.formConfCopy.fields, data[this.formConf.formModel])
     this.buildRules(data.formConfCopy.fields, data[this.formConf.formRules])
@@ -454,12 +455,10 @@ export default {
       loop(this.formConfCopy.fields)
     },
     beforeSubmit() {
-      let valid = true
-      if (!this.formConfCopy || !this.formConfCopy.funcs || !this.formConfCopy.funcs.beforeSubmit) return valid
+      if (!this.formConfCopy || !this.formConfCopy.funcs || !this.formConfCopy.funcs.beforeSubmit) return Promise.resolve()
       const func = this.jnpf.getScriptFunc.call(this, this.formConfCopy.funcs.beforeSubmit)
-      if (!func) return valid
-      valid = func(this.parameter)
-      return valid
+      if (!func) return Promise.resolve()
+      return func(this.parameter)
     },
     afterSubmit() {
       if (!this.formConfCopy || !this.formConfCopy.funcs || !this.formConfCopy.funcs.afterSubmit) return
@@ -468,12 +467,19 @@ export default {
       func(this.parameter)
     },
     submitForm() {
-      const isTableValid = this.checkTableData()
-      const beforeSubmitValid = this.beforeSubmit()
-      if (!beforeSubmitValid) return false
+      this.isTableValid = this.checkTableData()
+      try {
+        this.beforeSubmit().then(() => {
+          this.submit()
+        })
+      } catch (e) {
+        this.submit()
+      }
+    },
+    submit() {
       this.$refs[this.formConf.formRef].validate(valid => {
         if (!valid) return false
-        if (!isTableValid) return false
+        if (!this.isTableValid) return false
         // 触发submit事件
         this.$emit('submit', this[this.formConf.formModel], this.afterSubmit)
         return true
