@@ -2048,7 +2048,7 @@ export default {
     initConditionNodeData() {
       // 初始化条件表单数据
       let nodeConditions = this.value.properties && this.value.properties.conditions
-      this.pconditions = nodeConditions
+      this.pconditions = JSON.parse(JSON.stringify(nodeConditions))
     },
     addCondition() {
       let item = {
