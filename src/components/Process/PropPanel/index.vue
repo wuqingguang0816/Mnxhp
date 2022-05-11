@@ -1430,7 +1430,7 @@ const typeOptions = [
     value: 4
   },
   {
-    label: '环节',
+    label: '流程环节',
     value: 5
   },
   {
