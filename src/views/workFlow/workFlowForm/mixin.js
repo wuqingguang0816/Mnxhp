@@ -83,6 +83,7 @@ export default {
       })
     },
     updateDataRule() {
+      if (!this.setting.formOperates || !this.setting.formOperates.length) return
       let newRules = {}
       for (let i = 0; i < this.setting.formOperates.length; i++) {
         const item = this.setting.formOperates[i]
