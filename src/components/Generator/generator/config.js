@@ -835,7 +835,7 @@ export const selectComponents = [{
   {
     __config__: {
       jnpfKey: 'address',
-      label: '省市区',
+      label: '省市区域',
       labelWidth: undefined,
       showLabel: true,
       tag: 'JNPF-Address',
