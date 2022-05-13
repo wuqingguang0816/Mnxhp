@@ -75,7 +75,7 @@
       <el-dialog :title="eventType==='audit'?'审批通过':'审批拒绝'" :close-on-click-modal="false"
         :visible.sync="visible" class="JNPF-dialog JNPF-dialog_center" lock-scroll append-to-body
         width='600px'>
-        <el-form label-width="130px" ref="candidateForm" :model="candidateForm">
+        <el-form label-width="80px" ref="candidateForm" :model="candidateForm">
           <template v-if="eventType==='audit'">
             <el-form-item :label="item.nodeName+item.label" :prop="'candidateList.' + i + '.value'"
               v-for="(item,i) in candidateForm.candidateList" :key="i" :rules="item.rules">
@@ -89,7 +89,7 @@
           <el-form-item label="审批意见">
             <el-input v-model="reason" placeholder="请输入审批意见（选填）" type="textarea" :rows="4" />
           </el-form-item>
-          <el-form-item v-if="properties.hasSign">
+          <el-form-item label="审批签名" v-if="properties.hasSign">
             <div class="sign-main">
               <div class="sign-head">
                 <div class="sign-tip">请在这里输入你的签名</div>
@@ -238,7 +238,7 @@ export default {
       this.setting = data
       /**
        * opType
-       * -1 - 我发起的新建/编辑 
+       * -1 - 我发起的新建/编辑
        * 0 - 我发起的详情
        * 1 - 待办事宜
        * 2 - 已办事宜
@@ -663,7 +663,7 @@ export default {
     padding: 8px;
     border-bottom: 1px solid #dcdfe6;
     .sign-tip {
-      color: #606266;
+      color: #a5a5a5;
       font-size: 12px;
     }
     .sign-action {
