@@ -172,8 +172,8 @@ export default {
           }
         }
       }
-      let json = JSON.stringify(obj) === "{}" ? '' : JSON.stringify(obj)
-      this.$emit('search', json)
+      let queryJson = JSON.stringify(obj) === "{}" ? '' : JSON.stringify(obj)
+      this.$emit('search', queryJson)
     },
     reset() {
       this.treeReset()

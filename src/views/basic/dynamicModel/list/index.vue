@@ -184,7 +184,7 @@ export default {
         sort: 'desc',
         sidx: '',
         menuId: '',
-        json: ''
+        queryJson: ''
       },
       defaultListQuery: {
         pageSize: 20,
@@ -340,15 +340,15 @@ export default {
       if (this.treeActiveId == data[this.treeProps.value]) return
       this.treeActiveId = data[this.treeProps.value]
       this.$refs.Search.treeReset()
-      let json = {}
+      let queryJson = {}
       if (this.columnData.treeDataSource === "organize") {
         const nodePath = this.getNodePath(node)
         const currValue = nodePath.map(o => o[this.treeProps.value])
-        json = { [this.columnData.treeRelation]: currValue }
+        queryJson = { [this.columnData.treeRelation]: currValue }
       } else {
-        json = { [this.columnData.treeRelation]: data[this.treeProps.value] }
+        queryJson = { [this.columnData.treeRelation]: data[this.treeProps.value] }
       }
-      this.search(JSON.stringify(json))
+      this.search(JSON.stringify(queryJson))
     },
     handleDel(id) {
       this.$confirm(this.$t('common.delTip'), this.$t('common.tipTitle'), {
@@ -493,16 +493,16 @@ export default {
       this.listQuery.sidx = this.defaultListQuery.sidx
       if (this.columnData.type === 2) {
         let obj = { [this.columnData.treeRelation]: this.treeActiveId }
-        let json = this.treeActiveId ? JSON.stringify(obj) : ''
-        this.search(json)
+        let queryJson = this.treeActiveId ? JSON.stringify(obj) : ''
+        this.search(queryJson)
       } else {
         this.search('')
       }
     },
-    search(json) {
+    search(queryJson) {
       if (this.isPreview) return
-      if (!json) this.$refs.treeBox && this.$refs.treeBox.setCurrentKey(null);
-      this.listQuery.json = json
+      if (!queryJson) this.$refs.treeBox && this.$refs.treeBox.setCurrentKey(null);
+      this.listQuery.queryJson = queryJson
       this.listQuery.currentPage = 1
       this.initData()
     },
