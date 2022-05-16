@@ -6,6 +6,13 @@
   "description": "",
   "glyphs": [
     {
+      "icon_id": "29746765",
+      "name": "signature",
+      "font_class": "signature",
+      "unicode": "e8af",
+      "unicode_decimal": 59567
+    },
+    {
       "icon_id": "29420127",
       "name": "yingyong",
       "font_class": "yingyong",

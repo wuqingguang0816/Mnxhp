@@ -1,9 +1,9 @@
 @font-face {
   font-family: "icon-ym";
   /* Project id 3271933 */
-  src: url('iconfont.woff2?t=1651226621534') format('woff2'),
-    url('iconfont.woff?t=1651226621534') format('woff'),
-    url('iconfont.ttf?t=1651226621534') format('truetype');
+  src: url("iconfont.woff2?t=1652694762409") format("woff2"),
+    url("iconfont.woff?t=1652694762409") format("woff"),
+    url("iconfont.ttf?t=1652694762409") format("truetype");
 }
 
 .icon-ym {
@@ -12,6 +12,10 @@
   font-style: normal;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-ym-signature:before {
+  content: "\e8af";
 }
 
 .icon-ym-yingyong:before {
