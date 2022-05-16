@@ -137,6 +137,8 @@ export default {
             message: res.msg,
             duration: 1500,
             onClose: () => {
+              this.$store.commit('generator/SET_COMPANY_TREE', [])
+              this.$store.commit('generator/SET_DEP_TREE', [])
               this.initData()
             }
           })
