@@ -82,7 +82,7 @@
           </el-table-column>
           <el-table-column prop="status" label="流程状态" width="130">
             <template slot-scope="scope">
-              <el-tag type="primary" v-if="scope.row.status==1">通过</el-tag>
+              <el-tag type="success" v-if="scope.row.status==1">通过</el-tag>
               <el-tag type="danger" v-else>拒绝</el-tag>
             </template>
           </el-table-column>

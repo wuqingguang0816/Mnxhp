@@ -18,7 +18,7 @@
           </template>
           <template v-if="setting.opType == 1">
             <el-button type="warning" @click="openUserBox('transfer')"
-              v-if="properties.hasTransferBtn">{{properties.transferBtnText||'转 办'}}</el-button>
+              v-if="properties.hasTransferBtn">{{properties.transferBtnText||'转 审'}}</el-button>
             <el-button type="primary" @click="eventLauncher('audit')" :loading="candidateLoading"
               v-if="properties.hasAuditBtn">{{properties.auditBtnText||'通 过'}}</el-button>
             <el-button type="warning" @click="eventLauncher('saveAudit')"

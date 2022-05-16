@@ -13,7 +13,7 @@
 
     <!-- 条件  -->
     <section class="condition-pane pd-10" v-if="value && isConditionNode()">
-      <el-row class="condition-list">
+      <el-row class="condition-list condition-list-header">
         <el-col :span="6" class="label">字段名称</el-col>
         <el-col :span="5">比较</el-col>
         <el-col :span="7">数据值</el-col>
@@ -98,13 +98,12 @@
             </el-select>
           </el-col>
           <el-col :span="2">
-            <i class="el-icon-delete" style="cursor: pointer;" @click="onDelCondition(index)"></i>
+            <i class="el-icon-delete" @click="onDelCondition(index)"></i>
           </el-col>
         </el-row>
       </template>
       <div style="padding-left:4px;margin-top:10px;">
-        <el-button type="primary" size="small" icon="el-icon-plus" @click="addCondition()">添加条件
-        </el-button>
+        <el-button size="small" icon="el-icon-plus" @click="addCondition()">添加条件</el-button>
       </div>
     </section>
 
@@ -317,12 +316,12 @@
                   <el-input v-model="startForm.saveBtnText" />
                 </div>
                 <div class="per-cell">
-                  <el-checkbox v-model="startForm.hasPressBtn">催办</el-checkbox>
-                  <el-input v-model="startForm.pressBtnText" />
-                </div>
-                <div class="per-cell">
                   <el-checkbox v-model="startForm.hasRevokeBtn">撤回</el-checkbox>
                   <el-input v-model="startForm.revokeBtnText" />
+                </div>
+                <div class="per-cell">
+                  <el-checkbox v-model="startForm.hasPressBtn">催办</el-checkbox>
+                  <el-input v-model="startForm.pressBtnText" />
                 </div>
                 <div class="per-cell">
                   <el-checkbox v-model="startForm.hasPrintBtn">打印</el-checkbox>
@@ -849,7 +848,7 @@
                   <el-input v-model="approverForm.revokeBtnText" />
                 </div>
                 <div class="per-cell">
-                  <el-checkbox v-model="approverForm.hasTransferBtn">转办</el-checkbox>
+                  <el-checkbox v-model="approverForm.hasTransferBtn">转审</el-checkbox>
                   <el-input v-model="approverForm.transferBtnText" />
                 </div>
                 <div class="per-cell">
@@ -1353,7 +1352,7 @@ const defaultApproverForm = {
   hasRevokeBtn: true,
   revokeBtnText: '撤 回',
   hasTransferBtn: true,
-  transferBtnText: '转 办',
+  transferBtnText: '转 审',
   hasPrintBtn: false,
   printBtnText: '打 印',
   printId: '', // 打印模板
@@ -2331,6 +2330,11 @@ export default {
 .condition-list {
   font-size: 14px;
   line-height: 36px;
+  &.condition-list-header {
+    >>> .el-col {
+      text-align: left;
+    }
+  }
   >>> .el-col {
     text-align: center;
     padding: 0 4px;
@@ -2341,6 +2345,12 @@ export default {
     .el-input-number,
     .el-select {
       width: 100%;
+    }
+    .el-icon-delete {
+      cursor: pointer;
+      &:hover {
+        color: #f2725e;
+      }
     }
   }
 }
