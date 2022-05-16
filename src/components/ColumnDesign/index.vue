@@ -75,6 +75,9 @@ export default {
     }
     .unActive-btn {
       color: #606266 !important;
+      &:hover {
+        color: #1890ff !important;
+      }
     }
     >>> i {
       font-size: 20px;

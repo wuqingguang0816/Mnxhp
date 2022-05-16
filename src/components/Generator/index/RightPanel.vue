@@ -303,7 +303,7 @@
               <el-checkbox-group v-model="activeData.__config__.visibility" size="mini"
                 class="visibility-checkbox">
                 <el-checkbox-button label="pc">PC</el-checkbox-button>
-                <el-checkbox-button label="app">移动</el-checkbox-button>
+                <el-checkbox-button label="app">APP</el-checkbox-button>
               </el-checkbox-group>
             </el-form-item>
           </template>
