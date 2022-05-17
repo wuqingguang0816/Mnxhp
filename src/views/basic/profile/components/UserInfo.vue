@@ -230,6 +230,7 @@ export default {
             type: 'success',
             duration: 1500
           })
+          this.$emit('updateInfo')
           this.$store.commit('user/SET_USERINFO_USERNAME', this.form2.realName)
         })
       })

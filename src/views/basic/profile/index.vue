@@ -3,7 +3,7 @@
     <el-tabs tab-position="left" style="height:100%" v-model="activeTab" class="profile-tabs"
       v-loading="userLoading">
       <el-tab-pane label="个人资料" name="user">
-        <UserInfo ref="user" :user='user' v-if="visible.user" />
+        <UserInfo ref="user" :user='user' v-if="visible.user" @updateInfo="getInfo" />
       </el-tab-pane>
       <el-tab-pane label="修改密码" name="password">
         <Password ref="password" v-if="visible.password" />
