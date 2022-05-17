@@ -230,7 +230,7 @@
               </el-form-item>
             </template>
             <template v-if="activeData.on && (modelType==1||modelType==6)">
-              <el-divider>组件事件</el-divider>
+              <el-divider>脚本事件</el-divider>
               <div v-for="(value,key) in activeData.on" :key="key">
                 <el-form-item :label="key">
                   <el-button style="width: 100%;" @click="editFunc(value,key)">
@@ -387,7 +387,7 @@
             </template>
           </template>
           <template v-if="formConf.funcs && (modelType==1||modelType==6)">
-            <el-divider>表单事件</el-divider>
+            <el-divider>脚本事件</el-divider>
             <el-form-item label="onLoad">
               <el-button style="width: 100%;"
                 @click="editFunc(formConf.funcs.onLoad,'onLoad',true)">表单加载触发
