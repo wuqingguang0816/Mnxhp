@@ -127,7 +127,7 @@ export default {
       const form = new FormData()
       form.append('identifier', file.uniqueIdentifier)
       form.append('fileName', file.name)
-      form.append('filesize', file.size)
+      form.append('fileSize', file.size)
       form.append('fileType', file.getType())
       form.append('extension', file.getExtension())
       form.append('type', this.type)
