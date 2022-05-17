@@ -39,7 +39,8 @@ export default {
       this.url = ''
       let query = {
         fileName: this.file.fileId,
-        fileVersionId: this.file.fileVersionId
+        fileVersionId: this.file.fileVersionId,
+        fileDownloadUrl: this.file.url
       }
       PreviewFile(query).then(res => {
         if (res.data) {
