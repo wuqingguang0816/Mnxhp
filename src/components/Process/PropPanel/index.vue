@@ -1463,6 +1463,13 @@ const systemFieldOptions = [{
 },
 {
   __config__: {
+    label: '任务ID',
+    required: true
+  },
+  __vModel__: 'jnpfTaskId',
+},
+{
+  __config__: {
     label: '节点ID',
     required: true
   },
