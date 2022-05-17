@@ -202,7 +202,7 @@
                       </div>
                       <p class="custom-line-value">{{item.value}}</p>
                       <el-input v-model="item.label" placeholder="按钮名称" size="small" />
-                      <el-button class="custom-btn" @click="editFunc(item)">脚本事件</el-button>
+                      <el-button class="custom-btn" @click="editFunc(item)">事件</el-button>
                       <div class="close-btn custom-line-icon"
                         @click="columnData.customBtnsList.splice(index, 1)">
                         <i class="el-icon-remove-outline" />

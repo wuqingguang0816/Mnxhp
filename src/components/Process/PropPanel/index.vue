@@ -381,7 +381,7 @@
                 <el-switch v-model="startForm.initFuncConfig.on" />
               </el-form-item>
               <div style="margin-bottom: 18px;" v-if="startForm.initFuncConfig.on">
-                <el-form-item label="事件设置" style="margin-bottom: 0;"></el-form-item>
+                <el-form-item label="接口设置" style="margin-bottom: 0;"></el-form-item>
                 <el-form-item label-width="0">
                   <interface-dialog v-model="startForm.initFuncConfig.interfaceId"
                     :title="startForm.initFuncConfig.interfaceName"
@@ -424,7 +424,7 @@
                 <el-switch v-model="startForm.endFuncConfig.on" />
               </el-form-item>
               <div style="margin-bottom: 18px;" v-if="startForm.endFuncConfig.on">
-                <el-form-item label="事件设置" style="margin-bottom: 0;"></el-form-item>
+                <el-form-item label="接口设置" style="margin-bottom: 0;"></el-form-item>
                 <el-form-item label-width="0">
                   <interface-dialog v-model="startForm.endFuncConfig.interfaceId"
                     :title="startForm.endFuncConfig.interfaceName"
@@ -467,7 +467,7 @@
                 <el-switch v-model="startForm.flowRecallFuncConfig.on" />
               </el-form-item>
               <div v-if="startForm.flowRecallFuncConfig.on">
-                <el-form-item label="事件设置" style="margin-bottom: 0;"></el-form-item>
+                <el-form-item label="接口设置" style="margin-bottom: 0;"></el-form-item>
                 <el-form-item label-width="0">
                   <interface-dialog v-model="startForm.flowRecallFuncConfig.interfaceId"
                     :title="startForm.flowRecallFuncConfig.interfaceName"
@@ -922,7 +922,7 @@
                 <el-switch v-model="approverForm.approveFuncConfig.on" />
               </el-form-item>
               <div style="margin-bottom: 18px;" v-if="approverForm.approveFuncConfig.on">
-                <el-form-item label="事件设置" style="margin-bottom: 0;"></el-form-item>
+                <el-form-item label="接口设置" style="margin-bottom: 0;"></el-form-item>
                 <el-form-item label-width="0">
                   <interface-dialog v-model="approverForm.approveFuncConfig.interfaceId"
                     :title="approverForm.approveFuncConfig.interfaceName"
@@ -965,7 +965,7 @@
                 <el-switch v-model="approverForm.rejectFuncConfig.on" />
               </el-form-item>
               <div style="margin-bottom: 18px;" v-if="approverForm.rejectFuncConfig.on">
-                <el-form-item label="事件设置" style="margin-bottom: 0;"></el-form-item>
+                <el-form-item label="接口设置" style="margin-bottom: 0;"></el-form-item>
                 <el-form-item label-width="0">
                   <interface-dialog v-model="approverForm.rejectFuncConfig.interfaceId"
                     :title="approverForm.rejectFuncConfig.interfaceName"
@@ -1008,7 +1008,7 @@
                 <el-switch v-model="approverForm.recallFuncConfig.on" />
               </el-form-item>
               <div v-if="approverForm.recallFuncConfig.on">
-                <el-form-item label="事件设置" style="margin-bottom: 0;"></el-form-item>
+                <el-form-item label="接口设置" style="margin-bottom: 0;"></el-form-item>
                 <el-form-item label-width="0">
                   <interface-dialog v-model="approverForm.recallFuncConfig.interfaceId"
                     :title="approverForm.recallFuncConfig.interfaceName"

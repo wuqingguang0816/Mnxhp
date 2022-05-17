@@ -44,7 +44,7 @@
             <el-radio-group v-model="dataForm.dataType" @change="onDataTypeChange">
               <el-radio :label="2">静态数据</el-radio>
               <el-radio :label="1">SQL操作</el-radio>
-              <el-radio :label="3">Api数据</el-radio>
+              <el-radio :label="3">API操作</el-radio>
             </el-radio-group>
           </el-form-item>
           <el-form-item label="动作" prop="requestMethod" v-if="dataForm.dataType===1">
@@ -630,7 +630,7 @@ export default {
     }
   }
   .parameterList {
-    padding-left: 90px;
+    padding-left: 100px;
     margin-bottom: 18px;
     >>> .el-icon-edit-outline,
     >>> .el-icon-delete {
