@@ -2,7 +2,7 @@
   <div class="columnDesign-container">
     <div class="main-board">
       <div class="search-box">
-        <h4 class="cap">查询条件</h4>
+        <h4 class="cap">查询字段</h4>
         <el-table :data="columnData.searchList" class="JNPF-common-table" ref="dragTableSearch"
           :row-key="row=>row.__vModel__">
           <el-table-column align="center" label="拖动" width="50">
@@ -65,7 +65,7 @@
         <div class="searchList" v-show="currentTab==='search'">
           <el-table :data="searchOptions" class="JNPF-common-table" height="100%"
             @selection-change="searchSelectionChange" ref="searchTable">
-            <el-table-column prop="__config__.label" label="查询条件" />
+            <el-table-column prop="__config__.label" label="查询字段" />
             <el-table-column type="selection" width="55" align="center" />
           </el-table>
         </div>
@@ -257,7 +257,7 @@ const getSearchType = item => {
 const defaultFunc = '({ data, index, request, toast, refresh }) => {\r\n   \r\n}'
 
 const defaultColumnData = {
-  searchList: [], // 查询条件
+  searchList: [], // 查询字段
   columnList: [], // 字段列表
   defaultColumnList: [], // 所有可选择字段列表
   type: 1, //列表类型

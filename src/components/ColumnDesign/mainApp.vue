@@ -1,23 +1,8 @@
 <template>
   <div class="columnDesign-container">
     <div class="main-board">
-      <div class="sort-box">
-        <h4 class="cap">排序查询</h4>
-        <el-table :data="columnData.sortList" class="JNPF-common-table" ref="dragTableSort"
-          :row-key="row=>row.prop">
-          <el-table-column align="center" label="拖动" width="50">
-            <template>
-              <i class="drag-handler icon-ym icon-ym-darg" style="cursor: move;font-size:20px"
-                title='点击拖动' />
-            </template>
-          </el-table-column>
-          <el-table-column prop="label" label="列名" />
-          <el-table-column prop="prop" label="字段" />
-        </el-table>
-      </div>
-      <el-divider></el-divider>
       <div class="search-box">
-        <h4 class="cap">查询条件</h4>
+        <h4 class="cap">查询字段</h4>
         <el-table :data="columnData.searchList" class="JNPF-common-table" ref="dragTableSearch"
           :row-key="row=>row.prop">
           <el-table-column align="center" label="拖动" width="50">
@@ -33,6 +18,21 @@
               {{scope.row.searchType===3?'范围查询':scope.row.searchType===2?'模糊查询':'等于查询'}}
             </template>
           </el-table-column>
+        </el-table>
+      </div>
+      <el-divider></el-divider>
+      <div class="sort-box">
+        <h4 class="cap">排序字段</h4>
+        <el-table :data="columnData.sortList" class="JNPF-common-table" ref="dragTableSort"
+          :row-key="row=>row.prop">
+          <el-table-column align="center" label="拖动" width="50">
+            <template>
+              <i class="drag-handler icon-ym icon-ym-darg" style="cursor: move;font-size:20px"
+                title='点击拖动' />
+            </template>
+          </el-table-column>
+          <el-table-column prop="label" label="列名" />
+          <el-table-column prop="prop" label="字段" />
         </el-table>
       </div>
       <el-divider></el-divider>
@@ -53,8 +53,8 @@
     </div>
     <div class="right-board">
       <el-tabs v-model="currentTab" class="top-tabs top-tabs_app">
-        <el-tab-pane label="排序字段" name="sort" />
         <el-tab-pane label="查询字段" name="search" />
+        <el-tab-pane label="排序字段" name="sort" />
         <el-tab-pane label="列表字段" name="field" />
         <el-tab-pane label="列表属性" name="column" />
       </el-tabs>
@@ -156,7 +156,7 @@ const getSearchType = item => {
   return 1
 }
 const defaultColumnData = {
-  searchList: [], // 查询条件
+  searchList: [], // 查询字段
   columnList: [], // 字段列表
   defaultColumnList: [], // 所有可选择字段列表
   sortList: [], // 排序列表
