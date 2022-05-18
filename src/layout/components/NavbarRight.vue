@@ -148,14 +148,6 @@ export default {
     this.initWebSocket()
     this.initNotify()
   },
-  destroyed() {
-    if (this.socket) {
-      //离开路由之后断开websocket连接
-      this.socket.close()
-      this.socket = null
-      this.$store.commit('user/SET_SOCKET', this.socket)
-    }
-  },
   methods: {
     initWebSocket() {
       this.socket = this.$store.getters.socket || null

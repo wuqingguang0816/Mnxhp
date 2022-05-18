@@ -268,9 +268,9 @@ export default {
     handleNodeClick(data, node) {
       const nodePath = this.getNodePath(node)
       let currId = nodePath.map(o => o.id)
-      let currData = nodePath.map(o => o.fullName).join(' / ')
+      let currData = nodePath.map(o => o.fullName).join('/')
       if (this.multiple) {
-        const boo = this.selectedIds.some(o => o.join(' / ') === currId.join(' / '))
+        const boo = this.selectedIds.some(o => o.join('/') === currId.join('/'))
         if (boo) return
         this.selectedIds.push(currId)
         this.selectedData.push(currData)
@@ -291,7 +291,7 @@ export default {
       let selectedData = []
       for (let i = 0; i < this.selectedIds.length; i++) {
         let item = []
-        let selectedNames = this.selectedData[i].split(' / ')
+        let selectedNames = this.selectedData[i].split('/')
         for (let j = 0; j < this.selectedIds[i].length; j++) {
           item.push({
             id: this.selectedIds[i][j],
@@ -336,7 +336,7 @@ export default {
         }
         textList.push(textItem)
       }
-      this.selectedData = textList.map(o => o.join(' / '))
+      this.selectedData = textList.map(o => o.join('/'))
       if (this.multiple) {
         this.innerValue = ''
         this.tagsList = JSON.parse(JSON.stringify(this.selectedData))
