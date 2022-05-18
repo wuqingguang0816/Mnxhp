@@ -1,7 +1,7 @@
 // 开发环境接口配置
 // JAVA Boot版本对应后端接口地址
 // JAVA Cloud对应网关地址
-const APIURl = 'http://192.168.0.18:7004'
+const APIURl = 'http://localhost:30000'
 
 module.exports = {
   APIURl: APIURl,

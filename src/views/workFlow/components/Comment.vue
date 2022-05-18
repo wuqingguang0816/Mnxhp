@@ -40,12 +40,7 @@
             :limit="9" class="upload-btn">
             <el-button size="small" icon="el-icon-picture">图片</el-button>
           </el-upload>
-          <el-upload :action="define.comUploadUrl+'/annex'" :headers="uploadHeaders"
-            ref="elUploadFile" :on-success="handleFileSuccess" multiple :show-file-list="false"
-            :accept="fielAccept" :before-upload="beforeFileUpload" :on-exceed="handleFileExceed"
-            :limit="9" class="upload-btn">
-            <el-button size="small" icon="el-icon-upload">附件</el-button>
-          </el-upload>
+          <el-button size="small" icon="el-icon-upload" @click="uploadFile">附件</el-button>
         </el-form-item>
         <el-form-item prop="image" v-if="dataForm.image.length">
           <div class="img-list">
@@ -59,22 +54,23 @@
             </div>
           </div>
         </el-form-item>
-        <el-form-item prop="file" v-if="dataForm.file.length">
-          <transition-group class="el-upload-list el-upload-list el-upload-list--text" tag="ul"
-            name="el-list">
+        <el-form-item prop="file" v-show="dataForm.file.length">
+          <ul class="el-upload-list el-upload-list el-upload-list--text">
             <li class="el-upload-list__item is-success" v-for="(file,index) in dataForm.file"
               :key="file.fileId">
               <a class="el-upload-list__item-name" @click="handleFileClick(file)">
-                <i class="el-icon-document"></i>{{file.name}}
+                <i class="el-icon-paperclip"></i>{{file.name}}
               </a>
               <i class="el-icon-view" @click="handleFilePreview(file)"></i>
               <i class="el-icon-download" @click="handleFileClick(file)"></i>
               <label class="el-upload-list__item-status-label">
                 <i class="el-icon-upload-success el-icon-circle-check"></i>
               </label>
-              <i class="el-icon-close" @click="handleFileRemove(file,index)"></i>
+              <i class="el-icon-close" @click="handleFileRemove(index)"></i>
             </li>
-          </transition-group>
+          </ul>
+          <fileUploader ref="fileUploader" :limit="9" :fileSize="50" type="annex"
+            :accept="fileAccept" @fileSuccess="fileSuccess" />
         </el-form-item>
       </el-form>
       <span slot="footer" class="dialog-footer">
@@ -92,10 +88,11 @@
 import { getCommentList, createComment, delComment } from '@/api/workFlow/FlowEngine'
 import { getDownloadUrl } from '@/api/common'
 import Preview from '@/components/Generator/components/Upload/Preview'
+import FileUploader from './FileUploader'
 
 export default {
   name: 'comments',
-  components: { Preview },
+  components: { Preview, FileUploader },
   props: {
     id: { type: String, default: '' },
   },
@@ -121,9 +118,8 @@ export default {
       finish: false,
       uploadHeaders: { Authorization: this.$store.getters.token },
       imgUploading: false,
-      fileUploading: false,
       previewVisible: false,
-      fielAccept: '.xls,.xlsx,.doc,.docx,.pdf,.txt,.ppt,.pptx',
+      fileAccept: '.xls,.xlsx,.doc,.docx,.pdf,.txt,.ppt,.pptx',
       activeFile: {}
     }
   },
@@ -180,7 +176,6 @@ export default {
       this.dataForm.file = []
       this.$nextTick(() => {
         this.$refs.elUploadImg.uploadFiles = []
-        this.$refs.elUploadFile.uploadFiles = []
         this.$refs['dataForm'].resetFields()
       })
     },
@@ -261,48 +256,24 @@ export default {
       this.dataForm.image.splice(index, 1)
       this.$refs.elUploadImg.uploadFiles.splice(index, 1)
     },
-    getType(filename) {
-      const index1 = filename.lastIndexOf(".");
-      const index2 = filename.length;
-      const type = filename.substring(index1, index2);
-      return type;
-    },
-    beforeFileUpload(file) {
-      let isRightSize = file.size < 50 * 1024 * 1024
-      if (!isRightSize) {
-        this.$message.error(`文件大小超过50MB`)
-        return isRightSize;
+    uploadFile() {
+      const isTopLimit = this.dataForm.file.length > 9
+      if (isTopLimit) {
+        this.$message.error(`当前限制最多可以上传9个文件`)
+        return false
       }
-      let type = this.getType(file.name)
-      let isAccept = this.fielAccept.indexOf(type) > -1
-      if (!isAccept) {
-        this.$message.error(`请选择${this.fielAccept}类型的文件`)
-        return isAccept;
+      this.$refs.fileUploader && this.$refs.fileUploader.openUploader()
+    },
+    fileSuccess(data) {
+      const isTopLimit = this.dataForm.file.length > 9
+      if (isTopLimit) {
+        this.$message.error(`当前限制最多可以上传9个文件`)
+        return false
       }
-      if (isRightSize && isAccept) this.fileUploading = true
-      return isRightSize && isAccept;
+      this.dataForm.file.push(data)
     },
-    handleFileSuccess(res, file, fileList) {
-      if (res.code == 200) {
-        this.dataForm.file.push({
-          name: file.name,
-          fileId: res.data.name,
-          fileVersionId: res.data.fileVersionId,
-          url: res.data.url
-        })
-      } else {
-        this.$refs.elUploadFile.uploadFiles.splice(fileList.length - 1, 1)
-        fileList.filter(o => o.uid != file.uid)
-        this.$message({ message: res.msg, type: 'error', duration: 1500 })
-      }
-      this.fileUploading = false
-    },
-    handleFileExceed(files, fileList) {
-      this.$message.warning(`当前限制最多可以上传9个文件`);
-    },
-    handleFileRemove(file, index) {
+    handleFileRemove(index) {
       this.dataForm.file.splice(index, 1)
-      this.$refs.elUploadFile.uploadFiles.splice(index, 1)
     },
     handleFileClick(file) {
       if (!file.fileId) return

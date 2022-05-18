@@ -353,12 +353,13 @@ const jnpf = {
     if (hasPermission) return true
     return false
   },
-  downloadFile(url) {
+  downloadFile(url, name) {
     if (!url) return
     const baseUrl = url.indexOf('http') > -1 ? '' : define.comUrl
     const a = document.createElement('a')
     a.setAttribute('download', '')
-    a.setAttribute('href', baseUrl + url)
+    const realUrl = baseUrl + url + (name ? '&name=' + name : '')
+    a.setAttribute('href', realUrl)
     a.click()
   }
 }
