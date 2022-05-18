@@ -17,6 +17,14 @@ export const getRoleSelector = () => {
   })
 }
 
+// 获取角色下拉框列表(带权限)
+export const getRoleSelectorByPermission = () => {
+  return request({
+    url: '/api/permission/Role/SelectorByPermission',
+    method: 'GET'
+  })
+}
+
 // 新建角色
 export const createRole = (data) => {
   return request({

@@ -8,8 +8,8 @@
       </div>
       <div class="transfer-pane__body">
         <el-tabs v-model="activeName" class="transfer-pane__body-tab">
-          <el-tab-pane label="全局" name="all">
-            <el-tree :data="treeData" :props="props" ref="tree1" default-expand-all
+          <el-tab-pane label="组织" name="organize">
+            <el-tree :data="treeData2" :props="props" ref="tree2" default-expand-all
               :filter-node-method="filterNode" :expand-on-click-node="false" check-on-click-node
               @node-click="handleNodeClick" class="JNPF-common-el-tree" node-key="onlyId"
               v-loading="loading">
@@ -19,8 +19,8 @@
               </span>
             </el-tree>
           </el-tab-pane>
-          <el-tab-pane label="组织" name="organize">
-            <el-tree :data="treeData2" :props="props" ref="tree2" default-expand-all
+          <el-tab-pane label="全局" name="all">
+            <el-tree :data="treeData" :props="props" ref="tree1" default-expand-all
               :filter-node-method="filterNode" :expand-on-click-node="false" check-on-click-node
               @node-click="handleNodeClick" class="JNPF-common-el-tree" node-key="onlyId"
               v-loading="loading">
@@ -51,8 +51,9 @@
 </template>
 
 <script>
+import { getRoleSelectorByPermission } from '@/api/permission/role'
 export default {
-  name: 'JNPF-userTransfer',
+  name: 'JNPF-roleTransfer',
   data() {
     return {
       allLoading: false,
@@ -83,6 +84,10 @@ export default {
       type: Boolean,
       default: false
     },
+    auth: {
+      type: Boolean,
+      default: false
+    },
   },
   watch: {
     activeName(val) {
@@ -95,7 +100,7 @@ export default {
       this.selectedData = []
       this.ids = []
       this.keyword = ''
-      this.activeName = 'all'
+      this.activeName = 'organize'
       this.getList()
     },
     getSelectList() {
@@ -124,15 +129,29 @@ export default {
     },
     getList() {
       this.loading = true
-      this.$store.dispatch('base/getRoleTree').then(res => {
-        this.treeData = res.filter(o => o.id === '1')
-        this.treeData2 = res.filter(o => o.id !== '1')
-        this.$store.dispatch('base/getRoleList').then(res => {
-          this.allList = res
-          this.getSelectList()
-          this.loading = false
+      if (this.auth) {
+        getRoleSelectorByPermission().then(res => {
+          let list = res.data.list
+          this.treeData = list.filter(o => o.id === '1')
+          this.treeData2 = list.filter(o => o.id !== '1')
+          this.$store.dispatch('base/getRoleList').then(res => {
+            this.allList = res
+            this.getSelectList()
+            this.loading = false
+          })
         })
-      })
+      } else {
+        this.$store.dispatch('base/getRoleTree').then(res => {
+          this.treeData = res.filter(o => o.id === '1')
+          this.treeData2 = res.filter(o => o.id !== '1')
+          this.$store.dispatch('base/getRoleList').then(res => {
+            this.allList = res
+            this.getSelectList()
+            this.loading = false
+          })
+        })
+      }
+
     },
     handleNodeClick(data) {
       if (data.type !== 'role') return
