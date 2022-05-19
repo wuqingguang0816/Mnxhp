@@ -961,7 +961,7 @@
                   </el-table-column>
                 </el-table>
               </div>
-              <el-form-item label="拒绝事件">
+              <el-form-item label="驳回事件">
                 <el-switch v-model="approverForm.rejectFuncConfig.on" />
               </el-form-item>
               <div style="margin-bottom: 18px;" v-if="approverForm.rejectFuncConfig.on">
