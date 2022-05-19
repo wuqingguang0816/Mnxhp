@@ -1,6 +1,6 @@
 <script>
 import { NodeUtils } from "./util.js";
-const isCondition = data => data.type === "condition" || (data.type === "approver" && data.isInterflow);
+const isCondition = data => data.type === "condition" || (data.type === "approver" && (data.isInterflow || data.isBranchFlow));
 const notEmptyArray = arr => Array.isArray(arr) && arr.length > 0;
 const hasBranch = data => notEmptyArray(data.conditionNodes);
 const stopPro = ev => ev.stopPropagation();
@@ -49,6 +49,7 @@ let nodes = {
   timer: createFunc,
   subFlow: createFunc,
   interflow: createFunc,
+  branchFlow: createFunc,
   empty: _ => '',
   condition: function (ctx, conf, h) {
     // <i
@@ -124,7 +125,7 @@ function addNodeButton(ctx, data, h, isBranch = false) {
   return (
     <div class="add-node-btn-box flex justify-center">
       <div class="add-node-btn">
-        <el-popover placement="right" trigger="click" width="380">
+        <el-popover placement="right" trigger="click" width="440">
           <div class="condition-box">
             <div>
               <div class="condition-icon" onClick={ctx.eventLauncher.bind(ctx, "addApprovalNode", data, isBranch)} >
@@ -143,6 +144,12 @@ function addNodeButton(ctx, data, h, isBranch = false) {
                 <i class="ym-custom ym-custom-sitemap"></i>
               </div>
               条件分支
+            </div>
+            <div>
+              <div class="condition-icon" onClick={this.eventLauncher.bind(ctx, "appendBranchFlowBranch", data, isBranch)}>
+                <i class="icon-ym icon-ym-node"></i>
+              </div>
+              选择分支
             </div>
             <div class={{ 'condition-disabled': !canAddAppendInterflow }}>
               <div class="condition-icon" onClick={this.eventLauncher.bind(ctx, "appendInterflowBranch", data, isBranch, !canAddAppendInterflow)}>
@@ -175,7 +182,7 @@ function NodeFactory(ctx, data, h) {
     content = NodeUtils.isConditionNode(data) ? "未设置条件" : NodeUtils.isSubFlowNode(data) ? "未设置发起人" : "未设置审批人",
     selfNode = (
       <div class="node-wrap">
-        <div class={`node-wrap-box ${data.type} ${NodeUtils.isInterflowNode(data) ? 'interflow' : ''} ${showErrorTip ? 'error' : ''}`}>
+        <div class={`node-wrap-box ${data.type} ${NodeUtils.isInterflowNode(data) ? 'interflow' : ''} ${NodeUtils.isBranchFlowNode(data) ? 'branchFlow' : ''} ${showErrorTip ? 'error' : ''}`}>
           <el-tooltip content={content} placement="top" effect="dark">
             <div class="error-tip" onClick={this.eventLauncher.bind(ctx, "edit", data)}>!!!</div>
           </el-tooltip>
@@ -212,6 +219,22 @@ function NodeFactory(ctx, data, h) {
               <button onClick={this.eventLauncher.bind(ctx, "appendInterflowNode", data)}
                 class="btn">
                 添加分流
+              </button>
+              {data.conditionNodes.map(d => NodeFactory.call(ctx, ctx, d, h))}
+            </div>
+          </div>
+          {addNodeButton.call(ctx, ctx, data, h, true)}
+        </div>
+      );
+    }
+    if (NodeUtils.isBranchFlowNode(data.conditionNodes[0])) {
+      branchNode = (
+        <div class="branch-wrap">
+          <div class="branch-box-wrap">
+            <div class="branch-box flex justify-center relative">
+              <button onClick={this.eventLauncher.bind(ctx, "appendBranchFlowNode", data)}
+                class="btn">
+                添加分支
               </button>
               {data.conditionNodes.map(d => NodeFactory.call(ctx, ctx, d, h))}
             </div>

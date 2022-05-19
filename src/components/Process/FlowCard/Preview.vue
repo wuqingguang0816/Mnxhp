@@ -1,6 +1,6 @@
 <script>
 import { NodeUtils } from "./util.js";
-const isCondition = data => data.type === "condition" || (data.type === "approver" && data.isInterflow);
+const isCondition = data => data.type === "condition" || (data.type === "approver" && (data.isInterflow || data.isBranchFlow));
 const notEmptyArray = arr => Array.isArray(arr) && arr.length > 0;
 const hasBranch = data => notEmptyArray(data.conditionNodes);
 const stopPro = ev => ev.stopPropagation();
@@ -39,6 +39,7 @@ let nodes = {
   timer: createFunc,
   subFlow: createFunc,
   interflow: createFunc,
+  branchFlow: createFunc,
   empty: _ => '',
   condition: function (ctx, conf, h) {
     return (
@@ -75,7 +76,7 @@ function NodeFactory(ctx, data, h) {
     branchNode = "",
     selfNode = (
       <div class="node-wrap">
-        <div class={`node-wrap-box ${data.type} ${NodeUtils.isInterflowNode(data) ? 'interflow' : ''} ${showErrorTip ? 'error' : ''}`}>
+        <div class={`node-wrap-box ${data.type} ${NodeUtils.isInterflowNode(data) ? 'interflow' : ''} ${NodeUtils.isBranchFlowNode(data) ? 'branchFlow' : ''} ${showErrorTip ? 'error' : ''}`}>
           {nodes[data.type].call(ctx, ctx, data, h)}
           {addNodeButton.call(ctx, ctx, data, h)}
         </div>

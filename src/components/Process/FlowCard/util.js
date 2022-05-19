@@ -49,6 +49,9 @@ export class NodeUtils {
   static isInterflowNode(node) {
     return node && node.type === 'approver' && node.isInterflow
   }
+  static isBranchFlowNode(node) {
+    return node && node.type === 'approver' && node.isBranchFlow
+  }
   /**
    * 创建指定节点
    * @param { String } type - 节点类型
@@ -94,7 +97,7 @@ export class NodeUtils {
   static deleteNode(nodeData, processData, checkEmpty = true) {
     let prevNode = this.getPreviousNode(nodeData.prevId, processData)
     if (checkEmpty && prevNode.type === 'empty') {
-      if (this.isConditionNode(nodeData) || this.isInterflowNode(nodeData)) {
+      if (this.isConditionNode(nodeData) || this.isInterflowNode(nodeData) || this.isBranchFlowNode(nodeData)) {
         const willDelBranch = prevNode.conditionNodes.length === 2
         const target = willDelBranch ? prevNode : nodeData
         this.deleteNode(target, processData, willDelBranch)
@@ -114,7 +117,7 @@ export class NodeUtils {
       prev.childNode && (prev.childNode.prevId = prev.nodeId)
       prev.conditionNodes && prev.conditionNodes.forEach(c => c.prevId = prev.nodeId);
     }
-    if (this.isConditionNode(nodeData) || this.isInterflowNode(nodeData)) {
+    if (this.isConditionNode(nodeData) || this.isInterflowNode(nodeData) || this.isBranchFlowNode(nodeData)) {
       let cons = prevNode.conditionNodes
       let index = cons.findIndex(c => c.nodeId === nodeData.nodeId)
       if (cons.length > 2) {
@@ -217,9 +220,25 @@ export class NodeUtils {
     }
     this.setDefaultCondition(node, data)
   }
+  // 添加分流/合流 branch
   static appendInterflowNode(data) {
     const conditions = data.conditionNodes
     let node = this.createNode('interflow', data.nodeId)
+    let defaultNodeIndex = conditions.findIndex(node => node.properties.isDefault)
+    node.properties.priority = conditions.length
+    if (defaultNodeIndex > -1) {
+      conditions.splice(-1, 0, node) // 插在倒数第二个
+      //更新优先级
+      node.properties.priority = conditions.length - 2
+      conditions[conditions.length - 1].properties.priority = conditions.length - 1
+    } else {
+      conditions.push(node)
+    }
+  }
+  // 添加选择分支 branch
+  static appendBranchFlowNode(data) {
+    const conditions = data.conditionNodes
+    let node = this.createNode('branchFlow', data.nodeId)
     let defaultNodeIndex = conditions.findIndex(node => node.properties.isDefault)
     node.properties.priority = conditions.length
     if (defaultNodeIndex > -1) {
@@ -285,6 +304,31 @@ export class NodeUtils {
     ]
     nodeData.conditionNodes = conditionNodes
     nodeData.conditionType = "interflow"
+  }
+  // 新增选择分支节点
+  static appendBranchFlowBranch(data, isBottomBtnOfBranch) {
+    // isBottomBtnOfBranch 用户点击的是分支树下面的按钮
+    let nodeData = data
+    // 由于conditionNodes是数组 不能添加下级分支 故在两个分支树之间添加一个不会显示的正常节点 兼容此种情况
+    if (Array.isArray(data.conditionNodes) && data.conditionNodes.length) {
+      if (isBottomBtnOfBranch) {
+        // 添加一个模拟用的空白节点并返回这个节点，作为新分支的父节点
+        nodeData = this.addEmptyNode(nodeData, true)
+      } else {
+        let emptyNode = this.addEmptyNode(nodeData, true)
+        emptyNode.conditionNodes = nodeData.conditionNodes
+        emptyNode.conditionType = "branchFlow"
+        emptyNode.conditionNodes.forEach(n => {
+          n.prevId = emptyNode.nodeId
+        })
+      }
+    }
+    let conditionNodes = [
+      this.createNode("branchFlow", nodeData.nodeId),
+      this.createNode("branchFlow", nodeData.nodeId)
+    ]
+    nodeData.conditionNodes = conditionNodes
+    nodeData.conditionType = "branchFlow"
   }
   /**
    * 重设节点优先级（条件节点）

@@ -51,6 +51,14 @@ export default {
       title: '审批节点'
     }
   },
+  branchFlow: {
+    type: "approver",
+    content: "请设置审批人",
+    isBranchFlow: true,
+    properties: {
+      title: '审批节点'
+    }
+  },
   condition: {
     type: "condition",
     content: "请设置条件",

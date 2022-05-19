@@ -39,6 +39,7 @@ $base-size : 12px;
   flex-direction: column;
 
   &.condition,
+  &.branchFlow,
   &.interflow {
     padding: 30px 50px 0
   }
@@ -61,6 +62,7 @@ $base-size : 12px;
     background: $bg-color;
   }
 
+  &.approver.branchFlow::before,
   &.approver.interflow::before {
     top: 20px;
   }
@@ -68,6 +70,7 @@ $base-size : 12px;
   &.error {
 
     &.condition .error-tip,
+    &.branchFlow .error-tip,
     &.interflow .error-tip {
       right: 0;
     }
@@ -100,6 +103,7 @@ $base-size : 12px;
   }
 
   &.condition .error-tip,
+  &.branchFlow .error-tip,
   &.interflow .error-tip {
     right: 60px;
   }
