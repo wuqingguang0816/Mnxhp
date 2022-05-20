@@ -4,15 +4,25 @@
       <div class="JNPF-common-title">
         <h2>{{$t('common.organization')}}</h2>
         <span class="options">
-          <el-tooltip content="组织架构图" placement="top">
-            <el-link icon="el-icon-menu" :underline="false" @click="showDiagram" />
-          </el-tooltip>
+          <el-dropdown>
+            <el-link icon="icon-ym icon-ym-mpMenu" :underline="false" />
+            <el-dropdown-menu slot="dropdown">
+              <el-dropdown-item @click.native="getOrganizeList()">刷新数据</el-dropdown-item>
+              <el-dropdown-item @click.native="toggleExpand(true)">展开全部</el-dropdown-item>
+              <el-dropdown-item @click.native="toggleExpand(false)">折叠全部</el-dropdown-item>
+              <el-dropdown-item @click.native="showDiagram">架构图</el-dropdown-item>
+            </el-dropdown-menu>
+          </el-dropdown>
         </span>
       </div>
+      <div class="JNPF-common-tree-search-box">
+        <el-input placeholder="输入关键字" v-model="filterText" suffix-icon="el-icon-search" clearable />
+      </div>
       <el-scrollbar class="JNPF-common-el-tree-scrollbar" v-loading="treeLoading">
-        <el-tree ref="treeBox" :data="treeData" :props="defaultProps" default-expand-all
+        <el-tree ref="treeBox" :data="treeData" :props="defaultProps" :default-expand-all="expands"
           highlight-current :expand-on-click-node="false" node-key="id"
-          @node-click="handleNodeClick" class="JNPF-common-el-tree">
+          @node-click="handleNodeClick" class="JNPF-common-el-tree" v-if="refreshTree"
+          :filter-node-method="filterNode">
           <span class="custom-tree-node" slot-scope="{ data }" :title="data.fullName">
             <i :class="data.icon" />
             <span class="text">{{data.fullName}}</span>
@@ -78,7 +88,7 @@
         </JNPF-table>
       </div>
     </div>
-    <Form v-if="formVisible" ref="Form" @refreshDataList="initData" />
+    <Form v-if="formVisible" ref="Form" @refreshDataList="refresh" />
     <Diagram v-if="diagramVisible" ref="Diagram" @close="diagramVisible = false" />
     <gradeForm v-if="gradeFormVisible" ref="gradeForm" @close="gradeFormVisible=false" />
   </div>
@@ -115,11 +125,19 @@ export default {
       diagramVisible: false,
       typeListVisible: false,
       typeVisible: false,
-      gradeFormVisible: false
+      gradeFormVisible: false,
+      expands: true,
+      refreshTree: true,
+      filterText: ''
+    }
+  },
+  watch: {
+    filterText(val) {
+      this.$refs.treeBox.filter(val)
     }
   },
   created() {
-    this.getOrganizeList()
+    this.getOrganizeList(true)
   },
   methods: {
     showDiagram() {
@@ -128,7 +146,21 @@ export default {
         this.$refs.Diagram.init()
       })
     },
-    getOrganizeList() {
+    toggleExpand(expands) {
+      this.refreshTree = false
+      this.expands = expands
+      this.$nextTick(() => {
+        this.refreshTree = true
+        this.$nextTick(() => {
+          this.$refs.treeBox.setCurrentKey(this.companyId)
+        })
+      })
+    },
+    filterNode(value, data) {
+      if (!value) return true;
+      return data.fullName.indexOf(value) !== -1;
+    },
+    getOrganizeList(isInit) {
       this.treeLoading = true
       getDepartmentSelector().then(res => {
         this.treeData = res.data.list
@@ -138,10 +170,10 @@ export default {
             this.listLoading = false
             return
           }
-          this.companyId = this.treeData[0].id
+          if (isInit) this.companyId = this.treeData[0].id
           this.$refs.treeBox.setCurrentKey(this.companyId)
           this.treeLoading = false
-          this.initData()
+          if (isInit) this.initData()
         })
       }).catch(() => {
         this.treeLoading = false
@@ -176,6 +208,10 @@ export default {
       })
     },
     search() {
+      this.initData()
+    },
+    refresh() {
+      this.getOrganizeList()
       this.initData()
     },
     reset() {

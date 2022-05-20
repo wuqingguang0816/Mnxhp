@@ -55,11 +55,11 @@
               <span>{{ scope.row.type == 0? "发起流程" : "功能流程" }}</span>
             </template>
           </el-table-column>
-          <el-table-column prop="visibleType" label="可见范围" width="80">
+          <!-- <el-table-column prop="visibleType" label="可见范围" width="80">
             <template slot-scope="scope">
               <span>{{ scope.row.visibleType ==  0 ? "全部可见" : "部分可见" }}</span>
             </template>
-          </el-table-column>
+          </el-table-column> -->
           <el-table-column prop="creatorTime" label="创建时间" :formatter="jnpf.tableDateFormat"
             width="120" />
           <el-table-column prop="sortCode" label="排序" width="70" align="center" />
