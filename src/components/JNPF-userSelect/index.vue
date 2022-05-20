@@ -44,7 +44,8 @@
             </el-input>
           </div>
           <div class="transfer-pane__body">
-            <el-tabs v-model="activeName" class="transfer-pane__body-tab">
+            <el-tabs v-model="activeName" class="transfer-pane__body-tab"
+              :class="{'hasSys-tab':hasSys}">
               <el-tab-pane label="全部数据" name="all">
                 <el-tree :data="treeData" :props="props" check-on-click-node
                   @node-click="handleNodeClick" class="JNPF-common-el-tree" node-key="id"
@@ -75,13 +76,23 @@
                   </span>
                 </el-tree>
               </el-tab-pane>
+              <el-tab-pane label="系统变量" name="system">
+                <el-tree :data="treeData4" :props="props" :expand-on-click-node="false"
+                  check-on-click-node @node-click="handleNodeClick2" class="JNPF-common-el-tree"
+                  node-key="id" v-loading="loading">
+                  <span class="custom-tree-node" slot-scope="{ node }">
+                    <i class="icon-ym icon-ym-tree-user2"></i>
+                    <span class="text">{{node.label}}</span>
+                  </span>
+                </el-tree>
+              </el-tab-pane>
             </el-tabs>
           </div>
         </div>
         <div class="transfer-pane">
           <div class="transfer-pane__tools">
             <span>已选</span>
-            <el-button @click="removeAll" type="text">清空列表</el-button>
+            <el-button @click="removeAll" type="text" class="removeAllBtn">清空列表</el-button>
           </div>
           <div class="transfer-pane__body shadow right-pane">
             <template>
@@ -139,6 +150,10 @@ export default {
       type: Boolean,
       default: true
     },
+    hasSys: {
+      type: Boolean,
+      default: false
+    },
     size: String,
   },
   data() {
@@ -157,6 +172,10 @@ export default {
       treeData: [],
       treeData2: [],
       treeData3: [],
+      treeData4: [{
+        id: 'currentUser',
+        fullName: '当前用户'
+      }],
       selectedData: [],
       tagsList: [],
       inputHovering: false,
@@ -287,8 +306,15 @@ export default {
         return
       }
       const arr = this.multiple ? this.value : [this.value]
+      const hasSysItem = arr.some(o => o === 'currentUser')
       getUserInfoList(arr).then(res => {
         this.selectedData = res.data.list
+        if (hasSysItem) {
+          this.selectedData.push({
+            id: 'currentUser',
+            fullName: '当前用户'
+          })
+        }
         if (this.multiple) {
           this.innerValue = ''
           this.tagsList = JSON.parse(JSON.stringify(this.selectedData))
@@ -311,12 +337,14 @@ export default {
           this.treeData2 = res.data
           this.loading = false
         })
-      } else {
+      } else if (this.activeName === 'subordinates') {
         this.loading = true
         getSubordinates(this.keyword).then(res => {
           this.treeData3 = res.data
           this.loading = false
         })
+      } else {
+        this.loading = false
       }
     },
     getAllList() {

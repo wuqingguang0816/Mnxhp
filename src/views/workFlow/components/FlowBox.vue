@@ -5,8 +5,7 @@
         <el-page-header @back="goBack" :content="title" />
         <div class="options">
           <el-button type="primary" @click="addComment" v-if="activeTab==='comment'">评 论</el-button>
-          <template
-            v-if="(setting.opType=='-1'&&setting.id)||setting.opType==0||setting.opType==1||setting.opType==2">
+          <template v-if="setting.opType!=4&&setting.id">
             <el-button type="primary" @click="printBrowseVisible=true"
               v-if="properties.hasPrintBtn && properties.printId">
               {{properties.printBtnText||'打 印'}}</el-button>
@@ -19,7 +18,7 @@
           </template>
           <template v-if="setting.opType == 1">
             <el-button type="warning" @click="openUserBox('transfer')"
-              v-if="properties.hasTransferBtn">{{properties.transferBtnText||'转 办'}}</el-button>
+              v-if="properties.hasTransferBtn">{{properties.transferBtnText||'转 审'}}</el-button>
             <el-button type="primary" @click="eventLauncher('audit')" :loading="candidateLoading"
               v-if="properties.hasAuditBtn">{{properties.auditBtnText||'通 过'}}</el-button>
             <el-button type="warning" @click="eventLauncher('saveAudit')"
@@ -76,9 +75,9 @@
       <el-dialog :title="eventType==='audit'?'审批通过':'审批拒绝'" :close-on-click-modal="false"
         :visible.sync="visible" class="JNPF-dialog JNPF-dialog_center" lock-scroll append-to-body
         width='600px'>
-        <el-form label-width="130px" ref="candidateForm" :model="candidateForm">
+        <el-form label-width="80px" ref="candidateForm" :model="candidateForm">
           <template v-if="eventType==='audit'">
-            <el-form-item :label="item.label" :prop="'candidateList.' + i + '.value'"
+            <el-form-item :label="item.nodeName+item.label" :prop="'candidateList.' + i + '.value'"
               v-for="(item,i) in candidateForm.candidateList" :key="i" :rules="item.rules">
               <candidate-user-select v-model="item.value" multiple :placeholder="'请选择'+item.label"
                 :taskId="setting.taskId" :formData="formData" :nodeId="item.nodeId" />
@@ -90,7 +89,7 @@
           <el-form-item label="审批意见">
             <el-input v-model="reason" placeholder="请输入审批意见（选填）" type="textarea" :rows="4" />
           </el-form-item>
-          <el-form-item v-if="properties.hasSign">
+          <el-form-item label="审批签名" v-if="properties.hasSign">
             <div class="sign-main">
               <div class="sign-head">
                 <div class="sign-tip">请在这里输入你的签名</div>
@@ -239,7 +238,7 @@ export default {
       this.setting = data
       /**
        * opType
-       * -1 - 我发起的新建/编辑 
+       * -1 - 我发起的新建/编辑
        * 0 - 我发起的详情
        * 1 - 待办事宜
        * 2 - 已办事宜
@@ -375,9 +374,9 @@ export default {
           if (Array.isArray(data) && data.length) {
             this.candidateForm.candidateList = res.data.map(o => ({
               ...o,
-              label: o.nodeName + '审批人',
+              label: '审批人',
               value: [],
-              rules: [{ required: true, message: `${o.nodeName}审批人不能为空`, trigger: 'click' }]
+              rules: [{ required: true, message: `审批人不能为空`, trigger: 'click' }]
             }))
             this.$nextTick(() => {
               this.$refs['candidateForm'].resetFields()
@@ -664,7 +663,7 @@ export default {
     padding: 8px;
     border-bottom: 1px solid #dcdfe6;
     .sign-tip {
-      color: #606266;
+      color: #a5a5a5;
       font-size: 12px;
     }
     .sign-action {

@@ -18,6 +18,5 @@ module.exports = {
   // 数据报表接口-java cloud
   // reportServer: process.env.NODE_ENV === 'development' ? 'http://localhost:30000' : process.env.VUE_APP_BASE_API,
   // 报表前端
-  report: process.env.NODE_ENV === 'development' ? 'http://localhost:8200' : process.env.VUE_APP_BASE_API + '/Report',
-  version: '3.3'
+  report: process.env.NODE_ENV === 'development' ? 'http://localhost:8200' : process.env.VUE_APP_BASE_API + '/Report'
 }

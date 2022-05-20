@@ -35,10 +35,12 @@ export default {
       stepLoading: false,
       maxStep: 2,
       tables: [],
+      defaultTable: [],
       formVisible: false,
       btnLoading: false,
       formData: null,
       columnData: null,
+      appColumnData: null,
       flowTemplateJson: null,
       categoryList: [],
       dbOptions: [],
@@ -47,10 +49,11 @@ export default {
     }
   },
   methods: {
-    init(categoryList, id, type, webType) {
+    init(categoryList, id, type, webType, isToggle) {
       this.categoryList = categoryList
       this.activeStep = 0
       this.tables = []
+      this.defaultTable = []
       this.dataForm.id = id || ''
       this.getDbOptions()
       this.visible = true
@@ -61,11 +64,14 @@ export default {
           getVisualDevInfo(this.dataForm.id).then(res => {
             this.dataForm = res.data
             this.dataForm.webType = this.dataForm.webType || 2
+            if (isToggle) this.dataForm.webType = webType
             this.maxStep = parseInt(this.dataForm.webType)
             this.formData = this.dataForm.formData && JSON.parse(this.dataForm.formData)
             this.columnData = this.dataForm.columnData && JSON.parse(this.dataForm.columnData)
+            this.appColumnData = this.dataForm.appColumnData && JSON.parse(this.dataForm.appColumnData)
             this.flowTemplateJson = this.dataForm.flowTemplateJson && JSON.parse(this.dataForm.flowTemplateJson)
             this.tables = this.dataForm.tables && JSON.parse(this.dataForm.tables) || []
+            this.defaultTable = this.dataForm.tables && JSON.parse(this.dataForm.tables) || []
             this.updateFields()
             this.loading = false
           }).catch(() => { this.loading = false })
@@ -86,11 +92,13 @@ export default {
           this.flowTemplateJson = res.formData
         } else {
           this.columnData = res.columnData
+          this.appColumnData = res.appColumnData
         }
         this.dataForm.tables = JSON.stringify(this.tables)
-        this.dataForm.formData = JSON.stringify(this.formData)
-        this.dataForm.columnData = JSON.stringify(this.columnData)
-        this.dataForm.flowTemplateJson = JSON.stringify(this.flowTemplateJson)
+        this.dataForm.formData = this.formData ? JSON.stringify(this.formData) : null
+        this.dataForm.columnData = this.columnData ? JSON.stringify(this.columnData) : null
+        this.dataForm.appColumnData = this.appColumnData ? JSON.stringify(this.appColumnData) : null
+        this.dataForm.flowTemplateJson = this.flowTemplateJson ? JSON.stringify(this.flowTemplateJson) : null
         const formMethod = this.dataForm.id ? Update : Create
         formMethod(this.dataForm).then((res) => {
           this.$message({
@@ -112,7 +120,7 @@ export default {
           if (valid) {
             const type = this.dataForm.type
             if (!this.tables.length) {
-              if (type == 3 || type == 4 || type == 5) {
+              if (this.defaultTable.length || type == 3 || type == 4) {
                 this.$message.warning('请至少选择一个数据表')
                 return
               }
@@ -139,6 +147,7 @@ export default {
       } else {
         this.$refs['columnDesign'].getData().then(res => {
           this.columnData = res.columnData
+          this.appColumnData = res.appColumnData
           this.activeStep += 1
         }).catch(err => {
           err.msg && this.$message.warning(err.msg)

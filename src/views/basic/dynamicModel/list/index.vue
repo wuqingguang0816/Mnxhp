@@ -46,9 +46,9 @@
               <el-tag v-if="scope.row.flowState==1">等待审核</el-tag>
               <el-tag type="success" v-else-if="scope.row.flowState==2">审核通过</el-tag>
               <el-tag type="danger" v-else-if="scope.row.flowState==3">审核驳回</el-tag>
-              <el-tag type="warning" v-else-if="scope.row.flowState==4">流程撤回</el-tag>
+              <el-tag type="info" v-else-if="scope.row.flowState==4">流程撤回</el-tag>
               <el-tag type="info" v-else-if="scope.row.flowState==5">审核终止</el-tag>
-              <el-tag type="info" v-else>等待提交</el-tag>
+              <el-tag type="warning" v-else>等待提交</el-tag>
             </template>
           </el-table-column>
           <el-table-column label="操作" fixed="right" :width="operationWidth"
@@ -58,13 +58,13 @@
                 <template v-for="(item, i) in columnBtnsList">
                   <template v-if="item.value=='edit'">
                     <el-button size="mini" type="text" :key="i"
-                      :disabled="config.webType == 3 && [1,2,5].indexOf(scope.row.flowState)>-1"
+                      :disabled="config.webType == 3 && [1,2,4,5].indexOf(scope.row.flowState)>-1"
                       @click="columnBtnsHandel(item.value,scope.row)">
                       {{item.label}}</el-button>
                   </template>
                   <template v-else-if="item.value=='remove'">
                     <el-button size="mini" type="text" :key="i" class="JNPF-table-delBtn"
-                      :disabled="config.webType == 3 && [1,2,3,5].indexOf(scope.row.flowState)>-1"
+                      :disabled="config.webType == 3 && !!scope.row.flowState"
                       @click="columnBtnsHandel(item.value,scope.row)">
                       {{item.label}}</el-button>
                   </template>
@@ -99,13 +99,13 @@
                 <template v-for="(item, i) in columnBtnsList">
                   <template v-if="item.value=='edit'">
                     <el-button size="mini" type="text" :key="i"
-                      :disabled="config.webType == 3 && [1,2,5].indexOf(scope.row.flowState)>-1"
+                      :disabled="config.webType == 3 && [1,2,4,5].indexOf(scope.row.flowState)>-1"
                       @click="columnBtnsHandel(item.value,scope.row)" v-has="'btn_'+item.value">
                       {{item.label}}</el-button>
                   </template>
                   <template v-else-if="item.value=='remove'">
                     <el-button size="mini" type="text" :key="i" class="JNPF-table-delBtn"
-                      :disabled="config.webType == 3 && [1,2,3,5].indexOf(scope.row.flowState)>-1"
+                      :disabled="config.webType == 3 && !!scope.row.flowState"
                       @click="columnBtnsHandel(item.value,scope.row)" v-has="'btn_'+item.value">
                       {{item.label}}</el-button>
                   </template>
@@ -184,7 +184,7 @@ export default {
         sort: 'desc',
         sidx: '',
         menuId: '',
-        json: ''
+        queryJson: ''
       },
       defaultListQuery: {
         pageSize: 20,
@@ -340,15 +340,15 @@ export default {
       if (this.treeActiveId == data[this.treeProps.value]) return
       this.treeActiveId = data[this.treeProps.value]
       this.$refs.Search.treeReset()
-      let json = {}
+      let queryJson = {}
       if (this.columnData.treeDataSource === "organize") {
         const nodePath = this.getNodePath(node)
         const currValue = nodePath.map(o => o[this.treeProps.value])
-        json = { [this.columnData.treeRelation]: currValue }
+        queryJson = { [this.columnData.treeRelation]: currValue }
       } else {
-        json = { [this.columnData.treeRelation]: data[this.treeProps.value] }
+        queryJson = { [this.columnData.treeRelation]: data[this.treeProps.value] }
       }
-      this.search(JSON.stringify(json))
+      this.search(JSON.stringify(queryJson))
     },
     handleDel(id) {
       this.$confirm(this.$t('common.delTip'), this.$t('common.tipTitle'), {
@@ -493,16 +493,16 @@ export default {
       this.listQuery.sidx = this.defaultListQuery.sidx
       if (this.columnData.type === 2) {
         let obj = { [this.columnData.treeRelation]: this.treeActiveId }
-        let json = this.treeActiveId ? JSON.stringify(obj) : ''
-        this.search(json)
+        let queryJson = this.treeActiveId ? JSON.stringify(obj) : ''
+        this.search(queryJson)
       } else {
         this.search('')
       }
     },
-    search(json) {
+    search(queryJson) {
       if (this.isPreview) return
-      if (!json) this.$refs.treeBox && this.$refs.treeBox.setCurrentKey(null);
-      this.listQuery.json = json
+      if (!queryJson) this.$refs.treeBox && this.$refs.treeBox.setCurrentKey(null);
+      this.listQuery.queryJson = queryJson
       this.listQuery.currentPage = 1
       this.initData()
     },

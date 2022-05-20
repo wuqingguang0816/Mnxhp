@@ -3,14 +3,6 @@
     <el-form-item label="控件标题">
       <el-input v-model="activeData.__config__.label" placeholder="请输入控件标题" />
     </el-form-item>
-    <el-form-item label="控件栅格">
-      <el-slider v-model="activeData.__config__.span" :max="24" :min="6" show-stops :step="2"
-        show-tooltip />
-    </el-form-item>
-    <el-form-item label="标题宽度">
-      <el-input-number v-model="activeData.__config__.labelWidth" placeholder="标题宽度" :min="0"
-        :precision="0" controls-position="right" />
-    </el-form-item>
     <el-form-item label="默认值">
       <el-radio-group v-model="activeData.__config__.defaultValue">
         <el-radio :label="item[activeData.__config__.props.value]"

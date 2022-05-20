@@ -3,6 +3,21 @@ import FlowCard from "./FlowCard/index.vue";
 import PropPanel from "./PropPanel/index.vue";
 import { NodeUtils, getMockData } from "./FlowCard/util.js";
 import { getDrawingList } from '@/components/Generator/utils/db'
+const requiredDisabled = (jnpfKey) => {
+  return ['billRule', 'createUser', 'createTime', 'modifyTime', 'modifyUser', 'currPosition', 'currOrganize', 'table'].includes(jnpfKey)
+}
+const getDataType = (data) => {
+  if (!data.__config__ || !data.__config__.jnpfKey) return ''
+  const jnpfKey = data.__config__.jnpfKey
+  if (['numInput', 'date', 'rate', 'slider'].includes(jnpfKey)) {
+    return 'number'
+  } else if (['checkbox', 'uploadFz', 'uploadImg', 'cascader', 'comSelect', 'address'].includes(jnpfKey)) {
+    return 'array'
+  } else if (['select', 'depSelect', 'posSelect', 'userSelect', 'treeSelect'].includes(jnpfKey)) {
+    if (data.multiple) return 'array'
+  }
+  return ''
+}
 
 export default {
   name: 'Process',
@@ -56,18 +71,24 @@ export default {
       }
       const loop = (data, parent) => {
         if (!data) return
-        if (data.__config__ && data.__config__.jnpfKey !== 'table' && data.__config__.children && Array.isArray(data.__config__.children)) {
-          loop(data.__config__.children, data)
+        if (data.__vModel__) {
+          const isTableChild = parent && parent.__config__ && parent.__config__.jnpfKey === 'table'
+          const id = isTableChild ? parent.__vModel__ + '-' + data.__vModel__ : data.__vModel__
+          res.push({
+            id: id,
+            name: isTableChild ? parent.__config__.label + '-' + data.__config__.label : data.__config__.label,
+            required: data.__config__.required || getRequiredById(id),
+            requiredDisabled: requiredDisabled(data.__config__.jnpfKey) || data.__config__.required,
+            jnpfKey: data.__config__.jnpfKey,
+            dataType: getDataType(data),
+            read: getReadById(id),
+            write: getWriteById(id)
+          })
         }
         if (Array.isArray(data)) data.forEach(d => loop(d, parent))
-        if (data.__vModel__) res.push({
-          id: data.__vModel__,
-          name: data.__config__.label,
-          required: data.__config__.required || getRequiredById(data.__vModel__),
-          requiredDisabled: data.__config__.required,
-          read: getReadById(data.__vModel__),
-          write: getWriteById(data.__vModel__)
-        })
+        if (data.__config__ && data.__config__.children && Array.isArray(data.__config__.children)) {
+          loop(data.__config__.children, data)
+        }
       }
       loop(getDrawingList())
       target.properties.formOperates = res

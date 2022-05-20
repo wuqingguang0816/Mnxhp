@@ -52,6 +52,7 @@ const webPeculiarList = [{
     layout: 'colFormItem',
     span: 24,
     dragDisabled: false,
+    visibility: ["pc", "app"],
     tableName: '',
     noShow: false,
     regList: []
@@ -71,6 +72,7 @@ const onlinePeculiarList = [{
       layout: 'colFormItem',
       span: 24,
       dragDisabled: false,
+      visibility: ["pc", "app"],
       tableName: '',
       regList: [],
     },
@@ -93,6 +95,7 @@ const onlinePeculiarList = [{
       layout: 'colFormItem',
       span: 24,
       dragDisabled: false,
+      visibility: ["pc", "app"],
       tableName: '',
       regList: [],
     },

@@ -4,16 +4,26 @@
       <div class="JNPF-common-title">
         <h2>{{$t('common.organization')}}</h2>
         <span class="options">
-          <el-tooltip content="组织架构图" placement="top">
-            <el-link icon="el-icon-menu" :underline="false" @click="showDiagram" />
-          </el-tooltip>
+          <el-dropdown>
+            <el-link icon="icon-ym icon-ym-mpMenu" :underline="false" />
+            <el-dropdown-menu slot="dropdown">
+              <el-dropdown-item @click.native="getOrganizeList()">刷新数据</el-dropdown-item>
+              <el-dropdown-item @click.native="toggleExpand(true)">展开全部</el-dropdown-item>
+              <el-dropdown-item @click.native="toggleExpand(false)">折叠全部</el-dropdown-item>
+              <el-dropdown-item @click.native="showDiagram">架构图</el-dropdown-item>
+            </el-dropdown-menu>
+          </el-dropdown>
         </span>
       </div>
+      <div class="JNPF-common-tree-search-box">
+        <el-input placeholder="输入关键字" v-model="filterText" suffix-icon="el-icon-search" clearable />
+      </div>
       <el-scrollbar class="JNPF-common-el-tree-scrollbar" v-loading="treeLoading">
-        <el-tree ref="treeBox" :data="treeData" :props="defaultProps" default-expand-all
+        <el-tree ref="treeBox" :data="treeData" :props="defaultProps" :default-expand-all="expands"
           highlight-current :expand-on-click-node="false" node-key="id"
-          @node-click="handleNodeClick" class="JNPF-common-el-tree">
-          <span class="custom-tree-node" slot-scope="{ data }" :title="data.fullName">
+          @node-click="handleNodeClick" class="JNPF-common-el-tree" v-if="refreshTree"
+          :filter-node-method="filterNode">
+          <span class=" custom-tree-node" slot-scope="{ data }" :title="data.fullName">
             <i :class="data.icon" />
             <span class="text">{{data.fullName}}</span>
           </span>
@@ -73,8 +83,7 @@
                     </el-button>
                   </span>
                   <el-dropdown-menu slot="dropdown">
-                    <el-dropdown-item
-                      @click.native="handleUserRelation(scope.row.id, scope.row.fullName)">
+                    <el-dropdown-item @click.native="handleUserRelation(scope.row)">
                       {{$t('role.roleMember')}}
                     </el-dropdown-item>
                     <el-dropdown-item
@@ -93,21 +102,23 @@
       <Form v-if="formVisible" ref="Form" @refreshDataList="initData" />
       <Diagram v-if="diagramVisible" ref="Diagram" @close="diagramVisible = false" />
       <AuthorizeForm v-if="authorizeFormVisible" ref="AuthorizeForm" @close="removeAuthorizeForm" />
-      <UserRelationList v-if="userRelationListVisible" ref="UserRelationList"
-        @refreshDataList="initData" />
+      <component :is="currentView" v-if="userRelationListVisible" ref="UserRelationList"
+        @refreshDataList="initData" @closeDialog="userRelationListVisible=false" />
     </div>
   </div>
 </template>
 
 <script>
+import { getDepartmentSelector } from '@/api/permission/department'
 import { getRoleList, delRole, updateRoleState } from '@/api/permission/role'
 import Form from './Form'
 import AuthorizeForm from '@/views/permission/authorize/AuthorizeForm'
 import UserRelationList from './userRelation'
+import GlobalUserRelationList from '@/views/permission/userRelation/Selector'
 import Diagram from '@/views/permission/user/Diagram'
 
 export default {
-  components: { Form, AuthorizeForm, UserRelationList, Diagram },
+  components: { Form, AuthorizeForm, UserRelationList, GlobalUserRelationList, Diagram },
   name: 'permission-role',
   data() {
     return {
@@ -131,11 +142,20 @@ export default {
       formVisible: false,
       diagramVisible: false,
       authorizeFormVisible: false,
-      userRelationListVisible: false
+      userRelationListVisible: false,
+      currentView: null,
+      expands: true,
+      refreshTree: true,
+      filterText: ''
+    }
+  },
+  watch: {
+    filterText(val) {
+      this.$refs.treeBox.filter(val)
     }
   },
   created() {
-    this.getOrganizeList()
+    this.getOrganizeList(true)
   },
   methods: {
     reset() {
@@ -158,9 +178,23 @@ export default {
         this.$refs.Diagram.init()
       })
     },
-    getOrganizeList() {
+    toggleExpand(expands) {
+      this.refreshTree = false
+      this.expands = expands
+      this.$nextTick(() => {
+        this.refreshTree = true
+        this.$nextTick(() => {
+          this.$refs.treeBox.setCurrentKey(this.companyId)
+        })
+      })
+    },
+    filterNode(value, data) {
+      if (!value) return true;
+      return data.fullName.indexOf(value) !== -1;
+    },
+    getOrganizeList(isInit) {
       this.treeLoading = true
-      this.$store.dispatch('generator/getDepTree').then(res => {
+      getDepartmentSelector().then(res => {
         let firstItem = {
           fullName: "全局",
           hasChildren: false,
@@ -168,10 +202,10 @@ export default {
           parentId: "-1",
           icon: 'icon-ym icon-ym-global-role'
         }
-        this.treeData = [firstItem, ...res]
+        this.treeData = [firstItem, ...res.data.list]
         this.$nextTick(() => {
           this.treeLoading = false
-          this.initData()
+          if (isInit) this.initData()
         })
       }).catch(() => {
         this.treeLoading = false
@@ -243,10 +277,13 @@ export default {
         })
       }).catch(() => { })
     },
-    handleUserRelation(id, fullName) {
-      this.userRelationListVisible = true
+    handleUserRelation(row) {
+      this.currentView = row.type === '全局' ? GlobalUserRelationList : UserRelationList
       this.$nextTick(() => {
-        this.$refs.UserRelationList.init(id, fullName)
+        this.userRelationListVisible = true
+        this.$nextTick(() => {
+          this.$refs.UserRelationList.init(row.id, row.fullName, 'Role')
+        })
       })
     },
     handleAuthorize(id, fullName) {

@@ -16,6 +16,9 @@
             <el-form-item label="模板名称" prop="fullName">
               <el-input v-model="dataForm.fullName" placeholder="模板名称"></el-input>
             </el-form-item>
+            <el-form-item label="模板编码" prop="enCode">
+              <el-input v-model="dataForm.enCode" placeholder="模板编码"></el-input>
+            </el-form-item>
             <el-form-item label="通知方式">
               <el-checkbox v-model="dataForm.isEmail" :true-label="1" :false-label="0">邮箱
               </el-checkbox>
@@ -88,6 +91,7 @@ export default {
         id: '',
         category: '1',
         fullName: '',
+        enCode: '',
         title: '',
         isStationLetter: 0,
         isEmail: 0,
@@ -101,11 +105,11 @@ export default {
         enabledMark: 1,
       },
       dataRule: {
-        category: [
-          { required: true, message: '请选择消息类型', trigger: 'change' },
-        ],
         fullName: [
           { required: true, message: '模板名称不能为空', trigger: 'blur' },
+        ],
+        enCode: [
+          { required: true, message: '模板编码不能为空', trigger: 'blur' },
         ],
         title: [
           { required: true, message: '消息标题不能为空', trigger: 'blur' },
@@ -231,7 +235,7 @@ export default {
     },
     onSmsChange(id, item) {
       if (!id) return this.dataForm.smsTemplateName = ''
-      this.dataForm.smsTemplateName = item.templateName
+      this.dataForm.smsTemplateName = item.fullName
       getTemplateParams(id).then(res => {
         if (!res.data) return
         let newList = res.data.map(o => ({

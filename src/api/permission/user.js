@@ -127,10 +127,26 @@ export const getOrganization = (data) => {
     data
   })
 }
+// 通过岗位id获取用户树
+export const getUsersByPositionId = (data) => {
+  return request({
+    url: '/api/permission/Users/GetUsersByPositionId',
+    method: 'get',
+    data
+  })
+}
 // 通过角色id获取用户列表
 export const getUsersByRoleId = (data) => {
   return request({
     url: '/api/permission/Users/getUsersByRoleId',
+    method: 'get',
+    data
+  })
+}
+// 通过角色id获取组织下的用户列表
+export const getUsersByRoleOrgId = (data) => {
+  return request({
+    url: `/api/permission/Users/GetUsersByRoleOrgId`,
     method: 'get',
     data
   })

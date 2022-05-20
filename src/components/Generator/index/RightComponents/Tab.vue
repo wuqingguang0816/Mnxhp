@@ -1,9 +1,5 @@
 <template>
   <el-row>
-    <el-form-item label="控件栅格">
-      <el-slider v-model="activeData.__config__.span" :max="24" :min="6" show-stops :step="2"
-        show-tooltip />
-    </el-form-item>
     <el-form-item label="风格类型">
       <el-radio-group v-model="activeData.type">
         <el-radio-button label="">默认</el-radio-button>

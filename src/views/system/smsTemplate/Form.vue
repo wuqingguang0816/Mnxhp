@@ -12,31 +12,54 @@
       <el-row class="main" v-loading="loading">
         <el-col :span="12" :offset="6">
           <el-form :model="dataForm" :rules="dataRule" ref="dataForm" class="mt-20"
-            label-width="100px" @submit.native.prevent>
-            <el-form-item label="短信厂家" prop="company">
-              <el-radio-group v-model="dataForm.company">
+            label-width="110px" @submit.native.prevent>
+            <jnpf-form-tip-item label="短信厂家" prop="company">
+              <el-radio-group v-model="dataForm.company" @change="onCompanyChange">
                 <el-radio-button :label="1">阿里</el-radio-button>
                 <el-radio-button :label="2">腾讯</el-radio-button>
               </el-radio-group>
-            </el-form-item>
-            <el-form-item label="模板名称" prop="templateName">
-              <el-input v-model="dataForm.templateName" placeholder="模板名称"></el-input>
-            </el-form-item>
-            <el-form-item label="模板编号" prop="templateId">
-              <el-input v-model="dataForm.templateId" placeholder="模板编号"></el-input>
-            </el-form-item>
-            <el-form-item label="签名内容" prop="signContent">
-              <el-input v-model="dataForm.signContent" placeholder="签名内容"></el-input>
-            </el-form-item>
-            <el-form-item label="应用编号" prop="appId" v-if="dataForm.company===2">
-              <el-input v-model="dataForm.appId" placeholder="应用编号"></el-input>
-            </el-form-item>
-            <el-form-item label="模板验证">
+            </jnpf-form-tip-item>
+            <jnpf-form-tip-item label="模板名称" prop="fullName">
+              <el-input v-model="dataForm.fullName" clearable placeholder="模板名称" />
+            </jnpf-form-tip-item>
+            <jnpf-form-tip-item label="模板编码" prop="enCode">
+              <el-input v-model="dataForm.enCode" clearable placeholder="模板编码" />
+            </jnpf-form-tip-item>
+            <template v-if="dataForm.company===1">
+              <jnpf-form-tip-item label="签名名称" prop="signContent"
+                tip-label="选择国内消息或国际/港澳台消息，在签名管理⻚⾯获取">
+                <el-input v-model="dataForm.signContent" clearable placeholder="签名名称" />
+              </jnpf-form-tip-item>
+              <jnpf-form-tip-item label="模版Code" prop="templateId"
+                tip-label="选择国内消息或国际/港澳台消息，在模板管理⻚⾯查看模板CODE">
+                <el-input v-model="dataForm.templateId" clearable placeholder="模版Code" />
+              </jnpf-form-tip-item>
+              <jnpf-form-tip-item label="Endpoint" prop="endpoint" tip-label="服务接入点">
+                <el-input v-model="dataForm.endpoint" clearable placeholder="Endpoint" />
+              </jnpf-form-tip-item>
+            </template>
+            <template v-if="dataForm.company===2">
+              <jnpf-form-tip-item label="签名ID" prop="signId" tip-label="选择国内短信或国际/港澳台短信，在签名管理⻚⾯获取">
+                <el-input v-model="dataForm.signId" clearable placeholder="签名ID" />
+              </jnpf-form-tip-item>
+              <jnpf-form-tip-item label="模版ID" prop="ttTemplateId"
+                tip-label="选择择国内短信或国际/港澳台短信，在正⽂模板管理⻚⾯获取">
+                <el-input v-model="dataForm.ttTemplateId" clearable placeholder="模版ID" />
+              </jnpf-form-tip-item>
+              <jnpf-form-tip-item label="地域域名" prop="domain"
+                tip-label="默认是接⼊地域域名为sms.tencentcloudapi.com,也⽀持指定地域域名访问">
+                <el-input v-model="dataForm.domain" clearable placeholder="地域域名" />
+              </jnpf-form-tip-item>
+              <jnpf-form-tip-item label="地域参数" prop="region" tip-label="取值如： ap-beijing（华北地区(北京)）">
+                <el-input v-model="dataForm.region" clearable placeholder="地域参数" />
+              </jnpf-form-tip-item>
+            </template>
+            <jnpf-form-tip-item label="模板验证" tip-label="短信模板可用性测试">
               <el-button @click="showDialog()" :loading="testLoading">测试</el-button>
-            </el-form-item>
-            <el-form-item label="状态" prop="enabledMark">
+            </jnpf-form-tip-item>
+            <jnpf-form-tip-item label="状态" prop="enabledMark">
               <el-switch v-model="dataForm.enabledMark" :active-value="1" :inactive-value="0" />
-            </el-form-item>
+            </jnpf-form-tip-item>
           </el-form>
         </el-col>
       </el-row>
@@ -76,32 +99,43 @@ export default {
         id: '',
         enabledMark: 1,
         company: 1,
-        templateId: '',
-        templateName: '',
+        enCode: '',
+        fullName: '',
         signContent: '',
-        appId: '',
+        templateId: '',
+        endpoint: 'dysmsapi.aliyuncs.com',
+        signId: '',
+        ttTemplateId: '',
+        domain: 'sms.tencentcloudapi.com',
+        region: 'ap-beijing'
       },
       dataRule: {
         company: [
           { required: true, message: '短信厂家不能为空', trigger: 'blur' },
         ],
-        templateId: [
-          { required: true, message: '模板编号不能为空', trigger: 'blur' },
-        ],
-        templateName: [
+        fullName: [
           { required: true, message: '模板名称不能为空', trigger: 'blur' },
         ],
-        signContent: [
-          { required: true, message: '签名内容不能为空', trigger: 'blur' },
+        enCode: [
+          { required: true, message: '模板编码不能为空', trigger: 'blur' },
         ],
-        appId: [
-          { required: true, message: '应用编号不能为空', trigger: 'blur' },
+        signContent: [
+          { required: true, message: '签名名称不能为空', trigger: 'blur' },
+        ],
+        templateId: [
+          { required: true, message: '模版Code不能为空', trigger: 'blur' },
+        ],
+        signId: [
+          { required: true, message: '签名ID不能为空', trigger: 'blur' },
+        ],
+        ttTemplateId: [
+          { required: true, message: '模版ID不能为空', trigger: 'blur' },
         ],
       },
       testRule: {
         phoneNumbers: [
-          { required: true, message: '接收号码不能为空', trigger: 'blur' },
-        ],
+          { required: true, message: '接收号码不能为空', trigger: 'blur' }
+        ]
       },
       testForm: {
         phoneNumbers: ''
@@ -126,6 +160,14 @@ export default {
           this.loading = true
           getInfo(this.dataForm.id).then(res => {
             this.dataForm = res.data
+            if (this.dataForm.company == 2) {
+              this.$set(this.dataForm, 'signId', this.dataForm.signContent)
+              this.$set(this.dataForm, 'ttTemplateId', this.dataForm.templateId)
+              this.$set(this.dataForm, 'domain', this.dataForm.endpoint)
+            } else {
+              this.dataForm.domain = 'sms.tencentcloudapi.com'
+              this.dataForm.region = 'ap-beijing'
+            }
             this.loading = false
           }).catch(() => {
             this.loading = false
@@ -137,6 +179,11 @@ export default {
       this.$refs['dataForm'].validate((valid) => {
         if (valid) {
           this.btnLoading = true
+          if (this.dataForm.company == 2) {
+            this.dataForm.signContent = this.dataForm.signId
+            this.dataForm.templateId = this.dataForm.ttTemplateId
+            this.dataForm.endpoint = this.dataForm.domain
+          }
           const formMethod = this.dataForm.id ? Update : Create
           formMethod(this.dataForm).then((res) => {
             this.$message({
@@ -153,9 +200,17 @@ export default {
         }
       })
     },
+    onCompanyChange() {
+      this.$refs['dataForm'].clearValidate()
+    },
     showDialog() {
       this.$refs['dataForm'].validate((valid) => {
         if (valid) {
+          if (this.dataForm.company == 2) {
+            this.dataForm.signContent = this.dataForm.signId
+            this.dataForm.templateId = this.dataForm.ttTemplateId
+            this.dataForm.endpoint = this.dataForm.domain
+          }
           this.testLoading = true
           getTemplate(this.dataForm).then(res => {
             this.testList = res.data.map(o => ({

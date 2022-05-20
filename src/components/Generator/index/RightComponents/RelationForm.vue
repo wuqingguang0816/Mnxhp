@@ -6,14 +6,6 @@
     <el-form-item label="占位提示">
       <el-input v-model="activeData.placeholder" placeholder="请输入占位提示" />
     </el-form-item>
-    <el-form-item label="控件栅格">
-      <el-slider v-model="activeData.__config__.span" :max="24" :min="6" show-stops :step="2"
-        show-tooltip />
-    </el-form-item>
-    <el-form-item label="标题宽度">
-      <el-input-number v-model="activeData.__config__.labelWidth" placeholder="标题宽度" :min="0"
-        :precision="0" controls-position="right" />
-    </el-form-item>
     <el-form-item label="关联功能">
       <JNPF-TreeSelect :options="treeData" v-model="activeData.modelId" placeholder="请选择关联功能"
         lastLevel clearable @change="onModeIdChange" />

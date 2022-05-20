@@ -1,8 +1,6 @@
 <template>
   <el-dropdown class="international" @command="handleSetLanguage">
-    <div>
-      <i class="icon-ym icon-ym-header-language"></i>
-    </div>
+    <i class="icon-ym icon-ym-header-language"></i>
     <el-dropdown-menu slot="dropdown">
       <el-dropdown-item :disabled="language==='zh'" command="zh">
         简体中文
@@ -43,3 +41,10 @@ export default {
   }
 }
 </script>
+<style lang="scss" scoped>
+.international {
+  .icon-ym-header-language {
+    line-height: 63px;
+  }
+}
+</style>

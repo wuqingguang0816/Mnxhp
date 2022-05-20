@@ -13,18 +13,18 @@
 
     <!-- 条件  -->
     <section class="condition-pane pd-10" v-if="value && isConditionNode()">
-      <el-row class="condition-list">
+      <el-row class="condition-list condition-list-header">
         <el-col :span="6" class="label">字段名称</el-col>
         <el-col :span="5">比较</el-col>
-        <el-col :span="6">数据值</el-col>
-        <el-col :span="5">逻辑</el-col>
+        <el-col :span="7">数据值</el-col>
+        <el-col :span="4">逻辑</el-col>
         <el-col :span="2"></el-col>
       </el-row>
       <template v-for="(item, index) in pconditions">
         <el-row class="condition-list" :key="index">
           <el-col :span="6" class="label">
             <el-select v-model="item.field" placeholder="请选择"
-              @change="fieldNameChange($event,item)">
+              @change="fieldNameChange($event,item,index)">
               <el-option v-for="item in usedFormItems" :key="item.__vModel__"
                 :label="item.__config__.label" :value="item.__vModel__">
               </el-option>
@@ -37,10 +37,60 @@
               </el-option>
             </el-select>
           </el-col>
-          <el-col :span="6">
-            <el-input v-model="item.filedValue" placeholder="请输入内容"></el-input>
+          <el-col :span="7" class="filedValue">
+            <template v-if="item.jnpfKey==='numInput'">
+              <el-input-number v-model="item.filedValue" placeholder="请输入"
+                :precision="item.precision" controls-position="right" />
+            </template>
+            <template v-else-if="item.jnpfKey==='calculate'">
+              <el-input-number v-model="item.filedValue" placeholder="请输入" :precision="2"
+                controls-position="right" />
+            </template>
+            <template v-else-if="['rate','slider'].includes(item.jnpfKey)">
+              <el-input-number v-model="item.filedValue" placeholder="请输入"
+                controls-position="right" />
+            </template>
+            <template v-else-if="item.jnpfKey==='switch'">
+              <el-switch v-model="item.filedValue" :active-value="1" :inactive-value="0" />
+            </template>
+            <template v-else-if="item.jnpfKey==='time'">
+              <el-time-picker v-model="item.filedValue" :picker-options="item['picker-options']"
+                placeholder="请选择" clearable :value-format="item['value-format']"
+                :format="item.format">
+              </el-time-picker>
+            </template>
+            <template v-else-if="['date','createTime', 'modifyTime'].includes(item.jnpfKey)">
+              <el-date-picker v-model="item.filedValue" :type="item.type||'datetime'" clearable
+                placeholder="请选择" value-format="timestamp"
+                @change="onConditionDateChange($event,item)"
+                :format="item.format||'yyyy-MM-dd HH:mm:ss'">
+              </el-date-picker>
+            </template>
+            <template v-else-if="['comSelect','currOrganize'].includes(item.jnpfKey)">
+              <comSelect v-model="item.filedValue" placeholder="请选择" clearable
+                @change="onConditionListChange(arguments,item)" />
+            </template>
+            <template v-else-if="['depSelect'].includes(item.jnpfKey)">
+              <depSelect v-model="item.filedValue" placeholder="请选择" clearable
+                @change="onConditionObjChange(arguments,item)" />
+            </template>
+            <template v-else-if="['userSelect','createUser','modifyUser'].includes(item.jnpfKey)">
+              <userSelect v-model="item.filedValue" placeholder="请选择" hasSys clearable
+                @change="onConditionObjChange(arguments,item)" />
+            </template>
+            <template v-else-if="['posSelect','currPosition'].includes(item.jnpfKey)">
+              <posSelect v-model="item.filedValue" placeholder="请选择" clearable
+                @change="onConditionObjChange(arguments,item)" />
+            </template>
+            <template v-else-if="item.jnpfKey==='address'">
+              <JNPFAddress v-model="item.filedValue" placeholder="请选择" :level="item.level" clearable
+                @change="onConditionListChange(arguments,item)" />
+            </template>
+            <template v-else>
+              <el-input v-model="item.filedValue" placeholder="请输入"></el-input>
+            </template>
           </el-col>
-          <el-col :span="5">
+          <el-col :span="4">
             <el-select v-model="item.logic" placeholder="请选择" @change="logicChange($event,item)">
               <el-option v-for="item in logicOptions" :key="item.value" :label="item.label"
                 :value="item.value">
@@ -48,13 +98,12 @@
             </el-select>
           </el-col>
           <el-col :span="2">
-            <i class="el-icon-delete" style="cursor: pointer;" @click="onDelCondition(index)"></i>
+            <i class="el-icon-delete" @click="onDelCondition(index)"></i>
           </el-col>
         </el-row>
       </template>
       <div style="padding-left:4px;margin-top:10px;">
-        <el-button type="primary" size="small" icon="el-icon-plus" @click="addCondition()">添加条件
-        </el-button>
+        <el-button size="small" icon="el-icon-plus" @click="addCondition()">添加条件</el-button>
       </div>
     </section>
 
@@ -128,6 +177,10 @@
                 </el-form-item>
                 <el-form-item label="表单字段" style="margin-bottom:0;"
                   v-if="subFlowForm.initiateType === 4">
+                  <el-radio-group v-model="subFlowForm.formFieldType">
+                    <el-radio :label="1">用户</el-radio>
+                    <el-radio :label="2">部门</el-radio>
+                  </el-radio-group>
                   <el-select v-model="subFlowForm.formField" placeholder="请选择字段">
                     <el-option v-for="item in usedFormItems" :key="item.__vModel__"
                       :label="item.__config__.label" :value="item.__vModel__">
@@ -263,12 +316,12 @@
                   <el-input v-model="startForm.saveBtnText" />
                 </div>
                 <div class="per-cell">
-                  <el-checkbox v-model="startForm.hasPressBtn">催办</el-checkbox>
-                  <el-input v-model="startForm.pressBtnText" />
-                </div>
-                <div class="per-cell">
                   <el-checkbox v-model="startForm.hasRevokeBtn">撤回</el-checkbox>
                   <el-input v-model="startForm.revokeBtnText" />
+                </div>
+                <div class="per-cell">
+                  <el-checkbox v-model="startForm.hasPressBtn">催办</el-checkbox>
+                  <el-input v-model="startForm.pressBtnText" />
                 </div>
                 <div class="per-cell">
                   <el-checkbox v-model="startForm.hasPrintBtn">打印</el-checkbox>
@@ -328,7 +381,7 @@
                 <el-switch v-model="startForm.initFuncConfig.on" />
               </el-form-item>
               <div style="margin-bottom: 18px;" v-if="startForm.initFuncConfig.on">
-                <el-form-item label="事件设置" style="margin-bottom: 0;"></el-form-item>
+                <el-form-item label="接口设置" style="margin-bottom: 0;"></el-form-item>
                 <el-form-item label-width="0">
                   <interface-dialog v-model="startForm.initFuncConfig.interfaceId"
                     :title="startForm.initFuncConfig.interfaceName"
@@ -371,7 +424,7 @@
                 <el-switch v-model="startForm.endFuncConfig.on" />
               </el-form-item>
               <div style="margin-bottom: 18px;" v-if="startForm.endFuncConfig.on">
-                <el-form-item label="事件设置" style="margin-bottom: 0;"></el-form-item>
+                <el-form-item label="接口设置" style="margin-bottom: 0;"></el-form-item>
                 <el-form-item label-width="0">
                   <interface-dialog v-model="startForm.endFuncConfig.interfaceId"
                     :title="startForm.endFuncConfig.interfaceName"
@@ -414,7 +467,7 @@
                 <el-switch v-model="startForm.flowRecallFuncConfig.on" />
               </el-form-item>
               <div v-if="startForm.flowRecallFuncConfig.on">
-                <el-form-item label="事件设置" style="margin-bottom: 0;"></el-form-item>
+                <el-form-item label="接口设置" style="margin-bottom: 0;"></el-form-item>
                 <el-form-item label-width="0">
                   <interface-dialog v-model="startForm.flowRecallFuncConfig.interfaceId"
                     :title="startForm.flowRecallFuncConfig.interfaceName"
@@ -694,6 +747,10 @@
                 </el-form-item>
                 <el-form-item label="表单字段" style="margin-bottom:0;"
                   v-if="approverForm.assigneeType === 4">
+                  <el-radio-group v-model="approverForm.formFieldType">
+                    <el-radio :label="1">用户</el-radio>
+                    <el-radio :label="2">部门</el-radio>
+                  </el-radio-group>
                   <el-select v-model="approverForm.formField" placeholder="请选择字段">
                     <el-option v-for="item in usedFormItems" :key="item.__vModel__"
                       :label="item.__config__.label" :value="item.__vModel__">
@@ -791,7 +848,7 @@
                   <el-input v-model="approverForm.revokeBtnText" />
                 </div>
                 <div class="per-cell">
-                  <el-checkbox v-model="approverForm.hasTransferBtn">转办</el-checkbox>
+                  <el-checkbox v-model="approverForm.hasTransferBtn">转审</el-checkbox>
                   <el-input v-model="approverForm.transferBtnText" />
                 </div>
                 <div class="per-cell">
@@ -865,7 +922,7 @@
                 <el-switch v-model="approverForm.approveFuncConfig.on" />
               </el-form-item>
               <div style="margin-bottom: 18px;" v-if="approverForm.approveFuncConfig.on">
-                <el-form-item label="事件设置" style="margin-bottom: 0;"></el-form-item>
+                <el-form-item label="接口设置" style="margin-bottom: 0;"></el-form-item>
                 <el-form-item label-width="0">
                   <interface-dialog v-model="approverForm.approveFuncConfig.interfaceId"
                     :title="approverForm.approveFuncConfig.interfaceName"
@@ -904,11 +961,11 @@
                   </el-table-column>
                 </el-table>
               </div>
-              <el-form-item label="拒绝事件">
+              <el-form-item label="驳回事件">
                 <el-switch v-model="approverForm.rejectFuncConfig.on" />
               </el-form-item>
               <div style="margin-bottom: 18px;" v-if="approverForm.rejectFuncConfig.on">
-                <el-form-item label="事件设置" style="margin-bottom: 0;"></el-form-item>
+                <el-form-item label="接口设置" style="margin-bottom: 0;"></el-form-item>
                 <el-form-item label-width="0">
                   <interface-dialog v-model="approverForm.rejectFuncConfig.interfaceId"
                     :title="approverForm.rejectFuncConfig.interfaceName"
@@ -951,7 +1008,7 @@
                 <el-switch v-model="approverForm.recallFuncConfig.on" />
               </el-form-item>
               <div v-if="approverForm.recallFuncConfig.on">
-                <el-form-item label="事件设置" style="margin-bottom: 0;"></el-form-item>
+                <el-form-item label="接口设置" style="margin-bottom: 0;"></el-form-item>
                 <el-form-item label-width="0">
                   <interface-dialog v-model="approverForm.recallFuncConfig.interfaceId"
                     :title="approverForm.recallFuncConfig.interfaceName"
@@ -1162,6 +1219,21 @@ import { getDrawingList } from '@/components/Generator/utils/db'
 import OrgSelect from '../OrgSelect'
 import MsgDialog from './msgDialog'
 import InterfaceDialog from './InterfaceDialog'
+const requiredDisabled = (jnpfKey) => {
+  return ['billRule', 'createUser', 'createTime', 'modifyTime', 'modifyUser', 'currPosition', 'currOrganize', 'table'].includes(jnpfKey)
+}
+const getDataType = (data) => {
+  if (!data.__config__ || !data.__config__.jnpfKey) return ''
+  const jnpfKey = data.__config__.jnpfKey
+  if (['numInput', 'date', 'rate', 'slider'].includes(jnpfKey)) {
+    return 'number'
+  } else if (['checkbox', 'uploadFz', 'uploadImg', 'cascader', 'comSelect', 'address'].includes(jnpfKey)) {
+    return 'array'
+  } else if (['select', 'depSelect', 'posSelect', 'userSelect', 'treeSelect'].includes(jnpfKey)) {
+    if (data.multiple) return 'array'
+  }
+  return ''
+}
 const defaultStartForm = {
   initFuncConfig: {
     on: false,
@@ -1229,6 +1301,7 @@ const defaultStartForm = {
   formOperates: []
 }
 const defaultSubFlowForm = {
+  formFieldType: 1,// 表单字段审核方式的类型(1-用户 2-部门)
   initiateType: 6,
   managerLevel: 1,
   formField: '',
@@ -1248,6 +1321,7 @@ const defaultSubFlowForm = {
   isAsync: false
 }
 const defaultApproverForm = {
+  formFieldType: 1,// 表单字段审核方式的类型(1-用户 2-部门)
   approvers: [], // 审批人集合
   approverPos: [], // 审批岗位集合
   approverRole: [], // 审批角色集合
@@ -1278,7 +1352,7 @@ const defaultApproverForm = {
   hasRevokeBtn: true,
   revokeBtnText: '撤 回',
   hasTransferBtn: true,
-  transferBtnText: '转 办',
+  transferBtnText: '转 审',
   hasPrintBtn: false,
   printBtnText: '打 印',
   printId: '', // 打印模板
@@ -1355,11 +1429,11 @@ const typeOptions = [
     value: 4
   },
   {
-    label: '环节',
+    label: '流程环节',
     value: 5
   },
   {
-    label: '服务',
+    label: '接口服务',
     value: 9
   }]
 const assigneeTypeOptions = [...typeOptions, {
@@ -1495,6 +1569,14 @@ export default {
         {
           label: '不等于',
           value: "<>"
+        },
+        {
+          label: '包含',
+          value: "like"
+        },
+        {
+          label: '不包含',
+          value: "notLike"
         }],
       logicOptions: [
         {
@@ -1585,17 +1667,23 @@ export default {
       if (!formOperates.length) {
         const loop = (data, parent) => {
           if (!data) return
-          if (data.__config__ && data.__config__.jnpfKey !== 'table' && data.__config__.children && Array.isArray(data.__config__.children)) {
-            loop(data.__config__.children, data)
+          if (data.__vModel__) {
+            const isTableChild = parent && parent.__config__ && parent.__config__.jnpfKey === 'table'
+            res.push({
+              id: isTableChild ? parent.__vModel__ + '-' + data.__vModel__ : data.__vModel__,
+              name: isTableChild ? parent.__config__.label + '-' + data.__config__.label : data.__config__.label,
+              required: data.__config__.required,
+              requiredDisabled: requiredDisabled(data.__config__.jnpfKey) || data.__config__.required,
+              jnpfKey: data.__config__.jnpfKey,
+              dataType: getDataType(data),
+              read: true,
+              write: false
+            })
           }
           if (Array.isArray(data)) data.forEach(d => loop(d, parent))
-          if (data.__vModel__) res.push({
-            id: data.__vModel__,
-            name: data.__config__.label,
-            required: data.__config__.required,
-            read: true,
-            write: false
-          })
+          if (data.__config__ && data.__config__.children && Array.isArray(data.__config__.children)) {
+            loop(data.__config__.children, data)
+          }
         }
         loop(getDrawingList())
       } else {
@@ -1625,7 +1713,7 @@ export default {
       this.properties.conditions = this.pconditions
       for (let i = 0; i < this.pconditions.length; i++) {
         const e = this.pconditions[i];
-        nodeContent += `[${e.fieldName} ${e.symbol} ${e.filedValue}] ${i + 1 == this.pconditions.length ? '' : e.logicName}` + '\n'
+        nodeContent += `[${e.fieldName} ${e.symbolName} ${e.filedLabel ? e.filedLabel : (e.filedValue || e.filedValue === 0) ? e.filedValue : ''}] ${i + 1 == this.pconditions.length ? '' : e.logicName}` + '\n'
       }
       this.$emit("confirm", this.properties, nodeContent || '请设置条件');
       this.visible = false;
@@ -1873,7 +1961,8 @@ export default {
     */
     initApproverNodeData() {
       this.activeName = 'config'
-      Object.assign(this.approverForm, this.value.properties)
+      let properties = JSON.parse(JSON.stringify(this.value.properties))
+      this.approverForm = { ...this.approverForm, ...properties }
       this.getNodeOption()
       this.approverForm.formOperates = this.initFormOperates(this.value)
       this.approverForm.approveMsgConfig.on = typeof this.approverForm.approveMsgConfig.on === 'number' ? this.approverForm.approveMsgConfig.on : 2
@@ -1882,7 +1971,8 @@ export default {
     initSubFlowData() {
       this.getFlowOptions()
       this.getNodeOption()
-      Object.assign(this.subFlowForm, this.value.properties)
+      let properties = JSON.parse(JSON.stringify(this.value.properties))
+      Object.assign(this.subFlowForm, properties)
       this.subFlowForm.launchMsgConfig.on = typeof this.subFlowForm.launchMsgConfig.on === 'number' ? this.subFlowForm.launchMsgConfig.on : 0
     },
     openRuleBox() {
@@ -1964,23 +2054,30 @@ export default {
     initConditionNodeData() {
       // 初始化条件表单数据
       let nodeConditions = this.value.properties && this.value.properties.conditions
-      this.pconditions = nodeConditions
+      this.pconditions = JSON.parse(JSON.stringify(nodeConditions))
     },
     addCondition() {
       let item = {
         fieldName: '',
         symbolName: '',
         filedValue: '',
+        filedLabel: '',
         logicName: '并且',
         field: '',
         symbol: '',
         logic: '&&',
+        jnpfKey: ''
       }
       this.pconditions.push(item)
     },
-    fieldNameChange(val, item) {
+    fieldNameChange(val, item, i) {
       let obj = this.usedFormItems.filter(o => o.__vModel__ == val)[0]
       item.fieldName = obj.__config__.label
+      item.jnpfKey = obj.__config__.jnpfKey
+      item = { ...item, ...obj }
+      item.filedValue = undefined
+      item.filedLabel = ''
+      this.$set(this.pconditions, i, item)
     },
     symbolChange(val, item) {
       let obj = this.symbolOptions.filter(o => o.value == val)[0]
@@ -2010,16 +2107,6 @@ export default {
           this.$message({
             showClose: true,
             message: '比较不能为空',
-            type: 'error',
-            duration: 1000
-          });
-          isOk = false
-          break
-        }
-        if (!e.filedValue) {
-          this.$message({
-            showClose: true,
-            message: '数据值不能为空',
             type: 'error',
             duration: 1000
           });
@@ -2065,6 +2152,21 @@ export default {
         ...o,
         relationField: ''
       }))
+    },
+    // 条件节点
+    onConditionDateChange(val, item) {
+      if (!val) return item.filedLabel = ''
+      let format = item.format || 'yyyy-MM-dd HH:mm:ss'
+      item.filedLabel = this.jnpf.toDate(val, format)
+    },
+    onConditionListChange(data, item) {
+      if (!data || !data[1]) return item.filedLabel = ''
+      let labelList = data[1].map(o => o.fullName)
+      item.filedLabel = labelList.join(' / ')
+    },
+    onConditionObjChange(data, item) {
+      if (!data || !data[1]) return item.filedLabel = ''
+      item.filedLabel = data[1].fullName || ''
     }
   },
   watch: {
@@ -2235,12 +2337,27 @@ export default {
 .condition-list {
   font-size: 14px;
   line-height: 36px;
+  &.condition-list-header {
+    >>> .el-col {
+      text-align: left;
+    }
+  }
   >>> .el-col {
     text-align: center;
     padding: 0 4px;
+    &.filedValue {
+      text-align: left;
+    }
     .el-input,
+    .el-input-number,
     .el-select {
       width: 100%;
+    }
+    .el-icon-delete {
+      cursor: pointer;
+      &:hover {
+        color: #f2725e;
+      }
     }
   }
 }

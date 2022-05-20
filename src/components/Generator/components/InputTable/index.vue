@@ -19,7 +19,7 @@
       <template v-for="(head, cindex) in tableData">
         <el-table-column :key="head.__config__.formId" :min-width="head['min-width']"
           :prop="head.__vModel__" :width="head.__config__.columnWidth"
-          v-if="!head.__config__.noShow">
+          v-if="!head.__config__.noShow && (!head.__config__.visibility || (Array.isArray(head.__config__.visibility) && head.__config__.visibility.includes('pc')))">
           <template slot="header">
             <span style="color: #f56c6c;" v-if="head.__config__.required">*</span>
             {{ head.__config__['label'] }}
@@ -72,7 +72,7 @@
         </el-table-column>
       </template>
     </el-table>
-    <div class="table-actions" @click="addRow" v-if="!disabled">
+    <div class="table-actions" @click="addRow()" v-if="!disabled">
       <el-button type="text" icon="el-icon-plus"> {{ config.actionText }}</el-button>
     </div>
   </div>
@@ -356,6 +356,7 @@ export default {
           __vModel__: ['relationForm', 'popupSelect'].includes(t.__config__.jnpfKey) ? t.__vModel__ + '_jnpfRelation_' + rowIndex : t.__vModel__,
           regList: t.__config__.regList || [],
           required: t.__config__.required,
+          rowData: val || {},
           config: t
         }
         // if (t.tag === 'el-upload') this.$set(res, 'value', t.defaultValue)
@@ -370,6 +371,7 @@ export default {
           str = c.__vModel__.substring(0, c.__vModel__.indexOf('_jnpfRelation_'))
         }
         p[str] = c.value
+        if (c.rowData) p = { ...c.rowData, ...p }
         return p
       }, {}))
     },

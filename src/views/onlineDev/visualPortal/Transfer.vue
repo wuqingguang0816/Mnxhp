@@ -3,7 +3,7 @@
   <el-dialog title="选择角色" :close-on-click-modal="false"
     class="JNPF-dialog JNPF-dialog_center transfer-dialog" lock-scroll append-to-body
     v-bind="$attrs" width="800px" :modal-append-to-body="false" v-on="$listeners" @open="onOpen">
-    <roleTransfer v-model="selectedData" ref="roleTransfer" multiple />
+    <roleTransfer v-model="selectedData" ref="roleTransfer" multiple auth />
     <span slot="footer" class="dialog-footer">
       <el-button @click="closeTransfer">{{$t('common.cancelButton')}}</el-button>
       <el-button type="primary" @click="confirm">{{$t('common.confirmButton')}}</el-button>
@@ -13,7 +13,6 @@
 
 <script>
 import { getModelData, setModelData } from '@/api/permission/authorize'
-import { getRoleSelector } from '@/api/permission/role'
 import roleTransfer from '@/components/Process/OrgTransfer/roleTransfer'
 
 export default {

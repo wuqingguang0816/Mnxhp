@@ -33,6 +33,7 @@ export default {
         if (!res.data || !res.data.formData) return
         data.formConf = res.data.formData
         data.type = res.data.type
+        data.formOperates = []
         if (data.formType == 1) {
           if (res.data.formUrl) {
             this.currentView = (resolve) => require([`@/views/${res.data.formUrl}`], resolve)

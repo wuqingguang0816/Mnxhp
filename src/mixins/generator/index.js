@@ -1,4 +1,4 @@
-import { getVisualDevList, Delete, Copy, exportData, exportAppData } from '@/api/onlineDev/visualDev'
+import { getVisualDevList, Delete, Copy, exportData } from '@/api/onlineDev/visualDev'
 
 export default {
   data() {
@@ -15,6 +15,8 @@ export default {
       listLoading: false,
       formVisible: false,
       addVisible: false,
+      currWebType: '',
+      currId: '',
       categoryList: []
     }
   },
@@ -72,7 +74,7 @@ export default {
       }).catch(() => {});
     },
     copy(id) {
-      this.$confirm('您确定要复制该功能表单, 是否继续?', '提示', {
+      this.$confirm('您确定要复制该功能模板, 是否继续?', '提示', {
         type: 'warning'
       }).then(() => {
         Copy(id).then(res => {
@@ -88,28 +90,31 @@ export default {
       }).catch(() => {});
     },
     exportModel(id) {
-      this.$confirm('您确定要导出该功能表单, 是否继续?', '提示', {
+      this.$confirm('您确定要导出该功能模板, 是否继续?', '提示', {
         type: 'warning'
       }).then(() => {
-        let method = null
-        if (this.query.type == 1) {
-          method = exportData
-        }
-        if (this.query.type == 2) {
-          method = exportAppData
-        }
-        method(id).then(res => {
+        exportData(id).then(res => {
           this.jnpf.downloadFile(res.data.url)
         })
       }).catch(() => {});
     },
-    handleAdd(webType) {
-      this.addOrUpdateHandle('', webType)
+    toggleWebType(row) {
+      const { id, webType } = row
+      if (!webType) return
+      this.openAddBox(id, webType)
     },
-    addOrUpdateHandle(id, webType) {
+    openAddBox(id, webType) {
+      this.addVisible = true
+      this.currId = id || ''
+      this.currWebType = webType || ''
+    },
+    handleAdd(webType, isToggle) {
+      this.addOrUpdateHandle(this.currId, webType, isToggle)
+    },
+    addOrUpdateHandle(id, webType, isToggle) {
       this.formVisible = true
       this.$nextTick(() => {
-        this.$refs.Form.init(this.categoryList, id, this.query.type, webType)
+        this.$refs.Form.init(this.categoryList, id, this.query.type, webType, isToggle)
       })
     },
     closeForm(isRefresh) {

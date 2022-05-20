@@ -225,16 +225,12 @@ const actions = {
   logout({ commit, state, dispatch }) {
     return new Promise((resolve, reject) => {
       logout(state.token).then(() => {
-        commit('SET_TOKEN', '')
-        commit('SET_MENULIST', [])
-        commit('SET_USERINFO', {})
-        commit('SET_PERMISSION_LIST', [])
-        removeToken()
-        resetRouter()
-
-        // reset visited views and cached views
-        dispatch('tagsView/delAllViews', null, { root: true })
-        resolve()
+        dispatch('resetToken').then(() => {
+          resetRouter()
+          // reset visited views and cached views
+          dispatch('tagsView/delAllViews', null, { root: true })
+          resolve()
+        })
       }).catch(error => {
         reject(error)
       })
@@ -248,6 +244,8 @@ const actions = {
       commit('SET_USERINFO', {})
       commit('SET_PERMISSION_LIST', [])
       commit('SET_LOGIN_LOADING', false)
+      commit('generator/SET_COMPANY_TREE', [], { root: true })
+      commit('generator/SET_DEP_TREE', [], { root: true })
       removeToken()
       resolve()
     })
