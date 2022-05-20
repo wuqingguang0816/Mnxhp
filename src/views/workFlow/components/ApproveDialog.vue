@@ -2,17 +2,25 @@
   <el-dialog :title="eventType==='audit'?'审批通过':'审批拒绝'" :close-on-click-modal="false"
     :visible.sync="visible" class="JNPF-dialog JNPF-dialog_center" lock-scroll append-to-body
     width='600px'>
-    <el-form label-width="80px" ref="dataForm" :model="dataForm">
+    <el-form label-width="130px" ref="dataForm" :model="dataForm">
       <template v-if="eventType==='audit'">
+        <el-form-item label="分支选择" prop="branchList" v-if="branchList.length"
+          :rules="[{ required: true, message: `分支不能为空`, trigger: 'change' }]">
+          <el-select v-model="dataForm.branchList" multiple placeholder="请选择审批分支" clearable
+            @change="onBranchChange">
+            <el-option v-for="item in branchList" :key="item.nodeId" :label="item.nodeName"
+              :value="item.nodeId" />
+          </el-select>
+        </el-form-item>
         <el-form-item :label="item.nodeName+item.label" :prop="'candidateList.' + i + '.value'"
           v-for="(item,i) in dataForm.candidateList" :key="i" :rules="item.rules">
           <candidate-user-select v-model="item.value" multiple :placeholder="'请选择'+item.label"
             :taskId="taskId" :formData="formData" :nodeId="item.nodeId" />
         </el-form-item>
+        <el-form-item label="加签人员" v-if="properties&&properties.hasFreeApprover">
+          <user-select v-model="freeApproverUserId" placeholder="请选择加签人员,不选即该节点审核结束" />
+        </el-form-item>
       </template>
-      <el-form-item label="加签人员" v-if="eventType==='audit'&&properties&&properties.hasFreeApprover">
-        <user-select v-model="freeApproverUserId" placeholder="请选择加签人员,不选即该节点审核结束" />
-      </el-form-item>
       <el-form-item label="审批意见" prop="handleOpinion">
         <el-input v-model="dataForm.handleOpinion" placeholder="请输入审批意见（选填）" type="textarea"
           :rows="4" />
@@ -54,7 +62,9 @@ export default {
   data() {
     return {
       visible: false,
+      branchList: [],
       dataForm: {
+        branchList: [],
         candidateList: [],
         handleOpinion: '',
       },
@@ -72,11 +82,12 @@ export default {
     }
   },
   methods: {
-    init(properties, taskId, eventType, candidateList, flowId) {
+    init(properties, taskId, eventType, branchList, candidateList, flowId) {
       this.visible = true
       this.properties = properties
       this.taskId = taskId
       this.eventType = eventType || ''
+      this.branchList = branchList || []
       this.dataForm.candidateList = candidateList || []
       this.dataForm.handleOpinion = ''
       this.formData.flowId = flowId
@@ -87,6 +98,25 @@ export default {
         this.handleReset()
         this.$refs['dataForm'].resetFields()
       })
+    },
+    onBranchChange(val) {
+      if (!val.length) return this.dataForm.candidateList = []
+      let list = []
+      for (let i = 0; i < val.length; i++) {
+        inner: for (let j = 0; j < this.branchList.length; j++) {
+          let o = this.branchList[j]
+          if (val[i] === o.nodeId && o.isCandidates) {
+            list.push({
+              ...o,
+              label: '审批人',
+              value: [],
+              rules: [{ required: true, message: `审批人不能为空`, trigger: 'click' }]
+            })
+            break inner
+          }
+        }
+      }
+      this.dataForm.candidateList = list
     },
     handleApproval() {
       this.$refs['dataForm'].validate((valid) => {
@@ -101,7 +131,8 @@ export default {
           let query = {
             handleOpinion: this.dataForm.handleOpinion,
             signImg: this.signImg,
-            copyIds: this.copyIds.join(',')
+            copyIds: this.copyIds.join(','),
+            branchList: this.dataForm.branchList
           }
           if (this.dataForm.candidateList.length) {
             let candidateList = {}

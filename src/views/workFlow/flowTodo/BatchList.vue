@@ -150,6 +150,7 @@ export default {
       nodeOptions: [],
       multipleSelection: [],
       currentBatchType: null,
+      candidateType: 1,
       userBoxVisible: false,
       approveVisible: false,
       pickerOptions: {
@@ -244,9 +245,15 @@ export default {
         BatchCandidate(query).then(res => {
           let data = res.data
           this.btnLoading = false
+          this.candidateType = data.type
+          let branchList = []
           let candidateList = []
-          if (Array.isArray(data) && data.length) {
-            candidateList = res.data.map(o => ({
+          if (data.type == 1) {
+            branchList = data.list
+          }
+          if (data.type == 2) {
+            let list = data.list.filter(o => o.isCandidates)
+            candidateList = list.map(o => ({
               ...o,
               label: '审批人',
               value: [],
@@ -255,7 +262,7 @@ export default {
           }
           this.approveVisible = true
           this.$nextTick(() => {
-            this.$refs.approveDialog.init(properties, item.id, 'audit', candidateList, item.flowId)
+            this.$refs.approveDialog.init(properties, item.id, 'audit', branchList, candidateList, item.flowId)
           })
         }).catch(() => {
           this.btnLoading = false
@@ -266,7 +273,7 @@ export default {
         if (!properties.hasRejectBtn) return this.$message.error('当前审批节点无拒绝权限')
         this.approveVisible = true
         this.$nextTick(() => {
-          this.$refs.approveDialog.init(properties, item.id, 'reject', [], item.flowId)
+          this.$refs.approveDialog.init(properties, item.id, 'reject', [], [], item.flowId)
         })
         return
       }
@@ -291,6 +298,7 @@ export default {
         ...data,
         enCode: this.multipleSelection[0].flowCode,
         batchType: this.currentBatchType,
+        candidateType: this.candidateType,
         ids
       }
       BatchOperation(query).then(res => {

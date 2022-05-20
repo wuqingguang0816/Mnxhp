@@ -75,17 +75,25 @@
       <el-dialog :title="eventType==='audit'?'审批通过':'审批拒绝'" :close-on-click-modal="false"
         :visible.sync="visible" class="JNPF-dialog JNPF-dialog_center" lock-scroll append-to-body
         width='600px'>
-        <el-form label-width="80px" ref="candidateForm" :model="candidateForm">
+        <el-form label-width="130px" ref="candidateForm" :model="candidateForm">
           <template v-if="eventType==='audit'">
+            <el-form-item label="分支选择" prop="branchList" v-if="branchList.length"
+              :rules="[{ required: true, message: `分支不能为空`, trigger: 'change' }]">
+              <el-select v-model="candidateForm.branchList" multiple placeholder="请选择审批分支" clearable
+                @change="onBranchChange">
+                <el-option v-for="item in branchList" :key="item.nodeId" :label="item.nodeName"
+                  :value="item.nodeId" />
+              </el-select>
+            </el-form-item>
             <el-form-item :label="item.nodeName+item.label" :prop="'candidateList.' + i + '.value'"
               v-for="(item,i) in candidateForm.candidateList" :key="i" :rules="item.rules">
               <candidate-user-select v-model="item.value" multiple :placeholder="'请选择'+item.label"
                 :taskId="setting.taskId" :formData="formData" :nodeId="item.nodeId" />
             </el-form-item>
+            <el-form-item label="加签人员" v-if="properties.hasFreeApprover">
+              <user-select v-model="handleId" placeholder="请选择加签人员,不选即该节点审核结束" />
+            </el-form-item>
           </template>
-          <el-form-item label="加签人员" v-if="eventType==='audit'&& properties.hasFreeApprover">
-            <user-select v-model="handleId" placeholder="请选择加签人员,不选即该节点审核结束" />
-          </el-form-item>
           <el-form-item label="审批意见">
             <el-input v-model="reason" placeholder="请输入审批意见（选填）" type="textarea" :rows="4" />
           </el-form-item>
@@ -139,7 +147,8 @@
       <print-browse :visible.sync="printBrowseVisible" :id="properties.printId" :formId="setting.id"
         :fullName="setting.fullName" />
       <candidate-form :visible.sync="candidateVisible" :candidateList="candidateList"
-        :taskId="setting.taskId" :formData="formData" @submitCandidate="submitCandidate" />
+        :branchList="branchList" :taskId="setting.taskId" :formData="formData"
+        @submitCandidate="submitCandidate" />
     </div>
   </transition>
 </template>
@@ -199,8 +208,11 @@ export default {
       approvalBtnLoading: false,
       candidateLoading: false,
       candidateVisible: false,
+      candidateType: 1,
+      branchList: [],
       candidateList: [],
       candidateForm: {
+        branchList: [],
         candidateList: []
       },
       printBrowseVisible: false,
@@ -370,9 +382,17 @@ export default {
         this.candidateLoading = true
         Candidates(this.setting.taskId, { formData: this.formData }).then(res => {
           let data = res.data
+          this.candidateType = data.type
           this.candidateLoading = false
-          if (Array.isArray(data) && data.length) {
-            this.candidateForm.candidateList = res.data.map(o => ({
+          if (data.type == 1) {
+            this.branchList = res.data.list
+            this.$nextTick(() => {
+              this.$refs['candidateForm'].resetFields()
+            })
+          } else if (data.type == 2) {
+            this.branchList = []
+            let list = res.data.list.filter(o => o.isCandidates)
+            this.candidateForm.candidateList = list.map(o => ({
               ...o,
               label: '审批人',
               value: [],
@@ -389,6 +409,25 @@ export default {
           this.candidateLoading = false
         })
       }
+    },
+    onBranchChange(val) {
+      if (!val.length) return this.candidateForm.candidateList = []
+      let list = []
+      for (let i = 0; i < val.length; i++) {
+        inner: for (let j = 0; j < this.branchList.length; j++) {
+          let o = this.branchList[j]
+          if (val[i] === o.nodeId && o.isCandidates) {
+            list.push({
+              ...o,
+              label: '审批人',
+              value: [],
+              rules: [{ required: true, message: `审批人不能为空`, trigger: 'click' }]
+            })
+            break inner
+          }
+        }
+      }
+      this.candidateForm.candidateList = list
     },
     saveAudit() {
       this.btnLoading = true
@@ -416,8 +455,14 @@ export default {
       Candidates(0, { formData: this.formData }).then(res => {
         let data = res.data
         this.candidateLoading = false
-        if (Array.isArray(data) && data.length) {
-          this.candidateList = res.data
+        this.candidateType = data.type
+        if (data.type == 1) {
+          this.branchList = res.data.list
+          this.candidateList = []
+          this.candidateVisible = true
+        } else if (data.type == 2) {
+          this.branchList = []
+          this.candidateList = res.data.list.filter(o => o.isCandidates)
           this.candidateVisible = true
         } else {
           this.$confirm('您确定要提交当前流程吗, 是否继续?', '提示', {
@@ -430,8 +475,9 @@ export default {
         this.candidateLoading = false
       })
     },
-    handleRequest(candidateList) {
-      if (candidateList) this.formData.candidateList = candidateList
+    handleRequest(candidateData) {
+      if (candidateData) this.formData = { ...this.formData, ...candidateData }
+      this.formData.candidateType = this.candidateType
       if (!this.formData.id) delete (this.formData.id)
       if (this.eventType === 'save') this.btnLoading = true
       this.allBtnDisabled = true
@@ -591,7 +637,9 @@ export default {
             formData: this.formData,
             enCode: this.setting.enCode,
             signImg: this.signImg,
-            copyIds: this.copyIds.join(',')
+            copyIds: this.copyIds.join(','),
+            branchList: this.candidateForm.branchList,
+            candidateType: this.candidateType
           }
           if (this.candidateForm.candidateList.length) {
             let candidateList = {}
