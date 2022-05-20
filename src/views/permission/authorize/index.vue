@@ -60,7 +60,7 @@
 </template>
 
 <script>
-import { getRoleSelector } from '@/api/permission/role'
+import { getRoleSelectorByPermission } from '@/api/permission/role'
 import { getAuthorizeValues, updateBatchAuthorize } from '@/api/permission/authorize'
 
 export default {
@@ -118,7 +118,7 @@ export default {
     },
     getRoleList() {
       this.roleTreeLoading = true
-      getRoleSelector().then(res => {
+      getRoleSelectorByPermission().then(res => {
         let ids = []
         const loop = list => {
           for (let i = 0; i < list.length; i++) {

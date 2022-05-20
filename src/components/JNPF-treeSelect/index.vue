@@ -197,12 +197,12 @@ export default {
       if (this.multiple) {
         this.valueTitle = []
         this.$emit('input', [])
-        this.$emit('change', [])
+        this.$emit('change', [], [])
         this.$refs.selectTree.setCheckedKeys([])
       } else {
         this.valueTitle = ''
         this.$emit('input', '')
-        this.$emit('change', '')
+        this.$emit('change', '', '')
       }
       this.defaultExpandedKey = []
       this.clearSelected()

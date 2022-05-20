@@ -23,6 +23,7 @@ service.interceptors.request.use(
       config.timeout = 100000
     }
     // do something before request is sent
+    config.headers['jnpf-origin'] = 'pc'
     if (store.getters.token) {
       config.headers['Authorization'] = getToken()
     }

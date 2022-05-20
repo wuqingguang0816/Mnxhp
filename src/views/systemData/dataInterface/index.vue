@@ -55,7 +55,7 @@
             <template slot-scope="scope">
               <span v-if="scope.row.dataType === 1">SQL操作</span>
               <span v-if="scope.row.dataType === 2">静态数据</span>
-              <span v-if="scope.row.dataType === 3">Api数据</span>
+              <span v-if="scope.row.dataType === 3">API操作</span>
             </template>
           </el-table-column>
           <el-table-column prop="requestMethod" label="动作" width="100" />

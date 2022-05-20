@@ -24,14 +24,24 @@
           <el-button type="primary" icon="el-icon-plus" @click="addOrUpdateHandle()">新建项目
           </el-button>
           <div class="JNPF-common-head-right">
+            <el-tooltip effect="dark" content="展开" placement="top">
+              <el-link v-show="!expands" type="text"
+                icon="icon-ym icon-ym-btn-expand JNPF-common-head-icon" :underline="false"
+                @click="toggleExpand()" />
+            </el-tooltip>
+            <el-tooltip effect="dark" content="折叠" placement="top">
+              <el-link v-show="expands" type="text"
+                icon="icon-ym icon-ym-btn-collapse JNPF-common-head-icon" :underline="false"
+                @click="toggleExpand()" />
+            </el-tooltip>
             <el-tooltip effect="dark" :content="$t('common.refresh')" placement="top">
               <el-link icon="icon-ym icon-ym-Refresh JNPF-common-head-icon" :underline="false"
                 @click="refresh()" />
             </el-tooltip>
           </div>
         </div>
-        <JNPF-table v-loading="listLoading" :data="list" row-key="id"
-          :tree-props="{children: 'children', hasChildren: 'expanded'}" default-expand-all>
+        <JNPF-table v-loading="listLoading" :data="list" row-key="id" v-if="refreshTable"
+          :tree-props="{children: 'children', hasChildren: ''}" :default-expand-all="expands">
           <el-table-column prop="projectName" label="项目名称" width="200">
             <template slot-scope="scope">
               <span v-if="scope.row.fullName"
@@ -93,6 +103,8 @@ export default {
       list: [],
       listLoading: true,
       formVisible: false,
+      expands: true,
+      refreshTable: true,
       industryTypeList: []
     }
   },
@@ -115,6 +127,13 @@ export default {
     refresh() {
       this.keyword = ''
       this.initData()
+    },
+    toggleExpand() {
+      this.refreshTable = false;
+      this.expands = !this.expands;
+      this.$nextTick(() => {
+        this.refreshTable = true;
+      });
     },
     initData() {
       this.listLoading = true

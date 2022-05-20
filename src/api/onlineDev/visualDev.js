@@ -47,6 +47,14 @@ export function Copy(id) {
     method: 'POST'
   })
 }
+// 发布菜单
+export function Release(id, data) {
+  return request({
+    url: `/api/visualdev/Base/${id}/Actions/Release`,
+    method: 'POST',
+    data
+  })
+}
 // 获取模块命名
 export function getAreasName() {
   return request({
@@ -195,13 +203,6 @@ export function Preview(data) {
 export function exportData(modelId) {
   return request({
     url: `/api/visualdev/OnlineDev/${modelId}/Actions/ExportData`,
-    method: 'post'
-  })
-}
-// 导出App
-export function exportAppData(modelId) {
-  return request({
-    url: `/api/visualdev/OnlineDev/App/${modelId}/Actions/ExportData`,
     method: 'post'
   })
 }

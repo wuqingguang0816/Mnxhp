@@ -226,6 +226,7 @@ export default {
         ],
       },
       tables: [],
+      defaultTable: [],
       formVisible: false,
       btnLoading: false,
       mainTableFields: [],
@@ -245,6 +246,7 @@ export default {
       this.categoryList = categoryList
       this.activeStep = 0
       this.tables = []
+      this.defaultTable = []
       this.dataForm.id = id || ''
       this.getDbOptions()
       this.visible = true
@@ -257,6 +259,7 @@ export default {
             this.dataForm.flowTemplateJson && (this.flowTemplateJson = JSON.parse(this.dataForm.flowTemplateJson))
             this.dataForm.formData && (this.formData = JSON.parse(this.dataForm.formData))
             this.tables = this.dataForm.tables && JSON.parse(this.dataForm.tables) || []
+            this.defaultTable = this.dataForm.tables && JSON.parse(this.dataForm.tables) || []
             this.updateFields()
             this.loading = false
           }).catch(() => { this.loading = false })
@@ -295,6 +298,10 @@ export default {
         this.$refs['dataForm'].validate((valid) => {
           if (valid) {
             if (!this.tables.length) {
+              if (this.defaultTable.length) {
+                this.$message.warning('请至少选择一个数据表')
+                return
+              }
               this.$store.commit('generator/SET_TABLE', false)
             } else {
               if (!this.exist()) return

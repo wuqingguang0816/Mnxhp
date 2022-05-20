@@ -3,6 +3,7 @@ import topOperation from '@/components/JNPF-topOperation/index'
 import tableOperation from '@/components/JNPF-tableOperation'
 import Pagination from '@/components/Pagination'
 import JNPFTable from '@/components/JNPF-table'
+import jnpfFormTipItem from '@/components/jnpf-form-tip-item'
 import UserBox from '@/components/JNPF-userBox'
 import Screenfull from '@/components/Screenfull'
 import ColumnSettings from '@/components/ColumnSettings'
@@ -38,6 +39,7 @@ export default {
     Vue.component('tableOpts', tableOperation)
     Vue.component('Pagination', Pagination)
     Vue.component('JNPFTable', JNPFTable)
+    Vue.component('jnpfFormTipItem', jnpfFormTipItem)
     Vue.component('uploadBtn', uploadBtn)
     Vue.component('UserBox', UserBox)
     Vue.component('JNPFText', JNPFText)

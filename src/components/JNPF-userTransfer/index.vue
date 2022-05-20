@@ -44,7 +44,7 @@
     <div class="transfer-pane">
       <div class="transfer-pane__tools">
         <span>已选</span>
-        <el-button @click="removeAll" type="text">清空列表</el-button>
+        <el-button @click="removeAll" type="text" class="removeAllBtn">清空列表</el-button>
       </div>
       <div class="transfer-pane__body shadow right-pane">
         <template>

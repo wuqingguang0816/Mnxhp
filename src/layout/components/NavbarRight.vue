@@ -101,6 +101,12 @@ import Settings from './settings'
 import UserList from './userList/UserList'
 import dragDialog from "@/directive/el-drag-dialog";
 import ReconnectingWebSocket from 'reconnecting-websocket'
+// 心跳检测, 每隔一段时间检测连接状态，如果处于连接中，就向server端主动发送消息，来重置server端与客户端的最大连接时间，如果已经断开了，发起重连。
+let heartCheck = {
+  // 100秒发一次心跳，比server端设置的连接时间稍微小一点，在接近断开的情况下以通信的方式去重置连接时间。
+  timeout: 100000,
+  serverTimeoutObj: null,
+}
 // import Notify from '@/utils/notify';
 
 export default {
@@ -166,6 +172,7 @@ export default {
         }
         socket.onmessage = (event) => {
           let data = JSON.parse(event.data)
+          this.resetCheck()
           if (data.method == 'initMessage') {
             this.messageCount = data.unreadMessageCount + data.unreadNoticeCount
             this.isTwinkle = !!data.unreadNums.length
@@ -183,6 +190,13 @@ export default {
           }
           //用户过期
           if (data.method == 'logout') {
+            if (this.socket) {
+              this.socket.close()
+              this.socket = null
+              this.$store.commit('user/SET_SOCKET', this.socket)
+            }
+            clearInterval(heartCheck.serverTimeoutObj);
+            heartCheck.serverTimeoutObj = null
             this.$message({
               message: data.msg || '登录过期,请重新登录',
               type: 'error',
@@ -201,19 +215,21 @@ export default {
               this.socket = null
               this.$store.commit('user/SET_SOCKET', this.socket)
             }
+            clearInterval(heartCheck.serverTimeoutObj);
+            heartCheck.serverTimeoutObj = null
           }
           //接收对方发送的消息
           if (data.method == 'receiveMessage') {
             //判断是否打开窗口
             if (this.$refs.UserList && this.$refs.UserList.$refs.JNPFIm && this.$refs.UserList.$refs.JNPFIm.visible) {
               if (this.$refs.UserList.$refs.JNPFIm.info.id === data.formUserId) {
-                let messIitem = {
+                let messItem = {
                   userId: data.formUserId,
                   messageType: data.messageType,
                   message: data.formMessage,
                   dateTime: this.jnpf.toDate(data.dateTime)
                 }
-                this.$refs.UserList.$refs.JNPFIm.addItem(messIitem)
+                this.$refs.UserList.$refs.JNPFIm.addItem(messItem)
                 //更新已读
                 let updateReadMessage = {
                   method: "UpdateReadMessage",
@@ -235,21 +251,42 @@ export default {
           if (data.method == 'sendMessage') {
             if (this.$refs.UserList.$refs.JNPFIm.info.id !== data.toUserId) return
             //添加到客户端
-            let messIitem = {
+            let messItem = {
               userId: data.UserId,
               messageType: data.messageType,
               message: data.toMessage,
               dateTime: this.jnpf.toDate(data.dateTime)
             }
             this.$refs.UserList.updateLatestMessage(data)
-            this.$refs.UserList.$refs.JNPFIm.addItem(messIitem)
+            this.$refs.UserList.$refs.JNPFIm.addItem(messItem)
           }
           //消息列表
           if (data.method == 'messageList') {
             this.$refs.UserList.$refs.JNPFIm.getList(data)
           }
         }
+        socket.onclose = () => {
+          clearInterval(heartCheck.serverTimeoutObj);
+          heartCheck.serverTimeoutObj = null
+        }
       }
+    },
+    resetCheck() {
+      clearInterval(heartCheck.serverTimeoutObj);
+      heartCheck.serverTimeoutObj = null
+      this.start()
+    },
+    start() {
+      heartCheck.serverTimeoutObj = setInterval(() => {
+        if (this.socket) {
+          let message = {
+            method: "heartCheck",
+            token: this.$store.getters.token
+          }
+          this.socket.send(JSON.stringify(message))
+          this.resetCheck()
+        }
+      }, heartCheck.timeout)
     },
     toggleSideBar() {
       this.$store.dispatch('app/toggleSideBar')
@@ -331,9 +368,6 @@ export default {
       }
       >>> .icon-ym {
         font-size: 18px;
-      }
-      .icon-ym {
-        font-size: 20px;
       }
     }
 

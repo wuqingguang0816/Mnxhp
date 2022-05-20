@@ -33,7 +33,7 @@ const layouts = {
     if (config.showLabel === false) labelWidth = '0'
     if (config.jnpfKey === 'JNPFText') {
       return (
-        <el-col span={config.span} class={className}
+        <el-col span={24} class={className}
           nativeOnClick={event => { activeItem(element); event.stopPropagation() }}>
           <el-form-item label-width={labelWidth}
             label={config.showLabel ? config.label : ''} required={config.required}>
@@ -45,7 +45,7 @@ const layouts = {
     }
     if (config.jnpfKey === 'groupTitle') {
       return (
-        <el-col span={config.span} class={className}
+        <el-col span={24} class={className}
           nativeOnClick={event => { activeItem(element); event.stopPropagation() }}>
           <el-form-item label-width="0">{element.content}</el-form-item>
           {components.itemBtns.apply(this, arguments)}
@@ -54,7 +54,7 @@ const layouts = {
     }
     if (config.jnpfKey === 'barcode') {
       return (
-        <el-col span={config.span} class={className}
+        <el-col span={24} class={className}
           nativeOnClick={event => { activeItem(element); event.stopPropagation() }}>
           <el-form-item label-width={labelWidth}
             label={config.showLabel ? config.label : ''} required={config.required}>
@@ -66,7 +66,7 @@ const layouts = {
     }
     if (config.jnpfKey === 'qrcode') {
       return (
-        <el-col span={config.span} class={className}
+        <el-col span={24} class={className}
           nativeOnClick={event => { activeItem(element); event.stopPropagation() }}>
           <el-form-item label-width={labelWidth}
             label={config.showLabel ? config.label : ''} required={config.required}>
@@ -78,7 +78,7 @@ const layouts = {
     }
     if (config.jnpfKey === 'button') {
       return (
-        <el-col span={config.span} class={className}
+        <el-col span={24} class={className}
           nativeOnClick={event => { activeItem(element); event.stopPropagation() }}>
           <el-form-item label-width="0">
             <jnpf-button align={element.align} buttonText={element.buttonText} type={element.type} disabled={element.disabled}></jnpf-button>
@@ -88,7 +88,7 @@ const layouts = {
       )
     }
     return (
-      <el-col span={config.span} class={className}
+      <el-col span={24} class={className}
         nativeOnClick={event => { activeItem(element); event.stopPropagation() }}>
         <el-form-item label-width={labelWidth}
           label={config.showLabel ? config.label : ''} required={config.required}>
@@ -106,7 +106,7 @@ const layouts = {
       : 'drawing-row-item'
     if (element.__config__.jnpfKey === 'tab') {
       return (
-        <el-col span={element.__config__.span}>
+        <el-col span={24}>
           <el-row gutter={element.__config__.gutter} class={className}
             nativeOnClick={event => { activeItem(element); event.stopPropagation() }}>
             <el-tabs type={element.type} tab-position={element['tab-position']} vModel={element.__config__.active}>
@@ -141,7 +141,7 @@ const layouts = {
     }
     if (element.__config__.jnpfKey === 'collapse') {
       return (
-        <el-col span={element.__config__.span}>
+        <el-col span={24}>
           <el-row gutter={element.__config__.gutter} class={className}
             nativeOnClick={event => { activeItem(element); event.stopPropagation() }}>
             <el-collapse vModel={element.__config__.active} accordion={element.accordion}>
@@ -188,7 +188,7 @@ const layouts = {
         tip = <div class="table-tip">请将组件拖到此区域(可拖多个组件)</div>
       }
       return (
-        <el-col span={element.__config__.span}>
+        <el-col span={24}>
           <el-row gutter={element.__config__.gutter} class={className} style="padding-top:30px"
             nativeOnClick={event => { activeItem(element); event.stopPropagation() }}>
             <span class="component-name">{element.__config__.componentName}</span>
@@ -207,7 +207,7 @@ const layouts = {
         tip = <div class="table-tip">请将组件拖到此区域(可拖多个组件)</div>
       }
       return (
-        <el-col span={element.__config__.span}>
+        <el-col span={24}>
           <el-row gutter={element.__config__.gutter} class={className} style="padding-top:30px"
             nativeOnClick={event => { activeItem(element); event.stopPropagation() }}>
             <span class="component-name">{element.__config__.label}</span>
@@ -226,7 +226,7 @@ const layouts = {
         tip = <div class="table-tip">请将组件拖到此区域(可拖多个组件)</div>
       }
       return (
-        <el-col span={element.__config__.span}>
+        <el-col span={24}>
           <el-row gutter={element.__config__.gutter} class={className} style="padding-top:30px"
             nativeOnClick={event => { activeItem(element); event.stopPropagation() }}>
             <span class="component-name">{element.__config__.label}</span>

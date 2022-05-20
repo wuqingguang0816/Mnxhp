@@ -83,3 +83,11 @@ export const exportMenu = id => {
     method: 'GET'
   })
 }
+
+// 数据权限字段名称
+export const getFieldNameList = (id,name) => {
+  return request({
+    url: `/api/system/Module${name}/${id}/FieldList`,
+    method: 'GET'
+  })
+}

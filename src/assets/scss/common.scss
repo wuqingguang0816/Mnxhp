@@ -46,6 +46,10 @@
       padding: 0 10px;
     }
 
+    .JNPF-common-tree-search-box {
+      padding: 10px 10px 0;
+    }
+
     .JNPF-common-el-tree-scrollbar {
       flex: 1;
 
@@ -339,6 +343,12 @@
               text-align: center;
               padding: 0 20px;
             }
+          }
+        }
+
+        &.hasSys-tab {
+          .el-tabs__header .el-tabs__nav .el-tabs__item {
+            width: 25%;
           }
         }
 
@@ -855,7 +865,7 @@
   .approve-result {
     position: absolute;
     right: 10px;
-    top: 110px;
+    top: 100px;
     z-index: 100;
     width: 100px;
     height: 100px;
@@ -1678,6 +1688,10 @@ textarea.el-textarea__inner {
   margin: 14px 0;
 }
 
+.el-button [class*=icon-ym-]+span {
+  margin-left: 5px;
+}
+
 // 布局错位问题修正 
 .el-col {
   .el-form-item--small .el-form-item__label {
@@ -1887,6 +1901,10 @@ textarea.el-textarea__inner {
     display: flex;
     justify-content: space-between;
     align-items: center;
+
+    .removeAllBtn {
+      color: #f56c6c;
+    }
   }
 
   .transfer-pane__body {
@@ -1897,6 +1915,10 @@ textarea.el-textarea__inner {
     overflow-x: hidden;
     font-size: 14px;
     border: 1px solid #dcdfe6;
+
+    .el-tab-pane {
+      padding: 10px 0 !important;
+    }
 
     &.left-pane {
       .single-list {

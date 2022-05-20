@@ -1,7 +1,7 @@
 <template>
   <div class="userInfo">
     <el-tabs class="JNPF-el_tabs">
-      <el-tab-pane label="基本信息">
+      <el-tab-pane label="账户信息">
         <el-col :span="12">
           <el-form :model="form" label-width="100px">
             <el-form-item label="账户">
@@ -31,11 +31,11 @@
           </el-form>
         </el-col>
       </el-tab-pane>
-      <el-tab-pane label="扩展信息">
-        <el-form ref="dataForm" :model="form2" label-width="100px">
+      <el-tab-pane label="个人资料">
+        <el-form ref="dataForm" :model="form2" :rules="form2Rule" label-width="100px">
           <el-row>
             <el-col :span="12">
-              <el-form-item label="姓名">
+              <el-form-item label="姓名" prop="realName">
                 <el-input v-model="form2.realName" />
               </el-form-item>
             </el-col>
@@ -174,6 +174,11 @@ export default {
         urgentTelePhone: '',
         postalAddress: '',
       },
+      form2Rule: {
+        realName: [
+          { required: true, message: '姓名不能为空', trigger: 'blur' }
+        ]
+      },
       certificatesTypeOptions: [],
       educationOptions: [],
       genderOptions: [],
@@ -217,13 +222,17 @@ export default {
       }
     },
     dataFormSubmit() {
-      UpdateUser(this.form2).then(res => {
-        this.$message({
-          message: res.msg,
-          type: 'success',
-          duration: 1500
+      this.$refs['dataForm'].validate((valid) => {
+        if (!valid) return
+        UpdateUser(this.form2).then(res => {
+          this.$message({
+            message: res.msg,
+            type: 'success',
+            duration: 1500
+          })
+          this.$emit('updateInfo')
+          this.$store.commit('user/SET_USERINFO_USERNAME', this.form2.realName)
         })
-        this.$store.commit('user/SET_USERINFO_USERNAME', this.form2.realName)
       })
     }
   }

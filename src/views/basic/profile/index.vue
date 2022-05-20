@@ -1,30 +1,14 @@
 <template>
   <div class="app-container Profile-container">
-    <el-tabs tab-position="left" style="height:100%" v-model="activeTab" class="profile-tabs">
+    <el-tabs tab-position="left" style="height:100%" v-model="activeTab" class="profile-tabs"
+      v-loading="userLoading">
       <el-tab-pane label="个人资料" name="user">
-        <UserInfo ref="user" :user='user' v-if="visible.user" />
+        <UserInfo ref="user" :user='user' v-if="visible.user" @updateInfo="getInfo" />
       </el-tab-pane>
       <el-tab-pane label="修改密码" name="password">
         <Password ref="password" v-if="visible.password" />
       </el-tab-pane>
       <el-tab-pane disabled name="line"></el-tab-pane>
-      <el-tab-pane label="我的下属" name="subordinate">
-        <div class="JNPF-common-title mb-10">
-          <h2 class="bold">我的下属</h2>
-        </div>
-        <div class="subordinate-list">
-          <el-tree :data="treeData" :props="props" check-on-click-node node-key="id" lazy
-            v-loading="loading" :load="loadNode" class="JNPF-common-el-tree subordinate-tree">
-            <el-card class="subordinate-tree-node" shadow="never" slot-scope="{ data }">
-              <el-avatar :size="50" :src="define.comUrl+ data.avatar"></el-avatar>
-              <div class="text">
-                <p>{{data.userName}}</p>
-                <p>{{data.department}}{{data.position?'/'+data.position:''}}</p>
-              </div>
-            </el-card>
-          </el-tree>
-        </div>
-      </el-tab-pane>
       <el-tab-pane label="我的组织" name="organize">
         <div class="JNPF-common-title mb-10">
           <h2 class="bold">我的组织
@@ -73,6 +57,23 @@
             </el-col>
           </el-row>
           <el-empty description="暂无数据" :image-size="120" v-else></el-empty>
+        </div>
+      </el-tab-pane>
+      <el-tab-pane label="我的下属" name="subordinate">
+        <div class="JNPF-common-title mb-10">
+          <h2 class="bold">我的下属</h2>
+        </div>
+        <div class="subordinate-list">
+          <el-tree :data="treeData" :props="props" check-on-click-node node-key="id" lazy
+            v-loading="loading" :load="loadNode" class="JNPF-common-el-tree subordinate-tree">
+            <el-card class="subordinate-tree-node" shadow="never" slot-scope="{ data }">
+              <el-avatar :size="50" :src="define.comUrl+ data.avatar"></el-avatar>
+              <div class="text">
+                <p>{{data.userName}}</p>
+                <p>{{data.department}}{{data.position?'/'+data.position:''}}</p>
+              </div>
+            </el-card>
+          </el-tree>
         </div>
       </el-tab-pane>
       <el-tab-pane label="系统权限" name="authorize" class="el-tab-pane-authorize">
@@ -129,6 +130,7 @@ export default {
         isLeaf: 'isLeaf'
       },
       loading: false,
+      userLoading: false,
       nodeId: '0',
       uploadHeaders: { Authorization: this.$store.getters.token }
     }
@@ -159,9 +161,11 @@ export default {
   },
   methods: {
     getInfo() {
+      this.userLoading = true
       UserSettingInfo().then(res => {
         this.user = res.data
         this.activeTab = 'user'
+        this.userLoading = false
       })
     },
     getSubordinate() {

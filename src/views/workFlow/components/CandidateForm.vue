@@ -2,8 +2,8 @@
   <el-dialog title="提交审核" :close-on-click-modal="false"
     class="JNPF-dialog JNPF-dialog_center form-script-dialog" lock-scroll append-to-body
     v-bind="$attrs" width="600px" :modal-append-to-body="false" v-on="$listeners" @open="onOpen">
-    <el-form label-width="130px" ref="candidateForm" :model="candidateForm">
-      <el-form-item :label="item.label" :prop="'candidateList.' + i + '.value'"
+    <el-form label-width="80px" ref="candidateForm" :model="candidateForm">
+      <el-form-item :label="item.nodeName+item.label" :prop="'candidateList.' + i + '.value'"
         v-for="(item,i) in candidateForm.candidateList" :key="i" :rules="item.rules">
         <candidate-user-select v-model="item.value" multiple :placeholder="'请选择'+item.label"
           :taskId="taskId" :formData="formData" :nodeId="item.nodeId" />
@@ -33,9 +33,9 @@ export default {
     onOpen() {
       this.candidateForm.candidateList = this.candidateList.map(o => ({
         ...o,
-        label: o.nodeName + '审批人',
+        label: '审批人',
         value: [],
-        rules: [{ required: true, message: `${o.nodeName}审批人不能为空`, trigger: 'click' }]
+        rules: [{ required: true, message: `审批人不能为空`, trigger: 'click' }]
       }))
       this.$nextTick(() => {
         this.$refs['candidateForm'].resetFields()

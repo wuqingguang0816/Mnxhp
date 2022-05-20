@@ -6,9 +6,6 @@
       <el-form-item label="参数名称" prop="field">
         <el-input v-model="dataForm.field" placeholder="参数名称" />
       </el-form-item>
-      <el-form-item label="参数说明" prop="fieldName">
-        <el-input v-model="dataForm.fieldName" placeholder="参数说明" />
-      </el-form-item>
       <el-form-item label="参数类型" prop="dataType">
         <el-select v-model="dataForm.dataType" placeholder="请选择参数类型">
           <el-option v-for="item in options" :key="item.value" :label="item.label"
@@ -20,6 +17,9 @@
       </el-form-item>
       <el-form-item label="必填" prop="required">
         <el-switch v-model="dataForm.required" :active-value="1" :inactive-value="0" />
+      </el-form-item>
+      <el-form-item label="参数说明" prop="fieldName">
+        <el-input v-model="dataForm.fieldName" placeholder="参数说明" />
       </el-form-item>
     </el-form>
     <span slot="footer" class="dialog-footer">

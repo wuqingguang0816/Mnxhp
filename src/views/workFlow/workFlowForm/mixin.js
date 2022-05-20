@@ -5,6 +5,9 @@ import { BillNumber } from '@/api/system/billRule'
 export default {
   computed: {
     ...mapGetters(['userInfo']),
+    formOperates() {
+      return this.setting.formOperates
+    }
   },
   data() {
     return {
@@ -13,6 +16,7 @@ export default {
       setting: {},
       eventType: '',
       loading: false,
+      tableRequiredData: {},
     }
   },
   methods: {
@@ -79,28 +83,83 @@ export default {
       })
     },
     updateDataRule() {
+      if (!this.setting.formOperates || !this.setting.formOperates.length) return
       let newRules = {}
       for (let i = 0; i < this.setting.formOperates.length; i++) {
         const item = this.setting.formOperates[i]
-        const newRulesItem = {
-          required: item.required || false,
-          message: item.name + '不能为空',
-          trigger: item.trigger || 'blur'
-        }
-        if (!this.dataRule.hasOwnProperty(item.id)) {
-          if (item.required) this.$set(newRules, item.id, [newRulesItem])
-        } else {
-          let withoutRequiredItem = true
-          for (let i = 0; i < this.dataRule[item.id].length; i++) {
-            if (this.dataRule[item.id][i].hasOwnProperty('required')) {
-              this.dataRule[item.id][i].required = item.required || false
-              withoutRequiredItem = false
-            }
+        if (!item.id.includes('-')) {
+          const newRulesItem = {
+            required: item.required || false,
+            message: item.name + '不能为空',
+            trigger: item.trigger || 'blur'
           }
-          if (withoutRequiredItem && item.required) this.dataRule[item.id].push(newRulesItem)
+          if (!this.dataRule.hasOwnProperty(item.id)) {
+            if (item.required) this.$set(newRules, item.id, [newRulesItem])
+          } else {
+            let withoutRequiredItem = true
+            for (let i = 0; i < this.dataRule[item.id].length; i++) {
+              if (this.dataRule[item.id][i].hasOwnProperty('required')) {
+                this.dataRule[item.id][i].required = item.required || false
+                withoutRequiredItem = false
+              }
+            }
+            if (withoutRequiredItem && item.required) this.dataRule[item.id].push(newRulesItem)
+          }
+        } else {
+          let key = item.id.split('-')[0]
+          let newId = item.id.split('-')[1]
+          let newItem = {
+            ...item,
+            id: newId
+          }
+          if (!this.tableRequiredData.hasOwnProperty(key)) {
+            this.$set(this.tableRequiredData, key, [newItem])
+          } else {
+            this.tableRequiredData[key].push(newItem)
+          }
         }
       }
       this.dataRule = { ...this.dataRule, ...newRules }
+    },
+    exist() {
+      let isOk = true
+      for (let key in this.tableRequiredData) {
+        if (this.dataForm[key] && Array.isArray(this.dataForm[key])) {
+          for (let i = 0; i < this.dataForm[key].length; i++) {
+            let item = this.dataForm[key][i]
+            inner: for (let id in item) {
+              let arr = this.tableRequiredData[key].filter(o => o.id === id) || []
+              if (!arr.length) continue inner
+              if (arr[0].required) {
+                let msg = `${arr[0].name}不能为空`
+                let boo = true
+                if (arr[0].dataType === 'array') {
+                  boo = !this.jnpf.isEmptyArray(item[id])
+                } else {
+                  boo = !this.jnpf.isEmpty(item[id])
+                }
+                if (!boo) {
+                  this.$message({
+                    message: msg,
+                    type: 'error',
+                    duration: 1000
+                  })
+                  isOk = false
+                  break
+                }
+              }
+            }
+          }
+        }
+      }
+      return isOk
+    },
+    judgeRequired(id) {
+      if (!this.formOperates || !this.formOperates.length) return false
+      let arr = this.formOperates.filter(o => o.id === id) || []
+      if (!arr.length) return false
+      let item = arr[0]
+      return item.required
     },
     judgeShow(id) {
       if (this.setting.opType == 4) return true

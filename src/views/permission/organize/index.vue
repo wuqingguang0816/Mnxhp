@@ -23,14 +23,24 @@
         <div class="JNPF-common-head">
           <topOpts @add="addOrUpdateHandle()" />
           <div class="JNPF-common-head-right">
+            <el-tooltip effect="dark" content="展开" placement="top">
+              <el-link v-show="!expands" type="text"
+                icon="icon-ym icon-ym-btn-expand JNPF-common-head-icon" :underline="false"
+                @click="toggleExpand()" />
+            </el-tooltip>
+            <el-tooltip effect="dark" content="折叠" placement="top">
+              <el-link v-show="expands" type="text"
+                icon="icon-ym icon-ym-btn-collapse JNPF-common-head-icon" :underline="false"
+                @click="toggleExpand()" />
+            </el-tooltip>
             <el-tooltip effect="dark" :content="$t('common.refresh')" placement="top">
               <el-link icon="icon-ym icon-ym-Refresh JNPF-common-head-icon" :underline="false"
                 @click="reset()" />
             </el-tooltip>
           </div>
         </div>
-        <JNPF-table v-loading="listLoading" :data="treeList" row-key="id" default-expand-all
-          :tree-props="{children: 'children', hasChildren: ''}">
+        <JNPF-table v-loading="listLoading" :data="treeList" row-key="id" v-if="refreshTable"
+          :default-expand-all="expands" :tree-props="{children: 'children', hasChildren: ''}">
           <el-table-column prop="fullName" label="名称" />
           <el-table-column prop="enCode" label="编码" />
           <el-table-column prop="description" label="说明" />
@@ -80,6 +90,8 @@ export default {
         keyword: ''
       },
       treeList: [],
+      expands: true,
+      refreshTable: true,
       btnLoading: false,
       listLoading: true,
       formVisible: false,
@@ -121,6 +133,13 @@ export default {
         this.initData()
       }
     },
+    toggleExpand() {
+      this.refreshTable = false;
+      this.expands = !this.expands;
+      this.$nextTick(() => {
+        this.refreshTable = true;
+      });
+    },
     openGradeForm(row) {
       this.gradeFormVisible = true
       this.$nextTick(() => {
@@ -137,6 +156,8 @@ export default {
             message: res.msg,
             duration: 1500,
             onClose: () => {
+              this.$store.commit('generator/SET_COMPANY_TREE', [])
+              this.$store.commit('generator/SET_DEP_TREE', [])
               this.initData()
             }
           })

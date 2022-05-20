@@ -97,65 +97,110 @@
         </el-col>
       </el-row>
     </el-form>
-    <div class="box">
+    <div class="box" v-if="formOperates">
       <el-tabs v-model="activeName">
         <el-tab-pane label="订单商品" name="goods">
           <el-table :data="dataForm.goodsList" size='mini' show-summary
             :summary-method="getSummaries" v-if="judgeShow('goodsList')">
             <el-table-column type="index" width="50" label="序号" align="center" />
-            <el-table-column prop="goodsName" label="商品名称" />
-            <el-table-column prop="specifications" label="规格型号" width="80" />
-            <el-table-column prop="unit" label="单位" width="80" />
-            <el-table-column prop="qty" label="数量" width="80">
+            <el-table-column prop="goodsName" label="商品名称" v-if="judgeShow('goodsList-goodsName')">
+              <template slot="header" v-if="judgeRequired('goodsList-goodsName')">
+                <span class="required-sign">*</span>商品名称
+              </template>
+            </el-table-column>
+            <el-table-column prop="specifications" label="规格型号" width="80"
+              v-if="judgeShow('goodsList-specifications')">
+              <template slot="header" v-if="judgeRequired('goodsList-specifications')">
+                <span class="required-sign">*</span>规格型号
+              </template>
+            </el-table-column>
+            <el-table-column prop="unit" label="单位" width="80" v-if="judgeShow('goodsList-unit')">
+              <template slot="header" v-if="judgeRequired('goodsList-unit')">
+                <span class="required-sign">*</span>单位
+              </template>
+            </el-table-column>
+            <el-table-column prop="qty" label="数量" width="80" v-if="judgeShow('goodsList-qty')">
+              <template slot="header" v-if="judgeRequired('goodsList-qty')">
+                <span class="required-sign">*</span>数量
+              </template>
               <template slot-scope="scope">
                 <el-input v-model="scope.row.qty" @change="count(scope.row)"
-                  :disabled="judgeWrite('goodsList')"></el-input>
+                  :disabled="judgeWrite('goodsList')||judgeWrite('goodsList-qty')"></el-input>
               </template>
             </el-table-column>
-            <el-table-column prop="price" label="单价" width="80">
+            <el-table-column prop="price" label="单价" width="80" v-if="judgeShow('goodsList-price')">
+              <template slot="header" v-if="judgeRequired('goodsList-price')">
+                <span class="required-sign">*</span>单价
+              </template>
               <template slot-scope="scope">
                 <el-input v-model="scope.row.price" @change="count(scope.row)"
-                  :disabled="judgeWrite('goodsList')"></el-input>
+                  :disabled="judgeWrite('goodsList')||judgeWrite('goodsList-price')"></el-input>
               </template>
             </el-table-column>
-            <el-table-column prop="amount" label="金额" width="80">
+            <el-table-column prop="amount" label="金额" width="80"
+              v-if="judgeShow('goodsList-amount')">
+              <template slot="header" v-if="judgeRequired('goodsList-amount')">
+                <span class="required-sign">*</span>金额
+              </template>
               <template slot-scope="scope">
-                <el-input v-model="scope.row.amount" readonly :disabled="judgeWrite('goodsList')">
+                <el-input v-model="scope.row.amount" readonly
+                  :disabled="judgeWrite('goodsList')||judgeWrite('goodsList-amount')">
                 </el-input>
               </template>
             </el-table-column>
-            <el-table-column prop="discount" label="折扣%" width="90">
+            <el-table-column prop="discount" label="折扣%" width="90"
+              v-if="judgeShow('goodsList-discount')">
+              <template slot="header" v-if="judgeRequired('goodsList-discount')">
+                <span class="required-sign">*</span>折扣%
+              </template>
               <template slot-scope="scope">
                 <el-input-number v-model="scope.row.discount" :precision="2" :step="0.1" :min="0"
                   :max="100" @change="count(scope.row)" controls-position="right"
-                  :disabled="judgeWrite('goodsList')">
+                  :disabled="judgeWrite('goodsList')||judgeWrite('goodsList-discount')">
                 </el-input-number>
               </template>
             </el-table-column>
-            <el-table-column prop="cess" label="税率%" width="90">
+            <el-table-column prop="cess" label="税率%" width="90" v-if="judgeShow('goodsList-cess')">
+              <template slot="header" v-if="judgeRequired('goodsList-cess')">
+                <span class="required-sign">*</span>税率%
+              </template>
               <template slot-scope="scope">
                 <el-input-number v-model="scope.row.cess" :precision="2" :step="0.1" :min="0"
                   :max="100" @change="count(scope.row)" controls-position="right"
-                  :disabled="judgeWrite('goodsList')">
+                  :disabled="judgeWrite('goodsList')||judgeWrite('goodsList-cess')">
                 </el-input-number>
               </template>
             </el-table-column>
-            <el-table-column prop="actualPrice" label="实际单价" width="80">
+            <el-table-column prop="actualPrice" label="实际单价" width="80"
+              v-if="judgeShow('goodsList-actualPrice')">
+              <template slot="header" v-if="judgeRequired('goodsList-actualPrice')">
+                <span class="required-sign">*</span>实际单价
+              </template>
               <template slot-scope="scope">
                 <el-input v-model="scope.row.actualPrice" readonly
-                  :disabled="judgeWrite('goodsList')">
+                  :disabled="judgeWrite('goodsList')||judgeWrite('goodsList-actualPrice')">
                 </el-input>
               </template>
             </el-table-column>
-            <el-table-column prop="actualAmount" label="实际金额" width="80">
+            <el-table-column prop="actualAmount" label="实际金额" width="80"
+              v-if="judgeShow('goodsList-actualAmount')">
+              <template slot="header" v-if="judgeRequired('goodsList-actualAmount')">
+                <span class="required-sign">*</span>实际金额
+              </template>
               <template slot-scope="scope">
                 <el-input v-model="scope.row.actualAmount" readonly
-                  :disabled="judgeWrite('goodsList')"></el-input>
+                  :disabled="judgeWrite('goodsList')||judgeWrite('goodsList-actualAmount')">
+                </el-input>
               </template>
             </el-table-column>
-            <el-table-column prop="description" label="备注" width="80">
+            <el-table-column prop="description" label="备注" width="80"
+              v-if="judgeShow('goodsList-description')">
+              <template slot="header" v-if="judgeRequired('goodsList-description')">
+                <span class="required-sign">*</span>备注
+              </template>
               <template slot-scope="scope">
-                <el-input v-model="scope.row.description" :disabled="judgeWrite('goodsList')">
+                <el-input v-model="scope.row.description"
+                  :disabled="judgeWrite('goodsList')||judgeWrite('goodsList-description')">
                 </el-input>
               </template>
             </el-table-column>
@@ -176,37 +221,60 @@
           <el-table :data="dataForm.collectionPlanList" size='mini' show-summary
             :summary-method="getSummaries" v-if="judgeShow('collectionPlanList')">
             <el-table-column type="index" width="50" label="序号" align="center" />
-            <el-table-column prop="receivableDate" label="收款日期">
+            <el-table-column prop="receivableDate" label="收款日期"
+              v-if="judgeShow('collectionPlanList-receivableDate')">
+              <template slot="header" v-if="judgeRequired('collectionPlanList-receivableDate')">
+                <span class="required-sign">*</span>收款日期
+              </template>
               <template slot-scope="scope">
                 <el-date-picker v-model="scope.row.receivableDate" type="date"
                   value-format="timestamp" :editable="false"
-                  :disabled="judgeWrite('collectionPlanList')">
+                  :disabled="judgeWrite('collectionPlanList')||judgeWrite('collectionPlanList-receivableDate')">
                 </el-date-picker>
               </template>
             </el-table-column>
-            <el-table-column prop="receivableRate" label="收款比率%">
+            <el-table-column prop="receivableRate" label="收款比率%"
+              v-if="judgeShow('collectionPlanList-receivableRate')">
+              <template slot="header" v-if="judgeRequired('collectionPlanList-receivableRate')">
+                <span class="required-sign">*</span>收款比率%
+              </template>
               <template slot-scope="scope">
                 <el-input-number v-model="scope.row.receivableRate" :precision="2" :step="0.1"
                   :min="0" :max="100" controls-position="right"
-                  :disabled="judgeWrite('collectionPlanList')">
+                  :disabled="judgeWrite('collectionPlanList')||judgeWrite('collectionPlanList-receivableRate')">
                 </el-input-number>
               </template>
             </el-table-column>
-            <el-table-column prop="receivableMoney" label="收款金额">
+            <el-table-column prop="receivableMoney" label="收款金额"
+              v-if="judgeShow('collectionPlanList-receivableMoney')">
+              <template slot="header" v-if="judgeRequired('collectionPlanList-receivableMoney')">
+                <span class="required-sign">*</span>收款金额
+              </template>
               <template slot-scope="scope">
                 <el-input v-model="scope.row.receivableMoney"
-                  :disabled="judgeWrite('collectionPlanList')"></el-input>
+                  :disabled="judgeWrite('collectionPlanList')||judgeWrite('collectionPlanList-receivableMoney')">
+                </el-input>
               </template>
             </el-table-column>
-            <el-table-column prop="receivableMode" label="收款方式">
+            <el-table-column prop="receivableMode" label="收款方式"
+              v-if="judgeShow('collectionPlanList-receivableMode')">
+              <template slot="header" v-if="judgeRequired('collectionPlanList-receivableMode')">
+                <span class="required-sign">*</span>收款方式
+              </template>
               <template slot-scope="scope">
                 <el-input v-model="scope.row.receivableMode"
-                  :disabled="judgeWrite('collectionPlanList')"></el-input>
+                  :disabled="judgeWrite('collectionPlanList')||judgeWrite('collectionPlanList-receivableMode')">
+                </el-input>
               </template>
             </el-table-column>
-            <el-table-column prop="abstract" label="收款摘要">
+            <el-table-column prop="abstract" label="收款摘要"
+              v-if="judgeShow('collectionPlanList-abstract')">
+              <template slot="header" v-if="judgeRequired('collectionPlanList-abstract')">
+                <span class="required-sign">*</span>收款摘要
+              </template>
               <template slot-scope="scope">
-                <el-input v-model="scope.row.abstract" :disabled="judgeWrite('collectionPlanList')">
+                <el-input v-model="scope.row.abstract"
+                  :disabled="judgeWrite('collectionPlanList')||judgeWrite('collectionPlanList-abstract')">
                 </el-input>
               </template>
             </el-table-column>
@@ -283,12 +351,12 @@ export default {
   watch: {
     'dataForm.goodsList': {
       handler(newVal, oldVal) {
-        let menoy = 0
+        let money = 0
         for (let i = 0; i < newVal.length; i++) {
           const e = newVal[i];
-          menoy += parseFloat(e.amount)
+          money += parseFloat(e.amount)
         }
-        this.dataForm.receivableMoney = menoy
+        this.dataForm.receivableMoney = money
       },
       deep: true
     }
@@ -388,79 +456,6 @@ export default {
       });
       return sums
     },
-    exist() {
-      let isOk = true;
-      //  遍历数组，判断非空
-      for (let i = 0; i < this.dataForm.goodsList.length; i++) {
-        const e = this.dataForm.goodsList[i];
-        if (!e.qty) {
-          this.$message({
-            showClose: true,
-            message: '数量不能为空',
-            type: 'error',
-            duration: 1000
-          });
-          isOk = false
-          break
-        }
-        if (e.discount === '') {
-          this.$message({
-            showClose: true,
-            message: '折扣不能为空',
-            type: 'error',
-            duration: 1000
-          });
-          isOk = false
-          break
-        }
-        if (e.cess === '') {
-          this.$message({
-            showClose: true,
-            message: '税率不能为空',
-            type: 'error',
-            duration: 1000
-          });
-          isOk = false
-          break
-        }
-      }
-      if (isOk) {
-        for (let i = 0; i < this.dataForm.collectionPlanList.length; i++) {
-          const e = this.dataForm.collectionPlanList[i];
-          if (!e.receivableRate) {
-            this.$message({
-              showClose: true,
-              message: '收款比率不能为空',
-              type: 'error',
-              duration: 1000
-            });
-            isOk = false
-            break
-          }
-          if (!e.receivableMoney) {
-            this.$message({
-              showClose: true,
-              message: '收款金额不能为空',
-              type: 'error',
-              duration: 1000
-            });
-            isOk = false
-            break
-          }
-          if (!e.receivableMode) {
-            this.$message({
-              showClose: true,
-              message: '收款方式不能为空',
-              type: 'error',
-              duration: 1000
-            });
-            isOk = false
-            break
-          }
-        }
-      }
-      return isOk;
-    },
     addPlan() {
       let item = {
         receivableDate: "", receivableRate: 0, receivableMoney: 0, receivableMode: "", abstract: ""
@@ -492,9 +487,9 @@ export default {
       //金额 = 数量*单价
       row.amount = this.jnpf.toDecimal(parseFloat(row.price) * parseFloat(row.qty))
       //折扣价 = (单价*折扣)
-      var discountPrice = row.price * (row.discount / 100);
+      var discountPrice = row.price * (row.discount ? row.discount / 100 : 1);
       //实际单价 = 折扣价 * (1 + (税率 / 100))
-      row.actualPrice = this.jnpf.toDecimal(discountPrice * (1 + (row.cess / 100)));
+      row.actualPrice = this.jnpf.toDecimal(discountPrice * (1 + (row.cess ? row.cess / 100 : 0)));
       //实际金额
       row.actualAmount = this.jnpf.toDecimal(parseFloat(row.actualPrice) * parseFloat(row.qty))
     }

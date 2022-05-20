@@ -11,8 +11,7 @@
             <el-divider>选项</el-divider>
             <div v-for="(item, index) in activeData.list" :key="index" class="select-item">
               <JNPF-TreeSelect :options="menuList" v-model="item.id" placeholder="请选择菜单" lastLevel
-                lastLevelKey='type' :lastLevelValue='2' clearable
-                @change="getSelectValue(arguments,index)">
+                clearable @change="getSelectValue(arguments,index)">
               </JNPF-TreeSelect>
               <div class="close-btn select-line-icon" @click="delSelectItem(index)">
                 <i class="el-icon-remove-outline" />
@@ -115,7 +114,17 @@ export default {
     },
     getSelectValue(data, i) {
       if (!data[0]) {
-        this.$set(this.activeData.list, i, { fullName: '', id: '', urlAddress: '', icon: '', iconBackgroundColor: '' })
+        this.$set(this.activeData.list, i, {
+          fullName: '',
+          id: '',
+          urlAddress: '',
+          icon: '',
+          iconBackgroundColor: '',
+          type: '',
+          propertyJson: '',
+          linkTarget: '_self',
+          enCode: ''
+        })
       } else {
         let iconBackgroundColor = ''
         if (data[1].propertyJson) {
@@ -126,13 +135,27 @@ export default {
           fullName: data[1].fullName,
           id: data[1].id,
           urlAddress: data[1].urlAddress,
+          type: data[1].type,
+          propertyJson: data[1].propertyJson,
+          linkTarget: data[1].linkTarget,
+          enCode: data[1].enCode,
           icon: data[1].icon,
           iconBackgroundColor: iconBackgroundColor
         })
       }
     },
     addSelectItem() {
-      this.activeData.list.push({ fullName: '', id: '', urlAddress: '', icon: '', iconBackgroundColor: '' })
+      this.activeData.list.push({
+        fullName: '',
+        id: '',
+        urlAddress: '',
+        icon: '',
+        iconBackgroundColor: '',
+        type: '',
+        propertyJson: '',
+        linkTarget: '_self',
+        enCode: ''
+      })
     },
     delSelectItem(index) {
       if (this.activeData.list.length < 3) {

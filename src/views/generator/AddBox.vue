@@ -1,22 +1,22 @@
 <template>
-  <el-dialog title="新建" :close-on-click-modal="false" lock-scroll v-bind="$attrs" v-on="$listeners"
-    class="JNPF-dialog JNPF-dialog_center" width="800px">
+  <el-dialog :title="webType?'更改模式':'新建'" :close-on-click-modal="false" lock-scroll v-bind="$attrs"
+    v-on="$listeners" class="JNPF-dialog JNPF-dialog_center" :width="webType?'550px':'800px'">
     <div class="add-main">
-      <div class="add-item add-item-form" @click="add(1)">
+      <div class="add-item add-item-form" @click="add(1)" v-if="webType!==1">
         <i class="add-icon el-icon-document"></i>
         <div class="add-txt">
           <p class="add-title">表单</p>
           <p class="add-desc">纯表单设计</p>
         </div>
       </div>
-      <div class="add-item add-item-list" @click="add(2)">
+      <div class="add-item add-item-list" @click="add(2)" v-if="webType!==2">
         <i class="add-icon icon-ym icon-ym-sysMenu"></i>
         <div class="add-txt">
           <p class="add-title">列表</p>
           <p class="add-desc">表单+列表设计</p>
         </div>
       </div>
-      <div class="add-item" @click="add(3)">
+      <div class="add-item" @click="add(3)" v-if="webType!==3">
         <i class="add-icon icon-ym icon-ym-generator-company"></i>
         <div class="add-txt">
           <p class="add-title">流程</p>
@@ -29,9 +29,10 @@
 
 <script>
 export default {
+  props: ['webType'],
   methods: {
     add(type) {
-      this.$emit('add', type)
+      this.$emit('add', type, this.webType ? true : false)
       this.$emit('update:visible', false)
     }
   }
@@ -55,6 +56,9 @@ export default {
     align-items: center;
     cursor: pointer;
     padding-left: 20px;
+    &:hover {
+      opacity: 0.9;
+    }
     &.add-item-form {
       background: #f1f5ff;
       .add-icon {

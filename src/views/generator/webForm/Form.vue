@@ -110,8 +110,8 @@
           :webType="dataForm.webType" />
       </template>
       <template v-if="activeStep==2">
-        <columnDesign ref="columnDesign" :conf="columnData" :modelType="dataForm.type"
-          :webType="dataForm.webType" />
+        <columnDesign ref="columnDesign" :columnData="columnData" :appColumnData="appColumnData"
+          :modelType="dataForm.type" :webType="dataForm.webType" />
       </template>
       <template v-if="activeStep==3">
         <Process ref="process" :conf="flowTemplateJson" :flowType="1" />
@@ -124,7 +124,7 @@
 
 <script>
 import Generator from '@/components/Generator/index/Home'
-import ColumnDesign from '@/components/ColumnDesign/index'
+import ColumnDesign from '@/components/ColumnDesign'
 import Process from "@/components/Process"
 import TableForm from '../TableForm'
 import mixin from '@/mixins/generator/form'

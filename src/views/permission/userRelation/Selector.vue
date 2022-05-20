@@ -1,6 +1,6 @@
 <template>
   <el-dialog :title="pageTitle" :close-on-click-modal="false" :close-on-press-escape="false"
-    :visible.sync="visible" lock-scroll append-to-body
+    :visible.sync="visible" lock-scroll append-to-body destroy-on-close
     class="JNPF-dialog JNPF-dialog_center transfer-dialog" width="800px">
     <userTransfer v-model="dataForm.userIds" ref="userTransfer" multiple />
     <span slot="footer" class="dialog-footer">
@@ -28,6 +28,12 @@ export default {
       },
     }
   },
+  watch: {
+    visible(val) {
+      if (val) return
+      this.$emit('closeDialog')
+    }
+  },
   methods: {
     init(id, fullName, type) {
       this.visible = true
@@ -36,7 +42,7 @@ export default {
       this.dataForm.userIds = []
       this.$nextTick(() => {
         if (type === 'Position') {
-          this.pageTitle = this.$t(`position.postMember`) + '- ' + fullName
+          this.pageTitle = this.$t(`position.postMember`) + ' - ' + fullName
         } else if (type === 'Role') {
           this.pageTitle = this.$t(`role.roleMember`) + ' - ' + fullName
         } else if (type === 'Group') {

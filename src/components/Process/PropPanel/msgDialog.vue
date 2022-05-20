@@ -48,7 +48,7 @@
               </el-table-column>
               <el-table-column type="index" width="50" label="序号" align="center" />
               <el-table-column prop="fullName" label="模板名称" width="150" />
-              <el-table-column prop="category" label="消息类型" width="100" />
+              <el-table-column prop="enCode" label="模板编码" width="100" />
               <el-table-column prop="title" label="消息标题" show-overflow-tooltip />
             </JNPF-table>
             <pagination :total="total" :page.sync="listQuery.currentPage"

@@ -1,9 +1,5 @@
 <template>
   <el-row>
-    <el-form-item label="控件栅格">
-      <el-slider v-model="activeData.__config__.span" :max="24" :min="6" show-stops :step="2"
-        show-tooltip />
-    </el-form-item>
     <el-form-item label="展示文本">
       <el-input :value="activeData.__slot__.default" @input="onDefaultValueInput"
         placeholder="显示在分割线上的文字" />

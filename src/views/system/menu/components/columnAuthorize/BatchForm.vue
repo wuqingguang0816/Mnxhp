@@ -15,7 +15,9 @@
           [
             {
               "fullName":"名称",
-              "enCode":"fullName"
+              "enCode":"fullName",
+              "bindTable":"数据库表名",
+              "fieldRule":"字段规则"
             }
           ]
         </pre>
@@ -37,7 +39,6 @@
 <script>
 import { batchCreateColumn } from '@/api/system/columnAuthorize'
 import JNPFCodeEditor from '@/components/JNPFEditor/monaco'
-
 export default {
   components: { JNPFCodeEditor },
   data() {

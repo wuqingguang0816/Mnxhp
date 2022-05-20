@@ -12,8 +12,8 @@
           <el-col :span="6">
             <el-form-item>
               <el-button type="primary" icon="el-icon-search" @click="initData()">
-                {{$t('common.search')}}</el-button>
-              <el-button icon="el-icon-refresh-right" @click="reset()">{{$t('common.reset')}}
+                {{ $t("common.search") }}</el-button>
+              <el-button icon="el-icon-refresh-right" @click="reset()">{{ $t("common.reset") }}
               </el-button>
             </el-form-item>
           </el-col>
@@ -51,7 +51,7 @@
               <el-table-column prop="urlAddress" label="菜单地址" show-overflow-tooltip />
               <el-table-column prop="icon" label="图标" width="50" align="center">
                 <template slot-scope="scope">
-                  <i :class="scope.row.icon+' table-icon'" />
+                  <i :class="scope.row.icon + ' table-icon'" />
                 </template>
               </el-table-column>
               <el-table-column prop="type" label="类型" width="70" align="center">
@@ -71,21 +71,21 @@
                 <template slot-scope="scope">
                   <el-tag :type="scope.row.enabledMark == 1 ? 'success' : 'danger'"
                     disable-transitions>
-                    {{scope.row.enabledMark==1?'正常':'停用'}}</el-tag>
+                    {{ scope.row.enabledMark == 1 ? "正常" : "停用" }}</el-tag>
                 </template>
               </el-table-column>
               <el-table-column label="操作" width="150">
                 <template slot-scope="scope">
                   <tableOpts @edit="addOrUpdateHandle(scope.row.id)" @del="handleDel(scope.row.id)">
-                    <template v-if="scope.row.type && scope.row.type!=1">
+                    <template v-if="scope.row.type && scope.row.type != 1">
                       <el-dropdown>
                         <span class="el-dropdown-link">
-                          <el-button type="text" size="mini">{{$t('common.moreBtn')}}<i
-                              class="el-icon-arrow-down el-icon--right"></i>
+                          <el-button type="text" size="mini">{{ $t("common.moreBtn")
+                            }}<i class="el-icon-arrow-down el-icon--right"></i>
                           </el-button>
                         </span>
                         <el-dropdown-menu slot="dropdown">
-                          <template v-if="[2,3,4].indexOf(scope.row.type)>-1">
+                          <template v-if="[2, 3, 4].indexOf(scope.row.type) > -1">
                             <el-dropdown-item v-if="scope.row.isButtonAuthorize === 1"
                               @click.native="handleButtonAuthorize(scope.row)">
                               按钮权限
@@ -125,28 +125,33 @@
   </div>
 </template>
 <script>
-import { getMenuList, updateMenuState, delMenu, exportMenu } from '@/api/system/menu'
-import Form from './Form'
-import ButtonAuthorizeListDrawer from './components/buttonAuthorize/index'
-import ColumnAuthorizeListDrawer from './components/columnAuthorize/index'
-import FormAuthorizeListDrawer from './components/formAuthorize/index'
-import DataAuthorizeListDrawer from './components/dataAuthorize/index'
+import {
+  getMenuList,
+  updateMenuState,
+  delMenu,
+  exportMenu,
+} from "@/api/system/menu";
+import Form from "./Form";
+import ButtonAuthorizeListDrawer from "./components/buttonAuthorize/index";
+import ColumnAuthorizeListDrawer from "./components/columnAuthorize/index";
+import FormAuthorizeListDrawer from "./components/formAuthorize/index";
+import DataAuthorizeListDrawer from "./components/dataAuthorize/index";
 
 export default {
-  name: 'system-menu',
+  name: "system-menu",
   components: {
     Form,
     ButtonAuthorizeListDrawer,
     ColumnAuthorizeListDrawer,
     FormAuthorizeListDrawer,
-    DataAuthorizeListDrawer
+    DataAuthorizeListDrawer,
   },
   data() {
     return {
       options: [],
       listQuery: {
-        keyword: '',
-        category: 'Web'
+        keyword: "",
+        category: "Web",
       },
       treeList: [],
       btnLoading: false,
@@ -157,122 +162,136 @@ export default {
       formAuthorizeListDrawer: false,
       dataAuthorizeListDrawer: false,
       expands: true,
-      refreshTable: true
-    }
+      refreshTable: true,
+    };
   },
   watch: {
     "listQuery.category": function (val) {
-      this.reset()
-    }
+      this.reset();
+    },
   },
   created() {
-    this.initData()
+    this.initData();
   },
   methods: {
     reset() {
-      this.listQuery.keyword = ''
-      this.initData()
+      this.listQuery.keyword = "";
+      this.initData();
     },
     initData() {
-      this.listLoading = true
-      getMenuList(this.listQuery).then(res => {
-        this.treeList = res.data.list
-        this.listLoading = false
-        this.btnLoading = false
-      }).catch(() => {
-        this.listLoading = false
-        this.btnLoading = false
-      })
+      this.listLoading = true;
+      getMenuList(this.listQuery)
+        .then((res) => {
+          this.treeList = res.data.list;
+          this.listLoading = false;
+          this.btnLoading = false;
+        })
+        .catch(() => {
+          this.listLoading = false;
+          this.btnLoading = false;
+        });
     },
     toggleExpand() {
-      this.refreshTable = false
-      this.expands = !this.expands
+      this.refreshTable = false;
+      this.expands = !this.expands;
       this.$nextTick(() => {
-        this.refreshTable = true
-      })
+        this.refreshTable = true;
+      });
     },
     addOrUpdateHandle(id) {
-      this.formVisible = true
+      this.formVisible = true;
       this.$nextTick(() => {
-        this.$refs.Form.init(id, this.listQuery.category)
-      })
+        this.$refs.Form.init(id, this.listQuery.category);
+      });
     },
     handleUpdateState(row) {
-      const txt = row.enabledMark ? '禁用' : '开启'
-      this.$confirm(`您确定要${txt}当前菜单吗, 是否继续?`, '提示', {
-        type: 'warning'
-      }).then(() => {
-        updateMenuState(row.id).then(res => {
-          this.$message({
-            type: 'success',
-            message: res.msg,
-            duration: 1000,
-            onClose: () => {
-              row.enabledMark = row.enabledMark ? 0 : 1
-            }
-          })
+      const txt = row.enabledMark ? "禁用" : "开启";
+      this.$confirm(`您确定要${txt}当前菜单吗, 是否继续?`, "提示", {
+        type: "warning",
+      })
+        .then(() => {
+          updateMenuState(row.id).then((res) => {
+            this.$message({
+              type: "success",
+              message: res.msg,
+              duration: 1000,
+              onClose: () => {
+                row.enabledMark = row.enabledMark ? 0 : 1;
+              },
+            });
+          });
         })
-      }).catch(() => { })
+        .catch(() => { });
     },
     handleDel(id) {
-      this.$confirm(this.$t('common.delTip'), this.$t('common.tipTitle'), {
-        type: 'warning'
-      }).then(() => {
-        delMenu(id).then(res => {
-          this.$message({
-            type: 'success',
-            message: res.msg,
-            duration: 1500,
-            onClose: () => {
-              this.initData()
-            }
-          })
+      this.$confirm(this.$t("common.delTip"), this.$t("common.tipTitle"), {
+        type: "warning",
+      })
+        .then(() => {
+          delMenu(id).then((res) => {
+            this.$message({
+              type: "success",
+              message: res.msg,
+              duration: 1500,
+              onClose: () => {
+                this.initData();
+              },
+            });
+          });
         })
-      }).catch(() => { })
+        .catch(() => { });
     },
     handleButtonAuthorize(row) {
-      const moduleId = row.id
-      const fullName = row.fullName
-      this.buttonAuthorizeListDrawer = true
+      const moduleId = row.id;
+      const fullName = row.fullName;
+      this.buttonAuthorizeListDrawer = true;
       this.$nextTick(() => {
-        this.$refs.buttonAuthorizeList.init(moduleId, fullName)
-      })
+        this.$refs.buttonAuthorizeList.init(moduleId, fullName);
+      });
     },
+    //列表权限
     handleColumnAuthorize(row) {
-      const moduleId = row.id
-      const fullName = row.fullName
-      this.columnAuthorizeListDrawer = true
+      const moduleId = row.id;
+      const fullName = row.fullName;
+      const type = row.type;
+      this.columnAuthorizeListDrawer = true;
       this.$nextTick(() => {
-        this.$refs.ColumnAuthorizeList.init(moduleId, fullName)
-      })
+        this.$refs.ColumnAuthorizeList.init(moduleId, fullName, type);
+      });
     },
+    //表单权限
     handleFormAuthorize(row) {
-      const moduleId = row.id
-      const fullName = row.fullName
-      this.formAuthorizeListDrawer = true
+      const moduleId = row.id;
+      const fullName = row.fullName;
+      const type = row.type;
+      this.formAuthorizeListDrawer = true;
       this.$nextTick(() => {
-        this.$refs.FormAuthorizeList.init(moduleId, fullName)
-      })
+        this.$refs.FormAuthorizeList.init(moduleId, fullName, type);
+      });
     },
+    //数据权限
     handleDataAuthorize(row) {
-      const moduleId = row.id
-      const fullName = row.fullName
-      this.dataAuthorizeListDrawer = true
+      const moduleId = row.id;
+      const fullName = row.fullName;
+      const type = row.type;
+      this.dataAuthorizeListDrawer = true;
       this.$nextTick(() => {
-        this.$refs.DataAuthorizeList.init(moduleId, fullName)
-      })
+        this.$refs.DataAuthorizeList.init(moduleId, fullName, type);
+      });
     },
     exportMenu(id) {
-      this.$confirm('您确定要导出该菜单, 是否继续?', '提示', {
-        type: 'warning'
-      }).then(() => {
-        exportMenu(id).then(res => {
-          this.jnpf.downloadFile(res.data.url)
+      this.$confirm("您确定要导出该菜单, 是否继续?", "提示", {
+        type: "warning",
+      })
+        .then(() => {
+          exportMenu(id).then((res) => {
+            this.jnpf.downloadFile(res.data.url);
+          });
         })
-      }).catch(() => { });
-    }
-  }
-}
+        .catch(() => { });
+    },
+  },
+};
 </script>
 <style lang="scss" scoped>
 .menu-list {

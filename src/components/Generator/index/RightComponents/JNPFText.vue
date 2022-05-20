@@ -1,9 +1,5 @@
 <template>
   <el-row>
-    <el-form-item label="控件栅格">
-      <el-slider v-model="activeData.__config__.span" :max="24" :min="6" show-stops :step="2"
-        show-tooltip />
-    </el-form-item>
     <el-form-item label="文本内容">
       <el-input v-model="activeData.__config__.defaultValue" placeholder="请输入文本内容" />
     </el-form-item>
