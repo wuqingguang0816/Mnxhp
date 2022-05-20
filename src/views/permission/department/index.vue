@@ -78,7 +78,7 @@
         </JNPF-table>
       </div>
     </div>
-    <Form v-if="formVisible" ref="Form" @refreshDataList="initData" />
+    <Form v-if="formVisible" ref="Form" @refreshDataList="getOrganizeList()" />
     <Diagram v-if="diagramVisible" ref="Diagram" @close="diagramVisible = false" />
     <gradeForm v-if="gradeFormVisible" ref="gradeForm" @close="gradeFormVisible=false" />
   </div>
@@ -119,7 +119,7 @@ export default {
     }
   },
   created() {
-    this.getOrganizeList()
+    this.getOrganizeList(true)
   },
   methods: {
     showDiagram() {
@@ -128,7 +128,7 @@ export default {
         this.$refs.Diagram.init()
       })
     },
-    getOrganizeList() {
+    getOrganizeList(isInit) {
       this.treeLoading = true
       getDepartmentSelector().then(res => {
         this.treeData = res.data.list
@@ -138,7 +138,7 @@ export default {
             this.listLoading = false
             return
           }
-          this.companyId = this.treeData[0].id
+          if (isInit) this.companyId = this.treeData[0].id
           this.$refs.treeBox.setCurrentKey(this.companyId)
           this.treeLoading = false
           this.initData()
