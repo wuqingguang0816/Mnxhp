@@ -147,7 +147,7 @@ function addNodeButton(ctx, data, h, isBranch = false) {
             </div>
             <div>
               <div class="condition-icon" onClick={this.eventLauncher.bind(ctx, "appendBranchFlowBranch", data, isBranch)}>
-                <i class="icon-ym icon-ym-node"></i>
+                <i class="icon-ym icon-ym-branch"></i>
               </div>
               选择分支
             </div>
@@ -159,7 +159,7 @@ function addNodeButton(ctx, data, h, isBranch = false) {
             </div>
             <div class={{ 'condition-disabled': !canAddTimerNode }}>
               <div class="condition-icon" onClick={ctx.eventLauncher.bind(ctx, "addTimerNode", data, isBranch, !canAddTimerNode)} >
-                <i class="el-icon-timer" style="vertical-align: middle;"></i>
+                <i class="icon-ym icon-ym-timer"></i>
               </div>
               定时器
             </div>
