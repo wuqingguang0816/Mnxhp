@@ -36,7 +36,7 @@
                   <el-select v-model="query.dataType" placeholder="请选择" clearable>
                     <el-option label="SQL操作" :value="1"></el-option>
                     <el-option label="静态数据" :value="2"></el-option>
-                    <el-option label="Api数据" :value="3"></el-option>
+                    <el-option label="API操作" :value="3"></el-option>
                   </el-select>
                 </el-form-item>
               </el-col>
