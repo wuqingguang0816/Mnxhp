@@ -119,13 +119,13 @@
               </el-col>
               <el-col :span='6'>
                 <p class="timeline-cell" style="text-align:right">
-                  <el-link :underline="false" type="primary">流程转办</el-link>
+                  <el-link :underline="false" type="primary">流程转审</el-link>
                 </p>
               </el-col>
             </el-row>
             <p class="timeline-cell">执行人员：{{item.userName}}</p>
-            <p class="timeline-cell">执行动作：转办</p>
-            <p class="timeline-cell">转办人员：{{item.operatorId}}</p>
+            <p class="timeline-cell">执行动作：转审</p>
+            <p class="timeline-cell">转审人员：{{item.operatorId}}</p>
           </el-card>
         </el-timeline-item>
       </template>

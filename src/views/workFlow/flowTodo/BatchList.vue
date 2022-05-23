@@ -75,7 +75,7 @@
         <div class="JNPF-common-head">
           <div>
             <el-button type="warning" @click="handleBatch(2)" :disabled="!listQuery.nodeCode">
-              批量转办</el-button>
+              批量转审</el-button>
             <el-button type="primary" @click="handleBatch(0)" :disabled="!listQuery.nodeCode"
               :loading="btnLoading">批量通过</el-button>
             <el-button type="danger" @click="handleBatch(1)" :disabled="!listQuery.nodeCode">批量拒绝
@@ -227,7 +227,7 @@ export default {
       this.multipleSelection = val
     },
     handleBatch(batchType) {
-      // batchType 0-通过 1-拒绝 2-转办
+      // batchType 0-通过 1-拒绝 2-转审
       if (!this.multipleSelection.length) return this.$message.error('请先选择数据')
       let isDiffer = this.multipleSelection.some(o => o.flowVersion !== this.multipleSelection[0].flowVersion)
       if (isDiffer) return this.$message.error('请选择相同的版本审批单')
@@ -271,7 +271,7 @@ export default {
         return
       }
       if (batchType === 2) {
-        if (!properties.hasTransferBtn) return this.$message.error('当前审批节点无转办权限')
+        if (!properties.hasTransferBtn) return this.$message.error('当前审批节点无转审权限')
         this.userBoxVisible = true
         this.$nextTick(() => {
           this.$refs.userBox.init()
