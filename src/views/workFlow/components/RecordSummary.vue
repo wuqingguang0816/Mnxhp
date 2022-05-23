@@ -95,11 +95,11 @@
                     <div>{{item.fullName}} {{child.userName}} 于 {{child.handleTime | toDate()}}
                     </div>
                     <div class="status">
-                      <el-link :underline="false" type="primary">转办</el-link>
+                      <el-link :underline="false" type="primary">转审</el-link>
                     </div>
                   </div>
                   <div class=" child-item-option">
-                    转办人员：{{child.operatorId}}
+                    转审人员：{{child.operatorId}}
                   </div>
                 </template>
               </div>
