@@ -1,7 +1,8 @@
 
 <template>
-  <el-drawer size="550px" class="drawer JNPF-common-drawer" :visible.sync="visible" @close="cancel"
-    v-if="properties" append-to-body :wrapperClosable="false">
+  <el-drawer :size="value && isConditionNode() ?'650px':'550px'" class="drawer JNPF-common-drawer"
+    :visible.sync="visible" @close="cancel" v-if="properties" append-to-body
+    :wrapperClosable="false">
     <!-- 标题 -->
     <header slot="title" class="header"
       v-if="value && (value.type=='condition'|| value.type=='approver' || value.type=='subFlow' || value.type=='start' )">
@@ -14,90 +15,114 @@
     <!-- 条件  -->
     <section class="condition-pane pd-10" v-if="value && isConditionNode()">
       <el-row class="condition-list condition-list-header">
-        <el-col :span="6" class="label">字段名称</el-col>
-        <el-col :span="5">比较</el-col>
-        <el-col :span="7">数据值</el-col>
-        <el-col :span="4">逻辑</el-col>
-        <el-col :span="2"></el-col>
+        <el-col :span="8" class="label">字段名称</el-col>
+        <el-col :span="4">比较</el-col>
+        <el-col :span="8">数据值</el-col>
+        <el-col :span="3">逻辑</el-col>
+        <el-col :span="1"></el-col>
       </el-row>
       <template v-for="(item, index) in pconditions">
         <el-row class="condition-list" :key="index">
-          <el-col :span="6" class="label">
+          <el-col :span="8" class="label">
+            <el-select v-model="item.fieldType" placeholder="请选择"
+              class="condition-select condition-type-select" @change="fieldTypeChange(item)">
+              <el-option v-for="item in conditionTypeOptions" :key="item.value" :label="item.label"
+                :value="item.value" />
+            </el-select>
+            <el-button size="mini" v-if="item.fieldType===3" class="edit-script-btn"
+              @click="editFormula(item)">公式编辑
+            </el-button>
             <el-select v-model="item.field" placeholder="请选择"
-              @change="fieldNameChange($event,item,index)">
+              @change="fieldNameChange($event,item,index)" v-else>
               <el-option v-for="item in usedFormItems" :key="item.__vModel__"
                 :label="item.__config__.label" :value="item.__vModel__">
               </el-option>
             </el-select>
+
           </el-col>
-          <el-col :span="5">
-            <el-select v-model="item.symbol" placeholder="请选择" @change="symbolChange($event,item)">
+          <el-col :span="4">
+            <el-select v-model="item.symbol" placeholder="请选择" class="condition-select"
+              @change="symbolChange($event,item)">
               <el-option v-for="item in symbolOptions" :key="item.value" :label="item.label"
                 :value="item.value">
               </el-option>
             </el-select>
           </el-col>
-          <el-col :span="7" class="filedValue">
-            <template v-if="item.jnpfKey==='numInput'">
-              <el-input-number v-model="item.filedValue" placeholder="请输入"
-                :precision="item.precision" controls-position="right" />
-            </template>
-            <template v-else-if="item.jnpfKey==='calculate'">
-              <el-input-number v-model="item.filedValue" placeholder="请输入" :precision="2"
-                controls-position="right" />
-            </template>
-            <template v-else-if="['rate','slider'].includes(item.jnpfKey)">
-              <el-input-number v-model="item.filedValue" placeholder="请输入"
-                controls-position="right" />
-            </template>
-            <template v-else-if="item.jnpfKey==='switch'">
-              <el-switch v-model="item.filedValue" :active-value="1" :inactive-value="0" />
-            </template>
-            <template v-else-if="item.jnpfKey==='time'">
-              <el-time-picker v-model="item.filedValue" :picker-options="item['picker-options']"
-                placeholder="请选择" clearable :value-format="item['value-format']"
-                :format="item.format">
-              </el-time-picker>
-            </template>
-            <template v-else-if="['date','createTime', 'modifyTime'].includes(item.jnpfKey)">
-              <el-date-picker v-model="item.filedValue" :type="item.type||'datetime'" clearable
-                placeholder="请选择" value-format="timestamp"
-                @change="onConditionDateChange($event,item)"
-                :format="item.format||'yyyy-MM-dd HH:mm:ss'">
-              </el-date-picker>
-            </template>
-            <template v-else-if="['comSelect','currOrganize'].includes(item.jnpfKey)">
-              <comSelect v-model="item.filedValue" placeholder="请选择" clearable
-                @change="onConditionListChange(arguments,item)" />
-            </template>
-            <template v-else-if="['depSelect'].includes(item.jnpfKey)">
-              <depSelect v-model="item.filedValue" placeholder="请选择" clearable
-                @change="onConditionObjChange(arguments,item)" />
-            </template>
-            <template v-else-if="['userSelect','createUser','modifyUser'].includes(item.jnpfKey)">
-              <userSelect v-model="item.filedValue" placeholder="请选择" hasSys clearable
-                @change="onConditionObjChange(arguments,item)" />
-            </template>
-            <template v-else-if="['posSelect','currPosition'].includes(item.jnpfKey)">
-              <posSelect v-model="item.filedValue" placeholder="请选择" clearable
-                @change="onConditionObjChange(arguments,item)" />
-            </template>
-            <template v-else-if="item.jnpfKey==='address'">
-              <JNPFAddress v-model="item.filedValue" placeholder="请选择" :level="item.level" clearable
-                @change="onConditionListChange(arguments,item)" />
-            </template>
-            <template v-else>
-              <el-input v-model="item.filedValue" placeholder="请输入"></el-input>
-            </template>
+          <el-col :span="8" class="filedValue">
+            <el-select v-model="item.fieldValueType" placeholder="请选择"
+              class="condition-select condition-type-select" @change="fieldValueTypeChange(item)">
+              <el-option v-for="item in conditionTypeOptions1" :key="item.value" :label="item.label"
+                :value="item.value" />
+            </el-select>
+            <div v-if="item.fieldValueType===2">
+              <template v-if="item.jnpfKey==='numInput'">
+                <el-input-number v-model="item.filedValue" placeholder="请输入"
+                  :precision="item.precision" controls-position="right" />
+              </template>
+              <template v-else-if="item.jnpfKey==='calculate'">
+                <el-input-number v-model="item.filedValue" placeholder="请输入" :precision="2"
+                  controls-position="right" />
+              </template>
+              <template v-else-if="['rate','slider'].includes(item.jnpfKey)">
+                <el-input-number v-model="item.filedValue" placeholder="请输入"
+                  controls-position="right" />
+              </template>
+              <template v-else-if="item.jnpfKey==='switch'">
+                <el-switch v-model="item.filedValue" :active-value="1" :inactive-value="0" />
+              </template>
+              <template v-else-if="item.jnpfKey==='time'">
+                <el-time-picker v-model="item.filedValue" :picker-options="item['picker-options']"
+                  placeholder="请选择" clearable :value-format="item['value-format']"
+                  :format="item.format">
+                </el-time-picker>
+              </template>
+              <template v-else-if="['date','createTime', 'modifyTime'].includes(item.jnpfKey)">
+                <el-date-picker v-model="item.filedValue" :type="item.type||'datetime'" clearable
+                  placeholder="请选择" value-format="timestamp"
+                  @change="onConditionDateChange($event,item)"
+                  :format="item.format||'yyyy-MM-dd HH:mm:ss'">
+                </el-date-picker>
+              </template>
+              <template v-else-if="['comSelect','currOrganize'].includes(item.jnpfKey)">
+                <comSelect v-model="item.filedValue" placeholder="请选择" clearable
+                  @change="onConditionListChange(arguments,item)" />
+              </template>
+              <template v-else-if="['depSelect'].includes(item.jnpfKey)">
+                <depSelect v-model="item.filedValue" placeholder="请选择" clearable
+                  @change="onConditionObjChange(arguments,item)" />
+              </template>
+              <template v-else-if="['userSelect','createUser','modifyUser'].includes(item.jnpfKey)">
+                <userSelect v-model="item.filedValue" placeholder="请选择" hasSys clearable
+                  @change="onConditionObjChange(arguments,item)" />
+              </template>
+              <template v-else-if="['posSelect','currPosition'].includes(item.jnpfKey)">
+                <posSelect v-model="item.filedValue" placeholder="请选择" clearable
+                  @change="onConditionObjChange(arguments,item)" />
+              </template>
+              <template v-else-if="item.jnpfKey==='address'">
+                <JNPFAddress v-model="item.filedValue" placeholder="请选择" :level="item.level"
+                  clearable @change="onConditionListChange(arguments,item)" />
+              </template>
+              <template v-else>
+                <el-input v-model="item.filedValue" placeholder="请输入"></el-input>
+              </template>
+            </div>
+            <el-select v-model="item.filedValue" placeholder="请选择" v-if="item.fieldValueType===1"
+              @change="fieldValueChange($event,item)">
+              <el-option v-for="item in usedFormItems" :key="item.__vModel__"
+                :label="item.__config__.label" :value="item.__vModel__">
+              </el-option>
+            </el-select>
           </el-col>
-          <el-col :span="4">
-            <el-select v-model="item.logic" placeholder="请选择" @change="logicChange($event,item)">
+          <el-col :span="3">
+            <el-select v-model="item.logic" placeholder="请选择" class="condition-select"
+              @change="logicChange($event,item)">
               <el-option v-for="item in logicOptions" :key="item.value" :label="item.label"
                 :value="item.value">
               </el-option>
             </el-select>
           </el-col>
-          <el-col :span="2">
+          <el-col :span="1">
             <i class="el-icon-delete" @click="onDelCondition(index)"></i>
           </el-col>
         </el-row>
@@ -400,7 +425,7 @@
                     <template slot-scope="scope">
                       <template v-if="scope.row.required">
                         <el-select v-model="scope.row.relationField" placeholder="请选择表单字段" clearable
-                          filterable>
+                          filterable @change="onRelationFieldChange($event,scope.row)">
                           <el-option v-for="item in funcRequiredOptions" :key="item.__vModel__"
                             :label="item.__config__.label?item.__vModel__+'('+item.__config__.label+')':item.__vModel__"
                             :value="item.__vModel__">
@@ -409,7 +434,7 @@
                       </template>
                       <template v-else>
                         <el-select v-model="scope.row.relationField" placeholder="请选择表单字段" clearable
-                          filterable>
+                          filterable @change="onRelationFieldChange($event,scope.row)">
                           <el-option v-for="item in funcOptions" :key="item.__vModel__"
                             :label="item.__config__.label?item.__vModel__+'('+item.__config__.label+')':item.__vModel__"
                             :value="item.__vModel__">
@@ -443,7 +468,7 @@
                     <template slot-scope="scope">
                       <template v-if="scope.row.required">
                         <el-select v-model="scope.row.relationField" placeholder="请选择表单字段" clearable
-                          filterable>
+                          filterable @change="onRelationFieldChange($event,scope.row)">
                           <el-option v-for="item in funcRequiredOptions" :key="item.__vModel__"
                             :label="item.__config__.label?item.__vModel__+'('+item.__config__.label+')':item.__vModel__"
                             :value="item.__vModel__">
@@ -452,7 +477,7 @@
                       </template>
                       <template v-else>
                         <el-select v-model="scope.row.relationField" placeholder="请选择表单字段" clearable
-                          filterable>
+                          filterable @change="onRelationFieldChange($event,scope.row)">
                           <el-option v-for="item in funcOptions" :key="item.__vModel__"
                             :label="item.__config__.label?item.__vModel__+'('+item.__config__.label+')':item.__vModel__"
                             :value="item.__vModel__">
@@ -486,7 +511,7 @@
                     <template slot-scope="scope">
                       <template v-if="scope.row.required">
                         <el-select v-model="scope.row.relationField" placeholder="请选择表单字段" clearable
-                          filterable>
+                          filterable @change="onRelationFieldChange($event,scope.row)">
                           <el-option v-for="item in funcRequiredOptions" :key="item.__vModel__"
                             :label="item.__config__.label?item.__vModel__+'('+item.__config__.label+')':item.__vModel__"
                             :value="item.__vModel__">
@@ -495,7 +520,7 @@
                       </template>
                       <template v-else>
                         <el-select v-model="scope.row.relationField" placeholder="请选择表单字段" clearable
-                          filterable>
+                          filterable @change="onRelationFieldChange($event,scope.row)">
                           <el-option v-for="item in funcOptions" :key="item.__vModel__"
                             :label="item.__config__.label?item.__vModel__+'('+item.__config__.label+')':item.__vModel__"
                             :value="item.__vModel__">
@@ -542,7 +567,7 @@
                   <el-table-column prop="value" label="表单字段">
                     <template slot-scope="scope">
                       <el-select v-model="scope.row.relationField" placeholder="请选择表单字段" clearable
-                        filterable>
+                        filterable @change="onRelationFieldChange($event,scope.row)">
                         <el-option v-for="item in funcOptions" :key="item.__vModel__"
                           :label="item.__config__.label?item.__vModel__+'('+item.__config__.label+')':item.__vModel__"
                           :value="item.__vModel__">
@@ -580,7 +605,7 @@
                   <el-table-column prop="value" label="表单字段">
                     <template slot-scope="scope">
                       <el-select v-model="scope.row.relationField" placeholder="请选择表单字段" clearable
-                        filterable>
+                        filterable @change="onRelationFieldChange($event,scope.row)">
                         <el-option v-for="item in funcOptions" :key="item.__vModel__"
                           :label="item.__config__.label?item.__vModel__+'('+item.__config__.label+')':item.__vModel__"
                           :value="item.__vModel__">
@@ -618,7 +643,7 @@
                   <el-table-column prop="value" label="表单字段">
                     <template slot-scope="scope">
                       <el-select v-model="scope.row.relationField" placeholder="请选择表单字段" clearable
-                        filterable>
+                        filterable @change="onRelationFieldChange($event,scope.row)">
                         <el-option v-for="item in funcOptions" :key="item.__vModel__"
                           :label="item.__config__.label?item.__vModel__+'('+item.__config__.label+')':item.__vModel__"
                           :value="item.__vModel__">
@@ -656,7 +681,7 @@
                   <el-table-column prop="value" label="表单字段">
                     <template slot-scope="scope">
                       <el-select v-model="scope.row.relationField" placeholder="请选择表单字段" clearable
-                        filterable>
+                        filterable @change="onRelationFieldChange($event,scope.row)">
                         <el-option v-for="item in funcOptions" :key="item.__vModel__"
                           :label="item.__config__.label?item.__vModel__+'('+item.__config__.label+')':item.__vModel__"
                           :value="item.__vModel__">
@@ -694,7 +719,7 @@
                   <el-table-column prop="value" label="表单字段">
                     <template slot-scope="scope">
                       <el-select v-model="scope.row.relationField" placeholder="请选择表单字段" clearable
-                        filterable>
+                        filterable @change="onRelationFieldChange($event,scope.row)">
                         <el-option v-for="item in funcOptions" :key="item.__vModel__"
                           :label="item.__config__.label?item.__vModel__+'('+item.__config__.label+')':item.__vModel__"
                           :value="item.__vModel__">
@@ -941,7 +966,7 @@
                     <template slot-scope="scope">
                       <template v-if="scope.row.required">
                         <el-select v-model="scope.row.relationField" placeholder="请选择表单字段" clearable
-                          filterable>
+                          filterable @change="onRelationFieldChange($event,scope.row)">
                           <el-option v-for="item in funcRequiredOptions" :key="item.__vModel__"
                             :label="item.__config__.label?item.__vModel__+'('+item.__config__.label+')':item.__vModel__"
                             :value="item.__vModel__">
@@ -950,7 +975,7 @@
                       </template>
                       <template v-else>
                         <el-select v-model="scope.row.relationField" placeholder="请选择表单字段" clearable
-                          filterable>
+                          filterable @change="onRelationFieldChange($event,scope.row)">
                           <el-option v-for="item in funcOptions" :key="item.__vModel__"
                             :label="item.__config__.label?item.__vModel__+'('+item.__config__.label+')':item.__vModel__"
                             :value="item.__vModel__">
@@ -984,7 +1009,7 @@
                     <template slot-scope="scope">
                       <template v-if="scope.row.required">
                         <el-select v-model="scope.row.relationField" placeholder="请选择表单字段" clearable
-                          filterable>
+                          filterable @change="onRelationFieldChange($event,scope.row)">
                           <el-option v-for="item in funcRequiredOptions" :key="item.__vModel__"
                             :label="item.__config__.label?item.__vModel__+'('+item.__config__.label+')':item.__vModel__"
                             :value="item.__vModel__">
@@ -993,7 +1018,7 @@
                       </template>
                       <template v-else>
                         <el-select v-model="scope.row.relationField" placeholder="请选择表单字段" clearable
-                          filterable>
+                          filterable @change="onRelationFieldChange($event,scope.row)">
                           <el-option v-for="item in funcOptions" :key="item.__vModel__"
                             :label="item.__config__.label?item.__vModel__+'('+item.__config__.label+')':item.__vModel__"
                             :value="item.__vModel__">
@@ -1027,7 +1052,7 @@
                     <template slot-scope="scope">
                       <template v-if="scope.row.required">
                         <el-select v-model="scope.row.relationField" placeholder="请选择表单字段" clearable
-                          filterable>
+                          filterable @change="onRelationFieldChange($event,scope.row)">
                           <el-option v-for="item in funcRequiredOptions" :key="item.__vModel__"
                             :label="item.__config__.label?item.__vModel__+'('+item.__config__.label+')':item.__vModel__"
                             :value="item.__vModel__">
@@ -1036,7 +1061,7 @@
                       </template>
                       <template v-else>
                         <el-select v-model="scope.row.relationField" placeholder="请选择表单字段" clearable
-                          filterable>
+                          filterable @change="onRelationFieldChange($event,scope.row)">
                           <el-option v-for="item in funcOptions" :key="item.__vModel__"
                             :label="item.__config__.label?item.__vModel__+'('+item.__config__.label+')':item.__vModel__"
                             :value="item.__vModel__">
@@ -1083,7 +1108,7 @@
                   <el-table-column prop="value" label="表单字段">
                     <template slot-scope="scope">
                       <el-select v-model="scope.row.relationField" placeholder="请选择表单字段" clearable
-                        filterable>
+                        filterable @change="onRelationFieldChange($event,scope.row)">
                         <el-option v-for="item in funcOptions" :key="item.__vModel__"
                           :label="item.__config__.label?item.__vModel__+'('+item.__config__.label+')':item.__vModel__"
                           :value="item.__vModel__">
@@ -1121,7 +1146,7 @@
                   <el-table-column prop="value" label="表单字段">
                     <template slot-scope="scope">
                       <el-select v-model="scope.row.relationField" placeholder="请选择表单字段" clearable
-                        filterable>
+                        filterable @change="onRelationFieldChange($event,scope.row)">
                         <el-option v-for="item in funcOptions" :key="item.__vModel__"
                           :label="item.__config__.label?item.__vModel__+'('+item.__config__.label+')':item.__vModel__"
                           :value="item.__vModel__">
@@ -1159,7 +1184,7 @@
                   <el-table-column prop="value" label="表单字段">
                     <template slot-scope="scope">
                       <el-select v-model="scope.row.relationField" placeholder="请选择表单字段" clearable
-                        filterable>
+                        filterable @change="onRelationFieldChange($event,scope.row)">
                         <el-option v-for="item in funcOptions" :key="item.__vModel__"
                           :label="item.__config__.label?item.__vModel__+'('+item.__config__.label+')':item.__vModel__"
                           :value="item.__vModel__">
@@ -1587,6 +1612,18 @@ export default {
           label: '或者',
           value: "||"
         }],
+      conditionTypeOptions: [{
+        label: '字段',
+        value: 1
+      }],
+      conditionTypeOptions1: [{
+        label: '字段',
+        value: 1
+      },
+      {
+        label: '自定义',
+        value: 2
+      }],
       assignList: [],
       printTplList: [],
       flowOptions: [],
@@ -1614,10 +1651,31 @@ export default {
       const formItems = list
       return formItems
     },
+    formFieldsOptions() {
+      let list = []
+      const loop = (data, parent) => {
+        if (!data) return
+        if (data.__vModel__ && data.__config__.jnpfKey !== 'table') {
+          const isTableChild = parent && parent.__config__ && parent.__config__.jnpfKey === 'table'
+          let obj = JSON.parse(JSON.stringify(data))
+          if (isTableChild) {
+            obj.__vModel__ = parent.__vModel__ + '-' + data.__vModel__
+            obj.__config__.label = parent.__config__.label + '-' + data.__config__.label
+          }
+          list.push(obj)
+        }
+        if (data.__config__ && data.__config__.children && Array.isArray(data.__config__.children)) {
+          loop(data.__config__.children, data)
+        }
+        if (Array.isArray(data)) data.forEach(d => loop(d, parent))
+      }
+      loop(getDrawingList())
+      return list
+    },
     funcOptions() {
       let options = [
         ...systemFieldOptions,
-        ...this.usedFormItems
+        ...this.formFieldsOptions
       ]
       return options
     },
@@ -2061,6 +2119,8 @@ export default {
         fieldName: '',
         symbolName: '',
         filedValue: '',
+        fieldType: 1,
+        fieldValueType: 2,
         filedLabel: '',
         logicName: '并且',
         field: '',
@@ -2086,6 +2146,16 @@ export default {
     logicChange(val, item) {
       let obj = this.logicOptions.filter(o => o.value == val)[0]
       item.logicName = obj.label
+    },
+    fieldValueTypeChange(item) {
+      item.filedValue = ''
+    },
+    fieldTypeChange(item) {
+      item.filed = ''
+    },
+    fieldValueChange(val, item) {
+      let obj = this.usedFormItems.filter(o => o.__vModel__ == val)[0]
+      item.filedLabel = obj.__config__.label
     },
     // 条件字段验证
     exist() {
@@ -2137,7 +2207,8 @@ export default {
       let templateJson = JSON.parse(item.templateJson)
       this[obj][key].templateJson = templateJson.map(o => ({
         ...o,
-        relationField: ''
+        relationField: '',
+        isSubTable: false
       }))
     },
     onFuncChange(obj, key, params) {
@@ -2150,8 +2221,16 @@ export default {
       this[obj][key].interfaceName = item.fullName
       this[obj][key].templateJson = item.templateJson.map(o => ({
         ...o,
-        relationField: ''
+        relationField: '',
+        isSubTable: false
       }))
+    },
+    onRelationFieldChange(val, item) {
+      if (!val) return
+      let list = this.funcOptions.filter(o => val === o.__vModel__)
+      if (!list.length) return
+      let obj = list[0]
+      this.$set(item, 'isSubTable', obj.__config__ && obj.__config__.isSubTable ? obj.__config__.isSubTable : false)
     },
     // 条件节点
     onConditionDateChange(val, item) {
@@ -2345,8 +2424,10 @@ export default {
   >>> .el-col {
     text-align: center;
     padding: 0 4px;
+    &.label,
     &.filedValue {
-      text-align: left;
+      display: flex;
+      align-items: center;
     }
     .el-input,
     .el-input-number,
@@ -2357,6 +2438,21 @@ export default {
       cursor: pointer;
       &:hover {
         color: #f2725e;
+      }
+    }
+    .edit-script-btn {
+      flex: 1;
+      height: 32px;
+    }
+  }
+  .condition-select {
+    &.el-select {
+      &.condition-type-select {
+        width: 80px;
+        flex-shrink: 0;
+      }
+      >>> .el-input__inner {
+        padding: 0 26px 0 10px;
       }
     }
   }
