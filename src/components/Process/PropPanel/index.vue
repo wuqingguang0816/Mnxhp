@@ -48,7 +48,7 @@
               </el-option>
             </el-select>
           </el-col>
-          <el-col :span="8" class="filedValue">
+          <el-col :span="8" class="fieldValue">
             <el-select v-model="item.fieldValueType" placeholder="请选择"
               class="condition-select condition-type-select" @change="fieldValueTypeChange(item)">
               <el-option v-for="item in conditionTypeOptions1" :key="item.value" :label="item.label"
@@ -56,58 +56,58 @@
             </el-select>
             <div v-if="item.fieldValueType===2">
               <template v-if="item.jnpfKey==='numInput'">
-                <el-input-number v-model="item.filedValue" placeholder="请输入"
+                <el-input-number v-model="item.fieldValue" placeholder="请输入"
                   :precision="item.precision" controls-position="right" />
               </template>
               <template v-else-if="item.jnpfKey==='calculate'">
-                <el-input-number v-model="item.filedValue" placeholder="请输入" :precision="2"
+                <el-input-number v-model="item.fieldValue" placeholder="请输入" :precision="2"
                   controls-position="right" />
               </template>
               <template v-else-if="['rate','slider'].includes(item.jnpfKey)">
-                <el-input-number v-model="item.filedValue" placeholder="请输入"
+                <el-input-number v-model="item.fieldValue" placeholder="请输入"
                   controls-position="right" />
               </template>
               <template v-else-if="item.jnpfKey==='switch'">
-                <el-switch v-model="item.filedValue" :active-value="1" :inactive-value="0" />
+                <el-switch v-model="item.fieldValue" :active-value="1" :inactive-value="0" />
               </template>
               <template v-else-if="item.jnpfKey==='time'">
-                <el-time-picker v-model="item.filedValue" :picker-options="item['picker-options']"
+                <el-time-picker v-model="item.fieldValue" :picker-options="item['picker-options']"
                   placeholder="请选择" clearable :value-format="item['value-format']"
                   :format="item.format">
                 </el-time-picker>
               </template>
               <template v-else-if="['date','createTime', 'modifyTime'].includes(item.jnpfKey)">
-                <el-date-picker v-model="item.filedValue" :type="item.type||'datetime'" clearable
+                <el-date-picker v-model="item.fieldValue" :type="item.type||'datetime'" clearable
                   placeholder="请选择" value-format="timestamp"
                   @change="onConditionDateChange($event,item)"
                   :format="item.format||'yyyy-MM-dd HH:mm:ss'">
                 </el-date-picker>
               </template>
               <template v-else-if="['comSelect','currOrganize'].includes(item.jnpfKey)">
-                <comSelect v-model="item.filedValue" placeholder="请选择" clearable
+                <comSelect v-model="item.fieldValue" placeholder="请选择" clearable
                   @change="onConditionListChange(arguments,item)" />
               </template>
               <template v-else-if="['depSelect'].includes(item.jnpfKey)">
-                <depSelect v-model="item.filedValue" placeholder="请选择" clearable
+                <depSelect v-model="item.fieldValue" placeholder="请选择" clearable
                   @change="onConditionObjChange(arguments,item)" />
               </template>
               <template v-else-if="['userSelect','createUser','modifyUser'].includes(item.jnpfKey)">
-                <userSelect v-model="item.filedValue" placeholder="请选择" hasSys clearable
+                <userSelect v-model="item.fieldValue" placeholder="请选择" hasSys clearable
                   @change="onConditionObjChange(arguments,item)" />
               </template>
               <template v-else-if="['posSelect','currPosition'].includes(item.jnpfKey)">
-                <posSelect v-model="item.filedValue" placeholder="请选择" clearable
+                <posSelect v-model="item.fieldValue" placeholder="请选择" clearable
                   @change="onConditionObjChange(arguments,item)" />
               </template>
               <template v-else-if="item.jnpfKey==='address'">
-                <JNPFAddress v-model="item.filedValue" placeholder="请选择" :level="item.level"
+                <JNPFAddress v-model="item.fieldValue" placeholder="请选择" :level="item.level"
                   clearable @change="onConditionListChange(arguments,item)" />
               </template>
               <template v-else>
-                <el-input v-model="item.filedValue" placeholder="请输入"></el-input>
+                <el-input v-model="item.fieldValue" placeholder="请输入"></el-input>
               </template>
             </div>
-            <el-select v-model="item.filedValue" placeholder="请选择" v-if="item.fieldValueType===1"
+            <el-select v-model="item.fieldValue" placeholder="请选择" v-if="item.fieldValueType===1"
               @change="fieldValueChange($event,item)">
               <el-option v-for="item in usedFormItems" :key="item.__vModel__"
                 :label="item.__config__.label" :value="item.__vModel__">
@@ -1771,7 +1771,7 @@ export default {
       this.properties.conditions = this.pconditions
       for (let i = 0; i < this.pconditions.length; i++) {
         const e = this.pconditions[i];
-        nodeContent += `[${e.fieldName} ${e.symbolName} ${e.filedLabel ? e.filedLabel : (e.filedValue || e.filedValue === 0) ? e.filedValue : ''}] ${i + 1 == this.pconditions.length ? '' : e.logicName}` + '\n'
+        nodeContent += `[${e.fieldName} ${e.symbolName} ${e.fieldLabel ? e.fieldLabel : (e.fieldValue || e.fieldValue === 0) ? e.fieldValue : ''}] ${i + 1 == this.pconditions.length ? '' : e.logicName}` + '\n'
       }
       this.$emit("confirm", this.properties, nodeContent || '请设置条件');
       this.visible = false;
@@ -2118,10 +2118,10 @@ export default {
       let item = {
         fieldName: '',
         symbolName: '',
-        filedValue: '',
+        fieldValue: '',
         fieldType: 1,
         fieldValueType: 2,
-        filedLabel: '',
+        fieldLabel: '',
         logicName: '并且',
         field: '',
         symbol: '',
@@ -2135,8 +2135,8 @@ export default {
       item.fieldName = obj.__config__.label
       item.jnpfKey = obj.__config__.jnpfKey
       item = { ...item, ...obj }
-      item.filedValue = undefined
-      item.filedLabel = ''
+      item.fieldValue = undefined
+      item.fieldLabel = ''
       this.$set(this.pconditions, i, item)
     },
     symbolChange(val, item) {
@@ -2148,14 +2148,14 @@ export default {
       item.logicName = obj.label
     },
     fieldValueTypeChange(item) {
-      item.filedValue = ''
+      item.fieldValue = ''
     },
     fieldTypeChange(item) {
-      item.filed = ''
+      item.field = ''
     },
     fieldValueChange(val, item) {
       let obj = this.usedFormItems.filter(o => o.__vModel__ == val)[0]
-      item.filedLabel = obj.__config__.label
+      item.fieldLabel = obj.__config__.label
     },
     // 条件字段验证
     exist() {
@@ -2234,18 +2234,18 @@ export default {
     },
     // 条件节点
     onConditionDateChange(val, item) {
-      if (!val) return item.filedLabel = ''
+      if (!val) return item.fieldLabel = ''
       let format = item.format || 'yyyy-MM-dd HH:mm:ss'
-      item.filedLabel = this.jnpf.toDate(val, format)
+      item.fieldLabel = this.jnpf.toDate(val, format)
     },
     onConditionListChange(data, item) {
-      if (!data || !data[1]) return item.filedLabel = ''
+      if (!data || !data[1]) return item.fieldLabel = ''
       let labelList = data[1].map(o => o.fullName)
-      item.filedLabel = labelList.join(' / ')
+      item.fieldLabel = labelList.join('/')
     },
     onConditionObjChange(data, item) {
-      if (!data || !data[1]) return item.filedLabel = ''
-      item.filedLabel = data[1].fullName || ''
+      if (!data || !data[1]) return item.fieldLabel = ''
+      item.fieldLabel = data[1].fullName || ''
     }
   },
   watch: {
@@ -2425,7 +2425,7 @@ export default {
     text-align: center;
     padding: 0 4px;
     &.label,
-    &.filedValue {
+    &.fieldValue {
       display: flex;
       align-items: center;
     }
