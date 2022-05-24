@@ -74,9 +74,8 @@
         </el-tab-pane>
         <el-tab-pane label="安全设置" name="second">
           <el-alert title="注意：系统登录安全、黑名单IP限制" type="warning" :closable="false" show-icon />
-          <el-row>
+          <el-row class="mt-20">
             <el-col :span="18">
-              <el-divider content-position="left">登录设置</el-divider>
               <el-form-item label="登录方式">
                 <el-select v-model="baseForm.singleLogin" placeholder="请选择">
                   <el-option label="单一登录" :value="1" />
@@ -109,7 +108,7 @@
                 <el-input-number v-model="baseForm.verificationCodeNumber" :min="3" :max="6"
                   :precision="0" :step="1" controls-position="right" /> 位
               </el-form-item>
-              <el-form-item label="上次登录">
+              <el-form-item label="登录提示语">
                 <el-switch v-model="baseForm.lastLoginTimeSwitch" :active-value="1"
                   :inactive-value="0" />
               </el-form-item>
@@ -127,14 +126,14 @@
                   </div>
                 </el-card>
               </el-form-item>
-              <el-divider content-position="left">访问设置</el-divider>
-              <el-form-item label="开启验证">
+              <el-form-item label="白名单验证">
                 <el-switch v-model="baseForm.whitelistSwitch" :active-value="1"
                   :inactive-value="0" />
               </el-form-item>
-              <el-form-item label="允许访问IP" v-if="baseForm.whitelistSwitch">
+              <el-form-item label="白名单设置" v-if="baseForm.whitelistSwitch">
                 <el-input type="textarea" :autosize="{ minRows: 3, maxRows: 10}"
                   v-model="baseForm.whiteListIp" placeholder="允许访问IP" />
+                <div class="tip">多个IP设置，用英文符号隔开，如192.168.0.1,192.168.0.2</div>
               </el-form-item>
               <el-form-item>
                 <el-button type="primary" size="small" :loading="btnLoading" class="saveBtn"

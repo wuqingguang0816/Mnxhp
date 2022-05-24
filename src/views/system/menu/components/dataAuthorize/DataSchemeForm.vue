@@ -146,8 +146,8 @@ export default {
         getDataAuthorizeList(this.dataForm.moduleId).then(res => {
           this.fieldOptions = res.data.list
           this.fieldOptions.map(o => {
-            o.enCode = o.enCode.replace('_jnpf_','.')
-            o.enCode = o.enCode.replace('jnpf_','')
+            o.enCode = o.enCode.replace('_jnpf_', '.')
+            o.enCode = o.enCode.replace('jnpf_', '')
           });
           if (this.dataForm.id) {
             getDataSchemeInfo(this.dataForm.id).then(res => {
@@ -267,7 +267,7 @@ export default {
             for (let j = 0; j < e.groups.length; j++) {
               let ee = e.groups[j]
               let item = this.fieldOptions.filter(o => o.id === ee.id)[0]
-                  ee.bindTable = item.bindTable
+              ee.bindTable = item.bindTable
               if (!ee.field || !ee.id || !ee.op || !ee.value) {
                 this.$message.warning("过滤条件检查出格式错误")
                 conditionValid = false
