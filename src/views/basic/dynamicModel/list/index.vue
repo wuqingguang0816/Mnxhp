@@ -37,7 +37,8 @@
         </div>
         <JNPF-table v-loading="listLoading" :data="list" row-key="id" default-expand-all
           :tree-props="{children: 'children', hasChildren: ''}" @sort-change='sortChange'
-          :has-c="hasBatchBtn" @selection-change="handleSelectionChange" v-if="refreshTable">
+          :has-c="hasBatchBtn" @selection-change="handleSelectionChange" v-if="refreshTable"
+          custom-column>
           <el-table-column :prop="item.prop" :label="item.label" :align="item.align"
             :width="item.width" :key="i" :sortable="item.sortable?'custom':item.sortable"
             v-for="(item, i) in columnList" />

@@ -22,10 +22,10 @@
         </div>
         <JNPF-table v-loading="listLoading" :data="treeList" row-key="id" default-expand-all
           :tree-props="{ children: 'children', hasChildren: '' }">
-          <el-table-column prop="bindTable" label="数据库表" width="120" v-if="menuType == 2"/>
-          <el-table-column prop="enCode" label="字段名称" width="160"/>
-          <el-table-column prop="fullName" label="字段说明"/>
-          <el-table-column prop="sortCode" label="排序" width="90" align="center"/>
+          <el-table-column prop="bindTable" label="数据库表" width="120" v-if="menuType == 2" />
+          <el-table-column prop="enCode" label="字段名称" width="160" />
+          <el-table-column prop="fullName" label="字段说明" />
+          <el-table-column prop="sortCode" label="排序" width="90" align="center" />
           <el-table-column prop="enabledMark" label="状态" width="90">
             <template slot-scope="scope">
               <el-tag :type="scope.row.enabledMark == 1 ? 'success' : 'danger'" disable-transitions>
@@ -85,7 +85,7 @@ export default {
       menuType: 2,
       dbOptions: [],
       dbList: [],
-      tableName:''
+      tableName: ''
     };
   },
   methods: {
@@ -104,7 +104,7 @@ export default {
         this.getList();
       });
       if (this.menuType === 3) {
-        getFieldNameList(this.moduleId,'Form').then((res) => {
+        getFieldNameList(this.moduleId, 'Form').then((res) => {
           this.dbList = res.data || [];
         });
       } else {
@@ -139,8 +139,8 @@ export default {
         this.$refs.FormConnectForm.init(this.dbOptions);
       });
     },
-    getConnectList(data,tableName) {
-       this.tableName = tableName || ''
+    getConnectList(data, tableName) {
+      this.tableName = tableName || ''
       this.dbList = data;
     },
     getList() {
@@ -182,7 +182,7 @@ export default {
     addOrUpdateHandle(id) {
       this.formVisible = true;
       this.$nextTick(() => {
-        this.$refs.form.init(this.moduleId, id, this.menuType, this.dbList,this.tableName);
+        this.$refs.form.init(this.moduleId, id, this.menuType, this.dbList, this.tableName);
       });
     },
     handleBatchAdd() {

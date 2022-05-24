@@ -1,84 +1,40 @@
 <template>
   <div>
-    <el-drawer
-      :title="dialogTitle"
-      :visible.sync="columnAuthorizeListDrawer"
-      :wrapperClosable="false"
-      ref="drawer"
-      size="700px"
-      class="JNPF-common-drawer"
-    >
+    <el-drawer :title="dialogTitle" :visible.sync="columnAuthorizeListDrawer"
+      :wrapperClosable="false" ref="drawer" size="700px" class="JNPF-common-drawer">
       <div class="JNPF-flex-main">
         <div class="JNPF-common-head">
           <topOpts @add="addOrUpdateHandle('')">
-            <el-button
-              type="text"
-              icon="el-icon-copy-document"
-              @click="handleBatchAdd"
-            >
+            <el-button type="text" icon="el-icon-copy-document" @click="handleBatchAdd">
               批量新增
             </el-button>
-            <el-button
-              v-if="menuType === 2"
-              type="text"
-              icon="icon-ym icon-ym-dbLink"
-              @click="addDataConnect"
-            >
+            <el-button v-if="menuType === 2" type="text" icon="icon-ym icon-ym-dbLink"
+              @click="addDataConnect">
               数据连接
             </el-button>
           </topOpts>
           <div class="JNPF-common-head-right">
-            <el-tooltip
-              effect="dark"
-              :content="$t('common.refresh')"
-              placement="top"
-            >
-              <el-link
-                icon="icon-ym icon-ym-Refresh
-              JNPF-common-head-icon"
-                :underline="false"
-                @click="getList()"
-              />
+            <el-tooltip effect="dark" :content="$t('common.refresh')" placement="top">
+              <el-link icon="icon-ym icon-ym-Refresh
+              JNPF-common-head-icon" :underline="false" @click="getList()" />
             </el-tooltip>
           </div>
         </div>
-        <JNPF-table
-          v-loading="listLoading"
-          :data="treeList"
-          row-key="id"
-          default-expand-all
-          :tree-props="{ children: 'children', hasChildren: '' }"
-        >
-          <el-table-column
-            prop="bindTable"
-            label="数据库表"
-            width="120"
-            v-if="menuType == 2"
-          />
+        <JNPF-table v-loading="listLoading" :data="treeList" row-key="id" default-expand-all
+          :tree-props="{ children: 'children', hasChildren: '' }">
+          <el-table-column prop="bindTable" label="数据库表" width="120" v-if="menuType == 2" />
           <el-table-column prop="enCode" label="字段名称" width="160" />
           <el-table-column prop="fullName" label="字段说明" />
-          <el-table-column
-            prop="sortCode"
-            label="排序"
-            width="90"
-            align="center"
-          />
+          <el-table-column prop="sortCode" label="排序" width="90" align="center" />
           <el-table-column prop="enabledMark" label="状态" width="90">
             <template slot-scope="scope">
-              <el-tag
-                :type="scope.row.enabledMark == 1 ? 'success' : 'danger'"
-                disable-transitions
-              >
-                {{ scope.row.enabledMark == 1 ? "正常" : "停用" }}</el-tag
-              >
+              <el-tag :type="scope.row.enabledMark == 1 ? 'success' : 'danger'" disable-transitions>
+                {{ scope.row.enabledMark == 1 ? "正常" : "停用" }}</el-tag>
             </template>
           </el-table-column>
           <el-table-column label="操作" width="100">
             <template slot-scope="scope">
-              <tableOpts
-                @edit="addOrUpdateHandle(scope.row.id)"
-                @del="handleDel(scope.row.id)"
-              />
+              <tableOpts @edit="addOrUpdateHandle(scope.row.id)" @del="handleDel(scope.row.id)" />
             </template>
           </el-table-column>
         </JNPF-table>
@@ -87,21 +43,12 @@
         <el-button @click="visible = false">关闭</el-button>
       </span>
     </el-drawer>
-    <ColumnAuthorizeForm
-      v-if="columnAuthorizeFormVisible"
-      ref="ColumnAuthorizeForm"
-      @refreshDataList="getList"
-    />
-    <ColumnAuthorizeBatchForm
-      v-if="columnAuthorizeBatchFormVisible"
-      ref="ColumnAuthorizeBatchForm"
-      @refreshDataList="getList"
-    />
-    <ColumnConnectForm
-      v-if="columnConnectFormVisible"
-      ref="ColumnConnectForm"
-      @refreshDataList="getConnectList"
-    />
+    <ColumnAuthorizeForm v-if="columnAuthorizeFormVisible" ref="ColumnAuthorizeForm"
+      @refreshDataList="getList" />
+    <ColumnAuthorizeBatchForm v-if="columnAuthorizeBatchFormVisible" ref="ColumnAuthorizeBatchForm"
+      @refreshDataList="getList" />
+    <ColumnConnectForm v-if="columnConnectFormVisible" ref="ColumnConnectForm"
+      @refreshDataList="getConnectList" />
   </div>
 </template>
 
@@ -232,7 +179,7 @@ export default {
             });
           });
         })
-        .catch(() => {});
+        .catch(() => { });
     },
     addOrUpdateHandle(id) {
       this.columnAuthorizeFormVisible = true;
@@ -268,7 +215,7 @@ export default {
             });
           });
         })
-        .catch(() => {});
+        .catch(() => { });
     }
   }
 };
