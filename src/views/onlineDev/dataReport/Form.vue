@@ -33,7 +33,6 @@ export default {
       })
     },
     async handleMessage(e) {
-      console.log(e);
       const data = e.data
       if (data === 'closeDialog') {
         this.visible = false

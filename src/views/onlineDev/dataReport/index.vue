@@ -149,8 +149,7 @@ export default {
       this.initData()
     },
     refresh(isRefresh) {
-      this.previewVisible = false
-      if (isRefresh) this.initData()
+      this.initData()
     },
     initData() {
       this.listLoading = true
