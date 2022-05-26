@@ -1,9 +1,11 @@
 <template>
   <div class="sidebar-logo-container">
     <router-link class="sidebar-logo-link" to="/">
-      <img :src="define.comUrl+sysConfig.logoIcon" class="sidebar-logo"
-        v-if="sysConfig && sysConfig.logoIcon" />
-      <img src="@/assets/images/jnpf.png" class="sidebar-logo" v-else />
+      <el-image class="sidebar-logo" :src="define.comUrl+sysConfig.logoIcon">
+        <template slot="error">
+          <img class="sidebar-logo" src="@/assets/images/jnpf.png" alt="">
+        </template>
+      </el-image>
     </router-link>
   </div>
 </template>

@@ -2,14 +2,18 @@
   <div class="sidebar-logo-container" :class="{'collapse':collapse}">
     <transition name="sidebarLogoFade">
       <router-link v-if="collapse" key="collapse" class="sidebar-logo-link" to="/">
-        <img :src="define.comUrl+sysConfig.logoIcon" class="sidebar-logo"
-          v-if="sysConfig && sysConfig.logoIcon" />
-        <img src="@/assets/images/jnpf.png" class="sidebar-logo" v-else />
+        <el-image class="sidebar-logo" :src="define.comUrl+sysConfig.logoIcon">
+          <template slot="error">
+            <img class="sidebar-logo" src="@/assets/images/jnpf.png" alt="">
+          </template>
+        </el-image>
       </router-link>
       <router-link v-else key="expand" class="sidebar-logo-link" to="/">
-        <img :src="define.comUrl+sysConfig.navigationIcon" class="sidebar-logo"
-          v-if="sysConfig && sysConfig.navigationIcon" />
-        <img src="@/assets/images/jnpf1.png" class="sidebar-logo" v-else />
+        <el-image class="sidebar-logo" :src="define.comUrl+sysConfig.navigationIcon">
+          <template slot="error">
+            <img class="sidebar-logo" src="@/assets/images/jnpf1.png" alt="">
+          </template>
+        </el-image>
       </router-link>
     </transition>
   </div>

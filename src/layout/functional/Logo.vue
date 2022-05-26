@@ -1,13 +1,13 @@
 <template>
   <div class="functional-logo-container">
     <router-link class="sidebar-logo-link" to="/">
-      <img :src="define.comUrl+sysConfig.navigationIcon" class="sidebar-logo"
-        v-if="sysConfig && sysConfig.navigationIcon" />
-      <template v-else>
-        <img src="@/assets/images/jnpf2.png" class="sidebar-logo"
-          v-if="slideClass==='lightWhite'" />
-        <img src="@/assets/images/jnpf1.png" class="sidebar-logo" v-else />
-      </template>
+      <el-image class="sidebar-logo" :src="define.comUrl+sysConfig.navigationIcon">
+        <template slot="error">
+          <img src="@/assets/images/jnpf2.png" class="sidebar-logo"
+            v-if="slideClass==='lightWhite'" />
+          <img src="@/assets/images/jnpf1.png" class="sidebar-logo" v-else />
+        </template>
+      </el-image>
     </router-link>
   </div>
 </template>
