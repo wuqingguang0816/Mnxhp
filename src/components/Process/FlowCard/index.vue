@@ -110,10 +110,12 @@ function addNodeButton(ctx, data, h, isBranch = false) {
   let couldAddBranch = !hasBranch(data) || isBranch;
   let canAddAppendBranch = true
   let canAddAppendInterflow = true
+  let canAddAppendBranchFlowBranch = true
   let canAddTimerNode = true
   if (Array.isArray(data.conditionNodes) && data.conditionNodes.length) {
     canAddAppendBranch = false
     canAddAppendInterflow = false
+    canAddAppendBranchFlowBranch = false
   }
   if (data.type === 'timer' || (data.childNode && data.childNode.type === 'timer')) {
     canAddTimerNode = false
@@ -145,8 +147,8 @@ function addNodeButton(ctx, data, h, isBranch = false) {
               </div>
               条件分支
             </div>
-            <div>
-              <div class="condition-icon" onClick={this.eventLauncher.bind(ctx, "appendBranchFlowBranch", data, isBranch)}>
+            <div class={{ 'condition-disabled': !canAddAppendBranchFlowBranch }}>
+              <div class="condition-icon" onClick={this.eventLauncher.bind(ctx, "appendBranchFlowBranch", data, isBranch, !canAddAppendBranchFlowBranch)}>
                 <i class="icon-ym icon-ym-branch"></i>
               </div>
               选择分支
@@ -282,7 +284,7 @@ export default {
      * @param { Object } 包含event（事件名）和args（事件参数）两个参数
      */
     eventLauncher(event, ...args) {
-      let list = ['appendBranch', 'appendInterflowBranch', 'addTimerNode']
+      let list = ['appendBranch', 'appendBranchFlowBranch', 'appendInterflowBranch', 'addTimerNode']
       if (list.includes(event) && args[args.length - 2]) return
       // args.slice(0,-1) vue 会注入MouseEvent到最后一个参数 去除事件对象
       let param = { event, args: args.slice(0, -1) };
@@ -301,5 +303,5 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import 'index.scss';
+@import "index.scss";
 </style>
