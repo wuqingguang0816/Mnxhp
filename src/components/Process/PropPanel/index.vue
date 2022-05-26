@@ -1235,6 +1235,8 @@
         <el-button type="primary" @click="saveRule">确定</el-button>
       </span>
     </el-dialog>
+    <FormulaDialog :visible.sync="formulaVisible" :value="activeItem.field"
+      @updateFormula="updateFormula" :formFieldsOptions="formFieldsOptions" />
   </el-drawer>
 </template>
 <script>
@@ -1244,6 +1246,7 @@ import { getDrawingList } from '@/components/Generator/utils/db'
 import OrgSelect from '../OrgSelect'
 import MsgDialog from './msgDialog'
 import InterfaceDialog from './InterfaceDialog'
+import FormulaDialog from './formulaDialog'
 const requiredDisabled = (jnpfKey) => {
   return ['billRule', 'createUser', 'createTime', 'modifyTime', 'modifyUser', 'currPosition', 'currOrganize', 'table'].includes(jnpfKey)
 }
@@ -1544,7 +1547,7 @@ const systemFieldOptions = [{
 }]
 export default {
   props: [/*当前节点数据*/"value", /*整个节点数据*/"processData", "flowType"],
-  components: { OrgSelect, MsgDialog, InterfaceDialog },
+  components: { OrgSelect, MsgDialog, InterfaceDialog, FormulaDialog },
   data() {
     return {
       visible: false,  // 控制面板显隐
@@ -1615,6 +1618,10 @@ export default {
       conditionTypeOptions: [{
         label: '字段',
         value: 1
+      },
+      {
+        label: '公式',
+        value: 3
       }],
       conditionTypeOptions1: [{
         label: '字段',
@@ -1628,7 +1635,9 @@ export default {
       printTplList: [],
       flowOptions: [],
       childFieldOptions: [],
-      nodeOptions: []
+      nodeOptions: [],
+      formulaVisible: false,
+      activeItem: {}
     };
   },
   computed: {
@@ -2246,6 +2255,16 @@ export default {
     onConditionObjChange(data, item) {
       if (!data || !data[1]) return item.fieldLabel = ''
       item.fieldLabel = data[1].fullName || ''
+    },
+    editFormula(item) {
+      this.activeItem = item
+      this.$nextTick(() => {
+        this.formulaVisible = true
+      })
+    },
+    updateFormula(formula) {
+      this.activeItem.field = formula
+      this.activeItem.fieldName = formula
     }
   },
   watch: {

@@ -8,7 +8,7 @@
       <el-button icon="el-icon-circle-close" type="text" @click="$emit('update:visible', false)"
         class="delete-btn">关闭</el-button>
     </div>
-    <JSONEditor v-model="template" class="json-editor" />
+    <JSONEditor v-model="template" mode="json" class="json-editor" />
   </el-drawer>
 </template>
 
@@ -46,7 +46,7 @@ export default {
       this.clipboard.on('error', e => {
         this.$message.error('代码复制失败')
       })
-      this.template = this.jsonData
+      this.template = JSON.stringify(this.jsonData, null, 2)
     },
     onClose() {
       this.clipboard && this.clipboard.destroy()
