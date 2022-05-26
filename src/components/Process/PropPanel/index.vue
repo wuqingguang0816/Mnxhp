@@ -15,7 +15,7 @@
     <!-- 条件  -->
     <section class="condition-pane pd-10" v-if="value && isConditionNode()">
       <el-row class="condition-list condition-list-header">
-        <el-col :span="8" class="label">字段名称</el-col>
+        <el-col :span="8" class="label">条件字段</el-col>
         <el-col :span="4">比较</el-col>
         <el-col :span="8">数据值</el-col>
         <el-col :span="3">逻辑</el-col>
@@ -2158,9 +2158,11 @@ export default {
     },
     fieldValueTypeChange(item) {
       item.fieldValue = ''
+      item.fieldLabel = ''
     },
     fieldTypeChange(item) {
       item.field = ''
+      item.fieldName = ''
     },
     fieldValueChange(val, item) {
       let obj = this.usedFormItems.filter(o => o.__vModel__ == val)[0]
@@ -2175,7 +2177,7 @@ export default {
         if (!e.field) {
           this.$message({
             showClose: true,
-            message: '字段名称不能为空',
+            message: '条件字段不能为空',
             type: 'error',
             duration: 1000
           });
