@@ -101,7 +101,7 @@ export default {
           if (item.__vModel__) {
             const val = data[item.__vModel__]
             if (val !== undefined && !item.__config__.isSubTable) item.__config__.defaultValue = val
-            let noShow = false, isDisabled = true, required = false
+            let noShow = false, isDisabled = false, required = false
             if (this.setting.formOperates && this.setting.formOperates.length) {
               let id = item.__config__.isSubTable ? parent.__vModel__ + '-' + item.__vModel__ : item.__vModel__
               let arr = this.setting.formOperates.filter(o => o.id === id) || []
@@ -111,8 +111,6 @@ export default {
                 isDisabled = !obj.write
                 required = obj.required ? obj.required : item.__config__.required
               }
-            } else {
-              isDisabled = false
             }
             isDisabled = item.disabled ? item.disabled : isDisabled
             noShow = item.__config__.noShow ? item.__config__.noShow : noShow
