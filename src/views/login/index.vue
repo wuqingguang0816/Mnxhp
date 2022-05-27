@@ -5,9 +5,9 @@
     </div>
     <div class="login-left">
       <a class="login-company-logo" target="_blank" href="https://www.jnpfsoft.com">
-        <img class="login-company-logo-img" src="../../assets/images/login-company-logo.png" alt="">
+        <img class="login-company-logo-img" src="@/assets/images/login-company-logo.png" alt="">
       </a>
-      <img class="login-banner" src="../../assets/images/login-banner.png" alt="">
+      <img class="login-banner" src="@/assets/images/login-banner.png" alt="">
       <div class="login-left-txt" v-if="showTxt">
         <p class="title1">在线自动化，可视化系统开发，零代码实现80%的基础功能</p>
         <p class="title2">已帮助<span>20000+</span>家企业完成数字化转型升级</p>
@@ -16,11 +16,13 @@
     </div>
     <div class="login-content">
       <div class="login-form">
-        <el-image class="login-logo" :src="define.comUrl+sysConfig.loginIcon">
+        <el-image class="login-logo" :src="define.comUrl+sysConfig.loginIcon"
+          v-if="sysConfig && sysConfig.loginIcon">
           <template slot="error">
-            <img class="login-logo" src="../../assets/images/login_logo.png" alt="">
+            <img class="login-logo" src="@/assets/images/login_logo.png" alt="">
           </template>
         </el-image>
+        <img class="login-logo" src="@/assets/images/login_logo.png" alt="" v-else>
         <div class="login-tab" :class="'active'+active">
           <a class="item" :class="{'active': active==1}" @click="active=1">{{$t('login.title')}}</a>
           <a class="item" :class="{'active': active==2}"
@@ -62,7 +64,7 @@
             @click.native.prevent="handleLogin">{{ $t('login.logIn') }}</el-button>
         </el-form>
         <div v-show="active==2" class="login-form-QRCode">
-          <img class="qrcode-img" src="../../assets/images/login_qr.png">
+          <img class="qrcode-img" src="@/assets/images/login_qr.png">
           <p class="qrcode-tip">正在测试,稍后上线</p>
         </div>
       </div>

@@ -61,11 +61,13 @@
     <el-dialog title="关于平台" :close-on-click-modal="false" :visible.sync="visible" v-drag-dialog
       class="JNPF-dialog JNPF-dialog_center about-dialog" lock-scroll width="400px">
       <div class="about-dialog-main">
-        <el-image :src="define.comUrl+sysConfig.logoIcon" class="about-logo">
+        <el-image :src="define.comUrl+sysConfig.logoIcon" class="about-logo"
+          v-if="sysConfig && sysConfig.logoIcon">
           <template slot="error">
             <img src="@/assets/images/jnpf.png" class="about-logo" />
           </template>
         </el-image>
+        <img src="@/assets/images/jnpf.png" class="about-logo" v-else />
         <div>
           <p class="title"><a href="https://www.jnpfsoft.com"
               target="_blank">{{sysConfig.sysName}}</a></p>
