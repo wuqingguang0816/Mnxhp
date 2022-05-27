@@ -2148,10 +2148,10 @@ export default {
         return
       }
       this[obj][key].interfaceName = item.fullName
-      this[obj][key].templateJson = item.templateJson.map(o => ({
+      this[obj][key].templateJson = item.templateJson ? item.templateJson.map(o => ({
         ...o,
         relationField: ''
-      }))
+      })) : []
     },
     // 条件节点
     onConditionDateChange(val, item) {

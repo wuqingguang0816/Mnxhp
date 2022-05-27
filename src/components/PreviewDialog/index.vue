@@ -46,7 +46,7 @@ export default {
     },
     previewPc() {
       this.closeDialog()
-      if (this.type === 'flow') {
+      if (this.type === 'flow' || this.type === 'report') {
         setTimeout(() => {
           this.$emit('previewPc')
         }, 300)
@@ -58,7 +58,7 @@ export default {
     },
     previewApp() {
       let text = {
-        t: this.type === 'flow' ? 'WFP' : 'ADP',
+        t: this.type === 'flow' ? 'WFP' : this.type === 'webDesign' ? 'ADP' : 'report',
         id: this.id
       }
       this.qrCodeText = JSON.stringify(text)

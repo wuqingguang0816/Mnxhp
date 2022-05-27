@@ -68,9 +68,7 @@
                     </el-button>
                   </span>
                   <el-dropdown-menu slot="dropdown">
-                    <el-dropdown-item
-                      @click.native="handlePreview(scope.row.id, scope.row.fullName)">预览
-                    </el-dropdown-item>
+                    <el-dropdown-item @click.native="preview(scope.row)">预览</el-dropdown-item>
                     <el-dropdown-item @click.native="handleCopy(scope.row.id)">复制</el-dropdown-item>
                     <el-dropdown-item @click.native="handleExport(scope.row.id)">导出
                     </el-dropdown-item>
@@ -84,8 +82,10 @@
           :limit.sync="listQuery.pageSize" @pagination="initData" />
       </div>
     </div>
-    <Form v-if="formVisible" ref="Form" @refreshDataList="initData" />
-    <Preview v-show="previewVisible" ref="Preview" @close="previewVisible=false" />
+    <Form v-if="formVisible" ref="Form" @refreshDataList="refresh" />
+    <Preview v-if="previewVisible" ref="Preview" @close="previewVisible=false" />
+    <previewDialog :visible.sync="previewDialogVisible" :id="currRow.id" type="report"
+      @previewPc="previewPc" />
   </div>
 </template>
 <script>
@@ -98,12 +98,10 @@ import { reportServer } from '@/utils/define'
 import { getToken } from '@/utils/auth'
 import Form from './Form'
 import Preview from './Preview'
+import previewDialog from '@/components/PreviewDialog'
 
 export default {
-  components: {
-    Form,
-    Preview
-  },
+  components: { Form, Preview, previewDialog },
   name: 'onlineDev-dataReport',
   data() {
     return {
@@ -122,6 +120,8 @@ export default {
       formVisible: false,
       previewVisible: false,
       categoryList: [],
+      previewDialogVisible: false,
+      currRow: {}
     }
   },
   filters: {
@@ -146,6 +146,9 @@ export default {
         sort: 'desc',
         sidx: ''
       }
+      this.initData()
+    },
+    refresh(isRefresh) {
       this.initData()
     },
     initData() {
@@ -191,10 +194,16 @@ export default {
         })
       }).catch(() => { })
     },
-    handlePreview(id) {
+    preview(row) {
+      this.currRow = row
+      this.$nextTick(() => {
+        this.previewDialogVisible = true
+      })
+    },
+    previewPc() {
       this.previewVisible = true
       this.$nextTick(() => {
-        this.$refs.Preview.init(id)
+        this.$refs.Preview.init(this.currRow.id)
       })
     },
     handleCopy(id) {

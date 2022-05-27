@@ -152,6 +152,7 @@ $bg-color: #fff;
   text-align: center;
   overflow: auto;
   &.flow-container-preview {
+    height: calc(100% - 10px);
     >>> .branch-wrap {
       .branch-box {
         background: $bg-color;

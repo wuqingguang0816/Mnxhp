@@ -91,6 +91,9 @@ const appTypeData = [{
   enCode: 3,
   fullName: "功能"
 }, {
+  enCode: 5,
+  fullName: "报表"
+}, {
   enCode: 7,
   fullName: "外链"
 }]
@@ -401,6 +404,9 @@ export default {
         } else {
           if (this.dataForm.type == 3) {
             this.dataForm.urlAddress = `/pages/apply/dynamicModel/index?id=${moduleId}`
+          }
+          if (this.dataForm.type == 5) {
+            this.dataForm.urlAddress = menuEnCode
           }
         }
         if (valid) {
