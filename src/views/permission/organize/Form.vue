@@ -206,14 +206,18 @@ export default {
         this.$refs['dataForm'].resetFields()
         // 获取公司下拉列表
         getOrganizeSelector(id || 0).then(res => {
-          let topItem = {
-            fullName: "顶级节点",
-            hasChildren: true,
-            id: "-1",
-            icon: "icon-ym icon-ym-tree-organization3",
-            children: res.data.list
+          if (res.data.list && res.data.list.length) {
+            this.treeData = res.data.list
+          } else {
+            let topItem = {
+              fullName: "顶级节点",
+              hasChildren: true,
+              id: "-1",
+              icon: "icon-ym icon-ym-tree-organization3",
+              children: res.data.list
+            }
+            this.treeData = [topItem]
           }
-          this.treeData = [topItem]
         })
 
         // 获取公司性质

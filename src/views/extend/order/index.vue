@@ -93,11 +93,11 @@
           <el-table-column label="操作" width="150" fixed="right">
             <template slot-scope="scope">
               <el-button size="mini" type="text" @click="addOrUpdateHandle(scope.row.id)"
-                :disabled="[1,2,5].indexOf(scope.row.currentState)>-1" v-has="'btn_edit'">编辑
+                :disabled="[1,2,4,5].indexOf(scope.row.currentState)>-1" v-has="'btn_edit'">编辑
               </el-button>
               <el-button size="mini" type="text" class="JNPF-table-delBtn"
-                @click="handleDel(scope.$index,scope.row.id)"
-                :disabled="[1,2,3,5].indexOf(scope.row.currentState)>-1" v-has="'btn_remove'">删除
+                @click="handleDel(scope.$index,scope.row.id)" :disabled="!!scope.row.currentState"
+                v-has="'btn_remove'">删除
               </el-button>
               <el-button size="mini" type="text" :disabled="!scope.row.currentState"
                 @click="toApprovalDetail(scope.row.id,scope.row.currentState)"

@@ -2230,11 +2230,11 @@ export default {
         return
       }
       this[obj][key].interfaceName = item.fullName
-      this[obj][key].templateJson = item.templateJson.map(o => ({
+      this[obj][key].templateJson = item.templateJson ? item.templateJson.map(o => ({
         ...o,
         relationField: '',
         isSubTable: false
-      }))
+      })) : []
     },
     onRelationFieldChange(val, item) {
       if (!val) return

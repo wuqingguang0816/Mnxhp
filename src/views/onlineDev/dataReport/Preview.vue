@@ -27,7 +27,7 @@ export default {
     },
     async handleMessage(e) {
       const data = e.data
-      if(data === 'closeDialog') {
+      if (data === 'closeDialog') {
         this.url = ''
         this.$emit('close')
       }
