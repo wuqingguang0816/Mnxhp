@@ -240,6 +240,7 @@ const actions = {
   resetToken({ commit }) {
     return new Promise(resolve => {
       commit('SET_TOKEN', '')
+      commit('SET_SOCKET', null)
       commit('SET_MENULIST', [])
       commit('SET_USERINFO', {})
       commit('SET_PERMISSION_LIST', [])
