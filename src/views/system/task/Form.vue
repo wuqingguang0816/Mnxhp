@@ -48,7 +48,7 @@
             <template v-if="dataForm.executeType=='1'||dataForm.executeType=='2'">
               <el-col :span="24">
                 <el-form-item label="接口选择" prop="executeContent.interfaceId">
-                  <interface-dialog v-model="dataForm.executeContent.interfaceId"
+                  <interface-dialog :value="dataForm.executeContent.interfaceId"
                     :title="dataForm.executeContent.interfaceName" :dataType="dataType"
                     @change="onFuncChange" />
                 </el-form-item>
@@ -229,6 +229,14 @@ export default {
       })
     },
     onFuncChange(id, row) {
+      if (!id) {
+        this.dataForm.executeContent.interfaceId = ''
+        this.dataForm.executeContent.interfaceName = ''
+        this.dataForm.executeContent.parameter = []
+        return
+      }
+      if (this.dataForm.executeContent.interfaceId === id) return
+      this.dataForm.executeContent.interfaceName == id
       this.dataForm.executeContent.interfaceName = row.fullName
       this.dataForm.executeContent.parameter = row.templateJson.map(o => ({
         ...o,

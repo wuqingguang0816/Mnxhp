@@ -276,7 +276,7 @@
               </el-form-item>
               <template v-if="subFlowForm.launchMsgConfig.on===1">
                 <el-form-item label="消息模板">
-                  <msg-dialog v-model="subFlowForm.launchMsgConfig.msgId"
+                  <msg-dialog :value="subFlowForm.launchMsgConfig.msgId"
                     :title="subFlowForm.launchMsgConfig.msgName"
                     @change="onMsgChange('subFlowForm','launchMsgConfig',arguments)" />
                 </el-form-item>
@@ -408,7 +408,7 @@
               <div style="margin-bottom: 18px;" v-if="startForm.initFuncConfig.on">
                 <el-form-item label="接口设置" style="margin-bottom: 0;"></el-form-item>
                 <el-form-item label-width="0">
-                  <interface-dialog v-model="startForm.initFuncConfig.interfaceId"
+                  <interface-dialog :value="startForm.initFuncConfig.interfaceId"
                     :title="startForm.initFuncConfig.interfaceName"
                     @change="onFuncChange('startForm','initFuncConfig',arguments)" />
                 </el-form-item>
@@ -451,7 +451,7 @@
               <div style="margin-bottom: 18px;" v-if="startForm.endFuncConfig.on">
                 <el-form-item label="接口设置" style="margin-bottom: 0;"></el-form-item>
                 <el-form-item label-width="0">
-                  <interface-dialog v-model="startForm.endFuncConfig.interfaceId"
+                  <interface-dialog :value="startForm.endFuncConfig.interfaceId"
                     :title="startForm.endFuncConfig.interfaceName"
                     @change="onFuncChange('startForm','endFuncConfig',arguments)" />
                 </el-form-item>
@@ -494,7 +494,7 @@
               <div v-if="startForm.flowRecallFuncConfig.on">
                 <el-form-item label="接口设置" style="margin-bottom: 0;"></el-form-item>
                 <el-form-item label-width="0">
-                  <interface-dialog v-model="startForm.flowRecallFuncConfig.interfaceId"
+                  <interface-dialog :value="startForm.flowRecallFuncConfig.interfaceId"
                     :title="startForm.flowRecallFuncConfig.interfaceName"
                     @change="onFuncChange('startForm','flowRecallFuncConfig',arguments)" />
                 </el-form-item>
@@ -552,7 +552,7 @@
               </el-form-item>
               <div style="margin-bottom: 18px;" v-if="startForm.waitMsgConfig.on===1">
                 <el-form-item label="消息模板">
-                  <msg-dialog v-model="startForm.waitMsgConfig.msgId"
+                  <msg-dialog :value="startForm.waitMsgConfig.msgId"
                     :title="startForm.waitMsgConfig.msgName"
                     @change="onMsgChange('startForm','waitMsgConfig',arguments)" />
                 </el-form-item>
@@ -590,7 +590,7 @@
               </el-form-item>
               <div style="margin-bottom: 18px;" v-if="startForm.endMsgConfig.on===1">
                 <el-form-item label="消息模板">
-                  <msg-dialog v-model="startForm.endMsgConfig.msgId"
+                  <msg-dialog :value="startForm.endMsgConfig.msgId"
                     :title="startForm.endMsgConfig.msgName"
                     @change="onMsgChange('startForm','endMsgConfig',arguments)" />
                 </el-form-item>
@@ -628,7 +628,7 @@
               </el-form-item>
               <div style="margin-bottom: 18px;" v-if="startForm.approveMsgConfig.on===1">
                 <el-form-item label="消息模板">
-                  <msg-dialog v-model="startForm.approveMsgConfig.msgId"
+                  <msg-dialog :value="startForm.approveMsgConfig.msgId"
                     :title="startForm.approveMsgConfig.msgName"
                     @change="onMsgChange('startForm','approveMsgConfig',arguments)" />
                 </el-form-item>
@@ -666,7 +666,7 @@
               </el-form-item>
               <div style="margin-bottom: 18px;" v-if="startForm.rejectMsgConfig.on===1">
                 <el-form-item label="消息模板">
-                  <msg-dialog v-model="startForm.rejectMsgConfig.msgId"
+                  <msg-dialog :value="startForm.rejectMsgConfig.msgId"
                     :title="startForm.rejectMsgConfig.msgName"
                     @change="onMsgChange('startForm','rejectMsgConfig',arguments)" />
                 </el-form-item>
@@ -704,7 +704,7 @@
               </el-form-item>
               <div v-if="startForm.copyMsgConfig.on===1">
                 <el-form-item label="消息模板">
-                  <msg-dialog v-model="startForm.copyMsgConfig.msgId"
+                  <msg-dialog :value="startForm.copyMsgConfig.msgId"
                     :title="startForm.copyMsgConfig.msgName"
                     @change="onMsgChange('startForm','copyMsgConfig',arguments)" />
                 </el-form-item>
@@ -949,7 +949,7 @@
               <div style="margin-bottom: 18px;" v-if="approverForm.approveFuncConfig.on">
                 <el-form-item label="接口设置" style="margin-bottom: 0;"></el-form-item>
                 <el-form-item label-width="0">
-                  <interface-dialog v-model="approverForm.approveFuncConfig.interfaceId"
+                  <interface-dialog :value="approverForm.approveFuncConfig.interfaceId"
                     :title="approverForm.approveFuncConfig.interfaceName"
                     @change="onFuncChange('approverForm','approveFuncConfig',arguments)" />
                 </el-form-item>
@@ -992,7 +992,7 @@
               <div style="margin-bottom: 18px;" v-if="approverForm.rejectFuncConfig.on">
                 <el-form-item label="接口设置" style="margin-bottom: 0;"></el-form-item>
                 <el-form-item label-width="0">
-                  <interface-dialog v-model="approverForm.rejectFuncConfig.interfaceId"
+                  <interface-dialog :value="approverForm.rejectFuncConfig.interfaceId"
                     :title="approverForm.rejectFuncConfig.interfaceName"
                     @change="onFuncChange('approverForm','rejectFuncConfig',arguments)" />
                 </el-form-item>
@@ -1035,7 +1035,7 @@
               <div v-if="approverForm.recallFuncConfig.on">
                 <el-form-item label="接口设置" style="margin-bottom: 0;"></el-form-item>
                 <el-form-item label-width="0">
-                  <interface-dialog v-model="approverForm.recallFuncConfig.interfaceId"
+                  <interface-dialog :value="approverForm.recallFuncConfig.interfaceId"
                     :title="approverForm.recallFuncConfig.interfaceName"
                     @change="onFuncChange('approverForm','recallFuncConfig',arguments)" />
                 </el-form-item>
@@ -1093,7 +1093,7 @@
               </el-form-item>
               <div style="margin-bottom: 18px;" v-if="approverForm.approveMsgConfig.on===1">
                 <el-form-item label="消息模板">
-                  <msg-dialog v-model="approverForm.approveMsgConfig.msgId"
+                  <msg-dialog :value="approverForm.approveMsgConfig.msgId"
                     :title="approverForm.approveMsgConfig.msgName"
                     @change="onMsgChange('approverForm','approveMsgConfig',arguments)" />
                 </el-form-item>
@@ -1131,7 +1131,7 @@
               </el-form-item>
               <div style="margin-bottom: 18px;" v-if="approverForm.rejectMsgConfig.on===1">
                 <el-form-item label="消息模板">
-                  <msg-dialog v-model="approverForm.rejectMsgConfig.msgId"
+                  <msg-dialog :value="approverForm.rejectMsgConfig.msgId"
                     :title="approverForm.rejectMsgConfig.msgName"
                     @change="onMsgChange('approverForm','rejectMsgConfig',arguments)" />
                 </el-form-item>
@@ -1169,7 +1169,7 @@
               </el-form-item>
               <div v-if="approverForm.copyMsgConfig.on===1">
                 <el-form-item label="消息模板">
-                  <msg-dialog v-model="approverForm.copyMsgConfig.msgId"
+                  <msg-dialog :value="approverForm.copyMsgConfig.msgId"
                     :title="approverForm.copyMsgConfig.msgName"
                     @change="onMsgChange('approverForm','copyMsgConfig',arguments)" />
                 </el-form-item>
@@ -2209,13 +2209,15 @@ export default {
     onMsgChange(obj, key, params) {
       const [id, item] = params
       if (!id) {
+        this[obj][key].msgId = ''
         this[obj][key].msgName = ''
         this[obj][key].templateJson = []
         return
       }
+      if (this[obj][key].msgId === id) return
+      this[obj][key].msgId = id
       this[obj][key].msgName = item.fullName
-      if (!item.templateJson) return
-      let templateJson = JSON.parse(item.templateJson)
+      let templateJson = item.templateJson ? JSON.parse(item.templateJson) : []
       this[obj][key].templateJson = templateJson.map(o => ({
         ...o,
         relationField: '',
@@ -2225,10 +2227,13 @@ export default {
     onFuncChange(obj, key, params) {
       const [id, item] = params
       if (!id) {
+        this[obj][key].interfaceId = ''
         this[obj][key].interfaceName = ''
         this[obj][key].templateJson = []
         return
       }
+      if (this[obj][key].interfaceId === id) return
+      this[obj][key].interfaceId = id
       this[obj][key].interfaceName = item.fullName
       this[obj][key].templateJson = item.templateJson ? item.templateJson.map(o => ({
         ...o,
