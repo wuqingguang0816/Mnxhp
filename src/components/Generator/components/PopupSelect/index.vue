@@ -237,7 +237,7 @@ export default {
         relationField: this.relationField,
       }
       getDataInterfaceDataSelect(this.interfaceId, query).then(res => {
-        this.list = this.interfaceDataHandler(res.data)
+        this.list = res.data.list
         this.total = res.data.pagination.total
         this.listLoading = false
       }).catch(() => { this.listLoading = false })
