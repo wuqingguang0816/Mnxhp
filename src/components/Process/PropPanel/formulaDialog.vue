@@ -1,5 +1,5 @@
 <template>
-  <el-dialog title="公式编辑" :close-on-click-modal="false"
+  <el-dialog title="公式编辑" :close-on-click-modal="false" v-on="$listeners"
     class="JNPF-dialog JNPF-dialog_center formula-dialog" lock-scroll append-to-body v-bind="$attrs"
     width="800px" :modal-append-to-body="false" @open="onOpen">
     <div class="formula-dialog-body">
