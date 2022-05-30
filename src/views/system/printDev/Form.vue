@@ -255,18 +255,9 @@ export default {
       this.activeStep = key
     },
     getDbOptions() {
-      const defaultItem = {
-        fullName: '',
-        children: [{
-          fullName: '默认数据库',
-          id: '0'
-        }]
-      }
       getDataSourceListAll().then(res => {
-        const list = [defaultItem, ...res.data.list]
-        this.dbOptions = list.filter(o => o.children && o.children.length)
-      }).catch(() => {
-        this.dbOptions = [defaultItem]
+        const list = res.data.list || []
+        this.dbOptions = list.filter(o => o.children && o.children.length);
       })
     }
   }
