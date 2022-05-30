@@ -15,7 +15,11 @@
           <el-table-column prop="__vModel__" label="字段" />
           <el-table-column prop="searchType" label="类型">
             <template slot-scope="scope">
-              {{scope.row.searchType===3?'范围查询':scope.row.searchType===2?'模糊查询':'等于查询'}}
+              <el-select v-model="scope.row.searchType" placeholder="请选择">
+                <el-option label="等于查询" :value="1"></el-option>
+                <el-option label="模糊查询" :value="2"></el-option>
+                <el-option label="范围查询" :value="3"></el-option>
+              </el-select>
             </template>
           </el-table-column>
         </el-table>
@@ -92,6 +96,9 @@
                   <p class="item-name">{{item.name}}</p>
                 </div>
               </div>
+              <el-form-item label="高级查询">
+                <el-switch v-model="columnData.hasSuperQuery"></el-switch>
+              </el-form-item>
               <template v-if="columnData.type==2">
                 <el-divider>左侧设置</el-divider>
                 <el-form-item label="左侧标题">
@@ -258,7 +265,9 @@ const defaultFunc = '({ data, index, request, toast, refresh }) => {\r\n   \r\n}
 
 const defaultColumnData = {
   searchList: [], // 查询字段
+  hasSuperQuery: false, // 高级查询
   columnList: [], // 字段列表
+  columnOptions: [], // 字段列表
   defaultColumnList: [], // 所有可选择字段列表
   type: 1, //列表类型
   defaultSidx: '', // 默认排序字段
@@ -423,6 +432,7 @@ export default {
     if (typeof this.conf === 'object' && this.conf !== null) {
       this.columnData = Object.assign({}, defaultColumnData, this.conf)
     }
+    this.columnData.columnOptions = columnOptions
     if (!this.columnOptions.length) this.columnData.columnList = []
     if (!this.searchOptions.length) this.columnData.searchList = []
     this.setBtnValue(this.columnData.btnsList, this.btnsOption)
@@ -556,5 +566,5 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
-@import './index.scss';
+@import "./index.scss";
 </style>
