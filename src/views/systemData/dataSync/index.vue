@@ -71,7 +71,7 @@ export default {
   },
   methods: {
     initData() {
-      getDataSourceListAll().then(res => {
+      getDataSourceListAll('1').then(res => {
         this.dbOptions = res.data.list.filter(o => o.children && o.children.length)
       })
     },

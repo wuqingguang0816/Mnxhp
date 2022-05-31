@@ -50,6 +50,7 @@ export default {
       } else {
         this.candidateForm.candidateList = []
       }
+      this.candidateForm.branchList = []
       this.$nextTick(() => {
         this.$refs['candidateForm'].resetFields()
       })

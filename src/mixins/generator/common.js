@@ -100,19 +100,21 @@ export default {
       }
     },
     getDbOptions() {
-      const defaultItem = {
-        fullName: '',
-        children: [{
-          fullName: '默认数据库',
-          id: '0'
-        }]
-      }
       getDataSourceListAll().then(res => {
-        const list = [defaultItem, ...res.data.list]
+        const list = res.data.list || []
         this.dbOptions = list.filter(o => o.children && o.children.length)
-      }).catch(() => {
-        this.dbOptions = [defaultItem]
       })
+    },
+    getDbType() {
+      for (let i = 0; i < this.dbOptions.length; i++) {
+        const e = this.dbOptions[i].children;
+        for (let j = 0; j < e.length; j++) {
+          if (this.dataForm.dbLinkId === e[j].id) {
+            this.dbType = e[j].dbType
+            break
+          }
+        }
+      }
     },
     delItem(row, index) {
       this.tables.splice(index, 1);

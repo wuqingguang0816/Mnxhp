@@ -114,23 +114,10 @@ export default {
       }
     },
     getDataSourceListAll() {
-      const defaultItem = {
-        fullName: "",
-        children: [
-          {
-            fullName: "默认数据库",
-            id: "0",
-          },
-        ],
-      };
-      getDataSourceListAll()
-        .then((res) => {
-          const list = [defaultItem, ...res.data.list];
-          this.dbOptions = list.filter((o) => o.children && o.children.length);
-        })
-        .catch(() => {
-          this.dbOptions = [defaultItem];
-        });
+      getDataSourceListAll().then(res => {
+        const list = res.data.list || []
+        this.dbOptions = list.filter(o => o.children && o.children.length);
+      })
     },
     //数据连接
     addDataConnect() {

@@ -114,7 +114,7 @@
       </el-row>
       <template v-if="activeStep==1">
         <Generator ref="generator" :conf="formData" :modelType="dataForm.type"
-          :webType="dataForm.webType" />
+          :webType="dataForm.webType" :dbType="dbType" />
       </template>
       <template v-if="activeStep==2">
         <columnDesign ref="columnDesign" :columnData="columnData" :appColumnData="appColumnData"

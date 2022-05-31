@@ -384,6 +384,7 @@ export default {
           let data = res.data
           this.candidateType = data.type
           this.candidateLoading = false
+          this.candidateForm.branchList = []
           if (data.type == 1) {
             this.branchList = res.data.list
             this.$nextTick(() => {

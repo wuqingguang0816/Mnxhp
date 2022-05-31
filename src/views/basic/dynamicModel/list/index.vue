@@ -291,7 +291,7 @@ export default {
       if (this.columnData.treeDataSource === "api") {
         if (!this.columnData.treePropsUrl) return
         getDataInterfaceRes(this.columnData.treePropsUrl).then(res => {
-          let data = this.jnpf.interfaceDataHandler(res.data)
+          let data = res.data.data
           if (Array.isArray(data)) {
             this.treeData = data
           } else {

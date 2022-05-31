@@ -34,7 +34,7 @@
         <div class="JNPF-common-head">
           <topOpts @add="addOrUpdateHandle()" addText="新建表名">
             <upload-btn :url="'/api/system/DataModel/'+dataBase+'/Action/Import'"
-              @on-success="getTabelData" />
+              @on-success="getTableData" />
             <el-button type="text" icon="el-icon-menu" @click="handleFieldsManage()">常用字段
             </el-button>
           </topOpts>
@@ -126,28 +126,21 @@ export default {
   },
   methods: {
     search() {
-      this.getTabelData()
+      this.getTableData()
     },
     reset() {
       this.keyword = ''
-      this.getTabelData()
+      this.getTableData()
     },
     initData() {
       this.listLoading = true
       getDataSourceListAll().then(res => {
-        const defaultItem = {
-          fullName: '',
-          children: [{
-            fullName: '默认数据库',
-            id: '0'
-          }]
-        }
-        const list = [defaultItem, ...res.data.list]
+        const list = res.data.list || []
         this.dbOptions = list.filter(o => o.children && o.children.length)
-        this.getTabelData()
+        this.getTableData()
       })
     },
-    getTabelData() {
+    getTableData() {
       this.listLoading = true
       DataModelList(this.dataBase, { keyword: this.keyword }).then(res => {
         this.list = res.data.list
@@ -210,7 +203,7 @@ export default {
       this.formVisible = false
       if (isRefresh) {
         this.keyword = ''
-        this.getTabelData()
+        this.getTableData()
       }
     },
     openData(table) {
