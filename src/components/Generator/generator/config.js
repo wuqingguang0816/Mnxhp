@@ -623,6 +623,32 @@ export const inputComponents = [
   },
   {
     __config__: {
+      jnpfKey: "JNPFLinkText",
+      label: "链接组件",
+      labelWidth: undefined,
+      showLabel: false,
+      tag: "JNPFLinkText",
+      tagIcon: "icon-ym icon-ym-generator-textarea",
+      defaultValue: "这是一段文字",
+      required: false,
+      layout: "colFormItem",
+      span: 24,
+      dragDisabled: false,
+      visibility: ["pc", "app"]
+    },
+    style: { width: "100%" },
+    textStyle: {
+      color: "#000000",
+      "text-align": "left",
+      "font-weight": "normal",
+      "font-style": "normal",
+      "text-decoration": "none",
+      "line-height": 32,
+      "font-size": 12
+    }
+  },
+  {
+    __config__: {
       jnpfKey: "editor",
       label: "富文本",
       labelWidth: undefined,
@@ -780,6 +806,34 @@ export const selectComponents = [
     placeholder: "请选择",
     multiple: false,
     clearable: true,
+    disabled: false
+  },
+  {
+    __config__: {
+      jnpfKey: "groupSelect",
+      label: "分组选择",
+      labelWidth: undefined,
+      showLabel: true,
+      tag: "groupSelect",
+      tagIcon: "icon-ym icon-ym-generator-group1",
+      defaultValue: [],
+      required: false,
+      layout: "colFormItem",
+      span: 24,
+      dragDisabled: false,
+      visibility: ["pc", "app"],
+      tableName: "",
+      regList: [],
+      trigger: "change"
+    },
+    on: {
+      change:
+        "({ data, formData, setFormData, setShowOrHide, setRequired, setDisabled, request, getFieldOptions, setFieldOptions }) => {\n    // 在此编写代码\n    \n}"
+    },
+    placeholder: "请选择",
+    multiple: false,
+    clearable: true,
+    filterable: false,
     disabled: false
   },
   {

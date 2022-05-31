@@ -12,6 +12,7 @@ import UserSelect from '@/components/JNPF-userSelect'
 import uploadBtn from '@/components/JNPF-uploadBtn'
 // 代码生成器专供
 import JNPFText from '@/components/Generator/components/JNPFText'
+import JNPFLinkText from '@/components/Generator/components/JNPFLinkText'
 import JnpfBarcode from '@/components/Generator/components/JnpfBarcode'
 import JnpfQrcode from '@/components/Generator/components/JnpfQrcode'
 import JnpfButton from '@/components/Generator/components/JnpfButton'
@@ -21,6 +22,7 @@ import PopupSelect from '@/components/Generator/components/PopupSelect'
 import PopupAttr from '@/components/Generator/components/PopupAttr'
 import NumRange from '@/components/Generator/components/NumRange'
 import ComSelect from '@/components/Generator/components/ComSelect'
+import GroupSelect from '@/components/Generator/components/GroupSelect'
 import DepSelect from '@/components/Generator/components/DepSelect'
 import PosSelect from '@/components/Generator/components/PosSelect'
 import DicSelect from '@/components/Generator/components/DicSelect'
@@ -43,6 +45,7 @@ export default {
     Vue.component('uploadBtn', uploadBtn)
     Vue.component('UserBox', UserBox)
     Vue.component('JNPFText', JNPFText)
+    Vue.component('JNPFLinkText', JNPFLinkText)
     Vue.component('JnpfBarcode', JnpfBarcode)
     Vue.component('JnpfQrcode', JnpfQrcode)
     Vue.component('JnpfButton', JnpfButton)
@@ -52,6 +55,7 @@ export default {
     Vue.component('PopupAttr', PopupAttr)
     Vue.component('NumRange', NumRange)
     Vue.component('ComSelect', ComSelect)
+    Vue.component('GroupSelect', GroupSelect)
     Vue.component('DepSelect', DepSelect)
     Vue.component('PosSelect', PosSelect)
     Vue.component('UserSelect', UserSelect)

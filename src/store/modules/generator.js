@@ -1,10 +1,11 @@
-import { getOrganizeTree } from '@/api/permission/organize'
-import { getDepartmentSelector } from '@/api/permission/department'
-import { getDictionaryType } from '@/api/systemData/dictionary'
-
+import { getOrganizeTree } from "@/api/permission/organize";
+import { getDepartmentSelector } from "@/api/permission/department";
+import { getDictionaryType } from "@/api/systemData/dictionary";
+import { getGroupSelector } from "@/api/permission/group";
 const state = {
   companyTree: [],
   depTree: [],
+  groupTree: [],
   dicTree: [],
   formItemList: [],
   subTable: [],
@@ -12,86 +13,113 @@ const state = {
   hasTable: false,
   relationData: {},
   dynamicModelExtra: {}
-}
+};
 
 const mutations = {
   SET_COMPANY_TREE: (state, companyTree) => {
-    state.companyTree = companyTree
+    state.companyTree = companyTree;
   },
   SET_DEP_TREE: (state, depTree) => {
-    state.depTree = depTree
+    state.depTree = depTree;
+  },
+
+  SET_GROUP_TREE: (state, groupTree) => {
+    state.groupTree = groupTree;
   },
   SET_DIC_TREE: (state, dicTree) => {
-    state.dicTree = dicTree
+    state.dicTree = dicTree;
   },
   UPDATE_FORMITEM_LIST(state, list) {
-    state.formItemList = list
+    state.formItemList = list;
   },
   UPDATE_SUB_TABLE(state, subTable) {
-    state.subTable = subTable
+    state.subTable = subTable;
   },
   SET_ALL_TABLE(state, allTable) {
-    state.allTable = allTable
+    state.allTable = allTable;
   },
   SET_TABLE(state, val) {
-    state.hasTable = val
+    state.hasTable = val;
   },
   UPDATE_RELATION_DATA(state, val) {
-    state.relationData = val
+    state.relationData = val;
   },
   SET_DYNAMIC_MODEL_EXTRA(state, val) {
-    state.dynamicModelExtra = val
-  },
-}
+    state.dynamicModelExtra = val;
+  }
+};
 
 const actions = {
   getCompanyTree({ state, commit }) {
     return new Promise((resolve, reject) => {
       if (!state.companyTree.length) {
-        getOrganizeTree().then(res => {
-          commit('SET_COMPANY_TREE', res.data.list)
-          resolve(res.data.list)
-        }).catch(error => {
-          reject(error)
-        })
+        getOrganizeTree()
+          .then(res => {
+            commit("SET_COMPANY_TREE", res.data.list);
+            resolve(res.data.list);
+          })
+          .catch(error => {
+            reject(error);
+          });
       } else {
-        resolve(state.companyTree)
+        resolve(state.companyTree);
       }
-    })
+    });
   },
   getDepTree({ state, commit }) {
     return new Promise((resolve, reject) => {
       if (!state.depTree.length) {
-        getDepartmentSelector().then(res => {
-          commit('SET_DEP_TREE', res.data.list)
-          resolve(res.data.list)
-        }).catch(error => {
-          reject(error)
-        })
+        getDepartmentSelector()
+          .then(res => {
+            commit("SET_DEP_TREE", res.data.list);
+            resolve(res.data.list);
+          })
+          .catch(error => {
+            reject(error);
+          });
       } else {
-        resolve(state.depTree)
+        resolve(state.depTree);
       }
-    })
+    });
   },
+  getGroupTree({ state, commit }) {
+    return new Promise((resolve, reject) => {
+      if (!state.groupTree.length) {
+        getGroupSelector()
+          .then(res => {
+            commit("SET_GROUP_TREE", res.data);
+            resolve(res.data);
+          })
+          .catch(error => {
+            reject(error);
+          });
+      } else {
+        resolve(state.groupTree);
+      }
+    });
+  },
+
   getDicTree({ state, commit }) {
     return new Promise((resolve, reject) => {
       if (!state.dicTree.length) {
-        getDictionaryType().then(res => {
-          commit('SET_DIC_TREE', res.data.list)
-          resolve(res.data.list)
-        }).catch(error => {
-          reject(error)
-        })
+        getDictionaryType()
+          .then(res => {
+            commit("SET_DIC_TREE", res.data.list);
+            resolve(res.data.list);
+          })
+          .catch(error => {
+            reject(error);
+          });
       } else {
-        resolve(state.dicTree)
+        resolve(state.dicTree);
       }
-    })
-  },
-}
+    });
+  }
+};
 
 export default {
   namespaced: true,
   state,
   mutations,
   actions
-}
+};
