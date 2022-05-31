@@ -29,6 +29,10 @@
               {{item.label}}</el-button>
           </div>
           <div class="JNPF-common-head-right">
+            <el-tooltip content="高级查询" placement="top" v-if="columnData.hasSuperQuery">
+              <el-link icon="icon-ym icon-ym-filter JNPF-common-head-icon" :underline="false"
+                @click="openSuperQuery()" />
+            </el-tooltip>
             <el-tooltip effect="dark" :content="$t('common.refresh')" placement="top">
               <el-link icon="icon-ym icon-ym-Refresh JNPF-common-head-icon" :underline="false"
                 @click="initData()" />
@@ -150,6 +154,8 @@
     <Form v-show="formVisible" ref="Form" @refreshDataList="refresh" />
     <Detail v-show="detailVisible" ref="Detail" @close="detailVisible = false" />
     <ExportBox v-if="exportBoxVisible" ref="ExportBox" @download="download" />
+    <SuperQuery v-if="superQueryVisible" ref="SuperQuery" :columnOptions="columnOptions"
+      @superQuery="superQuery" />
   </div>
 </template>
 
@@ -164,9 +170,10 @@ import FlowBox from '@/views/workFlow/components/FlowBox'
 import Detail from './detail'
 import ExportBox from './ExportBox'
 import Search from './Search'
+import SuperQuery from '@/components/SuperQuery'
 export default {
   name: 'dynamicModel',
-  components: { Form, ExportBox, Search, Detail, FlowBox },
+  components: { Form, ExportBox, Search, Detail, FlowBox, SuperQuery },
   props: ['config', 'modelId', 'isPreview'],
   data() {
     return {
@@ -185,7 +192,8 @@ export default {
         sort: 'desc',
         sidx: '',
         menuId: '',
-        queryJson: ''
+        queryJson: '',
+        superQueryJson: ''
       },
       defaultListQuery: {
         pageSize: 20,
@@ -197,6 +205,7 @@ export default {
       detailVisible: false,
       importBoxVisible: false,
       exportBoxVisible: false,
+      superQueryVisible: false,
       treeData: [],
       treeActiveId: '',
       columnData: {
@@ -204,6 +213,7 @@ export default {
       },
       formData: {},
       columnList: [],
+      columnOptions: [],
       columnBtnsList: [],
       customBtnsList: [],
       hasBatchBtn: false,
@@ -237,6 +247,7 @@ export default {
       this.formData = JSON.parse(this.config.formData)
       this.customBtnsList = this.columnData.customBtnsList || []
       this.columnBtnsList = this.columnData.columnBtnsList || []
+      this.columnOptions = this.columnData.columnOptions || []
       this.listLoading = true
       if (this.isPreview) this.listQuery.menuId = "270579315303777093"
       let res = await getColumnsByModuleId(this.listQuery.menuId)
@@ -504,6 +515,18 @@ export default {
       if (this.isPreview) return
       if (!queryJson) this.$refs.treeBox && this.$refs.treeBox.setCurrentKey(null);
       this.listQuery.queryJson = queryJson
+      this.listQuery.currentPage = 1
+      this.initData()
+    },
+    openSuperQuery() {
+      this.superQueryVisible = true
+      this.$nextTick(() => {
+        this.$refs.SuperQuery.init()
+      })
+    },
+    superQuery(queryJson) {
+      if (this.isPreview) return
+      this.listQuery.superQueryJson = queryJson
       this.listQuery.currentPage = 1
       this.initData()
     },
