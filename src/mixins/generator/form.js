@@ -44,6 +44,7 @@ export default {
       flowTemplateJson: null,
       categoryList: [],
       dbOptions: [],
+      dbType: "MySQL",
       mainTableFields: [],
       relationTable: ""
     }
@@ -118,6 +119,7 @@ export default {
       if (this.activeStep < 1) {
         this.$refs['dataForm'].validate((valid) => {
           if (valid) {
+            this.getDbType()
             const type = this.dataForm.type
             if (!this.tables.length) {
               if (this.defaultTable.length || type == 3 || type == 4) {

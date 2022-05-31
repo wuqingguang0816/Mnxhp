@@ -344,6 +344,7 @@
             border: 1px solid #dcdfe6;
             border-radius: 6px;
             width: 220px;
+            overflow: hidden;
 
             &.formula-area {
               margin: 0 20px;
@@ -366,6 +367,8 @@
 
             .area-content {
               padding: 10px 0;
+              height: 216px;
+              overflow: hidden auto;
 
               .formula-desc-wrapper {
                 color: #5e6d82;

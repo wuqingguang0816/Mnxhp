@@ -8,7 +8,7 @@ export default {
     title: { type: String, default: '' },
     dataType: { type: String, default: 'static' },
     propsApi: { type: String, default: '' },
-    option: { type: Object, default: () => {} }
+    option: { type: Object, default: () => { } }
   },
   data() {
     return {
@@ -21,7 +21,7 @@ export default {
     if (this.dataType === 'dynamic') {
       if (!this.propsApi) return
       getDataInterfaceRes(this.propsApi).then(res => {
-        let data = this.jnpf.interfaceDataHandler(res.data)
+        let data = res.data.data
         this.currOption = data
         this.resetChart()
       })

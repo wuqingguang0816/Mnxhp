@@ -378,14 +378,7 @@ export default {
         })
         // 获取数据库
         getDataSourceListAll().then(res => {
-          const defaultItem = {
-            fullName: '',
-            children: [{
-              fullName: '默认数据库',
-              id: '0'
-            }]
-          }
-          const list = [defaultItem, ...res.data.list]
+          const list = res.data.list || []
           this.dbOptions = list.filter(o => o.children && o.children.length)
           this.getTableList(this.dataForm.dbLinkId)
           if (this.dataForm.id) {
