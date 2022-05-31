@@ -195,9 +195,9 @@ export default {
         { value: 'add', icon: 'el-icon-plus', label: '新增' }
       ],
       columnBtnsOption: [
-        { value: 'detail', icon: 'el-icon-tickets', label: '详情' },
         { value: 'edit', icon: 'el-icon-edit', label: '编辑' },
-        { value: 'remove', icon: 'el-icon-delete', label: '删除' }
+        { value: 'remove', icon: 'el-icon-delete', label: '删除' },
+        { value: 'detail', icon: 'el-icon-tickets', label: '详情' }
       ],
       columnOptions: [],
       searchOptions: [],
@@ -406,5 +406,5 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
-@import './index.scss';
+@import "./index.scss";
 </style>
