@@ -303,6 +303,7 @@ export default {
       type: Object,
       default: () => { }
     },
+    webType: '',
     modelType: ''
   },
   components: { draggable, FormScript },
@@ -332,6 +333,7 @@ export default {
         { url: require('@/assets/images/generator/columnType1.png'), value: 1, name: '普通表格' },
         { url: require('@/assets/images/generator/columnType2.png'), value: 2, name: '左侧树形+普通表格' },
         { url: require('@/assets/images/generator/columnType3.png'), value: 3, name: '分组表格' },
+        { url: require('@/assets/images/generator/columnType4.png'), value: 4, name: '编辑表格' },
       ],
       dataInterfaceSelector: [],
       formScriptVisible: false,
@@ -394,6 +396,9 @@ export default {
     this.getDataInterfaceSelector()
     if (this.modelType == 4) {
       this.typeList = this.typeList.filter(o => o.value != 3)
+    }
+    if (this.webType == 3) {
+      this.typeList = this.typeList.filter(o => o.value != 4)
     }
     let list = []
     const loop = (data, parent) => {
