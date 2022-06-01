@@ -1413,12 +1413,12 @@ const typeOptions = [
     value: 6
   },
   {
-    label: '发起者主管',
-    value: 1
-  },
-  {
     label: '发起者本人',
     value: 3
+  },
+  {
+    label: '发起者主管',
+    value: 1
   },
   {
     label: '部门主管',
