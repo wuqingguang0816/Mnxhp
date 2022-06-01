@@ -31,7 +31,7 @@ const layouts = {
     if (this.formConf.unFocusedComponentBorder) className += ' unfocus-bordered'
     let labelWidth = config.labelWidth ? `${config.labelWidth}px` : null
     if (config.showLabel === false) labelWidth = '0'
-    if (config.jnpfKey === 'JNPFText') {
+    if (config.jnpfKey === 'JNPFText' || config.jnpfKey === 'JNPFLinkText') {
       return (
         <el-col span={24} class={className}
           nativeOnClick={event => { activeItem(element); event.stopPropagation() }}>
