@@ -237,6 +237,7 @@ export default {
       loading: false,
       categoryList: [],
       formList: [],
+      dbType: "MySQL",
       dbOptions: [],
       formType: '系统表单'
     }
