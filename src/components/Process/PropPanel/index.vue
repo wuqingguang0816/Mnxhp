@@ -741,7 +741,7 @@
                   v-if="approverForm.assigneeType === 1">
                   <el-select v-model="approverForm.managerLevel">
                     <el-option v-for="item in 10" :key="item"
-                      :label="item===1?'直接主管':'第'+item+'级主管'" :value="item">
+                      :label="item===1?'直属主管':'第'+item+'级主管'" :value="item">
                     </el-option>
                   </el-select>
                 </el-form-item>
