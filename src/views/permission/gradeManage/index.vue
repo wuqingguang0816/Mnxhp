@@ -43,7 +43,7 @@
             width="250" />
           <el-table-column label="操作" width="250">
             <template slot-scope="scope">
-              <tableOpts @edit="addOrUpdateHandle(scope.row)" @del="handleDel(scope.row.id)">
+              <tableOpts @edit="addOrUpdateHandle(scope.row.id)" @del="handleDel(scope.row.id)">
               </tableOpts>
             </template>
           </el-table-column>
@@ -52,23 +52,19 @@
           :limit.sync="listQuery.pageSize" @pagination="initData" />
       </div>
       <Form v-if="formVisible" ref="Form" @refreshDataList="initData" />
-      <UserRelationList v-if="userRelationListVisible" ref="UserRelationList"
-        @refreshDataList="initData" />
     </div>
   </div>
 </template>
 
 <script>
-import { getGradeManageList } from '@/api/permission/gradeManage'
+import { getGradeManageList, delGradeManage } from '@/api/permission/gradeManage'
 import Form from './Form'
-import UserRelationList from '@/views/permission/userRelation/Selector'
 
 export default {
   components: {
-    Form,
-    UserRelationList
+    Form
   },
-  name: 'permission-group',
+  name: 'permission-gradeManage',
   data() {
     return {
       list: [],
@@ -83,7 +79,6 @@ export default {
       total: 0,
       listLoading: true,
       formVisible: false,
-      userRelationListVisible: false
     }
   },
   created() {
@@ -117,23 +112,17 @@ export default {
         this.listLoading = false
       })
     },
-    addOrUpdateHandle(row) {
+    addOrUpdateHandle(id) {
       this.formVisible = true
       this.$nextTick(() => {
-        this.$refs.Form.init(row)
+        this.$refs.Form.init(id)
       })
-    },
-    removeUserRelationList(isRefresh) {
-      this.userRelationListVisible = false
-      if (isRefresh) {
-        this.initData()
-      }
     },
     handleDel(id) {
       this.$confirm(this.$t('common.delTip'), this.$t('common.tipTitle'), {
         type: 'warning'
       }).then(() => {
-        delGroup(id).then(res => {
+        delGradeManage(id).then(res => {
           this.$message({
             type: 'success',
             message: res.msg,
@@ -145,12 +134,6 @@ export default {
         })
       }).catch(() => { })
     },
-    handleUserRelation(id, fullName) {
-      this.userRelationListVisible = true
-      this.$nextTick(() => {
-        this.$refs.UserRelationList.init(id, fullName, 'Group')
-      })
-    }
   }
 }
 </script>

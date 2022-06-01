@@ -17,3 +17,21 @@ export const getSelectorOrgList = (organizeId, userId) => {
     method: 'GET'
   })
 }
+
+//删除二级管理员 
+export const delGradeManage = (id) => {
+  return request({
+    url: `/api/permission/organizeAdminIsTrator/${id}`,
+    method: 'DELETE'
+  })
+}
+
+//新建二级管理员 
+export const saveGradeManage = (data) => {
+  return request({
+    url: `/api/permission/organizeAdminIsTrator`,
+    method: 'POST',
+    data
+  })
+
+}
