@@ -1405,7 +1405,7 @@ const defaultStep = [{
   properties: { title: '上级审批节点' }
 }, {
   nodeId: '0',
-  properties: { title: '发起节点' }
+  properties: { title: '流程发起' }
 }]
 const typeOptions = [
   {
