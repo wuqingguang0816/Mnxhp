@@ -60,6 +60,14 @@
     <el-form-item label="是否必填">
       <el-switch v-model="activeData.__config__.required" />
     </el-form-item>
+    <el-form-item>
+      <span slot="label">是否唯一
+        <el-tooltip content="输入值唯一性校验" placement="top">
+          <a class="el-icon-warning-outline"></a>
+        </el-tooltip>
+      </span>
+      <el-switch v-model="activeData.__config__.unique" />
+    </el-form-item>
     <div v-for="(item, index) in activeData.__config__.regList" :key="index" class="reg-item">
       <span class="close-btn" @click="activeData.__config__.regList.splice(index, 1)">
         <i class="el-icon-close" />

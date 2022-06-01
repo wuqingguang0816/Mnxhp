@@ -51,6 +51,7 @@ export const inputComponents = [
       visibility: ["pc", "app"],
       tableName: "",
       noShow: false,
+      unique: false,
       regList: [],
       trigger: "blur"
     },
@@ -682,8 +683,8 @@ export const inputComponents = [
       dragDisabled: false,
       visibility: ["pc", "app"]
     },
-    linkUrl:"",
-    target:"_blank",
+    linkUrl: "",
+    target: "_blank",
     style: { width: "100%" },
     textStyle: {
       color: "#000000",
