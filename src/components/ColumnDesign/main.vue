@@ -424,7 +424,8 @@ export default {
       align: 'left',
       jnpfKey: o.__config__.jnpfKey,
       sortable: false,
-      width: null
+      width: null,
+      ...o
     }));
     this.searchOptions = searchOptions.map(o => ({
       label: o.__config__.label,
