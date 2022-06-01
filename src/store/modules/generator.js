@@ -53,14 +53,12 @@ const actions = {
   getCompanyTree({ state, commit }) {
     return new Promise((resolve, reject) => {
       if (!state.companyTree.length) {
-        getOrganizeTree()
-          .then(res => {
-            commit("SET_COMPANY_TREE", res.data.list);
-            resolve(res.data.list);
-          })
-          .catch(error => {
-            reject(error);
-          });
+        getOrganizeTree().then(res => {
+          commit("SET_COMPANY_TREE", res.data.list);
+          resolve(res.data.list);
+        }).catch(error => {
+          reject(error);
+        });
       } else {
         resolve(state.companyTree);
       }
@@ -69,14 +67,12 @@ const actions = {
   getDepTree({ state, commit }) {
     return new Promise((resolve, reject) => {
       if (!state.depTree.length) {
-        getDepartmentSelector()
-          .then(res => {
-            commit("SET_DEP_TREE", res.data.list);
-            resolve(res.data.list);
-          })
-          .catch(error => {
-            reject(error);
-          });
+        getDepartmentSelector().then(res => {
+          commit("SET_DEP_TREE", res.data.list);
+          resolve(res.data.list);
+        }).catch(error => {
+          reject(error);
+        });
       } else {
         resolve(state.depTree);
       }
@@ -85,31 +81,26 @@ const actions = {
   getGroupTree({ state, commit }) {
     return new Promise((resolve, reject) => {
       if (!state.groupTree.length) {
-        getGroupSelector()
-          .then(res => {
-            commit("SET_GROUP_TREE", res.data);
-            resolve(res.data);
-          })
-          .catch(error => {
-            reject(error);
-          });
+        getGroupSelector().then(res => {
+          commit("SET_GROUP_TREE", res.data);
+          resolve(res.data);
+        }).catch(error => {
+          reject(error);
+        });
       } else {
         resolve(state.groupTree);
       }
     });
   },
-
   getDicTree({ state, commit }) {
     return new Promise((resolve, reject) => {
       if (!state.dicTree.length) {
-        getDictionaryType()
-          .then(res => {
-            commit("SET_DIC_TREE", res.data.list);
-            resolve(res.data.list);
-          })
-          .catch(error => {
-            reject(error);
-          });
+        getDictionaryType().then(res => {
+          commit("SET_DIC_TREE", res.data.list);
+          resolve(res.data.list);
+        }).catch(error => {
+          reject(error);
+        });
       } else {
         resolve(state.dicTree);
       }

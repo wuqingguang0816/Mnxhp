@@ -19,6 +19,9 @@
       <user-select v-model="activeData.__config__.defaultValue" placeholder="选择默认值" clearable
         v-if="activeData.__config__.jnpfKey==='userSelect'" :multiple="activeData.multiple"
         :key="key" />
+      <group-select v-model="activeData.__config__.defaultValue" placeholder="选择默认值" clearable
+        v-if="activeData.__config__.jnpfKey==='groupSelect'" :multiple="activeData.multiple"
+        :key="key" />
       <BillRule v-model="activeData.__config__.defaultValue" placeholder="选择默认值" clearable
         v-if="activeData.__config__.jnpfKey==='billRule'" :key="key" />
       <el-input :value="setDefaultValue(activeData.__config__.defaultValue)" placeholder="请输入默认值"
@@ -31,7 +34,7 @@
       v-if="['depSelect','posSelect'].includes(activeData.__config__.jnpfKey)">
       <el-switch v-model="activeData.filterable" />
     </el-form-item>
-    <el-form-item label="能否多选" v-if="needMultiple">
+    <el-form-item label="能否多选" v-if="activeData.__config__.jnpfKey!=='editor'">
       <el-switch v-model="activeData.multiple" @change="multipleChange" />
     </el-form-item>
     <el-form-item label="是否禁用" v-if="activeData.__config__.jnpfKey !=='editor'">
@@ -51,11 +54,6 @@ export default {
     return {
       key: +new Date()
     }
-  },
-  computed: {
-    needMultiple() {
-      return ['posSelect', 'userSelect', 'comSelect', 'depSelect'].indexOf(this.activeData.__config__.jnpfKey) > -1
-    },
   },
   created() { },
   methods: {

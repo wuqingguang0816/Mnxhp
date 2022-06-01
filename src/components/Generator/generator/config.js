@@ -819,7 +819,7 @@ export const selectComponents = [
       showLabel: true,
       tag: "groupSelect",
       tagIcon: "icon-ym icon-ym-generator-group1",
-      defaultValue: [],
+      defaultValue: '',
       required: false,
       layout: "colFormItem",
       span: 24,

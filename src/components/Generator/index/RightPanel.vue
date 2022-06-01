@@ -68,11 +68,12 @@
               </el-form-item>
             </template>
             <JNPFComInput v-if="activeData.__config__.jnpfKey==='comInput'"
-              :active-data="activeData" />  
+              :active-data="activeData" />
             <JNPF-textarea v-if="activeData.__config__.jnpfKey==='textarea'"
               :active-data="activeData" />
             <JNPFText v-if="activeData.__config__.jnpfKey==='JNPFText'" :active-data="activeData" />
-            <JNPFLinkText v-if="activeData.__config__.jnpfKey==='JNPFLinkText'" :active-data="activeData" />
+            <JNPFLinkText v-if="activeData.__config__.jnpfKey==='JNPFLinkText'"
+              :active-data="activeData" />
             <JNPFNumInput v-if="activeData.__config__.jnpfKey==='numInput'"
               :active-data="activeData" />
             <JNPFAmount v-if="activeData.__config__.jnpfKey==='JNPFAmount'"
@@ -123,9 +124,6 @@
               ref="popupAttr" />
             <Tab v-if="activeData.__config__.jnpfKey==='tab'" :active-data="activeData" />
             <Collapse v-if="activeData.__config__.jnpfKey==='collapse'" :active-data="activeData" />
-            <!-- <JNPFGroupSelect v-if="activeData.__config__.jnpfKey==='groupSelect'" ref="JNPFGroupSelect"
-              :active-data="activeData" /> -->
-
             <template v-if="activeData.__config__.jnpfKey==='barcode'">
               <el-form-item label="控件标题">
                 <el-input v-model="activeData.__config__.label" placeholder="请输入控件标题" />
@@ -457,10 +455,7 @@ import Tab from './RightComponents/Tab'
 import Collapse from './RightComponents/Collapse'
 import TableConfig from './RightComponents/table'
 
-import JNPFGroupSelect from './RightComponents/JNPFGroupSelect'
-
-
-const commonRightList = ['comSelect', 'depSelect', 'posSelect', 'userSelect', 'groupSelect','dicSelect', 'editor']
+const commonRightList = ['comSelect', 'depSelect', 'posSelect', 'userSelect', 'groupSelect', 'editor']
 const systemList = ['createUser', 'createTime', 'modifyUser', 'modifyTime', 'currOrganize', 'currDept', 'currPosition', 'billRule']
 
 export default {
@@ -497,7 +492,6 @@ export default {
     JNPFCalculate,
     PopupSelect,
     PopupAttr,
-    JNPFGroupSelect,
     Tab,
     Collapse,
     TableConfig
