@@ -55,6 +55,18 @@ const layouts = {
         </el-col>
       )
     }
+    if (config.jnpfKey === 'alert') {
+      return (
+        <el-col span={24} class={className}
+          nativeOnClick={event => { activeItem(element); event.stopPropagation() }}>
+          <el-form-item label-width="0">
+            <el-alert title={element.title} type={element.type} closable={element.closable}
+              show-icon={element['show-icon']} />
+          </el-form-item>
+          {components.itemBtns.apply(this, arguments)}
+        </el-col>
+      )
+    }
     if (config.jnpfKey === 'groupTitle') {
       return (
         <el-col span={24} class={className}

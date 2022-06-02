@@ -73,6 +73,7 @@
               :active-data="activeData" />
             <JNPFText v-if="activeData.__config__.jnpfKey==='JNPFText'" :active-data="activeData" />
             <JnpfLink v-if="activeData.__config__.jnpfKey==='link'" :active-data="activeData" />
+            <JnpfAlert v-if="activeData.__config__.jnpfKey==='alert'" :active-data="activeData" />
             <JNPFNumInput v-if="activeData.__config__.jnpfKey==='numInput'"
               :active-data="activeData" />
             <JNPFAmount v-if="activeData.__config__.jnpfKey==='JNPFAmount'"
@@ -291,7 +292,7 @@
                   :step="2" show-tooltip />
               </el-form-item>
               <el-form-item label="标题宽度"
-                v-if="!['divider','JNPFText','link','button','table','groupTitle ','card','row','tab','collapse'].includes(activeData.__config__.jnpfKey)">
+                v-if="!['divider','JNPFText','link','alert','button','table','groupTitle ','card','row','tab','collapse'].includes(activeData.__config__.jnpfKey)">
                 <el-input-number v-model="activeData.__config__.labelWidth" placeholder="标题宽度"
                   :min="0" :precision="0" controls-position="right" />
               </el-form-item>
@@ -423,6 +424,7 @@ import JNPFComInput from './RightComponents/ComInput'
 import JNPFTextarea from './RightComponents/Textarea'
 import JNPFText from './RightComponents/JNPFText'
 import JnpfLink from './RightComponents/JnpfLink'
+import JnpfAlert from './RightComponents/JnpfAlert'
 import JNPFNumInput from './RightComponents/NumInput'
 import JNPFAmount from './RightComponents/JNPFAmount'
 import JNPFPsdInput from './RightComponents/PsdInput'
@@ -464,6 +466,7 @@ export default {
     JNPFTextarea,
     JNPFText,
     JnpfLink,
+    JnpfAlert,
     JNPFNumInput,
     JNPFAmount,
     JNPFPsdInput,

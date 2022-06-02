@@ -1765,6 +1765,10 @@ textarea.el-textarea__inner {
   margin-left: 5px;
 }
 
+.el-form .el-form-item__content .el-alert__content {
+  line-height: 20px;
+}
+
 // 布局错位问题修正 
 .el-col {
   .el-form-item--small .el-form-item__label {

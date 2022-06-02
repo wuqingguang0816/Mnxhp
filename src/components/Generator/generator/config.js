@@ -689,6 +689,25 @@ export const inputComponents = [
       "text-align": "left",
     }
   },
+  {
+    __config__: {
+      jnpfKey: "alert",
+      label: "提示",
+      labelWidth: undefined,
+      showLabel: false,
+      tag: "el-alert",
+      tagIcon: "icon-ym icon-ym-generator-alert",
+      required: false,
+      layout: "colFormItem",
+      span: 24,
+      dragDisabled: false,
+      visibility: ["pc", "app"]
+    },
+    title: '这是一个提示',
+    type: "success",
+    "show-icon": false,
+    closable: false
+  },
 ];
 
 // 高级控件 【左面板】
@@ -822,10 +841,10 @@ export const selectComponents = [
       regList: [],
       trigger: "click"
     },
-    // on: {
-    //   change:
-    //     "({ data, formData, setFormData, setShowOrHide, setRequired, setDisabled, request, getFieldOptions, setFieldOptions }) => {\n    // 在此编写代码\n    \n}"
-    // },
+    on: {
+      change:
+        "({ data, formData, setFormData, setShowOrHide, setRequired, setDisabled, request, getFieldOptions, setFieldOptions }) => {\n    // 在此编写代码\n    \n}"
+    },
     placeholder: "请选择",
     multiple: false,
     clearable: true,

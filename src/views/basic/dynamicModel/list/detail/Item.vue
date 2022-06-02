@@ -19,6 +19,12 @@
             :textStyle="item.textStyle" />
         </el-form-item>
       </template>
+      <template v-else-if="item.__config__.jnpfKey==='alert'">
+        <el-form-item label-width="0">
+          <jnpf-link :title="item.title" :type="item.type" :closable="item.closable"
+            :show-icon="item['show-icon']" />
+        </el-form-item>
+      </template>
       <template v-else-if="item.__config__.jnpfKey==='groupTitle'">
         <el-form-item label-width="0">
           <groupTitle :content="item.content" :content-position="item['content-position']" />

@@ -51,7 +51,7 @@ import { deepClone } from '@/utils'
 import { saveDrawingList } from '@/components/Generator/utils/db'
 import { inputComponents, selectComponents, systemComponents } from '@/components/Generator/generator/config'
 import { debounce } from 'throttle-debounce'
-const ignoreList = ['divider', 'JNPFText', 'link', 'button', 'table', 'relationFormAttr', 'popupAttr', 'calculate']
+const ignoreList = ['divider', 'JNPFText', 'link', 'alert', 'button', 'table', 'relationFormAttr', 'popupAttr', 'calculate']
 export default {
   props: ['conf', 'enCode'],
   data() {
