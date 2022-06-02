@@ -137,6 +137,12 @@
                     <JNPFUploadFz v-model="scope.row[column.__vModel__]" detailed disabled />
                   </template>
                 </el-table-column>
+                <el-table-column :key="columnIndex" :label="column.__config__.label"
+                  v-else-if="column.__config__.jnpfKey==='uploadImg'">
+                  <template slot-scope="scope">
+                    <JNPFUploadImg v-model="scope.row[column.__vModel__]" detailed disabled />
+                  </template>
+                </el-table-column>
                 <el-table-column :key="columnIndex" :prop="column.__vModel__"
                   :label="column.__config__.label" v-else />
               </template>
