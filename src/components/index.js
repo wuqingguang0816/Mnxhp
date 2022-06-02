@@ -9,6 +9,7 @@ import Screenfull from '@/components/Screenfull'
 import ColumnSettings from '@/components/ColumnSettings'
 import JNPFQuill from '@/components/JNPFEditor/quill'
 import UserSelect from '@/components/JNPF-userSelect'
+
 import uploadBtn from '@/components/JNPF-uploadBtn'
 // 代码生成器专供
 import JNPFText from '@/components/Generator/components/JNPFText'
@@ -28,6 +29,7 @@ import PosSelect from '@/components/Generator/components/PosSelect'
 import DicSelect from '@/components/Generator/components/DicSelect'
 import BillRule from '@/components/Generator/components/BillRule'
 import JNPFInputTable from '@/components/Generator/components/InputTable'
+import RoleSelect from '@/components/Generator/components/RoleSelect'
 import JNPFAddress from '@/components/Generator/components/Address'
 import GroupTitle from '@/components/Generator/components/GroupTitle'
 import RelationForm from '@/components/Generator/components/RelationForm'
@@ -59,6 +61,7 @@ export default {
     Vue.component('DepSelect', DepSelect)
     Vue.component('PosSelect', PosSelect)
     Vue.component('UserSelect', UserSelect)
+    Vue.component('RoleSelect', RoleSelect)
     Vue.component('DicSelect', DicSelect)
     Vue.component('BillRule', BillRule)
     Vue.component('JNPFInputTable', JNPFInputTable)

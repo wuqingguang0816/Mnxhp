@@ -20,7 +20,9 @@
         v-if="activeData.__config__.jnpfKey==='userSelect'" :multiple="activeData.multiple"
         :key="key" />
       <group-select v-model="activeData.__config__.defaultValue" placeholder="选择默认值" clearable
-        v-if="activeData.__config__.jnpfKey==='groupSelect'" :multiple="activeData.multiple"
+        v-if="activeData.__config__.jnpfKey==='groupSelect'" :multiple="activeData.multiple" />
+      <role-select v-model="activeData.__config__.defaultValue" placeholder="选择默认值" clearable
+        v-if="activeData.__config__.jnpfKey==='roleSelect'" :multiple="activeData.multiple"
         :key="key" />
       <BillRule v-model="activeData.__config__.defaultValue" placeholder="选择默认值" clearable
         v-if="activeData.__config__.jnpfKey==='billRule'" :key="key" />
@@ -58,9 +60,9 @@ export default {
   created() { },
   methods: {
     multipleChange(val) {
-      this.$set(this.activeData.__config__, 'defaultValue', val ? [] : '')
-      this.activeData.__config__.renderKey = +new Date()
-      this.key = +new Date()
+      this.$set(this.activeData.__config__,'defaultValue',val? []:'')
+      this.activeData.__config__.renderKey=+new Date()
+      this.key=+new Date()
     }
   }
 }

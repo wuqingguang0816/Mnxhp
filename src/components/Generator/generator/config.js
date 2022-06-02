@@ -675,7 +675,7 @@ export const inputComponents = [
       labelWidth: undefined,
       showLabel: false,
       tag: "JNPFLinkText",
-      tagIcon: "icon-ym icon-ym-generator-textarea",
+      tagIcon: "icon-ym icon-ym-generator-link",
       defaultValue: "这是一段链接",
       required: false,
       layout: "colFormItem",
@@ -806,6 +806,33 @@ export const selectComponents = [
       change:
         "({ data, formData, setFormData, setShowOrHide, setRequired, setDisabled, request, getFieldOptions, setFieldOptions }) => {\n    // 在此编写代码\n    \n}"
     },
+    placeholder: "请选择",
+    multiple: false,
+    clearable: true,
+    disabled: false
+  },
+  {
+    __config__: {
+      jnpfKey: "roleSelect",
+      label: "角色选择",
+      labelWidth: undefined,
+      showLabel: true,
+      tag: "roleSelect",
+      tagIcon: "icon-ym icon-ym-generator-role",
+      defaultValue: null,
+      required: false,
+      layout: "colFormItem",
+      span: 24,
+      dragDisabled: false,
+      visibility: ["pc", "app"],
+      tableName: "",
+      regList: [],
+      trigger: "click"
+    },
+    // on: {
+    //   change:
+    //     "({ data, formData, setFormData, setShowOrHide, setRequired, setDisabled, request, getFieldOptions, setFieldOptions }) => {\n    // 在此编写代码\n    \n}"
+    // },
     placeholder: "请选择",
     multiple: false,
     clearable: true,
