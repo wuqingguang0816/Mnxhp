@@ -312,6 +312,7 @@ export default {
           this.resetInputHeight();
         })
       } else {
+        if (!this.selectedData.length) return this.innerValue = ''
         this.innerValue = this.selectedData[0].fullName
       }
     },
