@@ -123,6 +123,9 @@
                   <template v-else-if="['comInput','textarea'].includes(item.jnpfKey)">
                     <el-input v-model="scope.row[item.prop]" placeholder="请输入" clearable />
                   </template>
+                  <template v-else-if="systemComponentsList.includes(item.jnpfKey)">
+                    {{scope.row[item.prop+'_name']||scope.row[item.prop]}}
+                  </template>
                   <template v-else>
                     {{scope.row[item.prop]}}
                   </template>
@@ -272,7 +275,7 @@ import { getModelList, deleteModel, batchDelete, exportModel, createModel, updat
 import { getDictionaryDataSelector } from '@/api/systemData/dictionary'
 import { getDataInterfaceRes } from '@/api/systemData/dataInterface'
 import { getColumnsByModuleId } from '@/api/common'
-import { dyOptionsList } from '@/components/Generator/generator/comConfig'
+import { dyOptionsList, systemComponentsList } from '@/components/Generator/generator/comConfig'
 import request from '@/utils/request'
 import Form from './Form'
 import FlowBox from '@/views/workFlow/components/FlowBox'
@@ -286,6 +289,7 @@ export default {
   props: ['config', 'modelId', 'isPreview'],
   data() {
     return {
+      systemComponentsList,
       keyword: '',
       treeProps: {
         children: 'children',
