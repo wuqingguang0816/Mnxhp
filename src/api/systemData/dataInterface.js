@@ -78,7 +78,7 @@ export function getDataInterfaceRes(id) {
 // 预览接口数据
 export function previewDataInterface(id) {
   return request({
-    url: `/api/system/DataInterface/${id}/Preview`,
+    url: `/api/system/DataInterface/GetParam/${id}`,
     method: 'GET'
   })
 }
@@ -121,6 +121,16 @@ export function getDataInterfaceSelectorList(data) {
   return request({
     url: '/api/system/DataInterface/getList',
     method: 'GET',
+    data
+  })
+}
+
+//测试接口
+
+export function testInterface(id, data, tenantId) {
+  return request({
+    url: `/api/system/DataInterface/${id}/Actions/Preview` + '?tenantId=' + tenantId || '',
+    method: 'POST',
     data
   })
 }

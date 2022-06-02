@@ -8,11 +8,25 @@
     </div>
     <el-form ref="dataForm" class="main" label-position="top" v-loading="formLoading">
       <el-form-item label="Request URL">
-        <el-input v-model="url">
+        <el-input v-model="url" style="width: 1577px;margin-right: 10px">
           <template slot="prepend">GET</template>
         </el-input>
+        <el-button type="primary" @click="test">测试接口</el-button>
       </el-form-item>
-      <el-form-item label="Response body" class="value-item">
+      <el-form-item label="Request Param" v-if="inputList.length>0">
+        <el-row v-for="(item, index) in inputList" :key="item.index" class="mt-10">
+          <el-col :span="5">
+            <el-autocomplete v-model="item.field" :fetch-suggestions="querySearch" placeholder="key"
+              clearable style="width:100%" disabled />
+          </el-col>
+          <el-col :span="18" :offset="1">
+            <el-input v-model="item.defaultValue" placeholder="value" clearable />
+          </el-col>
+        </el-row>
+      </el-form-item>
+      <template>
+      </template>
+      <el-form-item label="Response Body" class="value-item">
         <el-input v-model="responseData" type="textarea" :rows="30" />
       </el-form-item>
     </el-form>
@@ -20,7 +34,7 @@
 </template>
 
 <script>
-import { previewDataInterface } from '@/api/systemData/dataInterface'
+import { previewDataInterface, testInterface } from '@/api/systemData/dataInterface'
 
 export default {
   data() {
@@ -32,10 +46,19 @@ export default {
       options: {
         readOnly: true,
         language: 'json'
-      }
+      },
+      inputList: []
     }
   },
   methods: {
+    test() {
+      testInterface(this.id, this.inputList).then(res => {
+        let data = res
+        this.responseData = JSON.stringify(data, null, 4)
+      }).catch(() => {
+        this.formLoading = false
+      })
+    },
     goBack() {
       this.$emit('close')
     },
@@ -46,8 +69,7 @@ export default {
       this.$nextTick(() => {
         this.url = `${this.define.comUrl}/api/system/DataInterface/${id}/Actions/Response` + (tenantId ? '?tenantId=' + tenantId : '')
         previewDataInterface(this.id).then(res => {
-          let data = res.data.data
-          this.responseData = JSON.stringify(data, null, 4)
+          this.inputList = res.data
           this.formLoading = false
         }).catch(() => {
           this.formLoading = false
