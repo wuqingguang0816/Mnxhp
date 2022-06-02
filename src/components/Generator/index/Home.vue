@@ -413,10 +413,10 @@ export default {
       return item
     },
     toggleVmodelCase(str) {
-      if (this.dbType === 'Oracle' || this.dbType === 'DM') {
+      if (this.dbType.toLowerCase() === 'Oracle'.toLowerCase() || this.dbType.toLowerCase() === 'DM8'.toLowerCase()) {
         return str.toUpperCase()
       }
-      if (this.dbType === 'PostgreSql' || this.dbType === 'KingBase') {
+      if (this.dbType.toLowerCase() === 'PostgreSQL'.toLowerCase() || this.dbType.toLowerCase() === 'KingBaseES'.toLowerCase()) {
         return str.toLowerCase()
       }
       return str
