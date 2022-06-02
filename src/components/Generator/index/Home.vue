@@ -125,7 +125,7 @@ export default {
     DraggableItemApp,
     Preview
   },
-  props: ['conf', 'modelType', 'webType'],
+  props: ['conf', 'modelType', 'webType', 'dbType'],
   data() {
     return {
       idGlobal: 100,
@@ -392,7 +392,7 @@ export default {
         if (!this.$store.getters.hasTable) {
           // 分割线和按钮不加vModel
           if (noVModelList.indexOf(config.jnpfKey) < 0) {
-            item.__vModel__ = `${config.jnpfKey}Field${this.idGlobal}`
+            item.__vModel__ = this.toggleVmodelCase(`${config.jnpfKey}Field${this.idGlobal}`)
           }
         } else {
           if (noVModelList.indexOf(config.jnpfKey) < 0) {
@@ -401,7 +401,7 @@ export default {
         }
       } else if (config.layout === 'rowFormItem') {
         if (config.jnpfKey === 'table') {
-          item.__vModel__ = `${config.jnpfKey}Field${this.idGlobal}`;
+          item.__vModel__ = this.toggleVmodelCase(`${config.jnpfKey}Field${this.idGlobal}`);
         }
         config.componentName = `row${this.idGlobal}`
         !Array.isArray(config.children) && (config.children = [])
@@ -411,6 +411,15 @@ export default {
         config.children = config.children.map(childItem => this.createIdAndKey(childItem))
       }
       return item
+    },
+    toggleVmodelCase(str) {
+      if (this.dbType.toLowerCase() === 'Oracle'.toLowerCase() || this.dbType.toLowerCase() === 'DM8'.toLowerCase()) {
+        return str.toUpperCase()
+      }
+      if (this.dbType.toLowerCase() === 'PostgreSQL'.toLowerCase() || this.dbType.toLowerCase() === 'KingBaseES'.toLowerCase()) {
+        return str.toLowerCase()
+      }
+      return str
     },
     AssembleFormData() {
       this.formData = {
@@ -500,6 +509,6 @@ export default {
 }
 </script>
 <style lang='scss'>
-@import '../styles/index';
-@import '../styles/home';
+@import "../styles/index";
+@import "../styles/home";
 </style>

@@ -25,7 +25,7 @@
           :filter-node-method="filterNode">
           <span class="custom-tree-node" slot-scope="{ data, node }" :title="data.fullName">
             <i :class="data.icon" />
-            <span class="text">{{node.label}}</span>
+            <span class="text" :title="data.fullName">{{node.label}}</span>
           </span>
         </el-tree>
       </el-scrollbar>

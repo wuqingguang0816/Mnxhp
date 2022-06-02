@@ -6,7 +6,7 @@ export default {
       initiator: [],
       initiatePos: [],
       initiateRole: [],
-      title: '发起节点'
+      title: '流程发起'
     }
   },
   approver: {

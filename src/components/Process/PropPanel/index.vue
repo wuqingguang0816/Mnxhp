@@ -766,7 +766,7 @@
                   v-if="approverForm.assigneeType === 1">
                   <el-select v-model="approverForm.managerLevel">
                     <el-option v-for="item in 10" :key="item"
-                      :label="item===1?'直接主管':'第'+item+'级主管'" :value="item">
+                      :label="item===1?'直属主管':'第'+item+'级主管'" :value="item">
                     </el-option>
                   </el-select>
                 </el-form-item>
@@ -1433,7 +1433,7 @@ const defaultStep = [{
   properties: { title: '上级审批节点' }
 }, {
   nodeId: '0',
-  properties: { title: '发起节点' }
+  properties: { title: '流程发起' }
 }]
 const typeOptions = [
   {
@@ -1441,12 +1441,12 @@ const typeOptions = [
     value: 6
   },
   {
-    label: '发起者主管',
-    value: 1
-  },
-  {
     label: '发起者本人',
     value: 3
+  },
+  {
+    label: '发起者主管',
+    value: 1
   },
   {
     label: '部门主管',

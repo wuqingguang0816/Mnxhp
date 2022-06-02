@@ -46,7 +46,7 @@ export default {
       this.$nextTick(() => {
         this.url = `${this.define.comUrl}/api/system/DataInterface/${id}/Actions/Response` + (tenantId ? '?tenantId=' + tenantId : '')
         previewDataInterface(this.id).then(res => {
-          let data = this.jnpf.interfaceDataHandler(res.data)
+          let data = res.data.data
           this.responseData = JSON.stringify(data, null, 4)
           this.formLoading = false
         }).catch(() => {

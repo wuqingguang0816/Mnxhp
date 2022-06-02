@@ -6,6 +6,13 @@
   "description": "",
   "glyphs": [
     {
+      "icon_id": "30164688",
+      "name": "gradeManage",
+      "font_class": "gradeManage",
+      "unicode": "e8c2",
+      "unicode_decimal": 59586
+    },
+    {
       "icon_id": "29877000",
       "name": "fold",
       "font_class": "fold",

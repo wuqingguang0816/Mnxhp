@@ -180,7 +180,7 @@ export default {
       }
       this.activeData.__config__.defaultValue = ''
       getDataInterfaceRes(val).then(res => {
-        let data = this.jnpf.interfaceDataHandler(res.data)
+        let data = res.data.data
         if (Array.isArray(data)) {
           this.activeData.__slot__.options = data
         } else {
