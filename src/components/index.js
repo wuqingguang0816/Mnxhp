@@ -13,7 +13,7 @@ import UserSelect from '@/components/JNPF-userSelect'
 import uploadBtn from '@/components/JNPF-uploadBtn'
 // 代码生成器专供
 import JNPFText from '@/components/Generator/components/JNPFText'
-import JNPFLinkText from '@/components/Generator/components/JNPFLinkText'
+import JnpfLink from '@/components/Generator/components/JnpfLink'
 import JnpfBarcode from '@/components/Generator/components/JnpfBarcode'
 import JnpfQrcode from '@/components/Generator/components/JnpfQrcode'
 import JnpfButton from '@/components/Generator/components/JnpfButton'
@@ -47,7 +47,7 @@ export default {
     Vue.component('uploadBtn', uploadBtn)
     Vue.component('UserBox', UserBox)
     Vue.component('JNPFText', JNPFText)
-    Vue.component('JNPFLinkText', JNPFLinkText)
+    Vue.component('JnpfLink', JnpfLink)
     Vue.component('JnpfBarcode', JnpfBarcode)
     Vue.component('JnpfQrcode', JnpfQrcode)
     Vue.component('JnpfButton', JnpfButton)

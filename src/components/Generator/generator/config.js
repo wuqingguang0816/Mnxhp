@@ -670,30 +670,23 @@ export const inputComponents = [
   },
   {
     __config__: {
-      jnpfKey: "JNPFLinkText",
-      label: "链接组件",
+      jnpfKey: "link",
+      label: "链接",
       labelWidth: undefined,
       showLabel: false,
-      tag: "JNPFLinkText",
+      tag: "JnpfLink",
       tagIcon: "icon-ym icon-ym-generator-link",
-      defaultValue: "这是一段链接",
       required: false,
       layout: "colFormItem",
       span: 24,
       dragDisabled: false,
       visibility: ["pc", "app"]
     },
-    linkUrl: "",
-    target: "_blank",
-    style: { width: "100%" },
+    content: '文本链接',
+    href: "",
+    target: "_self",
     textStyle: {
-      color: "#000000",
       "text-align": "left",
-      "font-weight": "normal",
-      "font-style": "normal",
-      "text-decoration": "none",
-      "line-height": 32,
-      "font-size": 12
     }
   },
 ];

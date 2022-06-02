@@ -25,15 +25,15 @@ const ruleTrigger = {
 // 动态options
 const dyOptionsList = ['radio', 'checkbox', 'select', 'cascader', 'treeSelect']
 // 不添加vModel
-const noVModelList = ['divider', 'JNPFText', 'JNPFLinkText', 'groupTitle', 'relationFormAttr', 'popupAttr', 'button', 'barcode', 'qrcode']
+const noVModelList = ['divider', 'JNPFText', 'link', 'groupTitle', 'relationFormAttr', 'popupAttr', 'button', 'barcode', 'qrcode']
 // 不可以添加到子表组件
-const noTableAllowList = ['divider', 'JNPFText', 'JNPFLinkText', 'groupTitle', 'button', 'barcode', 'qrcode', 'editor', 'uploadImg', 'radio', 'checkbox', 'createUser', 'createTime', 'modifyUser', 'modifyTime', 'currOrganize', 'currDept', 'currPosition', 'rate', 'slider', 'PsdInput', 'colorPicker']
+const noTableAllowList = ['divider', 'JNPFText', 'link', 'groupTitle', 'button', 'barcode', 'qrcode', 'editor', 'uploadImg', 'radio', 'checkbox', 'createUser', 'createTime', 'modifyUser', 'modifyTime', 'currOrganize', 'currDept', 'currPosition', 'rate', 'slider', 'PsdInput', 'colorPicker']
 // 不可以添加到列表展示
 const noColumnShowList = ['PsdInput', 'colorPicker', 'rate', 'slider', 'divider', 'uploadImg', 'uploadFz', 'editor', 'JNPFText', 'relationFormAttr', 'popupAttr', 'groupTitle']
 // 不可以添加到搜索
 const noSearchList = [...noColumnShowList, 'switch', 'timeRange', 'dateRange', 'relationForm', 'popupSelect']
 // 搜索时控件为input
-const useInputList = ['comInput', 'textarea', 'JNPFText', 'JNPFLinkText', 'billRule']
+const useInputList = ['comInput', 'textarea', 'JNPFText', 'link', 'billRule']
 // 搜索时控件为日期选择器
 const useDateList = ['createTime', 'modifyTime']
 // 搜索时控件为下拉选择器
@@ -61,53 +61,53 @@ const webPeculiarList = [{
 }]
 // 在线开发-功能设计/流程设计/移动设计独有组件
 const onlinePeculiarList = [{
-    __config__: {
-      jnpfKey: 'qrcode',
-      label: '二维码',
-      labelWidth: undefined,
-      showLabel: true,
-      tag: 'jnpf-qrcode',
-      tagIcon: 'icon-ym icon-ym-generator-qrcode',
-      defaultValue: '',
-      layout: 'colFormItem',
-      span: 24,
-      dragDisabled: false,
-      visibility: ["pc", "app"],
-      tableName: '',
-      regList: [],
-    },
-    colorDark: '#000',
-    colorLight: '#fff',
-    size: 100,
-    dataType: 'static',
-    staticText: '',
-    relationField: '',
+  __config__: {
+    jnpfKey: 'qrcode',
+    label: '二维码',
+    labelWidth: undefined,
+    showLabel: true,
+    tag: 'jnpf-qrcode',
+    tagIcon: 'icon-ym icon-ym-generator-qrcode',
+    defaultValue: '',
+    layout: 'colFormItem',
+    span: 24,
+    dragDisabled: false,
+    visibility: ["pc", "app"],
+    tableName: '',
+    regList: [],
   },
-  {
-    __config__: {
-      jnpfKey: 'barcode',
-      label: '条形码',
-      labelWidth: undefined,
-      showLabel: true,
-      tag: 'jnpf-barcode',
-      tagIcon: 'icon-ym icon-ym-generator-barcode',
-      defaultValue: '',
-      layout: 'colFormItem',
-      span: 24,
-      dragDisabled: false,
-      visibility: ["pc", "app"],
-      tableName: '',
-      regList: [],
-    },
-    format: 'code128',
-    lineColor: '#000',
-    background: '#fff',
-    width: 4,
-    height: 40,
-    dataType: 'static',
-    staticText: '',
-    relationField: '',
+  colorDark: '#000',
+  colorLight: '#fff',
+  size: 100,
+  dataType: 'static',
+  staticText: '',
+  relationField: '',
+},
+{
+  __config__: {
+    jnpfKey: 'barcode',
+    label: '条形码',
+    labelWidth: undefined,
+    showLabel: true,
+    tag: 'jnpf-barcode',
+    tagIcon: 'icon-ym icon-ym-generator-barcode',
+    defaultValue: '',
+    layout: 'colFormItem',
+    span: 24,
+    dragDisabled: false,
+    visibility: ["pc", "app"],
+    tableName: '',
+    regList: [],
   },
+  format: 'code128',
+  lineColor: '#000',
+  background: '#fff',
+  width: 4,
+  height: 40,
+  dataType: 'static',
+  staticText: '',
+  relationField: '',
+},
 ]
 
 export { ruleTrigger, dyOptionsList, noVModelList, noTableAllowList, noColumnShowList, noSearchList, webPeculiarList, onlinePeculiarList, useInputList, useDateList, useSelectList }

@@ -31,13 +31,25 @@ const layouts = {
     if (this.formConf.unFocusedComponentBorder) className += ' unfocus-bordered'
     let labelWidth = config.labelWidth ? `${config.labelWidth}px` : null
     if (config.showLabel === false) labelWidth = '0'
-    if (config.jnpfKey === 'JNPFText' || config.jnpfKey === 'JNPFLinkText') {
+    if (config.jnpfKey === 'JNPFText') {
       return (
         <el-col span={24} class={className}
           nativeOnClick={event => { activeItem(element); event.stopPropagation() }}>
           <el-form-item label-width={labelWidth}
             label={config.showLabel ? config.label : ''} required={config.required}>
             {config.defaultValue}
+          </el-form-item>
+          {components.itemBtns.apply(this, arguments)}
+        </el-col>
+      )
+    }
+    if (config.jnpfKey === 'link') {
+      return (
+        <el-col span={24} class={className}
+          nativeOnClick={event => { activeItem(element); event.stopPropagation() }}>
+          <el-form-item label-width="0">
+            <jnpf-link content={element.content} href={element.href} target={element.target}
+              textStyle={element.textStyle} />
           </el-form-item>
           {components.itemBtns.apply(this, arguments)}
         </el-col>

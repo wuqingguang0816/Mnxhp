@@ -65,7 +65,7 @@ function buildDataObject(confClone, dataObject, formData) {
       dataObject.attrs[key] = val
     }
   })
-  if (jnpfKey === 'JNPFText' || jnpfKey === 'JNPFLinkText') {
+  if (jnpfKey === 'JNPFText') {
     vModel.call(this, dataObject, confClone.__config__.defaultValue)
   }
   if (['calculate', 'table', 'barcode', 'qrcode'].includes(jnpfKey)) {
@@ -111,7 +111,7 @@ export default {
     },
     formData: {
       type: Object,
-      default: () => {}
+      default: () => { }
     },
   },
   render(h) {

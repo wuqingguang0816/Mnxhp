@@ -13,10 +13,10 @@
             v-model="item.__config__.defaultValue" :textStyle="item.textStyle" />
         </el-form-item>
       </template>
-      <template v-else-if="item.__config__.jnpfKey==='JNPFLinkText'">
+      <template v-else-if="item.__config__.jnpfKey==='link'">
         <el-form-item label-width="0">
-          <JNPFLinkText :lineHeight="item.lineHeight" :fontSize="item.fontSize"
-            v-model="item.__config__" :textStyle="item.textStyle" />
+          <jnpf-link :content="item.content" :href="item.href" :target="item.target"
+            :textStyle="item.textStyle" />
         </el-form-item>
       </template>
       <template v-else-if="item.__config__.jnpfKey==='groupTitle'">
