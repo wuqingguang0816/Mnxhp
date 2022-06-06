@@ -127,9 +127,9 @@ export function getDataInterfaceSelectorList(data) {
 
 //测试接口
 
-export function testInterface(id, data, tenantId) {
+export function testInterface(id, data) {
   return request({
-    url: `/api/system/DataInterface/${id}/Actions/Preview` + '?tenantId=' + tenantId || '',
+    url: `/api/system/DataInterface/${id}/Actions/Preview`,
     method: 'POST',
     data
   })
