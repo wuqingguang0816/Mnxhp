@@ -14,10 +14,10 @@
         <el-button type="primary" @click="test">测试接口</el-button>
       </el-form-item>
       <el-form-item label="Request Param" v-if="inputList.length>0">
-        <el-row v-for="(item, index) in inputList" :key="item.index" class="mt-10">
+        <el-row v-for="(item, index) in inputList" :key="index" class="mt-10">
           <el-col :span="5">
-            <el-autocomplete v-model="item.field" :fetch-suggestions="querySearch" placeholder="key"
-              clearable style="width:100%" disabled />
+            <el-input v-model="item.field" :fetch-suggestions="querySearch" placeholder="key"
+              clearable style="width:100%" readonly />
           </el-col>
           <el-col :span="18" :offset="1">
             <el-input v-model="item.defaultValue" placeholder="value" clearable />
@@ -47,12 +47,13 @@ export default {
         readOnly: true,
         language: 'json'
       },
-      inputList: []
+      inputList: [],
+      tenantId: ''
     }
   },
   methods: {
     test() {
-      testInterface(this.id, this.inputList).then(res => {
+      testInterface(this.id, this.inputList, this.tenantId).then(res => {
         let data = res
         this.responseData = JSON.stringify(data, null, 4)
       }).catch(() => {
@@ -64,6 +65,7 @@ export default {
     },
     init(id, tenantId) {
       this.id = id || ''
+      this.tenantId = tenantId || ''
       this.formLoading = true
       this.responseData = ''
       this.$nextTick(() => {
