@@ -1,5 +1,5 @@
 <template>
-  <el-dialog :title="!dataForm.id ? '新建参数' : '编辑参数'" :close-on-click-modal="false"
+  <el-dialog :title="type==='add' ? '新建参数' : '编辑参数'" :close-on-click-modal="false"
     :close-on-press-escape="false" :visible.sync="visible" lock-scroll width="600px" append-to-body
     class="JNPF-dialog JNPF-dialog_center">
     <el-form ref="fieldForm" :model="dataForm" :rules="dataRule" label-width="80px">

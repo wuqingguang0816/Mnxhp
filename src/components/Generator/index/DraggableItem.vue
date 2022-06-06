@@ -233,7 +233,7 @@ function buildOptions(element) {
     if (config.dataType === 'dynamic') {
       if (!config.propsUrl) return
       getDataInterfaceRes(config.propsUrl).then(res => {
-        let data = this.jnpf.interfaceDataHandler(res.data)
+        let data = res.data.data
         if (Array.isArray(data)) {
           isTreeSelect ? element.options = data : element.__slot__.options = data
         } else {

@@ -75,7 +75,7 @@
               <el-button icon="el-icon-plus" @click="addSql()">新增SQL</el-button>
               <el-row v-for="(item,i) in sqlTemplate" :key="i" class="mt-10">
                 <el-col :span="20">
-                  <el-input v-model="item.sql" placeholder="SQL语句" type="textarea"
+                  <el-input v-model="item.sql" placeholder="请输入SQL查询语句&存储过程语句" type="textarea"
                     :autosize="{ minRows: 3, maxRows: 10}" />
                 </el-col>
                 <el-col :span="3" :offset="1" class="delBtn">
@@ -255,18 +255,9 @@ export default {
       this.activeStep = key
     },
     getDbOptions() {
-      const defaultItem = {
-        fullName: '',
-        children: [{
-          fullName: '默认数据库',
-          id: '0'
-        }]
-      }
       getDataSourceListAll().then(res => {
-        const list = [defaultItem, ...res.data.list]
-        this.dbOptions = list.filter(o => o.children && o.children.length)
-      }).catch(() => {
-        this.dbOptions = [defaultItem]
+        const list = res.data.list || []
+        this.dbOptions = list.filter(o => o.children && o.children.length);
       })
     }
   }

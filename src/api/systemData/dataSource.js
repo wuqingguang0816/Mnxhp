@@ -40,10 +40,13 @@ export function TestDbConnection(data) {
     data
   })
 }
-export function getDataSourceListAll() {
+export function getDataSourceListAll(type) {
   return request({
     url: '/api/system/DataSource/Selector',
     method: 'get',
+    data: {
+      type
+    }
   })
 }
 export function Execute(data) {

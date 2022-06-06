@@ -89,6 +89,7 @@ export default {
       this.eventType = eventType || ''
       this.branchList = branchList || []
       this.dataForm.candidateList = candidateList || []
+      this.dataForm.branchList = []
       this.dataForm.handleOpinion = ''
       this.formData.flowId = flowId
       this.copyIds = []

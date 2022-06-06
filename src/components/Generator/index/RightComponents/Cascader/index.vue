@@ -206,7 +206,7 @@ export default {
         return
       }
       getDataInterfaceRes(val).then(res => {
-        let data = this.jnpf.interfaceDataHandler(res.data)
+        let data = res.data.data
         if (Array.isArray(data)) {
           this.activeData.options = data
         } else {
@@ -229,7 +229,7 @@ export default {
   .node-operation {
     float: right;
   }
-  i[class*='el-icon'] + i[class*='el-icon'] {
+  i[class*="el-icon"] + i[class*="el-icon"] {
     margin-left: 6px;
   }
   .el-icon-plus {

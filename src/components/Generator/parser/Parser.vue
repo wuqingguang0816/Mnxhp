@@ -288,7 +288,7 @@ export default {
           } else if (config.dataType === 'dynamic') {
             if (!config.propsUrl) return
             getDataInterfaceRes(config.propsUrl).then(res => {
-              let realData = this.jnpf.interfaceDataHandler(res.data)
+              let realData = res.data.data
               if (Array.isArray(realData)) {
                 isTreeSelect ? cur.options = realData : cur.__slot__.options = realData
               } else {
