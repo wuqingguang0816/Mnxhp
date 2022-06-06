@@ -20,7 +20,7 @@
             <template v-if="scope.row.thisLayerSelect===2">
               <el-checkbox checked disabled>查看</el-checkbox>
             </template>
-            <template v-else>
+            <template v-if="scope.row.thisLayerSelect===0 ||scope.row.thisLayerSelect===1">
               <el-checkbox v-model="scope.row.thisLayerSelect" :true-label="1" :false-label="0">
                 查看
               </el-checkbox>
@@ -28,7 +28,7 @@
             <template v-if="scope.row.thisLayerAdd===2">
               <el-checkbox checked disabled>添加</el-checkbox>
             </template>
-            <template v-else>
+            <template v-if="scope.row.thisLayerAdd===0 ||scope.row.thisLayerAdd===1">
               <el-checkbox v-model="scope.row.thisLayerAdd" :true-label="1" :false-label="0">
                 添加
               </el-checkbox>
@@ -36,7 +36,7 @@
             <template v-if="scope.row.thisLayerEdit===2">
               <el-checkbox checked disabled>编辑</el-checkbox>
             </template>
-            <template v-else>
+            <template v-if="scope.row.thisLayerEdit===0 ||scope.row.thisLayerEdit===1">
               <el-checkbox v-model="scope.row.thisLayerEdit" :true-label="1" :false-label="0">
                 编辑
               </el-checkbox>
@@ -44,7 +44,7 @@
             <template v-if="scope.row.thisLayerDelete===2">
               <el-checkbox checked disabled>删除</el-checkbox>
             </template>
-            <template v-else>
+            <template v-if="scope.row.thisLayerDelete===0 ||scope.row.thisLayerDelete===1">
               <el-checkbox v-model="scope.row.thisLayerDelete" :true-label="1" :false-label="0">
                 删除
               </el-checkbox>
@@ -56,7 +56,7 @@
             <template v-if="scope.row.subLayerSelect===2">
               <el-checkbox checked disabled>查看</el-checkbox>
             </template>
-            <template v-else>
+            <template v-if="scope.row.subLayerSelect===0 ||scope.row.subLayerSelect===1">
               <el-checkbox v-model="scope.row.subLayerSelect" :true-label="1" :false-label="0">
                 查看
               </el-checkbox>
@@ -64,7 +64,7 @@
             <template v-if="scope.row.subLayerAdd===2">
               <el-checkbox checked disabled>添加</el-checkbox>
             </template>
-            <template v-else>
+            <template v-if="scope.row.subLayerAdd===0 ||scope.row.subLayerAdd===1">
               <el-checkbox v-model="scope.row.subLayerAdd" :true-label="1" :false-label="0">
                 添加
               </el-checkbox>
@@ -72,7 +72,7 @@
             <template v-if="scope.row.subLayerEdit===2">
               <el-checkbox checked disabled>编辑</el-checkbox>
             </template>
-            <template v-else>
+            <template v-if="scope.row.subLayerEdit===0 ||scope.row.subLayerEdit===1">
               <el-checkbox v-model="scope.row.subLayerEdit" :true-label="1" :false-label="0">
                 编辑
               </el-checkbox>
@@ -80,8 +80,8 @@
             <template v-if="scope.row.subLayerDelete===2">
               <el-checkbox checked disabled>删除</el-checkbox>
             </template>
-            <template v-else>
-              <el-checkbox v-model="scope.row.subLayerDelete" :true-label="1" :false-label="0">
+            <template v-if="scope.row.thisLayerDelete===0 ||scope.row.thisLayerDelete===1">
+              <el-checkbox v-model="scope.row.thisLayerDelete" :true-label="1" :false-label="0">
                 删除
               </el-checkbox>
             </template>
