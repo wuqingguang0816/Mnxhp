@@ -14,12 +14,12 @@
         <el-button type="primary" @click="test">测试接口</el-button>
       </el-form-item>
       <el-form-item label="Request Param" v-if="inputList.length>0">
-        <el-row v-for="(item, index) in inputList" :key="index" class="mt-10">
+        <el-row v-for="(item, index) in inputList" :key="index">
           <el-col :span="5">
             <el-input v-model="item.field" :fetch-suggestions="querySearch" placeholder="key"
               clearable style="width:100%" readonly />
           </el-col>
-          <el-col :span="18" :offset="1">
+          <el-col :span="18" style="margin-left: 20px ;width: 1300px">
             <el-input v-model="item.defaultValue" placeholder="value" clearable />
           </el-col>
         </el-row>
