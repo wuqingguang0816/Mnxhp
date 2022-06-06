@@ -111,7 +111,7 @@
       </template>
       <template v-if="activeStep==2">
         <columnDesign ref="columnDesign" :columnData="columnData" :appColumnData="appColumnData"
-          :modelType="dataForm.type" :webType="dataForm.webType" />
+          :modelType="dataForm.type" :webType="dataForm.webType" :dbType="dbType" />
       </template>
       <template v-if="activeStep==3">
         <Process ref="process" :conf="flowTemplateJson" :flowType="1" />
