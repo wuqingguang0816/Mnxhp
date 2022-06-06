@@ -11,9 +11,9 @@ export const getGradeManageList = (data) => {
 
 
 //获取组织下拉框列表
-export const getSelectorOrgList = (organizeId, userId) => {
+export const getSelectorOrgList = (userId) => {
   return request({
-    url: `/api/permission/organizeAdminIsTrator/Selector/${organizeId}` + '?userId=' + userId,
+    url: `/api/permission/organizeAdminIsTrator/Selector/` + '?userId=' + userId,
     method: 'GET'
   })
 }

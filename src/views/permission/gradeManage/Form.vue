@@ -11,40 +11,80 @@
       <el-form-item label="设置管理员" prop="userId" v-if="dataForm.id">
         <user-select v-model="dataForm.userId" placeholder="请选择管理员" @change="onChange" disabled />
       </el-form-item>
-      <el-table v-loading="listLoading" :data="treeList" row-key="organizeId" lazy
-        :load="loadExpandData" :tree-props="{children: 'children', hasChildren: 'hasChildren'}"
+      <el-table v-loading="listLoading" :data="treeList" row-key="organizeId"
+        :default-expand-all="expands" :tree-props="{children: 'children', hasChildren: ''}"
         style="height:400px;overflow: auto">
         <el-table-column prop="fullName" label="组织架构" width="180" />
         <el-table-column label="组织操作权限(本层级)" width="300">
           <template slot-scope="scope">
-            <el-checkbox v-model="scope.row.thisLayerSelect"
-              :checked='scope.row.thisLayerSelect===1?true:false' true-label="1" false-label="0">查看
-            </el-checkbox>
-            <el-checkbox class="checkbox" :checked='scope.row.thisLayerAdd==1?true:false'
-              v-model="scope.row.thisLayerAdd" true-label="1" false-label="0">添加
-            </el-checkbox>
-            <el-checkbox class="checkbox" v-model="scope.row.thisLayerEdit"
-              :checked='scope.row.thisLayerEdit===1?true:false' true-label="1" false-label="0">编辑
-            </el-checkbox>
-            <el-checkbox class="checkbox" v-model="scope.row.thisLayerDelete"
-              :checked='scope.row.thisLayerDelete===1?true:false' true-label="1" false-label="0">删除
-            </el-checkbox>
+            <template v-if="scope.row.thisLayerSelect===2">
+              <el-checkbox checked disabled>查看</el-checkbox>
+            </template>
+            <template v-else>
+              <el-checkbox v-model="scope.row.thisLayerSelect" :true-label="1" :false-label="0">
+                查看
+              </el-checkbox>
+            </template>
+            <template v-if="scope.row.thisLayerAdd===2">
+              <el-checkbox checked disabled>添加</el-checkbox>
+            </template>
+            <template v-else>
+              <el-checkbox v-model="scope.row.thisLayerAdd" :true-label="1" :false-label="0">
+                添加
+              </el-checkbox>
+            </template>
+            <template v-if="scope.row.thisLayerEdit===2">
+              <el-checkbox checked disabled>编辑</el-checkbox>
+            </template>
+            <template v-else>
+              <el-checkbox v-model="scope.row.thisLayerEdit" :true-label="1" :false-label="0">
+                编辑
+              </el-checkbox>
+            </template>
+            <template v-if="scope.row.thisLayerDelete===2">
+              <el-checkbox checked disabled>删除</el-checkbox>
+            </template>
+            <template v-else>
+              <el-checkbox v-model="scope.row.thisLayerDelete" :true-label="1" :false-label="0">
+                删除
+              </el-checkbox>
+            </template>
           </template>
         </el-table-column>
         <el-table-column label="子组织操作权限(子层级)">
           <template slot-scope="scope">
-            <el-checkbox v-model="scope.row.subLayerSelect"
-              :checked='scope.row.subLayerSelect===1?true:false' true-label="1" false-label="0">查看
-            </el-checkbox>
-            <el-checkbox class="checkbox" v-model="scope.row.subLayerAdd"
-              :checked='scope.row.subLayerAdd===1?true:false' true-label="1" false-label="0"> 添加
-            </el-checkbox>
-            <el-checkbox class="checkbox" v-model="scope.row.subLayerEdit"
-              :checked='scope.row.subLayerEdit===1?true:false' true-label="1" false-label="0">编辑
-            </el-checkbox>
-            <el-checkbox class="checkbox" v-model="scope.row.subLayerDelete"
-              :checked='scope.row.subLayerDelete===1?true:false' true-label="1" false-label="0">删除
-            </el-checkbox>
+            <template v-if="scope.row.subLayerSelect===2">
+              <el-checkbox checked disabled>查看</el-checkbox>
+            </template>
+            <template v-else>
+              <el-checkbox v-model="scope.row.subLayerSelect" :true-label="1" :false-label="0">
+                查看
+              </el-checkbox>
+            </template>
+            <template v-if="scope.row.subLayerAdd===2">
+              <el-checkbox checked disabled>添加</el-checkbox>
+            </template>
+            <template v-else>
+              <el-checkbox v-model="scope.row.subLayerAdd" :true-label="1" :false-label="0">
+                添加
+              </el-checkbox>
+            </template>
+            <template v-if="scope.row.subLayerEdit===2">
+              <el-checkbox checked disabled>编辑</el-checkbox>
+            </template>
+            <template v-else>
+              <el-checkbox v-model="scope.row.subLayerEdit" :true-label="1" :false-label="0">
+                编辑
+              </el-checkbox>
+            </template>
+            <template v-if="scope.row.subLayerDelete===2">
+              <el-checkbox checked disabled>删除</el-checkbox>
+            </template>
+            <template v-else>
+              <el-checkbox v-model="scope.row.subLayerDelete" :true-label="1" :false-label="0">
+                删除
+              </el-checkbox>
+            </template>
           </template>
         </el-table-column>
       </el-table>
@@ -72,6 +112,7 @@ export default {
       listLoading: false,
       refreshTable: true,
       treeList: [],
+      expands: false,
       dataRule: {
         userId: [
           { required: true, message: '请选择管理员', trigger: 'click' }
@@ -80,23 +121,6 @@ export default {
     }
   },
   methods: {
-    setRecursion(list, id, data) {  //递归添加子级
-      for (let i = 0; i < list.length; i++) {
-        if (list[i].id == id) {
-          list[i] = { ...list[i], children: data }
-        } else {
-          if (list[i].children) {
-            this.setRecursion(list[i].children, id, data)
-          }
-        }
-      }
-    },
-    loadExpandData(tree, treeNode, resolve) {
-      getSelectorOrgList(tree.organizeId, this.dataForm.userId || '').then(res => {
-        this.setRecursion(this.treeList, tree.id, res.data)
-        resolve(res.data)
-      })
-    },
     onChange(val) {
       if (!val) return
       this.initData()
@@ -107,8 +131,8 @@ export default {
     initData() {
       this.listLoading = true
       if (this.dataForm.id) {
-        getSelectorOrgList(0, this.dataForm.userId || '').then(res => {
-          this.treeList = res.data || []
+        getSelectorOrgList(this.dataForm.userId || '').then(res => {
+          this.treeList = res.data.list || []
           this.listLoading = false
           this.btnLoading = false
         }).catch(() => {
@@ -116,8 +140,8 @@ export default {
           this.btnLoading = false
         })
       } else {
-        getSelectorOrgList(0, '').then(res => {
-          this.treeList = res.data || []
+        getSelectorOrgList('').then(res => {
+          this.treeList = res.data.list || []
           this.listLoading = false
           this.btnLoading = false
         }).catch(() => {
@@ -168,7 +192,10 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.checkbox {
-  margin-left: -20px;
+.el-checkbox {
+  margin-right: 0;
+}
+.el-checkbox + .el-checkbox {
+  margin-left: 10px;
 }
 </style>
