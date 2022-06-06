@@ -214,6 +214,10 @@ export default {
     }
   },
   created() {
+    this.$store.dispatch('base/getPositionList')
+    this.$store.dispatch('base/getRoleList')
+    this.$store.dispatch('generator/getDepTree')
+    this.$store.dispatch('generator/getGroupTree')
     if (typeof this.conf === 'object' && this.conf !== null) {
       this.isDrawingListChange = false
       this.drawingList = deepClone(this.conf.fields)

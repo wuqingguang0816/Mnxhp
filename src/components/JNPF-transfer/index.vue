@@ -9,9 +9,8 @@
       </div>
       <div class="transfer-pane__body">
         <el-tree :data="treeData" :props="props" default-expand-all ref="treeBox"
-          :expand-on-click-node="false" check-on-click-node class="JNPF-common-el-tree"
-          node-key="id" show-checkbox v-loading="loading" :filter-node-method="filterNode"
-          @check="onCheck">
+          :expand-on-click-node="false" class="JNPF-common-el-tree" node-key="id"
+          v-loading="loading" :filter-node-method="filterNode" @node-click="handleNodeClick">
           <span class="custom-tree-node" slot-scope="{ node, data }">
             <i :class="data.icon"></i>
             <span class="text">{{node.label}}</span>
@@ -55,6 +54,10 @@ export default {
       type: Boolean,
       default: false
     },
+    multiple: {
+      type: Boolean,
+      default: false
+    },
     treeData: {
       type: Array,
       default: () => []
@@ -74,6 +77,12 @@ export default {
       default: ''
     }
   },
+  computed: {
+    allList() {
+      if (!this.type) return []
+      return this.$store.getters[this.type + 'List'] || []
+    }
+  },
   watch: {
     value(val) {
       this.initHandle()
@@ -81,17 +90,24 @@ export default {
   },
   methods: {
     initHandle() {
-      if (this.value.length) {
-        this.$refs.treeBox.setCheckedKeys(this.value)
-        this.$nextTick(_ => {
-          this.selectedTextData = this.$refs.treeBox.getCheckedNodes(true)
-          this.selectedData = this.$refs.treeBox.getCheckedKeys(true)
-        })
-      } else {
-        this.$refs.treeBox.setCheckedKeys([])
+      if (!this.value || !this.value.length) {
         this.selectedTextData = []
         this.selectedData = []
+        return
       }
+      const arr = this.multiple ? this.value : [this.value]
+      let selectedTextData = []
+      for (let i = 0; i < arr.length; i++) {
+        const item = arr[i];
+        inner: for (let j = 0; j < this.allList.length; j++) {
+          if (item === this.allList[j].id) {
+            selectedTextData.push(this.allList[j])
+            break inner
+          }
+        }
+      }
+      this.selectedTextData = selectedTextData
+      this.selectedData = this.selectedTextData.map(o => o.id)
     },
     search() {
       this.$refs.treeBox.filter(this.filterText);
@@ -100,26 +116,22 @@ export default {
       if (!value) return true;
       return data.fullName.indexOf(value) !== -1;
     },
-    onCheck(data, checked) {
-      if (this.type) {
-        let list = this.$refs.treeBox.getCheckedNodes(true)
-        this.selectedTextData = list.filter(o => o.type == this.type)
-      } else {
-        this.selectedTextData = this.$refs.treeBox.getCheckedNodes(true)
-      }
+    handleNodeClick(data) {
+      if (data.type !== this.type) return
+      const boo = this.selectedData.some(o => o.id === data.id)
+      if (boo) return
+      this.multiple ? this.selectedTextData.push(data) : this.selectedTextData = [data]
       this.selectedData = this.selectedTextData.map(o => o.id)
       this.$emit('input', this.selectedData)
       this.$emit('getValue', this.selectedData, this.selectedTextData)
     },
     removeData(item, index) {
-      this.$refs.treeBox.setChecked(item.id, false)
       this.selectedData.splice(index, 1)
       this.selectedTextData.splice(index, 1)
       this.$emit('input', this.selectedData)
       this.$emit('getValue', this.selectedData, this.selectedTextData)
     },
     removeAll() {
-      this.$refs.treeBox.setCheckedKeys([])
       this.selectedData = []
       this.selectedTextData = []
       this.$emit('input', this.selectedData)

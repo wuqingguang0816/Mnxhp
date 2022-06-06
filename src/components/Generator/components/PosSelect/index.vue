@@ -32,7 +32,7 @@
         </template>
       </el-input>
     </div>
-    <el-dialog title="分组选择" :close-on-click-modal="false" :visible.sync="visible"
+    <el-dialog title="选择岗位" :close-on-click-modal="false" :visible.sync="visible"
       class="JNPF-dialog JNPF-dialog_center transfer-dialog" lock-scroll append-to-body
       width="800px" :modal-append-to-body="false" @close="onClose">
       <div class="transfer__body">
@@ -218,21 +218,7 @@ export default {
   methods: {
     async getData() {
       this.treeData = await this.$store.dispatch('base/getPositionTree')
-      this.allList = this.treeToArray(this.treeData)
-    },
-    treeToArray(treeData) {
-      let list = []
-      const loop = (treeData) => {
-        for (let i = 0; i < treeData.length; i++) {
-          const item = treeData[i]
-          list.push(item)
-          if (item.children && Array.isArray(item.children)) {
-            loop(item.children)
-          }
-        }
-      }
-      loop(treeData)
-      return list
+      this.allList = this.jnpf.treeToArray(this.treeData)
     },
     onClose() { },
     openDialog() {
@@ -250,7 +236,6 @@ export default {
       return data[this.props.label].indexOf(value) !== -1;
     },
     handleNodeClick(data) {
-      console.log(data.type );
       if (data.type !== 'position') return
       const boo = this.selectedData.some(o => o.id === data.id)
       if (boo) return

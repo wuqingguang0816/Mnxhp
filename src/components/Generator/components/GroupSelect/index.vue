@@ -218,21 +218,7 @@ export default {
   methods: {
     async getData() {
       this.treeData = await this.$store.dispatch('generator/getGroupTree')
-      this.allList = this.treeToArray(this.treeData)
-    },
-    treeToArray(treeData) {
-      let list = []
-      const loop = (treeData) => {
-        for (let i = 0; i < treeData.length; i++) {
-          const item = treeData[i]
-          list.push(item)
-          if (item.children && Array.isArray(item.children)) {
-            loop(item.children)
-          }
-        }
-      }
-      loop(treeData)
-      return list
+      this.allList = await this.$store.getters.groupList
     },
     onClose() { },
     openDialog() {

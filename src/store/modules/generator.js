@@ -2,10 +2,13 @@ import { getOrganizeTree } from "@/api/permission/organize";
 import { getDepartmentSelector } from "@/api/permission/department";
 import { getDictionaryType } from "@/api/systemData/dictionary";
 import { getGroupSelector } from "@/api/permission/group";
+import jnpf from '@/utils/jnpf';
 const state = {
   companyTree: [],
   depTree: [],
+  departmentList: [],
   groupTree: [],
+  groupList: [],
   dicTree: [],
   formItemList: [],
   subTable: [],
@@ -22,9 +25,14 @@ const mutations = {
   SET_DEP_TREE: (state, depTree) => {
     state.depTree = depTree;
   },
-
+  SET_DEP_LIST: (state, data) => {
+    state.departmentList = data;
+  },
   SET_GROUP_TREE: (state, groupTree) => {
     state.groupTree = groupTree;
+  },
+  SET_GROUP_LIST: (state, data) => {
+    state.groupList = data;
   },
   SET_DIC_TREE: (state, dicTree) => {
     state.dicTree = dicTree;
@@ -69,6 +77,8 @@ const actions = {
       if (!state.depTree.length) {
         getDepartmentSelector().then(res => {
           commit("SET_DEP_TREE", res.data.list);
+          let data = jnpf.treeToArray(res.data.list)
+          commit("SET_DEP_LIST", data);
           resolve(res.data.list);
         }).catch(error => {
           reject(error);
@@ -83,6 +93,8 @@ const actions = {
       if (!state.groupTree.length) {
         getGroupSelector().then(res => {
           commit("SET_GROUP_TREE", res.data);
+          let data = jnpf.treeToArray(res.data, 'group')
+          commit("SET_GROUP_LIST", data);
           resolve(res.data);
         }).catch(error => {
           reject(error);

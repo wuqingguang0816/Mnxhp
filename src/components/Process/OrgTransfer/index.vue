@@ -6,7 +6,7 @@
     <userTransfer v-model="selectedData" ref="userTransfer" multiple v-if="type==='user'" />
     <roleTransfer v-model="selectedData" ref="roleTransfer" multiple v-else-if="type==='role'" />
     <JNPFTransfer :loading="loading" :treeData="treeData" v-model="selectedData" :type="type"
-      ref="JNPFTransfer" v-else />
+      ref="JNPFTransfer" multiple v-else />
     <span slot="footer" class="dialog-footer">
       <el-button @click="closeTransfer">{{$t('common.cancelButton')}}</el-button>
       <el-button type="primary" @click="confirm">{{$t('common.confirmButton')}}</el-button>
@@ -69,7 +69,16 @@ export default {
             this.$refs.roleTransfer && this.$refs.roleTransfer.init()
           })
         } else {
-          let res = await this.$store.dispatch('base/getPositionTree')
+          let res = []
+          if (this.type === 'department') {
+            res = await this.$store.dispatch('generator/getDepTree')
+          }
+          if (this.type === 'group') {
+            res = await this.$store.dispatch('generator/getGroupTree')
+          }
+          if (this.type === 'position') {
+            res = await this.$store.dispatch('base/getPositionTree')
+          }
           this.$refs.JNPFTransfer && (this.$refs.JNPFTransfer.filterText = '')
           this.treeData = res
           this.selectedData = this.value

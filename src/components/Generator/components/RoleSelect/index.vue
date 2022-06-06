@@ -32,7 +32,7 @@
         </template>
       </el-input>
     </div>
-    <el-dialog title="角色选择" :close-on-click-modal="false" :visible.sync="visible"
+    <el-dialog title="选择角色" :close-on-click-modal="false" :visible.sync="visible"
       class="JNPF-dialog JNPF-dialog_center transfer-dialog" lock-scroll append-to-body
       width="800px" :modal-append-to-body="false" @close="onClose">
       <div class="transfer__body">
@@ -94,7 +94,7 @@
 </template>
 
 <script>
-import { addResizeListener,removeResizeListener } from 'element-ui/src/utils/resize-event';
+import { addResizeListener, removeResizeListener } from 'element-ui/src/utils/resize-event';
 
 export default {
   name: 'groupSelect',
@@ -158,59 +158,59 @@ export default {
   },
   computed: {
     showClose() {
-      let hasValue=this.multiple
-        ? Array.isArray(this.value)&&this.value.length>0
-        :this.value!==undefined&&this.value!==null&&this.value!=='';
-      let criteria=this.clearable&&
-        !this.selectDisabled&&
-        this.inputHovering&&
+      let hasValue = this.multiple
+        ? Array.isArray(this.value) && this.value.length > 0
+        : this.value !== undefined && this.value !== null && this.value !== '';
+      let criteria = this.clearable &&
+        !this.selectDisabled &&
+        this.inputHovering &&
         hasValue;
       return criteria;
     },
     currentPlaceholder() {
-      if(this.multiple&&Array.isArray(this.value)&&this.value.length) {
+      if (this.multiple && Array.isArray(this.value) && this.value.length) {
         return ''
       } else {
         return this.placeholder
       }
     },
     selectDisabled() {
-      return this.disabled||(this.elForm||{}).disabled;
+      return this.disabled || (this.elForm || {}).disabled;
     },
     _elFormItemSize() {
-      return (this.elFormItem||{}).elFormItemSize;
+      return (this.elFormItem || {}).elFormItemSize;
     },
     selectSize() {
-      return this.size||this._elFormItemSize||(this.$ELEMENT||{}).size;
+      return this.size || this._elFormItemSize || (this.$ELEMENT || {}).size;
     },
     collapseTagSize() {
-      return ['small','mini'].indexOf(this.selectSize)>-1
+      return ['small', 'mini'].indexOf(this.selectSize) > -1
         ? 'mini'
-        :'small';
+        : 'small';
     },
   },
   created() {
     this.getData()
   },
   mounted() {
-    addResizeListener(this.$el,this.handleResize);
+    addResizeListener(this.$el, this.handleResize);
 
-    const reference=this.$refs.reference;
-    if(reference&&reference.$el) {
-      const sizeMap={
+    const reference = this.$refs.reference;
+    if (reference && reference.$el) {
+      const sizeMap = {
         medium: 36,
         small: 32,
         mini: 28
       };
-      const input=reference.$el.querySelector('input');
-      this.initialInputHeight=input.getBoundingClientRect().height||sizeMap[this.selectSize];
+      const input = reference.$el.querySelector('input');
+      this.initialInputHeight = input.getBoundingClientRect().height || sizeMap[this.selectSize];
     }
-    if(this.multiple) {
+    if (this.multiple) {
       this.resetInputHeight();
     }
     this.$nextTick(() => {
-      if(reference&&reference.$el) {
-        this.inputWidth=reference.$el.getBoundingClientRect().width;
+      if (reference && reference.$el) {
+        this.inputWidth = reference.$el.getBoundingClientRect().width;
       }
     });
     this.setDefault()
@@ -218,7 +218,7 @@ export default {
     this.getData()
   },
   beforeDestroy() {
-    if(this.$el&&this.handleResize) removeResizeListener(this.$el,this.handleResize);
+    if (this.$el && this.handleResize) removeResizeListener(this.$el, this.handleResize);
   },
   watch: {
     value(val) {
@@ -230,7 +230,7 @@ export default {
       });
     },
     allList: {
-      handler: function(val) {
+      handler: function (val) {
         this.setDefault()
       },
       deep: true
@@ -238,149 +238,149 @@ export default {
   },
   methods: {
     async getData() {
-      this.selectedData=[]
-      this.ids=[]
-      this.keyword=''
-      this.activeName='organize'
+      this.selectedData = []
+      this.ids = []
+      this.keyword = ''
+      this.activeName = 'organize'
       this.getList()
     },
     getList() {
-      this.loading=true
+      this.loading = true
       this.$store.dispatch('base/getRoleTree').then(res => {
-        this.treeData=res.filter(o => o.id==='1')
-        this.treeData2=res.filter(o => o.id!=='1')
+        this.treeData = res.filter(o => o.id === '1')
+        this.treeData2 = res.filter(o => o.id !== '1')
         this.$store.dispatch('base/getRoleList').then(res => {
-          this.allList=res
-          this.loading=false
+          this.allList = res
+          this.loading = false
         })
       })
     },
     onClose() { },
     openDialog() {
-      if(this.selectDisabled) return
-      this.visible=true
+      if (this.selectDisabled) return
+      this.visible = true
       this.$nextTick(() => {
-        this.keyword=''
+        this.keyword = ''
         this.search()
         this.setDefault()
       })
     },
     search() {
-      const tree=this.activeName==='organize'? 'tree2':'tree1'
+      const tree = this.activeName === 'organize' ? 'tree2' : 'tree1'
       this.$refs[tree].filter(this.keyword)
     },
-    filterNode(value,data) {
-      if(!value) return true;
-      return data[this.props.label].indexOf(value)!==-1;
+    filterNode(value, data) {
+      if (!value) return true;
+      return data[this.props.label].indexOf(value) !== -1;
     },
     handleNodeClick(data) {
-      if(data.type!=='role') return
-      const boo=this.selectedData.some(o => o.id===data.id)
-      if(boo) return
-      const item={
+      if (data.type !== 'role') return
+      const boo = this.selectedData.some(o => o.id === data.id)
+      if (boo) return
+      const item = {
         id: data.id,
         fullName: data.fullName
       }
-      this.multiple? this.selectedData.push(item):this.selectedData=[item]
+      this.multiple ? this.selectedData.push(item) : this.selectedData = [item]
     },
     removeAll() {
-      this.selectedData=[]
+      this.selectedData = []
     },
     removeData(index) {
-      this.selectedData.splice(index,1)
+      this.selectedData.splice(index, 1)
     },
     confirm() {
-      if(this.multiple) {
-        this.innerValue=''
-        this.tagsList=JSON.parse(JSON.stringify(this.selectedData))
-        let selectedIds=this.selectedData.map(o => o.id)
-        this.$emit('input',selectedIds)
-        this.$emit('change',selectedIds,this.selectedData)
+      if (this.multiple) {
+        this.innerValue = ''
+        this.tagsList = JSON.parse(JSON.stringify(this.selectedData))
+        let selectedIds = this.selectedData.map(o => o.id)
+        this.$emit('input', selectedIds)
+        this.$emit('change', selectedIds, this.selectedData)
       } else {
-        if(!this.selectedData.length) {
-          this.innerValue=''
-          this.$emit('input','')
-          this.$emit('change','',{})
+        if (!this.selectedData.length) {
+          this.innerValue = ''
+          this.$emit('input', '')
+          this.$emit('change', '', {})
           return
         }
-        this.tagsList=JSON.parse(JSON.stringify(this.selectedData))
-        this.innerValue=this.selectedData[0].fullName
-        let selectedIds=this.selectedData[0].id
-        this.$emit('input',selectedIds)
-        this.$emit('change',selectedIds,this.selectedData[0])
+        this.tagsList = JSON.parse(JSON.stringify(this.selectedData))
+        this.innerValue = this.selectedData[0].fullName
+        let selectedIds = this.selectedData[0].id
+        this.$emit('input', selectedIds)
+        this.$emit('change', selectedIds, this.selectedData[0])
       }
-      this.visible=false
+      this.visible = false
     },
     setDefault() {
-      if(!this.value||!this.value.length) {
-        this.innerValue=''
-        this.selectedData=[]
-        this.tagsList=[]
+      if (!this.value || !this.value.length) {
+        this.innerValue = ''
+        this.selectedData = []
+        this.tagsList = []
         return
       }
-      const arr=this.multiple? this.value:[this.value]
-      let selectedData=[]
-      for(let i=0;i<arr.length;i++) {
-        const item=arr[i];
-        inner: for(let j=0;j<this.allList.length;j++) {
-          if(item===this.allList[j].id) {
+      const arr = this.multiple ? this.value : [this.value]
+      let selectedData = []
+      for (let i = 0; i < arr.length; i++) {
+        const item = arr[i];
+        inner: for (let j = 0; j < this.allList.length; j++) {
+          if (item === this.allList[j].id) {
             selectedData.push(this.allList[j])
             break inner
           }
         }
       }
-      this.selectedData=selectedData
-      if(this.multiple) {
-        this.innerValue=''
-        this.tagsList=JSON.parse(JSON.stringify(this.selectedData))
+      this.selectedData = selectedData
+      if (this.multiple) {
+        this.innerValue = ''
+        this.tagsList = JSON.parse(JSON.stringify(this.selectedData))
         this.$nextTick(() => {
           this.resetInputHeight();
         })
       } else {
-        if(!this.selectedData.length) return this.innerValue=''
-        this.innerValue=this.selectedData[0].fullName
+        if (!this.selectedData.length) return this.innerValue = ''
+        this.innerValue = this.selectedData[0].fullName
       }
     },
-    deleteTag(event,index) {
-      this.selectedData.splice(index,1)
+    deleteTag(event, index) {
+      this.selectedData.splice(index, 1)
       this.confirm()
       event.stopPropagation();
     },
     handleClearClick(event) {
-      this.selectedData=[]
+      this.selectedData = []
       this.confirm()
       event.stopPropagation();
     },
     resetInputWidth() {
-      this.inputWidth=this.$refs.reference.$el.getBoundingClientRect().width;
+      this.inputWidth = this.$refs.reference.$el.getBoundingClientRect().width;
     },
     handleResize() {
       this.resetInputWidth();
-      if(this.multiple) this.resetInputHeight();
+      if (this.multiple) this.resetInputHeight();
     },
     resetInputHeight() {
-      if(this.collapseTags) return;
+      if (this.collapseTags) return;
       this.$nextTick(() => {
-        if(!this.$refs.reference) return;
-        let inputChildNodes=this.$refs.reference.$el.childNodes;
-        let input=[].filter.call(inputChildNodes,item => item.tagName==='INPUT')[0];
-        const tags=this.$refs.tags;
-        const tagsHeight=tags? Math.round(tags.getBoundingClientRect().height):0;
-        const sizeInMap=this.initialInputHeight||40;
-        input.style.height=this.selectedData.length===0
-          ? sizeInMap+'px'
-          :Math.max(
-            tags? (tagsHeight+(tagsHeight>sizeInMap? 6:0)):0,
+        if (!this.$refs.reference) return;
+        let inputChildNodes = this.$refs.reference.$el.childNodes;
+        let input = [].filter.call(inputChildNodes, item => item.tagName === 'INPUT')[0];
+        const tags = this.$refs.tags;
+        const tagsHeight = tags ? Math.round(tags.getBoundingClientRect().height) : 0;
+        const sizeInMap = this.initialInputHeight || 40;
+        input.style.height = this.selectedData.length === 0
+          ? sizeInMap + 'px'
+          : Math.max(
+            tags ? (tagsHeight + (tagsHeight > sizeInMap ? 6 : 0)) : 0,
             sizeInMap
-          )+'px';
+          ) + 'px';
       });
     },
     resetInputWidth() {
-      this.inputWidth=this.$refs.reference.$el.getBoundingClientRect().width;
+      this.inputWidth = this.$refs.reference.$el.getBoundingClientRect().width;
     },
     handleResize() {
       this.resetInputWidth();
-      if(this.multiple) this.resetInputHeight();
+      if (this.multiple) this.resetInputHeight();
     }
   }
 }
