@@ -80,8 +80,8 @@
             <template v-if="scope.row.subLayerDelete===2">
               <el-checkbox checked disabled>删除</el-checkbox>
             </template>
-            <template v-if="scope.row.thisLayerDelete===0 ||scope.row.thisLayerDelete===1">
-              <el-checkbox v-model="scope.row.thisLayerDelete" :true-label="1" :false-label="0">
+            <template v-if="scope.row.subLayerDelete===0 ||scope.row.subLayerDelete===1">
+              <el-checkbox v-model="scope.row.subLayerDelete" :true-label="1" :false-label="0">
                 删除
               </el-checkbox>
             </template>
