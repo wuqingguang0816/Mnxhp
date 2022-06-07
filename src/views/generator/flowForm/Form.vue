@@ -104,7 +104,7 @@
       </el-row>
       <template v-if="activeStep==1">
         <Generator ref="generator" :conf="formData" :modelType="dataForm.type"
-          :webType="dataForm.webType" />
+          :webType="dataForm.webType" :dbType="dbType" />
       </template>
     </div>
     <TableForm :visible.sync="formVisible" ref="tableForm" @closeForm="closeForm"
