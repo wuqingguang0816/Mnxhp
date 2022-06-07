@@ -47,29 +47,15 @@
           <el-table-column prop="creatorTime" :formatter="jnpf.tableDateFormat" label="创建时间"
             width="120" />
           <el-table-column prop="sortCode" label="排序" width="70" align="center" />
-          <el-table-column label="操作" width="150">
+          <el-table-column label="操作" width="100">
             <template slot-scope="scope">
-              <tableOpts @edit="addOrUpdateHandle(scope.row.id)" @del="handleDel(scope.row.id)">
-                <el-dropdown hide-on-click>
-                  <span class="el-dropdown-link">
-                    <el-button size="mini" type="text">
-                      {{$t('common.moreBtn')}}<i class="el-icon-arrow-down el-icon--right"></i>
-                    </el-button>
-                  </span>
-                  <el-dropdown-menu slot="dropdown">
-                    <el-dropdown-item @click.native="openGradeForm(scope.row)">
-                      分级管理
-                    </el-dropdown-item>
-                  </el-dropdown-menu>
-                </el-dropdown>
-              </tableOpts>
+              <tableOpts @edit="addOrUpdateHandle(scope.row.id)" @del="handleDel(scope.row.id)" />
             </template>
           </el-table-column>
         </JNPF-table>
       </div>
     </div>
     <Form v-show="formVisible" ref="Form" @close="closeForm" />
-    <gradeForm v-if="gradeFormVisible" ref="gradeForm" @close="gradeFormVisible=false" />
   </div>
 </template>
 
@@ -79,11 +65,10 @@ import {
   delOrganize
 } from '@/api/permission/organize'
 import Form from './Form'
-import GradeForm from './GradeForm'
 
 export default {
   name: 'permission-organize',
-  components: { Form, GradeForm },
+  components: { Form },
   data() {
     return {
       listQuery: {
@@ -95,7 +80,6 @@ export default {
       btnLoading: false,
       listLoading: true,
       formVisible: false,
-      gradeFormVisible: false
     }
   },
   created() {
@@ -139,12 +123,6 @@ export default {
       this.$nextTick(() => {
         this.refreshTable = true;
       });
-    },
-    openGradeForm(row) {
-      this.gradeFormVisible = true
-      this.$nextTick(() => {
-        this.$refs.gradeForm.init(row.id, row.fullName)
-      })
     },
     handleDel(id) {
       this.$confirm(this.$t('common.delTip'), this.$t('common.tipTitle'), {
