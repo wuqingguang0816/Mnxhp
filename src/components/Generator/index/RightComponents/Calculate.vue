@@ -40,10 +40,13 @@
           编辑计算公式可用来完成审批单内数据的自动结算，例如：采购单内设置计算公式“合计=单价×数量”，发起人填写单价、数量后，组件将自动计算出合计金额，免手动计算</div>
         <div>
           <span>计算对象：</span>
-          <span v-for="item in calculateCmps" :key="item.__vModel__"
-            @click="expressionTemp.push(item)" class="calc-btn">
-            {{item.label}}
-          </span>
+          <template v-if="calculateCmps.length">
+            <span v-for="item in calculateCmps" :key="item.__vModel__"
+              @click="expressionTemp.push(item)" class="calc-btn">
+              {{item.label}}
+            </span>
+          </template>
+          <span style="color:#aaa" v-else>暂无数据</span>
         </div>
         <div style="margin: 10px 0;" class="comBtn">
           <span>计算符号：</span>

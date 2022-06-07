@@ -11,11 +11,11 @@
       </div>
       <el-form ref="dataForm" :model="dataForm" :rules="dataRule" v-loading="formLoading"
         label-width="60px" class="main">
-        <el-form-item label="用户" prop="toUserIds">
-          <user-select v-model="toUserIds" placeholder="全部用户" multiple clearable />
-        </el-form-item>
         <el-form-item label="标题" prop="title">
           <el-input v-model="dataForm.title" placeholder="公告标题" />
+        </el-form-item>
+        <el-form-item label="用户" prop="toUserIds">
+          <user-select v-model="toUserIds" placeholder="全部用户" multiple clearable />
         </el-form-item>
         <el-form-item label="附件" prop="files">
           <JNPF-UploadFz v-model="files" />
@@ -51,9 +51,6 @@ export default {
       dataRule: {
         title: [
           { required: true, message: '公告标题不能为空', trigger: 'blur' }
-        ],
-        bodyText: [
-          { required: true, message: '公告内容不能为空', trigger: 'blur' }
         ]
       }
     }

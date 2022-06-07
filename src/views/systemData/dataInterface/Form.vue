@@ -121,7 +121,7 @@
                     title='点击拖动' />
                 </template>
               </el-table-column>
-              <el-table-column prop="field" label="参数名称(说明)">
+              <el-table-column prop="field" label="参数名称">
                 <template slot-scope="scope">
                   <p @click="handleItemClick(scope.row)" style="cursor:pointer">
                     <span class="required-sign">{{scope.row.required?'*':''}}</span>
@@ -205,7 +205,7 @@
                     title='点击拖动' />
                 </template>
               </el-table-column>
-              <el-table-column prop="field" label="参数名称(说明)">
+              <el-table-column prop="field" label="参数名称">
                 <template slot-scope="scope">
                   <p>
                     <span class="required-sign">{{scope.row.required?'*':''}}</span>
