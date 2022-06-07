@@ -5,8 +5,11 @@
       label-width="100px">
       <el-alert title="设置当前组织部门的管理和相关操作权限" type="warning" :closable="false" show-icon class="mb-20">
       </el-alert>
-      <el-form-item label="设置管理员" prop="userId" v-if="!dataForm.id">
+      <el-form-item label="设置管理员" prop="userId" v-if="!dataForm.id && userInfo.isAdministrator">
         <user-select v-model="dataForm.userId" placeholder="请选择管理员" @change="onChange" />
+      </el-form-item>
+      <el-form-item label="设置管理员" prop="userId" v-if="!dataForm.id && !userInfo.isAdministrator">
+        <useSelect v-model="dataForm.userId" placeholder="请选择管理员" @change="onChange" />
       </el-form-item>
       <el-form-item label="设置管理员" prop="userId" v-if="dataForm.id">
         <user-select v-model="dataForm.userId" placeholder="请选择管理员" @change="onChange" disabled />
@@ -98,8 +101,11 @@
 </template>
 
 <script>
+import useSelect from "./UseSelent.vue"
+import { mapGetters } from "vuex";
 import { getSelectorOrgList, saveGradeManage } from '@/api/permission/gradeManage'
 export default {
+  components: { useSelect },
   data() {
     return {
       visible: false,
@@ -120,6 +126,9 @@ export default {
       }
     }
   },
+  computed: {
+    ...mapGetters(['userInfo'])
+  },
   methods: {
     onChange(val) {
       if (!val) return
@@ -130,6 +139,7 @@ export default {
     },
     initData() {
       this.listLoading = true
+      console.log(this.userInfo)
       if (this.dataForm.id) {
         getSelectorOrgList(this.dataForm.userId || '').then(res => {
           this.treeList = res.data.list || []

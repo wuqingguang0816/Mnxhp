@@ -191,3 +191,13 @@ export function ExportExceptionData(data) {
     data
   })
 }
+
+
+// 获取用户下拉框列表
+export const getListByAuthorize = (organizeId, keyword) => {
+  return request({
+    url: `/api/permission/Users/GetListByAuthorize/${organizeId}`,
+    method: 'post',
+    data: { keyword }
+  })
+}
