@@ -87,9 +87,6 @@
         <el-scrollbar class="right-scrollbar" v-show="currentTab==='column'">
           <div class="setting-box">
             <el-form :model="columnData" label-width="80px">
-              <el-form-item label="高级查询">
-                <el-switch v-model="columnData.hasSuperQuery"></el-switch>
-              </el-form-item>
               <el-divider>排序设置</el-divider>
               <el-form-item label="排序字段">
                 <el-select v-model="columnData.defaultSidx" placeholder="请选择排序字段" clearable>

@@ -397,9 +397,6 @@ export default {
     if (this.modelType == 4) {
       this.typeList = this.typeList.filter(o => o.value != 3)
     }
-    if (this.webType == 3) {
-      this.typeList = this.typeList.filter(o => o.value != 4)
-    }
     let list = []
     const loop = (data, parent) => {
       if (!data) return

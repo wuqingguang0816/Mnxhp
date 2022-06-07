@@ -156,10 +156,12 @@
             <template slot-scope="scope" v-if="!scope.row.top">
               <template v-if="isPreview || !columnData.useBtnPermission">
                 <template v-if="scope.row.rowEdit">
-                  <el-button size="mini" type="text" @click="saveForRowEdit(scope.row)">
+                  <el-button size="mini" type="text" @click="saveForRowEdit(scope.row,1)">
                     保存</el-button>
                   <el-button size="mini" type="text" class="JNPF-table-delBtn"
                     @click="cancelRowEdit(scope.row,scope.$index)">取消</el-button>
+                  <el-button size="mini" type="text" @click="submitForRowEdit(scope.row)"
+                    v-if="config.webType == 3">提交</el-button>
                 </template>
                 <template v-else>
                   <template v-for="(item, i) in columnBtnsList">
@@ -267,6 +269,9 @@
     <ExportBox v-if="exportBoxVisible" ref="ExportBox" @download="download" />
     <SuperQuery v-if="superQueryVisible" ref="SuperQuery" :columnOptions="columnOptions"
       @superQuery="superQuery" />
+    <candidate-form :visible.sync="candidateVisible" :candidateList="candidateList"
+      :branchList="branchList" taskId="0" :formData="workFlowFormData"
+      @submitCandidate="submitCandidate" />
   </div>
 </template>
 
@@ -276,6 +281,7 @@ import { getDictionaryDataSelector } from '@/api/systemData/dictionary'
 import { getDataInterfaceRes } from '@/api/systemData/dataInterface'
 import { getColumnsByModuleId } from '@/api/common'
 import { dyOptionsList, systemComponentsList } from '@/components/Generator/generator/comConfig'
+import { Candidates } from '@/api/workFlow/FlowBefore'
 import request from '@/utils/request'
 import Form from './Form'
 import FlowBox from '@/views/workFlow/components/FlowBox'
@@ -283,9 +289,10 @@ import Detail from './detail'
 import ExportBox from './ExportBox'
 import Search from './Search'
 import SuperQuery from '@/components/SuperQuery'
+import CandidateForm from '@/views/workFlow/components/CandidateForm'
 export default {
   name: 'dynamicModel',
-  components: { Form, ExportBox, Search, Detail, FlowBox, SuperQuery },
+  components: { Form, ExportBox, Search, Detail, FlowBox, SuperQuery, CandidateForm },
   props: ['config', 'modelId', 'isPreview'],
   data() {
     return {
@@ -333,7 +340,13 @@ export default {
       hasBatchBtn: false,
       refreshTable: true,
       multipleSelection: [],
-      settingsColumnList: []
+      settingsColumnList: [],
+      candidateVisible: false,
+      candidateType: 1,
+      branchList: [],
+      candidateList: [],
+      currRow: {},
+      workFlowFormData: {}
     }
   },
   computed: {
@@ -503,13 +516,16 @@ export default {
         }
       }).catch(() => { });
     },
-    saveForRowEdit(row) {
+    saveForRowEdit(row, status, candidateData) {
       if (this.isPreview) return this.$message({ message: '功能预览不支持数据保存', type: 'warning' })
       let query = {
         id: row.id,
-        status: 1,
+        status: status || "1",
+        candidateType: this.candidateType,
         data: JSON.stringify(row)
       }
+      if (candidateData) query = { ...query, ...candidateData }
+      if (this.config.webType == 3) query.flowId = this.config.flowId
       const formMethod = query.id ? updateModel : createModel
       formMethod(this.modelId, query).then(res => {
         this.$message({
@@ -517,10 +533,42 @@ export default {
           type: 'success',
           duration: 1500,
           onClose: () => {
+            this.candidateVisible = false
             this.initData()
           }
         })
       })
+    },
+    submitForRowEdit(row) {
+      this.currRow = row
+      if (this.isPreview) return this.$message({ message: '功能预览不支持数据保存', type: 'warning' })
+      this.workFlowFormData = {
+        id: row.id,
+        data: JSON.stringify(row),
+        flowId: this.config.flowId
+      }
+      Candidates(0, { formData: this.workFlowFormData }).then(res => {
+        let data = res.data
+        this.candidateType = data.type
+        if (data.type == 1) {
+          this.branchList = res.data.list
+          this.candidateList = []
+          this.candidateVisible = true
+        } else if (data.type == 2) {
+          this.branchList = []
+          this.candidateList = res.data.list.filter(o => o.isCandidates)
+          this.candidateVisible = true
+        } else {
+          this.$confirm('您确定要提交当前流程吗, 是否继续?', '提示', {
+            type: 'warning'
+          }).then(() => {
+            this.saveForRowEdit(row, '0')
+          }).catch(() => { })
+        }
+      }).catch(() => { })
+    },
+    submitCandidate(data) {
+      this.saveForRowEdit(this.currRow, '0', data)
     },
     cancelRowEdit(row, index) {
       if (!row.id) return this.list.splice(index, 1)
