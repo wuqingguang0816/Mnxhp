@@ -5,16 +5,14 @@
     <el-form ref="dataForm" :model="dataForm" :rules="dataRule" label-width="80px"
       v-loading="formLoading" class="menuForm">
       <el-form-item label="字段名称" prop="enCode">
-        <el-select v-if="enCodeOptions.length > 0" v-model="dataForm.enCode" placeholder="请选择字段名称"
+        <el-select v-if="enCodeOptions.length" v-model="dataForm.enCode" placeholder="请选择字段名称"
           clearable @change="onEnCodeChange">
           <el-option v-for="item in enCodeOptions" :key="item.field" :label="item.field"
             :value="item.field">
           </el-option>
         </el-select>
-        <el-input v-model="dataForm.enCode" placeholder="输入字段名称"
-          v-else-if="enCodeOptions.length === 0" />
+        <el-input v-model="dataForm.enCode" placeholder="输入字段名称" v-else />
       </el-form-item>
-
       <el-form-item label="字段规则" prop="fieldRule">
         <el-select v-model="dataForm.fieldRule" placeholder="请选择字段名称" clearable>
           <el-option v-for="item in fieldRuleOptions" :key="item.value" :label="item.label"
@@ -22,7 +20,6 @@
           </el-option>
         </el-select>
       </el-form-item>
-
       <el-form-item label="字段说明" prop="fullName">
         <el-input v-model="dataForm.fullName" placeholder="输入字段说明" />
       </el-form-item>
@@ -52,9 +49,7 @@
       </el-form-item>
     </el-form>
     <span slot="footer" class="dialog-footer">
-      <el-button @click="visible = false">{{
-        $t("common.cancelButton")
-      }}</el-button>
+      <el-button @click="visible = false">{{$t("common.cancelButton")}}</el-button>
       <el-button type="primary" :loading="btnLoading" @click="dataFormSubmit()">
         {{ $t("common.confirmButton") }}</el-button>
     </span>
