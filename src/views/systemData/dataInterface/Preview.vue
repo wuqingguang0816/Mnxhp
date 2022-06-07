@@ -1,7 +1,7 @@
 <template>
   <div class="JNPF-preview-main">
     <div class="JNPF-common-page-header">
-      <el-page-header @back="goBack" content="接口预览" />
+      <el-page-header @back="goBack" :content="'接口预览 - '+title" />
       <div class="options">
         <el-button @click="goBack">{{$t('common.cancelButton')}}</el-button>
       </div>
@@ -26,7 +26,7 @@
         </el-row>
       </el-form-item>
       <el-form-item label="Response Body" class="value-item">
-        <el-input v-model="responseData" type="textarea" :rows="30" />
+        <el-input v-model="responseData" type="textarea" :autosize="{ minRows: 20 }" />
       </el-form-item>
     </el-form>
   </div>
@@ -64,9 +64,10 @@ export default {
     goBack() {
       this.$emit('close')
     },
-    init(id, tenantId) {
+    init(id, tenantId, fullName) {
       this.id = id || ''
       this.tenantId = tenantId || ''
+      this.title = fullName || ''
       this.formLoading = true
       this.responseData = ''
       this.$nextTick(() => {
@@ -78,7 +79,6 @@ export default {
           this.formLoading = false
         })
       })
-
     },
   }
 }
