@@ -192,6 +192,7 @@ export default {
         item.field = fieldItem.enCode
         item.opOptions = this.getOptions(fieldItem)
         item.field = fieldItem.enCode
+        item.fieldRule = fieldItem.fieldRule || 0
         if (fieldItem.conditionText !== 'text') {
           item.readonly = true
           item.value = fieldItem.conditionText
