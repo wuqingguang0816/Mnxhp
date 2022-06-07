@@ -10,9 +10,22 @@
       <el-form-item label="Request URL">
         <el-input v-model="url">
           <template slot="prepend">GET</template>
+          <template slot="append">
+            <el-button type="primary" @click="test">测试接口</el-button>
+          </template>
         </el-input>
       </el-form-item>
-      <el-form-item label="Response body" class="value-item">
+      <el-form-item label="Request Param" v-if="inputList.length>0">
+        <el-row v-for="(item, index) in inputList" :key="index" :gutter="20" class="mt-10">
+          <el-col :span="6">
+            <el-input v-model="item.field" placeholder="key" clearable readonly />
+          </el-col>
+          <el-col :span="18">
+            <el-input v-model="item.defaultValue" placeholder="value" clearable />
+          </el-col>
+        </el-row>
+      </el-form-item>
+      <el-form-item label="Response Body" class="value-item">
         <el-input v-model="responseData" type="textarea" :rows="30" />
       </el-form-item>
     </el-form>
@@ -20,7 +33,7 @@
 </template>
 
 <script>
-import { previewDataInterface } from '@/api/systemData/dataInterface'
+import { previewDataInterface, testInterface } from '@/api/systemData/dataInterface'
 
 export default {
   data() {
@@ -32,22 +45,34 @@ export default {
       options: {
         readOnly: true,
         language: 'json'
-      }
+      },
+      inputList: [],
+      tenantId: ''
     }
   },
   methods: {
+    test() {
+      let query = {
+        paramList: this.inputList,
+        tenantId: this.tenantId
+      }
+      testInterface(this.id, query).then(res => {
+        let data = res
+        this.responseData = JSON.stringify(data, null, 4)
+      })
+    },
     goBack() {
       this.$emit('close')
     },
     init(id, tenantId) {
       this.id = id || ''
+      this.tenantId = tenantId || ''
       this.formLoading = true
       this.responseData = ''
       this.$nextTick(() => {
         this.url = `${this.define.comUrl}/api/system/DataInterface/${id}/Actions/Response` + (tenantId ? '?tenantId=' + tenantId : '')
         previewDataInterface(this.id).then(res => {
-          let data = res.data.data
-          this.responseData = JSON.stringify(data, null, 4)
+          this.inputList = res.data
           this.formLoading = false
         }).catch(() => {
           this.formLoading = false
@@ -58,24 +83,3 @@ export default {
   }
 }
 </script>
-<style lang="scss" scoped>
-.main {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
-  .value-item {
-    flex: 1;
-    margin-bottom: 0;
-    >>> .el-form-item__content {
-      height: calc(100% - 32px);
-      .el-textarea {
-        height: 100%;
-        .el-textarea__inner {
-          height: 100%;
-        }
-      }
-    }
-  }
-}
-</style>
