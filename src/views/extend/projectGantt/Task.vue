@@ -168,6 +168,7 @@ export default {
       this.managerIds = item.managerIds
       this.startDate = item.startTime
       this.endDate = item.endTime
+      this.keyword = ''
       this.$nextTick(() => { this.initData() })
     },
     initData() {
