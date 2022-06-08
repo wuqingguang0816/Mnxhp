@@ -6,17 +6,17 @@
         <span v-if="collapseTags && tagsList.length">
           <el-tag :closable="!selectDisabled" :size="collapseTagSize" type="info"
             @close="deleteTag($event, 0)" disable-transitions>
-            <span class="el-select__tags-text">{{ tagsList[0].userName }}</span>
+            <span class="el-select__tags-text">{{ tagsList[0].fullName }}</span>
           </el-tag>
           <el-tag v-if="tagsList.length > 1" :closable="false" type="info" disable-transitions>
             <span class="el-select__tags-text">+ {{ tagsList.length - 1 }}</span>
           </el-tag>
         </span>
         <transition-group @after-leave="resetInputHeight" v-if="!collapseTags">
-          <el-tag v-for="(item,i) in tagsList" :key="item.userId" :size="collapseTagSize"
+          <el-tag v-for="(item,i) in tagsList" :key="item.id" :size="collapseTagSize"
             :closable="!selectDisabled" type="info" @close="deleteTag($event, i)"
             disable-transitions>
-            <span class="el-select__tags-text">{{ item.userName }}</span>
+            <span class="el-select__tags-text">{{ item.fullName }}</span>
           </el-tag>
         </transition-group>
       </div>
@@ -46,9 +46,17 @@
           <div class="transfer-pane__body left-pane">
             <div class="single-list" ref="candidate">
               <template v-if="list.length">
-                <div v-for="(item, index) in list" :key="index" class="selected-item"
+                <div v-for="(item,index) in list" :key="index" class="selected-item-user"
                   @click="handleNodeClick(item)">
-                  <span>{{ item.userName}}</span>
+                  <div class="selected-item-main">
+                    <el-avatar :size="36" :src="define.comUrl+item.headIcon"
+                      class="selected-item-headIcon">
+                    </el-avatar>
+                    <div class="selected-item-text">
+                      <p class="name">{{item.fullName}}</p>
+                      <p class="organize" :title="item.organize">{{item.organize}}</p>
+                    </div>
+                  </div>
                 </div>
               </template>
               <el-empty description="暂无数据" :image-size="120" v-else></el-empty>
@@ -61,12 +69,22 @@
             <el-button @click="removeAll" type="text" class="removeAllBtn">清空列表</el-button>
           </div>
           <div class="transfer-pane__body shadow right-pane">
-            <template>
-              <div v-for="(item, index) in selectedData" :key=" index" class="selected-item">
-                <span>{{ item.userName}}</span>
-                <i class="el-icon-delete" @click="removeData(index)"></i>
+            <template v-if="selectedData.length">
+              <div v-for="(item,index) in selectedData" :key="index" class="selected-item-user">
+                <div class="selected-item-main">
+                  <el-avatar :size="36" :src="define.comUrl+item.headIcon"
+                    class="selected-item-headIcon">
+                  </el-avatar>
+                  <div class="selected-item-text">
+                    <p class="name">{{item.fullName}}
+                      <i class="el-icon-delete" @click="removeData(index)"></i>
+                    </p>
+                    <p class="organize" :title="item.organize">{{item.organize}}</p>
+                  </div>
+                </div>
               </div>
             </template>
+            <el-empty description="暂无数据" :image-size="120" v-else></el-empty>
           </div>
         </div>
       </div>
@@ -248,7 +266,7 @@ export default {
       if (this.multiple) {
         this.innerValue = ''
         this.tagsList = JSON.parse(JSON.stringify(this.selectedData))
-        let selectedIds = this.selectedData.map(o => o.userId)
+        let selectedIds = this.selectedData.map(o => o.id)
         this.$emit('input', selectedIds)
         this.$emit('change', selectedIds, this.selectedData)
       } else {
@@ -258,8 +276,8 @@ export default {
           this.$emit('change', '', {})
           return
         }
-        this.innerValue = this.selectedData[0].userName
-        let selectedIds = this.selectedData.map(o => o.userId)
+        this.innerValue = this.selectedData[0].fullName
+        let selectedIds = this.selectedData.map(o => o.id)
         this.$emit('input', selectedIds[0])
         this.$emit('change', selectedIds[0], this.selectedData[0])
       }
@@ -299,7 +317,7 @@ export default {
       })
     },
     handleNodeClick(item) {
-      const boo = this.selectedData.some(o => o.userId === item.userId)
+      const boo = this.selectedData.some(o => o.id === item.id)
       if (boo) return
       this.multiple ? this.selectedData.push(item) : this.selectedData = [item]
     },
@@ -318,15 +336,12 @@ export default {
       }
       const arr = this.multiple ? this.value : [this.value]
       getUserInfoList(arr).then(res => {
-        this.selectedData = res.data.list.map(o => ({
-          userId: o.id,
-          userName: o.fullName
-        }))
+        this.selectedData = res.data.list
         if (this.multiple) {
           this.innerValue = ''
           this.tagsList = JSON.parse(JSON.stringify(this.selectedData))
         } else {
-          this.innerValue = this.selectedData.length ? this.selectedData[0].userName : ''
+          this.innerValue = this.selectedData.length ? this.selectedData[0].fullName : ''
         }
         this.$nextTick(() => {
           if (this.multiple) {

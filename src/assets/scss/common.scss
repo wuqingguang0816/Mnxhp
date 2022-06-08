@@ -2003,6 +2003,10 @@ textarea.el-textarea__inner {
         overflow: auto;
         overflow-x: hidden;
 
+        .selected-item-user {
+          cursor: pointer;
+        }
+
         .selected-item {
           padding: 0px 12px;
           cursor: pointer;
@@ -2015,10 +2019,65 @@ textarea.el-textarea__inner {
     }
   }
 
+  .selected-item-user {
+    padding: 0 12px;
+
+    &:hover {
+      background-color: #f5f7fa;
+    }
+
+    .selected-item-main {
+      border-bottom: 1px solid #F4F6F9;
+      display: flex;
+      align-items: center;
+      height: 50px;
+    }
+
+    .selected-item-headIcon {
+      flex-shrink: 0;
+    }
+
+    .selected-item-text {
+      width: 272px;
+      margin-left: 10px;
+
+      .name {
+        height: 20px;
+        line-height: 20px;
+        font-size: 14px;
+        margin-bottom: 2px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+
+      .organize {
+        height: 17px;
+        line-height: 17px;
+        color: #999999;
+        font-size: 12px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+
+      .el-icon-delete:hover {
+        color: #f56c6c;
+        cursor: pointer;
+      }
+    }
+  }
+
   .right-pane {
     box-sizing: border-box;
     overflow: auto;
     border: 1px solid #dcdfe6;
+
+    .selected-item-user {
+      .organize {
+        padding-right: 25px;
+      }
+    }
 
     .selected-item {
       padding: 0px 12px;
@@ -2037,7 +2096,7 @@ textarea.el-textarea__inner {
         text-overflow: ellipsis;
       }
 
-      i:hover {
+      .el-icon-delete:hover {
         color: #f56c6c;
         cursor: pointer;
       }
