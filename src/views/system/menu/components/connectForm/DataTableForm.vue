@@ -64,15 +64,15 @@ export default {
   },
   methods: {
     onOpen() {
+      this.keyword = "";
+      this.checked = "";
+      this.checkedRow = {};
       this.initData();
     },
     closeDialog() {
-      this.checked = "";
-      this.checkedRow = {};
       this.$emit("update:visible", false);
     },
     refresh() {
-      this.keyword = "";
       this.initData();
     },
     initData() {
