@@ -22,7 +22,7 @@
       <div class="JNPF-common-search-box-right">
         <el-tooltip effect="dark" :content="$t('common.refresh')" placement="top">
           <el-link icon="icon-ym icon-ym-Refresh JNPF-common-head-icon" :underline="false"
-            @click="refresh()" />
+            @click="initData()" />
         </el-tooltip>
       </div>
     </el-row>
@@ -64,15 +64,15 @@ export default {
   },
   methods: {
     onOpen() {
+      this.keyword = "";
+      this.checked = "";
+      this.checkedRow = {};
       this.initData();
     },
     closeDialog() {
-      this.checked = "";
-      this.checkedRow = {};
       this.$emit("update:visible", false);
     },
     refresh() {
-      this.keyword = "";
       this.initData();
     },
     initData() {

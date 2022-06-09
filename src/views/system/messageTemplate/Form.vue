@@ -19,12 +19,12 @@
             <el-form-item label="模板编码" prop="enCode">
               <el-input v-model="dataForm.enCode" placeholder="模板编码"></el-input>
             </el-form-item>
-            <el-form-item label="通知方式">
-              <el-checkbox v-model="dataForm.isEmail" :true-label="1" :false-label="0">邮箱
+            <el-form-item label="通知方式" required>
+              <el-checkbox v-model="dataForm.isEmail" :true-label="1" :false-label="0">电子邮箱
               </el-checkbox>
               <el-checkbox v-model="dataForm.isWecom" :true-label="1" :false-label="0">企业微信
               </el-checkbox>
-              <el-checkbox v-model="dataForm.isDingTalk" :true-label="1" :false-label="0">钉钉
+              <el-checkbox v-model="dataForm.isDingTalk" :true-label="1" :false-label="0">阿里钉钉
               </el-checkbox>
               <el-checkbox v-model="dataForm.isSms" :true-label="1" :false-label="0"
                 @change="onIsSmsChange">短信
@@ -176,6 +176,10 @@ export default {
     },
     dataFormSubmit() {
       this.dataForm.templateJson = JSON.stringify(this.templateJson)
+      if (!this.dataForm.isEmail && !this.dataForm.isWecom && !this.dataForm.isDingTalk && !this.dataForm.isSms) {
+        this.$message.error(`请至少选择一个通知方式`)
+        return
+      }
       this.$refs['dataForm'].validate((valid) => {
         if (valid) {
           this.btnLoading = true
