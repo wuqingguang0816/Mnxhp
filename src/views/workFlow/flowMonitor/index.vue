@@ -76,7 +76,7 @@
           <div class="JNPF-common-head-right">
             <el-tooltip effect="dark" :content="$t('common.refresh')" placement="top">
               <el-link icon="icon-ym icon-ym-Refresh JNPF-common-head-icon" :underline="false"
-                @click="refresh()" />
+                @click="initData()" />
             </el-tooltip>
           </div>
         </div>
