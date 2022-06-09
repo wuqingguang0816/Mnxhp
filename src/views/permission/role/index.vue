@@ -109,7 +109,7 @@
 </template>
 
 <script>
-import { getDepartmentSelector } from '@/api/permission/department'
+import { getDepartmentSelectorByAuth } from '@/api/permission/department'
 import { getRoleList, delRole, updateRoleState } from '@/api/permission/role'
 import Form from './Form'
 import AuthorizeForm from '@/views/permission/authorize/AuthorizeForm'
@@ -194,7 +194,7 @@ export default {
     },
     getOrganizeList(isInit) {
       this.treeLoading = true
-      getDepartmentSelector().then(res => {
+      getDepartmentSelectorByAuth().then(res => {
         let firstItem = {
           fullName: "全局",
           hasChildren: false,

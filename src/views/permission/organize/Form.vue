@@ -137,7 +137,7 @@
 
 <script>
 import {
-  getOrganizeSelector,
+  getOrganizeSelectorByAuth,
   createOrganize,
   updateOrganize,
   getOrganizeInfo
@@ -205,7 +205,7 @@ export default {
       this.$nextTick(() => {
         this.$refs['dataForm'].resetFields()
         // 获取公司下拉列表
-        getOrganizeSelector(id || 0).then(res => {
+        getOrganizeSelectorByAuth(id || 0).then(res => {
           if (res.data.list && res.data.list.length) {
             this.treeData = res.data.list
           } else {

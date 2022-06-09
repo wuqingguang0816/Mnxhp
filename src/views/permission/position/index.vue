@@ -99,7 +99,7 @@
 </template>
 
 <script>
-import { getDepartmentSelector } from '@/api/permission/department'
+import { getDepartmentSelectorByAuth } from '@/api/permission/department'
 import { getPositionList, delPosition } from '@/api/permission/position'
 import Form from './Form'
 import Diagram from '@/views/permission/user/Diagram'
@@ -166,7 +166,7 @@ export default {
     },
     getOrganizeList(isInit) {
       this.treeLoading = true
-      getDepartmentSelector().then(res => {
+      getDepartmentSelectorByAuth().then(res => {
         this.treeData = res.data.list
         this.$nextTick(() => {
           this.treeLoading = false

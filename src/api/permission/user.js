@@ -101,7 +101,6 @@ export const getImUserSelector = (organizeId, keyword) => {
     data: { keyword }
   })
 }
-
 // 获取用户基本信息
 export const getUserInfoList = userId => {
   return request({

@@ -52,49 +52,6 @@
                 <span class="text">{{node.label}}</span>
               </span>
             </el-tree>
-            <!-- <el-tabs v-model="activeName" class="transfer-pane__body-tab"
-              :class="{'hasSys-tab':hasSys}">
-              <el-tab-pane label="全部数据" name="all">
-                <el-tree :data="treeData" :props="props" check-on-click-node
-                  @node-click="handleNodeClick" class="JNPF-common-el-tree" node-key="id"
-                  v-loading="loading" lazy :load="loadNode">
-                  <span class="custom-tree-node" slot-scope="{ node, data }">
-                    <i :class="data.icon"></i>
-                    <span class="text">{{node.label}}</span>
-                  </span>
-                </el-tree>
-              </el-tab-pane>
-              <el-tab-pane label="当前组织" name="department">
-                <el-tree :data="treeData2" :props="props" :expand-on-click-node="false"
-                  check-on-click-node @node-click="handleNodeClick2" class="JNPF-common-el-tree"
-                  node-key="id" v-loading="loading">
-                  <span class="custom-tree-node" slot-scope="{ node }">
-                    <i class="icon-ym icon-ym-tree-user2"></i>
-                    <span class="text">{{node.label}}</span>
-                  </span>
-                </el-tree>
-              </el-tab-pane>
-              <el-tab-pane label="我的下属" name="subordinates">
-                <el-tree :data="treeData3" :props="props" :expand-on-click-node="false"
-                  check-on-click-node @node-click="handleNodeClick2" class="JNPF-common-el-tree"
-                  node-key="id" v-loading="loading">
-                  <span class="custom-tree-node" slot-scope="{ node }">
-                    <i class="icon-ym icon-ym-tree-user2"></i>
-                    <span class="text">{{node.label}}</span>
-                  </span>
-                </el-tree>
-              </el-tab-pane>
-              <el-tab-pane label="系统变量" name="system">
-                <el-tree :data="treeData4" :props="props" :expand-on-click-node="false"
-                  check-on-click-node @node-click="handleNodeClick2" class="JNPF-common-el-tree"
-                  node-key="id" v-loading="loading">
-                  <span class="custom-tree-node" slot-scope="{ node }">
-                    <i class="icon-ym icon-ym-tree-user2"></i>
-                    <span class="text">{{node.label}}</span>
-                  </span>
-                </el-tree>
-              </el-tab-pane>
-            </el-tabs> -->
           </div>
         </div>
         <div class="transfer-pane">
@@ -338,23 +295,6 @@ export default {
     },
     getData() {
       this.getAllList()
-      // if (this.activeName === 'all') {
-      //   this.getAllList()
-      // } else if (this.activeName === 'department') {
-      //   this.loading = true
-      //   getOrganization({ keyword: this.keyword, organizeId: '0' }).then(res => {
-      //     this.treeData2 = res.data
-      //     this.loading = false
-      //   })
-      // } else if (this.activeName === 'subordinates') {
-      //   this.loading = true
-      //   getSubordinates(this.keyword).then(res => {
-      //     this.treeData3 = res.data
-      //     this.loading = false
-      //   })
-      // } else {
-      //   this.loading = false
-      // }
     },
     getAllList() {
       this.loading = true
@@ -370,7 +310,7 @@ export default {
         return resolve(this.treeData)
       }
       this.nodeId = node.data.id
-      getImUserSelector(this.nodeId).then(res => {
+      getListByAuthorize(this.nodeId).then(res => {
         resolve(res.data.list)
       })
     },

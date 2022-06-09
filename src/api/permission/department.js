@@ -17,6 +17,14 @@ export const getDepartmentSelector = (id) => {
   })
 }
 
+// 获取部门下拉框列表(公司+部门) ---带权限
+export const getDepartmentSelectorByAuth = (id) => {
+  return request({
+    url: '/api/permission/Organize/Department/SelectorByAuth/' + (!!id ? id : 0),
+    method: 'GET'
+  })
+}
+
 // 新建部门
 export const createDepartment = (data) => {
   return request({

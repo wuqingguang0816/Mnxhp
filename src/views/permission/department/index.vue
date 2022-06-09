@@ -81,7 +81,7 @@
 </template>
 <script>
 import {
-  getDepartmentSelector,
+  getDepartmentSelectorByAuth,
   getDepartmentList,
   delDepartment
 } from '@/api/permission/department'
@@ -146,7 +146,7 @@ export default {
     },
     getOrganizeList(isInit) {
       this.treeLoading = true
-      getDepartmentSelector().then(res => {
+      getDepartmentSelectorByAuth().then(res => {
         this.treeData = res.data.list
         this.$nextTick(() => {
           if (!this.treeData.length) {

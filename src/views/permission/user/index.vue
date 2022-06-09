@@ -119,7 +119,7 @@
 </template>
 <script>
 import {
-  getDepartmentSelector
+  getDepartmentSelectorByAuth
 } from '@/api/permission/department'
 import {
   getUserList,
@@ -213,7 +213,7 @@ export default {
     },
     getOrganizeList(isInit) {
       this.treeLoading = true
-      getDepartmentSelector().then(res => {
+      getDepartmentSelectorByAuth().then(res => {
         this.treeData = res.data.list
         this.treeLoading = false
         if (isInit) this.initData()

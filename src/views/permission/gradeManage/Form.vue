@@ -17,7 +17,12 @@
       <el-table v-loading="listLoading" :data="treeList" row-key="organizeId"
         :default-expand-all="expands" :tree-props="{children: 'children', hasChildren: ''}"
         style="height:400px;overflow: auto">
-        <el-table-column prop="fullName" label="组织架构" width="180" />
+        <el-table-column prop="fullName" label="组织架构">
+          <template slot-scope="scope">
+            <i :class=scope.row.icon></i>
+            {{scope.row.fullName}}
+          </template>
+        </el-table-column>
         <el-table-column label="组织操作权限(本层级)" width="300">
           <template slot-scope="scope">
             <template v-if="scope.row.thisLayerSelect===2">
@@ -54,7 +59,7 @@
             </template>
           </template>
         </el-table-column>
-        <el-table-column label="子组织操作权限(子层级)">
+        <el-table-column label="子组织操作权限(子层级)" width="300">
           <template slot-scope="scope">
             <template v-if="scope.row.subLayerSelect===2">
               <el-checkbox checked disabled>查看</el-checkbox>
@@ -207,5 +212,8 @@ export default {
 }
 .el-checkbox + .el-checkbox {
   margin-left: 10px;
+}
+>>> .el-dialog .el-dialog__body {
+  padding: 20px 20px 2px !important;
 }
 </style>
