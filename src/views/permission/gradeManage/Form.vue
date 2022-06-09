@@ -3,7 +3,8 @@
     class="JNPF-dialog JNPF-dialog_center" lock-scroll width="900px">
     <el-form ref="dataForm" :model="dataForm" :rules="dataRule" v-loading="formLoading"
       label-width="100px">
-      <el-alert title="设置当前组织部门的管理和相关操作权限" type="warning" :closable="false" show-icon class="mb-20">
+      <el-alert title="设置当前组织部门的管理员和相关操作权限" type="warning" :closable="false" show-icon
+        class="mb-20">
       </el-alert>
       <el-form-item label="设置管理员" prop="userId" v-if="!dataForm.id && userInfo.isAdministrator">
         <user-select v-model="dataForm.userId" placeholder="请选择管理员" @change="onChange" />
@@ -126,7 +127,7 @@ export default {
       expands: false,
       dataRule: {
         userId: [
-          { required: true, message: '请选择管理员', trigger: 'click' }
+          { required: true, message: '请选择管理员', trigger: 'change' }
         ]
       }
     }
@@ -144,7 +145,6 @@ export default {
     },
     initData() {
       this.listLoading = true
-      console.log(this.userInfo)
       if (this.dataForm.id) {
         getSelectorOrgList(this.dataForm.userId || '').then(res => {
           this.treeList = res.data.list || []

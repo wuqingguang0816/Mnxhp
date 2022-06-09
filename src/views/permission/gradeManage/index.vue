@@ -30,18 +30,18 @@
           </div>
         </div>
         <JNPF-table v-loading="listLoading" :data="list">
-          <el-table-column prop="account" label="账号" width="120" />
-          <el-table-column prop="realName" label="姓名" width="120" />
-          <el-table-column prop="gender" label="性别" width="120">
+          <el-table-column prop="account" label="账号" />
+          <el-table-column prop="realName" label="姓名" />
+          <el-table-column prop="gender" label="性别">
             <template slot-scope="scope" sortable>
               <span>{{ scope.row.gender ==1 ? '男': ( scope.row.gender == 2 ? '女' : '保密') }}</span>
             </template>
           </el-table-column>
-          <el-table-column prop="mobilePhone" label="手机" width="120" />
+          <el-table-column prop="mobilePhone" label="手机" />
           <el-table-column prop="organizeId" label="所属组织" min-width="200" />
           <el-table-column prop="creatorTime" label="创建时间" :formatter="jnpf.tableDateFormat"
-            width="120" />
-          <el-table-column label="操作" width="100">
+            width="150" />
+          <el-table-column label="操作" width="150">
             <template slot-scope="scope">
               <tableOpts @edit="addOrUpdateHandle(scope.row.id)" @del="handleDel(scope.row.id)">
               </tableOpts>
