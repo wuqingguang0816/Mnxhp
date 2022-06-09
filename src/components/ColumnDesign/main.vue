@@ -389,13 +389,18 @@ export default {
     let list = []
     const loop = (data, parent) => {
       if (!data) return
-      if (data.__config__ && data.__config__.jnpfKey !== 'table' && data.__config__.children && Array.isArray(data.__config__.children)) {
+      if (data.__config__ && data.__config__.children && Array.isArray(data.__config__.children)) {
         loop(data.__config__.children, data)
       }
       if (Array.isArray(data)) data.forEach(d => loop(d, parent))
       if (data.__config__ && data.__config__.jnpfKey) {
         const visibility = !data.__config__.visibility || (Array.isArray(data.__config__.visibility) && data.__config__.visibility.includes('pc'))
         if (data.__config__.layout === "colFormItem" && data.__vModel__ && visibility) {
+          const isTableChild = parent && parent.__config__ && parent.__config__.jnpfKey === 'table'
+          const id = isTableChild ? parent.__vModel__ + '-' + data.__vModel__ : data.__vModel__
+          const label = isTableChild ? parent.__config__.label + '-' + data.__config__.label : data.__config__.label
+          data.__vModel__ = id
+          data.__config__.label = label
           list.push(data)
         }
       }
@@ -556,5 +561,5 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
-@import './index.scss';
+@import "./index.scss";
 </style>
