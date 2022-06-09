@@ -191,3 +191,11 @@ export function ExportExceptionData(data) {
     data
   })
 }
+//部门、岗位、角色、分组id获取用户列表
+export function UserCondition(data) {
+  return request({
+    url: '/api/permission/Users/UserCondition',
+    method: 'post',
+    data
+  })
+}

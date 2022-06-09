@@ -299,7 +299,7 @@
                         :formatter="jnpf.tableDateFormat" />
                       <el-table-column label="操作" width="70">
                         <template slot-scope="scope">
-                          <el-button size="mini" type="text" @click="syncQy(scope.row)"
+                          <el-button size="mini" type="text" @click="syncWechat(scope.row)"
                             :loading="scope.row.loading">同步</el-button>
                         </template>
                       </el-table-column>
@@ -359,8 +359,8 @@
                         :formatter="jnpf.tableDateFormat" />
                       <el-table-column label="操作" width="70">
                         <template slot-scope="scope">
-                          <el-button size="mini" type="text" @click="syncDing(scope.row)"
-                            :loading="scope.row.loading">同步</el-button>
+                          <el-button size="mini" type="text" @click="syncNail(scope.row)">同步
+                          </el-button>
                         </template>
                       </el-table-column>
                     </el-table>
@@ -404,7 +404,8 @@
             <p class="add-desc">{{names}}</p>
           </div>
           <div class="add-button">
-            <el-button type="primary" size="small" @click="s">
+            <el-button type="primary" size="small" @click="name==='同步到微信'?syncQy(0):syncDing(0)"
+              :loading="wechatLoading">
               同步</el-button>
           </div>
         </div>
@@ -417,7 +418,8 @@
             <p class="add-desc">{{synchronization}}</p>
           </div>
           <div class="add-button">
-            <el-button type="primary" size="small" @click="s">
+            <el-button type="primary" size="small" @click="name==='同步到微信'?syncQy(1):syncDing(1)"
+              :loading="nailLoading">
               同步</el-button>
           </div>
         </div>
@@ -455,11 +457,14 @@ export default {
       testQyLoading: false,
       testSyncLoading: false,
       testDingLoading: false,
+      wechatLoading: false,
+      nailLoading: false,
       thirdTab: '0',
       visible: false,
       synchronization: '',
       name: '',
       names: '',
+      row: '',
       baseForm: {
         sysName: '',
         sysDescription: '',
@@ -687,52 +692,61 @@ export default {
         type == 1 ? this.wxResults = list : this.ddResults = list
       })
     },
-    syncQy(row) {
+    syncWechat(row) {
       this.name = '同步到微信'
       this.names = '把系统数据同步到企业微信'
       this.synchronization = '把企业微信数据同步到系统'
-      return this.visible = true
-      row.loading = true
-      const method = row.synType == '组织' ? synAllOrganizeSysToQy : synAllUserSysToQy
-      method().then(res => {
-        row.recordTotal = res.data.recordTotal
-        row.synDate = res.data.synDate
-        row.synFailCount = res.data.synFailCount
-        row.synSuccessCount = res.data.synSuccessCount
-        row.synType = res.data.synType
-        row.unSynCount = res.data.unSynCount
-        row.loading = false
-        this.$message({
-          message: '同步成功',
-          type: 'success',
-          duration: 1500,
-        })
-      }).catch(() => {
-        row.loading = false
-      })
+      this.row = row || ''
+      this.visible = true
+
     },
-    syncDing(row) {
+    syncNail(row) {
       this.name = '同步到钉钉'
       this.names = '把系统数据同步到阿里钉钉'
       this.synchronization = '把阿里钉钉数据同步到系统'
-      return this.visible = true
-      row.loading = true
-      const method = row.synType == '组织' ? synAllOrganizeSysToDing : synAllUserSysToDing
-      method().then(res => {
-        row.recordTotal = res.data.recordTotal
-        row.synDate = res.data.synDate
-        row.synFailCount = res.data.synFailCount
-        row.synSuccessCount = res.data.synSuccessCount
-        row.synType = res.data.synType
-        row.unSynCount = res.data.unSynCount
-        row.loading = false
-        this.$message({
-          message: '同步成功',
-          type: 'success',
-          duration: 1500,
-        })
-      }).catch(() => {
-        row.loading = false
+      this.row = row || ''
+      this.visible = true
+    },
+    syncQy(type) {
+      this.$confirm('同步以后会丢失现有数据，是否继续？', '提示', {
+        type: 'warning'
+      }).then(() => {
+        const method = this.row.synType == '组织' ? synAllOrganizeSysToQy : synAllUserSysToQy
+        method(type).then(res => {
+          this.row.recordTotal = res.data.recordTotal
+          this.row.synDate = res.data.synDate
+          this.row.synFailCount = res.data.synFailCount
+          this.row.synSuccessCount = res.data.synSuccessCount
+          this.row.synType = res.data.synType
+          this.row.unSynCount = res.data.unSynCount
+          this.visible = false
+          this.$message({
+            message: '同步成功',
+            type: 'success',
+            duration: 1500,
+          })
+        }).catch(() => { })
+      })
+    },
+    syncDing(type) {
+      this.$confirm('同步以后会丢失现有数据，是否继续？', '提示', {
+        type: 'warning'
+      }).then(() => {
+        const method = this.row.synType == '组织' ? synAllOrganizeSysToDing : synAllUserSysToDing
+        method(type).then(res => {
+          this.row.recordTotal = res.data.recordTotal
+          this.row.synDate = res.data.synDate
+          this.row.synFailCount = res.data.synFailCount
+          this.row.synSuccessCount = res.data.synSuccessCount
+          this.row.synType = res.data.synType
+          this.row.unSynCount = res.data.unSynCount
+          this.visible = false
+          this.$message({
+            message: '同步成功',
+            type: 'success',
+            duration: 1500,
+          })
+        }).catch(() => { })
       })
     },
     submitSmsForm() {
@@ -898,6 +912,7 @@ export default {
       .add-desc {
         color: #8d8989;
         font-size: 12px;
+        width: 150px;
       }
     }
   }

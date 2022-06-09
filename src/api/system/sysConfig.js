@@ -64,17 +64,19 @@ export function synAllUserSysToDing() {
   })
 }
 // 本地所有组织信息(包含公司和部门)同步到企业微信
-export function synAllOrganizeSysToQy() {
+export function synAllOrganizeSysToQy(data) {
   return request({
     url: '/api/system/SynThirdInfo/synAllOrganizeSysToQy',
-    method: 'GET'
+    method: 'GET',
+    data: { type: data }
   })
 }
 // 本地所有用户信息同步到企业微信
-export function synAllUserSysToQy() {
+export function synAllUserSysToQy(data) {
   return request({
     url: '/api/system/SynThirdInfo/synAllUserSysToQy',
-    method: 'GET'
+    method: 'GET',
+    data: { type: data }
   })
 }
 // 获取系统管理员

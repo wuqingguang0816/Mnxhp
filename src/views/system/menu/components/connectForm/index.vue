@@ -12,6 +12,10 @@
         </el-select>
       </el-form-item>
       <el-form-item label="数据选择" prop="dataSelect" class="el-select">
+        <dataTable v-model="dataForm.dataSelect" placeholder="请选择数据表" multiple clearable
+          :value='dataForm.dataSelect' />
+      </el-form-item>
+      <!-- <el-form-item label="数据选择" prop="dataSelect" class="el-select">
         <div @click="jumpTable">
           <el-input placeholder="请选择数据表" v-model="dataForm.dataSelect" readonly
             :validate-event="false" @mouseenter.native="inputHovering = true"
@@ -27,7 +31,7 @@
             </template>
           </el-input>
         </div>
-      </el-form-item>
+      </el-form-item> -->
     </el-form>
     <span slot="footer" class="dialog-footer">
       <el-button @click="visible = false">{{
@@ -44,8 +48,9 @@
 <script>
 import { getDataModelFields } from "@/api/system/dataAuthorize";
 import DataTableForm from "./DataTableForm.vue";
+import dataTable from './DataTable.vue'
 export default {
-  components: { DataTableForm },
+  components: { DataTableForm, dataTable },
   data() {
     return {
       inputHovering: false,
@@ -81,6 +86,9 @@ export default {
     }
   },
   methods: {
+    change(val) {
+      console.log(val)
+    },
     init(dbOptions, type) {
       this.type = type != undefined ? type : 1
       this.visible = true;
@@ -90,11 +98,12 @@ export default {
       this.dataForm.dataSelect = "";
     },
     dataFormSubmit() {
+
       this.$refs["dataForm"].validate(valid => {
         if (valid) {
           getDataModelFields(this.dataForm.dbLinkId, this.dataForm.dataSelect, this.type)
             .then(res => {
-              this.$emit("refreshDataList", res.data.list, this.dataForm.dataSelect);
+              this.$emit("refreshDataList", res.data.list, this.dataForm);
               this.visible = false;
             })
             .catch(() => { });

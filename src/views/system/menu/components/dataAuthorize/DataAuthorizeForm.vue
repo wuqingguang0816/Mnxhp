@@ -5,6 +5,10 @@
     <el-form ref="dataForm" :model="dataForm" :rules="dataRule" label-width="80px"
       v-loading="formLoading" class="menuForm">
       <el-form-item label="字段名称" prop="enCode">
+        <nameSelects :value="dataForm.enCode" :moduleId='dataForm.moduleId' :title="dataForm.enCode"
+          @change="changeName" />
+      </el-form-item>
+      <!-- <el-form-item label="字段名称" prop="enCode">
         <el-select v-if="enCodeOptions.length" v-model="dataForm.enCode" placeholder="请选择字段名称"
           clearable @change="onEnCodeChange">
           <el-option v-for="item in enCodeOptions" :key="item.field" :label="item.field"
@@ -12,7 +16,7 @@
           </el-option>
         </el-select>
         <el-input v-model="dataForm.enCode" placeholder="输入字段名称" v-else />
-      </el-form-item>
+      </el-form-item> -->
       <el-form-item label="字段规则" prop="fieldRule">
         <el-select v-model="dataForm.fieldRule" placeholder="请选择字段名称" clearable>
           <el-option v-for="item in fieldRuleOptions" :key="item.value" :label="item.label"
@@ -62,8 +66,9 @@ import {
   updateDataAuthorize,
   getDataAuthorizeInfo
 } from "@/api/system/dataAuthorize";
-
+import nameSelects from '../NameSelect.vue'
 export default {
+  components: { nameSelects },
   data() {
     return {
       visible: false,
@@ -101,7 +106,8 @@ export default {
       ],
       fieldRuleOptions: [
         { value: 0, label: "主表规则" },
-        { value: 1, label: "副表规则" }
+        { value: 1, label: "副表规则" },
+        { value: 2, label: "子表规则" }
       ],
       conditionTextOptions: [
         {
