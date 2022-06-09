@@ -63,3 +63,13 @@ export function DataSync(data) {
     data
   })
 }
+
+
+// 数据库同步
+export function synchronization(data) {
+  return request({
+    url: `/api/system/DataSync/Actions/test`,
+    method: 'post',
+    data
+  })
+}

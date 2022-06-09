@@ -21,12 +21,18 @@
           </el-option-group>
         </el-select>
         <el-button type="primary" @click="check" style="margin-left:10px">验证连接</el-button>
+        <el-button @click="addConfigure">+ 规则配置</el-button>
       </el-form-item>
     </el-form>
     <div class="JNPF-common-title">
       <h2>数据库表</h2>
+      <el-button size="primary" style="margin-right:1500px" type="text" @click="batch">批量同步
+      </el-button>
     </div>
-    <JNPF-table v-loading="listLoading" :data="list">
+    <el-table v-loading="listLoading" ref="multipleTable" :data="list"
+      @selection-change="handleSelectionChange">
+      <el-table-column type="selection" width="70" align="center" />
+      <el-table-column type="index" width="50" label="序号" align="center" />
       <el-table-column prop="table" label="表名" show-overflow-tooltip />
       <el-table-column prop="sum" label="总数" />
       <el-table-column prop="result" label="结果" />
@@ -37,13 +43,52 @@
           </el-button>
         </template>
       </el-table-column>
-    </JNPF-table>
+    </el-table>
+    <el-dialog title="规则配置" :close-on-click-modal="false" :visible.sync="dialogVisible"
+      class="JNPF-dialog JNPF-dialog_center rule-dialog" lock-scroll append-to-body width="600px">
+      <div class="option-box-tip">
+        设置数据库之间的字段转换规则，规则设置错误会导致同步的功能数据转换失败
+      </div>
+      <template :gutter="10" v-for="(item, i) in configureList">
+        <el-row :key="i" class="mb-10">
+          <el-col :span="3" class="rule-cell">字段类型</el-col>
+          <el-col :span="7" class="rule-cell">
+            <el-select v-model="item.beforeConversion" placeholder="请选择类型"
+              @change="changeConversion">
+              <el-option v-for="(item,index) in beforeConversionList" :key="index" :label="item.val"
+                :value="item.val" />
+            </el-select>
+          </el-col>
+          <el-col :span="2" class="rule-cell mid">转换</el-col>
+          <el-col :span="3" class="rule-cell">字段类型</el-col>
+          <el-col :span="7" class="rule-cell">
+            <el-select v-model="item.afterConversion" placeholder="请选择类型">
+              <el-option v-for="item in afterConversionList" :key="item.val" :label="item.val"
+                :value="item.val" />
+            </el-select>
+          </el-col>
+          <el-col :span="2" class="rule-cell">
+            <el-button type="danger" icon="el-icon-close" style="margin-left: 10px"
+              @click="delRule(i)">
+            </el-button>
+          </el-col>
+        </el-row>
+      </template>
+      <div class="table-actions" @click="addRule">
+        <el-button type="text" icon="el-icon-plus">新增规则</el-button>
+      </div>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="dialogVisible">取消</el-button>
+        <el-button type="primary" @click="saveRule">确定</el-button>
+      </span>
+    </el-dialog>
   </div>
 </template>
 
 <script>
-import { getDataSourceListAll, Execute, DataSync } from '@/api/systemData/dataSource'
-import { DataModelList } from '@/api/systemData/dataModel'
+import { getDataSourceListAll, Execute, synchronization } from '@/api/systemData/dataSource'
+import { getDataModelList } from '@/api/systemData/dataModel'
+import { forEach } from 'element-resize-detector/src/collection-utils'
 export default {
   name: 'systemData-dataSync',
   data() {
@@ -63,7 +108,16 @@ export default {
         ]
       },
       list: [],
-      listLoading: false
+      listLoading: false,
+      dialogVisible: false,//规则配置弹窗
+      configureList: [],
+      beforeConversion: '',//转换前
+      beforeConversionList: [],//转换前
+      afterConversion: '',//转换后
+      afterConversionList: [],//转换后
+      verification: false,
+      convertRulesMap: {},
+      batchList: []
     }
   },
   created() {
@@ -87,8 +141,14 @@ export default {
             return
           }
           this.listLoading = true
-          DataModelList(this.dataForm.dbConnectionFrom).then((res) => {
-            this.list = res.data.list
+          getDataModelList(this.dataForm).then((res) => {
+            this.beforeConversionList = []
+            this.convertRulesMap = res.data.convertRulesMap
+            for (var key in this.convertRulesMap) {
+              this.beforeConversionList.push({ val: key })
+            }
+            this.verification = res.data.checkDbFlag
+            this.list = res.data.tableList
             for (let i = 0; i < this.list.length; i++) {
               const e = this.list[i];
               this.$set(this.list[i], 'result', '')
@@ -99,15 +159,64 @@ export default {
         }
       })
     },
+    changeConversion(val) {
+      this.afterConversionList = []
+      this.convertRulesMap[val].forEach(element => {
+        this.afterConversionList.push({ val: element })
+      })
+    },
+    saveRule() {//保存
+      this.dialogVisible = false
+    },
+    addRule() {   //规则配置新增
+      this.configureList.push({
+        beforeConversion: '',
+        afterConversion: ''
+      })
+    },
+    delRule(i) {  //规则配置删除
+      this.configureList.splice(i, 1)
+    },
+    batch() {//批量同步
+      if (!this.batchList.length) return this.$message.error('请先选择数据')
+      var map = {};
+      // row.btnLoading = true
+      // row.result = ''
+      let data = {
+        dbConnectionFrom: this.dataForm.dbConnectionFrom,
+        dbConnectionTo: this.dataForm.dbConnectionTo,
+        dbTable: this.batchList,
+      }
+      if (this.configureList && this.configureList.length > 0) {
+        for (var index in this.configureList) {
+          map[this.configureList[index].beforeConversion] = this.configureList[index].afterConversion;
+        }
+        data = { ...data, convertRulesMap: map }
+      }
+    },
+    addConfigure() {  //添加规则配置
+      if (!this.verification) return this.$message.error('请验证连接')
+      this.dialogVisible = true
+    },
+    handleSelectionChange(val) {   //多选框
+      this.batchList = val
+    },
     copy(row) {
+      var map = {};
       row.btnLoading = true
       row.result = ''
       let data = {
         dbConnectionFrom: this.dataForm.dbConnectionFrom,
         dbConnectionTo: this.dataForm.dbConnectionTo,
-        dbTable: row.table
+        dbTable: row.table,
       }
-      DataSync(data).then((res) => {
+      if (this.configureList.length > 0) {
+        for (var index in this.configureList) {
+          map[this.configureList[index].beforeConversion] = this.configureList[index].afterConversion;
+        }
+        data = { ...data, convertRulesMap: map }
+      }
+      synchronization(data).then((res) => {
         if (res.data == 0) {
           this.execute(row, res.data)
         } else if (res.data == 1) {
@@ -130,9 +239,7 @@ export default {
             this.execute(row, res.data)
           }).catch(() => { row.btnLoading = false });
         }
-      }).catch(() => {
-        row.btnLoading = false
-      })
+      }).catch(() => { row.btnLoading = false });
     },
     execute(row, type) {
       row.result = ''
@@ -152,3 +259,21 @@ export default {
   }
 }
 </script>
+<style lang="scss" scoped>
+.rule-dialog {
+  >>> .el-dialog__body {
+    min-height: 300px !important;
+    padding: 20px 20px 10px !important;
+  }
+  .option-box-tip {
+    margin-bottom: 20px;
+  }
+  .rule-cell {
+    line-height: 32px;
+    &.mid {
+      color: #1890ff;
+      text-align: center;
+    }
+  }
+}
+</style>

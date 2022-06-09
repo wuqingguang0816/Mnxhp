@@ -394,6 +394,35 @@
         </el-tab-pane>
       </el-tabs>
     </el-form>
+    <el-dialog title="数据同步" :visible.sync="visible" class="JNPF-dialog JNPF-dialog_center"
+      lock-scroll width="450px">
+      <div class="add-main">
+        <div class="add-item add-item-sys">
+          <i class="add-icon icon-ym icon-ym-upload"></i>
+          <div class="add-txt">
+            <p class="add-title">{{name}}</p>
+            <p class="add-desc">{{names}}</p>
+          </div>
+          <div class="add-button">
+            <el-button type="primary" size="small" @click="s">
+              同步</el-button>
+          </div>
+        </div>
+      </div>
+      <div class="add-main">
+        <div class="add-item add-item-sys">
+          <i class="add-icons icon-ym icon-ym-download"></i>
+          <div class="add-txt">
+            <p class="add-title">同步到系统</p>
+            <p class="add-desc">{{synchronization}}</p>
+          </div>
+          <div class="add-button">
+            <el-button type="primary" size="small" @click="s">
+              同步</el-button>
+          </div>
+        </div>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
@@ -427,6 +456,10 @@ export default {
       testSyncLoading: false,
       testDingLoading: false,
       thirdTab: '0',
+      visible: false,
+      synchronization: '',
+      name: '',
+      names: '',
       baseForm: {
         sysName: '',
         sysDescription: '',
@@ -655,6 +688,10 @@ export default {
       })
     },
     syncQy(row) {
+      this.name = '同步到微信'
+      this.names = '把系统数据同步到企业微信'
+      this.synchronization = '把企业微信数据同步到系统'
+      return this.visible = true
       row.loading = true
       const method = row.synType == '组织' ? synAllOrganizeSysToQy : synAllUserSysToQy
       method().then(res => {
@@ -675,6 +712,10 @@ export default {
       })
     },
     syncDing(row) {
+      this.name = '同步到钉钉'
+      this.names = '把系统数据同步到阿里钉钉'
+      this.synchronization = '把阿里钉钉数据同步到系统'
+      return this.visible = true
       row.loading = true
       const method = row.synType == '组织' ? synAllOrganizeSysToDing : synAllUserSysToDing
       method().then(res => {
@@ -794,6 +835,69 @@ export default {
       margin-right: 20px;
       :last-child {
         margin-right: 0;
+      }
+    }
+  }
+}
+.add-main {
+  margin-top: -20px;
+  margin-left: -20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  .add-item {
+    width: 450px;
+    height: 100px;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    padding-left: 20px;
+    &.add-item-sys {
+      // background: #fdeee5;
+      .add-icon {
+        background: #75d8f791;
+        color: #08c0f8;
+      }
+    }
+    .add-icon {
+      width: 56px;
+      height: 56px;
+      margin-right: 10px;
+      background: #cefae2;
+      border-radius: 50%;
+      color: #0eac5c;
+      flex-shrink: 0;
+      font-size: 30px;
+      line-height: 56px;
+      text-align: center;
+    }
+    .add-button {
+      margin-left: 80px;
+    }
+    .add-icons {
+      width: 56px;
+      height: 56px;
+      margin-right: 10px;
+      background: #cefae2;
+      border-radius: 50%;
+      color: #0eac5c;
+      flex-shrink: 0;
+      font-size: 30px;
+      line-height: 56px;
+      text-align: center;
+    }
+    .add-txt {
+      height: 56px;
+      P {
+        line-height: 28px;
+      }
+      .add-title {
+        font-size: 18px;
+        font-weight: bold;
+      }
+      .add-desc {
+        color: #8d8989;
+        font-size: 12px;
       }
     }
   }
