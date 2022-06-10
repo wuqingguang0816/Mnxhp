@@ -135,10 +135,13 @@ export default {
     setDefault() {
 
       getInterfaceList(this.identId).then(res => {
-        this.selectedData = res.data.list
-        console.log(res)
+        if (res.data) {
+          let list = res.data.list
+          if (list) {
+            this.selectedData = res.data.list
+          }
+        }
       })
-
     },
     //搜索时展开所有节点
     searchData() {

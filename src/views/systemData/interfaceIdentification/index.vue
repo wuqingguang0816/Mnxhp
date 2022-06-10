@@ -69,9 +69,9 @@
       </div>
     </div>
     <Form v-if="formVisible" ref="Form" @close="closeForm" />
-    <Preview v-if="previewVisible" ref="Preview" @close="previewVisible = false" />
-    <Log v-if="logVisible" ref="Log" @close="logVisible = false" />
-    <Empower ref="Empower" @close="empowerVisible = false" multiple />
+    <Preview v-if="previewVisible" ref="Preview" @close="closeOtherWind" />
+    <Log v-if="logVisible" ref="Log" @close="closeOtherWind" />
+    <Empower v-if="empowerVisible" ref="Empower" @close="closeOtherWind" multiple />
   </div>
 </template>
 
@@ -103,7 +103,7 @@ export default {
       formVisible: false,
       previewVisible: false,
       logVisible: false,
-      // empowerVisible: false
+      empowerVisible: false
     }
   },
   created() {
@@ -138,7 +138,7 @@ export default {
     viewLog(data) {
       this.logVisible = true
       this.$nextTick(() => {
-        this.$refs.Log.init(data.id, data.appName)
+        this.$refs.Log.init(data)
       })
     },
     handleDel(id) {
@@ -176,15 +176,24 @@ export default {
           keyword: '',
           currentPage: 1,
           pageSize: 20,
-          categoryId: '',
+
           sort: 'desc'
         },
           this.initData()
       }
     },
+    closeOtherWind() {
+      this.formVisible = false,
+        this.previewVisible = false,
+        this.logVisible = false,
+        this.empowerVisible = false,
+        this.initData()
+    },
     viewEmpower(data) {
-      // this.empowerVisible = true
-      this.$refs.Empower.init(data)
+      this.empowerVisible = true
+      this.$nextTick(() => {
+        this.$refs.Empower.init(data)
+      })
     },
   }
 }

@@ -22,7 +22,7 @@
           </el-form-item>
           <el-form-item label="appSecret" prop="appSecret">
             <el-input v-model="dataForm.appSecret" placeholder="输入appSecret" show-password>
-              <el-button slot="append" style="background-color: #c8c9cc;color:#FFF;" @click="getappSecret" disabled>获取秘钥</el-button>
+              <el-button slot="append" style="background-color: #c8c9cc;color:#FFF;" disabled>获取秘钥</el-button>
             </el-input>
           </el-form-item>
           <el-form-item label="使用期限" prop="usefulLife">
@@ -55,26 +55,37 @@
       </el-col>
 
       <el-col :span="20" :offset="2" class="mt-20">
-        <JNPF-table v-loading="listLoading" :data="tableList">
-          <el-table-column prop="appId" label="接口名称" width="300" />
-          <el-table-column prop="appName" label="接口编码" width="300" />
-          <el-table-column prop="appName" label="接口地址" min-width="300" />
-          <el-table-column prop="status" label="接口类型" width="200">
-            <template slot-scope="scope">
-              <el-tag type="success" v-if="scope.row.status==1">正常</el-tag>
-              <el-tag type="danger" v-if="scope.row.status==0">停用</el-tag>
+        <el-table v-loading="listLoading" :data="tableList">
+          <el-table-column type="expand">
+            <template slot-scope="props">
+              <el-col :span="20" :offset="2">
+                <JNPF-table v-loading="listLoading2" :data="props.row.paramList">
+                  <el-table-column prop="field" label="参数名称" width="300" align="center" />
+                  <el-table-column prop="dataType" label="参数类型" min-width="300" align="center" />
+                  <el-table-column prop="defaultValue" label="默认值" width="300" align="center" />
+                </JNPF-table>
+              </el-col>
             </template>
           </el-table-column>
-
-        </JNPF-table>
+          <el-table-column prop="fullName" label="接口名称" width="300" />
+          <el-table-column prop="enCode" label="接口编码" width="300" />
+          <el-table-column prop="url" label="接口地址" min-width="300" show-overflow-tooltip />
+          <el-table-column prop="status" label="接口类型" width="200">
+            <template slot-scope="scope">
+              <el-tag v-if="scope.row.dataType==1">静态数据</el-tag>
+              <el-tag type="success" v-if="scope.row.dataType==2">SQL操作</el-tag>
+              <el-tag type="warning" v-if="scope.row.dataType==3">API操作</el-tag>
+            </template>
+          </el-table-column>
+        </el-table>
       </el-col>
-
+      <el-col class="mt-50"></el-col>
     </el-row>
   </div>
 </template>
 
 <script>
-import { create, update } from '@/api/systemData/interfaceIdentification.js'
+import { getInterfaceList } from '@/api/systemData/interfaceIdentification.js'
 
 export default {
   data() {
@@ -107,7 +118,18 @@ export default {
           }
         ],
       },
+      listLoading: false,
+      listLoading2: false,
       tableList: [],
+      tenantId: '',
+      options: [
+        { label: '字符串', value: 'varchar' },
+        { label: '整型', value: 'int' },
+        { label: '日期时间', value: 'datetime' },
+        { label: '浮点', value: 'decimal' },
+        { label: '长整型', value: 'bigint' },
+        { label: '文本', value: 'text' }
+      ],
     }
   },
   methods: {
@@ -118,44 +140,40 @@ export default {
       if (data) {
         this.initData(data)
       }
-      // if (!id) return this.$emit('close')
-      // this.id = id
-      // this.title = title
-      // this.reset()
     },
 
     initData(data) {
       this.dataForm = data
+      this.setInterfaceData()
     },
     handleChange(value) {
       console.log(value);
     },
-    dataFormSubmit() {
-      console.log("表单提交", this.dataForm)
-      this.$refs['dataForm'].validate((valid) => {
-        if (valid) {
-          this.btnLoading = true
-          const formMethod = this.dataForm.id ? update : create
-          formMethod(this.dataForm).then(res => {
-            this.$message({
-              message: res.msg,
-              type: 'success',
-              duration: 1000,
-              onClose: () => {
-                this.btnLoading = false
-                this.$emit('close', true)
-              }
-            })
-          }).catch(() => {
-            this.btnLoading = false
+    setInterfaceData() {
+      this.tenantId = this.dataForm.tenantId ? this.dataForm.tenantId : ''
+      getInterfaceList(this.dataForm.id).then(res => {
+        if (res.data.list) {
+          let arr = []
+          res.data.list.forEach(item => {
+            item.url = `${this.define.comUrl}/api/system/DataInterface/${item.id}/Actions/Response` + (this.tenantId ? '?tenantId=' + this.tenantId : '')
+            item.paramList = [...JSON.parse(item.requestParameters)]
+            if (item.paramList.length > 0) {
+              item.paramList.forEach(elem => {
+                this.options.forEach(elm2 => {
+                  if (elm2.value == elem.dataType) {
+                    elem.dataType = elm2.label
+                  }
+                })
+
+              })
+            }
           })
+
+          this.tableList = res.data.list
+          console.log(" this.tableList", this.tableList)
         }
       })
-    }
-
-
-
-
+    },
 
   }
 }
@@ -170,5 +188,11 @@ export default {
     flex: 1;
     border-top: none;
   }
+}
+.demo-table-expand {
+  font-size: 0;
+}
+.mt-50 {
+  margin-top: 50px;
 }
 </style>
