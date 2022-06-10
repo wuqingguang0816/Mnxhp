@@ -7,7 +7,7 @@
       </div>
     </div>
 
-    <el-row class="main" style="overflow: auto">
+    <el-row class="main">
       <el-col :span="22" :offset="1">
         <group-title content="基本信息" />
       </el-col>
@@ -204,7 +204,7 @@ export default {
 </script>
 <style lang="scss" scoped>
 .main {
-  overflow: hidden;
+  overflow: auto;
   display: flex;
   flex-direction: column;
   padding: 0 0 10px;

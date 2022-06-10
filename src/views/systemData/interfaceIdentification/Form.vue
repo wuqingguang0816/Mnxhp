@@ -180,7 +180,7 @@ export default {
 </script>
 <style lang="scss" scoped>
 .main {
-  overflow: hidden;
+  overflow: auto;
   display: flex;
   flex-direction: column;
   padding: 0 0 10px;
