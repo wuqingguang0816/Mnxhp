@@ -23,7 +23,7 @@
             {{scope.row.fullName}}
           </template>
         </el-table-column>
-        <el-table-column label="组织操作权限(本层级)" width="300">
+        <el-table-column label="组织操作权限(本层级)" width="280" align="center">
           <template slot-scope="scope">
             <template v-if="scope.row.thisLayerSelect===2">
               <el-checkbox checked disabled>查看</el-checkbox>
@@ -55,7 +55,7 @@
             </template>
           </template>
         </el-table-column>
-        <el-table-column label="子组织操作权限(子层级)" width="300">
+        <el-table-column label="子组织操作权限(子层级)" width="280" align="center">
           <template slot-scope="scope">
             <template v-if="scope.row.subLayerSelect===2">
               <el-checkbox checked disabled>查看</el-checkbox>
@@ -117,7 +117,7 @@ export default {
       treeList: [],
       dataRule: {
         userId: [
-          { required: true, message: '请选择管理员', trigger: 'change' }
+          { required: true, message: '请选择管理员', trigger: 'click' }
         ]
       }
     }
@@ -131,7 +131,6 @@ export default {
       this.initData()
     },
     handleCheckedDatesChange(val) {
-      console.log(val)
     },
     initData() {
       this.listLoading = true
