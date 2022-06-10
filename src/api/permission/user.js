@@ -151,6 +151,14 @@ export const getUsersByRoleOrgId = (data) => {
     data
   })
 }
+// 通过部门id,岗位id,角色id,分组id,用户id获取用户列表(带分页)
+export const getUsersByUserCondition = (data) => {
+  return request({
+    url: '/api/permission/Users/UserCondition',
+    method: 'post',
+    data
+  })
+}
 // 导出Excel
 export function ExportExcel(data) {
   return request({
@@ -187,14 +195,6 @@ export function ImportPreview(data) {
 export function ExportExceptionData(data) {
   return request({
     url: '/api/permission/Users/ExportExceptionData',
-    method: 'post',
-    data
-  })
-}
-//部门、岗位、角色、分组id获取用户列表
-export function UserCondition(data) {
-  return request({
-    url: '/api/permission/Users/UserCondition',
     method: 'post',
     data
   })

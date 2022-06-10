@@ -143,7 +143,7 @@
 </template>
 
 <script>
-import { getImUserSelector, getUserInfoList, UserCondition } from '@/api/permission/user'
+import { getImUserSelector, getUserInfoList, getUsersByUserCondition } from '@/api/permission/user'
 import { addResizeListener, removeResizeListener } from 'element-ui/src/utils/resize-event';
 import { getDepartmentSelector } from '@/api/permission/department'
 import { getPositionList, getPositionSelector } from '@/api/permission/position'
@@ -468,7 +468,7 @@ export default {
           groupIds: this.groupIds
         }
       }
-      UserCondition(query).then(res => {
+      getUsersByUserCondition(query).then(res => {
         this.tableData = []
         this.tableData = res.data.list
         this.total = res.data.pagination.total
@@ -490,7 +490,6 @@ export default {
       }).catch(() => {
         this.listLoading = false
       })
-
     },
     getAllList() {
       this.treeLoading = true
@@ -498,7 +497,6 @@ export default {
         this.treeData = res.data.list
         this.treeLoading = false
       })
-
     },
     loadNode(node, resolve) {
       if (node.level === 0) {

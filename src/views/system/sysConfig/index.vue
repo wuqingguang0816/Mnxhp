@@ -394,8 +394,8 @@
         </el-tab-pane>
       </el-tabs>
     </el-form>
-    <el-dialog title="数据同步" :visible.sync="visible" class="JNPF-dialog JNPF-dialog_center"
-      lock-scroll width="450px">
+    <el-dialog title="数据同步" :visible.sync="visible"
+      class="JNPF-dialog JNPF-dialog_center sync-dialog" lock-scroll width="450px">
       <div class="add-main">
         <div class="add-item add-item-sys">
           <i class="add-icon icon-ym icon-ym-upload"></i>
@@ -404,7 +404,7 @@
             <p class="add-desc">{{names}}</p>
           </div>
           <div class="add-button">
-            <el-button type="primary" size="small" @click="name==='同步到微信'?syncQy(0):syncDing(0)"
+            <el-button type="primary" size="small" @click="name==='同步到企业微信'?syncQy(0):syncDing(0)"
               :loading="wechatLoading">
               同步</el-button>
           </div>
@@ -418,7 +418,7 @@
             <p class="add-desc">{{synchronization}}</p>
           </div>
           <div class="add-button">
-            <el-button type="primary" size="small" @click="name==='同步到微信'?syncQy(1):syncDing(1)"
+            <el-button type="primary" size="small" @click="name==='同步到企业微信'?syncQy(1):syncDing(1)"
               :loading="nailLoading">
               同步</el-button>
           </div>
@@ -693,7 +693,7 @@ export default {
       })
     },
     syncWechat(row) {
-      this.name = '同步到微信'
+      this.name = '同步到企业微信'
       this.names = '把系统数据同步到企业微信'
       this.synchronization = '把企业微信数据同步到系统'
       this.row = row || ''
@@ -701,7 +701,7 @@ export default {
 
     },
     syncNail(row) {
-      this.name = '同步到钉钉'
+      this.name = '同步到阿里钉钉'
       this.names = '把系统数据同步到阿里钉钉'
       this.synchronization = '把阿里钉钉数据同步到系统'
       this.row = row || ''
@@ -854,8 +854,6 @@ export default {
   }
 }
 .add-main {
-  margin-top: -20px;
-  margin-left: -20px;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -865,9 +863,7 @@ export default {
     display: flex;
     align-items: center;
     cursor: pointer;
-    padding-left: 20px;
     &.add-item-sys {
-      // background: #fdeee5;
       .add-icon {
         background: #75d8f791;
         color: #08c0f8;
@@ -916,5 +912,8 @@ export default {
       }
     }
   }
+}
+>>> .sync-dialog .el-dialog__body {
+  padding: 20px 50px !important;
 }
 </style>
