@@ -25,6 +25,26 @@
               <el-button slot="append" style="background-color: #c8c9cc;color:#FFF;" disabled>获取秘钥</el-button>
             </el-input>
           </el-form-item>
+
+          <el-form-item label="验证签名" prop="verifySignature">
+            <el-row>
+              <el-col :span="12">
+                <div slot="label">验证签名
+                  <el-tooltip content="开启后需要验证消息签名的真实性" placement="top">
+                    <a class="el-icon-warning-outline"></a>
+                  </el-tooltip>
+                </div>
+                <el-switch v-model="dataForm.verifySignature" :active-value="1" :inactive-value="0">
+                </el-switch>
+                <el-button slot="append" style="background-color: #1890FF;color:#FFF;" @click="getappSecret">获取秘钥</el-button>
+
+              </el-col>
+              <el-col :span="12" align="right">
+                <i class="icon-ym icon-ym-extend-paperclip" style="color:#606266;font-size: 14px;"><span>验证签名使用说明</span></i>
+              </el-col>
+            </el-row>
+          </el-form-item>
+
           <el-form-item label="使用期限" prop="usefulLife">
             <div slot="label">使用期限
               <el-tooltip content="未选择日期默认永久有效" placement="top">
@@ -36,6 +56,10 @@
           </el-form-item>
           <el-form-item label="白名单" prop="whiteList">
             <el-input v-model="dataForm.whiteList" placeholder="" type="textarea" :rows="5" />
+            <span style="color:#C0C4CC">多个IP设置，用英文符号隔开，如192.168.0.1,192.168.0.2</span>
+          </el-form-item>
+          <el-form-item label="黑名单" prop="blackList">
+            <el-input v-model="dataForm.blackList" placeholder="" type="textarea" :rows="5" />
             <span style="color:#C0C4CC">多个IP设置，用英文符号隔开，如192.168.0.1,192.168.0.2</span>
           </el-form-item>
           <el-form-item label="排序" prop="sortCode">
