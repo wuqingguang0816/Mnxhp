@@ -23,7 +23,7 @@
             {{scope.row.fullName}}
           </template>
         </el-table-column>
-        <el-table-column label="组织操作权限(本层级)" width="280" align="center">
+        <el-table-column label="组织操作权限(本层级)" width="280" header-align="center">
           <template slot-scope="scope">
             <template v-if="scope.row.thisLayerSelect===2">
               <el-checkbox checked disabled>查看</el-checkbox>
@@ -55,7 +55,7 @@
             </template>
           </template>
         </el-table-column>
-        <el-table-column label="子组织操作权限(子层级)" width="280" align="center">
+        <el-table-column label="子组织操作权限(子层级)" width="280" header-align="center">
           <template slot-scope="scope">
             <template v-if="scope.row.subLayerSelect===2">
               <el-checkbox checked disabled>查看</el-checkbox>
@@ -156,15 +156,15 @@ export default {
     },
     onThisLayerSelectChange(val, row) {
       if (val) return
-      this.$set(row, 'thisLayerAdd', 0)
-      this.$set(row, 'thisLayerEdit', 0)
-      this.$set(row, 'thisLayerDelete', 0)
+      if (row.thisLayerAdd === 1) this.$set(row, 'thisLayerAdd', 0)
+      if (row.thisLayerEdit === 1) this.$set(row, 'thisLayerEdit', 0)
+      if (row.thisLayerDelete === 1) this.$set(row, 'thisLayerDelete', 0)
     },
     onSubLayerSelectChange(val, row) {
       if (val) return
-      this.$set(row, 'subLayerAdd', 0)
-      this.$set(row, 'subLayerEdit', 0)
-      this.$set(row, 'subLayerDelete', 0)
+      if (row.subLayerAdd === 1) this.$set(row, 'subLayerAdd', 0)
+      if (row.subLayerEdit === 1) this.$set(row, 'subLayerEdit', 0)
+      if (row.subLayerDelete === 1) this.$set(row, 'subLayerDelete', 0)
     },
     init(id) {
       this.treeList = []
