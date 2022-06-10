@@ -18,7 +18,8 @@
         </el-select>
       </el-form-item>
       <el-form-item label="所属组织" prop="organizeIdsTree" v-if="dataForm.globalMark===0">
-        <ComSelect v-model="dataForm.organizeIdsTree" placeholder="选择所属组织" multiple clearable />
+        <ComSelect v-model="dataForm.organizeIdsTree" placeholder="选择所属组织" multiple clearable
+          auth />
       </el-form-item>
       <el-form-item label="排序" prop="sortCode">
         <el-input-number :min="0" :max="999999" v-model="dataForm.sortCode"

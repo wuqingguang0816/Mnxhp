@@ -15,9 +15,8 @@
       <el-form-item label="设置管理员" prop="userId" v-if="dataForm.id">
         <user-select v-model="dataForm.userId" placeholder="请选择管理员" @change="onChange" disabled />
       </el-form-item>
-      <el-table v-loading="listLoading" :data="treeList" row-key="organizeId"
-        :default-expand-all="expands" :tree-props="{children: 'children', hasChildren: ''}"
-        style="height:400px;overflow: auto">
+      <el-table v-loading="listLoading" :data="treeList" row-key="organizeId" default-expand-all
+        :tree-props="{children: 'children', hasChildren: ''}" style="height:400px;overflow: auto">
         <el-table-column prop="fullName" label="组织架构">
           <template slot-scope="scope">
             <i :class=scope.row.icon></i>
@@ -30,33 +29,29 @@
               <el-checkbox checked disabled>查看</el-checkbox>
             </template>
             <template v-if="scope.row.thisLayerSelect===0 ||scope.row.thisLayerSelect===1">
-              <el-checkbox v-model="scope.row.thisLayerSelect" :true-label="1" :false-label="0">
-                查看
-              </el-checkbox>
+              <el-checkbox v-model="scope.row.thisLayerSelect" :true-label="1" :false-label="0"
+                @change="onThisLayerSelectChange($event,scope.row)">查看</el-checkbox>
             </template>
             <template v-if="scope.row.thisLayerAdd===2">
               <el-checkbox checked disabled>添加</el-checkbox>
             </template>
             <template v-if="scope.row.thisLayerAdd===0 ||scope.row.thisLayerAdd===1">
-              <el-checkbox v-model="scope.row.thisLayerAdd" :true-label="1" :false-label="0">
-                添加
-              </el-checkbox>
+              <el-checkbox v-model="scope.row.thisLayerAdd" :true-label="1" :false-label="0"
+                :disabled="scope.row.thisLayerSelect===0">添加</el-checkbox>
             </template>
             <template v-if="scope.row.thisLayerEdit===2">
               <el-checkbox checked disabled>编辑</el-checkbox>
             </template>
             <template v-if="scope.row.thisLayerEdit===0 ||scope.row.thisLayerEdit===1">
-              <el-checkbox v-model="scope.row.thisLayerEdit" :true-label="1" :false-label="0">
-                编辑
-              </el-checkbox>
+              <el-checkbox v-model="scope.row.thisLayerEdit" :true-label="1" :false-label="0"
+                :disabled="scope.row.thisLayerSelect===0">编辑</el-checkbox>
             </template>
             <template v-if="scope.row.thisLayerDelete===2">
               <el-checkbox checked disabled>删除</el-checkbox>
             </template>
             <template v-if="scope.row.thisLayerDelete===0 ||scope.row.thisLayerDelete===1">
-              <el-checkbox v-model="scope.row.thisLayerDelete" :true-label="1" :false-label="0">
-                删除
-              </el-checkbox>
+              <el-checkbox v-model="scope.row.thisLayerDelete" :true-label="1" :false-label="0"
+                :disabled="scope.row.thisLayerSelect===0">删除</el-checkbox>
             </template>
           </template>
         </el-table-column>
@@ -66,33 +61,29 @@
               <el-checkbox checked disabled>查看</el-checkbox>
             </template>
             <template v-if="scope.row.subLayerSelect===0 ||scope.row.subLayerSelect===1">
-              <el-checkbox v-model="scope.row.subLayerSelect" :true-label="1" :false-label="0">
-                查看
-              </el-checkbox>
+              <el-checkbox v-model="scope.row.subLayerSelect" :true-label="1" :false-label="0"
+                @change="onSubLayerSelectChange($event,scope.row)">查看</el-checkbox>
             </template>
             <template v-if="scope.row.subLayerAdd===2">
               <el-checkbox checked disabled>添加</el-checkbox>
             </template>
             <template v-if="scope.row.subLayerAdd===0 ||scope.row.subLayerAdd===1">
-              <el-checkbox v-model="scope.row.subLayerAdd" :true-label="1" :false-label="0">
-                添加
-              </el-checkbox>
+              <el-checkbox v-model="scope.row.subLayerAdd" :true-label="1" :false-label="0"
+                :disabled="scope.row.subLayerSelect===0">添加</el-checkbox>
             </template>
             <template v-if="scope.row.subLayerEdit===2">
               <el-checkbox checked disabled>编辑</el-checkbox>
             </template>
             <template v-if="scope.row.subLayerEdit===0 ||scope.row.subLayerEdit===1">
-              <el-checkbox v-model="scope.row.subLayerEdit" :true-label="1" :false-label="0">
-                编辑
-              </el-checkbox>
+              <el-checkbox v-model="scope.row.subLayerEdit" :true-label="1" :false-label="0"
+                :disabled="scope.row.subLayerSelect===0">编辑</el-checkbox>
             </template>
             <template v-if="scope.row.subLayerDelete===2">
               <el-checkbox checked disabled>删除</el-checkbox>
             </template>
             <template v-if="scope.row.subLayerDelete===0 ||scope.row.subLayerDelete===1">
-              <el-checkbox v-model="scope.row.subLayerDelete" :true-label="1" :false-label="0">
-                删除
-              </el-checkbox>
+              <el-checkbox v-model="scope.row.subLayerDelete" :true-label="1" :false-label="0"
+                :disabled="scope.row.subLayerSelect===0">删除</el-checkbox>
             </template>
           </template>
         </el-table-column>
@@ -124,7 +115,6 @@ export default {
       listLoading: false,
       refreshTable: true,
       treeList: [],
-      expands: false,
       dataRule: {
         userId: [
           { required: true, message: '请选择管理员', trigger: 'change' }
@@ -164,11 +154,25 @@ export default {
           this.btnLoading = false
         })
       }
-
+    },
+    onThisLayerSelectChange(val, row) {
+      if (val) return
+      this.$set(row, 'thisLayerAdd', 0)
+      this.$set(row, 'thisLayerEdit', 0)
+      this.$set(row, 'thisLayerDelete', 0)
+    },
+    onSubLayerSelectChange(val, row) {
+      if (val) return
+      this.$set(row, 'subLayerAdd', 0)
+      this.$set(row, 'subLayerEdit', 0)
+      this.$set(row, 'subLayerDelete', 0)
     },
     init(id) {
       this.treeList = []
       this.dataForm.id = id || ""
+      if (!this.dataForm.id) {
+        this.dataForm.userId = ""
+      }
       this.visible = true
       this.formLoading = true
       this.$nextTick(() => {

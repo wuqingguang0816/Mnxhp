@@ -42,7 +42,7 @@
             <el-col :sm="12" :xs="24">
               <el-form-item label="所属组织" prop="organizeIdTree">
                 <ComSelect v-model="dataForm.organizeIdTree" placeholder="选择所属组织" multiple
-                  @change="onOrganizeChange" clearable />
+                  @change="onOrganizeChange" clearable auth />
               </el-form-item>
             </el-col>
             <el-col :sm="12" :xs="24">
