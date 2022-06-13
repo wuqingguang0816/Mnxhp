@@ -93,6 +93,7 @@
   </div>
 </template>
 <script>
+import { getInfo } from "@/api/system/authorize";
 import {
   getDataAuthorizeSchemeList,
   getDataAuthorizeList,
@@ -129,12 +130,15 @@ export default {
       menuType: 2,
       dbOptions: [],
       dbList: [],
-      tableName: ""
+      tableName: "",
+      dataType: "",
+      dataList: []
     };
   },
   methods: {
-    init(moduleId, fullName, type) {
+    init(moduleId, fullName, type, dataType) {
       this.menuType = type;
+      this.dataType = dataType
       this.dataAuthorizeListDrawer = true;
       this.moduleId = moduleId;
       this.tabActiveName = "dataAuthorizeScheme";
@@ -150,14 +154,13 @@ export default {
         this.getAuthorizeSchemeList();
       });
       if (this.menuType === 3) {
-        getFieldNameList(this.moduleId, "DataAuthorize").then(res => {
-          this.dbList = res.data || [];
-        });
+        // getFieldNameList(this.moduleId, "DataAuthorize").then(res => {
+        //   this.dbList = res.data || [];
+        // });
       }
     },
-    getConnectList(data, tableName) {
+    getConnectList(tableName) {
       this.tableName = tableName || "";
-      this.dbList = data;
     },
     getAuthorizeSchemeList() {
       // 获取方案管理列表
@@ -194,6 +197,7 @@ export default {
         this.getAuthorizeList();
         if (this.menuType === 2) {
           this.getDataSourceListAll();
+          this.getInfo()
         }
       }
     },
@@ -206,6 +210,12 @@ export default {
         this.getAuthorizeList();
       }
     },
+    getInfo() {
+      getInfo(this.moduleId, this.dataType).then(res => {
+        this.dataList = res.data || {}
+        this.tableName = this.dataList.linkTables || ''
+      })
+    },
     getDataSourceListAll() {
       getDataSourceListAll().then(res => {
         const list = res.data.list || []
@@ -216,7 +226,7 @@ export default {
     addDataConnect() {
       this.dataConnectFormVisible = true;
       this.$nextTick(() => {
-        this.$refs.DataConnectForm.init(this.dbOptions, 0);
+        this.$refs.DataConnectForm.init(this.dataList, this.moduleId, this.dbOptions, this.dataType);
       });
     },
     //新增,编辑
@@ -234,8 +244,8 @@ export default {
             this.moduleId,
             id,
             this.menuType,
-            this.dbList,
-            this.tableName
+            this.tableName,
+            this.dataType
           );
         });
       }

@@ -385,28 +385,29 @@ export default {
         this.tagsList = []
         return
       }
-      // const arr = this.multiple ? this.value : [this.value]
-      // const hasSysItem = arr.some(o => o === 'currentUser')
-      // getUserInfoList(arr).then(res => {
-      //   this.selectedData = res.data.list
-      //   if (hasSysItem) {
-      //     this.selectedData.push({
-      //       id: 'currentUser',
-      //       fullName: '当前用户'
-      //     })
-      //   }
-      //   if (this.multiple) {
-      //     this.innerValue = ''
-      //     this.tagsList = JSON.parse(JSON.stringify(this.selectedData))
-      //   } else {
-      //     this.innerValue = this.selectedData.length ? this.selectedData[0].fullName : ''
-      //   }
-      //   this.$nextTick(() => {
-      //     if (this.multiple) {
-      //       this.resetInputHeight();
-      //     }
-      //   });
-      // })
+      // this.confirm()
+      const arr = this.multiple ? this.value : [this.value]
+      const hasSysItem = arr.some(o => o === 'currentUser')
+      getUserInfoList(arr).then(res => {
+        this.selectedData = res.data.list
+        if (hasSysItem) {
+          this.selectedData.push({
+            id: 'currentUser',
+            fullName: '当前用户'
+          })
+        }
+        if (this.multiple) {
+          this.innerValue = ''
+          this.tagsList = JSON.parse(JSON.stringify(this.selectedData))
+        } else {
+          this.innerValue = this.selectedData.length ? this.selectedData[0].fullName : ''
+        }
+        this.$nextTick(() => {
+          if (this.multiple) {
+            this.resetInputHeight();
+          }
+        })
+      })
     },
     getData() {
 

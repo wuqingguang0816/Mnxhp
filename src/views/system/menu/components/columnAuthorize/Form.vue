@@ -12,8 +12,8 @@
         <!--        <el-input v-model="dataForm.bindTableName" placeholder="绑定表格描述" />-->
         <!--      </el-form-item>-->
         <el-form-item label="字段名称" prop="enCode">
-          <nameSelects :value="dataForm.enCode" :moduleId='dataForm.moduleId'
-            :title="dataForm.enCode" @change="changeName" />
+          <nameSelects :value="dataForm.enCode" :moduleId="dataForm.moduleId"
+            :title="dataForm.enCode" :dataType="dataType" @change="changeName" />
         </el-form-item>
         <!-- <el-form-item label="字段名称" prop="enCode">
         <el-select v-if="enCodeOptions.length > 0" v-model="dataForm.enCode" placeholder="请选择字段名称"
@@ -85,6 +85,7 @@ export default {
         description: "",
         fieldRule: 0
       },
+      dataType: "",
       enCodeOptions: [],
       fieldRuleOptions: [
         { value: 0, label: "主表规则" },
@@ -102,15 +103,15 @@ export default {
     };
   },
   methods: {
-    init(moduleId, id, menuType, dbList, tableName) {
+    init(moduleId, id, menuType, tableName, dataType) {
       this.menuType = menuType;
+      this.dataType = dataType
       this.dataForm.id = id || "";
       this.dataForm.moduleId = moduleId;
       this.visible = true;
       this.formLoading = true;
       this.$nextTick(() => {
         this.$refs["dataForm"].resetFields();
-        this.enCodeOptions = dbList;
         this.dataForm.bindTable = tableName;
         // 获取字段数据
         if (this.dataForm.id) {
@@ -126,7 +127,6 @@ export default {
     },
     changeName(val) {
       this.dataForm.enCode = val
-      console.log(val)
     },
     onEnCodeChange(e) {
       let objVal;

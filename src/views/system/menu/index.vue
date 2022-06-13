@@ -256,7 +256,7 @@ export default {
       const type = row.type;
       this.columnAuthorizeListDrawer = true;
       this.$nextTick(() => {
-        this.$refs.ColumnAuthorizeList.init(moduleId, fullName, type);
+        this.$refs.ColumnAuthorizeList.init(moduleId, fullName, type, 1);
       });
     },
     //表单权限
@@ -266,7 +266,7 @@ export default {
       const type = row.type;
       this.formAuthorizeListDrawer = true;
       this.$nextTick(() => {
-        this.$refs.FormAuthorizeList.init(moduleId, fullName, type);
+        this.$refs.FormAuthorizeList.init(moduleId, fullName, type, 2);
       });
     },
     //数据权限
@@ -276,7 +276,7 @@ export default {
       const type = row.type;
       this.dataAuthorizeListDrawer = true;
       this.$nextTick(() => {
-        this.$refs.DataAuthorizeList.init(moduleId, fullName, type);
+        this.$refs.DataAuthorizeList.init(moduleId, fullName, type, 3);
       });
     },
     exportMenu(id) {

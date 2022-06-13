@@ -13,7 +13,7 @@
       </el-form-item>
       <el-form-item label="数据选择" prop="dataSelect" class="el-select">
         <dataTable v-model="dataForm.dataSelect" placeholder="请选择数据表" multiple clearable
-          :value='dataForm.dataSelect' />
+          :dbLinkId="dataForm.dbLinkId" :value='dataForm.dataSelect' />
       </el-form-item>
       <!-- <el-form-item label="数据选择" prop="dataSelect" class="el-select">
         <div @click="jumpTable">
@@ -46,7 +46,7 @@
 </template>
 
 <script>
-import { getDataModelFields } from "@/api/system/dataAuthorize";
+import { saveLinkData } from "@/api/system/authorize";
 import DataTableForm from "./DataTableForm.vue";
 import dataTable from './DataTable.vue'
 export default {
@@ -63,6 +63,7 @@ export default {
         dbLinkId: "0",
         dataSelect: ""
       },
+      moduleId: "",
       dataRule: {
         dbLinkId: [
           { required: true, message: "数据库不能为空", trigger: "blur" }
@@ -72,7 +73,8 @@ export default {
         ]
       },
       dbOptions: [],
-      type: 0
+      type: 0,
+      dataType: ""
     };
   },
   computed: {
@@ -89,31 +91,44 @@ export default {
     change(val) {
       console.log(val)
     },
-    init(dbOptions, type) {
+    init(dataList, moduleId, dbOptions, dataType, type) {
+      this.dataType = dataType
+      this.moduleId = moduleId
       this.type = type != undefined ? type : 1
       this.visible = true;
       this.dbOptions = dbOptions;
+      if (dataList) {
+        this.dataForm.id = dataList.id || ''
+        this.dataForm.dbLinkId = dataList.linkId
+        this.dataForm.dataSelect = dataList.linkTables.split(",")
+      }
     },
     clear() {
       this.dataForm.dataSelect = "";
     },
     dataFormSubmit() {
-
       this.$refs["dataForm"].validate(valid => {
         if (valid) {
-          getDataModelFields(this.dataForm.dbLinkId, this.dataForm.dataSelect, this.type)
-            .then(res => {
-              this.$emit("refreshDataList", res.data.list, this.dataForm);
-              this.visible = false;
-            })
-            .catch(() => { });
+          let query = {
+            id: this.dataForm.id,
+            moduleId: this.moduleId,
+            linkId: this.dataForm.dbLinkId,
+            linkTables: this.dataForm.dataSelect.toString(),
+            dataType: this.dataType
+          }
+          saveLinkData(query).then(res => {
+            this.$emit("refreshDataList", this.dataForm.dataSelect.toString());
+            this.visible = false;
+          }).catch(() => { });
         }
       });
     },
     jumpTable() {
       this.formVisible = true;
     },
-    onDbChange() { },
+    onDbChange() {
+      this.dataForm.dataSelect = ''
+    },
     closeForm(table, row) {
       //   let data = JSON.parse(JSON.stringify(dbData));
       this.dataForm.dataSelect = table;

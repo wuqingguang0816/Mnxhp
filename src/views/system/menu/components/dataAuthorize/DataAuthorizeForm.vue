@@ -6,7 +6,7 @@
       v-loading="formLoading" class="menuForm">
       <el-form-item label="字段名称" prop="enCode">
         <nameSelects :value="dataForm.enCode" :moduleId='dataForm.moduleId' :title="dataForm.enCode"
-          @change="changeName" />
+          :dataType="dataType" @change="changeName" />
       </el-form-item>
       <!-- <el-form-item label="字段名称" prop="enCode">
         <el-select v-if="enCodeOptions.length" v-model="dataForm.enCode" placeholder="请选择字段名称"
@@ -188,12 +188,14 @@ export default {
           { required: true, message: "请选择条件内容", trigger: "blur" }
         ]
       },
-      enCodeOptions: []
+      enCodeOptions: [],
+      dataType: ""
     };
   },
   methods: {
-    init(moduleId, id, menuType, dbList, tableName) {
+    init(moduleId, id, menuType, tableName, dataType) {
       this.menuType = menuType;
+      this.dataType = dataType
       this.dataForm.id = id || "";
       this.dataForm.moduleId = moduleId;
       this.conditionSymbol = [];
@@ -201,7 +203,6 @@ export default {
       this.formLoading = true;
       this.$nextTick(() => {
         this.$refs["dataForm"].resetFields();
-        this.enCodeOptions = dbList;
         this.dataForm.bindTable = tableName;
         // 获取字段数据
         if (this.dataForm.id) {
@@ -214,6 +215,9 @@ export default {
         }
         this.formLoading = false;
       });
+    },
+    changeName(val) {
+      this.dataForm.enCode = val
     },
     onEnCodeChange(e) {
       let objVal;

@@ -78,7 +78,7 @@
         <el-table-column prop="tableName" label="说明" width="150" show-overflow-tooltip />
       </el-table> -->
       <span slot="footer" class="dialog-footer">
-        <el-button @click="closeDialog">{{$t("common.cancelButton")}}</el-button>
+        <el-button @click="visible=false">{{$t("common.cancelButton")}}</el-button>
         <el-button type="primary" @click="confirm()">{{$t("common.confirmButton")}}</el-button>
       </span>
     </el-dialog>
@@ -100,6 +100,9 @@ export default {
     }
   },
   props: {
+    dbLinkId: {
+      default: ''
+    },
     value: {
       default: ''
     },
@@ -183,9 +186,9 @@ export default {
         : 'small';
     },
   },
-  // created() {
-  //   this.getData()
-  // },
+  created() {
+    this.getData()
+  },
   mounted() {
     addResizeListener(this.$el, this.handleResize);
 
@@ -230,6 +233,10 @@ export default {
   },
   methods: {
     async getData() {
+      const dbLinkId = this.dbLinkId || "0";
+      DataModelList(dbLinkId, { keyword: this.keyword }).then((res) => {
+        this.allList = res.data.list
+      })
     },
     echoTable(rows) {
       rows.forEach(row => {
@@ -307,6 +314,7 @@ export default {
         this.tagsList = []
         return
       }
+
       const arr = this.multiple ? this.value : [this.value]
       let selectedData = []
       for (let i = 0; i < arr.length; i++) {

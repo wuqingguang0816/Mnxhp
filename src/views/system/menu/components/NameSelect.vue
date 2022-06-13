@@ -75,6 +75,12 @@ import { getVisualTables, getTableInfoByTableName } from "@/api/system/authorize
 import { getDataInterfaceTypeSelector, getDataInterfaceSelectorList } from '@/api/systemData/dataInterface'
 export default {
   props: {
+    dataType: {
+      default: ''
+    },
+    menuType: {
+      default: ''
+    },
     value: {
       default: ''
     },
@@ -177,18 +183,28 @@ export default {
       this.visible = true
       this.treeLoading = true
       this.listLoading = true
-      getVisualTables(this.moduleId).then(res => {
-        this.treeData = res.data
+      getVisualTables(this.moduleId, this.dataType).then(res => {
+        let data = []
+        for (const key in res.data.linkTables) {
+          data.push({
+            tableName: res.data.linkTables[key],
+            dblink: res.data.linkId
+          })
+          // console.log(res.data.linkTables[key])
+        }
+        // console.log(data)
+        this.treeData = data
         if (!this.treeData.length) return this.treeLoading = false
         this.$nextTick(() => {
-          this.tableName = res.data[0].tableName
-          this.linkId = res.data[0].dblink
+          this.tableName = this.treeData[0].tableName
+          this.linkId = this.treeData[0].dblink
           this.reset()
           this.treeLoading = false
         })
       }).catch(() => {
         this.treeLoading = false
       })
+
     },
     clear() {
       this.checked = ''

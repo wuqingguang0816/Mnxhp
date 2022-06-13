@@ -53,6 +53,7 @@
 </template>
 
 <script>
+import { getInfo } from "@/api/system/authorize";
 import {
   getColumnAuthorizeList,
   updateColumnState,
@@ -87,12 +88,15 @@ export default {
       menuType: 2,
       dbOptions: [],
       dbList: [],
-      tableName: ""
+      tableName: "",
+      dataType: "",
+      dataList: {}
     };
   },
   methods: {
-    init(moduleId, fullName, type) {
+    init(moduleId, fullName, type, dataType) {
       this.menuType = type;
+      this.dataType = dataType
       this.columnAuthorizeListDrawer = true;
       this.moduleId = moduleId;
       this.dialogTitle = `列表权限 - ${fullName}`;
@@ -105,14 +109,9 @@ export default {
         this.listQuery.keyword = "";
         this.getList();
       });
-      if (this.menuType === 3) {
-        getFieldNameList(this.moduleId, "Column").then(res => {
-          this.dbList = res.data || [];
-        });
-      } else {
-        if (this.menuType === 2) {
-          this.getDataSourceListAll();
-        }
+      if (this.menuType === 2) {
+        this.getDataSourceListAll();
+        this.getInfo()
       }
     },
     getDataSourceListAll() {
@@ -121,16 +120,22 @@ export default {
         this.dbOptions = list.filter(o => o.children && o.children.length);
       })
     },
+    getInfo() {
+      getInfo(this.moduleId, this.dataType).then(res => {
+        this.dataList = res.data || {}
+        this.tableName = this.dataList.linkTables || ''
+      })
+    },
     //数据连接
     addDataConnect() {
       this.columnConnectFormVisible = true;
       this.$nextTick(() => {
-        this.$refs.ColumnConnectForm.init(this.dbOptions);
+        this.$refs.ColumnConnectForm.init(this.dataList, this.moduleId, this.dbOptions, this.dataType);
       });
     },
-    getConnectList(data, tableName) {
+    getConnectList(tableName) {
       this.tableName = tableName || "";
-      this.dbList = data;
+      // this.dbList = data;
     },
     getList() {
       this.listLoading = true;
@@ -175,8 +180,8 @@ export default {
           this.moduleId,
           id,
           this.menuType,
-          this.dbList,
-          this.tableName
+          this.tableName,
+          this.dataType
         );
       });
     },
