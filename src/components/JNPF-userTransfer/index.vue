@@ -47,12 +47,22 @@
         <el-button @click="removeAll" type="text" class="removeAllBtn">清空列表</el-button>
       </div>
       <div class="transfer-pane__body shadow right-pane">
-        <template>
-          <div v-for="(item, index) in selectedData" :key=" index" class="selected-item">
-            <span>{{ item.fullName}}</span>
-            <i class="el-icon-delete" @click="removeData(index)"></i>
+        <template v-if="selectedData.length">
+          <div v-for="(item,index) in selectedData" :key="index" class="selected-item-user">
+            <div class="selected-item-main">
+              <el-avatar :size="36" :src="define.comUrl+item.headIcon"
+                class="selected-item-headIcon">
+              </el-avatar>
+              <div class="selected-item-text">
+                <p class="name">{{item.fullName}}
+                  <i class="el-icon-delete" @click="removeData(index)"></i>
+                </p>
+                <p class="organize" :title="item.organize">{{item.organize}}</p>
+              </div>
+            </div>
           </div>
         </template>
+        <el-empty description="暂无数据" :image-size="120" v-else></el-empty>
       </div>
     </div>
   </div>
@@ -168,26 +178,13 @@ export default {
     },
     handleNodeClick(data) {
       if (data.type !== 'user') return
-      const boo = this.selectedData.some(o => o.id === data.id)
-      if (boo) return
-      const item = {
-        id: data.id,
-        fullName: data.fullName
-      }
-      this.multiple ? this.selectedData.push(item) : this.selectedData = [item]
-      this.multiple ? this.ids.push(item.id) : this.ids = [item.id]
-      this.$emit('input', this.ids)
-      this.$emit('getValue', this.ids, this.selectedData)
+      this.handleNodeClick2(data)
     },
     handleNodeClick2(data) {
       const boo = this.selectedData.some(o => o.id === data.id)
       if (boo) return
-      const item = {
-        id: data.id,
-        fullName: data.fullName
-      }
-      this.multiple ? this.selectedData.push(item) : this.selectedData = [item]
-      this.multiple ? this.ids.push(item.id) : this.ids = [item.id]
+      this.multiple ? this.selectedData.push(data) : this.selectedData = [data]
+      this.multiple ? this.ids.push(data.id) : this.ids = [data.id]
       this.$emit('input', this.ids)
       this.$emit('getValue', this.ids, this.selectedData)
     },

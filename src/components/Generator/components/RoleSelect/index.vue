@@ -277,11 +277,7 @@ export default {
       if (data.type !== 'role') return
       const boo = this.selectedData.some(o => o.id === data.id)
       if (boo) return
-      const item = {
-        id: data.id,
-        fullName: data.fullName
-      }
-      this.multiple ? this.selectedData.push(item) : this.selectedData = [item]
+      this.multiple ? this.selectedData.push(data) : this.selectedData = [data]
     },
     removeAll() {
       this.selectedData = []

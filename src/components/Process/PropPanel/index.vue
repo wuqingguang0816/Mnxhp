@@ -38,7 +38,6 @@
                 :label="item.__config__.label" :value="item.__vModel__">
               </el-option>
             </el-select>
-
           </el-col>
           <el-col :span="4">
             <el-select v-model="item.symbol" placeholder="请选择" class="condition-select"
@@ -232,11 +231,10 @@
                 </el-form-item>
                 <el-form-item style="margin-bottom:0;" v-if="subFlowForm.initiateType === 6">
                   <org-select ref="subFlow-role-org" type="role" v-model="subFlowForm.initiateRole"
-                    title="添加角色" class="mb-10" buttonType="button" />
-                  <org-select ref="subFlow-position-org" buttonType="button"
-                    v-model="subFlowForm.initiatePos" title="添加岗位" type="position" class="mb-10" />
-                  <org-select ref="subFlow-user-org" buttonType="button"
-                    v-model="subFlowForm.initiator" title="添加用户" />
+                    title="添加角色" class="mb-10" />
+                  <org-select ref="subFlow-position-org" v-model="subFlowForm.initiatePos"
+                    title="添加岗位" type="position" class="mb-10" />
+                  <org-select ref="subFlow-user-org" v-model="subFlowForm.initiator" title="添加用户" />
                 </el-form-item>
               </el-form-item>
               <el-form-item label="子流程类型">
@@ -319,11 +317,10 @@
               </el-col>
               <div class="option-box">
                 <org-select ref="start-role-org" type="role" v-model="initiateRole" title="添加角色"
-                  class="mb-10" buttonType="button" />
+                  class="mb-10" />
                 <org-select ref="start-position-org" type="position" v-model="initiatePos"
-                  title="添加岗位" class="mb-10" buttonType="button" />
-                <org-select ref="start-user-org" type="user" v-model="initiator" title="添加用户"
-                  buttonType="button" />
+                  title="添加岗位" class="mb-10" />
+                <org-select ref="start-user-org" type="user" v-model="initiator" title="添加用户" />
               </div>
             </el-row>
           </el-scrollbar>
@@ -802,11 +799,11 @@
                 </el-form-item>
                 <el-form-item style="margin-bottom:0;"
                   v-if="approverForm.assigneeType === 6||approverForm.assigneeType === 7">
-                  <org-select ref="approver-role-org" type="role" title="添加角色" buttonType="button"
+                  <org-select ref="approver-role-org" type="role" title="添加角色"
                     v-model="approverForm.approverRole" class="mb-10" />
-                  <org-select ref="approver-position-org" buttonType="button"
-                    v-model="approverForm.approverPos" title="添加岗位" type="position" class="mb-10" />
-                  <org-select ref="approver-user-org" title="添加用户" buttonType="button"
+                  <org-select ref="approver-position-org" v-model="approverForm.approverPos"
+                    title="添加岗位" type="position" class="mb-10" />
+                  <org-select ref="approver-user-org" title="添加用户"
                     v-model="approverForm.approvers" />
                 </el-form-item>
               </el-form-item>
@@ -840,13 +837,12 @@
               </el-form-item>
               <el-form-item label="抄送设置">
                 <org-select ref="approver-copy-role-org" type="role"
-                  v-model="approverForm.circulateRole" title="添加角色" class="mb-10"
-                  buttonType="button" />
-                <org-select ref="approver-copy-position-org" buttonType="button"
+                  v-model="approverForm.circulateRole" title="添加角色" class="mb-10" />
+                <org-select ref="approver-copy-position-org"
                   v-model="approverForm.circulatePosition" title="添加岗位" type="position"
                   class="mb-10" />
-                <org-select ref="approver-copy-user-org" buttonType="button"
-                  v-model="approverForm.circulateUser" title="添加用户" class="mb-10" />
+                <org-select ref="approver-copy-user-org" v-model="approverForm.circulateUser"
+                  title="添加用户" class="mb-10" />
                 <el-checkbox v-model="approverForm.isCustomCopy">允许自选抄送人</el-checkbox>
               </el-form-item>
             </el-form>

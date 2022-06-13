@@ -42,7 +42,7 @@ export default {
     },
     buttonType: {
       type: String,
-      default: 'input'
+      default: 'button'
     }, // or input
     tagConfig: {
       type: Object,

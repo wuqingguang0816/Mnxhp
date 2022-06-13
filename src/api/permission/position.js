@@ -75,3 +75,12 @@ export const getPositionByOrganize = (organizeIds) => {
     data: { organizeIds }
   })
 }
+
+// 通过部门id,岗位id获取岗位树形
+export const getPositionByPositionCondition = (data) => {
+  return request({
+    url: `/api/permission/Position/PositionCondition`,
+    method: 'post',
+    data
+  })
+}

@@ -9,6 +9,12 @@ export default {
   data() {
     return {}
   },
+  created() {
+    this.$store.dispatch('base/getPositionList')
+    this.$store.dispatch('base/getRoleList')
+    this.$store.dispatch('generator/getDepTree')
+    this.$store.dispatch('generator/getGroupTree')
+  },
   methods: {
     closeDialog(isRefresh) {
       this.visible = false
