@@ -59,3 +59,13 @@ export function getInterfaceList(id) {
     method: 'GET',
   })
 }
+
+// 获取接口日志列表
+export function dataInterfaceLog(data) {
+  return request({
+    url: `/api/system/InterfaceIdentification/dataInterfaceLog`,
+    method: 'GET',
+    data
+  })
+}
+

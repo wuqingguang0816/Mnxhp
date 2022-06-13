@@ -81,3 +81,11 @@ export const setOrganizeTrator = (data) => {
     data
   })
 }
+// 通过部门id获取部门树形
+export const getOrgByOrganizeCondition = (data) => {
+  return request({
+    url: `/api/permission/Organize/OrganizeCondition`,
+    method: 'post',
+    data
+  })
+}

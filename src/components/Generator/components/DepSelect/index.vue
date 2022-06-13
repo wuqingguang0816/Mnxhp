@@ -80,6 +80,7 @@
 
 <script>
 import { addResizeListener, removeResizeListener } from 'element-ui/src/utils/resize-event';
+import { getOrgByOrganizeCondition } from '@/api/permission/organize'
 
 export default {
   name: 'groupSelect',
@@ -114,6 +115,14 @@ export default {
     clearable: {
       type: Boolean,
       default: false
+    },
+    selectType: {
+      type: String,
+      default: 'all'
+    },
+    ableDepIds: {
+      type: Array,
+      default: () => []
     },
     size: String,
   },
@@ -217,8 +226,23 @@ export default {
   },
   methods: {
     async getData() {
-      this.treeData = await this.$store.dispatch('generator/getDepTree')
+      const treeData = await this.$store.dispatch('generator/getDepTree')
       this.allList = await this.$store.getters.departmentList
+      if (this.selectType === 'all') {
+        this.treeData = treeData
+      }
+      if (this.selectType === 'custom') {
+        this.getAbleList()
+      }
+    },
+    getAbleList() {
+      let query = {
+        keyword: "",
+        departIds: this.ableDepIds
+      }
+      getOrgByOrganizeCondition(query).then(res => {
+        this.treeData = res.data.list
+      })
     },
     onClose() { },
     openDialog() {
@@ -239,11 +263,7 @@ export default {
       if (data.type !== 'department') return
       const boo = this.selectedData.some(o => o.id === data.id)
       if (boo) return
-      const item = {
-        id: data.id,
-        fullName: data.fullName
-      }
-      this.multiple ? this.selectedData.push(item) : this.selectedData = [item]
+      this.multiple ? this.selectedData.push(data) : this.selectedData = [data]
     },
     removeAll() {
       this.selectedData = []

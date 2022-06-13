@@ -302,8 +302,6 @@ export const inputComponents = [
     },
     on: {
       change:
-        "({ data, formData, setFormData, setShowOrHide, setRequired, setDisabled, request, getFieldOptions, setFieldOptions }) => {\n    // 在此编写代码\n    \n}",
-      blur:
         "({ data, formData, setFormData, setShowOrHide, setRequired, setDisabled, request, getFieldOptions, setFieldOptions }) => {\n    // 在此编写代码\n    \n}"
     },
     placeholder: "请选择",
@@ -763,6 +761,8 @@ export const selectComponents = [
         "({ data, formData, setFormData, setShowOrHide, setRequired, setDisabled, request, getFieldOptions, setFieldOptions }) => {\n    // 在此编写代码\n    \n}"
     },
     placeholder: "请选择",
+    selectType: 'all',
+    ableDepIds: [],
     multiple: false,
     clearable: true,
     filterable: false,
@@ -791,6 +791,9 @@ export const selectComponents = [
         "({ data, formData, setFormData, setShowOrHide, setRequired, setDisabled, request, getFieldOptions, setFieldOptions }) => {\n    // 在此编写代码\n    \n}"
     },
     placeholder: "请选择",
+    selectType: 'all',
+    ableDepIds: [],
+    ablePosIds: [],
     multiple: false,
     clearable: true,
     filterable: false,
@@ -819,6 +822,12 @@ export const selectComponents = [
         "({ data, formData, setFormData, setShowOrHide, setRequired, setDisabled, request, getFieldOptions, setFieldOptions }) => {\n    // 在此编写代码\n    \n}"
     },
     placeholder: "请选择",
+    selectType: 'all',
+    ableDepIds: [],
+    ablePosIds: [],
+    ableUserIds: [],
+    ableRoleIds: [],
+    ableGroupIds: [],
     multiple: false,
     clearable: true,
     disabled: false

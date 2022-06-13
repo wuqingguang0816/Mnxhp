@@ -80,6 +80,7 @@
 
 <script>
 import { addResizeListener, removeResizeListener } from 'element-ui/src/utils/resize-event';
+import { getPositionByPositionCondition } from '@/api/permission/position'
 
 export default {
   name: 'groupSelect',
@@ -114,6 +115,18 @@ export default {
     clearable: {
       type: Boolean,
       default: false
+    },
+    selectType: {
+      type: String,
+      default: 'all'
+    },
+    ableDepIds: {
+      type: Array,
+      default: () => []
+    },
+    ablePosIds: {
+      type: Array,
+      default: () => []
     },
     size: String,
   },
@@ -217,8 +230,23 @@ export default {
   },
   methods: {
     async getData() {
-      this.treeData = await this.$store.dispatch('base/getPositionTree')
-      this.allList = this.jnpf.treeToArray(this.treeData)
+      this.allList = await this.$store.dispatch('base/getPositionList')
+      if (this.selectType === 'all') {
+        this.treeData = await this.$store.dispatch('base/getPositionTree')
+      }
+      if (this.selectType === 'custom') {
+        this.getAbleList()
+      }
+    },
+    getAbleList() {
+      let query = {
+        keyword: "",
+        departIds: this.ableDepIds,
+        positionIds: this.ablePosIds
+      }
+      getPositionByPositionCondition(query).then(res => {
+        this.treeData = res.data.list
+      })
     },
     onClose() { },
     openDialog() {
@@ -239,11 +267,7 @@ export default {
       if (data.type !== 'position') return
       const boo = this.selectedData.some(o => o.id === data.id)
       if (boo) return
-      const item = {
-        id: data.id,
-        fullName: data.fullName
-      }
-      this.multiple ? this.selectedData.push(item) : this.selectedData = [item]
+      this.multiple ? this.selectedData.push(data) : this.selectedData = [data]
     },
     removeAll() {
       this.selectedData = []
