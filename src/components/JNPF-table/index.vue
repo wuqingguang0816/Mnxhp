@@ -10,7 +10,7 @@
       <template v-else>
         <slot />
       </template>
-      <el-table-column align="center" fixed="right" width="36" v-if="customColumn">
+      <el-table-column align="center" fixed="right" width="40" v-if="customColumn">
         <template slot="header">
           <el-link icon="icon-ym icon-ym-options JNPF-common-head-icon" :underline="false"
             @click="showDrawer" />
