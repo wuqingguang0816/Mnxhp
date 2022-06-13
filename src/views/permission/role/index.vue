@@ -195,14 +195,14 @@ export default {
     getOrganizeList(isInit) {
       this.treeLoading = true
       getDepartmentSelectorByAuth().then(res => {
-        let firstItem = {
-          fullName: "全局",
-          hasChildren: false,
-          id: "0",
-          parentId: "-1",
-          icon: 'icon-ym icon-ym-global-role'
-        }
-        this.treeData = [firstItem, ...res.data.list]
+        // let firstItem = {
+        //   fullName: "全局",
+        //   hasChildren: false,
+        //   id: "0",
+        //   parentId: "-1",
+        //   icon: 'icon-ym icon-ym-global-role'
+        // }
+        this.treeData = res.data.list
         this.$nextTick(() => {
           this.treeLoading = false
           if (isInit) this.initData()
