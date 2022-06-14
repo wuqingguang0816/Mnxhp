@@ -32,7 +32,8 @@
               将 query string 分成 {name, value} 的列表形式。如果 name 对应多个 value, 则组成多个 (name, value) 对，其中 name 按照字典序进行排列，一个 name 对应多个 value ，同样 value 也按照字典序进行排列（示例为：name1=value1&amp;name2=value2&amp; ... nameX=valueX）。</p>
           </li>
           <li>
-            <p>Header 中的 YmDate， 或者 Date， RFC_1123，GMT 时区，例如（Thu, 3 Aug 2017 11:12:30 GMT）。加上换行符 \n</p>
+            <p>Header 中的 YmDate， RFC_1123，GMT 时区，例如（Thu, 3 Aug 2017 11:12:30 GMT）。加上换行符 \n</p>
+            <p>该时间将会用来判断请求有效性，限定一分钟之内有效。若无效返回验证超时。</p>
           </li>
           <li>Header 中的 Host，为开发者自身的域名，加上换行符 \n</li>
           <li>Header 中的 Content-Type，加上换行符 \n</li>
