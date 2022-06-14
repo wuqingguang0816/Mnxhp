@@ -59,6 +59,10 @@
         </ol>
         <h4><a href="#签名示例" id="签名示例" name="签名示例" class="anchor"><span class="octicon octicon-link"></span>签名示例</a></h4>
         <p>针对 appId, appSecret (abcde, xxxxxxxxxxxxxxxxyyyyyyyyyyyyyyyy)</p>
+        <p>appId和appSecret为必传参数。可以添加为请求头参数（Header）</p>
+        <p>或者当GET请求时：请求路径参数Params。如:**/Response?appId=123&amp;appSecret=abc</p>
+        <p>或者当POST请求时：请求头body参数json格式如：{"appId":"123","appSecret":"abc"}</p>
+        <p>注意：当参数不是放在Header内，而是GET的路径参数或者POST的body参数时，签名字符串的参数字段必须添加相关参数信息。</p>
         <h5><a href="#get-请求" id="get-请求" name="get-请求" class="anchor"><span class="octicon octicon-link"></span>GET 请求：</a></h5>
         <p><em>GET /dev/api/system/DataInterface/{id}/Actions/Response?tenantId=xxxxx&amp;name=abc<br>
             Host : localhost:30000<br>
