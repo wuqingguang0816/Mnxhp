@@ -139,8 +139,8 @@
           <el-form-item label="指派给谁" prop="freeApproverUserId">
             <user-select v-model="assignForm.freeApproverUserId" placeholder="请选择指派给谁" />
           </el-form-item>
-          <el-form-item label="指派意见" prop="reason">
-            <el-input v-model="assignForm.reason" placeholder="请输入指派意见（选填）" type="textarea" :rows="4" />  
+          <el-form-item label="指派意见" prop="handleOpinion">
+            <el-input v-model="assignForm.handleOpinion" placeholder="请输入指派意见（选填）" type="textarea" :rows="4" />  
           </el-form-item>
           <el-form-item label="指派附件" prop="fileList">
             <JNPF-UploadFz v-model="assignForm.fileList" />
@@ -186,7 +186,7 @@ export default {
         nodeCode: '',
         freeApproverUserId: '',
         fileList: [],
-        reason: ''
+        handleOpinion: ''
       },
       assignRules: {
         nodeCode: [
