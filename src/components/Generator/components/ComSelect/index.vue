@@ -277,10 +277,9 @@ export default {
       loop(node)
       return fullPath
     },
-    handleNodeClick(data, node) {
-      const nodePath = this.getNodePath(node)
-      let currId = nodePath.map(o => o.id)
-      let currData = nodePath.map(o => o.fullName).join('/')
+    handleNodeClick(data) {
+      let currId = data.organizeIds
+      let currData = data.organize
       if (this.multiple) {
         const boo = this.selectedIds.some(o => o.join('/') === currId.join('/'))
         if (boo) return
