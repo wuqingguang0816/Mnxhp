@@ -57,8 +57,8 @@
           </el-form-item>
           <el-form-item label="动作" prop="requestMethod" v-if="dataForm.dataType===3">
             <el-radio-group v-model="dataForm.requestMethod" @change="onMethodChange($event,'api')">
-              <el-radio label="6">GET请求</el-radio>
-              <el-radio label="7">POST请求</el-radio>
+              <el-radio label="6">GET</el-radio>
+              <el-radio label="7">POST</el-radio>
             </el-radio-group>
           </el-form-item>
           <el-form-item label="排序" prop="sortCode">
@@ -90,7 +90,7 @@
       </div>
       <div class="detail">
         <el-tabs v-model="activeName">
-          <el-tab-pane label="查询SQL" name="query">
+          <el-tab-pane label="SQL语句" name="query">
             <el-form ref="dataForm" :model="dataForm" :rules="dataRule" label-width="100px">
               <el-form-item label-width="0" prop="query">
                 <div class="sql-box">
@@ -121,7 +121,7 @@
                     title='点击拖动' />
                 </template>
               </el-table-column>
-              <el-table-column prop="field" label="参数名称(说明)">
+              <el-table-column prop="field" label="参数名称">
                 <template slot-scope="scope">
                   <p @click="handleItemClick(scope.row)" style="cursor:pointer">
                     <span class="required-sign">{{scope.row.required?'*':''}}</span>
@@ -205,7 +205,7 @@
                     title='点击拖动' />
                 </template>
               </el-table-column>
-              <el-table-column prop="field" label="参数名称(说明)">
+              <el-table-column prop="field" label="参数名称">
                 <template slot-scope="scope">
                   <p>
                     <span class="required-sign">{{scope.row.required?'*':''}}</span>

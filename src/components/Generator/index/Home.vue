@@ -417,7 +417,7 @@ export default {
       if (dbType.toLowerCase() === 'Oracle'.toLowerCase() || dbType.toLowerCase() === 'DM8'.toLowerCase()) {
         return str.toUpperCase()
       }
-      if (dbType === 'PostgreSql' || dbType === 'KingBase') {
+      if (dbType.toLowerCase() === 'PostgreSQL'.toLowerCase() || dbType.toLowerCase() === 'KingBaseES'.toLowerCase()) {
         return str.toLowerCase()
       }
       return str
