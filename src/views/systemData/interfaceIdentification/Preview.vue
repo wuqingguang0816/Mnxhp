@@ -39,9 +39,9 @@
                 <el-button slot="append" style="background-color: #1890FF;color:#FFF;" @click="getappSecret">获取秘钥</el-button>
 
               </el-col>
-              <el-col :span="12" align="right">
+              <!-- <el-col :span="12" align="right">
                 <i class="icon-ym icon-ym-extend-paperclip" style="color:#606266;font-size: 14px;"><span>验证签名使用说明</span></i>
-              </el-col>
+              </el-col> -->
             </el-row>
           </el-form-item>
 

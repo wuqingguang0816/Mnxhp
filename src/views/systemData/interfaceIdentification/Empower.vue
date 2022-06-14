@@ -145,7 +145,6 @@ export default {
     },
     //搜索时展开所有节点
     searchData() {
-      this.setAllExpand(this.treeData)
       if (this.keyword) {
         let arr = []
         this.treeData.forEach(item => {
@@ -159,7 +158,10 @@ export default {
           arr.push(item)
         })
         this.treeData = arr
+      } else {
+        this.getAllList()
       }
+      this.setAllExpand(this.treeData)
     },
     //设置展开的节点
     setAllExpand(data) {

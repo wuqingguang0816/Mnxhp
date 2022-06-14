@@ -39,7 +39,9 @@
 
               </el-col>
               <el-col :span="12" align="right">
-                <i class="icon-ym icon-ym-extend-paperclip" style="color:#606266;font-size: 14px;"><span>验证签名使用说明</span></i>
+                <i class="icon-ym icon-ym-extend-paperclip" style="color:#C0C4CC">
+                  <el-button type="text" @click.native="showVerify()" style="color:#C0C4CC;font-size: 14px;">验证签名使用说明</el-button>
+                </i>
               </el-col>
             </el-row>
           </el-form-item>
@@ -79,15 +81,21 @@
         </el-form>
       </el-col>
     </el-row>
+    <VerifySignatureInfo v-if="verifySignatureVisible" ref="VerifySignatureInfo" @close="verifySignatureVisible=false" />
   </div>
+
 </template>
 
 <script>
+
+import VerifySignatureInfo from './VerifySignatureInfo'
 import { create, update, getAppSecret } from '@/api/systemData/interfaceIdentification.js'
 
 export default {
+  components: { VerifySignatureInfo },
   data() {
     return {
+      verifySignatureVisible: false,
       btnLoading: false,
       dataForm: {
         appSecret: '',
@@ -169,12 +177,13 @@ export default {
           })
         }
       })
-    }
-
-
-
-
-
+    },
+    showVerify() {
+      this.verifySignatureVisible = true
+      this.$nextTick(() => {
+        this.$refs.VerifySignatureInfo.init()
+      })
+    },
   }
 }
 </script>
