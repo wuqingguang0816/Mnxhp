@@ -44,6 +44,9 @@
       <el-form-item label="抄送人员" prop="copyIds" v-if="properties&&properties.isCustomCopy">
         <user-select v-model="copyIds" placeholder="请选择" multiple />
       </el-form-item>
+      <el-form-item label="审批附件" prop="fileList">
+        <JNPF-UploadFz v-model="dataForm.fileList" />
+      </el-form-item>
     </el-form>
     <span slot="footer" class="dialog-footer">
       <el-button @click="visible = false">{{$t('common.cancelButton')}}</el-button>
@@ -67,6 +70,7 @@ export default {
         branchList: [],
         candidateList: [],
         handleOpinion: '',
+        fileList: []
       },
       copyIds: [],
       freeApproverUserId: '',
