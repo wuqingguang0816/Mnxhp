@@ -116,6 +116,9 @@
           <el-form-item label="抄送人员" v-if="properties.isCustomCopy">
             <user-select v-model="copyIds" placeholder="请选择" multiple />
           </el-form-item>
+          <el-form-item label="审批附件">
+            <JNPF-UploadFz v-model="approvalfileList" />
+          </el-form-item>
         </el-form>
         <span slot="footer" class="dialog-footer">
           <el-button @click="visible = false">{{$t('common.cancelButton')}}</el-button>
@@ -206,6 +209,7 @@ export default {
       endTime: 0,
       visible: false,
       reason: '',
+      approvalfileList: [],
       handleId: '',
       activeTab: '0',
       isComment: false,
@@ -384,6 +388,7 @@ export default {
       if (eventType === 'audit' || eventType === 'reject') {
         this.handleId = ''
         this.reason = ''
+        this.approvalfileList = []
         this.copyIds = []
         this.handleReset()
         if (eventType === 'reject') return this.visible = true
@@ -642,6 +647,7 @@ export default {
             return
           }
           let query = {
+            approvalfileList: this.approvalfileList,
             handleOpinion: this.reason,
             formData: this.formData,
             enCode: this.setting.enCode,
