@@ -21,7 +21,7 @@
       </template>
       <template v-else-if="item.__config__.jnpfKey==='alert'">
         <el-form-item label-width="0">
-          <jnpf-link :title="item.title" :type="item.type" :closable="item.closable"
+          <el-alert :title="item.title" :type="item.type" :closable="item.closable"
             :show-icon="item['show-icon']" />
         </el-form-item>
       </template>
