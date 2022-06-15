@@ -64,17 +64,16 @@ export function synAllUserSysToDing() {
   })
 }
 // 本地所有组织信息(包含公司和部门)同步到企业微信
-export function synAllOrganizeSysToQy(data) {
+export function synAllOrganizeSysToQy(type) {
   return request({
-    url: '/api/system/SynThirdInfo/synAllOrganizeSysToQy',
-    method: 'GET',
-    data: { type: data }
+    url: '/api/system/SynThirdInfo/synAllOrganizeSysToQy?type=' + type,
+    method: 'GET'
   })
 }
 // 本地所有用户信息同步到企业微信
-export function synAllUserSysToQy(data) {
+export function synAllUserSysToQy(type) {
   return request({
-    url: '/api/system/SynThirdInfo/synAllUserSysToQy',
+    url: '/api/system/SynThirdInfo/synAllUserSysToQy?type=' + type,
     method: 'GET',
     data: { type: data }
   })
