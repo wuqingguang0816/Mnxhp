@@ -199,25 +199,25 @@ export default {
     }
   },
   methods: {
-    init(id) {
+    init(id, parentId) {
       this.visible = true
       this.dataForm.id = id || ''
       this.$nextTick(() => {
         this.$refs['dataForm'].resetFields()
         // 获取公司下拉列表
-        getOrganizeSelectorByAuth().then(res => {
-          if (res.data.list && res.data.list.length) {
-            this.treeData = res.data.list
-          } else {
+        getOrganizeSelectorByAuth(id || 0).then(res => {
+          if (parentId == '-1') {
             this.treeData = []
-            // let topItem = {
-            //   fullName: "顶级节点",
-            //   hasChildren: true,
-            //   id: "-1",
-            //   icon: "icon-ym icon-ym-tree-organization3",
-            //   children: res.data.list
-            // }
-            // this.treeData = [topItem]
+            let topItem = {
+              fullName: "顶级节点",
+              hasChildren: true,
+              id: "-1",
+              icon: "icon-ym icon-ym-tree-organization3",
+              children: res.data.list
+            }
+            this.treeData = [topItem]
+          } else {
+            this.treeData = res.data.list || []
           }
         })
 

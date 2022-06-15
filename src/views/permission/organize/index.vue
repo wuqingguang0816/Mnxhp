@@ -49,7 +49,8 @@
           <el-table-column prop="sortCode" label="排序" width="70" align="center" />
           <el-table-column label="操作" width="100">
             <template slot-scope="scope">
-              <tableOpts @edit="addOrUpdateHandle(scope.row.id)" @del="handleDel(scope.row.id)" />
+              <tableOpts @edit="addOrUpdateHandle(scope.row.id,scope.row.parentId)"
+                @del="handleDel(scope.row.id)" />
             </template>
           </el-table-column>
         </JNPF-table>
@@ -104,10 +105,10 @@ export default {
       this.listQuery.keyword = ''
       this.initData()
     },
-    addOrUpdateHandle(id) {
+    addOrUpdateHandle(id, parentId) {
       this.formVisible = true
       this.$nextTick(() => {
-        this.$refs.Form.init(id)
+        this.$refs.Form.init(id, parentId)
       })
     },
     closeForm(isRefresh) {
