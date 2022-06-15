@@ -861,6 +861,19 @@
                     placeholder="请选择打印模板" lastLevel clearable></JNPF-TreeSelect>
                 </div>
               </el-form-item>
+              <el-form-item label="自动同意规则">
+                <div slot="label">自动同意规则
+                  <el-tooltip content="当前审批节点表单必填字段为空会使工单流转失败，下一审批节点设置候选人员、选择分支时当前审批节点规则失效" placement="top">
+                    <a class="el-icon-warning-outline"></a>
+                  </el-tooltip>
+                </div>
+                <el-select v-model="approverForm.agreeRule" class="mr-10">
+                  <el-option label="不启用" :value="1"></el-option>
+                  <el-option label="审批人为发起人" :value="2"></el-option>
+                  <el-option label="审批人与上一审批节点处理人相同" :value="3"></el-option>
+                  <el-option label="审批人审批过" :value="4"></el-option>
+                </el-select>
+              </el-form-item>
               <el-form-item label="签名设置">
                 <div slot="label">签名设置
                   <el-tooltip content="审批人同意时需签名" placement="top">
@@ -1321,6 +1334,7 @@ const defaultSubFlowForm = {
   isAsync: false
 }
 const defaultApproverForm = {
+  agreeRule: 1, // 自动同意规则,默认不启用
   formFieldType: 1,// 表单字段审核方式的类型(1-用户 2-部门)
   approvers: [], // 审批人集合
   approverPos: [], // 审批岗位集合
