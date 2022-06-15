@@ -50,78 +50,108 @@
               <template slot-scope="scope">
                 <template v-if="scope.row.rowEdit">
                   <template v-if="item.jnpfKey==='numInput'">
-                    <el-input-number v-model="scope.row[item.prop]" placeholder="请输入"
-                      :precision="item.precision" controls-position="right" style="width:100%" />
+                    <el-input-number v-model="scope.row[item.prop]" :placeholder="item.placeholder"
+                      :min="item.min" :max="item.max" :step="item.step" :precision="item.precision"
+                      :controls-position="item['controls-position']" :disabled="item.disabled"
+                      style="width:100%" />
                   </template>
                   <template v-else-if="['rate','slider'].includes(item.jnpfKey)">
                     <el-input-number v-model="scope.row[item.prop]" placeholder="请输入"
-                      controls-position="right" style="width:100%" />
+                      controls-position="right" style="width:100%" :disabled="item.disabled" />
                   </template>
                   <div v-else-if="item.jnpfKey==='switch'" style="padding-top: 5px;">
-                    <el-switch v-model="scope.row[item.prop]" :active-value="1"
-                      :inactive-value="0" />
+                    <el-switch v-model="scope.row[item.prop]" :active-value="item['active-value']"
+                      :inactive-value="item['inactive-value']" :disabled="item.disabled" />
                   </div>
                   <template v-else-if="item.jnpfKey==='time'">
                     <el-time-picker v-model="scope.row[item.prop]" style="width:100%"
-                      :picker-options="item['picker-options']" placeholder="请选择" clearable
-                      :value-format="item['value-format']" :format="item.format">
+                      :picker-options="item['picker-options']" :placeholder="item.placeholder"
+                      :clearable="item.clearable" :value-format="item['value-format']"
+                      :format="item.format" :readonly="item.readonly" :disabled="item.disabled">
                     </el-time-picker>
                   </template>
                   <template v-else-if="['date'].includes(item.jnpfKey)">
                     <el-date-picker v-model="scope.row[item.prop]" :type="item.type||'datetime'"
-                      clearable placeholder="请选择" value-format="timestamp" style="width:100%"
-                      :format="item.format||'yyyy-MM-dd HH:mm:ss'">
+                      :clearable="item.clearable" :placeholder="item.placeholder"
+                      value-format="timestamp" :format="item.format||'yyyy-MM-dd HH:mm:ss'"
+                      style="width:100%" :readonly="item.readonly" :disabled="item.disabled">
                     </el-date-picker>
                   </template>
                   <template v-else-if="['comSelect'].includes(item.jnpfKey)">
-                    <comSelect v-model="scope.row[item.prop]" placeholder="请选择" clearable />
+                    <comSelect v-model="scope.row[item.prop]" :placeholder="item.placeholder"
+                      :multiple="item.multiple" :clearable="item.clearable"
+                      :disabled="item.disabled" />
                   </template>
                   <template v-else-if="['depSelect'].includes(item.jnpfKey)">
-                    <depSelect v-model="scope.row[item.prop]" placeholder="请选择" clearable />
+                    <depSelect v-model="scope.row[item.prop]" :placeholder="item.placeholder"
+                      :multiple="item.multiple" :clearable="item.clearable"
+                      :disabled="item.disabled" />
                   </template>
                   <template v-else-if="['userSelect'].includes(item.jnpfKey)">
-                    <userSelect v-model="scope.row[item.prop]" placeholder="请选择" clearable />
+                    <userSelect v-model="scope.row[item.prop]" :placeholder="item.placeholder"
+                      :multiple="item.multiple" :clearable="item.clearable"
+                      :disabled="item.disabled" />
                   </template>
                   <template v-else-if="['posSelect'].includes(item.jnpfKey)">
-                    <posSelect v-model="scope.row[item.prop]" placeholder="请选择" clearable />
+                    <posSelect v-model="scope.row[item.prop]" :placeholder="item.placeholder"
+                      :multiple="item.multiple" :clearable="item.clearable"
+                      :disabled="item.disabled" />
                   </template>
                   <template v-else-if="item.jnpfKey==='address'">
-                    <JNPFAddress v-model="scope.row[item.prop]" placeholder="请选择"
-                      :level="item.level" clearable />
+                    <JNPFAddress v-model="scope.row[item.prop]" :level="item.level"
+                      :placeholder="item.placeholder" :multiple="item.multiple"
+                      :clearable="item.clearable" :disabled="item.disabled" />
                   </template>
                   <template v-else-if="['select','radio','checkbox'].includes(item.jnpfKey)">
-                    <el-select v-model="scope.row[item.prop]" placeholder="请选择" clearable
-                      filterable>
+                    <el-select v-model="scope.row[item.prop]" :placeholder="item.placeholder"
+                      :filterable="item.filterable"
+                      :multiple="item.multiple||item.jnpfKey==='checkbox'"
+                      :clearable="item.clearable" :disabled="item.disabled">
                       <el-option :label="oItem[item.__config__.props.label]"
                         v-for="(oItem, i) in item.__slot__.options"
                         :value="oItem[item.__config__.props.value]" :key="i"></el-option>
                     </el-select>
                   </template>
                   <template v-else-if="item.jnpfKey==='cascader'">
-                    <el-cascader v-model="scope.row[item.prop]" :options="item.options" clearable
-                      :show-all-levels="item['show-all-levels']" :props="item.props.props"
-                      filterable placeholder="请选择" style="width:100%">
+                    <el-cascader v-model="scope.row[item.prop]" :options="item.options"
+                      :clearable="item.clearable" :show-all-levels="item['show-all-levels']"
+                      :props="item.props.props" :filterable="item.filterable"
+                      :separator="item.separator" :placeholder="item.placeholder"
+                      :disabled="item.disabled" style="width:100%">
                     </el-cascader>
                   </template>
                   <template v-else-if="item.jnpfKey==='treeSelect'">
-                    <JNPF-TreeSelect v-model="scope.row[item.prop]" placeholder="请选择"
-                      :options="item.options" :props="item.props.props" clearable />
+                    <JNPF-TreeSelect v-model="scope.row[item.prop]" :options="item.options"
+                      :props="item.props.props" :placeholder="item.placeholder"
+                      :multiple="item.multiple" :clearable="item.clearable"
+                      :disabled="item.disabled" />
                   </template>
                   <template v-else-if="item.jnpfKey==='relationForm'">
-                    <relationForm v-model="scope.row[item.prop]" placeholder="请选择"
-                      :modelId="item.modelId" clearable :columnOptions="item.columnOptions"
+                    <relationForm v-model="scope.row[item.prop]" :placeholder="item.placeholder"
+                      :modelId="item.modelId" :columnOptions="item.columnOptions"
                       :relationField="item.relationField" :hasPage="item.hasPage"
-                      :pageSize="item.pageSize" />
+                      :pageSize="item.pageSize" :clearable="item.clearable"
+                      :disabled="item.disabled" />
                   </template>
                   <template v-else-if="item.jnpfKey==='popupSelect'">
-                    <popupSelect v-model="scope.row[item.prop]" placeholder="请选择"
-                      :interfaceId="item.interfaceId" clearable :columnOptions="item.columnOptions"
+                    <popupSelect v-model="scope.row[item.prop]" :placeholder="item.placeholder"
+                      :interfaceId="item.interfaceId" :columnOptions="item.columnOptions"
                       :propsValue="item.propsValue" :relationField="item.relationField"
                       :hasPage="item.hasPage" :pageSize="item.pageSize" :popupType="item.popupType"
-                      :popupTitle="item.popupTitle" :popupWidth="item.popupWidth" />
+                      :popupTitle="item.popupTitle" :popupWidth="item.popupWidth"
+                      :clearable="item.clearable" :disabled="item.disabled" />
                   </template>
                   <template v-else-if="['comInput','textarea'].includes(item.jnpfKey)">
-                    <el-input v-model="scope.row[item.prop]" placeholder="请输入" clearable />
+                    <el-input v-model="scope.row[item.prop]" :placeholder="item.placeholder"
+                      :readonly="item.readonly" :prefix-icon="item['prefix-icon']"
+                      :suffix-icon="item['suffix-icon']" :clearable="item.clearable"
+                      :show-word-limit="item['show-word-limit']" :maxlength="item.maxlength"
+                      :show-password="item['show-password']" :disabled="item.disabled">
+                      <template slot="prepend"
+                        v-if="item.__slot__ && item.__slot__.prepend">{{item.__slot__.prepend}}</template>
+                      <template slot="append"
+                        v-if="item.__slot__ && item.__slot__.append">{{item.__slot__.append}}</template>
+                    </el-input>
                   </template>
                   <template v-else-if="systemComponentsList.includes(item.jnpfKey)">
                     {{scope.row[item.prop+'_name']||scope.row[item.prop]}}
@@ -582,7 +612,7 @@ export default {
       }
       for (let i = 0; i < this.columnData.columnList.length; i++) {
         let e = this.columnData.columnList[i]
-        item[e.__vModel__] = item[e.__config__.defaultValue]
+        item[e.__vModel__] = e.__config__.defaultValue
       }
       this.list.unshift(item)
     },
