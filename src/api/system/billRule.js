@@ -72,3 +72,12 @@ export function exportTpl(id) {
     method: 'get'
   })
 }
+
+// 根据业务获取单据规则
+export function getListById(id, data) {
+  return request({
+    url: `/api/system/BillRule/category/${id}`,
+    method: 'get',
+    data
+  })
+}

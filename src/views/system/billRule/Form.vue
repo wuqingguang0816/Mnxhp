@@ -11,7 +11,8 @@
       </el-form-item>
       <el-form-item label="业务分类" prop="category">
         <el-select v-model="dataForm.category" placeholder="请选择" clearable>
-          <el-option v-for="(item,index) in categoryList" :label="item.fullName" :value="item.id" :key="index"/>
+          <el-option v-for="(item,index) in categoryList" :label="item.fullName" :value="item.id"
+            :key="index" />
         </el-select>
       </el-form-item>
       <el-form-item label="流水前辍" prop="prefix">
@@ -85,9 +86,9 @@ export default {
         sortCode: 0,
         enabledMark: 1,
         description: '',
-        category:''
+        category: ''
       },
-      categoryList:[],
+      categoryList: [],
       dataRule: {
         fullName: [
           { required: true, message: '请输入业务名称', trigger: 'blur' },
@@ -97,7 +98,7 @@ export default {
           { required: true, message: '请输入业务编码', trigger: 'blur' },
           { max: 50, message: '业务编码最多为50个字符！', trigger: 'blur' }
         ],
-        category:[
+        category: [
           { required: true, message: '请输入业务分类', trigger: 'blur' },
         ],
         prefix: [
@@ -119,8 +120,10 @@ export default {
       }
     }
   },
-  created(){
-    this.categoryList = [{label:'1',value:"22"}]
+  created() {
+    this.$store.dispatch('base/getDictionaryData', { sort: 'businessType' }).then((res) => {
+      this.categoryList = res
+    })
   },
   methods: {
     init(id) {

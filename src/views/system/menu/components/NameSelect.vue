@@ -182,7 +182,7 @@ export default {
       this.checked = this.value
       this.visible = true
       this.treeLoading = true
-      this.listLoading = true
+      // this.listLoading = true
       getVisualTables(this.moduleId, this.dataType).then(res => {
         let data = []
         for (const key in res.data.linkTables) {
@@ -190,9 +190,7 @@ export default {
             tableName: res.data.linkTables[key],
             dblink: res.data.linkId
           })
-          // console.log(res.data.linkTables[key])
         }
-        // console.log(data)
         this.treeData = data
         if (!this.treeData.length) return this.treeLoading = false
         this.$nextTick(() => {

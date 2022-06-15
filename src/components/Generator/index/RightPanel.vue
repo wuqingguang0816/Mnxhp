@@ -219,7 +219,8 @@
                 <el-input v-model="activeData.__config__.label" placeholder="请输入控件标题" />
               </el-form-item>
               <el-form-item label="选择模板" v-if="activeData.__config__.jnpfKey==='billRule'">
-                <BillRule v-model="activeData.__config__.rule" placeholder="选择模板" />
+                <BillRule v-model="activeData.__config__.rule" placeholder="选择模板"
+                  :value="activeData.__config__.rule" :title="activeData.__config__.rule" />
               </el-form-item>
               <el-form-item label="显示内容" v-if="activeData.__config__.jnpfKey==='currOrganize'">
                 <el-select v-model="activeData.showLevel" placeholder="请选择显示内容">
@@ -599,6 +600,9 @@ export default {
     }
   },
   computed: {
+    changeName() {
+
+    },
     activeTag() {
       return this.activeData.__config__.tag
     },
