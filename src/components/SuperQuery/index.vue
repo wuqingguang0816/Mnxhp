@@ -164,6 +164,8 @@
 
 import { getAdvancedQueryList, Delete, Create } from "@/api/system/advancedQuery";
 import { dyOptionsList } from '@/components/Generator/generator/comConfig'
+import { getDictionaryDataSelector } from '@/api/systemData/dictionary'
+import { getDataInterfaceRes } from '@/api/systemData/dataInterface'
 
 export default {
   props: {
