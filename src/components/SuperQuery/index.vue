@@ -145,7 +145,7 @@
       <el-button type="primary" :loading="btnLoading" @click="query()">查 询</el-button>
     </span>
     <el-dialog title="保存方案" :visible.sync="addPlanVisible" width="600px" append-to-body lock-scroll
-      class="JNPF-dialog JNPF-dialog_center ">
+      class="JNPF-dialog JNPF-dialog_center">
       <el-form ref="dataForm" :model="dataForm" :rules="dataRule" label-width="80px">
         <el-form-item label="方案名称" prop="fullName">
           <el-input v-model="dataForm.fullName" placeholder="请输入保存的方案名称" />
@@ -162,7 +162,7 @@
 
 <script>
 
-import { getAdvancedQueryList, Delete, Create } from "@/api/system/advancedQuery";
+import { getAdvancedQueryList, Delete, Create, Update } from "@/api/system/advancedQuery";
 import { dyOptionsList } from '@/components/Generator/generator/comConfig'
 import { getDictionaryDataSelector } from '@/api/systemData/dictionary'
 import { getDataInterfaceRes } from '@/api/systemData/dataInterface'
@@ -335,28 +335,38 @@ export default {
     savePlan() {
       this.$refs['dataForm'].validate((valid) => {
         if (valid) {
-          this.saveBtnLoading = true
-          let query = {
-            ...this.dataForm,
-            matchLogic: this.matchLogic,
-            moduleId: this.currMenuId,
-            conditionJson: JSON.stringify(this.conditionList)
-          }
-          Create(query).then(res => {
-            this.getAdvancedQueryList()
-            this.$message({
-              message: res.msg,
-              type: 'success',
-              duration: 1500,
-              onClose: () => {
-                this.addPlanVisible = false
-                this.saveBtnLoading = false
-              }
-            })
-          }).catch(() => {
-            this.saveBtnLoading = false
-          })
+          let boo = this.planList.some(o => o.fullName === this.dataForm.fullName)
+          if (!boo) return this.submit()
+          let list = this.planList.filter(o => o.fullName === this.dataForm.fullName)
+          this.$confirm(`${list[0].fullName}已存在, 是否覆盖方案?`, '', {
+            type: 'warning'
+          }).then(() => {
+            this.submit(list[0].id)
+          }).catch(() => { });
         }
+      })
+    },
+    submit(id) {
+      this.saveBtnLoading = true
+      let query = {
+        id: id || '',
+        ...this.dataForm,
+        matchLogic: this.matchLogic,
+        moduleId: this.currMenuId,
+        conditionJson: JSON.stringify(this.conditionList)
+      }
+      const formMethod = query.id ? Update : Create
+      formMethod(query).then(res => {
+        this.getAdvancedQueryList()
+        this.addPlanVisible = false
+        this.saveBtnLoading = false
+        this.$message({
+          message: res.msg,
+          type: 'success',
+          duration: 1500
+        })
+      }).catch(() => {
+        this.saveBtnLoading = false
       })
     },
     exist() {

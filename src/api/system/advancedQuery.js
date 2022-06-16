@@ -21,12 +21,19 @@ export function Delete(id) {
     method: 'DELETE'
   })
 }
-
 // 新建
 export function Create(data) {
   return request({
     url: '/api/system/AdvancedQuery',
     method: 'post',
+    data
+  })
+}
+// 编辑
+export function Update(data) {
+  return request({
+    url: `/api/system/AdvancedQuery/${data.id}`,
+    method: 'put',
     data
   })
 }
