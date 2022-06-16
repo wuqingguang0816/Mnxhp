@@ -292,6 +292,7 @@ export default {
       let obj = this.columnOptions.filter(o => o.__vModel__ == val)[0]
       item.jnpfKey = obj.__config__.jnpfKey
       item.attr = obj
+      if (item.jnpfKey === 'cascader') item.attr.props.props.multiple = false
       item.fieldValue = undefined
       this.$set(this.conditionList, i, item)
     },
