@@ -356,6 +356,25 @@
                 <div class="option-box-tip">*打开批量审批后，该流程待审批工单可进行批量操作</div>
               </el-form-item>
             </el-form>
+            <el-form class="pd-10" label-position="top" style="margin-top:-20px">
+              <el-form-item>
+                <div slot="label">异常处理规则
+                  <el-tooltip content="审批节点内设置的审批人员异常时遵循该规则" placement="top">
+                    <a class="el-icon-warning-outline"></a>
+                  </el-tooltip>
+                </div>
+                <el-select v-model="startForm.errorRule" class="mb-10"
+                  @change="startForm.errorRuleUser=[]">
+                  <el-option label="超级管理员处理" :value="1"></el-option>
+                  <el-option label="指定人员处理" :value="2"></el-option>
+                  <el-option label="上一节点审批人指定处理人" :value="3"></el-option>
+                  <el-option label="默认审批通过" :value="4"></el-option>
+                  <el-option label="无法提交" :value="5"></el-option>
+                </el-select>
+                <org-select type="user" v-model="startForm.errorRuleUser" title="选择用户"
+                  buttonType="button" v-if="startForm.errorRule===2" />
+              </el-form-item>
+            </el-form>
           </el-scrollbar>
         </el-tab-pane>
         <el-tab-pane label="表单权限">
@@ -784,13 +803,28 @@
                   <org-select ref="approver-user-org" title="添加用户" buttonType="button"
                     v-model="approverForm.approvers" />
                 </el-form-item>
+                <el-form-item style="margin-bottom:0;" v-if="approverForm.assigneeType === 6">
+                  <div slot="label">附加条件
+                    <el-tooltip content="指定成员增加人员选择范围附加条件" placement="top">
+                      <a class="el-icon-warning-outline"></a>
+                    </el-tooltip>
+                  </div>
+                  <el-select v-model="approverForm.extraRule">
+                    <el-option label="无附加条件" :value="1"></el-option>
+                    <el-option label="同一部门" :value="2"></el-option>
+                    <el-option label="同一岗位" :value="3"></el-option>
+                    <el-option label="发起人上级" :value="4"></el-option>
+                    <el-option label="发起人下属" :value="5"></el-option>
+                  </el-select>
+                </el-form-item>
               </el-form-item>
               <el-form-item label="审批方式">
                 <el-radio v-model="approverForm.counterSign" :label="0">
                   或签（一名审批人同意或拒绝即可）</el-radio>
-                <br>
                 <el-radio v-model="approverForm.counterSign" :label="1">
                   会签（无序会签，当审批达到会签比例时，则该审批通过）</el-radio>
+                <el-radio v-model="approverForm.counterSign" :label="2">
+                  依次审批（按顺序依次审批）</el-radio>
               </el-form-item>
               <el-form-item label="会签比例" v-if="approverForm.counterSign">
                 <el-select v-model="approverForm.countersignRatio">
@@ -863,11 +897,12 @@
               </el-form-item>
               <el-form-item label="自动同意规则">
                 <div slot="label">自动同意规则
-                  <el-tooltip content="当前审批节点表单必填字段为空会使工单流转失败，下一审批节点设置候选人员、选择分支时当前审批节点规则失效" placement="top">
+                  <el-tooltip content="当前审批节点表单必填字段为空会使工单流转失败，下一审批节点设置候选人员、选择分支时当前审批节点规则失效"
+                    placement="top">
                     <a class="el-icon-warning-outline"></a>
                   </el-tooltip>
                 </div>
-                <el-select v-model="approverForm.agreeRule" class="mr-10">
+                <el-select v-model="approverForm.agreeRule">
                   <el-option label="不启用" :value="1"></el-option>
                   <el-option label="审批人为发起人" :value="2"></el-option>
                   <el-option label="审批人与上一审批节点处理人相同" :value="3"></el-option>
@@ -1248,6 +1283,8 @@ const getDataType = (data) => {
   return ''
 }
 const defaultStartForm = {
+  errorRule: 1, // 异常处理规则
+  errorRuleUser: [], // 指定人员处理异常
   initFuncConfig: {
     on: false,
     interfaceId: '',
@@ -1334,6 +1371,7 @@ const defaultSubFlowForm = {
   isAsync: false
 }
 const defaultApproverForm = {
+  extraRule: 1, // 附加条件,默认无附加条件
   agreeRule: 1, // 自动同意规则,默认不启用
   formFieldType: 1,// 表单字段审核方式的类型(1-用户 2-部门)
   approvers: [], // 审批人集合
