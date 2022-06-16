@@ -473,6 +473,9 @@ export default {
               data[ii].width = replacedData[i].width
               data[ii].sortable = replacedData[i].sortable
             }
+            if (type === 'search') {
+              data[ii].searchType = replacedData[i].searchType
+            }
             res.push(data[ii])
             break inter
           }
@@ -569,5 +572,5 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
-@import "./index.scss";
+@import './index.scss';
 </style>
