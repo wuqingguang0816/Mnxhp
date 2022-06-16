@@ -343,6 +343,9 @@ export default {
       outer: for (let i = 0; i < replacedData.length; i++) {
         inter: for (let ii = 0; ii < data.length; ii++) {
           if (replacedData[i][key] === data[ii][key]) {
+            if (type === 'search') {
+              data[ii].searchType = replacedData[i].searchType
+            }
             res.push(data[ii])
             break inter
           }
@@ -413,5 +416,5 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
-@import "./index.scss";
+@import './index.scss';
 </style>
