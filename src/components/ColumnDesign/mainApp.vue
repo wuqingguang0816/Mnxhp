@@ -15,7 +15,8 @@
           <el-table-column prop="prop" label="字段" />
           <el-table-column prop="searchType" label="类型">
             <template slot-scope="scope">
-              <el-select v-model="scope.row.searchType" placeholder="请选择">
+              <el-select v-model="scope.row.searchType" placeholder="请选择"
+                :disabled="scope.row.jnpfKey!=='comInput'&&scope.row.jnpfKey!=='textarea'">
                 <el-option label="等于查询" :value="1"></el-option>
                 <el-option label="模糊查询" :value="2"></el-option>
                 <el-option label="范围查询" :value="3"></el-option>
