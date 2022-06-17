@@ -73,7 +73,7 @@ export default {
           { required: true, message: '请选择角色类型', trigger: 'change' }
         ],
         organizeIdsTree: [
-          { required: true, message: '请选择所属组织', trigger: 'change', type: 'array' }
+          { required: true, message: '请选择所属组织', trigger: 'click', type: 'array' }
         ]
       }
     }
