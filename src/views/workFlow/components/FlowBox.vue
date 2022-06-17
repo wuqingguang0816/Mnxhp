@@ -579,7 +579,7 @@ export default {
         this.handleRequest()
         return
       }
-      if (eventType === 'audit' || eventType === 'reject') {
+      if (this.eventType === 'audit' || this.eventType === 'reject') {
         this.handleApproval(data)
         return
       }
