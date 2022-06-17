@@ -140,6 +140,7 @@
         :fullName="setting.fullName" />
       <candidate-form :visible.sync="candidateVisible" :candidateList="candidateList"
         :taskId="setting.taskId" :formData="formData" @submitCandidate="submitCandidate" />
+      <error-form :visible.sync="errorVisible" :nodeList="errorNodeList" @submit="handleError" />
     </div>
   </transition>
 </template>
@@ -153,12 +154,13 @@ import recordList from './RecordList'
 import Comment from './Comment'
 import RecordSummary from './RecordSummary'
 import CandidateForm from './CandidateForm'
+import ErrorForm from './ErrorForm'
 import CandidateUserSelect from './CandidateUserSelect'
 import Process from '@/components/Process/Preview'
 import PrintBrowse from '@/components/PrintBrowse'
 import vueEsign from 'vue-esign'
 export default {
-  components: { recordList, Process, vueEsign, PrintBrowse, Comment, RecordSummary, CandidateForm, CandidateUserSelect },
+  components: { recordList, Process, vueEsign, PrintBrowse, Comment, RecordSummary, CandidateForm, CandidateUserSelect, ErrorForm },
   data() {
     return {
       userBoxVisible: false,
@@ -209,7 +211,9 @@ export default {
       copyIds: [],
       fullName: '',
       thisStep: '',
-      allBtnDisabled: false
+      allBtnDisabled: false,
+      errorVisible: false,
+      errorNodeList: [],
     }
   },
   computed: {
@@ -442,20 +446,28 @@ export default {
         formMethod = this.formData.id ? DynamicUpdate : DynamicCreate
       }
       formMethod(this.setting.enCode, this.formData).then(res => {
-        this.$message({
-          message: res.msg,
-          type: 'success',
-          duration: 1500,
-          onClose: () => {
-            if (this.eventType === 'save') this.btnLoading = false
-            this.candidateVisible = false
-            this.allBtnDisabled = false
-            this.$emit('close', true)
-          }
-        })
+        const errorData = res.data
+        if (errorData && Array.isArray(errorData) && errorData.length) {
+          this.errorNodeList = errorData
+          this.errorVisible = true
+        } else {
+          this.$message({
+            message: res.msg,
+            type: 'success',
+            duration: 1500,
+            onClose: () => {
+              if (this.eventType === 'save') this.btnLoading = false
+              this.candidateVisible = false
+              this.allBtnDisabled = false
+              this.errorVisible = false
+              this.$emit('close', true)
+            }
+          })
+        }
       }).catch(() => {
         if (this.eventType === 'save') this.btnLoading = false
         this.allBtnDisabled = false
+        this.errorVisible = false
       })
     },
     submitCandidate(data) {
@@ -561,6 +573,17 @@ export default {
         this.$refs['assignForm'].resetFields()
       })
     },
+    handleError(data) {
+      if (this.eventType === 'submit') {
+        this.formData.errorRuleUserList = data
+        this.handleRequest()
+        return
+      }
+      if (eventType === 'audit' || eventType === 'reject') {
+        this.handleApproval(data)
+        return
+      }
+    },
     handleAssign() {
       this.$refs['assignForm'].validate((valid) => {
         if (!valid) return
@@ -576,7 +599,7 @@ export default {
         })
       })
     },
-    handleApproval() {
+    handleApproval(errorRuleUserList) {
       this.$refs['candidateForm'].validate((valid) => {
         if (valid) {
           if (this.properties.hasSign && !this.signImg) {
@@ -593,6 +616,7 @@ export default {
             signImg: this.signImg,
             copyIds: this.copyIds.join(',')
           }
+          if (errorRuleUserList) query.errorRuleUserList = errorRuleUserList
           if (this.candidateForm.candidateList.length) {
             let candidateList = {}
             for (let i = 0; i < this.candidateForm.candidateList.length; i++) {
@@ -606,16 +630,23 @@ export default {
           const approvalMethod = this.eventType === 'audit' ? Audit : Reject
           this.approvalBtnLoading = true
           approvalMethod(this.setting.taskId, query).then(res => {
-            this.$message({
-              type: 'success',
-              message: res.msg,
-              duration: 1000,
-              onClose: () => {
-                this.approvalBtnLoading = false
-                this.visible = false
-                this.$emit('close', true)
-              }
-            })
+            const errorData = res.data
+            if (errorData && Array.isArray(errorData) && errorData.length) {
+              this.errorNodeList = errorData
+              this.errorVisible = true
+            } else {
+              this.$message({
+                type: 'success',
+                message: res.msg,
+                duration: 1000,
+                onClose: () => {
+                  this.approvalBtnLoading = false
+                  this.visible = false
+                  this.errorVisible = false
+                  this.$emit('close', true)
+                }
+              })
+            }
           }).catch(() => { this.approvalBtnLoading = false })
         }
       })
