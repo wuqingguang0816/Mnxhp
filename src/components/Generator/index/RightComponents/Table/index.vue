@@ -20,7 +20,7 @@
     <el-form-item label="配置表单">
       <el-switch v-model="activeData.addType" :active-value="1" :inactive-value="0" />
     </el-form-item>
-    <el-form-item label="选择表单">
+    <el-form-item label="选择表单" v-if="activeData.addType==1">
       <el-button style="width: 100%;" @click="editConf()">配置表单</el-button>
     </el-form-item>
     <Form v-if="formVisible" ref="Form" @submit="updateConf" />
