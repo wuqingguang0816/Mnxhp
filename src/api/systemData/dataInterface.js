@@ -116,6 +116,14 @@ export function getDataInterfaceDataInfo(id, data) {
     data
   })
 }
+// 获取多条接口数据
+export function getDataInterfaceDataInfoByIds(id, data) {
+  return request({
+    url: `/api/system/DataInterface/${id}/Action/InfoByIds`,
+    method: 'POST',
+    data
+  })
+}
 // 获取接口列表(工作流选择时调用，带分页)
 export function getDataInterfaceSelectorList(data) {
   return request({
