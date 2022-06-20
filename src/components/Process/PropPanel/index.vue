@@ -526,17 +526,17 @@
                 </el-table>
               </div>
               <el-form-item label="超时事件" class="mt-10">
-                <el-switch v-model="startForm.overTimeConfig.on" />
+                <el-switch v-model="startForm.overTimeFuncConfig.on" />
               </el-form-item>
-              <div style="margin-bottom: 18px;" v-if="startForm.overTimeConfig.on">
+              <div style="margin-bottom: 18px;" v-if="startForm.overTimeFuncConfig.on">
                 <el-form-item label="接口设置" style="margin-bottom: 0;"></el-form-item>
                 <el-form-item label-width="0">
-                  <interface-dialog :value="startForm.overTimeConfig.interfaceId"
-                    :title="startForm.overTimeConfig.interfaceName"
-                    @change="onFuncChange('startForm','overTimeConfig',arguments)" />
+                  <interface-dialog :value="startForm.overTimeFuncConfig.interfaceId"
+                    :title="startForm.overTimeFuncConfig.interfaceName"
+                    @change="onFuncChange('startForm','overTimeFuncConfig',arguments)" />
                 </el-form-item>
                 <el-form-item label="参数设置" style="margin-bottom: 0;"></el-form-item>
-                <el-table :data="startForm.overTimeConfig.templateJson">
+                <el-table :data="startForm.overTimeFuncConfig.templateJson">
                   <el-table-column type="index" width="50" label="序号" align="center" />
                   <el-table-column prop="field" label="参数名称" width="200">
                     <template slot-scope="scope">
@@ -569,17 +569,17 @@
                 </el-table>
               </div>
               <el-form-item label="提醒事件" class="mt-10">
-                <el-switch v-model="startForm.noticeConfig.on" />
+                <el-switch v-model="startForm.noticeFuncConfig.on" />
               </el-form-item>
-              <div style="margin-bottom: 18px;" v-if="startForm.noticeConfig.on">
+              <div style="margin-bottom: 18px;" v-if="startForm.noticeFuncConfig.on">
                 <el-form-item label="接口设置" style="margin-bottom: 0;"></el-form-item>
                 <el-form-item label-width="0">
-                  <interface-dialog :value="startForm.noticeConfig.interfaceId"
-                    :title="startForm.noticeConfig.interfaceName"
-                    @change="onFuncChange('startForm','noticeConfig',arguments)" />
+                  <interface-dialog :value="startForm.noticeFuncConfig.interfaceId"
+                    :title="startForm.noticeFuncConfig.interfaceName"
+                    @change="onFuncChange('startForm','noticeFuncConfig',arguments)" />
                 </el-form-item>
                 <el-form-item label="参数设置" style="margin-bottom: 0;"></el-form-item>
-                <el-table :data="startForm.noticeConfig.templateJson">
+                <el-table :data="startForm.noticeFuncConfig.templateJson">
                   <el-table-column type="index" width="50" label="序号" align="center" />
                   <el-table-column prop="field" label="参数名称" width="200">
                     <template slot-scope="scope">
@@ -1302,17 +1302,17 @@
                 </el-table>
               </div>
               <el-form-item label="超时事件" class="mt-10">
-                <el-switch v-model="approverForm.overTimeConfig.on" />
+                <el-switch v-model="approverForm.overTimeFuncConfig.on" />
               </el-form-item>
-              <div style="margin-bottom: 18px;" v-if="approverForm.overTimeConfig.on">
+              <div style="margin-bottom: 18px;" v-if="approverForm.overTimeFuncConfig.on">
                 <el-form-item label="接口设置" style="margin-bottom: 0;"></el-form-item>
                 <el-form-item label-width="0">
-                  <interface-dialog :value="approverForm.overTimeConfig.interfaceId"
-                    :title="approverForm.overTimeConfig.interfaceName"
-                    @change="onFuncChange('approverForm','overTimeConfig',arguments)" />
+                  <interface-dialog :value="approverForm.overTimeFuncConfig.interfaceId"
+                    :title="approverForm.overTimeFuncConfig.interfaceName"
+                    @change="onFuncChange('approverForm','overTimeFuncConfig',arguments)" />
                 </el-form-item>
                 <el-form-item label="参数设置" style="margin-bottom: 0;"></el-form-item>
-                <el-table :data="approverForm.overTimeConfig.templateJson">
+                <el-table :data="approverForm.overTimeFuncConfig.templateJson">
                   <el-table-column type="index" width="50" label="序号" align="center" />
                   <el-table-column prop="field" label="参数名称" width="200">
                     <template slot-scope="scope">
@@ -1345,17 +1345,17 @@
                 </el-table>
               </div>
               <el-form-item label="提醒事件" class="mt-10">
-                <el-switch v-model="approverForm.noticeConfig.on" />
+                <el-switch v-model="approverForm.noticeFuncConfig.on" />
               </el-form-item>
-              <div style="margin-bottom: 18px;" v-if="approverForm.noticeConfig.on">
+              <div style="margin-bottom: 18px;" v-if="approverForm.noticeFuncConfig.on">
                 <el-form-item label="接口设置" style="margin-bottom: 0;"></el-form-item>
                 <el-form-item label-width="0">
-                  <interface-dialog :value="approverForm.noticeConfig.interfaceId"
-                    :title="approverForm.noticeConfig.interfaceName"
-                    @change="onFuncChange('approverForm','noticeConfig',arguments)" />
+                  <interface-dialog :value="approverForm.noticeFuncConfig.interfaceId"
+                    :title="approverForm.noticeFuncConfig.interfaceName"
+                    @change="onFuncChange('approverForm','noticeFuncConfig',arguments)" />
                 </el-form-item>
                 <el-form-item label="参数设置" style="margin-bottom: 0;"></el-form-item>
-                <el-table :data="approverForm.noticeConfig.templateJson">
+                <el-table :data="approverForm.noticeFuncConfig.templateJson">
                   <el-table-column type="index" width="50" label="序号" align="center" />
                   <el-table-column prop="field" label="参数名称" width="200">
                     <template slot-scope="scope">
@@ -1609,7 +1609,7 @@
               </el-form-item>
               <div v-if="approverForm.noticeConfig.on===1">
                 <el-row :gutter="20">
-                  <el-col :span="8">第一次超时时间（时）</el-col>
+                  <el-col :span="8">第一次提醒时间（时）</el-col>
                   <el-col :span="16">
                     <el-input-number  v-model="approverForm.noticeConfig.fisrtOver" :min="0" :step="1"></el-input-number>
                   </el-col>
@@ -1706,35 +1706,43 @@ const getDataType = (data) => {
 const defaultStartForm = {
   errorRule: 1, // 异常处理规则
   errorRuleUser: [], // 指定人员处理异常
+  // 限时设置
   timeLimitConfig: {
-    on: 0,
-    nodeLimit: 0,
-    duringDeal: 24,
-    formField: '',
+    on: 0,  // 开启
+    nodeLimit: 0, // 节点限定时长起始值类型
+    duringDeal: 24, // 节点处理限定时长(时)
+    formField: '',  // 请选择字段
   },
   overTimeConfig: {
-    on: 0,
-    fisrtOver: 0,
-    overTimeDuring: 2,
-    overNotice: false,
-    overAutoApprove: false,
-    overAutoApproveTime: 5,
-    overEvent: false,
-    overEventTime: 5,
-    interfaceId: '',
-    interfaceName: '',
-    templateJson: []
+    on: 0, // 开启
+    fisrtOver: 0, // 第一次超时时间（时）
+    overTimeDuring: 2, // 超时间隔（时）
+    overNotice: false, // 超时事务-超时通知
+    overAutoApprove: false, // 超时事务-超时自动审批
+    overAutoApproveTime: 5, // 自动审批超时次数（次）
+    overEvent: false, // 超时事件
+    overEventTime: 5, // 超时事件超时次数（次）
   },
   noticeConfig: {
-    on: 0,
-    fisrtOver: 0,
-    overTimeDuring: 2,
-    overNotice: false,
-    overEvent: false,
-    overEventTime: 5,
-    interfaceId: '',
-    interfaceName: '',
-    templateJson: []
+    on: 0, // 开启
+    fisrtOver: 0, // 第一次提醒时间（时）
+    overTimeDuring: 2, // 提醒间隔（时）
+    overNotice: false, // 提醒事务-提醒通知
+    overEvent: false, // 提醒事件
+    overEventTime: 5, // 提醒次数（次）
+  },
+  // 流程事件
+  overTimeFuncConfig: {
+    on: false,     // 开启
+    interfaceId: '', // 接口id
+    interfaceName: '', // 接口名称
+    templateJson: [] // 模块json
+  },
+  noticeFuncConfig: {
+    on: false,     // 开启
+    interfaceId: '', // 接口id
+    interfaceName: '', // 接口名称
+    templateJson: [] // 模块json
   },
   initFuncConfig: {
     on: false,
@@ -1861,35 +1869,43 @@ const defaultApproverForm = {
   printId: '', // 打印模板
   hasSign: false,
   timeLimitConfig: {
-    on: 0,
-    nodeLimit: 0,
-    duringDeal: 24,
-    formField: ''
+    on: 0,  // 开启
+    nodeLimit: 0, // 节点限定时长起始值类型
+    duringDeal: 24, // 节点处理限定时长(时)
+    formField: '',  // 请选择字段
   },
   overTimeConfig: {
-    on: 0,
-    fisrtOver: 0,
-    overTimeDuring: 2,
-    overNotice: false,
-    overAutoApprove: false,
-    overAutoApproveTime: 5,
-    overEvent: false,
-    overEventTime: 5,
-    interfaceId: '',
-    interfaceName: '',
-    templateJson: []
+    on: 0, // 开启
+    fisrtOver: 0, // 第一次超时时间（时）
+    overTimeDuring: 2, // 超时间隔（时）
+    overNotice: false, // 超时事务-超时通知
+    overAutoApprove: false, // 超时事务-超时自动审批
+    overAutoApproveTime: 5, // 自动审批超时次数（次）
+    overEvent: false, // 超时事件
+    overEventTime: 5, // 超时事件超时次数（次）
   },
   noticeConfig: {
-    on: 0,
-    fisrtOver: 0,
-    overTimeDuring: 2,
-    overNotice: false,
-    overEvent: false,
-    overEventTime: 5,
-    interfaceId: '',
-    interfaceName: '',
-    templateJson: []
+    on: 0, // 开启
+    fisrtOver: 0, // 第一次提醒时间（时）
+    overTimeDuring: 2, // 提醒间隔（时）
+    overNotice: false, // 提醒事务-提醒通知
+    overEvent: false, // 提醒事件
+    overEventTime: 5, // 提醒次数（次）
   },
+  // 节点事件
+  overTimeFuncConfig: {
+    on: false,     // 开启
+    interfaceId: '', // 接口id
+    interfaceName: '', // 接口名称
+    templateJson: [] // 模块json
+  },
+  noticeFuncConfig: {
+    on: false,     // 开启
+    interfaceId: '', // 接口id
+    interfaceName: '', // 接口名称
+    templateJson: [] // 模块json
+  },
+
   timeoutConfig: {
     on: false,
     quantity: 1,
