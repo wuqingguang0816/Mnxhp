@@ -21,7 +21,16 @@
       </el-row>
       <div class="JNPF-common-layout-main JNPF-flex-main">
         <div class="JNPF-common-head">
-          <topOpts @add="addOrUpdateHandle()" />
+          <el-dropdown>
+            <el-button type="primary">
+              <i class="el-icon-plus"></i> 新建<i class="el-icon-arrow-down el-icon--right"></i>
+            </el-button>
+            <el-dropdown-menu slot="dropdown">
+              <el-dropdown-item @click.native="addOrUpdateHandle('','company')">新建公司
+              </el-dropdown-item>
+              <el-dropdown-item @click.native="addOrUpdateHandle()">新建部门</el-dropdown-item>
+            </el-dropdown-menu>
+          </el-dropdown>
           <div class="JNPF-common-head-right">
             <el-tooltip effect="dark" content="展开" placement="top">
               <el-link v-show="!expands" type="text"
@@ -49,14 +58,16 @@
           <el-table-column prop="sortCode" label="排序" width="70" align="center" />
           <el-table-column label="操作" width="100">
             <template slot-scope="scope">
-              <tableOpts @edit="addOrUpdateHandle(scope.row.id,scope.row.parentId)"
-                @del="handleDel(scope.row.id)" />
+              <tableOpts @edit="addOrUpdateHandle(scope.row.id,scope.row.type,scope.row.parentId)"
+                @del="handleDel(scope.row.id,scope.row.type)" />
             </template>
           </el-table-column>
         </JNPF-table>
       </div>
     </div>
     <Form v-show="formVisible" ref="Form" @close="closeForm" />
+    <DepForm v-show="depFormVisible" ref="depForm" @close="depForm" />
+
   </div>
 </template>
 
@@ -66,10 +77,11 @@ import {
   delOrganize
 } from '@/api/permission/organize'
 import Form from './Form'
+import DepForm from './depForm.vue'
 
 export default {
   name: 'permission-organize',
-  components: { Form },
+  components: { Form, DepForm },
   data() {
     return {
       listQuery: {
@@ -81,6 +93,7 @@ export default {
       btnLoading: false,
       listLoading: true,
       formVisible: false,
+      depFormVisible: false
     }
   },
   created() {
@@ -105,14 +118,34 @@ export default {
       this.listQuery.keyword = ''
       this.initData()
     },
-    addOrUpdateHandle(id, parentId) {
+    addOrUpdateHandle(id, type, parentId) {
+      if (type === 'company') {
+        this.addOrUpdateOeganize(id, parentId)
+      } else {
+        this.addOrUpdateDep(id)
+      }
+    },
+    addOrUpdateOeganize(id, parentId) {
       this.formVisible = true
       this.$nextTick(() => {
         this.$refs.Form.init(id, parentId)
       })
     },
+    addOrUpdateDep(id) {
+      this.depFormVisible = true
+      this.$nextTick(() => {
+        this.$refs.depForm.init(id)
+      })
+    },
     closeForm(isRefresh) {
       this.formVisible = false
+      if (isRefresh) {
+        this.keyword = ''
+        this.initData()
+      }
+    },
+    depForm(isRefresh) {
+      this.depFormVisible = false
       if (isRefresh) {
         this.keyword = ''
         this.initData()
@@ -125,23 +158,42 @@ export default {
         this.refreshTable = true;
       });
     },
-    handleDel(id) {
-      this.$confirm(this.$t('common.delTip'), this.$t('common.tipTitle'), {
-        type: 'warning'
-      }).then(() => {
-        delOrganize(id).then(res => {
-          this.$message({
-            type: 'success',
-            message: res.msg,
-            duration: 1500,
-            onClose: () => {
-              this.$store.commit('generator/SET_COMPANY_TREE', [])
-              this.$store.commit('generator/SET_DEP_TREE', [])
-              this.initData()
-            }
+    handleDel(id, type) {
+      if (type === 'company') {  //删除公司
+        this.$confirm(this.$t('common.delTip'), this.$t('common.tipTitle'), {
+          type: 'warning'
+        }).then(() => {
+          delOrganize(id).then(res => {
+            this.$message({
+              type: 'success',
+              message: res.msg,
+              duration: 1500,
+              onClose: () => {
+                this.$store.commit('generator/SET_COMPANY_TREE', [])
+                this.$store.commit('generator/SET_DEP_TREE', [])
+                this.initData()
+              }
+            })
           })
-        })
-      }).catch(() => { })
+        }).catch(() => { })
+      } else {    //删除部门
+        this.$confirm(this.$t('common.delTip'), this.$t('common.tipTitle'), {
+          type: 'warning'
+        }).then(() => {
+          delDepartment(id).then(res => {
+            this.$message({
+              type: 'success',
+              message: res.msg,
+              duration: 1500,
+              onClose: () => {
+                this.$store.commit('generator/SET_COMPANY_TREE', [])
+                this.$store.commit('generator/SET_DEP_TREE', [])
+                this.initData()
+              }
+            })
+          })
+        }).catch(() => { })
+      }
     }
   }
 }
