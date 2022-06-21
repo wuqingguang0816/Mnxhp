@@ -809,6 +809,82 @@
                   </el-table-column>
                 </el-table>
               </div>
+              <el-form-item>
+                <div slot="label">节点超时
+                  <el-tooltip content="所有节点抄送的时候" placement="top">
+                    <a class="el-icon-warning-outline"></a>
+                  </el-tooltip>
+                </div>
+                <el-select v-model="startForm.overTimeMsgConfig.on" placeholder="请选择">
+                  <el-option v-for="item in noticeOptions" :key="item.value" :label="item.label"
+                    :value="item.value" />
+                </el-select>
+              </el-form-item>
+              <div v-if="startForm.overTimeMsgConfig.on===1">
+                <el-form-item label="消息模板">
+                  <msg-dialog :value="startForm.overTimeMsgConfig.msgId"
+                    :title="startForm.overTimeMsgConfig.msgName"
+                    @change="onMsgChange('startForm','overTimeMsgConfig',arguments)" />
+                </el-form-item>
+                <el-form-item label="参数设置" style="margin-bottom: 0;"></el-form-item>
+                <el-table :data="startForm.overTimeMsgConfig.templateJson">
+                  <el-table-column type="index" width="50" label="序号" align="center" />
+                  <el-table-column prop="field" label="参数名称" width="200">
+                    <template slot-scope="scope">
+                      {{scope.row.fieldName?scope.row.field+'('+scope.row.fieldName+')':scope.row.field}}
+                    </template>
+                  </el-table-column>
+                  <el-table-column prop="value" label="表单字段">
+                    <template slot-scope="scope">
+                      <el-select v-model="scope.row.relationField" placeholder="请选择表单字段" clearable
+                        filterable>
+                        <el-option v-for="item in funcOptions" :key="item.__vModel__"
+                          :label="item.__config__.label?item.__vModel__+'('+item.__config__.label+')':item.__vModel__"
+                          :value="item.__vModel__">
+                        </el-option>
+                      </el-select>
+                    </template>
+                  </el-table-column>
+                </el-table>
+              </div>
+              <el-form-item>
+                <div slot="label">节点提醒
+                  <el-tooltip content="所有节点抄送的时候" placement="top">
+                    <a class="el-icon-warning-outline"></a>
+                  </el-tooltip>
+                </div>
+                <el-select v-model="startForm.noticeMsgConfig.on" placeholder="请选择">
+                  <el-option v-for="item in noticeOptions" :key="item.value" :label="item.label"
+                    :value="item.value" />
+                </el-select>
+              </el-form-item>
+              <div v-if="startForm.noticeMsgConfig.on===1">
+                <el-form-item label="消息模板">
+                  <msg-dialog :value="startForm.noticeMsgConfig.msgId"
+                    :title="startForm.noticeMsgConfig.msgName"
+                    @change="onMsgChange('startForm','noticeMsgConfig',arguments)" />
+                </el-form-item>
+                <el-form-item label="参数设置" style="margin-bottom: 0;"></el-form-item>
+                <el-table :data="startForm.noticeMsgConfig.templateJson">
+                  <el-table-column type="index" width="50" label="序号" align="center" />
+                  <el-table-column prop="field" label="参数名称" width="200">
+                    <template slot-scope="scope">
+                      {{scope.row.fieldName?scope.row.field+'('+scope.row.fieldName+')':scope.row.field}}
+                    </template>
+                  </el-table-column>
+                  <el-table-column prop="value" label="表单字段">
+                    <template slot-scope="scope">
+                      <el-select v-model="scope.row.relationField" placeholder="请选择表单字段" clearable
+                        filterable>
+                        <el-option v-for="item in funcOptions" :key="item.__vModel__"
+                          :label="item.__config__.label?item.__vModel__+'('+item.__config__.label+')':item.__vModel__"
+                          :value="item.__vModel__">
+                        </el-option>
+                      </el-select>
+                    </template>
+                  </el-table-column>
+                </el-table>
+              </div>
             </el-form>
           </el-scrollbar>
         </el-tab-pane>
@@ -1509,6 +1585,82 @@
                   </el-table-column>
                 </el-table>
               </div>
+              <el-form-item>
+                <div slot="label">节点超时
+                  <el-tooltip content="当前节点抄送的时候" placement="top">
+                    <a class="el-icon-warning-outline"></a>
+                  </el-tooltip>
+                </div>
+                <el-select v-model="approverForm.overTimeMsgConfig.on" placeholder="请选择">
+                  <el-option v-for="item in nodeNoticeOptions" :key="item.value" :label="item.label"
+                    :value="item.value" />
+                </el-select>
+              </el-form-item>
+              <div v-if="approverForm.overTimeMsgConfig.on===1">
+                <el-form-item label="消息模板">
+                  <msg-dialog :value="approverForm.overTimeMsgConfig.msgId"
+                    :title="approverForm.overTimeMsgConfig.msgName"
+                    @change="onMsgChange('approverForm','overTimeMsgConfig',arguments)" />
+                </el-form-item>
+                <el-form-item label="参数设置" style="margin-bottom: 0;"></el-form-item>
+                <el-table :data="approverForm.overTimeMsgConfig.templateJson">
+                  <el-table-column type="index" width="50" label="序号" align="center" />
+                  <el-table-column prop="field" label="参数名称" width="200">
+                    <template slot-scope="scope">
+                      {{scope.row.fieldName?scope.row.field+'('+scope.row.fieldName+')':scope.row.field}}
+                    </template>
+                  </el-table-column>
+                  <el-table-column prop="value" label="表单字段">
+                    <template slot-scope="scope">
+                      <el-select v-model="scope.row.relationField" placeholder="请选择表单字段" clearable
+                        filterable>
+                        <el-option v-for="item in funcOptions" :key="item.__vModel__"
+                          :label="item.__config__.label?item.__vModel__+'('+item.__config__.label+')':item.__vModel__"
+                          :value="item.__vModel__">
+                        </el-option>
+                      </el-select>
+                    </template>
+                  </el-table-column>
+                </el-table>
+              </div>
+              <el-form-item>
+                <div slot="label">节点提醒
+                  <el-tooltip content="当前节点抄送的时候" placement="top">
+                    <a class="el-icon-warning-outline"></a>
+                  </el-tooltip>
+                </div>
+                <el-select v-model="approverForm.noticeMsgConfig.on" placeholder="请选择">
+                  <el-option v-for="item in nodeNoticeOptions" :key="item.value" :label="item.label"
+                    :value="item.value" />
+                </el-select>
+              </el-form-item>
+              <div v-if="approverForm.noticeMsgConfig.on===1">
+                <el-form-item label="消息模板">
+                  <msg-dialog :value="approverForm.noticeMsgConfig.msgId"
+                    :title="approverForm.noticeMsgConfig.msgName"
+                    @change="onMsgChange('approverForm','noticeMsgConfig',arguments)" />
+                </el-form-item>
+                <el-form-item label="参数设置" style="margin-bottom: 0;"></el-form-item>
+                <el-table :data="approverForm.noticeMsgConfig.templateJson">
+                  <el-table-column type="index" width="50" label="序号" align="center" />
+                  <el-table-column prop="field" label="参数名称" width="200">
+                    <template slot-scope="scope">
+                      {{scope.row.fieldName?scope.row.field+'('+scope.row.fieldName+')':scope.row.field}}
+                    </template>
+                  </el-table-column>
+                  <el-table-column prop="value" label="表单字段">
+                    <template slot-scope="scope">
+                      <el-select v-model="scope.row.relationField" placeholder="请选择表单字段" clearable
+                        filterable>
+                        <el-option v-for="item in funcOptions" :key="item.__vModel__"
+                          :label="item.__config__.label?item.__vModel__+'('+item.__config__.label+')':item.__vModel__"
+                          :value="item.__vModel__">
+                        </el-option>
+                      </el-select>
+                    </template>
+                  </el-table-column>
+                </el-table>
+              </div>
             </el-form>
           </el-scrollbar>
         </el-tab-pane>
@@ -1792,6 +1944,18 @@ const defaultStartForm = {
     msgName: '',
     templateJson: []
   },
+  overTimeMsgConfig: {
+    on: 0,
+    msgId: '',
+    msgName: '',
+    templateJson: []
+  },
+  noticeMsgConfig: {
+    on: 0,
+    msgId: '',
+    msgName: '',
+    templateJson: []
+  },
   hasSubmitBtn: true,
   submitBtnText: '提 交',
   hasSaveBtn: true,
@@ -1911,6 +2075,18 @@ const defaultApproverForm = {
     quantity: 1,
     type: 'day',
     handler: 1
+  },
+  overTimeMsgConfig: {
+    on: 2,
+    msgId: '',
+    msgName: '',
+    templateJson: []
+  },
+  noticeMsgConfig: {
+    on: 2,
+    msgId: '',
+    msgName: '',
+    templateJson: []
   },
   approveMsgConfig: {
     on: 2,
