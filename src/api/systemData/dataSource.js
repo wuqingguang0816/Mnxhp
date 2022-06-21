@@ -65,10 +65,11 @@ export function DataSync(data) {
 }
 
 
-// 数据库同步
-export function synchronization(data) {
+
+//数据批量同步
+export function batchExecute(data) {
   return request({
-    url: `/api/system/DataSync/Actions/test`,
+    url: `/api/system/DataSync/Actions/batchExecute`,
     method: 'post',
     data
   })
