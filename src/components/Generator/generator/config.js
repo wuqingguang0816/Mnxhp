@@ -912,6 +912,16 @@ export const selectComponents = [
     disabled: false,
     actionText: "添加",
     "show-summary": false,
+    addType: 0,
+    addTableConf: {
+      interfaceId: '',
+      interfaceName: '',
+      templateJson: [],
+      hasPage: true,
+      pageSize: 20,
+      columnOptions: [],
+      relationOptions: []
+    },
     summaryField: [],
     tableConf: {},
     defaultValue: []

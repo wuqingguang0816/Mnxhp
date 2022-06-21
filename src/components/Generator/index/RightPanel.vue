@@ -453,7 +453,7 @@ import PopupTableSelect from './RightComponents/PopupTableSelect'
 import PopupAttr from './RightComponents/PopupAttr'
 import Tab from './RightComponents/Tab'
 import Collapse from './RightComponents/Collapse'
-import TableConfig from './RightComponents/table'
+import TableConfig from './RightComponents/Table'
 
 const commonRightList = ['comSelect', 'depSelect', 'posSelect', 'userSelect', 'dicSelect', 'editor']
 const systemList = ['createUser', 'createTime', 'modifyUser', 'modifyTime', 'currOrganize', 'currDept', 'currPosition', 'billRule']
