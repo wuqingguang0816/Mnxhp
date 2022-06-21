@@ -1,5 +1,5 @@
 <template>
-  <div class="DbCopy-container app-container nohead  JNPF-flex-main">
+  <div class="DbCopy-container app-container nohead JNPF-flex-main">
     <el-alert title="温馨提示：数据同步是由A数据库同步到B数据库，必须确保数据库表结构一致否则会同步失败。" type="warning" :closable="false"
       show-icon class="mb-20">
     </el-alert>
@@ -26,7 +26,7 @@
     </el-form>
     <div class="JNPF-common-title">
       <h2>数据库表</h2>
-      <el-button size="primary" style="margin-right:1500px" type="text" @click="batch">批量同步
+      <el-button size="primary" style="float:right" type="text" slot="right" @click="batch">批量同步
       </el-button>
     </div>
     <el-table v-loading="listLoading" ref="multipleTable" :data="list"
@@ -86,7 +86,7 @@
 </template>
 
 <script>
-import { getDataSourceListAll, Execute, synchronization } from '@/api/systemData/dataSource'
+import { getDataSourceListAll, Execute, DataSync, batchExecute } from '@/api/systemData/dataSource'
 import { getDataModelList } from '@/api/systemData/dataModel'
 import { forEach } from 'element-resize-detector/src/collection-utils'
 export default {
@@ -180,12 +180,10 @@ export default {
     batch() {//批量同步
       if (!this.batchList.length) return this.$message.error('请先选择数据')
       var map = {};
-      // row.btnLoading = true
-      // row.result = ''
       let data = {
         dbConnectionFrom: this.dataForm.dbConnectionFrom,
         dbConnectionTo: this.dataForm.dbConnectionTo,
-        dbTable: this.batchList,
+        dbTableList: this.batchList,
       }
       if (this.configureList && this.configureList.length > 0) {
         for (var index in this.configureList) {
@@ -193,13 +191,50 @@ export default {
         }
         data = { ...data, convertRulesMap: map }
       }
+      this.$confirm('批量同步，将覆盖您原有表内的数据。请确认操作', {
+        type: 'warning'
+      }).then(() => {
+        batchExecute(data).then(res => {
+
+          if (res.msg == 1) {
+            this.$message({
+              message: '批量同步成功!',
+              type: 'success',
+              duration: 1000
+            })
+          } else {
+            this.$message({
+              message: res.msg,
+              type: 'error',
+              duration: 1000
+            })
+          }
+          for (const key in res.data) {
+            for (let index = 0; index < this.list.length; index++) {
+              const element = this.list[index];
+              if (element.table == key) {
+                element.result = res.data[key] == 1 ? '成功' : '失败'
+              }
+            }
+          }
+          this.toggleSelection()
+        }).catch(() => { });
+      })
+    },
+    toggleSelection() {
+      this.$refs.multipleTable.clearSelection();
     },
     addConfigure() {  //添加规则配置
       if (!this.verification) return this.$message.error('请验证连接')
       this.dialogVisible = true
     },
     handleSelectionChange(val) {   //多选框
-      this.batchList = val
+      let list = []
+      val.forEach(element => {
+        list.push(element.table)
+      })
+      this.batchList = list
+
     },
     copy(row) {
       var map = {};
@@ -216,7 +251,7 @@ export default {
         }
         data = { ...data, convertRulesMap: map }
       }
-      synchronization(data).then((res) => {
+      DataSync(data).then((res) => {
         if (res.data == 0) {
           this.execute(row, res.data)
         } else if (res.data == 1) {
@@ -273,6 +308,14 @@ export default {
     &.mid {
       color: #1890ff;
       text-align: center;
+    }
+  }
+}
+.DbCopy-container {
+  .JNPF-common-title {
+    justify-content: left;
+    h2 {
+      margin-right: 10px;
     }
   }
 }
