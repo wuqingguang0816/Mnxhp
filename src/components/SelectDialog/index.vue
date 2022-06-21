@@ -16,6 +16,7 @@
 
 <script>
 import { getDataInterfaceDataSelect } from '@/api/systemData/dataInterface'
+import { mapGetters } from "vuex"
 export default {
   name: 'SelectDialog',
   props: {
@@ -52,7 +53,7 @@ export default {
     }
   },
   computed: {
-
+    ...mapGetters(['userInfo']),
   },
   methods: {
     init() {
@@ -78,7 +79,19 @@ export default {
     getParamList() {
       let templateJson = this.config.templateJson
       for (let i = 0; i < templateJson.length; i++) {
-        templateJson[i].defaultValue = this.formData[templateJson[i].relationField]
+        templateJson[i].defaultValue = this.formData[templateJson[i].relationField] || ''
+        if (templateJson[i].jnpfKey === 'createUser') {
+          templateJson[i].defaultValue = this.userInfo.userId
+        }
+        if (templateJson[i].jnpfKey === 'createTime') {
+          templateJson[i].defaultValue = new Date().getTime()
+        }
+        if (templateJson[i].jnpfKey === 'currOrganize') {
+          templateJson[i].defaultValue = this.userInfo.organizeId
+        }
+        if (templateJson[i].jnpfKey === 'currPosition') {
+          templateJson[i].defaultValue = this.userInfo.positionIds && this.userInfo.positionIds.length ? this.userInfo.positionIds[0] : ''
+        }
       }
       return templateJson
     },
