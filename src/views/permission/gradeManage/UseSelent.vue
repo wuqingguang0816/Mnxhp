@@ -6,17 +6,17 @@
         <span v-if="collapseTags && tagsList.length">
           <el-tag :closable="!selectDisabled" :size="collapseTagSize" type="info"
             @close="deleteTag($event, 0)" disable-transitions>
-            <span class="el-select__tags-text">{{ tagsList[0] }}</span>
+            <span class="el-select__tags-text">{{ tagsList[0].fullName }}</span>
           </el-tag>
           <el-tag v-if="tagsList.length > 1" :closable="false" type="info" disable-transitions>
             <span class="el-select__tags-text">+ {{ tagsList.length - 1 }}</span>
           </el-tag>
         </span>
         <transition-group @after-leave="resetInputHeight" v-if="!collapseTags">
-          <el-tag v-for="(item,i) in tagsList" :key="item" :size="collapseTagSize"
+          <el-tag v-for="(item,i) in tagsList" :key="item.id" :size="collapseTagSize"
             :closable="!selectDisabled" type="info" @close="deleteTag($event, i)"
             disable-transitions>
-            <span class="el-select__tags-text">{{ item }}</span>
+            <span class="el-select__tags-text">{{ item.fullName }}</span>
           </el-tag>
         </transition-group>
       </div>
@@ -32,22 +32,21 @@
         </template>
       </el-input>
     </div>
-    <el-dialog title="选择组织" :close-on-click-modal="false" :visible.sync="visible"
+    <el-dialog title="选择用户" :close-on-click-modal="false" :visible.sync="visible"
       class="JNPF-dialog JNPF-dialog_center transfer-dialog" lock-scroll append-to-body
       width="800px" :modal-append-to-body="false" @close="onClose">
       <div class="transfer__body">
         <div class="transfer-pane">
           <div class="transfer-pane__tools">
-            <el-input placeholder="请输入关键词查询" v-model="keyword" @keyup.enter.native="search"
+            <el-input placeholder="请输入关键词查询" v-model="keyword" @keyup.enter.native="getData"
               clearable class="search-input">
-              <el-button slot="append" icon="el-icon-search" @click="search"></el-button>
+              <el-button slot="append" icon="el-icon-search" @click="getData"></el-button>
             </el-input>
           </div>
           <div class="transfer-pane__body">
             <el-tree :data="treeData" :props="props" check-on-click-node
-              :expand-on-click-node="false" default-expand-all @node-click="handleNodeClick"
-              class="JNPF-common-el-tree" node-key="id" v-loading="loading" ref="tree"
-              :filter-node-method="filterNode">
+              @node-click="handleNodeClick" class="JNPF-common-el-tree" node-key="id"
+              v-loading="loading" lazy :load="loadNode">
               <span class="custom-tree-node" slot-scope="{ node, data }">
                 <i :class="data.icon"></i>
                 <span class="text">{{node.label}}</span>
@@ -62,8 +61,8 @@
           </div>
           <div class="transfer-pane__body shadow right-pane">
             <template>
-              <div v-for="(item, index) in selectedData" :key="index" class="selected-item">
-                <span>{{item}}</span>
+              <div v-for="(item, index) in selectedData" :key=" index" class="selected-item">
+                <span>{{ item.fullName}}</span>
                 <i class="el-icon-delete" @click="removeData(index)"></i>
               </div>
             </template>
@@ -79,10 +78,10 @@
 </template>
 
 <script>
+import { getImUserSelector, getUserInfoList, getListByAuthorize } from '@/api/permission/user'
 import { addResizeListener, removeResizeListener } from 'element-ui/src/utils/resize-event';
-import { getDepartmentSelectorByAuth } from "@/api/permission/department";
 export default {
-  name: 'comSelect',
+  name: 'useSelect',
   inject: {
     elForm: {
       default: ''
@@ -93,7 +92,8 @@ export default {
   },
   props: {
     value: {
-      default: () => []
+      type: [String, Array],
+      default: ''
     },
     placeholder: {
       type: String,
@@ -113,9 +113,9 @@ export default {
     },
     clearable: {
       type: Boolean,
-      default: false
+      default: true
     },
-    auth: {
+    hasSys: {
       type: Boolean,
       default: false
     },
@@ -123,28 +123,55 @@ export default {
   },
   data() {
     return {
-      treeData: [],
-      allList: [],
-      keyword: '',
-      innerValue: '',
       visible: false,
+      keyword: '',
+      activeName: '',
+      nodeId: '',
+      innerValue: '',
       loading: false,
       props: {
         children: 'children',
         label: 'fullName',
         isLeaf: 'isLeaf'
       },
+      treeData: [],
+      treeData2: [],
+      treeData3: [],
+      treeData4: [{
+        id: 'currentUser',
+        fullName: '当前用户'
+      }],
       selectedData: [],
-      selectedIds: [],
       tagsList: [],
       inputHovering: false,
       inputWidth: 0,
       initialInputHeight: 0,
     }
   },
+  watch: {
+    value(val) {
+      this.setDefault()
+    },
+    selectDisabled() {
+      this.$nextTick(() => {
+        this.resetInputHeight();
+      });
+    },
+    activeName(val) {
+      this.keyword = ''
+      if (!val) return
+      this.nodeId = '0'
+      this.treeData = []
+      this.treeData2 = []
+      this.treeData3 = []
+      this.getData()
+    }
+  },
   computed: {
     showClose() {
-      let hasValue = Array.isArray(this.value) && this.value.length > 0
+      let hasValue = this.multiple
+        ? Array.isArray(this.value) && this.value.length > 0
+        : this.value !== undefined && this.value !== null && this.value !== '';
       let criteria = this.clearable &&
         !this.selectDisabled &&
         this.inputHovering &&
@@ -174,7 +201,7 @@ export default {
     },
   },
   created() {
-    this.getData()
+    this.setDefault()
   },
   mounted() {
     addResizeListener(this.$el, this.handleResize);
@@ -202,157 +229,117 @@ export default {
   beforeDestroy() {
     if (this.$el && this.handleResize) removeResizeListener(this.$el, this.handleResize);
   },
-  watch: {
-    value(val) {
-      this.setDefault()
-    },
-    selectDisabled() {
-      this.$nextTick(() => {
-        this.resetInputHeight();
-      });
-    },
-    allList: {
-      handler: function (val) {
-        this.setDefault()
-      },
-      deep: true
-    }
-  },
   methods: {
-    async getData() {
-      const treeData = await this.$store.dispatch('generator/getDepTree')
-      this.allList = this.$store.getters.departmentList
-      if (this.auth) {
-        getDepartmentSelectorByAuth().then(res => {
-          this.treeData = res.data.list
-        })
-      } else {
-        this.treeData = treeData
-      }
-    },
-    onClose() { },
-    clear() {
-      if (this.selectDisabled) return
-      this.innerValue = ''
-      this.selectedData = []
-      this.selectedIds = []
-      this.tagsList = []
-      this.$emit('input', [])
-      this.$emit('change', [], [])
+    onClose() {
+      this.activeName = ''
     },
     openDialog() {
       if (this.selectDisabled) return
-      this.keyword = ''
-      this.search()
-      this.setDefault()
       this.visible = true
-    },
-    search() {
-      this.$refs.tree && this.$refs.tree.filter(this.keyword)
-    },
-    filterNode(value, data) {
-      if (!value) return true;
-      return data[this.props.label].indexOf(value) !== -1;
-    },
-    getNodePath(node) {
-      let fullPath = []
-      const loop = (node) => {
-        if (node.level) fullPath.unshift(node.data)
-        if (node.parent) loop(node.parent)
-      }
-      loop(node)
-      return fullPath
-    },
-    handleNodeClick(data) {
-      let currId = data.organizeIds
-      let currData = data.organize
-      if (this.multiple) {
-        const boo = this.selectedIds.some(o => o.join('/') === currId.join('/'))
-        if (boo) return
-        this.selectedIds.push(currId)
-        this.selectedData.push(currData)
-      } else {
-        this.selectedIds = [currId]
-        this.selectedData = [currData]
-      }
-    },
-    removeAll() {
+      this.activeName = 'all'
+      this.keyword = ''
+      this.nodeId = '0'
       this.selectedData = []
-      this.selectedIds = []
-    },
-    removeData(index) {
-      this.selectedData.splice(index, 1)
-      this.selectedIds.splice(index, 1)
+      this.setDefault()
     },
     confirm() {
-      let selectedData = []
-      for (let i = 0; i < this.selectedIds.length; i++) {
-        let item = []
-        let selectedNames = this.selectedData[i].split('/')
-        for (let j = 0; j < this.selectedIds[i].length; j++) {
-          item.push({
-            id: this.selectedIds[i][j],
-            fullName: selectedNames[j],
-          })
-        }
-        selectedData.push(item)
-      }
       if (this.multiple) {
         this.innerValue = ''
         this.tagsList = JSON.parse(JSON.stringify(this.selectedData))
-        this.$emit('input', this.selectedIds)
-        this.$emit('change', this.selectedIds, selectedData)
+        let selectedIds = this.selectedData.map(o => o.id)
+        this.$emit('input', selectedIds)
+        this.$emit('change', selectedIds, this.selectedData)
       } else {
-        this.innerValue = this.selectedData.join(',')
-        this.$emit('input', this.selectedIds[0])
-        this.$emit('change', this.selectedIds[0], selectedData[0])
+        if (!this.selectedData.length) {
+          this.innerValue = ''
+          this.$emit('input', '')
+          this.$emit('change', '', {})
+          return
+        }
+        this.innerValue = this.selectedData[0].fullName
+        let selectedIds = this.selectedData.map(o => o.id)
+        this.$emit('input', selectedIds[0])
+        this.$emit('change', selectedIds[0], this.selectedData[0])
       }
       this.visible = false
     },
     setDefault() {
       if (!this.value || !this.value.length) {
         this.innerValue = ''
-        this.selectedIds = []
         this.selectedData = []
         this.tagsList = []
         return
       }
-      let selectedIds = this.multiple ? this.value : [this.value]
-      this.selectedIds = JSON.parse(JSON.stringify(selectedIds))
-      let textList = []
-      for (let i = 0; i < selectedIds.length; i++) {
-        const item = selectedIds[i];
-        let textItem = JSON.parse(JSON.stringify(item))
-        for (let j = 0; j < item.length; j++) {
-          inner: for (let ii = 0; ii < this.allList.length; ii++) {
-            if (item[j] === this.allList[ii].id) {
-              textItem[j] = this.allList[ii].fullName
-              break inner
-            }
-          }
+      const arr = this.multiple ? this.value : [this.value]
+      const hasSysItem = arr.some(o => o === 'currentUser')
+      getUserInfoList(arr).then(res => {
+        this.selectedData = res.data.list
+        if (hasSysItem) {
+          this.selectedData.push({
+            id: 'currentUser',
+            fullName: '当前用户'
+          })
         }
-        textList.push(textItem)
-      }
-      this.selectedData = textList.map(o => o.join('/'))
-      if (this.multiple) {
-        this.innerValue = ''
-        this.tagsList = JSON.parse(JSON.stringify(this.selectedData))
+        if (this.multiple) {
+          this.innerValue = ''
+          this.tagsList = JSON.parse(JSON.stringify(this.selectedData))
+        } else {
+          this.innerValue = this.selectedData.length ? this.selectedData[0].fullName : ''
+        }
         this.$nextTick(() => {
-          this.resetInputHeight();
-        })
-      } else {
-        this.innerValue = this.selectedData.join(',')
+          if (this.multiple) {
+            this.resetInputHeight();
+          }
+        });
+      })
+    },
+    getData() {
+      this.getAllList()
+    },
+    getAllList() {
+      this.loading = true
+      if (this.keyword) this.nodeId = '0'
+      getListByAuthorize(this.nodeId, this.keyword).then(res => {
+        this.treeData = res.data.list
+        this.loading = false
+      })
+    },
+    loadNode(node, resolve) {
+      if (node.level === 0) {
+        this.nodeId = '0'
+        return resolve(this.treeData)
       }
+      this.nodeId = node.data.id
+      getListByAuthorize(this.nodeId).then(res => {
+        resolve(res.data.list)
+      })
+    },
+    handleNodeClick(data) {
+      if (data.type !== 'user') return
+      this.handleNodeClick2(data)
+    },
+    handleNodeClick2(data) {
+      const boo = this.selectedData.some(o => o.id === data.id)
+      if (boo) return
+      const item = {
+        id: data.id,
+        fullName: data.fullName
+      }
+      this.multiple ? this.selectedData.push(item) : this.selectedData = [item]
+    },
+    removeAll() {
+      this.selectedData = []
+    },
+    removeData(index) {
+      this.selectedData.splice(index, 1)
     },
     deleteTag(event, index) {
       this.selectedData.splice(index, 1)
-      this.selectedIds.splice(index, 1)
       this.confirm()
       event.stopPropagation();
     },
     handleClearClick(event) {
       this.selectedData = []
-      this.selectedIds = []
       this.confirm()
       event.stopPropagation();
     },
@@ -387,6 +374,6 @@ export default {
       this.resetInputWidth();
       if (this.multiple) this.resetInputHeight();
     }
-  }
+  },
 }
 </script>

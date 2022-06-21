@@ -129,6 +129,14 @@ export default {
         {
           value: "@userAraSubordinates",
           label: "当前用户及下属"
+        },
+        {
+          value: "@branchManageOrganize",
+          label: "当前分管组织"
+        },
+        {
+          value: "@branchManageOrganizeAndSub",
+          label: "当前分管组织及子组织"
         }
       ],
       conditionSymbolOptions: [

@@ -3,6 +3,9 @@
     :close-on-press-escape="false" :visible.sync="visible" lock-scroll
     class="JNPF-dialog JNPF-dialog_center" width="630px">
     <el-form ref="dataForm" :model="dataForm" :rules="dataRule" v-loading="formLoading">
+      <el-form-item prop="enCode">
+        <el-input v-model="dataForm.enCode" placeholder="请输入编码名称" />
+      </el-form-item>
       <el-form-item prop="fullName">
         <el-input v-model="dataForm.fullName" placeholder="请输入方案名称" />
       </el-form-item>
@@ -110,6 +113,7 @@ export default {
       dataForm: {
         id: "",
         moduleId: "",
+        enCode: "",
         fullName: "",
         conditionJson: "",
         conditionText: ""
@@ -118,6 +122,10 @@ export default {
       dataRule: {
         fullName: [
           { required: true, message: "方案名称不能为空", trigger: "blur" }
+        ],
+        enCode: [
+          { required: true, message: '请输入编码', trigger: 'blur' },
+          { max: 50, message: '字典编码最多为50个字符！', trigger: 'blur' }
         ]
       }
     }
@@ -127,6 +135,7 @@ export default {
       this.dataForm.id = id || ""
       this.dataForm.moduleId = moduleId
       this.dataForm.fullName = ""
+      this.dataForm.enCode = ""
       this.dataForm.conditionJson = ""
       this.dataForm.conditionText = ""
       this.condition = [{

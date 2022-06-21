@@ -42,7 +42,7 @@
             <el-col :sm="12" :xs="24">
               <el-form-item label="所属组织" prop="organizeIdTree">
                 <ComSelect v-model="dataForm.organizeIdTree" placeholder="选择所属组织" multiple
-                  @change="onOrganizeChange" clearable />
+                  @change="onOrganizeChange" clearable auth />
               </el-form-item>
             </el-col>
             <el-col :sm="12" :xs="24">
@@ -256,9 +256,9 @@ export default {
       },
       dataRule: {
         account: [
-          { required: true, message: '请输入账户名称', trigger: 'blur' },
-          { validator: this.formValidate('userAccount', '账户名称只能是数字英文'), trigger: 'blur' },
-          { max: 50, message: '账户名称最多为50个字符！', trigger: 'blur' }
+          { required: true, message: '请输入账户', trigger: 'blur' },
+          { validator: this.formValidate('fullName', '账户不能含有特殊符号'), trigger: 'blur' },
+          { max: 50, message: '账户最多为50个字符！', trigger: 'blur' }
         ],
         realName: [
           { required: true, message: '请输入真实姓名', trigger: 'blur' },

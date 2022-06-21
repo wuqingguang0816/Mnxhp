@@ -4,20 +4,20 @@
       <el-row class="JNPF-common-search-box" :gutter="16">
         <el-form @submit.native.prevent>
           <el-col :span="6">
-            <el-form-item label="数据库">
-              <el-select v-model="dataBase" placeholder="请选择数据库">
+            <el-form-item label="关键词">
+              <el-input v-model="keyword" placeholder="请输入关键词查询" clearable
+                @keyup.enter.native="search()" />
+            </el-form-item>
+          </el-col>
+          <el-col :span="6">
+            <el-form-item label="数据链接">
+              <el-select v-model="dataBase" placeholder="请选择数据链接">
                 <el-option-group v-for="group in dbOptions" :key="group.fullName"
                   :label="group.fullName">
                   <el-option v-for="item in group.children" :key="item.id" :label="item.fullName"
                     :value="item.id" />
                 </el-option-group>
               </el-select>
-            </el-form-item>
-          </el-col>
-          <el-col :span="6">
-            <el-form-item label="关键词">
-              <el-input v-model="keyword" placeholder="请输入关键词查询" clearable
-                @keyup.enter.native="search()" />
             </el-form-item>
           </el-col>
           <el-col :span="6">
