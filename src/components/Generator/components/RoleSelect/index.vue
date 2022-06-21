@@ -297,6 +297,7 @@ export default {
           this.innerValue = ''
           this.$emit('input', '')
           this.$emit('change', '', {})
+          this.visible = false
           return
         }
         this.tagsList = JSON.parse(JSON.stringify(this.selectedData))

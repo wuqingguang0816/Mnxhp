@@ -274,6 +274,7 @@ export default {
           this.innerValue = ''
           this.$emit('input', '')
           this.$emit('change', '', {})
+          this.visible = false
           return
         }
         this.innerValue = this.selectedData[0].fullName
