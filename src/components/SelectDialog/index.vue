@@ -31,6 +31,7 @@ export default {
       type: String,
       default: '700px'
     },
+    formData: Object,
     multiple: {
       type: Boolean,
       default: true
@@ -62,16 +63,24 @@ export default {
     initData() {
       if (!this.config.interfaceId) return
       this.listLoading = true
+      const paramList = this.getParamList()
       let query = {
         ...this.listQuery,
         interfaceId: this.config.interfaceId,
-        paramList: []
+        paramList
       }
       getDataInterfaceDataSelect(this.config.interfaceId, query).then(res => {
         this.list = res.data.list
         if (this.config.hasPage) this.total = res.data.pagination.total
         this.listLoading = false
       }).catch(() => { this.listLoading = false })
+    },
+    getParamList() {
+      let templateJson = this.config.templateJson
+      for (let i = 0; i < templateJson.length; i++) {
+        templateJson[i].defaultValue = this.formData[templateJson[i].relationField]
+      }
+      return templateJson
     },
     select() {
       if (!this.checked.length) return
