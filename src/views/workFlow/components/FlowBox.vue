@@ -152,6 +152,7 @@
           </el-button>
         </span>
       </el-dialog>
+      <ActionDialog ref='actionDialog' ></ActionDialog>
       <UserBox v-if="userBoxVisible" ref="userBox" :title="userBoxTitle" @submit="handleTransfer" />
       <print-browse :visible.sync="printBrowseVisible" :id="properties.printId" :formId="setting.id"
         :fullName="setting.fullName" />
@@ -175,8 +176,9 @@ import CandidateUserSelect from './CandidateUserSelect'
 import Process from '@/components/Process/Preview'
 import PrintBrowse from '@/components/PrintBrowse'
 import vueEsign from 'vue-esign'
+import ActionDialog from './ActionDialog'
 export default {
-  components: { recordList, Process, vueEsign, PrintBrowse, Comment, RecordSummary, CandidateForm, CandidateUserSelect },
+  components: { ActionDialog, recordList, Process, vueEsign, PrintBrowse, Comment, RecordSummary, CandidateForm, CandidateUserSelect },
   data() {
     return {
       userBoxVisible: false,
@@ -598,9 +600,8 @@ export default {
       }).catch(() => { })
     },
     openUserBox(type) {
-      this.userBoxVisible = true
       this.$nextTick(() => {
-        this.$refs.userBox.init()
+        this.$refs.actionDialog.init(type,this.setting.taskId)
       })
     },
     handleTransfer(freeApproverUserId) {
