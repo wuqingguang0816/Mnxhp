@@ -123,18 +123,50 @@ export default {
         }
       }
     },
+    getHandleName(handleStatus) {
+      let name = ""
+      switch (handleStatus) {
+        case "0":
+          name = "拒绝"
+          break;
+        case "1":
+          name = "通过"
+          break;
+        case "2":
+          name = "发起"
+          break;
+        case "3":
+          name = "撤回"
+          break;
+        case "4":
+          name = "终止"
+          break;
+        case "5":
+          name = "指派"
+          break;
+        case "6":
+          name = "加签"
+          break;
+        case "7":
+          name = "转审"
+          break;
+        default:
+          name = "通过"
+          break;
+      }
+      return name
+    },
     replaceSysValue() {
       const recordList = this.recordList.filter(o => o.handleStatus == 0 || o.handleStatus == 1)
       const systemPrinter = this.userInfo.userName + '/' + this.userInfo.userAccount
       const systemPrintTime = this.jnpf.toDate(new Date())
       let systemApprovalContent = ''
       if (recordList.length) {
-        systemApprovalContent += '<table style="border-collapse: collapse; width: 100%;" border="1" data-mce-style="border-collapse: collapse; width: 100%;"><tbody><tr><td style="width:30%;" data-mce-style="width: 30%;">审批节点</td><td style="width: 70%;" data-mce-style="width: 70%;">审批内容</td></tr>'
+        systemApprovalContent += '<table style="border-collapse: collapse; width: 100%;" border="1" data-mce-style="border-collapse: collapse; width: 100%;"><tbody><tr><td style="width:20%;" data-mce-style="width: 20%;">节点名称</td><td style="width:20%;" data-mce-style="width: 20%;">操作人员</td><td style="width:20%;" data-mce-style="width: 20%;">操作时间</td><td style="width:20%;" data-mce-style="width: 20%;">执行动作</td><td style="width: 20%;" data-mce-style="width: 20%;">备注</td></tr>'
         let content = ''
         for (let i = 0; i < recordList.length; i++) {
           const record = recordList[i];
-          let desc = (record.userName || record.handleId) + '于' + this.jnpf.toDate(record.handleTime) + (record.handleStatus == 1 ? '审批通过' : '审批拒绝') + (record.handleOpinion ? '，审批意见：' + record.handleOpinion : '')
-          content += `<tr><td style="width: 30%;" data-mce-style="width: 30%;"><span class="wk-print-tag-wukong wk-tiny-color--common" contenteditable="false">${record.nodeName}</span></td><td style="width: 70%;" data-mce-style="width: 70%;"><span class="wk-print-tag-wukong wk-tiny-color--common" contenteditable="false">${desc}</span></td></tr>`
+          content += `<tr><td style="width: 20%;" data-mce-style="width: 20%;"><span class="wk-print-tag-wukong wk-tiny-color--common" contenteditable="false">${record.nodeName}</span></td><td style="width: 20%;" data-mce-style="width: 20%;"><span class="wk-print-tag-wukong wk-tiny-color--common" contenteditable="false">${record.userName}</span></td><td style="width: 20%;" data-mce-style="width: 20%;"><span class="wk-print-tag-wukong wk-tiny-color--common" contenteditable="false">${this.jnpf.toDate(record.handleTime)}</span></td><td style="width: 20%;" data-mce-style="width: 20%;"><span class="wk-print-tag-wukong wk-tiny-color--common" contenteditable="false">${this.getHandleName(record.handleStatus)}</span></td><td style="width: 20%;" data-mce-style="width: 20%;"><span class="wk-print-tag-wukong wk-tiny-color--common" contenteditable="false">${record.handleOpinion || ""}</span></td></tr>`
         }
         systemApprovalContent += content
         systemApprovalContent += '</tbody></table>'
