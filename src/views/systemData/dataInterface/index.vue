@@ -37,7 +37,7 @@
           <div class="JNPF-common-head-right">
             <el-tooltip effect="dark" :content="$t('common.refresh')" placement="top">
               <el-link icon="icon-ym icon-ym-Refresh JNPF-common-head-icon" :underline="false"
-                @click="reset()" />
+                @click="getList()" />
             </el-tooltip>
           </div>
         </div>
@@ -78,16 +78,9 @@
                     </el-button>
                   </span>
                   <el-dropdown-menu slot="dropdown">
-                    <el-dropdown-item
-                      @click.native="handlePreview(scope.row.id, scope.row.enabledMark,scope.row.tenantId||'')">
-                      预览
-                    </el-dropdown-item>
-                    <el-dropdown-item @click.native="viewLog(scope.row)">
-                      日志
-                    </el-dropdown-item>
-                    <el-dropdown-item @click.native="exportData(scope.row.id)">
-                      导出
-                    </el-dropdown-item>
+                    <el-dropdown-item @click.native="handlePreview(scope.row)">预览</el-dropdown-item>
+                    <el-dropdown-item @click.native="viewLog(scope.row)">日志</el-dropdown-item>
+                    <el-dropdown-item @click.native="exportData(scope.row.id)">导出</el-dropdown-item>
                   </el-dropdown-menu>
                 </el-dropdown>
               </tableOpts>
@@ -222,13 +215,14 @@ export default {
         })
       }).catch(() => { })
     },
-    handlePreview(id, enabledMark, tenantId) {
+    handlePreview(row) {
+      const { id, enabledMark, tenantId, fullName } = row
       if (enabledMark === 0) {
         this.$message.error('接口已被禁用，请先开启接口')
       } else {
         this.previewVisible = true
         this.$nextTick(() => {
-          this.$refs.Preview.init(id, tenantId)
+          this.$refs.Preview.init(id, tenantId, fullName)
         })
       }
     },
