@@ -128,6 +128,43 @@
             <p class="timeline-cell">转审人员：{{item.operatorId}}</p>
           </el-card>
         </el-timeline-item>
+        <el-timeline-item :timestamp="item.handleTime | toDate()" placement="top" :key="i"
+          v-if="item.handleStatus==8">
+          <el-card>
+            <el-row>
+              <el-col :span='18'>
+                <p class="timeline-cell">审核节点：{{item.nodeName}}</p>
+              </el-col>
+              <el-col :span='6'>
+                <p class="timeline-cell" style="text-align:right">
+                  <el-link :underline="false" type="primary">流程变更</el-link>
+                </p>
+              </el-col>
+            </el-row>
+            <p class="timeline-cell">执行人员：{{item.userName}}</p>
+            <p class="timeline-cell">执行动作：变更</p>
+            <p class="timeline-cell">变更原因：{{item.handleOpinion}}</p>
+          </el-card>
+        </el-timeline-item>
+
+        <el-timeline-item :timestamp="item.handleTime | toDate()" placement="top" :key="i"
+        v-if="item.handleStatus==9">
+          <el-card>
+            <el-row>
+              <el-col :span='18'>
+                <p class="timeline-cell">审核节点：{{item.nodeName}}</p>
+              </el-col>
+              <el-col :span='6'>
+                <p class="timeline-cell" style="text-align:right">
+                  <el-link :underline="false" type="primary">流程复活</el-link>
+                </p>
+              </el-col>
+            </el-row>
+            <p class="timeline-cell">执行人员：{{item.userName}}</p>
+            <p class="timeline-cell">执行动作：复活</p>
+            <p class="timeline-cell">复活原因：{{item.handleOpinion}}</p>
+          </el-card>
+        </el-timeline-item>
       </template>
       <el-timeline-item :timestamp="endTime | toDate()" placement="top" v-if='endTime'>
         <el-card>
