@@ -7,6 +7,26 @@
         <interface-dialog :value="dataForm.interfaceId" :title="dataForm.interfaceName"
           @change="onInterfaceChange" />
       </el-form-item>
+      <el-form-item label="参数设置" style="margin-bottom: 0;"></el-form-item>
+      <el-table :data="dataForm.templateJson" style="margin-bottom: 18px;">
+        <el-table-column type="index" width="50" label="序号" align="center" />
+        <el-table-column prop="field" label="参数名称" width="200">
+          <template slot-scope="scope">
+            <span class="required-sign">{{scope.row.required?'*':''}}</span>
+            {{scope.row.fieldName?scope.row.field+'('+scope.row.fieldName+')':scope.row.field}}
+          </template>
+        </el-table-column>
+        <el-table-column prop="value" label="表单字段">
+          <template slot-scope="scope">
+            <el-select v-model="scope.row.relationField" placeholder="请选择表单字段" clearable filterable>
+              <el-option v-for="item in formFieldsOptions" :key="item.__vModel__"
+                :label="item.__config__.label?item.__vModel__+'('+item.__config__.label+')':item.__vModel__"
+                :value="item.__vModel__">
+              </el-option>
+            </el-select>
+          </template>
+        </el-table-column>
+      </el-table>
       <el-form-item label="设置列表字段" label-width="100px" style="margin-bottom: 0;"></el-form-item>
       <el-table :data="dataForm.columnOptions">
         <el-table-column type="index" width="50" label="序号" align="center" />
