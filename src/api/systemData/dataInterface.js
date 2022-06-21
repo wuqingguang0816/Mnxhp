@@ -104,7 +104,7 @@ export function getDataInterfaceLog(id, data) {
 export function getDataInterfaceDataSelect(id, data) {
   return request({
     url: `/api/system/DataInterface/${id}/Action/List`,
-    method: 'GET',
+    method: 'post',
     data
   })
 }
