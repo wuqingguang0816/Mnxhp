@@ -221,8 +221,8 @@
                 </el-radio-group>
               </el-form-item>
               <el-form-item label="子流程表单">
-                <JNPF-TreeSelect :options="flowOptions" v-model="subFlowForm.flowId"
-                  placeholder="请选择子流程表单" lastLevel clearable @change="subFlowForm.assignList=[]" />
+                <changeFlow v-model="subFlowForm.flowId" placeholder="请选择子流程表单"
+                  :value="subFlowForm.flowId" :title="subFlowForm.flowId" />
               </el-form-item>
               <el-form-item label="数据传递">
                 <div @click="openRuleBox">
@@ -1219,6 +1219,7 @@ import { getDrawingList } from '@/components/Generator/utils/db'
 import OrgSelect from '../OrgSelect'
 import MsgDialog from './msgDialog'
 import InterfaceDialog from './InterfaceDialog'
+import changeFlow from './changeFlow.vue'
 const requiredDisabled = (jnpfKey) => {
   return ['billRule', 'createUser', 'createTime', 'modifyTime', 'modifyUser', 'currPosition', 'currOrganize', 'table'].includes(jnpfKey)
 }
@@ -1519,7 +1520,7 @@ const systemFieldOptions = [{
 }]
 export default {
   props: [/*当前节点数据*/"value", /*整个节点数据*/"processData", "flowType"],
-  components: { OrgSelect, MsgDialog, InterfaceDialog },
+  components: { OrgSelect, MsgDialog, InterfaceDialog, changeFlow },
   data() {
     return {
       visible: false,  // 控制面板显隐
