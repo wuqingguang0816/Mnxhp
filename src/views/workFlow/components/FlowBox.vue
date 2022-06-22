@@ -17,7 +17,7 @@
               :disabled="allBtnDisabled">{{properties.saveBtnText||'暂 存'}}</el-button>
           </template>
           <template v-if="setting.opType == 1">
-            <el-button type="warning" @click="openUserBox('transfer')"
+            <el-button type="warning" @click="actionDialogHandler('transfer')"
               v-if="properties.hasTransferBtn">{{properties.transferBtnText||'转 审'}}</el-button>
             <el-button type="primary" @click="eventLauncher('audit')" :loading="candidateLoading"
               v-if="properties.hasAuditBtn">{{properties.auditBtnText||'通 过'}}</el-button>
@@ -32,12 +32,12 @@
             <el-button type="primary" @click="press()"
               v-if="properties.hasPressBtn || properties.hasPressBtn===undefined">
               {{properties.pressBtnText||'催 办'}}</el-button>
-            <el-button type="danger" @click="revoke()"
+            <el-button type="danger" @click="actionDialogHandler('revoke')"
               v-if="properties.hasRevokeBtn || properties.hasRevokeBtn===undefined">
               {{properties.revokeBtnText||'撤 回'}}</el-button>
           </template>
           <el-button type="danger" v-if="setting.opType == 2 && properties.hasRevokeBtn"
-            @click="recall()">{{properties.revokeBtnText||'撤 回'}}</el-button>
+            @click="actionDialogHandler('recall')">{{properties.revokeBtnText||'撤 回'}}</el-button>
           <template v-if="setting.opType == 4">
             <el-button type="primary" @click="openAssignBox" v-if="setting.status ==1">指 派
             </el-button>
@@ -153,7 +153,6 @@
         </span>
       </el-dialog>
       <ActionDialog ref='actionDialog' ></ActionDialog>
-      <UserBox v-if="userBoxVisible" ref="userBox" :title="userBoxTitle" @submit="handleTransfer" />
       <print-browse :visible.sync="printBrowseVisible" :id="properties.printId" :formId="setting.id"
         :fullName="setting.fullName" />
       <candidate-form :visible.sync="candidateVisible" :candidateList="candidateList"
@@ -165,8 +164,8 @@
 
 <script>
 import { FlowEngineInfo } from '@/api/workFlow/FlowEngine'
-import { FlowBeforeInfo, Audit, Reject, Transfer, Recall, Cancel, Assign, SaveAudit, Candidates, CandidateUser } from '@/api/workFlow/FlowBefore'
-import { Revoke, Press } from '@/api/workFlow/FlowLaunch'
+import { FlowBeforeInfo, Audit, Reject, Cancel, Assign, SaveAudit, Candidates, CandidateUser } from '@/api/workFlow/FlowBefore'
+import { Press } from '@/api/workFlow/FlowLaunch'
 import { Create, Update, DynamicCreate, DynamicUpdate } from '@/api/workFlow/workFlowForm'
 import recordList from './RecordList'
 import Comment from './Comment'
@@ -523,26 +522,11 @@ export default {
     submitCandidate(data) {
       this.handleRequest(data)
     },
-    revoke() {
-      this.$prompt('', "撤回流程", {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        inputPlaceholder: '请输入撤回原因（选填）',
-        inputType: 'textarea',
-        inputValue: "",
-        closeOnClickModal: false
-      }).then(({ value }) => {
-        Revoke(this.setting.id, { handleOpinion: value }).then(res => {
-          this.$message({
-            type: 'success',
-            message: res.msg,
-            duration: 1000,
-            onClose: () => {
-              this.$emit('close', true)
-            }
-          })
-        })
-      }).catch(() => { })
+    actionDialogHandler(type) {
+      let id = type === 'revoke' ? this.setting.id : this.setting.taskId
+      this.$nextTick(() => {
+        this.$refs.actionDialog.init(type,id)
+      })
     },
     press() {
       this.$confirm('此操作将提示该节点尽快处理，是否继续?', '提示', {
@@ -553,27 +537,6 @@ export default {
             type: 'success',
             message: res.msg,
             duration: 1000
-          })
-        })
-      }).catch(() => { })
-    },
-    recall() {
-      this.$prompt('', "撤回审核", {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        inputPlaceholder: '请输入撤回原因（选填）',
-        inputType: 'textarea',
-        inputValue: "",
-        closeOnClickModal: false
-      }).then(({ value }) => {
-        Recall(this.setting.taskId, { handleOpinion: value }).then(res => {
-          this.$message({
-            type: 'success',
-            message: res.msg,
-            duration: 1000,
-            onClose: () => {
-              this.$emit('close', true)
-            }
           })
         })
       }).catch(() => { })
@@ -598,23 +561,6 @@ export default {
           })
         })
       }).catch(() => { })
-    },
-    openUserBox(type) {
-      this.$nextTick(() => {
-        this.$refs.actionDialog.init(type,this.setting.taskId)
-      })
-    },
-    handleTransfer(freeApproverUserId) {
-      Transfer(this.setting.taskId, { freeApproverUserId }).then(res => {
-        this.$message({
-          type: 'success',
-          message: res.msg,
-          duration: 1000,
-          onClose: () => {
-            this.$emit('close', true)
-          }
-        })
-      })
     },
     openAssignBox() {
       this.assignVisible = true

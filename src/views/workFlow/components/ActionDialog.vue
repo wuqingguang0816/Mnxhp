@@ -11,10 +11,11 @@
             :rows="4" />
         </el-form-item>
       </template>
-      <template v-if="type==='revoke'">
-        <!-- <el-form-item :label="title+'原因'" prop="freeApproverUserId">
-          <user-select v-model="from.freeApproverUserId" :placeholder="`请选择${title}给谁`" />
-        </el-form-item> -->
+      <template v-if="type==='revoke' || type==='recall'">
+        <el-form-item :label="title+'原因'" prop="handleOpinion">
+          <el-input v-model="from.handleOpinion" :placeholder="`请输入${title}意见（选填）`" type="textarea"
+            :rows="4" />
+        </el-form-item>
       </template>
 
       <el-form-item :label="title+'附件'" prop="fileList">
@@ -52,7 +53,7 @@ export default {
         from: {
           handleOpinion:'',
           freeApproverUserId:[],
-          fileList:[],
+          fileList: [],
         },
         fromRules:{
           freeApproverUserId: [
@@ -81,7 +82,8 @@ export default {
           case 'transfer':
             this.title = '转审'
             break
-          case 'revoke' || 'recall':
+          case 'revoke':
+          case 'recall':  
             this.title = '撤回'
             break
           default:
@@ -105,12 +107,16 @@ export default {
           default:
             break  
         }
-        actionUrl(this.id,this.from).then(res => {
+        let query = {...this.from}
+        query.fileList = JSON.stringify(this.from.fileList)
+        actionUrl(this.id,query).then(res => {
           this.$message({
             type: 'success',
             message: res.msg,
             duration: 1000,
             onClose: () => {
+              this.$refs.from.resetFields()
+              this.fromVisible = false
               this.$emit('close', true)
             }
           })
