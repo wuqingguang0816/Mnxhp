@@ -21,7 +21,7 @@
             <el-button type="primary" @click="flowResurgence">复活</el-button>
           </template>
           <template v-if="flowTaskInfo.completion>0 && flowTaskInfo.completion<100 && nodeChange">
-            <el-button type="primary" @click="flowResurgence">节点变更</el-button>
+            <el-button type="primary" @click="flowResurgence">变更</el-button>
           </template>
           <template v-if="setting.opType == 1">
             <el-button type="warning" @click="openUserBox('transfer')"
@@ -152,8 +152,8 @@
                 :value="item.id" />
             </el-select>
           </el-form-item>
-          <el-form-item label="意见" prop="handleOpinion">
-            <el-input type="textarea" v-model="resurgenceForm.handleOpinion" placeholder="请填写意见" />
+          <el-form-item :label="flowTaskInfo.completion==100?'复活意见':'变更意见'" prop="handleOpinion">
+            <el-input type="textarea" v-model="resurgenceForm.handleOpinion" placeholder="请填写意见" :rows="4" />
           </el-form-item>
         </el-form>
         <span slot="footer" class="dialog-footer">
@@ -320,12 +320,9 @@ export default {
     },
     flowResurgence(){
       this.resurgenceVisible = true
-      // 请求下拉数据
       ResurgenceList(this.setting.taskId).then(res => {
         this.resurgenceNodeList = res.data
       })
-      
-
     },
     goBack(isRefresh) {
       this.$emit('close', isRefresh)
