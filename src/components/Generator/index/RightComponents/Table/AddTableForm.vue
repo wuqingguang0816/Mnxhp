@@ -7,6 +7,27 @@
         <interface-dialog :value="dataForm.interfaceId" :title="dataForm.interfaceName"
           @change="onInterfaceChange" />
       </el-form-item>
+      <el-form-item label="参数设置" style="margin-bottom: 0;"></el-form-item>
+      <el-table :data="dataForm.templateJson" style="margin-bottom: 18px;">
+        <el-table-column type="index" width="50" label="序号" align="center" />
+        <el-table-column prop="field" label="参数名称" width="200">
+          <template slot-scope="scope">
+            <span class="required-sign">{{scope.row.required?'*':''}}</span>
+            {{scope.row.fieldName?scope.row.field+'('+scope.row.fieldName+')':scope.row.field}}
+          </template>
+        </el-table-column>
+        <el-table-column prop="value" label="表单字段">
+          <template slot-scope="scope">
+            <el-select v-model="scope.row.relationField" placeholder="请选择表单字段" clearable filterable
+              @change="onRelationFieldChange($event,scope.row)">
+              <el-option v-for="item in formFieldsOptions" :key="item.__vModel__"
+                :label="item.__config__.label?item.__vModel__+'('+item.__config__.label+')':item.__vModel__"
+                :value="item.__vModel__">
+              </el-option>
+            </el-select>
+          </template>
+        </el-table-column>
+      </el-table>
       <el-form-item label="设置列表字段" label-width="100px" style="margin-bottom: 0;"></el-form-item>
       <el-table :data="dataForm.columnOptions">
         <el-table-column type="index" width="50" label="序号" align="center" />
@@ -103,6 +124,7 @@ export default {
   },
   computed: {
     formFieldsOptions() {
+      const noAllowList = ['table', 'uploadImg', 'uploadFz', 'modifyUser', 'modifyTime']
       let list = []
       const loop = (data, parent) => {
         if (!data) return
@@ -110,7 +132,7 @@ export default {
           loop(data.__config__.children, data)
         }
         if (Array.isArray(data)) data.forEach(d => loop(d, parent))
-        if (data.__vModel__ && data.__config__.jnpfKey !== 'table') list.push(data)
+        if (data.__vModel__ && !noAllowList.includes(data.__config__.jnpfKey)) list.push(data)
       }
       loop(getDrawingList())
       return list
@@ -136,6 +158,13 @@ export default {
         ...o,
         relationField: ''
       })) : []
+    },
+    onRelationFieldChange(val, row) {
+      if (!val) return row.jnpfKey = ''
+      let list = this.formFieldsOptions.filter(o => o.__vModel__ === val)
+      if (!list.length) return row.jnpfKey = ''
+      let item = list[0]
+      row.jnpfKey = item.__config__.jnpfKey
     },
     addColumn() {
       this.dataForm.columnOptions.push({
