@@ -236,7 +236,7 @@ export default {
         return
       }
       if (this.dataForm.executeContent.interfaceId === id) return
-      this.dataForm.executeContent.interfaceName == id
+      this.dataForm.executeContent.interfaceId = id
       this.dataForm.executeContent.interfaceName = row.fullName
       this.dataForm.executeContent.parameter = row.templateJson.map(o => ({
         ...o,

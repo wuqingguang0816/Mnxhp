@@ -65,7 +65,7 @@
               <el-table-column type="expand" width="40">
                 <template slot-scope="scope">
                   <el-table :data="scope.row.templateJson" size='mini'>
-                    <el-table-column prop="field" label="参数名称(说明)">
+                    <el-table-column prop="field" label="参数名称">
                       <template slot-scope="scope">
                         <p>
                           <span class="required-sign">{{scope.row.required?'*':''}}</span>
