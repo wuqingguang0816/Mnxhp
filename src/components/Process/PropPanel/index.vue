@@ -775,6 +775,9 @@
                   <el-radio-group v-model="approverForm.formFieldType">
                     <el-radio :label="1">用户</el-radio>
                     <el-radio :label="2">部门</el-radio>
+                    <el-radio :label="3">岗位</el-radio>
+                    <el-radio :label="4">角色</el-radio>
+                    <el-radio :label="5">分组</el-radio>
                   </el-radio-group>
                   <el-select v-model="approverForm.formField" placeholder="请选择字段">
                     <el-option v-for="item in usedFormItems" :key="item.__vModel__"
