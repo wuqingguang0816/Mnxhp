@@ -343,7 +343,7 @@ export const inputComponents = [
     relationField: "fullName",
     popupType: "popover",
     popupTitle: "选择数据",
-    popupWidth: "80%",
+    popupWidth: "700px",
     disabled: false,
     clearable: true,
     multiple: false,
