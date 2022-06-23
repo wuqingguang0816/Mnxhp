@@ -26,6 +26,7 @@
             </div>
             <JNPF-table v-loading="listLoading" :data="dataAuthorizeSchemeList" row-key="id"
               default-expand-all :tree-props="{ children: 'children', hasChildren: '' }">
+              <el-table-column prop="enCode" label="方案编码" width="160" />
               <el-table-column prop="fullName" label="方案名称" width="160" />
               <el-table-column prop="conditionText" label="过滤条件" />
               <el-table-column label="操作" width="100">
@@ -68,6 +69,9 @@
                         '@organizationAndSuborganization'
                     ">当前组织及子组织</span>
                   <span v-if="scope.row.conditionText === '@userAraSubordinates'">当前用户及下属</span>
+                  <span v-if="scope.row.conditionText === '@branchManageOrganize'">当前分管组织</span>
+                  <span
+                    v-if="scope.row.conditionText === '@branchManageOrganizeAndSub'">当前分管组织及子组织</span>
                 </template>
               </el-table-column>
               <el-table-column label="操作" width="100">
@@ -254,7 +258,8 @@ export default {
         let data = {
           moduleId: this.moduleId,
           enCode: "jnpf_alldata",
-          fullName: "全部数据"
+          fullName: "全部数据",
+          allData: 1
         };
         createDataScheme(data)
           .then(res => {

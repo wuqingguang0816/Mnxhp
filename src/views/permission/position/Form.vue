@@ -38,7 +38,7 @@
 
 <script>
 import {
-  getDepartmentSelector
+  getDepartmentSelectorByAuth
 } from '@/api/permission/department'
 import {
   createPosition,
@@ -91,7 +91,7 @@ export default {
       this.formLoading = true
       this.$nextTick(() => {
         this.$refs['dataForm'].resetFields()
-        getDepartmentSelector().then(res => {
+        getDepartmentSelectorByAuth().then(res => {
           this.treeData = res.data.list
         })
         // 获取岗位类型

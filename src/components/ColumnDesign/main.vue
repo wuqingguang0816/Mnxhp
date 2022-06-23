@@ -209,8 +209,12 @@
                         <i class="icon-ym icon-ym-darg" />
                       </div>
                       <p class="custom-line-value">{{item.value}}</p>
-                      <el-input v-model="item.label" placeholder="按钮名称" size="small" />
-                      <el-button class="custom-btn" @click="editFunc(item)">事件</el-button>
+                      <el-input v-model="item.label" placeholder="按钮名称" size="small">
+                        <template slot="append">
+                          <el-button type="primary" @click="editFunc(item)" class="custom-btn">事件
+                          </el-button>
+                        </template>
+                      </el-input>
                       <div class="close-btn custom-line-icon"
                         @click="columnData.customBtnsList.splice(index, 1)">
                         <i class="el-icon-remove-outline" />

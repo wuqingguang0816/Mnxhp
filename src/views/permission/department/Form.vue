@@ -35,7 +35,7 @@
 
 <script>
 import {
-  getDepartmentSelector,
+  getDepartmentSelectorByAuth,
   createDepartment,
   updateDepartment,
   getDepartmentInfo
@@ -83,7 +83,7 @@ export default {
       this.formLoading = true
       this.$nextTick(() => {
         this.$refs['dataForm'].resetFields()
-        getDepartmentSelector(id || 0).then(res => {
+        getDepartmentSelectorByAuth(id || 0).then(res => {
           this.treeData = res.data.list
         })
         if (this.dataForm.id) {

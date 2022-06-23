@@ -80,6 +80,7 @@
 
 <script>
 import { addResizeListener, removeResizeListener } from 'element-ui/src/utils/resize-event';
+import { getDepartmentSelectorByAuth } from "@/api/permission/department";
 export default {
   name: 'comSelect',
   inject: {
@@ -111,6 +112,10 @@ export default {
       default: false
     },
     clearable: {
+      type: Boolean,
+      default: false
+    },
+    auth: {
       type: Boolean,
       default: false
     },
@@ -215,8 +220,15 @@ export default {
   },
   methods: {
     async getData() {
-      this.treeData = await this.$store.dispatch('generator/getDepTree')
-      this.allList = this.treeToArray(this.treeData)
+      const treeData = await this.$store.dispatch('generator/getDepTree')
+      this.allList = this.treeToArray(treeData)
+      if (this.auth) {
+        getDepartmentSelectorByAuth().then(res => {
+          this.treeData = res.data.list
+        })
+      } else {
+        this.treeData = treeData
+      }
     },
     treeToArray(treeData) {
       let list = []
@@ -265,10 +277,9 @@ export default {
       loop(node)
       return fullPath
     },
-    handleNodeClick(data, node) {
-      const nodePath = this.getNodePath(node)
-      let currId = nodePath.map(o => o.id)
-      let currData = nodePath.map(o => o.fullName).join('/')
+    handleNodeClick(data) {
+      let currId = data.organizeIds
+      let currData = data.organize
       if (this.multiple) {
         const boo = this.selectedIds.some(o => o.join('/') === currId.join('/'))
         if (boo) return

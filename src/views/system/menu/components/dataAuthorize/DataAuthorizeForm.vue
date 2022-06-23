@@ -123,6 +123,14 @@ export default {
         {
           value: "@userAraSubordinates",
           label: "当前用户及下属"
+        },
+        {
+          value: "@branchManageOrganize",
+          label: "当前分管组织"
+        },
+        {
+          value: "@branchManageOrganizeAndSub",
+          label: "当前分管组织及子组织"
         }
       ],
       conditionSymbolOptions: [
@@ -149,6 +157,12 @@ export default {
         {
           value: "LessThanOrEqual",
           label: "小于等于"
+        }, {
+          value: 'Included',
+          label: '包含'
+        }, {
+          value: 'NotIncluded',
+          label: '不包含'
         }
       ],
       dataForm: {
