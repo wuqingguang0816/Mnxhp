@@ -1,6 +1,6 @@
 
 <template>
-  <el-drawer size="550px" class="drawer JNPF-common-drawer" :visible.sync="visible" @close="cancel"
+  <el-drawer size="600px" class="drawer JNPF-common-drawer" :visible.sync="visible" @close="cancel"
     v-if="properties" append-to-body :wrapperClosable="false">
     <!-- 标题 -->
     <header slot="title" class="header"
@@ -811,7 +811,7 @@
               </div>
               <el-form-item>
                 <div slot="label">节点超时
-                  <el-tooltip content="所有节点抄送的时候" placement="top">
+                  <el-tooltip content="所有节点超时的时候" placement="top">
                     <a class="el-icon-warning-outline"></a>
                   </el-tooltip>
                 </div>
@@ -849,7 +849,7 @@
               </div>
               <el-form-item>
                 <div slot="label">节点提醒
-                  <el-tooltip content="所有节点抄送的时候" placement="top">
+                  <el-tooltip content="所有节点提醒的时候" placement="top">
                     <a class="el-icon-warning-outline"></a>
                   </el-tooltip>
                 </div>
@@ -889,7 +889,7 @@
           </el-scrollbar>
         </el-tab-pane>
         <el-tab-pane label="超时提醒">
-           <el-scrollbar class="config-scrollbar">
+          <el-scrollbar class="config-scrollbar">
             <el-form :model="startForm" class="pd-10" label-position="top">
               <el-form-item class="mt-10" label="限时设置">
                 <el-select v-model="startForm.timeLimitConfig.on" placeholder="请选择">
@@ -899,19 +899,21 @@
               </el-form-item>
               <div v-if="startForm.timeLimitConfig.on===1">
                 <el-form-item label="节点限定时长起始值">
-                  <el-select  disabled v-model="startForm.timeLimitConfig.nodeLimit" placeholder="请选择">
+                  <el-select disabled v-model="startForm.timeLimitConfig.nodeLimit"
+                    placeholder="请选择">
                     <el-option v-for="item in overTimeOptions" :key="item.value" :label="item.label"
                       :value="item.value" />
                   </el-select>
-                </el-form-item>  
+                </el-form-item>
                 <el-row :gutter="20">
                   <el-col :span="8">节点处理限定时长(时)</el-col>
                   <el-col :span="16">
-                    <el-input-number  v-model="startForm.timeLimitConfig.duringDeal" :min="0" :step="1"></el-input-number>
+                    <el-input-number v-model="startForm.timeLimitConfig.duringDeal" :min="0"
+                      :step="1"></el-input-number>
                   </el-col>
                 </el-row>
               </div>
-              <el-form-item class="mt-10" >
+              <el-form-item class="mt-10">
                 <div slot="label">超时设置
                   <el-tooltip content="超过设置的节点处理限定时间即为超时" placement="top">
                     <a class="el-icon-warning-outline"></a>
@@ -924,15 +926,17 @@
               </el-form-item>
               <div v-if="startForm.overTimeConfig.on===1">
                 <el-row :gutter="20">
-                  <el-col :span="8">第一次超时时间（时）</el-col>
+                  <el-col :span="8">第一次超时时间(时)</el-col>
                   <el-col :span="16">
-                    <el-input-number  v-model="startForm.overTimeConfig.fisrtOver" :min="0" :step="1"></el-input-number>
+                    <el-input-number v-model="startForm.overTimeConfig.firstOver" :min="0"
+                      :step="1"></el-input-number>
                   </el-col>
                 </el-row>
-                <el-row :gutter="20">
-                  <el-col :span="8">超时间隔（时）</el-col>
+                <el-row :gutter="20" class="mt-10">
+                  <el-col :span="8">超时间隔(时)</el-col>
                   <el-col :span="16">
-                    <el-input-number  v-model="startForm.overTimeConfig.overTimeDuring" :min="0" :step="1"></el-input-number>
+                    <el-input-number v-model="startForm.overTimeConfig.overTimeDuring" :min="0"
+                      :step="1"></el-input-number>
                   </el-col>
                 </el-row>
                 <el-row>超时事务</el-row>
@@ -940,13 +944,16 @@
                   <el-checkbox v-model="startForm.overTimeConfig.overNotice">超时通知</el-checkbox>
                 </el-row>
                 <el-row>
-                  <el-checkbox v-model="startForm.overTimeConfig.overAutoApprove">超时自动审批<el-tooltip content="当前审批节点表单必填字段为空会使工单流转失败，下一审批节点设置候选人员、选择分支时当前审批节点规则失效" placement="top">
+                  <el-checkbox v-model="startForm.overTimeConfig.overAutoApprove">超时自动审批<el-tooltip
+                      content="当前审批节点表单必填字段为空会使工单流转失败，下一审批节点设置候选人员、选择分支时当前审批节点规则失效" placement="top">
                       <a class="el-icon-warning-outline"></a>
-                    </el-tooltip></el-checkbox>
+                    </el-tooltip>
+                  </el-checkbox>
                   <el-row :gutter="20">
-                    <el-col :span="8">超时次数（次）</el-col>
+                    <el-col :span="8">超时次数(次)</el-col>
                     <el-col :span="16">
-                      <el-input-number  v-model="startForm.overTimeConfig.overAutoApproveTime" :min="0" :step="1"></el-input-number>
+                      <el-input-number v-model="startForm.overTimeConfig.overAutoApproveTime"
+                        :min="0" :step="1"></el-input-number>
                     </el-col>
                   </el-row>
                 </el-row>
@@ -957,14 +964,14 @@
                     </el-tooltip>
                   </el-checkbox>
                   <el-row :gutter="20">
-                    <el-col :span="8">超时次数（次）</el-col>
+                    <el-col :span="8">超时次数(次)</el-col>
                     <el-col :span="16">
-                      <el-input-number  v-model="startForm.overTimeConfig.overEventTime" :min="0" :step="1"></el-input-number>
+                      <el-input-number v-model="startForm.overTimeConfig.overEventTime" :min="0"
+                        :step="1"></el-input-number>
                     </el-col>
                   </el-row>
                 </el-row>
               </div>
-
               <el-form-item class="mt-20">
                 <div slot="label">提醒设置
                   <el-tooltip content="请在流程事件内配置提醒事件" placement="top">
@@ -978,15 +985,17 @@
               </el-form-item>
               <div v-if="startForm.noticeConfig.on===1">
                 <el-row :gutter="20">
-                  <el-col :span="8">第一次超时时间（时）</el-col>
+                  <el-col :span="8">第一次超时时间(时)</el-col>
                   <el-col :span="16">
-                    <el-input-number  v-model="startForm.noticeConfig.fisrtOver" :min="0" :step="1"></el-input-number>
+                    <el-input-number v-model="startForm.noticeConfig.firstOver" :min="0" :step="1">
+                    </el-input-number>
                   </el-col>
                 </el-row>
-                <el-row :gutter="20">
-                  <el-col :span="8">提醒间隔（时）</el-col>
+                <el-row :gutter="20" class="mt-10">
+                  <el-col :span="8">提醒间隔(时)</el-col>
                   <el-col :span="16">
-                    <el-input-number  v-model="startForm.noticeConfig.overTimeDuring" :min="0" :step="1"></el-input-number>
+                    <el-input-number v-model="startForm.noticeConfig.overTimeDuring" :min="0"
+                      :step="1"></el-input-number>
                   </el-col>
                 </el-row>
                 <el-row>提醒事务</el-row>
@@ -1000,15 +1009,16 @@
                     </el-tooltip>
                   </el-checkbox>
                   <el-row :gutter="20">
-                    <el-col :span="8">提醒次数（次）</el-col>
+                    <el-col :span="8">提醒次数(次)</el-col>
                     <el-col :span="16">
-                      <el-input-number  v-model="startForm.noticeConfig.overEventTime" :min="0" :step="1"></el-input-number>
+                      <el-input-number v-model="startForm.noticeConfig.overEventTime" :min="0"
+                        :step="1"></el-input-number>
                     </el-col>
                   </el-row>
                 </el-row>
               </div>
             </el-form>
-          </el-scrollbar>    
+          </el-scrollbar>
         </el-tab-pane>
       </el-tabs>
     </section>
@@ -1199,22 +1209,6 @@
                 </div>
                 <el-checkbox v-model="approverForm.hasSign">手写签名</el-checkbox>
               </el-form-item>
-              <!-- <el-form-item label="超时设置">
-                <el-switch v-model="approverForm.timeoutConfig.on" class="mr-10" />
-                <template v-if="approverForm.timeoutConfig.on">
-                  <el-input-number v-model="approverForm.timeoutConfig.quantity"
-                    controls-position="right" :min="1" class="mr-10" />
-                  <el-select v-model="approverForm.timeoutConfig.type" class="timeout-select mr-10">
-                    <el-option label="天" value="day"></el-option>
-                    <el-option label="小时" value="hour"></el-option>
-                    <el-option label="分钟" value="minute"></el-option>
-                  </el-select>
-                  <el-radio-group v-model="approverForm.timeoutConfig.handler">
-                    <el-radio :label="1">同意</el-radio>
-                    <el-radio :label="2">驳回</el-radio>
-                  </el-radio-group>
-                </template>
-              </el-form-item> -->
               <el-form-item>
                 <div slot="label">加签设置
                   <el-tooltip content="允许在审批单中增加临时审批人" placement="top">
@@ -1587,7 +1581,7 @@
               </div>
               <el-form-item>
                 <div slot="label">节点超时
-                  <el-tooltip content="当前节点抄送的时候" placement="top">
+                  <el-tooltip content="当前节点超时的时候" placement="top">
                     <a class="el-icon-warning-outline"></a>
                   </el-tooltip>
                 </div>
@@ -1625,7 +1619,7 @@
               </div>
               <el-form-item>
                 <div slot="label">节点提醒
-                  <el-tooltip content="当前节点抄送的时候" placement="top">
+                  <el-tooltip content="当前节点提醒的时候" placement="top">
                     <a class="el-icon-warning-outline"></a>
                   </el-tooltip>
                 </div>
@@ -1665,11 +1659,11 @@
           </el-scrollbar>
         </el-tab-pane>
         <el-tab-pane label="超时提醒">
-           <el-scrollbar class="config-scrollbar">
+          <el-scrollbar class="config-scrollbar">
             <el-form :model="approverForm" class="pd-10" label-position="top">
               <el-form-item class="mt-10" label="限时设置">
                 <el-select v-model="approverForm.timeLimitConfig.on" placeholder="请选择">
-                  <el-option v-for="item in noticeOptions" :key="item.value" :label="item.label"
+                  <el-option v-for="item in nodeNoticeOptions" :key="item.value" :label="item.label"
                     :value="item.value" />
                 </el-select>
               </el-form-item>
@@ -1680,42 +1674,45 @@
                       :value="item.value" />
                   </el-select>
                 </el-form-item>
-                <el-row :gutter="20">
-                  <el-col :span="8">节点处理限定时长(时)</el-col>
-                  <el-col :span="16">
-                    <el-input-number  v-model="approverForm.timeLimitConfig.duringDeal" :min="0" :step="1"></el-input-number>
-                  </el-col>
-                </el-row>
-                <el-row class="mt-10">
+                <el-form-item label="表单字段" v-if="approverForm.timeLimitConfig.nodeLimit===2">
                   <el-select v-model="approverForm.timeLimitConfig.formField" placeholder="请选择字段">
                     <el-option v-for="item in usedFormItems" :key="item.__vModel__"
                       :label="item.__config__.label" :value="item.__vModel__">
                     </el-option>
                   </el-select>
+                </el-form-item>
+                <el-row :gutter="20">
+                  <el-col :span="8">节点处理限定时长(时)</el-col>
+                  <el-col :span="16">
+                    <el-input-number v-model="approverForm.timeLimitConfig.duringDeal" :min="0"
+                      :step="1"></el-input-number>
+                  </el-col>
                 </el-row>
               </div>
-              <el-form-item class="mt-10" >
+              <el-form-item class="mt-10">
                 <div slot="label">超时设置
                   <el-tooltip content="超过设置的节点处理限定时间即为超时" placement="top">
                     <a class="el-icon-warning-outline"></a>
                   </el-tooltip>
                 </div>
                 <el-select v-model="approverForm.overTimeConfig.on" placeholder="请选择">
-                  <el-option v-for="item in noticeOptions" :key="item.value" :label="item.label"
+                  <el-option v-for="item in nodeNoticeOptions" :key="item.value" :label="item.label"
                     :value="item.value" />
                 </el-select>
               </el-form-item>
               <div v-if="approverForm.overTimeConfig.on===1">
                 <el-row :gutter="20">
-                  <el-col :span="8">第一次超时时间（时）</el-col>
+                  <el-col :span="8">第一次超时时间(时)</el-col>
                   <el-col :span="16">
-                    <el-input-number  v-model="approverForm.overTimeConfig.fisrtOver" :min="0" :step="1"></el-input-number>
+                    <el-input-number v-model="approverForm.overTimeConfig.firstOver" :min="0"
+                      :step="1"></el-input-number>
                   </el-col>
                 </el-row>
                 <el-row :gutter="20" class="mt-10">
-                  <el-col :span="8">超时间隔（时）</el-col>
+                  <el-col :span="8">超时间隔(时)</el-col>
                   <el-col :span="16">
-                    <el-input-number  v-model="approverForm.overTimeConfig.overTimeDuring" :min="0" :step="1"></el-input-number>
+                    <el-input-number v-model="approverForm.overTimeConfig.overTimeDuring" :min="0"
+                      :step="1"></el-input-number>
                   </el-col>
                 </el-row>
                 <el-row>超时事务</el-row>
@@ -1723,13 +1720,17 @@
                   <el-checkbox v-model="approverForm.overTimeConfig.overNotice">超时通知</el-checkbox>
                 </el-row>
                 <el-row>
-                  <el-checkbox v-model="approverForm.overTimeConfig.overAutoApprove">超时自动审批<el-tooltip content="当前审批节点表单必填字段为空会使工单流转失败，下一审批节点设置候选人员、选择分支时当前审批节点规则失效" placement="top">
+                  <el-checkbox v-model="approverForm.overTimeConfig.overAutoApprove">超时自动审批
+                    <el-tooltip content="当前审批节点表单必填字段为空会使工单流转失败，下一审批节点设置候选人员、选择分支时当前审批节点规则失效"
+                      placement="top">
                       <a class="el-icon-warning-outline"></a>
-                    </el-tooltip></el-checkbox>
+                    </el-tooltip>
+                  </el-checkbox>
                   <el-row :gutter="20">
-                    <el-col :span="8">超时次数（次）</el-col>
+                    <el-col :span="8">超时次数(次)</el-col>
                     <el-col :span="16">
-                      <el-input-number  v-model="approverForm.overTimeConfig.overAutoApproveTime" :min="0" :step="1"></el-input-number>
+                      <el-input-number v-model="approverForm.overTimeConfig.overAutoApproveTime"
+                        :min="0" :step="1"></el-input-number>
                     </el-col>
                   </el-row>
                 </el-row>
@@ -1740,9 +1741,10 @@
                     </el-tooltip>
                   </el-checkbox>
                   <el-row :gutter="20">
-                    <el-col :span="8">超时次数（次）</el-col>
+                    <el-col :span="8">超时次数(次)</el-col>
                     <el-col :span="16">
-                      <el-input-number  v-model="approverForm.overTimeConfig.overEventTime" :min="0" :step="1"></el-input-number>
+                      <el-input-number v-model="approverForm.overTimeConfig.overEventTime" :min="0"
+                        :step="1"></el-input-number>
                     </el-col>
                   </el-row>
                 </el-row>
@@ -1755,21 +1757,23 @@
                   </el-tooltip>
                 </div>
                 <el-select v-model="approverForm.noticeConfig.on" placeholder="请选择">
-                  <el-option v-for="item in noticeOptions" :key="item.value" :label="item.label"
+                  <el-option v-for="item in nodeNoticeOptions" :key="item.value" :label="item.label"
                     :value="item.value" />
                 </el-select>
               </el-form-item>
               <div v-if="approverForm.noticeConfig.on===1">
                 <el-row :gutter="20">
-                  <el-col :span="8">第一次提醒时间（时）</el-col>
+                  <el-col :span="8">第一次提醒时间(时)</el-col>
                   <el-col :span="16">
-                    <el-input-number  v-model="approverForm.noticeConfig.fisrtOver" :min="0" :step="1"></el-input-number>
+                    <el-input-number v-model="approverForm.noticeConfig.firstOver" :min="0"
+                      :step="1"></el-input-number>
                   </el-col>
                 </el-row>
                 <el-row :gutter="20" class="mt-10">
-                  <el-col :span="8">提醒间隔（时）</el-col>
+                  <el-col :span="8">提醒间隔(时)</el-col>
                   <el-col :span="16">
-                    <el-input-number  v-model="approverForm.noticeConfig.overTimeDuring" :min="0" :step="1"></el-input-number>
+                    <el-input-number v-model="approverForm.noticeConfig.overTimeDuring" :min="0"
+                      :step="1"></el-input-number>
                   </el-col>
                 </el-row>
                 <el-row>提醒事务</el-row>
@@ -1783,15 +1787,16 @@
                     </el-tooltip>
                   </el-checkbox>
                   <el-row :gutter="20">
-                    <el-col :span="8">提醒次数（次）</el-col>
+                    <el-col :span="8">提醒次数(次)</el-col>
                     <el-col :span="16">
-                      <el-input-number  v-model="approverForm.noticeConfig.overEventTime" :min="0" :step="1"></el-input-number>
+                      <el-input-number v-model="approverForm.noticeConfig.overEventTime" :min="0"
+                        :step="1"></el-input-number>
                     </el-col>
                   </el-row>
                 </el-row>
               </div>
             </el-form>
-          </el-scrollbar>    
+          </el-scrollbar>
         </el-tab-pane>
       </el-tabs>
     </section>
@@ -1867,21 +1872,21 @@ const defaultStartForm = {
   },
   overTimeConfig: {
     on: 0, // 开启
-    fisrtOver: 0, // 第一次超时时间（时）
-    overTimeDuring: 2, // 超时间隔（时）
+    firstOver: 0, // 第一次超时时间(时)
+    overTimeDuring: 2, // 超时间隔(时)
     overNotice: false, // 超时事务-超时通知
     overAutoApprove: false, // 超时事务-超时自动审批
-    overAutoApproveTime: 5, // 自动审批超时次数（次）
+    overAutoApproveTime: 5, // 自动审批超时次数(次)
     overEvent: false, // 超时事件
-    overEventTime: 5, // 超时事件超时次数（次）
+    overEventTime: 5, // 超时事件超时次数(次)
   },
   noticeConfig: {
     on: 0, // 开启
-    fisrtOver: 0, // 第一次提醒时间（时）
-    overTimeDuring: 2, // 提醒间隔（时）
+    firstOver: 0, // 第一次提醒时间(时)
+    overTimeDuring: 2, // 提醒间隔(时)
     overNotice: false, // 提醒事务-提醒通知
     overEvent: false, // 提醒事件
-    overEventTime: 5, // 提醒次数（次）
+    overEventTime: 5, // 提醒次数(次)
   },
   // 流程事件
   overTimeFuncConfig: {
@@ -2033,28 +2038,28 @@ const defaultApproverForm = {
   printId: '', // 打印模板
   hasSign: false,
   timeLimitConfig: {
-    on: 0,  // 开启
+    on: 2,  // 开启
     nodeLimit: 0, // 节点限定时长起始值类型
     duringDeal: 24, // 节点处理限定时长(时)
     formField: '',  // 请选择字段
   },
   overTimeConfig: {
-    on: 0, // 开启
-    fisrtOver: 0, // 第一次超时时间（时）
-    overTimeDuring: 2, // 超时间隔（时）
+    on: 2, // 开启
+    firstOver: 0, // 第一次超时时间(时)
+    overTimeDuring: 2, // 超时间隔(时)
     overNotice: false, // 超时事务-超时通知
     overAutoApprove: false, // 超时事务-超时自动审批
-    overAutoApproveTime: 5, // 自动审批超时次数（次）
+    overAutoApproveTime: 5, // 自动审批超时次数(次)
     overEvent: false, // 超时事件
-    overEventTime: 5, // 超时事件超时次数（次）
+    overEventTime: 5, // 超时事件超时次数(次)
   },
   noticeConfig: {
-    on: 0, // 开启
-    fisrtOver: 0, // 第一次提醒时间（时）
-    overTimeDuring: 2, // 提醒间隔（时）
+    on: 2, // 开启
+    firstOver: 0, // 第一次提醒时间(时)
+    overTimeDuring: 2, // 提醒间隔(时)
     overNotice: false, // 提醒事务-提醒通知
     overEvent: false, // 提醒事件
-    overEventTime: 5, // 提醒次数（次）
+    overEventTime: 5, // 提醒次数(次)
   },
   // 节点事件
   overTimeFuncConfig: {
@@ -2068,13 +2073,6 @@ const defaultApproverForm = {
     interfaceId: '', // 接口id
     interfaceName: '', // 接口名称
     templateJson: [] // 模块json
-  },
-
-  timeoutConfig: {
-    on: false,
-    quantity: 1,
-    type: 'day',
-    handler: 1
   },
   overTimeMsgConfig: {
     on: 2,
@@ -2175,10 +2173,10 @@ const noticeOptions = [{
 const overTimeOptions = [{
   value: 0,
   label: '接收时间'
-},{
+}, {
   value: 1,
   label: '发起时间'
-},{
+}, {
   value: 2,
   label: '表单变量'
 },]
@@ -3049,7 +3047,7 @@ export default {
       height: 100%;
       .config-scrollbar {
         height: 100%;
-        .el-row{
+        .el-row {
           font-size: 14px;
           color: #606266;
           height: 32px;

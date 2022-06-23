@@ -148,7 +148,7 @@
         </el-timeline-item>
 
         <el-timeline-item :timestamp="item.handleTime | toDate()" placement="top" :key="i"
-        v-if="item.handleStatus==9">
+          v-if="item.handleStatus==9">
           <el-card>
             <el-row>
               <el-col :span='18'>

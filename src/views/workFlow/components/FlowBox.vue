@@ -16,13 +16,6 @@
             <el-button type="warning" @click="eventLauncher('save')" :loading="btnLoading"
               :disabled="allBtnDisabled">{{properties.saveBtnText||'暂 存'}}</el-button>
           </template>
-          <!-- 判断流程复活按钮,和节点变更 -->
-          <template v-if="flowTaskInfo.completion==100 && nodeChange">
-            <el-button type="primary" @click="flowResurgence">复活</el-button>
-          </template>
-          <template v-if="flowTaskInfo.completion>0 && flowTaskInfo.completion<100 && nodeChange">
-            <el-button type="primary" @click="flowResurgence">变更</el-button>
-          </template>
           <template v-if="setting.opType == 1">
             <el-button type="warning" @click="openUserBox('transfer')"
               v-if="properties.hasTransferBtn">{{properties.transferBtnText||'转 审'}}</el-button>
@@ -46,6 +39,11 @@
           <el-button type="danger" v-if="setting.opType == 2 && properties.hasRevokeBtn"
             @click="recall()">{{properties.revokeBtnText||'撤 回'}}</el-button>
           <template v-if="setting.opType == 4">
+            <!-- 判断流程复活按钮和节点变更 -->
+            <el-button type="primary" @click="flowResurgence" v-if="flowTaskInfo.completion==100">
+              复 活</el-button>
+            <el-button type="primary" @click="flowResurgence"
+              v-if="flowTaskInfo.completion>0 && flowTaskInfo.completion<100">变 更</el-button>
             <el-button type="primary" @click="openAssignBox" v-if="setting.status ==1">指 派
             </el-button>
             <el-button type="danger" v-if="setting.status != 2 && setting.status != 5"
@@ -143,28 +141,30 @@
         </span>
       </el-dialog>
       <!-- 流程节点变更复活对话框 -->
-      <el-dialog :title="flowTaskInfo.completion==100?'复活':'变更'" :close-on-click-modal="false" :visible.sync="resurgenceVisible"
-        class="JNPF-dialog JNPF-dialog_center" lock-scroll append-to-body width='600px'>
-        <el-form label-width="80px" :model="resurgenceForm" :rules="resurgenceRules" ref="resurgenceForm">
+      <el-dialog :title="flowTaskInfo.completion==100?'复活':'变更'" :close-on-click-modal="false"
+        :visible.sync="resurgenceVisible" class="JNPF-dialog JNPF-dialog_center" lock-scroll
+        append-to-body width='600px'>
+        <el-form label-width="80px" :model="resurgenceForm" :rules="resurgenceRules"
+          ref="resurgenceForm">
           <el-form-item :label="flowTaskInfo.completion==100?'复活节点':'变更节点'" prop="nodeCode">
-            <el-select v-model="resurgenceForm.nodeCode" :placeholder="flowTaskInfo.completion==100?'请选择复活节点':'请选择变更节点'">
+            <el-select v-model="resurgenceForm.nodeCode"
+              :placeholder="flowTaskInfo.completion==100?'请选择复活节点':'请选择变更节点'">
               <el-option v-for="item in resurgenceNodeList" :key="item.id" :label="item.nodeName"
                 :value="item.id" />
             </el-select>
           </el-form-item>
           <el-form-item :label="flowTaskInfo.completion==100?'复活意见':'变更意见'" prop="handleOpinion">
-            <el-input type="textarea" v-model="resurgenceForm.handleOpinion" placeholder="请填写意见" :rows="4" />
+            <el-input type="textarea" v-model="resurgenceForm.handleOpinion" placeholder="请填写意见"
+              :rows="4" />
           </el-form-item>
         </el-form>
         <span slot="footer" class="dialog-footer">
           <el-button @click="resurgenceVisible = false">{{$t('common.cancelButton')}}</el-button>
-          <el-button type="primary" @click="handleResurgence()" :loading="resurgenceBtnLoading">{{$t('common.confirmButton')}}
+          <el-button type="primary" @click="handleResurgence()" :loading="resurgenceBtnLoading">
+            {{$t('common.confirmButton')}}
           </el-button>
         </span>
       </el-dialog>
-
-
-
       <UserBox v-if="userBoxVisible" ref="userBox" :title="userBoxTitle" @submit="handleTransfer" />
       <print-browse :visible.sync="printBrowseVisible" :id="properties.printId" :formId="setting.id"
         :fullName="setting.fullName" />
@@ -177,7 +177,7 @@
 
 <script>
 import { FlowEngineInfo } from '@/api/workFlow/FlowEngine'
-import { FlowBeforeInfo, Audit, Reject, Transfer, Recall, Cancel, Assign, SaveAudit, Candidates, CandidateUser ,Resurgence ,ResurgenceList } from '@/api/workFlow/FlowBefore'
+import { FlowBeforeInfo, Audit, Reject, Transfer, Recall, Cancel, Assign, SaveAudit, Candidates, CandidateUser, Resurgence, ResurgenceList } from '@/api/workFlow/FlowBefore'
 import { Revoke, Press } from '@/api/workFlow/FlowLaunch'
 import { Create, Update, DynamicCreate, DynamicUpdate } from '@/api/workFlow/workFlowForm'
 import recordList from './RecordList'
@@ -196,7 +196,7 @@ export default {
       userBoxVisible: false,
       userBoxTitle: '审批人',
       assignVisible: false,
-      resurgenceVisible:false,
+      resurgenceVisible: false,
       assignForm: {
         nodeCode: '',
         freeApproverUserId: ''
@@ -216,14 +216,16 @@ export default {
       },
       resurgenceRules: {
         nodeCode: [
-          { required: true, 
-          // message: this.flowTaskInfo.completion==100?'请选择复活节点':'请选择变更节点', 
-          message:'节点未选择',
-          trigger: 'change' }
+          {
+            required: true,
+            // message: this.flowTaskInfo.completion==100?'请选择复活节点':'请选择变更节点', 
+            message: '请选择节点',
+            trigger: 'change'
+          }
         ],
       },
       assignNodeList: [],
-      resurgenceNodeList:[],
+      resurgenceNodeList: [],
       currentView: '',
       formData: {},
       setting: {},
@@ -244,7 +246,7 @@ export default {
       loading: false,
       btnLoading: false,
       approvalBtnLoading: false,
-      resurgenceBtnLoading:false,
+      resurgenceBtnLoading: false,
       candidateLoading: false,
       candidateVisible: false,
       candidateList: [],
@@ -267,10 +269,6 @@ export default {
       if ([2, 3, 4].includes(this.setting.opType)) return this.fullName
       return this.thisStep ? this.fullName + '/' + this.thisStep : this.fullName
     },
-    nodeChange() {
-      let show = this.$route.path.includes('flowMonitor')?true:false;
-      return show;
-    }
   },
   watch: {
     activeTab(val) {
@@ -283,42 +281,40 @@ export default {
     }
   },
   methods: {
-    handleResurgence(errorRuleUserList){
-       this.$refs['resurgenceForm'].validate((valid) => {
+    handleResurgence(errorRuleUserList) {
+      this.$refs['resurgenceForm'].validate((valid) => {
         if (!valid) return
-
         let query = {
-          handleOpinion:this.resurgenceForm.handleOpinion,
-          taskNodeId:this.resurgenceForm.nodeCode,
-          taskId:this.setting.taskId,
-          resurgence:this.flowTaskInfo.completion==100?true:false
+          handleOpinion: this.resurgenceForm.handleOpinion,
+          taskNodeId: this.resurgenceForm.nodeCode,
+          taskId: this.setting.taskId,
+          resurgence: this.flowTaskInfo.completion == 100 ? true : false
         }
         if (errorRuleUserList) query.errorRuleUserList = errorRuleUserList
         this.resurgenceBtnLoading = true
-        Resurgence( query ).then(res => {
+        Resurgence(query).then(res => {
           const errorData = res.data
-            if (errorData && Array.isArray(errorData) && errorData.length) {
-              this.errorNodeList = errorData
-              this.eventType = 'resurgence'
-              this.errorVisible = true
-            } else {
-              this.$message({
-                type: 'success',
-                message: res.msg,
-                duration: 1000,
-                onClose: () => {
-                  this.resurgenceBtnLoading = false
-                  this.visible = false
-                  this.errorVisible = false
-                  this.$emit('close', true)
-                }
-              })
-            }
-          
+          if (errorData && Array.isArray(errorData) && errorData.length) {
+            this.errorNodeList = errorData
+            this.eventType = 'resurgence'
+            this.errorVisible = true
+          } else {
+            this.$message({
+              type: 'success',
+              message: res.msg,
+              duration: 1000,
+              onClose: () => {
+                this.resurgenceBtnLoading = false
+                this.visible = false
+                this.errorVisible = false
+                this.$emit('close', true)
+              }
+            })
+          }
         }).catch(() => { this.resurgenceBtnLoading = false })
       })
     },
-    flowResurgence(){
+    flowResurgence() {
       this.resurgenceVisible = true
       ResurgenceList(this.setting.taskId).then(res => {
         this.resurgenceNodeList = res.data

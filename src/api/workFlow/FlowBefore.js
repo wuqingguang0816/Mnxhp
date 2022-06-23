@@ -72,12 +72,10 @@ export function Assign(id, data) {
     data
   })
 }
-
-
 // 流程复活和变更节点下拉数据
-export function ResurgenceList(data) {
+export function ResurgenceList(id) {
   return request({
-    url: `/api/workflow/Engine/FlowBefore/Selector/${data}`,
+    url: `/api/workflow/Engine/FlowBefore/Selector/${id}`,
     method: 'get',
   })
 }
@@ -89,7 +87,6 @@ export function Resurgence(data) {
     data
   })
 }
-
 // 审批汇总
 export function getRecordList(id, data) {
   return request({
