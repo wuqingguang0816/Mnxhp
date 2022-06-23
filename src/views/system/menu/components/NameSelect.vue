@@ -72,7 +72,6 @@
 
 <script>
 import { getVisualTables, getTableInfoByTableName } from "@/api/system/authorize"
-import { getDataInterfaceTypeSelector, getDataInterfaceSelectorList } from '@/api/systemData/dataInterface'
 export default {
   props: {
     dataType: {

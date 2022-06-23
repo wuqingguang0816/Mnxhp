@@ -151,8 +151,12 @@ export default {
   },
   created() {
     this.$store.dispatch('base/getDictionaryData', { sort: 'businessType' }).then((res) => {
-      this.treeData = res
+      this.treeData = [{ id: '0', fullName: '业务分类' }, ...res]
+      this.categoryId = this.treeData[0].id
+      this.reset()
     })
+
+
   },
   methods: {
     initData() {

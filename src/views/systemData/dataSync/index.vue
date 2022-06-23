@@ -29,8 +29,8 @@
       <el-button size="primary" style="float:right" type="text" slot="right" @click="batch">批量同步
       </el-button>
     </div>
-    <el-table v-loading="listLoading" ref="multipleTable" :data="list"
-      @selection-change="handleSelectionChange">
+    <JNPF-table v-loading="listLoading" ref="multipleTable" :data="list"
+      @selection-change="handleSelectionChange" :hasNO="false">
       <el-table-column type="selection" width="70" align="center" />
       <el-table-column type="index" width="50" label="序号" align="center" />
       <el-table-column prop="table" label="表名" show-overflow-tooltip />
@@ -43,7 +43,7 @@
           </el-button>
         </template>
       </el-table-column>
-    </el-table>
+    </JNPF-table>
     <el-dialog title="规则配置" :close-on-click-modal="false" :visible.sync="dialogVisible"
       class="JNPF-dialog JNPF-dialog_center rule-dialog" lock-scroll append-to-body width="600px">
       <div class="option-box-tip">
@@ -116,7 +116,7 @@ export default {
       afterConversion: '',//转换后
       afterConversionList: [],//转换后
       verification: false,
-      convertRulesMap: {},
+      convertRuleMap: {},
       batchList: []
     }
   },
@@ -143,8 +143,8 @@ export default {
           this.listLoading = true
           getDataModelList(this.dataForm).then((res) => {
             this.beforeConversionList = []
-            this.convertRulesMap = res.data.convertRulesMap
-            for (var key in this.convertRulesMap) {
+            this.convertRuleMap = res.data.convertRuleMap
+            for (var key in this.convertRuleMap) {
               this.beforeConversionList.push({ val: key })
             }
             this.verification = res.data.checkDbFlag
@@ -161,7 +161,7 @@ export default {
     },
     changeConversion(val) {
       this.afterConversionList = []
-      this.convertRulesMap[val].forEach(element => {
+      this.convertRuleMap[val].forEach(element => {
         this.afterConversionList.push({ val: element })
       })
     },
@@ -189,13 +189,13 @@ export default {
         for (var index in this.configureList) {
           map[this.configureList[index].beforeConversion] = this.configureList[index].afterConversion;
         }
-        data = { ...data, convertRulesMap: map }
+        data = { ...data, convertRuleMap: map }
       }
+      this.listLoading = true
       this.$confirm('批量同步，将覆盖您原有表内的数据。请确认操作', {
         type: 'warning'
       }).then(() => {
         batchExecute(data).then(res => {
-
           if (res.msg == 1) {
             this.$message({
               message: '批量同步成功!',
@@ -217,12 +217,14 @@ export default {
               }
             }
           }
+          this.listLoading = false
           this.toggleSelection()
-        }).catch(() => { });
+        }).catch(() => { this.listLoading = false });
       })
     },
     toggleSelection() {
-      this.$refs.multipleTable.clearSelection();
+      console.log(this.$refs)
+      this.$refs.multipleTable.$refs.JNPFTable.clearSelection();
     },
     addConfigure() {  //添加规则配置
       if (!this.verification) return this.$message.error('请验证连接')
@@ -249,7 +251,7 @@ export default {
         for (var index in this.configureList) {
           map[this.configureList[index].beforeConversion] = this.configureList[index].afterConversion;
         }
-        data = { ...data, convertRulesMap: map }
+        data = { ...data, convertRuleMap: map }
       }
       DataSync(data).then((res) => {
         if (res.data == 0) {
