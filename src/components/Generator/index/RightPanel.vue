@@ -116,9 +116,8 @@
               :active-data="activeData" ref="relationFormAttr" />
             <JNPFCalculate v-if="activeData.__config__.jnpfKey==='calculate'"
               :active-data="activeData" ref="calculate" />
-            <PopupSelect v-if="activeData.__config__.jnpfKey==='popupSelect'"
-              :active-data="activeData" />
-            <PopupTableSelect v-if="activeData.__config__.jnpfKey==='popupTableSelect'"
+            <PopupSelect
+              v-if="activeData.__config__.jnpfKey==='popupSelect'||activeData.__config__.jnpfKey==='popupTableSelect'"
               :active-data="activeData" />
             <PopupAttr v-if="activeData.__config__.jnpfKey==='popupAttr'" :active-data="activeData"
               ref="popupAttr" />
@@ -449,7 +448,6 @@ import RelationForm from './RightComponents/RelationForm'
 import RelationFormAttr from './RightComponents/RelationFormAttr'
 import JNPFCalculate from './RightComponents/Calculate'
 import PopupSelect from './RightComponents/PopupSelect'
-import PopupTableSelect from './RightComponents/PopupTableSelect'
 import PopupAttr from './RightComponents/PopupAttr'
 import Tab from './RightComponents/Tab'
 import Collapse from './RightComponents/Collapse'
@@ -490,7 +488,6 @@ export default {
     RelationFormAttr,
     JNPFCalculate,
     PopupSelect,
-    PopupTableSelect,
     PopupAttr,
     Tab,
     Collapse,

@@ -90,7 +90,10 @@ export default {
           templateJson[i].defaultValue = this.userInfo.organizeId
         }
         if (templateJson[i].jnpfKey === 'currPosition') {
-          templateJson[i].defaultValue = this.userInfo.positionIds && this.userInfo.positionIds.length ? this.userInfo.positionIds[0] : ''
+          if (this.userInfo.positionIds && this.userInfo.positionIds.length) {
+            let item = this.userInfo.positionIds[0]
+            templateJson[i].defaultValue = item.id
+          }
         }
       }
       return templateJson

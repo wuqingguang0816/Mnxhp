@@ -1880,6 +1880,41 @@ textarea.el-textarea__inner {
   }
 }
 
+.table-checkbox.el-checkbox.is-disabled {
+
+  .el-checkbox__inner,
+  .el-checkbox__inner::after,
+  input,
+  .el-checkbox__label {
+    cursor: pointer !important;
+  }
+
+  .el-checkbox__inner {
+    background-color: #fff !important;
+
+    &:hover {
+      border-color: #1890ff !important;
+    }
+  }
+
+  &.is-checked {
+    .el-checkbox__inner {
+      background-color: #1890ff !important;
+      border-color: #1890ff !important;
+
+      &::after {
+        border-color: #fff !important;
+      }
+    }
+
+    input {
+      color: #fff !important;
+      border-color: #fff !important;
+    }
+  }
+
+}
+
 .el-dropdown-menu__item .icon-ym {
   vertical-align: -1px;
 }

@@ -1,22 +1,41 @@
 <template>
   <div>
-    <el-popover placement="bottom" width="600" trigger="manual" v-model="visible">
-      <template>
-        <div class="el-select" slot="reference" @click="showSelect">
-          <el-input :placeholder="placeholder" v-model="innerValue" readonly :validate-event="false"
-            :disabled="disabled" @mouseenter.native="inputHovering = true"
-            @mouseleave.native="inputHovering = false">
-            <template slot="suffix">
-              <i v-show="!showClose"
-                :class="['el-select__caret', 'el-input__icon', 'el-icon-arrow-up']"></i>
-              <i v-if="showClose" class="el-select__caret el-input__icon el-icon-circle-close"
-                @click="clear"></i>
-            </template>
-          </el-input>
+    <el-popover placement="bottom" width="700" trigger="click" ref="popover"
+      :disabled="selectDisabled" @after-enter="openDialog">
+      <div class="el-select" slot="reference">
+        <div class="el-select__tags" v-if="multiple" ref="tags"
+          :style="{ 'max-width': inputWidth - 32 + 'px', width: '100%',cursor:'pointer' }">
+          <span v-if="collapseTags && tagsList.length">
+            <el-tag :closable="!selectDisabled" :size="collapseTagSize" type="info"
+              @close="deleteTag($event, 0)" disable-transitions>
+              <span class="el-select__tags-text">{{ tagsList[0][relationField] }}</span>
+            </el-tag>
+            <el-tag v-if="tagsList.length > 1" :closable="false" type="info" disable-transitions>
+              <span class="el-select__tags-text">+ {{ tagsList.length - 1 }}</span>
+            </el-tag>
+          </span>
+          <transition-group @after-leave="resetInputHeight" v-if="!collapseTags">
+            <el-tag v-for="(item,i) in tagsList" :key="item[propsValue]" :size="collapseTagSize"
+              :closable="!selectDisabled" type="info" @close="deleteTag($event, i)"
+              disable-transitions>
+              <span class="el-select__tags-text">{{ item[relationField] }}</span>
+            </el-tag>
+          </transition-group>
         </div>
-      </template>
+        <el-input ref="reference" v-model="innerValue" type="text" :placeholder="currentPlaceholder"
+          :disabled="selectDisabled" readonly :validate-event="false"
+          :tabindex="(multiple) ? '-1' : null" @mouseenter.native="inputHovering = true"
+          @mouseleave.native="inputHovering = false">
+          <template slot="suffix">
+            <i v-show="!showClose"
+              :class="['el-select__caret', 'el-input__icon', 'el-icon-arrow-up']"></i>
+            <i v-if="showClose" class="el-select__caret el-input__icon el-icon-circle-close"
+              @click.stop="handleClearClick"></i>
+          </template>
+        </el-input>
+      </div>
       <template>
-        <el-form @submit.native.prevent :inline="true">
+        <el-form @submit.native.prevent :inline="true" v-if="filterable">
           <el-form-item label="关键词">
             <el-input size="small" v-model="listQuery.keyword" placeholder="请输入关键词查询" clearable
               @keyup.enter.native="search()" />
@@ -40,8 +59,8 @@
           @row-click="rowClick" :hasNO="false" height="300">
           <el-table-column width="35" v-if="multiple">
             <template slot-scope="scope">
-              <el-checkbox :label="scope.row[propsValue]" @click="choose(scope.row)">&nbsp;
-              </el-checkbox>
+              <el-checkbox :value="selectedIds.includes(scope.row[propsValue])" disabled
+                class="table-checkbox">&nbsp;</el-checkbox>
             </template>
           </el-table-column>
           <el-table-column width="35" v-if="!multiple">
@@ -53,27 +72,35 @@
           <el-table-column :prop="item.value" :label="item.label" v-for="(item,i) in columnOptions"
             :key="i" />
         </JNPF-table>
-        <pagination :total="total" :page.sync="listQuery.currentPage"
-          :limit.sync="listQuery.pageSize" @pagination="initData" v-if="hasPage" />
+        <pagination :total="total" :page.sync="listQuery.currentPage" :pager-count="5"
+          :limit.sync="listQuery.pageSize" @pagination="initData" v-if="hasPage" class="mb-10" />
         <div class="fr">
-          <el-button @click="visible = false" size="small">{{$t('common.cancelButton')}}
+          <el-button @click="closePopover" size="small">{{$t('common.cancelButton')}}
           </el-button>
-          <el-button type="primary" @click="select()" size="small">{{$t('common.confirmButton')}}
+          <el-button type="primary" @click="confirm()" size="small">{{$t('common.confirmButton')}}
           </el-button>
         </div>
       </template>
-
     </el-popover>
-
   </div>
 </template>
 
 <script>
-import { getDataInterfaceDataSelect, getDataInterfaceDataInfo } from '@/api/systemData/dataInterface'
+import { getDataInterfaceDataSelect, getDataInterfaceDataInfoByIds } from '@/api/systemData/dataInterface'
+import { addResizeListener, removeResizeListener } from 'element-ui/src/utils/resize-event';
 export default {
-  name: 'PopupSelect',
+  name: 'PopupTableSelect',
+  inject: {
+    elForm: {
+      default: ''
+    },
+    elFormItem: {
+      default: ''
+    }
+  },
   props: {
     value: {
+      type: [String, Array],
       default: ''
     },
     interfaceId: {
@@ -128,10 +155,19 @@ export default {
       type: Boolean,
       default: false
     },
+    filterable: {
+      type: Boolean,
+      default: false
+    },
     clearable: {
       type: Boolean,
       default: true
-    }
+    },
+    collapseTags: {
+      type: Boolean,
+      default: false
+    },
+    size: String,
   },
   model: {
     prop: 'value',
@@ -150,18 +186,24 @@ export default {
       checked: '',
       checkedTxt: '',
       checkedRow: {},
+      selectedData: [],
+      selectedIds: [],
+      tagsList: [],
       listLoading: false,
-      visible: false,
       inputHovering: false,
+      inputWidth: 0,
+      initialInputHeight: 0,
     }
   },
   watch: {
     value(val) {
       this.setDefault()
     },
-    multiple(val){
-      this.setDefault()
-    }
+    selectDisabled() {
+      this.$nextTick(() => {
+        this.resetInputHeight();
+      });
+    },
   },
   computed: {
     showClose() {
@@ -169,30 +211,66 @@ export default {
         ? Array.isArray(this.value) && this.value.length > 0
         : this.value !== undefined && this.value !== null && this.value !== '';
       let criteria = this.clearable &&
-        !this.disabled &&
+        !this.selectDisabled &&
         this.inputHovering &&
         hasValue;
       return criteria;
     },
-    propsLabel() {
-      return this.columnOptions[0].value
-    }
+    currentPlaceholder() {
+      if (this.multiple && Array.isArray(this.value) && this.value.length) {
+        return ''
+      } else {
+        return this.placeholder
+      }
+    },
+    selectDisabled() {
+      return this.disabled || (this.elForm || {}).disabled;
+    },
+    _elFormItemSize() {
+      return (this.elFormItem || {}).elFormItemSize;
+    },
+    selectSize() {
+      return this.size || this._elFormItemSize || (this.$ELEMENT || {}).size;
+    },
+    collapseTagSize() {
+      return ['small', 'mini'].indexOf(this.selectSize) > -1
+        ? 'mini'
+        : 'small';
+    },
   },
   created() {
     this.listQuery.pageSize = this.hasPage ? this.pageSize : 10000
     this.setDefault()
   },
+  mounted() {
+    addResizeListener(this.$el, this.handleResize);
+
+    const reference = this.$refs.reference;
+    if (reference && reference.$el) {
+      const sizeMap = {
+        medium: 36,
+        small: 32,
+        mini: 28
+      };
+      const input = reference.$el.querySelector('input');
+      this.initialInputHeight = input.getBoundingClientRect().height || sizeMap[this.selectSize];
+    }
+    if (this.multiple) {
+      this.resetInputHeight();
+    }
+    this.$nextTick(() => {
+      if (reference && reference.$el) {
+        this.inputWidth = reference.$el.getBoundingClientRect().width;
+      }
+    });
+    this.setDefault()
+  },
+  beforeDestroy() {
+    if (this.$el && this.handleResize) removeResizeListener(this.$el, this.handleResize);
+  },
   methods: {
-    showSelect(){
-      if(this.disabled) return
-      this.visible= !this.visible
-    },
-    choose(row){
-      let data = row[propsValue]
-      this.value = this.value.includes(data) ? this.value.filter((item)=>{item!=data}) : this.value.push(data)
-    },
-    handleSelectionChange(val) {
-      this.value = val;
+    closePopover() {
+      this.$refs.popover.doClose()
     },
     initData() {
       if (!this.interfaceId) return
@@ -228,59 +306,140 @@ export default {
     },
     openDialog() {
       if (this.disabled) return
-      this.checked = this.value
-      this.visible = !this.visible
       this.reset()
     },
-    clear(event) {
+    confirm() {
+      if (this.multiple) {
+        this.innerValue = ''
+        this.tagsList = JSON.parse(JSON.stringify(this.selectedData))
+        this.selectedIds = this.selectedData.map(o => o[this.propsValue])
+        this.$emit('input', this.selectedIds)
+        this.$emit('change', this.selectedIds, this.selectedData)
+      } else {
+        if (!this.checked) {
+          this.innerValue = ''
+          this.checkedRow = {}
+          this.$emit('input', '')
+          this.$emit('change', '', {})
+          this.closePopover()
+          return
+        }
+        this.innerValue = this.checkedTxt
+        this.$emit('input', this.checked)
+        this.$emit('change', this.checked, this.checkedRow)
+      }
+      this.closePopover()
+    },
+    rowClick(row) {
+      if (this.multiple) {
+        const boo = this.selectedData.some(o => o[this.propsValue] === row[this.propsValue])
+        if (boo) {
+          this.selectedData = this.selectedData.filter(o => o[this.propsValue] !== row[this.propsValue])
+          this.selectedIds = this.selectedIds.filter(o => o !== row[this.propsValue])
+        } else {
+          this.selectedData.push(row)
+          this.selectedIds.push(row[this.propsValue])
+        }
+      } else {
+        this.checked = row[this.propsValue]
+        this.checkedTxt = row[this.relationField]
+        this.checkedRow = row
+      }
+    },
+    setDefault() {
+      if (!this.value || !this.value.length) {
+        this.innerValue = ''
+        this.checked = ''
+        this.selectedIds = []
+        this.selectedData = []
+        this.tagsList = []
+        // if (!this.field) return
+        // let relationData = this.$store.state.generator.relationData
+        // this.$set(relationData, this.field, [])
+        // this.$store.commit('generator/UPDATE_RELATION_DATA', relationData)
+        return
+      }
+      if (!this.interfaceId) return
+      const arr = this.multiple ? this.value : [this.value]
+      let query = {
+        ids: arr,
+        interfaceId: this.interfaceId,
+        propsValue: this.propsValue,
+        relationField: this.relationField,
+      }
+      getDataInterfaceDataInfoByIds(this.interfaceId, query).then(res => {
+        this.selectedData = res.data
+        this.selectedIds = this.selectedData.map(o => o[this.propsValue])
+        if (this.multiple) {
+          this.innerValue = ''
+          this.tagsList = JSON.parse(JSON.stringify(this.selectedData))
+        } else {
+          this.checked = this.value
+          this.innerValue = this.selectedData.length ? this.selectedData[0][this.relationField] : ''
+          this.checkedRow = this.selectedData[0]
+        }
+        // if (!this.field) return
+        // let relationData = this.$store.state.generator.relationData
+        // this.$set(relationData, this.field, res.data)
+        // this.$store.commit('generator/UPDATE_RELATION_DATA', relationData)
+        this.$nextTick(() => {
+          if (this.multiple) {
+            this.resetInputHeight();
+          }
+        });
+      })
+    },
+    deleteTag(event, index) {
+      this.selectedData.splice(index, 1)
+      this.confirm()
+      event.stopPropagation();
+    },
+    handleClearClick(event) {
       this.checked = ''
       this.innerValue = ''
       this.checkedRow = {}
+      this.selectedIds = []
+      this.selectedData = []
       this.$emit('input', this.checked)
       this.$emit('change', this.checked, this.checkedRow)
       event.stopPropagation();
     },
-    select() {
-      if (!this.checked) return
-      this.innerValue = this.checkedTxt
-      this.$emit('input', this.checked)
-      this.$emit('change', this.checked, this.checkedRow)
-      this.visible = false
+    resetInputWidth() {
+      this.inputWidth = this.$refs.reference.$el.getBoundingClientRect().width;
     },
-    rowClick(row) {
-      this.checked = row[this.propsValue]
-      this.checkedTxt = row[this.relationField]
-      this.checkedRow = row
+    handleResize() {
+      this.resetInputWidth();
+      if (this.multiple) this.resetInputHeight();
     },
-    setDefault() {
-      if (this.value) {
-        if (!this.interfaceId) return
-        let query = {
-          id: this.value,
-          interfaceId: this.interfaceId,
-          propsValue: this.propsValue,
-          relationField: this.relationField,
-        }
-        getDataInterfaceDataInfo(this.interfaceId, query).then(res => {
-          this.innerValue = res.data[this.relationField]
-          if (!this.field) return
-          let relationData = this.$store.state.generator.relationData
-          this.$set(relationData, this.field, res.data)
-          this.$store.commit('generator/UPDATE_RELATION_DATA', relationData)
-        })
-      } else {
-        this.innerValue = ''
-        if (!this.field) return
-        let relationData = this.$store.state.generator.relationData
-        this.$set(relationData, this.field, {})
-        this.$store.commit('generator/UPDATE_RELATION_DATA', relationData)
-      }
+    resetInputHeight() {
+      if (this.collapseTags) return;
+      this.$nextTick(() => {
+        if (!this.$refs.reference) return;
+        let inputChildNodes = this.$refs.reference.$el.childNodes;
+        let input = [].filter.call(inputChildNodes, item => item.tagName === 'INPUT')[0];
+        const tags = this.$refs.tags;
+        const tagsHeight = tags ? Math.round(tags.getBoundingClientRect().height) : 0;
+        const sizeInMap = this.initialInputHeight || 40;
+        input.style.height = this.selectedData.length === 0
+          ? sizeInMap + 'px'
+          : Math.max(
+            tags ? (tagsHeight + (tagsHeight > sizeInMap ? 6 : 0)) : 0,
+            sizeInMap
+          ) + 'px';
+      });
+    },
+    resetInputWidth() {
+      this.inputWidth = this.$refs.reference.$el.getBoundingClientRect().width;
+    },
+    handleResize() {
+      this.resetInputWidth();
+      if (this.multiple) this.resetInputHeight();
     }
   }
 }
 </script>
-<style scoped>
-.fr{
+<style lang="scss" scoped>
+.fr {
   float: right;
 }
 </style>

@@ -6,16 +6,16 @@
     <el-form-item label="占位提示">
       <el-input v-model="activeData.placeholder" placeholder="请输入占位提示" />
     </el-form-item>
-    <el-form-item label="弹窗标题">
+    <el-form-item label="弹窗标题" v-if="activeData.__config__.jnpfKey==='popupSelect'">
       <el-input v-model="activeData.popupTitle" placeholder="请输入弹窗标题" />
     </el-form-item>
-    <el-form-item label="弹窗类型">
+    <el-form-item label="弹窗类型" v-if="activeData.__config__.jnpfKey==='popupSelect'">
       <el-select v-model="activeData.popupType" placeholder="请选择弹窗类型">
         <el-option label="居中弹窗" value="dialog"></el-option>
         <el-option label="右侧弹窗" value="drawer"></el-option>
       </el-select>
     </el-form-item>
-    <el-form-item label="弹窗宽度">
+    <el-form-item label="弹窗宽度" v-if="activeData.__config__.jnpfKey==='popupSelect'">
       <el-select v-model="activeData.popupWidth" placeholder="请选择弹窗宽度">
         <el-option v-for="item in popupWidthOptions" :label="item" :value="item" :key="item" />
       </el-select>
@@ -67,6 +67,12 @@
     <el-form-item label="能否清空">
       <el-switch v-model="activeData.clearable" />
     </el-form-item>
+    <el-form-item label="能否搜索" v-if="activeData.__config__.jnpfKey==='popupTableSelect'">
+      <el-switch v-model="activeData.filterable" />
+    </el-form-item>
+    <el-form-item label="能否多选" v-if="activeData.__config__.jnpfKey==='popupTableSelect'">
+      <el-switch v-model="activeData.multiple" @change="multipleChange" />
+    </el-form-item>
     <el-form-item label="是否禁用">
       <el-switch v-model="activeData.disabled" />
     </el-form-item>
@@ -94,6 +100,9 @@ export default {
     this.getDataInterfaceSelector()
   },
   methods: {
+    multipleChange(val) {
+      this.$set(this.activeData.__config__, 'defaultValue', val ? [] : '')
+    },
     getDataInterfaceSelector() {
       getDataInterfaceSelector().then(res => {
         this.dataInterfaceSelector = res.data
