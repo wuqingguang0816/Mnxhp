@@ -22,7 +22,7 @@
             <el-form-item label="注册时间">
               <el-input v-model="creatorTime" readonly />
             </el-form-item>
-            <el-form-item label="上次登录时间">
+            <el-form-item label="上次登录">
               <el-input v-model="prevLogTime" readonly />
             </el-form-item>
             <el-form-item label="入职日期">

@@ -246,12 +246,12 @@
                 </el-radio-group>
               </el-form-item>
               <el-form-item label="子流程表单">
-                <JNPF-TreeSelect :options="flowOptions" v-model="subFlowForm.flowId"
-                  placeholder="请选择子流程表单" lastLevel clearable @change="subFlowForm.assignList=[]" />
+                <changeFlow v-model="subFlowForm.flowId" placeholder="请选择子流程表单"
+                  :value="subFlowForm.flowId" :title="subFlowForm.flowId" />
               </el-form-item>
-              <el-form-item label="数据传递">
+              <el-form-item label="子流程传递">
                 <div @click="openRuleBox">
-                  <el-input :value="subFlowForm.assignList.length?'已设置':''" placeholder="请设置数据传递规则"
+                  <el-input :value="subFlowForm.assignList.length?'已设置':''" placeholder="请设置子流程传递规则"
                     suffix-icon="el-icon-arrow-down" readonly class="hand" />
                 </div>
               </el-form-item>
@@ -1203,7 +1203,7 @@
       <el-button size="small" @click="cancel">取消</el-button>
       <el-button size="small" type="primary" @click="confirm">确定</el-button>
     </div>
-    <el-dialog title="数据传递" :close-on-click-modal="false" :visible.sync="ruleVisible"
+    <el-dialog title="子流程传递" :close-on-click-modal="false" :visible.sync="ruleVisible"
       class="JNPF-dialog JNPF-dialog_center rule-dialog" lock-scroll append-to-body width='700px'>
       <div class="option-box-tip">当父流程流转到子流程时，将对应的字段赋值给子流程</div>
       <el-row :gutter="10" v-for="(item,i) in assignList" :key="i" class="mb-10">
@@ -1247,6 +1247,7 @@ import OrgSelect from '../OrgSelect'
 import MsgDialog from './msgDialog'
 import InterfaceDialog from './InterfaceDialog'
 import FormulaDialog from './formulaDialog'
+import changeFlow from './changeFlow'
 const requiredDisabled = (jnpfKey) => {
   return ['billRule', 'createUser', 'createTime', 'modifyTime', 'modifyUser', 'currPosition', 'currOrganize', 'table'].includes(jnpfKey)
 }
@@ -1547,7 +1548,7 @@ const systemFieldOptions = [{
 }]
 export default {
   props: [/*当前节点数据*/"value", /*整个节点数据*/"processData", "flowType"],
-  components: { OrgSelect, MsgDialog, InterfaceDialog, FormulaDialog },
+  components: { OrgSelect, MsgDialog, InterfaceDialog, FormulaDialog, changeFlow },
   data() {
     return {
       visible: false,  // 控制面板显隐
