@@ -246,8 +246,8 @@
                 </el-radio-group>
               </el-form-item>
               <el-form-item label="子流程表单">
-                <JNPF-TreeSelect :options="flowOptions" v-model="subFlowForm.flowId"
-                  placeholder="请选择子流程表单" lastLevel clearable @change="subFlowForm.assignList=[]" />
+                <changeFlow v-model="subFlowForm.flowId" placeholder="请选择子流程表单"
+                  :value="subFlowForm.flowId" :title="subFlowForm.flowId" />
               </el-form-item>
               <el-form-item label="子流程传递">
                 <div @click="openRuleBox">
@@ -1247,6 +1247,7 @@ import OrgSelect from '../OrgSelect'
 import MsgDialog from './msgDialog'
 import InterfaceDialog from './InterfaceDialog'
 import FormulaDialog from './formulaDialog'
+import changeFlow from './changeFlow'
 const requiredDisabled = (jnpfKey) => {
   return ['billRule', 'createUser', 'createTime', 'modifyTime', 'modifyUser', 'currPosition', 'currOrganize', 'table'].includes(jnpfKey)
 }
@@ -1547,7 +1548,7 @@ const systemFieldOptions = [{
 }]
 export default {
   props: [/*当前节点数据*/"value", /*整个节点数据*/"processData", "flowType"],
-  components: { OrgSelect, MsgDialog, InterfaceDialog, FormulaDialog },
+  components: { OrgSelect, MsgDialog, InterfaceDialog, FormulaDialog, changeFlow },
   data() {
     return {
       visible: false,  // 控制面板显隐

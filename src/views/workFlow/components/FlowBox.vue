@@ -3,6 +3,25 @@
     <div class="JNPF-preview-main flow-form-main">
       <div class="JNPF-common-page-header">
         <el-page-header @back="goBack" :content="title" />
+        <el-dropdown placement="bottom" @command="handleFlowUrgent" trigger="click" disabled>
+          <div class="flow-urgent-value" v-show="!loading||title"
+            :style="{'cursor':setting.opType=='-1'?'pointer':''}"> <span
+              :style="{'background-color':flowUrgentList[selectState].color}" class="color-box">
+            </span>
+            <span
+              :style="{'color':flowUrgentList[selectState].color}">{{flowUrgentList[selectState].name}}</span>
+          </div>
+          <el-dropdown-menu slot="dropdown">
+            <div v-if="setting.opType=='-1'">
+              <el-dropdown-item v-for="(item,index) in flowUrgentList" :key="index"
+                :command="item.state">
+                <span :style="{'background-color':item.color}" class="color-box">
+                </span>
+                {{item.name}}
+              </el-dropdown-item>
+            </div>
+          </el-dropdown-menu>
+        </el-dropdown>
         <div class="options">
           <el-button type="primary" @click="addComment" v-if="activeTab==='comment'">评 论</el-button>
           <template v-if="setting.opType!=4&&setting.id">
@@ -143,6 +162,7 @@
           </el-button>
         </span>
       </el-dialog>
+
       <UserBox v-if="userBoxVisible" ref="userBox" :title="userBoxTitle" @submit="handleTransfer" />
       <print-browse :visible.sync="printBrowseVisible" :id="properties.printId" :formId="setting.id"
         :fullName="setting.fullName" />
@@ -221,13 +241,23 @@ export default {
       copyIds: [],
       fullName: '',
       thisStep: '',
-      allBtnDisabled: false
+      allBtnDisabled: false,
+      flowUrgent: 1,
+      flowUrgentList: [
+        { name: '普通', color: '#409EFF', state: 1, },
+        { name: '重要', color: '#E6A23C', state: 2, },
+        { name: '紧急', color: '#F56C6C', state: 3, },
+      ],
     }
   },
   computed: {
     title() {
       if ([2, 3, 4].includes(this.setting.opType)) return this.fullName
       return this.thisStep ? this.fullName + '/' + this.thisStep : this.fullName
+    },
+    selectState() {
+      const index = this.flowUrgentList.findIndex(c => this.flowUrgent === c.state)
+      return index
     }
   },
   watch: {
@@ -300,6 +330,7 @@ export default {
         data.fullName = this.flowTaskInfo.fullName
         this.fullName = this.flowTaskInfo.fullName
         this.thisStep = this.flowTaskInfo.thisStep
+        this.flowUrgent = this.flowTaskInfo.flowUrgent
         data.type = this.flowTaskInfo.type
         data.draftData = res.data.draftData || null
         if (data.formType == 1) {
@@ -451,6 +482,7 @@ export default {
     },
     submitOrSave() {
       this.formData.status = this.eventType === 'submit' ? 0 : 1
+      this.formData.flowUrgent = this.flowUrgent
       if (this.eventType === 'save') return this.handleRequest()
       this.candidateLoading = true
       Candidates(0, { formData: this.formData }).then(res => {
@@ -696,6 +728,9 @@ export default {
     },
     setLoad(val) {
       this.btnLoading = !!val
+    },
+    handleFlowUrgent(e) {
+      this.flowUrgent = e
     }
   }
 }
@@ -735,6 +770,20 @@ export default {
 .flow-form-main {
   .JNPF-el_tabs {
     overflow: hidden;
+  }
+}
+
+.color-box {
+  width: 7px;
+  height: 7px;
+  display: inline-block;
+  border-radius: 50%;
+}
+.flow-urgent-value {
+  display: flex;
+  align-items: center;
+  span:first-child {
+    margin: 0 3px 0 10px;
   }
 }
 </style>
