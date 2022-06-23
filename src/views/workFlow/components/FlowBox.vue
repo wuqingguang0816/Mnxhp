@@ -39,8 +39,8 @@
           <el-button type="danger" v-if="setting.opType == 2 && properties.hasRevokeBtn"
             @click="actionDialogHandler('recall')">{{properties.revokeBtnText||'撤 回'}}</el-button>
           <template v-if="setting.opType == 4">
-            <el-button type="primary" @click="openAssignBox" v-if="setting.status ==1">指 派
-            </el-button>
+            <el-button type="primary" @click="actionDialogHandler('assign')"
+              v-if="setting.status ==1">指 派</el-button>
             <el-button type="danger" v-if="setting.status != 2 && setting.status != 5"
               @click="cancel()">终 止</el-button>
           </template>
@@ -117,7 +117,7 @@
             <user-select v-model="copyIds" placeholder="请选择" multiple />
           </el-form-item>
           <el-form-item label="审批附件">
-            <JNPF-UploadFz v-model="approvalfileList" />
+            <JNPF-UploadFz v-model="approvalFileList" />
           </el-form-item>
         </el-form>
         <span slot="footer" class="dialog-footer">
@@ -127,32 +127,7 @@
           </el-button>
         </span>
       </el-dialog>
-      <el-dialog title="指派" :close-on-click-modal="false" :visible.sync="assignVisible"
-        class="JNPF-dialog JNPF-dialog_center" lock-scroll append-to-body width='600px'>
-        <el-form label-width="80px" :model="assignForm" :rules="assignRules" ref="assignForm">
-          <el-form-item label="指派节点" prop="nodeCode">
-            <el-select v-model="assignForm.nodeCode" placeholder="请选择指派节点">
-              <el-option v-for="item in assignNodeList" :key="item.nodeCode" :label="item.nodeName"
-                :value="item.nodeCode" />
-            </el-select>
-          </el-form-item>
-          <el-form-item label="指派给谁" prop="freeApproverUserId">
-            <user-select v-model="assignForm.freeApproverUserId" placeholder="请选择指派给谁" />
-          </el-form-item>
-          <el-form-item label="指派意见" prop="handleOpinion">
-            <el-input v-model="assignForm.handleOpinion" placeholder="请输入指派意见（选填）" type="textarea" :rows="4" />  
-          </el-form-item>
-          <el-form-item label="指派附件" prop="fileList">
-            <JNPF-UploadFz v-model="assignForm.fileList" />
-          </el-form-item>
-        </el-form>
-        <span slot="footer" class="dialog-footer">
-          <el-button @click="assignVisible = false">{{$t('common.cancelButton')}}</el-button>
-          <el-button type="primary" @click="handleAssign()">{{$t('common.confirmButton')}}
-          </el-button>
-        </span>
-      </el-dialog>
-      <ActionDialog ref='actionDialog' ></ActionDialog>
+      <ActionDialog ref='actionDialog' :assignNodeList="assignNodeList" @close="goBack" />
       <print-browse :visible.sync="printBrowseVisible" :id="properties.printId" :formId="setting.id"
         :fullName="setting.fullName" />
       <candidate-form :visible.sync="candidateVisible" :candidateList="candidateList"
@@ -164,7 +139,7 @@
 
 <script>
 import { FlowEngineInfo } from '@/api/workFlow/FlowEngine'
-import { FlowBeforeInfo, Audit, Reject, Cancel, Assign, SaveAudit, Candidates, CandidateUser } from '@/api/workFlow/FlowBefore'
+import { FlowBeforeInfo, Audit, Reject, Cancel, SaveAudit, Candidates, CandidateUser } from '@/api/workFlow/FlowBefore'
 import { Press } from '@/api/workFlow/FlowLaunch'
 import { Create, Update, DynamicCreate, DynamicUpdate } from '@/api/workFlow/workFlowForm'
 import recordList from './RecordList'
@@ -180,23 +155,6 @@ export default {
   components: { ActionDialog, recordList, Process, vueEsign, PrintBrowse, Comment, RecordSummary, CandidateForm, CandidateUserSelect },
   data() {
     return {
-      userBoxVisible: false,
-      userBoxTitle: '审批人',
-      assignVisible: false,
-      assignForm: {
-        nodeCode: '',
-        freeApproverUserId: '',
-        fileList: [],
-        handleOpinion: ''
-      },
-      assignRules: {
-        nodeCode: [
-          { required: true, message: '请选择指派节点', trigger: 'change' }
-        ],
-        freeApproverUserId: [
-          { required: true, message: '请选择指派给谁', trigger: 'click' }
-        ]
-      },
       assignNodeList: [],
       currentView: '',
       formData: {},
@@ -210,7 +168,7 @@ export default {
       endTime: 0,
       visible: false,
       reason: '',
-      approvalfileList: [],
+      approvalFileList: [],
       handleId: '',
       activeTab: '0',
       isComment: false,
@@ -389,7 +347,7 @@ export default {
       if (eventType === 'audit' || eventType === 'reject') {
         this.handleId = ''
         this.reason = ''
-        this.approvalfileList = []
+        this.approvalFileList = []
         this.copyIds = []
         this.handleReset()
         if (eventType === 'reject') return this.visible = true
@@ -525,7 +483,7 @@ export default {
     actionDialogHandler(type) {
       let id = type === 'revoke' ? this.setting.id : this.setting.taskId
       this.$nextTick(() => {
-        this.$refs.actionDialog.init(type,id)
+        this.$refs.actionDialog.init(type, id)
       })
     },
     press() {
@@ -562,27 +520,6 @@ export default {
         })
       }).catch(() => { })
     },
-    openAssignBox() {
-      this.assignVisible = true
-      this.$nextTick(() => {
-        this.$refs['assignForm'].resetFields()
-      })
-    },
-    handleAssign() {
-      this.$refs['assignForm'].validate((valid) => {
-        if (!valid) return
-        Assign(this.setting.taskId, this.assignForm).then(res => {
-          this.$message({
-            type: 'success',
-            message: res.msg,
-            duration: 1000,
-            onClose: () => {
-              this.$emit('close', true)
-            }
-          })
-        })
-      })
-    },
     handleApproval() {
       this.$refs['candidateForm'].validate((valid) => {
         if (valid) {
@@ -594,7 +531,7 @@ export default {
             return
           }
           let query = {
-            approvalfileList: this.approvalfileList,
+            fileList: this.approvalFileList,
             handleOpinion: this.reason,
             formData: this.formData,
             enCode: this.setting.enCode,
