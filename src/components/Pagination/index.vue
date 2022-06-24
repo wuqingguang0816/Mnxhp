@@ -87,6 +87,7 @@ export default {
 .pagination-container {
   background: #fff;
   text-align: right;
+  overflow: auto hidden;
 }
 .pagination-container.hidden {
   display: none;

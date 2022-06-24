@@ -116,7 +116,8 @@
               :active-data="activeData" ref="relationFormAttr" />
             <JNPFCalculate v-if="activeData.__config__.jnpfKey==='calculate'"
               :active-data="activeData" ref="calculate" />
-            <PopupSelect v-if="activeData.__config__.jnpfKey==='popupSelect'"
+            <PopupSelect
+              v-if="activeData.__config__.jnpfKey==='popupSelect'||activeData.__config__.jnpfKey==='popupTableSelect'"
               :active-data="activeData" />
             <PopupAttr v-if="activeData.__config__.jnpfKey==='popupAttr'" :active-data="activeData"
               ref="popupAttr" />
@@ -450,7 +451,7 @@ import PopupSelect from './RightComponents/PopupSelect'
 import PopupAttr from './RightComponents/PopupAttr'
 import Tab from './RightComponents/Tab'
 import Collapse from './RightComponents/Collapse'
-import TableConfig from './RightComponents/table'
+import TableConfig from './RightComponents/Table'
 
 const commonRightList = ['comSelect', 'depSelect', 'posSelect', 'userSelect', 'dicSelect', 'editor']
 const systemList = ['createUser', 'createTime', 'modifyUser', 'modifyTime', 'currOrganize', 'currDept', 'currPosition', 'billRule']

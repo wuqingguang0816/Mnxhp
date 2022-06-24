@@ -39,6 +39,11 @@
           <el-button type="danger" v-if="setting.opType == 2 && properties.hasRevokeBtn"
             @click="recall()">{{properties.revokeBtnText||'撤 回'}}</el-button>
           <template v-if="setting.opType == 4">
+            <!-- 判断流程复活按钮和节点变更 -->
+            <el-button type="primary" @click="flowResurgence" v-if="flowTaskInfo.completion==100">
+              复 活</el-button>
+            <el-button type="primary" @click="flowResurgence"
+              v-if="flowTaskInfo.completion>0 && flowTaskInfo.completion<100">变 更</el-button>
             <el-button type="primary" @click="openAssignBox" v-if="setting.status ==1">指 派
             </el-button>
             <el-button type="danger" v-if="setting.status != 2 && setting.status != 5"
@@ -143,38 +148,71 @@
           </el-button>
         </span>
       </el-dialog>
+      <!-- 流程节点变更复活对话框 -->
+      <el-dialog :title="flowTaskInfo.completion==100?'复活':'变更'" :close-on-click-modal="false"
+        :visible.sync="resurgenceVisible" class="JNPF-dialog JNPF-dialog_center" lock-scroll
+        append-to-body width='600px'>
+        <el-form label-width="80px" :model="resurgenceForm" :rules="resurgenceRules"
+          ref="resurgenceForm">
+          <el-form-item :label="flowTaskInfo.completion==100?'复活节点':'变更节点'" prop="nodeCode">
+            <el-select v-model="resurgenceForm.nodeCode"
+              :placeholder="flowTaskInfo.completion==100?'请选择复活节点':'请选择变更节点'">
+              <el-option v-for="item in resurgenceNodeList" :key="item.id" :label="item.nodeName"
+                :value="item.id" />
+            </el-select>
+          </el-form-item>
+          <el-form-item :label="flowTaskInfo.completion==100?'复活意见':'变更意见'" prop="handleOpinion">
+            <el-input type="textarea" v-model="resurgenceForm.handleOpinion" placeholder="请填写意见"
+              :rows="4" />
+          </el-form-item>
+        </el-form>
+        <span slot="footer" class="dialog-footer">
+          <el-button @click="resurgenceVisible = false">{{$t('common.cancelButton')}}</el-button>
+          <el-button type="primary" @click="handleResurgence()" :loading="resurgenceBtnLoading">
+            {{$t('common.confirmButton')}}
+          </el-button>
+        </span>
+      </el-dialog>
       <UserBox v-if="userBoxVisible" ref="userBox" :title="userBoxTitle" @submit="handleTransfer" />
       <print-browse :visible.sync="printBrowseVisible" :id="properties.printId" :formId="setting.id"
         :fullName="setting.fullName" />
       <candidate-form :visible.sync="candidateVisible" :candidateList="candidateList"
         :branchList="branchList" :taskId="setting.taskId" :formData="formData"
         @submitCandidate="submitCandidate" />
+      <error-form :visible.sync="errorVisible" :nodeList="errorNodeList" @submit="handleError" />
     </div>
   </transition>
 </template>
 
 <script>
 import { FlowEngineInfo } from '@/api/workFlow/FlowEngine'
-import { FlowBeforeInfo, Audit, Reject, Transfer, Recall, Cancel, Assign, SaveAudit, Candidates, CandidateUser } from '@/api/workFlow/FlowBefore'
+import { FlowBeforeInfo, Audit, Reject, Transfer, Recall, Cancel, Assign, SaveAudit, Candidates, CandidateUser, Resurgence, ResurgenceList } from '@/api/workFlow/FlowBefore'
 import { Revoke, Press } from '@/api/workFlow/FlowLaunch'
 import { Create, Update, DynamicCreate, DynamicUpdate } from '@/api/workFlow/workFlowForm'
 import recordList from './RecordList'
 import Comment from './Comment'
 import RecordSummary from './RecordSummary'
 import CandidateForm from './CandidateForm'
+import ErrorForm from './ErrorForm'
 import CandidateUserSelect from './CandidateUserSelect'
 import Process from '@/components/Process/Preview'
 import PrintBrowse from '@/components/PrintBrowse'
 import vueEsign from 'vue-esign'
 export default {
-  components: { recordList, Process, vueEsign, PrintBrowse, Comment, RecordSummary, CandidateForm, CandidateUserSelect },
+  components: { recordList, Process, vueEsign, PrintBrowse, Comment, RecordSummary, CandidateForm, CandidateUserSelect, ErrorForm },
   data() {
     return {
       userBoxVisible: false,
       userBoxTitle: '审批人',
       assignVisible: false,
+      resurgenceVisible: false,
       assignForm: {
         nodeCode: '',
+        freeApproverUserId: ''
+      },
+      resurgenceForm: {
+        nodeCode: '',
+        handleOpinion: '',
         freeApproverUserId: ''
       },
       assignRules: {
@@ -185,7 +223,18 @@ export default {
           { required: true, message: '请选择指派给谁', trigger: 'click' }
         ]
       },
+      resurgenceRules: {
+        nodeCode: [
+          {
+            required: true,
+            // message: this.flowTaskInfo.completion==100?'请选择复活节点':'请选择变更节点', 
+            message: '请选择节点',
+            trigger: 'change'
+          }
+        ],
+      },
       assignNodeList: [],
+      resurgenceNodeList: [],
       currentView: '',
       formData: {},
       setting: {},
@@ -206,6 +255,7 @@ export default {
       loading: false,
       btnLoading: false,
       approvalBtnLoading: false,
+      resurgenceBtnLoading: false,
       candidateLoading: false,
       candidateVisible: false,
       candidateType: 1,
@@ -221,14 +271,16 @@ export default {
       copyIds: [],
       fullName: '',
       thisStep: '',
-      allBtnDisabled: false
+      allBtnDisabled: false,
+      errorVisible: false,
+      errorNodeList: [],
     }
   },
   computed: {
     title() {
       if ([2, 3, 4].includes(this.setting.opType)) return this.fullName
       return this.thisStep ? this.fullName + '/' + this.thisStep : this.fullName
-    }
+    },
   },
   watch: {
     activeTab(val) {
@@ -241,6 +293,45 @@ export default {
     }
   },
   methods: {
+    handleResurgence(errorRuleUserList) {
+      this.$refs['resurgenceForm'].validate((valid) => {
+        if (!valid) return
+        let query = {
+          handleOpinion: this.resurgenceForm.handleOpinion,
+          taskNodeId: this.resurgenceForm.nodeCode,
+          taskId: this.setting.taskId,
+          resurgence: this.flowTaskInfo.completion == 100 ? true : false
+        }
+        if (errorRuleUserList) query.errorRuleUserList = errorRuleUserList
+        this.resurgenceBtnLoading = true
+        Resurgence(query).then(res => {
+          const errorData = res.data
+          if (errorData && Array.isArray(errorData) && errorData.length) {
+            this.errorNodeList = errorData
+            this.eventType = 'resurgence'
+            this.errorVisible = true
+          } else {
+            this.$message({
+              type: 'success',
+              message: res.msg,
+              duration: 1000,
+              onClose: () => {
+                this.resurgenceBtnLoading = false
+                this.visible = false
+                this.errorVisible = false
+                this.$emit('close', true)
+              }
+            })
+          }
+        }).catch(() => { this.resurgenceBtnLoading = false })
+      })
+    },
+    flowResurgence() {
+      this.resurgenceVisible = true
+      ResurgenceList(this.setting.taskId).then(res => {
+        this.resurgenceNodeList = res.data
+      })
+    },
     goBack(isRefresh) {
       this.$emit('close', isRefresh)
     },
@@ -489,20 +580,28 @@ export default {
         formMethod = this.formData.id ? DynamicUpdate : DynamicCreate
       }
       formMethod(this.setting.enCode, this.formData).then(res => {
-        this.$message({
-          message: res.msg,
-          type: 'success',
-          duration: 1500,
-          onClose: () => {
-            if (this.eventType === 'save') this.btnLoading = false
-            this.candidateVisible = false
-            this.allBtnDisabled = false
-            this.$emit('close', true)
-          }
-        })
+        const errorData = res.data
+        if (errorData && Array.isArray(errorData) && errorData.length) {
+          this.errorNodeList = errorData
+          this.errorVisible = true
+        } else {
+          this.$message({
+            message: res.msg,
+            type: 'success',
+            duration: 1500,
+            onClose: () => {
+              if (this.eventType === 'save') this.btnLoading = false
+              this.candidateVisible = false
+              this.allBtnDisabled = false
+              this.errorVisible = false
+              this.$emit('close', true)
+            }
+          })
+        }
       }).catch(() => {
         if (this.eventType === 'save') this.btnLoading = false
         this.allBtnDisabled = false
+        this.errorVisible = false
       })
     },
     submitCandidate(data) {
@@ -608,6 +707,21 @@ export default {
         this.$refs['assignForm'].resetFields()
       })
     },
+    handleError(data) {
+      if (this.eventType === 'submit') {
+        this.formData.errorRuleUserList = data
+        this.handleRequest()
+        return
+      }
+      if (this.eventType === 'audit' || this.eventType === 'reject') {
+        this.handleApproval(data)
+        return
+      }
+      if (this.eventType === 'resurgence') {
+        this.handleResurgence(data)
+        return
+      }
+    },
     handleAssign() {
       this.$refs['assignForm'].validate((valid) => {
         if (!valid) return
@@ -623,7 +737,7 @@ export default {
         })
       })
     },
-    handleApproval() {
+    handleApproval(errorRuleUserList) {
       this.$refs['candidateForm'].validate((valid) => {
         if (valid) {
           if (this.properties.hasSign && !this.signImg) {
@@ -642,6 +756,7 @@ export default {
             branchList: this.candidateForm.branchList,
             candidateType: this.candidateType
           }
+          if (errorRuleUserList) query.errorRuleUserList = errorRuleUserList
           if (this.candidateForm.candidateList.length) {
             let candidateList = {}
             for (let i = 0; i < this.candidateForm.candidateList.length; i++) {
@@ -655,16 +770,23 @@ export default {
           const approvalMethod = this.eventType === 'audit' ? Audit : Reject
           this.approvalBtnLoading = true
           approvalMethod(this.setting.taskId, query).then(res => {
-            this.$message({
-              type: 'success',
-              message: res.msg,
-              duration: 1000,
-              onClose: () => {
-                this.approvalBtnLoading = false
-                this.visible = false
-                this.$emit('close', true)
-              }
-            })
+            const errorData = res.data
+            if (errorData && Array.isArray(errorData) && errorData.length) {
+              this.errorNodeList = errorData
+              this.errorVisible = true
+            } else {
+              this.$message({
+                type: 'success',
+                message: res.msg,
+                duration: 1000,
+                onClose: () => {
+                  this.approvalBtnLoading = false
+                  this.visible = false
+                  this.errorVisible = false
+                  this.$emit('close', true)
+                }
+              })
+            }
           }).catch(() => { this.approvalBtnLoading = false })
         }
       })
