@@ -244,7 +244,7 @@ export default {
       this.visible = true
       this.loading = true
       let componentList = JSON.parse(JSON.stringify(this.columnOptions))
-      this.fieldOptions = this.buildOptions(componentList)
+      this.fieldOptions = componentList
       this.getAdvancedQueryList()
       this.$nextTick(() => {
         this.loading = false
@@ -293,6 +293,27 @@ export default {
       item.jnpfKey = obj.__config__.jnpfKey
       item.attr = obj
       if (item.jnpfKey === 'cascader') item.attr.props.props.multiple = false
+      let config = item.attr.__config__
+      if (dyOptionsList.indexOf(config.jnpfKey) > -1) {
+        let isTreeSelect = config.jnpfKey === 'treeSelect' || config.jnpfKey === 'cascader'
+        if (config.dataType === 'dictionary') {
+          if (!config.dictionaryType) return
+          getDictionaryDataSelector(config.dictionaryType).then(res => {
+            isTreeSelect ? item.attr.options = res.data.list : item.attr.__slot__.options = res.data.list
+          })
+        }
+        if (config.dataType === 'dynamic') {
+          if (!config.propsUrl) return
+          getDataInterfaceRes(config.propsUrl).then(res => {
+            let data = res.data.data
+            if (Array.isArray(data)) {
+              isTreeSelect ? item.attr.options = data : item.attr.__slot__.options = data
+            } else {
+              isTreeSelect ? item.attr.options = [] : item.attr.__slot__.options = []
+            }
+          })
+        }
+      }
       item.fieldValue = undefined
       this.$set(this.conditionList, i, item)
     },
