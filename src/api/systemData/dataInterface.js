@@ -68,10 +68,11 @@ export function getDataInterfaceTypeSelector() {
 }
 
 // 获取接口数据
-export function getDataInterfaceRes(id) {
+export function getDataInterfaceRes(id, data) {
   return request({
-    url: `/api/system/DataInterface/${id}/Actions/Response`,
-    method: 'GET'
+    url: `/api/system/DataInterface/${id}/Actions/Preview`,
+    method: 'POST',
+    data
   })
 }
 
