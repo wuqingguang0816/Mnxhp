@@ -298,6 +298,7 @@ export default {
             this.errorNodeList = errorData
             this.eventType = 'resurgence'
             this.errorVisible = true
+            this.resurgenceBtnLoading = false
           } else {
             this.$message({
               type: 'success',
@@ -537,6 +538,7 @@ export default {
         if (errorData && Array.isArray(errorData) && errorData.length) {
           this.errorNodeList = errorData
           this.errorVisible = true
+          this.allBtnDisabled = false
         } else {
           this.$message({
             message: res.msg,
@@ -725,6 +727,7 @@ export default {
             if (errorData && Array.isArray(errorData) && errorData.length) {
               this.errorNodeList = errorData
               this.errorVisible = true
+              this.approvalBtnLoading = false
             } else {
               this.$message({
                 type: 'success',
