@@ -157,12 +157,6 @@ export default {
         {
           value: "LessThanOrEqual",
           label: "小于等于"
-        }, {
-          value: 'Included',
-          label: '包含'
-        }, {
-          value: 'NotIncluded',
-          label: '不包含'
         }
       ],
       dataForm: {
