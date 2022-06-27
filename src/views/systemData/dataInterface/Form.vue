@@ -11,11 +11,13 @@
         </el-button>
         <el-button :disabled="active >= 1" @click="handleNextStep">{{$t('common.next')}}
         </el-button>
-        <el-button type="primary" :loading="btnLoading" :disabled="active < 1" @click="dataFormSubmit()">{{$t('common.confirmButton')}}</el-button>
+        <el-button type="primary" :loading="btnLoading" :disabled="active < 1"
+          @click="dataFormSubmit()">{{$t('common.confirmButton')}}</el-button>
         <el-button @click="goBack">{{$t('common.cancelButton')}}</el-button>
       </div>
     </div>
-    <el-form ref="dataForm" :model="dataForm" :rules="dataRule" v-loading="formLoading" label-width="100px" v-if="active === 0">
+    <el-form ref="dataForm" :model="dataForm" :rules="dataRule" v-loading="formLoading"
+      label-width="100px" v-if="active === 0">
       <el-row>
         <el-col :span="14" :offset="5" class="baseInfo mt-20">
           <el-form-item label="名称" prop="fullName">
@@ -25,7 +27,8 @@
             <el-input v-model="dataForm.enCode" placeholder="输入编码" maxlength="50" />
           </el-form-item>
           <el-form-item label="分类" prop="categoryId">
-            <JNPF-TreeSelect v-model="dataForm.categoryId" :options="selectData" placeholder="选择分类" clearable />
+            <JNPF-TreeSelect v-model="dataForm.categoryId" :options="selectData" placeholder="选择分类"
+              clearable />
           </el-form-item>
           <!-- <el-form-item label="授权" prop="checkType">
             <el-radio-group v-model="dataForm.checkType">
@@ -59,7 +62,8 @@
             </el-radio-group>
           </el-form-item>
           <el-form-item label="排序" prop="sortCode">
-            <el-input-number :min="0" :max="999999" v-model="dataForm.sortCode" controls-position="right" />
+            <el-input-number :min="0" :max="999999" v-model="dataForm.sortCode"
+              controls-position="right" />
           </el-form-item>
           <el-form-item label="状态" prop="enabledMark">
             <el-switch v-model="dataForm.enabledMark" :active-value="1" :inactive-value="0" />
@@ -72,18 +76,26 @@
     </el-form>
     <div class="config" v-if="active === 1 && dataForm.dataType === 1">
       <div class="tableData">
-        <el-select v-model="dataForm.dbLinkId" filterable placeholder="选择数据库" style="width: 100%" @change="handleSelectTable">
+        <el-select v-model="dataForm.dbLinkId" filterable placeholder="选择数据库" style="width: 100%"
+          @change="handleSelectTable">
           <el-option-group v-for="group in dbOptions" :key="group.fullName" :label="group.fullName">
-            <el-option v-for="item in group.children" :key="item.id" :label="item.fullName" :value="item.id" />
+            <el-option v-for="item in group.children" :key="item.id" :label="item.fullName"
+              :value="item.id" />
           </el-option-group>
         </el-select>
         <div class="box">
-          <el-tree :data="treeData" node-key="index" v-loading="treeLoading" :props="defaultProps" @node-click="handleNodeClick" />
+          <el-tree :data="treeData" node-key="index" v-loading="treeLoading" :props="defaultProps"
+            @node-click="handleNodeClick" />
         </div>
       </div>
       <div class="detail">
         <el-tabs v-model="activeName">
           <el-tab-pane label="SQL语句" name="query">
+            <span slot="label">SQL语句
+              <el-tooltip content="支持SQL语句&存储过程语句" placement="top">
+                <a class="el-icon-warning-outline"></a>
+              </el-tooltip>
+            </span>
             <el-form ref="dataForm" :model="dataForm" :rules="dataRule" label-width="100px">
               <el-form-item label-width="0" prop="query">
                 <div class="sql-box">
@@ -106,10 +118,12 @@
             <span>参数定义</span>
           </div>
           <div class="list">
-            <el-table :data="requestParameters" ref="dragTable" row-key="id" size='mini' height="100%">
+            <el-table :data="requestParameters" ref="dragTable" row-key="id" size='mini'
+              height="100%">
               <el-table-column align="center" label="拖动" width="50">
                 <template>
-                  <i class="drag-handler icon-ym icon-ym-darg" style="cursor: move;font-size:20px" title='点击拖动' />
+                  <i class="drag-handler icon-ym icon-ym-darg" style="cursor: move;font-size:20px"
+                    title='点击拖动' />
                 </template>
               </el-table-column>
               <el-table-column prop="field" label="参数名称">
@@ -132,8 +146,10 @@
               </el-table-column>
               <el-table-column label="操作" width="70">
                 <template slot-scope="scope">
-                  <el-button type="text" @click="addOrUpdateHandle(scope.row)" icon="el-icon-edit-outline"></el-button>
-                  <el-button type="text" class="JNPF-table-delBtn" icon="el-icon-delete" @click="removeParameter(scope.$index)"></el-button>
+                  <el-button type="text" @click="addOrUpdateHandle(scope.row)"
+                    icon="el-icon-edit-outline"></el-button>
+                  <el-button type="text" class="JNPF-table-delBtn" icon="el-icon-delete"
+                    @click="removeParameter(scope.$index)"></el-button>
                 </template>
               </el-table-column>
             </el-table>
@@ -156,7 +172,8 @@
         </el-form-item>
       </el-form>
     </div>
-    <el-form ref="dataForm" :model="dataForm" :rules="dataRule" label-width="100px" v-if="active === 1 && dataForm.dataType === 3">
+    <el-form ref="dataForm" :model="dataForm" :rules="dataRule" label-width="100px"
+      v-if="active === 1 && dataForm.dataType === 3">
       <el-row>
         <el-col :span="14" :offset="5" class="mt-20 baseInfo">
           <el-form-item label="接口路径" prop="path" maxlength="50">
@@ -169,7 +186,8 @@
             </el-button>
             <el-row v-for="(item, index) in requestHeaders" :key="item.index" class="mt-10">
               <el-col :span="10">
-                <el-autocomplete v-model="item.field" :fetch-suggestions="querySearch" placeholder="key" clearable style="width:100%" />
+                <el-autocomplete v-model="item.field" :fetch-suggestions="querySearch"
+                  placeholder="key" clearable style="width:100%" />
               </el-col>
               <el-col :span="10" :offset="1">
                 <el-input v-model="item.defaultValue" placeholder="value" clearable />
@@ -188,7 +206,8 @@
             <el-table :data="requestParameters" ref="dragTable" row-key="id" size='mini'>
               <el-table-column align="center" label="拖动" width="50">
                 <template>
-                  <i class="drag-handler icon-ym icon-ym-darg" style="cursor: move;font-size:20px" title='点击拖动' />
+                  <i class="drag-handler icon-ym icon-ym-darg" style="cursor: move;font-size:20px"
+                    title='点击拖动' />
                 </template>
               </el-table-column>
               <el-table-column prop="field" label="参数名称">
@@ -212,8 +231,10 @@
               <el-table-column prop="defaultValue" label="默认值" />
               <el-table-column label="操作" width="70">
                 <template slot-scope="scope">
-                  <el-button type="text" @click="addOrUpdateHandle(scope.row)" icon="el-icon-edit-outline"></el-button>
-                  <el-button type="text" class="JNPF-table-delBtn" icon="el-icon-delete" @click="removeParameter(scope.$index)"></el-button>
+                  <el-button type="text" @click="addOrUpdateHandle(scope.row)"
+                    icon="el-icon-edit-outline"></el-button>
+                  <el-button type="text" class="JNPF-table-delBtn" icon="el-icon-delete"
+                    @click="removeParameter(scope.$index)"></el-button>
                 </template>
               </el-table-column>
             </el-table>
@@ -225,7 +246,8 @@
       </el-row>
     </el-form>
     <FieldForm v-show="fieldFormVisible" ref="fieldForm" @addParameter="addParameter" />
-    <form-script :visible.sync="formScriptVisible" :value="this.dataForm.dataProcessing" @updateScript="updateScript" />
+    <form-script :visible.sync="formScriptVisible" :value="this.dataForm.dataProcessing"
+      @updateScript="updateScript" />
   </div>
 </template>
 
