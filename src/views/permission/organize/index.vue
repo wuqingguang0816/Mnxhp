@@ -78,7 +78,7 @@ import {
 } from '@/api/permission/organize'
 import Form from './Form'
 import DepForm from './depForm.vue'
-
+import { delDepartment } from '@/api/permission/department'
 export default {
   name: 'permission-organize',
   components: { Form, DepForm },

@@ -28,6 +28,18 @@
         <i class="el-icon-arrow-down"></i>
       </div>
       <el-dropdown-menu slot="dropdown">
+        <el-dropdown placement="right-start">
+          <el-dropdown-item>
+            <i class="icon-ym icon-ym-header-userInfo"></i>{{ $t('navbar.systemChange') }}
+          </el-dropdown-item>
+          <el-dropdown-menu slot="dropdown">
+            <el-dropdown-item v-for="item in userInfo.systemIds" :key="item.id"
+              @click.native="changeMajor(item.id,'System')" :disabled="item.currentSystem"> <i
+                :class="item.icon"></i>{{item.name}}
+            </el-dropdown-item>
+          </el-dropdown-menu>
+        </el-dropdown>
+
         <router-link to="/profile">
           <el-dropdown-item>
             <i class="icon-ym icon-ym-header-userInfo"></i>{{ $t('navbar.profile') }}
@@ -104,7 +116,7 @@ import UserList from './userList/UserList'
 import dragDialog from "@/directive/el-drag-dialog";
 import ReconnectingWebSocket from 'reconnecting-websocket'
 // import Notify from '@/utils/notify';
-
+import { setMajor } from '@/api/permission/userSetting'
 export default {
   directives: { dragDialog },
   components: {
@@ -114,7 +126,8 @@ export default {
     Search,
     MessageList,
     UserList,
-    Settings
+    Settings,
+    activeIndex2: '2'
   },
   computed: {
     ...mapState({
@@ -151,6 +164,22 @@ export default {
     this.initNotify()
   },
   methods: {
+    changeMajor(majorId, majorType) { //切换系统
+      let query = {
+        majorId,
+        majorType
+      }
+      setMajor(query).then(res => {
+        this.$message({
+          message: res.msg,
+          type: 'success',
+          duration: 1500,
+          onClose() {
+            location.reload()
+          }
+        })
+      })
+    },
     initWebSocket() {
       this.socket = this.$store.getters.socket || null
       if ('WebSocket' in window) {

@@ -126,6 +126,7 @@ export default {
     "reportBI": "大屏示例",
   },
   navbar: {
+    systemChange: '系统切换',
     profile: '个人信息',
     feedback: '反馈问题',
     about: '关于平台',
@@ -247,6 +248,7 @@ export default {
     deselectAll: '取消全选',
     expandAll: '展开所有',
     foldAll: '折叠所有',
+    systemPermission: '系统权限',
     menuPermission: '菜单权限',
     buttonPermission: '按钮权限',
     listPermission: '列表权限',

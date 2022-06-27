@@ -1,9 +1,9 @@
 import request from '@/utils/request'
 
 // 获取菜单列表
-export const getMenuList = (data) => {
+export const getMenuList = (systemId, data) => {
   return request({
-    url: '/api/system/Menu',
+    url: `/api/system/Menu/ModuleBySystem/${systemId}`,
     method: 'GET',
     data
   })
@@ -85,9 +85,11 @@ export const exportMenu = id => {
 }
 
 // 数据权限字段名称
-export const getFieldNameList = (id,name) => {
+export const getFieldNameList = (id, name) => {
   return request({
     url: `/api/system/Module${name}/${id}/FieldList`,
     method: 'GET'
   })
 }
+
+

@@ -74,23 +74,26 @@ export default {
       dataForm: {
         objectType: '',
         module: [],
+        systemIds: [],
         button: [],
         column: [],
         form: [],
         resource: []
       },
       params: {
-        type: 'module',
+        type: 'system',
         moduleIds: ''
       },
       title: '',
       active: 0,
+      systemAllData: [],
       authorizeTreeData: [],
       moduleAuthorizeTree: [],
       buttonAuthorizeTree: [],
       columnAuthorizeTree: [],
       formAuthorizeTree: [],
       resourceAuthorizeTree: [],
+      systemAllData: [],
       moduleAllData: [],
       buttonAllData: [],
       columnAllData: [],
@@ -128,36 +131,43 @@ export default {
       getAuthorizeValues(this.objectId, this.params).then(res => {
         switch (this.active) {
           case 0:
+            this.systemAuthorizeTree = res.data.list
+            this.systemAllData = res.data.all
+            this.authorizeTreeData = this.systemAuthorizeTree
+            this.dataForm.systemIds = [...this.moduleIdsTemp, ...res.data.ids]
+            this.$refs.authorizeTree.setCheckedKeys(this.dataForm.systemIds)
+            break
+          case 1:
             this.moduleAuthorizeTree = res.data.list
             this.moduleAllData = res.data.all
             this.authorizeTreeData = this.moduleAuthorizeTree
-            const moduleIds = [...this.moduleIdsTemp, ...res.data.ids]
+            const moduleIds = [...this.dataForm.module, ...res.data.ids, ...this.moduleIdsTemp]
             this.dataForm.module = [...new Set(moduleIds)]
             this.moduleIdsTemp = this.dataForm.module
             this.$refs.authorizeTree.setCheckedKeys(this.dataForm.module)
             break
-          case 1:
+          case 2:
             this.buttonAuthorizeTree = res.data.list
             this.buttonAllData = res.data.all
             this.authorizeTreeData = this.buttonAuthorizeTree
             this.dataForm.button = [...this.dataForm.button, ...res.data.ids, ...this.moduleIdsTemp]
             this.$refs.authorizeTree.setCheckedKeys(this.dataForm.button)
             break
-          case 2:
+          case 3:
             this.columnAuthorizeTree = res.data.list
             this.columnAllData = res.data.all
             this.authorizeTreeData = this.columnAuthorizeTree
             this.dataForm.column = [...this.dataForm.column, ...res.data.ids, ...this.moduleIdsTemp]
             this.$refs.authorizeTree.setCheckedKeys(this.dataForm.column)
             break
-          case 3:
+          case 4:
             this.formAuthorizeTree = res.data.list
             this.formAllData = res.data.all
             this.authorizeTreeData = this.formAuthorizeTree
             this.dataForm.form = [...this.dataForm.form, ...res.data.ids, ...this.moduleIdsTemp]
             this.$refs.authorizeTree.setCheckedKeys(this.dataForm.form)
             break
-          case 4:
+          case 5:
             this.resourceAuthorizeTree = res.data.list
             this.resourceAllData = res.data.all
             this.authorizeTreeData = this.resourceAuthorizeTree
@@ -179,18 +189,21 @@ export default {
       if (val === 'checkAll') {
         switch (this.active) {
           case 0:
-            this.$refs.authorizeTree.setCheckedKeys(this.moduleAllData)
+            this.$refs.authorizeTree.setCheckedKeys(this.systemAllData)
             break
           case 1:
-            this.$refs.authorizeTree.setCheckedKeys(this.buttonAllData)
+            this.$refs.authorizeTree.setCheckedKeys(this.moduleAllData)
             break
           case 2:
-            this.$refs.authorizeTree.setCheckedKeys(this.columnAllData)
+            this.$refs.authorizeTree.setCheckedKeys(this.buttonAllData)
             break
           case 3:
-            this.$refs.authorizeTree.setCheckedKeys(this.formAllData)
+            this.$refs.authorizeTree.setCheckedKeys(this.columnAllData)
             break
           case 4:
+            this.$refs.authorizeTree.setCheckedKeys(this.formAllData)
+            break
+          case 5:
             this.$refs.authorizeTree.setCheckedKeys(this.resourceAllData)
             break
         }
@@ -228,21 +241,24 @@ export default {
       this.treeLoading = true
       switch (this.active) {
         case 0:
-          this.params.type = 'module'
+          this.params.type = 'system'
           break
         case 1:
+          this.params.type = 'module'
+          break
+        case 2:
           this.params.type = 'button'
           this.params.moduleIds = (this.moduleIdsTemp).toString()
           break
-        case 2:
+        case 3:
           this.params.type = 'column'
           this.params.moduleIds = (this.moduleIdsTemp).toString()
           break
-        case 3:
+        case 4:
           this.params.type = 'form'
           this.params.moduleIds = (this.moduleIdsTemp).toString()
           break
-        case 4:
+        case 5:
           this.params.type = 'resource'
           this.params.moduleIds = (this.moduleIdsTemp).toString()
           break
@@ -257,19 +273,22 @@ export default {
       const dataIds = [...new Set(newIds)]
       switch (this.active) {
         case 0:
+          this.dataForm.systemIds = dataIds
+          break
+        case 1:
           this.dataForm.module = dataIds
           this.moduleIdsTemp = this.dataForm.module
           break
-        case 1:
+        case 2:
           this.dataForm.button = dataIds
           break
-        case 2:
+        case 3:
           this.dataForm.column = dataIds
           break
-        case 3:
+        case 4:
           this.dataForm.form = dataIds
           break
-        case 4:
+        case 5:
           this.dataForm.resource = dataIds
           break
       }

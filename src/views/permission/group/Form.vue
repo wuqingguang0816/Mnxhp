@@ -20,6 +20,9 @@
         <el-input-number :min="0" :max="999999" v-model="dataForm.sortCode"
           controls-position="right" />
       </el-form-item>
+      <el-form-item label="状态" prop="enabledMark">
+        <el-switch v-model="dataForm.enabledMark" :active-value="1" :inactive-value="0" />
+      </el-form-item>
       <el-form-item label="说明" prop="description">
         <el-input v-model="dataForm.description" type="textarea" :rows="3" />
       </el-form-item>
@@ -48,6 +51,7 @@ export default {
         enCode: '',
         type: '',
         sortCode: 0,
+        enabledMark: 1,
         description: ''
       },
       dataRule: {

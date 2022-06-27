@@ -159,7 +159,6 @@ export default {
       }).catch(() => { this.listLoading = false })
     },
     handleNodeClick(data) {
-      // if (this.query.cate
       this.tableName = ''
       this.linkId = ''
       this.tableName = data.tableName
@@ -181,7 +180,6 @@ export default {
       this.checked = this.value
       this.visible = true
       this.treeLoading = true
-      // this.listLoading = true
       getVisualTables(this.moduleId, this.dataType).then(res => {
         let data = []
         for (const key in res.data.linkTables) {
