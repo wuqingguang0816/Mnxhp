@@ -974,7 +974,7 @@
               </div>
               <el-form-item class="mt-20">
                 <div slot="label">提醒设置
-                  <el-tooltip content="请在流程事件内配置提醒事件" placement="top">
+                  <el-tooltip content="还未到达设置的节点处理限定时问即为提醒" placement="top">
                     <a class="el-icon-warning-outline"></a>
                   </el-tooltip>
                 </div>
