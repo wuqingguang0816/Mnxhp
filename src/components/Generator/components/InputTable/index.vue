@@ -431,7 +431,8 @@ export default {
     getTableSummaries(param) {
       const { columns, data } = param
       const sums = []
-      if (this.tableData.length + 1 !== columns.length) return []  // 防止多次加载
+      let tableData = this.tableData.filter(o => !o.__config__.noShow)
+      if (tableData.length + 1 !== columns.length) return []  // 防止多次加载
       columns.forEach((column, index) => {
         if (index === 0) {
           sums[index] = '合计'
