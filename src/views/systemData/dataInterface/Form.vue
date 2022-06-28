@@ -104,10 +104,15 @@
               </el-form-item>
             </el-form>
             <div class="tips">
-              <p><span>@user</span>当前用户</p>
-              <p><span>@organize</span>当前用户所在公司</p>
-              <p><span>@department</span>当前用户所在部门</p>
-              <p><span>@position</span>当前用户所在岗位</p>
+              <p>系统变量</p>
+              <div class="tips-content">
+                <div class="tips-content-item" v-for="(item,index) in sysVariableList" :key="index">
+                  <span @click="handleSysNodeClick(item.value)">{{item.value}}</span>
+                  <el-tooltip :content="item.tips" placement="top-start">
+                    <a class="el-icon-warning-outline"></a>
+                  </el-tooltip>
+                </div>
+              </div>
             </div>
           </el-tab-pane>
         </el-tabs>
@@ -363,7 +368,17 @@ export default {
             trigger: 'blur'
           }
         ]
-      }
+      },
+      sysVariableList: [
+        { value: '@user', tips: "当前用户" },
+        { value: '@organizationAndSuborganization', tips: "当前组织及子组织" },
+        { value: '@userAraSubordinates', tips: "当前用户及下属" },
+        { value: '@chargeorganization', tips: "当前分管组织" },
+        { value: '@organization', tips: "当前组织" },
+        {
+          value: '@chargeorganizationAndSuborganization', tips: "当前分管组织及子组织"
+        }
+      ]
     }
   },
   methods: {
@@ -432,6 +447,9 @@ export default {
     },
     handleNodeClick(data) {
       this.$refs.SQLEditorRef && this.$refs.SQLEditorRef.insert(data.table)
+    },
+    handleSysNodeClick(data) {
+      this.$refs.SQLEditorRef && this.$refs.SQLEditorRef.insert(data)
     },
     handlePrevStep() {
       this.active -= 1
@@ -602,20 +620,37 @@ export default {
       overflow: hidden;
       .sql-box {
         border: 1px solid #dcdfe6;
-        height: calc(100vh - 370px);
+        height: calc(100vh - 400px);
         overflow: auto;
       }
       .tips {
-        padding: 8px 16px;
+        padding: 8px 6px;
         background-color: #ecf8ff;
         border-radius: 4px;
-        border-left: 5px solid #50bfff;
+
         p {
-          line-height: 24px;
-          color: #5e6d82;
-          span {
+          padding: 8px 0;
+        }
+
+        .tips-content {
+          margin-left: 50px;
+          display: flex;
+          flex-wrap: wrap;
+
+          .tips-content-item {
             display: inline-block;
             padding-right: 10px;
+            line-height: 30px;
+            color: #5e6d82;
+            width: 50%;
+            font-size: 15px;
+            display: flex;
+            align-items: center;
+
+            span {
+              cursor: pointer;
+              padding-right: 2px;
+            }
           }
         }
       }
