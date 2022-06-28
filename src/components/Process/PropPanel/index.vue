@@ -199,6 +199,14 @@
                     </el-option>
                   </el-select>
                 </el-form-item>
+                <el-form-item label="发起者的" style="margin-bottom:0;"
+                  v-if="subFlowForm.initiateType === 2">
+                  <el-select v-model="subFlowForm.departmentLevel">
+                    <el-option v-for="item in 10" :key="item" :label="'第'+item+'级部门主管'"
+                      :value="item">
+                    </el-option>
+                  </el-select>
+                </el-form-item>
                 <el-form-item label="表单字段" style="margin-bottom:0;"
                   v-if="subFlowForm.initiateType === 4">
                   <el-radio-group v-model="subFlowForm.formFieldType">
@@ -354,6 +362,22 @@
                   <JNPF-TreeSelect :options="printTplList" v-model="startForm.printId"
                     placeholder="请选择打印模板" lastLevel clearable></JNPF-TreeSelect>
                 </div>
+              </el-form-item>
+              <el-form-item label="标题设置">
+                <el-radio-group v-model="startForm.titleType">
+                  <el-radio :label="0">默认</el-radio>
+                  <el-radio :label="1">自定义</el-radio>
+                </el-radio-group>
+                <template v-if="startForm.titleType==0">
+                  <el-input v-model="startForm.defaultContent" placeholder="请输入内容" readOnly>
+                  </el-input>
+                </template>
+                <template v-if="startForm.titleType==1">
+                  <el-autocomplete v-model="startForm.titleContent" placeholder="请输入内容"
+                    style="width:100%" clearable :fetch-suggestions="querySearch"
+                    @select="handleSelect">
+                  </el-autocomplete>
+                </template>
               </el-form-item>
             </el-form>
             <el-form class="pd-10" style="margin-top:-20px">
@@ -764,6 +788,14 @@
                   <el-select v-model="approverForm.managerLevel">
                     <el-option v-for="item in 10" :key="item"
                       :label="item===1?'直属主管':'第'+item+'级主管'" :value="item">
+                    </el-option>
+                  </el-select>
+                </el-form-item>
+                <el-form-item label="发起者的" style="margin-bottom:0;"
+                  v-if="approverForm.assigneeType === 2">
+                  <el-select v-model="approverForm.departmentLevel">
+                    <el-option v-for="item in 10" :key="item" :label="'第'+item+'级部门主管'"
+                      :value="item">
                     </el-option>
                   </el-select>
                 </el-form-item>
@@ -1322,12 +1354,16 @@ const defaultStartForm = {
   isBatchApproval: false,
   isSummary: false,
   summaryType: 0,
+  titleType: 0,
+  defaultContent: '{发起用户名}的{流程名称}',
+  titleContent: '',
   formOperates: []
 }
 const defaultSubFlowForm = {
   formFieldType: 1,// 表单字段审核方式的类型(1-用户 2-部门)
   initiateType: 6,
   managerLevel: 1,
+  departmentLevel: 1,
   formField: '',
   nodeId: '',
   getUserUrl: '',
@@ -1360,6 +1396,7 @@ const defaultApproverForm = {
   rejectStep: '0',  // 驳回步骤
   description: '',  // 节点描述
   managerLevel: 1,
+  departmentLevel: 1,
   countersignRatio: 100,
   formField: '',
   nodeId: '',
@@ -1546,6 +1583,7 @@ export default {
   components: { OrgSelect, MsgDialog, InterfaceDialog, FormulaDialog },
   data() {
     return {
+      temporaryContent: '',
       visible: false,  // 控制面板显隐
       activeName: "config", // or formAuth  Tab面板key
       showingPCons: [], // 用户选择了得条件  被选中的才会被展示在面板上编辑
@@ -1689,7 +1727,19 @@ export default {
       return options
     },
   },
+
   methods: {
+    handleSelect(item) {
+      this.temporaryContent += "{" + item.id + "}"
+      this.startForm.titleContent = this.temporaryContent
+    },
+    querySearch(queryString, cb) {
+      const params = this.getFormOperates().map(res => {
+        let obj = { value: res.id + "(" + res.name + ")", ...res }
+        return obj
+      })
+      cb(params);
+    },
     getFormOperates() {
       let res = []
       this.isApproverNode() && (res = this.approverForm.formOperates)
@@ -2283,6 +2333,9 @@ export default {
       this.isApproverNode() && this.initApproverNodeData()
       this.isConditionNode() && this.initConditionNodeData()
       this.getPrintTplList()
+    },
+    'startForm.titleContent'(newVal) {
+      this.temporaryContent = newVal
     },
     value(newVal) {
       if (newVal && newVal.properties) {
