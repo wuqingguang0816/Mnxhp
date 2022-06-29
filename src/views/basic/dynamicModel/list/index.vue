@@ -267,7 +267,7 @@ export default {
         if (this.columnData.type !== 3 && this.columnData.hasPage) this.total = res.data.pagination.total
         this.listLoading = false
         this.$nextTick(() => {
-          this.setTableLoadFunc()
+          if (this.columnData.funcs && this.columnData.funcs.afterOnload && this.columnData.funcs.afterOnload.func) this.setTableLoadFunc()
         })
       })
     },
