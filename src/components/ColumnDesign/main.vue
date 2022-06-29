@@ -203,7 +203,8 @@
                       <p class="custom-line-value">{{item.value}}</p>
                       <el-input v-model="item.label" placeholder="按钮名称" size="small">
                         <template slot="append">
-                          <el-button type="primary" @click="editFunc(item)" class="custom-btn">事件
+                          <el-button type="primary" @click="editFunc(item,'btn')"
+                            class="custom-btn">事件
                           </el-button>
                         </template>
                       </el-input>
@@ -231,12 +232,15 @@
               <el-form-item label="表单权限">
                 <el-switch v-model="columnData.useFormPermission"></el-switch>
               </el-form-item>
+
+              <el-button style="width: 100%;"
+                @click="addFunc(columnData.funcs.afterOnload,'afterOnload',true)">脚本事件</el-button>
             </el-form>
           </div>
         </el-scrollbar>
       </div>
     </div>
-    <form-script :visible.sync="formScriptVisible" :value="activeItem.func"
+    <form-script :visible.sync="formScriptVisible" :value="activeItem.func" :type="activeItem.type"
       @updateScript="updateScript" />
   </div>
 </template>
@@ -259,6 +263,7 @@ const getSearchType = item => {
 }
 
 const defaultFunc = '({ data, index, request, toast, refresh }) => {\r\n   \r\n}'
+const defaultFuncs = '({ data, attributes, events, methods, tableRef, request }) => {\r\n   \r\n}'
 
 const defaultColumnData = {
   searchList: [], // 查询字段
@@ -289,7 +294,13 @@ const defaultColumnData = {
   columnBtnsList: [
     { value: 'edit', icon: 'el-icon-edit', label: '编辑' },
     { value: 'remove', icon: 'el-icon-delete', label: '删除' }
-  ] // 列按钮
+  ], // 列按钮
+  funcs: {
+    afterOnload: {
+      func: "",
+      name: "脚本事件"
+    }
+  }
 }
 export default {
   name: 'columnDesign',
@@ -551,15 +562,25 @@ export default {
         func: ''
       })
     },
-    editFunc(item) {
+    editFunc(item, type) {
       if (!item.func) item.func = defaultFunc
       this.activeItem = item
+      this.activeItem.type = type
       this.$nextTick(() => {
         this.formScriptVisible = true
       })
     },
     updateScript(func) {
       this.activeItem.func = func
+    },
+
+    addFunc(item, type) {
+      if (!item.func) item.func = defaultFuncs
+      this.activeItem = item
+      this.activeItem.type = type
+      this.$nextTick(() => {
+        this.formScriptVisible = true
+      })
     }
   }
 }

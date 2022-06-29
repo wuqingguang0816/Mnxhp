@@ -38,7 +38,7 @@
         <JNPF-table v-loading="listLoading" :data="list" row-key="id" default-expand-all
           :tree-props="{children: 'children', hasChildren: ''}" @sort-change='sortChange'
           :has-c="hasBatchBtn" @selection-change="handleSelectionChange" v-if="refreshTable"
-          custom-column>
+          custom-column ref="tableRef">
           <el-table-column :prop="item.prop" :label="item.label" :align="item.align"
             :width="item.width" :key="i" :sortable="item.sortable?'custom':item.sortable"
             v-for="(item, i) in columnList" />
@@ -266,6 +266,9 @@ export default {
         this.list = res.data.list
         if (this.columnData.type !== 3 && this.columnData.hasPage) this.total = res.data.pagination.total
         this.listLoading = false
+        this.$nextTick(() => {
+          this.setTableLoadFunc()
+        })
       })
     },
     getTreeView() {
@@ -526,7 +529,21 @@ export default {
         method: method || 'GET',
         data: data || {}
       })
-    }
+    },
+    setTableLoadFunc() {
+      const JNPFTable = this.$refs.tableRef.$refs.JNPFTable
+      const parameter = {
+        data: this.list,
+        attributes: JNPFTable._props,
+        events: JNPFTable._events,
+        methods: JNPFTable,
+        tableRef: JNPFTable,
+        request: this.request,
+      }
+      const func = this.jnpf.getScriptFunc.call(this, this.columnData.funcs.afterOnload.func)
+      if (!func) return
+      func.call(this, parameter)
+    },
   }
 }
 </script>

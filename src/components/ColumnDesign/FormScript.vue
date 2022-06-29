@@ -7,10 +7,15 @@
         <div class="codeEditor">
           <JNPFCodeEditor v-model="text" :options="options" ref="CodeEditor" />
         </div>
-        <div class="tips">
+        <div class="tips" v-if="type == 'btn'">
           <p>支持JavaScript的脚本，参考编写脚本API</p>
           <p>data--列表当前行数据，index--列表当前行下标，request--异步请求(url,method,data)</p>
           <p>toast--消息提示，refresh--刷新页面</p>
+        </div>
+        <div class="tips" v-else>
+          <p>支持JavaScript的脚本，参考编写脚本API</p>
+          <p>data--列表行数据，attributes--列表属性，events--列表事件</p>
+          <p>methods--列表方法，tableRef--表格DOM元素，request--异步请求(url,methods,data)</p>
         </div>
       </div>
     </div>
@@ -25,7 +30,7 @@
 import JNPFCodeEditor from '@/components/JNPFEditor/monaco'
 export default {
   components: { JNPFCodeEditor },
-  props: ['value'],
+  props: ['value', 'type'],
   data() {
     return {
       text: '',
