@@ -2527,6 +2527,13 @@ export default {
      * 开始节点确认保存
      */
     startNodeConfirm() {
+      if (this.startForm.errorRule == 2 && !this.startForm.errorRuleUser.length) {
+        this.$message({
+          message: '请选择异常处理人',
+          type: 'error',
+        })
+        return
+      }
       let titleObj = {
         title: this.properties.title
       }

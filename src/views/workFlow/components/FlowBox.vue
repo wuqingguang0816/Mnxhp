@@ -42,8 +42,7 @@
             <!-- 判断流程复活按钮和节点变更 -->
             <el-button type="primary" @click="flowResurgence" v-if="flowTaskInfo.completion==100">
               复 活</el-button>
-            <el-button type="primary" @click="flowResurgence"
-              v-if="flowTaskInfo.completion>0 && flowTaskInfo.completion<100">变 更</el-button>
+            <el-button type="primary" @click="flowResurgence" v-else>变 更</el-button>
             <el-button type="primary" @click="openAssignBox" v-if="setting.status ==1">指 派
             </el-button>
             <el-button type="danger" v-if="setting.status != 2 && setting.status != 5"
@@ -230,7 +229,6 @@ export default {
         nodeCode: [
           {
             required: true,
-            // message: this.flowTaskInfo.completion==100?'请选择复活节点':'请选择变更节点', 
             message: '请选择节点',
             trigger: 'change'
           }
@@ -303,7 +301,7 @@ export default {
           handleOpinion: this.resurgenceForm.handleOpinion,
           taskNodeId: this.resurgenceForm.nodeCode,
           taskId: this.setting.taskId,
-          resurgence: this.flowTaskInfo.completion == 100 ? true : false
+          resurgence: this.flowTaskInfo.completion == 100
         }
         if (errorRuleUserList) query.errorRuleUserList = errorRuleUserList
         this.resurgenceBtnLoading = true
