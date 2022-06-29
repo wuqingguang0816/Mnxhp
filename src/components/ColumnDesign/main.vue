@@ -84,7 +84,6 @@
         <el-scrollbar class="right-scrollbar" v-show="currentTab==='column'">
           <div class="setting-box">
             <el-form :model="columnData" label-width="80px">
-              <!-- <el-divider>列表布局</el-divider> -->
               <div class="typeList">
                 <div class="item" v-for="(item, index) in typeList" :key="index"
                   @click="columnData.type=item.value">
@@ -97,11 +96,8 @@
                   <p class="item-name">{{item.name}}</p>
                 </div>
               </div>
-              <el-form-item label="高级查询">
-                <el-switch v-model="columnData.hasSuperQuery"></el-switch>
-              </el-form-item>
               <template v-if="columnData.type==2">
-                <el-divider>左侧设置</el-divider>
+                <el-divider>左侧配置</el-divider>
                 <el-form-item label="左侧标题">
                   <el-input v-model="columnData.treeTitle" placeholder="树形标题"></el-input>
                 </el-form-item>
@@ -148,8 +144,8 @@
                   </el-select>
                 </el-form-item>
               </template>
+              <el-divider>表格配置</el-divider>
               <template v-if="columnData.type==3">
-                <el-divider>分组设置</el-divider>
                 <el-form-item label="分组字段">
                   <el-select v-model="columnData.groupField" placeholder="请选择分组字段">
                     <el-option :label="item.__config__.label" :value="item.__vModel__"
@@ -157,12 +153,8 @@
                   </el-select>
                 </el-form-item>
               </template>
-              <el-divider>排序设置</el-divider>
-              <el-form-item label="排序字段">
-                <el-select v-model="columnData.defaultSidx" placeholder="请选择排序字段" clearable>
-                  <el-option :label="item.__config__.label" :value="item.__vModel__"
-                    v-for="(item, i) in list" :key="i"></el-option>
-                </el-select>
+              <el-form-item label="高级查询">
+                <el-switch v-model="columnData.hasSuperQuery"></el-switch>
               </el-form-item>
               <el-form-item label="排序类型">
                 <el-select v-model="columnData.sort" placeholder="请选择排序类型">
@@ -170,12 +162,17 @@
                   <el-option label="降序" value="desc"></el-option>
                 </el-select>
               </el-form-item>
+              <el-form-item label="排序字段">
+                <el-select v-model="columnData.defaultSidx" placeholder="请选择排序字段" clearable>
+                  <el-option :label="item.__config__.label" :value="item.__vModel__"
+                    v-for="(item, i) in list" :key="i"></el-option>
+                </el-select>
+              </el-form-item>
               <template v-if="columnData.type !==3">
-                <el-divider>分页设置</el-divider>
-                <el-form-item label="列表分页">
+                <el-form-item label="分页设置">
                   <el-switch v-model="columnData.hasPage"></el-switch>
                 </el-form-item>
-                <el-form-item label="分页条数">
+                <el-form-item label="分页条数" v-if="columnData.hasPage">
                   <el-radio-group v-model="columnData.pageSize">
                     <el-radio-button :label="20">20条</el-radio-button>
                     <el-radio-button :label="50">50条</el-radio-button>
@@ -185,7 +182,6 @@
                 </el-form-item>
               </template>
               <el-divider>按钮配置</el-divider>
-              <p class="btn-cap mb-10">系统按钮区</p>
               <el-checkbox-group v-model="btnsList" class="btnsList">
                 <el-checkbox :label="item.value" v-for="item in btnsOption" :key="item.value">
                   <span class="btn-label">{{ item.value | btnText }}</span>
@@ -270,7 +266,7 @@ const defaultFunc = '({ data, index, request, toast, refresh }) => {\r\n   \r\n}
 
 const defaultColumnData = {
   searchList: [], // 查询字段
-  hasSuperQuery: false, // 高级查询
+  hasSuperQuery: true, // 高级查询
   columnList: [], // 字段列表
   columnOptions: [], // 字段列表
   defaultColumnList: [], // 所有可选择字段列表
