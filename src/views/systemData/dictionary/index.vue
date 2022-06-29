@@ -9,6 +9,7 @@
             <el-dropdown-item @click.native="initData()">刷新数据</el-dropdown-item>
             <el-dropdown-item @click.native="toggleTreeExpand(true)">展开全部</el-dropdown-item>
             <el-dropdown-item @click.native="toggleTreeExpand(false)">折叠全部</el-dropdown-item>
+            <el-dropdown-item @click.native="handleTypeManage">分类管理</el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>
       </div>
@@ -46,7 +47,6 @@
       <div class="JNPF-common-layout-main JNPF-flex-main">
         <div class="JNPF-common-head">
           <topOpts @add="addOrUpdateHandle()" />
-
           <div class="JNPF-common-head-right">
             <el-tooltip effect="dark" content="展开" placement="top"
               v-if="tableData.length&&tableData.every((item)=>{return item.hasChildren})">
@@ -124,7 +124,6 @@ export default {
       listLoading: false,
       treeData: [],
       tableData: [],
-
       expands: true,
       expandsTree: true,
       refreshTable: true,
