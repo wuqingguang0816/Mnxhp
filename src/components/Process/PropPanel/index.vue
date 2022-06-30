@@ -102,6 +102,14 @@
                 <JNPFAddress v-model="item.fieldValue" placeholder="请选择" :level="item.level"
                   clearable @change="onConditionListChange(arguments,item)" />
               </template>
+              <template v-else-if="item.jnpfKey==='groupSelect'">
+                <groupSelect v-model="item.fieldValue" placeholder="请选择" clearable
+                  @change="onConditionObjChange(arguments,item)" />
+              </template>
+              <template v-else-if="item.jnpfKey==='roleSelect'">
+                <roleSelect v-model="item.fieldValue" placeholder="请选择" clearable
+                  @change="onConditionObjChange(arguments,item)" />
+              </template>
               <template v-else>
                 <el-input v-model="item.fieldValue" placeholder="请输入"></el-input>
               </template>
