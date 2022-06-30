@@ -36,12 +36,27 @@
           </div>
         </div>
         <JNPF-table v-loading="listLoading" :data="list" row-key="id" default-expand-all
-          :tree-props="{children: 'children', hasChildren: ''}" @sort-change='sortChange'
+          :tree-props="{children: 'children', hasChildren: ''}" @sort-change="sortChange"
           :has-c="hasBatchBtn" @selection-change="handleSelectionChange" v-if="refreshTable"
-          custom-column ref="tableRef">
-          <el-table-column :prop="item.prop" :label="item.label" :align="item.align"
-            :width="item.width" :key="i" :sortable="item.sortable?'custom':item.sortable"
-            v-for="(item, i) in columnList" />
+          custom-column :span-method="arraySpanMethod" ref="tableRef">
+          <template v-for="(item, i) in columnList">
+            <template v-if="item.jnpfKey==='table'">
+              <el-table-column :prop="item.prop" :label="item.label" :align="item.align" :key="i">
+                <el-table-column :prop="child.prop" :label="child.label" :align="child.align"
+                  :width="child.width" :key="ii" :sortable="child.sortable?'custom':child.sortable"
+                  v-for="(child, ii) in item.children" class-name="child-table-box">
+                  <template slot-scope="scope">
+                    <child-table-column :data="scope.row[item.prop]" :head="item.children"
+                      @toggleExpand="toggleExpand(scope.row,`${item.prop}Expand`)"
+                      :expand="scope.row[`${item.prop}Expand`]" />
+                  </template>
+                </el-table-column>
+              </el-table-column>
+            </template>
+            <el-table-column :prop="item.prop" :label="item.label" :align="item.align"
+              :width="item.width" :key="i" :sortable="item.sortable?'custom':item.sortable"
+              v-else />
+          </template>
           <el-table-column prop="flowState" label="状态" width="100" v-if="config.webType == 3">
             <template slot-scope="scope" v-if="!scope.row.top">
               <el-tag v-if="scope.row.flowState==1">等待审核</el-tag>
@@ -60,38 +75,36 @@
                   <template v-if="item.value=='edit'">
                     <el-button size="mini" type="text" :key="i"
                       :disabled="config.webType == 3 && [1,2,4,5].indexOf(scope.row.flowState)>-1"
-                      @click="columnBtnsHandel(item.value,scope.row)">
-                      {{item.label}}</el-button>
+                      @click="columnBtnsHandel(item.value,scope.row)">{{item.label}}</el-button>
                   </template>
                   <template v-else-if="item.value=='remove'">
                     <el-button size="mini" type="text" :key="i" class="JNPF-table-delBtn"
                       :disabled="config.webType == 3 && !!scope.row.flowState"
-                      @click="columnBtnsHandel(item.value,scope.row)">
-                      {{item.label}}</el-button>
+                      @click="columnBtnsHandel(item.value,scope.row)">{{item.label}}</el-button>
                   </template>
                   <template v-else-if="item.value=='detail'">
                     <el-button size="mini" type="text" :key="i"
                       :disabled="config.webType == 3 && !scope.row.flowState"
-                      @click="columnBtnsHandel(item.value,scope.row)">
-                      {{item.label}}</el-button>
+                      @click="columnBtnsHandel(item.value,scope.row)">{{item.label}}</el-button>
                   </template>
                   <template v-else>
                     <el-button size="mini" type="text" :key="i"
-                      @click="customBtnsHandel(item,scope.row,scope.$index)">
-                      {{item.label}}</el-button>
+                      @click="customBtnsHandel(item,scope.row,scope.$index)">{{item.label}}
+                    </el-button>
                   </template>
                 </template>
                 <template v-if="customBtnsList.length">
                   <el-dropdown hide-on-click>
                     <span class="el-dropdown-link">
                       <el-button type="text" size="mini">
-                        {{$t('common.moreBtn')}}<i class="el-icon-arrow-down el-icon--right"></i>
+                        {{$t('common.moreBtn')}}
+                        <i class="el-icon-arrow-down el-icon--right"></i>
                       </el-button>
                     </span>
                     <el-dropdown-menu slot="dropdown">
                       <el-dropdown-item v-for="(item, i) in customBtnsList" :key="i"
-                        @click.native="customBtnsHandel(item,scope.row,scope.$index)">
-                        {{item.label}}</el-dropdown-item>
+                        @click.native="customBtnsHandel(item,scope.row,scope.$index)">{{item.label}}
+                      </el-dropdown-item>
                     </el-dropdown-menu>
                   </el-dropdown>
                 </template>
@@ -118,15 +131,16 @@
                   </template>
                   <template v-else>
                     <el-button size="mini" type="text" :key="i" v-has="item.value"
-                      @click="customBtnsHandel(item,scope.row,scope.$index)">
-                      {{item.label}}</el-button>
+                      @click="customBtnsHandel(item,scope.row,scope.$index)">{{item.label}}
+                    </el-button>
                   </template>
                 </template>
                 <template v-if="customBtnsList.length">
                   <el-dropdown hide-on-click>
                     <span class="el-dropdown-link">
                       <el-button type="text" size="mini">
-                        {{$t('common.moreBtn')}}<i class="el-icon-arrow-down el-icon--right"></i>
+                        {{$t('common.moreBtn')}}
+                        <i class="el-icon-arrow-down el-icon--right"></i>
                       </el-button>
                     </span>
                     <el-dropdown-menu slot="dropdown">
@@ -164,9 +178,10 @@ import FlowBox from '@/views/workFlow/components/FlowBox'
 import Detail from './detail'
 import ExportBox from './ExportBox'
 import Search from './Search'
+import ChildTableColumn from './child-table-column'
 export default {
   name: 'dynamicModel',
-  components: { Form, ExportBox, Search, Detail, FlowBox },
+  components: { Form, ExportBox, Search, Detail, FlowBox, ChildTableColumn },
   props: ['config', 'modelId', 'isPreview'],
   data() {
     return {
@@ -209,7 +224,9 @@ export default {
       hasBatchBtn: false,
       refreshTable: true,
       multipleSelection: [],
-      settingsColumnList: []
+      settingsColumnList: [],
+      mergeList: [],
+      expandObj: {}
     }
   },
   computed: {
@@ -263,7 +280,10 @@ export default {
       if (this.isPreview) return
       this.listLoading = true
       getModelList(this.modelId, this.listQuery).then(res => {
-        this.list = res.data.list
+        this.list = res.data.list.map(o => ({
+          ...o,
+          ...this.expandObj
+        }))
         if (this.columnData.type !== 3 && this.columnData.hasPage) this.total = res.data.pagination.total
         this.listLoading = false
         this.$nextTick(() => {
@@ -306,10 +326,11 @@ export default {
     },
     getColumnList() {
       if (this.isPreview) {
-        this.columnList = this.columnData.columnList.map(o => ({
+        const columnList = this.columnData.columnList.map(o => ({
           ...o,
           visible: true
         }))
+        this.columnList = this.transformColumnList(columnList)
         return
       }
       let columnPermissionList = []
@@ -329,7 +350,73 @@ export default {
           }
         }
       }
-      this.columnList = columnPermissionList
+      this.columnList = this.transformColumnList(columnPermissionList)
+    },
+    transformColumnList(columnList) {
+      let list = [], tableData = {}
+      for (let i = 0; i < columnList.length; i++) {
+        const e = columnList[i];
+        if (!e.prop.includes('-')) {
+          list.push(e)
+        } else {
+          let prop = e.prop.split('-')[0]
+          let label = e.label.split('-')[0]
+          let vModel = e.prop.split('-')[1]
+          let newItem = {
+            align: "center",
+            jnpfKey: "table",
+            prop,
+            label,
+            children: []
+          }
+          e.vModel = vModel
+          if (!this.expandObj.hasOwnProperty(`${prop}Expand`)) this.$set(this.expandObj, `${prop}Expand`, false)
+          if (!tableData.hasOwnProperty(prop)) this.$set(tableData, prop, newItem)
+          tableData[prop].children.push(e)
+        }
+      }
+      for (const key in tableData) {
+        list.push(tableData[key])
+      }
+      this.getMergeList(list)
+      return list
+    },
+    getMergeList(list) {
+      list.forEach(item => {
+        if (item.children && item.children.length > 0) {
+          item.children.forEach((child, index) => {
+            if (index == 0) {
+              this.mergeList.push({
+                prop: child.prop,
+                rowspan: 1,
+                colspan: item.children.length
+              })
+            } else {
+              this.mergeList.push({
+                prop: child.prop,
+                rowspan: 0,
+                colspan: 0
+              })
+            }
+          })
+        } else {
+          this.mergeList.push({
+            prop: item.prop,
+            rowspan: 1,
+            colspan: 1
+          })
+        }
+      })
+    },
+    arraySpanMethod({ column }) {
+      for (let i = 0; i < this.mergeList.length; i++) {
+        if (column.property == this.mergeList[i].prop) {
+          return [this.mergeList[i].rowspan, this.mergeList[i].colspan]
+        }
+      }
+    },
+    toggleExpand(row, field) {
+      row[field] = !row[field]
     },
     getNodePath(node) {
       let fullPath = []
@@ -547,3 +634,12 @@ export default {
   }
 }
 </script>
+<style lang="scss" scoped>
+>>> td.child-table-box {
+  padding: 0 !important;
+  vertical-align: top !important;
+  & > .cell {
+    padding: 0 !important;
+  }
+}
+</style>
