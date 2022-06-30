@@ -1840,7 +1840,8 @@
 </template>
 <script>
 import { FlowEngineSelector, getFormDataFields } from '@/api/workFlow/FlowEngine'
-import { NodeUtils } from "../FlowCard/util.js"
+import { NodeUtils } from "../FlowCard/util"
+import nodeConfig from "../FlowCard/config"
 import { getDrawingList } from '@/components/Generator/utils/db'
 import OrgSelect from '../OrgSelect'
 import MsgDialog from './msgDialog'
@@ -1859,124 +1860,6 @@ const getDataType = (data) => {
     if (data.multiple) return 'array'
   }
   return ''
-}
-const defaultStartForm = {
-  errorRule: 1, // 异常处理规则
-  errorRuleUser: [], // 指定人员处理异常
-  // 限时设置
-  timeLimitConfig: {
-    on: 0,  // 开启
-    nodeLimit: 0, // 节点限定时长起始值类型
-    duringDeal: 24, // 节点处理限定时长(时)
-    formField: '',  // 请选择字段
-  },
-  overTimeConfig: {
-    on: 0, // 开启
-    firstOver: 0, // 第一次超时时间(时)
-    overTimeDuring: 2, // 超时间隔(时)
-    overNotice: false, // 超时事务-超时通知
-    overAutoApprove: false, // 超时事务-超时自动审批
-    overAutoApproveTime: 5, // 自动审批超时次数(次)
-    overEvent: false, // 超时事件
-    overEventTime: 5, // 超时事件超时次数(次)
-  },
-  noticeConfig: {
-    on: 0, // 开启
-    firstOver: 0, // 第一次提醒时间(时)
-    overTimeDuring: 2, // 提醒间隔(时)
-    overNotice: false, // 提醒事务-提醒通知
-    overEvent: false, // 提醒事件
-    overEventTime: 5, // 提醒次数(次)
-  },
-  // 流程事件
-  overTimeFuncConfig: {
-    on: false,     // 开启
-    interfaceId: '', // 接口id
-    interfaceName: '', // 接口名称
-    templateJson: [] // 模块json
-  },
-  noticeFuncConfig: {
-    on: false,     // 开启
-    interfaceId: '', // 接口id
-    interfaceName: '', // 接口名称
-    templateJson: [] // 模块json
-  },
-  initFuncConfig: {
-    on: false,
-    interfaceId: '',
-    interfaceName: '',
-    templateJson: []
-  },
-  endFuncConfig: {
-    on: false,
-    interfaceId: '',
-    interfaceName: '',
-    templateJson: []
-  },
-  flowRecallFuncConfig: {
-    on: false,
-    interfaceId: '',
-    interfaceName: '',
-    templateJson: []
-  },
-  waitMsgConfig: {
-    on: 0,
-    msgId: '',
-    msgName: '',
-    templateJson: []
-  },
-  endMsgConfig: {
-    on: 0,
-    msgId: '',
-    msgName: '',
-    templateJson: []
-  },
-  approveMsgConfig: {
-    on: 0,
-    msgId: '',
-    msgName: '',
-    templateJson: []
-  },
-  rejectMsgConfig: {
-    on: 0,
-    msgId: '',
-    msgName: '',
-    templateJson: []
-  },
-  copyMsgConfig: {
-    on: 0,
-    msgId: '',
-    msgName: '',
-    templateJson: []
-  },
-  overTimeMsgConfig: {
-    on: 0,
-    msgId: '',
-    msgName: '',
-    templateJson: []
-  },
-  noticeMsgConfig: {
-    on: 0,
-    msgId: '',
-    msgName: '',
-    templateJson: []
-  },
-  hasSubmitBtn: true,
-  submitBtnText: '提 交',
-  hasSaveBtn: true,
-  saveBtnText: '暂 存',
-  hasPressBtn: true,
-  pressBtnText: '催 办',
-  hasRevokeBtn: true,
-  revokeBtnText: '撤 回',
-  hasPrintBtn: false,
-  printBtnText: '打 印',
-  printId: '',
-  isComment: false,
-  isBatchApproval: false,
-  isSummary: false,
-  summaryType: 0,
-  formOperates: []
 }
 const defaultSubFlowForm = {
   formFieldType: 1,// 表单字段审核方式的类型(1-用户 2-部门)
@@ -2268,7 +2151,7 @@ export default {
       initiatePos: [],
       initiateRole: [],
       priorityLength: 0, // 当为条件节点时  显示节点优先级选项的数据
-      startForm: JSON.parse(JSON.stringify(defaultStartForm)),
+      startForm: JSON.parse(JSON.stringify(nodeConfig.defaultStartForm)),
       ruleVisible: false,
       subFlowForm: JSON.parse(JSON.stringify(defaultSubFlowForm)),
       approverForm: JSON.parse(JSON.stringify(defaultApproverForm)),
@@ -2920,7 +2803,7 @@ export default {
       if (!val) {
         this.approverForm = JSON.parse(JSON.stringify(defaultApproverForm)) // 重置数据为默认状态
         this.subFlowForm = JSON.parse(JSON.stringify(defaultSubFlowForm))
-        this.startForm = JSON.parse(JSON.stringify(defaultStartForm))
+        this.startForm = JSON.parse(JSON.stringify(nodeConfig.defaultStartForm))
         return
       }
       this.isStartNode() && this.initStartNodeData()
