@@ -48,8 +48,13 @@
           <el-table-column prop="webType" label="模式" width="70" align="center">
             <template slot-scope="scope">
               <span v-if="scope.row.webType == 1">表单</span>
-              <span v-if="scope.row.webType == 2">列表</span>
-              <span v-if="scope.row.webType == 3">流程</span>
+              <span v-else>列表</span>
+            </template>
+          </el-table-column>
+          <el-table-column prop="enableFlow" label="启用流程" width="80" align="center">
+            <template slot-scope="scope">
+              <span v-if="scope.row.enableFlow == 1">是</span>
+              <span v-else>否</span>
             </template>
           </el-table-column>
           <el-table-column prop="creatorUser" label="创建人" width="120" />

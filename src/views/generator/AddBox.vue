@@ -1,6 +1,6 @@
 <template>
   <el-dialog :title="webType?'更改模式':'新建'" :close-on-click-modal="false" lock-scroll v-bind="$attrs"
-    v-on="$listeners" class="JNPF-dialog JNPF-dialog_center" :width="webType?'550px':'800px'">
+    v-on="$listeners" class="JNPF-dialog JNPF-dialog_center" :width="webType?'310px':'580px'">
     <div class="add-main">
       <div class="add-item add-item-form" @click="add(1)" v-if="webType!==1">
         <i class="add-icon el-icon-document"></i>
@@ -14,13 +14,6 @@
         <div class="add-txt">
           <p class="add-title">列表</p>
           <p class="add-desc">表单+列表设计</p>
-        </div>
-      </div>
-      <div class="add-item" @click="add(3)" v-if="webType!==3">
-        <i class="add-icon icon-ym icon-ym-generator-company"></i>
-        <div class="add-txt">
-          <p class="add-title">流程</p>
-          <p class="add-desc">表单+列表+流程设计</p>
         </div>
       </div>
     </div>
@@ -41,7 +34,7 @@ export default {
 <style lang="scss" scoped>
 .JNPF-dialog {
   >>> .el-dialog__body {
-    padding: 50px 30px !important;
+    padding: 50px 40px !important;
   }
 }
 .add-main {

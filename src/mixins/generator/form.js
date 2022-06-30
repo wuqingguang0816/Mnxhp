@@ -15,6 +15,7 @@ export default {
         webType: 2,
         dbLinkId: '0',
         sortCode: 0,
+        enableFlow: 0,
         state: 1,
         category: '',
         description: "",
@@ -67,6 +68,7 @@ export default {
             this.dataForm.webType = this.dataForm.webType || 2
             if (isToggle) this.dataForm.webType = webType
             this.maxStep = parseInt(this.dataForm.webType)
+            if (this.maxStep > 2) this.maxStep = 2
             this.formData = this.dataForm.formData && JSON.parse(this.dataForm.formData)
             this.columnData = this.dataForm.columnData && JSON.parse(this.dataForm.columnData)
             this.appColumnData = this.dataForm.appColumnData && JSON.parse(this.dataForm.appColumnData)

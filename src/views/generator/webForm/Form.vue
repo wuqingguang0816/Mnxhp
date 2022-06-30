@@ -11,7 +11,6 @@
         <el-step title="基础设置" @click.native="stepChick(0)" />
         <el-step title="表单设计" @click.native="stepChick(1)" />
         <el-step title="列表设计" @click.native="stepChick(2)" v-if="maxStep>=2" />
-        <el-step title="流程设计" @click.native="stepChick(3)" v-if="maxStep>=3" />
       </el-steps>
       <div class="options">
         <el-button @click="prev" :disabled="activeStep<=0">{{$t('common.prev')}}</el-button>
@@ -40,6 +39,9 @@
                 <el-option :key="item.id" :label="item.fullName" :value="item.id"
                   v-for="item in categoryList" />
               </el-select>
+            </el-form-item>
+            <el-form-item label="启用流程" prop="enableFlow">
+              <el-switch v-model="dataForm.enableFlow" :active-value="1" :inactive-value="0" />
             </el-form-item>
             <el-form-item label="模板说明" prop="description">
               <el-input v-model="dataForm.description" placeholder="模板说明" type="textarea"
