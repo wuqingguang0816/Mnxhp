@@ -31,7 +31,7 @@ const noTableAllowList = ['divider', 'JNPFText', 'groupTitle', 'button', 'barcod
 // 不可以添加到列表展示
 const noColumnShowList = ['PsdInput', 'colorPicker', 'rate', 'slider', 'divider', 'uploadImg', 'uploadFz', 'editor', 'JNPFText', 'relationFormAttr', 'popupAttr', 'groupTitle']
 // 不可以添加到搜索
-const noSearchList = [...noColumnShowList, 'switch', 'timeRange', 'dateRange', 'relationForm', 'popupSelect']
+const noSearchList = [...noColumnShowList, 'switch', 'timeRange', 'dateRange', 'relationForm', 'popupSelect', 'popupTableSelect']
 // 搜索时控件为input
 const useInputList = ['comInput', 'textarea', 'JNPFText', 'billRule']
 // 搜索时控件为日期选择器
@@ -61,53 +61,53 @@ const webPeculiarList = [{
 }]
 // 在线开发-功能设计/流程设计/移动设计独有组件
 const onlinePeculiarList = [{
-    __config__: {
-      jnpfKey: 'qrcode',
-      label: '二维码',
-      labelWidth: undefined,
-      showLabel: true,
-      tag: 'jnpf-qrcode',
-      tagIcon: 'icon-ym icon-ym-generator-qrcode',
-      defaultValue: '',
-      layout: 'colFormItem',
-      span: 24,
-      dragDisabled: false,
-      visibility: ["pc", "app"],
-      tableName: '',
-      regList: [],
-    },
-    colorDark: '#000',
-    colorLight: '#fff',
-    size: 100,
-    dataType: 'static',
-    staticText: '',
-    relationField: '',
+  __config__: {
+    jnpfKey: 'qrcode',
+    label: '二维码',
+    labelWidth: undefined,
+    showLabel: true,
+    tag: 'jnpf-qrcode',
+    tagIcon: 'icon-ym icon-ym-generator-qrcode',
+    defaultValue: '',
+    layout: 'colFormItem',
+    span: 24,
+    dragDisabled: false,
+    visibility: ["pc", "app"],
+    tableName: '',
+    regList: [],
   },
-  {
-    __config__: {
-      jnpfKey: 'barcode',
-      label: '条形码',
-      labelWidth: undefined,
-      showLabel: true,
-      tag: 'jnpf-barcode',
-      tagIcon: 'icon-ym icon-ym-generator-barcode',
-      defaultValue: '',
-      layout: 'colFormItem',
-      span: 24,
-      dragDisabled: false,
-      visibility: ["pc", "app"],
-      tableName: '',
-      regList: [],
-    },
-    format: 'code128',
-    lineColor: '#000',
-    background: '#fff',
-    width: 4,
-    height: 40,
-    dataType: 'static',
-    staticText: '',
-    relationField: '',
+  colorDark: '#000',
+  colorLight: '#fff',
+  size: 100,
+  dataType: 'static',
+  staticText: '',
+  relationField: '',
+},
+{
+  __config__: {
+    jnpfKey: 'barcode',
+    label: '条形码',
+    labelWidth: undefined,
+    showLabel: true,
+    tag: 'jnpf-barcode',
+    tagIcon: 'icon-ym icon-ym-generator-barcode',
+    defaultValue: '',
+    layout: 'colFormItem',
+    span: 24,
+    dragDisabled: false,
+    visibility: ["pc", "app"],
+    tableName: '',
+    regList: [],
   },
+  format: 'code128',
+  lineColor: '#000',
+  background: '#fff',
+  width: 4,
+  height: 40,
+  dataType: 'static',
+  staticText: '',
+  relationField: '',
+},
 ]
 
 export { ruleTrigger, dyOptionsList, noVModelList, noTableAllowList, noColumnShowList, noSearchList, webPeculiarList, onlinePeculiarList, useInputList, useDateList, useSelectList }
