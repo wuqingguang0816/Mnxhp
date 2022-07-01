@@ -249,8 +249,16 @@ export default {
       if (this.selectDisabled) return
       this.keyword = ''
       this.search()
-      this.setDefault()
       this.visible = true
+      if (this.selectType === 'all') {
+        this.setDefault()
+      }
+      if (this.selectType === 'custom') {
+        this.getData()
+        this.$nextTick(() => {
+          this.setDefault()
+        })
+      }
     },
     search() {
       this.$refs.tree && this.$refs.tree.filter(this.keyword)
