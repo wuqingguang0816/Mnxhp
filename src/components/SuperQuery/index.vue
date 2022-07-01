@@ -60,14 +60,31 @@
                   <comSelect v-model="item.fieldValue" placeholder="请选择" clearable />
                 </template>
                 <template v-else-if="['depSelect'].includes(item.jnpfKey)">
-                  <depSelect v-model="item.fieldValue" placeholder="请选择" clearable />
+                  <depSelect v-model="item.fieldValue" placeholder="请选择" clearable
+                    :selectType="item.attr.selectType" :ableDepIds="item.attr.ableDepIds" />
                 </template>
-                <template
-                  v-else-if="['userSelect','createUser','modifyUser'].includes(item.jnpfKey)">
+                <template v-else-if="['createUser','modifyUser'].includes(item.jnpfKey)">
                   <userSelect v-model="item.fieldValue" placeholder="请选择" clearable />
                 </template>
-                <template v-else-if="['posSelect','currPosition'].includes(item.jnpfKey)">
+                <template v-else-if="['userSelect'].includes(item.jnpfKey)">
+                  <userSelect v-model="item.fieldValue" placeholder="请选择" clearable
+                    :selectType="item.attr.selectType" :ableDepIds="item.attr.ableDepIds"
+                    :ablePosIds="item.attr.ablePosIds" :ableUserIds="item.attr.ableUserIds"
+                    :ableRoleIds="item.attr.ableRoleIds" :ableGroupIds="item.attr.ableGroupIds" />
+                </template>
+                <template v-else-if="['currPosition'].includes(item.jnpfKey)">
                   <posSelect v-model="item.fieldValue" placeholder="请选择" clearable />
+                </template>
+                <template v-else-if="['posSelect'].includes(item.jnpfKey)">
+                  <posSelect v-model="item.fieldValue" placeholder="请选择" clearable
+                    :selectType="item.attr.selectType" :ableDepIds="item.attr.ableDepIds"
+                    :ablePosIds="item.attr.ablePosIds" />
+                </template>
+                <template v-if="item.__config__.jnpfKey==='groupSelect'">
+                  <groupSelect v-model="item.fieldValue" placeholder="请选择" clearable />
+                </template>
+                <template v-if="item.__config__.jnpfKey==='roleSelect'">
+                  <roleSelect v-model="item.fieldValue" placeholder="请选择" clearable />
                 </template>
                 <template v-else-if="item.jnpfKey==='address'">
                   <JNPFAddress v-model="item.fieldValue" placeholder="请选择" :level="item.attr.level"

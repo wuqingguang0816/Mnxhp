@@ -42,7 +42,7 @@
         <JNPF-table v-loading="listLoading" :data="list" row-key="id" default-expand-all
           :tree-props="{children: 'children', hasChildren: ''}" @sort-change="sortChange"
           :has-c="hasBatchBtn" @selection-change="handleSelectionChange" v-if="refreshTable"
-          custom-column>
+          custom-column :span-method="arraySpanMethod" ref="tableRef">
           <template v-if="columnData.type === 4">
             <el-table-column :prop="item.prop" :label="item.label" :align="item.align"
               :width="item.width" :key="i" :sortable="item.sortable?'custom':item.sortable"
@@ -84,16 +84,31 @@
                   </template>
                   <template v-else-if="['depSelect'].includes(item.jnpfKey)">
                     <depSelect v-model="scope.row[item.prop]" :placeholder="item.placeholder"
+                      :selectType="item.selectType" :ableDepIds="item.ableDepIds"
                       :multiple="item.multiple" :clearable="item.clearable"
                       :disabled="item.disabled" />
                   </template>
                   <template v-else-if="['userSelect'].includes(item.jnpfKey)">
                     <userSelect v-model="scope.row[item.prop]" :placeholder="item.placeholder"
+                      :selectType="item.selectType" :ableDepIds="item.ableDepIds"
+                      :ablePosIds="item.ablePosIds" :ableUserIds="item.ableUserIds"
+                      :ableRoleIds="item.ableRoleIds" :ableGroupIds="item.ableGroupIds"
                       :multiple="item.multiple" :clearable="item.clearable"
                       :disabled="item.disabled" />
                   </template>
                   <template v-else-if="['posSelect'].includes(item.jnpfKey)">
                     <posSelect v-model="scope.row[item.prop]" :placeholder="item.placeholder"
+                      :selectType="item.selectType" :ableDepIds="item.ableDepIds"
+                      :ablePosIds="item.ablePosIds" :multiple="item.multiple"
+                      :clearable="item.clearable" :disabled="item.disabled" />
+                  </template>
+                  <template v-if="item.__config__.jnpfKey==='groupSelect'">
+                    <groupSelect v-model="scope.row[item.prop]" :placeholder="item.placeholder"
+                      :multiple="item.multiple" :clearable="item.clearable"
+                      :disabled="item.disabled" />
+                  </template>
+                  <template v-if="item.__config__.jnpfKey==='roleSelect'">
+                    <roleSelect v-model="scope.row[item.prop]" :placeholder="item.placeholder"
                       :multiple="item.multiple" :clearable="item.clearable"
                       :disabled="item.disabled" />
                   </template>
@@ -167,9 +182,25 @@
             </el-table-column>
           </template>
           <template v-else>
-            <el-table-column :prop="item.prop" :label="item.label" :align="item.align"
-              :width="item.width" :key="i" :sortable="item.sortable?'custom':item.sortable"
-              v-for="(item, i) in columnList" />
+            <template v-for="(item, i) in columnList">
+              <template v-if="item.jnpfKey==='table'">
+                <el-table-column :prop="item.prop" :label="item.label" :align="item.align" :key="i">
+                  <el-table-column :prop="child.prop" :label="child.label" :align="child.align"
+                    :width="child.width" :key="ii"
+                    :sortable="child.sortable?'custom':child.sortable"
+                    v-for="(child, ii) in item.children" class-name="child-table-box">
+                    <template slot-scope="scope">
+                      <child-table-column :data="scope.row[item.prop]" :head="item.children"
+                        @toggleExpand="toggleExpand(scope.row,`${item.prop}Expand`)"
+                        :expand="scope.row[`${item.prop}Expand`]" />
+                    </template>
+                  </el-table-column>
+                </el-table-column>
+              </template>
+              <el-table-column :prop="item.prop" :label="item.label" :align="item.align"
+                :width="item.width" :key="i" :sortable="item.sortable?'custom':item.sortable"
+                v-else />
+            </template>
           </template>
           <el-table-column prop="flowState" label="状态" width="100" v-if="config.webType == 3">
             <template slot-scope="scope" v-if="!scope.row.top">
