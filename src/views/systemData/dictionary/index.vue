@@ -3,16 +3,20 @@
     <div class="JNPF-common-layout-left">
       <div class="JNPF-common-title">
         <h2>字典分类</h2>
-        <span class="options">
-          <el-tooltip content="分类管理" placement="top">
-            <el-link icon="el-icon-menu" :underline="false" @click="handleTypeManage" />
-          </el-tooltip>
-        </span>
+        <el-dropdown>
+          <el-link icon="icon-ym icon-ym-mpMenu" :underline="false" />
+          <el-dropdown-menu slot="dropdown">
+            <el-dropdown-item @click.native="initData()">刷新数据</el-dropdown-item>
+            <el-dropdown-item @click.native="toggleTreeExpand(true)">展开全部</el-dropdown-item>
+            <el-dropdown-item @click.native="toggleTreeExpand(false)">折叠全部</el-dropdown-item>
+          </el-dropdown-menu>
+        </el-dropdown>
       </div>
       <el-scrollbar class="JNPF-common-el-tree-scrollbar" v-loading="treeLoading">
-        <el-tree ref="treeBox" :data="treeData" :props="defaultProps" default-expand-all
-          highlight-current :expand-on-click-node="false" node-key="id"
-          @node-click="handleNodeClick" class="JNPF-common-el-tree">
+        <el-tree ref="treeBox" :data="treeData" :props="defaultProps"
+          :default-expand-all="expandsTree" highlight-current :expand-on-click-node="false"
+          node-key="id" @node-click="handleNodeClick" class="JNPF-common-el-tree"
+          v-if="refreshTree">
           <span class="custom-tree-node" slot-scope="{ node }">
             <i class="el-icon-notebook-2" />
             <span class="text">{{node.label}}</span>
@@ -42,14 +46,28 @@
       <div class="JNPF-common-layout-main JNPF-flex-main">
         <div class="JNPF-common-head">
           <topOpts @add="addOrUpdateHandle()" />
+
           <div class="JNPF-common-head-right">
+            <el-tooltip effect="dark" content="展开" placement="top"
+              v-if="tableData.length&&tableData.every((item)=>{return item.hasChildren})">
+              <el-link v-show="!expands" type="text"
+                icon="icon-ym icon-ym-btn-expand JNPF-common-head-icon" :underline="false"
+                @click="toggleExpand()" />
+            </el-tooltip>
+            <el-tooltip effect="dark" content="折叠" placement="top"
+              v-if="tableData.length&&tableData.every((item)=>{return item.hasChildren})">
+              <el-link v-show="expands" type="text"
+                icon="icon-ym icon-ym-btn-collapse JNPF-common-head-icon" :underline="false"
+                @click="toggleExpand()" />
+            </el-tooltip>
             <el-tooltip effect="dark" :content="$t('common.refresh')" placement="top">
               <el-link icon="icon-ym icon-ym-Refresh JNPF-common-head-icon" :underline="false"
                 @click="getDictionaryList()" />
             </el-tooltip>
           </div>
         </div>
-        <JNPF-table v-loading="listLoading" :data="tableData" row-key="id" default-expand-all
+        <JNPF-table v-loading="listLoading" :data="tableData" row-key="id"
+          :default-expand-all="expands" v-if="refreshTable"
           :tree-props="{children: 'children', hasChildren: ''}">
           <el-table-column prop="fullName" label="名称" />
           <el-table-column prop="enCode" label="编码" />
@@ -105,11 +123,16 @@ export default {
       treeLoading: false,
       listLoading: false,
       treeData: [],
-      tableData: []
+      tableData: [],
+
+      expands: true,
+      expandsTree: true,
+      refreshTable: true,
+      refreshTree: true,
     }
   },
   created() {
-    this.initData()
+    this.initData(true)
   },
   methods: {
     search() {
@@ -119,19 +142,36 @@ export default {
       this.listQuery.keyword = ''
       this.getDictionaryList()
     },
-    initData() {
+    initData(isInit) {
       this.treeLoading = true
       getDictionaryType().then(res => {
         this.treeData = res.data.list
         this.$nextTick(() => {
-          this.typeId = this.treeData[0].id
+          if (isInit) this.typeId = this.treeData[0].id
           this.listQuery.isTree = this.treeData[0].isTree
           this.$refs.treeBox.setCurrentKey(this.typeId)
           this.treeLoading = false
-          this.typeId && this.getDictionaryList()
+          if (isInit) this.typeId && this.getDictionaryList()
         })
       }).catch(() => {
         this.treeLoading = false
+      })
+    },
+    toggleExpand() {
+      this.refreshTable = false;
+      this.expands = !this.expands;
+      this.$nextTick(() => {
+        this.refreshTable = true;
+      });
+    },
+    toggleTreeExpand(expands) {
+      this.refreshTree = false
+      this.expandsTree = expands
+      this.$nextTick(() => {
+        this.refreshTree = true
+        this.$nextTick(() => {
+          this.$refs.treeBox.setCurrentKey(this.typeId)
+        })
       })
     },
     getDictionaryList() {

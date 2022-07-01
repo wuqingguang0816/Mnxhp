@@ -69,9 +69,9 @@
                         '@organizationAndSuborganization'
                     ">当前组织及子组织</span>
                   <span v-if="scope.row.conditionText === '@userAraSubordinates'">当前用户及下属</span>
-                  <span v-if="scope.row.conditionText === '@branchManageOrganize'">分管组织</span>
+                  <span v-if="scope.row.conditionText === '@branchManageOrganize'">当前分管组织</span>
                   <span
-                    v-if="scope.row.conditionText === '@branchManageOrganizeAndSub'">分管组织及子组织</span>
+                    v-if="scope.row.conditionText === '@branchManageOrganizeAndSub'">当前分管组织及子组织</span>
                 </template>
               </el-table-column>
               <el-table-column label="操作" width="100">

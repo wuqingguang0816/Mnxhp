@@ -126,18 +126,18 @@
               </el-form-item>
             </el-col>
             <el-col :sm="12" :xs="24">
-              <el-form-item label="入职时间" prop="entryDate">
-                <el-date-picker v-model="dataForm.entryDate" type="date" placeholder="选择入职时间"
-                  value-format="timestamp">
-                </el-date-picker>
-              </el-form-item>
-            </el-col>
-            <el-col :sm="12" :xs="24">
               <el-form-item label="证件类型" prop="certificatesType">
                 <el-select v-model="dataForm.certificatesType" placeholder="选择证件类型">
                   <el-option v-for="item in certificatesTypeTreeData" :key="item.id"
                     :label="item.fullName" :value="item.id" />
                 </el-select>
+              </el-form-item>
+            </el-col>
+            <el-col :sm="12" :xs="24">
+              <el-form-item label="入职时间" prop="entryDate">
+                <el-date-picker v-model="dataForm.entryDate" type="date" placeholder="选择入职时间"
+                  value-format="timestamp">
+                </el-date-picker>
               </el-form-item>
             </el-col>
             <el-col :sm="12" :xs="24">

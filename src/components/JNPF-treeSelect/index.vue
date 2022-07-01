@@ -13,7 +13,8 @@
         :filter-node-method="filterNode" :show-checkbox="multiple" :check-on-click-node="multiple"
         :class="{'single':!multiple}" :expand-on-click-node="!multiple" @check="check"
         v-show="options.length">
-        <span class="custom-tree-node" slot-scope="{ node, data }">
+        <span class="custom-tree-node" :class="{'is-disabled': data.disabled}"
+          slot-scope="{ node, data }">
           <slot :data="{ node, data }">
             <i :class="data.icon" v-if="data.icon"></i>
             <span class="text">{{node.label}}</span>
@@ -43,6 +44,9 @@ export default {
         value: 'id',             // ID字段名
         label: 'fullName',       // 显示名称
         children: 'children',    // 子级字段名
+        disabled: function (data) {
+          return data.disabled
+        }
       })
     },
     // 是否禁用
@@ -155,6 +159,7 @@ export default {
     },
     // 单选切换选项
     handleNodeClick(node) {
+      if (node.disabled) return
       if (!this.multiple) {
         if (this.lastLevel && node[this.lastLevelKey] && node[this.lastLevelKey] != this.lastLevelValue) return
         this.valueTitle = node[this.props.label]
@@ -261,6 +266,10 @@ ul li >>> .el-tree .el-tree-node__content {
 .el-tree.single >>> .is-current .el-tree-node__content .custom-tree-node {
   color: #409eff;
   font-weight: 700;
+  &.is-disabled {
+    color: #606266;
+    font-weight: normal;
+  }
 }
 .el-tree.single >>> .is-current .el-tree-node__children .custom-tree-node {
   color: #606266;

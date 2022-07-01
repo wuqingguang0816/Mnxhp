@@ -3,11 +3,20 @@
     <div class="JNPF-common-layout-left">
       <div class="JNPF-common-title">
         <h2>接口分类</h2>
+        <el-dropdown>
+          <el-link icon="icon-ym icon-ym-mpMenu" :underline="false" />
+          <el-dropdown-menu slot="dropdown">
+            <el-dropdown-item @click.native="initData()">刷新数据</el-dropdown-item>
+            <el-dropdown-item @click.native="toggleTreeExpand(true)">展开全部</el-dropdown-item>
+            <el-dropdown-item @click.native="toggleTreeExpand(false)">折叠全部</el-dropdown-item>
+          </el-dropdown-menu>
+        </el-dropdown>
       </div>
       <el-scrollbar class="JNPF-common-el-tree-scrollbar" v-loading="treeLoading">
-        <el-tree ref="treeBox" :data="treeData" :props="defaultProps" default-expand-all
-          highlight-current :expand-on-click-node="false" node-key="id"
-          @node-click="handleNodeClick" class="JNPF-common-el-tree" />
+        <el-tree ref="treeBox" :data="treeData" :props="defaultProps"
+          :default-expand-all="expandsTree" highlight-current :expand-on-click-node="false"
+          node-key="id" @node-click="handleNodeClick" class="JNPF-common-el-tree"
+          v-if="refreshTree" />
       </el-scrollbar>
     </div>
     <div class="JNPF-common-layout-center">
@@ -131,26 +140,38 @@ export default {
       tableData: [],
       logVisible: false,
       formVisible: false,
-      previewVisible: false
+      previewVisible: false,
+      expandsTree: true,
+      refreshTree: true,
     }
   },
   created() {
-    this.initData()
+    this.initData(true)
   },
   methods: {
-    initData() {
+    initData(isInit) {
       this.treeLoading = true
       getDataInterfaceTypeSelector().then(res => {
         this.treeData = res.data.list
         if (!this.treeData.length) return this.treeLoading = false
         this.$nextTick(() => {
-          this.listQuery.categoryId = this.treeData[0].id
+          if (isInit) this.listQuery.categoryId = this.treeData[0].id
           this.$refs.treeBox.setCurrentKey(this.listQuery.categoryId)
           this.treeLoading = false
-          this.getList()
+          if (isInit) this.getList()
         })
       }).catch(() => {
         this.treeLoading = false
+      })
+    },
+    toggleTreeExpand(expands) {
+      this.refreshTree = false
+      this.expandsTree = expands
+      this.$nextTick(() => {
+        this.refreshTree = true
+        this.$nextTick(() => {
+          this.$refs.treeBox.setCurrentKey(this.listQuery.categoryId)
+        })
       })
     },
     getList() {
