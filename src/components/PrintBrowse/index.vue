@@ -150,6 +150,12 @@ export default {
         case "7":
           name = "转审"
           break;
+        case "8":
+          name = "变更"
+          break;
+        case "9":
+          name = "复活"
+          break;
         default:
           name = "通过"
           break;
