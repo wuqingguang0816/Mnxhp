@@ -115,7 +115,7 @@ export default {
         body {
           font-family: simsun, serif, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
           padding: 40px 30px;
-          width: 600px;
+          width: 776px;
           margin: 0 auto !important;
           // border: 1px solid rgb(210, 213, 216);
           background: white;
