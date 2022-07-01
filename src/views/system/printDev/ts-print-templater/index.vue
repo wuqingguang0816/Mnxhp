@@ -122,6 +122,7 @@ export default {
           min-height: 100%;
           box-sizing: border-box;
           box-shadow: 0 2px 12px 0 rgb(0 0 0 / 10%);
+          word-break:break-all;
         }
         .wk-tiny-color--customer {
           color: #005AF3;
