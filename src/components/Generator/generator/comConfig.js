@@ -38,6 +38,8 @@ const useInputList = ['comInput', 'textarea', 'JNPFText', 'link', 'billRule']
 const useDateList = ['createTime', 'modifyTime']
 // 搜索时控件为下拉选择器
 const useSelectList = ['radio', 'checkbox', 'select']
+// 系统控件
+const systemComponentsList = ['createUser', 'createTime', 'modifyUser', 'modifyTime', 'currOrganize', 'currPosition', 'billRule']
 // 在线开发-功能设计/流程设计独有组件
 const webPeculiarList = [{
   __config__: {
@@ -110,4 +112,4 @@ const onlinePeculiarList = [{
 },
 ]
 
-export { ruleTrigger, dyOptionsList, noVModelList, noTableAllowList, noColumnShowList, noSearchList, webPeculiarList, onlinePeculiarList, useInputList, useDateList, useSelectList }
+export { ruleTrigger, dyOptionsList, noVModelList, noTableAllowList, noColumnShowList, noSearchList, webPeculiarList, onlinePeculiarList, useInputList, useDateList, useSelectList, systemComponentsList }

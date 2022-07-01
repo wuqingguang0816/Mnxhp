@@ -10,7 +10,7 @@
         <user-select v-model="dataForm.userId" placeholder="请选择管理员" @change="onChange" />
       </el-form-item>
       <el-form-item label="设置管理员" prop="userId" v-if="!dataForm.id && !userInfo.isAdministrator">
-        <useSelect v-model="dataForm.userId" placeholder="请选择管理员" @change="onChange" />
+        <grade-user-select v-model="dataForm.userId" placeholder="请选择管理员" @change="onChange" />
       </el-form-item>
       <el-form-item label="设置管理员" prop="userId" v-if="dataForm.id">
         <user-select v-model="dataForm.userId" placeholder="请选择管理员" @change="onChange" disabled />
@@ -23,7 +23,7 @@
             {{scope.row.fullName}}
           </template>
         </el-table-column>
-        <el-table-column label="组织操作权限(本层级)" width="280" header-align="center">
+        <el-table-column label="组织操作权限(本层级)" width="280">
           <template slot-scope="scope">
             <template v-if="scope.row.thisLayerSelect===2">
               <el-checkbox checked disabled>查看</el-checkbox>
@@ -55,7 +55,7 @@
             </template>
           </template>
         </el-table-column>
-        <el-table-column label="子组织操作权限(子层级)" width="280" header-align="center">
+        <el-table-column label="子组织操作权限(子层级)" width="280">
           <template slot-scope="scope">
             <template v-if="scope.row.subLayerSelect===2">
               <el-checkbox checked disabled>查看</el-checkbox>
@@ -98,11 +98,11 @@
 </template>
 
 <script>
-import useSelect from "./UseSelent.vue"
+import gradeUserSelect from "./GradeUserSelect"
 import { mapGetters } from "vuex";
 import { getSelectorOrgList, saveGradeManage } from '@/api/permission/gradeManage'
 export default {
-  components: { useSelect },
+  components: { gradeUserSelect },
   data() {
     return {
       visible: false,
@@ -129,8 +129,6 @@ export default {
     onChange(val) {
       if (!val) return
       this.initData()
-    },
-    handleCheckedDatesChange(val) {
     },
     initData() {
       this.listLoading = true
@@ -208,7 +206,6 @@ export default {
   }
 }
 </script>
-
 <style lang="scss" scoped>
 .el-checkbox {
   margin-right: 0;

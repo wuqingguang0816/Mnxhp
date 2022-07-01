@@ -15,7 +15,12 @@
           <el-table-column prop="prop" label="字段" />
           <el-table-column prop="searchType" label="类型">
             <template slot-scope="scope">
-              {{scope.row.searchType===3?'范围查询':scope.row.searchType===2?'模糊查询':'等于查询'}}
+              <el-select v-model="scope.row.searchType" placeholder="请选择"
+                :disabled="scope.row.jnpfKey!=='comInput'&&scope.row.jnpfKey!=='textarea'">
+                <el-option label="等于查询" :value="1"></el-option>
+                <el-option label="模糊查询" :value="2"></el-option>
+                <el-option label="范围查询" :value="3"></el-option>
+              </el-select>
             </template>
           </el-table-column>
         </el-table>
@@ -83,24 +88,23 @@
         <el-scrollbar class="right-scrollbar" v-show="currentTab==='column'">
           <div class="setting-box">
             <el-form :model="columnData" label-width="80px">
-              <el-divider>排序设置</el-divider>
-              <el-form-item label="排序字段">
-                <el-select v-model="columnData.defaultSidx" placeholder="请选择排序字段" clearable>
-                  <el-option :label="item.__config__.label" :value="item.__vModel__"
-                    v-for="(item, i) in list" :key="i"></el-option>
-                </el-select>
-              </el-form-item>
+              <el-divider>表格配置</el-divider>
               <el-form-item label="排序类型">
                 <el-select v-model="columnData.sort" placeholder="请选择排序类型">
                   <el-option label="升序" value="asc"></el-option>
                   <el-option label="降序" value="desc"></el-option>
                 </el-select>
               </el-form-item>
-              <el-divider>分页设置</el-divider>
-              <el-form-item label="列表分页">
+              <el-form-item label="排序字段">
+                <el-select v-model="columnData.defaultSidx" placeholder="请选择排序字段" clearable>
+                  <el-option :label="item.__config__.label" :value="item.__vModel__"
+                    v-for="(item, i) in list" :key="i"></el-option>
+                </el-select>
+              </el-form-item>
+              <el-form-item label="分页设置">
                 <el-switch v-model="columnData.hasPage"></el-switch>
               </el-form-item>
-              <el-form-item label="分页条数">
+              <el-form-item label="分页条数" v-if="columnData.hasPage">
                 <el-radio-group v-model="columnData.pageSize">
                   <el-radio-button :label="20">20条</el-radio-button>
                   <el-radio-button :label="50">50条</el-radio-button>
@@ -157,7 +161,9 @@ const getSearchType = item => {
 }
 const defaultColumnData = {
   searchList: [], // 查询字段
+  hasSuperQuery: false, // 高级查询
   columnList: [], // 字段列表
+  columnOptions: [],
   defaultColumnList: [], // 所有可选择字段列表
   sortList: [], // 排序列表
   // type: 1, //列表类型
@@ -305,6 +311,7 @@ export default {
     if (typeof this.conf === 'object' && this.conf !== null) {
       this.columnData = Object.assign({}, defaultColumnData, this.conf)
     }
+    this.columnData.columnOptions = options
     if (!this.columnOptions.length) this.columnData.columnList = []
     if (!this.searchOptions.length) this.columnData.searchList = []
     if (!this.sortOptions.length) this.columnData.sortList = []
@@ -339,6 +346,9 @@ export default {
       outer: for (let i = 0; i < replacedData.length; i++) {
         inter: for (let ii = 0; ii < data.length; ii++) {
           if (replacedData[i][key] === data[ii][key]) {
+            if (type === 'search') {
+              data[ii].searchType = replacedData[i].searchType
+            }
             res.push(data[ii])
             break inter
           }
@@ -409,5 +419,5 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
-@import "./index.scss";
+@import './index.scss';
 </style>

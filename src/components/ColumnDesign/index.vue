@@ -1,6 +1,6 @@
 <template>
   <div class="columnDesign-box">
-    <column-main ref="columnMain" :conf="columnData" :modelType="modelType"
+    <column-main ref="columnMain" :conf="columnData" :modelType="modelType" :webType="webType"
       v-show="currentTab==='pc'" />
     <column-main-app ref="columnMainApp" :conf="appColumnData" :modelType="modelType"
       v-show="currentTab==='app'" />
@@ -26,6 +26,7 @@ export default {
       type: Object,
       default: () => { }
     },
+    webType: '',
     modelType: ''
   },
   components: { ColumnMain, ColumnMainApp },

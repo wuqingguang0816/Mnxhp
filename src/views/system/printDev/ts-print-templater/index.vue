@@ -115,13 +115,14 @@ export default {
         body {
           font-family: simsun, serif, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
           padding: 40px 30px;
-          width: 600px;
+          width: 776px;
           margin: 0 auto !important;
           // border: 1px solid rgb(210, 213, 216);
           background: white;
           min-height: 100%;
           box-sizing: border-box;
           box-shadow: 0 2px 12px 0 rgb(0 0 0 / 10%);
+          word-break:break-all;
         }
         .wk-tiny-color--customer {
           color: #005AF3;

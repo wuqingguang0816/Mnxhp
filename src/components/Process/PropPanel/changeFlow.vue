@@ -1,7 +1,7 @@
 <template>
   <div class="popupSelect-container">
     <div class="el-select" @click="openDialog">
-      <el-input placeholder="请选择消息模板" v-model="title" readonly :validate-event="false"
+      <el-input placeholder="请选择子流程" readonly :validate-event="false" v-model="title"
         @mouseenter.native="inputHovering = true" @mouseleave.native="inputHovering = false">
         <template slot="suffix">
           <i v-show="!showClose"
@@ -11,16 +11,23 @@
         </template>
       </el-input>
     </div>
-    <el-dialog title="消息模板" :close-on-click-modal="false" :visible.sync="visible"
+    <el-dialog title="选择子流程" :close-on-click-modal="false" :visible.sync="visible"
       class="JNPF-dialog JNPF-dialog_center JNPF-dialog-tree-select" lock-scroll append-to-body
-      width='700px'>
+      width="1000px">
       <div class="JNPF-common-layout">
+        <div class="JNPF-common-layout-left">
+          <el-scrollbar class="JNPF-common-el-tree-scrollbar" v-loading="treeLoading">
+            <el-tree ref="treeBox" :data="treeData" :props="defaultProps" default-expand-all
+              highlight-current :expand-on-click-node="false" node-key="id"
+              @node-click="handleNodeClick" class="JNPF-common-el-tree" />
+          </el-scrollbar>
+        </div>
         <div class="JNPF-common-layout-center">
           <el-row class="JNPF-common-search-box" :gutter="16">
             <el-form @submit.native.prevent>
-              <el-col :span="10">
+              <el-col :span="8">
                 <el-form-item label="关键词">
-                  <el-input v-model="listQuery.keyword" placeholder="请输入关键词查询" clearable
+                  <el-input v-model="keyword" placeholder="请输入关键词查询" clearable
                     @keyup.enter.native="search()" class="search-input" />
                 </el-form-item>
               </el-col>
@@ -43,13 +50,12 @@
               @row-click="rowClick" :hasNO="false">
               <el-table-column width="35">
                 <template slot-scope="scope">
-                  <el-radio :label="scope.row.id" v-model="checked">&nbsp;</el-radio>
+                  <el-radio :label="scope.row.fullName" v-model="checked">&nbsp;</el-radio>
                 </template>
               </el-table-column>
               <el-table-column type="index" width="50" label="序号" align="center" />
-              <el-table-column prop="fullName" label="模板名称" width="150" />
-              <el-table-column prop="enCode" label="模板编码" width="100" />
-              <el-table-column prop="title" label="消息标题" show-overflow-tooltip />
+              <el-table-column prop="fullName" label="流程名称" />
+              <el-table-column prop="enCode" label="流程编码" />
             </JNPF-table>
             <pagination :total="total" :page.sync="listQuery.currentPage"
               :limit.sync="listQuery.pageSize" @pagination="initData" />
@@ -57,23 +63,30 @@
         </div>
       </div>
       <span slot="footer" class="dialog-footer">
-        <el-button @click="visible = false" size="small">{{$t('common.cancelButton')}}</el-button>
-        <el-button type="primary" @click="select()" size="small">{{$t('common.confirmButton')}}
-        </el-button>
+        <el-button @click="visible = false">{{$t('common.cancelButton')}}</el-button>
+        <el-button type="primary" @click="select()">{{$t('common.confirmButton')}}</el-button>
       </span>
     </el-dialog>
   </div>
 </template>
 
 <script>
-import { getSelector } from '@/api/system/messageTemplate'
+import { FlowEnginePageList } from '@/api/workFlow/FlowEngine'
 export default {
-  name: 'PopupSelect',
   props: {
+    dataType: {
+      default: ''
+    },
+    menuType: {
+      default: ''
+    },
     value: {
       default: ''
     },
     title: {
+      default: ''
+    },
+    moduleId: {
       type: String,
       default: ''
     },
@@ -95,16 +108,32 @@ export default {
       list: [],
       innerValue: '',
       listQuery: {
-        keyword: '',
         currentPage: 1,
-        pageSize: 20
+        pageSize: 20,
+        sort: 'desc',
+        sidx: ''
       },
+      keyword: '',
       total: 0,
       checked: '',
       checkedRow: {},
       listLoading: false,
+      defaultProps: {
+        id: 'id',
+        label: 'fullName',
+        enCode: 'enCode'
+      },
+      query: {
+        categoryId: '',
+        keyword: '',
+        dataType: null,
+      },
+      treeLoading: false,
+      treeData: [],
       inputHovering: false,
-      visible: false
+      visible: false,
+      tableName: '',
+      category: ''
     }
   },
   computed: {
@@ -117,29 +146,45 @@ export default {
       return criteria;
     }
   },
+  created() {
+    this.$store.dispatch('base/getDictionaryData', { sort: 'WorkFlowCategory' }).then((res) => {
+      this.treeData = [{ fullName: '全部数据', id: '', enCode: '' }, ...res]
+    })
+    this.reset()
+  },
   methods: {
     initData() {
       this.listLoading = true
-      getSelector(this.listQuery).then(res => {
+      let query = {
+        keyword: this.keyword,
+        ...this.listQuery,
+        category: this.category == '' ? '' : this.category
+      }
+      FlowEnginePageList(query).then((res) => {
         this.list = res.data.list
         this.total = res.data.pagination.total
         this.listLoading = false
       }).catch(() => { this.listLoading = false })
     },
-    openDialog() {
-      if (this.disabled) return
-      this.checked = this.value
-      this.visible = true
+    handleNodeClick(data) {
+      this.category = ''
+      this.category = data.enCode
       this.reset()
     },
     reset() {
-      this.listQuery.keyword = ''
+      this.keyword = ''
       this.search()
     },
     search() {
       this.listQuery.currentPage = 1
       this.listQuery.pageSize = 20
+      this.listQuery.sort = 'desc'
       this.initData()
+    },
+    openDialog() {
+      if (this.disabled) return
+      this.checked = this.value
+      this.visible = true
     },
     clear() {
       this.checked = ''
@@ -154,24 +199,16 @@ export default {
       this.visible = false
     },
     rowClick(row) {
-      this.checked = row.id
+      this.checked = row.fullName
       this.checkedRow = row
     }
   }
 }
 </script>
-<style lang="scss" scoped>
->>> .el-dialog__body {
-  max-height: 70vh;
-  padding: 0 0 10px !important;
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
-  .JNPF-common-search-box {
-    margin-bottom: 0;
-    .JNPF-common-search-box-right {
-      padding: 10px 10px 0 0;
-    }
-  }
+<style lang="scss">
+.template-item {
+  line-height: 30px;
 }
 </style>
+
+

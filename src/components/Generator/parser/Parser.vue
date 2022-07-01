@@ -320,7 +320,7 @@ export default {
     },
     buildRules(componentList, rules) {
       componentList.forEach(cur => {
-        const config = cur.__config__
+        const config = JSON.parse(JSON.stringify(cur.__config__))
         if (!Array.isArray(config.regList)) config.regList = []
         if (config.required) {
           const required = { required: config.required, message: cur.placeholder }
