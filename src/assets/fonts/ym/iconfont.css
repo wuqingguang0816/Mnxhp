@@ -1,9 +1,9 @@
 @font-face {
   font-family: "icon-ym";
   /* Project id 3271933 */
-  src: url('iconfont.woff2?t=1654162676099') format('woff2'),
-    url('iconfont.woff?t=1654162676099') format('woff'),
-    url('iconfont.ttf?t=1654162676099') format('truetype');
+  src: url('iconfont.woff2?t=1656741315748') format('woff2'),
+    url('iconfont.woff?t=1656741315748') format('woff'),
+    url('iconfont.ttf?t=1656741315748') format('truetype');
 }
 
 .icon-ym {
@@ -12,6 +12,14 @@
   font-style: normal;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-ym-position1:before {
+  content: "\e8c3";
+}
+
+.icon-ym-generator-popupTableSelect:before {
+  content: "\e8c4";
 }
 
 .icon-ym-gradeManage:before {
@@ -24,10 +32,6 @@
 
 .icon-ym-customForm:before {
   content: "\e857";
-}
-
-.icon-ym-formDesign1:before {
-  content: "\e8b0";
 }
 
 .icon-ym-branch:before {

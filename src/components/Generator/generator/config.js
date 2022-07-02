@@ -320,7 +320,7 @@ export const inputComponents = [
       showLabel: true,
       required: false,
       tag: "popupTableSelect",
-      tagIcon: "icon-ym icon-ym-generator-popup",
+      tagIcon: "icon-ym icon-ym-generator-popupTableSelect",
       defaultValue: "",
       layout: "colFormItem",
       span: 24,
