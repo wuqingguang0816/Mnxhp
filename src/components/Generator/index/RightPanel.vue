@@ -261,7 +261,7 @@
               <el-form-item label="卡片标题" label-width="76px">
                 <el-input v-model="activeData.header" placeholder="请输入卡片标题" />
               </el-form-item>
-              <el-form-item label="显示阴影" label-width="76px">
+              <el-form-item label="显示阴影" label-width="76px" v-show="showType==='pc'">
                 <el-radio-group v-model="activeData.shadow" size="small">
                   <el-radio-button label="always">一直显示</el-radio-button>
                   <el-radio-button label="hover">移入显示</el-radio-button>
@@ -499,6 +499,7 @@ export default {
     Collapse,
     TableConfig
   },
+  inject: ["getShowType"],
   props: ['showField', 'activeData', 'formConf', 'modelType', 'webType', 'drawingList'],
   data() {
     return {
@@ -600,6 +601,9 @@ export default {
     }
   },
   computed: {
+    showType() {
+      return this.getShowType()
+    },
     changeName() {
 
     },

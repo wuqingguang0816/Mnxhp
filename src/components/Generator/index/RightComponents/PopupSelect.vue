@@ -9,13 +9,13 @@
     <el-form-item label="弹窗标题">
       <el-input v-model="activeData.popupTitle" placeholder="请输入弹窗标题" />
     </el-form-item>
-    <el-form-item label="弹窗类型">
+    <el-form-item label="弹窗类型" v-show="showType==='pc'">
       <el-select v-model="activeData.popupType" placeholder="请选择弹窗类型">
         <el-option label="居中弹窗" value="dialog"></el-option>
         <el-option label="右侧弹窗" value="drawer"></el-option>
       </el-select>
     </el-form-item>
-    <el-form-item label="弹窗宽度">
+    <el-form-item label="弹窗宽度" v-show="showType==='pc'">
       <el-select v-model="activeData.popupWidth" placeholder="请选择弹窗宽度">
         <el-option v-for="item in popupWidthOptions" :label="item" :value="item" :key="item" />
       </el-select>

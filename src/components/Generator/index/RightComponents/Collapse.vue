@@ -1,6 +1,6 @@
 <template>
   <el-row>
-    <el-form-item label="是否手风琴">
+    <el-form-item label="是否手风琴" v-show="showType==='pc'">
       <el-switch v-model="activeData.accordion" />
     </el-form-item>
     <el-divider>面板配置</el-divider>
@@ -26,8 +26,10 @@
 </template>
 <script>
 import draggable from 'vuedraggable'
+import comMixin from './mixin';
 export default {
   props: ['activeData'],
+  mixins: [comMixin],
   components: { draggable },
   data() {
     return {}

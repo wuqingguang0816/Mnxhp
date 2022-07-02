@@ -173,6 +173,11 @@ export default {
       ]
     }
   },
+  provide() {
+    return {
+      getShowType: () => this.showType
+    }
+  },
   computed: {
   },
   watch: {
@@ -510,6 +515,6 @@ export default {
 }
 </script>
 <style lang='scss'>
-@import "../styles/index";
-@import "../styles/home";
+@import '../styles/index';
+@import '../styles/home';
 </style>
