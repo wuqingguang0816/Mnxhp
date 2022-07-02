@@ -269,7 +269,7 @@ export default {
           { required: true, message: '请选择性别', trigger: 'change' }
         ],
         organizeIdTree: [
-          { required: true, message: '请选择所属组织', trigger: 'change', type: 'array' }
+          { required: true, message: '请选择所属组织', trigger: 'click', type: 'array' }
         ]
       }
     }
