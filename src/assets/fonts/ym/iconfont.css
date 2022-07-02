@@ -1,9 +1,9 @@
 @font-face {
   font-family: "icon-ym";
   /* Project id 3271933 */
-  src: url("iconfont.woff2?t=1652694762409") format("woff2"),
-    url("iconfont.woff?t=1652694762409") format("woff"),
-    url("iconfont.ttf?t=1652694762409") format("truetype");
+  src: url('iconfont.woff2?t=1656741315748') format('woff2'),
+    url('iconfont.woff?t=1656741315748') format('woff'),
+    url('iconfont.ttf?t=1656741315748') format('truetype');
 }
 
 .icon-ym {
@@ -12,6 +12,94 @@
   font-style: normal;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-ym-position1:before {
+  content: "\e8c3";
+}
+
+.icon-ym-generator-popupTableSelect:before {
+  content: "\e8c4";
+}
+
+.icon-ym-gradeManage:before {
+  content: "\e8c2";
+}
+
+.icon-ym-fold:before {
+  content: "\e829";
+}
+
+.icon-ym-customForm:before {
+  content: "\e857";
+}
+
+.icon-ym-branch:before {
+  content: "\e8b1";
+}
+
+.icon-ym-codeGeneration1:before {
+  content: "\e8b2";
+}
+
+.icon-ym-filter:before {
+  content: "\e8b3";
+}
+
+.icon-ym-download:before {
+  content: "\e8b4";
+}
+
+.icon-ym-functionForm:before {
+  content: "\e8b5";
+}
+
+.icon-ym-unfold:before {
+  content: "\e8b6";
+}
+
+.icon-ym-node:before {
+  content: "\e8b7";
+}
+
+.icon-ym-nav-home:before {
+  content: "\e8b8";
+}
+
+.icon-ym-systemForm:before {
+  content: "\e8b9";
+}
+
+.icon-ym-generator-link:before {
+  content: "\e8ba";
+}
+
+.icon-ym-timer:before {
+  content: "\e8bb";
+}
+
+.icon-ym-generator-alert:before {
+  content: "\e8bc";
+}
+
+.icon-ym-generator-group1:before {
+  content: "\e8bd";
+}
+
+.icon-ym-generator-role:before {
+  content: "\e8be";
+}
+
+.icon-ym-systemToggle:before {
+  content: "\e8bf";
+}
+
+.icon-ym-upload:before {
+  content: "\e8c0";
+}
+
+.icon-ym-generator-department1:before {
+  content: "\e8c1";
 }
 
 .icon-ym-signature:before {
@@ -634,10 +722,6 @@
   content: "\e828";
 }
 
-.icon-ym-node:before {
-  content: "\e829";
-}
-
 .icon-ym-orderDemo:before {
   content: "\e82a";
 }
@@ -764,10 +848,6 @@
 
 .icon-ym-checktriangle:before {
   content: "\e747";
-}
-
-.icon-ym-nav-home:before {
-  content: "\e857";
 }
 
 .icon-ym-btn-fields:before {
