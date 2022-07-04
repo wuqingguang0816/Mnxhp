@@ -361,6 +361,10 @@ export default {
       }
       if (!this.interfaceId) return
       const arr = this.multiple ? this.value : [this.value]
+      if (this.multiple && !Array.isArray(this.value)) {
+        this.value = []
+        arr = []
+      }
       let query = {
         ids: arr,
         interfaceId: this.interfaceId,
