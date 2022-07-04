@@ -165,6 +165,7 @@ export default {
     },
     getConnectList(tableName) {
       this.tableName = tableName || "";
+      this.getInfo()
     },
     getAuthorizeSchemeList() {
       // 获取方案管理列表

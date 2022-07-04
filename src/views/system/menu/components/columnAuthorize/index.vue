@@ -135,7 +135,7 @@ export default {
     },
     getConnectList(tableName) {
       this.tableName = tableName || "";
-      // this.dbList = data;
+      this.getInfo()
     },
     getList() {
       this.listLoading = true;

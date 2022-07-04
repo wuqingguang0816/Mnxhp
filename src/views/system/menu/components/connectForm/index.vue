@@ -78,7 +78,9 @@ export default {
             dataType: this.dataType
           }
           saveLinkData(query).then(res => {
+
             this.$emit("refreshDataList", this.dataForm.dataSelect.toString());
+            this.dataForm.dataSelect = this.dataForm.dataSelect
             this.visible = false;
           }).catch(() => { });
         }

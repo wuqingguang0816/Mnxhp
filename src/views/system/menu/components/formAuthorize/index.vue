@@ -60,7 +60,6 @@ import {
 import Form from "./Form";
 import BatchForm from "./BatchForm";
 import FormConnectForm from "../connectForm";
-import { getFieldNameList } from "@/api/system/menu";
 import { getDataSourceListAll } from "@/api/systemData/dataSource";
 export default {
   components: {
@@ -131,7 +130,10 @@ export default {
       });
     },
     getConnectList(tableName) {
+      console.log(tableName)
       this.tableName = tableName || ''
+
+      this.getInfo()
     },
     getList() {
       this.listLoading = true;
