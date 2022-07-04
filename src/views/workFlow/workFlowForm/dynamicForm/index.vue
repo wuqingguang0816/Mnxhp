@@ -3,7 +3,7 @@
     <parser :form-conf="formConf" @submit="submitForm" :key="key" ref="dynamicForm"
       v-if="!loading" />
     <candidate-form :visible.sync="candidateVisible" :candidateList="this.candidateList"
-      @submitCandidate="selfHandleRequest" :formData="dataForm" />
+      :branchList="branchList" @submitCandidate="selfHandleRequest" :formData="dataForm" />
     <error-form :visible.sync="errorVisible" :nodeList="errorNodeList" @submit="handleError" />
   </div>
 </template>
@@ -25,6 +25,8 @@ export default {
       formConf: {},
       candidateVisible: false,
       candidateList: [],
+      candidateType: 1,
+      branchList: [],
       errorVisible: false,
       errorNodeList: [],
       dataForm: {
@@ -152,8 +154,14 @@ export default {
       Candidates(0, { formData: this.dataForm }).then(res => {
         let data = res.data
         this.$emit('setCandidateLoad', false)
-        if (Array.isArray(data) && data.length) {
-          this.candidateList = res.data
+        this.candidateType = data.type
+        if (data.type == 1) {
+          this.branchList = res.data.list
+          this.candidateList = []
+          this.candidateVisible = true
+        } else if (data.type == 2) {
+          this.branchList = []
+          this.candidateList = res.data.list.filter(o => o.isCandidates)
           this.candidateVisible = true
         } else {
           this.$confirm('您确定要提交当前流程吗, 是否继续?', '提示', {
@@ -166,8 +174,9 @@ export default {
         this.$emit('setCandidateLoad', false)
       })
     },
-    selfHandleRequest(candidateList) {
-      if (candidateList) this.dataForm.candidateList = candidateList
+    selfHandleRequest(candidateData) {
+      if (candidateData) this.dataForm = { ...this.dataForm, ...candidateData }
+      this.dataForm.candidateType = this.candidateType
       if (!this.dataForm.id) delete (this.dataForm.id)
       if (this.eventType === 'save') this.$emit('setLoad', true)
       const formMethod = this.dataForm.id ? updateModel : createModel
