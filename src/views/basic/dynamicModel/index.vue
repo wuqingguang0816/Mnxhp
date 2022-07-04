@@ -35,7 +35,7 @@ export default {
   methods: {
     getConfigData() {
       getConfigData(this.modelId).then(res => {
-        if (!res.code !== 200 || !res.data) {
+        if (res.code !== 200 || !res.data) {
           this.$store.dispatch('tagsView/delView', this.$route)
           this.$router.replace('/404')
           return
