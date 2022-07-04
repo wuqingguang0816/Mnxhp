@@ -28,9 +28,9 @@
     </el-row>
     <JNPF-table v-loading="listLoading" :data="list" hasC @selection-change="handleSelectionChange"
       :border="false">
-      <el-table-column prop="table" label="表名" show-overflow-tooltip />
+      <el-table-column prop="table" label="表名" width="300" />
+      <el-table-column prop="tableName" label="说明" show-overflow-tooltip />
       <el-table-column prop="sum" label="总数" width="90" />
-      <el-table-column prop="tableName" label="说明" width="150" show-overflow-tooltip />
     </JNPF-table>
     <span slot="footer" class="dialog-footer">
       <el-button @click="closeDialog">{{$t('common.cancelButton')}}</el-button>

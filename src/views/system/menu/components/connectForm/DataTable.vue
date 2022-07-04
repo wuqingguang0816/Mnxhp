@@ -63,20 +63,10 @@
         row-key="table" ref="multipleTable" @selection-change="handleSelectionChange" :hasNO="false"
         has-c>
         <el-table-column type="index" width="50" label="序号" align="center" />
-        <el-table-column prop="table" label="表名" show-overflow-tooltip />
+        <el-table-column prop="table" label="表名" width="300" />
+        <el-table-column prop="tableName" label="说明" show-overflow-tooltip />
         <el-table-column prop="sum" label="总数" width="90" />
-        <el-table-column prop="tableName" label="说明" width="150" show-overflow-tooltip />
       </JNPF-table>
-      <!-- <el-table v-loading="listLoading" :data="list" :border="false" tooltip-effect="dark"
-        ref="multipleTable" @selection-change="handleSelectionChange" :hasNO="false"
-        row-key="table">
-        <el-table-column type="selection" width="50" align="center">
-        </el-table-column>
-        <el-table-column type="index" width="50" label="序号" align="center" />
-        <el-table-column prop="table" label="表名" show-overflow-tooltip />
-        <el-table-column prop="sum" label="总数" width="90" />
-        <el-table-column prop="tableName" label="说明" width="150" show-overflow-tooltip />
-      </el-table> -->
       <span slot="footer" class="dialog-footer">
         <el-button @click="visible=false">{{$t("common.cancelButton")}}</el-button>
         <el-button type="primary" @click="confirm()">{{$t("common.confirmButton")}}</el-button>
