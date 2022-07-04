@@ -2149,3 +2149,36 @@ textarea.el-textarea__inner {
 .required-sign {
   color: #f56c6c;
 }
+
+.child-table-column {
+  .child-table__row {
+    background: transparent;
+    border-bottom: 1px solid #ebeef5 !important;
+    display: flex;
+    align-items: center;
+    min-height: 39px;
+
+    td {
+      border: none !important;
+      flex-shrink: 0;
+
+      &.td-flex-1 {
+        flex: 1;
+      }
+
+      .cell {
+        min-height: 23px !important;
+      }
+    }
+
+    &:last-child {
+      border-bottom: none !important;
+    }
+  }
+
+  .expand-more-btn {
+    height: 39px;
+    text-align: center;
+    padding-top: 4px;
+  }
+}

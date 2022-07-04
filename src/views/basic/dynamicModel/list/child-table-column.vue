@@ -47,6 +47,10 @@ export default {
       type: Number,
       default: 3
     },
+    rowEdit: {
+      type: Boolean,
+      default: false
+    },
     expand: {
       type: Boolean,
       default: false
@@ -54,6 +58,7 @@ export default {
   },
   computed: {
     fewData() {
+      if (!this.data) return []
       return this.data.slice(0, this.defaultNumber)
     }
   },
@@ -64,29 +69,3 @@ export default {
   }
 }
 </script>
-<style lang="scss" scoped>
-.child-table-column {
-  .child-table__row {
-    background: transparent;
-    border-bottom: 1px solid #ebeef5 !important;
-    display: flex;
-    align-items: center;
-    min-height: 39px;
-    td {
-      border: none !important;
-      flex-shrink: 0;
-      &.td-flex-1 {
-        flex: 1;
-      }
-    }
-    &:last-child {
-      border-bottom: none !important;
-    }
-  }
-  .expand-more-btn {
-    height: 39px;
-    text-align: center;
-    padding-top: 4px;
-  }
-}
-</style>
