@@ -130,9 +130,7 @@ export default {
       });
     },
     getConnectList(tableName) {
-      console.log(tableName)
       this.tableName = tableName || ''
-
       this.getInfo()
     },
     getList() {
