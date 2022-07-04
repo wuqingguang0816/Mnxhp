@@ -18,7 +18,7 @@ export function getFormInfo(id) {
 //暂存表单
 export function SaveAudit(data) {
   return request({
-    url: `/api/workflow/Form/save`,
+    url: `/api/workflow/Form`,
     method: 'post',
     data
   })
@@ -27,7 +27,7 @@ export function SaveAudit(data) {
 //修改表单
 export function Update(data) {
   return request({
-    url: `/api/workflow/Form/update`,
+    url: `/api/workflow/Form`,
     method: 'put',
     data
   })
@@ -36,7 +36,7 @@ export function Update(data) {
 //发布/回滚
 export function release(id, isRelease) {
   return request({
-    url: `/api/workflow/Form/release/${id}` + '?isRelease=' + isRelease,
+    url: `/api/workflow/Form/Release/${id}` + '?isRelease=' + isRelease,
     method: 'post',
   })
 }
@@ -44,7 +44,7 @@ export function release(id, isRelease) {
 //复制表单
 export function copyForm(id) {
   return request({
-    url: `/api/workflow/Form/copy/${id}`,
+    url: `/api/workflow/Form/${id}/Actions/Copy`,
     method: 'get',
   })
 }
@@ -52,8 +52,16 @@ export function copyForm(id) {
 //删除表单
 export function del(id) {
   return request({
-    url: `/api/workflow/Form/delete/${id}`,
+    url: `/api/workflow/Form/${id}`,
     method: 'delete',
+  })
+}
+
+//导出
+export function exportData(id) {
+  return request({
+    url: `/api/workflow/Form/${id}/Actions/ExportData`,
+    method: 'get',
   })
 }
 

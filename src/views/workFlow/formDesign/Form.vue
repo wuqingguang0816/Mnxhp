@@ -50,7 +50,7 @@
             </template>
             <template v-if="dataForm.formType!==1">
               <jnpf-form-tip-item label="接口地址" prop="interfaceUrl">
-                <el-input v-model="dataForm.appUrlAddress" placeholder="接口地址" />
+                <el-input v-model="dataForm.interfaceUrl" placeholder="接口地址" />
               </jnpf-form-tip-item>
             </template>
             <jnpf-form-tip-item label="表单排序" prop="sortCode">

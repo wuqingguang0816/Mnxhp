@@ -31,8 +31,7 @@
       <div class="JNPF-common-layout-main JNPF-flex-main">
         <div class="JNPF-common-head">
           <topOpts @add="dialogVisible=true">
-            <!-- <upload-btn url="/api/workflow/Engine/FlowEngine/Actions/ImportData"
-              @on-success="reset()" /> -->
+            <upload-btn url="/api/workflow/Form/Actions/ImportData" @on-success="reset()" />
           </topOpts>
           <div class="JNPF-common-head-right">
             <el-tooltip effect="dark" :content="$t('common.refresh')" placement="top">
@@ -49,7 +48,7 @@
               <span>{{ scope.row.formType == 1 ? "自定义表单" : (scope.row.flowType == 2? "功能表单" : "系统表单" )}}</span>
             </template>
           </el-table-column>
-          <el-table-column prop="creatorUserName" label="创建人" width="170">
+          <el-table-column prop="creatorUserId" label="创建人" width="170">
           </el-table-column>
           <el-table-column prop="creatorTime" label="创建时间" :formatter="jnpf.tableDateFormat"
             width="170" />
@@ -58,8 +57,8 @@
           <el-table-column prop="sortCode" label="排序" width="150" align="center" />
           <el-table-column label="状态" width="150" align="center">
             <template slot-scope="scope">
-              <el-tag :type="scope.row.status == 1 ? 'success' : 'danger'" disable-transitions>
-                {{scope.row.status==1?'已发布':'未发布'}}</el-tag>
+              <el-tag :type="scope.row.enabledMark == 1 ? 'success' : 'danger'" disable-transitions>
+                {{scope.row.enabledMark==1?'已发布':'未发布'}}</el-tag>
             </template>
           </el-table-column>
           <el-table-column label="操作" fixed="right" width="150">
@@ -79,7 +78,7 @@
                       回滚表单</el-dropdown-item>
                     <el-dropdown-item @click.native="copy(scope.row.id)">
                       复制表单</el-dropdown-item>
-                    <el-dropdown-item @click.native="exportModel(scope.row)">
+                    <el-dropdown-item @click.native="exportModel(scope.row.id)">
                       导出表单</el-dropdown-item>
                     <el-dropdown-item @click.native="readFrom(scope.row)">
                       表单预览</el-dropdown-item>
@@ -128,7 +127,7 @@
 <script>
 import Form from './Form'
 import Preview from './Preview.vue'
-import { getFormList, release, del, copyForm } from '@/api/workFlow/FormDesign'
+import { getFormList, release, del, copyForm, exportData } from '@/api/workFlow/FormDesign'
 export default {
   name: 'workFlow-flowEngine',
   components: { Form, Preview },
@@ -223,15 +222,8 @@ export default {
       this.$confirm('您确定要导出该功能表单, 是否继续?', '提示', {
         type: 'warning'
       }).then(() => {
-        let method = null
-        if (this.query.type == 1) {
-          method = exportData
-        }
-        if (this.query.type == 2) {
-          method = exportAppData
-        }
-        method(id).then(res => {
-          if (res.data.url) window.location.href = this.define.comUrl + res.data.url
+        exportData(id).then(res => {
+          this.jnpf.downloadFile(res.data.url)
         })
       }).catch(() => { });
     },
