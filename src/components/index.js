@@ -4,12 +4,12 @@ import tableOperation from '@/components/JNPF-tableOperation'
 import Pagination from '@/components/Pagination'
 import JNPFTable from '@/components/JNPF-table'
 import jnpfFormTipItem from '@/components/jnpf-form-tip-item'
+import jnpfOpenData from '@/components/jnpf-open-data'
 import UserBox from '@/components/JNPF-userBox'
 import Screenfull from '@/components/Screenfull'
 import ColumnSettings from '@/components/ColumnSettings'
 import JNPFQuill from '@/components/JNPFEditor/quill'
 import UserSelect from '@/components/JNPF-userSelect'
-
 import uploadBtn from '@/components/JNPF-uploadBtn'
 // 代码生成器专供
 import JNPFText from '@/components/Generator/components/JNPFText'
@@ -44,6 +44,7 @@ export default {
     Vue.component('Pagination', Pagination)
     Vue.component('JNPFTable', JNPFTable)
     Vue.component('jnpfFormTipItem', jnpfFormTipItem)
+    Vue.component('jnpfOpenData', jnpfOpenData)
     Vue.component('uploadBtn', uploadBtn)
     Vue.component('UserBox', UserBox)
     Vue.component('JNPFText', JNPFText)

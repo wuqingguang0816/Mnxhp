@@ -1126,7 +1126,7 @@ export const systemComponents = [
       label: "创建人员",
       labelWidth: undefined,
       showLabel: true,
-      tag: "el-input",
+      tag: "jnpf-open-data",
       tagIcon: "icon-ym icon-ym-generator-founder",
       defaultValue: "",
       required: false,
@@ -1137,6 +1137,7 @@ export const systemComponents = [
       tableName: "",
       noShow: false
     },
+    type: 'currUser',
     readonly: true,
     placeholder: "系统自动生成"
   },
@@ -1146,7 +1147,7 @@ export const systemComponents = [
       label: "创建时间",
       labelWidth: undefined,
       showLabel: true,
-      tag: "el-input",
+      tag: "jnpf-open-data",
       tagIcon: "icon-ym icon-ym-generator-createtime",
       defaultValue: "",
       layout: "colFormItem",
@@ -1157,6 +1158,7 @@ export const systemComponents = [
       tableName: "",
       noShow: false
     },
+    type: 'currTime',
     readonly: true,
     placeholder: "系统自动生成"
   },
@@ -1206,7 +1208,7 @@ export const systemComponents = [
       label: "所属组织",
       labelWidth: undefined,
       showLabel: true,
-      tag: "el-input",
+      tag: "jnpf-open-data",
       tagIcon: "icon-ym icon-ym-generator-company",
       defaultValue: "",
       required: false,
@@ -1217,6 +1219,7 @@ export const systemComponents = [
       tableName: "",
       noShow: false
     },
+    type: 'currOrganize',
     readonly: true,
     showLevel: "last",
     placeholder: "系统自动生成"
@@ -1227,7 +1230,7 @@ export const systemComponents = [
       label: "所属岗位",
       labelWidth: undefined,
       showLabel: true,
-      tag: "el-input",
+      tag: "jnpf-open-data",
       tagIcon: "icon-ym icon-ym-generator-station",
       defaultValue: "",
       required: false,
@@ -1238,6 +1241,7 @@ export const systemComponents = [
       tableName: "",
       noShow: false
     },
+    type: 'currPosition',
     readonly: true,
     placeholder: "系统自动生成"
   }
