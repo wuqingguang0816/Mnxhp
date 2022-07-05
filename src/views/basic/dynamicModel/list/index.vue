@@ -553,7 +553,7 @@ export default {
       this.columnList = this.transformColumnList(columnPermissionList)
     },
     transformColumnList(columnList) {
-      let list = [], tableData = {}
+      let list = []
       for (let i = 0; i < columnList.length; i++) {
         const e = columnList[i];
         if (!e.prop.includes('-')) {
@@ -571,12 +571,14 @@ export default {
           }
           e.vModel = vModel
           if (!this.expandObj.hasOwnProperty(`${prop}Expand`)) this.$set(this.expandObj, `${prop}Expand`, false)
-          if (!tableData.hasOwnProperty(prop)) this.$set(tableData, prop, newItem)
-          tableData[prop].children.push(e)
+          if (!list.some(o => o.prop === prop)) list.push(newItem)
+          for (let i = 0; i < list.length; i++) {
+            if (list[i].prop === prop) {
+              list[i].children.push(e)
+              break
+            }
+          }
         }
-      }
-      for (const key in tableData) {
-        list.push(tableData[key])
       }
       this.getMergeList(list)
       return list
