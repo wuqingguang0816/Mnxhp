@@ -230,6 +230,21 @@
                     suffix-icon="el-icon-arrow-down" readonly class="hand" />
                 </div>
               </el-form-item>
+              <el-form-item>
+                <div slot="label">异常处理规则
+                  <el-tooltip content="子流程发起节点人员异常时遵循该规则" placement="top">
+                    <a class="el-icon-warning-outline"></a>
+                  </el-tooltip>
+                </div>
+                <el-select v-model="subFlowForm.errorRule" class="mb-10"
+                  @change="subFlowForm.errorRuleUser=[]">
+                  <el-option label="超级管理员处理" :value="1"></el-option>
+                  <el-option label="指定人员处理" :value="2"></el-option>
+                  <el-option label="发起者本人处理" :value="6"></el-option>
+                </el-select>
+                <org-select type="user" v-model="subFlowForm.errorRuleUser" title="选择用户"
+                  buttonType="button" v-if="subFlowForm.errorRule===2" />
+              </el-form-item>
             </el-form>
           </el-scrollbar>
         </el-tab-pane>
@@ -1862,6 +1877,8 @@ const getDataType = (data) => {
   return ''
 }
 const defaultSubFlowForm = {
+  errorRule: 1, // 异常处理规则
+  errorRuleUser: [], // 指定人员处理异常
   formFieldType: 1,// 表单字段审核方式的类型(1-用户 2-部门)
   initiateType: 6,
   managerLevel: 1,
@@ -2438,6 +2455,13 @@ export default {
       if (!this.subFlowForm.flowId) {
         this.$message({
           message: '请选择子流程表单',
+          type: 'error',
+        })
+        return
+      }
+      if (this.subFlowForm.errorRule == 2 && !this.subFlowForm.errorRuleUser.length) {
+        this.$message({
+          message: '请选择异常处理人',
           type: 'error',
         })
         return
