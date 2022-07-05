@@ -41,21 +41,20 @@
           </div>
         </div>
         <JNPF-table v-loading="listLoading" :data="list">
-          <el-table-column prop="fullName" label="表单名称" min-width="170" />
-          <el-table-column prop="enCode" label="表单编码" width="170" />
-          <el-table-column prop="formType" label="表单类型" width="170">
+          <el-table-column prop="fullName" label="表单名称" min-width="150" />
+          <el-table-column prop="enCode" label="表单编码" width="200" />
+          <el-table-column prop="formType" label="表单类型" width="100">
             <template slot-scope="scope">
               <span>{{ scope.row.formType == 1 ? "自定义表单" : (scope.row.flowType == 2? "功能表单" : "系统表单" )}}</span>
             </template>
           </el-table-column>
-          <el-table-column prop="creatorUserId" label="创建人" width="170">
-          </el-table-column>
+          <el-table-column prop="creatorUserId" label="创建人" width="120" />
           <el-table-column prop="creatorTime" label="创建时间" :formatter="jnpf.tableDateFormat"
-            width="170" />
-          <el-table-column prop="creatorTime" label="最后修改时间" :formatter="jnpf.tableDateFormat"
-            width="170" />
-          <el-table-column prop="sortCode" label="排序" width="150" align="center" />
-          <el-table-column label="状态" width="150" align="center">
+            width="120" />
+          <el-table-column prop="lastModifyTime" label="最后修改时间" :formatter="jnpf.tableDateFormat"
+            width="120" />
+          <el-table-column prop="sortCode" label="排序" width="70" align="center" />
+          <el-table-column label="状态" width="80" align="center">
             <template slot-scope="scope">
               <el-tag :type="scope.row.enabledMark == 1 ? 'success' : 'danger'" disable-transitions>
                 {{scope.row.enabledMark==1?'已发布':'未发布'}}</el-tag>
@@ -95,28 +94,38 @@
     <Form v-if="formVisible" ref="Form" @close="closeForm" />
     <Preview v-if="previewVisible" ref="preview" @close="previewVisible=false" />
     <el-dialog title="新建表单" :visible.sync="dialogVisible"
-      class="JNPF-dialog JNPF-dialog_center add-dialog" lock-scroll width="1000px"
+      class="JNPF-dialog JNPF-dialog_center add-dialog" lock-scroll width="900px"
       :show-close="false">
       <div class="add-main">
-        <div class="add-item add-item-sys" @click="addFlow(1,0)">
-          <i class="add-icon icon-ym icon-ym-systemForm"></i>
-          <div class="add-txt">
-            <p class="add-title">系统表单</p>
-            <p class="add-desc">关联系统原有表单，便捷设计</p>
+        <div class="add-main-part add-main-left">
+          <div class="add-main-cap">发起流程表单</div>
+          <div class="add-main-container">
+            <div class="add-item" @click="addFlow(1,0)">
+              <i class="add-icon icon-ym icon-ym-systemForm"></i>
+              <div class="add-txt">
+                <p class="add-title">系统表单</p>
+                <p class="add-desc">关联系统原有表单，便捷设计</p>
+              </div>
+            </div>
+            <div class="add-item" @click="addFlow(1,1)">
+              <i class="add-icon icon-ym icon-ym-customForm"></i>
+              <div class="add-txt">
+                <p class="add-title">自定义表单</p>
+                <p class="add-desc">自定义设计流程表单</p>
+              </div>
+            </div>
           </div>
         </div>
-        <div class="add-item" @click="addFlow(1,1)">
-          <i class="add-icon icon-ym icon-ym-customForm"></i>
-          <div class="add-txt">
-            <p class="add-title">自定义表单</p>
-            <p class="add-desc">自定义设计流程表单</p>
-          </div>
-        </div>
-        <div class="add-item" @click="addFlow(2,0)">
-          <i class="add-icon  icon-ym icon-ym-functionForm"></i>
-          <div class="add-txt">
-            <p class="add-title">功能表单</p>
-            <p class="add-desc">关系系统开发功能表单</p>
+        <div class="add-main-part add-main-right">
+          <div class="add-main-cap">功能流程表单</div>
+          <div class="add-main-container">
+            <div class="add-item" @click="addFlow(2,0)">
+              <i class="add-icon  icon-ym icon-ym-functionForm"></i>
+              <div class="add-txt">
+                <p class="add-title">功能表单</p>
+                <p class="add-desc">关系系统开发功能表单</p>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -330,48 +339,69 @@ export default {
     display: none !important;
   }
   >>> .el-dialog__body {
-    padding: 50px 40px !important;
+    padding: 40px 30px !important;
   }
 }
 .add-main {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  .add-main-part {
+    border: 1px solid #dcdfe6;
+    padding: 20px;
+    border-radius: 4px;
+  }
+  .add-main-cap {
+    line-height: 25px;
+    font-size: 18px;
+    color: #303133;
+    margin-bottom: 14px;
+    font-weight: 400;
+  }
+  .add-main-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .add-main-left {
+    width: 530px;
+    .add-item {
+      background: #fff9f0;
+      .add-icon {
+        background: #f7e5cc;
+        color: #e68c22;
+      }
+    }
+  }
   .add-item {
-    width: 255px;
-    height: 136px;
-    background: #eff9ff;
+    width: 235px;
+    height: 120px;
+    background: #f0f7ff;
     display: flex;
     align-items: center;
     cursor: pointer;
-    padding-left: 20px;
-    &.add-item-sys {
-      background: #f1f5ff;
-      .add-icon {
-        background: #ccd9ff;
-        color: #537eff;
-      }
-    }
+    border-radius: 4px;
+    padding-left: 12px;
     .add-icon {
-      width: 56px;
-      height: 56px;
+      width: 48px;
+      height: 48px;
       margin-right: 10px;
-      background: #ceeaff;
-      border-radius: 10px;
-      color: #46adfe;
+      background: #cce1fa;
+      border-radius: 6px;
+      color: #4885d8;
       flex-shrink: 0;
       font-size: 30px;
-      line-height: 56px;
+      line-height: 48px;
       text-align: center;
     }
     .add-txt {
-      height: 56px;
+      height: 48px;
       P {
         line-height: 28px;
       }
       .add-title {
         font-size: 18px;
-        font-weight: bold;
+        color: #606266;
       }
       .add-desc {
         color: #8d8989;

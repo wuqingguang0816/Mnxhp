@@ -15,12 +15,24 @@
           <el-input v-model="scope.row.filedId" placeholder="输入字段"></el-input>
         </template>
       </el-table-column>
-      <!-- <el-table-column prop="required" label="必填" width="50">
+      <el-table-column prop="jnpfKey" label="控件类型">
+        <template slot-scope="scope">
+          <el-select v-model="scope.row.jnpfKey" placeholder="选择控件类型" clearable>
+            <el-option-group v-for="group in componentList" :key="group.id"
+              :label="group.fullName+'【'+group.children.length+'】'">
+              <el-option v-for="item in group.children" :key="item.__config__.jnpfKey"
+                :label="item.__config__.label" :value="item.__config__.jnpfKey">
+              </el-option>
+            </el-option-group>
+          </el-select>
+        </template>
+      </el-table-column>
+      <el-table-column prop="required" label="必填" width="50" align="center">
         <template slot-scope="scope">
           <el-checkbox :checked="scope.row.required"
             @change='scope.row.required?scope.row.required=false:scope.row.required=true' />
         </template>
-      </el-table-column> -->
+      </el-table-column>
       <el-table-column label="操作" width="50">
         <template slot-scope="scope">
           <el-button size="mini" type="text" class="JNPF-table-delBtn"
@@ -36,41 +48,19 @@
 
 <script>
 import { deepClone } from '@/utils'
-import { saveDrawingList } from '@/components/Generator/utils/db'
-import { debounce } from 'throttle-debounce'
+import { inputComponents, selectComponents, systemComponents } from '@/components/Generator/generator/config'
+const ignoreList = ['divider', 'JNPFText', 'button', 'table', 'relationFormAttr', 'popupAttr', 'calculate']
 export default {
   props: ['conf', 'enCode'],
   data() {
     return {
+      componentList: [],
       drawingList: [],
-      saveDrawingListDebounce: debounce(340, saveDrawingList),
-      isDrawingListChange: true
     }
   },
-  watch: {
-    conf(val) { },
-    drawingList: {
-      handler(val) {
-        let list = val.map(o => ({
-          __config__: {
-            label: o.filedName,
-            required: o.required || false
-          },
-          __vModel__: o.filedId
-        }))
-        this.saveDrawingListDebounce(list)
-        // if (!this.isDrawingListChange) {
-        //   this.isDrawingListChange = true
-        //   return
-        // }
-        this.$emit('drawingListChange')
-      },
-      deep: true
-    },
-  },
   created() {
+    this.getComponentList()
     if (typeof this.conf === 'object' && this.conf !== null) {
-      this.isDrawingListChange = false
       this.drawingList = deepClone(this.conf)
     }
   },
@@ -87,6 +77,27 @@ export default {
         }
         resolve({ formData: this.drawingList, target: 1 })
       })
+    },
+    getComponentList() {
+      const realInputComponents = inputComponents.filter(o => !ignoreList.includes(o.__config__.jnpfKey))
+      const realSelectComponents = selectComponents.filter(o => !ignoreList.includes(o.__config__.jnpfKey))
+      this.componentList = [
+        {
+          id: '1',
+          fullName: '基础控件',
+          children: realInputComponents
+        },
+        {
+          id: '2',
+          fullName: '高级控件',
+          children: realSelectComponents
+        },
+        {
+          id: '3',
+          fullName: '系统控件',
+          children: systemComponents
+        }
+      ]
     },
     // 验证
     exist() {
@@ -125,8 +136,8 @@ export default {
           isOk = false
           break
         }
-        let idnum = this.drawingList.filter(o => o.filedId == e.filedId)
-        if (idnum.length > 1) {
+        let idNum = this.drawingList.filter(o => o.filedId == e.filedId)
+        if (idNum.length > 1) {
           this.$message({
             showClose: true,
             message: `字段'${e.filedId}'已重复`,
@@ -139,11 +150,11 @@ export default {
       }
       return isOk;
     },
-    handleDel(index, row) {
+    handleDel(index) {
       this.drawingList.splice(index, 1);
     },
     addHandle() {
-      let item = { filedName: "", filedId: "", required: false }
+      let item = { filedName: "", filedId: "", jnpfKey: "", required: false }
       this.drawingList.push(item)
     }
   }

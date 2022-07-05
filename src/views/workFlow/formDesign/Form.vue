@@ -180,7 +180,7 @@ export default {
       dataRule: {
         fullName: [
           { required: true, message: '表单名称不能为空', trigger: 'blur' },
-          { pattern: /^[\u4e00-\u9fa5_a-zA-Z0-9]+$/, message: '请输入正确的流程名称', trigger: 'blur' },
+          { pattern: /^[\u4e00-\u9fa5_a-zA-Z0-9]+$/, message: '请输入正确的表单名称', trigger: 'blur' },
         ],
         enCode: [
           { required: true, message: '表单编码不能为空', trigger: 'blur' },
@@ -281,7 +281,6 @@ export default {
           model = 'fieldForm'
         }
         this.$refs[model].getData().then(res => {
-          console.log(res)
           this.draftJson = res.formData
           this.activeStep += 1
         }).catch(err => {
