@@ -36,7 +36,7 @@
       </el-row>
       <JNPF-table v-loading="listLoading" :data="list" @cell-dblclick="cellDblclick">
         <el-table-column :prop="item.field.toLowerCase()" :label="item.field" show-overflow-tooltip
-          v-for="item in options" :key="item.field" />
+          v-for="item in options" :key="item.field" min-width="150" />
       </JNPF-table>
       <pagination :total="total" :page.sync="listQuery.currentPage" :limit.sync="listQuery.pageSize"
         @pagination="initData" />
