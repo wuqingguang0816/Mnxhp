@@ -17,6 +17,13 @@ export function create(data) {
     data
   })
 }
+// 获取详情
+export function getInfo(id) {
+  return request({
+    url: `/api/system/InterfaceIdentification/${id}`,
+    method: 'GET',
+  })
+}
 
 // 修改接口
 export function update(data) {

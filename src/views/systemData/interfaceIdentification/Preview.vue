@@ -1,7 +1,7 @@
 <template>
   <div class="JNPF-preview-main">
     <div class="JNPF-common-page-header">
-      <el-page-header @back="goBack()" content="接口认证" />
+      <el-page-header @back="goBack()" :content="dataForm.appName" />
       <div class="options">
         <el-button @click="goBack()">{{$t('common.cancelButton')}}</el-button>
       </div>
@@ -11,17 +11,16 @@
         <group-title content="基本信息" />
       </el-col>
       <el-col :span="14" :offset="5" class="mb-10">
-        <el-form :model="dataForm" :rules="dataRule" ref="dataForm" class="mt-20"
-          label-width="120px" @submit.native.prevent>
+        <el-form :model="dataForm" :rules="dataRule" ref="dataForm" class="mt-20" label-width="120px" @submit.native.prevent>
           <jnpf-form-tip-item label="appId" prop="appId">
-            <el-input v-model="dataForm.appId" placeholder="输入appId" maxlength="100">
+            <el-input v-model="dataForm.appId" placeholder="输入appId" maxlength="100" readonly>
             </el-input>
           </jnpf-form-tip-item>
-          <jnpf-form-tip-item label="应用名称" prop="appName">
-            <el-input v-model="dataForm.appName" placeholder="输入应用名称"></el-input>
-          </jnpf-form-tip-item>
+          <!-- <jnpf-form-tip-item label="应用名称" prop="appName">
+            <el-input v-model="dataForm.appName" placeholder="输入应用名称" readonly></el-input>
+          </jnpf-form-tip-item> -->
           <jnpf-form-tip-item label="appSecret" prop="appSecret">
-            <el-input v-model="dataForm.appSecret" placeholder="输入appSecret" show-password>
+            <el-input v-model="dataForm.appSecret" placeholder="输入appSecret" show-password readonly>
               <el-button slot="append" style="background-color: #c8c9cc;color:#FFF;" disabled>获取秘钥
               </el-button>
             </el-input>
@@ -34,7 +33,7 @@
                     <a class="el-icon-warning-outline"></a>
                   </el-tooltip>
                 </div>
-                <el-switch v-model="dataForm.verifySignature" :active-value="1" :inactive-value="0">
+                <el-switch v-model="dataForm.verifySignature" :active-value="1" :inactive-value="0" disabled>
                 </el-switch>
               </el-col>
               <!-- <el-col :span="12" align="right">
@@ -43,27 +42,25 @@
             </el-row>
           </jnpf-form-tip-item>
           <jnpf-form-tip-item label="使用期限" prop="usefulLife" tip-label="未选择日期默认永久有效">
-            <el-date-picker v-model="dataForm.usefulLife" type="date" placeholder="请选择"
-              style="width:100%"></el-date-picker>
+            <el-date-picker v-model="dataForm.usefulLife" type="date" placeholder="请选择" style="width:100%" readonly></el-date-picker>
           </jnpf-form-tip-item>
           <jnpf-form-tip-item label="白名单" prop="whiteList">
-            <el-input v-model="dataForm.whiteList" placeholder="" type="textarea" :rows="5" />
+            <el-input v-model="dataForm.whiteList" placeholder="" type="textarea" :rows="5" readonly />
             <span style="color:#C0C4CC">多个IP设置，用英文符号隔开，如192.168.0.1,192.168.0.2</span>
           </jnpf-form-tip-item>
           <jnpf-form-tip-item label="黑名单" prop="blackList">
-            <el-input v-model="dataForm.blackList" placeholder="" type="textarea" :rows="5" />
+            <el-input v-model="dataForm.blackList" placeholder="" type="textarea" :rows="5" readonly />
             <span style="color:#C0C4CC">多个IP设置，用英文符号隔开，如192.168.0.1,192.168.0.2</span>
           </jnpf-form-tip-item>
           <jnpf-form-tip-item label="排序" prop="sortCode">
-            <el-input-number :min="0" :max="999999" v-model="dataForm.sortCode"
-              controls-position="right" />
+            <el-input-number :min="0" :max="999999" v-model="dataForm.sortCode" controls-position="right" disabled />
           </jnpf-form-tip-item>
           <jnpf-form-tip-item label="状态" prop="status">
-            <el-switch v-model="dataForm.status" :active-value="1" :inactive-value="0">
+            <el-switch v-model="dataForm.status" :active-value="1" :inactive-value="0" disabled>
             </el-switch>
           </jnpf-form-tip-item>
           <jnpf-form-tip-item label="说明" prop="description">
-            <el-input v-model="dataForm.description" placeholder="" type="textarea" :rows="5" />
+            <el-input v-model="dataForm.description" placeholder="" type="textarea" :rows="5" readonly />
           </jnpf-form-tip-item>
         </el-form>
       </el-col>
@@ -101,7 +98,7 @@
 </template>
 
 <script>
-import { getInterfaceList } from '@/api/systemData/interfaceIdentification.js'
+import { getInterfaceList, getInfo } from '@/api/systemData/interfaceIdentification.js'
 
 export default {
   data() {
@@ -152,14 +149,16 @@ export default {
     goBack() {
       this.$emit('close')
     },
-    init(data) {
-      if (data) {
-        this.initData(data)
+    init(id) {
+      if (id) {
+        this.initData(id)
       }
     },
-    initData(data) {
-      this.dataForm = data
-      this.setInterfaceData()
+    initData(id) {
+      getInfo(id).then(res => {
+        this.dataForm = res.data
+        this.setInterfaceData()
+      }).catch(() => { })
     },
     setInterfaceData() {
       this.tenantId = this.dataForm.tenantId ? this.dataForm.tenantId : ''
