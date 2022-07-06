@@ -5,7 +5,8 @@
         <el-form @submit.native.prevent>
           <el-col :span="6">
             <el-form-item label="关键词">
-              <el-input v-model="listQuery.keyword" placeholder="请输入关键词查询" clearable @keyup.enter.native="search()" />
+              <el-input v-model="listQuery.keyword" placeholder="请输入关键词查询" clearable
+                @keyup.enter.native="search()" />
             </el-form-item>
           </el-col>
           <el-col :span="6">
@@ -23,17 +24,21 @@
           <topOpts @add="addOrUpdateHandle()" addText="新建"></topOpts>
           <div class="JNPF-common-head-right">
             <el-tooltip effect="dark" :content="$t('common.refresh')" placement="top">
-              <el-link icon="icon-ym icon-ym-Refresh JNPF-common-head-icon" :underline="false" @click="reset()" />
+              <el-link icon="icon-ym icon-ym-Refresh JNPF-common-head-icon" :underline="false"
+                @click="reset()" />
             </el-tooltip>
           </div>
         </div>
         <JNPF-table v-loading="listLoading" :data="tableList">
           <el-table-column prop="appId" label="appId" width="250" />
           <el-table-column prop="appName" label="应用名称" min-width="200" />
-          <el-table-column prop="usefulLife" label="使用期限" width="120" :formatter="jnpf.tableDateFormat" />
+          <el-table-column prop="usefulLife" label="使用期限" width="120"
+            :formatter="jnpf.tableDateFormat" />
           <el-table-column prop="creatorUser" label="创建人" width="120" />
-          <el-table-column prop="creatorTime" label="创建时间" width="120" :formatter="jnpf.tableDateFormat" />
-          <el-table-column prop="lastModifyTime" label="最后修改时间" width="120" :formatter="jnpf.tableDateFormat" />
+          <el-table-column prop="creatorTime" label="创建时间" width="120"
+            :formatter="jnpf.tableDateFormat" />
+          <el-table-column prop="lastModifyTime" label="最后修改时间" width="120"
+            :formatter="jnpf.tableDateFormat" />
           <el-table-column prop="sortCode" label="排序" width="120" align="center" />
           <el-table-column prop="status" label="状态" width="120" align="center">
             <template slot-scope="scope">
@@ -46,7 +51,8 @@
               <tableOpts @edit="addOrUpdateHandle(scope.row)" @del="handleDel(scope.row.id)">
                 <el-dropdown hide-on-click>
                   <span class="el-dropdown-link">
-                    <el-button type="text" size="mini">{{$t('common.moreBtn')}}<i class="el-icon-arrow-down el-icon--right"></i>
+                    <el-button type="text" size="mini">{{$t('common.moreBtn')}}<i
+                        class="el-icon-arrow-down el-icon--right"></i>
                     </el-button>
                   </span>
                   <el-dropdown-menu slot="dropdown">
@@ -65,7 +71,8 @@
             </template>
           </el-table-column>
         </JNPF-table>
-        <pagination :total="total" :page.sync="listQuery.currentPage" :limit.sync="listQuery.pageSize" @pagination="initData" />
+        <pagination :total="total" :page.sync="listQuery.currentPage"
+          :limit.sync="listQuery.pageSize" @pagination="initData" />
       </div>
     </div>
     <Form v-if="formVisible" ref="Form" @close="closeForm" />
@@ -75,9 +82,7 @@
   </div>
 </template>
 
-
 <script>
-
 import Form from './Form'
 import Preview from './Preview'
 import Log from './Log'
@@ -90,7 +95,6 @@ export default {
   data() {
     return {
       tableList: [],
-
       listQuery: {
         keyword: '',
         currentPage: 1,
@@ -120,9 +124,6 @@ export default {
         this.listLoading = false
       })
     },
-
-
-
     addOrUpdateHandle(data) {
       this.formVisible = true
       this.$nextTick(() => {
@@ -142,7 +143,6 @@ export default {
       })
     },
     handleDel(id) {
-      console.log("删除", id)
       this.$confirm(this.$t('common.delTip'), this.$t('common.tipTitle'), {
         type: 'warning'
       }).then(() => {
@@ -170,24 +170,21 @@ export default {
     },
     closeForm(isRefresh) {
       this.formVisible = false
-      console.log(isRefresh)
       if (isRefresh) {
         this.listQuery = {
           keyword: '',
           currentPage: 1,
           pageSize: 20,
-
           sort: 'desc'
-        },
-          this.initData()
+        }
+        this.initData()
       }
     },
     closeOtherWind() {
-      this.formVisible = false,
-        this.previewVisible = false,
-        this.logVisible = false,
-        this.empowerVisible = false,
-        this.initData()
+      this.formVisible = false
+      this.previewVisible = false
+      this.logVisible = false
+      this.empowerVisible = false
     },
     viewEmpower(data) {
       this.empowerVisible = true

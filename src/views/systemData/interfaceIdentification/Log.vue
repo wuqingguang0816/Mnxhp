@@ -2,7 +2,7 @@
   <transition name="el-zoom-in-center">
     <div class="JNPF-preview-main">
       <div class="JNPF-common-page-header">
-        <el-page-header @back="goBack" :content="title" />
+        <el-page-header @back="goBack()" :content="title" />
         <div class="options">
           <el-button @click="goBack()">{{$t('common.cancelButton')}}</el-button>
         </div>
@@ -12,7 +12,8 @@
           <el-form @submit.native.prevent>
             <el-col :span="6">
               <el-form-item label="关键词">
-                <el-input v-model="listQuery.keyword" placeholder="请输入关键词查询" clearable @keyup.enter.native="search()" />
+                <el-input v-model="listQuery.keyword" placeholder="请输入关键词查询" clearable
+                  @keyup.enter.native="search()" />
               </el-form-item>
             </el-col>
             <el-col :span="6">
@@ -25,10 +26,11 @@
             </el-col>
           </el-form>
         </el-row>
-        <JNPF-table v-loading="listLoading" :data="list" stripe='true'>
+        <JNPF-table v-loading="listLoading" :data="list">
           <el-table-column prop="fullName" label="请求接口" width="120" show-overflow-tooltip />
           <el-table-column prop="url" label="请求地址" width="300" show-overflow-tooltip />
-          <el-table-column prop="invokTime" label="请求时间" :formatter="jnpf.tableDateFormat" width="120" />
+          <el-table-column prop="invokTime" label="请求时间" :formatter="jnpf.tableDateFormat"
+            width="120" />
           <el-table-column prop="userId" label="请求用户" width="120" />
           <el-table-column prop="invokIp" label="请求IP" width="120" />
           <el-table-column prop="invokType" label="请求类型" width="80" align="center">
@@ -40,7 +42,8 @@
           <el-table-column prop="invokWasteTime" label="耗时(毫秒)" width="80" />
           <el-table-column prop="invokDevice" label="请求设备" min-width="120" show-overflow-tooltip />
         </JNPF-table>
-        <pagination :total="total" :page.sync="listQuery.currentPage" :limit.sync="listQuery.pageSize" @pagination="initData" />
+        <pagination :total="total" :page.sync="listQuery.currentPage"
+          :limit.sync="listQuery.pageSize" @pagination="initData" />
       </div>
     </div>
   </transition>
@@ -75,10 +78,7 @@ export default {
       this.id = data.id
       this.title = data.appName
       this.interfaceIds = data.dataInterfaceIds
-
       this.initData()
-      console.log("interfaceIds", data.dataInterfaceIds);
-
     },
     initData() {
       this.listLoading = true

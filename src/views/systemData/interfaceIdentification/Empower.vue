@@ -1,20 +1,22 @@
 <template>
-  <el-dialog title="接口授权" :visible.sync="visible" class="JNPF-dialog JNPF-dialog_center transfer-dialog" lock-scroll append-to-body width="800px" :modal-append-to-body="false">
+  <el-dialog title="接口授权" :visible.sync="visible"
+    class="JNPF-dialog JNPF-dialog_center transfer-dialog" lock-scroll append-to-body width="800px"
+    :modal-append-to-body="false">
     <div class="transfer__body">
       <div class="transfer-pane">
         <div class="transfer-pane__tools">
-          <el-input placeholder="请输入关键词查询" v-model="keyword" @keyup.enter.native="searchData" clearable class="search-input">
+          <el-input placeholder="请输入关键词查询" v-model="keyword" @keyup.enter.native="searchData"
+            clearable class="search-input">
             <el-button slot="append" icon="el-icon-search" @click="searchData"></el-button>
           </el-input>
         </div>
-
         <div class="transfer-pane__body">
-          <el-tree :data="treeData" :props="prop" highlight-current check-on-click-node @node-click="handleNodeClick" :tree-props="{children: 'children', hasChildren: ''}" class="JNPF-common-el-tree" node-key="id" v-loading="loading" :default-expanded-keys="expands">
-
+          <el-tree :data="treeData" :props="prop" highlight-current check-on-click-node
+            @node-click="handleNodeClick" class="JNPF-common-el-tree" node-key="id"
+            v-loading="loading" default-expand-all :filter-node-method="filterNode" ref="tree">
           </el-tree>
         </div>
       </div>
-
       <div class="transfer-pane">
         <div class="transfer-pane__tools">
           <span>已选</span>
@@ -35,12 +37,10 @@
       <el-button type="primary" @click="confirm">{{$t('common.confirmButton')}}</el-button>
     </span>
   </el-dialog>
-
 </template>
 
 <script>
-
-import { getDataInterfaceSelectorList, getDataInterfaceTypeSelecto, getDataInterfaceSelector } from '@/api/systemData/dataInterface'
+import { getDataInterfaceSelectorList, getDataInterfaceTypeSelector, getDataInterfaceSelector } from '@/api/systemData/dataInterface'
 import { saveInterfaceList, getInterfaceList } from '@/api/systemData/interfaceIdentification'
 
 export default {
@@ -56,7 +56,6 @@ export default {
       },
       treeData: [],
       selectedData: [],
-      expands: [],
       identId: '',
     }
   },
@@ -80,23 +79,14 @@ export default {
       default: ''
     }
   },
-  watch: {
-
-  },
-
   created() {
     this.setDefault()
-  },
-
-  beforeDestroy() {
-
   },
   methods: {
     init(data) {
       this.identId = data.id
       this.openDialog()
     },
-
     openDialog() {
       this.visible = true
       this.keyword = ''
@@ -105,16 +95,13 @@ export default {
       this.setDefault()
     },
     confirm() {
-
       let arr = []
       this.selectedData.forEach(item => { arr.push(item.id) })
-      console.log("提交数据", arr)
       if (arr.length > 0) {
         let body = {
           interfaceIdentId: this.identId,
           dataInterfaceIds: arr.join(",")
         }
-        console.log("提交数据2", body)
         saveInterfaceList(body).then(res => {
           this.$message({
             message: res.msg,
@@ -127,85 +114,42 @@ export default {
           })
         })
       }
-
-
-
-
     },
     setDefault() {
-
       getInterfaceList(this.identId).then(res => {
-        if (res.data) {
-          let list = res.data.list
-          if (list) {
-            this.selectedData = res.data.list
-          }
-        }
+        this.selectedData = res.data.list || []
       })
     },
-    //搜索时展开所有节点
     searchData() {
-      if (this.keyword) {
-        let arr = []
-        this.treeData.forEach(item => {
-          let arr2 = []
-          item.children.forEach(elem => {
-            if (elem.fullName.indexOf(this.keyword) >= 0) {
-              arr2.push(elem)
-            }
-          })
-          item.children = arr2
-          arr.push(item)
-        })
-        this.treeData = arr
-      } else {
-        this.getAllList()
-      }
-      this.setAllExpand(this.treeData)
+      this.$refs.tree && this.$refs.tree.filter(this.keyword)
     },
-    //设置展开的节点
-    setAllExpand(data) {
-      this.expands = []
-      for (var i = 0; i < data.length; i++) {
-        this.expands.push(data[i].id);//id对应node-key
-      }
+    filterNode(value, data) {
+      if (!value) return true;
+      return data[this.props.label].indexOf(value) !== -1;
     },
-
-
     getData() {
       this.getAllList()
-
     },
     getAllList() {
       this.expands = []
       this.loading = true
-
       getDataInterfaceSelector().then(res => {
         this.treeData = res.data
         this.loading = false
       })
     },
-
     handleNodeClick(data) {
       if (data.hasChildren) return
-      this.handleNodeClick2(data)
-    },
-    handleNodeClick2(data) {
       const boo = this.selectedData.some(o => o.id === data.id)
       if (boo) return
-      const item = {
-        id: data.id,
-        fullName: data.fullName
-      }
-      this.multiple ? this.selectedData.push(item) : this.selectedData = [item]
+      this.multiple ? this.selectedData.push(data) : this.selectedData = [data]
     },
     removeAll() {
       this.selectedData = []
     },
     removeData(index) {
       this.selectedData.splice(index, 1)
-    },
-
-  },
+    }
+  }
 }
 </script>
