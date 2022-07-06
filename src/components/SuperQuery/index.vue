@@ -80,10 +80,10 @@
                     :selectType="item.attr.selectType" :ableDepIds="item.attr.ableDepIds"
                     :ablePosIds="item.attr.ablePosIds" />
                 </template>
-                <template v-if="item.jnpfKey==='groupSelect'">
+                <template v-else-if="item.jnpfKey==='groupSelect'">
                   <groupSelect v-model="item.fieldValue" placeholder="请选择" clearable />
                 </template>
-                <template v-if="item.jnpfKey==='roleSelect'">
+                <template v-else-if="item.jnpfKey==='roleSelect'">
                   <roleSelect v-model="item.fieldValue" placeholder="请选择" clearable />
                 </template>
                 <template v-else-if="item.jnpfKey==='address'">
