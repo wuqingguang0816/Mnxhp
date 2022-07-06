@@ -3,25 +3,31 @@
     <div class="JNPF-preview-main flow-form-main">
       <div class="JNPF-common-page-header">
         <el-page-header @back="goBack" :content="title" />
-        <el-dropdown placement="bottom" @command="handleFlowUrgent" trigger="click" disabled>
-          <div class="flow-urgent-value" v-show="!loading||title"
-            :style="{'cursor':setting.opType=='-1'?'pointer':''}"> <span
-              :style="{'background-color':flowUrgentList[selectState].color}" class="color-box">
-            </span>
-            <span
-              :style="{'color':flowUrgentList[selectState].color}">{{flowUrgentList[selectState].name}}</span>
-          </div>
-          <el-dropdown-menu slot="dropdown">
-            <div v-if="setting.opType=='-1'">
+        <template v-if="!loading||title">
+          <el-dropdown placement="bottom" @command="handleFlowUrgent" trigger="click"
+            v-show="setting.opType=='-1'">
+            <div class="flow-urgent-value" style="cursor:pointer">
+              <span :style="{'background-color':flowUrgentList[selectState].color}"
+                class="color-box"></span>
+              <span :style="{'color':flowUrgentList[selectState].color}">
+                {{flowUrgentList[selectState].name}}</span>
+            </div>
+            <el-dropdown-menu slot="dropdown">
               <el-dropdown-item v-for="(item,index) in flowUrgentList" :key="index"
                 :command="item.state">
                 <span :style="{'background-color':item.color}" class="color-box">
                 </span>
                 {{item.name}}
               </el-dropdown-item>
-            </div>
-          </el-dropdown-menu>
-        </el-dropdown>
+            </el-dropdown-menu>
+          </el-dropdown>
+          <div class="flow-urgent-value" v-show="setting.opType!=='-1'">
+            <span :style="{'background-color':flowUrgentList[selectState].color}"
+              class="color-box"></span>
+            <span
+              :style="{'color':flowUrgentList[selectState].color}">{{flowUrgentList[selectState].name}}</span>
+          </div>
+        </template>
         <div class="options">
           <el-button type="primary" @click="addComment" v-if="activeTab==='comment'">评 论</el-button>
           <template v-if="setting.opType!=4&&setting.id">
@@ -154,7 +160,6 @@
           </el-button>
         </span>
       </el-dialog>
-
       <UserBox v-if="userBoxVisible" ref="userBox" :title="userBoxTitle" @submit="handleTransfer" />
       <print-browse :visible.sync="printBrowseVisible" :id="properties.printId" :formId="setting.id"
         :fullName="setting.fullName" />
@@ -380,7 +385,7 @@ export default {
       }).catch(() => { this.loading = false })
     },
     eventLauncher(eventType) {
-      this.$refs.form && this.$refs.form.dataFormSubmit(eventType)
+      this.$refs.form && this.$refs.form.dataFormSubmit(eventType, this.flowUrgent)
     },
     eventReceiver(formData, eventType) {
       this.formData = formData
