@@ -948,7 +948,7 @@
                 <el-row :gutter="20">
                   <el-col :span="8">节点处理限定时长(时)</el-col>
                   <el-col :span="16">
-                    <el-input-number v-model="startForm.timeLimitConfig.duringDeal" :min="0"
+                    <el-input-number v-model="startForm.timeLimitConfig.duringDeal" :min="1"
                       :step="1"></el-input-number>
                   </el-col>
                 </el-row>
@@ -1724,7 +1724,7 @@
                 <el-row :gutter="20">
                   <el-col :span="8">节点处理限定时长(时)</el-col>
                   <el-col :span="16">
-                    <el-input-number v-model="approverForm.timeLimitConfig.duringDeal" :min="0"
+                    <el-input-number v-model="approverForm.timeLimitConfig.duringDeal" :min="1"
                       :step="1"></el-input-number>
                   </el-col>
                 </el-row>
