@@ -24,7 +24,7 @@ const defaultStartForm = {
   },
   noticeConfig: {
     on: 0, // 开启
-    firstOver: 0, // 第一次提醒时间(时)
+    firstOver: 1, // 第一次提醒时间(时)
     overTimeDuring: 2, // 提醒间隔(时)
     overNotice: false, // 提醒事务-提醒通知
     overEvent: false, // 提醒事件

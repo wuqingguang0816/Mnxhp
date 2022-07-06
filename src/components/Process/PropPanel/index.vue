@@ -1025,9 +1025,9 @@
               </el-form-item>
               <div v-if="startForm.noticeConfig.on===1">
                 <el-row :gutter="20">
-                  <el-col :span="8">第一次超时时间(时)</el-col>
+                  <el-col :span="8">第一次提醒时间(时)</el-col>
                   <el-col :span="16">
-                    <el-input-number v-model="startForm.noticeConfig.firstOver" :min="0" :step="1">
+                    <el-input-number v-model="startForm.noticeConfig.firstOver" :min="1" :step="1">
                     </el-input-number>
                   </el-col>
                 </el-row>
@@ -1805,7 +1805,7 @@
                 <el-row :gutter="20">
                   <el-col :span="8">第一次提醒时间(时)</el-col>
                   <el-col :span="16">
-                    <el-input-number v-model="approverForm.noticeConfig.firstOver" :min="0"
+                    <el-input-number v-model="approverForm.noticeConfig.firstOver" :min="1"
                       :step="1"></el-input-number>
                   </el-col>
                 </el-row>
@@ -1983,7 +1983,7 @@ const defaultApproverForm = {
   },
   noticeConfig: {
     on: 2, // 开启
-    firstOver: 0, // 第一次提醒时间(时)
+    firstOver: 1, // 第一次提醒时间(时)
     overTimeDuring: 2, // 提醒间隔(时)
     overNotice: false, // 提醒事务-提醒通知
     overEvent: false, // 提醒事件
