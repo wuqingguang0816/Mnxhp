@@ -72,7 +72,7 @@
               <el-col :span="24">
                 <el-form-item label="方法选择" prop="executeContent.localHostTaskId">
                   <el-select v-model="dataForm.executeContent.localHostTaskId" placeholder="请选择"
-                    @change="onLocalHostTaskIdChange">
+                    filterable @change="onLocalHostTaskIdChange">
                     <el-option v-for="item in taskOptions" :key="item.id" :label="item.fullName"
                       :value="item.id" />
                   </el-select>
