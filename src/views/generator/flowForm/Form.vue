@@ -91,7 +91,7 @@
               <el-table-column label="操作" fixed="right" width="50">
                 <template slot-scope="scope">
                   <el-button size="mini" type="text" class="JNPF-table-delBtn"
-                    @click="delItem(scope.row,scope.$index)">删除
+                    @click="delItem(scope.row,scope.$index)">移除
                   </el-button>
                 </template>
               </el-table-column>
