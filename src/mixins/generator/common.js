@@ -123,13 +123,17 @@ export default {
       }
     },
     delItem(row, index) {
-      this.tables.splice(index, 1);
-      if (row.typeId == '1' && this.tables.length) {
-        this.tables[0].typeId = '1'
-        this.tables[0].relationTable = ''
-        this.mainTableFields = this.tables[0].fields
-        this.relationTable = this.tables[0].table
-      }
+      this.$confirm("确定要移除当前行？", this.$t('common.tipTitle'), {
+        type: 'warning'
+      }).then(() => {
+        this.tables.splice(index, 1);
+        if (row.typeId == '1' && this.tables.length) {
+          this.tables[0].typeId = '1'
+          this.tables[0].relationTable = ''
+          this.mainTableFields = this.tables[0].fields
+          this.relationTable = this.tables[0].table
+        }
+      }).catch(() => { });
     },
     changeTable(row) {
       this.relationTable = row.table
