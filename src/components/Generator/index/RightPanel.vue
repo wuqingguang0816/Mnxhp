@@ -45,6 +45,14 @@
                   </el-form-item>
                 </template>
                 <template v-if="activeData.__config__.isSubTable && subTable.length">
+                  <el-form-item label="数据库表">
+                    <el-select v-model="activeData.__config__.relationTable" placeholder="请选择数据库表"
+                      filterable disabled>
+                      <el-option v-for="item in allTable" :key="item.table" :value="item.table"
+                        :label="item.tableName?item.table+'('+item.tableName+')':item.table">
+                      </el-option>
+                    </el-select>
+                  </el-form-item>
                   <el-form-item
                     v-if="activeData.__vModel__!==undefined && !noVModelList.includes(activeData.__config__.jnpfKey)"
                     label="控件字段">
