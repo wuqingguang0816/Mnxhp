@@ -246,8 +246,3 @@ export default {
   }
 }
 </script>
-<style lang="scss">
-.template-item {
-  line-height: 30px;
-}
-</style>

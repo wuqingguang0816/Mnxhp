@@ -84,8 +84,8 @@
     </div>
     <Form v-if="formVisible" ref="Form" @refreshDataList="refresh" />
     <Preview v-if="previewVisible" ref="Preview" @close="previewVisible=false" />
-    <previewDialog :visible.sync="previewDialogVisible" :id="currRow.id" type="report"
-      @previewPc="previewPc" />
+    <previewDialog :visible.sync="previewDialogVisible" :id="currRow.id"
+      :fullName="currRow.fullName" type="report" @previewPc="previewPc" />
   </div>
 </template>
 <script>

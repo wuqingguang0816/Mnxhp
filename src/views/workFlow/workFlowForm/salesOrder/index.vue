@@ -13,15 +13,6 @@
               :disabled="judgeWrite('flowTitle')"></el-input>
           </el-form-item>
         </el-col>
-        <el-col :span="12" v-if="judgeShow('flowUrgent')">
-          <el-form-item label="紧急程度" prop="flowUrgent">
-            <el-select v-model="dataForm.flowUrgent" placeholder="选择紧急程度"
-              :disabled="judgeWrite('flowUrgent')">
-              <el-option :key="item.value" :label="item.label" :value="item.value"
-                v-for="item in flowUrgentOptions" />
-            </el-select>
-          </el-form-item>
-        </el-col>
         <el-col :span="12" v-if="judgeShow('customerName')">
           <el-form-item label="客户名称" prop="customerName">
             <el-input v-model="dataForm.customerName" placeholder="客户名称"
@@ -219,9 +210,6 @@ export default {
       dataRule: {
         flowTitle: [
           { required: true, message: '流程标题不能为空', trigger: 'blur' },
-        ],
-        flowUrgent: [
-          { required: true, message: '紧急程度不能为空', trigger: 'change' },
         ],
         customerName: [
           { required: true, message: '客户名称不能为空', trigger: 'blur' },

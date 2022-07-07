@@ -50,7 +50,7 @@
               @row-click="rowClick" :hasNO="false">
               <el-table-column width="35">
                 <template slot-scope="scope">
-                  <el-radio :label="scope.row.fullName" v-model="checked">&nbsp;</el-radio>
+                  <el-radio :label="scope.row.id" v-model="checked">&nbsp;</el-radio>
                 </template>
               </el-table-column>
               <el-table-column type="index" width="50" label="序号" align="center" />
@@ -74,20 +74,10 @@
 import { FlowEnginePageList } from '@/api/workFlow/FlowEngine'
 export default {
   props: {
-    dataType: {
-      default: ''
-    },
-    menuType: {
-      default: ''
-    },
     value: {
       default: ''
     },
     title: {
-      default: ''
-    },
-    moduleId: {
-      type: String,
       default: ''
     },
     clearable: {
@@ -199,16 +189,9 @@ export default {
       this.visible = false
     },
     rowClick(row) {
-      this.checked = row.fullName
+      this.checked = row.id
       this.checkedRow = row
     }
   }
 }
 </script>
-<style lang="scss">
-.template-item {
-  line-height: 30px;
-}
-</style>
-
-

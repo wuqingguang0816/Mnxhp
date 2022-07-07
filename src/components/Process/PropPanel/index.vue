@@ -246,8 +246,8 @@
                 </el-radio-group>
               </el-form-item>
               <el-form-item label="子流程表单">
-                <changeFlow v-model="subFlowForm.flowId" placeholder="请选择子流程表单"
-                  :value="subFlowForm.flowId" :title="subFlowForm.flowId" />
+                <flow-dialog :value="subFlowForm.flowId" :title="subFlowForm.flowName"
+                  @change="onSubFlowIdChange" />
               </el-form-item>
               <el-form-item label="子流程传递">
                 <div @click="openRuleBox">
@@ -1247,7 +1247,7 @@ import OrgSelect from '../OrgSelect'
 import MsgDialog from './msgDialog'
 import InterfaceDialog from './InterfaceDialog'
 import FormulaDialog from './formulaDialog'
-import changeFlow from './changeFlow'
+import FlowDialog from './FlowDialog'
 const requiredDisabled = (jnpfKey) => {
   return ['billRule', 'createUser', 'createTime', 'modifyTime', 'modifyUser', 'currPosition', 'currOrganize', 'table'].includes(jnpfKey)
 }
@@ -1340,6 +1340,7 @@ const defaultSubFlowForm = {
   initiatePos: [],
   initiateRole: [],
   flowId: '',
+  flowName: '',
   assignList: [],
   launchMsgConfig: {
     on: 0,
@@ -1548,7 +1549,7 @@ const systemFieldOptions = [{
 }]
 export default {
   props: [/*当前节点数据*/"value", /*整个节点数据*/"processData", "flowType"],
-  components: { OrgSelect, MsgDialog, InterfaceDialog, FormulaDialog, changeFlow },
+  components: { OrgSelect, MsgDialog, InterfaceDialog, FormulaDialog, FlowDialog },
   data() {
     return {
       visible: false,  // 控制面板显隐
@@ -2248,6 +2249,16 @@ export default {
       if (!list.length) return
       let obj = list[0]
       this.$set(item, 'isSubTable', obj.__config__ && obj.__config__.isSubTable ? obj.__config__.isSubTable : false)
+    },
+    onSubFlowIdChange(id, item) {
+      if (!id) {
+        this.subFlowForm.flowId = ''
+        this.subFlowForm.flowName = ''
+        return
+      }
+      if (this.subFlowForm.flowId === id) return
+      this.subFlowForm.flowId = id
+      this.subFlowForm.flowName = item.fullName
     },
     // 条件节点
     onConditionDateChange(val, item) {
