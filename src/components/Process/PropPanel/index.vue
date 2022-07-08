@@ -968,7 +968,7 @@
                     <el-col :span="8">超时次数(次)</el-col>
                     <el-col :span="16">
                       <el-input-number v-model="startForm.overTimeConfig.overAutoApproveTime"
-                        :min="0" :step="1"></el-input-number>
+                        :min="1" :step="1"></el-input-number>
                     </el-col>
                   </el-row>
                 </el-row>
@@ -981,7 +981,7 @@
                   <el-row :gutter="20">
                     <el-col :span="8">超时次数(次)</el-col>
                     <el-col :span="16">
-                      <el-input-number v-model="startForm.overTimeConfig.overEventTime" :min="0"
+                      <el-input-number v-model="startForm.overTimeConfig.overEventTime" :min="1"
                         :step="1"></el-input-number>
                     </el-col>
                   </el-row>
@@ -1026,7 +1026,7 @@
                   <el-row :gutter="20">
                     <el-col :span="8">提醒次数(次)</el-col>
                     <el-col :span="16">
-                      <el-input-number v-model="startForm.noticeConfig.overEventTime" :min="0"
+                      <el-input-number v-model="startForm.noticeConfig.overEventTime" :min="1"
                         :step="1"></el-input-number>
                     </el-col>
                   </el-row>
@@ -1745,7 +1745,7 @@
                     <el-col :span="8">超时次数(次)</el-col>
                     <el-col :span="16">
                       <el-input-number v-model="approverForm.overTimeConfig.overAutoApproveTime"
-                        :min="0" :step="1"></el-input-number>
+                        :min="1" :step="1"></el-input-number>
                     </el-col>
                   </el-row>
                 </el-row>
@@ -1758,7 +1758,7 @@
                   <el-row :gutter="20">
                     <el-col :span="8">超时次数(次)</el-col>
                     <el-col :span="16">
-                      <el-input-number v-model="approverForm.overTimeConfig.overEventTime" :min="0"
+                      <el-input-number v-model="approverForm.overTimeConfig.overEventTime" :min="1"
                         :step="1"></el-input-number>
                     </el-col>
                   </el-row>
@@ -1804,7 +1804,7 @@
                   <el-row :gutter="20">
                     <el-col :span="8">提醒次数(次)</el-col>
                     <el-col :span="16">
-                      <el-input-number v-model="approverForm.noticeConfig.overEventTime" :min="0"
+                      <el-input-number v-model="approverForm.noticeConfig.overEventTime" :min="1"
                         :step="1"></el-input-number>
                     </el-col>
                   </el-row>
