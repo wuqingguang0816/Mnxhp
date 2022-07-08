@@ -29,7 +29,7 @@
         </el-tab-pane>
         <el-tab-pane label="联系人" name="contacts">
           <el-input v-model="listQuery.keyword" placeholder="搜索：请输入关键词" clearable
-            class="search-input">
+            @keyup.enter.native="search()" class="search-input">
             <i slot="suffix" class="el-input__icon el-icon-search" @click="search" title="搜索" />
           </el-input>
           <div class="userList" v-loading="loading && listQuery.currentPage==1" ref="userList">
