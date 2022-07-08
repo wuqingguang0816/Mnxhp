@@ -212,6 +212,7 @@ export default {
       return data.fullName.indexOf(value) !== -1;
     },
     getOrganizeList(isInit) {
+      this.filterText = ''
       this.treeLoading = true
       getDepartmentSelector().then(res => {
         this.treeData = res.data.list
