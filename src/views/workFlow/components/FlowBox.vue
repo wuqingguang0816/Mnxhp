@@ -45,8 +45,7 @@
             <el-button type="primary" @click="flowResurgence" v-else>变 更</el-button>
             <el-button type="primary" @click="openAssignBox" v-if="setting.status ==1">指 派
             </el-button>
-            <el-button type="danger" v-if="setting.status != 2 && setting.status != 5"
-              @click="cancel()">终 止</el-button>
+            <el-button type="danger" v-if="setting.status==1" @click="cancel()">终 止</el-button>
           </template>
           <el-button @click="goBack()" v-if="!setting.hideCancelBtn" :disabled="allBtnDisabled">
             {{$t('common.cancelButton')}}
