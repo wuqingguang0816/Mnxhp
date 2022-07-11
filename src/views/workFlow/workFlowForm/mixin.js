@@ -64,7 +64,7 @@ export default {
         this.paymentMethodOptions = res
       })
     },
-    dataFormSubmit(eventType) {
+    dataFormSubmit(eventType, flowUrgent) {
       this.eventType = eventType
       this.$refs['dataForm'].validate((valid) => {
         if (valid) {
@@ -74,7 +74,7 @@ export default {
           }
           if (eventType === 'save' || eventType === 'submit') {
             if (this.selfSubmit && typeof this.selfSubmit === "function") {
-              this.selfSubmit(this.dataForm)
+              this.selfSubmit(this.dataForm, flowUrgent)
               return
             }
           }

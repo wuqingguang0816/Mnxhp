@@ -19,6 +19,7 @@ export default {
       formData: {},
       loading: true,
       eventType: '',
+      flowUrgent: 1,
       key: +new Date(),
       formConf: {},
       candidateVisible: false,
@@ -143,6 +144,7 @@ export default {
     selfSubmit() {
       this.dataForm.status = this.eventType === 'submit' ? 0 : 1
       this.dataForm.flowId = this.setting.flowId
+      this.dataForm.flowUrgent = this.flowUrgent || 1
       if (this.eventType === 'save') return this.selfHandleRequest()
       this.$emit('setCandidateLoad', true)
       Candidates(0, { formData: this.dataForm }).then(res => {
@@ -182,9 +184,10 @@ export default {
         if (this.eventType === 'save') this.$emit('setLoad', false)
       })
     },
-    dataFormSubmit(eventType) {
+    dataFormSubmit(eventType, flowUrgent) {
       if (this.setting.isPreview) return this.$message({ message: '功能预览不支持数据保存', type: 'warning' })
       this.eventType = eventType
+      this.flowUrgent = flowUrgent
       this.$refs.dynamicForm && this.$refs.dynamicForm.submitForm()
     }
   }
