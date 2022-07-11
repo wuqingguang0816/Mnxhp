@@ -371,9 +371,10 @@ export default {
         this.$emit('setPageLoad')
       })
     },
-    selfSubmit() {
+    selfSubmit(dataForm, flowUrgent) {
       this.dataForm.status = this.eventType === 'submit' ? 0 : 1
       this.dataForm.flowId = this.setting.flowId
+      this.dataForm.flowUrgent = flowUrgent || 1
       if (this.eventType === 'save') return this.selfHandleRequest()
       this.$confirm('您确定要提交当前流程吗, 是否继续?', '提示', {
         type: 'warning'
