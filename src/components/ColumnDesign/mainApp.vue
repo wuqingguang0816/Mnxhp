@@ -126,11 +126,7 @@
                 </el-checkbox>
               </el-checkbox-group>
               <template v-if="modelType==1">
-                <p class="btn-cap mt-10 mb-10">自定义按钮区
-                  <el-tooltip content="小程序不支持进行自定义按钮配置" placement="top-start">
-                    <a class="el-icon-warning-outline"></a>
-                  </el-tooltip>
-                </p>
+                <p class="btn-cap mt-10 mb-10">自定义按钮区</p>
                 <div class="custom-btns-list">
                   <draggable :list="columnData.customBtnsList" :animation="340" group="customItem"
                     handle=".option-drag">
@@ -485,8 +481,4 @@ export default {
 </script>
 <style lang="scss" scoped>
 @import "./index.scss";
-
-.btn-cap a {
-  font-size: 15px;
-}
 </style>
