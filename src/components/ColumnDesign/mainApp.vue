@@ -125,6 +125,35 @@
                   <el-input v-model="item.label" />
                 </el-checkbox>
               </el-checkbox-group>
+              <template v-if="modelType==1">
+                <p class="btn-cap mt-10 mb-10">自定义按钮区</p>
+                <div class="custom-btns-list">
+                  <draggable :list="columnData.customBtnsList" :animation="340" group="customItem"
+                    handle=".option-drag">
+                    <div v-for="(item, index) in columnData.customBtnsList" :key="index"
+                      class="custom-item">
+                      <div class="custom-line-icon option-drag">
+                        <i class="icon-ym icon-ym-darg" />
+                      </div>
+                      <p class="custom-line-value">{{item.value}}</p>
+                      <el-input v-model="item.label" placeholder="按钮名称" size="small">
+                        <template slot="append">
+                          <el-button type="primary" @click="editFunc(item,'btn')"
+                            class="custom-btn">事件
+                          </el-button>
+                        </template>
+                      </el-input>
+                      <div class="close-btn custom-line-icon"
+                        @click="columnData.customBtnsList.splice(index, 1)">
+                        <i class="el-icon-remove-outline" />
+                      </div>
+                    </div>
+                  </draggable>
+                </div>
+                <div>
+                  <el-button type="text" icon="el-icon-plus" @click="addCustomBtn">添加按钮</el-button>
+                </div>
+              </template>
               <el-divider>权限设置</el-divider>
               <el-form-item label="按钮权限">
                 <el-switch v-model="columnData.useBtnPermission"></el-switch>
@@ -143,10 +172,14 @@
         </el-scrollbar>
       </div>
     </div>
+    <form-script :visible.sync="formScriptVisible" :value="activeItem.func" :type="activeItem.type"
+      @updateScript="updateScript" />
   </div>
 </template>
 <script>
 import Sortable from 'sortablejs'
+import draggable from 'vuedraggable'
+import FormScript from './FormScript'
 import { getDrawingList } from '@/components/Generator/utils/db'
 import { deepClone } from '@/utils'
 import { noColumnShowList, noSearchList, useInputList, useDateList } from '@/components/Generator/generator/comConfig'
@@ -159,6 +192,7 @@ const getSearchType = item => {
   if (fuzzyList.includes(jnpfKey)) return 2
   return 1
 }
+const defaultFunc = '({ data, index, request, toast, refresh }) => {\r\n   \r\n}'
 const defaultColumnData = {
   searchList: [], // 查询字段
   hasSuperQuery: false, // 高级查询
@@ -175,6 +209,7 @@ const defaultColumnData = {
   useFormPermission: false,
   useBtnPermission: false,
   useDataPermission: false,
+  customBtnsList: [],
   btnsList: [
     { value: 'add', icon: 'el-icon-plus', label: '新增' }
   ],  // 按钮
@@ -188,9 +223,11 @@ export default {
   props: {
     conf: {
       type: Object,
-      default: () => { }
+      default: () => { },
     },
+    modelType: ''
   },
+  components: { draggable, FormScript },
   data() {
     return {
       currentTab: 'column',
@@ -211,6 +248,8 @@ export default {
       sortList: [],
       btnsList: [],
       columnBtnsList: [],
+      formScriptVisible: false,
+      activeItem: {}
     }
   },
   filters: {
@@ -260,6 +299,9 @@ export default {
     },
   },
   created() {
+    if (this.modelType == 4) {
+      this.typeList = this.typeList.filter(o => o.value != 3)
+    }
     let list = []
     let list1 = []
     const loop = (data, parent) => {
@@ -414,10 +456,29 @@ export default {
     },
     columnSelectionChange(val) {
       this.$set(this.columnData, 'columnList', val)
-    }
+    },
+    addCustomBtn() {
+      const id = this.jnpf.idGenerator()
+      this.columnData.customBtnsList.push({
+        value: 'btn_' + id,
+        label: '按钮' + id,
+        func: ''
+      })
+    },
+    editFunc(item, type) {
+      if (!item.func) item.func = defaultFunc
+      this.activeItem = item
+      this.activeItem.type = type
+      this.$nextTick(() => {
+        this.formScriptVisible = true
+      })
+    },
+    updateScript(func) {
+      this.activeItem.func = func
+    },
   }
 }
 </script>
 <style lang="scss" scoped>
-@import './index.scss';
+@import "./index.scss";
 </style>
