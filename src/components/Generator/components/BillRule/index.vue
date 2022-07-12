@@ -74,7 +74,7 @@
 
 <script>
 import {
-  getListById
+  getBillRuleSelector
 } from '@/api/system/billRule'
 export default {
   props: {
@@ -164,8 +164,9 @@ export default {
       let query = {
         keyword: this.keyword,
         ...this.listQuery,
+        categoryId: this.categoryId
       }
-      getListById(this.categoryId, query).then(res => {
+      getBillRuleSelector(query).then(res => {
         this.list = res.data.list
         this.total = res.data.pagination.total
         this.listLoading = false

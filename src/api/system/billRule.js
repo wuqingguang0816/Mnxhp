@@ -10,10 +10,11 @@ export function getBillRuleList(data) {
 }
 
 // 获取单据规则下拉框
-export function getBillRuleSelector() {
+export function getBillRuleSelector(data) {
   return request({
     url: '/api/system/BillRule/Selector',
-    method: 'GET'
+    method: 'GET',
+    data
   })
 }
 
@@ -73,11 +74,3 @@ export function exportTpl(id) {
   })
 }
 
-// 根据业务获取单据规则
-export function getListById(id, data) {
-  return request({
-    url: `/api/system/BillRule/category/${id}`,
-    method: 'get',
-    data
-  })
-}
