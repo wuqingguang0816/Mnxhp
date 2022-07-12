@@ -42,7 +42,9 @@
             <!-- 判断流程复活按钮和节点变更 -->
             <el-button type="primary" @click="flowResurgence" v-if="flowTaskInfo.completion==100">
               复 活</el-button>
-            <el-button type="primary" @click="flowResurgence" v-else>变 更</el-button>
+            <el-button type="primary" @click="flowResurgence"
+              v-if="flowTaskInfo.completion>0&&flowTaskInfo.completion<100&&(setting.status==1||setting.status==3)">
+              变 更</el-button>
             <el-button type="primary" @click="openAssignBox" v-if="setting.status ==1">指 派
             </el-button>
             <el-button type="danger" v-if="setting.status==1" @click="cancel()">终 止</el-button>
