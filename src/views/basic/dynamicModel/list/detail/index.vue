@@ -212,12 +212,10 @@ export default {
           let item = list[i]
           if (item.__vModel__) {
             if (item.__config__.jnpfKey === 'relationForm' || item.__config__.jnpfKey === 'popupSelect') {
-              let id = data[item.__vModel__ + '_id']
-              if (id) item.__config__.defaultValue = id
+              item.__config__.defaultValue = data[item.__vModel__ + '_id']
               this.$set(item, 'name', data[item.__vModel__] || '')
             } else {
-              const val = data[item.__vModel__]
-              if (val) item.__config__.defaultValue = val
+              item.__config__.defaultValue = data[item.__vModel__]
             }
             if (this.useFormPermission) {
               let noShow = true
