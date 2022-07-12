@@ -36,11 +36,24 @@
                     v-if="activeData.__vModel__!==undefined && !noVModelList.includes(activeData.__config__.jnpfKey)"
                     label="控件字段">
                     <el-select v-model="activeData.__vModel__" placeholder="请选择控件字段(v-model)"
-                      clearable @change="fieldChange" filterable>
-                      <el-option v-for="item in fieldOptions" :key="item.realField"
-                        :value="item.realField"
-                        :label="item.fieldName?item.field+'('+item.fieldName+')':item.field">
-                      </el-option>
+                      clearable @change="fieldChange" filterable popper-class="field-select-popper">
+                      <p class="el-select-dropdown__empty" slot="empty">
+                        <span>无匹配数据，</span>
+                        <el-link type="primary" :underline="false" @click="openFieldDialog">添加字段
+                        </el-link>
+                      </p>
+                      <el-option-group label="" v-if="fieldOptions.length">
+                        <el-option disabled value="jnpfAddField">
+                          <el-link type="primary" :underline="false" @click="openFieldDialog">添加字段
+                          </el-link>
+                        </el-option>
+                      </el-option-group>
+                      <el-option-group label="">
+                        <el-option v-for="item in fieldOptions" :key="item.realField"
+                          :value="item.realField"
+                          :label="item.fieldName?item.field+'('+item.fieldName+')':item.field">
+                        </el-option>
+                      </el-option-group>
                     </el-select>
                   </el-form-item>
                 </template>
@@ -58,11 +71,25 @@
                     label="控件字段">
                     <el-select v-model="activeData.__vModel__" placeholder="请选择控件字段(v-model)"
                       clearable @change="fieldChange1" filterable>
-                      <el-option
-                        v-for="item in getSubTableFiled(activeData.__config__.relationTable)"
-                        :key="item.field" :value="item.field"
-                        :label="item.fieldName?item.field+'('+item.fieldName+')':item.field">
-                      </el-option>
+                      <p class="el-select-dropdown__empty" slot="empty">
+                        <span>无匹配数据，</span>
+                        <el-link type="primary" :underline="false" @click="openFieldDialog">添加字段
+                        </el-link>
+                      </p>
+                      <el-option-group label=""
+                        v-if="getSubTableFiled(activeData.__config__.relationTable).length">
+                        <el-option disabled value="jnpfAddField">
+                          <el-link type="primary" :underline="false" @click="openFieldDialog">添加字段
+                          </el-link>
+                        </el-option>
+                      </el-option-group>
+                      <el-option-group label="">
+                        <el-option
+                          v-for="item in getSubTableFiled(activeData.__config__.relationTable)"
+                          :key="item.field" :value="item.field"
+                          :label="item.fieldName?item.field+'('+item.fieldName+')':item.field">
+                        </el-option>
+                      </el-option-group>
                     </el-select>
                   </el-form-item>
                 </template>
@@ -255,7 +282,7 @@
                 <el-input v-model="activeData.__config__.label" placeholder="请输入控件标题" />
               </el-form-item>
               <el-form-item label="关联子表" v-if="$store.getters.hasTable">
-                <el-select v-model="activeData.__config__.tableName" placeholder="请选择关联子表" clearable
+                <el-select v-model="activeData.__config__.tableName" placeholder="请选择关联子表"
                   @change="onTableNameChange">
                   <el-option v-for="item in subTable" :key="item.table"
                     :label="item.tableName?item.table+'('+item.tableName+')':item.table"
@@ -419,6 +446,8 @@
     </div>
     <form-script :visible.sync="formScriptVisible" :tpl="activeScript" :fields="drawingList"
       @updateScript="updateScript" />
+    <field-dialog :visible.sync="fieldDialogVisible" ref="fieldDialog"
+      @close="fieldDialogVisible=false" @updateOptions="updateFieldOptions" />
   </div>
 </template>
 
@@ -429,6 +458,7 @@ import { saveFormConf, getDrawingList } from '@/components/Generator/utils/db'
 import { getDictionaryTypeSelector } from "@/api/systemData/dictionary"
 import { getDataInterfaceSelector } from "@/api/systemData/dataInterface"
 import FormScript from './FormScript'
+import FieldDialog from './FieldDialog'
 import JNPFComInput from './RightComponents/ComInput'
 import JNPFTextarea from './RightComponents/Textarea'
 import JNPFText from './RightComponents/JNPFText'
@@ -471,6 +501,7 @@ const systemList = ['createUser', 'createTime', 'modifyUser', 'modifyTime', 'cur
 export default {
   components: {
     FormScript,
+    FieldDialog,
     JNPFComInput,
     JNPFTextarea,
     JNPFText,
@@ -516,6 +547,7 @@ export default {
       dialogVisible: false,
       iconsVisible: false,
       formScriptVisible: false,
+      fieldDialogVisible: false,
       comScriptVisible: false,
       currentIconModel: null,
       activeScript: '',
@@ -618,14 +650,29 @@ export default {
     activeTag() {
       return this.activeData.__config__.tag
     },
-    formItemList() {
-      return this.$store.state.generator.formItemList
+    formItemList: {
+      get() {
+        return this.$store.state.generator.formItemList
+      },
+      set(val) {
+        this.$store.commit('generator/UPDATE_FORMITEM_LIST', val)
+      }
     },
-    subTable() {
-      return this.$store.state.generator.subTable || []
+    subTable: {
+      get() {
+        return this.$store.state.generator.subTable || []
+      },
+      set(val) {
+        this.$store.commit('generator/UPDATE_SUB_TABLE', val)
+      }
     },
-    allTable() {
-      return this.$store.state.generator.allTable || []
+    allTable: {
+      get() {
+        return this.$store.state.generator.allTable || []
+      },
+      set(val) {
+        this.$store.commit('generator/SET_ALL_TABLE', val)
+      }
     },
     mainTable() {
       let allTable = this.$store.state.generator.allTable
@@ -919,6 +966,39 @@ export default {
       this.isConf = isConf || false
       this.formScriptVisible = true
     },
+    openFieldDialog() {
+      let tableName = ''
+      if (!this.activeData.__config__.isSubTable) {
+        tableName = this.activeData.__config__.tableName
+      } else {
+        tableName = this.activeData.__config__.relationTable
+      }
+      let dataBase = this.$store.state.generator.dataBase || '0'
+      this.fieldDialogVisible = true
+      this.$nextTick(() => {
+        this.$refs.fieldDialog.init(dataBase, tableName)
+      })
+    },
+    updateFieldOptions(data) {
+      let tableName = ''
+      if (!this.activeData.__config__.isSubTable) {
+        tableName = this.activeData.__config__.tableName
+      } else {
+        tableName = this.activeData.__config__.relationTable
+      }
+      for (let i = 0; i < this.allTable.length; i++) {
+        if (this.allTable[i].table === tableName) {
+          this.allTable[i].fields = data
+          break
+        }
+      }
+      if (!this.activeData.__config__.isSubTable) {
+        this.formItemList = data
+        this.setDefaultOptions()
+      } else {
+        this.subTable = this.allTable.filter(o => o.typeId == '0')
+      }
+    },
     onBarcodeTextChange(val) {
       if (!val) return
       let reg = /^[A-Za-z0-9]+$/
@@ -1044,6 +1124,17 @@ export default {
     .el-checkbox-button__inner {
       width: 100%;
       text-align: center;
+    }
+  }
+}
+</style>
+<style lang="scss">
+.field-select-popper {
+  .el-select-dropdown__empty {
+    span,
+    .el-link {
+      line-height: 16px;
+      vertical-align: top;
     }
   }
 }

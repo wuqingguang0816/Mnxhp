@@ -3,7 +3,7 @@ export {
   parseTime,
   formatTime
 }
-from '@/utils'
+  from '@/utils'
 import jnpf from '@/utils/jnpf'
 
 /**
@@ -41,29 +41,29 @@ export function timeAgo(time) {
  */
 export function numberFormatter(num, digits) {
   const si = [{
-      value: 1E18,
-      symbol: 'E'
-    },
-    {
-      value: 1E15,
-      symbol: 'P'
-    },
-    {
-      value: 1E12,
-      symbol: 'T'
-    },
-    {
-      value: 1E9,
-      symbol: 'G'
-    },
-    {
-      value: 1E6,
-      symbol: 'M'
-    },
-    {
-      value: 1E3,
-      symbol: 'k'
-    }
+    value: 1E18,
+    symbol: 'E'
+  },
+  {
+    value: 1E15,
+    symbol: 'P'
+  },
+  {
+    value: 1E12,
+    symbol: 'T'
+  },
+  {
+    value: 1E9,
+    symbol: 'G'
+  },
+  {
+    value: 1E6,
+    symbol: 'M'
+  },
+  {
+    value: 1E3,
+    symbol: 'k'
+  }
   ]
   for (let i = 0; i < si.length; i++) {
     if (num >= si[i].value) {
@@ -123,6 +123,34 @@ export function urgentText(value) {
       break;
     default:
       text = "普通";
+      break;
+  }
+  return text
+}
+//  工作流审批状态
+export function dataType(val) {
+  let text = val
+  switch (val) {
+    case 'varchar':
+      text = "字符串"
+      break;
+    case 'int':
+      text = "整型"
+      break;
+    case 'datetime':
+      text = "日期时间"
+      break;
+    case 'decimal':
+      text = "浮点"
+      break;
+    case 'bigint':
+      text = "长整型"
+      break;
+    case 'text':
+      text = "文本"
+      break;
+    default:
+      text = val;
       break;
   }
   return text
