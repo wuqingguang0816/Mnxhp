@@ -316,7 +316,7 @@ export default {
             duration: 1000,
             onClose: () => {
               this.initData()
-              this.errorVisible = true
+              this.errorVisible = false
               this.$refs.approveDialog && this.$refs.approveDialog.closeDialog()
             }
           })
