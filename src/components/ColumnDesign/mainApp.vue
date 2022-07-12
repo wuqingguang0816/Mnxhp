@@ -299,9 +299,6 @@ export default {
     },
   },
   created() {
-    if (this.modelType == 4) {
-      this.typeList = this.typeList.filter(o => o.value != 3)
-    }
     let list = []
     let list1 = []
     const loop = (data, parent) => {
@@ -480,5 +477,5 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
-@import "./index.scss";
+@import './index.scss';
 </style>
