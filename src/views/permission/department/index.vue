@@ -145,6 +145,7 @@ export default {
       return data.fullName.indexOf(value) !== -1;
     },
     getOrganizeList(isInit) {
+      this.filterText = ''
       this.treeLoading = true
       getDepartmentSelectorByAuth().then(res => {
         this.treeData = res.data.list
@@ -208,7 +209,7 @@ export default {
             onClose: () => {
               this.$store.commit('generator/SET_COMPANY_TREE', [])
               this.$store.commit('generator/SET_DEP_TREE', [])
-              this.initData()
+              this.getOrganizeList(true)
             }
           })
         })

@@ -138,7 +138,7 @@ export default {
   },
   created() {
     this.$store.dispatch('base/getDictionaryData', { sort: 'WorkFlowCategory' }).then((res) => {
-      this.treeData = [{ fullName: '全部数据', id: '', enCode: '' }, ...res]
+      this.treeData = [{ fullName: '全部流程', id: '', enCode: '' }, ...res]
     })
     this.reset()
   },

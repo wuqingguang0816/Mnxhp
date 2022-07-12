@@ -1042,6 +1042,9 @@ export const selectComponents = [
     pageSize: 20,
     columnOptions: [],
     clearable: true,
+    popupType: "dialog",
+    popupTitle: "选择数据",
+    popupWidth: "800px",
     filterable: false,
     disabled: false
   },

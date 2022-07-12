@@ -196,6 +196,7 @@ export default {
       return data.fullName.indexOf(value) !== -1;
     },
     getOrganizeList(isInit) {
+      this.filterText = ''
       this.treeLoading = true
       getDepartmentSelectorByAuth().then(res => {
         if (this.userInfo.isAdministrator) {

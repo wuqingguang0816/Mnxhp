@@ -12,8 +12,10 @@
       </template>
       <el-table-column align="center" fixed="right" width="40" v-if="customColumn">
         <template slot="header">
-          <el-link icon="icon-ym icon-ym-options JNPF-common-head-icon" :underline="false"
-            @click="showDrawer" />
+          <el-tooltip content="表头设置" placement="top">
+            <el-link icon="icon-ym icon-ym-shezhi JNPF-common-head-icon" :underline="false"
+              @click="showDrawer" />
+          </el-tooltip>
         </template>
       </el-table-column>
       <template slot="empty">

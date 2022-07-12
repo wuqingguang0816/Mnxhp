@@ -1,7 +1,14 @@
 <template>
-  <el-dialog title="按钮脚本" :close-on-click-modal="false"
-    class="JNPF-dialog JNPF-dialog_center form-script-dialog" lock-scroll append-to-body
-    v-bind="$attrs" width="800px" :modal-append-to-body="false" v-on="$listeners" @open="onOpen">
+  <el-dialog :close-on-click-modal="false" class="JNPF-dialog JNPF-dialog_center form-script-dialog"
+    lock-scroll append-to-body v-bind="$attrs" width="800px" :modal-append-to-body="false"
+    v-on="$listeners" @open="onOpen">
+    <span slot="title" class="dialog-title">
+      <span>按钮脚本
+        <el-tooltip content="小程序不支持在线JS脚本" placement="top-start">
+          <a class="el-icon-warning-outline"></a>
+        </el-tooltip>
+      </span>
+    </span>
     <div class="form-script-dialog-body">
       <div class="right-main">
         <div class="codeEditor">

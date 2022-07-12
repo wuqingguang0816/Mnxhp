@@ -236,6 +236,10 @@
 }
 
 .JNPF-dialog {
+  .el-input__validateIcon {
+    display: none !important;
+  }
+
   &.JNPF-dialog_center {
     display: flex;
     justify-content: center;
@@ -2137,12 +2141,6 @@ textarea.el-textarea__inner {
 
   &>.el-select {
     width: 100%;
-  }
-
-  .search-input {
-    .el-input__validateIcon {
-      display: none !important;
-    }
   }
 }
 

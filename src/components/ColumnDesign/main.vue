@@ -149,7 +149,7 @@
                 <el-form-item label="分组字段">
                   <el-select v-model="columnData.groupField" placeholder="请选择分组字段">
                     <el-option :label="item.__config__.label" :value="item.__vModel__"
-                      v-for="(item, i) in list" :key="i"></el-option>
+                      v-for="(item, i) in groupFieldOptions" :key="i"></el-option>
                   </el-select>
                 </el-form-item>
               </template>
@@ -195,7 +195,8 @@
                 </el-checkbox>
               </el-checkbox-group>
               <template v-if="modelType==1">
-                <p class="btn-cap mt-10 mb-10">自定义按钮区</p>
+                <p class="btn-cap mt-10 mb-10">自定义按钮区
+                </p>
                 <div class="custom-btns-list">
                   <draggable :list="columnData.customBtnsList" :animation="340" group="customItem"
                     handle=".option-drag">
@@ -339,6 +340,7 @@ export default {
       ],
       columnOptions: [],
       searchOptions: [],
+      groupFieldOptions: [],
       btnsList: [],
       columnBtnsList: [],
       typeList: [
@@ -406,9 +408,6 @@ export default {
   },
   created() {
     this.getDataInterfaceSelector()
-    if (this.modelType == 4) {
-      this.typeList = this.typeList.filter(o => o.value != 3)
-    }
     let list = []
     const loop = (data, parent) => {
       if (!data) return
@@ -432,6 +431,7 @@ export default {
     this.list = list
     let columnOptions = list.filter(o => noColumnShowList.indexOf(o.__config__.jnpfKey) < 0)
     let searchOptions = list.filter(o => noSearchList.indexOf(o.__config__.jnpfKey) < 0)
+    this.groupFieldOptions = list.filter(o => o.__vModel__.indexOf('-') < 0)
     this.columnOptions = columnOptions.map(o => ({
       label: o.__config__.label,
       prop: o.__vModel__,
@@ -599,5 +599,5 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
-@import "./index.scss";
+@import './index.scss';
 </style>

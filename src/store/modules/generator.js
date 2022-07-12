@@ -13,6 +13,7 @@ const state = {
   formItemList: [],
   subTable: [],
   allTable: [],
+  dataBase: '',
   hasTable: false,
   relationData: {},
   dynamicModelExtra: {}
@@ -45,6 +46,9 @@ const mutations = {
   },
   SET_ALL_TABLE(state, allTable) {
     state.allTable = allTable;
+  },
+  SET_DATABASE(state, dataBase) {
+    state.dataBase = dataBase;
   },
   SET_TABLE(state, val) {
     state.hasTable = val;

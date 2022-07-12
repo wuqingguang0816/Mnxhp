@@ -53,6 +53,14 @@ export function DataModelUpdate(linkId, data) {
     data
   })
 }
+// 新增字段
+export function addTableField(linkId, data) {
+  return request({
+    url: `/api/system/DataModel/${linkId}/addField`,
+    method: 'put',
+    data
+  })
+}
 // 导出
 export function exportTpl(linkId, id) {
   return request({
