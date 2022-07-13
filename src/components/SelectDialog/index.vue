@@ -3,6 +3,25 @@
     <template v-if="popupType==='dialog'">
       <el-dialog :title="popupTitle" :close-on-click-modal="false" :visible.sync="visible"
         class="JNPF-dialog JNPF-dialog_center" lock-scroll append-to-body :width='popupWidth'>
+        <el-row class="JNPF-common-search-box" :gutter="16">
+          <el-form @submit.native.prevent>
+            <el-col :span="10">
+              <el-form-item label="关键词">
+                <el-input v-model="listQuery.keyword" placeholder="请输入关键词搜索" clearable
+                  @keyup.enter.native="search()" class="search-input" />
+              </el-form-item>
+            </el-col>
+            <el-col :span="8">
+              <el-form-item>
+                <el-button type="primary" icon="el-icon-search" @click="search()">
+                  {{$t('common.search')}}
+                </el-button>
+                <el-button icon="el-icon-refresh-right" @click="reset()">{{$t('common.reset')}}
+                </el-button>
+              </el-form-item>
+            </el-col>
+          </el-form>
+        </el-row>
         <JNPF-table v-loading="listLoading" :data="list" hasC
           @selection-change="handleSelectionChange">
           <el-table-column :prop="item.value" :label="item.label"
@@ -20,6 +39,25 @@
     <template v-if="popupType==='drawer'">
       <el-drawer :title="popupTitle" :visible.sync="visible" :wrapperClosable="false" ref="drawer"
         :size='popupWidth' append-to-body class="JNPF-common-drawer">
+        <el-row class="JNPF-common-search-box" :gutter="16">
+          <el-form @submit.native.prevent>
+            <el-col :span="10">
+              <el-form-item label="关键词">
+                <el-input v-model="listQuery.keyword" placeholder="请输入关键词搜索" clearable
+                  @keyup.enter.native="search()" class="search-input" />
+              </el-form-item>
+            </el-col>
+            <el-col :span="8">
+              <el-form-item>
+                <el-button type="primary" icon="el-icon-search" @click="search()">
+                  {{$t('common.search')}}
+                </el-button>
+                <el-button icon="el-icon-refresh-right" @click="reset()">{{$t('common.reset')}}
+                </el-button>
+              </el-form-item>
+            </el-col>
+          </el-form>
+        </el-row>
         <JNPF-table v-loading="listLoading" :data="list" hasC
           @selection-change="handleSelectionChange">
           <el-table-column :prop="item.value" :label="item.label"
@@ -142,7 +180,18 @@ export default {
     },
     handleSelectionChange(val) {
       this.checked = val
-    }
+    },
+    search() {
+      this.initData()
+      this.listQuery.currentPage = 1
+      this.listQuery.pageSize = this.hasPage ? this.pageSize : 10000
+    },
+    reset() {
+      this.listQuery.keyword = ''
+      this.listQuery.currentPage = 1
+      this.listQuery.pageSize = this.hasPage ? this.pageSize : 10000
+      this.initData()
+    },
   }
 }
 </script>
