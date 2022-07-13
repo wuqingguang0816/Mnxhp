@@ -200,15 +200,14 @@ export default {
       this.treeLoading = true
       getDepartmentSelectorByAuth().then(res => {
         if (this.userInfo.isAdministrator) {
-          let firstItem = []
-          firstItem = {
+          let globalItem = {
             fullName: "全局",
             hasChildren: false,
             id: "0",
             parentId: "-1",
             icon: 'icon-ym icon-ym-global-role'
           }
-          this.treeData = [firstItem, ...res.data.list]
+          this.treeData = [...res.data.list, globalItem]
         } else {
           this.treeData = res.data.list || []
         }
