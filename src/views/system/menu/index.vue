@@ -49,7 +49,7 @@
               <el-button size="mini" type="text" @click="addOrUpdateHandle(scope.row.id)">编辑
               </el-button>
               <el-button size="mini" type="text" class="JNPF-table-delBtn"
-                @click="addOrUpdateHandle(scope.row.id)" :disabled="scope.row.isMain==1?true:false">
+                @click="handleDel(scope.row.id)" :disabled="scope.row.isMain==1?true:false">
                 删除
               </el-button>
               <el-dropdown>
