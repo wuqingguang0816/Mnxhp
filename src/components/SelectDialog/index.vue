@@ -17,7 +17,7 @@
                 <el-button type="primary" icon="el-icon-search" @click="search()">
                   {{$t('common.search')}}
                 </el-button>
-                <el-button icon="el-icon-refresh-right" @click="reset()">{{$t('common.reset')}}
+                <el-button icon="el-icon-refresh-right" @click="initData()">{{$t('common.reset')}}
                 </el-button>
               </el-form-item>
             </el-col>
@@ -123,6 +123,7 @@ export default {
       let query = {
         ...this.listQuery,
         interfaceId: this.config.interfaceId,
+        columnOptions: this.config.columnOptions.map(o => o.value),
         paramList
       }
       getDataInterfaceDataSelect(this.config.interfaceId, query).then(res => {
@@ -172,12 +173,6 @@ export default {
       this.checked = val
     },
     search() {
-      this.initData()
-      this.listQuery.currentPage = 1
-      this.listQuery.pageSize = this.config.hasPage ? this.config.pageSize : 10000
-    },
-    reset() {
-      this.listQuery.keyword = ''
       this.listQuery.currentPage = 1
       this.listQuery.pageSize = this.config.hasPage ? this.config.pageSize : 10000
       this.initData()
