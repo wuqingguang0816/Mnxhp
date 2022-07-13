@@ -1,19 +1,14 @@
 <template>
-  <el-dialog title="接口授权" :visible.sync="visible"
-    class="JNPF-dialog JNPF-dialog_center transfer-dialog" lock-scroll append-to-body width="800px"
-    :modal-append-to-body="false">
+  <el-dialog title="接口授权" :visible.sync="visible" class="JNPF-dialog JNPF-dialog_center transfer-dialog" lock-scroll append-to-body width="800px" :modal-append-to-body="false">
     <div class="transfer__body">
       <div class="transfer-pane">
         <div class="transfer-pane__tools">
-          <el-input placeholder="请输入关键词查询" v-model="keyword" @keyup.enter.native="searchData"
-            clearable class="search-input">
+          <el-input placeholder="请输入关键词查询" v-model="keyword" @keyup.enter.native="searchData" clearable class="search-input">
             <el-button slot="append" icon="el-icon-search" @click="searchData"></el-button>
           </el-input>
         </div>
         <div class="transfer-pane__body">
-          <el-tree :data="treeData" :props="prop" highlight-current check-on-click-node
-            @node-click="handleNodeClick" class="JNPF-common-el-tree" node-key="id"
-            v-loading="loading" default-expand-all :filter-node-method="filterNode" ref="tree">
+          <el-tree :data="treeData" :props="prop" highlight-current check-on-click-node @node-click="handleNodeClick" class="JNPF-common-el-tree" node-key="id" v-loading="loading" default-expand-all :filter-node-method="filterNode" ref="tree">
           </el-tree>
         </div>
       </div>
@@ -97,23 +92,21 @@ export default {
     confirm() {
       let arr = []
       this.selectedData.forEach(item => { arr.push(item.id) })
-      if (arr.length > 0) {
-        let body = {
-          interfaceIdentId: this.identId,
-          dataInterfaceIds: arr.join(",")
-        }
-        saveInterfaceList(body).then(res => {
-          this.$message({
-            message: res.msg,
-            type: 'success',
-            duration: 1000,
-            onClose: () => {
-              this.visible = false
-              this.$emit('close')
-            }
-          })
-        })
+      let body = {
+        interfaceIdentId: this.identId,
+        dataInterfaceIds: arr.join(",")
       }
+      saveInterfaceList(body).then(res => {
+        this.$message({
+          message: res.msg,
+          type: 'success',
+          duration: 1000,
+          onClose: () => {
+            this.visible = false
+            this.$emit('close')
+          }
+        })
+      })
     },
     setDefault() {
       getInterfaceList(this.identId).then(res => {
