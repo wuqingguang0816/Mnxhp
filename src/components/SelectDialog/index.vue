@@ -1,8 +1,9 @@
 <template>
   <div class="main">
-    <template v-if="popupType==='dialog'">
-      <el-dialog :title="popupTitle" :close-on-click-modal="false" :visible.sync="visible"
-        class="JNPF-dialog JNPF-dialog_center" lock-scroll append-to-body :width='popupWidth'>
+    <template v-if="config.popupType==='dialog'">
+      <el-dialog :title="config.popupTitle" :close-on-click-modal="false" :visible.sync="visible"
+        class="JNPF-dialog JNPF-dialog_center" lock-scroll append-to-body
+        :width='config.popupWidth'>
         <el-row class="JNPF-common-search-box" :gutter="16">
           <el-form @submit.native.prevent>
             <el-col :span="10">
@@ -36,40 +37,41 @@
         </span>
       </el-dialog>
     </template>
-    <template v-if="popupType==='drawer'">
-      <el-drawer :title="popupTitle" :visible.sync="visible" :wrapperClosable="false" ref="drawer"
-        :size='popupWidth' append-to-body class="JNPF-common-drawer">
-        <el-row class="JNPF-common-search-box" :gutter="16">
-          <el-form @submit.native.prevent>
-            <el-col :span="10">
-              <el-form-item label="关键词">
-                <el-input v-model="listQuery.keyword" placeholder="请输入关键词搜索" clearable
-                  @keyup.enter.native="search()" class="search-input" />
-              </el-form-item>
-            </el-col>
-            <el-col :span="8">
-              <el-form-item>
-                <el-button type="primary" icon="el-icon-search" @click="search()">
-                  {{$t('common.search')}}
-                </el-button>
-                <el-button icon="el-icon-refresh-right" @click="reset()">{{$t('common.reset')}}
-                </el-button>
-              </el-form-item>
-            </el-col>
-          </el-form>
-        </el-row>
-        <JNPF-table v-loading="listLoading" :data="list" hasC
-          @selection-change="handleSelectionChange">
-          <el-table-column :prop="item.value" :label="item.label"
-            v-for="(item,i) in config.columnOptions" :key="i" />
-        </JNPF-table>
-        <pagination :total="total" :page.sync="listQuery.currentPage"
-          :limit.sync="listQuery.pageSize" @pagination="initData" v-if="config.hasPage"
-          :pager-count="5" />
-        <span slot="footer" class="dialog-footer">
-          <el-button @click="visible = false">{{$t('common.cancelButton')}}</el-button>
-          <el-button type="primary" @click="select()">{{$t('common.confirmButton')}}</el-button>
-        </span>
+    <template v-if="config.popupType==='drawer'">
+      <el-drawer :title="config.popupTitle" :visible.sync="visible" :wrapperClosable="false"
+        ref="drawer" :size='config.popupWidth' append-to-body class="JNPF-common-drawer">
+        <div class="JNPF-flex-main">
+          <el-row class="JNPF-common-search-box" :gutter="16">
+            <el-form @submit.native.prevent>
+              <el-col :span="10">
+                <el-form-item label="关键词">
+                  <el-input v-model="listQuery.keyword" placeholder="请输入关键词搜索" clearable
+                    @keyup.enter.native="search()" class="search-input" />
+                </el-form-item>
+              </el-col>
+              <el-col :span="8">
+                <el-form-item>
+                  <el-button type="primary" icon="el-icon-search" @click="search()">
+                    {{$t('common.search')}}
+                  </el-button>
+                  <el-button icon="el-icon-refresh-right" @click="reset()">{{$t('common.reset')}}
+                  </el-button>
+                </el-form-item>
+              </el-col>
+            </el-form>
+          </el-row>
+          <JNPF-table v-loading="listLoading" :data="list" hasC
+            @selection-change="handleSelectionChange">
+            <el-table-column :prop="item.value" :label="item.label"
+              v-for="(item,i) in config.columnOptions" :key="i" />
+          </JNPF-table>
+          <pagination :total="total" :page.sync="listQuery.currentPage"
+            :limit.sync="listQuery.pageSize" @pagination="initData" v-if="config.hasPage" />
+          <div class="drawer-footer">
+            <el-button @click="visible = false">{{$t('common.cancelButton')}}</el-button>
+            <el-button type="primary" @click="select()">{{$t('common.confirmButton')}}</el-button>
+          </div>
+        </div>
       </el-drawer>
     </template>
   </div>
@@ -84,18 +86,6 @@ export default {
     config: {
       type: Object,
       default: () => { }
-    },
-    popupTitle: {
-      type: String,
-      default: '选择数据'
-    },
-    popupWidth: {
-      type: String,
-      default: '800px'
-    },
-    popupType: {
-      type: String,
-      default: 'dialog'
     },
     formData: Object,
     multiple: {
@@ -184,12 +174,12 @@ export default {
     search() {
       this.initData()
       this.listQuery.currentPage = 1
-      this.listQuery.pageSize = this.hasPage ? this.pageSize : 10000
+      this.listQuery.pageSize = this.config.hasPage ? this.config.pageSize : 10000
     },
     reset() {
       this.listQuery.keyword = ''
       this.listQuery.currentPage = 1
-      this.listQuery.pageSize = this.hasPage ? this.pageSize : 10000
+      this.listQuery.pageSize = this.config.hasPage ? this.config.pageSize : 10000
       this.initData()
     },
   }
