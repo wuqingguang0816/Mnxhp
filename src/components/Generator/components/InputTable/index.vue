@@ -596,7 +596,7 @@ export default {
       // vertical-align: top;
       &::after,
       &::before {
-        content: '';
+        content: "";
         width: 10px;
         height: 10px;
         background: white;
