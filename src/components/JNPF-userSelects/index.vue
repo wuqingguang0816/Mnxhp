@@ -40,7 +40,8 @@
           <el-tabs v-model="activeName" class="transfer-pane__body-tab"
             :class="{'hasSys-tab':hasSys}">
             <el-tab-pane label="部门" name="Organize">
-              <el-scrollbar class="JNPF-common-el-tree-scrollbar" v-loading="treeLoading">
+              <el-scrollbar class="JNPF-common-el-tree-scrollbar el-tree-height"
+                v-loading="treeLoading">
                 <el-tree ref="treeBox" :data="treeData" :props="defaultProps"
                   :default-expand-all="expands" highlight-current :expand-on-click-node="false"
                   node-key="id" @node-click="handleNodeClick" class="JNPF-common-el-tree"
@@ -53,7 +54,8 @@
               </el-scrollbar>
             </el-tab-pane>
             <el-tab-pane label="角色" name="Role">
-              <el-scrollbar class="JNPF-common-el-tree-scrollbar" v-loading="treeLoading">
+              <el-scrollbar class="JNPF-common-el-tree-scrollbar el-tree-height"
+                v-loading="treeLoading">
                 <el-tree ref="treeBoxRole" :data="treeData3" :props="defaultProps"
                   :default-expand-all="expands" highlight-current :expand-on-click-node="false"
                   node-key="id" @node-click="handleNodeClick" class="JNPF-common-el-tree"
@@ -66,7 +68,8 @@
               </el-scrollbar>
             </el-tab-pane>
             <el-tab-pane label="岗位" name="Position">
-              <el-scrollbar class="JNPF-common-el-tree-scrollbar" v-loading="treeLoading">
+              <el-scrollbar class="JNPF-common-el-tree-scrollbar el-tree-height"
+                v-loading="treeLoading">
                 <el-tree ref="treeBoxPosition" :data="treeData2" :props="defaultProps"
                   :default-expand-all="expands" highlight-current :expand-on-click-node="false"
                   node-key="id" @node-click="handleNodeClick" class="JNPF-common-el-tree"
@@ -79,7 +82,8 @@
               </el-scrollbar>
             </el-tab-pane>
             <el-tab-pane label="分组" name="Group">
-              <el-scrollbar class="JNPF-common-el-tree-scrollbar" v-loading="treeLoading">
+              <el-scrollbar class="JNPF-common-el-tree-scrollbar el-tree-height"
+                v-loading="treeLoading">
                 <el-tree ref="treeBoxGroup" :data="treeData4" :props="defaultProps"
                   :default-expand-all="expands" highlight-current :expand-on-click-node="false"
                   node-key="id" @node-click="handleNodeClick" class="JNPF-common-el-tree"
@@ -597,4 +601,7 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
+.el-tree-height {
+  height: 550px;
+}
 </style>
