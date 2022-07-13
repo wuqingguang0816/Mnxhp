@@ -165,7 +165,7 @@
               <el-form-item label="排序字段">
                 <el-select v-model="columnData.defaultSidx" placeholder="请选择排序字段" clearable>
                   <el-option :label="item.__config__.label" :value="item.__vModel__"
-                    v-for="(item, i) in list" :key="i"></el-option>
+                    v-for="(item, i) in groupFieldOptions" :key="i"></el-option>
                 </el-select>
               </el-form-item>
               <template v-if="columnData.type !==3">
