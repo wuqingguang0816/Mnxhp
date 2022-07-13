@@ -115,7 +115,7 @@ export default {
     "extend-schedule": "Schedule",
     "extend-email": "Email",
     "extend-document": "Document",
-    "extend-documentPreview": "DocumentPreview",
+    "extend-documentPreview": "Document Demo",
     "extend-barCode": "BarCode",
     "extend-printData": "PrintData",
     "extend-map": "Map",
