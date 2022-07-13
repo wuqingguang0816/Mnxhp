@@ -1,17 +1,40 @@
 <template>
-  <el-dialog :title="popupTitle" :close-on-click-modal="false" :visible.sync="visible"
-    class="JNPF-dialog JNPF-dialog_center" lock-scroll append-to-body :width='popupWidth'>
-    <JNPF-table v-loading="listLoading" :data="list" hasC @selection-change="handleSelectionChange">
-      <el-table-column :prop="item.value" :label="item.label"
-        v-for="(item,i) in config.columnOptions" :key="i" />
-    </JNPF-table>
-    <pagination :total="total" :page.sync="listQuery.currentPage" :limit.sync="listQuery.pageSize"
-      @pagination="initData" v-if="config.hasPage" :pager-count="5" />
-    <span slot="footer" class="dialog-footer">
-      <el-button @click="visible = false">{{$t('common.cancelButton')}}</el-button>
-      <el-button type="primary" @click="select()">{{$t('common.confirmButton')}}</el-button>
-    </span>
-  </el-dialog>
+  <div class="main">
+    <template v-if="popupType==='dialog'">
+      <el-dialog :title="popupTitle" :close-on-click-modal="false" :visible.sync="visible"
+        class="JNPF-dialog JNPF-dialog_center" lock-scroll append-to-body :width='popupWidth'>
+        <JNPF-table v-loading="listLoading" :data="list" hasC
+          @selection-change="handleSelectionChange">
+          <el-table-column :prop="item.value" :label="item.label"
+            v-for="(item,i) in config.columnOptions" :key="i" />
+        </JNPF-table>
+        <pagination :total="total" :page.sync="listQuery.currentPage"
+          :limit.sync="listQuery.pageSize" @pagination="initData" v-if="config.hasPage"
+          :pager-count="5" />
+        <span slot="footer" class="dialog-footer">
+          <el-button @click="visible = false">{{$t('common.cancelButton')}}</el-button>
+          <el-button type="primary" @click="select()">{{$t('common.confirmButton')}}</el-button>
+        </span>
+      </el-dialog>
+    </template>
+    <template v-if="popupType==='drawer'">
+      <el-drawer :title="popupTitle" :visible.sync="visible" :wrapperClosable="false" ref="drawer"
+        :size='popupWidth' append-to-body class="JNPF-common-drawer">
+        <JNPF-table v-loading="listLoading" :data="list" hasC
+          @selection-change="handleSelectionChange">
+          <el-table-column :prop="item.value" :label="item.label"
+            v-for="(item,i) in config.columnOptions" :key="i" />
+        </JNPF-table>
+        <pagination :total="total" :page.sync="listQuery.currentPage"
+          :limit.sync="listQuery.pageSize" @pagination="initData" v-if="config.hasPage"
+          :pager-count="5" />
+        <span slot="footer" class="dialog-footer">
+          <el-button @click="visible = false">{{$t('common.cancelButton')}}</el-button>
+          <el-button type="primary" @click="select()">{{$t('common.confirmButton')}}</el-button>
+        </span>
+      </el-drawer>
+    </template>
+  </div>
 </template>
 
 <script>
@@ -30,7 +53,11 @@ export default {
     },
     popupWidth: {
       type: String,
-      default: '700px'
+      default: '800px'
+    },
+    popupType: {
+      type: String,
+      default: 'dialog'
     },
     formData: Object,
     multiple: {

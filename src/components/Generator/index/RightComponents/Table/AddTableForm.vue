@@ -3,6 +3,20 @@
     class="JNPF-dialog JNPF-dialog_center" lock-scroll width="600px">
     <el-form ref="dataForm" :model="dataForm" :rules="dataRule" v-loading="formLoading"
       label-width="70px" label-position="left">
+      <el-form-item label="弹窗标题">
+        <el-input v-model="dataForm.popupTitle" placeholder="请输入弹窗标题" />
+      </el-form-item>
+      <el-form-item label="弹窗类型">
+        <el-select v-model="dataForm.popupType" placeholder="请选择弹窗类型">
+          <el-option label="居中弹窗" value="dialog"></el-option>
+          <el-option label="右侧弹窗" value="drawer"></el-option>
+        </el-select>
+      </el-form-item>
+      <el-form-item label="弹窗宽度">
+        <el-select v-model="dataForm.popupWidth" placeholder="请选择弹窗宽度">
+          <el-option v-for="item in popupWidthOptions" :label="item" :value="item" :key="item" />
+        </el-select>
+      </el-form-item>
       <el-form-item label="远端数据" prop="fullName">
         <interface-dialog :value="dataForm.interfaceId" :title="dataForm.interfaceName"
           @change="onInterfaceChange" />
@@ -119,7 +133,8 @@ export default {
         columnOptions: [],
         relationOptions: []
       },
-      dataRule: {}
+      dataRule: {},
+      popupWidthOptions: ['600px', '800px', '1000px', '40%', '50%', '60%', '70%', '80%'],
     }
   },
   computed: {

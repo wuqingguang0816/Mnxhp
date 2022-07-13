@@ -75,8 +75,10 @@
     <div class="table-actions" @click="addItem()" v-if="!disabled">
       <el-button type="text" icon="el-icon-plus"> {{ config.actionText }}</el-button>
     </div>
-    <SelectDialog v-if="selectDialogVisible" :config="config.addTableConf" :formData="formData"
-      ref="selectDialog" @select="addForSelect" />
+    <SelectDialog v-if="selectDialogVisible" :popupTitle="config.addTableConf.popupTitle"
+      :popupType="config.addTableConf.popupType" :popupWidth="config.addTableConf.popupWidth"
+      :config="config.addTableConf" :formData="formData" ref="selectDialog"
+      @select="addForSelect" />
   </div>
 </template>
 <script>
@@ -596,7 +598,7 @@ export default {
       // vertical-align: top;
       &::after,
       &::before {
-        content: '';
+        content: "";
         width: 10px;
         height: 10px;
         background: white;
