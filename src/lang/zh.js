@@ -115,7 +115,7 @@ export default {
     "extend-schedule": "日程安排",
     "extend-email": "邮件收发",
     "extend-document": "知识管理",
-    "extend-documentPreview": "文档预览",
+    "extend-documentPreview": "文档示例",
     "extend-barCode": "条码示例",
     "extend-printData": "打印示例",
     "extend-map": "地图示例",

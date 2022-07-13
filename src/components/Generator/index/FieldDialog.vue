@@ -60,7 +60,7 @@
 </template>
 
 <script>
-import { DataModelInfo, addTableField } from '@/api/systemData/dataModel'
+import { DataModelInfo, addTableFields } from '@/api/systemData/dataModel'
 export default {
   data() {
     return {
@@ -116,7 +116,7 @@ export default {
         tableFieldList,
         tableInfo: this.dataForm
       }
-      addTableField(this.dataBase, query).then((res) => {
+      addTableFields(this.dataBase, query).then((res) => {
         this.$message({
           message: res.msg,
           type: 'success',

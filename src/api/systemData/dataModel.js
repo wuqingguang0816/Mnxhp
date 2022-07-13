@@ -54,9 +54,9 @@ export function DataModelUpdate(linkId, data) {
   })
 }
 // 新增字段
-export function addTableField(linkId, data) {
+export function addTableFields(linkId, data) {
   return request({
-    url: `/api/system/DataModel/${linkId}/addField`,
+    url: `/api/system/DataModel/${linkId}/addFields`,
     method: 'put',
     data
   })

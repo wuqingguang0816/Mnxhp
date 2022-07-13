@@ -371,12 +371,12 @@ export default {
       },
       sysVariableList: [
         { value: '@user', tips: "当前用户" },
-        { value: '@organizationAndSuborganization', tips: "当前组织及子组织" },
-        { value: '@userAraSubordinates', tips: "当前用户及下属" },
+        { value: '@currentOrganizationAndSuborganization', tips: "当前组织及子组织" },
+        { value: '@currentUsersAndSubordinates', tips: "当前用户及下属" },
         { value: '@chargeorganization', tips: "当前分管组织" },
         { value: '@organization', tips: "当前组织" },
         {
-          value: '@chargeorganizationAndSuborganization', tips: "当前分管组织及子组织"
+          value: '@currentChargeorganizationAndSuborganization', tips: "当前分管组织及子组织"
         }
       ]
     }
