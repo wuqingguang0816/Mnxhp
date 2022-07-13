@@ -6,7 +6,13 @@
     <el-form-item v-if="activeData.actionText !== undefined" label="动作文字">
       <el-input v-model="activeData.actionText" placeholder="请输入动作文字" />
     </el-form-item>
-    <el-form-item label="是否合计">
+    <el-form-item label="动作设置">
+      <el-switch v-model="activeData.addType" :active-value="1" :inactive-value="0" />
+    </el-form-item>
+    <el-form-item label="动作表单" v-if="activeData.addType==1">
+      <el-button style="width: 100%;" @click="editConf()">配置表单</el-button>
+    </el-form-item>
+    <el-form-item label="合计设置">
       <el-switch v-model="activeData['show-summary']" />
     </el-form-item>
     <el-form-item label="合计字段" v-if="activeData['show-summary']">
@@ -16,12 +22,6 @@
             v-if="['comInput','numInput','calculate'].includes(item.__config__.jnpfKey)" />
         </template>
       </el-select>
-    </el-form-item>
-    <el-form-item label="配置表单">
-      <el-switch v-model="activeData.addType" :active-value="1" :inactive-value="0" />
-    </el-form-item>
-    <el-form-item label="选择表单" v-if="activeData.addType==1">
-      <el-button style="width: 100%;" @click="editConf()">配置表单</el-button>
     </el-form-item>
     <Form v-if="formVisible" ref="Form" @submit="updateConf" />
   </el-row>
