@@ -74,7 +74,7 @@
 
 <script>
 import {
-  getListById
+  getBillRuleSelector
 } from '@/api/system/billRule'
 export default {
   props: {
@@ -151,7 +151,7 @@ export default {
   },
   created() {
     this.$store.dispatch('base/getDictionaryData', { sort: 'businessType' }).then((res) => {
-      this.treeData = [{ id: '0', fullName: '业务分类', children: res }]
+      this.treeData = [{ id: '', fullName: '业务分类', children: res }]
       this.categoryId = this.treeData[0].id
       this.reset()
     })
@@ -164,8 +164,9 @@ export default {
       let query = {
         keyword: this.keyword,
         ...this.listQuery,
+        categoryId: this.categoryId
       }
-      getListById(this.categoryId, query).then(res => {
+      getBillRuleSelector(query).then(res => {
         this.list = res.data.list
         this.total = res.data.pagination.total
         this.listLoading = false
