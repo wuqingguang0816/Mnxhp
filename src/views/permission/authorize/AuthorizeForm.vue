@@ -246,6 +246,7 @@ export default {
           break
         case 1:
           this.params.type = 'module'
+          this.params.moduleIds = (this.moduleIdsTemp).toString()
           break
         case 2:
           this.params.type = 'button'
@@ -275,10 +276,10 @@ export default {
       switch (this.active) {
         case 0:
           this.dataForm.systemIds = dataIds
+          this.moduleIdsTemp = this.dataForm.systemIds
           break
         case 1:
           this.dataForm.module = dataIds
-          this.moduleIdsTemp = this.dataForm.module
           break
         case 2:
           this.dataForm.button = dataIds

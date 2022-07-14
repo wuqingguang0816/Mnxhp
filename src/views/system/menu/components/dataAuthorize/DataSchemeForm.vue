@@ -151,6 +151,7 @@ export default {
       }]
       this.visible = true
       this.$nextTick(() => {
+        this.$refs["dataForm"].resetFields();
         this.formLoading = true
         getDataAuthorizeList(this.dataForm.moduleId).then(res => {
           this.fieldOptions = res.data.list
@@ -264,6 +265,7 @@ export default {
     },
     dataFormSubmit() {
       this.$refs["dataForm"].validate((valid) => {
+        console.log(valid)
         if (valid) {
           this.btnLoading = true
           let conditionText = "",

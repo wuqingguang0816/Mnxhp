@@ -55,7 +55,7 @@
         <div class="JNPF-common-search-box-right" style="margin-top: 10px;">
           <el-tooltip effect="dark" :content="$t('common.refresh')" placement="top">
             <el-link icon="icon-ym icon-ym-Refresh JNPF-common-head-icon" :underline="false"
-              @click="refresh()" />
+              @click="initData()" />
           </el-tooltip>
         </div>
       </el-row>
