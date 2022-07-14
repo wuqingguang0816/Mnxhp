@@ -11,7 +11,7 @@
           </el-col>
           <el-col :span="6">
             <el-form-item>
-              <el-button type="primary" icon="el-icon-search" @click="search()">
+              <el-button type="primary" icon="el-icon-search" @click="initData()">
                 {{$t('common.search')}}</el-button>
               <el-button icon="el-icon-refresh-right" @click="reset()">{{$t('common.reset')}}
               </el-button>
