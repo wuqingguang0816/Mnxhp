@@ -10,13 +10,15 @@ export const getMenuList = (systemId, data) => {
 }
 
 // 获取上级菜单下拉框
-export const getMenuSelector = (data, id) => {
+export const getMenuSelector = (data, id, systemId) => {
   return request({
-    url: '/api/system/Menu/Selector/' + (!!id ? id : 0),
+    url: '/api/system/Menu/Selector/' + (!!id ? id : 0) + "/" + (systemId || 0),
     method: 'GET',
     data
   })
 }
+
+
 // 获取菜单列表（下拉框）
 export const getSelectorAll = data => {
   return request({

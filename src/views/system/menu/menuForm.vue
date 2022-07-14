@@ -209,7 +209,7 @@ export default {
         this.dataForm.category = category
         this.dataForm.systemId = systemId
         // 获取上级菜单
-        getMenuSelector({ category }, id || 0).then(res => {
+        getMenuSelector({ category }, id || 0, systemId).then(res => {
           let topItem = {
             fullName: "顶级节点",
             hasChildren: true,
