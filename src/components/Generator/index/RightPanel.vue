@@ -43,7 +43,7 @@
                         </el-link>
                       </p>
                       <el-option-group label="" v-if="fieldOptions.length">
-                        <el-option disabled value="jnpfAddField">
+                        <el-option disabled value="-">
                           <el-link type="primary" :underline="false" @click="openFieldDialog">添加字段
                           </el-link>
                         </el-option>
@@ -78,7 +78,7 @@
                       </p>
                       <el-option-group label=""
                         v-if="getSubTableFiled(activeData.__config__.relationTable).length">
-                        <el-option disabled value="jnpfAddField">
+                        <el-option disabled value="-">
                           <el-link type="primary" :underline="false" @click="openFieldDialog">添加字段
                           </el-link>
                         </el-option>
