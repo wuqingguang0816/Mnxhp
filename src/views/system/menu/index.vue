@@ -6,7 +6,7 @@
           <el-col :span="6">
             <el-form-item label="关键词">
               <el-input v-model="listQuery.keyword" placeholder="请输入关键词查询" clearable
-                @keyup.enter.native="search()" />
+                @keyup.enter.native="initData()" />
             </el-form-item>
           </el-col>
           <el-col :span="6">
