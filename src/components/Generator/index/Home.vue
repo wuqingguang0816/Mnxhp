@@ -344,6 +344,7 @@ export default {
       }
       if (obj.to.className.indexOf('table') > -1) {
         this.$set(this.activeItem.__config__, 'isSubTable', true)
+        this.$set(this.activeItem.__config__, 'parentVModel', this.activeTableItem.__vModel__)
         if (this.$store.getters.hasTable) {
           this.$set(this.activeItem.__config__, 'relationTable', this.activeTableItem.__config__.tableName)
           this.activeItem.__vModel__ = ''
@@ -355,6 +356,7 @@ export default {
       if (obj.from == obj.to) return
       if (obj.to.className.indexOf('table') > -1) {
         this.$set(this.activeItem.__config__, 'isSubTable', true)
+        this.$set(this.activeItem.__config__, 'parentVModel', this.activeTableItem.__vModel__)
         if (this.$store.getters.hasTable) {
           this.$set(this.activeItem.__config__, 'relationTable', this.activeTableItem.__config__.tableName)
           this.activeItem.__vModel__ = ''
@@ -365,9 +367,11 @@ export default {
       if (obj.from == obj.to) return
       if (obj.to.className.indexOf('table') < 0) {
         this.$set(this.activeItem.__config__, 'isSubTable', false)
+        this.$set(this.activeItem.__config__, 'parentVModel', '')
         if (this.$store.getters.hasTable) this.activeItem.__vModel__ = ''
       } else {
         this.$set(this.activeItem.__config__, 'isSubTable', true)
+        this.$set(this.activeItem.__config__, 'parentVModel', this.activeTableItem.__vModel__)
         if (this.$store.getters.hasTable) {
           this.$set(this.activeItem.__config__, 'relationTable', this.activeTableItem.__config__.tableName)
           this.activeItem.__vModel__ = ''
@@ -389,7 +393,7 @@ export default {
       tempActiveData = clone
       return tempActiveData
     },
-    createIdAndKey(item) {
+    createIdAndKey(item, parent) {
       const config = item.__config__
       config.formId = ++this.idGlobal
       config.renderKey = +new Date() // 改变renderKey后可以实现强制更新组件
@@ -404,6 +408,9 @@ export default {
             item.__vModel__ = ""
           }
         }
+        if (parent && parent.__vModel__ && parent.__config__.jnpfKey === 'table') {
+          item.__config__.parentVModel = parent.__vModel__
+        }
       } else if (config.layout === 'rowFormItem') {
         if (config.jnpfKey === 'table') {
           item.__vModel__ = this.toggleVmodelCase(`${config.jnpfKey}Field${this.idGlobal}`);
@@ -413,7 +420,7 @@ export default {
         // delete config.label // rowFormItem无需配置label属性
       }
       if (Array.isArray(config.children)) {
-        config.children = config.children.map(childItem => this.createIdAndKey(childItem))
+        config.children = config.children.map(childItem => this.createIdAndKey(childItem, item))
       }
       return item
     },
