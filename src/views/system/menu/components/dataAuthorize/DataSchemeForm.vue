@@ -265,7 +265,6 @@ export default {
     },
     dataFormSubmit() {
       this.$refs["dataForm"].validate((valid) => {
-        console.log(valid)
         if (valid) {
           this.btnLoading = true
           let conditionText = "",
