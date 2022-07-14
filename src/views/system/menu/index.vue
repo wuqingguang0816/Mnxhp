@@ -66,8 +66,6 @@
             </template>
           </el-table-column>
         </JNPF-table>
-        <!-- <pagination :total="total" :page.sync="listQuery.currentPage"
-          :limit.sync="listQuery.pageSize" @pagination="initData" /> -->
       </div>
     </div>
     <Form v-if="formVisible" ref="Form" @refreshDataList="initData" />
@@ -100,7 +98,6 @@ export default {
       total: 0
     };
   },
-
   created() {
     this.initData();
   },
