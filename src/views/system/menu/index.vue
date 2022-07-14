@@ -66,8 +66,8 @@
             </template>
           </el-table-column>
         </JNPF-table>
-        <pagination :total="total" :page.sync="listQuery.currentPage"
-          :limit.sync="listQuery.pageSize" @pagination="initData" />
+        <!-- <pagination :total="total" :page.sync="listQuery.currentPage"
+          :limit.sync="listQuery.pageSize" @pagination="initData" /> -->
       </div>
     </div>
     <Form v-if="formVisible" ref="Form" @refreshDataList="initData" />
@@ -109,6 +109,7 @@ export default {
       this.previewVisible = false
       if (isRefresh) this.refresh()
     },
+
     reset() {
       this.listQuery.keyword = "";
       this.initData();
