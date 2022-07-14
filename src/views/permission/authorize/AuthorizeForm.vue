@@ -23,15 +23,16 @@
           <el-button :disabled="active <= 0 || treeLoading" @click="handlePrevStep">
             {{$t('common.prev')}}
           </el-button>
-          <el-button :disabled="active >= 4 || treeLoading" @click="handleNextStep">
+          <el-button :disabled="active >= 5 || treeLoading" @click="handleNextStep">
             {{$t('common.next')}}
           </el-button>
-          <el-button type="primary" :loading="btnLoading" :disabled="active < 4"
+          <el-button type="primary" :loading="btnLoading" :disabled="active < 5"
             @click="handleConfirm()">{{$t('common.confirmButton')}}</el-button>
           <el-button @click="goBack">{{$t('common.cancelButton')}}</el-button>
         </div>
       </div>
       <el-steps :active="active" finish-status="success" simple>
+        <el-step :title="$t('authorize.systemPermission')"></el-step>
         <el-step :title="$t('authorize.menuPermission')"></el-step>
         <el-step :title="$t('authorize.buttonPermission')"></el-step>
         <el-step :title="$t('authorize.listPermission')"></el-step>
