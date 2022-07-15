@@ -44,6 +44,7 @@
             </el-input>
           </div>
           <div class="transfer-pane__body left-pane">
+            <div class="custom-title">全部数据</div>
             <div class="single-list" ref="candidate">
               <template v-if="list.length">
                 <div v-for="(item,index) in list" :key="index" class="selected-item-user"

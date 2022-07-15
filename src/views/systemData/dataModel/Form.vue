@@ -23,7 +23,7 @@
           <h2>字段设置</h2>
           <div class="options">
             <el-dropdown :disabled="!fieldList.length">
-              <el-button icon="el-icon-plus" :disabled="!fieldList.length">
+              <el-button :disabled="!fieldList.length">
                 常用字段<i class="el-icon-arrow-down el-icon--right"></i>
               </el-button>
               <el-dropdown-menu slot="dropdown">
