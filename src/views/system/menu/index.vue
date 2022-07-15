@@ -30,15 +30,15 @@
           </div>
         </div>
         <JNPF-table v-loading="listLoading" :data="list">
-          <el-table-column prop="fullName" label="系统名称" />
-          <el-table-column prop="enCode" label="系统编码" />
-          <el-table-column prop="icon" label="图标" align="center">
+          <el-table-column prop="fullName" label="系统名称" min-width="200" />
+          <el-table-column prop="enCode" label="系统编码" min-width="200" />
+          <el-table-column prop="icon" label="图标" width="50" align="center">
             <template slot-scope="scope">
               <i :class="scope.row.icon + ' table-icon'" />
             </template>
           </el-table-column>
-          <el-table-column prop="sortCode" label="排序" align="center" />
-          <el-table-column prop="enabledMark" label="状态" align="center">
+          <el-table-column prop="sortCode" label="排序" width="70" align="center" />
+          <el-table-column prop="enabledMark" label="状态" width="70" align="center">
             <template slot-scope="scope">
               <el-tag :type="scope.row.enabledMark == 1 ? 'success' : 'danger'" disable-transitions>
                 {{scope.row.enabledMark==1?'正常':'停用'}}</el-tag>

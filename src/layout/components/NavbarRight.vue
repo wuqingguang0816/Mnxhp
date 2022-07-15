@@ -20,7 +20,7 @@
         <lang-select class="right-menu-item hover-effect" />
       </template>
     </template>
-    <el-dropdown class="avatar-container right-menu-item hover-effect" trigger="hover">
+    <el-dropdown class="avatar-container right-menu-item hover-effect" trigger='click'>
       <div class="avatar-wrapper">
         <el-avatar :size="26" :src="define.comUrl + userInfo.headIcon" class="user-avatar"
           v-if="userInfo.headIcon" />
@@ -39,7 +39,6 @@
             </el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>
-
         <router-link to="/profile">
           <el-dropdown-item>
             <i class="icon-ym icon-ym-header-userInfo"></i>{{ $t('navbar.profile') }}
