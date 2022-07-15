@@ -1,7 +1,7 @@
 <template>
   <div class="DbCopy-container app-container nohead JNPF-flex-main">
-    <el-alert title="温馨提示：数据同步是由A数据库同步到B数据库，必须确保数据库表结构一致否则会同步失败。" type="warning" :closable="false"
-      show-icon class="mb-20">
+    <el-alert title="温馨提示：数据同步是由A数据库同步到B数据库。" type="warning" :closable="false" show-icon
+      class="mb-20">
     </el-alert>
     <el-form ref="dataForm" :model="dataForm" label-width="140px" :rules="dataRule"
       @submit.native.prevent class="mt-10">
@@ -78,7 +78,7 @@
         <el-button type="text" icon="el-icon-plus">新增规则</el-button>
       </div>
       <span slot="footer" class="dialog-footer">
-        <el-button @click="dialogVisible">取消</el-button>
+        <el-button @click="dialogVisible=false">取消</el-button>
         <el-button type="primary" @click="saveRule">确定</el-button>
       </span>
     </el-dialog>
@@ -148,12 +148,14 @@ export default {
               this.beforeConversionList.push({ val: key, value: this.convertRuleMap[key] })
             }
             if (this.configureList.length == 0) {
-              const element = this.beforeConversionList[0];
-              this.configureList.push({
-                beforeConversion: element.val,
-                afterConversion: element.value[0]
-              })
-              this.configureList[0].afterConversionList = element.value
+              for (let index = 0; index < this.beforeConversionList.length; index++) {
+                const element = this.beforeConversionList[index];
+                this.configureList.push({
+                  beforeConversion: element.val,
+                  afterConversion: element.value[0]
+                })
+                this.configureList[index].afterConversionList = element.value
+              }
             }
             this.verification = res.data.checkDbFlag
             this.list = res.data.tableList
