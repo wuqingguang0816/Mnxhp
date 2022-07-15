@@ -1148,7 +1148,7 @@ export const systemComponents = [
     },
     type: 'currUser',
     readonly: true,
-    placeholder: "系统自动生成"
+    placeholder: ""
   },
   {
     __config__: {
@@ -1169,7 +1169,7 @@ export const systemComponents = [
     },
     type: 'currTime',
     readonly: true,
-    placeholder: "系统自动生成"
+    placeholder: ""
   },
   {
     __config__: {
@@ -1231,7 +1231,7 @@ export const systemComponents = [
     type: 'currOrganize',
     readonly: true,
     showLevel: "last",
-    placeholder: "系统自动生成"
+    placeholder: ""
   },
   {
     __config__: {
@@ -1252,7 +1252,7 @@ export const systemComponents = [
     },
     type: 'currPosition',
     readonly: true,
-    placeholder: "系统自动生成"
+    placeholder: ""
   }
 ];
 
