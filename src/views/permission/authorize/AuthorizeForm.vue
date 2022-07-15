@@ -136,6 +136,7 @@ export default {
             this.systemAllData = res.data.all
             this.authorizeTreeData = this.systemAuthorizeTree
             this.dataForm.systemIds = [...this.moduleIdsTemp, ...res.data.ids]
+            this.moduleIdsTemp = this.dataForm.systemIds
             this.$refs.authorizeTree.setCheckedKeys(this.dataForm.systemIds)
             break
           case 1:
@@ -280,6 +281,7 @@ export default {
           break
         case 1:
           this.dataForm.module = dataIds
+          this.moduleIdsTemp = this.dataForm.module
           break
         case 2:
           this.dataForm.button = dataIds
