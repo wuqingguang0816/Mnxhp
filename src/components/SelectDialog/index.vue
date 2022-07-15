@@ -120,10 +120,11 @@ export default {
       if (!this.config.interfaceId) return
       this.listLoading = true
       const paramList = this.getParamList()
+      const columnOptions = this.config.columnOptions.map(o => o.value)
       let query = {
         ...this.listQuery,
         interfaceId: this.config.interfaceId,
-        columnOptions: this.config.columnOptions.map(o => o.value),
+        columnOptions: columnOptions.join(','),
         paramList
       }
       getDataInterfaceDataSelect(this.config.interfaceId, query).then(res => {
