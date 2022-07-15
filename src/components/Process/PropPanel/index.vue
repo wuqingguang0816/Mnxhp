@@ -452,24 +452,24 @@
                   </el-table-column>
                   <el-table-column prop="value" label="表单字段">
                     <template slot-scope="scope">
-                      <template v-if="scope.row.required">
-                        <el-select v-model="scope.row.relationField" placeholder="请选择表单字段" clearable
-                          filterable @change="onRelationFieldChange($event,scope.row)">
+                      <el-select v-model="scope.row.relationField" placeholder="请选择表单字段" clearable
+                        filterable @change="onRelationFieldChange($event,scope.row)">
+                        <el-option-group>
+                          <el-option v-for="item in systemFieldOptions" :key="item.__vModel__"
+                            :label="item.__config__.label?item.__vModel__+'('+item.__config__.label+')':item.__vModel__"
+                            :value="item.__vModel__" />
+                        </el-option-group>
+                        <el-option-group v-if="scope.row.required">
                           <el-option v-for="item in funcRequiredOptions" :key="item.__vModel__"
                             :label="item.__config__.label?item.__vModel__+'('+item.__config__.label+')':item.__vModel__"
-                            :value="item.__vModel__">
-                          </el-option>
-                        </el-select>
-                      </template>
-                      <template v-else>
-                        <el-select v-model="scope.row.relationField" placeholder="请选择表单字段" clearable
-                          filterable @change="onRelationFieldChange($event,scope.row)">
-                          <el-option v-for="item in funcOptions" :key="item.__vModel__"
+                            :value="item.__vModel__" />
+                        </el-option-group>
+                        <el-option-group v-else>
+                          <el-option v-for="item in formFieldsOptions" :key="item.__vModel__"
                             :label="item.__config__.label?item.__vModel__+'('+item.__config__.label+')':item.__vModel__"
-                            :value="item.__vModel__">
-                          </el-option>
-                        </el-select>
-                      </template>
+                            :value="item.__vModel__" />
+                        </el-option-group>
+                      </el-select>
                     </template>
                   </el-table-column>
                 </el-table>
@@ -495,24 +495,24 @@
                   </el-table-column>
                   <el-table-column prop="value" label="表单字段">
                     <template slot-scope="scope">
-                      <template v-if="scope.row.required">
-                        <el-select v-model="scope.row.relationField" placeholder="请选择表单字段" clearable
-                          filterable @change="onRelationFieldChange($event,scope.row)">
+                      <el-select v-model="scope.row.relationField" placeholder="请选择表单字段" clearable
+                        filterable @change="onRelationFieldChange($event,scope.row)">
+                        <el-option-group>
+                          <el-option v-for="item in systemFieldOptions" :key="item.__vModel__"
+                            :label="item.__config__.label?item.__vModel__+'('+item.__config__.label+')':item.__vModel__"
+                            :value="item.__vModel__" />
+                        </el-option-group>
+                        <el-option-group v-if="scope.row.required">
                           <el-option v-for="item in funcRequiredOptions" :key="item.__vModel__"
                             :label="item.__config__.label?item.__vModel__+'('+item.__config__.label+')':item.__vModel__"
-                            :value="item.__vModel__">
-                          </el-option>
-                        </el-select>
-                      </template>
-                      <template v-else>
-                        <el-select v-model="scope.row.relationField" placeholder="请选择表单字段" clearable
-                          filterable @change="onRelationFieldChange($event,scope.row)">
-                          <el-option v-for="item in funcOptions" :key="item.__vModel__"
+                            :value="item.__vModel__" />
+                        </el-option-group>
+                        <el-option-group v-else>
+                          <el-option v-for="item in formFieldsOptions" :key="item.__vModel__"
                             :label="item.__config__.label?item.__vModel__+'('+item.__config__.label+')':item.__vModel__"
-                            :value="item.__vModel__">
-                          </el-option>
-                        </el-select>
-                      </template>
+                            :value="item.__vModel__" />
+                        </el-option-group>
+                      </el-select>
                     </template>
                   </el-table-column>
                 </el-table>
@@ -538,24 +538,24 @@
                   </el-table-column>
                   <el-table-column prop="value" label="表单字段">
                     <template slot-scope="scope">
-                      <template v-if="scope.row.required">
-                        <el-select v-model="scope.row.relationField" placeholder="请选择表单字段" clearable
-                          filterable @change="onRelationFieldChange($event,scope.row)">
+                      <el-select v-model="scope.row.relationField" placeholder="请选择表单字段" clearable
+                        filterable @change="onRelationFieldChange($event,scope.row)">
+                        <el-option-group>
+                          <el-option v-for="item in systemFieldOptions" :key="item.__vModel__"
+                            :label="item.__config__.label?item.__vModel__+'('+item.__config__.label+')':item.__vModel__"
+                            :value="item.__vModel__" />
+                        </el-option-group>
+                        <el-option-group v-if="scope.row.required">
                           <el-option v-for="item in funcRequiredOptions" :key="item.__vModel__"
                             :label="item.__config__.label?item.__vModel__+'('+item.__config__.label+')':item.__vModel__"
-                            :value="item.__vModel__">
-                          </el-option>
-                        </el-select>
-                      </template>
-                      <template v-else>
-                        <el-select v-model="scope.row.relationField" placeholder="请选择表单字段" clearable
-                          filterable @change="onRelationFieldChange($event,scope.row)">
-                          <el-option v-for="item in funcOptions" :key="item.__vModel__"
+                            :value="item.__vModel__" />
+                        </el-option-group>
+                        <el-option-group v-else>
+                          <el-option v-for="item in formFieldsOptions" :key="item.__vModel__"
                             :label="item.__config__.label?item.__vModel__+'('+item.__config__.label+')':item.__vModel__"
-                            :value="item.__vModel__">
-                          </el-option>
-                        </el-select>
-                      </template>
+                            :value="item.__vModel__" />
+                        </el-option-group>
+                      </el-select>
                     </template>
                   </el-table-column>
                 </el-table>
@@ -597,10 +597,16 @@
                     <template slot-scope="scope">
                       <el-select v-model="scope.row.relationField" placeholder="请选择表单字段" clearable
                         filterable @change="onRelationFieldChange($event,scope.row)">
-                        <el-option v-for="item in funcOptions" :key="item.__vModel__"
-                          :label="item.__config__.label?item.__vModel__+'('+item.__config__.label+')':item.__vModel__"
-                          :value="item.__vModel__">
-                        </el-option>
+                        <el-option-group>
+                          <el-option v-for="item in systemFieldOptions" :key="item.__vModel__"
+                            :label="item.__config__.label?item.__vModel__+'('+item.__config__.label+')':item.__vModel__"
+                            :value="item.__vModel__" />
+                        </el-option-group>
+                        <el-option-group>
+                          <el-option v-for="item in formFieldsOptions" :key="item.__vModel__"
+                            :label="item.__config__.label?item.__vModel__+'('+item.__config__.label+')':item.__vModel__"
+                            :value="item.__vModel__" />
+                        </el-option-group>
                       </el-select>
                     </template>
                   </el-table-column>
@@ -635,10 +641,16 @@
                     <template slot-scope="scope">
                       <el-select v-model="scope.row.relationField" placeholder="请选择表单字段" clearable
                         filterable @change="onRelationFieldChange($event,scope.row)">
-                        <el-option v-for="item in funcOptions" :key="item.__vModel__"
-                          :label="item.__config__.label?item.__vModel__+'('+item.__config__.label+')':item.__vModel__"
-                          :value="item.__vModel__">
-                        </el-option>
+                        <el-option-group>
+                          <el-option v-for="item in systemFieldOptions" :key="item.__vModel__"
+                            :label="item.__config__.label?item.__vModel__+'('+item.__config__.label+')':item.__vModel__"
+                            :value="item.__vModel__" />
+                        </el-option-group>
+                        <el-option-group>
+                          <el-option v-for="item in formFieldsOptions" :key="item.__vModel__"
+                            :label="item.__config__.label?item.__vModel__+'('+item.__config__.label+')':item.__vModel__"
+                            :value="item.__vModel__" />
+                        </el-option-group>
                       </el-select>
                     </template>
                   </el-table-column>
@@ -673,10 +685,16 @@
                     <template slot-scope="scope">
                       <el-select v-model="scope.row.relationField" placeholder="请选择表单字段" clearable
                         filterable @change="onRelationFieldChange($event,scope.row)">
-                        <el-option v-for="item in funcOptions" :key="item.__vModel__"
-                          :label="item.__config__.label?item.__vModel__+'('+item.__config__.label+')':item.__vModel__"
-                          :value="item.__vModel__">
-                        </el-option>
+                        <el-option-group>
+                          <el-option v-for="item in systemFieldOptions" :key="item.__vModel__"
+                            :label="item.__config__.label?item.__vModel__+'('+item.__config__.label+')':item.__vModel__"
+                            :value="item.__vModel__" />
+                        </el-option-group>
+                        <el-option-group>
+                          <el-option v-for="item in formFieldsOptions" :key="item.__vModel__"
+                            :label="item.__config__.label?item.__vModel__+'('+item.__config__.label+')':item.__vModel__"
+                            :value="item.__vModel__" />
+                        </el-option-group>
                       </el-select>
                     </template>
                   </el-table-column>
@@ -711,10 +729,16 @@
                     <template slot-scope="scope">
                       <el-select v-model="scope.row.relationField" placeholder="请选择表单字段" clearable
                         filterable @change="onRelationFieldChange($event,scope.row)">
-                        <el-option v-for="item in funcOptions" :key="item.__vModel__"
-                          :label="item.__config__.label?item.__vModel__+'('+item.__config__.label+')':item.__vModel__"
-                          :value="item.__vModel__">
-                        </el-option>
+                        <el-option-group>
+                          <el-option v-for="item in systemFieldOptions" :key="item.__vModel__"
+                            :label="item.__config__.label?item.__vModel__+'('+item.__config__.label+')':item.__vModel__"
+                            :value="item.__vModel__" />
+                        </el-option-group>
+                        <el-option-group>
+                          <el-option v-for="item in formFieldsOptions" :key="item.__vModel__"
+                            :label="item.__config__.label?item.__vModel__+'('+item.__config__.label+')':item.__vModel__"
+                            :value="item.__vModel__" />
+                        </el-option-group>
                       </el-select>
                     </template>
                   </el-table-column>
@@ -749,10 +773,16 @@
                     <template slot-scope="scope">
                       <el-select v-model="scope.row.relationField" placeholder="请选择表单字段" clearable
                         filterable @change="onRelationFieldChange($event,scope.row)">
-                        <el-option v-for="item in funcOptions" :key="item.__vModel__"
-                          :label="item.__config__.label?item.__vModel__+'('+item.__config__.label+')':item.__vModel__"
-                          :value="item.__vModel__">
-                        </el-option>
+                        <el-option-group>
+                          <el-option v-for="item in systemFieldOptions" :key="item.__vModel__"
+                            :label="item.__config__.label?item.__vModel__+'('+item.__config__.label+')':item.__vModel__"
+                            :value="item.__vModel__" />
+                        </el-option-group>
+                        <el-option-group>
+                          <el-option v-for="item in formFieldsOptions" :key="item.__vModel__"
+                            :label="item.__config__.label?item.__vModel__+'('+item.__config__.label+')':item.__vModel__"
+                            :value="item.__vModel__" />
+                        </el-option-group>
                       </el-select>
                     </template>
                   </el-table-column>
@@ -1005,24 +1035,24 @@
                   </el-table-column>
                   <el-table-column prop="value" label="表单字段">
                     <template slot-scope="scope">
-                      <template v-if="scope.row.required">
-                        <el-select v-model="scope.row.relationField" placeholder="请选择表单字段" clearable
-                          filterable @change="onRelationFieldChange($event,scope.row)">
+                      <el-select v-model="scope.row.relationField" placeholder="请选择表单字段" clearable
+                        filterable @change="onRelationFieldChange($event,scope.row)">
+                        <el-option-group>
+                          <el-option v-for="item in systemFieldOptions" :key="item.__vModel__"
+                            :label="item.__config__.label?item.__vModel__+'('+item.__config__.label+')':item.__vModel__"
+                            :value="item.__vModel__" />
+                        </el-option-group>
+                        <el-option-group v-if="scope.row.required">
                           <el-option v-for="item in funcRequiredOptions" :key="item.__vModel__"
                             :label="item.__config__.label?item.__vModel__+'('+item.__config__.label+')':item.__vModel__"
-                            :value="item.__vModel__">
-                          </el-option>
-                        </el-select>
-                      </template>
-                      <template v-else>
-                        <el-select v-model="scope.row.relationField" placeholder="请选择表单字段" clearable
-                          filterable @change="onRelationFieldChange($event,scope.row)">
-                          <el-option v-for="item in funcOptions" :key="item.__vModel__"
+                            :value="item.__vModel__" />
+                        </el-option-group>
+                        <el-option-group v-else>
+                          <el-option v-for="item in formFieldsOptions" :key="item.__vModel__"
                             :label="item.__config__.label?item.__vModel__+'('+item.__config__.label+')':item.__vModel__"
-                            :value="item.__vModel__">
-                          </el-option>
-                        </el-select>
-                      </template>
+                            :value="item.__vModel__" />
+                        </el-option-group>
+                      </el-select>
                     </template>
                   </el-table-column>
                 </el-table>
@@ -1048,24 +1078,24 @@
                   </el-table-column>
                   <el-table-column prop="value" label="表单字段">
                     <template slot-scope="scope">
-                      <template v-if="scope.row.required">
-                        <el-select v-model="scope.row.relationField" placeholder="请选择表单字段" clearable
-                          filterable @change="onRelationFieldChange($event,scope.row)">
+                      <el-select v-model="scope.row.relationField" placeholder="请选择表单字段" clearable
+                        filterable @change="onRelationFieldChange($event,scope.row)">
+                        <el-option-group>
+                          <el-option v-for="item in systemFieldOptions" :key="item.__vModel__"
+                            :label="item.__config__.label?item.__vModel__+'('+item.__config__.label+')':item.__vModel__"
+                            :value="item.__vModel__" />
+                        </el-option-group>
+                        <el-option-group v-if="scope.row.required">
                           <el-option v-for="item in funcRequiredOptions" :key="item.__vModel__"
                             :label="item.__config__.label?item.__vModel__+'('+item.__config__.label+')':item.__vModel__"
-                            :value="item.__vModel__">
-                          </el-option>
-                        </el-select>
-                      </template>
-                      <template v-else>
-                        <el-select v-model="scope.row.relationField" placeholder="请选择表单字段" clearable
-                          filterable @change="onRelationFieldChange($event,scope.row)">
-                          <el-option v-for="item in funcOptions" :key="item.__vModel__"
+                            :value="item.__vModel__" />
+                        </el-option-group>
+                        <el-option-group v-else>
+                          <el-option v-for="item in formFieldsOptions" :key="item.__vModel__"
                             :label="item.__config__.label?item.__vModel__+'('+item.__config__.label+')':item.__vModel__"
-                            :value="item.__vModel__">
-                          </el-option>
-                        </el-select>
-                      </template>
+                            :value="item.__vModel__" />
+                        </el-option-group>
+                      </el-select>
                     </template>
                   </el-table-column>
                 </el-table>
@@ -1091,24 +1121,24 @@
                   </el-table-column>
                   <el-table-column prop="value" label="表单字段">
                     <template slot-scope="scope">
-                      <template v-if="scope.row.required">
-                        <el-select v-model="scope.row.relationField" placeholder="请选择表单字段" clearable
-                          filterable @change="onRelationFieldChange($event,scope.row)">
+                      <el-select v-model="scope.row.relationField" placeholder="请选择表单字段" clearable
+                        filterable @change="onRelationFieldChange($event,scope.row)">
+                        <el-option-group>
+                          <el-option v-for="item in systemFieldOptions" :key="item.__vModel__"
+                            :label="item.__config__.label?item.__vModel__+'('+item.__config__.label+')':item.__vModel__"
+                            :value="item.__vModel__" />
+                        </el-option-group>
+                        <el-option-group v-if="scope.row.required">
                           <el-option v-for="item in funcRequiredOptions" :key="item.__vModel__"
                             :label="item.__config__.label?item.__vModel__+'('+item.__config__.label+')':item.__vModel__"
-                            :value="item.__vModel__">
-                          </el-option>
-                        </el-select>
-                      </template>
-                      <template v-else>
-                        <el-select v-model="scope.row.relationField" placeholder="请选择表单字段" clearable
-                          filterable @change="onRelationFieldChange($event,scope.row)">
-                          <el-option v-for="item in funcOptions" :key="item.__vModel__"
+                            :value="item.__vModel__" />
+                        </el-option-group>
+                        <el-option-group v-else>
+                          <el-option v-for="item in formFieldsOptions" :key="item.__vModel__"
                             :label="item.__config__.label?item.__vModel__+'('+item.__config__.label+')':item.__vModel__"
-                            :value="item.__vModel__">
-                          </el-option>
-                        </el-select>
-                      </template>
+                            :value="item.__vModel__" />
+                        </el-option-group>
+                      </el-select>
                     </template>
                   </el-table-column>
                 </el-table>
@@ -1150,10 +1180,16 @@
                     <template slot-scope="scope">
                       <el-select v-model="scope.row.relationField" placeholder="请选择表单字段" clearable
                         filterable @change="onRelationFieldChange($event,scope.row)">
-                        <el-option v-for="item in funcOptions" :key="item.__vModel__"
-                          :label="item.__config__.label?item.__vModel__+'('+item.__config__.label+')':item.__vModel__"
-                          :value="item.__vModel__">
-                        </el-option>
+                        <el-option-group>
+                          <el-option v-for="item in systemFieldOptions" :key="item.__vModel__"
+                            :label="item.__config__.label?item.__vModel__+'('+item.__config__.label+')':item.__vModel__"
+                            :value="item.__vModel__" />
+                        </el-option-group>
+                        <el-option-group>
+                          <el-option v-for="item in formFieldsOptions" :key="item.__vModel__"
+                            :label="item.__config__.label?item.__vModel__+'('+item.__config__.label+')':item.__vModel__"
+                            :value="item.__vModel__" />
+                        </el-option-group>
                       </el-select>
                     </template>
                   </el-table-column>
@@ -1188,10 +1224,16 @@
                     <template slot-scope="scope">
                       <el-select v-model="scope.row.relationField" placeholder="请选择表单字段" clearable
                         filterable @change="onRelationFieldChange($event,scope.row)">
-                        <el-option v-for="item in funcOptions" :key="item.__vModel__"
-                          :label="item.__config__.label?item.__vModel__+'('+item.__config__.label+')':item.__vModel__"
-                          :value="item.__vModel__">
-                        </el-option>
+                        <el-option-group>
+                          <el-option v-for="item in systemFieldOptions" :key="item.__vModel__"
+                            :label="item.__config__.label?item.__vModel__+'('+item.__config__.label+')':item.__vModel__"
+                            :value="item.__vModel__" />
+                        </el-option-group>
+                        <el-option-group>
+                          <el-option v-for="item in formFieldsOptions" :key="item.__vModel__"
+                            :label="item.__config__.label?item.__vModel__+'('+item.__config__.label+')':item.__vModel__"
+                            :value="item.__vModel__" />
+                        </el-option-group>
                       </el-select>
                     </template>
                   </el-table-column>
@@ -1226,10 +1268,16 @@
                     <template slot-scope="scope">
                       <el-select v-model="scope.row.relationField" placeholder="请选择表单字段" clearable
                         filterable @change="onRelationFieldChange($event,scope.row)">
-                        <el-option v-for="item in funcOptions" :key="item.__vModel__"
-                          :label="item.__config__.label?item.__vModel__+'('+item.__config__.label+')':item.__vModel__"
-                          :value="item.__vModel__">
-                        </el-option>
+                        <el-option-group>
+                          <el-option v-for="item in systemFieldOptions" :key="item.__vModel__"
+                            :label="item.__config__.label?item.__vModel__+'('+item.__config__.label+')':item.__vModel__"
+                            :value="item.__vModel__" />
+                        </el-option-group>
+                        <el-option-group>
+                          <el-option v-for="item in formFieldsOptions" :key="item.__vModel__"
+                            :label="item.__config__.label?item.__vModel__+'('+item.__config__.label+')':item.__vModel__"
+                            :value="item.__vModel__" />
+                        </el-option-group>
                       </el-select>
                     </template>
                   </el-table-column>
@@ -1620,6 +1668,7 @@ export default {
       assigneeTypeOptions: assigneeTypeOptions,
       noticeOptions,
       nodeNoticeOptions,
+      systemFieldOptions,
       rejectStepOptions: [],
       progressOptions: ['10', '20', '30', '40', '50', '60', '70', '80', '90'],
       symbolOptions: [
@@ -1738,7 +1787,7 @@ export default {
       return options
     },
     funcRequiredOptions() {
-      let options = this.funcOptions.filter(o => o.__config__ && o.__config__.required)
+      let options = this.formFieldsOptions.filter(o => o.__config__ && o.__config__.required)
       return options
     },
   },
