@@ -98,7 +98,7 @@
               <el-form-item label="排序字段">
                 <el-select v-model="columnData.defaultSidx" placeholder="请选择排序字段" clearable>
                   <el-option :label="item.__config__.label" :value="item.__vModel__"
-                    v-for="(item, i) in list" :key="i"></el-option>
+                    v-for="(item, i) in groupFieldOptions" :key="i"></el-option>
                 </el-select>
               </el-form-item>
               <el-form-item label="分页设置">
@@ -244,6 +244,7 @@ export default {
       ],
       columnOptions: [],
       searchOptions: [],
+      groupFieldOptions: [],
       sortOptions: [],
       sortList: [],
       btnsList: [],
@@ -325,6 +326,8 @@ export default {
     let options = list.filter(o => noColumnShowList.indexOf(o.__config__.jnpfKey) < 0)
     let searchOptions = list.filter(o => noSearchList.indexOf(o.__config__.jnpfKey) < 0)
     let sortOptions = list1.filter(o => noColumnShowList.indexOf(o.__config__.jnpfKey) < 0)
+    sortOptions = sortOptions.filter(o => o.__vModel__.indexOf('-') < 0)
+    this.groupFieldOptions = list.filter(o => o.__vModel__.indexOf('-') < 0)
     this.columnOptions = options.map(o => ({
       label: o.__config__.label,
       prop: o.__vModel__,
