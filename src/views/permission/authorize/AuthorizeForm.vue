@@ -252,7 +252,6 @@ export default {
           break
         case 1:
           this.params.type = 'module'
-          console.log(this.moduleIdsTemp)
           this.params.moduleIds = (this.systemIds).toString()
           break
         case 2:

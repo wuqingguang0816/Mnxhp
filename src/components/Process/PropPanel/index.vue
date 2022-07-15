@@ -1798,11 +1798,27 @@ export default {
       this.startForm.titleContent = this.temporaryContent
     },
     querySearch(queryString, cb) {
+      let systemParams = [{
+        id: 'jnpfFlowFullName',
+        value: 'jnpfFlowFullName(流程名称)'
+      },
+      {
+        id: 'jnpfFlowFullCode',
+        value: 'jnpfFlowFullCode(流程编码)'
+      },
+      {
+        id: 'jnpfLaunchUserName',
+        value: 'jnpfLaunchUserName(发起用户名)'
+      },
+      {
+        id: 'jnpfLaunchTime',
+        value: 'jnpfLaunchTime(发起时间)'
+      }]
       const params = this.getFormOperates().map(res => {
         let obj = { value: res.id + "(" + res.name + ")", ...res }
         return obj
       })
-      cb(params);
+      cb([...systemParams, ...params]);
     },
     getFormOperates() {
       let res = []
