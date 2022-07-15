@@ -8,7 +8,7 @@
           </div>
           <el-tree :data="newData" default-expand-all :expand-on-click-node="false"
             :props="defaultProps" @node-click="handleNodeClick"></el-tree>
-          <div class="JNPF-common-title">
+          <div class="JNPF-common-title sys-title">
             <h2>系统字段</h2>
           </div>
           <el-tree :data="newSysData" default-expand-all :expand-on-click-node="false"
@@ -314,9 +314,14 @@ export default {
     padding: 0 10px;
     margin-bottom: 10px;
     height: 39px;
+    &.sys-title {
+      margin-top: 30px;
+    }
     h2 {
       font-size: 14px;
       line-height: 39px;
+      color: #043254;
+      font-weight: bold;
     }
   }
 }
