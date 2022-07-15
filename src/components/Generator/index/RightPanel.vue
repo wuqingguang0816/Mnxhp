@@ -29,6 +29,10 @@
                       @change="tableChange" filterable>
                       <el-option v-for="item in allTable" :key="item.table" :value="item.table"
                         :label="item.tableName?item.table+'('+item.tableName+')':item.table">
+                        <span class="custom-option-left">
+                          {{ item.tableName?item.table+'('+item.tableName+')':item.table}}
+                        </span>
+                        <span class="custom-option-right">{{item.typeId=='1'?'主表':'子表'}}</span>
                       </el-option>
                     </el-select>
                   </el-form-item>
@@ -287,6 +291,10 @@
                   <el-option v-for="item in subTable" :key="item.table"
                     :label="item.tableName?item.table+'('+item.tableName+')':item.table"
                     :value="item.table">
+                    <span class="custom-option-left">
+                      {{ item.tableName?item.table+'('+item.tableName+')':item.table}}
+                    </span>
+                    <span class="custom-option-right">{{item.typeId=='1'?'主表':'子表'}}</span>
                   </el-option>
                 </el-select>
               </el-form-item>
@@ -1137,5 +1145,14 @@ export default {
       vertical-align: top;
     }
   }
+}
+.custom-option-left {
+  float: left;
+}
+.custom-option-right {
+  float: right;
+  color: #8492a6;
+  font-size: 13px;
+  margin-left: 20px;
 }
 </style>
