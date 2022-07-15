@@ -108,7 +108,7 @@
               <div class="tips-content">
                 <div class="tips-content-item" v-for="(item,index) in sysVariableList" :key="index">
                   <span @click="handleSysNodeClick(item.value)">{{item.value}}</span>
-                  <el-tooltip :content="item.tips" placement="top-start">
+                  <el-tooltip :content="item.tips" placement="top">
                     <a class="el-icon-warning-outline"></a>
                   </el-tooltip>
                 </div>
@@ -599,7 +599,9 @@ export default {
     justify-content: space-between;
     overflow: hidden;
     .tableData {
-      flex: 0 0 220px;
+      flex-shrink: 0;
+      width: 350px;
+
       .box {
         margin-top: 8px;
         border-radius: 4px;
