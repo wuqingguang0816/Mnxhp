@@ -54,7 +54,7 @@
           <el-col :span="3" class="rule-cell">字段类型</el-col>
           <el-col :span="7" class="rule-cell">
             <el-select v-model="item.beforeConversion" placeholder="请选择类型"
-              @change="changeConversion">
+              @change="changeConversion($event,i)">
               <el-option v-for="(item,index) in beforeConversionList" :key="index" :label="item.val"
                 :value="item.val" />
             </el-select>
@@ -63,8 +63,8 @@
           <el-col :span="3" class="rule-cell">字段类型</el-col>
           <el-col :span="7" class="rule-cell">
             <el-select v-model="item.afterConversion" placeholder="请选择类型">
-              <el-option v-for="item in afterConversionList" :key="item.val" :label="item.val"
-                :value="item.val" />
+              <el-option v-for="item in item.afterConversionList" :key="item" :label="item"
+                :value="item" />
             </el-select>
           </el-col>
           <el-col :span="2" class="rule-cell">
@@ -88,7 +88,7 @@
 <script>
 import { getDataSourceListAll, Execute, DataSync, batchExecute } from '@/api/systemData/dataSource'
 import { getDataModelList } from '@/api/systemData/dataModel'
-import { forEach } from 'element-resize-detector/src/collection-utils'
+
 export default {
   name: 'systemData-dataSync',
   data() {
@@ -145,7 +145,15 @@ export default {
             this.beforeConversionList = []
             this.convertRuleMap = res.data.convertRuleMap
             for (var key in this.convertRuleMap) {
-              this.beforeConversionList.push({ val: key })
+              this.beforeConversionList.push({ val: key, value: this.convertRuleMap[key] })
+            }
+            if (this.configureList.length == 0) {
+              const element = this.beforeConversionList[0];
+              this.configureList.push({
+                beforeConversion: element.val,
+                afterConversion: element.value[0]
+              })
+              this.configureList[0].afterConversionList = element.value
             }
             this.verification = res.data.checkDbFlag
             this.list = res.data.tableList
@@ -159,11 +167,10 @@ export default {
         }
       })
     },
-    changeConversion(val) {
+    changeConversion(val, i) {
       this.afterConversionList = []
-      this.convertRuleMap[val].forEach(element => {
-        this.afterConversionList.push({ val: element })
-      })
+      this.configureList[i].afterConversion = ''
+      this.configureList[i].afterConversionList = this.convertRuleMap[val]
     },
     saveRule() {//保存
       this.dialogVisible = false
