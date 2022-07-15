@@ -30,13 +30,6 @@
             <JNPF-TreeSelect v-model="dataForm.categoryId" :options="selectData" placeholder="选择分类"
               clearable />
           </el-form-item>
-          <!-- <el-form-item label="授权" prop="checkType">
-            <el-radio-group v-model="dataForm.checkType">
-              <el-radio :label="0">忽略验证</el-radio>
-              <el-radio :label="1">鉴权验证</el-radio>
-              <el-radio :label="2">跨域验证</el-radio>
-            </el-radio-group>
-          </el-form-item> -->
           <el-form-item prop="ipAddress" v-if="dataForm.checkType===2">
             <el-input v-model="dataForm.ipAddress" placeholder="请输入域名，多个域名用逗号隔开" />
           </el-form-item>
@@ -89,84 +82,88 @@
         </div>
       </div>
       <div class="detail">
-        <el-tabs v-model="activeName">
-          <el-tab-pane label="SQL语句" name="query">
-            <span slot="label">SQL语句
-              <el-tooltip content="支持SQL语句&存储过程语句" placement="top">
-                <a class="el-icon-warning-outline"></a>
-              </el-tooltip>
-            </span>
-            <el-form ref="dataForm" :model="dataForm" :rules="dataRule" label-width="100px">
-              <el-form-item label-width="0" prop="query">
-                <div class="sql-box">
-                  <SQLEditor v-model="dataForm.query" :options="sqlOptions" ref="SQLEditorRef" />
-                </div>
-              </el-form-item>
-            </el-form>
-            <div class="tips">
-              <p>系统变量</p>
-              <div class="tips-content">
-                <div class="tips-content-item" v-for="(item,index) in sysVariableList" :key="index">
-                  <span @click="handleSysNodeClick(item.value)">{{item.value}}</span>
-                  <el-tooltip :content="item.tips" placement="top">
-                    <a class="el-icon-warning-outline"></a>
-                  </el-tooltip>
-                </div>
+        <div class="top-box">
+          <el-tabs class="main-box" v-model="activeName">
+            <el-tab-pane label="SQL语句" name="query">
+              <span slot="label">SQL语句
+                <el-tooltip content="支持SQL语句&存储过程语句" placement="top">
+                  <a class="el-icon-warning-outline"></a>
+                </el-tooltip>
+              </span>
+              <el-form ref="dataForm" :model="dataForm" :rules="dataRule" label-width="100px">
+                <el-form-item label-width="0" prop="query">
+                  <div class="sql-box">
+                    <SQLEditor v-model="dataForm.query" :options="sqlOptions" ref="SQLEditorRef" />
+                  </div>
+                </el-form-item>
+              </el-form>
+
+            </el-tab-pane>
+          </el-tabs>
+          <div class="right-pane">
+            <div class="right-pane-list">
+              <div class="cap">
+                <span>参数定义</span>
+              </div>
+              <div class="list">
+                <el-table :data="requestParameters" ref="dragTable" row-key="id" size='mini'
+                  height="100%">
+                  <el-table-column align="center" label="拖动" width="50">
+                    <template>
+                      <i class="drag-handler icon-ym icon-ym-darg"
+                        style="cursor: move;font-size:20px" title='点击拖动' />
+                    </template>
+                  </el-table-column>
+                  <el-table-column prop="field" label="参数名称">
+                    <template slot-scope="scope">
+                      <p @click="handleItemClick(scope.row)" style="cursor:pointer">
+                        <span class="required-sign">{{scope.row.required?'*':''}}</span>
+                        {{scope.row.field}}{{scope.row.fieldName?'('+scope.row.fieldName+')':''}}
+                      </p>
+                    </template>
+                  </el-table-column>
+                  <el-table-column prop="dataType" label="参数类型" width="70">
+                    <template slot-scope="scope">
+                      <span v-if="scope.row.dataType === 'varchar'">字符串</span>
+                      <span v-if="scope.row.dataType === 'int'">整型</span>
+                      <span v-if="scope.row.dataType === 'datetime'">日期时间</span>
+                      <span v-if="scope.row.dataType === 'decimal'">浮点</span>
+                      <span v-if="scope.row.dataType === 'bigint'">长整型</span>
+                      <span v-if="scope.row.dataType === 'text'">文本</span>
+                    </template>
+                  </el-table-column>
+                  <el-table-column label="操作" width="70">
+                    <template slot-scope="scope">
+                      <el-button type="text" @click="addOrUpdateHandle(scope.row)"
+                        icon="el-icon-edit-outline"></el-button>
+                      <el-button type="text" class="JNPF-table-delBtn" icon="el-icon-delete"
+                        @click="removeParameter(scope.$index)"></el-button>
+                    </template>
+                  </el-table-column>
+                </el-table>
+              </div>
+              <div class="table-actions" @click="addOrUpdateHandle()">
+                <el-button type="text" icon="el-icon-plus">添加参数</el-button>
               </div>
             </div>
-          </el-tab-pane>
-        </el-tabs>
-      </div>
-      <div class="right-pane">
-        <div class="right-pane-list">
-          <div class="cap">
-            <span>参数定义</span>
-          </div>
-          <div class="list">
-            <el-table :data="requestParameters" ref="dragTable" row-key="id" size='mini'
-              height="100%">
-              <el-table-column align="center" label="拖动" width="50">
-                <template>
-                  <i class="drag-handler icon-ym icon-ym-darg" style="cursor: move;font-size:20px"
-                    title='点击拖动' />
-                </template>
-              </el-table-column>
-              <el-table-column prop="field" label="参数名称">
-                <template slot-scope="scope">
-                  <p @click="handleItemClick(scope.row)" style="cursor:pointer">
-                    <span class="required-sign">{{scope.row.required?'*':''}}</span>
-                    {{scope.row.field}}{{scope.row.fieldName?'('+scope.row.fieldName+')':''}}
-                  </p>
-                </template>
-              </el-table-column>
-              <el-table-column prop="dataType" label="参数类型" width="70">
-                <template slot-scope="scope">
-                  <span v-if="scope.row.dataType === 'varchar'">字符串</span>
-                  <span v-if="scope.row.dataType === 'int'">整型</span>
-                  <span v-if="scope.row.dataType === 'datetime'">日期时间</span>
-                  <span v-if="scope.row.dataType === 'decimal'">浮点</span>
-                  <span v-if="scope.row.dataType === 'bigint'">长整型</span>
-                  <span v-if="scope.row.dataType === 'text'">文本</span>
-                </template>
-              </el-table-column>
-              <el-table-column label="操作" width="70">
-                <template slot-scope="scope">
-                  <el-button type="text" @click="addOrUpdateHandle(scope.row)"
-                    icon="el-icon-edit-outline"></el-button>
-                  <el-button type="text" class="JNPF-table-delBtn" icon="el-icon-delete"
-                    @click="removeParameter(scope.$index)"></el-button>
-                </template>
-              </el-table-column>
-            </el-table>
-          </div>
-          <div class="table-actions" @click="addOrUpdateHandle()">
-            <el-button type="text" icon="el-icon-plus">添加参数</el-button>
+            <div class="right-pane-btn">
+              <el-button @click="editFunc()">接口数据处理</el-button>
+            </div>
           </div>
         </div>
-        <div class="right-pane-btn">
-          <el-button @click="editFunc()">接口数据处理</el-button>
+        <div class="bottom-Box tips">
+          <p>系统变量</p>
+          <div class="tips-content">
+            <div class="tips-content-item" v-for="(item,index) in sysVariableList" :key="index">
+              <span @click="handleSysNodeClick(item.value)">{{item.value}}</span>
+              <el-tooltip :content="item.tips" placement="top-start">
+                <a class="el-icon-warning-outline"></a>
+              </el-tooltip>
+            </div>
+          </div>
         </div>
       </div>
+
     </div>
     <div class="staticData" v-if="active === 1 && dataForm.dataType === 2">
       <el-form ref="dataForm" :model="dataForm" :rules="dataRule" label-width="100px">
@@ -601,7 +598,6 @@ export default {
     .tableData {
       flex-shrink: 0;
       width: 350px;
-
       .box {
         margin-top: 8px;
         border-radius: 4px;
@@ -620,32 +616,41 @@ export default {
       margin: 0 10px;
       margin-top: -10px;
       overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      .top-box {
+        display: flex;
+        .main-box {
+          flex: 1;
+          margin-right: 18px;
+        }
+      }
       .sql-box {
         border: 1px solid #dcdfe6;
         height: calc(100vh - 400px);
         overflow: auto;
       }
       .tips {
-        padding: 8px 6px;
+        padding: 8px 0;
         background-color: #ecf8ff;
         border-radius: 4px;
+        border-left: 5px solid #50bfff;
 
         p {
-          padding: 8px 0;
+          padding: 8px 0 8px 20px;
         }
 
         .tips-content {
-          margin-left: 50px;
           display: flex;
           flex-wrap: wrap;
 
           .tips-content-item {
             display: inline-block;
-            padding-right: 10px;
+            padding-left: 20px;
             line-height: 30px;
             color: #5e6d82;
             width: 50%;
-            font-size: 15px;
+            font-size: 14px;
             display: flex;
             align-items: center;
 
@@ -677,7 +682,8 @@ export default {
     flex-shrink: 0;
     display: flex;
     flex-direction: column;
-    height: 100%;
+    height: calc(100% - 28px);
+    margin-top: 10px;
     overflow: hidden;
 
     .right-pane-list {
@@ -689,8 +695,8 @@ export default {
       margin-bottom: 10px;
       overflow: hidden;
       .cap {
-        height: 36px;
-        line-height: 36px;
+        height: 38px;
+        line-height: 38px;
         display: flex;
         color: #606266;
         font-size: 14px;
