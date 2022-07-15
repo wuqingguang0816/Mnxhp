@@ -88,6 +88,7 @@
               </el-tab-pane>
             </el-tabs>
             <template v-if="selectType === 'custom'">
+              <div class="custom-title">全部数据</div>
               <div class="single-list" ref="infiniteBody">
                 <template v-if="ableList.length">
                   <div v-for="(item,index) in ableList" :key="index" class="selected-item-user"

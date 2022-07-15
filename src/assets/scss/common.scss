@@ -2002,6 +2002,20 @@ textarea.el-textarea__inner {
     }
 
     &.left-pane {
+      .custom-title {
+        height: 39px;
+        padding: 0 12px;
+        line-height: 39px;
+        font-size: 14px;
+        font-weight: 500;
+        color: #303133;
+        border-bottom: 1px solid #dcdfe6;
+
+        &+.single-list {
+          height: calc(100% - 40px);
+        }
+      }
+
       .single-list {
         height: 100%;
         overflow: auto;
