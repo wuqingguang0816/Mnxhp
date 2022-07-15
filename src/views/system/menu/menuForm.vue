@@ -330,7 +330,7 @@ export default {
       if (this.dataForm.category !== 'App') return
       if (val === '-1') {
         this.typeData = appTypeData.filter(o => o.enCode == 1)
-        if (this.dataForm.type != 1) this.dataForm.type = ''
+        if (this.dataForm.type && this.dataForm.type != 1) this.dataForm.type = ''
       } else {
         this.typeData = appTypeData.filter(o => o.enCode != 1)
         if (this.dataForm.type == 1) this.dataForm.type = ''

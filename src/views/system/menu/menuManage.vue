@@ -2,9 +2,7 @@
   <transition name="el-zoom-in-center">
     <div class="JNPF-common-layout menu-list">
       <div class="JNPF-common-layout-center">
-
         <div class="JNPF-preview-main flow-form-main">
-
           <div class="JNPF-common-page-header">
             <el-page-header @back="goBack" :content="title" />
           </div>
@@ -26,7 +24,6 @@
               </el-col>
             </el-form>
           </el-row>
-
           <div class="JNPF-common-layout-main JNPF-flex-main">
             <el-tabs type="border-card" v-model="listQuery.category" class="menu-tab">
               <el-tab-pane label="Web菜单" name="Web"></el-tab-pane>
@@ -127,7 +124,6 @@
             </el-tabs>
           </div>
         </div>
-
         <menuForm v-if="formVisible" ref="Form" @refreshDataList="initData" />
         <ButtonAuthorizeListDrawer v-if="buttonAuthorizeListDrawer" ref="buttonAuthorizeList" />
         <ColumnAuthorizeListDrawer v-if="columnAuthorizeListDrawer" ref="ColumnAuthorizeList" />
@@ -185,9 +181,6 @@ export default {
       this.reset();
     },
   },
-  // created() {
-  //   this.initData();
-  // },
   methods: {
     goBack(isRefresh) {
       this.$emit('close', isRefresh)
@@ -201,7 +194,7 @@ export default {
       this.listQuery.keyword = "";
       this.initData();
     },
-    initData(id) {
+    initData() {
       this.listLoading = true;
       getMenuList(this.systemId, this.listQuery)
         .then((res) => {

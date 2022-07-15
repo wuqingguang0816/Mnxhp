@@ -74,13 +74,13 @@
 </template>
 <script>
 import Form from "./Form";
-import menuManage from "./menuManage.vue";
+import MenuManage from "./menuManage";
 import { getSystem, delSystem } from "@/api/system/system";
 export default {
   name: "system-menu",
   components: {
     Form,
-    menuManage
+    MenuManage
   },
   data() {
     return {
@@ -106,21 +106,18 @@ export default {
       this.previewVisible = false
       if (isRefresh) this.refresh()
     },
-
     reset() {
       this.listQuery.keyword = "";
       this.initData();
     },
     initData() {
       this.listLoading = true;
-      getSystem(this.listQuery)
-        .then((res) => {
-          this.list = res.data.list;
-          this.listLoading = false;
-        })
-        .catch(() => {
-          this.listLoading = false;
-        });
+      getSystem(this.listQuery).then((res) => {
+        this.list = res.data.list;
+        this.listLoading = false;
+      }).catch(() => {
+        this.listLoading = false;
+      });
     },
     preview(row) {
       this.previewVisible = true
@@ -137,20 +134,18 @@ export default {
     handleDel(id) {
       this.$confirm(this.$t("common.delTip"), this.$t("common.tipTitle"), {
         type: "warning",
-      })
-        .then(() => {
-          delSystem(id).then((res) => {
-            this.$message({
-              type: "success",
-              message: res.msg,
-              duration: 1500,
-              onClose: () => {
-                this.initData();
-              },
-            });
+      }).then(() => {
+        delSystem(id).then((res) => {
+          this.$message({
+            type: "success",
+            message: res.msg,
+            duration: 1500,
+            onClose: () => {
+              this.initData();
+            },
           });
-        })
-        .catch(() => { });
+        });
+      }).catch(() => { });
     },
   }
 };
