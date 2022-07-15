@@ -11,7 +11,8 @@
         <group-title content="基本信息" />
       </el-col>
       <el-col :span="14" :offset="5" class="mb-10">
-        <el-form :model="dataForm" :rules="dataRule" ref="dataForm" class="mt-20" label-width="120px" @submit.native.prevent>
+        <el-form :model="dataForm" :rules="dataRule" ref="dataForm" class="mt-20"
+          label-width="120px" @submit.native.prevent>
           <jnpf-form-tip-item label="appId" prop="appId">
             <el-input v-model="dataForm.appId" placeholder="输入appId" maxlength="100" readonly>
             </el-input>
@@ -21,46 +22,41 @@
           </jnpf-form-tip-item> -->
           <jnpf-form-tip-item label="appSecret" prop="appSecret">
             <el-input v-model="dataForm.appSecret" placeholder="输入appSecret" show-password readonly>
-              <el-button slot="append" style="background-color: #c8c9cc;color:#FFF;" disabled>获取秘钥
-              </el-button>
             </el-input>
           </jnpf-form-tip-item>
-          <jnpf-form-tip-item label="验证签名" prop="verifySignature">
+          <jnpf-form-tip-item label="验证签名" prop="verifySignature" tip-label="开启后需要验证消息签名的真实性">
             <el-row>
               <el-col :span="12">
-                <div slot="label">验证签名
-                  <el-tooltip content="开启后需要验证消息签名的真实性" placement="top">
-                    <a class="el-icon-warning-outline"></a>
-                  </el-tooltip>
-                </div>
-                <el-switch v-model="dataForm.verifySignature" :active-value="1" :inactive-value="0" disabled>
+                <el-switch v-model="dataForm.verifySignature" :active-value="1" :inactive-value="0">
                 </el-switch>
               </el-col>
-              <!-- <el-col :span="12" align="right">
-                <i class="icon-ym icon-ym-extend-paperclip" style="color:#606266;font-size: 14px;"><span>验证签名使用说明</span></i>
-              </el-col> -->
             </el-row>
           </jnpf-form-tip-item>
           <jnpf-form-tip-item label="使用期限" prop="usefulLife" tip-label="未选择日期默认永久有效">
-            <el-date-picker v-model="dataForm.usefulLife" type="date" placeholder="请选择" style="width:100%" readonly></el-date-picker>
+            <el-date-picker v-model="dataForm.usefulLife" type="date" placeholder="请选择"
+              style="width:100%" readonly></el-date-picker>
           </jnpf-form-tip-item>
           <jnpf-form-tip-item label="白名单" prop="whiteList">
-            <el-input v-model="dataForm.whiteList" placeholder="" type="textarea" :rows="5" readonly />
+            <el-input v-model="dataForm.whiteList" placeholder="" type="textarea" :rows="5"
+              readonly />
             <span style="color:#C0C4CC">多个IP设置，用英文符号隔开，如192.168.0.1,192.168.0.2</span>
           </jnpf-form-tip-item>
           <jnpf-form-tip-item label="黑名单" prop="blackList">
-            <el-input v-model="dataForm.blackList" placeholder="" type="textarea" :rows="5" readonly />
+            <el-input v-model="dataForm.blackList" placeholder="" type="textarea" :rows="5"
+              readonly />
             <span style="color:#C0C4CC">多个IP设置，用英文符号隔开，如192.168.0.1,192.168.0.2</span>
           </jnpf-form-tip-item>
           <jnpf-form-tip-item label="排序" prop="sortCode">
-            <el-input-number :min="0" :max="999999" v-model="dataForm.sortCode" controls-position="right" disabled />
+            <el-input-number :min="0" :max="999999" v-model="dataForm.sortCode"
+              controls-position="right" disabled />
           </jnpf-form-tip-item>
           <jnpf-form-tip-item label="状态" prop="status">
             <el-switch v-model="dataForm.status" :active-value="1" :inactive-value="0" disabled>
             </el-switch>
           </jnpf-form-tip-item>
           <jnpf-form-tip-item label="说明" prop="description">
-            <el-input v-model="dataForm.description" placeholder="" type="textarea" :rows="5" readonly />
+            <el-input v-model="dataForm.description" placeholder="" type="textarea" :rows="5"
+              readonly />
           </jnpf-form-tip-item>
         </el-form>
       </el-col>
@@ -146,8 +142,8 @@ export default {
     }
   },
   methods: {
-    goBack() {
-      this.$emit('close')
+    goBack(isRefresh) {
+      this.$emit('close', isRefresh)
     },
     init(id) {
       if (id) {
@@ -179,9 +175,7 @@ export default {
               })
             }
           })
-
           this.tableList = res.data.list
-          console.log(" this.tableList", this.tableList)
         }
       })
     },

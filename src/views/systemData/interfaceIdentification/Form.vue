@@ -10,7 +10,8 @@
     </div>
     <el-row class="main">
       <el-col :span="14" :offset="5" class="mt-20">
-        <el-form :model="dataForm" :rules="dataRule" ref="dataForm" class="mt-20" label-width="120px" @submit.native.prevent>
+        <el-form :model="dataForm" :rules="dataRule" ref="dataForm" class="mt-20"
+          label-width="120px" @submit.native.prevent>
           <jnpf-form-tip-item label="appId" prop="appId">
             <el-input v-model="dataForm.appId" placeholder="输入appId" maxlength="100">
             </el-input>
@@ -20,30 +21,23 @@
           </jnpf-form-tip-item>
           <jnpf-form-tip-item label="appSecret" prop="appSecret">
             <el-input v-model="dataForm.appSecret" placeholder="输入appSecret" show-password readOnly>
-              <el-button slot="append" style="background-color: #1890FF;color:#FFF;" @click="getAppSecret">获取秘钥</el-button>
+              <el-button slot="append" @click="getAppSecret">获取秘钥</el-button>
             </el-input>
           </jnpf-form-tip-item>
-          <jnpf-form-tip-item label="验证签名" prop="verifySignature">
+          <jnpf-form-tip-item label="验证签名" prop="verifySignature" tip-label="开启后需要验证消息签名的真实性">
             <el-row>
               <el-col :span="12">
-                <div slot="label">验证签名
-                  <el-tooltip content="开启后需要验证消息签名的真实性" placement="top">
-                    <a class="el-icon-warning-outline"></a>
-                  </el-tooltip>
-                </div>
                 <el-switch v-model="dataForm.verifySignature" :active-value="1" :inactive-value="0">
                 </el-switch>
-                <el-button slot="append" style="background-color: #1890FF;color:#FFF;" @click="getAppSecret">获取秘钥</el-button>
               </el-col>
               <el-col :span="12" align="right">
-                <i class="icon-ym icon-ym-extend-paperclip" style="color:#C0C4CC">
-                  <el-button type="text" @click.native="showVerify()" style="color:#C0C4CC;font-size: 14px;">验证签名使用说明</el-button>
-                </i>
+                <el-link :underline="false" @click="showVerify()">验证签名使用说明</el-link>
               </el-col>
             </el-row>
           </jnpf-form-tip-item>
           <jnpf-form-tip-item label="使用期限" prop="usefulLife" tip-label="未选择日期默认永久有效">
-            <el-date-picker v-model="dataForm.usefulLife" type="date" placeholder="请选择" style="width:100%"></el-date-picker>
+            <el-date-picker v-model="dataForm.usefulLife" type="date" placeholder="请选择"
+              style="width:100%"></el-date-picker>
           </jnpf-form-tip-item>
           <jnpf-form-tip-item label="白名单" prop="whiteList">
             <el-input v-model="dataForm.whiteList" placeholder="" type="textarea" :rows="5" />
@@ -54,7 +48,8 @@
             <span style="color:#C0C4CC">多个IP设置，用英文符号隔开，如192.168.0.1,192.168.0.2</span>
           </jnpf-form-tip-item>
           <jnpf-form-tip-item label="排序" prop="sortCode">
-            <el-input-number :min="0" :max="999999" v-model="dataForm.sortCode" controls-position="right" />
+            <el-input-number :min="0" :max="999999" v-model="dataForm.sortCode"
+              controls-position="right" />
           </jnpf-form-tip-item>
           <jnpf-form-tip-item label="状态" prop="status">
             <el-switch v-model="dataForm.status" :active-value="1" :inactive-value="0">
@@ -66,7 +61,8 @@
         </el-form>
       </el-col>
     </el-row>
-    <VerifySignatureInfo v-if="verifySignatureVisible" ref="VerifySignatureInfo" @close="verifySignatureVisible=false" />
+    <VerifySignatureInfo v-if="verifySignatureVisible" ref="VerifySignatureInfo"
+      @close="verifySignatureVisible=false" />
   </div>
 </template>
 
@@ -111,20 +107,15 @@ export default {
     }
   },
   methods: {
-    goBack() {
-      this.$emit('close', true)
+    goBack(isRefresh) {
+      this.$emit('close', isRefresh)
     },
     init(id) {
       if (id) {
         getInfo(id).then(res => {
           this.initData(res.data)
         }).catch(() => { })
-
       }
-      // if (!id) return this.$emit('close')
-      // this.id = id
-      // this.title = title
-      // this.reset()
     },
     initData(data) {
       this.dataForm = data
