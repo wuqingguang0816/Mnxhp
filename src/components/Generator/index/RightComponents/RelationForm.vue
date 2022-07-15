@@ -54,8 +54,8 @@
         添加字段
       </el-button>
     </div>
-    <el-divider>分页设置</el-divider>
-    <el-form-item label="列表分页">
+    <el-divider>列表分页</el-divider>
+    <el-form-item label="分页设置">
       <el-switch v-model="activeData.hasPage"></el-switch>
     </el-form-item>
     <el-form-item label="分页条数" label-width="80px">

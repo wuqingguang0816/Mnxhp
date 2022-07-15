@@ -3,6 +3,9 @@
     <el-form-item label="提示文本">
       <el-input v-model="activeData.title" placeholder="请输入提示文本" />
     </el-form-item>
+    <el-form-item label="提示图标">
+      <el-switch v-model="activeData['show-icon']" />
+    </el-form-item>
     <el-form-item label="样式">
       <div class="type-list">
         <div class="type-list-item" :class="{active:activeData.type===item.id}"
@@ -10,9 +13,6 @@
           <el-alert :title="item.fullName" :type="item.id" :closable="false" center />
         </div>
       </div>
-    </el-form-item>
-    <el-form-item label="图标">
-      <el-switch v-model="activeData['show-icon']" />
     </el-form-item>
   </el-row>
 </template>
