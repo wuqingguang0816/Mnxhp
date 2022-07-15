@@ -280,11 +280,18 @@ export default {
     },
     execute(row, type) {
       row.result = ''
+      var map = {};
       let data = {
         type,
         dbConnectionFrom: this.dataForm.dbConnectionFrom,
         dbConnectionTo: this.dataForm.dbConnectionTo,
         dbTable: row.table
+      }
+      if (this.configureList.length > 0) {
+        for (var index in this.configureList) {
+          map[this.configureList[index].beforeConversion] = this.configureList[index].afterConversion;
+        }
+        data = { ...data, convertRuleMap: map }
       }
       Execute(data).then((res) => {
         row.result = res.msg
