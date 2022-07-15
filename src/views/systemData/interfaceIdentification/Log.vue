@@ -12,8 +12,12 @@
           <el-form @submit.native.prevent>
             <el-col :span="6">
               <el-form-item label="关键词">
-                <el-input v-model="listQuery.keyword" placeholder="请输入关键词查询" clearable
-                  @keyup.enter.native="search()" />
+                <el-input v-model="listQuery.keyword" placeholder="请输入关键词查询" clearable @keyup.enter.native="search()" />
+              </el-form-item>
+            </el-col>
+            <el-col :span="6">
+              <el-form-item label="时间">
+                <el-date-picker v-model="pickerVal" type="daterange" start-placeholder="开始日期" end-placeholder="结束日期" :picker-options="pickerOptions" value-format="timestamp" clearable :editable="false" />
               </el-form-item>
             </el-col>
             <el-col :span="6">
@@ -28,10 +32,10 @@
         </el-row>
         <JNPF-table v-loading="listLoading" :data="list">
           <el-table-column prop="fullName" label="请求接口" width="120" show-overflow-tooltip />
+          <el-table-column prop="enCode" label="接口编码" width="120" show-overflow-tooltip />
           <el-table-column prop="url" label="请求地址" width="300" show-overflow-tooltip />
-          <el-table-column prop="invokTime" label="请求时间" :formatter="jnpf.tableDateFormat"
-            width="120" />
-          <el-table-column prop="userId" label="请求用户" width="120" />
+          <el-table-column prop="invokTime" label="请求时间" :formatter="jnpf.tableDateFormat" width="120" />
+          <!-- <el-table-column prop="userId" label="请求用户" width="120" /> -->
           <el-table-column prop="invokIp" label="请求IP" width="120" />
           <el-table-column prop="invokType" label="请求类型" width="80" align="center">
             <template slot-scope="scope">
@@ -42,8 +46,7 @@
           <el-table-column prop="invokWasteTime" label="耗时(毫秒)" width="80" />
           <el-table-column prop="invokDevice" label="请求设备" min-width="120" show-overflow-tooltip />
         </JNPF-table>
-        <pagination :total="total" :page.sync="listQuery.currentPage"
-          :limit.sync="listQuery.pageSize" @pagination="initData" />
+        <pagination :total="total" :page.sync="listQuery.currentPage" :limit.sync="listQuery.pageSize" @pagination="initData" />
       </div>
     </div>
   </transition>
@@ -62,11 +65,41 @@ export default {
       listLoading: false,
       listQuery: {
         keyword: '',
+        startTime: '',
+        endTime: '',
         currentPage: 1,
         pageSize: 20,
         sort: 'desc',
       },
       ids: '',
+      pickerOptions: {
+        shortcuts: [{
+          text: '最近一周',
+          onClick(picker) {
+            const start = new Date()
+            const end = new Date()
+            start.setTime(start.getTime() - 3600 * 1000 * 24 * 7)
+            picker.$emit('pick', [start, end])
+          }
+        }, {
+          text: '最近一个月',
+          onClick(picker) {
+            const start = new Date()
+            const end = new Date()
+            start.setTime(start.getTime() - 3600 * 1000 * 24 * 30)
+            picker.$emit('pick', [start, end])
+          }
+        }, {
+          text: '最近三个月',
+          onClick(picker) {
+            const start = new Date()
+            const end = new Date()
+            start.setTime(start.getTime() - 3600 * 1000 * 24 * 90)
+            picker.$emit('pick', [start, end])
+          }
+        }]
+      },
+      pickerVal: []
     }
   },
   methods: {
@@ -81,14 +114,17 @@ export default {
       this.initData()
     },
     initData() {
+      console.log(this.interfaceIds)
       this.listLoading = true
       if (this.interfaceIds) {
         this.listQuery.ids = this.interfaceIds
+        console.log(this.listQuery)
         dataInterfaceLog(this.listQuery).then(res => {
           if (res.data) {
             res.data.list.forEach(item => {
               item.url = `${this.define.comUrl}/api/system/DataInterface/${item.id}/Actions/Response` + (item.tenantId ? '?tenantId=' + item.tenantId : '')
               item.fullName = item.dataInterfaceInfo.fullName
+              item.enCode = item.dataInterfaceInfo.enCode
             })
             this.list = res.data.list
             this.total = res.data.pagination.total
@@ -99,12 +135,20 @@ export default {
       this.listLoading = false
     },
     search() {
+      if (this.pickerVal && this.pickerVal.length) {
+        this.listQuery.startTime = this.pickerVal[0]
+        this.listQuery.endTime = this.pickerVal[1]
+      } else {
+        this.listQuery.startTime = ''
+        this.listQuery.endTime = ''
+      }
       this.listQuery.currentPage = 1
       this.listQuery.pageSize = 20
       this.listQuery.sort = 'desc'
       this.initData()
     },
     reset() {
+      this.pickerVal = []
       this.listQuery.keyword = ''
       this.search()
     },
