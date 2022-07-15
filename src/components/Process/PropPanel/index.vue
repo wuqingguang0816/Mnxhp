@@ -855,6 +855,11 @@
                   会签（无序会签，当审批达到会签比例时，则该审批通过）</el-radio>
               </el-form-item>
               <el-form-item label="会签比例" v-if="approverForm.counterSign">
+                <div slot="label">会签比例
+                  <el-tooltip content="会签通过比例" placement="top">
+                    <a class="el-icon-warning-outline"></a>
+                  </el-tooltip>
+                </div>
                 <el-select v-model="approverForm.countersignRatio">
                   <el-option v-for="item in 10" :key="item*10" :label="item*10+'%'"
                     :value="item*10">
