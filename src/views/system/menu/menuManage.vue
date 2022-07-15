@@ -5,6 +5,9 @@
         <div class="JNPF-preview-main flow-form-main">
           <div class="JNPF-common-page-header">
             <el-page-header @back="goBack" :content="title" />
+            <div class="options">
+              <el-button @click="goBack()">{{$t('common.cancelButton')}}</el-button>
+            </div>
           </div>
           <el-row class="JNPF-common-search-box" :gutter="16">
             <el-form @submit.native.prevent>
@@ -140,7 +143,7 @@ import {
   delMenu,
   exportMenu,
 } from "@/api/system/menu";
-import menuForm from "./menuForm.vue";
+import menuForm from "./menuForm";
 import ButtonAuthorizeListDrawer from "./components/buttonAuthorize/index";
 import ColumnAuthorizeListDrawer from "./components/columnAuthorize/index";
 import FormAuthorizeListDrawer from "./components/formAuthorize/index";
