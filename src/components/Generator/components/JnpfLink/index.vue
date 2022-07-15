@@ -32,7 +32,8 @@ export default {
     }
   },
   methods: {
-    onClickLink() {
+    onClickLink(event) {
+      this.$emit('click', event)
       if (!this.href) return
       if (this.target === '_self') {
         this.$router.push({ path: `/externalLink?href=${encodeURIComponent(Base64.encode(this.href))}` })

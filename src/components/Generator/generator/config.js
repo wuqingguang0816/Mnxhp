@@ -682,6 +682,10 @@ export const inputComponents = [
       dragDisabled: false,
       visibility: ["pc", "app"]
     },
+    on: {
+      click:
+        "({ data, formData, setFormData, setShowOrHide, setRequired, setDisabled, request, getFieldOptions, setFieldOptions }) => {\n    // 在此编写代码\n    \n}"
+    },
     content: '文本链接',
     href: "",
     target: "_self",
