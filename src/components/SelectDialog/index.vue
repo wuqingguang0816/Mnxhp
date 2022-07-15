@@ -17,7 +17,7 @@
                 <el-button type="primary" icon="el-icon-search" @click="search()">
                   {{$t('common.search')}}
                 </el-button>
-                <el-button icon="el-icon-refresh-right" @click="initData()">{{$t('common.reset')}}
+                <el-button icon="el-icon-refresh-right" @click="reset()">{{$t('common.reset')}}
                 </el-button>
               </el-form-item>
             </el-col>
@@ -176,6 +176,10 @@ export default {
       this.listQuery.currentPage = 1
       this.listQuery.pageSize = this.config.hasPage ? this.config.pageSize : 10000
       this.initData()
+    },
+    reset() {
+      this.listQuery.keyword = ''
+      this.search()
     },
   }
 }
