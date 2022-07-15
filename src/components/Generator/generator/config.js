@@ -20,6 +20,8 @@ export const formConf = {
   confirmButtonText: "确 定",
   hasPrintBtn: false,
   printButtonText: "打 印",
+  primaryKeyPolicy: 1,
+  concurrencyLock: false,
   printId: "",
   formStyle: "",
   funcs: {

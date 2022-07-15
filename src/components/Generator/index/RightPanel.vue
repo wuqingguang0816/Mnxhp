@@ -411,6 +411,20 @@
                 :key="item" />
             </el-select>
           </el-form-item>
+          <el-form-item label="主键策略">
+            <el-select v-model="formConf.primaryKeyPolicy" placeholder="请选择">
+              <el-option label="雪花ID" :value="1" />
+              <el-option label="自增长ID" :value="2" />
+            </el-select>
+          </el-form-item>
+          <el-form-item>
+            <span slot="label">并发锁定
+              <el-tooltip content="并发提交表单时候，加乐观锁机制以保证数据提交准确性" placement="top">
+                <a class="el-icon-warning-outline"></a>
+              </el-tooltip>
+            </span>
+            <el-switch v-model="formConf.concurrencyLock" />
+          </el-form-item>
           <template v-if="modelType!=3 && modelType!=6 && webType!=3">
             <el-divider>表单按钮</el-divider>
             <div class="per-cell">
