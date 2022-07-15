@@ -78,7 +78,7 @@
         <el-button type="text" icon="el-icon-plus">新增规则</el-button>
       </div>
       <span slot="footer" class="dialog-footer">
-        <el-button @click="dialogVisible">取消</el-button>
+        <el-button @click="dialogVisible=false">取消</el-button>
         <el-button type="primary" @click="saveRule">确定</el-button>
       </span>
     </el-dialog>
