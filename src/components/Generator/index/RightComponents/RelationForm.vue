@@ -58,7 +58,7 @@
     <el-form-item label="分页设置">
       <el-switch v-model="activeData.hasPage"></el-switch>
     </el-form-item>
-    <el-form-item label="分页条数" label-width="80px">
+    <el-form-item label="分页条数" label-width="80px" v-if="activeData.hasPage">
       <el-radio-group v-model="activeData.pageSize">
         <el-radio-button :label="20">20条</el-radio-button>
         <el-radio-button :label="50">50条</el-radio-button>
