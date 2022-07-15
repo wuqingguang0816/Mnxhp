@@ -66,13 +66,13 @@ export default {
       },
       dataRule: {
         fullName: [
-          { required: true, message: '菜单不能为空', trigger: 'blur' },
+          { required: true, message: '系统不能为空', trigger: 'blur' },
         ],
         enCode: [
-          { required: true, message: '菜单编码不能为空', trigger: 'blur' },
+          { required: true, message: '系统编码不能为空', trigger: 'blur' },
         ],
         icon: [
-          { required: true, message: '菜单图标不能为空', trigger: 'click' }
+          { required: true, message: '系统图标不能为空', trigger: 'click' }
         ],
       },
       formLoading: false,
