@@ -138,7 +138,6 @@ export default {
             this.authorizeTreeData = this.systemAuthorizeTree
             this.dataForm.systemIds = [...this.moduleIdsTemp, ...res.data.ids]
             this.dataForm.systemIds = [...new Set(this.dataForm.systemIds)]
-            this.systemIds = this.dataForm.systemIds
             this.moduleIdsTemp = this.dataForm.systemIds
             this.$refs.authorizeTree.setCheckedKeys(this.dataForm.systemIds)
             break
@@ -247,7 +246,6 @@ export default {
       switch (this.active) {
         case 0:
           this.params.type = 'system'
-          this.moduleIdsTemp = this.systemIds
           this.params.moduleIds = (this.moduleIdsTemp).toString()
           break
         case 1:
@@ -283,6 +281,7 @@ export default {
         case 0:
           this.dataForm.systemIds = dataIds
           this.moduleIdsTemp = this.dataForm.systemIds
+          this.systemIds = this.moduleIdsTemp
           break
         case 1:
           this.dataForm.module = dataIds
