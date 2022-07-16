@@ -139,6 +139,7 @@ export default {
             this.dataForm.systemIds = [...this.moduleIdsTemp, ...res.data.ids]
             this.dataForm.systemIds = [...new Set(this.dataForm.systemIds)]
             this.moduleIdsTemp = this.dataForm.systemIds
+            this.systemIds = this.moduleIdsTemp
             this.$refs.authorizeTree.setCheckedKeys(this.dataForm.systemIds)
             break
           case 1:
