@@ -9,8 +9,8 @@
       <el-form-item label="业务编码" prop="enCode">
         <el-input v-model="dataForm.enCode" placeholder="业务编码" />
       </el-form-item>
-      <el-form-item label="业务分类" prop="categoryId">
-        <el-select v-model="dataForm.categoryId" placeholder="请选择" clearable>
+      <el-form-item label="业务分类" prop="category">
+        <el-select v-model="dataForm.category" placeholder="请选择" clearable>
           <el-option v-for="(item,index) in categoryList" :label="item.fullName" :value="item.id"
             :key="index" />
         </el-select>
@@ -86,7 +86,7 @@ export default {
         sortCode: 0,
         enabledMark: 1,
         description: '',
-        categoryId: ''
+        category: ''
       },
       categoryList: [],
       dataRule: {
@@ -98,7 +98,7 @@ export default {
           { required: true, message: '请输入业务编码', trigger: 'blur' },
           { max: 50, message: '业务编码最多为50个字符！', trigger: 'blur' }
         ],
-        categoryId: [
+        category: [
           { required: true, message: '请选择业务分类', trigger: 'change' },
         ],
         prefix: [
