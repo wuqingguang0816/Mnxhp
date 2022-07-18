@@ -52,7 +52,7 @@ export default {
           }
           this.$store.commit('generator/SET_DYNAMIC_MODEL_EXTRA', extra)
           if (data.draftData) {
-            this.formData = data.draftData
+            this.formData = { ...data.draftData, id: this.dataForm.id, flowId: data.flowId }
             this.fillFormData(this.formConf, this.formData)
             this.$nextTick(() => {
               this.loading = false
@@ -64,7 +64,7 @@ export default {
             getModelInfo(data.flowId, this.dataForm.id).then(res => {
               this.dataForm = res.data
               if (!this.dataForm.data) return
-              this.formData = JSON.parse(this.dataForm.data)
+              this.formData = { ...JSON.parse(this.dataForm.data), id: this.dataForm.id, flowId: data.flowId }
               this.fillFormData(this.formConf, this.formData)
               this.$nextTick(() => {
                 this.loading = false
@@ -75,7 +75,7 @@ export default {
             DynamicInfo(this.dataForm.id).then(res => {
               this.dataForm = res.data
               if (!this.dataForm.data) return
-              this.formData = JSON.parse(this.dataForm.data)
+              this.formData = { ...JSON.parse(this.dataForm.data), id: this.dataForm.id, flowId: data.flowId }
               this.fillFormData(this.formConf, this.formData)
               this.$nextTick(() => {
                 this.loading = false
@@ -128,10 +128,12 @@ export default {
         }
       }
       loop(form.fields)
+      form.formData = data
     },
     submitForm(data, callback) {
       if (!data) return
-      this.dataForm.data = JSON.stringify(data)
+      const formData = { ...this.formData, ...data }
+      this.dataForm.data = JSON.stringify(formData)
       if (callback && typeof callback === "function") callback()
       if (this.setting.type == 1) {
         if (this.eventType === 'save' || this.eventType === 'submit') {

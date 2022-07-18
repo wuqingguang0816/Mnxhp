@@ -252,8 +252,10 @@ export default {
   },
   computed: {
     parameter() {
+      const oldFormData = this.formConfCopy.formData ? this.formConfCopy.formData : {}
+      const formData = { ...oldFormData, ...this[this.formConf.formModel] }
       return {
-        formData: this[this.formConf.formModel],
+        formData,
         setFormData: this.setFormData,
         setShowOrHide: this.setShowOrHide,
         setRequired: this.setRequired,

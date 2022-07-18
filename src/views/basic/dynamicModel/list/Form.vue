@@ -120,7 +120,7 @@ export default {
           getModelInfo(modelId, this.dataForm.id).then(res => {
             this.dataForm = res.data
             if (!this.dataForm.data) return
-            this.formData = JSON.parse(this.dataForm.data)
+            this.formData = { ...JSON.parse(this.dataForm.data), id: this.dataForm.id }
             this.fillFormData(this.formConf, this.formData)
             this.$nextTick(() => {
               this.visible = true
@@ -166,11 +166,13 @@ export default {
         }
       }
       loop(form.fields)
+      form.formData = data
     },
     submitForm(data, callback) {
       if (!data) return
       this.btnLoading = true
-      this.dataForm.data = JSON.stringify(data)
+      const formData = { ...this.formData, ...data }
+      this.dataForm.data = JSON.stringify(formData)
       const formMethod = this.dataForm.id ? updateModel : createModel
       formMethod(this.modelId, this.dataForm).then(res => {
         this.$message({
