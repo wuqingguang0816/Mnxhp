@@ -53,13 +53,6 @@
         <JNPF-table v-loading="listLoading" :data="tableData">
           <el-table-column prop="fullName" label="名称" />
           <el-table-column prop="enCode" label="编码" />
-          <el-table-column prop="checkType" label="授权" width="100">
-            <template slot-scope="scope">
-              <span v-if="scope.row.checkType === 0">忽略验证</span>
-              <span v-if="scope.row.checkType === 1">鉴权验证</span>
-              <span v-if="scope.row.checkType === 2">跨域验证</span>
-            </template>
-          </el-table-column>
           <el-table-column prop="dataType" label="类型" width="100">
             <template slot-scope="scope">
               <span v-if="scope.row.dataType === 1">SQL操作</span>

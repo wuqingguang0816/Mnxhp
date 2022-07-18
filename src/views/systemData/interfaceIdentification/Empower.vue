@@ -1,14 +1,18 @@
 <template>
-  <el-dialog title="接口授权" :visible.sync="visible" class="JNPF-dialog JNPF-dialog_center transfer-dialog" lock-scroll append-to-body width="800px" :modal-append-to-body="false">
+  <el-dialog title="接口授权" :visible.sync="visible" :modal-append-to-body="false"
+    class="JNPF-dialog JNPF-dialog_center transfer-dialog" lock-scroll append-to-body width="800px">
     <div class="transfer__body">
       <div class="transfer-pane">
         <div class="transfer-pane__tools">
-          <el-input placeholder="请输入关键词查询" v-model="keyword" @keyup.enter.native="searchData" clearable class="search-input">
+          <el-input placeholder="请输入关键词查询" v-model="keyword" @keyup.enter.native="searchData"
+            clearable class="search-input">
             <el-button slot="append" icon="el-icon-search" @click="searchData"></el-button>
           </el-input>
         </div>
         <div class="transfer-pane__body">
-          <el-tree :data="treeData" :props="prop" highlight-current check-on-click-node @node-click="handleNodeClick" class="JNPF-common-el-tree" node-key="id" v-loading="loading" default-expand-all :filter-node-method="filterNode" ref="tree">
+          <el-tree :data="treeData" :props="prop" highlight-current check-on-click-node
+            @node-click="handleNodeClick" class="JNPF-common-el-tree" node-key="id"
+            v-loading="loading" default-expand-all :filter-node-method="filterNode" ref="tree">
           </el-tree>
         </div>
       </div>
@@ -55,10 +59,6 @@ export default {
     }
   },
   props: {
-    height: {
-      type: String,
-      default: "380px"
-    },
     multiple: {
       type: Boolean,
       default: false

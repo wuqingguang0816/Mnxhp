@@ -74,7 +74,7 @@ export default {
   props: {
     height: {
       type: String,
-      default: "380px"
+      default: "400px"
     },
     value: {
       type: Array,
