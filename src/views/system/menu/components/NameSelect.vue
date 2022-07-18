@@ -55,7 +55,7 @@
               </el-table-column>
               <el-table-column type="index" width="50" label="序号" align="center" />
               <el-table-column prop="field" label="名称" />
-              <el-table-column prop="fullName" label="说明" />
+              <el-table-column prop="fieldName" label="说明" />
             </JNPF-table>
             <pagination :total="total" :page.sync="listQuery.currentPage"
               :limit.sync="listQuery.pageSize" @pagination="initData" />
