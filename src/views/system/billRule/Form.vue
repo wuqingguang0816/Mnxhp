@@ -99,7 +99,7 @@ export default {
           { max: 50, message: '业务编码最多为50个字符！', trigger: 'blur' }
         ],
         categoryId: [
-          { required: true, message: '请输入业务分类', trigger: 'blur' },
+          { required: true, message: '请选择业务分类', trigger: 'change' },
         ],
         prefix: [
           { required: true, message: '请输入流水前缀', trigger: 'blur' }
