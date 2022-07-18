@@ -53,7 +53,7 @@
 </template>
 
 <script>
-import { dataInterfaceLog } from '@/api/systemData/interfaceIdentification'
+import { dataInterfaceLog } from '@/api/systemData/interfaceOauth'
 
 export default {
   data() {
@@ -71,7 +71,6 @@ export default {
         pageSize: 20,
         sort: 'desc',
       },
-      ids: '',
       pickerOptions: {
         shortcuts: [{
           text: '最近一周',
@@ -110,16 +109,12 @@ export default {
       if (!data) return this.$emit('close')
       this.id = data.id
       this.title = data.appName
-      this.interfaceIds = data.dataInterfaceIds
       this.initData()
     },
     initData() {
-      console.log(this.interfaceIds)
       this.listLoading = true
-      if (this.interfaceIds) {
-        this.listQuery.ids = this.interfaceIds
-        console.log(this.listQuery)
-        dataInterfaceLog(this.listQuery).then(res => {
+      if (this.id) {
+        dataInterfaceLog(this.id).then(res => {
           if (res.data) {
             res.data.list.forEach(item => {
               item.url = `${this.define.comUrl}/api/system/DataInterface/${item.id}/Actions/Response` + (item.tenantId ? '?tenantId=' + item.tenantId : '')

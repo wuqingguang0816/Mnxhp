@@ -20,14 +20,17 @@
             <el-input v-model="dataForm.appName" placeholder="输入应用名称" readonly></el-input>
           </jnpf-form-tip-item> -->
           <jnpf-form-tip-item label="appSecret" prop="appSecret">
-            <el-input v-model="dataForm.appSecret" placeholder="输入appSecret" show-password readonly>
+            <el-input v-model="dataForm.appSecret" placeholder="输入appSecret" show-password readOnly>
             </el-input>
           </jnpf-form-tip-item>
           <jnpf-form-tip-item label="验证签名" prop="verifySignature" tip-label="开启后需要验证消息签名的真实性">
             <el-row>
               <el-col :span="12">
-                <el-switch v-model="dataForm.verifySignature" :active-value="1" :inactive-value="0">
+                <el-switch v-model="dataForm.verifySignature" :active-value="1" :inactive-value="0" disabled>
                 </el-switch>
+              </el-col>
+              <el-col :span="12" align="right">
+                <el-link :underline="false" @click="showVerify()">验证签名使用说明</el-link>
               </el-col>
             </el-row>
           </jnpf-form-tip-item>
@@ -36,14 +39,14 @@
           </jnpf-form-tip-item>
           <jnpf-form-tip-item label="白名单" prop="whiteList">
             <el-input v-model="dataForm.whiteList" placeholder="" type="textarea" :rows="5" readonly />
-            <span style="color:#C0C4CC">多个IP设置，用英文符号隔开，如192.168.0.1,192.168.0.2</span>
+            <!-- <span style="color:#C0C4CC">多个IP设置，用英文符号隔开，如192.168.0.1,192.168.0.2</span> -->
           </jnpf-form-tip-item>
           <jnpf-form-tip-item label="黑名单" prop="blackList">
             <el-input v-model="dataForm.blackList" placeholder="" type="textarea" :rows="5" readonly />
-            <span style="color:#C0C4CC">多个IP设置，用英文符号隔开，如192.168.0.1,192.168.0.2</span>
+            <!-- <span style="color:#C0C4CC">多个IP设置，用英文符号隔开，如192.168.0.1,192.168.0.2</span> -->
           </jnpf-form-tip-item>
           <jnpf-form-tip-item label="排序" prop="sortCode">
-            <el-input-number :min="0" :max="999999" v-model="dataForm.sortCode" controls-position="right" disabled />
+            <el-input-number :min="0" :max="999999" v-model="dataForm.sortCode" controls-position="right" readonly />
           </jnpf-form-tip-item>
           <jnpf-form-tip-item label="状态" prop="status">
             <el-switch v-model="dataForm.status" :active-value="1" :inactive-value="0" disabled>
@@ -84,16 +87,19 @@
       </el-col>
       <el-col class="mt-50"></el-col>
     </el-row>
+    <VerifySignatureInfo v-if="verifySignatureVisible" ref="VerifySignatureInfo" @close="verifySignatureVisible=false" />
   </div>
 </template>
 
 <script>
-import { getInterfaceList, getInfo } from '@/api/systemData/interfaceIdentification.js'
-
+import { getInterfaceList, getInfo } from '@/api/systemData/interfaceOauth.js'
+import VerifySignatureInfo from './VerifySignatureInfo'
 export default {
+  components: { VerifySignatureInfo },
   data() {
     return {
       btnLoading: false,
+      verifySignatureVisible: false,
       dataForm: {
         sortCode: 0,
         status: 1,
@@ -171,6 +177,12 @@ export default {
           })
           this.tableList = res.data.list
         }
+      })
+    },
+    showVerify() {
+      this.verifySignatureVisible = true
+      this.$nextTick(() => {
+        this.$refs.VerifySignatureInfo.init()
       })
     },
   }

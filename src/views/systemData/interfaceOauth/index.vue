@@ -80,10 +80,10 @@ import Form from './Form'
 import Preview from './Preview'
 import Log from './Log'
 import Empower from './Empower'
-import { getInterfaceIdentificationList, deleteInterfaceIdent } from '@/api/systemData/interfaceIdentification.js'
+import { getInterfaceOauthList, deleteInterfaceIdent } from '@/api/systemData/interfaceOauth.js'
 
 export default {
-  name: 'systemData-interfaceIdentification',
+  name: 'systemData-interfaceOauth',
   components: { Form, Preview, Log, Empower },
   data() {
     return {
@@ -109,7 +109,7 @@ export default {
   methods: {
     initData() {
       this.listLoading = true
-      getInterfaceIdentificationList(this.listQuery).then(res => {
+      getInterfaceOauthList(this.listQuery).then(res => {
         this.tableList = res.data.list
         this.total = res.data.pagination.total
         this.listLoading = false

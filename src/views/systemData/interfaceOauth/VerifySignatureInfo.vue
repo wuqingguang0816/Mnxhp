@@ -1,10 +1,8 @@
 <template>
-  <el-dialog class="JNPF-dialog JNPF-dialog_center" title="验证签名使用说明" append-to-body
-    :visible.sync="verifySignatureVisible" width="800px" @close="goback">
+  <el-dialog class="JNPF-dialog JNPF-dialog_center" title="验证签名使用说明" append-to-body :visible.sync="verifySignatureVisible" width="800px" @close="goback">
     <div class="doc-container">
       <div class="docu-container">
-        <h4><a href="#签名验证机制" id="签名验证机制" name="签名验证机制" class="anchor"><span
-              class="octicon octicon-link"></span>签名验证机制</a></h4>
+        <h4><a href="#签名验证机制" id="签名验证机制" name="签名验证机制" class="anchor"><span class="octicon octicon-link"></span>签名验证机制</a></h4>
         <p>和第三方服务对接时，需要建立通讯双方的信任关系，以及确保通讯内容不被篡改，不被重放等。通常，我们采用 HTTPS 和 KeyId/SecretKey 的方式：</p>
         <ol>
           <li>HTTPS 用来确定接收方的身份，利用公钥证书机制来保证。</li>
@@ -13,8 +11,7 @@
         </ol>
         <p>当前HTTP授权证书支持globalsign, symantec, geotrust, comodo这四类，其余证书类型需要经过处理，暂时不推荐。</p>
         <p>本系统内采用appId/appSecret来进行签名。</p>
-        <h4><a href="#签名过程" id="签名过程" name="签名过程" class="anchor"><span
-              class="octicon octicon-link"></span>签名过程</a></h4>
+        <h4><a href="#签名过程" id="签名过程" name="签名过程" class="anchor"><span class="octicon octicon-link"></span>签名过程</a></h4>
         <p>签名分为以下4个步骤:</p>
         <ol>
           <li>选择合适的签名方法</li>
@@ -24,8 +21,7 @@
             &lt;KeyId&gt;:&lt;Scope&gt;:&lt;Signature&gt;</li>
         </ol>
 
-        <h4><a href="#签名方法" id="签名方法" name="签名方法" class="anchor"><span
-              class="octicon octicon-link"></span>签名方法</a></h4>
+        <h4><a href="#签名方法" id="签名方法" name="签名方法" class="anchor"><span class="octicon octicon-link"></span>签名方法</a></h4>
         <p>为了使双方采用一致的算法计算签名，需要规定签名字符串的构建和签名算法，为了满足后续的签名算法升级，当前支持的签名方式为： HmacSHA256</p>
         <p>待签名字符串，请按照以下顺序构建</p>
         <ol>
@@ -51,8 +47,7 @@
           <li>对每一个小写的 name, 取出所有的对应的 value。如果有多个 value, 对所有的 value 进行字典序排序，用逗号 (,) 连接。</li>
           <li>对每一对 name, value。按照如下方式拼接：name:value\n (\n 为换行)</li>
         </ol>
-        <h4><a href="#计算待签名字符串的签名" id="计算待签名字符串的签名" name="计算待签名字符串的签名" class="anchor"><span
-              class="octicon octicon-link"></span>计算待签名字符串的签名</a></h4>
+        <h4><a href="#计算待签名字符串的签名" id="计算待签名字符串的签名" name="计算待签名字符串的签名" class="anchor"><span class="octicon octicon-link"></span>计算待签名字符串的签名</a></h4>
         <p><b>签名使用的 Key</b></p>
         <ol>
           <li>HmacSHA256 方式直接使用 appId 对应的 appSecret。通常这是一个32位 Base64 字符串，将其 Base64 decode 为字节数组。
@@ -68,15 +63,13 @@
           <li>将签名结果，按照 Authorization: &lt;SignVersion&gt;
             &lt;KeyId&gt;:&lt;Scope&gt;:&lt;Signature&gt; 格式加入到 Header 中。</li>
         </ol>
-        <h4><a href="#签名示例" id="签名示例" name="签名示例" class="anchor"><span
-              class="octicon octicon-link"></span>签名示例</a></h4>
+        <h4><a href="#签名示例" id="签名示例" name="签名示例" class="anchor"><span class="octicon octicon-link"></span>签名示例</a></h4>
         <p>针对 appId, appSecret (abcde, xxxxxxxxxxxxxxxxyyyyyyyyyyyyyyyy)</p>
         <p>appId和appSecret为必传参数。可以添加为请求头参数（Header）</p>
         <p>或者当GET请求时：请求路径参数Params。如:**/Response?appId=123&amp;appSecret=abc</p>
         <p>或者当POST请求时：请求头body参数json格式如：{"appId":"123","appSecret":"abc"}</p>
         <p>注意：当参数不是放在Header内，而是GET的路径参数或者POST的body参数时，签名字符串的参数字段必须添加相关参数信息。</p>
-        <h5><a href="#get-请求" id="get-请求" name="get-请求" class="anchor"><span
-              class="octicon octicon-link"></span>GET 请求：</a></h5>
+        <h5><a href="#get-请求" id="get-请求" name="get-请求" class="anchor"><span class="octicon octicon-link"></span>GET 请求：</a></h5>
         <p><em>GET
             /dev/api/system/DataInterface/{id}/Actions/Response?tenantId=xxxxx&amp;name=abc<br>
             Host : localhost:30000<br>
@@ -133,8 +126,7 @@
             </tr>
           </tbody>
         </table>
-        <h5><a href="#post-请求" id="post-请求" name="post-请求" class="anchor"><span
-              class="octicon octicon-link"></span>POST 请求：</a></h5>
+        <h5><a href="#post-请求" id="post-请求" name="post-请求" class="anchor"><span class="octicon octicon-link"></span>POST 请求：</a></h5>
         <p><em>POST /dev/api/system/DataInterface/{id}/Actions/Response<br>
             Host : localhost:30000<br>
             Accept : <em>/</em><br>
@@ -193,9 +185,7 @@
             </tr>
           </tbody>
         </table>
-        <h4><a href="#java版生成待签名字符串及authorization代码示例" id="java版生成待签名字符串及authorization代码示例"
-            name="java版生成待签名字符串及authorization代码示例" class="anchor"><span
-              class="octicon octicon-link"></span>(java版)生成待签名字符串及Authorization代码示例:</a></h4>
+        <h4><a href="#java版生成待签名字符串及authorization代码示例" id="java版生成待签名字符串及authorization代码示例" name="java版生成待签名字符串及authorization代码示例" class="anchor"><span class="octicon octicon-link"></span>(java版)生成待签名字符串及Authorization代码示例:</a></h4>
         <pre class=" language-java"><code class=" language-java"><span class="token keyword">import</span> org<span class="token punctuation">.</span>apache<span class="token punctuation">.</span>commons<span class="token punctuation">.</span>codec<span class="token punctuation">.</span>binary<span class="token punctuation">.</span>Base64<span class="token punctuation">;</span>
 <span class="token keyword">import</span> org<span class="token punctuation">.</span>apache<span class="token punctuation">.</span>commons<span class="token punctuation">.</span>codec<span class="token punctuation">.</span>binary<span class="token punctuation">.</span>Hex<span class="token punctuation">;</span>
 <span class="token keyword">import</span> javax<span class="token punctuation">.</span>crypto<span class="token punctuation">.</span>Mac<span class="token punctuation">;</span>
@@ -211,11 +201,11 @@
         String method <span class="token operator">=</span> <span class="token string">"POST"</span><span class="token punctuation">;</span>
         String urlPath <span class="token operator">=</span> <span class="token string">"/dev/api/system/DataInterface/{id}/Actions/Response"</span><span class="token punctuation">;</span>
         String param <span class="token operator">=</span> <span class="token string">"tenantId=xxxxx&amp;name=abc"</span><span class="token punctuation">;</span>
-        String xiaomiDate <span class="token operator">=</span> <span class="token string">"Wed, 18 Dec 2019 02:55:06 GMT"</span><span class="token punctuation">;</span>
+        String YmDate <span class="token operator">=</span> <span class="token string">"Wed, 18 Dec 2019 02:55:06 GMT"</span><span class="token punctuation">;</span>
         String host <span class="token operator">=</span> <span class="token string">"localhost:30000"</span><span class="token punctuation">;</span>
         String contentType <span class="token operator">=</span> <span class="token string">"application/json"</span><span class="token punctuation">;</span>
         String source <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">StringBuilder</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">append</span><span class="token punctuation">(</span>method<span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">append</span><span class="token punctuation">(</span><span class="token string">'\n'</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">append</span><span class="token punctuation">(</span>urlPath<span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">append</span><span class="token punctuation">(</span><span class="token string">'\n'</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">append</span><span class="token punctuation">(</span>param<span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">append</span><span class="token punctuation">(</span><span class="token string">'\n'</span><span class="token punctuation">)</span>
-                <span class="token punctuation">.</span><span class="token function">append</span><span class="token punctuation">(</span>xiaomiDate<span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">append</span><span class="token punctuation">(</span><span class="token string">'\n'</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">append</span><span class="token punctuation">(</span>host<span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">append</span><span class="token punctuation">(</span><span class="token string">'\n'</span><span class="token punctuation">)</span>
+                <span class="token punctuation">.</span><span class="token function">append</span><span class="token punctuation">(</span>YmDate<span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">append</span><span class="token punctuation">(</span><span class="token string">'\n'</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">append</span><span class="token punctuation">(</span>host<span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">append</span><span class="token punctuation">(</span><span class="token string">'\n'</span><span class="token punctuation">)</span>
                 <span class="token punctuation">.</span><span class="token function">append</span><span class="token punctuation">(</span>contentType<span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">append</span><span class="token punctuation">(</span><span class="token string">'\n'</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">append</span><span class="token punctuation">(</span><span class="token string">""</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">toString</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
         System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span>source<span class="token punctuation">)</span><span class="token punctuation">;</span>
         System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"=================================="</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
@@ -323,7 +313,10 @@ export default {
 .docs-type-container .right-container .ant-anchor-ink:before {
   width: 3px;
 }
-.docs-type-container .right-container .ant-anchor-link-active > .ant-anchor-link-title,
+.docs-type-container
+  .right-container
+  .ant-anchor-link-active
+  > .ant-anchor-link-title,
 .docs-type-container .right-container .ant-anchor-link-title:hover {
   color: #00c1df !important;
 }
@@ -592,14 +585,30 @@ table.noise-table tbody tr td {
   border: 1px solid #e8e8e8;
   padding: 35px 30px;
 }
-.intro-container .intro-body .advantage-container .advantages .advantage .advantage-img {
+.intro-container
+  .intro-body
+  .advantage-container
+  .advantages
+  .advantage
+  .advantage-img {
   text-align: center;
 }
-.intro-container .intro-body .advantage-container .advantages .advantage .advantage-img img {
+.intro-container
+  .intro-body
+  .advantage-container
+  .advantages
+  .advantage
+  .advantage-img
+  img {
   width: 96px;
   height: 96px;
 }
-.intro-container .intro-body .advantage-container .advantages .advantage .title {
+.intro-container
+  .intro-body
+  .advantage-container
+  .advantages
+  .advantage
+  .title {
   margin-top: 18px;
   font-size: 20px;
 }
@@ -618,12 +627,12 @@ table.noise-table tbody tr td {
  * @author Lea Verou
  */
 
-code[class*='language-'],
-pre[class*='language-'] {
+code[class*="language-"],
+pre[class*="language-"] {
   color: black;
   background: none;
   text-shadow: 0 1px white;
-  font-family: Consolas, Monaco, 'Andale Mono', 'Ubuntu Mono', monospace;
+  font-family: Consolas, Monaco, "Andale Mono", "Ubuntu Mono", monospace;
   text-align: left;
   white-space: pre;
   word-spacing: normal;
@@ -641,43 +650,43 @@ pre[class*='language-'] {
   hyphens: none;
 }
 
-pre[class*='language-']::-moz-selection,
-pre[class*='language-'] ::-moz-selection,
-code[class*='language-']::-moz-selection,
-code[class*='language-'] ::-moz-selection {
+pre[class*="language-"]::-moz-selection,
+pre[class*="language-"] ::-moz-selection,
+code[class*="language-"]::-moz-selection,
+code[class*="language-"] ::-moz-selection {
   text-shadow: none;
   background: #b3d4fc;
 }
 
-pre[class*='language-']::selection,
-pre[class*='language-'] ::selection,
-code[class*='language-']::selection,
-code[class*='language-'] ::selection {
+pre[class*="language-"]::selection,
+pre[class*="language-"] ::selection,
+code[class*="language-"]::selection,
+code[class*="language-"] ::selection {
   text-shadow: none;
   background: #b3d4fc;
 }
 
 @media print {
-  code[class*='language-'],
-  pre[class*='language-'] {
+  code[class*="language-"],
+  pre[class*="language-"] {
     text-shadow: none;
   }
 }
 
 /* Code blocks */
-pre[class*='language-'] {
+pre[class*="language-"] {
   padding: 1em;
   margin: 0.5em 0;
   overflow: auto;
 }
 
-:not(pre) > code[class*='language-'],
-pre[class*='language-'] {
+:not(pre) > code[class*="language-"],
+pre[class*="language-"] {
   background: #f5f2f0;
 }
 
 /* Inline code */
-:not(pre) > code[class*='language-'] {
+:not(pre) > code[class*="language-"] {
   padding: 0.1em;
   border-radius: 0.3em;
   white-space: normal;
