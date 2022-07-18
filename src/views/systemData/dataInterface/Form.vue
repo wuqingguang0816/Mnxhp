@@ -82,88 +82,96 @@
         </div>
       </div>
       <div class="detail">
-        <div class="top-box">
-          <el-tabs class="main-box" v-model="activeName">
-            <el-tab-pane label="SQL语句" name="query">
+        <div class="middle-pane">
+          <div class="right-pane-list">
+            <div class="cap">
               <span slot="label">SQL语句
                 <el-tooltip content="支持SQL语句&存储过程语句" placement="top">
                   <a class="el-icon-warning-outline"></a>
                 </el-tooltip>
               </span>
-              <el-form ref="dataForm" :model="dataForm" :rules="dataRule" label-width="100px">
+              <div style="float:right;cursor:pointer">
+                <el-dropdown>
+                  <span class="el-dropdown-link" title="111">
+                    系统变量<i class="el-icon-arrow-down el-icon--right"></i>
+                  </span>
+                  <el-dropdown-menu slot="dropdown">
+                    <el-dropdown-item v-for="(item,index) in sysVariableList" :key="index">
+                      <span @click="handleSysNodeClick(item.value)">
+                        <span>{{ item.value }}</span>
+                        <span
+                          style="float: right; color: #8492a6;padding-left: 10px;">{{ item.tips }}</span>
+                      </span>
+                    </el-dropdown-item>
+                  </el-dropdown-menu>
+                </el-dropdown>
+              </div>
+            </div>
+            <div class="list">
+              <el-form ref="dataForm" :model="dataForm" :rules="dataRule" label-width="100px"
+                style="padding-top: 0px;">
                 <el-form-item label-width="0" prop="query">
                   <div class="sql-box">
                     <SQLEditor v-model="dataForm.query" :options="sqlOptions" ref="SQLEditorRef" />
                   </div>
                 </el-form-item>
               </el-form>
-
-            </el-tab-pane>
-          </el-tabs>
-          <div class="right-pane">
-            <div class="right-pane-list">
-              <div class="cap">
-                <span>参数定义</span>
-              </div>
-              <div class="list">
-                <el-table :data="requestParameters" ref="dragTable" row-key="id" size='mini'
-                  height="100%">
-                  <el-table-column align="center" label="拖动" width="50">
-                    <template>
-                      <i class="drag-handler icon-ym icon-ym-darg"
-                        style="cursor: move;font-size:20px" title='点击拖动' />
-                    </template>
-                  </el-table-column>
-                  <el-table-column prop="field" label="参数名称">
-                    <template slot-scope="scope">
-                      <p @click="handleItemClick(scope.row)" style="cursor:pointer">
-                        <span class="required-sign">{{scope.row.required?'*':''}}</span>
-                        {{scope.row.field}}{{scope.row.fieldName?'('+scope.row.fieldName+')':''}}
-                      </p>
-                    </template>
-                  </el-table-column>
-                  <el-table-column prop="dataType" label="参数类型" width="70">
-                    <template slot-scope="scope">
-                      <span v-if="scope.row.dataType === 'varchar'">字符串</span>
-                      <span v-if="scope.row.dataType === 'int'">整型</span>
-                      <span v-if="scope.row.dataType === 'datetime'">日期时间</span>
-                      <span v-if="scope.row.dataType === 'decimal'">浮点</span>
-                      <span v-if="scope.row.dataType === 'bigint'">长整型</span>
-                      <span v-if="scope.row.dataType === 'text'">文本</span>
-                    </template>
-                  </el-table-column>
-                  <el-table-column label="操作" width="70">
-                    <template slot-scope="scope">
-                      <el-button type="text" @click="addOrUpdateHandle(scope.row)"
-                        icon="el-icon-edit-outline"></el-button>
-                      <el-button type="text" class="JNPF-table-delBtn" icon="el-icon-delete"
-                        @click="removeParameter(scope.$index)"></el-button>
-                    </template>
-                  </el-table-column>
-                </el-table>
-              </div>
-              <div class="table-actions" @click="addOrUpdateHandle()">
-                <el-button type="text" icon="el-icon-plus">添加参数</el-button>
-              </div>
-            </div>
-            <div class="right-pane-btn">
-              <el-button @click="editFunc()">接口数据处理</el-button>
-            </div>
-          </div>
-        </div>
-        <div class="bottom-Box tips">
-          <p>系统变量</p>
-          <div class="tips-content">
-            <div class="tips-content-item" v-for="(item,index) in sysVariableList" :key="index">
-              <span @click="handleSysNodeClick(item.value)">{{item.value}}</span>
-              <el-tooltip :content="item.tips" placement="top-start">
-                <a class="el-icon-warning-outline"></a>
-              </el-tooltip>
             </div>
           </div>
         </div>
       </div>
-
+      <div class="right-pane">
+        <div class="right-pane-list">
+          <div class="cap">
+            <span>参数定义</span>
+          </div>
+          <div class="list">
+            <el-table :data="requestParameters" ref="dragTable" row-key="id" size='mini'
+              height="100%">
+              <el-table-column align="center" label="拖动" width="50">
+                <template>
+                  <i class="drag-handler icon-ym icon-ym-darg" style="cursor: move;font-size:20px"
+                    title='点击拖动' />
+                </template>
+              </el-table-column>
+              <el-table-column prop="field" label="参数名称">
+                <template slot-scope="scope">
+                  <p @click="handleItemClick(scope.row)" style="cursor:pointer">
+                    <span class="required-sign">{{scope.row.required?'*':''}}</span>
+                    {{scope.row.field}}{{scope.row.fieldName?'('+scope.row.fieldName+')':''}}
+                  </p>
+                </template>
+              </el-table-column>
+              <el-table-column prop="dataType" label="参数类型" width="70">
+                <template slot-scope="scope">
+                  <span v-if="scope.row.dataType === 'varchar'">字符串</span>
+                  <span v-if="scope.row.dataType === 'int'">整型</span>
+                  <span v-if="scope.row.dataType === 'datetime'">日期时间</span>
+                  <span v-if="scope.row.dataType === 'decimal'">浮点</span>
+                  <span v-if="scope.row.dataType === 'bigint'">长整型</span>
+                  <span v-if="scope.row.dataType === 'text'">文本</span>
+                </template>
+              </el-table-column>
+              <el-table-column label="操作" width="70">
+                <template slot-scope="scope">
+                  <el-button type="text" @click="addOrUpdateHandle(scope.row)"
+                    icon="el-icon-edit-outline"></el-button>
+                  <el-button type="text" class="JNPF-table-delBtn" icon="el-icon-delete"
+                    @click="removeParameter(scope.$index)"></el-button>
+                </template>
+              </el-table-column>
+            </el-table>
+          </div>
+          <div class="table-actions" @click="addOrUpdateHandle()">
+            <el-button type="text" icon="el-icon-plus">添加参数</el-button>
+          </div>
+        </div>
+        <div class="right-pane-btn">
+          <template label="数据处理">
+            <el-button @click="editFunc()">接口数据处理</el-button>
+          </template>
+        </div>
+      </div>
     </div>
     <div class="staticData" v-if="active === 1 && dataForm.dataType === 2">
       <el-form ref="dataForm" :model="dataForm" :rules="dataRule" label-width="100px">
@@ -626,8 +634,9 @@ export default {
         }
       }
       .sql-box {
-        border: 1px solid #dcdfe6;
-        height: calc(100vh - 400px);
+        border-top: 1px solid #dcdfe6;
+        // border-bottom: 1px solid #dcdfe6;
+        height: calc(100vh - 258px);
         overflow: auto;
       }
       .tips {
@@ -677,13 +686,60 @@ export default {
       font-size: 16px;
     }
   }
+  .middle-pane {
+    flex-shrink: 0;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    overflow: hidden;
+    margin-top: 10px;
+    .right-pane-list {
+      border: 1px solid #dcdfe6;
+      border-radius: 4px;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      margin-bottom: 10px;
+      overflow: hidden;
+      .cap {
+        height: 36px;
+        line-height: 36px;
+        display: flex;
+        color: #606266;
+        font-size: 14px;
+        padding: 0 10px;
+        flex-shrink: 0;
+        justify-content: space-between;
+        align-items: center;
+      }
+      .table-actions {
+        flex-shrink: 0;
+      }
+      .list {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+      }
+      >>> .el-icon-edit-outline,
+      >>> .el-icon-delete {
+        font-size: 16px;
+      }
+    }
+    .right-pane-btn {
+      flex-shrink: 0;
+      .el-button {
+        width: 100%;
+      }
+    }
+  }
   .right-pane {
     width: 350px;
     flex-shrink: 0;
     display: flex;
     flex-direction: column;
-    height: calc(100% - 28px);
-    margin-top: 10px;
+    height: calc(100% - 2px);
+    // margin-top: 10px;
     overflow: hidden;
 
     .right-pane-list {

@@ -153,7 +153,7 @@ export default {
         ...this.listQuery,
       }
       getTableInfoByTableName(this.linkId, this.tableName, query).then(res => {
-        this.list = res.data
+        this.list = res.data.list
         this.total = res.data.pagination.total
         this.listLoading = false
       }).catch(() => { this.listLoading = false })
