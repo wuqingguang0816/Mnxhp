@@ -19,7 +19,7 @@
     <el-form-item label="步长">
       <el-input-number v-model="activeData.step" placeholder="步数" controls-position="right" />
     </el-form-item>
-    <el-form-item v-if="activeData['show-stops'] !== undefined" label="显示间断点">
+    <el-form-item v-if="activeData['show-stops'] !== undefined && showType==='pc'" label="显示间断点">
       <el-switch v-model="activeData['show-stops']" />
     </el-form-item>
     <el-form-item label="是否禁用">
