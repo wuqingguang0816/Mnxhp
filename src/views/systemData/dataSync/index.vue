@@ -21,13 +21,12 @@
           </el-option-group>
         </el-select>
         <el-button type="primary" @click="check" style="margin-left:10px">验证连接</el-button>
-        <el-button @click="addConfigure">+ 规则配置</el-button>
+        <el-button icon="el-icon-plus" @click="addConfigure">规则配置</el-button>
       </el-form-item>
     </el-form>
     <div class="JNPF-common-title">
       <h2>数据库表</h2>
-      <el-button size="primary" style="float:right" type="text" slot="right" @click="batch">批量同步
-      </el-button>
+      <el-button size="primary" type="text" @click="batch">批量同步</el-button>
     </div>
     <JNPF-table v-loading="listLoading" ref="multipleTable" :data="list"
       @selection-change="handleSelectionChange" :hasNO="false">
@@ -111,6 +110,7 @@ export default {
       listLoading: false,
       dialogVisible: false,//规则配置弹窗
       configureList: [],
+      defaultConfigureList: [],
       beforeConversion: '',//转换前
       beforeConversionList: [],//转换前
       afterConversion: '',//转换后
@@ -147,16 +147,16 @@ export default {
             for (var key in this.convertRuleMap) {
               this.beforeConversionList.push({ val: key, value: this.convertRuleMap[key] })
             }
-            if (this.configureList.length == 0) {
-              for (let index = 0; index < this.beforeConversionList.length; index++) {
-                const element = this.beforeConversionList[index];
-                this.configureList.push({
-                  beforeConversion: element.val,
-                  afterConversion: element.value[0]
-                })
-                this.configureList[index].afterConversionList = element.value
-              }
+            this.defaultConfigureList = []
+            for (let index = 0; index < this.beforeConversionList.length; index++) {
+              const element = this.beforeConversionList[index];
+              this.defaultConfigureList.push({
+                beforeConversion: element.val,
+                afterConversion: element.value[0]
+              })
+              this.defaultConfigureList[index].afterConversionList = element.value
             }
+            this.configureList = JSON.parse(JSON.stringify(this.defaultConfigureList))
             this.verification = res.data.checkDbFlag
             this.list = res.data.tableList
             for (let i = 0; i < this.list.length; i++) {
@@ -175,6 +175,7 @@ export default {
       this.configureList[i].afterConversionList = this.convertRuleMap[val]
     },
     saveRule() {//保存
+      this.defaultConfigureList = JSON.parse(JSON.stringify(this.configureList))
       this.dialogVisible = false
     },
     addRule() {   //规则配置新增
@@ -194,7 +195,7 @@ export default {
         dbConnectionTo: this.dataForm.dbConnectionTo,
         dbTableList: this.batchList,
       }
-      if (this.configureList && this.configureList.length > 0) {
+      if (this.configureList && this.configureList.length) {
         for (var index in this.configureList) {
           map[this.configureList[index].beforeConversion] = this.configureList[index].afterConversion;
         }
@@ -238,6 +239,7 @@ export default {
     addConfigure() {  //添加规则配置
       if (!this.verification) return this.$message.error('请验证连接')
       this.dialogVisible = true
+      this.configureList = JSON.parse(JSON.stringify(this.defaultConfigureList))
     },
     handleSelectionChange(val) {   //多选框
       let list = []
@@ -245,7 +247,6 @@ export default {
         list.push(element.table)
       })
       this.batchList = list
-
     },
     copy(row) {
       var map = {};
@@ -256,7 +257,7 @@ export default {
         dbConnectionTo: this.dataForm.dbConnectionTo,
         dbTable: row.table,
       }
-      if (this.configureList.length > 0) {
+      if (this.configureList.length) {
         for (var index in this.configureList) {
           map[this.configureList[index].beforeConversion] = this.configureList[index].afterConversion;
         }
@@ -296,7 +297,7 @@ export default {
         dbConnectionTo: this.dataForm.dbConnectionTo,
         dbTable: row.table
       }
-      if (this.configureList.length > 0) {
+      if (this.configureList.length) {
         for (var index in this.configureList) {
           map[this.configureList[index].beforeConversion] = this.configureList[index].afterConversion;
         }
