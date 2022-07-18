@@ -116,11 +116,10 @@ export default {
     }
   },
   created() {
-
     this.$store.dispatch('base/getDictionaryData', { sort: 'businessType' }).then((res) => {
       this.categoryList = res
+      this.initData()
     })
-    this.initData()
   },
   methods: {
     initData() {
