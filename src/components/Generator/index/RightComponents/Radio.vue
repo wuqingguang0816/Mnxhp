@@ -79,7 +79,7 @@
           <el-radio-button label="button">按钮</el-radio-button>
         </el-radio-group>
       </el-form-item>
-      <el-form-item v-if="activeData.__config__.optionType === 'default'" label="是否带边框">
+      <el-form-item v-if="activeData.__config__.optionType === 'default'" label="是否边框">
         <el-switch v-model="activeData.__config__.border" />
       </el-form-item>
       <el-form-item v-if="activeData.__config__.optionType === 'button' ||
