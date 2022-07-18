@@ -48,8 +48,8 @@
           <jnpf-form-tip-item label="排序" prop="sortCode">
             <el-input-number :min="0" :max="999999" v-model="dataForm.sortCode" controls-position="right" />
           </jnpf-form-tip-item>
-          <jnpf-form-tip-item label="状态" prop="status">
-            <el-switch v-model="dataForm.status" :active-value="1" :inactive-value="0">
+          <jnpf-form-tip-item label="状态" prop="enabledMark">
+            <el-switch v-model="dataForm.enabledMark" :active-value="1" :inactive-value="0">
             </el-switch>
           </jnpf-form-tip-item>
           <jnpf-form-tip-item label="说明" prop="description">
@@ -75,7 +75,7 @@ export default {
       dataForm: {
         appSecret: '',
         sortCode: 0,
-        status: 1,
+        enabledMark: 1,
       },
       dataRule: {
         appId: [

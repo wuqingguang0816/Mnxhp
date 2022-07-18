@@ -48,8 +48,8 @@
           <jnpf-form-tip-item label="排序" prop="sortCode">
             <el-input-number :min="0" :max="999999" v-model="dataForm.sortCode" controls-position="right" readonly />
           </jnpf-form-tip-item>
-          <jnpf-form-tip-item label="状态" prop="status">
-            <el-switch v-model="dataForm.status" :active-value="1" :inactive-value="0" disabled>
+          <jnpf-form-tip-item label="状态" prop="enabledMark">
+            <el-switch v-model="dataForm.enabledMark" :active-value="1" :inactive-value="0" disabled>
             </el-switch>
           </jnpf-form-tip-item>
           <jnpf-form-tip-item label="说明" prop="description">
@@ -76,7 +76,7 @@
           <el-table-column prop="fullName" label="接口名称" width="200" />
           <el-table-column prop="enCode" label="接口编码" width="200" />
           <el-table-column prop="url" label="接口地址" min-width="300" show-overflow-tooltip />
-          <el-table-column prop="status" label="接口类型" width="120" align="center">
+          <el-table-column prop="type" label="接口类型" width="120" align="center">
             <template slot-scope="scope">
               <el-tag v-if="scope.row.dataType">POST</el-tag>
               <!-- <el-tag type="success" v-if="scope.row.dataType==2">SQL操作</el-tag>
@@ -102,7 +102,7 @@ export default {
       verifySignatureVisible: false,
       dataForm: {
         sortCode: 0,
-        status: 1,
+        enabledMark: 1,
       },
       dataRule: {
         appId: [

@@ -2,6 +2,11 @@
   <el-dialog class="JNPF-dialog JNPF-dialog_center" title="验证签名使用说明" append-to-body :visible.sync="verifySignatureVisible" width="800px" @close="goback">
     <div class="doc-container">
       <div class="docu-container">
+        <h4><a href="#验证开启" id="验证开启" name="验证开启" class="anchor"><span class="octicon octicon-link"></span>验证开启</a></h4>
+        <p>验证签名关闭，不使用验证机制</p>
+        <li>直接将appId和appSecret，按照 Authorization: &lt;appId&gt;::&lt;appSecret&gt; 格式加入到 Header 中。</li>
+        <p>验证签名开启，使用下列签名验证机制</p>
+        <p></p>
         <h4><a href="#签名验证机制" id="签名验证机制" name="签名验证机制" class="anchor"><span class="octicon octicon-link"></span>签名验证机制</a></h4>
         <p>和第三方服务对接时，需要建立通讯双方的信任关系，以及确保通讯内容不被篡改，不被重放等。通常，我们采用 HTTPS 和 KeyId/SecretKey 的方式：</p>
         <ol>

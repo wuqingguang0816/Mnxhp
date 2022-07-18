@@ -35,10 +35,10 @@
           <el-table-column prop="creatorTime" label="创建时间" width="120" :formatter="jnpf.tableDateFormat" />
           <el-table-column prop="lastModifyTime" label="最后修改时间" width="120" :formatter="jnpf.tableDateFormat" />
           <el-table-column prop="sortCode" label="排序" width="70" align="center" />
-          <el-table-column prop="status" label="状态" width="70" align="center">
+          <el-table-column prop="enabledMark" label="状态" width="70" align="center">
             <template slot-scope="scope">
-              <el-tag type="success" v-if="scope.row.status==1">正常</el-tag>
-              <el-tag type="danger" v-if="scope.row.status==0">停用</el-tag>
+              <el-tag type="success" v-if="scope.row.enabledMark==1">正常</el-tag>
+              <el-tag type="danger" v-if="scope.row.enabledMark==0">停用</el-tag>
             </template>
           </el-table-column>
           <el-table-column label="操作" width="150" fixed="right">
