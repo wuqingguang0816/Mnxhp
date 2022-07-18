@@ -91,7 +91,6 @@
               <el-table-column prop="fullName" label="名称" />
               <el-table-column prop="enCode" label="编码" />
               <el-table-column prop="dataType" label="类型" width="100" />
-              <el-table-column prop="requestMethod" label="动作" width="100" />
             </JNPF-table>
             <pagination :total="total" :page.sync="listQuery.currentPage"
               :limit.sync="listQuery.pageSize" @pagination="initData" />

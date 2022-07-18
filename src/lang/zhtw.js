@@ -248,6 +248,7 @@ export default {
     deselectAll: '取消全選',
     expandAll: '展開所有',
     foldAll: '折疊所有',
+    systemPermission: '應用權限',
     menuPermission: '菜單權限',
     buttonPermission: '按鈕權限',
     listPermission: '列表權限',

@@ -247,6 +247,7 @@ export default {
     deselectAll: 'Deselect All',
     expandAll: 'Expand All',
     foldAll: 'Fold All',
+    systemPermission: 'System Permission',
     menuPermission: 'Menu Permission',
     buttonPermission: 'Button Permission',
     listPermission: 'List Permission',

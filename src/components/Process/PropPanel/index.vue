@@ -241,7 +241,7 @@
                       <a class="el-icon-warning-outline"></a>
                     </el-tooltip>
                   </div>
-                  <el-input v-model="subFlowForm.getUserUrl" placeholder="请输入接口地址">
+                  <el-input v-model="subFlowForm.getUserUrl" placeholder="请输入http或https接口地址">
                     <template slot="prepend">GET</template>
                   </el-input>
                 </el-form-item>
@@ -863,7 +863,7 @@
                       <a class="el-icon-warning-outline"></a>
                     </el-tooltip>
                   </div>
-                  <el-input v-model="approverForm.getUserUrl" placeholder="请输入接口地址">
+                  <el-input v-model="approverForm.getUserUrl" placeholder="请输入http或https接口地址">
                     <template slot="prepend">GET</template>
                   </el-input>
                 </el-form-item>

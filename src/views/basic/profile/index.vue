@@ -76,7 +76,7 @@
           </el-tree>
         </div>
       </el-tab-pane>
-      <el-tab-pane label="系统权限" name="authorize" class="el-tab-pane-authorize">
+      <el-tab-pane label="应用权限" name="authorize" class="el-tab-pane-authorize">
         <Authorize ref="authorize" v-if="visible.authorize" />
       </el-tab-pane>
       <el-tab-pane label="系统日志" name="sysLog">
