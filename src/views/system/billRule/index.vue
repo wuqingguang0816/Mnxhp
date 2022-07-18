@@ -10,6 +10,15 @@
             </el-form-item>
           </el-col>
           <el-col :span="6">
+            <el-form-item label="业务分类">
+              <el-select v-model="categoryId" placeholder="请选择业务分类" clearable>
+                <el-option v-for="item in categoryList" :key="item.id" :label="item.fullName"
+                  :value="item.id">
+                </el-option>
+              </el-select>
+            </el-form-item>
+          </el-col>
+          <el-col :span="6">
             <el-form-item>
               <el-button type="primary" icon="el-icon-search" @click="search()">
                 {{$t('common.search')}}</el-button>
@@ -96,6 +105,7 @@ export default {
       total: 0,
       btnLoading: false,
       listLoading: true,
+      categoryId: '',
       listQuery: {
         keyword: '',
         currentPage: 1,
@@ -107,15 +117,19 @@ export default {
   },
   created() {
 
-    // this.$store.dispatch('base/getDictionaryData', { sort: 'businessType' }).then((res) => {
-    //   this.categoryList = res
-    // })
+    this.$store.dispatch('base/getDictionaryData', { sort: 'businessType' }).then((res) => {
+      this.categoryList = res
+    })
     this.initData()
   },
   methods: {
     initData() {
       this.listLoading = true
-      getBillRuleList(this.listQuery).then(res => {
+      let query = {
+        ...this.listQuery,
+        categoryId: this.categoryId
+      }
+      getBillRuleList(query).then(res => {
         this.tableList = res.data.list
         this.total = res.data.pagination.total
         this.listLoading = false
@@ -145,7 +159,7 @@ export default {
     addOrUpdateHandle(id) {
       this.formVisible = true
       this.$nextTick(() => {
-        this.$refs.Form.init(id)
+        this.$refs.Form.init(id, this.categoryList)
       })
     },
     handleDel(id) {
@@ -181,6 +195,7 @@ export default {
     },
     reset() {
       this.listQuery.keyword = ''
+      this.categoryId = ''
       this.search()
     }
   }

@@ -120,14 +120,10 @@ export default {
       }
     }
   },
-  created() {
-    this.$store.dispatch('base/getDictionaryData', { sort: 'businessType' }).then((res) => {
-      this.categoryList = res
-    })
-  },
   methods: {
-    init(id) {
+    init(id, categoryList) {
       this.dataForm.id = id || ''
+      this.categoryList = categoryList
       this.visible = true
       this.formLoading = true
       this.$nextTick(() => {
