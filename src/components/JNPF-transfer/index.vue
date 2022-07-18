@@ -118,7 +118,7 @@ export default {
     },
     handleNodeClick(data) {
       if (data.type !== this.type) return
-      const boo = this.selectedData.some(o => o.id === data.id)
+      const boo = this.selectedTextData.some(o => o.id === data.id)
       if (boo) return
       this.multiple ? this.selectedTextData.push(data) : this.selectedTextData = [data]
       this.selectedData = this.selectedTextData.map(o => o.id)
