@@ -2015,7 +2015,7 @@ export default {
         title: this.properties.title
       }
       Object.assign(this.properties, this.subFlowForm, titleObj)
-      this.$emit("confirm", this.properties, content);
+      this.$emit("confirm", this.properties, content || '请设置发起人');
       this.visible = false;
     },
     /**
