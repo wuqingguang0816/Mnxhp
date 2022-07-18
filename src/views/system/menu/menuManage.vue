@@ -34,7 +34,8 @@
               <div class="box">
                 <div class="JNPF-common-head">
                   <topOpts @add="addOrUpdateHandle()">
-                    <upload-btn url="/api/system/Menu/Action/Import" @on-success="initData" />
+                    <upload-btn :url="'/api/system/Menu/'+systemId+'Action/Import'"
+                      @on-success="initData" />
                   </topOpts>
                   <div class="JNPF-common-head-right">
                     <el-tooltip effect="dark" content="展开" placement="top">
