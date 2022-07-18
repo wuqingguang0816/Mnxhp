@@ -244,6 +244,7 @@ export default {
     // 供父组件使用 获取表单JSON
     getData() {
       return new Promise((resolve, reject) => {
+        if (!this.exist()) return
         if (!this.drawingList.length) {
           reject({ msg: '表单不允许为空', target: 1 })
           return
@@ -461,6 +462,20 @@ export default {
         }
       })
     },
+    // 验证
+    exist() {
+      let isOk = true;
+      //  遍历数组，判断非空
+      for (let i = 0; i < this.drawingList.length; i++) {
+        const e = this.drawingList[i];
+        if (!e.__vModel__) {
+          this.$message.warning(`控件字段不能为空`)
+          isOk = false
+          break
+        }
+      }
+      return isOk;
+    },
     preview() {
       this.AssembleFormData()
       this.previewVisible = true
@@ -522,6 +537,6 @@ export default {
 }
 </script>
 <style lang='scss'>
-@import '../styles/index';
-@import '../styles/home';
+@import "../styles/index";
+@import "../styles/home";
 </style>

@@ -124,14 +124,15 @@
             <JNPF-table v-loading="listLoading" :data="tableData" :border="false"
               highlight-current-row row-key="table" ref="multipleTable"
               @selection-change="handleSelectionChange" :hasNO="false" has-c>
-              <el-table-column prop="account" label="账号" width="80" />
-              <el-table-column prop="fullName" label="姓名" />
-              <el-table-column prop="gender" label="性别" width="80" align="center">
+              <el-table-column prop="account" label="账号" width="100" />
+              <el-table-column prop="fullName" label="姓名" width="100" />
+              <el-table-column prop="gender" label="性别" width="90" align="center">
                 <template slot-scope="scope" sortable>
                   <span>{{ scope.row.gender ==1 ? '男': ( scope.row.gender == 2 ? '女' : '保密') }}</span>
                 </template>
               </el-table-column>
               <el-table-column label="手机号" fixed="right" prop="mobilePhone" width="120" />
+              <el-table-column label="所属组织" fixed="right" prop="organize" min-width="120" />
             </JNPF-table>
             <pagination :total="total" :page.sync="listQuery.currentPage"
               :limit.sync="listQuery.pageSize" @pagination="initData" />

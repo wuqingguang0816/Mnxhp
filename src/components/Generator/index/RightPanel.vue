@@ -103,7 +103,8 @@
               <el-form-item
                 v-if="activeData.__vModel__!==undefined  && !noVModelList.includes(activeData.__config__.jnpfKey)"
                 label="控件字段">
-                <el-input v-model="activeData.__vModel__" placeholder="请输入控件字段(v-model)" disabled />
+                <el-input v-model="activeData.__vModel__" placeholder="请输入控件字段(v-model)"
+                  @blur.native.capture="leaveCursor()" />
               </el-form-item>
             </template>
             <JNPFComInput v-if="activeData.__config__.jnpfKey==='comInput'"
@@ -769,6 +770,20 @@ export default {
     this.setDefaultOptions()
   },
   methods: {
+    leaveCursor() {
+      let isOk = true
+      const drawingList = getDrawingList()
+      for (let index = 0; index < drawingList.length; index++) {
+        const element = drawingList[index];
+        let num = drawingList.filter(o => o.__vModel__.toLowerCase() == element.__vModel__.toLowerCase())
+        if (num.length > 1) {
+          this.$message.warning(`字段【${element.__vModel__}】已存在,请重新输入!`)
+          this.activeData.__vModel__ = ''
+          isOk = false
+          break
+        }
+      }
+    },
     addReg() {
       this.activeData.__config__.regList.push({
         pattern: '',
