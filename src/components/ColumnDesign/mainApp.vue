@@ -167,6 +167,15 @@
               <el-form-item label="表单权限">
                 <el-switch v-model="columnData.useFormPermission"></el-switch>
               </el-form-item>
+
+              <el-form label-width="90px" class="sriptEvents">
+                <el-divider>脚本事件</el-divider>
+                <el-form-item label="表格事件" style="{text-align: left;}">
+                  <el-button style="width: 100%;"
+                    @click="addFunc(columnData.funcs.afterOnload,'afterOnload',true)">脚本编写
+                  </el-button>
+                </el-form-item>
+              </el-form>
             </el-form>
           </div>
         </el-scrollbar>
@@ -193,6 +202,8 @@ const getSearchType = item => {
   return 1
 }
 const defaultFunc = '({ data, index, request, toast, refresh }) => {\r\n   \r\n}'
+const defaultFuncs = '({ data, attributes, events, methods, tableRef, request }) => {\r\n   \r\n}'
+
 const defaultColumnData = {
   searchList: [], // 查询字段
   hasSuperQuery: false, // 高级查询
@@ -216,7 +227,13 @@ const defaultColumnData = {
   columnBtnsList: [
     { value: 'edit', icon: 'el-icon-edit', label: '编辑' },
     { value: 'remove', icon: 'el-icon-delete', label: '删除' }
-  ] // 列按钮
+  ], // 列按钮
+  funcs: {
+    afterOnload: {
+      func: "",
+      name: "脚本事件"
+    }
+  }
 }
 export default {
   name: 'columnDesign',
@@ -476,9 +493,23 @@ export default {
     updateScript(func) {
       this.activeItem.func = func
     },
+    addFunc(item, type) {
+      if (!item.func) item.func = defaultFuncs
+      this.activeItem = item
+      this.activeItem.type = type
+      this.$nextTick(() => {
+        this.formScriptVisible = true
+      })
+    }
   }
 }
 </script>
 <style lang="scss" scoped>
-@import './index.scss';
+@import "./index.scss";
+
+.sriptEvents {
+  >>> .el-form-item__label {
+    text-align: left;
+  }
+}
 </style>

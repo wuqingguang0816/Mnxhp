@@ -40,7 +40,7 @@
           <el-table-column prop="mobilePhone" label="手机" width="120" />
           <el-table-column prop="organizeId" label="所属组织" min-width="200" show-overflow-tooltip />
           <el-table-column prop="creatorTime" label="创建时间" :formatter="jnpf.tableDateFormat"
-            width="150" />
+            width="120" />
           <el-table-column label="操作" width="100">
             <template slot-scope="scope">
               <tableOpts @edit="addOrUpdateHandle(scope.row.id)" @del="handleDel(scope.row.id)">

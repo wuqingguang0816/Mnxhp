@@ -11,7 +11,7 @@
         <el-input v-model="url">
           <template slot="prepend">GET</template>
           <template slot="append">
-            <el-button type="primary" @click="test">测试接口</el-button>
+            <el-button type="primary" @click="test" :loading="testLoading">测试接口</el-button>
           </template>
         </el-input>
       </el-form-item>
@@ -40,6 +40,7 @@ export default {
     return {
       title: '',
       formLoading: false,
+      testLoading: false,
       responseData: '',
       url: '',
       options: {
@@ -52,13 +53,17 @@ export default {
   },
   methods: {
     test() {
+      this.testLoading = true
       let query = {
         paramList: this.inputList,
         tenantId: this.tenantId
       }
       testInterface(this.id, query).then(res => {
+        this.testLoading = false
         let data = res
         this.responseData = JSON.stringify(data, null, 4)
+      }).catch(() => {
+        this.testLoading = false
       })
     },
     goBack() {

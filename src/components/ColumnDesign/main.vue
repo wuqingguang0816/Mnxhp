@@ -238,8 +238,14 @@
                 <el-switch v-model="columnData.useFormPermission"></el-switch>
               </el-form-item>
 
-              <el-button style="width: 100%;"
-                @click="addFunc(columnData.funcs.afterOnload,'afterOnload',true)">脚本事件</el-button>
+              <el-form label-width="90px" class="sriptEvents">
+                <el-divider>脚本事件</el-divider>
+                <el-form-item label="表格事件" style="{text-align: left;}">
+                  <el-button style="width: 100%;"
+                    @click="addFunc(columnData.funcs.afterOnload,'afterOnload',true)">脚本编写
+                  </el-button>
+                </el-form-item>
+              </el-form>
             </el-form>
           </div>
         </el-scrollbar>
@@ -599,5 +605,11 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
-@import './index.scss';
+@import "./index.scss";
+
+.sriptEvents {
+  >>> .el-form-item__label {
+    text-align: left;
+  }
+}
 </style>

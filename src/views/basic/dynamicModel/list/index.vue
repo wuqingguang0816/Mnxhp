@@ -104,12 +104,12 @@
                         :ablePosIds="item.ablePosIds" :multiple="item.multiple"
                         :clearable="item.clearable" :disabled="item.disabled" />
                     </template>
-                    <template v-if="item.jnpfKey==='groupSelect'">
+                    <template v-else-if="item.jnpfKey==='groupSelect'">
                       <groupSelect v-model="scope.row[item.prop]" :placeholder="item.placeholder"
                         :multiple="item.multiple" :clearable="item.clearable"
                         :disabled="item.disabled" />
                     </template>
-                    <template v-if="item.jnpfKey==='roleSelect'">
+                    <template v-else-if="item.jnpfKey==='roleSelect'">
                       <roleSelect v-model="scope.row[item.prop]" :placeholder="item.placeholder"
                         :multiple="item.multiple" :clearable="item.clearable"
                         :disabled="item.disabled" />

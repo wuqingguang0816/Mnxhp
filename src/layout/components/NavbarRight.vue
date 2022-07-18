@@ -28,9 +28,14 @@
         <i class="el-icon-arrow-down"></i>
       </div>
       <el-dropdown-menu slot="dropdown">
+        <router-link to="/profile">
+          <el-dropdown-item>
+            <i class="icon-ym icon-ym-header-userInfo"></i>{{ $t('navbar.profile') }}
+          </el-dropdown-item>
+        </router-link>
         <el-dropdown placement="right-start">
           <el-dropdown-item>
-            <i class="icon-ym icon-ym-header-userInfo"></i>{{ $t('navbar.systemChange') }}
+            <i class="icon-ym icon-ym-systemToggle"></i>{{ $t('navbar.systemChange') }}
           </el-dropdown-item>
           <el-dropdown-menu slot="dropdown">
             <el-dropdown-item v-for="item in userInfo.systemIds" :key="item.id"
@@ -39,11 +44,6 @@
             </el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>
-        <router-link to="/profile">
-          <el-dropdown-item>
-            <i class="icon-ym icon-ym-header-userInfo"></i>{{ $t('navbar.profile') }}
-          </el-dropdown-item>
-        </router-link>
         <a href="http://mail.qq.com/cgi-bin/qm_share?t=qm_mailme&email=dA0dGhkVHQcbEgA0BQVaFxsZ"
           target="_blank">
           <el-dropdown-item>
