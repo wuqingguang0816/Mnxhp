@@ -131,8 +131,8 @@
                   <span>{{ scope.row.gender ==1 ? '男': ( scope.row.gender == 2 ? '女' : '保密') }}</span>
                 </template>
               </el-table-column>
-              <el-table-column label="手机号" fixed="right" prop="mobilePhone" width="120" />
-              <el-table-column label="所属组织" fixed="right" prop="organize" min-width="120" />
+              <el-table-column label="手机号" prop="mobilePhone" width="120" />
+              <el-table-column label="所属组织" prop="organize" />
             </JNPF-table>
             <pagination :total="total" :page.sync="listQuery.currentPage"
               :limit.sync="listQuery.pageSize" @pagination="initData" />
