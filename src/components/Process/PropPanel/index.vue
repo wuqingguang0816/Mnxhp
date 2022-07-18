@@ -76,9 +76,9 @@
                 </el-time-picker>
               </template>
               <template v-else-if="['date','createTime', 'modifyTime'].includes(item.jnpfKey)">
-                <el-date-picker v-model="item.fieldValue" :type="item.type||'datetime'" clearable
-                  placeholder="请选择" value-format="timestamp"
-                  @change="onConditionDateChange($event,item)"
+                <el-date-picker v-model="item.fieldValue" clearable placeholder="请选择"
+                  :type="item.jnpfKey==='date'&& item.type?item.type:'datetime'"
+                  value-format="timestamp" @change="onConditionDateChange($event,item)"
                   :format="item.format||'yyyy-MM-dd HH:mm:ss'">
                 </el-date-picker>
               </template>

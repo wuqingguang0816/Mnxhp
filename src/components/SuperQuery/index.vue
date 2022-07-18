@@ -51,8 +51,9 @@
                   </el-time-picker>
                 </template>
                 <template v-else-if="['date','createTime', 'modifyTime'].includes(item.jnpfKey)">
-                  <el-date-picker v-model="item.fieldValue" :type="item.attr.type||'datetime'"
-                    clearable placeholder="请选择" value-format="timestamp" style="width:100%"
+                  <el-date-picker v-model="item.fieldValue" clearable placeholder="请选择"
+                    :type="item.jnpfKey==='date'&&item.attr.type?item.attr.type:'datetime'"
+                    value-format="timestamp" style="width:100%"
                     :format="item.attr.format||'yyyy-MM-dd HH:mm:ss'">
                   </el-date-picker>
                 </template>
