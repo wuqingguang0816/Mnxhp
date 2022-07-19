@@ -2034,6 +2034,15 @@ textarea.el-textarea__inner {
 .popupSelect-container {
   width: 100%;
 
+  .popover-container {
+    width: 100%;
+
+    .el-popover__reference-wrapper,
+    .el-select {
+      width: 100%;
+    }
+  }
+
   &>.el-select {
     width: 100%;
   }
