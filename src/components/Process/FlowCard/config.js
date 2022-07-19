@@ -118,6 +118,9 @@ const defaultStartForm = {
   isBatchApproval: false,
   isSummary: false,
   summaryType: 0,
+  titleType: 0,
+  defaultContent: '{发起用户名}的{流程名称}',
+  titleContent: '',
   formOperates: []
 }
 export default {
