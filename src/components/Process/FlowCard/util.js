@@ -61,6 +61,7 @@ export class NodeUtils {
   static createNode(type, previousNodeId) {
     let res = JSON.parse(JSON.stringify(nodeConfig[type]))
     res.nodeId = this.idGenerator()
+    if (type !== 'start' && type !== 'timer') res.properties.title += res.nodeId
     res.prevId = previousNodeId
     return res
   }
