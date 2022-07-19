@@ -2359,10 +2359,7 @@ export default {
         id: 'jnpfLaunchTime',
         value: 'jnpfLaunchTime(发起时间)'
       }]
-      const params = this.getFormOperates().map(res => {
-        let obj = { value: res.id + "(" + res.name + ")", ...res }
-        return obj
-      })
+      const params = this.usedFormItems.map(o => ({ value: o.__vModel__ + "(" + o.__config__.label + ")" }))
       cb([...systemParams, ...params]);
     },
     getFormOperates() {
