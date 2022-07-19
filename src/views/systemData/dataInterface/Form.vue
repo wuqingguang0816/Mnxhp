@@ -123,7 +123,7 @@
       <div class="right-pane">
         <div class="right-pane-list">
           <div class="cap">
-            <span>参数定义</span>
+            <span>接口参数</span>
           </div>
           <div class="list">
             <el-table :data="requestParameters" ref="dragTable" row-key="id" size='mini'
