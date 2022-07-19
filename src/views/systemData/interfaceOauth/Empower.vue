@@ -36,7 +36,7 @@
 
 <script>
 import { getDataInterfaceSelectorList, getDataInterfaceTypeSelector, getDataInterfaceSelector } from '@/api/systemData/dataInterface'
-import { saveInterfaceList, getInterfaceList } from '@/api/systemData/interfaceOauth'
+import { saveInterfaceList, getInfo } from '@/api/systemData/interfaceOauth'
 
 export default {
   data() {
@@ -105,7 +105,7 @@ export default {
       })
     },
     setDefault() {
-      getInterfaceList(this.identId).then(res => {
+      getInfo(this.identId).then(res => {
         this.selectedData = res.data.list || []
       })
     },

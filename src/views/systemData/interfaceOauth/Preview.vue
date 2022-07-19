@@ -151,14 +151,16 @@ export default {
       }
     },
     initData(id) {
-      getInfo(id).then(res => {
-        this.dataForm = res.data
-        this.setInterfaceData()
-      }).catch(() => { })
+      this.dataForm.id = id
+      this.setInterfaceData()
     },
     setInterfaceData() {
-      this.tenantId = this.dataForm.tenantId ? this.dataForm.tenantId : ''
-      getInterfaceList(this.dataForm.id).then(res => {
+
+      getInfo(this.dataForm.id).then(res => {
+        if (res.data) {
+          this.dataForm = res.data
+          this.tenantId = this.dataForm.tenantId ? this.dataForm.tenantId : ''
+        }
         if (res.data.list) {
           let arr = []
           res.data.list.forEach(item => {
