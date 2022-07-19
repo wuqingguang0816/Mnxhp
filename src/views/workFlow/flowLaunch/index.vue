@@ -4,7 +4,7 @@
       <el-row class="JNPF-common-search-box" :gutter="16">
         <el-form @submit.native.prevent>
           <el-col :span="6">
-            <el-form-item label="关键词">
+            <el-form-item label="关键词1">
               <el-input v-model="keyword" placeholder="请输入关键词查询" clearable
                 @keyup.enter.native="search()" />
             </el-form-item>
@@ -43,6 +43,15 @@
               <el-form-item label="流程状态">
                 <el-select v-model="status" placeholder="选择流程状态" clearable>
                   <el-option v-for="(item,i) in statusList" :key="i" :label="item.fullName"
+                    :value="item.id">
+                  </el-option>
+                </el-select>
+              </el-form-item>
+            </el-col>
+            <el-col :span="6">
+              <el-form-item label="紧急程度">
+                <el-select v-model="urgent" placeholder="选择紧急程度" clearable>
+                  <el-option v-for="(item,i) in urgentList" :key="i" :label="item.fullName"
                     :value="item.id">
                   </el-option>
                 </el-select>
@@ -192,12 +201,25 @@ export default {
         id: 5,
         fullName: '审核终止'
       }],
+      urgentList: [
+        {
+          id: 1,
+          fullName: '普通'
+        }, {
+          id: 2,
+          fullName: '重要'
+        }, {
+          id: 3,
+          fullName: '紧急'
+        }
+      ],
       keyword: '',
       pickerVal: [],
       startTime: '',
       endTime: '',
       flowId: '',
       status: '',
+      urgent: '',
       flowCategory: '',
       categoryList: [],
       flowEngineList: []
@@ -250,6 +272,7 @@ export default {
         endTime: this.endTime,
         flowId: this.flowId,
         status: this.status,
+        flowUrgent: this.urgent,
         flowCategory: this.flowCategory
       }
       FlowLaunchList(query).then(res => {
@@ -319,6 +342,7 @@ export default {
       this.keyword = ''
       this.flowId = ''
       this.status = ''
+      this.urgent = ''
       this.flowCategory = ''
       this.listQuery = {
         currentPage: 1,
