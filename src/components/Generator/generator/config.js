@@ -315,43 +315,6 @@ export const inputComponents = [
   },
   {
     __config__: {
-      jnpfKey: "popupTableSelect",
-      label: "下拉表格",
-      labelWidth: undefined,
-      showLabel: true,
-      required: false,
-      tag: "popupTableSelect",
-      tagIcon: "icon-ym icon-ym-generator-popupTableSelect",
-      defaultValue: "",
-      layout: "colFormItem",
-      span: 24,
-      dragDisabled: false,
-      visibility: ["pc", "app"],
-      tableName: "",
-      regList: [],
-      trigger: "change"
-    },
-    on: {
-      change:
-        "({ data, formData, setFormData, setShowOrHide, setRequired, setDisabled, request, getFieldOptions, setFieldOptions }) => {\n    // 在此编写代码\n    \n}"
-    },
-    placeholder: "请选择",
-    interfaceId: "",
-    hasPage: false,
-    pageSize: 20,
-    columnOptions: [],
-    propsValue: "id",
-    relationField: "fullName",
-    popupType: "popover",
-    popupTitle: "选择数据",
-    popupWidth: "700px",
-    disabled: false,
-    clearable: true,
-    multiple: false,
-    filterable: false
-  },
-  {
-    __config__: {
       jnpfKey: "cascader",
       label: "级联选择",
       labelWidth: undefined,
@@ -982,26 +945,40 @@ export const selectComponents = [
   },
   {
     __config__: {
-      jnpfKey: "billRule",
-      label: "单据组件",
+      jnpfKey: "popupTableSelect",
+      label: "下拉表格",
       labelWidth: undefined,
       showLabel: true,
-      tag: "el-input",
-      defaultValue: "",
-      tagIcon: "icon-ym icon-ym-generator-documents",
-      defaultValue: null,
-      layout: "colFormItem",
       required: false,
+      tag: "popupTableSelect",
+      tagIcon: "icon-ym icon-ym-generator-popupTableSelect",
+      defaultValue: "",
+      layout: "colFormItem",
       span: 24,
       dragDisabled: false,
       visibility: ["pc", "app"],
       tableName: "",
-      noShow: false,
-      trigger: "change",
-      rule: ""
+      regList: [],
+      trigger: "change"
     },
-    readonly: true,
-    placeholder: "系统自动生成"
+    on: {
+      change:
+        "({ data, formData, setFormData, setShowOrHide, setRequired, setDisabled, request, getFieldOptions, setFieldOptions }) => {\n    // 在此编写代码\n    \n}"
+    },
+    placeholder: "请选择",
+    interfaceId: "",
+    hasPage: false,
+    pageSize: 20,
+    columnOptions: [],
+    propsValue: "id",
+    relationField: "fullName",
+    popupType: "popover",
+    popupTitle: "选择数据",
+    popupWidth: "700px",
+    disabled: false,
+    clearable: true,
+    multiple: false,
+    filterable: false
   },
   {
     __config__: {
@@ -1171,7 +1148,30 @@ export const selectComponents = [
     },
     showField: "",
     relationField: ""
-  }
+  },
+  {
+    __config__: {
+      jnpfKey: "billRule",
+      label: "单据组件",
+      labelWidth: undefined,
+      showLabel: true,
+      tag: "el-input",
+      defaultValue: "",
+      tagIcon: "icon-ym icon-ym-generator-documents",
+      defaultValue: null,
+      layout: "colFormItem",
+      required: false,
+      span: 24,
+      dragDisabled: false,
+      visibility: ["pc", "app"],
+      tableName: "",
+      noShow: false,
+      trigger: "change",
+      rule: ""
+    },
+    readonly: true,
+    placeholder: "系统自动生成"
+  },
 ];
 
 // 系统控件 【左面板】
