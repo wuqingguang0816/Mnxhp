@@ -270,7 +270,7 @@
                 </div>
               </el-form-item>
               <el-form-item>
-                <div slot="label">异常处理规则
+                <div slot="label">异常处理
                   <el-tooltip content="子流程发起节点人员异常时遵循该规则" placement="top">
                     <a class="el-icon-warning-outline"></a>
                   </el-tooltip>
@@ -403,7 +403,26 @@
                 </template>
               </el-form-item>
             </el-form>
-            <el-form class="pd-10" style="margin-top:-20px">
+            <el-form class="pd-10" label-position="top" style="margin-top:-20px">
+              <el-form-item>
+                <div slot="label">异常处理
+                  <el-tooltip content="审批节点内设置的审批人员异常时遵循该规则" placement="top">
+                    <a class="el-icon-warning-outline"></a>
+                  </el-tooltip>
+                </div>
+                <el-select v-model="startForm.errorRule" class="mb-10"
+                  @change="startForm.errorRuleUser=[]">
+                  <el-option label="超级管理员处理" :value="1"></el-option>
+                  <el-option label="指定人员处理" :value="2"></el-option>
+                  <el-option label="上一节点审批人指定处理人" :value="3"></el-option>
+                  <el-option label="默认审批通过" :value="4"></el-option>
+                  <el-option label="无法提交" :value="5"></el-option>
+                </el-select>
+                <org-select type="user" v-model="startForm.errorRuleUser" title="选择用户"
+                  buttonType="button" v-if="startForm.errorRule===2" />
+              </el-form-item>
+            </el-form>
+            <el-form class="pd-10" style="margin-top:-30px">
               <el-form-item label="审核汇总">
                 <el-switch v-model="startForm.isSummary" />
                 <div class="option-box-tip" v-if="!startForm.isSummary">*打开审核汇总后，流程流转记录会按部门及岗位进行汇总展示
@@ -423,25 +442,6 @@
               <el-form-item label="批量审批">
                 <el-switch v-model="startForm.isBatchApproval" />
                 <div class="option-box-tip">*打开批量审批后，该流程待审批工单可进行批量操作</div>
-              </el-form-item>
-            </el-form>
-            <el-form class="pd-10" label-position="top" style="margin-top:-20px">
-              <el-form-item>
-                <div slot="label">异常处理规则
-                  <el-tooltip content="审批节点内设置的审批人员异常时遵循该规则" placement="top">
-                    <a class="el-icon-warning-outline"></a>
-                  </el-tooltip>
-                </div>
-                <el-select v-model="startForm.errorRule" class="mb-10"
-                  @change="startForm.errorRuleUser=[]">
-                  <el-option label="超级管理员处理" :value="1"></el-option>
-                  <el-option label="指定人员处理" :value="2"></el-option>
-                  <el-option label="上一节点审批人指定处理人" :value="3"></el-option>
-                  <el-option label="默认审批通过" :value="4"></el-option>
-                  <el-option label="无法提交" :value="5"></el-option>
-                </el-select>
-                <org-select type="user" v-model="startForm.errorRuleUser" title="选择用户"
-                  buttonType="button" v-if="startForm.errorRule===2" />
               </el-form-item>
             </el-form>
           </el-scrollbar>
