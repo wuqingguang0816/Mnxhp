@@ -149,7 +149,7 @@
         <el-popover width="240" trigger="click" popper-class="plan-popper" ref="planPopper">
           <el-button slot="reference">方案选择<i class="el-icon-arrow-down el-icon--right"></i>
           </el-button>
-          <div class="plan-list">
+          <div class="plan-list" v-if="planList.length">
             <div class="plan-list-item" v-for="(item,i) in planList" :key="i"
               @click="selectPlan(item)">
               <el-link type="primary" :underline="false" class="plan-list-name">{{item.fullName}}
@@ -157,6 +157,7 @@
               <i class="el-icon-close" @click.stop="delPlan(item.id,i)"></i>
             </div>
           </div>
+          <div class="noData-txt" v-else>暂无数据</div>
         </el-popover>
       </div>
       <el-button @click="visible = false">{{$t('common.cancelButton')}}</el-button>
@@ -508,6 +509,13 @@ export default {
     .el-icon-close:hover {
       color: #f56c6c;
     }
+  }
+  .noData-txt {
+    height: 34px;
+    color: #999;
+    font-size: 14px;
+    line-height: 34px;
+    text-align: center;
   }
 }
 </style>
