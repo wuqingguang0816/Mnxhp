@@ -105,7 +105,7 @@ export function getDataInterfaceLog(id, data) {
 export function getDataInterfaceDataSelect(id, data) {
   return request({
     url: `/api/system/DataInterface/${id}/Action/List`,
-    method: 'GET',
+    method: 'post',
     data
   })
 }
@@ -114,6 +114,14 @@ export function getDataInterfaceDataInfo(id, data) {
   return request({
     url: `/api/system/DataInterface/${id}/Action/Info`,
     method: 'GET',
+    data
+  })
+}
+// 获取多条接口数据
+export function getDataInterfaceDataInfoByIds(id, data) {
+  return request({
+    url: `/api/system/DataInterface/${id}/Action/InfoByIds`,
+    method: 'POST',
     data
   })
 }

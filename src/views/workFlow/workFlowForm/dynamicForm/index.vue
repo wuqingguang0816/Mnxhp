@@ -4,6 +4,7 @@
       v-if="!loading" />
     <candidate-form :visible.sync="candidateVisible" :candidateList="this.candidateList"
       :branchList="branchList" @submitCandidate="selfHandleRequest" :formData="dataForm" />
+    <error-form :visible.sync="errorVisible" :nodeList="errorNodeList" @submit="handleError" />
   </div>
 </template>
 <script>
@@ -12,8 +13,9 @@ import { createModel, updateModel, getModelInfo } from '@/api/onlineDev/visualDe
 import { Candidates } from '@/api/workFlow/FlowBefore'
 import Parser from '@/components/Generator/parser/Parser'
 import CandidateForm from '@/views/workFlow/components/CandidateForm'
+import ErrorForm from '@/views/workFlow/components/ErrorForm'
 export default {
-  components: { Parser, CandidateForm },
+  components: { Parser, CandidateForm, ErrorForm },
   data() {
     return {
       formData: {},
@@ -26,6 +28,8 @@ export default {
       candidateList: [],
       candidateType: 1,
       branchList: [],
+      errorVisible: false,
+      errorNodeList: [],
       dataForm: {
         id: '',
         data: '',
@@ -181,19 +185,33 @@ export default {
       if (this.eventType === 'save') this.$emit('setLoad', true)
       const formMethod = this.dataForm.id ? updateModel : createModel
       formMethod(this.setting.flowId, this.dataForm).then(res => {
-        this.$message({
-          message: res.msg,
-          type: 'success',
-          duration: 1500,
-          onClose: () => {
-            if (this.eventType === 'save') this.$emit('setLoad', false)
-            this.candidateVisible = false
-            this.$emit('close', true)
-          }
-        })
+        const errorData = res.data
+        if (errorData && Array.isArray(errorData) && errorData.length) {
+          this.errorNodeList = errorData
+          this.errorVisible = true
+        } else {
+          this.$message({
+            type: 'success',
+            message: res.msg,
+            duration: 1000,
+            onClose: () => {
+              if (this.eventType === 'save') this.$emit('setLoad', false)
+              this.candidateVisible = false
+              this.errorVisible = false
+              this.$emit('close', true)
+            }
+          })
+        }
       }).catch(() => {
         if (this.eventType === 'save') this.$emit('setLoad', false)
       })
+    },
+    handleError(data) {
+      if (this.eventType === 'submit') {
+        this.dataForm.errorRuleUserList = data
+        this.selfHandleRequest()
+        return
+      }
     },
     dataFormSubmit(eventType, flowUrgent) {
       if (this.setting.isPreview) return this.$message({ message: '功能预览不支持数据保存', type: 'warning' })

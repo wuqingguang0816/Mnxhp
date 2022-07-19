@@ -31,7 +31,7 @@ const noTableAllowList = ['divider', 'JNPFText', 'link', 'alert', 'groupTitle', 
 // 不可以添加到列表展示
 const noColumnShowList = ['PsdInput', 'colorPicker', 'rate', 'slider', 'divider', 'uploadImg', 'uploadFz', 'editor', 'JNPFText', 'relationFormAttr', 'popupAttr', 'groupTitle']
 // 不可以添加到搜索
-const noSearchList = [...noColumnShowList, 'switch', 'timeRange', 'dateRange', 'relationForm', 'popupSelect']
+const noSearchList = [...noColumnShowList, 'switch', 'timeRange', 'dateRange', 'relationForm', 'popupSelect', 'popupTableSelect']
 // 搜索时控件为input
 const useInputList = ['comInput', 'textarea', 'JNPFText', 'link', 'billRule']
 // 搜索时控件为日期选择器

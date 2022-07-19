@@ -15,7 +15,9 @@
         <el-form-item :label="item.nodeName+item.label" :prop="'candidateList.' + i + '.value'"
           v-for="(item,i) in dataForm.candidateList" :key="i" :rules="item.rules">
           <candidate-user-select v-model="item.value" multiple :placeholder="'请选择'+item.label"
-            :taskId="taskId" :formData="formData" :nodeId="item.nodeId" />
+            :taskId="taskId" :formData="formData" :nodeId="item.nodeId" v-if="item.hasCandidates" />
+          <user-select v-model="item.value" multiple :placeholder="'请选择'+item.label" title="候选人员"
+            v-else />
         </el-form-item>
         <el-form-item label="加签人员" v-if="properties&&properties.hasFreeApprover">
           <user-select v-model="freeApproverUserId" placeholder="请选择加签人员,不选即该节点审核结束" />

@@ -32,7 +32,7 @@
         </template>
       </el-input>
     </div>
-    <el-dialog title="选择用户" :close-on-click-modal="false" :visible.sync="visible"
+    <el-dialog :title="title" :close-on-click-modal="false" :visible.sync="visible"
       class="JNPF-dialog JNPF-dialog_center transfer-dialog" lock-scroll append-to-body
       width="800px" :modal-append-to-body="false" @close="onClose">
       <div class="transfer__body">
@@ -163,6 +163,10 @@ export default {
     placeholder: {
       type: String,
       default: '请选择'
+    },
+    title: {
+      type: String,
+      default: '选择用户'
     },
     disabled: {
       type: Boolean,

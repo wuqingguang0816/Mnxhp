@@ -115,6 +115,7 @@
       </div>
       <approve-dialog v-if="approveVisible" ref="approveDialog" @submit="batchOperation" />
       <UserBox v-if="userBoxVisible" ref="userBox" title="审批人" @submit="handleTransfer" />
+      <error-form :visible.sync="errorVisible" :nodeList="errorNodeList" @submit="handleError" />
     </div>
   </transition>
 </template>
@@ -122,8 +123,9 @@
 <script>
 import { FlowBeforeList, getBatchFlowSelector, getNodeSelector, BatchCandidate, BatchOperation } from '@/api/workFlow/FlowBefore'
 import ApproveDialog from '@/views/workFlow/components/ApproveDialog'
+import ErrorForm from '../components/ErrorForm'
 export default {
-  components: { ApproveDialog },
+  components: { ApproveDialog, ErrorForm },
   props: ['categoryList'],
   data() {
     return {
@@ -181,7 +183,10 @@ export default {
         }]
       },
       pickerVal: [],
-      showAll: false
+      showAll: false,
+      errorVisible: false,
+      errorNodeList: [],
+      batchOperationData: {},
     }
   },
   watch: {
@@ -285,9 +290,6 @@ export default {
         })
       }
     },
-    handleApproval(data) {
-      this.batchOperation(data)
-    },
     handleTransfer(freeApproverUserId) {
       const data = { freeApproverUserId }
       this.batchOperation(data)
@@ -302,18 +304,31 @@ export default {
         ids
       }
       BatchOperation(query).then(res => {
-        this.$message({
-          type: 'success',
-          message: res.msg,
-          duration: 1000,
-          onClose: () => {
-            this.initData()
-            this.$refs.approveDialog && this.$refs.approveDialog.closeDialog()
-          }
-        })
+        const errorData = res.data
+        if (errorData && Array.isArray(errorData) && errorData.length) {
+          this.errorNodeList = errorData
+          this.errorVisible = true
+          this.batchOperationData = data
+        } else {
+          this.$message({
+            type: 'success',
+            message: res.msg,
+            duration: 1000,
+            onClose: () => {
+              this.initData()
+              this.errorVisible = false
+              this.$refs.approveDialog && this.$refs.approveDialog.closeDialog()
+            }
+          })
+        }
       }).catch(() => {
         this.$refs.approveDialog && (this.$refs.approveDialog.btnLoading = false)
+        this.errorVisible = false
       })
+    },
+    handleError(data) {
+      this.batchOperationData.errorRuleUserList = data
+      this.batchOperation(this.batchOperationData)
     },
     reset() {
       this.list = []
