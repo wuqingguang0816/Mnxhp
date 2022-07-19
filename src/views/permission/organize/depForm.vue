@@ -5,8 +5,8 @@
     class="JNPF-dialog JNPF-dialog_center" width="600px">
     <el-form ref="dataForm" v-loading="formLoading" :model="dataForm" :rules="dataRule"
       label-width="80px">
-      <el-form-item label="所属上级" prop="parentId">
-        <JNPF-TreeSelect v-model="dataForm.parentId" :options="treeData" placeholder="选择所属上级" />
+      <el-form-item label="所属组织" prop="parentId">
+        <ComSelect v-model="organizeIdTree" placeholder="选择所属组织" auth @change="onOrganizeChange" />
       </el-form-item>
       <el-form-item label="部门名称" prop="fullName">
         <el-input v-model="dataForm.fullName" placeholder="输入名称" />
@@ -34,12 +34,7 @@
 </template>
 
 <script>
-import {
-  getDepartmentSelector,
-  createDepartment,
-  updateDepartment,
-  getDepartmentInfo
-} from '@/api/permission/department'
+import { createDepartment, updateDepartment, getDepartmentInfo } from '@/api/permission/department'
 
 export default {
   data() {
@@ -57,11 +52,10 @@ export default {
         enabledMark: 1,
         description: ''
       },
-      treeData: [],
-      usersTreeData: [],
+      organizeIdTree: [],
       dataRule: {
         parentId: [
-          { required: true, message: '所属上级不能为空', trigger: 'input' }
+          { required: true, message: '所属组织不能为空', trigger: 'change' }
         ],
         fullName: [
           { required: true, message: '请输入部门名称', trigger: 'blur' },
@@ -77,24 +71,27 @@ export default {
     }
   },
   methods: {
-    init(id, parentId) {
+    init(id) {
       this.visible = true
       this.dataForm.id = id || ''
+      this.organizeIdTree = []
       this.formLoading = true
       this.$nextTick(() => {
         this.$refs['dataForm'].resetFields()
-        getDepartmentSelector(id || 0).then(res => {
-          this.treeData = res.data.list
-        })
         if (this.dataForm.id) {
           getDepartmentInfo(this.dataForm.id).then(res => {
             this.dataForm = res.data
+            this.organizeIdTree = res.data.organizeIdTree
+            this.formLoading = false
           })
         } else {
-          this.dataForm.parentId = parentId
+          this.formLoading = false
         }
-        this.formLoading = false
       })
+    },
+    onOrganizeChange(val) {
+      if (!val || !val.length) return
+      this.dataForm.parentId = val[val.length - 1]
     },
     dataFormSubmit() {
       this.$refs['dataForm'].validate((valid) => {
@@ -111,7 +108,7 @@ export default {
                 this.btnLoading = false
                 this.$store.commit('generator/SET_COMPANY_TREE', [])
                 this.$store.commit('generator/SET_DEP_TREE', [])
-                this.$emit('refreshDataList')
+                this.$emit('close', true)
               }
             })
           }).catch(() => {

@@ -22,8 +22,8 @@
       <div class="JNPF-common-layout-main JNPF-flex-main">
         <div class="JNPF-common-head">
           <el-dropdown>
-            <el-button type="primary">
-              <i class="el-icon-plus"></i> 新建<i class="el-icon-arrow-down el-icon--right"></i>
+            <el-button type="primary" icon="el-icon-plus">
+              新建<i class="el-icon-arrow-down el-icon--right"></i>
             </el-button>
             <el-dropdown-menu slot="dropdown">
               <el-dropdown-item @click.native="addOrUpdateHandle('','company')">新建公司
@@ -59,26 +59,21 @@
           <el-table-column label="操作" width="100">
             <template slot-scope="scope">
               <tableOpts @edit="addOrUpdateHandle(scope.row.id,scope.row.type,scope.row.parentId)"
-                @del="handleDel(scope.row.id,scope.row.type)" />
+                @del="handleDel(scope.row.id)" />
             </template>
           </el-table-column>
         </JNPF-table>
       </div>
     </div>
     <Form v-show="formVisible" ref="Form" @close="closeForm" />
-    <DepForm v-show="depFormVisible" ref="depForm" @close="depForm" />
-
+    <DepForm v-if="depFormVisible" ref="depForm" @close="closeDepForm" />
   </div>
 </template>
 
 <script>
-import {
-  getOrganizeList,
-  delOrganize
-} from '@/api/permission/organize'
+import { getOrganizeList, delOrganize } from '@/api/permission/organize'
 import Form from './Form'
-import DepForm from './depForm.vue'
-import { delDepartment } from '@/api/permission/department'
+import DepForm from './depForm'
 export default {
   name: 'permission-organize',
   components: { Form, DepForm },
@@ -120,12 +115,12 @@ export default {
     },
     addOrUpdateHandle(id, type, parentId) {
       if (type === 'company') {
-        this.addOrUpdateOeganize(id, parentId)
+        this.addOrUpdateOrganize(id, parentId)
       } else {
         this.addOrUpdateDep(id)
       }
     },
-    addOrUpdateOeganize(id, parentId) {
+    addOrUpdateOrganize(id, parentId) {
       this.formVisible = true
       this.$nextTick(() => {
         this.$refs.Form.init(id, parentId)
@@ -144,7 +139,7 @@ export default {
         this.initData()
       }
     },
-    depForm(isRefresh) {
+    closeDepForm(isRefresh) {
       this.depFormVisible = false
       if (isRefresh) {
         this.keyword = ''
@@ -158,42 +153,23 @@ export default {
         this.refreshTable = true;
       });
     },
-    handleDel(id, type) {
-      if (type === 'company') {  //删除公司
-        this.$confirm(this.$t('common.delTip'), this.$t('common.tipTitle'), {
-          type: 'warning'
-        }).then(() => {
-          delOrganize(id).then(res => {
-            this.$message({
-              type: 'success',
-              message: res.msg,
-              duration: 1500,
-              onClose: () => {
-                this.$store.commit('generator/SET_COMPANY_TREE', [])
-                this.$store.commit('generator/SET_DEP_TREE', [])
-                this.initData()
-              }
-            })
+    handleDel(id) {
+      this.$confirm(this.$t('common.delTip'), this.$t('common.tipTitle'), {
+        type: 'warning'
+      }).then(() => {
+        delOrganize(id).then(res => {
+          this.$message({
+            type: 'success',
+            message: res.msg,
+            duration: 1500,
+            onClose: () => {
+              this.$store.commit('generator/SET_COMPANY_TREE', [])
+              this.$store.commit('generator/SET_DEP_TREE', [])
+              this.initData()
+            }
           })
-        }).catch(() => { })
-      } else {    //删除部门
-        this.$confirm(this.$t('common.delTip'), this.$t('common.tipTitle'), {
-          type: 'warning'
-        }).then(() => {
-          delDepartment(id).then(res => {
-            this.$message({
-              type: 'success',
-              message: res.msg,
-              duration: 1500,
-              onClose: () => {
-                this.$store.commit('generator/SET_COMPANY_TREE', [])
-                this.$store.commit('generator/SET_DEP_TREE', [])
-                this.initData()
-              }
-            })
-          })
-        }).catch(() => { })
-      }
+        })
+      }).catch(() => { })
     }
   }
 }

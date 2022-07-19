@@ -116,7 +116,7 @@ export default {
       listLoading: false,
       authorizeFormVisible: false,
       userRelationListVisible: false,
-      type: '',
+      organizeIdTree: [],
       listQuery: {
         organizeId: '',
         keyword: '',
@@ -199,16 +199,26 @@ export default {
       this.listQuery.keyword = ''
       this.search()
     },
-    handleNodeClick(data) {
+    handleNodeClick(data, node) {
       if (this.listQuery.organizeId === data.id) return
       this.listQuery.organizeId = data.id
-      this.type = data.type
+      const nodePath = this.getNodePath(node)
+      this.organizeIdTree = nodePath.map(o => o.id)
       this.reset()
+    },
+    getNodePath(node) {
+      let fullPath = []
+      const loop = (node) => {
+        if (node.level) fullPath.unshift(node.data)
+        if (node.parent) loop(node.parent)
+      }
+      loop(node)
+      return fullPath
     },
     addOrUpdateHandle(id) {
       this.formVisible = true
       this.$nextTick(() => {
-        this.$refs.Form.init(id, this.type === 'department' ? this.listQuery.organizeId : '')
+        this.$refs.Form.init(id, this.listQuery.organizeId, this.organizeIdTree)
       })
     },
     removeUserRelationList(isRefresh) {
