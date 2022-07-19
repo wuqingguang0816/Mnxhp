@@ -271,7 +271,9 @@ export default {
       if (data.type !== 'department') return
       const boo = this.selectedData.some(o => o.id === data.id)
       if (boo) return
-      this.multiple ? this.selectedData.push(data) : this.selectedData = [data]
+      let item = { ...data }
+      if (this.selectType === 'custom') item.fullName = item.lastFullName
+      this.multiple ? this.selectedData.push(item) : this.selectedData = [item]
     },
     removeAll() {
       this.selectedData = []
