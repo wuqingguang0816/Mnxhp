@@ -233,13 +233,7 @@ export default {
     },
     getAPPMenuSelector() {
       getMenuSelector({ category: 'App' }, 0).then(res => {
-        let topItem = {
-          fullName: "顶级节点",
-          hasChildren: true,
-          id: "-1",
-          children: res.data.list
-        }
-        this.appTreeData = [topItem]
+        this.appTreeData = res.data.list
       })
     }
   }
