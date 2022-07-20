@@ -53,7 +53,7 @@
                     @change="onFuncChange" />
                 </el-form-item>
               </el-col>
-              <el-col :span="24">
+              <el-col :span="24" v-if="dataForm.executeContent.parameter.length">
                 <el-form-item label="请求参数" prop="executeContent.parameter">
                   <el-row v-for="(item,i) in dataForm.executeContent.parameter" :key="i"
                     class="mb-10">
