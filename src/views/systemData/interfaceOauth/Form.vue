@@ -41,10 +41,10 @@
             <el-input v-model="dataForm.whiteList" placeholder="" type="textarea" :rows="5" />
             <span style="color:#C0C4CC">多个IP设置，用英文符号隔开，如192.168.0.1,192.168.0.2</span>
           </jnpf-form-tip-item>
-          <jnpf-form-tip-item label="黑名单" prop="blackList">
+          <!-- <jnpf-form-tip-item label="黑名单" prop="blackList">
             <el-input v-model="dataForm.blackList" placeholder="" type="textarea" :rows="5" />
             <span style="color:#C0C4CC">多个IP设置，用英文符号隔开，如192.168.0.1,192.168.0.2</span>
-          </jnpf-form-tip-item>
+          </jnpf-form-tip-item> -->
           <jnpf-form-tip-item label="排序" prop="sortCode">
             <el-input-number :min="0" :max="999999" v-model="dataForm.sortCode" controls-position="right" />
           </jnpf-form-tip-item>
