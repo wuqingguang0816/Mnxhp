@@ -272,7 +272,7 @@ export default {
                 break
               }
             }
-            if (config.jnpfKey === 'popupSelect') {
+            if (config.jnpfKey === 'popupSelect' || config.jnpfKey === 'popupTableSelect') {
               if (!e.interfaceId) {
                 reject({ msg: '弹窗选择控件“远端数据”属性为必填项', target: 1 })
                 break
