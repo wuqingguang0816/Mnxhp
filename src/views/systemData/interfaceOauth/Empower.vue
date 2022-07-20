@@ -35,7 +35,7 @@
 </template>@/api/systemData/interfaceOauth
 
 <script>
-import { getDataInterfaceSelectorList, getDataInterfaceTypeSelector, getDataInterfaceSelector } from '@/api/systemData/dataInterface'
+import { getDataInterfaceSelector } from '@/api/systemData/dataInterface'
 import { saveInterfaceList, getInfo } from '@/api/systemData/interfaceOauth'
 
 export default {
@@ -71,7 +71,7 @@ export default {
     }
   },
   created() {
-    this.setDefault()
+
   },
   methods: {
     init(data) {

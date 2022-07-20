@@ -92,7 +92,7 @@
 </template>
 
 <script>
-import { getInterfaceList, getInfo } from '@/api/systemData/interfaceOauth.js'
+import { getInfo } from '@/api/systemData/interfaceOauth.js'
 import VerifySignatureInfo from './VerifySignatureInfo'
 export default {
   components: { VerifySignatureInfo },
