@@ -2,7 +2,7 @@
   <el-dialog :title="eventType==='audit'?'审批通过':'审批拒绝'" :close-on-click-modal="false"
     :visible.sync="visible" class="JNPF-dialog JNPF-dialog_center" lock-scroll append-to-body
     width='600px'>
-    <el-form ref="dataForm" :model="dataForm" candidateList
+    <el-form ref="dataForm" :model="dataForm"
       :label-width="dataForm.candidateList.length||branchList.length?'130px':'80px'">
       <template v-if="eventType==='audit'">
         <el-form-item label="分支选择" prop="branchList" v-if="branchList.length"
