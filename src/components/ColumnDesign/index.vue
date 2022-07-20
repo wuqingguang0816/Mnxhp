@@ -46,6 +46,9 @@ export default {
         let columnData = this.$refs.columnMain.getData()
         if (!columnData) reject({ msg: '', target: 2 })
         let appColumnData = this.$refs.columnMainApp.getData()
+        if (!appColumnData.columnList || !appColumnData.columnList.length) {
+          appColumnData.columnList = columnData.columnList
+        }
         resolve({ columnData, appColumnData, target: 2 })
       })
     },
