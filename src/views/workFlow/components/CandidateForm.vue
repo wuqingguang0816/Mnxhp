@@ -2,7 +2,8 @@
   <el-dialog title="提交审核" :close-on-click-modal="false"
     class="JNPF-dialog JNPF-dialog_center form-script-dialog" lock-scroll append-to-body
     v-bind="$attrs" width="600px" :modal-append-to-body="false" v-on="$listeners" @open="onOpen">
-    <el-form label-width="130px" ref="candidateForm" :model="candidateForm">
+    <el-form ref="candidateForm" :model="candidateForm"
+      :label-width="candidateForm.candidateList.length||branchList.length?'130px':'80px'">
       <el-form-item label="分支选择" prop="branchList" v-if="branchList && branchList.length"
         :rules="[{ required: true, message: `分支不能为空`, trigger: 'change' }]">
         <el-select v-model="candidateForm.branchList" multiple placeholder="请选择审批分支" clearable

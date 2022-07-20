@@ -105,7 +105,8 @@
       <el-dialog :title="eventType==='audit'?'审批通过':'审批拒绝'" :close-on-click-modal="false"
         :visible.sync="visible" class="JNPF-dialog JNPF-dialog_center" lock-scroll append-to-body
         width='600px'>
-        <el-form label-width="130px" ref="candidateForm" :model="candidateForm">
+        <el-form ref="candidateForm" :model="candidateForm"
+          :label-width="candidateForm.candidateList.length||branchList.length?'130px':'80px'">
           <template v-if="eventType==='audit'">
             <el-form-item label="分支选择" prop="branchList" v-if="branchList.length"
               :rules="[{ required: true, message: `分支不能为空`, trigger: 'change' }]">
