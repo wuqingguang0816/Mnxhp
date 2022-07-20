@@ -2238,3 +2238,14 @@ textarea.el-textarea__inner {
     padding-top: 4px;
   }
 }
+
+.el-table {
+  td.child-table-box {
+    padding: 0 !important;
+    vertical-align: top !important;
+
+    &>.cell {
+      padding: 0 !important;
+    }
+  }
+}

@@ -959,12 +959,3 @@ export default {
   }
 }
 </script>
-<style lang="scss" scoped>
->>> td.child-table-box {
-  padding: 0 !important;
-  vertical-align: top !important;
-  & > .cell {
-    padding: 0 !important;
-  }
-}
-</style>
