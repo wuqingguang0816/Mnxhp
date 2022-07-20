@@ -237,10 +237,13 @@ const actions = {
     })
   },
   // remove token
-  resetToken({ commit }) {
+  resetToken({ commit, state }) {
     return new Promise(resolve => {
       commit('SET_TOKEN', '')
-      commit('SET_SOCKET', null)
+      if (state.socket) {
+        state.socket.close()
+        commit('SET_SOCKET', null)
+      }
       commit('SET_MENULIST', [])
       commit('SET_USERINFO', {})
       commit('SET_PERMISSION_LIST', [])
