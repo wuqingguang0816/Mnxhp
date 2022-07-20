@@ -1,9 +1,9 @@
 @font-face {
   font-family: "icon-ym";
   /* Project id 3271933 */
-  src: url('iconfont.woff2?t=1658221625985') format('woff2'),
-    url('iconfont.woff?t=1658221625985') format('woff'),
-    url('iconfont.ttf?t=1658221625985') format('truetype');
+  src: url('iconfont.woff2?t=1658279997622') format('woff2'),
+    url('iconfont.woff?t=1658279997622') format('woff'),
+    url('iconfont.ttf?t=1658279997622') format('truetype');
 }
 
 .icon-ym {
@@ -14,23 +14,23 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+.icon-ym-logo-github:before {
+  content: "\e8b0";
+}
+
 .icon-ym-logo-feishu:before {
+  content: "\e8c5";
+}
+
+.icon-ym-logo-dingding:before {
   content: "\e8c6";
 }
 
 .icon-ym-logo-wechat:before {
-  content: "\e8b0";
-}
-
-.icon-ym-logo-qq:before {
-  content: "\e8c5";
-}
-
-.icon-ym-logo-github:before {
   content: "\e8c7";
 }
 
-.icon-ym-logo-dingding:before {
+.icon-ym-logo-qq:before {
   content: "\e8c8";
 }
 
