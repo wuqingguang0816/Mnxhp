@@ -100,11 +100,11 @@
               </template>
             </template>
             <template v-else>
-              <el-form-item
-                v-if="activeData.__vModel__!==undefined  && !noVModelList.includes(activeData.__config__.jnpfKey)"
-                label="控件字段">
+              <el-form-item label="控件字段"
+                v-if="activeData.__vModel__!==undefined  && !noVModelList.includes(activeData.__config__.jnpfKey)">
                 <el-input v-model="activeData.__vModel__" placeholder="请输入控件字段(v-model)"
-                  @blur.native.capture="leaveCursor()" />
+                  @change="inputFieldChange($event,activeData.__config__.formId,activeData.__config__.parentVModel)"
+                  :disabled="activeData.__config__.jnpfKey==='table'" />
               </el-form-item>
             </template>
             <JNPFComInput v-if="activeData.__config__.jnpfKey==='comInput'"
@@ -771,20 +771,6 @@ export default {
     this.setDefaultOptions()
   },
   methods: {
-    leaveCursor() {
-      let isOk = true
-      const drawingList = getDrawingList()
-      for (let index = 0; index < drawingList.length; index++) {
-        const element = drawingList[index];
-        let num = drawingList.filter(o => o.__vModel__.toLowerCase() == element.__vModel__.toLowerCase())
-        if (num.length > 1) {
-          this.$message.warning(`字段【${element.__vModel__}】已存在,请重新输入!`)
-          this.activeData.__vModel__ = ''
-          isOk = false
-          break
-        }
-      }
-    },
     addReg() {
       this.activeData.__config__.regList.push({
         pattern: '',
@@ -892,6 +878,49 @@ export default {
       let item = this.fieldOptions.filter(o => o.realField == val)[0]
       if (!item || !item.fieldName) return
       this.activeData.__config__.label = item.fieldName
+    },
+    inputFieldChange(val, formId, parentVModel) {
+      if (!val) return
+      let boo = false
+      let childBoo = false
+      if (parentVModel) {
+        const loop = (data, parent) => {
+          if (!data) return
+          if (data.__config__ && data.__config__.children && Array.isArray(data.__config__.children)) {
+            loop(data.__config__.children, data)
+          }
+          if (Array.isArray(data)) data.forEach(d => loop(d, parent))
+          if (parent && parent.__config__ && parent.__config__.jnpfKey == 'table') {
+            if (data.__vModel__ && data.__vModel__.toLowerCase() === val.toLowerCase() && data.__config__.formId !== formId && data.__config__.parentVModel === parentVModel) {
+              childBoo = true
+              return
+            }
+          }
+        }
+        loop(getDrawingList())
+      } else {
+        const loop = (data, parent) => {
+          if (!data) return
+          if (data.__config__ && data.__config__.jnpfKey !== 'table' && data.__config__.children && Array.isArray(data.__config__.children)) {
+            loop(data.__config__.children, data)
+          }
+          if (Array.isArray(data)) data.forEach(d => loop(d, parent))
+          if (data.__vModel__ && data.__vModel__.toLowerCase() === val.toLowerCase() && data.__config__.formId !== formId) {
+            boo = true
+            return
+          }
+        }
+        loop(getDrawingList())
+      }
+      if (boo) {
+        this.$message.warning(`字段【${val}】已存在,请重新输入!`)
+        this.activeData.__vModel__ = ''
+        return
+      }
+      if (childBoo) {
+        this.$message.warning(`子表字段【${val}】已存在,请重新输入!`)
+        this.activeData.__vModel__ = ''
+      }
     },
     tableChange() {
       this.activeData.__vModel__ = ''
