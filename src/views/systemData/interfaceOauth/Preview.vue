@@ -165,7 +165,10 @@ export default {
           let arr = []
           res.data.list.forEach(item => {
             item.url = `${this.define.comUrl}/api/system/DataInterface/${item.id}/Actions/Response` + (this.tenantId ? '?tenantId=' + this.tenantId : '')
-            item.paramList = [...JSON.parse(item.requestParameters)]
+            if (item.requestParameters) {
+              item.paramList = [...JSON.parse(item.requestParameters)]
+            }
+
             if (item.paramList.length > 0) {
               item.paramList.forEach(elem => {
                 this.options.forEach(elm2 => {
