@@ -35,7 +35,7 @@
             </el-row>
           </jnpf-form-tip-item>
           <jnpf-form-tip-item label="使用期限" prop="usefulLife" tip-label="未选择日期默认永久有效">
-            <el-date-picker v-model="dataForm.usefulLife" type="date" placeholder="请选择" style="width:100%"></el-date-picker>
+            <el-date-picker v-model="dataForm.usefulLife" type="date" placeholder="请选择" style="width:100%" format="yyyy-MM-dd" value-format="timestamp"></el-date-picker>
           </jnpf-form-tip-item>
           <jnpf-form-tip-item label="白名单" prop="whiteList">
             <el-input v-model="dataForm.whiteList" placeholder="" type="textarea" :rows="5" />
