@@ -60,7 +60,7 @@
           <i class="icon-ym icon-ym-header-lockScreen"></i>{{ $t('navbar.lockScreen') }}
         </el-dropdown-item>
         <el-dropdown-item divided @click.native="handleLogout">
-          <i class="icon-ym icon-ym-header-loginOut"></i>{{ $t('navbar.logOut') }}
+          <i class="icon-ym icon-ym-header-loginOut"></i>{{ $t('navbar.logout') }}
         </el-dropdown-item>
       </el-dropdown-menu>
     </el-dropdown>

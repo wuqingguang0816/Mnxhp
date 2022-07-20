@@ -133,7 +133,7 @@ export default {
     statement: '官方声明',
     lockScreen: '锁住屏幕',
     documentation: '帮助文档',
-    logOut: '退出系统',
+    logout: '退出系统',
     notice: '消息',
     chat: '聊天',
     setting: '设置'

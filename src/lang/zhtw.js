@@ -132,7 +132,7 @@ export default {
     statement: '官方聲明',
     lockScreen: '鎖住屏幕',
     documentation: '幫助文檔',
-    logOut: '退出系統',
+    logout: '退出系統',
     notice: '消息',
     chat: '聊天',
     setting: '設置'
