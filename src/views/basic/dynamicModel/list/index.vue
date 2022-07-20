@@ -219,16 +219,16 @@
           <el-table-column label="操作" fixed="right" :width="operationWidth"
             v-if="columnBtnsList.length || customBtnsList.length">
             <template slot-scope="scope" v-if="!scope.row.top">
-              <template v-if="isPreview || !columnData.useBtnPermission">
-                <template v-if="scope.row.rowEdit">
-                  <el-button size="mini" type="text" @click="saveForRowEdit(scope.row,1)">
-                    保存</el-button>
-                  <el-button size="mini" type="text" class="JNPF-table-delBtn"
-                    @click="cancelRowEdit(scope.row,scope.$index)">取消</el-button>
-                  <el-button size="mini" type="text" @click="submitForRowEdit(scope.row)"
-                    v-if="config.webType == 3">提交</el-button>
-                </template>
-                <template v-else>
+              <template v-if="scope.row.rowEdit">
+                <el-button size="mini" type="text" @click="saveForRowEdit(scope.row,1)">
+                  保存</el-button>
+                <el-button size="mini" type="text" class="JNPF-table-delBtn"
+                  @click="cancelRowEdit(scope.row,scope.$index)">取消</el-button>
+                <el-button size="mini" type="text" @click="submitForRowEdit(scope.row)"
+                  v-if="config.webType == 3">提交</el-button>
+              </template>
+              <template v-else>
+                <template v-if="isPreview || !columnData.useBtnPermission">
                   <template v-for="(item, i) in columnBtnsList">
                     <template v-if="item.value=='edit'">
                       <template v-if="columnData.type === 4">
@@ -277,47 +277,55 @@
                     </el-dropdown>
                   </template>
                 </template>
-              </template>
-              <template v-else>
-                <template v-for="(item, i) in columnBtnsList">
-                  <template v-if="item.value=='edit'">
-                    <el-button size="mini" type="text" :key="i"
-                      :disabled="config.webType == 3 && [1,2,4,5].indexOf(scope.row.flowState)>-1"
-                      @click="columnBtnsHandel(item.value,scope.row)" v-has="'btn_'+item.value">
-                      {{item.label}}</el-button>
-                  </template>
-                  <template v-else-if="item.value=='remove'">
-                    <el-button size="mini" type="text" :key="i" class="JNPF-table-delBtn"
-                      :disabled="config.webType == 3 && !!scope.row.flowState"
-                      @click="columnBtnsHandel(item.value,scope.row,scope.$index)"
-                      v-has="'btn_'+item.value">{{item.label}}</el-button>
-                  </template>
-                  <template v-else-if="item.value=='detail'">
-                    <el-button size="mini" type="text" :key="i"
-                      :disabled="config.webType == 3 && !scope.row.flowState"
-                      @click="columnBtnsHandel(item.value,scope.row)" v-has="'btn_'+item.value">
-                      {{item.label}}</el-button>
-                  </template>
-                  <template v-else>
-                    <el-button size="mini" type="text" :key="i" v-has="item.value"
-                      @click="customBtnsHandel(item,scope.row,scope.$index)">{{item.label}}
-                    </el-button>
-                  </template>
-                </template>
-                <template v-if="customBtnsList.length">
-                  <el-dropdown hide-on-click>
-                    <span class="el-dropdown-link">
-                      <el-button type="text" size="mini">
-                        {{$t('common.moreBtn')}}
-                        <i class="el-icon-arrow-down el-icon--right"></i>
+                <template v-else>
+                  <template v-for="(item, i) in columnBtnsList">
+                    <template v-if="item.value=='edit'">
+                      <template v-if="columnData.type === 4">
+                        <el-button size="mini" type="text" :key="i"
+                          :disabled="config.webType == 3 && [1,2,4,5].indexOf(scope.row.flowState)>-1"
+                          @click="scope.row.rowEdit=true" v-has="'btn_'+item.value">
+                          {{item.label}}</el-button>
+                      </template>
+                      <template v-else>
+                        <el-button size="mini" type="text" :key="i"
+                          :disabled="config.webType == 3 && [1,2,4,5].indexOf(scope.row.flowState)>-1"
+                          @click="columnBtnsHandel(item.value,scope.row)" v-has="'btn_'+item.value">
+                          {{item.label}}</el-button>
+                      </template>
+                    </template>
+                    <template v-else-if="item.value=='remove'">
+                      <el-button size="mini" type="text" :key="i" class="JNPF-table-delBtn"
+                        :disabled="config.webType == 3 && !!scope.row.flowState"
+                        @click="columnBtnsHandel(item.value,scope.row,scope.$index)"
+                        v-has="'btn_'+item.value">{{item.label}}</el-button>
+                    </template>
+                    <template v-else-if="item.value=='detail'">
+                      <el-button size="mini" type="text" :key="i"
+                        :disabled="config.webType == 3 && !scope.row.flowState"
+                        @click="columnBtnsHandel(item.value,scope.row)" v-has="'btn_'+item.value">
+                        {{item.label}}</el-button>
+                    </template>
+                    <template v-else>
+                      <el-button size="mini" type="text" :key="i" v-has="item.value"
+                        @click="customBtnsHandel(item,scope.row,scope.$index)">{{item.label}}
                       </el-button>
-                    </span>
-                    <el-dropdown-menu slot="dropdown">
-                      <el-dropdown-item v-for="(item, i) in customBtnsList" :key="i"
-                        @click.native="customBtnsHandel(item,scope.row,scope.$index)"
-                        v-has="item.value">{{item.label}}</el-dropdown-item>
-                    </el-dropdown-menu>
-                  </el-dropdown>
+                    </template>
+                  </template>
+                  <template v-if="customBtnsList.length">
+                    <el-dropdown hide-on-click>
+                      <span class="el-dropdown-link">
+                        <el-button type="text" size="mini">
+                          {{$t('common.moreBtn')}}
+                          <i class="el-icon-arrow-down el-icon--right"></i>
+                        </el-button>
+                      </span>
+                      <el-dropdown-menu slot="dropdown">
+                        <el-dropdown-item v-for="(item, i) in customBtnsList" :key="i"
+                          @click.native="customBtnsHandel(item,scope.row,scope.$index)"
+                          v-has="item.value">{{item.label}}</el-dropdown-item>
+                      </el-dropdown-menu>
+                    </el-dropdown>
+                  </template>
                 </template>
               </template>
             </template>

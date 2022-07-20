@@ -252,7 +252,7 @@ export default {
           for (let i = 0; i < list.length; i++) {
             const e = list[i]
             const config = e.__config__
-            if (this.$store.getters.hasTable && config.layout === "colFormItem" && !noVModelList.includes(config.jnpfKey) && !e.__vModel__) {
+            if (config.layout === "colFormItem" && !noVModelList.includes(config.jnpfKey) && !e.__vModel__) {
               reject({ msg: `${config.label}的控件字段不能为空`, target: 1 })
               break
             }

@@ -123,7 +123,11 @@
       <div class="right-pane">
         <div class="right-pane-list">
           <div class="cap">
-            <span>接口参数</span>
+            <span>接口参数
+              <el-tooltip content="接收方式:Body/json" placement="top">
+                <a class="el-icon-warning-outline"></a>
+              </el-tooltip>
+            </span>
           </div>
           <div class="list">
             <el-table :data="requestParameters" ref="dragTable" row-key="id" size='mini'
@@ -182,16 +186,16 @@
         </el-form-item>
       </el-form>
     </div>
-    <el-form ref="dataForm" :model="dataForm" :rules="dataRule" label-width="100px"
+    <el-form ref="dataForm" :model="dataForm" :rules="dataRule" label-width="110px"
       v-if="active === 1 && dataForm.dataType === 3">
       <el-row>
         <el-col :span="14" :offset="5" class="mt-20 baseInfo">
-          <el-form-item label="接口路径" prop="path" maxlength="50">
-            <el-input v-model="dataForm.path" placeholder="输入接口路径">
+          <jnpf-form-tip-item label="接口路径" prop="path">
+            <el-input v-model="dataForm.path" placeholder="输入接口路径" maxlength="50">
               <template slot="prepend">{{dataForm.requestMethod=='6'?'GET':'POST'}}</template>
             </el-input>
-          </el-form-item>
-          <el-form-item label="接口headers" prop="requestHeaders">
+          </jnpf-form-tip-item>
+          <jnpf-form-tip-item label="接口headers" prop="requestHeaders">
             <el-button @click="addHeaders()" class="el-icon-plus" size="mini">添加headers
             </el-button>
             <el-row v-for="(item, index) in requestHeaders" :key="item.index" class="mt-10">
@@ -207,11 +211,11 @@
                 </el-button>
               </el-col>
             </el-row>
-          </el-form-item>
-          <el-form-item label="接口参数">
+          </jnpf-form-tip-item>
+          <jnpf-form-tip-item label="接口参数" tip-label="接收方式:Body/json">
             <el-button @click="addOrUpdateHandle()" class="el-icon-plus" size="mini">添加参数
             </el-button>
-          </el-form-item>
+          </jnpf-form-tip-item>
           <div class="parameterList">
             <el-table :data="requestParameters" ref="dragTable" row-key="id" size='mini'>
               <el-table-column align="center" label="拖动" width="50">
@@ -249,9 +253,9 @@
               </el-table-column>
             </el-table>
           </div>
-          <el-form-item label="数据处理">
+          <jnpf-form-tip-item label="数据处理">
             <el-button @click="editFunc()">接口数据处理</el-button>
-          </el-form-item>
+          </jnpf-form-tip-item>
         </el-col>
       </el-row>
     </el-form>
@@ -679,7 +683,7 @@ export default {
     }
   }
   .parameterList {
-    padding-left: 100px;
+    padding-left: 110px;
     margin-bottom: 18px;
     >>> .el-icon-edit-outline,
     >>> .el-icon-delete {

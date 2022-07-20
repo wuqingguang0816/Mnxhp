@@ -50,7 +50,11 @@
         </div>
         <JNPF-table v-loading="listLoading" :data="treeList" row-key="id" v-if="refreshTable"
           :default-expand-all="expands" :tree-props="{children: 'children', hasChildren: ''}">
-          <el-table-column prop="fullName" label="名称" />
+          <el-table-column prop="fullName" label="名称">
+            <template slot-scope="scope">
+              <i :class="'table-icon icon-my '+scope.row.icon"></i>{{scope.row.fullName}}
+            </template>
+          </el-table-column>
           <el-table-column prop="enCode" label="编码" />
           <el-table-column prop="description" label="说明" />
           <el-table-column prop="creatorTime" :formatter="jnpf.tableDateFormat" label="创建时间"
@@ -174,3 +178,11 @@ export default {
   }
 }
 </script>
+<style lang="scss" scoped>
+.table-icon {
+  vertical-align: bottom;
+  font-size: 16px;
+  margin-right: 6px;
+  line-height: 23px;
+}
+</style>

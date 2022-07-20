@@ -132,7 +132,7 @@ export default {
     statement: 'Statement',
     lockScreen: 'Lock Screen',
     documentation: 'Documentation',
-    logOut: 'Log Out',
+    logout: 'Logout',
     notice: 'Notice',
     chat: 'Chat',
     setting: 'Setting'

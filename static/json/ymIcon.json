@@ -6,42 +6,42 @@
   "description": "",
   "glyphs": [
     {
-      "icon_id": "30703924",
-      "name": "logo-feishu",
-      "font_class": "logo-feishu",
-      "unicode": "e8c6",
-      "unicode_decimal": 59590
-    },
-    {
-      "icon_id": "30702804",
-      "name": "logo-wechat",
-      "font_class": "logo-wechat",
+      "icon_id": "30714846",
+      "name": "logo-github",
+      "font_class": "logo-github",
       "unicode": "e8b0",
       "unicode_decimal": 59568
     },
     {
-      "icon_id": "30702805",
-      "name": "logo-qq",
-      "font_class": "logo-qq",
+      "icon_id": "30714847",
+      "name": "logo-feishu",
+      "font_class": "logo-feishu",
       "unicode": "e8c5",
       "unicode_decimal": 59589
     },
     {
-      "icon_id": "30702807",
-      "name": "logo-github",
-      "font_class": "logo-github",
+      "icon_id": "30714848",
+      "name": "logo-dingding",
+      "font_class": "logo-dingding",
+      "unicode": "e8c6",
+      "unicode_decimal": 59590
+    },
+    {
+      "icon_id": "30714849",
+      "name": "logo-wechat",
+      "font_class": "logo-wechat",
       "unicode": "e8c7",
       "unicode_decimal": 59591
     },
     {
-      "icon_id": "30702808",
-      "name": "logo-dingding",
-      "font_class": "logo-dingding",
+      "icon_id": "30714850",
+      "name": "logo-qq",
+      "font_class": "logo-qq",
       "unicode": "e8c8",
       "unicode_decimal": 59592
     },
     {
-      "icon_id": "30702809",
+      "icon_id": "30714851",
       "name": "logo-wxWork",
       "font_class": "logo-wxWork",
       "unicode": "e8c9",
