@@ -191,7 +191,7 @@
       <el-row>
         <el-col :span="14" :offset="5" class="mt-20 baseInfo">
           <jnpf-form-tip-item label="接口路径" prop="path">
-            <el-input v-model="dataForm.path" placeholder="输入接口路径" maxlength="50">
+            <el-input v-model="dataForm.path" placeholder="输入接口路径">
               <template slot="prepend">{{dataForm.requestMethod=='6'?'GET':'POST'}}</template>
             </el-input>
           </jnpf-form-tip-item>
