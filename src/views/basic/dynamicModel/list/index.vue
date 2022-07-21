@@ -246,7 +246,7 @@
                     </template>
                     <template v-else-if="item.value=='remove'">
                       <el-button size="mini" type="text" :key="i" class="JNPF-table-delBtn"
-                        :disabled="config.webType == 3 && !!scope.row.flowState"
+                        :disabled="config.webType == 3 && [1,2,3,5].indexOf(scope.row.flowState)>-1"
                         @click="columnBtnsHandel(item.value,scope.row,scope.$index)">
                         {{item.label}}</el-button>
                     </template>
@@ -295,7 +295,7 @@
                     </template>
                     <template v-else-if="item.value=='remove'">
                       <el-button size="mini" type="text" :key="i" class="JNPF-table-delBtn"
-                        :disabled="config.webType == 3 && !!scope.row.flowState"
+                        :disabled="config.webType == 3 && [1,2,3,5].indexOf(scope.row.flowState)>-1"
                         @click="columnBtnsHandel(item.value,scope.row,scope.$index)"
                         v-has="'btn_'+item.value">{{item.label}}</el-button>
                     </template>

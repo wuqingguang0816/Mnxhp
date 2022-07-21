@@ -116,7 +116,8 @@
                 :disabled="[1,2,4,5].indexOf(scope.row.status)>-1">编辑
               </el-button>
               <el-button size="mini" type="text" class="JNPF-table-delBtn"
-                @click="handleDel(scope.$index,scope.row.id)" :disabled="!!scope.row.status">删除
+                @click="handleDel(scope.$index,scope.row.id)"
+                :disabled="[1,2,3,5].indexOf(scope.row.status)>-1">删除
               </el-button>
               <el-button size="mini" type="text" @click="toDetail(scope.row,0)"
                 :disabled="!scope.row.status">详情
