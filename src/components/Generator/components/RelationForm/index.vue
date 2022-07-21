@@ -93,7 +93,7 @@
             @row-click="rowClick" :hasNO="false">
             <el-table-column width="35">
               <template slot-scope="scope">
-                <el-radio :label="scope.row[propsValue]" v-model="checked">&nbsp;</el-radio>
+                <el-radio :label="scope.row.id" v-model="checked">&nbsp;</el-radio>
               </template>
             </el-table-column>
             <el-table-column type="index" width="50" label="序号" align="center" />
