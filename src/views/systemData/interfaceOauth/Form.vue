@@ -23,7 +23,7 @@
           <jnpf-form-tip-item label="应用名称" prop="appName">
             <el-input v-model="dataForm.appName" placeholder="输入应用名称"></el-input>
           </jnpf-form-tip-item>
-          <jnpf-form-tip-item label="验证签名" prop="verifySignature" tip-label="开启后需要验证消息签名的真实性">
+          <jnpf-form-tip-item label="验证签名" prop="verifySignature">
             <el-row>
               <el-col :span="12">
                 <el-switch v-model="dataForm.verifySignature" :active-value="1" :inactive-value="0">
@@ -34,7 +34,7 @@
               </el-col>
             </el-row>
           </jnpf-form-tip-item>
-          <jnpf-form-tip-item label="使用期限" prop="usefulLife" tip-label="未选择日期默认永久有效">
+          <jnpf-form-tip-item label="使用期限" prop="usefulLife">
             <el-date-picker v-model="dataForm.usefulLife" type="date" placeholder="请选择" style="width:100%" format="yyyy-MM-dd" value-format="timestamp"></el-date-picker>
           </jnpf-form-tip-item>
           <jnpf-form-tip-item label="白名单" prop="whiteList">
