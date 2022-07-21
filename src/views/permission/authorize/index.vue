@@ -367,6 +367,7 @@ export default {
   padding: 0;
   .el-steps {
     border-radius: 0;
+    padding: 13px 45px !important;
   }
 }
 .authorize-bd {
