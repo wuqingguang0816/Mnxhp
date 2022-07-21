@@ -125,8 +125,9 @@ export default {
     closeForm(val) {
 
     },
-    changeName(val) {
+    changeName(val, value) {
       this.dataForm.enCode = val
+      this.dataForm.tableName = value.tableName
     },
     onEnCodeChange(e) {
       let objVal;

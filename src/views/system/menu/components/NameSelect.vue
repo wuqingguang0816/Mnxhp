@@ -215,6 +215,7 @@ export default {
     rowClick(row) {
       this.checked = row.field
       this.checkedRow = row
+      this.checkedRow.tableName = this.tableName
     }
   }
 }
