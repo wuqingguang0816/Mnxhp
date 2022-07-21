@@ -159,7 +159,6 @@ export default {
       }).catch(() => { this.listLoading = false })
     },
     handleNodeClick(data) {
-      this.categoryId = ''
       this.categoryId = data.id
       this.reset()
     },
@@ -177,6 +176,8 @@ export default {
       if (this.disabled) return
       this.checked = this.value
       this.visible = true
+      this.categoryId = ''
+      this.reset()
     },
     clear() {
       this.checked = ''
