@@ -331,7 +331,7 @@
             </template>
           </el-table-column>
         </JNPF-table>
-        <template v-if="columnData.type !== 3 && columnData.hasPage">
+        <template v-if="columnData.type !== 3 && columnData.hasPage&&refreshTable">
           <pagination :total="total" :page.sync="listQuery.currentPage"
             :limit.sync="listQuery.pageSize" @pagination="initData" />
         </template>
@@ -413,7 +413,7 @@ export default {
       columnBtnsList: [],
       customBtnsList: [],
       hasBatchBtn: false,
-      refreshTable: true,
+      refreshTable: false,
       multipleSelection: [],
       settingsColumnList: [],
       mergeList: [],
@@ -437,6 +437,7 @@ export default {
   },
   methods: {
     async init() {
+      this.listLoading = true
       this.listQuery.menuId = this.$route.meta.modelId
       this.refreshTable = false
       if (!this.config.columnData || !this.config.formData) return
@@ -445,9 +446,6 @@ export default {
         this.columnData.columnList = this.columnData.columnList.filter(o => o.prop != this.columnData.groupField)
       }
       this.hasBatchBtn = this.columnData.btnsList.some(o => o.value == 'batchRemove')
-      this.$nextTick(() => {
-        this.refreshTable = true
-      })
       this.formData = JSON.parse(this.config.formData)
       this.customBtnsList = this.columnData.customBtnsList || []
       this.columnBtnsList = this.columnData.columnBtnsList || []
@@ -457,6 +455,9 @@ export default {
       let res = await getColumnsByModuleId(this.listQuery.menuId)
       this.settingsColumnList = res.data || []
       this.getColumnList()
+      this.$nextTick(() => {
+        this.refreshTable = true
+      })
       if (this.columnData.type === 4) this.buildOptions()
       if (this.isPreview) return this.listLoading = false
       this.listQuery.pageSize = this.columnData.pageSize
