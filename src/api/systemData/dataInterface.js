@@ -72,7 +72,7 @@ export function getDataInterfaceRes(id, data) {
   return request({
     url: `/api/system/DataInterface/${id}/Actions/Preview`,
     method: 'POST',
-    data
+    data: data || {}
   })
 }
 
