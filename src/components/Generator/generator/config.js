@@ -1167,7 +1167,8 @@ export const selectComponents = [
       tableName: "",
       noShow: false,
       trigger: "change",
-      rule: ""
+      rule: "",
+      ruleName: "",
     },
     readonly: true,
     placeholder: "系统自动生成"
