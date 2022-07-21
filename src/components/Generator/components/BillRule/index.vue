@@ -177,7 +177,10 @@ export default {
       this.checked = this.value
       this.visible = true
       this.categoryId = ''
-      this.reset()
+      this.$nextTick(() => {
+        this.$refs.treeBox.setCurrentKey(null)
+        this.reset()
+      })
     },
     clear() {
       this.checked = ''
