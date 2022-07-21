@@ -162,7 +162,7 @@ export default {
       this.tableName = ''
       this.linkId = ''
       this.tableName = data.tableName
-      this.linkId = data.dblink
+      this.linkId = data.dbLink
       this.reset()
     },
     reset() {
@@ -185,21 +185,20 @@ export default {
         for (const key in res.data.linkTables) {
           data.push({
             tableName: res.data.linkTables[key],
-            dblink: res.data.linkId
+            dbLink: res.data.linkId
           })
         }
         this.treeData = data
         if (!this.treeData.length) return this.treeLoading = false
         this.$nextTick(() => {
           this.tableName = this.treeData[0].tableName
-          this.linkId = this.treeData[0].dblink
+          this.linkId = this.treeData[0].dbLink
           this.reset()
           this.treeLoading = false
         })
       }).catch(() => {
         this.treeLoading = false
       })
-
     },
     clear() {
       this.checked = ''
@@ -220,10 +219,3 @@ export default {
   }
 }
 </script>
-<style lang="scss">
-.template-item {
-  line-height: 30px;
-}
-</style>
-
-
