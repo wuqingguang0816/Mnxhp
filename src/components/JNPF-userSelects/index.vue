@@ -80,7 +80,7 @@
                 </el-tree>
               </el-scrollbar>
             </el-tab-pane>
-            <el-tab-pane label="分组" name="Group">
+            <el-tab-pane label="分组" name="group">
               <el-scrollbar class="JNPF-common-el-tree-scrollbar el-tree-height"
                 v-loading="treeLoading">
                 <el-tree ref="treeBoxGroup" :data="treeData4" :props="defaultProps"
