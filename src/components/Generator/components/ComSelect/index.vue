@@ -243,7 +243,7 @@ export default {
     openDialog() {
       if (this.selectDisabled) return
       this.keyword = ''
-      this.search()
+      this.getData()
       this.setDefault()
       this.visible = true
     },
