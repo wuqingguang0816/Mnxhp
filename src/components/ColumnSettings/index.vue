@@ -101,7 +101,7 @@ export default {
   }
 }
 </script>
-<style lang="scss">
+<style lang="scss" scoped>
 .columnSettings-drawer {
   .JNPF-flex-main {
     overflow: hidden;
