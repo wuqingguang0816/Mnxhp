@@ -8,9 +8,9 @@
       </div> -->
       <el-scrollbar class="column-list" v-loading="loading">
         <template v-if="list.length">
-          <draggable :list="list" :animation="340" handle=".column-item-icon" @end="setColumn">
+          <draggable :list="list" :animation="340" handle=".column-item-icon">
             <div class="column-item" v-for="item in list" :key="item.prop"
-              @click="item.columnVisible = !item.columnVisible">
+              @click.self="item.columnVisible = !item.columnVisible">
               <div class="column-item-label">
                 <i class="icon-ym icon-ym-darg column-item-icon"></i>
                 <span>{{item.label}}</span>
@@ -67,7 +67,6 @@ export default {
         ...item,
         columnVisible: true
       }))
-      this.setColumn()
     },
     saveSettings() {
       this.$emit('setColumn', this.list)
