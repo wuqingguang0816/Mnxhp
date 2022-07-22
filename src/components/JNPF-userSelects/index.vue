@@ -561,8 +561,17 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
+.el-tabs {
+  height: 100%;
+}
+>>> .el-tabs__content {
+  height: calc(100% - 55px);
+  .el-tab-pane {
+    height: 100%;
+  }
+}
 .el-tree-height {
-  height: 500px;
+  height: 100%;
 }
 .JNPF-common-layout-main {
   padding-bottom: 0;
