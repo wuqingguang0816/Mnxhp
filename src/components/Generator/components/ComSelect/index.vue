@@ -63,7 +63,7 @@
           <div class="transfer-pane__body shadow right-pane">
             <template>
               <div v-for="(item, index) in selectedData" :key="index" class="selected-item">
-                <span>{{item}}</span>
+                <span :title="item">{{item}}</span>
                 <i class="el-icon-delete" @click="removeData(index)"></i>
               </div>
             </template>

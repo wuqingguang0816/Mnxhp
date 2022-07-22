@@ -439,12 +439,14 @@ export default {
       if (this.activeName === 'organize') {
         query = {
           pagination: this.listQuery,
-          departIds: this.departIds
+          departIds: this.departIds,
+          type: 'Organize'
         }
       } else {
         query = {
           pagination: this.listQuery,
-          [this.activeName + 'Ids']: this[this.activeName + 'Ids']
+          [this.activeName + 'Ids']: this[this.activeName + 'Ids'],
+          type: this.activeName.slice(0, 1).toUpperCase() + this.activeName.slice(1).toLowerCase()
         }
       }
       getUsersByUserCondition(query).then(res => {
