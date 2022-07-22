@@ -126,6 +126,7 @@ export default {
     "reportBI": "ReportBI Demo",
   },
   navbar: {
+    systemChange: 'Toggle App',
     profile: 'Profile',
     feedback: 'Feedback',
     about: 'About',
