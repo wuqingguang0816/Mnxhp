@@ -126,6 +126,7 @@ export default {
     "reportBI": "大屏示例",
   },
   navbar: {
+    systemChange: '應用切換',
     profile: '個人信息',
     feedback: '反饋問題',
     about: '關於平臺',

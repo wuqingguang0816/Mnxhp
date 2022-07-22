@@ -23,7 +23,7 @@
             <el-input v-model="dataForm.appSecret" placeholder="输入appSecret" show-password readOnly>
             </el-input>
           </jnpf-form-tip-item>
-          <jnpf-form-tip-item label="验证签名" prop="verifySignature" tip-label="开启后需要验证消息签名的真实性">
+          <jnpf-form-tip-item label="验证签名" prop="verifySignature">
             <el-row>
               <el-col :span="12">
                 <el-switch v-model="dataForm.verifySignature" :active-value="1" :inactive-value="0" disabled>
@@ -34,7 +34,7 @@
               </el-col>
             </el-row>
           </jnpf-form-tip-item>
-          <jnpf-form-tip-item label="使用期限" prop="usefulLife" tip-label="未选择日期默认永久有效">
+          <jnpf-form-tip-item label="使用期限" prop="usefulLife">
             <el-date-picker v-model="dataForm.usefulLife" type="date" placeholder="请选择" style="width:100%" readonly></el-date-picker>
           </jnpf-form-tip-item>
           <jnpf-form-tip-item label="白名单" prop="whiteList">
@@ -61,7 +61,7 @@
         <group-title content="接口集合" />
       </el-col>
       <el-col :span="20" :offset="2" class="mt-20">
-        <el-table v-loading="listLoading" :data="tableList">
+        <el-table v-loading="listLoading" :data="tableList" @cell-dblclick="cellDblclick">
           <el-table-column type="expand" align="left">
             <template slot-scope="props">
               <el-col :span="24">
@@ -189,6 +189,18 @@ export default {
       this.$nextTick(() => {
         this.$refs.VerifySignatureInfo.init()
       })
+    },
+    cellDblclick(row, column, cell, event) {
+      if (event.type == "dblclick") {
+        var save = function (e) {
+          e.clipboardData.setData("text/plain", event.target.innerText)
+          e.preventDefault()
+        }
+        document.addEventListener("copy", save)
+        document.execCommand("copy")
+        document.removeEventListener("copy", save)
+      }
+      this.$message({ message: '复制成功', type: 'success' })
     },
   }
 }

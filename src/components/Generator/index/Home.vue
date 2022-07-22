@@ -272,7 +272,7 @@ export default {
                 break
               }
             }
-            if (config.jnpfKey === 'popupSelect' || config.jnpfKey === 'popupTableSelect') {
+            if (config.jnpfKey === 'popupSelect') {
               if (!e.interfaceId) {
                 reject({ msg: '弹窗选择控件“远端数据”属性为必填项', target: 1 })
                 break
@@ -283,6 +283,20 @@ export default {
               }
               if (!e.relationField) {
                 reject({ msg: '弹窗选择控件“显示字段”属性为必填项', target: 1 })
+                break
+              }
+            }
+            if (config.jnpfKey === 'popupTableSelect') {
+              if (!e.interfaceId) {
+                reject({ msg: '下拉表格控件“远端数据”属性为必填项', target: 1 })
+                break
+              }
+              if (!e.propsValue) {
+                reject({ msg: '下拉表格控件“储存字段”属性为必填项', target: 1 })
+                break
+              }
+              if (!e.relationField) {
+                reject({ msg: '下拉表格控件“显示字段”属性为必填项', target: 1 })
                 break
               }
             }

@@ -126,7 +126,7 @@ export default {
     "reportBI": "大屏示例",
   },
   navbar: {
-    systemChange: '系统切换',
+    systemChange: '应用切换',
     profile: '个人信息',
     feedback: '反馈问题',
     about: '关于平台',
