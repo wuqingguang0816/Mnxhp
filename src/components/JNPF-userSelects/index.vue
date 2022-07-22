@@ -488,12 +488,9 @@ export default {
       })
     },
     search() {
-      this.listQuery = {
-        currentPage: 1,
-        pageSize: 20,
-        sort: 'desc',
-        keyword: ''
-      }
+      this.listQuery.currentPage = 1
+      this.listQuery.pageSize = 20
+      this.listQuery.sort = 'desc'
       this.initData()
     },
     reset() {
