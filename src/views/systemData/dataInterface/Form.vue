@@ -2,17 +2,21 @@
   <div class="JNPF-preview-main flow-form-main">
     <div class="JNPF-common-page-header">
       <el-page-header @back="goBack" content="" />
-      <el-steps :active="active" finish-status="success" simple class="steps">
+      <el-steps :active="active" finish-status="success" simple
+        :class="dataForm.dataType!=2?'elsteps':'steps'">
         <el-step title="基本信息"></el-step>
         <el-step title="数据配置"></el-step>
+        <el-step v-if="dataForm.dataType!=2" title="数据处理"></el-step>
       </el-steps>
       <div class="options">
         <el-button :disabled="active <= 0" @click="handlePrevStep">{{$t('common.prev')}}
         </el-button>
-        <el-button :disabled="active >= 1" @click="handleNextStep">{{$t('common.next')}}
+        <el-button :disabled="dataForm.dataType!=2?active >= 2:active >= 1" @click="handleNextStep">
+          {{$t('common.next')}}
         </el-button>
-        <el-button type="primary" :loading="btnLoading" :disabled="active < 1"
-          @click="dataFormSubmit()">{{$t('common.confirmButton')}}</el-button>
+        <el-button type="primary" :loading="btnLoading"
+          :disabled="dataForm.dataType!=2?active < 2:active < 1" @click="dataFormSubmit()">
+          {{$t('common.confirmButton')}}</el-button>
         <el-button @click="goBack">{{$t('common.cancelButton')}}</el-button>
       </div>
     </div>
@@ -46,12 +50,6 @@
               <el-radio label="1">增加</el-radio>
               <el-radio label="2">修改</el-radio>
               <el-radio label="4">删除</el-radio>
-            </el-radio-group>
-          </el-form-item>
-          <el-form-item label="动作" prop="requestMethod" v-if="dataForm.dataType===3">
-            <el-radio-group v-model="dataForm.requestMethod" @change="onMethodChange($event,'api')">
-              <el-radio label="6">GET</el-radio>
-              <el-radio label="7">POST</el-radio>
             </el-radio-group>
           </el-form-item>
           <el-form-item label="排序" prop="sortCode">
@@ -170,11 +168,15 @@
             <el-button type="text" icon="el-icon-plus">添加参数</el-button>
           </div>
         </div>
-        <div class="right-pane-btn">
-          <template label="数据处理">
-            <el-button @click="editFunc()">接口数据处理</el-button>
-          </template>
-        </div>
+      </div>
+    </div>
+    <div class="jsStaticData" v-if="active === 2">
+      <div class="json-box">
+        <JNPFCodeEditor v-model="text" :options="options" ref="CodeEditor" />
+      </div>
+      <div class="jsTips">
+        <p>1、支持JavaScript的脚本，参考编写脚本API</p>
+        <p>2、小程序不支持在线JS脚本</p>
       </div>
     </div>
     <div class="staticData" v-if="active === 1 && dataForm.dataType === 2">
@@ -190,14 +192,17 @@
       v-if="active === 1 && dataForm.dataType === 3">
       <el-row>
         <el-col :span="14" :offset="5" class="mt-20 baseInfo">
+          <jnpf-form-tip-item label="接口类型" prop="requestMethod">
+            <el-radio-group v-model="dataForm.requestMethod" @change="onMethodChange($event,'api')">
+              <el-radio label="6">GET</el-radio>
+              <el-radio label="7">POST</el-radio>
+            </el-radio-group>
+          </jnpf-form-tip-item>
           <jnpf-form-tip-item label="接口路径" prop="path">
             <el-input v-model="dataForm.path" placeholder="输入接口路径">
-              <template slot="prepend">{{dataForm.requestMethod=='6'?'GET':'POST'}}</template>
+              <el-button slot="append" class="el-icon-plus" @click="addHeaders()">添加headers
+              </el-button>
             </el-input>
-          </jnpf-form-tip-item>
-          <jnpf-form-tip-item label="接口headers" prop="requestHeaders">
-            <el-button @click="addHeaders()" class="el-icon-plus" size="mini">添加headers
-            </el-button>
             <el-row v-for="(item, index) in requestHeaders" :key="item.index" class="mt-10">
               <el-col :span="10">
                 <el-autocomplete v-model="item.field" :fetch-suggestions="querySearch"
@@ -253,9 +258,6 @@
               </el-table-column>
             </el-table>
           </div>
-          <jnpf-form-tip-item label="数据处理">
-            <el-button @click="editFunc()">接口数据处理</el-button>
-          </jnpf-form-tip-item>
         </el-col>
       </el-row>
     </el-form>
@@ -280,6 +282,7 @@ import FieldForm from './FieldForm'
 import FormScript from './FormScript'
 import { deepClone } from '@/utils'
 import Sortable from 'sortablejs'
+import JNPFCodeEditor from '@/components/JNPFEditor/monaco'
 const defaultDataHandler = '(data) => {\r\n    // 处理数据逻辑\r\n\r\n    // 返回所需的数据\r\n    return data\r\n}'
 
 export default {
@@ -287,7 +290,8 @@ export default {
     SQLEditor,
     JSONEditor,
     FieldForm,
-    FormScript
+    FormScript,
+    JNPFCodeEditor
   },
   data() {
     return {
@@ -387,7 +391,11 @@ export default {
         {
           value: '@currentChargeorganizationAndSuborganization', tips: "当前分管组织及子组织"
         }
-      ]
+      ],
+      text: '',
+      options: {
+        language: 'javascript'
+      },
     }
   },
   methods: {
@@ -462,12 +470,15 @@ export default {
     },
     handlePrevStep() {
       this.active -= 1
-      this.$refs['dataForm'].clearValidate()
+      if (this.active == 0) {
+        this.$refs['dataForm'].clearValidate()
+      }
+
     },
     handleNextStep() {
       this.$refs['dataForm'].validate(valid => {
         if (valid) {
-          if (this.active < 1) {
+          if (this.active < 2) {
             this.active += 1
             // SQL操作
             if (this.dataForm.dataType === 1) {
@@ -476,16 +487,30 @@ export default {
                 options: this.sqlOptions
               })
             }
+            //数据处理
+            if (this.active == 2 && this.dataForm.dataType != 2) {
+              if (!this.dataForm.dataProcessing) this.dataForm.dataProcessing = defaultDataHandler
+              this.text = this.dataForm.dataProcessing
+              this.$nextTick(() => {
+                this.$refs.CodeEditor && this.$refs.CodeEditor.changeEditor({
+                  value: this.text,
+                  options: this.options
+                })
+              })
+            }
             // 静态数据
             if (this.dataForm.dataType === 2) {
+              this.text = this.dataForm.dataProcessing
               this.$refs.JSONEditorRef && this.$refs.JSONEditorRef.changeEditor({
-                value: this.dataForm.query,
+                value: this.text,
                 options: this.jsonOptions
               })
             } else {
-              this.$nextTick(() => {
-                this.setSort()
-              })
+              if (this.active == 1) {
+                this.$nextTick(() => {
+                  this.setSort()
+                })
+              }
             }
           }
         }
@@ -570,6 +595,9 @@ export default {
       this.$refs['dataForm'].validate(valid => {
         if (valid) {
           this.btnLoading = true
+          if (this.active == 2) {
+            this.dataForm.dataProcessing = this.text
+          }
           this.dataForm.requestHeaders = JSON.stringify(this.requestHeaders)
           this.dataForm.requestParameters = JSON.stringify(this.requestParameters)
           const formMethod = this.dataForm.id ? updateDataInterface : createDataInterface
@@ -593,6 +621,44 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
+.jsTips {
+  -ms-flex-negative: 0;
+  flex-shrink: 0;
+  padding: 8px 16px;
+  background-color: #ecf8ff;
+  border-radius: 4px;
+  border-left: 5px solid #50bfff;
+  font-size: 14px;
+  line-height: 24px;
+  color: #5e6d82;
+}
+.jsStaticData {
+  flex: 1;
+  display: flex;
+  overflow: hidden;
+  flex-direction: column;
+  padding: 10px;
+  .json-box {
+    flex: 1;
+  }
+}
+.monaco-container {
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
+}
+.elsteps {
+  width: 440px;
+  padding: 6px 20px;
+  background: #fff;
+  justify-items: flex-start;
+}
+.steps {
+  width: 318px;
+  padding: 6px 20px;
+  background: #fff;
+  justify-items: flex-start;
+}
 .flow-form-main {
   >>> .el-tabs__header {
     padding: 0;
@@ -742,7 +808,7 @@ export default {
     flex-shrink: 0;
     display: flex;
     flex-direction: column;
-    height: calc(100% - 2px);
+    height: calc(100% + 9px);
     // margin-top: 10px;
     overflow: hidden;
 
