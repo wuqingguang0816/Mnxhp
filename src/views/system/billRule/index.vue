@@ -43,7 +43,7 @@
         <JNPF-table v-loading="listLoading" :data="tableList">
           <el-table-column prop="fullName" label="业务名称" min-width="200" />
           <el-table-column prop="enCode" label="业务编码" width="200" />
-          <el-table-column prop="category" label="分类" width="150" />
+          <el-table-column prop="category" label="业务分类" width="150" />
           <el-table-column prop="startNumber" label="流水起始" width="120" />
           <el-table-column prop="outputNumber" label="当前流水号" width="200" />
           <el-table-column prop="creatorUser" label="创建人" width="120" />
