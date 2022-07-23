@@ -667,7 +667,7 @@ export default {
   overflow: hidden;
 }
 .elsteps {
-  width: 440px;
+  width: 506px;
   padding: 6px 20px;
   background: #fff;
   justify-items: flex-start;
