@@ -1,4 +1,5 @@
 const defaultStartForm = {
+
   initiator: [],
   initiatePos: [],
   initiateRole: [],
@@ -121,7 +122,11 @@ const defaultStartForm = {
   titleType: 0,
   defaultContent: '{发起用户名}的{流程名称}',
   titleContent: '',
-  formOperates: []
+  formOperates: [],
+  circulateRole: [],
+  circulatePosition: [],
+  circulateUser: [],
+  isCustomCopy: false,
 }
 export default {
   defaultStartForm,

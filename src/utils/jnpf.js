@@ -7,6 +7,7 @@ const STORAGETYPE = window.localStorage
 
 const jnpf = {
   toDateText(dateTimeStamp) {
+    if (!dateTimeStamp) return ''
     let result = ''
     let minute = 1000 * 60; //把分，时，天，周，半个月，一个月用毫秒表示
     let hour = minute * 60;

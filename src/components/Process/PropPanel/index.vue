@@ -341,19 +341,41 @@
       <el-tabs style="height:100%;">
         <el-tab-pane label="基础设置" v-if="flowType!=1">
           <el-scrollbar class="config-scrollbar">
-            <el-row class="pd-10">
-              <el-col :span="4" style="font-size: 14px;line-height:32px">谁可以发起</el-col>
-              <el-col :span="20" style="font-size: 14px;line-height:32px;margin-bottom:10px">
-                默认所有人,需要设置请选择
-              </el-col>
-              <div class="option-box">
+            <el-form label-position="top" :model="startForm" class="pd-10">
+              <el-form-item label="发起设置">
+                <div slot="label">发起设置
+                  <el-tooltip content="谁可以发起 默认所有人,需要设置请选择" placement="top">
+                    <a class="el-icon-warning-outline"></a>
+                  </el-tooltip>
+                </div>
+                <!-- <div class="option-box"> -->
                 <org-select ref="start-role-org" type="role" v-model="initiateRole" title="添加角色"
                   class="mb-10" />
                 <org-select ref="start-position-org" type="position" v-model="initiatePos"
                   title="添加岗位" class="mb-10" />
                 <org-select ref="start-user-org" type="user" v-model="initiator" title="添加用户" />
-              </div>
-            </el-row>
+                <!-- </div> -->
+              </el-form-item>
+              <el-form-item label="抄送设置">
+                <!-- <div class="option-box"> -->
+                <org-select ref="approver-copy-role-org" type="role"
+                  v-model="startForm.circulateRole" title="添加角色" class="mb-10" />
+                <org-select ref="approver-copy-position-org" v-model="startForm.circulatePosition"
+                  title="添加岗位" type="position" class="mb-10" />
+                <org-select ref="approver-copy-user-org" v-model="startForm.circulateUser"
+                  title="添加用户" class="mb-10" />
+                <el-checkbox v-model="startForm.isCustomCopy">允许自选抄送人</el-checkbox>
+                <!-- </div> -->
+              </el-form-item>
+            </el-form>
+            <!-- <el-row class="pd-10">
+              <el-col :span="4" style="font-size: 14px;line-height:32px">谁可以发起</el-col>
+              <el-col :span="20" style="font-size: 14px;line-height:32px;margin-bottom:10px">
+                默认所有人,需要设置请选择
+              </el-col>
+
+            </el-row> -->
+
           </el-scrollbar>
         </el-tab-pane>
         <el-tab-pane label="高级设置">
