@@ -592,31 +592,50 @@ export default {
       this.$refs.SQLEditorRef.insert('{' + item.field + '}')
     },
     dataFormSubmit() {
-      this.$refs['dataForm'].validate(valid => {
-        if (valid) {
-          this.btnLoading = true
-          if (this.active == 2) {
-            this.dataForm.dataProcessing = this.text
-          }
-          this.dataForm.requestHeaders = JSON.stringify(this.requestHeaders)
-          this.dataForm.requestParameters = JSON.stringify(this.requestParameters)
-          const formMethod = this.dataForm.id ? updateDataInterface : createDataInterface
-          formMethod(this.dataForm).then(res => {
-            this.$message({
-              message: res.msg,
-              type: 'success',
-              duration: 1500,
-              onClose: () => {
-                this.btnLoading = false
-                this.$emit('close', true)
-              }
-            })
-          }).catch(() => {
-            this.btnLoading = false
+      if (this.active == 2) {
+        this.btnLoading = true
+        this.dataForm.dataProcessing = this.text
+        this.dataForm.requestHeaders = JSON.stringify(this.requestHeaders)
+        this.dataForm.requestParameters = JSON.stringify(this.requestParameters)
+        const formMethod = this.dataForm.id ? updateDataInterface : createDataInterface
+        formMethod(this.dataForm).then(res => {
+          this.$message({
+            message: res.msg,
+            type: 'success',
+            duration: 1500,
+            onClose: () => {
+              this.btnLoading = false
+              this.$emit('close', true)
+            }
           })
-        }
-      })
+        }).catch(() => {
+          this.btnLoading = false
+        })
+      } else {
+        this.$refs['dataForm'].validate(valid => {
+          if (valid) {
+            this.btnLoading = true
+            this.dataForm.requestHeaders = JSON.stringify(this.requestHeaders)
+            this.dataForm.requestParameters = JSON.stringify(this.requestParameters)
+            const formMethod = this.dataForm.id ? updateDataInterface : createDataInterface
+            formMethod(this.dataForm).then(res => {
+              this.$message({
+                message: res.msg,
+                type: 'success',
+                duration: 1500,
+                onClose: () => {
+                  this.btnLoading = false
+                  this.$emit('close', true)
+                }
+              })
+            }).catch(() => {
+              this.btnLoading = false
+            })
+          }
+        })
+      }
     }
+
   }
 }
 </script>
