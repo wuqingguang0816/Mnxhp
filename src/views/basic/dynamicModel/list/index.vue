@@ -159,6 +159,16 @@
                         :popupWidth="item.popupWidth" :clearable="item.clearable"
                         :disabled="item.disabled" />
                     </template>
+                    <template v-else-if="item.jnpfKey==='popupTableSelect'">
+                      <popupTableSelect v-model="scope.row[item.prop]"
+                        :placeholder="item.placeholder" :interfaceId="item.interfaceId"
+                        :columnOptions="item.columnOptions" :propsValue="item.propsValue"
+                        :relationField="item.relationField" :hasPage="item.hasPage"
+                        :pageSize="item.pageSize" :popupType="item.popupType"
+                        :popupTitle="item.popupTitle" :popupWidth="item.popupWidth"
+                        :filterable="item.filterable" :multiple="item.multiple"
+                        :clearable="item.clearable" :disabled="item.disabled" />
+                    </template>
                     <template v-else-if="['comInput','textarea'].includes(item.jnpfKey)">
                       <el-input v-model="scope.row[item.prop]" :placeholder="item.placeholder"
                         :readonly="item.readonly" :prefix-icon="item['prefix-icon']"
