@@ -21,7 +21,7 @@ export default {
     if (this.dataType === 'dynamic') {
       if (!this.propsApi) return
       getDataInterfaceRes(this.propsApi).then(res => {
-        let data = res.data.data
+        let data = res.data
         this.currOption = data
         this.resetChart()
       })

@@ -523,7 +523,7 @@ export default {
       if (this.columnData.treeDataSource === "api") {
         if (!this.columnData.treePropsUrl) return
         getDataInterfaceRes(this.columnData.treePropsUrl).then(res => {
-          let data = res.data.data
+          let data = res.data
           if (Array.isArray(data)) {
             this.treeData = data
           } else {
@@ -946,7 +946,7 @@ export default {
           if (config.dataType === 'dynamic') {
             if (!config.propsUrl) return
             getDataInterfaceRes(config.propsUrl).then(res => {
-              let data = res.data.data
+              let data = res.data
               if (Array.isArray(data)) {
                 isTreeSelect ? cur.options = data : cur.__slot__.options = data
               } else {
