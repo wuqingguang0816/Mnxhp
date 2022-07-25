@@ -414,7 +414,8 @@
             </el-select>
           </el-form-item>
           <el-form-item label="主键策略">
-            <el-select v-model="formConf.primaryKeyPolicy" placeholder="请选择">
+            <el-select v-model="formConf.primaryKeyPolicy" placeholder="请选择"
+              :disabled="!!getFormInfo().id">
               <el-option label="雪花ID" :value="1" />
               <el-option label="自增长ID" :value="2" />
             </el-select>
@@ -562,7 +563,7 @@ export default {
     Collapse,
     TableConfig
   },
-  inject: ["getShowType"],
+  inject: ["getShowType", "getFormInfo"],
   props: ['showField', 'activeData', 'formConf', 'modelType', 'webType', 'drawingList'],
   data() {
     return {
