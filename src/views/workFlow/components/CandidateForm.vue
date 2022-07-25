@@ -19,6 +19,9 @@
         <user-select v-model="item.value" multiple :placeholder="'请选择'+item.label" title="候选人员"
           v-else />
       </el-form-item>
+      <el-form-item label="抄送人员" v-if="isCustomCopy">
+        <user-select v-model="candidateForm.copyIds" placeholder="请选择" multiple />
+      </el-form-item>
     </el-form>
     <span slot="footer" class="dialog-footer">
       <el-button @click="closeDialog">{{$t('common.cancelButton')}}</el-button>
@@ -32,10 +35,11 @@
 import CandidateUserSelect from './CandidateUserSelect'
 export default {
   components: { CandidateUserSelect },
-  props: ['candidateList', 'branchList', 'taskId', 'formData'],
+  props: ['candidateList', 'branchList', 'taskId', 'formData', 'isCustomCopy'],
   data() {
     return {
       candidateForm: {
+        copyIds: [],
         branchList: [],
         candidateList: []
       }
@@ -86,7 +90,8 @@ export default {
           }
           this.$emit('submitCandidate', {
             candidateList,
-            branchList: this.candidateForm.branchList
+            branchList: this.candidateForm.branchList,
+            copyIds: this.candidateForm.copyIds.join(','),
           })
         }
       })

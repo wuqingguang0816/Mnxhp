@@ -102,20 +102,6 @@
           <Comment :id='setting.id' ref="comment" />
         </el-tab-pane>
       </el-tabs>
-      <el-dialog title="自选抄送人" :close-on-click-modal="false" :visible.sync="submitVisible"
-        class="JNPF-dialog JNPF-dialog_center" lock-scroll append-to-body width='600px'>
-        <el-form label-width="80px">
-          <el-form-item label="抄送人员" v-if="properties.isCustomCopy">
-            <user-select v-model="copyIds" placeholder="请选择" multiple />
-          </el-form-item>
-        </el-form>
-        <span slot="footer" class="dialog-footer">
-          <el-button @click="submitVisible = false">{{$t('common.cancelButton')}}</el-button>
-          <el-button type="primary" @click="handleRequest()" :loading="approvalBtnLoading">
-            {{$t('common.confirmButton')}}
-          </el-button>
-        </span>
-      </el-dialog>
       <el-dialog :title="eventType==='audit'?'审批通过':'审批拒绝'" :close-on-click-modal="false"
         :visible.sync="visible" class="JNPF-dialog JNPF-dialog_center" lock-scroll append-to-body
         width='600px'>
@@ -221,7 +207,7 @@
         :fullName="setting.fullName" />
       <candidate-form :visible.sync="candidateVisible" :candidateList="candidateList"
         :branchList="branchList" :taskId="setting.taskId" :formData="formData"
-        @submitCandidate="submitCandidate" />
+        @submitCandidate="submitCandidate" :isCustomCopy="properties.isCustomCopy" />
       <error-form :visible.sync="errorVisible" :nodeList="errorNodeList" @submit="handleError" />
     </div>
   </transition>
@@ -245,7 +231,6 @@ export default {
   components: { recordList, Process, vueEsign, PrintBrowse, Comment, RecordSummary, CandidateForm, CandidateUserSelect, ErrorForm },
   data() {
     return {
-      submitVisible: false,//抄送
       userBoxVisible: false,
       userBoxTitle: '审批人',
       assignVisible: false,
@@ -428,10 +413,10 @@ export default {
         this.flowTemplateJson.state = 'state-curr'
         data.formOperates = []
         this.properties = this.flowTemplateJson && this.flowTemplateJson.properties || {}
-        console.log(this.properties)
         if (this.flowTemplateJson && this.flowTemplateJson.properties && this.flowTemplateJson.properties.formOperates) {
           data.formOperates = this.flowTemplateJson.properties.formOperates || []
         }
+        data.flowTemplateJson = this.flowTemplateJson
         setTimeout(() => {
           this.$nextTick(() => {
             this.$refs.form && this.$refs.form.init(data)
@@ -480,6 +465,7 @@ export default {
         } else {
           data.formOperates = res.data.formOperates || []
         }
+        data.flowTemplateJson = this.flowTemplateJson
         if (this.flowTaskNodeList.length) {
           let assignNodeList = []
           for (let i = 0; i < this.flowTaskNodeList.length; i++) {
@@ -515,7 +501,6 @@ export default {
       this.formData.flowId = this.setting.flowId
       this.eventType = eventType
       if (eventType === 'save' || eventType === 'submit') {
-        if (this.properties.isCustomCopy) return this.submitVisible = true
         return this.submitOrSave()
       }
       if (eventType === 'saveAudit') {
@@ -604,7 +589,6 @@ export default {
       this.candidateLoading = true
       Candidates(0, { formData: this.formData }).then(res => {
         let data = res.data
-        console.log(data)
         this.candidateLoading = false
         this.candidateType = data.type
         if (data.type == 1) {
@@ -616,6 +600,12 @@ export default {
           this.candidateList = res.data.list.filter(o => o.isCandidates)
           this.candidateVisible = true
         } else {
+          if (this.properties.isCustomCopy) {
+            this.branchList = []
+            this.candidateList = []
+            this.candidateVisible = true
+            return
+          }
           this.$confirm('您确定要提交当前流程吗, 是否继续?', '提示', {
             type: 'warning'
           }).then(() => {
@@ -633,9 +623,6 @@ export default {
       if (this.eventType === 'save') this.btnLoading = true
       this.allBtnDisabled = true
       let formMethod = null
-      if (this.properties.isCustomCopy) {
-        this.formData.copyIds = this.copyIds.join(',')
-      }
       if (this.setting.formType == 1) {
         formMethod = this.formData.id ? Update : Create
       } else {

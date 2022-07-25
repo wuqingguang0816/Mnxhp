@@ -1,5 +1,4 @@
 const defaultStartForm = {
-
   initiator: [],
   initiatePos: [],
   initiateRole: [],

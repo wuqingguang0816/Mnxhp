@@ -355,7 +355,7 @@
       @superQuery="superQuery" />
     <candidate-form :visible.sync="candidateVisible" :candidateList="candidateList"
       :branchList="branchList" taskId="0" :formData="workFlowFormData"
-      @submitCandidate="submitCandidate" />
+      @submitCandidate="submitCandidate" :isCustomCopy="isCustomCopy" />
   </div>
 </template>
 
@@ -428,6 +428,8 @@ export default {
       settingsColumnList: [],
       mergeList: [],
       expandObj: {},
+      flowTemplateJson: {},
+      isCustomCopy: false,
       candidateVisible: false,
       candidateType: 1,
       branchList: [],
@@ -454,6 +456,10 @@ export default {
       this.columnData = JSON.parse(this.config.columnData)
       if (this.columnData.type === 3) {
         this.columnData.columnList = this.columnData.columnList.filter(o => o.prop != this.columnData.groupField)
+      }
+      if (this.config.webType == 3) {
+        this.flowTemplateJson = this.config.flowTemplateJson ? JSON.parse(this.config.flowTemplateJson) : {}
+        this.isCustomCopy = this.flowTemplateJson.properties && this.flowTemplateJson.properties.isCustomCopy
       }
       this.hasBatchBtn = this.columnData.btnsList.some(o => o.value == 'batchRemove')
       this.formData = JSON.parse(this.config.formData)
@@ -723,6 +729,12 @@ export default {
           this.candidateList = res.data.list.filter(o => o.isCandidates)
           this.candidateVisible = true
         } else {
+          if (this.isCustomCopy) {
+            this.branchList = []
+            this.candidateList = []
+            this.candidateVisible = true
+            return
+          }
           this.$confirm('您确定要提交当前流程吗, 是否继续?', '提示', {
             type: 'warning'
           }).then(() => {
