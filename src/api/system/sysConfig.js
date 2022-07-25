@@ -74,8 +74,7 @@ export function synAllOrganizeSysToQy(type) {
 export function synAllUserSysToQy(type) {
   return request({
     url: '/api/system/SynThirdInfo/synAllUserSysToQy?type=' + type,
-    method: 'GET',
-    data: { type: data }
+    method: 'GET'
   })
 }
 // 获取系统管理员
