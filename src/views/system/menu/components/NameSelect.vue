@@ -16,7 +16,7 @@
       width="1000px">
       <div class="JNPF-common-layout">
         <div class="JNPF-common-layout-left">
-          <el-scrollbar class="JNPF-common-el-tree-scrollbar" v-loading="treeLoading">
+          <el-scrollbar class="JNPF-common-el-tree-scrollbar " v-loading="treeLoading">
             <el-tree ref="treeBox" :data="treeData" :props="defaultProps" default-expand-all
               :current-node-key="tableName" highlight-current :expand-on-click-node="false"
               node-key="tableName" lock-scroll @node-click="handleNodeClick"
@@ -229,9 +229,3 @@ export default {
   }
 }
 </script>
-<style lang="scss" scoped>
-.el-tree-height {
-  height: 100%;
-  width: 100%;
-}
-</style>
