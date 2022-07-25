@@ -37,6 +37,9 @@
                   v-for="item in categoryList" />
               </el-select>
             </el-form-item>
+            <el-form-item label="表单类型" prop="formType">
+              <el-input v-model="formType" maxlength="50" disabled></el-input>
+            </el-form-item>
             <el-form-item label="流程类型" prop="type">
               <el-select v-model="dataForm.type" placeholder="选择类型" @change="typeChange"
                 :disabled="!!dataForm.id || dataForm.formType !== 1">
@@ -58,9 +61,6 @@
                 </el-row>
               </el-form-item>
             </template>
-            <el-form-item label="表单类型" prop="formType">
-              <el-input v-model="formType" maxlength="50" disabled></el-input>
-            </el-form-item>
             <template v-if="dataForm.formType == 1">
               <el-form-item label="Web地址" prop="formUrl">
                 <el-input v-model="dataForm.formUrl" placeholder="Web地址">
