@@ -95,11 +95,11 @@
                   </span>
                   <el-dropdown-menu slot="dropdown">
                     <el-dropdown-item v-for="(item,index) in sysVariableList" :key="index">
-                      <span @click="handleSysNodeClick(item.value)">
+                      <div @click="handleSysNodeClick(item.value)">
                         <span>{{ item.value }}</span>
                         <span
                           style="float: right; color: #8492a6;padding-left: 10px;">{{ item.tips }}</span>
-                      </span>
+                      </div>
                     </el-dropdown-item>
                   </el-dropdown-menu>
                 </el-dropdown>
