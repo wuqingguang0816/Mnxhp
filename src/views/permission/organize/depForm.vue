@@ -6,7 +6,8 @@
     <el-form ref="dataForm" v-loading="formLoading" :model="dataForm" :rules="dataRule"
       label-width="80px">
       <el-form-item label="所属组织" prop="parentId">
-        <ComSelect v-model="organizeIdTree" placeholder="选择所属组织" auth @change="onOrganizeChange" />
+        <ComSelect v-model="organizeIdTree" placeholder="选择所属组织" auth @change="onOrganizeChange"
+          :currOrgId="dataForm.id||'0'" />
       </el-form-item>
       <el-form-item label="部门名称" prop="fullName">
         <el-input v-model="dataForm.fullName" placeholder="输入名称" />

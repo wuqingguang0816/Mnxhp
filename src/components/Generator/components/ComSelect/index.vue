@@ -120,6 +120,9 @@ export default {
       default: false
     },
     size: String,
+    currOrgId: {
+      default: '0'
+    }
   },
   data() {
     return {
@@ -223,7 +226,7 @@ export default {
       const treeData = await this.$store.dispatch('generator/getDepTree')
       this.allList = this.$store.getters.departmentList
       if (this.auth) {
-        getDepartmentSelectorByAuth().then(res => {
+        getDepartmentSelectorByAuth(this.currOrgId).then(res => {
           this.treeData = res.data.list
         })
       } else {
@@ -264,6 +267,7 @@ export default {
       return fullPath
     },
     handleNodeClick(data) {
+      if (data.disabled) return
       let currId = data.organizeIds
       let currData = data.organize
       if (this.multiple) {
