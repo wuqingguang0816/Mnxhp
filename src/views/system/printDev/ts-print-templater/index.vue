@@ -47,21 +47,21 @@ export default {
       richHeight: document.documentElement.clientHeight - 42,
       systemData: [
         {
-          fieldName: '打印人员',
-          field: 'systemPrinter',
+          fullName: '打印人员',
+          id: 'systemPrinter',
         },
         {
-          fieldName: '打印时间',
-          field: 'systemPrintTime',
+          fullName: '打印时间',
+          id: 'systemPrintTime',
         },
         {
-          fieldName: '审批内容',
-          field: 'systemApprovalContent',
+          fullName: '审批内容',
+          id: 'systemApprovalContent',
         }
       ],
       defaultProps: {
         children: 'children',
-        label: 'fieldName'
+        label: 'fullName'
       }
     }
   },
@@ -89,7 +89,7 @@ export default {
     newSysData() {
       let data = this.systemData
       if (this.type == 2) {
-        data = this.systemData.filter(o => o.field !== 'systemApprovalContent')
+        data = this.systemData.filter(o => o.id !== 'systemApprovalContent')
       }
       return data
     }
@@ -274,8 +274,8 @@ export default {
       return this.editor.dom.getParent(this.editor.selection.getNode(), tag)
     },
     getSpanNode(item, node) {
-      const parent = (node.parent.data != null && node.parent.data.field != null) ? node.parent.data.field : 'null'
-      return `<span data-tag="${parent}.${item.field}" class="wk-print-tag-wukong ${this.getSpanColorClass()}" contenteditable="false">{${item.field}}</span>`
+      const parent = (node.parent.data != null && node.parent.data.id != null) ? node.parent.data.id : 'null'
+      return `<span data-tag="${parent}.${item.id}" class="wk-print-tag-wukong ${this.getSpanColorClass()}" contenteditable="false">{${item.id}}</span>`
     },
     getSpanColorClass() {
       const color = ['customer', 'contacts', 'business', 'contract', 'receivables', 'product'].includes(this.activeTab) ? this.activeTab : 'common'

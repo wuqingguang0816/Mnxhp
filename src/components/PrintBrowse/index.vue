@@ -88,7 +88,7 @@ export default {
         inner: for (let j = 0; j < spanList.length; j++) {
           const spanEle = spanList[j];
           const dataTag = spanEle.getAttribute('data-tag') ? spanEle.getAttribute('data-tag').split('.')[0] : 'null'
-          if (dataTag && dataTag !== 'null') {
+          if (dataTag && dataTag !== 'headTable' && dataTag !== 'null') {
             hasChildTable = true
             tableName = dataTag
             break inner
