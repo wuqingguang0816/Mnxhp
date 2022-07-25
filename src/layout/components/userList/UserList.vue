@@ -127,12 +127,14 @@ export default {
       this.selectedTag = tag
     },
     relocation() {
+      this.$refs.JNPFIm.closeIM()
       relocation(this.selectedTag.id).then((res) => {
         const list = this.replyList.filter(o => o.id !== this.selectedTag.id)
         this.replyList = list
       });
     },
     deleteChatRecord() {
+      this.$refs.JNPFIm.closeIM()
       this.$confirm("是否清空当前聊天的所有记录?", "提示", {
         type: "warning",
       }).then(() => {
