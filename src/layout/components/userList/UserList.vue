@@ -16,7 +16,6 @@
                     <span>{{item.realName}}/{{item.account}}</span>
                     <el-badge :value="item.unreadMessage" :hidden="!item.unreadMessage" />
                   </p>
-
                   <p class="name">
                     <span class="content">{{getMsgText(item.latestMessage,item.messageType)}}</span>
                     <span class="time">{{item.latestDate | toDateText()}}</span>
@@ -57,7 +56,6 @@
       </el-tabs>
     </el-drawer>
     <Im ref="JNPFIm" append-to-body />
-
   </div>
 </template>
 
@@ -128,9 +126,6 @@ export default {
       this.visibleMenu = true
       this.selectedTag = tag
     },
-    // isAffix(tag) {
-    //   return tag.meta && tag.meta.affix
-    // },
     relocation() {
       relocation(this.selectedTag.id).then((res) => {
         const list = this.replyList.filter(o => o.id !== this.selectedTag.id)
@@ -140,21 +135,18 @@ export default {
     deleteChatRecord() {
       this.$confirm("是否清空当前聊天的所有记录?", "提示", {
         type: "warning",
-      })
-        .then(() => {
-          deleteChatRecord(this.selectedTag.id).then((res) => {
-            for (let index = 0; index < this.replyList.length; index++) {
-              const element = this.replyList[index];
-              if (element.id === this.selectedTag.id) {
-                element.latestDate = ''
-                element.unreadMessage = ''
-                element.latestMessage = ''
-              }
+      }).then(() => {
+        deleteChatRecord(this.selectedTag.id).then((res) => {
+          for (let index = 0; index < this.replyList.length; index++) {
+            const element = this.replyList[index];
+            if (element.id === this.selectedTag.id) {
+              element.latestDate = ''
+              element.unreadMessage = ''
+              element.latestMessage = ''
             }
-            console.log()
-          });
-        })
-        .catch(() => { });
+          }
+        });
+      }).catch(() => { });
     },
     init() {
       this.finish = false
