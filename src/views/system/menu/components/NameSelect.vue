@@ -18,8 +18,13 @@
         <div class="JNPF-common-layout-left">
           <el-scrollbar class="JNPF-common-el-tree-scrollbar" v-loading="treeLoading">
             <el-tree ref="treeBox" :data="treeData" :props="defaultProps" default-expand-all
-              highlight-current :expand-on-click-node="false" node-key="tableName"
-              @node-click="handleNodeClick" class="JNPF-common-el-tree" />
+              :current-node-key="tableName" highlight-current :expand-on-click-node="false"
+              node-key="tableName" lock-scroll @node-click="handleNodeClick"
+              class="JNPF-common-el-tree">
+              <span class="custom-tree-node" slot-scope="{ data }" :title="data.tableName">
+                <span class="text" :title="data.tableName">{{data.tableName}}</span>
+              </span>
+            </el-tree>
           </el-scrollbar>
         </div>
         <div class="JNPF-common-layout-center">
@@ -193,8 +198,12 @@ export default {
         this.$nextTick(() => {
           this.tableName = this.treeData[0].tableName
           this.linkId = this.treeData[0].dbLink
+          this.$nextTick(function () {
+            this.$refs.treeBox.setCurrentKey(this.tableName)
+          })
           this.reset()
           this.treeLoading = false
+
         })
       }).catch(() => {
         this.treeLoading = false
@@ -220,3 +229,9 @@ export default {
   }
 }
 </script>
+<style lang="scss" scoped>
+.el-tree-height {
+  height: 100%;
+  width: 100%;
+}
+</style>
