@@ -199,14 +199,14 @@
             <template v-for="(item, i) in columnList">
               <template v-if="item.jnpfKey==='table'">
                 <el-table-column :prop="item.prop" :label="item.label" :align="item.align" :key="i">
-                  <el-table-column :prop="child.prop" :label="child.label" :align="child.align"
+                  <el-table-column :prop="child.prop" :label="child.childLabel" :align="child.align"
                     :width="child.width" :key="ii"
                     :sortable="child.sortable?'custom':child.sortable"
                     v-for="(child, ii) in item.children" class-name="child-table-box">
                     <template slot-scope="scope">
                       <child-table-column :data="scope.row[item.prop]" :head="item.children"
                         @toggleExpand="toggleExpand(scope.row,`${item.prop}Expand`)"
-                        :expand="scope.row[`${item.prop}Expand`]" />
+                        :expand="scope.row[`${item.prop}Expand`]" v-if="!ii" />
                     </template>
                   </el-table-column>
                 </el-table-column>
@@ -585,8 +585,9 @@ export default {
           list.push(e)
         } else {
           let prop = e.prop.split('-')[0]
-          let label = e.label.split('-')[0]
           let vModel = e.prop.split('-')[1]
+          let label = e.label.split('-')[0]
+          let childLabel = e.label.split('-')[1]
           let newItem = {
             align: "center",
             jnpfKey: "table",
@@ -595,6 +596,7 @@ export default {
             children: []
           }
           e.vModel = vModel
+          e.childLabel = childLabel
           if (!this.expandObj.hasOwnProperty(`${prop}Expand`)) this.$set(this.expandObj, `${prop}Expand`, false)
           if (!list.some(o => o.prop === prop)) list.push(newItem)
           for (let i = 0; i < list.length; i++) {
