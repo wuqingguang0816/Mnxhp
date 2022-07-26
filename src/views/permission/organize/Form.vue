@@ -216,10 +216,8 @@ export default {
           getOrganizeInfo(this.dataForm.id).then(res => {
             this.dataForm = res.data
             this.organizeIdTree = res.data.organizeIdTree
-            const propertyJson = JSON.parse(res.data.propertyJson)
+            const propertyJson = res.data.propertyJson ? JSON.parse(res.data.propertyJson) : {}
             this.dataForm.propertyJson = propertyJson
-            this.dataForm.propertyJson.enterpriseNature = propertyJson.enterpriseNature
-            this.dataForm.propertyJson.industry = propertyJson.industry
             this.formLoading = false
           }).catch(() => { this.formLoading = false })
         }
