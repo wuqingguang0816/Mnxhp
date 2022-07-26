@@ -156,9 +156,15 @@ export default {
   methods: {
     initData() {
       this.listLoading = true
+      this.list = []
       let query = {
         keyword: this.keyword,
         ...this.listQuery,
+      }
+      if (!this.treeData.length) {
+        this.listLoading = false
+        this.list = []
+        return
       }
       getTableInfoByTableName(this.linkId, this.tableName, query).then(res => {
         this.list = res.data.list
@@ -198,7 +204,12 @@ export default {
           })
         }
         this.treeData = data
-        if (!this.treeData.length) return this.treeLoading = false
+        if (!this.treeData.length) {
+          this.treeLoading = false
+          this.listLoading = false
+          this.search()
+          return
+        }
         this.$nextTick(() => {
           if (this.checked) {
             this.tableName = this.bindTable
