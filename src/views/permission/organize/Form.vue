@@ -215,7 +215,7 @@ export default {
           this.formLoading = true
           getOrganizeInfo(this.dataForm.id).then(res => {
             this.dataForm = res.data
-            this.organizeIdTree = res.data.organizeIdTree
+            this.organizeIdTree = res.data.organizeIdTree || []
             const propertyJson = res.data.propertyJson ? JSON.parse(res.data.propertyJson) : {}
             this.dataForm.propertyJson = propertyJson
             this.formLoading = false
