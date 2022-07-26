@@ -6,17 +6,10 @@
       v-loading="formLoading" class="menuForm">
       <el-form-item label="字段名称" prop="enCode">
         <nameSelects :value="dataForm.enCode" :moduleId='dataForm.moduleId' :title="dataForm.enCode"
-          :dataType="dataType" @change="changeName" :bindTable="dataForm.bindTable" />
-      </el-form-item>
-      <!-- <el-form-item label="字段名称" prop="enCode">
-        <el-select v-if="enCodeOptions.length" v-model="dataForm.enCode" placeholder="请选择字段名称"
-          clearable @change="onEnCodeChange">
-          <el-option v-for="item in enCodeOptions" :key="item.field" :label="item.field"
-            :value="item.field">
-          </el-option>
-        </el-select>
+          :dataType="dataType" @change="changeName" :bindTable="dataForm.bindTable"
+          v-if="treeData.length" />
         <el-input v-model="dataForm.enCode" placeholder="输入字段名称" v-else />
-      </el-form-item> -->
+      </el-form-item>
       <el-form-item label="字段规则" prop="fieldRule">
         <el-select v-model="dataForm.fieldRule" placeholder="请选择字段名称" clearable>
           <el-option v-for="item in fieldRuleOptions" :key="item.value" :label="item.label"
@@ -67,6 +60,7 @@ import {
   getDataAuthorizeInfo
 } from "@/api/system/dataAuthorize";
 import nameSelects from '../NameSelect.vue'
+import { getVisualTables } from "@/api/system/authorize"
 export default {
   components: { nameSelects },
   data() {
@@ -109,6 +103,7 @@ export default {
         { value: 1, label: "副表规则" },
         { value: 2, label: "子表规则" }
       ],
+      treeData: [],
       conditionTextOptions: [
         {
           value: "text",
@@ -214,7 +209,18 @@ export default {
       this.dataForm.moduleId = moduleId;
       this.conditionSymbol = [];
       this.visible = true;
-      this.formLoading = true;
+      this.formLoading = true
+      this.treeData = []
+      getVisualTables(moduleId, dataType).then(res => {
+        let data = []
+        for (const key in res.data.linkTables) {
+          data.push({
+            tableName: res.data.linkTables[key],
+            dbLink: res.data.linkId
+          })
+        }
+        this.treeData = data
+      })
       this.$nextTick(() => {
         this.$refs["dataForm"].resetFields();
         this.dataForm.bindTable = tableName;

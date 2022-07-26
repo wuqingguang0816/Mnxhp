@@ -4,23 +4,12 @@
     class="JNPF-dialog JNPF-dialog_center" width="600px">
     <el-form ref="dataForm" :model="dataForm" :rules="dataRule" label-width="80px"
       v-loading="formLoading" class="menuForm">
-      <!-- <el-form-item label="字段名称" prop="enCode">
-        <el-input v-model="dataForm.enCode" placeholder="输入字段名称" />
-      </el-form-item> -->
       <el-form-item label="字段名称" prop="enCode">
         <nameSelects :value="dataForm.enCode" :moduleId='dataForm.moduleId' :title="dataForm.enCode"
-          :dataType="dataType" @change="changeName" :bindTable="dataForm.bindTable" />
+          :dataType="dataType" @change="changeName" :bindTable="dataForm.bindTable"
+          v-if='treeData.length' />
+        <el-input v-model="dataForm.enCode" placeholder="输入字段名称" v-else />
       </el-form-item>
-      <!-- <el-form-item label="字段名称" prop="enCode">
-        <el-select v-if="enCodeOptions.length > 0" v-model="dataForm.enCode" placeholder="请选择字段名称"
-          clearable @change="onEnCodeChange">
-          <el-option v-for="item in enCodeOptions" :key="item.field" :label="item.field"
-            :value="item.field">
-          </el-option>
-        </el-select>
-        <el-input v-model="dataForm.enCode" placeholder="输入字段名称"
-          v-else-if="enCodeOptions.length === 0" />
-      </el-form-item> -->
       <el-form-item label="字段规则" prop="fieldRule">
         <el-select v-model="dataForm.fieldRule" placeholder="请选择字段名称" clearable>
           <el-option v-for="item in fieldRuleOptions" :key="item.value" :label="item.label"
@@ -59,6 +48,7 @@ import {
   getFormInfo
 } from "@/api/system/formAuthorize";
 import nameSelects from '../NameSelect.vue'
+import { getVisualTables } from "@/api/system/authorize"
 export default {
   components: { nameSelects },
   data() {
@@ -74,6 +64,7 @@ export default {
         fullName: "",
         enCode: "",
         sortCode: 0,
+        treeData: [],
         enabledMark: 1,
         description: "",
         dataType: "",
@@ -106,6 +97,17 @@ export default {
       this.dataForm.moduleId = moduleId;
       this.visible = true;
       this.formLoading = true;
+      this.treeData = []
+      getVisualTables(moduleId, dataType).then(res => {
+        let data = []
+        for (const key in res.data.linkTables) {
+          data.push({
+            tableName: res.data.linkTables[key],
+            dbLink: res.data.linkId
+          })
+        }
+        this.treeData = data
+      })
       this.$nextTick(() => {
         this.$refs["dataForm"].resetFields();
         this.dataForm.bindTable = tableName;
