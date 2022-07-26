@@ -79,6 +79,9 @@
 import { getVisualTables, getTableInfoByTableName } from "@/api/system/authorize"
 export default {
   props: {
+    bindTable: {
+      default: ''
+    },
     dataType: {
       default: ''
     },
@@ -185,6 +188,7 @@ export default {
       this.checked = this.value
       this.visible = true
       this.treeLoading = true
+      this.tableName = this.bindTable
       getVisualTables(this.moduleId, this.dataType).then(res => {
         let data = []
         for (const key in res.data.linkTables) {
@@ -196,14 +200,18 @@ export default {
         this.treeData = data
         if (!this.treeData.length) return this.treeLoading = false
         this.$nextTick(() => {
-          this.tableName = this.treeData[0].tableName
-          this.linkId = this.treeData[0].dbLink
-          this.$nextTick(function () {
+          if (this.checked) {
+            this.tableName = this.bindTable
+            let row = this.treeData.filter(item => item.tableName == this.tableName)
+            this.linkId = row[0].dbLink
             this.$refs.treeBox.setCurrentKey(this.tableName)
-          })
-          this.reset()
+          } else {
+            this.tableName = this.treeData[0].tableName
+            this.linkId = this.treeData[0].dbLink
+            this.$refs.treeBox.setCurrentKey(this.tableName)
+          }
           this.treeLoading = false
-
+          this.reset()
         })
       }).catch(() => {
         this.treeLoading = false

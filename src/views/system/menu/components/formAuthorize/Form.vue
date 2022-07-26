@@ -9,7 +9,7 @@
       </el-form-item> -->
       <el-form-item label="字段名称" prop="enCode">
         <nameSelects :value="dataForm.enCode" :moduleId='dataForm.moduleId' :title="dataForm.enCode"
-          :dataType="dataType" @change="changeName" />
+          :dataType="dataType" @change="changeName" :bindTable="dataForm.bindTable" />
       </el-form-item>
       <!-- <el-form-item label="字段名称" prop="enCode">
         <el-select v-if="enCodeOptions.length > 0" v-model="dataForm.enCode" placeholder="请选择字段名称"
@@ -122,6 +122,7 @@ export default {
     changeName(val, value) {
       this.dataForm.enCode = val
       this.dataForm.bindTable = value.tableName
+      this.dataForm.fullName = value.fieldName || ''
     },
     onEnCodeChange(e) {
       let objVal;
