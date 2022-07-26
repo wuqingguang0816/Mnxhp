@@ -91,7 +91,7 @@ export default {
       })
     },
     onOrganizeChange(val) {
-      if (!val || !val.length) return
+      if (!val || !val.length) return this.dataForm.parentId = ''
       this.dataForm.parentId = val[val.length - 1]
     },
     dataFormSubmit() {
