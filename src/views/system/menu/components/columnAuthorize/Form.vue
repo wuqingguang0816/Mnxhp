@@ -14,8 +14,7 @@
         <el-form-item label="字段名称" prop="enCode">
           <nameSelects :value="dataForm.enCode" :moduleId="dataForm.moduleId"
             :title="dataForm.enCode" :dataType="dataType" @change="changeName"
-            :bindTable="dataForm.bindTable" v-if='treeData.length' />
-          <el-input v-model="dataForm.enCode" placeholder="输入字段名称" v-else />
+            :bindTable="dataForm.bindTable" :menuType="menuType" :treeData="treeData" />
         </el-form-item>
         <el-form-item label="字段规则" prop="fieldRule">
           <el-select v-model="dataForm.fieldRule" placeholder="请选择字段名称" clearable>

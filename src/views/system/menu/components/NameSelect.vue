@@ -78,7 +78,9 @@
 <script>
 import { getVisualTables, getTableInfoByTableName } from "@/api/system/authorize"
 export default {
+
   props: {
+
     bindTable: {
       default: ''
     },
@@ -105,7 +107,11 @@ export default {
     disabled: {
       type: Boolean,
       default: false
-    }
+    },
+    treeData: {
+      type: Array,
+      default: () => []
+    },
   },
   model: {
     prop: 'value',
@@ -136,11 +142,10 @@ export default {
         dataType: null,
       },
       treeLoading: false,
-      treeData: [],
       inputHovering: false,
       visible: false,
       tableName: '',
-      linkId: ''
+      linkId: '',
     }
   },
   computed: {
@@ -161,12 +166,7 @@ export default {
         keyword: this.keyword,
         ...this.listQuery,
       }
-      if (!this.treeData.length) {
-        this.listLoading = false
-        this.list = []
-        return
-      }
-      getTableInfoByTableName(this.linkId, this.tableName, query).then(res => {
+      getTableInfoByTableName(this.linkId, this.tableName, this.menuType, query).then(res => {
         this.list = res.data.list
         this.total = res.data.pagination.total
         this.listLoading = false
@@ -190,42 +190,24 @@ export default {
       this.initData()
     },
     openDialog() {
-      if (this.disabled) return
+      if (!this.treeData.length) return this.$message.error(`请先进行数据连接！`)
       this.checked = this.value
       this.visible = true
       this.treeLoading = true
       this.tableName = this.bindTable
-      getVisualTables(this.moduleId, this.dataType).then(res => {
-        let data = []
-        for (const key in res.data.linkTables) {
-          data.push({
-            tableName: res.data.linkTables[key],
-            dbLink: res.data.linkId
-          })
+      this.$nextTick(() => {
+        if (this.checked) {
+          this.tableName = this.bindTable
+          let row = this.treeData.filter(item => item.tableName == this.tableName)
+          this.linkId = row[0].dbLink
+          this.$refs.treeBox.setCurrentKey(this.tableName)
+        } else {
+          this.tableName = this.treeData[0].tableName
+          this.linkId = this.treeData[0].dbLink
+          this.$refs.treeBox.setCurrentKey(this.tableName)
         }
-        this.treeData = data
-        if (!this.treeData.length) {
-          this.treeLoading = false
-          this.listLoading = false
-          this.search()
-          return
-        }
-        this.$nextTick(() => {
-          if (this.checked) {
-            this.tableName = this.bindTable
-            let row = this.treeData.filter(item => item.tableName == this.tableName)
-            this.linkId = row[0].dbLink
-            this.$refs.treeBox.setCurrentKey(this.tableName)
-          } else {
-            this.tableName = this.treeData[0].tableName
-            this.linkId = this.treeData[0].dbLink
-            this.$refs.treeBox.setCurrentKey(this.tableName)
-          }
-          this.treeLoading = false
-          this.reset()
-        })
-      }).catch(() => {
         this.treeLoading = false
+        this.reset()
       })
     },
     clear() {

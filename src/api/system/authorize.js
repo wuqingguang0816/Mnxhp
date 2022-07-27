@@ -8,9 +8,9 @@ export function getVisualTables(menudId, type) {
   })
 }
 //据表名获取数据表字段
-export function getTableInfoByTableName(linkId, tableName, data) {
+export function getTableInfoByTableName(linkId, tableName, menuType, data) {
   return request({
-    url: `/api/system/ModuleDataAuthorizeLink/${linkId}/Tables/${tableName}/Fields`,
+    url: `/api/system/ModuleDataAuthorizeLink/${linkId}/Tables/${tableName}/Fields/${menuType}`,
     method: 'get',
     data
   })
