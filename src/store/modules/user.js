@@ -75,7 +75,7 @@ const actions = {
     })
   },
   // user login
-  login({ commit }, userInfo) {
+  login({ commit, dispatch }, userInfo) {
     const { account, password, code, timestamp, origin } = userInfo
     return new Promise((resolve, reject) => {
       login(qs.stringify({
@@ -99,6 +99,18 @@ const actions = {
       }).catch(error => {
         reject(error)
       })
+    })
+  },
+  updataToken({ commit }, data) {
+    return new Promise((resolve, reject) => {
+      const layoutList = ['classic', 'functional', 'plain', 'blend']
+      let layoutType = data.theme && layoutList.indexOf(data.theme) > -1 ? data.theme : 'classic'
+      commit('SET_TOKEN', data.token)
+      commit('settings/CHANGE_SETTING', { key: "layoutType", value: layoutType }, { root: true })
+      setToken(data.token)
+      resolve(data)
+    }).catch(error => {
+      reject(error)
     })
   },
   // 获取用户信息

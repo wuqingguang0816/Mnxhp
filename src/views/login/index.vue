@@ -16,8 +16,7 @@
     </div>
     <div class="login-content">
       <div class="login-form">
-        <el-image class="login-logo" :src="define.comUrl+sysConfig.loginIcon"
-          v-if="sysConfig && sysConfig.loginIcon">
+        <el-image class="login-logo" :src="define.comUrl+sysConfig.loginIcon" v-if="sysConfig && sysConfig.loginIcon">
           <template slot="error">
             <img class="login-logo" src="@/assets/images/login_logo.png" alt="">
           </template>
@@ -25,43 +24,54 @@
         <img class="login-logo" src="@/assets/images/login_logo.png" alt="" v-else>
         <div class="login-tab" :class="'active'+active">
           <a class="item" :class="{'active': active==1}" @click="active=1">{{$t('login.title')}}</a>
-          <a class="item" :class="{'active': active==2}"
-            @click="active=2">{{$t('login.scanTitle')}}</a>
+          <a class="item" :class="{'active': active==2}" @click="active=2">{{$t('login.scanTitle')}}</a>
         </div>
-        <el-form v-show="active==1" ref="loginForm" :model="loginForm" :rules="loginRules"
-          autocomplete="on" label-position="left">
+        <el-form v-show="active==1" ref="loginForm" :model="loginForm" :rules="loginRules" autocomplete="on" label-position="left">
           <el-form-item prop="account">
-            <el-input ref="account" v-model="loginForm.account" :placeholder="$t('login.username')"
-              name="account" type="text" tabindex="1" autocomplete="on" prefix-icon="el-icon-user"
-              size="large" @change="getConfig"></el-input>
+            <el-input ref="account" v-model="loginForm.account" :placeholder="$t('login.username')" name="account" type="text" tabindex="1" autocomplete="on" prefix-icon="el-icon-user" size="large" @change="getConfig"></el-input>
           </el-form-item>
           <el-form-item class="rule-tip">{{$t('login.rule')}}</el-form-item>
           <el-tooltip v-model="capsTooltip" :content="$t('login.upper')" placement="right" manual>
             <el-form-item prop="password">
-              <el-input ref="password" v-model="loginForm.password" show-password
-                :placeholder="$t('login.password')" name="password" tabindex="2" autocomplete="on"
-                @keyup.native="checkCapslock" @blur="capsTooltip = false" prefix-icon="el-icon-lock"
-                size="large"></el-input>
+              <el-input ref="password" v-model="loginForm.password" show-password :placeholder="$t('login.password')" name="password" tabindex="2" autocomplete="on" @keyup.native="checkCapslock" @blur="capsTooltip = false" prefix-icon="el-icon-lock" size="large"></el-input>
               <!-- @keyup.enter.native="handleLogin" -->
             </el-form-item>
           </el-tooltip>
           <el-form-item prop="code" v-if="needCode">
             <el-row type="flex" justify="space-between">
               <el-col class="sms-input">
-                <el-input v-model="loginForm.code" :placeholder="$t('login.codeTip')" name="code"
-                  autocomplete="on" prefix-icon="el-icon-key" size="large">
+                <el-input v-model="loginForm.code" :placeholder="$t('login.codeTip')" name="code" autocomplete="on" prefix-icon="el-icon-key" size="large">
                 </el-input>
               </el-col>
               <el-col class="sms-right code-right">
                 <el-tooltip :content="$t('login.changeCode')" placement="bottom">
-                  <img id="imgcode" :alt="$t('login.changeCode')" :src="define.comUrl+imgUrl"
-                    @click="changeImg">
+                  <img id="imgcode" :alt="$t('login.changeCode')" :src="define.comUrl+imgUrl" @click="changeImg">
                 </el-tooltip>
               </el-col>
             </el-row>
           </el-form-item>
-          <el-button :loading="loading" type="primary" class="login-btn" size="large"
-            @click.native.prevent="handleLogin">{{ $t('login.logIn') }}</el-button>
+          <el-button :loading="loading" type="primary" class="login-btn" size="large" @click.native.prevent="handleLogin">{{ $t('login.logIn') }}</el-button>
+          <el-divider content-position="center">其他登录方式</el-divider>
+          <div class="other-list">
+            <el-tooltip class="item" effect="dark" content="微信登录" placement="top">
+              <div class="other-item" title="微信登录" @click="otherlogin('wechat_open')"><i class="icon-ym icon-ym-logo-wechat" /></div>
+            </el-tooltip>
+            <el-tooltip class="item" effect="dark" content="企业微信登录" placement="top">
+              <div class="other-item" title="企业微信登录" @click="otherlogin('wechat_enterprise')"><i class="icon-ym icon-ym-logo-wxWork" /></div>
+            </el-tooltip>
+            <el-tooltip class="item" effect="dark" content="QQ登录" placement="top">
+              <div class="other-item" title="QQ登录" @click="otherlogin('qq')"><i class="icon-ym icon-ym-logo-qq" /></div>
+            </el-tooltip>
+            <el-tooltip class="item" effect="dark" content="钉钉登录" placement="top">
+              <div class="other-item" title="钉钉登录" @click="otherlogin('dingtalk')"><i class="icon-ym icon-ym-logo-dingding" /></div>
+            </el-tooltip>
+            <el-tooltip class="item" effect="dark" content="飞书登录" placement="top">
+              <div class="other-item" title="飞书登录" @click="otherlogin('feishu')"><i class="icon-ym icon-ym-logo-feishu" /></div>
+            </el-tooltip>
+            <el-tooltip class="item" effect="dark" content="gitHub登录" placement="top">
+              <div class="other-item" title="gitHub登录" @click="otherlogin('github')"><i class="icon-ym icon-ym-logo-github" /></div>
+            </el-tooltip>
+          </div>
         </el-form>
         <div v-show="active==2" class="login-form-QRCode">
           <img class="qrcode-img" src="@/assets/images/login_qr.png">
@@ -75,7 +85,7 @@
 </template>
 
 <script>
-import { getConfig } from '@/api/user'
+import { getConfig, otherlogin } from '@/api/user'
 export default {
   name: 'Login',
   data() {
@@ -107,7 +117,8 @@ export default {
       redirect: undefined,
       showTxt: false,
       otherQuery: {},
-      active: 1
+      active: 1,
+      listenerLoad: false,
     }
   },
   computed: {
@@ -142,6 +153,7 @@ export default {
       }
     }
     if (this.needCode) this.changeImg()
+    this.loginListener()
   },
   mounted() {
     this.$store.commit('user/SET_LOGIN_LOADING', false)
@@ -213,6 +225,34 @@ export default {
         }
         return acc
       }, {})
+    },
+    otherlogin(data) {
+      otherlogin(data).then(res => {
+        var iWidth; //弹出窗口的宽度;
+        var iHeight;//弹出窗口的高度;
+        var iLeft = (window.screen.width - 10 - iWidth) / 2;
+        var iTop = (window.screen.height - 30 - iHeight) / 2;//获得窗口的垂直位置;
+        // console.log(iWidth, iHeight, iLeft, iTop)
+        let winURL = window.open(res.msg, '_blank', 'height=' + iHeight + ',innerHeight=' + iHeight + ',width=' + iWidth + ',innerWidth=' + iWidth + ',top=' + iTop + ',left=' + iLeft + ',toolbar=no,menubar=no,scrollbars=auto,resizeable=no,location=no,status=no')
+      })
+    },
+    loginListener() {
+      if (!this.listenerLoad) {
+        window.addEventListener('message', (e) => {
+          if (!e.data) return
+          var response = typeof e.data === 'string' ? JSON.parse(e.data) : e.data;
+          if (response.theme && !response.token) {
+            this.$message.error('用户未绑定或绑定账号异常！')
+          }
+          this.$store.dispatch('user/updataToken', response).then(res => {
+            this.$router.push({
+              path: this.redirect || '/home',
+              query: this.otherQuery
+            })
+          })
+        })
+      }
+      this.listenerLoad = true
     }
   }
 }
