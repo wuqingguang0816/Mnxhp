@@ -2813,14 +2813,14 @@ export default {
     initConditionNodeData() {
       // 初始化条件表单数据
       let nodeConditions = this.value.properties && this.value.properties.conditions
-      this.pconditions = JSON.parse(JSON.stringify(nodeConditions))
-      for (let i = 0; i < this.pconditions.length; i++) {
+      for (let i = 0; i < nodeConditions.length; i++) {
         for (let j = 0; j < this.usedFormItems.length; j++) {
-          if (this.pconditions[i].__vModel__ === this.usedFormItems[j].__vModel__) {
-            this.pconditions[i] = { ...this.pconditions[i], ...this.usedFormItems[j] }
+          if (nodeConditions[i].__vModel__ === this.usedFormItems[j].__vModel__) {
+            nodeConditions[i] = { ...nodeConditions[i], ...this.usedFormItems[j] }
           }
         }
       }
+      this.pconditions = JSON.parse(JSON.stringify(nodeConditions))
     },
     addCondition() {
       let item = {
