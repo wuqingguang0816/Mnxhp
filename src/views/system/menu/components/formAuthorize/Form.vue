@@ -6,7 +6,7 @@
       v-loading="formLoading" class="menuForm">
       <el-form-item label="字段名称" prop="enCode">
         <nameSelects :value="dataForm.enCode" :moduleId='dataForm.moduleId' :title="dataForm.enCode"
-          :dataType="dataType" :bindTable="dataForm.bindTable" :menuType="menuType"
+          :dataType="dataForm.dataType" :bindTable="dataForm.bindTable" :menuType="menuType"
           :treeData="treeData" @change="changeName" />
       </el-form-item>
       <el-form-item label="字段规则" prop="fieldRule">
@@ -75,6 +75,8 @@ export default {
         { value: 1, label: "副表规则" },
         { value: 2, label: "子表规则" }
       ],
+      menuType: '',
+      treeData: [],
       dataRule: {
         enCode: [
           { required: true, message: "字段名称不能为空", trigger: "blur" }
