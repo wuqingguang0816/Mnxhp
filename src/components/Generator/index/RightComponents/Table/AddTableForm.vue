@@ -17,7 +17,7 @@
           <el-option v-for="item in popupWidthOptions" :label="item" :value="item" :key="item" />
         </el-select>
       </el-form-item>
-      <el-form-item label="远端数据" prop="fullName">
+      <el-form-item label="远端数据" prop="interfaceName">
         <interface-dialog :value="dataForm.interfaceId" :title="dataForm.interfaceName"
           @change="onInterfaceChange" />
       </el-form-item>
