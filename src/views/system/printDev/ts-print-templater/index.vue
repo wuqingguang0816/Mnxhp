@@ -6,13 +6,13 @@
           <div class="JNPF-common-title">
             <h2>表单字段</h2>
           </div>
-          <el-tree :data="newData" default-expand-all :expand-on-click-node="false"
-            :props="defaultProps" @node-click="handleNodeClick"></el-tree>
+          <el-tree :data="newData" default-expand-all :props="defaultProps"
+            @node-click="handleNodeClick"></el-tree>
           <div class="JNPF-common-title sys-title">
             <h2>系统字段</h2>
           </div>
-          <el-tree :data="newSysData" default-expand-all :expand-on-click-node="false"
-            :props="defaultProps" @node-click="handleNodeClick"></el-tree>
+          <el-tree :data="newSysData" default-expand-all :props="defaultProps"
+            @node-click="handleNodeClick"></el-tree>
         </el-scrollbar>
       </div>
       <div class="system-view-content">
