@@ -70,7 +70,8 @@
             <el-button type="primary" @click="flowResurgence"
               v-if="flowTaskInfo.completion>0&&flowTaskInfo.completion<100&&(setting.status==1||setting.status==3)">
               变 更</el-button>
-            <el-button type="primary" @click="openAssignBox" v-if="setting.status ==1">指 派
+            <el-button type="primary" @click="openAssignBox"
+              v-if="setting.status==1&&assignNodeList.length">指 派
             </el-button>
             <el-button type="danger" v-if="setting.status==1" @click="cancel()">终 止</el-button>
           </template>
@@ -470,7 +471,7 @@ export default {
           let assignNodeList = []
           for (let i = 0; i < this.flowTaskNodeList.length; i++) {
             const nodeItem = this.flowTaskNodeList[i]
-            data.opType == 4 && nodeItem.type == 1 && assignNodeList.push(nodeItem)
+            data.opType == 4 && nodeItem.type == 1 && nodeItem.nodeType === 'approver' && assignNodeList.push(nodeItem)
             const loop = data => {
               if (Array.isArray(data)) data.forEach(d => loop(d))
               if (data.nodeId === nodeItem.nodeCode) {
