@@ -407,6 +407,7 @@ export default {
         this.departIds = []
         this.getAllList()
         this.initData()
+        this.selectId = "organize"
       } else if (this.activeName === 'position') { //岗位
         this.positionIds = []
         this.treeLoading = true
@@ -414,6 +415,7 @@ export default {
           this.treeData2 = res.data.list || []
           this.treeLoading = false
         })
+        this.selectId = "position"
         this.initData()
       } else if (this.activeName === 'role') { //角色
         this.roleIds = []
@@ -422,6 +424,7 @@ export default {
           this.treeData3 = res.data.list || []
           this.treeLoading = false
         })
+        this.selectId = "role"
         this.initData()
       } else if (this.activeName === 'group') { //分组
         this.groupIds = []
@@ -430,6 +433,7 @@ export default {
           this.treeData4 = res.data
           this.treeLoading = false
         })
+        this.selectId = "group"
         this.initData()
       }
     },
