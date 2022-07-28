@@ -122,6 +122,15 @@
                     :pageSize="item.attr.pageSize" :popupType="item.attr.popupType"
                     :popupTitle="item.attr.popupTitle" :popupWidth="item.attr.popupWidth" />
                 </template>
+                <template v-else-if="item.jnpfKey==='popupTableSelect'">
+                  <popupTableSelect v-model="item.fieldValue" :placeholder="item.attr.placeholder"
+                    :interfaceId="item.attr.interfaceId" :columnOptions="item.attr.columnOptions"
+                    :propsValue="item.attr.propsValue" :relationField="item.attr.relationField"
+                    :hasPage="item.attr.hasPage" :pageSize="item.attr.pageSize"
+                    :popupType="item.attr.popupType" :popupTitle="item.attr.popupTitle"
+                    :popupWidth="item.attr.popupWidth" :filterable="item.attr.filterable"
+                    clearable />
+                </template>
                 <template v-else>
                   <el-input v-model="item.fieldValue" placeholder="请输入" clearable />
                 </template>
