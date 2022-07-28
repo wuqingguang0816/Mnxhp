@@ -118,8 +118,6 @@ export default {
           if (res.data) {
             res.data.list.forEach(item => {
               item.url = `${this.define.comUrl}/api/system/DataInterface/${item.id}/Actions/Response` + (item.tenantId ? '?tenantId=' + item.tenantId : '')
-              item.fullName = item.dataInterfaceInfo.fullName
-              item.enCode = item.dataInterfaceInfo.enCode
             })
             this.list = res.data.list
             this.total = res.data.pagination.total
