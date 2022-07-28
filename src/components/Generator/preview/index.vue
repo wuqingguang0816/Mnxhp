@@ -45,7 +45,7 @@ export default {
           let item = list[i]
           if (item.__vModel__) {
             const val = data[item.__vModel__]
-            if (val !== undefined) item.__config__.defaultValue = val
+            if (val !== null && val !== undefined) item.__config__.defaultValue = val
           }
           if (item.__config__ && item.__config__.jnpfKey !== 'table' && item.__config__.children && Array.isArray(item.__config__.children)) {
             loop(item.__config__.children)

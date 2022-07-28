@@ -150,7 +150,7 @@ export default {
           let item = list[i]
           if (item.__vModel__) {
             const val = data[item.__vModel__]
-            if (val !== undefined) item.__config__.defaultValue = val
+            if (val !== null && val !== undefined) item.__config__.defaultValue = val
             if (!this.isPreview && this.useFormPermission) {
               let noShow = true
               if (this.formOperates && this.formOperates.length) {
