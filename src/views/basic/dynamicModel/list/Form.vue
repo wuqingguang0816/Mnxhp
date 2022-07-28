@@ -161,7 +161,7 @@ export default {
               this.$set(item.__config__, 'noShow', noShow)
             }
           }
-          if (item.__config__ && item.__config__.jnpfKey !== 'table' && item.__config__.children && Array.isArray(item.__config__.children)) {
+          if (item.__config__ && item.__config__.children && Array.isArray(item.__config__.children)) {
             loop(item.__config__.children, item)
           }
         }
