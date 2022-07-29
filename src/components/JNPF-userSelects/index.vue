@@ -122,7 +122,7 @@
           <div class="JNPF-common-layout-main JNPF-flex-main">
             <JNPF-table v-loading="listLoading" :data="tableData" :border="false"
               highlight-current-row row-key="table" ref="multipleTable"
-              @selection-change="handleSelectionChange" :hasNO="false" has-c>
+              @select="handleSelectionChange" :hasNO="false" has-c>
               <el-table-column prop="account" label="账号" width="100" />
               <el-table-column prop="fullName" label="姓名" width="100" />
               <el-table-column prop="gender" label="性别" width="90" align="center">
@@ -334,9 +334,24 @@ export default {
       if (!value) return true;
       return data.fullName.indexOf(value) !== -1;
     },
-    handleSelectionChange(val) {
-      if (val.length) {
-        this.selectList[this.selectId] = val
+    handleSelectionChange(selection, val) {
+
+      if (JSON.stringify(this.selectList) === '{}') {
+        this.selectList[this.selectId] = selection
+      } else {
+        const i = selection.filter(item => item === val)
+        if (i.length) {
+          this.selectList[this.selectId] = selection
+        } else {
+          for (let key in this.selectList) {
+            for (let index = 0; index < this.selectList[key].length; index++) {
+              if (val.id == this.selectList[key][index].id) {
+                this.selectList[key].splice(index, 1)
+              }
+            }
+            this.selectList[key] = this.selectList[key]
+          }
+        }
       }
     },
     onClose() {
@@ -348,7 +363,6 @@ export default {
       this.activeName = 'organize'
       this.listQuery.keyword = ''
       this.nodeId = '0'
-      this.selectedData = []
       this.getData()
     },
     confirm() {
@@ -356,7 +370,9 @@ export default {
       for (let key in this.selectList) {
         this.selectedData.push(...this.selectList[key])
       }
-      this.selectedData = [...new Set(this.selectedData)]
+      let list = this.selectedData;
+      let res = new Map();
+      this.selectedData = list.filter((list) => !res.has(list.id) && res.set(list.id, 1));
       if (this.multiple) {
         this.innerValue = ''
         this.tagsList = JSON.parse(JSON.stringify(this.selectedData))
@@ -407,6 +423,7 @@ export default {
         this.departIds = []
         this.getAllList()
         this.initData()
+        this.selectId = 'organize'
       } else if (this.activeName === 'position') { //岗位
         this.positionIds = []
         this.treeLoading = true
@@ -414,6 +431,8 @@ export default {
           this.treeData2 = res.data.list || []
           this.treeLoading = false
         })
+        this.selectId = 'position'
+
         this.initData()
       } else if (this.activeName === 'role') { //角色
         this.roleIds = []
@@ -422,6 +441,7 @@ export default {
           this.treeData3 = res.data.list || []
           this.treeLoading = false
         })
+        this.selectId = 'role'
         this.initData()
       } else if (this.activeName === 'group') { //分组
         this.groupIds = []
@@ -430,6 +450,7 @@ export default {
           this.treeData4 = res.data
           this.treeLoading = false
         })
+        this.selectId = 'group'
         this.initData()
       }
     },
@@ -453,7 +474,12 @@ export default {
         this.tableData = []
         this.tableData = res.data.list
         this.total = res.data.pagination.total
-        this.selectedData = this.selectList[this.selectId]
+        for (let key in this.selectList) {
+          this.selectedData.push(...this.selectList[key])
+        }
+        let listData = this.selectedData
+        let resData = new Map()
+        this.selectedData = listData.filter((listData) => !resData.has(listData.id) && resData.set(listData.id, 1))
         if (this.tableData.length && this.selectedData.length) {
           this.$nextTick(() => {
             this.tableData.forEach(i => {  // 循环嵌套
@@ -506,7 +532,6 @@ export default {
         if (data.type !== this.activeName) return
         this[this.activeName + 'Ids'] = [data.id]
       }
-      this.selectId = data.id
       this.reset()
     },
     removeAll() {
