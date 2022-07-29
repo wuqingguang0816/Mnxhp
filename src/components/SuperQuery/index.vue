@@ -306,6 +306,7 @@ export default {
       return componentList
     },
     getAdvancedQueryList() {
+      if (!this.currMenuId) return
       getAdvancedQueryList(this.currMenuId).then(res => {
         this.planList = res.data.list
       })
