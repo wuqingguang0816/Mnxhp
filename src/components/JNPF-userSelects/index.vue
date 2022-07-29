@@ -121,7 +121,7 @@
           </el-row>
           <div class="JNPF-common-layout-main JNPF-flex-main">
             <JNPF-table v-loading="listLoading" :data="tableData" :border="false"
-              highlight-current-row row-key="table" ref="multipleTable" @select="handleSelection"
+              highlight-current-row ref="multipleTable" @select="handleSelection"
               @select-all="handleSelectionAll" :hasNO="false" has-c>
               <el-table-column prop="account" label="账号" width="100" />
               <el-table-column prop="fullName" label="姓名" width="100" />
