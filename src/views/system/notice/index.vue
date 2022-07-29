@@ -33,8 +33,8 @@
           <el-table-column prop="title" label="标题" show-overflow-tooltip />
           <el-table-column prop="creatorTime" label="创建时间" :formatter="jnpf.tableDateFormat"
             width="120" />
-          <el-table-column prop="creatorUser" label="发布人员" width="120" />
-          <el-table-column prop="lastModifyTime" label="发布时间" :formatter="jnpf.tableDateFormat"
+          <el-table-column prop="releaseUser" label="发布人员" width="120" />
+          <el-table-column prop="releaseTime" label="发布时间" :formatter="jnpf.tableDateFormat"
             width="120" />
           <el-table-column prop="enabledMark" label="状态" width="100" align="center">
             <template slot-scope="scope">
