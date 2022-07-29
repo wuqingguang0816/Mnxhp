@@ -10,7 +10,8 @@
           :treeData="treeData" @change="changeName" />
       </jnpf-form-tip-item>
       <jnpf-form-tip-item label="字段规则" prop="fieldRule">
-        <el-select v-model="dataForm.fieldRule" placeholder="请选择字段名称" clearable>
+        <el-select v-model="dataForm.fieldRule" placeholder="请选择字段名称" clearable
+          @change="changeFieldRule">
           <el-option v-for="item in fieldRuleOptions" :key="item.value" :label="item.label"
             :value="item.value">
           </el-option>
@@ -242,6 +243,9 @@ export default {
         }
         this.formLoading = false;
       });
+    },
+    changeFieldRule() {
+      this.dataForm.childTableKey = ''
     },
     changeName(val, value) {
       this.dataForm.enCode = val
