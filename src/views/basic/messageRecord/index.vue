@@ -50,9 +50,9 @@
                   {{ scope.row.type==1?'系统消息':"私信信息"}}
                 </template>
               </el-table-column>
-              <el-table-column prop="creatorUser" label="发送人员" width="120">
+              <el-table-column prop="releaseUser" label="发送人员" width="120">
               </el-table-column>
-              <el-table-column prop="lastModifyTime" label="发送时间" :formatter="jnpf.tableDateFormat"
+              <el-table-column prop="releaseTime" label="发送时间" :formatter="jnpf.tableDateFormat"
                 width="120" />
               <el-table-column prop="isRead" label="状态" width="100">
                 <template slot-scope="scope">
