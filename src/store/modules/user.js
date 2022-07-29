@@ -9,6 +9,7 @@ const define = require('@/utils/define')
 const state = {
   token: getToken(),
   isLock: getLock() || 0,
+  isLeaveToast: true,
   menuList: [],
   leftMenuList: [],
   userInfo: {},
@@ -18,6 +19,9 @@ const state = {
 }
 
 const mutations = {
+  SET_TOAST: (state, data) => {
+    state.isLeaveToast = data
+  },
   SET_SOCKET: (state, socket) => {
     state.socket = socket
   },

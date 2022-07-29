@@ -30,7 +30,13 @@
         <JNPF-table v-loading="listLoading" :data="tableList">
           <el-table-column prop="appId" label="appId" width="250" />
           <el-table-column prop="appName" label="应用名称" min-width="200" />
-          <el-table-column prop="usefulLife" label="使用期限" width="120" :formatter="jnpf.tableDateFormat" />
+          <el-table-column prop="usefulLife" label="使用期限" width="120" :formatter="jnpf.tableDateFormat">
+            <template slot-scope="scope">
+              <span type="danger" v-if="scope.row.usefulLife">{{scope.row.usefulLife | toDate()}}</span>
+              <span type="success" v-else>永久</span>
+            </template>
+          </el-table-column>
+
           <el-table-column prop="creatorUser" label="创建人" width="120" />
           <el-table-column prop="creatorTime" label="创建时间" width="120" :formatter="jnpf.tableDateFormat" />
           <el-table-column prop="lastModifyTime" label="最后修改时间" width="120" :formatter="jnpf.tableDateFormat" />

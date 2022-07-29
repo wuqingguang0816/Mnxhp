@@ -37,9 +37,8 @@
       width="1000px">
       <div class="JNPF-common-layout">
         <div class="JNPF-common-layout-left">
-          <el-tabs v-model="activeName" class="transfer-pane__body-tab"
-            :class="{'hasSys-tab':hasSys}">
-            <el-tab-pane label="部门" name="Organize">
+          <el-tabs v-model="activeName" class="transfer-pane__body-tab">
+            <el-tab-pane label="部门" name="organize">
               <el-scrollbar class="JNPF-common-el-tree-scrollbar el-tree-height"
                 v-loading="treeLoading">
                 <el-tree ref="treeBox" :data="treeData" :props="defaultProps"
@@ -53,7 +52,7 @@
                 </el-tree>
               </el-scrollbar>
             </el-tab-pane>
-            <el-tab-pane label="角色" name="Role">
+            <el-tab-pane label="角色" name="role">
               <el-scrollbar class="JNPF-common-el-tree-scrollbar el-tree-height"
                 v-loading="treeLoading">
                 <el-tree ref="treeBoxRole" :data="treeData3" :props="defaultProps"
@@ -67,7 +66,7 @@
                 </el-tree>
               </el-scrollbar>
             </el-tab-pane>
-            <el-tab-pane label="岗位" name="Position">
+            <el-tab-pane label="岗位" name="position">
               <el-scrollbar class="JNPF-common-el-tree-scrollbar el-tree-height"
                 v-loading="treeLoading">
                 <el-tree ref="treeBoxPosition" :data="treeData2" :props="defaultProps"
@@ -81,7 +80,7 @@
                 </el-tree>
               </el-scrollbar>
             </el-tab-pane>
-            <el-tab-pane label="分组" name="Group">
+            <el-tab-pane label="分组" name="group">
               <el-scrollbar class="JNPF-common-el-tree-scrollbar el-tree-height"
                 v-loading="treeLoading">
                 <el-tree ref="treeBoxGroup" :data="treeData4" :props="defaultProps"
@@ -103,7 +102,7 @@
               <el-col :span="8">
                 <el-form-item label="关键词">
                   <el-input v-model="listQuery.keyword" placeholder="请输入关键词查询" clearable
-                    @keyup.enter.native="getData()" class="search-input" />
+                    @keyup.enter.native="search()" class="search-input" />
                 </el-form-item>
               </el-col>
               <el-col :span="8">
@@ -123,7 +122,7 @@
           <div class="JNPF-common-layout-main JNPF-flex-main">
             <JNPF-table v-loading="listLoading" :data="tableData" :border="false"
               highlight-current-row row-key="table" ref="multipleTable"
-              @selection-change="handleSelectionChange" :hasNO="false" has-c>
+              @select="handleSelectionChange" :hasNO="false" has-c>
               <el-table-column prop="account" label="账号" width="100" />
               <el-table-column prop="fullName" label="姓名" width="100" />
               <el-table-column prop="gender" label="性别" width="90" align="center">
@@ -132,7 +131,7 @@
                 </template>
               </el-table-column>
               <el-table-column label="手机号" prop="mobilePhone" width="120" />
-              <el-table-column label="所属组织" prop="organize" />
+              <el-table-column label="所属组织" prop="organize" show-overflow-tooltip />
             </JNPF-table>
             <pagination :total="total" :page.sync="listQuery.currentPage"
               :limit.sync="listQuery.pageSize" @pagination="initData" />
@@ -151,7 +150,7 @@
 import { getImUserSelector, getUserInfoList, getUsersByUserCondition } from '@/api/permission/user'
 import { addResizeListener, removeResizeListener } from 'element-ui/src/utils/resize-event';
 import { getDepartmentSelector } from '@/api/permission/department'
-import { getPositionList, getPositionSelector } from '@/api/permission/position'
+import { getPositionSelector } from '@/api/permission/position'
 import { getRoleSelector } from '@/api/permission/role'
 import { getGroupSelector } from '@/api/permission/group'
 export default {
@@ -189,10 +188,6 @@ export default {
       type: Boolean,
       default: true
     },
-    hasSys: {
-      type: Boolean,
-      default: false
-    },
     size: String,
   },
   data() {
@@ -219,7 +214,7 @@ export default {
         label: 'fullName'
       },
       treeLoading: false,
-      expands: false,
+      expands: true,
       tableData: [],
       total: 0,
       treeData: [],
@@ -238,7 +233,6 @@ export default {
       groupIds: [],
       selectId: '',
       selectList: {},
-      multipleSelection: []
     }
   },
   watch: {
@@ -340,9 +334,24 @@ export default {
       if (!value) return true;
       return data.fullName.indexOf(value) !== -1;
     },
-    handleSelectionChange(val) {
-      if (val.length) {
-        this.selectList[this.selectId] = val
+    handleSelectionChange(selection, val) {
+
+      if (JSON.stringify(this.selectList) === '{}') {
+        this.selectList[this.selectId] = selection
+      } else {
+        const i = selection.filter(item => item === val)
+        if (i.length) {
+          this.selectList[this.selectId] = selection
+        } else {
+          for (let key in this.selectList) {
+            for (let index = 0; index < this.selectList[key].length; index++) {
+              if (val.id == this.selectList[key][index].id) {
+                this.selectList[key].splice(index, 1)
+              }
+            }
+            this.selectList[key] = this.selectList[key]
+          }
+        }
       }
     },
     onClose() {
@@ -351,18 +360,19 @@ export default {
     openDialog() {
       if (this.selectDisabled) return
       this.visible = true
-      this.activeName = 'Organize'
+      this.activeName = 'organize'
       this.listQuery.keyword = ''
       this.nodeId = '0'
-      this.selectedData = []
       this.getData()
     },
     confirm() {
       this.selectedData = []
-      for (var key in this.selectList) {
+      for (let key in this.selectList) {
         this.selectedData.push(...this.selectList[key])
       }
-      this.selectedData = [...new Set(this.selectedData)]
+      let list = this.selectedData;
+      let res = new Map();
+      this.selectedData = list.filter((list) => !res.has(list.id) && res.set(list.id, 1));
       if (this.multiple) {
         this.innerValue = ''
         this.tagsList = JSON.parse(JSON.stringify(this.selectedData))
@@ -388,20 +398,13 @@ export default {
       if (!this.value || !this.value.length) {
         this.innerValue = ''
         this.selectedData = []
+        this.selectList = {}
         this.tagsList = []
         return
       }
-      // this.confirm()
       const arr = this.multiple ? this.value : [this.value]
-      const hasSysItem = arr.some(o => o === 'currentUser')
       getUserInfoList(arr).then(res => {
         this.selectedData = res.data.list
-        if (hasSysItem) {
-          this.selectedData.push({
-            id: 'currentUser',
-            fullName: '当前用户'
-          })
-        }
         if (this.multiple) {
           this.innerValue = ''
           this.tagsList = JSON.parse(JSON.stringify(this.selectedData))
@@ -416,70 +419,67 @@ export default {
       })
     },
     getData() {
-
-      if (this.activeName === 'Organize') {//部门
+      if (this.activeName === 'organize') {//部门
         this.departIds = []
         this.getAllList()
         this.initData()
-      } else if (this.activeName === 'Position') { //岗位
+        this.selectId = 'organize'
+      } else if (this.activeName === 'position') { //岗位
         this.positionIds = []
         this.treeLoading = true
         getPositionSelector().then(res => {
           this.treeData2 = res.data.list || []
           this.treeLoading = false
         })
+        this.selectId = 'position'
+
         this.initData()
-      } else if (this.activeName === 'Role') { //角色
+      } else if (this.activeName === 'role') { //角色
         this.roleIds = []
         this.treeLoading = true
         getRoleSelector().then(res => {
           this.treeData3 = res.data.list || []
           this.treeLoading = false
         })
+        this.selectId = 'role'
         this.initData()
-      } else if (this.activeName === 'Group') { //分组
+      } else if (this.activeName === 'group') { //分组
         this.groupIds = []
         this.treeLoading = true
         getGroupSelector().then(res => {
           this.treeData4 = res.data
           this.treeLoading = false
         })
+        this.selectId = 'group'
         this.initData()
       }
     },
     initData() {
-
       this.listLoading = true
       let query = {}
-      if (this.activeName === 'Organize') {
+      if (this.activeName === 'organize') {
         query = {
           pagination: this.listQuery,
-          departIds: this.departIds
+          departIds: this.departIds,
+          type: 'Organize'
         }
-      }
-      if (this.activeName === 'Role') {
+      } else {
         query = {
           pagination: this.listQuery,
-          roleIds: this.roleIds
-        }
-      }
-      if (this.activeName === 'Position') {
-        query = {
-          pagination: this.listQuery,
-          positionIds: this.positionIds
-        }
-      }
-      if (this.activeName === 'Group') {
-        query = {
-          pagination: this.listQuery,
-          groupIds: this.groupIds
+          [this.activeName + 'Ids']: this[this.activeName + 'Ids'],
+          type: this.activeName.slice(0, 1).toUpperCase() + this.activeName.slice(1).toLowerCase()
         }
       }
       getUsersByUserCondition(query).then(res => {
         this.tableData = []
         this.tableData = res.data.list
         this.total = res.data.pagination.total
-        this.selectedData = this.selectList[this.selectId]
+        for (let key in this.selectList) {
+          this.selectedData.push(...this.selectList[key])
+        }
+        let listData = this.selectedData
+        let resData = new Map()
+        this.selectedData = listData.filter((listData) => !resData.has(listData.id) && resData.set(listData.id, 1))
         if (this.tableData.length && this.selectedData.length) {
           this.$nextTick(() => {
             this.tableData.forEach(i => {  // 循环嵌套
@@ -516,9 +516,9 @@ export default {
       })
     },
     search() {
-      this.listQuery = {
-        ...this.listQuery,
-      }
+      this.listQuery.currentPage = 1
+      this.listQuery.pageSize = 20
+      this.listQuery.sort = 'desc'
       this.initData()
     },
     reset() {
@@ -526,36 +526,13 @@ export default {
       this.search()
     },
     handleNodeClick(data) {
-      if (this.activeName === 'Organize') {
-        this.departIds = []
+      if (this.activeName === 'organize') {
         this.departIds = [data.id]
-        this.selectId = data.id
-      }
-      if (this.activeName === 'Role') {
-        this.roleIds = []
-        this.roleIds = [data.id]
-        this.selectId = data.id
-      }
-      if (this.activeName === 'Position') {
-        this.positionIds = []
-        this.positionIds = [data.id]
-        this.selectId = data.id
-      }
-      if (this.activeName === 'Group') {
-        this.groupIds = []
-        this.groupIds = [data.id]
-        this.selectId = data.id
+      } else {
+        if (data.type !== this.activeName) return
+        this[this.activeName + 'Ids'] = [data.id]
       }
       this.reset()
-    },
-    handleNodeClick2(data) {
-      const boo = this.selectedData.some(o => o.id === data.id)
-      if (boo) return
-      const item = {
-        id: data.id,
-        fullName: data.fullName
-      }
-      this.multiple ? this.selectedData.push(item) : this.selectedData = [item]
     },
     removeAll() {
       this.selectedData = []
@@ -565,7 +542,7 @@ export default {
     },
     deleteTag(event, index) {
       let a = this.selectedData.splice(index, 1)
-      for (var key in this.selectList) {
+      for (let key in this.selectList) {
         for (let index = 0; index < this.selectList[key].length; index++) {
           if (a[0].id == this.selectList[key][index].id) {
             this.selectList[key].splice(index, 1)
@@ -580,6 +557,13 @@ export default {
       this.selectedData = []
       this.confirm()
       event.stopPropagation();
+    },
+    resetInputWidth() {
+      this.inputWidth = this.$refs.reference.$el.getBoundingClientRect().width;
+    },
+    handleResize() {
+      this.resetInputWidth();
+      if (this.multiple) this.resetInputHeight();
     },
     resetInputHeight() {
       if (this.collapseTags) return;
@@ -602,7 +586,22 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
+.el-tabs {
+  height: 100%;
+}
+>>> .el-tabs__content {
+  height: calc(100% - 55px);
+  .el-tab-pane {
+    height: 100%;
+  }
+}
 .el-tree-height {
-  height: 550px;
+  height: 100%;
+}
+.JNPF-common-layout-main {
+  padding-bottom: 0;
+}
+>>> .el-tabs__item {
+  padding: 0 13px !important;
 }
 </style>

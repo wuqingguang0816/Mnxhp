@@ -63,7 +63,7 @@
           <div class="transfer-pane__body shadow right-pane">
             <template>
               <div v-for="(item, index) in selectedData" :key="index" class="selected-item">
-                <span>{{item}}</span>
+                <span :title="item">{{item}}</span>
                 <i class="el-icon-delete" @click="removeData(index)"></i>
               </div>
             </template>
@@ -81,6 +81,7 @@
 <script>
 import { addResizeListener, removeResizeListener } from 'element-ui/src/utils/resize-event';
 import { getDepartmentSelectorByAuth } from "@/api/permission/department";
+import { getOrganizeSelectorByAuth } from '@/api/permission/organize'
 export default {
   name: 'comSelect',
   inject: {
@@ -119,7 +120,17 @@ export default {
       type: Boolean,
       default: false
     },
+    isOnlyOrg: {
+      type: Boolean,
+      default: false
+    },
     size: String,
+    currOrgId: {
+      default: '0'
+    },
+    parentId: {
+      default: ''
+    }
   },
   data() {
     return {
@@ -221,9 +232,22 @@ export default {
   methods: {
     async getData() {
       const treeData = await this.$store.dispatch('generator/getDepTree')
-      this.allList = this.$store.getters.departmentList
+      const topItem = {
+        fullName: "顶级节点",
+        hasChildren: true,
+        id: "-1",
+        icon: "icon-ym icon-ym-tree-organization3",
+        organize: '顶级节点',
+        organizeIds: ['-1']
+      }
+      this.allList = [...this.$store.getters.departmentList, topItem]
       if (this.auth) {
-        getDepartmentSelectorByAuth().then(res => {
+        if (this.isOnlyOrg && this.parentId === '-1') {
+          this.treeData = [topItem]
+          return
+        }
+        const method = this.isOnlyOrg ? getOrganizeSelectorByAuth : getDepartmentSelectorByAuth
+        method(this.currOrgId).then(res => {
           this.treeData = res.data.list
         })
       } else {
@@ -243,7 +267,8 @@ export default {
     openDialog() {
       if (this.selectDisabled) return
       this.keyword = ''
-      this.search()
+      this.treeData = []
+      this.getData()
       this.setDefault()
       this.visible = true
     },
@@ -264,6 +289,7 @@ export default {
       return fullPath
     },
     handleNodeClick(data) {
+      if (data.disabled) return
       let currId = data.organizeIds
       let currData = data.organize
       if (this.multiple) {
@@ -285,6 +311,7 @@ export default {
       this.selectedIds.splice(index, 1)
     },
     confirm() {
+      if (!this.selectedIds.length) return this.$message.error('请选择数据')
       let selectedData = []
       for (let i = 0; i < this.selectedIds.length; i++) {
         let item = []

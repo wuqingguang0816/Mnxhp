@@ -92,23 +92,34 @@ export default {
       ],
       fieldOptions: [],
       opOptions: [{
-        value: 'Equal',
-        label: '等于'
+        value: "Equal",
+        label: "等于"
+      },
+      {
+        value: "NotEqual",
+        label: "不等于"
+      },
+      {
+        value: "GreaterThan",
+        label: "大于"
+      },
+      {
+        value: "GreaterThanOrEqual",
+        label: "大于等于"
+      },
+      {
+        value: "LessThan",
+        label: "小于"
+      },
+      {
+        value: "LessThanOrEqual",
+        label: "小于等于"
       }, {
-        value: 'NotEqual',
-        label: '不等于'
+        value: 'Included',
+        label: '包含'
       }, {
-        value: 'GreaterThan',
-        label: '大于'
-      }, {
-        value: 'GreaterThanOrEqual',
-        label: '大于等于'
-      }, {
-        value: 'LessThan',
-        label: '小于'
-      }, {
-        value: 'LessThanOrEqual',
-        label: '小于等于'
+        value: 'NotIncluded',
+        label: '不包含'
       }],
       dataForm: {
         id: "",

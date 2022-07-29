@@ -30,7 +30,6 @@
           <el-form-item prop="account">
             <el-input ref="account" v-model="loginForm.account" :placeholder="$t('login.username')" name="account" type="text" tabindex="1" autocomplete="on" prefix-icon="el-icon-user" size="large" @change="getConfig"></el-input>
           </el-form-item>
-          <el-form-item class="rule-tip">{{$t('login.rule')}}</el-form-item>
           <el-tooltip v-model="capsTooltip" :content="$t('login.upper')" placement="right" manual>
             <el-form-item prop="password">
               <el-input ref="password" v-model="loginForm.password" show-password :placeholder="$t('login.password')" name="password" tabindex="2" autocomplete="on" @keyup.native="checkCapslock" @blur="capsTooltip = false" prefix-icon="el-icon-lock" size="large"></el-input>
@@ -259,5 +258,5 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import "./index.scss";
+@import './index.scss';
 </style>

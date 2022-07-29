@@ -260,8 +260,8 @@
                 <el-input v-model="activeData.__config__.label" placeholder="请输入控件标题" />
               </el-form-item>
               <el-form-item label="选择模板" v-if="activeData.__config__.jnpfKey==='billRule'">
-                <BillRule v-model="activeData.__config__.rule" placeholder="选择模板"
-                  :value="activeData.__config__.rule" :title="activeData.__config__.rule" />
+                <BillRule :value="activeData.__config__.rule"
+                  :title="activeData.__config__.ruleName" @change="onRuleChange" />
               </el-form-item>
               <el-form-item label="显示内容" v-if="activeData.__config__.jnpfKey==='currOrganize'">
                 <el-select v-model="activeData.showLevel" placeholder="请选择显示内容">
@@ -414,7 +414,8 @@
             </el-select>
           </el-form-item>
           <el-form-item label="主键策略">
-            <el-select v-model="formConf.primaryKeyPolicy" placeholder="请选择">
+            <el-select v-model="formConf.primaryKeyPolicy" placeholder="请选择"
+              :disabled="!!getFormInfo().id">
               <el-option label="雪花ID" :value="1" />
               <el-option label="自增长ID" :value="2" />
             </el-select>
@@ -562,7 +563,7 @@ export default {
     Collapse,
     TableConfig
   },
-  inject: ["getShowType"],
+  inject: ["getShowType", "getFormInfo"],
   props: ['showField', 'activeData', 'formConf', 'modelType', 'webType', 'drawingList'],
   data() {
     return {
@@ -1076,7 +1077,17 @@ export default {
           duration: 1500,
         })
       }
-    }
+    },
+    onRuleChange(id, item) {
+      if (!id) {
+        this.activeData.__config__.rule = ''
+        this.activeData.__config__.ruleName = ''
+        return
+      }
+      if (this.activeData.__config__.rule === id) return
+      this.activeData.__config__.rule = id
+      this.activeData.__config__.ruleName = item.fullName
+    },
   }
 }
 </script>

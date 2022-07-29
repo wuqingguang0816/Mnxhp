@@ -33,7 +33,8 @@
           :pager-count="5" />
         <span slot="footer" class="dialog-footer">
           <el-button @click="visible = false">{{$t('common.cancelButton')}}</el-button>
-          <el-button type="primary" @click="select()">{{$t('common.confirmButton')}}</el-button>
+          <el-button type="primary" @click="select()" :loading="btnLoading">
+            {{$t('common.confirmButton')}}</el-button>
         </span>
       </el-dialog>
     </template>
@@ -69,7 +70,8 @@
             :limit.sync="listQuery.pageSize" @pagination="initData" v-if="config.hasPage" />
           <div class="drawer-footer">
             <el-button @click="visible = false">{{$t('common.cancelButton')}}</el-button>
-            <el-button type="primary" @click="select()">{{$t('common.confirmButton')}}</el-button>
+            <el-button type="primary" @click="select()" :loading="btnLoading">
+              {{$t('common.confirmButton')}}</el-button>
           </div>
         </div>
       </el-drawer>
@@ -97,6 +99,7 @@ export default {
     return {
       visible: false,
       listLoading: true,
+      btnLoading: false,
       listQuery: {
         keyword: '',
         currentPage: 1,
@@ -114,6 +117,7 @@ export default {
     init() {
       this.listQuery.pageSize = this.config.hasPage ? this.config.pageSize : 10000
       this.visible = true
+      this.btnLoading = false
       this.initData()
     },
     initData() {
@@ -157,6 +161,7 @@ export default {
     },
     select() {
       if (!this.checked.length) return
+      this.btnLoading = true
       this.visible = false
       let checked = []
       for (let i = 0; i < this.checked.length; i++) {

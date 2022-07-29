@@ -29,6 +29,9 @@
 <script>
 import Form from './AddTableForm'
 const defaultAddTableConf = {
+  popupTitle: '选择数据',
+  popupType: 'dialog',
+  popupWidth: '800px',
   interfaceId: '',
   interfaceName: '',
   templateJson: [],

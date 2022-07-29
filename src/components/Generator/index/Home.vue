@@ -286,6 +286,20 @@ export default {
                 break
               }
             }
+            if (config.jnpfKey === 'popupTableSelect') {
+              if (!e.interfaceId) {
+                reject({ msg: '下拉表格控件“远端数据”属性为必填项', target: 1 })
+                break
+              }
+              if (!e.propsValue) {
+                reject({ msg: '下拉表格控件“储存字段”属性为必填项', target: 1 })
+                break
+              }
+              if (!e.relationField) {
+                reject({ msg: '下拉表格控件“显示字段”属性为必填项', target: 1 })
+                break
+              }
+            }
             if (config.layout === 'rowFormItem' && !config.children.length) {
               reject({ msg: `您的${config.label}控件中没有组件`, target: 1 })
               break
@@ -426,7 +440,7 @@ export default {
     },
     toggleVmodelCase(str) {
       const dbType = this.dbType || ''
-      if (dbType.toLowerCase() === 'Oracle'.toLowerCase() || dbType.toLowerCase() === 'DM8'.toLowerCase()) {
+      if (dbType.toLowerCase() === 'Oracle'.toLowerCase() || dbType.toLowerCase() === 'DM'.toLowerCase()) {
         return str.toUpperCase()
       }
       if (dbType.toLowerCase() === 'PostgreSQL'.toLowerCase() || dbType.toLowerCase() === 'KingBaseES'.toLowerCase()) {

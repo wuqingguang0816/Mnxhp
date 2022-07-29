@@ -405,7 +405,7 @@
           </div>
           <div class="add-button">
             <el-button type="primary" size="small" @click="name==='同步到企业微信'?syncQy(0):syncDing(0)"
-              :loading="wechatLoading">
+              :loading="wechatLoading" :disabled="nailLoading">
               同步</el-button>
           </div>
         </div>
@@ -419,7 +419,7 @@
           </div>
           <div class="add-button">
             <el-button type="primary" size="small" @click="name==='同步到企业微信'?syncQy(1):syncDing(1)"
-              :loading="nailLoading">
+              :loading="nailLoading" :disabled="wechatLoading">
               同步</el-button>
           </div>
         </div>
@@ -708,45 +708,67 @@ export default {
       this.visible = true
     },
     syncQy(type) {
+      type == 0 ? this.wechatLoading = true : this.nailLoading = true
       this.$confirm('同步以后会丢失现有数据，是否继续？', '提示', {
         type: 'warning'
       }).then(() => {
         const method = this.row.synType == '组织' ? synAllOrganizeSysToQy : synAllUserSysToQy
         method(type).then(res => {
+          if (res.msg === '正在进行同步,请稍等') {
+            this.$message({
+              message: res.msg,
+              type: 'success',
+              duration: 1500,
+            })
+            this.visible = false
+            type == 0 ? this.wechatLoading = false : this.nailLoading = false
+          }
           this.row.recordTotal = res.data.recordTotal
           this.row.synDate = res.data.synDate
           this.row.synFailCount = res.data.synFailCount
           this.row.synSuccessCount = res.data.synSuccessCount
           this.row.synType = res.data.synType
           this.row.unSynCount = res.data.unSynCount
-          this.visible = false
           this.$message({
             message: '同步成功',
             type: 'success',
             duration: 1500,
           })
-        }).catch(() => { })
+          this.visible = false
+          type == 0 ? this.wechatLoading = false : this.nailLoading = false
+        }).catch(() => { type == 0 ? this.wechatLoading = false : this.nailLoading = false })
       })
     },
     syncDing(type) {
+      type == 0 ? this.wechatLoading = true : this.nailLoading = true
       this.$confirm('同步以后会丢失现有数据，是否继续？', '提示', {
         type: 'warning'
       }).then(() => {
         const method = this.row.synType == '组织' ? synAllOrganizeSysToDing : synAllUserSysToDing
         method(type).then(res => {
+          if (res.msg === '正在进行同步,请稍等') {
+            this.$message({
+              message: res.msg,
+              type: 'success',
+              duration: 1500,
+            })
+            this.visible = false
+            type == 0 ? this.wechatLoading = false : this.nailLoading = false
+          }
           this.row.recordTotal = res.data.recordTotal
           this.row.synDate = res.data.synDate
           this.row.synFailCount = res.data.synFailCount
           this.row.synSuccessCount = res.data.synSuccessCount
           this.row.synType = res.data.synType
           this.row.unSynCount = res.data.unSynCount
-          this.visible = false
           this.$message({
             message: '同步成功',
             type: 'success',
             duration: 1500,
           })
-        }).catch(() => { })
+          type == 0 ? this.wechatLoading = false : this.nailLoading = false
+          this.visible = false
+        }).catch(() => { type == 0 ? this.wechatLoading = false : this.nailLoading = false })
       })
     },
     submitSmsForm() {

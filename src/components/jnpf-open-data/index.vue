@@ -1,7 +1,7 @@
 <template>
   <div>
-    <el-input v-model="innerValue" :placeholder="placeholder" readonly v-if="!detailed" />
-    <p v-else>{{innerValue}}</p>
+    <el-input :value="value||innerValue" :placeholder="placeholder" readonly v-if="!detailed" />
+    <p v-else>{{value||innerValue}}</p>
   </div>
 </template>
 
@@ -46,10 +46,6 @@ export default {
     }
   },
   watch: {
-    value(val) {
-      this.innerValue = val
-      this.$emit('input', this.innerValue)
-    },
     showLevel() {
       this.setDefault()
     }
@@ -63,7 +59,7 @@ export default {
         this.innerValue = this.userInfo.userName + '/' + this.userInfo.userAccount
       }
       if (this.type === 'currTime') {
-        this.innerValue = this.jnpf.toDate(new Date().getTime())
+        this.innerValue = this.jnpf.toDate(new Date().getTime(), 'yyyy-MM-dd HH:mm:ss')
       }
       if (this.type === 'currOrganize') {
         this.innerValue = this.showLevel === 'last' ? this.userInfo.organizeName : this.userInfo.departmentName
@@ -71,7 +67,6 @@ export default {
       if (this.type === 'currPosition') {
         this.innerValue = this.userInfo.positionName
       }
-      this.$emit('input', this.innerValue)
     }
   }
 }

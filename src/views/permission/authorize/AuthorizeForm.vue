@@ -333,6 +333,7 @@ export default {
   }
   .el-steps {
     border-radius: 0;
+    padding: 13px 45px !important;
   }
 }
 .main {

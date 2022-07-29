@@ -16,10 +16,15 @@
       width="1000px">
       <div class="JNPF-common-layout">
         <div class="JNPF-common-layout-left">
-          <el-scrollbar class="JNPF-common-el-tree-scrollbar" v-loading="treeLoading">
+          <el-scrollbar class="JNPF-common-el-tree-scrollbar " v-loading="treeLoading">
             <el-tree ref="treeBox" :data="treeData" :props="defaultProps" default-expand-all
-              highlight-current :expand-on-click-node="false" node-key="tableName"
-              @node-click="handleNodeClick" class="JNPF-common-el-tree" />
+              :current-node-key="tableName" highlight-current :expand-on-click-node="false"
+              node-key="tableName" lock-scroll @node-click="handleNodeClick"
+              class="JNPF-common-el-tree">
+              <span class="custom-tree-node" slot-scope="{ data }" :title="data.tableName">
+                <span class="text" :title="data.tableName">{{data.tableName}}</span>
+              </span>
+            </el-tree>
           </el-scrollbar>
         </div>
         <div class="JNPF-common-layout-center">
@@ -73,7 +78,12 @@
 <script>
 import { getVisualTables, getTableInfoByTableName } from "@/api/system/authorize"
 export default {
+
   props: {
+
+    bindTable: {
+      default: ''
+    },
     dataType: {
       default: ''
     },
@@ -97,7 +107,11 @@ export default {
     disabled: {
       type: Boolean,
       default: false
-    }
+    },
+    treeData: {
+      type: Array,
+      default: () => []
+    },
   },
   model: {
     prop: 'value',
@@ -128,11 +142,10 @@ export default {
         dataType: null,
       },
       treeLoading: false,
-      treeData: [],
       inputHovering: false,
       visible: false,
       tableName: '',
-      linkId: ''
+      linkId: '',
     }
   },
   computed: {
@@ -148,11 +161,12 @@ export default {
   methods: {
     initData() {
       this.listLoading = true
+      this.list = []
       let query = {
         keyword: this.keyword,
         ...this.listQuery,
       }
-      getTableInfoByTableName(this.linkId, this.tableName, query).then(res => {
+      getTableInfoByTableName(this.linkId, this.tableName, this.menuType, query).then(res => {
         this.list = res.data.list
         this.total = res.data.pagination.total
         this.listLoading = false
@@ -162,7 +176,7 @@ export default {
       this.tableName = ''
       this.linkId = ''
       this.tableName = data.tableName
-      this.linkId = data.dblink
+      this.linkId = data.dbLink
       this.reset()
     },
     reset() {
@@ -176,30 +190,25 @@ export default {
       this.initData()
     },
     openDialog() {
-      if (this.disabled) return
+      if (!this.treeData.length) return this.$message.error(`请先进行数据连接！`)
       this.checked = this.value
       this.visible = true
       this.treeLoading = true
-      getVisualTables(this.moduleId, this.dataType).then(res => {
-        let data = []
-        for (const key in res.data.linkTables) {
-          data.push({
-            tableName: res.data.linkTables[key],
-            dblink: res.data.linkId
-          })
-        }
-        this.treeData = data
-        if (!this.treeData.length) return this.treeLoading = false
-        this.$nextTick(() => {
+      this.tableName = this.bindTable
+      this.$nextTick(() => {
+        if (this.checked) {
+          this.tableName = this.bindTable
+          let row = this.treeData.filter(item => item.tableName == this.tableName)
+          this.linkId = row[0].dbLink
+          this.$refs.treeBox.setCurrentKey(this.tableName)
+        } else {
           this.tableName = this.treeData[0].tableName
-          this.linkId = this.treeData[0].dblink
-          this.reset()
-          this.treeLoading = false
-        })
-      }).catch(() => {
+          this.linkId = this.treeData[0].dbLink
+          this.$refs.treeBox.setCurrentKey(this.tableName)
+        }
         this.treeLoading = false
+        this.reset()
       })
-
     },
     clear() {
       this.checked = ''
@@ -216,14 +225,8 @@ export default {
     rowClick(row) {
       this.checked = row.field
       this.checkedRow = row
+      this.checkedRow.tableName = this.tableName
     }
   }
 }
 </script>
-<style lang="scss">
-.template-item {
-  line-height: 30px;
-}
-</style>
-
-

@@ -102,7 +102,7 @@ export default {
       })
     },
     onOrganizeChange(val) {
-      if (!val || !val.length) return
+      if (!val || !val.length) return this.dataForm.organizeId = ''
       this.dataForm.organizeId = val[val.length - 1]
     },
     dataFormSubmit() {

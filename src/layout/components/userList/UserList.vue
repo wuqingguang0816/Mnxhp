@@ -8,7 +8,7 @@
           <div class="userList replyList" v-loading="replyLoading && listQuery.currentPage==1">
             <div v-if="replyList.length">
               <div v-for="(item,i) in replyList" :key="i" class="userList-item"
-                @click="readInfo(item,true)">
+                @contextmenu.prevent=openMenu(item,$event) @click="readInfo(item,true) ">
                 <el-avatar :size="36" :src="define.comUrl+item.headIcon">
                 </el-avatar>
                 <div class="userList-txt">
@@ -18,13 +18,17 @@
                   </p>
                   <p class="name">
                     <span class="content">{{getMsgText(item.latestMessage,item.messageType)}}</span>
-                    <span class="time">{{item.latestDate| toDateText()}}</span>
+                    <span class="time">{{item.latestDate | toDateText()}}</span>
                   </p>
                 </div>
                 <!-- <el-badge :value="item.unreadMessage" :hidden="!item.unreadMessage"></el-badge> -->
               </div>
             </div>
             <p class="noData-txt" v-else>{{$t('common.noData')}}</p>
+            <ul v-show="visibleMenu" :style="{left:left+'px',top:top+'px'}" class="contextmenu">
+              <li @click="relocation()">移除</li>
+              <li @click="deleteChatRecord()">删除聊天记录</li>
+            </ul>
           </div>
         </el-tab-pane>
         <el-tab-pane label="联系人" name="contacts">
@@ -58,19 +62,24 @@
 <script>
 import { mapGetters } from 'vuex'
 import { getImUser } from '@/api/permission/user'
-import { getIMReply } from '@/api/system/message'
+import { getIMReply, deleteChatRecord, relocation } from '@/api/system/message'
 import Im from './Im'
 export default {
   name: 'UserList',
   components: { Im },
   data() {
     return {
+      top: 0,
+      left: 0,
+      selectedTag: {},
+      visitedViews: '',
       drawer: false,
       activeTab: 'reply',
       userList: [],
       replyList: [],
       loading: false,
       replyLoading: false,
+      visibleMenu: false,
       visible: false,
       finish: false,
       listQuery: {
@@ -89,9 +98,58 @@ export default {
       if (val === 'contacts' && !this.userList.length) {
         this.getUserList()
       }
+    },
+    visibleMenu(value) {
+      if (value) {
+        document.body.addEventListener('click', this.closeMenu)
+      } else {
+        document.body.removeEventListener('click', this.closeMenu)
+      }
     }
   },
   methods: {
+    closeMenu() {
+      this.visibleMenu = false
+    },
+    openMenu(tag, e) {
+      const menuMinWidth = 105
+      const offsetLeft = this.$el.getBoundingClientRect().left // container margin left
+      const offsetWidth = this.$el.offsetWidth // container width
+      const maxLeft = offsetWidth - menuMinWidth // left boundary
+      const left = e.clientX - offsetLeft + 30 // 15: margin right
+      if (left > maxLeft) {
+        this.left = maxLeft
+      } else {
+        this.left = left
+      }
+      this.top = e.clientY - 95
+      this.visibleMenu = true
+      this.selectedTag = tag
+    },
+    relocation() {
+      this.$refs.JNPFIm.closeIM()
+      relocation(this.selectedTag.id).then((res) => {
+        const list = this.replyList.filter(o => o.id !== this.selectedTag.id)
+        this.replyList = list
+      });
+    },
+    deleteChatRecord() {
+      this.$refs.JNPFIm.closeIM()
+      this.$confirm("是否清空当前聊天的所有记录?", "提示", {
+        type: "warning",
+      }).then(() => {
+        deleteChatRecord(this.selectedTag.id).then((res) => {
+          for (let index = 0; index < this.replyList.length; index++) {
+            const element = this.replyList[index];
+            if (element.id === this.selectedTag.id) {
+              element.latestDate = ''
+              element.unreadMessage = ''
+              element.latestMessage = ''
+            }
+          }
+        });
+      }).catch(() => { });
+    },
     init() {
       this.finish = false
       this.drawer = true
@@ -244,6 +302,27 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.contextmenu {
+  margin: 0;
+  background: #fff;
+  z-index: 3000;
+  position: absolute;
+  list-style-type: none;
+  padding: 5px 0;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 400;
+  color: #333;
+  box-shadow: 2px 2px 3px 0 rgba(0, 0, 0, 0.3);
+  li {
+    margin: 0;
+    padding: 7px 16px;
+    cursor: pointer;
+    &:hover {
+      background: #eee;
+    }
+  }
+}
 .contacts-drawer {
   >>> .el-tabs {
     height: 100%;

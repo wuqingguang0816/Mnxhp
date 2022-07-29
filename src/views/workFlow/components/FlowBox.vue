@@ -70,7 +70,8 @@
             <el-button type="primary" @click="flowResurgence"
               v-if="flowTaskInfo.completion>0&&flowTaskInfo.completion<100&&(setting.status==1||setting.status==3)">
               变 更</el-button>
-            <el-button type="primary" @click="openAssignBox" v-if="setting.status ==1">指 派
+            <el-button type="primary" @click="openAssignBox"
+              v-if="setting.status==1&&assignNodeList.length">指 派
             </el-button>
             <el-button type="danger" v-if="setting.status==1" @click="cancel()">终 止</el-button>
           </template>
@@ -105,7 +106,8 @@
       <el-dialog :title="eventType==='audit'?'审批通过':'审批拒绝'" :close-on-click-modal="false"
         :visible.sync="visible" class="JNPF-dialog JNPF-dialog_center" lock-scroll append-to-body
         width='600px'>
-        <el-form label-width="130px" ref="candidateForm" :model="candidateForm">
+        <el-form ref="candidateForm" :model="candidateForm"
+          :label-width="candidateForm.candidateList.length||branchList.length?'130px':'80px'">
           <template v-if="eventType==='audit'">
             <el-form-item label="分支选择" prop="branchList" v-if="branchList.length"
               :rules="[{ required: true, message: `分支不能为空`, trigger: 'change' }]">
@@ -206,7 +208,7 @@
         :fullName="setting.fullName" />
       <candidate-form :visible.sync="candidateVisible" :candidateList="candidateList"
         :branchList="branchList" :taskId="setting.taskId" :formData="formData"
-        @submitCandidate="submitCandidate" />
+        @submitCandidate="submitCandidate" :isCustomCopy="properties.isCustomCopy" />
       <error-form :visible.sync="errorVisible" :nodeList="errorNodeList" @submit="handleError" />
     </div>
   </transition>
@@ -415,6 +417,7 @@ export default {
         if (this.flowTemplateJson && this.flowTemplateJson.properties && this.flowTemplateJson.properties.formOperates) {
           data.formOperates = this.flowTemplateJson.properties.formOperates || []
         }
+        data.flowTemplateJson = this.flowTemplateJson
         setTimeout(() => {
           this.$nextTick(() => {
             this.$refs.form && this.$refs.form.init(data)
@@ -463,11 +466,12 @@ export default {
         } else {
           data.formOperates = res.data.formOperates || []
         }
+        data.flowTemplateJson = this.flowTemplateJson
         if (this.flowTaskNodeList.length) {
           let assignNodeList = []
           for (let i = 0; i < this.flowTaskNodeList.length; i++) {
             const nodeItem = this.flowTaskNodeList[i]
-            data.opType == 4 && nodeItem.type == 1 && assignNodeList.push(nodeItem)
+            data.opType == 4 && nodeItem.type == 1 && nodeItem.nodeType === 'approver' && assignNodeList.push(nodeItem)
             const loop = data => {
               if (Array.isArray(data)) data.forEach(d => loop(d))
               if (data.nodeId === nodeItem.nodeCode) {
@@ -597,6 +601,12 @@ export default {
           this.candidateList = res.data.list.filter(o => o.isCandidates)
           this.candidateVisible = true
         } else {
+          if (this.properties.isCustomCopy) {
+            this.branchList = []
+            this.candidateList = []
+            this.candidateVisible = true
+            return
+          }
           this.$confirm('您确定要提交当前流程吗, 是否继续?', '提示', {
             type: 'warning'
           }).then(() => {

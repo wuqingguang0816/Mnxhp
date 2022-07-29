@@ -1,13 +1,13 @@
 <template>
-  <el-dialog :title="!dataForm.id ? '新建系统' : '编辑系统'" :close-on-click-modal="false"
+  <el-dialog :title="!dataForm.id ? '新建应用' : '编辑应用'" :close-on-click-modal="false"
     :close-on-press-escape="false" :visible.sync="visible" lock-scroll
     class="JNPF-dialog JNPF-dialog_center" width="600px">
     <el-form ref="dataForm" :model="dataForm" :rules="dataRule" label-width="80px"
       v-loading="formLoading" class="menuForm">
-      <el-form-item label="系统名称" prop="fullName">
+      <el-form-item label="应用名称" prop="fullName">
         <el-input v-model="dataForm.fullName" placeholder="输入名称" />
       </el-form-item>
-      <el-form-item label="系统编码" prop="enCode">
+      <el-form-item label="应用编码" prop="enCode">
         <el-input v-model="dataForm.enCode" placeholder="输入编码" />
       </el-form-item>
       <el-form-item label="图标" prop="icon">
@@ -66,13 +66,13 @@ export default {
       },
       dataRule: {
         fullName: [
-          { required: true, message: '系统不能为空', trigger: 'blur' },
+          { required: true, message: '应用不能为空', trigger: 'blur' },
         ],
         enCode: [
-          { required: true, message: '系统编码不能为空', trigger: 'blur' },
+          { required: true, message: '应用编码不能为空', trigger: 'blur' },
         ],
         icon: [
-          { required: true, message: '系统图标不能为空', trigger: 'click' }
+          { required: true, message: '应用图标不能为空', trigger: 'click' }
         ],
       },
       formLoading: false,

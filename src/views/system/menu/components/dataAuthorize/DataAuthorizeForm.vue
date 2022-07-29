@@ -2,55 +2,51 @@
   <el-dialog :title="!dataForm.id ? '新建字段' : '编辑字段'" :close-on-click-modal="false"
     :close-on-press-escape="false" :visible.sync="visible" lock-scroll
     class="JNPF-dialog JNPF-dialog_center" width="630px">
-    <el-form ref="dataForm" :model="dataForm" :rules="dataRule" label-width="80px"
+    <el-form ref="dataForm" :model="dataForm" :rules="dataRule" label-width="100px"
       v-loading="formLoading" class="menuForm">
-      <el-form-item label="字段名称" prop="enCode">
+      <jnpf-form-tip-item label="字段名称" prop="enCode">
         <nameSelects :value="dataForm.enCode" :moduleId='dataForm.moduleId' :title="dataForm.enCode"
-          :dataType="dataType" @change="changeName" />
-      </el-form-item>
-      <!-- <el-form-item label="字段名称" prop="enCode">
-        <el-select v-if="enCodeOptions.length" v-model="dataForm.enCode" placeholder="请选择字段名称"
-          clearable @change="onEnCodeChange">
-          <el-option v-for="item in enCodeOptions" :key="item.field" :label="item.field"
-            :value="item.field">
-          </el-option>
-        </el-select>
-        <el-input v-model="dataForm.enCode" placeholder="输入字段名称" v-else />
-      </el-form-item> -->
-      <el-form-item label="字段规则" prop="fieldRule">
+          :dataType="dataType" :bindTable="dataForm.bindTable" :menuType="menuType"
+          :treeData="treeData" @change="changeName" />
+      </jnpf-form-tip-item>
+      <jnpf-form-tip-item label="字段规则" prop="fieldRule">
         <el-select v-model="dataForm.fieldRule" placeholder="请选择字段名称" clearable>
           <el-option v-for="item in fieldRuleOptions" :key="item.value" :label="item.label"
             :value="item.value">
           </el-option>
         </el-select>
-      </el-form-item>
-      <el-form-item label="字段说明" prop="fullName">
+      </jnpf-form-tip-item>
+      <jnpf-form-tip-item label="关联字段" prop="childTableKey"
+        tip-label="输入表单设计内设计子表控制字段名;例：tableField107" v-if="dataForm.fieldRule==2">
+        <el-input v-model="dataForm.childTableKey" placeholder="请输入关联主表的子表控件名称" />
+      </jnpf-form-tip-item>
+      <jnpf-form-tip-item label="字段说明" prop="fullName">
         <el-input v-model="dataForm.fullName" placeholder="输入字段说明" />
-      </el-form-item>
-      <el-form-item label="字段类型" prop="type">
+      </jnpf-form-tip-item>
+      <jnpf-form-tip-item label="字段类型" prop="type">
         <el-select v-model="dataForm.type" placeholder="请选择" clearable>
           <el-option v-for="item in typeOptions" :key="item.value" :label="item.label"
             :value="item.value">
           </el-option>
         </el-select>
-      </el-form-item>
-      <el-form-item label="条件符号" prop="conditionSymbol">
+      </jnpf-form-tip-item>
+      <jnpf-form-tip-item label="条件符号" prop="conditionSymbol">
         <el-select v-model="conditionSymbol" multiple placeholder="请选择">
           <el-option v-for="item in conditionSymbolOptions" :key="item.value" :label="item.label"
             :value="item.value">
           </el-option>
         </el-select>
-      </el-form-item>
-      <el-form-item label="条件内容" prop="conditionText">
+      </jnpf-form-tip-item>
+      <jnpf-form-tip-item label="条件内容" prop="conditionText">
         <el-select v-model="dataForm.conditionText" placeholder="请选择" clearable>
           <el-option v-for="item in conditionTextOptions" :key="item.value" :label="item.label"
             :value="item.value">
           </el-option>
         </el-select>
-      </el-form-item>
-      <el-form-item label="备注" prop="description">
+      </jnpf-form-tip-item>
+      <jnpf-form-tip-item label="备注" prop="description">
         <el-input v-model="dataForm.description" type="textarea" :rows="3" />
-      </el-form-item>
+      </jnpf-form-tip-item>
     </el-form>
     <span slot="footer" class="dialog-footer">
       <el-button @click="visible = false">{{$t("common.cancelButton")}}</el-button>
@@ -67,6 +63,7 @@ import {
   getDataAuthorizeInfo
 } from "@/api/system/dataAuthorize";
 import nameSelects from '../NameSelect.vue'
+import { getVisualTables } from "@/api/system/authorize"
 export default {
   components: { nameSelects },
   data() {
@@ -109,6 +106,7 @@ export default {
         { value: 1, label: "副表规则" },
         { value: 2, label: "子表规则" }
       ],
+      treeData: [],
       conditionTextOptions: [
         {
           value: "text",
@@ -180,7 +178,8 @@ export default {
         conditionSymbol: "",
         conditionText: "",
         description: "",
-        fieldRule: 0
+        fieldRule: 0,
+        childTableKey: ''
       },
       conditionSymbol: [],
       menuType: 2,
@@ -193,6 +192,9 @@ export default {
         ],
         fullName: [
           { required: true, message: "字段说明不能为空", trigger: "blur" }
+        ],
+        childTableKey: [
+          { required: true, message: "关联字段不能为空", trigger: "blur" }
         ],
         type: [{ required: true, message: "请选择字段类型", trigger: "blur" }],
         conditionSymbol: [
@@ -214,7 +216,18 @@ export default {
       this.dataForm.moduleId = moduleId;
       this.conditionSymbol = [];
       this.visible = true;
-      this.formLoading = true;
+      this.formLoading = true
+      this.treeData = []
+      getVisualTables(moduleId, dataType).then(res => {
+        let data = []
+        for (const key in res.data.linkTables) {
+          data.push({
+            tableName: res.data.linkTables[key],
+            dbLink: res.data.linkId
+          })
+        }
+        this.treeData = data
+      })
       this.$nextTick(() => {
         this.$refs["dataForm"].resetFields();
         this.dataForm.bindTable = tableName;
@@ -230,8 +243,12 @@ export default {
         this.formLoading = false;
       });
     },
-    changeName(val) {
+    changeName(val, value) {
       this.dataForm.enCode = val
+      this.dataForm.bindTable = value.tableName
+      this.dataForm.type = value.dataType || ''
+      this.dataForm.fullName = value.fieldName || ''
+
     },
     onEnCodeChange(e) {
       let objVal;

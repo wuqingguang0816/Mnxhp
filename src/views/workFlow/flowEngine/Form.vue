@@ -37,6 +37,9 @@
                   v-for="item in categoryList" />
               </el-select>
             </el-form-item>
+            <el-form-item label="表单类型" prop="formType">
+              <el-input v-model="formType" maxlength="50" disabled></el-input>
+            </el-form-item>
             <el-form-item label="流程类型" prop="type">
               <el-select v-model="dataForm.type" placeholder="选择类型" @change="typeChange"
                 :disabled="!!dataForm.id || dataForm.formType !== 1">
@@ -58,9 +61,6 @@
                 </el-row>
               </el-form-item>
             </template>
-            <el-form-item label="表单类型" prop="formType">
-              <el-input v-model="formType" maxlength="50" disabled></el-input>
-            </el-form-item>
             <template v-if="dataForm.formType == 1">
               <el-form-item label="Web地址" prop="formUrl">
                 <el-input v-model="dataForm.formUrl" placeholder="Web地址">
@@ -70,6 +70,16 @@
               <!-- <el-form-item label="App地址" prop="appFormUrl">
                 <el-input v-model="dataForm.appFormUrl" placeholder="App地址" />
               </el-form-item> -->
+              <el-form-item label="数据连接">
+                <el-select v-model="dataForm.dbLinkId" placeholder="请选择数据库" @change="onDbChange"
+                  clearable>
+                  <el-option-group v-for="group in dbOptions" :key="group.fullName"
+                    :label="group.fullName">
+                    <el-option v-for="item in group.children" :key="item.id" :label="item.fullName"
+                      :value="item.id" />
+                  </el-option-group>
+                </el-select>
+              </el-form-item>
             </template>
             <el-form-item label="流程排序" prop="sortCode">
               <el-input-number :min="0" :max="999999" v-model="dataForm.sortCode"
@@ -258,6 +268,7 @@ export default {
             this.dataForm = res.data
             this.formType = this.dataForm.formType == 1 ? '系统表单' : '自定义表单'
             this.dataForm.flowTemplateJson && (this.flowTemplateJson = JSON.parse(this.dataForm.flowTemplateJson))
+            this.dataForm.dbLinkId = this.dataForm.dbLinkId || '0'
             this.dataForm.formData && (this.formData = JSON.parse(this.dataForm.formData))
             this.tables = this.dataForm.tables && JSON.parse(this.dataForm.tables) || []
             this.defaultTable = this.dataForm.tables && JSON.parse(this.dataForm.tables) || []

@@ -163,7 +163,7 @@ export default {
       }
       this.activeData.__config__.defaultValue = this.activeData.multiple ? [] : ''
       getDataInterfaceRes(val).then(res => {
-        let data = res.data.data
+        let data = res.data
         if (Array.isArray(data)) {
           this.activeData.__slot__.options = data
         } else {

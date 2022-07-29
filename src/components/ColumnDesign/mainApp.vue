@@ -351,7 +351,8 @@ export default {
       align: 'left',
       jnpfKey: o.__config__.jnpfKey,
       sortable: false,
-      width: null
+      width: null,
+      ...o
     }));
     this.searchOptions = searchOptions.map(o => ({
       label: o.__config__.label,
@@ -505,7 +506,7 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
-@import "./index.scss";
+@import './index.scss';
 
 .sriptEvents {
   >>> .el-form-item__label {

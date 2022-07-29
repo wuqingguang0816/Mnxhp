@@ -46,17 +46,16 @@
             </div>
           </el-row>
           <div class="JNPF-common-layout-main JNPF-flex-main">
-            <JNPF-table v-loading="listLoading" :data="list" :border="false" highlight-current-row
-              @row-click="rowClick" :hasNO="false">
+            <JNPF-table v-loading="listLoading" :data="list" :border="false" @row-click="rowClick"
+              :hasNO="false">
               <el-table-column width="35">
                 <template slot-scope="scope">
-                  <el-radio :label="scope.row.fullName" v-model="checked">&nbsp;</el-radio>
+                  <el-radio :label="scope.row.enCode" v-model="checked">&nbsp;</el-radio>
                 </template>
               </el-table-column>
               <el-table-column type="index" width="50" label="序号" align="center" />
               <el-table-column prop="fullName" label="业务名称" />
               <el-table-column prop="enCode" label="业务编码" />
-              <!-- <el-table-column prop="category" label="分类" width="150" /> -->
               <el-table-column prop="startNumber" label="流水起始" />
             </JNPF-table>
             <pagination :total="total" :page.sync="listQuery.currentPage"
@@ -78,20 +77,10 @@ import {
 } from '@/api/system/billRule'
 export default {
   props: {
-    dataType: {
-      default: ''
-    },
-    menuType: {
-      default: ''
-    },
     value: {
       default: ''
     },
     title: {
-      default: ''
-    },
-    moduleId: {
-      type: String,
       default: ''
     },
     clearable: {
@@ -129,7 +118,6 @@ export default {
       query: {
         categoryId: '',
         keyword: '',
-        dataType: null,
       },
       treeLoading: false,
       treeData: [],
@@ -155,8 +143,6 @@ export default {
       this.categoryId = this.treeData[0].id
       this.reset()
     })
-
-
   },
   methods: {
     initData() {
@@ -173,8 +159,6 @@ export default {
       }).catch(() => { this.listLoading = false })
     },
     handleNodeClick(data) {
-      // if (this.query.cate
-      this.categoryId = ''
       this.categoryId = data.id
       this.reset()
     },
@@ -192,30 +176,11 @@ export default {
       if (this.disabled) return
       this.checked = this.value
       this.visible = true
-      // this.treeLoading = true
-      // this.listLoading = true
-      // getVisualTables(this.moduleId, this.dataType).then(res => {
-      //   let data = []
-      //   for (const key in res.data.linkTables) {
-      //     data.push({
-      //       tableName: res.data.linkTables[key],
-      //       dblink: res.data.linkId
-      //     })
-      //     // console.log(res.data.linkTables[key])
-      //   }
-      //   // console.log(data)
-      //   this.treeData = data
-      //   if (!this.treeData.length) return this.treeLoading = false
-      //   this.$nextTick(() => {
-      //     this.tableName = this.treeData[0].tableName
-      //     this.linkId = this.treeData[0].dblink
-      //     this.reset()
-      //     this.treeLoading = false
-      //   })
-      // }).catch(() => {
-      //   this.treeLoading = false
-      // })
-
+      this.categoryId = ''
+      this.$nextTick(() => {
+        this.$refs.treeBox.setCurrentKey(null)
+        this.reset()
+      })
     },
     clear() {
       this.checked = ''
@@ -230,16 +195,9 @@ export default {
       this.visible = false
     },
     rowClick(row) {
-      this.checked = row.fullName
+      this.checked = row.enCode
       this.checkedRow = row
     }
   }
 }
 </script>
-<style lang="scss">
-.template-item {
-  line-height: 30px;
-}
-</style>
-
-

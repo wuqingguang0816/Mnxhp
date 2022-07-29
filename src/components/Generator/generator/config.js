@@ -974,7 +974,7 @@ export const selectComponents = [
     relationField: "fullName",
     popupType: "popover",
     popupTitle: "选择数据",
-    popupWidth: "700px",
+    popupWidth: "800px",
     disabled: false,
     clearable: true,
     multiple: false,
@@ -1002,6 +1002,9 @@ export const selectComponents = [
     "show-summary": false,
     addType: 0,
     addTableConf: {
+      popupTitle: '选择数据',
+      popupType: 'dialog',
+      popupWidth: '800px',
       interfaceId: '',
       interfaceName: '',
       templateJson: [],
@@ -1167,7 +1170,8 @@ export const selectComponents = [
       tableName: "",
       noShow: false,
       trigger: "change",
-      rule: ""
+      rule: "",
+      ruleName: "",
     },
     readonly: true,
     placeholder: "系统自动生成"

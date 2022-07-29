@@ -200,7 +200,7 @@ export default {
         return
       }
       getDataInterfaceRes(val).then(res => {
-        let data = res.data.data
+        let data = res.data
         if (Array.isArray(data)) {
           this.activeData.options = data
         } else {
@@ -223,7 +223,7 @@ export default {
   .node-operation {
     float: right;
   }
-  i[class*="el-icon"] + i[class*="el-icon"] {
+  i[class*='el-icon'] + i[class*='el-icon'] {
     margin-left: 6px;
   }
   .el-icon-plus {

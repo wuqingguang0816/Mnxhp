@@ -159,6 +159,16 @@
                         :popupWidth="item.popupWidth" :clearable="item.clearable"
                         :disabled="item.disabled" />
                     </template>
+                    <template v-else-if="item.jnpfKey==='popupTableSelect'">
+                      <popupTableSelect v-model="scope.row[item.prop]"
+                        :placeholder="item.placeholder" :interfaceId="item.interfaceId"
+                        :columnOptions="item.columnOptions" :propsValue="item.propsValue"
+                        :relationField="item.relationField" :hasPage="item.hasPage"
+                        :pageSize="item.pageSize" :popupType="item.popupType"
+                        :popupTitle="item.popupTitle" :popupWidth="item.popupWidth"
+                        :filterable="item.filterable" :multiple="item.multiple"
+                        :clearable="item.clearable" :disabled="item.disabled" />
+                    </template>
                     <template v-else-if="['comInput','textarea'].includes(item.jnpfKey)">
                       <el-input v-model="scope.row[item.prop]" :placeholder="item.placeholder"
                         :readonly="item.readonly" :prefix-icon="item['prefix-icon']"
@@ -189,14 +199,14 @@
             <template v-for="(item, i) in columnList">
               <template v-if="item.jnpfKey==='table'">
                 <el-table-column :prop="item.prop" :label="item.label" :align="item.align" :key="i">
-                  <el-table-column :prop="child.prop" :label="child.label" :align="child.align"
+                  <el-table-column :prop="child.prop" :label="child.childLabel" :align="child.align"
                     :width="child.width" :key="ii"
                     :sortable="child.sortable?'custom':child.sortable"
                     v-for="(child, ii) in item.children" class-name="child-table-box">
                     <template slot-scope="scope">
                       <child-table-column :data="scope.row[item.prop]" :head="item.children"
                         @toggleExpand="toggleExpand(scope.row,`${item.prop}Expand`)"
-                        :expand="scope.row[`${item.prop}Expand`]" />
+                        :expand="scope.row[`${item.prop}Expand`]" v-if="!ii" />
                     </template>
                   </el-table-column>
                 </el-table-column>
@@ -246,7 +256,7 @@
                     </template>
                     <template v-else-if="item.value=='remove'">
                       <el-button size="mini" type="text" :key="i" class="JNPF-table-delBtn"
-                        :disabled="config.webType == 3 && !!scope.row.flowState"
+                        :disabled="config.webType == 3 && [1,2,3,5].indexOf(scope.row.flowState)>-1"
                         @click="columnBtnsHandel(item.value,scope.row,scope.$index)">
                         {{item.label}}</el-button>
                     </template>
@@ -295,7 +305,7 @@
                     </template>
                     <template v-else-if="item.value=='remove'">
                       <el-button size="mini" type="text" :key="i" class="JNPF-table-delBtn"
-                        :disabled="config.webType == 3 && !!scope.row.flowState"
+                        :disabled="config.webType == 3 && [1,2,3,5].indexOf(scope.row.flowState)>-1"
                         @click="columnBtnsHandel(item.value,scope.row,scope.$index)"
                         v-has="'btn_'+item.value">{{item.label}}</el-button>
                     </template>
@@ -331,7 +341,7 @@
             </template>
           </el-table-column>
         </JNPF-table>
-        <template v-if="columnData.type !== 3 && columnData.hasPage">
+        <template v-if="columnData.type !== 3 && columnData.hasPage&&refreshTable">
           <pagination :total="total" :page.sync="listQuery.currentPage"
             :limit.sync="listQuery.pageSize" @pagination="initData" />
         </template>
@@ -345,7 +355,7 @@
       @superQuery="superQuery" />
     <candidate-form :visible.sync="candidateVisible" :candidateList="candidateList"
       :branchList="branchList" taskId="0" :formData="workFlowFormData"
-      @submitCandidate="submitCandidate" />
+      @submitCandidate="submitCandidate" :isCustomCopy="isCustomCopy" />
   </div>
 </template>
 
@@ -413,11 +423,13 @@ export default {
       columnBtnsList: [],
       customBtnsList: [],
       hasBatchBtn: false,
-      refreshTable: true,
+      refreshTable: false,
       multipleSelection: [],
       settingsColumnList: [],
       mergeList: [],
       expandObj: {},
+      flowTemplateJson: {},
+      isCustomCopy: false,
       candidateVisible: false,
       candidateType: 1,
       branchList: [],
@@ -437,6 +449,7 @@ export default {
   },
   methods: {
     async init() {
+      this.listLoading = true
       this.listQuery.menuId = this.$route.meta.modelId
       this.refreshTable = false
       if (!this.config.columnData || !this.config.formData) return
@@ -444,10 +457,11 @@ export default {
       if (this.columnData.type === 3) {
         this.columnData.columnList = this.columnData.columnList.filter(o => o.prop != this.columnData.groupField)
       }
+      if (this.config.webType == 3) {
+        this.flowTemplateJson = this.config.flowTemplateJson ? JSON.parse(this.config.flowTemplateJson) : {}
+        this.isCustomCopy = this.flowTemplateJson.properties && this.flowTemplateJson.properties.isCustomCopy
+      }
       this.hasBatchBtn = this.columnData.btnsList.some(o => o.value == 'batchRemove')
-      this.$nextTick(() => {
-        this.refreshTable = true
-      })
       this.formData = JSON.parse(this.config.formData)
       this.customBtnsList = this.columnData.customBtnsList || []
       this.columnBtnsList = this.columnData.columnBtnsList || []
@@ -457,6 +471,9 @@ export default {
       let res = await getColumnsByModuleId(this.listQuery.menuId)
       this.settingsColumnList = res.data || []
       this.getColumnList()
+      this.$nextTick(() => {
+        this.refreshTable = true
+      })
       if (this.columnData.type === 4) this.buildOptions()
       if (this.isPreview) return this.listLoading = false
       this.listQuery.pageSize = this.columnData.pageSize
@@ -522,7 +539,7 @@ export default {
       if (this.columnData.treeDataSource === "api") {
         if (!this.columnData.treePropsUrl) return
         getDataInterfaceRes(this.columnData.treePropsUrl).then(res => {
-          let data = res.data.data
+          let data = res.data
           if (Array.isArray(data)) {
             this.treeData = data
           } else {
@@ -568,8 +585,9 @@ export default {
           list.push(e)
         } else {
           let prop = e.prop.split('-')[0]
-          let label = e.label.split('-')[0]
           let vModel = e.prop.split('-')[1]
+          let label = e.label.split('-')[0]
+          let childLabel = e.label.split('-')[1]
           let newItem = {
             align: "center",
             jnpfKey: "table",
@@ -578,6 +596,7 @@ export default {
             children: []
           }
           e.vModel = vModel
+          e.childLabel = childLabel
           if (!this.expandObj.hasOwnProperty(`${prop}Expand`)) this.$set(this.expandObj, `${prop}Expand`, false)
           if (!list.some(o => o.prop === prop)) list.push(newItem)
           for (let i = 0; i < list.length; i++) {
@@ -712,6 +731,12 @@ export default {
           this.candidateList = res.data.list.filter(o => o.isCandidates)
           this.candidateVisible = true
         } else {
+          if (this.isCustomCopy) {
+            this.branchList = []
+            this.candidateList = []
+            this.candidateVisible = true
+            return
+          }
           this.$confirm('您确定要提交当前流程吗, 是否继续?', '提示', {
             type: 'warning'
           }).then(() => {
@@ -945,7 +970,7 @@ export default {
           if (config.dataType === 'dynamic') {
             if (!config.propsUrl) return
             getDataInterfaceRes(config.propsUrl).then(res => {
-              let data = res.data.data
+              let data = res.data
               if (Array.isArray(data)) {
                 isTreeSelect ? cur.options = data : cur.__slot__.options = data
               } else {
@@ -959,12 +984,3 @@ export default {
   }
 }
 </script>
-<style lang="scss" scoped>
->>> td.child-table-box {
-  padding: 0 !important;
-  vertical-align: top !important;
-  & > .cell {
-    padding: 0 !important;
-  }
-}
-</style>

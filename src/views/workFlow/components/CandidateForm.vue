@@ -2,7 +2,8 @@
   <el-dialog title="提交审核" :close-on-click-modal="false"
     class="JNPF-dialog JNPF-dialog_center form-script-dialog" lock-scroll append-to-body
     v-bind="$attrs" width="600px" :modal-append-to-body="false" v-on="$listeners" @open="onOpen">
-    <el-form label-width="130px" ref="candidateForm" :model="candidateForm">
+    <el-form ref="candidateForm" :model="candidateForm"
+      :label-width="candidateForm.candidateList.length||branchList.length?'130px':'80px'">
       <el-form-item label="分支选择" prop="branchList" v-if="branchList && branchList.length"
         :rules="[{ required: true, message: `分支不能为空`, trigger: 'change' }]">
         <el-select v-model="candidateForm.branchList" multiple placeholder="请选择审批分支" clearable
@@ -18,6 +19,9 @@
         <user-select v-model="item.value" multiple :placeholder="'请选择'+item.label" title="候选人员"
           v-else />
       </el-form-item>
+      <el-form-item label="抄送人员" v-if="isCustomCopy">
+        <user-select v-model="candidateForm.copyIds" placeholder="请选择" multiple />
+      </el-form-item>
     </el-form>
     <span slot="footer" class="dialog-footer">
       <el-button @click="closeDialog">{{$t('common.cancelButton')}}</el-button>
@@ -31,10 +35,11 @@
 import CandidateUserSelect from './CandidateUserSelect'
 export default {
   components: { CandidateUserSelect },
-  props: ['candidateList', 'branchList', 'taskId', 'formData'],
+  props: ['candidateList', 'branchList', 'taskId', 'formData', 'isCustomCopy'],
   data() {
     return {
       candidateForm: {
+        copyIds: [],
         branchList: [],
         candidateList: []
       }
@@ -85,7 +90,8 @@ export default {
           }
           this.$emit('submitCandidate', {
             candidateList,
-            branchList: this.candidateForm.branchList
+            branchList: this.candidateForm.branchList,
+            copyIds: this.candidateForm.copyIds.join(','),
           })
         }
       })

@@ -22,29 +22,28 @@
           <li>选择合适的签名方法</li>
           <li>根据对应的签名，构建待签名的字符串</li>
           <li>根据对应的签名算法和对应的appSecret，计算待签名字符串的 Hmac 签名</li>
-          <li>将签名按规定格式加入到 Header: Authorization中。通常使用: Authorization: &lt;SignVersion&gt;
-            &lt;KeyId&gt;:&lt;Scope&gt;:&lt;Signature&gt;</li>
+          <li>将签名按规定格式加入到 Header: Authorization中。
+            <p>通常使用: Authorization: &lt;SignVersion&gt;&lt;KeyId&gt;:&lt;Scope&gt;:&lt;Signature&gt;</p>
+          </li>
+          <p>本系统内最终以&lt;KeyId&gt;:&lt;Signature&gt;规则展示</p>
         </ol>
-
         <h4><a href="#签名方法" id="签名方法" name="签名方法" class="anchor"><span class="octicon octicon-link"></span>签名方法</a></h4>
         <p>为了使双方采用一致的算法计算签名，需要规定签名字符串的构建和签名算法，为了满足后续的签名算法升级，当前支持的签名方式为： HmacSHA256</p>
         <p>待签名字符串，请按照以下顺序构建</p>
         <ol>
-          <li>Http Method, 大写。例如 GET, POST。加上换行符 \n</li>
-          <li>URI Path。query params string 之前的部分。 加上换行符 \n</li>
           <li>
-            <p>规范化的 query params。加上换行符 \n<br>
-              具体格式如下:<br>
-              将 query string 分成 {name, value} 的列表形式。如果 name 对应多个 value, 则组成多个 (name, value) 对，其中
-              name 按照字典序进行排列，一个 name 对应多个 value ，同样 value
-              也按照字典序进行排列（示例为：name1=value1&amp;name2=value2&amp; ... nameX=valueX）。</p>
+            <p>Http Method, 大写。例如 GET, POST。加上换行符 \n</p>
           </li>
           <li>
-            <p>Header 中的 YmDate， RFC_1123，GMT 时区，例如（Thu, 3 Aug 2017 11:12:30 GMT）。加上换行符 \n</p>
+            <p>URI Path。query params string 之前的部分。 加上换行符 \n</p>
+          </li>
+          <li>
+            <p>Header 中的 YmDate， 以时间戳的形式，例如（2022-06-28 16:26:11=>1656404771000）。加上换行符 \n</p>
             <p>该时间将会用来判断请求有效性，限定一分钟之内有效。若无效返回验证超时。</p>
           </li>
-          <li>Header 中的 Host，为开发者自身的域名，加上换行符 \n</li>
-          <li>Header 中的 Content-Type，加上换行符 \n</li>
+          <li>
+            <p>Header 中的 Host，为开发者自身的域名，加上换行符 \n</p>
+          </li>
         </ol>
         <p>Header规范化方法如下:</p>
         <ol>
@@ -65,22 +64,17 @@
           <li>将待签名字符串，获取对应的 UTF-8 字节数组。</li>
           <li>使用签名算法对待签名字节数组计算 Hmac 签名。</li>
           <li>将签名结果变成 Hex 字符串。</li>
-          <li>将签名结果，按照 Authorization: &lt;SignVersion&gt;
-            &lt;KeyId&gt;:&lt;Scope&gt;:&lt;Signature&gt; 格式加入到 Header 中。</li>
+          <li>将签名结果，按照 Authorization: &lt;KeyId&gt;:&lt;Signature&gt; 格式加入到 Header 中。</li>
         </ol>
         <h4><a href="#签名示例" id="签名示例" name="签名示例" class="anchor"><span class="octicon octicon-link"></span>签名示例</a></h4>
         <p>针对 appId, appSecret (abcde, xxxxxxxxxxxxxxxxyyyyyyyyyyyyyyyy)</p>
-        <p>appId和appSecret为必传参数。可以添加为请求头参数（Header）</p>
-        <p>或者当GET请求时：请求路径参数Params。如:**/Response?appId=123&amp;appSecret=abc</p>
-        <p>或者当POST请求时：请求头body参数json格式如：{"appId":"123","appSecret":"abc"}</p>
-        <p>注意：当参数不是放在Header内，而是GET的路径参数或者POST的body参数时，签名字符串的参数字段必须添加相关参数信息。</p>
+        <p>appId和appSecret为必传参数。可以添加为请求头参数（Header）如：abcde:xxxxxxxxxxxxxxxxyyyyyyyyyyyyyyyy</p>
+        <p>其他参数：如果是GET请求，统一路径传参；如果是POST请求，统一Body-application/json传参。
         <h5><a href="#get-请求" id="get-请求" name="get-请求" class="anchor"><span class="octicon octicon-link"></span>GET 请求：</a></h5>
-        <p><em>GET
-            /dev/api/system/DataInterface/{id}/Actions/Response?tenantId=xxxxx&amp;name=abc<br>
-            Host : localhost:30000<br>
-            Accept : <em>/</em><br>
-            YmDate : Mon, 7 Aug 2017 08:00:50 GMT<br>
-            Content-Type:application/json</em></p>
+        <p><em>GET</em>
+          /dev/api/system/DataInterface/{id}/Actions/Response?tenantId=xxxxx&amp;name=abc<br>
+          Host : localhost:30000<br>
+          YmDate : 1656404771000<br>
         <p>按照规则生成的待签名字符串如下：</p>
         <table class="table table-bordered">
           <thead>
@@ -103,26 +97,19 @@
               <td> /dev/api/system/DataInterface/{id}/Actions/Response</td>
             </tr>
             <tr>
-              <td>规范化的 query params</td>
-              <td>tenantId=xxxxx&amp;name=abc</td>
-            </tr>
-            <tr>
               <td>YmDate</td>
-              <td>Mon, 7 Aug 2017 08:00:50 GMT</td>
+              <td>1656404771000</td>
             </tr>
             <tr>
               <td>Host</td>
               <td>localhost:30000</td>
             </tr>
             <tr>
-              <td>Content-Type</td>
-              <td>application/json</td>
-            </tr>
-            <tr>
               <td>最终待签名字符串</td>
               <td>以下 \n
-                表明换行<br>GET\n<br>/dev/api/system/DataInterface/{id}/Actions/Response\n<br>tenantId=xxxxx&amp;name=abc\n<br>Mon,
-                7 Aug 2017 08:00:50 GMT\n<br>localhost:30000\n<br>application/json\n</td>
+                表明换行<br>GET\n<br>/dev/api/system/DataInterface/{id}/Actions/Response\n<br>1656404771000\n
+                <br>localhost:30000\n<br>
+              </td>
             </tr>
             <tr>
               <td>最终计算的 Authorization header</td>
@@ -134,11 +121,7 @@
         <h5><a href="#post-请求" id="post-请求" name="post-请求" class="anchor"><span class="octicon octicon-link"></span>POST 请求：</a></h5>
         <p><em>POST /dev/api/system/DataInterface/{id}/Actions/Response<br>
             Host : localhost:30000<br>
-            Accept : <em>/</em><br>
-            User-Agent : AHC/2.0<br>
-            Content-Type : application/x-www-form-urlencoded<br>
-            YmDate : Mon, 7 Aug 2017 08:02:03 GMT<br>
-            Content-Length : 15<br>
+            YmDate : 1656404771000<br>
             body参数json格式如：{"tenantId":"123","name":"abc"}</em></p>
         <p>按照规则生成的待签名字符串如下：</p>
         <table class="table table-bordered">
@@ -162,25 +145,18 @@
               <td>/dev/api/system/DataInterface/{id}/Actions/Response</td>
             </tr>
             <tr>
-              <td>规范化的 query params</td>
-              <td>tenantId=123&amp;name=bac</td>
-            </tr>
-            <tr>
               <td>YmDate</td>
-              <td>Mon, 7 Aug 2017 08:02:03 GMT</td>
+              <td>1656404771000</td>
             </tr>
             <tr>
               <td>Host</td>
               <td>localhost:30000</td>
             </tr>
-            <tr>
-              <td>Content-Type</td>
-              <td>application/x-www-form-urlencoded</td>
-            </tr>
+
             <tr>
               <td>最终待签名字符串</td>
-              <td>以下 \n 表明换行<br>POST\n<br>/hmac/testPost\n<br>tenantId=123&amp;name=bac\n<br>Mon, 7
-                Aug 2017 08:02:03 GMT\n<br>localhost:30000\n<br>application/x-www-form-urlencoded\n
+              <td>以下 \n 表明换行<br>POST\n<br>/hmac/testPost\n<br>1656404771000\n
+                <br>localhost:30000\n<br>
               </td>
             </tr>
             <tr>
@@ -190,7 +166,7 @@
             </tr>
           </tbody>
         </table>
-        <h4><a href="#java版生成待签名字符串及authorization代码示例" id="java版生成待签名字符串及authorization代码示例" name="java版生成待签名字符串及authorization代码示例" class="anchor"><span class="octicon octicon-link"></span>(java版)生成待签名字符串及Authorization代码示例:</a></h4>
+        <h4><a href="#javaversion" id="javaversion" name="javaversion" class="anchor"><span class="octicon octicon-link"></span>(java版)生成待签名字符串及Authorization代码示例:</a></h4>
         <pre class=" language-java"><code class=" language-java"><span class="token keyword">import</span> org<span class="token punctuation">.</span>apache<span class="token punctuation">.</span>commons<span class="token punctuation">.</span>codec<span class="token punctuation">.</span>binary<span class="token punctuation">.</span>Base64<span class="token punctuation">;</span>
 <span class="token keyword">import</span> org<span class="token punctuation">.</span>apache<span class="token punctuation">.</span>commons<span class="token punctuation">.</span>codec<span class="token punctuation">.</span>binary<span class="token punctuation">.</span>Hex<span class="token punctuation">;</span>
 <span class="token keyword">import</span> javax<span class="token punctuation">.</span>crypto<span class="token punctuation">.</span>Mac<span class="token punctuation">;</span>
@@ -205,20 +181,49 @@
         String algorithmForMac <span class="token operator">=</span> <span class="token string">"HmacSHA256"</span><span class="token punctuation">;</span>
         String method <span class="token operator">=</span> <span class="token string">"POST"</span><span class="token punctuation">;</span>
         String urlPath <span class="token operator">=</span> <span class="token string">"/dev/api/system/DataInterface/{id}/Actions/Response"</span><span class="token punctuation">;</span>
-        String param <span class="token operator">=</span> <span class="token string">"tenantId=xxxxx&amp;name=abc"</span><span class="token punctuation">;</span>
-        String YmDate <span class="token operator">=</span> <span class="token string">"Wed, 18 Dec 2019 02:55:06 GMT"</span><span class="token punctuation">;</span>
+        String YmDate <span class="token operator">=</span> <span class="token string">"1656404771000"</span><span class="token punctuation">;</span>
         String host <span class="token operator">=</span> <span class="token string">"localhost:30000"</span><span class="token punctuation">;</span>
-        String contentType <span class="token operator">=</span> <span class="token string">"application/json"</span><span class="token punctuation">;</span>
-        String source <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">StringBuilder</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">append</span><span class="token punctuation">(</span>method<span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">append</span><span class="token punctuation">(</span><span class="token string">'\n'</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">append</span><span class="token punctuation">(</span>urlPath<span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">append</span><span class="token punctuation">(</span><span class="token string">'\n'</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">append</span><span class="token punctuation">(</span>param<span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">append</span><span class="token punctuation">(</span><span class="token string">'\n'</span><span class="token punctuation">)</span>
-                <span class="token punctuation">.</span><span class="token function">append</span><span class="token punctuation">(</span>YmDate<span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">append</span><span class="token punctuation">(</span><span class="token string">'\n'</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">append</span><span class="token punctuation">(</span>host<span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">append</span><span class="token punctuation">(</span><span class="token string">'\n'</span><span class="token punctuation">)</span>
-                <span class="token punctuation">.</span><span class="token function">append</span><span class="token punctuation">(</span>contentType<span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">append</span><span class="token punctuation">(</span><span class="token string">'\n'</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">append</span><span class="token punctuation">(</span><span class="token string">""</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">toString</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-        System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span>source<span class="token punctuation">)</span><span class="token punctuation">;</span>
-        System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"=================================="</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        String source <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">StringBuilder()</span>
+                      <span class="token punctuation">.</span><span class="token function">append</span>(method)<span class="token punctuation">.</span><span class="token function">append</span><span class="token punctuation">(</span><span class="token string">'\n'</span><span class="token punctuation">)</span>
+                      <span class="token punctuation">.</span><span class="token function">append</span>(url)<span class="token punctuation">.</span><span class="token function">append</span><span class="token punctuation">(</span><span class="token string">'\n'</span><span class="token punctuation">)</span>
+                      <span class="token punctuation">.</span><span class="token function">append</span>(ymdate)<span class="token punctuation">.</span><span class="token function">append</span><span class="token punctuation">(</span><span class="token string">'\n'</span><span class="token punctuation">)</span>
+                      <span class="token punctuation">.</span><span class="token function">append</span>(host)<span class="token punctuation">.</span><span class="token function">append</span><span class="token punctuation">(</span><span class="token string">'\n'</span><span class="token punctuation">)</span><span class="token punctuation">.toString();</span>
         Mac mac <span class="token operator">=</span> Mac<span class="token punctuation">.</span><span class="token function">getInstance</span><span class="token punctuation">(</span>algorithmForMac<span class="token punctuation">)</span><span class="token punctuation">;</span>
         SecretKeySpec secretKeySpec <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">SecretKeySpec</span><span class="token punctuation">(</span>Base64<span class="token punctuation">.</span><span class="token function">decodeBase64</span><span class="token punctuation">(</span>secret<span class="token punctuation">)</span><span class="token punctuation">,</span> algorithmForMac<span class="token punctuation">)</span><span class="token punctuation">;</span>
         mac<span class="token punctuation">.</span><span class="token function">init</span><span class="token punctuation">(</span>secretKeySpec<span class="token punctuation">)</span><span class="token punctuation">;</span>
         String signature <span class="token operator">=</span> Hex<span class="token punctuation">.</span><span class="token function">encodeHexString</span><span class="token punctuation">(</span>mac<span class="token punctuation">.</span><span class="token function">doFinal</span><span class="token punctuation">(</span>source<span class="token punctuation">.</span><span class="token function">getBytes</span><span class="token punctuation">(</span><span class="token string">"utf-8"</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
         System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span>signature<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</code></pre>
+        <h4><a href="#.netversion" id=".netversion" name=".netversion" class="anchor"><span class="octicon octicon-link"></span>(.net版)生成待签名字符串及Authorization代码示例:</a></h4>
+        <pre class=" language-java"><code class=" language-java"><span class="token keyword">using</span><span > System.Security.Cryptography;</span>
+<span class="token keyword">using</span><span> System.Text;</span>
+<span class="token keyword">using</span><span > JNPF.Common.Extension;</span>
+<span class="token keyword">namespace JNPF.Systems.System</span>
+<span class="token punctuation">{</span>
+    <span class="token keyword"> internal class Class1</span>
+    <span class="token punctuation">{</span>
+      <span class="token keyword"> static void Main(string[] args)</span>
+      <span class="token punctuation">{</span>
+        String secret <span class="token operator">=</span> <span class="token string">"xxxxxxxxxxxxxxxxyyyyyyyyyyyyyyyy"</span><span class="token punctuation">;</span>
+        String method <span class="token operator">=</span> <span class="token string">"POST"</span><span class="token punctuation">;</span>
+        String urlPath <span class="token operator">=</span> <span class="token string">"/dev/api/system/DataInterface/{id}/Actions/Response"</span><span class="token punctuation">;</span>
+        String YmDate <span class="token operator">=</span> <span class="token string">"1656404771000"</span><span class="token punctuation">;</span>
+        String host <span class="token operator">=</span> <span class="token string">"localhost:30000"</span><span class="token punctuation">;</span>
+        String source <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">StringBuilder()</span>
+                      <span class="token punctuation">.</span><span class="token function">Append</span>(method)<span class="token punctuation">.</span><span class="token function">Append</span><span class="token punctuation">(</span><span class="token string">'\n'</span><span class="token punctuation">)</span>
+                      <span class="token punctuation">.</span><span class="token function">Append</span>(url)<span class="token punctuation">.</span><span class="token function">Append</span><span class="token punctuation">(</span><span class="token string">'\n'</span><span class="token punctuation">)</span>
+                      <span class="token punctuation">.</span><span class="token function">Append</span>(ymdate)<span class="token punctuation">.</span><span class="token function">Append</span><span class="token punctuation">(</span><span class="token string">'\n'</span><span class="token punctuation">)</span>
+                      <span class="token punctuation">.</span><span class="token function">Append</span>(host)<span class="token punctuation">.</span><span class="token function">Append</span><span class="token punctuation">(</span><span class="token string">'\n'</span><span class="token punctuation">)</span><span class="token punctuation">.ToString();</span>
+        <span>using (var hmac = </span><span class="token keyword">new</span><span> HMACSHA256(secret.</span><span class="token function">ToBytes</span><span>(Encoding.UTF8)))</span>
+        <span class="token punctuation">{</span>
+          <span>byte[] hashmessage = hmac.</span><span class="token function">ComputeHash</span><span>(source.</span><span class="token function">ToBytes</span><span>(Encoding.UTF8));</span>
+          <span>var signature = hashmessage.</span><span class="token function">ToHexString</span><span>();</span>
+          <span>Console.</span><span class="token function">WriteLine</span><span>(signature);</span>
+          <span>Console.</span><span class="token function">ReadKey</span><span>();</span>
+        <span class="token punctuation">}</span>
+      <span class="token punctuation">}</span>
     <span class="token punctuation">}</span>
 <span class="token punctuation">}</span>
 </code></pre>

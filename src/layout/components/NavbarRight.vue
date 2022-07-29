@@ -173,7 +173,8 @@ export default {
           message: res.msg,
           type: 'success',
           duration: 1500,
-          onClose() {
+          onClose: () => {
+            this.$store.commit('user/SET_TOAST', false)
             location.reload()
           }
         })

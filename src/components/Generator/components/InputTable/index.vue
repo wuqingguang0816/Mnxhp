@@ -137,7 +137,7 @@ export default {
           if (config.dataType === 'dynamic') {
             if (!config.propsUrl) return
             getDataInterfaceRes(config.propsUrl).then(res => {
-              let realData = res.data.data
+              let realData = res.data
               if (Array.isArray(realData)) {
                 isTreeSelect ? cur.options = realData : cur.__slot__.options = realData
               } else {
@@ -596,7 +596,7 @@ export default {
       // vertical-align: top;
       &::after,
       &::before {
-        content: "";
+        content: '';
         width: 10px;
         height: 10px;
         background: white;

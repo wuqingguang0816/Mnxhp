@@ -3,7 +3,8 @@
     <parser :form-conf="formConf" @submit="submitForm" :key="key" ref="dynamicForm"
       v-if="!loading" />
     <candidate-form :visible.sync="candidateVisible" :candidateList="this.candidateList"
-      :branchList="branchList" @submitCandidate="selfHandleRequest" :formData="dataForm" />
+      :branchList="branchList" @submitCandidate="selfHandleRequest" :formData="dataForm"
+      :isCustomCopy="isCustomCopy" />
     <error-form :visible.sync="errorVisible" :nodeList="errorNodeList" @submit="handleError" />
   </div>
 </template>
@@ -18,12 +19,14 @@ export default {
   components: { Parser, CandidateForm, ErrorForm },
   data() {
     return {
+      setting: {},
       formData: {},
       loading: true,
       eventType: '',
       flowUrgent: 1,
       key: +new Date(),
       formConf: {},
+      isCustomCopy: false,
       candidateVisible: false,
       candidateList: [],
       candidateType: 1,
@@ -42,6 +45,7 @@ export default {
       this.setting = data
       this.formConf = data.formConf ? JSON.parse(data.formConf) : {}
       this.dataForm.id = data.id || ''
+      this.isCustomCopy = this.setting.flowTemplateJson && this.setting.flowTemplateJson.properties && this.setting.flowTemplateJson.properties.isCustomCopy
       this.loading = true
       this.$nextTick(() => {
         if (this.dataForm.id) {
@@ -107,7 +111,7 @@ export default {
           let item = list[i]
           if (item.__vModel__) {
             const val = data[item.__vModel__]
-            if (val !== undefined && !item.__config__.isSubTable) item.__config__.defaultValue = val
+            if (val !== null && val !== undefined && !item.__config__.isSubTable) item.__config__.defaultValue = val
             let noShow = false, isDisabled = false, required = false
             if (this.setting.formOperates && this.setting.formOperates.length) {
               let id = item.__config__.isSubTable ? parent.__vModel__ + '-' + item.__vModel__ : item.__vModel__
@@ -168,6 +172,12 @@ export default {
           this.candidateList = res.data.list.filter(o => o.isCandidates)
           this.candidateVisible = true
         } else {
+          if (this.isCustomCopy) {
+            this.branchList = []
+            this.candidateList = []
+            this.candidateVisible = true
+            return
+          }
           this.$confirm('您确定要提交当前流程吗, 是否继续?', '提示', {
             type: 'warning'
           }).then(() => {

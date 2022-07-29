@@ -33,6 +33,26 @@
     <el-form-item label="显示字段">
       <el-input v-model="activeData.relationField" placeholder="请输入显示字段" />
     </el-form-item>
+    <el-table :data="activeData.templateJson"
+      v-if="activeData.templateJson && activeData.templateJson.length">
+      <el-table-column type="index" width="50" label="序号" align="center" />
+      <el-table-column prop="field" label="参数名称">
+        <template slot-scope="scope">
+          <span class="required-sign">{{scope.row.required?'*':''}}</span>
+          {{scope.row.fieldName?scope.row.field+'('+scope.row.fieldName+')':scope.row.field}}
+        </template>
+      </el-table-column>
+      <el-table-column prop="value" label="表单字段">
+        <template slot-scope="scope">
+          <el-select v-model="scope.row.relationField" placeholder="请选择表单字段" clearable filterable
+            @change="onRelationFieldChange($event,scope.row)">
+            <el-option v-for="item in formFieldsOptions" :key="item.realVModel"
+              :label="item.realLabel" :value="item.realVModel">
+            </el-option>
+          </el-select>
+        </template>
+      </el-table-column>
+    </el-table>
     <el-divider>列表字段</el-divider>
     <draggable :list="activeData.columnOptions" :animation="340" group="selectItem"
       handle=".option-drag">
@@ -87,6 +107,8 @@
 import comMixin from './mixin';
 import draggable from 'vuedraggable'
 import { getDataInterfaceSelector } from '@/api/systemData/dataInterface'
+import { noAllowRelationList } from '@/components/Generator/generator/comConfig'
+import { getDrawingList } from '@/components/Generator/utils/db'
 export default {
   props: ['activeData'],
   mixins: [comMixin],
@@ -98,12 +120,54 @@ export default {
       dataInterfaceSelector: []
     }
   },
+  computed: {
+    formFieldsOptions() {
+      let list = []
+      const loop = (data, parent) => {
+        if (!data) return
+        if (data.__config__ && this.isIncludesTable(data) && data.__config__.children && Array.isArray(data.__config__.children)) {
+          loop(data.__config__.children, data)
+        }
+        if (Array.isArray(data)) data.forEach(d => loop(d, parent))
+        if (data.__vModel__ && !noAllowRelationList.includes(data.__config__.jnpfKey) && data.__vModel__ !== this.activeData.__vModel__) {
+          const isTableChild = parent && parent.__config__ && parent.__config__.jnpfKey === 'table'
+          list.push({
+            realVModel: isTableChild ? parent.__vModel__ + '-' + data.__vModel__ : data.__vModel__,
+            realLabel: isTableChild ? parent.__config__.label + '-' + data.__config__.label : data.__config__.label,
+            ...data
+          })
+        }
+      }
+      loop(getDrawingList())
+      return list
+    }
+  },
   created() {
     this.getDataInterfaceSelector()
   },
   methods: {
     multipleChange(val) {
       this.$set(this.activeData.__config__, 'defaultValue', val ? [] : '')
+    },
+    isIncludesTable(data) {
+      if (this.activeData.__config__.isSubTable) return this.activeData.__config__.parentVModel === data.__vModel__
+      return data.__config__.jnpfKey !== 'table'
+    },
+    onInterfaceIdChange(val, row) {
+      if (!val) {
+        this.activeData.templateJson = []
+        this.activeData.__config__.defaultValue = ''
+        return
+      }
+      this.activeData.templateJson = row.requestParameters ? JSON.parse(row.requestParameters) : []
+      this.activeData.__config__.defaultValue = ''
+    },
+    onRelationFieldChange(val, row) {
+      if (!val) return row.jnpfKey = ''
+      let list = this.formFieldsOptions.filter(o => o.__vModel__ === val)
+      if (!list.length) return row.jnpfKey = ''
+      let item = list[0]
+      row.jnpfKey = item.__config__.jnpfKey
     },
     getDataInterfaceSelector() {
       getDataInterfaceSelector().then(res => {

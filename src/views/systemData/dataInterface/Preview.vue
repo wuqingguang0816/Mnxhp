@@ -76,7 +76,8 @@ export default {
       this.formLoading = true
       this.responseData = ''
       this.$nextTick(() => {
-        this.url = `${this.define.comUrl}/api/system/DataInterface/${id}/Actions/Response` + (tenantId ? '?tenantId=' + tenantId : '')
+        const prefix = this.define.comUrl === '/dev' ? this.define.APIURl : ''
+        this.url = `${prefix}${this.define.comUrl}/api/system/DataInterface/${id}/Actions/Preview` + (tenantId ? '?tenantId=' + tenantId : '')
         previewDataInterface(this.id).then(res => {
           this.inputList = res.data
           this.formLoading = false

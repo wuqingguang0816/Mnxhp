@@ -30,8 +30,8 @@
           </div>
         </div>
         <JNPF-table v-loading="listLoading" :data="list">
-          <el-table-column prop="fullName" label="系统名称" min-width="200" />
-          <el-table-column prop="enCode" label="系统编码" min-width="200" />
+          <el-table-column prop="fullName" label="应用名称" min-width="200" />
+          <el-table-column prop="enCode" label="应用编码" min-width="200" />
           <el-table-column prop="icon" label="图标" width="50" align="center">
             <template slot-scope="scope">
               <i :class="scope.row.icon + ' table-icon'" />
