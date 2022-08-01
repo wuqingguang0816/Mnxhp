@@ -137,7 +137,7 @@ export default {
       return ''
     },
     replaceSysValue() {
-      const recordList = this.recordList.filter(o => o.handleStatus == 0 || o.handleStatus == 1)
+      const recordList = this.recordList
       const systemPrinter = this.userInfo.userName + '/' + this.userInfo.userAccount
       const systemPrintTime = this.jnpf.toDate(new Date())
       let systemApprovalContent = ''
