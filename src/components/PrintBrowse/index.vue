@@ -124,43 +124,17 @@ export default {
       }
     },
     getHandleName(handleStatus) {
-      let name = ""
-      switch (handleStatus) {
-        case "0":
-          name = "拒绝"
-          break;
-        case "1":
-          name = "通过"
-          break;
-        case "2":
-          name = "发起"
-          break;
-        case "3":
-          name = "撤回"
-          break;
-        case "4":
-          name = "终止"
-          break;
-        case "5":
-          name = "指派"
-          break;
-        case "6":
-          name = "加签"
-          break;
-        case "7":
-          name = "转审"
-          break;
-        case "8":
-          name = "变更"
-          break;
-        case "9":
-          name = "复活"
-          break;
-        default:
-          name = "通过"
-          break;
-      }
-      return name
+      if (handleStatus == 0) return "拒绝"
+      if (handleStatus == 1) return "通过"
+      if (handleStatus == 2) return "发起"
+      if (handleStatus == 3) return "撤回"
+      if (handleStatus == 4) return "终止"
+      if (handleStatus == 5) return "指派"
+      if (handleStatus == 6) return "加签"
+      if (handleStatus == 7) return "转审"
+      if (handleStatus == 8) return "变更"
+      if (handleStatus == 9) return "复活"
+      return ''
     },
     replaceSysValue() {
       const recordList = this.recordList.filter(o => o.handleStatus == 0 || o.handleStatus == 1)
