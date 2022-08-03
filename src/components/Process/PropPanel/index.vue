@@ -431,6 +431,22 @@
                 <org-select type="user" v-model="startForm.errorRuleUser" title="选择用户"
                   buttonType="button" v-if="startForm.errorRule===2" />
               </el-form-item>
+              <el-form-item label="签名设置">
+                <div slot="label">签名设置
+                  <el-tooltip content="发起人在进行流程撤回操作时需手写签名" placement="top">
+                    <a class="el-icon-warning-outline"></a>
+                  </el-tooltip>
+                </div>
+                <el-checkbox v-model="startForm.hasSign">手写签名</el-checkbox>
+              </el-form-item>
+              <el-form-item label="意见设置">
+                <div slot="label">意见设置
+                  <el-tooltip content="发起人在进行流程撤回操作需填写意见" placement="top">
+                    <a class="el-icon-warning-outline"></a>
+                  </el-tooltip>
+                </div>
+                <el-checkbox v-model="startForm.hasOpinion">意见填写</el-checkbox>
+              </el-form-item>
             </el-form>
             <el-form class="pd-10" style="margin-top:-30px">
               <el-form-item label="审核汇总">
@@ -1238,11 +1254,19 @@
               </el-form-item>
               <el-form-item label="签名设置">
                 <div slot="label">签名设置
-                  <el-tooltip content="审批人同意时需签名" placement="top">
+                  <el-tooltip content="审批人在进行审批操作时需手写签名" placement="top">
                     <a class="el-icon-warning-outline"></a>
                   </el-tooltip>
                 </div>
                 <el-checkbox v-model="approverForm.hasSign">手写签名</el-checkbox>
+              </el-form-item>
+              <el-form-item label="意见设置">
+                <div slot="label">意见设置
+                  <el-tooltip content="审批人在进行审批操作需填写审批意见" placement="top">
+                    <a class="el-icon-warning-outline"></a>
+                  </el-tooltip>
+                </div>
+                <el-checkbox v-model="approverForm.hasOpinion">意见填写</el-checkbox>
               </el-form-item>
               <el-form-item>
                 <div slot="label">加签设置
@@ -1982,6 +2006,7 @@ const defaultApproverForm = {
   printBtnText: '打 印',
   printId: '', // 打印模板
   hasSign: false,
+  hasOpinion: false,
   timeLimitConfig: {
     on: 2,  // 开启
     nodeLimit: 0, // 节点限定时长起始值类型
