@@ -519,13 +519,13 @@ export default {
           this.candidateType = data.type
           this.candidateLoading = false
           this.candidateForm.branchList = []
+          this.branchList = []
           if (data.type == 1) {
             this.branchList = res.data.list
             this.$nextTick(() => {
               this.$refs['candidateForm'].resetFields()
             })
           } else if (data.type == 2) {
-            this.branchList = []
             let list = res.data.list.filter(o => o.isCandidates)
             this.candidateForm.candidateList = list.map(o => ({
               ...o,
