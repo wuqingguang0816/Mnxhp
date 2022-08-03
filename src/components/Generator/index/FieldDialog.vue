@@ -135,9 +135,9 @@ export default {
       //  遍历数组，判断非空
       for (let i = 0; i < this.list.length; i++) {
         const e = this.list[i];
+        if (e.disabled) continue
         if (!e.field) {
           this.$message({
-            showClose: true,
             message: `第${i + 1}行列名不能为空`,
             type: 'error',
             duration: 1000
@@ -148,7 +148,6 @@ export default {
         let reg = /(^_([a-zA-Z0-9]_?)*$)|(^[a-zA-Z](_?[a-zA-Z0-9])*_?$)/
         if (!reg.test(e.field)) {
           this.$message({
-            showClose: true,
             message: `第${i + 1}行列名格式错误，请重新输入`,
             type: 'error',
             duration: 1000
@@ -159,7 +158,6 @@ export default {
         let num = this.list.filter(o => o.field == e.field)
         if (num.length > 1) {
           this.$message({
-            showClose: true,
             message: `第${i + 1}行列名'${e.field}'已重复`,
             type: 'error',
             duration: 1000
@@ -169,7 +167,6 @@ export default {
         }
         if (!e.fieldName) {
           this.$message({
-            showClose: true,
             message: `第${i + 1}行说明不能为空`,
             type: 'error',
             duration: 1000
