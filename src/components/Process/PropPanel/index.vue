@@ -422,9 +422,9 @@
                 </div>
                 <el-select v-model="startForm.errorRule" class="mb-10"
                   @change="startForm.errorRuleUser=[]">
-                  <el-option label="超级管理员处理" :value="1"></el-option>
-                  <el-option label="指定人员处理" :value="2"></el-option>
-                  <el-option label="上一节点审批人指定处理人" :value="3"></el-option>
+                  <el-option label="超级管理员" :value="1"></el-option>
+                  <el-option label="指定人员" :value="2"></el-option>
+                  <el-option label="上一节点审批人指定" :value="3"></el-option>
                   <el-option label="默认审批通过" :value="4"></el-option>
                   <el-option label="无法提交" :value="5"></el-option>
                 </el-select>
