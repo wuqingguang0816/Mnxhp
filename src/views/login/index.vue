@@ -23,58 +23,68 @@
           </template>
         </el-image>
         <img class="login-logo" src="@/assets/images/login_logo.png" alt="" v-else>
-        <div class="login-tab" :class="'active'+active">
-          <a class="item" :class="{'active': active==1}" @click="active=1">{{$t('login.title')}}</a>
-          <a class="item" :class="{'active': active==2}"
-            @click="active=2">{{$t('login.scanTitle')}}</a>
-        </div>
-        <el-form v-show="active==1" ref="loginForm" :model="loginForm" :rules="loginRules"
-          autocomplete="on" label-position="left">
-          <el-form-item prop="account">
-            <el-input ref="account" v-model="loginForm.account" :placeholder="$t('login.username')"
-              name="account" type="text" tabindex="1" autocomplete="on" prefix-icon="el-icon-user"
-              size="large" @change="getConfig"></el-input>
-          </el-form-item>
-          <el-tooltip v-model="capsTooltip" :content="$t('login.upper')" placement="right" manual>
-            <el-form-item prop="password">
-              <el-input ref="password" v-model="loginForm.password" show-password
-                :placeholder="$t('login.password')" name="password" tabindex="2" autocomplete="on"
-                @keyup.native="checkCapslock" @blur="capsTooltip = false" prefix-icon="el-icon-lock"
-                size="large"></el-input>
-              <!-- @keyup.enter.native="handleLogin" -->
+        <div v-show="!isSso && !ssoLoading">
+          <div class="login-tab" :class="'active'+active">
+            <a class="item" :class="{'active': active==1}"
+              @click="active=1">{{$t('login.title')}}</a>
+            <a class="item" :class="{'active': active==2}"
+              @click="active=2">{{$t('login.scanTitle')}}</a>
+          </div>
+          <el-form v-show="active==1" ref="loginForm" :model="loginForm" :rules="loginRules"
+            autocomplete="on" label-position="left">
+            <el-form-item prop="account">
+              <el-input ref="account" v-model="loginForm.account"
+                :placeholder="$t('login.username')" name="account" type="text" tabindex="1"
+                autocomplete="on" prefix-icon="el-icon-user" size="large" @change="getConfig">
+              </el-input>
             </el-form-item>
-          </el-tooltip>
-          <el-form-item prop="code" v-if="needCode">
-            <el-row type="flex" justify="space-between">
-              <el-col class="sms-input">
-                <el-input v-model="loginForm.code" :placeholder="$t('login.codeTip')" name="code"
-                  autocomplete="on" prefix-icon="el-icon-key" size="large">
-                </el-input>
-              </el-col>
-              <el-col class="sms-right code-right">
-                <el-tooltip :content="$t('login.changeCode')" placement="bottom">
-                  <img id="imgcode" :alt="$t('login.changeCode')" :src="define.comUrl+imgUrl"
-                    @click="changeImg">
-                </el-tooltip>
-              </el-col>
-            </el-row>
-          </el-form-item>
-          <el-button :loading="loading" type="primary" class="login-btn" size="large"
-            @click.native.prevent="handleLogin">{{ $t('login.logIn') }}</el-button>
-        </el-form>
-        <div v-show="active==2" class="login-form-QRCode">
-          <img class="qrcode-img" src="@/assets/images/login_qr.png">
-          <p class="qrcode-tip">正在测试,稍后上线</p>
+            <el-tooltip v-model="capsTooltip" :content="$t('login.upper')" placement="right" manual>
+              <el-form-item prop="password">
+                <el-input ref="password" v-model="loginForm.password" show-password
+                  :placeholder="$t('login.password')" name="password" tabindex="2" autocomplete="on"
+                  @keyup.native="checkCapslock" @blur="capsTooltip = false"
+                  prefix-icon="el-icon-lock" size="large"></el-input>
+                <!-- @keyup.enter.native="handleLogin" -->
+              </el-form-item>
+            </el-tooltip>
+            <el-form-item prop="code" v-if="needCode">
+              <el-row type="flex" justify="space-between">
+                <el-col class="sms-input">
+                  <el-input v-model="loginForm.code" :placeholder="$t('login.codeTip')" name="code"
+                    autocomplete="on" prefix-icon="el-icon-key" size="large">
+                  </el-input>
+                </el-col>
+                <el-col class="sms-right code-right">
+                  <el-tooltip :content="$t('login.changeCode')" placement="bottom">
+                    <img id="imgcode" :alt="$t('login.changeCode')" :src="define.comUrl+imgUrl"
+                      @click="changeImg">
+                  </el-tooltip>
+                </el-col>
+              </el-row>
+            </el-form-item>
+            <el-button :loading="loading" type="primary" class="login-btn" size="large"
+              @click.native.prevent="handleLogin">{{ $t('login.logIn') }}</el-button>
+          </el-form>
+          <div v-show="active==2" class="login-form-QRCode">
+            <img class="qrcode-img" src="@/assets/images/login_qr.png">
+            <p class="qrcode-tip">正在测试,稍后上线</p>
+          </div>
         </div>
+        <el-button type="primary" class="sso-login-btn" size="large"
+          @click.native.prevent="ssoLogin" v-show="isSso && !ssoLoading">单点登录</el-button>
       </div>
     </div>
+    <el-dialog :close-on-click-modal="false" :visible.sync="visible" destroy-on-close
+      class="JNPF-dialog JNPF-dialog_center JNPF-dialog-sso" lock-scroll width="1000px">
+      <iframe width="100%" height="100%" :src="ssoUrl" frameborder="0"></iframe>
+    </el-dialog>
     <!-- <div class="login-foot">Copyright 引迈信息技术有限公司, All Rights Reserved. 沪ICP备17044791号-1
       助力企业和团队快速实现目标</div> -->
   </div>
 </template>
 
 <script>
-import { getConfig } from '@/api/user'
+import { getConfig, getLoginConfig, getTicketStatus } from '@/api/user'
 export default {
   name: 'Login',
   data() {
@@ -105,6 +115,12 @@ export default {
       codeLength: 4,
       redirect: undefined,
       showTxt: false,
+      visible: false,
+      ssoLoading: true,
+      isSso: false,
+      ssoTicket: '',
+      ssoUrl: '',
+      ssoTimer: null,
       otherQuery: {},
       active: 1
     }
@@ -121,6 +137,9 @@ export default {
     loginLoading(val) {
       if (!val) this.loading = false
     },
+    visible(val) {
+      if (!val) this.clearTimer()
+    },
     $route: {
       handler: function (route) {
         const query = route.query
@@ -134,9 +153,10 @@ export default {
   },
   created() {
     const _this = this
+    this.getLoginConfig()
     document.onkeydown = function (e) {
       const { keyCode } = e
-      if (keyCode === 13) {
+      if (keyCode === 13 && !this.isSso) {
         _this.handleLogin()
       }
     }
@@ -154,6 +174,7 @@ export default {
       const { keyCode } = e
       if (keyCode === 13) { }
     }
+    this.clearTimer()
   },
   methods: {
     setShowTxt() {
@@ -212,6 +233,42 @@ export default {
         }
         return acc
       }, {})
+    },
+    ssoLogin() {
+      this.visible = true
+      setTimeout(() => {
+        this.ssoTimer = setInterval(() => {
+          this.getTicketStatus()
+        }, 1000);
+      }, 1000);
+    },
+    getLoginConfig() {
+      this.ssoLoading = true
+      getLoginConfig().then(res => {
+        this.isSso = res.data.redirect
+        this.ssoTicket = res.data.ticket
+        this.ssoUrl = res.data.url
+        this.ssoLoading = false
+      }).catch(() => {
+        this.isSso = false
+        this.ssoLoading = false
+      })
+    },
+    getTicketStatus() {
+      getTicketStatus(this.ssoTicket).then(res => {
+        console.log(res);
+        if (res.data.status != 2) this.clearTimer()
+        // 登录成功
+        if (res.data.status == 1) {
+
+        }
+      })
+    },
+    clearTimer() {
+      if (this.ssoTimer) {
+        clearInterval(this.ssoTimer)
+        this.ssoTimer = null
+      }
     }
   }
 }

@@ -117,6 +117,12 @@
       margin-bottom: 26px;
       color: #666666;
     }
+
+    .sso-login-btn {
+      width: 100%;
+      font-size: 16px;
+      margin-top: 100px;
+    }
   }
 
   .login-form {
@@ -272,5 +278,13 @@
     left: 31%;
     text-align: left;
     margin-left: 110px;
+  }
+}
+
+.JNPF-dialog-sso {
+  >>>.el-dialog__body {
+    padding: 0 !important;
+    height: 600px !important;
+    overflow: hidden !important;
   }
 }

@@ -44,3 +44,19 @@ export function getConfig(account) {
     method: 'get'
   })
 }
+
+// 获取登陆配置
+export function getLoginConfig() {
+  return request({
+    url: `/api/oauth/getLoginConfig`,
+    method: 'get'
+  })
+}
+
+// 轮询获取登陆状态
+export function getTicketStatus(ticket) {
+  return request({
+    url: `/api/oauth/getTicketStatus/${ticket}`,
+    method: 'get'
+  })
+}
