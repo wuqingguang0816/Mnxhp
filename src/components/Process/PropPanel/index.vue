@@ -2428,7 +2428,10 @@ export default {
         id: 'jnpfLaunchTime',
         value: 'jnpfLaunchTime(发起时间)'
       }]
-      const params = this.usedFormItems.map(o => ({ id: o.__vModel__, value: o.__vModel__ + "(" + o.__config__.label + ")" }))
+      let items = []
+      items = this.usedFormItems.filter(o => o.__config__.jnpfKey === 'comInput' || o.__config__.jnpfKey === 'textarea' || o.__config__.jnpfKey === 'numInput')
+      const params = items.map(o => ({ id: o.__vModel__, value: o.__vModel__ + "(" + o.__config__.label + ")" }))
+
       cb([...systemParams, ...params]);
     },
     getFormOperates() {
