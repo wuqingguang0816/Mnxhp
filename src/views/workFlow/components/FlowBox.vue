@@ -129,10 +129,12 @@
               <user-select v-model="handleId" placeholder="请选择加签人员,不选即该节点审核结束" />
             </el-form-item>
           </template>
-          <el-form-item label="审批意见">
-            <el-input v-model="reason" placeholder="请输入审批意见（选填）" type="textarea" :rows="4" />
+          <el-form-item label="审批意见" v-if="properties.hasOpinion" prop="handleOpinion"
+            :rules="[{ required: true, message: '请输入审批意见',trigger: 'blur'}]">
+            <el-input v-model="candidateForm.handleOpinion" placeholder="请输入审批意见" type="textarea"
+              :rows="4" />
           </el-form-item>
-          <el-form-item label="审批签名" v-if="properties.hasSign">
+          <el-form-item label="审批签名" required v-if="properties.hasSign">
             <div class="sign-main">
               <div class="sign-head">
                 <div class="sign-tip">请在这里输入你的签名</div>
@@ -203,13 +205,13 @@
           </el-button>
         </span>
       </el-dialog>
-      <UserBox v-if="userBoxVisible" ref="userBox" :title="userBoxTitle" @submit="handleTransfer" />
       <print-browse :visible.sync="printBrowseVisible" :id="properties.printId" :formId="setting.id"
         :fullName="setting.fullName" />
       <candidate-form :visible.sync="candidateVisible" :candidateList="candidateList"
         :branchList="branchList" :taskId="setting.taskId" :formData="formData"
         @submitCandidate="submitCandidate" :isCustomCopy="properties.isCustomCopy" />
       <error-form :visible.sync="errorVisible" :nodeList="errorNodeList" @submit="handleError" />
+      <actionDialog v-if="actionVisible" ref="actionDialog" title="审批人" @submit="handleRecall" />
     </div>
   </transition>
 </template>
@@ -228,18 +230,18 @@ import CandidateUserSelect from './CandidateUserSelect'
 import Process from '@/components/Process/Preview'
 import PrintBrowse from '@/components/PrintBrowse'
 import vueEsign from 'vue-esign'
+import ActionDialog from '@/views/workFlow/components/ActionDialog'
 export default {
-  components: { recordList, Process, vueEsign, PrintBrowse, Comment, RecordSummary, CandidateForm, CandidateUserSelect, ErrorForm },
+  components: { recordList, Process, vueEsign, PrintBrowse, Comment, RecordSummary, CandidateForm, CandidateUserSelect, ErrorForm, ActionDialog },
   data() {
     return {
-      userBoxVisible: false,
-      userBoxTitle: '审批人',
       assignVisible: false,
       resurgenceVisible: false,
       assignForm: {
         nodeCode: '',
         freeApproverUserId: ''
       },
+      actionVisible: false,
       resurgenceForm: {
         nodeCode: '',
         handleOpinion: '',
@@ -275,7 +277,6 @@ export default {
       properties: {},
       endTime: 0,
       visible: false,
-      reason: '',
       handleId: '',
       activeTab: '0',
       isComment: false,
@@ -292,7 +293,8 @@ export default {
       candidateList: [],
       candidateForm: {
         branchList: [],
-        candidateList: []
+        candidateList: [],
+        handleOpinion: ''
       },
       printBrowseVisible: false,
       eventType: '',
@@ -509,10 +511,21 @@ export default {
       }
       if (eventType === 'audit' || eventType === 'reject') {
         this.handleId = ''
-        this.reason = ''
+        this.candidateForm.handleOpinion = ''
         this.copyIds = []
         this.handleReset()
-        if (eventType === 'reject') return this.visible = true
+        if (eventType === 'reject') {
+          if (!this.properties.hasSign && !this.properties.hasOpinion) {
+            this.$confirm('此操作将驳回该审批单，是否继续？', '提示', {
+              type: 'warning'
+            }).then(() => {
+              this.handleApproval('', true)
+            }).catch(() => { });
+            return
+          }
+          this.visible = true
+          return
+        }
         this.candidateLoading = true
         Candidates(this.setting.taskId, { formData: this.formData }).then(res => {
           let data = res.data
@@ -525,6 +538,7 @@ export default {
             this.$nextTick(() => {
               this.$refs['candidateForm'].resetFields()
             })
+            this.visible = true
           } else if (data.type == 2) {
             let list = res.data.list.filter(o => o.isCandidates)
             this.candidateForm.candidateList = list.map(o => ({
@@ -536,15 +550,25 @@ export default {
             this.$nextTick(() => {
               this.$refs['candidateForm'].resetFields()
             })
+            this.visible = true
           } else {
             this.candidateForm.candidateList = []
+            if (!this.properties.hasSign && !this.properties.hasOpinion && !this.properties.hasFreeApprover && !this.properties.isCustomCopy) {
+              this.$confirm('此操作将通过该审批单，是否继续？', '提示', {
+                type: 'warning'
+              }).then(() => {
+                this.handleApproval('', true)
+              }).catch(() => { });
+              return
+            }
+            this.visible = true
           }
-          this.visible = true
         }).catch(() => {
           this.candidateLoading = false
         })
       }
     },
+
     onBranchChange(val) {
       if (!val.length) return this.candidateForm.candidateList = []
       let list = []
@@ -659,25 +683,57 @@ export default {
       this.handleRequest(data)
     },
     revoke() {
-      this.$prompt('', "撤回流程", {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        inputPlaceholder: '请输入撤回原因（选填）',
-        inputType: 'textarea',
-        inputValue: "",
-        closeOnClickModal: false
-      }).then(({ value }) => {
-        Revoke(this.setting.id, { handleOpinion: value }).then(res => {
-          this.$message({
-            type: 'success',
-            message: res.msg,
-            duration: 1000,
-            onClose: () => {
-              this.$emit('close', true)
-            }
-          })
+      this.eventType = 'revoke'
+      this.showDialog()
+    },
+    recall() {
+      this.eventType = 'recall'
+      this.showDialog()
+    },
+    openUserBox(type) {
+      this.eventType = 'transfer'
+      this.actionVisible = true
+      this.$nextTick(() => {
+        this.$refs.actionDialog.init(this.properties, this.eventType)
+      })
+    },
+    showDialog() {
+      if (!this.properties.hasOpinion) {
+        const title = this.eventType == 'revoke' ? '此操作将撤回该流程，是否继续？' : '此操作将撤回该审批单，是否继续？'
+        this.$confirm(title, '提示', {
+          type: 'warning'
+        }).then(() => {
+          this.handleRecall()
+        }).catch(() => { });
+        return
+      }
+      this.actionVisible = true
+      this.$nextTick(() => {
+        this.$refs.actionDialog.init(this.properties, this.eventType)
+      })
+    },
+    handleRecall(query) {
+      if (!query) {
+        query = {
+          handleOpinion: '',
+          freeApproverUserId: '',
+          signImg: '',
+        }
+      }
+      const id = this.eventType == 'recall' || this.eventType == 'transfer' ? this.setting.taskId : this.setting.id
+      const formMethod = this.eventType == 'revoke' ? Revoke : this.eventType == 'transfer' ? Transfer : Recall
+      this.approvalBtnLoading = true
+      formMethod(id, query).then(res => {
+        this.approvalBtnLoading = false
+        this.$message({
+          type: 'success',
+          message: res.msg,
+          duration: 1000,
+          onClose: () => {
+            this.$emit('close', true)
+          }
         })
-      }).catch(() => { })
+      }).catch(() => { this.approvalBtnLoading = false })
     },
     press() {
       this.$confirm('此操作将提示该节点尽快处理，是否继续?', '提示', {
@@ -688,27 +744,6 @@ export default {
             type: 'success',
             message: res.msg,
             duration: 1000
-          })
-        })
-      }).catch(() => { })
-    },
-    recall() {
-      this.$prompt('', "撤回审核", {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        inputPlaceholder: '请输入撤回原因（选填）',
-        inputType: 'textarea',
-        inputValue: "",
-        closeOnClickModal: false
-      }).then(({ value }) => {
-        Recall(this.setting.taskId, { handleOpinion: value }).then(res => {
-          this.$message({
-            type: 'success',
-            message: res.msg,
-            duration: 1000,
-            onClose: () => {
-              this.$emit('close', true)
-            }
           })
         })
       }).catch(() => { })
@@ -733,24 +768,6 @@ export default {
           })
         })
       }).catch(() => { })
-    },
-    openUserBox(type) {
-      this.userBoxVisible = true
-      this.$nextTick(() => {
-        this.$refs.userBox.init()
-      })
-    },
-    handleTransfer(freeApproverUserId) {
-      Transfer(this.setting.taskId, { freeApproverUserId }).then(res => {
-        this.$message({
-          type: 'success',
-          message: res.msg,
-          duration: 1000,
-          onClose: () => {
-            this.$emit('close', true)
-          }
-        })
-      })
     },
     openAssignBox() {
       this.assignVisible = true
@@ -788,58 +805,62 @@ export default {
         })
       })
     },
-    handleApproval(errorRuleUserList) {
+    handleApproval(errorRuleUserList, isValidate) {
+      const handleRequest = () => {
+        if (this.properties.hasSign && !this.signImg) {
+          this.$message({
+            message: '请签名',
+            type: 'error'
+          })
+          return
+        }
+        let query = {
+          handleOpinion: this.candidateForm.handleOpinion,
+          formData: this.formData,
+          enCode: this.setting.enCode,
+          signImg: this.signImg,
+          copyIds: this.copyIds.join(','),
+          branchList: this.candidateForm.branchList,
+          candidateType: this.candidateType
+        }
+        if (errorRuleUserList) query.errorRuleUserList = errorRuleUserList
+        if (this.candidateForm.candidateList.length) {
+          let candidateList = {}
+          for (let i = 0; i < this.candidateForm.candidateList.length; i++) {
+            candidateList[this.candidateForm.candidateList[i].nodeId] = this.candidateForm.candidateList[i].value
+          }
+          query.candidateList = candidateList
+        }
+        if (this.eventType === 'audit' && this.properties.hasFreeApprover) {
+          query = { freeApproverUserId: this.handleId, ...query }
+        }
+        const approvalMethod = this.eventType === 'audit' ? Audit : Reject
+        this.approvalBtnLoading = true
+        approvalMethod(this.setting.taskId, query).then(res => {
+          const errorData = res.data
+          if (errorData && Array.isArray(errorData) && errorData.length) {
+            this.errorNodeList = errorData
+            this.errorVisible = true
+            this.approvalBtnLoading = false
+          } else {
+            this.$message({
+              type: 'success',
+              message: res.msg,
+              duration: 1000,
+              onClose: () => {
+                this.approvalBtnLoading = false
+                this.visible = false
+                this.errorVisible = false
+                this.$emit('close', true)
+              }
+            })
+          }
+        }).catch(() => { this.approvalBtnLoading = false })
+      }
+      if (isValidate) return handleRequest()
       this.$refs['candidateForm'].validate((valid) => {
         if (valid) {
-          if (this.properties.hasSign && !this.signImg) {
-            this.$message({
-              message: '请签名',
-              type: 'error'
-            })
-            return
-          }
-          let query = {
-            handleOpinion: this.reason,
-            formData: this.formData,
-            enCode: this.setting.enCode,
-            signImg: this.signImg,
-            copyIds: this.copyIds.join(','),
-            branchList: this.candidateForm.branchList,
-            candidateType: this.candidateType
-          }
-          if (errorRuleUserList) query.errorRuleUserList = errorRuleUserList
-          if (this.candidateForm.candidateList.length) {
-            let candidateList = {}
-            for (let i = 0; i < this.candidateForm.candidateList.length; i++) {
-              candidateList[this.candidateForm.candidateList[i].nodeId] = this.candidateForm.candidateList[i].value
-            }
-            query.candidateList = candidateList
-          }
-          if (this.eventType === 'audit' && this.properties.hasFreeApprover) {
-            query = { freeApproverUserId: this.handleId, ...query }
-          }
-          const approvalMethod = this.eventType === 'audit' ? Audit : Reject
-          this.approvalBtnLoading = true
-          approvalMethod(this.setting.taskId, query).then(res => {
-            const errorData = res.data
-            if (errorData && Array.isArray(errorData) && errorData.length) {
-              this.errorNodeList = errorData
-              this.errorVisible = true
-              this.approvalBtnLoading = false
-            } else {
-              this.$message({
-                type: 'success',
-                message: res.msg,
-                duration: 1000,
-                onClose: () => {
-                  this.approvalBtnLoading = false
-                  this.visible = false
-                  this.errorVisible = false
-                  this.$emit('close', true)
-                }
-              })
-            }
-          }).catch(() => { this.approvalBtnLoading = false })
+          handleRequest()
         }
       })
     },
@@ -853,7 +874,7 @@ export default {
       this.$refs.esign.generate().then(res => {
         if (res) this.signImg = res
       }).catch(err => {
-        this.$message({
+        this.$({
           message: '请签名',
           type: 'warning'
         })
