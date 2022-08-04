@@ -396,7 +396,7 @@
                     placeholder="请选择打印模板" lastLevel clearable></JNPF-TreeSelect>
                 </div>
               </el-form-item>
-              <el-form-item label="标题设置">
+              <el-form-item label="标题设置" style="margin-top:-10px">
                 <el-radio-group v-model="startForm.titleType">
                   <el-radio :label="0">默认</el-radio>
                   <el-radio :label="1">自定义</el-radio>
@@ -431,43 +431,54 @@
                 <org-select type="user" v-model="startForm.errorRuleUser" title="选择用户"
                   buttonType="button" v-if="startForm.errorRule===2" />
               </el-form-item>
-              <el-form-item label="签名设置">
-                <div slot="label">签名设置
+            </el-form>
+            <el-form class="pd-10" style="margin-top:-30px" label-width="90px"
+              label-position="left">
+              <el-form-item>
+                <div slot="label">手写签名
                   <el-tooltip content="发起人在进行流程撤回操作时需手写签名" placement="top">
                     <a class="el-icon-warning-outline"></a>
                   </el-tooltip>
                 </div>
-                <el-checkbox v-model="startForm.hasSign">手写签名</el-checkbox>
+                <el-switch v-model="startForm.hasSign" />
               </el-form-item>
-              <el-form-item label="意见设置">
-                <div slot="label">意见设置
+              <el-form-item>
+                <div slot="label">意见填写
                   <el-tooltip content="发起人在进行流程撤回操作需填写意见" placement="top">
                     <a class="el-icon-warning-outline"></a>
                   </el-tooltip>
                 </div>
-                <el-checkbox v-model="startForm.hasOpinion">意见填写</el-checkbox>
+                <el-switch v-model="startForm.hasOpinion" />
               </el-form-item>
-            </el-form>
-            <el-form class="pd-10" style="margin-top:-30px">
-              <el-form-item label="审核汇总">
-                <el-switch v-model="startForm.isSummary" />
-                <div class="option-box-tip" v-if="!startForm.isSummary">*打开审核汇总后，流程流转记录会按部门及岗位进行汇总展示
+              <el-form-item>
+                <div slot="label">审核汇总
+                  <el-tooltip content="流程流转记录会按部门及岗位进行汇总展示" placement="top">
+                    <a class="el-icon-warning-outline"></a>
+                  </el-tooltip>
                 </div>
+                <el-switch v-model="startForm.isSummary" />
               </el-form-item>
-              <el-form-item label="汇总设置" v-if="startForm.isSummary">
+              <el-form-item label="汇总设置" v-if="startForm.isSummary" style="margin-top:-18px">
                 <el-select v-model="startForm.summaryType" placeholder="请选择">
                   <el-option label="汇总全部流转记录" :value="0"></el-option>
                   <el-option label="汇总通过及拒绝流转记录" :value="1"></el-option>
                 </el-select>
-                <div class="option-box-tip">*打开审核汇总后，流程流转记录会按部门及岗位进行汇总展示</div>
               </el-form-item>
               <el-form-item label="流程评论">
+                <div slot="label">流程评论
+                  <el-tooltip content="流程内涉及的用户均可进行意见评论" placement="top">
+                    <a class="el-icon-warning-outline"></a>
+                  </el-tooltip>
+                </div>
                 <el-switch v-model="startForm.isComment" />
-                <div class="option-box-tip">*打开流程评论后，流程内涉及的用户均可进行意见评论</div>
               </el-form-item>
               <el-form-item label="批量审批">
+                <div slot="label">批量审批
+                  <el-tooltip content="流程待审批工单可进行批量操作" placement="top">
+                    <a class="el-icon-warning-outline"></a>
+                  </el-tooltip>
+                </div>
                 <el-switch v-model="startForm.isBatchApproval" />
-                <div class="option-box-tip">*打开批量审批后，该流程待审批工单可进行批量操作</div>
               </el-form-item>
             </el-form>
           </el-scrollbar>
@@ -980,11 +991,16 @@
                 </el-row>
                 <el-row>超时事务</el-row>
                 <el-row>
-                  <el-checkbox v-model="startForm.overTimeConfig.overNotice">超时通知</el-checkbox>
+                  <el-checkbox v-model="startForm.overTimeConfig.overNotice">超时通知
+                    <el-tooltip content="勾选后才能进行超时消息发送（站内信系统默认发送，第三方超时消息需在流程通知内配置）" placement="top">
+                      <a class="el-icon-warning-outline"></a>
+                    </el-tooltip>
+                  </el-checkbox>
                 </el-row>
                 <el-row>
-                  <el-checkbox v-model="startForm.overTimeConfig.overAutoApprove">超时自动审批<el-tooltip
-                      content="当前审批节点表单必填字段为空会使工单流转失败，下一审批节点设置候选人员、选择分支时当前审批节点规则失效" placement="top">
+                  <el-checkbox v-model="startForm.overTimeConfig.overAutoApprove">超时自动审批
+                    <el-tooltip content="当前审批节点表单必填字段为空会使工单流转失败，下一审批节点设置候选人员、选择分支时当前审批节点规则失效"
+                      placement="top">
                       <a class="el-icon-warning-outline"></a>
                     </el-tooltip>
                   </el-checkbox>
@@ -1039,7 +1055,11 @@
                 </el-row>
                 <el-row>提醒事务</el-row>
                 <el-row>
-                  <el-checkbox v-model="startForm.noticeConfig.overNotice">提醒通知</el-checkbox>
+                  <el-checkbox v-model="startForm.noticeConfig.overNotice">提醒通知
+                    <el-tooltip content="勾选后才能进行提醒消息发送（站内信系统默认发送，第三方超时消息需在流程通知内配置）" placement="top">
+                      <a class="el-icon-warning-outline"></a>
+                    </el-tooltip>
+                  </el-checkbox>
                 </el-row>
                 <el-row>
                   <el-checkbox v-model="startForm.noticeConfig.overEvent">提醒事件
@@ -1238,7 +1258,7 @@
                     placeholder="请选择打印模板" lastLevel clearable></JNPF-TreeSelect>
                 </div>
               </el-form-item>
-              <el-form-item label="自动同意">
+              <el-form-item label="自动同意" style="margin-top:-10px">
                 <div slot="label">自动同意
                   <el-tooltip content="当前审批节点表单必填字段为空会使工单流转失败，下一审批节点设置候选人员、选择分支时当前审批节点规则失效"
                     placement="top">
@@ -1252,30 +1272,36 @@
                   <el-option label="审批人审批过" :value="4"></el-option>
                 </el-select>
               </el-form-item>
-              <el-form-item label="签名设置">
-                <div slot="label">签名设置
+            </el-form>
+            <el-form class="pd-10" style="margin-top:-20px" label-width="90px"
+              label-position="left">
+              <el-form-item>
+                <div slot="label">手写签名
                   <el-tooltip content="审批人在进行审批操作时需手写签名" placement="top">
                     <a class="el-icon-warning-outline"></a>
                   </el-tooltip>
                 </div>
-                <el-checkbox v-model="approverForm.hasSign">手写签名</el-checkbox>
+                <el-switch v-model="approverForm.hasSign" />
               </el-form-item>
-              <el-form-item label="意见设置">
-                <div slot="label">意见设置
+              <el-form-item>
+                <div slot="label">意见填写
                   <el-tooltip content="审批人在进行审批操作需填写审批意见" placement="top">
                     <a class="el-icon-warning-outline"></a>
                   </el-tooltip>
                 </div>
-                <el-checkbox v-model="approverForm.hasOpinion">意见填写</el-checkbox>
+                <el-switch v-model="approverForm.hasOpinion" />
               </el-form-item>
               <el-form-item>
-                <div slot="label">加签设置
+                <div slot="label">允许加签
                   <el-tooltip content="允许在审批单中增加临时审批人" placement="top">
                     <a class="el-icon-warning-outline"></a>
                   </el-tooltip>
                 </div>
-                <el-checkbox v-model="approverForm.hasFreeApprover">允许加签</el-checkbox>
+                <el-switch v-model="approverForm.hasFreeApprover" />
               </el-form-item>
+            </el-form>
+            <el-form class="pd-10" style="margin-top:-20px" label-width="90px"
+              label-position="left">
               <el-form-item label="说明">
                 <el-input v-model="approverForm.description" type="textarea" :rows="3"></el-input>
               </el-form-item>
@@ -1794,7 +1820,11 @@
                 </el-row>
                 <el-row>超时事务</el-row>
                 <el-row>
-                  <el-checkbox v-model="approverForm.overTimeConfig.overNotice">超时通知</el-checkbox>
+                  <el-checkbox v-model="approverForm.overTimeConfig.overNotice">超时通知
+                    <el-tooltip content="勾选后才能进行超时消息发送（站内信系统默认发送，第三方超时消息需在节点通知内配置）" placement="top">
+                      <a class="el-icon-warning-outline"></a>
+                    </el-tooltip>
+                  </el-checkbox>
                 </el-row>
                 <el-row>
                   <el-checkbox v-model="approverForm.overTimeConfig.overAutoApprove">超时自动审批
@@ -1855,7 +1885,11 @@
                 </el-row>
                 <el-row>提醒事务</el-row>
                 <el-row>
-                  <el-checkbox v-model="approverForm.noticeConfig.overNotice">提醒通知</el-checkbox>
+                  <el-checkbox v-model="approverForm.noticeConfig.overNotice">提醒通知
+                    <el-tooltip content="勾选后才能进行提醒消息发送（站内信系统默认发送，第三方超时消息需在节点通知内配置）" placement="top">
+                      <a class="el-icon-warning-outline"></a>
+                    </el-tooltip>
+                  </el-checkbox>
                 </el-row>
                 <el-row>
                   <el-checkbox v-model="approverForm.noticeConfig.overEvent">提醒事件
