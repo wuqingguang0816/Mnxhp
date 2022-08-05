@@ -12,14 +12,14 @@
             </template>
           </el-input>
         </jnpf-form-tip-item>
-        <el-form-item label="字段规则" prop="fieldRule">
+        <jnpf-form-tip-item label="字段规则" prop="fieldRule">
           <el-select v-model="dataForm.fieldRule" placeholder="请选择字段规则" clearable
             @change="changeFieldRule">
             <el-option v-for="item in fieldRuleOptions" :key="item.value" :label="item.label"
               :value="item.value">
             </el-option>
           </el-select>
-        </el-form-item>
+        </jnpf-form-tip-item>
         <jnpf-form-tip-item label="关联字段" prop="childTableKey"
           tip-label="输入表单设计内设计子表控制字段名;例：tableField107" v-if="dataForm.fieldRule==2">
           <el-input v-model="dataForm.childTableKey" placeholder="请输入关联主表的子表控件名称" />
