@@ -12,12 +12,14 @@
         <!--        <el-input v-model="dataForm.bindTableName" placeholder="绑定表格描述" />-->
         <!--      </el-form-item>-->
         <jnpf-form-tip-item label="字段名称" prop="enCode">
-          <nameSelects :value="dataForm.enCode" :moduleId="dataForm.moduleId"
-            :title="dataForm.enCode" :dataType="dataType" @change="changeName"
-            :bindTable="dataForm.bindTable" :menuType="menuType" :treeData="treeData" />
+          <el-input v-model="dataForm.enCode" placeholder="请输入字段名称">
+            <template slot="append">
+              <el-button type="primary" @click="selectName">选择</el-button>
+            </template>
+          </el-input>
         </jnpf-form-tip-item>
         <jnpf-form-tip-item label="字段规则" prop="fieldRule">
-          <el-select v-model="dataForm.fieldRule" placeholder="请选择字段名称" clearable
+          <el-select v-model="dataForm.fieldRule" placeholder="请选择字段规则" clearable
             @change="changeFieldRule">
             <el-option v-for="item in fieldRuleOptions" :key="item.value" :label="item.label"
               :value="item.value">
@@ -50,7 +52,9 @@
           {{ $t("common.confirmButton") }}</el-button>
       </span>
     </el-dialog>
-    <nameSelects :visible.sync="nameVisible" ref="nameForm" @closeForm="closeForm" />
+    <nameSelects :visible.sync="nameVisible" :value="dataForm.enCode" :moduleId="dataForm.moduleId"
+      :title="dataForm.enCode" :dataType="dataType" :bindTable="dataForm.bindTable"
+      :menuType="menuType" :treeData="treeData" ref="nameForm" @closeForm="closeForm" />
   </div>
 </template>
 
@@ -139,13 +143,16 @@ export default {
         this.formLoading = false;
       });
     },
-    closeForm(val) {
-
+    selectName() {
+      this.nameVisible = true
+      this.$nextTick(() => {
+        this.$refs.nameForm.openDialog();
+      });
     },
     changeFieldRule() {
       this.dataForm.childTableKey = ''
     },
-    changeName(val, value) {
+    closeForm(val, value) {
       this.dataForm.enCode = val
       this.dataForm.bindTable = value.tableName
       this.dataForm.fullName = value.fieldName || ''
