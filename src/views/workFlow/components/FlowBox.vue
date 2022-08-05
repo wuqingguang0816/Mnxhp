@@ -134,7 +134,7 @@
             <el-input v-model="candidateForm.handleOpinion" placeholder="请输入审批意见" type="textarea"
               :rows="4" />
           </el-form-item>
-          <el-form-item label="审批签名" required v-if="properties.hasSign">
+          <el-form-item label="手写签名" required v-if="properties.hasSign">
             <div class="sign-main">
               <div class="sign-head">
                 <div class="sign-tip">请在这里输入你的签名</div>
@@ -698,7 +698,7 @@ export default {
       })
     },
     showDialog() {
-      if (!this.properties.hasOpinion) {
+      if (!this.properties.hasOpinion && !this.properties.hasSign) {
         const title = this.eventType == 'revoke' ? '此操作将撤回该流程，是否继续？' : '此操作将撤回该审批单，是否继续？'
         this.$confirm(title, '提示', {
           type: 'warning'
@@ -720,7 +720,7 @@ export default {
           signImg: '',
         }
       }
-      const id = this.eventType == 'recall' || this.eventType == 'transfer' ? this.setting.taskId : this.setting.id
+      const id = this.eventType == 'revoke' ? this.setting.id : this.setting.taskId
       const formMethod = this.eventType == 'revoke' ? Revoke : this.eventType == 'transfer' ? Transfer : Recall
       this.approvalBtnLoading = true
       formMethod(id, query).then(res => {
