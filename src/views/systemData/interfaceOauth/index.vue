@@ -32,7 +32,7 @@
           <el-table-column prop="appName" label="应用名称" min-width="200" />
           <el-table-column prop="usefulLife" label="使用期限" width="120" :formatter="jnpf.tableDateFormat">
             <template slot-scope="scope">
-              <span type="danger" v-if="scope.row.usefulLife">{{scope.row.usefulLife | toDate()}}</span>
+              <span type="danger" v-if="scope.row.usefulLife">{{scope.row.usefulLife | toDate('yyyy-MM-dd')}}</span>
               <span type="success" v-else>永久</span>
             </template>
           </el-table-column>
