@@ -70,13 +70,14 @@
             <p class="qrcode-tip">正在测试,稍后上线</p>
           </div>
         </div>
-        <el-button type="primary" class="sso-login-btn" size="large"
-          @click.native.prevent="ssoLogin" v-show="isSso && !ssoLoading">单点登录</el-button>
+        <el-button type="primary" class="sso-login-btn" size="large" :loading="loading"
+          @click.native.prevent="ssoLogin" v-show="isSso && !ssoLoading">登录</el-button>
       </div>
     </div>
-    <el-dialog :close-on-click-modal="false" :visible.sync="visible" destroy-on-close
-      class="JNPF-dialog JNPF-dialog_center JNPF-dialog-sso" lock-scroll width="1000px">
-      <iframe width="100%" height="100%" :src="ssoUrl" frameborder="0"></iframe>
+    <el-dialog title="登录" :close-on-click-modal="false" :visible.sync="visible"
+      :close-on-press-escape="false" class="JNPF-dialog JNPF-dialog_center JNPF-dialog-sso"
+      lock-scroll width="1000px" @open="onOpen">
+      <iframe width="100%" height="100%" :src="ssoUrl" frameborder="0" v-if="show"></iframe>
     </el-dialog>
     <!-- <div class="login-foot">Copyright 引迈信息技术有限公司, All Rights Reserved. 沪ICP备17044791号-1
       助力企业和团队快速实现目标</div> -->
@@ -116,6 +117,7 @@ export default {
       redirect: undefined,
       showTxt: false,
       visible: false,
+      show: false,
       ssoLoading: true,
       isSso: false,
       ssoTicket: '',
@@ -138,7 +140,11 @@ export default {
       if (!val) this.loading = false
     },
     visible(val) {
-      if (!val) this.clearTimer()
+      if (!val) {
+        this.loading = false
+        this.show = false
+        this.clearTimer()
+      }
     },
     $route: {
       handler: function (route) {
@@ -235,15 +241,14 @@ export default {
       }, {})
     },
     ssoLogin() {
+      if (this.loading) return
+      this.loading = true
       this.visible = true
-      setTimeout(() => {
-        this.ssoTimer = setInterval(() => {
-          this.getTicketStatus()
-        }, 1000);
-      }, 1000);
+      this.ssoTimer = setInterval(() => {
+        this.getTicketStatus()
+      }, 1000)
     },
     getLoginConfig() {
-      this.ssoLoading = true
       getLoginConfig().then(res => {
         this.isSso = res.data.redirect
         this.ssoTicket = res.data.ticket
@@ -256,13 +261,28 @@ export default {
     },
     getTicketStatus() {
       getTicketStatus(this.ssoTicket).then(res => {
-        console.log(res);
-        if (res.data.status != 2) this.clearTimer()
-        // 登录成功
-        if (res.data.status == 1) {
-
+        if (res.data.status != 2) {
+          this.clearTimer()
+          // 登录成功
+          if (res.data.status == 1) {
+            const data = {
+              theme: res.data.theme,
+              token: res.data.value,
+            }
+            this.$store.dispatch('user/setToken', data).then(() => {
+              this.$router.push('/')
+            })
+          } else {
+            this.visible = false
+            this.ssoUrl = ''
+            this.$message.error(res.data.value || '操作超时，请重新点击登录')
+            this.getLoginConfig()
+          }
         }
       })
+    },
+    onOpen() {
+      this.show = true
     },
     clearTimer() {
       if (this.ssoTimer) {

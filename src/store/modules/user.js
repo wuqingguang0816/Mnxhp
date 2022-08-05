@@ -79,7 +79,7 @@ const actions = {
     })
   },
   // user login
-  login({ commit, dispatch }, userInfo) {
+  login({ dispatch }, userInfo) {
     const { account, password, code, timestamp, origin } = userInfo
     return new Promise((resolve, reject) => {
       login(qs.stringify({
@@ -95,6 +95,7 @@ const actions = {
       })).then(response => {
         const { data } = response
         dispatch('setToken', data)
+        resolve(data)
       }).catch(error => {
         reject(error)
       })
