@@ -74,7 +74,6 @@ export default {
             this.tables = this.dataForm.tables && JSON.parse(this.dataForm.tables) || []
             this.defaultTable = this.dataForm.tables && JSON.parse(this.dataForm.tables) || []
             this.updateFields()
-            this.loading = false
           }).catch(() => { this.loading = false })
         } else {
           this.dataForm.type = type
