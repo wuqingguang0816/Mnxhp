@@ -18,7 +18,7 @@
           <el-row :gutter="20" class="custom-row">
             <el-col :sm="12" :xs="24">
               <el-form-item label="账户" prop="account">
-                <el-input v-model="dataForm.account" placeholder="账户名称" />
+                <el-input v-model="dataForm.account" placeholder="账户名称" :readonly="!!dataForm.id" />
               </el-form-item>
             </el-col>
             <el-col :sm="12" :xs="24">
