@@ -90,7 +90,7 @@ export default {
       }
     },
     async updateFields() {
-      if (!this.tables.length) return
+      if (!this.tables.length) return this.loading = false
       this.dataForm.dbLinkId = this.dataForm.dbLinkId || '0'
       const type = this.dataForm.type
       let queryType = 0
@@ -104,6 +104,7 @@ export default {
           this.relationTable = this.tables[i].table
         }
       }
+      this.loading = false
     },
     getDbOptions() {
       getDataSourceListAll().then(res => {
