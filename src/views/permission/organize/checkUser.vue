@@ -76,7 +76,6 @@ export default {
       this.finish = false
       this.loading = false
       this.listQuery.currentPage = 1
-      this.listQuery.keyword = ''
       this.listQuery.sort = 'desc'
       this.initData()
     },
