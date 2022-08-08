@@ -277,9 +277,9 @@
                 </div>
                 <el-select v-model="subFlowForm.errorRule" class="mb-10"
                   @change="subFlowForm.errorRuleUser=[]">
-                  <el-option label="超级管理员处理" :value="1"></el-option>
-                  <el-option label="指定人员处理" :value="2"></el-option>
-                  <el-option label="发起者本人处理" :value="6"></el-option>
+                  <el-option label="超级管理员" :value="1"></el-option>
+                  <el-option label="指定人员" :value="2"></el-option>
+                  <el-option label="发起者本人" :value="6"></el-option>
                 </el-select>
                 <org-select type="user" v-model="subFlowForm.errorRuleUser" title="选择用户"
                   buttonType="button" v-if="subFlowForm.errorRule===2" />
@@ -361,6 +361,20 @@
                   title="添加岗位" type="position" class="mb-10" />
                 <org-select ref="start-copy-user-org" v-model="startForm.circulateUser" title="添加用户"
                   class="mb-10" />
+                <el-form-item>
+                  <div slot="label">附加条件
+                    <el-tooltip content="抄送人员增加人员选择范围附加条件" placement="top">
+                      <a class="el-icon-warning-outline"></a>
+                    </el-tooltip>
+                  </div>
+                  <el-select v-model="startForm.extraCopyRule">
+                    <el-option label="无附加条件" :value="1"></el-option>
+                    <el-option label="同一部门" :value="2"></el-option>
+                    <el-option label="同一岗位" :value="3"></el-option>
+                    <el-option label="发起人上级" :value="4"></el-option>
+                    <el-option label="发起人下属" :value="5"></el-option>
+                  </el-select>
+                </el-form-item>
                 <el-checkbox v-model="startForm.isCustomCopy">允许自选抄送人</el-checkbox>
               </el-form-item>
             </el-form>
@@ -1219,6 +1233,20 @@
                   class="mb-10" />
                 <org-select ref="approver-copy-user-org" v-model="approverForm.circulateUser"
                   title="添加用户" class="mb-10" />
+                <el-form-item>
+                  <div slot="label">附加条件
+                    <el-tooltip content="抄送人员增加人员选择范围附加条件" placement="top">
+                      <a class="el-icon-warning-outline"></a>
+                    </el-tooltip>
+                  </div>
+                  <el-select v-model="approverForm.extraCopyRule">
+                    <el-option label="无附加条件" :value="1"></el-option>
+                    <el-option label="同一部门" :value="2"></el-option>
+                    <el-option label="同一岗位" :value="3"></el-option>
+                    <el-option label="发起人上级" :value="4"></el-option>
+                    <el-option label="发起人下属" :value="5"></el-option>
+                  </el-select>
+                </el-form-item>
                 <el-checkbox v-model="approverForm.isCustomCopy">允许自选抄送人</el-checkbox>
               </el-form-item>
             </el-form>
@@ -2002,6 +2030,7 @@ const defaultSubFlowForm = {
 }
 const defaultApproverForm = {
   extraRule: 1, // 附加条件,默认无附加条件
+  extraCopyRule: 1, // 抄送附加条件,默认无附加条件
   agreeRule: 1, // 自动同意规则,默认不启用
   formFieldType: 1,// 表单字段审核方式的类型(1-用户 2-部门)
   approvers: [], // 审批人集合
