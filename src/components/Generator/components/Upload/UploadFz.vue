@@ -13,14 +13,15 @@
         <li class="el-upload-list__item is-success" v-for="(file,index) in fileList"
           :key="file.fileId" :class="{'el-upload-list__item_detail':detailed}">
           <a class="el-upload-list__item-name" @click="handleClick(file)">
-            <i class="el-icon-paperclip"></i>{{file.name}}
+            <i class="el-icon-paperclip"></i>
+            {{file.name}}{{file.fileSize?`（${jnpf.toFileSize(file.fileSize)}）`:''}}
           </a>
-          <i class="el-icon-view" @click="handlePreview(file)"></i>
-          <i class="el-icon-download" @click="handleClick(file)"></i>
+          <i class="el-icon-view" title="查看" @click="handlePreview(file)"></i>
+          <i class="el-icon-download" title="下载" @click="handleClick(file)"></i>
           <label class="el-upload-list__item-status-label" :class="{'disabled':disabled}">
             <i class="el-icon-upload-success el-icon-circle-check"></i>
           </label>
-          <i class="el-icon-close" v-if="!disabled" @click="handleRemove(index)"></i>
+          <i class="el-icon-close" title="删除" v-if="!disabled" @click="handleRemove(index)"></i>
         </li>
       </ul>
     </template>
@@ -74,7 +75,7 @@ export default {
       default: 'MB'
     },
     fileSize: {
-      default: 5
+      default: 10
     }
   },
   data() {

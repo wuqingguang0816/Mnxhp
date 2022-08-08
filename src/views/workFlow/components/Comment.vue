@@ -59,14 +59,15 @@
             <li class="el-upload-list__item is-success" v-for="(file,index) in dataForm.file"
               :key="file.fileId">
               <a class="el-upload-list__item-name" @click="handleFileClick(file)">
-                <i class="el-icon-paperclip"></i>{{file.name}}
+                <i class="el-icon-paperclip"></i>
+                {{file.name}}{{file.fileSize?`（${jnpf.toFileSize(file.fileSize)}）`:''}}
               </a>
-              <i class="el-icon-view" @click="handleFilePreview(file)"></i>
-              <i class="el-icon-download" @click="handleFileClick(file)"></i>
+              <i class="el-icon-view" title="查看" @click="handleFilePreview(file)"></i>
+              <i class="el-icon-download" title="下载" @click="handleFileClick(file)"></i>
               <label class="el-upload-list__item-status-label">
                 <i class="el-icon-upload-success el-icon-circle-check"></i>
               </label>
-              <i class="el-icon-close" @click="handleFileRemove(index)"></i>
+              <i class="el-icon-close" title="删除" @click="handleFileRemove(index)"></i>
             </li>
           </ul>
           <fileUploader ref="fileUploader" :limit="9" :fileSize="50" type="annex"

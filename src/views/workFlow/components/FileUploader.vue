@@ -131,6 +131,8 @@ export default {
         let data = {
           name: file.name,
           fileId: res.data.name,
+          fileSize: res.data.fileSize,
+          fileExtension: res.data.fileExtension,
           fileVersionId: res.data.fileVersionId,
           url: res.data.url
         }
