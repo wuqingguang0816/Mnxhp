@@ -53,7 +53,9 @@
           <el-card>
             <p class="timeline-cell">撤回节点：{{item.nodeName}}</p>
             <p class="timeline-cell">撤回人员：{{item.userName}}</p>
-            <p class="timeline-cell">撤回原因：{{item.handleOpinion}}</p>
+            <p class="timeline-cell" v-if="item.handleOpinion">撤回原因：{{item.handleOpinion}}</p>
+            <p class="timeline-cell" v-if="item.signImg">
+              手写签名：<img :src="item.signImg" class="signImg"></p>
           </el-card>
         </el-timeline-item>
         <el-timeline-item :timestamp="item.handleTime | toDate()" placement="top" :key="i"
@@ -71,7 +73,9 @@
             </el-row>
             <p class="timeline-cell">执行人员：{{item.userName}}</p>
             <p class="timeline-cell">执行动作：终止</p>
-            <p class="timeline-cell">终止原因：{{item.handleOpinion}}</p>
+            <p class="timeline-cell" v-if="item.handleOpinion">终止原因：{{item.handleOpinion}}</p>
+            <p class="timeline-cell" v-if="item.signImg">
+              手写签名：<img :src="item.signImg" class="signImg"></p>
           </el-card>
         </el-timeline-item>
         <el-timeline-item :timestamp="item.handleTime | toDate()" placement="top" :key="i"
@@ -126,6 +130,10 @@
             <p class="timeline-cell">执行人员：{{item.userName}}</p>
             <p class="timeline-cell">执行动作：转审</p>
             <p class="timeline-cell">转审人员：{{item.operatorId}}</p>
+            <p class="timeline-cell" v-if="item.handleOpinion">
+              转审意见：{{item.handleOpinion}}</p>
+            <p class="timeline-cell" v-if="item.signImg">
+              手写签名：<img :src="item.signImg" class="signImg"></p>
           </el-card>
         </el-timeline-item>
         <el-timeline-item :timestamp="item.handleTime | toDate()" placement="top" :key="i"
