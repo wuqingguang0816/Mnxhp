@@ -311,7 +311,6 @@ export default {
       this.selectedIds.splice(index, 1)
     },
     confirm() {
-      if (!this.selectedIds.length) return this.$message.error('请选择数据')
       let selectedData = []
       for (let i = 0; i < this.selectedIds.length; i++) {
         let item = []
