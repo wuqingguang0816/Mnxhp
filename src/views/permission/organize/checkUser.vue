@@ -1,5 +1,5 @@
 <template>
-  <el-dialog title="查看成员" :close-on-click-modal="false" :visible.sync="visible"
+  <el-dialog :title="title" :close-on-click-modal="false" :visible.sync="visible"
     class="JNPF-dialog JNPF-dialog_center transfer-dialog" lock-scroll append-to-body width="600px"
     :modal-append-to-body="false">
     <div class="transfer__body">
@@ -43,6 +43,7 @@ export default {
   data() {
     return {
       visible: false,
+      title: '',
       list: [],
       listQuery: {
         organizeId: '',
@@ -58,9 +59,10 @@ export default {
     if (this.$el && this.handleResize) removeResizeListener(this.$el, this.handleResize);
   },
   methods: {
-    init(id) {
+    init(id, name) {
       this.visible = true
       this.list = []
+      this.title = '查看成员 - ' + name || ''
       this.listQuery.organizeId = id
       this.finish = false
       this.loading = false

@@ -71,7 +71,7 @@
                     </el-button>
                   </span>
                   <el-dropdown-menu slot="dropdown">
-                    <el-dropdown-item @click.native="checkMembers(scope.row.id)">
+                    <el-dropdown-item @click.native="checkMembers(scope.row.id,scope.row.fullName)">
                       查看成员</el-dropdown-item>
                   </el-dropdown-menu>
                 </el-dropdown>
@@ -167,10 +167,10 @@ export default {
         this.initData()
       }
     },
-    checkMembers(id) {
+    checkMembers(id, name) {
       this.checkUserFormVisible = true
       this.$nextTick(() => {
-        this.$refs.checkUserForm.init(id)
+        this.$refs.checkUserForm.init(id, name)
       })
     },
     checkUser() {
