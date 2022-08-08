@@ -126,6 +126,7 @@ const defaultStartForm = {
   circulatePosition: [],
   circulateUser: [],
   isCustomCopy: false,
+  extraCopyRule: 1,
   hasSign: false,
   hasOpinion: false,
 }
