@@ -10,7 +10,8 @@
             <el-button slot="append" icon="el-icon-search" @click="search"></el-button>
           </el-input>
         </div>
-        <div class="transfer-pane__body shadow right-pane" ref="list">
+        <div class="transfer-pane__body shadow right-pane"
+          v-loading="loading && listQuery.currentPage==1" ref="list">
           <template v-if="list.length">
             <div v-for="(item,index) in list" :key="index" class="selected-item-user">
               <div class="selected-item-main">
@@ -62,6 +63,7 @@ export default {
       this.list = []
       this.listQuery.organizeId = id
       this.finish = false
+      this.loading = false
       this.initData()
       this.$nextTick(() => {
         this.bindScroll()
@@ -70,6 +72,7 @@ export default {
     search() {
       this.list = []
       this.finish = false
+      this.loading = false
       this.listQuery.currentPage = 1
       this.listQuery.sort = 'desc'
       this.initData()
@@ -79,18 +82,20 @@ export default {
       this.search()
     },
     initData() {
+      this.loading = true
       getUserList(this.listQuery).then(res => {
         if (res.data.list.length < this.listQuery.pageSize) this.finish = true
         this.list = [...this.list, ...res.data.list]
+        this.loading = false
       }).catch(() => {
-
+        this.loading = false
       })
     },
     bindScroll() {
       let _this = this,
         vBody = _this.$refs.list;
       vBody.addEventListener("scroll", function () {
-        if (vBody.scrollHeight - vBody.clientHeight - vBody.scrollTop <= 10 && !_this.finish) {
+        if (vBody.scrollHeight - vBody.clientHeight - vBody.scrollTop <= 200 && !_this.loading && !_this.finish) {
           _this.listQuery.currentPage += 1
           _this.initData()
         }
