@@ -172,6 +172,7 @@ export default {
             this.buttonAllData = res.data.all
             this.authorizeTreeData = this.buttonAuthorizeTree
             this.dataForm.button = [...this.dataForm.button, ...res.data.ids, ...this.moduleIdsTemp]
+            this.dataForm.button = [...new Set(this.dataForm.button)]
             this.$refs.authorizeTree.setCheckedKeys(this.dataForm.button)
             break
           case 3:
@@ -179,6 +180,7 @@ export default {
             this.columnAllData = res.data.all
             this.authorizeTreeData = this.columnAuthorizeTree
             this.dataForm.column = [...this.dataForm.column, ...res.data.ids, ...this.moduleIdsTemp]
+            this.dataForm.column = [...new Set(this.dataForm.column)]
             this.$refs.authorizeTree.setCheckedKeys(this.dataForm.column)
             break
           case 4:
@@ -186,6 +188,7 @@ export default {
             this.formAllData = res.data.all
             this.authorizeTreeData = this.formAuthorizeTree
             this.dataForm.form = [...this.dataForm.form, ...res.data.ids, ...this.moduleIdsTemp]
+            this.dataForm.form = [...new Set(this.dataForm.form)]
             this.$refs.authorizeTree.setCheckedKeys(this.dataForm.form)
             break
           case 5:
@@ -193,6 +196,7 @@ export default {
             this.resourceAllData = res.data.all
             this.authorizeTreeData = this.resourceAuthorizeTree
             this.dataForm.resource = [...this.dataForm.resource, ...res.data.ids, ...this.moduleIdsTemp]
+            this.dataForm.resource = [...new Set(this.dataForm.resource)]
             this.$refs.authorizeTree.setCheckedKeys(this.dataForm.resource)
             break
         }
