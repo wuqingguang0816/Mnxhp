@@ -482,6 +482,7 @@ import { isNumberStr } from '@/components/Generator/utils'
 import { saveFormConf, getDrawingList } from '@/components/Generator/utils/db'
 import { getDictionaryTypeSelector } from "@/api/systemData/dictionary"
 import { getDataInterfaceSelector } from "@/api/systemData/dataInterface"
+import { DataModelFieldList } from '@/api/systemData/dataModel'
 import FormScript from './FormScript'
 import FieldDialog from './FieldDialog'
 import JNPFComInput from './RightComponents/ComInput'
@@ -1047,21 +1048,25 @@ export default {
         this.$refs.fieldDialog.init(dataBase, tableName)
       })
     },
-    updateFieldOptions(data) {
+    async updateFieldOptions(data) {
       let tableName = ''
       if (!this.activeData.__config__.isSubTable) {
         tableName = this.activeData.__config__.tableName
       } else {
         tableName = this.activeData.__config__.relationTable
       }
+      let queryType = 0, type = this.getFormInfo().type
+      if (type == 3 || type == 4 || type == 5) queryType = 1
+      let res = await DataModelFieldList(this.getFormInfo().dbLinkId, tableName, queryType)
+      let fields = res.data.list
       for (let i = 0; i < this.allTable.length; i++) {
         if (this.allTable[i].table === tableName) {
-          this.allTable[i].fields = data
+          this.allTable[i].fields = fields
           break
         }
       }
       if (!this.activeData.__config__.isSubTable) {
-        this.formItemList = data
+        this.formItemList = fields
         this.setDefaultOptions()
       } else {
         this.subTable = this.allTable.filter(o => o.typeId == '0')
