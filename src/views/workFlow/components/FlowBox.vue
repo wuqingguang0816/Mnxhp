@@ -311,6 +311,7 @@ export default {
       ],
       errorVisible: false,
       errorNodeList: [],
+      isValidate: false,
     }
   },
   computed: {
@@ -513,16 +514,18 @@ export default {
         this.handleId = ''
         this.candidateForm.handleOpinion = ''
         this.copyIds = []
+        this.isValidate = false
         this.handleReset()
         if (eventType === 'reject') {
           if (!this.properties.hasSign && !this.properties.hasOpinion) {
             this.$confirm('此操作将驳回该审批单，是否继续？', '提示', {
               type: 'warning'
             }).then(() => {
-              this.handleApproval('', true)
+              this.handleApproval()
             }).catch(() => { });
             return
           }
+          this.isValidate = true
           this.visible = true
           return
         }
@@ -557,10 +560,11 @@ export default {
               this.$confirm('此操作将通过该审批单，是否继续？', '提示', {
                 type: 'warning'
               }).then(() => {
-                this.handleApproval('', true)
+                this.handleApproval()
               }).catch(() => { });
               return
             }
+            this.isValidate = true
             this.visible = true
           }
         }).catch(() => {
@@ -568,7 +572,6 @@ export default {
         })
       }
     },
-
     onBranchChange(val) {
       if (!val.length) return this.candidateForm.candidateList = []
       let list = []
@@ -805,7 +808,7 @@ export default {
         })
       })
     },
-    handleApproval(errorRuleUserList, isValidate) {
+    handleApproval(errorRuleUserList) {
       const handleRequest = () => {
         if (this.properties.hasSign && !this.signImg) {
           this.$message({
@@ -857,7 +860,7 @@ export default {
           }
         }).catch(() => { this.approvalBtnLoading = false })
       }
-      if (isValidate) return handleRequest()
+      if (!this.isValidate) return handleRequest()
       this.$refs['candidateForm'].validate((valid) => {
         if (valid) {
           handleRequest()
