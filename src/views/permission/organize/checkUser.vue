@@ -18,7 +18,7 @@
                   class="selected-item-headIcon">
                 </el-avatar>
                 <div class="selected-item-text">
-                  <p class="name">{{item.realName}}
+                  <p class="name">{{item.realName}}/{{item.account}}
                   </p>
                   <p class="organize" :title="item.organize">{{item.organize}}</p>
                 </div>
@@ -61,16 +61,16 @@ export default {
       this.visible = true
       this.list = []
       this.listQuery.organizeId = id
-      this.search()
       this.finish = false
+      this.initData()
       this.$nextTick(() => {
         this.bindScroll()
       })
     },
     search() {
+      this.list = []
       this.finish = false
       this.listQuery.currentPage = 1
-      this.listQuery.pageSize = 20
       this.listQuery.sort = 'desc'
       this.initData()
     },
@@ -83,13 +83,14 @@ export default {
         if (res.data.list.length < this.listQuery.pageSize) this.finish = true
         this.list = [...this.list, ...res.data.list]
       }).catch(() => {
+
       })
     },
     bindScroll() {
       let _this = this,
         vBody = _this.$refs.list;
       vBody.addEventListener("scroll", function () {
-        if (vBody.scrollHeight - vBody.clientHeight - vBody.scrollTop <= 200 && !_this.finish) {
+        if (vBody.scrollHeight - vBody.clientHeight - vBody.scrollTop <= 10 && !_this.finish) {
           _this.listQuery.currentPage += 1
           _this.initData()
         }
