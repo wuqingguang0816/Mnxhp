@@ -91,9 +91,10 @@ export function deleteChatRecord(id) {
   })
 }
 
+//移除
 export function relocation(id) {
   return request({
     url: `/api/message/imreply/relocation/${id}`,
-    method: 'get'
+    method: 'DELETE'
   })
 }
