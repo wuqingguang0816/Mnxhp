@@ -22,10 +22,16 @@ export default {
     },
     prev() {
       this.activeStep -= 1
+      if (this.activeStep == 0) this.updateTables()
     },
     stepChick(key) {
       if (this.activeStep <= key) return
       this.activeStep = key
+      if (this.activeStep == 0) this.updateTables()
+    },
+    updateTables() {
+      this.tables = this.$store.state.generator.allTable || []
+      this.mainTableFields = this.$store.state.generator.formItemList || []
     },
     onDbChange() {
       this.tables = []

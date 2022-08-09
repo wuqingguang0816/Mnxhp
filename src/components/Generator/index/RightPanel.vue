@@ -1066,7 +1066,7 @@ export default {
         }
       }
       if (!this.activeData.__config__.isSubTable) {
-        this.formItemList = fields
+        if (this.activeData.__config__.tableName === this.mainTable) this.formItemList = fields
         this.setDefaultOptions()
       } else {
         this.subTable = this.allTable.filter(o => o.typeId == '0')
