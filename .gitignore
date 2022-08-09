@@ -58,7 +58,6 @@ report.html
 /es
 elasticsearch-*
 config/base.yaml
-/.vscode/
 /coverage
 yarn.lock
 components/**/*.js
@@ -68,6 +67,4 @@ components/**/*.jsx
 /.history
 *.tmp
 package-lock.json
-package.json
-package.json
 package.json
