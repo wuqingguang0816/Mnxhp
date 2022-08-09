@@ -207,7 +207,7 @@ export default {
     },
     fillFormData(form, data) {
       let relationFormAttrList = []
-      const loop = list => {
+      const loop = (list, parent) => {
         for (let i = 0; i < list.length; i++) {
           let item = list[i]
           if (item.__vModel__) {
@@ -218,17 +218,18 @@ export default {
               item.__config__.defaultValue = data[item.__vModel__]
             }
             if (this.useFormPermission) {
+              let id = item.__config__.isSubTable ? parent.__vModel__ + '-' + item.__vModel__ : item.__vModel__
               let noShow = true
               if (this.formOperates && this.formOperates.length) {
-                noShow = !this.formOperates.some(o => o.enCode === item.__vModel__)
+                noShow = !this.formOperates.some(o => o.enCode === item.id)
               }
               noShow = item.__config__.noShow ? item.__config__.noShow : noShow
               this.$set(item.__config__, 'noShow', noShow)
             }
           }
           if (['relationFormAttr', 'popupAttr'].includes(item.__config__.jnpfKey)) relationFormAttrList.push(item)
-          if (item.__config__ && item.__config__.jnpfKey !== 'table' && item.__config__.children && Array.isArray(item.__config__.children)) {
-            loop(item.__config__.children)
+          if (item.__config__ && item.__config__.children && Array.isArray(item.__config__.children)) {
+            loop(item.__config__.children, item)
           }
         }
       }
