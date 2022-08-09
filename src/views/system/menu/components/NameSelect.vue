@@ -117,7 +117,6 @@ export default {
         currentPage: 1,
         pageSize: 20,
         sort: 'desc',
-        sidx: ''
       },
       keyword: '',
       total: 0,
@@ -188,16 +187,9 @@ export default {
       this.treeLoading = true
       this.tableName = this.bindTable
       this.$nextTick(() => {
-        if (this.checked) {
-          this.tableName = this.bindTable
-          let row = this.treeData.filter(item => item.tableName == this.tableName)
-          this.linkId = row[0].dbLink
-          this.$refs.treeBox.setCurrentKey(this.tableName)
-        } else {
-          this.tableName = this.treeData[0].tableName
-          this.linkId = this.treeData[0].dbLink
-          this.$refs.treeBox.setCurrentKey(this.tableName)
-        }
+        this.tableName = this.treeData[0].tableName
+        this.linkId = this.treeData[0].dbLink
+        this.$refs.treeBox.setCurrentKey(this.tableName)
         this.treeLoading = false
         this.reset()
       })
