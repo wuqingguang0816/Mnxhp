@@ -221,7 +221,7 @@ export default {
               let id = item.__config__.isSubTable ? parent.__vModel__ + '-' + item.__vModel__ : item.__vModel__
               let noShow = true
               if (this.formOperates && this.formOperates.length) {
-                noShow = !this.formOperates.some(o => o.enCode === item.id)
+                noShow = !this.formOperates.some(o => o.enCode === id)
               }
               noShow = item.__config__.noShow ? item.__config__.noShow : noShow
               this.$set(item.__config__, 'noShow', noShow)
