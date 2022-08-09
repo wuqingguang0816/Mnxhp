@@ -541,6 +541,7 @@ export default {
             this.$nextTick(() => {
               this.$refs['candidateForm'].resetFields()
             })
+            this.isValidate = true
             this.visible = true
           } else if (data.type == 2) {
             let list = res.data.list.filter(o => o.isCandidates)
@@ -553,6 +554,7 @@ export default {
             this.$nextTick(() => {
               this.$refs['candidateForm'].resetFields()
             })
+            this.isValidate = true
             this.visible = true
           } else {
             this.candidateForm.candidateList = []
