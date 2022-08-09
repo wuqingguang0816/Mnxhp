@@ -65,6 +65,7 @@ export default {
       this.title = '查看成员 - ' + name || ''
       this.listQuery.organizeId = id
       this.listQuery.keyword = ''
+      this.listQuery.currentPage = 1
       this.finish = false
       this.loading = false
       this.initData()
