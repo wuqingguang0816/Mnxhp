@@ -16,8 +16,7 @@
                 <el-form-item
                   v-if="activeData.__vModel__!==undefined && !noVModelList.includes(activeData.__config__.jnpfKey)"
                   label="控件字段">
-                  <el-input v-model="activeData.__vModel__" placeholder="请输入控件字段(v-model)"
-                    disabled />
+                  <el-input v-model="activeData.__vModel__" placeholder="请输入数据库字段" disabled />
                 </el-form-item>
               </template>
               <template v-else>
@@ -39,8 +38,8 @@
                   <el-form-item
                     v-if="activeData.__vModel__!==undefined && !noVModelList.includes(activeData.__config__.jnpfKey)"
                     label="控件字段">
-                    <el-select v-model="activeData.__vModel__" placeholder="请选择控件字段(v-model)"
-                      clearable @change="fieldChange" filterable popper-class="field-select-popper">
+                    <el-select v-model="activeData.__vModel__" placeholder="请选择数据库字段" clearable
+                      @change="fieldChange" filterable popper-class="field-select-popper">
                       <p class="el-select-dropdown__empty" slot="empty">
                         <span>无匹配数据，</span>
                         <el-link type="primary" :underline="false" @click="openFieldDialog">添加字段
@@ -73,8 +72,8 @@
                   <el-form-item
                     v-if="activeData.__vModel__!==undefined && !noVModelList.includes(activeData.__config__.jnpfKey)"
                     label="控件字段">
-                    <el-select v-model="activeData.__vModel__" placeholder="请选择控件字段(v-model)"
-                      clearable @change="fieldChange1" filterable>
+                    <el-select v-model="activeData.__vModel__" placeholder="请选择数据库字段" clearable
+                      @change="fieldChange1" filterable>
                       <p class="el-select-dropdown__empty" slot="empty">
                         <span>无匹配数据，</span>
                         <el-link type="primary" :underline="false" @click="openFieldDialog">添加字段
@@ -102,7 +101,7 @@
             <template v-else>
               <el-form-item label="控件字段"
                 v-if="activeData.__vModel__!==undefined  && !noVModelList.includes(activeData.__config__.jnpfKey)">
-                <el-input v-model="activeData.__vModel__" placeholder="请输入控件字段(v-model)"
+                <el-input v-model="activeData.__vModel__" placeholder="请输入数据库字段"
                   @change="inputFieldChange($event,activeData.__config__.formId,activeData.__config__.parentVModel)"
                   :disabled="activeData.__config__.jnpfKey==='table'" />
               </el-form-item>
