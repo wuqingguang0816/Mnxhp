@@ -435,7 +435,7 @@ export default {
         data.fullName = this.flowTaskInfo.fullName
         this.fullName = this.flowTaskInfo.fullName
         this.thisStep = this.flowTaskInfo.thisStep
-        this.flowUrgent = this.flowTaskInfo.flowUrgent
+        this.flowUrgent = this.flowTaskInfo.flowUrgent||1
         data.type = this.flowTaskInfo.type
         data.draftData = res.data.draftData || null
         if (data.formType == 1) {
