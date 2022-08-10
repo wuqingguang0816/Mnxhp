@@ -279,7 +279,7 @@ export default {
     handleFileClick(file) {
       if (!file.fileId) return
       getDownloadUrl('annex', file.fileId).then(res => {
-        this.jnpf.downloadFile(res.data.url)
+        this.jnpf.downloadFile(res.data.url, file.name)
       })
     },
     handleFilePreview(file) {
