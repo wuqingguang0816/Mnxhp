@@ -879,7 +879,7 @@ export default {
       this.$refs.esign.generate().then(res => {
         if (res) this.signImg = res
       }).catch(err => {
-        this.$({
+        this.$message({
           message: '请签名',
           type: 'warning'
         })
