@@ -18,6 +18,10 @@
             </template>
           </el-input>
         </jnpf-form-tip-item>
+        <jnpf-form-tip-item label="数据库表" prop="bindTable" v-if="dataForm.bindTable">
+          <el-input v-model="dataForm.bindTable" placeholder="请输入数据库表" disabled>
+          </el-input>
+        </jnpf-form-tip-item>
         <jnpf-form-tip-item label="字段规则" prop="fieldRule">
           <el-select v-model="dataForm.fieldRule" placeholder="请选择字段规则" clearable
             @change="changeFieldRule">
