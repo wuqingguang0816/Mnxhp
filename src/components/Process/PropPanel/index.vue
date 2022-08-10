@@ -2069,7 +2069,7 @@ const defaultApproverForm = {
   printBtnText: '打 印',
   printId: '', // 打印模板
   hasSign: false,
-  hasOpinion: false,
+  hasOpinion: true,
   timeLimitConfig: {
     on: 2,  // 开启
     nodeLimit: 0, // 节点限定时长起始值类型

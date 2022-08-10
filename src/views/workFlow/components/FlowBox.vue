@@ -129,8 +129,7 @@
               <user-select v-model="handleId" placeholder="请选择加签人员,不选即该节点审核结束" />
             </el-form-item>
           </template>
-          <el-form-item label="审批意见" v-if="properties.hasOpinion" prop="handleOpinion"
-            :rules="[{ required: true, message: '请输入审批意见',trigger: 'blur'}]">
+          <el-form-item label="审批意见" v-if="properties.hasOpinion" prop="handleOpinion">
             <el-input v-model="candidateForm.handleOpinion" placeholder="请输入审批意见" type="textarea"
               :rows="4" />
           </el-form-item>
@@ -435,7 +434,7 @@ export default {
         data.fullName = this.flowTaskInfo.fullName
         this.fullName = this.flowTaskInfo.fullName
         this.thisStep = this.flowTaskInfo.thisStep
-        this.flowUrgent = this.flowTaskInfo.flowUrgent||1
+        this.flowUrgent = this.flowTaskInfo.flowUrgent || 1
         data.type = this.flowTaskInfo.type
         data.draftData = res.data.draftData || null
         if (data.formType == 1) {

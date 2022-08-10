@@ -24,8 +24,7 @@
           <user-select v-model="freeApproverUserId" placeholder="请选择加签人员,不选即该节点审核结束" />
         </el-form-item>
       </template>
-      <el-form-item label="审批意见" prop="handleOpinion" v-if="properties&&properties.hasOpinion"
-        :rules="[{ required: true, message: '请输入审批意见',trigger: 'blur'}]">
+      <el-form-item label="审批意见" prop="handleOpinion" v-if="properties&&properties.hasOpinion">
         <el-input v-model="dataForm.handleOpinion" placeholder="请输入审批意见（选填）" type="textarea"
           :rows="4" />
       </el-form-item>

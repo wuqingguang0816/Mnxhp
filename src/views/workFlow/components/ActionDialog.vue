@@ -6,8 +6,7 @@
         :rules="[{ required: true, message: '请选择转审给谁',trigger: 'blur'}]">
         <user-select v-model="dataForm.freeApproverUserId" placeholder="请选择转审给谁" />
       </el-form-item>
-      <el-form-item :label="`${label}原因`" prop="handleOpinion" v-if="properties.hasOpinion"
-        :rules="[{ required: true, message: `请输入${label}原因`,trigger: 'blur'}]">
+      <el-form-item :label="`${label}原因`" prop="handleOpinion" v-if="properties.hasOpinion">
         <el-input v-model="dataForm.handleOpinion" :placeholder="`请输入${label}原因`" type="textarea"
           :rows="4" />
       </el-form-item>
@@ -60,7 +59,6 @@ export default {
       this.visible = true
       this.properties = properties
       this.eventType = eventType || ''
-
       this.dataForm.handleOpinion = ''
       this.dataForm.freeApproverUserId = ''
       this.signImg = ''
@@ -80,7 +78,6 @@ export default {
         default:
           break;
       }
-
       this.$nextTick(() => {
         this.handleReset()
         this.$refs['dataForm'].resetFields()
