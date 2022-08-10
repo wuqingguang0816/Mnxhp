@@ -94,8 +94,9 @@ const actions = {
         grant_type: 'password'
       })).then(response => {
         const { data } = response
-        dispatch('setToken', data)
-        resolve(data)
+        dispatch('setToken', data).then(() => {
+          resolve(data)
+        })
       }).catch(error => {
         reject(error)
       })
