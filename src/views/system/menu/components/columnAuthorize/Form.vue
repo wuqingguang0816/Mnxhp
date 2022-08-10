@@ -113,7 +113,7 @@ export default {
     };
   },
   methods: {
-    init(moduleId, id, menuType, tableName, dataType) {
+    init(moduleId, id, menuType, dataType) {
       this.menuType = menuType;
       this.dataType = dataType
       this.dataForm.id = id || "";
@@ -132,15 +132,15 @@ export default {
         this.treeData = data
       })
       this.$nextTick(() => {
-        this.$refs["dataForm"].resetFields();
-        this.dataForm.bindTable = tableName;
+        this.$refs["dataForm"].resetFields()
+        this.dataForm.bindTable = ''
         // 获取字段数据
         if (this.dataForm.id) {
           getColumnInfo(this.dataForm.id).then(res => {
-            this.dataForm = res.data;
-          });
+            this.dataForm = res.data
+          })
         }
-        this.formLoading = false;
+        this.formLoading = false
       });
     },
     selectName() {

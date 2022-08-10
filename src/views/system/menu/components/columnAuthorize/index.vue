@@ -180,7 +180,6 @@ export default {
           this.moduleId,
           id,
           this.menuType,
-          this.tableName,
           this.dataType
         );
       });

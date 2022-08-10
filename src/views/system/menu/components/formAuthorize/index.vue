@@ -172,7 +172,7 @@ export default {
     addOrUpdateHandle(id) {
       this.formVisible = true;
       this.$nextTick(() => {
-        this.$refs.form.init(this.moduleId, id, this.menuType, this.tableName, this.dataType);
+        this.$refs.form.init(this.moduleId, id, this.menuType, this.dataType);
       });
     },
     handleBatchAdd() {

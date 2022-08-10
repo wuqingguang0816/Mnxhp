@@ -109,7 +109,7 @@ export default {
     };
   },
   methods: {
-    init(moduleId, id, menuType, tableName, dataType) {
+    init(moduleId, id, menuType, dataType) {
       this.menuType = menuType;
       this.dataType = dataType
       this.dataForm.id = id || "";
@@ -129,22 +129,22 @@ export default {
       })
       this.$nextTick(() => {
         this.$refs["dataForm"].resetFields();
-        this.dataForm.bindTable = tableName;
-        this.menuType = menuType;
+        this.dataForm.bindTable = ''
+        this.menuType = menuType
         if (this.dataForm.id) {
           getFormInfo(this.dataForm.id).then(res => {
-            this.dataForm = res.data;
-            this.formLoading = false;
+            this.dataForm = res.data
+            this.formLoading = false
           });
         } else {
-          this.formLoading = false;
+          this.formLoading = false
         }
       });
     },
     selectName() {
       this.nameVisible = true
       this.$nextTick(() => {
-        this.$refs.nameForm.openDialog();
+        this.$refs.nameForm.openDialog()
       });
     },
     changeFieldRule() {
