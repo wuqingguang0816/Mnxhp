@@ -81,7 +81,7 @@ const onlinePeculiarList = [{
   colorLight: '#fff',
   size: 100,
   dataType: 'static',
-  staticText: '',
+  staticText: '二维码',
   relationField: '',
 },
 {
@@ -106,7 +106,7 @@ const onlinePeculiarList = [{
   width: 4,
   height: 40,
   dataType: 'static',
-  staticText: '',
+  staticText: '20220810',
   relationField: '',
 },
 ]
