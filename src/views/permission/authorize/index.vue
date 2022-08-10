@@ -162,7 +162,7 @@ export default {
             this.moduleAuthorizeTree = res.data.list
             this.moduleAllData = res.data.all
             this.authorizeTreeData = this.moduleAuthorizeTree
-            const moduleIds = [...this.dataForm.module, ...res.data.ids, ...this.moduleIdsTemp]
+            const moduleIds = [...res.data.ids, ...this.moduleIdsTemp]
             this.dataForm.module = [...new Set(moduleIds)]
             this.moduleIdsTemp = this.dataForm.module
             this.$refs.authorizeTree.setCheckedKeys(this.dataForm.module)
