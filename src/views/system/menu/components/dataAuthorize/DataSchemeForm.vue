@@ -275,6 +275,7 @@ export default {
       return list[0].fullName || val
     },
     dataFormSubmit() {
+
       this.$refs["dataForm"].validate((valid) => {
         if (valid) {
           this.btnLoading = true
@@ -289,9 +290,14 @@ export default {
             for (let j = 0; j < e.groups.length; j++) {
               let ee = e.groups[j]
               let item = this.fieldOptions.filter(o => o.id === ee.id)[0]
+              if (!item) {
+                this.$message.warning("方案内条件配置不完整，请检查条件内容")
+                conditionValid = false
+                break outer
+              }
               ee.bindTable = item.bindTable
               if (!ee.field || !ee.id || !ee.op || !ee.value) {
-                this.$message.warning("过滤条件检查出格式错误")
+                this.$message.warning("方案内条件配置不完整，请检查条件内容")
                 conditionValid = false
                 break outer
               }
@@ -320,6 +326,8 @@ export default {
           }).catch(() => {
             this.btnLoading = false
           })
+        } else {
+          this.btnLoading = false
         }
       })
     }

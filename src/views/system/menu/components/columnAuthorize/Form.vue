@@ -138,6 +138,7 @@ export default {
       this.$nextTick(() => {
         this.$refs["dataForm"].resetFields()
         this.dataForm.bindTable = ''
+        this.dataForm.fieldRule = 0
         // 获取字段数据
         if (this.dataForm.id) {
           getColumnInfo(this.dataForm.id).then(res => {

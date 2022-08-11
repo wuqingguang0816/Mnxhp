@@ -134,6 +134,7 @@ export default {
       this.$nextTick(() => {
         this.$refs["dataForm"].resetFields();
         this.dataForm.bindTable = ''
+        this.dataForm.fieldRule = 0
         this.menuType = menuType
         if (this.dataForm.id) {
           getFormInfo(this.dataForm.id).then(res => {
