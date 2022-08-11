@@ -2249,4 +2249,13 @@ textarea.el-textarea__inner {
       padding: 0 !important;
     }
   }
+
+  .table-child-first {
+    border-right: none !important;
+
+    .td-child-first {
+      width: 1px;
+      flex-shrink: 0;
+    }
+  }
 }
