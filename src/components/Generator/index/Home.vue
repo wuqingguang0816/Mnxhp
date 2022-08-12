@@ -258,7 +258,7 @@ export default {
             }
             if (config.jnpfKey === 'billRule') {
               if (!config.rule) {
-                reject({ msg: '单据组件“选择模板”属性为必填项', target: 1 })
+                reject({ msg: '单据组件“单据模板”属性为必填项', target: 1 })
                 break
               }
             }

@@ -258,7 +258,7 @@
               <el-form-item label="控件标题">
                 <el-input v-model="activeData.__config__.label" placeholder="请输入控件标题" />
               </el-form-item>
-              <el-form-item label="选择模板" v-if="activeData.__config__.jnpfKey==='billRule'">
+              <el-form-item label="单据模板" v-if="activeData.__config__.jnpfKey==='billRule'">
                 <BillRule :value="activeData.__config__.rule"
                   :title="activeData.__config__.ruleName" @change="onRuleChange" />
               </el-form-item>

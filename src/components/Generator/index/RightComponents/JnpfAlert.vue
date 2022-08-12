@@ -6,7 +6,7 @@
     <el-form-item label="提示图标">
       <el-switch v-model="activeData['show-icon']" />
     </el-form-item>
-    <el-form-item label="样式">
+    <el-form-item label="样式效果">
       <div class="type-list">
         <div class="type-list-item" :class="{active:activeData.type===item.id}"
           v-for="(item,i) in typeList" :key="i" @click="activeData.type=item.id">
