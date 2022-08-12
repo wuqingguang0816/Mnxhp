@@ -359,7 +359,7 @@
                         :formatter="jnpf.tableDateFormat" />
                       <el-table-column label="操作" width="70">
                         <template slot-scope="scope">
-                          <el-button size="mini" type="text" @click="syncNail(scope.row)">同步
+                          <el-button size="mini" type="text" @click="syncDing(scope.row)">同步
                           </el-button>
                         </template>
                       </el-table-column>
@@ -405,7 +405,7 @@
           </div>
           <div class="add-button">
             <el-button type="primary" size="small" @click="name==='同步到企业微信'?syncQy(0):syncDing(0)"
-              :loading="wechatLoading" :disabled="nailLoading">
+              :loading="wechatLoading" :disabled="dingLoading">
               同步</el-button>
           </div>
         </div>
@@ -419,7 +419,7 @@
           </div>
           <div class="add-button">
             <el-button type="primary" size="small" @click="name==='同步到企业微信'?syncQy(1):syncDing(1)"
-              :loading="nailLoading" :disabled="wechatLoading">
+              :loading="dingLoading" :disabled="wechatLoading">
               同步</el-button>
           </div>
         </div>
@@ -458,7 +458,7 @@ export default {
       testSyncLoading: false,
       testDingLoading: false,
       wechatLoading: false,
-      nailLoading: false,
+      dingLoading: false,
       thirdTab: '0',
       visible: false,
       synchronization: '',
@@ -700,7 +700,7 @@ export default {
       this.visible = true
 
     },
-    syncNail(row) {
+    syncDing(row) {
       this.name = '同步到阿里钉钉'
       this.names = '把系统数据同步到阿里钉钉'
       this.synchronization = '把阿里钉钉数据同步到系统'
@@ -708,20 +708,21 @@ export default {
       this.visible = true
     },
     syncQy(type) {
-      type == 0 ? this.wechatLoading = true : this.nailLoading = true
       this.$confirm('同步以后会丢失现有数据，是否继续？', '提示', {
         type: 'warning'
       }).then(() => {
+        type == 0 ? this.wechatLoading = true : this.dingLoading = true
         const method = this.row.synType == '组织' ? synAllOrganizeSysToQy : synAllUserSysToQy
         method(type).then(res => {
+          type == 0 ? this.wechatLoading = false : this.dingLoading = false
+          this.visible = false
           if (res.msg === '正在进行同步,请稍等') {
             this.$message({
               message: res.msg,
               type: 'success',
               duration: 1500,
             })
-            this.visible = false
-            type == 0 ? this.wechatLoading = false : this.nailLoading = false
+            return
           }
           this.row.recordTotal = res.data.recordTotal
           this.row.synDate = res.data.synDate
@@ -734,26 +735,25 @@ export default {
             type: 'success',
             duration: 1500,
           })
-          this.visible = false
-          type == 0 ? this.wechatLoading = false : this.nailLoading = false
-        }).catch(() => { type == 0 ? this.wechatLoading = false : this.nailLoading = false })
+        }).catch(() => { type == 0 ? this.wechatLoading = false : this.dingLoading = false })
       })
     },
     syncDing(type) {
-      type == 0 ? this.wechatLoading = true : this.nailLoading = true
       this.$confirm('同步以后会丢失现有数据，是否继续？', '提示', {
         type: 'warning'
       }).then(() => {
+        type == 0 ? this.wechatLoading = true : this.dingLoading = true
         const method = this.row.synType == '组织' ? synAllOrganizeSysToDing : synAllUserSysToDing
         method(type).then(res => {
+          type == 0 ? this.wechatLoading = false : this.dingLoading = false
+          this.visible = false
           if (res.msg === '正在进行同步,请稍等') {
             this.$message({
               message: res.msg,
               type: 'success',
               duration: 1500,
             })
-            this.visible = false
-            type == 0 ? this.wechatLoading = false : this.nailLoading = false
+            return
           }
           this.row.recordTotal = res.data.recordTotal
           this.row.synDate = res.data.synDate
@@ -766,9 +766,7 @@ export default {
             type: 'success',
             duration: 1500,
           })
-          type == 0 ? this.wechatLoading = false : this.nailLoading = false
-          this.visible = false
-        }).catch(() => { type == 0 ? this.wechatLoading = false : this.nailLoading = false })
+        }).catch(() => { type == 0 ? this.wechatLoading = false : this.dingLoading = false })
       })
     },
     submitSmsForm() {
