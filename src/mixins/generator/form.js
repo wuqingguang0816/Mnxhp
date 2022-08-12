@@ -126,6 +126,8 @@ export default {
                 return
               }
               this.$store.commit('generator/SET_TABLE', false)
+              this.$store.commit('generator/SET_ALL_TABLE', [])
+              this.$store.commit('generator/UPDATE_FORMITEM_LIST', [])
               this.activeStep += 1
             } else {
               if (!this.exist()) return
