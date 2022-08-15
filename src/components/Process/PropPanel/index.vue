@@ -1999,7 +1999,7 @@ const getDataType = (data) => {
     return 'number'
   } else if (['checkbox', 'uploadFz', 'uploadImg', 'cascader', 'comSelect', 'address'].includes(jnpfKey)) {
     return 'array'
-  } else if (['select', 'depSelect', 'posSelect', 'userSelect', 'treeSelect'].includes(jnpfKey)) {
+  } else if (['select', 'depSelect', 'posSelect', 'userSelect', 'treeSelect', 'roleSelect', 'groupSelect'].includes(jnpfKey)) {
     if (data.multiple) return 'array'
   }
   return ''
