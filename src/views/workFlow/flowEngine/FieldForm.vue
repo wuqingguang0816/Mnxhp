@@ -72,7 +72,8 @@ export default {
             jnpfKey: o.jnpfKey || '',
             required: o.required || false
           },
-          __vModel__: o.filedId
+          __vModel__: o.filedId,
+          multiple: o.multiple
         }))
         this.saveDrawingListDebounce(list)
         // if (!this.isDrawingListChange) {
