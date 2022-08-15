@@ -8,9 +8,9 @@
       <template v-for="(item,i) in socialsList">
         <el-row :key="i">
           <el-col :span="1" class="col-img">
-            <img v-if="item.enname==='wechat_enterprise'" src="@/assets/images/socials/wxWork.png" alt="" class="row-img" />
             <img v-if="item.enname=='wechat_open'" src="@/assets/images/socials/wechat_open.png" alt="" class="row-img" />
             <img v-if="item.enname==='qq'" src="@/assets/images/socials/qq.png" alt="" class="row-img" />
+            <img v-if="item.enname==='wechat_enterprise'" src="@/assets/images/socials/wxWork.png" alt="" class="row-img" />
             <img v-if="item.enname==='dingtalk'" src="@/assets/images/socials/dingtalk.png" alt="" class="row-img" />
             <img v-if="item.enname==='feishu'" src="@/assets/images/socials/feishu.png" alt="" class="row-img" />
             <img v-if="item.enname==='github'" src="@/assets/images/socials/gitHub.png" alt="" class="row-img" />
