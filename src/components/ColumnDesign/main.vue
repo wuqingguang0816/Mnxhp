@@ -238,7 +238,7 @@
                 <el-switch v-model="columnData.useFormPermission"></el-switch>
               </el-form-item>
 
-              <el-form label-width="90px" class="sriptEvents">
+              <el-form label-width="90px" class="sriptEvents" v-if="modelType==1">
                 <el-divider>脚本事件</el-divider>
                 <el-form-item label="表格事件" style="{text-align: left;}">
                   <el-button style="width: 100%;"
