@@ -179,12 +179,13 @@
                   </jnpf-form-tip-item>
                   <jnpf-form-tip-item label="SDK AppID" prop="tencentAppId" label-width="180px"
                     tip-label="【应⽤管理】-【应⽤列表】应⽤中的 SDK AppID">
-                    <el-input v-model="baseForm.tencentAppId" clearable
+                    <el-input v-model="baseForm.tencentAppId" clearable show-password
                       placeholder="请输入SDK AppID" />
                   </jnpf-form-tip-item>
                   <jnpf-form-tip-item label="App Key" prop="tencentAppKey" label-width="180px"
                     tip-label="【应⽤管理】-【应⽤列表】应⽤中的 App Key">
-                    <el-input v-model="baseForm.tencentAppKey" clearable placeholder="请输入App Key" />
+                    <el-input v-model="baseForm.tencentAppKey" clearable show-password
+                      placeholder="请输入App Key" />
                   </jnpf-form-tip-item>
                   <el-form-item label-width="180px">
                     <el-button type="primary" size="small" :loading="btnLoading" class="saveBtn"
@@ -260,7 +261,8 @@
                 </el-col>
                 <el-col :span="12" :offset="6" :pull="6">
                   <el-form-item label="凭证密钥" prop="qyhAgentSecret">
-                    <el-input v-model="baseForm.qyhAgentSecret" placeholder="请输入AppSecret">
+                    <el-input v-model="baseForm.qyhAgentSecret" placeholder="请输入AppSecret"
+                      show-password>
                       <el-button slot="append" @click="checkQy(0)" :loading="testQyLoading">连接测试
                       </el-button>
                     </el-input>
@@ -268,7 +270,8 @@
                 </el-col>
                 <el-col :span="12" :offset="6" :pull="6">
                   <el-form-item label="同步密钥" prop="qyhCorpSecret">
-                    <el-input v-model="baseForm.qyhCorpSecret" placeholder="请输入CorpSecret">
+                    <el-input v-model="baseForm.qyhCorpSecret" placeholder="请输入CorpSecret"
+                      show-password>
                       <el-button slot="append" @click="checkQy(1)" :loading="testSyncLoading">同步测试
                       </el-button>
                     </el-input>
@@ -328,7 +331,8 @@
                 </el-col>
                 <el-col :span="12" :offset="6" :pull="6">
                   <el-form-item label="凭证密钥" prop="dingSynAppSecret">
-                    <el-input v-model="baseForm.dingSynAppSecret" placeholder="请输入AppSecret">
+                    <el-input v-model="baseForm.dingSynAppSecret" placeholder="请输入AppSecret"
+                      show-password>
                       <el-button slot="append" @click="checkDing" :loading="testDingLoading">连接测试
                       </el-button>
                     </el-input>
