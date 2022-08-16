@@ -145,6 +145,7 @@ export default {
               element.latestDate = ''
               element.unreadMessage = ''
               element.latestMessage = ''
+              element.messageType = ''
             }
           }
         });
