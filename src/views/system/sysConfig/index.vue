@@ -363,7 +363,7 @@
                         :formatter="jnpf.tableDateFormat" />
                       <el-table-column label="操作" width="70">
                         <template slot-scope="scope">
-                          <el-button size="mini" type="text" @click="syncDing(scope.row)">同步
+                          <el-button size="mini" type="text" @click="syncDingVisible(scope.row)">同步
                           </el-button>
                         </template>
                       </el-table-column>
@@ -704,7 +704,7 @@ export default {
       this.visible = true
 
     },
-    syncDing(row) {
+    syncDingVisible(row) {
       this.name = '同步到阿里钉钉'
       this.names = '把系统数据同步到阿里钉钉'
       this.synchronization = '把阿里钉钉数据同步到系统'
