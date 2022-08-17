@@ -22,7 +22,7 @@
         <el-input v-model="dataForm.userName" placeholder="用户" />
       </el-form-item>
       <el-form-item label="密码" prop="password">
-        <el-input v-model="dataForm.password" placeholder="密码" />
+        <el-input v-model="dataForm.password" placeholder="密码" show-password />
       </el-form-item>
       <!-- ==============不同数据库之间差异的部分================ -->
       <template v-if="dataForm.dbType==='MySQL'">
