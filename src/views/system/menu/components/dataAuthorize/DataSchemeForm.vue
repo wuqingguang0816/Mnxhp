@@ -178,8 +178,8 @@ export default {
                 let groups = this.condition[i].groups
                 for (let j = 0; j < groups.length; j++) {
                   let e = groups[j]
-                  let item = this.fieldOptions.filter(o => o.id === groups[j].id)[0]
-                  e.opOptions = this.getOptions(item)
+                  let list = this.fieldOptions.filter(o => o.id === groups[j].id)
+                  list.length ? e.opOptions = this.getOptions(list[0]) : e.opOptions = []
                   if (item.conditionText !== 'text') {
                     e.readonly = true
                   } else {
