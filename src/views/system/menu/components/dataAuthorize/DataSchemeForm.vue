@@ -180,7 +180,7 @@ export default {
                   let e = groups[j]
                   let list = this.fieldOptions.filter(o => o.id === groups[j].id)
                   list.length ? e.opOptions = this.getOptions(list[0]) : e.opOptions = []
-                  if (item.conditionText !== 'text') {
+                  if (e.conditionText !== 'text') {
                     e.readonly = true
                   } else {
                     e.readonly = false
