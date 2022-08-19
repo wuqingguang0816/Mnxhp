@@ -51,10 +51,12 @@ export default {
       socialsList: [],
       dialogVisible: false,
       dialogSrt: '',
+      listenerLoad: false,
     }
   },
   created() {
     this.init()
+    this.bindListener()
   },
   methods: {
     init() {
@@ -65,25 +67,50 @@ export default {
       })
     },
     bingding(data) {
-      console.log(data)
+      // console.log(data)
       binding(data).then(res => {
-        var iWidth; //弹出窗口的宽度;
-        var iHeight;//弹出窗口的高度;
-        var iTop = (window.screen.height - 30 - iHeight) / 2;//获得窗口的垂直位置;
-        var iLeft = (window.screen.width - 10 - iWidth) / 2;
-        let winURL = window.open(res.msg, '_blank', 'height=' + iHeight + ',,innerHeight=' + iHeight + ',width=' + iWidth + ',innerWidth=' + iWidth + ',top=' + iTop + ',left=' + iLeft + ',toolbar=no,menubar=no,scrollbars=auto,resizeable=no,location=no,status=no')
-        const loop = setInterval(() => {    // 使用定时器查询当前状态
-          if (winURL && winURL.closed) {  // 进行判断条件   closed属性就是返回当前窗口的状态
-            console.log('我被关闭了', winURL.frameElement)
-            clearInterval(loop);       // 清除定时器
-            this.init()
-          }
-        }, 500);
-
+        if (this.winURL && !this.winURL.closed) {
+          console.log(this.winURL)
+          this.winURL.location.replace(res.msg)
+          this.winURL.focus()
+          return
+        }
+        var iWidth = 750; //弹出窗口的宽度;
+        var iHeight = 500;//弹出窗口的高度;
+        var iLeft = (window.screen.width - iWidth) / 2;
+        var iTop = (window.screen.height - iHeight) / 2;//获得窗口的垂直位置;
+        this.winURL = window.open(res.msg, '_blank', 'height=' + iHeight + ',,innerHeight=' + iHeight + ',width=' + iWidth + ',innerWidth=' + iWidth + ',top=' + iTop + ',left=' + iLeft + ',toolbar=no,menubar=no,scrollbars=auto,resizeable=no,location=no,status=no')
       })
     },
-
-
+    bindListener() {
+      if (!this.listenerLoad) {
+        window.addEventListener('message', (e) => {
+          var res = typeof e.data === 'string' ? JSON.parse(e.data) : e.data;
+          console.log(res)
+          if (res.code == "200") {
+            this.$message({
+              message: res.message,
+              type: 'success',
+              duration: 1000,
+              onClose: () => {
+                this.init()
+              }
+            })
+          }
+          if (res.code == "201") {
+            this.$message({
+              message: res.message,
+              type: 'error',
+              duration: 3000,
+              onClose: () => {
+                this.init()
+              }
+            })
+          }
+        })
+      }
+      this.listenerLoad = true
+    },
 
     deleteSocials(id) {
       this.$confirm('确定要解除该账号绑定?', '提示', {

@@ -227,12 +227,17 @@ export default {
     },
     otherlogin(data) {
       otherlogin(data).then(res => {
-        var iWidth; //弹出窗口的宽度;
-        var iHeight;//弹出窗口的高度;
-        var iLeft = (window.screen.width - 10 - iWidth) / 2;
-        var iTop = (window.screen.height - 30 - iHeight) / 2;//获得窗口的垂直位置;
-        // console.log(iWidth, iHeight, iLeft, iTop)
-        let winURL = window.open(res.msg, '_blank', 'height=' + iHeight + ',innerHeight=' + iHeight + ',width=' + iWidth + ',innerWidth=' + iWidth + ',top=' + iTop + ',left=' + iLeft + ',toolbar=no,menubar=no,scrollbars=auto,resizeable=no,location=no,status=no')
+        if (this.winURL && !this.winURL.closed) {
+          console.log(this.winURL)
+          this.winURL.location.replace(res.msg)
+          this.winURL.focus()
+          return
+        }
+        var iWidth = 750; //弹出窗口的宽度;
+        var iHeight = 500;//弹出窗口的高度;
+        var iLeft = (window.screen.width - iWidth) / 2;
+        var iTop = (window.screen.height - iHeight) / 2;//获得窗口的垂直位置;
+        this.winURL = window.open(res.msg, '_blank', 'height=' + iHeight + ',innerHeight=' + iHeight + ',width=' + iWidth + ',innerWidth=' + iWidth + ',top=' + iTop + ',left=' + iLeft + ',toolbar=no,menubar=no,scrollbars=auto,resizeable=no,location=no,status=no')
       })
     },
     loginListener() {
@@ -258,5 +263,5 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import './index.scss';
+@import "./index.scss";
 </style>
