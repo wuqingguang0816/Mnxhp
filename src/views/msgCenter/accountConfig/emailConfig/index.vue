@@ -11,7 +11,7 @@
           </el-col>
           <el-col :span="6">
             <el-form-item label="状态">
-              <el-select v-model="category" placeholder="请选择状态" clearable>
+              <el-select v-model="status" placeholder="请选择状态" clearable>
                 <el-option v-for="item in categoryList" :key="item.enCode" :label="item.fullName"
                   :value="item.enCode">
                 </el-option>
@@ -31,7 +31,7 @@
       <div class="JNPF-common-layout-main JNPF-flex-main">
         <div class="JNPF-common-head">
           <topOpts @add="addOrUpdateHandle()">
-            <upload-btn url="/api/system/printDev/Actions/ImportData" @on-success="initData" />
+            <upload-btn url="/api/message/AccountConfig/Action/Import" @on-success="initData" />
           </topOpts>
           <div class="JNPF-common-head-right">
             <el-tooltip effect="dark" :content="$t('common.refresh')" placement="top">
@@ -40,17 +40,16 @@
             </el-tooltip>
           </div>
         </div>
-        <JNPF-table>
+        <JNPF-table v-loading="listLoading" :data="list">
           <el-table-column prop="fullName" label="名称" show-overflow-tooltip min-width="120" />
           <el-table-column prop="enCode" label="编码" width="150" />
-          <el-table-column prop="category" label="发件人昵称" width="150" />
-          <el-table-column prop="creatorUser" label="发件人邮箱" width="120" />
-          <el-table-column prop="lastModifyTime" label="创建人" :formatter="jnpf.tableDateFormat"
-            width="120" />
+          <el-table-column prop="addressorName" label="发件人昵称" width="150" />
+          <el-table-column prop="sendEmail" label="发件人邮箱" width="150" />
+          <el-table-column prop="creatorUserId" label="创建人" width="150" />
           <el-table-column prop="creatorTime" label="创建时间" :formatter="jnpf.tableDateFormat"
-            width="120" />
+            width="150" />
           <el-table-column prop="lastModifyTime" label="最后修改时间" :formatter="jnpf.tableDateFormat"
-            width="120" />
+            width="150" />
           <el-table-column prop="sortCode" label="排序" width="70" align="center" />
           <el-table-column prop="enabledMark" label="状态" width="70" align="center">
             <template slot-scope="scope">
@@ -76,23 +75,33 @@
             </template>
           </el-table-column>
         </JNPF-table>
-        <!-- <pagination :total="total" :page.sync="listQuery.currentPage"
-          :limit.sync="listQuery.pageSize" @pagination="initData" /> -->
+        <pagination :total="total" :page.sync="listQuery.currentPage"
+          :limit.sync="listQuery.pageSize" @pagination="initData" />
       </div>
     </div>
+    <Form v-if="formVisible" ref="Form" @refreshDataList="initData" />
   </div>
 </template>
 
 <script>
-
+import Form from './Form'
+import {
+  getConfigList,
+  delConfig,
+  copyConfig,
+  exportConfig
+} from '@/api/msgCenter/accountConfig'
 export default {
   name: 'system-printDev',
+  components: {
+    Form
+  },
   data() {
     return {
       list: [],
-      categoryList: [],
+      categoryList: [{ fullName: '启用', enCode: 1 }, { fullName: '禁用', enCode: 0 }],
       keyword: '',
-      category: '',
+      status: '',
       listQuery: {
         currentPage: 1,
         pageSize: 20,
@@ -101,106 +110,97 @@ export default {
       },
       total: 0,
       listLoading: true,
-      formVisible: false,
-      previewVisible: false,
-      activeId: ''
+      formVisible: false
     }
   },
   created() {
+    this.initData()
   },
   methods: {
-    // reset() {
-    //   this.keyword = ''
-    //   this.category = ''
-    //   this.search()
-    // },
-    // search() {
-    //   this.listQuery = {
-    //     currentPage: 1,
-    //     pageSize: 20,
-    //     sort: 'desc',
-    //     sidx: ''
-    //   }
-    //   this.initData()
-    // },
-    // initData() {
-    //   this.listLoading = true
-    //   let query = {
-    //     ...this.listQuery,
-    //     keyword: this.keyword,
-    //     category: this.category
-    //   }
-    //   getPrintDevList(query).then(res => {
-    //     this.list = res.data.list
-    //     this.total = res.data.pagination.total
-    //     this.listLoading = false
-    //   }).catch(() => {
-    //     this.listLoading = false
-    //   })
-    // },
-    // getDictionaryData() {
-    //   this.$store.dispatch('base/getDictionaryData', { sort: 'printDev' }).then((res) => {
-    //     this.categoryList = res
-    //   })
-    // },
-    // addOrUpdateHandle(id) {
-    //   this.formVisible = true
-    //   this.$nextTick(() => {
-    //     this.$refs.Form.init(this.categoryList, id)
-    //   })
-    // },
-    // copy(id) {
-    //   this.$confirm('您确定要复制该打印模板, 是否继续?', '提示', {
-    //     type: 'warning'
-    //   }).then(() => {
-    //     Copy(id).then(res => {
-    //       this.$message({
-    //         type: 'success',
-    //         message: res.msg,
-    //         duration: 1000,
-    //         onClose: () => {
-    //           this.initData()
-    //         }
-    //       });
-    //     })
-    //   }).catch(() => { });
-    // },
-    // exportTpl(id) {
-    //   this.$confirm('您确定要导出该打印模板, 是否继续?', '提示', {
-    //     type: 'warning'
-    //   }).then(() => {
-    //     exportTpl(id).then(res => {
-    //       this.jnpf.downloadFile(res.data.url)
-    //     })
-    //   }).catch(() => { });
-    // },
-    // preview(id) {
-    //   if (!id) return
-    //   this.activeId = id
-    //   this.previewVisible = true
-    // },
-    // closeForm(isRefresh) {
-    //   this.formVisible = false
-    //   if (isRefresh) {
-    //     this.initData()
-    //   }
-    // },
-    // handleDel(id) {
-    //   this.$confirm(this.$t('common.delTip'), this.$t('common.tipTitle'), {
-    //     type: 'warning'
-    //   }).then(() => {
-    //     Delete(id).then(res => {
-    //       this.$message({
-    //         type: 'success',
-    //         message: res.msg,
-    //         duration: 1500,
-    //         onClose: () => {
-    //           this.initData()
-    //         }
-    //       })
-    //     })
-    //   }).catch(() => { })
-    // },
+    reset() {
+      this.keyword = ''
+      this.status = ''
+      this.search()
+    },
+    search() {
+      this.listQuery = {
+        currentPage: 1,
+        pageSize: 20,
+        sort: 'desc',
+        sidx: ''
+      }
+      this.initData()
+    },
+    initData() {
+      this.formVisible = false
+      this.listLoading = true
+      let query = {
+        ...this.listQuery,
+        keyword: this.keyword,
+        status: this.status,
+        type: 2
+      }
+      getConfigList(query).then(res => {
+        this.list = res.data.list
+        this.total = res.data.pagination.total
+        this.listLoading = false
+      }).catch(() => {
+        this.listLoading = false
+      })
+    },
+    addOrUpdateHandle(id) {
+      this.formVisible = true
+      this.$nextTick(() => {
+        this.$refs.Form.init(id, this.list)
+      })
+    },
+    copy(id) {
+      this.$confirm('您确定要复制该打印模板, 是否继续?', '提示', {
+        type: 'warning'
+      }).then(() => {
+        copyConfig(id).then(res => {
+          this.$message({
+            type: 'success',
+            message: res.msg,
+            duration: 1000,
+            onClose: () => {
+              this.initData()
+            }
+          });
+        })
+      }).catch(() => { });
+    },
+    exportTpl(id) {
+      this.$confirm('您确定要导出该打印模板, 是否继续?', '提示', {
+        type: 'warning'
+      }).then(() => {
+        exportConfig(id).then(res => {
+          this.jnpf.downloadFile(res.data.url)
+        })
+      }).catch(() => { });
+    },
+    closeForm(isRefresh) {
+      this.formVisible = false
+      if (isRefresh) {
+        this.initData()
+      }
+    },
+    handleDel(id) {
+      this.$confirm(this.$t('common.delTip'), this.$t('common.tipTitle'), {
+        type: 'warning'
+      }).then(() => {
+        delConfig(id).then(res => {
+          this.$message({
+            type: 'success',
+            message: res.msg,
+            duration: 1500,
+            onClose: () => {
+              this.initData()
+            }
+          })
+        })
+      }).catch(() => { })
+    },
   }
 }
 </script>
