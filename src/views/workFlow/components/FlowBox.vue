@@ -210,7 +210,7 @@
         :branchList="branchList" :taskId="setting.taskId" :formData="formData"
         @submitCandidate="submitCandidate" :isCustomCopy="properties.isCustomCopy" />
       <error-form :visible.sync="errorVisible" :nodeList="errorNodeList" @submit="handleError" />
-      <actionDialog v-if="actionVisible" ref="actionDialog" title="审批人" @submit="handleRecall" />
+      <actionDialog v-if="actionVisible" ref="actionDialog" @submit="handleRecall" />
     </div>
   </transition>
 </template>
@@ -737,7 +737,10 @@ export default {
             this.$emit('close', true)
           }
         })
-      }).catch(() => { this.approvalBtnLoading = false })
+      }).catch(() => { 
+        this.$refs.actionDialog.btnLoading = false
+        this.approvalBtnLoading = false 
+        })
     },
     press() {
       this.$confirm('此操作将提示该节点尽快处理，是否继续?', '提示', {
