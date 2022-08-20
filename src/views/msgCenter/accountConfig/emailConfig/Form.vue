@@ -85,7 +85,6 @@ export default {
         enabledMark: 1,
         description: ''
       },
-      categoryList: [],
       dataRule: {
         fullName: [
           { required: true, message: '请输入名称', trigger: 'blur' },
@@ -117,9 +116,8 @@ export default {
     }
   },
   methods: {
-    init(id, categoryList) {
+    init(id) {
       this.dataForm.id = id || ''
-      this.categoryList = categoryList
       this.visible = true
       this.formLoading = true
       this.$nextTick(() => {

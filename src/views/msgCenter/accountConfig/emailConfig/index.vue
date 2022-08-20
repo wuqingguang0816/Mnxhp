@@ -151,7 +151,7 @@ export default {
     addOrUpdateHandle(id) {
       this.formVisible = true
       this.$nextTick(() => {
-        this.$refs.Form.init(id, this.list)
+        this.$refs.Form.init(id)
       })
     },
     copy(id) {
