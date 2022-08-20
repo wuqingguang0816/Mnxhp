@@ -30,6 +30,7 @@
       </jnpf-form-tip-item>
     </el-form>
     <span slot="footer" class="dialog-footer">
+      <el-button type="primary" :loading="btnLoading" @click="sendTest()">测试</el-button>
       <el-button @click="visible = false">{{$t('common.cancelButton')}}</el-button>
       <el-button type="primary" :loading="btnLoading" @click="dataFormSubmit()">
         {{$t('common.confirmButton')}}</el-button>
@@ -41,7 +42,8 @@
 import {
   createConfig,
   updateConfig,
-  getConfigDetail
+  getConfigDetail,
+  testConfig
 } from '@/api/msgCenter/accountConfig'
 export default {
   data() {
@@ -95,6 +97,29 @@ export default {
         }
       })
       this.formLoading = false
+    },
+    sendTest() {
+      this.$refs['dataForm'].validate((valid) => {
+        if (valid) {
+          this.btnLoading = true
+          let query = {
+            ...this.dataForm,
+            type: 5
+          }
+          testConfig(query).then(res => {
+            this.$message({
+              type: 'success',
+              message: res.msg,
+              duration: 1000,
+              onClose: () => {
+                this.btnLoading = false
+              }
+            });
+          }).catch(() => {
+            this.btnLoading = false
+          })
+        }
+      })
     },
     dataFormSubmit() {
       this.$refs['dataForm'].validate((valid) => {
