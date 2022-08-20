@@ -10,10 +10,19 @@
             </el-form-item>
           </el-col>
           <el-col :span="6">
+            <el-form-item label="渠道">
+              <el-select v-model="channel" placeholder="请选择状态" clearable>
+                <el-option v-for="item in channelList" :key="item.id" :label="item.fullName"
+                  :value="item.id">
+                </el-option>
+              </el-select>
+            </el-form-item>
+          </el-col>
+          <el-col :span="6">
             <el-form-item label="状态">
-              <el-select v-model="category" placeholder="请选择状态" clearable>
-                <el-option v-for="item in categoryList" :key="item.enCode" :label="item.fullName"
-                  :value="item.enCode">
+              <el-select v-model="status" placeholder="请选择状态" clearable>
+                <el-option v-for="item in statusList" :key="item.id" :label="item.fullName"
+                  :value="item.id">
                 </el-option>
               </el-select>
             </el-form-item>
@@ -31,7 +40,7 @@
       <div class="JNPF-common-layout-main JNPF-flex-main">
         <div class="JNPF-common-head">
           <topOpts @add="addOrUpdateHandle()">
-            <upload-btn url="/api/system/printDev/Actions/ImportData" @on-success="initData" />
+            <upload-btn url="/api/message/AccountConfig/Action/Import" @on-success="initData" />
           </topOpts>
           <div class="JNPF-common-head-right">
             <el-tooltip effect="dark" :content="$t('common.refresh')" placement="top">
@@ -40,13 +49,12 @@
             </el-tooltip>
           </div>
         </div>
-        <JNPF-table>
+        <JNPF-table v-loading="listLoading" :data="list">
           <el-table-column prop="fullName" label="名称" show-overflow-tooltip min-width="120" />
           <el-table-column prop="enCode" label="编码" width="150" />
-          <el-table-column prop="category" label="短信签名" width="150" />
-          <el-table-column prop="creatorUser" label="渠道" width="120" />
-          <el-table-column prop="lastModifyTime" label="创建人" :formatter="jnpf.tableDateFormat"
-            width="120" />
+          <el-table-column prop="smsSignature" label="短信签名" width="150" />
+          <el-table-column prop="channel" label="渠道" width="120" />
+          <el-table-column prop="creatorUser" label="创建人" width="120" />
           <el-table-column prop="creatorTime" label="创建时间" :formatter="jnpf.tableDateFormat"
             width="120" />
           <el-table-column prop="lastModifyTime" label="最后修改时间" :formatter="jnpf.tableDateFormat"
@@ -76,23 +84,35 @@
             </template>
           </el-table-column>
         </JNPF-table>
-        <!-- <pagination :total="total" :page.sync="listQuery.currentPage"
-          :limit.sync="listQuery.pageSize" @pagination="initData" /> -->
+        <pagination :total="total" :page.sync="listQuery.currentPage"
+          :limit.sync="listQuery.pageSize" @pagination="initData" />
       </div>
     </div>
+    <Form v-if="formVisible" ref="Form" @refreshDataList="initData" />
   </div>
 </template>
 
 <script>
-
+import Form from './Form'
+import {
+  getConfigList,
+  delConfig,
+  copyConfig,
+  exportConfig
+} from '@/api/msgCenter/accountConfig'
 export default {
   name: 'system-printDev',
+  components: {
+    Form
+  },
   data() {
     return {
       list: [],
-      categoryList: [],
+      statusList: [{ fullName: '启用', id: 1 }, { fullName: '禁用', id: 0 }],
+      channelList: [{ fullName: '阿里云', id: '1' }, { fullName: '腾讯云', id: '2' }],
       keyword: '',
-      category: '',
+      channel: '',
+      status: '',
       listQuery: {
         currentPage: 1,
         pageSize: 20,
@@ -101,106 +121,92 @@ export default {
       },
       total: 0,
       listLoading: true,
-      formVisible: false,
-      previewVisible: false,
-      activeId: ''
+      formVisible: false
     }
   },
   created() {
+    this.initData()
   },
   methods: {
-    // reset() {
-    //   this.keyword = ''
-    //   this.category = ''
-    //   this.search()
-    // },
-    // search() {
-    //   this.listQuery = {
-    //     currentPage: 1,
-    //     pageSize: 20,
-    //     sort: 'desc',
-    //     sidx: ''
-    //   }
-    //   this.initData()
-    // },
-    // initData() {
-    //   this.listLoading = true
-    //   let query = {
-    //     ...this.listQuery,
-    //     keyword: this.keyword,
-    //     category: this.category
-    //   }
-    //   getPrintDevList(query).then(res => {
-    //     this.list = res.data.list
-    //     this.total = res.data.pagination.total
-    //     this.listLoading = false
-    //   }).catch(() => {
-    //     this.listLoading = false
-    //   })
-    // },
-    // getDictionaryData() {
-    //   this.$store.dispatch('base/getDictionaryData', { sort: 'printDev' }).then((res) => {
-    //     this.categoryList = res
-    //   })
-    // },
-    // addOrUpdateHandle(id) {
-    //   this.formVisible = true
-    //   this.$nextTick(() => {
-    //     this.$refs.Form.init(this.categoryList, id)
-    //   })
-    // },
-    // copy(id) {
-    //   this.$confirm('您确定要复制该打印模板, 是否继续?', '提示', {
-    //     type: 'warning'
-    //   }).then(() => {
-    //     Copy(id).then(res => {
-    //       this.$message({
-    //         type: 'success',
-    //         message: res.msg,
-    //         duration: 1000,
-    //         onClose: () => {
-    //           this.initData()
-    //         }
-    //       });
-    //     })
-    //   }).catch(() => { });
-    // },
-    // exportTpl(id) {
-    //   this.$confirm('您确定要导出该打印模板, 是否继续?', '提示', {
-    //     type: 'warning'
-    //   }).then(() => {
-    //     exportTpl(id).then(res => {
-    //       this.jnpf.downloadFile(res.data.url)
-    //     })
-    //   }).catch(() => { });
-    // },
-    // preview(id) {
-    //   if (!id) return
-    //   this.activeId = id
-    //   this.previewVisible = true
-    // },
-    // closeForm(isRefresh) {
-    //   this.formVisible = false
-    //   if (isRefresh) {
-    //     this.initData()
-    //   }
-    // },
-    // handleDel(id) {
-    //   this.$confirm(this.$t('common.delTip'), this.$t('common.tipTitle'), {
-    //     type: 'warning'
-    //   }).then(() => {
-    //     Delete(id).then(res => {
-    //       this.$message({
-    //         type: 'success',
-    //         message: res.msg,
-    //         duration: 1500,
-    //         onClose: () => {
-    //           this.initData()
-    //         }
-    //       })
-    //     })
-    //   }).catch(() => { })
-    // },
+    reset() {
+      this.keyword = ''
+      this.status = ''
+      this.channel = ''
+      this.search()
+    },
+    search() {
+      this.listQuery = {
+        currentPage: 1,
+        pageSize: 20,
+        sort: 'desc',
+        sidx: ''
+      }
+      this.initData()
+    },
+    initData() {
+      this.listLoading = true
+      let query = {
+        ...this.listQuery,
+        keyword: this.keyword,
+        status: this.status,
+        channel: this.channel,
+        type: 3
+      }
+      getConfigList(query).then(res => {
+        this.list = res.data.list
+        this.total = res.data.pagination.total
+        this.listLoading = false
+      }).catch(() => {
+        this.listLoading = false
+      })
+    },
+    addOrUpdateHandle(id) {
+      this.formVisible = true
+      this.$nextTick(() => {
+        this.$refs.Form.init(id, this.channelList)
+      })
+    },
+    copy(id) {
+      this.$confirm('您确定要复制该打印模板, 是否继续?', '提示', {
+        type: 'warning'
+      }).then(() => {
+        copyConfig(id).then(res => {
+          this.$message({
+            type: 'success',
+            message: res.msg,
+            duration: 1000,
+            onClose: () => {
+              this.initData()
+            }
+          });
+        })
+      }).catch(() => { });
+    },
+    exportTpl(id) {
+      this.$confirm('您确定要导出该打印模板, 是否继续?', '提示', {
+        type: 'warning'
+      }).then(() => {
+        exportConfig(id).then(res => {
+          this.jnpf.downloadFile(res.data.url)
+        })
+      }).catch(() => { });
+    },
+    handleDel(id) {
+      this.$confirm(this.$t('common.delTip'), this.$t('common.tipTitle'), {
+        type: 'warning'
+      }).then(() => {
+        delConfig(id).then(res => {
+          this.$message({
+            type: 'success',
+            message: res.msg,
+            duration: 1500,
+            onClose: () => {
+              this.initData()
+            }
+          })
+        })
+      }).catch(() => { })
+    },
   }
 }
 </script>
