@@ -4,54 +4,56 @@
     <el-form ref="dataForm" :model="dataForm" :rules="dataRule" v-loading="formLoading"
       label-width="160px">
       <jnpf-form-tip-item label="名称" prop="fullName">
-        <el-input v-model="dataForm.fullName" placeholder="输入名称" />
+        <el-input v-model="dataForm.fullName" placeholder="输入名称" clearable />
       </jnpf-form-tip-item>
       <jnpf-form-tip-item label="编码" prop="enCode">
-        <el-input v-model="dataForm.enCode" placeholder="业务编码" />
+        <el-input v-model="dataForm.enCode" placeholder="业务编码" clearable />
       </jnpf-form-tip-item>
       <jnpf-form-tip-item label="渠道" prop="channel">
         <el-select v-model="dataForm.channel" placeholder="请选择" clearable @change="channelVal">
-          <el-option v-for="(item,index) in channelList" :label="item.fullName" :value="item.id"
-            :key="index" />
+          <el-option v-for="item in channelList" :label="item.fullName" :value="item.id"
+            :key="item.value" />
         </el-select>
       </jnpf-form-tip-item>
       <jnpf-form-tip-item label="短信签名" prop="smsSignature" tip-label="选择国内消息或国际/港澳台消息，在“签名管理”⻚中获取">
-        <el-input v-model="dataForm.smsSignature" placeholder="短信签名" />
+        <el-input v-model="dataForm.smsSignature" placeholder="短信签名" clearable />
       </jnpf-form-tip-item>
       <template v-if="dataForm.channel == 1">
         <jnpf-form-tip-item label="AccessKey ID" prop="appId"
           tip-label="请在“阿里云的AccessKey管理-安全信息管理”页中获得">
-          <el-input v-model="dataForm.appId" placeholder="AccessKey ID" />
+          <el-input v-model="dataForm.appId" placeholder="AccessKey ID" clearable />
         </jnpf-form-tip-item>
         <jnpf-form-tip-item label="AccessKey Secret" prop="appSecret"
           tip-label="请在”阿里云的AccessKey管理-安全信息管理”页中获得">
-          <el-input v-model="dataForm.appSecret" placeholder="AccessKey Secret" />
+          <el-input v-model="dataForm.appSecret" placeholder="AccessKey Secret" show-password
+            clearable />
         </jnpf-form-tip-item>
         <jnpf-form-tip-item label="EndPoint" prop="endPoint"
           tip-label="请在“阿里云的短信服务-OpenAPI Explorer-Region&Endpoint”页中获得">
-          <el-input v-model="dataForm.endPoint" placeholder="EndPoint" />
+          <el-input v-model="dataForm.endPoint" placeholder="EndPoint" clearable />
         </jnpf-form-tip-item>
       </template>
       <template v-if="dataForm.channel == 2">
-        <jnpf-form-tip-item label="SecretId" prop="appId"
+        <jnpf-form-tip-item label="SecretId" prop="secretId"
           tip-label="请在”腾讯云的访问管理-访问密钥- API密钥管理”⻚中获得">
-          <el-input v-model.number="dataForm.appId" maxlength="1" placeholder="SecretId" />
+          <el-input v-model.number="dataForm.secretId" maxlength="1" placeholder="SecretId"
+            clearable />
         </jnpf-form-tip-item>
-        <jnpf-form-tip-item label="SecretKey" prop="appSecret"
+        <jnpf-form-tip-item label="SecretKey" prop="secretKey"
           tip-label="请在“腾讯云的访问管理-访问密钥- API密钥管理”⻚中获得">
-          <el-input v-model="dataForm.appSecret" placeholder="SecretKey" />
+          <el-input v-model="dataForm.secretKey" placeholder="SecretKey" clearable />
         </jnpf-form-tip-item>
         <jnpf-form-tip-item label="SDK AppID" prop="sdkAppId" tip-label="请在”腾讯云的应⽤管理-应⽤列表”⻚中获得">
-          <el-input v-model="dataForm.sdkAppId" placeholder="SDK AppID" />
+          <el-input v-model="dataForm.sdkAppId" placeholder="SDK AppID" clearable />
         </jnpf-form-tip-item>
         <jnpf-form-tip-item label="App Key" prop="appKey" tip-label="请在”腾讯云的应⽤管理-应⽤列表”⻚中获得">
-          <el-input v-model="dataForm.appKey" placeholder="App Key" />
+          <el-input v-model="dataForm.appKey" placeholder="App Key" clearable />
         </jnpf-form-tip-item>
         <jnpf-form-tip-item label="地域域名" prop="zoneName" tip-label="默认是国内地域域名,也⽀持指定其它地域域名">
-          <el-input v-model="dataForm.zoneName" placeholder="地域域名" />
+          <el-input v-model="dataForm.zoneName" placeholder="地域域名" clearable />
         </jnpf-form-tip-item>
         <jnpf-form-tip-item label="地域参数" prop="zoneParam" tip-label="默认是国内地域参数,也⽀持指定其它地域参数">
-          <el-input v-model="dataForm.zoneParam" placeholder="地域参数" />
+          <el-input v-model="dataForm.zoneParam" placeholder="地域参数" clearable />
         </jnpf-form-tip-item>
       </template>
       <jnpf-form-tip-item label="排序" prop="sortCode">
@@ -79,6 +81,7 @@ import {
   updateConfig,
   getConfigDetail
 } from '@/api/msgCenter/accountConfig'
+import closest from 'clipboard'
 export default {
   data() {
     return {
@@ -102,7 +105,8 @@ export default {
         description: '',
         secretId: '',
         secretKey: '',
-        smsSignature: ''
+        smsSignature: '',
+        selectIndex: 1
       },
       dataRule: {
         fullName: [
@@ -157,9 +161,19 @@ export default {
       this.channelList = data
       this.$nextTick(() => {
         this.$refs['dataForm'].resetFields()
+        this.dataForm.appId = "";
+        this.dataForm.appSecret = "";
+        this.dataForm.endPoint = "";
+        this.dataForm.secretId = "";
+        this.dataForm.secretKey = "";
+        this.dataForm.appKey = "";
+        this.dataForm.sdkAppId = "";
+        this.dataForm.zoneName = 'sms.tencentcloudapi.com';
+        this.dataForm.zoneParam = 'ap-beijing';
         if (this.dataForm.id) {
           getConfigDetail(this.dataForm.id).then(res => {
             this.dataForm = res.data
+            this.selectIndex = this.dataForm.channel
             if (this.dataForm.channel == 2) {
               this.$set(this.dataForm, 'secretId', this.dataForm.appId)
               this.$set(this.dataForm, 'secretKey', this.dataForm.appSecret)
@@ -169,24 +183,26 @@ export default {
       })
       this.formLoading = false
     },
-    channelVal(e) {
-      // console.log(this.dataForm)
-      // this.$refs['dataForm'].clearValidate()
-      // this.$refs['dataForm'].resetFields()
-      // this.dataForm.channel = e
-      // if (this.dataForm.channel == 2) {
-      //   this.dataForm.zoneName = 'sms.tencentcloudapi.com';
-      //   this.dataForm.zoneParam = 'ap-beijing';
-      // }
+    channelVal() {
+      this.$refs['dataForm'].clearValidate()
+      this.dataForm.appId = "";
+      this.dataForm.appSecret = "";
+      this.dataForm.endPoint = "";
+      this.dataForm.secretId = "";
+      this.dataForm.secretKey = "";
+      this.dataForm.appKey = "";
+      this.dataForm.sdkAppId = "";
+      this.dataForm.zoneName = 'sms.tencentcloudapi.com';
+      this.dataForm.zoneParam = 'ap-beijing';
+      this.dataForm.smsSignature = "";
     },
     dataFormSubmit() {
       this.$refs['dataForm'].validate((valid) => {
         if (valid) {
           if (this.dataForm.channel == 2) {
-            this.dataForm.secretId = this.dataForm.appId
-            this.dataForm.secretKey = this.dataForm.appSecret
+            this.dataForm.appId = this.dataForm.secretId
+            this.dataForm.appSecret = this.dataForm.secretKey
           }
-          console.log(this.dataForm)
           let query = {
             ...this.dataForm,
             type: 3

@@ -62,7 +62,7 @@ export default {
             ...this.dataForm,
             type: 2
           }
-          testConfig(query).then(res => {
+          testConfig(query, 'testSendMail').then(res => {
             this.$message({
               type: 'success',
               message: res.msg,

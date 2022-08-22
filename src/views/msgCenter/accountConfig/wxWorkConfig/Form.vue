@@ -1,22 +1,22 @@
 <template>
-  <el-dialog :title="!dataForm.id ? '新建企业微信配置' : '编辑企业微信配置'" :close-on-click-modal="false"
+  <el-dialog :title="!dataForm.id ? '新建' : '编辑'" :close-on-click-modal="false"
     :visible.sync="visible" class="JNPF-dialog JNPF-dialog_center" lock-scroll width="600px">
     <el-form ref="dataForm" :model="dataForm" :rules="dataRule" v-loading="formLoading"
       label-width="120px">
       <jnpf-form-tip-item label="名称" prop="fullName">
-        <el-input v-model="dataForm.fullName" placeholder="请输入名称" />
+        <el-input v-model="dataForm.fullName" placeholder="请输入名称" clearable />
       </jnpf-form-tip-item>
       <jnpf-form-tip-item label="编码" prop="enCode">
-        <el-input v-model="dataForm.enCode" placeholder="请输入业务编码" />
+        <el-input v-model="dataForm.enCode" placeholder="请输入业务编码" clearable />
       </jnpf-form-tip-item>
       <jnpf-form-tip-item label="企业ID" prop="enterpriseId" tip-label="请在“企业微信管理后台-我的企业-企业信息”页中获得">
-        <el-input v-model="dataForm.enterpriseId" placeholder="请输入企业ID" />
+        <el-input v-model="dataForm.enterpriseId" placeholder="请输入企业ID" clearable />
       </jnpf-form-tip-item>
       <jnpf-form-tip-item label="应用AgentID" prop="appId" tip-label="请在“企业微信管理后台-应用管理-应用-详情”页中获得">
-        <el-input v-model="dataForm.appId" placeholder="请输入应用AgentID" />
+        <el-input v-model="dataForm.appId" placeholder="请输入应用AgentID" clearable />
       </jnpf-form-tip-item>
       <jnpf-form-tip-item label="应用Secret" prop="appSecret" tip-label="请在“企业微信管理后台-应用管理-应用-详情”页中获得">
-        <el-input v-model="dataForm.appSecret" placeholder="请输入应用Secret" />
+        <el-input v-model="dataForm.appSecret" placeholder="请输入应用Secret" show-password clearable />
       </jnpf-form-tip-item>
       <jnpf-form-tip-item label="排序" prop="sortCode">
         <el-input-number :min="0" :max="999999" v-model="dataForm.sortCode"
@@ -106,7 +106,7 @@ export default {
             ...this.dataForm,
             type: 5
           }
-          testConfig(query).then(res => {
+          testConfig(query, 'testQyWebChatConnect').then(res => {
             this.$message({
               type: 'success',
               message: res.msg,

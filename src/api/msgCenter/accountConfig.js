@@ -31,9 +31,9 @@ export const updateConfig = data => {
   })
 }
 // 测试
-export const testConfig = data => {
+export const testConfig = (data,type) => {
   return request({
-    url: '/api/message/AccountConfig/testSendMail',
+    url: `/api/message/AccountConfig/${type}`,
     method: 'POST',
     data
   })

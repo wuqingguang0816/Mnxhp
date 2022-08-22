@@ -4,19 +4,19 @@
     <el-form ref="dataForm" :model="dataForm" :rules="dataRule" v-loading="formLoading"
       label-width="120px">
       <jnpf-form-tip-item label="名称" prop="fullName">
-        <el-input v-model="dataForm.fullName" placeholder="请输入名称" />
+        <el-input v-model="dataForm.fullName" placeholder="请输入名称" clearable />
       </jnpf-form-tip-item>
       <jnpf-form-tip-item label="编码" prop="enCode">
-        <el-input v-model="dataForm.enCode" placeholder="请输入编码" />
+        <el-input v-model="dataForm.enCode" placeholder="请输入编码" clearable />
       </jnpf-form-tip-item>
       <jnpf-form-tip-item label="AgentId" prop="agentId" tip-label="请在“钉钉开发者后台-应用开发-应用信息”页中获得">
-        <el-input v-model="dataForm.agentId" placeholder="请输入AgentId" />
+        <el-input v-model="dataForm.agentId" placeholder="请输入AgentId" clearable />
       </jnpf-form-tip-item>
       <jnpf-form-tip-item label="Appkey" prop="appId" tip-label="请在“钉钉开发者后台-应用开发-应用信息”页中获得">
-        <el-input v-model="dataForm.appId" placeholder="请输入Appkey" />
+        <el-input v-model="dataForm.appId" placeholder="请输入Appkey" clearable />
       </jnpf-form-tip-item>
       <jnpf-form-tip-item label="AppSecret" prop="appSecret" tip-label="请在“钉钉开发者后台-应用开发-应用信息”页中获得">
-        <el-input v-model="dataForm.appSecret" placeholder="请输入AppSecret" />
+        <el-input v-model="dataForm.appSecret" placeholder="请输入AppSecret" clearable show-password />
       </jnpf-form-tip-item>
       <jnpf-form-tip-item label="排序" prop="sort">
         <el-input-number :min="0" :max="999999" v-model="dataForm.sortCode"
@@ -104,7 +104,7 @@ export default {
             ...this.dataForm,
             type: 4
           }
-          testConfig(query).then(res => {
+          testConfig(query, 'testDingTalkConnect').then(res => {
             this.$message({
               type: 'success',
               message: res.msg,

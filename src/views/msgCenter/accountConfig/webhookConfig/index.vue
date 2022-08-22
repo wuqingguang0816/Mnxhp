@@ -107,7 +107,7 @@ export default {
   data() {
     return {
       list: [],
-      webhookList: [{ fullName: '钉钉', enCode: 1 }, { fullName: '企业微信', enCode: 2 }],
+      webhookList: [{ fullName: '钉钉', enCode: '1' }, { fullName: '企业微信', enCode: '2' }],
       categoryList: [{ fullName: '启用', enCode: 1 }, { fullName: '禁用', enCode: 0 }],
       keyword: '',
       webhookType: '',

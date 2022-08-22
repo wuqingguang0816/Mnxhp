@@ -4,19 +4,19 @@
     <el-form ref="dataForm" :model="dataForm" :rules="dataRule" v-loading="formLoading"
       label-width="140px">
       <el-form-item label="名称" prop="fullName">
-        <el-input v-model="dataForm.fullName" placeholder="输入名称" />
+        <el-input v-model="dataForm.fullName" placeholder="输入名称" clearable />
       </el-form-item>
       <el-form-item label="编码" prop="enCode">
-        <el-input v-model="dataForm.enCode" placeholder="编码" />
+        <el-input v-model="dataForm.enCode" placeholder="编码" clearable />
       </el-form-item>
       <el-form-item label="发件人昵称" prop="addressorName">
-        <el-input v-model="dataForm.addressorName" placeholder="发件人昵称" />
+        <el-input v-model="dataForm.addressorName" placeholder="发件人昵称" clearable />
       </el-form-item>
       <el-form-item label="发件人邮箱" prop="sendEmail">
-        <el-input v-model="dataForm.sendEmail" placeholder="发件人邮箱" />
+        <el-input v-model="dataForm.sendEmail" placeholder="发件人邮箱" clearable />
       </el-form-item>
       <el-form-item label="SMTP服务器" prop="smtpServer">
-        <el-input v-model="dataForm.smtpServer" placeholder="SMTP服务器" />
+        <el-input v-model="dataForm.smtpServer" placeholder="SMTP服务器" clearable />
       </el-form-item>
       <el-form-item label="SMTP端口" prop="smtpPort">
         <el-input-number :min="0" :max="999999" v-model="dataForm.smtpPort"
@@ -26,17 +26,17 @@
         <el-switch v-model="dataForm.sslLink" :active-value="1" :inactive-value="0" />
       </el-form-item>
       <el-form-item label="SMTP用户名" prop="smtpUser">
-        <el-input v-model="dataForm.smtpUser" placeholder="SMTP服务器" />
+        <el-input v-model="dataForm.smtpUser" placeholder="SMTP服务器" clearable />
       </el-form-item>
       <el-form-item label="SMTP密码" prop="smtpPassword">
-        <el-input v-model="dataForm.smtpPassword" placeholder="SMTP服务器" />
+        <el-input v-model="dataForm.smtpPassword" placeholder="SMTP服务器" clearable show-password />
       </el-form-item>
       <el-form-item label="排序" prop="sortCode">
         <el-input-number :min="0" :max="999999" v-model="dataForm.sortCode"
           controls-position="right" />
       </el-form-item>
       <el-form-item label="状态" prop="enabledMark">
-        <el-switch v-model="dataForm.enabledMark" :active-value="1" :inactive-value="0"/>
+        <el-switch v-model="dataForm.enabledMark" :active-value="1" :inactive-value="0" />
       </el-form-item>
       <el-form-item label="说明" prop="description">
         <el-input v-model="dataForm.description" type="textarea" :rows="3" />
@@ -78,7 +78,7 @@ export default {
         sendEmail: '',
         smtpServer: '',
         smtpPort: '25',
-        sslLink: '',
+        sslLink: 0,
         smtpUser: '',
         smtpPassword: '',
         sortCode: 0,
