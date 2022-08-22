@@ -77,6 +77,7 @@ export default {
         text: this.qrCodeText,
         correctLevel: QRCode.CorrectLevel.H
       })
+      qrcode._el.title = ''
     },
   },
 }

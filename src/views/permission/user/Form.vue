@@ -18,7 +18,7 @@
           <el-row :gutter="20" class="custom-row">
             <el-col :sm="12" :xs="24">
               <el-form-item label="账户" prop="account">
-                <el-input v-model="dataForm.account" placeholder="账户名称" />
+                <el-input v-model="dataForm.account" placeholder="账户名称" :readonly="!!dataForm.id" />
               </el-form-item>
             </el-col>
             <el-col :sm="12" :xs="24">
@@ -85,7 +85,7 @@
             <el-col :span="12">
               <el-form-item label="状态" prop="enabledMark">
                 <el-select v-model="dataForm.enabledMark" placeholder="选择状态">
-                  <el-option label="正常" :value="1" />
+                  <el-option label="启用" :value="1" />
                   <el-option label="锁定" :value="2" />
                   <el-option label="禁用" :value="0" />
                 </el-select>

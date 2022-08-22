@@ -261,7 +261,6 @@ export default {
     },
     select() {
       if (!this.checked) return
-      this.innerValue = this.checkedTxt
       this.$emit('input', this.checked)
       this.$emit('change', this.checked, this.checkedRow)
       this.visible = false
@@ -281,6 +280,7 @@ export default {
           if (!res.data || !res.data.data) return
           let data = JSON.parse(res.data.data)
           this.innerValue = data[this.relationField]
+          this.checkedTxt = data[this.relationField]
           if (!this.field) return
           let relationData = this.$store.state.generator.relationData
           this.$set(relationData, this.field, data)
@@ -288,6 +288,7 @@ export default {
         })
       } else {
         this.innerValue = ''
+        this.checkedTxt = ''
         if (!this.field) return
         let relationData = this.$store.state.generator.relationData
         this.$set(relationData, this.field, {})

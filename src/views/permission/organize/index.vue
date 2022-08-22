@@ -60,17 +60,32 @@
           <el-table-column prop="creatorTime" :formatter="jnpf.tableDateFormat" label="创建时间"
             width="120" />
           <el-table-column prop="sortCode" label="排序" width="70" align="center" />
-          <el-table-column label="操作" width="100">
+          <el-table-column label="操作" width="150">
             <template slot-scope="scope">
               <tableOpts @edit="addOrUpdateHandle(scope.row.id,scope.row.type,scope.row.parentId)"
-                @del="handleDel(scope.row.id)" />
+                @del="handleDel(scope.row.id)">
+                <el-dropdown>
+                  <span class="el-dropdown-link">
+                    <el-button type="text" size="mini">{{$t('common.moreBtn')}}<i
+                        class="el-icon-arrow-down el-icon--right"></i>
+                    </el-button>
+                  </span>
+                  <el-dropdown-menu slot="dropdown">
+                    <el-dropdown-item @click.native="checkMembers(scope.row.id,scope.row.fullName)">
+                      查看成员</el-dropdown-item>
+                  </el-dropdown-menu>
+                </el-dropdown>
+              </tableOpts>
             </template>
           </el-table-column>
         </JNPF-table>
       </div>
     </div>
+
     <Form v-show="formVisible" ref="Form" @close="closeForm" />
     <DepForm v-if="depFormVisible" ref="depForm" @close="closeDepForm" />
+    <CheckUser v-if="checkUserFormVisible" ref="checkUserForm"
+      @close="checkUserFormVisible=false" />
   </div>
 </template>
 
@@ -78,9 +93,10 @@
 import { getOrganizeList, delOrganize } from '@/api/permission/organize'
 import Form from './Form'
 import DepForm from './depForm'
+import CheckUser from './checkUser.vue'
 export default {
   name: 'permission-organize',
-  components: { Form, DepForm },
+  components: { Form, DepForm, CheckUser },
   data() {
     return {
       listQuery: {
@@ -92,7 +108,8 @@ export default {
       btnLoading: false,
       listLoading: true,
       formVisible: false,
-      depFormVisible: false
+      depFormVisible: false,
+      checkUserFormVisible: false
     }
   },
   created() {
@@ -149,6 +166,15 @@ export default {
         this.keyword = ''
         this.initData()
       }
+    },
+    checkMembers(id, name) {
+      this.checkUserFormVisible = true
+      this.$nextTick(() => {
+        this.$refs.checkUserForm.init(id, name)
+      })
+    },
+    checkUser() {
+
     },
     toggleExpand() {
       this.refreshTable = false;

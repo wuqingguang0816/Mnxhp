@@ -161,7 +161,6 @@ export default {
           getPrintDevInfo(this.dataForm.id).then(res => {
             this.dataForm = res.data
             this.sqlTemplate = this.dataForm.sqlTemplate && JSON.parse(this.dataForm.sqlTemplate) || []
-            this.updateFields()
             this.loading = false
           }).catch(() => { this.loading = false })
         }

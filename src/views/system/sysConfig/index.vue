@@ -179,12 +179,13 @@
                   </jnpf-form-tip-item>
                   <jnpf-form-tip-item label="SDK AppID" prop="tencentAppId" label-width="180px"
                     tip-label="【应⽤管理】-【应⽤列表】应⽤中的 SDK AppID">
-                    <el-input v-model="baseForm.tencentAppId" clearable
+                    <el-input v-model="baseForm.tencentAppId" clearable show-password
                       placeholder="请输入SDK AppID" />
                   </jnpf-form-tip-item>
                   <jnpf-form-tip-item label="App Key" prop="tencentAppKey" label-width="180px"
                     tip-label="【应⽤管理】-【应⽤列表】应⽤中的 App Key">
-                    <el-input v-model="baseForm.tencentAppKey" clearable placeholder="请输入App Key" />
+                    <el-input v-model="baseForm.tencentAppKey" clearable show-password
+                      placeholder="请输入App Key" />
                   </jnpf-form-tip-item>
                   <el-form-item label-width="180px">
                     <el-button type="primary" size="small" :loading="btnLoading" class="saveBtn"
@@ -260,7 +261,8 @@
                 </el-col>
                 <el-col :span="12" :offset="6" :pull="6">
                   <el-form-item label="凭证密钥" prop="qyhAgentSecret">
-                    <el-input v-model="baseForm.qyhAgentSecret" placeholder="请输入AppSecret">
+                    <el-input v-model="baseForm.qyhAgentSecret" placeholder="请输入AppSecret"
+                      show-password>
                       <el-button slot="append" @click="checkQy(0)" :loading="testQyLoading">连接测试
                       </el-button>
                     </el-input>
@@ -268,7 +270,8 @@
                 </el-col>
                 <el-col :span="12" :offset="6" :pull="6">
                   <el-form-item label="同步密钥" prop="qyhCorpSecret">
-                    <el-input v-model="baseForm.qyhCorpSecret" placeholder="请输入CorpSecret">
+                    <el-input v-model="baseForm.qyhCorpSecret" placeholder="请输入CorpSecret"
+                      show-password>
                       <el-button slot="append" @click="checkQy(1)" :loading="testSyncLoading">同步测试
                       </el-button>
                     </el-input>
@@ -328,7 +331,8 @@
                 </el-col>
                 <el-col :span="12" :offset="6" :pull="6">
                   <el-form-item label="凭证密钥" prop="dingSynAppSecret">
-                    <el-input v-model="baseForm.dingSynAppSecret" placeholder="请输入AppSecret">
+                    <el-input v-model="baseForm.dingSynAppSecret" placeholder="请输入AppSecret"
+                      show-password>
                       <el-button slot="append" @click="checkDing" :loading="testDingLoading">连接测试
                       </el-button>
                     </el-input>
@@ -359,7 +363,7 @@
                         :formatter="jnpf.tableDateFormat" />
                       <el-table-column label="操作" width="70">
                         <template slot-scope="scope">
-                          <el-button size="mini" type="text" @click="syncNail(scope.row)">同步
+                          <el-button size="mini" type="text" @click="syncDingVisible(scope.row)">同步
                           </el-button>
                         </template>
                       </el-table-column>
@@ -405,7 +409,7 @@
           </div>
           <div class="add-button">
             <el-button type="primary" size="small" @click="name==='同步到企业微信'?syncQy(0):syncDing(0)"
-              :loading="wechatLoading" :disabled="nailLoading">
+              :loading="wechatLoading" :disabled="dingLoading">
               同步</el-button>
           </div>
         </div>
@@ -419,7 +423,7 @@
           </div>
           <div class="add-button">
             <el-button type="primary" size="small" @click="name==='同步到企业微信'?syncQy(1):syncDing(1)"
-              :loading="nailLoading" :disabled="wechatLoading">
+              :loading="dingLoading" :disabled="wechatLoading">
               同步</el-button>
           </div>
         </div>
@@ -458,7 +462,7 @@ export default {
       testSyncLoading: false,
       testDingLoading: false,
       wechatLoading: false,
-      nailLoading: false,
+      dingLoading: false,
       thirdTab: '0',
       visible: false,
       synchronization: '',
@@ -700,7 +704,7 @@ export default {
       this.visible = true
 
     },
-    syncNail(row) {
+    syncDingVisible(row) {
       this.name = '同步到阿里钉钉'
       this.names = '把系统数据同步到阿里钉钉'
       this.synchronization = '把阿里钉钉数据同步到系统'
@@ -708,20 +712,21 @@ export default {
       this.visible = true
     },
     syncQy(type) {
-      type == 0 ? this.wechatLoading = true : this.nailLoading = true
       this.$confirm('同步以后会丢失现有数据，是否继续？', '提示', {
         type: 'warning'
       }).then(() => {
+        type == 0 ? this.wechatLoading = true : this.dingLoading = true
         const method = this.row.synType == '组织' ? synAllOrganizeSysToQy : synAllUserSysToQy
         method(type).then(res => {
+          type == 0 ? this.wechatLoading = false : this.dingLoading = false
+          this.visible = false
           if (res.msg === '正在进行同步,请稍等') {
             this.$message({
               message: res.msg,
               type: 'success',
               duration: 1500,
             })
-            this.visible = false
-            type == 0 ? this.wechatLoading = false : this.nailLoading = false
+            return
           }
           this.row.recordTotal = res.data.recordTotal
           this.row.synDate = res.data.synDate
@@ -734,26 +739,25 @@ export default {
             type: 'success',
             duration: 1500,
           })
-          this.visible = false
-          type == 0 ? this.wechatLoading = false : this.nailLoading = false
-        }).catch(() => { type == 0 ? this.wechatLoading = false : this.nailLoading = false })
+        }).catch(() => { type == 0 ? this.wechatLoading = false : this.dingLoading = false })
       })
     },
     syncDing(type) {
-      type == 0 ? this.wechatLoading = true : this.nailLoading = true
       this.$confirm('同步以后会丢失现有数据，是否继续？', '提示', {
         type: 'warning'
       }).then(() => {
+        type == 0 ? this.wechatLoading = true : this.dingLoading = true
         const method = this.row.synType == '组织' ? synAllOrganizeSysToDing : synAllUserSysToDing
         method(type).then(res => {
+          type == 0 ? this.wechatLoading = false : this.dingLoading = false
+          this.visible = false
           if (res.msg === '正在进行同步,请稍等') {
             this.$message({
               message: res.msg,
               type: 'success',
               duration: 1500,
             })
-            this.visible = false
-            type == 0 ? this.wechatLoading = false : this.nailLoading = false
+            return
           }
           this.row.recordTotal = res.data.recordTotal
           this.row.synDate = res.data.synDate
@@ -766,9 +770,7 @@ export default {
             type: 'success',
             duration: 1500,
           })
-          type == 0 ? this.wechatLoading = false : this.nailLoading = false
-          this.visible = false
-        }).catch(() => { type == 0 ? this.wechatLoading = false : this.nailLoading = false })
+        }).catch(() => { type == 0 ? this.wechatLoading = false : this.dingLoading = false })
       })
     },
     submitSmsForm() {

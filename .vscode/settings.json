@@ -1,0 +1,60 @@
+{
+  "editor.formatOnSave": true,
+  "editor.tabSize": 2,
+  "[jsonc]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[javascript]": {
+    "editor.defaultFormatter": "vscode.typescript-language-features"
+  },
+  "editor.renderWhitespace": "none",
+  "editor.renderControlCharacters": false,
+  "typescript.validate.enable": false,
+  "vetur.format.defaultFormatter.html": "js-beautify-html",
+  "vetur.format.defaultFormatter.js": "vscode-typescript",
+  "vetur.format.defaultFormatterOptions": {
+    "js-beautify-html": {
+      "wrap_attributes": "auto",
+      "wrap_attributes_mode": "auto",
+      "wrap_line_length": 100,
+      "wrapped_attributes_per_line": "multiple",
+      "wrapped_attributes_indent": "auto",
+      "wrapped_attributes_end": "auto"
+    },
+    "prettier": {
+      "proseWrap": "never",
+      "printWidth": 200,
+      "semi": true, //要不要分号
+      "singleQuote": true //单引号
+    }
+  },
+  "editor.quickSuggestions": {
+    "strings": true
+  },
+  "element-helper.language": "zh-CN",
+  "element-helper.version": "2.5",
+  "element-helper.indent-size": 2,
+  "element-helper.quotes": "double",
+  "element-helper.pug-quotes": "single",
+  "[typescript]": {
+    "editor.defaultFormatter": "vscode.typescript-language-features"
+  },
+  "javascript.validate.enable": true,
+  "javascript.implicitProjectConfig.checkJs": true,
+  "[scss]": {
+    "editor.defaultFormatter": "vscode.css-language-features"
+  },
+  "[vue]": {
+    "editor.defaultFormatter": "octref.vetur"
+  },
+  "[json]": {
+    "editor.defaultFormatter": "vscode.json-language-features"
+  },
+  "editor.unicodeHighlight.ambiguousCharacters": false,
+  "editor.inlineSuggest.enabled": true,
+  "bracket-pair-colorizer-2.depreciation-notice": false,
+  "[css]": {
+    "editor.defaultFormatter": "vscode.css-language-features"
+  },
+  "gitlens.hovers.currentLine.over": "line"
+}

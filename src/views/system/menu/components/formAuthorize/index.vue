@@ -29,7 +29,7 @@
           <el-table-column prop="enabledMark" label="状态" width="90">
             <template slot-scope="scope">
               <el-tag :type="scope.row.enabledMark == 1 ? 'success' : 'danger'" disable-transitions>
-                {{ scope.row.enabledMark == 1 ? "正常" : "停用" }}</el-tag>
+                {{scope.row.enabledMark==1?'启用':'禁用'}}</el-tag>
             </template>
           </el-table-column>
           <el-table-column label="操作" width="100">
@@ -172,7 +172,7 @@ export default {
     addOrUpdateHandle(id) {
       this.formVisible = true;
       this.$nextTick(() => {
-        this.$refs.form.init(this.moduleId, id, this.menuType, this.tableName, this.dataType);
+        this.$refs.form.init(this.moduleId, id, this.menuType, this.dataType);
       });
     },
     handleBatchAdd() {

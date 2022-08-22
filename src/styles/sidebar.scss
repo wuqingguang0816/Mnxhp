@@ -114,6 +114,15 @@
       }
     }
 
+    & .el-submenu .el-menu-item,
+    & .el-submenu .el-submenu__title,
+    & .submenu-title-noDropdown {
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      padding-right: 20px;
+    }
+
     & .nest-menu .el-submenu>.el-submenu__title,
     & .el-submenu .el-menu-item {
       min-width: $sideBarWidth !important;

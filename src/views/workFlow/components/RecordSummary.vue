@@ -17,7 +17,7 @@
                       <el-link :underline="false" type="danger">审核拒绝</el-link>
                     </div>
                   </div>
-                  <div class="child-item-option">
+                  <div class="child-item-option" v-if="child.handleOpinion">
                     审批意见：{{child.handleOpinion}}
                   </div>
                 </template>
@@ -29,7 +29,7 @@
                       <el-link :underline="false" type="success">审核通过</el-link>
                     </div>
                   </div>
-                  <div class="child-item-option">
+                  <div class="child-item-option" v-if="child.handleOpinion">
                     审批意见：{{child.handleOpinion}}
                   </div>
                 </template>
@@ -50,7 +50,7 @@
                       <el-link :underline="false" type="info">撤回</el-link>
                     </div>
                   </div>
-                  <div class="child-item-option">
+                  <div class="child-item-option" v-if="child.handleOpinion">
                     撤回原因：{{child.handleOpinion}}
                   </div>
                 </template>
@@ -62,7 +62,7 @@
                       <el-link :underline="false" type="danger">流程终止</el-link>
                     </div>
                   </div>
-                  <div class=" child-item-option">
+                  <div class=" child-item-option" v-if="child.handleOpinion">
                     终止原因：{{child.handleOpinion}}
                   </div>
                 </template>
