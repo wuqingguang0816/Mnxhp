@@ -141,111 +141,8 @@
             </el-col>
           </el-row>
         </el-tab-pane>
-        <el-tab-pane label="第三方设置" name="third">
+        <el-tab-pane label="同步设置" name="third">
           <el-tabs tab-position="left" style="height:100%" v-model="thirdTab" class="thirdTab">
-            <el-tab-pane label="阿里短信">
-              <!-- <el-alert title="注意：请在短信厂家官网网站开通申请" type="warning" :closable="false" show-icon /> -->
-              <el-row style="margin-top: 15px" v-if="thirdTab=='0'">
-                <el-col :span="12">
-                  <jnpf-form-tip-item label="AccessKey ID" prop="aliAccessKey" label-width="180px"
-                    tip-label="授权ID，【AccessKey管理】中的 AccessKey ID">
-                    <el-input v-model="baseForm.aliAccessKey" clearable
-                      placeholder="请输入AccessKey ID" />
-                  </jnpf-form-tip-item>
-                  <jnpf-form-tip-item label="AccessKey Secret" prop="aliSecret" label-width="180px"
-                    tip-label="授权密钥,【AccessKey管理】中的 AccessKey Secret">
-                    <el-input v-model="baseForm.aliSecret" show-password clearable
-                      placeholder="请输入AccessKey Secret" />
-                  </jnpf-form-tip-item>
-                  <el-form-item label-width="180px">
-                    <el-button type="primary" size="small" :loading="btnLoading" class="saveBtn"
-                      @click="submitSmsForm()">保 存</el-button>
-                  </el-form-item>
-                </el-col>
-              </el-row>
-            </el-tab-pane>
-            <el-tab-pane label="腾讯短信">
-              <el-row style="margin-top: 15px" v-if="thirdTab=='1'">
-                <el-col :span="12">
-                  <jnpf-form-tip-item label="SecretId" prop="tencentSecretId" label-width="180px"
-                    tip-label="在【访问管理】-【访问密钥】- 【API密钥管理】中获取 SecretId">
-                    <el-input v-model="baseForm.tencentSecretId" clearable
-                      placeholder="请输入SecretId" />
-                  </jnpf-form-tip-item>
-                  <jnpf-form-tip-item label="SecretKey" prop="tencentSecretKey" label-width="180px"
-                    tip-label="在【访问管理】-【访问密钥】- 【API密钥管理】中获取 SecretKey">
-                    <el-input v-model="baseForm.tencentSecretKey" show-password clearable
-                      placeholder="请输入SecretKey" />
-                  </jnpf-form-tip-item>
-                  <jnpf-form-tip-item label="SDK AppID" prop="tencentAppId" label-width="180px"
-                    tip-label="【应⽤管理】-【应⽤列表】应⽤中的 SDK AppID">
-                    <el-input v-model="baseForm.tencentAppId" clearable
-                      placeholder="请输入SDK AppID" />
-                  </jnpf-form-tip-item>
-                  <jnpf-form-tip-item label="App Key" prop="tencentAppKey" label-width="180px"
-                    tip-label="【应⽤管理】-【应⽤列表】应⽤中的 App Key">
-                    <el-input v-model="baseForm.tencentAppKey" clearable placeholder="请输入App Key" />
-                  </jnpf-form-tip-item>
-                  <el-form-item label-width="180px">
-                    <el-button type="primary" size="small" :loading="btnLoading" class="saveBtn"
-                      @click="submitSmsForm()">保 存</el-button>
-                  </el-form-item>
-                </el-col>
-              </el-row>
-            </el-tab-pane>
-            <el-tab-pane label="电子邮箱">
-              <el-alert title="注意：系统邮件设置成功后所有邮件会由此邮箱发出" type="warning" :closable="false"
-                show-icon />
-              <el-row :gutter="20" style="margin-top: 15px">
-                <el-col :span="12">
-                  <el-form-item label="POP3服务" prop="emailPop3Host">
-                    <el-input v-model="baseForm.emailPop3Host" clearable placeholder="POP3服务" />
-                  </el-form-item>
-                </el-col>
-                <el-col :span="12">
-                  <el-form-item label="SMTP服务" prop="emailSmtpHost">
-                    <el-input v-model="baseForm.emailSmtpHost" clearable placeholder="SMTP服务" />
-                  </el-form-item>
-                </el-col>
-                <el-col :span="12">
-                  <el-form-item label="POP3端口" prop="emailPop3Port">
-                    <el-input-number v-model="baseForm.emailPop3Port" controls-position="right" />
-                  </el-form-item>
-                </el-col>
-                <el-col :span="12">
-                  <el-form-item label="SMTP端口" prop="emailSmtpPort">
-                    <el-input-number v-model="baseForm.emailSmtpPort" controls-position="right" />
-                  </el-form-item>
-                </el-col>
-                <el-col :span="12" :offset="6" :pull="6">
-                  <el-form-item label="显示名称" prop="emailSenderName">
-                    <el-input v-model="baseForm.emailSenderName" clearable placeholder="显示名称" />
-                  </el-form-item>
-                </el-col>
-                <el-col :span="12" :offset="6" :pull="6">
-                  <el-form-item label="邮箱账户" prop="emailAccount">
-                    <el-input v-model="baseForm.emailAccount" clearable placeholder="邮箱账户" />
-                  </el-form-item>
-                </el-col>
-                <el-col :span="12" :offset="6" :pull="6">
-                  <el-form-item label="邮箱密码" prop="emailPassword">
-                    <el-input v-model="baseForm.emailPassword" show-password placeholder="邮箱密码">
-                      <el-button slot="append" @click="checkEmailStatus" :loading="testLoading">测试连接
-                      </el-button>
-                    </el-input>
-                  </el-form-item>
-                </el-col>
-                <el-col>
-                  <el-form-item label="SSL登录" prop="emailSsl">
-                    <el-switch v-model="baseForm.emailSsl" :active-value="1" :inactive-value="0" />
-                  </el-form-item>
-                  <el-form-item>
-                    <el-button type="primary" size="small" :loading="btnLoading" class="saveBtn"
-                      @click="submitForm()">保 存</el-button>
-                  </el-form-item>
-                </el-col>
-              </el-row>
-            </el-tab-pane>
             <el-tab-pane label="企业微信">
               <el-row :gutter="20" style="margin-top: 15px">
                 <el-col :span="12" :offset="6" :pull="6">
@@ -432,7 +329,6 @@
 import {
   getSystemConfig,
   updateSystemConfig,
-  testEmail,
   testQy,
   testDing,
   getSynThirdTotal,
@@ -453,7 +349,6 @@ export default {
       activeName: 'first',
       listLoading: false,
       btnLoading: false,
-      testLoading: false,
       testQyLoading: false,
       testSyncLoading: false,
       testDingLoading: false,
@@ -485,20 +380,6 @@ export default {
         lastLoginTimeSwitch: 1,
         whitelistSwitch: 1,
         whiteListIp: '',
-        emailPop3Host: '',
-        emailPop3Port: '110',
-        emailSmtpHost: '',
-        emailSmtpPort: '25',
-        emailSenderName: '',
-        emailAccount: '',
-        emailPassword: '',
-        emailSsl: 0,
-        aliAccessKey: '',
-        aliSecret: '',
-        tencentSecretId: '',
-        tencentSecretKey: '',
-        tencentAppId: '',
-        tencentAppKey: '',
         qyhCorpId: '',
         qyhAgentId: '',
         qyhAgentSecret: '',
@@ -515,26 +396,7 @@ export default {
         lockTime: 10,
         enableVerificationCode: 0
       },
-      rules: {
-        aliAccessKey: [
-          { required: true, message: 'AccessKey ID不能为空', trigger: 'blur' }
-        ],
-        aliSecret: [
-          { required: true, message: 'AccessKey Secret不能为空', trigger: 'blur' }
-        ],
-        tencentSecretId: [
-          { required: true, message: 'SecretId不能为空', trigger: 'blur' }
-        ],
-        tencentSecretKey: [
-          { required: true, message: 'SecretKey不能为空', trigger: 'blur' }
-        ],
-        tencentAppId: [
-          { required: true, message: 'SDK AppID不能为空', trigger: 'blur' }
-        ],
-        tencentAppKey: [
-          { required: true, message: 'App Key不能为空', trigger: 'blur' }
-        ],
-      },
+      rules: {},
       wxEvents: [{
         select: false,
         title: '启用同步组织',
@@ -619,30 +481,6 @@ export default {
         }).catch(() => {
           this.listLoading = false
         })
-      })
-    },
-    checkEmailStatus() {
-      this.testLoading = true
-      const data = {
-        account: this.baseForm.emailAccount,
-        password: this.baseForm.emailPassword,
-        pop3Host: this.baseForm.emailPop3Host,
-        pop3Port: this.baseForm.emailPop3Port,
-        smtpHost: this.baseForm.emailSmtpHost,
-        smtpPort: this.baseForm.emailSmtpPort,
-        ssl: this.baseForm.emailSsl
-      }
-      testEmail(data).then(res => {
-        this.$message({
-          message: res.msg,
-          type: 'success',
-          duration: 1500,
-          onClose: () => {
-            this.testLoading = false
-          }
-        })
-      }).catch(() => {
-        this.testLoading = false
       })
     },
     checkQy(type) {
