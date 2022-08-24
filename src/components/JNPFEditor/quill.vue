@@ -69,6 +69,13 @@ export default {
       // console.log('editor change!', quill, html, text)
       // this.$emit('change', html)
       this.$emit("input", this.content);
+    },
+    insertText(content) {
+      let quill = this.$refs.myQuillEditor.quill
+      let index = quill.selection.savedRange.index
+      quill.insertText(index, content)
+      index += content.length
+      quill.setSelection(index)
     }
   },
   computed: {
