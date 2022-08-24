@@ -2400,7 +2400,7 @@ export default {
         if (data.__vModel__ && data.__config__.jnpfKey !== 'table') list.push(data)
       }
       loop(getDrawingList())
-      const formItems = list
+      const formItems = list.filter(o => o.__vModel__.indexOf('-') < 0)
       return formItems
     },
     formFieldsOptions() {
