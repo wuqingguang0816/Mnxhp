@@ -2759,6 +2759,13 @@ export default {
         })
         return
       }
+      if (this.approverForm.hasAgreeRule && !this.approverForm.agreeRules.length) {
+        this.$message({
+          message: '请选择同意规则配置',
+          type: 'error',
+        })
+        return
+      }
       // let copyContent = '', copyText = this.getOrgSelectLabel('approver-copy-user'),
       //   copyPosText = this.getOrgSelectLabel('approver-copy-position')
       // if (this.approverForm.circulatePosition.length || this.approverForm.circulateUser.length) {
