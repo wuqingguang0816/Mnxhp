@@ -5,7 +5,7 @@
     <div class="notice-wrapper" v-loading="loading">
       <h1 class="title">{{dataForm.title}}</h1>
       <div class="info">
-        <span>{{jnpf.dateFormat(dataForm.lastModifyTime)}}</span><span>{{dataForm.creatorUser}}</span>
+        <span>{{jnpf.dateFormat(dataForm.releaseTime)}}</span><span>{{dataForm.releaseUser}}</span>
       </div>
       <div class="main" v-html="dataForm.bodyText"></div>
       <div class="file-list" v-if="files.length">

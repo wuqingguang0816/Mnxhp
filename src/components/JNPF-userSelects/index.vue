@@ -121,8 +121,8 @@
           </el-row>
           <div class="JNPF-common-layout-main JNPF-flex-main">
             <JNPF-table v-loading="listLoading" :data="tableData" :border="false"
-              highlight-current-row row-key="table" ref="multipleTable"
-              @select="handleSelectionChange" :hasNO="false" has-c>
+              highlight-current-row ref="multipleTable" @select="handleSelection"
+              @select-all="handleSelectionAll" :hasNO="false" has-c>
               <el-table-column prop="account" label="账号" width="100" />
               <el-table-column prop="fullName" label="姓名" width="100" />
               <el-table-column prop="gender" label="性别" width="90" align="center">
@@ -232,7 +232,6 @@ export default {
       positionIds: [],
       groupIds: [],
       selectId: '',
-      selectList: {},
     }
   },
   watch: {
@@ -334,25 +333,52 @@ export default {
       if (!value) return true;
       return data.fullName.indexOf(value) !== -1;
     },
-    handleSelectionChange(selection, val) {
-
-      if (JSON.stringify(this.selectList) === '{}') {
-        this.selectList[this.selectId] = selection
+    /**
+     * 点击表格全选或非取消选择功能
+     * @param {array} selection  当前页面选中的数据
+     * @param {object} val  当前选择或取消选择行数据
+     */
+    handleSelection(selection, val) {
+      const index = this.selectedData.findIndex((item) => {
+        return item.id == val.id
+      })
+      if (index == -1) {
+        this.selectedData.push(val)
       } else {
-        const i = selection.filter(item => item === val)
-        if (i.length) {
-          this.selectList[this.selectId] = selection
-        } else {
-          for (let key in this.selectList) {
-            for (let index = 0; index < this.selectList[key].length; index++) {
-              if (val.id == this.selectList[key][index].id) {
-                this.selectList[key].splice(index, 1)
+        this.selectedData.splice(index, 1)
+      }
+      this.selectedData = [...new Set(this.selectedData)]
+    },
+    /**
+     * 点击表格全选或取消选择功能
+     * @param {array} selection  当前页面选中的数据
+     */
+    handleSelectionAll(selection) {
+      if (selection.length) {
+        if (this.selectedData.length) {
+          this.selectedData.forEach((item, index) => {
+            selection.forEach(it => {
+              if (item.id != it.id) {
+                this.selectedData.push(it)
               }
+            });
+          });
+        } else {
+          this.selectedData.push(...selection)
+        }
+      } else {
+        if (this.selectedData.length && this.tableData.length) {
+          this.tableData.forEach(item => {
+            const index = this.selectedData.findIndex((it) => {
+              return item.id == it.id
+            })
+            if (index != -1) {
+              this.selectedData.splice(index, 1)
             }
-            this.selectList[key] = this.selectList[key]
-          }
+          });
         }
       }
+      this.selectedData = [...new Set(this.selectedData)]
     },
     onClose() {
       this.activeName = ''
@@ -366,13 +392,6 @@ export default {
       this.getData()
     },
     confirm() {
-      this.selectedData = []
-      for (let key in this.selectList) {
-        this.selectedData.push(...this.selectList[key])
-      }
-      let list = this.selectedData;
-      let res = new Map();
-      this.selectedData = list.filter((list) => !res.has(list.id) && res.set(list.id, 1));
       if (this.multiple) {
         this.innerValue = ''
         this.tagsList = JSON.parse(JSON.stringify(this.selectedData))
@@ -398,7 +417,6 @@ export default {
       if (!this.value || !this.value.length) {
         this.innerValue = ''
         this.selectedData = []
-        this.selectList = {}
         this.tagsList = []
         return
       }
@@ -432,7 +450,6 @@ export default {
           this.treeLoading = false
         })
         this.selectId = 'position'
-
         this.initData()
       } else if (this.activeName === 'role') { //角色
         this.roleIds = []
@@ -474,12 +491,6 @@ export default {
         this.tableData = []
         this.tableData = res.data.list
         this.total = res.data.pagination.total
-        for (let key in this.selectList) {
-          this.selectedData.push(...this.selectList[key])
-        }
-        let listData = this.selectedData
-        let resData = new Map()
-        this.selectedData = listData.filter((listData) => !resData.has(listData.id) && resData.set(listData.id, 1))
         if (this.tableData.length && this.selectedData.length) {
           this.$nextTick(() => {
             this.tableData.forEach(i => {  // 循环嵌套
@@ -541,15 +552,7 @@ export default {
       this.selectedData.splice(index, 1)
     },
     deleteTag(event, index) {
-      let a = this.selectedData.splice(index, 1)
-      for (let key in this.selectList) {
-        for (let index = 0; index < this.selectList[key].length; index++) {
-          if (a[0].id == this.selectList[key][index].id) {
-            this.selectList[key].splice(index, 1)
-          }
-        }
-        this.selectList[key] = this.selectList[key]
-      }
+      this.selectedData.splice(index, 1)
       this.confirm()
       event.stopPropagation();
     },

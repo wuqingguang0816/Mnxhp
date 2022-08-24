@@ -31,8 +31,8 @@
           </el-form>
         </el-row>
         <JNPF-table v-loading="listLoading" :data="list">
-          <el-table-column prop="fullName" label="请求接口" width="120" show-overflow-tooltip />
-          <el-table-column prop="enCode" label="接口编码" width="120" show-overflow-tooltip />
+          <el-table-column prop="fullName" label="接口名称" width="150" show-overflow-tooltip />
+          <el-table-column prop="enCode" label="接口编码" width="150" show-overflow-tooltip />
           <el-table-column prop="url" label="请求地址" width="300" show-overflow-tooltip />
           <el-table-column prop="invokTime" label="请求时间" :formatter="jnpf.tableDateFormat" width="120" />
           <!-- <el-table-column prop="userId" label="请求用户" width="120" /> -->
@@ -114,7 +114,7 @@ export default {
     initData() {
       this.listLoading = true
       if (this.id) {
-        dataInterfaceLog(this.id).then(res => {
+        dataInterfaceLog(this.id, this.listQuery).then(res => {
           if (res.data) {
             res.data.list.forEach(item => {
               item.url = `${this.define.comUrl}/api/system/DataInterface/${item.id}/Actions/Response` + (item.tenantId ? '?tenantId=' + item.tenantId : '')

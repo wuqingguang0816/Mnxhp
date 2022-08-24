@@ -229,8 +229,8 @@ export default {
           }
           this.listLoading = false
           this.toggleSelection()
-        }).catch(() => { this.listLoading = false });
-      })
+        }).catch(() => { this.listLoading = false })
+      }).catch(() => { this.listLoading = false })
     },
     toggleSelection() {
       console.log(this.$refs)

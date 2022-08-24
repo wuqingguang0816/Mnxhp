@@ -5,7 +5,7 @@
     <div class="notice-wrapper" v-loading="loading">
       <h1 class="title">{{info.title}}</h1>
       <div class="info">
-        <span>{{info.lastModifyTime|toDate()}}</span><span>{{info.creatorUser}}</span>
+        <span>{{info.releaseTime|toDate()}}</span><span>{{info.releaseUser}}</span>
       </div>
       <div class="main" v-html="info.bodyText"></div>
       <div class="file-list" v-if="files.length">

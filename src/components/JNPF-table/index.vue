@@ -3,7 +3,8 @@
     <el-table v-if="!refreshTable" :data="data" ref="JNPFTable" class="JNPF-common-table"
       :height="height" :element-loading-text="$t('common.loadingText')" v-bind="$attrs"
       v-on="$listeners" :border="border">
-      <el-table-column prop="selection" type="selection" width="50" v-if="hasC" align="center" />
+      <el-table-column prop="selection" type="selection" width="50" v-if="hasC" align="center"
+        :selectable="checkSelectable" />
       <el-table-column prop="index" type="index" width="50" label="序号" v-if="hasNO"
         align="center" />
       <jnpf-table-column :columns="columns" :columnList="columnList" v-if="customColumn" />
@@ -160,6 +161,10 @@ export default {
       this.columnList = list
       this.$forceUpdate()
       this.refreshTable = true
+    },
+    checkSelectable(row) {
+      if (row.top) return false
+      return true
     }
   }
 }

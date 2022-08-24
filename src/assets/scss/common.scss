@@ -2031,6 +2031,7 @@ textarea.el-textarea__inner {
     overflow-x: hidden;
     font-size: 14px;
     border: 1px solid #dcdfe6;
+    border-radius: 4px;
 
     .el-tab-pane {
       padding: 10px 0 !important;
@@ -2246,6 +2247,15 @@ textarea.el-textarea__inner {
 
     &>.cell {
       padding: 0 !important;
+    }
+  }
+
+  .table-child-first {
+    border-right: none !important;
+
+    .td-child-first {
+      width: 1px;
+      flex-shrink: 0;
     }
   }
 }

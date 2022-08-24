@@ -22,10 +22,16 @@ export default {
     },
     prev() {
       this.activeStep -= 1
+      if (this.activeStep == 0) this.updateTables()
     },
     stepChick(key) {
       if (this.activeStep <= key) return
       this.activeStep = key
+      if (this.activeStep == 0) this.updateTables()
+    },
+    updateTables() {
+      this.tables = this.$store.state.generator.allTable || []
+      this.mainTableFields = this.$store.state.generator.formItemList || []
     },
     onDbChange() {
       this.tables = []
@@ -90,7 +96,7 @@ export default {
       }
     },
     async updateFields() {
-      if (!this.tables.length) return
+      if (!this.tables.length) return this.loading = false
       this.dataForm.dbLinkId = this.dataForm.dbLinkId || '0'
       const type = this.dataForm.type
       let queryType = 0
@@ -104,6 +110,7 @@ export default {
           this.relationTable = this.tables[i].table
         }
       }
+      this.loading = false
     },
     getDbOptions() {
       getDataSourceListAll().then(res => {

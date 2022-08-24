@@ -22,7 +22,7 @@
         <el-input v-model="dataForm.userName" placeholder="用户" />
       </el-form-item>
       <el-form-item label="密码" prop="password">
-        <el-input v-model="dataForm.password" placeholder="密码" />
+        <el-input v-model="dataForm.password" placeholder="密码" show-password />
       </el-form-item>
       <!-- ==============不同数据库之间差异的部分================ -->
       <template v-if="dataForm.dbType==='MySQL'">
@@ -129,7 +129,7 @@ export default {
           { required: true, message: '连接驱动不能为空', trigger: 'change' }
         ],
         fullName: [
-          { required: true, message: '应用名称不能为空', trigger: 'blur' }
+          { required: true, message: '连接名称不能为空', trigger: 'blur' }
         ],
         host: [
           { required: true, message: '主机地址不能为空', trigger: 'blur' },

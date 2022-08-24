@@ -467,7 +467,7 @@ export default {
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 23px;
+    height: 32px;
 
     .el-icon-delete {
       position: absolute;

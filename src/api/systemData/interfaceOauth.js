@@ -68,10 +68,11 @@ export function getInterfaceList(id) {
 }
 
 // 获取接口日志列表
-export function dataInterfaceLog(id) {
+export function dataInterfaceLog(id, data) {
   return request({
     url: `/api/system/InterfaceOauth/dataInterfaceLog/${id}`,
     method: 'GET',
+    data
   })
 }
 

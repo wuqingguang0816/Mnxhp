@@ -207,7 +207,7 @@ const actions = {
     return new Promise((resolve, reject) => {
       if (!state.printFlowTree.length) {
         getPrintDevSelector(1).then(res => {
-          commit('SET_PRINT_FLOW_TREE', res.data.list)
+          // commit('SET_PRINT_FLOW_TREE', res.data.list)
           resolve(res.data.list)
         }).catch(error => {
           reject(error)
@@ -221,7 +221,7 @@ const actions = {
     return new Promise((resolve, reject) => {
       if (!state.printFormTree.length) {
         getPrintDevSelector(2).then(res => {
-          commit('SET_PRINT_FORM_TREE', res.data.list)
+          // commit('SET_PRINT_FORM_TREE', res.data.list)
           resolve(res.data.list)
         }).catch(error => {
           reject(error)

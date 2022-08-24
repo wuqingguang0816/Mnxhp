@@ -16,8 +16,9 @@
             {
               "fullName":"名称",
               "enCode":"fullName",
-              "bindTable":"数据库表名",
-              "fieldRule":"字段规则"
+              "bindTable":"table1", //数据库表名
+              "fieldRule":1, //字段规则 0:主表规则  1:副表规则  2:子表规则
+              "childTableKey":"tableField107" //关联字段,fieldRule为子表规则才需要输入
             }
           ]
         </pre>

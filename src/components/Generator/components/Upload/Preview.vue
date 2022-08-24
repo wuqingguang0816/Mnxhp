@@ -44,7 +44,7 @@ export default {
       }
       PreviewFile(query).then(res => {
         if (res.data) {
-          this.url = res.data
+          this.url = res.data + '&token=' + this.$store.getters.token
         } else {
           this.$message.warning('文件不存在')
           this.goBack()

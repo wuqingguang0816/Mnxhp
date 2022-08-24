@@ -8,11 +8,13 @@
 export default {
   name: 'App',
   mounted() {
+    if (process.env.NODE_ENV === 'development') return
     this.$nextTick(() => {
       window.addEventListener('beforeunload', this.beforeUnload)
     })
   },
   beforeDestroy() {
+    if (process.env.NODE_ENV === 'development') return
     window.removeEventListener('beforeunload', this.beforeUnload)
   },
   methods: {

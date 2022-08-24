@@ -89,7 +89,7 @@
                 </template>
                 <template v-else-if="item.jnpfKey==='address'">
                   <JNPFAddress v-model="item.fieldValue" placeholder="请选择" :level="item.attr.level"
-                    clearable />
+                    clearable :key="item.cellKey" />
                 </template>
                 <template v-else-if="['select','radio','checkbox'].includes(item.jnpfKey)">
                   <el-select v-model="item.fieldValue" placeholder="请选择" clearable filterable>
@@ -306,11 +306,13 @@ export default {
       return componentList
     },
     getAdvancedQueryList() {
+      if (!this.currMenuId) return
       getAdvancedQueryList(this.currMenuId).then(res => {
         this.planList = res.data.list
       })
     },
     onFieldChange(val, item, i) {
+      item.cellKey = +new Date()
       if (!val) {
         item.jnpfKey = ''
         item.fieldValue = undefined
@@ -351,6 +353,7 @@ export default {
         fieldValue: '',
         symbol: '==',
         jnpfKey: '',
+        cellKey: +new Date(),
         attr: {}
       }
       this.conditionList.push(item)
