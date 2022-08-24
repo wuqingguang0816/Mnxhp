@@ -182,7 +182,6 @@ export default {
     },
     openDialog() {
       if (!this.treeData.length) return this.$message.error(`请先进行数据连接！`)
-      this.checked = this.value
       this.visible = true
       this.treeLoading = true
       this.tableName = this.bindTable
