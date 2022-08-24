@@ -368,11 +368,8 @@
                     </el-tooltip>
                   </div>
                   <el-select v-model="startForm.extraCopyRule">
-                    <el-option label="无附加条件" :value="1"></el-option>
-                    <el-option label="同一部门" :value="2"></el-option>
-                    <el-option label="同一岗位" :value="3"></el-option>
-                    <el-option label="发起人上级" :value="4"></el-option>
-                    <el-option label="发起人下属" :value="5"></el-option>
+                    <el-option v-for="(item,i) in extraRuleOptions" :key="i" :label="item.label"
+                      :value="item.value" />
                   </el-select>
                 </el-form-item>
                 <el-checkbox v-model="startForm.isCustomCopy">允许自选抄送人</el-checkbox>
@@ -1185,11 +1182,8 @@
                     </el-tooltip>
                   </div>
                   <el-select v-model="approverForm.extraRule">
-                    <el-option label="无附加条件" :value="1"></el-option>
-                    <el-option label="同一部门" :value="2"></el-option>
-                    <el-option label="同一岗位" :value="3"></el-option>
-                    <el-option label="发起人上级" :value="4"></el-option>
-                    <el-option label="发起人下属" :value="5"></el-option>
+                    <el-option v-for="(item,i) in extraRuleOptions" :key="i" :label="item.label"
+                      :value="item.value" />
                   </el-select>
                 </el-form-item>
               </el-form-item>
@@ -1240,11 +1234,8 @@
                     </el-tooltip>
                   </div>
                   <el-select v-model="approverForm.extraCopyRule">
-                    <el-option label="无附加条件" :value="1"></el-option>
-                    <el-option label="同一部门" :value="2"></el-option>
-                    <el-option label="同一岗位" :value="3"></el-option>
-                    <el-option label="发起人上级" :value="4"></el-option>
-                    <el-option label="发起人下属" :value="5"></el-option>
+                    <el-option v-for="(item,i) in extraRuleOptions" :key="i" :label="item.label"
+                      :value="item.value" />
                   </el-select>
                 </el-form-item>
                 <el-checkbox v-model="approverForm.isCustomCopy">允许自选抄送人</el-checkbox>
@@ -2213,6 +2204,32 @@ const overTimeOptions = [{
   value: 2,
   label: '表单变量'
 },]
+const extraRuleOptions = [
+  {
+    value: 1,
+    label: '无附加条件'
+  },
+  {
+    value: 6,
+    label: '同一公司'
+  },
+  {
+    value: 2,
+    label: '同一部门'
+  },
+  {
+    value: 3,
+    label: '同一岗位'
+  },
+  {
+    value: 4,
+    label: '发起人上级'
+  },
+  {
+    value: 5,
+    label: '发起人下属'
+  }
+]
 const nodeNoticeOptions = [
   {
     value: 2,
@@ -2312,6 +2329,7 @@ export default {
       nodeNoticeOptions,
       systemFieldOptions,
       overTimeOptions,
+      extraRuleOptions,
       rejectStepOptions: [],
       progressOptions: ['10', '20', '30', '40', '50', '60', '70', '80', '90'],
       symbolOptions: [
