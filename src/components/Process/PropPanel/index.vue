@@ -1277,6 +1277,9 @@
                     placeholder="请选择打印模板" lastLevel clearable></JNPF-TreeSelect>
                 </div>
               </el-form-item>
+            </el-form>
+            <el-form class="pd-10" style="margin-top:-20px" label-width="90px"
+              label-position="left">
               <el-form-item label="自动同意" style="margin-top:-10px">
                 <div slot="label">自动同意
                   <el-tooltip content="当前审批节点表单必填字段为空会使工单流转失败，下一审批节点设置候选人员、选择分支时当前审批节点规则失效"
@@ -1284,16 +1287,19 @@
                     <a class="el-icon-warning-outline"></a>
                   </el-tooltip>
                 </div>
-                <el-select v-model="approverForm.agreeRule">
-                  <el-option label="关闭" :value="1"></el-option>
-                  <el-option label="审批人为发起人" :value="2"></el-option>
-                  <el-option label="审批人与上一审批节点处理人相同" :value="3"></el-option>
-                  <el-option label="审批人审批过" :value="4"></el-option>
-                </el-select>
+                <el-switch v-model="approverForm.hasAgreeRule" />
               </el-form-item>
-            </el-form>
-            <el-form class="pd-10" style="margin-top:-20px" label-width="90px"
-              label-position="left">
+              <el-form-item v-show="approverForm.hasAgreeRule" label-width="0"
+                style="margin-top:-18px">
+                <el-row>同意规则配置</el-row>
+                <el-row>
+                  <el-select v-model="approverForm.agreeRules" multiple>
+                    <el-option label="审批人为发起人" :value="2"></el-option>
+                    <el-option label="审批人与上一审批节点处理人相同" :value="3"></el-option>
+                    <el-option label="审批人审批过" :value="4"></el-option>
+                  </el-select>
+                </el-row>
+              </el-form-item>
               <el-form-item>
                 <div slot="label">手写签名
                   <el-tooltip content="审批人在进行审批操作时需手写签名" placement="top">
@@ -2022,7 +2028,8 @@ const defaultSubFlowForm = {
 const defaultApproverForm = {
   extraRule: 1, // 附加条件,默认无附加条件
   extraCopyRule: 1, // 抄送附加条件,默认无附加条件
-  agreeRule: 1, // 自动同意规则,默认不启用
+  hasAgreeRule: false, // 自动同意规则,默认不启用
+  agreeRules: [], // 自动同意规则数组
   formFieldType: 1,// 表单字段审核方式的类型(1-用户 2-部门)
   approvers: [], // 审批人集合
   approverPos: [], // 审批岗位集合
