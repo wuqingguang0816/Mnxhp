@@ -33,7 +33,7 @@
             <i class="icon-ym icon-ym-header-userInfo"></i>{{ $t('navbar.profile') }}
           </el-dropdown-item>
         </router-link>
-        <el-dropdown placement="right-start" v-if="userInfo.systemIds.length>1">
+        <el-dropdown placement="right-start" v-if="userInfo.systemIds&&userInfo.systemIds.length>1">
           <el-dropdown-item>
             <i class="icon-ym icon-ym-systemToggle"></i>{{ $t('navbar.systemChange') }}
           </el-dropdown-item>
