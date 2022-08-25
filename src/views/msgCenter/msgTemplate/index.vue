@@ -89,7 +89,9 @@
           <el-table-column label="操作" width="150" fixed="right">
             <template slot-scope="scope">
               <tableOpts @edit="addEditTemplate(scope.row.id)"
-                @del="handleDel(scope.$index,scope.row.id)">
+                @del="handleDel(scope.$index,scope.row.id)"
+                :editDisabled="scope.row.templateType == '1'"
+                :delDisabled="scope.row.templateType == '1'">
                 <el-dropdown>
                   <el-button type="text" size="mini">
                     {{$t('common.moreBtn')}}<i class="el-icon-arrow-down el-icon--right" />
