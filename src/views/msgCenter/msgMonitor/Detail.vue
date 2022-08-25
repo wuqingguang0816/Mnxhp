@@ -33,7 +33,7 @@
 <script>
 import { getMsgMonitorDetail } from '@/api/msgCenter/msgMonitor'
 export default {
-  name: 'detailForm',
+  name: 'msgMonitor-Form',
   data() {
     return {
       detailForm: {},

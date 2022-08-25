@@ -73,7 +73,7 @@
 import { getMsgMonitorList, delMsgMonitor, emptyMsgMonitor } from '@/api/msgCenter/msgMonitor'
 import Detail from './Detail'
 export default {
-  name: 'workFlow-flowMonitor',
+  name: 'system-mesCenter-msgMonitor',
   components: { Detail },
   data() {
     return {
