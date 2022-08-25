@@ -8,12 +8,17 @@
       <template v-for="(item,i) in socialsList">
         <el-row :key="i">
           <el-col :span="1" class="col-img">
-            <img v-if="item.enname=='wechat_open'" src="@/assets/images/socials/wechat_open.png" alt="" class="row-img" />
-            <img v-if="item.enname==='qq'" src="@/assets/images/socials/qq.png" alt="" class="row-img" />
-            <img v-if="item.enname==='wechat_enterprise'" src="@/assets/images/socials/wxWork.png" alt="" class="row-img" />
-            <img v-if="item.enname==='dingtalk'" src="@/assets/images/socials/dingtalk.png" alt="" class="row-img" />
-            <img v-if="item.enname==='feishu'" src="@/assets/images/socials/feishu.png" alt="" class="row-img" />
-            <img v-if="item.enname==='github'" src="@/assets/images/socials/gitHub.png" alt="" class="row-img" />
+            <img v-if="item.enname" :src="item.logo" alt="" class="row-img" />
+            <!-- <img v-if="item.enname==='qq'" src="@/assets/images/socials/qq.png" alt=""
+              class="row-img" />
+            <img v-if="item.enname==='wechat_enterprise'" src="@/assets/images/socials/wxWork.png"
+              alt="" class="row-img" />
+            <img v-if="item.enname==='dingtalk'" src="@/assets/images/socials/dingtalk.png" alt=""
+              class="row-img" />
+            <img v-if="item.enname==='feishu'" src="@/assets/images/socials/feishu.png" alt=""
+              class="row-img" />
+            <img v-if="item.enname==='github'" src="@/assets/images/socials/gitHub.png" alt=""
+              class="row-img" /> -->
             <!-- <img v-if="item.enname==='gitee'" src="@/assets/images/socials/gitee.png" alt="" class="row-img" /> -->
             <img v-if="!item.enname" src="" alt="" class="row-img" />
           </el-col>
@@ -27,8 +32,10 @@
             </div>
           </el-col>
           <el-col :span="1" class="col-line-height">
-            <el-button size="small" type="" v-if="item.entity" @click="deleteSocials(item.entity.id)">解绑</el-button>
-            <el-button size="small" type="primary" v-if="!item.entity" @click="bingding(item.enname)">绑定</el-button>
+            <el-button size="small" type="" v-if="item.entity"
+              @click="deleteSocials(item.entity.id)">解绑</el-button>
+            <el-button size="small" type="primary" v-if="!item.entity"
+              @click="bingding(item.enname)">绑定</el-button>
           </el-col>
         </el-row>
         <el-divider class="divider-margin" :key="i"></el-divider>
@@ -36,8 +43,10 @@
       </template>
     </el-col>
 
-    <el-dialog title="登录" :visible.sync="dialogVisible" width="500px" height="500px" :before-close="handleClose">
-      <iframe :src="dialogSrt" width="100%" height="500px" frameborder="0" @load="iframeLoad" sandbox="allow-scripts allow-top-navigation allow-same-origin allow-top-navigation-by-user-activation">
+    <el-dialog title="登录" :visible.sync="dialogVisible" width="500px" height="500px"
+      :before-close="handleClose">
+      <iframe :src="dialogSrt" width="100%" height="500px" frameborder="0" @load="iframeLoad"
+        sandbox="allow-scripts allow-top-navigation allow-same-origin allow-top-navigation-by-user-activation">
       </iframe>
     </el-dialog>
 

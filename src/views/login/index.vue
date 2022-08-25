@@ -63,30 +63,12 @@
             @click.native.prevent="handleLogin">{{ $t('login.logIn') }}</el-button>
           <el-divider content-position="center">其他登录方式</el-divider>
           <div class="other-list">
-            <el-tooltip class="item" effect="dark" content="微信登录" placement="top">
-              <div class="other-item" title="微信登录" @click="otherLogin('wechat_open')"><i
-                  class="icon-ym icon-ym-logo-wechat" /></div>
-            </el-tooltip>
-            <el-tooltip class="item" effect="dark" content="企业微信登录" placement="top">
-              <div class="other-item" title="企业微信登录" @click="otherLogin('wechat_enterprise')"><i
-                  class="icon-ym icon-ym-logo-wxWork" /></div>
-            </el-tooltip>
-            <el-tooltip class="item" effect="dark" content="QQ登录" placement="top">
-              <div class="other-item" title="QQ登录" @click="otherLogin('qq')"><i
-                  class="icon-ym icon-ym-logo-qq" /></div>
-            </el-tooltip>
-            <el-tooltip class="item" effect="dark" content="钉钉登录" placement="top">
-              <div class="other-item" title="钉钉登录" @click="otherLogin('dingtalk')"><i
-                  class="icon-ym icon-ym-logo-dingding" /></div>
-            </el-tooltip>
-            <el-tooltip class="item" effect="dark" content="飞书登录" placement="top">
-              <div class="other-item" title="飞书登录" @click="otherLogin('feishu')"><i
-                  class="icon-ym icon-ym-logo-feishu" /></div>
-            </el-tooltip>
-            <el-tooltip class="item" effect="dark" content="gitHub登录" placement="top">
-              <div class="other-item" title="gitHub登录" @click="otherLogin('github')"><i
-                  class="icon-ym icon-ym-logo-github" /></div>
-            </el-tooltip>
+            <div v-for="(item,i) in socialsList" :key="i">
+              <el-tooltip class="item" effect="dark" :content='item.name+"登录"' placement="top">
+                <div class="other-item" @click="otherLogin(item.enname)"><i :class="item.icon" />
+                </div>
+              </el-tooltip>
+            </div>
           </div>
         </el-form>
         <div v-show="active==2" class="login-form-QRCode">
@@ -102,6 +84,7 @@
 
 <script>
 import { getConfig, otherLogin } from '@/api/user'
+import { getSocialsUserList } from '@/api/permission/socialsUser'
 export default {
   name: 'Login',
   data() {
@@ -135,6 +118,7 @@ export default {
       otherQuery: {},
       active: 1,
       listenerLoad: false,
+      socialsList: [],
     }
   },
   computed: {
@@ -170,6 +154,7 @@ export default {
     }
     if (this.needCode) this.changeImg()
     this.loginListener()
+    this.otherLoginList()
   },
   mounted() {
     this.$store.commit('user/SET_LOGIN_LOADING', false)
@@ -242,6 +227,13 @@ export default {
         return acc
       }, {})
     },
+    otherLoginList() {
+      this.socialsList = []
+      getSocialsUserList().then(res => {
+        this.socialsList = res.data.filter(item => { return item.isLatest == "true" });
+      })
+    },
+
     otherLogin(data) {
       otherLogin(data).then(res => {
         if (this.winURL && !this.winURL.closed) {
@@ -261,6 +253,7 @@ export default {
         window.addEventListener('message', (e) => {
           if (!e.data) return
           var response = typeof e.data === 'string' ? JSON.parse(e.data) : e.data;
+          if (e.data.type == "webpackOk") return
           if (!response.theme || !response.token) return this.$message.error('用户未绑定或绑定账号异常！')
           this.$store.dispatch('user/updateToken', response).then(res => {
             this.$router.push({
