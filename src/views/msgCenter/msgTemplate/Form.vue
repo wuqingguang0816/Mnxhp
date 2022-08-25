@@ -194,6 +194,7 @@
 import { getMsgTemplateDetail, addMsgTemplate, editMsgTemplate, getMsgTypeList } from '@/api/msgCenter/msgTemplate'
 import { deepClone } from '@/utils'
 export default {
+  name: 'msgTemplate-Form',
   data() {
     return {
       dataForm: {

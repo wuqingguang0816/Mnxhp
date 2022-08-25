@@ -96,6 +96,7 @@
 <script>
 import { getMsgTemplateDetail, getMsgTypeList } from '@/api/msgCenter/msgTemplate'
 export default {
+  name: 'msgTemplate-Detail',
   data() {
     return {
       dataForm: {
