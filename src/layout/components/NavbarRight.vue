@@ -184,7 +184,8 @@ export default {
       this.socket = this.$store.getters.socket || null
       if ('WebSocket' in window) {
         if (!this.socket) {
-          this.socket = new ReconnectingWebSocket(this.define.WebSocketUrl)
+          const webSocketUrl = `${this.define.WebSocketUrl}/${this.$store.getters.token}`
+          this.socket = new ReconnectingWebSocket(webSocketUrl)
           this.$store.commit('user/SET_SOCKET', this.socket)
         }
         //添加事件监听
