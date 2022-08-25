@@ -12,7 +12,7 @@ export function login(data) {
   })
 }
 // 第三方登录
-export function otherlogin(data) {
+export function otherLogin(data) {
   return request({
     url: `/api/oauth/render/${data}`,
     method: 'get',
