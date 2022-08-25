@@ -67,6 +67,7 @@ export default {
           testSendConfigInfo(id).then(res => {
             this.testSendData = res.data
             for (let index = 0; index < this.testSendData.length; index++) {
+              const item = this.testSendData[index]
               item.paramJson = item.paramJson ? JSON.parse(item.paramJson) : []
               item.toUser = item.toUser || []
             }
