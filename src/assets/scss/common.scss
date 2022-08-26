@@ -1773,6 +1773,10 @@ textarea.el-textarea__inner {
   line-height: 20px;
 }
 
+.el-input-number.el-input-number--small {
+  width: 160px;
+}
+
 // 布局错位问题修正 
 .el-col {
   .el-form-item--small .el-form-item__label {
