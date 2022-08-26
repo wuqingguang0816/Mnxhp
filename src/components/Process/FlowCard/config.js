@@ -62,37 +62,37 @@ const defaultStartForm = {
     templateJson: []
   },
   waitMsgConfig: {
-    on: 0,
+    on: 3,
     msgId: '',
     msgName: '',
     templateJson: []
   },
   endMsgConfig: {
-    on: 0,
+    on: 3,
     msgId: '',
     msgName: '',
     templateJson: []
   },
   approveMsgConfig: {
-    on: 0,
+    on: 3,
     msgId: '',
     msgName: '',
     templateJson: []
   },
   rejectMsgConfig: {
-    on: 0,
+    on: 3,
     msgId: '',
     msgName: '',
     templateJson: []
   },
   copyMsgConfig: {
-    on: 0,
+    on: 3,
     msgId: '',
     msgName: '',
     templateJson: []
   },
   overTimeMsgConfig: {
-    on: 0,
+    on: 3,
     msgId: '',
     msgName: '',
     templateJson: []

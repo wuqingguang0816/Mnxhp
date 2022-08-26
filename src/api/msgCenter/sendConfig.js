@@ -67,3 +67,11 @@ export const exportSendConfig = id => {
     method: 'GET'
   })
 }
+// 列表
+export const getMsgTemplate = data => {
+  return request({
+    url: '/api/message/SendMessageConfig/getSendConfigList',
+    method: 'GET',
+    data
+  })
+}

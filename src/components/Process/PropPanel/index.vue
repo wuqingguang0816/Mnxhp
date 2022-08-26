@@ -290,7 +290,7 @@
         <el-tab-pane label="节点通知">
           <el-scrollbar class="config-scrollbar">
             <el-form :model="subFlowForm" label-position="top" class="pd-10">
-              <el-alert title="该通知设置配置外部第三方消息提醒，站内信系统默认发送" type="warning" :closable="false"
+              <el-alert title="该通知设置在【消息中心】-【消息发送配置】维护，默认发送站内信提醒" type="warning" :closable="false"
                 show-icon />
               <el-form-item class="mt-10">
                 <div slot="label">子流程发起
@@ -299,12 +299,12 @@
                   </el-tooltip>
                 </div>
                 <el-select v-model="subFlowForm.launchMsgConfig.on" placeholder="请选择">
-                  <el-option v-for="item in noticeOptions" :key="item.value" :label="item.label"
+                  <el-option v-for="item in noticeOptionsData" :key="item.value" :label="item.label"
                     :value="item.value" />
                 </el-select>
               </el-form-item>
               <template v-if="subFlowForm.launchMsgConfig.on===1">
-                <el-form-item label="消息模板">
+                <el-form-item label="发送配置">
                   <msg-dialog :value="subFlowForm.launchMsgConfig.msgId"
                     :title="subFlowForm.launchMsgConfig.msgName"
                     @change="onMsgChange('subFlowForm','launchMsgConfig',arguments)" />
@@ -312,15 +312,26 @@
                 <el-form-item label="参数设置" style="margin-bottom: 0;"></el-form-item>
                 <el-table :data="subFlowForm.launchMsgConfig.templateJson">
                   <el-table-column type="index" width="50" label="序号" align="center" />
-                  <el-table-column prop="field" label="参数名称" width="200">
+                  <el-table-column prop="field" label="模板名称" width="150">
                     <template slot-scope="scope">
-                      {{scope.row.fieldName?scope.row.field+'('+scope.row.fieldName+')':scope.row.field}}
+                      <p class="template-name" @click="showTemplateDetail(scope.row.templateId)">
+                        {{scope.row.msgTemplateName}}</p>
+                    </template>
+                  </el-table-column>
+                  <el-table-column prop="field" label="参数名称" width="150">
+                    <template slot-scope="scope">
+                      <div class="parameter-box" v-for="(item,index) in scope.row.paramJson"
+                        :key="index">
+                        {{item.field}}({{item.fieldName}})
+                      </div>
                     </template>
                   </el-table-column>
                   <el-table-column prop="value" label="表单字段">
                     <template slot-scope="scope">
-                      <el-select v-model="scope.row.relationField" placeholder="请选择表单字段" clearable
-                        filterable>
+                      <el-select class="variable-box" v-model="it.relationField"
+                        placeholder="请选择表单字段" clearable filterable
+                        @change="onRelationFieldChange($event,it)"
+                        v-for="(it,index) in scope.row.paramJson" :key="index">
                         <el-option v-for="item in funcOptions" :key="item.__vModel__"
                           :label="item.__config__.label?item.__vModel__+'('+item.__config__.label+')':item.__vModel__"
                           :value="item.__vModel__">
@@ -651,7 +662,7 @@
         <el-tab-pane label="流程通知">
           <el-scrollbar class="config-scrollbar">
             <el-form :model="startForm" class="pd-10" label-position="top">
-              <el-alert title="该通知设置配置外部第三方消息提醒，站内信系统默认发送" type="warning" :closable="false"
+              <el-alert title="该通知设置在【消息中心】-【消息发送配置】维护，默认发送站内信提醒" type="warning" :closable="false"
                 show-icon />
               <el-form-item class="mt-10">
                 <div slot="label">流程待办
@@ -660,12 +671,12 @@
                   </el-tooltip>
                 </div>
                 <el-select v-model="startForm.waitMsgConfig.on" placeholder="请选择">
-                  <el-option v-for="item in noticeOptions" :key="item.value" :label="item.label"
+                  <el-option v-for="item in noticeOptionsData" :key="item.value" :label="item.label"
                     :value="item.value" />
                 </el-select>
               </el-form-item>
               <div style="margin-bottom: 18px;" v-if="startForm.waitMsgConfig.on===1">
-                <el-form-item label="消息模板">
+                <el-form-item label="发送配置">
                   <msg-dialog :value="startForm.waitMsgConfig.msgId"
                     :title="startForm.waitMsgConfig.msgName"
                     @change="onMsgChange('startForm','waitMsgConfig',arguments)" />
@@ -673,15 +684,26 @@
                 <el-form-item label="参数设置" style="margin-bottom: 0;"></el-form-item>
                 <el-table :data="startForm.waitMsgConfig.templateJson">
                   <el-table-column type="index" width="50" label="序号" align="center" />
-                  <el-table-column prop="field" label="参数名称" width="200">
+                  <el-table-column prop="field" label="模板名称" width="150">
                     <template slot-scope="scope">
-                      {{scope.row.fieldName?scope.row.field+'('+scope.row.fieldName+')':scope.row.field}}
+                      <p class="template-name" @click="showTemplateDetail(scope.row.templateId)">
+                        {{scope.row.msgTemplateName}}</p>
+                    </template>
+                  </el-table-column>
+                  <el-table-column prop="field" label="参数名称" width="150">
+                    <template slot-scope="scope">
+                      <div class="parameter-box" v-for="(item,index) in scope.row.paramJson"
+                        :key="index">
+                        {{item.field}}({{item.fieldName}})
+                      </div>
                     </template>
                   </el-table-column>
                   <el-table-column prop="value" label="表单字段">
                     <template slot-scope="scope">
-                      <el-select v-model="scope.row.relationField" placeholder="请选择表单字段" clearable
-                        filterable @change="onRelationFieldChange($event,scope.row)">
+                      <el-select class="variable-box" v-model="it.relationField"
+                        placeholder="请选择表单字段" clearable filterable
+                        @change="onRelationFieldChange($event,it)"
+                        v-for="(it,index) in scope.row.paramJson" :key="index">
                         <el-option-group>
                           <el-option v-for="item in systemFieldOptions" :key="item.__vModel__"
                             :label="item.__config__.label?item.__vModel__+'('+item.__config__.label+')':item.__vModel__"
@@ -704,12 +726,12 @@
                   </el-tooltip>
                 </div>
                 <el-select v-model="startForm.endMsgConfig.on" placeholder="请选择">
-                  <el-option v-for="item in noticeOptions" :key="item.value" :label="item.label"
+                  <el-option v-for="item in noticeOptionsData" :key="item.value" :label="item.label"
                     :value="item.value" />
                 </el-select>
               </el-form-item>
               <div style="margin-bottom: 18px;" v-if="startForm.endMsgConfig.on===1">
-                <el-form-item label="消息模板">
+                <el-form-item label="发送配置">
                   <msg-dialog :value="startForm.endMsgConfig.msgId"
                     :title="startForm.endMsgConfig.msgName"
                     @change="onMsgChange('startForm','endMsgConfig',arguments)" />
@@ -717,15 +739,26 @@
                 <el-form-item label="参数设置" style="margin-bottom: 0;"></el-form-item>
                 <el-table :data="startForm.endMsgConfig.templateJson">
                   <el-table-column type="index" width="50" label="序号" align="center" />
-                  <el-table-column prop="field" label="参数名称" width="200">
+                  <el-table-column prop="field" label="模板名称" width="150">
                     <template slot-scope="scope">
-                      {{scope.row.fieldName?scope.row.field+'('+scope.row.fieldName+')':scope.row.field}}
+                      <p class="template-name" @click="showTemplateDetail(scope.row.templateId)">
+                        {{scope.row.msgTemplateName}}</p>
+                    </template>
+                  </el-table-column>
+                  <el-table-column prop="field" label="参数名称" width="150">
+                    <template slot-scope="scope">
+                      <div class="parameter-box" v-for="(item,index) in scope.row.paramJson"
+                        :key="index">
+                        {{item.field}}({{item.fieldName}})
+                      </div>
                     </template>
                   </el-table-column>
                   <el-table-column prop="value" label="表单字段">
                     <template slot-scope="scope">
-                      <el-select v-model="scope.row.relationField" placeholder="请选择表单字段" clearable
-                        filterable @change="onRelationFieldChange($event,scope.row)">
+                      <el-select class="variable-box" v-model="it.relationField"
+                        placeholder="请选择表单字段" clearable filterable
+                        @change="onRelationFieldChange($event,it)"
+                        v-for="(it,index) in scope.row.paramJson" :key="index">
                         <el-option-group>
                           <el-option v-for="item in systemFieldOptions" :key="item.__vModel__"
                             :label="item.__config__.label?item.__vModel__+'('+item.__config__.label+')':item.__vModel__"
@@ -748,12 +781,12 @@
                   </el-tooltip>
                 </div>
                 <el-select v-model="startForm.approveMsgConfig.on" placeholder="请选择">
-                  <el-option v-for="item in noticeOptions" :key="item.value" :label="item.label"
+                  <el-option v-for="item in noticeOptionsData" :key="item.value" :label="item.label"
                     :value="item.value" />
                 </el-select>
               </el-form-item>
               <div style="margin-bottom: 18px;" v-if="startForm.approveMsgConfig.on===1">
-                <el-form-item label="消息模板">
+                <el-form-item label="发送配置">
                   <msg-dialog :value="startForm.approveMsgConfig.msgId"
                     :title="startForm.approveMsgConfig.msgName"
                     @change="onMsgChange('startForm','approveMsgConfig',arguments)" />
@@ -761,15 +794,26 @@
                 <el-form-item label="参数设置" style="margin-bottom: 0;"></el-form-item>
                 <el-table :data="startForm.approveMsgConfig.templateJson">
                   <el-table-column type="index" width="50" label="序号" align="center" />
-                  <el-table-column prop="field" label="参数名称" width="200">
+                  <el-table-column prop="field" label="模板名称" width="150">
                     <template slot-scope="scope">
-                      {{scope.row.fieldName?scope.row.field+'('+scope.row.fieldName+')':scope.row.field}}
+                      <p class="template-name" @click="showTemplateDetail(scope.row.templateId)">
+                        {{scope.row.msgTemplateName}}</p>
+                    </template>
+                  </el-table-column>
+                  <el-table-column prop="field" label="参数名称" width="150">
+                    <template slot-scope="scope">
+                      <div class="parameter-box" v-for="(item,index) in scope.row.paramJson"
+                        :key="index">
+                        {{item.field}}({{item.fieldName}})
+                      </div>
                     </template>
                   </el-table-column>
                   <el-table-column prop="value" label="表单字段">
                     <template slot-scope="scope">
-                      <el-select v-model="scope.row.relationField" placeholder="请选择表单字段" clearable
-                        filterable @change="onRelationFieldChange($event,scope.row)">
+                      <el-select class="variable-box" v-model="it.relationField"
+                        placeholder="请选择表单字段" clearable filterable
+                        @change="onRelationFieldChange($event,it)"
+                        v-for="(it,index) in scope.row.paramJson" :key="index">
                         <el-option-group>
                           <el-option v-for="item in systemFieldOptions" :key="item.__vModel__"
                             :label="item.__config__.label?item.__vModel__+'('+item.__config__.label+')':item.__vModel__"
@@ -792,12 +836,12 @@
                   </el-tooltip>
                 </div>
                 <el-select v-model="startForm.rejectMsgConfig.on" placeholder="请选择">
-                  <el-option v-for="item in noticeOptions" :key="item.value" :label="item.label"
+                  <el-option v-for="item in noticeOptionsData" :key="item.value" :label="item.label"
                     :value="item.value" />
                 </el-select>
               </el-form-item>
               <div style="margin-bottom: 18px;" v-if="startForm.rejectMsgConfig.on===1">
-                <el-form-item label="消息模板">
+                <el-form-item label="发送配置">
                   <msg-dialog :value="startForm.rejectMsgConfig.msgId"
                     :title="startForm.rejectMsgConfig.msgName"
                     @change="onMsgChange('startForm','rejectMsgConfig',arguments)" />
@@ -805,15 +849,26 @@
                 <el-form-item label="参数设置" style="margin-bottom: 0;"></el-form-item>
                 <el-table :data="startForm.rejectMsgConfig.templateJson">
                   <el-table-column type="index" width="50" label="序号" align="center" />
-                  <el-table-column prop="field" label="参数名称" width="200">
+                  <el-table-column prop="field" label="模板名称" width="150">
                     <template slot-scope="scope">
-                      {{scope.row.fieldName?scope.row.field+'('+scope.row.fieldName+')':scope.row.field}}
+                      <p class="template-name" @click="showTemplateDetail(scope.row.templateId)">
+                        {{scope.row.msgTemplateName}}</p>
+                    </template>
+                  </el-table-column>
+                  <el-table-column prop="field" label="参数名称" width="150">
+                    <template slot-scope="scope">
+                      <div class="parameter-box" v-for="(item,index) in scope.row.paramJson"
+                        :key="index">
+                        {{item.field}}({{item.fieldName}})
+                      </div>
                     </template>
                   </el-table-column>
                   <el-table-column prop="value" label="表单字段">
                     <template slot-scope="scope">
-                      <el-select v-model="scope.row.relationField" placeholder="请选择表单字段" clearable
-                        filterable @change="onRelationFieldChange($event,scope.row)">
+                      <el-select class="variable-box" v-model="it.relationField"
+                        placeholder="请选择表单字段" clearable filterable
+                        @change="onRelationFieldChange($event,it)"
+                        v-for="(it,index) in scope.row.paramJson" :key="index">
                         <el-option-group>
                           <el-option v-for="item in systemFieldOptions" :key="item.__vModel__"
                             :label="item.__config__.label?item.__vModel__+'('+item.__config__.label+')':item.__vModel__"
@@ -836,12 +891,12 @@
                   </el-tooltip>
                 </div>
                 <el-select v-model="startForm.copyMsgConfig.on" placeholder="请选择">
-                  <el-option v-for="item in noticeOptions" :key="item.value" :label="item.label"
+                  <el-option v-for="item in noticeOptionsData" :key="item.value" :label="item.label"
                     :value="item.value" />
                 </el-select>
               </el-form-item>
               <div v-if="startForm.copyMsgConfig.on===1">
-                <el-form-item label="消息模板">
+                <el-form-item label="发送配置">
                   <msg-dialog :value="startForm.copyMsgConfig.msgId"
                     :title="startForm.copyMsgConfig.msgName"
                     @change="onMsgChange('startForm','copyMsgConfig',arguments)" />
@@ -849,15 +904,26 @@
                 <el-form-item label="参数设置" style="margin-bottom: 0;"></el-form-item>
                 <el-table :data="startForm.copyMsgConfig.templateJson">
                   <el-table-column type="index" width="50" label="序号" align="center" />
-                  <el-table-column prop="field" label="参数名称" width="200">
+                  <el-table-column prop="field" label="模板名称" width="150">
                     <template slot-scope="scope">
-                      {{scope.row.fieldName?scope.row.field+'('+scope.row.fieldName+')':scope.row.field}}
+                      <p class="template-name" @click="showTemplateDetail(scope.row.templateId)">
+                        {{scope.row.msgTemplateName}}</p>
+                    </template>
+                  </el-table-column>
+                  <el-table-column prop="field" label="参数名称" width="150">
+                    <template slot-scope="scope">
+                      <div class="parameter-box" v-for="(item,index) in scope.row.paramJson"
+                        :key="index">
+                        {{item.field}}({{item.fieldName}})
+                      </div>
                     </template>
                   </el-table-column>
                   <el-table-column prop="value" label="表单字段">
                     <template slot-scope="scope">
-                      <el-select v-model="scope.row.relationField" placeholder="请选择表单字段" clearable
-                        filterable @change="onRelationFieldChange($event,scope.row)">
+                      <el-select class="variable-box" v-model="it.relationField"
+                        placeholder="请选择表单字段" clearable filterable
+                        @change="onRelationFieldChange($event,it)"
+                        v-for="(it,index) in scope.row.paramJson" :key="index">
                         <el-option-group>
                           <el-option v-for="item in systemFieldOptions" :key="item.__vModel__"
                             :label="item.__config__.label?item.__vModel__+'('+item.__config__.label+')':item.__vModel__"
@@ -880,12 +946,12 @@
                   </el-tooltip>
                 </div>
                 <el-select v-model="startForm.overTimeMsgConfig.on" placeholder="请选择">
-                  <el-option v-for="item in noticeOptions" :key="item.value" :label="item.label"
+                  <el-option v-for="item in noticeOptionsData" :key="item.value" :label="item.label"
                     :value="item.value" />
                 </el-select>
               </el-form-item>
               <div v-if="startForm.overTimeMsgConfig.on===1">
-                <el-form-item label="消息模板">
+                <el-form-item label="发送配置">
                   <msg-dialog :value="startForm.overTimeMsgConfig.msgId"
                     :title="startForm.overTimeMsgConfig.msgName"
                     @change="onMsgChange('startForm','overTimeMsgConfig',arguments)" />
@@ -893,15 +959,26 @@
                 <el-form-item label="参数设置" style="margin-bottom: 0;"></el-form-item>
                 <el-table :data="startForm.overTimeMsgConfig.templateJson">
                   <el-table-column type="index" width="50" label="序号" align="center" />
-                  <el-table-column prop="field" label="参数名称" width="200">
+                  <el-table-column prop="field" label="模板名称" width="150">
                     <template slot-scope="scope">
-                      {{scope.row.fieldName?scope.row.field+'('+scope.row.fieldName+')':scope.row.field}}
+                      <p class="template-name" @click="showTemplateDetail(scope.row.templateId)">
+                        {{scope.row.msgTemplateName}}</p>
+                    </template>
+                  </el-table-column>
+                  <el-table-column prop="field" label="参数名称" width="150">
+                    <template slot-scope="scope">
+                      <div class="parameter-box" v-for="(item,index) in scope.row.paramJson"
+                        :key="index">
+                        {{item.field}}({{item.fieldName}})
+                      </div>
                     </template>
                   </el-table-column>
                   <el-table-column prop="value" label="表单字段">
                     <template slot-scope="scope">
-                      <el-select v-model="scope.row.relationField" placeholder="请选择表单字段" clearable
-                        filterable>
+                      <el-select class="variable-box" v-model="it.relationField"
+                        placeholder="请选择表单字段" clearable filterable
+                        @change="onRelationFieldChange($event,it)"
+                        v-for="(it,index) in scope.row.paramJson" :key="index">
                         <el-option v-for="item in funcOptions" :key="item.__vModel__"
                           :label="item.__config__.label?item.__vModel__+'('+item.__config__.label+')':item.__vModel__"
                           :value="item.__vModel__">
@@ -918,12 +995,12 @@
                   </el-tooltip>
                 </div>
                 <el-select v-model="startForm.noticeMsgConfig.on" placeholder="请选择">
-                  <el-option v-for="item in noticeOptions" :key="item.value" :label="item.label"
+                  <el-option v-for="item in noticeOptionsData" :key="item.value" :label="item.label"
                     :value="item.value" />
                 </el-select>
               </el-form-item>
               <div v-if="startForm.noticeMsgConfig.on===1">
-                <el-form-item label="消息模板">
+                <el-form-item label="发送配置">
                   <msg-dialog :value="startForm.noticeMsgConfig.msgId"
                     :title="startForm.noticeMsgConfig.msgName"
                     @change="onMsgChange('startForm','noticeMsgConfig',arguments)" />
@@ -931,15 +1008,26 @@
                 <el-form-item label="参数设置" style="margin-bottom: 0;"></el-form-item>
                 <el-table :data="startForm.noticeMsgConfig.templateJson">
                   <el-table-column type="index" width="50" label="序号" align="center" />
-                  <el-table-column prop="field" label="参数名称" width="200">
+                  <el-table-column prop="field" label="模板名称" width="150">
                     <template slot-scope="scope">
-                      {{scope.row.fieldName?scope.row.field+'('+scope.row.fieldName+')':scope.row.field}}
+                      <p class="template-name" @click="showTemplateDetail(scope.row.templateId)">
+                        {{scope.row.msgTemplateName}}</p>
+                    </template>
+                  </el-table-column>
+                  <el-table-column prop="field" label="参数名称" width="150">
+                    <template slot-scope="scope">
+                      <div class="parameter-box" v-for="(item,index) in scope.row.paramJson"
+                        :key="index">
+                        {{item.field}}({{item.fieldName}})
+                      </div>
                     </template>
                   </el-table-column>
                   <el-table-column prop="value" label="表单字段">
                     <template slot-scope="scope">
-                      <el-select v-model="scope.row.relationField" placeholder="请选择表单字段" clearable
-                        filterable>
+                      <el-select class="variable-box" v-model="it.relationField"
+                        placeholder="请选择表单字段" clearable filterable
+                        @change="onRelationFieldChange($event,it)"
+                        v-for="(it,index) in scope.row.paramJson" :key="index">
                         <el-option v-for="item in funcOptions" :key="item.__vModel__"
                           :label="item.__config__.label?item.__vModel__+'('+item.__config__.label+')':item.__vModel__"
                           :value="item.__vModel__">
@@ -1576,7 +1664,7 @@
         <el-tab-pane label="节点通知">
           <el-scrollbar class="config-scrollbar">
             <el-form :model="approverForm" class="pd-10" label-position="top">
-              <el-alert title="该通知设置配置外部第三方消息提醒，站内信系统默认发送" type="warning" :closable="false"
+              <el-alert title="该通知设置在【消息中心】-【消息发送配置】维护，默认发送站内信提醒" type="warning" :closable="false"
                 show-icon />
               <el-form-item class="mt-10">
                 <div slot="label">节点同意
@@ -1585,12 +1673,12 @@
                   </el-tooltip>
                 </div>
                 <el-select v-model="approverForm.approveMsgConfig.on" placeholder="请选择">
-                  <el-option v-for="item in nodeNoticeOptions" :key="item.value" :label="item.label"
-                    :value="item.value" />
+                  <el-option v-for="item in nodeNoticeOptionsData" :key="item.value"
+                    :label="item.label" :value="item.value" />
                 </el-select>
               </el-form-item>
               <div style="margin-bottom: 18px;" v-if="approverForm.approveMsgConfig.on===1">
-                <el-form-item label="消息模板">
+                <el-form-item label="发送配置">
                   <msg-dialog :value="approverForm.approveMsgConfig.msgId"
                     :title="approverForm.approveMsgConfig.msgName"
                     @change="onMsgChange('approverForm','approveMsgConfig',arguments)" />
@@ -1598,15 +1686,26 @@
                 <el-form-item label="参数设置" style="margin-bottom: 0;"></el-form-item>
                 <el-table :data="approverForm.approveMsgConfig.templateJson">
                   <el-table-column type="index" width="50" label="序号" align="center" />
-                  <el-table-column prop="field" label="参数名称" width="200">
+                  <el-table-column prop="field" label="模板名称" width="150">
                     <template slot-scope="scope">
-                      {{scope.row.fieldName?scope.row.field+'('+scope.row.fieldName+')':scope.row.field}}
+                      <p class="template-name" @click="showTemplateDetail(scope.row.templateId)">
+                        {{scope.row.msgTemplateName}}</p>
+                    </template>
+                  </el-table-column>
+                  <el-table-column prop="field" label="参数名称" width="150">
+                    <template slot-scope="scope">
+                      <div class="parameter-box" v-for="(item,index) in scope.row.paramJson"
+                        :key="index">
+                        {{item.field}}({{item.fieldName}})
+                      </div>
                     </template>
                   </el-table-column>
                   <el-table-column prop="value" label="表单字段">
                     <template slot-scope="scope">
-                      <el-select v-model="scope.row.relationField" placeholder="请选择表单字段" clearable
-                        filterable @change="onRelationFieldChange($event,scope.row)">
+                      <el-select class="variable-box" v-model="it.relationField"
+                        placeholder="请选择表单字段" clearable filterable
+                        @change="onRelationFieldChange($event,it)"
+                        v-for="(it,index) in scope.row.paramJson" :key="index">
                         <el-option-group>
                           <el-option v-for="item in systemFieldOptions" :key="item.__vModel__"
                             :label="item.__config__.label?item.__vModel__+'('+item.__config__.label+')':item.__vModel__"
@@ -1629,12 +1728,12 @@
                   </el-tooltip>
                 </div>
                 <el-select v-model="approverForm.rejectMsgConfig.on" placeholder="请选择">
-                  <el-option v-for="item in nodeNoticeOptions" :key="item.value" :label="item.label"
-                    :value="item.value" />
+                  <el-option v-for="item in nodeNoticeOptionsData" :key="item.value"
+                    :label="item.label" :value="item.value" />
                 </el-select>
               </el-form-item>
               <div style="margin-bottom: 18px;" v-if="approverForm.rejectMsgConfig.on===1">
-                <el-form-item label="消息模板">
+                <el-form-item label="发送配置">
                   <msg-dialog :value="approverForm.rejectMsgConfig.msgId"
                     :title="approverForm.rejectMsgConfig.msgName"
                     @change="onMsgChange('approverForm','rejectMsgConfig',arguments)" />
@@ -1642,15 +1741,26 @@
                 <el-form-item label="参数设置" style="margin-bottom: 0;"></el-form-item>
                 <el-table :data="approverForm.rejectMsgConfig.templateJson">
                   <el-table-column type="index" width="50" label="序号" align="center" />
-                  <el-table-column prop="field" label="参数名称" width="200">
+                  <el-table-column prop="field" label="模板名称" width="150">
                     <template slot-scope="scope">
-                      {{scope.row.fieldName?scope.row.field+'('+scope.row.fieldName+')':scope.row.field}}
+                      <p class="template-name" @click="showTemplateDetail(scope.row.templateId)">
+                        {{scope.row.msgTemplateName}}</p>
+                    </template>
+                  </el-table-column>
+                  <el-table-column prop="field" label="参数名称" width="150">
+                    <template slot-scope="scope">
+                      <div class="parameter-box" v-for="(item,index) in scope.row.paramJson"
+                        :key="index">
+                        {{item.field}}({{item.fieldName}})
+                      </div>
                     </template>
                   </el-table-column>
                   <el-table-column prop="value" label="表单字段">
                     <template slot-scope="scope">
-                      <el-select v-model="scope.row.relationField" placeholder="请选择表单字段" clearable
-                        filterable @change="onRelationFieldChange($event,scope.row)">
+                      <el-select class="variable-box" v-model="it.relationField"
+                        placeholder="请选择表单字段" clearable filterable
+                        @change="onRelationFieldChange($event,it)"
+                        v-for="(it,index) in scope.row.paramJson" :key="index">
                         <el-option-group>
                           <el-option v-for="item in systemFieldOptions" :key="item.__vModel__"
                             :label="item.__config__.label?item.__vModel__+'('+item.__config__.label+')':item.__vModel__"
@@ -1673,12 +1783,12 @@
                   </el-tooltip>
                 </div>
                 <el-select v-model="approverForm.copyMsgConfig.on" placeholder="请选择">
-                  <el-option v-for="item in nodeNoticeOptions" :key="item.value" :label="item.label"
-                    :value="item.value" />
+                  <el-option v-for="item in nodeNoticeOptionsData" :key="item.value"
+                    :label="item.label" :value="item.value" />
                 </el-select>
               </el-form-item>
               <div v-if="approverForm.copyMsgConfig.on===1">
-                <el-form-item label="消息模板">
+                <el-form-item label="发送配置">
                   <msg-dialog :value="approverForm.copyMsgConfig.msgId"
                     :title="approverForm.copyMsgConfig.msgName"
                     @change="onMsgChange('approverForm','copyMsgConfig',arguments)" />
@@ -1686,15 +1796,26 @@
                 <el-form-item label="参数设置" style="margin-bottom: 0;"></el-form-item>
                 <el-table :data="approverForm.copyMsgConfig.templateJson">
                   <el-table-column type="index" width="50" label="序号" align="center" />
-                  <el-table-column prop="field" label="参数名称" width="200">
+                  <el-table-column prop="field" label="模板名称" width="150">
                     <template slot-scope="scope">
-                      {{scope.row.fieldName?scope.row.field+'('+scope.row.fieldName+')':scope.row.field}}
+                      <p class="template-name" @click="showTemplateDetail(scope.row.templateId)">
+                        {{scope.row.msgTemplateName}}</p>
+                    </template>
+                  </el-table-column>
+                  <el-table-column prop="field" label="参数名称" width="150">
+                    <template slot-scope="scope">
+                      <div class="parameter-box" v-for="(item,index) in scope.row.paramJson"
+                        :key="index">
+                        {{item.field}}({{item.fieldName}})
+                      </div>
                     </template>
                   </el-table-column>
                   <el-table-column prop="value" label="表单字段">
                     <template slot-scope="scope">
-                      <el-select v-model="scope.row.relationField" placeholder="请选择表单字段" clearable
-                        filterable @change="onRelationFieldChange($event,scope.row)">
+                      <el-select class="variable-box" v-model="it.relationField"
+                        placeholder="请选择表单字段" clearable filterable
+                        @change="onRelationFieldChange($event,it)"
+                        v-for="(it,index) in scope.row.paramJson" :key="index">
                         <el-option-group>
                           <el-option v-for="item in systemFieldOptions" :key="item.__vModel__"
                             :label="item.__config__.label?item.__vModel__+'('+item.__config__.label+')':item.__vModel__"
@@ -1717,12 +1838,12 @@
                   </el-tooltip>
                 </div>
                 <el-select v-model="approverForm.overTimeMsgConfig.on" placeholder="请选择">
-                  <el-option v-for="item in nodeNoticeOptions" :key="item.value" :label="item.label"
-                    :value="item.value" />
+                  <el-option v-for="item in nodeNoticeOptionsData" :key="item.value"
+                    :label="item.label" :value="item.value" />
                 </el-select>
               </el-form-item>
               <div v-if="approverForm.overTimeMsgConfig.on===1">
-                <el-form-item label="消息模板">
+                <el-form-item label="发送配置">
                   <msg-dialog :value="approverForm.overTimeMsgConfig.msgId"
                     :title="approverForm.overTimeMsgConfig.msgName"
                     @change="onMsgChange('approverForm','overTimeMsgConfig',arguments)" />
@@ -1730,15 +1851,26 @@
                 <el-form-item label="参数设置" style="margin-bottom: 0;"></el-form-item>
                 <el-table :data="approverForm.overTimeMsgConfig.templateJson">
                   <el-table-column type="index" width="50" label="序号" align="center" />
-                  <el-table-column prop="field" label="参数名称" width="200">
+                  <el-table-column prop="field" label="模板名称" width="150">
                     <template slot-scope="scope">
-                      {{scope.row.fieldName?scope.row.field+'('+scope.row.fieldName+')':scope.row.field}}
+                      <p class="template-name" @click="showTemplateDetail(scope.row.templateId)">
+                        {{scope.row.msgTemplateName}}</p>
+                    </template>
+                  </el-table-column>
+                  <el-table-column prop="field" label="参数名称" width="150">
+                    <template slot-scope="scope">
+                      <div class="parameter-box" v-for="(item,index) in scope.row.paramJson"
+                        :key="index">
+                        {{item.field}}({{item.fieldName}})
+                      </div>
                     </template>
                   </el-table-column>
                   <el-table-column prop="value" label="表单字段">
                     <template slot-scope="scope">
-                      <el-select v-model="scope.row.relationField" placeholder="请选择表单字段" clearable
-                        filterable>
+                      <el-select class="variable-box" v-model="it.relationField"
+                        placeholder="请选择表单字段" clearable filterable
+                        @change="onRelationFieldChange($event,it)"
+                        v-for="(it,index) in scope.row.paramJson" :key="index">
                         <el-option v-for="item in funcOptions" :key="item.__vModel__"
                           :label="item.__config__.label?item.__vModel__+'('+item.__config__.label+')':item.__vModel__"
                           :value="item.__vModel__">
@@ -1755,12 +1887,12 @@
                   </el-tooltip>
                 </div>
                 <el-select v-model="approverForm.noticeMsgConfig.on" placeholder="请选择">
-                  <el-option v-for="item in nodeNoticeOptions" :key="item.value" :label="item.label"
-                    :value="item.value" />
+                  <el-option v-for="item in nodeNoticeOptionsData" :key="item.value"
+                    :label="item.label" :value="item.value" />
                 </el-select>
               </el-form-item>
               <div v-if="approverForm.noticeMsgConfig.on===1">
-                <el-form-item label="消息模板">
+                <el-form-item label="发送配置">
                   <msg-dialog :value="approverForm.noticeMsgConfig.msgId"
                     :title="approverForm.noticeMsgConfig.msgName"
                     @change="onMsgChange('approverForm','noticeMsgConfig',arguments)" />
@@ -1768,15 +1900,26 @@
                 <el-form-item label="参数设置" style="margin-bottom: 0;"></el-form-item>
                 <el-table :data="approverForm.noticeMsgConfig.templateJson">
                   <el-table-column type="index" width="50" label="序号" align="center" />
-                  <el-table-column prop="field" label="参数名称" width="200">
+                  <el-table-column prop="field" label="模板名称" width="150">
                     <template slot-scope="scope">
-                      {{scope.row.fieldName?scope.row.field+'('+scope.row.fieldName+')':scope.row.field}}
+                      <p class="template-name" @click="showTemplateDetail(scope.row.templateId)">
+                        {{scope.row.msgTemplateName}}</p>
+                    </template>
+                  </el-table-column>
+                  <el-table-column prop="field" label="参数名称" width="150">
+                    <template slot-scope="scope">
+                      <div class="parameter-box" v-for="(item,index) in scope.row.paramJson"
+                        :key="index">
+                        {{item.field}}({{item.fieldName}})
+                      </div>
                     </template>
                   </el-table-column>
                   <el-table-column prop="value" label="表单字段">
                     <template slot-scope="scope">
-                      <el-select v-model="scope.row.relationField" placeholder="请选择表单字段" clearable
-                        filterable>
+                      <el-select class="variable-box" v-model="it.relationField"
+                        placeholder="请选择表单字段" clearable filterable
+                        @change="onRelationFieldChange($event,it)"
+                        v-for="(it,index) in scope.row.paramJson" :key="index">
                         <el-option v-for="item in funcOptions" :key="item.__vModel__"
                           :label="item.__config__.label?item.__vModel__+'('+item.__config__.label+')':item.__vModel__"
                           :value="item.__vModel__">
@@ -1977,6 +2120,7 @@
     </el-dialog>
     <FormulaDialog :visible.sync="formulaVisible" :value="activeItem.field"
       @updateFormula="updateFormula" :formFieldsOptions="formFieldsOptions" />
+    <Detail v-if="viewVisible" ref="View" @close="viewVisible = false" />
   </el-drawer>
 </template>
 <script>
@@ -1989,6 +2133,7 @@ import MsgDialog from './msgDialog'
 import InterfaceDialog from './InterfaceDialog'
 import FormulaDialog from './formulaDialog'
 import FlowDialog from './FlowDialog'
+import Detail from './TemplateDetail'
 const requiredDisabled = (jnpfKey) => {
   return ['billRule', 'createUser', 'createTime', 'modifyTime', 'modifyUser', 'currPosition', 'currOrganize', 'table'].includes(jnpfKey)
 }
@@ -2021,7 +2166,7 @@ const defaultSubFlowForm = {
   flowName: '',
   assignList: [],
   launchMsgConfig: {
-    on: 0,
+    on: 3,
     msgId: '',
     msgName: '',
     templateJson: []
@@ -2220,6 +2365,20 @@ const nodeNoticeOptions = [
   },
   ...noticeOptions
 ]
+const noticeOptionsData = [
+  {
+    value: 3,
+    label: '默认'
+  },
+  ...noticeOptions
+]
+const nodeNoticeOptionsData = [
+  {
+    value: 2,
+    label: '同步发起配置'
+  },
+  ...noticeOptionsData
+]
 const systemFieldOptions = [{
   __config__: {
     label: '流程ID',
@@ -2285,7 +2444,7 @@ const systemFieldOptions = [{
 }]
 export default {
   props: [/*当前节点数据*/"value", /*整个节点数据*/"processData", "flowType"],
-  components: { OrgSelect, MsgDialog, InterfaceDialog, FormulaDialog, FlowDialog },
+  components: { OrgSelect, MsgDialog, InterfaceDialog, FormulaDialog, FlowDialog, Detail },
   data() {
     return {
       temporaryContent: '',
@@ -2310,6 +2469,8 @@ export default {
       assigneeTypeOptions: assigneeTypeOptions,
       noticeOptions,
       nodeNoticeOptions,
+      noticeOptionsData,
+      nodeNoticeOptionsData,
       systemFieldOptions,
       overTimeOptions,
       rejectStepOptions: [],
@@ -2378,7 +2539,8 @@ export default {
       childFieldOptions: [],
       nodeOptions: [],
       formulaVisible: false,
-      activeItem: {}
+      activeItem: {},
+      viewVisible: false
     };
   },
   computed: {
@@ -3010,8 +3172,7 @@ export default {
       let templateJson = item.templateJson ? JSON.parse(item.templateJson) : []
       this[obj][key].templateJson = templateJson.map(o => ({
         ...o,
-        relationField: '',
-        isSubTable: false
+        paramJson: o.paramJson ? JSON.parse(o.paramJson) : [],
       }))
     },
     onFuncChange(obj, key, params) {
@@ -3072,6 +3233,12 @@ export default {
     updateFormula(formula) {
       this.activeItem.field = formula
       this.activeItem.fieldName = formula
+    },
+    showTemplateDetail(id) {
+      this.viewVisible = true
+      this.$nextTick(() => {
+        this.$refs.View.init(id)
+      })
     }
   },
   watch: {
@@ -3307,5 +3474,16 @@ export default {
       text-align: center;
     }
   }
+}
+.template-name {
+  cursor: pointer;
+}
+.parameter-box {
+  height: 30px;
+  line-height: 30px;
+  margin-bottom: 8px;
+}
+.variable-box {
+  margin-bottom: 8px;
 }
 </style>
