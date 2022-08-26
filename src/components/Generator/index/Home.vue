@@ -99,7 +99,7 @@ import Preview from '../preview'
 import {
   inputComponents, selectComponents, systemComponents, layoutComponents, formConf
 } from '@/components/Generator/generator/config'
-import { noVModelList, noTableAllowList, onlinePeculiarList } from '@/components/Generator/generator/comConfig'
+import { noVModelList, noTableAllowList, calculateItem, onlinePeculiarList } from '@/components/Generator/generator/comConfig'
 import {
   exportDefault, beautifierConf, isNumberStr, titleCase, deepClone
 } from '@/components/Generator/utils'
@@ -229,7 +229,10 @@ export default {
       this.drawingList = []
       this.idGlobal = 100
     }
-    if (this.modelType == 1 || this.modelType == 6) this.leftComponents[1].list = [...this.leftComponents[1].list, ...onlinePeculiarList]
+    if (this.modelType == 1 || this.modelType == 6) {
+      this.leftComponents[1].list = [...this.leftComponents[1].list, calculateItem]
+      this.leftComponents[3].list = [...this.leftComponents[3].list, ...onlinePeculiarList]
+    }
     if (this.webType != 2 || this.modelType == 3 || this.modelType == 6) this.formConf.popupType = 'fullScreen'
   },
   mounted() {

@@ -24,7 +24,7 @@
     </el-form>
     <span slot="footer" class="dialog-footer">
       <el-button @click="visible = false">{{$t('common.cancelButton')}}</el-button>
-      <el-button type="primary" @click="dataFormSubmit()">下载代码</el-button>
+      <el-button type="primary" @click="dataFormSubmit()" :loading="loading">下载代码</el-button>
     </span>
   </el-dialog>
 </template>
@@ -35,6 +35,7 @@ export default {
   data() {
     return {
       visible: false,
+      loading: false,
       dataForm: {
         module: '',
         description: '',
@@ -79,6 +80,7 @@ export default {
     dataFormSubmit() {
       this.$refs['dataForm'].validate((valid) => {
         if (valid) {
+          this.loading = true
           let subClassName = this.dataForm.subClassName.map(o => o.fullName)
           let query = {
             module: this.dataForm.module,
@@ -87,9 +89,12 @@ export default {
             description: this.dataForm.description
           }
           DownloadCode(this.id, query).then(res => {
-            if (!res.data || !res.data.url) return
+            if (!res.data || !res.data.url) return this.loading = false
             this.jnpf.downloadFile(res.data.url)
+            this.loading = false
             this.$emit('close')
+          }).catch(() => {
+            this.loading = false
           })
         }
       })
