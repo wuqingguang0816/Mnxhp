@@ -498,12 +498,13 @@
                 </div>
                 <el-switch v-model="startForm.isSummary" />
               </el-form-item>
-              <el-form-item label="汇总设置" class="form-item-content" v-if="startForm.isSummary">
+              <div v-if="startForm.isSummary" class="form-item-content form-item-content-first">
+                <div class="form-sub-title">汇总设置</div>
                 <el-select v-model="startForm.summaryType" placeholder="请选择">
                   <el-option label="汇总全部流转记录" :value="0"></el-option>
                   <el-option label="汇总通过及拒绝流转记录" :value="1"></el-option>
                 </el-select>
-              </el-form-item>
+              </div>
               <el-form-item label="流程评论">
                 <div slot="label" class="form-item-label">流程评论
                   <el-tooltip content="流程内涉及的用户均可进行意见评论" placement="top">
