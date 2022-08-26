@@ -141,7 +141,6 @@ export default {
       }
       getRecordList(this.id, query).then(res => {
         this.list = res.data
-        console.log(this.list);
         this.loading = false
       }).catch(() => {
         this.loading = false

@@ -157,7 +157,7 @@ export default {
         keyword: this.keyword,
         ...this.listQuery,
       }
-      getTableInfoByTableName(this.linkId, this.tableName, this.menuType, query).then(res => {
+      getTableInfoByTableName(this.linkId, this.tableName, this.menuType, this.dataType, query).then(res => {
         this.list = res.data.list
         this.total = res.data.pagination.total
         this.listLoading = false
@@ -182,8 +182,8 @@ export default {
     },
     openDialog() {
       if (!this.treeData.length) return this.$message.error(`请先进行数据连接！`)
-      this.checked = this.value
       this.visible = true
+      this.checked = ''
       this.treeLoading = true
       this.tableName = this.bindTable
       this.$nextTick(() => {
@@ -200,7 +200,7 @@ export default {
       this.$emit('closeForm', this.checked, this.checkedRow)
     },
     select() {
-      if (!this.checked) return
+      if (!this.checked) return this.$message.warning(`请选择一条数据！`)
       this.visible = false
       this.$emit('closeForm', this.checked, this.checkedRow)
     },

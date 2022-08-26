@@ -142,9 +142,9 @@ export default {
           for (let index = 0; index < this.replyList.length; index++) {
             const element = this.replyList[index];
             if (element.id === this.selectedTag.id) {
-              element.latestDate = ''
               element.unreadMessage = ''
               element.latestMessage = ''
+              element.messageType = ''
             }
           }
         });
