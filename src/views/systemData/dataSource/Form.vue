@@ -129,7 +129,7 @@ export default {
           { required: true, message: '连接驱动不能为空', trigger: 'change' }
         ],
         fullName: [
-          { required: true, message: '应用名称不能为空', trigger: 'blur' }
+          { required: true, message: '连接名称不能为空', trigger: 'blur' }
         ],
         host: [
           { required: true, message: '主机地址不能为空', trigger: 'blur' },

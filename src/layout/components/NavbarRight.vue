@@ -33,7 +33,7 @@
             <i class="icon-ym icon-ym-header-userInfo"></i>{{ $t('navbar.profile') }}
           </el-dropdown-item>
         </router-link>
-        <el-dropdown placement="right-start" v-if="userInfo.systemIds.length>1">
+        <el-dropdown placement="right-start" v-if="userInfo.systemIds&&userInfo.systemIds.length>1">
           <el-dropdown-item>
             <i class="icon-ym icon-ym-systemToggle"></i>{{ $t('navbar.systemChange') }}
           </el-dropdown-item>
@@ -184,7 +184,8 @@ export default {
       this.socket = this.$store.getters.socket || null
       if ('WebSocket' in window) {
         if (!this.socket) {
-          this.socket = new ReconnectingWebSocket(this.define.WebSocketUrl)
+          const webSocketUrl = `${this.define.WebSocketUrl}/${this.$store.getters.token}`
+          this.socket = new ReconnectingWebSocket(webSocketUrl)
           this.$store.commit('user/SET_SOCKET', this.socket)
         }
         //添加事件监听
