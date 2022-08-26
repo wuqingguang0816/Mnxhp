@@ -157,7 +157,7 @@ export default {
         keyword: this.keyword,
         ...this.listQuery,
       }
-      getTableInfoByTableName(this.linkId, this.tableName, this.dataType, query).then(res => {
+      getTableInfoByTableName(this.linkId, this.tableName, this.menuType, this.dataType, query).then(res => {
         this.list = res.data.list
         this.total = res.data.pagination.total
         this.listLoading = false
