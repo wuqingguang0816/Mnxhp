@@ -549,7 +549,7 @@
                 <div slot="label" class="form-item-label">发起事件</div>
                 <el-switch v-model="startForm.initFuncConfig.on" />
               </el-form-item>
-              <div style="margin-bottom: 18px;" class="form-item-content"
+              <div class="form-item-content form-item-content-first"
                 v-if="startForm.initFuncConfig.on">
                 <div class="form-sub-title">接口设置</div>
                 <el-form-item label-width="0">
@@ -594,7 +594,7 @@
                 <div slot="label" class="form-item-label">结束事件</div>
                 <el-switch v-model="startForm.endFuncConfig.on" />
               </el-form-item>
-              <div style="margin-bottom: 18px;" class="form-item-content"
+              <div class="form-item-content form-item-content-first"
                 v-if="startForm.endFuncConfig.on">
                 <div class="form-sub-title">接口设置</div>
                 <el-form-item label-width="0">
@@ -639,7 +639,8 @@
                 <div slot="label" class="form-item-label">撤回事件</div>
                 <el-switch v-model="startForm.flowRecallFuncConfig.on" />
               </el-form-item>
-              <div class="form-item-content" v-if="startForm.flowRecallFuncConfig.on">
+              <div class="form-item-content form-item-content-first"
+                v-if="startForm.flowRecallFuncConfig.on">
                 <div class="form-sub-title">接口设置</div>
                 <el-form-item label-width="0">
                   <interface-dialog :value="startForm.flowRecallFuncConfig.interfaceId"
@@ -1427,7 +1428,7 @@
                 <div slot="label" class="form-item-label">同意事件</div>
                 <el-switch v-model="approverForm.approveFuncConfig.on" />
               </el-form-item>
-              <div style="margin-bottom: 18px;" class="form-item-content"
+              <div class="form-item-content form-item-content-first"
                 v-if="approverForm.approveFuncConfig.on">
                 <div class="form-sub-title">接口设置</div>
                 <el-form-item label-width="0">
@@ -1472,7 +1473,7 @@
                 <div slot="label" class="form-item-label">驳回事件</div>
                 <el-switch v-model="approverForm.rejectFuncConfig.on" />
               </el-form-item>
-              <div style="margin-bottom: 18px;" class="form-item-content"
+              <div class="form-item-content form-item-content-first"
                 v-if="approverForm.rejectFuncConfig.on">
                 <div class="form-sub-title">接口设置</div>
                 <el-form-item label-width="0">
@@ -1517,7 +1518,7 @@
                 <div slot="label" class="form-item-label">撤回事件</div>
                 <el-switch v-model="approverForm.recallFuncConfig.on" />
               </el-form-item>
-              <div style="margin-bottom: 18px;" class="form-item-content"
+              <div class="form-item-content form-item-content-first"
                 v-if="approverForm.recallFuncConfig.on">
                 <div class="form-sub-title">接口设置</div>
                 <el-form-item label-width="0">
@@ -1562,7 +1563,7 @@
                 <div slot="label" class="form-item-label">超时事件</div>
                 <el-switch v-model="approverForm.overTimeFuncConfig.on" />
               </el-form-item>
-              <div style="margin-bottom: 18px;" class="form-item-content"
+              <div class="form-item-content form-item-content-first"
                 v-if="approverForm.overTimeFuncConfig.on">
                 <div class="form-sub-title">接口设置</div>
                 <el-form-item label-width="0">
@@ -1607,7 +1608,7 @@
                 <div slot="label" class="form-item-label">提醒事件</div>
                 <el-switch v-model="approverForm.noticeFuncConfig.on" />
               </el-form-item>
-              <div style="margin-bottom: 18px;" class="form-item-content"
+              <div class="form-item-content form-item-content-first"
                 v-if="approverForm.noticeFuncConfig.on">
                 <div class="form-sub-title">接口设置</div>
                 <el-form-item label-width="0">
@@ -3415,6 +3416,9 @@ export default {
 }
 .form-item-content {
   padding: 0 20px;
+  &.form-item-content-first {
+    margin: -12px 0 18px;
+  }
 }
 .el-form-item {
   margin-bottom: 12px !important;
