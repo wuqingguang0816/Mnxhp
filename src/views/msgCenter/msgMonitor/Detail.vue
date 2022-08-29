@@ -8,6 +8,9 @@
       <el-form-item label="账号编码" prop="accountCode" v-if="detailForm.accountCode">
         {{detailForm.accountCode}}
       </el-form-item>
+      <el-form-item label="消息来源" prop="accountCode">
+        {{detailForm.messageSource}}
+      </el-form-item>
       <el-form-item label="消息类型" prop="messageType">
         {{detailForm.messageType}}
       </el-form-item>
