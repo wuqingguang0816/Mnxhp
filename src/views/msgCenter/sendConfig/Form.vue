@@ -226,7 +226,7 @@ export default {
     handleView(id) {
       this.viewVisible = true
       this.$nextTick(() => {
-        this.$refs.View.init(id, this.msgTypeList)
+        this.$refs.View.init(id, this.messageTypeList)
       })
     }
   }
