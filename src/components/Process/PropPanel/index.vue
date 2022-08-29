@@ -397,11 +397,8 @@
                       </el-tooltip>
                     </div>
                     <el-select v-model="startForm.extraCopyRule">
-                      <el-option label="无附加条件" :value="1"></el-option>
-                      <el-option label="同一部门" :value="2"></el-option>
-                      <el-option label="同一岗位" :value="3"></el-option>
-                      <el-option label="发起人上级" :value="4"></el-option>
-                      <el-option label="发起人下属" :value="5"></el-option>
+                      <el-option v-for="(item,i) in extraRuleOptions" :key="i" :label="item.label"
+                        :value="item.value" />
                     </el-select>
                   </el-form-item>
                   <el-checkbox v-model="startForm.isCustomCopy">允许自选抄送人</el-checkbox>
@@ -1327,11 +1324,8 @@
                       </el-tooltip>
                     </div>
                     <el-select v-model="approverForm.extraRule">
-                      <el-option label="无附加条件" :value="1"></el-option>
-                      <el-option label="同一部门" :value="2"></el-option>
-                      <el-option label="同一岗位" :value="3"></el-option>
-                      <el-option label="发起人上级" :value="4"></el-option>
-                      <el-option label="发起人下属" :value="5"></el-option>
+                      <el-option v-for="(item,i) in extraRuleOptions" :key="i" :label="item.label"
+                        :value="item.value" />
                     </el-select>
                   </el-form-item>
                 </div>
@@ -1392,11 +1386,8 @@
                       </el-tooltip>
                     </div>
                     <el-select v-model="approverForm.extraCopyRule">
-                      <el-option label="无附加条件" :value="1"></el-option>
-                      <el-option label="同一部门" :value="2"></el-option>
-                      <el-option label="同一岗位" :value="3"></el-option>
-                      <el-option label="发起人上级" :value="4"></el-option>
-                      <el-option label="发起人下属" :value="5"></el-option>
+                      <el-option v-for="(item,i) in extraRuleOptions" :key="i" :label="item.label"
+                        :value="item.value" />
                     </el-select>
                   </el-form-item>
                   <el-checkbox v-model="approverForm.isCustomCopy">允许自选抄送人</el-checkbox>
@@ -1442,6 +1433,9 @@
                   </div>
                 </div>
               </el-form-item>
+            </el-form>
+            <el-form class="pd-10-20" style="margin-top:-20px" label-width="90px"
+              label-position="left">
               <el-form-item label="自动同意">
                 <div slot="label" class="form-item-label">自动同意
                   <el-tooltip content="当前审批节点表单必填字段为空会使工单流转失败，下一审批节点设置候选人员、选择分支时当前审批节点规则失效"
@@ -1449,16 +1443,19 @@
                     <a class="el-icon-warning-outline"></a>
                   </el-tooltip>
                 </div>
-                <el-select class="form-item-content" v-model="approverForm.agreeRule">
-                  <el-option label="关闭" :value="1"></el-option>
-                  <el-option label="审批人为发起人" :value="2"></el-option>
-                  <el-option label="审批人与上一审批节点处理人相同" :value="3"></el-option>
-                  <el-option label="审批人审批过" :value="4"></el-option>
-                </el-select>
+                <el-switch v-model="approverForm.hasAgreeRule" />
               </el-form-item>
-            </el-form>
-            <el-form class="pd-10-20" style="margin-top:-20px" label-width="90px"
-              label-position="left">
+              <div class="form-item-content form-item-content-first"
+                v-show="approverForm.hasAgreeRule">
+                <div class="form-sub-title">同意规则配置</div>
+                <el-row>
+                  <el-select v-model="approverForm.agreeRules" multiple>
+                    <el-option label="审批人为发起人" :value="2"></el-option>
+                    <el-option label="审批人与上一审批节点处理人相同" :value="3"></el-option>
+                    <el-option label="审批人审批过" :value="4"></el-option>
+                  </el-select>
+                </el-row>
+              </div>
               <el-form-item>
                 <div slot="label" class="form-item-label">手写签名
                   <el-tooltip content="审批人在进行审批操作时需手写签名" placement="top">
@@ -1485,7 +1482,8 @@
               </el-form-item>
               <el-form-item label="说明">
                 <div slot="label" class="form-item-label">说明</div>
-                <el-input v-model="approverForm.description" type="textarea" :rows="3"></el-input>
+                <el-input v-model="approverForm.description" type="textarea" :rows="3">
+                </el-input>
               </el-form-item>
             </el-form>
           </el-scrollbar>
@@ -2265,7 +2263,8 @@ const defaultSubFlowForm = {
 const defaultApproverForm = {
   extraRule: 1, // 附加条件,默认无附加条件
   extraCopyRule: 1, // 抄送附加条件,默认无附加条件
-  agreeRule: 1, // 自动同意规则,默认不启用
+  hasAgreeRule: false, // 自动同意规则,默认不启用
+  agreeRules: [], // 自动同意规则数组
   formFieldType: 1,// 表单字段审核方式的类型(1-用户 2-部门)
   approvers: [], // 审批人集合
   approverPos: [], // 审批岗位集合
@@ -2447,6 +2446,32 @@ const overTimeOptions = [{
   value: 2,
   label: '表单变量'
 },]
+const extraRuleOptions = [
+  {
+    value: 1,
+    label: '无附加条件'
+  },
+  {
+    value: 6,
+    label: '同一公司'
+  },
+  {
+    value: 2,
+    label: '同一部门'
+  },
+  {
+    value: 3,
+    label: '同一岗位'
+  },
+  {
+    value: 4,
+    label: '发起人上级'
+  },
+  {
+    value: 5,
+    label: '发起人下属'
+  }
+]
 const nodeNoticeOptions = [
   {
     value: 2,
@@ -2562,6 +2587,7 @@ export default {
       nodeNoticeOptionsData,
       systemFieldOptions,
       overTimeOptions,
+      extraRuleOptions,
       rejectStepOptions: [],
       progressOptions: ['10', '20', '30', '40', '50', '60', '70', '80', '90'],
       symbolOptions: [
@@ -2981,6 +3007,13 @@ export default {
       if (assigneeType == 9 && !this.approverForm.getUserUrl) {
         this.$message({
           message: '请输入接口路径',
+          type: 'error',
+        })
+        return
+      }
+      if (this.approverForm.hasAgreeRule && !this.approverForm.agreeRules.length) {
+        this.$message({
+          message: '请选择同意规则配置',
           type: 'error',
         })
         return
