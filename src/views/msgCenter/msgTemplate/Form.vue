@@ -112,7 +112,8 @@
                 <el-form-item label="消息内容" prop="content" v-if="dataForm.messageType == 2">
                   <JNPFQuill v-model="dataForm.content" ref="myQuillEditor" />
                 </el-form-item>
-                <el-form-item label="消息内容" prop="content" class="jnpf-textarea-item" v-else>
+                <el-form-item label="消息内容" prop="content" class="jnpf-textarea-item"
+                  v-else-if="dataForm.messageType != 1||dataForm.messageSource != 1">
                   <el-input v-model="dataForm.content" placeholder="消息内容" type="textarea"
                     :rows="19" />
                 </el-form-item>
@@ -471,7 +472,7 @@ export default {
       margin-bottom: unset;
     }
     >>> .ql-editor {
-      min-height: unset !important;
+      min-height: 300px !important;
     }
   }
 }
