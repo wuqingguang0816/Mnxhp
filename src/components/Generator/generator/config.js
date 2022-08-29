@@ -1335,28 +1335,27 @@ export const layoutComponents = [
   },
   {
     __config__: {
-      jnpfKey: "JNPFText",
-      label: "文本",
+      jnpfKey: "link",
+      label: "链接",
       labelWidth: undefined,
       showLabel: false,
-      tag: "JNPF-Text",
-      tagIcon: "icon-ym icon-ym-generator-textarea",
-      defaultValue: "这是一段文字",
+      tag: "JnpfLink",
+      tagIcon: "icon-ym icon-ym-generator-link",
       required: false,
       layout: "colFormItem",
       span: 24,
       dragDisabled: false,
       visibility: ["pc", "app"]
     },
-    style: { width: "100%" },
+    on: {
+      click:
+        "({ data, formData, setFormData, setShowOrHide, setRequired, setDisabled, request, getFieldOptions, setFieldOptions }) => {\n    // 在此编写代码\n    \n}"
+    },
+    content: '文本链接',
+    href: "",
+    target: "_self",
     textStyle: {
-      color: "#000000",
       "text-align": "left",
-      "font-weight": "normal",
-      "font-style": "normal",
-      "text-decoration": "none",
-      "line-height": 32,
-      "font-size": 12
     }
   },
   {
@@ -1387,27 +1386,28 @@ export const layoutComponents = [
   },
   {
     __config__: {
-      jnpfKey: "link",
-      label: "链接",
+      jnpfKey: "JNPFText",
+      label: "文本",
       labelWidth: undefined,
       showLabel: false,
-      tag: "JnpfLink",
-      tagIcon: "icon-ym icon-ym-generator-link",
+      tag: "JNPF-Text",
+      tagIcon: "icon-ym icon-ym-generator-textarea",
+      defaultValue: "这是一段文字",
       required: false,
       layout: "colFormItem",
       span: 24,
       dragDisabled: false,
       visibility: ["pc", "app"]
     },
-    on: {
-      click:
-        "({ data, formData, setFormData, setShowOrHide, setRequired, setDisabled, request, getFieldOptions, setFieldOptions }) => {\n    // 在此编写代码\n    \n}"
-    },
-    content: '文本链接',
-    href: "",
-    target: "_self",
+    style: { width: "100%" },
     textStyle: {
+      color: "#000000",
       "text-align": "left",
+      "font-weight": "normal",
+      "font-style": "normal",
+      "text-decoration": "none",
+      "line-height": 32,
+      "font-size": 12
     }
   },
   {
