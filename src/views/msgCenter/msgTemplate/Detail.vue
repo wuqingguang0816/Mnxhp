@@ -58,7 +58,8 @@
               <el-form-item label="消息内容" prop="content" v-if="dataForm.messageType == 2">
                 <p v-html="dataForm.content"></p>
               </el-form-item>
-              <el-form-item label="消息内容" prop="content" class="jnpf-textarea-item" v-else>
+              <el-form-item label="消息内容" prop="content" class="jnpf-textarea-item"
+                v-else-if="dataForm.messageType != 1||dataForm.messageSource != 1">
                 <p>{{dataForm.content}}</p>
               </el-form-item>
             </div>
