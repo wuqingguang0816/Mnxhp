@@ -3405,7 +3405,6 @@ export default {
   }
 }
 .form-item-label {
-  color: #303133;
   font-weight: 600;
   font-size: 14px;
   line-height: 32px;
@@ -3416,7 +3415,7 @@ export default {
   line-height: 32px;
 }
 .form-item-content {
-  padding: 0 20px;
+  padding: 0 10px;
   &.form-item-content-first {
     margin: -12px 0 18px;
   }
