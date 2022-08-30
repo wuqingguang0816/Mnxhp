@@ -1,7 +1,46 @@
 import request from '@/utils/request'
 
+// 第三方登录获取登录页面
+export function otherLogin(data, param) {
+  return request({
+    url: `/api/oauth/socials/render/${data}?ticket=${param}`,
+    method: 'get',
+
+  })
+}
+// 第三方登录回调列表后点击登录
+export function socialsLogin(data) {
+  return request({
+    url: `/api/oauth/socials/login/${data.socialType}`,
+    method: 'post',
+    data
+  })
+}
+//获取登录票据
+export function getLoginConfig() {
+  return request({
+    url: `/api/oauth/socials/getLoginConfig`,
+    method: 'get',
+
+  })
+}
+//根据票据获取登录状态
+export function getTicketStatus(data) {
+  return request({
+    url: `/api/oauth/socials/getTicketStatus/${data}`,
+    method: 'get',
+  })
+}
 // 获取用户授权列表
-export const getSocialsUserList = (data) => {
+export function getSocialsLoginList(data) {
+  return request({
+    url: '/api/permission/socials/login',
+    method: 'GET',
+    data
+  })
+}
+// 获取用户授权列表
+export function getSocialsUserList(data) {
   return request({
     url: '/api/permission/socials',
     method: 'GET',
@@ -10,7 +49,7 @@ export const getSocialsUserList = (data) => {
 }
 
 // 获取用户授权列表
-export const binding = (data) => {
+export function binding(data) {
   return request({
     url: `/api/permission/socials/render/${data}`,
     method: 'GET',
@@ -18,7 +57,7 @@ export const binding = (data) => {
 }
 
 // 解绑
-export const deleteSocials = (id) => {
+export function deleteSocials(id) {
   return request({
     url: `/api/permission/socials/${id}`,
     method: 'DELETE',

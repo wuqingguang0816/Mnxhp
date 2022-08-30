@@ -79,12 +79,30 @@
     </div>
     <!-- <div class="login-foot">Copyright 引迈信息技术有限公司, All Rights Reserved. 沪ICP备17044791号-1
       助力企业和团队快速实现目标</div> -->
+    <el-dialog title="请选择登录账号" :visible.sync="dialogVisible" width="60%"
+      class="JNPF-dialog JNPF-dialog_center form-script-dialog" :before-close="handleClose">
+      <el-row :gutter="12">
+        <template v-for="(item,i) in tenantSocialList">
+          <el-col :span="12" :key="i">
+            <div @click="socailsLogin(item)">
+              <el-card shadow="hover" style="margin-bottom:15px">
+                <el-descriptions title="用户信息" :column="1">
+                  <el-descriptions-item label="租户名称">{{item.tenantName}}</el-descriptions-item>
+                  <el-descriptions-item label="租户ID">{{item.tenantId}}</el-descriptions-item>
+                  <el-descriptions-item label="账号">{{item.userId}}</el-descriptions-item>
+                </el-descriptions>
+              </el-card>
+            </div>
+          </el-col>
+        </template>
+      </el-row>
+    </el-dialog>
   </div>
 </template>
 
 <script>
-import { getConfig, otherLogin } from '@/api/user'
-import { getSocialsUserList } from '@/api/permission/socialsUser'
+import { getConfig } from '@/api/user'
+import { getSocialsLoginList, getLoginConfig, getTicketStatus, otherLogin, socialsLogin } from '@/api/permission/socialsUser'
 export default {
   name: 'Login',
   data() {
@@ -118,7 +136,11 @@ export default {
       otherQuery: {},
       active: 1,
       listenerLoad: false,
+      ticket: "",
+      ssoTimer: null,
       socialsList: [],
+      dialogVisible: false,
+      tenantSocialList: [],
     }
   },
   computed: {
@@ -153,7 +175,7 @@ export default {
       }
     }
     if (this.needCode) this.changeImg()
-    this.loginListener()
+    // this.loginListener()
     this.otherLoginList()
   },
   mounted() {
@@ -229,32 +251,52 @@ export default {
     },
     otherLoginList() {
       this.socialsList = []
-      getSocialsUserList().then(res => {
+      getSocialsLoginList().then(res => {
         this.socialsList = res.data.filter(item => { return item.isLatest == "true" });
       })
     },
 
     otherLogin(data) {
-      otherLogin(data).then(res => {
-        if (this.winURL && !this.winURL.closed) {
-          this.winURL.location.replace(res.msg)
-          this.winURL.focus()
-          return
-        }
-        var iWidth = 750; //弹出窗口的宽度;
-        var iHeight = 500;//弹出窗口的高度;
-        var iLeft = (window.screen.width - iWidth) / 2;
-        var iTop = (window.screen.height - iHeight) / 2;//获得窗口的垂直位置;
-        this.winURL = window.open(res.msg, '_blank', 'height=' + iHeight + ',innerHeight=' + iHeight + ',width=' + iWidth + ',innerWidth=' + iWidth + ',top=' + iTop + ',left=' + iLeft + ',toolbar=no,menubar=no,scrollbars=auto,resizeable=no,location=no,status=no')
+      getLoginConfig().then(res => {
+        this.ticket = res.data.ticket
+        otherLogin(data, this.ticket).then(res => {
+          if (this.winURL && !this.winURL.closed) {
+            this.winURL.location.replace(res.msg)
+            this.winURL.focus()
+            return
+          }
+          var iWidth = 750; //弹出窗口的宽度;
+          var iHeight = 500;//弹出窗口的高度;
+          var iLeft = (window.screen.width - iWidth) / 2;
+          var iTop = (window.screen.height - iHeight) / 2;//获得窗口的垂直位置;
+          this.winURL = window.open(res.msg, '_blank', 'height=' + iHeight + ',innerHeight=' + iHeight + ',width=' + iWidth + ',innerWidth=' + iWidth + ',top=' + iTop + ',left=' + iLeft + ',toolbar=no,menubar=no,scrollbars=auto,resizeable=no,location=no,status=no')
+          this.ssoTimer = setInterval(() => {
+            if (this.winURL.closed) { this.clearTimer() }
+            this.getTicketStatus()
+          }, 1000)
+        })
       })
     },
     loginListener() {
       if (!this.listenerLoad) {
         window.addEventListener('message', (e) => {
           if (!e.data) return
+          console.log(e)
           var response = typeof e.data === 'string' ? JSON.parse(e.data) : e.data;
           if (e.data.type == "webpackOk") return
-          if (!response.theme || !response.token) return this.$message.error('用户未绑定或绑定账号异常！')
+
+          if (response.code == 200) {
+            if (response.hasOwnProperty("data")) {
+              console.log(response.data)
+              this.dialogVisible = true
+              this.tenantSocialList = response.data
+              return
+            }
+          }
+          if (!response.code || response.code != 200) {
+            this.$message.error('用户未绑定或绑定账号异常！')
+            return
+          }
           this.$store.dispatch('user/updateToken', response).then(res => {
             this.$router.push({
               path: this.redirect || '/home',
@@ -264,6 +306,63 @@ export default {
         })
       }
       this.listenerLoad = true
+    },
+    getTicketStatus() {
+      getTicketStatus(this.ticket).then(response => {
+        console.log(response)
+        if (response.data.status != 2) {
+          this.winURL.close()
+          this.clearTimer()
+          switch (response.data.status) {
+            case 1://登陆成功
+              let param = {
+                theme: response.data.theme,
+                token: response.data.value
+              }
+              this.$store.dispatch('user/updateToken', param).then(res => {
+                this.$router.push({
+                  path: this.redirect || '/home',
+                  query: this.otherQuery
+                })
+              })
+              break;
+            case 4://未绑定
+              this.$message.error('用户未绑定！')
+              break;
+            case 6://多租户绑定多个
+              this.dialogVisible = true
+              this.tenantSocialList = response.data.tenantUserInfo
+              break;
+            default:
+              this.$message.error('账号异常！')
+              break
+          }
+        }
+
+      })
+    },
+    clearTimer() {
+      if (this.ssoTimer) {
+        clearInterval(this.ssoTimer)
+        this.ssoTimer = null
+        this.ticket = ''
+      }
+    },
+    handleClose() {
+      this.dialogVisible = false
+    },
+    socailsLogin(data) {
+      console.log(data)
+      socialsLogin(data).then(response => {
+        if (response.code == 200) {
+          this.$store.dispatch('user/updateToken', response.data).then(res => {
+            this.$router.push({
+              path: this.redirect || '/home',
+              query: this.otherQuery
+            })
+          })
+        }
+      })
     }
   }
 }
