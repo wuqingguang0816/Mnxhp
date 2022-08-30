@@ -1259,6 +1259,8 @@
                     或签（一名审批人同意或拒绝即可）</el-radio>
                   <el-radio v-model="approverForm.counterSign" :label="1">
                     会签（无序会签，当审批达到会签比例时，则该审批通过）</el-radio>
+                  <el-radio v-model="approverForm.counterSign" :label="2">
+                    依次审批（按顺序依次审批）</el-radio>
                 </div>
               </el-form-item>
               <el-form-item label="会签比例" v-if="approverForm.counterSign">
