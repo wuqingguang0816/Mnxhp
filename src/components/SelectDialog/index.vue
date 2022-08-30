@@ -116,6 +116,7 @@ export default {
   },
   methods: {
     init() {
+      this.listQuery.keyword = ''
       this.listQuery.pageSize = this.config.hasPage ? this.config.pageSize : 10000
       this.visible = true
       this.btnLoading = false
