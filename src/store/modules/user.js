@@ -212,8 +212,9 @@ const actions = {
             }
           }
         }
-        setData(routerList)
-        if (userInfo.systemIds && userInfo.systemIds.length) {
+        const dataList = routerList && routerList.length ? routerList : menuList
+        setData(dataList)
+        if (userInfo.systemIds && userInfo.systemIds.length && routerList && routerList.length) {
           for (let index = 0; index < userInfo.systemIds.length; index++) {
             const element = userInfo.systemIds[index];
             if (element.currentSystem) {
@@ -222,7 +223,7 @@ const actions = {
             }
           }
         } else {
-          menuList = routerList[0].children || []
+          menuList = routerList && routerList.length ? routerList[0].children : menuList
         }
         if (!menuList.length) {
           reject('您的权限不足，请联系管理员')
