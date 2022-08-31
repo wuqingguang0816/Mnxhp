@@ -94,14 +94,10 @@
               <el-col :span="12" :key="i">
                 <div @click="socailsLogin(item)">
                   <el-card shadow="hover" class="other-login-card">
-                    <el-descriptions :title="item.accountName" :column="1">
-                      <el-descriptions-item label="租户名称" class="other-login-des">{{item.tenantName}}
-                      </el-descriptions-item>
-                      <el-descriptions-item label="租户ID" class="other-login-des">{{item.tenantId}}
-                      </el-descriptions-item>
-                      <el-descriptions-item label="账号ID" class="other-login-des">{{item.userId}}
-                      </el-descriptions-item>
-                    </el-descriptions>
+                    <h2>{{item.accountName}}</h2>
+                    <div class="other-login-des">租户名称：{{item.tenantName}}</div>
+                    <div class="other-login-des">租户ID：{{item.tenantId}}</div>
+                    <div class="other-login-des">账号ID：{{item.userId}}</div>
                   </el-card>
                 </div>
               </el-col>
