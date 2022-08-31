@@ -33,14 +33,18 @@
           <el-table-column prop="fullName" label="任务标题" show-overflow-tooltip min-width="150" />
           <el-table-column prop="enCode" label="任务编码" width="200" />
           <el-table-column prop="runCount" label="执行次数" width="100" />
+          <el-table-column prop="startTime" label="任务开始时间" width="120"
+            :formatter="jnpf.tableDateFormat" />
+          <el-table-column prop="endTime" label="任务结束时间" width="120"
+            :formatter="jnpf.tableDateFormat" />
           <el-table-column prop="lastRunTime" label="最后执行时间" width="120"
             :formatter="jnpf.tableDateFormat" />
           <el-table-column prop="nextRunTime" label="下次运行时间" width="120"
             :formatter="jnpf.tableDateFormat" />
           <el-table-column prop="enabledMark" label="状态" width="70" align="center">
             <template slot-scope="scope">
-              <el-switch v-model="scope.row.enabledMark" :active-value="1" :inactive-value="0"
-                @click.native="handleUpdateState(scope.row)" disabled class="table-switch" />
+              <el-tag :type="scope.row.enabledMark == 1 ? 'success' : 'danger'" disable-transitions>
+                {{scope.row.enabledMark==1?'启用':'禁用'}}</el-tag>
             </template>
           </el-table-column>
           <el-table-column label="操作" width="150" fixed="right">
