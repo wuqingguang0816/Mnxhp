@@ -183,10 +183,15 @@
               </template>
               <el-divider>按钮配置</el-divider>
               <el-checkbox-group v-model="btnsList" class="btnsList">
-                <el-checkbox :label="item.value" v-for="item in btnsOption" :key="item.value">
-                  <span class="btn-label">{{ item.value | btnText }}</span>
-                  <el-input v-model="item.label" />
-                </el-checkbox>
+                <div v-for="item in btnsOption" :key="item.value">
+                  <el-checkbox :label="item.value">
+                    <span class="btn-label">{{ item.value | btnText }}</span>
+                    <el-input v-model="item.label" />
+                  </el-checkbox>
+                  <el-button class="upload"
+                    v-if="item.value === 'upload'&&btnsList.indexOf('upload')!=-1"
+                    @click="setUploadData">请设置导入模板</el-button>
+                </div>
               </el-checkbox-group>
               <el-checkbox-group v-model="columnBtnsList" class="btnsList columnBtnList">
                 <el-checkbox :label="item.value" v-for="item in columnBtnsOption" :key="item.value">
@@ -252,12 +257,14 @@
     </div>
     <form-script :visible.sync="formScriptVisible" :value="activeItem.func" :type="activeItem.type"
       @updateScript="updateScript" />
+    <upload-box ref="uploadRef" :visible.sync="uploadBoxVisible" @onConfirm="onConfirm" />
   </div>
 </template>
 <script>
 import Sortable from 'sortablejs'
 import draggable from 'vuedraggable'
 import FormScript from './FormScript'
+import uploadBox from './uploadBox'
 import { getDrawingList } from '@/components/Generator/utils/db'
 import { noColumnShowList, noSearchList, useInputList, useDateList } from '@/components/Generator/generator/comConfig'
 import { getDataInterfaceSelector } from '@/api/systemData/dataInterface'
@@ -312,7 +319,8 @@ const defaultColumnData = {
       func: "",
       name: "脚本事件"
     }
-  }
+  },
+  uploadData: {}
 }
 export default {
   name: 'columnDesign',
@@ -324,7 +332,7 @@ export default {
     webType: '',
     modelType: ''
   },
-  components: { draggable, FormScript },
+  components: { draggable, FormScript, uploadBox },
   data() {
     return {
       currentTab: 'column',
@@ -336,6 +344,7 @@ export default {
       btnsOption: [
         { value: 'add', icon: 'el-icon-plus', label: '新增' },
         { value: 'download', icon: 'el-icon-download', label: '导出' },
+        { value: 'upload', icon: 'el-icon-upload2', label: '导入' },
         { value: 'batchRemove', icon: 'el-icon-delete', label: '批量删除' },
       ],
       columnBtnsOption: [
@@ -356,6 +365,7 @@ export default {
       ],
       dataInterfaceSelector: [],
       formScriptVisible: false,
+      uploadBoxVisible: false,
       activeItem: {}
     }
   },
@@ -377,6 +387,9 @@ export default {
           break;
         case 'detail':
           text = '详情'
+          break;
+        case 'upload':
+          text = '导入'
           break;
         default:
           text = '新增'
@@ -512,6 +525,7 @@ export default {
     */
     getData() {
       if (!this.columnData.columnList.length) return this.$message.warning('列表字段不允许为空')
+      if (!this.columnData.uploadData.selectKey && this.btnsList.indexOf('upload') != -1) return this.$message.warning('请设置导入模板')
       if (this.columnData.type == 2) {
         if (this.columnData.treeDataSource === 'dictionary' && !this.columnData.treeDictionary) return this.$message.warning('请选择数据字典')
         if (this.columnData.treeDataSource === 'api') {
@@ -599,6 +613,17 @@ export default {
       this.$nextTick(() => {
         this.formScriptVisible = true
       })
+    },
+    setUploadData() {
+      this.uploadBoxVisible = true
+      this.$nextTick(() => {
+        const selectData = this.columnData.uploadData.selectKey ? this.columnData.uploadData.selectKey : []
+        const dataType = this.columnData.uploadData.dataType ? this.columnData.uploadData.dataType : ''
+        this.$refs.uploadRef.init(getDrawingList(), selectData, dataType)
+      })
+    },
+    onConfirm(data) {
+      this.columnData.uploadData = data
     }
   }
 }
