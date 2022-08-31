@@ -34,8 +34,7 @@
               <div class="box">
                 <div class="JNPF-common-head">
                   <topOpts @add="addOrUpdateHandle()">
-                    <upload-btn :url="'/api/system/Menu/'+systemId+'/Action/Import'"
-                      @on-success="initData" />
+                    <el-button type="text" icon="el-icon-upload2" @click="importMenu">导入</el-button>
                   </topOpts>
                   <div class="JNPF-common-head-right">
                     <el-tooltip effect="dark" content="展开" placement="top">
@@ -132,6 +131,25 @@
         <ColumnAuthorizeListDrawer v-if="columnAuthorizeListDrawer" ref="ColumnAuthorizeList" />
         <FormAuthorizeListDrawer v-if="formAuthorizeListDrawer" ref="FormAuthorizeList" />
         <DataAuthorizeListDrawer v-if="dataAuthorizeListDrawer" ref="DataAuthorizeList" />
+        <el-dialog title="所属上级" :visible.sync="selectMenuVisible"
+          class="JNPF-dialog JNPF-dialog_center" lock-scroll width="600px">
+          <el-form class="dialog-form-main" :model="dataForm" :rules="formRule"
+            label-position="right" label-width="50px" ref="dataForm">
+            <el-form-item label="上级" prop="parentId">
+              <JNPF-TreeSelect v-model="dataForm.parentId" :options="treeData"
+                placeholder="选择上级菜单" />
+            </el-form-item>
+            <upload-btn v-show="false" :url="'/api/system/Menu/'+systemId+'/Action/Import'"
+              @on-success="uploadSuccess" :buttonText="$t('common.confirmButton')"
+              buttonType="primary" :showIcon='false' :data="{parentId:dataForm.parentId}"
+              ref="uploadRef" />
+          </el-form>
+          <span slot="footer" class="dialog-footer">
+            <el-button @click="selectMenuVisible = false">{{$t('common.cancelButton')}}</el-button>
+            <el-button type="primary" @click="handleUpload">{{$t('common.confirmButton')}}
+            </el-button>
+          </span>
+        </el-dialog>
       </div>
     </div>
   </transition>
@@ -142,6 +160,7 @@ import {
   updateMenuState,
   delMenu,
   exportMenu,
+  getMenuSelector
 } from "@/api/system/menu";
 import menuForm from "./menuForm";
 import ButtonAuthorizeListDrawer from "./components/buttonAuthorize/index";
@@ -176,7 +195,18 @@ export default {
       expands: true,
       refreshTable: true,
       title: '',
-      systemId: ''
+      systemId: '',
+      selectMenuVisible: false,
+      formRule: {
+        parentId: [
+          { required: true, message: '上级菜单不能为空', trigger: 'change' }
+        ]
+      },
+      treeData: [],
+      dataForm: {
+        parentId: ""
+      },
+      menuBtnLoading: false
     };
   },
   watch: {
@@ -308,6 +338,30 @@ export default {
           });
         })
         .catch(() => { });
+    },
+    importMenu() {
+      this.dataForm.parentId = ''
+      this.selectMenuVisible = true
+      getMenuSelector({ category: this.listQuery.category }, '', this.systemId).then((res) => {
+        let topItem = {
+          fullName: "顶级节点",
+          hasChildren: true,
+          id: "-1",
+          children: res.data.list
+        }
+        this.treeData = [topItem]
+      })
+    },
+    handleUpload() {
+      this.$refs['dataForm'].validate(valid => {
+        if (valid) {
+          this.$refs.uploadRef.$refs.uploadBtn.$el.click()
+        }
+      })
+    },
+    uploadSuccess() {
+      this.selectMenuVisible = false
+      this.initData()
     },
   },
 };

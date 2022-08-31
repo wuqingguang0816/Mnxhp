@@ -1,8 +1,10 @@
 <template>
   <el-upload :action="define.comUrl+url" :headers="{ Authorization: $store.getters.token}"
-    :on-success="handleSuccess" :before-upload="beforeUpload" :show-file-list="false"
+    :data="data" :on-success="handleSuccess" :before-upload="beforeUpload" :show-file-list="false"
     class="upload-btn">
-    <el-button :type="buttonType" icon="el-icon-upload2" :loading="loading">{{buttonText}}
+    <el-button ref="uploadBtn" :type="buttonType" :icon="showIcon?'el-icon-upload2':''"
+      :loading="loading">
+      {{buttonText}}
     </el-button>
   </el-upload>
 </template>
@@ -27,7 +29,15 @@ export default {
     buttonType: {
       type: String,
       default: 'text'
-    }
+    },
+    data: {
+      type: Object,
+      default: () => { }
+    },
+    showIcon: {
+      type: Boolean,
+      default: true
+    },
   },
   methods: {
     beforeUpload() {
