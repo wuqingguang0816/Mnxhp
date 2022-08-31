@@ -94,10 +94,10 @@
               <el-col :span="12" :key="i">
                 <div @click="socailsLogin(item)">
                   <el-card shadow="hover" class="other-login-card">
-                    <h2>{{item.accountName}}</h2>
+                    <h2>{{item.socialName}}</h2>
                     <div class="other-login-des">租户名称：{{item.tenantName}}</div>
                     <div class="other-login-des">租户ID：{{item.tenantId}}</div>
-                    <div class="other-login-des">账号ID：{{item.userId}}</div>
+                    <div class="other-login-des">账号ID：{{item.accountName}}</div>
                   </el-card>
                 </div>
               </el-col>

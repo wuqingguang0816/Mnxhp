@@ -325,10 +325,10 @@
 
   .other-login-card {
     border-radius: 5px;
-    border-left: 5px solid #1890ff;
+    border-left: 5px solid #9DC8FA;
     font-size: 12px;
     margin-bottom: 15px;
-    background-color: rgba(255, 255, 255, 0.4);
+    background-color: rgba(255, 255, 255, 1);
 
     &:hover {
       border-color: #1890ff;
@@ -340,6 +340,10 @@
   }
 
   .other-login-des {
+    width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
     margin-top: 15px;
     font-size: 14px;
   }
