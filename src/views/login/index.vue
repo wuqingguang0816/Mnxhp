@@ -79,23 +79,37 @@
     </div>
     <!-- <div class="login-foot">Copyright 引迈信息技术有限公司, All Rights Reserved. 沪ICP备17044791号-1
       助力企业和团队快速实现目标</div> -->
-    <el-dialog title="请选择登录账号" :visible.sync="dialogVisible" width="60%"
-      class="JNPF-dialog JNPF-dialog_center form-script-dialog" :before-close="handleClose">
-      <el-row :gutter="12">
-        <template v-for="(item,i) in tenantSocialList">
-          <el-col :span="12" :key="i">
-            <div @click="socailsLogin(item)">
-              <el-card shadow="hover" style="margin-bottom:15px">
-                <el-descriptions title="用户信息" :column="1">
-                  <el-descriptions-item label="租户名称">{{item.tenantName}}</el-descriptions-item>
-                  <el-descriptions-item label="租户ID">{{item.tenantId}}</el-descriptions-item>
-                  <el-descriptions-item label="账号">{{item.userId}}</el-descriptions-item>
-                </el-descriptions>
-              </el-card>
-            </div>
-          </el-col>
-        </template>
-      </el-row>
+    <el-dialog title="测试" :visible.sync="dialogVisible" width="40%"
+      class="JNPF-dialog JNPF-dialog_center form-script-dialog other-login-dialog"
+      :before-close="handleClose" :center="true">
+
+      <div class="other-main">
+        <div class="other-title">
+          <div class="other-icon"><i class="icon-ym icon-ym-user" /></div>
+          <div class="other-text">请选择登录账号</div>
+        </div>
+        <div class="other-body">
+          <el-row :gutter="10">
+            <template v-for="(item,i) in tenantSocialList">
+              <el-col :span="12" :key="i">
+                <div @click="socailsLogin(item)">
+                  <el-card shadow="hover" class="other-login-card">
+                    <el-descriptions :title="item.accountName" :column="1">
+                      <el-descriptions-item label="租户名称" class="other-login-des">{{item.tenantName}}
+                      </el-descriptions-item>
+                      <el-descriptions-item label="租户ID" class="other-login-des">{{item.tenantId}}
+                      </el-descriptions-item>
+                      <el-descriptions-item label="账号ID" class="other-login-des">{{item.userId}}
+                      </el-descriptions-item>
+                    </el-descriptions>
+                  </el-card>
+                </div>
+              </el-col>
+            </template>
+          </el-row>
+        </div>
+
+      </div>
     </el-dialog>
   </div>
 </template>
@@ -308,38 +322,41 @@ export default {
       this.listenerLoad = true
     },
     getTicketStatus() {
-      getTicketStatus(this.ticket).then(response => {
-        console.log(response)
-        if (response.data.status != 2) {
-          this.winURL.close()
-          this.clearTimer()
-          switch (response.data.status) {
-            case 1://登陆成功
-              let param = {
-                theme: response.data.theme,
-                token: response.data.value
-              }
-              this.$store.dispatch('user/updateToken', param).then(res => {
-                this.$router.push({
-                  path: this.redirect || '/home',
-                  query: this.otherQuery
+      if (this.ticket) {
+        getTicketStatus(this.ticket).then(response => {
+          console.log(response)
+          if (response.data.status != 2) {
+            this.winURL.close()
+            this.clearTimer()
+            switch (response.data.status) {
+              case 1://登陆成功
+                let param = {
+                  theme: response.data.theme,
+                  token: response.data.value
+                }
+                this.$store.dispatch('user/updateToken', param).then(res => {
+                  this.$router.push({
+                    path: this.redirect || '/home',
+                    query: this.otherQuery
+                  })
                 })
-              })
-              break;
-            case 4://未绑定
-              this.$message.error('用户未绑定！')
-              break;
-            case 6://多租户绑定多个
-              this.dialogVisible = true
-              this.tenantSocialList = response.data.tenantUserInfo
-              break;
-            default:
-              this.$message.error('账号异常！')
-              break
+                break;
+              case 4://未绑定
+                this.$message.error('用户未绑定！')
+                break;
+              case 6://多租户绑定多个
+                this.dialogVisible = true
+                this.tenantSocialList = response.data.tenantUserInfo
+                break;
+              default:
+                this.$message.error('账号异常！')
+                break
+            }
           }
-        }
 
-      })
+        })
+
+      }
     },
     clearTimer() {
       if (this.ssoTimer) {

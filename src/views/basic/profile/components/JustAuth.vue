@@ -3,23 +3,11 @@
     <div class="JNPF-common-title mb-20">
       <h2 class="bold">第三方服务绑定</h2>
     </div>
-
     <el-col :span="22" :offset="1" class="mt-20">
       <template v-for="(item,i) in socialsList">
         <el-row :key="i">
           <el-col :span="1" class="col-img">
             <img v-if="item.enname" :src="item.logo" alt="" class="row-img" />
-            <!-- <img v-if="item.enname==='qq'" src="@/assets/images/socials/qq.png" alt=""
-              class="row-img" />
-            <img v-if="item.enname==='wechat_enterprise'" src="@/assets/images/socials/wxWork.png"
-              alt="" class="row-img" />
-            <img v-if="item.enname==='dingtalk'" src="@/assets/images/socials/dingtalk.png" alt=""
-              class="row-img" />
-            <img v-if="item.enname==='feishu'" src="@/assets/images/socials/feishu.png" alt=""
-              class="row-img" />
-            <img v-if="item.enname==='github'" src="@/assets/images/socials/gitHub.png" alt=""
-              class="row-img" /> -->
-            <!-- <img v-if="item.enname==='gitee'" src="@/assets/images/socials/gitee.png" alt="" class="row-img" /> -->
             <img v-if="!item.enname" src="" alt="" class="row-img" />
           </el-col>
           <el-col :span="21">
@@ -42,14 +30,6 @@
 
       </template>
     </el-col>
-
-    <el-dialog title="登录" :visible.sync="dialogVisible" width="500px" height="500px"
-      :before-close="handleClose">
-      <iframe :src="dialogSrt" width="100%" height="500px" frameborder="0" @load="iframeLoad"
-        sandbox="allow-scripts allow-top-navigation allow-same-origin allow-top-navigation-by-user-activation">
-      </iframe>
-    </el-dialog>
-
   </div>
 </template>
 <script>

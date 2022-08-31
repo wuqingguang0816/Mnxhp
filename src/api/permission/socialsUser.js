@@ -40,14 +40,19 @@ export function getSocialsLoginList(data) {
   })
 }
 // 获取用户授权列表
-export function getSocialsUserList(data) {
+export function getSocialsUserList() {
   return request({
     url: '/api/permission/socials',
     method: 'GET',
-    data
   })
 }
-
+// 获取用户授权列表
+export function getSocialsUserListByUser(userId) {
+  return request({
+    url: '/api/permission/socials?userId=' + userId,
+    method: 'GET',
+  })
+}
 // 获取用户授权列表
 export function binding(data) {
   return request({

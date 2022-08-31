@@ -307,4 +307,84 @@
     text-align: left;
     margin-left: 110px;
   }
+
+  // 第三方登录多租户弹窗样式
+  .other-login-dialog {
+    >>>.el-dialog__header {
+      display: none;
+    }
+
+    >>>.el-dialog__body {
+      height: 450px;
+      overflow: hidden;
+      background: url('../../assets/images/other-login-dialog.png') no-repeat center !important;
+      background-size: 100% 100%;
+    }
+  }
+
+  .other-login-card {
+    border-radius: 5px;
+    border-left: 5px solid #1890ff;
+    font-size: 12px;
+    margin-bottom: 15px;
+
+    &:hover {
+      border-color: #1890ff;
+
+      i {
+        color: #fff;
+      }
+    }
+  }
+
+  .other-login-des {
+    margin: 20px 10px;
+  }
+
+  .other-body {
+    padding: 0 10px 0 20px;
+    width: 100%;
+  }
+
+  .other-title {
+    display: flex;
+    height: 50px;
+    line-height: 50px;
+    text-align: center;
+    justify-content: center;
+    // align-items: center;
+    margin: auto;
+
+    .other-icon {
+      width: 24px;
+      height: 24px;
+      line-height: 24px;
+      text-align: center;
+      border-radius: 50%;
+      border: 2px solid #1890ff;
+
+      i {
+        font-size: 16px;
+        color: #1890ff;
+      }
+    }
+
+    .other-text {
+      height: 24px;
+      line-height: 24px;
+      font-size: 18px;
+      color: #000;
+      font-weight: bold;
+      margin: 0 5px;
+    }
+
+  }
+
+  .other-body {
+    width: 100%;
+    height: 350px;
+    overflow-x: hidden;
+    overflow-y: auto;
+  }
+
 }
