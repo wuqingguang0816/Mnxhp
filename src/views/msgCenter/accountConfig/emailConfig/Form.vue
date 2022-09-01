@@ -98,7 +98,8 @@ export default {
           { required: true, message: '请输入发件人昵称', trigger: 'blur' }
         ],
         sendEmail: [
-          { required: true, message: '请输入发件人邮箱', trigger: 'blur' }
+          { required: true, message: '请输入发件人邮箱', trigger: 'blur', pattern: /^[a-z0-9]+([._\\-]*[a-z0-9])*@([a-z0-9]+[-a-z0-9]*[a-z0-9]+.){1,63}[a-z0-9]+$/ },
+          { type: 'email', message: '请输入正确的邮箱地址', trigger: ['blur', 'change'] }
         ],
         smtpServer: [
           { required: true, message: '请输入SMTP服务器', trigger: 'blur' }

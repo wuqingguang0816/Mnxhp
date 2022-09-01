@@ -1,5 +1,5 @@
 <template>
-  <el-dialog :title="!dataForm.id ? '新建钉钉配置' : '编辑钉钉配置'" :close-on-click-modal="false"
+  <el-dialog :title="!dataForm.id ? '新建' : '编辑'" :close-on-click-modal="false"
     :visible.sync="visible" class="JNPF-dialog JNPF-dialog_center" lock-scroll width="600px">
     <el-form ref="dataForm" :model="dataForm" :rules="dataRule" v-loading="formLoading"
       label-width="120px">

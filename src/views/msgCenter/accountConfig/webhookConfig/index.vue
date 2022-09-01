@@ -97,7 +97,8 @@ import {
   getConfigList,
   delConfig,
   copyConfig,
-  exportConfig
+  exportConfig,
+  getMsgTypeList
 } from '@/api/msgCenter/accountConfig'
 export default {
   name: 'system-printDev',
@@ -107,7 +108,7 @@ export default {
   data() {
     return {
       list: [],
-      webhookList: [{ fullName: '钉钉', enCode: '1' }, { fullName: '企业微信', enCode: '2' }],
+      webhookList: [{ fullName: '钉钉', enCode: '1' }, { fullName: '企业微信', enCode: '2' }, { fullName: '其它', enCode: '3' }],
       categoryList: [{ fullName: '启用', enCode: 1 }, { fullName: '禁用', enCode: 0 }],
       keyword: '',
       webhookType: '',
@@ -143,6 +144,9 @@ export default {
       this.initData()
     },
     initData() {
+      getMsgTypeList(3).then(res => {
+        this.webhookList = res.data
+      })
       this.listLoading = true
       let query = {
         ...this.listQuery,
