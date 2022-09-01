@@ -1263,7 +1263,7 @@
                     依次审批（按顺序依次审批）</el-radio>
                 </div>
               </el-form-item>
-              <el-form-item label="会签比例" v-if="approverForm.counterSign">
+              <el-form-item label="会签比例" v-if="approverForm.counterSign==1">
                 <div slot="label" class="form-item-label">会签比例
                   <el-tooltip content="会签通过比例" placement="top">
                     <a class="el-icon-warning-outline"></a>
