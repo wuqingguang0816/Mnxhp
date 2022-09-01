@@ -856,6 +856,7 @@ export const selectComponents = [
     },
     placeholder: "请选择",
     interfaceId: "",
+    interfaceName: "",
     hasPage: false,
     pageSize: 20,
     columnOptions: [],

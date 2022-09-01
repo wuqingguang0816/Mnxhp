@@ -43,7 +43,7 @@
       </div>
     </template>
     <template v-if="activeData.__config__.dataType === 'dictionary'">
-      <el-form-item label="远端数据">
+      <el-form-item label="数据字典">
         <JNPF-TreeSelect :options="treeData" v-model="activeData.__config__.dictionaryType"
           placeholder="请选择数据字典" lastLevel clearable>
         </JNPF-TreeSelect>
@@ -154,12 +154,14 @@ export default {
       if (val === 'static') {
         this.activeData.__config__.dictionaryType = ''
         this.activeData.__config__.propsUrl = ''
+        this.activeData.__config__.propsName = ''
       }
       if (val === 'dynamic') {
         this.activeData.__config__.dictionaryType = ''
       }
       if (val === 'dictionary') {
         this.activeData.__config__.propsUrl = ''
+        this.activeData.__config__.propsName = ''
       }
     },
     dictionaryTypeChange() {
@@ -184,6 +186,7 @@ export default {
         }
       }).catch(() => {
         this.activeData.__config__.propsUrl = ''
+        this.activeData.__config__.propsName = ''
         this.activeData.__slot__.options = []
       })
     }
