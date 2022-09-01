@@ -180,11 +180,14 @@ export default {
   }
   .list {
     flex: 1;
-    margin-top: 10px;
+    padding-top: 10px;
     overflow: hidden auto;
     .item {
       margin-bottom: 20px;
       cursor: pointer;
+      >>> .el-card {
+        border-radius: 10px;
+      }
       >>> .el-card__body {
         display: flex;
         align-items: center;
