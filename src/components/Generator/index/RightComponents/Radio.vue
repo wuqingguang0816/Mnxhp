@@ -56,10 +56,8 @@
     </template>
     <template v-if="activeData.__config__.dataType === 'dynamic'">
       <el-form-item label="远端数据">
-        <JNPF-TreeSelect :options="dataInterfaceSelector" v-model="activeData.__config__.propsUrl"
-          placeholder="请选择远端数据" lastLevel lastLevelKey='categoryId' lastLevelValue='1'
-          @change="propsUrlChange" clearable>
-        </JNPF-TreeSelect>
+        <interface-dialog :value="activeData.__config__.propsUrl"
+          :title="activeData.__config__.propsName" popupTitle="远端数据" @change="propsUrlChange" />
       </el-form-item>
       <el-form-item label="存储字段">
         <el-input v-model="activeData.__config__.props.value" placeholder="请输入存储字段" />
@@ -104,10 +102,11 @@ import comMixin from './mixin';
 import draggable from 'vuedraggable'
 import { getDictionaryTypeSelector, getDictionaryDataSelector } from '@/api/systemData/dictionary'
 import { getDataInterfaceSelector, getDataInterfaceRes } from '@/api/systemData/dataInterface'
+import InterfaceDialog from '@/components/Process/PropPanel/InterfaceDialog'
 export default {
   props: ['activeData'],
   mixins: [comMixin],
-  components: { draggable },
+  components: { draggable, InterfaceDialog },
   data() {
     return {
       treeData: [],
@@ -165,11 +164,15 @@ export default {
     dictionaryTypeChange() {
       this.activeData.__config__.defaultValue = ''
     },
-    propsUrlChange(val) {
+    propsUrlChange(val, item) {
       if (!val) {
+        this.activeData.__config__.propsUrl = ''
+        this.activeData.__config__.propsName = ''
         this.activeData.__slot__.options = []
         return
       }
+      this.activeData.__config__.propsUrl = val
+      this.activeData.__config__.propsName = item.fullName
       this.activeData.__config__.defaultValue = ''
       getDataInterfaceRes(val).then(res => {
         let data = res.data

@@ -193,6 +193,7 @@ export const inputComponents = [
       dataType: "static",
       dictionaryType: "",
       propsUrl: "",
+      propsName: "",
       props: {
         label: "fullName",
         value: "id"
@@ -240,6 +241,7 @@ export const inputComponents = [
       dataType: "static",
       dictionaryType: "",
       propsUrl: "",
+      propsName: "",
       props: {
         label: "fullName",
         value: "id"
@@ -285,6 +287,7 @@ export const inputComponents = [
       dataType: "static",
       dictionaryType: "",
       propsUrl: "",
+      propsName: "",
       props: {
         label: "fullName",
         value: "id"
@@ -332,6 +335,7 @@ export const inputComponents = [
       trigger: "change",
       dataType: "static",
       propsUrl: "",
+      propsName: "",
       dictionaryType: ""
     },
     options: [
@@ -796,7 +800,8 @@ export const selectComponents = [
       trigger: "change",
       dataType: "static",
       dictionaryType: "",
-      propsUrl: ""
+      propsUrl: "",
+      propsName: ""
     },
     on: {
       change:
@@ -989,6 +994,7 @@ export const selectComponents = [
     },
     placeholder: "请选择",
     interfaceId: "",
+    interfaceName: "",
     hasPage: false,
     pageSize: 20,
     columnOptions: [],
