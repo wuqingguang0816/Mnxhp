@@ -1,16 +1,8 @@
 <template>
   <div class="popupSelect-container">
-    <div class="el-select" @click="openDialog">
-      <el-input placeholder="请选择字段名称" readonly :validate-event="false" v-model="title"
-        @mouseenter.native="inputHovering = true" @mouseleave.native="inputHovering = false">
-        <template slot="suffix">
-          <i v-show="!showClose"
-            :class="['el-select__caret', 'el-input__icon', 'el-icon-arrow-up']"></i>
-          <i v-if="showClose" class="el-select__caret el-input__icon el-icon-circle-close"
-            @click.stop="clear"></i>
-        </template>
-      </el-input>
-    </div>
+    <!-- <div class="el-select" @click="openDialog">
+
+    </div> -->
     <el-dialog title="字段名称" :close-on-click-modal="false" :visible.sync="visible"
       class="JNPF-dialog JNPF-dialog_center JNPF-dialog-tree-select" lock-scroll append-to-body
       width="1000px">
@@ -125,7 +117,6 @@ export default {
         currentPage: 1,
         pageSize: 20,
         sort: 'desc',
-        sidx: ''
       },
       keyword: '',
       total: 0,
@@ -166,7 +157,7 @@ export default {
         keyword: this.keyword,
         ...this.listQuery,
       }
-      getTableInfoByTableName(this.linkId, this.tableName, this.menuType, query).then(res => {
+      getTableInfoByTableName(this.linkId, this.tableName, this.menuType, this.dataType, query).then(res => {
         this.list = res.data.list
         this.total = res.data.pagination.total
         this.listLoading = false
@@ -191,21 +182,14 @@ export default {
     },
     openDialog() {
       if (!this.treeData.length) return this.$message.error(`请先进行数据连接！`)
-      this.checked = this.value
       this.visible = true
+      this.checked = ''
       this.treeLoading = true
       this.tableName = this.bindTable
       this.$nextTick(() => {
-        if (this.checked) {
-          this.tableName = this.bindTable
-          let row = this.treeData.filter(item => item.tableName == this.tableName)
-          this.linkId = row[0].dbLink
-          this.$refs.treeBox.setCurrentKey(this.tableName)
-        } else {
-          this.tableName = this.treeData[0].tableName
-          this.linkId = this.treeData[0].dbLink
-          this.$refs.treeBox.setCurrentKey(this.tableName)
-        }
+        this.tableName = this.treeData[0].tableName
+        this.linkId = this.treeData[0].dbLink
+        this.$refs.treeBox.setCurrentKey(this.tableName)
         this.treeLoading = false
         this.reset()
       })
@@ -213,14 +197,12 @@ export default {
     clear() {
       this.checked = ''
       this.checkedRow = {}
-      this.$emit('input', this.checked)
-      this.$emit('change', this.checked, this.checkedRow)
+      this.$emit('closeForm', this.checked, this.checkedRow)
     },
     select() {
-      if (!this.checked) return
-      this.$emit('input', this.checked)
-      this.$emit('change', this.checked, this.checkedRow)
+      if (!this.checked) return this.$message.warning(`请选择一条数据！`)
       this.visible = false
+      this.$emit('closeForm', this.checked, this.checkedRow)
     },
     rowClick(row) {
       this.checked = row.field

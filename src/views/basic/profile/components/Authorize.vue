@@ -47,7 +47,7 @@ export default {
       this.loading = true
       AuthorizeList().then(res => {
         this.info = res.data;
-        this.treeData = this.info.module
+        this.treeData = this.info[this.activeTab]
         this.loading = false
       })
     },

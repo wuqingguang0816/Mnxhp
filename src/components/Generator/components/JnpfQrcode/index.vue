@@ -111,6 +111,7 @@ export default {
         colorLight: this.colorLight,
         correctLevel: QRCode.CorrectLevel.L //容错级别 容错级别有：（1）QRCode.CorrectLevel.L （2）QRCode.CorrectLevel.M （3）QRCode.CorrectLevel.Q （4）QRCode.CorrectLevel.H
       })
+      qrcode._el.title = ''
     }
   },
 }

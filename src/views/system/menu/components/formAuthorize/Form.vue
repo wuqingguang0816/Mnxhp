@@ -1,47 +1,59 @@
 <template>
-  <el-dialog :title="!dataForm.id ? '新建字段' : '编辑字段'" :close-on-click-modal="false"
-    :close-on-press-escape="false" :visible.sync="visible" lock-scroll
-    class="JNPF-dialog JNPF-dialog_center" width="600px">
-    <el-form ref="dataForm" :model="dataForm" :rules="dataRule" label-width="100px"
-      v-loading="formLoading" class="menuForm">
-      <jnpf-form-tip-item label="字段名称" prop="enCode">
-        <nameSelects :value="dataForm.enCode" :moduleId='dataForm.moduleId' :title="dataForm.enCode"
-          :dataType="dataType" :bindTable="dataForm.bindTable" :menuType="menuType"
-          :treeData="treeData" @change="changeName" />
-      </jnpf-form-tip-item>
-      <el-form-item label="字段规则" prop="fieldRule">
-        <el-select v-model="dataForm.fieldRule" placeholder="请选择字段名称" clearable>
-          <el-option v-for="item in fieldRuleOptions" :key="item.value" :label="item.label"
-            :value="item.value">
-          </el-option>
-        </el-select>
-      </el-form-item>
-      <jnpf-form-tip-item label="关联字段" prop="childTableKey"
-        tip-label="输入表单设计内设计子表控制字段名;例：tableField107" v-if="dataForm.fieldRule==2">
-        <el-input v-model="dataForm.childTableKey" placeholder="请输入关联主表的子表控件名称" />
-      </jnpf-form-tip-item>
-      <jnpf-form-tip-item label="字段说明" prop="fullName">
-        <el-input v-model="dataForm.fullName" placeholder="输入字段说明" />
-      </jnpf-form-tip-item>
-      <jnpf-form-tip-item label="排序" prop="sortCode">
-        <el-input-number :min="0" :max="999999" v-model="dataForm.sortCode"
-          controls-position="right" />
-      </jnpf-form-tip-item>
-      <jnpf-form-tip-item label="状态" prop="enabledMark">
-        <el-switch v-model="dataForm.enabledMark" :active-value="1" :inactive-value="0" />
-      </jnpf-form-tip-item>
-      <jnpf-form-tip-item label="备注" prop="description">
-        <el-input v-model="dataForm.description" type="textarea" :rows="3" />
-      </jnpf-form-tip-item>
-    </el-form>
-    <span slot="footer" class="dialog-footer">
-      <el-button @click="visible = false">{{
+  <div>
+    <el-dialog :title="!dataForm.id ? '新建字段' : '编辑字段'" :close-on-click-modal="false"
+      :close-on-press-escape="false" :visible.sync="visible" lock-scroll
+      class="JNPF-dialog JNPF-dialog_center" width="600px">
+      <el-form ref="dataForm" :model="dataForm" :rules="dataRule" label-width="100px"
+        v-loading="formLoading" class="menuForm">
+        <jnpf-form-tip-item label="字段名称" prop="enCode">
+          <el-input v-model="dataForm.enCode" placeholder="请输入字段名称">
+            <template slot="append">
+              <el-button type="primary" @click="selectName">选择</el-button>
+            </template>
+          </el-input>
+        </jnpf-form-tip-item>
+        <jnpf-form-tip-item label="数据库表" prop="bindTable" v-if="dataForm.bindTable">
+          <el-input v-model="dataForm.bindTable" placeholder="请输入数据库表" disabled>
+          </el-input>
+        </jnpf-form-tip-item>
+        <jnpf-form-tip-item label="字段规则" prop="fieldRule">
+          <el-select v-model="dataForm.fieldRule" placeholder="请选择字段规则" clearable
+            @change="changeFieldRule">
+            <el-option v-for="item in fieldRuleOptions" :key="item.value" :label="item.label"
+              :value="item.value">
+            </el-option>
+          </el-select>
+        </jnpf-form-tip-item>
+        <jnpf-form-tip-item label="关联字段" prop="childTableKey"
+          tip-label="输入表单设计内设计子表控制字段名;例：tableField107" v-if="dataForm.fieldRule==2">
+          <el-input v-model="dataForm.childTableKey" placeholder="请输入关联主表的子表控件名称" />
+        </jnpf-form-tip-item>
+        <jnpf-form-tip-item label="字段说明" prop="fullName">
+          <el-input v-model="dataForm.fullName" placeholder="输入字段说明" />
+        </jnpf-form-tip-item>
+        <jnpf-form-tip-item label="排序" prop="sortCode">
+          <el-input-number :min="0" :max="999999" v-model="dataForm.sortCode"
+            controls-position="right" />
+        </jnpf-form-tip-item>
+        <jnpf-form-tip-item label="状态" prop="enabledMark">
+          <el-switch v-model="dataForm.enabledMark" :active-value="1" :inactive-value="0" />
+        </jnpf-form-tip-item>
+        <jnpf-form-tip-item label="备注" prop="description">
+          <el-input v-model="dataForm.description" type="textarea" :rows="3" />
+        </jnpf-form-tip-item>
+      </el-form>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="visible = false">{{
         $t("common.cancelButton")
       }}</el-button>
-      <el-button type="primary" :loading="btnLoading" @click="dataFormSubmit()">
-        {{ $t("common.confirmButton") }}</el-button>
-    </span>
-  </el-dialog>
+        <el-button type="primary" :loading="btnLoading" @click="dataFormSubmit()">
+          {{ $t("common.confirmButton") }}</el-button>
+      </span>
+    </el-dialog>
+    <nameSelects :visible.sync="nameVisible" :value="dataForm.enCode" :moduleId="dataForm.moduleId"
+      :title="dataForm.enCode" :dataType="dataType" :bindTable="dataForm.bindTable"
+      :menuType="menuType" :treeData="treeData" ref="nameForm" @closeForm="closeForm" />
+  </div>
 </template>
 
 <script>
@@ -81,7 +93,9 @@ export default {
         { value: 2, label: "子表规则" }
       ],
       menuType: '',
+      dataType: '',
       treeData: [],
+      nameVisible: false,
       dataRule: {
         enCode: [
           { required: true, message: "字段名称不能为空", trigger: "blur" }
@@ -99,7 +113,7 @@ export default {
     };
   },
   methods: {
-    init(moduleId, id, menuType, tableName, dataType) {
+    init(moduleId, id, menuType, dataType) {
       this.menuType = menuType;
       this.dataType = dataType
       this.dataForm.id = id || "";
@@ -119,19 +133,29 @@ export default {
       })
       this.$nextTick(() => {
         this.$refs["dataForm"].resetFields();
-        this.dataForm.bindTable = tableName;
-        this.menuType = menuType;
+        this.dataForm.bindTable = ''
+        this.dataForm.fieldRule = 0
+        this.menuType = menuType
         if (this.dataForm.id) {
           getFormInfo(this.dataForm.id).then(res => {
-            this.dataForm = res.data;
-            this.formLoading = false;
+            this.dataForm = res.data
+            this.formLoading = false
           });
         } else {
-          this.formLoading = false;
+          this.formLoading = false
         }
       });
     },
-    changeName(val, value) {
+    selectName() {
+      this.nameVisible = true
+      this.$nextTick(() => {
+        this.$refs.nameForm.openDialog()
+      });
+    },
+    changeFieldRule() {
+      this.dataForm.childTableKey = ''
+    },
+    closeForm(val, value) {
       this.dataForm.enCode = val
       this.dataForm.bindTable = value.tableName
       this.dataForm.fullName = value.fieldName || ''

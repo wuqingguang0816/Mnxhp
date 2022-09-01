@@ -99,7 +99,7 @@ import Preview from '../preview'
 import {
   inputComponents, selectComponents, systemComponents, layoutComponents, formConf
 } from '@/components/Generator/generator/config'
-import { noVModelList, noTableAllowList, webPeculiarList, onlinePeculiarList } from '@/components/Generator/generator/comConfig'
+import { noVModelList, noTableAllowList, calculateItem, onlinePeculiarList } from '@/components/Generator/generator/comConfig'
 import {
   exportDefault, beautifierConf, isNumberStr, titleCase, deepClone
 } from '@/components/Generator/utils'
@@ -229,7 +229,10 @@ export default {
       this.drawingList = []
       this.idGlobal = 100
     }
-    if (this.modelType == 1 || this.modelType == 6) this.leftComponents[1].list = [...this.leftComponents[1].list, ...onlinePeculiarList, ...webPeculiarList]
+    if (this.modelType == 1 || this.modelType == 6) {
+      this.leftComponents[1].list = [...this.leftComponents[1].list, calculateItem]
+      this.leftComponents[3].list = [...this.leftComponents[3].list, ...onlinePeculiarList]
+    }
     if (this.webType != 2 || this.modelType == 3 || this.modelType == 6) this.formConf.popupType = 'fullScreen'
   },
   mounted() {
@@ -258,7 +261,7 @@ export default {
             }
             if (config.jnpfKey === 'billRule') {
               if (!config.rule) {
-                reject({ msg: '单据组件“选择模板”属性为必填项', target: 1 })
+                reject({ msg: '单据组件“单据模板”属性为必填项', target: 1 })
                 break
               }
             }

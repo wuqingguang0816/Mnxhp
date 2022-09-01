@@ -420,6 +420,7 @@ export default {
       formData: {},
       columnList: [],
       columnOptions: [],
+      exportList: [],
       columnBtnsList: [],
       customBtnsList: [],
       hasBatchBtn: false,
@@ -551,10 +552,7 @@ export default {
     },
     getColumnList() {
       if (this.isPreview) {
-        const columnList = this.columnData.columnList.map(o => ({
-          ...o,
-          visible: true
-        }))
+        const columnList = this.columnData.columnList
         this.columnList = this.transformColumnList(columnList)
         return
       }
@@ -608,7 +606,21 @@ export default {
         }
       }
       this.getMergeList(list)
+      this.getExportList(list)
       return list
+    },
+    getExportList(list) {
+      let exportList = []
+      for (let i = 0; i < list.length; i++) {
+        if (list[i].jnpfKey === 'table') {
+          for (let j = 0; j < list[i].children.length; j++) {
+            exportList.push(list[i].children[j])
+          }
+        } else {
+          exportList.push(list[i])
+        }
+      }
+      this.exportList = exportList
     },
     getMergeList(list) {
       list.forEach(item => {
@@ -798,7 +810,7 @@ export default {
       if (key == 'download') {
         this.exportBoxVisible = true
         this.$nextTick(() => {
-          this.$refs.ExportBox.init(this.columnList)
+          this.$refs.ExportBox.init(this.exportList)
         })
       }
       if (this.isPreview) return

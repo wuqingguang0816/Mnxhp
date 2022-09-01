@@ -33,7 +33,7 @@
 </template>
 
 <script>
-import { previewDataInterface, testInterface } from '@/api/systemData/dataInterface'
+import { getDataInterfaceParam, getDataInterfaceRes } from '@/api/systemData/dataInterface'
 
 export default {
   data() {
@@ -56,9 +56,10 @@ export default {
       this.testLoading = true
       let query = {
         paramList: this.inputList,
-        tenantId: this.tenantId
+        tenantId: this.tenantId,
+        origin: 'preview'
       }
-      testInterface(this.id, query).then(res => {
+      getDataInterfaceRes(this.id, query).then(res => {
         this.testLoading = false
         let data = res
         this.responseData = JSON.stringify(data, null, 4)
@@ -76,9 +77,9 @@ export default {
       this.formLoading = true
       this.responseData = ''
       this.$nextTick(() => {
-        const prefix = this.define.comUrl === '/dev' ? this.define.APIURl : ''
+        const prefix = this.define.comUrl === '/dev' ? window.location.origin : ''
         this.url = `${prefix}${this.define.comUrl}/api/system/DataInterface/${id}/Actions/Preview` + (tenantId ? '?tenantId=' + tenantId : '')
-        previewDataInterface(this.id).then(res => {
+        getDataInterfaceParam(this.id).then(res => {
           this.inputList = res.data
           this.formLoading = false
         }).catch(() => {

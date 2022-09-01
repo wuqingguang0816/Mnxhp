@@ -87,7 +87,7 @@
         </div>
         <el-scrollbar class="right-scrollbar" v-show="currentTab==='column'">
           <div class="setting-box">
-            <el-form :model="columnData" label-width="80px">
+            <el-form :model="columnData" label-width="80px" label-position="left">
               <el-divider>表格配置</el-divider>
               <el-form-item label="排序类型">
                 <el-select v-model="columnData.sort" placeholder="请选择排序类型">
@@ -167,15 +167,14 @@
               <el-form-item label="表单权限">
                 <el-switch v-model="columnData.useFormPermission"></el-switch>
               </el-form-item>
-
-              <el-form label-width="90px" class="sriptEvents">
+              <template v-if="modelType==1">
                 <el-divider>脚本事件</el-divider>
-                <el-form-item label="表格事件" style="{text-align: left;}">
+                <el-form-item label="表格事件">
                   <el-button style="width: 100%;"
                     @click="addFunc(columnData.funcs.afterOnload,'afterOnload',true)">脚本编写
                   </el-button>
                 </el-form-item>
-              </el-form>
+              </template>
             </el-form>
           </div>
         </el-scrollbar>
@@ -507,10 +506,4 @@ export default {
 </script>
 <style lang="scss" scoped>
 @import './index.scss';
-
-.sriptEvents {
-  >>> .el-form-item__label {
-    text-align: left;
-  }
-}
 </style>

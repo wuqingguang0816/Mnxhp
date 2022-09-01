@@ -28,7 +28,7 @@ export default {
     },
     placeholder: {
       type: String,
-      default: '请输入内容...'
+      default: '请输入'
     }
   },
   data() {
@@ -90,15 +90,19 @@ export default {
 .jnpf-editor-quill {
   >>> .ql-editor {
     min-height: 400px;
+    white-space: normal !important;
   }
   >>> .ql-toolbar.ql-snow {
     border: 1px solid #dcdfe6;
     border-bottom: 0;
     border-radius: 4px 4px 0 0;
   }
-  >>> .ql-container.ql-snow {
-    border: 1px solid #dcdfe6;
-    border-radius: 0 0 4px 4px;
+  >>> .ql-container {
+    white-space: pre-wrap !important;
+    .ql-snow {
+      border: 1px solid #dcdfe6;
+      border-radius: 0 0 4px 4px;
+    }
   }
 }
 </style>

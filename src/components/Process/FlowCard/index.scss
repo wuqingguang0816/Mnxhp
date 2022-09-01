@@ -282,7 +282,8 @@ $base-size : 12px;
     box-sizing: border-box;
 
     .text {
-      margin: 0 ellipsis(4)
+      word-break: break-all;
+      margin: 0 ellipsis(4);
     }
   }
 

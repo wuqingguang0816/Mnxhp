@@ -2,10 +2,6 @@
   <el-drawer title="列表显示设置" :visible.sync="drawerVisible" :wrapperClosable="false" size="320px"
     append-to-body class="JNPF-common-drawer columnSettings-drawer">
     <div class="JNPF-flex-main">
-      <!-- <div class="columnSetting-head">
-        <span>表头设置</span>
-        <el-link type="primary" :underline="false" @click="reset()">恢复默认</el-link>
-      </div> -->
       <el-scrollbar class="column-list" v-loading="loading">
         <template v-if="list.length">
           <draggable :list="list" :animation="340" handle=".column-item-icon">
@@ -107,8 +103,7 @@ export default {
         background: rgba(25, 144, 250, 0.1);
       }
       .column-item-icon {
-        width: 14px;
-        margin: auto 8px auto 22px;
+        margin: auto 8px auto 10px;
         color: #909399;
         cursor: move;
         font-size: 14px;
@@ -125,12 +120,14 @@ export default {
         align-items: center;
       }
       .check-box {
-        margin-right: 20px;
+        margin-right: 16px;
       }
     }
   }
   .footer {
-    margin: 4px auto 20px;
+    margin: 4px 20px 20px;
+    display: flex;
+    justify-content: flex-end;
   }
 }
 </style>
