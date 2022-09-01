@@ -106,17 +106,19 @@
                 </div>
               </div>
               <div class="right-pane" v-if="dataForm.messageType != 3">
-                <el-form-item label="消息标题" prop="title">
+                <jnpf-form-tip-item label="消息标题" prop="title">
                   <el-input v-model="dataForm.title" placeholder="消息标题" clearable></el-input>
-                </el-form-item>
-                <el-form-item label="消息内容" prop="content" v-if="dataForm.messageType == 2">
+                </jnpf-form-tip-item>
+                <jnpf-form-tip-item label="消息内容" prop="content" v-if="dataForm.messageType == 2"
+                  tipLabel='参数格式：{参数名}'>
                   <JNPFQuill v-model="dataForm.content" ref="myQuillEditor" />
-                </el-form-item>
-                <el-form-item label="消息内容" prop="content" class="jnpf-textarea-item"
-                  v-else-if="dataForm.messageType != 1||dataForm.messageSource != 1">
+                </jnpf-form-tip-item>
+                <jnpf-form-tip-item label="消息内容" prop="content" class="jnpf-textarea-item"
+                  v-else-if="dataForm.messageType != 1||dataForm.messageSource != 1"
+                  tipLabel='参数格式：{参数名}'>
                   <el-input v-model="dataForm.content" placeholder="消息内容" type="textarea"
                     :rows="19" />
-                </el-form-item>
+                </jnpf-form-tip-item>
               </div>
               <div class="right-pane" v-else>
                 <jnpf-form-tip-item label="模版编号" prop="templateCode"
