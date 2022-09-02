@@ -149,8 +149,8 @@ export default {
         for (let i = 0; i < list.length; i++) {
           let item = list[i]
           if (item.__vModel__) {
-            const val = data[item.__vModel__]
-            if (val !== null && val !== undefined) item.__config__.defaultValue = val
+            const val = data.hasOwnProperty(item.__vModel__) ? data[item.__vModel__] : item.__config__.defaultValue
+            if (!item.__config__.isSubTable) item.__config__.defaultValue = val
             if (!this.isPreview && this.useFormPermission) {
               let id = item.__config__.isSubTable ? parent.__vModel__ + '-' + item.__vModel__ : item.__vModel__
               let noShow = true
