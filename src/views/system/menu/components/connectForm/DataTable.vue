@@ -176,9 +176,6 @@ export default {
         : 'small';
     },
   },
-  created() {
-    this.getData()
-  },
   mounted() {
     addResizeListener(this.$el, this.handleResize);
 
@@ -213,21 +210,9 @@ export default {
       this.$nextTick(() => {
         this.resetInputHeight();
       });
-    },
-    allList: {
-      handler: function (val) {
-        this.setDefault()
-      },
-      deep: true
     }
   },
   methods: {
-    async getData() {
-      const dbLinkId = this.dbLinkId || "0";
-      DataModelList(dbLinkId, { keyword: this.keyword }).then((res) => {
-        this.allList = res.data.list
-      })
-    },
     echoTable(rows) {
       rows.forEach(row => {
         this.$refs.multipleTable.$refs.JNPFTable.toggleRowSelection(row, true)
