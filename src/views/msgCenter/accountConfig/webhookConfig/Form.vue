@@ -10,7 +10,8 @@
         <el-input v-model="dataForm.enCode" placeholder="请输入编码" clearable />
       </el-form-item>
       <el-form-item label="类型" prop="webhookType">
-        <el-select v-model="dataForm.webhookType" placeholder="请选择类型" clearable>
+        <el-select v-model="dataForm.webhookType" placeholder="请选择类型" clearable
+          @change="changeType">
           <el-option v-for="item in webhookList" :label="item.fullName" :value="item.enCode"
             :key="item.enCode" />
         </el-select>
@@ -21,21 +22,12 @@
       <el-form-item label="认证类型" prop="approveType">
         <el-select v-model="dataForm.approveType" placeholder="请选择认证类型" clearable>
           <el-option v-for="item in approveTypeList" :label="item.fullName" :value="item.enCode"
-            :key="item.enCode" />
+            :key="item.enCode" :disabled="isApproveType" />
         </el-select>
       </el-form-item>
       <template v-if="dataForm.approveType == 2">
         <el-form-item label="Bearer令牌" prop="bearer">
           <el-input v-model="dataForm.bearer" placeholder="请输入Bearer令牌" clearable />
-        </el-form-item>
-      </template>
-      <template v-if="dataForm.approveType == 3">
-        <el-form-item label="用户名" prop="userName">
-          <el-input v-model="dataForm.userName" placeholder="请输入用户名" clearable />
-        </el-form-item>
-        <el-form-item label="密码" prop="password">
-          <el-input v-model="dataForm.password" show-password placeholder="请输入密码" clearable>
-          </el-input>
         </el-form-item>
       </template>
       <el-form-item label="排序" prop="sortCode">
@@ -82,8 +74,9 @@ export default {
         enabledMark: 1,
         description: ''
       },
+      isApproveType: false,
       webhookList: [],
-      approveTypeList: [{ fullName: '无需认证', enCode: '1' }, { fullName: 'bearer令牌', enCode: '2' }, { fullName: '基本认证', enCode: '3' }],
+      approveTypeList: [{ fullName: '无需认证', enCode: '1' }, { fullName: 'bearer令牌', enCode: '2' }],
       dataRule: {
         fullName: [
           { required: true, message: '请输入业务名称', trigger: 'blur' },
@@ -121,6 +114,10 @@ export default {
         }
       })
       this.formLoading = false
+    },
+    changeType(e) {
+      this.isApproveType = false
+      if (e == 2) return this.isApproveType = true
     },
     dataFormSubmit() {
       this.$refs['dataForm'].validate((valid) => {
