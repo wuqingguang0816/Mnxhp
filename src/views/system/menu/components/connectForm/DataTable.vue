@@ -68,7 +68,7 @@
         <el-table-column prop="sum" label="总数" width="90" />
       </JNPF-table>
       <span slot="footer" class="dialog-footer">
-        <el-button @click="visible=false">{{$t("common.cancelButton")}}</el-button>
+        <el-button @click="onCloseVisible">{{$t("common.cancelButton")}}</el-button>
         <el-button type="primary" @click="confirm()">{{$t("common.confirmButton")}}</el-button>
       </span>
     </el-dialog>
@@ -79,7 +79,6 @@
 import { addResizeListener, removeResizeListener } from 'element-ui/src/utils/resize-event';
 import { DataModelList } from "@/api/systemData/dataModel";
 export default {
-  props: ["dbLinkId", "dataSelect"],
   name: 'dataTable',
   inject: {
     elForm: {
@@ -176,6 +175,9 @@ export default {
         : 'small';
     },
   },
+  created() {
+    this.getData()
+  },
   mounted() {
     addResizeListener(this.$el, this.handleResize);
 
@@ -213,6 +215,13 @@ export default {
     }
   },
   methods: {
+    async getData() {
+      const dbLinkId = this.dbLinkId || "0";
+      DataModelList(dbLinkId, { keyword: this.keyword }).then((res) => {
+        this.allList = res.data.list
+        this.setDefault()
+      })
+    },
     echoTable(rows) {
       rows.forEach(row => {
         this.$refs.multipleTable.$refs.JNPFTable.toggleRowSelection(row, true)
@@ -223,6 +232,22 @@ export default {
       this.selectedData = [];
       this.$emit("update:visible", false);
     },
+    onCloseVisible() {
+      if (this.allList.length && this.selectedData.length) {
+        this.$nextTick(() => {
+          let selData = []
+          this.allList.forEach(i => {  // 循环嵌套
+            this.selectedData.forEach(item => {
+              if (i.table === item.table) { // 判断哪些数据是需要回显的
+                selData.push(i)    // 需要回显的数据整合起来               
+              }
+            })
+          })
+          this.echoTable(selData) // 调用回显方法
+        })
+      }
+      this.visible = false
+    },
     refresh() {
       this.keyword = "";
       this.initData();
@@ -231,7 +256,6 @@ export default {
       this.listLoading = true;
       const dbLinkId = this.dbLinkId || "0";
       DataModelList(dbLinkId, { keyword: this.keyword }).then((res) => {
-        this.allList = res.data.list
         this.list = res.data.list;
         this.listLoading = false;
         if (this.list.length && this.selectedData.length) {
@@ -283,7 +307,6 @@ export default {
     },
     setDefault() {
       if (!this.value || !this.value.length) {
-
         this.innerValue = ''
         this.selectedData = []
         this.tagsList = []
