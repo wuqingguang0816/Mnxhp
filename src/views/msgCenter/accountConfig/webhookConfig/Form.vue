@@ -93,9 +93,7 @@ export default {
           { required: true, message: '请选择认证类型', trigger: 'change' }
         ],
         webhookAddress: [{ required: true, message: '请输入业务编码', trigger: 'blur' }],
-        bearer: [{ required: true, message: '请输Bearer令牌', trigger: 'blur' }],
-        userName: [{ required: true, message: '请输用户名', trigger: 'blur' }],
-        password: [{ required: true, message: '请输密码', trigger: 'blur' }]
+        bearer: [{ required: true, message: '请输Bearer令牌', trigger: 'blur' }]
       }
     }
   },
