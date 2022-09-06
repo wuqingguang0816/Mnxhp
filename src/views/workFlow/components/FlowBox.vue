@@ -134,20 +134,23 @@
               :rows="4" />
           </el-form-item>
           <el-form-item label="手写签名" required v-if="properties.hasSign">
-            <div class="sign-main">
-              <div class="sign-head">
-                <div class="sign-tip">请在这里输入你的签名</div>
-                <div class="sign-action">
-                  <el-button class="clear-btn" size="mini" @click="handleReset">清空</el-button>
-                  <el-button class="sure-btn" size="mini" @click="handleGenerate"
-                    :disabled="!!signImg">确定签名</el-button>
-                </div>
-              </div>
-              <div class="sign-box">
-                <vue-esign ref="esign" :height="330" v-if="!signImg" :lineWidth="5" />
-                <img :src="signImg" alt="" v-if="signImg" class="sign-img">
+            <div class="sign-mian">
+              <img :src="userInfo.signImg" alt="" v-if="userInfo.signImg" class="sign-img">
+              <div @click="addSign" class="sign-style">
+                <i class="icon-ym icon-ym-signature add-sign"></i>
+                <span class="sign-title">手写签名</span>
               </div>
             </div>
+            <el-dialog title="请签名" class="JNPF-dialog JNPF-dialog_center sign-dialog"
+              :closeOnClickModal='false' :visible.sync="dialogVisible" append-to-body width="600px">
+              <div class="drawing-board">
+                <vue-esign ref="esign" :height=' 300' :width="560" :lineWidth="3" />
+              </div>
+              <span slot="footer" class="dialog-footer">
+                <el-button @click="handleReset">清空</el-button>
+                <el-button type="primary" @click="handleGenerate()">确定</el-button>
+              </span>
+            </el-dialog>
           </el-form-item>
           <el-form-item label="抄送人员" v-if="properties.isCustomCopy">
             <user-select v-model="copyIds" placeholder="请选择" multiple />
@@ -216,6 +219,7 @@
 </template>
 
 <script>
+import { createSign } from '@/api/permission/userSetting'
 import { FlowEngineInfo } from '@/api/workFlow/FlowEngine'
 import { FlowBeforeInfo, Audit, Reject, Transfer, Recall, Cancel, Assign, SaveAudit, Candidates, CandidateUser, Resurgence, ResurgenceList } from '@/api/workFlow/FlowBefore'
 import { Revoke, Press } from '@/api/workFlow/FlowLaunch'
@@ -230,6 +234,7 @@ import Process from '@/components/Process/Preview'
 import PrintBrowse from '@/components/PrintBrowse'
 import vueEsign from 'vue-esign'
 import ActionDialog from '@/views/workFlow/components/ActionDialog'
+import { mapGetters } from "vuex";
 export default {
   components: { recordList, Process, vueEsign, PrintBrowse, Comment, RecordSummary, CandidateForm, CandidateUserSelect, ErrorForm, ActionDialog },
   data() {
@@ -311,6 +316,7 @@ export default {
       errorVisible: false,
       errorNodeList: [],
       isValidate: false,
+      dialogVisible: false,
     }
   },
   computed: {
@@ -321,7 +327,8 @@ export default {
     selectState() {
       const index = this.flowUrgentList.findIndex(c => this.flowUrgent === c.state)
       return index
-    }
+    },
+    ...mapGetters(['userInfo'])
   },
   watch: {
     activeTab(val) {
@@ -334,6 +341,35 @@ export default {
     }
   },
   methods: {
+    handleReset() {
+      this.signImg = ''
+      this.$nextTick(() => {
+        this.$refs.esign && this.$refs.esign.reset()
+      })
+    },
+    handleGenerate() {
+      this.$refs.esign.generate().then(res => {
+        if (res) this.signImg = res
+        let query = {
+          signImg: this.signImg,
+          isDefault: 1
+        }
+        createSign(query).then(res => {
+          this.$store.commit('user/SET_USERINFO_SIGNIMG', this.signImg)
+          this.dialogVisible = false
+          this.handleReset()
+        }).catch(err => {
+          this.dialogVisible = false
+          this.handleReset()
+        })
+      }).catch(err => {
+        this.dialogVisible = false
+        this.handleReset()
+      })
+    },
+    addSign() {
+      this.dialogVisible = true
+    },
     handleResurgence(errorRuleUserList) {
       this.$refs['resurgenceForm'].validate((valid) => {
         if (!valid) return
@@ -737,10 +773,10 @@ export default {
             this.$emit('close', true)
           }
         })
-      }).catch(() => { 
+      }).catch(() => {
         this.$refs.actionDialog.btnLoading = false
-        this.approvalBtnLoading = false 
-        })
+        this.approvalBtnLoading = false
+      })
     },
     press() {
       this.$confirm('此操作将提示该节点尽快处理，是否继续?', '提示', {
@@ -877,16 +913,6 @@ export default {
         this.$refs.esign && this.$refs.esign.reset()
       })
     },
-    handleGenerate() {
-      this.$refs.esign.generate().then(res => {
-        if (res) this.signImg = res
-      }).catch(err => {
-        this.$message({
-          message: '请签名',
-          type: 'warning'
-        })
-      })
-    },
     addComment() {
       this.$refs.comment && this.$refs.comment.showCommentDialog()
     },
@@ -906,37 +932,27 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
-.sign-main {
-  border: 1px solid #dcdfe6;
-  border-radius: 4px;
-  overflow: hidden;
-  .sign-head {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 8px;
-    border-bottom: 1px solid #dcdfe6;
-    .sign-tip {
-      color: #a5a5a5;
-      font-size: 12px;
-    }
-    .sign-action {
-      display: flex;
-      align-items: center;
-      .clear-btn,
-      .sure-btn {
-        margin-left: 5px;
-      }
-    }
-  }
-  .sign-box {
-    border-top: 0;
-    height: 100px;
-  }
+.sign-mian {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
   .sign-img {
-    width: 100%;
+    width: 100px;
+    height: 50px;
+  }
+  .add-sign {
+    height: 50px;
+    font-size: 36px;
+    margin-top: 10px;
+    color: #2188ff;
+  }
+  .sign-title {
+    font-size: 16px;
+    color: #2188ff;
   }
 }
+
 .flow-form-main {
   .JNPF-el_tabs {
     overflow: hidden;
@@ -955,5 +971,28 @@ export default {
   span:first-child {
     margin: 0 3px 0 10px;
   }
+}
+.sign-dialog {
+  >>> .el-dialog__body {
+    overflow: hidden;
+    height: 320px;
+    overflow: auto;
+    overflow-x: hidden;
+    padding: 23px 14px 2px !important;
+  }
+}
+.drawing-board {
+  border: 1px solid rgb(224, 238, 238);
+  width: 100%;
+  height: 300px;
+  background-color: rgb(247, 247, 247);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: -10px;
+  margin-bottom: -10px;
+}
+.sign-style {
+  cursor: pointer;
 }
 </style>

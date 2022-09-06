@@ -11,20 +11,23 @@
           :rows="4" />
       </el-form-item>
       <el-form-item label="手写签名" required v-if="properties.hasSign">
-        <div class="sign-main">
-          <div class="sign-head">
-            <div class="sign-tip">请在这里输入你的签名</div>
-            <div class="sign-action">
-              <el-button class="clear-btn" size="mini" @click="handleReset">清空</el-button>
-              <el-button class="sure-btn" size="mini" @click="handleGenerate" :disabled="!!signImg">
-                确定签名</el-button>
-            </div>
-          </div>
-          <div class="sign-box">
-            <vue-esign ref="esign" :height="330" v-if="!signImg" :lineWidth="5" />
-            <img :src="signImg" alt="" v-if="signImg" class="sign-img">
+        <div class="sign-mian">
+          <img :src="userInfo.signImg" alt="" v-if="userInfo.signImg" class="sign-img">
+          <div @click="addSign" class="sign-style">
+            <i class="icon-ym icon-ym-signature add-sign"></i>
+            <span class="sign-title">手写签名</span>
           </div>
         </div>
+        <el-dialog title="请签名" class="JNPF-dialog JNPF-dialog_center sign-dialog"
+          :closeOnClickModal='false' :visible.sync="dialogVisible" append-to-body width="600px">
+          <div class="drawing-board">
+            <vue-esign ref="esign" :height=' 300' :width="560" :lineWidth="3" />
+          </div>
+          <span slot="footer" class="dialog-footer">
+            <el-button @click="handleReset">清空</el-button>
+            <el-button type="primary" @click="handleGenerate()">确定</el-button>
+          </span>
+        </el-dialog>
       </el-form-item>
     </el-form>
     <span slot="footer" class="dialog-footer">
@@ -37,6 +40,8 @@
 </template>
 <script>
 import vueEsign from 'vue-esign'
+import { createSign } from '@/api/permission/userSetting'
+import { mapGetters } from "vuex";
 export default {
   components: { vueEsign },
   data() {
@@ -51,8 +56,12 @@ export default {
       signImg: '',
       btnLoading: false,
       title: '',
-      label: ''
+      label: '',
+      dialogVisible: false
     }
+  },
+  computed: {
+    ...mapGetters(['userInfo'])
   },
   methods: {
     init(properties, eventType) {
@@ -82,6 +91,35 @@ export default {
         this.handleReset()
         this.$refs['dataForm'].resetFields()
       })
+    },
+    handleReset() {
+      this.signImg = ''
+      this.$nextTick(() => {
+        this.$refs.esign && this.$refs.esign.reset()
+      })
+    },
+    handleGenerate() {
+      this.$refs.esign.generate().then(res => {
+        if (res) this.signImg = res
+        let query = {
+          signImg: this.signImg,
+          isDefault: 1
+        }
+        createSign(query).then(res => {
+          this.$store.commit('user/SET_USERINFO_SIGNIMG', this.signImg)
+          this.dialogVisible = false
+          this.handleReset()
+        }).catch(err => {
+          this.dialogVisible = false
+          this.handleReset()
+        })
+      }).catch(err => {
+        this.dialogVisible = true
+        this.handleReset()
+      })
+    },
+    addSign() {
+      this.dialogVisible = true
     },
     handleSure() {
       this.$refs['dataForm'].validate((valid) => {
@@ -127,35 +165,27 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
-.sign-main {
-  border: 1px solid #dcdfe6;
-  border-radius: 4px;
-  overflow: hidden;
-  .sign-head {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 0 4px;
-    border-bottom: 1px solid #dcdfe6;
-    .sign-tip {
-      color: #a5a5a5;
-      font-size: 12px;
-    }
-    .sign-action {
-      display: flex;
-      align-items: center;
-      .clear-btn,
-      .sure-btn {
-        margin-left: 5px;
-      }
-    }
-  }
-  .sign-box {
-    border-top: 0;
-    height: 100px;
-  }
+.sign-mian {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
   .sign-img {
-    width: 100%;
+    width: 100px;
+    height: 50px;
   }
+  .add-sign {
+    height: 50px;
+    font-size: 36px;
+    margin-top: 10px;
+    color: #2188ff;
+  }
+  .sign-title {
+    font-size: 16px;
+    color: #2188ff;
+  }
+}
+.sign-style {
+  cursor: pointer;
 }
 </style>

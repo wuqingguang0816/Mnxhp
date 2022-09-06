@@ -49,7 +49,7 @@ export function UpdateLanguage(data) {
 // 获取我的下属
 export function getSubordinate(id) {
   return request({
-    url: `/api/permission/Users/Current/Subordinate/${id?id:'0'}`,
+    url: `/api/permission/Users/Current/Subordinate/${id ? id : '0'}`,
     method: 'GET'
   })
 }
@@ -98,5 +98,37 @@ export function setMajor(data) {
     url: `/api/permission/Users/Current/major`,
     method: 'put',
     data
+  })
+}
+
+//获取个性签名列表
+export function getSign(data) {
+  return request({
+    url: `/api/permission/Users/Current/SignImg`,
+    method: 'get',
+  })
+}
+//新建个性签名
+export function createSign(data) {
+  return request({
+    url: `/api/permission/Users/Current/SignImg`,
+    method: 'post',
+    data
+  })
+}
+
+//删除个性签名
+export function deleteSign(id) {
+  return request({
+    url: `/api/permission/Users/Current/${id}/SignImg`,
+    method: 'delete',
+  })
+}
+
+//设置默认
+export function uptateDefault(id) {
+  return request({
+    url: `/api/permission/Users/Current/${id}/SignImg`,
+    method: 'put',
   })
 }

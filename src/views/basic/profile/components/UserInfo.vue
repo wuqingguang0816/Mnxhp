@@ -137,14 +137,54 @@
           </el-row>
         </el-form>
       </el-tab-pane>
+      <el-tab-pane label="个人签名">
+        <el-row class="sign" :gutter="40">
+          <div @click="addSign" style="cursor : pointer">
+            <el-col :span="6" class="sign-item">
+              <div class='add-sign'>
+                <i class="add-icon el-icon-plus"></i>
+              </div>
+            </el-col>
+          </div>
+          <template v-for="(item,i) in signList">
+            <el-col :span="6" class="sign-item" :key="i">
+              <div :class="item.isDefault?'add-sign active':'add-sign'">
+                <img :src="item.signImg" alt="" class="sign-img">
+                <div class="icon-checked1" v-if="item.isDefault">
+                  <i class=" el-icon-check"></i>
+                </div>
+                <div v-if="!item.isDefault" class="add-button">
+                  <el-button @click="deleteSign(item.id)">删除</el-button>
+                  <el-button type="primary" @click="uptateDefault(item.id,item.signImg)">设为默认
+                  </el-button>
+                </div>
+              </div>
+            </el-col>
+          </template>
+        </el-row>
+      </el-tab-pane>
     </el-tabs>
+    <el-dialog title="请签名" class="JNPF-dialog JNPF-dialog_center sign-dialog"
+      :closeOnClickModal='false' :visible.sync="dialogVisible" append-to-body width="600px">
+      <div class="sign-main">
+        <!-- <div>使用鼠标在此签名</div> -->
+        <vue-esign ref="esign" :height=' 300' :width="560" :lineWidth="3" />
+      </div>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="handleReset">清空</el-button>
+        <el-button type="primary" @click="handleGenerate()">确定签名</el-button>
+      </span>
+    </el-dialog>
   </div>
 </template>
 
 <script>
 
-import { UpdateUser } from '@/api/permission/userSetting'
+import { UpdateUser, getSign, createSign, deleteSign, uptateDefault } from '@/api/permission/userSetting'
+import { mapGetters } from "vuex";
+import vueEsign from 'vue-esign'
 export default {
+  components: { vueEsign },
   props: {
     user: {
       type: Object,
@@ -173,6 +213,7 @@ export default {
         urgentContacts: '',
         urgentTelePhone: '',
         postalAddress: '',
+
       },
       form2Rule: {
         realName: [
@@ -182,7 +223,10 @@ export default {
       certificatesTypeOptions: [],
       educationOptions: [],
       genderOptions: [],
-      nationOptions: []
+      nationOptions: [],
+      dialogVisible: false,
+      signImg: '',
+      signList: []
     }
   },
   computed: {
@@ -195,12 +239,77 @@ export default {
     prevLogTime() {
       return this.jnpf.toDate(this.form.prevLogTime)
     },
+    ...mapGetters(['userInfo'])
   },
   created() {
     this.getOptions()
     this.getInfo()
+    this.getSign()
   },
   methods: {
+    getSign() {
+      getSign().then(res => {
+        this.signList = res.data || []
+      })
+    },
+    deleteSign(id) {
+      deleteSign(id).then(res => {
+        this.$message({
+          message: res.msg,
+          type: 'success',
+          duration: 1500
+        })
+        this.getSign()
+      })
+    },
+    uptateDefault(id, signImg) {
+      uptateDefault(id).then(res => {
+        this.$message({
+          message: res.msg,
+          type: 'success',
+          duration: 1500
+        })
+        this.$store.commit('user/SET_USERINFO_SIGNIMG', signImg)
+        this.getSign()
+      }).catch(err => {
+        this.getSign()
+      })
+    },
+    handleReset() {
+      this.signImg = ''
+      this.$nextTick(() => {
+        this.$refs.esign && this.$refs.esign.reset()
+      })
+    },
+    handleGenerate() {
+      this.$refs.esign.generate().then(res => {
+        if (res) this.signImg = res
+        let query = {
+          signImg: this.signImg,
+          isDefault: 0
+        }
+        createSign(query).then(res => {
+          this.$message({
+            message: res.msg,
+            type: 'success',
+            duration: 1500
+          })
+          this.dialogVisible = false
+          if (!this.userInfo.signImg) this.$store.commit('user/SET_USERINFO_SIGNIMG', this.signImg)
+          this.getSign()
+          this.handleReset()
+        }).catch(err => {
+          this.getSign()
+          this.handleReset()
+        })
+      }).catch(err => {
+        this.getSign()
+        this.handleReset()
+      })
+    },
+    addSign() {
+      this.dialogVisible = true
+    },
     getOptions() {
       this.$store.dispatch('base/getDictionaryData', { sort: 'Education' }).then((res) => {
         this.educationOptions = JSON.parse(JSON.stringify(res))
@@ -245,5 +354,99 @@ export default {
   >>> .el-tabs__nav-scroll {
     padding-top: 0 !important;
   }
+}
+.sign {
+  padding: 20px 50px 0px 50px;
+}
+.add-sign {
+  position: relative;
+  height: 160px;
+  background-color: rgb(247, 247, 247);
+  border-radius: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  &.active {
+    border: 1px solid #1890ff;
+    box-shadow: 0 0 6px rgba(6, 58, 108, 0.26);
+    color: #1890ff;
+    .btn,
+    .icon-checked {
+      display: block;
+    }
+  }
+  .add-button {
+    position: absolute;
+    display: none;
+  }
+  .add-icon {
+    font-size: 50px;
+    color: rgb(157, 158, 159);
+  }
+  .sign-img {
+    width: 100%;
+    height: 100%;
+  }
+}
+.add-sign:hover .add-button {
+  display: flex;
+  width: 100%;
+  height: 100%;
+  border-radius: 10px;
+  background-color: rgba(157, 158, 159, 0.8);
+
+  justify-content: center;
+  align-items: center;
+}
+.sign-dialog {
+  >>> .el-dialog__body {
+    overflow: hidden;
+    height: 320px;
+    overflow: auto;
+    overflow-x: hidden;
+    padding: 23px 14px 2px !important;
+  }
+}
+
+.sign-main {
+  border: 1px solid rgb(224, 238, 238);
+  width: 100%;
+  height: 300px;
+  background-color: rgb(247, 247, 247);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: -10px;
+  margin-bottom: -10px;
+}
+.icon-checked1 {
+  display: block;
+  width: 20px;
+  height: 20px;
+  border: 20px solid #1890ff;
+  border-left: 20px solid transparent;
+  border-top: 20px solid transparent;
+  border-bottom-right-radius: 10px;
+  position: absolute;
+  transform: scale(0.8);
+  right: -6px;
+  bottom: -6px;
+  i {
+    position: absolute;
+    top: -4px;
+    left: -4px;
+    font-size: 24px;
+    color: #fff;
+    transform: scale(0.8);
+  }
+}
+
+.esign {
+  canvas {
+    height: 300px;
+  }
+}
+.sign-item {
+  margin-bottom: 20px;
 }
 </style>

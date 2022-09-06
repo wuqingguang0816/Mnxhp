@@ -54,6 +54,9 @@ const mutations = {
   },
   SET_LOGIN_LOADING: (state, loginLoading) => {
     state.loginLoading = loginLoading
+  },
+  SET_USERINFO_SIGNIMG: (state, signImg) => {
+    state.userInfo.signImg = signImg
   }
 }
 
