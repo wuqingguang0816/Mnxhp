@@ -109,7 +109,7 @@ export default {
     return {
       list: [],
       statusList: [{ fullName: '启用', id: 1 }, { fullName: '禁用', id: 0 }],
-      channelList: [{ fullName: '阿里云', id: '1' }, { fullName: '腾讯云', id: '2' }],
+      channelList: [{ fullName: '阿里云', id: 1 }, { fullName: '腾讯云', id: 2 }],
       keyword: '',
       channel: '',
       status: '',
@@ -167,7 +167,7 @@ export default {
       })
     },
     copy(id) {
-      this.$confirm('您确定要复制该打印模板, 是否继续?', '提示', {
+      this.$confirm('您确定要复制该数据, 是否继续?', '提示', {
         type: 'warning'
       }).then(() => {
         copyConfig(id).then(res => {
@@ -183,7 +183,7 @@ export default {
       }).catch(() => { });
     },
     exportTpl(id) {
-      this.$confirm('您确定要导出该打印模板, 是否继续?', '提示', {
+      this.$confirm('您确定要导出该数据, 是否继续?', '提示', {
         type: 'warning'
       }).then(() => {
         exportConfig(id).then(res => {

@@ -153,7 +153,7 @@ export default {
       })
     },
     copy(id) {
-      this.$confirm('您确定要复制该打印模板, 是否继续?', '提示', {
+      this.$confirm('您确定要复制该数据, 是否继续?', '提示', {
         type: 'warning'
       }).then(() => {
         copyConfig(id).then(res => {
@@ -169,7 +169,7 @@ export default {
       }).catch(() => { });
     },
     exportTpl(id) {
-      this.$confirm('您确定要导出该打印模板, 是否继续?', '提示', {
+      this.$confirm('您确定要导出该数据, 是否继续?', '提示', {
         type: 'warning'
       }).then(() => {
         exportConfig(id).then(res => {

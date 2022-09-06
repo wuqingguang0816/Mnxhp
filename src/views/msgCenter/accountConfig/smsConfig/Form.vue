@@ -36,8 +36,7 @@
       <template v-if="dataForm.channel == 2">
         <jnpf-form-tip-item label="SecretId" prop="secretId"
           tip-label="请在”腾讯云的访问管理-访问密钥- API密钥管理”⻚中获得">
-          <el-input v-model.number="dataForm.secretId" maxlength="1" placeholder="SecretId"
-            clearable />
+          <el-input v-model.number="dataForm.secretId" placeholder="SecretId" clearable />
         </jnpf-form-tip-item>
         <jnpf-form-tip-item label="SecretKey" prop="secretKey"
           tip-label="请在“腾讯云的访问管理-访问密钥- API密钥管理”⻚中获得">
@@ -81,7 +80,6 @@ import {
   updateConfig,
   getConfigDetail
 } from '@/api/msgCenter/accountConfig'
-import closest from 'clipboard'
 export default {
   data() {
     return {
@@ -92,7 +90,7 @@ export default {
       dataForm: {
         fullName: '',
         enCode: '',
-        channel: '1',
+        channel: 1,
         appId: '',
         appSecret: '',
         sdkAppId: '',
