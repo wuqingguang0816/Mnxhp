@@ -1259,9 +1259,11 @@
                     或签（一名审批人同意或拒绝即可）</el-radio>
                   <el-radio v-model="approverForm.counterSign" :label="1">
                     会签（无序会签，当审批达到会签比例时，则该审批通过）</el-radio>
+                  <el-radio v-model="approverForm.counterSign" :label="2">
+                    依次审批（按顺序依次审批）</el-radio>
                 </div>
               </el-form-item>
-              <el-form-item label="会签比例" v-if="approverForm.counterSign">
+              <el-form-item label="会签比例" v-if="approverForm.counterSign==1">
                 <div slot="label" class="form-item-label">会签比例
                   <el-tooltip content="会签通过比例" placement="top">
                     <a class="el-icon-warning-outline"></a>
@@ -2318,63 +2320,63 @@ const systemFieldOptions = [{
     label: '流程ID',
     required: true
   },
-  __vModel__: 'jnpfFlowId',
+  __vModel__: '@flowId',
 },
 {
   __config__: {
     label: '任务ID',
     required: true
   },
-  __vModel__: 'jnpfTaskId',
+  __vModel__: '@taskId',
 },
 {
   __config__: {
     label: '节点ID',
     required: true
   },
-  __vModel__: 'jnpfTaskNodeId',
+  __vModel__: '@taskNodeId',
 },
 {
   __config__: {
     label: '流程名称',
     required: true
   },
-  __vModel__: 'jnpfFlowFullName',
+  __vModel__: '@flowFullName',
 },
 {
   __config__: {
     label: '任务标题',
     required: true
   },
-  __vModel__: 'jnpfTaskFullName',
+  __vModel__: '@taskFullName',
 },
 {
   __config__: {
     label: '发起用户ID',
     required: true
   },
-  __vModel__: 'jnpfLaunchUserId',
+  __vModel__: '@launchUserId',
 },
 {
   __config__: {
     label: '发起用户名',
     required: true
   },
-  __vModel__: 'jnpfLaunchUserName',
+  __vModel__: '@launchUserName',
 },
 {
   __config__: {
     label: '当前操作用户ID',
     required: true
   },
-  __vModel__: 'jnpfFlowOperatorUserId',
+  __vModel__: '@flowOperatorUserId',
 },
 {
   __config__: {
     label: '当前操作用户名',
     required: true
   },
-  __vModel__: 'jnpfFlowOperatorUserName',
+  __vModel__: '@flowOperatorUserName',
 }]
 export default {
   props: [/*当前节点数据*/"value", /*整个节点数据*/"processData", "flowType"],
@@ -2535,20 +2537,20 @@ export default {
     },
     querySearch(queryString, cb) {
       let systemParams = [{
-        id: 'jnpfFlowFullName',
-        value: 'jnpfFlowFullName(流程名称)'
+        id: '@flowFullName',
+        value: '@flowFullName(流程名称)'
       },
       {
-        id: 'jnpfFlowFullCode',
-        value: 'jnpfFlowFullCode(流程编码)'
+        id: '@flowFullCode',
+        value: '@flowFullCode(流程编码)'
       },
       {
-        id: 'jnpfLaunchUserName',
-        value: 'jnpfLaunchUserName(发起用户名)'
+        id: '@launchUserName',
+        value: '@launchUserName(发起用户名)'
       },
       {
-        id: 'jnpfLaunchTime',
-        value: 'jnpfLaunchTime(发起时间)'
+        id: '@launchTime',
+        value: '@launchTime(发起时间)'
       }]
       let items = []
       items = this.usedFormItems.filter(o => o.__config__.jnpfKey === 'comInput' || o.__config__.jnpfKey === 'textarea' || o.__config__.jnpfKey === 'numInput')

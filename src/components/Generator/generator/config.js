@@ -193,6 +193,7 @@ export const inputComponents = [
       dataType: "static",
       dictionaryType: "",
       propsUrl: "",
+      propsName: "",
       props: {
         label: "fullName",
         value: "id"
@@ -240,6 +241,7 @@ export const inputComponents = [
       dataType: "static",
       dictionaryType: "",
       propsUrl: "",
+      propsName: "",
       props: {
         label: "fullName",
         value: "id"
@@ -285,6 +287,7 @@ export const inputComponents = [
       dataType: "static",
       dictionaryType: "",
       propsUrl: "",
+      propsName: "",
       props: {
         label: "fullName",
         value: "id"
@@ -332,6 +335,7 @@ export const inputComponents = [
       trigger: "change",
       dataType: "static",
       propsUrl: "",
+      propsName: "",
       dictionaryType: ""
     },
     options: [
@@ -596,6 +600,102 @@ export const inputComponents = [
     },
     placeholder: "请输入"
   },
+  {
+    __config__: {
+      jnpfKey: "link",
+      label: "链接",
+      labelWidth: undefined,
+      showLabel: false,
+      tag: "JnpfLink",
+      tagIcon: "icon-ym icon-ym-generator-link",
+      required: false,
+      layout: "colFormItem",
+      span: 24,
+      dragDisabled: false,
+      visibility: ["pc", "app"]
+    },
+    on: {
+      click:
+        "({ data, formData, setFormData, setShowOrHide, setRequired, setDisabled, request, getFieldOptions, setFieldOptions }) => {\n    // 在此编写代码\n    \n}"
+    },
+    content: '文本链接',
+    href: "",
+    target: "_self",
+    textStyle: {
+      "text-align": "left",
+    }
+  },
+  {
+    __config__: {
+      jnpfKey: "button",
+      label: "按钮",
+      labelWidth: undefined,
+      showLabel: false,
+      tag: "jnpf-button",
+      tagIcon: "icon-ym icon-ym-generator-button",
+      defaultValue: null,
+      required: false,
+      layout: "colFormItem",
+      span: 24,
+      dragDisabled: false,
+      visibility: ["pc", "app"],
+      regList: [],
+      trigger: "click"
+    },
+    on: {
+      click:
+        "({ data, formData, setFormData, setShowOrHide, setRequired, setDisabled, request, getFieldOptions, setFieldOptions }) => {\n    // 在此编写代码\n    \n}"
+    },
+    align: "left",
+    buttonText: "按钮",
+    type: "",
+    disabled: false
+  },
+  {
+    __config__: {
+      jnpfKey: "JNPFText",
+      label: "文本",
+      labelWidth: undefined,
+      showLabel: false,
+      tag: "JNPF-Text",
+      tagIcon: "icon-ym icon-ym-generator-textarea",
+      defaultValue: "这是一段文字",
+      required: false,
+      layout: "colFormItem",
+      span: 24,
+      dragDisabled: false,
+      visibility: ["pc", "app"]
+    },
+    style: { width: "100%" },
+    textStyle: {
+      color: "#000000",
+      "text-align": "left",
+      "font-weight": "normal",
+      "font-style": "normal",
+      "text-decoration": "none",
+      "line-height": 32,
+      "font-size": 12
+    }
+  },
+  {
+    __config__: {
+      jnpfKey: "alert",
+      label: "提示",
+      labelWidth: undefined,
+      showLabel: false,
+      tag: "el-alert",
+      tagIcon: "icon-ym icon-ym-generator-alert",
+      required: false,
+      layout: "colFormItem",
+      span: 24,
+      dragDisabled: false,
+      visibility: ["pc", "app"]
+    },
+    title: '这是一个提示',
+    type: "success",
+    "show-icon": false,
+    closable: false
+  },
 ];
 
 // 高级控件 【左面板】
@@ -796,7 +896,8 @@ export const selectComponents = [
       trigger: "change",
       dataType: "static",
       dictionaryType: "",
-      propsUrl: ""
+      propsUrl: "",
+      propsName: ""
     },
     on: {
       change:
@@ -851,6 +952,7 @@ export const selectComponents = [
     },
     placeholder: "请选择",
     interfaceId: "",
+    interfaceName: "",
     hasPage: false,
     pageSize: 20,
     columnOptions: [],
@@ -989,6 +1091,7 @@ export const selectComponents = [
     },
     placeholder: "请选择",
     interfaceId: "",
+    interfaceName: "",
     hasPage: false,
     pageSize: 20,
     columnOptions: [],
@@ -1332,101 +1435,5 @@ export const layoutComponents = [
       default: "我是分割线"
     },
     "content-position": "center"
-  },
-  {
-    __config__: {
-      jnpfKey: "link",
-      label: "链接",
-      labelWidth: undefined,
-      showLabel: false,
-      tag: "JnpfLink",
-      tagIcon: "icon-ym icon-ym-generator-link",
-      required: false,
-      layout: "colFormItem",
-      span: 24,
-      dragDisabled: false,
-      visibility: ["pc", "app"]
-    },
-    on: {
-      click:
-        "({ data, formData, setFormData, setShowOrHide, setRequired, setDisabled, request, getFieldOptions, setFieldOptions }) => {\n    // 在此编写代码\n    \n}"
-    },
-    content: '文本链接',
-    href: "",
-    target: "_self",
-    textStyle: {
-      "text-align": "left",
-    }
-  },
-  {
-    __config__: {
-      jnpfKey: "button",
-      label: "按钮",
-      labelWidth: undefined,
-      showLabel: false,
-      tag: "jnpf-button",
-      tagIcon: "icon-ym icon-ym-generator-button",
-      defaultValue: null,
-      required: false,
-      layout: "colFormItem",
-      span: 24,
-      dragDisabled: false,
-      visibility: ["pc", "app"],
-      regList: [],
-      trigger: "click"
-    },
-    on: {
-      click:
-        "({ data, formData, setFormData, setShowOrHide, setRequired, setDisabled, request, getFieldOptions, setFieldOptions }) => {\n    // 在此编写代码\n    \n}"
-    },
-    align: "left",
-    buttonText: "按钮",
-    type: "",
-    disabled: false
-  },
-  {
-    __config__: {
-      jnpfKey: "JNPFText",
-      label: "文本",
-      labelWidth: undefined,
-      showLabel: false,
-      tag: "JNPF-Text",
-      tagIcon: "icon-ym icon-ym-generator-textarea",
-      defaultValue: "这是一段文字",
-      required: false,
-      layout: "colFormItem",
-      span: 24,
-      dragDisabled: false,
-      visibility: ["pc", "app"]
-    },
-    style: { width: "100%" },
-    textStyle: {
-      color: "#000000",
-      "text-align": "left",
-      "font-weight": "normal",
-      "font-style": "normal",
-      "text-decoration": "none",
-      "line-height": 32,
-      "font-size": 12
-    }
-  },
-  {
-    __config__: {
-      jnpfKey: "alert",
-      label: "提示",
-      labelWidth: undefined,
-      showLabel: false,
-      tag: "el-alert",
-      tagIcon: "icon-ym icon-ym-generator-alert",
-      required: false,
-      layout: "colFormItem",
-      span: 24,
-      dragDisabled: false,
-      visibility: ["pc", "app"]
-    },
-    title: '这是一个提示',
-    type: "success",
-    "show-icon": false,
-    closable: false
   },
 ];
