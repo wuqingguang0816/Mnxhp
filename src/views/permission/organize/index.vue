@@ -56,6 +56,11 @@
             </template>
           </el-table-column>
           <el-table-column prop="enCode" label="编码" />
+          <el-table-column type="index" label="层级" width="100" align="center">
+            <template slot-scope="scope">
+              <span>{{scope.row.index}}</span>
+            </template>
+          </el-table-column>
           <el-table-column prop="type" label="类型" width="100" align="center">
             <template slot-scope="scope">
               {{scope.row.type==='company'?'公司':'部门'}}
@@ -124,6 +129,7 @@ export default {
       this.loading = true
       getOrganizeList(this.listQuery).then(res => {
         this.treeList = res.data.list
+        if (this.treeList.length > 0) this.setTableIndex(this.treeList);
         this.listLoading = false
         this.btnLoading = false
       }).catch(() => {
@@ -133,6 +139,18 @@ export default {
     },
     search() {
       this.initData()
+    },
+    // 树形列表index层级，实现方法（可复制直接调用）
+    setTableIndex(arr, index) {
+      arr.forEach((item, key) => {
+        item.index = key + 1;
+        if (index) {
+          item.index = index + 1;
+        }
+        if (item.children) {
+          this.setTableIndex(item.children, item.index);
+        }
+      });
     },
     reset() {
       this.listQuery.keyword = ''
