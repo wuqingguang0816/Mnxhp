@@ -103,13 +103,8 @@
                   </el-option-group>
                 </el-select>
               </el-form-item>
-              <el-table :data="tables" class="JNPF-common-table">
-                <template #empty>
-                  <div class="jnpf-table__empty-text">
-                    <p>点击“新增”可选择1条(单表)或2条以上(多表)</p>
-                    <p>未选择新增数据表时系统将会自动创建数据表</p>
-                  </div>
-                </template>
+              <el-table :data="tables" class="JNPF-common-table"
+                empty-text="点击“新增”可选择1条(单表)或2条以上(多表)，未选择数据表时系统将会自动创建数据表">
                 <el-table-column type="index" label="序号" width="50" align="center" />
                 <el-table-column prop="typeId" label="类别" width="65">
                   <template slot-scope="scope">
