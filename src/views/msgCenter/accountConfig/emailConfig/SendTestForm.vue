@@ -29,8 +29,8 @@ export default {
       visible: false,
       testForm: {
         testSendEmail: "",
-        testEmailTitle: "",
-        testEmailContent: ""
+        testEmailTitle: "测试",
+        testEmailContent: "测试"
       },
       dataForm: {},
       btnLoading: false,
