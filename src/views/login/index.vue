@@ -307,7 +307,7 @@ export default {
             this.$message.error('用户未绑定或绑定账号异常！')
             return
           }
-          this.$store.dispatch('user/updateToken', response).then(res => {
+          this.$store.dispatch('user/setToken', response).then(res => {
             this.$router.push({
               path: this.redirect || '/home',
               query: this.otherQuery
@@ -330,7 +330,7 @@ export default {
                   theme: response.data.theme,
                   token: response.data.value
                 }
-                this.$store.dispatch('user/updateToken', param).then(res => {
+                this.$store.dispatch('user/setToken', param).then(res => {
                   this.$router.push({
                     path: this.redirect || '/home',
                     query: this.otherQuery
@@ -368,7 +368,7 @@ export default {
       console.log(data)
       socialsLogin(data).then(response => {
         if (response.code == 200) {
-          this.$store.dispatch('user/updateToken', response.data).then(res => {
+          this.$store.dispatch('user/setToken', response.data).then(res => {
             this.$router.push({
               path: this.redirect || '/home',
               query: this.otherQuery
