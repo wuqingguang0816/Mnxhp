@@ -245,6 +245,7 @@ export default {
     },
     activeName(val) {
       this.listQuery.keyword = ''
+      this.listQuery.currentPage = 1
       if (!val) return
       this.nodeId = '0'
       this.treeData = []

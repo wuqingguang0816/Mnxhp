@@ -732,12 +732,20 @@
   }
 }
 
+.mb-5 {
+  margin-bottom: 5px;
+}
+
 .mb-10 {
   margin-bottom: 10px;
 }
 
 .mb-20 {
   margin-bottom: 20px !important;
+}
+
+.mt-8 {
+  margin-top: 8px;
 }
 
 .mt-10 {
@@ -748,8 +756,16 @@
   margin-top: 20px;
 }
 
+.ml-8 {
+  margin-left: 8px;
+}
+
 .pd-10 {
   padding: 10px;
+}
+
+.pd-10-20 {
+  padding: 10px 20px;
 }
 
 .JNPF-common-page-header {
@@ -1773,6 +1789,10 @@ textarea.el-textarea__inner {
   line-height: 20px;
 }
 
+.el-input-number.el-input-number--small {
+  width: 160px;
+}
+
 // 布局错位问题修正 
 .el-col {
   .el-form-item--small .el-form-item__label {
@@ -2258,4 +2278,9 @@ textarea.el-textarea__inner {
       flex-shrink: 0;
     }
   }
+}
+
+.jnpf-table__empty-text {
+  padding: 30px;
+  line-height: 30px;
 }

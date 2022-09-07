@@ -40,8 +40,7 @@ const useDateList = ['createTime', 'modifyTime']
 const useSelectList = ['radio', 'checkbox', 'select']
 // 系统控件
 const systemComponentsList = ['createUser', 'createTime', 'modifyUser', 'modifyTime', 'currOrganize', 'currPosition', 'billRule']
-// 在线开发-功能设计/流程设计/移动设计独有组件
-const onlinePeculiarList = [{
+const calculateItem = {
   __config__: {
     jnpfKey: 'calculate',
     label: '计算公式',
@@ -60,8 +59,9 @@ const onlinePeculiarList = [{
     regList: []
   },
   expression: []
-},
-{
+}
+// 在线开发-功能设计/流程设计/移动设计独有组件
+const onlinePeculiarList = [{
   __config__: {
     jnpfKey: 'qrcode',
     label: '二维码',
@@ -111,4 +111,4 @@ const onlinePeculiarList = [{
 },
 ]
 
-export { ruleTrigger, dyOptionsList, noVModelList, noTableAllowList, noColumnShowList, noSearchList, onlinePeculiarList, useInputList, useDateList, useSelectList, systemComponentsList }
+export { ruleTrigger, dyOptionsList, noVModelList, noTableAllowList, noColumnShowList, noSearchList, calculateItem, onlinePeculiarList, useInputList, useDateList, useSelectList, systemComponentsList }

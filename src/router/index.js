@@ -36,29 +36,34 @@ import Layout from '@/layout'
 
 // component: (resolve) => require(["@/views/login/index"], resolve),
 export const constantRoutes = [{
-    path: '/redirect',
-    component: Layout,
-    hidden: true,
-    children: [{
-      path: '/redirect/:path*',
-      component: (resolve) => require(['@/views/redirect'], resolve)
-    }]
-  },
-  {
-    path: '/login',
-    component: (resolve) => require(['@/views/login'], resolve),
-    hidden: true
-  },
-  {
-    path: '/lockScreen',
-    component: (resolve) => require(['@/views/basic/lockScreen'], resolve),
-    hidden: true
-  },
-  {
-    path: '/auth-redirect',
-    component: (resolve) => require(['@/views/login/auth-redirect'], resolve),
-    hidden: true
-  }
+  path: '/redirect',
+  component: Layout,
+  hidden: true,
+  children: [{
+    path: '/redirect/:path*',
+    component: (resolve) => require(['@/views/redirect'], resolve)
+  }]
+},
+{
+  path: '/login',
+  component: (resolve) => require(['@/views/login'], resolve),
+  hidden: true
+},
+{
+  path: '/sso',
+  component: (resolve) => require(['@/views/login/sso-redirect'], resolve),
+  hidden: true
+},
+{
+  path: '/lockScreen',
+  component: (resolve) => require(['@/views/basic/lockScreen'], resolve),
+  hidden: true
+},
+{
+  path: '/auth-redirect',
+  component: (resolve) => require(['@/views/login/auth-redirect'], resolve),
+  hidden: true
+}
 ]
 
 const createRouter = () => new Router({
