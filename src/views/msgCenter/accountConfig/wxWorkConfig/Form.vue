@@ -16,7 +16,8 @@
         <el-input v-model="dataForm.appId" placeholder="请输入应用AgentID" clearable />
       </jnpf-form-tip-item>
       <jnpf-form-tip-item label="应用Secret" prop="appSecret" tip-label="请在“企业微信管理后台-应用管理-应用-详情”页中获得">
-        <el-input v-model="dataForm.appSecret" placeholder="请输入应用Secret" show-password clearable />
+        <el-input v-model="dataForm.appSecret" placeholder="请输入应用Secret" show-password clearable
+          maxlength="50" />
       </jnpf-form-tip-item>
       <jnpf-form-tip-item label="排序" prop="sortCode">
         <el-input-number :min="0" :max="999999" v-model="dataForm.sortCode"

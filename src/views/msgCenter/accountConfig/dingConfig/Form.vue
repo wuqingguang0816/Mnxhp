@@ -16,7 +16,8 @@
         <el-input v-model="dataForm.appId" placeholder="请输入Appkey" clearable />
       </jnpf-form-tip-item>
       <jnpf-form-tip-item label="AppSecret" prop="appSecret" tip-label="请在“钉钉开发者后台-应用开发-应用信息”页中获得">
-        <el-input v-model="dataForm.appSecret" placeholder="请输入AppSecret" clearable show-password />
+        <el-input v-model="dataForm.appSecret" placeholder="请输入AppSecret" clearable show-password
+          maxlength="50" />
       </jnpf-form-tip-item>
       <jnpf-form-tip-item label="排序" prop="sort">
         <el-input-number :min="0" :max="999999" v-model="dataForm.sortCode"

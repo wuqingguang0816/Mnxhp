@@ -21,12 +21,12 @@
       <template v-if="dataForm.channel == 1">
         <jnpf-form-tip-item label="AccessKey ID" prop="appId"
           tip-label="请在“阿里云的AccessKey管理-安全信息管理”页中获得">
-          <el-input v-model="dataForm.appId" placeholder="AccessKey ID" clearable />
+          <el-input v-model="dataForm.appId" placeholder="AccessKey ID" clearable maxlength="50" />
         </jnpf-form-tip-item>
         <jnpf-form-tip-item label="AccessKey Secret" prop="appSecret"
           tip-label="请在”阿里云的AccessKey管理-安全信息管理”页中获得">
           <el-input v-model="dataForm.appSecret" placeholder="AccessKey Secret" show-password
-            clearable />
+            clearable maxlength="50" />
         </jnpf-form-tip-item>
         <jnpf-form-tip-item label="EndPoint" prop="endPoint"
           tip-label="请在“阿里云的短信服务-OpenAPI Explorer-Region&Endpoint”页中获得">
@@ -36,7 +36,8 @@
       <template v-if="dataForm.channel == 2">
         <jnpf-form-tip-item label="SecretId" prop="secretId"
           tip-label="请在”腾讯云的访问管理-访问密钥- API密钥管理”⻚中获得">
-          <el-input v-model.number="dataForm.secretId" placeholder="SecretId" clearable />
+          <el-input v-model.number="dataForm.secretId" placeholder="SecretId" clearable
+            maxlength="50" />
         </jnpf-form-tip-item>
         <jnpf-form-tip-item label="SecretKey" prop="secretKey"
           tip-label="请在“腾讯云的访问管理-访问密钥- API密钥管理”⻚中获得">
