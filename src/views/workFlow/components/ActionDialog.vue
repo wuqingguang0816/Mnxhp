@@ -19,9 +19,10 @@
           </div>
         </div>
         <el-dialog title="请签名" class="JNPF-dialog JNPF-dialog_center sign-dialog"
-          :closeOnClickModal='false' :visible.sync="dialogVisible" append-to-body width="600px">
+          :closeOnClickModal='false' :visible.sync="dialogVisible" append-to-body
+          :before-close="handleClose" width="600px">
           <div class="drawing-board">
-            <vue-esign ref="esign" :height=' 300' :width="560" :lineWidth="3" />
+            <vue-esign ref="esign" :height='300' :width="560" :lineWidth="3" />
           </div>
           <span slot="footer" class="dialog-footer">
             <el-button @click="handleReset">清空</el-button>
@@ -98,6 +99,10 @@ export default {
         this.$refs.esign && this.$refs.esign.reset()
       })
     },
+    handleClose() {
+      this.handleReset()
+      this.dialogVisible = false
+    },
     handleGenerate() {
       this.$refs.esign.generate().then(res => {
         if (res) this.signImg = res
@@ -114,8 +119,7 @@ export default {
           this.handleReset()
         })
       }).catch(err => {
-        this.dialogVisible = true
-        this.handleReset()
+        this.$message.warning("请签名")
       })
     },
     addSign() {
