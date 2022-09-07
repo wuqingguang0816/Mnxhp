@@ -155,7 +155,7 @@
                 </div>
                 <div v-if="!item.isDefault" class="add-button">
                   <el-button @click="deleteSign(item.id)">删除</el-button>
-                  <el-button type="primary" @click="uptateDefault(item.id,item.signImg)">设为默认
+                  <el-button type="primary" @click="updateDefault(item.id,item.signImg)">设为默认
                   </el-button>
                 </div>
               </div>
@@ -164,12 +164,12 @@
         </el-row>
       </el-tab-pane>
     </el-tabs>
-    <SignImgDialog v-if="sginVisible" ref="SignImg" :lineWidth='3' :userInfo='userInfo'
+    <SignImgDialog v-if="signVisible" ref="SignImg" :lineWidth='3' :userInfo='userInfo'
       :isDefault='0' @close="closeDialog" />
   </div>
 </template>
 <script>
-import { UpdateUser, getSign, deleteSign, uptateDefault } from '@/api/permission/userSetting'
+import { UpdateUser, getSign, deleteSign, updateDefault } from '@/api/permission/userSetting'
 import { mapGetters } from "vuex";
 import SignImgDialog from '@/components/SignImgDialog'
 export default {
@@ -213,7 +213,7 @@ export default {
       educationOptions: [],
       genderOptions: [],
       nationOptions: [],
-      sginVisible: false,
+      signVisible: false,
       signImg: '',
       signList: []
     }
@@ -237,7 +237,7 @@ export default {
   },
   methods: {
     closeDialog() {
-      this.sginVisible = false
+      this.signVisible = false
       this.getSign()
     },
     getSign() {
@@ -255,8 +255,8 @@ export default {
         this.getSign()
       })
     },
-    uptateDefault(id, signImg) {
-      uptateDefault(id).then(res => {
+    updateDefault(id, signImg) {
+      updateDefault(id).then(res => {
         this.$message({
           message: res.msg,
           type: 'success',
@@ -269,7 +269,7 @@ export default {
       })
     },
     addSign() {
-      this.sginVisible = true
+      this.signVisible = true
       this.$nextTick(() => {
         this.$refs.SignImg.init()
       })

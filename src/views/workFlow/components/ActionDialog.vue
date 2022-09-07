@@ -12,8 +12,8 @@
             :rows="4" />
         </el-form-item>
         <el-form-item label="手写签名" required v-if="properties.hasSign">
-          <div class="sign-mian">
-            <img :src="userInfo.signImg" alt="" v-if="userInfo.signImg" class="sign-img">
+          <div class="sign-main">
+            <img :src="dataForm.signImg" alt="" v-if="dataForm.signImg" class="sign-img">
             <div @click="addSign" class="sign-style">
               <i class="icon-ym icon-ym-signature add-sign"></i>
               <span class="sign-title">手写签名</span>
@@ -28,8 +28,8 @@
         </el-button>
       </span>
     </el-dialog>
-    <SignImgDialog v-if="sginVisible" ref="SignImg" :lineWidth='3' :userInfo='userInfo'
-      :isDefault='1' @close="sginVisible = false" />
+    <SignImgDialog v-if="signVisible" ref="SignImg" :lineWidth='3' :userInfo='userInfo'
+      :isDefault='1' @close="signDialog" />
   </div>
 </template>
 <script>
@@ -44,13 +44,13 @@ export default {
       eventType: '',
       dataForm: {
         handleOpinion: '',
-        freeApproverUserId: ''
+        freeApproverUserId: '',
+        signImg: ''
       },
-      signImg: '',
       btnLoading: false,
       title: '',
       label: '',
-      sginVisible: false
+      signVisible: false
     }
   },
   computed: {
@@ -63,7 +63,7 @@ export default {
       this.eventType = eventType || ''
       this.dataForm.handleOpinion = ''
       this.dataForm.freeApproverUserId = ''
-      this.signImg = ''
+      this.dataForm.signImg = this.userInfo.signImg || ''
       switch (eventType) {
         case 'transfer':
           this.title = '转审'
@@ -86,15 +86,21 @@ export default {
       })
     },
     addSign() {
-      this.sginVisible = true
+      this.signVisible = true
       this.$nextTick(() => {
         this.$refs.SignImg.init()
       })
     },
+    signDialog(val) {
+      this.signVisible = true
+      if (val) {
+        this.dataForm.signImg = val
+      }
+    },
     handleSure() {
       this.$refs['dataForm'].validate((valid) => {
         if (valid) {
-          if (this.properties.hasSign && !this.signImg) {
+          if (this.properties.hasSign && !this.dataForm.signImg) {
             this.$message({
               message: '请签名',
               type: 'error'
@@ -104,7 +110,7 @@ export default {
           let query = {
             handleOpinion: this.dataForm.handleOpinion,
             freeApproverUserId: this.dataForm.freeApproverUserId,
-            signImg: this.signImg,
+            signImg: this.dataForm.signImg,
           }
           this.btnLoading = true
           this.$emit('submit', query)
@@ -119,7 +125,7 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
-.sign-mian {
+.sign-main {
   width: 100%;
   display: flex;
   flex-direction: row;

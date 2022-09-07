@@ -134,8 +134,8 @@
               :rows="4" />
           </el-form-item>
           <el-form-item label="手写签名" required v-if="properties.hasSign">
-            <div class="sign-mian">
-              <img :src="userInfo.signImg" alt="" v-if="userInfo.signImg" class="sign-img">
+            <div class="sign-main">
+              <img :src="signImg" alt="" v-if="signImg" class="sign-img">
               <div @click="addSign" class="sign-style">
                 <i class="icon-ym icon-ym-signature add-sign"></i>
                 <span class="sign-title">手写签名</span>
@@ -204,8 +204,8 @@
         @submitCandidate="submitCandidate" :isCustomCopy="properties.isCustomCopy" />
       <error-form :visible.sync="errorVisible" :nodeList="errorNodeList" @submit="handleError" />
       <actionDialog v-if="actionVisible" ref="actionDialog" @submit="handleRecall" />
-      <SignImgDialog v-if="sginVisible" ref="SignImg" :lineWidth='3' :userInfo='userInfo'
-        :isDefault='1' @close="sginVisible = false" />
+      <SignImgDialog v-if="signVisible" ref="SignImg" :lineWidth='3' :userInfo='userInfo'
+        :isDefault='1' @close="signDialog" />
     </div>
   </transition>
 </template>
@@ -307,7 +307,7 @@ export default {
       errorVisible: false,
       errorNodeList: [],
       isValidate: false,
-      sginVisible: false,
+      signVisible: false,
     }
   },
   computed: {
@@ -333,10 +333,16 @@ export default {
   },
   methods: {
     addSign() {
-      this.sginVisible = true
+      this.signVisible = true
       this.$nextTick(() => {
         this.$refs.SignImg.init()
       })
+    },
+    signDialog(val) {
+      this.signVisible = false
+      if (val) {
+        this.signImg = val
+      }
     },
     handleResurgence(errorRuleUserList) {
       this.$refs['resurgenceForm'].validate((valid) => {
@@ -518,7 +524,7 @@ export default {
         this.candidateForm.handleOpinion = ''
         this.copyIds = []
         this.isValidate = false
-        this.handleReset()
+        this.signImg = this.userInfo.signImg || ''
         if (eventType === 'reject') {
           if (!this.properties.hasSign && !this.properties.hasOpinion) {
             this.$confirm('此操作将驳回该审批单，是否继续？', '提示', {
@@ -875,12 +881,6 @@ export default {
         }
       })
     },
-    handleReset() {
-      this.signImg = ''
-      this.$nextTick(() => {
-        this.$refs.esign && this.$refs.esign.reset()
-      })
-    },
     addComment() {
       this.$refs.comment && this.$refs.comment.showCommentDialog()
     },
@@ -900,7 +900,7 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
-.sign-mian {
+.sign-main {
   width: 100%;
   display: flex;
   flex-direction: row;

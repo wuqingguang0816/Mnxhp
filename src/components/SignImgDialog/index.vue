@@ -1,7 +1,7 @@
 <template>
   <div>
     <el-dialog title="请签名" class="JNPF-dialog JNPF-dialog_center sign-dialog"
-      :closeOnClickModal='false' :visible.sync="sginVisible" append-to-body width="600px">
+      :closeOnClickModal='false' :visible.sync="signVisible" append-to-body width="600px">
       <div class="sign-main">
         <vue-esign ref="esign" :height='300' :width="560" :lineWidth="lineWidth" />
       </div>
@@ -37,14 +37,14 @@ export default {
   },
   data() {
     return {
-      sginVisible: false,
+      signVisible: false,
       signImg: '',
     }
   },
   methods: {
     init() {
       this.handleReset()
-      this.sginVisible = true
+      this.signVisible = true
     },
     handleReset() {
       this.signImg = ''
@@ -71,11 +71,12 @@ export default {
           if (this.isDefault == 1) {
             this.$store.commit('user/SET_USERINFO_SIGNIMG', this.signImg)
           }
-          this.sginVisible = false
+          this.signVisible = false
+          this.$emit('close', this.signImg)
           this.handleReset()
-          this.$emit('close')
+
         }).catch(err => {
-          this.sginVisible = false
+          this.signVisible = false
           this.$emit('close')
           this.handleReset()
         })

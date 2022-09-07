@@ -126,7 +126,7 @@ export function deleteSign(id) {
 }
 
 //设置默认
-export function uptateDefault(id) {
+export function updateDefault(id) {
   return request({
     url: `/api/permission/Users/Current/${id}/SignImg`,
     method: 'put',
