@@ -61,7 +61,7 @@
           </el-form-item>
           <el-button :loading="loading" type="primary" class="login-btn" size="large"
             @click.native.prevent="handleLogin">{{ $t('login.logIn') }}</el-button>
-          <el-divider content-position="center">其他登录方式</el-divider>
+          <el-divider content-position="center" v-if="socialsList">其他登录方式</el-divider>
           <div class="other-list">
             <div v-for="(item,i) in socialsList" :key="i">
               <el-tooltip class="item" effect="dark" :content='item.name+"登录"' placement="top">
