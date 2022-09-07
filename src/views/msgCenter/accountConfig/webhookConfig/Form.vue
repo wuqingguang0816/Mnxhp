@@ -84,7 +84,8 @@ export default {
         ],
         enCode: [
           { required: true, message: '请输入业务编码', trigger: 'blur' },
-          { max: 50, message: '业务编码最多为50个字符！', trigger: 'blur' }
+          { max: 50, message: '业务编码最多为50个字符！', trigger: 'blur' },
+          { validator: this.formValidate('enCode'), trigger: 'blur' },
         ],
         webhookType: [
           { required: true, message: '请选择类型', trigger: 'change' }

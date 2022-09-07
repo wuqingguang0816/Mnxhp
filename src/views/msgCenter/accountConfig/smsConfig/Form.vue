@@ -114,7 +114,8 @@ export default {
         ],
         enCode: [
           { required: true, message: '请输入编码', trigger: 'blur' },
-          { max: 50, message: '编码最多为50个字符！', trigger: 'blur' }
+          { max: 50, message: '编码最多为50个字符！', trigger: 'blur' },
+          { validator: this.formValidate('enCode'), trigger: 'blur' },
         ],
         channel: [
           { required: true, message: '请选择渠道', trigger: 'change' },
