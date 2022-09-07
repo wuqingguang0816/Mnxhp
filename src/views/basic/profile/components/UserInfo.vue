@@ -287,8 +287,6 @@ export default {
     },
     handleGenerate() {
       this.$refs.esign.generate().then(res => {
-        console.log(res)
-
         if (res) this.signImg = res
         let query = {
           signImg: this.signImg,
