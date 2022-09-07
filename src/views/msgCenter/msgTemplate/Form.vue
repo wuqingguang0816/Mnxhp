@@ -176,7 +176,7 @@
         append-to-body width="600px">
         <el-form :model="fieldForm" :rules="fieldRule" ref="fieldForm" label-width="100px">
           <jnpf-form-tip-item label="参数名称" prop="field"
-            :tip-label="isEdit?'':'可以使用大小写英文字母、数字、下划线组合，且不能数字开头'" placement="top-start">
+            :tip-label="isEdit?'':'可以使用大小写英文字母、数字、下划线组合，且不能数字、下划线开头。'" placement="top-start">
             <el-input v-model="fieldForm.field" placeholder="参数名称" :disabled="isEdit" />
           </jnpf-form-tip-item>
           <jnpf-form-tip-item label="参数说明" prop="fieldName">

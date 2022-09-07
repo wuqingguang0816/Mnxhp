@@ -73,7 +73,7 @@
           <el-table-column prop="sortCode" label="排序" width="100" />
           <el-table-column prop="enabledMark" label="状态" width="100" align="center">
             <template slot-scope="scope">
-              <el-tag :type="scope.row.enabledMark==1?'success':'warning'" disable-transitions>
+              <el-tag :type="scope.row.enabledMark==1?'success':'danger'" disable-transitions>
                 {{ scope.row.enabledMark==1?'启用':'禁用' }}
               </el-tag>
             </template>
