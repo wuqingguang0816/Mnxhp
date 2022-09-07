@@ -74,7 +74,7 @@
           <el-table-column prop="enabledMark" label="状态" width="100" align="center">
             <template slot-scope="scope">
               <el-tag :type="scope.row.enabledMark==1?'success':'warning'" disable-transitions>
-                {{ scope.row.enabledMark==1?'启用':'停用' }}
+                {{ scope.row.enabledMark==1?'启用':'禁用' }}
               </el-tag>
             </template>
           </el-table-column>
@@ -181,7 +181,7 @@ export default {
       }).catch(() => { });
     },
     handleExport(id) {
-      this.$confirm('您确定要导出该消息模板, 是否继续?', '提示', {
+      this.$confirm('您确定要导出该数据, 是否继续?', '提示', {
         type: 'warning'
       }).then(() => {
         exportSendConfig(id).then(res => {

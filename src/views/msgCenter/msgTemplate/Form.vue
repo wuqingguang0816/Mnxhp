@@ -220,6 +220,7 @@ export default {
         ],
         enCode: [
           { required: true, message: '模板编码不能为空', trigger: 'blur' },
+          { validator: this.formValidate('enCode'), trigger: 'blur' },
         ],
         messageSource: [
           { required: true, message: '请选择消息来源', trigger: 'change' },
@@ -240,6 +241,7 @@ export default {
       fieldRule: {
         field: [
           { required: true, message: '参数名称不能为空', trigger: 'blur' },
+          { validator: this.formValidate('filed'), trigger: 'blur' },
         ],
         fieldName: [
           { required: true, message: '参数说明不能为空', trigger: 'blur' },

@@ -220,7 +220,7 @@ export default {
       }).catch(() => { });
     },
     handleExport(id) {
-      this.$confirm('您确定要导出该消息模板, 是否继续?', '提示', {
+      this.$confirm('您确定要导出该数据, 是否继续?', '提示', {
         type: 'warning'
       }).then(() => {
         exportMsgTemplate(id).then(res => {

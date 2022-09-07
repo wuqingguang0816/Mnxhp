@@ -2,7 +2,7 @@
   <transition name="el-zoom-in-center">
     <div class="JNPF-preview-main flow-form-main">
       <div class="JNPF-common-page-header">
-        <el-page-header @back="goBack" :content="!dataForm.id ? '新建消息模板' : '编辑消息模板'" />
+        <el-page-header @back="goBack" :content="!dataForm.id ? '新建发送配置' : '编辑发送配置'" />
         <div class="options">
           <el-button type="primary" @click="dataFormSubmit()" :loading="btnLoading">
             {{$t('common.confirmButton')}}</el-button>
@@ -132,6 +132,7 @@ export default {
         ],
         enCode: [
           { required: true, message: '模板编码不能为空', trigger: 'blur' },
+          { validator: this.formValidate('enCode'), trigger: 'blur' },
         ],
         messageSource: [
           { required: true, message: '请选择消息来源', trigger: 'change' },
