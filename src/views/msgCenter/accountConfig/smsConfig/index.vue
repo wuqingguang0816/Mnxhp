@@ -20,8 +20,8 @@
           </el-col>
           <el-col :span="6">
             <el-form-item label="状态">
-              <el-select v-model="status" placeholder="请选择状态" clearable>
-                <el-option v-for="item in statusList" :key="item.id" :label="item.fullName"
+              <el-select v-model="enabledMark" placeholder="请选择状态" clearable>
+                <el-option v-for="item in enabledMarkList" :key="item.id" :label="item.fullName"
                   :value="item.id">
                 </el-option>
               </el-select>
@@ -108,11 +108,11 @@ export default {
   data() {
     return {
       list: [],
-      statusList: [{ fullName: '启用', id: 1 }, { fullName: '禁用', id: 0 }],
+      enabledMarkList: [{ fullName: '启用', id: 1 }, { fullName: '禁用', id: 0 }],
       channelList: [{ fullName: '阿里云', id: 1 }, { fullName: '腾讯云', id: 2 }],
       keyword: '',
       channel: '',
-      status: '',
+      enabledMark: '',
       listQuery: {
         currentPage: 1,
         pageSize: 20,
@@ -130,7 +130,7 @@ export default {
   methods: {
     reset() {
       this.keyword = ''
-      this.status = ''
+      this.enabledMark = ''
       this.channel = ''
       this.search()
     },
@@ -148,7 +148,7 @@ export default {
       let query = {
         ...this.listQuery,
         keyword: this.keyword,
-        status: this.status,
+        enabledMark: this.enabledMark,
         channel: this.channel,
         type: 3
       }

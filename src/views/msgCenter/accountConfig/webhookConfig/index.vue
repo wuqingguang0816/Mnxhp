@@ -20,7 +20,7 @@
           </el-col>
           <el-col :span="6">
             <el-form-item label="状态">
-              <el-select v-model="status" placeholder="请选择状态" clearable>
+              <el-select v-model="enabledMark" placeholder="请选择状态" clearable>
                 <el-option v-for="item in categoryList" :key="item.enCode" :label="item.fullName"
                   :value="item.enCode">
                 </el-option>
@@ -112,7 +112,7 @@ export default {
       categoryList: [{ fullName: '启用', enCode: 1 }, { fullName: '禁用', enCode: 0 }],
       keyword: '',
       webhookType: '',
-      status: '',
+      enabledMark: '',
       listQuery: {
         currentPage: 1,
         pageSize: 20,
@@ -130,7 +130,7 @@ export default {
   methods: {
     reset() {
       this.keyword = ''
-      this.status = ''
+      this.enabledMark = ''
       this.webhookType = ''
       this.search()
     },
@@ -151,7 +151,7 @@ export default {
       let query = {
         ...this.listQuery,
         keyword: this.keyword,
-        status: this.status,
+        enabledMark: this.enabledMark,
         webhookType: this.webhookType,
         type: 7
       }

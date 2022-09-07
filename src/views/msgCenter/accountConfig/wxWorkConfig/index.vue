@@ -11,7 +11,7 @@
           </el-col>
           <el-col :span="6">
             <el-form-item label="状态">
-              <el-select v-model="status" placeholder="请选择状态" clearable>
+              <el-select v-model="enabledMark" placeholder="请选择状态" clearable>
                 <el-option v-for="item in categoryList" :key="item.enCode" :label="item.fullName"
                   :value="item.enCode">
                 </el-option>
@@ -108,7 +108,7 @@ export default {
       total: 0,
       listLoading: true,
       formVisible: false,
-      status: '',
+      enabledMark: '',
     }
   },
   created() {
@@ -135,7 +135,7 @@ export default {
       let query = {
         ...this.listQuery,
         keyword: this.keyword,
-        status: this.status,
+        enabledMark: this.enabledMark,
         type: 5
       }
       getConfigList(query).then(res => {
