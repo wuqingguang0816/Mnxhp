@@ -164,27 +164,16 @@
         </el-row>
       </el-tab-pane>
     </el-tabs>
-    <el-dialog title="请签名" class="JNPF-dialog JNPF-dialog_center sign-dialog"
-      :closeOnClickModal='false' :visible.sync="dialogVisible" append-to-body
-      :before-close="handleClose" width="600px">
-      <div class="sign-main">
-        <vue-esign ref="esign" :height='300' :width="560" :lineWidth="3" />
-      </div>
-      <span slot="footer" class="dialog-footer">
-        <el-button @click="handleReset">清空</el-button>
-        <el-button type="primary" @click="handleGenerate()">确定签名</el-button>
-      </span>
-    </el-dialog>
+    <SignImgDialog v-if="sginVisible" ref="SignImg" :lineWidth='3' :userInfo='userInfo'
+      :isDefault='0' @close="closeDialog" />
   </div>
 </template>
-
 <script>
-
-import { UpdateUser, getSign, createSign, deleteSign, uptateDefault } from '@/api/permission/userSetting'
+import { UpdateUser, getSign, deleteSign, uptateDefault } from '@/api/permission/userSetting'
 import { mapGetters } from "vuex";
-import vueEsign from 'vue-esign'
+import SignImgDialog from '@/components/SignImgDialog'
 export default {
-  components: { vueEsign },
+  components: { SignImgDialog },
   props: {
     user: {
       type: Object,
@@ -224,7 +213,7 @@ export default {
       educationOptions: [],
       genderOptions: [],
       nationOptions: [],
-      dialogVisible: false,
+      sginVisible: false,
       signImg: '',
       signList: []
     }
@@ -247,6 +236,10 @@ export default {
     this.getSign()
   },
   methods: {
+    closeDialog() {
+      this.sginVisible = false
+      this.getSign()
+    },
     getSign() {
       getSign().then(res => {
         this.signList = res.data || []
@@ -275,43 +268,11 @@ export default {
         this.getSign()
       })
     },
-    handleReset() {
-      this.signImg = ''
-      this.$nextTick(() => {
-        this.$refs.esign && this.$refs.esign.reset()
-      })
-    },
-    handleClose() {
-      this.handleReset()
-      this.dialogVisible = false
-    },
-    handleGenerate() {
-      this.$refs.esign.generate().then(res => {
-        if (res) this.signImg = res
-        let query = {
-          signImg: this.signImg,
-          isDefault: 0
-        }
-        createSign(query).then(res => {
-          this.$message({
-            message: res.msg,
-            type: 'success',
-            duration: 1500
-          })
-          this.dialogVisible = false
-          if (!this.userInfo.signImg) this.$store.commit('user/SET_USERINFO_SIGNIMG', this.signImg)
-          this.getSign()
-          this.handleReset()
-        }).catch(err => {
-          this.getSign()
-          this.handleReset()
-        })
-      }).catch(err => {
-        this.$message.warning("请签名")
-      })
-    },
     addSign() {
-      this.dialogVisible = true
+      this.sginVisible = true
+      this.$nextTick(() => {
+        this.$refs.SignImg.init()
+      })
     },
     getOptions() {
       this.$store.dispatch('base/getDictionaryData', { sort: 'Education' }).then((res) => {

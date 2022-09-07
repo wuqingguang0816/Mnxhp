@@ -141,17 +141,6 @@
                 <span class="sign-title">手写签名</span>
               </div>
             </div>
-            <el-dialog title="请签名" class="JNPF-dialog JNPF-dialog_center sign-dialog"
-              :before-close="handleClose" :closeOnClickModal='false' :visible.sync="dialogVisible"
-              append-to-body width="600px">
-              <div class="drawing-board">
-                <vue-esign ref="esign" :height='300' :width="560" :lineWidth="3" />
-              </div>
-              <span slot="footer" class="dialog-footer">
-                <el-button @click="handleReset">清空</el-button>
-                <el-button type="primary" @click="handleGenerate()">确定</el-button>
-              </span>
-            </el-dialog>
           </el-form-item>
           <el-form-item label="抄送人员" v-if="properties.isCustomCopy">
             <user-select v-model="copyIds" placeholder="请选择" multiple />
@@ -215,12 +204,13 @@
         @submitCandidate="submitCandidate" :isCustomCopy="properties.isCustomCopy" />
       <error-form :visible.sync="errorVisible" :nodeList="errorNodeList" @submit="handleError" />
       <actionDialog v-if="actionVisible" ref="actionDialog" @submit="handleRecall" />
+      <SignImgDialog v-if="sginVisible" ref="SignImg" :lineWidth='3' :userInfo='userInfo'
+        :isDefault='1' @close="sginVisible = false" />
     </div>
   </transition>
 </template>
 
 <script>
-import { createSign } from '@/api/permission/userSetting'
 import { FlowEngineInfo } from '@/api/workFlow/FlowEngine'
 import { FlowBeforeInfo, Audit, Reject, Transfer, Recall, Cancel, Assign, SaveAudit, Candidates, CandidateUser, Resurgence, ResurgenceList } from '@/api/workFlow/FlowBefore'
 import { Revoke, Press } from '@/api/workFlow/FlowLaunch'
@@ -233,11 +223,11 @@ import ErrorForm from './ErrorForm'
 import CandidateUserSelect from './CandidateUserSelect'
 import Process from '@/components/Process/Preview'
 import PrintBrowse from '@/components/PrintBrowse'
-import vueEsign from 'vue-esign'
 import ActionDialog from '@/views/workFlow/components/ActionDialog'
 import { mapGetters } from "vuex";
+import SignImgDialog from '@/components/SignImgDialog'
 export default {
-  components: { recordList, Process, vueEsign, PrintBrowse, Comment, RecordSummary, CandidateForm, CandidateUserSelect, ErrorForm, ActionDialog },
+  components: { recordList, Process, SignImgDialog, PrintBrowse, Comment, RecordSummary, CandidateForm, CandidateUserSelect, ErrorForm, ActionDialog },
   data() {
     return {
       assignVisible: false,
@@ -317,7 +307,7 @@ export default {
       errorVisible: false,
       errorNodeList: [],
       isValidate: false,
-      dialogVisible: false,
+      sginVisible: false,
     }
   },
   computed: {
@@ -342,37 +332,11 @@ export default {
     }
   },
   methods: {
-    handleReset() {
-      this.signImg = ''
-      this.$nextTick(() => {
-        this.$refs.esign && this.$refs.esign.reset()
-      })
-    },
-    handleClose() {
-      this.handleReset()
-      this.dialogVisible = false
-    },
-    handleGenerate() {
-      this.$refs.esign.generate().then(res => {
-        if (res) this.signImg = res
-        let query = {
-          signImg: this.signImg,
-          isDefault: 1
-        }
-        createSign(query).then(res => {
-          this.$store.commit('user/SET_USERINFO_SIGNIMG', this.signImg)
-          this.dialogVisible = false
-          this.handleReset()
-        }).catch(err => {
-          this.dialogVisible = false
-          this.handleReset()
-        })
-      }).catch(err => {
-        this.$message.warning("请签名")
-      })
-    },
     addSign() {
-      this.dialogVisible = true
+      this.sginVisible = true
+      this.$nextTick(() => {
+        this.$refs.SignImg.init()
+      })
     },
     handleResurgence(errorRuleUserList) {
       this.$refs['resurgenceForm'].validate((valid) => {
