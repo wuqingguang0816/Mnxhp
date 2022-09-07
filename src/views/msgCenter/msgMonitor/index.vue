@@ -55,7 +55,7 @@
           <el-table-column prop="messageSource" label="消息来源" width="150" />
           <el-table-column prop="title" label="标题" width="230" />
           <el-table-column prop="content" label="内容" show-overflow-tooltip min-width="150" />
-          <el-table-column prop="sendTime" label="发起时间" width="200"
+          <el-table-column prop="sendTime" label="发送时间" width="200"
             :formatter="jnpf.tableDateFormat" />
           <el-table-column label="操作" width="100" fixed="right">
             <template slot-scope="scope">
