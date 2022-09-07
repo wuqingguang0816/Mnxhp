@@ -41,7 +41,7 @@
         </jnpf-form-tip-item>
         <jnpf-form-tip-item label="SecretKey" prop="secretKey"
           tip-label="请在“腾讯云的访问管理-访问密钥- API密钥管理”⻚中获得">
-          <el-input v-model="dataForm.secretKey" placeholder="SecretKey" clearable />
+          <el-input v-model="dataForm.secretKey" placeholder="SecretKey" clearable maxlength="50" />
         </jnpf-form-tip-item>
         <jnpf-form-tip-item label="SDK AppID" prop="sdkAppId" tip-label="请在”腾讯云的应⽤管理-应⽤列表”⻚中获得">
           <el-input v-model="dataForm.sdkAppId" placeholder="SDK AppID" clearable />
