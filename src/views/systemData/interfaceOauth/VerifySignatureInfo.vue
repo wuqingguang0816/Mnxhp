@@ -81,7 +81,7 @@
         <h5><a href="#get-请求" id="get-请求" name="get-请求" class="anchor"><span
               class="octicon octicon-link"></span>GET 请求：</a></h5>
         <p><em>GET</em>
-          /dev/api/system/DataInterface/{id}/Actions/Response?tenantId=xxxxx&amp;name=abc<br>
+          /api/system/DataInterface/{id}/Actions/Response?tenantId=xxxxx&amp;name=abc<br>
           Host : localhost:30000<br>
           YmDate : 1656404771000<br>
         <p>按照规则生成的待签名字符串如下：</p>
@@ -103,7 +103,7 @@
             </tr>
             <tr>
               <td>URL Path</td>
-              <td> /dev/api/system/DataInterface/{id}/Actions/Response</td>
+              <td> /api/system/DataInterface/{id}/Actions/Response</td>
             </tr>
             <tr>
               <td>YmDate</td>
@@ -116,7 +116,7 @@
             <tr>
               <td>最终待签名字符串</td>
               <td>以下 \n
-                表明换行<br>GET\n<br>/dev/api/system/DataInterface/{id}/Actions/Response\n<br>1656404771000\n
+                表明换行<br>GET\n<br>/api/system/DataInterface/{id}/Actions/Response\n<br>1656404771000\n
                 <br>localhost:30000\n<br>
               </td>
             </tr>
@@ -129,7 +129,7 @@
         </table>
         <h5><a href="#post-请求" id="post-请求" name="post-请求" class="anchor"><span
               class="octicon octicon-link"></span>POST 请求：</a></h5>
-        <p><em>POST /dev/api/system/DataInterface/{id}/Actions/Response<br>
+        <p><em>POST /api/system/DataInterface/{id}/Actions/Response<br>
             Host : localhost:30000<br>
             YmDate : 1656404771000<br>
             body参数json格式如：{"tenantId":"123","name":"abc"}</em></p>
@@ -152,7 +152,7 @@
             </tr>
             <tr>
               <td>URL Path</td>
-              <td>/dev/api/system/DataInterface/{id}/Actions/Response</td>
+              <td>/api/system/DataInterface/{id}/Actions/Response</td>
             </tr>
             <tr>
               <td>YmDate</td>
@@ -191,7 +191,7 @@
         String secret <span class="token operator">=</span> <span class="token string">"xxxxxxxxxxxxxxxxyyyyyyyyyyyyyyyy"</span><span class="token punctuation">;</span>
         String algorithmForMac <span class="token operator">=</span> <span class="token string">"HmacSHA256"</span><span class="token punctuation">;</span>
         String method <span class="token operator">=</span> <span class="token string">"POST"</span><span class="token punctuation">;</span>
-        String urlPath <span class="token operator">=</span> <span class="token string">"/dev/api/system/DataInterface/{id}/Actions/Response"</span><span class="token punctuation">;</span>
+        String urlPath <span class="token operator">=</span> <span class="token string">"/api/system/DataInterface/{id}/Actions/Response"</span><span class="token punctuation">;</span>
         String YmDate <span class="token operator">=</span> <span class="token string">"1656404771000"</span><span class="token punctuation">;</span>
         String host <span class="token operator">=</span> <span class="token string">"localhost:30000"</span><span class="token punctuation">;</span>
         String source <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">StringBuilder()</span>
@@ -220,7 +220,7 @@
       <span class="token punctuation">{</span>
         String secret <span class="token operator">=</span> <span class="token string">"xxxxxxxxxxxxxxxxyyyyyyyyyyyyyyyy"</span><span class="token punctuation">;</span>
         String method <span class="token operator">=</span> <span class="token string">"POST"</span><span class="token punctuation">;</span>
-        String urlPath <span class="token operator">=</span> <span class="token string">"/dev/api/system/DataInterface/{id}/Actions/Response"</span><span class="token punctuation">;</span>
+        String urlPath <span class="token operator">=</span> <span class="token string">"/api/system/DataInterface/{id}/Actions/Response"</span><span class="token punctuation">;</span>
         String YmDate <span class="token operator">=</span> <span class="token string">"1656404771000"</span><span class="token punctuation">;</span>
         String host <span class="token operator">=</span> <span class="token string">"localhost:30000"</span><span class="token punctuation">;</span>
         String source <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">StringBuilder()</span>
