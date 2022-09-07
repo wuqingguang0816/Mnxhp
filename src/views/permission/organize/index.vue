@@ -56,11 +56,7 @@
             </template>
           </el-table-column>
           <el-table-column prop="enCode" label="编码" />
-          <el-table-column type="index" label="层级" width="100" align="center">
-            <template slot-scope="scope">
-              <span>{{scope.row.index}}</span>
-            </template>
-          </el-table-column>
+          <el-table-column prop="index" label="层级" width="100" align="center" />
           <el-table-column prop="type" label="类型" width="100" align="center">
             <template slot-scope="scope">
               {{scope.row.type==='company'?'公司':'部门'}}
