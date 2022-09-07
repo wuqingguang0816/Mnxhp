@@ -6,10 +6,10 @@
         <user-select v-model="testForm.testSendEmail" placeholder="收件人" :multiple="true" />
       </el-form-item>
       <el-form-item label="邮件标题" prop="testEmailTitle">
-        <el-input placeholder="邮件标题" v-model="testForm.testEmailTitle" />
+        <el-input placeholder="邮件标题" v-model="testForm.testEmailTitle" clearable />
       </el-form-item>
       <el-form-item label="邮件内容" prop="testEmailContent">
-        <el-input placeholder="邮件内容" v-model="testForm.testEmailContent" />
+        <el-input placeholder="邮件内容" v-model="testForm.testEmailContent" clearable />
       </el-form-item>
     </el-form>
     <span slot="footer" class="dialog-footer">
@@ -29,8 +29,8 @@ export default {
       visible: false,
       testForm: {
         testSendEmail: "",
-        testEmailTitle: "测试",
-        testEmailContent: "测试"
+        testEmailTitle: "",
+        testEmailContent: ""
       },
       dataForm: {},
       btnLoading: false,
@@ -52,6 +52,9 @@ export default {
     init(data) {
       this.visible = true
       this.dataForm = data
+      this.testForm.testSendEmail = '';
+      this.testForm.testEmailTitle = '测试';
+      this.testForm.testEmailContent = '测试';
     },
     testSubmit() {
       this.$refs['testForm'].validate((valid) => {
