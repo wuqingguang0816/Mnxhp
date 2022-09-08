@@ -8,18 +8,24 @@ export function otherLogin(data, param) {
 
   })
 }
+
 // 第三方登录回调列表后点击登录
 export function socialsLogin(data) {
   return request({
-    url: `/api/oauth/socials/login/${data.socialType}`,
+    url: `/api/oauth/Login/socials`,
     method: 'post',
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded'
+    },
     data
   })
 }
+
+
 //获取登录票据
 export function getLoginConfig() {
   return request({
-    url: `/api/oauth/socials/getLoginConfig`,
+    url: `/api/oauth/getLoginConfig`,
     method: 'get',
 
   })
@@ -27,7 +33,7 @@ export function getLoginConfig() {
 //根据票据获取登录状态
 export function getTicketStatus(data) {
   return request({
-    url: `/api/oauth/socials/getTicketStatus/${data}`,
+    url: `/api/oauth/getTicketStatus/${data}`,
     method: 'get',
   })
 }

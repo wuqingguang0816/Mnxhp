@@ -61,7 +61,7 @@
           </el-form-item>
           <el-button :loading="loading" type="primary" class="login-btn" size="large"
             @click.native.prevent="handleLogin">{{ $t('login.logIn') }}</el-button>
-          <el-divider content-position="center" v-if="socialsList">其他登录方式</el-divider>
+          <el-divider content-position="center" v-if="socialsList.length>0">其他登录方式</el-divider>
           <div class="other-list">
             <div v-for="(item,i) in socialsList" :key="i">
               <el-tooltip class="item" effect="dark" :content='item.name+"登录"' placement="top">
@@ -113,6 +113,8 @@
 <script>
 import { getConfig } from '@/api/user'
 import { getSocialsLoginList, getLoginConfig, getTicketStatus, otherLogin, socialsLogin } from '@/api/permission/socialsUser'
+import qs from 'qs'
+
 export default {
   name: 'Login',
   data() {
@@ -151,6 +153,7 @@ export default {
       socialsList: [],
       dialogVisible: false,
       tenantSocialList: [],
+      redirectUrl: '',
     }
   },
   computed: {
@@ -186,7 +189,7 @@ export default {
     }
     if (this.needCode) this.changeImg()
     // this.loginListener()
-    this.otherLoginList()
+    this.getLoginConfig()
   },
   mounted() {
     this.$store.commit('user/SET_LOGIN_LOADING', false)
@@ -267,25 +270,26 @@ export default {
     },
 
     otherLogin(data) {
-      getLoginConfig().then(res => {
-        this.ticket = res.data.ticket
-        otherLogin(data, this.ticket).then(res => {
-          if (this.winURL && !this.winURL.closed) {
-            this.winURL.location.replace(res.msg)
-            this.winURL.focus()
-            return
-          }
-          var iWidth = 750; //弹出窗口的宽度;
-          var iHeight = 500;//弹出窗口的高度;
-          var iLeft = (window.screen.width - iWidth) / 2;
-          var iTop = (window.screen.height - iHeight) / 2;//获得窗口的垂直位置;
-          this.winURL = window.open(res.msg, '_blank', 'height=' + iHeight + ',innerHeight=' + iHeight + ',width=' + iWidth + ',innerWidth=' + iWidth + ',top=' + iTop + ',left=' + iLeft + ',toolbar=no,menubar=no,scrollbars=auto,resizeable=no,location=no,status=no')
-          this.ssoTimer = setInterval(() => {
-            if (this.winURL.closed) { this.clearTimer() }
-            this.getTicketStatus()
-          }, 1000)
-        })
+
+      if (this.winURL && !this.winURL.closed) {
+        this.winURL.location.replace(redirectUrl)
+        this.winURL.focus()
+        return
+      }
+      this.socialsList.forEach(item => {
+        if (data == item.enname) {
+          this.redirectUrl = item.renderUrl
+        }
       })
+      var iWidth = 750; //弹出窗口的宽度;
+      var iHeight = 500;//弹出窗口的高度;
+      var iLeft = (window.screen.width - iWidth) / 2;
+      var iTop = (window.screen.height - iHeight) / 2;//获得窗口的垂直位置;
+      this.winURL = window.open(this.redirectUrl, '_blank', 'height=' + iHeight + ',innerHeight=' + iHeight + ',width=' + iWidth + ',innerWidth=' + iWidth + ',top=' + iTop + ',left=' + iLeft + ',toolbar=no,menubar=no,scrollbars=auto,resizeable=no,location=no,status=no')
+      this.ssoTimer = setInterval(() => {
+        if (this.winURL.closed) { this.clearTimer() }
+        this.getTicketStatus()
+      }, 1000)
     },
     loginListener() {
       if (!this.listenerLoad) {
@@ -342,7 +346,7 @@ export default {
                 break;
               case 6://多租户绑定多个
                 this.dialogVisible = true
-                this.tenantSocialList = response.data.tenantUserInfo
+                this.tenantSocialList = typeof response.data.value === 'string' ? JSON.parse(response.data.value) : response.data.value;
                 break;
               default:
                 this.$message.error('账号异常！')
@@ -366,7 +370,7 @@ export default {
     },
     socailsLogin(data) {
       console.log(data)
-      socialsLogin(data).then(response => {
+      socialsLogin(qs.stringify({ ...data })).then(response => {
         if (response.code == 200) {
           this.$store.dispatch('user/setToken', response.data).then(res => {
             this.$router.push({
@@ -376,7 +380,15 @@ export default {
           })
         }
       })
-    }
+    },
+    getLoginConfig() {
+      getLoginConfig().then(res => {
+        this.ticket = res.data.ticket
+        this.socialsList = res.data.socialsList
+      }).catch(() => {
+
+      })
+    },
   }
 }
 </script>
