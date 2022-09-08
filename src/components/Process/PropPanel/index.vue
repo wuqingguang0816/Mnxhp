@@ -303,8 +303,8 @@
         <el-tab-pane label="节点通知">
           <el-scrollbar class="config-scrollbar">
             <el-form :model="subFlowForm" label-position="top" class="pd-10-20">
-              <el-alert title="该通知设置在【消息中心】-【消息发送配置】维护，默认发送站内信提醒" type="warning" :closable="false"
-                show-icon />
+              <el-alert title="该通知设置在【消息中心】-【消息发送配置】维护，选择默认则站内信提醒，选择关闭则不提醒。" type="warning"
+                :closable="false" show-icon />
               <el-form-item class="mt-10">
                 <div slot="label" class="form-item-label">子流程发起
                   <el-tooltip content="该子流程被发起的时候" placement="top">
@@ -691,8 +691,8 @@
         <el-tab-pane label="流程通知">
           <el-scrollbar class="config-scrollbar">
             <el-form :model="startForm" class="pd-10-20" label-position="top">
-              <el-alert title="该通知设置在【消息中心】-【消息发送配置】维护，默认发送站内信提醒" type="warning" :closable="false"
-                show-icon />
+              <el-alert title="该通知设置在【消息中心】-【消息发送配置】维护，选择默认则站内信提醒，选择关闭则不提醒。" type="warning"
+                :closable="false" show-icon />
               <el-form-item class="mt-10">
                 <div slot="label" class="form-item-label">流程待办
                   <el-tooltip content="流程处于等待的时候" placement="top">
@@ -1738,8 +1738,8 @@
         <el-tab-pane label="节点通知">
           <el-scrollbar class="config-scrollbar">
             <el-form :model="approverForm" class="pd-10-20" label-position="top">
-              <el-alert title="该通知设置在【消息中心】-【消息发送配置】维护，默认发送站内信提醒" type="warning" :closable="false"
-                show-icon />
+              <el-alert title="该通知设置在【消息中心】-【消息发送配置】维护，选择默认则站内信提醒，选择关闭则不提醒。" type="warning"
+                :closable="false" show-icon />
               <el-form-item class="mt-10">
                 <div slot="label" class="form-item-label">节点同意
                   <el-tooltip content="当前节点审核人同意的时候" placement="top">
