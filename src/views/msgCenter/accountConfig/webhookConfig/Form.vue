@@ -27,7 +27,7 @@
       </el-form-item>
       <template v-if="dataForm.approveType == 2">
         <el-form-item label="Bearer令牌" prop="bearer">
-          <el-input v-model="dataForm.bearer" placeholder="请输入Bearer令牌" clearable maxlength="50" />
+          <el-input v-model="dataForm.bearer" placeholder="请输入Bearer令牌" clearable />
         </el-form-item>
       </template>
       <el-form-item label="排序" prop="sortCode">
