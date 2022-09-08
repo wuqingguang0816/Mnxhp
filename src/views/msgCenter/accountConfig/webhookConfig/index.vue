@@ -153,7 +153,7 @@ export default {
         keyword: this.keyword,
         enabledMark: this.enabledMark,
         webhookType: this.webhookType,
-        type: 7
+        type: 6
       }
       getConfigList(query).then(res => {
         this.list = res.data.list

@@ -124,7 +124,7 @@ export default {
           this.btnLoading = true
           let query = {
             ...this.dataForm,
-            type: 7
+            type: 6
           }
           if (query.approveType == 1) {
             query.bearer = "";
