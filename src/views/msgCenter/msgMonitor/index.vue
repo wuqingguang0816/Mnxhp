@@ -26,13 +26,30 @@
               </el-date-picker>
             </el-form-item>
           </el-col>
+          <template v-if="showAll">
+            <el-col :span="6">
+              <el-form-item label="消息流程">
+                <el-select v-model="messageSource" placeholder="选择流程" clearable>
+                  <el-option v-for="(item,index) in messageSourceList" :key="index"
+                    :label="item.fullName" :value="item.enCode">
+                  </el-option>
+                </el-select>
+              </el-form-item>
+            </el-col>
+          </template>
+
           <el-col :span="6">
             <el-form-item>
               <el-button type="primary" icon="el-icon-search" @click="search()">
                 {{$t('common.search')}}</el-button>
               <el-button icon="el-icon-refresh-right" @click="refresh()">{{$t('common.reset')}}
               </el-button>
+              <el-button type="text" icon="el-icon-arrow-down" @click="showAll=true"
+                v-if="!showAll">展开</el-button>
+              <el-button type="text" icon="el-icon-arrow-up" @click="showAll=false" v-else>
+                收起</el-button>
             </el-form-item>
+
           </el-col>
         </el-form>
       </el-row>
@@ -72,12 +89,14 @@
 </template>
 <script>
 import { getMsgMonitorList, delMsgMonitor, emptyMsgMonitor } from '@/api/msgCenter/msgMonitor'
+import { getMsgTypeList } from '@/api/msgCenter/msgTemplate'
 import Detail from './Detail'
 export default {
   name: 'system-mesCenter-msgMonitor',
   components: { Detail },
   data() {
     return {
+      showAll: false,
       list: [],
       total: 0,
       listLoading: true,
@@ -119,11 +138,13 @@ export default {
       sendTime: '',
       msgType: '',
       msgTypeList: [],
+      messageSource: '',
+      messageSourceList: [],
       multipleSelection: []
     }
   },
   created() {
-    this.getMsgTypeList()
+    this.getConfig()
     this.initData()
   },
   methods: {
@@ -134,6 +155,7 @@ export default {
         keyword: this.keyword,
         sendTime: this.sendTime,
         messageType: this.msgType,
+        messageSource: this.messageSource,
       }
       getMsgMonitorList(query).then(async res => {
         this.list = res.data.list
@@ -141,9 +163,12 @@ export default {
         this.listLoading = false
       })
     },
-    getMsgTypeList() {
+    getConfig() {
       this.$store.dispatch('base/getMsgTypeList').then((res) => {
         this.msgTypeList = res
+      })
+      getMsgTypeList(4).then(res => {
+        this.messageSourceList = res.data
       })
     },
     search() {
