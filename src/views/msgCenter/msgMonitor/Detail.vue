@@ -17,11 +17,11 @@
       <el-form-item label="发送时间" prop="sendTime">
         {{detailForm.sendTime|toDate()}}
       </el-form-item>
-      <el-form-item label="标题" prop="title">
-        {{detailForm.title}}
-      </el-form-item>
       <el-form-item label="接收人" prop="receiveUser">
         {{detailForm.receiveUser}}
+      </el-form-item>
+      <el-form-item label="标题" prop="title">
+        {{detailForm.title}}
       </el-form-item>
       <el-form-item label="内容" prop="fieldName">
         {{detailForm.content}}
