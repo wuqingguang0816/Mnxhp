@@ -992,7 +992,7 @@ export default {
     margin-right: 10px;
   }
   .el-button {
-    width: 70px;
+    min-width: 70px;
   }
 }
 .dropdown-item {
