@@ -3,7 +3,7 @@
     :visible.sync="visible" class="JNPF-dialog JNPF-dialog_center" lock-scroll width="500px">
     <el-form ref="testForm" label-width="100px" :model="testForm" :rules="dataRule">
       <el-form-item label="收件邮箱" prop="testSendEmail">
-        <user-select v-model="testForm.testSendEmail" placeholder="收件人" :multiple="true" />
+        <user-select v-model="testForm.testSendEmail" placeholder="收件人" :multiple="false" />
       </el-form-item>
       <el-form-item label="邮件标题" prop="testEmailTitle">
         <el-input placeholder="邮件标题" v-model="testForm.testEmailTitle" clearable />
@@ -36,7 +36,7 @@ export default {
       btnLoading: false,
       dataRule: {
         testSendEmail: [
-          { required: true, message: '请选择收件人', trigger: 'click', type: 'array' },
+          { required: true, message: '请选择收件人', trigger: 'click' },
         ],
         testEmailTitle: [
           { required: true, message: '请输入邮件标题', trigger: 'blur' },
@@ -65,6 +65,7 @@ export default {
             ...this.dataForm,
             type: 2
           }
+          query.testSendEmail = [query.testSendEmail]
           testConfig(query, 'testSendMail').then(res => {
             this.$message({
               type: 'success',
