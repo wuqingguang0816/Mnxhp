@@ -23,73 +23,86 @@
           </template>
         </el-image>
         <img class="login-logo" src="@/assets/images/login_logo.png" alt="" v-else>
-        <div class="login-tab" :class="'active'+active">
-          <a class="item" :class="{'active': active==1}" @click="active=1">{{$t('login.title')}}</a>
-          <a class="item" :class="{'active': active==2}"
-            @click="active=2">{{$t('login.scanTitle')}}</a>
-        </div>
-        <el-form v-show="active==1" ref="loginForm" :model="loginForm" :rules="loginRules"
-          autocomplete="on" label-position="left">
-          <el-form-item prop="account">
-            <el-input ref="account" v-model="loginForm.account" :placeholder="$t('login.username')"
-              name="account" type="text" tabindex="1" autocomplete="on" prefix-icon="el-icon-user"
-              size="large" @change="getConfig"></el-input>
-          </el-form-item>
-          <el-tooltip v-model="capsTooltip" :content="$t('login.upper')" placement="right" manual>
-            <el-form-item prop="password">
-              <el-input ref="password" v-model="loginForm.password" show-password
-                :placeholder="$t('login.password')" name="password" tabindex="2" autocomplete="on"
-                @keyup.native="checkCapslock" @blur="capsTooltip = false" prefix-icon="el-icon-lock"
-                size="large"></el-input>
-              <!-- @keyup.enter.native="handleLogin" -->
-            </el-form-item>
-          </el-tooltip>
-          <el-form-item prop="code" v-if="needCode">
-            <el-row type="flex" justify="space-between">
-              <el-col class="sms-input">
-                <el-input v-model="loginForm.code" :placeholder="$t('login.codeTip')" name="code"
-                  autocomplete="on" prefix-icon="el-icon-key" size="large">
-                </el-input>
-              </el-col>
-              <el-col class="sms-right code-right">
-                <el-tooltip :content="$t('login.changeCode')" placement="bottom">
-                  <img id="imgcode" :alt="$t('login.changeCode')" :src="define.comUrl+imgUrl"
-                    @click="changeImg">
-                </el-tooltip>
-              </el-col>
-            </el-row>
-          </el-form-item>
-          <el-button :loading="loading" type="primary" class="login-btn" size="large"
-            @click.native.prevent="handleLogin">{{ $t('login.logIn') }}</el-button>
-          <el-divider content-position="center" v-if="socialsList.length>0">其他登录方式</el-divider>
-          <div class="other-list">
-            <div v-for="(item,i) in socialsList" :key="i">
-              <el-tooltip class="item" effect="dark" :content='item.name+"登录"' placement="top">
-                <div class="other-item" @click="otherLogin(item.enname)"><i :class="item.icon" />
-                </div>
-              </el-tooltip>
-            </div>
+        <div v-show="!isSso && !ssoLoading">
+          <div class="login-tab" :class="'active'+active">
+            <a class="item" :class="{'active': active==1}"
+              @click="active=1">{{$t('login.title')}}</a>
+            <a class="item" :class="{'active': active==2}"
+              @click="active=2">{{$t('login.scanTitle')}}</a>
           </div>
-        </el-form>
-        <div v-show="active==2" class="login-form-QRCode">
-          <img class="qrcode-img" src="@/assets/images/login_qr.png">
-          <p class="qrcode-tip">正在测试,稍后上线</p>
+          <el-form v-show="active==1" ref="loginForm" :model="loginForm" :rules="loginRules"
+            autocomplete="on" label-position="left">
+            <el-form-item prop="account">
+              <el-input ref="account" v-model="loginForm.account"
+                :placeholder="$t('login.username')" name="account" type="text" tabindex="1"
+                autocomplete="on" prefix-icon="el-icon-user" size="large" @change="getConfig">
+              </el-input>
+            </el-form-item>
+            <el-tooltip v-model="capsTooltip" :content="$t('login.upper')" placement="right" manual>
+              <el-form-item prop="password">
+                <el-input ref="password" v-model="loginForm.password" show-password
+                  :placeholder="$t('login.password')" name="password" tabindex="2" autocomplete="on"
+                  @keyup.native="checkCapslock" @blur="capsTooltip = false"
+                  prefix-icon="el-icon-lock" size="large"></el-input>
+                <!-- @keyup.enter.native="handleLogin" -->
+              </el-form-item>
+            </el-tooltip>
+            <el-form-item prop="code" v-if="needCode">
+              <el-row type="flex" justify="space-between">
+                <el-col class="sms-input">
+                  <el-input v-model="loginForm.code" :placeholder="$t('login.codeTip')" name="code"
+                    autocomplete="on" prefix-icon="el-icon-key" size="large">
+                  </el-input>
+                </el-col>
+                <el-col class="sms-right code-right">
+                  <el-tooltip :content="$t('login.changeCode')" placement="bottom">
+                    <img id="imgcode" :alt="$t('login.changeCode')" :src="define.comUrl+imgUrl"
+                      @click="changeImg">
+                  </el-tooltip>
+                </el-col>
+              </el-row>
+            </el-form-item>
+            <el-button :loading="loading" type="primary" class="login-btn" size="large"
+              @click.native.prevent="handleLogin">{{ $t('login.logIn') }}</el-button>
+            <template v-if="socialsList.length">
+              <el-divider content-position="center">其他登录方式</el-divider>
+              <div class="other-list">
+                <div v-for="(item,i) in socialsList" :key="i">
+                  <el-tooltip class="item" effect="dark" :content='item.name+"登录"' placement="top">
+                    <div class="other-item" @click="otherLogin(item.enname)"><i
+                        :class="item.icon" />
+                    </div>
+                  </el-tooltip>
+                </div>
+              </div>
+            </template>
+          </el-form>
+          <div v-show="active==2" class="login-form-QRCode">
+            <img class="qrcode-img" src="@/assets/images/login_qr.png">
+            <p class="qrcode-tip">正在测试,稍后上线</p>
+          </div>
         </div>
+        <el-button type="primary" class="sso-login-btn" size="large" :loading="loading"
+          @click.native.prevent="ssoLogin" v-show="isSso && !ssoLoading">登录</el-button>
       </div>
     </div>
+    <el-dialog title="登录" :close-on-click-modal="false" :visible.sync="visible"
+      :close-on-press-escape="false" class="JNPF-dialog JNPF-dialog_center JNPF-dialog-sso"
+      lock-scroll width="1000px" @open="onOpen">
+      <iframe width="100%" height="100%" :src="ssoUrl" frameborder="0" v-if="show"></iframe>
+    </el-dialog>
     <!-- <div class="login-foot">Copyright 引迈信息技术有限公司, All Rights Reserved. 沪ICP备17044791号-1
       助力企业和团队快速实现目标</div> -->
-    <el-dialog title="测试" :visible.sync="dialogVisible" width="40%"
+    <el-dialog :visible.sync="dialogVisible" width="600px"
       class="JNPF-dialog JNPF-dialog_center form-script-dialog other-login-dialog"
-      :before-close="handleClose" :center="true">
-
+      :before-close="handleClose">
       <div class="other-main">
         <div class="other-title">
           <div class="other-icon"><i class="icon-ym icon-ym-user" /></div>
           <div class="other-text">请选择登录账号</div>
         </div>
         <div class="other-body">
-          <el-row :gutter="10">
+          <el-row :gutter="20">
             <template v-for="(item,i) in tenantSocialList">
               <el-col :span="12" :key="i">
                 <div @click="socailsLogin(item)">
@@ -104,7 +117,6 @@
             </template>
           </el-row>
         </div>
-
       </div>
     </el-dialog>
   </div>
@@ -112,7 +124,7 @@
 
 <script>
 import { getConfig } from '@/api/user'
-import { getSocialsLoginList, getLoginConfig, getTicketStatus, otherLogin, socialsLogin } from '@/api/permission/socialsUser'
+import { getSocialsLoginList, getLoginConfig, getTicketStatus, socialsLogin } from '@/api/permission/socialsUser'
 import qs from 'qs'
 
 export default {
@@ -148,7 +160,12 @@ export default {
       otherQuery: {},
       active: 1,
       listenerLoad: false,
-      ticket: "",
+      visible: false,
+      show: false,
+      ssoLoading: true,
+      isSso: false,
+      ssoUrl: '',
+      ssoTicket: "",
       ssoTimer: null,
       socialsList: [],
       dialogVisible: false,
@@ -167,6 +184,13 @@ export default {
   watch: {
     loginLoading(val) {
       if (!val) this.loading = false
+    },
+    visible(val) {
+      if (!val) {
+        this.loading = false
+        this.show = false
+        this.clearTimer()
+      }
     },
     $route: {
       handler: function (route) {
@@ -188,7 +212,6 @@ export default {
       }
     }
     if (this.needCode) this.changeImg()
-    // this.loginListener()
     this.getLoginConfig()
   },
   mounted() {
@@ -268,9 +291,7 @@ export default {
         this.socialsList = res.data.filter(item => { return item.isLatest == "true" });
       })
     },
-
     otherLogin(data) {
-
       if (this.winURL && !this.winURL.closed) {
         this.winURL.location.replace(redirectUrl)
         this.winURL.focus()
@@ -291,78 +312,50 @@ export default {
         this.getTicketStatus()
       }, 1000)
     },
-    loginListener() {
-      if (!this.listenerLoad) {
-        window.addEventListener('message', (e) => {
-          if (!e.data) return
-          console.log(e)
-          var response = typeof e.data === 'string' ? JSON.parse(e.data) : e.data;
-          if (e.data.type == "webpackOk") return
-
-          if (response.code == 200) {
-            if (response.hasOwnProperty("data")) {
-              console.log(response.data)
-              this.dialogVisible = true
-              this.tenantSocialList = response.data
-              return
-            }
-          }
-          if (!response.code || response.code != 200) {
-            this.$message.error('用户未绑定或绑定账号异常！')
-            return
-          }
-          this.$store.dispatch('user/setToken', response).then(res => {
-            this.$router.push({
-              path: this.redirect || '/home',
-              query: this.otherQuery
-            })
-          })
-        })
-      }
-      this.listenerLoad = true
-    },
     getTicketStatus() {
-      if (this.ticket) {
-        getTicketStatus(this.ticket).then(response => {
-          console.log(response)
-          if (response.data.status != 2) {
-            this.winURL.close()
-            this.clearTimer()
-            switch (response.data.status) {
-              case 1://登陆成功
-                let param = {
-                  theme: response.data.theme,
-                  token: response.data.value
-                }
-                this.$store.dispatch('user/setToken', param).then(res => {
-                  this.$router.push({
-                    path: this.redirect || '/home',
-                    query: this.otherQuery
-                  })
+      if (!this.ssoTicket) return
+      getTicketStatus(this.ssoTicket).then(res => {
+        if (res.data.status != 2) {
+          this.winURL && this.winURL.close()
+          this.clearTimer()
+          switch (res.data.status) {
+            case 1://登陆成功
+              let param = {
+                theme: res.data.theme,
+                token: res.data.value
+              }
+              this.$store.dispatch('user/setToken', param).then(res => {
+                this.$router.push({
+                  path: this.redirect || '/home',
+                  query: this.otherQuery
                 })
-                break;
-              case 4://未绑定
-                this.$message.error('用户未绑定！')
-                break;
-              case 6://多租户绑定多个
-                this.dialogVisible = true
-                this.tenantSocialList = typeof response.data.value === 'string' ? JSON.parse(response.data.value) : response.data.value;
-                break;
-              default:
-                this.$message.error('账号异常！')
-                break
-            }
+              })
+              break;
+            case 4://未绑定
+              this.$message.error(res.data.value || '用户未绑定！')
+              this.visible = false
+              this.ssoUrl = ''
+              this.getLoginConfig()
+              break;
+            case 6://多租户绑定多个
+              this.dialogVisible = true
+              this.tenantSocialList = typeof res.data.value === 'string' ? JSON.parse(res.data.value) : res.data.value;
+              break;
+            default:
+              this.$message.error(res.data.value || '账号异常！')
+              this.visible = false
+              this.ssoUrl = ''
+              this.getLoginConfig()
+              break
           }
-
-        })
-
-      }
+        }
+      })
     },
     clearTimer() {
       if (this.ssoTimer) {
         clearInterval(this.ssoTimer)
         this.ssoTimer = null
-        this.ticket = ''
+        this.ssoTicket = ''
       }
     },
     handleClose() {
@@ -381,13 +374,28 @@ export default {
         }
       })
     },
+    ssoLogin() {
+      if (this.loading) return
+      this.loading = true
+      this.visible = true
+      this.ssoTimer = setInterval(() => {
+        this.getTicketStatus()
+      }, 1000)
+    },
     getLoginConfig() {
       getLoginConfig().then(res => {
-        this.ticket = res.data.ticket
-        this.socialsList = res.data.socialsList
+        this.isSso = res.data.redirect
+        this.ssoTicket = res.data.ticket
+        this.ssoUrl = res.data.url
+        this.socialsList = res.data.socialsList || []
+        this.ssoLoading = false
       }).catch(() => {
-
+        this.isSso = false
+        this.ssoLoading = false
       })
+    },
+    onOpen() {
+      this.show = true
     },
   }
 }

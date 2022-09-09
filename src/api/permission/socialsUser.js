@@ -8,7 +8,6 @@ export function otherLogin(data, param) {
 
   })
 }
-
 // 第三方登录回调列表后点击登录
 export function socialsLogin(data) {
   return request({
@@ -20,14 +19,11 @@ export function socialsLogin(data) {
     data
   })
 }
-
-
 //获取登录票据
 export function getLoginConfig() {
   return request({
     url: `/api/oauth/getLoginConfig`,
     method: 'get',
-
   })
 }
 //根据票据获取登录状态
@@ -66,7 +62,6 @@ export function binding(data) {
     method: 'GET',
   })
 }
-
 // 解绑
 export function deleteSocials(id) {
   return request({
