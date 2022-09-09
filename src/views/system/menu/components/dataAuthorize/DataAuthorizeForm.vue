@@ -125,20 +125,20 @@ export default {
           label: "任意文本"
         },
         {
-          value: "@organizeId",
-          label: "当前组织"
-        },
-        {
-          value: "@organizationAndSuborganization",
-          label: "当前组织及子组织"
-        },
-        {
           value: "@userId",
           label: "当前用户"
         },
         {
           value: "@userAraSubordinates",
           label: "当前用户及下属"
+        },
+        {
+          value: "@organizeId",
+          label: "当前组织"
+        },
+        {
+          value: "@organizationAndSuborganization",
+          label: "当前组织及子组织"
         },
         {
           value: "@branchManageOrganize",
