@@ -162,6 +162,12 @@ export default {
       this.visible = true
       this.$nextTick(async () => {
         this.$refs['dataForm'].resetFields()
+        this.dataForm.serviceName = ''
+        this.dataForm.dbSchema = ''
+        this.dataForm.oracleExtend = false
+        this.dataForm.oracleLinkType = ''
+        this.dataForm.oracleService = ''
+        this.dataForm.oracleRole = ''
         const res = await this.$store.dispatch('base/getDictionaryData', { sort: 'dbType' })
         this.dbOptions = JSON.parse(JSON.stringify(res))
         if (this.dataForm.id) {

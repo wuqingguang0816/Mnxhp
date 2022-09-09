@@ -253,9 +253,10 @@ export default {
   computed: {
     parameter() {
       const oldFormData = this.formConfCopy.formData ? this.formConfCopy.formData : {}
-      const formData = { ...oldFormData, ...this[this.formConf.formModel] }
+      this[this.formConf.formModel].id = oldFormData.id || ''
+      this[this.formConf.formModel].flowId = oldFormData.flowId || ''
       return {
-        formData,
+        formData: this[this.formConf.formModel],
         setFormData: this.setFormData,
         setShowOrHide: this.setShowOrHide,
         setRequired: this.setRequired,

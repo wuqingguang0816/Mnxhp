@@ -25,7 +25,8 @@
     </el-form>
     <span slot="footer" class="dialog-footer">
       <el-button @click="closeDialog">{{$t('common.cancelButton')}}</el-button>
-      <el-button type="primary" @click="submitCandidate()">{{$t('common.confirmButton')}}
+      <el-button type="primary" @click="submitCandidate()" :loading="btnLoading">
+        {{$t('common.confirmButton')}}
       </el-button>
     </span>
   </el-dialog>
@@ -42,7 +43,8 @@ export default {
         copyIds: [],
         branchList: [],
         candidateList: []
-      }
+      },
+      btnLoading: false
     }
   },
   methods: {
@@ -84,6 +86,7 @@ export default {
     submitCandidate() {
       this.$refs['candidateForm'].validate((valid) => {
         if (valid) {
+          this.btnLoading = true
           let candidateList = {}
           for (let i = 0; i < this.candidateForm.candidateList.length; i++) {
             candidateList[this.candidateForm.candidateList[i].nodeId] = this.candidateForm.candidateList[i].value

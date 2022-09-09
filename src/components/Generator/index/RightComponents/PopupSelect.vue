@@ -23,9 +23,8 @@
       </el-select>
     </el-form-item>
     <el-form-item label="远端数据">
-      <JNPF-TreeSelect :options="dataInterfaceSelector" v-model="activeData.interfaceId"
-        placeholder="请选择远端数据" lastLevel lastLevelKey='categoryId' lastLevelValue='1' clearable>
-      </JNPF-TreeSelect>
+      <interface-dialog :value="activeData.interfaceId" :title="activeData.interfaceName"
+        popupTitle="远端数据" @change="propsUrlChange" />
     </el-form-item>
     <el-form-item label="存储字段">
       <el-input v-model="activeData.propsValue" placeholder="请输入存储字段" />
@@ -109,10 +108,11 @@ import draggable from 'vuedraggable'
 import { getDataInterfaceSelector } from '@/api/systemData/dataInterface'
 import { noAllowRelationList } from '@/components/Generator/generator/comConfig'
 import { getDrawingList } from '@/components/Generator/utils/db'
+import InterfaceDialog from '@/components/Process/PropPanel/InterfaceDialog'
 export default {
   props: ['activeData'],
   mixins: [comMixin],
-  components: { draggable },
+  components: { draggable, InterfaceDialog },
   data() {
     return {
       popupWidthOptions: ['600px', '800px', '1000px', '40%', '50%', '60%', '70%', '80%'],
@@ -179,6 +179,15 @@ export default {
         value: '',
         label: ''
       })
+    },
+    propsUrlChange(val, item) {
+      if (!val) {
+        this.activeData.interfaceId = ''
+        this.activeData.interfaceName = ''
+        return
+      }
+      this.activeData.interfaceId = val
+      this.activeData.interfaceName = item.fullName
     }
   }
 }

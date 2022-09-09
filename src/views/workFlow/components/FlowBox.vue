@@ -29,52 +29,71 @@
           </div>
         </template>
         <div class="options">
-          <el-button type="primary" @click="addComment" v-if="activeTab==='comment'">评 论</el-button>
-          <template v-if="setting.opType!=4&&setting.id">
-            <el-button type="primary" @click="printBrowseVisible=true"
-              v-if="properties.hasPrintBtn && properties.printId">
-              {{properties.printBtnText||'打 印'}}</el-button>
-          </template>
-          <template v-if="setting.opType=='-1'">
-            <el-button type="primary" @click="eventLauncher('submit')" :loading="candidateLoading"
-              :disabled="allBtnDisabled">{{properties.submitBtnText||'提 交'}}</el-button>
-            <el-button type="warning" @click="eventLauncher('save')" :loading="btnLoading"
-              :disabled="allBtnDisabled">{{properties.saveBtnText||'暂 存'}}</el-button>
-          </template>
-          <template v-if="setting.opType == 1">
-            <el-button type="warning" @click="openUserBox('transfer')"
-              v-if="properties.hasTransferBtn">{{properties.transferBtnText||'转 审'}}</el-button>
-            <el-button type="primary" @click="eventLauncher('audit')" :loading="candidateLoading"
-              v-if="properties.hasAuditBtn">{{properties.auditBtnText||'通 过'}}</el-button>
-            <el-button type="warning" @click="eventLauncher('saveAudit')"
-              v-if="properties.hasSaveBtn" :loading="btnLoading">{{properties.saveBtnText||'暂 存'}}
+          <el-dropdown class="dropdown" placement="bottom" @command="handleMore">
+            <el-button style="width:70px" :disabled="allBtnDisabled" v-if="setting.opType != 2">
+              更 多<i class="el-icon-arrow-down el-icon--right"></i>
             </el-button>
-            <el-button type="danger" @click="eventReceiver({},'reject')"
-              v-if="properties.hasRejectBtn">
-              {{properties.rejectBtnText||'拒 绝'}}</el-button>
-          </template>
-          <template v-if="setting.opType == 0 && setting.status == 1">
-            <el-button type="primary" @click="press()"
-              v-if="properties.hasPressBtn || properties.hasPressBtn===undefined">
-              {{properties.pressBtnText||'催 办'}}</el-button>
-            <el-button type="danger" @click="revoke()"
-              v-if="properties.hasRevokeBtn || properties.hasRevokeBtn===undefined">
-              {{properties.revokeBtnText||'撤 回'}}</el-button>
-          </template>
+            <el-dropdown-menu slot="dropdown">
+              <el-dropdown-item class="dropdown-item" v-if="setting.opType=='-1'" command="save">
+                {{properties.saveBtnText||'暂 存'}}
+              </el-dropdown-item>
+              <el-dropdown-item class="dropdown-item"
+                v-if="(properties.hasRevokeBtn || properties.hasRevokeBtn===undefined)&&setting.opType == 0 && setting.status == 1"
+                command="revoke">
+                {{properties.revokeBtnText||'撤 回'}}
+              </el-dropdown-item>
+              <!-- 审批 -->
+              <template v-if="setting.opType == 1">
+                <el-dropdown-item class="dropdown-item" v-if="properties.hasTransferBtn"
+                  command="transfer">
+                  {{properties.transferBtnText||'转 审'}}
+                </el-dropdown-item>
+                <el-dropdown-item class="dropdown-item" v-if="properties.hasSaveBtn"
+                  command="saveAudit">
+                  {{properties.saveBtnText||'暂 存'}}
+                </el-dropdown-item>
+                <el-dropdown-item class="dropdown-item" v-if="properties.hasRejectBtn"
+                  command="reject">
+                  {{properties.rejectBtnText||'拒 绝'}}
+                </el-dropdown-item>
+              </template>
+              <!-- 判断流程复活按钮和节点变更 -->
+              <template v-if="setting.opType == 4">
+                <el-dropdown-item class="dropdown-item" v-if="flowTaskInfo.completion==100"
+                  command="resurgence">
+                  复 活
+                </el-dropdown-item>
+                <el-dropdown-item class="dropdown-item"
+                  v-if="flowTaskInfo.completion>0&&flowTaskInfo.completion<100&&(setting.status==1||setting.status==3)"
+                  command="resurgence">变 更
+                </el-dropdown-item>
+                <el-dropdown-item class="dropdown-item"
+                  v-if="setting.status==1&&assignNodeList.length" command="assign">指 派
+                </el-dropdown-item>
+              </template>
+              <el-dropdown-item class="dropdown-item" v-if="activeTab==='comment'"
+                command="comment">评 论
+              </el-dropdown-item>
+              <el-dropdown-item class="dropdown-item"
+                v-if="setting.opType!=4&&setting.id&&properties.hasPrintBtn && properties.printId"
+                command="print">
+                {{properties.printBtnText||'打 印'}}
+              </el-dropdown-item>
+            </el-dropdown-menu>
+          </el-dropdown>
+          <el-button v-if="setting.opType=='-1'" type="primary" @click="eventLauncher('submit')"
+            :loading="candidateLoading" :disabled="allBtnDisabled">
+            {{properties.submitBtnText||'提 交'}}</el-button>
+          <el-button type="primary" @click="eventLauncher('audit')" :loading="candidateLoading"
+            v-if="setting.opType == 1&&properties.hasAuditBtn">{{properties.auditBtnText||'通 过'}}
+          </el-button>
+          <el-button type="primary" @click="press()"
+            v-if="setting.opType == 0 && setting.status == 1&&(properties.hasPressBtn || properties.hasPressBtn===undefined)">
+            {{properties.pressBtnText||'催 办'}}</el-button>
           <el-button type="danger" v-if="setting.opType == 2 && properties.hasRevokeBtn"
             @click="recall()">{{properties.revokeBtnText||'撤 回'}}</el-button>
-          <template v-if="setting.opType == 4">
-            <!-- 判断流程复活按钮和节点变更 -->
-            <el-button type="primary" @click="flowResurgence" v-if="flowTaskInfo.completion==100">
-              复 活</el-button>
-            <el-button type="primary" @click="flowResurgence"
-              v-if="flowTaskInfo.completion>0&&flowTaskInfo.completion<100&&(setting.status==1||setting.status==3)">
-              变 更</el-button>
-            <el-button type="primary" @click="openAssignBox"
-              v-if="setting.status==1&&assignNodeList.length">指 派
-            </el-button>
-            <el-button type="danger" v-if="setting.status==1" @click="cancel()">终 止</el-button>
-          </template>
+          <el-button type="danger" v-if="setting.opType == 4&&setting.status==1" @click="cancel()">
+            终止</el-button>
           <el-button @click="goBack()" v-if="!setting.hideCancelBtn" :disabled="allBtnDisabled">
             {{$t('common.cancelButton')}}
           </el-button>
@@ -495,6 +514,17 @@ export default {
           })
         }, 500)
       }).catch(() => { this.loading = false })
+    },
+    handleMore(e) {
+      if (e == 'revoke') return this.revoke()
+      if (e == 'transfer') return this.openUserBox('transfer')
+      if (e == 'saveAudit') return this.eventLauncher('saveAudit')
+      if (e == 'reject') return this.eventReceiver({}, 'reject')
+      if (e == 'resurgence') return this.flowResurgence()
+      if (e == 'assign') return this.openAssignBox()
+      if (e == 'comment') return this.addComment()
+      if (e == 'print') return this.printBrowseVisible = true
+      this.eventLauncher(e)
     },
     eventLauncher(eventType) {
       this.$refs.form && this.$refs.form.dataFormSubmit(eventType, this.flowUrgent)
@@ -955,5 +985,18 @@ export default {
   span:first-child {
     margin: 0 3px 0 10px;
   }
+}
+
+.options {
+  .dropdown {
+    margin-right: 10px;
+  }
+  .el-button {
+    min-width: 70px;
+  }
+}
+.dropdown-item {
+  min-width: 70px;
+  text-align: center;
 }
 </style>

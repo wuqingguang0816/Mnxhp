@@ -110,8 +110,8 @@ export default {
         for (let i = 0; i < list.length; i++) {
           let item = list[i]
           if (item.__vModel__) {
-            const val = data[item.__vModel__]
-            if (val !== null && val !== undefined && !item.__config__.isSubTable) item.__config__.defaultValue = val
+            const val = data.hasOwnProperty(item.__vModel__) ? data[item.__vModel__] : item.__config__.defaultValue
+            if (!item.__config__.isSubTable) item.__config__.defaultValue = val
             let noShow = false, isDisabled = false, required = false
             if (this.setting.formOperates && this.setting.formOperates.length) {
               let id = item.__config__.isSubTable ? parent.__vModel__ + '-' + item.__vModel__ : item.__vModel__
