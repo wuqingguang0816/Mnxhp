@@ -81,7 +81,7 @@ export default {
     dataFormSubmit() {
       for (let index = 0; index < this.testSendData.length; index++) {
         const item = this.testSendData[index]
-        if (item.toUser && !item.toUser.length && item.messageType != '6') {
+        if (item.toUser && !item.toUser.length && item.messageType != 'webhook') {
           return this.$message.error(`请选${this.testSendData[index].msgTemplateName}择接收人`)
         }
       }
