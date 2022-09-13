@@ -330,7 +330,7 @@ export default {
       })
     },
     removeParameter(index) {
-      this.$confirm('此操作删除该参数, 是否继续?', '提示', {
+      this.$confirm('此操作删除该参数, 不能恢复，是否继续?', '提示', {
         type: 'warning'
       }).then(() => {
         this.parameterList.splice(index, 1)
