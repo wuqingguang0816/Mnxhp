@@ -59,10 +59,10 @@
           </el-table-column>
           <el-table-column prop="messageType" label="消息类型" width="500">
             <template slot-scope="scope">
-              <el-tag class="my-el-tag" disable-transitions
+              <span class="my-span-tag" :style="{'background':colorList[item.type]}"
                 v-for="(item,index) in scope.row.messageType" :key="index">
-                {{item}}
-              </el-tag>
+                {{item.fullName}}
+              </span>
             </template>
           </el-table-column>
           <el-table-column prop="creatorUserId" label="创建人" width="120" />
@@ -140,6 +140,7 @@ export default {
         { fullName: "启用", enCode: '1' },
         { fullName: "禁用", enCode: '0' },
       ],
+      colorList: ['', '#2870F8', '#6DE083', '#F48282', '#6893F5', '#64B0F4', '#FF96B2']
     }
   },
   created() {
@@ -237,7 +238,15 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
-.my-el-tag {
+.my-span-tag {
   margin-right: 8px;
+  color: #fff;
+  height: 24px;
+  padding: 0 8px;
+  line-height: 22px;
+  border-radius: 4px;
+  white-space: nowrap;
+  display: inline-block;
+  font-size: 12px;
 }
 </style>
