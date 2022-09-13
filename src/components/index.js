@@ -11,6 +11,7 @@ import ColumnSettings from '@/components/ColumnSettings'
 import JNPFQuill from '@/components/JNPFEditor/quill'
 import UserSelect from '@/components/JNPF-userSelect'
 import uploadBtn from '@/components/JNPF-uploadBtn'
+import ImportBox from '@/components/JNPFImport'
 // 代码生成器专供
 import JNPFText from '@/components/Generator/components/JNPFText'
 import JnpfLink from '@/components/Generator/components/JnpfLink'
@@ -76,5 +77,6 @@ export default {
     Vue.component('JNPFQuill', JNPFQuill)
     Vue.component('Screenfull', Screenfull)
     Vue.component('ColumnSettings', ColumnSettings)
+    Vue.component('ImportBox', ImportBox)
   }
 }

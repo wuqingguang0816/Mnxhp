@@ -190,7 +190,7 @@
                   </el-checkbox>
                   <el-button class="upload"
                     v-if="item.value === 'upload'&&btnsList.indexOf('upload')!=-1"
-                    @click="setUploadData">请设置导入模板</el-button>
+                    @click="setUploaderTemplateJson">请设置导入模板</el-button>
                 </div>
               </el-checkbox-group>
               <el-checkbox-group v-model="columnBtnsList" class="btnsList columnBtnList">
@@ -320,7 +320,7 @@ const defaultColumnData = {
       name: "脚本事件"
     }
   },
-  uploadData: {}
+  uploaderTemplateJson: {}
 }
 export default {
   name: 'columnDesign',
@@ -525,7 +525,7 @@ export default {
     */
     getData() {
       if (!this.columnData.columnList.length) return this.$message.warning('列表字段不允许为空')
-      if (!this.columnData.uploadData.selectKey && this.btnsList.indexOf('upload') != -1) return this.$message.warning('请设置导入模板')
+      if (!this.columnData.uploaderTemplateJson.selectKey && this.btnsList.indexOf('upload') != -1) return this.$message.warning('请设置导入模板')
       if (this.columnData.type == 2) {
         if (this.columnData.treeDataSource === 'dictionary' && !this.columnData.treeDictionary) return this.$message.warning('请选择数据字典')
         if (this.columnData.treeDataSource === 'api') {
@@ -614,16 +614,16 @@ export default {
         this.formScriptVisible = true
       })
     },
-    setUploadData() {
+    setUploaderTemplateJson() {
       this.uploadBoxVisible = true
       this.$nextTick(() => {
-        const selectData = this.columnData.uploadData.selectKey ? this.columnData.uploadData.selectKey : []
-        const dataType = this.columnData.uploadData.dataType ? this.columnData.uploadData.dataType : ''
+        const selectData = this.columnData.uploaderTemplateJson.selectKey ? this.columnData.uploaderTemplateJson.selectKey : []
+        const dataType = this.columnData.uploaderTemplateJson.dataType ? this.columnData.uploaderTemplateJson.dataType : ''
         this.$refs.uploadRef.init(getDrawingList(), selectData, dataType)
       })
     },
     onConfirm(data) {
-      this.columnData.uploadData = data
+      this.columnData.uploaderTemplateJson = data
     }
   }
 }
