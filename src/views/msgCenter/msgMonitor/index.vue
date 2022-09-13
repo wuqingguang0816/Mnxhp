@@ -28,8 +28,8 @@
           </el-col>
           <template v-if="showAll">
             <el-col :span="6">
-              <el-form-item label="消息流程">
-                <el-select v-model="messageSource" placeholder="选择流程" clearable>
+              <el-form-item label="消息来源">
+                <el-select v-model="messageSource" placeholder="消息来源" clearable>
                   <el-option v-for="(item,index) in messageSourceList" :key="index"
                     :label="item.fullName" :value="item.enCode">
                   </el-option>
@@ -141,8 +141,8 @@ export default {
     }
   },
   created() {
-    this.getConfig()
     this.initData()
+    this.getConfig()
   },
   methods: {
     initData() {
@@ -166,6 +166,11 @@ export default {
       })
       getMsgTypeList(4).then(res => {
         this.messageSourceList = res.data
+        this.messageSourceList.map(res => {
+          if (res.enCode == 1) {
+            this.messageSource = res.enCode
+          }
+        })
       })
     },
     search() {
