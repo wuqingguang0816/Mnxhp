@@ -70,7 +70,7 @@
               <i class="el-icon-close" title="删除" @click="handleFileRemove(index)"></i>
             </li>
           </ul>
-          <fileUploader ref="fileUploader" :limit="9" :fileSize="50" type="annex"
+          <fileUploader ref="fileUploader" :limit="2" :fileSize="50" type="annex"
             :accept="fileAccept" @fileSuccess="fileSuccess" />
         </el-form-item>
       </el-form>
@@ -258,17 +258,17 @@ export default {
       this.$refs.elUploadImg.uploadFiles.splice(index, 1)
     },
     uploadFile() {
-      const isTopLimit = this.dataForm.file.length > 9
+      const isTopLimit = this.dataForm.file.length >= 2
       if (isTopLimit) {
-        this.$message.error(`当前限制最多可以上传9个文件`)
+        this.$message.error(`当前限制最多可以上传2个文件`)
         return false
       }
       this.$refs.fileUploader && this.$refs.fileUploader.openUploader()
     },
     fileSuccess(data) {
-      const isTopLimit = this.dataForm.file.length > 9
+      const isTopLimit = this.dataForm.file.length >= 2
       if (isTopLimit) {
-        this.$message.error(`当前限制最多可以上传9个文件`)
+        this.$message.error(`当前限制最多可以上传2个文件`)
         return false
       }
       this.dataForm.file.push(data)
