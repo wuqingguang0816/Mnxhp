@@ -24,7 +24,7 @@
         {{detailForm.title}}
       </el-form-item>
       <el-form-item label="内容" prop="fieldName">
-        {{detailForm.content}}
+        <p class="content" v-html="detailForm.content"></p>
       </el-form-item>
     </el-form>
     <span slot="footer" class="dialog-footer">
@@ -58,3 +58,10 @@ export default {
   }
 }
 </script>
+<style lang="scss" scoped>
+.content {
+  >>> img {
+    width: 100%;
+  }
+}
+</style>

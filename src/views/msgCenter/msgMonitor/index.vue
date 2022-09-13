@@ -37,7 +37,6 @@
               </el-form-item>
             </el-col>
           </template>
-
           <el-col :span="6">
             <el-form-item>
               <el-button type="primary" icon="el-icon-search" @click="search()">
@@ -49,7 +48,6 @@
               <el-button type="text" icon="el-icon-arrow-up" @click="showAll=false" v-else>
                 收起</el-button>
             </el-form-item>
-
           </el-col>
         </el-form>
       </el-row>
@@ -70,8 +68,7 @@
         <JNPF-table v-loading="listLoading" :data="list" hasC @selection-change="handleChange">
           <el-table-column prop="messageType" label="消息类型" width="150" />
           <el-table-column prop="messageSource" label="消息来源" width="150" />
-          <el-table-column prop="title" label="标题" width="230" />
-          <el-table-column prop="content" label="内容" show-overflow-tooltip min-width="150" />
+          <el-table-column prop="title" label="标题" min-width="230" />
           <el-table-column prop="sendTime" label="发送时间" width="200"
             :formatter="jnpf.tableDateFormat" />
           <el-table-column label="操作" width="100" fixed="right">
