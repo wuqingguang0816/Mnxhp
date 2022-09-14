@@ -94,6 +94,10 @@
                 <userSelect v-model="item.fieldValue" placeholder="请选择" hasSys clearable
                   @change="onConditionObjChange(arguments,item)" />
               </template>
+              <template v-else-if="['usersSelect'].includes(item.jnpfKey)">
+                <usersSelect v-model="item.fieldValue" placeholder="请选择" clearable
+                  @change="onConditionObjChange(arguments,item)" />
+              </template>
               <template v-else-if="['posSelect','currPosition'].includes(item.jnpfKey)">
                 <posSelect v-model="item.fieldValue" placeholder="请选择" clearable
                   @change="onConditionObjChange(arguments,item)" />

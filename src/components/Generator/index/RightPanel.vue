@@ -520,7 +520,7 @@ import Tab from './RightComponents/Tab'
 import Collapse from './RightComponents/Collapse'
 import TableConfig from './RightComponents/Table'
 
-const commonRightList = ['comSelect', 'depSelect', 'posSelect', 'userSelect', 'groupSelect', "roleSelect", 'editor']
+const commonRightList = ['comSelect', 'depSelect', 'posSelect', 'userSelect', 'usersSelect', 'groupSelect', "roleSelect", 'editor']
 const systemList = ['createUser', 'createTime', 'modifyUser', 'modifyTime', 'currOrganize', 'currDept', 'currPosition', 'billRule']
 
 export default {

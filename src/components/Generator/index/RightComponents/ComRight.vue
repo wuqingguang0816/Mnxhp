@@ -7,7 +7,7 @@
       <el-input v-model="activeData.placeholder" placeholder="请输入占位提示" />
     </el-form-item>
     <el-form-item label="可选范围"
-      v-if="['depSelect','posSelect','userSelect'].includes(activeData.__config__.jnpfKey)">
+      v-if="['depSelect','posSelect','userSelect','usersSelect'].includes(activeData.__config__.jnpfKey)">
       <el-select v-model="activeData.selectType" placeholder="请选择" @change="onTypeChange">
         <el-option v-for="item in selectTypeOptions" :key="item.value" :label="item.label"
           :value="item.value" />
@@ -30,6 +30,9 @@
           <org-Select v-model="activeData.ableRoleIds" title="添加角色" type="role" class="mt-10" />
           <org-Select v-model="activeData.ableGroupIds" title="添加分组" type="group" class="mt-10" />
         </template>
+        <template v-if="activeData.__config__.jnpfKey==='usersSelect'">
+          <org-Select v-model="activeData.ableIds" title="添加用户" type="users" class="mt-10" />
+        </template>
       </template>
     </el-form-item>
     <el-form-item label="默认值">
@@ -48,6 +51,9 @@
         :key="key" :selectType="activeData.selectType" :ableDepIds="activeData.ableDepIds"
         :ablePosIds="activeData.ablePosIds" :ableUserIds="activeData.ableUserIds"
         :ableRoleIds="activeData.ableRoleIds" :ableGroupIds="activeData.ableGroupIds" />
+      <users-select v-model="activeData.__config__.defaultValue" placeholder="选择默认值" clearable
+        v-if="activeData.__config__.jnpfKey==='usersSelect'" :multiple="activeData.multiple"
+        :key="key" :selectType="activeData.selectType" :ableIds="activeData.ableIds" />
       <group-select v-model="activeData.__config__.defaultValue" placeholder="选择默认值" clearable
         v-if="activeData.__config__.jnpfKey==='groupSelect'" :multiple="activeData.multiple" />
       <role-select v-model="activeData.__config__.defaultValue" placeholder="选择默认值" clearable

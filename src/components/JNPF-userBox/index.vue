@@ -56,7 +56,7 @@ export default {
     getList() {
       this.loading = true
       if (this.keyword) this.nodeId = '0'
-      getImUserSelector(this.nodeId, this.keyword).then(res => {
+      getImUserSelector(this.nodeId, { keyword: this.keyword }).then(res => {
         this.treeData = res.data.list
         this.loading = false
       })

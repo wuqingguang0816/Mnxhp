@@ -2119,10 +2119,21 @@ textarea.el-textarea__inner {
 
     .selected-item-headIcon {
       flex-shrink: 0;
+
+      &.icon {
+        width: 36px;
+        height: 36px;
+        text-align: center;
+
+        i {
+          font-size: 22px;
+          line-height: 36px;
+        }
+      }
     }
 
     .selected-item-text {
-      width: 272px;
+      width: calc(100% - 46px);
       margin-left: 10px;
 
       .name {

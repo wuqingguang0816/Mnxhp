@@ -44,12 +44,13 @@
             </el-input>
           </div>
           <div class="transfer-pane__body left-pane">
-            <el-tabs v-model="activeName" class="transfer-pane__body-tab"
-              :class="{'hasSys-tab':hasSys}" v-if="selectType==='all'">
-              <el-tab-pane label="全部数据" name="all">
+            <el-tabs v-model="activeName" class="transfer-pane__body-tab hasSys-tab"
+              v-if="selectType==='all'">
+              <el-tab-pane label="部门" name="department">
                 <el-tree :data="treeData" :props="props" check-on-click-node
-                  @node-click="handleNodeClick" class="JNPF-common-el-tree" node-key="id"
-                  v-loading="loading" lazy :load="loadNode" v-if="!this.isAsync">
+                  :expand-on-click-node="false" @node-click="handleNodeClick"
+                  class="JNPF-common-el-tree" node-key="id" v-loading="loading" lazy
+                  :load="loadNode" v-if="!this.isAsync">
                   <span class="custom-tree-node" slot-scope="{ node, data }">
                     <i :class="data.icon"></i>
                     <span class="text">{{node.label}}</span>
@@ -74,50 +75,35 @@
                   <el-empty description="暂无数据" :image-size="120" v-else></el-empty>
                 </div>
               </el-tab-pane>
-              <el-tab-pane label="当前组织" name="department">
-                <div class="single-list" v-loading="loading">
-                  <template v-if="treeData2.length">
-                    <div v-for="(item,index) in treeData2" :key="index" class="selected-item-user"
-                      @click="handleNodeClick2(item)">
-                      <div class="selected-item-main">
-                        <el-avatar :size="36" :src="define.comUrl+item.headIcon"
-                          class="selected-item-headIcon">
-                        </el-avatar>
-                        <div class="selected-item-text">
-                          <p class="name">{{item.fullName}}</p>
-                          <p class="organize" :title="item.organize">{{item.organize}}</p>
-                        </div>
-                      </div>
-                    </div>
-                  </template>
-                  <el-empty description="暂无数据" :image-size="120" v-else></el-empty>
-                </div>
+              <el-tab-pane label="角色" name="role" v-if="multiple">
+                <el-tree :data="treeData2" :props="props" :expand-on-click-node="false"
+                  default-expand-all check-on-click-node @node-click="handleNodeClick"
+                  class="JNPF-common-el-tree" node-key="id" v-loading="roleLoading" ref="roleTree"
+                  :filter-node-method="filterNode">
+                  <span class="custom-tree-node" slot-scope="{ node, data }">
+                    <i :class="data.icon"></i>
+                    <span class="text">{{node.label}}</span>
+                  </span>
+                </el-tree>
               </el-tab-pane>
-              <el-tab-pane label="我的下属" name="subordinates">
-                <div class="single-list" v-loading="loading">
-                  <template v-if="treeData3.length">
-                    <div v-for="(item,index) in treeData3" :key="index" class="selected-item-user"
-                      @click="handleNodeClick2(item)">
-                      <div class="selected-item-main">
-                        <el-avatar :size="36" :src="define.comUrl+item.headIcon"
-                          class="selected-item-headIcon">
-                        </el-avatar>
-                        <div class="selected-item-text">
-                          <p class="name">{{item.fullName}}</p>
-                          <p class="organize" :title="item.organize">{{item.organize}}</p>
-                        </div>
-                      </div>
-                    </div>
-                  </template>
-                  <el-empty description="暂无数据" :image-size="120" v-else></el-empty>
-                </div>
+              <el-tab-pane label="岗位" name="position" v-if="multiple">
+                <el-tree :data="treeData3" :props="props" :expand-on-click-node="false"
+                  default-expand-all check-on-click-node @node-click="handleNodeClick"
+                  class="JNPF-common-el-tree" node-key="id" v-loading="positionLoading"
+                  ref="positionTree" :filter-node-method="filterNode">
+                  <span class="custom-tree-node" slot-scope="{ node, data }">
+                    <i :class="data.icon"></i>
+                    <span class="text">{{node.label}}</span>
+                  </span>
+                </el-tree>
               </el-tab-pane>
-              <el-tab-pane label="系统变量" name="system">
+              <el-tab-pane label="分组" name="group" v-if="multiple">
                 <el-tree :data="treeData4" :props="props" :expand-on-click-node="false"
-                  check-on-click-node @node-click="handleNodeClick2" class="JNPF-common-el-tree"
-                  node-key="id" v-loading="loading">
-                  <span class="custom-tree-node" slot-scope="{ node }">
-                    <i class="icon-ym icon-ym-tree-user2"></i>
+                  default-expand-all check-on-click-node @node-click="handleNodeClick"
+                  class="JNPF-common-el-tree" node-key="id" v-loading="groupLoading" ref="groupTree"
+                  :filter-node-method="filterNode">
+                  <span class="custom-tree-node" slot-scope="{ node, data }">
+                    <i :class="data.icon"></i>
                     <span class="text">{{node.label}}</span>
                   </span>
                 </el-tree>
@@ -125,10 +111,11 @@
             </el-tabs>
             <template v-if="selectType === 'custom'">
               <div class="custom-title">全部数据</div>
-              <div class="single-list" ref="infiniteBody">
+              <div class="single-list" ref="infiniteBody"
+                v-loading="loading && pagination.currentPage==1">
                 <template v-if="ableList.length">
                   <div v-for="(item,index) in ableList" :key="index" class="selected-item-user"
-                    @click="handleNodeClick2(item)">
+                    @click="handleNodeClick(item)">
                     <div class="selected-item-main">
                       <el-avatar :size="36" :src="define.comUrl+item.headIcon"
                         class="selected-item-headIcon">
@@ -155,8 +142,11 @@
               <div v-for="(item,index) in selectedData" :key="index" class="selected-item-user">
                 <div class="selected-item-main">
                   <el-avatar :size="36" :src="define.comUrl+item.headIcon"
-                    class="selected-item-headIcon">
+                    class="selected-item-headIcon" v-if="item.type==='user'">
                   </el-avatar>
+                  <div class="selected-item-headIcon icon" v-else>
+                    <i :class="item.icon"></i>
+                  </div>
                   <div class="selected-item-text">
                     <p class="name">{{item.fullName}}
                       <i class="el-icon-delete" @click="removeData(index)"></i>
@@ -179,8 +169,11 @@
 </template>
 
 <script>
-import { getImUserSelector, getUserInfoList, getSubordinates, getOrganization, getUsersByUserCondition } from '@/api/permission/user'
+import { getImUserSelector, getSelectedList, getSelectedUserList } from '@/api/permission/user'
 import { addResizeListener, removeResizeListener } from 'element-ui/src/utils/resize-event';
+import { getPositionSelector } from '@/api/permission/position'
+import { getRoleSelector } from '@/api/permission/role'
+import { getGroupSelector } from '@/api/permission/group'
 export default {
   name: 'userSelect',
   inject: {
@@ -228,23 +221,7 @@ export default {
       type: String,
       default: 'all'
     },
-    ableDepIds: {
-      type: Array,
-      default: () => []
-    },
-    ablePosIds: {
-      type: Array,
-      default: () => []
-    },
-    ableUserIds: {
-      type: Array,
-      default: () => []
-    },
-    ableRoleIds: {
-      type: Array,
-      default: () => []
-    },
-    ableGroupIds: {
+    ableIds: {
       type: Array,
       default: () => []
     },
@@ -257,6 +234,9 @@ export default {
       nodeId: '',
       innerValue: '',
       loading: false,
+      roleLoading: true,
+      positionLoading: true,
+      groupLoading: true,
       props: {
         children: 'children',
         label: 'fullName',
@@ -265,11 +245,7 @@ export default {
       treeData: [],
       treeData2: [],
       treeData3: [],
-      treeData4: [{
-        id: 'currentUser',
-        fullName: '当前用户',
-        headIcon: '/api/file/Image/userAvatar/001.png'
-      }],
+      treeData4: [],
       ableList: [],
       selectedData: [],
       tagsList: [],
@@ -301,8 +277,6 @@ export default {
       if (!val) return
       this.nodeId = '0'
       this.treeData = []
-      this.treeData2 = []
-      this.treeData3 = []
       this.getData()
     }
   },
@@ -341,6 +315,7 @@ export default {
   },
   created() {
     this.setDefault()
+    this.getOtherData()
   },
   mounted() {
     addResizeListener(this.$el, this.handleResize);
@@ -373,13 +348,9 @@ export default {
       this.loading = true
       let query = {
         pagination: this.pagination,
-        departIds: this.ableDepIds,
-        positionIds: this.ablePosIds,
-        userIds: this.ableUserIds,
-        roleIds: this.ableRoleIds,
-        groupIds: this.ableGroupIds,
+        userId: this.ableIds
       }
-      getUsersByUserCondition(query).then(res => {
+      getSelectedUserList(query).then(res => {
         if (res.data.list.length < this.pagination.pageSize) {
           this.finish = true
         }
@@ -412,17 +383,18 @@ export default {
       if (this.selectDisabled) return
       this.visible = true
       this.pagination.keyword = ''
+      this.pagination.currentPage = 1
       this.nodeId = '0'
       this.isAsync = false
       this.finish = false
       this.selectedData = []
       if (this.selectType === 'all') {
-        this.activeName = 'all'
+        this.activeName = 'department'
         this.setDefault()
       }
       if (this.selectType === 'custom') {
         this.ableList = []
-        this.getData()
+        this.getAbleList()
         this.$nextTick(() => {
           this.bindScroll()
           this.setDefault()
@@ -459,16 +431,8 @@ export default {
         return
       }
       const arr = this.multiple ? this.value : [this.value]
-      const hasSysItem = arr.some(o => o === 'currentUser')
-      getUserInfoList(arr).then(res => {
-        this.selectedData = res.data.list
-        if (hasSysItem) {
-          this.selectedData.push({
-            id: 'currentUser',
-            fullName: '当前用户',
-            headIcon: '/api/file/Image/userAvatar/001.png'
-          })
-        }
+      getSelectedList(arr).then(res => {
+        this.selectedData = res.data.list.map(o => ({ ...o, id: o.type ? o.id + '--' + o.type : o.id }))
         if (this.multiple) {
           this.innerValue = ''
           this.tagsList = JSON.parse(JSON.stringify(this.selectedData))
@@ -484,30 +448,31 @@ export default {
     },
     getData() {
       if (this.selectType === 'all') {
-        if (this.activeName === 'all') {
+        if (this.activeName === 'department') {
           this.getAllList()
-        } else if (this.activeName === 'department') {
-          this.loading = true
-          getOrganization({ keyword: this.pagination.keyword, organizeId: '0' }).then(res => {
-            this.treeData2 = res.data
-            this.loading = false
-          })
-        } else if (this.activeName === 'subordinates') {
-          this.loading = true
-          getSubordinates(this.pagination.keyword).then(res => {
-            this.treeData3 = res.data
-            this.loading = false
-          })
+        } else if (['role', 'position', 'group'].includes(this.activeName)) {
+          this.$refs[this.activeName + 'Tree'] && this.$refs[this.activeName + 'Tree'].filter(this.pagination.keyword)
         } else {
           this.loading = false
         }
       }
-      if (this.selectType === 'custom') {
-        this.pagination.currentPage = 1
-        this.finish = false
-        this.ableList = []
-        this.getAbleList()
-      }
+    },
+    getOtherData() {
+      this.roleLoading = true
+      this.positionLoading = true
+      this.groupLoading = true
+      getRoleSelector().then(res => {
+        this.treeData2 = res.data.list
+        this.roleLoading = false
+      })
+      getPositionSelector().then(res => {
+        this.treeData3 = res.data.list
+        this.positionLoading = false
+      })
+      getGroupSelector().then(res => {
+        this.treeData4 = res.data
+        this.groupLoading = false
+      })
     },
     search() {
       this.nodeId = '0'
@@ -515,12 +480,16 @@ export default {
       this.pagination.currentPage = 1
       this.isAsync = !!this.pagination.keyword
       this.finish = false
-      if (this.isAsync && this.activeName === 'all') {
+      if (this.isAsync && this.activeName === 'department') {
         this.$nextTick(() => {
           this.bindScroll()
         })
       }
       this.getData()
+    },
+    filterNode(value, data) {
+      if (!value) return true;
+      return data[this.props.label].indexOf(value) !== -1;
     },
     getAllList() {
       this.loading = true
@@ -549,13 +518,13 @@ export default {
       })
     },
     handleNodeClick(data) {
-      if (data.type !== 'user') return
-      this.handleNodeClick2(data)
-    },
-    handleNodeClick2(data) {
-      const boo = this.selectedData.some(o => o.id === data.id)
+      const usableList = this.multiple ? ['company', 'department', 'role', 'position', 'group', 'user'] : ['user']
+      if (!usableList.includes(data.type)) return
+      const boo = this.selectedData.some(o => o.id === data.id + '--' + data.type)
+      let item = JSON.parse(JSON.stringify(data))
+      item.id += '--' + item.type
       if (boo) return
-      this.multiple ? this.selectedData.push(data) : this.selectedData = [data]
+      this.multiple ? this.selectedData.push(item) : this.selectedData = [item]
     },
     removeAll() {
       this.selectedData = []

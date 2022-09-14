@@ -10,6 +10,7 @@ import Screenfull from '@/components/Screenfull'
 import ColumnSettings from '@/components/ColumnSettings'
 import JNPFQuill from '@/components/JNPFEditor/quill'
 import UserSelect from '@/components/JNPF-userSelect'
+import UsersSelect from '@/components/JNPF-usersSelect'
 import uploadBtn from '@/components/JNPF-uploadBtn'
 import ImportBox from '@/components/JNPFImport'
 // 代码生成器专供
@@ -65,6 +66,7 @@ export default {
     Vue.component('DepSelect', DepSelect)
     Vue.component('PosSelect', PosSelect)
     Vue.component('UserSelect', UserSelect)
+    Vue.component('UsersSelect', UsersSelect)
     Vue.component('RoleSelect', RoleSelect)
     Vue.component('DicSelect', DicSelect)
     Vue.component('BillRule', BillRule)

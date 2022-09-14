@@ -98,6 +98,12 @@
                         :multiple="item.multiple" :clearable="item.clearable"
                         :disabled="item.disabled" />
                     </template>
+                    <template v-else-if="['usersSelect'].includes(item.jnpfKey)">
+                      <usersSelect v-model="scope.row[item.prop]" :placeholder="item.placeholder"
+                        :selectType="item.selectType" :ableIds="item.ableIds"
+                        :multiple="item.multiple" :clearable="item.clearable"
+                        :disabled="item.disabled" />
+                    </template>
                     <template v-else-if="['posSelect'].includes(item.jnpfKey)">
                       <posSelect v-model="scope.row[item.prop]" :placeholder="item.placeholder"
                         :selectType="item.selectType" :ableDepIds="item.ableDepIds"

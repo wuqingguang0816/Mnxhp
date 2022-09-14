@@ -94,11 +94,11 @@ export const getImUser = data => {
 }
 
 // 获取用户下拉框列表
-export const getImUserSelector = (organizeId, keyword) => {
+export const getImUserSelector = (organizeId, data = {}) => {
   return request({
     url: `/api/permission/Users/ImUser/Selector/${organizeId}`,
     method: 'post',
-    data: { keyword }
+    data
   })
 }
 // 获取用户基本信息
@@ -198,13 +198,27 @@ export function ExportExceptionData(data) {
     data
   })
 }
-
-
 // 获取用户下拉框列表
 export const getListByAuthorize = (organizeId, keyword) => {
   return request({
     url: `/api/permission/Users/GetListByAuthorize/${organizeId}`,
     method: 'post',
     data: { keyword }
+  })
+}
+// 获取选中组织、岗位、角色、用户基本信息
+export const getSelectedList = userId => {
+  return request({
+    url: '/api/permission/Users/getSelectedList',
+    method: 'post',
+    data: { userId }
+  })
+}
+// 通过组织、岗位、角色、用户ids获取选中用户基本信息
+export const getSelectedUserList = data => {
+  return request({
+    url: '/api/permission/Users/getSelectedUserList',
+    method: 'post',
+    data
   })
 }
