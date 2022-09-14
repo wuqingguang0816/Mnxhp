@@ -26,10 +26,10 @@
         <el-switch v-model="dataForm.sslLink" :active-value="1" :inactive-value="0" />
       </el-form-item>
       <el-form-item label="SMTP用户名" prop="smtpUser">
-        <el-input v-model="dataForm.smtpUser" placeholder="SMTP服务器" clearable />
+        <el-input v-model="dataForm.smtpUser" placeholder="SMTP用户名" clearable />
       </el-form-item>
       <el-form-item label="SMTP密码" prop="smtpPassword">
-        <el-input v-model="dataForm.smtpPassword" placeholder="SMTP服务器" clearable show-password />
+        <el-input v-model="dataForm.smtpPassword" placeholder="SMTP密码" clearable show-password />
       </el-form-item>
       <el-form-item label="排序" prop="sortCode">
         <el-input-number :min="0" :max="999999" v-model="dataForm.sortCode"
