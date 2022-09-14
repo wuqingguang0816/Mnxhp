@@ -25,7 +25,7 @@
             :key="item.enCode" />
         </el-select>
       </jnpf-form-tip-item>
-      <template v-if="dataForm.approveType == 2 && dataForm.webhookType ==1">
+      <template v-if="dataForm.approveType == 2">
         <jnpf-form-tip-item label="Bearer令牌" prop="bearer" tip-label="密钥">
           <el-input v-model="dataForm.bearer" placeholder="请输入Bearer令牌" clearable />
         </jnpf-form-tip-item>
