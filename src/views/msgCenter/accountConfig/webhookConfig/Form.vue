@@ -2,44 +2,44 @@
   <el-dialog :title="!dataForm.id ? '新建' : '编辑'" :close-on-click-modal="false"
     :visible.sync="visible" class="JNPF-dialog JNPF-dialog_center" lock-scroll width="600px">
     <el-form ref="dataForm" :model="dataForm" :rules="dataRule" v-loading="formLoading"
-      label-width="120px">
-      <el-form-item label="名称" prop="fullName">
+      label-width="130px">
+      <jnpf-form-tip-item label="名称" prop="fullName">
         <el-input v-model="dataForm.fullName" placeholder="请输入名称" clearable />
-      </el-form-item>
-      <el-form-item label="编码" prop="enCode">
+      </jnpf-form-tip-item>
+      <jnpf-form-tip-item label="编码" prop="enCode">
         <el-input v-model="dataForm.enCode" placeholder="请输入编码" clearable />
-      </el-form-item>
-      <el-form-item label="类型" prop="webhookType">
+      </jnpf-form-tip-item>
+      <jnpf-form-tip-item label="类型" prop="webhookType">
         <el-select v-model="dataForm.webhookType" placeholder="请选择类型" clearable @change="change">
           <el-option v-for="item in webhookList" :label="item.fullName" :value="item.enCode"
             :key="item.enCode" />
         </el-select>
-      </el-form-item>
-      <el-form-item label="WebHook地址" prop="webhookAddress">
+      </jnpf-form-tip-item>
+      <jnpf-form-tip-item label="WebHook地址" prop="webhookAddress">
         <el-input v-model="dataForm.webhookAddress" placeholder="请输入WebHook地址" clearable />
-      </el-form-item>
-      <el-form-item label="认证类型" prop="approveType">
+      </jnpf-form-tip-item>
+      <jnpf-form-tip-item label="认证类型" prop="approveType">
         <el-select v-model="dataForm.approveType" placeholder="请选择认证类型" clearable
           :disabled="dataForm.webhookType ==2 ? true : false">
           <el-option v-for="item in approveTypeList" :label="item.fullName" :value="item.enCode"
             :key="item.enCode" />
         </el-select>
-      </el-form-item>
+      </jnpf-form-tip-item>
       <template v-if="dataForm.approveType == 2 && dataForm.webhookType ==1">
-        <el-form-item label="Bearer令牌" prop="bearer">
+        <jnpf-form-tip-item label="Bearer令牌" prop="bearer" tip-label="密钥">
           <el-input v-model="dataForm.bearer" placeholder="请输入Bearer令牌" clearable />
-        </el-form-item>
+        </jnpf-form-tip-item>
       </template>
-      <el-form-item label="排序" prop="sortCode">
+      <jnpf-form-tip-item label="排序" prop="sortCode">
         <el-input-number :min="0" :max="999999" v-model="dataForm.sortCode"
           controls-position="right" />
-      </el-form-item>
-      <el-form-item label="状态" prop="enabledMark">
+      </jnpf-form-tip-item>
+      <jnpf-form-tip-item label="状态" prop="enabledMark">
         <el-switch v-model="dataForm.enabledMark" :active-value="1" :inactive-value="0" />
-      </el-form-item>
-      <el-form-item label="说明" prop="description">
+      </jnpf-form-tip-item>
+      <jnpf-form-tip-item label="说明" prop="description">
         <el-input v-model="dataForm.description" type="textarea" :rows="3" />
-      </el-form-item>
+      </jnpf-form-tip-item>
     </el-form>
     <span slot="footer" class="dialog-footer">
       <el-button @click="visible = false">{{$t('common.cancelButton')}}</el-button>
