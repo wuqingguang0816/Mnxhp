@@ -124,7 +124,7 @@
 
 <script>
 import { getConfig } from '@/api/user'
-import { getSocialsLoginList, getLoginConfig, getTicketStatus, socialsLogin } from '@/api/permission/socialsUser'
+import { getSocialsLoginList, getLoginConfig, getTicket, getTicketStatus, socialsLogin } from '@/api/permission/socialsUser'
 import qs from 'qs'
 
 export default {
@@ -164,8 +164,10 @@ export default {
       show: false,
       ssoLoading: true,
       isSso: false,
+      preUrl: '',
       ssoUrl: '',
       ssoTicket: "",
+      ticketParams: "",
       ssoTimer: null,
       socialsList: [],
       dialogVisible: false,
@@ -292,25 +294,29 @@ export default {
       })
     },
     otherLogin(data) {
-      if (this.winURL && !this.winURL.closed) {
-        this.winURL.location.replace(redirectUrl)
-        this.winURL.focus()
-        return
-      }
-      this.socialsList.forEach(item => {
-        if (data == item.enname) {
-          this.redirectUrl = item.renderUrl
+      getTicket().then(res => {
+        this.ssoTicket = res.data
+        if (this.winURL && !this.winURL.closed) {
+          this.winURL.location.replace(this.redirectUrl)
+          this.winURL.focus()
+          return
         }
+        this.socialsList.forEach(item => {
+          if (data == item.enname) {
+            let renderUrl = item.renderUrl.replace('JNPF_TICKET', this.ssoTicket)
+            this.redirectUrl = renderUrl
+          }
+        })
+        var iWidth = 750; //弹出窗口的宽度;
+        var iHeight = 500;//弹出窗口的高度;
+        var iLeft = (window.screen.width - iWidth) / 2;
+        var iTop = (window.screen.height - iHeight) / 2;//获得窗口的垂直位置;
+        this.winURL = window.open(this.redirectUrl, '_blank', 'height=' + iHeight + ',innerHeight=' + iHeight + ',width=' + iWidth + ',innerWidth=' + iWidth + ',top=' + iTop + ',left=' + iLeft + ',toolbar=no,menubar=no,scrollbars=auto,resizeable=no,location=no,status=no')
+        this.ssoTimer = setInterval(() => {
+          if (this.winURL.closed) { this.clearTimer() }
+          this.getTicketStatus()
+        }, 1000)
       })
-      var iWidth = 750; //弹出窗口的宽度;
-      var iHeight = 500;//弹出窗口的高度;
-      var iLeft = (window.screen.width - iWidth) / 2;
-      var iTop = (window.screen.height - iHeight) / 2;//获得窗口的垂直位置;
-      this.winURL = window.open(this.redirectUrl, '_blank', 'height=' + iHeight + ',innerHeight=' + iHeight + ',width=' + iWidth + ',innerWidth=' + iWidth + ',top=' + iTop + ',left=' + iLeft + ',toolbar=no,menubar=no,scrollbars=auto,resizeable=no,location=no,status=no')
-      this.ssoTimer = setInterval(() => {
-        if (this.winURL.closed) { this.clearTimer() }
-        this.getTicketStatus()
-      }, 1000)
     },
     getTicketStatus() {
       if (!this.ssoTicket) return
@@ -362,7 +368,6 @@ export default {
       this.dialogVisible = false
     },
     socailsLogin(data) {
-      console.log(data)
       socialsLogin(qs.stringify({ ...data })).then(response => {
         if (response.code == 200) {
           this.$store.dispatch('user/setToken', response.data).then(res => {
@@ -377,16 +382,20 @@ export default {
     ssoLogin() {
       if (this.loading) return
       this.loading = true
-      this.visible = true
-      this.ssoTimer = setInterval(() => {
-        this.getTicketStatus()
-      }, 1000)
+      getTicket().then(res => {
+        this.ssoTicket = res.data
+        this.ssoUrl = this.preUrl + '?' + this.ticketParams + '=' + this.ssoTicket
+        this.visible = true
+        this.ssoTimer = setInterval(() => {
+          this.getTicketStatus()
+        }, 1000)
+      })
     },
     getLoginConfig() {
       getLoginConfig().then(res => {
         this.isSso = res.data.redirect
-        this.ssoTicket = res.data.ticket
-        this.ssoUrl = res.data.url
+        this.preUrl = res.data.url
+        this.ticketParams = res.data.ticketParams
         this.socialsList = res.data.socialsList || []
         this.ssoLoading = false
       }).catch(() => {

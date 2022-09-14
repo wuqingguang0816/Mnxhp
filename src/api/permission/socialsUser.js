@@ -19,10 +19,17 @@ export function socialsLogin(data) {
     data
   })
 }
-//获取登录票据
+//获取登录配置
 export function getLoginConfig() {
   return request({
     url: `/api/oauth/getLoginConfig`,
+    method: 'get',
+  })
+}
+//获取登录票据
+export function getTicket() {
+  return request({
+    url: `/api/oauth/getTicket`,
     method: 'get',
   })
 }
