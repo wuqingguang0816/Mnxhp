@@ -117,6 +117,12 @@
       margin-bottom: 26px;
       color: #666666;
     }
+
+    .sso-login-btn {
+      width: 100%;
+      font-size: 16px;
+      margin-top: 100px;
+    }
   }
 
   .login-form {
@@ -212,6 +218,40 @@
       }
     }
 
+    .el-divider__text {
+      color: #a0acb7;
+    }
+
+    .other-list {
+      display: flex;
+      align-items: center;
+      justify-content: space-around;
+
+      .other-item {
+        width: 30px;
+        height: 30px;
+        line-height: 30px;
+        text-align: center;
+        cursor: pointer;
+        border-radius: 50%;
+
+        i {
+          font-size: 20px;
+          color: #a0acb7;
+        }
+
+        &:hover {
+          background-color: #1890ff;
+
+          i {
+            color: #fff;
+          }
+        }
+      }
+    }
+
+
+
     .el-form {
       input:-webkit-autofill {
         box-shadow: 0 0 0px 1000px #fff inset !important;
@@ -272,5 +312,101 @@
     left: 31%;
     text-align: left;
     margin-left: 110px;
+  }
+
+  // 第三方登录多租户弹窗样式
+  .other-login-dialog {
+    >>>.el-dialog__header {
+      display: none;
+    }
+
+    >>>.el-dialog__body {
+      width: 100%;
+      height: 450px;
+      overflow: hidden;
+      background: url('../../assets/images/other-login-dialog.png') no-repeat center !important;
+      background-size: 100%;
+    }
+  }
+
+  .other-login-card {
+    border-radius: 5px;
+    border-left: 5px solid #9DC8FA;
+    font-size: 12px;
+    margin-bottom: 15px;
+    background-color: rgba(255, 255, 255, 1);
+    cursor: pointer;
+
+    &:hover {
+      border-color: #1890ff;
+
+      i {
+        color: #fff;
+      }
+    }
+  }
+
+  .other-login-des {
+    width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    margin-top: 15px;
+    font-size: 14px;
+  }
+
+  .other-body {
+    padding: 0;
+    width: 100%;
+  }
+
+  .other-title {
+    display: flex;
+    height: 50px;
+    line-height: 50px;
+    text-align: center;
+    justify-content: center;
+    // align-items: center;
+    margin: auto;
+
+    .other-icon {
+      width: 24px;
+      height: 24px;
+      line-height: 24px;
+      text-align: center;
+      border-radius: 50%;
+      border: 2px solid #1890ff;
+
+      i {
+        font-size: 16px;
+        color: #1890ff;
+      }
+    }
+
+    .other-text {
+      height: 24px;
+      line-height: 24px;
+      font-size: 18px;
+      color: #000;
+      font-weight: bold;
+      margin: 0 5px;
+    }
+
+  }
+
+  .other-body {
+    width: 100%;
+    height: 350px;
+    overflow-x: hidden;
+    overflow-y: auto;
+  }
+
+}
+
+.JNPF-dialog-sso {
+  >>>.el-dialog__body {
+    padding: 0 !important;
+    height: 600px !important;
+    overflow: hidden !important;
   }
 }

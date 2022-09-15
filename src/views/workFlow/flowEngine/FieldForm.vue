@@ -33,6 +33,12 @@
             @change='scope.row.required?scope.row.required=false:scope.row.required=true' />
         </template>
       </el-table-column>
+      <el-table-column prop="multiple" label="多选" width="50" align="center">
+        <template slot-scope="scope">
+          <el-checkbox :checked="scope.row.multiple"
+            @change='scope.row.multiple?scope.row.multiple=false:scope.row.multiple=true' />
+        </template>
+      </el-table-column>
       <el-table-column label="操作" width="50">
         <template slot-scope="scope">
           <el-button size="mini" type="text" class="JNPF-table-delBtn"

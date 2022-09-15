@@ -100,6 +100,8 @@
                     </el-dropdown-item>
                     <el-dropdown-item @click.native="unlockUser(scope.row.id)"
                       v-if="scope.row.enabledMark == 2">解除锁定</el-dropdown-item>
+                    <el-dropdown-item @click.native="socialsBindBtn(scope.row)">绑定管理
+                    </el-dropdown-item>
                   </el-dropdown-menu>
                 </el-dropdown>
               </tableOpts>
@@ -115,6 +117,7 @@
     <ResetPwdForm v-if="resetFormVisible" ref="ResetPwdForm" @refreshDataList="initData" />
     <ExportForm v-if="exportFormVisible" ref="exportForm" />
     <ImportForm v-if="importFormVisible" ref="importForm" @refresh="reset()" />
+    <SocialsBind v-if="socialsVisible" ref="SocialsBind" @close="socialsVisible=false" />
   </div>
 </template>
 <script>
@@ -132,6 +135,7 @@ import Diagram from './Diagram'
 import ResetPwdForm from './ResetPassword'
 import ImportForm from './ImportForm'
 import ExportForm from './ExportForm'
+import SocialsBind from './SocialsBind'
 
 export default {
   name: 'permission-user',
@@ -140,7 +144,8 @@ export default {
     Diagram,
     ResetPwdForm,
     ExportForm,
-    ImportForm
+    ImportForm,
+    SocialsBind
   },
   data() {
     return {
@@ -169,7 +174,8 @@ export default {
       exportFormVisible: false,
       expands: true,
       refreshTree: true,
-      filterText: ''
+      filterText: '',
+      socialsVisible: false,
     }
   },
   watch: {
@@ -324,7 +330,14 @@ export default {
       this.$nextTick(() => {
         this.$refs.ResetPwdForm.init(id, account)
       })
-    }
+    },
+    socialsBindBtn(data) {
+      this.socialsVisible = true
+      this.$nextTick(() => {
+        this.$refs.SocialsBind.init(data)
+      })
+    },
+
   }
 }
 </script>

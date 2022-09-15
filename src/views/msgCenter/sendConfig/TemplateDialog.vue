@@ -1,8 +1,9 @@
 <template>
   <div class="popupSelect-container">
     <div class="el-select" @click="openDialog">
-      <el-input placeholder="请选择短信模板" v-model="title" readonly :validate-event="false"
-        @mouseenter.native="inputHovering = true" @mouseleave.native="inputHovering = false">
+      <el-input :placeholder="type==1?'请选择选择模板':'请选择选择账号'" v-model="title" readonly
+        :validate-event="false" @mouseenter.native="inputHovering = true"
+        @mouseleave.native="inputHovering = false">
         <template slot="suffix">
           <i v-show="!showClose"
             :class="['el-select__caret', 'el-input__icon', 'el-icon-arrow-up']"></i>
@@ -11,7 +12,7 @@
         </template>
       </el-input>
     </div>
-    <el-dialog title="短信模板" :close-on-click-modal="false" :visible.sync="visible"
+    <el-dialog :title="type==1?'选择模板':'选择账号'" :close-on-click-modal="false" :visible.sync="visible"
       class="JNPF-dialog JNPF-dialog_center JNPF-dialog-tree-select" lock-scroll append-to-body
       width='600px'>
       <div class="JNPF-common-layout">
@@ -41,15 +42,14 @@
           <div class="JNPF-common-layout-main JNPF-flex-main">
             <JNPF-table v-loading="listLoading" :data="list" :border="false" highlight-current-row
               @row-click="rowClick" :hasNO="false">
-              <el-table-column width="35">
+              <el-table-column width="50">
                 <template slot-scope="scope">
                   <el-radio :label="scope.row.id" v-model="checked">&nbsp;</el-radio>
                 </template>
               </el-table-column>
-              <el-table-column type="index" width="50" label="序号" align="center" />
-              <el-table-column prop="fullName" label="模板名称" show-overflow-tooltip />
-              <el-table-column prop="enCode" label="模板编码" />
-              <el-table-column prop="company" label="短信厂家" width="100" />
+              <el-table-column type="index" label="序号" />
+              <el-table-column prop="fullName" label="名称" show-overflow-tooltip />
+              <el-table-column prop="enCode" label="编码" />
             </JNPF-table>
             <pagination :total="total" :page.sync="listQuery.currentPage"
               :limit.sync="listQuery.pageSize" @pagination="initData" />
@@ -66,9 +66,10 @@
 </template>
 
 <script>
-import { getSelector } from '@/api/system/smsTemplate'
+import { getMsgTemplateList } from '@/api/msgCenter/msgTemplate'
+import { getConfigList } from '@/api/msgCenter/accountConfig'
 export default {
-  name: 'PopupSelect',
+  name: 'sendConfig-TemplateDialog',
   props: {
     value: {
       default: ''
@@ -84,6 +85,14 @@ export default {
     disabled: {
       type: Boolean,
       default: false
+    },
+    type: {
+      type: Number,
+      default: 1
+    },
+    messageType: {
+      type: [String, Number],
+      default: 0
     }
   },
   model: {
@@ -97,7 +106,9 @@ export default {
       listQuery: {
         keyword: '',
         currentPage: 1,
-        pageSize: 20
+        pageSize: 20,
+        enabledMark: 1,
+        messageType: 1
       },
       total: 0,
       checked: '',
@@ -120,7 +131,10 @@ export default {
   methods: {
     initData() {
       this.listLoading = true
-      getSelector(this.listQuery).then(res => {
+      if (this.type == 2) this.listQuery.type = this.messageType
+      if (this.type != 2) this.listQuery.messageType = this.messageType
+      const formMethod = this.type == 2 ? getConfigList : getMsgTemplateList
+      formMethod(this.listQuery).then(res => {
         this.list = res.data.list
         this.total = res.data.pagination.total
         this.listLoading = false
@@ -128,6 +142,7 @@ export default {
     },
     openDialog() {
       if (this.disabled) return
+      if (!this.messageType) return this.$message({ message: '请选择消息类型', type: 'warning' });
       this.checked = this.value
       this.visible = true
       this.reset()

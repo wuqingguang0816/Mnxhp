@@ -11,6 +11,14 @@ export function login(data) {
     data
   })
 }
+// 第三方登录
+export function otherLogin(data) {
+  return request({
+    url: `/api/oauth/render/${data}`,
+    method: 'get',
+
+  })
+}
 
 // 获取当前用户信息
 export function getInfo() {

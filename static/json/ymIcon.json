@@ -6,6 +6,62 @@
   "description": "",
   "glyphs": [
     {
+      "icon_id": "31355272",
+      "name": "accountConfig",
+      "font_class": "accountConfig",
+      "unicode": "e8cb",
+      "unicode_decimal": 59595
+    },
+    {
+      "icon_id": "31355273",
+      "name": "sendConfig",
+      "font_class": "sendConfig",
+      "unicode": "e8cc",
+      "unicode_decimal": 59596
+    },
+    {
+      "icon_id": "31355274",
+      "name": "smsConfig",
+      "font_class": "smsConfig",
+      "unicode": "e8cd",
+      "unicode_decimal": 59597
+    },
+    {
+      "icon_id": "31355275",
+      "name": "emailConfig",
+      "font_class": "emailConfig",
+      "unicode": "e8ce",
+      "unicode_decimal": 59598
+    },
+    {
+      "icon_id": "31355276",
+      "name": "msgCenter",
+      "font_class": "msgCenter",
+      "unicode": "e8cf",
+      "unicode_decimal": 59599
+    },
+    {
+      "icon_id": "31355277",
+      "name": "msgTemplate",
+      "font_class": "msgTemplate",
+      "unicode": "e8d0",
+      "unicode_decimal": 59600
+    },
+    {
+      "icon_id": "31355278",
+      "name": "msgMonitor",
+      "font_class": "msgMonitor",
+      "unicode": "e8d1",
+      "unicode_decimal": 59601
+    },
+    {
+      "icon_id": "31353254",
+      "name": "logo-webhook",
+      "font_class": "logo-webhook",
+      "unicode": "e8ca",
+      "unicode_decimal": 59594
+    },
+    {
       "icon_id": "30714846",
       "name": "logo-github",
       "font_class": "logo-github",

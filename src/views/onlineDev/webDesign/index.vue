@@ -227,18 +227,18 @@ export default {
     },
     getMenuSelector() {
       getMenuSelector({ category: 'Web' }, 0).then(res => {
-        let topItem = {
-          fullName: "顶级节点",
-          hasChildren: true,
-          id: "-1",
-          children: res.data.list
-        }
-        this.treeData = [topItem]
+        this.treeData = res.data.list
       })
     },
     getAPPMenuSelector() {
       getMenuSelector({ category: 'App' }, 0).then(res => {
-        this.appTreeData = res.data.list
+        this.appTreeData = res.data.list || []
+        for (let index = 0; index < this.appTreeData.length; index++) {
+          const item = this.appTreeData[index];
+          if (item.type == 0) {
+            item.disabled = true
+          }
+        }
       })
     }
   }
