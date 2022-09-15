@@ -600,6 +600,102 @@ export const inputComponents = [
     },
     placeholder: "请输入"
   },
+  {
+    __config__: {
+      jnpfKey: "link",
+      label: "链接",
+      labelWidth: undefined,
+      showLabel: false,
+      tag: "JnpfLink",
+      tagIcon: "icon-ym icon-ym-generator-link",
+      required: false,
+      layout: "colFormItem",
+      span: 24,
+      dragDisabled: false,
+      visibility: ["pc", "app"]
+    },
+    on: {
+      click:
+        "({ data, formData, setFormData, setShowOrHide, setRequired, setDisabled, request, getFieldOptions, setFieldOptions }) => {\n    // 在此编写代码\n    \n}"
+    },
+    content: '文本链接',
+    href: "",
+    target: "_self",
+    textStyle: {
+      "text-align": "left",
+    }
+  },
+  {
+    __config__: {
+      jnpfKey: "button",
+      label: "按钮",
+      labelWidth: undefined,
+      showLabel: false,
+      tag: "jnpf-button",
+      tagIcon: "icon-ym icon-ym-generator-button",
+      defaultValue: null,
+      required: false,
+      layout: "colFormItem",
+      span: 24,
+      dragDisabled: false,
+      visibility: ["pc", "app"],
+      regList: [],
+      trigger: "click"
+    },
+    on: {
+      click:
+        "({ data, formData, setFormData, setShowOrHide, setRequired, setDisabled, request, getFieldOptions, setFieldOptions }) => {\n    // 在此编写代码\n    \n}"
+    },
+    align: "left",
+    buttonText: "按钮",
+    type: "",
+    disabled: false
+  },
+  {
+    __config__: {
+      jnpfKey: "JNPFText",
+      label: "文本",
+      labelWidth: undefined,
+      showLabel: false,
+      tag: "JNPF-Text",
+      tagIcon: "icon-ym icon-ym-generator-textarea",
+      defaultValue: "这是一段文字",
+      required: false,
+      layout: "colFormItem",
+      span: 24,
+      dragDisabled: false,
+      visibility: ["pc", "app"]
+    },
+    style: { width: "100%" },
+    textStyle: {
+      color: "#000000",
+      "text-align": "left",
+      "font-weight": "normal",
+      "font-style": "normal",
+      "text-decoration": "none",
+      "line-height": 32,
+      "font-size": 12
+    }
+  },
+  {
+    __config__: {
+      jnpfKey: "alert",
+      label: "提示",
+      labelWidth: undefined,
+      showLabel: false,
+      tag: "el-alert",
+      tagIcon: "icon-ym icon-ym-generator-alert",
+      required: false,
+      layout: "colFormItem",
+      span: 24,
+      dragDisabled: false,
+      visibility: ["pc", "app"]
+    },
+    title: '这是一个提示',
+    type: "success",
+    "show-icon": false,
+    closable: false
+  },
 ];
 
 // 高级控件 【左面板】
@@ -1220,70 +1316,23 @@ export const layoutComponents = [
   },
   {
     __config__: {
-      jnpfKey: "card",
-      label: "卡片容器",
+      jnpfKey: "divider",
+      label: "分割线",
+      labelWidth: undefined,
       showLabel: false,
-      tag: "el-card",
-      tagIcon: "icon-ym icon-ym-generator-card",
-      defaultValue: [],
-      layout: "rowFormItem",
-      span: "24",
+      tag: "el-divider",
+      tagIcon: "icon-ym icon-ym-generator-divider",
+      defaultValue: null,
+      required: false,
+      layout: "colFormItem",
+      span: 24,
       dragDisabled: false,
-      visibility: ["pc", "app"],
-      children: []
+      visibility: ["pc", "app"]
     },
-    header: "卡片容器",
-    shadow: "always"
-  },
-  {
-    __config__: {
-      jnpfKey: "row",
-      label: "栅格容器",
-      tagIcon: "icon-ym icon-ym-generator-layout",
-      layout: "rowFormItem",
-      span: "24",
-      dragDisabled: false,
-      visibility: ["pc", "app"],
-      layoutTree: true,
-      rowType: "layout"
+    __slot__: {
+      default: "我是分割线"
     },
-    type: "default",
-    justify: "start",
-    align: "top"
-  },
-  {
-    __config__: {
-      jnpfKey: "tab",
-      label: "标签面板",
-      showLabel: false,
-      tag: "el-tab",
-      tagIcon: "icon-ym icon-ym-generator-label",
-      layout: "rowFormItem",
-      span: "24",
-      dragDisabled: false,
-      visibility: ["pc", "app"],
-      children: [
-        {
-          title: "Tab 1",
-          __config__: {
-            children: []
-          }
-        },
-        {
-          title: "Tab 2",
-          __config__: {
-            children: []
-          }
-        }
-      ],
-      active: 0
-    },
-    on: {
-      "tab-click":
-        "({ data, formData, setFormData, setShowOrHide, setRequired, setDisabled, request, getFieldOptions, setFieldOptions }) => {\n    // 在此编写代码\n    \n}"
-    },
-    type: "",
-    "tab-position": "top"
+    "content-position": "center"
   },
   {
     __config__: {
@@ -1322,118 +1371,69 @@ export const layoutComponents = [
   },
   {
     __config__: {
-      jnpfKey: "divider",
-      label: "分割线",
-      labelWidth: undefined,
+      jnpfKey: "tab",
+      label: "标签面板",
       showLabel: false,
-      tag: "el-divider",
-      tagIcon: "icon-ym icon-ym-generator-divider",
-      defaultValue: null,
-      required: false,
-      layout: "colFormItem",
-      span: 24,
-      dragDisabled: false,
-      visibility: ["pc", "app"]
-    },
-    __slot__: {
-      default: "我是分割线"
-    },
-    "content-position": "center"
-  },
-  {
-    __config__: {
-      jnpfKey: "link",
-      label: "链接",
-      labelWidth: undefined,
-      showLabel: false,
-      tag: "JnpfLink",
-      tagIcon: "icon-ym icon-ym-generator-link",
-      required: false,
-      layout: "colFormItem",
-      span: 24,
-      dragDisabled: false,
-      visibility: ["pc", "app"]
-    },
-    on: {
-      click:
-        "({ data, formData, setFormData, setShowOrHide, setRequired, setDisabled, request, getFieldOptions, setFieldOptions }) => {\n    // 在此编写代码\n    \n}"
-    },
-    content: '文本链接',
-    href: "",
-    target: "_self",
-    textStyle: {
-      "text-align": "left",
-    }
-  },
-  {
-    __config__: {
-      jnpfKey: "button",
-      label: "按钮",
-      labelWidth: undefined,
-      showLabel: false,
-      tag: "jnpf-button",
-      tagIcon: "icon-ym icon-ym-generator-button",
-      defaultValue: null,
-      required: false,
-      layout: "colFormItem",
-      span: 24,
+      tag: "el-tab",
+      tagIcon: "icon-ym icon-ym-generator-label",
+      layout: "rowFormItem",
+      span: "24",
       dragDisabled: false,
       visibility: ["pc", "app"],
-      regList: [],
-      trigger: "click"
+      children: [
+        {
+          title: "Tab 1",
+          __config__: {
+            children: []
+          }
+        },
+        {
+          title: "Tab 2",
+          __config__: {
+            children: []
+          }
+        }
+      ],
+      active: 0
     },
     on: {
-      click:
+      "tab-click":
         "({ data, formData, setFormData, setShowOrHide, setRequired, setDisabled, request, getFieldOptions, setFieldOptions }) => {\n    // 在此编写代码\n    \n}"
     },
-    align: "left",
-    buttonText: "按钮",
     type: "",
-    disabled: false
+    "tab-position": "top"
   },
   {
     __config__: {
-      jnpfKey: "JNPFText",
-      label: "文本",
-      labelWidth: undefined,
-      showLabel: false,
-      tag: "JNPF-Text",
-      tagIcon: "icon-ym icon-ym-generator-textarea",
-      defaultValue: "这是一段文字",
-      required: false,
-      layout: "colFormItem",
-      span: 24,
+      jnpfKey: "row",
+      label: "栅格容器",
+      tagIcon: "icon-ym icon-ym-generator-layout",
+      layout: "rowFormItem",
+      span: "24",
       dragDisabled: false,
-      visibility: ["pc", "app"]
+      visibility: ["pc", "app"],
+      layoutTree: true,
+      rowType: "layout"
     },
-    style: { width: "100%" },
-    textStyle: {
-      color: "#000000",
-      "text-align": "left",
-      "font-weight": "normal",
-      "font-style": "normal",
-      "text-decoration": "none",
-      "line-height": 32,
-      "font-size": 12
-    }
+    type: "default",
+    justify: "start",
+    align: "top"
   },
   {
     __config__: {
-      jnpfKey: "alert",
-      label: "提示",
-      labelWidth: undefined,
+      jnpfKey: "card",
+      label: "卡片容器",
       showLabel: false,
-      tag: "el-alert",
-      tagIcon: "icon-ym icon-ym-generator-alert",
-      required: false,
-      layout: "colFormItem",
-      span: 24,
+      tag: "el-card",
+      tagIcon: "icon-ym icon-ym-generator-card",
+      defaultValue: [],
+      layout: "rowFormItem",
+      span: "24",
       dragDisabled: false,
-      visibility: ["pc", "app"]
+      visibility: ["pc", "app"],
+      children: []
     },
-    title: '这是一个提示',
-    type: "success",
-    "show-icon": false,
-    closable: false
+    header: "卡片容器",
+    shadow: "always"
   },
 ];

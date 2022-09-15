@@ -446,7 +446,7 @@ export default {
     resetTable() {
       this.tableData = this.config.__config__.children
       this.tableFormData = []
-      this.addRow()
+      // this.addRow()
     },
     reset() {
       this.tableData.map((t) => {
