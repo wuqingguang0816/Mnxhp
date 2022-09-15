@@ -31,7 +31,7 @@
       <div class="JNPF-common-layout-main JNPF-flex-main">
         <div class="JNPF-common-head">
           <topOpts @add="addOrUpdateHandle()">
-            <upload-btn url="/api/message/AccountConfig/Action/Import" @on-success="initData" />
+            <!-- <upload-btn url="/api/message/AccountConfig/Action/Import" @on-success="initData" /> -->
           </topOpts>
           <div class="JNPF-common-head-right">
             <el-tooltip effect="dark" :content="$t('common.refresh')" placement="top">
@@ -44,7 +44,7 @@
           <el-table-column prop="fullName" label="名称" show-overflow-tooltip min-width="120" />
           <el-table-column prop="enCode" label="编码" width="150" />
           <el-table-column prop="addressorName" label="发件人昵称" width="150" />
-          <el-table-column prop="sendEmail" label="发件人邮箱" width="150" />
+          <el-table-column prop="smtpUser" label="用户名" width="150" />
           <el-table-column prop="creatorUserId" label="创建人" width="150" />
           <el-table-column prop="creatorTime" label="创建时间" :formatter="jnpf.tableDateFormat"
             width="150" />
@@ -68,7 +68,7 @@
                   </span>
                   <el-dropdown-menu slot="dropdown">
                     <el-dropdown-item @click.native="copy(scope.row.id)">复制</el-dropdown-item>
-                    <el-dropdown-item @click.native="exportTpl(scope.row.id)">导出</el-dropdown-item>
+                    <!-- <el-dropdown-item @click.native="exportTpl(scope.row.id)">导出</el-dropdown-item> -->
                   </el-dropdown-menu>
                 </el-dropdown>
               </tableOpts>

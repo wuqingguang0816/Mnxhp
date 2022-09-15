@@ -12,9 +12,6 @@
       <el-form-item label="发件人昵称" prop="addressorName">
         <el-input v-model="dataForm.addressorName" placeholder="发件人昵称" clearable />
       </el-form-item>
-      <el-form-item label="发件人邮箱" prop="sendEmail">
-        <el-input v-model="dataForm.sendEmail" placeholder="发件人邮箱" clearable />
-      </el-form-item>
       <el-form-item label="SMTP服务器" prop="smtpServer">
         <el-input v-model="dataForm.smtpServer" placeholder="SMTP服务器" clearable />
       </el-form-item>
@@ -75,7 +72,6 @@ export default {
         fullName: '',
         enCode: '',
         addressorName: '',
-        sendEmail: '',
         smtpServer: '',
         smtpPort: '25',
         sslLink: 0,
@@ -97,10 +93,6 @@ export default {
         ],
         addressorName: [
           { required: true, message: '请输入发件人昵称', trigger: 'blur' }
-        ],
-        sendEmail: [
-          { required: true, message: '请输入发件人邮箱', trigger: 'blur', pattern: /^[a-z0-9]+([._\\-]*[a-z0-9])*@([a-z0-9]+[-a-z0-9]*[a-z0-9]+.){1,63}[a-z0-9]+$/ },
-          { type: 'email', message: '请输入正确的邮箱地址', trigger: ['blur', 'change'] }
         ],
         smtpServer: [
           { required: true, message: '请输入SMTP服务器', trigger: 'blur' }

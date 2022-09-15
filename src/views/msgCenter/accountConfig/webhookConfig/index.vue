@@ -40,7 +40,7 @@
       <div class="JNPF-common-layout-main JNPF-flex-main">
         <div class="JNPF-common-head">
           <topOpts @add="addOrUpdateHandle()">
-            <upload-btn url="/api/message/AccountConfig/Action/Import" @on-success="initData" />
+            <!-- <upload-btn url="/api/message/AccountConfig/Action/Import" @on-success="initData" /> -->
           </topOpts>
           <div class="JNPF-common-head-right">
             <el-tooltip effect="dark" :content="$t('common.refresh')" placement="top">
@@ -76,7 +76,7 @@
                   </span>
                   <el-dropdown-menu slot="dropdown">
                     <el-dropdown-item @click.native="copy(scope.row.id)">复制</el-dropdown-item>
-                    <el-dropdown-item @click.native="exportTpl(scope.row.id)">导出</el-dropdown-item>
+                    <!-- <el-dropdown-item @click.native="exportTpl(scope.row.id)">导出</el-dropdown-item> -->
                   </el-dropdown-menu>
                 </el-dropdown>
               </tableOpts>
