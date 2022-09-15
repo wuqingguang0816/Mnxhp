@@ -2,7 +2,8 @@
   <el-form-item v-on="$listeners" v-bind="$attrs">
     <span slot="label">{{label}}
       <template v-if="tipLabel">
-        <el-tooltip :content="tipLabel" placement="top">
+        <el-tooltip placement="top">
+          <div slot="content" v-html="tipLabel"></div>
           <a :class="tipIcon"></a>
         </el-tooltip>
       </template>

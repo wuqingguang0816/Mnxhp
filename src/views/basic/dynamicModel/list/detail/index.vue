@@ -215,7 +215,8 @@ export default {
               item.__config__.defaultValue = data[item.__vModel__ + '_id']
               this.$set(item, 'name', data[item.__vModel__] || '')
             } else {
-              item.__config__.defaultValue = data[item.__vModel__]
+              const val = data.hasOwnProperty(item.__vModel__) ? data[item.__vModel__] : item.__config__.defaultValue
+              item.__config__.defaultValue = val
             }
             if (this.useFormPermission) {
               let id = item.__config__.isSubTable ? parent.__vModel__ + '-' + item.__vModel__ : item.__vModel__
