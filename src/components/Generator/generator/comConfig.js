@@ -58,6 +58,7 @@ const calculateItem = {
     noShow: false,
     regList: []
   },
+  style: { width: "100%" },
   expression: []
 }
 // 在线开发-功能设计/流程设计/移动设计独有组件

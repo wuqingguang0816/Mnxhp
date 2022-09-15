@@ -132,6 +132,7 @@ export const inputComponents = [
       blur:
         "({ data, formData, setFormData, setShowOrHide, setRequired, setDisabled, request, getFieldOptions, setFieldOptions }) => {\n    // 在此编写代码\n    \n}"
     },
+    style: { width: null },
     placeholder: "数字文本",
     min: undefined,
     max: undefined,
@@ -573,6 +574,7 @@ export const inputComponents = [
       change:
         "({ data, formData, setFormData, setShowOrHide, setRequired, setDisabled, request, getFieldOptions, setFieldOptions }) => {\n    // 在此编写代码\n    \n}"
     },
+    style: { width: "100%" },
     disabled: false,
     min: 0,
     max: 100,
@@ -598,6 +600,7 @@ export const inputComponents = [
       regList: [],
       trigger: "blur"
     },
+    style: { width: "100%" },
     placeholder: "请输入"
   },
   {
@@ -666,7 +669,6 @@ export const inputComponents = [
       dragDisabled: false,
       visibility: ["pc", "app"]
     },
-    style: { width: "100%" },
     textStyle: {
       color: "#000000",
       "text-align": "left",
@@ -722,6 +724,7 @@ export const selectComponents = [
       change:
         "({ data, formData, setFormData, setShowOrHide, setRequired, setDisabled, request, getFieldOptions, setFieldOptions }) => {\n    // 在此编写代码\n    \n}"
     },
+    style: { width: "100%" },
     placeholder: "请选择",
     multiple: false,
     clearable: true,
@@ -750,6 +753,7 @@ export const selectComponents = [
       change:
         "({ data, formData, setFormData, setShowOrHide, setRequired, setDisabled, request, getFieldOptions, setFieldOptions }) => {\n    // 在此编写代码\n    \n}"
     },
+    style: { width: "100%" },
     placeholder: "请选择",
     selectType: 'all',
     ableDepIds: [],
@@ -780,6 +784,7 @@ export const selectComponents = [
       change:
         "({ data, formData, setFormData, setShowOrHide, setRequired, setDisabled, request, getFieldOptions, setFieldOptions }) => {\n    // 在此编写代码\n    \n}"
     },
+    style: { width: "100%" },
     placeholder: "请选择",
     selectType: 'all',
     ableDepIds: [],
@@ -811,6 +816,7 @@ export const selectComponents = [
       change:
         "({ data, formData, setFormData, setShowOrHide, setRequired, setDisabled, request, getFieldOptions, setFieldOptions }) => {\n    // 在此编写代码\n    \n}"
     },
+    style: { width: "100%" },
     placeholder: "请选择",
     selectType: 'all',
     ableDepIds: [],
@@ -844,6 +850,7 @@ export const selectComponents = [
       change:
         "({ data, formData, setFormData, setShowOrHide, setRequired, setDisabled, request, getFieldOptions, setFieldOptions }) => {\n    // 在此编写代码\n    \n}"
     },
+    style: { width: "100%" },
     placeholder: "请选择",
     multiple: false,
     clearable: true,
@@ -871,6 +878,7 @@ export const selectComponents = [
       change:
         "({ data, formData, setFormData, setShowOrHide, setRequired, setDisabled, request, getFieldOptions, setFieldOptions }) => {\n    // 在此编写代码\n    \n}"
     },
+    style: { width: "100%" },
     placeholder: "请选择",
     multiple: false,
     clearable: true,
@@ -903,6 +911,7 @@ export const selectComponents = [
       change:
         "({ data, formData, setFormData, setShowOrHide, setRequired, setDisabled, request, getFieldOptions, setFieldOptions }) => {\n    // 在此编写代码\n    \n}"
     },
+    style: { width: "100%" },
     placeholder: "请选择",
     props: {
       props: {
@@ -950,6 +959,7 @@ export const selectComponents = [
       change:
         "({ data, formData, setFormData, setShowOrHide, setRequired, setDisabled, request, getFieldOptions, setFieldOptions }) => {\n    // 在此编写代码\n    \n}"
     },
+    style: { width: "100%" },
     placeholder: "请选择",
     interfaceId: "",
     interfaceName: "",
@@ -1025,6 +1035,7 @@ export const selectComponents = [
       change:
         "({ data, formData, setFormData, setShowOrHide, setRequired, setDisabled, request, getFieldOptions, setFieldOptions }) => {\n    // 在此编写代码\n    \n}"
     },
+    style: { width: "100%" },
     placeholder: "请选择",
     disabled: false,
     clearable: true,
@@ -1054,6 +1065,7 @@ export const selectComponents = [
       change:
         "({ data, formData, setFormData, setShowOrHide, setRequired, setDisabled, request, getFieldOptions, setFieldOptions }) => {\n    // 在此编写代码\n    \n}"
     },
+    style: { width: "100%" },
     placeholder: "请选择",
     modelId: "",
     relationField: "",
@@ -1089,6 +1101,7 @@ export const selectComponents = [
       change:
         "({ data, formData, setFormData, setShowOrHide, setRequired, setDisabled, request, getFieldOptions, setFieldOptions }) => {\n    // 在此编写代码\n    \n}"
     },
+    style: { width: "100%" },
     placeholder: "请选择",
     interfaceId: "",
     interfaceName: "",
@@ -1118,6 +1131,7 @@ export const selectComponents = [
       dragDisabled: false,
       visibility: ["pc", "app"]
     },
+    style: { width: "100%" },
     showField: "",
     relationField: ""
   },
@@ -1136,6 +1150,7 @@ export const selectComponents = [
       dragDisabled: false,
       visibility: ["pc", "app"]
     },
+    style: { width: "100%" },
     showField: "",
     relationField: ""
   },
@@ -1160,6 +1175,7 @@ export const selectComponents = [
       rule: "",
       ruleName: "",
     },
+    style: { width: "100%" },
     readonly: true,
     placeholder: "系统自动生成"
   },
@@ -1184,6 +1200,7 @@ export const systemComponents = [
       tableName: "",
       noShow: false
     },
+    style: { width: "100%" },
     type: 'currUser',
     readonly: true,
     placeholder: ""
@@ -1205,6 +1222,7 @@ export const systemComponents = [
       tableName: "",
       noShow: false
     },
+    style: { width: "100%" },
     type: 'currTime',
     readonly: true,
     placeholder: ""
@@ -1226,6 +1244,7 @@ export const systemComponents = [
       tableName: "",
       noShow: false
     },
+    style: { width: "100%" },
     readonly: true,
     placeholder: "系统自动生成"
   },
@@ -1246,6 +1265,7 @@ export const systemComponents = [
       tableName: "",
       noShow: false
     },
+    style: { width: "100%" },
     readonly: true,
     placeholder: "系统自动生成"
   },
@@ -1266,6 +1286,7 @@ export const systemComponents = [
       tableName: "",
       noShow: false
     },
+    style: { width: "100%" },
     type: 'currOrganize',
     readonly: true,
     showLevel: "last",
@@ -1288,6 +1309,7 @@ export const systemComponents = [
       tableName: "",
       noShow: false
     },
+    style: { width: "100%" },
     type: 'currPosition',
     readonly: true,
     placeholder: ""

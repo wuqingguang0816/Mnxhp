@@ -342,6 +342,10 @@
                   :min="0" :precision="0" controls-position="right" />
               </el-form-item>
             </template>
+            <jnpf-form-tip-item tip-label="支持%和px两种宽度设置" label="控件宽度"
+              v-if="!activeData.__config__.isSubTable&&!noWithList.includes(activeData.__config__.jnpfKey)&&showType==='pc'&&activeData.style">
+              <el-input v-model="activeData.style.width" placeholder="控件宽度" />
+            </jnpf-form-tip-item>
             <el-form-item label="控件宽度" v-if="activeData.__config__.isSubTable">
               <el-input-number v-model="activeData.__config__.columnWidth" placeholder="控件宽度"
                 :min="0" :precision="0" controls-position="right" />
@@ -522,6 +526,9 @@ import TableConfig from './RightComponents/Table'
 
 const commonRightList = ['comSelect', 'depSelect', 'posSelect', 'userSelect', 'groupSelect', "roleSelect", 'editor']
 const systemList = ['createUser', 'createTime', 'modifyUser', 'modifyTime', 'currOrganize', 'currDept', 'currPosition', 'billRule']
+//不设置宽度
+const noWithList = ['switch', 'radio', 'checkbox', 'uploadFz', 'uploadImg', 'colorPicker', 'rate', 'link', 'button', 'JNPFText', 'alert', 'qrcode', 'barcode']
+const layoutList = ["groupTitle", 'divider', 'collapse', 'tab', 'row', 'card', 'table']
 
 export default {
   components: {
@@ -662,7 +669,8 @@ export default {
           const config = data.__config__
           return data.componentName || `${config.label}: ${data.__vModel__}`
         }
-      }
+      },
+      noWithList: [...noWithList, ...layoutList]
     }
   },
   computed: {
