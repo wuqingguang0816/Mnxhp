@@ -60,13 +60,6 @@ export const delMsgTemplate = id => {
     method: 'DELETE'
   })
 }
-// 导出
-export const exportSendConfig = id => {
-  return request({
-    url: `/api/message/SendMessageConfig/${id}/Action/Export`,
-    method: 'GET'
-  })
-}
 // 列表
 export const getMsgTemplate = data => {
   return request({

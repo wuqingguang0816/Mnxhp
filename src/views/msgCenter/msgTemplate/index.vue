@@ -54,10 +54,7 @@
       </el-row>
       <div class="JNPF-common-layout-main JNPF-flex-main">
         <div class="JNPF-common-head">
-          <topOpts @add="addEditTemplate()">
-            <upload-btn url="/api/message/MessageTemplateConfig/Action/Import"
-              @on-success="initData" />
-          </topOpts>
+          <topOpts @add="addEditTemplate()"></topOpts>
           <div class="JNPF-common-head-right">
             <el-tooltip effect="dark" :content="$t('common.refresh')" placement="top">
               <el-link icon="icon-ym icon-ym-Refresh JNPF-common-head-icon" :underline="false"
@@ -99,8 +96,6 @@
                   <el-dropdown-menu slot="dropdown">
                     <el-dropdown-item @click.native="handleCopy(scope.row.id)">
                       复制</el-dropdown-item>
-                    <el-dropdown-item @click.native="handleExport(scope.row.id)">
-                      导出</el-dropdown-item>
                     <el-dropdown-item @click.native="handleView(scope.row.id)">
                       详情</el-dropdown-item>
                   </el-dropdown-menu>
@@ -118,7 +113,7 @@
   </div>
 </template>
 <script>
-import { getMsgTemplateList, delMsgTemplate, copyMsgTemplate, exportMsgTemplate } from '@/api/msgCenter/msgTemplate'
+import { getMsgTemplateList, delMsgTemplate, copyMsgTemplate } from '@/api/msgCenter/msgTemplate'
 import Form from './Form'
 import Detail from './Detail'
 export default {
@@ -216,15 +211,6 @@ export default {
               this.initData()
             }
           });
-        })
-      }).catch(() => { });
-    },
-    handleExport(id) {
-      this.$confirm('您确定要导出该数据, 是否继续?', '提示', {
-        type: 'warning'
-      }).then(() => {
-        exportMsgTemplate(id).then(res => {
-          this.jnpf.downloadFile(res.data.url)
         })
       }).catch(() => { });
     },

@@ -52,13 +52,6 @@ export const delMsgTemplate = id => {
     method: 'DELETE'
   })
 }
-// 导出
-export const exportMsgTemplate = id => {
-  return request({
-    url: `/api/message/MessageTemplateConfig/${id}/Action/Export`,
-    method: 'GET'
-  })
-}
 //数据类型具体对应数据：1：消息类型，2：渠道，3：webhook类型，4：消息来源
 export const getMsgTypeList = type => {
   return request({

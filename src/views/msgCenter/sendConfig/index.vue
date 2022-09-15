@@ -39,9 +39,7 @@
       </el-row>
       <div class="JNPF-common-layout-main JNPF-flex-main">
         <div class="JNPF-common-head">
-          <topOpts @add="addEditData()">
-            <upload-btn url="/api/message/SendMessageConfig/Action/Import" @on-success="initData" />
-          </topOpts>
+          <topOpts @add="addEditData()"></topOpts>
           <div class="JNPF-common-head-right">
             <el-tooltip effect="dark" :content="$t('common.refresh')" placement="top">
               <el-link icon="icon-ym icon-ym-Refresh JNPF-common-head-icon" :underline="false"
@@ -89,8 +87,6 @@
                   </el-button>
                   <el-dropdown-menu slot="dropdown">
                     <el-dropdown-item @click.native="handleCopy(scope.row.id)">复制</el-dropdown-item>
-                    <el-dropdown-item @click.native="handleExport(scope.row.id)">导出
-                    </el-dropdown-item>
                     <el-dropdown-item @click.native="handleTestSend(scope.row.id)">测试发送
                     </el-dropdown-item>
                     <el-dropdown-item @click.native="handleView(scope.row.id)">详情</el-dropdown-item>
@@ -110,7 +106,7 @@
   </div>
 </template>
 <script>
-import { getSendConfigList, delMsgTemplate, copySendConfig, exportSendConfig } from '@/api/msgCenter/sendConfig'
+import { getSendConfigList, delMsgTemplate, copySendConfig } from '@/api/msgCenter/sendConfig'
 import Form from './Form'
 import TestSend from './TestSend'
 import Detail from './Detail'
@@ -178,15 +174,6 @@ export default {
               this.initData()
             }
           });
-        })
-      }).catch(() => { });
-    },
-    handleExport(id) {
-      this.$confirm('您确定要导出该数据, 是否继续?', '提示', {
-        type: 'warning'
-      }).then(() => {
-        exportSendConfig(id).then(res => {
-          this.jnpf.downloadFile(res.data.url)
         })
       }).catch(() => { });
     },
