@@ -191,8 +191,8 @@
         append-to-body width='600px'>
         <el-form label-width="80px" :model="resurgenceForm" :rules="resurgenceRules"
           ref="resurgenceForm">
-          <el-form-item :label="flowTaskInfo.completion==100?'复活节点':'变更节点'" prop="nodeCode">
-            <el-select v-model="resurgenceForm.nodeCode"
+          <el-form-item :label="flowTaskInfo.completion==100?'复活节点':'变更节点'" prop="taskNodeId">
+            <el-select v-model="resurgenceForm.taskNodeId"
               :placeholder="flowTaskInfo.completion==100?'请选择复活节点':'请选择变更节点'">
               <el-option v-for="item in resurgenceNodeList" :key="item.id" :label="item.nodeName"
                 :value="item.id" />
@@ -201,6 +201,9 @@
           <el-form-item :label="flowTaskInfo.completion==100?'复活意见':'变更意见'" prop="handleOpinion">
             <el-input type="textarea" v-model="resurgenceForm.handleOpinion" placeholder="请填写意见"
               :rows="4" />
+          </el-form-item>
+          <el-form-item :label="flowTaskInfo.completion==100?'复活附件':'变更附件'" prop="fileList">
+            <JNPF-UploadFz v-model="resurgenceForm.fileList" :limit="3" />
           </el-form-item>
         </el-form>
         <span slot="footer" class="dialog-footer">
@@ -244,12 +247,12 @@ export default {
       resurgenceVisible: false,
       actionVisible: false,
       resurgenceForm: {
-        nodeCode: '',
+        taskNodeId: '',
         handleOpinion: '',
-        freeApproverUserId: ''
+        fileList: []
       },
       resurgenceRules: {
-        nodeCode: [
+        taskNodeId: [
           {
             required: true,
             message: '请选择节点',
@@ -333,8 +336,7 @@ export default {
       this.$refs['resurgenceForm'].validate((valid) => {
         if (!valid) return
         let query = {
-          handleOpinion: this.resurgenceForm.handleOpinion,
-          taskNodeId: this.resurgenceForm.nodeCode,
+          ...this.resurgenceForm,
           taskId: this.setting.taskId,
           resurgence: this.flowTaskInfo.completion == 100
         }
