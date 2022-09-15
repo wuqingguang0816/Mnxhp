@@ -33,6 +33,12 @@
             @change='scope.row.required?scope.row.required=false:scope.row.required=true' />
         </template>
       </el-table-column>
+      <el-table-column prop="multiple" label="多选" width="50" align="center">
+        <template slot-scope="scope">
+          <el-checkbox :checked="scope.row.multiple"
+            @change='scope.row.multiple?scope.row.multiple=false:scope.row.multiple=true' />
+        </template>
+      </el-table-column>
       <el-table-column label="操作" width="50">
         <template slot-scope="scope">
           <el-button size="mini" type="text" class="JNPF-table-delBtn"
@@ -49,7 +55,7 @@
 <script>
 import { deepClone } from '@/utils'
 import { inputComponents, selectComponents, systemComponents } from '@/components/Generator/generator/config'
-const ignoreList = ['divider', 'JNPFText', 'button', 'table', 'relationFormAttr', 'popupAttr', 'calculate']
+const ignoreList = ['divider', 'JNPFText', 'link', 'alert', 'button', 'table', 'relationFormAttr', 'popupAttr', 'calculate']
 export default {
   props: ['conf', 'enCode'],
   data() {
@@ -154,7 +160,7 @@ export default {
       this.drawingList.splice(index, 1);
     },
     addHandle() {
-      let item = { filedName: "", filedId: "", jnpfKey: "", required: false }
+      let item = { filedName: "", filedId: "", jnpfKey: "", required: false, multiple: false }
       this.drawingList.push(item)
     }
   }
