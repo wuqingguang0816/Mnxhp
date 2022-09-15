@@ -1,31 +1,55 @@
 <template>
   <el-dialog :title="title" :close-on-click-modal="false" width='600px' :visible.sync="visible"
     class="JNPF-dialog JNPF-dialog_center" lock-scroll append-to-body>
-    <el-form ref="dataForm" :model="dataForm" label-width="80px">
-      <el-form-item label="转审给谁" prop="freeApproverUserId" v-if="eventType == 'transfer'"
-        :rules="[{ required: true, message: '请选择转审给谁',trigger: 'blur'}]">
-        <user-select v-model="dataForm.freeApproverUserId" placeholder="请选择转审给谁" />
-      </el-form-item>
-      <el-form-item :label="`${label}原因`" prop="handleOpinion" v-if="properties.hasOpinion">
-        <el-input v-model="dataForm.handleOpinion" :placeholder="`请输入${label}原因`" type="textarea"
-          :rows="4" />
-      </el-form-item>
-      <el-form-item label="手写签名" required v-if="properties.hasSign">
-        <div class="sign-main">
-          <div class="sign-head">
-            <div class="sign-tip">请在这里输入你的签名</div>
-            <div class="sign-action">
-              <el-button class="clear-btn" size="mini" @click="handleReset">清空</el-button>
-              <el-button class="sure-btn" size="mini" @click="handleGenerate" :disabled="!!signImg">
-                确定签名</el-button>
+    <el-form ref="dataForm" :model="dataForm" label-width="80px" :rules="fromRules">
+      <template v-if="eventType==='transfer'||eventType==='assign'||eventType==='cancel'">
+        <el-form-item label="指派节点" prop="nodeCode" v-if="eventType==='assign'">
+          <el-select v-model="dataForm.nodeCode" placeholder="请选择指派节点">
+            <el-option v-for="item in assignNodeList" :key="item.nodeCode" :label="item.nodeName"
+              :value="item.nodeCode" />
+          </el-select>
+        </el-form-item>
+        <el-form-item :label="label+'给谁'" prop="freeApproverUserId"
+          v-if="eventType==='transfer'||eventType==='assign'"
+          :rules="[{ required: true, message: `请选择${label}给谁`, trigger: 'click' }]">
+          <user-select v-model="dataForm.freeApproverUserId" :placeholder="`请选择${label}给谁`" />
+        </el-form-item>
+        <el-form-item :label="`${label}原因`" prop="handleOpinion">
+          <el-input v-model="dataForm.handleOpinion" :placeholder="`请输入${label}原因`" type="textarea"
+            :rows="4" />
+        </el-form-item>
+        <el-form-item :label="`${label}附件`" prop="fileList">
+          <JNPF-UploadFz v-model="dataForm.fileList" :limit="3" />
+        </el-form-item>
+      </template>
+      <template v-else>
+        <template v-if="properties.hasOpinion">
+          <el-form-item :label="`${label}原因`" prop="handleOpinion">
+            <el-input v-model="dataForm.handleOpinion" :placeholder="`请输入${label}原因`"
+              type="textarea" :rows="4" />
+          </el-form-item>
+          <el-form-item :label="`${label}附件`" prop="fileList">
+            <JNPF-UploadFz v-model="dataForm.fileList" :limit="3" />
+          </el-form-item>
+        </template>
+        <el-form-item label="手写签名" required v-if="properties.hasSign">
+          <div class="sign-main">
+            <div class="sign-head">
+              <div class="sign-tip">请在这里输入你的签名</div>
+              <div class="sign-action">
+                <el-button class="clear-btn" size="mini" @click="handleReset">清空</el-button>
+                <el-button class="sure-btn" size="mini" @click="handleGenerate"
+                  :disabled="!!signImg">
+                  确定签名</el-button>
+              </div>
+            </div>
+            <div class="sign-box">
+              <vue-esign ref="esign" :height="330" v-if="!signImg" :lineWidth="5" />
+              <img :src="signImg" alt="" v-if="signImg" class="sign-img">
             </div>
           </div>
-          <div class="sign-box">
-            <vue-esign ref="esign" :height="330" v-if="!signImg" :lineWidth="5" />
-            <img :src="signImg" alt="" v-if="signImg" class="sign-img">
-          </div>
-        </div>
-      </el-form-item>
+        </el-form-item>
+      </template>
     </el-form>
     <span slot="footer" class="dialog-footer">
       <el-button @click="visible = false">{{$t('common.cancelButton')}}</el-button>
@@ -39,6 +63,12 @@
 import vueEsign from 'vue-esign'
 export default {
   components: { vueEsign },
+  props: {
+    assignNodeList: {
+      type: Array,
+      default: () => []
+    }
+  },
   data() {
     return {
       visible: false,
@@ -46,7 +76,14 @@ export default {
       eventType: '',
       dataForm: {
         handleOpinion: '',
-        freeApproverUserId: ''
+        freeApproverUserId: '',
+        nodeCode: '',
+        fileList: [],
+      },
+      fromRules: {
+        nodeCode: [
+          { required: true, message: '请选择指派节点', trigger: 'change' }
+        ]
       },
       signImg: '',
       btnLoading: false,
@@ -61,6 +98,8 @@ export default {
       this.eventType = eventType || ''
       this.dataForm.handleOpinion = ''
       this.dataForm.freeApproverUserId = ''
+      this.dataForm.nodeCode = ''
+      this.dataForm.fileList = []
       this.signImg = ''
       switch (eventType) {
         case 'transfer':
@@ -74,6 +113,14 @@ export default {
         case 'recall':
           this.title = '撤回审核'
           this.label = '撤回'
+          break;
+        case 'assign':
+          this.title = '指派'
+          this.label = '指派'
+          break;
+        case 'cancel':
+          this.title = '终止审核不可恢复'
+          this.label = '终止'
           break;
         default:
           break;
@@ -94,9 +141,8 @@ export default {
             return
           }
           let query = {
-            handleOpinion: this.dataForm.handleOpinion,
-            freeApproverUserId: this.dataForm.freeApproverUserId,
             signImg: this.signImg,
+            ...this.dataForm
           }
           this.btnLoading = true
           this.$emit('submit', query)

@@ -75,7 +75,7 @@
                 command="comment">评 论
               </el-dropdown-item>
               <el-dropdown-item class="dropdown-item"
-                v-if="setting.opType!=4&&setting.id&&properties.hasPrintBtn && properties.printId"
+                v-if="setting.opType!=4&&setting.id&&properties.hasPrintBtn&&properties.printId"
                 command="print">
                 {{properties.printBtnText||'打 印'}}
               </el-dropdown-item>
@@ -91,8 +91,9 @@
             v-if="setting.opType == 0 && setting.status == 1&&(properties.hasPressBtn || properties.hasPressBtn===undefined)">
             {{properties.pressBtnText||'催 办'}}</el-button>
           <el-button type="danger" v-if="setting.opType == 2 && properties.hasRevokeBtn"
-            @click="recall()">{{properties.revokeBtnText||'撤 回'}}</el-button>
-          <el-button type="danger" v-if="setting.opType == 4&&setting.status==1" @click="cancel()">
+            @click="actionLauncher('recall')">{{properties.revokeBtnText||'撤 回'}}</el-button>
+          <el-button type="danger" v-if="setting.opType == 4&&setting.status==1"
+            @click="actionLauncher('cancel')">
             终止</el-button>
           <el-button @click="goBack()" v-if="!setting.hideCancelBtn" :disabled="allBtnDisabled">
             {{$t('common.cancelButton')}}
@@ -148,10 +149,15 @@
               <user-select v-model="handleId" placeholder="请选择加签人员,不选即该节点审核结束" />
             </el-form-item>
           </template>
-          <el-form-item label="审批意见" v-if="properties.hasOpinion" prop="handleOpinion">
-            <el-input v-model="candidateForm.handleOpinion" placeholder="请输入审批意见" type="textarea"
-              :rows="4" />
-          </el-form-item>
+          <template v-if="properties.hasOpinion">
+            <el-form-item label="审批意见" prop="handleOpinion">
+              <el-input v-model="candidateForm.handleOpinion" placeholder="请输入审批意见" type="textarea"
+                :rows="4" />
+            </el-form-item>
+            <el-form-item label="审批附件" prop="fileList">
+              <JNPF-UploadFz v-model="candidateForm.fileList" :limit="3" />
+            </el-form-item>
+          </template>
           <el-form-item label="手写签名" required v-if="properties.hasSign">
             <div class="sign-main">
               <div class="sign-head">
@@ -176,25 +182,6 @@
           <el-button @click="visible = false">{{$t('common.cancelButton')}}</el-button>
           <el-button type="primary" @click="handleApproval()" :loading="approvalBtnLoading">
             {{$t('common.confirmButton')}}
-          </el-button>
-        </span>
-      </el-dialog>
-      <el-dialog title="指派" :close-on-click-modal="false" :visible.sync="assignVisible"
-        class="JNPF-dialog JNPF-dialog_center" lock-scroll append-to-body width='600px'>
-        <el-form label-width="80px" :model="assignForm" :rules="assignRules" ref="assignForm">
-          <el-form-item label="指派节点" prop="nodeCode">
-            <el-select v-model="assignForm.nodeCode" placeholder="请选择指派节点">
-              <el-option v-for="item in assignNodeList" :key="item.nodeCode" :label="item.nodeName"
-                :value="item.nodeCode" />
-            </el-select>
-          </el-form-item>
-          <el-form-item label="指派给谁" prop="freeApproverUserId">
-            <user-select v-model="assignForm.freeApproverUserId" placeholder="请选择指派给谁" />
-          </el-form-item>
-        </el-form>
-        <span slot="footer" class="dialog-footer">
-          <el-button @click="assignVisible = false">{{$t('common.cancelButton')}}</el-button>
-          <el-button type="primary" @click="handleAssign()">{{$t('common.confirmButton')}}
           </el-button>
         </span>
       </el-dialog>
@@ -229,7 +216,8 @@
         :branchList="branchList" :taskId="setting.taskId" :formData="formData"
         @submitCandidate="submitCandidate" :isCustomCopy="properties.isCustomCopy" />
       <error-form :visible.sync="errorVisible" :nodeList="errorNodeList" @submit="handleError" />
-      <actionDialog v-if="actionVisible" ref="actionDialog" @submit="handleRecall" />
+      <actionDialog v-if="actionVisible" ref="actionDialog" :assignNodeList="assignNodeList"
+        @submit="actionReceiver" />
     </div>
   </transition>
 </template>
@@ -253,25 +241,12 @@ export default {
   components: { recordList, Process, vueEsign, PrintBrowse, Comment, RecordSummary, CandidateForm, CandidateUserSelect, ErrorForm, ActionDialog },
   data() {
     return {
-      assignVisible: false,
       resurgenceVisible: false,
-      assignForm: {
-        nodeCode: '',
-        freeApproverUserId: ''
-      },
       actionVisible: false,
       resurgenceForm: {
         nodeCode: '',
         handleOpinion: '',
         freeApproverUserId: ''
-      },
-      assignRules: {
-        nodeCode: [
-          { required: true, message: '请选择指派节点', trigger: 'change' }
-        ],
-        freeApproverUserId: [
-          { required: true, message: '请选择指派给谁', trigger: 'click' }
-        ]
       },
       resurgenceRules: {
         nodeCode: [
@@ -312,6 +287,7 @@ export default {
       candidateForm: {
         branchList: [],
         candidateList: [],
+        fileList: [],
         handleOpinion: ''
       },
       printBrowseVisible: false,
@@ -516,12 +492,12 @@ export default {
       }).catch(() => { this.loading = false })
     },
     handleMore(e) {
-      if (e == 'revoke') return this.revoke()
-      if (e == 'transfer') return this.openUserBox('transfer')
+      if (e == 'revoke') return this.actionLauncher('revoke')
+      if (e == 'transfer') return this.actionLauncher('transfer')
       if (e == 'saveAudit') return this.eventLauncher('saveAudit')
       if (e == 'reject') return this.eventReceiver({}, 'reject')
       if (e == 'resurgence') return this.flowResurgence()
-      if (e == 'assign') return this.openAssignBox()
+      if (e == 'assign') return this.actionLauncher('assign')
       if (e == 'comment') return this.addComment()
       if (e == 'print') return this.printBrowseVisible = true
       this.eventLauncher(e)
@@ -542,6 +518,7 @@ export default {
       if (eventType === 'audit' || eventType === 'reject') {
         this.handleId = ''
         this.candidateForm.handleOpinion = ''
+        this.candidateForm.fileList = []
         this.copyIds = []
         this.isValidate = false
         this.handleReset()
@@ -716,48 +693,37 @@ export default {
     submitCandidate(data) {
       this.handleRequest(data)
     },
-    revoke() {
-      this.eventType = 'revoke'
-      this.showDialog()
-    },
-    recall() {
-      this.eventType = 'recall'
-      this.showDialog()
-    },
-    openUserBox(type) {
-      this.eventType = 'transfer'
-      this.actionVisible = true
-      this.$nextTick(() => {
-        this.$refs.actionDialog.init(this.properties, this.eventType)
-      })
-    },
-    showDialog() {
-      if (!this.properties.hasOpinion && !this.properties.hasSign) {
+    actionLauncher(eventType) {
+      this.eventType = eventType
+      if ((eventType === 'revoke' || eventType === 'recall') && !this.properties.hasOpinion && !this.properties.hasSign) {
         const title = this.eventType == 'revoke' ? '此操作将撤回该流程，是否继续？' : '此操作将撤回该审批单，是否继续？'
         this.$confirm(title, '提示', {
           type: 'warning'
         }).then(() => {
-          this.handleRecall()
+          this.actionReceiver()
         }).catch(() => { });
         return
       }
+      this.showActionDialog()
+    },
+    showActionDialog() {
       this.actionVisible = true
       this.$nextTick(() => {
         this.$refs.actionDialog.init(this.properties, this.eventType)
       })
     },
-    handleRecall(query) {
+    actionReceiver(query) {
       if (!query) {
         query = {
           handleOpinion: '',
-          freeApproverUserId: '',
           signImg: '',
+          fileList: []
         }
       }
       const id = this.eventType == 'revoke' ? this.setting.id : this.setting.taskId
-      const formMethod = this.eventType == 'revoke' ? Revoke : this.eventType == 'transfer' ? Transfer : Recall
+      const actionMethod = this.getActionMethod()
       this.approvalBtnLoading = true
-      formMethod(id, query).then(res => {
+      actionMethod(id, query).then(res => {
         this.approvalBtnLoading = false
         this.$message({
           type: 'success',
@@ -767,10 +733,17 @@ export default {
             this.$emit('close', true)
           }
         })
-      }).catch(() => { 
+      }).catch(() => {
         this.$refs.actionDialog.btnLoading = false
-        this.approvalBtnLoading = false 
-        })
+        this.approvalBtnLoading = false
+      })
+    },
+    getActionMethod() {
+      if (this.eventType === 'transfer') return Transfer
+      if (this.eventType === 'assign') return Assign
+      if (this.eventType === 'revoke') return Revoke
+      if (this.eventType === 'recall') return Recall
+      if (this.eventType === 'cancel') return Cancel
     },
     press() {
       this.$confirm('此操作将提示该节点尽快处理，是否继续?', '提示', {
@@ -784,33 +757,6 @@ export default {
           })
         })
       }).catch(() => { })
-    },
-    cancel() {
-      this.$prompt('', "终止审核不可恢复", {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        inputPlaceholder: '请输入终止原因（选填）',
-        inputType: 'textarea',
-        inputValue: "",
-        closeOnClickModal: false
-      }).then(({ value }) => {
-        Cancel(this.setting.taskId, { handleOpinion: value }).then(res => {
-          this.$message({
-            type: 'success',
-            message: res.msg,
-            duration: 1000,
-            onClose: () => {
-              this.$emit('close', true)
-            }
-          })
-        })
-      }).catch(() => { })
-    },
-    openAssignBox() {
-      this.assignVisible = true
-      this.$nextTick(() => {
-        this.$refs['assignForm'].resetFields()
-      })
     },
     handleError(data) {
       if (this.eventType === 'submit') {
@@ -827,21 +773,6 @@ export default {
         return
       }
     },
-    handleAssign() {
-      this.$refs['assignForm'].validate((valid) => {
-        if (!valid) return
-        Assign(this.setting.taskId, this.assignForm).then(res => {
-          this.$message({
-            type: 'success',
-            message: res.msg,
-            duration: 1000,
-            onClose: () => {
-              this.$emit('close', true)
-            }
-          })
-        })
-      })
-    },
     handleApproval(errorRuleUserList) {
       const handleRequest = () => {
         if (this.properties.hasSign && !this.signImg) {
@@ -853,6 +784,7 @@ export default {
         }
         let query = {
           handleOpinion: this.candidateForm.handleOpinion,
+          fileList: this.candidateForm.fileList,
           formData: this.formData,
           enCode: this.setting.enCode,
           signImg: this.signImg,
