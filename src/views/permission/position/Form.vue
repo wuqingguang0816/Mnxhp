@@ -5,7 +5,7 @@
     <el-form ref="dataForm" v-loading="formLoading" :model="dataForm" :rules="dataRule"
       label-width="90px">
       <el-form-item label="所属组织" prop="organizeId">
-        <JNPF-TreeSelect v-model="dataForm.organizeId" :options="treeData" placeholder="选择所属组织" />
+        <ComSelect v-model="organizeIdTree" placeholder="选择所属组织" auth @change="onOrganizeChange" />
       </el-form-item>
       <el-form-item label="岗位名称" prop="fullName">
         <el-input v-model="dataForm.fullName" placeholder="输入名称" />
@@ -37,14 +37,7 @@
 </template>
 
 <script>
-import {
-  getDepartmentSelector
-} from '@/api/permission/department'
-import {
-  createPosition,
-  updatePosition,
-  getPositionInfo
-} from '@/api/permission/position'
+import { createPosition, updatePosition, getPositionInfo } from '@/api/permission/position'
 
 export default {
   data() {
@@ -63,10 +56,10 @@ export default {
         sortCode: 0,
         description: ''
       },
-      treeData: [],
+      organizeIdTree: [],
       dataRule: {
         organizeId: [
-          { required: true, message: '所属组织不能为空', trigger: 'input' }
+          { required: true, message: '所属组织不能为空', trigger: 'change' }
         ],
         fullName: [
           { required: true, message: '请输入岗位名称', trigger: 'blur' },
@@ -85,15 +78,13 @@ export default {
     }
   },
   methods: {
-    init(id, organizeId) {
+    init(id, organizeId, organizeIdTree) {
       this.visible = true
       this.dataForm.id = id || ''
+      this.organizeIdTree = []
       this.formLoading = true
       this.$nextTick(() => {
         this.$refs['dataForm'].resetFields()
-        getDepartmentSelector().then(res => {
-          this.treeData = res.data.list
-        })
         // 获取岗位类型
         this.$store.dispatch('base/getDictionaryData', { sort: 'PositionType' }).then(res => {
           this.typeOptions = res
@@ -101,12 +92,18 @@ export default {
         if (this.dataForm.id) {
           getPositionInfo(this.dataForm.id).then(res => {
             this.dataForm = res.data
+            this.organizeIdTree = res.data.organizeIdTree
           })
         } else {
           this.dataForm.organizeId = organizeId
+          this.organizeIdTree = organizeIdTree
         }
         this.formLoading = false
       })
+    },
+    onOrganizeChange(val) {
+      if (!val || !val.length) return this.dataForm.organizeId = ''
+      this.dataForm.organizeId = val[val.length - 1]
     },
     dataFormSubmit() {
       this.$refs['dataForm'].validate((valid) => {

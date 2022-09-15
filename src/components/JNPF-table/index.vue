@@ -3,17 +3,20 @@
     <el-table v-if="!refreshTable" :data="data" ref="JNPFTable" class="JNPF-common-table"
       :height="height" :element-loading-text="$t('common.loadingText')" v-bind="$attrs"
       v-on="$listeners" :border="border">
-      <el-table-column prop="selection" type="selection" width="50" v-if="hasC" align="center" />
+      <el-table-column prop="selection" type="selection" width="50" v-if="hasC" align="center"
+        :selectable="checkSelectable" />
       <el-table-column prop="index" type="index" width="50" label="序号" v-if="hasNO"
         align="center" />
       <jnpf-table-column :columns="columns" :columnList="columnList" v-if="customColumn" />
       <template v-else>
         <slot />
       </template>
-      <el-table-column align="center" fixed="right" width="36" v-if="customColumn">
+      <el-table-column align="center" fixed="right" width="40" v-if="customColumn">
         <template slot="header">
-          <el-link icon="icon-ym icon-ym-options JNPF-common-head-icon" :underline="false"
-            @click="showDrawer" />
+          <el-tooltip content="表头设置" placement="top">
+            <el-link icon="icon-ym icon-ym-shezhi JNPF-common-head-icon" :underline="false"
+              @click="showDrawer" />
+          </el-tooltip>
         </template>
       </el-table-column>
       <template slot="empty">
@@ -158,6 +161,10 @@ export default {
       this.columnList = list
       this.$forceUpdate()
       this.refreshTable = true
+    },
+    checkSelectable(row) {
+      if (row.top) return false
+      return true
     }
   }
 }
@@ -167,81 +174,5 @@ export default {
   flex: 1 0 0;
   height: 100%;
   overflow: hidden;
-}
-
-.elDialog {
-  margin: 0 !important;
-  width: 240px !important;
-}
-
-.elDialog .el-dialog__header {
-  padding: 0;
-}
-
-.elDialog .el-dialog__body {
-  padding: 0;
-}
-
-.elDialog .el-dialog__footer {
-  padding: 0;
-}
-
-.column-list {
-  height: calc(100% - 46px);
-  padding: 0;
-
-  .column-item-header {
-    height: 36px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 0 24px;
-    font-size: 14px;
-    color: #999;
-    border-bottom: 1px solid #d9d9d9;
-  }
-
-  .column-item {
-    height: 36px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 0 24px;
-    font-size: 14px;
-    color: #303133;
-    cursor: pointer;
-
-    &:hover {
-      background: #f2f4f6;
-    }
-
-    &.sortable-chosen {
-      border: 1px dashed #1890ff;
-    }
-  }
-
-  .column-item-icon {
-    width: 14px;
-    margin-right: 5px;
-    color: #909399;
-    cursor: move;
-  }
-
-  .el-switch {
-    transform: scale(0.8);
-  }
-
-  .column-item-label {
-    overflow: hidden;
-    white-space: nowrap;
-    text-overflow: ellipsis;
-    word-break: break-all;
-    flex: 1 0 0;
-  }
-
-  .column-item-value {
-    flex: 1 0 0;
-    text-align: right;
-  }
 }
 </style>

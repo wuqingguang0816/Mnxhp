@@ -35,11 +35,11 @@ export default {
   methods: {
     getConfigData() {
       getConfigData(this.modelId).then(res => {
-        if (res.code !== 200) {
+        if (res.code !== 200 || !res.data) {
           this.$store.dispatch('tagsView/delView', this.$route)
           this.$router.replace('/404')
+          return
         }
-        if (!res.data) return
         this.config = res.data
         if (res.data.webType == '1') {
           this.currentView = 'Form'

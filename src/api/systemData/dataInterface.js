@@ -68,15 +68,16 @@ export function getDataInterfaceTypeSelector() {
 }
 
 // 获取接口数据
-export function getDataInterfaceRes(id) {
+export function getDataInterfaceRes(id, data) {
   return request({
-    url: `/api/system/DataInterface/${id}/Actions/Response`,
-    method: 'GET'
+    url: `/api/system/DataInterface/${id}/Actions/Preview`,
+    method: 'POST',
+    data: data || {}
   })
 }
 
-// 预览接口数据
-export function previewDataInterface(id) {
+// 获取数据接口参数
+export function getDataInterfaceParam(id) {
   return request({
     url: `/api/system/DataInterface/GetParam/${id}`,
     method: 'GET'
@@ -104,7 +105,7 @@ export function getDataInterfaceLog(id, data) {
 export function getDataInterfaceDataSelect(id, data) {
   return request({
     url: `/api/system/DataInterface/${id}/Action/List`,
-    method: 'GET',
+    method: 'post',
     data
   })
 }
@@ -116,21 +117,19 @@ export function getDataInterfaceDataInfo(id, data) {
     data
   })
 }
+// 获取多条接口数据
+export function getDataInterfaceDataInfoByIds(id, data) {
+  return request({
+    url: `/api/system/DataInterface/${id}/Action/InfoByIds`,
+    method: 'POST',
+    data
+  })
+}
 // 获取接口列表(工作流选择时调用，带分页)
 export function getDataInterfaceSelectorList(data) {
   return request({
     url: '/api/system/DataInterface/getList',
     method: 'GET',
-    data
-  })
-}
-
-//测试接口
-
-export function testInterface(id, data) {
-  return request({
-    url: `/api/system/DataInterface/${id}/Actions/Preview`,
-    method: 'POST',
     data
   })
 }

@@ -1,7 +1,13 @@
 import { isNumberStr } from '@/components/Generator/utils'
 export default {
+  inject: ["getShowType"],
   data() {
     return {}
+  },
+  computed: {
+    showType() {
+      return this.getShowType()
+    }
   },
   methods: {
     onDefaultValueInput(str) {

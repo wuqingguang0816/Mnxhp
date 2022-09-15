@@ -32,7 +32,7 @@
         <JNPF-table v-loading="listLoading" :data="list">
           <el-table-column prop="fullName" label="模板名称" show-overflow-tooltip min-width="200" />
           <el-table-column prop="enCode" label="模板编码" width="200" />
-          <el-table-column prop="noticeMethod" label="通知方式" width="200" />
+          <el-table-column prop="noticeMethod" label="通知方式" width="240" />
           <el-table-column prop="creatorUser" label="创建人" width="120" />
           <el-table-column prop="creatorTime" label="创建时间" :formatter="jnpf.tableDateFormat"
             width="120" />
@@ -41,7 +41,7 @@
           <el-table-column prop="enabledMark" label="状态" width="70" align="center">
             <template slot-scope="scope">
               <el-tag :type="scope.row.enabledMark == 1 ? 'success' : 'danger'" disable-transitions>
-                {{scope.row.enabledMark==1?'正常':'停用'}}</el-tag>
+                {{scope.row.enabledMark==1?'启用':'禁用'}}</el-tag>
             </template>
           </el-table-column>
           <el-table-column label="操作" width="100" fixed="right">

@@ -111,7 +111,7 @@ export default {
     },
     formData: {
       type: Object,
-      default: () => {}
+      default: () => { }
     },
   },
   render(h) {

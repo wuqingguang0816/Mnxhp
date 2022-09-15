@@ -37,9 +37,8 @@
                 </el-radio-group>
               </el-form-item>
               <el-form-item label="数据接口" v-if="item.dataType==='dynamic'">
-                <JNPF-TreeSelect :options="dataInterfaceOptions" v-model="item.propsApi"
-                  placeholder="请选择数据接口" lastLevel lastLevelKey='categoryId' lastLevelValue='1'
-                  clearable />
+                <interface-dialog :value="item.propsApi" :title="item.propsName" popupTitle="数据接口"
+                  @change="propsUrlChange(arguments , index)" />
               </el-form-item>
               <el-form-item label="数值" v-if="item.dataType==='static'">
                 <el-input v-model="item.num" placeholder="请输入数值" />
@@ -66,9 +65,8 @@
               <el-button @click="showData(activeData.option)">查看</el-button>
             </el-form-item>
             <el-form-item label="数据接口" v-if="activeData.dataType==='dynamic'">
-              <JNPF-TreeSelect :options="dataInterfaceOptions" v-model="activeData.propsApi"
-                placeholder="请选择数据接口" lastLevel lastLevelKey='categoryId' lastLevelValue='1'
-                clearable />
+              <interface-dialog :value="activeData.propsApi" :title="activeData.propsName"
+                popupTitle="数据接口" @change="propsApiChange" />
             </el-form-item>
           </template>
         </template>
@@ -84,9 +82,10 @@ import { getSelectorAll } from '@/api/system/menu'
 import { getDataInterfaceSelector } from '@/api/systemData/dataInterface'
 import iconBox from '@/components/JNPF-iconBox'
 import JSONArea from './JSONArea'
+import InterfaceDialog from '@/components/Process/PropPanel/InterfaceDialog'
 export default {
   props: ['activeData'],
-  components: { draggable, iconBox, JSONArea },
+  components: { draggable, iconBox, JSONArea, InterfaceDialog },
   data() {
     return {
       iconsVisible: false,
@@ -200,6 +199,25 @@ export default {
     },
     dataTypeChange() {
       this.activeData.propsApi = ''
+      this.activeData.propsName = ''
+    },
+    propsUrlChange(data, index) {
+      if (!data || !data.length) {
+        this.activeData.list[index].propsApi = ''
+        this.activeData.list[index].propsName = ''
+        return
+      }
+      this.activeData.list[index].propsApi = data[0]
+      this.activeData.list[index].propsName = data[1].fullName
+    },
+    propsApiChange(val, item) {
+      if (!val) {
+        this.activeData.propsApi = ''
+        this.activeData.propsName = ''
+        return
+      }
+      this.activeData.propsApi = val
+      this.activeData.propsName = item.fullName
     }
   }
 }

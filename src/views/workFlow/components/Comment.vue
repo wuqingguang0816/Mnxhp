@@ -58,18 +58,19 @@
           <ul class="el-upload-list el-upload-list el-upload-list--text">
             <li class="el-upload-list__item is-success" v-for="(file,index) in dataForm.file"
               :key="file.fileId">
-              <a class="el-upload-list__item-name" @click="handleFileClick(file)">
-                <i class="el-icon-paperclip"></i>{{file.name}}
+              <a class="el-upload-list__item-name">
+                <i class="el-icon-paperclip"></i>
+                {{file.name}}{{file.fileSize?`（${jnpf.toFileSize(file.fileSize)}）`:''}}
               </a>
-              <i class="el-icon-view" @click="handleFilePreview(file)"></i>
-              <i class="el-icon-download" @click="handleFileClick(file)"></i>
+              <i class="el-icon-view" title="查看" @click="handleFilePreview(file)"></i>
+              <i class="el-icon-download" title="下载" @click="handleFileClick(file)"></i>
               <label class="el-upload-list__item-status-label">
                 <i class="el-icon-upload-success el-icon-circle-check"></i>
               </label>
-              <i class="el-icon-close" @click="handleFileRemove(index)"></i>
+              <i class="el-icon-close" title="删除" @click="handleFileRemove(index)"></i>
             </li>
           </ul>
-          <fileUploader ref="fileUploader" :limit="9" :fileSize="50" type="annex"
+          <fileUploader ref="fileUploader" :limit="2" :fileSize="50" type="annex"
             :accept="fileAccept" @fileSuccess="fileSuccess" />
         </el-form-item>
       </el-form>
@@ -257,17 +258,17 @@ export default {
       this.$refs.elUploadImg.uploadFiles.splice(index, 1)
     },
     uploadFile() {
-      const isTopLimit = this.dataForm.file.length > 9
+      const isTopLimit = this.dataForm.file.length >= 2
       if (isTopLimit) {
-        this.$message.error(`当前限制最多可以上传9个文件`)
+        this.$message.error(`当前限制最多可以上传2个文件`)
         return false
       }
       this.$refs.fileUploader && this.$refs.fileUploader.openUploader()
     },
     fileSuccess(data) {
-      const isTopLimit = this.dataForm.file.length > 9
+      const isTopLimit = this.dataForm.file.length >= 2
       if (isTopLimit) {
-        this.$message.error(`当前限制最多可以上传9个文件`)
+        this.$message.error(`当前限制最多可以上传2个文件`)
         return false
       }
       this.dataForm.file.push(data)
@@ -278,7 +279,7 @@ export default {
     handleFileClick(file) {
       if (!file.fileId) return
       getDownloadUrl('annex', file.fileId).then(res => {
-        this.jnpf.downloadFile(res.data.url)
+        this.jnpf.downloadFile(res.data.url, file.name)
       })
     },
     handleFilePreview(file) {

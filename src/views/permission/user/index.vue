@@ -77,7 +77,7 @@
           <el-table-column prop="sortCode" label="排序" width="70" align="center" />
           <el-table-column prop="enabledMark" label="状态" width="70" align="center">
             <template slot-scope="scope">
-              <el-tag type="success" disable-transitions v-if="scope.row.enabledMark == 1">正常
+              <el-tag type="success" disable-transitions v-if="scope.row.enabledMark == 1">启用
               </el-tag>
               <el-tag type="warning" disable-transitions v-else-if="scope.row.enabledMark == 2">锁定
               </el-tag>
@@ -119,7 +119,7 @@
 </template>
 <script>
 import {
-  getDepartmentSelector
+  getDepartmentSelectorByAuth
 } from '@/api/permission/department'
 import {
   getUserList,
@@ -212,8 +212,9 @@ export default {
       return data.fullName.indexOf(value) !== -1;
     },
     getOrganizeList(isInit) {
+      this.filterText = ''
       this.treeLoading = true
-      getDepartmentSelector().then(res => {
+      getDepartmentSelectorByAuth().then(res => {
         this.treeData = res.data.list
         this.treeLoading = false
         if (isInit) this.initData()

@@ -26,6 +26,7 @@
             </div>
             <JNPF-table v-loading="listLoading" :data="dataAuthorizeSchemeList" row-key="id"
               default-expand-all :tree-props="{ children: 'children', hasChildren: '' }">
+              <el-table-column prop="enCode" label="方案编码" width="160" />
               <el-table-column prop="fullName" label="方案名称" width="160" />
               <el-table-column prop="conditionText" label="过滤条件" />
               <el-table-column label="操作" width="100">
@@ -53,7 +54,7 @@
             </div>
             <JNPF-table v-loading="dataListLoading" :data="dataAuthorizeList" row-key="id"
               default-expand-all :tree-props="{ children: 'children', hasChildren: '' }">
-              <el-table-column prop="bindTable" label="数据库表" width="120" v-if="menuType == 2" />
+              <el-table-column prop="bindTable" label="数据库表" width="120" />
               <el-table-column prop="enCode" label="字段名称" />
               <el-table-column prop="fullName" label="字段说明" show-overflow-tooltip />
               <el-table-column prop="type" label="字段类型" width="70" />
@@ -68,6 +69,9 @@
                         '@organizationAndSuborganization'
                     ">当前组织及子组织</span>
                   <span v-if="scope.row.conditionText === '@userAraSubordinates'">当前用户及下属</span>
+                  <span v-if="scope.row.conditionText === '@branchManageOrganize'">当前分管组织</span>
+                  <span
+                    v-if="scope.row.conditionText === '@branchManageOrganizeAndSub'">当前分管组织及子组织</span>
                 </template>
               </el-table-column>
               <el-table-column label="操作" width="100">
@@ -93,6 +97,7 @@
   </div>
 </template>
 <script>
+import { getInfo } from "@/api/system/authorize";
 import {
   getDataAuthorizeSchemeList,
   getDataAuthorizeList,
@@ -129,12 +134,15 @@ export default {
       menuType: 2,
       dbOptions: [],
       dbList: [],
-      tableName: ""
+      tableName: "",
+      dataType: "",
+      dataList: []
     };
   },
   methods: {
-    init(moduleId, fullName, type) {
+    init(moduleId, fullName, type, dataType) {
       this.menuType = type;
+      this.dataType = dataType
       this.dataAuthorizeListDrawer = true;
       this.moduleId = moduleId;
       this.tabActiveName = "dataAuthorizeScheme";
@@ -150,14 +158,14 @@ export default {
         this.getAuthorizeSchemeList();
       });
       if (this.menuType === 3) {
-        getFieldNameList(this.moduleId, "DataAuthorize").then(res => {
-          this.dbList = res.data || [];
-        });
+        // getFieldNameList(this.moduleId, "DataAuthorize").then(res => {
+        //   this.dbList = res.data || [];
+        // });
       }
     },
-    getConnectList(data, tableName) {
+    getConnectList(tableName) {
       this.tableName = tableName || "";
-      this.dbList = data;
+      this.getInfo()
     },
     getAuthorizeSchemeList() {
       // 获取方案管理列表
@@ -194,6 +202,7 @@ export default {
         this.getAuthorizeList();
         if (this.menuType === 2) {
           this.getDataSourceListAll();
+          this.getInfo()
         }
       }
     },
@@ -206,6 +215,12 @@ export default {
         this.getAuthorizeList();
       }
     },
+    getInfo() {
+      getInfo(this.moduleId, this.dataType).then(res => {
+        this.dataList = res.data || {}
+        this.tableName = this.dataList.linkTables || ''
+      })
+    },
     getDataSourceListAll() {
       getDataSourceListAll().then(res => {
         const list = res.data.list || []
@@ -216,7 +231,7 @@ export default {
     addDataConnect() {
       this.dataConnectFormVisible = true;
       this.$nextTick(() => {
-        this.$refs.DataConnectForm.init(this.dbOptions, 0);
+        this.$refs.DataConnectForm.init(this.dataList, this.moduleId, this.dbOptions, this.dataType);
       });
     },
     //新增,编辑
@@ -234,8 +249,7 @@ export default {
             this.moduleId,
             id,
             this.menuType,
-            this.dbList,
-            this.tableName
+            this.dataType
           );
         });
       }
@@ -254,7 +268,8 @@ export default {
         let data = {
           moduleId: this.moduleId,
           enCode: "jnpf_alldata",
-          fullName: "全部数据"
+          fullName: "全部数据",
+          allData: 1
         };
         createDataScheme(data)
           .then(res => {

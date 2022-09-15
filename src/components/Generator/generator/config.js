@@ -20,6 +20,8 @@ export const formConf = {
   confirmButtonText: "确 定",
   hasPrintBtn: false,
   printButtonText: "打 印",
+  primaryKeyPolicy: 1,
+  concurrencyLock: false,
   printId: "",
   formStyle: "",
   funcs: {
@@ -51,6 +53,7 @@ export const inputComponents = [
       visibility: ["pc", "app"],
       tableName: "",
       noShow: false,
+      unique: false,
       regList: [],
       trigger: "blur"
     },
@@ -190,6 +193,7 @@ export const inputComponents = [
       dataType: "static",
       dictionaryType: "",
       propsUrl: "",
+      propsName: "",
       props: {
         label: "fullName",
         value: "id"
@@ -237,6 +241,7 @@ export const inputComponents = [
       dataType: "static",
       dictionaryType: "",
       propsUrl: "",
+      propsName: "",
       props: {
         label: "fullName",
         value: "id"
@@ -282,6 +287,7 @@ export const inputComponents = [
       dataType: "static",
       dictionaryType: "",
       propsUrl: "",
+      propsName: "",
       props: {
         label: "fullName",
         value: "id"
@@ -301,8 +307,6 @@ export const inputComponents = [
     },
     on: {
       change:
-        "({ data, formData, setFormData, setShowOrHide, setRequired, setDisabled, request, getFieldOptions, setFieldOptions }) => {\n    // 在此编写代码\n    \n}",
-      blur:
         "({ data, formData, setFormData, setShowOrHide, setRequired, setDisabled, request, getFieldOptions, setFieldOptions }) => {\n    // 在此编写代码\n    \n}"
     },
     placeholder: "请选择",
@@ -331,6 +335,7 @@ export const inputComponents = [
       trigger: "change",
       dataType: "static",
       propsUrl: "",
+      propsName: "",
       dictionaryType: ""
     },
     options: [
@@ -459,7 +464,7 @@ export const inputComponents = [
     },
     disabled: false,
     accept: "",
-    fileSize: 5,
+    fileSize: 10,
     sizeUnit: "MB",
     buttonText: "点击上传",
     showTip: false,
@@ -490,7 +495,7 @@ export const inputComponents = [
     disabled: false,
     accept: "",
     showTip: false,
-    fileSize: 5,
+    fileSize: 10,
     sizeUnit: "MB",
     limit: 9
   },
@@ -577,23 +582,74 @@ export const inputComponents = [
   },
   {
     __config__: {
-      jnpfKey: "divider",
-      label: "分割线",
+      jnpfKey: "editor",
+      label: "富文本",
+      labelWidth: undefined,
+      showLabel: true,
+      tag: "JNPF-Quill",
+      tagIcon: "icon-ym icon-ym-generator-rich-text",
+      defaultValue: null,
+      required: false,
+      layout: "colFormItem",
+      span: 24,
+      dragDisabled: false,
+      visibility: ["pc", "app"],
+      tableName: "",
+      regList: [],
+      trigger: "blur"
+    },
+    placeholder: "请输入"
+  },
+  {
+    __config__: {
+      jnpfKey: "link",
+      label: "链接",
       labelWidth: undefined,
       showLabel: false,
-      tag: "el-divider",
-      tagIcon: "icon-ym icon-ym-generator-divider",
-      defaultValue: null,
+      tag: "JnpfLink",
+      tagIcon: "icon-ym icon-ym-generator-link",
       required: false,
       layout: "colFormItem",
       span: 24,
       dragDisabled: false,
       visibility: ["pc", "app"]
     },
-    __slot__: {
-      default: "我是分割线"
+    on: {
+      click:
+        "({ data, formData, setFormData, setShowOrHide, setRequired, setDisabled, request, getFieldOptions, setFieldOptions }) => {\n    // 在此编写代码\n    \n}"
     },
-    "content-position": "center"
+    content: '文本链接',
+    href: "",
+    target: "_self",
+    textStyle: {
+      "text-align": "left",
+    }
+  },
+  {
+    __config__: {
+      jnpfKey: "button",
+      label: "按钮",
+      labelWidth: undefined,
+      showLabel: false,
+      tag: "jnpf-button",
+      tagIcon: "icon-ym icon-ym-generator-button",
+      defaultValue: null,
+      required: false,
+      layout: "colFormItem",
+      span: 24,
+      dragDisabled: false,
+      visibility: ["pc", "app"],
+      regList: [],
+      trigger: "click"
+    },
+    on: {
+      click:
+        "({ data, formData, setFormData, setShowOrHide, setRequired, setDisabled, request, getFieldOptions, setFieldOptions }) => {\n    // 在此编写代码\n    \n}"
+    },
+    align: "left",
+    buttonText: "按钮",
+    type: "",
+    disabled: false
   },
   {
     __config__: {
@@ -623,50 +679,23 @@ export const inputComponents = [
   },
   {
     __config__: {
-      jnpfKey: "editor",
-      label: "富文本",
-      labelWidth: undefined,
-      showLabel: true,
-      tag: "JNPF-Quill",
-      tagIcon: "icon-ym icon-ym-generator-rich-text",
-      defaultValue: null,
-      required: false,
-      layout: "colFormItem",
-      span: 24,
-      dragDisabled: false,
-      visibility: ["pc", "app"],
-      tableName: "",
-      regList: [],
-      trigger: "blur"
-    },
-    placeholder: "请输入内容..."
-  },
-  {
-    __config__: {
-      jnpfKey: "button",
-      label: "按钮",
+      jnpfKey: "alert",
+      label: "提示",
       labelWidth: undefined,
       showLabel: false,
-      tag: "jnpf-button",
-      tagIcon: "icon-ym icon-ym-generator-button",
-      defaultValue: null,
+      tag: "el-alert",
+      tagIcon: "icon-ym icon-ym-generator-alert",
       required: false,
       layout: "colFormItem",
       span: 24,
       dragDisabled: false,
-      visibility: ["pc", "app"],
-      regList: [],
-      trigger: "click"
+      visibility: ["pc", "app"]
     },
-    on: {
-      click:
-        "({ data, formData, setFormData, setShowOrHide, setRequired, setDisabled, request, getFieldOptions, setFieldOptions }) => {\n    // 在此编写代码\n    \n}"
-    },
-    align: "left",
-    buttonText: "按钮",
-    type: "",
-    disabled: false
-  }
+    title: '这是一个提示',
+    type: "success",
+    "show-icon": false,
+    closable: false
+  },
 ];
 
 // 高级控件 【左面板】
@@ -722,6 +751,8 @@ export const selectComponents = [
         "({ data, formData, setFormData, setShowOrHide, setRequired, setDisabled, request, getFieldOptions, setFieldOptions }) => {\n    // 在此编写代码\n    \n}"
     },
     placeholder: "请选择",
+    selectType: 'all',
+    ableDepIds: [],
     multiple: false,
     clearable: true,
     filterable: false,
@@ -750,6 +781,9 @@ export const selectComponents = [
         "({ data, formData, setFormData, setShowOrHide, setRequired, setDisabled, request, getFieldOptions, setFieldOptions }) => {\n    // 在此编写代码\n    \n}"
     },
     placeholder: "请选择",
+    selectType: 'all',
+    ableDepIds: [],
+    ablePosIds: [],
     multiple: false,
     clearable: true,
     filterable: false,
@@ -778,8 +812,69 @@ export const selectComponents = [
         "({ data, formData, setFormData, setShowOrHide, setRequired, setDisabled, request, getFieldOptions, setFieldOptions }) => {\n    // 在此编写代码\n    \n}"
     },
     placeholder: "请选择",
+    selectType: 'all',
+    ableDepIds: [],
+    ablePosIds: [],
+    ableUserIds: [],
+    ableRoleIds: [],
+    ableGroupIds: [],
     multiple: false,
     clearable: true,
+    disabled: false
+  },
+  {
+    __config__: {
+      jnpfKey: "roleSelect",
+      label: "角色选择",
+      labelWidth: undefined,
+      showLabel: true,
+      tag: "roleSelect",
+      tagIcon: "icon-ym icon-ym-generator-role",
+      defaultValue: null,
+      required: false,
+      layout: "colFormItem",
+      span: 24,
+      dragDisabled: false,
+      visibility: ["pc", "app"],
+      tableName: "",
+      regList: [],
+      trigger: "click"
+    },
+    on: {
+      change:
+        "({ data, formData, setFormData, setShowOrHide, setRequired, setDisabled, request, getFieldOptions, setFieldOptions }) => {\n    // 在此编写代码\n    \n}"
+    },
+    placeholder: "请选择",
+    multiple: false,
+    clearable: true,
+    disabled: false
+  },
+  {
+    __config__: {
+      jnpfKey: "groupSelect",
+      label: "分组选择",
+      labelWidth: undefined,
+      showLabel: true,
+      tag: "groupSelect",
+      tagIcon: "icon-ym icon-ym-generator-group1",
+      defaultValue: '',
+      required: false,
+      layout: "colFormItem",
+      span: 24,
+      dragDisabled: false,
+      visibility: ["pc", "app"],
+      tableName: "",
+      regList: [],
+      trigger: "change"
+    },
+    on: {
+      change:
+        "({ data, formData, setFormData, setShowOrHide, setRequired, setDisabled, request, getFieldOptions, setFieldOptions }) => {\n    // 在此编写代码\n    \n}"
+    },
+    placeholder: "请选择",
+    multiple: false,
+    clearable: true,
+    filterable: false,
     disabled: false
   },
   {
@@ -801,7 +896,8 @@ export const selectComponents = [
       trigger: "change",
       dataType: "static",
       dictionaryType: "",
-      propsUrl: ""
+      propsUrl: "",
+      propsName: ""
     },
     on: {
       change:
@@ -834,26 +930,41 @@ export const selectComponents = [
   },
   {
     __config__: {
-      jnpfKey: "billRule",
-      label: "单据组件",
+      jnpfKey: "popupTableSelect",
+      label: "下拉表格",
       labelWidth: undefined,
       showLabel: true,
-      tag: "el-input",
-      defaultValue: "",
-      tagIcon: "icon-ym icon-ym-generator-documents",
-      defaultValue: null,
-      layout: "colFormItem",
       required: false,
+      tag: "popupTableSelect",
+      tagIcon: "icon-ym icon-ym-generator-popupTableSelect",
+      defaultValue: "",
+      layout: "colFormItem",
       span: 24,
       dragDisabled: false,
       visibility: ["pc", "app"],
       tableName: "",
-      noShow: false,
-      trigger: "change",
-      rule: ""
+      regList: [],
+      trigger: "change"
     },
-    readonly: true,
-    placeholder: "系统自动生成"
+    on: {
+      change:
+        "({ data, formData, setFormData, setShowOrHide, setRequired, setDisabled, request, getFieldOptions, setFieldOptions }) => {\n    // 在此编写代码\n    \n}"
+    },
+    placeholder: "请选择",
+    interfaceId: "",
+    interfaceName: "",
+    hasPage: false,
+    pageSize: 20,
+    columnOptions: [],
+    propsValue: "id",
+    relationField: "fullName",
+    popupType: "popover",
+    popupTitle: "选择数据",
+    popupWidth: "800px",
+    disabled: false,
+    clearable: true,
+    multiple: false,
+    filterable: false
   },
   {
     __config__: {
@@ -875,6 +986,19 @@ export const selectComponents = [
     disabled: false,
     actionText: "添加",
     "show-summary": false,
+    addType: 0,
+    addTableConf: {
+      popupTitle: '选择数据',
+      popupType: 'dialog',
+      popupWidth: '800px',
+      interfaceId: '',
+      interfaceName: '',
+      templateJson: [],
+      hasPage: true,
+      pageSize: 20,
+      columnOptions: [],
+      relationOptions: []
+    },
     summaryField: [],
     tableConf: {},
     defaultValue: []
@@ -937,6 +1061,9 @@ export const selectComponents = [
     pageSize: 20,
     columnOptions: [],
     clearable: true,
+    popupType: "dialog",
+    popupTitle: "选择数据",
+    popupWidth: "800px",
     filterable: false,
     disabled: false
   },
@@ -964,6 +1091,7 @@ export const selectComponents = [
     },
     placeholder: "请选择",
     interfaceId: "",
+    interfaceName: "",
     hasPage: false,
     pageSize: 20,
     columnOptions: [],
@@ -1010,7 +1138,31 @@ export const selectComponents = [
     },
     showField: "",
     relationField: ""
-  }
+  },
+  {
+    __config__: {
+      jnpfKey: "billRule",
+      label: "单据组件",
+      labelWidth: undefined,
+      showLabel: true,
+      tag: "el-input",
+      defaultValue: "",
+      tagIcon: "icon-ym icon-ym-generator-documents",
+      defaultValue: null,
+      layout: "colFormItem",
+      required: false,
+      span: 24,
+      dragDisabled: false,
+      visibility: ["pc", "app"],
+      tableName: "",
+      noShow: false,
+      trigger: "change",
+      rule: "",
+      ruleName: "",
+    },
+    readonly: true,
+    placeholder: "系统自动生成"
+  },
 ];
 
 // 系统控件 【左面板】
@@ -1021,7 +1173,7 @@ export const systemComponents = [
       label: "创建人员",
       labelWidth: undefined,
       showLabel: true,
-      tag: "el-input",
+      tag: "jnpf-open-data",
       tagIcon: "icon-ym icon-ym-generator-founder",
       defaultValue: "",
       required: false,
@@ -1032,8 +1184,9 @@ export const systemComponents = [
       tableName: "",
       noShow: false
     },
+    type: 'currUser',
     readonly: true,
-    placeholder: "系统自动生成"
+    placeholder: ""
   },
   {
     __config__: {
@@ -1041,7 +1194,7 @@ export const systemComponents = [
       label: "创建时间",
       labelWidth: undefined,
       showLabel: true,
-      tag: "el-input",
+      tag: "jnpf-open-data",
       tagIcon: "icon-ym icon-ym-generator-createtime",
       defaultValue: "",
       layout: "colFormItem",
@@ -1052,8 +1205,9 @@ export const systemComponents = [
       tableName: "",
       noShow: false
     },
+    type: 'currTime',
     readonly: true,
-    placeholder: "系统自动生成"
+    placeholder: ""
   },
   {
     __config__: {
@@ -1101,7 +1255,7 @@ export const systemComponents = [
       label: "所属组织",
       labelWidth: undefined,
       showLabel: true,
-      tag: "el-input",
+      tag: "jnpf-open-data",
       tagIcon: "icon-ym icon-ym-generator-company",
       defaultValue: "",
       required: false,
@@ -1112,9 +1266,10 @@ export const systemComponents = [
       tableName: "",
       noShow: false
     },
+    type: 'currOrganize',
     readonly: true,
     showLevel: "last",
-    placeholder: "系统自动生成"
+    placeholder: ""
   },
   {
     __config__: {
@@ -1122,7 +1277,7 @@ export const systemComponents = [
       label: "所属岗位",
       labelWidth: undefined,
       showLabel: true,
-      tag: "el-input",
+      tag: "jnpf-open-data",
       tagIcon: "icon-ym icon-ym-generator-station",
       defaultValue: "",
       required: false,
@@ -1133,8 +1288,9 @@ export const systemComponents = [
       tableName: "",
       noShow: false
     },
+    type: 'currPosition',
     readonly: true,
-    placeholder: "系统自动生成"
+    placeholder: ""
   }
 ];
 
@@ -1160,36 +1316,58 @@ export const layoutComponents = [
   },
   {
     __config__: {
-      jnpfKey: "card",
-      label: "卡片容器",
+      jnpfKey: "divider",
+      label: "分割线",
+      labelWidth: undefined,
       showLabel: false,
-      tag: "el-card",
-      tagIcon: "icon-ym icon-ym-generator-card",
-      defaultValue: [],
-      layout: "rowFormItem",
-      span: "24",
+      tag: "el-divider",
+      tagIcon: "icon-ym icon-ym-generator-divider",
+      defaultValue: null,
+      required: false,
+      layout: "colFormItem",
+      span: 24,
       dragDisabled: false,
-      visibility: ["pc", "app"],
-      children: []
+      visibility: ["pc", "app"]
     },
-    header: "卡片容器",
-    shadow: "always"
+    __slot__: {
+      default: "我是分割线"
+    },
+    "content-position": "center"
   },
   {
     __config__: {
-      jnpfKey: "row",
-      label: "栅格容器",
-      tagIcon: "icon-ym icon-ym-generator-layout",
+      jnpfKey: "collapse",
+      label: "折叠面板",
+      showLabel: false,
+      tag: "el-collapse",
+      tagIcon: "icon-ym icon-ym-generator-fold",
       layout: "rowFormItem",
       span: "24",
       dragDisabled: false,
       visibility: ["pc", "app"],
-      layoutTree: true,
-      rowType: "layout"
+      children: [
+        {
+          title: "面板1",
+          name: "1",
+          __config__: {
+            children: []
+          }
+        },
+        {
+          title: "面板2",
+          name: "2",
+          __config__: {
+            children: []
+          }
+        }
+      ],
+      active: ["1"]
     },
-    type: "default",
-    justify: "start",
-    align: "top"
+    on: {
+      change:
+        "({ data, formData, setFormData, setShowOrHide, setRequired, setDisabled, request, getFieldOptions, setFieldOptions }) => {\n    // 在此编写代码\n    \n}"
+    },
+    accordion: false
   },
   {
     __config__: {
@@ -1227,37 +1405,35 @@ export const layoutComponents = [
   },
   {
     __config__: {
-      jnpfKey: "collapse",
-      label: "折叠面板",
-      showLabel: false,
-      tag: "el-collapse",
-      tagIcon: "icon-ym icon-ym-generator-fold",
+      jnpfKey: "row",
+      label: "栅格容器",
+      tagIcon: "icon-ym icon-ym-generator-layout",
       layout: "rowFormItem",
       span: "24",
       dragDisabled: false,
       visibility: ["pc", "app"],
-      children: [
-        {
-          title: "面板1",
-          name: "1",
-          __config__: {
-            children: []
-          }
-        },
-        {
-          title: "面板2",
-          name: "2",
-          __config__: {
-            children: []
-          }
-        }
-      ],
-      active: ["1"]
+      layoutTree: true,
+      rowType: "layout"
     },
-    on: {
-      change:
-        "({ data, formData, setFormData, setShowOrHide, setRequired, setDisabled, request, getFieldOptions, setFieldOptions }) => {\n    // 在此编写代码\n    \n}"
+    type: "default",
+    justify: "start",
+    align: "top"
+  },
+  {
+    __config__: {
+      jnpfKey: "card",
+      label: "卡片容器",
+      showLabel: false,
+      tag: "el-card",
+      tagIcon: "icon-ym icon-ym-generator-card",
+      defaultValue: [],
+      layout: "rowFormItem",
+      span: "24",
+      dragDisabled: false,
+      visibility: ["pc", "app"],
+      children: []
     },
-    accordion: false
-  }
+    header: "卡片容器",
+    shadow: "always"
+  },
 ];

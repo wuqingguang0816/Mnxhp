@@ -9,6 +9,12 @@ export default {
   data() {
     return {}
   },
+  created() {
+    this.$store.dispatch('base/getPositionList')
+    this.$store.dispatch('base/getRoleList')
+    this.$store.dispatch('generator/getDepTree')
+    this.$store.dispatch('generator/getGroupTree')
+  },
   methods: {
     closeDialog(isRefresh) {
       this.visible = false
@@ -16,10 +22,16 @@ export default {
     },
     prev() {
       this.activeStep -= 1
+      if (this.activeStep == 0) this.updateTables()
     },
     stepChick(key) {
       if (this.activeStep <= key) return
       this.activeStep = key
+      if (this.activeStep == 0) this.updateTables()
+    },
+    updateTables() {
+      this.tables = this.$store.state.generator.allTable || []
+      this.mainTableFields = this.$store.state.generator.formItemList || []
     },
     onDbChange() {
       this.tables = []
@@ -84,7 +96,7 @@ export default {
       }
     },
     async updateFields() {
-      if (!this.tables.length) return
+      if (!this.tables.length) return this.loading = false
       this.dataForm.dbLinkId = this.dataForm.dbLinkId || '0'
       const type = this.dataForm.type
       let queryType = 0
@@ -98,6 +110,7 @@ export default {
           this.relationTable = this.tables[i].table
         }
       }
+      this.loading = false
     },
     getDbOptions() {
       getDataSourceListAll().then(res => {
@@ -117,13 +130,17 @@ export default {
       }
     },
     delItem(row, index) {
-      this.tables.splice(index, 1);
-      if (row.typeId == '1' && this.tables.length) {
-        this.tables[0].typeId = '1'
-        this.tables[0].relationTable = ''
-        this.mainTableFields = this.tables[0].fields
-        this.relationTable = this.tables[0].table
-      }
+      this.$confirm("确定要移除当前行？", this.$t('common.tipTitle'), {
+        type: 'warning'
+      }).then(() => {
+        this.tables.splice(index, 1);
+        if (row.typeId == '1' && this.tables.length) {
+          this.tables[0].typeId = '1'
+          this.tables[0].relationTable = ''
+          this.mainTableFields = this.tables[0].fields
+          this.relationTable = this.tables[0].table
+        }
+      }).catch(() => { });
     },
     changeTable(row) {
       this.relationTable = row.table

@@ -32,7 +32,7 @@
         </template>
       </el-input>
     </div>
-    <el-dialog title="选择用户" :close-on-click-modal="false" :visible.sync="visible"
+    <el-dialog :title="title" :close-on-click-modal="false" :visible.sync="visible"
       class="JNPF-dialog JNPF-dialog_center transfer-dialog" lock-scroll append-to-body
       width="800px" :modal-append-to-body="false" @close="onClose">
       <div class="transfer__body">
@@ -43,9 +43,9 @@
               <el-button slot="append" icon="el-icon-search" @click="getData"></el-button>
             </el-input>
           </div>
-          <div class="transfer-pane__body">
+          <div class="transfer-pane__body left-pane">
             <el-tabs v-model="activeName" class="transfer-pane__body-tab"
-              :class="{'hasSys-tab':hasSys}">
+              :class="{'hasSys-tab':hasSys}" v-if="selectType==='all'">
               <el-tab-pane label="全部数据" name="all">
                 <el-tree :data="treeData" :props="props" check-on-click-node
                   @node-click="handleNodeClick" class="JNPF-common-el-tree" node-key="id"
@@ -87,6 +87,26 @@
                 </el-tree>
               </el-tab-pane>
             </el-tabs>
+            <template v-if="selectType === 'custom'">
+              <div class="custom-title">全部数据</div>
+              <div class="single-list" ref="infiniteBody">
+                <template v-if="ableList.length">
+                  <div v-for="(item,index) in ableList" :key="index" class="selected-item-user"
+                    @click="handleNodeClick2(item)">
+                    <div class="selected-item-main">
+                      <el-avatar :size="36" :src="define.comUrl+item.headIcon"
+                        class="selected-item-headIcon">
+                      </el-avatar>
+                      <div class="selected-item-text">
+                        <p class="name">{{item.fullName}}</p>
+                        <p class="organize" :title="item.organize">{{item.organize}}</p>
+                      </div>
+                    </div>
+                  </div>
+                </template>
+                <el-empty description="暂无数据" :image-size="120" v-else></el-empty>
+              </div>
+            </template>
           </div>
         </div>
         <div class="transfer-pane">
@@ -95,12 +115,22 @@
             <el-button @click="removeAll" type="text" class="removeAllBtn">清空列表</el-button>
           </div>
           <div class="transfer-pane__body shadow right-pane">
-            <template>
-              <div v-for="(item, index) in selectedData" :key=" index" class="selected-item">
-                <span>{{ item.fullName}}</span>
-                <i class="el-icon-delete" @click="removeData(index)"></i>
+            <template v-if="selectedData.length">
+              <div v-for="(item,index) in selectedData" :key="index" class="selected-item-user">
+                <div class="selected-item-main">
+                  <el-avatar :size="36" :src="define.comUrl+item.headIcon"
+                    class="selected-item-headIcon">
+                  </el-avatar>
+                  <div class="selected-item-text">
+                    <p class="name">{{item.fullName}}
+                      <i class="el-icon-delete" @click="removeData(index)"></i>
+                    </p>
+                    <p class="organize" :title="item.organize">{{item.organize}}</p>
+                  </div>
+                </div>
               </div>
             </template>
+            <el-empty description="暂无数据" :image-size="120" v-else></el-empty>
           </div>
         </div>
       </div>
@@ -113,7 +143,7 @@
 </template>
 
 <script>
-import { getImUserSelector, getUserInfoList, getSubordinates, getOrganization } from '@/api/permission/user'
+import { getImUserSelector, getUserInfoList, getSubordinates, getOrganization, getUsersByUserCondition } from '@/api/permission/user'
 import { addResizeListener, removeResizeListener } from 'element-ui/src/utils/resize-event';
 export default {
   name: 'userSelect',
@@ -133,6 +163,10 @@ export default {
     placeholder: {
       type: String,
       default: '请选择'
+    },
+    title: {
+      type: String,
+      default: '选择用户'
     },
     disabled: {
       type: Boolean,
@@ -154,6 +188,30 @@ export default {
       type: Boolean,
       default: false
     },
+    selectType: {
+      type: String,
+      default: 'all'
+    },
+    ableDepIds: {
+      type: Array,
+      default: () => []
+    },
+    ablePosIds: {
+      type: Array,
+      default: () => []
+    },
+    ableUserIds: {
+      type: Array,
+      default: () => []
+    },
+    ableRoleIds: {
+      type: Array,
+      default: () => []
+    },
+    ableGroupIds: {
+      type: Array,
+      default: () => []
+    },
     size: String,
   },
   data() {
@@ -174,13 +232,23 @@ export default {
       treeData3: [],
       treeData4: [{
         id: 'currentUser',
-        fullName: '当前用户'
+        fullName: '当前用户',
+        headIcon: '/api/file/Image/userAvatar/001.png'
       }],
+      ableList: [],
       selectedData: [],
       tagsList: [],
       inputHovering: false,
       inputWidth: 0,
       initialInputHeight: 0,
+      total: 0,
+      finish: false,
+      listLoading: false,
+      pagination: {
+        keyword: '',
+        currentPage: 1,
+        pageSize: 20,
+      }
     }
   },
   watch: {
@@ -265,17 +333,59 @@ export default {
     if (this.$el && this.handleResize) removeResizeListener(this.$el, this.handleResize);
   },
   methods: {
+    getAbleList() {
+      this.listLoading = true
+      let query = {
+        pagination: this.pagination,
+        departIds: this.ableDepIds,
+        positionIds: this.ablePosIds,
+        userIds: this.ableUserIds,
+        roleIds: this.ableRoleIds,
+        groupIds: this.ableGroupIds,
+      }
+      getUsersByUserCondition(query).then(res => {
+        if (res.data.list.length < this.pagination.pageSize) {
+          this.finish = true
+        }
+        this.ableList = [...this.ableList, ...res.data.list]
+        this.total = res.data.pagination.total
+        this.listLoading = false
+      }).catch(() => {
+        this.listLoading = false
+      })
+    },
+    bindScroll() {
+      let _this = this,
+        vBody = _this.$refs.infiniteBody;
+      vBody.addEventListener("scroll", function () {
+        if (vBody.scrollHeight - vBody.clientHeight - vBody.scrollTop <= 200 && !_this.listLoading && !_this.finish) {
+          _this.pagination.currentPage += 1
+          _this.getAbleList()
+        }
+      });
+    },
     onClose() {
       this.activeName = ''
     },
     openDialog() {
       if (this.selectDisabled) return
       this.visible = true
-      this.activeName = 'all'
       this.keyword = ''
       this.nodeId = '0'
+      this.finish = false
       this.selectedData = []
-      this.setDefault()
+      if (this.selectType === 'all') {
+        this.activeName = 'all'
+        this.setDefault()
+      }
+      if (this.selectType === 'custom') {
+        this.ableList = []
+        this.getData()
+        this.$nextTick(() => {
+          this.bindScroll()
+          this.setDefault()
+        })
+      }
     },
     confirm() {
       if (this.multiple) {
@@ -289,6 +399,7 @@ export default {
           this.innerValue = ''
           this.$emit('input', '')
           this.$emit('change', '', {})
+          this.visible = false
           return
         }
         this.innerValue = this.selectedData[0].fullName
@@ -312,7 +423,8 @@ export default {
         if (hasSysItem) {
           this.selectedData.push({
             id: 'currentUser',
-            fullName: '当前用户'
+            fullName: '当前用户',
+            headIcon: '/api/file/Image/userAvatar/001.png'
           })
         }
         if (this.multiple) {
@@ -329,22 +441,31 @@ export default {
       })
     },
     getData() {
-      if (this.activeName === 'all') {
-        this.getAllList()
-      } else if (this.activeName === 'department') {
-        this.loading = true
-        getOrganization({ keyword: this.keyword, organizeId: '0' }).then(res => {
-          this.treeData2 = res.data
+      if (this.selectType === 'all') {
+        if (this.activeName === 'all') {
+          this.getAllList()
+        } else if (this.activeName === 'department') {
+          this.loading = true
+          getOrganization({ keyword: this.keyword, organizeId: '0' }).then(res => {
+            this.treeData2 = res.data
+            this.loading = false
+          })
+        } else if (this.activeName === 'subordinates') {
+          this.loading = true
+          getSubordinates(this.keyword).then(res => {
+            this.treeData3 = res.data
+            this.loading = false
+          })
+        } else {
           this.loading = false
-        })
-      } else if (this.activeName === 'subordinates') {
-        this.loading = true
-        getSubordinates(this.keyword).then(res => {
-          this.treeData3 = res.data
-          this.loading = false
-        })
-      } else {
-        this.loading = false
+        }
+      }
+      if (this.selectType === 'custom') {
+        this.pagination.keyword = this.keyword
+        this.pagination.currentPage = 1
+        this.finish = false
+        this.ableList = []
+        this.getAbleList()
       }
     },
     getAllList() {
@@ -372,11 +493,7 @@ export default {
     handleNodeClick2(data) {
       const boo = this.selectedData.some(o => o.id === data.id)
       if (boo) return
-      const item = {
-        id: data.id,
-        fullName: data.fullName
-      }
-      this.multiple ? this.selectedData.push(item) : this.selectedData = [item]
+      this.multiple ? this.selectedData.push(data) : this.selectedData = [data]
     },
     removeAll() {
       this.selectedData = []

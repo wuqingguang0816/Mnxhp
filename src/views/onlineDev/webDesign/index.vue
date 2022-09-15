@@ -66,7 +66,7 @@
           <el-table-column prop="state" label="状态" width="70" align="center">
             <template slot-scope="scope">
               <el-tag :type="scope.row.state == 1 ? 'success' : 'danger'" disable-transitions>
-                {{scope.row.state==1?'正常':'停用'}}</el-tag>
+                {{scope.row.state==1?'启用':'禁用'}}</el-tag>
             </template>
           </el-table-column>
           <el-table-column label="操作" fixed="right" width="150">
@@ -238,13 +238,7 @@ export default {
     },
     getAPPMenuSelector() {
       getMenuSelector({ category: 'App' }, 0).then(res => {
-        let topItem = {
-          fullName: "顶级节点",
-          hasChildren: true,
-          id: "-1",
-          children: res.data.list
-        }
-        this.appTreeData = [topItem]
+        this.appTreeData = res.data.list
       })
     }
   }

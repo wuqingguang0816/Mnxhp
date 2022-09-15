@@ -34,7 +34,7 @@
         </div>
       </template>
       <template v-if="activeData.__config__.dataType === 'dictionary'">
-        <el-form-item label="远端数据">
+        <el-form-item label="数据字典">
           <JNPF-TreeSelect :options="treeData" v-model="activeData.__config__.dictionaryType"
             placeholder="请选择数据字典" lastLevel clearable>
           </JNPF-TreeSelect>
@@ -48,9 +48,8 @@
       </template>
       <template v-if="activeData.__config__.dataType === 'dynamic'">
         <el-form-item label="远端数据">
-          <JNPF-TreeSelect :options="dataInterfaceSelector" v-model="activeData.__config__.propsUrl"
-            placeholder="请选择远端数据" lastLevel lastLevelKey='categoryId' lastLevelValue='1'
-            @change="propsUrlChange" clearable />
+          <interface-dialog :value="activeData.__config__.propsUrl"
+            :title="activeData.__config__.propsName" popupTitle="远端数据" @change="propsUrlChange" />
         </el-form-item>
         <el-form-item label="存储字段">
           <el-input v-model="activeData.props.props.value" placeholder="请输入存储字段"
@@ -97,10 +96,11 @@ import comMixin from '../mixin';
 import TreeNodeDialog from './TreeNodeDialog'
 import { getDictionaryTypeSelector, getDictionaryDataSelector } from '@/api/systemData/dictionary'
 import { getDataInterfaceSelector, getDataInterfaceRes } from '@/api/systemData/dataInterface'
+import InterfaceDialog from '@/components/Process/PropPanel/InterfaceDialog'
 export default {
   props: ['activeData'],
   mixins: [comMixin],
-  components: { TreeNodeDialog },
+  components: { TreeNodeDialog, InterfaceDialog },
   data() {
     return {
       treeData: [],
@@ -198,15 +198,20 @@ export default {
       this.activeData.props.props.children = 'children'
       this.activeData.__config__.dictionaryType = ''
       this.activeData.__config__.propsUrl = ''
+      this.activeData.__config__.propsName = ''
     },
-    propsUrlChange(val) {
+    propsUrlChange(val, item) {
       this.activeData.__config__.defaultValue = []
       if (!val) {
+        this.activeData.__config__.propsUrl = ''
+        this.activeData.__config__.propsName = ''
         this.activeData.options = []
         return
       }
+      this.activeData.__config__.propsUrl = val
+      this.activeData.__config__.propsName = item.fullName
       getDataInterfaceRes(val).then(res => {
-        let data = res.data.data
+        let data = res.data
         if (Array.isArray(data)) {
           this.activeData.options = data
         } else {
@@ -214,6 +219,7 @@ export default {
         }
       }).catch(() => {
         this.activeData.__config__.propsUrl = ''
+        this.activeData.__config__.propsName = ''
         this.activeData.options = []
       })
     }
@@ -229,7 +235,7 @@ export default {
   .node-operation {
     float: right;
   }
-  i[class*="el-icon"] + i[class*="el-icon"] {
+  i[class*='el-icon'] + i[class*='el-icon'] {
     margin-left: 6px;
   }
   .el-icon-plus {

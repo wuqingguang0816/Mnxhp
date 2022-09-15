@@ -72,6 +72,21 @@ export function Assign(id, data) {
     data
   })
 }
+// 流程复活和变更节点下拉数据
+export function ResurgenceList(id) {
+  return request({
+    url: `/api/workflow/Engine/FlowBefore/Selector/${id}`,
+    method: 'get',
+  })
+}
+// 流程复活和变更提交
+export function Resurgence(data) {
+  return request({
+    url: `/api/workflow/Engine/FlowBefore/Change`,
+    method: 'post',
+    data
+  })
+}
 // 审批汇总
 export function getRecordList(id, data) {
   return request({

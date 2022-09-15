@@ -7,6 +7,7 @@ const STORAGETYPE = window.localStorage
 
 const jnpf = {
   toDateText(dateTimeStamp) {
+    if (!dateTimeStamp) return ''
     let result = ''
     let minute = 1000 * 60; //把分，时，天，周，半个月，一个月用毫秒表示
     let hour = minute * 60;
@@ -194,7 +195,7 @@ const jnpf = {
       cents = "0" + cents;
     for (var i = 0; i < Math.floor((num.length - (1 + i)) / 3); i++)
       num = num.substring(0, num.length - (4 * i + 3)) + '' +
-      num.substring(num.length - (4 * i + 3));
+        num.substring(num.length - (4 * i + 3));
     return (((sign) ? '' : '-') + num + '.' + cents);
   },
   toUrl(url) {
@@ -256,7 +257,7 @@ const jnpf = {
 
     function cacheItem(key, val) {
       key = STORAGEPREFIX + key
-      let valType = typeof(val)
+      let valType = typeof (val)
       if (val !== null) {
         var valConstructor = val.constructor
       }
@@ -361,6 +362,21 @@ const jnpf = {
     const realUrl = baseUrl + url + (name ? '&name=' + name : '')
     a.setAttribute('href', realUrl)
     a.click()
+  },
+  treeToArray(treeData, type) {
+    type = type || ''
+    let list = []
+    const loop = (treeData) => {
+      for (let i = 0; i < treeData.length; i++) {
+        const item = treeData[i]
+        if (!type || item.type === type) list.push(item)
+        if (item.children && Array.isArray(item.children)) {
+          loop(item.children)
+        }
+      }
+    }
+    loop(treeData)
+    return list
   },
   isEmpty(data) {
     return data === null || data === undefined || data === ''

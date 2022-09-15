@@ -99,7 +99,7 @@ import Preview from '../preview'
 import {
   inputComponents, selectComponents, systemComponents, layoutComponents, formConf
 } from '@/components/Generator/generator/config'
-import { noVModelList, noTableAllowList, webPeculiarList, onlinePeculiarList } from '@/components/Generator/generator/comConfig'
+import { noVModelList, noTableAllowList, calculateItem, onlinePeculiarList } from '@/components/Generator/generator/comConfig'
 import {
   exportDefault, beautifierConf, isNumberStr, titleCase, deepClone
 } from '@/components/Generator/utils'
@@ -173,6 +173,11 @@ export default {
       ]
     }
   },
+  provide() {
+    return {
+      getShowType: () => this.showType
+    }
+  },
   computed: {
   },
   watch: {
@@ -224,7 +229,10 @@ export default {
       this.drawingList = []
       this.idGlobal = 100
     }
-    if (this.modelType == 1 || this.modelType == 6) this.leftComponents[1].list = [...this.leftComponents[1].list, ...onlinePeculiarList, ...webPeculiarList]
+    if (this.modelType == 1 || this.modelType == 6) {
+      this.leftComponents[1].list = [...this.leftComponents[1].list, calculateItem]
+      this.leftComponents[3].list = [...this.leftComponents[3].list, ...onlinePeculiarList]
+    }
     if (this.webType != 2 || this.modelType == 3 || this.modelType == 6) this.formConf.popupType = 'fullScreen'
   },
   mounted() {
@@ -247,13 +255,13 @@ export default {
           for (let i = 0; i < list.length; i++) {
             const e = list[i]
             const config = e.__config__
-            if (this.$store.getters.hasTable && config.layout === "colFormItem" && !noVModelList.includes(config.jnpfKey) && !e.__vModel__) {
-              reject({ msg: `请选择${config.label}的控件字段`, target: 1 })
+            if (config.layout === "colFormItem" && !noVModelList.includes(config.jnpfKey) && !e.__vModel__) {
+              reject({ msg: `${config.label}的控件字段不能为空`, target: 1 })
               break
             }
             if (config.jnpfKey === 'billRule') {
               if (!config.rule) {
-                reject({ msg: '单据组件“选择模板”属性为必填项', target: 1 })
+                reject({ msg: '单据组件“单据模板”属性为必填项', target: 1 })
                 break
               }
             }
@@ -278,6 +286,20 @@ export default {
               }
               if (!e.relationField) {
                 reject({ msg: '弹窗选择控件“显示字段”属性为必填项', target: 1 })
+                break
+              }
+            }
+            if (config.jnpfKey === 'popupTableSelect') {
+              if (!e.interfaceId) {
+                reject({ msg: '下拉表格控件“远端数据”属性为必填项', target: 1 })
+                break
+              }
+              if (!e.propsValue) {
+                reject({ msg: '下拉表格控件“储存字段”属性为必填项', target: 1 })
+                break
+              }
+              if (!e.relationField) {
+                reject({ msg: '下拉表格控件“显示字段”属性为必填项', target: 1 })
                 break
               }
             }
@@ -339,6 +361,7 @@ export default {
       }
       if (obj.to.className.indexOf('table') > -1) {
         this.$set(this.activeItem.__config__, 'isSubTable', true)
+        this.$set(this.activeItem.__config__, 'parentVModel', this.activeTableItem.__vModel__)
         if (this.$store.getters.hasTable) {
           this.$set(this.activeItem.__config__, 'relationTable', this.activeTableItem.__config__.tableName)
           this.activeItem.__vModel__ = ''
@@ -350,6 +373,7 @@ export default {
       if (obj.from == obj.to) return
       if (obj.to.className.indexOf('table') > -1) {
         this.$set(this.activeItem.__config__, 'isSubTable', true)
+        this.$set(this.activeItem.__config__, 'parentVModel', this.activeTableItem.__vModel__)
         if (this.$store.getters.hasTable) {
           this.$set(this.activeItem.__config__, 'relationTable', this.activeTableItem.__config__.tableName)
           this.activeItem.__vModel__ = ''
@@ -360,9 +384,11 @@ export default {
       if (obj.from == obj.to) return
       if (obj.to.className.indexOf('table') < 0) {
         this.$set(this.activeItem.__config__, 'isSubTable', false)
+        this.$set(this.activeItem.__config__, 'parentVModel', '')
         if (this.$store.getters.hasTable) this.activeItem.__vModel__ = ''
       } else {
         this.$set(this.activeItem.__config__, 'isSubTable', true)
+        this.$set(this.activeItem.__config__, 'parentVModel', this.activeTableItem.__vModel__)
         if (this.$store.getters.hasTable) {
           this.$set(this.activeItem.__config__, 'relationTable', this.activeTableItem.__config__.tableName)
           this.activeItem.__vModel__ = ''
@@ -384,7 +410,7 @@ export default {
       tempActiveData = clone
       return tempActiveData
     },
-    createIdAndKey(item) {
+    createIdAndKey(item, parent) {
       const config = item.__config__
       config.formId = ++this.idGlobal
       config.renderKey = +new Date() // 改变renderKey后可以实现强制更新组件
@@ -399,6 +425,9 @@ export default {
             item.__vModel__ = ""
           }
         }
+        if (parent && parent.__vModel__ && parent.__config__.jnpfKey === 'table') {
+          item.__config__.parentVModel = parent.__vModel__
+        }
       } else if (config.layout === 'rowFormItem') {
         if (config.jnpfKey === 'table') {
           item.__vModel__ = this.toggleVmodelCase(`${config.jnpfKey}Field${this.idGlobal}`);
@@ -408,13 +437,13 @@ export default {
         // delete config.label // rowFormItem无需配置label属性
       }
       if (Array.isArray(config.children)) {
-        config.children = config.children.map(childItem => this.createIdAndKey(childItem))
+        config.children = config.children.map(childItem => this.createIdAndKey(childItem, item))
       }
       return item
     },
     toggleVmodelCase(str) {
       const dbType = this.dbType || ''
-      if (dbType.toLowerCase() === 'Oracle'.toLowerCase() || dbType.toLowerCase() === 'DM8'.toLowerCase()) {
+      if (dbType.toLowerCase() === 'Oracle'.toLowerCase() || dbType.toLowerCase() === 'DM'.toLowerCase()) {
         return str.toUpperCase()
       }
       if (dbType.toLowerCase() === 'PostgreSQL'.toLowerCase() || dbType.toLowerCase() === 'KingBaseES'.toLowerCase()) {
@@ -510,6 +539,6 @@ export default {
 }
 </script>
 <style lang='scss'>
-@import "../styles/index";
-@import "../styles/home";
+@import '../styles/index';
+@import '../styles/home';
 </style>

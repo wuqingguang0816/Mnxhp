@@ -32,7 +32,7 @@
         </template>
       </el-input>
     </div>
-    <el-dialog title="组织选择" :close-on-click-modal="false" :visible.sync="visible"
+    <el-dialog title="选择组织" :close-on-click-modal="false" :visible.sync="visible"
       class="JNPF-dialog JNPF-dialog_center transfer-dialog" lock-scroll append-to-body
       width="800px" :modal-append-to-body="false" @close="onClose">
       <div class="transfer__body">
@@ -63,7 +63,7 @@
           <div class="transfer-pane__body shadow right-pane">
             <template>
               <div v-for="(item, index) in selectedData" :key="index" class="selected-item">
-                <span>{{item}}</span>
+                <span :title="item">{{item}}</span>
                 <i class="el-icon-delete" @click="removeData(index)"></i>
               </div>
             </template>
@@ -80,6 +80,8 @@
 
 <script>
 import { addResizeListener, removeResizeListener } from 'element-ui/src/utils/resize-event';
+import { getDepartmentSelectorByAuth } from "@/api/permission/department";
+import { getOrganizeSelectorByAuth } from '@/api/permission/organize'
 export default {
   name: 'comSelect',
   inject: {
@@ -114,7 +116,21 @@ export default {
       type: Boolean,
       default: false
     },
+    auth: {
+      type: Boolean,
+      default: false
+    },
+    isOnlyOrg: {
+      type: Boolean,
+      default: false
+    },
     size: String,
+    currOrgId: {
+      default: '0'
+    },
+    parentId: {
+      default: ''
+    }
   },
   data() {
     return {
@@ -215,22 +231,28 @@ export default {
   },
   methods: {
     async getData() {
-      this.treeData = await this.$store.dispatch('generator/getDepTree')
-      this.allList = this.treeToArray(this.treeData)
-    },
-    treeToArray(treeData) {
-      let list = []
-      const loop = (treeData) => {
-        for (let i = 0; i < treeData.length; i++) {
-          const item = treeData[i]
-          list.push(item)
-          if (item.hasChildren && item.children && Array.isArray(item.children)) {
-            loop(item.children)
-          }
-        }
+      const treeData = await this.$store.dispatch('generator/getDepTree')
+      const topItem = {
+        fullName: "顶级节点",
+        hasChildren: true,
+        id: "-1",
+        icon: "icon-ym icon-ym-tree-organization3",
+        organize: '顶级节点',
+        organizeIds: ['-1']
       }
-      loop(treeData)
-      return list
+      this.allList = [...this.$store.getters.departmentList, topItem]
+      if (this.auth) {
+        if (this.isOnlyOrg && this.parentId === '-1') {
+          this.treeData = [topItem]
+          return
+        }
+        const method = this.isOnlyOrg ? getOrganizeSelectorByAuth : getDepartmentSelectorByAuth
+        method(this.currOrgId).then(res => {
+          this.treeData = res.data.list
+        })
+      } else {
+        this.treeData = treeData
+      }
     },
     onClose() { },
     clear() {
@@ -245,7 +267,8 @@ export default {
     openDialog() {
       if (this.selectDisabled) return
       this.keyword = ''
-      this.search()
+      this.treeData = []
+      this.getData()
       this.setDefault()
       this.visible = true
     },
@@ -265,10 +288,10 @@ export default {
       loop(node)
       return fullPath
     },
-    handleNodeClick(data, node) {
-      const nodePath = this.getNodePath(node)
-      let currId = nodePath.map(o => o.id)
-      let currData = nodePath.map(o => o.fullName).join('/')
+    handleNodeClick(data) {
+      if (data.disabled) return
+      let currId = data.organizeIds
+      let currData = data.organize
       if (this.multiple) {
         const boo = this.selectedIds.some(o => o.join('/') === currId.join('/'))
         if (boo) return

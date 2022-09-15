@@ -1,136 +1,161 @@
 <template>
-  <el-dialog :title="title" :close-on-click-modal="false" :visible.sync="fromVisible"
-    class="JNPF-dialog JNPF-dialog_center" lock-scroll append-to-body width='600px'>
-    <el-form label-width="80px" :model="from" :rules="fromRules" ref="from">
-      <template v-if="type==='transfer'||type==='assign'">
-        <el-form-item label="指派节点" prop="nodeCode" v-if="type==='assign'">
-          <el-select v-model="from.nodeCode" placeholder="请选择指派节点">
-            <el-option v-for="item in assignNodeList" :key="item.nodeCode" :label="item.nodeName"
-              :value="item.nodeCode" />
-          </el-select>
-        </el-form-item>
-        <el-form-item :label="title+'给谁'" prop="freeApproverUserId"
-          :rules="[{ required: true, message: `请选择${title}给谁`, trigger: 'click' }]">
-          <user-select v-model="from.freeApproverUserId" :placeholder="`请选择${title}给谁`" />
-        </el-form-item>
-        <el-form-item :label="title+'意见'" prop="handleOpinion">
-          <el-input v-model="from.handleOpinion" :placeholder="`请输入${title}意见（选填）`" type="textarea"
-            :rows="4" />
-        </el-form-item>
-      </template>
-      <template v-if="type==='revoke'||type==='recall'">
-        <el-form-item :label="title+'原因'" prop="handleOpinion">
-          <el-input v-model="from.handleOpinion" :placeholder="`请输入${title}原因（选填）`" type="textarea"
-            :rows="4" />
-        </el-form-item>
-      </template>
-      <el-form-item :label="title+'附件'" prop="fileList">
-        <JNPF-UploadFz v-model="from.fileList" :limit="limit" />
+  <el-dialog :title="title" :close-on-click-modal="false" width='600px' :visible.sync="visible"
+    class="JNPF-dialog JNPF-dialog_center" lock-scroll append-to-body>
+    <el-form ref="dataForm" :model="dataForm" label-width="80px">
+      <el-form-item label="转审给谁" prop="freeApproverUserId" v-if="eventType == 'transfer'"
+        :rules="[{ required: true, message: '请选择转审给谁',trigger: 'blur'}]">
+        <user-select v-model="dataForm.freeApproverUserId" placeholder="请选择转审给谁" />
+      </el-form-item>
+      <el-form-item :label="`${label}原因`" prop="handleOpinion" v-if="properties.hasOpinion">
+        <el-input v-model="dataForm.handleOpinion" :placeholder="`请输入${label}原因`" type="textarea"
+          :rows="4" />
+      </el-form-item>
+      <el-form-item label="手写签名" required v-if="properties.hasSign">
+        <div class="sign-main">
+          <div class="sign-head">
+            <div class="sign-tip">请在这里输入你的签名</div>
+            <div class="sign-action">
+              <el-button class="clear-btn" size="mini" @click="handleReset">清空</el-button>
+              <el-button class="sure-btn" size="mini" @click="handleGenerate" :disabled="!!signImg">
+                确定签名</el-button>
+            </div>
+          </div>
+          <div class="sign-box">
+            <vue-esign ref="esign" :height="330" v-if="!signImg" :lineWidth="5" />
+            <img :src="signImg" alt="" v-if="signImg" class="sign-img">
+          </div>
+        </div>
       </el-form-item>
     </el-form>
     <span slot="footer" class="dialog-footer">
-      <el-button @click="fromVisible = false">{{$t('common.cancelButton')}}</el-button>
-      <el-button type="primary" @click="handleAction()">{{$t('common.confirmButton')}}
+      <el-button @click="visible = false">{{$t('common.cancelButton')}}</el-button>
+      <el-button type="primary" @click="handleSure()" :loading="btnLoading">
+        {{$t('common.confirmButton')}}
       </el-button>
     </span>
   </el-dialog>
 </template>
-
 <script>
-import { Transfer, Recall, Assign } from '@/api/workFlow/FlowBefore'
-import { Revoke } from '@/api/workFlow/FlowLaunch'
+import vueEsign from 'vue-esign'
 export default {
-  props: {
-    assignNodeList: {
-      type: Array,
-      default: () => []
-    },
-    limit: {
-      type: Number,
-      default: 3
-    }
-  },
+  components: { vueEsign },
   data() {
     return {
-      fromVisible: false,
-      type: '',
-      title: '',
-      id: '',
-      from: {
-        nodeCode: '',
+      visible: false,
+      properties: {},
+      eventType: '',
+      dataForm: {
         handleOpinion: '',
-        freeApproverUserId: '',
-        fileList: [],
+        freeApproverUserId: ''
       },
-      fromRules: {
-        nodeCode: [
-          { required: true, message: '请选择指派节点', trigger: 'change' }
-        ]
-      }
-    };
+      signImg: '',
+      btnLoading: false,
+      title: '',
+      label: ''
+    }
   },
   methods: {
-    init(type, id) {
-      this.id = id
-      this.type = type
-      switch (this.type) {
+    init(properties, eventType) {
+      this.visible = true
+      this.properties = properties
+      this.eventType = eventType || ''
+      this.dataForm.handleOpinion = ''
+      this.dataForm.freeApproverUserId = ''
+      this.signImg = ''
+      switch (eventType) {
         case 'transfer':
           this.title = '转审'
-          break
-        case 'assign':
-          this.title = '指派'
-          break
+          this.label = '转审'
+          break;
         case 'revoke':
+          this.title = '撤回流程'
+          this.label = '撤回'
+          break;
         case 'recall':
-          this.title = '撤回'
-          break
+          this.title = '撤回审核'
+          this.label = '撤回'
+          break;
         default:
-          break
+          break;
       }
-      this.fromVisible = true
       this.$nextTick(() => {
-        this.$refs.from.resetFields()
-        this.from.nodeCode = ''
-        this.from.freeApproverUserId = ''
-        this.from.handleOpinion = ''
+        this.handleReset()
+        this.$refs['dataForm'].resetFields()
       })
     },
-    handleAction() {
-      this.$refs.from.validate((valid) => {
-        if (!valid) return
-        let formMethod = ''
-        switch (this.type) {
-          case 'transfer':
-            formMethod = Transfer
-            break
-          case 'assign':
-            formMethod = Assign
-            break
-          case 'revoke':
-            formMethod = Revoke
-            break
-          case 'recall':
-            formMethod = Recall
-            break
-          default:
-            break
+    handleSure() {
+      this.$refs['dataForm'].validate((valid) => {
+        if (valid) {
+          if (this.properties.hasSign && !this.signImg) {
+            this.$message({
+              message: '请签名',
+              type: 'error'
+            })
+            return
+          }
+          let query = {
+            handleOpinion: this.dataForm.handleOpinion,
+            freeApproverUserId: this.dataForm.freeApproverUserId,
+            signImg: this.signImg,
+          }
+          this.btnLoading = true
+          this.$emit('submit', query)
         }
-        let query = { ...this.from }
-        query.fileList = JSON.stringify(this.from.fileList)
-        formMethod(this.id, query).then(res => {
-          this.$message({
-            type: 'success',
-            message: res.msg,
-            duration: 1000,
-            onClose: () => {
-              this.$refs.from.resetFields()
-              this.fromVisible = false
-              this.$emit('close', true)
-            }
-          })
+      })
+    },
+    closeDialog() {
+      this.btnLoading = false
+      this.visible = false
+    },
+    handleReset() {
+      this.signImg = ''
+      this.$nextTick(() => {
+        this.$refs.esign && this.$refs.esign.reset()
+      })
+    },
+    handleGenerate() {
+      this.$refs.esign.generate().then(res => {
+        if (res) this.signImg = res
+      }).catch(err => {
+        this.$message({
+          message: '请签名',
+          type: 'warning'
         })
       })
     },
   }
 }
 </script>
+<style lang="scss" scoped>
+.sign-main {
+  border: 1px solid #dcdfe6;
+  border-radius: 4px;
+  overflow: hidden;
+  .sign-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 4px;
+    border-bottom: 1px solid #dcdfe6;
+    .sign-tip {
+      color: #a5a5a5;
+      font-size: 12px;
+    }
+    .sign-action {
+      display: flex;
+      align-items: center;
+      .clear-btn,
+      .sure-btn {
+        margin-left: 5px;
+      }
+    }
+  }
+  .sign-box {
+    border-top: 0;
+    height: 100px;
+  }
+  .sign-img {
+    width: 100%;
+  }
+}
+</style>

@@ -12,44 +12,26 @@
         </el-select>
       </el-form-item>
       <el-form-item label="数据选择" prop="dataSelect" class="el-select">
-        <div @click="jumpTable">
-          <el-input placeholder="请选择数据表" v-model="dataForm.dataSelect" readonly
-            :validate-event="false" @mouseenter.native="inputHovering = true"
-            @mouseleave.native="inputHovering = false">
-            <template slot="suffix">
-              <i v-show="!showClose" :class="[
-                  'el-select__caret',
-                  'el-input__icon',
-                  'el-icon-arrow-up'
-                ]"></i>
-              <i v-if="showClose" class="el-select__caret el-input__icon el-icon-circle-close"
-                @click.stop="clear"></i>
-            </template>
-          </el-input>
-        </div>
+        <dataTable v-model="dataForm.dataSelect" placeholder="请选择数据表" multiple clearable
+          :dbLinkId="dataForm.dbLinkId" :value='dataForm.dataSelect' />
       </el-form-item>
     </el-form>
     <span slot="footer" class="dialog-footer">
-      <el-button @click="visible = false">{{
-        $t("common.cancelButton")
-      }}</el-button>
+      <el-button @click="visible = false">{{$t("common.cancelButton")}}</el-button>
       <el-button type="primary" :loading="btnLoading" @click="dataFormSubmit()">
         {{ $t("common.confirmButton") }}</el-button>
     </span>
-    <DataTableForm :visible.sync="formVisible" ref="tableForm" @closeForm="closeForm"
-      :dbLinkId="dataForm.dbLinkId" :dataSelect="dataForm.dataSelect" />
   </el-dialog>
 </template>
 
 <script>
-import { getDataModelFields } from "@/api/system/dataAuthorize";
-import DataTableForm from "./DataTableForm.vue";
+import { saveLinkData } from "@/api/system/authorize";
+import dataTable from './DataTable.vue'
 export default {
-  components: { DataTableForm },
+  components: { dataTable },
   data() {
     return {
       inputHovering: false,
-      formVisible: false,
       visible: false,
       formLoading: false,
       btnLoading: false,
@@ -58,6 +40,7 @@ export default {
         dbLinkId: "0",
         dataSelect: ""
       },
+      moduleId: "",
       dataRule: {
         dbLinkId: [
           { required: true, message: "数据库不能为空", trigger: "blur" }
@@ -67,48 +50,43 @@ export default {
         ]
       },
       dbOptions: [],
-      type: 0
+      type: 0,
+      dataType: ""
     };
   },
-  computed: {
-    showClose() {
-      let hasValue =
-        this.dataForm.dataSelect !== undefined &&
-        this.dataForm.dataSelect !== null &&
-        this.dataForm.dataSelect !== "";
-      let criteria = this.inputHovering && hasValue;
-      return criteria;
-    }
-  },
   methods: {
-    init(dbOptions, type) {
-      this.type = type != undefined ? type : 1
+    init(dataList, moduleId, dbOptions, dataType, type) {
+      this.dataType = dataType
+      this.moduleId = moduleId
+      this.type = type || 1
       this.visible = true;
       this.dbOptions = dbOptions;
-    },
-    clear() {
-      this.dataForm.dataSelect = "";
+      if (dataList) {
+        this.dataForm.id = dataList.id || ''
+        this.dataForm.dbLinkId = dataList.linkId || '0'
+        this.dataForm.dataSelect = dataList.linkTables ? dataList.linkTables.split(",") : []
+      }
     },
     dataFormSubmit() {
       this.$refs["dataForm"].validate(valid => {
         if (valid) {
-          getDataModelFields(this.dataForm.dbLinkId, this.dataForm.dataSelect, this.type)
-            .then(res => {
-              this.$emit("refreshDataList", res.data.list, this.dataForm.dataSelect);
-              this.visible = false;
-            })
-            .catch(() => { });
+          let query = {
+            id: this.dataForm.id,
+            moduleId: this.moduleId,
+            linkId: this.dataForm.dbLinkId,
+            linkTables: this.dataForm.dataSelect.toString(),
+            dataType: this.dataType
+          }
+          saveLinkData(query).then(res => {
+            this.$emit("refreshDataList", this.dataForm.dataSelect.toString());
+            this.visible = false;
+          }).catch(() => { });
         }
       });
     },
-    jumpTable() {
-      this.formVisible = true;
+    onDbChange() {
+      this.dataForm.dataSelect = ''
     },
-    onDbChange() { },
-    closeForm(table, row) {
-      //   let data = JSON.parse(JSON.stringify(dbData));
-      this.dataForm.dataSelect = table;
-    }
   }
 };
 </script>

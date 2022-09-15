@@ -13,7 +13,7 @@ const getDataType = (data) => {
     return 'number'
   } else if (['checkbox', 'uploadFz', 'uploadImg', 'cascader', 'comSelect', 'address'].includes(jnpfKey)) {
     return 'array'
-  } else if (['select', 'depSelect', 'posSelect', 'userSelect', 'treeSelect'].includes(jnpfKey)) {
+  } else if (['select', 'depSelect', 'posSelect', 'userSelect', 'treeSelect', 'roleSelect', 'groupSelect'].includes(jnpfKey)) {
     if (data.multiple) return 'array'
   }
   return ''
@@ -32,6 +32,8 @@ export default {
     this.updateFiled(data)
     this.$store.dispatch('base/getPositionList')
     this.$store.dispatch('base/getRoleList')
+    this.$store.dispatch('generator/getDepTree')
+    this.$store.dispatch('generator/getGroupTree')
     return {
       data, // 流程图数据
       scaleVal: 100, // 流程图缩放比例 100%

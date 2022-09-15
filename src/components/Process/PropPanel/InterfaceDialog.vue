@@ -1,7 +1,7 @@
 <template>
   <div class="popupSelect-container">
     <div class="el-select" @click="openDialog">
-      <el-input placeholder="请选择接口模板" v-model="title" readonly :validate-event="false"
+      <el-input :placeholder="'请选择'+popupTitle" v-model="title" readonly :validate-event="false"
         @mouseenter.native="inputHovering = true" @mouseleave.native="inputHovering = false">
         <template slot="suffix">
           <i v-show="!showClose"
@@ -11,7 +11,7 @@
         </template>
       </el-input>
     </div>
-    <el-dialog title="接口模板" :close-on-click-modal="false" :visible.sync="visible"
+    <el-dialog :title="popupTitle" :close-on-click-modal="false" :visible.sync="visible"
       class="JNPF-dialog JNPF-dialog_center JNPF-dialog-tree-select" lock-scroll append-to-body
       width="1000px">
       <div class="JNPF-common-layout">
@@ -34,8 +34,8 @@
               <el-col :span="8" v-if="!dataType">
                 <el-form-item label="类型">
                   <el-select v-model="query.dataType" placeholder="请选择" clearable>
-                    <el-option label="SQL操作" :value="1"></el-option>
                     <el-option label="静态数据" :value="2"></el-option>
+                    <el-option label="SQL操作" :value="1"></el-option>
                     <el-option label="API操作" :value="3"></el-option>
                   </el-select>
                 </el-form-item>
@@ -91,7 +91,6 @@
               <el-table-column prop="fullName" label="名称" />
               <el-table-column prop="enCode" label="编码" />
               <el-table-column prop="dataType" label="类型" width="100" />
-              <el-table-column prop="requestMethod" label="动作" width="100" />
             </JNPF-table>
             <pagination :total="total" :page.sync="listQuery.currentPage"
               :limit.sync="listQuery.pageSize" @pagination="initData" />
@@ -128,7 +127,11 @@ export default {
     disabled: {
       type: Boolean,
       default: false
-    }
+    },
+    popupTitle: {
+      type: String,
+      default: '接口模板'
+    },
   },
   model: {
     prop: 'value',
@@ -246,8 +249,3 @@ export default {
   }
 }
 </script>
-<style lang="scss">
-.template-item {
-  line-height: 30px;
-}
-</style>

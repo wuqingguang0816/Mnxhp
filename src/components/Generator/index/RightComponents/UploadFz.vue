@@ -3,6 +3,9 @@
     <el-form-item label="控件标题">
       <el-input v-model="activeData.__config__.label" placeholder="请输入控件标题" />
     </el-form-item>
+    <el-form-item label="按钮文字">
+      <el-input v-model="activeData.buttonText" placeholder="请输入按钮文字" />
+    </el-form-item>
     <el-form-item label="文件类型">
       <el-select v-model="activeData.accept" placeholder="不限制" clearable @change="onChange">
         <el-option label="图片" value="image/*" />
@@ -22,9 +25,6 @@
           <el-option label="MB" value="MB" />
         </el-select>
       </el-input>
-    </el-form-item>
-    <el-form-item label="按钮文字">
-      <el-input v-model="activeData.buttonText" placeholder="请输入按钮文字" />
     </el-form-item>
     <el-form-item label="最大上传数">
       <el-input-number :value="activeData.limit" :min="0" placeholder="最大上传数"

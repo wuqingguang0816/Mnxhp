@@ -6,13 +6,13 @@
           <div class="JNPF-common-title">
             <h2>表单字段</h2>
           </div>
-          <el-tree :data="newData" default-expand-all :expand-on-click-node="false"
-            :props="defaultProps" @node-click="handleNodeClick"></el-tree>
-          <div class="JNPF-common-title">
+          <el-tree :data="newData" default-expand-all :props="defaultProps"
+            @node-click="handleNodeClick"></el-tree>
+          <div class="JNPF-common-title sys-title">
             <h2>系统字段</h2>
           </div>
-          <el-tree :data="newSysData" default-expand-all :expand-on-click-node="false"
-            :props="defaultProps" @node-click="handleNodeClick"></el-tree>
+          <el-tree :data="newSysData" default-expand-all :props="defaultProps"
+            @node-click="handleNodeClick"></el-tree>
         </el-scrollbar>
       </div>
       <div class="system-view-content">
@@ -47,21 +47,21 @@ export default {
       richHeight: document.documentElement.clientHeight - 42,
       systemData: [
         {
-          fieldName: '打印人员',
-          field: 'systemPrinter',
+          fullName: '打印人员',
+          id: 'systemPrinter',
         },
         {
-          fieldName: '打印时间',
-          field: 'systemPrintTime',
+          fullName: '打印时间',
+          id: 'systemPrintTime',
         },
         {
-          fieldName: '审批内容',
-          field: 'systemApprovalContent',
+          fullName: '审批内容',
+          id: 'systemApprovalContent',
         }
       ],
       defaultProps: {
         children: 'children',
-        label: 'fieldName'
+        label: 'fullName'
       }
     }
   },
@@ -89,7 +89,7 @@ export default {
     newSysData() {
       let data = this.systemData
       if (this.type == 2) {
-        data = this.systemData.filter(o => o.field !== 'systemApprovalContent')
+        data = this.systemData.filter(o => o.id !== 'systemApprovalContent')
       }
       return data
     }
@@ -115,13 +115,14 @@ export default {
         body {
           font-family: simsun, serif, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
           padding: 40px 30px;
-          width: 600px;
+          width: 776px;
           margin: 0 auto !important;
           // border: 1px solid rgb(210, 213, 216);
           background: white;
           min-height: 100%;
           box-sizing: border-box;
           box-shadow: 0 2px 12px 0 rgb(0 0 0 / 10%);
+          word-break:break-all;
         }
         .wk-tiny-color--customer {
           color: #005AF3;
@@ -273,8 +274,8 @@ export default {
       return this.editor.dom.getParent(this.editor.selection.getNode(), tag)
     },
     getSpanNode(item, node) {
-      const parent = (node.parent.data != null && node.parent.data.field != null) ? node.parent.data.field : 'null'
-      return `<span data-tag="${parent}.${item.field}" class="wk-print-tag-wukong ${this.getSpanColorClass()}" contenteditable="false">{${item.field}}</span>`
+      const parent = (node.parent.data != null && node.parent.data.id != null) ? node.parent.data.id : 'null'
+      return `<span data-tag="${parent}.${item.id}" class="wk-print-tag-wukong ${this.getSpanColorClass()}" contenteditable="false">{${item.id}}</span>`
     },
     getSpanColorClass() {
       const color = ['customer', 'contacts', 'business', 'contract', 'receivables', 'product'].includes(this.activeTab) ? this.activeTab : 'common'
@@ -313,9 +314,14 @@ export default {
     padding: 0 10px;
     margin-bottom: 10px;
     height: 39px;
+    &.sys-title {
+      margin-top: 30px;
+    }
     h2 {
       font-size: 14px;
       line-height: 39px;
+      color: #043254;
+      font-weight: bold;
     }
   }
 }

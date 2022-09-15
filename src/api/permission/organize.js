@@ -17,6 +17,14 @@ export const getOrganizeSelector = (id) => {
   })
 }
 
+// 获取组织/公司下拉框列表(带权限)
+export const getOrganizeSelectorByAuth = (id) => {
+  return request({
+    url: '/api/permission/Organize/SelectorByAuth/' + (!!id ? id : 0),
+    method: 'GET'
+  })
+}
+
 // 获取组织/公司树形
 export const getOrganizeTree = () => {
   return request({
@@ -78,6 +86,14 @@ export const setOrganizeTrator = (data) => {
   return request({
     url: `/api/permission/organizeAdminIsTrator/${data.organizeId}`,
     method: 'PUT',
+    data
+  })
+}
+// 通过部门id获取部门树形
+export const getOrgByOrganizeCondition = (data) => {
+  return request({
+    url: `/api/permission/Organize/OrganizeCondition`,
+    method: 'post',
     data
   })
 }

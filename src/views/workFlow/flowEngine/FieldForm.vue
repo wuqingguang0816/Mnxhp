@@ -51,7 +51,7 @@ import { deepClone } from '@/utils'
 import { saveDrawingList } from '@/components/Generator/utils/db'
 import { inputComponents, selectComponents, systemComponents } from '@/components/Generator/generator/config'
 import { debounce } from 'throttle-debounce'
-const ignoreList = ['divider', 'JNPFText', 'button', 'table', 'relationFormAttr', 'popupAttr', 'calculate']
+const ignoreList = ['divider', 'JNPFText', 'link', 'alert', 'button', 'table', 'relationFormAttr', 'popupAttr', 'calculate']
 export default {
   props: ['conf', 'enCode'],
   data() {
@@ -72,7 +72,8 @@ export default {
             jnpfKey: o.jnpfKey || '',
             required: o.required || false
           },
-          __vModel__: o.filedId
+          __vModel__: o.filedId,
+          multiple: o.multiple || false
         }))
         this.saveDrawingListDebounce(list)
         // if (!this.isDrawingListChange) {
@@ -181,7 +182,7 @@ export default {
       this.drawingList.splice(index, 1);
     },
     addHandle() {
-      let item = { filedName: "", filedId: "", required: false }
+      let item = { filedName: "", filedId: "", required: false, multiple: false }
       this.drawingList.push(item)
     }
   }

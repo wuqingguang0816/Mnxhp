@@ -53,6 +53,14 @@ export function DataModelUpdate(linkId, data) {
     data
   })
 }
+// 新增字段
+export function addTableFields(linkId, data) {
+  return request({
+    url: `/api/system/DataModel/${linkId}/addFields`,
+    method: 'put',
+    data
+  })
+}
 // 导出
 export function exportTpl(linkId, id) {
   return request({
@@ -60,3 +68,13 @@ export function exportTpl(linkId, id) {
     method: 'get'
   })
 }
+
+// 获取数据库表列表
+export function getDataModelList(data) {
+  return request({
+    url: `/api/system/DataSync/Actions/checkDbLink`,
+    method: 'post',
+    data
+  })
+}
+

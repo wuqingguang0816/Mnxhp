@@ -114,7 +114,8 @@
           :limit.sync="listQuery.pageSize" @pagination="initData" />
       </div>
       <approve-dialog v-if="approveVisible" ref="approveDialog" @submit="batchOperation" />
-      <UserBox v-if="userBoxVisible" ref="userBox" title="审批人" @submit="handleTransfer" />
+      <error-form :visible.sync="errorVisible" :nodeList="errorNodeList" @submit="handleError" />
+      <actionDialog v-if="userBoxVisible" ref="userBox" title="审批人" @submit="handleTransfer" />
     </div>
   </transition>
 </template>
@@ -122,8 +123,10 @@
 <script>
 import { FlowBeforeList, getBatchFlowSelector, getNodeSelector, BatchCandidate, BatchOperation } from '@/api/workFlow/FlowBefore'
 import ApproveDialog from '@/views/workFlow/components/ApproveDialog'
+import ActionDialog from '@/views/workFlow/components/ActionDialog'
+import ErrorForm from '../components/ErrorForm'
 export default {
-  components: { ApproveDialog },
+  components: { ApproveDialog, ErrorForm, ActionDialog },
   props: ['categoryList'],
   data() {
     return {
@@ -181,7 +184,10 @@ export default {
         }]
       },
       pickerVal: [],
-      showAll: false
+      showAll: false,
+      errorVisible: false,
+      errorNodeList: [],
+      batchOperationData: {},
     }
   },
   watch: {
@@ -250,6 +256,10 @@ export default {
           let candidateList = []
           if (data.type == 1) {
             branchList = data.list
+            this.approveVisible = true
+            this.$nextTick(() => {
+              this.$refs.approveDialog.init(properties, item.id, 'audit', branchList, candidateList, item.flowId)
+            })
           }
           if (data.type == 2) {
             let list = data.list.filter(o => o.isCandidates)
@@ -259,11 +269,25 @@ export default {
               value: [],
               rules: [{ required: true, message: `审批人不能为空`, trigger: 'click' }]
             }))
+            this.approveVisible = true
+            this.$nextTick(() => {
+              this.$refs.approveDialog.init(properties, item.id, 'audit', branchList, candidateList, item.flowId)
+            })
+          } else {
+            if (!properties.hasSign && !properties.hasOpinion && !properties.hasFreeApprover && !properties.isCustomCopy) {
+              this.$confirm('此操作将通过该审批单，是否继续？', '提示', {
+                type: 'warning'
+              }).then(() => {
+                this.batchOperation()
+              }).catch(() => { });
+              return
+            }
+            this.approveVisible = true
+            this.$nextTick(() => {
+              this.$refs.approveDialog.init(properties, item.id, 'audit', branchList, candidateList, item.flowId)
+            })
           }
-          this.approveVisible = true
-          this.$nextTick(() => {
-            this.$refs.approveDialog.init(properties, item.id, 'audit', branchList, candidateList, item.flowId)
-          })
+
         }).catch(() => {
           this.btnLoading = false
         })
@@ -271,6 +295,14 @@ export default {
       }
       if (batchType === 1) {
         if (!properties.hasRejectBtn) return this.$message.error('当前审批节点无拒绝权限')
+        if (!properties.hasSign && !properties.hasOpinion) {
+          this.$confirm('此操作将驳回该审批单，是否继续？', '提示', {
+            type: 'warning'
+          }).then(() => {
+            this.batchOperation()
+          }).catch(() => { });
+          return
+        }
         this.approveVisible = true
         this.$nextTick(() => {
           this.$refs.approveDialog.init(properties, item.id, 'reject', [], [], item.flowId)
@@ -281,18 +313,23 @@ export default {
         if (!properties.hasTransferBtn) return this.$message.error('当前审批节点无转审权限')
         this.userBoxVisible = true
         this.$nextTick(() => {
-          this.$refs.userBox.init()
+          this.$refs.userBox.init(properties, 'transfer')
         })
       }
     },
-    handleApproval(data) {
-      this.batchOperation(data)
-    },
-    handleTransfer(freeApproverUserId) {
-      const data = { freeApproverUserId }
+    handleTransfer(data) {
       this.batchOperation(data)
     },
     batchOperation(data) {
+      if (!data) {
+        data = {
+          branchList: [],
+          copyIds: "",
+          freeApproverUserId: "",
+          handleOpinion: "",
+          signImg: "",
+        }
+      }
       const ids = this.multipleSelection.map(o => o.id)
       const query = {
         ...data,
@@ -302,18 +339,33 @@ export default {
         ids
       }
       BatchOperation(query).then(res => {
-        this.$message({
-          type: 'success',
-          message: res.msg,
-          duration: 1000,
-          onClose: () => {
-            this.initData()
-            this.$refs.approveDialog && this.$refs.approveDialog.closeDialog()
-          }
-        })
+        const errorData = res.data
+        if (errorData && Array.isArray(errorData) && errorData.length) {
+          this.errorNodeList = errorData
+          this.errorVisible = true
+          this.batchOperationData = data
+        } else {
+          this.$message({
+            type: 'success',
+            message: res.msg,
+            duration: 1000,
+            onClose: () => {
+              this.initData()
+              this.errorVisible = false
+              this.$refs.approveDialog && this.$refs.approveDialog.closeDialog()
+              this.$refs.userBox && this.$refs.userBox.closeDialog()
+            }
+          })
+        }
       }).catch(() => {
         this.$refs.approveDialog && (this.$refs.approveDialog.btnLoading = false)
+        this.$refs.userBox && this.$refs.userBox.closeDialog()
+        this.errorVisible = false
       })
+    },
+    handleError(data) {
+      this.batchOperationData.errorRuleUserList = data
+      this.batchOperation(this.batchOperationData)
     },
     reset() {
       this.list = []

@@ -22,7 +22,7 @@
         <el-input v-model="dataForm.userName" placeholder="用户" />
       </el-form-item>
       <el-form-item label="密码" prop="password">
-        <el-input v-model="dataForm.password" placeholder="密码" />
+        <el-input v-model="dataForm.password" placeholder="密码" show-password />
       </el-form-item>
       <!-- ==============不同数据库之间差异的部分================ -->
       <template v-if="dataForm.dbType==='MySQL'">
@@ -47,7 +47,7 @@
           </el-input>
         </el-form-item>
       </template>
-      <template v-if="dataForm.dbType==='Oracle'||dataForm.dbType==='DM8'">
+      <template v-if="dataForm.dbType==='Oracle'||dataForm.dbType==='DM'">
         <el-form-item label="模式" prop="dbSchema">
           <el-input v-model="dataForm.dbSchema" :disabled="true" placeholder="与用户同名">
             <el-button slot="append" @click="test" :loading="testLoad">测试连接</el-button>
@@ -82,7 +82,7 @@
       <!-- 暂时停用表空间，表空间是物理层分类一般不做操作（类似，静态资源放哪里，而用户只需要关心它展示端在哪个分类里，
             而不用关心实际它存储在哪里，navicat与数据库自带操作工具，也并没有指定表空间。），逻辑分类用模式。 -->
       <!--<el-form-item label="表空间" prop="tableSpace"
-        v-if="dataForm.dbType==='DM8'||dataForm.dbType==='Oracle'">
+        v-if="dataForm.dbType==='DM'||dataForm.dbType==='Oracle'">
         <el-input v-model="dataForm.tableSpace" placeholder="表空间">
           <el-button slot="append" @click="test" :loading="testLoad">测试连接</el-button>
         </el-input>
@@ -129,7 +129,7 @@ export default {
           { required: true, message: '连接驱动不能为空', trigger: 'change' }
         ],
         fullName: [
-          { required: true, message: '应用名称不能为空', trigger: 'blur' }
+          { required: true, message: '连接名称不能为空', trigger: 'blur' }
         ],
         host: [
           { required: true, message: '主机地址不能为空', trigger: 'blur' },
@@ -162,6 +162,12 @@ export default {
       this.visible = true
       this.$nextTick(async () => {
         this.$refs['dataForm'].resetFields()
+        this.dataForm.serviceName = ''
+        this.dataForm.dbSchema = ''
+        this.dataForm.oracleExtend = false
+        this.dataForm.oracleLinkType = ''
+        this.dataForm.oracleService = ''
+        this.dataForm.oracleRole = ''
         const res = await this.$store.dispatch('base/getDictionaryData', { sort: 'dbType' })
         this.dbOptions = JSON.parse(JSON.stringify(res))
         if (this.dataForm.id) {
@@ -205,7 +211,7 @@ export default {
         case 'Oracle':
           port = '1521'
           break;
-        case 'DM8':
+        case 'DM':
           port = '5236'
           break;
         case 'KingbaseES':

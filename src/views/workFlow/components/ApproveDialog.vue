@@ -16,17 +16,19 @@
         <el-form-item :label="item.nodeName+item.label" :prop="'candidateList.' + i + '.value'"
           v-for="(item,i) in dataForm.candidateList" :key="i" :rules="item.rules">
           <candidate-user-select v-model="item.value" multiple :placeholder="'请选择'+item.label"
-            :taskId="taskId" :formData="formData" :nodeId="item.nodeId" />
+            :taskId="taskId" :formData="formData" :nodeId="item.nodeId" v-if="item.hasCandidates" />
+          <user-select v-model="item.value" multiple :placeholder="'请选择'+item.label" title="候选人员"
+            v-else />
         </el-form-item>
         <el-form-item label="加签人员" v-if="properties&&properties.hasFreeApprover">
           <user-select v-model="freeApproverUserId" placeholder="请选择加签人员,不选即该节点审核结束" />
         </el-form-item>
       </template>
-      <el-form-item label="审批意见" prop="handleOpinion">
+      <el-form-item label="审批意见" prop="handleOpinion" v-if="properties&&properties.hasOpinion">
         <el-input v-model="dataForm.handleOpinion" placeholder="请输入审批意见（选填）" type="textarea"
           :rows="4" />
       </el-form-item>
-      <el-form-item label="审批签名" v-if="properties&&properties.hasSign">
+      <el-form-item label="审批签名" required v-if="properties&&properties.hasSign">
         <div class="sign-main">
           <div class="sign-head">
             <div class="sign-tip">请在这里输入你的签名</div>

@@ -10,6 +10,15 @@
             </el-form-item>
           </el-col>
           <el-col :span="6">
+            <el-form-item label="业务分类">
+              <el-select v-model="categoryId" placeholder="请选择业务分类" clearable>
+                <el-option v-for="item in categoryList" :key="item.id" :label="item.fullName"
+                  :value="item.id">
+                </el-option>
+              </el-select>
+            </el-form-item>
+          </el-col>
+          <el-col :span="6">
             <el-form-item>
               <el-button type="primary" icon="el-icon-search" @click="search()">
                 {{$t('common.search')}}</el-button>
@@ -34,8 +43,9 @@
         <JNPF-table v-loading="listLoading" :data="tableList">
           <el-table-column prop="fullName" label="业务名称" min-width="200" />
           <el-table-column prop="enCode" label="业务编码" width="200" />
+          <el-table-column prop="category" label="业务分类" width="150" />
           <el-table-column prop="startNumber" label="流水起始" width="120" />
-          <el-table-column prop="outputNumber" label="当前流水号" width="300" />
+          <el-table-column prop="outputNumber" label="当前流水号" width="200" />
           <el-table-column prop="creatorUser" label="创建人" width="120" />
           <el-table-column prop="creatorTime" label="创建时间" :formatter="jnpf.tableDateFormat"
             width="120" />
@@ -45,7 +55,7 @@
           <el-table-column prop="enabledMark" label="状态" width="70" align="center">
             <template slot-scope="scope">
               <el-tag :type="scope.row.enabledMark == 1 ? 'success' : 'danger'" disable-transitions>
-                {{scope.row.enabledMark==1?'正常':'停用'}}</el-tag>
+                {{scope.row.enabledMark==1?'启用':'禁用'}}</el-tag>
             </template>
           </el-table-column>
           <el-table-column label="操作" width="150" fixed="right">
@@ -95,21 +105,30 @@ export default {
       total: 0,
       btnLoading: false,
       listLoading: true,
+      categoryId: '',
       listQuery: {
         keyword: '',
         currentPage: 1,
         pageSize: 20
       },
-      formVisible: false
+      formVisible: false,
+      categoryList: []
     }
   },
   created() {
-    this.initData()
+    this.$store.dispatch('base/getDictionaryData', { sort: 'businessType' }).then((res) => {
+      this.categoryList = res
+      this.initData()
+    })
   },
   methods: {
     initData() {
       this.listLoading = true
-      getBillRuleList(this.listQuery).then(res => {
+      let query = {
+        ...this.listQuery,
+        categoryId: this.categoryId
+      }
+      getBillRuleList(query).then(res => {
         this.tableList = res.data.list
         this.total = res.data.pagination.total
         this.listLoading = false
@@ -139,7 +158,7 @@ export default {
     addOrUpdateHandle(id) {
       this.formVisible = true
       this.$nextTick(() => {
-        this.$refs.Form.init(id)
+        this.$refs.Form.init(id, this.categoryList)
       })
     },
     handleDel(id) {
@@ -175,6 +194,7 @@ export default {
     },
     reset() {
       this.listQuery.keyword = ''
+      this.categoryId = ''
       this.search()
     }
   }

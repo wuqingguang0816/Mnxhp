@@ -70,7 +70,7 @@
           <el-table-column prop="enabledMark" label="状态" width="70" align="center">
             <template slot-scope="scope">
               <el-tag :type="scope.row.enabledMark == 1 ? 'success' : 'danger'" disable-transitions>
-                {{scope.row.enabledMark==1?'正常':'停用'}}</el-tag>
+                {{scope.row.enabledMark==1?'启用':'禁用'}}</el-tag>
             </template>
           </el-table-column>
           <el-table-column label="操作" width="150" fixed="right">
@@ -109,14 +109,14 @@
 </template>
 
 <script>
-import { getDepartmentSelector } from '@/api/permission/department'
+import { getDepartmentSelectorByAuth } from '@/api/permission/department'
 import { getRoleList, delRole, updateRoleState } from '@/api/permission/role'
 import Form from './Form'
 import AuthorizeForm from '@/views/permission/authorize/AuthorizeForm'
 import UserRelationList from './userRelation'
 import GlobalUserRelationList from '@/views/permission/userRelation/Selector'
 import Diagram from '@/views/permission/user/Diagram'
-
+import { mapGetters } from "vuex";
 export default {
   components: { Form, AuthorizeForm, UserRelationList, GlobalUserRelationList, Diagram },
   name: 'permission-role',
@@ -153,6 +153,9 @@ export default {
     filterText(val) {
       this.$refs.treeBox.filter(val)
     }
+  },
+  computed: {
+    ...mapGetters(['userInfo'])
   },
   created() {
     this.getOrganizeList(true)
@@ -193,16 +196,21 @@ export default {
       return data.fullName.indexOf(value) !== -1;
     },
     getOrganizeList(isInit) {
+      this.filterText = ''
       this.treeLoading = true
-      getDepartmentSelector().then(res => {
-        let firstItem = {
-          fullName: "全局",
-          hasChildren: false,
-          id: "0",
-          parentId: "-1",
-          icon: 'icon-ym icon-ym-global-role'
+      getDepartmentSelectorByAuth().then(res => {
+        if (this.userInfo.isAdministrator) {
+          let globalItem = {
+            fullName: "全局",
+            hasChildren: false,
+            id: "0",
+            parentId: "-1",
+            icon: 'icon-ym icon-ym-global-role'
+          }
+          this.treeData = [...res.data.list, globalItem]
+        } else {
+          this.treeData = res.data.list || []
         }
-        this.treeData = [firstItem, ...res.data.list]
         this.$nextTick(() => {
           this.treeLoading = false
           if (isInit) this.initData()

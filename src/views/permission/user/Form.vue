@@ -18,7 +18,7 @@
           <el-row :gutter="20" class="custom-row">
             <el-col :sm="12" :xs="24">
               <el-form-item label="账户" prop="account">
-                <el-input v-model="dataForm.account" placeholder="账户名称" />
+                <el-input v-model="dataForm.account" placeholder="账户名称" :readonly="!!dataForm.id" />
               </el-form-item>
             </el-col>
             <el-col :sm="12" :xs="24">
@@ -42,7 +42,7 @@
             <el-col :sm="12" :xs="24">
               <el-form-item label="所属组织" prop="organizeIdTree">
                 <ComSelect v-model="dataForm.organizeIdTree" placeholder="选择所属组织" multiple
-                  @change="onOrganizeChange" clearable />
+                  @change="onOrganizeChange" clearable auth />
               </el-form-item>
             </el-col>
             <el-col :sm="12" :xs="24">
@@ -85,7 +85,7 @@
             <el-col :span="12">
               <el-form-item label="状态" prop="enabledMark">
                 <el-select v-model="dataForm.enabledMark" placeholder="选择状态">
-                  <el-option label="正常" :value="1" />
+                  <el-option label="启用" :value="1" />
                   <el-option label="锁定" :value="2" />
                   <el-option label="禁用" :value="0" />
                 </el-select>
@@ -126,18 +126,18 @@
               </el-form-item>
             </el-col>
             <el-col :sm="12" :xs="24">
-              <el-form-item label="入职时间" prop="entryDate">
-                <el-date-picker v-model="dataForm.entryDate" type="date" placeholder="选择入职时间"
-                  value-format="timestamp">
-                </el-date-picker>
-              </el-form-item>
-            </el-col>
-            <el-col :sm="12" :xs="24">
               <el-form-item label="证件类型" prop="certificatesType">
                 <el-select v-model="dataForm.certificatesType" placeholder="选择证件类型">
                   <el-option v-for="item in certificatesTypeTreeData" :key="item.id"
                     :label="item.fullName" :value="item.id" />
                 </el-select>
+              </el-form-item>
+            </el-col>
+            <el-col :sm="12" :xs="24">
+              <el-form-item label="入职时间" prop="entryDate">
+                <el-date-picker v-model="dataForm.entryDate" type="date" placeholder="选择入职时间"
+                  value-format="timestamp">
+                </el-date-picker>
               </el-form-item>
             </el-col>
             <el-col :sm="12" :xs="24">
@@ -269,7 +269,7 @@ export default {
           { required: true, message: '请选择性别', trigger: 'change' }
         ],
         organizeIdTree: [
-          { required: true, message: '请选择所属组织', trigger: 'change', type: 'array' }
+          { required: true, message: '请选择所属组织', trigger: 'click', type: 'array' }
         ]
       }
     }

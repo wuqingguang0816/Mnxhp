@@ -25,7 +25,7 @@
       <el-input-number v-model="activeData.precision" :min="0" placeholder="精度"
         controls-position="right" />
     </el-form-item>
-    <el-form-item label="按钮位置">
+    <el-form-item label="按钮位置" v-show="showType==='pc'">
       <el-radio-group v-model="activeData['controls-position']">
         <el-radio-button label="">默认</el-radio-button>
         <el-radio-button label="right">右侧</el-radio-button>

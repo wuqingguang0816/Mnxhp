@@ -49,10 +49,6 @@
                 end-placeholder="结束日期" class="item">
               </el-date-picker>
             </template>
-            <template v-if="commonList.includes(item.__config__.jnpfKey)">
-              <component :is="item.__config__.tag" v-model="item.value" clearable
-                :placeholder="'请选择'+item.__config__.label" class="item" />
-            </template>
             <template v-if="item.__config__.jnpfKey==='address'">
               <JNPFAddress v-model="item.value" :placeholder="'请选择'+item.__config__.label"
                 :level="item.level" class="item" clearable />
@@ -66,7 +62,8 @@
               <userSelect v-model="item.value" :placeholder="'请选择'+item.__config__.label" clearable
                 class="item" />
             </template>
-            <template v-if="item.__config__.jnpfKey==='currOrganize'">
+            <template
+              v-if="item.__config__.jnpfKey==='currOrganize'||item.__config__.jnpfKey==='comSelect'">
               <comSelect v-model="item.value" :placeholder="'请选择'+item.__config__.label" clearable
                 class="item" />
             </template>
@@ -77,6 +74,29 @@
             <template v-if="item.__config__.jnpfKey==='currPosition'">
               <posSelect v-model="item.value" :placeholder="'请选择'+item.__config__.label" clearable
                 class="item" />
+            </template>
+            <template v-if="item.__config__.jnpfKey==='groupSelect'">
+              <groupSelect v-model="item.value" :placeholder="'请选择'+item.__config__.label" clearable
+                class="item" />
+            </template>
+            <template v-if="item.__config__.jnpfKey==='roleSelect'">
+              <roleSelect v-model="item.value" :placeholder="'请选择'+item.__config__.label" clearable
+                class="item" />
+            </template>
+            <template v-if="item.__config__.jnpfKey==='userSelect'">
+              <userSelect v-model="item.value" :placeholder="'请选择'+item.__config__.label" clearable
+                class="item" :selectType="item.selectType" :ableDepIds="item.ableDepIds"
+                :ablePosIds="item.ablePosIds" :ableUserIds="item.ableUserIds"
+                :ableRoleIds="item.ableRoleIds" :ableGroupIds="item.ableGroupIds" />
+            </template>
+            <template v-if="item.__config__.jnpfKey==='posSelect'">
+              <posSelect v-model="item.value" :placeholder="'请选择'+item.__config__.label" clearable
+                class="item" :selectType="item.selectType" :ableDepIds="item.ableDepIds"
+                :ablePosIds="item.ablePosIds" />
+            </template>
+            <template v-if="item.__config__.jnpfKey==='depSelect'">
+              <depSelect v-model="item.value" :placeholder="'请选择'+item.__config__.label" clearable
+                class="item" :selectType="item.selectType" :ableDepIds="item.ableDepIds" />
             </template>
           </template>
         </el-form-item>
@@ -111,7 +131,6 @@ export default {
     return {
       showAll: false,
       searchList: [],
-      commonList: ['comSelect', 'depSelect', 'posSelect', 'userSelect', 'dicSelect'],
       useInputList,
       useDateList,
       useSelectList
@@ -143,7 +162,7 @@ export default {
           if (config.dataType === 'dynamic') {
             if (!config.propsUrl) return
             getDataInterfaceRes(config.propsUrl).then(res => {
-              let data = res.data.data
+              let data = res.data
               if (Array.isArray(data)) {
                 isTreeSelect ? cur.options = data : cur.__slot__.options = data
               } else {

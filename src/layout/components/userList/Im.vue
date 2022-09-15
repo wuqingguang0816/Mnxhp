@@ -36,8 +36,8 @@
         </div>
         <div class="toolBox">
           <div class="toolBox-left">
-            <el-popover placement="top-start" trigger="click" ref="popover"
-              v-model="popoverVisible">
+            <el-popover placement="top-start" trigger="click" ref="popover" v-model="popoverVisible"
+              popper-class="emjio-popper">
               <div class="emjioBox">
                 <ul class="emjio">
                   <li v-for="(item,i) in this.emojiList" :key="i" @click="selectEmit(item)">
@@ -737,7 +737,7 @@ export default {
 }
 </style>
 <style lang="scss">
-.el-popover {
+.emjio-popper {
   z-index: 30000 !important;
 }
 </style>

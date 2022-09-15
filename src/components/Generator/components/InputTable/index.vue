@@ -72,18 +72,22 @@
         </el-table-column>
       </template>
     </el-table>
-    <div class="table-actions" @click="addRow()" v-if="!disabled">
+    <div class="table-actions" @click="addItem()" v-if="!disabled">
       <el-button type="text" icon="el-icon-plus"> {{ config.actionText }}</el-button>
     </div>
+    <SelectDialog v-if="selectDialogVisible" :config="config.addTableConf" :formData="formData"
+      ref="selectDialog" @select="addForSelect" />
   </div>
 </template>
 <script>
 import { dyOptionsList } from '@/components/Generator/generator/comConfig'
 import { getDictionaryDataSelector } from '@/api/systemData/dictionary'
 import { getDataInterfaceRes } from '@/api/systemData/dataInterface'
+import SelectDialog from '@/components/SelectDialog/index'
 
 export default {
   name: 'input-table',
+  components: { SelectDialog },
   inject: ['parameter'],
   props: {
     config: {
@@ -105,6 +109,7 @@ export default {
       tableFormData: [],
       tableData: [],
       activeRowIndex: 0,
+      selectDialogVisible: false,
       isAddRow: true // list类型下 添加行数据 number类型组件会进行校验 产生不需要的结果 在这里进行添加行数据判断 hack
     }
   },
@@ -132,7 +137,7 @@ export default {
           if (config.dataType === 'dynamic') {
             if (!config.propsUrl) return
             getDataInterfaceRes(config.propsUrl).then(res => {
-              let realData = res.data.data
+              let realData = res.data
               if (Array.isArray(realData)) {
                 isTreeSelect ? cur.options = realData : cur.__slot__.options = realData
               } else {
@@ -393,6 +398,22 @@ export default {
       this.clearAddRowFlag()
       this.updateParentData()
     },
+    addItem() {
+      if (this.config.addType == 1) {
+        this.openSelectDialog()
+      } else {
+        this.addRow()
+      }
+    },
+    openSelectDialog() {
+      this.selectDialogVisible = true
+      this.$nextTick(() => {
+        this.$refs.selectDialog.init()
+      })
+    },
+    addForSelect(data) {
+      data.forEach(t => this.addRow(t))
+    },
     getCmpValOfRow(row, key) {
       // 获取数字相关组件的输入值
       // const isNumCmp = tag => ['fc-amount', 'el-input-number', 'el-slider'].includes(tag)
@@ -410,7 +431,8 @@ export default {
     getTableSummaries(param) {
       const { columns, data } = param
       const sums = []
-      if (this.tableData.length + 1 !== columns.length) return []  // 防止多次加载
+      let tableData = this.tableData.filter(o => !o.__config__.noShow)
+      if (tableData.length + 1 !== columns.length) return []  // 防止多次加载
       columns.forEach((column, index) => {
         if (index === 0) {
           sums[index] = '合计'
@@ -424,7 +446,7 @@ export default {
     resetTable() {
       this.tableData = this.config.__config__.children
       this.tableFormData = []
-      this.addRow()
+      // this.addRow()
     },
     reset() {
       this.tableData.map((t) => {
@@ -445,7 +467,7 @@ export default {
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 23px;
+    height: 32px;
 
     .el-icon-delete {
       position: absolute;
@@ -574,7 +596,7 @@ export default {
       // vertical-align: top;
       &::after,
       &::before {
-        content: "";
+        content: '';
         width: 10px;
         height: 10px;
         background: white;

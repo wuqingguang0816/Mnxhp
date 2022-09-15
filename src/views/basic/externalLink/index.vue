@@ -6,6 +6,7 @@
 </template>
 
 <script>
+const Base64 = require('js-base64').Base64
 export default {
   name: 'externalLink',
   data() {
@@ -14,7 +15,10 @@ export default {
     }
   },
   created() {
-    this.url = this.$route.meta.urlAddress || ''
+    const urlAddress = this.$route.meta.urlAddress || ''
+    if (urlAddress) return this.url = urlAddress
+    const href = Base64.decode(this.$route.query.href)
+    this.url = href || ''
   },
   methods: {}
 }

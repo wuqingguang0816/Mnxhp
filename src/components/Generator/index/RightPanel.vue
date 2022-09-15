@@ -16,8 +16,7 @@
                 <el-form-item
                   v-if="activeData.__vModel__!==undefined && !noVModelList.includes(activeData.__config__.jnpfKey)"
                   label="控件字段">
-                  <el-input v-model="activeData.__vModel__" placeholder="请输入控件字段(v-model)"
-                    disabled />
+                  <el-input v-model="activeData.__vModel__" placeholder="请输入数据库字段" disabled />
                 </el-form-item>
               </template>
               <template v-else>
@@ -29,42 +28,82 @@
                       @change="tableChange" filterable>
                       <el-option v-for="item in allTable" :key="item.table" :value="item.table"
                         :label="item.tableName?item.table+'('+item.tableName+')':item.table">
+                        <span class="custom-option-left">
+                          {{ item.tableName?item.table+'('+item.tableName+')':item.table}}
+                        </span>
+                        <span class="custom-option-right">{{item.typeId=='1'?'主表':'子表'}}</span>
                       </el-option>
                     </el-select>
                   </el-form-item>
                   <el-form-item
                     v-if="activeData.__vModel__!==undefined && !noVModelList.includes(activeData.__config__.jnpfKey)"
                     label="控件字段">
-                    <el-select v-model="activeData.__vModel__" placeholder="请选择控件字段(v-model)"
-                      clearable @change="fieldChange" filterable>
-                      <el-option v-for="item in fieldOptions" :key="item.realField"
-                        :value="item.realField"
-                        :label="item.fieldName?item.field+'('+item.fieldName+')':item.field">
-                      </el-option>
+                    <el-select v-model="activeData.__vModel__" placeholder="请选择数据库字段" clearable
+                      @change="fieldChange" filterable popper-class="field-select-popper">
+                      <p class="el-select-dropdown__empty" slot="empty">
+                        <span>无匹配数据，</span>
+                        <el-link type="primary" :underline="false" @click="openFieldDialog">添加字段
+                        </el-link>
+                      </p>
+                      <el-option-group label="" v-if="fieldOptions.length">
+                        <el-option disabled value="-">
+                          <el-link type="primary" :underline="false" @click="openFieldDialog">添加字段
+                          </el-link>
+                        </el-option>
+                      </el-option-group>
+                      <el-option-group label="">
+                        <el-option v-for="item in fieldOptions" :key="item.realField"
+                          :value="item.realField"
+                          :label="item.fieldName?item.field+'('+item.fieldName+')':item.field">
+                        </el-option>
+                      </el-option-group>
                     </el-select>
                   </el-form-item>
                 </template>
                 <template v-if="activeData.__config__.isSubTable && subTable.length">
+                  <el-form-item label="数据库表">
+                    <el-select v-model="activeData.__config__.relationTable" placeholder="请选择数据库表"
+                      filterable disabled>
+                      <el-option v-for="item in allTable" :key="item.table" :value="item.table"
+                        :label="item.tableName?item.table+'('+item.tableName+')':item.table">
+                      </el-option>
+                    </el-select>
+                  </el-form-item>
                   <el-form-item
                     v-if="activeData.__vModel__!==undefined && !noVModelList.includes(activeData.__config__.jnpfKey)"
                     label="控件字段">
-                    <el-select v-model="activeData.__vModel__" placeholder="请选择控件字段(v-model)"
-                      clearable @change="fieldChange1" filterable>
-                      <el-option
-                        v-for="item in getSubTableFiled(activeData.__config__.relationTable)"
-                        :key="item.field" :value="item.field"
-                        :label="item.fieldName?item.field+'('+item.fieldName+')':item.field">
-                      </el-option>
+                    <el-select v-model="activeData.__vModel__" placeholder="请选择数据库字段" clearable
+                      @change="fieldChange1" filterable>
+                      <p class="el-select-dropdown__empty" slot="empty">
+                        <span>无匹配数据，</span>
+                        <el-link type="primary" :underline="false" @click="openFieldDialog">添加字段
+                        </el-link>
+                      </p>
+                      <el-option-group label=""
+                        v-if="getSubTableFiled(activeData.__config__.relationTable).length">
+                        <el-option disabled value="-">
+                          <el-link type="primary" :underline="false" @click="openFieldDialog">添加字段
+                          </el-link>
+                        </el-option>
+                      </el-option-group>
+                      <el-option-group label="">
+                        <el-option
+                          v-for="item in getSubTableFiled(activeData.__config__.relationTable)"
+                          :key="item.field" :value="item.field"
+                          :label="item.fieldName?item.field+'('+item.fieldName+')':item.field">
+                        </el-option>
+                      </el-option-group>
                     </el-select>
                   </el-form-item>
                 </template>
               </template>
             </template>
             <template v-else>
-              <el-form-item
-                v-if="activeData.__vModel__!==undefined  && !noVModelList.includes(activeData.__config__.jnpfKey)"
-                label="控件字段">
-                <el-input v-model="activeData.__vModel__" placeholder="请输入控件字段(v-model)" disabled />
+              <el-form-item label="控件字段"
+                v-if="activeData.__vModel__!==undefined  && !noVModelList.includes(activeData.__config__.jnpfKey)">
+                <el-input v-model="activeData.__vModel__" placeholder="请输入数据库字段"
+                  @change="inputFieldChange($event,activeData.__config__.formId,activeData.__config__.parentVModel)"
+                  :disabled="activeData.__config__.jnpfKey==='table'" />
               </el-form-item>
             </template>
             <JNPFComInput v-if="activeData.__config__.jnpfKey==='comInput'"
@@ -72,6 +111,8 @@
             <JNPF-textarea v-if="activeData.__config__.jnpfKey==='textarea'"
               :active-data="activeData" />
             <JNPFText v-if="activeData.__config__.jnpfKey==='JNPFText'" :active-data="activeData" />
+            <JnpfLink v-if="activeData.__config__.jnpfKey==='link'" :active-data="activeData" />
+            <JnpfAlert v-if="activeData.__config__.jnpfKey==='alert'" :active-data="activeData" />
             <JNPFNumInput v-if="activeData.__config__.jnpfKey==='numInput'"
               :active-data="activeData" />
             <JNPFAmount v-if="activeData.__config__.jnpfKey==='JNPFAmount'"
@@ -116,7 +157,8 @@
               :active-data="activeData" ref="relationFormAttr" />
             <JNPFCalculate v-if="activeData.__config__.jnpfKey==='calculate'"
               :active-data="activeData" ref="calculate" />
-            <PopupSelect v-if="activeData.__config__.jnpfKey==='popupSelect'"
+            <PopupSelect
+              v-if="activeData.__config__.jnpfKey==='popupSelect'||activeData.__config__.jnpfKey==='popupTableSelect'"
               :active-data="activeData" />
             <PopupAttr v-if="activeData.__config__.jnpfKey==='popupAttr'" :active-data="activeData"
               ref="popupAttr" />
@@ -216,8 +258,9 @@
               <el-form-item label="控件标题">
                 <el-input v-model="activeData.__config__.label" placeholder="请输入控件标题" />
               </el-form-item>
-              <el-form-item label="选择模板" v-if="activeData.__config__.jnpfKey==='billRule'">
-                <BillRule v-model="activeData.__config__.rule" placeholder="选择模板" />
+              <el-form-item label="单据模板" v-if="activeData.__config__.jnpfKey==='billRule'">
+                <BillRule :value="activeData.__config__.rule"
+                  :title="activeData.__config__.ruleName" @change="onRuleChange" />
               </el-form-item>
               <el-form-item label="显示内容" v-if="activeData.__config__.jnpfKey==='currOrganize'">
                 <el-select v-model="activeData.showLevel" placeholder="请选择显示内容">
@@ -244,11 +287,15 @@
                 <el-input v-model="activeData.__config__.label" placeholder="请输入控件标题" />
               </el-form-item>
               <el-form-item label="关联子表" v-if="$store.getters.hasTable">
-                <el-select v-model="activeData.__config__.tableName" placeholder="请选择关联子表" clearable
+                <el-select v-model="activeData.__config__.tableName" placeholder="请选择关联子表"
                   @change="onTableNameChange">
                   <el-option v-for="item in subTable" :key="item.table"
                     :label="item.tableName?item.table+'('+item.tableName+')':item.table"
                     :value="item.table">
+                    <span class="custom-option-left">
+                      {{ item.tableName?item.table+'('+item.tableName+')':item.table}}
+                    </span>
+                    <span class="custom-option-right">{{item.typeId=='1'?'主表':'子表'}}</span>
                   </el-option>
                 </el-select>
               </el-form-item>
@@ -258,7 +305,7 @@
               <el-form-item label="卡片标题" label-width="76px">
                 <el-input v-model="activeData.header" placeholder="请输入卡片标题" />
               </el-form-item>
-              <el-form-item label="显示阴影" label-width="76px">
+              <el-form-item label="显示阴影" label-width="76px" v-show="showType==='pc'">
                 <el-radio-group v-model="activeData.shadow" size="small">
                   <el-radio-button label="always">一直显示</el-radio-button>
                   <el-radio-button label="hover">移入显示</el-radio-button>
@@ -290,7 +337,7 @@
                   :step="2" show-tooltip />
               </el-form-item>
               <el-form-item label="标题宽度"
-                v-if="!['divider','JNPFText','button','table','groupTitle ','card','row','tab','collapse'].includes(activeData.__config__.jnpfKey)">
+                v-if="!['divider','JNPFText','link','alert','button','table','groupTitle ','card','row','tab','collapse'].includes(activeData.__config__.jnpfKey)">
                 <el-input-number v-model="activeData.__config__.labelWidth" placeholder="标题宽度"
                   :min="0" :precision="0" controls-position="right" />
               </el-form-item>
@@ -365,6 +412,21 @@
                 :key="item" />
             </el-select>
           </el-form-item>
+          <el-form-item label="主键策略">
+            <el-select v-model="formConf.primaryKeyPolicy" placeholder="请选择"
+              :disabled="!!getFormInfo().id">
+              <el-option label="雪花ID" :value="1" />
+              <el-option label="自增长ID" :value="2" />
+            </el-select>
+          </el-form-item>
+          <el-form-item>
+            <span slot="label">并发锁定
+              <el-tooltip content="并发提交表单时候，加乐观锁机制以保证数据提交准确性" placement="top">
+                <a class="el-icon-warning-outline"></a>
+              </el-tooltip>
+            </span>
+            <el-switch v-model="formConf.concurrencyLock" />
+          </el-form-item>
           <template v-if="modelType!=3 && modelType!=6 && webType!=3">
             <el-divider>表单按钮</el-divider>
             <div class="per-cell">
@@ -408,6 +470,8 @@
     </div>
     <form-script :visible.sync="formScriptVisible" :tpl="activeScript" :fields="drawingList"
       @updateScript="updateScript" />
+    <field-dialog :visible.sync="fieldDialogVisible" ref="fieldDialog"
+      @close="fieldDialogVisible=false" @updateOptions="updateFieldOptions" />
   </div>
 </template>
 
@@ -417,10 +481,14 @@ import { isNumberStr } from '@/components/Generator/utils'
 import { saveFormConf, getDrawingList } from '@/components/Generator/utils/db'
 import { getDictionaryTypeSelector } from "@/api/systemData/dictionary"
 import { getDataInterfaceSelector } from "@/api/systemData/dataInterface"
+import { DataModelFieldList } from '@/api/systemData/dataModel'
 import FormScript from './FormScript'
+import FieldDialog from './FieldDialog'
 import JNPFComInput from './RightComponents/ComInput'
 import JNPFTextarea from './RightComponents/Textarea'
 import JNPFText from './RightComponents/JNPFText'
+import JnpfLink from './RightComponents/JnpfLink'
+import JnpfAlert from './RightComponents/JnpfAlert'
 import JNPFNumInput from './RightComponents/NumInput'
 import JNPFAmount from './RightComponents/JNPFAmount'
 import JNPFPsdInput from './RightComponents/PsdInput'
@@ -450,17 +518,20 @@ import PopupSelect from './RightComponents/PopupSelect'
 import PopupAttr from './RightComponents/PopupAttr'
 import Tab from './RightComponents/Tab'
 import Collapse from './RightComponents/Collapse'
-import TableConfig from './RightComponents/table'
+import TableConfig from './RightComponents/Table'
 
-const commonRightList = ['comSelect', 'depSelect', 'posSelect', 'userSelect', 'dicSelect', 'editor']
+const commonRightList = ['comSelect', 'depSelect', 'posSelect', 'userSelect', 'groupSelect', "roleSelect", 'editor']
 const systemList = ['createUser', 'createTime', 'modifyUser', 'modifyTime', 'currOrganize', 'currDept', 'currPosition', 'billRule']
 
 export default {
   components: {
     FormScript,
+    FieldDialog,
     JNPFComInput,
     JNPFTextarea,
     JNPFText,
+    JnpfLink,
+    JnpfAlert,
     JNPFNumInput,
     JNPFAmount,
     JNPFPsdInput,
@@ -492,6 +563,7 @@ export default {
     Collapse,
     TableConfig
   },
+  inject: ["getShowType", "getFormInfo"],
   props: ['showField', 'activeData', 'formConf', 'modelType', 'webType', 'drawingList'],
   data() {
     return {
@@ -500,6 +572,7 @@ export default {
       dialogVisible: false,
       iconsVisible: false,
       formScriptVisible: false,
+      fieldDialogVisible: false,
       comScriptVisible: false,
       currentIconModel: null,
       activeScript: '',
@@ -593,17 +666,38 @@ export default {
     }
   },
   computed: {
+    showType() {
+      return this.getShowType()
+    },
+    changeName() {
+
+    },
     activeTag() {
       return this.activeData.__config__.tag
     },
-    formItemList() {
-      return this.$store.state.generator.formItemList
+    formItemList: {
+      get() {
+        return this.$store.state.generator.formItemList
+      },
+      set(val) {
+        this.$store.commit('generator/UPDATE_FORMITEM_LIST', val)
+      }
     },
-    subTable() {
-      return this.$store.state.generator.subTable || []
+    subTable: {
+      get() {
+        return this.$store.state.generator.subTable || []
+      },
+      set(val) {
+        this.$store.commit('generator/UPDATE_SUB_TABLE', val)
+      }
     },
-    allTable() {
-      return this.$store.state.generator.allTable || []
+    allTable: {
+      get() {
+        return this.$store.state.generator.allTable || []
+      },
+      set(val) {
+        this.$store.commit('generator/SET_ALL_TABLE', val)
+      }
     },
     mainTable() {
       let allTable = this.$store.state.generator.allTable
@@ -786,6 +880,49 @@ export default {
       if (!item || !item.fieldName) return
       this.activeData.__config__.label = item.fieldName
     },
+    inputFieldChange(val, formId, parentVModel) {
+      if (!val) return
+      let boo = false
+      let childBoo = false
+      if (parentVModel) {
+        const loop = (data, parent) => {
+          if (!data) return
+          if (data.__config__ && data.__config__.children && Array.isArray(data.__config__.children)) {
+            loop(data.__config__.children, data)
+          }
+          if (Array.isArray(data)) data.forEach(d => loop(d, parent))
+          if (parent && parent.__config__ && parent.__config__.jnpfKey == 'table') {
+            if (data.__vModel__ && data.__vModel__.toLowerCase() === val.toLowerCase() && data.__config__.formId !== formId && data.__config__.parentVModel === parentVModel) {
+              childBoo = true
+              return
+            }
+          }
+        }
+        loop(getDrawingList())
+      } else {
+        const loop = (data, parent) => {
+          if (!data) return
+          if (data.__config__ && data.__config__.jnpfKey !== 'table' && data.__config__.children && Array.isArray(data.__config__.children)) {
+            loop(data.__config__.children, data)
+          }
+          if (Array.isArray(data)) data.forEach(d => loop(d, parent))
+          if (data.__vModel__ && data.__vModel__.toLowerCase() === val.toLowerCase() && data.__config__.formId !== formId) {
+            boo = true
+            return
+          }
+        }
+        loop(getDrawingList())
+      }
+      if (boo) {
+        this.$message.warning(`字段【${val}】已存在,请重新输入!`)
+        this.activeData.__vModel__ = ''
+        return
+      }
+      if (childBoo) {
+        this.$message.warning(`子表字段【${val}】已存在,请重新输入!`)
+        this.activeData.__vModel__ = ''
+      }
+    },
     tableChange() {
       this.activeData.__vModel__ = ''
       this.setDefaultOptions()
@@ -897,6 +1034,43 @@ export default {
       this.isConf = isConf || false
       this.formScriptVisible = true
     },
+    openFieldDialog() {
+      let tableName = ''
+      if (!this.activeData.__config__.isSubTable) {
+        tableName = this.activeData.__config__.tableName
+      } else {
+        tableName = this.activeData.__config__.relationTable
+      }
+      let dataBase = this.$store.state.generator.dataBase || '0'
+      this.fieldDialogVisible = true
+      this.$nextTick(() => {
+        this.$refs.fieldDialog.init(dataBase, tableName)
+      })
+    },
+    async updateFieldOptions(data) {
+      let tableName = ''
+      if (!this.activeData.__config__.isSubTable) {
+        tableName = this.activeData.__config__.tableName
+      } else {
+        tableName = this.activeData.__config__.relationTable
+      }
+      let queryType = 0, type = this.getFormInfo().type
+      if (type == 3 || type == 4 || type == 5) queryType = 1
+      let res = await DataModelFieldList(this.getFormInfo().dbLinkId, tableName, queryType)
+      let fields = res.data.list
+      for (let i = 0; i < this.allTable.length; i++) {
+        if (this.allTable[i].table === tableName) {
+          this.allTable[i].fields = fields
+          break
+        }
+      }
+      if (!this.activeData.__config__.isSubTable) {
+        if (this.activeData.__config__.tableName === this.mainTable) this.formItemList = fields
+        this.setDefaultOptions()
+      } else {
+        this.subTable = this.allTable.filter(o => o.typeId == '0')
+      }
+    },
     onBarcodeTextChange(val) {
       if (!val) return
       let reg = /^[A-Za-z0-9]+$/
@@ -907,7 +1081,17 @@ export default {
           duration: 1500,
         })
       }
-    }
+    },
+    onRuleChange(id, item) {
+      if (!id) {
+        this.activeData.__config__.rule = ''
+        this.activeData.__config__.ruleName = ''
+        return
+      }
+      if (this.activeData.__config__.rule === id) return
+      this.activeData.__config__.rule = id
+      this.activeData.__config__.ruleName = item.fullName
+    },
   }
 }
 </script>
@@ -1024,5 +1208,25 @@ export default {
       text-align: center;
     }
   }
+}
+</style>
+<style lang="scss">
+.field-select-popper {
+  .el-select-dropdown__empty {
+    span,
+    .el-link {
+      line-height: 16px;
+      vertical-align: top;
+    }
+  }
+}
+.custom-option-left {
+  float: left;
+}
+.custom-option-right {
+  float: right;
+  color: #8492a6;
+  font-size: 13px;
+  margin-left: 20px;
 }
 </style>

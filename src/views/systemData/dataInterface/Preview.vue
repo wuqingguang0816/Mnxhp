@@ -11,7 +11,7 @@
         <el-input v-model="url">
           <template slot="prepend">GET</template>
           <template slot="append">
-            <el-button type="primary" @click="test">测试接口</el-button>
+            <el-button type="primary" @click="test" :loading="testLoading">测试接口</el-button>
           </template>
         </el-input>
       </el-form-item>
@@ -33,13 +33,14 @@
 </template>
 
 <script>
-import { previewDataInterface, testInterface } from '@/api/systemData/dataInterface'
+import { getDataInterfaceParam, getDataInterfaceRes } from '@/api/systemData/dataInterface'
 
 export default {
   data() {
     return {
       title: '',
       formLoading: false,
+      testLoading: false,
       responseData: '',
       url: '',
       options: {
@@ -52,13 +53,18 @@ export default {
   },
   methods: {
     test() {
+      this.testLoading = true
       let query = {
         paramList: this.inputList,
-        tenantId: this.tenantId
+        tenantId: this.tenantId,
+        origin: 'preview'
       }
-      testInterface(this.id, query).then(res => {
+      getDataInterfaceRes(this.id, query).then(res => {
+        this.testLoading = false
         let data = res
         this.responseData = JSON.stringify(data, null, 4)
+      }).catch(() => {
+        this.testLoading = false
       })
     },
     goBack() {
@@ -71,8 +77,9 @@ export default {
       this.formLoading = true
       this.responseData = ''
       this.$nextTick(() => {
-        this.url = `${this.define.comUrl}/api/system/DataInterface/${id}/Actions/Response` + (tenantId ? '?tenantId=' + tenantId : '')
-        previewDataInterface(this.id).then(res => {
+        const prefix = this.define.comUrl === '/dev' ? window.location.origin : ''
+        this.url = `${prefix}${this.define.comUrl}/api/system/DataInterface/${id}/Actions/Preview` + (tenantId ? '?tenantId=' + tenantId : '')
+        getDataInterfaceParam(this.id).then(res => {
           this.inputList = res.data
           this.formLoading = false
         }).catch(() => {

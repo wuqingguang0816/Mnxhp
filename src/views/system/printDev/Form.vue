@@ -161,7 +161,6 @@ export default {
           getPrintDevInfo(this.dataForm.id).then(res => {
             this.dataForm = res.data
             this.sqlTemplate = this.dataForm.sqlTemplate && JSON.parse(this.dataForm.sqlTemplate) || []
-            this.updateFields()
             this.loading = false
           }).catch(() => { this.loading = false })
         }
@@ -222,18 +221,7 @@ export default {
               sqlTemplate: this.dataForm.sqlTemplate
             }
             getFields(query).then(res => {
-              let treeData = res.data.headTable
-              for (let key in res.data) {
-                if (key !== 'headTable') {
-                  let item = {
-                    field: key,
-                    fieldName: key,
-                    children: res.data[key]
-                  }
-                  treeData.push(item)
-                }
-              }
-              this.treeData = treeData
+              this.treeData = res.data
               this.activeStep += 1
               this.nextBtnLoading = false
             }).catch(() => {

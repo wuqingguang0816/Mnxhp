@@ -101,7 +101,6 @@ export const getImUserSelector = (organizeId, keyword) => {
     data: { keyword }
   })
 }
-
 // 获取用户基本信息
 export const getUserInfoList = userId => {
   return request({
@@ -151,6 +150,14 @@ export const getUsersByRoleOrgId = (data) => {
     data
   })
 }
+// 通过部门id,岗位id,角色id,分组id,用户id获取用户列表(带分页)
+export const getUsersByUserCondition = (data) => {
+  return request({
+    url: '/api/permission/Users/UserCondition',
+    method: 'post',
+    data
+  })
+}
 // 导出Excel
 export function ExportExcel(data) {
   return request({
@@ -189,5 +196,15 @@ export function ExportExceptionData(data) {
     url: '/api/permission/Users/ExportExceptionData',
     method: 'post',
     data
+  })
+}
+
+
+// 获取用户下拉框列表
+export const getListByAuthorize = (organizeId, keyword) => {
+  return request({
+    url: `/api/permission/Users/GetListByAuthorize/${organizeId}`,
+    method: 'post',
+    data: { keyword }
   })
 }

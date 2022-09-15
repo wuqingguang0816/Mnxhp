@@ -18,8 +18,9 @@
           <el-row :gutter="20" class="custom-row">
             <el-col :sm="12" :xs="24">
               <el-form-item label="上级公司" prop="parentId">
-                <JNPF-TreeSelect v-model="dataForm.parentId" :options="treeData"
-                  placeholder="选择上级公司" style="width: 100%" />
+                <ComSelect v-model="organizeIdTree" placeholder="选择上级公司" auth isOnlyOrg
+                  @change="onOrganizeChange" :currOrgId="dataForm.id||'0'"
+                  :parentId="parentId||'0'" />
               </el-form-item>
             </el-col>
             <el-col :sm="12" :xs="24">
@@ -136,12 +137,7 @@
 </template>
 
 <script>
-import {
-  getOrganizeSelector,
-  createOrganize,
-  updateOrganize,
-  getOrganizeInfo
-} from '@/api/permission/organize'
+import { createOrganize, updateOrganize, getOrganizeInfo } from '@/api/permission/organize'
 
 export default {
   data() {
@@ -175,7 +171,8 @@ export default {
           businessscope: ''
         }
       },
-      treeData: [],
+      parentId: '',
+      organizeIdTree: [],
       natureData: [],
       industryData: [],
       pickerOptions: {
@@ -185,7 +182,7 @@ export default {
       },
       dataRule: {
         parentId: [
-          { required: true, message: '上级公司不能为空', trigger: 'input' }
+          { required: true, message: '上级公司不能为空', trigger: 'change' }
         ],
         fullName: [
           { required: true, message: '请输入公司名称', trigger: 'blur' }
@@ -199,45 +196,28 @@ export default {
     }
   },
   methods: {
-    init(id) {
+    init(id, parentId) {
       this.visible = true
       this.dataForm.id = id || ''
+      this.parentId = parentId || ''
+      this.organizeIdTree = []
       this.$nextTick(() => {
         this.$refs['dataForm'].resetFields()
-        // 获取公司下拉列表
-        getOrganizeSelector(id || 0).then(res => {
-          if (res.data.list && res.data.list.length) {
-            this.treeData = res.data.list
-          } else {
-            let topItem = {
-              fullName: "顶级节点",
-              hasChildren: true,
-              id: "-1",
-              icon: "icon-ym icon-ym-tree-organization3",
-              children: res.data.list
-            }
-            this.treeData = [topItem]
-          }
-        })
-
         // 获取公司性质
         this.$store.dispatch('base/getDictionaryData', { sort: 'EnterpriseNature' }).then(res => {
           this.natureData = res
         })
-
         // 获取所属行业
         this.$store.dispatch('base/getDictionaryData', { sort: 'IndustryType' }).then(res => {
           this.industryData = res
         })
-
         if (this.dataForm.id) {
           this.formLoading = true
           getOrganizeInfo(this.dataForm.id).then(res => {
             this.dataForm = res.data
-            const propertyJson = JSON.parse(res.data.propertyJson)
+            this.organizeIdTree = res.data.organizeIdTree || []
+            const propertyJson = res.data.propertyJson ? JSON.parse(res.data.propertyJson) : {}
             this.dataForm.propertyJson = propertyJson
-            this.dataForm.propertyJson.enterpriseNature = propertyJson.enterpriseNature
-            this.dataForm.propertyJson.industry = propertyJson.industry
             this.formLoading = false
           }).catch(() => { this.formLoading = false })
         }
@@ -245,6 +225,10 @@ export default {
     },
     goBack() {
       this.$emit('close')
+    },
+    onOrganizeChange(val) {
+      if (!val || !val.length) return this.dataForm.parentId = ''
+      this.dataForm.parentId = val[val.length - 1]
     },
     handleConfirm() {
       this.$refs['dataForm'].validate((valid) => {

@@ -3,7 +3,9 @@
     <parser :form-conf="formConf" @submit="submitForm" :key="key" ref="dynamicForm"
       v-if="!loading" />
     <candidate-form :visible.sync="candidateVisible" :candidateList="this.candidateList"
-      @submitCandidate="selfHandleRequest" :formData="dataForm" />
+      :branchList="branchList" @submitCandidate="selfHandleRequest" :formData="dataForm"
+      :isCustomCopy="isCustomCopy" />
+    <error-form :visible.sync="errorVisible" :nodeList="errorNodeList" @submit="handleError" />
   </div>
 </template>
 <script>
@@ -12,17 +14,25 @@ import { createModel, updateModel, getModelInfo } from '@/api/onlineDev/visualDe
 import { Candidates } from '@/api/workFlow/FlowBefore'
 import Parser from '@/components/Generator/parser/Parser'
 import CandidateForm from '@/views/workFlow/components/CandidateForm'
+import ErrorForm from '@/views/workFlow/components/ErrorForm'
 export default {
-  components: { Parser, CandidateForm },
+  components: { Parser, CandidateForm, ErrorForm },
   data() {
     return {
+      setting: {},
       formData: {},
       loading: true,
       eventType: '',
+      flowUrgent: 1,
       key: +new Date(),
       formConf: {},
+      isCustomCopy: false,
       candidateVisible: false,
       candidateList: [],
+      candidateType: 1,
+      branchList: [],
+      errorVisible: false,
+      errorNodeList: [],
       dataForm: {
         id: '',
         data: '',
@@ -35,6 +45,7 @@ export default {
       this.setting = data
       this.formConf = data.formConf ? JSON.parse(data.formConf) : {}
       this.dataForm.id = data.id || ''
+      this.isCustomCopy = this.setting.flowTemplateJson && this.setting.flowTemplateJson.properties && this.setting.flowTemplateJson.properties.isCustomCopy
       this.loading = true
       this.$nextTick(() => {
         if (this.dataForm.id) {
@@ -49,7 +60,7 @@ export default {
           }
           this.$store.commit('generator/SET_DYNAMIC_MODEL_EXTRA', extra)
           if (data.draftData) {
-            this.formData = data.draftData
+            this.formData = { ...data.draftData, id: this.dataForm.id, flowId: data.flowId }
             this.fillFormData(this.formConf, this.formData)
             this.$nextTick(() => {
               this.loading = false
@@ -61,7 +72,7 @@ export default {
             getModelInfo(data.flowId, this.dataForm.id).then(res => {
               this.dataForm = res.data
               if (!this.dataForm.data) return
-              this.formData = JSON.parse(this.dataForm.data)
+              this.formData = { ...JSON.parse(this.dataForm.data), id: this.dataForm.id, flowId: data.flowId }
               this.fillFormData(this.formConf, this.formData)
               this.$nextTick(() => {
                 this.loading = false
@@ -72,7 +83,7 @@ export default {
             DynamicInfo(this.dataForm.id).then(res => {
               this.dataForm = res.data
               if (!this.dataForm.data) return
-              this.formData = JSON.parse(this.dataForm.data)
+              this.formData = { ...JSON.parse(this.dataForm.data), id: this.dataForm.id, flowId: data.flowId }
               this.fillFormData(this.formConf, this.formData)
               this.$nextTick(() => {
                 this.loading = false
@@ -99,8 +110,8 @@ export default {
         for (let i = 0; i < list.length; i++) {
           let item = list[i]
           if (item.__vModel__) {
-            const val = data[item.__vModel__]
-            if (val !== undefined && !item.__config__.isSubTable) item.__config__.defaultValue = val
+            const val = data.hasOwnProperty(item.__vModel__) ? data[item.__vModel__] : item.__config__.defaultValue
+            if (!item.__config__.isSubTable) item.__config__.defaultValue = val
             let noShow = false, isDisabled = false, required = false
             if (this.setting.formOperates && this.setting.formOperates.length) {
               let id = item.__config__.isSubTable ? parent.__vModel__ + '-' + item.__vModel__ : item.__vModel__
@@ -125,10 +136,12 @@ export default {
         }
       }
       loop(form.fields)
+      form.formData = data
     },
     submitForm(data, callback) {
       if (!data) return
-      this.dataForm.data = JSON.stringify(data)
+      const formData = { ...this.formData, ...data }
+      this.dataForm.data = JSON.stringify(formData)
       if (callback && typeof callback === "function") callback()
       if (this.setting.type == 1) {
         if (this.eventType === 'save' || this.eventType === 'submit') {
@@ -143,15 +156,28 @@ export default {
     selfSubmit() {
       this.dataForm.status = this.eventType === 'submit' ? 0 : 1
       this.dataForm.flowId = this.setting.flowId
+      this.dataForm.flowUrgent = this.flowUrgent || 1
       if (this.eventType === 'save') return this.selfHandleRequest()
       this.$emit('setCandidateLoad', true)
       Candidates(0, { formData: this.dataForm }).then(res => {
         let data = res.data
         this.$emit('setCandidateLoad', false)
-        if (Array.isArray(data) && data.length) {
-          this.candidateList = res.data
+        this.candidateType = data.type
+        if (data.type == 1) {
+          this.branchList = res.data.list
+          this.candidateList = []
+          this.candidateVisible = true
+        } else if (data.type == 2) {
+          this.branchList = []
+          this.candidateList = res.data.list.filter(o => o.isCandidates)
           this.candidateVisible = true
         } else {
+          if (this.isCustomCopy) {
+            this.branchList = []
+            this.candidateList = []
+            this.candidateVisible = true
+            return
+          }
           this.$confirm('您确定要提交当前流程吗, 是否继续?', '提示', {
             type: 'warning'
           }).then(() => {
@@ -162,29 +188,45 @@ export default {
         this.$emit('setCandidateLoad', false)
       })
     },
-    selfHandleRequest(candidateList) {
-      if (candidateList) this.dataForm.candidateList = candidateList
+    selfHandleRequest(candidateData) {
+      if (candidateData) this.dataForm = { ...this.dataForm, ...candidateData }
+      this.dataForm.candidateType = this.candidateType
       if (!this.dataForm.id) delete (this.dataForm.id)
       if (this.eventType === 'save') this.$emit('setLoad', true)
       const formMethod = this.dataForm.id ? updateModel : createModel
       formMethod(this.setting.flowId, this.dataForm).then(res => {
-        this.$message({
-          message: res.msg,
-          type: 'success',
-          duration: 1500,
-          onClose: () => {
-            if (this.eventType === 'save') this.$emit('setLoad', false)
-            this.candidateVisible = false
-            this.$emit('close', true)
-          }
-        })
+        const errorData = res.data
+        if (errorData && Array.isArray(errorData) && errorData.length) {
+          this.errorNodeList = errorData
+          this.errorVisible = true
+        } else {
+          this.$message({
+            type: 'success',
+            message: res.msg,
+            duration: 1000,
+            onClose: () => {
+              if (this.eventType === 'save') this.$emit('setLoad', false)
+              this.candidateVisible = false
+              this.errorVisible = false
+              this.$emit('close', true)
+            }
+          })
+        }
       }).catch(() => {
         if (this.eventType === 'save') this.$emit('setLoad', false)
       })
     },
-    dataFormSubmit(eventType) {
+    handleError(data) {
+      if (this.eventType === 'submit') {
+        this.dataForm.errorRuleUserList = data
+        this.selfHandleRequest()
+        return
+      }
+    },
+    dataFormSubmit(eventType, flowUrgent) {
       if (this.setting.isPreview) return this.$message({ message: '功能预览不支持数据保存', type: 'warning' })
       this.eventType = eventType
+      this.flowUrgent = flowUrgent
       this.$refs.dynamicForm && this.$refs.dynamicForm.submitForm()
     }
   }

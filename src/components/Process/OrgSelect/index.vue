@@ -42,7 +42,7 @@ export default {
     },
     buttonType: {
       type: String,
-      default: 'input'
+      default: 'button'
     }, // or input
     tagConfig: {
       type: Object,
@@ -77,6 +77,13 @@ export default {
   computed: {
     selectedLabels() {
       return this.selectedData.map(t => t.fullName).join(',')
+    },
+    allList() {
+      let list = []
+      if (this.type !== 'user') {
+        list = this.$store.getters[this.type + 'List']
+      }
+      return list
     }
   },
   methods: {
@@ -88,18 +95,11 @@ export default {
       })
     },
     getText(id) {
-      let list = [], text = ''
-      if (this.type == 'position' || this.type == 'role') {
-        list = this.$store.getters[this.type + 'List']
-        let arr = list.filter(o => o.id === id)
+      let text = ''
+      if (this.type !== 'user') {
+        let arr = this.allList.filter(o => o.id === id)
         if (!arr.length) return ''
         text = arr[0].fullName || ''
-      }
-      if (this.type == 'user') {
-        list = this.$store.getters.userList
-        let arr = list.filter(o => o.id === id)
-        if (!arr.length) return ''
-        text = arr[0].realName && arr[0].account ? arr[0].realName + '/' + arr[0].account : ''
       }
       return text
     },
@@ -121,7 +121,6 @@ export default {
       this.selectedData.splice(i, 1)
       this.$emit('change', this.innerValue)
     },
-
     onConfirm(data) {
       this.innerValue = data
       this.$emit('change', this.innerValue)

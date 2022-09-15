@@ -44,7 +44,7 @@ export default {
           list[i].num = ''
           if (!list[i].propsApi) continue
           getDataInterfaceRes(list[i].propsApi).then(res => {
-            list[i].num = res.data.data
+            list[i].num = res.data
           })
         }
       }

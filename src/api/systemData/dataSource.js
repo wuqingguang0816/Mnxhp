@@ -63,3 +63,14 @@ export function DataSync(data) {
     data
   })
 }
+
+
+
+//数据批量同步
+export function batchExecute(data) {
+  return request({
+    url: `/api/system/DataSync/Actions/batchExecute`,
+    method: 'post',
+    data
+  })
+}

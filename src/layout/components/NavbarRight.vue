@@ -20,7 +20,7 @@
         <lang-select class="right-menu-item hover-effect" />
       </template>
     </template>
-    <el-dropdown class="avatar-container right-menu-item hover-effect" trigger="hover">
+    <el-dropdown class="avatar-container right-menu-item hover-effect" trigger='click'>
       <div class="avatar-wrapper">
         <el-avatar :size="26" :src="define.comUrl + userInfo.headIcon" class="user-avatar"
           v-if="userInfo.headIcon" />
@@ -33,6 +33,17 @@
             <i class="icon-ym icon-ym-header-userInfo"></i>{{ $t('navbar.profile') }}
           </el-dropdown-item>
         </router-link>
+        <el-dropdown placement="right-start" v-if="userInfo.systemIds&&userInfo.systemIds.length>1">
+          <el-dropdown-item>
+            <i class="icon-ym icon-ym-systemToggle"></i>{{ $t('navbar.systemChange') }}
+          </el-dropdown-item>
+          <el-dropdown-menu slot="dropdown">
+            <el-dropdown-item v-for="item in userInfo.systemIds" :key="item.id"
+              @click.native="changeMajor(item.id,'System')" :disabled="item.currentSystem"> <i
+                :class="item.icon"></i>{{item.name}}
+            </el-dropdown-item>
+          </el-dropdown-menu>
+        </el-dropdown>
         <a href="http://mail.qq.com/cgi-bin/qm_share?t=qm_mailme&email=dA0dGhkVHQcbEgA0BQVaFxsZ"
           target="_blank">
           <el-dropdown-item>
@@ -49,7 +60,7 @@
           <i class="icon-ym icon-ym-header-lockScreen"></i>{{ $t('navbar.lockScreen') }}
         </el-dropdown-item>
         <el-dropdown-item divided @click.native="handleLogout">
-          <i class="icon-ym icon-ym-header-loginOut"></i>{{ $t('navbar.logOut') }}
+          <i class="icon-ym icon-ym-header-loginOut"></i>{{ $t('navbar.logout') }}
         </el-dropdown-item>
       </el-dropdown-menu>
     </el-dropdown>
@@ -103,14 +114,8 @@ import Settings from './settings'
 import UserList from './userList/UserList'
 import dragDialog from "@/directive/el-drag-dialog";
 import ReconnectingWebSocket from 'reconnecting-websocket'
-// 心跳检测, 每隔一段时间检测连接状态，如果处于连接中，就向server端主动发送消息，来重置server端与客户端的最大连接时间，如果已经断开了，发起重连。
-let heartCheck = {
-  // 100秒发一次心跳，比server端设置的连接时间稍微小一点，在接近断开的情况下以通信的方式去重置连接时间。
-  timeout: 100000,
-  serverTimeoutObj: null,
-}
 // import Notify from '@/utils/notify';
-
+import { setMajor } from '@/api/permission/userSetting'
 export default {
   directives: { dragDialog },
   components: {
@@ -120,7 +125,8 @@ export default {
     Search,
     MessageList,
     UserList,
-    Settings
+    Settings,
+    activeIndex2: '2'
   },
   computed: {
     ...mapState({
@@ -157,11 +163,29 @@ export default {
     this.initNotify()
   },
   methods: {
+    changeMajor(majorId, majorType) { //切换系统
+      let query = {
+        majorId,
+        majorType
+      }
+      setMajor(query).then(res => {
+        this.$message({
+          message: res.msg,
+          type: 'success',
+          duration: 1500,
+          onClose: () => {
+            this.$store.commit('user/SET_TOAST', false)
+            location.reload()
+          }
+        })
+      })
+    },
     initWebSocket() {
       this.socket = this.$store.getters.socket || null
       if ('WebSocket' in window) {
         if (!this.socket) {
-          this.socket = new ReconnectingWebSocket(this.define.WebSocketUrl)
+          const webSocketUrl = `${this.define.WebSocketUrl}/${this.$store.getters.token}`
+          this.socket = new ReconnectingWebSocket(webSocketUrl)
           this.$store.commit('user/SET_SOCKET', this.socket)
         }
         //添加事件监听
@@ -174,7 +198,6 @@ export default {
         }
         socket.onmessage = (event) => {
           let data = JSON.parse(event.data)
-          this.resetCheck()
           if (data.method == 'initMessage') {
             this.messageCount = data.unreadMessageCount + data.unreadNoticeCount
             this.isTwinkle = !!data.unreadNums.length
@@ -197,8 +220,6 @@ export default {
               this.socket = null
               this.$store.commit('user/SET_SOCKET', this.socket)
             }
-            clearInterval(heartCheck.serverTimeoutObj);
-            heartCheck.serverTimeoutObj = null
             this.$message({
               message: data.msg || '登录过期,请重新登录',
               type: 'error',
@@ -217,8 +238,6 @@ export default {
               this.socket = null
               this.$store.commit('user/SET_SOCKET', this.socket)
             }
-            clearInterval(heartCheck.serverTimeoutObj);
-            heartCheck.serverTimeoutObj = null
           }
           //接收对方发送的消息
           if (data.method == 'receiveMessage') {
@@ -267,28 +286,7 @@ export default {
             this.$refs.UserList.$refs.JNPFIm.getList(data)
           }
         }
-        socket.onclose = () => {
-          clearInterval(heartCheck.serverTimeoutObj);
-          heartCheck.serverTimeoutObj = null
-        }
       }
-    },
-    resetCheck() {
-      clearInterval(heartCheck.serverTimeoutObj);
-      heartCheck.serverTimeoutObj = null
-      this.start()
-    },
-    start() {
-      heartCheck.serverTimeoutObj = setInterval(() => {
-        if (this.socket) {
-          let message = {
-            method: "heartCheck",
-            token: this.$store.getters.token
-          }
-          this.socket.send(JSON.stringify(message))
-          this.resetCheck()
-        }
-      }, heartCheck.timeout)
     },
     toggleSideBar() {
       this.$store.dispatch('app/toggleSideBar')

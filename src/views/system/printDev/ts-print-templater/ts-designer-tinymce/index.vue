@@ -1,7 +1,7 @@
 <template>
   <editor ref="mceEditor" :id="id" v-model="dataValue" v-bind="$attrs" :init="showInit"
-    :plugins="showPlugins" :toolbar="showToolbar"
-    tinymce-script-src="https://www.72crm.com/npm/tinymce/tinymce.min.js" v-on="$listeners" />
+    :plugins="showPlugins" :toolbar="showToolbar" tinymce-script-src="/cdn/tinymce/tinymce.min.js"
+    v-on="$listeners" />
 </template>
 
 <script>

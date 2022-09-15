@@ -9,6 +9,7 @@ const define = require('@/utils/define')
 const state = {
   token: getToken(),
   isLock: getLock() || 0,
+  isLeaveToast: true,
   menuList: [],
   leftMenuList: [],
   userInfo: {},
@@ -18,6 +19,9 @@ const state = {
 }
 
 const mutations = {
+  SET_TOAST: (state, data) => {
+    state.isLeaveToast = data
+  },
   SET_SOCKET: (state, socket) => {
     state.socket = socket
   },
@@ -222,13 +226,10 @@ const actions = {
   },
 
   // user logout
-  logout({ commit, state, dispatch }) {
+  logout({ dispatch }) {
     return new Promise((resolve, reject) => {
-      logout(state.token).then(() => {
+      logout().then(() => {
         dispatch('resetToken').then(() => {
-          resetRouter()
-          // reset visited views and cached views
-          dispatch('tagsView/delAllViews', null, { root: true })
           resolve()
         })
       }).catch(error => {
@@ -237,10 +238,16 @@ const actions = {
     })
   },
   // remove token
-  resetToken({ commit }) {
+  resetToken({ commit, state, dispatch }) {
     return new Promise(resolve => {
       commit('SET_TOKEN', '')
-      commit('SET_SOCKET', null)
+      if (state.socket) {
+        state.socket.close()
+        commit('SET_SOCKET', null)
+      }
+      resetRouter()
+      // reset visited views and cached views
+      dispatch('tagsView/delAllViews', null, { root: true })
       commit('SET_MENULIST', [])
       commit('SET_USERINFO', {})
       commit('SET_PERMISSION_LIST', [])

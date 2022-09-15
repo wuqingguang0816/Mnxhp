@@ -9,6 +9,12 @@
       <el-form-item label="业务编码" prop="enCode">
         <el-input v-model="dataForm.enCode" placeholder="业务编码" />
       </el-form-item>
+      <el-form-item label="业务分类" prop="category">
+        <el-select v-model="dataForm.category" placeholder="请选择" clearable>
+          <el-option v-for="(item,index) in categoryList" :label="item.fullName" :value="item.id"
+            :key="index" />
+        </el-select>
+      </el-form-item>
       <el-form-item label="流水前辍" prop="prefix">
         <el-input v-model="dataForm.prefix" placeholder="输入前缀" @keyup.native="handleChange" />
       </el-form-item>
@@ -79,8 +85,10 @@ export default {
         example: '',
         sortCode: 0,
         enabledMark: 1,
-        description: ''
+        description: '',
+        category: ''
       },
+      categoryList: [],
       dataRule: {
         fullName: [
           { required: true, message: '请输入业务名称', trigger: 'blur' },
@@ -89,6 +97,9 @@ export default {
         enCode: [
           { required: true, message: '请输入业务编码', trigger: 'blur' },
           { max: 50, message: '业务编码最多为50个字符！', trigger: 'blur' }
+        ],
+        category: [
+          { required: true, message: '请选择业务分类', trigger: 'change' },
         ],
         prefix: [
           { required: true, message: '请输入流水前缀', trigger: 'blur' }
@@ -110,8 +121,9 @@ export default {
     }
   },
   methods: {
-    init(id) {
+    init(id, categoryList) {
       this.dataForm.id = id || ''
+      this.categoryList = categoryList
       this.visible = true
       this.formLoading = true
       this.$nextTick(() => {

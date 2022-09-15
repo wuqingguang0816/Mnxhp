@@ -37,6 +37,9 @@
                   v-for="item in categoryList" />
               </el-select>
             </el-form-item>
+            <el-form-item label="表单类型" prop="formType">
+              <el-input v-model="formType" maxlength="50" disabled></el-input>
+            </el-form-item>
             <el-form-item label="流程类型" prop="type">
               <el-select v-model="dataForm.type" placeholder="选择类型" @change="typeChange"
                 :disabled="!!dataForm.id || dataForm.formType !== 1">
@@ -58,9 +61,6 @@
                 </el-row>
               </el-form-item>
             </template>
-            <el-form-item label="表单类型" prop="formType">
-              <el-input v-model="formType" maxlength="50" disabled></el-input>
-            </el-form-item>
             <template v-if="dataForm.formType == 1">
               <el-form-item label="Web地址" prop="formUrl">
                 <el-input v-model="dataForm.formUrl" placeholder="Web地址">
@@ -70,6 +70,16 @@
               <!-- <el-form-item label="App地址" prop="appFormUrl">
                 <el-input v-model="dataForm.appFormUrl" placeholder="App地址" />
               </el-form-item> -->
+              <el-form-item label="数据连接">
+                <el-select v-model="dataForm.dbLinkId" placeholder="请选择数据库" @change="onDbChange"
+                  clearable>
+                  <el-option-group v-for="group in dbOptions" :key="group.fullName"
+                    :label="group.fullName">
+                    <el-option v-for="item in group.children" :key="item.id" :label="item.fullName"
+                      :value="item.id" />
+                  </el-option-group>
+                </el-select>
+              </el-form-item>
             </template>
             <el-form-item label="流程排序" prop="sortCode">
               <el-input-number :min="0" :max="999999" v-model="dataForm.sortCode"
@@ -94,7 +104,7 @@
                 </el-select>
               </el-form-item>
               <el-table :data="tables" class="JNPF-common-table"
-                empty-text="点击“新增”可选择 1 条（单表）或 2 条以上（多表）">
+                empty-text="点击“新增”可选择1条(单表)或2条以上(多表)，未选择数据表时系统将会自动创建数据表">
                 <el-table-column type="index" label="序号" width="50" align="center" />
                 <el-table-column prop="typeId" label="类别" width="65">
                   <template slot-scope="scope">
@@ -132,7 +142,7 @@
                 <el-table-column label="操作" fixed="right" width="50">
                   <template slot-scope="scope">
                     <el-button size="mini" type="text" class="JNPF-table-delBtn"
-                      @click="delItem(scope.row,scope.$index)">删除
+                      @click="delItem(scope.row,scope.$index)">移除
                     </el-button>
                   </template>
                 </el-table-column>
@@ -258,11 +268,11 @@ export default {
             this.dataForm = res.data
             this.formType = this.dataForm.formType == 1 ? '系统表单' : '自定义表单'
             this.dataForm.flowTemplateJson && (this.flowTemplateJson = JSON.parse(this.dataForm.flowTemplateJson))
+            this.dataForm.dbLinkId = this.dataForm.dbLinkId || '0'
             this.dataForm.formData && (this.formData = JSON.parse(this.dataForm.formData))
             this.tables = this.dataForm.tables && JSON.parse(this.dataForm.tables) || []
             this.defaultTable = this.dataForm.tables && JSON.parse(this.dataForm.tables) || []
             this.updateFields()
-            this.loading = false
           }).catch(() => { this.loading = false })
         } else {
           this.dataForm.formType = formType
@@ -305,11 +315,14 @@ export default {
                 return
               }
               this.$store.commit('generator/SET_TABLE', false)
+              this.$store.commit('generator/SET_ALL_TABLE', [])
+              this.$store.commit('generator/UPDATE_FORMITEM_LIST', [])
             } else {
               if (!this.exist()) return
               let subTable = this.tables.filter(o => o.typeId == '0')
               this.$store.commit('generator/UPDATE_SUB_TABLE', subTable)
               this.$store.commit('generator/SET_ALL_TABLE', this.tables)
+              this.$store.commit('generator/SET_DATABASE', this.dataForm.dbLinkId)
               this.$store.commit('generator/SET_TABLE', true)
               this.$store.commit('generator/UPDATE_FORMITEM_LIST', this.mainTableFields)
             }

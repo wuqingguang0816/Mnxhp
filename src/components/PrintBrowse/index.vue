@@ -8,7 +8,7 @@
         <p class="header-txt"> · 打印预览</p>
       </div>
       <div class="options">
-        <el-button type="primary" size="small" @click="word">Word下载</el-button>
+        <el-button type="primary" size="small" @click="word">下载</el-button>
         <el-button type="primary" size="small" @click="print">打印</el-button>
         <el-button @click="closeDialog()">{{$t('common.cancelButton')}}</el-button>
       </div>
@@ -88,7 +88,7 @@ export default {
         inner: for (let j = 0; j < spanList.length; j++) {
           const spanEle = spanList[j];
           const dataTag = spanEle.getAttribute('data-tag') ? spanEle.getAttribute('data-tag').split('.')[0] : 'null'
-          if (dataTag && dataTag !== 'null') {
+          if (dataTag && dataTag !== 'headTable' && dataTag !== 'null') {
             hasChildTable = true
             tableName = dataTag
             break inner
@@ -123,18 +123,30 @@ export default {
         }
       }
     },
+    getHandleName(handleStatus) {
+      if (handleStatus == 0) return "拒绝"
+      if (handleStatus == 1) return "通过"
+      if (handleStatus == 2) return "发起"
+      if (handleStatus == 3) return "撤回"
+      if (handleStatus == 4) return "终止"
+      if (handleStatus == 5) return "指派"
+      if (handleStatus == 6) return "加签"
+      if (handleStatus == 7) return "转审"
+      if (handleStatus == 8) return "变更"
+      if (handleStatus == 9) return "复活"
+      return ''
+    },
     replaceSysValue() {
-      const recordList = this.recordList.filter(o => o.handleStatus == 0 || o.handleStatus == 1)
+      const recordList = this.recordList
       const systemPrinter = this.userInfo.userName + '/' + this.userInfo.userAccount
       const systemPrintTime = this.jnpf.toDate(new Date())
       let systemApprovalContent = ''
       if (recordList.length) {
-        systemApprovalContent += '<table style="border-collapse: collapse; width: 100%;" border="1" data-mce-style="border-collapse: collapse; width: 100%;"><tbody><tr><td style="width:30%;" data-mce-style="width: 30%;">审批节点</td><td style="width: 70%;" data-mce-style="width: 70%;">审批内容</td></tr>'
+        systemApprovalContent += '<table style="border-collapse: collapse; width: 100%;" border="1" data-mce-style="border-collapse: collapse; width: 100%;"><tbody><tr><td style="width:20%;" data-mce-style="width: 20%;">节点名称</td><td style="width:20%;" data-mce-style="width: 20%;">操作人员</td><td style="width:20%;" data-mce-style="width: 20%;">操作时间</td><td style="width:20%;" data-mce-style="width: 20%;">执行动作</td><td style="width: 20%;" data-mce-style="width: 20%;">备注</td></tr>'
         let content = ''
         for (let i = 0; i < recordList.length; i++) {
           const record = recordList[i];
-          let desc = (record.userName || record.handleId) + '于' + this.jnpf.toDate(record.handleTime) + (record.handleStatus == 1 ? '审批通过' : '审批拒绝') + (record.handleOpinion ? '，审批意见：' + record.handleOpinion : '')
-          content += `<tr><td style="width: 30%;" data-mce-style="width: 30%;"><span class="wk-print-tag-wukong wk-tiny-color--common" contenteditable="false">${record.nodeName}</span></td><td style="width: 70%;" data-mce-style="width: 70%;"><span class="wk-print-tag-wukong wk-tiny-color--common" contenteditable="false">${desc}</span></td></tr>`
+          content += `<tr><td style="width: 20%;" data-mce-style="width: 20%;"><span class="wk-print-tag-wukong wk-tiny-color--common" contenteditable="false">${record.nodeName}</span></td><td style="width: 20%;" data-mce-style="width: 20%;"><span class="wk-print-tag-wukong wk-tiny-color--common" contenteditable="false">${record.userName}</span></td><td style="width: 20%;" data-mce-style="width: 20%;"><span class="wk-print-tag-wukong wk-tiny-color--common" contenteditable="false">${this.jnpf.toDate(record.handleTime)}</span></td><td style="width: 20%;" data-mce-style="width: 20%;"><span class="wk-print-tag-wukong wk-tiny-color--common" contenteditable="false">${this.getHandleName(record.handleStatus)}</span></td><td style="width: 20%;" data-mce-style="width: 20%;"><span class="wk-print-tag-wukong wk-tiny-color--common" contenteditable="false">${record.handleOpinion || ""}</span></td></tr>`
         }
         systemApprovalContent += content
         systemApprovalContent += '</tbody></table>'
@@ -208,7 +220,7 @@ export default {
   padding: 40px 30px;
   margin: 0 auto;
   border-radius: 4px;
-  width: 600px;
+  width: 776px;
   height: 100%;
   overflow: auto;
 }

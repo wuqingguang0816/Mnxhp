@@ -17,10 +17,10 @@
     <el-form-item label="允许半选">
       <el-switch v-model="activeData['allow-half']" />
     </el-form-item>
-    <el-form-item label="辅助文字">
+    <el-form-item label="辅助文字" v-show="showType==='pc'">
       <el-switch v-model="activeData['show-text']" @change="rateTextChange" />
     </el-form-item>
-    <el-form-item label="显示分数">
+    <el-form-item label="显示分数" v-show="showType==='pc'">
       <el-switch v-model="activeData['show-score']" @change="rateScoreChange" />
     </el-form-item>
     <el-form-item label="是否禁用">

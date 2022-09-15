@@ -13,6 +13,18 @@
             v-model="item.__config__.defaultValue" :textStyle="item.textStyle" />
         </el-form-item>
       </template>
+      <template v-else-if="item.__config__.jnpfKey==='link'">
+        <el-form-item label-width="0">
+          <jnpf-link :content="item.content" :href="item.href" :target="item.target"
+            :textStyle="item.textStyle" />
+        </el-form-item>
+      </template>
+      <template v-else-if="item.__config__.jnpfKey==='alert'">
+        <el-form-item label-width="0">
+          <el-alert :title="item.title" :type="item.type" :closable="item.closable"
+            :show-icon="item['show-icon']" />
+        </el-form-item>
+      </template>
       <template v-else-if="item.__config__.jnpfKey==='groupTitle'">
         <el-form-item label-width="0">
           <groupTitle :content="item.content" :content-position="item['content-position']" />
@@ -131,6 +143,12 @@
                     <JNPFUploadFz v-model="scope.row[column.__vModel__]" detailed disabled />
                   </template>
                 </el-table-column>
+                <el-table-column :key="columnIndex" :label="column.__config__.label"
+                  v-else-if="column.__config__.jnpfKey==='uploadImg'">
+                  <template slot-scope="scope">
+                    <JNPFUploadImg v-model="scope.row[column.__vModel__]" detailed disabled />
+                  </template>
+                </el-table-column>
                 <el-table-column :key="columnIndex" :prop="column.__vModel__"
                   :label="column.__config__.label" v-else />
               </template>
@@ -192,7 +210,7 @@ export default {
     downloadFile(file) {
       if (!file.fileId) return
       getDownloadUrl('annex', file.fileId).then(res => {
-        this.jnpf.downloadFile(res.data.url)
+        this.jnpf.downloadFile(res.data.url, file.name)
       })
     },
     getImgList(list) {

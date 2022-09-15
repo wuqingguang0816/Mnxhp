@@ -80,7 +80,7 @@ export default {
       this.selectedData = []
       this.keyword = ''
       this.$nextTick(() => {
-        this.pageTitle = this.$t(`position.postMember`) + '- ' + fullName
+        this.pageTitle = this.$t(`position.postMember`) + ' - ' + fullName
         this.allLoading = true
         this.initData()
         getUserRelationList(this.dataForm.objectId).then(res => {

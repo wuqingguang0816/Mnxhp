@@ -6,6 +6,20 @@
     <el-form-item label="占位提示">
       <el-input v-model="activeData.placeholder" placeholder="请输入占位提示" />
     </el-form-item>
+    <el-form-item label="弹窗标题">
+      <el-input v-model="activeData.popupTitle" placeholder="请输入弹窗标题" />
+    </el-form-item>
+    <el-form-item label="弹窗类型" v-show="showType==='pc'">
+      <el-select v-model="activeData.popupType" placeholder="请选择弹窗类型">
+        <el-option label="居中弹窗" value="dialog"></el-option>
+        <el-option label="右侧弹窗" value="drawer"></el-option>
+      </el-select>
+    </el-form-item>
+    <el-form-item label="弹窗宽度" v-show="showType==='pc'">
+      <el-select v-model="activeData.popupWidth" placeholder="请选择弹窗宽度">
+        <el-option v-for="item in popupWidthOptions" :label="item" :value="item" :key="item" />
+      </el-select>
+    </el-form-item>
     <el-form-item label="关联功能">
       <JNPF-TreeSelect :options="treeData" v-model="activeData.modelId" placeholder="请选择关联功能"
         lastLevel clearable @change="onModeIdChange" />
@@ -40,11 +54,11 @@
         添加字段
       </el-button>
     </div>
-    <el-divider>分页设置</el-divider>
-    <el-form-item label="列表分页">
+    <el-divider>列表分页</el-divider>
+    <el-form-item label="分页设置">
       <el-switch v-model="activeData.hasPage"></el-switch>
     </el-form-item>
-    <el-form-item label="分页条数" label-width="80px">
+    <el-form-item label="分页条数" label-width="80px" v-if="activeData.hasPage">
       <el-radio-group v-model="activeData.pageSize">
         <el-radio-button :label="20">20条</el-radio-button>
         <el-radio-button :label="50">50条</el-radio-button>
@@ -75,7 +89,8 @@ export default {
   data() {
     return {
       treeData: [],
-      fieldOptions: []
+      fieldOptions: [],
+      popupWidthOptions: ['600px', '800px', '1000px', '40%', '50%', '60%', '70%', '80%'],
     }
   },
   created() {

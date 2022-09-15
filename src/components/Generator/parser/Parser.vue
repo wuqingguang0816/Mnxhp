@@ -252,6 +252,9 @@ export default {
   },
   computed: {
     parameter() {
+      const oldFormData = this.formConfCopy.formData ? this.formConfCopy.formData : {}
+      this[this.formConf.formModel].id = oldFormData.id || ''
+      this[this.formConf.formModel].flowId = oldFormData.flowId || ''
       return {
         formData: this[this.formConf.formModel],
         setFormData: this.setFormData,
@@ -288,7 +291,7 @@ export default {
           } else if (config.dataType === 'dynamic') {
             if (!config.propsUrl) return
             getDataInterfaceRes(config.propsUrl).then(res => {
-              let realData = res.data.data
+              let realData = res.data
               if (Array.isArray(realData)) {
                 isTreeSelect ? cur.options = realData : cur.__slot__.options = realData
               } else {
@@ -320,7 +323,7 @@ export default {
     },
     buildRules(componentList, rules) {
       componentList.forEach(cur => {
-        const config = cur.__config__
+        const config = JSON.parse(JSON.stringify(cur.__config__))
         if (!Array.isArray(config.regList)) config.regList = []
         if (config.required) {
           const required = { required: config.required, message: cur.placeholder }

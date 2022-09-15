@@ -3,11 +3,20 @@
     <div class="JNPF-common-layout-left">
       <div class="JNPF-common-title">
         <h2>接口分类</h2>
+        <el-dropdown>
+          <el-link icon="icon-ym icon-ym-mpMenu" :underline="false" />
+          <el-dropdown-menu slot="dropdown">
+            <el-dropdown-item @click.native="initData()">刷新数据</el-dropdown-item>
+            <el-dropdown-item @click.native="toggleTreeExpand(true)">展开全部</el-dropdown-item>
+            <el-dropdown-item @click.native="toggleTreeExpand(false)">折叠全部</el-dropdown-item>
+          </el-dropdown-menu>
+        </el-dropdown>
       </div>
       <el-scrollbar class="JNPF-common-el-tree-scrollbar" v-loading="treeLoading">
-        <el-tree ref="treeBox" :data="treeData" :props="defaultProps" default-expand-all
-          highlight-current :expand-on-click-node="false" node-key="id"
-          @node-click="handleNodeClick" class="JNPF-common-el-tree" />
+        <el-tree ref="treeBox" :data="treeData" :props="defaultProps"
+          :default-expand-all="expandsTree" highlight-current :expand-on-click-node="false"
+          node-key="id" @node-click="handleNodeClick" class="JNPF-common-el-tree"
+          v-if="refreshTree" />
       </el-scrollbar>
     </div>
     <div class="JNPF-common-layout-center">
@@ -44,13 +53,6 @@
         <JNPF-table v-loading="listLoading" :data="tableData">
           <el-table-column prop="fullName" label="名称" />
           <el-table-column prop="enCode" label="编码" />
-          <el-table-column prop="checkType" label="授权" width="100">
-            <template slot-scope="scope">
-              <span v-if="scope.row.checkType === 0">忽略验证</span>
-              <span v-if="scope.row.checkType === 1">鉴权验证</span>
-              <span v-if="scope.row.checkType === 2">跨域验证</span>
-            </template>
-          </el-table-column>
           <el-table-column prop="dataType" label="类型" width="100">
             <template slot-scope="scope">
               <span v-if="scope.row.dataType === 1">SQL操作</span>
@@ -58,14 +60,13 @@
               <span v-if="scope.row.dataType === 3">API操作</span>
             </template>
           </el-table-column>
-          <el-table-column prop="requestMethod" label="动作" width="100" />
           <el-table-column prop="creatorTime" label="创建时间" :formatter="jnpf.tableDateFormat"
             width="120" />
           <el-table-column prop="sortCode" label="排序" width="70" align="center" />
           <el-table-column prop="enabledMark" label="状态" width="70" align="center">
             <template slot-scope="scope">
               <el-tag :type="scope.row.enabledMark == 1 ? 'success' : 'danger'" disable-transitions>
-                {{scope.row.enabledMark==1?'正常':'停用'}}</el-tag>
+                {{scope.row.enabledMark==1?'启用':'禁用'}}</el-tag>
             </template>
           </el-table-column>
           <el-table-column label="操作" width="150">
@@ -79,7 +80,7 @@
                   </span>
                   <el-dropdown-menu slot="dropdown">
                     <el-dropdown-item @click.native="handlePreview(scope.row)">预览</el-dropdown-item>
-                    <el-dropdown-item @click.native="viewLog(scope.row)">日志</el-dropdown-item>
+                    <!-- <el-dropdown-item @click.native="viewLog(scope.row)">日志</el-dropdown-item> -->
                     <el-dropdown-item @click.native="exportData(scope.row.id)">导出</el-dropdown-item>
                   </el-dropdown-menu>
                 </el-dropdown>
@@ -131,26 +132,38 @@ export default {
       tableData: [],
       logVisible: false,
       formVisible: false,
-      previewVisible: false
+      previewVisible: false,
+      expandsTree: true,
+      refreshTree: true,
     }
   },
   created() {
-    this.initData()
+    this.initData(true)
   },
   methods: {
-    initData() {
+    initData(isInit) {
       this.treeLoading = true
       getDataInterfaceTypeSelector().then(res => {
         this.treeData = res.data.list
         if (!this.treeData.length) return this.treeLoading = false
         this.$nextTick(() => {
-          this.listQuery.categoryId = this.treeData[0].id
+          if (isInit) this.listQuery.categoryId = this.treeData[0].id
           this.$refs.treeBox.setCurrentKey(this.listQuery.categoryId)
           this.treeLoading = false
-          this.getList()
+          if (isInit) this.getList()
         })
       }).catch(() => {
         this.treeLoading = false
+      })
+    },
+    toggleTreeExpand(expands) {
+      this.refreshTree = false
+      this.expandsTree = expands
+      this.$nextTick(() => {
+        this.refreshTree = true
+        this.$nextTick(() => {
+          this.$refs.treeBox.setCurrentKey(this.listQuery.categoryId)
+        })
       })
     },
     getList() {

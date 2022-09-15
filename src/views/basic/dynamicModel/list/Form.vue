@@ -120,7 +120,7 @@ export default {
           getModelInfo(modelId, this.dataForm.id).then(res => {
             this.dataForm = res.data
             if (!this.dataForm.data) return
-            this.formData = JSON.parse(this.dataForm.data)
+            this.formData = { ...JSON.parse(this.dataForm.data), id: this.dataForm.id }
             this.fillFormData(this.formConf, this.formData)
             this.$nextTick(() => {
               this.visible = true
@@ -145,32 +145,35 @@ export default {
       this.formOperates = list[0] && list[0].form ? list[0].form : []
     },
     fillFormData(form, data) {
-      const loop = list => {
+      const loop = (list, parent) => {
         for (let i = 0; i < list.length; i++) {
           let item = list[i]
           if (item.__vModel__) {
-            const val = data[item.__vModel__]
-            if (val !== undefined) item.__config__.defaultValue = val
+            const val = data.hasOwnProperty(item.__vModel__) ? data[item.__vModel__] : item.__config__.defaultValue
+            if (!item.__config__.isSubTable) item.__config__.defaultValue = val
             if (!this.isPreview && this.useFormPermission) {
+              let id = item.__config__.isSubTable ? parent.__vModel__ + '-' + item.__vModel__ : item.__vModel__
               let noShow = true
               if (this.formOperates && this.formOperates.length) {
-                noShow = !this.formOperates.some(o => o.enCode === item.__vModel__)
+                noShow = !this.formOperates.some(o => o.enCode === id)
               }
               noShow = item.__config__.noShow ? item.__config__.noShow : noShow
               this.$set(item.__config__, 'noShow', noShow)
             }
           }
-          if (item.__config__ && item.__config__.jnpfKey !== 'table' && item.__config__.children && Array.isArray(item.__config__.children)) {
-            loop(item.__config__.children)
+          if (item.__config__ && item.__config__.children && Array.isArray(item.__config__.children)) {
+            loop(item.__config__.children, item)
           }
         }
       }
       loop(form.fields)
+      form.formData = data
     },
     submitForm(data, callback) {
       if (!data) return
       this.btnLoading = true
-      this.dataForm.data = JSON.stringify(data)
+      const formData = { ...this.formData, ...data }
+      this.dataForm.data = JSON.stringify(formData)
       const formMethod = this.dataForm.id ? updateModel : createModel
       formMethod(this.modelId, this.dataForm).then(res => {
         this.$message({

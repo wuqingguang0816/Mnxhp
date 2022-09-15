@@ -64,8 +64,6 @@ export default {
         { label: '整型', value: 'int' },
         { label: '日期时间', value: 'datetime' },
         { label: '浮点', value: 'decimal' },
-        { label: '长整型', value: 'bigint' },
-        { label: '文本', value: 'text' }
       ],
       dataRule: {
         field: [

@@ -34,9 +34,9 @@
           </el-col>
         </el-form>
       </el-row>
-      <JNPF-table v-loading="listLoading" :data="list">
+      <JNPF-table v-loading="listLoading" :data="list" @cell-dblclick="cellDblclick">
         <el-table-column :prop="item.field.toLowerCase()" :label="item.field" show-overflow-tooltip
-          v-for="item in options" :key="item.field" />
+          v-for="item in options" :key="item.field" min-width="150" />
       </JNPF-table>
       <pagination :total="total" :page.sync="listQuery.currentPage" :limit.sync="listQuery.pageSize"
         @pagination="initData" />
@@ -82,6 +82,18 @@ export default {
         sort: 'desc'
       }
       this.initData()
+    },
+    cellDblclick(row, column, cell, event) {
+      if (event.type == "dblclick") {
+        var save = function (e) {
+          e.clipboardData.setData("text/plain", event.target.innerText)
+          e.preventDefault()
+        }
+        document.addEventListener("copy", save)
+        document.execCommand("copy")
+        document.removeEventListener("copy", save)
+      }
+      this.$message({ message: '复制成功', type: 'success' })
     },
     init(dataBase, table) {
       if (!dataBase || !table) {

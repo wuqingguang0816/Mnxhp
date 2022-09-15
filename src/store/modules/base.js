@@ -3,6 +3,7 @@ import { UserListAll, getUserSelector } from '@/api/permission/user'
 import { getPositionListAll, getPositionSelector } from '@/api/permission/position'
 import { getRoleSelector } from '@/api/permission/role'
 import { getPrintDevSelector } from '@/api/system/printDev'
+import jnpf from '@/utils/jnpf';
 
 const state = {
   dictionaryList: [],
@@ -76,7 +77,7 @@ const actions = {
         } else {
           let rowData = [];
           if (!data.isTree) {
-            rowData = data.dictionaryList.fliter(o => o.id == info.id)
+            rowData = data.dictionaryList.filter(o => o.id == info.id)
           } else {
             function findData(list) {
               for (let i = 0; i < list.length; i++) {
@@ -137,19 +138,9 @@ const actions = {
     return new Promise((resolve, reject) => {
       if (!state.roleList.length) {
         dispatch('getRoleTree').then(res => {
-          let list = []
-          const loop = (treeData) => {
-            for (let i = 0; i < treeData.length; i++) {
-              const item = treeData[i]
-              if (item.type === 'role') list.push(item)
-              if (item.hasChildren && item.children && Array.isArray(item.children)) {
-                loop(item.children)
-              }
-            }
-          }
-          loop(res)
-          commit('SET_ROLE_LIST', list)
-          resolve(list)
+          let data = jnpf.treeToArray(res, 'role')
+          commit('SET_ROLE_LIST', data)
+          resolve(data)
         }).catch(error => {
           reject(error)
         })
@@ -216,7 +207,7 @@ const actions = {
     return new Promise((resolve, reject) => {
       if (!state.printFlowTree.length) {
         getPrintDevSelector(1).then(res => {
-          commit('SET_PRINT_FLOW_TREE', res.data.list)
+          // commit('SET_PRINT_FLOW_TREE', res.data.list)
           resolve(res.data.list)
         }).catch(error => {
           reject(error)
@@ -230,7 +221,7 @@ const actions = {
     return new Promise((resolve, reject) => {
       if (!state.printFormTree.length) {
         getPrintDevSelector(2).then(res => {
-          commit('SET_PRINT_FORM_TREE', res.data.list)
+          // commit('SET_PRINT_FORM_TREE', res.data.list)
           resolve(res.data.list)
         }).catch(error => {
           reject(error)

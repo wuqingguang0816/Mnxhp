@@ -1,22 +1,24 @@
 import request from '@/utils/request'
 
 // 获取菜单列表
-export const getMenuList = (data) => {
+export const getMenuList = (systemId, data) => {
   return request({
-    url: '/api/system/Menu',
+    url: `/api/system/Menu/ModuleBySystem/${systemId}`,
     method: 'GET',
     data
   })
 }
 
 // 获取上级菜单下拉框
-export const getMenuSelector = (data, id) => {
+export const getMenuSelector = (data, id, systemId) => {
   return request({
-    url: '/api/system/Menu/Selector/' + (!!id ? id : 0),
+    url: '/api/system/Menu/Selector/' + (!!id ? id : 0) + "/" + (systemId || 0),
     method: 'GET',
     data
   })
 }
+
+
 // 获取菜单列表（下拉框）
 export const getSelectorAll = data => {
   return request({
@@ -85,9 +87,11 @@ export const exportMenu = id => {
 }
 
 // 数据权限字段名称
-export const getFieldNameList = (id,name) => {
+export const getFieldNameList = (id, name) => {
   return request({
     url: `/api/system/Module${name}/${id}/FieldList`,
     method: 'GET'
   })
 }
+
+

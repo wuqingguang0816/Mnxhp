@@ -43,7 +43,7 @@
       </div>
     </template>
     <template v-if="activeData.__config__.dataType === 'dictionary'">
-      <el-form-item label="远端数据">
+      <el-form-item label="数据字典">
         <JNPF-TreeSelect :options="treeData" v-model="activeData.__config__.dictionaryType"
           placeholder="请选择数据字典" lastLevel clearable>
         </JNPF-TreeSelect>
@@ -57,10 +57,8 @@
     </template>
     <template v-if="activeData.__config__.dataType === 'dynamic'">
       <el-form-item label="远端数据">
-        <JNPF-TreeSelect :options="dataInterfaceSelector" v-model="activeData.__config__.propsUrl"
-          placeholder="请选择远端数据" lastLevel lastLevelKey='categoryId' lastLevelValue='1'
-          @change="propsUrlChange" clearable>
-        </JNPF-TreeSelect>
+        <interface-dialog :value="activeData.__config__.propsUrl"
+          :title="activeData.__config__.propsName" popupTitle="远端数据" @change="propsUrlChange" />
       </el-form-item>
       <el-form-item label="存储字段">
         <el-input v-model="activeData.__config__.props.value" placeholder="请输入存储字段" />
@@ -73,33 +71,25 @@
     <!-- <el-form-item label="显示标签">
       <el-switch v-model="activeData.__config__.showLabel" />
     </el-form-item> -->
-    <el-form-item label="选项样式">
-      <el-radio-group v-model="activeData.__config__.optionType">
-        <el-radio-button label="default">
-          默认
-        </el-radio-button>
-        <el-radio-button label="button">
-          按钮
-        </el-radio-button>
-      </el-radio-group>
-    </el-form-item>
-    <el-form-item v-if=" activeData.__config__.optionType === 'default'" label="是否带边框">
-      <el-switch v-model="activeData.__config__.border" />
-    </el-form-item>
-    <el-form-item v-if="activeData.__config__.optionType === 'button' ||
+    <template v-if="showType==='pc'">
+      <el-form-item label="选项样式">
+        <el-radio-group v-model="activeData.__config__.optionType">
+          <el-radio-button label="default">默认</el-radio-button>
+          <el-radio-button label="button">按钮</el-radio-button>
+        </el-radio-group>
+      </el-form-item>
+      <el-form-item v-if=" activeData.__config__.optionType === 'default'" label="是否边框">
+        <el-switch v-model="activeData.__config__.border" />
+      </el-form-item>
+      <el-form-item v-if="activeData.__config__.optionType === 'button' ||
                 activeData.__config__.border" label="组件尺寸">
-      <el-radio-group v-model="activeData.size">
-        <el-radio-button label="medium">
-          中等
-        </el-radio-button>
-        <el-radio-button label="small">
-          较小
-        </el-radio-button>
-        <el-radio-button label="mini">
-          迷你
-        </el-radio-button>
-      </el-radio-group>
-    </el-form-item>
+        <el-radio-group v-model="activeData.size">
+          <el-radio-button label="medium">中等</el-radio-button>
+          <el-radio-button label="small">较小</el-radio-button>
+          <el-radio-button label="mini">迷你</el-radio-button>
+        </el-radio-group>
+      </el-form-item>
+    </template>
     <el-form-item label="是否禁用">
       <el-switch v-model="activeData.disabled" />
     </el-form-item>
@@ -113,10 +103,11 @@ import comMixin from './mixin';
 import draggable from 'vuedraggable'
 import { getDictionaryTypeSelector, getDictionaryDataSelector } from '@/api/systemData/dictionary'
 import { getDataInterfaceSelector, getDataInterfaceRes } from '@/api/systemData/dataInterface'
+import InterfaceDialog from '@/components/Process/PropPanel/InterfaceDialog'
 export default {
   props: ['activeData'],
   mixins: [comMixin],
-  components: { draggable },
+  components: { draggable, InterfaceDialog },
   data() {
     return {
       treeData: [],
@@ -163,25 +154,31 @@ export default {
       if (val === 'static') {
         this.activeData.__config__.dictionaryType = ''
         this.activeData.__config__.propsUrl = ''
+        this.activeData.__config__.propsName = ''
       }
       if (val === 'dynamic') {
         this.activeData.__config__.dictionaryType = ''
       }
       if (val === 'dictionary') {
         this.activeData.__config__.propsUrl = ''
+        this.activeData.__config__.propsName = ''
       }
     },
     dictionaryTypeChange() {
       this.activeData.__config__.defaultValue = []
     },
-    propsUrlChange(val) {
+    propsUrlChange(val, item) {
       if (!val) {
+        this.activeData.__config__.propsUrl = ''
+        this.activeData.__config__.propsName = ''
         this.activeData.__slot__.options = []
         return
       }
+      this.activeData.__config__.propsUrl = val
+      this.activeData.__config__.propsName = item.fullName
       this.activeData.__config__.defaultValue = []
       getDataInterfaceRes(val).then(res => {
-        let data = res.data.data
+        let data = res.data
         if (Array.isArray(data)) {
           this.activeData.__slot__.options = data
         } else {
@@ -189,6 +186,7 @@ export default {
         }
       }).catch(() => {
         this.activeData.__config__.propsUrl = ''
+        this.activeData.__config__.propsName = ''
         this.activeData.__slot__.options = []
       })
     }

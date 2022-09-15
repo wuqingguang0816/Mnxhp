@@ -10,20 +10,20 @@
       <el-input :value="setDefaultValue(activeData.__config__.defaultValue)" placeholder="请输入默认值"
         @input="onDefaultValueInput" />
     </el-form-item>
-    <el-form-item label="前缀">
+    <el-form-item label="前缀" v-show="showType==='pc'">
       <el-input v-model="activeData.__slot__.prepend" placeholder="请输入前缀" />
     </el-form-item>
-    <el-form-item label="后缀">
+    <el-form-item label="后缀" v-show="showType==='pc'">
       <el-input v-model="activeData.__slot__.append" placeholder="请输入后缀" />
     </el-form-item>
-    <el-form-item label="前图标">
+    <el-form-item label="前图标" v-show="showType==='pc'">
       <el-input v-model="activeData['prefix-icon']" placeholder="请输入前图标名称">
         <el-button slot="append" @click="openIconsDialog('prefix-icon')">
           选择
         </el-button>
       </el-input>
     </el-form-item>
-    <el-form-item label="后图标">
+    <el-form-item label="后图标" v-show="showType==='pc'">
       <el-input v-model="activeData['suffix-icon']" placeholder="请输入后图标名称">
         <el-button slot="append" @click="openIconsDialog('suffix-icon')">
           选择
@@ -41,9 +41,9 @@
     <!-- <el-form-item label="输入统计">
       <el-switch v-model="activeData['show-word-limit']" />
     </el-form-item> -->
-    <!-- <el-form-item label="能否清空">
+    <el-form-item label="能否清空">
       <el-switch v-model="activeData.clearable" />
-    </el-form-item> -->
+    </el-form-item>
     <el-form-item label="是否密码">
       <el-switch v-model="activeData['show-password']" />
     </el-form-item>
@@ -59,6 +59,14 @@
     <el-divider>校验规则</el-divider>
     <el-form-item label="是否必填">
       <el-switch v-model="activeData.__config__.required" />
+    </el-form-item>
+    <el-form-item>
+      <span slot="label">是否唯一
+        <el-tooltip content="输入值唯一性校验" placement="top">
+          <a class="el-icon-warning-outline"></a>
+        </el-tooltip>
+      </span>
+      <el-switch v-model="activeData.__config__.unique" />
     </el-form-item>
     <div v-for="(item, index) in activeData.__config__.regList" :key="index" class="reg-item">
       <span class="close-btn" @click="activeData.__config__.regList.splice(index, 1)">

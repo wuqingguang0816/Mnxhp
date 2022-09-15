@@ -22,14 +22,14 @@
         </div>
         <JNPF-table v-loading="listLoading" :data="treeList" row-key="id" default-expand-all
           :tree-props="{ children: 'children', hasChildren: '' }">
-          <el-table-column prop="bindTable" label="数据库表" width="120" v-if="menuType == 2" />
+          <el-table-column prop="bindTable" label="数据库表" width="120" />
           <el-table-column prop="enCode" label="字段名称" width="160" />
           <el-table-column prop="fullName" label="字段说明" />
           <el-table-column prop="sortCode" label="排序" width="90" align="center" />
           <el-table-column prop="enabledMark" label="状态" width="90">
             <template slot-scope="scope">
               <el-tag :type="scope.row.enabledMark == 1 ? 'success' : 'danger'" disable-transitions>
-                {{ scope.row.enabledMark == 1 ? "正常" : "停用" }}</el-tag>
+                {{scope.row.enabledMark==1?'启用':'禁用'}}</el-tag>
             </template>
           </el-table-column>
           <el-table-column label="操作" width="100">
@@ -53,6 +53,7 @@
 </template>
 
 <script>
+import { getInfo } from "@/api/system/authorize";
 import {
   getColumnAuthorizeList,
   updateColumnState,
@@ -87,12 +88,15 @@ export default {
       menuType: 2,
       dbOptions: [],
       dbList: [],
-      tableName: ""
+      tableName: "",
+      dataType: "",
+      dataList: {}
     };
   },
   methods: {
-    init(moduleId, fullName, type) {
+    init(moduleId, fullName, type, dataType) {
       this.menuType = type;
+      this.dataType = dataType
       this.columnAuthorizeListDrawer = true;
       this.moduleId = moduleId;
       this.dialogTitle = `列表权限 - ${fullName}`;
@@ -105,14 +109,9 @@ export default {
         this.listQuery.keyword = "";
         this.getList();
       });
-      if (this.menuType === 3) {
-        getFieldNameList(this.moduleId, "Column").then(res => {
-          this.dbList = res.data || [];
-        });
-      } else {
-        if (this.menuType === 2) {
-          this.getDataSourceListAll();
-        }
+      if (this.menuType === 2) {
+        this.getDataSourceListAll();
+        this.getInfo()
       }
     },
     getDataSourceListAll() {
@@ -121,16 +120,22 @@ export default {
         this.dbOptions = list.filter(o => o.children && o.children.length);
       })
     },
+    getInfo() {
+      getInfo(this.moduleId, this.dataType).then(res => {
+        this.dataList = res.data || {}
+        this.tableName = this.dataList.linkTables || ''
+      })
+    },
     //数据连接
     addDataConnect() {
       this.columnConnectFormVisible = true;
       this.$nextTick(() => {
-        this.$refs.ColumnConnectForm.init(this.dbOptions);
+        this.$refs.ColumnConnectForm.init(this.dataList, this.moduleId, this.dbOptions, this.dataType);
       });
     },
-    getConnectList(data, tableName) {
+    getConnectList(tableName) {
       this.tableName = tableName || "";
-      this.dbList = data;
+      this.getInfo()
     },
     getList() {
       this.listLoading = true;
@@ -175,8 +180,7 @@ export default {
           this.moduleId,
           id,
           this.menuType,
-          this.dbList,
-          this.tableName
+          this.dataType
         );
       });
     },

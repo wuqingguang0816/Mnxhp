@@ -13,7 +13,7 @@
     </div>
     <el-dialog title="消息模板" :close-on-click-modal="false" :visible.sync="visible"
       class="JNPF-dialog JNPF-dialog_center JNPF-dialog-tree-select" lock-scroll append-to-body
-      width='600px'>
+      width='700px'>
       <div class="JNPF-common-layout">
         <div class="JNPF-common-layout-center">
           <el-row class="JNPF-common-search-box" :gutter="16">

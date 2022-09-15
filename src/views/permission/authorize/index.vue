@@ -20,13 +20,14 @@
         </el-dropdown>
         <el-button :disabled="active <= 0 || treeLoading" @click="handlePrevStep">
           {{$t('common.prev')}}</el-button>
-        <el-button :disabled="active >= 5 || treeLoading" @click="handleNextStep">
+        <el-button :disabled="active >= 6 || treeLoading" @click="handleNextStep">
           {{$t('common.next')}}</el-button>
-        <el-button type="primary" :loading="btnLoading" :disabled="active < 5"
+        <el-button type="primary" :loading="btnLoading" :disabled="active < 6"
           @click="handleConfirm()">{{$t('common.confirmButton')}}</el-button>
       </div>
     </div>
     <el-steps :active="active" finish-status="success" simple>
+      <el-step :title="$t('authorize.systemPermission')"></el-step>
       <el-step :title="$t('authorize.menuPermission')"></el-step>
       <el-step :title="$t('authorize.buttonPermission')"></el-step>
       <el-step :title="$t('authorize.listPermission')"></el-step>
@@ -35,7 +36,7 @@
       <el-step :title="$t('authorize.selectRoles')"></el-step>
     </el-steps>
     <div class="authorize-bd">
-      <div v-if="active < 5">
+      <div v-if="active < 6">
         <el-tree :data="authorizeTreeData" ref="authorizeTree" v-loading="treeLoading" show-checkbox
           default-expand-all node-key="id" :check-strictly="checkStrictly" check-on-click-node
           :props="defaultProps" :expand-on-click-node="false" @check-change="selectTreeNodeClick">
@@ -74,26 +75,31 @@ export default {
       checkStrictly: true,
       objectId: 0,
       params: {
-        type: 'module',
+        type: 'system',
         moduleIds: ''
       },
       dataForm: {
         roleIds: [],
         module: [],
+        systemIds: [],
         button: [],
         column: [],
         form: [],
         resource: []
       },
+      systemIds: '',
       roleTreeAllData: [],
       roleAllIds: [],
       positionTreeData: [],
       authorizeTreeData: [],
+      systemTreeData: [],
+      systemAuthorizeTree: [],
       moduleAuthorizeTree: [],
       buttonAuthorizeTree: [],
       columnAuthorizeTree: [],
       formAuthorizeTree: [],
       resourceAuthorizeTree: [],
+      systemAllData: [],
       moduleAllData: [],
       buttonAllData: [],
       columnAllData: [],
@@ -143,40 +149,54 @@ export default {
       getAuthorizeValues(this.objectId, this.params).then(res => {
         switch (this.active) {
           case 0:
+            this.systemAuthorizeTree = res.data.list
+            this.systemAllData = res.data.all
+            this.authorizeTreeData = this.systemAuthorizeTree
+            this.dataForm.systemIds = [...this.moduleIdsTemp, ...res.data.ids]
+            this.dataForm.systemIds = [...new Set(this.dataForm.systemIds)]
+            this.moduleIdsTemp = this.dataForm.systemIds
+            this.systemIds = this.moduleIdsTemp
+            this.$refs.authorizeTree.setCheckedKeys(this.dataForm.systemIds)
+            break
+          case 1:
             this.moduleAuthorizeTree = res.data.list
             this.moduleAllData = res.data.all
             this.authorizeTreeData = this.moduleAuthorizeTree
-            const moduleIds = [...this.moduleIdsTemp, ...res.data.ids]
+            const moduleIds = [...res.data.ids, ...this.moduleIdsTemp]
             this.dataForm.module = [...new Set(moduleIds)]
             this.moduleIdsTemp = this.dataForm.module
             this.$refs.authorizeTree.setCheckedKeys(this.dataForm.module)
             break
-          case 1:
+          case 2:
             this.buttonAuthorizeTree = res.data.list
             this.buttonAllData = res.data.all
             this.authorizeTreeData = this.buttonAuthorizeTree
             this.dataForm.button = [...this.dataForm.button, ...res.data.ids, ...this.moduleIdsTemp]
+            this.dataForm.button = [...new Set(this.dataForm.button)]
             this.$refs.authorizeTree.setCheckedKeys(this.dataForm.button)
             break
-          case 2:
+          case 3:
             this.columnAuthorizeTree = res.data.list
             this.columnAllData = res.data.all
             this.authorizeTreeData = this.columnAuthorizeTree
             this.dataForm.column = [...this.dataForm.column, ...res.data.ids, ...this.moduleIdsTemp]
+            this.dataForm.column = [...new Set(this.dataForm.column)]
             this.$refs.authorizeTree.setCheckedKeys(this.dataForm.column)
             break
-          case 3:
+          case 4:
             this.formAuthorizeTree = res.data.list
             this.formAllData = res.data.all
             this.authorizeTreeData = this.formAuthorizeTree
             this.dataForm.form = [...this.dataForm.form, ...res.data.ids, ...this.moduleIdsTemp]
+            this.dataForm.form = [...new Set(this.dataForm.form)]
             this.$refs.authorizeTree.setCheckedKeys(this.dataForm.form)
             break
-          case 4:
+          case 5:
             this.resourceAuthorizeTree = res.data.list
             this.resourceAllData = res.data.all
             this.authorizeTreeData = this.resourceAuthorizeTree
             this.dataForm.resource = [...this.dataForm.resource, ...res.data.ids, ...this.moduleIdsTemp]
+            this.dataForm.resource = [...new Set(this.dataForm.resource)]
             this.$refs.authorizeTree.setCheckedKeys(this.dataForm.resource)
             break
         }
@@ -191,26 +211,29 @@ export default {
       if (val === 'checkAll') {
         switch (this.active) {
           case 0:
-            this.$refs.authorizeTree.setCheckedKeys(this.moduleAllData)
+            this.$refs.authorizeTree.setCheckedKeys(this.systemAllData)
             break
           case 1:
-            this.$refs.authorizeTree.setCheckedKeys(this.buttonAllData)
+            this.$refs.authorizeTree.setCheckedKeys(this.moduleAllData)
             break
           case 2:
-            this.$refs.authorizeTree.setCheckedKeys(this.columnAllData)
+            this.$refs.authorizeTree.setCheckedKeys(this.buttonAllData)
             break
           case 3:
-            this.$refs.authorizeTree.setCheckedKeys(this.formAllData)
+            this.$refs.authorizeTree.setCheckedKeys(this.columnAllData)
             break
           case 4:
-            this.$refs.authorizeTree.setCheckedKeys(this.resourceAllData)
+            this.$refs.authorizeTree.setCheckedKeys(this.formAllData)
             break
           case 5:
+            this.$refs.authorizeTree.setCheckedKeys(this.resourceAllData)
+            break
+          case 6:
             this.$refs.roleTree.setCheckedKeys(this.roleAllIds)
         }
       }
       if (val === 'cancelCheckAll') {
-        if (this.active === 5) {
+        if (this.active === 6) {
           this.$refs.roleTree.setCheckedKeys([])
         } else {
           this.$refs.authorizeTree.setCheckedKeys([])
@@ -227,7 +250,7 @@ export default {
         result = false
       }
       let nodes
-      if (this.active === 5) {
+      if (this.active === 6) {
         nodes = this.$refs.roleTree.store.nodesMap
       } else {
         nodes = this.$refs.authorizeTree.store.nodesMap
@@ -243,7 +266,7 @@ export default {
     },
     // 下一步
     handleNextStep() {
-      if (this.active++ > 5) this.active = 0
+      if (this.active++ > 6) this.active = 0
       this.handleInitData()
     },
     handleInitData() {
@@ -251,32 +274,36 @@ export default {
       this.treeLoading = true
       switch (this.active) {
         case 0:
-          this.params.type = 'module'
+          this.params.type = 'system'
           break
         case 1:
+          this.params.type = 'module'
+          this.params.moduleIds = (this.systemIds).toString()
+          break
+        case 2:
           this.params.type = 'button'
           this.params.moduleIds = (this.moduleIdsTemp).toString()
           break
-        case 2:
+        case 3:
           this.params.type = 'column'
           this.params.moduleIds = (this.moduleIdsTemp).toString()
           break
-        case 3:
+        case 4:
           this.params.type = 'form'
           this.params.moduleIds = (this.moduleIdsTemp).toString()
           break
-        case 4:
+        case 5:
           this.params.type = 'resource'
           this.params.moduleIds = (this.moduleIdsTemp).toString()
           break
-        case 5:
+        case 6:
           this.getRoleList()
           this.$nextTick(() => {
             this.$refs.roleTree.setCheckedKeys(this.dataForm.roleIds)
           })
           break
       }
-      if (this.active !== 5) {
+      if (this.active !== 6) {
         this.getAuthorizeList()
       } else {
         this.treeLoading = false
@@ -285,7 +312,7 @@ export default {
     // 设置数据
     selectTreeNodeClick() {
       let dataIds = []
-      if (this.active !== 5) {
+      if (this.active !== 6) {
         const parentIds = this.$refs.authorizeTree.getHalfCheckedKeys()
         const childrenIds = this.$refs.authorizeTree.getCheckedKeys()
         const newIds = [...parentIds, ...childrenIds]
@@ -293,22 +320,27 @@ export default {
       }
       switch (this.active) {
         case 0:
+          this.dataForm.systemIds = dataIds
+          this.moduleIdsTemp = this.dataForm.systemIds
+          this.systemIds = this.moduleIdsTemp
+          break
+        case 1:
           this.dataForm.module = dataIds
           this.moduleIdsTemp = this.dataForm.module
           break
-        case 1:
+        case 2:
           this.dataForm.button = dataIds
           break
-        case 2:
+        case 3:
           this.dataForm.column = dataIds
           break
-        case 3:
+        case 4:
           this.dataForm.form = dataIds
           break
-        case 4:
+        case 5:
           this.dataForm.resource = dataIds
           break
-        case 5:
+        case 6:
           let nodes = this.$refs.roleTree.getCheckedNodes()
           this.dataForm.roleIds = nodes.map(o => o.id)
           break
@@ -339,6 +371,7 @@ export default {
   padding: 0;
   .el-steps {
     border-radius: 0;
+    padding: 13px 45px !important;
   }
 }
 .authorize-bd {

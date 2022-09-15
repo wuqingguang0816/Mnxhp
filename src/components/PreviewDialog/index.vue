@@ -28,7 +28,7 @@
 <script>
 import QRCode from 'qrcodejs2'
 export default {
-  props: ['id', 'type'],
+  props: ['id', 'type', 'fullName'],
   data() {
     return {
       previewAppVisible: false,
@@ -61,6 +61,7 @@ export default {
         t: this.type === 'flow' ? 'WFP' : this.type === 'webDesign' ? 'ADP' : 'report',
         id: this.id
       }
+      if (this.type === 'report') text.fullName = this.fullName
       this.qrCodeText = JSON.stringify(text)
       this.closeDialog()
       setTimeout(() => {
@@ -76,6 +77,7 @@ export default {
         text: this.qrCodeText,
         correctLevel: QRCode.CorrectLevel.H
       })
+      qrcode._el.title = ''
     },
   },
 }

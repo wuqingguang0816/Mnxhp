@@ -3,6 +3,9 @@
     :close-on-press-escape="false" :visible.sync="visible" lock-scroll
     class="JNPF-dialog JNPF-dialog_center" width="630px">
     <el-form ref="dataForm" :model="dataForm" :rules="dataRule" v-loading="formLoading">
+      <el-form-item prop="enCode">
+        <el-input v-model="dataForm.enCode" placeholder="请输入编码名称" />
+      </el-form-item>
       <el-form-item prop="fullName">
         <el-input v-model="dataForm.fullName" placeholder="请输入方案名称" />
       </el-form-item>
@@ -89,27 +92,39 @@ export default {
       ],
       fieldOptions: [],
       opOptions: [{
-        value: 'Equal',
-        label: '等于'
+        value: "Equal",
+        label: "等于"
+      },
+      {
+        value: "NotEqual",
+        label: "不等于"
+      },
+      {
+        value: "GreaterThan",
+        label: "大于"
+      },
+      {
+        value: "GreaterThanOrEqual",
+        label: "大于等于"
+      },
+      {
+        value: "LessThan",
+        label: "小于"
+      },
+      {
+        value: "LessThanOrEqual",
+        label: "小于等于"
       }, {
-        value: 'NotEqual',
-        label: '不等于'
+        value: 'Included',
+        label: '包含'
       }, {
-        value: 'GreaterThan',
-        label: '大于'
-      }, {
-        value: 'GreaterThanOrEqual',
-        label: '大于等于'
-      }, {
-        value: 'LessThan',
-        label: '小于'
-      }, {
-        value: 'LessThanOrEqual',
-        label: '小于等于'
+        value: 'NotIncluded',
+        label: '不包含'
       }],
       dataForm: {
         id: "",
         moduleId: "",
+        enCode: "",
         fullName: "",
         conditionJson: "",
         conditionText: ""
@@ -118,6 +133,10 @@ export default {
       dataRule: {
         fullName: [
           { required: true, message: "方案名称不能为空", trigger: "blur" }
+        ],
+        enCode: [
+          { required: true, message: '请输入编码', trigger: 'blur' },
+          { max: 50, message: '字典编码最多为50个字符！', trigger: 'blur' }
         ]
       }
     }
@@ -127,6 +146,7 @@ export default {
       this.dataForm.id = id || ""
       this.dataForm.moduleId = moduleId
       this.dataForm.fullName = ""
+      this.dataForm.enCode = ""
       this.dataForm.conditionJson = ""
       this.dataForm.conditionText = ""
       this.condition = [{
@@ -142,6 +162,7 @@ export default {
       }]
       this.visible = true
       this.$nextTick(() => {
+        this.$refs["dataForm"].resetFields();
         this.formLoading = true
         getDataAuthorizeList(this.dataForm.moduleId).then(res => {
           this.fieldOptions = res.data.list
@@ -157,9 +178,9 @@ export default {
                 let groups = this.condition[i].groups
                 for (let j = 0; j < groups.length; j++) {
                   let e = groups[j]
-                  let item = this.fieldOptions.filter(o => o.id === groups[j].id)[0]
-                  e.opOptions = this.getOptions(item)
-                  if (item.conditionText !== 'text') {
+                  let list = this.fieldOptions.filter(o => o.id === groups[j].id)
+                  list.length ? e.opOptions = this.getOptions(list[0]) : e.opOptions = []
+                  if (e.conditionText !== 'text') {
                     e.readonly = true
                   } else {
                     e.readonly = false
@@ -254,6 +275,7 @@ export default {
       return list[0].fullName || val
     },
     dataFormSubmit() {
+
       this.$refs["dataForm"].validate((valid) => {
         if (valid) {
           this.btnLoading = true
@@ -268,9 +290,14 @@ export default {
             for (let j = 0; j < e.groups.length; j++) {
               let ee = e.groups[j]
               let item = this.fieldOptions.filter(o => o.id === ee.id)[0]
+              if (!item) {
+                this.$message.warning("方案内条件配置不完整，请检查条件内容")
+                conditionValid = false
+                break outer
+              }
               ee.bindTable = item.bindTable
               if (!ee.field || !ee.id || !ee.op || !ee.value) {
-                this.$message.warning("过滤条件检查出格式错误")
+                this.$message.warning("方案内条件配置不完整，请检查条件内容")
                 conditionValid = false
                 break outer
               }
@@ -299,6 +326,8 @@ export default {
           }).catch(() => {
             this.btnLoading = false
           })
+        } else {
+          this.btnLoading = false
         }
       })
     }

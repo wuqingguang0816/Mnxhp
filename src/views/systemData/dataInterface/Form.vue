@@ -2,17 +2,21 @@
   <div class="JNPF-preview-main flow-form-main">
     <div class="JNPF-common-page-header">
       <el-page-header @back="goBack" content="" />
-      <el-steps :active="active" finish-status="success" simple class="steps">
+      <el-steps :active="active" finish-status="success" simple
+        :class="dataForm.dataType!=2?'elsteps':'steps'">
         <el-step title="基本信息"></el-step>
         <el-step title="数据配置"></el-step>
+        <el-step v-if="dataForm.dataType!=2" title="数据处理"></el-step>
       </el-steps>
       <div class="options">
         <el-button :disabled="active <= 0" @click="handlePrevStep">{{$t('common.prev')}}
         </el-button>
-        <el-button :disabled="active >= 1" @click="handleNextStep">{{$t('common.next')}}
+        <el-button :disabled="dataForm.dataType!=2?active >= 2:active >= 1" @click="handleNextStep">
+          {{$t('common.next')}}
         </el-button>
-        <el-button type="primary" :loading="btnLoading" :disabled="active < 1"
-          @click="dataFormSubmit()">{{$t('common.confirmButton')}}</el-button>
+        <el-button type="primary" :loading="btnLoading"
+          :disabled="dataForm.dataType!=2?active < 2:active < 1" @click="dataFormSubmit()">
+          {{$t('common.confirmButton')}}</el-button>
         <el-button @click="goBack">{{$t('common.cancelButton')}}</el-button>
       </div>
     </div>
@@ -30,13 +34,6 @@
             <JNPF-TreeSelect v-model="dataForm.categoryId" :options="selectData" placeholder="选择分类"
               clearable />
           </el-form-item>
-          <el-form-item label="授权" prop="checkType">
-            <el-radio-group v-model="dataForm.checkType">
-              <el-radio :label="0">忽略验证</el-radio>
-              <el-radio :label="1">鉴权验证</el-radio>
-              <el-radio :label="2">跨域验证</el-radio>
-            </el-radio-group>
-          </el-form-item>
           <el-form-item prop="ipAddress" v-if="dataForm.checkType===2">
             <el-input v-model="dataForm.ipAddress" placeholder="请输入域名，多个域名用逗号隔开" />
           </el-form-item>
@@ -53,12 +50,6 @@
               <el-radio label="1">增加</el-radio>
               <el-radio label="2">修改</el-radio>
               <el-radio label="4">删除</el-radio>
-            </el-radio-group>
-          </el-form-item>
-          <el-form-item label="动作" prop="requestMethod" v-if="dataForm.dataType===3">
-            <el-radio-group v-model="dataForm.requestMethod" @change="onMethodChange($event,'api')">
-              <el-radio label="6">GET</el-radio>
-              <el-radio label="7">POST</el-radio>
             </el-radio-group>
           </el-form-item>
           <el-form-item label="排序" prop="sortCode">
@@ -89,28 +80,54 @@
         </div>
       </div>
       <div class="detail">
-        <el-tabs v-model="activeName">
-          <el-tab-pane label="SQL语句" name="query">
-            <el-form ref="dataForm" :model="dataForm" :rules="dataRule" label-width="100px">
-              <el-form-item label-width="0" prop="query">
-                <div class="sql-box">
-                  <SQLEditor v-model="dataForm.query" :options="sqlOptions" ref="SQLEditorRef" />
-                </div>
-              </el-form-item>
-            </el-form>
-            <div class="tips">
-              <p><span>@user</span>当前用户</p>
-              <p><span>@organize</span>当前用户所在公司</p>
-              <p><span>@department</span>当前用户所在部门</p>
-              <p><span>@position</span>当前用户所在岗位</p>
+        <div class="middle-pane">
+          <div class="right-pane-list">
+            <div class="cap">
+              <span slot="label">SQL语句
+                <el-tooltip content="支持SQL语句&存储过程语句" placement="top">
+                  <a class="el-icon-warning-outline"></a>
+                </el-tooltip>
+              </span>
+              <div style="float:right;cursor:pointer">
+                <el-dropdown>
+                  <span class="el-dropdown-link" title="111">
+                    系统变量<i class="el-icon-arrow-down el-icon--right"></i>
+                  </span>
+                  <el-dropdown-menu slot="dropdown">
+                    <el-dropdown-item disabled>当前系统变量仅支持内部接口引用</el-dropdown-item>
+                    <el-dropdown-item divided></el-dropdown-item>
+                    <el-dropdown-item v-for="(item,index) in sysVariableList" :key="index">
+                      <div @click="handleSysNodeClick(item.value)">
+                        <span>{{ item.value }}</span>
+                        <span
+                          style="float: right; color: #8492a6;padding-left: 10px;">{{ item.tips }}</span>
+                      </div>
+                    </el-dropdown-item>
+                  </el-dropdown-menu>
+                </el-dropdown>
+              </div>
             </div>
-          </el-tab-pane>
-        </el-tabs>
+            <div class="list">
+              <el-form ref="dataForm" :model="dataForm" :rules="dataRule" label-width="100px"
+                style="padding-top: 0px;">
+                <el-form-item label-width="0" prop="query">
+                  <div class="sql-box">
+                    <SQLEditor v-model="dataForm.query" :options="sqlOptions" ref="SQLEditorRef" />
+                  </div>
+                </el-form-item>
+              </el-form>
+            </div>
+          </div>
+        </div>
       </div>
       <div class="right-pane">
         <div class="right-pane-list">
           <div class="cap">
-            <span>参数定义</span>
+            <span>接口参数
+              <el-tooltip content="接收方式:Body/json" placement="top">
+                <a class="el-icon-warning-outline"></a>
+              </el-tooltip>
+            </span>
           </div>
           <div class="list">
             <el-table :data="requestParameters" ref="dragTable" row-key="id" size='mini'
@@ -153,9 +170,15 @@
             <el-button type="text" icon="el-icon-plus">添加参数</el-button>
           </div>
         </div>
-        <div class="right-pane-btn">
-          <el-button @click="editFunc()">接口数据处理</el-button>
-        </div>
+      </div>
+    </div>
+    <div class="jsStaticData" v-if="active === 2">
+      <div class="json-box">
+        <JNPFCodeEditor v-model="text" :options="options" ref="CodeEditor" />
+      </div>
+      <div class="jsTips">
+        <p>1、支持JavaScript的脚本，参考编写脚本API</p>
+        <p>2、小程序不支持在线JS脚本</p>
       </div>
     </div>
     <div class="staticData" v-if="active === 1 && dataForm.dataType === 2">
@@ -167,18 +190,21 @@
         </el-form-item>
       </el-form>
     </div>
-    <el-form ref="dataForm" :model="dataForm" :rules="dataRule" label-width="100px"
+    <el-form ref="dataForm" :model="dataForm" :rules="dataRule" label-width="110px"
       v-if="active === 1 && dataForm.dataType === 3">
       <el-row>
         <el-col :span="14" :offset="5" class="mt-20 baseInfo">
-          <el-form-item label="接口路径" prop="path" maxlength="50">
+          <jnpf-form-tip-item label="接口类型" prop="requestMethod">
+            <el-radio-group v-model="dataForm.requestMethod" @change="onMethodChange($event,'api')">
+              <el-radio label="6">GET</el-radio>
+              <el-radio label="7">POST</el-radio>
+            </el-radio-group>
+          </jnpf-form-tip-item>
+          <jnpf-form-tip-item label="接口路径" prop="path">
             <el-input v-model="dataForm.path" placeholder="输入接口路径">
-              <template slot="prepend">{{dataForm.requestMethod=='6'?'GET':'POST'}}</template>
+              <el-button slot="append" class="el-icon-plus" @click="addHeaders()">添加headers
+              </el-button>
             </el-input>
-          </el-form-item>
-          <el-form-item label="接口headers" prop="requestHeaders">
-            <el-button @click="addHeaders()" class="el-icon-plus" size="mini">添加headers
-            </el-button>
             <el-row v-for="(item, index) in requestHeaders" :key="item.index" class="mt-10">
               <el-col :span="10">
                 <el-autocomplete v-model="item.field" :fetch-suggestions="querySearch"
@@ -192,11 +218,11 @@
                 </el-button>
               </el-col>
             </el-row>
-          </el-form-item>
-          <el-form-item label="接口参数">
+          </jnpf-form-tip-item>
+          <jnpf-form-tip-item label="接口参数" tip-label="接收方式:Body/json">
             <el-button @click="addOrUpdateHandle()" class="el-icon-plus" size="mini">添加参数
             </el-button>
-          </el-form-item>
+          </jnpf-form-tip-item>
           <div class="parameterList">
             <el-table :data="requestParameters" ref="dragTable" row-key="id" size='mini'>
               <el-table-column align="center" label="拖动" width="50">
@@ -234,9 +260,6 @@
               </el-table-column>
             </el-table>
           </div>
-          <el-form-item label="数据处理">
-            <el-button @click="editFunc()">接口数据处理</el-button>
-          </el-form-item>
         </el-col>
       </el-row>
     </el-form>
@@ -261,6 +284,7 @@ import FieldForm from './FieldForm'
 import FormScript from './FormScript'
 import { deepClone } from '@/utils'
 import Sortable from 'sortablejs'
+import JNPFCodeEditor from '@/components/JNPFEditor/monaco'
 const defaultDataHandler = '(data) => {\r\n    // 处理数据逻辑\r\n\r\n    // 返回所需的数据\r\n    return data\r\n}'
 
 export default {
@@ -268,7 +292,8 @@ export default {
     SQLEditor,
     JSONEditor,
     FieldForm,
-    FormScript
+    FormScript,
+    JNPFCodeEditor
   },
   data() {
     return {
@@ -358,7 +383,21 @@ export default {
             trigger: 'blur'
           }
         ]
-      }
+      },
+      sysVariableList: [
+        { value: '@user', tips: "当前用户" },
+        { value: '@currentUsersAndSubordinates', tips: "当前用户及下属" },
+        { value: '@organization', tips: "当前组织" },
+        { value: '@currentOrganizationAndSuborganization', tips: "当前组织及子组织" },
+        { value: '@chargeorganization', tips: "当前分管组织" },
+        {
+          value: '@currentChargeorganizationAndSuborganization', tips: "当前分管组织及子组织"
+        }
+      ],
+      text: '',
+      options: {
+        language: 'javascript'
+      },
     }
   },
   methods: {
@@ -428,14 +467,20 @@ export default {
     handleNodeClick(data) {
       this.$refs.SQLEditorRef && this.$refs.SQLEditorRef.insert(data.table)
     },
+    handleSysNodeClick(data) {
+      this.$refs.SQLEditorRef && this.$refs.SQLEditorRef.insert(data)
+    },
     handlePrevStep() {
       this.active -= 1
-      this.$refs['dataForm'].clearValidate()
+      if (this.active == 0) {
+        this.$refs['dataForm'].clearValidate()
+      }
+
     },
     handleNextStep() {
       this.$refs['dataForm'].validate(valid => {
         if (valid) {
-          if (this.active < 1) {
+          if (this.active < 2) {
             this.active += 1
             // SQL操作
             if (this.dataForm.dataType === 1) {
@@ -444,16 +489,30 @@ export default {
                 options: this.sqlOptions
               })
             }
+            //数据处理
+            if (this.active == 2 && this.dataForm.dataType != 2) {
+              if (!this.dataForm.dataProcessing) this.dataForm.dataProcessing = defaultDataHandler
+              this.text = this.dataForm.dataProcessing
+              this.$nextTick(() => {
+                this.$refs.CodeEditor && this.$refs.CodeEditor.changeEditor({
+                  value: this.text,
+                  options: this.options
+                })
+              })
+            }
             // 静态数据
             if (this.dataForm.dataType === 2) {
+              this.text = this.dataForm.dataProcessing
               this.$refs.JSONEditorRef && this.$refs.JSONEditorRef.changeEditor({
-                value: this.dataForm.query,
+                value: this.text,
                 options: this.jsonOptions
               })
             } else {
-              this.$nextTick(() => {
-                this.setSort()
-              })
+              if (this.active == 1) {
+                this.$nextTick(() => {
+                  this.setSort()
+                })
+              }
             }
           }
         }
@@ -535,32 +594,92 @@ export default {
       this.$refs.SQLEditorRef.insert('{' + item.field + '}')
     },
     dataFormSubmit() {
-      this.$refs['dataForm'].validate(valid => {
-        if (valid) {
-          this.btnLoading = true
-          this.dataForm.requestHeaders = JSON.stringify(this.requestHeaders)
-          this.dataForm.requestParameters = JSON.stringify(this.requestParameters)
-          const formMethod = this.dataForm.id ? updateDataInterface : createDataInterface
-          formMethod(this.dataForm).then(res => {
-            this.$message({
-              message: res.msg,
-              type: 'success',
-              duration: 1500,
-              onClose: () => {
-                this.btnLoading = false
-                this.$emit('close', true)
-              }
-            })
-          }).catch(() => {
-            this.btnLoading = false
+      if (this.active == 2) {
+        this.btnLoading = true
+        this.dataForm.dataProcessing = this.text
+        this.dataForm.requestHeaders = JSON.stringify(this.requestHeaders)
+        this.dataForm.requestParameters = JSON.stringify(this.requestParameters)
+        const formMethod = this.dataForm.id ? updateDataInterface : createDataInterface
+        formMethod(this.dataForm).then(res => {
+          this.$message({
+            message: res.msg,
+            type: 'success',
+            duration: 1500,
+            onClose: () => {
+              this.btnLoading = false
+              this.$emit('close', true)
+            }
           })
-        }
-      })
+        }).catch(() => {
+          this.btnLoading = false
+        })
+      } else {
+        this.$refs['dataForm'].validate(valid => {
+          if (valid) {
+            this.btnLoading = true
+            this.dataForm.requestHeaders = JSON.stringify(this.requestHeaders)
+            this.dataForm.requestParameters = JSON.stringify(this.requestParameters)
+            const formMethod = this.dataForm.id ? updateDataInterface : createDataInterface
+            formMethod(this.dataForm).then(res => {
+              this.$message({
+                message: res.msg,
+                type: 'success',
+                duration: 1500,
+                onClose: () => {
+                  this.btnLoading = false
+                  this.$emit('close', true)
+                }
+              })
+            }).catch(() => {
+              this.btnLoading = false
+            })
+          }
+        })
+      }
     }
+
   }
 }
 </script>
 <style lang="scss" scoped>
+.jsTips {
+  -ms-flex-negative: 0;
+  flex-shrink: 0;
+  padding: 8px 16px;
+  background-color: #ecf8ff;
+  border-radius: 4px;
+  border-left: 5px solid #50bfff;
+  font-size: 14px;
+  line-height: 24px;
+  color: #5e6d82;
+}
+.jsStaticData {
+  flex: 1;
+  display: flex;
+  overflow: hidden;
+  flex-direction: column;
+  padding: 10px;
+  .json-box {
+    flex: 1;
+  }
+}
+.monaco-container {
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
+}
+.elsteps {
+  width: 506px;
+  padding: 6px 20px;
+  background: #fff;
+  justify-items: flex-start;
+}
+.steps {
+  width: 318px;
+  padding: 6px 20px;
+  background: #fff;
+  justify-items: flex-start;
+}
 .flow-form-main {
   >>> .el-tabs__header {
     padding: 0;
@@ -576,7 +695,8 @@ export default {
     justify-content: space-between;
     overflow: hidden;
     .tableData {
-      flex: 0 0 220px;
+      flex-shrink: 0;
+      width: 350px;
       .box {
         margin-top: 8px;
         border-radius: 4px;
@@ -595,22 +715,49 @@ export default {
       margin: 0 10px;
       margin-top: -10px;
       overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      .top-box {
+        display: flex;
+        .main-box {
+          flex: 1;
+          margin-right: 18px;
+        }
+      }
       .sql-box {
-        border: 1px solid #dcdfe6;
-        height: calc(100vh - 370px);
+        border-top: 1px solid #dcdfe6;
+        // border-bottom: 1px solid #dcdfe6;
+        height: calc(100vh - 258px);
         overflow: auto;
       }
       .tips {
-        padding: 8px 16px;
+        padding: 8px 0;
         background-color: #ecf8ff;
         border-radius: 4px;
         border-left: 5px solid #50bfff;
+
         p {
-          line-height: 24px;
-          color: #5e6d82;
-          span {
+          padding: 8px 0 8px 20px;
+        }
+
+        .tips-content {
+          display: flex;
+          flex-wrap: wrap;
+
+          .tips-content-item {
             display: inline-block;
-            padding-right: 10px;
+            padding-left: 20px;
+            line-height: 30px;
+            color: #5e6d82;
+            width: 50%;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+
+            span {
+              cursor: pointer;
+              padding-right: 2px;
+            }
           }
         }
       }
@@ -623,21 +770,20 @@ export default {
     }
   }
   .parameterList {
-    padding-left: 100px;
+    padding-left: 110px;
     margin-bottom: 18px;
     >>> .el-icon-edit-outline,
     >>> .el-icon-delete {
       font-size: 16px;
     }
   }
-  .right-pane {
-    width: 350px;
+  .middle-pane {
     flex-shrink: 0;
     display: flex;
     flex-direction: column;
     height: 100%;
     overflow: hidden;
-
+    margin-top: 10px;
     .right-pane-list {
       border: 1px solid #dcdfe6;
       border-radius: 4px;
@@ -649,6 +795,55 @@ export default {
       .cap {
         height: 36px;
         line-height: 36px;
+        display: flex;
+        color: #606266;
+        font-size: 14px;
+        padding: 0 10px;
+        flex-shrink: 0;
+        justify-content: space-between;
+        align-items: center;
+      }
+      .table-actions {
+        flex-shrink: 0;
+      }
+      .list {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+      }
+      >>> .el-icon-edit-outline,
+      >>> .el-icon-delete {
+        font-size: 16px;
+      }
+    }
+    .right-pane-btn {
+      flex-shrink: 0;
+      .el-button {
+        width: 100%;
+      }
+    }
+  }
+  .right-pane {
+    width: 350px;
+    flex-shrink: 0;
+    display: flex;
+    flex-direction: column;
+    height: calc(100% + 9px);
+    // margin-top: 10px;
+    overflow: hidden;
+
+    .right-pane-list {
+      border: 1px solid #dcdfe6;
+      border-radius: 4px;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      margin-bottom: 10px;
+      overflow: hidden;
+      .cap {
+        height: 38px;
+        line-height: 38px;
         display: flex;
         color: #606266;
         font-size: 14px;

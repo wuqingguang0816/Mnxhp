@@ -53,7 +53,7 @@
               </el-select>
             </el-form-item>
             <el-table :data="tables" class="JNPF-common-table"
-              empty-text="点击“新增”可选择 1 条（单表）或 2 条以上（多表）">
+              empty-text="点击“新增”可选择1条(单表)或2条以上(多表)">
               <el-table-column type="index" label="序号" width="50" align="center" />
               <el-table-column prop="typeId" label="类别" width="65">
                 <template slot-scope="scope">
@@ -91,7 +91,7 @@
               <el-table-column label="操作" fixed="right" width="50">
                 <template slot-scope="scope">
                   <el-button size="mini" type="text" class="JNPF-table-delBtn"
-                    @click="delItem(scope.row,scope.$index)">删除
+                    @click="delItem(scope.row,scope.$index)">移除
                   </el-button>
                 </template>
               </el-table-column>

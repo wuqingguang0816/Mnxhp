@@ -82,3 +82,19 @@ export function getIMReply() {
     method: 'GET'
   })
 }
+
+//删除聊天记录
+export function deleteChatRecord(id) {
+  return request({
+    url: `/api/message/imreply/deleteChatRecord/${id}`,
+    method: 'DELETE'
+  })
+}
+
+//移除
+export function relocation(id) {
+  return request({
+    url: `/api/message/imreply/relocation/${id}`,
+    method: 'DELETE'
+  })
+}

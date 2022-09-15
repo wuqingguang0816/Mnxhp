@@ -76,7 +76,6 @@ export default {
             this.tables = this.dataForm.tables && JSON.parse(this.dataForm.tables) || []
             this.defaultTable = this.dataForm.tables && JSON.parse(this.dataForm.tables) || []
             this.updateFields()
-            this.loading = false
           }).catch(() => { this.loading = false })
         } else {
           this.dataForm.type = type
@@ -129,12 +128,15 @@ export default {
                 return
               }
               this.$store.commit('generator/SET_TABLE', false)
+              this.$store.commit('generator/SET_ALL_TABLE', [])
+              this.$store.commit('generator/UPDATE_FORMITEM_LIST', [])
               this.activeStep += 1
             } else {
               if (!this.exist()) return
               let subTable = this.tables.filter(o => o.typeId == '0')
               this.$store.commit('generator/UPDATE_SUB_TABLE', subTable)
               this.$store.commit('generator/SET_ALL_TABLE', this.tables)
+              this.$store.commit('generator/SET_DATABASE', this.dataForm.dbLinkId)
               this.$store.commit('generator/SET_TABLE', true)
               this.$store.commit('generator/UPDATE_FORMITEM_LIST', this.mainTableFields)
               this.activeStep += 1

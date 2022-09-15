@@ -3,47 +3,97 @@
     <div class="JNPF-preview-main flow-form-main">
       <div class="JNPF-common-page-header">
         <el-page-header @back="goBack" :content="title" />
+        <template v-if="!loading||title">
+          <el-dropdown placement="bottom" @command="handleFlowUrgent" trigger="click"
+            v-show="setting.opType=='-1'">
+            <div class="flow-urgent-value" style="cursor:pointer">
+              <span :style="{'background-color':flowUrgentList[selectState].color}"
+                class="color-box"></span>
+              <span :style="{'color':flowUrgentList[selectState].color}">
+                {{flowUrgentList[selectState].name}}</span>
+            </div>
+            <el-dropdown-menu slot="dropdown">
+              <el-dropdown-item v-for="(item,index) in flowUrgentList" :key="index"
+                :command="item.state">
+                <span :style="{'background-color':item.color}" class="color-box">
+                </span>
+                {{item.name}}
+              </el-dropdown-item>
+            </el-dropdown-menu>
+          </el-dropdown>
+          <div class="flow-urgent-value" v-show="setting.opType!=='-1'">
+            <span :style="{'background-color':flowUrgentList[selectState].color}"
+              class="color-box"></span>
+            <span
+              :style="{'color':flowUrgentList[selectState].color}">{{flowUrgentList[selectState].name}}</span>
+          </div>
+        </template>
         <div class="options">
-          <el-button type="primary" @click="addComment" v-if="activeTab==='comment'">评 论</el-button>
-          <template v-if="setting.opType!=4&&setting.id">
-            <el-button type="primary" @click="printBrowseVisible=true"
-              v-if="properties.hasPrintBtn && properties.printId">
-              {{properties.printBtnText||'打 印'}}</el-button>
-          </template>
-          <template v-if="setting.opType=='-1'">
-            <el-button type="primary" @click="eventLauncher('submit')" :loading="candidateLoading"
-              :disabled="allBtnDisabled">{{properties.submitBtnText||'提 交'}}</el-button>
-            <el-button type="warning" @click="eventLauncher('save')" :loading="btnLoading"
-              :disabled="allBtnDisabled">{{properties.saveBtnText||'暂 存'}}</el-button>
-          </template>
-          <template v-if="setting.opType == 1">
-            <el-button type="warning" @click="actionDialogHandler('transfer')"
-              v-if="properties.hasTransferBtn">{{properties.transferBtnText||'转 审'}}</el-button>
-            <el-button type="primary" @click="eventLauncher('audit')" :loading="candidateLoading"
-              v-if="properties.hasAuditBtn">{{properties.auditBtnText||'通 过'}}</el-button>
-            <el-button type="warning" @click="eventLauncher('saveAudit')"
-              v-if="properties.hasSaveBtn" :loading="btnLoading">{{properties.saveBtnText||'暂 存'}}
+          <el-dropdown class="dropdown" placement="bottom" @command="handleMore">
+            <el-button style="width:70px" :disabled="allBtnDisabled" v-if="setting.opType != 2">
+              更 多<i class="el-icon-arrow-down el-icon--right"></i>
             </el-button>
-            <el-button type="danger" @click="eventReceiver({},'reject')"
-              v-if="properties.hasRejectBtn">
-              {{properties.rejectBtnText||'拒 绝'}}</el-button>
-          </template>
-          <template v-if="setting.opType == 0 && setting.status == 1">
-            <el-button type="primary" @click="press()"
-              v-if="properties.hasPressBtn || properties.hasPressBtn===undefined">
-              {{properties.pressBtnText||'催 办'}}</el-button>
-            <el-button type="danger" @click="actionDialogHandler('revoke')"
-              v-if="properties.hasRevokeBtn || properties.hasRevokeBtn===undefined">
-              {{properties.revokeBtnText||'撤 回'}}</el-button>
-          </template>
+            <el-dropdown-menu slot="dropdown">
+              <el-dropdown-item class="dropdown-item" v-if="setting.opType=='-1'" command="save">
+                {{properties.saveBtnText||'暂 存'}}
+              </el-dropdown-item>
+              <el-dropdown-item class="dropdown-item"
+                v-if="(properties.hasRevokeBtn || properties.hasRevokeBtn===undefined)&&setting.opType == 0 && setting.status == 1"
+                command="revoke">
+                {{properties.revokeBtnText||'撤 回'}}
+              </el-dropdown-item>
+              <!-- 审批 -->
+              <template v-if="setting.opType == 1">
+                <el-dropdown-item class="dropdown-item" v-if="properties.hasTransferBtn"
+                  command="transfer">
+                  {{properties.transferBtnText||'转 审'}}
+                </el-dropdown-item>
+                <el-dropdown-item class="dropdown-item" v-if="properties.hasSaveBtn"
+                  command="saveAudit">
+                  {{properties.saveBtnText||'暂 存'}}
+                </el-dropdown-item>
+                <el-dropdown-item class="dropdown-item" v-if="properties.hasRejectBtn"
+                  command="reject">
+                  {{properties.rejectBtnText||'拒 绝'}}
+                </el-dropdown-item>
+              </template>
+              <!-- 判断流程复活按钮和节点变更 -->
+              <template v-if="setting.opType == 4">
+                <el-dropdown-item class="dropdown-item" v-if="flowTaskInfo.completion==100"
+                  command="resurgence">
+                  复 活
+                </el-dropdown-item>
+                <el-dropdown-item class="dropdown-item"
+                  v-if="flowTaskInfo.completion>0&&flowTaskInfo.completion<100&&(setting.status==1||setting.status==3)"
+                  command="resurgence">变 更
+                </el-dropdown-item>
+                <el-dropdown-item class="dropdown-item"
+                  v-if="setting.status==1&&assignNodeList.length" command="assign">指 派
+                </el-dropdown-item>
+              </template>
+              <el-dropdown-item class="dropdown-item" v-if="activeTab==='comment'"
+                command="comment">评 论
+              </el-dropdown-item>
+              <el-dropdown-item class="dropdown-item"
+                v-if="setting.opType!=4&&setting.id&&properties.hasPrintBtn && properties.printId"
+                command="print">
+                {{properties.printBtnText||'打 印'}}
+              </el-dropdown-item>
+            </el-dropdown-menu>
+          </el-dropdown>
+          <el-button v-if="setting.opType=='-1'" type="primary" @click="eventLauncher('submit')"
+            :loading="candidateLoading" :disabled="allBtnDisabled">
+            {{properties.submitBtnText||'提 交'}}</el-button>
+          <el-button type="primary" @click="eventLauncher('audit')" :loading="candidateLoading"
+            v-if="setting.opType == 1&&properties.hasAuditBtn">{{properties.auditBtnText||'通 过'}}
+          </el-button>
+          <el-button type="primary" @click="press()"
+            v-if="setting.opType == 0 && setting.status == 1&&(properties.hasPressBtn || properties.hasPressBtn===undefined)">
+            {{properties.pressBtnText||'催 办'}}</el-button>
           <el-button type="danger" v-if="setting.opType == 2 && properties.hasRevokeBtn"
-            @click="actionDialogHandler('recall')">{{properties.revokeBtnText||'撤 回'}}</el-button>
-          <template v-if="setting.opType == 4">
-            <el-button type="primary" @click="actionDialogHandler('assign')"
-              v-if="setting.status ==1">指 派</el-button>
-            <el-button type="danger" v-if="setting.status != 2 && setting.status != 5"
-              @click="cancel()">终 止</el-button>
-          </template>
+            @click="recall()">{{properties.revokeBtnText||'撤 回'}}</el-button>
+          <el-button type="danger" v-if="setting.opType == 4&&setting.status==1" @click="cancel()">
+            终止</el-button>
           <el-button @click="goBack()" v-if="!setting.hideCancelBtn" :disabled="allBtnDisabled">
             {{$t('common.cancelButton')}}
           </el-button>
@@ -89,16 +139,20 @@
             <el-form-item :label="item.nodeName+item.label" :prop="'candidateList.' + i + '.value'"
               v-for="(item,i) in candidateForm.candidateList" :key="i" :rules="item.rules">
               <candidate-user-select v-model="item.value" multiple :placeholder="'请选择'+item.label"
-                :taskId="setting.taskId" :formData="formData" :nodeId="item.nodeId" />
+                :taskId="setting.taskId" :formData="formData" :nodeId="item.nodeId"
+                v-if="item.hasCandidates" />
+              <user-select v-model="item.value" multiple :placeholder="'请选择'+item.label"
+                title="候选人员" v-else />
             </el-form-item>
             <el-form-item label="加签人员" v-if="properties.hasFreeApprover">
               <user-select v-model="handleId" placeholder="请选择加签人员,不选即该节点审核结束" />
             </el-form-item>
           </template>
-          <el-form-item label="审批意见">
-            <el-input v-model="reason" placeholder="请输入审批意见（选填）" type="textarea" :rows="4" />
+          <el-form-item label="审批意见" v-if="properties.hasOpinion" prop="handleOpinion">
+            <el-input v-model="candidateForm.handleOpinion" placeholder="请输入审批意见" type="textarea"
+              :rows="4" />
           </el-form-item>
-          <el-form-item label="审批签名" v-if="properties.hasSign">
+          <el-form-item label="手写签名" required v-if="properties.hasSign">
             <div class="sign-main">
               <div class="sign-head">
                 <div class="sign-tip">请在这里输入你的签名</div>
@@ -117,9 +171,6 @@
           <el-form-item label="抄送人员" v-if="properties.isCustomCopy">
             <user-select v-model="copyIds" placeholder="请选择" multiple />
           </el-form-item>
-          <el-form-item label="审批附件">
-            <JNPF-UploadFz v-model="approvalFileList" />
-          </el-form-item>
         </el-form>
         <span slot="footer" class="dialog-footer">
           <el-button @click="visible = false">{{$t('common.cancelButton')}}</el-button>
@@ -128,35 +179,111 @@
           </el-button>
         </span>
       </el-dialog>
-      <ActionDialog ref='actionDialog' :assignNodeList="assignNodeList" @close="goBack" />
+      <el-dialog title="指派" :close-on-click-modal="false" :visible.sync="assignVisible"
+        class="JNPF-dialog JNPF-dialog_center" lock-scroll append-to-body width='600px'>
+        <el-form label-width="80px" :model="assignForm" :rules="assignRules" ref="assignForm">
+          <el-form-item label="指派节点" prop="nodeCode">
+            <el-select v-model="assignForm.nodeCode" placeholder="请选择指派节点">
+              <el-option v-for="item in assignNodeList" :key="item.nodeCode" :label="item.nodeName"
+                :value="item.nodeCode" />
+            </el-select>
+          </el-form-item>
+          <el-form-item label="指派给谁" prop="freeApproverUserId">
+            <user-select v-model="assignForm.freeApproverUserId" placeholder="请选择指派给谁" />
+          </el-form-item>
+        </el-form>
+        <span slot="footer" class="dialog-footer">
+          <el-button @click="assignVisible = false">{{$t('common.cancelButton')}}</el-button>
+          <el-button type="primary" @click="handleAssign()">{{$t('common.confirmButton')}}
+          </el-button>
+        </span>
+      </el-dialog>
+      <!-- 流程节点变更复活对话框 -->
+      <el-dialog :title="flowTaskInfo.completion==100?'复活':'变更'" :close-on-click-modal="false"
+        :visible.sync="resurgenceVisible" class="JNPF-dialog JNPF-dialog_center" lock-scroll
+        append-to-body width='600px'>
+        <el-form label-width="80px" :model="resurgenceForm" :rules="resurgenceRules"
+          ref="resurgenceForm">
+          <el-form-item :label="flowTaskInfo.completion==100?'复活节点':'变更节点'" prop="nodeCode">
+            <el-select v-model="resurgenceForm.nodeCode"
+              :placeholder="flowTaskInfo.completion==100?'请选择复活节点':'请选择变更节点'">
+              <el-option v-for="item in resurgenceNodeList" :key="item.id" :label="item.nodeName"
+                :value="item.id" />
+            </el-select>
+          </el-form-item>
+          <el-form-item :label="flowTaskInfo.completion==100?'复活意见':'变更意见'" prop="handleOpinion">
+            <el-input type="textarea" v-model="resurgenceForm.handleOpinion" placeholder="请填写意见"
+              :rows="4" />
+          </el-form-item>
+        </el-form>
+        <span slot="footer" class="dialog-footer">
+          <el-button @click="resurgenceVisible = false">{{$t('common.cancelButton')}}</el-button>
+          <el-button type="primary" @click="handleResurgence()" :loading="resurgenceBtnLoading">
+            {{$t('common.confirmButton')}}
+          </el-button>
+        </span>
+      </el-dialog>
       <print-browse :visible.sync="printBrowseVisible" :id="properties.printId" :formId="setting.id"
         :fullName="setting.fullName" />
       <candidate-form :visible.sync="candidateVisible" :candidateList="candidateList"
         :branchList="branchList" :taskId="setting.taskId" :formData="formData"
-        @submitCandidate="submitCandidate" />
+        @submitCandidate="submitCandidate" :isCustomCopy="properties.isCustomCopy" />
+      <error-form :visible.sync="errorVisible" :nodeList="errorNodeList" @submit="handleError" />
+      <actionDialog v-if="actionVisible" ref="actionDialog" @submit="handleRecall" />
     </div>
   </transition>
 </template>
 
 <script>
 import { FlowEngineInfo } from '@/api/workFlow/FlowEngine'
-import { FlowBeforeInfo, Audit, Reject, Cancel, SaveAudit, Candidates, CandidateUser } from '@/api/workFlow/FlowBefore'
-import { Press } from '@/api/workFlow/FlowLaunch'
+import { FlowBeforeInfo, Audit, Reject, Transfer, Recall, Cancel, Assign, SaveAudit, Candidates, CandidateUser, Resurgence, ResurgenceList } from '@/api/workFlow/FlowBefore'
+import { Revoke, Press } from '@/api/workFlow/FlowLaunch'
 import { Create, Update, DynamicCreate, DynamicUpdate } from '@/api/workFlow/workFlowForm'
 import recordList from './RecordList'
 import Comment from './Comment'
 import RecordSummary from './RecordSummary'
 import CandidateForm from './CandidateForm'
+import ErrorForm from './ErrorForm'
 import CandidateUserSelect from './CandidateUserSelect'
 import Process from '@/components/Process/Preview'
 import PrintBrowse from '@/components/PrintBrowse'
 import vueEsign from 'vue-esign'
-import ActionDialog from './ActionDialog'
+import ActionDialog from '@/views/workFlow/components/ActionDialog'
 export default {
-  components: { ActionDialog, recordList, Process, vueEsign, PrintBrowse, Comment, RecordSummary, CandidateForm, CandidateUserSelect },
+  components: { recordList, Process, vueEsign, PrintBrowse, Comment, RecordSummary, CandidateForm, CandidateUserSelect, ErrorForm, ActionDialog },
   data() {
     return {
+      assignVisible: false,
+      resurgenceVisible: false,
+      assignForm: {
+        nodeCode: '',
+        freeApproverUserId: ''
+      },
+      actionVisible: false,
+      resurgenceForm: {
+        nodeCode: '',
+        handleOpinion: '',
+        freeApproverUserId: ''
+      },
+      assignRules: {
+        nodeCode: [
+          { required: true, message: '请选择指派节点', trigger: 'change' }
+        ],
+        freeApproverUserId: [
+          { required: true, message: '请选择指派给谁', trigger: 'click' }
+        ]
+      },
+      resurgenceRules: {
+        nodeCode: [
+          {
+            required: true,
+            message: '请选择节点',
+            trigger: 'change'
+          }
+        ],
+      },
       assignNodeList: [],
+      resurgenceNodeList: [],
       currentView: '',
       formData: {},
       setting: {},
@@ -168,8 +295,6 @@ export default {
       properties: {},
       endTime: 0,
       visible: false,
-      reason: '',
-      approvalFileList: [],
       handleId: '',
       activeTab: '0',
       isComment: false,
@@ -178,6 +303,7 @@ export default {
       loading: false,
       btnLoading: false,
       approvalBtnLoading: false,
+      resurgenceBtnLoading: false,
       candidateLoading: false,
       candidateVisible: false,
       candidateType: 1,
@@ -185,7 +311,8 @@ export default {
       candidateList: [],
       candidateForm: {
         branchList: [],
-        candidateList: []
+        candidateList: [],
+        handleOpinion: ''
       },
       printBrowseVisible: false,
       eventType: '',
@@ -193,13 +320,26 @@ export default {
       copyIds: [],
       fullName: '',
       thisStep: '',
-      allBtnDisabled: false
+      allBtnDisabled: false,
+      flowUrgent: 1,
+      flowUrgentList: [
+        { name: '普通', color: '#409EFF', state: 1, },
+        { name: '重要', color: '#E6A23C', state: 2, },
+        { name: '紧急', color: '#F56C6C', state: 3, },
+      ],
+      errorVisible: false,
+      errorNodeList: [],
+      isValidate: false,
     }
   },
   computed: {
     title() {
       if ([2, 3, 4].includes(this.setting.opType)) return this.fullName
       return this.thisStep ? this.fullName + '/' + this.thisStep : this.fullName
+    },
+    selectState() {
+      const index = this.flowUrgentList.findIndex(c => this.flowUrgent === c.state)
+      return index
     }
   },
   watch: {
@@ -213,6 +353,46 @@ export default {
     }
   },
   methods: {
+    handleResurgence(errorRuleUserList) {
+      this.$refs['resurgenceForm'].validate((valid) => {
+        if (!valid) return
+        let query = {
+          handleOpinion: this.resurgenceForm.handleOpinion,
+          taskNodeId: this.resurgenceForm.nodeCode,
+          taskId: this.setting.taskId,
+          resurgence: this.flowTaskInfo.completion == 100
+        }
+        if (errorRuleUserList) query.errorRuleUserList = errorRuleUserList
+        this.resurgenceBtnLoading = true
+        Resurgence(query).then(res => {
+          const errorData = res.data
+          if (errorData && Array.isArray(errorData) && errorData.length) {
+            this.errorNodeList = errorData
+            this.eventType = 'resurgence'
+            this.errorVisible = true
+            this.resurgenceBtnLoading = false
+          } else {
+            this.$message({
+              type: 'success',
+              message: res.msg,
+              duration: 1000,
+              onClose: () => {
+                this.resurgenceBtnLoading = false
+                this.visible = false
+                this.errorVisible = false
+                this.$emit('close', true)
+              }
+            })
+          }
+        }).catch(() => { this.resurgenceBtnLoading = false })
+      })
+    },
+    flowResurgence() {
+      this.resurgenceVisible = true
+      ResurgenceList(this.setting.taskId).then(res => {
+        this.resurgenceNodeList = res.data
+      })
+    },
     goBack(isRefresh) {
       this.$emit('close', isRefresh)
     },
@@ -258,6 +438,7 @@ export default {
         if (this.flowTemplateJson && this.flowTemplateJson.properties && this.flowTemplateJson.properties.formOperates) {
           data.formOperates = this.flowTemplateJson.properties.formOperates || []
         }
+        data.flowTemplateJson = this.flowTemplateJson
         setTimeout(() => {
           this.$nextTick(() => {
             this.$refs.form && this.$refs.form.init(data)
@@ -272,6 +453,7 @@ export default {
         data.fullName = this.flowTaskInfo.fullName
         this.fullName = this.flowTaskInfo.fullName
         this.thisStep = this.flowTaskInfo.thisStep
+        this.flowUrgent = this.flowTaskInfo.flowUrgent || 1
         data.type = this.flowTaskInfo.type
         data.draftData = res.data.draftData || null
         if (data.formType == 1) {
@@ -305,11 +487,12 @@ export default {
         } else {
           data.formOperates = res.data.formOperates || []
         }
+        data.flowTemplateJson = this.flowTemplateJson
         if (this.flowTaskNodeList.length) {
           let assignNodeList = []
           for (let i = 0; i < this.flowTaskNodeList.length; i++) {
             const nodeItem = this.flowTaskNodeList[i]
-            data.opType == 4 && nodeItem.type == 1 && assignNodeList.push(nodeItem)
+            data.opType == 4 && nodeItem.type == 1 && nodeItem.nodeType === 'approver' && assignNodeList.push(nodeItem)
             const loop = data => {
               if (Array.isArray(data)) data.forEach(d => loop(d))
               if (data.nodeId === nodeItem.nodeCode) {
@@ -332,8 +515,19 @@ export default {
         }, 500)
       }).catch(() => { this.loading = false })
     },
+    handleMore(e) {
+      if (e == 'revoke') return this.revoke()
+      if (e == 'transfer') return this.openUserBox('transfer')
+      if (e == 'saveAudit') return this.eventLauncher('saveAudit')
+      if (e == 'reject') return this.eventReceiver({}, 'reject')
+      if (e == 'resurgence') return this.flowResurgence()
+      if (e == 'assign') return this.openAssignBox()
+      if (e == 'comment') return this.addComment()
+      if (e == 'print') return this.printBrowseVisible = true
+      this.eventLauncher(e)
+    },
     eventLauncher(eventType) {
-      this.$refs.form && this.$refs.form.dataFormSubmit(eventType)
+      this.$refs.form && this.$refs.form.dataFormSubmit(eventType, this.flowUrgent)
     },
     eventReceiver(formData, eventType) {
       this.formData = formData
@@ -347,24 +541,38 @@ export default {
       }
       if (eventType === 'audit' || eventType === 'reject') {
         this.handleId = ''
-        this.reason = ''
-        this.approvalFileList = []
+        this.candidateForm.handleOpinion = ''
         this.copyIds = []
+        this.isValidate = false
         this.handleReset()
-        if (eventType === 'reject') return this.visible = true
+        if (eventType === 'reject') {
+          if (!this.properties.hasSign && !this.properties.hasOpinion) {
+            this.$confirm('此操作将驳回该审批单，是否继续？', '提示', {
+              type: 'warning'
+            }).then(() => {
+              this.handleApproval()
+            }).catch(() => { });
+            return
+          }
+          this.isValidate = true
+          this.visible = true
+          return
+        }
         this.candidateLoading = true
         Candidates(this.setting.taskId, { formData: this.formData }).then(res => {
           let data = res.data
           this.candidateType = data.type
           this.candidateLoading = false
           this.candidateForm.branchList = []
+          this.branchList = []
           if (data.type == 1) {
             this.branchList = res.data.list
             this.$nextTick(() => {
               this.$refs['candidateForm'].resetFields()
             })
+            this.isValidate = true
+            this.visible = true
           } else if (data.type == 2) {
-            this.branchList = []
             let list = res.data.list.filter(o => o.isCandidates)
             this.candidateForm.candidateList = list.map(o => ({
               ...o,
@@ -375,10 +583,21 @@ export default {
             this.$nextTick(() => {
               this.$refs['candidateForm'].resetFields()
             })
+            this.isValidate = true
+            this.visible = true
           } else {
             this.candidateForm.candidateList = []
+            if (!this.properties.hasSign && !this.properties.hasOpinion && !this.properties.hasFreeApprover && !this.properties.isCustomCopy) {
+              this.$confirm('此操作将通过该审批单，是否继续？', '提示', {
+                type: 'warning'
+              }).then(() => {
+                this.handleApproval()
+              }).catch(() => { });
+              return
+            }
+            this.isValidate = true
+            this.visible = true
           }
-          this.visible = true
         }).catch(() => {
           this.candidateLoading = false
         })
@@ -424,6 +643,7 @@ export default {
     },
     submitOrSave() {
       this.formData.status = this.eventType === 'submit' ? 0 : 1
+      this.formData.flowUrgent = this.flowUrgent
       if (this.eventType === 'save') return this.handleRequest()
       this.candidateLoading = true
       Candidates(0, { formData: this.formData }).then(res => {
@@ -439,6 +659,12 @@ export default {
           this.candidateList = res.data.list.filter(o => o.isCandidates)
           this.candidateVisible = true
         } else {
+          if (this.properties.isCustomCopy) {
+            this.branchList = []
+            this.candidateList = []
+            this.candidateVisible = true
+            return
+          }
           this.$confirm('您确定要提交当前流程吗, 是否继续?', '提示', {
             type: 'warning'
           }).then(() => {
@@ -462,30 +688,89 @@ export default {
         formMethod = this.formData.id ? DynamicUpdate : DynamicCreate
       }
       formMethod(this.setting.enCode, this.formData).then(res => {
-        this.$message({
-          message: res.msg,
-          type: 'success',
-          duration: 1500,
-          onClose: () => {
-            if (this.eventType === 'save') this.btnLoading = false
-            this.candidateVisible = false
-            this.allBtnDisabled = false
-            this.$emit('close', true)
-          }
-        })
+        const errorData = res.data
+        if (errorData && Array.isArray(errorData) && errorData.length) {
+          this.errorNodeList = errorData
+          this.errorVisible = true
+          this.allBtnDisabled = false
+        } else {
+          this.$message({
+            message: res.msg,
+            type: 'success',
+            duration: 1500,
+            onClose: () => {
+              if (this.eventType === 'save') this.btnLoading = false
+              this.candidateVisible = false
+              this.allBtnDisabled = false
+              this.errorVisible = false
+              this.$emit('close', true)
+            }
+          })
+        }
       }).catch(() => {
         if (this.eventType === 'save') this.btnLoading = false
         this.allBtnDisabled = false
+        this.errorVisible = false
       })
     },
     submitCandidate(data) {
       this.handleRequest(data)
     },
-    actionDialogHandler(type) {
-      let id = type === 'revoke' ? this.setting.id : this.setting.taskId
+    revoke() {
+      this.eventType = 'revoke'
+      this.showDialog()
+    },
+    recall() {
+      this.eventType = 'recall'
+      this.showDialog()
+    },
+    openUserBox(type) {
+      this.eventType = 'transfer'
+      this.actionVisible = true
       this.$nextTick(() => {
-        this.$refs.actionDialog.init(type, id)
+        this.$refs.actionDialog.init(this.properties, this.eventType)
       })
+    },
+    showDialog() {
+      if (!this.properties.hasOpinion && !this.properties.hasSign) {
+        const title = this.eventType == 'revoke' ? '此操作将撤回该流程，是否继续？' : '此操作将撤回该审批单，是否继续？'
+        this.$confirm(title, '提示', {
+          type: 'warning'
+        }).then(() => {
+          this.handleRecall()
+        }).catch(() => { });
+        return
+      }
+      this.actionVisible = true
+      this.$nextTick(() => {
+        this.$refs.actionDialog.init(this.properties, this.eventType)
+      })
+    },
+    handleRecall(query) {
+      if (!query) {
+        query = {
+          handleOpinion: '',
+          freeApproverUserId: '',
+          signImg: '',
+        }
+      }
+      const id = this.eventType == 'revoke' ? this.setting.id : this.setting.taskId
+      const formMethod = this.eventType == 'revoke' ? Revoke : this.eventType == 'transfer' ? Transfer : Recall
+      this.approvalBtnLoading = true
+      formMethod(id, query).then(res => {
+        this.approvalBtnLoading = false
+        this.$message({
+          type: 'success',
+          message: res.msg,
+          duration: 1000,
+          onClose: () => {
+            this.$emit('close', true)
+          }
+        })
+      }).catch(() => { 
+        this.$refs.actionDialog.btnLoading = false
+        this.approvalBtnLoading = false 
+        })
     },
     press() {
       this.$confirm('此操作将提示该节点尽快处理，是否继续?', '提示', {
@@ -521,39 +806,80 @@ export default {
         })
       }).catch(() => { })
     },
-    handleApproval() {
-      this.$refs['candidateForm'].validate((valid) => {
-        if (valid) {
-          if (this.properties.hasSign && !this.signImg) {
-            this.$message({
-              message: '请签名',
-              type: 'error'
-            })
-            return
-          }
-          let query = {
-            fileList: this.approvalFileList,
-            handleOpinion: this.reason,
-            formData: this.formData,
-            enCode: this.setting.enCode,
-            signImg: this.signImg,
-            copyIds: this.copyIds.join(','),
-            branchList: this.candidateForm.branchList,
-            candidateType: this.candidateType
-          }
-          if (this.candidateForm.candidateList.length) {
-            let candidateList = {}
-            for (let i = 0; i < this.candidateForm.candidateList.length; i++) {
-              candidateList[this.candidateForm.candidateList[i].nodeId] = this.candidateForm.candidateList[i].value
+    openAssignBox() {
+      this.assignVisible = true
+      this.$nextTick(() => {
+        this.$refs['assignForm'].resetFields()
+      })
+    },
+    handleError(data) {
+      if (this.eventType === 'submit') {
+        this.formData.errorRuleUserList = data
+        this.handleRequest()
+        return
+      }
+      if (this.eventType === 'audit' || this.eventType === 'reject') {
+        this.handleApproval(data)
+        return
+      }
+      if (this.eventType === 'resurgence') {
+        this.handleResurgence(data)
+        return
+      }
+    },
+    handleAssign() {
+      this.$refs['assignForm'].validate((valid) => {
+        if (!valid) return
+        Assign(this.setting.taskId, this.assignForm).then(res => {
+          this.$message({
+            type: 'success',
+            message: res.msg,
+            duration: 1000,
+            onClose: () => {
+              this.$emit('close', true)
             }
-            query.candidateList = candidateList
+          })
+        })
+      })
+    },
+    handleApproval(errorRuleUserList) {
+      const handleRequest = () => {
+        if (this.properties.hasSign && !this.signImg) {
+          this.$message({
+            message: '请签名',
+            type: 'error'
+          })
+          return
+        }
+        let query = {
+          handleOpinion: this.candidateForm.handleOpinion,
+          formData: this.formData,
+          enCode: this.setting.enCode,
+          signImg: this.signImg,
+          copyIds: this.copyIds.join(','),
+          branchList: this.candidateForm.branchList,
+          candidateType: this.candidateType
+        }
+        if (errorRuleUserList) query.errorRuleUserList = errorRuleUserList
+        if (this.candidateForm.candidateList.length) {
+          let candidateList = {}
+          for (let i = 0; i < this.candidateForm.candidateList.length; i++) {
+            candidateList[this.candidateForm.candidateList[i].nodeId] = this.candidateForm.candidateList[i].value
           }
-          if (this.eventType === 'audit' && this.properties.hasFreeApprover) {
-            query = { freeApproverUserId: this.handleId, ...query }
-          }
-          const approvalMethod = this.eventType === 'audit' ? Audit : Reject
-          this.approvalBtnLoading = true
-          approvalMethod(this.setting.taskId, query).then(res => {
+          query.candidateList = candidateList
+        }
+        if (this.eventType === 'audit' && this.properties.hasFreeApprover) {
+          query = { freeApproverUserId: this.handleId, ...query }
+        }
+        const approvalMethod = this.eventType === 'audit' ? Audit : Reject
+        this.approvalBtnLoading = true
+        approvalMethod(this.setting.taskId, query).then(res => {
+          const errorData = res.data
+          if (errorData && Array.isArray(errorData) && errorData.length) {
+            this.errorNodeList = errorData
+            this.errorVisible = true
+            this.approvalBtnLoading = false
+          } else {
             this.$message({
               type: 'success',
               message: res.msg,
@@ -561,10 +887,17 @@ export default {
               onClose: () => {
                 this.approvalBtnLoading = false
                 this.visible = false
+                this.errorVisible = false
                 this.$emit('close', true)
               }
             })
-          }).catch(() => { this.approvalBtnLoading = false })
+          }
+        }).catch(() => { this.approvalBtnLoading = false })
+      }
+      if (!this.isValidate) return handleRequest()
+      this.$refs['candidateForm'].validate((valid) => {
+        if (valid) {
+          handleRequest()
         }
       })
     },
@@ -595,6 +928,9 @@ export default {
     },
     setLoad(val) {
       this.btnLoading = !!val
+    },
+    handleFlowUrgent(e) {
+      this.flowUrgent = e
     }
   }
 }
@@ -635,5 +971,32 @@ export default {
   .JNPF-el_tabs {
     overflow: hidden;
   }
+}
+
+.color-box {
+  width: 7px;
+  height: 7px;
+  display: inline-block;
+  border-radius: 50%;
+}
+.flow-urgent-value {
+  display: flex;
+  align-items: center;
+  span:first-child {
+    margin: 0 3px 0 10px;
+  }
+}
+
+.options {
+  .dropdown {
+    margin-right: 10px;
+  }
+  .el-button {
+    min-width: 70px;
+  }
+}
+.dropdown-item {
+  min-width: 70px;
+  text-align: center;
 }
 </style>
