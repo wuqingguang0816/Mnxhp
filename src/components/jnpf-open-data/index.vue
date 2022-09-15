@@ -62,7 +62,7 @@ export default {
         this.innerValue = this.jnpf.toDate(new Date().getTime(), 'yyyy-MM-dd HH:mm:ss')
       }
       if (this.type === 'currOrganize') {
-        this.innerValue = this.showLevel === 'last' ? this.userInfo.organizeName : this.userInfo.departmentName
+        this.innerValue = this.showLevel === 'last' ? this.userInfo.departmentName : this.userInfo.organizeName
       }
       if (this.type === 'currPosition') {
         this.innerValue = this.userInfo.positionName
