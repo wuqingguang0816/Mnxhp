@@ -82,13 +82,13 @@ export default {
       for (let i = 0; i < this.testSendData.length; i++) {
         const item = this.testSendData[i]
         if (item.toUser && !item.toUser.length && item.messageType != 'webhook') {
-          return this.$message.error(`请选择${item.msgTemplateName}的接收人`)
+          return this.$message.error(`${item.msgTemplateName}的接收人为空！`)
         }
         if (item.paramJson && item.paramJson.length) {
           for (let j = 0; j < item.paramJson.length; j++) {
             const cur = item.paramJson[j];
             if (!cur.value) {
-              return this.$message.error(`请输入${item.msgTemplateName}参数${cur.fieldName}的变量`)
+              return this.$message.error(`${item.msgTemplateName}参数对应的变量为空！`)
             }
           }
         }
