@@ -677,6 +677,7 @@ export default {
         const nodePath = this.getNodePath(node)
         const currValue = nodePath.map(o => o[this.treeProps.value])
         queryJson = { [this.columnData.treeRelation]: currValue }
+        this.treeActiveId = currValue
       } else {
         queryJson = { [this.columnData.treeRelation]: data[this.treeProps.value] }
       }
