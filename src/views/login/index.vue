@@ -345,7 +345,7 @@ export default {
               })
               break;
             case 4://未绑定
-              this.$message.error('第三方未绑定账号！')
+              this.$message.error('第三方账号未绑定，5分钟内登录本系统账号密码自动绑定该账号！')
               this.visible = false
               this.ssoUrl = ''
               break;
