@@ -84,13 +84,13 @@
             <jnpf-barcode :format="item.format" :lineColor="item.lineColor"
               :background="item.background" :width="item.width" :height="item.height"
               :staticText="item.staticText" :dataType="item.dataType"
-              :relationField="item.relationField" :formData="formValue"></jnpf-barcode>
+              :relationField="item.relationField+'_id'" :formData="formValue"></jnpf-barcode>
           </template>
           <template v-else-if="item.__config__.jnpfKey==='qrcode'">
             <jnpf-qrcode :format="item.format" :colorLight="item.colorLight"
               :colorDark="item.colorDark" :size="item.size" :staticText="item.staticText"
-              :dataType="item.dataType" :relationField="item.relationField" :formData="formValue">
-            </jnpf-qrcode>
+              :dataType="item.dataType" :relationField="item.relationField+'_id'"
+              :formData="formValue"></jnpf-qrcode>
           </template>
           <template v-else>
             <p>{{ getValue(item) }}</p>
