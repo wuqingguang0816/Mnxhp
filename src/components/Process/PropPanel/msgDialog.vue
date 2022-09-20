@@ -96,7 +96,8 @@ export default {
       listQuery: {
         keyword: '',
         currentPage: 1,
-        pageSize: 20
+        pageSize: 20,
+        messageSource: 1
       },
       total: 0,
       checked: '',
