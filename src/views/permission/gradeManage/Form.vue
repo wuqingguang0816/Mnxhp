@@ -1,6 +1,6 @@
 <template>
-  <el-dialog :title="!dataForm.id?'新建':'编辑'" :close-on-click-modal="false" :visible.sync="visible"
-    class="JNPF-dialog JNPF-dialog_center" lock-scroll width="900px">
+  <el-dialog :title="!dataForm.id?'新建分管':'编辑分管'" :close-on-click-modal="false"
+    :visible.sync="visible" class="JNPF-dialog JNPF-dialog_center" lock-scroll width="900px">
     <el-form ref="dataForm" :model="dataForm" :rules="dataRule" v-loading="formLoading"
       label-width="100px">
       <el-alert title="设置当前组织部门的管理员和相关操作权限" type="warning" :closable="false" show-icon
