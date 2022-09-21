@@ -24,7 +24,7 @@ const layouts = {
     const visibility = !config.visibility || (Array.isArray(config.visibility) && config.visibility.includes('pc'))
     if (visibility && !config.noShow) {
       return (
-        <el-col span={config.span}>
+        <el-col span={config.span} class={config.className}>
           <el-form-item label-width={labelWidth} prop={scheme.__vModel__} key={config.renderKey}
             label={config.showLabel ? config.label : ''}>
             {Item}
@@ -237,6 +237,7 @@ export default {
       tableRefs: {},
       isTableValid: false
     }
+    this.initCss(data.formConfCopy)
     this.initFormData(data.formConfCopy.fields, data[this.formConf.formModel])
     this.buildRules(data.formConfCopy.fields, data[this.formConf.formRules])
     this.buildOptions(data.formConfCopy.fields, data.options)
@@ -268,6 +269,19 @@ export default {
     }
   },
   methods: {
+    initCss(formCopy) {
+      if (document.getElementById('styleId')) {
+        document.getElementById('styleId').remove()
+      }
+      let classJson = formCopy.classJson
+      let hand = document.getElementsByTagName('head')[0]
+      let style = document.createElement('style')
+      style.type = 'text/css'
+      style.id = 'styleId'
+      let html = classJson
+      style.innerText = html
+      hand.appendChild(style)
+    },
     initFormData(componentList, formData) {
       this.$store.commit('generator/UPDATE_RELATION_DATA', {})
       componentList.forEach(cur => {
