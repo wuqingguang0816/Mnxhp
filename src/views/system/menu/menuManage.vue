@@ -342,6 +342,9 @@ export default {
     importMenu() {
       this.dataForm.parentId = ''
       this.selectMenuVisible = true
+      this.$nextTick(() => {
+        this.$refs.dataForm.resetFields()
+      })
       getMenuSelector({ category: this.listQuery.category }, '', this.systemId).then((res) => {
         let topItem = {
           fullName: "顶级节点",
