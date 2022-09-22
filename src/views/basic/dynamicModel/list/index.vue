@@ -585,7 +585,7 @@ export default {
           let prop = e.prop.split('-')[0]
           let vModel = e.prop.split('-')[1]
           let label = e.label.split('-')[0]
-          let childLabel = e.label.split('-')[1]
+          let childLabel = e.label.replace(label + '-', '');
           let newItem = {
             align: "center",
             jnpfKey: "table",
