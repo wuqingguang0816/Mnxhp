@@ -19,14 +19,14 @@
           </template>
         </el-table-column>
         <el-table-column prop="parameterData" label="参数名称" min-width="200">
-          <template slot-scope="scope" v-if="scope.row.messageType != 'webhook'">
+          <template slot-scope="scope">
             <div class="parameter-box" v-for="(item,index) in scope.row.paramJson" :key="index">
               {{item.field}}({{item.fieldName}})
             </div>
           </template>
         </el-table-column>
         <el-table-column prop="parameterData" label="变量" min-width="200">
-          <template slot-scope="scope" v-if="scope.row.messageType != 'webhook'">
+          <template slot-scope="scope">
             <div class="variable-box" v-for="(item,index) in scope.row.paramJson" :key="index">
               <el-input v-model="item.value" placeholder="变量"></el-input>
             </div>
@@ -79,10 +79,18 @@ export default {
       })
     },
     dataFormSubmit() {
-      for (let index = 0; index < this.testSendData.length; index++) {
-        const item = this.testSendData[index]
+      for (let i = 0; i < this.testSendData.length; i++) {
+        const item = this.testSendData[i]
         if (item.toUser && !item.toUser.length && item.messageType != 'webhook') {
-          return this.$message.error(`请选${this.testSendData[index].msgTemplateName}择接收人`)
+          return this.$message.error(`${item.msgTemplateName}的接收人为空！`)
+        }
+        if (item.paramJson && item.paramJson.length) {
+          for (let j = 0; j < item.paramJson.length; j++) {
+            const cur = item.paramJson[j];
+            if (!cur.value) {
+              return this.$message.error(`${item.msgTemplateName}参数对应的变量为空！`)
+            }
+          }
         }
       }
       let data = deepClone(this.testSendData)

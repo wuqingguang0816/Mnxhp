@@ -8,8 +8,7 @@
         <el-input v-model="dataForm.category" disabled />
       </el-form-item>
       <el-form-item label="上级" prop="parentId">
-        <JNPF-TreeSelect v-model="dataForm.parentId" :options="treeData" placeholder="选择上级菜单"
-          @change="onChange" />
+        <JNPF-TreeSelect v-model="dataForm.parentId" :options="treeData" placeholder="选择上级菜单" />
       </el-form-item>
       <el-form-item label="名称" prop="fullName">
         <el-input v-model="dataForm.fullName" placeholder="输入名称" />
@@ -196,6 +195,11 @@ export default {
           { required: true, message: '关联不能为空', trigger: 'blur' }
         ],
       }
+    }
+  },
+  watch: {
+    'dataForm.parentId'(val) {
+      this.onChange(val)
     }
   },
   methods: {

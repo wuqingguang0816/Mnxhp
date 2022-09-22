@@ -80,11 +80,12 @@ const actions = {
   },
   // user login
   login({ dispatch }, userInfo) {
-    const { account, password, code, timestamp, origin } = userInfo
+    const { account, password, code, timestamp, origin, jnpf_ticket } = userInfo
     return new Promise((resolve, reject) => {
       login(qs.stringify({
         account: account.trim(),
         password: md5(password),
+        jnpf_ticket: jnpf_ticket,
         origin,
         code,
         timestamp,

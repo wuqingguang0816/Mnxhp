@@ -350,6 +350,13 @@
               <el-input-number v-model="activeData.__config__.columnWidth" placeholder="控件宽度"
                 :min="0" :precision="0" controls-position="right" />
             </el-form-item>
+            <el-form-item label="自定义Class" v-if="showType==='pc'">
+              <el-select v-model="activeData.__config__.className" multiple placeholder="请选择">
+                <el-option v-for="item in formConf.classNames" :key="item" :label="item"
+                  :value="item">
+                </el-option>
+              </el-select>
+            </el-form-item>
             <el-form-item label="多端显示">
               <el-checkbox-group v-model="activeData.__config__.visibility" size="mini"
                 class="visibility-checkbox">
@@ -431,6 +438,10 @@
             </span>
             <el-switch v-model="formConf.concurrencyLock" />
           </el-form-item>
+          <el-divider>表单样式</el-divider>
+          <el-form-item label="样式CSS">
+            <el-button style="width: 100%;" @click="addStyle">设置</el-button>
+          </el-form-item>
           <template v-if="modelType!=3 && modelType!=6 && webType!=3">
             <el-divider>表单按钮</el-divider>
             <div class="per-cell">
@@ -476,6 +487,8 @@
       @updateScript="updateScript" />
     <field-dialog :visible.sync="fieldDialogVisible" ref="fieldDialog"
       @close="fieldDialogVisible=false" @updateOptions="updateFieldOptions" />
+    <StyleScript :visible.sync="styleScriptVisible" :value="formConf.classJson"
+      @updateStyleScript="updateStyleScript" />
   </div>
 </template>
 
@@ -523,7 +536,7 @@ import PopupAttr from './RightComponents/PopupAttr'
 import Tab from './RightComponents/Tab'
 import Collapse from './RightComponents/Collapse'
 import TableConfig from './RightComponents/Table'
-
+import StyleScript from './StyleScript'
 const commonRightList = ['comSelect', 'depSelect', 'posSelect', 'userSelect', 'groupSelect', "roleSelect", 'editor']
 const systemList = ['createUser', 'createTime', 'modifyUser', 'modifyTime', 'currOrganize', 'currDept', 'currPosition', 'billRule']
 //不设置宽度
@@ -532,6 +545,7 @@ const layoutList = ["groupTitle", 'divider', 'collapse', 'tab', 'row', 'card', '
 
 export default {
   components: {
+    StyleScript,
     FormScript,
     FieldDialog,
     JNPFComInput,
@@ -590,6 +604,7 @@ export default {
       fieldOptions: [],
       dictionaryOptions: [],
       dataInterfaceOptions: [],
+      styleScriptVisible: false,
       justifyOptions: [
         {
           label: 'start',
@@ -780,6 +795,43 @@ export default {
     this.setDefaultOptions()
   },
   methods: {
+    addStyle() {
+      this.$nextTick(() => {
+        this.styleScriptVisible = true
+      })
+    },
+    updateStyleScript(func) {
+      this.formConf.classJson = func
+      this.formConf.classNames = this.spiltByDoc(func).map(o => o.key)
+    },
+    spiltByDoc(str) {
+      let func = str.trim()
+      let arr = []
+      let cut = func.split("}")
+      cut.forEach(item => {
+        if (item) {
+          let afterCut = item.split("{")
+          let classObject = {}
+          let name = ''
+          if (afterCut[0].split(" ").length > 1) {
+            name = afterCut[0].split(" ")[0]
+          } else {
+            name = afterCut[0]
+          }
+          if (name.split("\.").length > 1) {
+            name = name.split("\.")[1]
+          }
+          name = name.split("\:")[0]
+          let matching = new RegExp(/^[a-zA-Z][a-zA-Z0-9_]*$/)
+          if (matching.test(name)) {
+            classObject.key = name.replace(/\r|\n/ig, '').trim()
+            classObject.value = item.replace(/\r|\n/ig, '') + "}"
+            arr.push(classObject)
+          }
+        }
+      })
+      return arr
+    },
     addReg() {
       this.activeData.__config__.regList.push({
         pattern: '',

@@ -259,7 +259,8 @@ export default {
           this.$store.commit('user/SET_LOGIN_LOADING', true)
           const query = {
             ...this.loginForm,
-            timestamp: this.timestamp
+            timestamp: this.timestamp,
+            jnpf_ticket: this.ssoTicket
           }
           this.$store.dispatch('user/login', query).then(res => {
             this.$router.push({
@@ -323,7 +324,12 @@ export default {
       getTicketStatus(this.ssoTicket).then(res => {
         if (res.data.status != 2) {
           this.winURL && this.winURL.close()
-          this.clearTimer()
+          if (res.data.status == 4) {//未绑定预留ticket
+            clearInterval(this.ssoTimer)
+            this.ssoTimer = null
+          } else {
+            this.clearTimer()
+          }
           switch (res.data.status) {
             case 1://登陆成功
               let param = {
@@ -338,10 +344,9 @@ export default {
               })
               break;
             case 4://未绑定
-              this.$message.error(res.data.value || '用户未绑定！')
+              this.$message.error('第三方账号未绑定，5分钟内登录本系统账号密码自动绑定该账号！')
               this.visible = false
               this.ssoUrl = ''
-              this.getLoginConfig()
               break;
             case 6://多租户绑定多个
               this.dialogVisible = true
@@ -368,7 +373,7 @@ export default {
       this.dialogVisible = false
     },
     socailsLogin(data) {
-      socialsLogin(qs.stringify({ ...data })).then(response => {
+      socialsLogin(qs.stringify({ ...data, tenantLogin: true })).then(response => {
         if (response.code == 200) {
           this.$store.dispatch('user/setToken', response.data).then(res => {
             this.$router.push({

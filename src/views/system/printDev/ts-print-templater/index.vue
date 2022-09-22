@@ -57,6 +57,18 @@ export default {
         {
           fullName: '审批内容',
           id: 'systemApprovalContent',
+        },
+        {
+          fullName: '图片',
+          id: "img",
+        },
+        {
+          fullName: '二维码',
+          id: 'qrCode',
+        },
+        {
+          fullName: '条形码',
+          id: 'barCode',
         }
       ],
       defaultProps: {
@@ -96,9 +108,7 @@ export default {
   },
   methods: {
     handleNodeClick(item, node) {
-      if (item.children != null && item.children.length > 0) {
-        return
-      }
+      if (item.children != null && item.children.length > 0) return
       const tableParent = this.getCurrentParentByTag('table[data-wk-table-tag="table"]')
       if (!tableParent) {
         this.editor.insertContent(this.getSpanNode(item, node))
@@ -275,6 +285,9 @@ export default {
     },
     getSpanNode(item, node) {
       const parent = (node.parent.data != null && node.parent.data.id != null) ? node.parent.data.id : 'null'
+      if (item.id == 'img' || item.id == 'barCode' || item.id == 'qrCode') {
+        return `&lt;${item.id} width='100' height='100'&gt;&lt;/${item.id}&gt;`
+      }
       return `<span data-tag="${parent}.${item.id}" class="wk-print-tag-wukong ${this.getSpanColorClass()}" contenteditable="false">{${item.id}}</span>`
     },
     getSpanColorClass() {
