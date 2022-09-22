@@ -346,8 +346,9 @@
               <el-input-number v-model="activeData.__config__.columnWidth" placeholder="控件宽度"
                 :min="0" :precision="0" controls-position="right" />
             </el-form-item>
-            <el-form-item label="自定义Class" v-if="showType==='pc'">
-              <el-select v-model="activeData.__config__.className" multiple placeholder="请选择">
+            <el-form-item label="自定义Class">
+              <el-select v-model="activeData.__config__.className" multiple clearable
+                placeholder="请选择">
                 <el-option v-for="item in formConf.classNames" :key="item" :label="item"
                   :value="item">
                 </el-option>
