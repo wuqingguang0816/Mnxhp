@@ -1,10 +1,11 @@
 <script>
 import { deepClone } from '@/utils'
 import render from '@/components/Generator/render/render.js'
-import { ruleTrigger, dyOptionsList } from '@/components/Generator/generator/comConfig'
+import { dyOptionsList } from '@/components/Generator/generator/comConfig'
 import { getDictionaryDataSelector } from '@/api/systemData/dictionary'
 import { getDataInterfaceRes } from '@/api/systemData/dataInterface'
 import request from '@/utils/request'
+import { mapGetters } from "vuex"
 
 const layouts = {
   colFormItem(h, scheme) {
@@ -19,8 +20,8 @@ const layouts = {
         style={scheme.style} clearable={scheme.clearable} filterable={scheme.filterable}
         onChange={val => this.onCascaderChange(val, scheme.on)} onBlur={val => this.onCascaderBlur(val, scheme.on)}
         key={scheme.__config__.renderKey}></el-cascader>
-      : <render formData={this[this.formConf.formModel]} conf={scheme} {...{ on: listeners }} ref={config.rowType === 'table' ? scheme.__vModel__ : undefined}
-        key={scheme.__config__.renderKey} />
+      : <render formData={this[this.formConf.formModel]} conf={scheme} {...{ on: listeners }} ref={config.jnpfKey === 'table' ? scheme.__vModel__ : undefined}
+        key={scheme.__config__.renderKey} relations={config.jnpfKey === 'table' ? this.relations : undefined} />
     const visibility = !config.visibility || (Array.isArray(config.visibility) && config.visibility.includes('pc'))
     if (visibility && !config.noShow) {
       return (
@@ -206,6 +207,7 @@ function buildListeners(scheme) {
             data = params.length > 1 ? params[1] : params[0]
           }
           func.call(this, { data, ...this.parameter })
+          this.handleRelation(scheme.__vModel__)
         } else {
           func.call(this, { data: params[0], ...this.parameter })
         }
@@ -235,12 +237,14 @@ export default {
       [this.formConf.formRules]: {},
       options: {},
       tableRefs: {},
+      relations: {},
       isTableValid: false
     }
     this.initCss(data.formConfCopy)
     this.initFormData(data.formConfCopy.fields, data[this.formConf.formModel])
     this.buildRules(data.formConfCopy.fields, data[this.formConf.formRules])
-    this.buildOptions(data.formConfCopy.fields, data.options)
+    this.buildOptions(data.formConfCopy.fields, data.options, data[this.formConf.formModel])
+    this.buildRelations(data.formConfCopy.fields, data.relations)
     this.$nextTick(() => {
       this.onLoad(data.formConfCopy)
     })
@@ -252,6 +256,11 @@ export default {
     }
   },
   computed: {
+    ...mapGetters(['userInfo']),
+    formDataConf() {
+      const name = this.formConf.formModel
+      return this[name]
+    },
     parameter() {
       const oldFormData = this.formConfCopy.formData ? this.formConfCopy.formData : {}
       this[this.formConf.formModel].id = oldFormData.id || ''
@@ -291,7 +300,123 @@ export default {
         if (config.children) this.initFormData(config.children, formData)
       })
     },
-    buildOptions(componentList, data) {
+    buildRelations(componentList, relations) {
+      componentList.forEach(cur => {
+        const config = cur.__config__
+        if (dyOptionsList.indexOf(config.jnpfKey) > -1) {
+          if (config.dataType === 'dynamic') {
+            if (config.templateJson && config.templateJson.length) {
+              for (let i = 0; i < config.templateJson.length; i++) {
+                const e = config.templateJson[i];
+                if (e.relationField) {
+                  let item = {
+                    ...cur,
+                    realVModel: cur.__config__.isSubTable ? cur.__config__.parentVModel + '-' + cur.__vModel__ : cur.__vModel__,
+                    opType: 'setOptions'
+                  }
+                  if (relations.hasOwnProperty(e.relationField)) {
+                    let boo = relations[e.relationField].some(o => o.realVModel === cur.realVModel)
+                    if (!boo) {
+                      relations[e.relationField].push(item)
+                    }
+                  } else {
+                    relations[e.relationField] = [item]
+                  }
+                }
+              }
+            }
+          }
+        }
+        if (config.jnpfKey === 'userSelect' && ['dep', 'pos', 'role', 'group'].includes(cur.selectType)) {
+          if (cur.relationField) {
+            let item = {
+              ...cur,
+              realVModel: cur.__config__.isSubTable ? cur.__config__.parentVModel + '-' + cur.__vModel__ : cur.__vModel__,
+              opType: 'setUserOptions'
+            }
+            if (relations.hasOwnProperty(cur.relationField)) {
+              let boo = relations[cur.relationField].some(o => o.realVModel === cur.realVModel)
+              if (!boo) {
+                relations[cur.relationField].push(item)
+              }
+            } else {
+              relations[cur.relationField] = [item]
+            }
+          }
+        }
+        if (config.jnpfKey === 'popupSelect') {
+          if (cur.templateJson && cur.templateJson.length) {
+            for (let i = 0; i < cur.templateJson.length; i++) {
+              const e = cur.templateJson[i];
+              if (e.relationField) {
+                let item = {
+                  ...cur,
+                  realVModel: cur.__config__.isSubTable ? cur.__config__.parentVModel + '-' + cur.__vModel__ : cur.__vModel__,
+                  opType: 'setPopupOptions'
+                }
+                if (relations.hasOwnProperty(e.relationField)) {
+                  let boo = relations[e.relationField].some(o => o.realVModel === cur.realVModel)
+                  if (!boo) {
+                    relations[e.relationField].push(item)
+                  }
+                } else {
+                  relations[e.relationField] = [item]
+                }
+              }
+            }
+          }
+        }
+        if (config.children) this.buildRelations(config.children, relations)
+      })
+    },
+    handleRelation(field) {
+      if (!field) return
+      const currRelations = this.relations
+      for (let key in currRelations) {
+        if (key === field) {
+          for (let i = 0; i < currRelations[key].length; i++) {
+            const e = currRelations[key][i];
+            let vModel = e.realVModel || e.__vModel__
+            const config = e.__config__
+            const jnpfKey = config.jnpfKey
+            let defaultValue = ''
+            if (['checkbox', 'cascader'].includes(jnpfKey) || (['select', 'treeSelect', 'popupSelect', 'popupTableSelect', 'userSelect'].includes(jnpfKey) && e.multiple)) {
+              defaultValue = []
+            }
+            if (vModel.includes('-')) {
+              // 子表字段
+              const tableVModel = vModel.split('-')[0]
+              this.$refs[tableVModel] && this.$refs[tableVModel].$children[0] && this.$refs[tableVModel].$children[0].handleRelationForParent(e, defaultValue)
+            } else {
+              this.setFormData(e.__vModel__, defaultValue)
+              if (e.opType === 'setOptions') {
+                let query = {
+                  paramList: this.getParamList(config.templateJson, this[this.formConf.formModel])
+                }
+                getDataInterfaceRes(config.propsUrl, query).then(res => {
+                  let realData = res.data
+                  this.setFieldOptions(e.__vModel__, realData)
+                })
+              }
+              if (e.opType === 'setUserOptions') {
+                let value = this[this.formConf.formModel][e.relationField] || []
+                this.comSet('ableRelationIds', e.__vModel__, Array.isArray(value) ? value : [value])
+              }
+              if (e.opType === 'setPopupOptions') { }
+            }
+          }
+        }
+      }
+    },
+    getParamList(templateJson, formData) {
+      for (let i = 0; i < templateJson.length; i++) {
+        if (templateJson[i].relationField) {
+          templateJson[i].defaultValue = formData[templateJson[i].relationField] || ''
+        }
+      }
+      return templateJson
+    },
+    buildOptions(componentList, data, formData) {
       componentList.forEach(cur => {
         const config = cur.__config__
         if (dyOptionsList.indexOf(config.jnpfKey) > -1) {
@@ -304,7 +429,10 @@ export default {
             })
           } else if (config.dataType === 'dynamic') {
             if (!config.propsUrl) return
-            getDataInterfaceRes(config.propsUrl).then(res => {
+            let query = {
+              paramList: config.templateJson ? this.getParamList(config.templateJson, formData) : [],
+            }
+            getDataInterfaceRes(config.propsUrl, query).then(res => {
               let realData = res.data
               if (Array.isArray(realData)) {
                 isTreeSelect ? cur.options = realData : cur.__slot__.options = realData
@@ -317,22 +445,7 @@ export default {
             isTreeSelect ? data[cur.__vModel__ + 'Options'] = cur.options : data[cur.__vModel__ + 'Options'] = cur.__slot__.options
           }
         }
-        if (config.jnpfKey === 'comSelect') {
-          this.$store.dispatch('generator/getCompanyTree').then(res => {
-            data[cur.__vModel__ + 'Options'] = res
-          })
-        }
-        if (config.jnpfKey === 'depSelect') {
-          this.$store.dispatch('generator/getDepTree').then(res => {
-            data[cur.__vModel__ + 'Options'] = res
-          })
-        }
-        if (config.jnpfKey === 'posSelect') {
-          this.$store.dispatch('base/getPositionTree').then(res => {
-            data[cur.__vModel__ + 'Options'] = res
-          })
-        }
-        if (config.children && config.jnpfKey !== 'table') this.buildOptions(config.children, data)
+        if (config.children && config.jnpfKey !== 'table') this.buildOptions(config.children, data, formData)
       })
     },
     buildRules(componentList, rules) {
@@ -415,6 +528,7 @@ export default {
         this.comSet('defaultValue', prop, value)
         this[this.formConf.formModel][prop] = value
       }
+      this.handleRelation(prop)
     },
     setShowOrHide(prop, value) {
       const newVal = !!value
@@ -453,6 +567,9 @@ export default {
           if (item.__vModel__ && item.__vModel__ === prop) {
             switch (field) {
               case 'disabled':
+                this.$set(item, field, value)
+                break;
+              case 'ableRelationIds':
                 this.$set(item, field, value)
                 break;
               case 'options':

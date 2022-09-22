@@ -103,6 +103,16 @@ export default {
       type: [String, Array],
       default: ''
     },
+    rowIndex: {
+      default: null
+    },
+    formData: {
+      type: Object
+    },
+    templateJson: {
+      type: Array,
+      default: () => []
+    },
     interfaceId: {
       type: String,
       default: ''
@@ -275,17 +285,36 @@ export default {
     initData() {
       if (!this.interfaceId) return
       this.listLoading = true
+      const paramList = this.getParamList()
+      const columnOptions = this.columnOptions.map(o => o.value)
       let query = {
         ...this.listQuery,
         interfaceId: this.interfaceId,
         propsValue: this.propsValue,
         relationField: this.relationField,
+        columnOptions: columnOptions.join(','),
+        paramList
       }
       getDataInterfaceDataSelect(this.interfaceId, query).then(res => {
         this.list = res.data.list
         this.total = res.data.pagination.total
         this.listLoading = false
       }).catch(() => { this.listLoading = false })
+    },
+    getParamList() {
+      let templateJson = this.templateJson
+      for (let i = 0; i < templateJson.length; i++) {
+        if (templateJson[i].relationField) {
+          if (templateJson[i].relationField.includes('-')) {
+            let tableVModel = templateJson[i].relationField.split('-')[0]
+            let childVModel = templateJson[i].relationField.split('-')[1]
+            templateJson[i].defaultValue = this.formData[tableVModel] && this.formData[tableVModel][this.rowIndex] && this.formData[tableVModel][this.rowIndex][childVModel] || ''
+          } else {
+            templateJson[i].defaultValue = this.formData[templateJson[i].relationField] || ''
+          }
+        }
+      }
+      return templateJson
     },
     interfaceDataHandler(data) {
       if (!data.dataProcessing) return data.list

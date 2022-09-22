@@ -68,8 +68,12 @@ function buildDataObject(confClone, dataObject, formData) {
   if (jnpfKey === 'JNPFText') {
     vModel.call(this, dataObject, confClone.__config__.defaultValue)
   }
-  if (['calculate', 'table', 'barcode', 'qrcode'].includes(jnpfKey)) {
+  if (['calculate', 'table', 'barcode', 'qrcode', 'popupSelect'].includes(jnpfKey)) {
     dataObject.attrs['formData'] = formData
+  }
+  if (['table'].includes(jnpfKey)) {
+    dataObject.attrs['relations'] = this.relations
+    dataObject.attrs['vModel'] = confClone.__vModel__
   }
   if (['relationForm', 'popupSelect'].includes(jnpfKey)) {
     dataObject.attrs['field'] = confClone.__config__.tableName ? confClone.__vModel__ + '_jnpfTable_' + confClone.__config__.tableName + (confClone.__config__.isSubTable ? '0' : "1") : confClone.__vModel__
@@ -113,6 +117,7 @@ export default {
       type: Object,
       default: () => { }
     },
+    relations: Object,
   },
   render(h) {
     const dataObject = makeDataObject()

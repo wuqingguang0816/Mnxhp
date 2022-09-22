@@ -1,27 +1,3 @@
-// 规则
-const ruleTrigger = {
-  'el-input': 'blur',
-  'el-input-number': 'blur',
-  'el-select': 'change',
-  'el-radio-group': 'change',
-  'el-checkbox-group': 'change',
-  'el-cascader': 'change',
-  'el-time-picker': 'change',
-  'el-date-picker': 'change',
-  'el-rate': 'change',
-  'el-color-picker': 'change',
-  'JNPF-Quill': 'blur',
-  "JNPF-Text": 'blur',
-  "JNPF-Amount": 'change',
-  "JNPF-UploadFz": 'change',
-  "JNPF-UploadImg": 'change',
-  "com-select": 'change',
-  "dep-select": 'change',
-  "pos-select": 'change',
-  "user-select": 'change',
-  "dic-select": 'change',
-  "JNPF-Address": 'change',
-}
 // 动态options
 const dyOptionsList = ['radio', 'checkbox', 'select', 'cascader', 'treeSelect']
 // 不添加vModel
@@ -40,6 +16,8 @@ const useDateList = ['createTime', 'modifyTime']
 const useSelectList = ['radio', 'checkbox', 'select']
 // 系统控件
 const systemComponentsList = ['createUser', 'createTime', 'modifyUser', 'modifyTime', 'currOrganize', 'currPosition', 'billRule']
+// 不允许关联到联动里面的控件
+const noAllowRelationList = ['table', 'uploadImg', 'uploadFz', 'modifyUser', 'modifyTime']
 const calculateItem = {
   __config__: {
     jnpfKey: 'calculate',
@@ -111,5 +89,4 @@ const onlinePeculiarList = [{
   relationField: '',
 },
 ]
-
-export { ruleTrigger, dyOptionsList, noVModelList, noTableAllowList, noColumnShowList, noSearchList, calculateItem, onlinePeculiarList, useInputList, useDateList, useSelectList, systemComponentsList }
+export { dyOptionsList, noVModelList, noTableAllowList, noColumnShowList, noSearchList, calculateItem, onlinePeculiarList, useInputList, useDateList, useSelectList, systemComponentsList, noAllowRelationList }

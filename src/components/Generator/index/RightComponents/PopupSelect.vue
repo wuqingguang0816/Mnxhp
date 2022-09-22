@@ -24,7 +24,7 @@
     </el-form-item>
     <el-form-item label="远端数据">
       <interface-dialog :value="activeData.interfaceId" :title="activeData.interfaceName"
-        popupTitle="远端数据" @change="propsUrlChange" />
+        popupTitle="远端数据" @change="onInterfaceIdChange" />
     </el-form-item>
     <el-form-item label="存储字段">
       <el-input v-model="activeData.propsValue" placeholder="请输入存储字段" />
@@ -105,7 +105,6 @@
 <script>
 import comMixin from './mixin';
 import draggable from 'vuedraggable'
-import { getDataInterfaceSelector } from '@/api/systemData/dataInterface'
 import { noAllowRelationList } from '@/components/Generator/generator/comConfig'
 import { getDrawingList } from '@/components/Generator/utils/db'
 import InterfaceDialog from '@/components/Process/PropPanel/InterfaceDialog'
@@ -117,7 +116,6 @@ export default {
     return {
       popupWidthOptions: ['600px', '800px', '1000px', '40%', '50%', '60%', '70%', '80%'],
       treeData: [],
-      dataInterfaceSelector: []
     }
   },
   computed: {
@@ -142,9 +140,6 @@ export default {
       return list
     }
   },
-  created() {
-    this.getDataInterfaceSelector()
-  },
   methods: {
     multipleChange(val) {
       this.$set(this.activeData.__config__, 'defaultValue', val ? [] : '')
@@ -155,10 +150,14 @@ export default {
     },
     onInterfaceIdChange(val, row) {
       if (!val) {
+        this.activeData.interfaceId = ''
+        this.activeData.interfaceName = ''
         this.activeData.templateJson = []
         this.activeData.__config__.defaultValue = ''
         return
       }
+      this.activeData.interfaceId = val
+      this.activeData.interfaceName = row.fullName
       this.activeData.templateJson = row.requestParameters ? JSON.parse(row.requestParameters) : []
       this.activeData.__config__.defaultValue = ''
     },
@@ -169,25 +168,11 @@ export default {
       let item = list[0]
       row.jnpfKey = item.__config__.jnpfKey
     },
-    getDataInterfaceSelector() {
-      getDataInterfaceSelector().then(res => {
-        this.dataInterfaceSelector = res.data
-      })
-    },
     addSelectItem() {
       this.activeData.columnOptions.push({
         value: '',
         label: ''
       })
-    },
-    propsUrlChange(val, item) {
-      if (!val) {
-        this.activeData.interfaceId = ''
-        this.activeData.interfaceName = ''
-        return
-      }
-      this.activeData.interfaceId = val
-      this.activeData.interfaceName = item.fullName
     }
   }
 }

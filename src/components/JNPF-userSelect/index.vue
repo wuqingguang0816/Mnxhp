@@ -87,7 +87,7 @@
                 </el-tree>
               </el-tab-pane>
             </el-tabs>
-            <template v-if="selectType === 'custom'">
+            <template v-else>
               <div class="custom-title">全部数据</div>
               <div class="single-list" ref="infiniteBody">
                 <template v-if="ableList.length">
@@ -192,6 +192,10 @@ export default {
       type: String,
       default: 'all'
     },
+    ableRelationIds: {
+      type: Array,
+      default: () => []
+    },
     ableDepIds: {
       type: Array,
       default: () => []
@@ -248,6 +252,13 @@ export default {
         keyword: '',
         currentPage: 1,
         pageSize: 20,
+      },
+      ableQuery: {
+        departIds: [],
+        positionIds: [],
+        userIds: [],
+        roleIds: [],
+        groupIds: []
       }
     }
   },
@@ -337,11 +348,7 @@ export default {
       this.listLoading = true
       let query = {
         pagination: this.pagination,
-        departIds: this.ableDepIds,
-        positionIds: this.ablePosIds,
-        userIds: this.ableUserIds,
-        roleIds: this.ableRoleIds,
-        groupIds: this.ableGroupIds,
+        ...this.ableQuery
       }
       getUsersByUserCondition(query).then(res => {
         if (res.data.list.length < this.pagination.pageSize) {
@@ -377,15 +384,38 @@ export default {
       if (this.selectType === 'all') {
         this.activeName = 'all'
         this.setDefault()
-      }
-      if (this.selectType === 'custom') {
-        this.ableList = []
+      } else {
+        if (this.selectType === 'custom') {
+          this.ableQuery = {
+            departIds: this.ableDepIds,
+            positionIds: this.ablePosIds,
+            userIds: this.ableUserIds,
+            roleIds: this.ableRoleIds,
+            groupIds: this.ableGroupIds,
+          }
+        } else {
+          const id = this.getAbleKey(this.selectType)
+          this.ableQuery = {
+            departIds: [],
+            positionIds: [],
+            userIds: [],
+            roleIds: [],
+            groupIds: []
+          }
+          this.ableQuery[id] = this.ableRelationIds
+        }
         this.getData()
         this.$nextTick(() => {
           this.bindScroll()
           this.setDefault()
         })
       }
+    },
+    getAbleKey(selectType) {
+      if (selectType === 'dep') return 'departIds'
+      if (selectType === 'pos') return 'positionIds'
+      if (selectType === 'role') return 'roleIds'
+      if (selectType === 'group') return 'groupIds'
     },
     confirm() {
       if (this.multiple) {
@@ -459,8 +489,7 @@ export default {
         } else {
           this.loading = false
         }
-      }
-      if (this.selectType === 'custom') {
+      } else {
         this.pagination.keyword = this.keyword
         this.pagination.currentPage = 1
         this.finish = false

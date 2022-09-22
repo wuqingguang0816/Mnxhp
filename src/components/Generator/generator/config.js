@@ -28,11 +28,11 @@ export const formConf = {
   classJson: "",
   funcs: {
     onLoad:
-      "({ formData, setFormData, setShowOrHide, setRequired, setDisabled, request, getFieldOptions, setFieldOptions }) => {\n    // 在此编写代码\n    \n}",
+      "({ formData, setFormData, setShowOrHide, setRequired, setDisabled, request }) => {\n    // 在此编写代码\n    \n}",
     beforeSubmit:
-      "({ formData, setFormData, setShowOrHide, setRequired, setDisabled, request, getFieldOptions, setFieldOptions }) => {\n    return new Promise((resolve, reject) => {\n        // 在此编写代码\n        \n        // 继续执行\n        resolve()\n    })\n}",
+      "({ formData, setFormData, setShowOrHide, setRequired, setDisabled, request }) => {\n    return new Promise((resolve, reject) => {\n        // 在此编写代码\n        \n        // 继续执行\n        resolve()\n    })\n}",
     afterSubmit:
-      "({ formData, setFormData, setShowOrHide, setRequired, setDisabled, request, getFieldOptions, setFieldOptions }) => {\n    // 在此编写代码\n    \n}"
+      "({ formData, setFormData, setShowOrHide, setRequired, setDisabled, request }) => {\n    // 在此编写代码\n    \n}"
   },
   idGlobal: 100
 };
@@ -66,9 +66,9 @@ export const inputComponents = [
     },
     on: {
       change:
-        "({ data, formData, setFormData, setShowOrHide, setRequired, setDisabled, request, getFieldOptions, setFieldOptions }) => {\n    // 在此编写代码\n    \n}",
+        "({ data, formData, setFormData, setShowOrHide, setRequired, setDisabled, request }) => {\n    // 在此编写代码\n    \n}",
       blur:
-        "({ data, formData, setFormData, setShowOrHide, setRequired, setDisabled, request, getFieldOptions, setFieldOptions }) => {\n    // 在此编写代码\n    \n}"
+        "({ data, formData, setFormData, setShowOrHide, setRequired, setDisabled, request }) => {\n    // 在此编写代码\n    \n}"
     },
     placeholder: "请输入",
     style: { width: "100%" },
@@ -99,6 +99,12 @@ export const inputComponents = [
       tableName: "",
       regList: [],
       trigger: "blur"
+    },
+    on: {
+      change:
+        "({ data, formData, setFormData, setShowOrHide, setRequired, setDisabled, request }) => {\n    // 在此编写代码\n    \n}",
+      blur:
+        "({ data, formData, setFormData, setShowOrHide, setRequired, setDisabled, request }) => {\n    // 在此编写代码\n    \n}"
     },
     type: "textarea",
     placeholder: "请输入",
@@ -133,9 +139,9 @@ export const inputComponents = [
     },
     on: {
       change:
-        "({ data, formData, setFormData, setShowOrHide, setRequired, setDisabled, request, getFieldOptions, setFieldOptions }) => {\n    // 在此编写代码\n    \n}",
+        "({ data, formData, setFormData, setShowOrHide, setRequired, setDisabled, request }) => {\n    // 在此编写代码\n    \n}",
       blur:
-        "({ data, formData, setFormData, setShowOrHide, setRequired, setDisabled, request, getFieldOptions, setFieldOptions }) => {\n    // 在此编写代码\n    \n}"
+        "({ data, formData, setFormData, setShowOrHide, setRequired, setDisabled, request }) => {\n    // 在此编写代码\n    \n}"
     },
     style: { width: null },
     placeholder: "数字文本",
@@ -168,7 +174,7 @@ export const inputComponents = [
     },
     on: {
       change:
-        "({ data, formData, setFormData, setShowOrHide, setRequired, setDisabled, request, getFieldOptions, setFieldOptions }) => {\n    // 在此编写代码\n    \n}"
+        "({ data, formData, setFormData, setShowOrHide, setRequired, setDisabled, request }) => {\n    // 在此编写代码\n    \n}"
     },
     disabled: false,
     activeTxt: "开",
@@ -202,6 +208,7 @@ export const inputComponents = [
       dictionaryType: "",
       propsUrl: "",
       propsName: "",
+      templateJson: [],
       props: {
         label: "fullName",
         value: "id"
@@ -221,7 +228,7 @@ export const inputComponents = [
     },
     on: {
       change:
-        "({ data, formData, setFormData, setShowOrHide, setRequired, setDisabled, request, getFieldOptions, setFieldOptions }) => {\n    // 在此编写代码\n    \n}"
+        "({ data, formData, setFormData, setShowOrHide, setRequired, setDisabled, request }) => {\n    // 在此编写代码\n    \n}"
     },
     style: {},
     size: "small",
@@ -251,6 +258,7 @@ export const inputComponents = [
       dictionaryType: "",
       propsUrl: "",
       propsName: "",
+      templateJson: [],
       props: {
         label: "fullName",
         value: "id"
@@ -270,7 +278,7 @@ export const inputComponents = [
     },
     on: {
       change:
-        "({ data, formData, setFormData, setShowOrHide, setRequired, setDisabled, request, getFieldOptions, setFieldOptions }) => {\n    // 在此编写代码\n    \n}"
+        "({ data, formData, setFormData, setShowOrHide, setRequired, setDisabled, request }) => {\n    // 在此编写代码\n    \n}"
     },
     style: {},
     size: "small",
@@ -298,6 +306,7 @@ export const inputComponents = [
       dictionaryType: "",
       propsUrl: "",
       propsName: "",
+      templateJson: [],
       props: {
         label: "fullName",
         value: "id"
@@ -317,7 +326,7 @@ export const inputComponents = [
     },
     on: {
       change:
-        "({ data, formData, setFormData, setShowOrHide, setRequired, setDisabled, request, getFieldOptions, setFieldOptions }) => {\n    // 在此编写代码\n    \n}"
+        "({ data, formData, setFormData, setShowOrHide, setRequired, setDisabled, request }) => {\n    // 在此编写代码\n    \n}"
     },
     placeholder: "请选择",
     style: { width: "100%" },
@@ -347,6 +356,7 @@ export const inputComponents = [
       dataType: "static",
       propsUrl: "",
       propsName: "",
+      templateJson: [],
       dictionaryType: ""
     },
     options: [
@@ -363,9 +373,9 @@ export const inputComponents = [
     ],
     on: {
       change:
-        "({ data, formData, setFormData, setShowOrHide, setRequired, setDisabled, request, getFieldOptions, setFieldOptions }) => {\n    // 在此编写代码\n    \n}",
+        "({ data, formData, setFormData, setShowOrHide, setRequired, setDisabled, request }) => {\n    // 在此编写代码\n    \n}",
       blur:
-        "({ data, formData, setFormData, setShowOrHide, setRequired, setDisabled, request, getFieldOptions, setFieldOptions }) => {\n    // 在此编写代码\n    \n}"
+        "({ data, formData, setFormData, setShowOrHide, setRequired, setDisabled, request }) => {\n    // 在此编写代码\n    \n}"
     },
     placeholder: "请选择",
     style: { width: "100%" },
@@ -404,9 +414,9 @@ export const inputComponents = [
     },
     on: {
       change:
-        "({ data, formData, setFormData, setShowOrHide, setRequired, setDisabled, request, getFieldOptions, setFieldOptions }) => {\n    // 在此编写代码\n    \n}",
+        "({ data, formData, setFormData, setShowOrHide, setRequired, setDisabled, request }) => {\n    // 在此编写代码\n    \n}",
       blur:
-        "({ data, formData, setFormData, setShowOrHide, setRequired, setDisabled, request, getFieldOptions, setFieldOptions }) => {\n    // 在此编写代码\n    \n}"
+        "({ data, formData, setFormData, setShowOrHide, setRequired, setDisabled, request }) => {\n    // 在此编写代码\n    \n}"
     },
     placeholder: "请选择",
     type: "date",
@@ -438,9 +448,9 @@ export const inputComponents = [
     },
     on: {
       change:
-        "({ data, formData, setFormData, setShowOrHide, setRequired, setDisabled, request, getFieldOptions, setFieldOptions }) => {\n    // 在此编写代码\n    \n}",
+        "({ data, formData, setFormData, setShowOrHide, setRequired, setDisabled, request }) => {\n    // 在此编写代码\n    \n}",
       blur:
-        "({ data, formData, setFormData, setShowOrHide, setRequired, setDisabled, request, getFieldOptions, setFieldOptions }) => {\n    // 在此编写代码\n    \n}"
+        "({ data, formData, setFormData, setShowOrHide, setRequired, setDisabled, request }) => {\n    // 在此编写代码\n    \n}"
     },
     placeholder: "请选择",
     style: { width: "100%" },
@@ -474,7 +484,7 @@ export const inputComponents = [
     },
     on: {
       change:
-        "({ data, formData, setFormData, setShowOrHide, setRequired, setDisabled, request, getFieldOptions, setFieldOptions }) => {\n    // 在此编写代码\n    \n}"
+        "({ data, formData, setFormData, setShowOrHide, setRequired, setDisabled, request }) => {\n    // 在此编写代码\n    \n}"
     },
     disabled: false,
     accept: "",
@@ -505,7 +515,7 @@ export const inputComponents = [
     },
     on: {
       change:
-        "({ data, formData, setFormData, setShowOrHide, setRequired, setDisabled, request, getFieldOptions, setFieldOptions }) => {\n    // 在此编写代码\n    \n}"
+        "({ data, formData, setFormData, setShowOrHide, setRequired, setDisabled, request }) => {\n    // 在此编写代码\n    \n}"
     },
     disabled: false,
     accept: "",
@@ -559,7 +569,7 @@ export const inputComponents = [
     },
     on: {
       change:
-        "({ data, formData, setFormData, setShowOrHide, setRequired, setDisabled, request, getFieldOptions, setFieldOptions }) => {\n    // 在此编写代码\n    \n}"
+        "({ data, formData, setFormData, setShowOrHide, setRequired, setDisabled, request }) => {\n    // 在此编写代码\n    \n}"
     },
     style: {},
     max: 5,
@@ -589,7 +599,7 @@ export const inputComponents = [
     },
     on: {
       change:
-        "({ data, formData, setFormData, setShowOrHide, setRequired, setDisabled, request, getFieldOptions, setFieldOptions }) => {\n    // 在此编写代码\n    \n}"
+        "({ data, formData, setFormData, setShowOrHide, setRequired, setDisabled, request }) => {\n    // 在此编写代码\n    \n}"
     },
     style: { width: "100%" },
     disabled: false,
@@ -638,7 +648,7 @@ export const inputComponents = [
     },
     on: {
       click:
-        "({ data, formData, setFormData, setShowOrHide, setRequired, setDisabled, request, getFieldOptions, setFieldOptions }) => {\n    // 在此编写代码\n    \n}"
+        "({ data, formData, setFormData, setShowOrHide, setRequired, setDisabled, request }) => {\n    // 在此编写代码\n    \n}"
     },
     content: '文本链接',
     href: "",
@@ -667,7 +677,7 @@ export const inputComponents = [
     },
     on: {
       click:
-        "({ data, formData, setFormData, setShowOrHide, setRequired, setDisabled, request, getFieldOptions, setFieldOptions }) => {\n    // 在此编写代码\n    \n}"
+        "({ data, formData, setFormData, setShowOrHide, setRequired, setDisabled, request }) => {\n    // 在此编写代码\n    \n}"
     },
     align: "left",
     buttonText: "按钮",
@@ -745,7 +755,7 @@ export const selectComponents = [
     },
     on: {
       change:
-        "({ data, formData, setFormData, setShowOrHide, setRequired, setDisabled, request, getFieldOptions, setFieldOptions }) => {\n    // 在此编写代码\n    \n}"
+        "({ data, formData, setFormData, setShowOrHide, setRequired, setDisabled, request }) => {\n    // 在此编写代码\n    \n}"
     },
     style: { width: "100%" },
     placeholder: "请选择",
@@ -775,7 +785,7 @@ export const selectComponents = [
     },
     on: {
       change:
-        "({ data, formData, setFormData, setShowOrHide, setRequired, setDisabled, request, getFieldOptions, setFieldOptions }) => {\n    // 在此编写代码\n    \n}"
+        "({ data, formData, setFormData, setShowOrHide, setRequired, setDisabled, request }) => {\n    // 在此编写代码\n    \n}"
     },
     style: { width: "100%" },
     placeholder: "请选择",
@@ -807,7 +817,7 @@ export const selectComponents = [
     },
     on: {
       change:
-        "({ data, formData, setFormData, setShowOrHide, setRequired, setDisabled, request, getFieldOptions, setFieldOptions }) => {\n    // 在此编写代码\n    \n}"
+        "({ data, formData, setFormData, setShowOrHide, setRequired, setDisabled, request }) => {\n    // 在此编写代码\n    \n}"
     },
     style: { width: "100%" },
     placeholder: "请选择",
@@ -836,20 +846,23 @@ export const selectComponents = [
       visibility: ["pc", "app"],
       tableName: "",
       regList: [],
-      trigger: "click"
+      trigger: "click",
+      relationField: '',
     },
     on: {
       change:
-        "({ data, formData, setFormData, setShowOrHide, setRequired, setDisabled, request, getFieldOptions, setFieldOptions }) => {\n    // 在此编写代码\n    \n}"
+        "({ data, formData, setFormData, setShowOrHide, setRequired, setDisabled, request }) => {\n    // 在此编写代码\n    \n}"
     },
     style: { width: "100%" },
     placeholder: "请选择",
     selectType: 'all',
+    ableRelationIds: [],
     ableDepIds: [],
     ablePosIds: [],
     ableUserIds: [],
     ableRoleIds: [],
     ableGroupIds: [],
+    relationField: '',
     multiple: false,
     clearable: true,
     disabled: false
@@ -875,7 +888,7 @@ export const selectComponents = [
     },
     on: {
       change:
-        "({ data, formData, setFormData, setShowOrHide, setRequired, setDisabled, request, getFieldOptions, setFieldOptions }) => {\n    // 在此编写代码\n    \n}"
+        "({ data, formData, setFormData, setShowOrHide, setRequired, setDisabled, request }) => {\n    // 在此编写代码\n    \n}"
     },
     style: { width: "100%" },
     placeholder: "请选择",
@@ -904,7 +917,7 @@ export const selectComponents = [
     },
     on: {
       change:
-        "({ data, formData, setFormData, setShowOrHide, setRequired, setDisabled, request, getFieldOptions, setFieldOptions }) => {\n    // 在此编写代码\n    \n}"
+        "({ data, formData, setFormData, setShowOrHide, setRequired, setDisabled, request }) => {\n    // 在此编写代码\n    \n}"
     },
     style: { width: "100%" },
     placeholder: "请选择",
@@ -934,11 +947,12 @@ export const selectComponents = [
       dataType: "static",
       dictionaryType: "",
       propsUrl: "",
-      propsName: ""
+      propsName: "",
+      templateJson: [],
     },
     on: {
       change:
-        "({ data, formData, setFormData, setShowOrHide, setRequired, setDisabled, request, getFieldOptions, setFieldOptions }) => {\n    // 在此编写代码\n    \n}"
+        "({ data, formData, setFormData, setShowOrHide, setRequired, setDisabled, request }) => {\n    // 在此编写代码\n    \n}"
     },
     style: { width: "100%" },
     placeholder: "请选择",
@@ -987,12 +1001,13 @@ export const selectComponents = [
     },
     on: {
       change:
-        "({ data, formData, setFormData, setShowOrHide, setRequired, setDisabled, request, getFieldOptions, setFieldOptions }) => {\n    // 在此编写代码\n    \n}"
+        "({ data, formData, setFormData, setShowOrHide, setRequired, setDisabled, request }) => {\n    // 在此编写代码\n    \n}"
     },
     style: { width: "100%" },
     placeholder: "请选择",
     interfaceId: "",
     interfaceName: "",
+    templateJson: [],
     hasPage: false,
     pageSize: 20,
     columnOptions: [],
@@ -1065,7 +1080,7 @@ export const selectComponents = [
     },
     on: {
       change:
-        "({ data, formData, setFormData, setShowOrHide, setRequired, setDisabled, request, getFieldOptions, setFieldOptions }) => {\n    // 在此编写代码\n    \n}"
+        "({ data, formData, setFormData, setShowOrHide, setRequired, setDisabled, request }) => {\n    // 在此编写代码\n    \n}"
     },
     style: { width: "100%" },
     placeholder: "请选择",
@@ -1096,7 +1111,7 @@ export const selectComponents = [
     },
     on: {
       change:
-        "({ data, formData, setFormData, setShowOrHide, setRequired, setDisabled, request, getFieldOptions, setFieldOptions }) => {\n    // 在此编写代码\n    \n}"
+        "({ data, formData, setFormData, setShowOrHide, setRequired, setDisabled, request }) => {\n    // 在此编写代码\n    \n}"
     },
     style: { width: "100%" },
     placeholder: "请选择",
@@ -1133,12 +1148,13 @@ export const selectComponents = [
     },
     on: {
       change:
-        "({ data, formData, setFormData, setShowOrHide, setRequired, setDisabled, request, getFieldOptions, setFieldOptions }) => {\n    // 在此编写代码\n    \n}"
+        "({ data, formData, setFormData, setShowOrHide, setRequired, setDisabled, request }) => {\n    // 在此编写代码\n    \n}"
     },
     style: { width: "100%" },
     placeholder: "请选择",
     interfaceId: "",
     interfaceName: "",
+    templateJson: [],
     hasPage: false,
     pageSize: 20,
     columnOptions: [],
@@ -1433,7 +1449,7 @@ export const layoutComponents = [
     },
     on: {
       change:
-        "({ data, formData, setFormData, setShowOrHide, setRequired, setDisabled, request, getFieldOptions, setFieldOptions }) => {\n    // 在此编写代码\n    \n}"
+        "({ data, formData, setFormData, setShowOrHide, setRequired, setDisabled, request }) => {\n    // 在此编写代码\n    \n}"
     },
     accordion: false
   },
@@ -1467,7 +1483,7 @@ export const layoutComponents = [
     },
     on: {
       "tab-click":
-        "({ data, formData, setFormData, setShowOrHide, setRequired, setDisabled, request, getFieldOptions, setFieldOptions }) => {\n    // 在此编写代码\n    \n}"
+        "({ data, formData, setFormData, setShowOrHide, setRequired, setDisabled, request }) => {\n    // 在此编写代码\n    \n}"
     },
     type: "",
     "tab-position": "top"

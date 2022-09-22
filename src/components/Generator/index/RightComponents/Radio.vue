@@ -43,8 +43,8 @@
     </template>
     <template v-if="activeData.__config__.dataType === 'dictionary'">
       <el-form-item label="数据字典">
-        <JNPF-TreeSelect :options="treeData" v-model="activeData.__config__.dictionaryType"
-          placeholder="请选择数据字典" lastLevel clearable>
+        <JNPF-TreeSelect :options="dicOptions" v-model="activeData.__config__.dictionaryType"
+          placeholder="请选择数据字典" lastLevel clearable @change="dictionaryTypeChange">
         </JNPF-TreeSelect>
       </el-form-item>
       <el-form-item label="存储字段">
@@ -65,6 +65,26 @@
       <el-form-item label="显示字段">
         <el-input v-model="activeData.__config__.props.label" placeholder="请输入显示字段" />
       </el-form-item>
+      <el-table :data="activeData.__config__.templateJson"
+        v-if="activeData.__config__.templateJson && activeData.__config__.templateJson.length">
+        <el-table-column type="index" width="50" label="序号" align="center" />
+        <el-table-column prop="field" label="参数名称">
+          <template slot-scope="scope">
+            <span class="required-sign">{{scope.row.required?'*':''}}</span>
+            {{scope.row.fieldName?scope.row.field+'('+scope.row.fieldName+')':scope.row.field}}
+          </template>
+        </el-table-column>
+        <el-table-column prop="value" label="表单字段">
+          <template slot-scope="scope">
+            <el-select v-model="scope.row.relationField" placeholder="请选择表单字段" clearable filterable
+              @change="onRelationFieldChange($event,scope.row)">
+              <el-option v-for="item in formFieldsOptions" :key="item.realVModel"
+                :label="item.realLabel" :value="item.realVModel">
+              </el-option>
+            </el-select>
+          </template>
+        </el-table-column>
+      </el-table>
     </template>
     <el-divider />
     <!-- <el-form-item label="显示标签">
@@ -99,96 +119,11 @@
 </template>
 <script>
 import comMixin from './mixin';
-import draggable from 'vuedraggable'
-import { getDictionaryTypeSelector, getDictionaryDataSelector } from '@/api/systemData/dictionary'
-import { getDataInterfaceSelector, getDataInterfaceRes } from '@/api/systemData/dataInterface'
-import InterfaceDialog from '@/components/Process/PropPanel/InterfaceDialog'
+import dynamicMixin from './dynamicMixin';
 export default {
-  props: ['activeData'],
-  mixins: [comMixin],
-  components: { draggable, InterfaceDialog },
+  mixins: [comMixin, dynamicMixin],
   data() {
-    return {
-      treeData: [],
-      dataInterfaceSelector: []
-    }
+    return {}
   },
-  created() {
-    this.getDictionaryType()
-    this.getDataInterfaceSelector()
-  },
-  watch: {
-    'activeData.__config__.dictionaryType': function (val) {
-      if (!val) {
-        this.activeData.__slot__.options = []
-        return
-      }
-      getDictionaryDataSelector(val).then(res => {
-        this.activeData.__slot__.options = res.data.list
-      })
-    }
-  },
-  methods: {
-    getDictionaryType() {
-      getDictionaryTypeSelector().then(res => {
-        this.treeData = res.data.list
-      })
-    },
-    getDataInterfaceSelector() {
-      getDataInterfaceSelector().then(res => {
-        this.dataInterfaceSelector = res.data
-      })
-    },
-    addSelectItem() {
-      this.activeData.__slot__.options.push({
-        fullName: '',
-        id: ''
-      })
-    },
-    dataTypeChange(val) {
-      this.activeData.__config__.defaultValue = ''
-      this.activeData.__slot__.options = []
-      this.activeData.__config__.props.value = 'id'
-      this.activeData.__config__.props.label = 'fullName'
-      if (val === 'static') {
-        this.activeData.__config__.dictionaryType = ''
-        this.activeData.__config__.propsUrl = ''
-        this.activeData.__config__.propsName = ''
-      }
-      if (val === 'dynamic') {
-        this.activeData.__config__.dictionaryType = ''
-      }
-      if (val === 'dictionary') {
-        this.activeData.__config__.propsUrl = ''
-        this.activeData.__config__.propsName = ''
-      }
-    },
-    dictionaryTypeChange() {
-      this.activeData.__config__.defaultValue = ''
-    },
-    propsUrlChange(val, item) {
-      if (!val) {
-        this.activeData.__config__.propsUrl = ''
-        this.activeData.__config__.propsName = ''
-        this.activeData.__slot__.options = []
-        return
-      }
-      this.activeData.__config__.propsUrl = val
-      this.activeData.__config__.propsName = item.fullName
-      this.activeData.__config__.defaultValue = ''
-      getDataInterfaceRes(val).then(res => {
-        let data = res.data
-        if (Array.isArray(data)) {
-          this.activeData.__slot__.options = data
-        } else {
-          this.activeData.__slot__.options = []
-        }
-      }).catch(() => {
-        this.activeData.__config__.propsUrl = ''
-        this.activeData.__config__.propsName = ''
-        this.activeData.__slot__.options = []
-      })
-    }
-  }
 }
 </script>

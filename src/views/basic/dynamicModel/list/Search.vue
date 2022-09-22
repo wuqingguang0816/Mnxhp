@@ -161,7 +161,10 @@ export default {
           }
           if (config.dataType === 'dynamic') {
             if (!config.propsUrl) return
-            getDataInterfaceRes(config.propsUrl).then(res => {
+            let query = {
+              paramList: config.templateJson || [],
+            }
+            getDataInterfaceRes(config.propsUrl, query).then(res => {
               let data = res.data
               if (Array.isArray(data)) {
                 isTreeSelect ? cur.options = data : cur.__slot__.options = data

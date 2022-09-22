@@ -119,14 +119,17 @@
               :active-data="activeData" />
             <JNPFPsdInput v-if="activeData.__config__.jnpfKey==='PsdInput'"
               :active-data="activeData" />
-            <JNPFRadio v-if="activeData.__config__.jnpfKey==='radio'" :active-data="activeData" />
+            <JNPFRadio v-if="activeData.__config__.jnpfKey==='radio'" :active-data="activeData"
+              :dictionaryOptions="dictionaryOptions" :dataInterfaceOptions="dataInterfaceOptions" />
             <JNPFCheckbox v-if="activeData.__config__.jnpfKey==='checkbox'"
-              :active-data="activeData" />
+              :active-data="activeData" :dictionaryOptions="dictionaryOptions"
+              :dataInterfaceOptions="dataInterfaceOptions" />
             <JNPFSelect v-if="activeData.__config__.jnpfKey==='select'" :active-data="activeData"
               :key="activeData.__config__.renderKey" :dictionaryOptions="dictionaryOptions"
               :dataInterfaceOptions="dataInterfaceOptions" />
             <JNPFCascader v-if="activeData.__config__.jnpfKey==='cascader'"
-              :active-data="activeData" />
+              :active-data="activeData" :dictionaryOptions="dictionaryOptions"
+              :dataInterfaceOptions="dataInterfaceOptions" />
             <JNPFTime v-if="activeData.__config__.jnpfKey==='time'" :active-data="activeData" />
             <JNPFTimeRange v-if="activeData.__config__.jnpfKey==='timeRange'"
               :active-data="activeData" />
@@ -148,7 +151,8 @@
             <JNPFAddress v-if="activeData.__config__.jnpfKey==='address'"
               :active-data="activeData" />
             <TreeSelect v-if="activeData.__config__.jnpfKey==='treeSelect'"
-              :active-data="activeData" />
+              :active-data="activeData" :dictionaryOptions="dictionaryOptions"
+              :dataInterfaceOptions="dataInterfaceOptions" />
             <GroupTitle v-if="activeData.__config__.jnpfKey==='groupTitle'"
               :active-data="activeData" />
             <RelationForm v-if="activeData.__config__.jnpfKey==='relationForm'"
