@@ -103,7 +103,7 @@
               <el-checkbox checked disabled>删除</el-checkbox>
             </template>
             <template v-if="scope.row.subLayerDelete===3">
-              <el-checkbox checked disabled>删除</el-checkbox>
+              <el-checkbox disabled>删除</el-checkbox>
             </template>
             <template v-if="scope.row.subLayerDelete===0 ||scope.row.subLayerDelete===1">
               <el-checkbox v-model="scope.row.subLayerDelete" :true-label="1" :false-label="0"
