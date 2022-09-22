@@ -262,7 +262,6 @@ export default {
             timestamp: this.timestamp,
             jnpf_ticket: this.ssoTicket
           }
-          console.log("这里", query)
           this.$store.dispatch('user/login', query).then(res => {
             this.$router.push({
               path: this.redirect || '/home',

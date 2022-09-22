@@ -274,13 +274,13 @@ export default {
         document.getElementById('styleId').remove()
       }
       let classJson = formCopy.classJson
-      let hand = document.getElementsByTagName('head')[0]
+      let head = document.getElementsByTagName('head')[0]
       let style = document.createElement('style')
       style.type = 'text/css'
       style.id = 'styleId'
       let html = classJson
       style.innerText = html
-      hand.appendChild(style)
+      head.appendChild(style)
     },
     initFormData(componentList, formData) {
       this.$store.commit('generator/UPDATE_RELATION_DATA', {})
