@@ -116,7 +116,7 @@
           <div class="JNPF-common-title" v-if="item.__config__.showTitle">
             <h2>{{item.__config__.label}}</h2>
           </div>
-          <JNPF-table :data="item.__config__.defaultValue"
+          <el-table :data="item.__config__.defaultValue"
             :show-summary="!!item.__config__.defaultValue.length && item['show-summary'] && (item.summaryField && !!item.summaryField.length)"
             :summary-method="getSummaries">
             <template v-for="(column,columnIndex) in item.__config__.children">
@@ -153,7 +153,7 @@
                   :label="column.__config__.label" v-else />
               </template>
             </template>
-          </JNPF-table>
+          </el-table>
         </el-form-item>
       </template>
       <template v-if="item.__config__.jnpfKey==='tab'">

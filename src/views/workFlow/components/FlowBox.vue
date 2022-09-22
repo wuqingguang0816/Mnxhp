@@ -525,7 +525,7 @@ export default {
         this.isValidate = false
         this.handleReset()
         if (eventType === 'reject') {
-          if (!this.properties.hasSign && !this.properties.hasOpinion) {
+          if (!this.properties.hasSign && !this.properties.hasOpinion && !this.properties.isCustomCopy) {
             this.$confirm('此操作将驳回该审批单，是否继续？', '提示', {
               type: 'warning'
             }).then(() => {

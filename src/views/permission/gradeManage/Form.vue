@@ -1,6 +1,6 @@
 <template>
-  <el-dialog :title="!dataForm.id?'新建':'编辑'" :close-on-click-modal="false" :visible.sync="visible"
-    class="JNPF-dialog JNPF-dialog_center" lock-scroll width="900px">
+  <el-dialog :title="!dataForm.id?'新建分管':'编辑分管'" :close-on-click-modal="false"
+    :visible.sync="visible" class="JNPF-dialog JNPF-dialog_center" lock-scroll width="900px">
     <el-form ref="dataForm" :model="dataForm" :rules="dataRule" v-loading="formLoading"
       label-width="100px">
       <el-alert title="设置当前组织部门的管理员和相关操作权限" type="warning" :closable="false" show-icon
@@ -103,7 +103,7 @@
               <el-checkbox checked disabled>删除</el-checkbox>
             </template>
             <template v-if="scope.row.subLayerDelete===3">
-              <el-checkbox checked disabled>删除</el-checkbox>
+              <el-checkbox disabled>删除</el-checkbox>
             </template>
             <template v-if="scope.row.subLayerDelete===0 ||scope.row.subLayerDelete===1">
               <el-checkbox v-model="scope.row.subLayerDelete" :true-label="1" :false-label="0"
