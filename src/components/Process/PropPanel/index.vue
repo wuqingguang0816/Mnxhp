@@ -1468,7 +1468,7 @@
               </el-form-item>
               <el-form-item>
                 <div slot="label" class="form-item-label">意见填写
-                  <el-tooltip content="审批人在进行审批操作需填写审批意见" placement="top">
+                  <el-tooltip content="审批人在进行审批操作需填写意见" placement="top">
                     <a class="el-icon-warning-outline"></a>
                   </el-tooltip>
                 </div>
