@@ -70,9 +70,9 @@ export function binding(data) {
   })
 }
 // 解绑
-export function deleteSocials(id) {
+export function deleteSocials(userId, id) {
   return request({
-    url: `/api/permission/socials/${id}`,
+    url: `/api/permission/socials/${id}?userId=${userId}`,
     method: 'DELETE',
   })
 }

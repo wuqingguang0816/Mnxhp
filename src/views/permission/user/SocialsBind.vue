@@ -62,7 +62,7 @@ export default {
       this.$confirm('确定要解除该账号绑定?', '提示', {
         type: 'warning'
       }).then(() => {
-        deleteSocials(id).then(res => {
+        deleteSocials(this.userId, id).then(res => {
           this.$message({
             message: res.msg,
             type: 'success',
