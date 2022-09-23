@@ -231,7 +231,7 @@ export default {
     }
     if (this.modelType == 1 || this.modelType == 6) {
       this.leftComponents[1].list = [...this.leftComponents[1].list, calculateItem]
-      this.leftComponents[3].list = [...this.leftComponents[3].list, ...onlinePeculiarList]
+      this.leftComponents[0].list = [...this.leftComponents[0].list, ...onlinePeculiarList]
     }
     if (this.webType != 2 || this.modelType == 3 || this.modelType == 6) this.formConf.popupType = 'fullScreen'
   },
