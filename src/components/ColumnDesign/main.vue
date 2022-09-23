@@ -40,7 +40,8 @@
           <el-table-column prop="prop" label="字段" />
           <el-table-column prop="sortable" label="排序" width="60" align="center">
             <template slot-scope="scope">
-              <el-checkbox v-model="scope.row.sortable" />
+              <el-checkbox v-model="scope.row.sortable"
+                :disabled="scope.row.__config__&&scope.row.__config__.isSubTable" />
             </template>
           </el-table-column>
           <el-table-column prop="align" label="对齐">
