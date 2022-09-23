@@ -391,8 +391,8 @@
                   <org-select ref="start-copy-user-org" v-model="startForm.circulateUser"
                     title="添加用户" class="mb-5" />
                   <el-form-item>
-                    <div slot="label">附加条件
-                      <el-tooltip content="抄送人员增加人员选择范围附加条件" placement="top">
+                    <div slot="label">审批人范围
+                      <el-tooltip content="抄送人员增加人员选择范围审批人范围" placement="top">
                         <a class="el-icon-warning-outline"></a>
                       </el-tooltip>
                     </div>
@@ -1313,8 +1313,8 @@
                   </el-form-item>
                   <el-form-item style="margin-bottom:0!important"
                     v-if="approverForm.assigneeType === 6">
-                    <div slot="label">附加条件
-                      <el-tooltip content="指定成员增加人员选择范围附加条件" placement="top">
+                    <div slot="label">审批人范围
+                      <el-tooltip content="指定成员增加人员选择范围审批人范围" placement="top">
                         <a class="el-icon-warning-outline"></a>
                       </el-tooltip>
                     </div>
@@ -1377,8 +1377,8 @@
                   <org-select ref="approver-copy-user-org" v-model="approverForm.circulateUser"
                     title="添加用户" class="mb-5" />
                   <el-form-item>
-                    <div slot="label">附加条件
-                      <el-tooltip content="抄送人员增加人员选择范围附加条件" placement="top">
+                    <div slot="label">审批人范围
+                      <el-tooltip content="抄送人员增加人员选择范围审批人范围" placement="top">
                         <a class="el-icon-warning-outline"></a>
                       </el-tooltip>
                     </div>
@@ -2258,8 +2258,8 @@ const defaultSubFlowForm = {
   isAsync: false
 }
 const defaultApproverForm = {
-  extraRule: 1, // 附加条件,默认无附加条件
-  extraCopyRule: 1, // 抄送附加条件,默认无附加条件
+  extraRule: 1, // 审批人范围,默认无审批人范围
+  extraCopyRule: 1, // 抄送审批人范围,默认无审批人范围
   hasAgreeRule: false, // 自动同意规则,默认不启用
   agreeRules: [], // 自动同意规则数组
   formFieldType: 1,// 表单字段审核方式的类型(1-用户 2-部门)
@@ -2446,7 +2446,7 @@ const overTimeOptions = [{
 const extraRuleOptions = [
   {
     value: 1,
-    label: '无附加条件'
+    label: '无审批人范围'
   },
   {
     value: 6,

@@ -71,7 +71,7 @@
           </el-table-column>
           <el-table-column label="操作" fixed="right" width="150">
             <template slot-scope="scope">
-              <tableOpts @edit="addOrUpdateHandle(scope.row.id,scope.row.formType)"
+              <tableOpts @edit="addOrUpdateHandle(scope.row.id,scope.row.type)"
                 @del="handleDel(scope.row.id)">
                 <el-dropdown>
                   <span class="el-dropdown-link">
@@ -100,21 +100,21 @@
     <preview v-if="previewVisible" ref="preview" @close="previewVisible=false" />
     <previewDialog :visible.sync="previewDialogVisible" :id="currRow.id" type="flow"
       @previewPc="previewPc" />
-    <el-dialog title="新建表单" :visible.sync="dialogVisible" class="JNPF-dialog JNPF-dialog_center"
+    <el-dialog title="新建流程" :visible.sync="dialogVisible" class="JNPF-dialog JNPF-dialog_center"
       lock-scroll width="600px">
       <div class="add-main">
-        <div class="add-item add-item-sys" @click="addFlow(1)">
+        <div class="add-item add-item-sys" @click="addFlow(0)">
           <i class="add-icon el-icon-document"></i>
           <div class="add-txt">
-            <p class="add-title">系统表单</p>
-            <p class="add-desc">关联系统原有表单，便捷设计</p>
+            <p class="add-title">发起流程</p>
+            <p class="add-desc">快速发起的工作流程</p>
           </div>
         </div>
-        <div class="add-item" @click="addFlow(2)">
+        <div class="add-item" @click="addFlow(1)">
           <i class="add-icon icon-ym icon-ym-generator-company"></i>
           <div class="add-txt">
-            <p class="add-title">自定义表单</p>
-            <p class="add-desc">自定义设计流程表单</p>
+            <p class="add-title">功能流程</p>
+            <p class="add-desc">在线开发和代码生成的功能流程</p>
           </div>
         </div>
       </div>
@@ -202,15 +202,15 @@ export default {
         })
       }).catch(() => { });
     },
-    addFlow(formType) {
+    addFlow(type) {
       this.dialogVisible = false
-      this.addOrUpdateHandle('', formType)
+      this.addOrUpdateHandle('', type)
     },
     // 新增 / 修改
-    addOrUpdateHandle(id, formType) {
+    addOrUpdateHandle(id, type) {
       this.formVisible = true
       this.$nextTick(() => {
-        this.$refs.Form.init(this.categoryList, id, formType)
+        this.$refs.Form.init(this.categoryList, id, type)
       })
     },
     copy(id) {
@@ -295,7 +295,7 @@ export default {
 <style lang="scss" scoped>
 .JNPF-dialog {
   >>> .el-dialog__body {
-    padding: 50px 30px !important;
+    padding: 50px 20px !important;
   }
 }
 .add-main {
@@ -303,9 +303,9 @@ export default {
   align-items: center;
   justify-content: space-between;
   .add-item {
-    width: 255px;
+    width: 265px;
     height: 136px;
-    background: #eff9ff;
+    background: #f0fffa;
     display: flex;
     align-items: center;
     cursor: pointer;
@@ -314,19 +314,19 @@ export default {
       opacity: 0.9;
     }
     &.add-item-sys {
-      background: #f1f5ff;
+      background: #fffbf5;
       .add-icon {
-        background: #ccd9ff;
-        color: #537eff;
+        background: #ffefd5;
+        color: #ce7e2e;
       }
     }
     .add-icon {
       width: 56px;
       height: 56px;
       margin-right: 10px;
-      background: #ceeaff;
       border-radius: 10px;
-      color: #46adfe;
+      background: #ccf7e0;
+      color: #12a572;
       flex-shrink: 0;
       font-size: 30px;
       line-height: 56px;
