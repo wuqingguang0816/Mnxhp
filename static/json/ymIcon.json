@@ -6,6 +6,20 @@
   "description": "",
   "glyphs": [
     {
+      "icon_id": "31997659",
+      "name": "launchFlow",
+      "font_class": "launchFlow",
+      "unicode": "e8d2",
+      "unicode_decimal": 59602
+    },
+    {
+      "icon_id": "31997660",
+      "name": "funcFlow",
+      "font_class": "funcFlow",
+      "unicode": "e8d3",
+      "unicode_decimal": 59603
+    },
+    {
       "icon_id": "31355272",
       "name": "accountConfig",
       "font_class": "accountConfig",

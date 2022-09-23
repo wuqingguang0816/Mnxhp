@@ -1,10 +1,10 @@
 @font-face {
   font-family: "icon-ym";
   /* Project id 3271933 */
-  src: url('iconfont.woff2?t=1660892518546') format('woff2'),
-    url('iconfont.woff?t=1660892518546') format('woff'),
-    url('iconfont.ttf?t=1660892518546') format('truetype'),
-    url('iconfont.svg?t=1660892518546#icon-ym') format('svg');
+  src: url('iconfont.woff2?t=1663905007310') format('woff2'),
+    url('iconfont.woff?t=1663905007310') format('woff'),
+    url('iconfont.ttf?t=1663905007310') format('truetype'),
+    url('iconfont.svg?t=1663905007310#icon-ym') format('svg');
 }
 
 .icon-ym {
@@ -13,6 +13,14 @@
   font-style: normal;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-ym-launchFlow:before {
+  content: "\e8d2";
+}
+
+.icon-ym-funcFlow:before {
+  content: "\e8d3";
 }
 
 .icon-ym-accountConfig:before {
