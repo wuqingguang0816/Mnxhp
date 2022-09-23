@@ -3090,7 +3090,8 @@ export default {
       this.initiator = this.value.properties && this.value.properties.initiator
       this.initiatePos = this.value.properties && this.value.properties.initiatePos
       this.initiateRole = this.value.properties && this.value.properties.initiateRole
-      Object.assign(this.startForm, this.value.properties)
+      let properties = JSON.parse(JSON.stringify(this.value.properties))
+      Object.assign(this.startForm, properties)
     },
     /**
     * 初始化审批节点所需数据
@@ -3098,9 +3099,9 @@ export default {
     initApproverNodeData() {
       this.activeName = 'config'
       let properties = JSON.parse(JSON.stringify(this.value.properties))
-      this.approverForm = { ...this.approverForm, ...properties }
-      this.getNodeOption()
       this.approverForm.formOperates = this.initFormOperates(this.value)
+      Object.assign(this.approverForm, properties)
+      this.getNodeOption()
       this.approverForm.approveMsgConfig.on = typeof this.approverForm.approveMsgConfig.on === 'number' ? this.approverForm.approveMsgConfig.on : 2
       this.approverForm.rejectMsgConfig.on = typeof this.approverForm.rejectMsgConfig.on === 'number' ? this.approverForm.rejectMsgConfig.on : 2
     },
