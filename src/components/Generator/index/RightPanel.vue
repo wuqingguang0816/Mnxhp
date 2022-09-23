@@ -738,6 +738,7 @@ export default {
       deep: true
     },
     activeData(val) {
+      if (!val || !val.__config__) return
       if (val.__config__.jnpfKey === 'relationFormAttr') {
         this.$nextTick(() => {
           this.$refs.relationFormAttr && this.$refs.relationFormAttr.getOptions()
