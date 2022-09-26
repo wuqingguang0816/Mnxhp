@@ -132,7 +132,8 @@ export default {
       },
       keyword: '',
       pickerVal: [],
-      sendTime: '',
+      startTime: '',
+      endTime: '',
       msgType: '',
       msgTypeList: [],
       messageSource: '',
@@ -150,7 +151,8 @@ export default {
       let query = {
         ...this.listQuery,
         keyword: this.keyword,
-        sendTime: this.sendTime,
+        startTime: this.startTime,
+        endTime: this.endTime,
         messageType: this.msgType,
         messageSource: this.messageSource,
       }
@@ -175,9 +177,11 @@ export default {
     },
     search() {
       if (this.pickerVal && this.pickerVal.length) {
-        this.sendTime = this.pickerVal
+        this.startTime = this.pickerVal[0]
+        this.endTime = this.pickerVal[1]
       } else {
-        this.sendTime = ''
+        this.startTime = ''
+        this.endTime = ''
       }
       this.listQuery = {
         currentPage: 1,
@@ -231,7 +235,8 @@ export default {
     },
     refresh() {
       this.pickerVal = ''
-      this.sendTime = ''
+      this.startTime = ''
+      this.endTime = ''
       this.keyword = ''
       this.msgType = ''
       this.listQuery = {
