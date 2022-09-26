@@ -49,7 +49,8 @@
               </jnpf-form-tip-item>
             </template>
             <template v-if="dataForm.formType!==1">
-              <jnpf-form-tip-item label="接口地址" prop="interfaceUrl">
+              <jnpf-form-tip-item label="接口地址" prop="interfaceUrl"
+                tip-label="后端接口请求地址, 系统将会请求地址中的saveData(post方法), getData(get方法)接口例：/api/example/UserController">
                 <el-input v-model="dataForm.interfaceUrl" placeholder="接口地址" />
               </jnpf-form-tip-item>
             </template>
@@ -151,7 +152,7 @@ import Generator from '@/components/Generator/index/Home'
 import FieldForm from './FieldForm'
 import TableForm from '@/views/generator/TableForm'
 import mixin from '@/mixins/generator/common'
-import { getFormInfo, SaveAudit, Update } from '@/api/workFlow/FormDesign'
+import { getFormInfo, Create, Update } from '@/api/workFlow/FormDesign'
 
 export default {
   mixins: [mixin],
@@ -241,7 +242,7 @@ export default {
         this.btnLoading = true
         this.dataForm.draftJson = JSON.stringify(res.formData)
         this.dataForm.tableJson = JSON.stringify(this.tables)
-        const formMethod = this.dataForm.id ? Update : SaveAudit
+        const formMethod = this.dataForm.id ? Update : Create
         formMethod(this.dataForm).then((res) => {
           this.$message({
             message: res.msg,

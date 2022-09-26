@@ -3,7 +3,7 @@ import request from '@/utils/request'
 //表单列表
 export function getFormList(data) {
   return request({
-    url: `/api/workflow/Form`,
+    url: `/api/flowForm/Form`,
     method: 'get',
     data
   })
@@ -11,14 +11,14 @@ export function getFormList(data) {
 //查看
 export function getFormInfo(id) {
   return request({
-    url: `/api/workflow/Form/${id}`,
+    url: `/api/flowForm/Form/${id}`,
     method: 'get'
   })
 }
-//暂存表单
-export function SaveAudit(data) {
+//新建表单
+export function Create(data) {
   return request({
-    url: `/api/workflow/Form`,
+    url: `/api/flowForm/Form`,
     method: 'post',
     data
   })
@@ -27,7 +27,7 @@ export function SaveAudit(data) {
 //修改表单
 export function Update(data) {
   return request({
-    url: `/api/workflow/Form`,
+    url: `/api/flowForm/Form`,
     method: 'put',
     data
   })
@@ -36,7 +36,7 @@ export function Update(data) {
 //发布/回滚
 export function release(id, isRelease) {
   return request({
-    url: `/api/workflow/Form/Release/${id}` + '?isRelease=' + isRelease,
+    url: `/api/flowForm/Form/Release/${id}` + '?isRelease=' + isRelease,
     method: 'post',
   })
 }
@@ -44,7 +44,7 @@ export function release(id, isRelease) {
 //复制表单
 export function copyForm(id) {
   return request({
-    url: `/api/workflow/Form/${id}/Actions/Copy`,
+    url: `/api/flowForm/Form/${id}/Actions/Copy`,
     method: 'get',
   })
 }
@@ -52,7 +52,7 @@ export function copyForm(id) {
 //删除表单
 export function del(id) {
   return request({
-    url: `/api/workflow/Form/${id}`,
+    url: `/api/flowForm/Form/${id}`,
     method: 'delete',
   })
 }
@@ -60,10 +60,15 @@ export function del(id) {
 //导出
 export function exportData(id) {
   return request({
-    url: `/api/workflow/Form/${id}/Actions/ExportData`,
+    url: `/api/flowForm/Form/${id}/Actions/ExportData`,
     method: 'get',
   })
 }
 
-
-
+//根据表单id获取表单字段
+export function getFormField(id) {
+  return request({
+    url: `/api/flowForm/Form/${id}/getField`,
+    method: 'get',
+  })
+}
