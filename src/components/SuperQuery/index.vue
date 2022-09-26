@@ -422,6 +422,15 @@ export default {
         this.saveBtnLoading = false
       })
     },
+    getDataType(jnpfKey) {
+      if (!jnpfKey) return ''
+      if (['numInput', 'date', 'rate', 'slider'].includes(jnpfKey)) {
+        return 'number'
+      } else if (['uploadFz', 'uploadImg', 'cascader', 'comSelect', 'address'].includes(jnpfKey)) {
+        return 'array'
+      }
+      return ''
+    },
     exist() {
       let isOk = true
       for (let i = 0; i < this.conditionList.length; i++) {
@@ -429,6 +438,21 @@ export default {
         if (!e.field) {
           this.$message({
             message: `请选择查询字段`,
+            type: 'error',
+            duration: 1000
+          });
+          isOk = false
+          break
+        }
+        let flag = false
+        if (this.getDataType(e.jnpfKey) === 'array') {
+          flag = this.jnpf.isEmptyArray(e.fieldValue)
+        } else {
+          flag = this.jnpf.isEmpty(e.fieldValue)
+        }
+        if (flag) {
+          this.$message({
+            message: `空条件不能保存`,
             type: 'error',
             duration: 1000
           });

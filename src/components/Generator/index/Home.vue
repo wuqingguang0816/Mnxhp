@@ -201,7 +201,10 @@ export default {
     drawingList: {
       handler(val) {
         this.saveDrawingListDebounce(val)
-        if (val.length === 0) this.idGlobal = 100
+        if (val.length === 0) {
+          this.idGlobal = 100
+          this.activeData = {}
+        }
         // if (!this.isDrawingListChange) {
         //   this.isDrawingListChange = true
         //   return
@@ -231,7 +234,7 @@ export default {
     }
     if (this.modelType == 1 || this.modelType == 6) {
       this.leftComponents[1].list = [...this.leftComponents[1].list, calculateItem]
-      this.leftComponents[3].list = [...this.leftComponents[3].list, ...onlinePeculiarList]
+      this.leftComponents[0].list = [...this.leftComponents[0].list, ...onlinePeculiarList]
     }
     if (this.webType != 2 || this.modelType == 3 || this.modelType == 6) this.formConf.popupType = 'fullScreen'
   },

@@ -21,7 +21,7 @@
           </el-col>
           <el-col :span="1" class="col-line-height">
             <el-button size="small" type="" v-if="item.entity"
-              @click="deleteSocials(item.entity.id)">解绑</el-button>
+              @click="deleteSocials(item.entity.userId,item.entity.id)">解绑</el-button>
             <el-button size="small" type="primary" v-if="!item.entity"
               @click="bingding(item.enname)">绑定</el-button>
           </el-col>
@@ -52,6 +52,7 @@ export default {
       this.loading = true
       getSocialsUserList().then(res => {
         this.socialsList = res.data;
+        console.log(this.socialsList)
         this.loading = false
       })
     },
@@ -101,11 +102,11 @@ export default {
       this.listenerLoad = true
     },
 
-    deleteSocials(id) {
+    deleteSocials(userId, id) {
       this.$confirm('确定要解除该账号绑定?', '提示', {
         type: 'warning'
       }).then(() => {
-        deleteSocials(id).then(res => {
+        deleteSocials(userId, id).then(res => {
           this.$message({
             message: res.msg,
             type: 'success',

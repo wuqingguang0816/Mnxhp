@@ -98,7 +98,7 @@ const defaultStartForm = {
     templateJson: []
   },
   noticeMsgConfig: {
-    on: 0,
+    on: 3,
     msgId: '',
     msgName: '',
     templateJson: []

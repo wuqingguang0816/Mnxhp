@@ -7,7 +7,7 @@
         <el-input v-model="dataForm.fullName" placeholder="请输入名称" clearable />
       </jnpf-form-tip-item>
       <jnpf-form-tip-item label="编码" prop="enCode">
-        <el-input v-model="dataForm.enCode" placeholder="请输入业务编码" clearable />
+        <el-input v-model="dataForm.enCode" placeholder="请输入编码" clearable />
       </jnpf-form-tip-item>
       <jnpf-form-tip-item label="企业ID" prop="enterpriseId" tip-label="请在“企业微信管理后台-我的企业-企业信息”页中获得">
         <el-input v-model="dataForm.enterpriseId" placeholder="请输入企业ID" clearable />
