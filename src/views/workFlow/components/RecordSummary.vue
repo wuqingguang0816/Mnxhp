@@ -47,7 +47,7 @@
                         {{child.handleOpinion}}
                       </div>
                       <div class="file-List" v-if="child.fileList.length">
-                        <JNPF-UploadFz v-model="child.fileList" detailed disabled :isIcon='false'>
+                        <JNPF-UploadFz v-model="child.fileList" detailed disabled :showIcon='false'>
                         </JNPF-UploadFz>
                       </div>
                     </div>
