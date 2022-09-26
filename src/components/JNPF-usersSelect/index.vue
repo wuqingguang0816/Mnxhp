@@ -138,7 +138,7 @@
             <el-button @click="removeAll" type="text" class="removeAllBtn">清空列表</el-button>
           </div>
           <div class="transfer-pane__body shadow right-pane">
-            <template v-if="selectedData.length">
+            <template v-if="selectedData.length&&!multiple">
               <div v-for="(item,index) in selectedData" :key="index" class="selected-item-user">
                 <div class="selected-item-main">
                   <el-avatar :size="36" :src="define.comUrl+item.headIcon"
@@ -154,6 +154,27 @@
                     <p class="organize" :title="item.organize">{{item.organize}}</p>
                   </div>
                 </div>
+              </div>
+            </template>
+            <template v-else-if="haveData&&multiple">
+              <div v-for="(item,index) in selectedList" :key="index"
+                class="selected-item-user-multiple">
+                <template v-if="item.children.length">
+                  <p class="selected-item-title">
+                    <i :class="item.icon"></i><span>{{item.fullName}}</span>
+                  </p>
+                  <div class="selected-item-main" v-for="(child,i) in item.children" :key="i">
+                    <el-avatar :size="36" :src="define.comUrl+child.headIcon"
+                      class="selected-item-headIcon" v-if="child.type==='user'">
+                    </el-avatar>
+                    <div class="selected-item-icon" v-else>{{child.fullName.substring(0,1)}}</div>
+                    <div class="selected-item-text">
+                      <p class="name">{{child.fullName}}</p>
+                      <p class="organize" :title="child.organize">{{child.organize}}</p>
+                    </div>
+                    <i class="el-icon-delete delete" @click="removeMulData(index,i)"></i>
+                  </div>
+                </template>
               </div>
             </template>
             <el-empty description="暂无数据" :image-size="120" v-else></el-empty>
@@ -174,6 +195,43 @@ import { addResizeListener, removeResizeListener } from 'element-ui/src/utils/re
 import { getPositionSelector } from '@/api/permission/position'
 import { getRoleSelector } from '@/api/permission/role'
 import { getGroupSelector } from '@/api/permission/group'
+const defaultSelectedList = [
+  {
+    id: "department",
+    type: "department",
+    fullName: "部门",
+    icon: "icon-ym icon-ym-tree-department1",
+    children: []
+  },
+  {
+    id: "position",
+    type: "position",
+    fullName: "岗位",
+    icon: "icon-ym icon-ym-tree-position1",
+    children: []
+  },
+  {
+    id: "user",
+    type: "user",
+    fullName: "用户",
+    icon: "icon-ym icon-ym-tree-user2",
+    children: []
+  },
+  {
+    id: "group",
+    type: "group",
+    fullName: "分组",
+    icon: "icon-ym icon-ym-generator-group1",
+    children: []
+  },
+  {
+    id: "role",
+    type: "role",
+    fullName: "角色",
+    icon: "icon-ym icon-ym-generator-group1",
+    children: []
+  }
+]
 export default {
   name: 'userSelect',
   inject: {
@@ -259,7 +317,9 @@ export default {
         keyword: '',
         currentPage: 1,
         pageSize: 20,
-      }
+      },
+      selectedList: defaultSelectedList,
+      haveData: false
     }
   },
   watch: {
@@ -278,6 +338,28 @@ export default {
       this.nodeId = '0'
       this.treeData = []
       this.getData()
+    },
+    selectedData(val) {
+      if (!this.multiple) return
+      this.selectedList = JSON.parse(JSON.stringify(defaultSelectedList))
+      this.haveData = false
+      for (let i = 0; i < this.selectedData.length; i++) {
+        const item = this.selectedData[i];
+        const type = item.type == 'company' ? 'department' : item.type
+        this.selectedList.map(res => {
+          if (res.type == type) {
+            const obj = {
+              fullName: item.fullName,
+              type: type,
+              headIcon: item.headIcon,
+              organize: item.organize,
+              id: item.id
+            }
+            res.children.push(obj)
+            this.haveData = true
+          }
+        })
+      }
     }
   },
   computed: {
@@ -319,7 +401,6 @@ export default {
   },
   mounted() {
     addResizeListener(this.$el, this.handleResize);
-
     const reference = this.$refs.reference;
     if (reference && reference.$el) {
       const sizeMap = {
@@ -531,6 +612,9 @@ export default {
     },
     removeData(index) {
       this.selectedData.splice(index, 1)
+    },
+    removeMulData(index, i) {
+      this.selectedList[index].children.splice(i, 1)
     },
     deleteTag(event, index) {
       this.selectedData.splice(index, 1)

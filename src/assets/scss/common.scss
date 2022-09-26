@@ -2163,6 +2163,115 @@ textarea.el-textarea__inner {
     }
   }
 
+  .selected-item-user-multiple {
+    padding-left: 12px;
+    position: relative;
+
+    .selected-item-title {
+      font-size: 14px;
+      color: #303133;
+      display: flex;
+      align-items: center;
+
+      span {
+        padding-left: 6px;
+      }
+    }
+
+    .selected-item-main {
+      display: flex;
+      align-items: center;
+      height: 64px;
+      padding-left: 21px;
+      position: relative;
+
+      &:hover {
+        background-color: #f5f7fa;
+      }
+
+      &:last-child {
+        border-bottom: 1px solid #F2F5F8;
+      }
+
+      &:not(:last-child) {
+        &:before {
+          position: absolute;
+          content: "";
+          bottom: 0;
+          right: 0;
+          width: calc(100% - 21px);
+          height: 1px;
+          background-color: #F2F5F8;
+        }
+      }
+    }
+
+    .selected-item-headIcon {
+      flex-shrink: 0;
+
+      &.icon {
+        width: 36px;
+        height: 36px;
+        text-align: center;
+
+        i {
+          font-size: 22px;
+          line-height: 36px;
+        }
+      }
+    }
+
+    .selected-item-icon {
+      width: 36px;
+      height: 36px;
+      background: linear-gradient(193deg, #A7D6FF 0%, #1990FA 100%);
+      border-radius: 50%;
+      line-height: 36px;
+      color: #FFFFFF;
+      font-size: 14px;
+      text-align: center;
+    }
+
+    .selected-item-text {
+      flex: 1;
+      margin-left: 10px;
+      min-width: 0;
+
+      .name {
+        color: #333333;
+        height: 20px;
+        line-height: 20px;
+        font-size: 14px;
+        margin-bottom: 2px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+
+      .organize {
+        color: #999999;
+        height: 17px;
+        line-height: 17px;
+        color: #999999;
+        font-size: 12px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+    }
+
+    .delete {
+      margin-right: 15px;
+      font-size: 15px;
+      align-items: center;
+
+      &:hover {
+        color: #f56c6c;
+        cursor: pointer;
+      }
+    }
+  }
+
   .right-pane {
     box-sizing: border-box;
     overflow: auto;
