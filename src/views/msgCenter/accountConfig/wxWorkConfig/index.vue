@@ -117,7 +117,7 @@ export default {
   methods: {
     reset() {
       this.keyword = ''
-      this.category = ''
+      this.enabledMark = ''
       this.search()
     },
     search() {
