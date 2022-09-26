@@ -181,6 +181,13 @@
                   </el-radio-group>
                 </el-form-item>
               </template>
+              <el-divider>子表配置</el-divider>
+              <el-form-item label="子表样式">
+                <el-select v-model="columnData.childTableStyle" placeholder="请选择子表样式">
+                  <el-option label="分组展示" :value="1" />
+                  <el-option label="折叠展示" :value="2" />
+                </el-select>
+              </el-form-item>
               <el-divider>按钮配置</el-divider>
               <el-checkbox-group v-model="btnsList" class="btnsList">
                 <el-checkbox :label="item.value" v-for="item in btnsOption" :key="item.value">
@@ -289,6 +296,7 @@ const cellStyleDefaultFunc = '({row, column, rowIndex, columnIndex}) => {\r\n   
 const defaultColumnData = {
   searchList: [], // 查询字段
   hasSuperQuery: true, // 高级查询
+  childTableStyle: 1, // 子表样式
   columnList: [], // 字段列表
   columnOptions: [], // 字段列表
   defaultColumnList: [], // 所有可选择字段列表

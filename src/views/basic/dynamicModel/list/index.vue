@@ -39,11 +39,12 @@
             </el-tooltip>
           </div>
         </div>
-        <JNPF-table v-loading="listLoading" :data="list" row-key="id" default-expand-all
+        <JNPF-table v-loading="listLoading" :data="list" row-key="id"
+          :default-expand-all="columnData.childTableStyle!==2"
           :tree-props="{children: 'children', hasChildren: ''}" @sort-change="sortChange"
           :row-style="rowStyle" :cell-style="cellStyle" :has-c="hasBatchBtn"
           @selection-change="handleSelectionChange" v-if="refreshTable" custom-column
-          :span-method="arraySpanMethod" ref="tableRef">
+          :span-method="arraySpanMethod" ref="tableRef" :hasNO="columnData.childTableStyle!==2">
           <template v-if="columnData.type === 4">
             <template v-for="(item, i) in columnList">
               <el-table-column :prop="item.prop" :label="item.label" :align="item.align"
@@ -197,9 +198,28 @@
             </template>
           </template>
           <template v-else>
+            <template v-if="columnData.childTableStyle==2&&childColumnList.length">
+              <el-table-column width="0" />
+              <el-table-column type="expand" width="40">
+                <template slot-scope="scope">
+                  <el-tabs>
+                    <el-tab-pane :label="child.label" v-for="(child,cIndex) in childColumnList"
+                      :key="cIndex">
+                      <el-table :data="scope.row[child.prop]" size='mini'>
+                        <el-table-column :prop="childTable.vModel" :label="childTable.childLabel"
+                          :align="childTable.align" :width="childTable.width"
+                          v-for="(childTable,iii) in child.children" :key="iii" />
+                      </el-table>
+                    </el-tab-pane>
+                  </el-tabs>
+                </template>
+              </el-table-column>
+              <el-table-column type="index" width="50" label="序号" align="center" />
+            </template>
             <template v-for="(item, i) in columnList">
               <template v-if="item.jnpfKey==='table'">
-                <el-table-column :prop="item.prop" :label="item.label" :align="item.align" :key="i">
+                <el-table-column :prop="item.prop" :label="item.label" :align="item.align" :key="i"
+                  v-if="columnData.childTableStyle!=2">
                   <el-table-column :prop="child.prop" :label="child.childLabel" :align="child.align"
                     :width="child.width" :key="ii"
                     :sortable="child.sortable?'custom':child.sortable"
@@ -227,8 +247,9 @@
               <el-tag type="warning" v-else>等待提交</el-tag>
             </template>
           </el-table-column>
-          <el-table-column label="操作" fixed="right" :width="operationWidth"
-            v-if="columnBtnsList.length || customBtnsList.length">
+          <el-table-column label="操作"
+            :fixed="columnData.childTableStyle==2&&childColumnList.length?false:'right'"
+            :width="operationWidth" v-if="columnBtnsList.length || customBtnsList.length">
             <template slot-scope="scope" v-if="!scope.row.top">
               <template v-if="scope.row.rowEdit">
                 <el-button size="mini" type="text" @click="saveForRowEdit(scope.row,1)">
@@ -420,6 +441,7 @@ export default {
       },
       formData: {},
       columnList: [],
+      childColumnList: [],
       columnOptions: [],
       exportList: [],
       columnBtnsList: [],
@@ -612,6 +634,7 @@ export default {
       }
       this.getMergeList(list)
       this.getExportList(list)
+      this.childColumnList = list.filter(o => o.jnpfKey === 'table')
       return list
     },
     getExportList(list) {
