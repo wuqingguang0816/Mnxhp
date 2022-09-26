@@ -347,10 +347,9 @@
                 :min="0" :precision="0" controls-position="right" />
             </el-form-item>
             <el-form-item label="多端显示">
-              <el-checkbox-group v-model="activeData.__config__.visibility" size="mini"
-                class="visibility-checkbox">
-                <el-checkbox-button label="pc">PC</el-checkbox-button>
-                <el-checkbox-button label="app">APP</el-checkbox-button>
+              <el-checkbox-group v-model="activeData.__config__.visibility" size="mini">
+                <el-checkbox label="pc">Web</el-checkbox>
+                <el-checkbox label="app">App</el-checkbox>
               </el-checkbox-group>
             </el-form-item>
           </template>
@@ -1198,16 +1197,6 @@ export default {
   }
   &.last {
     margin-bottom: 0;
-  }
-}
-.visibility-checkbox {
-  width: 100%;
-  >>> .el-checkbox-button {
-    width: 50%;
-    .el-checkbox-button__inner {
-      width: 100%;
-      text-align: center;
-    }
   }
 }
 </style>
