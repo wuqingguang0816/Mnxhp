@@ -355,10 +355,9 @@
               </el-select>
             </el-form-item>
             <el-form-item label="多端显示">
-              <el-checkbox-group v-model="activeData.__config__.visibility" size="mini"
-                class="visibility-checkbox">
-                <el-checkbox-button label="pc">PC</el-checkbox-button>
-                <el-checkbox-button label="app">APP</el-checkbox-button>
+              <el-checkbox-group v-model="activeData.__config__.visibility" size="mini">
+                <el-checkbox label="pc">Web</el-checkbox>
+                <el-checkbox label="app">App</el-checkbox>
               </el-checkbox-group>
             </el-form-item>
           </template>
@@ -754,6 +753,7 @@ export default {
       deep: true
     },
     activeData(val) {
+      if (!val || !val.__config__) return
       if (val.__config__.jnpfKey === 'relationFormAttr') {
         this.$nextTick(() => {
           this.$refs.relationFormAttr && this.$refs.relationFormAttr.getOptions()
@@ -1250,16 +1250,6 @@ export default {
   }
   &.last {
     margin-bottom: 0;
-  }
-}
-.visibility-checkbox {
-  width: 100%;
-  >>> .el-checkbox-button {
-    width: 50%;
-    .el-checkbox-button__inner {
-      width: 100%;
-      text-align: center;
-    }
   }
 }
 </style>
