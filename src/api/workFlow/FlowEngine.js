@@ -38,14 +38,14 @@ export function Update(data) {
     data
   })
 }
-// 复制流程表单
+// 复制流程
 export function Copy(id) {
   return request({
     url: `/api/workflow/Engine/FlowEngine/${id}/Actions/Copy`,
     method: 'post'
   })
 }
-// 导出流程表单
+// 导出流程
 export function exportData(id) {
   return request({
     url: `/api/workflow/Engine/FlowEngine/${id}/Actions/ExportData`,

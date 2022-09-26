@@ -41,14 +41,10 @@
                   <template slot="prepend">@/views/</template>
                 </el-input>
               </jnpf-form-tip-item>
-            </template>
-            <template v-if="dataForm.formType!==1">
               <jnpf-form-tip-item label="App地址" prop="appUrlAddress"
                 tip-label="APP地址配置为物理地址，需与代码同步更新">
                 <el-input v-model="dataForm.appUrlAddress" placeholder="App地址" />
               </jnpf-form-tip-item>
-            </template>
-            <template v-if="dataForm.formType!==1">
               <jnpf-form-tip-item label="接口地址" prop="interfaceUrl"
                 tip-label="后端接口请求地址, 系统将会请求地址中的saveData(post方法), getData(get方法)接口例：/api/example/UserController">
                 <el-input v-model="dataForm.interfaceUrl" placeholder="接口地址" />
@@ -137,10 +133,6 @@
           </el-row>
         </template>
       </template>
-      <template v-if="activeStep==2">
-        <Process ref="processDesign" :conf="flowTemplateJson" @startNodeChange="onStartChange"
-          :flowType="dataForm.type" />
-      </template>
     </div>
     <TableForm :visible.sync="formVisible" ref="tableForm" @closeForm="closeForm"
       :dbLinkId="dataForm.dbLinkId" />
@@ -171,11 +163,9 @@ export default {
         category: '',
         description: "",
         tables: '',
-        enabledMark: 1,
         formType: 2,
         columnData: '',
         interfaceUrl: '',
-        flowTemplateJson: '',
         flowType: ''
       },
       dataRule: {

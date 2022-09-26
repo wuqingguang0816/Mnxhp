@@ -45,11 +45,6 @@
           <el-table-column prop="fullName" label="流程名称" min-width="150" />
           <el-table-column prop="enCode" label="流程编码" width="200" />
           <el-table-column prop="category" label="流程分类" width="150" />
-          <el-table-column prop="formType" label="表单类型" width="100">
-            <template slot-scope="scope">
-              <span>{{ scope.row.formType == 1? "系统表单" : "自定义表单" }}</span>
-            </template>
-          </el-table-column>
           <el-table-column prop="type" label="流程类型" width="80">
             <template slot-scope="scope">
               <span>{{ scope.row.type == 0? "发起流程" : "功能流程" }}</span>
@@ -60,6 +55,7 @@
               <span>{{ scope.row.visibleType ==  0 ? "全部可见" : "部分可见" }}</span>
             </template>
           </el-table-column> -->
+          <el-table-column prop="creatorUserId" label="创建人" width="120" />
           <el-table-column prop="creatorTime" label="创建时间" :formatter="jnpf.tableDateFormat"
             width="120" />
           <el-table-column prop="sortCode" label="排序" width="70" align="center" />
@@ -104,14 +100,14 @@
       lock-scroll width="600px">
       <div class="add-main">
         <div class="add-item add-item-sys" @click="addFlow(0)">
-          <i class="add-icon el-icon-document"></i>
+          <i class="add-icon icon-ym icon-ym-launchFlow"></i>
           <div class="add-txt">
             <p class="add-title">发起流程</p>
             <p class="add-desc">快速发起的工作流程</p>
           </div>
         </div>
         <div class="add-item" @click="addFlow(1)">
-          <i class="add-icon icon-ym icon-ym-generator-company"></i>
+          <i class="add-icon icon-ym icon-ym-funcFlow"></i>
           <div class="add-txt">
             <p class="add-title">功能流程</p>
             <p class="add-desc">在线开发和代码生成的功能流程</p>

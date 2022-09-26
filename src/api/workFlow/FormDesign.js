@@ -72,3 +72,11 @@ export function getFormField(id) {
     method: 'get',
   })
 }
+//根据表单id获取表单字段
+export function getFormSelect(data) {
+  return request({
+    url: `/api/flowForm/Form/select`,
+    method: 'get',
+    data
+  })
+}
