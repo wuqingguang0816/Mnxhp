@@ -52,15 +52,12 @@ export default {
       this.loading = true
       getSocialsUserList().then(res => {
         this.socialsList = res.data;
-        console.log(this.socialsList)
         this.loading = false
       })
     },
     bingding(data) {
-      // console.log(data)
       binding(data).then(res => {
         if (this.winURL && !this.winURL.closed) {
-          console.log(this.winURL)
           this.winURL.location.replace(res.msg)
           this.winURL.focus()
           return
@@ -69,14 +66,13 @@ export default {
         var iHeight = 500;//弹出窗口的高度;
         var iLeft = (window.screen.width - iWidth) / 2;
         var iTop = (window.screen.height - iHeight) / 2;//获得窗口的垂直位置;
-        this.winURL = window.open(res.msg, '_blank', 'height=' + iHeight + ',,innerHeight=' + iHeight + ',width=' + iWidth + ',innerWidth=' + iWidth + ',top=' + iTop + ',left=' + iLeft + ',toolbar=no,menubar=no,scrollbars=auto,resizeable=no,location=no,status=no')
+        this.winURL = window.open(res.msg, '_blank', 'height=' + iHeight + ',innerHeight=' + iHeight + ',width=' + iWidth + ',innerWidth=' + iWidth + ',top=' + iTop + ',left=' + iLeft + ',toolbar=no,menubar=no,scrollbars=auto,resizeable=no,location=no,status=no')
       })
     },
     bindListener() {
       if (!this.listenerLoad) {
         window.addEventListener('message', (e) => {
           var res = typeof e.data === 'string' ? JSON.parse(e.data) : e.data;
-          console.log(res)
           if (res.code == "200") {
             this.$message({
               message: res.message,
@@ -101,7 +97,6 @@ export default {
       }
       this.listenerLoad = true
     },
-
     deleteSocials(userId, id) {
       this.$confirm('确定要解除该账号绑定?', '提示', {
         type: 'warning'
@@ -130,13 +125,11 @@ export default {
     },
 
     iframeLoad() {
-      console.log(123)
       window.addEventListener("message", this.handleMessage);
     },
     handleMessage(e) {
       //e为传过来的信息
       console.log(e)
-
     }
   }
 }
