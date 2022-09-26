@@ -202,7 +202,7 @@
                   <div v-if="subFlowForm.initiateType === 6" class="option-box-tip">
                     所指定的成员将作为子流程发起人，多人时，发起多个子流程</div>
                   <div v-if="subFlowForm.initiateType === 9" class="option-box-tip">
-                    通过第三方调用从目标服务中获取子流程发起人</div>
+                    从目标服务中获取子流程发起人</div>
                   <el-form-item label="发起者的" style="margin-bottom:0!important;"
                     v-if="subFlowForm.initiateType === 1">
                     <el-select v-model="subFlowForm.managerLevel">
@@ -242,7 +242,8 @@
                   <el-form-item style="margin-bottom:0!important;"
                     v-if="subFlowForm.initiateType === 9">
                     <div slot="label">请求路径
-                      <el-tooltip content="自带参数：taskId、taskNodeId" placement="top">
+                      <el-tooltip placement="top"
+                        content='请求自带参数：taskId、taskNodeId，返回结构：JSON对象{"handleId":"id1,id2"}'>
                         <a class="el-icon-warning-outline"></a>
                       </el-tooltip>
                     </div>
