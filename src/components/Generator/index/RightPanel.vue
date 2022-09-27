@@ -420,7 +420,7 @@
             </el-select>
           </el-form-item>
           <el-form-item label="表单Css">
-            <el-button style="width: 100%;" @click="addStyle">设置</el-button>
+            <el-button style="width: 100%;" @click="addStyle">编写样式</el-button>
           </el-form-item>
           <el-form-item label="表单Class">
             <el-select v-model="formConf.className" multiple clearable placeholder="请选择">
