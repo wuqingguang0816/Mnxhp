@@ -151,7 +151,7 @@
             </el-row>
             <p class="timeline-cell">执行人员：{{item.userName}}</p>
             <p class="timeline-cell">执行动作：变更</p>
-            <p class="timeline-cell">变更原因：{{item.handleOpinion}}</p>
+            <p class="timeline-cell" v-if="item.handleOpinion">变更原因：{{item.handleOpinion}}</p>
           </el-card>
         </el-timeline-item>
 
