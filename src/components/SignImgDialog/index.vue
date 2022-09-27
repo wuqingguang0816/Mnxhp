@@ -8,7 +8,7 @@
       </div>
       <span slot="footer" class="dialog-footer">
         <el-button @click="handleReset">清空</el-button>
-        <el-button type="primary" @click="handleGenerate()">确定签名</el-button>
+        <el-button type="primary" :loading="loading" @click="handleGenerate()">确定签名</el-button>
       </span>
     </el-dialog>
   </div>
@@ -27,7 +27,6 @@ export default {
     isDefault: {
       required: true,
       type: Number
-
     },
     userInfo: {
       type: Object,
@@ -39,6 +38,7 @@ export default {
   data() {
     return {
       signVisible: false,
+      loading: false,
       signImg: '',
       showTip: true
     }
@@ -66,6 +66,7 @@ export default {
       })
     },
     handleGenerate() {
+      this.loading = true
       this.$refs.esign.generate().then(res => {
         if (res) this.signImg = res
         let query = {
@@ -85,15 +86,18 @@ export default {
             this.$store.commit('user/SET_USERINFO_SIGNIMG', this.signImg)
           }
           this.signVisible = false
+          this.loading = false
           this.$emit('close', this.signImg)
           this.handleReset()
 
         }).catch(err => {
           this.signVisible = false
+          this.loading = false
           this.$emit('close')
           this.handleReset()
         })
       }).catch(err => {
+        this.loading = false
         this.$message.warning("请签名")
       })
     },

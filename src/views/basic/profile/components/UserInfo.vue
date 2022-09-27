@@ -362,27 +362,6 @@ export default {
   justify-content: center;
   align-items: center;
 }
-.sign-dialog {
-  >>> .el-dialog__body {
-    overflow: hidden;
-    height: 320px;
-    overflow: auto;
-    overflow-x: hidden;
-    padding: 23px 14px 2px !important;
-  }
-}
-
-.sign-main {
-  border: 1px solid rgb(224, 238, 238);
-  width: 100%;
-  height: 300px;
-  background-color: rgb(247, 247, 247);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin-top: -10px;
-  margin-bottom: -10px;
-}
 .icon-checked1 {
   display: block;
   width: 20px;
@@ -393,8 +372,8 @@ export default {
   border-bottom-right-radius: 10px;
   position: absolute;
   transform: scale(0.8);
-  right: -6px;
-  bottom: -6px;
+  right: -5px;
+  bottom: -5px;
   i {
     position: absolute;
     top: -4px;
@@ -402,12 +381,6 @@ export default {
     font-size: 24px;
     color: #fff;
     transform: scale(0.8);
-  }
-}
-
-.esign {
-  canvas {
-    height: 300px;
   }
 }
 .sign-item {
