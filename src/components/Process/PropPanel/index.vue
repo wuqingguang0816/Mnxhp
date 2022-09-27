@@ -201,6 +201,8 @@
                     设置审批流程中某个环节的审批人作为子流程发起人</div>
                   <div v-if="subFlowForm.initiateType === 6" class="option-box-tip">
                     所指定的成员将作为子流程发起人，多人时，发起多个子流程</div>
+                  <div v-if="subFlowForm.initiateType === 7" class="option-box-tip">
+                    指定可供选择的候选人发起多个子流程</div>
                   <div v-if="subFlowForm.initiateType === 9" class="option-box-tip">
                     从目标服务中获取子流程发起人</div>
                   <el-form-item label="发起者的" style="margin-bottom:0!important;"
@@ -252,7 +254,7 @@
                     </el-input>
                   </el-form-item>
                   <el-form-item style="margin-bottom:0!important;"
-                    v-if="subFlowForm.initiateType === 6">
+                    v-if="subFlowForm.initiateType === 6||subFlowForm.initiateType === 7">
                     <org-select ref="subFlow-department-org" type="department"
                       v-model="subFlowForm.initiateOrg" title="添加部门" class="mb-5" />
                     <org-select ref="subFlow-role-org" type="role"
@@ -2447,11 +2449,11 @@ const typeOptions = [
   {
     label: '接口服务',
     value: 9
+  },
+  {
+    label: '候选人员',
+    value: 7
   }]
-const assigneeTypeOptions = [...typeOptions, {
-  label: '候选人员',
-  value: 7
-}]
 const noticeOptions = [{
   value: 1,
   label: '自定义'
@@ -2605,7 +2607,7 @@ export default {
       subFlowForm: JSON.parse(JSON.stringify(defaultSubFlowForm)),
       approverForm: JSON.parse(JSON.stringify(defaultApproverForm)),
       initiateTypeOptions: typeOptions,
-      assigneeTypeOptions: assigneeTypeOptions,
+      assigneeTypeOptions: typeOptions,
       noticeOptions,
       nodeNoticeOptions,
       noticeOptionsData,
