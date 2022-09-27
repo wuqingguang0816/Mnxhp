@@ -1345,70 +1345,23 @@ export const layoutComponents = [
   },
   {
     __config__: {
-      jnpfKey: "card",
-      label: "卡片容器",
+      jnpfKey: "divider",
+      label: "分割线",
+      labelWidth: undefined,
       showLabel: false,
-      tag: "el-card",
-      tagIcon: "icon-ym icon-ym-generator-card",
-      defaultValue: [],
-      layout: "rowFormItem",
-      span: "24",
+      tag: "el-divider",
+      tagIcon: "icon-ym icon-ym-generator-divider",
+      defaultValue: null,
+      required: false,
+      layout: "colFormItem",
+      span: 24,
       dragDisabled: false,
-      visibility: ["pc", "app"],
-      children: []
+      visibility: ["pc", "app"]
     },
-    header: "卡片容器",
-    shadow: "always"
-  },
-  {
-    __config__: {
-      jnpfKey: "row",
-      label: "栅格容器",
-      tagIcon: "icon-ym icon-ym-generator-layout",
-      layout: "rowFormItem",
-      span: "24",
-      dragDisabled: false,
-      visibility: ["pc", "app"],
-      layoutTree: true,
-      rowType: "layout"
+    __slot__: {
+      default: "我是分割线"
     },
-    type: "default",
-    justify: "start",
-    align: "top"
-  },
-  {
-    __config__: {
-      jnpfKey: "tab",
-      label: "标签面板",
-      showLabel: false,
-      tag: "el-tab",
-      tagIcon: "icon-ym icon-ym-generator-label",
-      layout: "rowFormItem",
-      span: "24",
-      dragDisabled: false,
-      visibility: ["pc", "app"],
-      children: [
-        {
-          title: "Tab 1",
-          __config__: {
-            children: []
-          }
-        },
-        {
-          title: "Tab 2",
-          __config__: {
-            children: []
-          }
-        }
-      ],
-      active: 0
-    },
-    on: {
-      "tab-click":
-        "({ data, formData, setFormData, setShowOrHide, setRequired, setDisabled, request, getFieldOptions, setFieldOptions }) => {\n    // 在此编写代码\n    \n}"
-    },
-    type: "",
-    "tab-position": "top"
+    "content-position": "center"
   },
   {
     __config__: {
@@ -1447,22 +1400,69 @@ export const layoutComponents = [
   },
   {
     __config__: {
-      jnpfKey: "divider",
-      label: "分割线",
-      labelWidth: undefined,
+      jnpfKey: "tab",
+      label: "标签面板",
       showLabel: false,
-      tag: "el-divider",
-      tagIcon: "icon-ym icon-ym-generator-divider",
-      defaultValue: null,
-      required: false,
-      layout: "colFormItem",
-      span: 24,
+      tag: "el-tab",
+      tagIcon: "icon-ym icon-ym-generator-label",
+      layout: "rowFormItem",
+      span: "24",
       dragDisabled: false,
-      visibility: ["pc", "app"]
+      visibility: ["pc", "app"],
+      children: [
+        {
+          title: "Tab 1",
+          __config__: {
+            children: []
+          }
+        },
+        {
+          title: "Tab 2",
+          __config__: {
+            children: []
+          }
+        }
+      ],
+      active: 0
     },
-    __slot__: {
-      default: "我是分割线"
+    on: {
+      "tab-click":
+        "({ data, formData, setFormData, setShowOrHide, setRequired, setDisabled, request, getFieldOptions, setFieldOptions }) => {\n    // 在此编写代码\n    \n}"
     },
-    "content-position": "center"
+    type: "",
+    "tab-position": "top"
+  },
+  {
+    __config__: {
+      jnpfKey: "row",
+      label: "栅格容器",
+      tagIcon: "icon-ym icon-ym-generator-layout",
+      layout: "rowFormItem",
+      span: "24",
+      dragDisabled: false,
+      visibility: ["pc", "app"],
+      layoutTree: true,
+      rowType: "layout"
+    },
+    type: "default",
+    justify: "start",
+    align: "top"
+  },
+  {
+    __config__: {
+      jnpfKey: "card",
+      label: "卡片容器",
+      showLabel: false,
+      tag: "el-card",
+      tagIcon: "icon-ym icon-ym-generator-card",
+      defaultValue: [],
+      layout: "rowFormItem",
+      span: "24",
+      dragDisabled: false,
+      visibility: ["pc", "app"],
+      children: []
+    },
+    header: "卡片容器",
+    shadow: "always"
   },
 ];

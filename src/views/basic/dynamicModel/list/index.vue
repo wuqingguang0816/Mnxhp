@@ -593,7 +593,7 @@ export default {
           let prop = e.prop.split('-')[0]
           let vModel = e.prop.split('-')[1]
           let label = e.label.split('-')[0]
-          let childLabel = e.label.split('-')[1]
+          let childLabel = e.label.replace(label + '-', '');
           let newItem = {
             align: "center",
             jnpfKey: "table",
@@ -685,6 +685,7 @@ export default {
         const nodePath = this.getNodePath(node)
         const currValue = nodePath.map(o => o[this.treeProps.value])
         queryJson = { [this.columnData.treeRelation]: currValue }
+        this.treeActiveId = currValue
       } else {
         queryJson = { [this.columnData.treeRelation]: data[this.treeProps.value] }
       }

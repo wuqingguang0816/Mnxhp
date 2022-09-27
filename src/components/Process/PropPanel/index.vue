@@ -1366,7 +1366,7 @@
               </el-form-item>
               <el-form-item label="自动同意">
                 <div slot="label" class="form-item-label">自动同意
-                  <el-tooltip content="当前审批节点表单必填字段为空会使工单流转失败，下一审批节点设置候选人员、选择分支时当前审批节点规则失效"
+                  <el-tooltip content="当前审批节点表单必填字段为空工单流转时不做校验，下一审批节点设置候选人员、选择分支、异常节点时当前审批节点规则失效"
                     placement="top">
                     <a class="el-icon-warning-outline"></a>
                   </el-tooltip>
@@ -1391,7 +1391,7 @@
               </el-form-item>
               <el-form-item>
                 <div slot="label" class="form-item-label">意见填写
-                  <el-tooltip content="审批人在进行审批操作需填写审批意见" placement="top">
+                  <el-tooltip content="审批人在进行审批操作需填写意见" placement="top">
                     <a class="el-icon-warning-outline"></a>
                   </el-tooltip>
                 </div>
@@ -1955,7 +1955,7 @@
                 </el-row>
                 <el-row>
                   <el-checkbox v-model="approverForm.overTimeConfig.overAutoApprove">超时自动审批
-                    <el-tooltip content="当前审批节点表单必填字段为空会使工单流转失败，下一审批节点设置候选人员、选择分支时当前审批节点规则失效"
+                    <el-tooltip content="当前审批节点表单必填字段为空工单流转时不做校验，下一审批节点设置候选人员、选择分支、异常节点时当前审批节点规则失效"
                       placement="top">
                       <a class="el-icon-warning-outline"></a>
                     </el-tooltip>

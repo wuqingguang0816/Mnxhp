@@ -94,6 +94,8 @@
                     系统变量<i class="el-icon-arrow-down el-icon--right"></i>
                   </span>
                   <el-dropdown-menu slot="dropdown">
+                    <el-dropdown-item disabled>当前系统变量仅支持内部接口引用</el-dropdown-item>
+                    <el-dropdown-item divided></el-dropdown-item>
                     <el-dropdown-item v-for="(item,index) in sysVariableList" :key="index">
                       <div @click="handleSysNodeClick(item.value)">
                         <span>{{ item.value }}</span>
@@ -384,10 +386,10 @@ export default {
       },
       sysVariableList: [
         { value: '@user', tips: "当前用户" },
-        { value: '@currentOrganizationAndSuborganization', tips: "当前组织及子组织" },
         { value: '@currentUsersAndSubordinates', tips: "当前用户及下属" },
-        { value: '@chargeorganization', tips: "当前分管组织" },
         { value: '@organization', tips: "当前组织" },
+        { value: '@currentOrganizationAndSuborganization', tips: "当前组织及子组织" },
+        { value: '@chargeorganization', tips: "当前分管组织" },
         {
           value: '@currentChargeorganizationAndSuborganization', tips: "当前分管组织及子组织"
         }

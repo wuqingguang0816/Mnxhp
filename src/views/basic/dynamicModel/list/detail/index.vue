@@ -99,6 +99,7 @@ export default {
     },
     init(formData, modelId, id, useFormPermission) {
       this.formData = deepClone(formData)
+      this.initRelationForm(this.formData.fields)
       this.modelId = modelId
       this.useFormPermission = useFormPermission
       this.dataForm.id = id || ''
@@ -126,6 +127,21 @@ export default {
           this.visible = false
           this.$emit('close')
         }
+      })
+    },
+    initRelationForm(componentList) {
+      componentList.forEach(cur => {
+        const config = cur.__config__
+        if (config.jnpfKey == 'relationFormAttr' || config.jnpfKey == 'popupAttr') {
+          const relationKey = cur.relationField.split("_jnpfTable_")[0]
+          componentList.forEach(item => {
+            const noVisibility = Array.isArray(item.__config__.visibility) && !item.__config__.visibility.includes('pc')
+            if ((relationKey == item.__vModel__) && (noVisibility || !!item.__config__.noShow)) {
+              cur.__config__.noShow = true
+            }
+          })
+        }
+        if (cur.__config__.children && cur.__config__.children.length) this.initRelationForm(cur.__config__.children)
       })
     },
     unique(arr, attrName) {
@@ -215,7 +231,8 @@ export default {
               item.__config__.defaultValue = data[item.__vModel__ + '_id']
               this.$set(item, 'name', data[item.__vModel__] || '')
             } else {
-              item.__config__.defaultValue = data[item.__vModel__]
+              const val = data.hasOwnProperty(item.__vModel__) ? data[item.__vModel__] : item.__config__.defaultValue
+              item.__config__.defaultValue = val
             }
             if (this.useFormPermission) {
               let id = item.__config__.isSubTable ? parent.__vModel__ + '-' + item.__vModel__ : item.__vModel__
