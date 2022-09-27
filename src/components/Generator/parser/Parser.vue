@@ -238,6 +238,7 @@ export default {
       isTableValid: false
     }
     this.initFormData(data.formConfCopy.fields, data[this.formConf.formModel])
+    this.initRelationForm(data.formConfCopy.fields)
     this.buildRules(data.formConfCopy.fields, data[this.formConf.formRules])
     this.buildOptions(data.formConfCopy.fields, data.options)
     this.$nextTick(() => {
@@ -275,6 +276,21 @@ export default {
         if (cur.__vModel__) formData[cur.__vModel__] = config.defaultValue
         if (cur.__config__.jnpfKey == 'table') return
         if (config.children) this.initFormData(config.children, formData)
+      })
+    },
+    initRelationForm(componentList) {
+      componentList.forEach(cur => {
+        const config = cur.__config__
+        if (config.jnpfKey == 'relationFormAttr' || config.jnpfKey == 'popupAttr') {
+          const relationKey = cur.relationField.split("_jnpfTable_")[0]
+          componentList.forEach(item => {
+            const noVisibility = Array.isArray(item.__config__.visibility) && !item.__config__.visibility.includes('pc')
+            if ((relationKey == item.__vModel__) && (noVisibility || !!item.__config__.noShow)) {
+              cur.__config__.noShow = true
+            }
+          })
+        }
+        if (cur.__config__.children && cur.__config__.children.length) this.initRelationForm(cur.__config__.children)
       })
     },
     buildOptions(componentList, data) {
