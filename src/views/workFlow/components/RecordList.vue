@@ -170,7 +170,7 @@
             </el-row>
             <p class="timeline-cell">执行人员：{{item.userName}}</p>
             <p class="timeline-cell">执行动作：复活</p>
-            <p class="timeline-cell">复活原因：{{item.handleOpinion}}</p>
+            <p class="timeline-cell" v-if="item.handleOpinion">复活原因：{{item.handleOpinion}}</p>
           </el-card>
         </el-timeline-item>
       </template>
