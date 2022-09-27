@@ -4,6 +4,7 @@
       :closeOnClickModal='false' :visible.sync="signVisible" append-to-body width="600px">
       <div class="sign-main">
         <vue-esign ref="esign" :height='300' :width="560" :lineWidth="lineWidth" />
+        <div class="tip" v-show="showTip">使用鼠标在此签名</div>
       </div>
       <span slot="footer" class="dialog-footer">
         <el-button @click="handleReset">清空</el-button>
@@ -39,12 +40,24 @@ export default {
     return {
       signVisible: false,
       signImg: '',
+      showTip: true
     }
   },
   methods: {
     init() {
       this.handleReset()
       this.signVisible = true
+      this.showTip = true
+      this.$nextTick(() => {
+        this.$watch(
+          () => {
+            return this.$refs.esign.hasDrew
+          },
+          (val) => {
+            this.showTip = !val
+          }
+        )
+      })
     },
     handleReset() {
       this.signImg = ''
@@ -108,5 +121,18 @@ export default {
   align-items: center;
   margin-top: -10px;
   margin-bottom: -10px;
+  position: relative;
+  .tip {
+    height: 300px;
+    line-height: 300px;
+    text-align: center;
+    position: absolute;
+    left: 0;
+    top: 0;
+    right: 0;
+    color: #9d9d9f;
+    font-size: 16px;
+    pointer-events: none;
+  }
 }
 </style>
