@@ -20,8 +20,8 @@
           <el-col :span="6">
             <el-form-item label="所属分类">
               <el-select v-model="flowCategory" placeholder="选择所属分类" clearable>
-                <el-option v-for="item in categoryList" :key="item.enCode" :label="item.fullName"
-                  :value="item.enCode">
+                <el-option v-for="item in categoryList" :key="item.id" :label="item.fullName"
+                  :value="item.id">
                 </el-option>
               </el-select>
             </el-form-item>

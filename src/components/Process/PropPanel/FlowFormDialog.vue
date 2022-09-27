@@ -11,7 +11,7 @@
         </template>
       </el-input>
     </div>
-    <el-dialog :title="isFunc?'功能选择':'表单选择'" :close-on-click-modal="false" :visible.sync="visible"
+    <el-dialog :title="label+'选择'" :close-on-click-modal="false" :visible.sync="visible"
       class="JNPF-dialog JNPF-dialog_center JNPF-dialog-tree-select" lock-scroll append-to-body
       width='600px'>
       <div class="JNPF-common-layout">
@@ -47,19 +47,13 @@
                 </template>
               </el-table-column>
               <el-table-column type="index" label="序号" />
-              <template v-if="isFunc">
-                <el-table-column prop="fullName" label="功能名称" show-overflow-tooltip />
-                <el-table-column prop="enCode" label="功能编码" />
-              </template>
-              <template v-else>
-                <el-table-column prop="fullName" label="表单名称" show-overflow-tooltip />
-                <el-table-column prop="enCode" label="表单编码" />
-                <el-table-column prop="formType" label="表单类型" width="100">
-                  <template slot-scope="scope">
-                    <span>{{ scope.row.formType == 1 ? "自定义表单" : (scope.row.flowType == 2? "功能表单" : "系统表单" )}}</span>
-                  </template>
-                </el-table-column>
-              </template>
+              <el-table-column prop="fullName" :label="label+'名称'" show-overflow-tooltip />
+              <el-table-column prop="enCode" :label="label+'编码'" />
+              <el-table-column prop="formType" :label="label+'类型'" width="100">
+                <template slot-scope="scope">
+                  <span>{{ scope.row.formType == 1 ? "自定义"+label : "系统"+label}}</span>
+                </template>
+              </el-table-column>
             </JNPF-table>
             <pagination :total="total" :page.sync="listQuery.currentPage"
               :limit.sync="listQuery.pageSize" @pagination="initData" />
@@ -106,10 +100,6 @@ export default {
     formType: {
       default: null
     },
-    isFunc: {
-      type: Boolean,
-      default: false
-    },
   },
   model: {
     prop: 'value',
@@ -142,6 +132,9 @@ export default {
         this.inputHovering &&
         hasValue;
       return criteria;
+    },
+    label() {
+      return this.type == 1 ? "功能" : "表单"
     }
   },
   methods: {

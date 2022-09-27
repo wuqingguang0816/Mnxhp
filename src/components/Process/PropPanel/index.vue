@@ -374,6 +374,14 @@
         <el-tab-pane label="基础设置">
           <el-scrollbar class="config-scrollbar">
             <el-form label-position="top" :model="startForm" class="pd-10-20">
+              <el-form-item>
+                <div slot="label" class="form-item-label">{{flowType==1?"功能":"表单"}}配置</div>
+                <div class="form-item-content">
+                  <flow-form-dialog :value="startForm.formId" :title="startForm.formName"
+                    :type="flowType" @change="onStartFormIdChange"
+                    :placeholder='"请选择"+(flowType==1?"功能":"表单")' />
+                </div>
+              </el-form-item>
               <el-form-item label="发起设置" v-if="flowType!=1">
                 <div slot="label" class="form-item-label">发起设置
                   <el-tooltip content="谁可以发起 默认所有人,需要设置请选择" placement="top">
@@ -2242,6 +2250,7 @@ import InterfaceDialog from './InterfaceDialog'
 import FormulaDialog from './formulaDialog'
 import FlowDialog from './FlowDialog'
 import Detail from './TemplateDetail'
+import FlowFormDialog from "./FlowFormDialog"
 const requiredDisabled = (jnpfKey) => {
   return ['billRule', 'createUser', 'createTime', 'modifyTime', 'modifyUser', 'currPosition', 'currOrganize', 'table'].includes(jnpfKey)
 }
@@ -2583,7 +2592,7 @@ const systemFieldOptions = [{
 }]
 export default {
   props: [/*当前节点数据*/"value", /*整个节点数据*/"processData", "flowType"],
-  components: { OrgSelect, MsgDialog, InterfaceDialog, FormulaDialog, FlowDialog, Detail },
+  components: { OrgSelect, MsgDialog, InterfaceDialog, FormulaDialog, FlowDialog, Detail, FlowFormDialog },
   data() {
     return {
       temporaryContent: '',
@@ -3400,6 +3409,10 @@ export default {
       this.$nextTick(() => {
         this.$refs.View.init(id)
       })
+    },
+    onStartFormIdChange(id, item) {
+      this.startForm.formName = item.fullName
+      this.startForm.formId = id
     }
   },
   watch: {

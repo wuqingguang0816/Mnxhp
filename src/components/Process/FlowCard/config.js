@@ -133,6 +133,8 @@ const defaultStartForm = {
   extraCopyRule: 1,
   hasSign: false,
   hasOpinion: true,
+  formId: "",
+  formName: "",
 }
 export default {
   defaultStartForm,

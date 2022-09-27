@@ -200,6 +200,7 @@ export default {
       this.activeStep = 0
       this.tables = []
       this.dataForm.id = id || ''
+      this.getDbOptions()
       this.visible = true
       this.loading = true
       this.$nextTick(() => {

@@ -111,14 +111,19 @@ function addNodeButton(ctx, data, h, isBranch = false) {
   let canAddAppendBranch = true
   let canAddAppendInterflow = true
   let canAddAppendBranchFlowBranch = true
+  let canAddSubFlow = true
   let canAddTimerNode = true
   if (Array.isArray(data.conditionNodes) && data.conditionNodes.length) {
     canAddAppendBranch = false
     canAddAppendInterflow = false
     canAddAppendBranchFlowBranch = false
+    canAddSubFlow = false
   }
   if (data.type === 'timer' || (data.childNode && data.childNode.type === 'timer')) {
     canAddTimerNode = false
+  }
+  if (data.type === 'subFlow') {
+    canAddAppendBranch = false
   }
   let isEmpty = data.type === "empty";
   if (isEmpty && !isBranch) {
@@ -135,8 +140,8 @@ function addNodeButton(ctx, data, h, isBranch = false) {
               </div>
               审批节点
             </div>
-            <div>
-              <div class="condition-icon" onClick={ctx.eventLauncher.bind(ctx, "addSubFlowNode", data, isBranch)} >
+            <div class={{ 'condition-disabled': !canAddSubFlow && !isBranch }}>
+              <div class="condition-icon" onClick={ctx.eventLauncher.bind(ctx, "addSubFlowNode", data, isBranch, !canAddSubFlow && !isBranch)} >
                 <i class="icon-ym icon-ym-generator-subFlow"></i>
               </div>
               子流程
@@ -303,5 +308,5 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import "index.scss";
+@import 'index.scss';
 </style>

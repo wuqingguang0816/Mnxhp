@@ -14,8 +14,8 @@
         <el-button @click="prev" :disabled="activeStep<=0">{{$t('common.prev')}}</el-button>
         <el-button @click="next" :disabled="activeStep>=1 || loading">{{$t('common.next')}}
         </el-button>
-        <el-button type="primary" @click="dataFormSubmit()" :disabled="activeStep<1"
-          :loading="btnLoading">{{$t('common.confirmButton')}}</el-button>
+        <el-button type="primary" @click="dataFormSubmit()" :disabled="loading"
+          :loading="btnLoading">保 存</el-button>
         <el-button @click="closeDialog()">{{$t('common.cancelButton')}}</el-button>
       </div>
     </div>
@@ -51,18 +51,6 @@
                   :predefine="['#008cff', '#35b8e0', '#00cc88','#ff9d00','#ff4d4d', '#5b69bc', '#ff8acc', '#3b3e47','#282828']" />
               </el-row>
             </el-form-item>
-            <template v-if="dataForm.type==1">
-              <el-form-item label="功能类型" prop="formType">
-                <el-select v-model="dataForm.formType" placeholder="选择类型">
-                  <el-option label="自定义流程" :value="2" />
-                  <el-option label="功能流程" :value="1" />
-                </el-select>
-              </el-form-item>
-              <el-form-item label="关联功能" prop="formId">
-                <flow-form-dialog isFunc :value="dataForm.formId" :title="dataForm.formName"
-                  :type="dataForm.type" :formType="dataForm.formType" @change="onFormChange" />
-              </el-form-item>
-            </template>
             <el-form-item label="流程排序" prop="sortCode">
               <el-input-number :min="0" :max="999999" v-model="dataForm.sortCode"
                 controls-position="right" />
@@ -86,10 +74,9 @@
 import { FlowEngineInfo, Update, Create } from '@/api/workFlow/FlowEngine'
 import iconBox from '@/components/JNPF-iconBox'
 import Process from "@/components/Process"
-import FlowFormDialog from './FlowFormDialog'
 
 export default {
-  components: { iconBox, Process, FlowFormDialog },
+  components: { iconBox, Process },
   data() {
     return {
       visible: false,
@@ -101,13 +88,10 @@ export default {
         enCode: '',
         description: '',
         type: 0,
-        formType: null,
-        formId: '',
-        formName: '',
         sortCode: 0,
         icon: '',
         iconBackground: '#008cff',
-        flowTemplateJson: ''
+        flowTemplateJson: null
       },
       dataRule: {
         fullName: [
@@ -148,9 +132,6 @@ export default {
       this.dataForm.id = id || ''
       this.dataForm.icon = ''
       this.dataForm.iconBackground = '#008cff'
-      this.dataForm.formType = type === 1 ? 2 : null
-      this.dataForm.formId = ''
-      this.dataForm.formName = ''
       this.visible = true
       this.loading = true
       this.$nextTick(() => {
@@ -169,25 +150,35 @@ export default {
       })
     },
     dataFormSubmit() {
-      this.$refs['processDesign'].getData().then(res => {
-        this.btnLoading = true
-        this.flowTemplateJson = res.formData
-        this.dataForm.flowTemplateJson = JSON.stringify(this.flowTemplateJson)
-        const formMethod = this.dataForm.id ? Update : Create
-        formMethod(this.dataForm).then((res) => {
-          this.$message({
-            message: res.msg,
-            type: 'success',
-            duration: 1500,
-            onClose: () => {
-              this.btnLoading = false
-              this.closeDialog(true)
-            }
-          })
-        }).catch(() => { this.btnLoading = false })
-      }).catch(err => {
-        err.msg && this.$message.warning(err.msg)
-      })
+      if (this.activeStep === 1) {
+        this.$refs['processDesign'].getData().then(res => {
+          this.flowTemplateJson = res.formData
+          this.dataForm.flowTemplateJson = JSON.stringify(this.flowTemplateJson)
+          this.submit()
+        }).catch(err => {
+          err.msg && this.$message.warning(err.msg)
+        })
+      } else {
+        this.$refs['dataForm'].validate((valid) => {
+          if (!valid) return
+          this.submit()
+        })
+      }
+    },
+    submit() {
+      this.btnLoading = true
+      const formMethod = this.dataForm.id ? Update : Create
+      formMethod(this.dataForm).then((res) => {
+        this.$message({
+          message: res.msg,
+          type: 'success',
+          duration: 1500,
+          onClose: () => {
+            this.btnLoading = false
+            this.closeDialog(true)
+          }
+        })
+      }).catch(() => { this.btnLoading = false })
     },
     prev() {
       this.activeStep -= 1
@@ -210,10 +201,6 @@ export default {
     openIconBox() { this.iconBoxVisible = true },
     choiceIcon(value) {
       this.dataForm.icon = value
-    },
-    onFormChange(id, item) {
-      this.dataForm.formName = item.fullName
-      this.dataForm.formId = id
     },
   }
 }
