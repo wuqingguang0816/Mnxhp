@@ -3038,13 +3038,6 @@ export default {
         })
         return
       }
-      if (assigneeType == 7 && !this.approverForm.approvers.length && !this.approverForm.approverPos.length && !this.approverForm.approverRole.length) {
-        this.$message({
-          message: '请设置候选人员',
-          type: 'error',
-        })
-        return
-      }
       if (assigneeType == 9 && !this.approverForm.getUserUrl) {
         this.$message({
           message: '请输入接口路径',
