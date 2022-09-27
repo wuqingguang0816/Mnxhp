@@ -253,10 +253,14 @@
                   </el-form-item>
                   <el-form-item style="margin-bottom:0!important;"
                     v-if="subFlowForm.initiateType === 6">
+                    <org-select ref="subFlow-department-org" type="department"
+                      v-model="subFlowForm.initiateOrg" title="添加部门" class="mb-5" />
                     <org-select ref="subFlow-role-org" type="role"
                       v-model="subFlowForm.initiateRole" title="添加角色" class="mb-5" />
                     <org-select ref="subFlow-position-org" v-model="subFlowForm.initiatePos"
                       title="添加岗位" type="position" class="mb-5" />
+                    <org-select ref="subFlow-group-org" type="group"
+                      v-model="subFlowForm.initiateGroup" title="添加分组" class="mb-5" />
                     <org-select ref="subFlow-user-org" v-model="subFlowForm.initiator"
                       title="添加用户" />
                   </el-form-item>
@@ -375,20 +379,28 @@
                   </el-tooltip>
                 </div>
                 <div class="form-item-content">
+                  <org-select ref="start-department-org" type="department" v-model="initiateOrg"
+                    title="添加部门" class="mb-5" />
                   <org-select ref="start-role-org" type="role" v-model="initiateRole" title="添加角色"
                     class="mb-5" />
                   <org-select ref="start-position-org" type="position" v-model="initiatePos"
                     title="添加岗位" class="mb-5" />
+                  <org-select ref="start-group-org" type="group" v-model="initiateGroup"
+                    title="添加分组" class="mb-5" />
                   <org-select ref="start-user-org" type="user" v-model="initiator" title="添加用户" />
                 </div>
               </el-form-item>
               <el-form-item label="抄送设置">
                 <div slot="label" class="form-item-label">抄送设置</div>
                 <div class="form-item-content">
+                  <org-select ref="start-copy-department-org" type="department"
+                    v-model="startForm.circulateOrg" title="添加部门" class="mb-5" />
                   <org-select ref="start-copy-role-org" type="role"
                     v-model="startForm.circulateRole" title="添加角色" class="mb-5" />
                   <org-select ref="start-copy-position-org" v-model="startForm.circulatePosition"
                     title="添加岗位" type="position" class="mb-5" />
+                  <org-select ref="start-copy-group-org" type="group"
+                    v-model="startForm.circulateGroup" title="添加分组" class="mb-5" />
                   <org-select ref="start-copy-user-org" v-model="startForm.circulateUser"
                     title="添加用户" class="mb-5" />
                   <el-form-item>
@@ -1306,10 +1318,14 @@
                   </el-form-item>
                   <el-form-item style="margin-bottom:0!important"
                     v-if="approverForm.assigneeType === 6||approverForm.assigneeType === 7">
+                    <org-select ref="approver-department-org" type="department" title="添加部门"
+                      v-model="approverForm.approverOrg" class="mb-5" />
                     <org-select ref="approver-role-org" type="role" title="添加角色"
                       v-model="approverForm.approverRole" class="mb-5" />
                     <org-select ref="approver-position-org" v-model="approverForm.approverPos"
                       title="添加岗位" type="position" class="mb-5" />
+                    <org-select ref="approver-group-org" type="group" title="添加分组"
+                      v-model="approverForm.approverGroup" class="mb-5" />
                     <org-select ref="approver-user-org" title="添加用户"
                       v-model="approverForm.approvers" />
                   </el-form-item>
@@ -1371,11 +1387,15 @@
               <el-form-item label="抄送设置">
                 <div slot="label" class="form-item-label">抄送设置</div>
                 <div class="form-item-content">
+                  <org-select ref="approver-copy-department-org" type="department"
+                    v-model="approverForm.circulateOrg" title="添加部门" class="mb-5" />
                   <org-select ref="approver-copy-role-org" type="role"
                     v-model="approverForm.circulateRole" title="添加角色" class="mb-5" />
                   <org-select ref="approver-copy-position-org"
                     v-model="approverForm.circulatePosition" title="添加岗位" type="position"
                     class="mb-5" />
+                  <org-select ref="approver-copy-group-org" type="group"
+                    v-model="approverForm.circulateGroup" title="添加分组" class="mb-5" />
                   <org-select ref="approver-copy-user-org" v-model="approverForm.circulateUser"
                     title="添加用户" class="mb-5" />
                   <el-form-item>
@@ -2248,6 +2268,8 @@ const defaultSubFlowForm = {
   initiator: [],
   initiatePos: [],
   initiateRole: [],
+  initiateOrg: [],
+  initiateGroup: [],
   flowId: '',
   flowName: '',
   assignList: [],
@@ -2268,6 +2290,8 @@ const defaultApproverForm = {
   approvers: [], // 审批人集合
   approverPos: [], // 审批岗位集合
   approverRole: [], // 审批角色集合
+  approverOrg: [], // 审批部门集合
+  approverGroup: [], // 审批分组集合
   assigneeType: 6, // 指定审批人
   userType: 'role', //role,position,user
   formOperates: [], // 表单权限集合
@@ -2573,6 +2597,8 @@ export default {
       initiator: [],
       initiatePos: [],
       initiateRole: [],
+      initiateOrg: [],
+      initiateGroup: [],
       priorityLength: 0, // 当为条件节点时  显示节点优先级选项的数据
       startForm: JSON.parse(JSON.stringify(nodeConfig.defaultStartForm)),
       ruleVisible: false,
@@ -2749,6 +2775,8 @@ export default {
       this.approverForm.approvers = []
       this.approverForm.approverPos = []
       this.approverForm.approverRole = []
+      this.approverForm.approverOrg = []
+      this.approverForm.approverGroup = []
     },
     onOrgChange(data, key) {
 
@@ -2852,15 +2880,21 @@ export default {
       this.properties.initiator = this.initiator
       this.properties.initiatePos = this.initiatePos
       this.properties.initiateRole = this.initiateRole
+      this.properties.initiateOrg = this.initiateOrg
+      this.properties.initiateGroup = this.initiateGroup
       let content = '',
+        initiatorOrgText = this.getOrgSelectLabel('start-department'),
+        initiatorGroupText = this.getOrgSelectLabel('start-group'),
         initiatorText = this.getOrgSelectLabel('start-user'),
         initiatorPosText = this.getOrgSelectLabel('start-position'),
         initiatorRoleText = this.getOrgSelectLabel('start-role')
-      if (!initiatorRoleText && !initiatorText && !initiatorPosText) {
+      if (!initiatorOrgText && !initiatorGroupText && !initiatorRoleText && !initiatorText && !initiatorPosText) {
         content = "所有人"
       } else {
-        content += initiatorRoleText
+        content += initiatorOrgText
+        content += (content && initiatorRoleText ? ',' : '') + initiatorRoleText
         content += (content && initiatorPosText ? ',' : '') + initiatorPosText
+        content += (content && initiatorGroupText ? ',' : '') + initiatorGroupText
         content += (content && initiatorText ? ',' : '') + initiatorText
       }
       this.$emit("confirm", this.properties, content);
@@ -2893,18 +2927,22 @@ export default {
       }
       let content = ''
       if (this.subFlowForm.initiateType === 6) {
-        if (!this.subFlowForm.initiator.length && !this.subFlowForm.initiatePos.length && !this.subFlowForm.initiateRole.length) {
+        if (!this.subFlowForm.initiator.length && !this.subFlowForm.initiatePos.length && !this.subFlowForm.initiateRole.length && !this.subFlowForm.initiateOrg.length && !this.subFlowForm.initiateGroup.length) {
           this.$message({
             message: '请设置发起人',
             type: 'error',
           })
           return
         }
-        let initiatorText = this.getOrgSelectLabel('subFlow-user'),
-          initiatePosText = this.getOrgSelectLabel('subFlow-position'),
-          initiateRoleText = this.getOrgSelectLabel('subFlow-role')
-        content += initiateRoleText
-        content += (content && initiatePosText ? ',' : '') + initiatePosText
+        let initiatorOrgText = this.getOrgSelectLabel('subFlow-department'),
+          initiatorGroupText = this.getOrgSelectLabel('subFlow-group'),
+          initiatorText = this.getOrgSelectLabel('subFlow-user'),
+          initiatorPosText = this.getOrgSelectLabel('subFlow-position'),
+          initiatorRoleText = this.getOrgSelectLabel('subFlow-role')
+        content += initiatorOrgText
+        content += (content && initiatorRoleText ? ',' : '') + initiatorRoleText
+        content += (content && initiatorPosText ? ',' : '') + initiatorPosText
+        content += (content && initiatorGroupText ? ',' : '') + initiatorGroupText
         content += (content && initiatorText ? ',' : '') + initiatorText
       } else {
         content = this.initiateTypeOptions.find(t => t.value === this.subFlowForm.initiateType).label
@@ -2965,7 +3003,7 @@ export default {
       const assigneeType = this.approverForm.assigneeType
       let content = ''
       if (assigneeType == 6) {
-        if (!this.approverForm.approvers.length && !this.approverForm.approverPos.length && !this.approverForm.approverRole.length) {
+        if (!this.approverForm.approvers.length && !this.approverForm.approverPos.length && !this.approverForm.approverRole.length && !this.approverForm.approverOrg.length && !this.approverForm.approverGroup.length) {
           this.$message({
             message: '请设置审批人',
             type: 'error',
@@ -2975,9 +3013,13 @@ export default {
         // approver
         let approverText = this.getOrgSelectLabel('approver-user'),
           approverPosText = this.getOrgSelectLabel('approver-position'),
-          approverRoleText = this.getOrgSelectLabel('approver-role')
-        content += approverRoleText
+          approverRoleText = this.getOrgSelectLabel('approver-role'),
+          approverOrgText = this.getOrgSelectLabel('approver-department'),
+          approverGroupText = this.getOrgSelectLabel('approver-group')
+        content += approverOrgText
+        content += (content && approverRoleText ? ',' : '') + approverRoleText
         content += (content && approverPosText ? ',' : '') + approverPosText
+        content += (content && approverGroupText ? ',' : '') + approverGroupText
         content += (content && approverText ? ',' : '') + approverText
       } else {
         content = this.assigneeTypeOptions.find(t => t.value === assigneeType).label
@@ -3087,6 +3129,8 @@ export default {
       this.initiator = this.value.properties && this.value.properties.initiator
       this.initiatePos = this.value.properties && this.value.properties.initiatePos
       this.initiateRole = this.value.properties && this.value.properties.initiateRole
+      this.initiateOrg = this.value.properties && this.value.properties.initiateOrg
+      this.initiateGroup = this.value.properties && this.value.properties.initiateGroup
       let properties = JSON.parse(JSON.stringify(this.value.properties))
       Object.assign(this.startForm, properties)
     },
