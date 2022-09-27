@@ -192,12 +192,29 @@ export default {
           const width = this.getWidthHeight(item)
           const height = this.getWidthHeight(item, 'height')
           let value = this.getValue(item)
-          value = new RegExp('http').test(value) ? value : this.define.comUrl + value
-          const template = `<img width='${width}' height='${height}' src='${value}'/>`
-          if (childItem) {
-            childItem.innerHTML = template
+          const replaceImg = (template) => {
+            if (childItem) {
+              childItem.innerHTML = template
+            } else {
+              this.printTemplate = this.replaceAll(this.printTemplate, item, template)
+            }
+          }
+          if (Array.isArray(JSON.parse(value))) {
+            const list = JSON.parse(value)
+            let template = ''
+            for (let index = 0; index < list.length; index++) {
+              const element = list[index];
+              if (element.url) {
+                value = new RegExp('http').test(element.url) ? value : this.define.comUrl + element.url
+                console.log(value)
+                template += `<img width='${width}' height='${height}' src='${value}'/>`
+              }
+            }
+            replaceImg(template)
           } else {
-            this.printTemplate = this.replaceAll(this.printTemplate, item, template)
+            value = new RegExp('http').test(value) ? value : this.define.comUrl + value
+            let template = `<img width='${width}' height='${height}' src='${value}'/>`
+            replaceImg(template)
           }
         }
       }
