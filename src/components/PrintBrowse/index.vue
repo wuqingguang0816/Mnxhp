@@ -199,14 +199,19 @@ export default {
               this.printTemplate = this.replaceAll(this.printTemplate, item, template)
             }
           }
-          if (Array.isArray(JSON.parse(value))) {
+          const isArray = false
+          try {
+            isArray = Array.isArray(JSON.parse(value))
+          } catch (error) {
+            isArray = false
+          }
+          if (isArray) {
             const list = JSON.parse(value)
             let template = ''
             for (let index = 0; index < list.length; index++) {
               const element = list[index];
               if (element.url) {
                 value = new RegExp('http').test(element.url) ? value : this.define.comUrl + element.url
-                console.log(value)
                 template += `<img width='${width}' height='${height}' src='${value}'/>`
               }
             }
@@ -379,10 +384,19 @@ export default {
     },
     print() {
       let print = this.$refs.tsPrint.innerHTML
-      let newWindow = window.open('_blank')
-      newWindow.document.body.innerHTML = print
-      newWindow.print()
-      newWindow.close()
+      let iframe = document.createElement('IFRAME');
+      document.body.appendChild(iframe);
+      let doc = iframe.contentWindow.document
+      doc.write(print);
+      doc.close();
+      iframe.contentWindow.focus();
+      iframe.contentWindow.addEventListener('load', function () {
+        let oldTitle = document.title;
+        document.title = "JNPF快速开发平台";
+        iframe.contentWindow.print();
+        document.title = oldTitle;
+        document.body.removeChild(iframe);
+      })
     },
   }
 }
