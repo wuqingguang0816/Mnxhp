@@ -48,7 +48,7 @@
               <el-table-column prop="enCode" :label="label+'编码'" />
               <el-table-column prop="formType" :label="label+'类型'" width="100">
                 <template slot-scope="scope">
-                  <span>{{ scope.row.formType == 1 ? "自定义"+label : "系统"+label}}</span>
+                  <span>{{ scope.row.formType == 2 ? "自定义"+label : "系统"+label}}</span>
                 </template>
               </el-table-column>
             </JNPF-table>
@@ -110,8 +110,6 @@ export default {
         keyword: '',
         currentPage: 1,
         pageSize: 20,
-        // formType: null,
-        // type: null
       },
       total: 0,
       checked: '',
@@ -139,7 +137,7 @@ export default {
       this.listLoading = true
       let q = {
         ...this.listQuery,
-        type: this.type,
+        flowType: this.type,
         formType: this.formType,
       }
       getFormSelect(q).then(res => {
@@ -151,6 +149,10 @@ export default {
     openDialog() {
       if (this.disabled) return
       this.checked = this.value
+      this.checkedRow = {
+        id: this.value,
+        fullName: this.title
+      }
       this.visible = true
       this.reset()
     },

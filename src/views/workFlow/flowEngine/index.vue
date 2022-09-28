@@ -55,7 +55,7 @@
               <span>{{ scope.row.visibleType ==  0 ? "全部可见" : "部分可见" }}</span>
             </template>
           </el-table-column> -->
-          <el-table-column prop="creatorUserId" label="创建人" width="120" />
+          <el-table-column prop="creatorUser" label="创建人" width="120" />
           <el-table-column prop="creatorTime" label="创建时间" :formatter="jnpf.tableDateFormat"
             width="120" />
           <el-table-column prop="sortCode" label="排序" width="70" align="center" />
