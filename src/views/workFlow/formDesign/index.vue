@@ -45,10 +45,10 @@
           <el-table-column prop="enCode" label="表单编码" width="200" />
           <el-table-column prop="formType" label="表单类型" width="100">
             <template slot-scope="scope">
-              <span>{{ scope.row.formType == 1 ? "自定义表单" : (scope.row.flowType == 2? "功能表单" : "系统表单" )}}</span>
+              <span>{{ scope.row.formType == 2 ? "自定义表单" : (scope.row.flowType == 1? "功能表单" : "系统表单" )}}</span>
             </template>
           </el-table-column>
-          <el-table-column prop="creatorUserId" label="创建人" width="120" />
+          <el-table-column prop="creatorUser" label="创建人" width="120" />
           <el-table-column prop="creatorTime" label="创建时间" :formatter="jnpf.tableDateFormat"
             width="120" />
           <el-table-column prop="lastModifyTime" label="最后修改时间" :formatter="jnpf.tableDateFormat"
@@ -100,14 +100,14 @@
         <div class="add-main-part add-main-left">
           <div class="add-main-cap">发起流程表单</div>
           <div class="add-main-container">
-            <div class="add-item" @click="addFlow(1,0)">
+            <div class="add-item" @click="addFlow(0,1)">
               <i class="add-icon icon-ym icon-ym-systemForm"></i>
               <div class="add-txt">
                 <p class="add-title">系统表单</p>
                 <p class="add-desc">关联系统原有表单，便捷设计</p>
               </div>
             </div>
-            <div class="add-item" @click="addFlow(1,1)">
+            <div class="add-item" @click="addFlow(0,2)">
               <i class="add-icon icon-ym icon-ym-customForm"></i>
               <div class="add-txt">
                 <p class="add-title">自定义表单</p>
@@ -119,7 +119,7 @@
         <div class="add-main-part add-main-right">
           <div class="add-main-cap">功能流程表单</div>
           <div class="add-main-container">
-            <div class="add-item" @click="addFlow(2,0)">
+            <div class="add-item" @click="addFlow(1,1)">
               <i class="add-icon  icon-ym icon-ym-functionForm"></i>
               <div class="add-txt">
                 <p class="add-title">功能表单</p>
@@ -245,17 +245,6 @@ export default {
         this.initData()
       }
     },
-    handleUpdate() {
-    },
-    formManagement() {
-
-    },
-    formVersion(item) {
-      this.formManagementVisible = true
-      this.$nextTick(() => {
-        this.$refs.formManagement.init(item)
-      })
-    },
     addFlow(flowType, formType) {
       this.dialogVisible = false
       this.addOrUpdateHandle('', flowType, formType)
@@ -295,7 +284,7 @@ export default {
             }
           });
         })
-      })
+      }).catch(() => { });
     },
     releaseForm(id) {
       this.$confirm('发布表单会覆盖当前线上版本，是否继续？', '发布确认', {
@@ -311,7 +300,7 @@ export default {
             }
           });
         })
-      })
+      }).catch(() => { });
     },
     rollBackForm(id) {
       this.$confirm('此操作将当前编辑的表单内容回滚为已经发布的表单内容，是否继续？', '提示', {
@@ -327,9 +316,8 @@ export default {
             }
           });
         })
-      })
+      }).catch(() => { });
     }
-
   }
 }
 </script>

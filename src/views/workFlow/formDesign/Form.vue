@@ -11,11 +11,13 @@
         <el-step title="表单设计" @click.native="stepChick(1)" />
       </el-steps>
       <div class="options">
-        <el-button @click="prev" :disabled="activeStep<=0">{{$t('common.prev')}}</el-button>
-        <el-button @click="next" :disabled="activeStep>=1 || loading">{{$t('common.next')}}
+        <el-button @click="prev" :disabled="activeStep<=0||btnLoading">{{$t('common.prev')}}
+        </el-button>
+        <el-button @click="next" :disabled="activeStep>=1||loading||btnLoading">
+          {{$t('common.next')}}
         </el-button>
         <template>
-          <el-button type="primary" @click="dataFormSubmit()" :disabled="activeStep<1"
+          <el-button type="primary" @click="dataFormSubmit()" :disabled="loading"
             :loading="btnLoading">保 存</el-button>
         </template>
         <el-button @click="closeDialog()">{{$t('common.cancelButton')}}</el-button>
@@ -35,7 +37,7 @@
             <jnpf-form-tip-item label="表单类型" prop="formType">
               <el-input v-model="formType" maxlength="50" disabled></el-input>
             </jnpf-form-tip-item>
-            <template v-if="dataForm.formType!==1">
+            <template v-if="dataForm.formType==1">
               <jnpf-form-tip-item label="Web地址" prop="urlAddress">
                 <el-input v-model="dataForm.urlAddress" placeholder="Web地址">
                   <template slot="prepend">@/views/</template>
@@ -59,17 +61,17 @@
                 :rows="3" />
             </jnpf-form-tip-item>
             <template>
-              <jnpf-form-tip-item label="数据连接" v-if="dataForm.formType==1">
-                <el-select v-model="dataForm.dbLinkId" placeholder="请选择数据库" @change="onDbChange"
-                  clearable>
-                  <el-option-group v-for="group in dbOptions" :key="group.fullName"
-                    :label="group.fullName">
-                    <el-option v-for="item in group.children" :key="item.id" :label="item.fullName"
-                      :value="item.id" />
-                  </el-option-group>
-                </el-select>
-              </jnpf-form-tip-item>
-              <template v-if="dataForm.flowType==1 && dataForm.formType==1">
+              <template v-if="dataForm.formType==2">
+                <jnpf-form-tip-item label="数据连接">
+                  <el-select v-model="dataForm.dbLinkId" placeholder="请选择数据库" @change="onDbChange"
+                    clearable>
+                    <el-option-group v-for="group in dbOptions" :key="group.fullName"
+                      :label="group.fullName">
+                      <el-option v-for="item in group.children" :key="item.id"
+                        :label="item.fullName" :value="item.id" />
+                    </el-option-group>
+                  </el-select>
+                </jnpf-form-tip-item>
                 <el-table :data="tables" class="JNPF-common-table"
                   empty-text="点击“新增”可选择 1 条（单表）或 2 条以上（多表）">
                   <el-table-column type="index" label="序号" width="50" align="center" />
@@ -122,7 +124,7 @@
         </el-col>
       </el-row>
       <template v-if="activeStep==1">
-        <template v-if="this.dataForm.flowType == 1 && this.dataForm.formType == 1">
+        <template v-if="this.dataForm.formType == 2">
           <Generator ref="generator" :conf="draftJson" :modelType="6" />
         </template>
         <template v-else>
@@ -207,8 +209,7 @@ export default {
         if (this.dataForm.id) {
           getFormInfo(this.dataForm.id).then(res => {
             this.dataForm = res.data
-            this.dataForm.formType = res.data.formType
-            this.formData = res.data.formType == 1 ? "自定义表单" : (res.data.flowType == 2 ? "功能表单" : "系统表单")
+            this.formType = res.data.formType == 2 ? "自定义表单" : (res.data.flowType == 1 ? "功能表单" : "系统表单")
             this.draftJson = res.data.draftJson && JSON.parse(res.data.draftJson)
             this.tables = this.dataForm.tableJson && JSON.parse(this.dataForm.tableJson) || []
             this.updateFields()
@@ -217,36 +218,46 @@ export default {
         } else {
           this.dataForm.flowType = flowType
           this.dataForm.formType = formType
-          this.formType = formType == 1 ? "自定义表单" : (flowType == 2 ? "功能表单" : "系统表单")
+          this.formType = formType == 2 ? "自定义表单" : (flowType == 1 ? "功能表单" : "系统表单")
           this.loading = false
         }
       })
     },
     dataFormSubmit() {
-      let model = ''
-      if (this.dataForm.flowType == 1 && this.dataForm.formType == 1) {
-        model = 'generator'
+      if (this.activeStep === 1) {
+        let model = ''
+        if (this.dataForm.formType == 2) {
+          model = 'generator'
+        } else {
+          model = 'fieldForm'
+        }
+        this.$refs[model].getData().then(res => {
+          this.dataForm.draftJson = JSON.stringify(res.formData)
+          this.dataForm.tableJson = JSON.stringify(this.tables)
+          this.submit()
+        }).catch(err => {
+          err.msg && this.$message.warning(err.msg)
+        })
       } else {
-        model = 'fieldForm'
+        this.$refs['dataForm'].validate((valid) => {
+          if (!valid) return
+          this.submit()
+        })
       }
-      this.$refs[model].getData().then(res => {
-        this.btnLoading = true
-        this.dataForm.draftJson = JSON.stringify(res.formData)
-        this.dataForm.tableJson = JSON.stringify(this.tables)
-        const formMethod = this.dataForm.id ? Update : Create
-        formMethod(this.dataForm).then((res) => {
-          this.$message({
-            message: res.msg,
-            type: 'success',
-            duration: 1500,
-            onClose: () => {
-              this.closeDialog(true)
-            }
-          })
-        }).catch(() => { this.btnLoading = false })
-      }).catch(err => {
-        err.msg && this.$message.warning(err.msg)
-      })
+    },
+    submit() {
+      this.btnLoading = true
+      const formMethod = this.dataForm.id ? Update : Create
+      formMethod(this.dataForm).then((res) => {
+        this.$message({
+          message: res.msg,
+          type: 'success',
+          duration: 1500,
+          onClose: () => {
+            this.closeDialog(true)
+          }
+        })
+      }).catch(() => { this.btnLoading = false })
     },
     next() {
       if (this.activeStep < 1) {
@@ -264,19 +275,6 @@ export default {
             }
             this.activeStep += 1
           }
-        })
-      } else {
-        let model = ''
-        if (this.dataForm.flowType == 1 && this.dataForm.formType == 1) {
-          model = 'generator'
-        } else {
-          model = 'fieldForm'
-        }
-        this.$refs[model].getData().then(res => {
-          this.draftJson = res.formData
-          this.activeStep += 1
-        }).catch(err => {
-          err.msg && this.$message.warning(err.msg)
         })
       }
     },
