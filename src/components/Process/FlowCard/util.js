@@ -429,7 +429,7 @@ export class NodeUtils {
     let valid = true
     const props = node.properties
     this.isStartNode(node) &&
-      !props.initiator &&
+      !props.formId &&
       (valid = false)
 
     this.isConditionNode(node) &&

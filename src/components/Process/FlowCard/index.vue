@@ -184,9 +184,12 @@ function addNodeButton(ctx, data, h, isBranch = false) {
 function NodeFactory(ctx, data, h) {
   if (!data) return
   const showErrorTip = ctx.verifyMode && NodeUtils.checkNode(data) === false
+  let content = "未设置审批人"
+  if (NodeUtils.isStartNode(data)) content = `未设置${this.flowType == 1 ? "功能" : "表单"}配置`
+  if (NodeUtils.isConditionNode(data)) content = "未设置条件"
+  if (NodeUtils.isSubFlowNode(data)) content = "未设置发起人"
   let res = [],
     branchNode = "",
-    content = NodeUtils.isConditionNode(data) ? "未设置条件" : NodeUtils.isSubFlowNode(data) ? "未设置发起人" : "未设置审批人",
     selfNode = (
       <div class="node-wrap">
         <div class={`node-wrap-box ${data.type} ${NodeUtils.isInterflowNode(data) ? 'interflow' : ''} ${NodeUtils.isBranchFlowNode(data) ? 'branchFlow' : ''} ${showErrorTip ? 'error' : ''}`}>
