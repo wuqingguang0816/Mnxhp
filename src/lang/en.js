@@ -139,7 +139,7 @@ export default {
     setting: 'Setting'
   },
   login: {
-    title: 'Account Password Login',
+    title: 'Account Login',
     scanTitle: 'APP Scan Login',
     codeTitle: 'Verification Code Login',
     logIn: 'Login',
