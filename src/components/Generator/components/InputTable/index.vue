@@ -230,10 +230,11 @@ export default {
               const vModel = item.jnpfKey === 'popupSelect' ? item.__vModel__.substring(0, item.__vModel__.indexOf('_jnpfRelation_')) : item.__vModel__
               if (e.__vModel__ === vModel) {
                 item.value = defaultValue
+                this.handleRelation(item, rowIndex)
                 if (e.opType === 'setOptions') {
                   item.options = []
                   let query = {
-                    paramList: this.getParamList(e.__config__.templateJson, this.formData, i)
+                    paramList: this.getParamList(e.__config__.templateJson, this.formData, rowIndex)
                   }
                   getDataInterfaceRes(e.__config__.propsUrl, query).then(res => {
                     let realData = res.data
@@ -260,6 +261,7 @@ export default {
         const config = cur.__config__
         if (val && dyOptionsList.indexOf(config.jnpfKey) > -1) {
           if (config.dataType === 'dynamic') {
+            this.handleRelation(item, rowIndex)
             if (!config.propsUrl || !config.templateJson || !config.templateJson.length) return
             let query = {
               paramList: config.templateJson ? this.getParamList(config.templateJson, this.formData, rowIndex) : [],
