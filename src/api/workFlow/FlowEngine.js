@@ -133,3 +133,19 @@ export function delComment(id) {
     method: 'delete'
   })
 }
+//流程版本列表
+export function flowJsonList(id, data) {
+  return request({
+    url: `/api/workflow/Engine/flowTemplate/${id}/FlowJsonList`,
+    method: 'get',
+    data
+  })
+}
+
+//设置主版本
+export function mainVersion(id) {
+  return request({
+    url: `/api/workflow/Engine/flowTemplate/${id}/MainVersion`,
+    method: 'post',
+  })
+}

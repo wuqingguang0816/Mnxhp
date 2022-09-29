@@ -9,24 +9,26 @@
       </div>
       <div class="main">
         <JNPF-table v-loading="listLoading" :data="list">
-          <el-table-column prop="version" label="版本号" show-overflow-tooltip>
+          <el-table-column prop="version" label="版本号" align="center">
             <template slot-scope="scope">
-              <span>v:{{scope.row.version}}</span>
+              <span class="versionClass">V:{{scope.row.version}}</span>
             </template>
           </el-table-column>
-          <el-table-column prop="principal" label="主版本">
+          <el-table-column prop="enabledMark" label="主版本" align="center">
             <template slot-scope="scope">
-              <span>{{ scope.row.principal==1?'是':'否'}}</span>
+              <span>{{ scope.row.enabledMark==1?'是':'否'}}</span>
             </template>
           </el-table-column>
-          <el-table-column prop="deploymentTime" label="创建时间" :formatter="jnpf.tableDateFormat" />
-          <el-table-column prop="startTime" label="最后修改时间" :formatter="jnpf.tableDateFormat" />
+          <el-table-column prop="creatorUserId" label="创建人" />
+          <el-table-column prop="creatorTime" label="创建时间" :formatter="jnpf.tableDateFormat" />
+          <el-table-column prop="lastModifyTime" label="最后修改时间" :formatter="jnpf.tableDateFormat" />
           <el-table-column label="操作" fixed="right">
             <template slot-scope="scope">
               <el-button type="text" size="mini" @click.native="updateRelease(scope.row)"
                 :disabled="scope.row.principal==1">设为主版本
               </el-button>
-              <el-button type="text" size="mini" @click.native="del(scope.row)">删除</el-button>
+              <el-button type="text" size="mini" @click.native="del(scope.row)" style="color:red">删除
+              </el-button>
               <el-dropdown>
                 <span class="el-dropdown-link">
                   <el-button type="text" size="mini">{{$t('common.moreBtn')}}<i
@@ -43,14 +45,14 @@
         <pagination :total="total" :page.sync="listQuery.currentPage"
           :limit.sync="listQuery.pageSize" @pagination="initData" />
       </div>
-      <FlowDetails v-if="flowVisible" ref="flow" @close="flowVisible=false" />
+      <!-- <FlowDetails v-if="flowVisible" ref="flow" @close="flowVisible=false" /> -->
     </div>
 
   </transition>
 </template>
 
 <script>
-
+import { flowJsonList, mainVersion } from '@/api/workFlow/FlowEngine'
 export default {
   components: {},
   props: [],
@@ -59,7 +61,7 @@ export default {
       flowVisible: true,
       id: '',
       title: '',
-      list: [{ id: '1', principal: '1', fullName: "v1", startTime: '2021-10-01 15:30', category: '1' }],
+      list: [],
       total: 0,
       listLoading: false,
       btnLoading: false,
@@ -70,7 +72,7 @@ export default {
         sidx: ''
       },
       enCode: '',
-      deploymentId: ''
+
 
     }
   },
@@ -80,12 +82,15 @@ export default {
       this.$confirm('确认是否将当前修改的版本设为主版本？', '系统提示', {
         type: 'warning'
       }).then(() => {
-        setRelease(this.id, item.deploymentId).then(res => {
-          this.$message({
-            type: 'success',
-            message: res.msg
-          });
-          this.$emit('management', item.deploymentId)
+        mainVersion(item.id).then(res => {
+          console.log(res)
+          if (res.code == 200) {
+            this.$message({
+              type: 'success',
+              message: res.msg
+            });
+            this.initData()
+          }
         })
       }).catch(() => {
       });
@@ -94,13 +99,7 @@ export default {
       this.$confirm('此操作将永久删除该数据，是否继续？', '系统提示', {
         type: 'warning'
       }).then(() => {
-        delRelease(item.deploymentId).then(res => {
-          this.$message({
-            type: 'success',
-            message: res.msg
-          });
-          this.$emit('management', item.deploymentId)
-        })
+
       }).catch(() => {
       });
     },
@@ -111,13 +110,10 @@ export default {
       })
     },
     goBack() {
-      this.$emit('management')
+      this.$emit('close', true)
     },
-    init(item) {
-      this.id = item.id
-      console.log(this.id)
-      this.enCode = item.enCode
-      this.deploymentId = item.deploymentId
+    init(flowId) {
+      this.id = flowId
       this.initData()
     },
     reset() {
@@ -137,20 +133,14 @@ export default {
       this.listLoading = true
       let query = {
         ...this.listQuery,
-        enCode: this.enCode,
+        templateId: this.id
       }
-      // versionList(query).then(res => {
-      //   for (let i = 0; i < res.data.list.length; i++) {
-      //     if (res.data.list[i].deploymentId === this.deploymentId) {
-      //       res.data.list[i].principal = 1
-      //     } else {
-      //       res.data.list[i].principal = 0
-      //     }
-      //   }
-      //   this.list = res.data.list
-      //   this.total = res.data.pagination.total
+      flowJsonList(this.id, query).then((res) => {
+        console.log(res)
+        this.list = res.data.list
+      })
       this.listLoading = false
-      // })
+
     },
   }
 }
@@ -168,5 +158,14 @@ export default {
     flex: 1;
     border-top: none;
   }
+}
+.versionClass {
+  display: inline-block;
+  width: 50px;
+  height: 24px;
+  line-height: 24px;
+  text-align: center;
+  border: 1px solid #1890ff;
+  border-radius: 5px;
 }
 </style>

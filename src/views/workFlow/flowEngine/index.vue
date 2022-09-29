@@ -76,8 +76,16 @@
                     </el-button>
                   </span>
                   <el-dropdown-menu slot="dropdown">
-                    <el-dropdown-item @click.native="preview(scope.row)">
-                      表单预览</el-dropdown-item>
+                    <el-dropdown-item v-if="scope.row.enabledMark!=1"
+                      @click.native="handleUpdate(scope.row)">
+                      启用流程</el-dropdown-item>
+                    <el-dropdown-item v-if="scope.row.enabledMark==1"
+                      @click.native="handleUpdate(scope.row)">
+                      禁用流程</el-dropdown-item>
+                    <el-dropdown-item @click.native="showManage(scope.row.id)">
+                      版本管理</el-dropdown-item>
+                    <!-- <el-dropdown-item @click.native="preview(scope.row)">
+                      表单预览</el-dropdown-item> -->
                     <el-dropdown-item @click.native="copy(scope.row.id)">
                       复制流程</el-dropdown-item>
                     <el-dropdown-item @click.native="handleExport(scope.row.id)">
@@ -93,9 +101,11 @@
       </div>
     </div>
     <Form v-if="formVisible" ref="Form" @close="closeForm" />
+    <FlowManage v-if="manageVisible" ref="FlowManage" @close="closeManage" />
     <preview v-if="previewVisible" ref="preview" @close="previewVisible=false" />
     <previewDialog :visible.sync="previewDialogVisible" :id="currRow.id" type="flow"
       @previewPc="previewPc" />
+
     <el-dialog title="新建流程" :visible.sync="dialogVisible" class="JNPF-dialog JNPF-dialog_center"
       lock-scroll width="600px">
       <div class="add-main">
@@ -123,10 +133,11 @@ import { FlowEngineList, Delete, Release, Stop, Copy, exportData } from '@/api/w
 import Form from './Form'
 import preview from '../components/Preview'
 import previewDialog from '@/components/PreviewDialog'
+import FlowManage from './FlowManagement.vue'
 
 export default {
   name: 'workFlow-flowEngine',
-  components: { Form, preview, previewDialog },
+  components: { Form, preview, previewDialog, FlowManage },
   data() {
     return {
       keyword: '',
@@ -142,6 +153,7 @@ export default {
       listLoading: true,
       dialogVisible: false,
       formVisible: false,
+      manageVisible: false,
       previewVisible: false,
       previewDialogVisible: false,
       currRow: {},
@@ -258,9 +270,21 @@ export default {
         this.initData()
       }
     },
+    showManage(data) {
+      this.manageVisible = true
+      this.$nextTick(() => {
+        this.$refs.FlowManage.init(data)
+      })
+    },
+    closeManage(isRefresh) {
+      this.manageVisible = false
+      if (isRefresh) {
+        this.initData()
+      }
+    },
     handleUpdate(row) {
       if (row.enabledMark) {
-        this.$confirm('您确定要停止当前流程吗, 是否继续?', '提示', {
+        this.$confirm('此操作将禁用该流程，是否继续？', '提示', {
           type: 'warning'
         }).then(() => {
           Stop(row.id).then(res => {
@@ -272,7 +296,7 @@ export default {
           })
         }).catch(() => { });
       } else {
-        this.$confirm('您确定要发布当前流程吗, 是否继续?', '提示', {
+        this.$confirm('此操作将启用该流程，是否继续？', '提示', {
           type: 'warning'
         }).then(() => {
           Release(row.id).then(res => {
@@ -284,7 +308,8 @@ export default {
           })
         }).catch(() => { });
       }
-    }
+    },
+
   }
 }
 </script>
