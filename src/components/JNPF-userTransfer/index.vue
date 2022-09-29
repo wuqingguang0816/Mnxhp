@@ -197,14 +197,14 @@ export default {
       } else if (this.activeName === 'department') {
         this.loading = true
         this.treeData2 = []
-        getOrganization({ keyword: this.keyword, organizeId: '0' }).then(res => {
+        getOrganization({ keyword: this.pagination.keyword, organizeId: '0' }).then(res => {
           this.treeData2 = res.data
           this.loading = false
         })
       } else {
         this.loading = true
         this.treeData3 = []
-        getSubordinates(this.keyword).then(res => {
+        getSubordinates(this.pagination.keyword).then(res => {
           this.treeData3 = res.data
           this.loading = false
         })
