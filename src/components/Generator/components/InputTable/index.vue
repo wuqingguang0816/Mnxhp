@@ -261,7 +261,7 @@ export default {
         const config = cur.__config__
         if (val && dyOptionsList.indexOf(config.jnpfKey) > -1) {
           if (config.dataType === 'dynamic') {
-            this.handleRelation(item, rowIndex)
+            this.buildRowAttr(rowIndex, item)
             if (!config.propsUrl || !config.templateJson || !config.templateJson.length) return
             let query = {
               paramList: config.templateJson ? this.getParamList(config.templateJson, this.formData, rowIndex) : [],
