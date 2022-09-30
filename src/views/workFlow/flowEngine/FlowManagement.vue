@@ -11,7 +11,7 @@
         <JNPF-table v-loading="listLoading" :data="list">
           <el-table-column prop="version" label="版本号" align="center">
             <template slot-scope="scope">
-              <span class="versionClass">V:{{scope.row.version}}</span>
+              <el-tag>V:{{scope.row.version}}</el-tag>
             </template>
           </el-table-column>
           <el-table-column prop="enabledMark" label="主版本" align="center">
@@ -47,7 +47,6 @@
       </div>
       <!-- <FlowDetails v-if="flowVisible" ref="flow" @close="flowVisible=false" /> -->
     </div>
-
   </transition>
 </template>
 
@@ -72,8 +71,6 @@ export default {
         sidx: ''
       },
       enCode: '',
-
-
     }
   },
 
@@ -83,7 +80,6 @@ export default {
         type: 'warning'
       }).then(() => {
         mainVersion(item.id).then(res => {
-          console.log(res)
           if (res.code == 200) {
             this.$message({
               type: 'success',
@@ -92,8 +88,7 @@ export default {
             this.initData()
           }
         })
-      }).catch(() => {
-      });
+      }).catch(() => { });
     },
     del(item) {
       this.$confirm('此操作将永久删除该数据，是否继续？', '系统提示', {
@@ -136,7 +131,6 @@ export default {
         templateId: this.id
       }
       flowJsonList(this.id, query).then((res) => {
-        console.log(res)
         this.list = res.data.list
       })
       this.listLoading = false
@@ -158,14 +152,5 @@ export default {
     flex: 1;
     border-top: none;
   }
-}
-.versionClass {
-  display: inline-block;
-  width: 50px;
-  height: 24px;
-  line-height: 24px;
-  text-align: center;
-  border: 1px solid #1890ff;
-  border-radius: 5px;
 }
 </style>
