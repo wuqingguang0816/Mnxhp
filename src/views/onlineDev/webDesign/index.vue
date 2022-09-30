@@ -118,7 +118,7 @@
         <template v-if="!currRow.pcIsRelease">
           <el-form-item label="上级" prop="pcModuleParentId" v-if="releaseQuery.pc">
             <JNPF-TreeSelect v-model="releaseQuery.pcModuleParentId" :options="treeData"
-              placeholder="选择上级菜单" @change="treeSelectChange" />
+              placeholder="选择上级菜单" @change="treeSelectChange(arguments,'pc')" />
           </el-form-item>
         </template>
         <template v-if="!currRow.appIsRelease">
@@ -126,7 +126,7 @@
           </el-form-item>
           <el-form-item label="上级" prop="appModuleParentId" v-if="releaseQuery.app">
             <JNPF-TreeSelect v-model="releaseQuery.appModuleParentId" :options="appTreeData"
-              placeholder="选择上级菜单" @change="treeSelectChange" />
+              placeholder="选择上级菜单" @change="treeSelectChange(arguments,'app')" />
           </el-form-item>
         </template>
       </el-form>
@@ -176,7 +176,8 @@ export default {
       },
       treeData: [],
       appTreeData: [],
-      systemId: ""
+      pcSystemId: "",
+      appSystemId: "",
     }
   },
   methods: {
@@ -189,7 +190,8 @@ export default {
     openReleaseDialog(row) {
       this.currRow = row
       this.releaseDialogVisible = true
-      this.systemId = ""
+      this.pcSystemId = ""
+      this.appSystemId = ""
       this.releaseQuery = {
         pc: 1,
         app: 1,
@@ -205,8 +207,12 @@ export default {
     selectToggle(key) {
       this.releaseQuery[key] = this.releaseQuery[key] === 1 ? 0 : 1
     },
-    treeSelectChange(e, node) {
-      this.systemId = node.systemId
+    treeSelectChange(data, type) {
+      const systemId = data[1].systemId
+      if (type == 'pc') this.pcSystemId = systemId
+      if (type == 'app') this.appSystemId = systemId
+      console.log(this.pcSystemId)
+      console.log(this.appSystemId)
     },
     // 发布菜单
     release() {
@@ -214,7 +220,8 @@ export default {
         if (!valid) return
         if (!this.releaseQuery.pc && !this.releaseQuery.app) return this.$message.error('请至少选择一种菜单同步方式')
         this.releaseBtnLoading = true
-        this.releaseQuery.systemId = this.systemId
+        this.releaseQuery.pcSystemId = this.pcSystemId
+        this.releaseQuery.appSystemId = this.appSystemId
         Release(this.currRow.id, this.releaseQuery).then(res => {
           this.releaseBtnLoading = false
           this.releaseDialogVisible = false
