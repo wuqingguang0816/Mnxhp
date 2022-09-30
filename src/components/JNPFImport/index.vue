@@ -42,8 +42,9 @@
             <el-input v-model="scope.row[item.id]" />
           </template>
           <template v-if="item.children">
-            <el-table-column :prop="it.id" :label="it.fullName" :width="it.id=='delete'?50:150"
-              v-for="(it,i) in item.children" :key="i" class-name="child-table-box">>
+            <el-table-column :prop="item.id+'-'+it.id" :label="it.fullName"
+              :width="it.id=='delete'?50:150" v-for="(it,i) in item.children" :key="i"
+              class-name="child-table-box">>
               <template slot-scope="scope">
                 <div class="child-table-column">
                   <tr v-for="(row,j) in scope.row[item.id]" :key="j"
@@ -156,7 +157,8 @@ export default {
       },
       modelId: "",
       url: '',
-      actionUrl: ''
+      actionUrl: '',
+      mergeList: []
     }
   },
   methods: {
@@ -230,24 +232,41 @@ export default {
           this.headerList = JSON.parse(JSON.stringify(res.data.headerRow))
           this.btnLoading = false
           this.active++
+          this.getMergeList(this.headerList)
         }).catch(() => { this.btnLoading = false })
       }
     },
-    arraySpanMethod({ row, column, rowIndex, columnIndex }) {
-      let list = this.active == 2 ? this.headerList : this.resultHeaderList
-      for (let index = 0; index < list.length; index++) {
-        const element = list[index];
-        if (element.children && element.children.length) {
-          for (let i = 0; i < element.children.length; i++) {
-            const item = element.children[i];
-            if (column.property == item.id) {
-              if (i == 0) {
-                return [1, element.children.length];
-              } else {
-                return [0, 0];
-              }
+    getMergeList(list) {
+      list.forEach(item => {
+        if (item.children && item.children.length > 0) {
+          item.children.forEach((child, index) => {
+            if (index == 0) {
+              this.mergeList.push({
+                prop: item.id + '-' + child.id,
+                rowspan: 1,
+                colspan: item.children.length
+              })
+            } else {
+              this.mergeList.push({
+                prop: item.id + '-' + child.id,
+                rowspan: 0,
+                colspan: 0
+              })
             }
-          }
+          })
+        } else {
+          this.mergeList.push({
+            prop: item.id,
+            rowspan: 1,
+            colspan: 1
+          })
+        }
+      })
+    },
+    arraySpanMethod({ row, column, rowIndex, columnIndex }) {
+      for (let i = 0; i < this.mergeList.length; i++) {
+        if (column.property == this.mergeList[i].prop) {
+          return [this.mergeList[i].rowspan, this.mergeList[i].colspan]
         }
       }
     },
