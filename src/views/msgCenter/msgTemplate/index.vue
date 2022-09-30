@@ -191,6 +191,7 @@ export default {
       }).then(() => {
         delMsgTemplate(id).then(res => {
           this.list.splice(index, 1)
+          this.total--
           this.$message({
             type: 'success',
             message: res.msg

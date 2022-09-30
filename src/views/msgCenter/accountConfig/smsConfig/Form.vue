@@ -4,10 +4,10 @@
     <el-form ref="dataForm" :model="dataForm" :rules="dataRule" v-loading="formLoading"
       label-width="160px">
       <jnpf-form-tip-item label="名称" prop="fullName">
-        <el-input v-model="dataForm.fullName" placeholder="输入名称" clearable />
+        <el-input v-model="dataForm.fullName" placeholder="名称" clearable />
       </jnpf-form-tip-item>
       <jnpf-form-tip-item label="编码" prop="enCode">
-        <el-input v-model="dataForm.enCode" placeholder="业务编码" clearable />
+        <el-input v-model="dataForm.enCode" placeholder="编码" clearable />
       </jnpf-form-tip-item>
       <jnpf-form-tip-item label="渠道" prop="channel">
         <el-select v-model="dataForm.channel" placeholder="请选择" clearable @change="channelVal">

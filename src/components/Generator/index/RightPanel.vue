@@ -354,7 +354,7 @@
               <el-input-number v-model="activeData.__config__.columnWidth" placeholder="控件宽度"
                 :min="0" :precision="0" controls-position="right" />
             </el-form-item>
-            <el-form-item label="自定义Class">
+            <el-form-item label="控件Class">
               <el-select v-model="activeData.__config__.className" multiple clearable
                 placeholder="请选择">
                 <el-option v-for="item in formConf.classNames" :key="item" :label="item"
@@ -427,6 +427,16 @@
                 :key="item" />
             </el-select>
           </el-form-item>
+          <el-form-item label="表单Css">
+            <el-button style="width: 100%;" @click="addStyle">编写样式</el-button>
+          </el-form-item>
+          <el-form-item label="表单Class">
+            <el-select v-model="formConf.className" multiple clearable placeholder="请选择">
+              <el-option v-for="item in formConf.classNames" :key="item" :label="item"
+                :value="item">
+              </el-option>
+            </el-select>
+          </el-form-item>
           <el-form-item label="主键策略">
             <el-select v-model="formConf.primaryKeyPolicy" placeholder="请选择"
               :disabled="!!getFormInfo().id">
@@ -441,10 +451,6 @@
               </el-tooltip>
             </span>
             <el-switch v-model="formConf.concurrencyLock" />
-          </el-form-item>
-          <el-divider>表单样式</el-divider>
-          <el-form-item label="样式CSS">
-            <el-button style="width: 100%;" @click="addStyle">设置</el-button>
           </el-form-item>
           <template v-if="modelType!=3 && modelType!=6 && webType!=3">
             <el-divider>表单按钮</el-divider>
@@ -827,7 +833,7 @@ export default {
             name = name.split("\.")[1]
           }
           name = name.split("\:")[0]
-          let matching = new RegExp(/^[a-zA-Z][a-zA-Z0-9_]*$/)
+          let matching = new RegExp(/^[a-zA-Z]-?.*[a-zA-Z0-9_]*$/)
           if (matching.test(name)) {
             classObject.key = name.replace(/\r|\n/ig, '').trim()
             classObject.value = item.replace(/\r|\n/ig, '') + "}"

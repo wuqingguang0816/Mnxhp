@@ -25,6 +25,7 @@ export const formConf = {
   printId: "",
   formStyle: "",
   classNames: [],
+  className: [],
   classJson: "",
   funcs: {
     onLoad:

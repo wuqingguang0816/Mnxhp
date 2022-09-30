@@ -55,6 +55,9 @@ export default {
       this.testForm.testSendEmail = '';
       this.testForm.testEmailTitle = '测试';
       this.testForm.testEmailContent = '测试';
+      this.$nextTick(() => {
+        this.$refs['testForm'].resetFields()
+      })
     },
     testSubmit() {
       this.$refs['testForm'].validate((valid) => {

@@ -92,7 +92,7 @@ export default {
         approveType: [
           { required: true, message: '请选择认证类型', trigger: 'change' }
         ],
-        webhookAddress: [{ required: true, message: '请输入业务编码', trigger: 'blur' }],
+        webhookAddress: [{ required: true, message: '请输入WebHook地址', trigger: 'blur' }],
         bearer: [{ required: true, message: '请输Bearer令牌', trigger: 'blur' }]
       }
     }

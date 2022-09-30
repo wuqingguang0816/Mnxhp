@@ -230,7 +230,7 @@ export default {
   color: #fff;
   height: 24px;
   padding: 0 8px;
-  line-height: 22px;
+  line-height: 24px;
   border-radius: 4px;
   white-space: nowrap;
   display: inline-block;

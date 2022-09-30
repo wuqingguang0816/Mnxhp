@@ -113,7 +113,7 @@
                   tipLabel='参数格式：{参数名}'>
                   <JNPFQuill v-model="dataForm.content" ref="myQuillEditor" />
                 </jnpf-form-tip-item>
-                <jnpf-form-tip-item label="消息内容" prop="content" class="jnpf-textarea-item"
+                <jnpf-form-tip-item label="消息内容" prop="content"
                   v-else-if="dataForm.messageType != 1||dataForm.messageSource != 1"
                   tipLabel='参数格式：{参数名}'>
                   <el-input v-model="dataForm.content" placeholder="消息内容" type="textarea"
@@ -412,7 +412,7 @@ export default {
     display: flex;
     flex-direction: column;
     overflow: hidden;
-    margin: 0 10px 0 20px;
+    margin: 0 10px 18px 20px;
 
     .left-pane-list {
       border: 1px solid #dcdfe6;
@@ -471,9 +471,6 @@ export default {
       >>> .el-icon-delete {
         font-size: 16px;
       }
-    }
-    .jnpf-textarea-item {
-      margin-bottom: unset;
     }
     >>> .ql-editor {
       min-height: 300px !important;

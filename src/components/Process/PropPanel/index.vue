@@ -142,11 +142,11 @@
     <!-- 定时器  -->
     <section class="condition-pane pd-10-20" v-if="value && isTimerNode()">
       <el-row>
-        <el-alert title="添加定时器后，审批节点将根据设置的时间流转" type="warning" :closable="false" show-icon />
+        <el-alert title="定时器将根据设置的延迟时间流转审批" type="warning" :closable="false" show-icon />
         <el-col :span="24">
           <el-form class="mt-10" label-position="top">
             <el-form-item label="时间设置">
-              <div slot="label" class="form-item-label">时间设置</div>
+              <div slot="label" class="form-item-label">延迟时间</div>
               <div class="form-item-content">
                 <div class="mb-10">
                   <el-input-number :min="0" v-model="properties.day" :precision="0"
@@ -3378,6 +3378,7 @@ export default {
       if (this.subFlowForm.flowId === id) return
       this.subFlowForm.flowId = id
       this.subFlowForm.flowName = item.fullName
+      this.subFlowForm.assignList = []
     },
     // 条件节点
     onConditionDateChange(val, item) {
