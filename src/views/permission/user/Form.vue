@@ -13,7 +13,11 @@
       <div class="main" v-loading="formLoading">
         <el-form ref="dataForm" :model="dataForm" :rules="dataRule" label-width="80px">
           <div class="JNPF-common-title mb-20">
-            <h2 class="bold">账户信息</h2>
+            <h2 class="bold">账户信息
+              <el-tooltip effect="dark" content="新用户初始密码默认是0000" placement="top">
+                <a class="el-icon-warning-outline"></a>
+              </el-tooltip>
+            </h2>
           </div>
           <el-row :gutter="20" class="custom-row">
             <el-col :sm="12" :xs="24">
