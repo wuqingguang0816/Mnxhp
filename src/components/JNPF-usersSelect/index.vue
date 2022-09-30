@@ -172,7 +172,7 @@
                       <p class="name">{{child.fullName}}</p>
                       <p class="organize" :title="child.organize">{{child.organize}}</p>
                     </div>
-                    <i class="el-icon-delete delete" @click="removeMulData(index,i)"></i>
+                    <i class="el-icon-delete delete" @click="removeMulData(child.id)"></i>
                   </div>
                 </template>
               </div>
@@ -613,8 +613,11 @@ export default {
     removeData(index) {
       this.selectedData.splice(index, 1)
     },
-    removeMulData(index, i) {
-      this.selectedList[index].children.splice(i, 1)
+    removeMulData(id) {
+      const index = this.selectedData.findIndex((item) => {
+        return item.id == id
+      })
+      if (index != -1) this.selectedData.splice(index, 1)
     },
     deleteTag(event, index) {
       this.selectedData.splice(index, 1)
