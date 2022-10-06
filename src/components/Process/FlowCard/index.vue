@@ -118,6 +118,7 @@ function addNodeButton(ctx, data, h, isBranch = false) {
     canAddAppendInterflow = false
     canAddAppendBranchFlowBranch = false
     canAddSubFlow = false
+    canAddTimerNode = false
   }
   if (data.type === 'timer' || (data.childNode && data.childNode.type === 'timer')) {
     canAddTimerNode = false
@@ -133,6 +134,7 @@ function addNodeButton(ctx, data, h, isBranch = false) {
     <div class="add-node-btn-box flex justify-center">
       <div class="add-node-btn">
         <el-popover placement="right" trigger="click" width="440">
+          <el-alert title="增加节点后可能会导致下面节点配置的数据传递规则失效" type="warning" closable={false} show-icon />
           <div class="condition-box">
             <div>
               <div class="condition-icon" onClick={ctx.eventLauncher.bind(ctx, "addApprovalNode", data, isBranch)} >
@@ -292,11 +294,20 @@ export default {
      * @param { Object } 包含event（事件名）和args（事件参数）两个参数
      */
     eventLauncher(event, ...args) {
+      stopPro(args[args.length - 1])
       let list = ['appendBranch', 'appendBranchFlowBranch', 'appendInterflowBranch', 'addTimerNode']
       if (list.includes(event) && args[args.length - 2]) return
       // args.slice(0,-1) vue 会注入MouseEvent到最后一个参数 去除事件对象
       let param = { event, args: args.slice(0, -1) };
-      this.$emit("emits", param);
+      if (event === 'deleteNode') {
+        this.$confirm('此操作将永久删除该节点，删除后可能会导致下面节点配置的数据传递规则失效，是否继续?', '提示', {
+          type: 'warning'
+        }).then(() => {
+          this.$emit("emits", param);
+        }).catch(() => { });
+      } else {
+        this.$emit("emits", param);
+      }
     }
   },
   render(h) {

@@ -11,8 +11,10 @@
         <el-step title="流程设计" @click.native="stepChick(1)" />
       </el-steps>
       <div class="options">
-        <el-button @click="prev" :disabled="activeStep<=0">{{$t('common.prev')}}</el-button>
-        <el-button @click="next" :disabled="activeStep>=1 || loading">{{$t('common.next')}}
+        <el-button @click="prev" :disabled="activeStep<=0||btnLoading">{{$t('common.prev')}}
+        </el-button>
+        <el-button @click="next" :disabled="activeStep>=1||loading||btnLoading">
+          {{$t('common.next')}}
         </el-button>
         <el-button type="primary" @click="dataFormSubmit()" :disabled="loading"
           :loading="btnLoading">保 存</el-button>

@@ -1259,6 +1259,31 @@
         <el-tab-pane label="基础设置" name="config">
           <el-scrollbar class="config-scrollbar">
             <el-form label-position="top" :model="approverForm" class="pd-10-20">
+              <template v-if="flowType!==1">
+                <el-form-item>
+                  <div slot="label" class="form-item-label">表单配置
+                    <el-tooltip content="审批节点不配置表单，默认引用发起节点表单" placement="top">
+                      <a class="el-icon-warning-outline"></a>
+                    </el-tooltip>
+                  </div>
+                  <div class="form-item-content">
+                    <flow-form-dialog :value="approverForm.formId" :title="approverForm.formName"
+                      :type="flowType" @change="onApproverFormIdChange" placeholder="请选择表单" />
+                  </div>
+                </el-form-item>
+                <el-form-item>
+                  <div slot="label" class="form-item-label">数据传递
+                    <el-tooltip content="不设置传递规则时字段名称相同自动赋值；设置传递规则时相同名称字段会自动赋值字段后再按传递规则赋值"
+                      placement="top">
+                      <a class="el-icon-warning-outline"></a>
+                    </el-tooltip>
+                  </div>
+                  <div class="form-item-content hand" @click="openApproverTransmitRuleBox">
+                    <el-input class="hand" :value="approverForm.assignList.length?'已设置':''"
+                      placeholder="请设置数据传递规则" suffix-icon="el-icon-arrow-down" readonly />
+                  </div>
+                </el-form-item>
+              </template>
               <el-form-item label="审批设置">
                 <div slot="label" class="form-item-label">审批设置</div>
                 <div class="form-item-content">
@@ -2234,16 +2259,54 @@
         <el-button type="primary" @click="saveRule">确定</el-button>
       </span>
     </el-dialog>
+    <el-dialog title="数据传递" :close-on-click-modal="false"
+      :visible.sync="approverTransmitRuleVisible" class="JNPF-dialog JNPF-dialog_center rule-dialog"
+      lock-scroll append-to-body width='700px'>
+      <el-tabs class="JNPF-el_tabs node-tabs">
+        <el-tab-pane :label="item.title" v-for="(item,i) in assignList" :key="i">
+          <div class="option-box-tip">当节点流转到本节点时，将对应的上一节点的字段赋值给本节点</div>
+          <el-row :gutter="10" v-for="(child,cIndex) in item.ruleList" :key="cIndex" class="mb-10">
+            <el-col :span="2" class="rule-cell">上节点</el-col>
+            <el-col :span="7" class="rule-cell">
+              <el-select v-model="child.parentField" placeholder="请选择字段">
+                <el-option v-for="field in item.formFieldList" :key="field.__vModel__"
+                  :label="field.__config__.label" :value="field.__vModel__" />
+              </el-select>
+            </el-col>
+            <el-col :span="4" class="rule-cell mid">赋值给</el-col>
+            <el-col :span="2" class="rule-cell">本节点</el-col>
+            <el-col :span="7" class="rule-cell">
+              <el-select v-model="child.childField" placeholder="请选择字段" filterable clearable>
+                <el-option v-for="item in formFieldsOptions" :key="item.__vModel__"
+                  :label="item.__config__.label" :value="item.__vModel__" />
+              </el-select>
+            </el-col>
+            <el-col :span="2" class="rule-cell">
+              <el-button type="danger" icon="el-icon-close"
+                @click="delApproverTransmitRule(i,cIndex)">
+              </el-button>
+            </el-col>
+          </el-row>
+          <div class="table-actions" @click="addApproverTransmitRule(i)">
+            <el-button type="text" icon="el-icon-plus">新增规则</el-button>
+          </div>
+        </el-tab-pane>
+      </el-tabs>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="approverTransmitRuleVisible = false">取消</el-button>
+        <el-button type="primary" @click="saveApproverTransmitRule">确定</el-button>
+      </span>
+    </el-dialog>
     <FormulaDialog :visible.sync="formulaVisible" :value="activeItem.field"
       @updateFormula="updateFormula" :formFieldsOptions="formFieldsOptions" />
     <Detail v-if="viewVisible" ref="View" @close="viewVisible = false" />
   </el-drawer>
 </template>
 <script>
-import { FlowEngineSelector, getFormDataFields } from '@/api/workFlow/FlowEngine'
+import { getFormDataFields } from '@/api/workFlow/FlowEngine'
+import { getFormInfo } from '@/api/workFlow/FormDesign'
 import { NodeUtils } from "../FlowCard/util"
 import nodeConfig from "../FlowCard/config"
-import { getDrawingList } from '@/components/Generator/utils/db'
 import OrgSelect from '../OrgSelect'
 import MsgDialog from './msgDialog'
 import InterfaceDialog from './InterfaceDialog'
@@ -2337,6 +2400,10 @@ const defaultApproverForm = {
   printId: '', // 打印模板
   hasSign: false,
   hasOpinion: true,
+  formId: "",
+  formName: "",
+  formFieldList: [],
+  assignList: [],
   timeLimitConfig: {
     on: 2,  // 开启
     nodeLimit: 0, // 节点限定时长起始值类型
@@ -2686,12 +2753,15 @@ export default {
       }],
       assignList: [],
       printTplList: [],
-      flowOptions: [],
       childFieldOptions: [],
       nodeOptions: [],
       formulaVisible: false,
       activeItem: {},
-      viewVisible: false
+      viewVisible: false,
+      formFieldList: [],
+      approverTransmitRuleVisible: false,
+      prevNodeList: [],
+      isPrevNodeWithSubForm: false,
     };
   },
   computed: {
@@ -2700,40 +2770,11 @@ export default {
       // 发起人是默认就有得  所以需要加 1
       return this.pconditions.length - this.showingPCons.length + 1;
     },
-    usedFormItems() {
-      let list = []
-      const loop = (data, parent) => {
-        if (!data) return
-        if (data.__config__ && data.__config__.jnpfKey !== 'table' && data.__config__.children && Array.isArray(data.__config__.children)) {
-          loop(data.__config__.children, data)
-        }
-        if (Array.isArray(data)) data.forEach(d => loop(d, parent))
-        if (data.__vModel__ && data.__config__.jnpfKey !== 'table') list.push(data)
-      }
-      loop(getDrawingList())
-      const formItems = list.filter(o => o.__vModel__.indexOf('-') < 0)
-      return formItems
-    },
     formFieldsOptions() {
-      let list = []
-      const loop = (data, parent) => {
-        if (!data) return
-        if (data.__vModel__ && data.__config__.jnpfKey !== 'table') {
-          const isTableChild = parent && parent.__config__ && parent.__config__.jnpfKey === 'table'
-          let obj = JSON.parse(JSON.stringify(data))
-          if (isTableChild) {
-            obj.__vModel__ = parent.__vModel__ + '-' + data.__vModel__
-            obj.__config__.label = parent.__config__.label + '-' + data.__config__.label
-          }
-          list.push(obj)
-        }
-        if (data.__config__ && data.__config__.children && Array.isArray(data.__config__.children)) {
-          loop(data.__config__.children, data)
-        }
-        if (Array.isArray(data)) data.forEach(d => loop(d, parent))
-      }
-      loop(getDrawingList())
-      return list
+      return this.formFieldList.filter(o => o.__config__.jnpfKey !== 'table')
+    },
+    usedFormItems() {
+      return this.formFieldsOptions.filter(o => o.__vModel__.indexOf('-') < 0)
     },
     funcOptions() {
       let options = [
@@ -2743,11 +2784,9 @@ export default {
       return options
     },
     funcRequiredOptions() {
-      let options = this.formFieldsOptions.filter(o => o.__config__ && o.__config__.required)
-      return options
+      return this.formFieldsOptions.filter(o => o.__config__ && o.__config__.required)
     },
   },
-
   methods: {
     handleSelect(item) {
       this.temporaryContent += "{" + item.id + "}"
@@ -2812,31 +2851,35 @@ export default {
     couldShowIt(item, ...tag) {
       return tag.includes(item.tag) && this.showingPCons.includes(item.formId);
     },
-    initFormOperates(target) {
+    initFormOperates(target, isUpdate, isSameForm) {
       const formOperates = target.properties && target.properties.formOperates || []
       let res = []
-      if (!formOperates.length) {
-        const loop = (data, parent) => {
-          if (!data) return
-          if (data.__vModel__) {
-            const isTableChild = parent && parent.__config__ && parent.__config__.jnpfKey === 'table'
-            res.push({
-              id: isTableChild ? parent.__vModel__ + '-' + data.__vModel__ : data.__vModel__,
-              name: isTableChild ? parent.__config__.label + '-' + data.__config__.label : data.__config__.label,
-              required: data.__config__.required,
-              requiredDisabled: requiredDisabled(data.__config__.jnpfKey) || data.__config__.required,
-              jnpfKey: data.__config__.jnpfKey,
-              dataType: getDataType(data),
-              read: true,
-              write: false
-            })
-          }
-          if (Array.isArray(data)) data.forEach(d => loop(d, parent))
-          if (data.__config__ && data.__config__.children && Array.isArray(data.__config__.children)) {
-            loop(data.__config__.children, data)
-          }
+      const getWriteById = id => {
+        const arr = formOperates.filter(o => o.id === id)
+        return arr.length ? arr[0].write : NodeUtils.isStartNode(target)
+      }
+      const getReadById = id => {
+        const arr = formOperates.filter(o => o.id === id)
+        return arr.length ? arr[0].read : true
+      }
+      const getRequiredById = id => {
+        const arr = formOperates.filter(o => o.id === id)
+        return arr.length ? arr[0].required : false
+      }
+      if (!formOperates.length || isUpdate) {
+        for (let i = 0; i < this.formFieldList.length; i++) {
+          const data = this.formFieldList[i];
+          res.push({
+            id: data.__vModel__,
+            name: data.__config__.label,
+            required: !isSameForm ? data.__config__.required : data.__config__.required || getRequiredById(data.__vModel__),
+            requiredDisabled: requiredDisabled(data.__config__.jnpfKey) || data.__config__.required,
+            jnpfKey: data.__config__.jnpfKey,
+            dataType: getDataType(data),
+            read: !isSameForm ? true : getReadById(data.__vModel__),
+            write: !isSameForm ? NodeUtils.isStartNode(target) : getWriteById(data.__vModel__),
+          })
         }
-        loop(getDrawingList())
       } else {
         res = formOperates
       }
@@ -3137,25 +3180,112 @@ export default {
       this.initiateGroup = this.value.properties && this.value.properties.initiateGroup
       let properties = JSON.parse(JSON.stringify(this.value.properties))
       Object.assign(this.startForm, properties)
+      this.formFieldList = this.startForm.formFieldList
     },
     /**
     * 初始化审批节点所需数据
     */
     initApproverNodeData() {
       this.activeName = 'config'
+      this.isPrevNodeWithSubForm = false
       let properties = JSON.parse(JSON.stringify(this.value.properties))
+      if (!properties.formId) properties.formFieldList = this.processData.properties.formFieldList
+      this.formFieldList = properties.formFieldList
       this.approverForm.formOperates = this.initFormOperates(this.value)
       Object.assign(this.approverForm, properties)
       this.getNodeOption()
+      this.getPrevNodeOption()
+      if (this.isPrevNodeWithSubForm) {
+        for (let i = 0; i < this.assigneeTypeOptions.length; i++) {
+          if (this.assigneeTypeOptions[i].value === 7) {
+            this.assigneeTypeOptions[i].disabled = true
+          }
+        }
+      } else {
+        this.assigneeTypeOptions = JSON.parse(JSON.stringify(typeOptions))
+      }
       this.approverForm.approveMsgConfig.on = typeof this.approverForm.approveMsgConfig.on === 'number' ? this.approverForm.approveMsgConfig.on : 2
       this.approverForm.rejectMsgConfig.on = typeof this.approverForm.rejectMsgConfig.on === 'number' ? this.approverForm.rejectMsgConfig.on : 2
     },
     initSubFlowData() {
-      this.getFlowOptions()
       this.getNodeOption()
       let properties = JSON.parse(JSON.stringify(this.value.properties))
       Object.assign(this.subFlowForm, properties)
       this.subFlowForm.launchMsgConfig.on = typeof this.subFlowForm.launchMsgConfig.on === 'number' ? this.subFlowForm.launchMsgConfig.on : 0
+    },
+    openApproverTransmitRuleBox() {
+      let assignList = this.approverForm.assignList ? JSON.parse(JSON.stringify(this.approverForm.assignList)) : []
+      let newAssignList = this.prevNodeList.map(o => ({
+        nodeId: o.nodeId,
+        title: o.properties.title,
+        formFieldList: o.properties.formFieldList && o.properties.formFieldList.length ? o.properties.formFieldList : this.processData.properties.formFieldList,
+        ruleList: []
+      }))
+      if (!assignList.length) {
+        this.assignList = newAssignList
+      } else {
+        let list = []
+        // 去掉被删掉的节点
+        for (let i = 0; i < assignList.length; i++) {
+          const e = assignList[i];
+          inter: for (let j = 0; j < newAssignList.length; j++) {
+            if (e.nodeId === newAssignList[j].nodeId) {
+              const item = {
+                nodeId: e.nodeId,
+                title: newAssignList[j].title,
+                formFieldList: newAssignList[j].formFieldList,
+                ruleList: e.ruleList
+              }
+              list.push(item)
+              break inter
+            }
+          }
+        }
+        let addList = newAssignList.filter(o => !assignList.some(item => item.nodeId === o.nodeId))
+        this.assignList = [...list, ...addList]
+      }
+      this.approverTransmitRuleVisible = true
+    },
+    addApproverTransmitRule(i) {
+      this.assignList[i].ruleList.push({
+        parentField: '',
+        childField: '',
+        childFieldOptions: []
+      })
+    },
+    delApproverTransmitRule(i, cIndex) {
+      this.assignList[i].ruleList.splice(cIndex, 1)
+    },
+    saveApproverTransmitRule() {
+      let boo = true
+      for (let i = 0; i < this.assignList.length; i++) {
+        const e = this.assignList[i]
+        const ruleList = e.ruleList;
+        for (let j = 0; j < ruleList.length; j++) {
+          if (!ruleList[j].parentField) {
+            boo = false
+            this.$message({
+              message: `请选择${e.title}的上节点字段`,
+              type: 'error',
+            })
+            break
+          }
+          if (!ruleList[j].childField) {
+            boo = false
+            this.$message({
+              message: `请选择${e.title}的本节点字段`,
+              type: 'error',
+            })
+            break
+          }
+        }
+      }
+      if (!boo) return
+      this.approverForm.assignList = this.assignList
+      this.approverTransmitRuleVisible = false
+      this.$nextTick(() => {
+        this.assignList = []
+      })
     },
     openRuleBox() {
       if (!this.subFlowForm.flowId) {
@@ -3206,10 +3336,63 @@ export default {
       this.ruleVisible = false
       this.assignList = []
     },
-    getFlowOptions() {
-      FlowEngineSelector().then(res => {
-        this.flowOptions = res.data.list
-      })
+    // 获取上一节数据
+    getPrevNodeOption() {
+      let prevNode = NodeUtils.getPreviousNode(this.value.prevId, this.processData)
+      let node = JSON.parse(JSON.stringify(prevNode))
+      delete node.childNode
+      let prevNodeList = []
+      const loop = nodeData => {
+        if (nodeData.conditionNodes) {
+          let hasCondition = nodeData.conditionNodes.some(o => o.nodeId === this.value.nodeId)
+          if (hasCondition) return prevNodeList.push(nodeData)
+        }
+        if (nodeData.childNode) {
+          loop(nodeData.childNode)
+        } else if (nodeData.conditionNodes && !nodeData.childNode) {
+          for (let c of nodeData.conditionNodes) {
+            loop(c)
+          }
+        } else {
+          prevNodeList.push(nodeData)
+        }
+      }
+      loop(node)
+      this.prevNodeList = prevNodeList
+      this.getPrevNodeRealList()
+    },
+    getPrevNodeRealList() {
+      const loop = (data) => {
+        inner: for (let i = 0; i < data.length; i++) {
+          if (['condition', 'subFlow', 'timer'].includes(data[i].type)) {
+            if (data[i].type === 'subFlow') this.isPrevNodeWithSubForm = true
+            let prevNode = NodeUtils.getPreviousNode(data[i].prevId, this.processData)
+            let node = JSON.parse(JSON.stringify(prevNode))
+            delete node.childNode
+            let prevNodeList = []
+            const getPrevNodeAllList = nodeData => {
+              if (nodeData.conditionNodes) {
+                let hasCondition = nodeData.conditionNodes.some(o => o.nodeId === data[i].nodeId)
+                if (hasCondition) return prevNodeList.push(nodeData)
+              }
+              if (nodeData.childNode) {
+                getPrevNodeAllList(nodeData.childNode)
+              } else if (nodeData.conditionNodes && !nodeData.childNode) {
+                for (let c of nodeData.conditionNodes) {
+                  getPrevNodeAllList(c)
+                }
+              } else {
+                prevNodeList.push(nodeData)
+              }
+            }
+            getPrevNodeAllList(node)
+            data.splice(i, 1, ...prevNodeList)
+            loop(data)
+            break inner
+          }
+        }
+      }
+      loop(this.prevNodeList)
     },
     // 获取驳回步骤选项
     getNodeOption() {
@@ -3234,6 +3417,7 @@ export default {
      * 初始化条件节点数据
      */
     initConditionNodeData() {
+      this.getConditionNodeFieldList()
       // 初始化条件表单数据
       let nodeConditions = this.value.properties && this.value.properties.conditions
       for (let i = 0; i < nodeConditions.length; i++) {
@@ -3260,6 +3444,15 @@ export default {
         jnpfKey: ''
       }
       this.pconditions.push(item)
+    },
+    getConditionNodeFieldList() {
+      this.getPrevNodeOption()
+      if (!this.prevNodeList.length) {
+        this.formFieldList = []
+      } else {
+        let prevNode = this.prevNodeList[0]
+        this.formFieldList = prevNode.properties.formFieldList && prevNode.properties.formFieldList.length ? prevNode.properties.formFieldList : this.processData.properties.formFieldList
+      }
     },
     fieldNameChange(val, item, i) {
       let obj = this.usedFormItems.filter(o => o.__vModel__ == val)[0]
@@ -3412,9 +3605,81 @@ export default {
       })
     },
     onStartFormIdChange(id, item) {
+      let isSameForm = this.startForm.formId === id
       this.startForm.formName = item.fullName
       this.startForm.formId = id
-    }
+      this.getFormFieldList(id, 'startForm', isSameForm)
+    },
+    onApproverFormIdChange(id, item) {
+      let isSameForm = this.startForm.formId === id
+      this.approverForm.formName = item.fullName
+      this.approverForm.formId = id
+      this.approverForm.assignList = []
+      this.getFormFieldList(id, 'approverForm', isSameForm)
+    },
+    getFormFieldList(id, form, isSameForm) {
+      getFormInfo(id).then(res => {
+        let { formType = 1, propertyJson } = res.data
+        let formJson = {}, fieldList = []
+        if (propertyJson) formJson = JSON.parse(propertyJson)
+        if (formType == 1) {
+          fieldList = this.transformFormJson(formJson)
+        } else {
+          fieldList = formJson.fields
+        }
+        let list = this.transformFieldList(fieldList)
+        this.formFieldList = list
+        this[form].formFieldList = list
+        this[form].formOperates = this.initFormOperates(this.value, true, isSameForm)
+        // 更新所有没设置表单的节点的表单权限
+        if (form === 'startForm') this.updateAllNodeFormOperates(list, isSameForm)
+      })
+    },
+    transformFormJson(list) {
+      let fieldList = list.map(o => ({
+        __config__: {
+          label: o.filedName,
+          jnpfKey: o.jnpfKey || '',
+          required: o.required || false
+        },
+        __vModel__: o.filedId,
+        multiple: o.multiple || false
+      }))
+      return fieldList
+    },
+    transformFieldList(formFieldList) {
+      let list = []
+      const loop = (data, parent) => {
+        if (!data) return
+        if (data.__vModel__) {
+          const isTableChild = parent && parent.__config__ && parent.__config__.jnpfKey === 'table'
+          let obj = JSON.parse(JSON.stringify(data))
+          if (isTableChild) {
+            obj.__vModel__ = parent.__vModel__ + '-' + data.__vModel__
+            obj.__config__.label = parent.__config__.label + '-' + data.__config__.label
+          }
+          list.push(obj)
+        }
+        if (Array.isArray(data)) data.forEach(d => loop(d, parent))
+        if (data.__config__ && data.__config__.children && Array.isArray(data.__config__.children)) {
+          loop(data.__config__.children, data)
+        }
+      }
+      loop(formFieldList)
+      return list
+    },
+    updateAllNodeFormOperates(formFieldList, isSameForm) {
+      const loop = data => {
+        if (Array.isArray(data)) data.forEach(d => loop(d))
+        if (data.type === 'approver' && !data.properties.formId) {
+          data.properties.formOperates = this.initFormOperates(data, true, isSameForm)
+          data.properties.formFieldList = formFieldList
+        }
+        if (data.conditionNodes && Array.isArray(data.conditionNodes)) loop(data.conditionNodes)
+        if (data.childNode) loop(data.childNode)
+      }
+      loop(this.processData)
+    },
   },
   watch: {
     visible(val) {
@@ -3639,8 +3904,21 @@ export default {
 }
 .rule-dialog {
   >>> .el-dialog__body {
-    min-height: 300px !important;
-    padding: 20px 20px 10px !important;
+    padding: 0 0 10px !important;
+    min-height: 364px;
+  }
+  .node-tabs {
+    >>> .el-tabs__nav-wrap {
+      padding: 0 20px;
+    }
+    >>> .el-tabs__content {
+      .el-tab-pane {
+        min-height: 300px !important;
+        max-height: 500px !important;
+        padding: 0 10px 10px;
+        overflow: auto;
+      }
+    }
   }
   .option-box-tip {
     margin-bottom: 20px;

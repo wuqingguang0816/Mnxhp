@@ -29,7 +29,7 @@ export default {
     } else {
       data = getMockData()
     }
-    this.updateFiled(data)
+    // this.updateFiled(data)
     this.$store.dispatch('base/getPositionList')
     this.$store.dispatch('base/getRoleList')
     this.$store.dispatch('generator/getDepTree')

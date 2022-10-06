@@ -135,6 +135,7 @@ const defaultStartForm = {
   hasOpinion: true,
   formId: "",
   formName: "",
+  formFieldList: [],
 }
 export default {
   defaultStartForm,
