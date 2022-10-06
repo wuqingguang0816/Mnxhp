@@ -59,6 +59,11 @@
           <el-table-column prop="creatorTime" label="创建时间" :formatter="jnpf.tableDateFormat"
             width="120" />
           <el-table-column prop="sortCode" label="排序" width="70" align="center" />
+          <el-table-column prop="version" label="版本号" width="70" align="center">
+            <template slot-scope="scope">
+              <el-tag>V:{{scope.row.version}}</el-tag>
+            </template>
+          </el-table-column>
           <el-table-column prop="enabledMark" label="状态" width="70" align="center">
             <template slot-scope="scope">
               <el-tag :type="scope.row.enabledMark == 1 ? 'success' : 'danger'" disable-transitions>
@@ -84,8 +89,6 @@
                       禁用流程</el-dropdown-item>
                     <el-dropdown-item @click.native="showManage(scope.row.id)">
                       版本管理</el-dropdown-item>
-                    <!-- <el-dropdown-item @click.native="preview(scope.row)">
-                      表单预览</el-dropdown-item> -->
                     <el-dropdown-item @click.native="copy(scope.row.id)">
                       复制流程</el-dropdown-item>
                     <el-dropdown-item @click.native="handleExport(scope.row.id)">
@@ -102,10 +105,6 @@
     </div>
     <Form v-if="formVisible" ref="Form" @close="closeForm" />
     <FlowManage v-if="manageVisible" ref="FlowManage" @close="closeManage" />
-    <preview v-if="previewVisible" ref="preview" @close="previewVisible=false" />
-    <previewDialog :visible.sync="previewDialogVisible" :id="currRow.id" type="flow"
-      @previewPc="previewPc" />
-
     <el-dialog title="新建流程" :visible.sync="dialogVisible" class="JNPF-dialog JNPF-dialog_center"
       lock-scroll width="600px">
       <div class="add-main">
@@ -131,13 +130,11 @@
 <script>
 import { FlowEngineList, Delete, Release, Stop, Copy, exportData } from '@/api/workFlow/FlowEngine'
 import Form from './Form'
-import preview from '../components/Preview'
-import previewDialog from '@/components/PreviewDialog'
 import FlowManage from './FlowManagement.vue'
 
 export default {
   name: 'workFlow-flowEngine',
-  components: { Form, preview, previewDialog, FlowManage },
+  components: { Form, FlowManage },
   data() {
     return {
       keyword: '',
@@ -154,9 +151,6 @@ export default {
       dialogVisible: false,
       formVisible: false,
       manageVisible: false,
-      previewVisible: false,
-      previewDialogVisible: false,
-      currRow: {},
       categoryList: []
     }
   },
@@ -245,24 +239,6 @@ export default {
           this.jnpf.downloadFile(res.data.url)
         })
       }).catch(() => { });
-    },
-    preview(row) {
-      this.currRow = row
-      this.$nextTick(() => {
-        this.previewDialogVisible = true
-      })
-    },
-    previewPc() {
-      let data = {
-        enCode: this.currRow.enCode,
-        fullName: this.currRow.fullName,
-        formType: this.currRow.formType,
-        flowId: this.currRow.id
-      }
-      this.previewVisible = true
-      this.$nextTick(() => {
-        this.$refs.preview.init(data)
-      })
     },
     closeForm(isRefresh) {
       this.formVisible = false

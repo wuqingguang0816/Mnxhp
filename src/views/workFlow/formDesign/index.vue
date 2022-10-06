@@ -9,15 +9,6 @@
                 @keyup.enter.native="search()" />
             </el-form-item>
           </el-col>
-          <!-- <el-col :span="6">
-            <el-form-item label="表单分类">
-              <el-select v-model="formType" placeholder="表单分类" clearable>
-                <el-option label="系统表单" :value="1" />
-                <el-option label="自定义表单" :value="2" />
-                <el-option label="功能表单" :value="2" />
-              </el-select>
-            </el-form-item>
-          </el-col> -->
           <el-col :span="6">
             <el-form-item>
               <el-button type="primary" icon="el-icon-search" @click="search()">
@@ -79,7 +70,7 @@
                       复制表单</el-dropdown-item>
                     <el-dropdown-item @click.native="exportModel(scope.row.id)">
                       导出表单</el-dropdown-item>
-                    <el-dropdown-item @click.native="readFrom(scope.row)">
+                    <el-dropdown-item @click.native="preview(scope.row)">
                       表单预览</el-dropdown-item>
                   </el-dropdown-menu>
                 </el-dropdown>
@@ -92,7 +83,9 @@
       </div>
     </div>
     <Form v-if="formVisible" ref="Form" @close="closeForm" />
-    <Preview v-if="previewVisible" ref="preview" @close="previewVisible=false" />
+    <preview v-if="previewVisible" ref="preview" @close="previewVisible=false" />
+    <previewDialog :visible.sync="previewDialogVisible" :id="currRow.id" type="flow"
+      @previewPc="previewPc" />
     <el-dialog title="新建表单" :visible.sync="dialogVisible"
       class="JNPF-dialog JNPF-dialog_center add-dialog" lock-scroll width="900px"
       :show-close="false">
@@ -100,14 +93,14 @@
         <div class="add-main-part add-main-left">
           <div class="add-main-cap">发起流程表单</div>
           <div class="add-main-container">
-            <div class="add-item" @click="addFlow(0,1)">
+            <div class="add-item" @click="addForm(0,1)">
               <i class="add-icon icon-ym icon-ym-systemForm"></i>
               <div class="add-txt">
                 <p class="add-title">系统表单</p>
                 <p class="add-desc">关联系统原有表单，便捷设计</p>
               </div>
             </div>
-            <div class="add-item" @click="addFlow(0,2)">
+            <div class="add-item" @click="addForm(0,2)">
               <i class="add-icon icon-ym icon-ym-customForm"></i>
               <div class="add-txt">
                 <p class="add-title">自定义表单</p>
@@ -119,7 +112,7 @@
         <div class="add-main-part add-main-right">
           <div class="add-main-cap">功能流程表单</div>
           <div class="add-main-container">
-            <div class="add-item" @click="addFlow(1,1)">
+            <div class="add-item" @click="addForm(1,1)">
               <i class="add-icon  icon-ym icon-ym-functionForm"></i>
               <div class="add-txt">
                 <p class="add-title">功能表单</p>
@@ -135,21 +128,21 @@
 
 <script>
 import Form from './Form'
-import Preview from './Preview.vue'
+import preview from './Preview'
+import previewDialog from '@/components/PreviewDialog'
 import { getFormList, release, del, copyForm, exportData } from '@/api/workFlow/FormDesign'
 export default {
   name: 'workFlow-flowEngine',
-  components: { Form, Preview },
+  components: { Form, preview, previewDialog },
   data() {
     return {
-      query: { keyword: '', type: 8 },
+      query: { keyword: '' },
       downloadFormVisible: false,
       sort: 'flowForm',
       dialogVisible: false,
       previewVisible: false,
-      formManagementVisible: false,
+      previewDialogVisible: false,
       list: [],
-      formType: '',
       listQuery: {
         currentPage: 1,
         pageSize: 20,
@@ -160,8 +153,8 @@ export default {
       listLoading: false,
       formVisible: false,
       addVisible: false,
+      currRow: {},
       categoryList: []
-
     }
   },
   created() {
@@ -179,15 +172,13 @@ export default {
     },
     reset() {
       this.query.keyword = ''
-      this.formType = ''
       this.search()
     },
     initData() {
       this.listLoading = true
       let query = {
         ...this.listQuery,
-        ...this.query,
-        formType: this.formType
+        ...this.query
       }
       getFormList(query).then(res => {
         this.list = res.data.list
@@ -245,7 +236,7 @@ export default {
         this.initData()
       }
     },
-    addFlow(flowType, formType) {
+    addForm(flowType, formType) {
       this.dialogVisible = false
       this.addOrUpdateHandle('', flowType, formType)
     },
@@ -256,13 +247,18 @@ export default {
         this.$refs.Form.init(id, flowType, formType)
       })
     },
-    readFrom(currRow) {
+    preview(row) {
+      this.currRow = row
+      this.$nextTick(() => {
+        this.previewDialogVisible = true
+      })
+    },
+    previewPc() {
       let data = {
-        enCode: currRow.enCode,
-        fullName: currRow.fullName,
-        formType: currRow.formType,
-        id: currRow.id,
-        isRelease: currRow.state
+        enCode: this.currRow.enCode,
+        fullName: this.currRow.fullName,
+        formType: this.currRow.formType,
+        formId: this.currRow.id
       }
       this.previewVisible = true
       this.$nextTick(() => {

@@ -29,20 +29,19 @@ export default {
     },
     init(data) {
       this.setting = data
-      getFormInfo(data.id).then(res => {
+      getFormInfo(data.formId).then(res => {
         if (!res.data || !res.data.draftJson) return
         data.formConf = res.data.draftJson
-        if (res.data.status == 1) {
-          data.formConf = res.data.propertyJson
-        }
-        if (data.formType == 2) {
-          this.currentView = (resolve) => require([`@/views/workFlow/workFlowForm/dynamicForm`], resolve)
-        } else {
-          if (res.data.urlAddress) {
-            this.currentView = (resolve) => require([`@/views/${res.data.urlAddress}`], resolve)
+        data.type = res.data.type
+        data.formOperates = []
+        if (data.formType == 1) {
+          if (res.data.formUrl) {
+            this.currentView = (resolve) => require([`@/views/${res.data.formUrl}`], resolve)
           } else {
             this.currentView = (resolve) => require([`@/views/workFlow/workFlowForm/${data.enCode}`], resolve)
           }
+        } else {
+          this.currentView = (resolve) => require([`@/views/workFlow/workFlowForm/dynamicForm`], resolve)
         }
         setTimeout(() => {
           this.$nextTick(() => {
