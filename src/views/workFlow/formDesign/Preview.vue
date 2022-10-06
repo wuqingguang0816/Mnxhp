@@ -35,7 +35,7 @@ export default {
         if (res.data.status == 1) {
           data.formConf = res.data.propertyJson
         }
-        if (data.formType == 1) {
+        if (data.formType == 2) {
           this.currentView = (resolve) => require([`@/views/workFlow/workFlowForm/dynamicForm`], resolve)
         } else {
           if (res.data.urlAddress) {
