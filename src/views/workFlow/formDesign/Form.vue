@@ -213,7 +213,6 @@ export default {
             this.draftJson = res.data.draftJson && JSON.parse(res.data.draftJson)
             this.tables = this.dataForm.tableJson && JSON.parse(this.dataForm.tableJson) || []
             this.updateFields()
-            this.loading = false
           }).catch(() => { this.loading = false })
         } else {
           this.dataForm.flowType = flowType
@@ -225,12 +224,7 @@ export default {
     },
     dataFormSubmit() {
       if (this.activeStep === 1) {
-        let model = ''
-        if (this.dataForm.formType == 2) {
-          model = 'generator'
-        } else {
-          model = 'fieldForm'
-        }
+        const model = this.dataForm.formType == 2 ? 'generator' : 'fieldForm'
         this.$refs[model].getData().then(res => {
           this.dataForm.draftJson = JSON.stringify(res.formData)
           this.dataForm.tableJson = JSON.stringify(this.tables)
