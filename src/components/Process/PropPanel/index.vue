@@ -2227,33 +2227,37 @@
       <el-button size="small" @click="cancel">取消</el-button>
       <el-button size="small" type="primary" @click="confirm">确定</el-button>
     </div>
-    <el-dialog title="子流程传递" :close-on-click-modal="false" :visible.sync="ruleVisible"
+    <el-dialog title="数据传递" :close-on-click-modal="false" :visible.sync="ruleVisible"
       class="JNPF-dialog JNPF-dialog_center rule-dialog" lock-scroll append-to-body width='700px'>
-      <div class="option-box-tip">当父流程流转到子流程时，将对应的字段赋值给子流程</div>
-      <el-row :gutter="10" v-for="(item,i) in assignList" :key="i" class="mb-10">
-        <el-col :span="2" class="rule-cell">父流程</el-col>
-        <el-col :span="7" class="rule-cell">
-          <el-select v-model="item.parentField" placeholder="请选择字段">
-            <el-option v-for="item in usedFormItems" :key="item.__vModel__"
-              :label="item.__config__.label" :value="item.__vModel__" />
-          </el-select>
-        </el-col>
-        <el-col :span="4" class="rule-cell mid">赋值给</el-col>
-        <el-col :span="2" class="rule-cell">子流程</el-col>
-        <el-col :span="7" class="rule-cell">
-          <el-select v-model="item.childField" placeholder="请选择字段">
-            <el-option v-for="item in childFieldOptions" :key="item.vmodel" :label="item.label"
-              :value="item.vmodel" />
-          </el-select>
-        </el-col>
-        <el-col :span="2" class="rule-cell">
-          <el-button type="danger" icon="el-icon-close" @click="delRule(i)">
-          </el-button>
-        </el-col>
-      </el-row>
-      <div class="table-actions" @click="addRule">
-        <el-button type="text" icon="el-icon-plus">新增规则</el-button>
-      </div>
+      <el-tabs class="JNPF-el_tabs node-tabs">
+        <el-tab-pane :label="item.title" v-for="(item,i) in assignList" :key="i">
+          <div class="option-box-tip">当父流程流转到子流程时，将对应的上一节点表单字段赋值给子流程发起节点</div>
+          <el-row :gutter="10" v-for="(child,cIndex) in item.ruleList" :key="cIndex" class="mb-10">
+            <el-col :span="2" class="rule-cell">父流程</el-col>
+            <el-col :span="7" class="rule-cell">
+              <el-select v-model="child.parentField" placeholder="请选择字段" filterable clearable>
+                <el-option v-for="field in item.formFieldList" :key="field.__vModel__"
+                  :label="field.__config__.label" :value="field.__vModel__" />
+              </el-select>
+            </el-col>
+            <el-col :span="4" class="rule-cell mid">赋值给</el-col>
+            <el-col :span="2" class="rule-cell">子流程</el-col>
+            <el-col :span="7" class="rule-cell">
+              <el-select v-model="child.childField" placeholder="请选择字段" filterable clearable>
+                <el-option v-for="item in childFieldOptions" :key="item.vmodel" :label="item.label"
+                  :value="item.vmodel" />
+              </el-select>
+            </el-col>
+            <el-col :span="2" class="rule-cell">
+              <el-button type="danger" icon="el-icon-close" @click="delTransmitRule(i,cIndex)">
+              </el-button>
+            </el-col>
+          </el-row>
+          <div class="table-actions" @click="addTransmitRule(i)">
+            <el-button type="text" icon="el-icon-plus">新增规则</el-button>
+          </div>
+        </el-tab-pane>
+      </el-tabs>
       <span slot="footer" class="dialog-footer">
         <el-button @click="ruleVisible = false">取消</el-button>
         <el-button type="primary" @click="saveRule">确定</el-button>
@@ -2268,7 +2272,7 @@
           <el-row :gutter="10" v-for="(child,cIndex) in item.ruleList" :key="cIndex" class="mb-10">
             <el-col :span="2" class="rule-cell">上节点</el-col>
             <el-col :span="7" class="rule-cell">
-              <el-select v-model="child.parentField" placeholder="请选择字段">
+              <el-select v-model="child.parentField" placeholder="请选择字段" filterable clearable>
                 <el-option v-for="field in item.formFieldList" :key="field.__vModel__"
                   :label="field.__config__.label" :value="field.__vModel__" />
               </el-select>
@@ -2282,12 +2286,11 @@
               </el-select>
             </el-col>
             <el-col :span="2" class="rule-cell">
-              <el-button type="danger" icon="el-icon-close"
-                @click="delApproverTransmitRule(i,cIndex)">
+              <el-button type="danger" icon="el-icon-close" @click="delTransmitRule(i,cIndex)">
               </el-button>
             </el-col>
           </el-row>
-          <div class="table-actions" @click="addApproverTransmitRule(i)">
+          <div class="table-actions" @click="addTransmitRule(i)">
             <el-button type="text" icon="el-icon-plus">新增规则</el-button>
           </div>
         </el-tab-pane>
@@ -3209,12 +3212,17 @@ export default {
     },
     initSubFlowData() {
       this.getNodeOption()
+      this.getPrevNodeOption()
       let properties = JSON.parse(JSON.stringify(this.value.properties))
       Object.assign(this.subFlowForm, properties)
       this.subFlowForm.launchMsgConfig.on = typeof this.subFlowForm.launchMsgConfig.on === 'number' ? this.subFlowForm.launchMsgConfig.on : 0
     },
     openApproverTransmitRuleBox() {
       let assignList = this.approverForm.assignList ? JSON.parse(JSON.stringify(this.approverForm.assignList)) : []
+      this.getRealAssignList(assignList)
+      this.approverTransmitRuleVisible = true
+    },
+    getRealAssignList(assignList) {
       let newAssignList = this.prevNodeList.map(o => ({
         nodeId: o.nodeId,
         title: o.properties.title,
@@ -3244,16 +3252,15 @@ export default {
         let addList = newAssignList.filter(o => !assignList.some(item => item.nodeId === o.nodeId))
         this.assignList = [...list, ...addList]
       }
-      this.approverTransmitRuleVisible = true
     },
-    addApproverTransmitRule(i) {
+    addTransmitRule(i) {
       this.assignList[i].ruleList.push({
         parentField: '',
         childField: '',
         childFieldOptions: []
       })
     },
-    delApproverTransmitRule(i, cIndex) {
+    delTransmitRule(i, cIndex) {
       this.assignList[i].ruleList.splice(cIndex, 1)
     },
     saveApproverTransmitRule() {
@@ -3283,9 +3290,7 @@ export default {
       if (!boo) return
       this.approverForm.assignList = this.assignList
       this.approverTransmitRuleVisible = false
-      this.$nextTick(() => {
-        this.assignList = []
-      })
+      this.assignList = []
     },
     openRuleBox() {
       if (!this.subFlowForm.flowId) {
@@ -3297,38 +3302,33 @@ export default {
       }
       getFormDataFields(this.subFlowForm.flowId).then(res => {
         this.childFieldOptions = res.data.list
-        this.assignList = JSON.parse(JSON.stringify(this.subFlowForm.assignList))
+        let assignList = this.subFlowForm.assignList ? JSON.parse(JSON.stringify(this.subFlowForm.assignList)) : []
+        this.getRealAssignList(assignList)
         this.ruleVisible = true
       })
-    },
-    addRule() {
-      this.assignList.push({
-        parentField: '',
-        childField: ''
-      })
-    },
-    delRule(i) {
-      this.assignList.splice(i, 1)
     },
     saveRule() {
       let boo = true
       for (let i = 0; i < this.assignList.length; i++) {
-        const element = this.assignList[i];
-        if (!element.parentField) {
-          boo = false
-          this.$message({
-            message: '请选择父流程字段',
-            type: 'error',
-          })
-          break
-        }
-        if (!element.childField) {
-          boo = false
-          this.$message({
-            message: '请选择子流程字段',
-            type: 'error',
-          })
-          break
+        const e = this.assignList[i]
+        const ruleList = e.ruleList;
+        for (let j = 0; j < ruleList.length; j++) {
+          if (!ruleList[j].parentField) {
+            boo = false
+            this.$message({
+              message: `请选择${e.title}的父流程字段`,
+              type: 'error',
+            })
+            break
+          }
+          if (!ruleList[j].childField) {
+            boo = false
+            this.$message({
+              message: `请选择${e.title}的子流程字段`,
+              type: 'error',
+            })
+            break
+          }
         }
       }
       if (!boo) return
