@@ -70,8 +70,11 @@
                       复制表单</el-dropdown-item>
                     <el-dropdown-item @click.native="exportModel(scope.row.id)">
                       导出表单</el-dropdown-item>
-                    <el-dropdown-item @click.native="preview(scope.row)">
-                      表单预览</el-dropdown-item>
+                    <el-dropdown-item @click.native="preview(scope.row,'propertyJson')"
+                      v-if="scope.row.enabledMark == 1">
+                      预览表单</el-dropdown-item>
+                    <el-dropdown-item @click.native="preview(scope.row,'draftJson')">
+                      预览草稿</el-dropdown-item>
                   </el-dropdown-menu>
                 </el-dropdown>
               </tableOpts>
@@ -85,7 +88,7 @@
     <Form v-if="formVisible" ref="Form" @close="closeForm" />
     <preview v-if="previewVisible" ref="preview" @close="previewVisible=false" />
     <previewDialog :visible.sync="previewDialogVisible" :id="currRow.id" type="flow"
-      @previewPc="previewPc" />
+      @previewPc="previewPc" :dataSource="currRow.dataSource" />
     <el-dialog title="新建表单" :visible.sync="dialogVisible"
       class="JNPF-dialog JNPF-dialog_center add-dialog" lock-scroll width="900px"
       :show-close="false">
@@ -247,8 +250,9 @@ export default {
         this.$refs.Form.init(id, flowType, formType)
       })
     },
-    preview(row) {
+    preview(row, dataSource) {
       this.currRow = row
+      this.currRow.dataSource = dataSource
       this.$nextTick(() => {
         this.previewDialogVisible = true
       })
@@ -258,7 +262,8 @@ export default {
         enCode: this.currRow.enCode,
         fullName: this.currRow.fullName,
         formType: this.currRow.formType,
-        formId: this.currRow.id
+        formId: this.currRow.id,
+        dataSource: this.currRow.dataSource,
       }
       this.previewVisible = true
       this.$nextTick(() => {

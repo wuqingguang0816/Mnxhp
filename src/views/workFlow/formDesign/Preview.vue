@@ -31,7 +31,8 @@ export default {
       this.setting = data
       getFormInfo(data.formId).then(res => {
         if (!res.data || !res.data.draftJson) return
-        data.formConf = res.data.draftJson
+        const dataSource = data.dataSource === "propertyJson" ? "propertyJson" : "draftJson"
+        data.formConf = res.data[dataSource]
         data.type = res.data.type
         data.formOperates = []
         if (data.formType == 1) {

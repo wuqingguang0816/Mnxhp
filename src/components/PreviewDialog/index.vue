@@ -28,7 +28,7 @@
 <script>
 import QRCode from 'qrcodejs2'
 export default {
-  props: ['id', 'type', 'fullName'],
+  props: ['id', 'type', 'fullName', 'dataSource'],
   data() {
     return {
       previewAppVisible: false,
@@ -62,6 +62,7 @@ export default {
         id: this.id
       }
       if (this.type === 'report') text.fullName = this.fullName
+      if (this.type === 'flow') text.ds = this.dataSource
       this.qrCodeText = JSON.stringify(text)
       this.closeDialog()
       setTimeout(() => {
