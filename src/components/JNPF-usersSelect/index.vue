@@ -566,7 +566,11 @@ export default {
           this.bindScroll()
         })
       }
-      this.getData()
+      if (this.selectType === 'all') {
+        this.getData()
+      } else {
+        this.getAbleList()
+      }
     },
     filterNode(value, data) {
       if (!value) return true;
