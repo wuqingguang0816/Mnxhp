@@ -89,24 +89,10 @@ export function FlowEngineSelector(type) {
     data: { type }
   })
 }
-// 流程表单主表属性
-export function getFormDataFields(id) {
+// 获取流程发起节点表单信息
+export function getFlowFormInfo(id) {
   return request({
-    url: `/api/workflow/Engine/flowTemplate/${id}/FormDataFields`,
-    method: 'get'
-  })
-}
-// 流程表单数据
-export function FieldDataSelect(id) {
-  return request({
-    url: `/api/workflow/Engine/flowTemplate/${id}/FieldDataSelect`,
-    method: 'get'
-  })
-}
-// 获取流程表单详情
-export function getFlowTaskData(flowId, id) {
-  return request({
-    url: `/api/workflow/Engine/FlowTask/${flowId}/${id}`,
+    url: `/api/workflow/Engine/flowTemplate/${id}/FormInfo`,
     method: 'get'
   })
 }

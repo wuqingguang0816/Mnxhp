@@ -9,7 +9,6 @@
   </div>
 </template>
 <script>
-import { DynamicInfo } from '@/api/workFlow/workFlowForm'
 import { createModel, updateModel, getModelInfo } from '@/api/onlineDev/visualDev'
 import { Candidates } from '@/api/workFlow/FlowBefore'
 import Parser from '@/components/Generator/parser/Parser'
@@ -35,7 +34,7 @@ export default {
       errorNodeList: [],
       dataForm: {
         id: '',
-        data: '',
+        formData: {},
         flowId: ''
       }
     }
@@ -44,63 +43,31 @@ export default {
     init(data) {
       this.setting = data
       this.formConf = data.formConf ? JSON.parse(data.formConf) : {}
+      this.formData = {}
       this.dataForm.id = data.id || ''
       this.isCustomCopy = this.setting.flowTemplateJson && this.setting.flowTemplateJson.properties && this.setting.flowTemplateJson.properties.isCustomCopy
       this.loading = true
       this.$nextTick(() => {
-        if (this.dataForm.id) {
-          let extra = {
+        let extra = {}
+        if (data.id) {
+          extra = {
             modelId: data.flowId,
-            id: this.dataForm.id,
+            id: data.id,
             type: data.type,
             flowId: data.flowId,
             processId: data.id,
             taskId: data.taskId,
             opType: data.opType
           }
-          this.$store.commit('generator/SET_DYNAMIC_MODEL_EXTRA', extra)
-          if (data.draftData) {
-            this.formData = { ...data.draftData, id: this.dataForm.id, flowId: data.flowId }
-            this.fillFormData(this.formConf, this.formData)
-            this.$nextTick(() => {
-              this.loading = false
-              this.$emit('setPageLoad')
-            })
-            return
-          }
-          if (data.type == 1) {
-            getModelInfo(data.flowId, this.dataForm.id).then(res => {
-              this.dataForm = res.data
-              if (!this.dataForm.data) return
-              this.formData = { ...JSON.parse(this.dataForm.data), id: this.dataForm.id, flowId: data.flowId }
-              this.fillFormData(this.formConf, this.formData)
-              this.$nextTick(() => {
-                this.loading = false
-                this.$emit('setPageLoad')
-              })
-            })
-          } else {
-            DynamicInfo(this.dataForm.id).then(res => {
-              this.dataForm = res.data
-              if (!this.dataForm.data) return
-              this.formData = { ...JSON.parse(this.dataForm.data), id: this.dataForm.id, flowId: data.flowId }
-              this.fillFormData(this.formConf, this.formData)
-              this.$nextTick(() => {
-                this.loading = false
-                this.$emit('setPageLoad')
-              })
-            })
-          }
-        } else {
-          this.$store.commit('generator/SET_DYNAMIC_MODEL_EXTRA', {})
-          this.formData = {}
-          this.fillFormData(this.formConf, this.formData)
-          this.$nextTick(() => {
-            this.loading = false
-            this.$emit('setPageLoad')
-          })
-          this.dataForm.flowId = data.flowId
+          this.formData = { ...formData, flowId: data.flowId }
         }
+        this.$store.commit('generator/SET_DYNAMIC_MODEL_EXTRA', extra)
+        this.fillFormData(this.formConf, this.formData)
+        this.$nextTick(() => {
+          this.loading = false
+          this.$emit('setPageLoad')
+        })
+        this.dataForm.flowId = data.flowId
         this.key = +new Date()
       })
     },
@@ -141,7 +108,7 @@ export default {
     submitForm(data, callback) {
       if (!data) return
       const formData = { ...this.formData, ...data }
-      this.dataForm.data = JSON.stringify(formData)
+      this.dataForm.formData = formData
       if (callback && typeof callback === "function") callback()
       if (this.setting.type == 1) {
         if (this.eventType === 'save' || this.eventType === 'submit') {

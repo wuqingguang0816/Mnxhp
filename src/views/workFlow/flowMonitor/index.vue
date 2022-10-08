@@ -286,7 +286,6 @@ export default {
         enCode: item.flowCode,
         flowId: item.flowId,
         id: item.processId,
-        formType: item.formType,
         taskId: item.id,
         status: item.status,
         opType: 4,

@@ -226,7 +226,6 @@
 </template>
 
 <script>
-import { FlowEngineInfo } from '@/api/workFlow/FlowEngine'
 import { FlowBeforeInfo, Audit, Reject, Transfer, Recall, Cancel, Assign, SaveAudit, Candidates, CandidateUser, Resurgence, ResurgenceList } from '@/api/workFlow/FlowBefore'
 import { Revoke, Press } from '@/api/workFlow/FlowLaunch'
 import { Create, Update, DynamicCreate, DynamicUpdate } from '@/api/workFlow/workFlowForm'
@@ -266,6 +265,7 @@ export default {
       formData: {},
       setting: {},
       flowFormInfo: {},
+      flowTemplateInfo: {},
       flowTaskInfo: {},
       flowTaskNodeList: [],
       flowTemplateJson: {},
@@ -387,83 +387,39 @@ export default {
        * 3 - 抄送事宜
        * 4 - 流程监控
        */
-      if (this.setting.opType == '-1') {
-        this.getEngineInfo(data)
-      } else {
-        this.getBeforeInfo(data)
-      }
-    },
-    getEngineInfo(data) {
-      FlowEngineInfo(data.flowId).then(res => {
-        data.type = res.data.type
-        data.fullName = res.data.fullName
-        this.fullName = res.data.fullName
-        if (data.formType == 1) {
-          if (res.data.formUrl) {
-            const formUrl = res.data.formUrl.replace(/\s*/g, "")
-            this.currentView = (resolve) => require([`@/views/${formUrl}`], resolve)
-          } else {
-            this.currentView = (resolve) => require([`@/views/workFlow/workFlowForm/${data.enCode}`], resolve)
-          }
-        } else {
-          this.currentView = (resolve) => require([`@/views/workFlow/workFlowForm/dynamicForm`], resolve)
-        }
-        data.formConf = res.data.formData
-        this.flowTemplateJson = res.data.flowTemplateJson ? JSON.parse(res.data.flowTemplateJson) : null
-        this.flowTemplateJson.state = 'state-curr'
-        data.formOperates = []
-        this.properties = this.flowTemplateJson && this.flowTemplateJson.properties || {}
-        if (this.flowTemplateJson && this.flowTemplateJson.properties && this.flowTemplateJson.properties.formOperates) {
-          data.formOperates = this.flowTemplateJson.properties.formOperates || []
-        }
-        data.flowTemplateJson = this.flowTemplateJson
-        setTimeout(() => {
-          this.$nextTick(() => {
-            this.$refs.form && this.$refs.form.init(data)
-          })
-        }, 500)
-      }).catch(() => { this.loading = false })
+      this.getBeforeInfo(data)
     },
     getBeforeInfo(data) {
-      FlowBeforeInfo(data.id, { taskNodeId: data.taskNodeId, taskOperatorId: data.taskId }).then(res => {
+      FlowBeforeInfo(data.id || 0, { taskNodeId: data.taskNodeId, taskOperatorId: data.taskId, flowId: data.flowId }).then(res => {
         this.flowFormInfo = res.data.flowFormInfo
         this.flowTaskInfo = res.data.flowTaskInfo
-        data.fullName = this.flowTaskInfo.fullName
-        this.fullName = this.flowTaskInfo.fullName
+        this.flowTemplateInfo = res.data.flowTemplateInfo
+        const fullName = data.opType == '-1' ? this.flowTemplateInfo.fullName : this.flowTaskInfo.fullName
+        this.flowTaskInfo = res.data.flowTaskInfo
+        data.fullName = fullName
+        this.fullName = fullName
         this.thisStep = this.flowTaskInfo.thisStep
         this.flowUrgent = this.flowTaskInfo.flowUrgent || 1
-        data.type = this.flowTaskInfo.type
+        data.type = this.flowTemplateInfo.type
         data.draftData = res.data.draftData || null
-        if (data.formType == 1) {
-          if (this.flowTaskInfo.formUrl) {
-            this.currentView = (resolve) => require([`@/views/${this.flowTaskInfo.formUrl}`], resolve)
-          } else {
-            this.currentView = (resolve) => require([`@/views/workFlow/workFlowForm/${data.enCode}`], resolve)
-          }
-        } else {
-          this.currentView = (resolve) => require([`@/views/workFlow/workFlowForm/dynamicForm`], resolve)
-        }
-        this.flowTaskNodeList = res.data.flowTaskNodeList
-        this.flowTemplateJson = this.flowTaskInfo.flowTemplateJson ? JSON.parse(this.flowTaskInfo.flowTemplateJson) : null
+        data.formData = res.data.formData || {}
+        const formUrl = this.flowFormInfo.formType == 2 ? 'workFlow/workFlowForm/dynamicForm' : this.flowFormInfo.urlAddress ? this.flowFormInfo.urlAddress.replace(/\s*/g, "") : `workFlow/workFlowForm/${this.flowFormInfo.enCode}`
+        this.currentView = (resolve) => require([`@/views/${formUrl}`], resolve)
+        this.flowTaskNodeList = res.data.flowTaskNodeList || []
+        this.flowTemplateJson = this.flowTemplateInfo.flowTemplateJson ? JSON.parse(this.flowTemplateInfo.flowTemplateJson) : null
         this.isComment = this.flowTemplateJson.properties.isComment
         this.isSummary = this.flowTemplateJson.properties.isSummary
         this.summaryType = this.flowTemplateJson.properties.summaryType
-        this.flowTaskOperatorRecordList = res.data.flowTaskOperatorRecordList
+        this.flowTaskOperatorRecordList = res.data.flowTaskOperatorRecordList || []
         this.properties = res.data.approversProperties || {}
         this.endTime = this.flowTaskInfo.completion == 100 ? this.flowTaskInfo.endTime : 0
-        data.formConf = res.data.flowFormInfo
-        if (data.opType != 1) data.readonly = true
-        data.formOperates = []
+        data.formConf = this.flowFormInfo.propertyJson
+        if (data.opType != 1 && data.opType != '-1') data.readonly = true
+        data.formOperates = res.data.formOperates || []
         if (data.opType == 0) {
-          this.properties = this.flowTemplateJson && this.flowTemplateJson.properties || {}
-          if (this.flowTemplateJson && this.flowTemplateJson.properties && this.flowTemplateJson.properties.formOperates) {
-            data.formOperates = this.flowTemplateJson.properties.formOperates || []
-          }
           for (let i = 0; i < data.formOperates.length; i++) {
             data.formOperates[i].write = false
           }
-        } else {
-          data.formOperates = res.data.formOperates || []
         }
         data.flowTemplateJson = this.flowTemplateJson
         if (this.flowTaskNodeList.length) {
@@ -485,6 +441,8 @@ export default {
             loop(this.flowTemplateJson)
           }
           this.assignNodeList = assignNodeList
+        } else {
+          this.flowTemplateJson.state = 'state-curr'
         }
         setTimeout(() => {
           this.$nextTick(() => {

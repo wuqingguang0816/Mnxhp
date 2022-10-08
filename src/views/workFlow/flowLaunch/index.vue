@@ -309,7 +309,6 @@ export default {
         id: '',
         enCode: item.enCode,
         flowId: item.id,
-        formType: item.formType,
         opType: '-1'
       }
       this.formVisible = true
@@ -323,7 +322,6 @@ export default {
         id: item.id,
         enCode: item.flowCode,
         flowId: item.flowId,
-        formType: item.formType,
         opType,
         status: item.status
       }

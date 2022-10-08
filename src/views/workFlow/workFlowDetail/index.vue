@@ -49,7 +49,6 @@ export default {
         id: item.processId,
         enCode: item.enCode,
         flowId: item.flowId,
-        formType: item.formType,
         opType: item.type == 1 ? 0 : item.type == 2 ? 1 : item.type,
         taskNodeId: item.taskNodeId,
         taskId: item.taskOperatorId,

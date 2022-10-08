@@ -2244,8 +2244,8 @@
             <el-col :span="2" class="rule-cell">子流程</el-col>
             <el-col :span="7" class="rule-cell">
               <el-select v-model="child.childField" placeholder="请选择字段" filterable clearable>
-                <el-option v-for="item in childFieldOptions" :key="item.vmodel" :label="item.label"
-                  :value="item.vmodel" />
+                <el-option v-for="field in childFieldOptions" :key="field.__vModel__"
+                  :label="field.__config__.label" :value="field.__vModel__" />
               </el-select>
             </el-col>
             <el-col :span="2" class="rule-cell">
@@ -2306,7 +2306,7 @@
   </el-drawer>
 </template>
 <script>
-import { getFormDataFields } from '@/api/workFlow/FlowEngine'
+import { getFlowFormInfo } from '@/api/workFlow/FlowEngine'
 import { getFormInfo } from '@/api/workFlow/FormDesign'
 import { NodeUtils } from "../FlowCard/util"
 import nodeConfig from "../FlowCard/config"
@@ -3300,8 +3300,16 @@ export default {
         })
         return
       }
-      getFormDataFields(this.subFlowForm.flowId).then(res => {
-        this.childFieldOptions = res.data.list
+      getFlowFormInfo(this.subFlowForm.flowId).then(res => {
+        let { formType = 1, propertyJson } = res.data
+        let formJson = {}, fieldList = []
+        if (propertyJson) formJson = JSON.parse(propertyJson)
+        if (formType == 1) {
+          fieldList = this.transformFormJson(formJson)
+        } else {
+          fieldList = formJson.fields
+        }
+        this.childFieldOptions = this.transformFieldList(fieldList)
         let assignList = this.subFlowForm.assignList ? JSON.parse(JSON.stringify(this.subFlowForm.assignList)) : []
         this.getRealAssignList(assignList)
         this.ruleVisible = true
