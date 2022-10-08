@@ -25,7 +25,7 @@
           <el-table-column label="操作" fixed="right">
             <template slot-scope="scope">
               <el-button type="text" size="mini" @click.native="updateRelease(scope.row)"
-                :disabled="scope.row.principal==1">设为主版本
+                :disabled="scope.row.enabledMark==1">设为主版本
               </el-button>
               <el-button type="text" size="mini" @click.native="del(scope.row)" style="color:red">删除
               </el-button>
