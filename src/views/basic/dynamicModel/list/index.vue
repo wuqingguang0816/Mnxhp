@@ -757,10 +757,10 @@ export default {
       if (this.isPreview) return this.$message({ message: '功能预览不支持数据保存', type: 'warning' })
       this.workFlowFormData = {
         id: row.id,
-        data: JSON.stringify(row),
+        formData: row,
         flowId: this.config.flowId
       }
-      Candidates(0, { formData: this.workFlowFormData }).then(res => {
+      Candidates(0, this.workFlowFormData).then(res => {
         let data = res.data
         this.candidateType = data.type
         if (data.type == 1) {

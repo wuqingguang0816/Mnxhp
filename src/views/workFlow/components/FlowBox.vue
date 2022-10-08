@@ -496,7 +496,7 @@ export default {
           return
         }
         this.candidateLoading = true
-        Candidates(this.setting.taskId, { formData: this.formData }).then(res => {
+        Candidates(this.setting.taskId, this.formData).then(res => {
           let data = res.data
           this.candidateType = data.type
           this.candidateLoading = false
@@ -583,7 +583,7 @@ export default {
       this.formData.flowUrgent = this.flowUrgent
       if (this.eventType === 'save') return this.handleRequest()
       this.candidateLoading = true
-      Candidates(0, { formData: this.formData }).then(res => {
+      Candidates(0, this.formData).then(res => {
         let data = res.data
         this.candidateLoading = false
         this.candidateType = data.type

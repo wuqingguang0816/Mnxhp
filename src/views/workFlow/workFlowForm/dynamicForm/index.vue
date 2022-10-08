@@ -126,7 +126,7 @@ export default {
       this.dataForm.flowUrgent = this.flowUrgent || 1
       if (this.eventType === 'save') return this.selfHandleRequest()
       this.$emit('setCandidateLoad', true)
-      Candidates(0, { formData: this.dataForm }).then(res => {
+      Candidates(0, this.dataForm).then(res => {
         let data = res.data
         this.$emit('setCandidateLoad', false)
         this.candidateType = data.type
