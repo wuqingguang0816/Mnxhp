@@ -438,13 +438,12 @@ export class NodeUtils {
       (valid = false)
 
     this.isSubFlowNode(node) &&
-      (!props.flowId || props.initiateType === 6 && (isEmptyArray(props.initiator) && isEmptyArray(props.initiatePos) && isEmptyArray(props.initiateRole))) &&
+      (!props.flowId || props.initiateType === 6 && (isEmptyArray(props.initiator) && isEmptyArray(props.initiatePos) && isEmptyArray(props.initiateRole) && isEmptyArray(props.initiateOrg) && isEmptyArray(props.initiateGroup))) &&
       (valid = false)
 
-    const customSettings = [6, 7]
     this.isApproverNode(node) &&
-      (!props.assigneeType || customSettings.includes(props.assigneeType)) &&
-      (isEmptyArray(props.approvers) && isEmptyArray(props.approverPos) && isEmptyArray(props.approverRole)) &&
+      (!props.assigneeType || props.assigneeType === 6) &&
+      (isEmptyArray(props.approvers) && isEmptyArray(props.approverPos) && isEmptyArray(props.approverRole) && isEmptyArray(props.approverOrg) && isEmptyArray(props.approverGroup)) &&
       (valid = false)
     return valid
   }
