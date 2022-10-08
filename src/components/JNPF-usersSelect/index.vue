@@ -228,7 +228,7 @@ const defaultSelectedList = [
     id: "role",
     type: "role",
     fullName: "角色",
-    icon: "icon-ym icon-ym-generator-group1",
+    icon: "icon-ym icon-ym-global-role",
     children: []
   }
 ]
