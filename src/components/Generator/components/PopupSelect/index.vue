@@ -245,7 +245,6 @@ export default {
         ...this.listQuery,
         interfaceId: this.interfaceId,
         propsValue: this.propsValue,
-        columnOptions: columnOptions.join(','),
         relationField: this.relationField,
         columnOptions: columnOptions.join(','),
         paramList
