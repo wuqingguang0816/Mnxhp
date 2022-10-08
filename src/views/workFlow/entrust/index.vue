@@ -30,13 +30,14 @@
           </div>
         </div>
         <JNPF-table v-loading="listLoading" :data="list">
+          <el-table-column prop="userName" label="委托人" width="150" />
           <el-table-column prop="toUserName" label="被委托人" width="150" />
           <el-table-column prop="flowName" label="委托流程" width="250" />
-          <el-table-column prop="flowCategory" label="流程分类" width="100">
+          <!-- <el-table-column prop="flowCategory" label="流程分类" width="100">
             <template slot-scope="scope">
               {{ scope.row.flowCategory|getCategoryText(categoryList) }}
             </template>
-          </el-table-column>
+          </el-table-column> -->
           <el-table-column prop="startTime" label="开始时间" width="120"
             :formatter="jnpf.tableDateFormat" />
           <el-table-column prop="endTime" label="结束时间" width="120"
@@ -88,7 +89,7 @@ export default {
   },
   filters: {
     getCategoryText(id, categoryList) {
-      let item = categoryList.filter(o => o.enCode == id)[0]
+      let item = categoryList.filter(o => o.id == id)[0]
       return item && item.fullName ? item.fullName : ''
     }
   },
