@@ -211,8 +211,6 @@ export default {
       const systemId = data[1].systemId
       if (type == 'pc') this.pcSystemId = systemId
       if (type == 'app') this.appSystemId = systemId
-      console.log(this.pcSystemId)
-      console.log(this.appSystemId)
     },
     // 发布菜单
     release() {
