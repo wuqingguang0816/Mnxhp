@@ -59,6 +59,7 @@ export default {
             taskId: data.taskId,
             opType: data.opType
           }
+          const formData = data.draftData || data.formData
           this.formData = { ...formData, flowId: data.flowId }
         }
         this.$store.commit('generator/SET_DYNAMIC_MODEL_EXTRA', extra)

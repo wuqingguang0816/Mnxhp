@@ -618,13 +618,8 @@ export default {
       if (!this.formData.id) delete (this.formData.id)
       if (this.eventType === 'save') this.btnLoading = true
       this.allBtnDisabled = true
-      let formMethod = null
-      if (this.setting.formType == 1) {
-        formMethod = this.formData.id ? Update : Create
-      } else {
-        formMethod = this.formData.id ? DynamicUpdate : DynamicCreate
-      }
-      formMethod(this.setting.enCode, this.formData).then(res => {
+      const formMethod = this.formData.id ? Update : Create
+      formMethod(this.formData).then(res => {
         const errorData = res.data
         if (errorData && Array.isArray(errorData) && errorData.length) {
           this.errorNodeList = errorData
