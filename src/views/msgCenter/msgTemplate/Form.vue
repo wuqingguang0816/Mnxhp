@@ -29,7 +29,8 @@
           </el-col>
           <el-col :span="12">
             <el-form-item label="消息来源" prop="messageSource">
-              <el-select v-model="dataForm.messageSource" placeholder="选择消息来源" clearable>
+              <el-select v-model="dataForm.messageSource" placeholder="选择消息来源" clearable
+                :disabled="this.dataForm.id?true:false">
                 <el-option v-for="(item,index) in messageSourceList" :key="index"
                   :label="item.fullName" :value="item.enCode">
                 </el-option>
