@@ -2406,6 +2406,7 @@ const defaultApproverForm = {
   formId: "",
   formName: "",
   formFieldList: [],
+  prevNodeList: [],
   assignList: [],
   timeLimitConfig: {
     on: 2,  // 开启
@@ -3198,6 +3199,7 @@ export default {
       Object.assign(this.approverForm, properties)
       this.getNodeOption()
       this.getPrevNodeOption()
+      this.approverForm.prevNodeList = this.prevNodeList
       if (this.isPrevNodeWithSubForm) {
         for (let i = 0; i < this.assigneeTypeOptions.length; i++) {
           if (this.assigneeTypeOptions[i].value === 7) {
@@ -3401,6 +3403,13 @@ export default {
         }
       }
       loop(this.prevNodeList)
+      this.prevNodeList = this.unique(this.prevNodeList, 'nodeId')
+    },
+    // 去重
+    unique(arr, attrName) {
+      const res = new Map()
+      // 根据对象的某个属性值去重
+      return arr.filter(o => !res.has(o[attrName]) && res.set(o[attrName], 1))
     },
     // 获取驳回步骤选项
     getNodeOption() {
