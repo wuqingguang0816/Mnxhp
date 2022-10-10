@@ -238,7 +238,7 @@ export default {
       this.fileList = []
     },
     beforeRemove(file, fileList) {
-      return this.$confirm(`确定移除 ${file.name}？`).catch(() => { })
+      return this.$confirm(`确定移除 ${file.name}？`).then(() => { })
     },
     handleChange(file, fileList) {
       this.fileList = fileList.slice(-1)
