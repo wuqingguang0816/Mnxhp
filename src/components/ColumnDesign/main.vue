@@ -44,6 +44,15 @@
                 :disabled="scope.row.__config__&&scope.row.__config__.isSubTable" />
             </template>
           </el-table-column>
+          <el-table-column prop="align" label="冻结">
+            <template slot-scope="scope">
+              <el-select v-model="scope.row.fixed" placeholder="请选择"
+                :disabled="scope.row.__config__&&scope.row.__config__.isSubTable">
+                <el-option v-for="item in fixedOptions" :key="item" :label="item" :value="item">
+                </el-option>
+              </el-select>
+            </template>
+          </el-table-column>
           <el-table-column prop="align" label="对齐">
             <template slot-scope="scope">
               <el-select v-model="scope.row.align" placeholder="请选择">
@@ -371,6 +380,7 @@ export default {
     return {
       currentTab: 'column',
       alignOptions: ['left', 'center', 'right'],
+      fixedOptions: ['none', 'left', 'right'],
       list: [],
       searchList: [],
       columnList: [],
@@ -483,6 +493,7 @@ export default {
     this.columnOptions = columnOptions.map(o => ({
       label: o.__config__.label,
       prop: o.__vModel__,
+      fixed: 'none',
       align: 'left',
       jnpfKey: o.__config__.jnpfKey,
       sortable: false,
@@ -535,6 +546,7 @@ export default {
         inter: for (let ii = 0; ii < data.length; ii++) {
           if (replacedData[i][key] === data[ii][key]) {
             if (type === 'column') {
+              data[ii].fixed = replacedData[i].fixed
               data[ii].align = replacedData[i].align
               data[ii].width = replacedData[i].width
               data[ii].sortable = replacedData[i].sortable

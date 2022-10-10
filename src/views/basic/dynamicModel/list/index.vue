@@ -48,8 +48,8 @@
           <template v-if="columnData.type === 4">
             <template v-for="(item, i) in columnList">
               <el-table-column :prop="item.prop" :label="item.label" :align="item.align"
-                :width="item.width" :key="i" :sortable="item.sortable?'custom':item.sortable"
-                v-if="item.jnpfKey !=='table'">
+                :fixed="item.fixed!='none'?item.fixed:false" :width="item.width" :key="i"
+                :sortable="item.sortable?'custom':item.sortable" v-if="item.jnpfKey !=='table'">
                 <template slot-scope="scope">
                   <template v-if="scope.row.rowEdit">
                     <template v-if="item.jnpfKey==='numInput'">
