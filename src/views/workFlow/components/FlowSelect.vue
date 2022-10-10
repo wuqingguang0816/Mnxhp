@@ -1,15 +1,45 @@
 <template>
   <div class="popupSelect-container">
-    <el-input v-model="value" placeholder="请输入字段名称" @click.native="flowSelect">
-    </el-input>
-    <el-dialog title="委托流程" :close-on-click-modal="false" :visible.sync="visible"
+    <div class="el-select" @click.stop="flowSelect">
+      <div class="el-select__tags" v-if="multiple" ref="tags"
+        :style="{ 'max-width': inputWidth - 32 + 'px', width: '100%',cursor:'pointer' }">
+        <span v-if="collapseTags && tagsList.length">
+          <el-tag :closable="!selectDisabled" :size="collapseTagSize" type="info"
+            @close="deleteTag($event, 0)" disable-transitions>
+            <span class="el-select__tags-text">{{ tagsList[0].fullName }}</span>
+          </el-tag>
+          <el-tag v-if="tagsList.length > 1" :closable="false" type="info" disable-transitions>
+            <span class="el-select__tags-text">+ {{ tagsList.length - 1 }}</span>
+          </el-tag>
+        </span>
+        <transition-group @after-leave="resetInputHeight" v-if="!collapseTags">
+          <el-tag v-for="(item,i) in tagsList" :key="item.id" :size="collapseTagSize"
+            :closable="!selectDisabled" type="info" @close="deleteTag($event, i)"
+            disable-transitions>
+            <span class="el-select__tags-text">{{ item.fullName }}</span>
+          </el-tag>
+        </transition-group>
+      </div>
+      <el-input ref="reference" v-model="innerValue" type="text" :placeholder="currentPlaceholder"
+        :disabled="selectDisabled" readonly :validate-event="false"
+        :tabindex="(multiple) ? '-1' : null" @mouseenter.native="inputHovering = true"
+        @mouseleave.native="inputHovering = false">
+        <template slot="suffix">
+          <i v-show="!showClose"
+            :class="['el-select__caret', 'el-input__icon', 'el-icon-arrow-up']"></i>
+          <i v-if="showClose" class="el-select__caret el-input__icon el-icon-circle-close"
+            @click="handleClearClick"></i>
+        </template>
+      </el-input>
+    </div>
+    <el-dialog title="委托流程" :visible.sync="visible" :before-close="cancelConfirm"
       class="JNPF-dialog JNPF-dialog_center JNPF-dialog-tree-select" lock-scroll append-to-body
       width="1000px">
       <div class="JNPF-common-layout">
         <div class="JNPF-common-layout-left" style="width: 150px;">
           <el-scrollbar class="JNPF-common-el-tree-scrollbar " v-loading="treeLoading">
             <el-tree ref="treeBox" :data="categoryList" :props="defaultProps" default-expand-all
-              current-node-key="0" highlight-current :expand-on-click-node="false" node-key="id"
+              :current-node-key="0" highlight-current :expand-on-click-node="false" node-key="id"
               lock-scroll @node-click="handleNodeClick" class="JNPF-common-el-tree">
               <span class="custom-tree-node" slot-scope="{ data }" :title="data.fullName">
                 <span class="text" :title="data.fullName" style="margin-left:20px">
@@ -43,14 +73,11 @@
             </div>
           </el-row>
           <div class="JNPF-common-layout-main JNPF-flex-main">
-            <JNPF-table v-loading="listLoading" :data="list" :border="false" highlight-current-row
-              @row-click="rowClick" :hasNO="false">
-              <el-table-column width="35">
-                <!-- <template slot-scope="scope">
-                  <el-radio :label="scope.row.field" v-model="checked">&nbsp;</el-radio>
-                </template> -->
-              </el-table-column>
-              <el-table-column type="index" width="50" label="序号" align="center" />
+
+            <JNPF-table v-loading="listLoading" :data="tableData" :border="false"
+              highlight-current-row ref="multipleTable" @select="handleSelection"
+              @select-all="handleSelectionAll" :hasNO="false" has-c>
+
               <el-table-column prop="fullName" label="流程名称" />
               <el-table-column prop="enCode" label="流程编码" />
             </JNPF-table>
@@ -60,8 +87,8 @@
         </div>
       </div>
       <span slot="footer" class="dialog-footer">
-        <el-button @click="visible = false">{{$t('common.cancelButton')}}</el-button>
-        <el-button type="primary" @click="select()">{{$t('common.confirmButton')}}</el-button>
+        <el-button @click="cancelConfirm()">{{$t('common.cancelButton')}}</el-button>
+        <el-button type="primary" @click="confirm()">{{$t('common.confirmButton')}}</el-button>
       </span>
     </el-dialog>
   </div>
@@ -69,23 +96,43 @@
 
 <script>
 
-import { FlowEngineListAll } from '@/api/workFlow/FlowEngine'
+import { addResizeListener, removeResizeListener } from 'element-ui/src/utils/resize-event';
 import { FlowEngineList } from '@/api/workFlow/FlowEngine'
 export default {
-
-  props: {
-    value: {
+  name: 'flowSelect',
+  inject: {
+    elForm: {
       default: ''
     },
-
+    elFormItem: {
+      default: ''
+    }
   },
-  model: {
-    prop: 'value',
-    event: 'input'
+  props: {
+    value: {
+      type: [String, Array],
+      default: ''
+    },
+    clearable: {
+      type: Boolean,
+      default: true
+    },
+    multiple: {
+      type: Boolean,
+      default: false
+    },
+    collapseTags: {
+      type: Boolean,
+      default: false
+    },
+    placeholder: {
+      type: String,
+      default: '全部流程'
+    },
   },
   data() {
     return {
-      list: [],
+      tableData: [],
       innerValue: '',
       listQuery: {
         currentPage: 1,
@@ -94,53 +141,172 @@ export default {
       },
       keyword: '',
       total: 0,
-      checked: '',
-      checkedRow: {},
       listLoading: false,
-      defaultProps: {
-        children: 'children',
-        label: 'fullName',
-        key: "id"
-      },
       query: {
         categoryId: '',
         keyword: '',
       },
       treeLoading: false,
       visible: false,
-
+      multipleSelection: '',
       categoryList: [],
+      selectedData: [],
+      tagsList: [],
+      inputWidth: 0,
     }
   },
+  watch: {
+    value(val) {
+      this.setDefault()
+    },
+    selectDisabled() {
+      this.$nextTick(() => {
+        this.resetInputHeight();
+      });
+    },
+
+  },
   computed: {
-    // showClose() {
-    //   let hasValue = this.value !== undefined && this.value !== null && this.value !== '';
-    //   let criteria = this.clearable &&
-    //     !this.disabled &&
-    //     this.inputHovering &&
-    //     hasValue;
-    //   return criteria;
-    // },
+    showClose() {
+      let hasValue = this.multiple
+        ? Array.isArray(this.value) && this.value.length > 0
+        : this.value !== undefined && this.value !== null && this.value !== '';
+      let criteria = this.clearable &&
+        !this.selectDisabled &&
+        this.inputHovering &&
+        hasValue;
+      return criteria;
+    },
+    currentPlaceholder() {
+      if (this.multiple && Array.isArray(this.value) && this.value.length) {
+        return ''
+      } else {
+        return this.placeholder
+      }
+    },
+    selectDisabled() {
+      return this.disabled || (this.elForm || {}).disabled;
+    },
+    _elFormItemSize() {
+      return (this.elFormItem || {}).elFormItemSize;
+    },
+    selectSize() {
+      return this.size || this._elFormItemSize || (this.$ELEMENT || {}).size;
+    },
+    collapseTagSize() {
+      return ['small', 'mini'].indexOf(this.selectSize) > -1
+        ? 'mini'
+        : 'small';
+    },
   },
   created() {
     this.getDictionaryData()
+    this.setDefault()
+  },
+  mounted() {
+    addResizeListener(this.$el, this.handleResize);
+    const reference = this.$refs.reference;
+    if (reference && reference.$el) {
+      const sizeMap = {
+        medium: 36,
+        small: 32,
+        mini: 28
+      };
+      const input = reference.$el.querySelector('input');
+      this.initialInputHeight = input.getBoundingClientRect().height || sizeMap[this.selectSize];
+    }
+    if (this.multiple) {
+      this.resetInputHeight();
+    }
+    this.$nextTick(() => {
+      if (reference && reference.$el) {
+        this.inputWidth = reference.$el.getBoundingClientRect().width;
+      }
+    });
+    this.setDefault()
+  },
+  beforeDestroy() {
+    if (this.$el && this.handleResize) removeResizeListener(this.$el, this.handleResize);
   },
   methods: {
     initData() {
       this.listLoading = true
-      this.list = []
+      this.tableData = []
       let query = {
         ...this.listQuery,
         keyword: this.keyword,
         category: this.categoryId ? this.categoryId : ""
       }
       FlowEngineList(query).then((res) => {
-        this.list = res.data.list
+        this.tableData = res.data.list
+        this.total = res.data.pagination.total
+        if (this.tableData.length && this.selectedData.length) {
+          this.$nextTick(() => {
+            this.tableData.forEach(row => {  // 循环嵌套
+              this.selectedData.forEach(item => {
+                if (row.id === item.id) { // 判断哪些数据是需要回显的
+                  this.$refs.multipleTable.$refs.JNPFTable.toggleRowSelection(row, true)
+                }
+              })
+            })
+          })
+        }
+        this.listLoading = false
+      }).catch(() => {
         this.listLoading = false
       })
     },
+    setDefault() {
+      if (!this.value || !this.value.length) {
+        this.innerValue = ''
+        this.selectedData = []
+        this.tagsList = []
+        return
+      }
+      const arr = this.multiple ? this.value : [this.value]
+      let query = {
+        ...this.listQuery,
+        keyword: '',
+        category: ''
+      }
+      FlowEngineList(query).then((res) => {
+        let list = res.data.list.filter(item => {
+          return arr.includes(item.id)
+        })
+        this.selectedData = list
+        if (this.multiple) {
+          this.innerValue = ''
+          this.tagsList = JSON.parse(JSON.stringify(this.selectedData))
+        } else {
+          this.innerValue = this.selectedData.length ? this.selectedData[0].fullName : ''
+        }
+        this.$nextTick(() => {
+          if (this.multiple) {
+            this.resetInputHeight();
+          }
+        })
+
+      })
+
+      // getUserInfoList(arr).then(res => {
+      //   this.selectedData = res.data.list
+      //   if (this.multiple) {
+      //     this.innerValue = ''
+      //     this.tagsList = JSON.parse(JSON.stringify(this.selectedData))
+      //   } else {
+      //     this.innerValue = this.selectedData.length ? this.selectedData[0].fullName : ''
+      //   }
+      //   this.$nextTick(() => {
+      //     if (this.multiple) {
+      //       this.resetInputHeight();
+      //     }
+      //   })
+      // })
+    },
+
     flowSelect() {
       this.visible = true
+      this.initData()
     },
     getDictionaryData() {
       this.$store.dispatch('base/getDictionaryData', { sort: 'WorkFlowCategory' }).then((res) => {
@@ -149,18 +315,14 @@ export default {
           encode: "all",
           fullName: "全部流程",
         })
+
         this.categoryList.push(...res)
       })
+      this.categoryId = 0
     },
     handleNodeClick(data) {
-      // console.log(data)
       this.categoryId = data.id ? data.id : 0
       this.initData()
-      // this.tableName = ''
-      // this.linkId = ''
-      // this.tableName = data.tableName
-      // this.linkId = data.dbLink
-      // this.reset()
 
     },
     reset() {
@@ -173,35 +335,115 @@ export default {
       this.listQuery.sort = 'desc'
       this.initData()
     },
-    openDialog() {
-      // if (!this.treeData.length) return this.$message.error(`请先进行数据连接！`)
-      this.visible = true
-      this.checked = ''
-      this.treeLoading = true
-      this.tableName = this.bindTable
-      this.$nextTick(() => {
-        this.tableName = this.treeData[0].tableName
-        this.linkId = this.treeData[0].dbLink
-        this.$refs.treeBox.setCurrentKey(this.tableName)
-        this.treeLoading = false
-        this.reset()
+
+
+    handleSelection(selection, val) {
+      const index = this.selectedData.findIndex((item) => {
+        return item.id == val.id
       })
+      if (index == -1) {
+        this.selectedData.push(val)
+      } else {
+        this.selectedData.splice(index, 1)
+      }
+      this.selectedData = [...new Set(this.selectedData)]
     },
-    clear() {
-      this.checked = ''
-      this.checkedRow = {}
-      this.$emit('closeForm', this.checked, this.checkedRow)
+
+    handleSelectionAll(selection) {
+      if (selection.length) {
+        if (this.selectedData.length) {
+          this.selectedData.forEach((item, index) => {
+            selection.forEach(it => {
+              if (item.id != it.id) {
+                this.selectedData.push(it)
+              }
+            });
+          });
+        } else {
+          this.selectedData.push(...selection)
+        }
+      } else {
+        if (this.selectedData.length && this.tableData.length) {
+          this.tableData.forEach(item => {
+            const index = this.selectedData.findIndex((it) => {
+              return item.id == it.id
+            })
+            if (index != -1) {
+              this.selectedData.splice(index, 1)
+            }
+          });
+        }
+      }
+      this.selectedData = [...new Set(this.selectedData)]
     },
-    select() {
-      if (!this.checked) return this.$message.warning(`请选择一条数据！`)
+    //确定
+    confirm() {
+      if (this.multiple) {
+        this.innerValue = ''
+        this.tagsList = JSON.parse(JSON.stringify(this.selectedData))
+        let selectedIds = this.selectedData.map(o => o.id)
+        this.$emit('input', selectedIds)
+        this.$emit('change', selectedIds, this.selectedData)
+      } else {
+        if (!this.selectedData.length) {
+          this.innerValue = ''
+          this.$emit('input', '')
+          this.$emit('change', '', {})
+          this.visible = false
+          return
+        }
+        this.innerValue = this.selectedData[0].fullName
+        let selectedIds = this.selectedData.map(o => o.id)
+        this.$emit('input', selectedIds[0])
+        this.$emit('change', selectedIds[0], this.selectedData[0])
+      }
       this.visible = false
-      this.$emit('closeForm', this.checked, this.checkedRow)
     },
-    rowClick(row) {
-      this.checked = row.field
-      this.checkedRow = row
-      this.checkedRow.tableName = this.tableName
-    }
+    cancelConfirm() {
+      this.setDefault()
+      this.visible = false
+    },
+
+    removeAll() {
+      this.selectedData = []
+    },
+    removeData(index) {
+      this.selectedData.splice(index, 1)
+    },
+    deleteTag(event, index) {
+      this.selectedData.splice(index, 1)
+      this.confirm()
+      event.stopPropagation();
+    },
+    handleClearClick(event) {
+      this.selectedData = []
+      this.confirm()
+      event.stopPropagation();
+    },
+    resetInputWidth() {
+      this.inputWidth = this.$refs.reference.$el.getBoundingClientRect().width;
+    },
+    handleResize() {
+      this.resetInputWidth();
+      if (this.multiple) this.resetInputHeight();
+    },
+    resetInputHeight() {
+      if (this.collapseTags) return;
+      this.$nextTick(() => {
+        if (!this.$refs.reference) return;
+        let inputChildNodes = this.$refs.reference.$el.childNodes;
+        let input = [].filter.call(inputChildNodes, item => item.tagName === 'INPUT')[0];
+        const tags = this.$refs.tags;
+        const tagsHeight = tags ? Math.round(tags.getBoundingClientRect().height) : 0;
+        const sizeInMap = this.initialInputHeight || 40;
+        input.style.height = this.selectedData.length === 0
+          ? sizeInMap + 'px'
+          : Math.max(
+            tags ? (tagsHeight + (tagsHeight > sizeInMap ? 6 : 0)) : 0,
+            sizeInMap
+          ) + 'px';
+      });
+    },
   }
 }
 </script>

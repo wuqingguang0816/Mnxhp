@@ -17,15 +17,7 @@
         </el-select>
       </jnpf-form-tip-item>
       <jnpf-form-tip-item label="委托流程" prop="flowId" tip-label="未选择委托流程默认全部流程进行委托">
-        <FlowSelect :value="dataForm.flowId" />
-        <!-- <el-select v-model="dataForm.flowId" placeholder="请选择流程" @change="handleChange" filterable>
-          <el-option-group v-for="group in flowEngineList" :key="group.id"
-            :label="group.fullName+'【'+group.num+'】'">
-            <el-option v-for="item in group.children" :key="item.id"
-              :label="item.fullName+'/'+item.enCode" :value="item.id">
-            </el-option>
-          </el-option-group>
-        </el-select> -->
+        <FlowSelect v-model="dataForm.flowId" placeholder="全部流程" :value='dataForm.flowId' multiple clearable />
       </jnpf-form-tip-item>
       <jnpf-form-tip-item label="开始时间" prop="startTime">
         <el-date-picker v-model="dataForm.startTime" type="date" placeholder="选择日期"
@@ -109,9 +101,9 @@ export default {
         type: [
           { required: true, message: '委托类型不能为空', trigger: 'change' }
         ],
-        flowId: [
-          { required: true, message: '委托流程不能为空', trigger: 'change' }
-        ],
+        // flowId: [
+        //   { required: true, message: '委托流程不能为空', trigger: 'change' }
+        // ],
         startTime: [
           { required: true, message: '开始时间不能为空', trigger: 'change' },
           { validator: checkStartTime, trigger: 'change' }
@@ -143,7 +135,8 @@ export default {
           if (this.dataForm.id) {
             FlowDelegateInfo(this.dataForm.id).then(res => {
               this.dataForm = res.data
-              this.dataForm.type = this.dataForm.type.split(",")
+              this.dataForm.flowId = this.dataForm.flowId ? this.dataForm.flowId.split(",") : ''
+              this.dataForm.type = this.dataForm.type ? this.dataForm.type.split(",") : ''
             })
           }
           this.loading = false
@@ -157,12 +150,16 @@ export default {
       this.getFlowEngineList()
     },
     dataFormSubmit() {
-      this.dataForm.type = this.dataForm.type.join(",")
       this.$refs['dataForm'].validate((valid) => {
         if (valid) {
           this.btnLoading = true
           const formMethod = this.dataForm.id ? Update : Create
-          formMethod(this.dataForm).then(res => {
+          let params = {
+            ...this.dataForm
+          }
+          params.flowId = this.dataForm.flowId ? this.dataForm.flowId.join(",") : ""
+          params.type = this.dataForm.type ? this.dataForm.type.join(",") : ""
+          formMethod(params).then(res => {
             this.$message({
               message: res.msg,
               type: 'success',
