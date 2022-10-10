@@ -33,8 +33,8 @@
       </el-input>
     </div>
     <el-dialog title="选择用户" :close-on-click-modal="false" :visible.sync="visible"
-      class="JNPF-dialog JNPF-dialog_center JNPF-dialog-tree-select" lock-scroll append-to-body
-      width="1000px">
+      :before-close="cancelConfirm" class="JNPF-dialog JNPF-dialog_center JNPF-dialog-tree-select"
+      lock-scroll append-to-body width="1000px">
       <div class="JNPF-common-layout">
         <div class="JNPF-common-layout-left">
           <el-tabs v-model="activeName" class="transfer-pane__body-tab">
@@ -139,7 +139,7 @@
         </div>
       </div>
       <span slot="footer" class="dialog-footer">
-        <el-button @click="visible = false">{{$t('common.cancelButton')}}</el-button>
+        <el-button @click="cancelConfirm">{{$t('common.cancelButton')}}</el-button>
         <el-button type="primary" @click="confirm()">{{$t('common.confirmButton')}}</el-button>
       </span>
     </el-dialog>
@@ -231,7 +231,7 @@ export default {
       roleIds: [],
       positionIds: [],
       groupIds: [],
-      selectId: '',
+      selectId: ''
     }
   },
   watch: {
@@ -321,14 +321,9 @@ export default {
         this.$refs.multipleTable.$refs.JNPFTable.toggleRowSelection(row, true)
       })
     },
-    toggleSelection(rows) {
-      if (rows) {
-        rows.forEach(row => {
-          this.$refs.multipleTable.$refs.JNPFTable.toggleRowSelection(row, true)
-        });
-      } else {
-        this.$refs.multipleTable.clearSelection();
-      }
+    cancelConfirm() {
+      this.setDefault()
+      this.visible = false
     },
     filterNode(value, data) {
       if (!value) return true;
