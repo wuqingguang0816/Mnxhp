@@ -49,7 +49,8 @@
               <el-tab-pane label="全部数据" name="all">
                 <el-tree :data="treeData" :props="props" check-on-click-node
                   @node-click="handleNodeClick" class="JNPF-common-el-tree" node-key="id"
-                  v-loading="loading" lazy :load="loadNode">
+                  v-loading="loading" lazy :load="loadNode"
+                  :default-expanded-keys="defaultExpandedKeys">
                   <span class="custom-tree-node" slot-scope="{ node, data }">
                     <i :class="data.icon"></i>
                     <span class="text">{{node.label}}</span>
@@ -226,6 +227,7 @@ export default {
         label: 'fullName',
         isLeaf: 'isLeaf'
       },
+      defaultExpandedKeys: [],
       treeData: [],
       treeData2: [],
       treeData3: [],
@@ -473,6 +475,9 @@ export default {
       getImUserSelector(this.nodeId, this.keyword).then(res => {
         this.treeData = res.data.list
         this.loading = false
+        if (!this.keyword && this.treeData.length && this.nodeId == '0') {
+          this.defaultExpandedKeys = [this.treeData[0].id]
+        }
       })
     },
     loadNode(node, resolve) {
