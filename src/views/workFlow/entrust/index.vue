@@ -21,7 +21,9 @@
       </el-row>
       <div class="JNPF-common-layout-main JNPF-flex-main">
         <div class="JNPF-common-head">
-          <topOpts @add="addOrUpdateHandle()" addText="新建委托"></topOpts>
+          <topOpts @add="addOrUpdateHandle()" addText="新建委托">
+            <el-button type="text" @click="addFlow()">我的委托</el-button>
+          </topOpts>
           <div class="JNPF-common-head-right">
             <el-tooltip effect="dark" :content="$t('common.refresh')" placement="top">
               <el-link icon="icon-ym icon-ym-Refresh JNPF-common-head-icon" :underline="false"
@@ -32,7 +34,7 @@
         <JNPF-table v-loading="listLoading" :data="list">
           <el-table-column prop="userName" label="委托人" width="150" />
           <el-table-column prop="toUserName" label="被委托人" width="150" />
-          <el-table-column prop="flowName" label="委托流程" width="250" />
+          <el-table-column prop="flowName" label="委托流程" width="250" show-overflow-tooltip />
           <!-- <el-table-column prop="flowCategory" label="流程分类" width="100">
             <template slot-scope="scope">
               {{ scope.row.flowCategory|getCategoryText(categoryList) }}
@@ -63,15 +65,20 @@
       </div>
     </div>
     <Form v-if="formVisible" ref="Form" @refreshDataList="reset" />
+    <MyEntrust v-if="flowVisible" ref="MyEntrust" @close="flowVisible=false"
+      @choiceFlow="choiceFlow" />
+    <FlowBox v-if="flowboxVisible" ref="FlowBox" @close="closeForm" />
   </div>
 </template>
 
 <script>
 import { FlowDelegateList, Delete } from '@/api/workFlow/FlowDelegate'
 import Form from './Form'
+import MyEntrust from './myEntrust.vue'
+import FlowBox from '../components/FlowBox'
 export default {
   name: 'workFlow-entrust',
-  components: { Form },
+  components: { Form, MyEntrust, FlowBox },
   data() {
     return {
       keyword: '',
@@ -84,7 +91,9 @@ export default {
         sort: 'desc',
         sidx: ''
       },
-      formVisible: false
+      formVisible: false,
+      flowVisible: false,
+      flowboxVisible: false,
     }
   },
   filters: {
@@ -171,6 +180,29 @@ export default {
       this.$nextTick(() => {
         this.$refs.Form.init(id)
       })
+    },
+    addFlow() {
+      this.flowVisible = true
+      this.$nextTick(() => {
+        this.$refs.MyEntrust.init()
+      })
+    },
+    choiceFlow(item) {
+      let data = {
+        id: '',
+        enCode: item.enCode,
+        flowId: item.id,
+        opType: '-1'
+      }
+      this.flowboxVisible = true
+      this.$nextTick(() => {
+        this.$refs.FlowBox.init(data)
+        this.flowVisible = false
+      })
+    },
+    closeForm(isRefresh) {
+      this.flowboxVisible = false
+      if (isRefresh) this.refresh()
     },
   }
 }

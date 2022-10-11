@@ -4,7 +4,7 @@
     <el-form ref="dataForm" :model="dataForm" :rules="dataRule" label-width="100px"
       v-loading="loading">
       <jnpf-form-tip-item label="委托人" prop="userId">
-        <user-select v-model="dataForm.userId" placeholder="选择委托人" @change="onChange" />
+        <user-select v-model="dataForm.userId" placeholder="选择委托人" @change="onChangeUser" />
       </jnpf-form-tip-item>
       <jnpf-form-tip-item label="被委托人" prop="toUserId">
         <user-select v-model="dataForm.toUserId" placeholder="选择被委托人" @change="onChange" />
@@ -17,7 +17,8 @@
         </el-select>
       </jnpf-form-tip-item>
       <jnpf-form-tip-item label="委托流程" prop="flowId" tip-label="未选择委托流程默认全部流程进行委托">
-        <FlowSelect v-model="dataForm.flowId" placeholder="全部流程" :value='dataForm.flowId' multiple clearable />
+        <FlowSelect v-model="dataForm.flowId" placeholder="全部流程" :value='dataForm.flowId' multiple
+          @changeName="changeName" clearable />
       </jnpf-form-tip-item>
       <jnpf-form-tip-item label="开始时间" prop="startTime">
         <el-date-picker v-model="dataForm.startTime" type="date" placeholder="选择日期"
@@ -82,7 +83,7 @@ export default {
         id: '',
         userId: '',
         toUserId: '',
-        flowId: '',
+        flowId: [],
         description: '',
         startTime: '',
         endTime: '',
@@ -127,6 +128,7 @@ export default {
   },
 
   methods: {
+
     getFlowEngineList() {
       FlowEngineListAll().then((res) => {
         this.flowEngineList = res.data.list
@@ -135,7 +137,7 @@ export default {
           if (this.dataForm.id) {
             FlowDelegateInfo(this.dataForm.id).then(res => {
               this.dataForm = res.data
-              this.dataForm.flowId = this.dataForm.flowId ? this.dataForm.flowId.split(",") : ''
+              this.dataForm.flowId = this.dataForm.flowId ? this.dataForm.flowId.split(",") : []
               this.dataForm.type = this.dataForm.type ? this.dataForm.type.split(",") : ''
             })
           }
@@ -198,13 +200,24 @@ export default {
     onChange(id, selectedData) {
       if (!id) return this.dataForm.toUserName = ''
       this.dataForm.toUserName = selectedData.fullName
-    }
+    },
+    onChangeUser(id, selectedData) {
+      if (!id) return this.dataForm.userName = ''
+      this.dataForm.userName = selectedData.fullName
+    },
+    changeName(listData) {
+      if (listData && listData.length) {
+        let arr = []
+        listData.forEach(item => {
+          arr.push(item.fullName + "/" + item.enCode)
+        })
+        this.dataForm.flowName = arr.join(",")
+      } else {
+        this.dataForm.flowName = "全部流程"
+      }
+    },
   },
-  flowSelect() {
-    this.nameVisible = true
-    this.$nextTick(() => {
-      this.$refs.nameForm.openDialog();
-    });
-  },
+
+
 }
 </script>

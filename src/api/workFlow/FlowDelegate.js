@@ -38,3 +38,12 @@ export function Update(data) {
     data
   })
 }
+
+// 获取我的委托发起流程
+export function delegateGetflow(data) {
+  return request({
+    url: `/api/workflow/Engine/FlowDelegate/getflow`,
+    method: 'get',
+    data
+  })
+}
