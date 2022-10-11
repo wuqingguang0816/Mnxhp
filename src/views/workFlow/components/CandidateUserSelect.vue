@@ -306,7 +306,7 @@ export default {
       this.listLoading = true
       let query = {
         ...this.listQuery,
-        formData: this.formData,
+        ...this.formData,
         nodeCode: this.nodeId
       }
       CandidateUser(this.taskId || 0, query).then((res) => {

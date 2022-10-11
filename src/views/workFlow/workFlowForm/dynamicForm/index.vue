@@ -111,15 +111,7 @@ export default {
       const formData = { ...this.formData, ...data }
       this.dataForm.formData = formData
       if (callback && typeof callback === "function") callback()
-      if (this.setting.type == 1) {
-        if (this.eventType === 'save' || this.eventType === 'submit') {
-          this.selfSubmit()
-          return
-        }
-        this.$emit('eventReceiver', this.dataForm, this.eventType)
-      } else {
-        this.$emit('eventReceiver', this.dataForm, this.eventType)
-      }
+      this.$emit('eventReceiver', this.dataForm, this.eventType)
     },
     selfSubmit() {
       this.dataForm.status = this.eventType === 'submit' ? 0 : 1

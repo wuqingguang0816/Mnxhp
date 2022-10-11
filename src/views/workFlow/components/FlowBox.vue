@@ -561,10 +561,7 @@ export default {
     },
     saveAudit() {
       this.btnLoading = true
-      let query = {
-        formData: this.formData
-      }
-      SaveAudit(this.setting.taskId, query).then(res => {
+      SaveAudit(this.setting.taskId, this.formData).then(res => {
         this.$message({
           message: res.msg,
           type: 'success',
@@ -740,7 +737,7 @@ export default {
         let query = {
           handleOpinion: this.candidateForm.handleOpinion,
           fileList: this.candidateForm.fileList,
-          formData: this.formData,
+          ...this.formData,
           enCode: this.setting.enCode,
           signImg: this.signImg,
           copyIds: this.copyIds.join(','),
