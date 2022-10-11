@@ -2134,7 +2134,6 @@ textarea.el-textarea__inner {
         overflow: hidden;
         text-overflow: ellipsis;
         white-space: nowrap;
-        padding-right: unset !important;
       }
     }
 
@@ -2148,12 +2147,6 @@ textarea.el-textarea__inner {
     box-sizing: border-box;
     overflow: auto;
     border: 1px solid #dcdfe6;
-
-    .selected-item-user {
-      .organize {
-        padding-right: 25px;
-      }
-    }
 
     .selected-item {
       padding: 0px 12px;
