@@ -103,8 +103,9 @@
               {{scope.row[item.id]}}
             </template>
             <template v-if="item.children">
-              <el-table-column :prop="it.id" :label="it.fullName" :width="it.id=='delete'?50:150"
-                v-for="(it,i) in item.children" :key="i" class-name="child-table-box">>
+              <el-table-column :prop="item.id+'-'+it.id" :label="it.fullName"
+                :width="it.id=='delete'?50:150" v-for="(it,i) in item.children" :key="i"
+                class-name="child-table-box">>
                 <template slot-scope="scope">
                   <div class="child-table-column">
                     <tr v-for="(row,j) in scope.row[item.id]" :key="j"
@@ -212,6 +213,7 @@ export default {
           this.resultList = res.data.failResult
           this.btnLoading = false
           this.active++
+          this.getMergeList(this.resultHeaderList)
         }).catch(() => { this.btnLoading = false })
       }
       if (this.active == 1) {
@@ -237,6 +239,7 @@ export default {
       }
     },
     getMergeList(list) {
+      this.mergeList = []
       list.forEach(item => {
         if (item.children && item.children.length > 0) {
           item.children.forEach((child, index) => {
