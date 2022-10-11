@@ -520,7 +520,12 @@ export default {
           this.bindScroll()
         })
       }
-      this.getData()
+      if (this.selectType === 'all') {
+        this.getData()
+      } else {
+        this.ableList = []
+        this.getAbleList()
+      }
     },
     getAllList() {
       this.loading = true
