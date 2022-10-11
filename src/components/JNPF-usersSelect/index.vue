@@ -569,6 +569,7 @@ export default {
       if (this.selectType === 'all') {
         this.getData()
       } else {
+        this.ableList = []
         this.getAbleList()
       }
     },
