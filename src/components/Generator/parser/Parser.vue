@@ -285,7 +285,19 @@ export default {
       }
     }
   },
+  mounted() {
+    this.initRelationData()
+  },
   methods: {
+    initRelationData() {
+      const handleRelationFun = (list) => {
+        list.forEach(cur => {
+          this.handleRelation(cur.__vModel__)
+          if (cur.__config__.children) handleRelationFun(cur.__config__.children)
+        })
+      }
+      handleRelationFun(this.formConfCopy.fields)
+    },
     initCss(formCopy) {
       if (document.getElementById('styleId')) {
         document.getElementById('styleId').remove()
