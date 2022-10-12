@@ -139,7 +139,8 @@
               <JNPF-TreeSelect v-model="dataForm.parentId" :options="treeData"
                 placeholder="选择上级菜单" />
             </el-form-item>
-            <upload-btn v-show="false" :url="'/api/system/Menu/'+systemId+'/Action/Import'"
+            <upload-btn v-show="false"
+              :url="'/api/system/Menu/'+systemId+'/Action/Import?category='+this.listQuery.category"
               @on-success="uploadSuccess" :buttonText="$t('common.confirmButton')"
               buttonType="primary" :showIcon='false' :data="{parentId:dataForm.parentId}"
               ref="uploadRef" />
