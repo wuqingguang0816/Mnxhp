@@ -63,10 +63,10 @@
           <el-table-column prop="lastModifyTime" label="最后修改时间" :formatter="jnpf.tableDateFormat"
             width="120" />
           <el-table-column prop="sortCode" label="排序" width="70" align="center" />
-          <el-table-column prop="state" label="状态" width="70" align="center">
+          <el-table-column prop="state" label="状态" width="80" align="center">
             <template slot-scope="scope">
-              <el-tag :type="scope.row.state == 1 ? 'success' : 'danger'" disable-transitions>
-                {{scope.row.state==1?'启用':'禁用'}}</el-tag>
+              <el-tag :type="scope.row.state == 1 ? 'success' : 'info'" disable-transitions>
+                {{scope.row.state==1?'已发布':'未发布'}}</el-tag>
             </template>
           </el-table-column>
           <el-table-column label="操作" fixed="right" width="150">
@@ -79,14 +79,28 @@
                     </el-button>
                   </span>
                   <el-dropdown-menu slot="dropdown">
+                    <el-dropdown-item @click.native="releaseModel(scope.row)">发布模板
+                    </el-dropdown-item>
+                    <el-dropdown-item v-if="scope.row.state==1" @click.native="rollBack(scope.row)">
+                      回滚模板</el-dropdown-item>
                     <el-dropdown-item @click.native="toggleWebType(scope.row)">更改模式
+                    </el-dropdown-item>
+                    <el-dropdown-item @click.native="copy(scope.row.id)">复制模板</el-dropdown-item>
+                    <el-dropdown-item @click.native="exportModel(scope.row.id)">导出模板
+                    </el-dropdown-item>
+                    <el-dropdown-item v-if="scope.row.state==1"
+                      @click.native="preview(scope.row.id)">预览模板
+                    </el-dropdown-item>
+                    <el-dropdown-item @click.native="previewDraft(scope.row.id)">预览草稿
+                    </el-dropdown-item>
+                    <!-- <el-dropdown-item @click.native="toggleWebType(scope.row)">更改模式
                     </el-dropdown-item>
                     <el-dropdown-item @click.native="openReleaseDialog(scope.row)">同步菜单
                     </el-dropdown-item>
                     <el-dropdown-item @click.native="preview(scope.row.id)">预览模板</el-dropdown-item>
                     <el-dropdown-item @click.native="copy(scope.row.id)">复制模板</el-dropdown-item>
                     <el-dropdown-item @click.native="exportModel(scope.row.id)">导出模板
-                    </el-dropdown-item>
+                    </el-dropdown-item> -->
                   </el-dropdown-menu>
                 </el-dropdown>
               </tableOpts>
@@ -191,6 +205,32 @@ export default {
       this.$nextTick(() => {
         this.previewDialogVisible = true
       })
+    },
+    rollBack(row) {
+      this.$confirm('此操作将当前编辑的模板内容回滚为已经发布的模板内容，是否继续？', '提示', {
+        type: 'warning'
+      }).then(() => {
+
+      })
+    },
+    previewDraft(row) {
+      this.currId = row.id
+      this.$nextTick(() => {
+        this.previewDialogVisible = true
+      })
+    },
+    releaseModel(row) {
+      if (row.state == 1) {
+        this.$confirm('发布模板会覆盖当前线上版本且进行菜单同步，是否继续？', '提示', {
+          type: 'warning'
+        }).then(() => {
+          setTimeout(() => {
+            this.openReleaseDialog(row)
+          }, 200)
+        })
+      } else {
+        this.openReleaseDialog(row)
+      }
     },
     openReleaseDialog(row) {
       this.currRow = row
