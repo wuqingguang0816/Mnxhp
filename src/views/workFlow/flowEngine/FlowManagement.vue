@@ -2,12 +2,38 @@
   <transition name="el-zoom-in-center">
     <div class="JNPF-preview-main">
       <div class="JNPF-common-page-header">
-        <el-page-header @back="goBack" content="版本管理" />
+        <el-page-header @back="goBack" :content="!flowVisible?title+'的版本管理':'流程图'" />
         <div class="options">
           <el-button @click="goBack()">{{$t('common.cancelButton')}}</el-button>
         </div>
       </div>
-      <div class="main">
+      <div class="main" v-if="!flowVisible">
+        <el-row class="JNPF-common-search-box" :gutter="16">
+          <el-form @submit.native.prevent>
+            <el-col :span="6">
+              <el-form-item label="关键词">
+                <el-input v-model="keyword" placeholder="请输入关键词查询" clearable
+                  @keyup.enter.native="search()" />
+              </el-form-item>
+            </el-col>
+            <el-col :span="6">
+              <el-form-item label="创建时间">
+                <el-date-picker v-model="pickerVal" type="daterange" start-placeholder="开始日期"
+                  end-placeholder="结束日期" :picker-options="pickerOptions" value-format="timestamp"
+                  clearable :editable="false">
+                </el-date-picker>
+              </el-form-item>
+            </el-col>
+            <el-col :span="6">
+              <el-form-item>
+                <el-button type="primary" icon="el-icon-search" @click="search()">
+                  {{$t('common.search')}}</el-button>
+                <el-button icon="el-icon-refresh-right" @click="reset()">{{$t('common.reset')}}
+                </el-button>
+              </el-form-item>
+            </el-col>
+          </el-form>
+        </el-row>
         <JNPF-table v-loading="listLoading" :data="list">
           <el-table-column prop="version" label="版本号" align="center">
             <template slot-scope="scope">
@@ -27,7 +53,8 @@
               <el-button type="text" size="mini" @click.native="updateRelease(scope.row)"
                 :disabled="scope.row.enabledMark==1">设为主版本
               </el-button>
-              <el-button type="text" size="mini" @click.native="del(scope.row)" style="color:red">删除
+              <el-button type="text" size="mini" @click.native="del(scope.row)" style="color:red">
+                删除
               </el-button>
               <el-dropdown>
                 <span class="el-dropdown-link">
@@ -45,19 +72,22 @@
         <pagination :total="total" :page.sync="listQuery.currentPage"
           :limit.sync="listQuery.pageSize" @pagination="initData" />
       </div>
-      <!-- <FlowDetails v-if="flowVisible" ref="flow" @close="flowVisible=false" /> -->
+      <div class="main" v-else>
+        <Process :conf="flowTemplateJson" />
+      </div>
     </div>
   </transition>
 </template>
 
 <script>
+import Process from '@/components/Process/Preview'
 import { flowJsonList, mainVersion } from '@/api/workFlow/FlowEngine'
 export default {
-  components: {},
+  components: { Process },
   props: [],
   data() {
     return {
-      flowVisible: true,
+      flowVisible: false,
       id: '',
       title: '',
       list: [],
@@ -70,10 +100,40 @@ export default {
         sort: 'desc',
         sidx: ''
       },
+      startTime: '',
+      endTime: '',
+      keyword: '',
       enCode: '',
+      pickerVal: '',
+      pickerOptions: {
+        shortcuts: [{
+          text: '最近一周',
+          onClick(picker) {
+            const end = new Date();
+            const start = new Date();
+            start.setTime(start.getTime() - 3600 * 1000 * 24 * 7);
+            picker.$emit('pick', [start, end]);
+          }
+        }, {
+          text: '最近一个月',
+          onClick(picker) {
+            const end = new Date();
+            const start = new Date();
+            start.setTime(start.getTime() - 3600 * 1000 * 24 * 30);
+            picker.$emit('pick', [start, end]);
+          }
+        }, {
+          text: '最近三个月',
+          onClick(picker) {
+            const end = new Date();
+            const start = new Date();
+            start.setTime(start.getTime() - 3600 * 1000 * 24 * 90);
+            picker.$emit('pick', [start, end]);
+          }
+        }]
+      },
     }
   },
-
   methods: {
     updateRelease(item) {
       this.$confirm('确认是否将当前修改的版本设为主版本？', '系统提示', {
@@ -100,22 +160,46 @@ export default {
     },
     flowInfo(item) {
       this.flowVisible = true
-      this.$nextTick(() => {
-        this.$refs.flow.inits(item)
-      })
+      this.flowTemplateJson = item.flowTemplateJson
     },
     goBack() {
+      if (this.flowVisible) {
+        return this.flowVisible = false
+      }
       this.$emit('close', true)
     },
-    init(flowId) {
+    init(flowId, fullName) {
       this.id = flowId
+      this.title = fullName
       this.initData()
     },
     reset() {
-      this.enCode = ''
+      this.pickerVal = ''
+      this.startTime = ''
+      this.endTime = ''
+      this.keyword = ''
+      this.listQuery = {
+        currentPage: 1,
+        pageSize: 20,
+        sort: 'desc',
+        sidx: ''
+      }
       this.search()
     },
     search() {
+      if (this.pickerVal && this.pickerVal.length) {
+        this.startTime = this.pickerVal[0]
+        this.endTime = this.pickerVal[1]
+      } else {
+        this.startTime = ''
+        this.endTime = ''
+      }
+      this.listQuery = {
+        currentPage: 1,
+        pageSize: 20,
+        sort: 'desc',
+        sidx: ''
+      }
       this.listQuery = {
         currentPage: 1,
         pageSize: 20,
@@ -128,13 +212,17 @@ export default {
       this.listLoading = true
       let query = {
         ...this.listQuery,
+        startTime: this.startTime,
+        endTime: this.endTime,
+        keyword: this.keyword,
         templateId: this.id
       }
       flowJsonList(this.id, query).then((res) => {
         this.list = res.data.list
+        this.total = res.data.pagination.total
+
       })
       this.listLoading = false
-
     },
   }
 }
@@ -152,5 +240,34 @@ export default {
     flex: 1;
     border-top: none;
   }
+  >>> .tips-item {
+    display: none;
+  }
+  >>> .flow-container {
+    display: inline-block;
+    background: #fff;
+    width: 100%;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+    text-align: center;
+    overflow: auto;
+    margin-top: 30px;
+  }
+  >>> .tips {
+    position: absolute;
+    left: 9px;
+    top: -1px;
+    z-index: 199;
+    text-align: left;
+  }
+  >>> .scale-slider {
+    position: fixed;
+    right: 10px;
+    z-index: 199;
+    margin-top: -20px;
+  }
+}
+.flow-text {
+  font-size: 18px;
 }
 </style>
