@@ -29,12 +29,13 @@ export default {
     } else {
       this.modelId = this.$route.meta.relationId
     }
+    const type = this.$route.query.previewType ? this.$route.query.previewType : ''
     if (!this.modelId) return
-    this.getConfigData()
+    this.getConfigData({ type })
   },
   methods: {
-    getConfigData() {
-      getConfigData(this.modelId).then(res => {
+    getConfigData(previewType) {
+      getConfigData(this.modelId, previewType).then(res => {
         if (res.code !== 200 || !res.data) {
           this.$store.dispatch('tagsView/delView', this.$route)
           this.$router.replace('/404')
