@@ -31,7 +31,7 @@
                         <span class="custom-option-left">
                           {{ item.tableName?item.table+'('+item.tableName+')':item.table}}
                         </span>
-                        <span class="custom-option-right">{{item.typeId=='1'?'主表':'子表'}}</span>
+                        <span class="custom-option-right">{{item.typeId=='1'?'主表':'从表'}}</span>
                       </el-option>
                     </el-select>
                   </el-form-item>
@@ -299,7 +299,7 @@
                     <span class="custom-option-left">
                       {{ item.tableName?item.table+'('+item.tableName+')':item.table}}
                     </span>
-                    <span class="custom-option-right">{{item.typeId=='1'?'主表':'子表'}}</span>
+                    <span class="custom-option-right">{{item.typeId=='1'?'主表':'从表'}}</span>
                   </el-option>
                 </el-select>
               </el-form-item>
