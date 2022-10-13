@@ -681,7 +681,7 @@ export default {
   justify-items: flex-start;
 }
 .flow-form-main {
-  .main {
+  >>> .main {
     padding: 0 !important;
   }
   >>> .el-tabs__header {
