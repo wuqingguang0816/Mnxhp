@@ -2350,6 +2350,7 @@ const defaultSubFlowForm = {
   flowId: '',
   flowName: '',
   assignList: [],
+  prevNodeList: [],
   launchMsgConfig: {
     on: 3,
     msgId: '',
@@ -3217,6 +3218,7 @@ export default {
       this.getPrevNodeOption()
       let properties = JSON.parse(JSON.stringify(this.value.properties))
       Object.assign(this.subFlowForm, properties)
+      this.subFlowForm.prevNodeList = this.prevNodeList
       this.subFlowForm.launchMsgConfig.on = typeof this.subFlowForm.launchMsgConfig.on === 'number' ? this.subFlowForm.launchMsgConfig.on : 0
     },
     openApproverTransmitRuleBox() {
