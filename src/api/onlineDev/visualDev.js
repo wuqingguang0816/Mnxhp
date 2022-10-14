@@ -80,10 +80,11 @@ export function CodePreview(id, data) {
 }
 // 无表
 // 获取列表表单配置JSON
-export function getConfigData(modelId) {
+export function getConfigData(modelId, data) {
   return request({
     url: `/api/visualdev/OnlineDev/${modelId}/Config`,
-    method: 'get'
+    method: 'get',
+    data
   })
 }
 // 获取列表配置JSON
@@ -206,3 +207,12 @@ export function exportData(modelId) {
     method: 'post'
   })
 }
+
+// 回滚模板
+export function rollbackTemplate(id) {
+  return request({
+    url: `/api/visualdev/Base/${id}/Actions/RollbackTemplate`,
+    method: 'get'
+  })
+}
+

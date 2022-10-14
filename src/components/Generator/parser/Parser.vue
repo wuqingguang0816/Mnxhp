@@ -285,7 +285,19 @@ export default {
       }
     }
   },
+  mounted() {
+    this.initRelationData()
+  },
   methods: {
+    initRelationData() {
+      const handleRelationFun = (list) => {
+        list.forEach(cur => {
+          this.handleDefaultRelation(cur.__vModel__)
+          if (cur.__config__.children) handleRelationFun(cur.__config__.children)
+        })
+      }
+      handleRelationFun(this.formConfCopy.fields)
+    },
     initCss(formCopy) {
       if (document.getElementById('styleId')) {
         document.getElementById('styleId').remove()
@@ -411,6 +423,29 @@ export default {
                 this.comSet('ableRelationIds', e.__vModel__, Array.isArray(value) ? value : [value])
               }
               if (e.opType === 'setPopupOptions') { }
+            }
+          }
+        }
+      }
+    },
+    handleDefaultRelation(field) {
+      if (!field) return
+      const currRelations = this.relations
+      for (let key in currRelations) {
+        if (key === field) {
+          for (let i = 0; i < currRelations[key].length; i++) {
+            const e = currRelations[key][i];
+            let vModel = e.realVModel || e.__vModel__
+            const config = e.__config__
+            let defaultValue = ''
+            if (vModel.includes('-')) {
+              const tableVModel = vModel.split('-')[0]
+              this.$refs[tableVModel] && this.$refs[tableVModel].$children[0] && this.$refs[tableVModel].$children[0].handleRelationForParent(e, defaultValue)
+            } else {
+              if (e.opType === 'setUserOptions') {
+                let value = this[this.formConf.formModel][e.relationField] || []
+                this.comSet('ableRelationIds', e.__vModel__, Array.isArray(value) ? value : [value])
+              }
             }
           }
         }

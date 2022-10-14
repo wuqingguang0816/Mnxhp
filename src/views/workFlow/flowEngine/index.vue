@@ -78,6 +78,7 @@
                   <span class="el-dropdown-link">
                     <el-button type="text" size="mini">{{$t('common.moreBtn')}}<i
                         class="el-icon-arrow-down el-icon--right"></i>
+
                     </el-button>
                   </span>
                   <el-dropdown-menu slot="dropdown">
@@ -87,8 +88,10 @@
                     <el-dropdown-item v-if="scope.row.enabledMark==1"
                       @click.native="handleUpdate(scope.row)">
                       禁用流程</el-dropdown-item>
-                    <el-dropdown-item @click.native="showManage(scope.row.id)">
+                    <el-dropdown-item @click.native="showManage(scope.row.id,scope.row.fullName)">
                       版本管理</el-dropdown-item>
+                    <el-dropdown-item @click.native="management(scope.row.id)">
+                      协管流程</el-dropdown-item>
                     <el-dropdown-item @click.native="copy(scope.row.id)">
                       复制流程</el-dropdown-item>
                     <el-dropdown-item @click.native="handleExport(scope.row.id)">
@@ -124,6 +127,20 @@
         </div>
       </div>
     </el-dialog>
+    <el-dialog title='协管' :close-on-click-modal="false" :visible.sync="managementVisible"
+      class="JNPF-dialog JNPF-dialog_center" lock-scroll append-to-body width='600px'>
+      <el-form ref="dataForm" label-width="100px">
+        <el-form-item label="设置协管员">
+          <user-select v-model="managementUserId" placeholder="请选择该流程协管人员" />
+        </el-form-item>
+      </el-form>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="managementVisible = false">{{$t('common.cancelButton')}}</el-button>
+        <el-button type="primary" @click="handleApproval()" :loading="btnLoading">
+          {{$t('common.confirmButton')}}
+        </el-button>
+      </span>
+    </el-dialog>
   </div>
 </template>
 
@@ -147,11 +164,14 @@ export default {
       },
       total: 0,
       list: [],
+      btnLoading: false,
       listLoading: true,
       dialogVisible: false,
       formVisible: false,
       manageVisible: false,
-      categoryList: []
+      categoryList: [],
+      managementVisible: false,
+      managementUserId: ''
     }
   },
   created() {
@@ -246,10 +266,10 @@ export default {
         this.initData()
       }
     },
-    showManage(data) {
+    showManage(id, fullName) {
       this.manageVisible = true
       this.$nextTick(() => {
-        this.$refs.FlowManage.init(data)
+        this.$refs.FlowManage.init(id, fullName)
       })
     },
     closeManage(isRefresh) {
@@ -257,6 +277,12 @@ export default {
       if (isRefresh) {
         this.initData()
       }
+    },
+    handleApproval() {
+
+    },
+    management(id) {
+      this.managementVisible = true
     },
     handleUpdate(row) {
       if (row.enabledMark) {

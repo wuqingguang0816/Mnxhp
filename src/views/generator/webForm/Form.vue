@@ -64,7 +64,7 @@
                 <template slot-scope="scope">
                   <el-tag v-if="scope.row.typeId=='1'">主表</el-tag>
                   <el-tag type="warning" v-else @click="changeTable(scope.row)"
-                    style="cursor:pointer" title="点击设置成主表">子表</el-tag>
+                    style="cursor:pointer" title="点击设置成主表">从表</el-tag>
                 </template>
               </el-table-column>
               <el-table-column prop="table" label="表名">
