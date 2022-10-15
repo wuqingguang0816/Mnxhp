@@ -48,6 +48,7 @@ export default {
       this.dataInit()
     },
     closeTransfer() {
+
       this.$emit('update:visible', false)
     },
     confirm() {
@@ -57,6 +58,7 @@ export default {
     dataInit() {
       this.loading = true
       this.selectedData = []
+      this.treeData = []
       this.$nextTick(async () => {
         if (this.type === 'user') {
           this.selectedData = JSON.parse(JSON.stringify(this.value))

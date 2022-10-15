@@ -15,7 +15,7 @@ export default {
         singleFile: this.limit === 1,
         testChunks: true, //是否开启服务器分片校验
         // 服务器分片校验函数，秒传及断点续传基础
-        checkChunkUploadedByResponse: function(chunk, message) {
+        checkChunkUploadedByResponse: function (chunk, message) {
           const objMessage = JSON.parse(message)
           if (objMessage.code === 200) {
             if (objMessage.data.uploaded) {
@@ -23,6 +23,8 @@ export default {
             }
             const chunkNumbers = objMessage.data.chunkNumbers
             return (chunkNumbers || []).indexOf(chunk.offset + 1) >= 0
+          } else {
+            return true
           }
         },
         headers: {
@@ -137,7 +139,7 @@ export default {
           // )
         }
       }
-      fileReader.onerror = function() {
+      fileReader.onerror = function () {
         _this.$message.error(`文件${file.name}读取出错，请检查该文件`)
         file.cancel()
       }
