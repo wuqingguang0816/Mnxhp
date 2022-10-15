@@ -111,7 +111,8 @@ export default {
         for (let j = 0; j < tds.cells.length; j++) {
           let spanList = tds.cells[j].getElementsByTagName('span')
           for (let i = 0; i < spanList.length; i++) {
-            if (`{${key}}` === spanList[i].innerHTML) {
+            const dataTag = spanList[i].getAttribute('data-tag') ? spanList[i].getAttribute('data-tag').split('.')[1] : 'null'
+            if (key == dataTag) {
               spanList[i].innerHTML = data[key]
             }
           }
