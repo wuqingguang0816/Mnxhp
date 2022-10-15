@@ -79,12 +79,13 @@ const actions = {
     })
   },
   // user login
-  login({ commit }, userInfo) {
-    const { account, password, code, timestamp, origin } = userInfo
+  login({ dispatch }, userInfo) {
+    const { account, password, code, timestamp, origin, jnpf_ticket } = userInfo
     return new Promise((resolve, reject) => {
       login(qs.stringify({
         account: account.trim(),
         password: md5(password),
+        jnpf_ticket: jnpf_ticket,
         origin,
         code,
         timestamp,
@@ -94,15 +95,23 @@ const actions = {
         grant_type: 'password'
       })).then(response => {
         const { data } = response
-        const layoutList = ['classic', 'functional', 'plain', 'blend']
-        let layoutType = data.theme && layoutList.indexOf(data.theme) > -1 ? data.theme : 'classic'
-        commit('SET_TOKEN', data.token)
-        commit('settings/CHANGE_SETTING', { key: "layoutType", value: layoutType }, { root: true })
-        setToken(data.token)
-        resolve(data)
+        dispatch('setToken', data).then(() => {
+          resolve(data)
+        })
       }).catch(error => {
         reject(error)
       })
+    })
+  },
+  // 保存token
+  setToken({ commit }, data) {
+    return new Promise((resolve, reject) => {
+      const layoutList = ['classic', 'functional', 'plain', 'blend']
+      let layoutType = data.theme && layoutList.indexOf(data.theme) > -1 ? data.theme : 'classic'
+      commit('SET_TOKEN', data.token)
+      commit('settings/CHANGE_SETTING', { key: "layoutType", value: layoutType }, { root: true })
+      setToken(data.token)
+      resolve(data)
     })
   },
   // 获取用户信息
@@ -111,18 +120,18 @@ const actions = {
       getInfo().then(response => {
         const { data } = response
         if (!data) reject('验证失败，请重新登录。')
-        let { menuList, userInfo, permissionList } = data
-        if (!menuList.length) {
-          reject('您的权限不足，请联系管理员')
-          return false;
-        }
-        let routerList = []
-
+        let { menuList, userInfo, permissionList, routerList } = data
+        let routerListData = []
         function setData(list) {
           for (let i = 0; i < list.length; i++) {
             const e = list[i]
             let name = e.enCode.replace(/\./g, '-')
             e.vueName = name
+            if (e.type == 0) {
+              if (e.hasChildren && e.children.length) {
+                setData(e.children)
+              }
+            }
             if (e.type == 1) {
               e.path = '/' + e.enCode
               if (e.hasChildren && e.children.length) {
@@ -144,7 +153,7 @@ const actions = {
                   modelId: e.id
                 }
               }
-              routerList.push(newObj)
+              routerListData.push(newObj)
             }
             // 功能、字典、报表、门户
             if ([3, 4, 5, 8].indexOf(e.type) > -1) {
@@ -179,7 +188,7 @@ const actions = {
                   isTree
                 }
               }
-              routerList.push(newObj)
+              routerListData.push(newObj)
             }
             // 大屏
             if (e.type == 6) {
@@ -205,20 +214,36 @@ const actions = {
                     urlAddress: path
                   }
                 }
-                routerList.push(newObj)
+                routerListData.push(newObj)
               } else {
                 e.path = path
               }
             }
           }
         }
-        setData(menuList)
+        const dataList = routerList && routerList.length ? routerList : menuList
+        setData(dataList)
+        if (userInfo.systemIds && userInfo.systemIds.length && routerList && routerList.length) {
+          for (let index = 0; index < userInfo.systemIds.length; index++) {
+            const element = userInfo.systemIds[index];
+            if (element.currentSystem) {
+              const list = routerList.filter(o => o.id === element.id)
+              list.length ? menuList = list[0].children || [] : menuList = []
+            }
+          }
+        } else {
+          menuList = routerList && routerList.length ? routerList[0].children : menuList
+        }
+        if (!menuList.length) {
+          reject('您的权限不足，请联系管理员')
+          return false;
+        }
         commit('SET_MENULIST', menuList)
         commit('SET_USERINFO', userInfo)
         commit('SET_PERMISSION_LIST', permissionList)
         const sysConfigInfo = data.sysConfigInfo || defaultSettings.sysConfig
         commit('settings/CHANGE_SETTING', { key: "sysConfig", value: sysConfigInfo }, { root: true })
-        resolve(routerList)
+        resolve(routerListData)
       }).catch(error => {
         reject(error)
       })

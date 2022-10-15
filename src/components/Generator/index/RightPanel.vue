@@ -346,6 +346,14 @@
               <el-input-number v-model="activeData.__config__.columnWidth" placeholder="控件宽度"
                 :min="0" :precision="0" controls-position="right" />
             </el-form-item>
+            <el-form-item label="控件Class">
+              <el-select v-model="activeData.__config__.className" multiple clearable
+                placeholder="请选择">
+                <el-option v-for="item in formConf.classNames" :key="item" :label="item"
+                  :value="item">
+                </el-option>
+              </el-select>
+            </el-form-item>
             <el-form-item label="多端显示">
               <el-checkbox-group v-model="activeData.__config__.visibility" size="mini">
                 <el-checkbox label="pc">Web</el-checkbox>
@@ -411,6 +419,16 @@
                 :key="item" />
             </el-select>
           </el-form-item>
+          <el-form-item label="表单Css">
+            <el-button style="width: 100%;" @click="addStyle">编写样式</el-button>
+          </el-form-item>
+          <el-form-item label="表单Class">
+            <el-select v-model="formConf.className" multiple clearable placeholder="请选择">
+              <el-option v-for="item in formConf.classNames" :key="item" :label="item"
+                :value="item">
+              </el-option>
+            </el-select>
+          </el-form-item>
           <el-form-item label="主键策略">
             <el-select v-model="formConf.primaryKeyPolicy" placeholder="请选择"
               :disabled="!!getFormInfo().id">
@@ -471,6 +489,8 @@
       @updateScript="updateScript" />
     <field-dialog :visible.sync="fieldDialogVisible" ref="fieldDialog"
       @close="fieldDialogVisible=false" @updateOptions="updateFieldOptions" />
+    <StyleScript :visible.sync="styleScriptVisible" :value="formConf.classJson"
+      @updateStyleScript="updateStyleScript" />
   </div>
 </template>
 
@@ -518,12 +538,13 @@ import PopupAttr from './RightComponents/PopupAttr'
 import Tab from './RightComponents/Tab'
 import Collapse from './RightComponents/Collapse'
 import TableConfig from './RightComponents/Table'
-
+import StyleScript from './StyleScript'
 const commonRightList = ['comSelect', 'depSelect', 'posSelect', 'userSelect', 'groupSelect', "roleSelect", 'editor']
 const systemList = ['createUser', 'createTime', 'modifyUser', 'modifyTime', 'currOrganize', 'currDept', 'currPosition', 'billRule']
 
 export default {
   components: {
+    StyleScript,
     FormScript,
     FieldDialog,
     JNPFComInput,
@@ -582,6 +603,7 @@ export default {
       fieldOptions: [],
       dictionaryOptions: [],
       dataInterfaceOptions: [],
+      styleScriptVisible: false,
       justifyOptions: [
         {
           label: 'start',
@@ -772,6 +794,43 @@ export default {
     this.setDefaultOptions()
   },
   methods: {
+    addStyle() {
+      this.$nextTick(() => {
+        this.styleScriptVisible = true
+      })
+    },
+    updateStyleScript(func) {
+      this.formConf.classJson = func
+      this.formConf.classNames = this.spiltByDoc(func).map(o => o.key)
+    },
+    spiltByDoc(str) {
+      let func = str.trim()
+      let arr = []
+      let cut = func.split("}")
+      cut.forEach(item => {
+        if (item) {
+          let afterCut = item.split("{")
+          let classObject = {}
+          let name = ''
+          if (afterCut[0].split(" ").length > 1) {
+            name = afterCut[0].split(" ")[0]
+          } else {
+            name = afterCut[0]
+          }
+          if (name.split("\.").length > 1) {
+            name = name.split("\.")[1]
+          }
+          name = name.split("\:")[0]
+          let matching = new RegExp(/^[a-zA-Z]-?.*[a-zA-Z0-9_]*$/)
+          if (matching.test(name)) {
+            classObject.key = name.replace(/\r|\n/ig, '').trim()
+            classObject.value = item.replace(/\r|\n/ig, '') + "}"
+            arr.push(classObject)
+          }
+        }
+      })
+      return arr
+    },
     addReg() {
       this.activeData.__config__.regList.push({
         pattern: '',

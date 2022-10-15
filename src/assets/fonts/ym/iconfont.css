@@ -1,9 +1,10 @@
 @font-face {
   font-family: "icon-ym";
   /* Project id 3271933 */
-  src: url('iconfont.woff2?t=1658279997622') format('woff2'),
-    url('iconfont.woff?t=1658279997622') format('woff'),
-    url('iconfont.ttf?t=1658279997622') format('truetype');
+  src: url('iconfont.woff2?t=1660892518546') format('woff2'),
+    url('iconfont.woff?t=1660892518546') format('woff'),
+    url('iconfont.ttf?t=1660892518546') format('truetype'),
+    url('iconfont.svg?t=1660892518546#icon-ym') format('svg');
 }
 
 .icon-ym {
@@ -12,6 +13,38 @@
   font-style: normal;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-ym-accountConfig:before {
+  content: "\e8cb";
+}
+
+.icon-ym-sendConfig:before {
+  content: "\e8cc";
+}
+
+.icon-ym-smsConfig:before {
+  content: "\e8cd";
+}
+
+.icon-ym-emailConfig:before {
+  content: "\e8ce";
+}
+
+.icon-ym-msgCenter:before {
+  content: "\e8cf";
+}
+
+.icon-ym-msgTemplate:before {
+  content: "\e8d0";
+}
+
+.icon-ym-msgMonitor:before {
+  content: "\e8d1";
+}
+
+.icon-ym-logo-webhook:before {
+  content: "\e8ca";
 }
 
 .icon-ym-logo-github:before {

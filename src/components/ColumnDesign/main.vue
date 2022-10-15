@@ -40,7 +40,8 @@
           <el-table-column prop="prop" label="字段" />
           <el-table-column prop="sortable" label="排序" width="60" align="center">
             <template slot-scope="scope">
-              <el-checkbox v-model="scope.row.sortable" />
+              <el-checkbox v-model="scope.row.sortable"
+                :disabled="scope.row.__config__&&scope.row.__config__.isSubTable" />
             </template>
           </el-table-column>
           <el-table-column prop="align" label="对齐">
@@ -239,9 +240,19 @@
               </el-form-item>
               <template v-if="modelType==1">
                 <el-divider>脚本事件</el-divider>
-                <el-form-item label="表格事件">
+                <el-form-item label="表格事件" label-width="85px">
                   <el-button style="width: 100%;"
                     @click="addFunc(columnData.funcs.afterOnload,'afterOnload',true)">脚本编写
+                  </el-button>
+                </el-form-item>
+                <el-form-item label="行样式" label-width="85px">
+                  <el-button style="width: 100%;"
+                    @click="addFunc(columnData.funcs.rowStyle,'rowStyle',true)">脚本编写
+                  </el-button>
+                </el-form-item>
+                <el-form-item label="单元格样式" label-width="85px">
+                  <el-button style="width: 100%;"
+                    @click="addFunc(columnData.funcs.cellStyle,'cellStyle',true)">脚本编写
                   </el-button>
                 </el-form-item>
               </template>
@@ -250,8 +261,8 @@
         </el-scrollbar>
       </div>
     </div>
-    <form-script :visible.sync="formScriptVisible" :value="activeItem.func" :type="activeItem.type"
-      @updateScript="updateScript" />
+    <form-script v-if="formScriptVisible" :key="scriptKey" :value="activeItem.func" ref="formScript"
+      :type="activeItem.type" @updateScript="updateScript" @closeDialog="formScriptVisible=false" />
   </div>
 </template>
 <script>
@@ -273,8 +284,9 @@ const getSearchType = item => {
 }
 
 const defaultFunc = '({ data, index, request, toast, refresh }) => {\r\n   \r\n}'
-const defaultFuncs = '({ data, attributes, events, methods, tableRef, request }) => {\r\n   \r\n}'
-
+const defaultFuncs = '({ data, tableRef, request }) => {\r\n   \r\n}'
+const rowStyleDefaultFunc = '({row,rowIndex}) => {\r\n   \r\n}'
+const cellStyleDefaultFunc = '({row, column, rowIndex, columnIndex}) => {\r\n   \r\n}'
 const defaultColumnData = {
   searchList: [], // 查询字段
   hasSuperQuery: true, // 高级查询
@@ -311,7 +323,29 @@ const defaultColumnData = {
     afterOnload: {
       func: "",
       name: "脚本事件"
+    },
+    rowStyle: {
+      func: "",
+      name: "脚本事件"
+    },
+    cellStyle: {
+      func: "",
+      name: "脚本事件"
     }
+  }
+}
+const defaultFuncsData = {
+  afterOnload: {
+    func: "",
+    name: "脚本事件"
+  },
+  rowStyle: {
+    func: "",
+    name: "脚本事件"
+  },
+  cellStyle: {
+    func: "",
+    name: "脚本事件"
   }
 }
 export default {
@@ -356,7 +390,8 @@ export default {
       ],
       dataInterfaceSelector: [],
       formScriptVisible: false,
-      activeItem: {}
+      activeItem: {},
+      scriptKey: ''
     }
   },
   filters: {
@@ -456,6 +491,7 @@ export default {
     }));
     if (typeof this.conf === 'object' && this.conf !== null) {
       this.columnData = Object.assign({}, defaultColumnData, this.conf)
+      this.columnData.funcs = Object.assign({}, defaultFuncsData, this.columnData.funcs)
     }
     this.columnData.columnOptions = columnOptions
     if (!this.columnOptions.length) this.columnData.columnList = []
@@ -584,20 +620,23 @@ export default {
       if (!item.func) item.func = defaultFunc
       this.activeItem = item
       this.activeItem.type = type
+      this.formScriptVisible = true
       this.$nextTick(() => {
-        this.formScriptVisible = true
+        this.$refs.formScript.init()
       })
     },
     updateScript(func) {
       this.activeItem.func = func
     },
-
     addFunc(item, type) {
-      if (!item.func) item.func = defaultFuncs
+      if (!item.func && type == 'afterOnload') item.func = defaultFuncs
+      if (!item.func && type == 'rowStyle') item.func = rowStyleDefaultFunc
+      if (!item.func && type == 'cellStyle') item.func = cellStyleDefaultFunc
       this.activeItem = item
       this.activeItem.type = type
+      this.formScriptVisible = true
       this.$nextTick(() => {
-        this.formScriptVisible = true
+        this.$refs.formScript.init()
       })
     }
   }

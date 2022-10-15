@@ -1,7 +1,7 @@
 <template>
   <div class="popupSelect-container">
     <div class="el-select" @click="openDialog">
-      <el-input placeholder="请选择消息模板" v-model="title" readonly :validate-event="false"
+      <el-input placeholder="请选择发送配置" v-model="title" readonly :validate-event="false"
         @mouseenter.native="inputHovering = true" @mouseleave.native="inputHovering = false">
         <template slot="suffix">
           <i v-show="!showClose"
@@ -11,9 +11,9 @@
         </template>
       </el-input>
     </div>
-    <el-dialog title="消息模板" :close-on-click-modal="false" :visible.sync="visible"
+    <el-dialog title="消息发送配置" :close-on-click-modal="false" :visible.sync="visible"
       class="JNPF-dialog JNPF-dialog_center JNPF-dialog-tree-select" lock-scroll append-to-body
-      width='700px'>
+      width='600px'>
       <div class="JNPF-common-layout">
         <div class="JNPF-common-layout-center">
           <el-row class="JNPF-common-search-box" :gutter="16">
@@ -47,9 +47,8 @@
                 </template>
               </el-table-column>
               <el-table-column type="index" width="50" label="序号" align="center" />
-              <el-table-column prop="fullName" label="模板名称" width="150" />
-              <el-table-column prop="enCode" label="模板编码" width="100" />
-              <el-table-column prop="title" label="消息标题" show-overflow-tooltip />
+              <el-table-column prop="fullName" label="名称" />
+              <el-table-column prop="enCode" label="编码" />
             </JNPF-table>
             <pagination :total="total" :page.sync="listQuery.currentPage"
               :limit.sync="listQuery.pageSize" @pagination="initData" />
@@ -66,7 +65,7 @@
 </template>
 
 <script>
-import { getSelector } from '@/api/system/messageTemplate'
+import { getMsgTemplate } from '@/api/msgCenter/sendConfig'
 export default {
   name: 'PopupSelect',
   props: {
@@ -97,7 +96,8 @@ export default {
       listQuery: {
         keyword: '',
         currentPage: 1,
-        pageSize: 20
+        pageSize: 20,
+        messageSource: 1
       },
       total: 0,
       checked: '',
@@ -120,7 +120,7 @@ export default {
   methods: {
     initData() {
       this.listLoading = true
-      getSelector(this.listQuery).then(res => {
+      getMsgTemplate(this.listQuery).then(res => {
         this.list = res.data.list
         this.total = res.data.pagination.total
         this.listLoading = false

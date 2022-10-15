@@ -1,4 +1,5 @@
 import { getDictionaryAll } from '@/api/systemData/dictionary'
+import { getMsgTypeList } from '@/api/msgCenter/msgTemplate'
 import { UserListAll, getUserSelector } from '@/api/permission/user'
 import { getPositionListAll, getPositionSelector } from '@/api/permission/position'
 import { getRoleSelector } from '@/api/permission/role'
@@ -14,7 +15,8 @@ const state = {
   roleList: [],
   roleTree: [],
   printFlowTree: [],
-  printFormTree: []
+  printFormTree: [],
+  msgTypeList: []
 }
 
 const mutations = {
@@ -44,7 +46,10 @@ const mutations = {
   },
   SET_PRINT_FORM_TREE: (state, printTree) => {
     state.printFormTree = printTree
-  }
+  },
+  SET_MESSAGE_TYPE_LIST: (state, msgTypeList) => {
+    state.msgTypeList = msgTypeList
+  },
 }
 
 const actions = {
@@ -228,6 +233,20 @@ const actions = {
         })
       } else {
         resolve(state.printFormTree)
+      }
+    })
+  },
+  getMsgTypeList({ state, commit }) {
+    return new Promise((resolve, reject) => {
+      if (!state.msgTypeList.length) {
+        getMsgTypeList(1).then(res => {
+          commit('SET_MESSAGE_TYPE_LIST', res.data)
+          resolve(res.data)
+        }).catch(error => {
+          reject(error)
+        })
+      } else {
+        resolve(state.msgTypeList)
       }
     })
   },

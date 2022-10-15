@@ -8,8 +8,8 @@
         <p class="header-txt"> · 打印预览</p>
       </div>
       <div class="options">
-        <el-button type="primary" size="small" @click="word">下载</el-button>
-        <el-button type="primary" size="small" @click="print">打印</el-button>
+        <el-button type="primary" size="small" @click="word">下 载</el-button>
+        <el-button type="primary" size="small" @click="print">打 印</el-button>
         <el-button @click="closeDialog()">{{$t('common.cancelButton')}}</el-button>
       </div>
     </div>
@@ -22,6 +22,8 @@
 <script>
 import { mapGetters } from "vuex"
 import { getData } from '@/api/system/printDev'
+import QRCode from 'qrcodejs2'
+import JsBarcode from 'jsbarcode'
 export default {
   props: ['id', 'formId', 'fullName'],
   computed: {
@@ -75,6 +77,9 @@ export default {
         })
         this.replaceValue(this.data)
         this.replaceSysValue()
+        this.replaceImg()
+        this.replaceBarCode()
+        this.replaceQrCode()
         this.loading = false
       })
     },
@@ -101,12 +106,13 @@ export default {
     closeDialog() {
       this.$emit('update:visible', false)
     },
-    shengchengtable(data, tds) {
+    generateTable(data, tds) {
       for (let key in data) {
         for (let j = 0; j < tds.cells.length; j++) {
           let spanList = tds.cells[j].getElementsByTagName('span')
           for (let i = 0; i < spanList.length; i++) {
-            if (`{${key}}` === spanList[i].innerHTML) {
+            const dataTag = spanList[i].getAttribute('data-tag') ? spanList[i].getAttribute('data-tag').split('.')[1] : 'null'
+            if (key == dataTag) {
               spanList[i].innerHTML = data[key]
             }
           }
@@ -118,7 +124,15 @@ export default {
       for (let key in this.data) {
         if (key == dataTag) {
           for (let j = 0; j < this.data[key].length; j++) {
-            newTable.push(this.shengchengtable(this.data[key][j], tds.cloneNode(true)))
+            let tr = this.generateTable(this.data[key][j], tds.cloneNode(true))
+            let tds1 = tr.children
+            for (let i = 0; i < tds1.length; i++) {
+              const element = tds1[i];
+              this.replaceImg(element)
+              this.replaceBarCode(element)
+              this.replaceQrCode(element)
+            }
+            newTable.push(tr)
           }
         }
       }
@@ -163,6 +177,171 @@ export default {
         }
       }
     },
+    replaceImg(childItem) {
+      let imgRegular = /&lt;img(\S|\s)*?&lt;\/img&gt;/g
+      let imgList = []
+      if (childItem) {
+        const element = childItem.innerHTML
+        imgList = element.match(imgRegular)
+      } else {
+        imgList = this.printTemplate.match(imgRegular)
+      }
+      if (imgList && imgList.length) {
+        for (var i = 0; i < imgList.length; i++) {
+          const item = imgList[i]
+          if (this.getIsChildren(item) && !childItem) continue
+          const width = this.getWidthHeight(item)
+          const height = this.getWidthHeight(item, 'height')
+          let value = this.getValue(item)
+          const replaceImg = (template) => {
+            if (childItem) {
+              childItem.innerHTML = template
+            } else {
+              this.printTemplate = this.replaceAll(this.printTemplate, item, template)
+            }
+          }
+          const isArray = false
+          try {
+            isArray = Array.isArray(JSON.parse(value))
+          } catch (error) {
+            isArray = false
+          }
+          if (isArray) {
+            const list = JSON.parse(value)
+            let template = ''
+            for (let index = 0; index < list.length; index++) {
+              const element = list[index];
+              if (element.url) {
+                value = new RegExp('http').test(element.url) ? value : this.define.comUrl + element.url
+                template += `<img width='${width}' height='${height}' src='${value}'/>`
+              }
+            }
+            replaceImg(template)
+          } else {
+            value = new RegExp('http').test(value) ? value : this.define.comUrl + value
+            let template = `<img width='${width}' height='${height}' src='${value}'/>`
+            replaceImg(template)
+          }
+        }
+      }
+    },
+    replaceBarCode(childItem) {
+      let imgRegular = /&lt;barCode(\S|\s)*?&lt;\/barCode&gt;/g
+      let imgList = []
+      if (childItem) {
+        const element = childItem.innerHTML
+        imgList = element.match(imgRegular)
+      } else {
+        imgList = this.printTemplate.match(imgRegular)
+      }
+      if (imgList && imgList.length) {
+        for (var i = 0; i < imgList.length; i++) {
+          const item = imgList[i]
+          if (this.getIsChildren(item) && !childItem) continue
+          const width = this.getWidthHeight(item)
+          const height = this.getWidthHeight(item, 'height')
+          const value = this.getValue(item)
+          const id = this.jnpf.idGenerator()
+          const template = `<img width='${width}' height='${height}'  id='barcode${id}'/>`
+          if (childItem) {
+            childItem.innerHTML = template
+          } else {
+            this.printTemplate = this.replaceAll(this.printTemplate, item, template)
+          }
+          this.$nextTick(() => {
+            this.getJsBarcode(value, '#barcode' + id, width, height)
+          })
+        }
+      }
+    },
+    replaceQrCode(childItem) {
+      let imgRegular = /&lt;qrCode(\S|\s)*?&lt;\/qrCode&gt;/g
+      let imgList = []
+      if (childItem) {
+        const element = childItem.innerHTML
+        imgList = element.match(imgRegular)
+      } else {
+        imgList = this.printTemplate.match(imgRegular)
+      }
+      if (imgList && imgList.length) {
+        for (var i = 0; i < imgList.length; i++) {
+          const item = imgList[i]
+          if (this.getIsChildren(item) && !childItem) continue
+          const width = this.getWidthHeight(item)
+          const height = this.getWidthHeight(item, 'height')
+          const value = this.getValue(item)
+          const id = this.jnpf.idGenerator()
+          const template = `<span id='qrCode${id}'/>`
+          if (childItem) {
+            childItem.innerHTML = template
+          } else {
+            this.printTemplate = this.replaceAll(this.printTemplate, item, template)
+          }
+          this.$nextTick(() => {
+            this.getJsQrcode(value, 'qrCode' + id, width, height)
+          })
+        }
+
+      }
+    },
+
+    getWidthHeight(item, type = 'width') {
+      let regular = ""
+      if (type == 'width') regular = /width=[\"|'](.*?)[\"|']/gi;
+      if (type == 'height') regular = /height=[\"|'](.*?)[\"|']/gi;
+      let quotes = /["|'](.*)["|']/;
+      let data = item.match(regular)
+      let value = ""
+      if (data && data.length) {
+        let res = data[0].match(quotes)
+        value = res && res.length ? res[1] : 100
+      }
+      return value
+    },
+    getValue(item) {
+      let regexp = /(?<=(((<|&lt;)[a-zA-Z-]+?){0,1}(>|&gt;)))([\s\S]+)(?=([\s]{0,1}(<|&lt;)\/[a-zA-Z-]+((>|&gt;){0,1})))/g
+      let data = item.match(regexp)
+      let value = data && data.length ? data[0] : ''
+      let regexp_ = /<span(\S|\s)*?<\/span>/g
+      let data_ = value.match(regexp_)
+      if (data_ && data_.length) {
+        let res = data_[0].match(regexp)
+        value = res && res.length ? res[0] : ''
+        return this.data[value] ? this.data[value] : value
+      } else {
+        return this.data[value] ? this.data[value] : value
+      }
+    },
+    getIsChildren(item) {
+      let regular = /data-tag=[\"|'](.*?)[\"|']/gi;
+      let quotes = /["|'](.*)["|']/;
+      let data = item.match(regular)
+      if (data && data.length) {
+        let res = data[0].match(quotes)
+        data = res && res.length ? res[1] : ""
+        if (data) {
+          const dataTag = data.split('.')[0]
+          if (dataTag && dataTag !== 'headTable' && dataTag !== 'null') return true
+        }
+      }
+    },
+    getJsBarcode(value, id, width, height) {
+      if (!value) return
+      JsBarcode(id, value, {
+        width: width ? width : 4,
+        height: height ? height : 80,
+        displayValue: false
+      });
+    },
+    getJsQrcode(value, id, width, height) {
+      if (!value) return
+      let qrcode = new QRCode(document.getElementById(id), {
+        width: width ? width : 265,
+        height: height ? height : 265, // 高度
+        text: value, // 二维码内容
+        correctLevel: QRCode.CorrectLevel.H //容错级别 容错级别有：（1）QRCode.CorrectLevel.L （2）QRCode.CorrectLevel.M （3）QRCode.CorrectLevel.Q （4）QRCode.CorrectLevel.H
+      })
+    },
     replaceAll(data, replace, value) {
       const lenr = replace.length
       const len = data.length
@@ -206,10 +385,19 @@ export default {
     },
     print() {
       let print = this.$refs.tsPrint.innerHTML
-      let newWindow = window.open('_blank')
-      newWindow.document.body.innerHTML = print
-      newWindow.print()
-      newWindow.close()
+      let iframe = document.createElement('IFRAME');
+      document.body.appendChild(iframe);
+      let doc = iframe.contentWindow.document
+      doc.write(print);
+      doc.close();
+      iframe.contentWindow.focus();
+      iframe.contentWindow.addEventListener('load', function () {
+        let oldTitle = document.title;
+        document.title = "JNPF快速开发平台";
+        iframe.contentWindow.print();
+        document.title = oldTitle;
+        document.body.removeChild(iframe);
+      })
     },
   }
 }

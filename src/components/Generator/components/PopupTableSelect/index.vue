@@ -275,10 +275,12 @@ export default {
     initData() {
       if (!this.interfaceId) return
       this.listLoading = true
+      const columnOptions = this.columnOptions.map(o => o.value)
       let query = {
         ...this.listQuery,
         interfaceId: this.interfaceId,
         propsValue: this.propsValue,
+        columnOptions: columnOptions.join(','),
         relationField: this.relationField,
       }
       getDataInterfaceDataSelect(this.interfaceId, query).then(res => {

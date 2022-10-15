@@ -41,8 +41,9 @@
         </div>
         <JNPF-table v-loading="listLoading" :data="list" row-key="id" default-expand-all
           :tree-props="{children: 'children', hasChildren: ''}" @sort-change="sortChange"
-          :has-c="hasBatchBtn" @selection-change="handleSelectionChange" v-if="refreshTable"
-          custom-column :span-method="arraySpanMethod" ref="tableRef">
+          :row-style="rowStyle" :cell-style="cellStyle" :has-c="hasBatchBtn"
+          @selection-change="handleSelectionChange" v-if="refreshTable" custom-column
+          :span-method="arraySpanMethod" ref="tableRef">
           <template v-if="columnData.type === 4">
             <template v-for="(item, i) in columnList">
               <el-table-column :prop="item.prop" :label="item.label" :align="item.align"
@@ -436,7 +437,9 @@ export default {
       branchList: [],
       candidateList: [],
       currRow: {},
-      workFlowFormData: {}
+      workFlowFormData: {},
+      rowStyle: null,
+      cellStyle: null
     }
   },
   computed: {
@@ -471,6 +474,8 @@ export default {
       if (this.isPreview) this.listQuery.menuId = "270579315303777093"
       let res = await getColumnsByModuleId(this.listQuery.menuId)
       this.settingsColumnList = res.data || []
+      this.rowStyle = this.jnpf.getScriptFunc.call(this, this.columnData.funcs && this.columnData.funcs.rowStyle && this.columnData.funcs.rowStyle.func)
+      this.cellStyle = this.jnpf.getScriptFunc.call(this, this.columnData.funcs && this.columnData.funcs.cellStyle && this.columnData.funcs.cellStyle.func)
       this.getColumnList()
       this.$nextTick(() => {
         this.refreshTable = true

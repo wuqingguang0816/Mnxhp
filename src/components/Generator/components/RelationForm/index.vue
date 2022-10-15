@@ -111,13 +111,18 @@
         </div>
       </el-drawer>
     </template>
+    <el-form>
+      <Detail v-if="detailVisible" ref="Detail" @close="detailVisible = false" />
+    </el-form>
   </div>
 </template>
 
 <script>
-import { getFieldDataSelect, getDataChange } from '@/api/onlineDev/visualDev'
+import { getFieldDataSelect, getDataChange, getConfigData } from '@/api/onlineDev/visualDev'
+import Detail from '@/views/basic/dynamicModel/list/detail'
 export default {
   name: 'PopupSelect',
+  components: { Detail },
   props: {
     value: {
       default: ''
@@ -194,7 +199,8 @@ export default {
       checkedRow: {},
       listLoading: false,
       inputHovering: false,
-      visible: false
+      visible: false,
+      detailVisible: false
     }
   },
   watch: {
@@ -247,7 +253,21 @@ export default {
       this.initData()
     },
     openDialog() {
-      if (this.disabled) return
+      if (this.disabled) {
+        if (!this.value) return
+        getConfigData(this.modelId).then(res => {
+          if (!res.data) return
+          if (!res.data.formData) return
+          let formData = JSON.parse(res.data.formData)
+          formData.popupType = 'general'
+          this.detailVisible = true
+          this.$nextTick(() => {
+            this.$refs.Detail.init(formData, this.modelId, this.value)
+          })
+
+        })
+        return
+      }
       this.checked = this.value
       this.visible = true
       this.reset()

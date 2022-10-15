@@ -118,7 +118,7 @@
         <template v-if="!currRow.pcIsRelease">
           <el-form-item label="上级" prop="pcModuleParentId" v-if="releaseQuery.pc">
             <JNPF-TreeSelect v-model="releaseQuery.pcModuleParentId" :options="treeData"
-              placeholder="选择上级菜单" />
+              placeholder="选择上级菜单" @change="treeSelectChange(arguments,'pc')" />
           </el-form-item>
         </template>
         <template v-if="!currRow.appIsRelease">
@@ -126,7 +126,7 @@
           </el-form-item>
           <el-form-item label="上级" prop="appModuleParentId" v-if="releaseQuery.app">
             <JNPF-TreeSelect v-model="releaseQuery.appModuleParentId" :options="appTreeData"
-              placeholder="选择上级菜单" />
+              placeholder="选择上级菜单" @change="treeSelectChange(arguments,'app')" />
           </el-form-item>
         </template>
       </el-form>
@@ -164,6 +164,7 @@ export default {
         app: 1,
         pcModuleParentId: '',
         appModuleParentId: '',
+        systemId: ''
       },
       releaseQueryRule: {
         pcModuleParentId: [
@@ -174,7 +175,9 @@ export default {
         ],
       },
       treeData: [],
-      appTreeData: []
+      appTreeData: [],
+      pcSystemId: "",
+      appSystemId: "",
     }
   },
   methods: {
@@ -187,6 +190,8 @@ export default {
     openReleaseDialog(row) {
       this.currRow = row
       this.releaseDialogVisible = true
+      this.pcSystemId = ""
+      this.appSystemId = ""
       this.releaseQuery = {
         pc: 1,
         app: 1,
@@ -202,12 +207,19 @@ export default {
     selectToggle(key) {
       this.releaseQuery[key] = this.releaseQuery[key] === 1 ? 0 : 1
     },
+    treeSelectChange(data, type) {
+      const systemId = data[1].systemId
+      if (type == 'pc') this.pcSystemId = systemId
+      if (type == 'app') this.appSystemId = systemId
+    },
     // 发布菜单
     release() {
       this.$refs['releaseForm'].validate((valid) => {
         if (!valid) return
         if (!this.releaseQuery.pc && !this.releaseQuery.app) return this.$message.error('请至少选择一种菜单同步方式')
         this.releaseBtnLoading = true
+        this.releaseQuery.pcSystemId = this.pcSystemId
+        this.releaseQuery.appSystemId = this.appSystemId
         Release(this.currRow.id, this.releaseQuery).then(res => {
           this.releaseBtnLoading = false
           this.releaseDialogVisible = false
@@ -222,18 +234,18 @@ export default {
     },
     getMenuSelector() {
       getMenuSelector({ category: 'Web' }, 0).then(res => {
-        let topItem = {
-          fullName: "顶级节点",
-          hasChildren: true,
-          id: "-1",
-          children: res.data.list
-        }
-        this.treeData = [topItem]
+        this.treeData = res.data.list
       })
     },
     getAPPMenuSelector() {
       getMenuSelector({ category: 'App' }, 0).then(res => {
-        this.appTreeData = res.data.list
+        this.appTreeData = res.data.list || []
+        for (let index = 0; index < this.appTreeData.length; index++) {
+          const item = this.appTreeData[index];
+          if (item.type == 0) {
+            item.disabled = true
+          }
+        }
       })
     }
   }

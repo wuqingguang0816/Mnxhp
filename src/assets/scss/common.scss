@@ -1804,6 +1804,12 @@ textarea.el-textarea__inner {
   }
 }
 
+.item-table {
+  .el-link {
+    font-size: 12px;
+  }
+}
+
 .word-form {
   padding: 0 !important;
   margin: 0 !important;
@@ -2112,7 +2118,8 @@ textarea.el-textarea__inner {
     }
 
     .selected-item-text {
-      width: 272px;
+      min-width: 0;
+      flex: 1;
       margin-left: 10px;
 
       .name {
@@ -2120,9 +2127,9 @@ textarea.el-textarea__inner {
         line-height: 20px;
         font-size: 14px;
         margin-bottom: 2px;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
       }
 
       .organize {
@@ -2133,12 +2140,13 @@ textarea.el-textarea__inner {
         overflow: hidden;
         text-overflow: ellipsis;
         white-space: nowrap;
+        padding-right: unset !important;
       }
+    }
 
-      .el-icon-delete:hover {
-        color: #f56c6c;
-        cursor: pointer;
-      }
+    .el-icon-delete:hover {
+      color: #f56c6c;
+      cursor: pointer;
     }
   }
 

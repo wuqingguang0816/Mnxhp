@@ -24,7 +24,7 @@ const layouts = {
     const visibility = !config.visibility || (Array.isArray(config.visibility) && config.visibility.includes('pc'))
     if (visibility && !config.noShow) {
       return (
-        <el-col span={config.span}>
+        <el-col span={config.span} class={config.className}>
           <el-form-item label-width={labelWidth} prop={scheme.__vModel__} key={config.renderKey}
             label={config.showLabel ? config.label : ''}>
             {Item}
@@ -112,8 +112,15 @@ const layouts = {
 
 function renderFrom(h) {
   const { formConfCopy } = this
+  let classStyle = []
+  if (formConfCopy.formStyle) {
+    let formStyle = formConfCopy.formStyle.split(" ")
+    classStyle = [...formStyle, ...formConfCopy.className]
+  } else {
+    classStyle = formConfCopy.className
+  }
   return (
-    <el-row gutter={formConfCopy.gutter} class={formConfCopy.formStyle}>
+    <el-row gutter={formConfCopy.gutter} class={classStyle}>
       <el-form
         size={formConfCopy.size}
         label-position={formConfCopy.labelPosition}
@@ -237,6 +244,7 @@ export default {
       tableRefs: {},
       isTableValid: false
     }
+    this.initCss(data.formConfCopy)
     this.initFormData(data.formConfCopy.fields, data[this.formConf.formModel])
     this.initRelationForm(data.formConfCopy.fields)
     this.buildRules(data.formConfCopy.fields, data[this.formConf.formRules])
@@ -269,6 +277,19 @@ export default {
     }
   },
   methods: {
+    initCss(formCopy) {
+      if (document.getElementById('styleId')) {
+        document.getElementById('styleId').remove()
+      }
+      let classJson = formCopy.classJson
+      let head = document.getElementsByTagName('head')[0]
+      let style = document.createElement('style')
+      style.type = 'text/css'
+      style.id = 'styleId'
+      let html = classJson
+      style.innerText = html
+      head.appendChild(style)
+    },
     initFormData(componentList, formData) {
       this.$store.commit('generator/UPDATE_RELATION_DATA', {})
       componentList.forEach(cur => {
