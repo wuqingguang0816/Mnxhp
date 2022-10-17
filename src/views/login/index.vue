@@ -85,6 +85,7 @@
         <el-button type="primary" class="sso-login-btn" size="large" :loading="loading"
           @click.native.prevent="ssoLogin" v-show="isSso && !ssoLoading">登录</el-button>
       </div>
+      <div class="copyright"> {{sysConfig.copyright}}</div>
     </div>
     <el-dialog title="登录" :close-on-click-modal="false" :visible.sync="visible"
       :close-on-press-escape="false" class="JNPF-dialog JNPF-dialog_center JNPF-dialog-sso"
