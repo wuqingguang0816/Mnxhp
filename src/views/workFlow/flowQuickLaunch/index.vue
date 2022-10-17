@@ -101,7 +101,7 @@ export default {
     },
     closeForm(isRefresh) {
       this.formVisible = false
-      if (isRefresh) this.refresh()
+      if (isRefresh) this.search()
     },
     search() {
       this.list = []
