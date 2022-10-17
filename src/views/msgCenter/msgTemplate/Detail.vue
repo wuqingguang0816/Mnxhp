@@ -163,7 +163,7 @@ export default {
 <style lang="scss" scoped>
 .main {
   p {
-    color: #606266;
+    color: #999;
   }
 }
 </style>
