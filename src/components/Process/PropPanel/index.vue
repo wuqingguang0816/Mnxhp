@@ -3146,6 +3146,7 @@ export default {
       if (this.subFlowForm.flowId === id) return
       this.subFlowForm.flowId = id
       this.subFlowForm.flowName = item.fullName
+      this.subFlowForm.assignList = []
     },
     // 条件节点
     onConditionDateChange(val, item) {

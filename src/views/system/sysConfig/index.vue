@@ -785,30 +785,34 @@ export default {
       this.baseForm.qyhIsSynUser = this.wxEvents[1].select ? 1 : 0
       this.baseForm.dingSynIsSynOrg = this.ddEvents[0].select ? 1 : 0
       this.baseForm.dingSynIsSynUser = this.ddEvents[1].select ? 1 : 0
-      updateSystemConfig(this.baseForm).then(res => {
-        this.$message({
-          message: res.msg,
-          type: 'success',
-          duration: 1500,
-          onClose: () => {
-            this.btnLoading = false
-            const sysConfig = {
-              sysName: this.baseForm.sysName,
-              sysVersion: this.baseForm.sysVersion,
-              loginIcon: this.baseForm.loginIcon,
-              copyright: this.baseForm.copyright,
-              companyName: this.baseForm.companyName,
-              navigationIcon: this.baseForm.navigationIcon,
-              logoIcon: this.baseForm.logoIcon,
-              appIcon: this.baseForm.appIcon
+      this.$confirm('您确定要保存，是否继续？', '提示', {
+        type: 'warning'
+      }).then(() => {
+        updateSystemConfig(this.baseForm).then(res => {
+          this.$message({
+            message: res.msg,
+            type: 'success',
+            duration: 1500,
+            onClose: () => {
+              this.btnLoading = false
+              const sysConfig = {
+                sysName: this.baseForm.sysName,
+                sysVersion: this.baseForm.sysVersion,
+                loginIcon: this.baseForm.loginIcon,
+                copyright: this.baseForm.copyright,
+                companyName: this.baseForm.companyName,
+                navigationIcon: this.baseForm.navigationIcon,
+                logoIcon: this.baseForm.logoIcon,
+                appIcon: this.baseForm.appIcon
+              }
+              this.$store.commit('settings/CHANGE_SETTING', { key: "sysConfig", value: sysConfig })
+              this.initData()
             }
-            this.$store.commit('settings/CHANGE_SETTING', { key: "sysConfig", value: sysConfig })
-            this.initData()
-          }
+          })
+        }).catch(() => {
+          this.btnLoading = false
         })
-      }).catch(() => {
-        this.btnLoading = false
-      })
+      }).catch(() => { this.btnLoading = false })
     },
     getAdminList() {
       getAdminList().then(res => {
@@ -818,16 +822,20 @@ export default {
     },
     setAdminList() {
       this.btnLoading = true
-      setAdminList(this.adminIds).then(res => {
-        this.$message({
-          message: res.msg,
-          type: 'success',
-          duration: 1500,
-          onClose: () => {
-            this.btnLoading = false
-          }
+      this.$confirm('您确定要保存，是否继续？', '提示', {
+        type: 'warning'
+      }).then(() => {
+        setAdminList(this.adminIds).then(res => {
+          this.$message({
+            message: res.msg,
+            type: 'success',
+            duration: 1500,
+            onClose: () => {
+              this.btnLoading = false
+            }
+          })
         })
-      })
+      }).catch(() => { this.btnLoading = false })
     }
   }
 }
