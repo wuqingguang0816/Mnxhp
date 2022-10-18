@@ -145,8 +145,15 @@
               <user-select v-model="item.value" multiple :placeholder="'请选择'+item.label"
                 title="候选人员" v-else />
             </el-form-item>
-            <el-form-item label="加签人员" v-if="properties.hasFreeApprover">
-              <user-select v-model="handleId" placeholder="请选择加签人员,不选即该节点审核结束" />
+          </template>
+          <template v-if="properties.rejectType &&eventType!=='audit'">
+            <el-form-item label="驳回节点" prop="rejectStep">
+              <el-select v-model="candidateForm.rejectStep" placeholder="请选择驳回节点"
+                :disabled='properties.rejectStep!=="2"'>
+                <el-option v-for="item in rejectList" :key="item.nodeCode" :label="item.nodeName"
+                  :value="item.nodeCode">
+                </el-option>
+              </el-select>
             </el-form-item>
           </template>
           <template v-if="properties.hasOpinion">
@@ -226,7 +233,7 @@
 </template>
 
 <script>
-import { FlowBeforeInfo, Audit, Reject, Transfer, Recall, Cancel, Assign, SaveAudit, Candidates, CandidateUser, Resurgence, ResurgenceList } from '@/api/workFlow/FlowBefore'
+import { FlowBeforeInfo, Audit, Reject, Transfer, Recall, Cancel, Assign, SaveAudit, Candidates, CandidateUser, Resurgence, ResurgenceList, RejectList } from '@/api/workFlow/FlowBefore'
 import { Revoke, Press } from '@/api/workFlow/FlowLaunch'
 import { Create, Update, DynamicCreate, DynamicUpdate } from '@/api/workFlow/workFlowForm'
 import recordList from './RecordList'
@@ -291,9 +298,11 @@ export default {
         branchList: [],
         candidateList: [],
         fileList: [],
-        handleOpinion: ''
+        handleOpinion: '',
+        rejectStep: ''
       },
       printBrowseVisible: false,
+      rejectList: [],
       eventType: '',
       signImg: '',
       copyIds: [],
@@ -483,6 +492,10 @@ export default {
         this.isValidate = false
         this.handleReset()
         if (eventType === 'reject') {
+          RejectList(this.setting.taskId).then(res => {
+            this.rejectList = res.data || []
+            this.candidateForm.rejectStep = this.rejectList[0].nodeCode
+          }).catch({})
           if (!this.properties.hasSign && !this.properties.hasOpinion && !this.properties.isCustomCopy) {
             this.$confirm('此操作将驳回该审批单，是否继续？', '提示', {
               type: 'warning'
@@ -753,6 +766,7 @@ export default {
           branchList: this.candidateForm.branchList,
           candidateType: this.candidateType
         }
+        if (this.eventType === 'reject') query.rejectStep = this.candidateForm.rejectStep
         if (errorRuleUserList) query.errorRuleUserList = errorRuleUserList
         if (this.candidateForm.candidateList.length) {
           let candidateList = {}

@@ -1403,6 +1403,18 @@
               </el-form-item>
               <el-form-item label="驳回设置">
                 <div slot="label" class="form-item-label">驳回设置</div>
+                <el-radio-group v-model="approverForm.rejectType">
+                  <el-radio :label="1">重新审批
+                    <el-tooltip content="若流程为A->B->C,C驳回至A，则C->A->B->C" placement="top">
+                      <i class="el-icon-warning-outline"></i>
+                    </el-tooltip>
+                  </el-radio>
+                  <el-radio :label="2">从当前节点审批
+                    <el-tooltip content="若流程为A->B->C,C驳回至A，则C->A->C" placement="top">
+                      <i class="el-icon-warning-outline"></i>
+                    </el-tooltip>
+                  </el-radio>
+                </el-radio-group>
                 <el-select class="form-item-content" v-model="approverForm.rejectStep"
                   placeholder="请选择">
                   <el-option v-for="item in rejectStepOptions" :key="item.nodeId"
@@ -2378,6 +2390,7 @@ const defaultApproverForm = {
   circulateUser: [],  // 抄送人集合
   isCustomCopy: false,
   progress: '50',  // 进度
+  rejectType: 1, //驳回
   rejectStep: '0',  // 驳回步骤
   description: '',  // 节点描述
   managerLevel: 1,
@@ -2696,7 +2709,7 @@ export default {
       systemFieldOptions,
       overTimeOptions,
       extraRuleOptions,
-      rejectStepOptions: [],
+      realList: [],
       progressOptions: ['10', '20', '30', '40', '50', '60', '70', '80', '90'],
       symbolOptions: [
         {
@@ -2791,6 +2804,19 @@ export default {
     funcRequiredOptions() {
       return this.formFieldsOptions.filter(o => o.__config__ && o.__config__.required)
     },
+    rejectStepOptions() {
+      let options = []
+      if (this.approverForm.counterSign == 0) {
+        const list = [{
+          nodeId: '2',
+          properties: { title: '自选审批节点' }
+        }]
+        options = [...list, ...defaultStep, ...this.realList]
+      } else {
+        options = [...defaultStep, ...this.realList]
+      }
+      return options
+    }
   },
   methods: {
     handleSelect(item) {
@@ -3428,7 +3454,7 @@ export default {
         if (list[i].nodeId === _this.value.nodeId) break
         realList.push(list[i])
       }
-      this.rejectStepOptions = [...defaultStep, ...realList]
+      this.realList = realList
       let nodeOptions = list.filter(o => o.nodeId !== _this.value.nodeId)
       this.nodeOptions = nodeOptions
     },

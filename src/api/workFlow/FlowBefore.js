@@ -148,3 +148,12 @@ export function checkInfo(taskOperatorId) {
     method: 'get'
   })
 }
+
+//获取驳回下拉接口
+export function RejectList(id) {
+  return request({
+    url: `/api/workflow/Engine/FlowBefore/RejectList/${id}`,
+    method: 'get'
+  })
+}
+
