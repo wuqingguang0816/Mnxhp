@@ -108,7 +108,8 @@ export default {
       })
     },
     onBranchChange(val) {
-      if (!val.length) return this.dataForm.candidateList = []
+      const defaultList = this.dataForm.candidateList.filter(o => o.isDefault)
+      if (!val.length) return this.dataForm.candidateList = defaultList
       let list = []
       for (let i = 0; i < val.length; i++) {
         inner: for (let j = 0; j < this.branchList.length; j++) {
@@ -124,7 +125,7 @@ export default {
           }
         }
       }
-      this.dataForm.candidateList = list
+      this.dataForm.candidateList = [...defaultList, ...list]
     },
     handleApproval() {
       this.$refs['dataForm'].validate((valid) => {

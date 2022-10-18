@@ -764,8 +764,8 @@ export default {
         let data = res.data
         this.candidateType = data.type
         if (data.type == 1) {
-          this.branchList = res.data.list
-          this.candidateList = []
+          this.branchList = res.data.list.filter(o => o.isBranchFlow)
+          this.candidateList = res.data.list.filter(o => !o.isBranchFlow && o.isCandidates)
           this.candidateVisible = true
         } else if (data.type == 2) {
           this.branchList = []

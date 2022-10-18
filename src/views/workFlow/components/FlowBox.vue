@@ -503,7 +503,15 @@ export default {
           this.candidateForm.branchList = []
           this.branchList = []
           if (data.type == 1) {
-            this.branchList = res.data.list
+            this.branchList = res.data.list.filter(o => o.isBranchFlow)
+            let list = res.data.list.filter(o => !o.isBranchFlow && o.isCandidates)
+            this.candidateForm.candidateList = list.map(o => ({
+              ...o,
+              isDefault: true,
+              label: '审批人',
+              value: [],
+              rules: [{ required: true, message: `审批人不能为空`, trigger: 'click' }]
+            }))
             this.$nextTick(() => {
               this.$refs['candidateForm'].resetFields()
             })
@@ -541,7 +549,8 @@ export default {
       }
     },
     onBranchChange(val) {
-      if (!val.length) return this.candidateForm.candidateList = []
+      const defaultList = this.candidateForm.candidateList.filter(o => o.isDefault)
+      if (!val.length) return this.candidateForm.candidateList = defaultList
       let list = []
       for (let i = 0; i < val.length; i++) {
         inner: for (let j = 0; j < this.branchList.length; j++) {
@@ -557,7 +566,7 @@ export default {
           }
         }
       }
-      this.candidateForm.candidateList = list
+      this.candidateForm.candidateList = [...defaultList, ...list]
     },
     saveAudit() {
       this.btnLoading = true
@@ -585,8 +594,8 @@ export default {
         this.candidateLoading = false
         this.candidateType = data.type
         if (data.type == 1) {
-          this.branchList = res.data.list
-          this.candidateList = []
+          this.branchList = res.data.list.filter(o => o.isBranchFlow)
+          this.candidateList = res.data.list.filter(o => !o.isBranchFlow && o.isCandidates)
           this.candidateVisible = true
         } else if (data.type == 2) {
           this.branchList = []
