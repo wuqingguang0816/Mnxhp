@@ -344,7 +344,9 @@ export default {
       treeData: [],
       defaultProps: {
         children: 'children',
-        label: 'table'
+        label: function (data, node) {
+          return data.table + '(' + data.tableName + ')'
+        },
       },
       activeName: 'query',
       dataRule: {
