@@ -1,5 +1,4 @@
 import { mapGetters } from "vuex"
-import { Info } from '@/api/workFlow/workFlowForm'
 import { BillNumber } from '@/api/system/billRule'
 
 export default {
@@ -28,22 +27,12 @@ export default {
         this.$refs['dataForm'].resetFields()
         if (this.beforeInit) this.beforeInit()
         if (data.id) {
-          if (data.draftData) {
-            this.dataForm = data.draftData
-            if (this.dataForm.fileJson) {
-              this.fileList = JSON.parse(this.dataForm.fileJson)
-            }
-            this.$emit('setPageLoad')
-            return
+          this.dataForm = data.draftData || data.formData
+          if (this.dataForm.fileJson) {
+            this.fileList = JSON.parse(this.dataForm.fileJson)
           }
-          if (this.selfGetInfo && typeof this.selfGetInfo === "function") return this.selfGetInfo()
-          Info(this.setting.enCode, data.id).then(res => {
-            this.dataForm = res.data
-            if (res.data.fileJson) {
-              this.fileList = JSON.parse(res.data.fileJson)
-            }
-            this.$emit('setPageLoad')
-          })
+          this.$emit('setPageLoad')
+          return
         } else {
           this.dataForm.flowId = data.flowId
           if (this.selfInit) this.selfInit(data)
@@ -78,7 +67,7 @@ export default {
               return
             }
           }
-          this.$emit('eventReceiver', this.dataForm, eventType)
+          this.$emit('eventReceiver', { formData: this.dataForm }, eventType)
         }
       })
     },
