@@ -49,16 +49,13 @@ export default {
   },
   methods: {
     onOpen() {
-      if (!this.branchList.length) {
-        this.candidateForm.candidateList = this.candidateList.map(o => ({
-          ...o,
-          label: '审批人',
-          value: [],
-          rules: [{ required: true, message: `审批人不能为空`, trigger: 'click' }]
-        }))
-      } else {
-        this.candidateForm.candidateList = []
-      }
+      this.candidateForm.candidateList = this.candidateList.map(o => ({
+        ...o,
+        isDefault: true,
+        label: '审批人',
+        value: [],
+        rules: [{ required: true, message: `审批人不能为空`, trigger: 'click' }]
+      }))
       this.candidateForm.branchList = []
       this.$nextTick(() => {
         this.$refs['candidateForm'].resetFields()
