@@ -870,6 +870,35 @@ export const selectComponents = [
   },
   {
     __config__: {
+      jnpfKey: "usersSelect",
+      label: "用户组件",
+      labelWidth: undefined,
+      showLabel: true,
+      tag: "users-select",
+      tagIcon: "icon-ym icon-ym-generator-founder",
+      defaultValue: null,
+      required: false,
+      layout: "colFormItem",
+      span: 24,
+      dragDisabled: false,
+      visibility: ["pc", "app"],
+      tableName: "",
+      regList: [],
+      trigger: "click"
+    },
+    on: {
+      change:
+        "({ data, formData, setFormData, setShowOrHide, setRequired, setDisabled, request, getFieldOptions, setFieldOptions }) => {\n    // 在此编写代码\n    \n}"
+    },
+    placeholder: "请选择",
+    selectType: 'all',
+    ableIds: [],
+    multiple: false,
+    clearable: true,
+    disabled: false
+  },
+  {
+    __config__: {
       jnpfKey: "roleSelect",
       label: "角色选择",
       labelWidth: undefined,

@@ -100,6 +100,12 @@
                         :multiple="item.multiple" :clearable="item.clearable"
                         :disabled="item.disabled" />
                     </template>
+                    <template v-else-if="['usersSelect'].includes(item.jnpfKey)">
+                      <usersSelect v-model="scope.row[item.prop]" :placeholder="item.placeholder"
+                        :selectType="item.selectType" :ableIds="item.ableIds"
+                        :multiple="item.multiple" :clearable="item.clearable"
+                        :disabled="item.disabled" />
+                    </template>
                     <template v-else-if="['posSelect'].includes(item.jnpfKey)">
                       <posSelect v-model="scope.row[item.prop]" :placeholder="item.placeholder"
                         :selectType="item.selectType" :ableDepIds="item.ableDepIds"
@@ -373,6 +379,7 @@
     <Form v-show="formVisible" ref="Form" @refreshDataList="refresh" />
     <Detail v-show="detailVisible" ref="Detail" @close="detailVisible = false" />
     <ExportBox v-if="exportBoxVisible" ref="ExportBox" @download="download" />
+    <ImportBox v-if="uploadBoxVisible" ref="UploadBox" @refresh="initData" />
     <SuperQuery v-if="superQueryVisible" ref="SuperQuery" :columnOptions="columnOptions"
       @superQuery="superQuery" />
     <candidate-form :visible.sync="candidateVisible" :candidateList="candidateList"
@@ -433,6 +440,7 @@ export default {
       detailVisible: false,
       importBoxVisible: false,
       exportBoxVisible: false,
+      uploadBoxVisible: false,
       superQueryVisible: false,
       treeData: [],
       treeActiveId: '',
@@ -840,6 +848,12 @@ export default {
         this.exportBoxVisible = true
         this.$nextTick(() => {
           this.$refs.ExportBox.init(this.exportList)
+        })
+      }
+      if (key == 'upload') {
+        this.uploadBoxVisible = true
+        this.$nextTick(() => {
+          this.$refs.UploadBox.init(this.modelId)
         })
       }
       if (this.isPreview) return

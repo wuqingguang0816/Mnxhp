@@ -38,3 +38,39 @@ export const chunkMerge = (data) => {
     data
   })
 }
+
+// 下载导入示例模板
+export function getTemplateDownload(modelId, url) {
+  return request({
+    url: `/api/${url}/TemplateDownload`,
+    method: 'get'
+  })
+}
+
+// 导入预览
+export function getImportPreview(modelId, data, url) {
+  console.log(url)
+  return request({
+    url: `/api/${url}/ImportPreview`,
+    method: 'get',
+    data
+  })
+}
+
+// 导入数据
+export function importData(modelId, data, url) {
+  return request({
+    url: `/api/${url}/ImportData`,
+    method: 'post',
+    data
+  })
+}
+
+// 导出错误数据
+export function getImportExceptionData(modelId, data, url) {
+  return request({
+    url: `/api/${url}/ImportExceptionData`,
+    method: 'post',
+    data
+  })
+}

@@ -15,8 +15,7 @@
           <el-input v-model="dataForm.title" placeholder="公告标题" />
         </el-form-item>
         <el-form-item label="用户" prop="toUserIds">
-          <userselects v-model="toUserIds" placeholder="全部用户" :value='toUserIds' multiple
-            clearable />
+          <usersSelect v-model="toUserIds" placeholder="全部用户" multiple clearable />
         </el-form-item>
         <el-form-item label="附件" prop="files">
           <JNPF-UploadFz v-model="files" />
@@ -30,11 +29,8 @@
 </template>
 
 <script>
-import JNPFQuill from '@/components/JNPFEditor/quill'
 import { createNotice, updateNotice, getNoticeInfo } from '@/api/system/message'
-import userselects from '@/components/JNPF-userSelects'
 export default {
-  components: { JNPFQuill, userselects },
   data() {
     return {
       visible: false,

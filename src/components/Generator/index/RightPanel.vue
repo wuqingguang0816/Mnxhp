@@ -547,7 +547,7 @@ import Tab from './RightComponents/Tab'
 import Collapse from './RightComponents/Collapse'
 import TableConfig from './RightComponents/Table'
 import StyleScript from './StyleScript'
-const commonRightList = ['comSelect', 'depSelect', 'posSelect', 'userSelect', 'groupSelect', "roleSelect", 'editor']
+const commonRightList = ['comSelect', 'depSelect', 'posSelect', 'userSelect', 'usersSelect', 'groupSelect', "roleSelect", 'editor']
 const systemList = ['createUser', 'createTime', 'modifyUser', 'modifyTime', 'currOrganize', 'currDept', 'currPosition', 'billRule']
 //不设置宽度
 const noWithList = ['switch', 'radio', 'checkbox', 'uploadFz', 'uploadImg', 'colorPicker', 'rate', 'link', 'button', 'JNPFText', 'alert', 'qrcode', 'barcode']

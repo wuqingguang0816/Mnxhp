@@ -73,6 +73,10 @@
                     :ablePosIds="item.attr.ablePosIds" :ableUserIds="item.attr.ableUserIds"
                     :ableRoleIds="item.attr.ableRoleIds" :ableGroupIds="item.attr.ableGroupIds" />
                 </template>
+                <template v-else-if="['usersSelect'].includes(item.jnpfKey)">
+                  <usersSelect v-model="item.fieldValue" placeholder="请选择" clearable
+                    :selectType="item.attr.selectType" :ableIds="item.attr.ableIds" />
+                </template>
                 <template v-else-if="['currPosition'].includes(item.jnpfKey)">
                   <posSelect v-model="item.fieldValue" placeholder="请选择" clearable />
                 </template>
