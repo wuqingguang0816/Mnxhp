@@ -237,7 +237,7 @@
                 v-else />
             </template>
           </template>
-          <el-table-column prop="flowState" label="状态" width="100" v-if="config.webType == 3">
+          <el-table-column prop="flowState" label="状态" width="100" v-if="config.enableFlow">
             <template slot-scope="scope" v-if="!scope.row.top">
               <el-tag v-if="scope.row.flowState==1">等待审核</el-tag>
               <el-tag type="success" v-else-if="scope.row.flowState==2">审核通过</el-tag>
@@ -257,7 +257,7 @@
                 <el-button size="mini" type="text" class="JNPF-table-delBtn"
                   @click="cancelRowEdit(scope.row,scope.$index)">取消</el-button>
                 <el-button size="mini" type="text" @click="submitForRowEdit(scope.row)"
-                  v-if="config.webType == 3">提交</el-button>
+                  v-if="config.enableFlow">提交</el-button>
               </template>
               <template v-else>
                 <template v-if="isPreview || !columnData.useBtnPermission">
@@ -265,26 +265,26 @@
                     <template v-if="item.value=='edit'">
                       <template v-if="columnData.type === 4">
                         <el-button size="mini" type="text" :key="i"
-                          :disabled="config.webType == 3 && [1,2,4,5].indexOf(scope.row.flowState)>-1"
+                          :disabled="config.enableFlow && [1,2,4,5].indexOf(scope.row.flowState)>-1"
                           @click="scope.row.rowEdit=true">
                           {{item.label}}</el-button>
                       </template>
                       <template v-else>
                         <el-button size="mini" type="text" :key="i"
-                          :disabled="config.webType == 3 && [1,2,4,5].indexOf(scope.row.flowState)>-1"
+                          :disabled="config.enableFlow && [1,2,4,5].indexOf(scope.row.flowState)>-1"
                           @click="columnBtnsHandel(item.value,scope.row)">
                           {{item.label}}</el-button>
                       </template>
                     </template>
                     <template v-else-if="item.value=='remove'">
                       <el-button size="mini" type="text" :key="i" class="JNPF-table-delBtn"
-                        :disabled="config.webType == 3 && [1,2,3,5].indexOf(scope.row.flowState)>-1"
+                        :disabled="config.enableFlow && [1,2,3,5].indexOf(scope.row.flowState)>-1"
                         @click="columnBtnsHandel(item.value,scope.row,scope.$index)">
                         {{item.label}}</el-button>
                     </template>
                     <template v-else-if="item.value=='detail'">
                       <el-button size="mini" type="text" :key="i"
-                        :disabled="config.webType == 3 && !scope.row.flowState"
+                        :disabled="config.enableFlow && !scope.row.flowState"
                         @click="columnBtnsHandel(item.value,scope.row)" v-if="scope.row.id">
                         {{item.label}}</el-button>
                     </template>
@@ -314,26 +314,26 @@
                     <template v-if="item.value=='edit'">
                       <template v-if="columnData.type === 4">
                         <el-button size="mini" type="text" :key="i"
-                          :disabled="config.webType == 3 && [1,2,4,5].indexOf(scope.row.flowState)>-1"
+                          :disabled="config.enableFlow && [1,2,4,5].indexOf(scope.row.flowState)>-1"
                           @click="scope.row.rowEdit=true" v-has="'btn_'+item.value">
                           {{item.label}}</el-button>
                       </template>
                       <template v-else>
                         <el-button size="mini" type="text" :key="i"
-                          :disabled="config.webType == 3 && [1,2,4,5].indexOf(scope.row.flowState)>-1"
+                          :disabled="config.enableFlow && [1,2,4,5].indexOf(scope.row.flowState)>-1"
                           @click="columnBtnsHandel(item.value,scope.row)" v-has="'btn_'+item.value">
                           {{item.label}}</el-button>
                       </template>
                     </template>
                     <template v-else-if="item.value=='remove'">
                       <el-button size="mini" type="text" :key="i" class="JNPF-table-delBtn"
-                        :disabled="config.webType == 3 && [1,2,3,5].indexOf(scope.row.flowState)>-1"
+                        :disabled="config.enableFlow && [1,2,3,5].indexOf(scope.row.flowState)>-1"
                         @click="columnBtnsHandel(item.value,scope.row,scope.$index)"
                         v-has="'btn_'+item.value">{{item.label}}</el-button>
                     </template>
                     <template v-else-if="item.value=='detail'">
                       <el-button size="mini" type="text" :key="i"
-                        :disabled="config.webType == 3 && !scope.row.flowState"
+                        :disabled="config.enableFlow && !scope.row.flowState"
                         @click="columnBtnsHandel(item.value,scope.row)" v-has="'btn_'+item.value">
                         {{item.label}}</el-button>
                     </template>
@@ -483,7 +483,7 @@ export default {
       if (this.columnData.type === 3) {
         this.columnData.columnList = this.columnData.columnList.filter(o => o.prop != this.columnData.groupField)
       }
-      if (this.config.webType == 3) {
+      if (this.config.enableFlow) {
         this.flowTemplateJson = this.config.flowTemplateJson ? JSON.parse(this.config.flowTemplateJson) : {}
         this.isCustomCopy = this.flowTemplateJson.properties && this.flowTemplateJson.properties.isCustomCopy
       }
@@ -738,7 +738,7 @@ export default {
         data: JSON.stringify(row)
       }
       if (candidateData) query = { ...query, ...candidateData }
-      if (this.config.webType == 3) query.flowId = this.config.flowId
+      if (this.config.enableFlow) query.flowId = this.config.flowId
       const formMethod = query.id ? updateModel : createModel
       formMethod(this.modelId, query).then(res => {
         this.$message({
@@ -806,7 +806,7 @@ export default {
       this.list.unshift(item)
     },
     addOrUpdateHandle(id) {
-      if (this.config.webType == 3) {
+      if (this.config.enableFlow) {
         let data = {
           id: id || '',
           enCode: this.config.flowEnCode,
@@ -897,7 +897,7 @@ export default {
       }
     },
     goDetail(id, row) {
-      if (this.config.webType == 3) {
+      if (this.config.enableFlow) {
         let data = {
           id,
           enCode: this.config.flowEnCode,

@@ -1,235 +1,236 @@
 <template>
-  <transition name="el-zoom-in-center">
-    <div class="JNPF-preview-main flow-form-main">
-      <div class="JNPF-common-page-header">
-        <el-page-header @back="goBack" :content="title" />
-        <template v-if="!loading||title">
-          <el-dropdown placement="bottom" @command="handleFlowUrgent" trigger="click"
-            v-show="setting.opType=='-1'">
-            <div class="flow-urgent-value" style="cursor:pointer">
-              <span :style="{'background-color':flowUrgentList[selectState].color}"
-                class="color-box"></span>
-              <span :style="{'color':flowUrgentList[selectState].color}">
-                {{flowUrgentList[selectState].name}}</span>
-            </div>
-            <el-dropdown-menu slot="dropdown">
-              <el-dropdown-item v-for="(item,index) in flowUrgentList" :key="index"
-                :command="item.state">
-                <span :style="{'background-color':item.color}" class="color-box">
-                </span>
-                {{item.name}}
-              </el-dropdown-item>
-            </el-dropdown-menu>
-          </el-dropdown>
-          <div class="flow-urgent-value" v-show="setting.opType!=='-1'">
+  <!-- <transition name="el-zoom-in-center"> -->
+  <div class="JNPF-preview-main flow-form-main">
+    <div class="JNPF-common-page-header">
+      <div v-if="setting.fromForm">{{title}}</div>
+      <el-page-header @back="goBack" :content="title" v-else />
+      <template v-if="!loading||title">
+        <el-dropdown placement="bottom" @command="handleFlowUrgent" trigger="click"
+          v-show="setting.opType=='-1'">
+          <div class="flow-urgent-value" style="cursor:pointer">
             <span :style="{'background-color':flowUrgentList[selectState].color}"
               class="color-box"></span>
-            <span
-              :style="{'color':flowUrgentList[selectState].color}">{{flowUrgentList[selectState].name}}</span>
+            <span :style="{'color':flowUrgentList[selectState].color}">
+              {{flowUrgentList[selectState].name}}</span>
           </div>
-        </template>
-        <div class="options">
-          <el-dropdown class="dropdown" placement="bottom" @command="handleMore">
-            <el-button style="width:70px" :disabled="allBtnDisabled" v-if="setting.opType != 2">
-              更 多<i class="el-icon-arrow-down el-icon--right"></i>
-            </el-button>
-            <el-dropdown-menu slot="dropdown">
-              <el-dropdown-item class="dropdown-item" v-if="setting.opType=='-1'" command="save">
+          <el-dropdown-menu slot="dropdown">
+            <el-dropdown-item v-for="(item,index) in flowUrgentList" :key="index"
+              :command="item.state">
+              <span :style="{'background-color':item.color}" class="color-box">
+              </span>
+              {{item.name}}
+            </el-dropdown-item>
+          </el-dropdown-menu>
+        </el-dropdown>
+        <div class="flow-urgent-value" v-show="setting.opType!=='-1'">
+          <span :style="{'background-color':flowUrgentList[selectState].color}"
+            class="color-box"></span>
+          <span
+            :style="{'color':flowUrgentList[selectState].color}">{{flowUrgentList[selectState].name}}</span>
+        </div>
+      </template>
+      <div class="options">
+        <el-dropdown class="dropdown" placement="bottom" @command="handleMore">
+          <el-button style="width:70px" :disabled="allBtnDisabled" v-if="setting.opType != 2">
+            更 多<i class="el-icon-arrow-down el-icon--right"></i>
+          </el-button>
+          <el-dropdown-menu slot="dropdown">
+            <el-dropdown-item class="dropdown-item" v-if="setting.opType=='-1'" command="save">
+              {{properties.saveBtnText||'暂 存'}}
+            </el-dropdown-item>
+            <el-dropdown-item class="dropdown-item"
+              v-if="(properties.hasRevokeBtn || properties.hasRevokeBtn===undefined)&&setting.opType == 0 && setting.status == 1"
+              command="revoke">
+              {{properties.revokeBtnText||'撤 回'}}
+            </el-dropdown-item>
+            <!-- 审批 -->
+            <template v-if="setting.opType == 1">
+              <el-dropdown-item class="dropdown-item" v-if="properties.hasTransferBtn"
+                command="transfer">
+                {{properties.transferBtnText||'转 审'}}
+              </el-dropdown-item>
+              <el-dropdown-item class="dropdown-item" v-if="properties.hasSaveBtn"
+                command="saveAudit">
                 {{properties.saveBtnText||'暂 存'}}
               </el-dropdown-item>
-              <el-dropdown-item class="dropdown-item"
-                v-if="(properties.hasRevokeBtn || properties.hasRevokeBtn===undefined)&&setting.opType == 0 && setting.status == 1"
-                command="revoke">
-                {{properties.revokeBtnText||'撤 回'}}
+              <el-dropdown-item class="dropdown-item" v-if="properties.hasRejectBtn"
+                command="reject">
+                {{properties.rejectBtnText||'拒 绝'}}
               </el-dropdown-item>
-              <!-- 审批 -->
-              <template v-if="setting.opType == 1">
-                <el-dropdown-item class="dropdown-item" v-if="properties.hasTransferBtn"
-                  command="transfer">
-                  {{properties.transferBtnText||'转 审'}}
-                </el-dropdown-item>
-                <el-dropdown-item class="dropdown-item" v-if="properties.hasSaveBtn"
-                  command="saveAudit">
-                  {{properties.saveBtnText||'暂 存'}}
-                </el-dropdown-item>
-                <el-dropdown-item class="dropdown-item" v-if="properties.hasRejectBtn"
-                  command="reject">
-                  {{properties.rejectBtnText||'拒 绝'}}
-                </el-dropdown-item>
-              </template>
-              <!-- 判断流程复活按钮和节点变更 -->
-              <template v-if="setting.opType == 4">
-                <el-dropdown-item class="dropdown-item" v-if="flowTaskInfo.completion==100"
-                  command="resurgence">
-                  复 活
-                </el-dropdown-item>
-                <el-dropdown-item class="dropdown-item"
-                  v-if="flowTaskInfo.completion>0&&flowTaskInfo.completion<100&&(setting.status==1||setting.status==3)"
-                  command="resurgence">变 更
-                </el-dropdown-item>
-                <el-dropdown-item class="dropdown-item"
-                  v-if="setting.status==1&&assignNodeList.length" command="assign">指 派
-                </el-dropdown-item>
-              </template>
-              <el-dropdown-item class="dropdown-item" v-if="activeTab==='comment'"
-                command="comment">评 论
+            </template>
+            <!-- 判断流程复活按钮和节点变更 -->
+            <template v-if="setting.opType == 4">
+              <el-dropdown-item class="dropdown-item" v-if="flowTaskInfo.completion==100"
+                command="resurgence">
+                复 活
               </el-dropdown-item>
               <el-dropdown-item class="dropdown-item"
-                v-if="setting.opType!=4&&setting.id&&properties.hasPrintBtn&&properties.printId"
-                command="print">
-                {{properties.printBtnText||'打 印'}}
+                v-if="flowTaskInfo.completion>0&&flowTaskInfo.completion<100&&(setting.status==1||setting.status==3)"
+                command="resurgence">变 更
               </el-dropdown-item>
-            </el-dropdown-menu>
-          </el-dropdown>
-          <el-button v-if="setting.opType=='-1'" type="primary" @click="eventLauncher('submit')"
-            :loading="candidateLoading" :disabled="allBtnDisabled">
-            {{properties.submitBtnText||'提 交'}}</el-button>
-          <el-button type="primary" @click="eventLauncher('audit')" :loading="candidateLoading"
-            v-if="setting.opType == 1&&properties.hasAuditBtn">{{properties.auditBtnText||'通 过'}}
-          </el-button>
-          <el-button type="primary" @click="press()"
-            v-if="setting.opType == 0 && setting.status == 1&&(properties.hasPressBtn || properties.hasPressBtn===undefined)">
-            {{properties.pressBtnText||'催 办'}}</el-button>
-          <el-button type="danger" v-if="setting.opType == 2 && properties.hasRevokeBtn"
-            @click="actionLauncher('recall')">{{properties.revokeBtnText||'撤 回'}}</el-button>
-          <el-button type="danger" v-if="setting.opType == 4&&setting.status==1"
-            @click="actionLauncher('cancel')">
-            终止</el-button>
-          <el-button @click="goBack()" v-if="!setting.hideCancelBtn" :disabled="allBtnDisabled">
-            {{$t('common.cancelButton')}}
-          </el-button>
-        </div>
+              <el-dropdown-item class="dropdown-item"
+                v-if="setting.status==1&&assignNodeList.length" command="assign">指 派
+              </el-dropdown-item>
+            </template>
+            <el-dropdown-item class="dropdown-item" v-if="activeTab==='comment'" command="comment">评
+              论
+            </el-dropdown-item>
+            <el-dropdown-item class="dropdown-item"
+              v-if="setting.opType!=4&&setting.id&&properties.hasPrintBtn&&properties.printId"
+              command="print">
+              {{properties.printBtnText||'打 印'}}
+            </el-dropdown-item>
+          </el-dropdown-menu>
+        </el-dropdown>
+        <el-button v-if="setting.opType=='-1'" type="primary" @click="eventLauncher('submit')"
+          :loading="candidateLoading" :disabled="allBtnDisabled">
+          {{properties.submitBtnText||'提 交'}}</el-button>
+        <el-button type="primary" @click="eventLauncher('audit')" :loading="candidateLoading"
+          v-if="setting.opType == 1&&properties.hasAuditBtn">{{properties.auditBtnText||'通 过'}}
+        </el-button>
+        <el-button type="primary" @click="press()"
+          v-if="setting.opType == 0 && setting.status == 1&&(properties.hasPressBtn || properties.hasPressBtn===undefined)">
+          {{properties.pressBtnText||'催 办'}}</el-button>
+        <el-button type="danger" v-if="setting.opType == 2 && properties.hasRevokeBtn"
+          @click="actionLauncher('recall')">{{properties.revokeBtnText||'撤 回'}}</el-button>
+        <el-button type="danger" v-if="setting.opType == 4&&setting.status==1"
+          @click="actionLauncher('cancel')">
+          终止</el-button>
+        <el-button @click="goBack()" v-if="!setting.hideCancelBtn" :disabled="allBtnDisabled">
+          {{$t('common.cancelButton')}}
+        </el-button>
       </div>
-      <div class="approve-result" v-if="(setting.opType==0||setting.opType==4) && activeTab==='0'">
-        <div class="approve-result-img" :class="flowTaskInfo.status | flowStatus()"></div>
-      </div>
-      <el-tabs class="JNPF-el_tabs" v-model="activeTab">
-        <el-tab-pane label="表单信息" v-loading="loading">
-          <component :is="currentView" @close="goBack" ref="form" @eventReceiver="eventReceiver"
-            @setLoad="setLoad" @setCandidateLoad="setCandidateLoad" @setPageLoad="setPageLoad" />
-        </el-tab-pane>
-        <el-tab-pane label="流程信息" v-loading="loading">
-          <Process :conf="flowTemplateJson" v-if="flowTemplateJson.nodeId" />
-        </el-tab-pane>
-        <el-tab-pane label="流转记录" v-if="setting.opType!='-1'" v-loading="loading">
-          <recordList :list='flowTaskOperatorRecordList' :endTime='endTime' />
-        </el-tab-pane>
-        <el-tab-pane label="审批汇总" v-if="setting.opType!='-1' && isSummary" v-loading="loading"
-          name="recordSummary">
-          <RecordSummary :id='setting.id' :summaryType="summaryType" ref="recordSummary" />
-        </el-tab-pane>
-        <el-tab-pane label="流程评论" v-if="setting.opType!='-1' && isComment" v-loading="loading"
-          name="comment">
-          <Comment :id='setting.id' ref="comment" />
-        </el-tab-pane>
-      </el-tabs>
-      <el-dialog :title="eventType==='audit'?'审批通过':'审批拒绝'" :close-on-click-modal="false"
-        :visible.sync="visible" class="JNPF-dialog JNPF-dialog_center" lock-scroll append-to-body
-        width='600px'>
-        <el-form ref="candidateForm" :model="candidateForm"
-          :label-width="candidateForm.candidateList.length||branchList.length?'130px':'80px'">
-          <template v-if="eventType==='audit'">
-            <el-form-item label="分支选择" prop="branchList" v-if="branchList.length"
-              :rules="[{ required: true, message: `分支不能为空`, trigger: 'change' }]">
-              <el-select v-model="candidateForm.branchList" multiple placeholder="请选择审批分支" clearable
-                @change="onBranchChange">
-                <el-option v-for="item in branchList" :key="item.nodeId" :label="item.nodeName"
-                  :value="item.nodeId" />
-              </el-select>
-            </el-form-item>
-            <el-form-item :label="item.nodeName+item.label" :prop="'candidateList.' + i + '.value'"
-              v-for="(item,i) in candidateForm.candidateList" :key="i" :rules="item.rules">
-              <candidate-user-select v-model="item.value" multiple :placeholder="'请选择'+item.label"
-                :taskId="setting.taskId" :formData="formData" :nodeId="item.nodeId"
-                v-if="item.hasCandidates" />
-              <user-select v-model="item.value" multiple :placeholder="'请选择'+item.label"
-                title="候选人员" v-else />
-            </el-form-item>
-          </template>
-          <template v-if="properties.rejectType &&eventType!=='audit'">
-            <el-form-item label="驳回节点" prop="rejectStep">
-              <el-select v-model="candidateForm.rejectStep" placeholder="请选择驳回节点"
-                :disabled='properties.rejectStep!=="2"'>
-                <el-option v-for="item in rejectList" :key="item.nodeCode" :label="item.nodeName"
-                  :value="item.nodeCode">
-                </el-option>
-              </el-select>
-            </el-form-item>
-          </template>
-          <template v-if="properties.hasOpinion">
-            <el-form-item label="审批意见" prop="handleOpinion">
-              <el-input v-model="candidateForm.handleOpinion" placeholder="请输入审批意见" type="textarea"
-                :rows="4" />
-            </el-form-item>
-            <el-form-item label="审批附件" prop="fileList">
-              <JNPF-UploadFz v-model="candidateForm.fileList" :limit="3" />
-            </el-form-item>
-          </template>
-          <el-form-item label="手写签名" required v-if="properties.hasSign">
-            <div class="sign-main">
-              <div class="sign-head">
-                <div class="sign-tip">请在这里输入你的签名</div>
-                <div class="sign-action">
-                  <el-button class="clear-btn" size="mini" @click="handleReset">清空</el-button>
-                  <el-button class="sure-btn" size="mini" @click="handleGenerate"
-                    :disabled="!!signImg">确定签名</el-button>
-                </div>
-              </div>
-              <div class="sign-box">
-                <vue-esign ref="esign" :height="330" v-if="!signImg" :lineWidth="5" />
-                <img :src="signImg" alt="" v-if="signImg" class="sign-img">
-              </div>
-            </div>
-          </el-form-item>
-          <el-form-item label="抄送人员" v-if="properties.isCustomCopy">
-            <user-select v-model="copyIds" placeholder="请选择" multiple />
-          </el-form-item>
-        </el-form>
-        <span slot="footer" class="dialog-footer">
-          <el-button @click="visible = false">{{$t('common.cancelButton')}}</el-button>
-          <el-button type="primary" @click="handleApproval()" :loading="approvalBtnLoading">
-            {{$t('common.confirmButton')}}
-          </el-button>
-        </span>
-      </el-dialog>
-      <!-- 流程节点变更复活对话框 -->
-      <el-dialog :title="flowTaskInfo.completion==100?'复活':'变更'" :close-on-click-modal="false"
-        :visible.sync="resurgenceVisible" class="JNPF-dialog JNPF-dialog_center" lock-scroll
-        append-to-body width='600px'>
-        <el-form label-width="80px" :model="resurgenceForm" :rules="resurgenceRules"
-          ref="resurgenceForm">
-          <el-form-item :label="flowTaskInfo.completion==100?'复活节点':'变更节点'" prop="taskNodeId">
-            <el-select v-model="resurgenceForm.taskNodeId"
-              :placeholder="flowTaskInfo.completion==100?'请选择复活节点':'请选择变更节点'">
-              <el-option v-for="item in resurgenceNodeList" :key="item.id" :label="item.nodeName"
-                :value="item.id" />
+    </div>
+    <div class="approve-result" v-if="(setting.opType==0||setting.opType==4) && activeTab==='0'">
+      <div class="approve-result-img" :class="flowTaskInfo.status | flowStatus()"></div>
+    </div>
+    <el-tabs class="JNPF-el_tabs" v-model="activeTab">
+      <el-tab-pane label="表单信息" v-loading="loading">
+        <component :is="currentView" @close="goBack" ref="form" @eventReceiver="eventReceiver"
+          @setLoad="setLoad" @setCandidateLoad="setCandidateLoad" @setPageLoad="setPageLoad" />
+      </el-tab-pane>
+      <el-tab-pane label="流程信息" v-loading="loading">
+        <Process :conf="flowTemplateJson" v-if="flowTemplateJson.nodeId" />
+      </el-tab-pane>
+      <el-tab-pane label="流转记录" v-if="setting.opType!='-1'" v-loading="loading">
+        <recordList :list='flowTaskOperatorRecordList' :endTime='endTime' />
+      </el-tab-pane>
+      <el-tab-pane label="审批汇总" v-if="setting.opType!='-1' && isSummary" v-loading="loading"
+        name="recordSummary">
+        <RecordSummary :id='setting.id' :summaryType="summaryType" ref="recordSummary" />
+      </el-tab-pane>
+      <el-tab-pane label="流程评论" v-if="setting.opType!='-1' && isComment" v-loading="loading"
+        name="comment">
+        <Comment :id='setting.id' ref="comment" />
+      </el-tab-pane>
+    </el-tabs>
+    <el-dialog :title="eventType==='audit'?'审批通过':'审批拒绝'" :close-on-click-modal="false"
+      :visible.sync="visible" class="JNPF-dialog JNPF-dialog_center" lock-scroll append-to-body
+      width='600px'>
+      <el-form ref="candidateForm" :model="candidateForm"
+        :label-width="candidateForm.candidateList.length||branchList.length?'130px':'80px'">
+        <template v-if="eventType==='audit'">
+          <el-form-item label="分支选择" prop="branchList" v-if="branchList.length"
+            :rules="[{ required: true, message: `分支不能为空`, trigger: 'change' }]">
+            <el-select v-model="candidateForm.branchList" multiple placeholder="请选择审批分支" clearable
+              @change="onBranchChange">
+              <el-option v-for="item in branchList" :key="item.nodeId" :label="item.nodeName"
+                :value="item.nodeId" />
             </el-select>
           </el-form-item>
-          <el-form-item :label="flowTaskInfo.completion==100?'复活意见':'变更意见'" prop="handleOpinion">
-            <el-input type="textarea" v-model="resurgenceForm.handleOpinion" placeholder="请填写意见"
+          <el-form-item :label="item.nodeName+item.label" :prop="'candidateList.' + i + '.value'"
+            v-for="(item,i) in candidateForm.candidateList" :key="i" :rules="item.rules">
+            <candidate-user-select v-model="item.value" multiple :placeholder="'请选择'+item.label"
+              :taskId="setting.taskId" :formData="formData" :nodeId="item.nodeId"
+              v-if="item.hasCandidates" />
+            <user-select v-model="item.value" multiple :placeholder="'请选择'+item.label" title="候选人员"
+              v-else />
+          </el-form-item>
+        </template>
+        <template v-if="properties.rejectType &&eventType!=='audit'">
+          <el-form-item label="驳回节点" prop="rejectStep">
+            <el-select v-model="candidateForm.rejectStep" placeholder="请选择驳回节点"
+              :disabled='properties.rejectStep!=="2"'>
+              <el-option v-for="item in rejectList" :key="item.nodeCode" :label="item.nodeName"
+                :value="item.nodeCode">
+              </el-option>
+            </el-select>
+          </el-form-item>
+        </template>
+        <template v-if="properties.hasOpinion">
+          <el-form-item label="审批意见" prop="handleOpinion">
+            <el-input v-model="candidateForm.handleOpinion" placeholder="请输入审批意见" type="textarea"
               :rows="4" />
           </el-form-item>
-          <el-form-item :label="flowTaskInfo.completion==100?'复活附件':'变更附件'" prop="fileList">
-            <JNPF-UploadFz v-model="resurgenceForm.fileList" :limit="3" />
+          <el-form-item label="审批附件" prop="fileList">
+            <JNPF-UploadFz v-model="candidateForm.fileList" :limit="3" />
           </el-form-item>
-        </el-form>
-        <span slot="footer" class="dialog-footer">
-          <el-button @click="resurgenceVisible = false">{{$t('common.cancelButton')}}</el-button>
-          <el-button type="primary" @click="handleResurgence()" :loading="resurgenceBtnLoading">
-            {{$t('common.confirmButton')}}
-          </el-button>
-        </span>
-      </el-dialog>
-      <print-browse :visible.sync="printBrowseVisible" :id="properties.printId" :formId="setting.id"
-        :fullName="setting.fullName" />
-      <candidate-form :visible.sync="candidateVisible" :candidateList="candidateList"
-        :branchList="branchList" :taskId="setting.taskId" :formData="formData"
-        @submitCandidate="submitCandidate" :isCustomCopy="properties.isCustomCopy" />
-      <error-form :visible.sync="errorVisible" :nodeList="errorNodeList" @submit="handleError" />
-      <actionDialog v-if="actionVisible" ref="actionDialog" :assignNodeList="assignNodeList"
-        @submit="actionReceiver" />
-    </div>
-  </transition>
+        </template>
+        <el-form-item label="手写签名" required v-if="properties.hasSign">
+          <div class="sign-main">
+            <div class="sign-head">
+              <div class="sign-tip">请在这里输入你的签名</div>
+              <div class="sign-action">
+                <el-button class="clear-btn" size="mini" @click="handleReset">清空</el-button>
+                <el-button class="sure-btn" size="mini" @click="handleGenerate"
+                  :disabled="!!signImg">确定签名</el-button>
+              </div>
+            </div>
+            <div class="sign-box">
+              <vue-esign ref="esign" :height="330" v-if="!signImg" :lineWidth="5" />
+              <img :src="signImg" alt="" v-if="signImg" class="sign-img">
+            </div>
+          </div>
+        </el-form-item>
+        <el-form-item label="抄送人员" v-if="properties.isCustomCopy">
+          <user-select v-model="copyIds" placeholder="请选择" multiple />
+        </el-form-item>
+      </el-form>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="visible = false">{{$t('common.cancelButton')}}</el-button>
+        <el-button type="primary" @click="handleApproval()" :loading="approvalBtnLoading">
+          {{$t('common.confirmButton')}}
+        </el-button>
+      </span>
+    </el-dialog>
+    <!-- 流程节点变更复活对话框 -->
+    <el-dialog :title="flowTaskInfo.completion==100?'复活':'变更'" :close-on-click-modal="false"
+      :visible.sync="resurgenceVisible" class="JNPF-dialog JNPF-dialog_center" lock-scroll
+      append-to-body width='600px'>
+      <el-form label-width="80px" :model="resurgenceForm" :rules="resurgenceRules"
+        ref="resurgenceForm">
+        <el-form-item :label="flowTaskInfo.completion==100?'复活节点':'变更节点'" prop="taskNodeId">
+          <el-select v-model="resurgenceForm.taskNodeId"
+            :placeholder="flowTaskInfo.completion==100?'请选择复活节点':'请选择变更节点'">
+            <el-option v-for="item in resurgenceNodeList" :key="item.id" :label="item.nodeName"
+              :value="item.id" />
+          </el-select>
+        </el-form-item>
+        <el-form-item :label="flowTaskInfo.completion==100?'复活意见':'变更意见'" prop="handleOpinion">
+          <el-input type="textarea" v-model="resurgenceForm.handleOpinion" placeholder="请填写意见"
+            :rows="4" />
+        </el-form-item>
+        <el-form-item :label="flowTaskInfo.completion==100?'复活附件':'变更附件'" prop="fileList">
+          <JNPF-UploadFz v-model="resurgenceForm.fileList" :limit="3" />
+        </el-form-item>
+      </el-form>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="resurgenceVisible = false">{{$t('common.cancelButton')}}</el-button>
+        <el-button type="primary" @click="handleResurgence()" :loading="resurgenceBtnLoading">
+          {{$t('common.confirmButton')}}
+        </el-button>
+      </span>
+    </el-dialog>
+    <print-browse :visible.sync="printBrowseVisible" :id="properties.printId" :formId="setting.id"
+      :fullName="setting.fullName" />
+    <candidate-form :visible.sync="candidateVisible" :candidateList="candidateList"
+      :branchList="branchList" :taskId="setting.taskId" :formData="formData"
+      @submitCandidate="submitCandidate" :isCustomCopy="properties.isCustomCopy" />
+    <error-form :visible.sync="errorVisible" :nodeList="errorNodeList" @submit="handleError" />
+    <actionDialog v-if="actionVisible" ref="actionDialog" :assignNodeList="assignNodeList"
+      @submit="actionReceiver" />
+  </div>
+  <!-- </transition> -->
 </template>
 
 <script>
