@@ -2,51 +2,52 @@
   <transition name="el-zoom-in-center">
     <div class="JNPF-preview-main">
       <div class="JNPF-common-page-header">
-        <el-page-header @back="goBack" content="我的委托" />
+        <el-page-header @back="goBack" content="新建流程" />
         <div class="options">
           <el-button @click="goBack()">{{$t('common.cancelButton')}}</el-button>
         </div>
       </div>
       <div class="main">
-        <!-- <el-tabs tab-position="left" style="height:100%" v-model="category" class="flow-tabs"> -->
-        <!-- <el-tab-pane label="全部流程" name=""></el-tab-pane>
+        <el-tabs tab-position="left" style="height:100%" v-model="category" class="flow-tabs">
+          <el-tab-pane label="全部流程" name=""></el-tab-pane>
           <el-tab-pane :label="item.fullName" :name="item.enCode" v-for="item in categoryList"
-            :key="item.enCode"></el-tab-pane> -->
-        <div class="box">
-          <el-row class="JNPF-common-search-box" :gutter="16">
-            <el-form @submit.native.prevent>
-              <el-col :span="6">
-                <el-form-item label="关键词">
-                  <el-input v-model="keyword" placeholder="请输入关键词查询" clearable
-                    @keyup.enter.native="search()" />
-                </el-form-item>
-              </el-col>
-              <el-col :span="6">
-                <el-form-item>
-                  <el-button type="primary" icon="el-icon-search" @click="search()">
-                    {{$t('common.search')}}</el-button>
-                  <el-button icon="el-icon-refresh-right" @click="reset()">{{$t('common.reset')}}
-                  </el-button>
-                </el-form-item>
-              </el-col>
-            </el-form>
-          </el-row>
-          <div class="list" ref="infiniteBody" v-loading="listLoading && listQuery.currentPage==1">
-            <el-row :gutter="20" v-if="list.length">
-              <el-col :span="4" v-for="(item,i) in list" :key="i" class="item"
-                @click.native="jump(item)">
-                <el-card shadow="hover">
-                  <div class="box-icon" :style="{backgroundColor:item.iconBackground||'#008cff'}">
-                    <i :class="item.icon"></i>
-                  </div>
-                  <span class="title">{{item.fullName}}</span>
-                </el-card>
-              </el-col>
+            :key="item.enCode"></el-tab-pane>
+          <div class="box">
+            <el-row class="JNPF-common-search-box" :gutter="16">
+              <el-form @submit.native.prevent>
+                <el-col :span="6">
+                  <el-form-item label="关键词">
+                    <el-input v-model="keyword" placeholder="请输入关键词查询" clearable
+                      @keyup.enter.native="search()" />
+                  </el-form-item>
+                </el-col>
+                <el-col :span="6">
+                  <el-form-item>
+                    <el-button type="primary" icon="el-icon-search" @click="search()">
+                      {{$t('common.search')}}</el-button>
+                    <el-button icon="el-icon-refresh-right" @click="reset()">{{$t('common.reset')}}
+                    </el-button>
+                  </el-form-item>
+                </el-col>
+              </el-form>
             </el-row>
-            <el-empty description="暂无数据" :image-size="120" v-else></el-empty>
+            <div class="list" ref="infiniteBody"
+              v-loading="listLoading && listQuery.currentPage==1">
+              <el-row :gutter="20" v-if="list.length">
+                <el-col :span="6" v-for="(item,i) in list" :key="i" class="item"
+                  @click.native="jump(item)">
+                  <el-card shadow="hover">
+                    <div class="box-icon" :style="{backgroundColor:item.iconBackground||'#008cff'}">
+                      <i :class="item.icon"></i>
+                    </div>
+                    <span class="title">{{item.fullName}}</span>
+                  </el-card>
+                </el-col>
+              </el-row>
+              <el-empty description="暂无数据" :image-size="120" v-else></el-empty>
+            </div>
           </div>
-        </div>
-        <!-- </el-tabs> -->
+        </el-tabs>
       </div>
     </div>
   </transition>
@@ -58,6 +59,7 @@ export default {
   data() {
     return {
       keyword: '',
+      category: '',
       listQuery: {
         currentPage: 1,
         pageSize: 50,
@@ -68,16 +70,23 @@ export default {
       finish: false,
       list: [],
       listLoading: true,
+      categoryList: []
     }
   },
   watch: {
+    category(val) {
+      this.reset()
+    }
   },
   methods: {
     goBack() {
       this.$emit('close')
     },
     init() {
-      this.initData()
+      this.getDictionaryData()
+      this.$nextTick(() => {
+        this.bindScroll()
+      })
     },
     reset() {
       this.keyword = ''
@@ -114,7 +123,11 @@ export default {
         this.listLoading = false
       })
     },
-
+    getDictionaryData() {
+      this.$store.dispatch('base/getDictionaryData', { sort: 'WorkFlowCategory' }).then((res) => {
+        this.categoryList = res
+      })
+    },
     jump(item) {
       if (!item.enCode) {
         this.$message({
@@ -134,20 +147,20 @@ export default {
   display: flex;
   flex-direction: column;
   color: #606266;
+  .flow-tabs {
+    >>> .el-tabs__item {
+      text-align: left !important;
+      width: 160px !important;
+    }
+    >>> .el-tabs__content {
+      height: 100%;
 
-  >>> .el-tabs__item {
-    text-align: left !important;
-    width: 160px !important;
-  }
-  >>> .el-tabs__content {
-    height: 100%;
-
-    .el-tab-pane {
-      height: 0;
-      display: none !important;
+      .el-tab-pane {
+        height: 0;
+        display: none !important;
+      }
     }
   }
-
   >>> .is-horizontal {
     display: none;
   }

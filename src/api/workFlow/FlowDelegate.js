@@ -47,3 +47,12 @@ export function delegateGetflow(data) {
     data
   })
 }
+
+// 获取一个流程的所有委托人
+export function getUserListByFlowId(data) {
+  return request({
+    url: `/api/workflow/Engine/FlowDelegate/userList`,
+    method: 'get',
+    data
+  })
+}

@@ -4,13 +4,17 @@
     <el-form ref="dataForm" :model="dataForm" :rules="dataRule" label-width="100px"
       v-loading="loading">
       <jnpf-form-tip-item label="委托人" prop="userId">
-        <user-select v-model="dataForm.userId" placeholder="选择委托人" @change="onChangeUser" />
+        <user-select v-model="dataForm.userId" placeholder="选择委托人" @change="onChangeUser"
+          v-if="!dataForm.id&&isGradeUser==0" />
+        <grade-user-select v-model="dataForm.userId" placeholder="选择委托人" @change="onChangeUser"
+          v-if="!dataForm.id&&isGradeUser==1" />
+        <el-input v-model="myNameAccount" v-if="dataForm.id||isGradeUser==2" disabled />
       </jnpf-form-tip-item>
       <jnpf-form-tip-item label="被委托人" prop="toUserId">
         <user-select v-model="dataForm.toUserId" placeholder="选择被委托人" @change="onChange" />
       </jnpf-form-tip-item>
       <jnpf-form-tip-item label="委托类型" prop="type">
-        <el-select v-model="dataForm.type" multiple placeholder="请选择">
+        <el-select v-model="dataForm.type" placeholder="请选择">
           <el-option v-for="item in typeOptions" :key="item.value" :label="item.label"
             :value="item.value">
           </el-option>
@@ -46,8 +50,12 @@
 import { FlowDelegateInfo, Create, Update } from '@/api/workFlow/FlowDelegate'
 import { FlowEngineListAll } from '@/api/workFlow/FlowEngine'
 import FlowSelect from '../components/FlowSelect.vue'
+import { mapGetters } from "vuex";
+import gradeUserSelect from "../../permission/gradeManage/GradeUserSelect"
+import { getListByAuthorize } from '@/api/permission/user'
+
 export default {
-  components: { FlowSelect },
+  components: { FlowSelect, gradeUserSelect },
   data() {
     var checkStartTime = (rule, value, callback) => {
       if (!this.dataForm.endTime) {
@@ -124,32 +132,61 @@ export default {
         value: "1",
         label: '审批委托'
       }],
+      isGradeUser: 2,//0管理员，1分级管理员，2普通用户
+      myNameAccount: '',
     }
   },
+  computed: {
+    ...mapGetters(['userInfo'])
 
+  },
+  watch: {
+
+  },
+  created() {
+
+  },
   methods: {
 
-    getFlowEngineList() {
-      FlowEngineListAll().then((res) => {
-        this.flowEngineList = res.data.list
-        this.$nextTick(() => {
-          this.$refs['dataForm'].resetFields()
-          if (this.dataForm.id) {
-            FlowDelegateInfo(this.dataForm.id).then(res => {
-              this.dataForm = res.data
-              this.dataForm.flowId = this.dataForm.flowId ? this.dataForm.flowId.split(",") : []
-              this.dataForm.type = this.dataForm.type ? this.dataForm.type.split(",") : ''
-            })
-          }
-          this.loading = false
-        })
-      })
-    },
+
     init(id) {
+      this.$nextTick(() => {
+        this.$refs['dataForm'].resetFields()
+      })
       this.dataForm.id = id || ''
       this.visible = true
       this.loading = true
+      //初始化委托人组件
+      if (this.userInfo.isAdministrator) {
+        this.isGradeUser = 0
+      } else {
+        getListByAuthorize('0', null).then(res => {
+          if (res.data.list.length) {
+            this.isGradeUser = 1
+          }
+          if (this.isGradeUser == 2) {
+            this.myNameAccount = this.userInfo.userName + '/' + this.userInfo.userAccount
+            this.dataForm.userId = this.userInfo.userAccount
+            this.dataForm.userName = this.myNameAccount
+          }
+        })
+      }
+      //初始化流程列表
       this.getFlowEngineList()
+    },
+    getFlowEngineList() {
+      FlowEngineListAll().then((res) => {
+        this.flowEngineList = res.data.list
+        //初始化数据
+        if (this.dataForm.id) {
+          FlowDelegateInfo(this.dataForm.id).then(res => {
+            this.dataForm = res.data
+            this.dataForm.flowId = this.dataForm.flowId ? this.dataForm.flowId.split(",") : []
+            this.myNameAccount = this.dataForm.userName
+          })
+        }
+        this.loading = false
+      })
     },
     dataFormSubmit() {
       this.$refs['dataForm'].validate((valid) => {
@@ -160,7 +197,14 @@ export default {
             ...this.dataForm
           }
           params.flowId = this.dataForm.flowId ? this.dataForm.flowId.join(",") : ""
-          params.type = this.dataForm.type ? this.dataForm.type.join(",") : ""
+          if (this.isGradeUser == 2) {
+            params.userId = this.userInfo.userId
+            params.userName = this.myNameAccount
+          }
+          if (!params.flowId) {
+            params.flowName = "全部流程"
+          }
+          // params.type = this.dataForm.type ? this.dataForm.type.join(",") : ""
           formMethod(params).then(res => {
             this.$message({
               message: res.msg,
@@ -205,6 +249,9 @@ export default {
       if (!id) return this.dataForm.userName = ''
       this.dataForm.userName = selectedData.fullName
     },
+    // onChangeInput(id, selectedData) {
+    //   console.log("input", id)
+    // },
     changeName(listData) {
       if (listData && listData.length) {
         let arr = []

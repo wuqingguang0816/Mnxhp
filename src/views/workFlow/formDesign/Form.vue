@@ -208,10 +208,12 @@ export default {
       this.$nextTick(() => {
         if (this.dataForm.id) {
           getFormInfo(this.dataForm.id).then(res => {
+
             this.dataForm = res.data
             this.formType = res.data.formType == 2 ? "自定义表单" : (res.data.flowType == 1 ? "功能表单" : "系统表单")
             this.draftJson = res.data.draftJson && JSON.parse(res.data.draftJson)
             this.tables = this.dataForm.tableJson && JSON.parse(this.dataForm.tableJson) || []
+            console.log(111, this.tables)
             this.updateFields()
           }).catch(() => { this.loading = false })
         } else {

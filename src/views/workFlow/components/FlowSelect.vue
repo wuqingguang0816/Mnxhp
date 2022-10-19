@@ -16,7 +16,8 @@
           <el-tag v-for="(item,i) in tagsList" :key="item.id" :size="collapseTagSize"
             :closable="!selectDisabled" type="info" @close="deleteTag($event, i)"
             disable-transitions>
-            <span class="el-select__tags-text">{{ item.fullName}}/{{item.enCode}}</span>
+            <span
+              class="el-select__tags-text">{{item.fullName.length>20?item.fullName.substring(0,19)+'...':item.fullName}}/{{item.enCode.length>30?item.enCode.substring(0,30)+'...':item.enCode}}</span>
           </el-tag>
         </transition-group>
       </div>
@@ -234,7 +235,6 @@ export default {
   },
   methods: {
     initData() {
-      console.log('初始化')
       this.listLoading = true
       this.tableData = []
       let query = {
@@ -264,7 +264,6 @@ export default {
       })
     },
     setDefault() {
-      console.log('初始值')
       if (!this.value || !this.value.length) {
         this.innerValue = ''
         this.selectedData = []
@@ -359,10 +358,6 @@ export default {
     },
 
     handleSelectionAll(selection) {
-      console.log('这', selection.length)
-      console.log('selection', selection)
-      console.log('selectedData', this.selectedData)
-      console.log('tableData', this.tableData)
       if (selection.length) {
         if (this.selectedData.length) {
           this.selectedData.forEach((item, index) => {
@@ -381,7 +376,6 @@ export default {
             const index = this.selectedData.findIndex((it) => {
               return item.id == it.id
             })
-            console.log("index", index)
             if (index != -1) {
               this.selectedData.splice(index, 1)
             }
