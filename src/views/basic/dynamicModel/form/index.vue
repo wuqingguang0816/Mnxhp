@@ -95,7 +95,7 @@ export default {
       })
     },
     closeFlow(isRefresh) {
-      if (isRefresh) this.initData()
+      if (isRefresh) this.init()
     },
   }
 }
