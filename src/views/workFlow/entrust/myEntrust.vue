@@ -8,9 +8,13 @@
         </div>
       </div>
       <div class="main">
+        <el-tabs tab-position="top" style="height:8%" v-model="flowType" class="flow-tabs1">
+          <el-tab-pane label="发起流程" name="0"></el-tab-pane>
+          <el-tab-pane label="功能流程" name="1"></el-tab-pane>
+        </el-tabs>
         <el-tabs tab-position="left" style="height:100%" v-model="category" class="flow-tabs">
           <el-tab-pane label="全部流程" name=""></el-tab-pane>
-          <el-tab-pane :label="item.fullName" :name="item.enCode" v-for="item in categoryList"
+          <el-tab-pane :label="item.fullName" :name="item.id" v-for="item in categoryList"
             :key="item.enCode"></el-tab-pane>
           <div class="box">
             <el-row class="JNPF-common-search-box" :gutter="16">
@@ -60,6 +64,7 @@ export default {
     return {
       keyword: '',
       category: '',
+      flowType: '0',
       listQuery: {
         currentPage: 1,
         pageSize: 50,
@@ -75,6 +80,9 @@ export default {
   },
   watch: {
     category(val) {
+      this.reset()
+    },
+    flowType(val) {
       this.reset()
     }
   },
@@ -116,10 +124,17 @@ export default {
     initData() {
       this.listLoading = true
       let query = {
+        ...this.listQuery,
         keyword: this.keyword,
+        category: this.category == 0 ? '' : this.category,
+        flowType: this.flowType
       }
       delegateGetflow(query).then((res) => {
-        this.list = res.data
+        if (res.data.list.length < this.listQuery.pageSize) {
+          this.finish = true
+        }
+        this.list = [...this.list, ...res.data.list]
+        this.total = res.data.pagination.total
         this.listLoading = false
       })
     },
