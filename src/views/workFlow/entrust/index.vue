@@ -230,7 +230,6 @@ export default {
     getDictionaryData() {
       this.$store.dispatch('base/getDictionaryData', { sort: 'WorkFlowCategory' }).then((res) => {
         this.categoryList = res
-        // this.initData()
       })
     },
     search() {
@@ -240,7 +239,10 @@ export default {
         sort: 'desc',
         sidx: ''
       }
-      this.initData()
+      if (this.activeName == '0') {//委托发起
+        this.initFlowList()
+      } else { this.initData() }
+
     },
     reset() {
       this.keyword = ''
@@ -312,7 +314,6 @@ export default {
     choiceFlow(item) {
       this.checkUserList = []
       getUserListByFlowId({ flowId: item.id }).then(res => {
-        console.log(res)
         this.flowUserList = res.data.list
         if (res.data.list.length > 1) {
           this.visibleUsers = true
@@ -326,7 +327,6 @@ export default {
             opType: '-1',
             branchList: [res.data.list[0].id],
           }
-          console.log(data)
           this.flowboxVisible = true
           this.$nextTick(() => {
             this.$refs.FlowBox.init(data)
@@ -370,10 +370,6 @@ export default {
         this.initData()
       }
     },
-    // handleClick(tab, event) {
-    //   this.myOrDelagateToMe = tab.paneName
-    //   this.initData()
-    // },
 
     initFlowList() {
       this.flowListLoading = true
@@ -389,8 +385,6 @@ export default {
       })
     },
     checkUserChange(data) {
-      console.log("checkUserChange", data)
-
       let index = this.checkUserList.findIndex(item => {
         if (item == data) {
           return true
@@ -401,8 +395,6 @@ export default {
       } else {
         this.checkUserList.push(data)
       }
-      console.log(this.checkUserList,)
-
     }
 
   }

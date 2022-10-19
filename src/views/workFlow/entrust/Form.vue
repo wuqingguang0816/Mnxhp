@@ -96,7 +96,6 @@ export default {
         startTime: '',
         endTime: '',
         flowName: '',
-        // flowCategory: '',
         toUserName: '',
         type: [],
       },
@@ -110,9 +109,6 @@ export default {
         type: [
           { required: true, message: '委托类型不能为空', trigger: 'change' }
         ],
-        // flowId: [
-        //   { required: true, message: '委托流程不能为空', trigger: 'change' }
-        // ],
         startTime: [
           { required: true, message: '开始时间不能为空', trigger: 'change' },
           { validator: checkStartTime, trigger: 'change' }
@@ -204,7 +200,6 @@ export default {
           if (!params.flowId) {
             params.flowName = "全部流程"
           }
-          // params.type = this.dataForm.type ? this.dataForm.type.join(",") : ""
           formMethod(params).then(res => {
             this.$message({
               message: res.msg,
@@ -223,7 +218,6 @@ export default {
     handleChange(val) {
       if (!val) {
         this.dataForm.flowName = ''
-        // this.dataForm.flowCategory = ''
         return
       }
       let active = {}
@@ -239,7 +233,6 @@ export default {
         }
       }
       this.dataForm.flowName = active.fullName + '/' + active.enCode
-      // this.dataForm.flowCategory = active.category
     },
     onChange(id, selectedData) {
       if (!id) return this.dataForm.toUserName = ''
@@ -249,9 +242,6 @@ export default {
       if (!id) return this.dataForm.userName = ''
       this.dataForm.userName = selectedData.fullName
     },
-    // onChangeInput(id, selectedData) {
-    //   console.log("input", id)
-    // },
     changeName(listData) {
       if (listData && listData.length) {
         let arr = []

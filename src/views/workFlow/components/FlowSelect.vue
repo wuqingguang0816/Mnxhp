@@ -3,15 +3,6 @@
     <div class="el-select" @click.stop="flowSelect">
       <div class="el-select__tags" v-if="multiple" ref="tags"
         :style="{ 'max-width': inputWidth - 32 + 'px', width: '100%',cursor:'pointer' }">
-        <!-- <span v-if="collapseTags && tagsList.length">
-          <el-tag :closable="!selectDisabled" :size="collapseTagSize" type="info"
-            @close="deleteTag($event, 0)" disable-transitions>
-            <span class="el-select__tags-text">{{ tagsList[0].fullName }}</span>
-          </el-tag>
-          <el-tag v-if="tagsList.length > 1" :closable="false" type="info" disable-transitions>
-            <span class="el-select__tags-text">+ {{ tagsList.length - 1 }}</span>
-          </el-tag>
-        </span> -->
         <transition-group @after-leave="resetInputHeight" v-if="!collapseTags">
           <el-tag v-for="(item,i) in tagsList" :key="item.id" :size="collapseTagSize"
             :closable="!selectDisabled" type="info" @close="deleteTag($event, i)"
@@ -295,21 +286,6 @@ export default {
         })
 
       })
-
-      // getUserInfoList(arr).then(res => {
-      //   this.selectedData = res.data.list
-      //   if (this.multiple) {
-      //     this.innerValue = ''
-      //     this.tagsList = JSON.parse(JSON.stringify(this.selectedData))
-      //   } else {
-      //     this.innerValue = this.selectedData.length ? this.selectedData[0].fullName : ''
-      //   }
-      //   this.$nextTick(() => {
-      //     if (this.multiple) {
-      //       this.resetInputHeight();
-      //     }
-      //   })
-      // })
     },
 
     flowSelect() {
@@ -384,7 +360,6 @@ export default {
       }
       const map = new Map()
       this.selectedData = this.selectedData.filter(key => !map.has(key.id) && map.set(key.id))
-      // this.selectedData = [...new Set(this.selectedData)]
     },
     //确定
     confirm() {
