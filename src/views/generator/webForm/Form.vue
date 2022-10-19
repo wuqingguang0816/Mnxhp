@@ -16,8 +16,8 @@
         <el-button @click="prev" :disabled="activeStep<=0">{{$t('common.prev')}}</el-button>
         <el-button @click="next" :disabled="activeStep>=maxStep || loading">{{$t('common.next')}}
         </el-button>
-        <el-button type="primary" @click="dataFormSubmit()" :disabled="activeStep!=maxStep"
-          :loading="btnLoading">{{$t('common.confirmButton')}}</el-button>
+        <el-button type="primary" @click="dataFormSubmit()" :disabled="loading"
+          :loading="btnLoading">{{$t('common.saveButton')}}</el-button>
         <el-button @click="closeDialog()">{{$t('common.cancelButton')}}</el-button>
       </div>
     </div>
@@ -115,9 +115,6 @@
         <columnDesign ref="columnDesign" :columnData="columnData" :appColumnData="appColumnData"
           :modelType="dataForm.type" :webType="dataForm.webType" :dbType="dbType" />
       </template>
-      <template v-if="activeStep==3">
-        <Process ref="process" :conf="flowTemplateJson" :flowType="1" />
-      </template>
     </div>
     <TableForm :visible.sync="formVisible" ref="tableForm" @closeForm="closeForm"
       :dbLinkId="dataForm.dbLinkId" />
@@ -127,12 +124,11 @@
 <script>
 import Generator from '@/components/Generator/index/Home'
 import ColumnDesign from '@/components/ColumnDesign'
-import Process from "@/components/Process"
 import TableForm from '../TableForm'
 import mixin from '@/mixins/generator/form'
 export default {
   mixins: [mixin],
-  components: { Generator, ColumnDesign, Process, TableForm },
+  components: { Generator, ColumnDesign, TableForm },
   data() {
     return {
       dataRule: {
