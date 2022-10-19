@@ -205,6 +205,7 @@ export default {
     outFullScreen: '退出全屏',
     confirmButton: '確 定',
     cancelButton: '取 消',
+    saveButton: '保 存',
     delTip: '此操作將永久刪除該數據, 是否繼續？',
     loadingText: '數據加載中',
     noData: '暫無數據',

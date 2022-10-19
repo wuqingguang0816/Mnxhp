@@ -42,7 +42,6 @@ export default {
       formData: null,
       columnData: null,
       appColumnData: null,
-      flowTemplateJson: null,
       categoryList: [],
       dbOptions: [],
       dbType: "MySQL",
@@ -72,7 +71,6 @@ export default {
             this.formData = this.dataForm.formData && JSON.parse(this.dataForm.formData)
             this.columnData = this.dataForm.columnData && JSON.parse(this.dataForm.columnData)
             this.appColumnData = this.dataForm.appColumnData && JSON.parse(this.dataForm.appColumnData)
-            this.flowTemplateJson = this.dataForm.flowTemplateJson && JSON.parse(this.dataForm.flowTemplateJson)
             this.tables = this.dataForm.tables && JSON.parse(this.dataForm.tables) || []
             this.defaultTable = this.dataForm.tables && JSON.parse(this.dataForm.tables) || []
             this.updateFields()
@@ -85,36 +83,51 @@ export default {
       })
     },
     dataFormSubmit() {
-      const component = this.getComponent()
-      this.$refs[component].getData().then(res => {
-        this.btnLoading = true
-        if (this.dataForm.webType == 1) {
-          this.formData = res.formData
-        } else if (this.dataForm.webType == 3) {
-          this.flowTemplateJson = res.formData
-        } else {
-          this.columnData = res.columnData
-          this.appColumnData = res.appColumnData
-        }
+      const getData = () => {
         this.dataForm.tables = JSON.stringify(this.tables)
         this.dataForm.formData = this.formData ? JSON.stringify(this.formData) : null
         this.dataForm.columnData = this.columnData ? JSON.stringify(this.columnData) : null
         this.dataForm.appColumnData = this.appColumnData ? JSON.stringify(this.appColumnData) : null
-        this.dataForm.flowTemplateJson = this.flowTemplateJson ? JSON.stringify(this.flowTemplateJson) : null
-        const formMethod = this.dataForm.id ? Update : Create
-        formMethod(this.dataForm).then((res) => {
-          this.$message({
-            message: res.msg,
-            type: 'success',
-            duration: 1500,
-            onClose: () => {
-              this.closeDialog(true)
-            }
-          })
-        }).catch(() => { this.btnLoading = false })
-      }).catch(err => {
-        err.msg && this.$message.warning(err.msg)
-      })
+      }
+      if (!this.activeStep) {
+        this.$refs['dataForm'].validate((valid) => {
+          if (valid) {
+            getData()
+            this.formSubmit()
+          }
+        })
+      } else if (this.activeStep == 1) {
+        this.$refs['generator'].getData().then(res => {
+          this.formData = res.formData
+          getData()
+          this.formSubmit()
+        }).catch(err => {
+          err.msg && this.$message.warning(err.msg)
+        })
+      } else if (this.activeStep == 2) {
+        this.$refs['columnDesign'].getData().then(res => {
+          this.columnData = res.columnData
+          this.appColumnData = res.appColumnData
+          getData()
+          this.formSubmit()
+        }).catch(err => {
+          err.msg && this.$message.warning(err.msg)
+        })
+      }
+    },
+    formSubmit() {
+      this.btnLoading = true
+      const formMethod = this.dataForm.id ? Update : Create
+      formMethod(this.dataForm).then((res) => {
+        this.$message({
+          message: res.msg,
+          type: 'success',
+          duration: 1500,
+          onClose: () => {
+            this.closeDialog(true)
+          }
+        })
+      }).catch(() => { this.btnLoading = false })
     },
     next() {
       if (this.activeStep < 1) {
@@ -159,18 +172,6 @@ export default {
           err.msg && this.$message.warning(err.msg)
         })
       }
-    },
-    getComponent() {
-      const webType = this.dataForm.webType || 2
-      let component = 'columnDesign'
-      if (webType == 1) {
-        component = 'generator'
-      } else if (webType == 3) {
-        component = 'process'
-      } else {
-        component = 'columnDesign'
-      }
-      return component
     }
   }
 }

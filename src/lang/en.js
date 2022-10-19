@@ -205,6 +205,7 @@ export default {
     outFullScreen: 'Out Full Screen',
     confirmButton: 'Ok',
     cancelButton: 'Cancel',
+    saveButton: 'Save',
     delTip: 'This operation will permanently delete the data. Do you want to continue?',
     loadingText: 'Data Loading',
     noData: 'No Data',

@@ -200,11 +200,13 @@ export default {
     search: '查询',
     reset: '重置',
     refresh: '刷新',
+
     columnSettings: '表头设置',
     fullScreen: '全屏',
     outFullScreen: '退出全屏',
     confirmButton: '确 定',
     cancelButton: '取 消',
+    saveButton: '保 存',
     delTip: '此操作将永久删除该数据, 是否继续？',
     loadingText: '数据加载中',
     noData: '暂无数据',
