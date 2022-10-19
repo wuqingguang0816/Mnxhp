@@ -253,6 +253,7 @@ export default {
       this.initData();
     },
     initData() {
+      this.getData()
       this.listLoading = true;
       const dbLinkId = this.dbLinkId || "0";
       DataModelList(dbLinkId, { keyword: this.keyword }).then((res) => {
