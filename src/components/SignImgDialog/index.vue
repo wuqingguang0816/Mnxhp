@@ -17,7 +17,7 @@
 import { createSign } from '@/api/permission/userSetting'
 import vueEsign from 'vue-esign'
 export default {
-  name: 'SelectDialog',
+  name: 'SignImgDialog',
   components: { vueEsign },
   props: {
     lineWidth: {

@@ -80,6 +80,10 @@
               command="print">
               {{properties.printBtnText||'打 印'}}
             </el-dropdown-item>
+            <el-dropdown-item class="dropdown-item"
+              v-if="setting.opType!=4 && properties.hasFreeApproverBtn" command="hasFreeApprover">
+              {{properties.hasFreeApproverBtnText||'加 签'}}
+            </el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>
         <el-button v-if="setting.opType=='-1'" type="primary" @click="eventLauncher('submit')"
@@ -168,17 +172,10 @@
         </template>
         <el-form-item label="手写签名" required v-if="properties.hasSign">
           <div class="sign-main">
-            <div class="sign-head">
-              <div class="sign-tip">请在这里输入你的签名</div>
-              <div class="sign-action">
-                <el-button class="clear-btn" size="mini" @click="handleReset">清空</el-button>
-                <el-button class="sure-btn" size="mini" @click="handleGenerate"
-                  :disabled="!!signImg">确定签名</el-button>
-              </div>
-            </div>
-            <div class="sign-box">
-              <vue-esign ref="esign" :height="330" v-if="!signImg" :lineWidth="5" />
-              <img :src="signImg" alt="" v-if="signImg" class="sign-img">
+            <img :src="signImg" alt="" v-if="signImg" class="sign-img">
+            <div @click="addSign" class="sign-style">
+              <i class="icon-ym icon-ym-signature add-sign"></i>
+              <span class="sign-title">手写签名</span>
             </div>
           </div>
         </el-form-item>
@@ -229,11 +226,16 @@
     <error-form :visible.sync="errorVisible" :nodeList="errorNodeList" @submit="handleError" />
     <actionDialog v-if="actionVisible" ref="actionDialog" :assignNodeList="assignNodeList"
       @submit="actionReceiver" />
+    <HasFreeApprover :visible.sync="hasFreeApproverVisible" :taskId="setting.taskId"
+      :formData="formData" />
+    <SignImgDialog v-if="signVisible" ref="SignImg" :lineWidth='3' :userInfo='userInfo'
+      :isDefault='1' @close="signDialog" />
   </div>
   <!-- </transition> -->
 </template>
 
 <script>
+import SignImgDialog from '@/components/SignImgDialog'
 import { FlowBeforeInfo, Audit, Reject, Transfer, Recall, Cancel, Assign, SaveAudit, Candidates, CandidateUser, Resurgence, ResurgenceList, RejectList } from '@/api/workFlow/FlowBefore'
 import { Revoke, Press } from '@/api/workFlow/FlowLaunch'
 import { Create, Update, DynamicCreate, DynamicUpdate } from '@/api/workFlow/workFlowForm'
@@ -247,8 +249,10 @@ import Process from '@/components/Process/Preview'
 import PrintBrowse from '@/components/PrintBrowse'
 import vueEsign from 'vue-esign'
 import ActionDialog from '@/views/workFlow/components/ActionDialog'
+import HasFreeApprover from './HasFreeApprover'
+import { mapGetters } from "vuex"
 export default {
-  components: { recordList, Process, vueEsign, PrintBrowse, Comment, RecordSummary, CandidateForm, CandidateUserSelect, ErrorForm, ActionDialog },
+  components: { SignImgDialog, HasFreeApprover, recordList, Process, vueEsign, PrintBrowse, Comment, RecordSummary, CandidateForm, CandidateUserSelect, ErrorForm, ActionDialog },
   data() {
     return {
       resurgenceVisible: false,
@@ -267,11 +271,14 @@ export default {
           }
         ],
       },
+      previewVisible: false,
       assignNodeList: [],
       resurgenceNodeList: [],
       currentView: '',
+      previewTitle: '',
       formData: {},
       setting: {},
+      monitorList: [{ fullName: '1', flowName: '1', startTime: '1', userName: '1', thisStep: '1' }, { fullName: '1', flowName: '1', startTime: '1', userName: '1', thisStep: '1' }],
       flowFormInfo: {},
       flowTemplateInfo: {},
       flowTaskInfo: {},
@@ -292,6 +299,8 @@ export default {
       resurgenceBtnLoading: false,
       candidateLoading: false,
       candidateVisible: false,
+      hasFreeApproverVisible: false,
+      signVisible: false,
       candidateType: 1,
       branchList: [],
       candidateList: [],
@@ -329,7 +338,8 @@ export default {
     selectState() {
       const index = this.flowUrgentList.findIndex(c => this.flowUrgent === c.state)
       return index
-    }
+    },
+    ...mapGetters(['userInfo'])
   },
   watch: {
     activeTab(val) {
@@ -342,6 +352,18 @@ export default {
     }
   },
   methods: {
+    addSign() {
+      this.signVisible = true
+      this.$nextTick(() => {
+        this.$refs.SignImg.init()
+      })
+    },
+    signDialog(val) {
+      this.signVisible = false
+      if (val) {
+        this.signImg = val
+      }
+    },
     handleResurgence(errorRuleUserList) {
       this.$refs['resurgenceForm'].validate((valid) => {
         if (!valid) return
@@ -470,6 +492,7 @@ export default {
       if (e == 'assign') return this.actionLauncher('assign')
       if (e == 'comment') return this.addComment()
       if (e == 'print') return this.printBrowseVisible = true
+      if (e == 'hasFreeApprover') return this.hasFreeApproverVisible
       this.eventLauncher(e)
     },
     eventLauncher(eventType) {
@@ -819,16 +842,6 @@ export default {
         this.$refs.esign && this.$refs.esign.reset()
       })
     },
-    handleGenerate() {
-      this.$refs.esign.generate().then(res => {
-        if (res) this.signImg = res
-      }).catch(err => {
-        this.$message({
-          message: '请签名',
-          type: 'warning'
-        })
-      })
-    },
     addComment() {
       this.$refs.comment && this.$refs.comment.showCommentDialog()
     },
@@ -849,34 +862,23 @@ export default {
 </script>
 <style lang="scss" scoped>
 .sign-main {
-  border: 1px solid #dcdfe6;
-  border-radius: 4px;
-  overflow: hidden;
-  .sign-head {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 8px;
-    border-bottom: 1px solid #dcdfe6;
-    .sign-tip {
-      color: #a5a5a5;
-      font-size: 12px;
-    }
-    .sign-action {
-      display: flex;
-      align-items: center;
-      .clear-btn,
-      .sure-btn {
-        margin-left: 5px;
-      }
-    }
-  }
-  .sign-box {
-    border-top: 0;
-    height: 100px;
-  }
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
   .sign-img {
-    width: 100%;
+    width: 100px;
+    height: 50px;
+  }
+  .add-sign {
+    height: 50px;
+    font-size: 36px;
+    margin-top: 10px;
+    color: #2188ff;
+  }
+  .sign-title {
+    font-size: 16px;
+    color: #2188ff;
   }
 }
 .flow-form-main {
