@@ -445,7 +445,7 @@ export default {
             roleIds: [],
             groupIds: []
           }
-          this.ableQuery[id] = this.ableRelationIds
+          this.ableQuery[id] = Array.isArray(this.ableRelationIds) ? this.ableRelationIds : [this.ableRelationIds]
         }
         this.getData()
         this.$nextTick(() => {
