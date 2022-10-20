@@ -406,7 +406,6 @@ export default {
         this.flowTaskInfo = res.data.flowTaskInfo || {}
         this.flowTemplateInfo = res.data.flowTemplateInfo
         const fullName = data.opType == '-1' ? this.flowTemplateInfo.fullName : this.flowTaskInfo.fullName
-        this.flowTaskInfo = res.data.flowTaskInfo
         data.fullName = fullName
         this.fullName = fullName
         this.thisStep = this.flowTaskInfo.thisStep
