@@ -57,6 +57,10 @@
                 command="reject">
                 {{properties.rejectBtnText||'拒 绝'}}
               </el-dropdown-item>
+              <el-dropdown-item class="dropdown-item" v-if="properties.hasFreeApproverBtn"
+                command="hasFreeApprover">
+                {{properties.hasFreeApproverBtnText||'加 签'}}
+              </el-dropdown-item>
             </template>
             <!-- 判断流程复活按钮和节点变更 -->
             <template v-if="setting.opType == 4">
@@ -79,10 +83,6 @@
               v-if="setting.opType!=4&&setting.id&&properties.hasPrintBtn&&properties.printId"
               command="print">
               {{properties.printBtnText||'打 印'}}
-            </el-dropdown-item>
-            <el-dropdown-item class="dropdown-item"
-              v-if="setting.opType!=4 && properties.hasFreeApproverBtn" command="hasFreeApprover">
-              {{properties.hasFreeApproverBtnText||'加 签'}}
             </el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>
@@ -492,7 +492,6 @@ export default {
       if (e == 'assign') return this.actionLauncher('assign')
       if (e == 'comment') return this.addComment()
       if (e == 'print') return this.printBrowseVisible = true
-      if (e == 'hasFreeApprover') return this.hasFreeApproverVisible = true
       this.eventLauncher(e)
     },
     eventLauncher(eventType) {
@@ -507,6 +506,9 @@ export default {
       }
       if (eventType === 'saveAudit') {
         return this.saveAudit()
+      }
+      if (eventType === 'hasFreeApprover') {
+        return this.hasFreeApproverVisible = true
       }
       if (eventType === 'audit' || eventType === 'reject') {
         this.handleId = ''
