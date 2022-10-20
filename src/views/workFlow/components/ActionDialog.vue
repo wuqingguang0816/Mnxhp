@@ -125,7 +125,6 @@ export default {
           break;
       }
       this.$nextTick(() => {
-        this.handleReset()
         this.$refs['dataForm'].resetFields()
       })
     },
