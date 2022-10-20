@@ -25,9 +25,14 @@ export default {
       this.updateDataRule()
       this.$nextTick(() => {
         this.$refs['dataForm'].resetFields()
-        if (this.beforeInit) this.beforeInit()
+        if (this.beforeInit && typeof this.beforeInit === "function") this.beforeInit()
         if (data.id) {
-          this.dataForm = data.draftData || data.formData
+          let dataForm = data.draftData || data.formData
+          if (this.selfGetInfo && typeof this.selfGetInfo === "function") {
+            this.selfGetInfo(dataForm)
+          } else {
+            this.dataForm = dataForm
+          }
           if (this.dataForm.fileJson) {
             this.fileList = JSON.parse(this.dataForm.fileJson)
           }
@@ -58,16 +63,22 @@ export default {
       this.$refs['dataForm'].validate((valid) => {
         if (valid) {
           if (this.exist && !this.exist()) return
-          if ('fileJson' in this.dataForm) {
-            this.dataForm.fileJson = JSON.stringify(this.fileList)
+          let dataForm = {}
+          if (this.beforeSubmit && typeof this.beforeSubmit === "function") {
+            dataForm = this.beforeSubmit()
+          } else {
+            dataForm = this.dataForm
+          }
+          if ('fileJson' in dataForm) {
+            dataForm.fileJson = JSON.stringify(this.fileList)
           }
           if (eventType === 'save' || eventType === 'submit') {
             if (this.selfSubmit && typeof this.selfSubmit === "function") {
-              this.selfSubmit(this.dataForm, flowUrgent)
+              this.selfSubmit(dataForm, flowUrgent)
               return
             }
           }
-          this.$emit('eventReceiver', { formData: this.dataForm }, eventType)
+          this.$emit('eventReceiver', { formData: dataForm }, eventType)
         }
       })
     },
