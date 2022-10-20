@@ -262,6 +262,10 @@ export default {
               reject({ msg: `${config.label}的控件字段不能为空`, target: 1 })
               break
             }
+            if (e.__config__.isStorage == 2 && !e.__vModel__) {
+              reject({ msg: `${config.label}的控件字段不能为空`, target: 1 })
+              break
+            }
             if (config.jnpfKey === 'billRule') {
               if (!config.rule) {
                 reject({ msg: '单据组件“单据模板”属性为必填项', target: 1 })
@@ -421,6 +425,10 @@ export default {
         if (!this.$store.getters.hasTable) {
           // 分割线和按钮不加vModel
           if (noVModelList.indexOf(config.jnpfKey) < 0) {
+            item.__vModel__ = this.toggleVmodelCase(`${config.jnpfKey}Field${this.idGlobal}`)
+          }
+          // relationFormAttr  popupAttr calculate 加vModel
+          if (config.jnpfKey == 'relationFormAttr' || config.jnpfKey == 'popupAttr' || config.jnpfKey == 'calculate') {
             item.__vModel__ = this.toggleVmodelCase(`${config.jnpfKey}Field${this.idGlobal}`)
           }
         } else {

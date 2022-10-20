@@ -1210,6 +1210,7 @@ export const selectComponents = [
       layout: "colFormItem",
       span: 24,
       dragDisabled: false,
+      isStorage: 1,
       visibility: ["pc", "app"]
     },
     style: { width: "100%" },
@@ -1230,6 +1231,7 @@ export const selectComponents = [
       layout: "colFormItem",
       span: 24,
       dragDisabled: false,
+      isStorage: 1,
       visibility: ["pc", "app"]
     },
     style: { width: "100%" },

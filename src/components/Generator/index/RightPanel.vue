@@ -12,9 +12,19 @@
           labelPosition="left">
           <template v-if="activeData.__config__">
             <template v-if="$store.getters.hasTable">
+              <template
+                v-if="activeData.__config__.jnpfKey==='calculate' ||activeData.__config__.jnpfKey==='popupAttr' ||activeData.__config__.jnpfKey==='relationFormAttr'">
+                <el-form-item label="控件类型">
+                  <el-select v-model="activeData.__config__.isStorage" placeholder="请选择"
+                    @change="changeStorage">
+                    <el-option :label="item.label" :value="item.value"
+                      v-for="(item,i) in storageType" :key="i"></el-option>
+                  </el-select>
+                </el-form-item>
+              </template>
               <template v-if="activeData.__config__.jnpfKey==='table'">
                 <el-form-item
-                  v-if="activeData.__vModel__!==undefined && !noVModelList.includes(activeData.__config__.jnpfKey)"
+                  v-if="activeData.__vModel__!==undefined && !noVModelList.includes(activeData.__config__.jnpfKey)  ||activeData.__config__.isStorage==2 "
                   label="控件字段">
                   <el-input v-model="activeData.__vModel__" placeholder="请输入数据库字段" disabled />
                 </el-form-item>
@@ -22,7 +32,7 @@
               <template v-else>
                 <template v-if="!activeData.__config__.isSubTable">
                   <el-form-item
-                    v-if="activeData.__vModel__!==undefined && !noVModelList.includes(activeData.__config__.jnpfKey)"
+                    v-if="activeData.__vModel__!==undefined && !noVModelList.includes(activeData.__config__.jnpfKey)  ||activeData.__config__.isStorage==2"
                     label="数据库表">
                     <el-select v-model="activeData.__config__.tableName" placeholder="请选择数据库表"
                       @change="tableChange" filterable>
@@ -36,7 +46,7 @@
                     </el-select>
                   </el-form-item>
                   <el-form-item
-                    v-if="activeData.__vModel__!==undefined && !noVModelList.includes(activeData.__config__.jnpfKey)"
+                    v-if="activeData.__vModel__!==undefined && !noVModelList.includes(activeData.__config__.jnpfKey) ||activeData.__config__.isStorage==2"
                     label="控件字段">
                     <el-select v-model="activeData.__vModel__" placeholder="请选择数据库字段" clearable
                       @change="fieldChange" filterable popper-class="field-select-popper">
@@ -61,6 +71,16 @@
                   </el-form-item>
                 </template>
                 <template v-if="activeData.__config__.isSubTable && subTable.length">
+                  <template
+                    v-if="activeData.__config__.jnpfKey==='calculate' ||activeData.__config__.jnpfKey==='popupAttr' ||activeData.__config__.jnpfKey==='relationFormAttr'">
+                    <el-form-item label="控件类型">
+                      <el-select v-model="activeData.__config__.isStorage" placeholder="请选择"
+                        @change="changeStorage">
+                        <el-option :label="item.label" :value="item.value"
+                          v-for="(item,i) in storageType" :key="i"></el-option>
+                      </el-select>
+                    </el-form-item>
+                  </template>
                   <el-form-item label="数据库表">
                     <el-select v-model="activeData.__config__.relationTable" placeholder="请选择数据库表"
                       filterable disabled>
@@ -70,7 +90,7 @@
                     </el-select>
                   </el-form-item>
                   <el-form-item
-                    v-if="activeData.__vModel__!==undefined && !noVModelList.includes(activeData.__config__.jnpfKey)"
+                    v-if="activeData.__vModel__!==undefined && !noVModelList.includes(activeData.__config__.jnpfKey) ||activeData.__config__.isStorage==2"
                     label="控件字段">
                     <el-select v-model="activeData.__vModel__" placeholder="请选择数据库字段" clearable
                       @change="fieldChange1" filterable>
@@ -99,8 +119,17 @@
               </template>
             </template>
             <template v-else>
+              <template
+                v-if="activeData.__config__.jnpfKey==='calculate' ||activeData.__config__.jnpfKey==='popupAttr' ||activeData.__config__.jnpfKey==='relationFormAttr'">
+                <el-form-item label="控件类型">
+                  <el-select v-model="activeData.__config__.isStorage" placeholder="请选择">
+                    <el-option :label="item.label" :value="item.value"
+                      v-for="(item,i) in storageType" :key="i"></el-option>
+                  </el-select>
+                </el-form-item>
+              </template>
               <el-form-item label="控件字段"
-                v-if="activeData.__vModel__!==undefined  && !noVModelList.includes(activeData.__config__.jnpfKey)">
+                v-if="activeData.__vModel__!==undefined  && !noVModelList.includes(activeData.__config__.jnpfKey)  ||activeData.__config__.isStorage==2">
                 <el-input v-model="activeData.__vModel__" placeholder="请输入数据库字段"
                   @change="inputFieldChange($event,activeData.__config__.formId,activeData.__config__.parentVModel)"
                   :disabled="activeData.__config__.jnpfKey==='table'" />
@@ -615,6 +644,14 @@ export default {
       dictionaryOptions: [],
       dataInterfaceOptions: [],
       styleScriptVisible: false,
+      storageType: [
+        {
+          label: '展示数据',
+          value: 1
+        }, {
+          label: '存储数据',
+          value: 2
+        }],
       justifyOptions: [
         {
           label: 'start',
@@ -806,6 +843,9 @@ export default {
     this.setDefaultOptions()
   },
   methods: {
+    changeStorage() {
+      this.activeData.__vModel__ = ''
+    },
     addStyle() {
       this.$nextTick(() => {
         this.styleScriptVisible = true

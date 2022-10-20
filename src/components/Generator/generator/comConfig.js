@@ -1,7 +1,7 @@
 // 动态options
 const dyOptionsList = ['radio', 'checkbox', 'select', 'cascader', 'treeSelect']
 // 不添加vModel
-const noVModelList = ['divider', 'JNPFText', 'link', 'alert', 'groupTitle', 'relationFormAttr', 'popupAttr', 'button', 'barcode', 'qrcode']
+const noVModelList = ['divider', 'JNPFText', 'link', 'alert', 'groupTitle', 'relationFormAttr', 'popupAttr', 'button', 'barcode', 'qrcode', 'calculate']
 // 不可以添加到子表组件
 const noTableAllowList = ['divider', 'JNPFText', 'link', 'alert', 'groupTitle', 'button', 'barcode', 'qrcode', 'editor', 'radio', 'checkbox', 'createUser', 'createTime', 'modifyUser', 'modifyTime', 'currOrganize', 'currDept', 'currPosition', 'rate', 'slider', 'PsdInput', 'colorPicker']
 // 不可以添加到列表展示
@@ -34,6 +34,7 @@ const calculateItem = {
     visibility: ["pc", "app"],
     tableName: '',
     noShow: false,
+    isStorage: 1,
     regList: []
   },
   style: { width: "100%" },
