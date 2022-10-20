@@ -157,13 +157,3 @@ export function RejectList(id) {
   })
 }
 
-
-
-// 审批加签
-export function FreeApprover(id, data) {
-  return request({
-    url: `/api/workflow/Engine/FlowBefore/freeApprover/${id}`,
-    method: 'post',
-    data
-  })
-}
