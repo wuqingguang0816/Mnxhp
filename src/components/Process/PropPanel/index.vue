@@ -1320,20 +1320,24 @@
                       </el-option>
                     </el-select>
                   </el-form-item>
-                  <el-form-item label="表单字段" style="margin-bottom:0;"
+                  <el-form-item label="表单字段" style="margin-bottom:0"
                     v-if="approverForm.assigneeType === 4">
-                    <el-radio-group v-model="approverForm.formFieldType">
-                      <el-radio :label="1">用户</el-radio>
-                      <el-radio :label="2">部门</el-radio>
-                      <el-radio :label="3">岗位</el-radio>
-                      <el-radio :label="4">角色</el-radio>
-                      <el-radio :label="5">分组</el-radio>
-                    </el-radio-group>
-                    <el-select v-model="approverForm.formField" placeholder="请选择字段">
-                      <el-option v-for="item in usedFormItems" :key="item.__vModel__"
-                        :label="item.__config__.label" :value="item.__vModel__">
-                      </el-option>
-                    </el-select>
+                    <div class="assignee-form">
+                      <el-select v-model="approverForm.formFieldType" placeholder="请选择字段"
+                        class="form-field-type">
+                        <el-option :value="1" label="用户"></el-option>
+                        <el-option :value="2" label="部门"></el-option>
+                        <el-option :value="3" label="岗位"></el-option>
+                        <el-option :value="4" label="角色"></el-option>
+                        <el-option :value="5" label="分组"></el-option>
+                      </el-select>
+                      <el-select v-model="approverForm.formField" placeholder="请选择字段"
+                        class="form-field">
+                        <el-option v-for="item in usedFormItems" :key="item.__vModel__"
+                          :label="item.__config__.label" :value="item.__vModel__">
+                        </el-option>
+                      </el-select>
+                    </div>
                   </el-form-item>
                   <el-form-item label="审批节点" style="margin-bottom:0!important"
                     v-if="approverForm.assigneeType === 5">
@@ -1501,6 +1505,16 @@
                     <JNPF-TreeSelect :options="printTplList" v-model="approverForm.printId"
                       placeholder="请选择打印模板" lastLevel clearable></JNPF-TreeSelect>
                   </div>
+                  <div class="per-cell">
+                    <div slot="label" class="has-free-approver">
+                      <el-checkbox v-model="approverForm.hasFreeApproverBtn">加签<el-tooltip
+                          content="允许在审批单中增加临时审批人" placement="top">
+                          <a class="el-icon-warning-outline"></a>
+                        </el-tooltip>
+                      </el-checkbox>
+                    </div>
+                    <el-input v-model="approverForm.hasFreeApproverBtnText" />
+                  </div>
                 </div>
               </el-form-item>
             </el-form>
@@ -1541,14 +1555,6 @@
                   </el-tooltip>
                 </div>
                 <el-switch v-model="approverForm.hasOpinion" />
-              </el-form-item>
-              <el-form-item>
-                <div slot="label" class="form-item-label">允许加签
-                  <el-tooltip content="允许在审批单中增加临时审批人" placement="top">
-                    <a class="el-icon-warning-outline"></a>
-                  </el-tooltip>
-                </div>
-                <el-switch v-model="approverForm.hasFreeApprover" />
               </el-form-item>
               <el-form-item label="说明">
                 <div slot="label" class="form-item-label">说明</div>
@@ -2405,7 +2411,8 @@ const defaultApproverForm = {
   getUserUrl: '',
   counterSign: 0,
   noApproverHandler: true,
-  hasFreeApprover: false,
+  hasFreeApproverBtn: false,
+  hasFreeApproverBtnText: '加签',
   hasSaveBtn: false,
   saveBtnText: '暂 存',
   hasAuditBtn: true,
@@ -2513,11 +2520,12 @@ const defaultApproverForm = {
   },
 }
 const defaultStep = [{
-  nodeId: '1',
-  properties: { title: '上级审批节点' }
-}, {
   nodeId: '0',
   properties: { title: '流程发起' }
+
+}, {
+  nodeId: '1',
+  properties: { title: '上级审批节点' }
 }]
 const typeOptions = [
   {
@@ -2713,7 +2721,7 @@ export default {
       systemFieldOptions,
       overTimeOptions,
       extraRuleOptions,
-      realList: [],
+      realNodeList: [],
       progressOptions: ['10', '20', '30', '40', '50', '60', '70', '80', '90'],
       symbolOptions: [
         {
@@ -2815,9 +2823,9 @@ export default {
           nodeId: '2',
           properties: { title: '自选审批节点' }
         }]
-        options = [...list, ...defaultStep, ...this.realList]
+        options = [...defaultStep, ...list, ...this.realNodeList]
       } else {
-        options = [...defaultStep, ...this.realList]
+        options = [...defaultStep, ...this.realNodeList]
       }
       return options
     }
@@ -3458,7 +3466,7 @@ export default {
         if (list[i].nodeId === _this.value.nodeId) break
         realList.push(list[i])
       }
-      this.realList = realList
+      this.realNodeList = realList
       let nodeOptions = list.filter(o => o.nodeId !== _this.value.nodeId)
       this.nodeOptions = nodeOptions
     },
@@ -4009,5 +4017,31 @@ export default {
 }
 .el-form-item {
   margin-bottom: 12px !important;
+}
+.has-free-approver {
+  width: 92px;
+}
+.assignee-form {
+  display: flex;
+  .form-field-type {
+    width: 120px;
+    >>> .el-input--small {
+      .el-input__inner {
+        height: 32px;
+        line-height: 32px;
+        border-radius: 5px 0px 0px 5px;
+      }
+    }
+  }
+  .form-field {
+    >>> .el-input--small {
+      .el-input__inner {
+        height: 32px;
+        line-height: 32px;
+        border-radius: 0px 5px 5px 0px;
+        border-left: 0px solid #dcdfe6;
+      }
+    }
+  }
 }
 </style>
