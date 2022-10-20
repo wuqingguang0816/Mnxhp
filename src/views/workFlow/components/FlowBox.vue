@@ -113,7 +113,8 @@
         <Process :conf="flowTemplateJson" v-if="flowTemplateJson.nodeId" />
       </el-tab-pane>
       <el-tab-pane label="流转记录" v-if="setting.opType!='-1'" v-loading="loading">
-        <recordList :list='flowTaskOperatorRecordList' :endTime='endTime' />
+        <recordList :list='flowTaskOperatorRecordList' :endTime='endTime'
+          :flowId="setting.flowId" />
       </el-tab-pane>
       <el-tab-pane label="审批汇总" v-if="setting.opType!='-1' && isSummary" v-loading="loading"
         name="recordSummary">
@@ -421,6 +422,7 @@ export default {
         this.isSummary = this.flowTemplateJson.properties.isSummary
         this.summaryType = this.flowTemplateJson.properties.summaryType
         this.flowTaskOperatorRecordList = res.data.flowTaskOperatorRecordList || []
+        this.flowTaskOperatorRecordList = this.flowTaskOperatorRecordList.reverse()
         this.properties = res.data.approversProperties || {}
         this.endTime = this.flowTaskInfo.completion == 100 ? this.flowTaskInfo.endTime : 0
         data.formConf = this.flowFormInfo.propertyJson

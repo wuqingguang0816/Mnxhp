@@ -1,199 +1,116 @@
 <template>
-  <el-col :span="12" style="padding-left:20px; overflow: auto;">
-    <el-timeline reverse>
-      <template v-for="(item, i) in list">
-        <el-timeline-item :timestamp="item.handleTime | toDate()" placement="top" :key="i"
-          v-if="item.handleStatus==0">
-          <el-card>
-            <el-row>
-              <el-col :span='18'>
-                <p class="timeline-cell">审核节点：{{item.nodeName}}</p>
-              </el-col>
-              <el-col :span='6'>
-                <p class="timeline-cell" style="text-align:right">
-                  <el-link :underline="false" type="danger">审核拒绝</el-link>
-                </p>
-              </el-col>
-            </el-row>
-            <p class="timeline-cell">审核人员：{{item.userName}}</p>
-            <p class="timeline-cell" v-if="item.handleOpinion">
-              审核意见：{{item.handleOpinion}}</p>
-            <p class="timeline-cell" v-if="item.signImg">
-              审核签名：<img :src="item.signImg" class="signImg"></p>
-          </el-card>
-        </el-timeline-item>
-        <el-timeline-item :timestamp="item.handleTime | toDate()" placement="top" :key="i"
-          v-if="item.handleStatus==1">
-          <el-card>
-            <el-row>
-              <el-col :span='18'>
-                <p class="timeline-cell">审核节点：{{item.nodeName}}</p>
-              </el-col>
-              <el-col :span='6'>
-                <p class="timeline-cell" style="text-align:right">
-                  <el-link :underline="false" type="success">审核通过</el-link>
-                </p>
-              </el-col>
-            </el-row>
-            <p class="timeline-cell">审核人员：{{item.userName}}{{item.status==1?'(加签)':''}}</p>
-            <p class="timeline-cell" v-if="item.handleOpinion">
-              审核意见：{{item.handleOpinion}}</p>
-            <p class="timeline-cell" v-if="item.signImg">
-              审核签名：<img :src="item.signImg" class="signImg"></p>
-          </el-card>
-        </el-timeline-item>
-        <el-timeline-item :timestamp="item.handleTime | toDate()" placement="top" :key="i"
-          v-if="item.handleStatus==2">
-          <el-card>
-            <p class="timeline-cell">发起人：{{item.userName}}</p>
-          </el-card>
-        </el-timeline-item>
-        <el-timeline-item :timestamp="item.handleTime | toDate()" placement="top" :key="i"
-          v-if="item.handleStatus==3">
-          <el-card>
-            <p class="timeline-cell">撤回节点：{{item.nodeName}}</p>
-            <p class="timeline-cell">撤回人员：{{item.userName}}</p>
-            <p class="timeline-cell" v-if="item.handleOpinion">撤回原因：{{item.handleOpinion}}</p>
-            <p class="timeline-cell" v-if="item.signImg">
-              手写签名：<img :src="item.signImg" class="signImg"></p>
-          </el-card>
-        </el-timeline-item>
-        <el-timeline-item :timestamp="item.handleTime | toDate()" placement="top" :key="i"
-          v-if="item.handleStatus==4">
-          <el-card>
-            <el-row>
-              <el-col :span='18'>
-                <p class="timeline-cell">审核节点：{{item.nodeName}}</p>
-              </el-col>
-              <el-col :span='6'>
-                <p class="timeline-cell" style="text-align:right">
-                  <el-link :underline="false" type="danger">流程终止</el-link>
-                </p>
-              </el-col>
-            </el-row>
-            <p class="timeline-cell">执行人员：{{item.userName}}</p>
-            <p class="timeline-cell">执行动作：终止</p>
-            <p class="timeline-cell" v-if="item.handleOpinion">终止原因：{{item.handleOpinion}}</p>
-            <p class="timeline-cell" v-if="item.signImg">
-              手写签名：<img :src="item.signImg" class="signImg"></p>
-          </el-card>
-        </el-timeline-item>
-        <el-timeline-item :timestamp="item.handleTime | toDate()" placement="top" :key="i"
-          v-if="item.handleStatus==5">
-          <el-card>
-            <el-row>
-              <el-col :span='18'>
-                <p class="timeline-cell">审核节点：{{item.nodeName}}</p>
-              </el-col>
-              <el-col :span='6'>
-                <p class="timeline-cell" style="text-align:right">
-                  <el-link :underline="false" type="primary">流程指派</el-link>
-                </p>
-              </el-col>
-            </el-row>
-            <p class="timeline-cell">执行人员：{{item.userName}}</p>
-            <p class="timeline-cell">执行动作：指派</p>
-            <p class="timeline-cell">指派人员：{{item.operatorId}}</p>
-          </el-card>
-        </el-timeline-item>
-        <el-timeline-item :timestamp="item.handleTime | toDate()" placement="top" :key="i"
-          v-if="item.handleStatus==6">
-          <el-card>
-            <el-row>
-              <el-col :span='18'>
-                <p class="timeline-cell">审核节点：{{item.nodeName}}</p>
-              </el-col>
-              <el-col :span='6'>
-                <p class="timeline-cell" style="text-align:right">
-                  <el-link :underline="false" type="primary">流程加签</el-link>
-                </p>
-              </el-col>
-            </el-row>
-            <p class="timeline-cell">执行人员：{{item.userName}}</p>
-            <p class="timeline-cell">执行动作：加签</p>
-            <p class="timeline-cell">加签人员：{{item.operatorId}}</p>
-          </el-card>
-        </el-timeline-item>
-        <el-timeline-item :timestamp="item.handleTime | toDate()" placement="top" :key="i"
-          v-if="item.handleStatus==7">
-          <el-card>
-            <el-row>
-              <el-col :span='18'>
-                <p class="timeline-cell">审核节点：{{item.nodeName}}</p>
-              </el-col>
-              <el-col :span='6'>
-                <p class="timeline-cell" style="text-align:right">
-                  <el-link :underline="false" type="primary">流程转审</el-link>
-                </p>
-              </el-col>
-            </el-row>
-            <p class="timeline-cell">执行人员：{{item.userName}}</p>
-            <p class="timeline-cell">执行动作：转审</p>
-            <p class="timeline-cell">转审人员：{{item.operatorId}}</p>
-            <p class="timeline-cell" v-if="item.handleOpinion">
-              转审意见：{{item.handleOpinion}}</p>
-            <p class="timeline-cell" v-if="item.signImg">
-              手写签名：<img :src="item.signImg" class="signImg"></p>
-          </el-card>
-        </el-timeline-item>
-        <el-timeline-item :timestamp="item.handleTime | toDate()" placement="top" :key="i"
-          v-if="item.handleStatus==8">
-          <el-card>
-            <el-row>
-              <el-col :span='18'>
-                <p class="timeline-cell">审核节点：{{item.nodeName}}</p>
-              </el-col>
-              <el-col :span='6'>
-                <p class="timeline-cell" style="text-align:right">
-                  <el-link :underline="false" type="primary">流程变更</el-link>
-                </p>
-              </el-col>
-            </el-row>
-            <p class="timeline-cell">执行人员：{{item.userName}}</p>
-            <p class="timeline-cell">执行动作：变更</p>
-            <p class="timeline-cell" v-if="item.handleOpinion">变更原因：{{item.handleOpinion}}</p>
-          </el-card>
-        </el-timeline-item>
-
-        <el-timeline-item :timestamp="item.handleTime | toDate()" placement="top" :key="i"
-          v-if="item.handleStatus==9">
-          <el-card>
-            <el-row>
-              <el-col :span='18'>
-                <p class="timeline-cell">审核节点：{{item.nodeName}}</p>
-              </el-col>
-              <el-col :span='6'>
-                <p class="timeline-cell" style="text-align:right">
-                  <el-link :underline="false" type="primary">流程复活</el-link>
-                </p>
-              </el-col>
-            </el-row>
-            <p class="timeline-cell">执行人员：{{item.userName}}</p>
-            <p class="timeline-cell">执行动作：复活</p>
-            <p class="timeline-cell" v-if="item.handleOpinion">复活原因：{{item.handleOpinion}}</p>
-          </el-card>
-        </el-timeline-item>
-      </template>
-      <el-timeline-item :timestamp="endTime | toDate()" placement="top" v-if='endTime'>
-        <el-card>
-          <p class="timeline-cell">流程结束</p>
-        </el-card>
-      </el-timeline-item>
-    </el-timeline>
-  </el-col>
+  <div class="JNPF-common-layout">
+    <JNPF-table :data="list" :hasNO="false" class="recordListTable" height="100%">
+      <el-table-column prop="nodeName" label="节点名称" show-overflow-tooltip width="200">
+        <template slot-scope="scope">
+          <el-link type="primary" :underline="false" @click="handelNodeDetail(scope.row)">
+            {{scope.row.nodeName}}</el-link>
+        </template>
+      </el-table-column>
+      <el-table-column prop="userName" label="操作人员" width="150" />
+      <el-table-column prop="createdTime" label="接收时间" width="150"
+        :formatter="jnpf.tableDateFormat" />
+      <el-table-column prop="handleTime" label="操作时间" width="150"
+        :formatter="jnpf.tableDateFormat" />
+      <el-table-column prop="handleStatus" label="执行动作" min-width="130" show-overflow-tooltip>
+        <template slot-scope="scope">
+          <div class="item">
+            <span :style="{background:colorList[scope.row.handleStatus||0]}"></span>
+            {{statusList[scope.row.handleStatus||0]}}
+            <div
+              v-if="scope.row.handleStatus==5||scope.row.handleStatus==6||scope.row.handleStatus==7">
+              ：{{scope.row.operatorId}}
+            </div>
+          </div>
+        </template>
+      </el-table-column>
+      <el-table-column prop="signImg" label="签名" width="120" align="center">
+        <template slot-scope="scope">
+          <el-image v-if="scope.row.signImg" style="width: 80px" :src="scope.row.signImg"
+            :preview-src-list="[scope.row.signImg]">
+          </el-image>
+        </template>
+      </el-table-column>
+      <el-table-column prop="fileList" label="附件" width="150" align="center">
+        <template slot-scope="scope">
+          <div v-for="(file,index) in JSON.parse(scope.row.fileList)" :key="index"
+            @click="handlePreview(file)">
+            <el-link type="primary" :underline="false">{{file.name}}</el-link>
+          </div>
+        </template>
+      </el-table-column>
+      <el-table-column prop="handleOpinion" label="备注" width="200" show-overflow-tooltip />
+    </JNPF-table>
+    <Preview :visible.sync="previewVisible" :file="activeFile" :showDownload="true" />
+    <FormBox v-if="formVisible" ref="FormBox" @close="formVisible = false" />
+  </div>
 </template>
-
 <script>
+import Preview from '@/components/Generator/components/Upload/Preview'
+import FormBox from '../components/FormBox'
 export default {
+  components: { Preview, FormBox },
   props: {
     list: { type: Array, default: [] },
     endTime: { type: Number, default: 0 },
+    flowId: { type: String, default: '' },
   },
-  name: 'recordList'
+  name: 'recordList',
+  data() {
+    return {
+      colorList: ['rgba(242,68,68,0.39)', 'rgba(35,162,5,0.39)', 'rgba(21,157,120,0.39)', 'rgba(21,21,157,0.39)', 'rgba(186,33,33,0.39)',
+        'rgba(25,185,185,0.39)', 'rgba(50,191,61,0.39)', 'rgba(49,151,214,0.39)', 'rgba(185,123,6,0.39)', 'rgba(45,94,186,0.39)'],
+      statusList: ['拒绝', '同意', '发起', '撤回', '终止', '指派', '加签', '转办', '变更', '复活'],
+      previewVisible: false,
+      formVisible: false,
+      activeFile: {},
+    }
+  },
+  methods: {
+    handlePreview(file) {
+      this.activeFile = file
+      this.previewVisible = true
+    },
+    handelNodeDetail(item) {
+      let data = {
+        id: item.taskId,
+        taskNodeId: item.taskNodeId,
+        enCode: item.flowCode,
+        flowId: this.flowId,
+        formType: item.formType,
+        opType: 0,
+        status: item.status,
+        title: item.nodeName
+      }
+      this.formVisible = true
+      this.$nextTick(() => {
+        this.$refs.FormBox.init(data)
+      })
+    }
+  }
 }
 </script>
 <style lang="scss" scoped>
-.timeline-cell .el-link {
-  cursor: auto !important;
+.recordListTable {
+  .el-link {
+    font-size: 12px;
+  }
+  .item {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    span {
+      width: 7px;
+      height: 7px;
+      margin-right: 6px;
+      margin-bottom: 1px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+  }
+  .signImg {
+    width: 80px;
+    cursor: pointer;
+  }
 }
 </style>
