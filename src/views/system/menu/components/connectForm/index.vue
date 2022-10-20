@@ -43,10 +43,10 @@ export default {
       moduleId: "",
       dataRule: {
         dbLinkId: [
-          { required: true, message: "数据库不能为空", trigger: "blur" }
+          { required: true, message: "数据库不能为空", trigger: "change" }
         ],
         dataSelect: [
-          { required: true, message: "数据表不能为空", trigger: "blur" }
+          { required: true, message: "数据表不能为空", trigger: "change" }
         ]
       },
       dbOptions: [],
