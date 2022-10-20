@@ -50,7 +50,7 @@
 
 <script>
 
-import { Candidates, Audit } from '@/api/workFlow/FlowBefore'
+import { Candidates, FreeApprover } from '@/api/workFlow/FlowBefore'
 import CandidateUserSelect from './CandidateUserSelect'
 export default {
   components: { CandidateUserSelect },
@@ -80,10 +80,6 @@ export default {
       }
     }
   },
-  computed: {},
-  watch: {},
-  created() { },
-  mounted() { },
   methods: {
     onOpen() {
       Candidates(this.taskId, this.formData).then(res => {
@@ -104,7 +100,6 @@ export default {
           this.$nextTick(() => {
             this.$refs['hasFreeApproverForm'].resetFields()
           })
-          console.log(this.hasFreeApproverForm.candidateList)
         } else if (data.type == 2) {
           let list = res.data.list.filter(o => o.isCandidates)
           this.hasFreeApproverForm.candidateList = list.map(o => ({
@@ -163,7 +158,7 @@ export default {
           }
           query.candidateList = candidateList
         }
-        Audit(this.taskId, query).then(res => {
+        FreeApprover(this.taskId, query).then(res => {
           this.$message({
             type: 'success',
             message: res.msg,
