@@ -532,8 +532,7 @@ export default {
         } else {
           this.loading = false
         }
-      }
-      if (this.selectType === 'custom') {
+      } else {
         this.pagination.keyword = this.keyword
         this.pagination.currentPage = 1
         this.finish = false

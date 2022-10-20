@@ -89,7 +89,7 @@
 <script>
 
 import { addResizeListener, removeResizeListener } from 'element-ui/src/utils/resize-event';
-import { FlowEngineList } from '@/api/workFlow/FlowEngine'
+import { FlowEngineAll, FlowEngineListByIds } from '@/api/workFlow/FlowEngine'
 export default {
   name: 'flowSelect',
   inject: {
@@ -233,7 +233,7 @@ export default {
         keyword: this.keyword,
         category: this.categoryId ? this.categoryId : ""
       }
-      FlowEngineList(query).then((res) => {
+      FlowEngineAll(query).then((res) => {
         this.tableData = res.data.list
         this.total = res.data.pagination.total
         if (this.tableData.length && this.selectedData.length) {
@@ -262,17 +262,8 @@ export default {
         return
       }
       const arr = this.multiple ? this.value : [this.value]
-      let query = {
-        ...this.listQuery,
-        keyword: '',
-        category: ''
-      }
-      FlowEngineList(query).then((res) => {
-        this.tableData = res.data.list
-        let list = this.tableData.filter(item => {
-          return arr.includes(item.id)
-        })
-        this.selectedData = list
+      FlowEngineListByIds(arr).then((res) => {
+        this.selectedData = res.data
         if (this.multiple) {
           this.innerValue = ''
           this.tagsList = JSON.parse(JSON.stringify(this.selectedData))
@@ -290,7 +281,7 @@ export default {
 
     flowSelect() {
       this.visible = true
-      this.initData()
+      this.search()
     },
     getDictionaryData() {
       this.$store.dispatch('base/getDictionaryData', { sort: 'WorkFlowCategory' }).then((res) => {

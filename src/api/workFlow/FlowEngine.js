@@ -135,3 +135,22 @@ export function mainVersion(id) {
     method: 'post',
   })
 }
+
+
+// 委托可选全部流程
+export function FlowEngineAll(data) {
+  return request({
+    url: `/api/workflow/Engine/flowTemplate/getflowAll`,
+    method: 'get',
+    data
+  })
+}
+
+// 委托 通过list<flowId>获取流程引擎列表
+export function FlowEngineListByIds(data) {
+  return request({
+    url: `/api/workflow/Engine/flowTemplate/getflowList`,
+    method: 'post',
+    data
+  })
+}
