@@ -20,8 +20,15 @@
           <user-select v-model="item.value" multiple :placeholder="'请选择'+item.label" title="候选人员"
             v-else />
         </el-form-item>
-        <el-form-item label="加签人员" v-if="properties&&properties.hasFreeApprover">
-          <user-select v-model="freeApproverUserId" placeholder="请选择加签人员,不选即该节点审核结束" />
+      </template>
+      <template v-if="properties&&properties.rejectType &&eventType!=='audit'">
+        <el-form-item label="驳回节点" prop="rejectStep">
+          <el-select v-model="dataForm.rejectStep" placeholder="请选择驳回节点"
+            :disabled='properties.rejectStep!=="2"'>
+            <el-option v-for="item in rejectList" :key="item.nodeCode" :label="item.nodeName"
+              :value="item.nodeCode">
+            </el-option>
+          </el-select>
         </el-form-item>
       </template>
       <el-form-item label="审批意见" prop="handleOpinion" v-if="properties&&properties.hasOpinion">
@@ -61,6 +68,7 @@
 </template>
 
 <script>
+import { RejectList } from '@/api/workFlow/FlowBefore'
 import vueEsign from 'vue-esign'
 import CandidateUserSelect from './CandidateUserSelect'
 export default {
@@ -73,7 +81,8 @@ export default {
         branchList: [],
         candidateList: [],
         handleOpinion: '',
-        fileList: []
+        fileList: [],
+        rejectStep: ''
       },
       copyIds: [],
       freeApproverUserId: '',
@@ -85,7 +94,8 @@ export default {
       formData: {
         flowId: '',
         data: '{}'
-      }
+      },
+      rejectList: []
     }
   },
   methods: {
@@ -106,6 +116,12 @@ export default {
         this.handleReset()
         this.$refs['dataForm'].resetFields()
       })
+      if (eventType === 'reject') {
+        RejectList(taskId).then(res => {
+          this.rejectList = res.data || []
+          this.dataForm.rejectStep = this.rejectList[0].nodeCode
+        }).catch({})
+      }
     },
     onBranchChange(val) {
       const defaultList = this.dataForm.candidateList.filter(o => o.isDefault)
@@ -143,6 +159,7 @@ export default {
             copyIds: this.copyIds.join(','),
             branchList: this.dataForm.branchList
           }
+          if (this.eventType === 'reject') query.rejectStep = this.dataForm.rejectStep
           if (this.dataForm.candidateList.length) {
             let candidateList = {}
             for (let i = 0; i < this.dataForm.candidateList.length; i++) {
