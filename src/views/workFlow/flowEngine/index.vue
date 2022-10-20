@@ -90,7 +90,7 @@
                       禁用流程</el-dropdown-item>
                     <el-dropdown-item @click.native="showManage(scope.row.id,scope.row.fullName)">
                       版本管理</el-dropdown-item>
-                    <el-dropdown-item @click.native="management(scope.row.id)">
+                    <el-dropdown-item @click.native="management(scope.row.id,scope.row.assistList)">
                       协管流程</el-dropdown-item>
                     <el-dropdown-item @click.native="copy(scope.row.id)">
                       复制流程</el-dropdown-item>
@@ -131,7 +131,7 @@
       class="JNPF-dialog JNPF-dialog_center" lock-scroll append-to-body width='600px'>
       <el-form ref="dataForm" label-width="100px">
         <el-form-item label="设置协管员">
-          <user-select v-model="managementUserId" placeholder="请选择该流程协管人员" />
+          <users-select multiple v-model="managementUserId" placeholder="请选择该流程协管人员" />
         </el-form-item>
       </el-form>
       <span slot="footer" class="dialog-footer">
@@ -145,7 +145,7 @@
 </template>
 
 <script>
-import { FlowEngineList, Delete, Release, Stop, Copy, exportData } from '@/api/workFlow/FlowEngine'
+import { FlowEngineList, Delete, Release, Stop, Copy, exportData, assist } from '@/api/workFlow/FlowEngine'
 import Form from './Form'
 import FlowManage from './FlowManagement.vue'
 
@@ -171,14 +171,15 @@ export default {
       manageVisible: false,
       categoryList: [],
       managementVisible: false,
-      managementUserId: ''
+      managementUserId: [],
+      templateId: ''
     }
   },
   created() {
     this.getDictionaryData()
     this.initData()
   },
-  methods: {
+  methds: {
     reset() {
       this.keyword = ''
       this.category = ''
@@ -279,10 +280,23 @@ export default {
       }
     },
     handleApproval() {
-
+      let query = {
+        list: this.managementUserId,
+        templateId: this.templateId
+      }
+      assist(query).then(res => {
+        this.$message({
+          type: 'success',
+          message: res.msg
+        });
+        this.managementVisible = false
+        this.initData()
+      })
     },
-    management(id) {
+    management(id, list) {
       this.managementVisible = true
+      this.templateId = id
+      this.managementUserId = list ? JSON.parse(list) : []
     },
     handleUpdate(row) {
       if (row.enabledMark) {

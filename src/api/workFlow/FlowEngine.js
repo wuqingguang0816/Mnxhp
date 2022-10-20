@@ -154,3 +154,13 @@ export function FlowEngineListByIds(data) {
     data
   })
 }
+
+//设置协管
+export function assist(data) {
+  return request({
+    url: `/api/workflow/Engine/flowTemplate/assist`,
+    method: 'post',
+    data
+  })
+}
+
