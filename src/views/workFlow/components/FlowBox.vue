@@ -236,7 +236,7 @@
 <script>
 import { FlowBeforeInfo, Audit, Reject, Transfer, Recall, Cancel, Assign, SaveAudit, Candidates, CandidateUser, Resurgence, ResurgenceList, RejectList } from '@/api/workFlow/FlowBefore'
 import { Revoke, Press } from '@/api/workFlow/FlowLaunch'
-import { Create, Update, DynamicCreate, DynamicUpdate } from '@/api/workFlow/workFlowForm'
+import { Create, Update } from '@/api/workFlow/workFlowForm'
 import recordList from './RecordList'
 import Comment from './Comment'
 import RecordSummary from './RecordSummary'
@@ -402,7 +402,7 @@ export default {
     getBeforeInfo(data) {
       FlowBeforeInfo(data.id || 0, { taskNodeId: data.taskNodeId, taskOperatorId: data.taskId, flowId: data.flowId }).then(res => {
         this.flowFormInfo = res.data.flowFormInfo
-        this.flowTaskInfo = res.data.flowTaskInfo
+        this.flowTaskInfo = res.data.flowTaskInfo || {}
         this.flowTemplateInfo = res.data.flowTemplateInfo
         const fullName = data.opType == '-1' ? this.flowTemplateInfo.fullName : this.flowTaskInfo.fullName
         this.flowTaskInfo = res.data.flowTaskInfo
