@@ -1,9 +1,12 @@
 <template>
   <div>
-    <el-input v-model="innerValue" placeholder="用于展示关联弹窗的属性，且数据不会保存" readonly
-      v-if="!isDetail && isStorage && isStorage==1" />
-    <el-input v-model="innerValue" placeholder="用于展示关联弹窗的属性，且数据同时会保存入库" readonly
-      v-else-if="isStorage && isStorage==2" />
+    <template v-if="!isDetail">
+      <el-input v-model="innerValue" placeholder="用于展示关联弹窗的属性，且数据不会保存" readonly
+        v-if="isStorage==1" />
+      <el-input v-model="innerValue" placeholder="用于展示关联弹窗的属性，且数据同时会保存入库" readonly
+        v-else-if="isStorage==2" />
+    </template>
+    <p v-else>{{innerValue}}</p>
   </div>
 </template>
 
