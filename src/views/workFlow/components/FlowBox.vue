@@ -117,7 +117,8 @@
         <Process :conf="flowTemplateJson" v-if="flowTemplateJson.nodeId" />
       </el-tab-pane>
       <el-tab-pane label="流转记录" v-if="setting.opType!='-1'" v-loading="loading">
-        <recordList :list='flowTaskOperatorRecordList' :endTime='endTime' />
+        <recordList :list='flowTaskOperatorRecordList' :endTime='endTime'
+          :flowId="setting.flowId" />
       </el-tab-pane>
       <el-tab-pane label="审批汇总" v-if="setting.opType!='-1' && isSummary" v-loading="loading"
         name="recordSummary">
@@ -238,7 +239,7 @@
 import SignImgDialog from '@/components/SignImgDialog'
 import { FlowBeforeInfo, Audit, Reject, Transfer, Recall, Cancel, Assign, SaveAudit, Candidates, CandidateUser, Resurgence, ResurgenceList, RejectList } from '@/api/workFlow/FlowBefore'
 import { Revoke, Press } from '@/api/workFlow/FlowLaunch'
-import { Create, Update, DynamicCreate, DynamicUpdate } from '@/api/workFlow/workFlowForm'
+import { Create, Update } from '@/api/workFlow/workFlowForm'
 import recordList from './RecordList'
 import Comment from './Comment'
 import RecordSummary from './RecordSummary'
@@ -424,10 +425,9 @@ export default {
     getBeforeInfo(data) {
       FlowBeforeInfo(data.id || 0, { taskNodeId: data.taskNodeId, taskOperatorId: data.taskId, flowId: data.flowId }).then(res => {
         this.flowFormInfo = res.data.flowFormInfo
-        this.flowTaskInfo = res.data.flowTaskInfo
+        this.flowTaskInfo = res.data.flowTaskInfo || {}
         this.flowTemplateInfo = res.data.flowTemplateInfo
         const fullName = data.opType == '-1' ? this.flowTemplateInfo.fullName : this.flowTaskInfo.fullName
-        this.flowTaskInfo = res.data.flowTaskInfo
         data.fullName = fullName
         this.fullName = fullName
         this.thisStep = this.flowTaskInfo.thisStep
@@ -443,6 +443,7 @@ export default {
         this.isSummary = this.flowTemplateJson.properties.isSummary
         this.summaryType = this.flowTemplateJson.properties.summaryType
         this.flowTaskOperatorRecordList = res.data.flowTaskOperatorRecordList || []
+        this.flowTaskOperatorRecordList = this.flowTaskOperatorRecordList.reverse()
         this.properties = res.data.approversProperties || {}
         this.endTime = this.flowTaskInfo.completion == 100 ? this.flowTaskInfo.endTime : 0
         data.formConf = this.flowFormInfo.propertyJson
