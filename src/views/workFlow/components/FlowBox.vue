@@ -248,12 +248,11 @@ import ErrorForm from './ErrorForm'
 import CandidateUserSelect from './CandidateUserSelect'
 import Process from '@/components/Process/Preview'
 import PrintBrowse from '@/components/PrintBrowse'
-import vueEsign from 'vue-esign'
 import ActionDialog from '@/views/workFlow/components/ActionDialog'
 import HasFreeApprover from './HasFreeApprover'
 import { mapGetters } from "vuex"
 export default {
-  components: { SignImgDialog, HasFreeApprover, recordList, Process, vueEsign, PrintBrowse, Comment, RecordSummary, CandidateForm, CandidateUserSelect, ErrorForm, ActionDialog },
+  components: { SignImgDialog, HasFreeApprover, recordList, Process, PrintBrowse, Comment, RecordSummary, CandidateForm, CandidateUserSelect, ErrorForm, ActionDialog },
   data() {
     return {
       resurgenceVisible: false,
@@ -516,7 +515,6 @@ export default {
         this.candidateForm.fileList = []
         this.copyIds = []
         this.isValidate = false
-        this.handleReset()
         if (eventType === 'reject') {
           RejectList(this.setting.taskId).then(res => {
             this.rejectList = res.data || []
@@ -836,12 +834,6 @@ export default {
         if (valid) {
           handleRequest()
         }
-      })
-    },
-    handleReset() {
-      this.signImg = ''
-      this.$nextTick(() => {
-        this.$refs.esign && this.$refs.esign.reset()
       })
     },
     addComment() {

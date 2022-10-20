@@ -113,7 +113,6 @@ export default {
       this.signImg = ''
       this.freeApproverUserId = ''
       this.$nextTick(() => {
-        this.handleReset()
         this.$refs['dataForm'].resetFields()
       })
       if (eventType === 'reject') {
@@ -123,7 +122,6 @@ export default {
         }).catch({})
       }
     },
-
     onBranchChange(val) {
       const defaultList = this.dataForm.candidateList.filter(o => o.isDefault)
       if (!val.length) return this.dataForm.candidateList = defaultList
