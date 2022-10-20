@@ -494,6 +494,7 @@ export default {
       if (e == 'comment') return this.addComment()
       if (e == 'print') return this.printBrowseVisible = true
       if (e == 'hasFreeApprover') return this.hasFreeApproverVisible
+      if (e == 'hasFreeApprover') return this.hasFreeApproverVisible = true
       this.eventLauncher(e)
     },
     eventLauncher(eventType) {

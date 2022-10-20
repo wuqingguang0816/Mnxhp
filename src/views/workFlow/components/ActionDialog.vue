@@ -34,18 +34,10 @@
         </template>
         <el-form-item label="手写签名" required v-if="properties.hasSign">
           <div class="sign-main">
-            <div class="sign-head">
-              <div class="sign-tip">请在这里输入你的签名</div>
-              <div class="sign-action">
-                <el-button class="clear-btn" size="mini" @click="handleReset">清空</el-button>
-                <el-button class="sure-btn" size="mini" @click="handleGenerate"
-                  :disabled="!!signImg">
-                  确定签名</el-button>
-              </div>
-            </div>
-            <div class="sign-box">
-              <vue-esign ref="esign" :height="330" v-if="!signImg" :lineWidth="5" />
-              <img :src="signImg" alt="" v-if="signImg" class="sign-img">
+            <img :src="signImg" alt="" v-if="signImg" class="sign-img">
+            <div @click="addSign" class="sign-style">
+              <i class="icon-ym icon-ym-signature add-sign"></i>
+              <span class="sign-title">手写签名</span>
             </div>
           </div>
         </el-form-item>
@@ -57,12 +49,15 @@
         {{$t('common.confirmButton')}}
       </el-button>
     </span>
+    <SignImgDialog v-if="signVisible" ref="SignImg" :lineWidth='3' :userInfo='userInfo'
+      :isDefault='1' @close="signDialog" />
   </el-dialog>
 </template>
 <script>
-import vueEsign from 'vue-esign'
+import SignImgDialog from '@/components/SignImgDialog'
+import { mapGetters } from "vuex"
 export default {
-  components: { vueEsign },
+  components: { SignImgDialog },
   props: {
     assignNodeList: {
       type: Array,
@@ -80,6 +75,7 @@ export default {
         nodeCode: '',
         fileList: [],
       },
+      signVisible: false,
       fromRules: {
         nodeCode: [
           { required: true, message: '请选择指派节点', trigger: 'change' }
@@ -90,6 +86,9 @@ export default {
       title: '',
       label: ''
     }
+  },
+  computed: {
+    ...mapGetters(['userInfo'])
   },
   methods: {
     init(properties, eventType) {
@@ -130,6 +129,18 @@ export default {
         this.$refs['dataForm'].resetFields()
       })
     },
+    addSign() {
+      this.signVisible = true
+      this.$nextTick(() => {
+        this.$refs.SignImg.init()
+      })
+    },
+    signDialog(val) {
+      this.signVisible = false
+      if (val) {
+        this.signImg = val
+      }
+    },
     handleSure() {
       this.$refs['dataForm'].validate((valid) => {
         if (valid) {
@@ -153,55 +164,28 @@ export default {
       this.btnLoading = false
       this.visible = false
     },
-    handleReset() {
-      this.signImg = ''
-      this.$nextTick(() => {
-        this.$refs.esign && this.$refs.esign.reset()
-      })
-    },
-    handleGenerate() {
-      this.$refs.esign.generate().then(res => {
-        if (res) this.signImg = res
-      }).catch(err => {
-        this.$message({
-          message: '请签名',
-          type: 'warning'
-        })
-      })
-    },
   }
 }
 </script>
 <style lang="scss" scoped>
 .sign-main {
-  border: 1px solid #dcdfe6;
-  border-radius: 4px;
-  overflow: hidden;
-  .sign-head {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 0 4px;
-    border-bottom: 1px solid #dcdfe6;
-    .sign-tip {
-      color: #a5a5a5;
-      font-size: 12px;
-    }
-    .sign-action {
-      display: flex;
-      align-items: center;
-      .clear-btn,
-      .sure-btn {
-        margin-left: 5px;
-      }
-    }
-  }
-  .sign-box {
-    border-top: 0;
-    height: 100px;
-  }
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
   .sign-img {
-    width: 100%;
+    width: 100px;
+    height: 50px;
+  }
+  .add-sign {
+    height: 50px;
+    font-size: 36px;
+    margin-top: 10px;
+    color: #2188ff;
+  }
+  .sign-title {
+    font-size: 16px;
+    color: #2188ff;
   }
 }
 </style>

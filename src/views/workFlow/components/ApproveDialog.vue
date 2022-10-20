@@ -66,10 +66,9 @@
 import SignImgDialog from '@/components/SignImgDialog'
 import { RejectList } from '@/api/workFlow/FlowBefore'
 import { mapGetters } from "vuex"
-import vueEsign from 'vue-esign'
 import CandidateUserSelect from './CandidateUserSelect'
 export default {
-  components: { SignImgDialog, CandidateUserSelect, vueEsign },
+  components: { SignImgDialog, CandidateUserSelect },
   data() {
     return {
       visible: false,
@@ -82,6 +81,7 @@ export default {
         rejectStep: ''
       },
       copyIds: [],
+      signVisible: false,
       freeApproverUserId: '',
       signImg: '',
       btnLoading: false,
@@ -191,23 +191,7 @@ export default {
     closeDialog() {
       this.btnLoading = false
       this.visible = false
-    },
-    handleReset() {
-      this.signImg = ''
-      this.$nextTick(() => {
-        this.$refs.esign && this.$refs.esign.reset()
-      })
-    },
-    handleGenerate() {
-      this.$refs.esign.generate().then(res => {
-        if (res) this.signImg = res
-      }).catch(err => {
-        this.$message({
-          message: '请签名',
-          type: 'warning'
-        })
-      })
-    },
+    }
   }
 }
 </script>
