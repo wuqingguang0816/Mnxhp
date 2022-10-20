@@ -8,7 +8,7 @@
         </template>
       </el-table-column>
       <el-table-column prop="userName" label="操作人员" width="150" />
-      <el-table-column prop="createdTime" label="接收时间" width="150"
+      <el-table-column prop="creatorTime" label="接收时间" width="150"
         :formatter="jnpf.tableDateFormat" />
       <el-table-column prop="handleTime" label="操作时间" width="150"
         :formatter="jnpf.tableDateFormat" />
