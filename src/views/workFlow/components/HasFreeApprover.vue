@@ -9,19 +9,29 @@
       </el-form-item>
       <el-form-item label="加签类型">
         <el-radio-group v-model="hasFreeApproverForm.freeApproverType">
-          <el-radio-button :label="1">加签前</el-radio-button>
-          <el-radio-button :label="2">加签后</el-radio-button>
+          <el-radio-button :label="1">审批前</el-radio-button>
+          <el-radio-button :label="2">审批后</el-radio-button>
         </el-radio-group>
         <div v-if='hasFreeApproverForm.freeApproverType==1'>加签后，流程先经过加签审批人，再由我审批</div>
         <div v-else>审批后加签，即表示同意该申请并增加审批人员</div>
       </el-form-item>
-      <el-form-item label="分支选择" prop="branchList" v-if="branchList.length">
+      <el-form-item label="分支选择" prop="branchList"
+        v-if="branchList.length &&hasFreeApproverForm.freeApproverType===2">
         <el-select v-model="hasFreeApproverForm.branchList" multiple placeholder="请选择审批分支" clearable
           @change="onBranchChange">
           <el-option v-for="item in branchList" :key="item.nodeId" :label="item.nodeName"
             :value="item.nodeId" />
         </el-select>
       </el-form-item>
+      <div v-if="hasFreeApproverForm.freeApproverType==2">
+        <el-form-item :label="item.nodeName+item.label" :prop="'candidateList.' + i + '.value'"
+          v-for="(item,i) in hasFreeApproverForm.candidateList" :key="i" :rules="item.rules">
+          <candidate-user-select v-model="item.value" multiple :placeholder="'请选择'+item.label"
+            :taskId="taskId" :formData="formData" :nodeId="item.nodeId" v-if="item.hasCandidates" />
+          <user-select v-model="item.value" multiple :placeholder="'请选择'+item.label" title="候选人员"
+            v-else />
+        </el-form-item>
+      </div>
       <el-form-item label="加签意见" prop="handleOpinion">
         <el-input v-model="hasFreeApproverForm.handleOpinion" placeholder="请输入加签意见" type="textarea"
           :rows="4" />
@@ -39,10 +49,11 @@
 </template>
 
 <script>
-import Parser from '@/components/Generator/parser/Parser'
+
 import { Candidates, Audit } from '@/api/workFlow/FlowBefore'
+import CandidateUserSelect from './CandidateUserSelect'
 export default {
-  components: { Parser },
+  components: { CandidateUserSelect },
   props: ['taskId', 'formData'],
   data() {
     return {
@@ -54,7 +65,8 @@ export default {
         freeApproverType: 1,
         handleOpinion: '',
         fileList: [],
-        branchList: []
+        branchList: [],
+        candidateList: []
       },
       branchList: [],
       candidateType: 1,
@@ -64,7 +76,7 @@ export default {
         freeApproverUserId: [
           { required: true, message: '加签人员不能为空', trigger: 'change' }
         ],
-        branchList: [{ required: true, message: `分支不能为空`, trigger: 'change' }]
+        branchList: [{ required: true, message: `选择分支不能为空`, trigger: 'click' }]
       }
     }
   },
@@ -90,10 +102,9 @@ export default {
             rules: [{ required: true, message: `审批人不能为空`, trigger: 'click' }]
           }))
           this.$nextTick(() => {
-            this.$refs['candidateForm'].resetFields()
+            this.$refs['hasFreeApproverForm'].resetFields()
           })
-          this.isValidate = true
-          this.visible = true
+          console.log(this.hasFreeApproverForm.candidateList)
         } else if (data.type == 2) {
           let list = res.data.list.filter(o => o.isCandidates)
           this.hasFreeApproverForm.candidateList = list.map(o => ({
@@ -105,15 +116,34 @@ export default {
           this.$nextTick(() => {
             this.$refs['hasFreeApproverForm'].resetFields()
           })
-          this.isValidate = true
-          this.visible = true
         }
       })
     },
     onClose() {
+      this.$emit('update:visible', false)
     },
     close(e) {
       this.$emit('update:visible', false)
+    },
+    onBranchChange(val) {
+      const defaultList = this.hasFreeApproverForm.candidateList.filter(o => o.isDefault)
+      if (!val.length) return this.hasFreeApproverForm.candidateList = defaultList
+      let list = []
+      for (let i = 0; i < val.length; i++) {
+        inner: for (let j = 0; j < this.branchList.length; j++) {
+          let o = this.branchList[j]
+          if (val[i] === o.nodeId && o.isCandidates) {
+            list.push({
+              ...o,
+              label: '审批人',
+              value: [],
+              rules: [{ required: true, message: `审批人不能为空`, trigger: 'click' }]
+            })
+            break inner
+          }
+        }
+      }
+      this.hasFreeApproverForm.candidateList = [...defaultList, ...list]
     },
     dataFormSubmit() {
       this.$refs['hasFreeApproverForm'].validate((valid) => {
@@ -133,8 +163,7 @@ export default {
           }
           query.candidateList = candidateList
         }
-        Audit(this.setting.taskId, query).then(res => {
-
+        Audit(this.taskId, query).then(res => {
           this.$message({
             type: 'success',
             message: res.msg,
@@ -155,7 +184,7 @@ export default {
   padding: 30px 20px;
   color: #606266;
   font-size: 14px;
-  height: 350px;
+  height: 400px;
   word-break: break-all;
 }
 </style>
