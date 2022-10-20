@@ -22,7 +22,7 @@
       <div class="JNPF-common-layout-main JNPF-flex-main">
         <div class="JNPF-common-head">
           <topOpts @add="dialogVisible=true">
-            <upload-btn url="/api/workflow/Form/Actions/ImportData" @on-success="reset()" />
+            <upload-btn url="/api/flowForm/Form/Actions/ImportData" @on-success="reset()" />
           </topOpts>
           <div class="JNPF-common-head-right">
             <el-tooltip effect="dark" :content="$t('common.refresh')" placement="top">
