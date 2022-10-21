@@ -179,7 +179,7 @@ export default {
     this.getDictionaryData()
     this.initData()
   },
-  methds: {
+  methods: {
     reset() {
       this.keyword = ''
       this.category = ''
