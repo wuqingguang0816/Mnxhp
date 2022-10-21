@@ -431,7 +431,7 @@ export default {
       }
       return ''
     },
-    exist() {
+    exist(type) {
       let isOk = true
       for (let i = 0; i < this.conditionList.length; i++) {
         const e = this.conditionList[i];
@@ -451,8 +451,9 @@ export default {
           flag = this.jnpf.isEmpty(e.fieldValue)
         }
         if (flag) {
+          const mes = type == 'query' ? '查询' : '保存'
           this.$message({
-            message: `空条件不能保存`,
+            message: `空条件不能${mes}`,
             type: 'error',
             duration: 1000
           });
@@ -463,7 +464,7 @@ export default {
       return isOk
     },
     query() {
-      if (!this.exist()) return
+      if (!this.exist('query')) return
       let query = {
         matchLogic: this.matchLogic,
         conditionJson: JSON.stringify(this.conditionList)
