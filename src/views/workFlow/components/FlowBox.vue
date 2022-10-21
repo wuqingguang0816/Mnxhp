@@ -109,7 +109,7 @@
       <div class="approve-result-img" :class="flowTaskInfo.status | flowStatus()"></div>
     </div>
     <el-tabs class="JNPF-el_tabs" v-model="activeTab">
-      <el-tab-pane label="表单信息" v-loading="loading">
+      <el-tab-pane label="表单信息" v-loading="loading" v-if="setting.opType!='4'">
         <component :is="currentView" @close="goBack" ref="form" @eventReceiver="eventReceiver"
           @setLoad="setLoad" @setCandidateLoad="setCandidateLoad" @setPageLoad="setPageLoad" />
       </el-tab-pane>
