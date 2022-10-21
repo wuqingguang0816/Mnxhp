@@ -16,7 +16,7 @@ export function FlowDelegateInfo(id) {
   })
 }
 // 删除流程委托
-export function Delete(id) {
+export function DeleteDelagate(id) {
   return request({
     url: `/api/workflow/Engine/FlowDelegate/${id}`,
     method: 'DELETE'

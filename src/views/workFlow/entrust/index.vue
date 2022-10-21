@@ -67,7 +67,7 @@
                     :disabled="[1,2,4,5].indexOf(scope.row.status)>-1">编辑
                   </el-button>
                   <el-button size="mini" type="text" class="JNPF-table-delBtn"
-                    @click="handleDel(scope.$index,scope.row.id)"
+                    @click="handleDelFlow(scope.$index,scope.row.id)"
                     :disabled="[1,2,3,5].indexOf(scope.row.status)>-1">删除
                   </el-button>
                   <el-button size="mini" type="text" @click="toDetail(scope.row,0)"
@@ -173,8 +173,8 @@
 </template>
 
 <script>
-import { FlowDelegateList, Delete, getUserListByFlowId } from '@/api/workFlow/FlowDelegate'
-import { FlowLaunchList } from '@/api/workFlow/FlowLaunch'
+import { FlowDelegateList, DeleteDelagate, getUserListByFlowId } from '@/api/workFlow/FlowDelegate'
+import { FlowLaunchList, Delete } from '@/api/workFlow/FlowLaunch'
 import Form from './Form'
 import MyEntrust from './myEntrust.vue'
 import FlowBox from '../components/FlowBox'
@@ -287,7 +287,7 @@ export default {
       }).catch(() => { });
     },
     asyncDel(index, id) {
-      Delete(id).then(res => {
+      DeleteDelagate(id).then(res => {
         this.list.splice(index, 1);
         this.$message({
           type: 'success',
@@ -295,6 +295,24 @@ export default {
         });
       })
     },
+    handleDelFlow(index, id) {
+      this.$confirm(this.$t('common.delTip'), this.$t('common.tipTitle'), {
+        type: 'warning'
+      }).then(() => {
+        this.asyncDelFlow(index, id);
+      }).catch(() => { });
+    },
+    asyncDelFlow(index, id) {
+      Delete(id).then(res => {
+        this.flowList.splice(index, 1);
+        this.$message({
+          type: 'success',
+          message: res.msg
+        });
+      })
+    },
+
+
     formatter(row, column) {
       return this.jnpf.dateFormat(row, column)
     },
@@ -355,7 +373,7 @@ export default {
 
     closeForm(isRefresh) {
       this.flowboxVisible = false
-      if (isRefresh) this.refresh()
+      if (isRefresh) this.search()
     },
     activeClick(tab, event) {
       this.activeName = tab.paneName
@@ -395,7 +413,20 @@ export default {
       } else {
         this.checkUserList.push(data)
       }
-    }
+    },
+    toDetail(item, opType) {
+      let data = {
+        id: item.id,
+        enCode: item.flowCode,
+        flowId: item.flowId,
+        opType,
+        status: item.status
+      }
+      this.flowboxVisible = true
+      this.$nextTick(() => {
+        this.$refs.FlowBox.init(data)
+      })
+    },
 
   }
 }
