@@ -16,6 +16,7 @@ export default {
       eventType: '',
       loading: false,
       tableRequiredData: {},
+      formRef: 'dataForm',
     }
   },
   methods: {
@@ -24,7 +25,7 @@ export default {
       this.setting = data
       this.updateDataRule()
       this.$nextTick(() => {
-        this.$refs['dataForm'].resetFields()
+        this.$refs[this.formRef].resetFields()
         if (this.beforeInit && typeof this.beforeInit === "function") this.beforeInit()
         if (data.id) {
           let dataForm = data.draftData || data.formData
@@ -60,7 +61,7 @@ export default {
     },
     dataFormSubmit(eventType, flowUrgent) {
       this.eventType = eventType
-      this.$refs['dataForm'].validate((valid) => {
+      this.$refs[this.formRef].validate((valid) => {
         if (valid) {
           if (this.exist && !this.exist()) return
           let dataForm = {}
