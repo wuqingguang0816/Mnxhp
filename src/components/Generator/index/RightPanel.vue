@@ -15,7 +15,8 @@
               <template
                 v-if="activeData.__config__.jnpfKey==='calculate' ||activeData.__config__.jnpfKey==='popupAttr' ||activeData.__config__.jnpfKey==='relationFormAttr'">
                 <el-form-item label="控件类型">
-                  <el-select v-model="activeData.__config__.isStorage" placeholder="请选择">
+                  <el-select v-model="activeData.__config__.isStorage" placeholder="请选择"
+                    @change="changeStorage">
                     <el-option :label="item.label" :value="item.value"
                       v-for="(item,i) in storageType" :key="i"></el-option>
                   </el-select>
@@ -72,7 +73,7 @@
                 <template v-if="activeData.__config__.isSubTable && subTable.length">
                   <template
                     v-if="activeData.__config__.jnpfKey==='calculate' ||activeData.__config__.jnpfKey==='popupAttr' ||activeData.__config__.jnpfKey==='relationFormAttr'">
-                    <el-form-item label="控件类型">
+                    <el-form-item label="控件类型" @change="changeStorage">
                       <el-select v-model="activeData.__config__.isStorage" placeholder="请选择">
                         <el-option :label="item.label" :value="item.value"
                           v-for="(item,i) in storageType" :key="i"></el-option>
@@ -119,7 +120,7 @@
             <template v-else>
               <template
                 v-if="activeData.__config__.jnpfKey==='calculate' ||activeData.__config__.jnpfKey==='popupAttr' ||activeData.__config__.jnpfKey==='relationFormAttr'">
-                <el-form-item label="控件类型">
+                <el-form-item label="控件类型" @change="changeStorage">
                   <el-select v-model="activeData.__config__.isStorage" placeholder="请选择">
                     <el-option :label="item.label" :value="item.value"
                       v-for="(item,i) in storageType" :key="i"></el-option>
@@ -1032,6 +1033,9 @@ export default {
     tableChange() {
       this.activeData.__vModel__ = ''
       this.setDefaultOptions()
+    },
+    changeStorage() {
+      if (this.activeData.__config__.isStorage == 1) return this.activeData.__vModel__ = ''
     },
     setDefaultOptions() {
       if (!this.$store.getters.hasTable) return
