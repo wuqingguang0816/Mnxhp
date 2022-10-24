@@ -44,11 +44,11 @@ export default {
     getFormVal(vModel) {
       try {
         if (vModel.indexOf('.') > -1) {
-          let [tabelVModel, cmpVModel] = vModel.split('.')
+          let [tableVModel, cmpVModel] = vModel.split('.')
           if (typeof this.rowIndex === 'number') {
-            return this.rootFormData[tabelVModel][this.rowIndex][cmpVModel] || 0
+            return this.rootFormData[tableVModel][this.rowIndex][cmpVModel] || 0
           } else {
-            return this.rootFormData[tabelVModel].reduce((sum, c) => (c[cmpVModel] ? Number(c[cmpVModel]) : 0) + sum, 0)
+            return this.rootFormData[tableVModel].reduce((sum, c) => (c[cmpVModel] ? Number(c[cmpVModel]) : 0) + sum, 0)
           }
         }
         return this.rootFormData[vModel] || 0
@@ -77,7 +77,7 @@ export default {
       handler: function (val) {
         if (!val) return
         if (!this.computeExps) { // formData更新可能比较频繁
-          this.computeExps = debounce(this.execRPN, 500)
+          this.computeExps = this.execRPN
         }
         this.computeExps()
       },
