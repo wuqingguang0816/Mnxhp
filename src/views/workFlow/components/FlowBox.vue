@@ -30,7 +30,7 @@
         </template>
         <div class="options">
           <el-dropdown class="dropdown" placement="bottom" @command="handleMore">
-            <el-button style="width:70px" :disabled="allBtnDisabled" v-if="setting.opType != 2">
+            <el-button style="width:70px" :disabled="allBtnDisabled">
               更 多<i class="el-icon-arrow-down el-icon--right"></i>
             </el-button>
             <el-dropdown-menu slot="dropdown">
