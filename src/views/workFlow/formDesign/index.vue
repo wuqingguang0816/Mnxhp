@@ -64,7 +64,8 @@
                   <el-dropdown-menu slot="dropdown">
                     <el-dropdown-item @click.native="releaseForm(scope.row.id)">
                       发布表单</el-dropdown-item>
-                    <el-dropdown-item @click.native="rollBackForm(scope.row.id)">
+                    <el-dropdown-item @click.native="rollBackForm(scope.row.id)"
+                      v-if="scope.row.enabledMark">
                       回滚表单</el-dropdown-item>
                     <el-dropdown-item @click.native="copy(scope.row.id)">
                       复制表单</el-dropdown-item>
