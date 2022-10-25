@@ -3,25 +3,25 @@
     class="JNPF-dialog JNPF-dialog_center" lock-scroll append-to-body width='600px'>
     <el-form :model="detailForm" label-width="100px" v-loading="loading">
       <el-form-item label="账号名称" prop="accountName" v-if="detailForm.accountName">
-        {{detailForm.accountName}}
+        <p>{{detailForm.accountName}}</p>
       </el-form-item>
       <el-form-item label="账号编码" prop="accountCode" v-if="detailForm.accountCode">
-        {{detailForm.accountCode}}
+        <p>{{detailForm.accountCode}}</p>
       </el-form-item>
       <el-form-item label="消息来源" prop="accountCode">
-        {{detailForm.messageSource}}
+        <p>{{detailForm.messageSource}}</p>
       </el-form-item>
       <el-form-item label="消息类型" prop="messageType">
-        {{detailForm.messageType}}
+        <p>{{detailForm.messageType}}</p>
       </el-form-item>
       <el-form-item label="发送时间" prop="sendTime">
-        {{detailForm.sendTime|toDate()}}
+        <p>{{detailForm.sendTime|toDate()}}</p>
       </el-form-item>
       <el-form-item label="接收人" prop="receiveUser">
-        {{detailForm.receiveUser}}
+        <p>{{detailForm.receiveUser}}</p>
       </el-form-item>
       <el-form-item label="标题" prop="title">
-        {{detailForm.title}}
+        <p>{{detailForm.title}}</p>
       </el-form-item>
       <el-form-item label="内容" prop="fieldName">
         <p class="content" v-html="detailForm.content"></p>
@@ -59,9 +59,14 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
-.content {
-  >>> img {
-    width: 100%;
+.JNPF-dialog {
+  p {
+    color: #999;
+  }
+  .content {
+    >>> img {
+      width: 100%;
+    }
   }
 }
 </style>

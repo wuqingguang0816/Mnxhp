@@ -93,7 +93,7 @@
               :formData="formValue"></jnpf-qrcode>
           </template>
           <template v-else>
-            <p>{{ getValue(item) }}</p>
+            <p class="jnpf-detail-text">{{ getValue(item) }}</p>
           </template>
         </el-form-item>
       </template>

@@ -176,6 +176,9 @@ export default {
             if (this.dataForm.channel == 2) {
               this.$set(this.dataForm, 'secretId', this.dataForm.appId)
               this.$set(this.dataForm, 'secretKey', this.dataForm.appSecret)
+            } else {
+              this.$set(this.dataForm, 'secretId', "")
+              this.$set(this.dataForm, 'secretKey', "")
             }
           })
         }

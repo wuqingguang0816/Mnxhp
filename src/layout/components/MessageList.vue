@@ -247,4 +247,7 @@ export default {
     }
   }
 }
+.main >>> a {
+  color: #06c !important;
+}
 </style>

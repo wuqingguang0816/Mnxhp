@@ -164,7 +164,7 @@ function addNodeButton(ctx, data, h, isBranch = false) {
               <div class="condition-icon" onClick={this.eventLauncher.bind(ctx, "appendInterflowBranch", data, isBranch, !canAddAppendInterflow)}>
                 <i class="icon-ym icon-ym-node"></i>
               </div>
-              分流/合流
+              并行分支
             </div>
             <div class={{ 'condition-disabled': !canAddTimerNode }}>
               <div class="condition-icon" onClick={ctx.eventLauncher.bind(ctx, "addTimerNode", data, isBranch, !canAddTimerNode)} >

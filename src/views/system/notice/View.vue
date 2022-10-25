@@ -55,3 +55,8 @@ export default {
   }
 }
 </script>
+<style lang="scss" scoped>
+.main >>> a {
+  color: #06c !important;
+}
+</style>
