@@ -19,6 +19,7 @@ export default {
     closeDialog(isRefresh) {
       this.visible = false
       this.$emit('close', isRefresh)
+      this.$store.state.generator.allTable = []
     },
     prev() {
       this.activeStep -= 1
