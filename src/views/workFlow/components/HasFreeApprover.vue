@@ -149,7 +149,8 @@ export default {
           fileList: this.hasFreeApproverForm.fileList,
           freeApproverType: this.hasFreeApproverForm.freeApproverType,
           freeApproverUserId: this.hasFreeApproverForm.freeApproverUserId,
-          branchList: this.hasFreeApproverForm.branchList
+          branchList: this.hasFreeApproverForm.branchList,
+          formData: this.formData.formData
         }
         if (this.hasFreeApproverForm.candidateList.length) {
           let candidateList = {}
@@ -165,7 +166,7 @@ export default {
             duration: 1000,
             onClose: () => {
               this.btnLoading = false
-              this.close()
+              this.$emit('close')
             }
           })
         }).catch(() => { this.btnLoading = false })

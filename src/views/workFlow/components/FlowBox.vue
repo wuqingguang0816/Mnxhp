@@ -228,7 +228,7 @@
     <actionDialog v-if="actionVisible" ref="actionDialog" :assignNodeList="assignNodeList"
       @submit="actionReceiver" />
     <HasFreeApprover :visible.sync="hasFreeApproverVisible" :taskId="setting.taskId"
-      :formData="formData" />
+      :formData="formData" @close="approverDialog" />
     <SignImgDialog v-if="signVisible" ref="SignImg" :lineWidth='3' :userInfo='userInfo'
       :isDefault='1' @close="signDialog" />
   </div>
@@ -363,6 +363,9 @@ export default {
       if (val) {
         this.signImg = val
       }
+    },
+    approverDialog() {
+      this.$emit('close', true)
     },
     handleResurgence(errorRuleUserList) {
       this.$refs['resurgenceForm'].validate((valid) => {
