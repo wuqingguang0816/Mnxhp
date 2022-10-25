@@ -6,6 +6,20 @@
   "description": "",
   "glyphs": [
     {
+      "icon_id": "32473793",
+      "name": "btn-download",
+      "font_class": "btn-download",
+      "unicode": "e8d9",
+      "unicode_decimal": 59609
+    },
+    {
+      "icon_id": "32450926",
+      "name": "btn-upload",
+      "font_class": "btn-upload",
+      "unicode": "e8d7",
+      "unicode_decimal": 59607
+    },
+    {
       "icon_id": "32440940",
       "name": "right",
       "font_class": "right",
@@ -27,25 +41,11 @@
       "unicode_decimal": 59606
     },
     {
-      "icon_id": "32440943",
-      "name": "report-upload",
-      "font_class": "report-upload",
-      "unicode": "e8d7",
-      "unicode_decimal": 59607
-    },
-    {
       "icon_id": "32440944",
       "name": "add-flow",
       "font_class": "add-flow",
       "unicode": "e8d8",
       "unicode_decimal": 59608
-    },
-    {
-      "icon_id": "32440945",
-      "name": "btn-download",
-      "font_class": "btn-download",
-      "unicode": "e8d9",
-      "unicode_decimal": 59609
     },
     {
       "icon_id": "31997659",
