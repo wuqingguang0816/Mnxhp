@@ -61,11 +61,14 @@ export default {
       this.type = type || 1
       this.visible = true;
       this.dbOptions = dbOptions;
-      if (dataList) {
-        this.dataForm.id = dataList.id || ''
-        this.dataForm.dbLinkId = dataList.linkId || '0'
-        this.dataForm.dataSelect = dataList.linkTables ? dataList.linkTables.split(",") : []
-      }
+      this.$nextTick(() => {
+        this.$refs['dataForm'].resetFields()
+        if (dataList) {
+          this.dataForm.id = dataList.id || ''
+          this.dataForm.dbLinkId = dataList.linkId || '0'
+          this.dataForm.dataSelect = dataList.linkTables ? dataList.linkTables.split(",") : []
+        }
+      })
     },
     dataFormSubmit() {
       this.$refs["dataForm"].validate(valid => {
