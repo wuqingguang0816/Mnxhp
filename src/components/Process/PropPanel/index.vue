@@ -1309,7 +1309,7 @@
                   <div v-if="approverForm.assigneeType === 6" class="option-box-tip">
                     指定审批人处理审批单</div>
                   <div v-if="approverForm.assigneeType === 7" class="option-box-tip">
-                    指定可供选择的候选人处理审批单</div>
+                    默认所有人，需要设置请指定候选人范围处理审批单</div>
                   <div v-if="approverForm.assigneeType === 9" class="option-box-tip">
                     从目标服务中获取审批人</div>
                   <el-form-item label="发起者的" style="margin-bottom:0!important"
