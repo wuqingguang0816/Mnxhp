@@ -47,7 +47,7 @@
           <el-table-column prop="sortCode" label="排序" width="70" align="center" />
           <el-table-column label="状态" width="80" align="center">
             <template slot-scope="scope">
-              <el-tag :type="scope.row.enabledMark == 1 ? 'success' : 'danger'" disable-transitions>
+              <el-tag :type="scope.row.enabledMark == 1 ? 'success' : 'info'" disable-transitions>
                 {{scope.row.enabledMark==1?'已发布':'未发布'}}</el-tag>
             </template>
           </el-table-column>
