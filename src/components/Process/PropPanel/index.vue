@@ -1418,9 +1418,7 @@
                     </el-tooltip>
                   </el-radio>
                   <el-radio :label="2">从当前节点审批
-                    <el-tooltip
-                      content="若流程为A->B->C,C驳回至A，则C->A->C；若选择驳回发起节点、或者选择驳回上一节点为发起节点无法遵循该规则"
-                      placement="top">
+                    <el-tooltip content="若流程为A->B->C,C驳回至A，则C->A->C" placement="top">
                       <i class="el-icon-warning-outline"></i>
                     </el-tooltip>
                   </el-radio>
