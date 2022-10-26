@@ -179,9 +179,6 @@ export default {
           { required: true, message: '表单编码不能为空', trigger: 'blur' },
           { pattern: /^\w+$/, message: '请输入正确的表单编码', trigger: 'blur' },
         ],
-        // urlAddress: [
-        //    { required: true, message: 'web地址不能为空', trigger: 'blur' }
-        //  ],
         formType: [
           { required: true, message: '表单类型不能为空', trigger: 'blur' }
         ],

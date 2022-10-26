@@ -108,7 +108,7 @@
               <i class="add-icon icon-ym icon-ym-customForm"></i>
               <div class="add-txt">
                 <p class="add-title">自定义表单</p>
-                <p class="add-desc">自定义设计流程表单</p>
+                <p class="add-desc">自定义设计业务流程表单</p>
               </div>
             </div>
           </div>
