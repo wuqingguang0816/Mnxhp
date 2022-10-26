@@ -120,7 +120,7 @@
               <i class="add-icon  icon-ym icon-ym-functionForm"></i>
               <div class="add-txt">
                 <p class="add-title">功能表单</p>
-                <p class="add-desc">关系系统开发功能表单</p>
+                <p class="add-desc">关联系统开发功能表单</p>
               </div>
             </div>
           </div>
