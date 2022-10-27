@@ -90,7 +90,7 @@
                       禁用流程</el-dropdown-item>
                     <el-dropdown-item @click.native="showManage(scope.row.id,scope.row.fullName)">
                       版本管理</el-dropdown-item>
-                    <el-dropdown-item @click.native="management(scope.row.id,scope.row.assistList)">
+                    <el-dropdown-item @click.native="management(scope.row.id)">
                       协管流程</el-dropdown-item>
                     <el-dropdown-item @click.native="copy(scope.row.id)">
                       复制流程</el-dropdown-item>
@@ -145,7 +145,7 @@
 </template>
 
 <script>
-import { FlowEngineList, Delete, Release, Stop, Copy, exportData, assist } from '@/api/workFlow/FlowEngine'
+import { FlowEngineList, Delete, Release, Stop, Copy, exportData, assist, assistList } from '@/api/workFlow/FlowEngine'
 import Form from './Form'
 import FlowManage from './FlowManagement.vue'
 
@@ -293,10 +293,12 @@ export default {
         this.initData()
       })
     },
-    management(id, list) {
+    management(id) {
       this.managementVisible = true
       this.templateId = id
-      this.managementUserId = list ? JSON.parse(list) : []
+      assistList(id).then(res => {
+        this.managementUserId = res.data.list || []
+      })
     },
     handleUpdate(row) {
       if (row.enabledMark) {

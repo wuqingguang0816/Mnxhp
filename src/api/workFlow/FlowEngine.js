@@ -164,3 +164,13 @@ export function assist(data) {
   })
 }
 
+//获取协管接口
+
+//设置协管
+export function assistList(id) {
+  return request({
+    url: `/api/workflow/Engine/flowTemplate/${id}/assistList`,
+    method: 'get'
+  })
+}
+
