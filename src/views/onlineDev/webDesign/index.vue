@@ -79,7 +79,7 @@
                     </el-button>
                   </span>
                   <el-dropdown-menu slot="dropdown">
-                    <el-dropdown-item @click.native="releaseModel(scope.row)">发布模板
+                    <el-dropdown-item @click.native="openReleaseDialog(scope.row)">发布模板
                     </el-dropdown-item>
                     <el-dropdown-item v-if="scope.row.isRelease==1"
                       @click.native="rollBack(scope.row)">
@@ -144,7 +144,7 @@
       </el-form>
       <span slot="footer" class="dialog-footer">
         <el-button @click="releaseDialogVisible = false">{{$t('common.cancelButton')}}</el-button>
-        <el-button type="primary" :loading="releaseBtnLoading" @click="release">
+        <el-button type="primary" :loading="releaseBtnLoading" @click="releaseModel">
           {{$t('common.confirmButton')}}</el-button>
       </span>
     </el-dialog>
@@ -216,18 +216,14 @@ export default {
         })
       })
     },
-    releaseModel(row) {
-      if (row.state == 1) {
-        this.$confirm('发布模板会覆盖当前线上版本且进行菜单同步，是否继续？', '提示', {
-          type: 'warning'
-        }).then(() => {
-          setTimeout(() => {
-            this.openReleaseDialog(row)
-          }, 200)
-        })
-      } else {
-        this.openReleaseDialog(row)
-      }
+    releaseModel() {
+      this.$confirm('发布模板会覆盖当前线上版本且进行菜单同步，是否继续？', '提示', {
+        type: 'warning'
+      }).then(() => {
+        setTimeout(() => {
+          this.release()
+        }, 200)
+      })
     },
     openReleaseDialog(row) {
       this.currRow = row
