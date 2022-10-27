@@ -1410,7 +1410,11 @@
                 </el-select>
               </el-form-item>
               <el-form-item label="驳回设置">
-                <div slot="label" class="form-item-label">驳回设置</div>
+                <div slot="label" class="form-item-label">驳回设置
+                  <el-tooltip content="纯表单流程设置驳回到发起节点无效" placement="top">
+                    <i class="el-icon-warning-outline"></i>
+                  </el-tooltip>
+                </div>
                 <el-radio-group v-model="approverForm.rejectType">
                   <el-radio :label="1">重新审批
                     <el-tooltip content="若流程为A->B->C,C驳回至A，则C->A->B->C" placement="top">
