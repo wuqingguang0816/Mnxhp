@@ -35,7 +35,8 @@
             更 多<i class="el-icon-arrow-down el-icon--right"></i>
           </el-button>
           <el-dropdown-menu slot="dropdown">
-            <el-dropdown-item class="dropdown-item" v-if="setting.opType=='-1'" command="save">
+            <el-dropdown-item class="dropdown-item"
+              v-if="setting.opType=='-1'&&!setting.hideCancelBtn" command="save">
               {{properties.saveBtnText||'暂 存'}}
             </el-dropdown-item>
             <el-dropdown-item class="dropdown-item"
