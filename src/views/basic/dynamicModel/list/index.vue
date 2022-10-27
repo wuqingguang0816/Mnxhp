@@ -239,8 +239,8 @@
                 </el-table-column>
               </template>
               <el-table-column :prop="item.prop" :label="item.label" :align="item.align"
-                :width="item.width" :key="i" :sortable="item.sortable?'custom':item.sortable"
-                v-else />
+                :fixed="item.fixed!='none'?item.fixed:false" :width="item.width" :key="i"
+                :sortable="item.sortable?'custom':item.sortable" v-else />
             </template>
           </template>
           <el-table-column prop="flowState" label="状态" width="100" v-if="config.enableFlow==1">
