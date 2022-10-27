@@ -39,6 +39,7 @@ export default {
         data.fullName = this.flowTaskInfo.fullName
         this.flowUrgent = this.flowTaskInfo.flowUrgent || 1
         data.type = this.flowTaskInfo.type
+        data.formData = res.data.formData || {}
         data.draftData = res.data.draftData || null
         if (data.formType == 1) {
           if (this.flowTaskInfo.formUrl) {
