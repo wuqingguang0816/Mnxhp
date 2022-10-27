@@ -145,6 +145,7 @@ export default {
       this.$set(this.activeData.__config__, 'defaultValue', val ? [] : '')
     },
     isIncludesTable(data) {
+      if (!data.__config__.layout || data.__config__.layout === 'rowFormItem') return true
       if (this.activeData.__config__.isSubTable) return this.activeData.__config__.parentVModel === data.__vModel__
       return data.__config__.jnpfKey !== 'table'
     },

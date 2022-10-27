@@ -1466,14 +1466,18 @@ export const layoutComponents = [
           title: "面板1",
           name: "1",
           __config__: {
-            children: []
+            jnpfKey: "collapseItem",
+            children: [],
+            layout: "rowFormItem",
           }
         },
         {
           title: "面板2",
           name: "2",
           __config__: {
-            children: []
+            jnpfKey: "collapseItem",
+            children: [],
+            layout: "rowFormItem",
           }
         }
       ],
@@ -1501,13 +1505,17 @@ export const layoutComponents = [
         {
           title: "Tab 1",
           __config__: {
-            children: []
+            jnpfKey: "tabItem",
+            children: [],
+            layout: "rowFormItem",
           }
         },
         {
           title: "Tab 2",
           __config__: {
-            children: []
+            jnpfKey: "tabItem",
+            children: [],
+            layout: "rowFormItem",
           }
         }
       ],
