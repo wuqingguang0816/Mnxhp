@@ -257,6 +257,7 @@ export default {
     },
     getParamList() {
       let templateJson = this.templateJson
+      if (!this.formData) return templateJson
       for (let i = 0; i < templateJson.length; i++) {
         if (templateJson[i].relationField) {
           if (templateJson[i].relationField.includes('-')) {
