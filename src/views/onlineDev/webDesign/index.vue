@@ -217,12 +217,15 @@ export default {
       })
     },
     releaseModel() {
-      this.$confirm('发布模板会覆盖当前线上版本且进行菜单同步，是否继续？', '提示', {
-        type: 'warning'
-      }).then(() => {
-        setTimeout(() => {
-          this.release()
-        }, 200)
+      this.$refs['releaseForm'].validate((valid) => {
+        if (!valid) return
+        this.$confirm('发布模板会覆盖当前线上版本且进行菜单同步，是否继续？', '提示', {
+          type: 'warning'
+        }).then(() => {
+          setTimeout(() => {
+            this.release()
+          }, 200)
+        })
       })
     },
     openReleaseDialog(row) {
@@ -252,23 +255,20 @@ export default {
     },
     // 发布菜单
     release() {
-      this.$refs['releaseForm'].validate((valid) => {
-        if (!valid) return
-        if (!this.releaseQuery.pc && !this.releaseQuery.app) return this.$message.error('请至少选择一种菜单同步方式')
-        this.releaseBtnLoading = true
-        this.releaseQuery.pcSystemId = this.pcSystemId
-        this.releaseQuery.appSystemId = this.appSystemId
-        Release(this.currRow.id, this.releaseQuery).then(res => {
-          this.releaseBtnLoading = false
-          this.releaseDialogVisible = false
-          this.initData()
-          this.$message({
-            type: 'success',
-            message: res.msg,
-            duration: 1000,
-          });
-        }).catch(() => { this.releaseBtnLoading = false })
-      })
+      if (!this.releaseQuery.pc && !this.releaseQuery.app) return this.$message.error('请至少选择一种菜单同步方式')
+      this.releaseBtnLoading = true
+      this.releaseQuery.pcSystemId = this.pcSystemId
+      this.releaseQuery.appSystemId = this.appSystemId
+      Release(this.currRow.id, this.releaseQuery).then(res => {
+        this.releaseBtnLoading = false
+        this.releaseDialogVisible = false
+        this.initData()
+        this.$message({
+          type: 'success',
+          message: res.msg,
+          duration: 1000,
+        });
+      }).catch(() => { this.releaseBtnLoading = false })
     },
     getMenuSelector() {
       getMenuSelector({ category: 'Web' }, 0).then(res => {
