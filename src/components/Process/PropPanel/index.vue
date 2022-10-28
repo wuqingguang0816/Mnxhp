@@ -418,14 +418,14 @@
                   <org-select ref="start-copy-user-org" v-model="startForm.circulateUser"
                     title="添加用户" class="mb-5" />
                   <el-form-item>
-                    <div slot="label">审批人范围
-                      <el-tooltip content="抄送人员增加人员选择范围审批人范围" placement="top">
+                    <div slot="label">抄送人范围
+                      <el-tooltip content="抄送人员增加人员选择范围附加条件" placement="top">
                         <a class="el-icon-warning-outline"></a>
                       </el-tooltip>
                     </div>
                     <el-select v-model="startForm.extraCopyRule">
-                      <el-option v-for="(item,i) in extraRuleOptions" :key="i" :label="item.label"
-                        :value="item.value" />
+                      <el-option v-for="(item,i) in extraRuleOptions" :key="i"
+                        :label="item.value==1?'无抄送人范围':item.label" :value="item.value" />
                     </el-select>
                   </el-form-item>
                   <el-checkbox v-model="startForm.isCustomCopy">允许自选抄送人</el-checkbox>
@@ -1375,7 +1375,7 @@
                   <el-form-item style="margin-bottom:0!important"
                     v-if="approverForm.assigneeType === 6">
                     <div slot="label">审批人范围
-                      <el-tooltip content="指定成员增加人员选择范围审批人范围" placement="top">
+                      <el-tooltip content="指定成员增加人员选择范围附加条件" placement="top">
                         <a class="el-icon-warning-outline"></a>
                       </el-tooltip>
                     </div>
@@ -1458,14 +1458,14 @@
                   <org-select ref="approver-copy-user-org" v-model="approverForm.circulateUser"
                     title="添加用户" class="mb-5" />
                   <el-form-item>
-                    <div slot="label">审批人范围
-                      <el-tooltip content="抄送人员增加人员选择范围审批人范围" placement="top">
+                    <div slot="label">抄送人范围
+                      <el-tooltip content="抄送人员增加人员选择范围附加条件" placement="top">
                         <a class="el-icon-warning-outline"></a>
                       </el-tooltip>
                     </div>
                     <el-select v-model="approverForm.extraCopyRule">
-                      <el-option v-for="(item,i) in extraRuleOptions" :key="i" :label="item.label"
-                        :value="item.value" />
+                      <el-option v-for="(item,i) in extraRuleOptions" :key="i"
+                        :label="item.value==1?'无抄送人范围':item.label" :value="item.value" />
                     </el-select>
                   </el-form-item>
                   <el-checkbox v-model="approverForm.isCustomCopy">允许自选抄送人</el-checkbox>
