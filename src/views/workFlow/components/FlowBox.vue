@@ -107,8 +107,8 @@
           </el-form-item>
         </template>
         <template v-if="properties.rejectType &&eventType!=='audit'">
-          <el-form-item label="驳回节点" prop="rejectStep">
-            <el-select v-model="candidateForm.rejectStep" placeholder="请选择驳回节点"
+          <el-form-item label="退回节点" prop="rejectStep">
+            <el-select v-model="candidateForm.rejectStep" placeholder="请选择退回节点"
               :disabled='properties.rejectStep!=="2"'>
               <el-option v-for="item in rejectList" :key="item.nodeCode" :label="item.nodeName"
                 :value="item.nodeCode">
@@ -506,7 +506,7 @@ export default {
             this.candidateForm.rejectStep = this.rejectList[0].nodeCode
           }).catch({})
           if (!this.properties.hasSign && !this.properties.hasOpinion && !this.properties.isCustomCopy) {
-            this.$confirm('此操作将驳回该审批单，是否继续？', '提示', {
+            this.$confirm('此操作将退回该审批单，是否继续？', '提示', {
               type: 'warning'
             }).then(() => {
               this.handleApproval()

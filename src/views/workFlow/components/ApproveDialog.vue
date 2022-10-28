@@ -22,8 +22,8 @@
         </el-form-item>
       </template>
       <template v-if="properties&&properties.rejectType &&eventType!=='audit'">
-        <el-form-item label="驳回节点" prop="rejectStep">
-          <el-select v-model="dataForm.rejectStep" placeholder="请选择驳回节点"
+        <el-form-item label="退回节点" prop="rejectStep">
+          <el-select v-model="dataForm.rejectStep" placeholder="请选择退回节点"
             :disabled='properties.rejectStep!=="2"'>
             <el-option v-for="item in rejectList" :key="item.nodeCode" :label="item.nodeName"
               :value="item.nodeCode">

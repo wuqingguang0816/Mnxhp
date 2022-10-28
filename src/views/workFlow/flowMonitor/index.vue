@@ -105,7 +105,7 @@
             <template slot-scope="scope">
               <el-tag type="primary" v-if="scope.row.status==1">等待审核</el-tag>
               <el-tag type="success" v-else-if="scope.row.status==2">审核通过</el-tag>
-              <el-tag type="danger" v-else-if="scope.row.status==3">审核驳回</el-tag>
+              <el-tag type="danger" v-else-if="scope.row.status==3">审核退回</el-tag>
               <el-tag type="info" v-else-if="scope.row.status==4">流程撤回</el-tag>
               <el-tag type="info" v-else-if="scope.row.status==5">审核终止</el-tag>
               <el-tag v-else type="warning">等待提交</el-tag>
@@ -190,7 +190,7 @@ export default {
         fullName: '审核通过'
       }, {
         id: 3,
-        fullName: '审核驳回'
+        fullName: '审核退回'
       }, {
         id: 4,
         fullName: '流程撤回'

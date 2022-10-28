@@ -1409,20 +1409,20 @@
                   </el-option>
                 </el-select>
               </el-form-item>
-              <el-form-item label="驳回设置">
-                <div slot="label" class="form-item-label">驳回设置
-                  <el-tooltip content="纯表单流程设置驳回到发起节点无效" placement="top">
+              <el-form-item label="退回设置">
+                <div slot="label" class="form-item-label">退回设置
+                  <el-tooltip content="纯表单流程设置退回到发起节点无效" placement="top">
                     <i class="el-icon-warning-outline"></i>
                   </el-tooltip>
                 </div>
                 <el-radio-group v-model="approverForm.rejectType">
                   <el-radio :label="1">重新审批
-                    <el-tooltip content="若流程为A->B->C,C驳回至A，则C->A->B->C" placement="top">
+                    <el-tooltip content="若流程为A->B->C,C退回至A，则C->A->B->C" placement="top">
                       <i class="el-icon-warning-outline"></i>
                     </el-tooltip>
                   </el-radio>
                   <el-radio :label="2">从当前节点审批
-                    <el-tooltip content="若流程为A->B->C,C驳回至A，则C->A->C" placement="top">
+                    <el-tooltip content="若流程为A->B->C,C退回至A，则C->A->C" placement="top">
                       <i class="el-icon-warning-outline"></i>
                     </el-tooltip>
                   </el-radio>
@@ -1489,7 +1489,7 @@
                     <el-input v-model="approverForm.auditBtnText" />
                   </div>
                   <div class="per-cell">
-                    <el-checkbox v-model="approverForm.hasRejectBtn">驳回</el-checkbox>
+                    <el-checkbox v-model="approverForm.hasRejectBtn">退回</el-checkbox>
                     <el-input v-model="approverForm.rejectBtnText" />
                   </div>
                   <div class="per-cell">
@@ -1632,8 +1632,8 @@
                   </el-table-column>
                 </el-table>
               </div>
-              <el-form-item label="驳回事件">
-                <div slot="label" class="form-item-label">驳回事件</div>
+              <el-form-item label="退回事件">
+                <div slot="label" class="form-item-label">退回事件</div>
                 <el-switch v-model="approverForm.rejectFuncConfig.on" />
               </el-form-item>
               <div class="form-item-content form-item-content-first"
@@ -2404,8 +2404,8 @@ const defaultApproverForm = {
   circulateUser: [],  // 抄送人集合
   isCustomCopy: false,
   progress: '50',  // 进度
-  rejectType: 1, //驳回
-  rejectStep: '0',  // 驳回步骤
+  rejectType: 1, //退回
+  rejectStep: '0',  // 退回步骤
   description: '',  // 节点描述
   managerLevel: 1,
   departmentLevel: 1,
@@ -3455,7 +3455,7 @@ export default {
       // 根据对象的某个属性值去重
       return arr.filter(o => !res.has(o[attrName]) && res.set(o[attrName], 1))
     },
-    // 获取驳回步骤选项
+    // 获取退回步骤选项
     getNodeOption() {
       let list = [], _this = this
       const loop = data => {

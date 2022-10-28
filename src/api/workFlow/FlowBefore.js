@@ -32,7 +32,7 @@ export function SaveAudit(id, data) {
     data
   })
 }
-// 待我审核驳回
+// 待我审核退回
 export function Reject(id, data) {
   return request({
     url: `/api/workflow/Engine/FlowBefore/Reject/${id}`,
@@ -149,7 +149,7 @@ export function checkInfo(taskOperatorId) {
   })
 }
 
-//获取驳回下拉接口
+//获取退回下拉接口
 export function RejectList(id) {
   return request({
     url: `/api/workflow/Engine/FlowBefore/RejectList/${id}`,
