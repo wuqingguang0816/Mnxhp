@@ -30,61 +30,14 @@
         </div>
       </template>
       <div class="options">
-        <el-dropdown class="dropdown" placement="bottom" @command="handleMore">
+        <el-dropdown class="dropdown" placement="bottom" @command="handleMore"
+          v-if="moreBtnList.length">
           <el-button style="width:70px" :disabled="allBtnDisabled">
             更 多<i class="el-icon-arrow-down el-icon--right"></i>
           </el-button>
           <el-dropdown-menu slot="dropdown">
-            <el-dropdown-item class="dropdown-item"
-              v-if="setting.opType=='-1'&&!setting.hideCancelBtn" command="save">
-              {{properties.saveBtnText||'暂 存'}}
-            </el-dropdown-item>
-            <el-dropdown-item class="dropdown-item"
-              v-if="(properties.hasRevokeBtn || properties.hasRevokeBtn===undefined)&&setting.opType == 0 && setting.status == 1"
-              command="revoke">
-              {{properties.revokeBtnText||'撤 回'}}
-            </el-dropdown-item>
-            <!-- 审批 -->
-            <template v-if="setting.opType == 1">
-              <el-dropdown-item class="dropdown-item" v-if="properties.hasTransferBtn"
-                command="transfer">
-                {{properties.transferBtnText||'转 审'}}
-              </el-dropdown-item>
-              <el-dropdown-item class="dropdown-item" v-if="properties.hasSaveBtn"
-                command="saveAudit">
-                {{properties.saveBtnText||'暂 存'}}
-              </el-dropdown-item>
-              <el-dropdown-item class="dropdown-item" v-if="properties.hasRejectBtn"
-                command="reject">
-                {{properties.rejectBtnText||'拒 绝'}}
-              </el-dropdown-item>
-              <el-dropdown-item class="dropdown-item" v-if="properties.hasFreeApproverBtn"
-                command="hasFreeApprover">
-                {{properties.hasFreeApproverBtnText||'加 签'}}
-              </el-dropdown-item>
-            </template>
-            <!-- 判断流程复活按钮和节点变更 -->
-            <template v-if="setting.opType == 4">
-              <el-dropdown-item class="dropdown-item" v-if="flowTaskInfo.completion==100"
-                command="resurgence">
-                复 活
-              </el-dropdown-item>
-              <el-dropdown-item class="dropdown-item"
-                v-if="flowTaskInfo.completion>0&&flowTaskInfo.completion<100&&(setting.status==1||setting.status==3)"
-                command="resurgence">变 更
-              </el-dropdown-item>
-              <el-dropdown-item class="dropdown-item"
-                v-if="setting.status==1&&assignNodeList.length" command="assign">指 派
-              </el-dropdown-item>
-            </template>
-            <el-dropdown-item class="dropdown-item" v-if="activeTab==='comment'" command="comment">评
-              论
-            </el-dropdown-item>
-            <el-dropdown-item class="dropdown-item"
-              v-if="setting.opType!=4&&setting.id&&properties.hasPrintBtn&&properties.printId"
-              command="print">
-              {{properties.printBtnText||'打 印'}}
-            </el-dropdown-item>
+            <el-dropdown-item class="dropdown-item" v-for="(item,index) in moreBtnList" :key="index"
+              :command="item.key">{{item.label}}</el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>
         <el-button v-if="setting.opType=='-1'" type="primary" @click="eventLauncher('submit')"
@@ -329,6 +282,7 @@ export default {
       errorVisible: false,
       errorNodeList: [],
       isValidate: false,
+      moreBtnList: []
     }
   },
   computed: {
@@ -346,6 +300,9 @@ export default {
     activeTab(val) {
       if (val === 'comment') {
         this.$refs.comment && this.$refs.comment.init()
+        this.moreBtnList.push({ label: "评 论", key: "comment" })
+      } else {
+        this.moreBtnList = this.moreBtnList.filter(o => o.key != "comment")
       }
       if (val === 'recordSummary') {
         this.$refs.recordSummary && this.$refs.recordSummary.init()
@@ -480,12 +437,35 @@ export default {
         } else {
           this.flowTemplateJson.state = 'state-curr'
         }
+        this.initBtnList()
         setTimeout(() => {
           this.$nextTick(() => {
             this.$refs.form && this.$refs.form.init(data)
           })
         }, 500)
       }).catch(() => { this.loading = false })
+    },
+    initBtnList() {
+      const list = []
+      const setting = this.setting
+      const opType = this.setting.opType
+      const properties = this.properties
+      const flowTaskInfo = this.flowTaskInfo
+      if (opType == '-1' && !setting.hideCancelBtn) list.push({ label: properties.saveBtnText || '暂 存', key: 'save' })
+      if (opType == 0 && setting.status == 1 && (properties.hasRevokeBtn || properties.hasRevokeBtn === undefined)) list.push({ label: properties.revokeBtnText || '撤 回', key: 'revoke' })
+      if (opType != 4 && setting.id && properties.hasPrintBtn && properties.printId) list.push({ label: properties.printBtnText || '打 印', key: 'print' })
+      if (opType == 1) {
+        if (properties.hasTransferBtn) list.push({ label: properties.transferBtnText || '转 审', key: 'transfer' })
+        if (properties.hasSaveBtn) list.push({ label: properties.saveBtnText || '暂 存', key: 'saveAudit' })
+        if (properties.hasRejectBtn) list.push({ label: properties.rejectBtnText || '拒 绝', key: 'reject' })
+        if (properties.hasFreeApproverBtn) list.push({ label: properties.hasFreeApproverBtnText || '加 签', key: 'hasFreeApprover' })
+      }
+      if (opType == 4) {
+        if (flowTaskInfo.completion == 100) list.push({ label: '复 活', key: 'resurgence' })
+        if (flowTaskInfo.completion > 0 && flowTaskInfo.completion < 100 && (setting.status == 1 || setting.status == 3)) list.push({ label: '变 更', key: 'resurgence' })
+        if (setting.status == 1 && this.assignNodeList.length) list.push({ label: '指 派', key: 'assign' })
+      }
+      this.moreBtnList = list
     },
     handleMore(e) {
       if (e == 'revoke') return this.actionLauncher('revoke')
