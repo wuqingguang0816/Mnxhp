@@ -1110,7 +1110,7 @@
             </el-form>
           </el-scrollbar>
         </el-tab-pane>
-        <el-tab-pane label="超时提醒">
+        <el-tab-pane label="超时处理">
           <el-scrollbar class="config-scrollbar">
             <el-form :model="startForm" class="pd-10-20" label-position="top">
               <el-form-item label="限时设置">
@@ -2096,7 +2096,7 @@
             </el-form>
           </el-scrollbar>
         </el-tab-pane>
-        <el-tab-pane label="超时提醒">
+        <el-tab-pane label="超时处理">
           <el-scrollbar class="config-scrollbar">
             <el-form :model="approverForm" class="pd-10-20" label-position="top">
               <el-form-item label="限时设置">
