@@ -1468,7 +1468,6 @@ export const layoutComponents = [
           __config__: {
             jnpfKey: "collapseItem",
             children: [],
-            layout: "rowFormItem",
           }
         },
         {
@@ -1477,7 +1476,6 @@ export const layoutComponents = [
           __config__: {
             jnpfKey: "collapseItem",
             children: [],
-            layout: "rowFormItem",
           }
         }
       ],
@@ -1507,7 +1505,6 @@ export const layoutComponents = [
           __config__: {
             jnpfKey: "tabItem",
             children: [],
-            layout: "rowFormItem",
           }
         },
         {
@@ -1515,7 +1512,6 @@ export const layoutComponents = [
           __config__: {
             jnpfKey: "tabItem",
             children: [],
-            layout: "rowFormItem",
           }
         }
       ],

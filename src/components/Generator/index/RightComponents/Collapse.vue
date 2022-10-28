@@ -43,7 +43,6 @@ export default {
         __config__: {
           jnpfKey: "collapseItem",
           children: [],
-          layout: "rowFormItem",
         }
       })
     },

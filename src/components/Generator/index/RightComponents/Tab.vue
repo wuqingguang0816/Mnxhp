@@ -54,7 +54,6 @@ export default {
         __config__: {
           jnpfKey: "tabItem",
           children: [],
-          layout: "rowFormItem",
         }
       })
     },
