@@ -77,7 +77,7 @@
               </el-table-column>
             </JNPF-table>
             <pagination :total="total" :page.sync="listQuery.currentPage"
-              :limit.sync="listQuery.pageSize" @pagination="initData" />
+              :limit.sync="listQuery.pageSize" @pagination="initFlowList" />
           </div>
         </el-tab-pane>
 
@@ -387,11 +387,11 @@ export default {
         this.initFlowList()
       }
       if (tab.paneName == '1') {//委托设置
-        this.initData()
+        this.search()
       }
 
       if (tab.paneName == '2') {//委托给我的
-        this.initData()
+        this.search()
       }
     },
 
