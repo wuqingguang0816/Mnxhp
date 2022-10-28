@@ -76,10 +76,10 @@ export default {
           { required: true, message: '请输入原始ID', trigger: 'blur' },
         ],
         appId: [
-          { required: true, message: '请输入应用AppID', trigger: 'blur' }
+          { required: true, message: '请输入AppID', trigger: 'blur' }
         ],
         appSecret: [
-          { required: true, message: '请输入应用Secret', trigger: 'blur' }
+          { required: true, message: '请输入Secret', trigger: 'blur' }
         ]
       }
     }
