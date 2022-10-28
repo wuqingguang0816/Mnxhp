@@ -38,9 +38,6 @@
           <JNPF-UploadFz v-model="files" disabled detailed />
         </div>
       </div>
-      <span slot="footer" class="dialog-footer">
-        <el-button @click="visible = false">{{$t('common.cancelButton')}}</el-button>
-      </span>
     </el-dialog>
   </div>
 </template>
