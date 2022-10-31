@@ -382,7 +382,7 @@
                 <div slot="label" class="form-item-label">{{flowType==1?"功能":"表单"}}配置</div>
                 <div class="form-item-content">
                   <flow-form-dialog :value="startForm.formId" :title="startForm.formName"
-                    :type="flowType" @change="onStartFormIdChange"
+                    :type="flowType" @change="onStartFormIdChange" :clearable="false"
                     :placeholder='"请选择"+(flowType==1?"功能":"表单")' />
                 </div>
               </el-form-item>
@@ -3666,17 +3666,31 @@ export default {
       })
     },
     onStartFormIdChange(id, item) {
+      if (!id) return this.handleNull('startForm')
       let isSameForm = this.startForm.formId === id
       this.startForm.formName = item.fullName
       this.startForm.formId = id
       this.getFormFieldList(id, 'startForm', isSameForm)
     },
     onApproverFormIdChange(id, item) {
+      if (!id) return this.handleNull('approverForm')
       let isSameForm = this.startForm.formId === id
       this.approverForm.formName = item.fullName
       this.approverForm.formId = id
       this.approverForm.assignList = []
       this.getFormFieldList(id, 'approverForm', isSameForm)
+    },
+    handleNull(form) {
+      this[form].formName = ''
+      this[form].formId = ''
+      let formFieldList = []
+      if (form === 'approverForm') {
+        formFieldList = this.processData.properties.formFieldList || []
+      }
+      this.formFieldList = formFieldList
+      this[form].formFieldList = formFieldList
+      this[form].formOperates = this.initFormOperates(this.value, true)
+      if (form === 'startForm') this.updateAllNodeFormOperates([])
     },
     getFormFieldList(id, form, isSameForm) {
       getFormInfo(id).then(res => {
