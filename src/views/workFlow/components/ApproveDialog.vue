@@ -39,7 +39,7 @@
           :rows="4" />
       </el-form-item>
       <el-form-item label="审批附件" prop="fileList">
-        <JNPF-UploadFz v-model="dataForm.fileList" />
+        <JNPF-UploadFz v-model="dataForm.fileList" :limit="3" />
       </el-form-item>
       <el-form-item label="审批签名" required v-if="properties&&properties.hasSign">
         <div class="sign-main">
