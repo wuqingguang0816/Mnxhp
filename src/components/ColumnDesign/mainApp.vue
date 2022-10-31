@@ -161,11 +161,11 @@
               <el-form-item label="列表权限">
                 <el-switch v-model="columnData.useColumnPermission"></el-switch>
               </el-form-item>
-              <el-form-item label="数据权限">
-                <el-switch v-model="columnData.useDataPermission"></el-switch>
-              </el-form-item>
               <el-form-item label="表单权限">
                 <el-switch v-model="columnData.useFormPermission"></el-switch>
+              </el-form-item>
+              <el-form-item label="数据权限">
+                <el-switch v-model="columnData.useDataPermission"></el-switch>
               </el-form-item>
               <template v-if="modelType==1">
                 <el-divider>脚本事件</el-divider>

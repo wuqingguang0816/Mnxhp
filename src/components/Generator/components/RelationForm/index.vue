@@ -1,7 +1,8 @@
 <template>
   <div class="popupSelect-container">
     <div class="el-select" @click="openDialog">
-      <el-input :placeholder="placeholder" v-model="innerValue" readonly :validate-event="false"
+      <el-input :placeholder="placeholder" :class="{'link-style':this.disabled&&innerValue}"
+        v-model="innerValue" readonly :validate-event="false"
         @mouseenter.native="inputHovering = true" @mouseleave.native="inputHovering = false">
         <template slot="suffix">
           <i v-show="!showClose"
@@ -332,6 +333,13 @@ export default {
     .JNPF-common-search-box-right {
       padding: 10px 10px 0 0;
     }
+  }
+}
+.link-style {
+  >>> .el-input__inner {
+    color: #1890ff !important;
+    text-decoration: underline;
+    cursor: pointer !important;
   }
 }
 </style>
