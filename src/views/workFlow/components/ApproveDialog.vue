@@ -31,9 +31,15 @@
           </el-select>
         </el-form-item>
       </template>
+      <el-form-item label="抄送人员" prop="copyIds" v-if="properties&&properties.isCustomCopy">
+        <user-select v-model="copyIds" placeholder="请选择" multiple />
+      </el-form-item>
       <el-form-item label="审批意见" prop="handleOpinion" v-if="properties&&properties.hasOpinion">
         <el-input v-model="dataForm.handleOpinion" placeholder="请输入审批意见（选填）" type="textarea"
           :rows="4" />
+      </el-form-item>
+      <el-form-item label="审批附件" prop="fileList">
+        <JNPF-UploadFz v-model="dataForm.fileList" />
       </el-form-item>
       <el-form-item label="审批签名" required v-if="properties&&properties.hasSign">
         <div class="sign-main">
@@ -43,12 +49,6 @@
             <span class="sign-title">手写签名</span>
           </div>
         </div>
-      </el-form-item>
-      <el-form-item label="抄送人员" prop="copyIds" v-if="properties&&properties.isCustomCopy">
-        <user-select v-model="copyIds" placeholder="请选择" multiple />
-      </el-form-item>
-      <el-form-item label="审批附件" prop="fileList">
-        <JNPF-UploadFz v-model="dataForm.fileList" />
       </el-form-item>
     </el-form>
     <span slot="footer" class="dialog-footer">

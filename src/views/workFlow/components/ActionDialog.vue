@@ -21,6 +21,15 @@
         <el-form-item :label="`${label}附件`" prop="fileList">
           <JNPF-UploadFz v-model="dataForm.fileList" :limit="3" />
         </el-form-item>
+        <el-form-item label="手写签名" required v-if="properties.hasSign&&eventType==='transfer'">
+          <div class="sign-main">
+            <img :src="signImg" alt="" v-if="signImg" class="sign-img">
+            <div @click="addSign" class="sign-style">
+              <i class="icon-ym icon-ym-signature add-sign"></i>
+              <span class="sign-title" v-if="!signImg">手写签名</span>
+            </div>
+          </div>
+        </el-form-item>
       </template>
       <template v-else>
         <template v-if="properties.hasOpinion">
@@ -37,11 +46,12 @@
             <img :src="signImg" alt="" v-if="signImg" class="sign-img">
             <div @click="addSign" class="sign-style">
               <i class="icon-ym icon-ym-signature add-sign"></i>
-              <span class="sign-title">手写签名</span>
+              <span class="sign-title" v-if="!signImg">手写签名</span>
             </div>
           </div>
         </el-form-item>
       </template>
+
     </el-form>
     <span slot="footer" class="dialog-footer">
       <el-button @click="visible = false">{{$t('common.cancelButton')}}</el-button>
@@ -94,12 +104,13 @@ export default {
     init(properties, eventType) {
       this.visible = true
       this.properties = properties
+      console.log(this.userInfo)
       this.eventType = eventType || ''
       this.dataForm.handleOpinion = ''
       this.dataForm.freeApproverUserId = ''
       this.dataForm.nodeCode = ''
       this.dataForm.fileList = []
-      this.signImg = ''
+      this.signImg = this.userInfo.signImg
       switch (eventType) {
         case 'transfer':
           this.title = '转审'
@@ -143,7 +154,8 @@ export default {
     handleSure() {
       this.$refs['dataForm'].validate((valid) => {
         if (valid) {
-          if (this.properties.hasSign && !this.signImg) {
+          console.log(this.eventType)
+          if (this.properties.hasSign && !this.signImg && this.eventType != 'assign' && this.eventType != 'cancel') {
             this.$message({
               message: '请签名',
               type: 'error'
