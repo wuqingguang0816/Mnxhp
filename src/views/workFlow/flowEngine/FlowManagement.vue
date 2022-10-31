@@ -53,7 +53,12 @@
               <el-button type="text" size="mini" @click.native="updateRelease(scope.row)"
                 :disabled="scope.row.enabledMark==1">设为主版本
               </el-button>
-              <el-button type="text" size="mini" @click.native="del(scope.row)" style="color:red">
+              <el-button type="text" v-if="scope.row.enabledMark==1" size="mini"
+                @click.native="del(scope.row)" :disabled="scope.row.enabledMark==1">
+                删除
+              </el-button>
+              <el-button type="text" v-else size="mini" @click.native="del(scope.row)"
+                style="color:red">
                 删除
               </el-button>
               <el-dropdown>
@@ -105,6 +110,7 @@ export default {
       keyword: '',
       enCode: '',
       pickerVal: '',
+      flowTemplateJson: {},
       pickerOptions: {
         shortcuts: [{
           text: '最近一周',
@@ -160,7 +166,7 @@ export default {
     },
     flowInfo(item) {
       this.flowVisible = true
-      this.flowTemplateJson = item.flowTemplateJson
+      this.flowTemplateJson = item.flowTemplateJson ? JSON.parse(item.flowTemplateJson) : null
     },
     goBack() {
       if (this.flowVisible) {
