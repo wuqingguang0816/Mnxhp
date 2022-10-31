@@ -156,7 +156,8 @@ export default {
             handleOpinion: this.dataForm.handleOpinion,
             signImg: this.signImg,
             copyIds: this.copyIds.join(','),
-            branchList: this.dataForm.branchList
+            branchList: this.dataForm.branchList,
+            fileList: this.dataForm.fileList
           }
           if (this.eventType === 'reject') query.rejectStep = this.dataForm.rejectStep
           if (this.dataForm.candidateList.length) {
