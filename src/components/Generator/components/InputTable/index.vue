@@ -522,6 +522,7 @@ export default {
       if (['relationFormAttr', 'popupAttr'].includes(itemConfig.jnpfKey)) {
         let prop = newObj['relationField'].split('_jnpfTable_')[0]
         newObj['relationField'] = prop + '_jnpfRelation_' + rowIndex
+        newObj['isStorage'] = itemConfig.isStorage
       }
       return newObj
     },

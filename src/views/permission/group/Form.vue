@@ -99,6 +99,7 @@ export default {
               type: 'success',
               duration: 1500,
               onClose: () => {
+                this.$store.commit('generator/SET_GROUP_TREE', [])
                 this.visible = false
                 this.btnLoading = false
                 this.$emit('refreshDataList')

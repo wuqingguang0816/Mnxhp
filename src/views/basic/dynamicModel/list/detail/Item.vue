@@ -155,7 +155,7 @@
                 </el-table-column>
                 <el-table-column :key="columnIndex" :prop="column.__vModel__"
                   :label="column.__config__.label" v-else>
-                  <template slot-scope="scope">
+                  <template>
                     <span
                       v-if="column.__slot__&&column.__slot__.prepend">{{column.__slot__.prepend}}</span>{{column.__config__.label}}<span
                       v-if="column.__slot__&&column.__slot__.append">{{column.__slot__.append}}</span>
