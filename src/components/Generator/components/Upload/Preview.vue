@@ -88,7 +88,7 @@ export default {
     },
     handleDownload() {
       if (!this.file.fileId) return
-      if (this.file) {
+      if (this.file.url) {
         let arr = this.file.url.split("\/")
         this.type = arr[arr.length - 2]
       }
