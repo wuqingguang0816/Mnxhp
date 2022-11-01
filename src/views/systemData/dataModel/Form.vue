@@ -44,12 +44,14 @@
           <el-table-column type="index" width="50" label="序号" align="center" />
           <el-table-column prop="field" label="列名">
             <template slot-scope="scope">
-              <el-input v-model="scope.row.field" placeholder="请输入列名" maxlength="50" />
+              <p v-if="scope.row.disabled">{{scope.row.field}}</p>
+              <el-input v-else v-model="scope.row.field" placeholder="请输入列名" maxlength="50" />
             </template>
           </el-table-column>
           <el-table-column prop="dataType" label="类型">
             <template slot-scope="scope">
-              <el-select v-model="scope.row.dataType" placeholder="请选择">
+              <p v-if="scope.row.disabled">{{scope.row.dataType}}</p>
+              <el-select v-else v-model="scope.row.dataType" placeholder="请选择">
                 <el-option v-for="item in options" :key="item.value" :label="item.label"
                   :value="item.value" />
               </el-select>
@@ -57,30 +59,35 @@
           </el-table-column>
           <el-table-column prop="dataLength" label="长度">
             <template slot-scope="scope">
-              <el-input v-model="scope.row.dataLength" placeholder="请输入长度"
+              <p v-if="scope.row.disabled">{{scope.row.dataLength}}</p>
+              <el-input v-else v-model="scope.row.dataLength" placeholder="请输入长度"
                 :disabled="scope.row.dataType!=='varchar'&&scope.row.dataType!=='decimal'" />
             </template>
           </el-table-column>
           <el-table-column prop="primaryKey" label="是否主键" width="70" align="center">
             <template slot-scope="scope">
-              <el-checkbox v-model="scope.row.primaryKey" @change='changeKey($event,scope.row)'
-                :true-label="1" :false-label="0" />
+              <el-checkbox :value='!!scope.row.primaryKey' v-if="scope.row.disabled" />
+              <el-checkbox v-else v-model="scope.row.primaryKey"
+                @change='changeKey($event,scope.row)' :true-label="1" :false-label="0" />
             </template>
           </el-table-column>
           <el-table-column prop="allowNull" label="允许空" width="60" align="center">
             <template slot-scope="scope">
-              <el-checkbox v-model="scope.row.allowNull" :true-label="1" :false-label="0" />
+              <el-checkbox :value='!!scope.row.allowNull' v-if="scope.row.disabled" />
+              <el-checkbox v-else v-model="scope.row.allowNull" :true-label="1" :false-label="0" />
             </template>
           </el-table-column>
           <el-table-column prop="fieldName" label="说明">
             <template slot-scope="scope">
-              <el-input v-model="scope.row.fieldName" placeholder="请输入说明" />
+              <p v-if="scope.row.disabled">{{scope.row.fieldName}}</p>
+              <el-input v-else v-model="scope.row.fieldName" placeholder="请输入说明" />
             </template>
           </el-table-column>
           <el-table-column label="操作" width="50">
             <template slot-scope="scope">
               <el-button class="JNPF-table-delBtn" size="mini" type="text"
-                @click="handleDel(scope.$index,scope.row)">删除</el-button>
+                v-if="!scope.row.disabled" @click="handleDel(scope.$index,scope.row)">删除
+              </el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -94,7 +101,7 @@
 
 <script>
 import Sortable from 'sortablejs'
-import { DataModelInfo, DataModelUpdate, DataModelCreate } from '@/api/systemData/dataModel'
+import { DataModelInfo, DataModelUpdate, DataModelCreate, addTableFields } from '@/api/systemData/dataModel'
 import { getList } from '@/api/systemData/commonFields'
 export default {
   data() {
@@ -147,18 +154,23 @@ export default {
         if (this.dataForm.table) {
           DataModelInfo(dataBase, this.dataForm.table).then(res => {
             this.dataForm = res.data.tableInfo
+            const hasTableData = res.data.hasTableData || false
             this.$set(this.dataForm, 'newTable', this.dataForm.table)
             this.list = res.data.tableFieldList.map((o, i) => ({ index: i, ...o }))
+            for (let index = 0; index < this.list.length; index++) {
+              const element = this.list[index];
+              if (hasTableData) element.disabled = true
+            }
             this.listLoading = false
+            this.$nextTick(() => {
+              if (!hasTableData) this.setSort()
+            })
           })
         } else {
           this.dataForm.newTable = table || ''
           this.listLoading = false
           this.list = []
         }
-      })
-      this.$nextTick(() => {
-        this.setSort()
       })
     },
     setSort() {
@@ -199,6 +211,26 @@ export default {
             return
           }
           this.btnLoading = true
+          let tableFieldList = this.list.filter(o => !o.disabled)
+          if (tableFieldList.length && tableFieldList.length != this.list.length) {
+            let query = {
+              tableFieldList,
+              tableInfo: this.dataForm
+            }
+            addTableFields(this.dataBase, query).then((res) => {
+              this.$message({
+                message: res.msg,
+                type: 'success',
+                duration: 1500,
+                onClose: () => {
+                  this.visible = false
+                  this.btnLoading = false
+                  this.$emit('close', true)
+                }
+              })
+            }).catch(() => { this.btnLoading = false })
+            return
+          }
           let query = {
             tableFieldList: this.list,
             tableInfo: this.dataForm
