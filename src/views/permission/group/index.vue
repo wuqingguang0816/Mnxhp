@@ -154,6 +154,7 @@ export default {
             message: res.msg,
             duration: 1500,
             onClose: () => {
+              this.$store.commit('generator/SET_GROUP_TREE', [])
               this.initData()
             }
           })
