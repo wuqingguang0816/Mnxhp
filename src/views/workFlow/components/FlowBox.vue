@@ -130,7 +130,7 @@
             <img :src="signImg" alt="" v-if="signImg" class="sign-img">
             <div @click="addSign" class="sign-style">
               <i class="icon-ym icon-ym-signature add-sign"></i>
-              <span class="sign-title">手写签名</span>
+              <span class="sign-title" v-if="!signImg">手写签名</span>
             </div>
           </div>
         </el-form-item>
@@ -500,6 +500,7 @@ export default {
         this.candidateForm.fileList = []
         this.copyIds = []
         this.isValidate = false
+        if (this.properties.hasSign) this.signImg = this.userInfo.signImg
         if (eventType === 'reject') {
           RejectList(this.setting.taskId).then(res => {
             this.rejectList = res.data || []

@@ -46,7 +46,7 @@
           <img :src="signImg" alt="" v-if="signImg" class="sign-img">
           <div @click="addSign" class="sign-style">
             <i class="icon-ym icon-ym-signature add-sign"></i>
-            <span class="sign-title" v-if="signImg">手写签名</span>
+            <span class="sign-title" v-if="!signImg">手写签名</span>
           </div>
         </div>
       </el-form-item>
