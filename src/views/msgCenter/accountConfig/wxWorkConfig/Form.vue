@@ -30,9 +30,11 @@
       </jnpf-form-tip-item>
     </el-form>
     <span slot="footer" class="dialog-footer">
-      <el-button type="primary" :loading="btnLoading" @click="sendTest()">测试</el-button>
+      <el-button type="primary" :loading="testBtnLoading" :disabled="btnLoading"
+        @click="sendTest()">测试</el-button>
       <el-button @click="visible = false">{{$t('common.cancelButton')}}</el-button>
-      <el-button type="primary" :loading="btnLoading" @click="dataFormSubmit()">
+      <el-button type="primary" :loading="btnLoading" :disabled="testBtnLoading"
+        @click="dataFormSubmit()">
         {{$t('common.confirmButton')}}</el-button>
     </span>
   </el-dialog>
@@ -51,6 +53,7 @@ export default {
       visible: false,
       formLoading: false,
       btnLoading: false,
+      testBtnLoading: false,
       dataForm: {
         fullName: '',
         enCode: '',
@@ -102,7 +105,7 @@ export default {
     sendTest() {
       this.$refs['dataForm'].validate((valid) => {
         if (valid) {
-          this.btnLoading = true
+          this.testBtnLoading = true
           let query = {
             ...this.dataForm,
             type: 5
@@ -113,11 +116,11 @@ export default {
               message: res.msg,
               duration: 1000,
               onClose: () => {
-                this.btnLoading = false
+                this.testBtnLoading = false
               }
             });
           }).catch(() => {
-            this.btnLoading = false
+            this.testBtnLoading = false
           })
         }
       })
