@@ -88,6 +88,10 @@ export default {
     },
     handleDownload() {
       if (!this.file.fileId) return
+      if (this.file) {
+        let arr = this.file.url.split("\/")
+        this.type = arr[arr.length - 2]
+      }
       getDownloadUrl(this.type, this.file.fileId).then(res => {
         this.jnpf.downloadFile(res.data.url, this.file.name)
       })
