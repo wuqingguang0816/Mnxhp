@@ -70,14 +70,6 @@ export const updateMenuState = (id) => {
   })
 }
 
-//获取菜单分类
-export const getMenuType = () => {
-  return request({
-    url: `/api/system/DictionaryData/e3ca5fe13c484a74bf0a4ea69eec1afd/Data/Selector`,
-    method: 'GET'
-  })
-}
-
 // 导出系统菜单数据
 export const exportMenu = id => {
   return request({

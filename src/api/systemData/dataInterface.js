@@ -59,14 +59,6 @@ export function updateDataInterfaceState(id) {
   })
 }
 
-// 获取接口分类
-export function getDataInterfaceTypeSelector() {
-  return request({
-    url: '/api/system/DictionaryData/9c43287481364d348c0ea0d0f64b38be/Data/Selector',
-    method: 'GET'
-  })
-}
-
 // 获取接口数据
 export function getDataInterfaceRes(id, data) {
   return request({

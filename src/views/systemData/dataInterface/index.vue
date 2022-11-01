@@ -99,7 +99,6 @@
 </template>
 <script>
 import {
-  getDataInterfaceTypeSelector,
   getDataInterfaceList,
   updateDataInterfaceState,
   delDataInterface,
@@ -143,8 +142,8 @@ export default {
   methods: {
     initData(isInit) {
       this.treeLoading = true
-      getDataInterfaceTypeSelector().then(res => {
-        this.treeData = res.data.list
+      this.$store.dispatch('base/getDictionaryData', { sort: 'DataInterfaceType' }).then((res) => {
+        this.treeData = res
         if (!this.treeData.length) return this.treeLoading = false
         this.$nextTick(() => {
           if (isInit) this.listQuery.categoryId = this.treeData[0].id
@@ -152,8 +151,6 @@ export default {
           this.treeLoading = false
           if (isInit) this.getList()
         })
-      }).catch(() => {
-        this.treeLoading = false
       })
     },
     toggleTreeExpand(expands) {
