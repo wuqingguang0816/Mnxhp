@@ -271,7 +271,6 @@
 
 <script>
 import {
-  getDataInterfaceTypeSelector,
   getDataInterfaceInfo,
   createDataInterface,
   updateDataInterface,
@@ -414,8 +413,8 @@ export default {
       this.$nextTick(() => {
         this.$refs['dataForm'].resetFields()
         // 获取分类
-        getDataInterfaceTypeSelector().then(res => {
-          this.selectData = res.data.list
+        this.$store.dispatch('base/getDictionaryData', { sort: 'DataInterfaceType' }).then((res) => {
+          this.selectData = res
         })
         // 获取数据库
         getDataSourceListAll().then(res => {

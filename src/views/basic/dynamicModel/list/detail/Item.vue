@@ -93,7 +93,11 @@
               :formData="formValue"></jnpf-qrcode>
           </template>
           <template v-else>
-            <p class="jnpf-detail-text">{{ getValue(item) }}</p>
+            <p class="jnpf-detail-text">
+              <span
+                v-if="item.__slot__&&item.__slot__.prepend">{{item.__slot__.prepend}}</span>{{getValue(item)}}<span
+                v-if="item.__slot__&&item.__slot__.append">{{item.__slot__.append}}</span>
+            </p>
           </template>
         </el-form-item>
       </template>
@@ -150,7 +154,13 @@
                   </template>
                 </el-table-column>
                 <el-table-column :key="columnIndex" :prop="column.__vModel__"
-                  :label="column.__config__.label" v-else />
+                  :label="column.__config__.label" v-else>
+                  <template slot-scope="scope">
+                    <span
+                      v-if="column.__slot__&&column.__slot__.prepend">{{column.__slot__.prepend}}</span>{{column.__config__.label}}<span
+                      v-if="column.__slot__&&column.__slot__.append">{{column.__slot__.append}}</span>
+                  </template>
+                </el-table-column>
               </template>
             </template>
           </el-table>

@@ -106,7 +106,7 @@
 </template>
 
 <script>
-import { getDataInterfaceTypeSelector, getDataInterfaceSelectorList } from '@/api/systemData/dataInterface'
+import { getDataInterfaceSelectorList } from '@/api/systemData/dataInterface'
 export default {
   props: {
     value: {
@@ -217,8 +217,8 @@ export default {
       this.visible = true
       this.treeLoading = true
       this.listLoading = true
-      getDataInterfaceTypeSelector().then(res => {
-        this.treeData = res.data.list
+      this.$store.dispatch('base/getDictionaryData', { sort: 'DataInterfaceType' }).then((res) => {
+        this.treeData = res
         if (!this.treeData.length) return this.treeLoading = false
         this.$nextTick(() => {
           this.query.categoryId = this.treeData[0].id
@@ -226,8 +226,6 @@ export default {
           this.treeLoading = false
           this.reset()
         })
-      }).catch(() => {
-        this.treeLoading = false
       })
     },
     clear() {
