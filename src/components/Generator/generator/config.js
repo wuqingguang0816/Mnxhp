@@ -958,6 +958,44 @@ export const selectComponents = [
   },
   {
     __config__: {
+      jnpfKey: "table",
+      label: "设计子表",
+      showLabel: false,
+      tagIcon: "icon-ym icon-ym-generator-table",
+      className: [],
+      tag: "JNPF-InputTable",
+      defaultValue: [],
+      layout: "rowFormItem",
+      dragDisabled: false,
+      visibility: ["pc", "app"],
+      showTitle: true,
+      type: "table",
+      rowType: "table",
+      children: [],
+      tableName: ""
+    },
+    disabled: false,
+    actionText: "添加",
+    "show-summary": false,
+    addType: 0,
+    addTableConf: {
+      popupTitle: '选择数据',
+      popupType: 'dialog',
+      popupWidth: '800px',
+      interfaceId: '',
+      interfaceName: '',
+      templateJson: [],
+      hasPage: true,
+      pageSize: 20,
+      columnOptions: [],
+      relationOptions: []
+    },
+    summaryField: [],
+    tableConf: {},
+    defaultValue: []
+  },
+  {
+    __config__: {
       jnpfKey: "treeSelect",
       label: "下拉树形",
       labelWidth: undefined,
@@ -1053,44 +1091,6 @@ export const selectComponents = [
   },
   {
     __config__: {
-      jnpfKey: "table",
-      label: "设计子表",
-      showLabel: false,
-      tagIcon: "icon-ym icon-ym-generator-table",
-      className: [],
-      tag: "JNPF-InputTable",
-      defaultValue: [],
-      layout: "rowFormItem",
-      dragDisabled: false,
-      visibility: ["pc", "app"],
-      showTitle: true,
-      type: "table",
-      rowType: "table",
-      children: [],
-      tableName: ""
-    },
-    disabled: false,
-    actionText: "添加",
-    "show-summary": false,
-    addType: 0,
-    addTableConf: {
-      popupTitle: '选择数据',
-      popupType: 'dialog',
-      popupWidth: '800px',
-      interfaceId: '',
-      interfaceName: '',
-      templateJson: [],
-      hasPage: true,
-      pageSize: 20,
-      columnOptions: [],
-      relationOptions: []
-    },
-    summaryField: [],
-    tableConf: {},
-    defaultValue: []
-  },
-  {
-    __config__: {
       jnpfKey: "address",
       label: "省市区域",
       labelWidth: undefined,
@@ -1119,6 +1119,32 @@ export const selectComponents = [
     filterable: false,
     multiple: false,
     level: 2
+  },
+  {
+    __config__: {
+      jnpfKey: "billRule",
+      label: "单据组件",
+      labelWidth: undefined,
+      showLabel: true,
+      tag: "el-input",
+      defaultValue: "",
+      tagIcon: "icon-ym icon-ym-generator-documents",
+      className: [],
+      defaultValue: null,
+      layout: "colFormItem",
+      required: false,
+      span: 24,
+      dragDisabled: false,
+      visibility: ["pc", "app"],
+      tableName: "",
+      noShow: false,
+      trigger: "change",
+      rule: "",
+      ruleName: "",
+    },
+    style: { width: "100%" },
+    readonly: true,
+    placeholder: "系统自动生成"
   },
   {
     __config__: {
@@ -1237,32 +1263,6 @@ export const selectComponents = [
     style: { width: "100%" },
     showField: "",
     relationField: ""
-  },
-  {
-    __config__: {
-      jnpfKey: "billRule",
-      label: "单据组件",
-      labelWidth: undefined,
-      showLabel: true,
-      tag: "el-input",
-      defaultValue: "",
-      tagIcon: "icon-ym icon-ym-generator-documents",
-      className: [],
-      defaultValue: null,
-      layout: "colFormItem",
-      required: false,
-      span: 24,
-      dragDisabled: false,
-      visibility: ["pc", "app"],
-      tableName: "",
-      noShow: false,
-      trigger: "change",
-      rule: "",
-      ruleName: "",
-    },
-    style: { width: "100%" },
-    readonly: true,
-    placeholder: "系统自动生成"
   },
 ];
 
