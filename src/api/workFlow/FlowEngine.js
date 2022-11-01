@@ -136,6 +136,13 @@ export function mainVersion(id) {
   })
 }
 
+//设置主版本
+export function delVersion(id) {
+  return request({
+    url: `/api/workflow/Engine/flowTemplate/${id}/FlowJson`,
+    method: 'delete',
+  })
+}
 
 // 委托可选全部流程
 export function FlowEngineAll(data) {
@@ -165,12 +172,13 @@ export function assist(data) {
 }
 
 //获取协管接口
-
-//设置协管
 export function assistList(id) {
   return request({
     url: `/api/workflow/Engine/flowTemplate/${id}/assistList`,
     method: 'get'
   })
 }
+
+
+
 

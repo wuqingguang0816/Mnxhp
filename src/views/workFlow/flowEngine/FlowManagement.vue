@@ -86,7 +86,7 @@
 
 <script>
 import Process from '@/components/Process/Preview'
-import { flowJsonList, mainVersion } from '@/api/workFlow/FlowEngine'
+import { flowJsonList, mainVersion, delVersion } from '@/api/workFlow/FlowEngine'
 export default {
   components: { Process },
   props: [],
@@ -160,7 +160,15 @@ export default {
       this.$confirm('此操作将永久删除该数据，是否继续？', '系统提示', {
         type: 'warning'
       }).then(() => {
-
+        delVersion(item.id).then(res => {
+          if (res.code == 200) {
+            this.$message({
+              type: 'success',
+              message: res.msg
+            });
+            this.initData()
+          }
+        })
       }).catch(() => {
       });
     },
