@@ -424,15 +424,11 @@ export default {
       if (config.layout === 'colFormItem') {
         if (!this.$store.getters.hasTable) {
           // 分割线和按钮不加vModel
-          if (noVModelList.indexOf(config.jnpfKey) < 0) {
-            item.__vModel__ = this.toggleVmodelCase(`${config.jnpfKey}Field${this.idGlobal}`)
-          }
-          // relationFormAttr  popupAttr calculate 加vModel
-          if (config.jnpfKey == 'relationFormAttr' || config.jnpfKey == 'popupAttr' || config.jnpfKey == 'calculate') {
+          if (noVModelList.indexOf(config.jnpfKey) < 0 || config.isStorage == 2) {
             item.__vModel__ = this.toggleVmodelCase(`${config.jnpfKey}Field${this.idGlobal}`)
           }
         } else {
-          if (noVModelList.indexOf(config.jnpfKey) < 0) {
+          if (noVModelList.indexOf(config.jnpfKey) < 0 || config.isStorage != 2) {
             item.__vModel__ = ""
           }
         }

@@ -12,16 +12,6 @@
           labelPosition="left">
           <template v-if="activeData.__config__">
             <template v-if="$store.getters.hasTable">
-              <template
-                v-if="activeData.__config__.jnpfKey==='calculate' ||activeData.__config__.jnpfKey==='popupAttr' ||activeData.__config__.jnpfKey==='relationFormAttr'">
-                <el-form-item label="控件类型">
-                  <el-select v-model="activeData.__config__.isStorage" placeholder="请选择"
-                    @change="changeStorage">
-                    <el-option :label="item.label" :value="item.value"
-                      v-for="(item,i) in storageType" :key="i"></el-option>
-                  </el-select>
-                </el-form-item>
-              </template>
               <template v-if="activeData.__config__.jnpfKey==='table'">
                 <el-form-item
                   v-if="activeData.__vModel__!==undefined && !noVModelList.includes(activeData.__config__.jnpfKey)  ||activeData.__config__.isStorage==2 "
@@ -31,6 +21,16 @@
               </template>
               <template v-else>
                 <template v-if="!activeData.__config__.isSubTable">
+                  <template
+                    v-if="activeData.__config__.jnpfKey==='calculate' ||activeData.__config__.jnpfKey==='popupAttr' ||activeData.__config__.jnpfKey==='relationFormAttr'">
+                    <el-form-item label="控件类型">
+                      <el-select v-model="activeData.__config__.isStorage" placeholder="请选择"
+                        @change="changeStorage">
+                        <el-option :label="item.label" :value="item.value"
+                          v-for="(item,i) in storageType" :key="i"></el-option>
+                      </el-select>
+                    </el-form-item>
+                  </template>
                   <el-form-item
                     v-if="activeData.__vModel__!==undefined && !noVModelList.includes(activeData.__config__.jnpfKey)  ||activeData.__config__.isStorage==2"
                     label="数据库表">
@@ -46,7 +46,7 @@
                     </el-select>
                   </el-form-item>
                   <el-form-item
-                    v-if="activeData.__vModel__!==undefined && !noVModelList.includes(activeData.__config__.jnpfKey) ||activeData.__config__.isStorage==2"
+                    v-if="activeData.__vModel__!==undefined && !noVModelList.includes(activeData.__config__.jnpfKey) ||activeData.__config__.isStorage==2 "
                     label="控件字段">
                     <el-select v-model="activeData.__vModel__" placeholder="请选择数据库字段" clearable
                       @change="fieldChange" filterable popper-class="field-select-popper">
@@ -73,8 +73,9 @@
                 <template v-if="activeData.__config__.isSubTable && subTable.length">
                   <template
                     v-if="activeData.__config__.jnpfKey==='calculate' ||activeData.__config__.jnpfKey==='popupAttr' ||activeData.__config__.jnpfKey==='relationFormAttr'">
-                    <el-form-item label="控件类型" @change="changeStorage">
-                      <el-select v-model="activeData.__config__.isStorage" placeholder="请选择">
+                    <el-form-item label="控件类型">
+                      <el-select v-model="activeData.__config__.isStorage" placeholder="请选择"
+                        @change="changeStorage">
                         <el-option :label="item.label" :value="item.value"
                           v-for="(item,i) in storageType" :key="i"></el-option>
                       </el-select>
@@ -120,8 +121,9 @@
             <template v-else>
               <template
                 v-if="activeData.__config__.jnpfKey==='calculate' ||activeData.__config__.jnpfKey==='popupAttr' ||activeData.__config__.jnpfKey==='relationFormAttr'">
-                <el-form-item label="控件类型" @change="changeStorage">
-                  <el-select v-model="activeData.__config__.isStorage" placeholder="请选择">
+                <el-form-item label="控件类型">
+                  <el-select v-model="activeData.__config__.isStorage" placeholder="请选择"
+                    @change="changeStorage">
                     <el-option :label="item.label" :value="item.value"
                       v-for="(item,i) in storageType" :key="i"></el-option>
                   </el-select>
