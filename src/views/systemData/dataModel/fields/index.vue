@@ -1,5 +1,5 @@
 <template>
-  <el-drawer title="常用字段管理" :visible.sync="drawer" :wrapperClosable="false" size="700px"
+  <el-drawer title="常用字段管理" :visible.sync="drawer" :wrapperClosable="false" size="800px"
     class="JNPF-common-drawer">
     <div class="JNPF-flex-main">
       <div class="JNPF-common-head">

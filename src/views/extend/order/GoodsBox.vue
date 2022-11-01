@@ -1,6 +1,6 @@
 <template>
   <el-dialog title="选择商品" :close-on-click-modal="false" :visible.sync="visible"
-    class="JNPF-dialog JNPF-dialog_center" lock-scroll append-to-body width="700px">
+    class="JNPF-dialog JNPF-dialog_center" lock-scroll append-to-body width="800px">
     <el-row class="JNPF-common-search-box" :gutter="16">
       <el-form @submit.native.prevent>
         <el-col :span="10">

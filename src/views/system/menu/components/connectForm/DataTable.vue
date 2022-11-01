@@ -33,7 +33,7 @@
       </el-input>
     </div>
     <el-dialog title="数据选择" :close-on-click-modal="false" :visible.sync="visible"
-      class="JNPF-dialog JNPF-dialog_center table-dialog" lock-scroll append-to-body width="700px"
+      class="JNPF-dialog JNPF-dialog_center table-dialog" lock-scroll append-to-body width="800px"
       :modal-append-to-body="false" @close="onClose">
       <el-row class="JNPF-common-search-box" :gutter="16">
         <el-form @submit.native.prevent>
