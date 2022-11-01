@@ -95,8 +95,8 @@
           <template v-else>
             <p class="jnpf-detail-text">
               <span
-                v-if="item.__slot__.prepend">{{item.__slot__.prepend}}</span>{{getValue(item)}}<span
-                v-if="item.__slot__.append">{{item.__slot__.append}}</span>
+                v-if="item.__slot__&&item.__slot__.prepend">{{item.__slot__.prepend}}</span>{{getValue(item)}}<span
+                v-if="item.__slot__&&item.__slot__.append">{{item.__slot__.append}}</span>
             </p>
           </template>
         </el-form-item>
@@ -157,8 +157,8 @@
                   :label="column.__config__.label" v-else>
                   <template slot-scope="scope">
                     <span
-                      v-if="column.__slot__.prepend">{{column.__slot__.prepend}}</span>{{column.__config__.label}}<span
-                      v-if="column.__slot__.append">{{column.__slot__.append}}</span>
+                      v-if="column.__slot__&&column.__slot__.prepend">{{column.__slot__.prepend}}</span>{{column.__config__.label}}<span
+                      v-if="column.__slot__&&column.__slot__.append">{{column.__slot__.append}}</span>
                   </template>
                 </el-table-column>
               </template>
