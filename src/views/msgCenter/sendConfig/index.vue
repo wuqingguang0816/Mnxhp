@@ -10,6 +10,15 @@
             </el-form-item>
           </el-col>
           <el-col :span="6">
+            <el-form-item label="消息来源">
+              <el-select v-model="listQuery.messageSource" placeholder="选择消息来源" clearable>
+                <el-option v-for="(item,index) in messageSourceList" :key="index"
+                  :label="item.fullName" :value="item.enCode">
+                </el-option>
+              </el-select>
+            </el-form-item>
+          </el-col>
+          <el-col :span="6">
             <el-form-item label="模板类型">
               <el-select v-model="listQuery.templateType" placeholder="选择模板类型" clearable>
                 <el-option v-for="(item,index) in templateTypeList" :key="index"
@@ -18,21 +27,27 @@
               </el-select>
             </el-form-item>
           </el-col>
-          <el-col :span="6">
-            <el-form-item label="状态">
-              <el-select v-model="listQuery.enabledMark" placeholder="选择状态" clearable>
-                <el-option v-for="(item,index) in enabledMarkList" :key="index"
-                  :label="item.fullName" :value="item.enCode">
-                </el-option>
-              </el-select>
-            </el-form-item>
-          </el-col>
+          <template v-if="showAll">
+            <el-col :span="6">
+              <el-form-item label="状态">
+                <el-select v-model="listQuery.enabledMark" placeholder="选择状态" clearable>
+                  <el-option v-for="(item,index) in enabledMarkList" :key="index"
+                    :label="item.fullName" :value="item.enCode">
+                  </el-option>
+                </el-select>
+              </el-form-item>
+            </el-col>
+          </template>
           <el-col :span="6">
             <el-form-item>
               <el-button type="primary" icon="el-icon-search" @click="search()">
                 {{$t('common.search')}}</el-button>
               <el-button icon="el-icon-refresh-right" @click="reset()">{{$t('common.reset')}}
               </el-button>
+              <el-button type="text" icon="el-icon-arrow-down" @click="showAll=true"
+                v-if="!showAll">展开</el-button>
+              <el-button type="text" icon="el-icon-arrow-up" @click="showAll=false" v-else>
+                收起</el-button>
             </el-form-item>
           </el-col>
         </el-form>
@@ -48,14 +63,14 @@
           </div>
         </div>
         <JNPF-table v-loading="listLoading" :data="list" max-height="100%">
-          <el-table-column prop="fullName" label="名称" show-overflow-tooltip />
+          <el-table-column prop="fullName" label="名称" show-overflow-tooltip min-width="120" />
           <el-table-column prop="enCode" label="编码" width="120" />
           <el-table-column prop="templateType" label="模板类型" width="120">
             <template slot-scope="scope">
               {{scope.row.templateType=='1'?'系统模板':'自定义模板'}}
             </template>
           </el-table-column>
-          <el-table-column prop="messageType" label="消息类型" width="500">
+          <el-table-column prop="messageType" label="消息类型" width="450">
             <template slot-scope="scope">
               <span class="my-span-tag" :style="{'background':colorList[item.type]}"
                 v-for="(item,index) in scope.row.messageType" :key="index">
@@ -107,6 +122,7 @@
 </template>
 <script>
 import { getSendConfigList, delMsgTemplate, copySendConfig } from '@/api/msgCenter/sendConfig'
+import { getMsgTypeList } from '@/api/msgCenter/msgTemplate'
 import Form from './Form'
 import TestSend from './TestSend'
 import Detail from './Detail'
@@ -116,6 +132,7 @@ export default {
   components: { Form, TestSend, Detail },
   data() {
     return {
+      showAll: false,
       list: [],
       total: 0,
       btnLoading: false,
@@ -136,11 +153,13 @@ export default {
         { fullName: "启用", enCode: '1' },
         { fullName: "禁用", enCode: '0' },
       ],
+      messageSourceList: [],
       colorList: ['', '#2870F8', '#6DE083', '#F48282', '#6893F5', '#64B0F4', '#FF96B2']
     }
   },
   created() {
     this.initData()
+    this.getMsgTypeList()
   },
   methods: {
     initData() {
@@ -153,6 +172,12 @@ export default {
       }).catch(() => {
         this.listLoading = false
         this.btnLoading = false
+      })
+
+    },
+    getMsgTypeList() {
+      getMsgTypeList(4).then(res => {
+        this.messageSourceList = res.data
       })
     },
     addEditData(id) {
@@ -215,6 +240,7 @@ export default {
       this.listQuery.keyword = ''
       this.listQuery.templateType = ''
       this.listQuery.enabledMark = ''
+      this.listQuery.messageSource = ''
       this.search()
     },
     closeForm(isRefresh) {
