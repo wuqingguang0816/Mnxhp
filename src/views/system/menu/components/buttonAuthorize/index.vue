@@ -1,7 +1,7 @@
 <template>
   <div>
     <el-drawer :title="dialogTitle" :visible.sync="buttonAuthorizeListDrawer"
-      :wrapperClosable="false" ref="drawer" size="800px" class="JNPF-common-drawer">
+      :wrapperClosable="false" ref="drawer" size="700px" class="JNPF-common-drawer">
       <div class="JNPF-flex-main">
         <div class="JNPF-common-head">
           <div>
