@@ -21,8 +21,8 @@
     <template v-if="!detailed">
       <el-upload :action="define.comUploadUrl+'/'+type" :headers="uploadHeaders" ref="elUpload"
         :on-success="handleSuccess" :multiple="limit!==1" :show-file-list="false" accept="image/*"
-        :before-upload="beforeUpload" :on-exceed="handleExceed" :disabled="disabled"
-        list-type="picture-card" :limit="limit" class="upload-btn">
+        :before-upload="beforeUpload" :disabled="disabled" list-type="picture-card"
+        class="upload-btn">
         <i class="el-icon-plus"></i>
         <div slot="tip" class="el-upload__tip" v-show="showTip">
           只能上传不超过{{fileSize}}{{sizeUnit}}的{{accept}}图片
@@ -88,22 +88,15 @@ export default {
       immediate: true,
       handler(val) {
         this.fileList = val
-        this.$nextTick(() => {
-          if (!val.length) {
-            this.$refs.elUpload && this.$refs.elUpload.uploadFiles.splice(0)
-          } else {
-            if (!this.$refs.elUpload) return
-            this.$refs.elUpload.uploadFiles = val.map(o => ({
-              ...o,
-              uid: o.fileId
-            }))
-          }
-        })
       }
     }
   },
   methods: {
     beforeUpload(file) {
+      if (this.fileList.length >= this.limit) {
+        this.handleExceed()
+        return false
+      }
       const unitNum = units[this.sizeUnit];
       if (!this.fileSize) return true
       let isRightSize = file.size / unitNum < this.fileSize
@@ -119,6 +112,7 @@ export default {
       return isRightSize && isAccept;
     },
     handleSuccess(res, file, fileList) {
+      if (this.fileList.length >= this.limit) return this.handleExceed()
       if (res.code == 200) {
         this.fileList.push({
           name: file.name,
