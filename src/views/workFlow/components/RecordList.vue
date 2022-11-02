@@ -18,7 +18,7 @@
             <span :style="{background:colorList[scope.row.handleStatus||0]}"></span>
             {{statusList[scope.row.handleStatus||0]}}
             <div
-              v-if="scope.row.handleStatus==5||scope.row.handleStatus==6||scope.row.handleStatus==7">
+              v-if="scope.row.handleStatus==5||scope.row.handleStatus==6||scope.row.handleStatus==7||scope.row.handleStatus==10">
               ：{{scope.row.operatorId}}
             </div>
           </div>
@@ -59,8 +59,8 @@ export default {
   data() {
     return {
       colorList: ['rgba(242,68,68,0.39)', 'rgba(35,162,5,0.39)', 'rgba(21,157,120,0.39)', 'rgba(21,21,157,0.39)', 'rgba(186,33,33,0.39)',
-        'rgba(25,185,185,0.39)', 'rgba(50,191,61,0.39)', 'rgba(49,151,214,0.39)', 'rgba(185,123,6,0.39)', 'rgba(45,94,186,0.39)'],
-      statusList: ['拒绝', '同意', '发起', '撤回', '终止', '指派', '加签', '转办', '变更', '复活'],
+        'rgba(25,185,185,0.39)', 'rgba(50,191,61,0.39)', 'rgba(49,151,214,0.39)', 'rgba(185,123,6,0.39)', 'rgba(45,94,186,0.39)', 'rgba(50,191,61,0.39)'],
+      statusList: ['拒绝', '同意', '发起', '撤回', '终止', '指派', '前加签', '转办', '变更', '复活', '后加签'],
       previewVisible: false,
       formVisible: false,
       activeFile: {},
