@@ -115,14 +115,14 @@
           <i class="add-icon icon-ym icon-ym-launchFlow"></i>
           <div class="add-txt">
             <p class="add-title">发起流程</p>
-            <p class="add-desc">快速发起的工作流程</p>
+            <p class="add-desc">设计工作流发起的业务流程</p>
           </div>
         </div>
         <div class="add-item" @click="addFlow(1)">
           <i class="add-icon icon-ym icon-ym-funcFlow"></i>
           <div class="add-txt">
             <p class="add-title">功能流程</p>
-            <p class="add-desc">在线开发和代码生成的功能流程</p>
+            <p class="add-desc">在线开发和代码生成功能赋予流程</p>
           </div>
         </div>
       </div>
@@ -342,13 +342,13 @@ export default {
   align-items: center;
   justify-content: space-between;
   .add-item {
-    width: 265px;
+    width: 270px;
     height: 136px;
     background: #f0fffa;
     display: flex;
     align-items: center;
     cursor: pointer;
-    padding-left: 20px;
+    padding-left: 18px;
     &:hover {
       opacity: 0.9;
     }
