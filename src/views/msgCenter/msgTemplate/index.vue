@@ -79,8 +79,8 @@
               {{scope.row.templateType=='1'?'系统模板':'自定义模板'}}
             </template>
           </el-table-column>
-          <el-table-column prop="messageType" label="消息类型" width="170" />
-          <el-table-column prop="creatorUserId" label="创建人" width="120" />
+          <el-table-column prop="messageType" label="消息类型" width="140" />
+          <el-table-column prop="creatorUserId" label="创建人" width="150" />
           <el-table-column prop="creatorTime" label="创建时间" :formatter="jnpf.tableDateFormat"
             width="140" />
           <el-table-column prop="lastModifyTime" label="最后修改时间" :formatter="jnpf.tableDateFormat"

@@ -78,13 +78,13 @@
               </span>
             </template>
           </el-table-column>
-          <el-table-column prop="creatorUserId" label="创建人" width="120" />
+          <el-table-column prop="creatorUserId" label="创建人" width="150" />
           <el-table-column prop="creatorTime" label="创建时间" :formatter="jnpf.tableDateFormat"
             width="120" />
           <el-table-column prop="lastModifyTime" label="最后修改时间" :formatter="jnpf.tableDateFormat"
             width="120" />
-          <el-table-column prop="sortCode" label="排序" width="100" />
-          <el-table-column prop="enabledMark" label="状态" width="100" align="center">
+          <el-table-column prop="sortCode" label="排序" width="70" />
+          <el-table-column prop="enabledMark" label="状态" width="80" align="center">
             <template slot-scope="scope">
               <el-tag :type="scope.row.enabledMark==1?'success':'danger'" disable-transitions>
                 {{ scope.row.enabledMark==1?'启用':'禁用' }}

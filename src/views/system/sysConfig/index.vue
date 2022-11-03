@@ -294,7 +294,7 @@
             <el-col :span="18">
               <jnpf-form-tip-item label-width="180px" label="审批链接时效性" prop="title"
                 tipLabel="审批链接是否有效：审批链接发送时间 + 审批链接时效性">
-                <el-input-number v-model="baseForm.linkTime" :min="1" :precision="0" :step="1"
+                <el-input-number v-model="baseForm.linkTime" :min="0" :precision="0" :step="1"
                   controls-position="right" /> 小时
               </jnpf-form-tip-item>
               <jnpf-form-tip-item label-width="180px" label="审批链接被点击后失效" prop="title"
@@ -302,8 +302,8 @@
                 <el-switch v-model="baseForm.isClick" :active-value="1" :inactive-value="0" />
               </jnpf-form-tip-item>
               <jnpf-form-tip-item label-width="180px" label="链接点击几次后失效" v-if="baseForm.isClick">
-                <el-input-number v-model="baseForm.unClickNum" :min="1" :max="9999" :precision="0"
-                  :step="1" controls-position="right" />
+                <el-input-number v-model="baseForm.unClickNum" :min="0" :precision="0" :step="1"
+                  controls-position="right" />
               </jnpf-form-tip-item>
               <el-form-item>
                 <el-button type="primary" size="small" :loading="btnLoading" class="saveBtn"
