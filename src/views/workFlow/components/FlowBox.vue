@@ -610,8 +610,8 @@ export default {
     submitOrSave() {
       this.formData.status = this.eventType === 'submit' ? 0 : 1
       this.formData.flowUrgent = this.flowUrgent
-      if (this.setting.branchList) {//被委托人不为空的时候走委托创建流程
-        this.formData.branchList = this.setting.branchList
+      if (this.setting.delegateUserList) {//被委托人不为空的时候走委托创建流程
+        this.formData.delegateUserList = this.setting.delegateUserList
       }
 
       if (this.eventType === 'save') return this.handleRequest()
