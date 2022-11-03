@@ -349,7 +349,7 @@ export default {
             enCode: item.enCode,
             flowId: item.id,
             opType: '-1',
-            branchList: [res.data.list[0].id],
+            delegateUserList: [res.data.list[0].id],
           }
           this.flowboxVisible = true
           this.$nextTick(() => {
