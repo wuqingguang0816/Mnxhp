@@ -165,6 +165,9 @@ export function toDate(v, format) {
 export function toDateText(dateTime) {
   return jnpf.toDateText(dateTime)
 }
+export function toDateValue(dateTime) {
+  return jnpf.toDateValue(dateTime)
+}
 export function toFileSize(size) {
   return jnpf.toFileSize(size)
 }

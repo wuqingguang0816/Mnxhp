@@ -1,10 +1,29 @@
 <template>
   <div>
-    <el-drawer title="站内消息" :visible.sync="drawer" direction="rtl" size="280px"
-      class="JNPF-messageList JNPF-common-drawer" :before-close="handleClose">
+    <el-drawer :visible.sync="drawer" direction="rtl" size="280px"
+      class="JNPF-messageList JNPF-common-drawer" :show-close="false" :before-close="handleClose">
+      <div slot="title" class="title-box">
+        <div class="title">站内消息</div>
+        <el-link type="primary" :underline="false" @click="gotoCenter">更多</el-link>
+      </div>
+      <el-input v-model="listQuery.keyword" placeholder="搜索：请输入关键词" clearable
+        @keyup.enter.native="search()" class="search-input">
+        <i slot="suffix" class="el-input__icon el-icon-search" @click="search" title="搜索" />
+      </el-input>
       <div class="tool">
-        <el-link :underline="false" @click.native="readAll">全部已读</el-link>
-        <el-link :underline="false" @click.native="gotoCenter">消息中心</el-link>
+        <el-dropdown @command="handleCommand">
+          <span class="el-dropdown-link">
+            {{type}}<i class="el-icon-arrow-down el-icon--right"></i>
+          </span>
+          <el-dropdown-menu slot="dropdown">
+            <el-dropdown-item command="全部">全部</el-dropdown-item>
+            <el-dropdown-item command="流程">流程</el-dropdown-item>
+            <el-dropdown-item command="公告">公告</el-dropdown-item>
+          </el-dropdown-menu>
+        </el-dropdown>
+        <div class="is-read-box">仅显示未读
+          <el-switch v-model="isNoRead"></el-switch>
+        </div>
       </div>
       <div class="JNPF-messageList-box" v-loading="loading && listQuery.currentPage==1"
         ref="messageListBody">
@@ -12,19 +31,23 @@
           <div v-for="(item,i) in list" :key="i" class="JNPF-messageList-item"
             @click="readInfo(item)" :title="item.title">
             <el-badge is-dot :hidden="item.isRead=='1'" type="warning">
-              <i class="icon-ym icon-ym-xitong JNPF-messageList-item-icon"></i>
+              <i class="icon-ym icon-ym-xitong JNPF-messageList-item-icon"
+                v-if="item.type == 2"></i>
+              <i class="icon-ym icon-ym icon-ym-generator-flow JNPF-messageList-item-icon flow-icon"
+                v-else></i>
             </el-badge>
             <div class="JNPF-messageList-txt">
               <p class="title">{{item.title}}</p>
               <p class="name">
-                <span>{{item.releaseUser}}</span>
-                <span class="time">{{item.releaseTime| toDateText()}}</span>
+                <span class="user">{{item.releaseUser}}</span>
+                <span class="time">{{item.releaseTime| toDateValue()}}</span>
               </p>
             </div>
           </div>
         </div>
         <p class="noData-txt" v-else>{{$t('common.noData')}}</p>
       </div>
+      <div class="bottom-box" @click="readAll">全部标识已读</div>
     </el-drawer>
     <el-dialog title="查看消息" :close-on-click-modal="false" :visible.sync="visible"
       class="JNPF-dialog JNPF-dialog_center JNPF-dialog-notice" lock-scroll width="80%">
@@ -54,7 +77,8 @@ export default {
         pageSize: 20,
         sort: 'desc',
         keyword: '',
-        type: ''
+        type: '',
+        isRead: 0
       },
       list: [],
       activeItem: {},
@@ -62,7 +86,16 @@ export default {
       visible: false,
       finish: false,
       files: [],
-      info: {}
+      info: {},
+      type: '全部',
+      isNoRead: true
+    }
+  },
+  watch: {
+    isNoRead(val) {
+      this.listQuery.isRead = ''
+      if (val) this.listQuery.isRead = 0
+      this.init()
     }
   },
   methods: {
@@ -141,6 +174,16 @@ export default {
       let vBody = this.$refs.messageListBody;
       vBody.removeEventListener("scroll", function () { });
       done();
+    },
+    handleCommand(e) {
+      this.type = e
+      if (e == '全部') this.listQuery.type = ''
+      if (e == '流程') this.listQuery.type = 2
+      if (e == '公告') this.listQuery.type = 1
+      this.init()
+    },
+    search() {
+      this.init()
     }
   }
 }
@@ -148,6 +191,36 @@ export default {
 
 <style lang="scss" scoped>
 .JNPF-messageList {
+  .title-box {
+    display: flex;
+    .title {
+      flex: 1;
+    }
+  }
+  .search-input {
+    margin-bottom: 10px;
+    >>> .el-input__inner {
+      border-radius: 0;
+      border-right: none;
+      border-left: none;
+    }
+    .el-input__icon {
+      cursor: pointer;
+      &:hover {
+        color: #1890ff;
+      }
+    }
+  }
+  .is-read-box {
+    font-size: 14px;
+    color: #999999;
+    display: flex;
+    align-items: center;
+
+    >>> .el-switch {
+      margin-left: 4px;
+    }
+  }
   .JNPF-messageList-title {
     display: flex;
     align-items: center;
@@ -208,7 +281,9 @@ export default {
       &:hover {
         background-color: #f5f7f9;
       }
-
+      .flow-icon {
+        background-color: #33cc51 !important;
+      }
       .JNPF-messageList-item-icon {
         background-color: #1890ff;
         width: 36px;
@@ -236,11 +311,27 @@ export default {
         .name {
           font-size: 12px;
           color: #999;
-          .time {
-            float: right;
+          display: flex;
+          justify-content: space-between;
+          .user {
+            flex: 1;
+            min-width: 0;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+            overflow: hidden;
           }
         }
       }
+    }
+    .bottom-box {
+      height: 50px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      color: #303133;
+      cursor: pointer;
+      border-top: 1px solid #e3e6eb;
     }
   }
 }

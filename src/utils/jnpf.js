@@ -48,6 +48,24 @@ const jnpf = {
     }
     return result;
   },
+  toDateValue(dateTimeStamp) {
+    if (!dateTimeStamp) return ''
+    let result = ''
+    let datetime = new Date();
+    let nowYear = datetime.getFullYear()
+    datetime.setTime(dateTimeStamp);
+    let Nyear = datetime.getFullYear();
+    let Nmonth = datetime.getMonth() + 1 < 10 ? "0" + (datetime.getMonth() + 1) : datetime.getMonth() + 1;
+    let Ndate = datetime.getDate() < 10 ? "0" + datetime.getDate() : datetime.getDate();
+    let Nhour = datetime.getHours() < 10 ? "0" + datetime.getHours() : datetime.getHours();
+    let Nminute = datetime.getMinutes() < 10 ? "0" + datetime.getMinutes() : datetime.getMinutes();
+    if (Nyear == nowYear) {
+      result = Nmonth + "-" + Ndate + ' ' + Nhour + ':' + Nminute
+    } else {
+      result = Nyear + "-" + Nmonth + "-" + Ndate + ' ' + Nhour + ':' + Nminute
+    }
+    return result;
+  },
   getDate(format, strInterval, number) {
     var myDate = new Date();
     var dtTmp = new Date();
