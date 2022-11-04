@@ -69,7 +69,7 @@ export function Stop(id) {
 // 获取引擎id
 export function getFlowIdByCode(enCode) {
   return request({
-    url: `/api/workflow/Engine/FlowEngine/getFlowIdByCode/${enCode}`,
+    url: `/api/workflow/Engine/flowTemplate/getFlowIdByCode/${enCode}`,
     method: 'get'
   })
 }
