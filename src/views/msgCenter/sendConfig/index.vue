@@ -154,7 +154,7 @@ export default {
         { fullName: "禁用", enCode: '0' },
       ],
       messageSourceList: [],
-      colorList: ['', '#2870F8', '#6DE083', '#F48282', '#6893F5', '#64B0F4', '#FF96B2']
+      colorList: ['', '#2870F8', '#6DE083', '#F48282', '#6893F5', '#64B0F4', '#FF96B2', '#9C82F4']
     }
   },
   created() {

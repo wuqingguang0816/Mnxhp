@@ -183,7 +183,7 @@
                           </el-select>
                         </template>
                       </el-table-column>
-                      <el-table-column label="标题" v-if="dataForm.messageType==7">
+                      <el-table-column label="标题" width="70" v-if="dataForm.messageType==7">
                         <template slot-scope="scope">
                           <el-checkbox v-model="scope.row.isTitle"
                             @change='changeKey($event,scope.row)' :true-label="1"
@@ -441,7 +441,7 @@ export default {
       this.smsList.push({
         smsField: "",
         field: "",
-        id: this.jnpf.idGenerator()
+        fieldId: this.jnpf.idGenerator()
       })
     },
     removeSmsData(index) {
@@ -456,7 +456,7 @@ export default {
     changeKey(val, row) {
       if (!val) return
       for (let i = 0; i < this.smsList.length; i++) {
-        if (row.id != this.smsList[i].id) {
+        if (row.fieldId != this.smsList[i].fieldId) {
           this.$set(this.smsList[i], 'isTitle', 0)
         }
       }
