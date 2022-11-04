@@ -97,18 +97,18 @@
         <div class="add-main-part add-main-left">
           <div class="add-main-cap">发起流程表单</div>
           <div class="add-main-container">
-            <div class="add-item" @click="addForm(0,1)">
-              <i class="add-icon icon-ym icon-ym-systemForm"></i>
-              <div class="add-txt">
-                <p class="add-title">系统表单</p>
-                <p class="add-desc">关联系统原有表单，便捷设计</p>
-              </div>
-            </div>
             <div class="add-item" @click="addForm(0,2)">
               <i class="add-icon icon-ym icon-ym-customForm"></i>
               <div class="add-txt">
                 <p class="add-title">自定义表单</p>
                 <p class="add-desc">自定义设计业务流程表单</p>
+              </div>
+            </div>
+            <div class="add-item" @click="addForm(0,1)">
+              <i class="add-icon icon-ym icon-ym-systemForm"></i>
+              <div class="add-txt">
+                <p class="add-title">系统表单</p>
+                <p class="add-desc">关联系统原有表单，便捷设计</p>
               </div>
             </div>
           </div>
