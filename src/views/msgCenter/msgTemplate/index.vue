@@ -10,6 +10,15 @@
             </el-form-item>
           </el-col>
           <el-col :span="6">
+            <el-form-item label="消息来源">
+              <el-select v-model="messageSource" placeholder="选择消息来源" clearable>
+                <el-option v-for="(item,index) in messageSourceList" :key="index"
+                  :label="item.fullName" :value="item.enCode">
+                </el-option>
+              </el-select>
+            </el-form-item>
+          </el-col>
+          <el-col :span="6">
             <el-form-item label="模板类型">
               <el-select v-model="templateType" placeholder="选择模板类型" clearable>
                 <el-option v-for="(item,index) in templateTypeList" :key="index"
@@ -18,16 +27,16 @@
               </el-select>
             </el-form-item>
           </el-col>
-          <el-col :span="6">
-            <el-form-item label="消息类型">
-              <el-select v-model="msgType" placeholder="选择消息类型" clearable>
-                <el-option v-for="(item,index) in msgTypeList" :key="index" :label="item.fullName"
-                  :value="item.enCode">
-                </el-option>
-              </el-select>
-            </el-form-item>
-          </el-col>
           <template v-if="showAll">
+            <el-col :span="6">
+              <el-form-item label="消息类型">
+                <el-select v-model="msgType" placeholder="选择消息类型" clearable>
+                  <el-option v-for="(item,index) in msgTypeList" :key="index" :label="item.fullName"
+                    :value="item.enCode">
+                  </el-option>
+                </el-select>
+              </el-form-item>
+            </el-col>
             <el-col :span="6">
               <el-form-item label="状态">
                 <el-select v-model="enabledMark" placeholder="选择状态" clearable>
@@ -70,8 +79,8 @@
               {{scope.row.templateType=='1'?'系统模板':'自定义模板'}}
             </template>
           </el-table-column>
-          <el-table-column prop="messageType" label="消息类型" width="170" />
-          <el-table-column prop="creatorUserId" label="创建人" width="120" />
+          <el-table-column prop="messageType" label="消息类型" width="140" />
+          <el-table-column prop="creatorUserId" label="创建人" width="150" />
           <el-table-column prop="creatorTime" label="创建时间" :formatter="jnpf.tableDateFormat"
             width="140" />
           <el-table-column prop="lastModifyTime" label="最后修改时间" :formatter="jnpf.tableDateFormat"
@@ -113,7 +122,7 @@
   </div>
 </template>
 <script>
-import { getMsgTemplateList, delMsgTemplate, copyMsgTemplate } from '@/api/msgCenter/msgTemplate'
+import { getMsgTemplateList, delMsgTemplate, copyMsgTemplate, getMsgTypeList } from '@/api/msgCenter/msgTemplate'
 import Form from './Form'
 import Detail from './Detail'
 export default {
@@ -134,6 +143,8 @@ export default {
       ],
       msgType: "",
       msgTypeList: [],
+      messageSource: "",
+      messageSourceList: [],
       list: [],
       total: 0,
       listLoading: true,
@@ -167,6 +178,9 @@ export default {
       this.$store.dispatch('base/getMsgTypeList').then((res) => {
         this.msgTypeList = res
       })
+      getMsgTypeList(4).then(res => {
+        this.messageSourceList = res.data
+      })
     },
     search() {
       this.listQuery = {
@@ -174,13 +188,15 @@ export default {
         pageSize: 20,
         templateType: this.templateType,
         messageType: this.msgType,
-        enabledMark: this.enabledMark
+        enabledMark: this.enabledMark,
+        messageSource: this.messageSource,
       }
       this.initData()
     },
     reset() {
       this.keyword = ''
       this.templateType = ""
+      this.messageSource = ""
       this.msgType = ""
       this.enabledMark = ""
       this.search()

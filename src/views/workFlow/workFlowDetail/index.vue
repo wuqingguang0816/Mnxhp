@@ -52,7 +52,8 @@ export default {
         opType: item.type == 1 ? 0 : item.type == 2 ? 1 : item.type,
         taskNodeId: item.taskNodeId,
         taskId: item.taskOperatorId,
-        hideCancelBtn: true
+        hideCancelBtn: true,
+        fromForm: 1
       }
       if (item.type == 2) {
         checkInfo(item.taskOperatorId).then(res => {

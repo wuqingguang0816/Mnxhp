@@ -10,6 +10,15 @@
             </el-form-item>
           </el-col>
           <el-col :span="6">
+            <el-form-item label="消息来源">
+              <el-select v-model="listQuery.messageSource" placeholder="选择消息来源" clearable>
+                <el-option v-for="(item,index) in messageSourceList" :key="index"
+                  :label="item.fullName" :value="item.enCode">
+                </el-option>
+              </el-select>
+            </el-form-item>
+          </el-col>
+          <el-col :span="6">
             <el-form-item label="模板类型">
               <el-select v-model="listQuery.templateType" placeholder="选择模板类型" clearable>
                 <el-option v-for="(item,index) in templateTypeList" :key="index"
@@ -18,21 +27,27 @@
               </el-select>
             </el-form-item>
           </el-col>
-          <el-col :span="6">
-            <el-form-item label="状态">
-              <el-select v-model="listQuery.enabledMark" placeholder="选择状态" clearable>
-                <el-option v-for="(item,index) in enabledMarkList" :key="index"
-                  :label="item.fullName" :value="item.enCode">
-                </el-option>
-              </el-select>
-            </el-form-item>
-          </el-col>
+          <template v-if="showAll">
+            <el-col :span="6">
+              <el-form-item label="状态">
+                <el-select v-model="listQuery.enabledMark" placeholder="选择状态" clearable>
+                  <el-option v-for="(item,index) in enabledMarkList" :key="index"
+                    :label="item.fullName" :value="item.enCode">
+                  </el-option>
+                </el-select>
+              </el-form-item>
+            </el-col>
+          </template>
           <el-col :span="6">
             <el-form-item>
               <el-button type="primary" icon="el-icon-search" @click="search()">
                 {{$t('common.search')}}</el-button>
               <el-button icon="el-icon-refresh-right" @click="reset()">{{$t('common.reset')}}
               </el-button>
+              <el-button type="text" icon="el-icon-arrow-down" @click="showAll=true"
+                v-if="!showAll">展开</el-button>
+              <el-button type="text" icon="el-icon-arrow-up" @click="showAll=false" v-else>
+                收起</el-button>
             </el-form-item>
           </el-col>
         </el-form>
@@ -63,13 +78,13 @@
               </span>
             </template>
           </el-table-column>
-          <el-table-column prop="creatorUserId" label="创建人" width="120" />
+          <el-table-column prop="creatorUserId" label="创建人" width="150" />
           <el-table-column prop="creatorTime" label="创建时间" :formatter="jnpf.tableDateFormat"
             width="120" />
           <el-table-column prop="lastModifyTime" label="最后修改时间" :formatter="jnpf.tableDateFormat"
             width="120" />
-          <el-table-column prop="sortCode" label="排序" width="100" />
-          <el-table-column prop="enabledMark" label="状态" width="100" align="center">
+          <el-table-column prop="sortCode" label="排序" width="70" />
+          <el-table-column prop="enabledMark" label="状态" width="80" align="center">
             <template slot-scope="scope">
               <el-tag :type="scope.row.enabledMark==1?'success':'danger'" disable-transitions>
                 {{ scope.row.enabledMark==1?'启用':'禁用' }}
@@ -107,6 +122,7 @@
 </template>
 <script>
 import { getSendConfigList, delMsgTemplate, copySendConfig } from '@/api/msgCenter/sendConfig'
+import { getMsgTypeList } from '@/api/msgCenter/msgTemplate'
 import Form from './Form'
 import TestSend from './TestSend'
 import Detail from './Detail'
@@ -116,6 +132,7 @@ export default {
   components: { Form, TestSend, Detail },
   data() {
     return {
+      showAll: false,
       list: [],
       total: 0,
       btnLoading: false,
@@ -136,11 +153,13 @@ export default {
         { fullName: "启用", enCode: '1' },
         { fullName: "禁用", enCode: '0' },
       ],
-      colorList: ['', '#2870F8', '#6DE083', '#F48282', '#6893F5', '#64B0F4', '#FF96B2']
+      messageSourceList: [],
+      colorList: ['', '#2870F8', '#6DE083', '#F48282', '#6893F5', '#64B0F4', '#FF96B2', '#9C82F4']
     }
   },
   created() {
     this.initData()
+    this.getMsgTypeList()
   },
   methods: {
     initData() {
@@ -153,6 +172,12 @@ export default {
       }).catch(() => {
         this.listLoading = false
         this.btnLoading = false
+      })
+
+    },
+    getMsgTypeList() {
+      getMsgTypeList(4).then(res => {
+        this.messageSourceList = res.data
       })
     },
     addEditData(id) {
@@ -215,6 +240,7 @@ export default {
       this.listQuery.keyword = ''
       this.listQuery.templateType = ''
       this.listQuery.enabledMark = ''
+      this.listQuery.messageSource = ''
       this.search()
     },
     closeForm(isRefresh) {
