@@ -279,6 +279,7 @@ const actions = {
       commit('SET_LOGIN_LOADING', false)
       commit('generator/SET_COMPANY_TREE', [], { root: true })
       commit('generator/SET_DEP_TREE', [], { root: true })
+      commit('base/SET_DICTIONARY_LIST', [], { root: true })
       removeToken()
       resolve()
     })
