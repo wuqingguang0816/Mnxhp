@@ -379,7 +379,7 @@
           <el-scrollbar class="config-scrollbar">
             <el-form label-position="top" :model="startForm" class="pd-10-20">
               <el-form-item>
-                <div slot="label" class="form-item-label">{{flowType==1?"功能":"表单"}}配置</div>
+                <div slot="label" class="form-item-label">{{flowType==1?"功能":"表单"}}设置</div>
                 <div class="form-item-content">
                   <flow-form-dialog :value="startForm.formId" :title="startForm.formName"
                     :type="flowType" @change="onStartFormIdChange" :clearable="false"
@@ -1415,7 +1415,7 @@
                     <i class="el-icon-warning-outline"></i>
                   </el-tooltip>
                 </div>
-                <el-radio-group v-model="approverForm.rejectType">
+                <el-radio-group v-model="approverForm.rejectType" class="form-item-content">
                   <el-radio :label="1">重新审批
                     <el-tooltip content="若流程为A->B->C,C退回至A，则C->A->B->C" placement="top">
                       <i class="el-icon-warning-outline"></i>
