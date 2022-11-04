@@ -32,7 +32,7 @@
             @click="readInfo(item)" :title="item.title">
             <el-badge is-dot :hidden="item.isRead=='1'" type="warning">
               <i class="icon-ym icon-ym-xitong JNPF-messageList-item-icon"
-                v-if="item.type == 2"></i>
+                v-if="item.type == 1"></i>
               <i class="icon-ym icon-ym icon-ym-generator-flow JNPF-messageList-item-icon flow-icon"
                 v-else></i>
             </el-badge>
