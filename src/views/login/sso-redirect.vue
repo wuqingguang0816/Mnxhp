@@ -17,7 +17,7 @@ export default {
     init() {
       const token = this.$route.query.token
       const theme = this.$route.query.theme
-      if (!token || !theme) return
+      if (!token) return
       const data = {
         token,
         theme
