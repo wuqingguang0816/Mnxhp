@@ -18,7 +18,7 @@ export function EmployeeDelete(id) {
 // 导出Excel
 export function ExportExcel(data) {
   return request({
-    url: 'api/extend/Employee/ExportExcelData',
+    url: '/api/extend/Employee/ExportExcelData',
     method: 'get',
     data
   })

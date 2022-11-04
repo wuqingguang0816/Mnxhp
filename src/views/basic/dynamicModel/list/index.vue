@@ -15,7 +15,7 @@
       </el-tree>
     </div>
     <div class="JNPF-common-layout-center">
-      <Search ref="Search" :list="columnData.searchList" @reset="reset" @search="search" />
+      <Search ref="Search" :list="columnData.searchList" @reset="reset" @search="searchData" />
       <div class="JNPF-common-layout-main JNPF-flex-main">
         <div class="JNPF-common-head">
           <div v-if="isPreview || !columnData.useBtnPermission">
@@ -950,6 +950,15 @@ export default {
     reset() {
       this.listQuery.sort = this.defaultListQuery.sort
       this.listQuery.sidx = this.defaultListQuery.sidx
+      if (this.columnData.type === 2) {
+        let obj = { [this.columnData.treeRelation]: this.treeActiveId }
+        let queryJson = this.treeActiveId ? JSON.stringify(obj) : ''
+        this.search(queryJson)
+      } else {
+        this.search('')
+      }
+    },
+    searchData() {
       if (this.columnData.type === 2) {
         let obj = { [this.columnData.treeRelation]: this.treeActiveId }
         let queryJson = this.treeActiveId ? JSON.stringify(obj) : ''
