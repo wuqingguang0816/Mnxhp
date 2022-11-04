@@ -31,7 +31,7 @@
       <div class="JNPF-common-layout-main JNPF-flex-main">
         <div class="JNPF-common-head">
           <topOpts @add="dialogVisible=true">
-            <upload-btn url="/api/workflow/Engine/FlowEngine/Actions/ImportData"
+            <upload-btn url="/api/workflow/Engine/flowTemplate/Actions/ImportData"
               @on-success="reset()" />
           </topOpts>
           <div class="JNPF-common-head-right">
