@@ -3243,15 +3243,6 @@ export default {
       this.getNodeOption()
       this.getPrevNodeOption()
       this.approverForm.prevNodeList = this.prevNodeList
-      if (this.isPrevNodeWithSubForm) {
-        for (let i = 0; i < this.assigneeTypeOptions.length; i++) {
-          if (this.assigneeTypeOptions[i].value === 7) {
-            this.assigneeTypeOptions[i].disabled = true
-          }
-        }
-      } else {
-        this.assigneeTypeOptions = JSON.parse(JSON.stringify(typeOptions))
-      }
       this.approverForm.approveMsgConfig.on = typeof this.approverForm.approveMsgConfig.on === 'number' ? this.approverForm.approveMsgConfig.on : 2
       this.approverForm.rejectMsgConfig.on = typeof this.approverForm.rejectMsgConfig.on === 'number' ? this.approverForm.rejectMsgConfig.on : 2
     },
