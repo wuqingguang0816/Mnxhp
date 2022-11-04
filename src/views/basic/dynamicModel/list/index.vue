@@ -958,14 +958,13 @@ export default {
         this.search('')
       }
     },
-    searchData() {
-      if (this.columnData.type === 2) {
-        let obj = { [this.columnData.treeRelation]: this.treeActiveId }
-        let queryJson = this.treeActiveId ? JSON.stringify(obj) : ''
-        this.search(queryJson)
-      } else {
-        this.search('')
+    searchData(queryJson) {
+      if (this.columnData.type === 2 && this.treeActiveId) {
+        queryJson = JSON.parse(queryJson)
+        queryJson = { [this.columnData.treeRelation]: this.treeActiveId, ...queryJson }
+        queryJson = JSON.stringify(queryJson)
       }
+      this.search(queryJson)
     },
     search(queryJson) {
       if (this.isPreview) return
