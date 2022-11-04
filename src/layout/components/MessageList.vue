@@ -152,18 +152,27 @@ export default {
       this.$router.push('/messageRecord')
     },
     readAll() {
-      this.$confirm('您确定全部为已读状态, 是否继续?', '提示', {
+      this.$confirm('您确定全部标识为已读状态, 是否继续?', '提示', {
         type: 'warning'
       }).then(() => {
-        MessageAllRead().then(res => {
+        const query = {
+          keyword: this.listQuery.keyword,
+          type: this.listQuery.type,
+          isRead: this.isNoRead ? 0 : 1
+        }
+        MessageAllRead(query).then(res => {
           this.$message({
             message: res.msg,
             type: 'success',
             duration: 1500,
             onClose: () => {
               this.$emit('read', true)
-              for (let i = 0; i < this.list.length; i++) {
-                this.$set(this.list[i], 'isRead', '1')
+              if (this.isNoRead) {
+                this.init()
+              } else {
+                for (let i = 0; i < this.list.length; i++) {
+                  this.$set(this.list[i], 'isRead', '1')
+                }
               }
             }
           })

@@ -9,10 +9,11 @@ export function getMessageList(data) {
   })
 }
 // 全部已读
-export function MessageAllRead() {
+export function MessageAllRead(data) {
   return request({
     url: '/api/message/Actions/ReadAll',
-    method: 'POST'
+    method: 'POST',
+    data
   })
 }
 // 查看消息内容

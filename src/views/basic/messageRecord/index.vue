@@ -22,8 +22,8 @@
       <div class="JNPF-common-layout-main JNPF-flex-main">
         <el-tabs type="border-card" v-model="activeName" class="messageRecord-tab">
           <el-tab-pane label="全部" name="0"></el-tab-pane>
-          <el-tab-pane label="通知" name="1"></el-tab-pane>
-          <el-tab-pane label="私信" name="2"></el-tab-pane>
+          <el-tab-pane label="流程" name="1"></el-tab-pane>
+          <el-tab-pane label="公告" name="2"></el-tab-pane>
           <div class="box">
             <div class="JNPF-common-head">
               <div class="left-btn">
@@ -46,8 +46,7 @@
               </el-table-column>
               <el-table-column prop="type" label="消息类型" width="120">
                 <template slot-scope="scope">
-                  <!-- {{ scope.row.type==1?'系统公告':scope.row.type==2?"系统消息":"私信信息"}} -->
-                  {{ scope.row.type==1?'系统消息':"私信信息"}}
+                  {{ scope.row.type==1?'公告':"流程"}}
                 </template>
               </el-table-column>
               <el-table-column prop="releaseUser" label="发送人员" width="120">
@@ -118,7 +117,9 @@ export default {
     },
     initData() {
       this.listLoading = true
-      let type = this.activeName == '0' ? '' : this.activeName
+      let type = ''
+      if (this.activeName == 1) type = 2
+      if (this.activeName == 2) type = 1
       let data = {
         ...this.listQuery,
         keyword: this.keyword,
