@@ -116,6 +116,7 @@
 
 <script>
 import { OrderList, Delete, OrderEntryList, OrderReceivableList } from '@/api/extend/order'
+import { getFlowIdByCode } from '@/api/workFlow/FlowEngine'
 import Detail from './Detail'
 import FlowBox from '@/views/workFlow/components/FlowBox'
 export default {
@@ -162,6 +163,7 @@ export default {
           }
         }]
       },
+      flowId: '',
       pickerVal: [],
       startTime: '',
       endTime: ''
@@ -169,6 +171,7 @@ export default {
   },
   created() {
     this.initData()
+    this.getFlowIdByCode()
   },
   methods: {
     search() {
@@ -207,6 +210,11 @@ export default {
         this.listLoading = false
       })
     },
+    getFlowIdByCode() {
+      getFlowIdByCode('crmOrder').then(res => {
+        this.flowId = res.data
+      })
+    },
     expandChange(rows) {
       rows.isExpanded = !rows.isExpanded
       if (!rows.isExpanded) return
@@ -243,7 +251,7 @@ export default {
       let data = {
         id,
         enCode: 'crmOrder',
-        flowId: '52d3144909d04e2f8a6629ab2ab39e14',
+        flowId: this.flowId,
         formType: 1,
         opType: '-1'
       }
@@ -256,7 +264,7 @@ export default {
       let data = {
         id,
         enCode: 'crmOrder',
-        flowId: '52d3144909d04e2f8a6629ab2ab39e14',
+        flowId: this.flowId,
         formType: 1,
         opType: 0,
         status

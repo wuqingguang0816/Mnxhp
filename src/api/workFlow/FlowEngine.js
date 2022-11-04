@@ -66,6 +66,13 @@ export function Stop(id) {
     method: 'post'
   })
 }
+// 获取引擎id
+export function getFlowIdByCode(enCode) {
+  return request({
+    url: `/api/workflow/Engine/FlowEngine/getFlowIdByCode/${enCode}`,
+    method: 'get'
+  })
+}
 // 列表ListAll
 export function FlowEngineListAll() {
   return request({
