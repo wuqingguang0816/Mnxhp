@@ -263,7 +263,7 @@ export default {
   .add-item {
     width: 255px;
     height: 136px;
-    background: #eff9ff;
+    background: #fef3e6;
     display: flex;
     align-items: center;
     cursor: pointer;
@@ -282,9 +282,9 @@ export default {
       width: 56px;
       height: 56px;
       margin-right: 10px;
-      background: #ceeaff;
       border-radius: 10px;
-      color: #46adfe;
+      background: #fce1bf;
+      color: #ea986c;
       flex-shrink: 0;
       font-size: 30px;
       line-height: 56px;

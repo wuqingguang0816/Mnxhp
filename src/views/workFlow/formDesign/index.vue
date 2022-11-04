@@ -356,17 +356,17 @@ export default {
   .add-main-left {
     width: 530px;
     .add-item {
-      background: #fff9f0;
+      background: #f1f5ff;
       .add-icon {
-        background: #f7e5cc;
-        color: #e68c22;
+        background: #ccd9ff;
+        color: #537eff;
       }
     }
   }
   .add-item {
     width: 235px;
     height: 120px;
-    background: #f0f7ff;
+    background: #fef3e6;
     display: flex;
     align-items: center;
     cursor: pointer;
@@ -376,9 +376,9 @@ export default {
       width: 48px;
       height: 48px;
       margin-right: 10px;
-      background: #cce1fa;
+      background: #fce1bf;
       border-radius: 6px;
-      color: #4885d8;
+      color: #ea986c;
       flex-shrink: 0;
       font-size: 30px;
       line-height: 48px;

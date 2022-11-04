@@ -344,7 +344,7 @@ export default {
   .add-item {
     width: 270px;
     height: 136px;
-    background: #f0fffa;
+    background: #fef3e6;
     display: flex;
     align-items: center;
     cursor: pointer;
@@ -353,10 +353,10 @@ export default {
       opacity: 0.9;
     }
     &.add-item-sys {
-      background: #fffbf5;
+      background: #f1f5ff;
       .add-icon {
-        background: #ffefd5;
-        color: #ce7e2e;
+        background: #ccd9ff;
+        color: #537eff;
       }
     }
     .add-icon {
@@ -364,8 +364,8 @@ export default {
       height: 56px;
       margin-right: 10px;
       border-radius: 10px;
-      background: #ccf7e0;
-      color: #12a572;
+      background: #fce1bf;
+      color: #ea986c;
       flex-shrink: 0;
       font-size: 30px;
       line-height: 56px;
