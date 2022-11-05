@@ -323,7 +323,8 @@ export default {
         enCode: item.flowCode,
         flowId: item.flowId,
         opType,
-        status: item.status
+        status: item.status,
+        parentId: item.parentId
       }
       this.formVisible = true
       this.$nextTick(() => {
