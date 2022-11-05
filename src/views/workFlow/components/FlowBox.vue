@@ -38,7 +38,7 @@
                 {{properties.saveBtnText||'暂 存'}}
               </el-dropdown-item>
               <el-dropdown-item class="dropdown-item"
-                v-if="(properties.hasRevokeBtn || properties.hasRevokeBtn===undefined)&&setting.opType == 0 && setting.status == 1"
+                v-if="(properties.hasRevokeBtn || properties.hasRevokeBtn===undefined)&&setting.opType == 0 && setting.status == 1 && setting.parentId == '0'"
                 command="revoke">
                 {{properties.revokeBtnText||'撤 回'}}
               </el-dropdown-item>
