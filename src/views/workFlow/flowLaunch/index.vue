@@ -325,7 +325,8 @@ export default {
         flowId: item.flowId,
         formType: item.formType,
         opType,
-        status: item.status
+        status: item.status,
+        parentId: item.parentId
       }
       this.formVisible = true
       this.$nextTick(() => {
