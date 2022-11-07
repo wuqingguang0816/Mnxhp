@@ -16,7 +16,7 @@
         <el-input v-model="dataForm.appId" placeholder="请输入AppID" clearable />
       </jnpf-form-tip-item>
       <jnpf-form-tip-item label="Secret" prop="appSecret" tip-label="请在“微信公众号管理后台-设置与开发-基本配置”页中获得">
-        <el-input v-model="dataForm.appSecret" placeholder="请输入Secret" clearable />
+        <el-input v-model="dataForm.appSecret" placeholder="请输入Secret" clearable show-password />
       </jnpf-form-tip-item>
       <jnpf-form-tip-item label="排序" prop="sortCode">
         <el-input-number :min="0" :max="999999" v-model="dataForm.sortCode"
@@ -30,8 +30,8 @@
       </jnpf-form-tip-item>
     </el-form>
     <span slot="footer" class="dialog-footer">
-      <el-button type="primary" :loading="testBtnLoading" :disabled="btnLoading"
-        @click="sendTest()">测试</el-button>
+      <!-- <el-button type="primary" :loading="testBtnLoading" :disabled="btnLoading"
+        @click="sendTest()">测试</el-button> -->
       <el-button @click="visible = false">{{$t('common.cancelButton')}}</el-button>
       <el-button type="primary" :loading="btnLoading" :disabled="testBtnLoading"
         @click="dataFormSubmit()">
