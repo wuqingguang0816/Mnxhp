@@ -48,7 +48,7 @@
           <el-table-column prop="creatorUser" label="创建人" />
           <el-table-column prop="creatorTime" label="创建时间" :formatter="jnpf.tableDateFormat" />
           <el-table-column prop="lastModifyTime" label="最后修改时间" :formatter="jnpf.tableDateFormat" />
-          <el-table-column label="操作" fixed="right">
+          <el-table-column label="操作" fixed="right" width="200">
             <template slot-scope="scope">
               <el-button type="text" size="mini" @click.native="updateRelease(scope.row)"
                 :disabled="scope.row.enabledMark==1">设为主版本
