@@ -110,7 +110,8 @@ export default {
       this.dataForm.handleOpinion = ''
       this.formData.flowId = flowId
       this.copyIds = []
-      this.signImg = this.userInfo.signImg
+      this.signImg = ""
+      if (this.properties && this.properties.hasSign) this.signImg = this.userInfo.signImg
       this.freeApproverUserId = ''
       this.$nextTick(() => {
         this.$refs['dataForm'].resetFields()

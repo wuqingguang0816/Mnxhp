@@ -104,13 +104,13 @@ export default {
     init(properties, eventType) {
       this.visible = true
       this.properties = properties
-      console.log(this.userInfo)
       this.eventType = eventType || ''
       this.dataForm.handleOpinion = ''
       this.dataForm.freeApproverUserId = ''
       this.dataForm.nodeCode = ''
       this.dataForm.fileList = []
-      this.signImg = this.userInfo.signImg
+      this.signImg = ""
+      if ((eventType == 'transfer' || eventType == 'transfer' || eventType == 'transfer') && this.properties.hasSign) this.signImg = this.userInfo.signImg
       switch (eventType) {
         case 'transfer':
           this.title = '转审'
