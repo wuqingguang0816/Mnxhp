@@ -1,7 +1,7 @@
 <template>
   <transition name="el-zoom-in-center">
     <div class="JNPF-preview-main">
-      <div class="JNPF-common-page-header">
+      <div class="JNPF-common-page-header" v-if="showTitle">
         <el-page-header @back="goBack" content="新建流程" />
         <div class="options">
           <el-button @click="goBack()">{{$t('common.cancelButton')}}</el-button>
@@ -70,7 +70,8 @@ export default {
       finish: false,
       list: [],
       listLoading: true,
-      categoryList: []
+      categoryList: [],
+      showTitle: true
     }
   },
   watch: {
@@ -82,7 +83,8 @@ export default {
     goBack() {
       this.$emit('close')
     },
-    init() {
+    init(flag) {
+      this.showTitle = !flag
       this.getDictionaryData()
       this.$nextTick(() => {
         this.bindScroll()
