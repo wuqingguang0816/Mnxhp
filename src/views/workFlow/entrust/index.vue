@@ -368,7 +368,7 @@ export default {
         enCode: this.checkFlowItem.enCode,
         flowId: this.checkFlowItem.id,
         opType: '-1',
-        branchList: this.checkUserList,
+        delegateUserList: this.checkUserList,
       }
       this.flowboxVisible = true
       this.$nextTick(() => {
