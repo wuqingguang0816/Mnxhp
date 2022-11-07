@@ -74,6 +74,7 @@
         <JNPF-table v-loading="listLoading" :data="list">
           <el-table-column prop="fullName" label="名称" show-overflow-tooltip min-width="200" />
           <el-table-column prop="enCode" label="编码" width="180" />
+          <el-table-column prop="messageSource" label="消息来源" width="100" />
           <el-table-column prop="category" label="模板类型" width="170">
             <template slot-scope="scope">
               {{scope.row.templateType=='1'?'系统模板':'自定义模板'}}
