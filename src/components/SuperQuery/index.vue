@@ -69,9 +69,10 @@
                 </template>
                 <template v-else-if="['userSelect'].includes(item.jnpfKey)">
                   <userSelect v-model="item.fieldValue" placeholder="请选择" clearable
-                    :selectType="item.attr.selectType" :ableDepIds="item.attr.ableDepIds"
-                    :ablePosIds="item.attr.ablePosIds" :ableUserIds="item.attr.ableUserIds"
-                    :ableRoleIds="item.attr.ableRoleIds" :ableGroupIds="item.attr.ableGroupIds" />
+                    :selectType="item.attr.selectType!='all'||item.attr.selectType!='custom'?'all':item.attr.selectType"
+                    :ableDepIds="item.attr.ableDepIds" :ablePosIds="item.attr.ablePosIds"
+                    :ableUserIds="item.attr.ableUserIds" :ableRoleIds="item.attr.ableRoleIds"
+                    :ableGroupIds="item.attr.ableGroupIds" />
                 </template>
                 <template v-else-if="['usersSelect'].includes(item.jnpfKey)">
                   <usersSelect v-model="item.fieldValue" placeholder="请选择" clearable
