@@ -44,7 +44,8 @@
           :tree-props="{children: 'children', hasChildren: ''}" @sort-change="sortChange"
           :row-style="rowStyle" :cell-style="cellStyle" :has-c="hasBatchBtn"
           @selection-change="handleSelectionChange" v-if="refreshTable" custom-column
-          :span-method="arraySpanMethod" ref="tableRef" :hasNO="columnData.childTableStyle!==2">
+          :span-method="arraySpanMethod" ref="tableRef" :hasNO="columnData.childTableStyle!==2"
+          :hasNOFixed="columnList.some(o=>o.fixed == 'left')">
           <template v-if="columnData.type === 4">
             <template v-for="(item, i) in columnList">
               <el-table-column :prop="item.prop" :label="item.label" :align="item.align"
@@ -245,7 +246,8 @@
                 :sortable="item.sortable?'custom':item.sortable" v-else />
             </template>
           </template>
-          <el-table-column prop="flowState" label="状态" width="100" v-if="config.enableFlow==1">
+          <el-table-column :fixed="columnList.some(o=>o.fixed == 'right')?'right':false"
+            prop="flowState" label="状态" width="100" v-if="config.enableFlow==1">
             <template slot-scope="scope" v-if="!scope.row.top">
               <el-tag v-if="scope.row.flowState==1">等待审核</el-tag>
               <el-tag type="success" v-else-if="scope.row.flowState==2">审核通过</el-tag>

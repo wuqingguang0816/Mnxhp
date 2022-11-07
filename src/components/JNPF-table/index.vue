@@ -6,7 +6,7 @@
       <el-table-column prop="selection" type="selection" width="50" v-if="hasC" align="center"
         :selectable="checkSelectable" />
       <el-table-column prop="index" type="index" width="50" label="序号" v-if="hasNO"
-        align="center" />
+        :fixed="hasNOFixed" align="center" />
       <jnpf-table-column :columns="columns" :columnList="columnList" v-if="customColumn" />
       <template v-else>
         <slot />
@@ -43,6 +43,10 @@ export default {
     hasNO: {
       type: Boolean,
       default: true
+    },
+    hasNOFixed: {
+      type: Boolean,
+      default: false
     },
     // 多选框 默认无
     hasC: {
