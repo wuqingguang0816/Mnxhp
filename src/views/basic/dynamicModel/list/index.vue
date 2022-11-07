@@ -206,7 +206,8 @@
           <template v-else>
             <template v-if="columnData.childTableStyle==2&&childColumnList.length">
               <el-table-column width="0" />
-              <el-table-column type="expand" width="40">
+              <el-table-column type="expand" width="40"
+                :fixed="columnList.some(o=>o.fixed == 'left')">
                 <template slot-scope="scope">
                   <el-tabs>
                     <el-tab-pane :label="child.label" v-for="(child,cIndex) in childColumnList"
@@ -220,7 +221,8 @@
                   </el-tabs>
                 </template>
               </el-table-column>
-              <el-table-column type="index" width="50" label="序号" align="center" />
+              <el-table-column :fixed="columnList.some(o=>o.fixed == 'left')" type="index"
+                width="50" label="序号" align="center" />
             </template>
             <template v-for="(item, i) in columnList">
               <template v-if="item.jnpfKey==='table'">
@@ -253,9 +255,8 @@
               <el-tag type="warning" v-else>等待提交</el-tag>
             </template>
           </el-table-column>
-          <el-table-column label="操作"
-            :fixed="columnData.childTableStyle==2&&childColumnList.length?false:'right'"
-            :width="operationWidth" v-if="columnBtnsList.length || customBtnsList.length">
+          <el-table-column label="操作" fixed="right" :width="operationWidth"
+            v-if="columnBtnsList.length || customBtnsList.length">
             <template slot-scope="scope" v-if="!scope.row.top">
               <template v-if="scope.row.rowEdit">
                 <el-button size="mini" type="text" @click="saveForRowEdit(scope.row,1)">
