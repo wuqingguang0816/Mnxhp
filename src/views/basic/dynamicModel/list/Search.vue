@@ -90,8 +90,9 @@
                 :ableRoleIds="item.ableRoleIds" :ableGroupIds="item.ableGroupIds" />
             </template>
             <template v-if="item.__config__.jnpfKey==='usersSelect'">
-              <usersSelect v-model="item.value" :placeholder="'请选择'+item.__config__.label" clearable
-                class="item" :selectType="item.selectType" :ableIds="item.ableIds" />
+              <usersSelect v-model="item.value" :multiple="item.multiple"
+                :placeholder="'请选择'+item.__config__.label" clearable class="item"
+                :selectType="item.selectType" :ableIds="item.ableIds" />
             </template>
             <template v-if="item.__config__.jnpfKey==='posSelect'">
               <posSelect v-model="item.value" :placeholder="'请选择'+item.__config__.label" clearable
