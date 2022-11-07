@@ -10,8 +10,8 @@
       <div class="main">
         <el-tabs tab-position="left" style="height:100%" v-model="category" class="flow-tabs">
           <el-tab-pane label="全部流程" name=""></el-tab-pane>
-          <el-tab-pane :label="item.fullName" :name="item.enCode" v-for="item in categoryList"
-            :key="item.enCode"></el-tab-pane>
+          <el-tab-pane :label="item.fullName" :name="item.id" v-for="item in categoryList"
+            :key="item.id"></el-tab-pane>
           <div class="box">
             <el-row class="JNPF-common-search-box" :gutter="16">
               <el-form @submit.native.prevent>
