@@ -73,7 +73,7 @@
 </template>
 
 <script>
-import { FlowEngineInfo, Update, Create } from '@/api/workFlow/FlowEngine'
+import { FlowEngineInfo, Update, Create, mainVersion } from '@/api/workFlow/FlowEngine'
 import iconBox from '@/components/JNPF-iconBox'
 import Process from "@/components/Process"
 
@@ -171,16 +171,42 @@ export default {
       this.btnLoading = true
       const formMethod = this.dataForm.id ? Update : Create
       formMethod(this.dataForm).then((res) => {
-        this.$message({
-          message: res.msg,
-          type: 'success',
-          duration: 1500,
-          onClose: () => {
-            this.btnLoading = false
-            this.closeDialog(true)
-          }
-        })
+        if (this.activeStep == 1 && res.data && res.data.isMainVersion) {
+          this.setMainVersion(res.data.id, res.msg)
+        } else {
+          this.$message({
+            message: res.msg,
+            type: 'success',
+            duration: 1500,
+            onClose: () => {
+              this.btnLoading = false
+              this.closeDialog(true)
+            }
+          })
+        }
       }).catch(() => { this.btnLoading = false })
+    },
+    setMainVersion(id, msg) {
+      this.$confirm('此操作将该版本设为主版本且影响启用的线上流程，是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        mainVersion(id).then(res => {
+          this.$message({
+            message: msg,
+            type: 'success',
+            duration: 1500,
+            onClose: () => {
+              this.btnLoading = false
+              this.closeDialog(true)
+            }
+          })
+        }).catch(() => { this.btnLoading = false });
+      }).catch(() => {
+        this.btnLoading = false
+        this.closeDialog(true)
+      });
     },
     prev() {
       this.activeStep -= 1
