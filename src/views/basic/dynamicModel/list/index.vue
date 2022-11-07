@@ -207,8 +207,7 @@
           <template v-else>
             <template v-if="columnData.childTableStyle==2&&childColumnList.length">
               <el-table-column width="0" />
-              <el-table-column type="expand" width="40"
-                :fixed="columnList.some(o=>o.fixed == 'left')">
+              <el-table-column type="expand" width="40">
                 <template slot-scope="scope">
                   <el-tabs>
                     <el-tab-pane :label="child.label" v-for="(child,cIndex) in childColumnList"
@@ -222,8 +221,7 @@
                   </el-tabs>
                 </template>
               </el-table-column>
-              <el-table-column :fixed="columnList.some(o=>o.fixed == 'left')" type="index"
-                width="50" label="序号" align="center" />
+              <el-table-column type="index" width="50" label="序号" align="center" />
             </template>
             <template v-for="(item, i) in columnList">
               <template v-if="item.jnpfKey==='table'">
@@ -242,11 +240,13 @@
                 </el-table-column>
               </template>
               <el-table-column :prop="item.prop" :label="item.label" :align="item.align"
-                :fixed="item.fixed!='none'?item.fixed:false" :width="item.width" :key="i"
-                :sortable="item.sortable?'custom':item.sortable" v-else />
+                :fixed="item.fixed!='none'&&columnData.childTableStyle!=2?item.fixed:false"
+                :width="item.width" :key="i" :sortable="item.sortable?'custom':item.sortable"
+                v-else />
             </template>
           </template>
-          <el-table-column :fixed="columnList.some(o=>o.fixed == 'right')?'right':false"
+          <el-table-column
+            :fixed="columnList.some(o=>o.fixed == 'right')&&columnData.childTableStyle!=2?'right':false"
             prop="flowState" label="状态" width="100" v-if="config.enableFlow==1">
             <template slot-scope="scope" v-if="!scope.row.top">
               <el-tag v-if="scope.row.flowState==1">等待审核</el-tag>
@@ -257,8 +257,9 @@
               <el-tag type="warning" v-else>等待提交</el-tag>
             </template>
           </el-table-column>
-          <el-table-column label="操作" fixed="right" :width="operationWidth"
-            v-if="columnBtnsList.length || customBtnsList.length">
+          <el-table-column label="操作"
+            :fixed="columnData.childTableStyle==2&&childColumnList.length?false:'right'"
+            :width="operationWidth" v-if="columnBtnsList.length || customBtnsList.length">
             <template slot-scope="scope" v-if="!scope.row.top">
               <template v-if="scope.row.rowEdit">
                 <el-button size="mini" type="text" @click="saveForRowEdit(scope.row,1)">

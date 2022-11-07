@@ -44,7 +44,7 @@
                 :disabled="scope.row.__config__&&scope.row.__config__.isSubTable" />
             </template>
           </el-table-column>
-          <el-table-column prop="align" label="冻结">
+          <el-table-column prop="align" label="冻结" v-if="columnData.childTableStyle!=2">
             <template slot-scope="scope">
               <el-select v-model="scope.row.fixed" placeholder="请选择"
                 :disabled="scope.row.__config__&&scope.row.__config__.isSubTable">
