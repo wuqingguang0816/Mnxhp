@@ -227,15 +227,22 @@
                   </el-form-item>
                   <el-form-item label="表单字段" style="margin-bottom:0!important;"
                     v-if="subFlowForm.initiateType === 4">
-                    <el-radio-group v-model="subFlowForm.formFieldType">
-                      <el-radio :label="1">用户</el-radio>
-                      <el-radio :label="2">部门</el-radio>
-                    </el-radio-group>
-                    <el-select v-model="subFlowForm.formField" placeholder="请选择字段">
-                      <el-option v-for="item in usedFormItems" :key="item.__vModel__"
-                        :label="item.__config__.label" :value="item.__vModel__">
-                      </el-option>
-                    </el-select>
+                    <div class="assignee-form">
+                      <el-select v-model="subFlowForm.formFieldType" placeholder="请选择字段"
+                        class="form-field-type">
+                        <el-option :value="1" label="用户"></el-option>
+                        <el-option :value="2" label="部门"></el-option>
+                        <el-option :value="3" label="岗位"></el-option>
+                        <el-option :value="4" label="角色"></el-option>
+                        <el-option :value="5" label="分组"></el-option>
+                      </el-select>
+                      <el-select v-model="subFlowForm.formField" placeholder="请选择字段"
+                        class="form-field">
+                        <el-option v-for="item in usedFormItems" :key="item.__vModel__"
+                          :label="item.__config__.label" :value="item.__vModel__">
+                        </el-option>
+                      </el-select>
+                    </div>
                   </el-form-item>
                   <el-form-item label="审批节点" style="margin-bottom:0!important;"
                     v-if="subFlowForm.initiateType === 5">
