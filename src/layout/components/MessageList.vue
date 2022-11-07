@@ -340,6 +340,10 @@ export default {
       color: #303133;
       cursor: pointer;
       border-top: 1px solid #e3e6eb;
+
+      &:hover {
+        color: #1890ff;
+      }
     }
   }
 }
