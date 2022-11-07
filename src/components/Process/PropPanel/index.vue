@@ -2821,16 +2821,30 @@ export default {
       return this.formFieldsOptions.filter(o => o.__config__ && o.__config__.required)
     },
     rejectStepOptions() {
+      console.log(this.approverForm.counterSign)
+      console.log(this.approverForm.rejectType)
+      console.log(defaultStep)
+      console.log(this.realNodeList)
       let options = []
-      if (this.approverForm.counterSign == 0) {
-        const list = [{
-          nodeId: '2',
-          properties: { title: '自选审批节点' }
-        }]
-        options = [...defaultStep, ...list, ...this.realNodeList]
-      } else {
-        options = [...defaultStep, ...this.realNodeList]
+      if (this.approverForm.rejectType) { }
+
+      const list = [{
+        nodeId: '2',
+        properties: { title: '自选审批节点' }
+      }]
+      console.log(list)
+      options = [...defaultStep, ...list, ...this.realNodeList]
+      //    if (this.approverForm.counterSign == 0) {
+      // } else {
+      //   options = [...defaultStep, ...this.realNodeList]
+      // }
+
+      if (this.approverForm.rejectType == 2) {
+        console.log(options)
+        options = options.filter(o => o.nodeId != 1)
       }
+
+      console.log(options)
       return options
     }
   },
