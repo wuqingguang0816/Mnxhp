@@ -108,7 +108,7 @@ export default {
           this.testBtnLoading = true
           let query = {
             ...this.dataForm,
-            type: 8
+            type: 7
           }
           testConfig(query, 'testQyWebChatConnect').then(res => {
             this.$message({
@@ -130,7 +130,7 @@ export default {
         if (valid) {
           let query = {
             ...this.dataForm,
-            type: 8
+            type: 7
           }
           this.btnLoading = true
           const formMethod = this.dataForm.id ? updateConfig : createConfig

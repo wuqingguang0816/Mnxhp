@@ -136,7 +136,7 @@ export default {
         ...this.listQuery,
         keyword: this.keyword,
         enabledMark: this.enabledMark,
-        type: 8
+        type: 7
       }
       getConfigList(query).then(res => {
         this.list = res.data.list
