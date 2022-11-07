@@ -47,7 +47,7 @@
         </div>
         <p class="noData-txt" v-else>{{$t('common.noData')}}</p>
       </div>
-      <div class="bottom-box" @click="readAll">全部标识已读</div>
+      <div class="bottom-box" @click="readAll">全部已读</div>
     </el-drawer>
     <el-dialog title="查看消息" :close-on-click-modal="false" :visible.sync="visible"
       class="JNPF-dialog JNPF-dialog_center JNPF-dialog-notice" lock-scroll width="80%">
@@ -207,7 +207,6 @@ export default {
     }
   }
   .search-input {
-    margin-bottom: 10px;
     >>> .el-input__inner {
       border-radius: 0;
       border-right: none;
