@@ -51,43 +51,6 @@
             </el-form-item>
           </el-col>
           <el-col :span="24">
-            <!-- <div class="right-pane" v-if="dataForm.messageType != 3">
-              <el-form-item label="消息标题" prop="title">
-                <p>{{dataForm.title}}</p>
-              </el-form-item>
-              <el-form-item label="消息内容" prop="content" v-if="dataForm.messageType == 2">
-                <p v-html="dataForm.content"></p>
-              </el-form-item>
-              <el-form-item label="消息内容" prop="content" class="jnpf-textarea-item"
-                v-else-if="dataForm.messageType != 1||dataForm.messageSource != 1">
-                <p>{{dataForm.content}}</p>
-              </el-form-item>
-            </div>
-            <div class="right-pane" v-else>
-              <jnpf-form-tip-item label="模版编号" prop="templateCode"
-                tipLabel="阿里云：在模板管理⻚⾯查看模板CODE<br/>腾讯云：在正⽂模板管理⻚⾯查看模板ID">
-                <p>{{dataForm.templateCode}}</p>
-              </jnpf-form-tip-item>
-              <div class="msg-pane">
-                <div class="list">
-                  <el-table :data="smsList" ref="dragTable" row-key="id" height="100%">
-                    <el-table-column label="序号" type="index" width="300"></el-table-column>
-                    <el-table-column prop="smsField">
-                      <template slot="header">
-                        <p>
-                          短信变量
-                          <el-tooltip content="内容在第三方平台维护，绑定第三方平台短信变量，如：腾讯云：{1}，阿里云格式：${name}"
-                            placement="top">
-                            <a class="el-icon-warning-outline"></a>
-                          </el-tooltip>
-                        </p>
-                      </template>
-                    </el-table-column>
-                    <el-table-column label="参数" prop="field"></el-table-column>
-                  </el-table>
-                </div>
-              </div>
-            </div> -->
             <div class="parameter-box">
               <div class="left-pane">
                 <div class="left-pane-list">
@@ -140,7 +103,7 @@
                       <p>{{dataForm.templateCode}}</p>
                     </jnpf-form-tip-item>
                   </el-col>
-                  <el-col :span="12" offset="12"></el-col>
+                  <el-col :span="12" :offset="12"></el-col>
                   <el-col :span="12" v-if="dataForm.messageType == 7">
                     <jnpf-form-tip-item label="跳转方式" prop="wxSkip">
                       <p>{{dataForm.wxSkip==1?'小程序':'页面'}}</p>
@@ -227,6 +190,7 @@ export default {
       messageSourceList: [],
       messageTypeList: [],
       smsList: [],
+      keyword: "",
       parameterList: [],
       allParameterList: [],
     }
@@ -268,7 +232,14 @@ export default {
     },
     goBack() {
       this.$emit('close')
-    }
+    },
+    searchParameter() {
+      this.parameterList = this.allParameterList.filter(item => {
+        if (item.field.toLowerCase().includes(this.keyword.toLowerCase())) {
+          return item
+        }
+      })
+    },
   }
 }
 </script>
