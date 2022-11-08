@@ -15,10 +15,11 @@ export const getMsgMonitorDetail = id => {
   })
 }
 // 批量删除
-export const delMsgMonitor = id => {
+export const delMsgMonitor = (data) => {
   return request({
-    url: `/api/message/MessageMonitor/batchRemove/${id}`,
-    method: 'DELETE'
+    url: '/api/message/MessageMonitor/batchRemove',
+    method: 'DELETE',
+    data
   })
 }
 // 一键清空

@@ -200,11 +200,11 @@ export default {
         this.$message({ type: 'error', message: '请选择一条数据' });
         return
       }
-      let data = this.multipleSelection.join(',')
+      const query = { ids: this.multipleSelection }
       this.$confirm('您确定要删除这些数据吗, 是否继续?', '提示', {
         type: 'warning'
       }).then(() => {
-        delMsgMonitor(data).then(res => {
+        delMsgMonitor(query).then(res => {
           this.$message({
             type: 'success',
             message: res.msg
