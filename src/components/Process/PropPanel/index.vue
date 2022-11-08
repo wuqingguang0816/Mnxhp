@@ -346,8 +346,8 @@
                   <el-table-column type="index" width="50" label="序号" align="center" />
                   <el-table-column prop="field" label="模板名称" width="150">
                     <template slot-scope="scope">
-                      <p class="template-name" @click="showTemplateDetail(scope.row.templateId)">
-                        {{scope.row.msgTemplateName}}</p>
+                      <el-link @click='goDetail(scope.row.templateId)'>{{scope.row.msgTemplateName}}
+                      </el-link>
                     </template>
                   </el-table-column>
                   <el-table-column prop="field" label="参数名称" width="150">
@@ -751,8 +751,8 @@
                   <el-table-column type="index" width="50" label="序号" align="center" />
                   <el-table-column prop="field" label="模板名称" width="150">
                     <template slot-scope="scope">
-                      <p class="template-name" @click="showTemplateDetail(scope.row.templateId)">
-                        {{scope.row.msgTemplateName}}</p>
+                      <el-link @click='goDetail(scope.row.templateId)'>{{scope.row.msgTemplateName}}
+                      </el-link>
                     </template>
                   </el-table-column>
                   <el-table-column prop="field" label="参数名称" width="150">
@@ -808,8 +808,8 @@
                   <el-table-column type="index" width="50" label="序号" align="center" />
                   <el-table-column prop="field" label="模板名称" width="150">
                     <template slot-scope="scope">
-                      <p class="template-name" @click="showTemplateDetail(scope.row.templateId)">
-                        {{scope.row.msgTemplateName}}</p>
+                      <el-link @click='goDetail(scope.row.templateId)'>{{scope.row.msgTemplateName}}
+                      </el-link>
                     </template>
                   </el-table-column>
                   <el-table-column prop="field" label="参数名称" width="150">
@@ -865,8 +865,8 @@
                   <el-table-column type="index" width="50" label="序号" align="center" />
                   <el-table-column prop="field" label="模板名称" width="150">
                     <template slot-scope="scope">
-                      <p class="template-name" @click="showTemplateDetail(scope.row.templateId)">
-                        {{scope.row.msgTemplateName}}</p>
+                      <el-link @click='goDetail(scope.row.templateId)'>{{scope.row.msgTemplateName}}
+                      </el-link>
                     </template>
                   </el-table-column>
                   <el-table-column prop="field" label="参数名称" width="150">
@@ -922,8 +922,8 @@
                   <el-table-column type="index" width="50" label="序号" align="center" />
                   <el-table-column prop="field" label="模板名称" width="150">
                     <template slot-scope="scope">
-                      <p class="template-name" @click="showTemplateDetail(scope.row.templateId)">
-                        {{scope.row.msgTemplateName}}</p>
+                      <el-link @click='goDetail(scope.row.templateId)'>{{scope.row.msgTemplateName}}
+                      </el-link>
                     </template>
                   </el-table-column>
                   <el-table-column prop="field" label="参数名称" width="150">
@@ -979,8 +979,8 @@
                   <el-table-column type="index" width="50" label="序号" align="center" />
                   <el-table-column prop="field" label="模板名称" width="150">
                     <template slot-scope="scope">
-                      <p class="template-name" @click="showTemplateDetail(scope.row.templateId)">
-                        {{scope.row.msgTemplateName}}</p>
+                      <el-link @click='goDetail(scope.row.templateId)'>{{scope.row.msgTemplateName}}
+                      </el-link>
                     </template>
                   </el-table-column>
                   <el-table-column prop="field" label="参数名称" width="150">
@@ -1036,8 +1036,8 @@
                   <el-table-column type="index" width="50" label="序号" align="center" />
                   <el-table-column prop="field" label="模板名称" width="150">
                     <template slot-scope="scope">
-                      <p class="template-name" @click="showTemplateDetail(scope.row.templateId)">
-                        {{scope.row.msgTemplateName}}</p>
+                      <el-link @click='goDetail(scope.row.templateId)'>{{scope.row.msgTemplateName}}
+                      </el-link>
                     </template>
                   </el-table-column>
                   <el-table-column prop="field" label="参数名称" width="150">
@@ -1087,8 +1087,8 @@
                   <el-table-column type="index" width="50" label="序号" align="center" />
                   <el-table-column prop="field" label="模板名称" width="150">
                     <template slot-scope="scope">
-                      <p class="template-name" @click="showTemplateDetail(scope.row.templateId)">
-                        {{scope.row.msgTemplateName}}</p>
+                      <el-link @click='goDetail(scope.row.templateId)'>{{scope.row.msgTemplateName}}
+                      </el-link>
                     </template>
                   </el-table-column>
                   <el-table-column prop="field" label="参数名称" width="150">
@@ -1851,8 +1851,8 @@
                   <el-table-column type="index" width="50" label="序号" align="center" />
                   <el-table-column prop="field" label="模板名称" width="150">
                     <template slot-scope="scope">
-                      <p class="template-name" @click="showTemplateDetail(scope.row.templateId)">
-                        {{scope.row.msgTemplateName}}</p>
+                      <el-link @click='goDetail(scope.row.templateId)'>{{scope.row.msgTemplateName}}
+                      </el-link>
                     </template>
                   </el-table-column>
                   <el-table-column prop="field" label="参数名称" width="150">
@@ -1908,8 +1908,8 @@
                   <el-table-column type="index" width="50" label="序号" align="center" />
                   <el-table-column prop="field" label="模板名称" width="150">
                     <template slot-scope="scope">
-                      <p class="template-name" @click="showTemplateDetail(scope.row.templateId)">
-                        {{scope.row.msgTemplateName}}</p>
+                      <el-link @click='goDetail(scope.row.templateId)'>{{scope.row.msgTemplateName}}
+                      </el-link>
                     </template>
                   </el-table-column>
                   <el-table-column prop="field" label="参数名称" width="150">
@@ -1965,8 +1965,8 @@
                   <el-table-column type="index" width="50" label="序号" align="center" />
                   <el-table-column prop="field" label="模板名称" width="150">
                     <template slot-scope="scope">
-                      <p class="template-name" @click="showTemplateDetail(scope.row.templateId)">
-                        {{scope.row.msgTemplateName}}</p>
+                      <el-link @click='goDetail(scope.row.templateId)'>{{scope.row.msgTemplateName}}
+                      </el-link>
                     </template>
                   </el-table-column>
                   <el-table-column prop="field" label="参数名称" width="150">
@@ -2022,8 +2022,8 @@
                   <el-table-column type="index" width="50" label="序号" align="center" />
                   <el-table-column prop="field" label="模板名称" width="150">
                     <template slot-scope="scope">
-                      <p class="template-name" @click="showTemplateDetail(scope.row.templateId)">
-                        {{scope.row.msgTemplateName}}</p>
+                      <el-link @click='goDetail(scope.row.templateId)'>{{scope.row.msgTemplateName}}
+                      </el-link>
                     </template>
                   </el-table-column>
                   <el-table-column prop="field" label="参数名称" width="150">
@@ -2073,8 +2073,8 @@
                   <el-table-column type="index" width="50" label="序号" align="center" />
                   <el-table-column prop="field" label="模板名称" width="150">
                     <template slot-scope="scope">
-                      <p class="template-name" @click="showTemplateDetail(scope.row.templateId)">
-                        {{scope.row.msgTemplateName}}</p>
+                      <el-link @click='goDetail(scope.row.templateId)'>{{scope.row.msgTemplateName}}
+                      </el-link>
                     </template>
                   </el-table-column>
                   <el-table-column prop="field" label="参数名称" width="150">
@@ -3656,7 +3656,7 @@ export default {
       this.activeItem.field = formula
       this.activeItem.fieldName = formula
     },
-    showTemplateDetail(id) {
+    goDetail(id) {
       this.viewVisible = true
       this.$nextTick(() => {
         this.$refs.View.init(id)
@@ -4002,9 +4002,6 @@ export default {
       text-align: center;
     }
   }
-}
-.template-name {
-  cursor: pointer;
 }
 .parameter-box {
   height: 30px;

@@ -10,7 +10,11 @@
         </div>
       </div>
       <JNPF-table class="main-table" :data="testSendData" height="100%" v-loading="loading">
-        <el-table-column prop="msgTemplateName" label="模板名称" width="150"></el-table-column>
+        <el-table-column prop="msgTemplateName" label="模板名称" width="150">
+          <template slot-scope="scope">
+            <el-link @click='goDetail(scope.row.templateId)'>{{scope.row.msgTemplateName}}</el-link>
+          </template>
+        </el-table-column>
         <el-table-column prop="messageType" label="模板类型" width="150"></el-table-column>
         <el-table-column prop="toUser" label="接收人" min-width="200">
           <template slot-scope="scope" v-if="scope.row.messageType != 'webhook'">
@@ -34,6 +38,7 @@
         </el-table-column>
       </JNPF-table>
       <SendResults v-if="resultsVisible" ref="ResultsDialog" />
+      <Detail v-if="viewVisible" ref="View" @close="viewVisible = false" />
     </div>
   </transition>
 </template>
@@ -41,16 +46,18 @@
 import { testSendConfigInfo, testSendConfig } from '@/api/msgCenter/sendConfig'
 import userSelect from '@/components/JNPF-userSelect'
 import SendResults from './SendResults'
+import Detail from '@/components/Process/PropPanel/TemplateDetail'
 import { deepClone } from '../../../components/Generator/utils'
 
 export default {
-  components: { userSelect, SendResults },
+  components: { userSelect, SendResults, Detail },
   name: 'sendConfig-TestSend',
   data() {
     return {
       btnLoading: false,
       loading: false,
       resultsVisible: false,
+      viewVisible: false,
       resultData: [],
       testSendData: [],
       resultList: []
@@ -111,6 +118,12 @@ export default {
       this.resultsVisible = true
       this.$nextTick(() => {
         this.$refs.ResultsDialog && this.$refs.ResultsDialog.init(this.resultList)
+      })
+    },
+    goDetail(id) {
+      this.viewVisible = true
+      this.$nextTick(() => {
+        this.$refs.View.init(id)
       })
     }
   }
