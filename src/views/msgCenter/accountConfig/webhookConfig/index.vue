@@ -97,9 +97,9 @@ import {
   getConfigList,
   delConfig,
   copyConfig,
-  exportConfig,
-  getMsgTypeList
+  exportConfig
 } from '@/api/msgCenter/accountConfig'
+import { getMsgTypeList } from '@/api/msgCenter/msgTemplate'
 export default {
   name: 'system-printDev',
   components: {

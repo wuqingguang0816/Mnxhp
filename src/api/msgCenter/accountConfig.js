@@ -15,13 +15,6 @@ export const createConfig = data => {
     data
   })
 }
-//数据类型具体对应数据：1：消息类型，2：渠道，3：webhook类型，4：消息来源
-export const getMsgTypeList = type => {
-  return request({
-    url: `/api/message/MessageDataType/getTypeList/${type}`,
-    method: 'post'
-  })
-}
 // 详情
 export const getConfigDetail = id => {
   return request({
@@ -38,7 +31,7 @@ export const updateConfig = data => {
   })
 }
 // 测试
-export const testConfig = (data,type) => {
+export const testConfig = (data, type) => {
   return request({
     url: `/api/message/AccountConfig/${type}`,
     method: 'POST',
