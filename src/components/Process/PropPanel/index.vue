@@ -3266,12 +3266,15 @@ export default {
       this.approverTransmitRuleVisible = true
     },
     getRealAssignList(assignList) {
-      let newAssignList = this.prevNodeList.map(o => ({
-        nodeId: o.nodeId,
-        title: o.properties.title,
-        formFieldList: o.properties.formFieldList && o.properties.formFieldList.length ? o.properties.formFieldList : this.processData.properties.formFieldList,
-        ruleList: []
-      }))
+      let newAssignList = this.prevNodeList.map(o => {
+        let formFieldList = o.properties.formFieldList && o.properties.formFieldList.length ? o.properties.formFieldList : this.processData.properties.formFieldList
+        return {
+          nodeId: o.nodeId,
+          title: o.properties.title,
+          formFieldList: formFieldList.filter(o => o.__config__.jnpfKey !== 'table'),
+          ruleList: []
+        }
+      })
       if (!assignList.length) {
         this.assignList = newAssignList
       } else {
@@ -3509,7 +3512,8 @@ export default {
         this.formFieldList = []
       } else {
         let prevNode = this.prevNodeList[0]
-        this.formFieldList = prevNode.properties.formFieldList && prevNode.properties.formFieldList.length ? prevNode.properties.formFieldList : this.processData.properties.formFieldList
+        let formFieldList = prevNode.properties.formFieldList && prevNode.properties.formFieldList.length ? prevNode.properties.formFieldList : this.processData.properties.formFieldList
+        this.formFieldList = formFieldList.filter(o => o.__config__.jnpfKey !== 'table')
       }
     },
     fieldNameChange(val, item, i) {
