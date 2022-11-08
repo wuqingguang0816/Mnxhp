@@ -328,7 +328,7 @@ export default {
           if (!this.field) return
           let relationData = this.$store.state.generator.relationData
           this.$set(relationData, this.field, res.data)
-          this.$eventBus.$emit('popupAttrEventBus', relationData)
+          this.$eventBus.$emit('popupAttrEventBus', relationData, this.field)
           this.$store.commit('generator/UPDATE_RELATION_DATA', relationData)
         })
       } else {
@@ -336,7 +336,7 @@ export default {
         if (!this.field) return
         let relationData = this.$store.state.generator.relationData
         this.$set(relationData, this.field, {})
-        this.$eventBus.$emit('popupAttrEventBus', relationData)
+        this.$eventBus.$emit('popupAttrEventBus', relationData, this.field)
         this.$store.commit('generator/UPDATE_RELATION_DATA', relationData)
       }
     }

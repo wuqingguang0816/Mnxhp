@@ -25,7 +25,7 @@ export default {
   },
   computed: {
     relationData() {
-      if (this.isStorage == 2) {
+      if (this.isStorage == 2 && this.defaultValue) {
         this.$emit('input', this.defaultValue)
         return this.innerValue = this.defaultValue
       }
@@ -33,8 +33,8 @@ export default {
     }
   },
   created() {
-    this.$eventBus.$on('eventBus', val => {
-      if (!this.showField || !this.relationField) return
+    this.$eventBus.$on('eventBus', (val, vModel) => {
+      if (!this.showField || !this.relationField || this.relationField != vModel) return
       let obj = val[this.relationField] || {}
       this.innerValue = obj[this.showField] ? obj[this.showField] : ''
       this.$emit('input', this.innerValue)
