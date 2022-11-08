@@ -45,7 +45,7 @@
           <el-table-column prop="enCode" label="编码" width="150" />
           <el-table-column prop="addressorName" label="发件人昵称" width="150" />
           <el-table-column prop="smtpUser" label="用户名" width="150" />
-          <el-table-column prop="creatorUserId" label="创建人" width="150" />
+          <el-table-column prop="creatorUser" label="创建人" width="150" />
           <el-table-column prop="creatorTime" label="创建时间" :formatter="jnpf.tableDateFormat"
             width="150" />
           <el-table-column prop="lastModifyTime" label="最后修改时间" :formatter="jnpf.tableDateFormat"

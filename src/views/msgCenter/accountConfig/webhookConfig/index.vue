@@ -53,7 +53,7 @@
           <el-table-column prop="fullName" label="名称" show-overflow-tooltip min-width="120" />
           <el-table-column prop="enCode" label="编码" width="150" />
           <el-table-column prop="webhookType" label="类型" width="120" />
-          <el-table-column prop="creatorUserId" label="创建人" width="120" />
+          <el-table-column prop="creatorUser" label="创建人" width="120" />
           <el-table-column prop="creatorTime" label="创建时间" :formatter="jnpf.tableDateFormat"
             width="120" />
           <el-table-column prop="lastModifyTime" label="最后修改时间" :formatter="jnpf.tableDateFormat"
