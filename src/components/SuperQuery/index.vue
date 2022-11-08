@@ -474,7 +474,9 @@ export default {
         matchLogic: this.matchLogic,
         conditionJson: JSON.stringify(this.conditionList)
       }
-      this.$emit('superQuery', JSON.stringify(query))
+      query = JSON.stringify(query)
+      if (!this.conditionList.length) query = ""
+      this.$emit('superQuery', query)
       this.visible = false
     }
   }
