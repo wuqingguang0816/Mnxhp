@@ -40,13 +40,13 @@
         </jnpf-form-tip-item>
         <jnpf-form-tip-item label="SecretKey" prop="secretKey"
           tip-label="请在“腾讯云的访问管理-访问密钥- API密钥管理”⻚中获得">
-          <el-input v-model="dataForm.secretKey" placeholder="SecretKey" clearable />
+          <el-input v-model="dataForm.secretKey" placeholder="SecretKey" clearable show-password />
         </jnpf-form-tip-item>
         <jnpf-form-tip-item label="SDK AppID" prop="sdkAppId" tip-label="请在”腾讯云的应⽤管理-应⽤列表”⻚中获得">
-          <el-input v-model="dataForm.sdkAppId" placeholder="SDK AppID" clearable />
+          <el-input v-model="dataForm.sdkAppId" placeholder="SDK AppID" clearable show-password />
         </jnpf-form-tip-item>
         <jnpf-form-tip-item label="App Key" prop="appKey" tip-label="请在”腾讯云的应⽤管理-应⽤列表”⻚中获得">
-          <el-input v-model="dataForm.appKey" placeholder="App Key" clearable />
+          <el-input v-model="dataForm.appKey" placeholder="App Key" clearable show-password />
         </jnpf-form-tip-item>
         <jnpf-form-tip-item label="地域域名" prop="zoneName" tip-label="默认是国内地域域名,也⽀持指定其它地域域名">
           <el-input v-model="dataForm.zoneName" placeholder="地域域名" clearable />
