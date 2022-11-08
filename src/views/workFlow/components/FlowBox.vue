@@ -83,7 +83,7 @@
         <Comment :id='setting.id' ref="comment" />
       </el-tab-pane>
     </el-tabs>
-    <el-dialog :title="eventType==='audit'?'审批通过':'审批拒绝'" :close-on-click-modal="false"
+    <el-dialog :title="eventType==='audit'?'审批通过':'审批退回'" :close-on-click-modal="false"
       :visible.sync="visible" class="JNPF-dialog JNPF-dialog_center" lock-scroll append-to-body
       width='600px'>
       <el-form ref="candidateForm" :model="candidateForm"
@@ -457,7 +457,7 @@ export default {
       if (opType == 1) {
         if (properties.hasTransferBtn) list.push({ label: properties.transferBtnText || '转 审', key: 'transfer' })
         if (properties.hasSaveBtn) list.push({ label: properties.saveBtnText || '暂 存', key: 'saveAudit' })
-        if (properties.hasRejectBtn) list.push({ label: properties.rejectBtnText || '拒 绝', key: 'reject' })
+        if (properties.hasRejectBtn) list.push({ label: properties.rejectBtnText || '退 回', key: 'reject' })
         if (properties.hasFreeApproverBtn) list.push({ label: properties.hasFreeApproverBtnText || '加 签', key: 'hasFreeApprover' })
       }
       if (opType == 4) {
