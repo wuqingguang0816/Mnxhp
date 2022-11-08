@@ -99,7 +99,6 @@ export default {
     },
     init(formData, modelId, id, useFormPermission) {
       this.formData = deepClone(formData)
-      this.initRelationForm(this.formData.fields)
       this.modelId = modelId
       this.useFormPermission = useFormPermission
       this.dataForm.id = id || ''
@@ -119,6 +118,7 @@ export default {
             if (!this.dataForm.data) return
             this.formValue = JSON.parse(this.dataForm.data)
             this.fillFormData(this.formData, this.formValue)
+            this.initRelationForm(this.formData.fields)
             this.visible = true
           })
         } else {
