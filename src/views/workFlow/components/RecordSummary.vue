@@ -12,9 +12,7 @@
                 <template v-if="child.handleStatus==0">
                   <div class="child-item-block">
                     <div class="avatar">
-                      <el-avatar
-                        src="https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png">
-                      </el-avatar>
+                      <el-avatar :src="define.comUrl+child.headIcon"></el-avatar>
                     </div>
                     <div class="child-item-title">
                       <div class="child-item-line">
@@ -32,9 +30,7 @@
                 <template v-if="child.handleStatus==1">
                   <div class="child-item-block">
                     <div class="avatar">
-                      <el-avatar
-                        src="https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png">
-                      </el-avatar>
+                      <el-avatar :src="define.comUrl+child.headIcon"></el-avatar>
                     </div>
                     <div class="child-item-title">
                       <div class="child-item-line">
@@ -56,9 +52,7 @@
                 <template v-if="child.handleStatus==2">
                   <div class="child-item-block">
                     <div class="avatar">
-                      <el-avatar
-                        src="https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png">
-                      </el-avatar>
+                      <el-avatar :src="define.comUrl+child.headIcon"></el-avatar>
                     </div>
                     <div class="child-item-title">
                       <div class="child-item-line">
@@ -73,9 +67,7 @@
                 <template v-if="child.handleStatus==3">
                   <div class="child-item-block">
                     <div class="avatar">
-                      <el-avatar
-                        src="https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png">
-                      </el-avatar>
+                      <el-avatar :src="define.comUrl+child.headIcon"></el-avatar>
                     </div>
                     <div class="child-item-title">
                       <div class="child-item-line">
@@ -93,9 +85,7 @@
                 <template v-if="child.handleStatus==4">
                   <div class="child-item-block">
                     <div class="avatar">
-                      <el-avatar
-                        src="https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png">
-                      </el-avatar>
+                      <el-avatar :src="define.comUrl+child.headIcon"></el-avatar>
                     </div>
                     <div class="child-item-title">
                       <div class="child-item-line">
@@ -113,9 +103,7 @@
                 <template v-if="child.handleStatus==5">
                   <div class="child-item-block">
                     <div class="avatar">
-                      <el-avatar
-                        src="https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png">
-                      </el-avatar>
+                      <el-avatar :src="define.comUrl+child.headIcon"></el-avatar>
                     </div>
                     <div class="child-item-title">
                       <div class="child-item-line">
@@ -133,9 +121,7 @@
                 <template v-if="child.handleStatus==6">
                   <div class="child-item-block">
                     <div class="avatar">
-                      <el-avatar
-                        src="https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png">
-                      </el-avatar>
+                      <el-avatar :src="define.comUrl+child.headIcon"></el-avatar>
                     </div>
                     <div class="child-item-title">
                       <div class="child-item-line">
@@ -153,9 +139,7 @@
                 <template v-if="child.handleStatus==7">
                   <div class="child-item-block">
                     <div class="avatar">
-                      <el-avatar
-                        src="https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png">
-                      </el-avatar>
+                      <el-avatar :src="define.comUrl+child.headIcon"></el-avatar>
                     </div>
                     <div class="child-item-title">
                       <div class="child-item-line">
@@ -209,11 +193,13 @@ export default {
       }
       getRecordList(this.id, query).then(res => {
         this.list = res.data
-        this.list.forEach((o, i) => {
-          o.list.forEach(j => {
-            j.fileList = JSON.parse(j.fileList)
+        if (this.list.length) {
+          this.list.forEach((o, i) => {
+            o.list.forEach(j => {
+              j.fileList = j.fileList ? JSON.parse(j.fileList) : []
+            })
           })
-        })
+        }
         this.loading = false
       }).catch(() => {
         this.loading = false
