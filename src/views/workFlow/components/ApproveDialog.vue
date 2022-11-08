@@ -21,7 +21,7 @@
             v-else />
         </el-form-item>
       </template>
-      <template v-if="properties&&properties.rejectType &&eventType!=='audit'">
+      <template v-if="properties&&properties.rejectType &&eventType!=='audit'&&showReject">
         <el-form-item label="退回节点" prop="rejectStep">
           <el-select v-model="dataForm.rejectStep" placeholder="请选择退回节点"
             :disabled='properties.rejectStep!=="2"'>
@@ -92,6 +92,7 @@ export default {
         flowId: '',
         data: '{}'
       },
+      showReject: false,
       rejectList: []
     }
   },
@@ -118,7 +119,8 @@ export default {
       })
       if (eventType === 'reject') {
         RejectList(taskId).then(res => {
-          this.rejectList = res.data || []
+          this.showReject = res.data.isLastAppro
+          this.rejectList = res.data.list || []
           this.dataForm.rejectStep = this.rejectList[0].nodeCode
         }).catch({})
       }

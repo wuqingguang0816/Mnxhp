@@ -106,7 +106,7 @@
               v-else />
           </el-form-item>
         </template>
-        <template v-if="properties.rejectType &&eventType!=='audit'">
+        <template v-if="properties.rejectType &&eventType!=='audit'&&showReject">
           <el-form-item label="退回节点" prop="rejectStep">
             <el-select v-model="candidateForm.rejectStep" placeholder="请选择退回节点"
               :disabled='properties.rejectStep!=="2"'>
@@ -267,6 +267,7 @@ export default {
       },
       printBrowseVisible: false,
       rejectList: [],
+      showReject: false,
       eventType: '',
       signImg: '',
       copyIds: [],
@@ -503,7 +504,8 @@ export default {
         if (this.properties.hasSign) this.signImg = this.userInfo.signImg
         if (eventType === 'reject') {
           RejectList(this.setting.taskId).then(res => {
-            this.rejectList = res.data || []
+            this.showReject = res.data.isLastAppro
+            this.rejectList = res.data.list || []
             this.candidateForm.rejectStep = this.rejectList[0].nodeCode
           }).catch({})
           if (!this.properties.hasSign && !this.properties.hasOpinion && !this.properties.isCustomCopy) {
