@@ -452,7 +452,7 @@ export default {
       const properties = this.properties
       const flowTaskInfo = this.flowTaskInfo
       if (opType == '-1' && !setting.hideCancelBtn) list.push({ label: properties.saveBtnText || '暂 存', key: 'save' })
-      if (opType == 0 && setting.status == 1 && setting.parentId == '0' && (properties.hasRevokeBtn || properties.hasRevokeBtn === undefined)) list.push({ label: properties.revokeBtnText || '撤 回', key: 'revoke' })
+      if (opType == 0 && setting.status == 1 && (setting.parentId == '0' || !setting.parentId) && (properties.hasRevokeBtn || properties.hasRevokeBtn === undefined)) list.push({ label: properties.revokeBtnText || '撤 回', key: 'revoke' })
       if (opType != 4 && setting.id && properties.hasPrintBtn && properties.printId) list.push({ label: properties.printBtnText || '打 印', key: 'print' })
       if (opType == 1) {
         if (properties.hasTransferBtn) list.push({ label: properties.transferBtnText || '转 审', key: 'transfer' })
