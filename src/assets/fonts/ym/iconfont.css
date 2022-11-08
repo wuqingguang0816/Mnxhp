@@ -1,9 +1,9 @@
 @font-face {
   font-family: "icon-ym";
   /* Project id 3271933 */
-  src: url('iconfont.woff2?t=1666604610565') format('woff2'),
-    url('iconfont.woff?t=1666604610565') format('woff'),
-    url('iconfont.ttf?t=1666604610565') format('truetype');
+  src: url('iconfont.woff2?t=1667890974760') format('woff2'),
+    url('iconfont.woff?t=1667890974760') format('woff'),
+    url('iconfont.ttf?t=1667890974760') format('truetype');
 }
 
 .icon-ym {
@@ -12,6 +12,10 @@
   font-style: normal;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-ym-flowEntrust-app:before {
+  content: "\e8da";
 }
 
 .icon-ym-btn-download:before {

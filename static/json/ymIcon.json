@@ -6,6 +6,13 @@
   "description": "",
   "glyphs": [
     {
+      "icon_id": "32732986",
+      "name": "flowEntrust-app",
+      "font_class": "flowEntrust-app",
+      "unicode": "e8da",
+      "unicode_decimal": 59610
+    },
+    {
       "icon_id": "32473793",
       "name": "btn-download",
       "font_class": "btn-download",
