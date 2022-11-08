@@ -111,7 +111,7 @@ export function CandidateUser(id, data) {
     data
   })
 }
-// 批量通过、拒绝、转审  batchType 0-通过 1-拒绝 2-转审
+// 批量通过、退回、转审  batchType 0-通过 1-退回 2-转审
 export function BatchOperation(data) {
   return request({
     url: `/api/workflow/Engine/FlowBefore/BatchOperation`,

@@ -94,7 +94,7 @@
             <template slot-scope="scope">
               <el-tag type="success" v-if="scope.row.status==1">通过</el-tag>
               <el-tag type="primary" v-else-if="scope.row.status==10">前加签</el-tag>
-              <el-tag type="danger" v-else>拒绝</el-tag>
+              <el-tag type="danger" v-else>退回</el-tag>
             </template>
           </el-table-column>
           <el-table-column prop="creatorTime" label="办理时间" width="130">

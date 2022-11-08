@@ -1,5 +1,5 @@
 <template>
-  <el-dialog :title="eventType==='audit'?'审批通过':'审批拒绝'" :close-on-click-modal="false"
+  <el-dialog :title="eventType==='audit'?'审批通过':'审批退回'" :close-on-click-modal="false"
     :visible.sync="visible" class="JNPF-dialog JNPF-dialog_center" lock-scroll append-to-body
     width='600px'>
     <el-form ref="dataForm" :model="dataForm"

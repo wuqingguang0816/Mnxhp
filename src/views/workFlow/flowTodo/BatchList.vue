@@ -78,7 +78,7 @@
               批量转审</el-button>
             <el-button type="primary" @click="handleBatch(0)" :disabled="!listQuery.nodeCode"
               :loading="btnLoading">批量通过</el-button>
-            <el-button type="danger" @click="handleBatch(1)" :disabled="!listQuery.nodeCode">批量拒绝
+            <el-button type="danger" @click="handleBatch(1)" :disabled="!listQuery.nodeCode">批量退回
             </el-button>
           </div>
         </div>
@@ -238,7 +238,7 @@ export default {
       this.multipleSelection = val
     },
     handleBatch(batchType) {
-      // batchType 0-通过 1-拒绝 2-转审
+      // batchType 0-通过 1-退回 2-转审
       if (!this.multipleSelection.length) return this.$message.error('请先选择数据')
       let isDiffer = this.multipleSelection.some(o => o.flowVersion !== this.multipleSelection[0].flowVersion)
       if (isDiffer) return this.$message.error('请选择相同的版本审批单')
@@ -298,7 +298,7 @@ export default {
         return
       }
       if (batchType === 1) {
-        if (!properties.hasRejectBtn) return this.$message.error('当前审批节点无拒绝权限')
+        if (!properties.hasRejectBtn) return this.$message.error('当前审批节点无退回权限')
         if (!properties.hasSign && !properties.hasOpinion) {
           this.$confirm('此操作将退回该审批单，是否继续？', '提示', {
             type: 'warning'

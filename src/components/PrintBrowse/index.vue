@@ -138,7 +138,7 @@ export default {
       }
     },
     getHandleName(handleStatus) {
-      if (handleStatus == 0) return "拒绝"
+      if (handleStatus == 0) return "退回"
       if (handleStatus == 1) return "通过"
       if (handleStatus == 2) return "发起"
       if (handleStatus == 3) return "撤回"

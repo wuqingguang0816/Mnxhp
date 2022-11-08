@@ -21,7 +21,7 @@
                         <div class="name">
                           {{child.userName}}<span> 于 {{child.handleTime | toDate()}}</span>
                         </div>
-                        <el-tag type="danger" class="tag">拒绝</el-tag>
+                        <el-tag type="danger" class="tag">退回</el-tag>
                       </div>
                       <div class="child-item-option" v-if="child.handleOpinion">
                         {{child.handleOpinion}}

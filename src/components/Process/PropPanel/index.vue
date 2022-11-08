@@ -543,7 +543,7 @@
                 <div class="form-sub-title">汇总设置</div>
                 <el-select v-model="startForm.summaryType" placeholder="请选择">
                   <el-option label="汇总全部流转记录" :value="0"></el-option>
-                  <el-option label="汇总通过及拒绝流转记录" :value="1"></el-option>
+                  <el-option label="汇总通过及退回流转记录" :value="1"></el-option>
                 </el-select>
               </div>
               <el-form-item label="流程评论">
@@ -899,8 +899,8 @@
                 </el-table>
               </div>
               <el-form-item>
-                <div slot="label" class="form-item-label">节点拒绝
-                  <el-tooltip content="所有节点审核人拒绝的时候" placement="top">
+                <div slot="label" class="form-item-label">节点退回
+                  <el-tooltip content="所有节点审核人退回的时候" placement="top">
                     <a class="el-icon-warning-outline"></a>
                   </el-tooltip>
                 </div>
@@ -1397,7 +1397,7 @@
                 <div slot="label" class="form-item-label">审批方式</div>
                 <div class="form-item-content">
                   <el-radio v-model="approverForm.counterSign" :label="0">
-                    或签（一名审批人同意或拒绝即可）</el-radio>
+                    或签（一名审批人同意或退回即可）</el-radio>
                   <el-radio v-model="approverForm.counterSign" :label="1">
                     会签（无序会签，当审批达到会签比例时，则该审批通过）</el-radio>
                   <el-radio v-model="approverForm.counterSign" :label="2">
@@ -1885,8 +1885,8 @@
                 </el-table>
               </div>
               <el-form-item>
-                <div slot="label" class="form-item-label">节点拒绝
-                  <el-tooltip content="当前节点审核人拒绝的时候" placement="top">
+                <div slot="label" class="form-item-label">节点退回
+                  <el-tooltip content="当前节点审核人退回的时候" placement="top">
                     <a class="el-icon-warning-outline"></a>
                   </el-tooltip>
                 </div>
@@ -2429,7 +2429,7 @@ const defaultApproverForm = {
   hasAuditBtn: true,
   auditBtnText: '通 过',
   hasRejectBtn: true,
-  rejectBtnText: '拒 绝',
+  rejectBtnText: '退 回',
   hasRevokeBtn: true,
   revokeBtnText: '撤 回',
   hasTransferBtn: true,
