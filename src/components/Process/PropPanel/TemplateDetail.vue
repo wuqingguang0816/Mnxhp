@@ -237,7 +237,7 @@ export default {
     },
     searchParameter() {
       this.parameterList = this.allParameterList.filter(item => {
-        if (item.field.toLowerCase().includes(this.keyword.toLowerCase())) {
+        if (item.field.toLowerCase().includes(this.keyword.toLowerCase()) || item.fieldName.toLowerCase().includes(this.keyword.toLowerCase())) {
           return item
         }
       })
