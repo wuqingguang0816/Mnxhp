@@ -9,6 +9,7 @@
           <el-button @click="goBack()">{{$t('common.cancelButton')}}</el-button>
         </div>
       </div>
+      <el-alert title="注意：测试发送的消息通知链接不支持跳转" type="warning" :closable="false" show-icon />
       <JNPF-table class="main-table" :data="testSendData" height="100%" v-loading="loading">
         <el-table-column prop="msgTemplateName" label="模板名称" width="150">
           <template slot-scope="scope">
