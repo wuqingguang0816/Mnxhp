@@ -57,6 +57,7 @@ export default {
       }
       if (item.type == 2) {
         checkInfo(item.taskOperatorId).then(res => {
+          if (res.data.isCheck) data.opType = 3
           this.formVisible = true
           this.$nextTick(() => {
             this.$refs.FlowBox.init(data)
