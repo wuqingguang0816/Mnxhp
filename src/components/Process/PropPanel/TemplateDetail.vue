@@ -255,7 +255,7 @@ export default {
     display: flex;
     .left-pane {
       width: 350px;
-      height: 433px;
+      height: 323px;
       flex-shrink: 0;
       display: flex;
       flex-direction: column;
