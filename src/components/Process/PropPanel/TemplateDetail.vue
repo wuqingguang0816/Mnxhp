@@ -76,7 +76,7 @@
               </div>
             </div>
             <div class="right-pane" v-if="dataForm.messageType != 3&&dataForm.messageType != 7">
-              <jnpf-form-tip-item label="消息标题" prop="title">
+              <jnpf-form-tip-item label="消息标题" prop="title" tipLabel='参数格式：{参数名}'>
                 <p>{{dataForm.title}}</p>
               </jnpf-form-tip-item>
               <jnpf-form-tip-item label="消息内容" prop="content" v-if="dataForm.messageType == 2"
