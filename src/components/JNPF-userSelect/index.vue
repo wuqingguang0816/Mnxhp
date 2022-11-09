@@ -578,6 +578,7 @@ export default {
       })
     },
     loadNode(node, resolve) {
+      if (this.visible === false) return []
       if (node.level === 0) {
         this.nodeId = '0'
         return resolve(this.treeData)
