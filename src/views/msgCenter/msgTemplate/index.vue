@@ -19,26 +19,26 @@
             </el-form-item>
           </el-col>
           <el-col :span="6">
-            <el-form-item label="模板类型">
-              <el-select v-model="templateType" placeholder="选择模板类型" clearable>
-                <el-option v-for="(item,index) in templateTypeList" :key="index"
-                  :label="item.fullName" :value="item.enCode">
+            <el-form-item label="消息类型">
+              <el-select v-model="msgType" placeholder="选择消息类型" clearable>
+                <el-option v-for="(item,index) in msgTypeList" :key="index" :label="item.fullName"
+                  :value="item.enCode">
                 </el-option>
               </el-select>
             </el-form-item>
           </el-col>
           <template v-if="showAll">
             <el-col :span="6">
-              <el-form-item label="消息类型">
-                <el-select v-model="msgType" placeholder="选择消息类型" clearable>
-                  <el-option v-for="(item,index) in msgTypeList" :key="index" :label="item.fullName"
-                    :value="item.enCode">
+              <el-form-item label="模板类型">
+                <el-select v-model="templateType" placeholder="选择模板类型" clearable>
+                  <el-option v-for="(item,index) in templateTypeList" :key="index"
+                    :label="item.fullName" :value="item.enCode">
                   </el-option>
                 </el-select>
               </el-form-item>
             </el-col>
             <el-col :span="6">
-              <el-form-item label="状态">
+              <el-form-item :label="enabledMarkLabel">
                 <el-select v-model="enabledMark" placeholder="选择状态" clearable>
                   <el-option v-for="(item,index) in enabledMarkList" :key="index"
                     :label="item.fullName" :value="item.enCode">
@@ -75,12 +75,12 @@
           <el-table-column prop="fullName" label="名称" show-overflow-tooltip min-width="200" />
           <el-table-column prop="enCode" label="编码" width="180" />
           <el-table-column prop="messageSource" label="消息来源" width="100" />
+          <el-table-column prop="messageType" label="消息类型" width="140" />
           <el-table-column prop="category" label="模板类型" width="170">
             <template slot-scope="scope">
               {{scope.row.templateType=='1'?'系统模板':'自定义模板'}}
             </template>
           </el-table-column>
-          <el-table-column prop="messageType" label="消息类型" width="140" />
           <el-table-column prop="creatorUser" label="创建人" width="150" />
           <el-table-column prop="creatorTime" label="创建时间" :formatter="jnpf.tableDateFormat"
             width="140" />
@@ -156,6 +156,7 @@ export default {
       formVisible: false,
       viewVisible: false,
       showAll: false,
+      enabledMarkLabel: '状\u3000态'
     }
   },
   created() {
