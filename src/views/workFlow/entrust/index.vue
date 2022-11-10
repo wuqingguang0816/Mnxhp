@@ -112,7 +112,7 @@
                 </el-table-column>
                 <el-table-column prop="endTime" label="结束时间" width="120">
                   <template slot-scope="scope">
-                    {{scope.row.startTime| toDate('yyyy-MM-dd')}}
+                    {{scope.row.endTime| toDate('yyyy-MM-dd')}}
                   </template>
                 </el-table-column>
                 <el-table-column prop="status" label="状态" width="100" align="center">
