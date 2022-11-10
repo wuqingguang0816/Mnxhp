@@ -59,7 +59,7 @@ export default {
   data() {
     return {
       keyword: '',
-      category: '',
+      category: '0',
       flowType: '',
       listQuery: {
         currentPage: 1,
@@ -85,6 +85,7 @@ export default {
     },
     init(type) {
       this.flowType = type
+      this.search()
       this.getDictionaryData()
       this.$nextTick(() => {
         this.bindScroll()
@@ -95,6 +96,7 @@ export default {
       this.search()
     },
     search() {
+      console.log(22, this.flowType)
       this.list = []
       this.finish = false
       this.listQuery = {
@@ -106,6 +108,7 @@ export default {
       this.initData()
     },
     bindScroll() {
+
       let _this = this,
         vBody = _this.$refs.infiniteBody;
       vBody.addEventListener("scroll", function () {
@@ -117,6 +120,7 @@ export default {
     },
     initData() {
       this.listLoading = true
+      console.log(111, this.flowType)
       let query = {
         ...this.listQuery,
         keyword: this.keyword,
