@@ -359,18 +359,37 @@ export default {
           this.dataForm.smsFieldList = this.smsList
           this.btnLoading = true
           const formMethod = this.dataForm.id ? editMsgTemplate : addMsgTemplate
-          formMethod(this.dataForm).then((res) => {
-            this.$message({
-              message: res.msg,
-              type: 'success',
-              duration: 1500,
-              onClose: () => {
-                this.visible = false
-                this.btnLoading = false
-                this.$emit('close', true)
-              }
-            })
-          }).catch(() => { this.btnLoading = false })
+          let isOk = true;
+          for (let i = 0; i < this.dataForm.smsFieldList.length; i++) {
+            let list = this.dataForm.smsFieldList[i]
+            let num = this.dataForm.smsFieldList.filter(o => o.smsField == list.smsField)
+            if (num.length > 1) {
+              this.$message({
+                showClose: true,
+                message: `第${i + 1}行短信变量'${list.smsField}'已重复`,
+                type: 'error',
+                duration: 1000
+              });
+              this.visible = false
+              this.btnLoading = false
+              isOk = false
+              break
+            }
+          }
+          if (isOk) {
+            formMethod(this.dataForm).then((res) => {
+              this.$message({
+                message: res.msg,
+                type: 'success',
+                duration: 1500,
+                onClose: () => {
+                  this.visible = false
+                  this.btnLoading = false
+                  this.$emit('close', true)
+                }
+              })
+            }).catch(() => { this.btnLoading = false })
+          }
         }
       })
     },
