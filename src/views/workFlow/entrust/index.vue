@@ -24,7 +24,7 @@
         <el-tab-pane label="委托发起">
           <div class="JNPF-common-layout-main JNPF-flex-main">
             <div class="JNPF-common-head">
-              <topOpts @add="addFlow()" addText="新建流程"></topOpts>
+              <topOpts @add="dialogVisible=true" addText="新建流程"></topOpts>
               <div class="JNPF-common-head-right">
                 <el-tooltip effect="dark" :content="$t('common.refresh')" placement="top">
                   <el-link icon="icon-ym icon-ym-Refresh JNPF-common-head-icon" :underline="false"
@@ -84,9 +84,10 @@
         <template v-for="item in delagateTypeList">
           <el-tab-pane :label="item.label" :key="item.key">
             <div class="JNPF-common-layout-main JNPF-flex-main">
-              <div class="JNPF-common-head" v-if="item.key=='1'">
-                <topOpts @add="addOrUpdateHandle()" addText="新建委托">
+              <div class="JNPF-common-head">
+                <topOpts @add="addOrUpdateHandle()" addText="新建委托" v-if="item.key=='1'">
                 </topOpts>
+                <div v-else></div>
                 <div class="JNPF-common-head-right">
                   <el-tooltip effect="dark" :content="$t('common.refresh')" placement="top">
                     <el-link icon="icon-ym icon-ym-Refresh JNPF-common-head-icon" :underline="false"
@@ -175,6 +176,25 @@
           {{$t('common.confirmButton')}}</el-button>
       </span>
     </el-dialog>
+    <el-dialog title="新建流程" :visible.sync="dialogVisible"
+      class="JNPF-dialog JNPF-dialogs JNPF-dialog_center" lock-scroll width="600px">
+      <div class="add-main">
+        <div class="add-item add-item-sys" @click="addFlow(0)">
+          <i class="add-icon icon-ym icon-ym-launchFlow"></i>
+          <div class="add-txt">
+            <p class="add-title">发起流程</p>
+            <p class="add-desc">发起表单的业务流程</p>
+          </div>
+        </div>
+        <div class="add-item" @click="addFlow(1)">
+          <i class="add-icon icon-ym icon-ym-funcFlow"></i>
+          <div class="add-txt">
+            <p class="add-title">功能流程</p>
+            <p class="add-desc">发起功能的赋予流程</p>
+          </div>
+        </div>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
@@ -215,7 +235,8 @@ export default {
       flowUserList: [],
       checkUserList: [],
       classObject: { active: true },
-      checkFlowItem: {}
+      checkFlowItem: {},
+      dialogVisible: false
     }
   },
   filters: {
@@ -317,8 +338,6 @@ export default {
         });
       })
     },
-
-
     formatter(row, column) {
       return this.jnpf.dateFormat(row, column)
     },
@@ -329,10 +348,11 @@ export default {
         this.$refs.Form.init(id)
       })
     },
-    addFlow() {
+    addFlow(type) {
+      this.dialogVisible = false
       this.flowVisible = true
       this.$nextTick(() => {
-        this.$refs.MyEntrust.init()
+        this.$refs.MyEntrust.init(type)
       })
     },
     choiceFlow(item) {
@@ -443,11 +463,11 @@ export default {
 }
 .JNPF-el_tabs {
   >>> .el-tabs__item {
-    width: 100px;
+    // width: 100px;
     text-align: center;
   }
   >>> .el-tabs__content {
-    padding: 15px 15px 15px 15px;
+    padding: 15px 0 15px;
   }
 }
 .childrenTab {
@@ -528,6 +548,61 @@ export default {
           font-size: 20px;
           color: #fff;
         }
+      }
+    }
+  }
+}
+.JNPF-dialogs {
+  >>> .el-dialog__body {
+    padding: 50px 20px !important;
+  }
+}
+.add-main {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  .add-item {
+    width: 270px;
+    height: 136px;
+    background: #fef3e6;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    padding-left: 18px;
+    &:hover {
+      opacity: 0.9;
+    }
+    &.add-item-sys {
+      background: #f1f5ff;
+      .add-icon {
+        background: #ccd9ff;
+        color: #537eff;
+      }
+    }
+    .add-icon {
+      width: 56px;
+      height: 56px;
+      margin-right: 10px;
+      border-radius: 10px;
+      background: #fce1bf;
+      color: #ea986c;
+      flex-shrink: 0;
+      font-size: 30px;
+      line-height: 56px;
+      text-align: center;
+    }
+    .add-txt {
+      height: 56px;
+      P {
+        line-height: 28px;
+      }
+      .add-title {
+        font-size: 18px;
+        font-weight: bold;
+      }
+      .add-desc {
+        color: #8d8989;
+        font-size: 12px;
       }
     }
   }

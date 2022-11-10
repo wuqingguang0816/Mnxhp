@@ -1,6 +1,7 @@
 <template>
-  <el-dialog :title="webType?'更改模式':'新建'" :close-on-click-modal="false" lock-scroll v-bind="$attrs"
-    v-on="$listeners" class="JNPF-dialog JNPF-dialog_center" :width="webType?'310px':'580px'">
+  <el-dialog :title="webType?'更改模式':'新建功能'" :close-on-click-modal="false" lock-scroll
+    v-bind="$attrs" v-on="$listeners" class="JNPF-dialog JNPF-dialog_center"
+    :width="webType?'310px':'580px'">
     <div class="add-main">
       <div class="add-item add-item-form" @click="add(1)" v-if="webType!==1">
         <i class="add-icon el-icon-document"></i>

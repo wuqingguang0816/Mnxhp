@@ -109,7 +109,7 @@
     <Form v-if="formVisible" ref="Form" @close="closeForm" />
     <FlowManage v-if="manageVisible" ref="FlowManage" @close="closeManage" />
     <el-dialog title="新建流程" :visible.sync="dialogVisible" class="JNPF-dialog JNPF-dialog_center"
-      lock-scroll width="600px">
+      :close-on-click-modal="false" lock-scroll width="600px">
       <div class="add-main">
         <div class="add-item add-item-sys" @click="addFlow(0)">
           <i class="add-icon icon-ym icon-ym-launchFlow"></i>
