@@ -463,7 +463,7 @@ export default {
       }
       if (opType == 4) {
         if (flowTaskInfo.completion == 100) list.push({ label: '复 活', key: 'resurgence' })
-        if (flowTaskInfo.completion > 0 && flowTaskInfo.completion < 100 && flowTaskInfo.rejectDataId && (setting.status == 1 || setting.status == 3)) list.push({ label: '变 更', key: 'resurgence' })
+        if (flowTaskInfo.completion > 0 && flowTaskInfo.completion < 100 && !flowTaskInfo.rejectDataId && (setting.status == 1 || setting.status == 3)) list.push({ label: '变 更', key: 'resurgence' })
         if (setting.status == 1 && this.assignNodeList.length) list.push({ label: '指 派', key: 'assign' })
       }
       this.moreBtnList = list
