@@ -69,9 +69,13 @@
             <JNPF-table v-loading="listLoading" :data="tableData" :border="false"
               highlight-current-row ref="multipleTable" @select="handleSelection"
               @select-all="handleSelectionAll" :hasNO="false" has-c>
-
               <el-table-column prop="fullName" label="流程名称" />
               <el-table-column prop="enCode" label="流程编码" />
+              <el-table-column prop="type" label="流程类型" width="120">
+                <template slot-scope="scope">
+                  <span>{{ scope.row.type == 0? "发起流程" : "功能流程" }}</span>
+                </template>
+              </el-table-column>
             </JNPF-table>
             <pagination :total="total" :page.sync="listQuery.currentPage"
               :limit.sync="listQuery.pageSize" @pagination="initData" />

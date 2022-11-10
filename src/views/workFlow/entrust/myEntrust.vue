@@ -78,9 +78,6 @@ export default {
     category(val) {
       this.reset()
     },
-    flowType(val) {
-      this.reset()
-    }
   },
   methods: {
     goBack() {
