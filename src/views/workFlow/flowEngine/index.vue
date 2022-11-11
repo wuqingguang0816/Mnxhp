@@ -108,10 +108,11 @@
     </div>
     <Form v-if="formVisible" ref="Form" @close="closeForm" />
     <FlowManage v-if="manageVisible" ref="FlowManage" @close="closeManage" />
-    <el-dialog title="新建流程" :visible.sync="dialogVisible" class="JNPF-dialog JNPF-dialog_center"
-      :close-on-click-modal="false" lock-scroll width="600px">
+    <el-dialog title="新建流程" :visible.sync="dialogVisible"
+      class="JNPF-dialog JNPF-dialog_center JNPF-dialog-add" :close-on-click-modal="false"
+      lock-scroll width="600px">
       <div class="add-main">
-        <div class="add-item add-item-sys" @click="addFlow(0)">
+        <div class="add-item add-item-left" @click="addFlow(0)">
           <i class="add-icon icon-ym icon-ym-launchFlow"></i>
           <div class="add-txt">
             <p class="add-title">发起流程</p>
@@ -331,60 +332,3 @@ export default {
   }
 }
 </script>
-<style lang="scss" scoped>
-.JNPF-dialog {
-  >>> .el-dialog__body {
-    padding: 50px 20px !important;
-  }
-}
-.add-main {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  .add-item {
-    width: 270px;
-    height: 136px;
-    background: #fef3e6;
-    display: flex;
-    align-items: center;
-    cursor: pointer;
-    padding-left: 18px;
-    &:hover {
-      opacity: 0.9;
-    }
-    &.add-item-sys {
-      background: #f1f5ff;
-      .add-icon {
-        background: #ccd9ff;
-        color: #537eff;
-      }
-    }
-    .add-icon {
-      width: 56px;
-      height: 56px;
-      margin-right: 10px;
-      border-radius: 10px;
-      background: #fce1bf;
-      color: #ea986c;
-      flex-shrink: 0;
-      font-size: 30px;
-      line-height: 56px;
-      text-align: center;
-    }
-    .add-txt {
-      height: 56px;
-      P {
-        line-height: 28px;
-      }
-      .add-title {
-        font-size: 18px;
-        font-weight: bold;
-      }
-      .add-desc {
-        color: #8d8989;
-        font-size: 12px;
-      }
-    }
-  }
-}
-</style>
