@@ -394,6 +394,7 @@
 
 <script>
 import { getModelList, deleteModel, batchDelete, exportModel, createModel, updateModel } from '@/api/onlineDev/visualDev'
+import { Create, Update } from '@/api/workFlow/workFlowForm'
 import { getDictionaryDataSelector } from '@/api/systemData/dictionary'
 import { getDataInterfaceRes } from '@/api/systemData/dataInterface'
 import { getColumnsByModuleId } from '@/api/common'
@@ -743,26 +744,46 @@ export default {
     },
     saveForRowEdit(row, status, candidateData) {
       if (this.isPreview) return this.$message({ message: '功能预览不支持数据保存', type: 'warning' })
-      let query = {
-        id: row.id,
-        status: status || "1",
-        candidateType: this.candidateType,
-        data: JSON.stringify(row)
-      }
-      if (candidateData) query = { ...query, ...candidateData }
-      if (this.config.enableFlow == 1) query.flowId = this.config.flowId
-      const formMethod = query.id ? updateModel : createModel
-      formMethod(this.modelId, query).then(res => {
-        this.$message({
-          message: res.msg,
-          type: 'success',
-          duration: 1500,
-          onClose: () => {
-            this.candidateVisible = false
-            this.initData()
-          }
+      if (this.config.enableFlow == 1) {
+        let query = {
+          id: row.id,
+          status: status || "1",
+          candidateType: this.candidateType,
+          formData: row,
+          flowId: this.config.flowId,
+          flowUrgent: 1
+        }
+        if (candidateData) query = { ...query, ...candidateData }
+        const formMethod = query.id ? Update : Create
+        formMethod(query).then(res => {
+          this.$message({
+            message: res.msg,
+            type: 'success',
+            duration: 1500,
+            onClose: () => {
+              this.candidateVisible = false
+              this.initData()
+            }
+          })
         })
-      })
+      } else {
+        let query = {
+          id: row.id,
+          data: JSON.stringify(row)
+        }
+        const formMethod = query.id ? updateModel : createModel
+        formMethod(this.modelId, query).then(res => {
+          this.$message({
+            message: res.msg,
+            type: 'success',
+            duration: 1500,
+            onClose: () => {
+              this.candidateVisible = false
+              this.initData()
+            }
+          })
+        })
+      }
     },
     submitForRowEdit(row) {
       this.currRow = row
