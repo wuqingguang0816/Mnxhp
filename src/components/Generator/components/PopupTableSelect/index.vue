@@ -304,7 +304,7 @@ export default {
     getParamList() {
       let templateJson = this.templateJson
       for (let i = 0; i < templateJson.length; i++) {
-        if (templateJson[i].relationField) {
+        if (templateJson[i].relationField && this.formData) {
           if (templateJson[i].relationField.includes('-')) {
             let tableVModel = templateJson[i].relationField.split('-')[0]
             let childVModel = templateJson[i].relationField.split('-')[1]
