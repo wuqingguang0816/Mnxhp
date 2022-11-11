@@ -3599,11 +3599,8 @@ export default {
       if (this[obj][key].msgId === id) return
       this[obj][key].msgId = id
       this[obj][key].msgName = item.fullName
-      let templateJson = item.templateJson ? JSON.parse(item.templateJson) : []
-      this[obj][key].templateJson = templateJson.map(o => ({
-        ...o,
-        paramJson: o.paramJson ? JSON.parse(o.paramJson) : [],
-      }))
+      console.log(item)
+      this[obj][key].templateJson = item.templateJson
     },
     onFuncChange(obj, key, params) {
       const [id, item] = params

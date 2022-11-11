@@ -76,7 +76,7 @@ export default {
             this.testSendData = res.data
             for (let index = 0; index < this.testSendData.length; index++) {
               const item = this.testSendData[index]
-              item.paramJson = item.paramJson ? JSON.parse(item.paramJson) : []
+              item.paramJson = item.paramJson || []
               item.toUser = item.toUser || []
             }
             this.loading = false
@@ -102,10 +102,6 @@ export default {
         }
       }
       let data = deepClone(this.testSendData)
-      for (let index = 0; index < data.length; index++) {
-        const item = data[index]
-        item.paramJson = item.paramJson.length ? JSON.stringify(item.paramJson) : ''
-      }
       this.btnLoading = true
       testSendConfig(data).then(res => {
         this.btnLoading = false
