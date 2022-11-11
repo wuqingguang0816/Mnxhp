@@ -3262,6 +3262,8 @@ export default {
       this.getPrevNodeOption()
       let properties = JSON.parse(JSON.stringify(this.value.properties))
       Object.assign(this.subFlowForm, properties)
+      const prevNode = this.prevNodeList[0]
+      this.formFieldList = prevNode.properties.formId ? prevNode.properties.formFieldList : this.processData.properties.formFieldList
       this.subFlowForm.prevNodeList = this.prevNodeList
       this.subFlowForm.launchMsgConfig.on = typeof this.subFlowForm.launchMsgConfig.on === 'number' ? this.subFlowForm.launchMsgConfig.on : 0
     },
@@ -3599,7 +3601,6 @@ export default {
       if (this[obj][key].msgId === id) return
       this[obj][key].msgId = id
       this[obj][key].msgName = item.fullName
-      console.log(item)
       this[obj][key].templateJson = item.templateJson
     },
     onFuncChange(obj, key, params) {
