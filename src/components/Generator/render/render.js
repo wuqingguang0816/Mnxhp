@@ -73,6 +73,9 @@ function buildDataObject(confClone, dataObject, formData) {
   if (['select'].includes(jnpfKey)) {
     dataObject.attrs['popper-append-to-body'] = false
   }
+  if(['date','time'].includes(jnpfKey)){
+    dataObject.attrs['append-to-body'] = false
+  }
   if (['table'].includes(jnpfKey)) {
     dataObject.attrs['relations'] = this.relations
     dataObject.attrs['vModel'] = confClone.__vModel__

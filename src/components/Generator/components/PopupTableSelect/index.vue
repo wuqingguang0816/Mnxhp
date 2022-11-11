@@ -1,7 +1,8 @@
 <template>
   <div class="popupSelect-container">
     <el-popover placement="bottom-start" width="700" trigger="click" ref="popover"
-      :disabled="selectDisabled" @after-enter="openDialog" class="popover-container">
+      :disabled="selectDisabled" @after-enter="openDialog" class="popover-container"
+      :append-to-body="false">
       <div class="el-select" slot="reference">
         <div class="el-select__tags" v-if="multiple" ref="tags"
           :style="{ 'max-width': inputWidth - 32 + 'px', width: '100%',cursor:'pointer' }">
