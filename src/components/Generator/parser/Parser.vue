@@ -114,12 +114,8 @@ const layouts = {
 function renderFrom(h) {
   const { formConfCopy } = this
   let classStyle = []
-  if (formConfCopy.formStyle) {
-    let formStyle = formConfCopy.formStyle.split(" ")
-    classStyle = [...formStyle, ...formConfCopy.className]
-  } else {
-    classStyle = formConfCopy.className
-  }
+  if (formConfCopy.formStyle) classStyle.push(formConfCopy.formStyle)
+  if (formConfCopy.className) classStyle = [...classStyle, ...formConfCopy.className]
   return (
     <el-row gutter={formConfCopy.gutter} class={classStyle}>
       <el-form
