@@ -41,15 +41,8 @@ export default {
         data.type = this.flowTaskInfo.type
         data.formData = res.data.formData || {}
         data.draftData = res.data.draftData || null
-        if (data.formType == 1) {
-          if (this.flowTaskInfo.formUrl) {
-            this.currentView = (resolve) => require([`@/views/${this.flowTaskInfo.formUrl}`], resolve)
-          } else {
-            this.currentView = (resolve) => require([`@/views/workFlow/workFlowForm/${data.enCode}`], resolve)
-          }
-        } else {
-          this.currentView = (resolve) => require([`@/views/workFlow/workFlowForm/dynamicForm`], resolve)
-        }
+        const formUrl = this.flowFormInfo.formType == 2 ? 'workFlow/workFlowForm/dynamicForm' : this.flowFormInfo.urlAddress ? this.flowFormInfo.urlAddress.replace(/\s*/g, "") : `workFlow/workFlowForm/${this.flowFormInfo.enCode}`
+        this.currentView = (resolve) => require([`@/views/${formUrl}`], resolve)
         data.formConf = res.data.flowFormInfo.propertyJson
         if (data.opType != 1) data.readonly = true
         setTimeout(() => {
