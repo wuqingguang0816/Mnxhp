@@ -709,6 +709,81 @@
   }
 }
 
+.JNPF-dialog-add {
+  .el-dialog__body {
+    padding: 20px !important;
+  }
+
+  .add-main {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    .add-item {
+      width: 270px;
+      height: 136px;
+      background: #fef3e6;
+      display: flex;
+      align-items: center;
+      cursor: pointer;
+      padding-left: 20px;
+
+      &:hover {
+        opacity: 0.9;
+      }
+
+      &.add-item-left {
+        background: #f1f5ff;
+
+        .add-icon {
+          background: #ccd9ff;
+          color: #537eff;
+        }
+      }
+
+      // &.add-item-list {
+      //   background: #fef3e6;
+
+      //   .add-icon {
+      //     background: #fce1bf;
+      //     color: #ea986c;
+      //   }
+      // }
+
+      .add-icon {
+        width: 56px;
+        height: 56px;
+        margin-right: 10px;
+        background: #fce1bf;
+        border-radius: 10px;
+        color: #ea986c;
+        flex-shrink: 0;
+        font-size: 30px;
+        line-height: 56px;
+        text-align: center;
+      }
+
+      .add-txt {
+        height: 56px;
+
+        P {
+          line-height: 28px;
+        }
+
+        .add-title {
+          font-size: 18px;
+          font-weight: bold;
+        }
+
+        .add-desc {
+          color: #8d8989;
+          font-size: 12px;
+        }
+      }
+    }
+  }
+}
+
 .custom-tree-node {
   width: calc(100% - 24px);
   flex: 1;

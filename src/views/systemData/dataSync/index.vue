@@ -233,7 +233,6 @@ export default {
       }).catch(() => { this.listLoading = false })
     },
     toggleSelection() {
-      console.log(this.$refs)
       this.$refs.multipleTable.$refs.JNPFTable.clearSelection();
     },
     addConfigure() {  //添加规则配置

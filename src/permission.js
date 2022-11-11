@@ -31,7 +31,6 @@ router.beforeEach(async (to, from, next) => {
     })
   }
   // determine whether the user has logged in
-  // console.log(123123)
   if (hasToken) {
     if (store.getters.isLock && to.path !== '/lockScreen' && to.path !== '/login') {
       next({

@@ -154,7 +154,6 @@ export default {
     handleSure() {
       this.$refs['dataForm'].validate((valid) => {
         if (valid) {
-          console.log(this.eventType)
           if (this.properties.hasSign && !this.signImg && this.eventType != 'assign' && this.eventType != 'cancel') {
             this.$message({
               message: '请签名',

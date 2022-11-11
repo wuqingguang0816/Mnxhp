@@ -24,7 +24,7 @@
         <el-tab-pane label="委托发起">
           <div class="JNPF-common-layout-main JNPF-flex-main">
             <div class="JNPF-common-head">
-              <topOpts @add="addFlow()" addText="新建流程"></topOpts>
+              <topOpts @add="dialogVisible=true" addText="新建流程"></topOpts>
               <div class="JNPF-common-head-right">
                 <el-tooltip effect="dark" :content="$t('common.refresh')" placement="top">
                   <el-link icon="icon-ym icon-ym-Refresh JNPF-common-head-icon" :underline="false"
@@ -84,9 +84,10 @@
         <template v-for="item in delagateTypeList">
           <el-tab-pane :label="item.label" :key="item.key">
             <div class="JNPF-common-layout-main JNPF-flex-main">
-              <div class="JNPF-common-head" v-if="item.key=='1'">
-                <topOpts @add="addOrUpdateHandle()" addText="新建委托">
+              <div class="JNPF-common-head">
+                <topOpts @add="addOrUpdateHandle()" addText="新建委托" v-if="item.key=='1'">
                 </topOpts>
+                <div v-else></div>
                 <div class="JNPF-common-head-right">
                   <el-tooltip effect="dark" :content="$t('common.refresh')" placement="top">
                     <el-link icon="icon-ym icon-ym-Refresh JNPF-common-head-icon" :underline="false"
@@ -104,11 +105,12 @@
                   </template>
                 </el-table-column>
                 <el-table-column prop="flowName" label="委托流程" width="250" show-overflow-tooltip />
-
                 <el-table-column prop="startTime" label="开始时间" width="120"
-                  :formatter="jnpf.tableDateFormat" />
+                  :formatter="jnpf.tableDateFormat">
+                </el-table-column>
                 <el-table-column prop="endTime" label="结束时间" width="120"
-                  :formatter="jnpf.tableDateFormat" />
+                  :formatter="jnpf.tableDateFormat">
+                </el-table-column>
                 <el-table-column prop="status" label="状态" width="100" align="center">
                   <template slot-scope="scope">
                     <el-tag type="info" v-if='scope.row.status==1'>未开始</el-tag>
@@ -175,6 +177,25 @@
           {{$t('common.confirmButton')}}</el-button>
       </span>
     </el-dialog>
+    <el-dialog title="新建流程" :visible.sync="dialogVisible"
+      class="JNPF-dialog JNPF-dialog_center JNPF-dialog-add" lock-scroll width="600px">
+      <div class="add-main">
+        <div class="add-item add-item-left" @click="addFlow(0)">
+          <i class="add-icon icon-ym icon-ym-launchFlow"></i>
+          <div class="add-txt">
+            <p class="add-title">发起流程</p>
+            <p class="add-desc">发起表单的业务流程</p>
+          </div>
+        </div>
+        <div class="add-item" @click="addFlow(1)">
+          <i class="add-icon icon-ym icon-ym-funcFlow"></i>
+          <div class="add-txt">
+            <p class="add-title">功能流程</p>
+            <p class="add-desc">发起功能的赋予流程</p>
+          </div>
+        </div>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
@@ -215,7 +236,8 @@ export default {
       flowUserList: [],
       checkUserList: [],
       classObject: { active: true },
-      checkFlowItem: {}
+      checkFlowItem: {},
+      dialogVisible: false
     }
   },
   filters: {
@@ -317,8 +339,6 @@ export default {
         });
       })
     },
-
-
     formatter(row, column) {
       return this.jnpf.dateFormat(row, column)
     },
@@ -329,10 +349,11 @@ export default {
         this.$refs.Form.init(id)
       })
     },
-    addFlow() {
+    addFlow(type) {
+      this.dialogVisible = false
       this.flowVisible = true
       this.$nextTick(() => {
-        this.$refs.MyEntrust.init()
+        this.$refs.MyEntrust.init(type)
       })
     },
     choiceFlow(item) {
@@ -443,11 +464,11 @@ export default {
 }
 .JNPF-el_tabs {
   >>> .el-tabs__item {
-    width: 100px;
+    // width: 100px;
     text-align: center;
   }
   >>> .el-tabs__content {
-    padding: 15px 15px 15px 15px;
+    padding: 15px 0 15px;
   }
 }
 .childrenTab {

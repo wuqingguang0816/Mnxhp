@@ -1,8 +1,9 @@
 <template>
-  <el-dialog :title="webType?'更改模式':'新建'" :close-on-click-modal="false" lock-scroll v-bind="$attrs"
-    v-on="$listeners" class="JNPF-dialog JNPF-dialog_center" :width="webType?'310px':'580px'">
+  <el-dialog :title="webType?'更改模式':'新建功能'" :close-on-click-modal="false" lock-scroll
+    v-bind="$attrs" v-on="$listeners" class="JNPF-dialog JNPF-dialog_center JNPF-dialog-add"
+    :width="webType?'310px':'600px'">
     <div class="add-main">
-      <div class="add-item add-item-form" @click="add(1)" v-if="webType!==1">
+      <div class="add-item add-item-left" @click="add(1)" v-if="webType!==1">
         <i class="add-icon el-icon-document"></i>
         <div class="add-txt">
           <p class="add-title">表单</p>
@@ -31,67 +32,3 @@ export default {
   }
 }
 </script>
-<style lang="scss" scoped>
-.JNPF-dialog {
-  >>> .el-dialog__body {
-    padding: 50px 40px !important;
-  }
-}
-.add-main {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  .add-item {
-    width: 230px;
-    height: 136px;
-    background: #eff9ff;
-    display: flex;
-    align-items: center;
-    cursor: pointer;
-    padding-left: 20px;
-    &:hover {
-      opacity: 0.9;
-    }
-    &.add-item-form {
-      background: #f1f5ff;
-      .add-icon {
-        background: #ccd9ff;
-        color: #537eff;
-      }
-    }
-    &.add-item-list {
-      background: #fef3e6;
-      .add-icon {
-        background: #fce1bf;
-        color: #ea986c;
-      }
-    }
-    .add-icon {
-      width: 56px;
-      height: 56px;
-      margin-right: 10px;
-      background: #ceeaff;
-      border-radius: 10px;
-      color: #46adfe;
-      flex-shrink: 0;
-      font-size: 30px;
-      line-height: 56px;
-      text-align: center;
-    }
-    .add-txt {
-      height: 56px;
-      P {
-        line-height: 28px;
-      }
-      .add-title {
-        font-size: 18px;
-        font-weight: bold;
-      }
-      .add-desc {
-        color: #8d8989;
-        font-size: 12px;
-      }
-    }
-  }
-}
-</style>

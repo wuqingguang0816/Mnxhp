@@ -8,10 +8,6 @@
         </div>
       </div>
       <div class="main">
-        <el-tabs tab-position="top" style="height:8%" v-model="flowType" class="flow-tabs1">
-          <el-tab-pane label="发起流程" name="0"></el-tab-pane>
-          <el-tab-pane label="功能流程" name="1"></el-tab-pane>
-        </el-tabs>
         <el-tabs tab-position="left" style="height:100%" v-model="category" class="flow-tabs">
           <el-tab-pane label="全部流程" name=""></el-tab-pane>
           <el-tab-pane :label="item.fullName" :name="item.id" v-for="item in categoryList"
@@ -63,8 +59,8 @@ export default {
   data() {
     return {
       keyword: '',
-      category: '',
-      flowType: '0',
+      category: '0',
+      flowType: '',
       listQuery: {
         currentPage: 1,
         pageSize: 50,
@@ -82,15 +78,14 @@ export default {
     category(val) {
       this.reset()
     },
-    flowType(val) {
-      this.reset()
-    }
   },
   methods: {
     goBack() {
       this.$emit('close')
     },
-    init() {
+    init(type) {
+      this.flowType = type
+      this.search()
       this.getDictionaryData()
       this.$nextTick(() => {
         this.bindScroll()
@@ -112,6 +107,7 @@ export default {
       this.initData()
     },
     bindScroll() {
+
       let _this = this,
         vBody = _this.$refs.infiniteBody;
       vBody.addEventListener("scroll", function () {
