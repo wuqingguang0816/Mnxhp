@@ -3360,7 +3360,7 @@ export default {
         } else {
           fieldList = formJson.fields
         }
-        this.childFieldOptions = this.transformFieldList(fieldList)
+        this.childFieldOptions = this.transformFieldList(fieldList).filter(o => o.__config__.jnpfKey !== 'table')
         let assignList = this.subFlowForm.assignList ? JSON.parse(JSON.stringify(this.subFlowForm.assignList)) : []
         this.getRealAssignList(assignList)
         this.ruleVisible = true
