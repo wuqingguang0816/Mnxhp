@@ -301,7 +301,6 @@
 import comMixin from '../mixin'
 import { CustomerList } from '@/api/extend/order'
 import GoodsBox from '@/views/extend/order/GoodsBox'
-import { Info, Update, Create } from '@/api/extend/order'
 export default {
   mixins: [comMixin],
   components: { GoodsBox },
@@ -362,44 +361,6 @@ export default {
     }
   },
   methods: {
-    selfGetInfo() {
-      Info(this.setting.id).then(res => {
-        this.dataForm = res.data
-        if (res.data.fileJson) {
-          this.fileList = JSON.parse(res.data.fileJson)
-        }
-        this.$emit('setPageLoad')
-      })
-    },
-    selfSubmit(dataForm, flowUrgent) {
-      this.dataForm.status = this.eventType === 'submit' ? 0 : 1
-      this.dataForm.flowId = this.setting.flowId
-      this.dataForm.flowUrgent = flowUrgent || 1
-      if (this.eventType === 'save') return this.selfHandleRequest()
-      this.$confirm('您确定要提交当前流程吗, 是否继续?', '提示', {
-        type: 'warning'
-      }).then(() => {
-        this.selfHandleRequest()
-      }).catch(() => { });
-    },
-    selfHandleRequest() {
-      if (!this.dataForm.id) delete (this.dataForm.id)
-      if (this.eventType === 'save') this.$emit('setLoad', true)
-      const formMethod = this.dataForm.id ? Update : Create
-      formMethod(this.dataForm).then(res => {
-        this.$message({
-          message: res.msg,
-          type: 'success',
-          duration: 1500,
-          onClose: () => {
-            if (this.eventType === 'save') this.$emit('setLoad', false)
-            this.$emit('close', true)
-          }
-        })
-      }).catch(() => {
-        if (this.eventType === 'save') this.$emit('setLoad', false)
-      })
-    },
     onChange(id, selectedData) {
       if (!id) return this.dataForm.salesmanName = ''
       this.dataForm.salesmanName = selectedData.fullName
