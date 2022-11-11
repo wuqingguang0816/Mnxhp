@@ -96,7 +96,6 @@ export default {
       this.search()
     },
     search() {
-      console.log(22, this.flowType)
       this.list = []
       this.finish = false
       this.listQuery = {
@@ -120,7 +119,6 @@ export default {
     },
     initData() {
       this.listLoading = true
-      console.log(111, this.flowType)
       let query = {
         ...this.listQuery,
         keyword: this.keyword,

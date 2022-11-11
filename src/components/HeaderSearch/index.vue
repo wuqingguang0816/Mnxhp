@@ -100,7 +100,6 @@ export default {
       let res = []
 
       for (const router of routes) {
-        // console.log(router);
 
         // skip hidden router
         if (router.hidden) { continue }
