@@ -188,7 +188,7 @@
               <el-form-item label="发起设置">
                 <div slot="label" class="form-item-label">发起设置</div>
                 <div class="form-item-content">
-                  <el-radio-group v-model="subFlowForm.initiateType">
+                  <el-radio-group v-model="subFlowForm.initiateType" @change="resetOrgColl">
                     <el-radio v-for="item in initiateTypeOptions" :label="item.value"
                       :key="item.value" :disabled="item.disabled" class="radio-item">{{item.label}}
                     </el-radio>
@@ -2880,6 +2880,11 @@ export default {
       this.approverForm.approverRole = []
       this.approverForm.approverOrg = []
       this.approverForm.approverGroup = []
+      this.subFlowForm.initiator = []
+      this.subFlowForm.initiatePos = []
+      this.subFlowForm.initiateRole = []
+      this.subFlowForm.initiateOrg = []
+      this.subFlowForm.initiateGroup = []
     },
     onOrgChange(data, key) {
 
