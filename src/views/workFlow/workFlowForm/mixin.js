@@ -79,7 +79,7 @@ export default {
               return
             }
           }
-          this.$emit('eventReceiver', { formData: dataForm }, eventType)
+          this.$emit('eventReceiver', { formData: dataForm,id:dataForm.id }, eventType)
         }
       })
     },
