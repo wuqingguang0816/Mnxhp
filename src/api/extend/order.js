@@ -38,29 +38,6 @@ export function OrderList(data) {
     data
   })
 }
-// 新建订单信息
-export function Create(data) {
-  return request({
-    url: `/api/extend/CrmOrder`,
-    method: 'post',
-    data
-  })
-}
-// 更新订单信息
-export function Update(data) {
-  return request({
-    url: `/api/extend/CrmOrder/${data.id}`,
-    method: 'put',
-    data
-  })
-}
-// 更新订单信息
-export function Info(id) {
-  return request({
-    url: `/api/extend/CrmOrder/${id}`,
-    method: 'get'
-  })
-}
 // 获取订单信息(下一个订单)
 export function NextInfo(id) {
   return request({
