@@ -1,9 +1,9 @@
 <template>
-  <el-select v-model="valueTitle" :clearable="clearable" :disabled="disabled" @clear="clearHandle"
-    ref='elSelect' :placeholder="placeholder" :popper-class="`JNPF-select-tree ${themeClass}`"
-    @focus="selectFocus" :filterable="filterable" :filter-method="selectFilter"
-    class="JNPF-selectTree" @visible-change="visibleChange" :multiple="multiple"
-    :collapse-tags="collapseTags" @remove-tag="removeTag" :key="key">
+  <el-select v-model="valueTitle" :popper-append-to-body="false" :clearable="clearable"
+    :disabled="disabled" @clear="clearHandle" ref='elSelect' :placeholder="placeholder"
+    :popper-class="`JNPF-select-tree ${themeClass}`" @focus="selectFocus" :filterable="filterable"
+    :filter-method="selectFilter" class="JNPF-selectTree" @visible-change="visibleChange"
+    :multiple="multiple" :collapse-tags="collapseTags" @remove-tag="removeTag" :key="key">
     <el-option v-for="item in selectOptions" :key="item.id" :label="item[props.label]"
       :value="item[props.value]" style="display:none"></el-option>
     <el-option :value="optionTitle" :label="optionTitle" class="options">
