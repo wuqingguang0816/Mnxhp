@@ -17,7 +17,7 @@ const layouts = {
     const Item = config.jnpfKey === 'cascader'
       ? <el-cascader v-model={this[this.formConf.formModel][scheme.__vModel__]} placeholder={scheme.placeholder} options={scheme.options}
         props={scheme.props} disabled={scheme.disabled} show-all-levels={scheme['show-all-levels']} separator={scheme.separator}
-        style={scheme.style} clearable={scheme.clearable} filterable={scheme.filterable} append-to-body={false}
+        style={scheme.style} clearable={scheme.clearable} filterable={scheme.filterable}
         onChange={val => this.onCascaderChange(val, scheme.on)} onBlur={val => this.onCascaderBlur(val, scheme.on)}
         key={scheme.__config__.renderKey}></el-cascader>
       : <render formData={this[this.formConf.formModel]} conf={scheme} {...{ on: listeners }} ref={config.jnpfKey === 'table' ? scheme.__vModel__ : undefined}
