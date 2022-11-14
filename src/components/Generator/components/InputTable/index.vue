@@ -627,6 +627,7 @@ export default {
         }
         const sumVal = data.reduce((sum, d) => sum + this.getCmpValOfRow(d, column.property), 0)
         sums[index] = Number.isNaN(sumVal) ? '' : sumVal
+        if (sums[index] && !Number.isInteger(sums[index])) sums[index] = sums[index].toFixed(2)
       })
       return sums
     },
