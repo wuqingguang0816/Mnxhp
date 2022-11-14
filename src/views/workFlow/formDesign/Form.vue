@@ -225,6 +225,7 @@ export default {
         this.$refs[model].getData().then(res => {
           this.dataForm.draftJson = JSON.stringify(res.formData)
           this.dataForm.tableJson = JSON.stringify(this.tables)
+          this.draftJson = res.formData
           this.submit()
         }).catch(err => {
           err.msg && this.$message.warning(err.msg)
