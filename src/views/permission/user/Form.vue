@@ -285,6 +285,8 @@ export default {
       this.roleId = []
       this.groupId = []
       this.positionId = []
+      this.positionTreeData = []
+      this.roleTreeData = []
       this.dataForm.organizeIdTree = []
       this.$nextTick(() => {
         this.formLoading = true
