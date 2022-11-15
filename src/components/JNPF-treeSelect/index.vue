@@ -91,6 +91,12 @@ export default {
     }
   },
   mounted() {
+    if (this.$refs.elSelect) {
+      this.$refs.elSelect.focus()
+      this.$nextTick(() => {
+        this.$refs.elSelect.blur()
+      })
+    }
     if (this.value) {
       this.initHandle()
     }
