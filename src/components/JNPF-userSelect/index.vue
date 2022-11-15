@@ -49,14 +49,14 @@
               <el-tab-pane label="全部数据" name="all">
                 <el-tree :data="treeData" :props="props" check-on-click-node
                   @node-click="handleNodeClick" class="JNPF-common-el-tree" node-key="id"
-                  v-loading="loading" lazy :load="loadNode" v-if="!this.isAsync"
+                  v-loading="loading" lazy :load="loadNode" v-if="!isAsync"
                   :default-expanded-keys="defaultExpandedKeys">
                   <span class="custom-tree-node" slot-scope="{ node, data }">
                     <i :class="data.icon"></i>
                     <span class="text">{{node.label}}</span>
                   </span>
                 </el-tree>
-                <div class="single-list" ref="infiniteBody" v-if="this.isAsync"
+                <div class="single-list" ref="infiniteBody" v-if="isAsync"
                   v-loading="loading && pagination.currentPage==1">
                   <template v-if="treeData.length">
                     <div v-for="(item,index) in treeData" :key="index" class="selected-item-user"
@@ -406,8 +406,7 @@ export default {
           _this.pagination.currentPage += 1
           if (_this.selectType === 'all') {
             _this.getAllList()
-          }
-          if (_this.selectType === 'custom') {
+          } else {
             _this.getAbleList()
           }
         }
@@ -533,7 +532,6 @@ export default {
           this.loading = false
         }
       } else {
-        this.pagination.keyword = this.keyword
         this.pagination.currentPage = 1
         this.finish = false
         this.ableList = []

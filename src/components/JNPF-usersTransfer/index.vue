@@ -90,11 +90,10 @@
                 <i :class="item.icon"></i>
               </div>
               <div class="selected-item-text">
-                <p class="name">{{item.fullName}}
-                  <i class="el-icon-delete" @click="removeData(index)"></i>
-                </p>
+                <p class="name">{{item.fullName}}</p>
                 <p class="organize" :title="item.organize">{{item.organize}}</p>
               </div>
+              <i class="el-icon-delete" @click="removeData(index)"></i>
             </div>
           </div>
         </template>
