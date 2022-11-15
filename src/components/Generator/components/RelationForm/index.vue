@@ -112,7 +112,7 @@
         </div>
       </el-drawer>
     </template>
-    <el-form>
+    <el-form v-if="detailVisible">
       <Detail v-if="detailVisible" ref="Detail" @close="detailVisible = false" />
     </el-form>
   </div>
