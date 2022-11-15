@@ -240,7 +240,7 @@ export default {
         appModuleParentId: '',
       }
       this.$nextTick(() => {
-        this.$refs['releaseForm'].resetFields()
+        this.$refs['releaseForm'] && this.$refs['releaseForm'].resetFields()
       })
       this.getMenuSelector()
       this.getAPPMenuSelector()
