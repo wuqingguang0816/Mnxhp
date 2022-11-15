@@ -79,7 +79,7 @@
                     <template slot-scope="scope">
                       <el-tag v-if="scope.row.typeId=='1'">主表</el-tag>
                       <el-tag type="warning" v-else @click="changeTable(scope.row)"
-                        style="cursor:pointer" title="点击设置成主表">子表</el-tag>
+                        style="cursor:pointer" title="点击设置成主表">从表</el-tag>
                     </template>
                   </el-table-column>
                   <el-table-column prop="table" label="表名">
@@ -110,7 +110,7 @@
                   <el-table-column label="操作" fixed="right" width="50">
                     <template slot-scope="scope">
                       <el-button size="mini" type="text" class="JNPF-table-delBtn"
-                        @click="delItem(scope.row,scope.$index)">删除
+                        @click="delItem(scope.row,scope.$index)">移除
                       </el-button>
                     </template>
                   </el-table-column>
