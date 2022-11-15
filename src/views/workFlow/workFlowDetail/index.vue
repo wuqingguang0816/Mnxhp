@@ -75,7 +75,7 @@ export default {
     },
     closeForm() {
       this.$store.dispatch('tagsView/delView', this.$route)
-      this.$router.replace('/dashboard')
+      this.$router.back()
     }
   }
 }
