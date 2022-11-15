@@ -157,7 +157,6 @@ export default {
       }).catch(() => { this.listLoading = false })
     },
     handleNodeClick(data) {
-      console.log(data.id == this.category)
       if (data.id == this.category) return
       this.category = data.id || ''
       this.reset()
