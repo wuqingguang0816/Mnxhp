@@ -157,8 +157,9 @@ export default {
       }).catch(() => { this.listLoading = false })
     },
     handleNodeClick(data) {
-      this.category = ''
-      this.category = data.enCode
+      console.log(data.id == this.category)
+      if (data.id == this.category) return
+      this.category = data.id || ''
       this.reset()
     },
     reset() {
