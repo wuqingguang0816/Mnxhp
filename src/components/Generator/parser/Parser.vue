@@ -127,6 +127,7 @@ function renderFrom(h) {
         // model不能直接赋值 https://github.com/vuejs/jsx/issues/49#issuecomment-472013664
         props={{ model: this[formConfCopy.formModel] }}
         rules={this[formConfCopy.formRules]}
+        nativeOnSubmit={event => { event.preventDefault() }}
       >
         {renderFormItem.call(this, h, formConfCopy.fields)}
         {
