@@ -572,7 +572,7 @@ export default {
           this.treeData = res.data.list
         }
         this.loading = false
-        if (!this.keyword && this.treeData.length && this.nodeId == '0') {
+        if (!this.pagination.keyword && this.treeData.length && this.nodeId == '0') {
           this.defaultExpandedKeys = [this.treeData[0].id]
         }
       })
