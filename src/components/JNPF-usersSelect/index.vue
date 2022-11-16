@@ -138,7 +138,7 @@
             <el-button @click="removeAll" type="text" class="removeAllBtn">清空列表</el-button>
           </div>
           <div class="transfer-pane__body shadow right-pane">
-            <template v-if="selectedData.length&&!multiple">
+            <template v-if="(selectedData.length&&!multiple)||selectType == 'custom'">
               <div v-for="(item,index) in selectedData" :key="index" class="selected-item-user">
                 <div class="selected-item-main">
                   <el-avatar :size="36" :src="define.comUrl+item.headIcon"
