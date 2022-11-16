@@ -3614,11 +3614,7 @@ export default {
       if (this[obj][key].interfaceId === id) return
       this[obj][key].interfaceId = id
       this[obj][key].interfaceName = item.fullName
-      this[obj][key].templateJson = item.templateJson ? item.templateJson.map(o => ({
-        ...o,
-        relationField: '',
-        isSubTable: false
-      })) : []
+      this[obj][key].templateJson = item.templateJson
     },
     onRelationFieldChange(val, item) {
       if (!val) return
