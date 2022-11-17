@@ -74,3 +74,11 @@ export function batchExecute(data) {
     data
   })
 }
+// 获取数据库表列表
+export function checkDbLink(data) {
+  return request({
+    url: `/api/system/DataSync/Actions/checkDbLink`,
+    method: 'post',
+    data
+  })
+}

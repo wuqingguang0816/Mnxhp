@@ -85,8 +85,7 @@
 </template>
 
 <script>
-import { getDataSourceListAll, Execute, DataSync, batchExecute } from '@/api/systemData/dataSource'
-import { getDataModelList } from '@/api/systemData/dataModel'
+import { getDataSourceListAll, Execute, DataSync, batchExecute, checkDbLink } from '@/api/systemData/dataSource'
 
 export default {
   name: 'systemData-dataSync',
@@ -141,7 +140,7 @@ export default {
             return
           }
           this.listLoading = true
-          getDataModelList(this.dataForm).then((res) => {
+          checkDbLink(this.dataForm).then((res) => {
             this.beforeConversionList = []
             this.convertRuleMap = res.data.convertRuleMap
             for (var key in this.convertRuleMap) {
