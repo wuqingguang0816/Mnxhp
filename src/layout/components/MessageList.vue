@@ -158,7 +158,7 @@ export default {
         const query = {
           keyword: this.listQuery.keyword,
           type: this.listQuery.type,
-          isRead: this.isNoRead ? 0 : 1
+          isRead: this.isNoRead ? 0 : ''
         }
         MessageAllRead(query).then(res => {
           this.$message({
