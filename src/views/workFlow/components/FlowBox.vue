@@ -53,7 +53,7 @@
           @click="actionLauncher('recall')">{{properties.revokeBtnText||'撤 回'}}</el-button>
         <el-button type="danger" v-if="setting.opType == 4&&setting.status==1"
           @click="actionLauncher('cancel')">
-          终止</el-button>
+          终 止</el-button>
         <el-button @click="goBack()" v-if="!setting.hideCancelBtn" :disabled="allBtnDisabled">
           {{$t('common.cancelButton')}}
         </el-button>
