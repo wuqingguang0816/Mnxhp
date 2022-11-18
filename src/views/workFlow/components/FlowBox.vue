@@ -53,7 +53,7 @@
           @click="actionLauncher('recall')">{{properties.revokeBtnText||'撤 回'}}</el-button>
         <el-button type="danger" v-if="setting.opType == 4&&setting.status==1"
           @click="actionLauncher('cancel')">
-          终止</el-button>
+          终 止</el-button>
         <el-button @click="goBack()" v-if="!setting.hideCancelBtn" :disabled="allBtnDisabled">
           {{$t('common.cancelButton')}}
         </el-button>
@@ -182,7 +182,7 @@
     <actionDialog v-if="actionVisible" ref="actionDialog" :assignNodeList="assignNodeList"
       @submit="actionReceiver" />
     <HasFreeApprover :visible.sync="hasFreeApproverVisible" :taskId="setting.taskId"
-      :formData="formData" @close="approverDialog" />
+      :formData="formData" :properties="properties" @close="approverDialog" />
     <SignImgDialog v-if="signVisible" ref="SignImg" :lineWidth='3' :userInfo='userInfo'
       :isDefault='1' @close="signDialog" />
   </div>
@@ -843,26 +843,6 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
-.sign-main {
-  width: 100%;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  .sign-img {
-    width: 100px;
-    height: 50px;
-  }
-  .add-sign {
-    height: 50px;
-    font-size: 36px;
-    margin-top: 10px;
-    color: #2188ff;
-  }
-  .sign-title {
-    font-size: 16px;
-    color: #2188ff;
-  }
-}
 .flow-form-main {
   .JNPF-el_tabs {
     overflow: hidden;

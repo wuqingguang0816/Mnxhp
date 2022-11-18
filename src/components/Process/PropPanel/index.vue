@@ -2423,7 +2423,7 @@ const defaultApproverForm = {
   counterSign: 0,
   noApproverHandler: true,
   hasFreeApproverBtn: false,
-  hasFreeApproverBtnText: '加签',
+  hasFreeApproverBtnText: '加 签',
   hasSaveBtn: false,
   saveBtnText: '暂 存',
   hasAuditBtn: true,

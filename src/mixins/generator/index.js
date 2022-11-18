@@ -71,7 +71,7 @@ export default {
             }
           });
         })
-      }).catch(() => {});
+      }).catch(() => { });
     },
     copy(id) {
       this.$confirm('您确定要复制该功能模板, 是否继续?', '提示', {
@@ -87,7 +87,7 @@ export default {
             }
           });
         })
-      }).catch(() => {});
+      }).catch(() => { });
     },
     exportModel(id) {
       this.$confirm('您确定要导出该功能模板, 是否继续?', '提示', {
@@ -96,7 +96,7 @@ export default {
         exportData(id).then(res => {
           this.jnpf.downloadFile(res.data.url)
         })
-      }).catch(() => {});
+      }).catch(() => { });
     },
     toggleWebType(row) {
       const { id, webType } = row

@@ -14,11 +14,13 @@
           :rules="[{ required: true, message: `请选择${label}给谁`, trigger: 'click' }]">
           <user-select v-model="dataForm.freeApproverUserId" :placeholder="`请选择${label}给谁`" />
         </el-form-item>
-        <el-form-item :label="`${label}原因`" prop="handleOpinion">
+        <el-form-item :label="`${label}原因`" prop="handleOpinion"
+          v-if="eventType==='assign'||eventType==='cancel'||(eventType==='transfer'&&properties&&properties.hasOpinion)">
           <el-input v-model="dataForm.handleOpinion" :placeholder="`请输入${label}原因`" type="textarea"
             :rows="4" />
         </el-form-item>
-        <el-form-item :label="`${label}附件`" prop="fileList">
+        <el-form-item :label="`${label}附件`" prop="fileList"
+          v-if="eventType==='assign'||eventType==='cancel'||(eventType==='transfer'&&properties&&properties.hasOpinion)">
           <JNPF-UploadFz v-model="dataForm.fileList" :limit="3" />
         </el-form-item>
         <el-form-item label="手写签名" required v-if="properties.hasSign&&eventType==='transfer'">
@@ -177,25 +179,3 @@ export default {
   }
 }
 </script>
-<style lang="scss" scoped>
-.sign-main {
-  width: 100%;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  .sign-img {
-    width: 100px;
-    height: 50px;
-  }
-  .add-sign {
-    height: 50px;
-    font-size: 36px;
-    margin-top: 10px;
-    color: #2188ff;
-  }
-  .sign-title {
-    font-size: 16px;
-    color: #2188ff;
-  }
-}
-</style>

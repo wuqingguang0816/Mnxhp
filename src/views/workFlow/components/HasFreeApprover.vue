@@ -32,12 +32,21 @@
             v-else />
         </el-form-item>
       </div>
-      <el-form-item label="加签意见" prop="handleOpinion">
-        <el-input v-model="hasFreeApproverForm.handleOpinion" placeholder="请输入加签意见" type="textarea"
+      <el-form-item label="加签原因" prop="handleOpinion" v-if="properties&&properties.hasOpinion">
+        <el-input v-model="hasFreeApproverForm.handleOpinion" placeholder="请输入加签原因" type="textarea"
           :rows="4" />
       </el-form-item>
-      <el-form-item label="审批附件" prop="fileList">
+      <el-form-item label="加签附件" prop="fileList" v-if="properties&&properties.hasOpinion">
         <JNPF-UploadFz v-model="hasFreeApproverForm.fileList" :limit="3" />
+      </el-form-item>
+      <el-form-item label="手写签名" required v-if="properties&&properties.hasSign">
+        <div class="sign-main">
+          <img :src="signImg" alt="" v-if="signImg" class="sign-img">
+          <div @click="addSign" class="sign-style">
+            <i class="icon-ym icon-ym-signature add-sign"></i>
+            <span class="sign-title" v-if="!signImg">手写签名</span>
+          </div>
+        </div>
       </el-form-item>
     </el-form>
     <div slot="footer">
@@ -45,16 +54,22 @@
       <el-button type="primary" :loading="btnLoading" @click="dataFormSubmit()">
         {{$t('common.confirmButton')}}</el-button>
     </div>
+
+    <SignImgDialog v-if="signVisible" ref="SignImg" :lineWidth='3' :userInfo='userInfo'
+      :isDefault='1' @close="signDialog" />
   </el-dialog>
+
 </template>
 
 <script>
 
 import { Candidates, FreeApprover } from '@/api/workFlow/FlowBefore'
+import SignImgDialog from '@/components/SignImgDialog'
 import CandidateUserSelect from './CandidateUserSelect'
+import { mapGetters } from "vuex"
 export default {
-  components: { CandidateUserSelect },
-  props: ['taskId', 'formData'],
+  components: { CandidateUserSelect, SignImgDialog },
+  props: ['taskId', 'formData', 'properties'],
   data() {
     return {
       key: +new Date(),
@@ -77,11 +92,18 @@ export default {
           { required: true, message: '加签人员不能为空', trigger: 'change' }
         ],
         branchList: [{ required: true, message: `选择分支不能为空`, trigger: 'click' }]
-      }
+      },
+      signImg: '',
+      signVisible: false,
     }
+  },
+  computed: {
+    ...mapGetters(['userInfo'])
   },
   methods: {
     onOpen() {
+      this.signImg = ""
+      if (this.properties && this.properties.hasSign) this.signImg = this.userInfo.signImg
       Candidates(this.taskId, this.formData).then(res => {
         let data = res.data
         this.candidateType = data.type
@@ -159,6 +181,9 @@ export default {
           }
           query.candidateList = candidateList
         }
+        if (this.signImg) {
+          query.signImg = this.signImg
+        }
         FreeApprover(this.taskId, query).then(res => {
           this.$message({
             type: 'success',
@@ -171,7 +196,19 @@ export default {
           })
         }).catch(() => { this.btnLoading = false })
       })
-    }
+    },
+    addSign() {
+      this.signVisible = true
+      this.$nextTick(() => {
+        this.$refs.SignImg.init()
+      })
+    },
+    signDialog(val) {
+      this.signVisible = false
+      if (val) {
+        this.signImg = val
+      }
+    },
   }
 }
 </script>
@@ -180,7 +217,6 @@ export default {
   padding: 30px 20px;
   color: #606266;
   font-size: 14px;
-  height: 400px;
   word-break: break-all;
 }
 </style>
