@@ -2,29 +2,34 @@
 
 ## 环境要求
 
-- Node.js 最新版本
+- Node.js (v12 或 v14)
 - git
 
 ## 使用说明
-### 安装依赖
-```bash
-npm i
 
-# 如果下载速度比较慢，可通过以下方式解决
-npm i --registry=https://registry.npm.taobao.org
+### 安装依赖
+
+```bash
+npm install --registry http://registry.npmmirror.com
 ```
+
 ### 开发环境
+
 - 打开`src/utils/define.js`,修改接口地址
+
 ```bash
   // 开发环境接口配置
   const APIURl = 'http://192.168.0.25:30000'
 ```
+
 - 运行前端项目(默认会自动打开浏览器)
+
 ```bash
 npm run dev
 ```
 
 ### 测试生产发布
+
 ```bash
 # 构建测试环境,对应.env.staging文件配置
 npm run build:staging
@@ -48,15 +53,11 @@ npm run lint
 # 代码格式检查并自动修复
 npm run lint -- --fix
 ```
+
 ## 常见问题
 
-- 出现`
-npm ERR! fatal: unable to access 'https://github.com/nhn/raphael.git/': Failed connect to github.com:443; Connection timed out`报错
-
-Windows环境下，打开`C:\Windows\System32\drivers\etc\host`文件，添加以下内容
+- 依赖安装失败，可执行以下命令,然后再重新安装依赖
 
 ```bash
-52.74.223.119  github.com
+git config --global url."https://".insteadOf git://
 ```
-
-参考文档`https://hknaruto.blog.csdn.net/article/details/105134485`
