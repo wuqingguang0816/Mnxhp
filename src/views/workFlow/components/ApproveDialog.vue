@@ -35,7 +35,7 @@
         <user-select v-model="copyIds" placeholder="请选择" multiple />
       </el-form-item>
       <el-form-item label="审批意见" prop="handleOpinion" v-if="properties&&properties.hasOpinion">
-        <el-input v-model="dataForm.handleOpinion" placeholder="请输入审批意见（选填）" type="textarea"
+        <el-input v-model="dataForm.handleOpinion" placeholder="请输入审批意见" type="textarea"
           :rows="4" />
       </el-form-item>
       <el-form-item label="审批附件" prop="fileList">
@@ -197,25 +197,4 @@ export default {
   }
 }
 </script>
-<style lang="scss" scoped>
-.sign-main {
-  width: 100%;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  .sign-img {
-    width: 100px;
-    height: 50px;
-  }
-  .add-sign {
-    height: 50px;
-    font-size: 36px;
-    margin-top: 10px;
-    color: #2188ff;
-  }
-  .sign-title {
-    font-size: 16px;
-    color: #2188ff;
-  }
-}
-</style>
+

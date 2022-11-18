@@ -177,25 +177,3 @@ export default {
   }
 }
 </script>
-<style lang="scss" scoped>
-.sign-main {
-  width: 100%;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  .sign-img {
-    width: 100px;
-    height: 50px;
-  }
-  .add-sign {
-    height: 50px;
-    font-size: 36px;
-    margin-top: 10px;
-    color: #2188ff;
-  }
-  .sign-title {
-    font-size: 16px;
-    color: #2188ff;
-  }
-}
-</style>

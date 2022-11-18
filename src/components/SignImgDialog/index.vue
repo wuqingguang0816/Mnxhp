@@ -2,7 +2,7 @@
   <div>
     <el-dialog title="请签名" class="JNPF-dialog JNPF-dialog_center sign-dialog"
       :closeOnClickModal='false' :visible.sync="signVisible" append-to-body width="600px">
-      <div class="sign-main">
+      <div class="sign-main-box">
         <vue-esign ref="esign" :height='300' :width="560" :lineWidth="lineWidth" />
         <div class="tip" v-show="showTip">使用鼠标在此签名</div>
       </div>
@@ -115,7 +115,7 @@ export default {
   }
 }
 
-.sign-main {
+.sign-main-box {
   border: 1px solid rgb(224, 238, 238);
   width: 100%;
   height: 300px;
