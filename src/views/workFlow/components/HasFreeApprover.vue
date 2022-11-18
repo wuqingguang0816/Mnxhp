@@ -181,6 +181,9 @@ export default {
           }
           query.candidateList = candidateList
         }
+        if (this.signImg) {
+          query.signImg = this.signImg
+        }
         FreeApprover(this.taskId, query).then(res => {
           this.$message({
             type: 'success',
