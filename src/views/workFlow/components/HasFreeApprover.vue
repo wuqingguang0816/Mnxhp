@@ -32,14 +32,14 @@
             v-else />
         </el-form-item>
       </div>
-      <el-form-item label="加签意见" prop="handleOpinion" v-if="properties&&properties.hasOpinion">
-        <el-input v-model="hasFreeApproverForm.handleOpinion" placeholder="请输入加签意见" type="textarea"
+      <el-form-item label="加签原因" prop="handleOpinion" v-if="properties&&properties.hasOpinion">
+        <el-input v-model="hasFreeApproverForm.handleOpinion" placeholder="请输入加签原因" type="textarea"
           :rows="4" />
       </el-form-item>
-      <el-form-item label="审批附件" prop="fileList">
+      <el-form-item label="加签附件" prop="fileList" v-if="properties&&properties.hasOpinion">
         <JNPF-UploadFz v-model="hasFreeApproverForm.fileList" :limit="3" />
       </el-form-item>
-      <el-form-item label="审批签名" required v-if="properties&&properties.hasSign">
+      <el-form-item label="手写签名" required v-if="properties&&properties.hasSign">
         <div class="sign-main">
           <img :src="signImg" alt="" v-if="signImg" class="sign-img">
           <div @click="addSign" class="sign-style">
