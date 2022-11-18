@@ -102,6 +102,7 @@ export default {
   },
   methods: {
     onOpen() {
+      this.signImg = ""
       if (this.properties && this.properties.hasSign) this.signImg = this.userInfo.signImg
       Candidates(this.taskId, this.formData).then(res => {
         let data = res.data
