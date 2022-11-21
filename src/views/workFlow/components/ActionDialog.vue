@@ -112,7 +112,7 @@ export default {
       this.dataForm.nodeCode = ''
       this.dataForm.fileList = []
       this.signImg = ""
-      if ((eventType == 'transfer' || eventType == 'transfer' || eventType == 'transfer') && this.properties.hasSign) this.signImg = this.userInfo.signImg
+      if (this.properties.hasSign) this.signImg = this.userInfo.signImg
       switch (eventType) {
         case 'transfer':
           this.title = '转审'
