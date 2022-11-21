@@ -115,7 +115,7 @@
 </template>
 
 <script>
-import { getDataInterfaceDataSelect, getDataInterfaceDataInfo } from '@/api/systemData/dataInterface'
+import { getDataInterfaceDataSelect, getDataInterfaceDataInfoByIds } from '@/api/systemData/dataInterface'
 export default {
   name: 'PopupSelect',
   props: {
@@ -317,13 +317,15 @@ export default {
     setDefault() {
       if (this.value) {
         if (!this.interfaceId) return
+        const paramList = this.getParamList()
         let query = {
           id: this.value,
           interfaceId: this.interfaceId,
           propsValue: this.propsValue,
           relationField: this.relationField,
+          paramList
         }
-        getDataInterfaceDataInfo(this.interfaceId, query).then(res => {
+        getDataInterfaceDataInfoByIds(this.interfaceId, query).then(res => {
           this.innerValue = res.data[this.relationField]
           if (!this.field) return
           let relationData = this.$store.state.generator.relationData

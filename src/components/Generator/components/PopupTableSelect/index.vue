@@ -394,11 +394,13 @@ export default {
         this.value = []
         arr = []
       }
+      const paramList = this.getParamList()
       let query = {
         ids: arr,
         interfaceId: this.interfaceId,
         propsValue: this.propsValue,
         relationField: this.relationField,
+        paramList
       }
       getDataInterfaceDataInfoByIds(this.interfaceId, query).then(res => {
         this.selectedData = res.data
