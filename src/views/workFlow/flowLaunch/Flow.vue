@@ -120,7 +120,8 @@ export default {
       let query = {
         ...this.listQuery,
         keyword: this.keyword,
-        category: this.category == 0 ? '' : this.category
+        category: this.category == 0 ? '' : this.category,
+        flowType: 0
       }
       FlowEnginePageList(query).then((res) => {
         if (res.data.list.length < this.listQuery.pageSize) {
