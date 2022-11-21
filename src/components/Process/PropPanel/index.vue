@@ -289,7 +289,7 @@
               <el-form-item label="子流程表单">
                 <div slot="label" class="form-item-label">子流程表单</div>
                 <flow-dialog class="form-item-content" :value="subFlowForm.flowId"
-                  :title="subFlowForm.flowName" @change="onSubFlowIdChange" />
+                  :title="subFlowForm.flowName" :flowType="flowType" @change="onSubFlowIdChange" />
               </el-form-item>
               <el-form-item label="子流程传递">
                 <div slot="label" class="form-item-label">子流程传递</div>
