@@ -319,17 +319,18 @@ export default {
         if (!this.interfaceId) return
         const paramList = this.getParamList()
         let query = {
-          id: this.value,
+          ids: [this.value],
           interfaceId: this.interfaceId,
           propsValue: this.propsValue,
           relationField: this.relationField,
           paramList
         }
         getDataInterfaceDataInfoByIds(this.interfaceId, query).then(res => {
-          this.innerValue = res.data[this.relationField]
+          const data = res.data && res.data.length ? res.data[0] : {}
+          this.innerValue = data[this.relationField]
           if (!this.field) return
           let relationData = this.$store.state.generator.relationData
-          this.$set(relationData, this.field, res.data)
+          this.$set(relationData, this.field, data)
           this.$eventBus.$emit('popupAttrEventBus', relationData, this.field)
           this.$store.commit('generator/UPDATE_RELATION_DATA', relationData)
         })

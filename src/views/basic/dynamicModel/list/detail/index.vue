@@ -188,7 +188,7 @@ export default {
         if (jnpfKey === 'popupSelect') {
           const paramList = this.getParamList(activeItem)
           let query = {
-            id: id,
+            ids: [id],
             interfaceId: modelId,
             propsValue: activeItem.propsValue,
             relationField: activeItem.relationField,
@@ -196,7 +196,7 @@ export default {
           }
           getDataInterfaceDataInfoByIds(modelId, query).then(res => {
             if (!res.data) return this.$set(this.relationData, field, "")
-            this.$set(this.relationData, field, res.data)
+            this.$set(this.relationData, field, res.data && res.data.length ? res.data[0] : {})
           }).catch(() => { this.$set(this.relationData, field, "") })
         }
       }
