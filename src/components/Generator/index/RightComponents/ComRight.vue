@@ -173,7 +173,7 @@ export default {
       this.key = +new Date()
     },
     isIncludesTable(data) {
-      if (!data.__config__.layout || data.__config__.layout === 'rowFormItem') return true
+      if ((!data.__config__.layout || data.__config__.layout === 'rowFormItem') && data.__config__.jnpfKey !== 'table') return true
       if (this.activeData.__config__.isSubTable) return this.activeData.__config__.parentVModel === data.__vModel__
       return data.__config__.jnpfKey !== 'table'
     },
