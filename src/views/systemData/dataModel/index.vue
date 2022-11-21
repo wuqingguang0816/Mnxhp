@@ -10,8 +10,8 @@
             </el-form-item>
           </el-col>
           <el-col :span="6">
-            <el-form-item label="数据链接">
-              <el-select v-model="dataBase" placeholder="请选择数据链接" @change="getTableData">
+            <el-form-item label="数据连接">
+              <el-select v-model="dataBase" placeholder="请选择数据连接" @change="getTableData">
                 <el-option-group v-for="group in dbOptions" :key="group.fullName"
                   :label="group.fullName">
                   <el-option v-for="item in group.children" :key="item.id" :label="item.fullName"
