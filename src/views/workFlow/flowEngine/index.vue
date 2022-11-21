@@ -90,7 +90,8 @@
                       禁用流程</el-dropdown-item>
                     <el-dropdown-item @click.native="showManage(scope.row.id,scope.row.fullName)">
                       版本管理</el-dropdown-item>
-                    <el-dropdown-item @click.native="management(scope.row.id)">
+                    <el-dropdown-item v-if="scope.row.hasAssistBtn==1"
+                      @click.native="management(scope.row.id)">
                       协管流程</el-dropdown-item>
                     <el-dropdown-item @click.native="copy(scope.row.id)">
                       复制流程</el-dropdown-item>
