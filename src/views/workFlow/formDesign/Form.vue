@@ -192,12 +192,14 @@ export default {
       iconBoxVisible: false,
       dbOptions: [],
       formType: '系统表单',
+      defaultTable: []
     }
   },
   methods: {
     init(id, flowType, formType) {
       this.activeStep = 0
       this.tables = []
+      this.defaultTable = []
       this.dataForm.id = id || ''
       this.getDbOptions()
       this.visible = true
@@ -209,6 +211,7 @@ export default {
             this.formType = res.data.formType == 2 ? "自定义表单" : (res.data.flowType == 1 ? "功能表单" : "系统表单")
             this.draftJson = res.data.draftJson && JSON.parse(res.data.draftJson)
             this.tables = this.dataForm.tableJson && JSON.parse(this.dataForm.tableJson) || []
+            this.defaultTable = JSON.parse(JSON.stringify(this.tables))
             this.updateFields()
           }).catch(() => { this.loading = false })
         } else {
@@ -256,7 +259,12 @@ export default {
         this.$refs['dataForm'].validate((valid) => {
           if (valid) {
             if (!this.tables.length) {
+              if (this.defaultTable.length) {
+                this.$message.warning('请至少选择一个数据表')
+                return
+              }
               this.$store.commit('generator/SET_TABLE', false)
+              this.activeStep += 1
             } else {
               if (!this.exist()) return
               let subTable = this.tables.filter(o => o.typeId == '0')
@@ -264,8 +272,8 @@ export default {
               this.$store.commit('generator/SET_ALL_TABLE', this.tables)
               this.$store.commit('generator/SET_TABLE', true)
               this.$store.commit('generator/UPDATE_FORMITEM_LIST', this.mainTableFields)
+              this.activeStep += 1
             }
-            this.activeStep += 1
           }
         })
       }
