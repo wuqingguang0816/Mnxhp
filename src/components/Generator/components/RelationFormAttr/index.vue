@@ -2,7 +2,7 @@
   <div>
     <template v-if="!isDetail">
       <el-input v-model="innerValue" placeholder="用于展示关联表单的属性，且数据不会保存" readonly
-        v-if=" isStorage==1" />
+        v-if="isStorage==1" />
       <el-input v-model="innerValue" placeholder="用于展示关联表单的属性，且数据同时会保存入库" readonly
         v-else-if="isStorage==2" />
     </template>
