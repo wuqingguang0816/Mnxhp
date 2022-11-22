@@ -80,3 +80,11 @@ export function getFormSelect(data) {
     data
   })
 }
+
+//通过表单id获取流程id
+export function getFormById(id) {
+  return request({
+    url: `/api/flowForm/Form/getFormById/${id}`,
+    method: 'get'
+  })
+}
