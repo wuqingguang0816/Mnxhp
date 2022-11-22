@@ -235,6 +235,7 @@ export default {
         })
       } else {
         this.$refs['dataForm'].validate((valid) => {
+          this.dataForm.tableJson = JSON.stringify(this.tables)
           if (!valid) return
           this.submit()
         })
