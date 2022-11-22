@@ -295,6 +295,8 @@ import uploadBox from './uploadBox'
 import { getDrawingList } from '@/components/Generator/utils/db'
 import { noColumnShowList, noSearchList, useInputList, useDateList } from '@/components/Generator/generator/comConfig'
 import { getDataInterfaceSelector } from '@/api/systemData/dataInterface'
+import { noVModelList, systemComponentsList } from '@/components/Generator/generator/comConfig'
+const excludeList = [...noVModelList, 'uploadFz', 'uploadImg', 'colorPicker', 'popupTableSelect', 'relationForm', 'popupSelect', 'calculate', 'groupTitle']
 
 const getSearchType = item => {
   const jnpfKey = item.__config__.jnpfKey
@@ -538,6 +540,7 @@ export default {
     this.$nextTick(() => {
       this.setListValue(this.columnData.columnList, this.columnOptions, 'column')
       this.setListValue(this.columnData.searchList, this.searchOptions, "search")
+      if (this.btnsList.indexOf('upload') != -1) this.setDefaultUpLoadData()
     })
   },
   methods: {
@@ -575,6 +578,25 @@ export default {
       res.forEach(row => {
         this.$refs[type + 'Table'].toggleRowSelection(row, true)
       })
+    },
+    setDefaultUpLoadData() {
+      let selectKey = this.columnData.uploaderTemplateJson.selectKey
+      const newList = []
+      for (let i = 0; i < selectKey.length; i++) {
+        const element = selectKey[i];
+        if (this.list.some(item => item.__vModel__ == element)) newList.push(element)
+      }
+      for (let i = 0; i < this.list.length; i++) {
+        const element = this.list[i]
+        const required = element.__config__.required
+        const jnpfKey = element.__config__.jnpfKey
+        if ((required || systemComponentsList.includes(jnpfKey))) {
+          if (!selectKey.includes(element.__vModel__)) {
+            newList.push(element.__vModel__)
+          }
+        }
+      }
+      this.columnData.uploaderTemplateJson.selectKey = newList
     },
     /**
       * 供父组件使用 获取列表JSON
@@ -678,7 +700,7 @@ export default {
       this.$nextTick(() => {
         const selectData = this.columnData.uploaderTemplateJson.selectKey ? this.columnData.uploaderTemplateJson.selectKey : []
         const dataType = this.columnData.uploaderTemplateJson.dataType ? this.columnData.uploaderTemplateJson.dataType : ''
-        this.$refs.uploadRef.init(getDrawingList(), selectData, dataType)
+        this.$refs.uploadRef.init(this.list, selectData, dataType)
       })
     },
     onConfirm(data) {

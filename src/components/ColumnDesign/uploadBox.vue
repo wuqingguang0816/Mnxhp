@@ -59,30 +59,20 @@ export default {
   methods: {
     init(columnList, selectData, dataType) {
       this.visible = true
-      let list = []
-      const loop = (data, parent) => {
-        if (!data) return
-        if (Array.isArray(data)) data.forEach(d => loop(d, parent))
-        if (data.__config__ && data.__config__.jnpfKey) {
-          if (data.__config__.layout === "colFormItem" && data.__vModel__ && !excludeList.includes(data.__config__.jnpfKey)) {
-            const isTableChild = parent && parent.__config__ && parent.__config__.jnpfKey === 'table'
-            const __vModel__ = isTableChild ? parent.__vModel__ + '-' + data.__vModel__ : data.__vModel__
-            const label = isTableChild ? parent.__config__.label + '-' + data.__config__.label : data.__config__.label
-            const required = data.__config__.required
-            const disabled = systemComponentsList.includes(data.__config__.jnpfKey) || required
-            list.push({ __vModel__, label, disabled })
-            if ((required || systemComponentsList.includes(data.__config__.jnpfKey))) {
-              this.checkedList.push(__vModel__)
-              this.defaultCheckedList.push(__vModel__)
-            }
-          }
-        }
-        if (data.__config__ && data.__config__.children && Array.isArray(data.__config__.children)) {
-          loop(data.__config__.children, data)
+      this.checkedList = []
+      this.defaultCheckedList = []
+      for (let i = 0; i < columnList.length; i++) {
+        const element = columnList[i]
+        const label = element.__config__.label
+        const required = element.__config__.required
+        const jnpfKey = element.__config__.jnpfKey
+        const disabled = systemComponentsList.includes(jnpfKey) || required
+        this.columnList.push({ __vModel__: element.__vModel__, label, disabled })
+        if ((required || systemComponentsList.includes(jnpfKey))) {
+          this.checkedList.push(element.__vModel__)
+          this.defaultCheckedList.push(element.__vModel__)
         }
       }
-      loop(columnList)
-      this.columnList = list
       if (selectData && selectData.length) {
         this.checkedList.push(...selectData)
         this.checkedList = Array.from(new Set(this.checkedList))
