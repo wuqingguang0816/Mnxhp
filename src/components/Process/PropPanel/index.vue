@@ -3253,7 +3253,6 @@ export default {
       Object.assign(this.approverForm, properties)
       this.getNodeOption()
       this.getPrevNodeOption()
-      this.approverForm.prevNodeList = this.prevNodeList
       this.approverForm.approveMsgConfig.on = typeof this.approverForm.approveMsgConfig.on === 'number' ? this.approverForm.approveMsgConfig.on : 2
       this.approverForm.rejectMsgConfig.on = typeof this.approverForm.rejectMsgConfig.on === 'number' ? this.approverForm.rejectMsgConfig.on : 2
     },
@@ -3264,7 +3263,6 @@ export default {
       Object.assign(this.subFlowForm, properties)
       const prevNode = this.prevNodeList[0]
       this.formFieldList = prevNode.properties.formId ? prevNode.properties.formFieldList : this.processData.properties.formFieldList
-      this.subFlowForm.prevNodeList = this.prevNodeList
       this.subFlowForm.launchMsgConfig.on = typeof this.subFlowForm.launchMsgConfig.on === 'number' ? this.subFlowForm.launchMsgConfig.on : 0
     },
     openApproverTransmitRuleBox() {
