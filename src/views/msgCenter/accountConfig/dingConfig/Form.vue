@@ -92,6 +92,7 @@ export default {
       this.formLoading = true
       this.$nextTick(() => {
         this.$refs['dataForm'].resetFields()
+        this.dataForm.sortCode = 0
         if (this.dataForm.id) {
           getConfigDetail(this.dataForm.id).then(res => {
             this.dataForm = res.data
