@@ -240,7 +240,7 @@
                 </el-table-column>
               </template>
               <el-table-column :prop="item.prop" :label="item.label" :align="item.align"
-                :fixed="item.fixed!='none'&&columnData.childTableStyle!=2?item.fixed:false"
+                :fixed="columnList.some(o=>o.fixed == 'left')&&i==0&&columnData.groupField&&columnData.type==3?'left':item.fixed!='none'&&columnData.childTableStyle!=2?item.fixed:false"
                 :width="item.width" :key="i" :sortable="item.sortable?'custom':item.sortable"
                 v-else />
             </template>
