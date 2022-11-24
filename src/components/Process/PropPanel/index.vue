@@ -3771,6 +3771,9 @@ export default {
     'startForm.titleContent'(newVal) {
       this.temporaryContent = newVal
     },
+    'approverForm.rejectType'(val) {
+      this.approverForm.rejectStep = '0'
+    },
     value(newVal) {
       if (newVal && newVal.properties) {
         this.visible = true;
