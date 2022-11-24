@@ -173,7 +173,7 @@ export default {
       dataRule: {
         fullName: [
           { required: true, message: '表单名称不能为空', trigger: 'blur' },
-          { pattern: /^[\u4e00-\u9fa5_a-zA-Z0-9]+$/, message: '请输入正确的表单名称', trigger: 'blur' },
+          // { pattern: /^[\u4e00-\u9fa5_a-zA-Z0-9]+$/, message: '请输入正确的表单名称', trigger: 'blur' },1
         ],
         enCode: [
           { required: true, message: '表单编码不能为空', trigger: 'blur' },
