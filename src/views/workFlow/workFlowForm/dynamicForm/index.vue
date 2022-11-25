@@ -112,7 +112,7 @@ export default {
           if (item.__vModel__) {
             const val = data.hasOwnProperty(item.__vModel__) ? data[item.__vModel__] : item.__config__.defaultValue
             if (!item.__config__.isSubTable) item.__config__.defaultValue = val
-            let noShow = false, isDisabled = false, required = false
+            let noShow = false, isDisabled = false, required = item.__config__.required || false
             if (this.setting.formOperates && this.setting.formOperates.length) {
               let id = item.__config__.isSubTable ? parent.__vModel__ + '-' + item.__vModel__ : item.__vModel__
               let arr = this.setting.formOperates.filter(o => o.id === id) || []
