@@ -832,6 +832,7 @@ export default {
     },
     setCandidateLoad(val) {
       this.candidateLoading = !!val
+      this.allBtnDisabled = !!val
     },
     setLoad(val) {
       this.btnLoading = !!val

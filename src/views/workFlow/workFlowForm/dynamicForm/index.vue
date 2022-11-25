@@ -154,11 +154,13 @@ export default {
       if (!this.dataForm.id) delete (this.dataForm.id)
       if (this.eventType === 'save') this.$emit('setLoad', true)
       const formMethod = this.dataForm.id ? updateModel : createModel
+      this.$emit('setCandidateLoad', true)
       formMethod(this.setting.flowId, this.dataForm).then(res => {
         const errorData = res.data
         if (errorData && Array.isArray(errorData) && errorData.length) {
           this.errorNodeList = errorData
           this.errorVisible = true
+          this.$emit('setCandidateLoad', false)
         } else {
           this.$message({
             type: 'success',
@@ -168,12 +170,14 @@ export default {
               if (this.eventType === 'save') this.$emit('setLoad', false)
               this.candidateVisible = false
               this.errorVisible = false
+              this.$emit('setCandidateLoad', false)
               this.$emit('close', true)
             }
           })
         }
       }).catch(() => {
         if (this.eventType === 'save') this.$emit('setLoad', false)
+        this.$emit('setCandidateLoad', false)
       })
     },
     handleError(data) {
