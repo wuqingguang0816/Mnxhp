@@ -76,8 +76,11 @@
             <p>{{ item.name }}</p>
           </template>
           <template v-else-if="['relationFormAttr','popupAttr'].includes(item.__config__.jnpfKey)">
-            <p>
+            <p v-if="!item.__vModel__">
               {{ relationData[item.relationField] && relationData[item.relationField][item.showField] ? relationData[item.relationField][item.showField] : '' }}
+            </p>
+            <p v-else>
+              {{item.__config__.defaultValue}}
             </p>
           </template>
           <template v-else-if="item.__config__.jnpfKey==='barcode'">

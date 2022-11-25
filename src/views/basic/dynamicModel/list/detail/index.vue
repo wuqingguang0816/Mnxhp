@@ -203,15 +203,15 @@ export default {
     },
     getParamList(activeItem) {
       let templateJson = activeItem.templateJson
-      if (!this.formData) return templateJson
+      if (!this.formValue) return templateJson
       for (let i = 0; i < templateJson.length; i++) {
         if (templateJson[i].relationField) {
           if (templateJson[i].relationField.includes('-')) {
             let tableVModel = templateJson[i].relationField.split('-')[0]
             let childVModel = templateJson[i].relationField.split('-')[1]
-            templateJson[i].defaultValue = this.formData[tableVModel] && this.formData[tableVModel][this.rowIndex] && this.formData[tableVModel][this.rowIndex][childVModel] || ''
+            templateJson[i].defaultValue = this.formValue[tableVModel] && this.formValue[tableVModel][this.rowIndex] && this.formValue[tableVModel][this.rowIndex][childVModel] || ''
           } else {
-            templateJson[i].defaultValue = this.formData[templateJson[i].relationField] || ''
+            templateJson[i].defaultValue = this.formValue[templateJson[i].relationField] || ''
           }
         }
       }
