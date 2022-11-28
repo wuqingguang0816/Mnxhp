@@ -120,7 +120,7 @@ export default {
           if (router.redirect !== 'noRedirect') {
             // only push the routes with title
             // special case: need to exclude parent router without redirect
-            res.push(data)
+            if (data.path && data.path != '/') res.push(data)
           }
         }
 
