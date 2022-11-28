@@ -404,16 +404,10 @@ export default {
     },
     activeClick(tab, event) {
       this.activeName = tab.paneName
-      if (tab.paneName == '0') {//委托发起
-        this.initFlowList()
-      }
-      if (tab.paneName == '1') {//委托设置
-        this.search()
-      }
-
-      if (tab.paneName == '2') {//委托给我的
-        this.search()
-      }
+      this.keyword = ''
+      if (tab.paneName == '0') this.initFlowList()
+      if (tab.paneName == '1') this.search()
+      if (tab.paneName == '2') this.search()
     },
 
     initFlowList() {
