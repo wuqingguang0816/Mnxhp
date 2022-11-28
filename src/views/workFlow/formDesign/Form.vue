@@ -125,7 +125,7 @@
       </el-row>
       <template v-if="activeStep==1">
         <template v-if="this.dataForm.formType == 2">
-          <Generator ref="generator" :conf="draftJson" :modelType="6" />
+          <Generator ref="generator" :conf="draftJson" :modelType="6" :dbType="dbType" />
         </template>
         <template v-else>
           <el-row type="flex" justify="center" align="middle" class="basic-box">
@@ -192,6 +192,7 @@ export default {
       iconBoxVisible: false,
       dbOptions: [],
       formType: '系统表单',
+      dbType: "MySQL",
       defaultTable: []
     }
   },
@@ -259,6 +260,7 @@ export default {
       if (this.activeStep < 1) {
         this.$refs['dataForm'].validate((valid) => {
           if (valid) {
+            this.getDbType()
             if (!this.tables.length) {
               if (this.defaultTable.length) {
                 this.$message.warning('请至少选择一个数据表')
