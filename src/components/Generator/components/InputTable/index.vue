@@ -253,15 +253,14 @@ export default {
       }
       this.updateParentData()
     },
-    buildRowAttr(rowIndex, val) {
+    buildRowAttr(rowIndex) {
       let row = this.tableFormData[rowIndex];
       for (let i = 0; i < row.length; i++) {
         let item = row[i];
         const cur = row[i].config
         const config = cur.__config__
-        if (val && dyOptionsList.indexOf(config.jnpfKey) > -1) {
+        if (dyOptionsList.indexOf(config.jnpfKey) > -1) {
           if (config.dataType === 'dynamic') {
-            this.handleRelation(item, rowIndex)
             if (!config.propsUrl || !config.templateJson || !config.templateJson.length) return
             let query = {
               paramList: config.templateJson ? this.getParamList(config.templateJson, this.formData, rowIndex) : [],
@@ -581,7 +580,7 @@ export default {
       if (!Array.isArray(this.tableFormData)) this.tableFormData = []
       const rowIndex = this.tableFormData.length
       this.tableFormData.push(JSON.parse(JSON.stringify(this.getEmptyRow(val, rowIndex))))
-      this.buildRowAttr(rowIndex, val)
+      this.buildRowAttr(rowIndex)
       this.clearAddRowFlag()
       this.updateParentData()
     },
