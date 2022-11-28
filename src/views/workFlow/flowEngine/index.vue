@@ -129,7 +129,7 @@
         </div>
       </div>
     </el-dialog>
-    <el-dialog title='协管' :close-on-click-modal="false" :visible.sync="managementVisible"
+    <el-dialog title='协管流程' :close-on-click-modal="false" :visible.sync="managementVisible"
       class="JNPF-dialog JNPF-dialog_center" lock-scroll append-to-body width='600px'>
       <el-form ref="dataForm" label-width="100px">
         <el-form-item label="设置协管员">
