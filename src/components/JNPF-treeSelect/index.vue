@@ -33,6 +33,7 @@
 </template>
 
 <script>
+let isFirst = 1
 import { mapState } from 'vuex'
 export default {
   name: "el-tree-select",
@@ -91,12 +92,6 @@ export default {
     }
   },
   mounted() {
-    if (this.$refs.elSelect) {
-      this.$refs.elSelect.focus()
-      this.$nextTick(() => {
-        this.$refs.elSelect.blur()
-      })
-    }
     if (this.value) {
       this.initHandle()
     }
@@ -114,6 +109,15 @@ export default {
     },
     selectFocus() {
       this.initHandle()
+      if (isFirst && this.$refs.elSelect) {
+        isFirst = 0
+        if (this.$refs.elSelect) {
+          this.$refs.elSelect.focus()
+          this.$nextTick(() => {
+            this.$refs.elSelect.blur()
+          })
+        }
+      }
     },
     // 初始化值
     initHandle() {
