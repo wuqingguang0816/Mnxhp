@@ -116,10 +116,9 @@ export default {
       this.$nextTick(() => {
         this.$refs['dataForm'].resetFields()
       })
-
       this.showReject = properties.showReject
       this.rejectList = properties.rejectList
-      this.dataForm.rejectStep = properties.rejectStep
+      this.dataForm.rejectStep = properties.nodeCode
     },
     onBranchChange(val) {
       const defaultList = this.dataForm.candidateList.filter(o => o.isDefault)

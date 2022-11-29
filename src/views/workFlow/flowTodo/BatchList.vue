@@ -303,7 +303,7 @@ export default {
         RejectList(item.id).then(res => {
           properties.showReject = res.data.isLastAppro
           properties.rejectList = res.data.list || []
-          properties.rejectStep = properties.rejectList[0].nodeCode
+          properties.nodeCode = properties.rejectList[0].nodeCode
           if (!properties.hasSign && !properties.hasOpinion && !properties.showReject) {
             this.$confirm('此操作将退回该审批单，是否继续？', '提示', {
               type: 'warning'
