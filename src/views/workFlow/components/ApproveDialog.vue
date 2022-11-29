@@ -38,7 +38,7 @@
         <el-input v-model="dataForm.handleOpinion" placeholder="请输入审批意见" type="textarea"
           :rows="4" />
       </el-form-item>
-      <el-form-item label="审批附件" prop="fileList">
+      <el-form-item label="审批附件" prop="fileList" v-if="properties&&properties.hasOpinion">
         <JNPF-UploadFz v-model="dataForm.fileList" :limit="3" />
       </el-form-item>
       <el-form-item label="审批签名" required v-if="properties&&properties.hasSign">
@@ -64,7 +64,6 @@
 
 <script>
 import SignImgDialog from '@/components/SignImgDialog'
-import { RejectList } from '@/api/workFlow/FlowBefore'
 import { mapGetters } from "vuex"
 import CandidateUserSelect from './CandidateUserSelect'
 export default {
@@ -117,13 +116,10 @@ export default {
       this.$nextTick(() => {
         this.$refs['dataForm'].resetFields()
       })
-      if (eventType === 'reject') {
-        RejectList(taskId).then(res => {
-          this.showReject = res.data.isLastAppro
-          this.rejectList = res.data.list || []
-          this.dataForm.rejectStep = this.rejectList[0].nodeCode
-        }).catch({})
-      }
+
+      this.showReject = properties.showReject
+      this.rejectList = properties.rejectList
+      this.dataForm.rejectStep = properties.rejectStep
     },
     onBranchChange(val) {
       const defaultList = this.dataForm.candidateList.filter(o => o.isDefault)

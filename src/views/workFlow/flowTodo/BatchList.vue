@@ -129,6 +129,7 @@ import { FlowBeforeList, getBatchFlowSelector, getNodeSelector, BatchCandidate, 
 import ApproveDialog from '@/views/workFlow/components/ApproveDialog'
 import ActionDialog from '@/views/workFlow/components/ActionDialog'
 import ErrorForm from '../components/ErrorForm'
+import { RejectList } from '@/api/workFlow/FlowBefore'
 export default {
   components: { ApproveDialog, ErrorForm, ActionDialog },
   props: ['categoryList'],
@@ -299,18 +300,23 @@ export default {
       }
       if (batchType === 1) {
         if (!properties.hasRejectBtn) return this.$message.error('当前审批节点无退回权限')
-        if (!properties.hasSign && !properties.hasOpinion) {
-          this.$confirm('此操作将退回该审批单，是否继续？', '提示', {
-            type: 'warning'
-          }).then(() => {
-            this.batchOperation()
-          }).catch(() => { });
-          return
-        }
-        this.approveVisible = true
-        this.$nextTick(() => {
-          this.$refs.approveDialog.init(properties, item.id, 'reject', [], [], item.flowId)
-        })
+        RejectList(item.id).then(res => {
+          properties.showReject = res.data.isLastAppro
+          properties.rejectList = res.data.list || []
+          properties.rejectStep = properties.rejectList[0].nodeCode
+          if (!properties.hasSign && !properties.hasOpinion && !properties.showReject) {
+            this.$confirm('此操作将退回该审批单，是否继续？', '提示', {
+              type: 'warning'
+            }).then(() => {
+              this.batchOperation()
+            }).catch(() => { });
+            return
+          }
+          this.approveVisible = true
+          this.$nextTick(() => {
+            this.$refs.approveDialog.init(properties, item.id, 'reject', [], [], item.flowId)
+          })
+        }).catch({})
         return
       }
       if (batchType === 2) {
