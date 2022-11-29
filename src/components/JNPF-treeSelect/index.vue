@@ -111,12 +111,10 @@ export default {
       this.initHandle()
       if (isFirst && this.$refs.elSelect) {
         isFirst = 0
-        if (this.$refs.elSelect) {
-          this.$refs.elSelect.focus()
-          this.$nextTick(() => {
-            this.$refs.elSelect.blur()
-          })
-        }
+        this.$refs.elSelect.focus()
+        this.$nextTick(() => {
+          this.$refs.elSelect.blur()
+        })
       }
     },
     // 初始化值
