@@ -183,7 +183,7 @@ export default {
         }
       })
     },
-    handleRelationForParent(e, defaultValue) {
+    handleRelationForParent(e, defaultValue, notSetDefault) {
       if (!this.tableFormData.length) return
       for (let i = 0; i < this.tableFormData.length; i++) {
         let row = this.tableFormData[i];
@@ -191,7 +191,7 @@ export default {
           let item = row[j];
           const vModel = item.jnpfKey === 'popupSelect' ? item.__vModel__.substring(0, item.__vModel__.indexOf('_jnpfRelation_')) : item.__vModel__
           if (e.__vModel__ === vModel) {
-            item.value = defaultValue
+            if (!notSetDefault) item.value = defaultValue
             if (e.opType === 'setOptions') {
               item.options = []
               let query = {

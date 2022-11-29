@@ -434,10 +434,9 @@ export default {
             const e = currRelations[key][i];
             let vModel = e.realVModel || e.__vModel__
             const config = e.__config__
-            let defaultValue = ''
             if (vModel.includes('-')) {
               const tableVModel = vModel.split('-')[0]
-              this.$refs[tableVModel] && this.$refs[tableVModel].$children[0] && this.$refs[tableVModel].$children[0].handleRelationForParent(e, defaultValue)
+              this.$refs[tableVModel] && this.$refs[tableVModel].$children[0] && this.$refs[tableVModel].$children[0].handleRelationForParent(e, '', true)
             } else {
               if (e.opType === 'setUserOptions') {
                 let value = this[this.formConf.formModel][e.relationField] || []
