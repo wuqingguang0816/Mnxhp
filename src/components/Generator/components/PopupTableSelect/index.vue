@@ -100,7 +100,7 @@ export default {
   },
   props: {
     value: {
-      type: [String, Array],
+      type: [String, Number, Array],
       default: ''
     },
     rowIndex: {

@@ -57,7 +57,7 @@ export default {
     placeholder: { type: String, default: '请选择' },
     // 初始值
     value: {
-      type: [String, Array]
+      type: [String, Number, Array]
     },
     // 可清空选项
     clearable: { type: Boolean, default: false },
