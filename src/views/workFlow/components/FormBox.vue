@@ -45,6 +45,12 @@ export default {
         this.currentView = (resolve) => require([`@/views/${formUrl}`], resolve)
         data.formConf = res.data.flowFormInfo.propertyJson
         if (data.opType != 1) data.readonly = true
+        data.formOperates = res.data.formOperates || []
+        if (data.opType == 0) {
+          for (let i = 0; i < data.formOperates.length; i++) {
+            data.formOperates[i].write = false
+          }
+        }
         setTimeout(() => {
           this.$nextTick(() => {
             this.$refs.form && this.$refs.form.init(data)
