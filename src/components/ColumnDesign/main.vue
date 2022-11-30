@@ -163,9 +163,6 @@
                   </el-select>
                 </el-form-item>
               </template>
-              <el-form-item label="高级查询">
-                <el-switch v-model="columnData.hasSuperQuery"></el-switch>
-              </el-form-item>
               <el-form-item label="排序类型">
                 <el-select v-model="columnData.sort" placeholder="请选择排序类型">
                   <el-option label="升序" value="asc"></el-option>
@@ -177,6 +174,9 @@
                   <el-option :label="item.__config__.label" :value="item.__vModel__"
                     v-for="(item, i) in groupFieldOptions" :key="i"></el-option>
                 </el-select>
+              </el-form-item>
+              <el-form-item label="高级查询">
+                <el-switch v-model="columnData.hasSuperQuery"></el-switch>
               </el-form-item>
               <template v-if="columnData.type !==3">
                 <el-form-item label="分页设置">
@@ -191,7 +191,6 @@
                   </el-radio-group>
                 </el-form-item>
               </template>
-              <el-divider>子表配置</el-divider>
               <el-form-item label="子表样式">
                 <el-select v-model="columnData.childTableStyle" placeholder="请选择子表样式">
                   <el-option label="分组展示" :value="1" />
@@ -266,7 +265,7 @@
                     @click="addFunc(columnData.funcs.afterOnload,'afterOnload',true)">脚本编写
                   </el-button>
                 </el-form-item>
-                <el-form-item label="行样式" label-width="85px">
+                <el-form-item label="表格行样式" label-width="85px">
                   <el-button style="width: 100%;"
                     @click="addFunc(columnData.funcs.rowStyle,'rowStyle',true)">脚本编写
                   </el-button>
