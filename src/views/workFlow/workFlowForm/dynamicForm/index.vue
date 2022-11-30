@@ -112,7 +112,7 @@ export default {
           if (item.__vModel__) {
             const val = data.hasOwnProperty(item.__vModel__) ? data[item.__vModel__] : item.__config__.defaultValue
             if (!item.__config__.isSubTable) item.__config__.defaultValue = val
-            let noShow = false, isDisabled = false, required = false
+            let noShow = false, isDisabled = false, required = item.__config__.required || false
             if (this.setting.formOperates && this.setting.formOperates.length) {
               let id = item.__config__.isSubTable ? parent.__vModel__ + '-' + item.__vModel__ : item.__vModel__
               let arr = this.setting.formOperates.filter(o => o.id === id) || []
@@ -194,11 +194,13 @@ export default {
       if (!this.dataForm.id) delete (this.dataForm.id)
       if (this.eventType === 'save') this.$emit('setLoad', true)
       const formMethod = this.dataForm.id ? updateModel : createModel
+      this.$emit('setCandidateLoad', true)
       formMethod(this.setting.flowId, this.dataForm).then(res => {
         const errorData = res.data
         if (errorData && Array.isArray(errorData) && errorData.length) {
           this.errorNodeList = errorData
           this.errorVisible = true
+          this.$emit('setCandidateLoad', false)
         } else {
           this.$message({
             type: 'success',
@@ -208,12 +210,14 @@ export default {
               if (this.eventType === 'save') this.$emit('setLoad', false)
               this.candidateVisible = false
               this.errorVisible = false
+              this.$emit('setCandidateLoad', false)
               this.$emit('close', true)
             }
           })
         }
       }).catch(() => {
         if (this.eventType === 'save') this.$emit('setLoad', false)
+        this.$emit('setCandidateLoad', false)
       })
     },
     handleError(data) {

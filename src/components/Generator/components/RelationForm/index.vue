@@ -243,9 +243,9 @@ export default {
       }).catch(() => { this.listLoading = false })
     },
     search() {
-      this.initData()
       this.listQuery.currentPage = 1
       this.listQuery.pageSize = this.hasPage ? this.pageSize : 10000
+      this.initData()
     },
     reset() {
       this.listQuery.keyword = ''
