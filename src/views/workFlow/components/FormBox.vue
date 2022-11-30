@@ -1,6 +1,6 @@
 <template>
   <el-dialog :title="setting.title" :close-on-click-modal="false" :visible.sync="visible"
-    class="JNPF-dialog JNPF-dialog_center" lock-scroll append-to-body width='600px'
+    class="JNPF-dialog JNPF-dialog_center" lock-scroll append-to-body width='1000px'
     destroy-on-close>
     <div class="main" v-loading="loading">
       <component :is="currentView" ref="form" @setLoad="setLoad"
