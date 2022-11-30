@@ -1,5 +1,5 @@
 <template>
-  <el-input v-model="innerValue" v-if="isStorage==1" readonly placeholder="用于展示计算结果" />
+  <el-input v-model="innerValue" v-if="isStorage==1" readonly placeholder="用于展示计算结果，且数据不会保存" />
   <el-input v-model="innerValue" v-else readonly placeholder="用于展示计算结果，且数据同时会保存入库" />
 </template>
 <script>
