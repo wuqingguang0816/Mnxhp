@@ -648,7 +648,7 @@ export default {
       })
     },
     handleRequest(candidateData) {
-      if (candidateData) this.formData = { ...this.formData, ...candidateData }
+      if (candidateData) this.formData = { ...this.formData, ...candidateData, ...this.setting }
       this.formData.candidateType = this.candidateType
       if (!this.formData.id) delete (this.formData.id)
       if (this.eventType === 'save') this.btnLoading = true
