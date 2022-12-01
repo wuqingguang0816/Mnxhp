@@ -9,151 +9,27 @@
             <div class="cap">{{item.fullName}}意见</div>
             <div class="content">
               <div class="child-item" v-for="(child,j) in item.list" :key="j">
-                <template v-if="child.handleStatus==0">
-                  <div class="child-item-block">
-                    <div class="avatar">
-                      <el-avatar :src="define.comUrl+child.headIcon"></el-avatar>
+                <div class="child-item-block">
+                  <div class="avatar">
+                    <el-avatar :src="define.comUrl+child.headIcon"></el-avatar>
+                  </div>
+                  <div class="child-item-title">
+                    <div class="child-item-line">
+                      <div class="name">
+                        {{child.userName}}<span> 于 {{child.handleTime | toDate()}}</span>
+                      </div>
+                      <el-tag :type="child.tagType" class="tag">{{child.txt}}</el-tag>
                     </div>
-                    <div class="child-item-title">
-                      <div class="child-item-line">
-                        <div class="name">
-                          {{child.userName}}<span> 于 {{child.handleTime | toDate()}}</span>
-                        </div>
-                        <el-tag type="danger" class="tag">退回</el-tag>
-                      </div>
-                      <div class="child-item-option" v-if="child.handleOpinion">
-                        {{child.handleOpinion}}
-                      </div>
+                    <div class="child-item-option"
+                      v-if="child.handleOpinion && child.handleStatus!=2">
+                      {{child.handleOpinion}}
+                    </div>
+                    <div class="file-List" v-if="(child.fileList.length && child.handleStatus!=2)">
+                      <JNPF-UploadFz v-model="child.fileList" detailed disabled :showIcon='false'>
+                      </JNPF-UploadFz>
                     </div>
                   </div>
-                </template>
-                <template v-if="child.handleStatus==1">
-                  <div class="child-item-block">
-                    <div class="avatar">
-                      <el-avatar :src="define.comUrl+child.headIcon"></el-avatar>
-                    </div>
-                    <div class="child-item-title">
-                      <div class="child-item-line">
-                        <div class="name">
-                          {{child.userName}}<span> 于 {{child.handleTime | toDate()}}</span>
-                        </div>
-                        <el-tag type="success" class="tag">同意</el-tag>
-                      </div>
-                      <div class="child-item-option" v-if="child.handleOpinion">
-                        {{child.handleOpinion}}
-                      </div>
-                      <div class="file-List" v-if="child.fileList.length">
-                        <JNPF-UploadFz v-model="child.fileList" detailed disabled :showIcon='false'>
-                        </JNPF-UploadFz>
-                      </div>
-                    </div>
-                  </div>
-                </template>
-                <template v-if="child.handleStatus==2">
-                  <div class="child-item-block">
-                    <div class="avatar">
-                      <el-avatar :src="define.comUrl+child.headIcon"></el-avatar>
-                    </div>
-                    <div class="child-item-title">
-                      <div class="child-item-line">
-                        <div class="name">
-                          {{child.userName}}<span> 于 {{child.handleTime | toDate()}}</span>
-                        </div>
-                        <el-tag class="tag">发起</el-tag>
-                      </div>
-                    </div>
-                  </div>
-                </template>
-                <template v-if="child.handleStatus==3">
-                  <div class="child-item-block">
-                    <div class="avatar">
-                      <el-avatar :src="define.comUrl+child.headIcon"></el-avatar>
-                    </div>
-                    <div class="child-item-title">
-                      <div class="child-item-line">
-                        <div class="name">
-                          {{child.userName}}<span> 于 {{child.handleTime | toDate()}}</span>
-                        </div>
-                        <el-tag type="warning" class="tag">撤回</el-tag>
-                      </div>
-                      <div class="child-item-option" v-if="child.handleOpinion">
-                        {{child.handleOpinion}}
-                      </div>
-                    </div>
-                  </div>
-                </template>
-                <template v-if="child.handleStatus==4">
-                  <div class="child-item-block">
-                    <div class="avatar">
-                      <el-avatar :src="define.comUrl+child.headIcon"></el-avatar>
-                    </div>
-                    <div class="child-item-title">
-                      <div class="child-item-line">
-                        <div class="name">
-                          {{child.userName}}<span> 于 {{child.handleTime | toDate()}}</span>
-                        </div>
-                        <el-tag type="warning" class="tag">终止</el-tag>
-                      </div>
-                      <div class="child-item-option" v-if="child.handleOpinion">
-                        {{child.handleOpinion}}
-                      </div>
-                    </div>
-                  </div>
-                </template>
-                <template v-if="child.handleStatus==5">
-                  <div class="child-item-block">
-                    <div class="avatar">
-                      <el-avatar :src="define.comUrl+child.headIcon"></el-avatar>
-                    </div>
-                    <div class="child-item-title">
-                      <div class="child-item-line">
-                        <div class="name">
-                          {{child.userName}}<span> 于 {{child.handleTime | toDate()}}</span>
-                        </div>
-                        <el-tag class="tag">指派</el-tag>
-                      </div>
-                      <div class="child-item-option" v-if="child.handleOpinion">
-                        {{child.handleOpinion}}
-                      </div>
-                    </div>
-                  </div>
-                </template>
-                <template v-if="child.handleStatus==6">
-                  <div class="child-item-block">
-                    <div class="avatar">
-                      <el-avatar :src="define.comUrl+child.headIcon"></el-avatar>
-                    </div>
-                    <div class="child-item-title">
-                      <div class="child-item-line">
-                        <div class="name">
-                          {{child.userName}}<span> 于 {{child.handleTime | toDate()}}</span>
-                        </div>
-                        <el-tag class="tag">加签</el-tag>
-                      </div>
-                      <div class="child-item-option" v-if="child.handleOpinion">
-                        {{child.handleOpinion}}
-                      </div>
-                    </div>
-                  </div>
-                </template>
-                <template v-if="child.handleStatus==7">
-                  <div class="child-item-block">
-                    <div class="avatar">
-                      <el-avatar :src="define.comUrl+child.headIcon"></el-avatar>
-                    </div>
-                    <div class="child-item-title">
-                      <div class="child-item-line">
-                        <div class="name">
-                          {{child.userName}}<span> 于 {{child.handleTime | toDate()}}</span>
-                        </div>
-                        <el-tag class="tag">转审</el-tag>
-                      </div>
-                      <div class="child-item-option" v-if="child.handleOpinion">
-                        {{child.handleOpinion}}
-                      </div>
-                    </div>
-                  </div>
-                </template>
+                </div>
               </div>
             </div>
           </div>
@@ -198,6 +74,11 @@ export default {
             o.list.forEach(j => {
               j.fileList = j.fileList ? JSON.parse(j.fileList) : []
             })
+            o.list = o.list.map(i => ({
+              txt: i.handleStatus == 0 ? '退回' : i.handleStatus == 1 ? '同意' : i.handleStatus == 2 ? '发起' : i.handleStatus == 3 ? '撤回' : i.handleStatus == 4 ? '终止' : i.handleStatus == 5 ? '指派' : i.handleStatus == 6 ? '加签' : '转审',
+              tagType: i.handleStatus == 0 ? 'danger' : i.handleStatus == 1 ? 'success' : i.handleStatus == 3 || i.handleStatus == 4 ? 'warning' : "",
+              ...i
+            }))
           })
         }
         this.loading = false
