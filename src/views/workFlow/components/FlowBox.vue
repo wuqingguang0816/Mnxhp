@@ -485,6 +485,7 @@ export default {
     eventReceiver(formData, eventType) {
       this.formData = formData
       this.formData.flowId = this.setting.flowId
+      this.formData.id = this.setting.id
       this.eventType = eventType
       if (eventType === 'save' || eventType === 'submit') {
         return this.submitOrSave()
@@ -648,7 +649,7 @@ export default {
       })
     },
     handleRequest(candidateData) {
-      if (candidateData) this.formData = { ...this.formData, ...candidateData, ...this.setting }
+      if (candidateData) this.formData = { ...this.formData, ...candidateData }
       this.formData.candidateType = this.candidateType
       if (!this.formData.id) delete (this.formData.id)
       if (this.eventType === 'save') this.btnLoading = true
