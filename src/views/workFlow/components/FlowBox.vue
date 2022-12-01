@@ -323,8 +323,8 @@ export default {
         this.signImg = val
       }
     },
-    approverDialog() {
-      this.$emit('close', true)
+    approverDialog(needClose) {
+      if (needClose) this.$emit('close', true)
     },
     handleResurgence(errorRuleUserList) {
       this.$refs['resurgenceForm'].validate((valid) => {
