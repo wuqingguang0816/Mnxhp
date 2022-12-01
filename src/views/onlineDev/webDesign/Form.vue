@@ -11,14 +11,13 @@
         <el-step title="基础设置" @click.native="stepChick(0)" />
         <el-step title="表单设计" @click.native="stepChick(1)" />
         <el-step title="列表设计" @click.native="stepChick(2)" v-if="maxStep>=2" />
-        <el-step title="流程设计" @click.native="stepChick(3)" v-if="maxStep>=3" />
       </el-steps>
       <div class="options">
         <el-button @click="prev" :disabled="activeStep<=0">{{$t('common.prev')}}</el-button>
         <el-button @click="next" :disabled="activeStep>=maxStep || loading">{{$t('common.next')}}
         </el-button>
-        <el-button type="primary" @click="dataFormSubmit()" :disabled="activeStep!=maxStep"
-          :loading="btnLoading">{{$t('common.confirmButton')}}</el-button>
+        <el-button type="primary" @click="dataFormSubmit()" :disabled="loading"
+          :loading="btnLoading">{{$t('common.saveButton')}}</el-button>
         <el-button @click="closeDialog()">{{$t('common.cancelButton')}}</el-button>
       </div>
     </div>
@@ -41,12 +40,12 @@
                   v-for="item in categoryList" />
               </el-select>
             </el-form-item>
+            <el-form-item label="启用流程" prop="enableFlow">
+              <el-switch v-model="dataForm.enableFlow" :active-value="1" :inactive-value="0" />
+            </el-form-item>
             <el-form-item label="功能排序" prop="sortCode">
               <el-input-number :min="0" :max="999999" v-model="dataForm.sortCode"
                 controls-position="right" />
-            </el-form-item>
-            <el-form-item label="功能状态" prop="state">
-              <el-switch v-model="dataForm.state" :active-value="1" :inactive-value="0" />
             </el-form-item>
             <el-form-item label="功能说明" prop="description">
               <el-input v-model="dataForm.description" placeholder="功能说明" type="textarea"
@@ -69,7 +68,7 @@
                 <template slot-scope="scope">
                   <el-tag v-if="scope.row.typeId=='1'">主表</el-tag>
                   <el-tag type="warning" v-else @click="changeTable(scope.row)"
-                    style="cursor:pointer" title="点击设置成主表">子表</el-tag>
+                    style="cursor:pointer" title="点击设置成主表">从表</el-tag>
                 </template>
               </el-table-column>
               <el-table-column prop="table" label="表名">
@@ -120,9 +119,6 @@
         <columnDesign ref="columnDesign" :columnData="columnData" :appColumnData="appColumnData"
           :modelType="dataForm.type" :webType="dataForm.webType" />
       </template>
-      <template v-if="activeStep==3">
-        <Process ref="process" :conf="flowTemplateJson" :flowType="1" />
-      </template>
     </div>
     <TableForm :visible.sync="formVisible" ref="tableForm" @closeForm="closeForm"
       :dbLinkId="dataForm.dbLinkId" />
@@ -132,12 +128,11 @@
 <script>
 import Generator from '@/components/Generator/index/Home'
 import ColumnDesign from '@/components/ColumnDesign'
-import Process from "@/components/Process"
 import TableForm from '@/views/generator/TableForm'
 import mixin from '@/mixins/generator/form'
 export default {
   mixins: [mixin],
-  components: { Generator, ColumnDesign, Process, TableForm },
+  components: { Generator, ColumnDesign, TableForm },
   data() {
     return {
       dataRule: {

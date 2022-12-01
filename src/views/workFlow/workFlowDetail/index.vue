@@ -49,14 +49,15 @@ export default {
         id: item.processId,
         enCode: item.enCode,
         flowId: item.flowId,
-        formType: item.formType,
         opType: item.type == 1 ? 0 : item.type == 2 ? 1 : item.type,
         taskNodeId: item.taskNodeId,
         taskId: item.taskOperatorId,
-        hideCancelBtn: true
+        hideCancelBtn: true,
+        fromForm: 1
       }
       if (item.type == 2) {
         checkInfo(item.taskOperatorId).then(res => {
+          if (res.data && res.data.isCheck) data.opType = 3
           this.formVisible = true
           this.$nextTick(() => {
             this.$refs.FlowBox.init(data)

@@ -1,6 +1,7 @@
 <template>
   <div class="app-container Profile-container">
-    <el-tabs tab-position="left" style="height:100%" v-model="activeTab" class="profile-tabs" v-loading="userLoading">
+    <el-tabs tab-position="left" style="height:100%" v-model="activeTab" class="profile-tabs"
+      v-loading="userLoading">
       <el-tab-pane label="个人资料" name="user">
         <UserInfo ref="user" :user='user' v-if="visible.user" @updateInfo="getInfo" />
       </el-tab-pane>
@@ -19,7 +20,8 @@
         <div class="organize-list">
           <el-row :gutter="80" v-if="organizeList.length">
             <el-col :span="12" class="organize-item" v-for="(item,i) in organizeList" :key="i">
-              <div class="organize-item-main" :class="{active:activeOrganize===item.id}" @click="changeMajor(item.id,'Organize')">
+              <div class="organize-item-main" :class="{active:activeOrganize===item.id}"
+                @click="changeMajor(item.id,'Organize')">
                 <i class="icon-ym icon-ym-organization"></i>
                 <p class="organize-name">{{item.fullName}}</p>
                 <p class="btn">默认</p>
@@ -43,7 +45,8 @@
         <div class="organize-list">
           <el-row :gutter="80" v-if="positionList.length">
             <el-col :span="12" class="organize-item" v-for="(item,i) in positionList" :key="i">
-              <div class="organize-item-main" :class="{active:activePosition===item.id}" @click="changeMajor(item.id,'Position')">
+              <div class="organize-item-main" :class="{active:activePosition===item.id}"
+                @click="changeMajor(item.id,'Position')">
                 <i class="icon-ym icon-ym-wf-outgoingApply"></i>
                 <p class="organize-name">{{item.fullName}}</p>
                 <p class="btn">主岗</p>
@@ -61,12 +64,13 @@
           <h2 class="bold">我的下属</h2>
         </div>
         <div class="subordinate-list">
-          <el-tree :data="treeData" :props="props" check-on-click-node node-key="id" lazy v-loading="loading" :load="loadNode" class="JNPF-common-el-tree subordinate-tree">
+          <el-tree :data="treeData" :props="props" check-on-click-node node-key="id" lazy
+            v-loading="loading" :load="loadNode" class="JNPF-common-el-tree subordinate-tree">
             <el-card class="subordinate-tree-node" shadow="never" slot-scope="{ data }">
               <el-avatar :size="50" :src="define.comUrl+ data.avatar"></el-avatar>
               <div class="text">
                 <p>{{data.userName}}</p>
-                <p>{{data.department}}{{data.position?'/'+data.position:''}}</p>
+                <p class="user-text">{{data.department}}{{data.position?'/'+data.position:''}}</p>
               </div>
             </el-card>
           </el-tree>
@@ -83,9 +87,12 @@
       </el-tab-pane>
     </el-tabs>
     <div class="head">
-      <el-upload class="avatar-uploader" :action="define.comUploadUrl+'/userAvatar'" :headers="uploadHeaders" :on-success="handleSuccess" :show-file-list="false" accept="image/*">
+      <el-upload class="avatar-uploader" :action="define.comUploadUrl+'/userAvatar'"
+        :headers="uploadHeaders" :on-success="handleSuccess" :show-file-list="false"
+        accept="image/*">
         <div class="avatar-box">
-          <el-avatar :size="50" :src="define.comUrl + user.avatar" class="avatar" v-if="user.avatar" />
+          <el-avatar :size="50" :src="define.comUrl + user.avatar" class="avatar"
+            v-if="user.avatar" />
           <div class="avatar-hover">更换头像</div>
         </div>
       </el-upload>
@@ -281,7 +288,7 @@ export default {
         width: 100%;
         height: 1px;
         background: #ddd;
-        content: "";
+        content: '';
         display: block;
         overflow: hidden;
         top: 10px;
@@ -335,7 +342,7 @@ export default {
     }
     .username {
       line-height: 50px;
-      font-size: 12px;
+      font-size: 14px;
     }
   }
 
@@ -347,7 +354,7 @@ export default {
     height: 100%;
     margin: 0;
     .subordinate-tree-node {
-      width: 260px;
+      width: 300px;
     }
     >>> .el-tree-node:focus > .el-tree-node__content {
       background-color: #fff;
@@ -380,6 +387,10 @@ export default {
           overflow: hidden;
           word-break: break-all;
         }
+      }
+      .user-text {
+        color: #999;
+        font-size: 12px;
       }
     }
   }

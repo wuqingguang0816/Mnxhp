@@ -12,8 +12,8 @@
       <ul class="el-upload-list el-upload-list el-upload-list--text">
         <li class="el-upload-list__item is-success" v-for="(file,index) in fileList"
           :key="file.fileId" :class="{'el-upload-list__item_detail':detailed}">
-          <a class="el-upload-list__item-name">
-            <i class="el-icon-paperclip"></i>
+          <a class="el-upload-list__item-name" :style="{'color': !showIcon?'#409eff':''}">
+            <i class="el-icon-paperclip" v-if="showIcon"></i>
             {{file.name}}{{file.fileSize?`（${jnpf.toFileSize(file.fileSize)}）`:''}}
           </a>
           <i class="el-icon-view" title="查看" @click="handlePreview(file)"></i>
@@ -49,6 +49,10 @@ export default {
     disabled: {
       type: Boolean,
       default: false
+    },
+    showIcon: {
+      type: Boolean,
+      default: true
     },
     showTip: {
       type: Boolean,

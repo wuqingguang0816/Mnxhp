@@ -67,7 +67,7 @@
 
 <script>
 import { getDataChange, getConfigData } from '@/api/onlineDev/visualDev'
-import { getDataInterfaceDataInfo } from '@/api/systemData/dataInterface'
+import { getDataInterfaceDataInfoByIds } from '@/api/systemData/dataInterface'
 import { deepClone } from '@/utils'
 import Parser from './Parser'
 import PrintBrowse from '@/components/PrintBrowse'
@@ -99,7 +99,6 @@ export default {
     },
     init(formData, modelId, id, useFormPermission) {
       this.formData = deepClone(formData)
-      this.initRelationForm(this.formData.fields)
       this.modelId = modelId
       this.useFormPermission = useFormPermission
       this.dataForm.id = id || ''
@@ -119,6 +118,7 @@ export default {
             if (!this.dataForm.data) return
             this.formValue = JSON.parse(this.dataForm.data)
             this.fillFormData(this.formData, this.formValue)
+            this.initRelationForm(this.formData.fields)
             this.visible = true
           })
         } else {
@@ -186,18 +186,36 @@ export default {
           }).catch(() => { this.$set(this.relationData, field, "") })
         }
         if (jnpfKey === 'popupSelect') {
+          const paramList = this.getParamList(activeItem)
           let query = {
-            id: id,
+            ids: [id],
             interfaceId: modelId,
             propsValue: activeItem.propsValue,
             relationField: activeItem.relationField,
+            paramList
           }
-          getDataInterfaceDataInfo(modelId, query).then(res => {
+          getDataInterfaceDataInfoByIds(modelId, query).then(res => {
             if (!res.data) return this.$set(this.relationData, field, "")
-            this.$set(this.relationData, field, res.data)
+            this.$set(this.relationData, field, res.data && res.data.length ? res.data[0] : {})
           }).catch(() => { this.$set(this.relationData, field, "") })
         }
       }
+    },
+    getParamList(activeItem) {
+      let templateJson = activeItem.templateJson
+      if (!this.formValue) return templateJson
+      for (let i = 0; i < templateJson.length; i++) {
+        if (templateJson[i].relationField) {
+          if (templateJson[i].relationField.includes('-')) {
+            let tableVModel = templateJson[i].relationField.split('-')[0]
+            let childVModel = templateJson[i].relationField.split('-')[1]
+            templateJson[i].defaultValue = this.formValue[tableVModel] && this.formValue[tableVModel][this.rowIndex] && this.formValue[tableVModel][this.rowIndex][childVModel] || ''
+          } else {
+            templateJson[i].defaultValue = this.formValue[templateJson[i].relationField] || ''
+          }
+        }
+      }
+      return templateJson
     },
     toDetail(item) {
       if (!item.__config__.defaultValue) return

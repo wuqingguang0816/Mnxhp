@@ -115,12 +115,22 @@
 </template>
 
 <script>
-import { getDataInterfaceDataSelect, getDataInterfaceDataInfo } from '@/api/systemData/dataInterface'
+import { getDataInterfaceDataSelect, getDataInterfaceDataInfoByIds } from '@/api/systemData/dataInterface'
 export default {
   name: 'PopupSelect',
   props: {
     value: {
       default: ''
+    },
+    rowIndex: {
+      default: null
+    },
+    formData: {
+      type: Object
+    },
+    templateJson: {
+      type: Array,
+      default: () => []
     },
     interfaceId: {
       type: String,
@@ -223,26 +233,43 @@ export default {
   },
   created() {
     this.listQuery.pageSize = this.hasPage ? this.pageSize : 10000
-    // this.reset()
     this.setDefault()
   },
   methods: {
     initData() {
       if (!this.interfaceId) return
       this.listLoading = true
+      const paramList = this.getParamList()
       const columnOptions = this.columnOptions.map(o => o.value)
       let query = {
         ...this.listQuery,
         interfaceId: this.interfaceId,
         propsValue: this.propsValue,
-        columnOptions: columnOptions.join(','),
         relationField: this.relationField,
+        columnOptions: columnOptions.join(','),
+        paramList
       }
       getDataInterfaceDataSelect(this.interfaceId, query).then(res => {
         this.list = res.data.list
         this.total = res.data.pagination.total
         this.listLoading = false
       }).catch(() => { this.listLoading = false })
+    },
+    getParamList() {
+      let templateJson = this.templateJson
+      if (!this.formData) return templateJson
+      for (let i = 0; i < templateJson.length; i++) {
+        if (templateJson[i].relationField) {
+          if (templateJson[i].relationField.includes('-')) {
+            let tableVModel = templateJson[i].relationField.split('-')[0]
+            let childVModel = templateJson[i].relationField.split('-')[1]
+            templateJson[i].defaultValue = this.formData[tableVModel] && this.formData[tableVModel][this.rowIndex] && this.formData[tableVModel][this.rowIndex][childVModel] || ''
+          } else {
+            templateJson[i].defaultValue = this.formData[templateJson[i].relationField] || ''
+          }
+        }
+      }
+      return templateJson
     },
     interfaceDataHandler(data) {
       if (!data.dataProcessing) return data.list
@@ -290,17 +317,21 @@ export default {
     setDefault() {
       if (this.value) {
         if (!this.interfaceId) return
+        const paramList = this.getParamList()
         let query = {
-          id: this.value,
+          ids: [this.value],
           interfaceId: this.interfaceId,
           propsValue: this.propsValue,
           relationField: this.relationField,
+          paramList
         }
-        getDataInterfaceDataInfo(this.interfaceId, query).then(res => {
-          this.innerValue = res.data[this.relationField]
+        getDataInterfaceDataInfoByIds(this.interfaceId, query).then(res => {
+          const data = res.data && res.data.length ? res.data[0] : {}
+          this.innerValue = data[this.relationField]
           if (!this.field) return
           let relationData = this.$store.state.generator.relationData
-          this.$set(relationData, this.field, res.data)
+          this.$set(relationData, this.field, data)
+          this.$eventBus.$emit('popupAttrEventBus', relationData, this.field)
           this.$store.commit('generator/UPDATE_RELATION_DATA', relationData)
         })
       } else {
@@ -308,6 +339,7 @@ export default {
         if (!this.field) return
         let relationData = this.$store.state.generator.relationData
         this.$set(relationData, this.field, {})
+        this.$eventBus.$emit('popupAttrEventBus', relationData, this.field)
         this.$store.commit('generator/UPDATE_RELATION_DATA', relationData)
       }
     }

@@ -14,15 +14,25 @@
             <template v-if="$store.getters.hasTable">
               <template v-if="activeData.__config__.jnpfKey==='table'">
                 <el-form-item
-                  v-if="activeData.__vModel__!==undefined && !noVModelList.includes(activeData.__config__.jnpfKey)"
+                  v-if="activeData.__vModel__!==undefined && !noVModelList.includes(activeData.__config__.jnpfKey)  ||activeData.__config__.isStorage==2 "
                   label="控件字段">
                   <el-input v-model="activeData.__vModel__" placeholder="请输入数据库字段" disabled />
                 </el-form-item>
               </template>
               <template v-else>
                 <template v-if="!activeData.__config__.isSubTable">
+                  <template
+                    v-if="activeData.__config__.jnpfKey==='calculate' ||activeData.__config__.jnpfKey==='popupAttr' ||activeData.__config__.jnpfKey==='relationFormAttr'">
+                    <el-form-item label="控件类型">
+                      <el-select v-model="activeData.__config__.isStorage" placeholder="请选择"
+                        @change="changeStorage">
+                        <el-option :label="item.label" :value="item.value"
+                          v-for="(item,i) in storageType" :key="i"></el-option>
+                      </el-select>
+                    </el-form-item>
+                  </template>
                   <el-form-item
-                    v-if="activeData.__vModel__!==undefined && !noVModelList.includes(activeData.__config__.jnpfKey)"
+                    v-if="activeData.__vModel__!==undefined && !noVModelList.includes(activeData.__config__.jnpfKey)  ||activeData.__config__.isStorage==2"
                     label="数据库表">
                     <el-select v-model="activeData.__config__.tableName" placeholder="请选择数据库表"
                       @change="tableChange" filterable>
@@ -31,12 +41,12 @@
                         <span class="custom-option-left">
                           {{ item.tableName?item.table+'('+item.tableName+')':item.table}}
                         </span>
-                        <span class="custom-option-right">{{item.typeId=='1'?'主表':'子表'}}</span>
+                        <span class="custom-option-right">{{item.typeId=='1'?'主表':'从表'}}</span>
                       </el-option>
                     </el-select>
                   </el-form-item>
                   <el-form-item
-                    v-if="activeData.__vModel__!==undefined && !noVModelList.includes(activeData.__config__.jnpfKey)"
+                    v-if="activeData.__vModel__!==undefined && !noVModelList.includes(activeData.__config__.jnpfKey) ||activeData.__config__.isStorage==2 "
                     label="控件字段">
                     <el-select v-model="activeData.__vModel__" placeholder="请选择数据库字段" clearable
                       @change="fieldChange" filterable popper-class="field-select-popper">
@@ -61,6 +71,16 @@
                   </el-form-item>
                 </template>
                 <template v-if="activeData.__config__.isSubTable && subTable.length">
+                  <template
+                    v-if="activeData.__config__.jnpfKey==='calculate' ||activeData.__config__.jnpfKey==='popupAttr' ||activeData.__config__.jnpfKey==='relationFormAttr'">
+                    <el-form-item label="控件类型">
+                      <el-select v-model="activeData.__config__.isStorage" placeholder="请选择"
+                        @change="changeStorage">
+                        <el-option :label="item.label" :value="item.value"
+                          v-for="(item,i) in storageType" :key="i"></el-option>
+                      </el-select>
+                    </el-form-item>
+                  </template>
                   <el-form-item label="数据库表">
                     <el-select v-model="activeData.__config__.relationTable" placeholder="请选择数据库表"
                       filterable disabled>
@@ -70,7 +90,7 @@
                     </el-select>
                   </el-form-item>
                   <el-form-item
-                    v-if="activeData.__vModel__!==undefined && !noVModelList.includes(activeData.__config__.jnpfKey)"
+                    v-if="activeData.__vModel__!==undefined && !noVModelList.includes(activeData.__config__.jnpfKey) ||activeData.__config__.isStorage==2"
                     label="控件字段">
                     <el-select v-model="activeData.__vModel__" placeholder="请选择数据库字段" clearable
                       @change="fieldChange1" filterable>
@@ -99,8 +119,18 @@
               </template>
             </template>
             <template v-else>
+              <template
+                v-if="activeData.__config__.jnpfKey==='calculate' ||activeData.__config__.jnpfKey==='popupAttr' ||activeData.__config__.jnpfKey==='relationFormAttr'">
+                <el-form-item label="控件类型">
+                  <el-select v-model="activeData.__config__.isStorage" placeholder="请选择"
+                    @change="changeStorage">
+                    <el-option :label="item.label" :value="item.value"
+                      v-for="(item,i) in storageType" :key="i"></el-option>
+                  </el-select>
+                </el-form-item>
+              </template>
               <el-form-item label="控件字段"
-                v-if="activeData.__vModel__!==undefined  && !noVModelList.includes(activeData.__config__.jnpfKey)">
+                v-if="activeData.__vModel__!==undefined  && !noVModelList.includes(activeData.__config__.jnpfKey)  ||activeData.__config__.isStorage==2">
                 <el-input v-model="activeData.__vModel__" placeholder="请输入数据库字段"
                   @change="inputFieldChange($event,activeData.__config__.formId,activeData.__config__.parentVModel)"
                   :disabled="activeData.__config__.jnpfKey==='table'" />
@@ -119,14 +149,17 @@
               :active-data="activeData" />
             <JNPFPsdInput v-if="activeData.__config__.jnpfKey==='PsdInput'"
               :active-data="activeData" />
-            <JNPFRadio v-if="activeData.__config__.jnpfKey==='radio'" :active-data="activeData" />
+            <JNPFRadio v-if="activeData.__config__.jnpfKey==='radio'" :active-data="activeData"
+              :dictionaryOptions="dictionaryOptions" :dataInterfaceOptions="dataInterfaceOptions" />
             <JNPFCheckbox v-if="activeData.__config__.jnpfKey==='checkbox'"
-              :active-data="activeData" />
+              :active-data="activeData" :dictionaryOptions="dictionaryOptions"
+              :dataInterfaceOptions="dataInterfaceOptions" />
             <JNPFSelect v-if="activeData.__config__.jnpfKey==='select'" :active-data="activeData"
               :key="activeData.__config__.renderKey" :dictionaryOptions="dictionaryOptions"
               :dataInterfaceOptions="dataInterfaceOptions" />
             <JNPFCascader v-if="activeData.__config__.jnpfKey==='cascader'"
-              :active-data="activeData" />
+              :active-data="activeData" :dictionaryOptions="dictionaryOptions"
+              :dataInterfaceOptions="dataInterfaceOptions" />
             <JNPFTime v-if="activeData.__config__.jnpfKey==='time'" :active-data="activeData" />
             <JNPFTimeRange v-if="activeData.__config__.jnpfKey==='timeRange'"
               :active-data="activeData" />
@@ -148,7 +181,8 @@
             <JNPFAddress v-if="activeData.__config__.jnpfKey==='address'"
               :active-data="activeData" />
             <TreeSelect v-if="activeData.__config__.jnpfKey==='treeSelect'"
-              :active-data="activeData" />
+              :active-data="activeData" :dictionaryOptions="dictionaryOptions"
+              :dataInterfaceOptions="dataInterfaceOptions" />
             <GroupTitle v-if="activeData.__config__.jnpfKey==='groupTitle'"
               :active-data="activeData" />
             <RelationForm v-if="activeData.__config__.jnpfKey==='relationForm'"
@@ -295,7 +329,7 @@
                     <span class="custom-option-left">
                       {{ item.tableName?item.table+'('+item.tableName+')':item.table}}
                     </span>
-                    <span class="custom-option-right">{{item.typeId=='1'?'主表':'子表'}}</span>
+                    <span class="custom-option-right">{{item.typeId=='1'?'主表':'从表'}}</span>
                   </el-option>
                 </el-select>
               </el-form-item>
@@ -342,6 +376,10 @@
                   :min="0" :precision="0" controls-position="right" />
               </el-form-item>
             </template>
+            <jnpf-form-tip-item tip-label="支持%和px两种宽度设置" label="控件宽度"
+              v-if="!activeData.__config__.isSubTable&&!noWithList.includes(activeData.__config__.jnpfKey)&&showType==='pc'&&activeData.style">
+              <el-input v-model="activeData.style.width" placeholder="控件宽度" />
+            </jnpf-form-tip-item>
             <el-form-item label="控件宽度" v-if="activeData.__config__.isSubTable">
               <el-input-number v-model="activeData.__config__.columnWidth" placeholder="控件宽度"
                 :min="0" :precision="0" controls-position="right" />
@@ -539,8 +577,11 @@ import Tab from './RightComponents/Tab'
 import Collapse from './RightComponents/Collapse'
 import TableConfig from './RightComponents/Table'
 import StyleScript from './StyleScript'
-const commonRightList = ['comSelect', 'depSelect', 'posSelect', 'userSelect', 'groupSelect', "roleSelect", 'editor']
+const commonRightList = ['comSelect', 'depSelect', 'posSelect', 'userSelect', 'usersSelect', 'groupSelect', "roleSelect", 'editor']
 const systemList = ['createUser', 'createTime', 'modifyUser', 'modifyTime', 'currOrganize', 'currDept', 'currPosition', 'billRule']
+//不设置宽度
+const noWithList = ['switch', 'radio', 'checkbox', 'uploadFz', 'uploadImg', 'colorPicker', 'rate', 'link', 'button', 'JNPFText', 'alert', 'qrcode', 'barcode']
+const layoutList = ["groupTitle", 'divider', 'collapse', 'tab', 'row', 'card', 'table']
 
 export default {
   components: {
@@ -604,6 +645,14 @@ export default {
       dictionaryOptions: [],
       dataInterfaceOptions: [],
       styleScriptVisible: false,
+      storageType: [
+        {
+          label: '展示数据',
+          value: 1
+        }, {
+          label: '存储数据',
+          value: 2
+        }],
       justifyOptions: [
         {
           label: 'start',
@@ -683,7 +732,8 @@ export default {
           const config = data.__config__
           return data.componentName || `${config.label}: ${data.__vModel__}`
         }
-      }
+      },
+      noWithList: [...noWithList, ...layoutList]
     }
   },
   computed: {
@@ -985,6 +1035,9 @@ export default {
     tableChange() {
       this.activeData.__vModel__ = ''
       this.setDefaultOptions()
+    },
+    changeStorage() {
+      if (this.activeData.__config__.isStorage == 1) return this.activeData.__vModel__ = ''
     },
     setDefaultOptions() {
       if (!this.$store.getters.hasTable) return

@@ -112,7 +112,7 @@
         </div>
       </el-drawer>
     </template>
-    <el-form>
+    <el-form v-if="detailVisible">
       <Detail v-if="detailVisible" ref="Detail" @close="detailVisible = false" />
     </el-form>
   </div>
@@ -305,6 +305,7 @@ export default {
           if (!this.field) return
           let relationData = this.$store.state.generator.relationData
           this.$set(relationData, this.field, data)
+          this.$eventBus.$emit('eventBus', relationData, this.field)
           this.$store.commit('generator/UPDATE_RELATION_DATA', relationData)
         })
       } else {
@@ -313,6 +314,7 @@ export default {
         if (!this.field) return
         let relationData = this.$store.state.generator.relationData
         this.$set(relationData, this.field, {})
+        this.$eventBus.$emit('eventBus', relationData, this.field)
         this.$store.commit('generator/UPDATE_RELATION_DATA', relationData)
       }
     }

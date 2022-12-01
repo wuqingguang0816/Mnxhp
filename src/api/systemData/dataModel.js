@@ -68,13 +68,3 @@ export function exportTpl(linkId, id) {
     method: 'get'
   })
 }
-
-// 获取数据库表列表
-export function getDataModelList(data) {
-  return request({
-    url: `/api/system/DataSync/Actions/checkDbLink`,
-    method: 'post',
-    data
-  })
-}
-

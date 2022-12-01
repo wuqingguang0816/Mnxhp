@@ -1,5 +1,5 @@
 <template>
-  <el-dialog :title="eventType==='audit'?'审批通过':'审批拒绝'" :close-on-click-modal="false"
+  <el-dialog :title="eventType==='audit'?'审批通过':'审批退回'" :close-on-click-modal="false"
     :visible.sync="visible" class="JNPF-dialog JNPF-dialog_center" lock-scroll append-to-body
     width='600px'>
     <el-form ref="dataForm" :model="dataForm"
@@ -20,32 +20,35 @@
           <user-select v-model="item.value" multiple :placeholder="'请选择'+item.label" title="候选人员"
             v-else />
         </el-form-item>
-        <el-form-item label="加签人员" v-if="properties&&properties.hasFreeApprover">
-          <user-select v-model="freeApproverUserId" placeholder="请选择加签人员,不选即该节点审核结束" />
+      </template>
+      <template v-if="properties&&properties.rejectType &&eventType!=='audit'&&showReject">
+        <el-form-item label="退回节点" prop="rejectStep">
+          <el-select v-model="dataForm.rejectStep" placeholder="请选择退回节点"
+            :disabled='properties.rejectStep!=="2"'>
+            <el-option v-for="item in rejectList" :key="item.nodeCode" :label="item.nodeName"
+              :value="item.nodeCode">
+            </el-option>
+          </el-select>
         </el-form-item>
       </template>
+      <el-form-item label="抄送人员" prop="copyIds" v-if="properties&&properties.isCustomCopy">
+        <user-select v-model="copyIds" placeholder="请选择" multiple />
+      </el-form-item>
       <el-form-item label="审批意见" prop="handleOpinion" v-if="properties&&properties.hasOpinion">
-        <el-input v-model="dataForm.handleOpinion" placeholder="请输入审批意见（选填）" type="textarea"
+        <el-input v-model="dataForm.handleOpinion" placeholder="请输入审批意见" type="textarea"
           :rows="4" />
+      </el-form-item>
+      <el-form-item label="审批附件" prop="fileList" v-if="properties&&properties.hasOpinion">
+        <JNPF-UploadFz v-model="dataForm.fileList" :limit="3" />
       </el-form-item>
       <el-form-item label="审批签名" required v-if="properties&&properties.hasSign">
         <div class="sign-main">
-          <div class="sign-head">
-            <div class="sign-tip">请在这里输入你的签名</div>
-            <div class="sign-action">
-              <el-button class="clear-btn" size="mini" @click="handleReset">清空</el-button>
-              <el-button class="sure-btn" size="mini" @click="handleGenerate" :disabled="!!signImg">
-                确定签名</el-button>
-            </div>
-          </div>
-          <div class="sign-box">
-            <vue-esign ref="esign" :height="330" v-if="!signImg" :lineWidth="5" />
-            <img :src="signImg" alt="" v-if="signImg" class="sign-img">
+          <img :src="signImg" alt="" v-if="signImg" class="sign-img">
+          <div @click="addSign" class="sign-style">
+            <i class="icon-ym icon-ym-signature add-sign"></i>
+            <span class="sign-title" v-if="!signImg">手写签名</span>
           </div>
         </div>
-      </el-form-item>
-      <el-form-item label="抄送人员" prop="copyIds" v-if="properties&&properties.isCustomCopy">
-        <user-select v-model="copyIds" placeholder="请选择" multiple />
       </el-form-item>
     </el-form>
     <span slot="footer" class="dialog-footer">
@@ -54,14 +57,17 @@
         {{$t('common.confirmButton')}}
       </el-button>
     </span>
+    <SignImgDialog v-if="signVisible" ref="SignImg" :lineWidth='3' :userInfo='userInfo'
+      :isDefault='1' @close="signDialog" />
   </el-dialog>
 </template>
 
 <script>
-import vueEsign from 'vue-esign'
+import SignImgDialog from '@/components/SignImgDialog'
+import { mapGetters } from "vuex"
 import CandidateUserSelect from './CandidateUserSelect'
 export default {
-  components: { CandidateUserSelect, vueEsign },
+  components: { SignImgDialog, CandidateUserSelect },
   data() {
     return {
       visible: false,
@@ -70,8 +76,11 @@ export default {
         branchList: [],
         candidateList: [],
         handleOpinion: '',
+        fileList: [],
+        rejectStep: ''
       },
       copyIds: [],
+      signVisible: false,
       freeApproverUserId: '',
       signImg: '',
       btnLoading: false,
@@ -81,8 +90,13 @@ export default {
       formData: {
         flowId: '',
         data: '{}'
-      }
+      },
+      showReject: false,
+      rejectList: []
     }
+  },
+  computed: {
+    ...mapGetters(['userInfo'])
   },
   methods: {
     init(properties, taskId, eventType, branchList, candidateList, flowId) {
@@ -96,15 +110,19 @@ export default {
       this.dataForm.handleOpinion = ''
       this.formData.flowId = flowId
       this.copyIds = []
-      this.signImg = ''
+      this.signImg = ""
+      if (this.properties && this.properties.hasSign) this.signImg = this.userInfo.signImg
       this.freeApproverUserId = ''
       this.$nextTick(() => {
-        this.handleReset()
         this.$refs['dataForm'].resetFields()
       })
+      this.showReject = properties.showReject
+      this.rejectList = properties.rejectList
+      this.dataForm.rejectStep = properties.nodeCode
     },
     onBranchChange(val) {
-      if (!val.length) return this.dataForm.candidateList = []
+      const defaultList = this.dataForm.candidateList.filter(o => o.isDefault)
+      if (!val.length) return this.dataForm.candidateList = defaultList
       let list = []
       for (let i = 0; i < val.length; i++) {
         inner: for (let j = 0; j < this.branchList.length; j++) {
@@ -120,7 +138,7 @@ export default {
           }
         }
       }
-      this.dataForm.candidateList = list
+      this.dataForm.candidateList = [...defaultList, ...list]
     },
     handleApproval() {
       this.$refs['dataForm'].validate((valid) => {
@@ -136,8 +154,10 @@ export default {
             handleOpinion: this.dataForm.handleOpinion,
             signImg: this.signImg,
             copyIds: this.copyIds.join(','),
-            branchList: this.dataForm.branchList
+            branchList: this.dataForm.branchList,
+            fileList: this.dataForm.fileList
           }
+          if (this.eventType === 'reject') query.rejectStep = this.dataForm.rejectStep
           if (this.dataForm.candidateList.length) {
             let candidateList = {}
             for (let i = 0; i < this.dataForm.candidateList.length; i++) {
@@ -153,59 +173,23 @@ export default {
         }
       })
     },
+    addSign() {
+      this.signVisible = true
+      this.$nextTick(() => {
+        this.$refs.SignImg.init()
+      })
+    },
+    signDialog(val) {
+      this.signVisible = false
+      if (val) {
+        this.signImg = val
+      }
+    },
     closeDialog() {
       this.btnLoading = false
       this.visible = false
-    },
-    handleReset() {
-      this.signImg = ''
-      this.$nextTick(() => {
-        this.$refs.esign && this.$refs.esign.reset()
-      })
-    },
-    handleGenerate() {
-      this.$refs.esign.generate().then(res => {
-        if (res) this.signImg = res
-      }).catch(err => {
-        this.$message({
-          message: '请签名',
-          type: 'warning'
-        })
-      })
-    },
+    }
   }
 }
 </script>
-<style lang="scss" scoped>
-.sign-main {
-  border: 1px solid #dcdfe6;
-  border-radius: 4px;
-  overflow: hidden;
-  .sign-head {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 0 4px;
-    border-bottom: 1px solid #dcdfe6;
-    .sign-tip {
-      color: #a5a5a5;
-      font-size: 12px;
-    }
-    .sign-action {
-      display: flex;
-      align-items: center;
-      .clear-btn,
-      .sure-btn {
-        margin-left: 5px;
-      }
-    }
-  }
-  .sign-box {
-    border-top: 0;
-    height: 100px;
-  }
-  .sign-img {
-    width: 100%;
-  }
-}
-</style>
+

@@ -69,9 +69,14 @@
                 </template>
                 <template v-else-if="['userSelect'].includes(item.jnpfKey)">
                   <userSelect v-model="item.fieldValue" placeholder="请选择" clearable
-                    :selectType="item.attr.selectType" :ableDepIds="item.attr.ableDepIds"
-                    :ablePosIds="item.attr.ablePosIds" :ableUserIds="item.attr.ableUserIds"
-                    :ableRoleIds="item.attr.ableRoleIds" :ableGroupIds="item.attr.ableGroupIds" />
+                    :selectType="item.attr.selectType!='all'||item.attr.selectType!='custom'?'all':item.attr.selectType"
+                    :ableDepIds="item.attr.ableDepIds" :ablePosIds="item.attr.ablePosIds"
+                    :ableUserIds="item.attr.ableUserIds" :ableRoleIds="item.attr.ableRoleIds"
+                    :ableGroupIds="item.attr.ableGroupIds" />
+                </template>
+                <template v-else-if="['usersSelect'].includes(item.jnpfKey)">
+                  <usersSelect v-model="item.fieldValue" placeholder="请选择" clearable
+                    :selectType="item.attr.selectType" :ableIds="item.attr.ableIds" />
                 </template>
                 <template v-else-if="['currPosition'].includes(item.jnpfKey)">
                   <posSelect v-model="item.fieldValue" placeholder="请选择" clearable />
@@ -469,7 +474,9 @@ export default {
         matchLogic: this.matchLogic,
         conditionJson: JSON.stringify(this.conditionList)
       }
-      this.$emit('superQuery', JSON.stringify(query))
+      query = JSON.stringify(query)
+      if (!this.conditionList.length) query = ""
+      this.$emit('superQuery', query)
       this.visible = false
     }
   }

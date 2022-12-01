@@ -12,79 +12,76 @@
       <el-row class="main">
         <el-col :span="14" :offset="5">
           <el-form :model="dataForm" :rules="dataRule" ref="dataForm" class="mt-20"
-            label-width="100px" @submit.native.prevent>
-            <el-col :span="24">
-              <el-form-item label="任务名称" prop="fullName">
-                <el-input v-model="dataForm.fullName" placeholder="任务名称" maxlength="100">
-                </el-input>
-              </el-form-item>
-            </el-col>
-            <el-col :span="24">
-              <el-form-item label="任务编码" prop="enCode">
-                <el-input v-model="dataForm.enCode" placeholder="任务编码"></el-input>
-              </el-form-item>
-            </el-col>
-            <el-col :span="24">
-              <el-form-item label="Cron表达式" prop="executeContent.cron">
-                <el-input v-model="dataForm.executeContent.cron" placeholder="Cron表达式" readonly>
-                  <el-button slot="append" icon="el-icon-edit-outline" @click="showDialog">
-                  </el-button>
-                </el-input>
-              </el-form-item>
-            </el-col>
-            <el-col :span="24">
-              <el-form-item label="任务类型" prop="executeType">
-                <el-radio-group v-model="dataForm.executeType" @change="onExecuteTypeChange">
-                  <el-radio label="1">API操作</el-radio>
-                  <el-radio label="2">SQL操作</el-radio>
-                  <el-radio label="3">本地任务
-                    <el-tooltip content="获取在程序中事先写好的本地方法" placement="top">
-                      <i class="el-icon-warning-outline"></i>
-                    </el-tooltip>
-                  </el-radio>
-                </el-radio-group>
-              </el-form-item>
-            </el-col>
-            <template v-if="dataForm.executeType=='1'||dataForm.executeType=='2'">
-              <el-col :span="24">
-                <el-form-item label="接口选择" prop="executeContent.interfaceId">
-                  <interface-dialog :value="dataForm.executeContent.interfaceId"
-                    :title="dataForm.executeContent.interfaceName" :dataType="dataType"
-                    @change="onFuncChange" />
-                </el-form-item>
-              </el-col>
-              <el-col :span="24" v-if="dataForm.executeContent.parameter.length">
-                <el-form-item label="请求参数" prop="executeContent.parameter">
-                  <el-row v-for="(item,i) in dataForm.executeContent.parameter" :key="i"
-                    class="mb-10">
-                    <el-col :span="11">
-                      <span
-                        class="required-sign">{{item.required?'*':''}}</span>{{item.fieldName?item.field+'('+item.fieldName+')':item.field}}
-                    </el-col>
-                    <el-col :span="12" :offset="1">
-                      <el-input v-model="item.value" placeholder="请求参数值" clearable />
-                    </el-col>
-                  </el-row>
-                </el-form-item>
-              </el-col>
+            label-width="130px" @submit.native.prevent>
+            <jnpf-form-tip-item label="任务名称" prop="fullName">
+              <el-input v-model="dataForm.fullName" placeholder="任务名称" maxlength="100">
+              </el-input>
+            </jnpf-form-tip-item>
+            <jnpf-form-tip-item label="任务编码" prop="enCode">
+              <el-input v-model="dataForm.enCode" placeholder="任务编码"></el-input>
+            </jnpf-form-tip-item>
+            <jnpf-form-tip-item label="Cron表达式" prop="executeContent.cron">
+              <el-input v-model="dataForm.executeContent.cron" placeholder="Cron表达式" readonly>
+                <el-button slot="append" icon="el-icon-edit-outline" @click="showDialog">
+                </el-button>
+              </el-input>
+            </jnpf-form-tip-item>
+            <jnpf-form-tip-item label="任务开始时间" prop="executeContent.startTime">
+              <el-date-picker v-model="dataForm.executeContent.startTime" type="datetime"
+                format="yyyy-MM-dd HH:mm:ss" value-format="timestamp" placeholder="选择任务开始时间">
+              </el-date-picker>
+            </jnpf-form-tip-item>
+            <jnpf-form-tip-item label="任务结束时间" prop="executeContent.endTime"
+              tip-label="未选结束时间即为永久期限">
+              <el-date-picker v-model="dataForm.executeContent.endTime" type="datetime"
+                format="yyyy-MM-dd HH:mm:ss" value-format="timestamp" placeholder="选择任务结束时间">
+              </el-date-picker>
+            </jnpf-form-tip-item>
+            <jnpf-form-tip-item label="任务类型" prop="executeType">
+              <el-radio-group v-model="dataForm.executeType" @change="onExecuteTypeChange">
+                <el-radio label="1">数据接口</el-radio>
+                <el-radio label="3">本地任务
+                  <el-tooltip content="获取在程序中事先写好的本地方法" placement="top">
+                    <i class="el-icon-warning-outline"></i>
+                  </el-tooltip>
+                </el-radio>
+              </el-radio-group>
+            </jnpf-form-tip-item>
+            <template v-if="dataForm.executeType=='1'">
+              <jnpf-form-tip-item label="接口选择" prop="executeContent.interfaceId">
+                <interface-dialog :value="dataForm.executeContent.interfaceId"
+                  :title="dataForm.executeContent.interfaceName" @change="onFuncChange" />
+              </jnpf-form-tip-item>
+              <jnpf-form-tip-item label="请求参数" prop="executeContent.parameter"
+                v-if="dataForm.executeContent.parameter.length">
+                <el-row v-for="(item,i) in dataForm.executeContent.parameter" :key="i"
+                  class="mb-10">
+                  <el-col :span="11">
+                    <span
+                      class="required-sign">{{item.required?'*':''}}</span>{{item.fieldName?item.field+'('+item.fieldName+')':item.field}}
+                  </el-col>
+                  <el-col :span="12" :offset="1">
+                    <el-input v-model="item.value" placeholder="请求参数值" clearable />
+                  </el-col>
+                </el-row>
+              </jnpf-form-tip-item>
             </template>
             <template v-if="dataForm.executeType=='3'">
-              <el-col :span="24">
-                <el-form-item label="方法选择" prop="executeContent.localHostTaskId">
-                  <el-select v-model="dataForm.executeContent.localHostTaskId" placeholder="请选择"
-                    filterable @change="onLocalHostTaskIdChange">
-                    <el-option v-for="item in taskOptions" :key="item.id" :label="item.fullName"
-                      :value="item.id" />
-                  </el-select>
-                </el-form-item>
-              </el-col>
+              <jnpf-form-tip-item label="方法选择" prop="executeContent.localHostTaskId">
+                <el-select v-model="dataForm.executeContent.localHostTaskId" placeholder="请选择"
+                  filterable @change="onLocalHostTaskIdChange">
+                  <el-option v-for="item in taskOptions" :key="item.id" :label="item.fullName"
+                    :value="item.id" />
+                </el-select>
+              </jnpf-form-tip-item>
             </template>
-            <el-col :span="24">
-              <el-form-item label="任务说明" prop="description">
-                <el-input v-model="dataForm.description" placeholder="任务说明" type="textarea"
-                  :rows="3" />
-              </el-form-item>
-            </el-col>
+            <jnpf-form-tip-item label="任务状态" prop="enabledMark">
+              <el-switch v-model="dataForm.enabledMark" :active-value="1" :inactive-value="0" />
+            </jnpf-form-tip-item>
+            <jnpf-form-tip-item label="任务说明" prop="description">
+              <el-input v-model="dataForm.description" placeholder="任务说明" type="textarea"
+                :rows="3" />
+            </jnpf-form-tip-item>
           </el-form>
         </el-col>
       </el-row>
@@ -113,6 +110,29 @@ import InterfaceDialog from '@/components/Process/PropPanel/InterfaceDialog'
 export default {
   components: { vcrontab, InterfaceDialog },
   data() {
+    const checkStartTime = (rule, value, callback) => {
+      if (!this.dataForm.executeContent.endTime) {
+        callback()
+      } else {
+        if (this.dataForm.executeContent.endTime <= value) {
+          callback(new Error('任务结束时间不能早于任务开始时间'));
+        } else {
+          this.$refs.dataForm.validateField('executeContent.endTime');
+          callback()
+        }
+      }
+    }
+    const checkEndTime = (rule, value, callback) => {
+      if (!this.dataForm.executeContent.startTime || !value) {
+        callback()
+      } else {
+        if (this.dataForm.executeContent.startTime >= value) {
+          callback(new Error('任务结束时间不能早于任务开始时间'));
+        } else {
+          callback()
+        }
+      }
+    }
     return {
       showCron: false,
       showCrontab: true,
@@ -121,6 +141,7 @@ export default {
         fullName: '',
         enCode: '',
         executeType: '1',
+        enabledMark: 1,
         description: '',
         executeContent: {
           cron: '',
@@ -128,6 +149,8 @@ export default {
           interfaceName: '',
           parameter: [],
           localHostTaskId: '',
+          startTime: null,
+          endTime: null
         }
       },
       dataRule: {
@@ -146,19 +169,18 @@ export default {
         ],
         'executeContent.localHostTaskId': [
           { required: true, message: '方法选择不能为空', trigger: 'change' }
+        ],
+        'executeContent.startTime': [
+          { required: true, message: '任务开始时间不能为空', trigger: 'change' },
+          { validator: checkStartTime, trigger: 'change' }
+        ],
+        'executeContent.endTime': [
+          { validator: checkEndTime, trigger: 'change' }
         ]
       },
       formVisible: false,
       btnLoading: false,
       taskOptions: []
-    }
-  },
-  computed: {
-    dataType() {
-      let dataType = 0
-      if (this.dataForm.executeType === '1') dataType = 3
-      if (this.dataForm.executeType === '2') dataType = 1
-      return dataType
     }
   },
   methods: {
@@ -171,6 +193,7 @@ export default {
         fullName: '',
         enCode: '',
         executeType: '1',
+        enabledMark: 1,
         description: '',
         executeContent: {
           cron: '',
@@ -178,6 +201,8 @@ export default {
           interfaceName: '',
           parameter: [],
           localHostTaskId: '',
+          startTime: null,
+          endTime: null
         }
       }
       this.dataForm.id = id || ''
@@ -251,7 +276,7 @@ export default {
     },
     onLocalHostTaskIdChange(val) {
       if (!val) return
-      let list = this.taskOptions.filter(o => o.id === val)
+      let list = this.taskOptions.filter(o => o.id === val) || []
       if (!list.length) return
       let item = list[0]
       if (!item.cron) return

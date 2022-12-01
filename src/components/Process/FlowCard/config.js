@@ -2,6 +2,8 @@ const defaultStartForm = {
   initiator: [],
   initiatePos: [],
   initiateRole: [],
+  initiateOrg: [],
+  initiateGroup: [],
   title: '流程发起',
   errorRule: 1, // 异常处理规则
   errorRuleUser: [], // 指定人员处理异常
@@ -125,10 +127,15 @@ const defaultStartForm = {
   circulateRole: [],
   circulatePosition: [],
   circulateUser: [],
+  circulateOrg: [],
+  circulateGroup: [],
   isCustomCopy: false,
   extraCopyRule: 1,
   hasSign: false,
   hasOpinion: true,
+  formId: "",
+  formName: "",
+  formFieldList: [],
 }
 export default {
   defaultStartForm,

@@ -20,8 +20,8 @@
           <el-col :span="6">
             <el-form-item label="所属分类">
               <el-select v-model="flowCategory" placeholder="选择所属分类" clearable>
-                <el-option v-for="item in categoryList" :key="item.enCode" :label="item.fullName"
-                  :value="item.enCode">
+                <el-option v-for="item in categoryList" :key="item.id" :label="item.fullName"
+                  :value="item.id">
                 </el-option>
               </el-select>
             </el-form-item>
@@ -93,7 +93,7 @@
           <el-table-column prop="status" label="流程状态" width="130" align="center">
             <template slot-scope="scope">
               <el-tag type="success" v-if="scope.row.status==2">审核通过</el-tag>
-              <el-tag type="danger" v-else-if="scope.row.status==3">审核驳回</el-tag>
+              <el-tag type="danger" v-else-if="scope.row.status==3">审核退回</el-tag>
               <el-tag type="info" v-else-if="scope.row.status==4">流程撤回</el-tag>
               <el-tag type="info" v-else-if="scope.row.status==5">审核终止</el-tag>
               <el-tag type="primary" v-else>等待审核</el-tag>
@@ -251,7 +251,6 @@ export default {
         id: item.processId,
         enCode: item.flowCode,
         flowId: item.flowId,
-        formType: item.formType,
         opType: 3,
         taskNodeId: item.thisStepId
       }

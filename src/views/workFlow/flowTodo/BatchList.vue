@@ -78,14 +78,18 @@
               批量转审</el-button>
             <el-button type="primary" @click="handleBatch(0)" :disabled="!listQuery.nodeCode"
               :loading="btnLoading">批量通过</el-button>
-            <el-button type="danger" @click="handleBatch(1)" :disabled="!listQuery.nodeCode">批量拒绝
+            <el-button type="danger" @click="handleBatch(1)" :disabled="!listQuery.nodeCode">批量退回
             </el-button>
           </div>
         </div>
         <JNPF-table v-loading="listLoading" :data="list" has-c @selection-change="handleChange">
           <el-table-column prop="fullName" label="流程标题" show-overflow-tooltip min-width="150" />
           <el-table-column prop="flowName" label="所属流程" width="130" />
-          <el-table-column prop="flowVersion" label="流程版本" width="130" />
+          <el-table-column prop="flowVersion" label="流程版本" width="130" align="center">
+            <template slot-scope="scope">
+              <el-tag>V:{{scope.row.flowVersion}}</el-tag>
+            </template>
+          </el-table-column>
           <el-table-column prop="startTime" label="发起时间" width="130"
             :formatter="jnpf.tableDateFormat" />
           <el-table-column prop="userName" label="发起人员" width="130" />
@@ -98,7 +102,7 @@
           <el-table-column prop="status" label="流程状态" width="130" align="center">
             <template slot-scope="scope">
               <el-tag type="success" v-if="scope.row.status==2">审核通过</el-tag>
-              <el-tag type="danger" v-else-if="scope.row.status==3">审核驳回</el-tag>
+              <el-tag type="danger" v-else-if="scope.row.status==3">审核退回</el-tag>
               <el-tag type="info" v-else-if="scope.row.status==4">流程撤回</el-tag>
               <el-tag type="info" v-else-if="scope.row.status==5">审核终止</el-tag>
               <el-tag type="primary" v-else>等待审核</el-tag>
@@ -125,6 +129,7 @@ import { FlowBeforeList, getBatchFlowSelector, getNodeSelector, BatchCandidate, 
 import ApproveDialog from '@/views/workFlow/components/ApproveDialog'
 import ActionDialog from '@/views/workFlow/components/ActionDialog'
 import ErrorForm from '../components/ErrorForm'
+import { RejectList } from '@/api/workFlow/FlowBefore'
 export default {
   components: { ApproveDialog, ErrorForm, ActionDialog },
   props: ['categoryList'],
@@ -234,7 +239,7 @@ export default {
       this.multipleSelection = val
     },
     handleBatch(batchType) {
-      // batchType 0-通过 1-拒绝 2-转审
+      // batchType 0-通过 1-退回 2-转审
       if (!this.multipleSelection.length) return this.$message.error('请先选择数据')
       let isDiffer = this.multipleSelection.some(o => o.flowVersion !== this.multipleSelection[0].flowVersion)
       if (isDiffer) return this.$message.error('请选择相同的版本审批单')
@@ -294,19 +299,24 @@ export default {
         return
       }
       if (batchType === 1) {
-        if (!properties.hasRejectBtn) return this.$message.error('当前审批节点无拒绝权限')
-        if (!properties.hasSign && !properties.hasOpinion) {
-          this.$confirm('此操作将驳回该审批单，是否继续？', '提示', {
-            type: 'warning'
-          }).then(() => {
-            this.batchOperation()
-          }).catch(() => { });
-          return
-        }
-        this.approveVisible = true
-        this.$nextTick(() => {
-          this.$refs.approveDialog.init(properties, item.id, 'reject', [], [], item.flowId)
-        })
+        if (!properties.hasRejectBtn) return this.$message.error('当前审批节点无退回权限')
+        RejectList(item.id).then(res => {
+          properties.showReject = res.data.isLastAppro
+          properties.rejectList = res.data.list || []
+          properties.nodeCode = properties.rejectList[0].nodeCode
+          if (!properties.hasSign && !properties.hasOpinion && !properties.showReject) {
+            this.$confirm('此操作将退回该审批单，是否继续？', '提示', {
+              type: 'warning'
+            }).then(() => {
+              this.batchOperation()
+            }).catch(() => { });
+            return
+          }
+          this.approveVisible = true
+          this.$nextTick(() => {
+            this.$refs.approveDialog.init(properties, item.id, 'reject', [], [], item.flowId)
+          })
+        }).catch({})
         return
       }
       if (batchType === 2) {

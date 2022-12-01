@@ -111,6 +111,14 @@
     align-items: center;
     position: relative;
 
+    .copyright {
+      color: #a0acb7;
+      font-size: 12px;
+      position: fixed;
+      bottom: 20px;
+      text-align: center;
+    }
+
     .login-cap {
       font-size: 26px;
       line-height: 38px;

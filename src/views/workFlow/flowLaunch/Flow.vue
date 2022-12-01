@@ -1,7 +1,7 @@
 <template>
   <transition name="el-zoom-in-center">
     <div class="JNPF-preview-main">
-      <div class="JNPF-common-page-header">
+      <div class="JNPF-common-page-header" v-if="showTitle">
         <el-page-header @back="goBack" content="新建流程" />
         <div class="options">
           <el-button @click="goBack()">{{$t('common.cancelButton')}}</el-button>
@@ -10,8 +10,8 @@
       <div class="main">
         <el-tabs tab-position="left" style="height:100%" v-model="category" class="flow-tabs">
           <el-tab-pane label="全部流程" name=""></el-tab-pane>
-          <el-tab-pane :label="item.fullName" :name="item.enCode" v-for="item in categoryList"
-            :key="item.enCode"></el-tab-pane>
+          <el-tab-pane :label="item.fullName" :name="item.id" v-for="item in categoryList"
+            :key="item.id"></el-tab-pane>
           <div class="box">
             <el-row class="JNPF-common-search-box" :gutter="16">
               <el-form @submit.native.prevent>
@@ -70,7 +70,8 @@ export default {
       finish: false,
       list: [],
       listLoading: true,
-      categoryList: []
+      categoryList: [],
+      showTitle: true
     }
   },
   watch: {
@@ -82,7 +83,8 @@ export default {
     goBack() {
       this.$emit('close')
     },
-    init() {
+    init(flag) {
+      this.showTitle = !flag
       this.getDictionaryData()
       this.$nextTick(() => {
         this.bindScroll()
@@ -118,7 +120,8 @@ export default {
       let query = {
         ...this.listQuery,
         keyword: this.keyword,
-        category: this.category == 0 ? '' : this.category
+        category: this.category == 0 ? '' : this.category,
+        flowType: 0
       }
       FlowEnginePageList(query).then((res) => {
         if (res.data.list.length < this.listQuery.pageSize) {

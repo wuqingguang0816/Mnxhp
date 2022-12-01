@@ -56,6 +56,6 @@ export const delMsgTemplate = id => {
 export const getMsgTypeList = type => {
   return request({
     url: `/api/message/MessageDataType/getTypeList/${type}`,
-    method: 'post'
+    method: 'GET'
   })
 }

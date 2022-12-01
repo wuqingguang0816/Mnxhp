@@ -16,10 +16,21 @@ router.beforeEach(async (to, from, next) => {
 
   // set page title
   document.title = getPageTitle(to.meta.title, to.meta.zhTitle)
-
-  // determine whether the user has logged in
   const hasToken = getToken()
-
+  if (to.path == '/workFlowDetail' && to.query.token && hasToken != to.query.token) {
+    let param = {
+      token: to.query.token
+    }
+    store.dispatch('user/resetToken').then(() => {
+      store.dispatch('user/setToken', param).then(() => {
+        next({
+          ...to,
+          replace: true
+        })
+      })
+    })
+  }
+  // determine whether the user has logged in
   if (hasToken) {
     if (store.getters.isLock && to.path !== '/lockScreen' && to.path !== '/login') {
       next({

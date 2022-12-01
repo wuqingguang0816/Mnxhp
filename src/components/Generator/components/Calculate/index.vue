@@ -1,5 +1,6 @@
 <template>
-  <el-input v-model="innerValue" readonly placeholder="用于展示计算结果" />
+  <el-input v-model="innerValue" v-if="isStorage==1" readonly placeholder="用于展示计算结果，且数据不会保存" />
+  <el-input v-model="innerValue" v-else readonly placeholder="用于展示计算结果，且数据同时会保存入库" />
 </template>
 <script>
 import { mergeNumberOfExps, validExp, toRPN, calcRPN, debounce } from '../../utils'
@@ -14,6 +15,7 @@ export default {
     "expression",
     "tableVModel",
     "componentVModel",
+    'isStorage',
     "rowIndex" // 计算公式放在表格中时， 需要获取在表格中的行位置
   ],
   name: 'calculate',

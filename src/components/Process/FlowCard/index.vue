@@ -111,14 +111,20 @@ function addNodeButton(ctx, data, h, isBranch = false) {
   let canAddAppendBranch = true
   let canAddAppendInterflow = true
   let canAddAppendBranchFlowBranch = true
+  let canAddSubFlow = true
   let canAddTimerNode = true
   if (Array.isArray(data.conditionNodes) && data.conditionNodes.length) {
     canAddAppendBranch = false
     canAddAppendInterflow = false
     canAddAppendBranchFlowBranch = false
+    canAddSubFlow = false
+    canAddTimerNode = false
   }
   if (data.type === 'timer' || (data.childNode && data.childNode.type === 'timer')) {
     canAddTimerNode = false
+  }
+  if (data.type === 'subFlow') {
+    canAddAppendBranch = false
   }
   let isEmpty = data.type === "empty";
   if (isEmpty && !isBranch) {
@@ -128,6 +134,7 @@ function addNodeButton(ctx, data, h, isBranch = false) {
     <div class="add-node-btn-box flex justify-center">
       <div class="add-node-btn">
         <el-popover placement="right" trigger="click" width="440">
+          <el-alert title="增加节点后可能会导致下面节点配置的数据传递规则失效" type="warning" closable={false} show-icon />
           <div class="condition-box">
             <div>
               <div class="condition-icon" onClick={ctx.eventLauncher.bind(ctx, "addApprovalNode", data, isBranch)} >
@@ -135,8 +142,8 @@ function addNodeButton(ctx, data, h, isBranch = false) {
               </div>
               审批节点
             </div>
-            <div>
-              <div class="condition-icon" onClick={ctx.eventLauncher.bind(ctx, "addSubFlowNode", data, isBranch)} >
+            <div class={{ 'condition-disabled': !canAddSubFlow && !isBranch }}>
+              <div class="condition-icon" onClick={ctx.eventLauncher.bind(ctx, "addSubFlowNode", data, isBranch, !canAddSubFlow && !isBranch)} >
                 <i class="icon-ym icon-ym-generator-subFlow"></i>
               </div>
               子流程
@@ -179,9 +186,12 @@ function addNodeButton(ctx, data, h, isBranch = false) {
 function NodeFactory(ctx, data, h) {
   if (!data) return
   const showErrorTip = ctx.verifyMode && NodeUtils.checkNode(data) === false
+  let content = "未设置审批人"
+  if (NodeUtils.isStartNode(data)) content = `未设置${this.flowType == 1 ? "功能" : "表单"}配置`
+  if (NodeUtils.isConditionNode(data)) content = "未设置条件"
+  if (NodeUtils.isSubFlowNode(data)) content = "未设置发起人"
   let res = [],
     branchNode = "",
-    content = NodeUtils.isConditionNode(data) ? "未设置条件" : NodeUtils.isSubFlowNode(data) ? "未设置发起人" : "未设置审批人",
     selfNode = (
       <div class="node-wrap">
         <div class={`node-wrap-box ${data.type} ${NodeUtils.isInterflowNode(data) ? 'interflow' : ''} ${NodeUtils.isBranchFlowNode(data) ? 'branchFlow' : ''} ${showErrorTip ? 'error' : ''}`}>
@@ -284,11 +294,20 @@ export default {
      * @param { Object } 包含event（事件名）和args（事件参数）两个参数
      */
     eventLauncher(event, ...args) {
+      stopPro(args[args.length - 1])
       let list = ['appendBranch', 'appendBranchFlowBranch', 'appendInterflowBranch', 'addTimerNode']
       if (list.includes(event) && args[args.length - 2]) return
       // args.slice(0,-1) vue 会注入MouseEvent到最后一个参数 去除事件对象
       let param = { event, args: args.slice(0, -1) };
-      this.$emit("emits", param);
+      if (event === 'deleteNode') {
+        this.$confirm('此操作将永久删除该节点，删除后可能会导致下面节点配置的数据传递规则失效，是否继续?', '提示', {
+          type: 'warning'
+        }).then(() => {
+          this.$emit("emits", param);
+        }).catch(() => { });
+      } else {
+        this.$emit("emits", param);
+      }
     }
   },
   render(h) {

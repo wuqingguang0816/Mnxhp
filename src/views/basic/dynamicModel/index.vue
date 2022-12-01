@@ -8,6 +8,7 @@
 import { getConfigData } from '@/api/onlineDev/visualDev'
 import Form from './form'
 import List from './list'
+import { message } from '@/utils/message'
 
 export default {
   name: 'dynamicModel',
@@ -29,15 +30,21 @@ export default {
     } else {
       this.modelId = this.$route.meta.relationId
     }
+    const type = this.$route.query.previewType ? this.$route.query.previewType : ''
     if (!this.modelId) return
-    this.getConfigData()
+    this.getConfigData({ type })
   },
   methods: {
-    getConfigData() {
-      getConfigData(this.modelId).then(res => {
+    getConfigData(previewType) {
+      getConfigData(this.modelId, previewType).then(res => {
         if (res.code !== 200 || !res.data) {
           this.$store.dispatch('tagsView/delView', this.$route)
           this.$router.replace('/404')
+          message({
+            message: res.msg || '请求出错，请重试',
+            type: 'error',
+            duration: 1500,
+          })
           return
         }
         this.config = res.data

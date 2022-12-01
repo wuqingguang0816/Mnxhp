@@ -94,6 +94,10 @@
                 <userSelect v-model="item.fieldValue" placeholder="请选择" hasSys clearable
                   @change="onConditionObjChange(arguments,item)" />
               </template>
+              <template v-else-if="['usersSelect'].includes(item.jnpfKey)">
+                <usersSelect v-model="item.fieldValue" placeholder="请选择" clearable
+                  @change="onConditionObjChange(arguments,item)" />
+              </template>
               <template v-else-if="['posSelect','currPosition'].includes(item.jnpfKey)">
                 <posSelect v-model="item.fieldValue" placeholder="请选择" clearable
                   @change="onConditionObjChange(arguments,item)" />
@@ -184,7 +188,7 @@
               <el-form-item label="发起设置">
                 <div slot="label" class="form-item-label">发起设置</div>
                 <div class="form-item-content">
-                  <el-radio-group v-model="subFlowForm.initiateType">
+                  <el-radio-group v-model="subFlowForm.initiateType" @change="resetOrgColl">
                     <el-radio v-for="item in initiateTypeOptions" :label="item.value"
                       :key="item.value" :disabled="item.disabled" class="radio-item">{{item.label}}
                     </el-radio>
@@ -201,6 +205,8 @@
                     设置审批流程中某个环节的审批人作为子流程发起人</div>
                   <div v-if="subFlowForm.initiateType === 6" class="option-box-tip">
                     所指定的成员将作为子流程发起人，多人时，发起多个子流程</div>
+                  <div v-if="subFlowForm.initiateType === 7" class="option-box-tip">
+                    指定可供选择的候选人发起多个子流程</div>
                   <div v-if="subFlowForm.initiateType === 9" class="option-box-tip">
                     从目标服务中获取子流程发起人</div>
                   <el-form-item label="发起者的" style="margin-bottom:0!important;"
@@ -221,15 +227,22 @@
                   </el-form-item>
                   <el-form-item label="表单字段" style="margin-bottom:0!important;"
                     v-if="subFlowForm.initiateType === 4">
-                    <el-radio-group v-model="subFlowForm.formFieldType">
-                      <el-radio :label="1">用户</el-radio>
-                      <el-radio :label="2">部门</el-radio>
-                    </el-radio-group>
-                    <el-select v-model="subFlowForm.formField" placeholder="请选择字段">
-                      <el-option v-for="item in usedFormItems" :key="item.__vModel__"
-                        :label="item.__config__.label" :value="item.__vModel__">
-                      </el-option>
-                    </el-select>
+                    <div class="assignee-form">
+                      <el-select v-model="subFlowForm.formFieldType" placeholder="请选择字段"
+                        class="form-field-type">
+                        <el-option :value="1" label="用户"></el-option>
+                        <el-option :value="2" label="部门"></el-option>
+                        <el-option :value="3" label="岗位"></el-option>
+                        <el-option :value="4" label="角色"></el-option>
+                        <el-option :value="5" label="分组"></el-option>
+                      </el-select>
+                      <el-select v-model="subFlowForm.formField" placeholder="请选择字段"
+                        class="form-field">
+                        <el-option v-for="item in usedFormItems" :key="item.__vModel__"
+                          :label="item.__config__.label" :value="item.__vModel__">
+                        </el-option>
+                      </el-select>
+                    </div>
                   </el-form-item>
                   <el-form-item label="审批节点" style="margin-bottom:0!important;"
                     v-if="subFlowForm.initiateType === 5">
@@ -252,11 +265,15 @@
                     </el-input>
                   </el-form-item>
                   <el-form-item style="margin-bottom:0!important;"
-                    v-if="subFlowForm.initiateType === 6">
+                    v-if="subFlowForm.initiateType === 6||subFlowForm.initiateType === 7">
+                    <org-select ref="subFlow-department-org" type="department"
+                      v-model="subFlowForm.initiateOrg" title="添加部门" class="mb-5" />
                     <org-select ref="subFlow-role-org" type="role"
                       v-model="subFlowForm.initiateRole" title="添加角色" class="mb-5" />
                     <org-select ref="subFlow-position-org" v-model="subFlowForm.initiatePos"
                       title="添加岗位" type="position" class="mb-5" />
+                    <org-select ref="subFlow-group-org" type="group"
+                      v-model="subFlowForm.initiateGroup" title="添加分组" class="mb-5" />
                     <org-select ref="subFlow-user-org" v-model="subFlowForm.initiator"
                       title="添加用户" />
                   </el-form-item>
@@ -272,7 +289,7 @@
               <el-form-item label="子流程表单">
                 <div slot="label" class="form-item-label">子流程表单</div>
                 <flow-dialog class="form-item-content" :value="subFlowForm.flowId"
-                  :title="subFlowForm.flowName" @change="onSubFlowIdChange" />
+                  :title="subFlowForm.flowName" :flowType="flowType" @change="onSubFlowIdChange" />
               </el-form-item>
               <el-form-item label="子流程传递">
                 <div slot="label" class="form-item-label">子流程传递</div>
@@ -329,8 +346,8 @@
                   <el-table-column type="index" width="50" label="序号" align="center" />
                   <el-table-column prop="field" label="模板名称" width="150">
                     <template slot-scope="scope">
-                      <p class="template-name" @click="showTemplateDetail(scope.row.templateId)">
-                        {{scope.row.msgTemplateName}}</p>
+                      <el-link @click='goDetail(scope.row.templateId)'>{{scope.row.msgTemplateName}}
+                      </el-link>
                     </template>
                   </el-table-column>
                   <el-table-column prop="field" label="参数名称" width="150">
@@ -368,6 +385,14 @@
         <el-tab-pane label="基础设置">
           <el-scrollbar class="config-scrollbar">
             <el-form label-position="top" :model="startForm" class="pd-10-20">
+              <el-form-item>
+                <div slot="label" class="form-item-label">{{flowType==1?"功能":"表单"}}设置</div>
+                <div class="form-item-content">
+                  <flow-form-dialog :value="startForm.formId" :title="startForm.formName"
+                    :type="flowType" @change="onStartFormIdChange" :clearable="false"
+                    :placeholder='"请选择"+(flowType==1?"功能":"表单")' />
+                </div>
+              </el-form-item>
               <el-form-item label="发起设置" v-if="flowType!=1">
                 <div slot="label" class="form-item-label">发起设置
                   <el-tooltip content="谁可以发起 默认所有人,需要设置请选择" placement="top">
@@ -375,31 +400,39 @@
                   </el-tooltip>
                 </div>
                 <div class="form-item-content">
+                  <org-select ref="start-department-org" type="department" v-model="initiateOrg"
+                    title="添加部门" class="mb-5" />
                   <org-select ref="start-role-org" type="role" v-model="initiateRole" title="添加角色"
                     class="mb-5" />
                   <org-select ref="start-position-org" type="position" v-model="initiatePos"
                     title="添加岗位" class="mb-5" />
+                  <org-select ref="start-group-org" type="group" v-model="initiateGroup"
+                    title="添加分组" class="mb-5" />
                   <org-select ref="start-user-org" type="user" v-model="initiator" title="添加用户" />
                 </div>
               </el-form-item>
               <el-form-item label="抄送设置">
                 <div slot="label" class="form-item-label">抄送设置</div>
                 <div class="form-item-content">
+                  <org-select ref="start-copy-department-org" type="department"
+                    v-model="startForm.circulateOrg" title="添加部门" class="mb-5" />
                   <org-select ref="start-copy-role-org" type="role"
                     v-model="startForm.circulateRole" title="添加角色" class="mb-5" />
                   <org-select ref="start-copy-position-org" v-model="startForm.circulatePosition"
                     title="添加岗位" type="position" class="mb-5" />
+                  <org-select ref="start-copy-group-org" type="group"
+                    v-model="startForm.circulateGroup" title="添加分组" class="mb-5" />
                   <org-select ref="start-copy-user-org" v-model="startForm.circulateUser"
                     title="添加用户" class="mb-5" />
                   <el-form-item>
-                    <div slot="label">附加条件
+                    <div slot="label">抄送人范围
                       <el-tooltip content="抄送人员增加人员选择范围附加条件" placement="top">
                         <a class="el-icon-warning-outline"></a>
                       </el-tooltip>
                     </div>
                     <el-select v-model="startForm.extraCopyRule">
-                      <el-option v-for="(item,i) in extraRuleOptions" :key="i" :label="item.label"
-                        :value="item.value" />
+                      <el-option v-for="(item,i) in extraRuleOptions" :key="i"
+                        :label="item.value==1?'无抄送人范围':item.label" :value="item.value" />
                     </el-select>
                   </el-form-item>
                   <el-checkbox v-model="startForm.isCustomCopy">允许自选抄送人</el-checkbox>
@@ -510,7 +543,7 @@
                 <div class="form-sub-title">汇总设置</div>
                 <el-select v-model="startForm.summaryType" placeholder="请选择">
                   <el-option label="汇总全部流转记录" :value="0"></el-option>
-                  <el-option label="汇总通过及拒绝流转记录" :value="1"></el-option>
+                  <el-option label="汇总通过及退回流转记录" :value="1"></el-option>
                 </el-select>
               </div>
               <el-form-item label="流程评论">
@@ -718,8 +751,8 @@
                   <el-table-column type="index" width="50" label="序号" align="center" />
                   <el-table-column prop="field" label="模板名称" width="150">
                     <template slot-scope="scope">
-                      <p class="template-name" @click="showTemplateDetail(scope.row.templateId)">
-                        {{scope.row.msgTemplateName}}</p>
+                      <el-link @click='goDetail(scope.row.templateId)'>{{scope.row.msgTemplateName}}
+                      </el-link>
                     </template>
                   </el-table-column>
                   <el-table-column prop="field" label="参数名称" width="150">
@@ -775,8 +808,8 @@
                   <el-table-column type="index" width="50" label="序号" align="center" />
                   <el-table-column prop="field" label="模板名称" width="150">
                     <template slot-scope="scope">
-                      <p class="template-name" @click="showTemplateDetail(scope.row.templateId)">
-                        {{scope.row.msgTemplateName}}</p>
+                      <el-link @click='goDetail(scope.row.templateId)'>{{scope.row.msgTemplateName}}
+                      </el-link>
                     </template>
                   </el-table-column>
                   <el-table-column prop="field" label="参数名称" width="150">
@@ -832,8 +865,8 @@
                   <el-table-column type="index" width="50" label="序号" align="center" />
                   <el-table-column prop="field" label="模板名称" width="150">
                     <template slot-scope="scope">
-                      <p class="template-name" @click="showTemplateDetail(scope.row.templateId)">
-                        {{scope.row.msgTemplateName}}</p>
+                      <el-link @click='goDetail(scope.row.templateId)'>{{scope.row.msgTemplateName}}
+                      </el-link>
                     </template>
                   </el-table-column>
                   <el-table-column prop="field" label="参数名称" width="150">
@@ -866,8 +899,8 @@
                 </el-table>
               </div>
               <el-form-item>
-                <div slot="label" class="form-item-label">节点拒绝
-                  <el-tooltip content="所有节点审核人拒绝的时候" placement="top">
+                <div slot="label" class="form-item-label">节点退回
+                  <el-tooltip content="所有节点审核人退回的时候" placement="top">
                     <a class="el-icon-warning-outline"></a>
                   </el-tooltip>
                 </div>
@@ -889,8 +922,8 @@
                   <el-table-column type="index" width="50" label="序号" align="center" />
                   <el-table-column prop="field" label="模板名称" width="150">
                     <template slot-scope="scope">
-                      <p class="template-name" @click="showTemplateDetail(scope.row.templateId)">
-                        {{scope.row.msgTemplateName}}</p>
+                      <el-link @click='goDetail(scope.row.templateId)'>{{scope.row.msgTemplateName}}
+                      </el-link>
                     </template>
                   </el-table-column>
                   <el-table-column prop="field" label="参数名称" width="150">
@@ -946,8 +979,8 @@
                   <el-table-column type="index" width="50" label="序号" align="center" />
                   <el-table-column prop="field" label="模板名称" width="150">
                     <template slot-scope="scope">
-                      <p class="template-name" @click="showTemplateDetail(scope.row.templateId)">
-                        {{scope.row.msgTemplateName}}</p>
+                      <el-link @click='goDetail(scope.row.templateId)'>{{scope.row.msgTemplateName}}
+                      </el-link>
                     </template>
                   </el-table-column>
                   <el-table-column prop="field" label="参数名称" width="150">
@@ -1003,8 +1036,8 @@
                   <el-table-column type="index" width="50" label="序号" align="center" />
                   <el-table-column prop="field" label="模板名称" width="150">
                     <template slot-scope="scope">
-                      <p class="template-name" @click="showTemplateDetail(scope.row.templateId)">
-                        {{scope.row.msgTemplateName}}</p>
+                      <el-link @click='goDetail(scope.row.templateId)'>{{scope.row.msgTemplateName}}
+                      </el-link>
                     </template>
                   </el-table-column>
                   <el-table-column prop="field" label="参数名称" width="150">
@@ -1054,8 +1087,8 @@
                   <el-table-column type="index" width="50" label="序号" align="center" />
                   <el-table-column prop="field" label="模板名称" width="150">
                     <template slot-scope="scope">
-                      <p class="template-name" @click="showTemplateDetail(scope.row.templateId)">
-                        {{scope.row.msgTemplateName}}</p>
+                      <el-link @click='goDetail(scope.row.templateId)'>{{scope.row.msgTemplateName}}
+                      </el-link>
                     </template>
                   </el-table-column>
                   <el-table-column prop="field" label="参数名称" width="150">
@@ -1084,7 +1117,7 @@
             </el-form>
           </el-scrollbar>
         </el-tab-pane>
-        <el-tab-pane label="超时提醒">
+        <el-tab-pane label="超时处理">
           <el-scrollbar class="config-scrollbar">
             <el-form :model="startForm" class="pd-10-20" label-position="top">
               <el-form-item label="限时设置">
@@ -1237,6 +1270,31 @@
         <el-tab-pane label="基础设置" name="config">
           <el-scrollbar class="config-scrollbar">
             <el-form label-position="top" :model="approverForm" class="pd-10-20">
+              <template v-if="flowType!==1">
+                <el-form-item>
+                  <div slot="label" class="form-item-label">表单配置
+                    <el-tooltip content="审批节点不配置表单，默认引用发起节点表单" placement="top">
+                      <a class="el-icon-warning-outline"></a>
+                    </el-tooltip>
+                  </div>
+                  <div class="form-item-content">
+                    <flow-form-dialog :value="approverForm.formId" :title="approverForm.formName"
+                      :type="flowType" @change="onApproverFormIdChange" placeholder="请选择表单" />
+                  </div>
+                </el-form-item>
+                <el-form-item>
+                  <div slot="label" class="form-item-label">数据传递
+                    <el-tooltip content="不设置传递规则时字段名称相同自动赋值；设置传递规则时相同名称字段会自动赋值字段后再按传递规则赋值"
+                      placement="top">
+                      <a class="el-icon-warning-outline"></a>
+                    </el-tooltip>
+                  </div>
+                  <div class="form-item-content hand" @click="openApproverTransmitRuleBox">
+                    <el-input class="hand" :value="approverForm.assignList.length?'已设置':''"
+                      placeholder="请设置数据传递规则" suffix-icon="el-icon-arrow-down" readonly />
+                  </div>
+                </el-form-item>
+              </template>
               <el-form-item label="审批设置">
                 <div slot="label" class="form-item-label">审批设置</div>
                 <div class="form-item-content">
@@ -1258,7 +1316,7 @@
                   <div v-if="approverForm.assigneeType === 6" class="option-box-tip">
                     指定审批人处理审批单</div>
                   <div v-if="approverForm.assigneeType === 7" class="option-box-tip">
-                    指定可供选择的候选人处理审批单</div>
+                    默认所有人，需要设置请指定候选人范围处理审批单</div>
                   <div v-if="approverForm.assigneeType === 9" class="option-box-tip">
                     从目标服务中获取审批人</div>
                   <el-form-item label="发起者的" style="margin-bottom:0!important"
@@ -1269,25 +1327,24 @@
                       </el-option>
                     </el-select>
                   </el-form-item>
-                  <el-form-item label="发起者的" style="margin-bottom:0!important"
-                    v-if="approverForm.assigneeType === 2">
-                    <el-select v-model="approverForm.departmentLevel">
-                      <el-option v-for="item in 10" :key="item" :label="'第'+item+'级部门主管'"
-                        :value="item">
-                      </el-option>
-                    </el-select>
-                  </el-form-item>
-                  <el-form-item label="表单字段" style="margin-bottom:0!important"
+                  <el-form-item label="表单字段" style="margin-bottom:0"
                     v-if="approverForm.assigneeType === 4">
-                    <el-radio-group v-model="approverForm.formFieldType">
-                      <el-radio :label="1">用户</el-radio>
-                      <el-radio :label="2">部门</el-radio>
-                    </el-radio-group>
-                    <el-select v-model="approverForm.formField" placeholder="请选择字段">
-                      <el-option v-for="item in usedFormItems" :key="item.__vModel__"
-                        :label="item.__config__.label" :value="item.__vModel__">
-                      </el-option>
-                    </el-select>
+                    <div class="assignee-form">
+                      <el-select v-model="approverForm.formFieldType" placeholder="请选择字段"
+                        class="form-field-type">
+                        <el-option :value="1" label="用户"></el-option>
+                        <el-option :value="2" label="部门"></el-option>
+                        <el-option :value="3" label="岗位"></el-option>
+                        <el-option :value="4" label="角色"></el-option>
+                        <el-option :value="5" label="分组"></el-option>
+                      </el-select>
+                      <el-select v-model="approverForm.formField" placeholder="请选择字段"
+                        class="form-field">
+                        <el-option v-for="item in usedFormItems" :key="item.__vModel__"
+                          :label="item.__config__.label" :value="item.__vModel__">
+                        </el-option>
+                      </el-select>
+                    </div>
                   </el-form-item>
                   <el-form-item label="审批节点" style="margin-bottom:0!important"
                     v-if="approverForm.assigneeType === 5">
@@ -1311,16 +1368,20 @@
                   </el-form-item>
                   <el-form-item style="margin-bottom:0!important"
                     v-if="approverForm.assigneeType === 6||approverForm.assigneeType === 7">
+                    <org-select ref="approver-department-org" type="department" title="添加部门"
+                      v-model="approverForm.approverOrg" class="mb-5" />
                     <org-select ref="approver-role-org" type="role" title="添加角色"
                       v-model="approverForm.approverRole" class="mb-5" />
                     <org-select ref="approver-position-org" v-model="approverForm.approverPos"
                       title="添加岗位" type="position" class="mb-5" />
+                    <org-select ref="approver-group-org" type="group" title="添加分组"
+                      v-model="approverForm.approverGroup" class="mb-5" />
                     <org-select ref="approver-user-org" title="添加用户"
                       v-model="approverForm.approvers" />
                   </el-form-item>
                   <el-form-item style="margin-bottom:0!important"
                     v-if="approverForm.assigneeType === 6">
-                    <div slot="label">附加条件
+                    <div slot="label">审批人范围
                       <el-tooltip content="指定成员增加人员选择范围附加条件" placement="top">
                         <a class="el-icon-warning-outline"></a>
                       </el-tooltip>
@@ -1336,7 +1397,7 @@
                 <div slot="label" class="form-item-label">审批方式</div>
                 <div class="form-item-content">
                   <el-radio v-model="approverForm.counterSign" :label="0">
-                    或签（一名审批人同意或拒绝即可）</el-radio>
+                    或签（一名审批人同意或退回即可）</el-radio>
                   <el-radio v-model="approverForm.counterSign" :label="1">
                     会签（无序会签，当审批达到会签比例时，则该审批通过）</el-radio>
                   <el-radio v-model="approverForm.counterSign" :label="2">
@@ -1355,8 +1416,24 @@
                   </el-option>
                 </el-select>
               </el-form-item>
-              <el-form-item label="驳回设置">
-                <div slot="label" class="form-item-label">驳回设置</div>
+              <el-form-item label="退回设置">
+                <div slot="label" class="form-item-label">退回设置
+                  <el-tooltip content="纯表单流程设置退回到发起节点无效" placement="top">
+                    <i class="el-icon-warning-outline"></i>
+                  </el-tooltip>
+                </div>
+                <el-radio-group v-model="approverForm.rejectType" class="form-item-content">
+                  <el-radio :label="1">重新审批
+                    <el-tooltip content="若流程为A->B->C,C退回至A，则C->A->B->C" placement="top">
+                      <i class="el-icon-warning-outline"></i>
+                    </el-tooltip>
+                  </el-radio>
+                  <el-radio :label="2">从当前节点审批
+                    <el-tooltip content="若流程为A->B->C,C退回至A，则C->A->C" placement="top">
+                      <i class="el-icon-warning-outline"></i>
+                    </el-tooltip>
+                  </el-radio>
+                </el-radio-group>
                 <el-select class="form-item-content" v-model="approverForm.rejectStep"
                   placeholder="请选择">
                   <el-option v-for="item in rejectStepOptions" :key="item.nodeId"
@@ -1376,22 +1453,26 @@
               <el-form-item label="抄送设置">
                 <div slot="label" class="form-item-label">抄送设置</div>
                 <div class="form-item-content">
+                  <org-select ref="approver-copy-department-org" type="department"
+                    v-model="approverForm.circulateOrg" title="添加部门" class="mb-5" />
                   <org-select ref="approver-copy-role-org" type="role"
                     v-model="approverForm.circulateRole" title="添加角色" class="mb-5" />
                   <org-select ref="approver-copy-position-org"
                     v-model="approverForm.circulatePosition" title="添加岗位" type="position"
                     class="mb-5" />
+                  <org-select ref="approver-copy-group-org" type="group"
+                    v-model="approverForm.circulateGroup" title="添加分组" class="mb-5" />
                   <org-select ref="approver-copy-user-org" v-model="approverForm.circulateUser"
                     title="添加用户" class="mb-5" />
                   <el-form-item>
-                    <div slot="label">附加条件
+                    <div slot="label">抄送人范围
                       <el-tooltip content="抄送人员增加人员选择范围附加条件" placement="top">
                         <a class="el-icon-warning-outline"></a>
                       </el-tooltip>
                     </div>
                     <el-select v-model="approverForm.extraCopyRule">
-                      <el-option v-for="(item,i) in extraRuleOptions" :key="i" :label="item.label"
-                        :value="item.value" />
+                      <el-option v-for="(item,i) in extraRuleOptions" :key="i"
+                        :label="item.value==1?'无抄送人范围':item.label" :value="item.value" />
                     </el-select>
                   </el-form-item>
                   <el-checkbox v-model="approverForm.isCustomCopy">允许自选抄送人</el-checkbox>
@@ -1415,7 +1496,7 @@
                     <el-input v-model="approverForm.auditBtnText" />
                   </div>
                   <div class="per-cell">
-                    <el-checkbox v-model="approverForm.hasRejectBtn">驳回</el-checkbox>
+                    <el-checkbox v-model="approverForm.hasRejectBtn">退回</el-checkbox>
                     <el-input v-model="approverForm.rejectBtnText" />
                   </div>
                   <div class="per-cell">
@@ -1434,6 +1515,16 @@
                     <p style="width:112px"></p>
                     <JNPF-TreeSelect :options="printTplList" v-model="approverForm.printId"
                       placeholder="请选择打印模板" lastLevel clearable></JNPF-TreeSelect>
+                  </div>
+                  <div class="per-cell">
+                    <div slot="label" class="has-free-approver">
+                      <el-checkbox v-model="approverForm.hasFreeApproverBtn">加签<el-tooltip
+                          content="允许在审批单中增加临时审批人" placement="top">
+                          <a class="el-icon-warning-outline"></a>
+                        </el-tooltip>
+                      </el-checkbox>
+                    </div>
+                    <el-input v-model="approverForm.hasFreeApproverBtnText" />
                   </div>
                 </div>
               </el-form-item>
@@ -1475,14 +1566,6 @@
                   </el-tooltip>
                 </div>
                 <el-switch v-model="approverForm.hasOpinion" />
-              </el-form-item>
-              <el-form-item>
-                <div slot="label" class="form-item-label">允许加签
-                  <el-tooltip content="允许在审批单中增加临时审批人" placement="top">
-                    <a class="el-icon-warning-outline"></a>
-                  </el-tooltip>
-                </div>
-                <el-switch v-model="approverForm.hasFreeApprover" />
               </el-form-item>
               <el-form-item label="说明">
                 <div slot="label" class="form-item-label">说明</div>
@@ -1556,8 +1639,8 @@
                   </el-table-column>
                 </el-table>
               </div>
-              <el-form-item label="驳回事件">
-                <div slot="label" class="form-item-label">驳回事件</div>
+              <el-form-item label="退回事件">
+                <div slot="label" class="form-item-label">退回事件</div>
                 <el-switch v-model="approverForm.rejectFuncConfig.on" />
               </el-form-item>
               <div class="form-item-content form-item-content-first"
@@ -1768,8 +1851,8 @@
                   <el-table-column type="index" width="50" label="序号" align="center" />
                   <el-table-column prop="field" label="模板名称" width="150">
                     <template slot-scope="scope">
-                      <p class="template-name" @click="showTemplateDetail(scope.row.templateId)">
-                        {{scope.row.msgTemplateName}}</p>
+                      <el-link @click='goDetail(scope.row.templateId)'>{{scope.row.msgTemplateName}}
+                      </el-link>
                     </template>
                   </el-table-column>
                   <el-table-column prop="field" label="参数名称" width="150">
@@ -1802,8 +1885,8 @@
                 </el-table>
               </div>
               <el-form-item>
-                <div slot="label" class="form-item-label">节点拒绝
-                  <el-tooltip content="当前节点审核人拒绝的时候" placement="top">
+                <div slot="label" class="form-item-label">节点退回
+                  <el-tooltip content="当前节点审核人退回的时候" placement="top">
                     <a class="el-icon-warning-outline"></a>
                   </el-tooltip>
                 </div>
@@ -1825,8 +1908,8 @@
                   <el-table-column type="index" width="50" label="序号" align="center" />
                   <el-table-column prop="field" label="模板名称" width="150">
                     <template slot-scope="scope">
-                      <p class="template-name" @click="showTemplateDetail(scope.row.templateId)">
-                        {{scope.row.msgTemplateName}}</p>
+                      <el-link @click='goDetail(scope.row.templateId)'>{{scope.row.msgTemplateName}}
+                      </el-link>
                     </template>
                   </el-table-column>
                   <el-table-column prop="field" label="参数名称" width="150">
@@ -1882,8 +1965,8 @@
                   <el-table-column type="index" width="50" label="序号" align="center" />
                   <el-table-column prop="field" label="模板名称" width="150">
                     <template slot-scope="scope">
-                      <p class="template-name" @click="showTemplateDetail(scope.row.templateId)">
-                        {{scope.row.msgTemplateName}}</p>
+                      <el-link @click='goDetail(scope.row.templateId)'>{{scope.row.msgTemplateName}}
+                      </el-link>
                     </template>
                   </el-table-column>
                   <el-table-column prop="field" label="参数名称" width="150">
@@ -1939,8 +2022,8 @@
                   <el-table-column type="index" width="50" label="序号" align="center" />
                   <el-table-column prop="field" label="模板名称" width="150">
                     <template slot-scope="scope">
-                      <p class="template-name" @click="showTemplateDetail(scope.row.templateId)">
-                        {{scope.row.msgTemplateName}}</p>
+                      <el-link @click='goDetail(scope.row.templateId)'>{{scope.row.msgTemplateName}}
+                      </el-link>
                     </template>
                   </el-table-column>
                   <el-table-column prop="field" label="参数名称" width="150">
@@ -1990,8 +2073,8 @@
                   <el-table-column type="index" width="50" label="序号" align="center" />
                   <el-table-column prop="field" label="模板名称" width="150">
                     <template slot-scope="scope">
-                      <p class="template-name" @click="showTemplateDetail(scope.row.templateId)">
-                        {{scope.row.msgTemplateName}}</p>
+                      <el-link @click='goDetail(scope.row.templateId)'>{{scope.row.msgTemplateName}}
+                      </el-link>
                     </template>
                   </el-table-column>
                   <el-table-column prop="field" label="参数名称" width="150">
@@ -2020,7 +2103,7 @@
             </el-form>
           </el-scrollbar>
         </el-tab-pane>
-        <el-tab-pane label="超时提醒">
+        <el-tab-pane label="超时处理">
           <el-scrollbar class="config-scrollbar">
             <el-form :model="approverForm" class="pd-10-20" label-position="top">
               <el-form-item label="限时设置">
@@ -2177,36 +2260,77 @@
       <el-button size="small" @click="cancel">取消</el-button>
       <el-button size="small" type="primary" @click="confirm">确定</el-button>
     </div>
-    <el-dialog title="子流程传递" :close-on-click-modal="false" :visible.sync="ruleVisible"
+    <el-dialog title="数据传递" :close-on-click-modal="false" :visible.sync="ruleVisible"
       class="JNPF-dialog JNPF-dialog_center rule-dialog" lock-scroll append-to-body width='700px'>
-      <div class="option-box-tip">当父流程流转到子流程时，将对应的字段赋值给子流程</div>
-      <el-row :gutter="10" v-for="(item,i) in assignList" :key="i" class="mb-10">
-        <el-col :span="2" class="rule-cell">父流程</el-col>
-        <el-col :span="7" class="rule-cell">
-          <el-select v-model="item.parentField" placeholder="请选择字段">
-            <el-option v-for="item in usedFormItems" :key="item.__vModel__"
-              :label="item.__config__.label" :value="item.__vModel__" />
-          </el-select>
-        </el-col>
-        <el-col :span="4" class="rule-cell mid">赋值给</el-col>
-        <el-col :span="2" class="rule-cell">子流程</el-col>
-        <el-col :span="7" class="rule-cell">
-          <el-select v-model="item.childField" placeholder="请选择字段">
-            <el-option v-for="item in childFieldOptions" :key="item.vmodel" :label="item.label"
-              :value="item.vmodel" />
-          </el-select>
-        </el-col>
-        <el-col :span="2" class="rule-cell">
-          <el-button type="danger" icon="el-icon-close" @click="delRule(i)">
-          </el-button>
-        </el-col>
-      </el-row>
-      <div class="table-actions" @click="addRule">
-        <el-button type="text" icon="el-icon-plus">新增规则</el-button>
-      </div>
+      <el-tabs class="JNPF-el_tabs node-tabs">
+        <el-tab-pane :label="item.title" v-for="(item,i) in assignList" :key="i">
+          <div class="option-box-tip">当父流程流转到子流程时，将对应的上一节点表单字段赋值给子流程发起节点</div>
+          <el-row :gutter="10" v-for="(child,cIndex) in item.ruleList" :key="cIndex" class="mb-10">
+            <el-col :span="2" class="rule-cell">父流程</el-col>
+            <el-col :span="7" class="rule-cell">
+              <el-select v-model="child.parentField" placeholder="请选择字段" filterable clearable>
+                <el-option v-for="field in item.formFieldList" :key="field.__vModel__"
+                  :label="field.__config__.label" :value="field.__vModel__" />
+              </el-select>
+            </el-col>
+            <el-col :span="4" class="rule-cell mid">赋值给</el-col>
+            <el-col :span="2" class="rule-cell">子流程</el-col>
+            <el-col :span="7" class="rule-cell">
+              <el-select v-model="child.childField" placeholder="请选择字段" filterable clearable>
+                <el-option v-for="field in childFieldOptions" :key="field.__vModel__"
+                  :label="field.__config__.label" :value="field.__vModel__" />
+              </el-select>
+            </el-col>
+            <el-col :span="2" class="rule-cell">
+              <el-button type="danger" icon="el-icon-close" @click="delTransmitRule(i,cIndex)">
+              </el-button>
+            </el-col>
+          </el-row>
+          <div class="table-actions" @click="addTransmitRule(i)">
+            <el-button type="text" icon="el-icon-plus">新增规则</el-button>
+          </div>
+        </el-tab-pane>
+      </el-tabs>
       <span slot="footer" class="dialog-footer">
         <el-button @click="ruleVisible = false">取消</el-button>
         <el-button type="primary" @click="saveRule">确定</el-button>
+      </span>
+    </el-dialog>
+    <el-dialog title="数据传递" :close-on-click-modal="false"
+      :visible.sync="approverTransmitRuleVisible" class="JNPF-dialog JNPF-dialog_center rule-dialog"
+      lock-scroll append-to-body width='700px'>
+      <el-tabs class="JNPF-el_tabs node-tabs">
+        <el-tab-pane :label="item.title" v-for="(item,i) in assignList" :key="i">
+          <div class="option-box-tip">当节点流转到本节点时，将对应的上一节点的字段赋值给本节点</div>
+          <el-row :gutter="10" v-for="(child,cIndex) in item.ruleList" :key="cIndex" class="mb-10">
+            <el-col :span="2" class="rule-cell">上节点</el-col>
+            <el-col :span="7" class="rule-cell">
+              <el-select v-model="child.parentField" placeholder="请选择字段" filterable clearable>
+                <el-option v-for="field in item.formFieldList" :key="field.__vModel__"
+                  :label="field.__config__.label" :value="field.__vModel__" />
+              </el-select>
+            </el-col>
+            <el-col :span="4" class="rule-cell mid">赋值给</el-col>
+            <el-col :span="2" class="rule-cell">本节点</el-col>
+            <el-col :span="7" class="rule-cell">
+              <el-select v-model="child.childField" placeholder="请选择字段" filterable clearable>
+                <el-option v-for="item in formFieldsOptions" :key="item.__vModel__"
+                  :label="item.__config__.label" :value="item.__vModel__" />
+              </el-select>
+            </el-col>
+            <el-col :span="2" class="rule-cell">
+              <el-button type="danger" icon="el-icon-close" @click="delTransmitRule(i,cIndex)">
+              </el-button>
+            </el-col>
+          </el-row>
+          <div class="table-actions" @click="addTransmitRule(i)">
+            <el-button type="text" icon="el-icon-plus">新增规则</el-button>
+          </div>
+        </el-tab-pane>
+      </el-tabs>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="approverTransmitRuleVisible = false">取消</el-button>
+        <el-button type="primary" @click="saveApproverTransmitRule">确定</el-button>
       </span>
     </el-dialog>
     <FormulaDialog :visible.sync="formulaVisible" :value="activeItem.field"
@@ -2215,16 +2339,17 @@
   </el-drawer>
 </template>
 <script>
-import { FlowEngineSelector, getFormDataFields } from '@/api/workFlow/FlowEngine'
+import { getFlowFormInfo } from '@/api/workFlow/FlowEngine'
+import { getFormInfo } from '@/api/workFlow/FormDesign'
 import { NodeUtils } from "../FlowCard/util"
 import nodeConfig from "../FlowCard/config"
-import { getDrawingList } from '@/components/Generator/utils/db'
 import OrgSelect from '../OrgSelect'
 import MsgDialog from './msgDialog'
 import InterfaceDialog from './InterfaceDialog'
 import FormulaDialog from './formulaDialog'
 import FlowDialog from './FlowDialog'
 import Detail from './TemplateDetail'
+import FlowFormDialog from "./FlowFormDialog"
 const requiredDisabled = (jnpfKey) => {
   return ['billRule', 'createUser', 'createTime', 'modifyTime', 'modifyUser', 'currPosition', 'currOrganize', 'table'].includes(jnpfKey)
 }
@@ -2253,9 +2378,12 @@ const defaultSubFlowForm = {
   initiator: [],
   initiatePos: [],
   initiateRole: [],
+  initiateOrg: [],
+  initiateGroup: [],
   flowId: '',
   flowName: '',
   assignList: [],
+  prevNodeList: [],
   launchMsgConfig: {
     on: 3,
     msgId: '',
@@ -2265,14 +2393,16 @@ const defaultSubFlowForm = {
   isAsync: false
 }
 const defaultApproverForm = {
-  extraRule: 1, // 附加条件,默认无附加条件
-  extraCopyRule: 1, // 抄送附加条件,默认无附加条件
+  extraRule: 1, // 审批人范围,默认无审批人范围
+  extraCopyRule: 1, // 抄送审批人范围,默认无审批人范围
   hasAgreeRule: false, // 自动同意规则,默认不启用
   agreeRules: [], // 自动同意规则数组
   formFieldType: 1,// 表单字段审核方式的类型(1-用户 2-部门)
   approvers: [], // 审批人集合
   approverPos: [], // 审批岗位集合
   approverRole: [], // 审批角色集合
+  approverOrg: [], // 审批部门集合
+  approverGroup: [], // 审批分组集合
   assigneeType: 6, // 指定审批人
   userType: 'role', //role,position,user
   formOperates: [], // 表单权限集合
@@ -2281,7 +2411,8 @@ const defaultApproverForm = {
   circulateUser: [],  // 抄送人集合
   isCustomCopy: false,
   progress: '50',  // 进度
-  rejectStep: '0',  // 驳回步骤
+  rejectType: 1, //退回
+  rejectStep: '0',  // 退回步骤
   description: '',  // 节点描述
   managerLevel: 1,
   departmentLevel: 1,
@@ -2291,13 +2422,14 @@ const defaultApproverForm = {
   getUserUrl: '',
   counterSign: 0,
   noApproverHandler: true,
-  hasFreeApprover: false,
+  hasFreeApproverBtn: false,
+  hasFreeApproverBtnText: '加 签',
   hasSaveBtn: false,
   saveBtnText: '暂 存',
   hasAuditBtn: true,
   auditBtnText: '通 过',
   hasRejectBtn: true,
-  rejectBtnText: '拒 绝',
+  rejectBtnText: '退 回',
   hasRevokeBtn: true,
   revokeBtnText: '撤 回',
   hasTransferBtn: true,
@@ -2307,6 +2439,11 @@ const defaultApproverForm = {
   printId: '', // 打印模板
   hasSign: false,
   hasOpinion: true,
+  formId: "",
+  formName: "",
+  formFieldList: [],
+  prevNodeList: [],
+  assignList: [],
   timeLimitConfig: {
     on: 2,  // 开启
     nodeLimit: 0, // 节点限定时长起始值类型
@@ -2394,11 +2531,12 @@ const defaultApproverForm = {
   },
 }
 const defaultStep = [{
-  nodeId: '1',
-  properties: { title: '上级审批节点' }
-}, {
   nodeId: '0',
   properties: { title: '流程发起' }
+
+}, {
+  nodeId: '1',
+  properties: { title: '上级审批节点' }
 }]
 const typeOptions = [
   {
@@ -2428,11 +2566,11 @@ const typeOptions = [
   {
     label: '接口服务',
     value: 9
+  },
+  {
+    label: '候选人员',
+    value: 7
   }]
-const assigneeTypeOptions = [...typeOptions, {
-  label: '候选人员',
-  value: 7
-}]
 const noticeOptions = [{
   value: 1,
   label: '自定义'
@@ -2453,7 +2591,7 @@ const overTimeOptions = [{
 const extraRuleOptions = [
   {
     value: 1,
-    label: '无附加条件'
+    label: '无审批人范围'
   },
   {
     value: 6,
@@ -2562,7 +2700,7 @@ const systemFieldOptions = [{
 }]
 export default {
   props: [/*当前节点数据*/"value", /*整个节点数据*/"processData", "flowType"],
-  components: { OrgSelect, MsgDialog, InterfaceDialog, FormulaDialog, FlowDialog, Detail },
+  components: { OrgSelect, MsgDialog, InterfaceDialog, FormulaDialog, FlowDialog, Detail, FlowFormDialog },
   data() {
     return {
       temporaryContent: '',
@@ -2578,13 +2716,15 @@ export default {
       initiator: [],
       initiatePos: [],
       initiateRole: [],
+      initiateOrg: [],
+      initiateGroup: [],
       priorityLength: 0, // 当为条件节点时  显示节点优先级选项的数据
       startForm: JSON.parse(JSON.stringify(nodeConfig.defaultStartForm)),
       ruleVisible: false,
       subFlowForm: JSON.parse(JSON.stringify(defaultSubFlowForm)),
       approverForm: JSON.parse(JSON.stringify(defaultApproverForm)),
       initiateTypeOptions: typeOptions,
-      assigneeTypeOptions: assigneeTypeOptions,
+      assigneeTypeOptions: typeOptions,
       noticeOptions,
       nodeNoticeOptions,
       noticeOptionsData,
@@ -2592,7 +2732,7 @@ export default {
       systemFieldOptions,
       overTimeOptions,
       extraRuleOptions,
-      rejectStepOptions: [],
+      realNodeList: [],
       progressOptions: ['10', '20', '30', '40', '50', '60', '70', '80', '90'],
       symbolOptions: [
         {
@@ -2654,12 +2794,15 @@ export default {
       }],
       assignList: [],
       printTplList: [],
-      flowOptions: [],
       childFieldOptions: [],
       nodeOptions: [],
       formulaVisible: false,
       activeItem: {},
-      viewVisible: false
+      viewVisible: false,
+      formFieldList: [],
+      approverTransmitRuleVisible: false,
+      prevNodeList: [],
+      isPrevNodeWithSubForm: false,
     };
   },
   computed: {
@@ -2668,40 +2811,11 @@ export default {
       // 发起人是默认就有得  所以需要加 1
       return this.pconditions.length - this.showingPCons.length + 1;
     },
-    usedFormItems() {
-      let list = []
-      const loop = (data, parent) => {
-        if (!data) return
-        if (data.__config__ && data.__config__.jnpfKey !== 'table' && data.__config__.children && Array.isArray(data.__config__.children)) {
-          loop(data.__config__.children, data)
-        }
-        if (Array.isArray(data)) data.forEach(d => loop(d, parent))
-        if (data.__vModel__ && data.__config__.jnpfKey !== 'table') list.push(data)
-      }
-      loop(getDrawingList())
-      const formItems = list.filter(o => o.__vModel__.indexOf('-') < 0)
-      return formItems
-    },
     formFieldsOptions() {
-      let list = []
-      const loop = (data, parent) => {
-        if (!data) return
-        if (data.__vModel__ && data.__config__.jnpfKey !== 'table') {
-          const isTableChild = parent && parent.__config__ && parent.__config__.jnpfKey === 'table'
-          let obj = JSON.parse(JSON.stringify(data))
-          if (isTableChild) {
-            obj.__vModel__ = parent.__vModel__ + '-' + data.__vModel__
-            obj.__config__.label = parent.__config__.label + '-' + data.__config__.label
-          }
-          list.push(obj)
-        }
-        if (data.__config__ && data.__config__.children && Array.isArray(data.__config__.children)) {
-          loop(data.__config__.children, data)
-        }
-        if (Array.isArray(data)) data.forEach(d => loop(d, parent))
-      }
-      loop(getDrawingList())
-      return list
+      return this.formFieldList.filter(o => o.__config__.jnpfKey !== 'table')
+    },
+    usedFormItems() {
+      return this.formFieldsOptions.filter(o => o.__vModel__.indexOf('-') < 0)
     },
     funcOptions() {
       let options = [
@@ -2711,11 +2825,21 @@ export default {
       return options
     },
     funcRequiredOptions() {
-      let options = this.formFieldsOptions.filter(o => o.__config__ && o.__config__.required)
-      return options
+      return this.formFieldsOptions.filter(o => o.__config__ && o.__config__.required)
     },
+    rejectStepOptions() {
+      let options = []
+      const list = [{
+        nodeId: '2',
+        properties: { title: '自选审批节点' }
+      }]
+      options = [...defaultStep, ...list, ...this.realNodeList]
+      if (this.approverForm.rejectType == 2) {
+        options = options.filter(o => o.nodeId != 1)
+      }
+      return options
+    }
   },
-
   methods: {
     handleSelect(item) {
       this.temporaryContent += "{" + item.id + "}"
@@ -2754,6 +2878,13 @@ export default {
       this.approverForm.approvers = []
       this.approverForm.approverPos = []
       this.approverForm.approverRole = []
+      this.approverForm.approverOrg = []
+      this.approverForm.approverGroup = []
+      this.subFlowForm.initiator = []
+      this.subFlowForm.initiatePos = []
+      this.subFlowForm.initiateRole = []
+      this.subFlowForm.initiateOrg = []
+      this.subFlowForm.initiateGroup = []
     },
     onOrgChange(data, key) {
 
@@ -2778,31 +2909,35 @@ export default {
     couldShowIt(item, ...tag) {
       return tag.includes(item.tag) && this.showingPCons.includes(item.formId);
     },
-    initFormOperates(target) {
+    initFormOperates(target, isUpdate, isSameForm) {
       const formOperates = target.properties && target.properties.formOperates || []
       let res = []
-      if (!formOperates.length) {
-        const loop = (data, parent) => {
-          if (!data) return
-          if (data.__vModel__) {
-            const isTableChild = parent && parent.__config__ && parent.__config__.jnpfKey === 'table'
-            res.push({
-              id: isTableChild ? parent.__vModel__ + '-' + data.__vModel__ : data.__vModel__,
-              name: isTableChild ? parent.__config__.label + '-' + data.__config__.label : data.__config__.label,
-              required: data.__config__.required,
-              requiredDisabled: requiredDisabled(data.__config__.jnpfKey) || data.__config__.required,
-              jnpfKey: data.__config__.jnpfKey,
-              dataType: getDataType(data),
-              read: true,
-              write: false
-            })
-          }
-          if (Array.isArray(data)) data.forEach(d => loop(d, parent))
-          if (data.__config__ && data.__config__.children && Array.isArray(data.__config__.children)) {
-            loop(data.__config__.children, data)
-          }
+      const getWriteById = id => {
+        const arr = formOperates.filter(o => o.id === id)
+        return arr.length ? arr[0].write : NodeUtils.isStartNode(target)
+      }
+      const getReadById = id => {
+        const arr = formOperates.filter(o => o.id === id)
+        return arr.length ? arr[0].read : true
+      }
+      const getRequiredById = id => {
+        const arr = formOperates.filter(o => o.id === id)
+        return arr.length ? arr[0].required : false
+      }
+      if (!formOperates.length || isUpdate) {
+        for (let i = 0; i < this.formFieldList.length; i++) {
+          const data = this.formFieldList[i];
+          res.push({
+            id: data.__vModel__,
+            name: data.__config__.label,
+            required: !isSameForm ? data.__config__.required : data.__config__.required || getRequiredById(data.__vModel__),
+            requiredDisabled: requiredDisabled(data.__config__.jnpfKey) || data.__config__.required,
+            jnpfKey: data.__config__.jnpfKey,
+            dataType: getDataType(data),
+            read: !isSameForm ? true : getReadById(data.__vModel__),
+            write: !isSameForm ? NodeUtils.isStartNode(target) : getWriteById(data.__vModel__),
+          })
         }
-        loop(getDrawingList())
       } else {
         res = formOperates
       }
@@ -2857,15 +2992,21 @@ export default {
       this.properties.initiator = this.initiator
       this.properties.initiatePos = this.initiatePos
       this.properties.initiateRole = this.initiateRole
+      this.properties.initiateOrg = this.initiateOrg
+      this.properties.initiateGroup = this.initiateGroup
       let content = '',
+        initiatorOrgText = this.getOrgSelectLabel('start-department'),
+        initiatorGroupText = this.getOrgSelectLabel('start-group'),
         initiatorText = this.getOrgSelectLabel('start-user'),
         initiatorPosText = this.getOrgSelectLabel('start-position'),
         initiatorRoleText = this.getOrgSelectLabel('start-role')
-      if (!initiatorRoleText && !initiatorText && !initiatorPosText) {
+      if (!initiatorOrgText && !initiatorGroupText && !initiatorRoleText && !initiatorText && !initiatorPosText) {
         content = "所有人"
       } else {
-        content += initiatorRoleText
+        content += initiatorOrgText
+        content += (content && initiatorRoleText ? ',' : '') + initiatorRoleText
         content += (content && initiatorPosText ? ',' : '') + initiatorPosText
+        content += (content && initiatorGroupText ? ',' : '') + initiatorGroupText
         content += (content && initiatorText ? ',' : '') + initiatorText
       }
       this.$emit("confirm", this.properties, content);
@@ -2898,18 +3039,22 @@ export default {
       }
       let content = ''
       if (this.subFlowForm.initiateType === 6) {
-        if (!this.subFlowForm.initiator.length && !this.subFlowForm.initiatePos.length && !this.subFlowForm.initiateRole.length) {
+        if (!this.subFlowForm.initiator.length && !this.subFlowForm.initiatePos.length && !this.subFlowForm.initiateRole.length && !this.subFlowForm.initiateOrg.length && !this.subFlowForm.initiateGroup.length) {
           this.$message({
             message: '请设置发起人',
             type: 'error',
           })
           return
         }
-        let initiatorText = this.getOrgSelectLabel('subFlow-user'),
-          initiatePosText = this.getOrgSelectLabel('subFlow-position'),
-          initiateRoleText = this.getOrgSelectLabel('subFlow-role')
-        content += initiateRoleText
-        content += (content && initiatePosText ? ',' : '') + initiatePosText
+        let initiatorOrgText = this.getOrgSelectLabel('subFlow-department'),
+          initiatorGroupText = this.getOrgSelectLabel('subFlow-group'),
+          initiatorText = this.getOrgSelectLabel('subFlow-user'),
+          initiatorPosText = this.getOrgSelectLabel('subFlow-position'),
+          initiatorRoleText = this.getOrgSelectLabel('subFlow-role')
+        content += initiatorOrgText
+        content += (content && initiatorRoleText ? ',' : '') + initiatorRoleText
+        content += (content && initiatorPosText ? ',' : '') + initiatorPosText
+        content += (content && initiatorGroupText ? ',' : '') + initiatorGroupText
         content += (content && initiatorText ? ',' : '') + initiatorText
       } else {
         content = this.initiateTypeOptions.find(t => t.value === this.subFlowForm.initiateType).label
@@ -2970,7 +3115,7 @@ export default {
       const assigneeType = this.approverForm.assigneeType
       let content = ''
       if (assigneeType == 6) {
-        if (!this.approverForm.approvers.length && !this.approverForm.approverPos.length && !this.approverForm.approverRole.length) {
+        if (!this.approverForm.approvers.length && !this.approverForm.approverPos.length && !this.approverForm.approverRole.length && !this.approverForm.approverOrg.length && !this.approverForm.approverGroup.length) {
           this.$message({
             message: '请设置审批人',
             type: 'error',
@@ -2980,9 +3125,13 @@ export default {
         // approver
         let approverText = this.getOrgSelectLabel('approver-user'),
           approverPosText = this.getOrgSelectLabel('approver-position'),
-          approverRoleText = this.getOrgSelectLabel('approver-role')
-        content += approverRoleText
+          approverRoleText = this.getOrgSelectLabel('approver-role'),
+          approverOrgText = this.getOrgSelectLabel('approver-department'),
+          approverGroupText = this.getOrgSelectLabel('approver-group')
+        content += approverOrgText
+        content += (content && approverRoleText ? ',' : '') + approverRoleText
         content += (content && approverPosText ? ',' : '') + approverPosText
+        content += (content && approverGroupText ? ',' : '') + approverGroupText
         content += (content && approverText ? ',' : '') + approverText
       } else {
         content = this.assigneeTypeOptions.find(t => t.value === assigneeType).label
@@ -2997,13 +3146,6 @@ export default {
       if (assigneeType == 5 && !this.approverForm.nodeId) {
         this.$message({
           message: '请选择节点',
-          type: 'error',
-        })
-        return
-      }
-      if (assigneeType == 7 && !this.approverForm.approvers.length && !this.approverForm.approverPos.length && !this.approverForm.approverRole.length) {
-        this.$message({
-          message: '请设置候选人员',
           type: 'error',
         })
         return
@@ -3092,27 +3234,114 @@ export default {
       this.initiator = this.value.properties && this.value.properties.initiator
       this.initiatePos = this.value.properties && this.value.properties.initiatePos
       this.initiateRole = this.value.properties && this.value.properties.initiateRole
+      this.initiateOrg = this.value.properties && this.value.properties.initiateOrg
+      this.initiateGroup = this.value.properties && this.value.properties.initiateGroup
       let properties = JSON.parse(JSON.stringify(this.value.properties))
       Object.assign(this.startForm, properties)
+      this.formFieldList = this.startForm.formFieldList
     },
     /**
     * 初始化审批节点所需数据
     */
     initApproverNodeData() {
       this.activeName = 'config'
+      this.isPrevNodeWithSubForm = false
       let properties = JSON.parse(JSON.stringify(this.value.properties))
+      if (!properties.formId) properties.formFieldList = this.processData.properties.formFieldList
+      this.formFieldList = properties.formFieldList
       this.approverForm.formOperates = this.initFormOperates(this.value)
       Object.assign(this.approverForm, properties)
       this.getNodeOption()
+      this.getPrevNodeOption()
       this.approverForm.approveMsgConfig.on = typeof this.approverForm.approveMsgConfig.on === 'number' ? this.approverForm.approveMsgConfig.on : 2
       this.approverForm.rejectMsgConfig.on = typeof this.approverForm.rejectMsgConfig.on === 'number' ? this.approverForm.rejectMsgConfig.on : 2
     },
     initSubFlowData() {
-      this.getFlowOptions()
       this.getNodeOption()
+      this.getPrevNodeOption()
       let properties = JSON.parse(JSON.stringify(this.value.properties))
       Object.assign(this.subFlowForm, properties)
+      const prevNode = this.prevNodeList[0]
+      this.formFieldList = prevNode.properties.formId ? prevNode.properties.formFieldList : this.processData.properties.formFieldList
       this.subFlowForm.launchMsgConfig.on = typeof this.subFlowForm.launchMsgConfig.on === 'number' ? this.subFlowForm.launchMsgConfig.on : 0
+    },
+    openApproverTransmitRuleBox() {
+      let assignList = this.approverForm.assignList ? JSON.parse(JSON.stringify(this.approverForm.assignList)) : []
+      this.getRealAssignList(assignList)
+      this.approverTransmitRuleVisible = true
+    },
+    getRealAssignList(assignList) {
+      let newAssignList = this.prevNodeList.map(o => {
+        let formFieldList = o.properties.formFieldList && o.properties.formFieldList.length ? o.properties.formFieldList : this.processData.properties.formFieldList
+        return {
+          nodeId: o.nodeId,
+          title: o.properties.title,
+          formFieldList: formFieldList.filter(o => o.__config__.jnpfKey !== 'table'),
+          ruleList: []
+        }
+      })
+      if (!assignList.length) {
+        this.assignList = newAssignList
+      } else {
+        let list = []
+        // 去掉被删掉的节点
+        for (let i = 0; i < assignList.length; i++) {
+          const e = assignList[i];
+          inter: for (let j = 0; j < newAssignList.length; j++) {
+            if (e.nodeId === newAssignList[j].nodeId) {
+              const item = {
+                nodeId: e.nodeId,
+                title: newAssignList[j].title,
+                formFieldList: newAssignList[j].formFieldList,
+                ruleList: e.ruleList
+              }
+              list.push(item)
+              break inter
+            }
+          }
+        }
+        let addList = newAssignList.filter(o => !assignList.some(item => item.nodeId === o.nodeId))
+        this.assignList = [...list, ...addList]
+      }
+    },
+    addTransmitRule(i) {
+      this.assignList[i].ruleList.push({
+        parentField: '',
+        childField: '',
+        childFieldOptions: []
+      })
+    },
+    delTransmitRule(i, cIndex) {
+      this.assignList[i].ruleList.splice(cIndex, 1)
+    },
+    saveApproverTransmitRule() {
+      let boo = true
+      for (let i = 0; i < this.assignList.length; i++) {
+        const e = this.assignList[i]
+        const ruleList = e.ruleList;
+        for (let j = 0; j < ruleList.length; j++) {
+          if (!ruleList[j].parentField) {
+            boo = false
+            this.$message({
+              message: `请选择${e.title}的上节点字段`,
+              type: 'error',
+            })
+            break
+          }
+          if (!ruleList[j].childField) {
+            boo = false
+            this.$message({
+              message: `请选择${e.title}的本节点字段`,
+              type: 'error',
+            })
+            break
+          }
+        }
+      }
+      if (!boo) return
+      this.approverForm.assignList = this.assignList
+      this.approverTransmitRuleVisible = false
+      this.assignList = []
     },
     openRuleBox() {
       if (!this.subFlowForm.flowId) {
@@ -3122,40 +3351,43 @@ export default {
         })
         return
       }
-      getFormDataFields(this.subFlowForm.flowId).then(res => {
-        this.childFieldOptions = res.data.list
-        this.assignList = JSON.parse(JSON.stringify(this.subFlowForm.assignList))
+      getFlowFormInfo(this.subFlowForm.flowId).then(res => {
+        let { formType = 1, propertyJson } = res.data
+        let formJson = {}, fieldList = []
+        if (propertyJson) formJson = JSON.parse(propertyJson)
+        if (formType == 1) {
+          fieldList = this.transformFormJson(formJson)
+        } else {
+          fieldList = formJson.fields
+        }
+        this.childFieldOptions = this.transformFieldList(fieldList).filter(o => o.__config__.jnpfKey !== 'table')
+        let assignList = this.subFlowForm.assignList ? JSON.parse(JSON.stringify(this.subFlowForm.assignList)) : []
+        this.getRealAssignList(assignList)
         this.ruleVisible = true
       })
-    },
-    addRule() {
-      this.assignList.push({
-        parentField: '',
-        childField: ''
-      })
-    },
-    delRule(i) {
-      this.assignList.splice(i, 1)
     },
     saveRule() {
       let boo = true
       for (let i = 0; i < this.assignList.length; i++) {
-        const element = this.assignList[i];
-        if (!element.parentField) {
-          boo = false
-          this.$message({
-            message: '请选择父流程字段',
-            type: 'error',
-          })
-          break
-        }
-        if (!element.childField) {
-          boo = false
-          this.$message({
-            message: '请选择子流程字段',
-            type: 'error',
-          })
-          break
+        const e = this.assignList[i]
+        const ruleList = e.ruleList;
+        for (let j = 0; j < ruleList.length; j++) {
+          if (!ruleList[j].parentField) {
+            boo = false
+            this.$message({
+              message: `请选择${e.title}的父流程字段`,
+              type: 'error',
+            })
+            break
+          }
+          if (!ruleList[j].childField) {
+            boo = false
+            this.$message({
+              message: `请选择${e.title}的子流程字段`,
+              type: 'error',
+            })
+            break
+          }
         }
       }
       if (!boo) return
@@ -3163,12 +3395,72 @@ export default {
       this.ruleVisible = false
       this.assignList = []
     },
-    getFlowOptions() {
-      FlowEngineSelector().then(res => {
-        this.flowOptions = res.data.list
-      })
+    // 获取上一节数据
+    getPrevNodeOption() {
+      let prevNode = NodeUtils.getPreviousNode(this.value.prevId, this.processData)
+      let node = JSON.parse(JSON.stringify(prevNode))
+      delete node.childNode
+      let prevNodeList = []
+      const loop = nodeData => {
+        if (nodeData.conditionNodes) {
+          let hasCondition = nodeData.conditionNodes.some(o => o.nodeId === this.value.nodeId)
+          if (hasCondition) return prevNodeList.push(nodeData)
+        }
+        if (nodeData.childNode) {
+          loop(nodeData.childNode)
+        } else if (nodeData.conditionNodes && !nodeData.childNode) {
+          for (let c of nodeData.conditionNodes) {
+            loop(c)
+          }
+        } else {
+          prevNodeList.push(nodeData)
+        }
+      }
+      loop(node)
+      this.prevNodeList = prevNodeList
+      this.getPrevNodeRealList()
     },
-    // 获取驳回步骤选项
+    getPrevNodeRealList() {
+      const loop = (data) => {
+        inner: for (let i = 0; i < data.length; i++) {
+          if (['condition', 'subFlow', 'timer'].includes(data[i].type)) {
+            if (data[i].type === 'subFlow') this.isPrevNodeWithSubForm = true
+            let prevNode = NodeUtils.getPreviousNode(data[i].prevId, this.processData)
+            let node = JSON.parse(JSON.stringify(prevNode))
+            delete node.childNode
+            let prevNodeList = []
+            const getPrevNodeAllList = nodeData => {
+              if (nodeData.conditionNodes) {
+                let hasCondition = nodeData.conditionNodes.some(o => o.nodeId === data[i].nodeId)
+                if (hasCondition) return prevNodeList.push(nodeData)
+              }
+              if (nodeData.childNode) {
+                getPrevNodeAllList(nodeData.childNode)
+              } else if (nodeData.conditionNodes && !nodeData.childNode) {
+                for (let c of nodeData.conditionNodes) {
+                  getPrevNodeAllList(c)
+                }
+              } else {
+                prevNodeList.push(nodeData)
+              }
+            }
+            getPrevNodeAllList(node)
+            data.splice(i, 1, ...prevNodeList)
+            loop(data)
+            break inner
+          }
+        }
+      }
+      loop(this.prevNodeList)
+      this.prevNodeList = this.unique(this.prevNodeList, 'nodeId')
+    },
+    // 去重
+    unique(arr, attrName) {
+      const res = new Map()
+      // 根据对象的某个属性值去重
+      return arr.filter(o => !res.has(o[attrName]) && res.set(o[attrName], 1))
+    },
+    // 获取退回步骤选项
     getNodeOption() {
       let list = [], _this = this
       const loop = data => {
@@ -3183,7 +3475,7 @@ export default {
         if (list[i].nodeId === _this.value.nodeId) break
         realList.push(list[i])
       }
-      this.rejectStepOptions = [...defaultStep, ...realList]
+      this.realNodeList = realList
       let nodeOptions = list.filter(o => o.nodeId !== _this.value.nodeId)
       this.nodeOptions = nodeOptions
     },
@@ -3191,6 +3483,7 @@ export default {
      * 初始化条件节点数据
      */
     initConditionNodeData() {
+      this.getConditionNodeFieldList()
       // 初始化条件表单数据
       let nodeConditions = this.value.properties && this.value.properties.conditions
       for (let i = 0; i < nodeConditions.length; i++) {
@@ -3217,6 +3510,16 @@ export default {
         jnpfKey: ''
       }
       this.pconditions.push(item)
+    },
+    getConditionNodeFieldList() {
+      this.getPrevNodeOption()
+      if (!this.prevNodeList.length) {
+        this.formFieldList = []
+      } else {
+        let prevNode = this.prevNodeList[0]
+        let formFieldList = prevNode.properties.formFieldList && prevNode.properties.formFieldList.length ? prevNode.properties.formFieldList : this.processData.properties.formFieldList
+        this.formFieldList = formFieldList.filter(o => o.__config__.jnpfKey !== 'table')
+      }
     },
     fieldNameChange(val, item, i) {
       let obj = this.usedFormItems.filter(o => o.__vModel__ == val)[0]
@@ -3296,11 +3599,7 @@ export default {
       if (this[obj][key].msgId === id) return
       this[obj][key].msgId = id
       this[obj][key].msgName = item.fullName
-      let templateJson = item.templateJson ? JSON.parse(item.templateJson) : []
-      this[obj][key].templateJson = templateJson.map(o => ({
-        ...o,
-        paramJson: o.paramJson ? JSON.parse(o.paramJson) : [],
-      }))
+      this[obj][key].templateJson = item.templateJson
     },
     onFuncChange(obj, key, params) {
       const [id, item] = params
@@ -3313,11 +3612,7 @@ export default {
       if (this[obj][key].interfaceId === id) return
       this[obj][key].interfaceId = id
       this[obj][key].interfaceName = item.fullName
-      this[obj][key].templateJson = item.templateJson ? item.templateJson.map(o => ({
-        ...o,
-        relationField: '',
-        isSubTable: false
-      })) : []
+      this[obj][key].templateJson = item.templateJson
     },
     onRelationFieldChange(val, item) {
       if (!val) return
@@ -3362,12 +3657,102 @@ export default {
       this.activeItem.field = formula
       this.activeItem.fieldName = formula
     },
-    showTemplateDetail(id) {
+    goDetail(id) {
       this.viewVisible = true
       this.$nextTick(() => {
         this.$refs.View.init(id)
       })
-    }
+    },
+    onStartFormIdChange(id, item) {
+      if (!id) return this.handleNull('startForm')
+      let isSameForm = this.startForm.formId === id
+      this.startForm.formName = item.fullName
+      this.startForm.formId = id
+      this.getFormFieldList(id, 'startForm', isSameForm)
+    },
+    onApproverFormIdChange(id, item) {
+      if (!id) return this.handleNull('approverForm')
+      let isSameForm = this.startForm.formId === id
+      this.approverForm.formName = item.fullName
+      this.approverForm.formId = id
+      this.approverForm.assignList = []
+      this.getFormFieldList(id, 'approverForm', isSameForm)
+    },
+    handleNull(form) {
+      this[form].formName = ''
+      this[form].formId = ''
+      let formFieldList = []
+      if (form === 'approverForm') {
+        formFieldList = this.processData.properties.formFieldList || []
+      }
+      this.formFieldList = formFieldList
+      this[form].formFieldList = formFieldList
+      this[form].formOperates = this.initFormOperates(this.value, true)
+      if (form === 'startForm') this.updateAllNodeFormOperates([])
+    },
+    getFormFieldList(id, form, isSameForm) {
+      getFormInfo(id).then(res => {
+        let { formType = 1, propertyJson } = res.data
+        let formJson = {}, fieldList = []
+        if (propertyJson) formJson = JSON.parse(propertyJson)
+        if (formType == 1) {
+          fieldList = this.transformFormJson(formJson)
+        } else {
+          fieldList = formJson.fields
+        }
+        let list = this.transformFieldList(fieldList)
+        this.formFieldList = list
+        this[form].formFieldList = list
+        this[form].formOperates = this.initFormOperates(this.value, true, isSameForm)
+        // 更新所有没设置表单的节点的表单权限
+        if (form === 'startForm') this.updateAllNodeFormOperates(list, isSameForm)
+      })
+    },
+    transformFormJson(list) {
+      let fieldList = list.map(o => ({
+        __config__: {
+          label: o.filedName,
+          jnpfKey: o.jnpfKey || '',
+          required: o.required || false
+        },
+        __vModel__: o.filedId,
+        multiple: o.multiple || false
+      }))
+      return fieldList
+    },
+    transformFieldList(formFieldList) {
+      let list = []
+      const loop = (data, parent) => {
+        if (!data) return
+        if (data.__vModel__) {
+          const isTableChild = parent && parent.__config__ && parent.__config__.jnpfKey === 'table'
+          let obj = JSON.parse(JSON.stringify(data))
+          if (isTableChild) {
+            obj.__vModel__ = parent.__vModel__ + '-' + data.__vModel__
+            obj.__config__.label = parent.__config__.label + '-' + data.__config__.label
+          }
+          list.push(obj)
+        }
+        if (Array.isArray(data)) data.forEach(d => loop(d, parent))
+        if (data.__config__ && data.__config__.children && Array.isArray(data.__config__.children)) {
+          loop(data.__config__.children, data)
+        }
+      }
+      loop(formFieldList)
+      return list
+    },
+    updateAllNodeFormOperates(formFieldList, isSameForm) {
+      const loop = data => {
+        if (Array.isArray(data)) data.forEach(d => loop(d))
+        if (data.type === 'approver' && !data.properties.formId) {
+          data.properties.formOperates = this.initFormOperates(data, true, isSameForm)
+          data.properties.formFieldList = formFieldList
+        }
+        if (data.conditionNodes && Array.isArray(data.conditionNodes)) loop(data.conditionNodes)
+        if (data.childNode) loop(data.childNode)
+      }
+      loop(this.processData)
+    },
   },
   watch: {
     visible(val) {
@@ -3385,6 +3770,9 @@ export default {
     },
     'startForm.titleContent'(newVal) {
       this.temporaryContent = newVal
+    },
+    'approverForm.rejectType'(val) {
+      this.approverForm.rejectStep = '0'
     },
     value(newVal) {
       if (newVal && newVal.properties) {
@@ -3592,8 +3980,21 @@ export default {
 }
 .rule-dialog {
   >>> .el-dialog__body {
-    min-height: 300px !important;
-    padding: 20px 20px 10px !important;
+    padding: 0 0 10px !important;
+    min-height: 364px;
+  }
+  .node-tabs {
+    >>> .el-tabs__nav-wrap {
+      padding: 0 20px;
+    }
+    >>> .el-tabs__content {
+      .el-tab-pane {
+        min-height: 300px !important;
+        max-height: 500px !important;
+        padding: 0 10px 10px;
+        overflow: auto;
+      }
+    }
   }
   .option-box-tip {
     margin-bottom: 20px;
@@ -3605,9 +4006,6 @@ export default {
       text-align: center;
     }
   }
-}
-.template-name {
-  cursor: pointer;
 }
 .parameter-box {
   height: 30px;
@@ -3635,5 +4033,31 @@ export default {
 }
 .el-form-item {
   margin-bottom: 12px !important;
+}
+.has-free-approver {
+  width: 92px;
+}
+.assignee-form {
+  display: flex;
+  .form-field-type {
+    width: 120px;
+    >>> .el-input--small {
+      .el-input__inner {
+        height: 32px;
+        line-height: 32px;
+        border-radius: 5px 0px 0px 5px;
+      }
+    }
+  }
+  .form-field {
+    >>> .el-input--small {
+      .el-input__inner {
+        height: 32px;
+        line-height: 32px;
+        border-radius: 0px 5px 5px 0px;
+        border-left: 0px solid #dcdfe6;
+      }
+    }
+  }
 }
 </style>

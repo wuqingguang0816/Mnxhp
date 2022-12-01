@@ -38,9 +38,9 @@
       <div class="transfer__body">
         <div class="transfer-pane">
           <div class="transfer-pane__tools">
-            <el-input placeholder="请输入关键词查询" v-model="keyword" @keyup.enter.native="getData"
-              clearable class="search-input">
-              <el-button slot="append" icon="el-icon-search" @click="getData"></el-button>
+            <el-input placeholder="请输入关键词查询" v-model="pagination.keyword"
+              @keyup.enter.native="search" clearable class="search-input">
+              <el-button slot="append" icon="el-icon-search" @click="search"></el-button>
             </el-input>
           </div>
           <div class="transfer-pane__body left-pane">
@@ -49,33 +49,69 @@
               <el-tab-pane label="全部数据" name="all">
                 <el-tree :data="treeData" :props="props" check-on-click-node
                   @node-click="handleNodeClick" class="JNPF-common-el-tree" node-key="id"
-                  v-loading="loading" lazy :load="loadNode"
+                  v-loading="loading" lazy :load="loadNode" v-if="!isAsync"
                   :default-expanded-keys="defaultExpandedKeys">
                   <span class="custom-tree-node" slot-scope="{ node, data }">
                     <i :class="data.icon"></i>
                     <span class="text">{{node.label}}</span>
                   </span>
                 </el-tree>
+                <div class="single-list" ref="infiniteBody" v-if="isAsync"
+                  v-loading="loading && pagination.currentPage==1">
+                  <template v-if="treeData.length">
+                    <div v-for="(item,index) in treeData" :key="index" class="selected-item-user"
+                      @click="handleNodeClick(item)">
+                      <div class="selected-item-main">
+                        <el-avatar :size="36" :src="define.comUrl+item.headIcon"
+                          class="selected-item-headIcon">
+                        </el-avatar>
+                        <div class="selected-item-text">
+                          <p class="name">{{item.fullName}}</p>
+                          <p class="organize" :title="item.organize">{{item.organize}}</p>
+                        </div>
+                      </div>
+                    </div>
+                  </template>
+                  <el-empty description="暂无数据" :image-size="120" v-else></el-empty>
+                </div>
               </el-tab-pane>
               <el-tab-pane label="当前组织" name="department">
-                <el-tree :data="treeData2" :props="props" :expand-on-click-node="false"
-                  check-on-click-node @node-click="handleNodeClick2" class="JNPF-common-el-tree"
-                  node-key="id" v-loading="loading">
-                  <span class="custom-tree-node" slot-scope="{ node }">
-                    <i class="icon-ym icon-ym-tree-user2"></i>
-                    <span class="text">{{node.label}}</span>
-                  </span>
-                </el-tree>
+                <div class="single-list" v-loading="loading">
+                  <template v-if="treeData2.length">
+                    <div v-for="(item,index) in treeData2" :key="index" class="selected-item-user"
+                      @click="handleNodeClick2(item)">
+                      <div class="selected-item-main">
+                        <el-avatar :size="36" :src="define.comUrl+item.headIcon"
+                          class="selected-item-headIcon">
+                        </el-avatar>
+                        <div class="selected-item-text">
+                          <p class="name">{{item.fullName}}</p>
+                          <p class="organize" :title="item.organize">{{item.organize}}</p>
+                        </div>
+                      </div>
+                    </div>
+                  </template>
+                  <el-empty description="暂无数据" :image-size="120" v-else></el-empty>
+                </div>
               </el-tab-pane>
               <el-tab-pane label="我的下属" name="subordinates">
-                <el-tree :data="treeData3" :props="props" :expand-on-click-node="false"
-                  check-on-click-node @node-click="handleNodeClick2" class="JNPF-common-el-tree"
-                  node-key="id" v-loading="loading">
-                  <span class="custom-tree-node" slot-scope="{ node }">
-                    <i class="icon-ym icon-ym-tree-user2"></i>
-                    <span class="text">{{node.label}}</span>
-                  </span>
-                </el-tree>
+                <div class="single-list" v-loading="loading">
+                  <template v-if="treeData3.length">
+                    <div v-for="(item,index) in treeData3" :key="index" class="selected-item-user"
+                      @click="handleNodeClick2(item)">
+                      <div class="selected-item-main">
+                        <el-avatar :size="36" :src="define.comUrl+item.headIcon"
+                          class="selected-item-headIcon">
+                        </el-avatar>
+                        <div class="selected-item-text">
+                          <p class="name">{{item.fullName}}</p>
+                          <p class="organize" :title="item.organize">{{item.organize}}</p>
+                        </div>
+                      </div>
+                    </div>
+                  </template>
+                  <el-empty description="暂无数据" :image-size="120" v-else></el-empty>
+                </div>
               </el-tab-pane>
               <el-tab-pane label="系统变量" name="system">
                 <el-tree :data="treeData4" :props="props" :expand-on-click-node="false"
@@ -88,7 +124,7 @@
                 </el-tree>
               </el-tab-pane>
             </el-tabs>
-            <template v-if="selectType === 'custom'">
+            <template v-else>
               <div class="custom-title">全部数据</div>
               <div class="single-list" ref="infiniteBody">
                 <template v-if="ableList.length">
@@ -135,7 +171,7 @@
         </div>
       </div>
       <span slot="footer" class="dialog-footer">
-        <el-button @click="visible=false">{{$t('common.cancelButton')}}</el-button>
+        <el-button @click="setDefault(),visible=false">{{$t('common.cancelButton')}}</el-button>
         <el-button type="primary" @click="confirm">{{$t('common.confirmButton')}}</el-button>
       </span>
     </el-dialog>
@@ -192,6 +228,10 @@ export default {
       type: String,
       default: 'all'
     },
+    ableRelationIds: {
+      type: Array,
+      default: () => []
+    },
     ableDepIds: {
       type: Array,
       default: () => []
@@ -217,7 +257,6 @@ export default {
   data() {
     return {
       visible: false,
-      keyword: '',
       activeName: '',
       nodeId: '',
       innerValue: '',
@@ -243,12 +282,19 @@ export default {
       inputWidth: 0,
       initialInputHeight: 0,
       total: 0,
+      isAsync: false,
       finish: false,
-      listLoading: false,
       pagination: {
         keyword: '',
         currentPage: 1,
         pageSize: 20,
+      },
+      ableQuery: {
+        departIds: [],
+        positionIds: [],
+        userIds: [],
+        roleIds: [],
+        groupIds: []
       }
     }
   },
@@ -262,7 +308,8 @@ export default {
       });
     },
     activeName(val) {
-      this.keyword = ''
+      this.pagination.keyword = ''
+      this.isAsync = false
       if (!val) return
       this.nodeId = '0'
       this.treeData = []
@@ -335,14 +382,10 @@ export default {
   },
   methods: {
     getAbleList() {
-      this.listLoading = true
+      this.loading = true
       let query = {
         pagination: this.pagination,
-        departIds: this.ableDepIds,
-        positionIds: this.ablePosIds,
-        userIds: this.ableUserIds,
-        roleIds: this.ableRoleIds,
-        groupIds: this.ableGroupIds,
+        ...this.ableQuery
       }
       getUsersByUserCondition(query).then(res => {
         if (res.data.list.length < this.pagination.pageSize) {
@@ -350,18 +393,22 @@ export default {
         }
         this.ableList = [...this.ableList, ...res.data.list]
         this.total = res.data.pagination.total
-        this.listLoading = false
+        this.loading = false
       }).catch(() => {
-        this.listLoading = false
+        this.loading = false
       })
     },
     bindScroll() {
       let _this = this,
         vBody = _this.$refs.infiniteBody;
       vBody.addEventListener("scroll", function () {
-        if (vBody.scrollHeight - vBody.clientHeight - vBody.scrollTop <= 200 && !_this.listLoading && !_this.finish) {
+        if (vBody.scrollHeight - vBody.clientHeight - vBody.scrollTop <= 200 && !_this.loading && !_this.finish) {
           _this.pagination.currentPage += 1
-          _this.getAbleList()
+          if (_this.selectType === 'all') {
+            _this.getAllList()
+          } else {
+            _this.getAbleList()
+          }
         }
       });
     },
@@ -371,22 +418,46 @@ export default {
     openDialog() {
       if (this.selectDisabled) return
       this.visible = true
-      this.keyword = ''
+      this.pagination.keyword = ''
       this.nodeId = '0'
+      this.isAsync = false
       this.finish = false
       this.selectedData = []
       if (this.selectType === 'all') {
         this.activeName = 'all'
         this.setDefault()
-      }
-      if (this.selectType === 'custom') {
-        this.ableList = []
+      } else {
+        if (this.selectType === 'custom') {
+          this.ableQuery = {
+            departIds: this.ableDepIds,
+            positionIds: this.ablePosIds,
+            userIds: this.ableUserIds,
+            roleIds: this.ableRoleIds,
+            groupIds: this.ableGroupIds,
+          }
+        } else {
+          const id = this.getAbleKey(this.selectType)
+          this.ableQuery = {
+            departIds: [],
+            positionIds: [],
+            userIds: [],
+            roleIds: [],
+            groupIds: []
+          }
+          this.ableQuery[id] = Array.isArray(this.ableRelationIds) ? this.ableRelationIds : [this.ableRelationIds]
+        }
         this.getData()
         this.$nextTick(() => {
           this.bindScroll()
           this.setDefault()
         })
       }
+    },
+    getAbleKey(selectType) {
+      if (selectType === 'dep') return 'departIds'
+      if (selectType === 'pos') return 'positionIds'
+      if (selectType === 'role') return 'roleIds'
+      if (selectType === 'group') return 'groupIds'
     },
     confirm() {
       if (this.multiple) {
@@ -447,40 +518,65 @@ export default {
           this.getAllList()
         } else if (this.activeName === 'department') {
           this.loading = true
-          getOrganization({ keyword: this.keyword, organizeId: '0' }).then(res => {
+          getOrganization({ keyword: this.pagination.keyword, organizeId: '0' }).then(res => {
             this.treeData2 = res.data
             this.loading = false
           })
         } else if (this.activeName === 'subordinates') {
           this.loading = true
-          getSubordinates(this.keyword).then(res => {
+          getSubordinates(this.pagination.keyword).then(res => {
             this.treeData3 = res.data
             this.loading = false
           })
         } else {
           this.loading = false
         }
-      }
-      if (this.selectType === 'custom') {
-        this.pagination.keyword = this.keyword
+      } else {
         this.pagination.currentPage = 1
         this.finish = false
         this.ableList = []
         this.getAbleList()
       }
     },
+    search() {
+      this.nodeId = '0'
+      this.treeData = []
+      this.pagination.currentPage = 1
+      this.isAsync = !!this.pagination.keyword
+      this.finish = false
+      if (this.isAsync && this.activeName === 'all') {
+        this.$nextTick(() => {
+          this.bindScroll()
+        })
+      }
+      if (this.selectType === 'all') {
+        this.getData()
+      } else {
+        this.ableList = []
+        this.getAbleList()
+      }
+    },
     getAllList() {
       this.loading = true
-      if (this.keyword) this.nodeId = '0'
-      getImUserSelector(this.nodeId, this.keyword).then(res => {
-        this.treeData = res.data.list
+      if (this.pagination.keyword) this.nodeId = '0'
+      getImUserSelector(this.nodeId, this.pagination).then(res => {
+        if (this.pagination.keyword) {
+          if (res.data.list.length < this.pagination.pageSize) {
+            this.finish = true
+          }
+          this.treeData = [...this.treeData, ...res.data.list]
+          this.total = res.data.pagination.total
+        } else {
+          this.treeData = res.data.list
+        }
         this.loading = false
-        if (!this.keyword && this.treeData.length && this.nodeId == '0') {
+        if (!this.pagination.keyword && this.treeData.length && this.nodeId == '0') {
           this.defaultExpandedKeys = [this.treeData[0].id]
         }
       })
     },
     loadNode(node, resolve) {
+      if (this.visible === false) return []
       if (node.level === 0) {
         this.nodeId = '0'
         return resolve(this.treeData)

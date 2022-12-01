@@ -10,96 +10,148 @@
             <div class="content">
               <div class="child-item" v-for="(child,j) in item.list" :key="j">
                 <template v-if="child.handleStatus==0">
-                  <div class="child-item-title">
-                    <div>{{item.fullName}} {{child.userName}} 于 {{child.handleTime | toDate()}}
+                  <div class="child-item-block">
+                    <div class="avatar">
+                      <el-avatar :src="define.comUrl+child.headIcon"></el-avatar>
                     </div>
-                    <div class="status">
-                      <el-link :underline="false" type="danger">审核拒绝</el-link>
+                    <div class="child-item-title">
+                      <div class="child-item-line">
+                        <div class="name">
+                          {{child.userName}}<span> 于 {{child.handleTime | toDate()}}</span>
+                        </div>
+                        <el-tag type="danger" class="tag">退回</el-tag>
+                      </div>
+                      <div class="child-item-option" v-if="child.handleOpinion">
+                        {{child.handleOpinion}}
+                      </div>
                     </div>
-                  </div>
-                  <div class="child-item-option" v-if="child.handleOpinion">
-                    审批意见：{{child.handleOpinion}}
                   </div>
                 </template>
                 <template v-if="child.handleStatus==1">
-                  <div class="child-item-title">
-                    <div>{{item.fullName}} {{child.userName}} 于 {{child.handleTime | toDate()}}
+                  <div class="child-item-block">
+                    <div class="avatar">
+                      <el-avatar :src="define.comUrl+child.headIcon"></el-avatar>
                     </div>
-                    <div class="status">
-                      <el-link :underline="false" type="success">审核通过</el-link>
+                    <div class="child-item-title">
+                      <div class="child-item-line">
+                        <div class="name">
+                          {{child.userName}}<span> 于 {{child.handleTime | toDate()}}</span>
+                        </div>
+                        <el-tag type="success" class="tag">同意</el-tag>
+                      </div>
+                      <div class="child-item-option" v-if="child.handleOpinion">
+                        {{child.handleOpinion}}
+                      </div>
+                      <div class="file-List" v-if="child.fileList.length">
+                        <JNPF-UploadFz v-model="child.fileList" detailed disabled :showIcon='false'>
+                        </JNPF-UploadFz>
+                      </div>
                     </div>
-                  </div>
-                  <div class="child-item-option" v-if="child.handleOpinion">
-                    审批意见：{{child.handleOpinion}}
                   </div>
                 </template>
                 <template v-if="child.handleStatus==2">
-                  <div class="child-item-title">
-                    <div>{{item.fullName}} {{child.userName}} 于 {{child.handleTime | toDate()}}
+                  <div class="child-item-block">
+                    <div class="avatar">
+                      <el-avatar :src="define.comUrl+child.headIcon"></el-avatar>
                     </div>
-                    <div class="status">
-                      <el-link :underline="false" type="primary">发起</el-link>
+                    <div class="child-item-title">
+                      <div class="child-item-line">
+                        <div class="name">
+                          {{child.userName}}<span> 于 {{child.handleTime | toDate()}}</span>
+                        </div>
+                        <el-tag class="tag">发起</el-tag>
+                      </div>
                     </div>
                   </div>
                 </template>
                 <template v-if="child.handleStatus==3">
-                  <div class="child-item-title">
-                    <div>{{item.fullName}} {{child.userName}} 于 {{child.handleTime | toDate()}}
+                  <div class="child-item-block">
+                    <div class="avatar">
+                      <el-avatar :src="define.comUrl+child.headIcon"></el-avatar>
                     </div>
-                    <div class="status">
-                      <el-link :underline="false" type="info">撤回</el-link>
+                    <div class="child-item-title">
+                      <div class="child-item-line">
+                        <div class="name">
+                          {{child.userName}}<span> 于 {{child.handleTime | toDate()}}</span>
+                        </div>
+                        <el-tag type="warning" class="tag">撤回</el-tag>
+                      </div>
+                      <div class="child-item-option" v-if="child.handleOpinion">
+                        {{child.handleOpinion}}
+                      </div>
                     </div>
-                  </div>
-                  <div class="child-item-option" v-if="child.handleOpinion">
-                    撤回原因：{{child.handleOpinion}}
                   </div>
                 </template>
                 <template v-if="child.handleStatus==4">
-                  <div class="child-item-title">
-                    <div>{{item.fullName}} {{child.userName}} 于 {{child.handleTime | toDate()}}
+                  <div class="child-item-block">
+                    <div class="avatar">
+                      <el-avatar :src="define.comUrl+child.headIcon"></el-avatar>
                     </div>
-                    <div class="status">
-                      <el-link :underline="false" type="danger">流程终止</el-link>
+                    <div class="child-item-title">
+                      <div class="child-item-line">
+                        <div class="name">
+                          {{child.userName}}<span> 于 {{child.handleTime | toDate()}}</span>
+                        </div>
+                        <el-tag type="warning" class="tag">终止</el-tag>
+                      </div>
+                      <div class="child-item-option" v-if="child.handleOpinion">
+                        {{child.handleOpinion}}
+                      </div>
                     </div>
-                  </div>
-                  <div class=" child-item-option" v-if="child.handleOpinion">
-                    终止原因：{{child.handleOpinion}}
                   </div>
                 </template>
                 <template v-if="child.handleStatus==5">
-                  <div class="child-item-title">
-                    <div>{{item.fullName}} {{child.userName}} 于 {{child.handleTime | toDate()}}
+                  <div class="child-item-block">
+                    <div class="avatar">
+                      <el-avatar :src="define.comUrl+child.headIcon"></el-avatar>
                     </div>
-                    <div class="status">
-                      <el-link :underline="false" type="primary">指派</el-link>
+                    <div class="child-item-title">
+                      <div class="child-item-line">
+                        <div class="name">
+                          {{child.userName}}<span> 于 {{child.handleTime | toDate()}}</span>
+                        </div>
+                        <el-tag class="tag">指派</el-tag>
+                      </div>
+                      <div class="child-item-option" v-if="child.handleOpinion">
+                        {{child.handleOpinion}}
+                      </div>
                     </div>
-                  </div>
-                  <div class=" child-item-option">
-                    指派人员：{{child.operatorId}}
                   </div>
                 </template>
                 <template v-if="child.handleStatus==6">
-                  <div class="child-item-title">
-                    <div>{{item.fullName}} {{child.userName}} 于 {{child.handleTime | toDate()}}
+                  <div class="child-item-block">
+                    <div class="avatar">
+                      <el-avatar :src="define.comUrl+child.headIcon"></el-avatar>
                     </div>
-                    <div class="status">
-                      <el-link :underline="false" type="primary">加签</el-link>
+                    <div class="child-item-title">
+                      <div class="child-item-line">
+                        <div class="name">
+                          {{child.userName}}<span> 于 {{child.handleTime | toDate()}}</span>
+                        </div>
+                        <el-tag class="tag">加签</el-tag>
+                      </div>
+                      <div class="child-item-option" v-if="child.handleOpinion">
+                        {{child.handleOpinion}}
+                      </div>
                     </div>
-                  </div>
-                  <div class=" child-item-option">
-                    加签人员：{{child.operatorId}}
                   </div>
                 </template>
                 <template v-if="child.handleStatus==7">
-                  <div class="child-item-title">
-                    <div>{{item.fullName}} {{child.userName}} 于 {{child.handleTime | toDate()}}
+                  <div class="child-item-block">
+                    <div class="avatar">
+                      <el-avatar :src="define.comUrl+child.headIcon"></el-avatar>
                     </div>
-                    <div class="status">
-                      <el-link :underline="false" type="primary">转审</el-link>
+                    <div class="child-item-title">
+                      <div class="child-item-line">
+                        <div class="name">
+                          {{child.userName}}<span> 于 {{child.handleTime | toDate()}}</span>
+                        </div>
+                        <el-tag class="tag">转审</el-tag>
+                      </div>
+                      <div class="child-item-option" v-if="child.handleOpinion">
+                        {{child.handleOpinion}}
+                      </div>
                     </div>
-                  </div>
-                  <div class=" child-item-option">
-                    转审人员：{{child.operatorId}}
                   </div>
                 </template>
               </div>
@@ -141,6 +193,13 @@ export default {
       }
       getRecordList(this.id, query).then(res => {
         this.list = res.data
+        if (this.list.length) {
+          this.list.forEach((o, i) => {
+            o.list.forEach(j => {
+              j.fileList = j.fileList ? JSON.parse(j.fileList) : []
+            })
+          })
+        }
         this.loading = false
       }).catch(() => {
         this.loading = false
@@ -175,24 +234,62 @@ export default {
             }
             .content {
               flex: 1;
-              padding: 30px 50px;
+              padding: 0px 36px;
               border-left: 1px solid #e4e7ed;
             }
             .child-item {
-              margin-bottom: 20px;
+              padding: 20px 0;
               font-size: 14px;
-              line-height: 30px;
+              line-height: 22px;
               &:last-child {
                 margin-bottom: 0;
               }
-              .child-item-title {
-                margin-bottom: 2px;
+              &:nth-child(2n) {
+                border-top: 1px solid #e1e5eb;
+              }
+              .child-item-block {
                 display: flex;
-                justify-content: space-between;
-                .status {
-                  flex-shrink: 0;
-                  .el-link {
-                    cursor: auto !important;
+                align-items: flex-start;
+                flex-direction: row;
+                .avatar {
+                  width: 40px;
+                  height: 40px;
+                }
+                // padding: 10px;
+
+                .child-item-title {
+                  flex: 1;
+                  margin-bottom: 2px;
+                  display: flex;
+                  justify-content: space-between;
+                  flex-direction: column;
+                  margin-left: 5px;
+                  .child-item-line {
+                    display: flex;
+                    align-items: center;
+                    flex-direction: row;
+                    justify-content: space-between;
+                    padding-left: 4px;
+                    .name {
+                      font-weight: 600;
+                      span {
+                        font-weight: 400;
+                        font-size: 12px;
+                      }
+                    }
+                    .tag {
+                      float: right;
+                    }
+                  }
+                  .child-item-option {
+                    color: #747579;
+                    padding-left: 4px;
+                  }
+                  .status {
+                    flex-shrink: 0;
+                    .el-link {
+                      cursor: auto !important;
+                    }
                   }
                 }
               }

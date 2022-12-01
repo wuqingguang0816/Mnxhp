@@ -28,7 +28,7 @@ const baseRouter = [{
 	meta: {
 		title: 'messageRecord',
 		affix: false,
-		zhTitle: '消息中心',
+		zhTitle: '站内消息',
 		icon: 'icon-ym icon-ym-sysNotice',
 	}
 },

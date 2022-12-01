@@ -15,7 +15,7 @@
           <el-input v-model="scope.row.filedId" placeholder="输入字段"></el-input>
         </template>
       </el-table-column>
-      <el-table-column prop="filedId" label="控件类型">
+      <el-table-column prop="jnpfKey" label="控件类型">
         <template slot-scope="scope">
           <el-select v-model="scope.row.jnpfKey" placeholder="选择控件类型" clearable>
             <el-option-group v-for="group in componentList" :key="group.id"
@@ -54,9 +54,7 @@
 
 <script>
 import { deepClone } from '@/utils'
-import { saveDrawingList } from '@/components/Generator/utils/db'
 import { inputComponents, selectComponents, systemComponents } from '@/components/Generator/generator/config'
-import { debounce } from 'throttle-debounce'
 const ignoreList = ['divider', 'JNPFText', 'link', 'alert', 'button', 'table', 'relationFormAttr', 'popupAttr', 'calculate']
 export default {
   props: ['conf', 'enCode'],
@@ -64,37 +62,11 @@ export default {
     return {
       componentList: [],
       drawingList: [],
-      saveDrawingListDebounce: debounce(340, saveDrawingList),
-      isDrawingListChange: true
     }
-  },
-  watch: {
-    conf(val) { },
-    drawingList: {
-      handler(val) {
-        let list = val.map(o => ({
-          __config__: {
-            label: o.filedName,
-            jnpfKey: o.jnpfKey || '',
-            required: o.required || false
-          },
-          __vModel__: o.filedId,
-          multiple: o.multiple || false
-        }))
-        this.saveDrawingListDebounce(list)
-        // if (!this.isDrawingListChange) {
-        //   this.isDrawingListChange = true
-        //   return
-        // }
-        this.$emit('drawingListChange')
-      },
-      deep: true
-    },
   },
   created() {
     this.getComponentList()
     if (typeof this.conf === 'object' && this.conf !== null) {
-      this.isDrawingListChange = false
       this.drawingList = deepClone(this.conf)
     }
   },
@@ -184,11 +156,11 @@ export default {
       }
       return isOk;
     },
-    handleDel(index, row) {
+    handleDel(index) {
       this.drawingList.splice(index, 1);
     },
     addHandle() {
-      let item = { filedName: "", filedId: "", required: false, multiple: false }
+      let item = { filedName: "", filedId: "", jnpfKey: "", required: false, multiple: false }
       this.drawingList.push(item)
     }
   }

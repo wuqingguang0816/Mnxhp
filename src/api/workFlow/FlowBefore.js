@@ -32,7 +32,7 @@ export function SaveAudit(id, data) {
     data
   })
 }
-// 待我审核驳回
+// 待我审核退回
 export function Reject(id, data) {
   return request({
     url: `/api/workflow/Engine/FlowBefore/Reject/${id}`,
@@ -111,7 +111,7 @@ export function CandidateUser(id, data) {
     data
   })
 }
-// 批量通过、拒绝、转审  batchType 0-通过 1-拒绝 2-转审
+// 批量通过、退回、转审  batchType 0-通过 1-退回 2-转审
 export function BatchOperation(data) {
   return request({
     url: `/api/workflow/Engine/FlowBefore/BatchOperation`,
@@ -148,3 +148,21 @@ export function checkInfo(taskOperatorId) {
     method: 'get'
   })
 }
+
+//获取退回下拉接口
+export function RejectList(id) {
+  return request({
+    url: `/api/workflow/Engine/FlowBefore/RejectList/${id}`,
+    method: 'get'
+  })
+}
+
+// 加签
+export function FreeApprover(id, data) {
+  return request({
+    url: `/api/workflow/Engine/FlowBefore/freeApprover/${id}`,
+    method: 'post',
+    data
+  })
+}
+

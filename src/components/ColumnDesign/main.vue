@@ -44,6 +44,15 @@
                 :disabled="scope.row.__config__&&scope.row.__config__.isSubTable" />
             </template>
           </el-table-column>
+          <el-table-column prop="align" label="冻结" v-if="columnData.childTableStyle!=2">
+            <template slot-scope="scope">
+              <el-select v-model="scope.row.fixed" placeholder="请选择"
+                :disabled="scope.row.__config__&&scope.row.__config__.isSubTable">
+                <el-option v-for="item in fixedOptions" :key="item" :label="item" :value="item">
+                </el-option>
+              </el-select>
+            </template>
+          </el-table-column>
           <el-table-column prop="align" label="对齐">
             <template slot-scope="scope">
               <el-select v-model="scope.row.align" placeholder="请选择">
@@ -154,9 +163,6 @@
                   </el-select>
                 </el-form-item>
               </template>
-              <el-form-item label="高级查询">
-                <el-switch v-model="columnData.hasSuperQuery"></el-switch>
-              </el-form-item>
               <el-form-item label="排序类型">
                 <el-select v-model="columnData.sort" placeholder="请选择排序类型">
                   <el-option label="升序" value="asc"></el-option>
@@ -168,6 +174,9 @@
                   <el-option :label="item.__config__.label" :value="item.__vModel__"
                     v-for="(item, i) in groupFieldOptions" :key="i"></el-option>
                 </el-select>
+              </el-form-item>
+              <el-form-item label="高级查询">
+                <el-switch v-model="columnData.hasSuperQuery"></el-switch>
               </el-form-item>
               <template v-if="columnData.type !==3">
                 <el-form-item label="分页设置">
@@ -182,12 +191,23 @@
                   </el-radio-group>
                 </el-form-item>
               </template>
+              <el-form-item label="子表样式">
+                <el-select v-model="columnData.childTableStyle" placeholder="请选择子表样式">
+                  <el-option label="分组展示" :value="1" />
+                  <el-option label="折叠展示" :value="2" />
+                </el-select>
+              </el-form-item>
               <el-divider>按钮配置</el-divider>
               <el-checkbox-group v-model="btnsList" class="btnsList">
-                <el-checkbox :label="item.value" v-for="item in btnsOption" :key="item.value">
-                  <span class="btn-label">{{ item.value | btnText }}</span>
-                  <el-input v-model="item.label" />
-                </el-checkbox>
+                <div v-for="item in btnsOption" :key="item.value">
+                  <el-checkbox :label="item.value">
+                    <span class="btn-label">{{ item.value | btnText }}</span>
+                    <el-input v-model="item.label" />
+                  </el-checkbox>
+                  <el-button class="upload"
+                    v-if="item.value === 'upload'&&btnsList.indexOf('upload')!=-1"
+                    @click="setUploaderTemplateJson">请设置导入模板</el-button>
+                </div>
               </el-checkbox-group>
               <el-checkbox-group v-model="columnBtnsList" class="btnsList columnBtnList">
                 <el-checkbox :label="item.value" v-for="item in columnBtnsOption" :key="item.value">
@@ -245,7 +265,7 @@
                     @click="addFunc(columnData.funcs.afterOnload,'afterOnload',true)">脚本编写
                   </el-button>
                 </el-form-item>
-                <el-form-item label="行样式" label-width="85px">
+                <el-form-item label="表格行样式" label-width="85px">
                   <el-button style="width: 100%;"
                     @click="addFunc(columnData.funcs.rowStyle,'rowStyle',true)">脚本编写
                   </el-button>
@@ -263,15 +283,19 @@
     </div>
     <form-script v-if="formScriptVisible" :key="scriptKey" :value="activeItem.func" ref="formScript"
       :type="activeItem.type" @updateScript="updateScript" @closeDialog="formScriptVisible=false" />
+    <upload-box ref="uploadRef" :visible.sync="uploadBoxVisible" @onConfirm="onConfirm" />
   </div>
 </template>
 <script>
 import Sortable from 'sortablejs'
 import draggable from 'vuedraggable'
 import FormScript from './FormScript'
+import uploadBox from './uploadBox'
 import { getDrawingList } from '@/components/Generator/utils/db'
 import { noColumnShowList, noSearchList, useInputList, useDateList } from '@/components/Generator/generator/comConfig'
 import { getDataInterfaceSelector } from '@/api/systemData/dataInterface'
+import { noVModelList, systemComponentsList } from '@/components/Generator/generator/comConfig'
+const excludeList = [...noVModelList, 'uploadFz', 'uploadImg', 'colorPicker', 'popupTableSelect', 'relationForm', 'popupSelect', 'calculate', 'groupTitle']
 
 const getSearchType = item => {
   const jnpfKey = item.__config__.jnpfKey
@@ -290,6 +314,7 @@ const cellStyleDefaultFunc = '({row, column, rowIndex, columnIndex}) => {\r\n   
 const defaultColumnData = {
   searchList: [], // 查询字段
   hasSuperQuery: true, // 高级查询
+  childTableStyle: 1, // 子表样式
   columnList: [], // 字段列表
   columnOptions: [], // 字段列表
   defaultColumnList: [], // 所有可选择字段列表
@@ -332,7 +357,8 @@ const defaultColumnData = {
       func: "",
       name: "脚本事件"
     }
-  }
+  },
+  uploaderTemplateJson: {}
 }
 const defaultFuncsData = {
   afterOnload: {
@@ -358,11 +384,12 @@ export default {
     webType: '',
     modelType: ''
   },
-  components: { draggable, FormScript },
+  components: { draggable, FormScript, uploadBox },
   data() {
     return {
       currentTab: 'column',
       alignOptions: ['left', 'center', 'right'],
+      fixedOptions: ['none', 'left', 'right'],
       list: [],
       searchList: [],
       columnList: [],
@@ -370,6 +397,7 @@ export default {
       btnsOption: [
         { value: 'add', icon: 'el-icon-plus', label: '新增' },
         { value: 'download', icon: 'el-icon-download', label: '导出' },
+        { value: 'upload', icon: 'el-icon-upload2', label: '导入' },
         { value: 'batchRemove', icon: 'el-icon-delete', label: '批量删除' },
       ],
       columnBtnsOption: [
@@ -391,7 +419,8 @@ export default {
       dataInterfaceSelector: [],
       formScriptVisible: false,
       activeItem: {},
-      scriptKey: ''
+      scriptKey: '',
+      uploadBoxVisible: false,
     }
   },
   filters: {
@@ -412,6 +441,9 @@ export default {
           break;
         case 'detail':
           text = '详情'
+          break;
+        case 'upload':
+          text = '导入'
           break;
         default:
           text = '新增'
@@ -469,12 +501,13 @@ export default {
     }
     loop(getDrawingList())
     this.list = list
-    let columnOptions = list.filter(o => noColumnShowList.indexOf(o.__config__.jnpfKey) < 0)
+    let columnOptions = list.filter(o => noColumnShowList.indexOf(o.__config__.jnpfKey) < 0 || o.__config__.isStorage == 2)
     let searchOptions = list.filter(o => noSearchList.indexOf(o.__config__.jnpfKey) < 0)
     this.groupFieldOptions = list.filter(o => o.__vModel__.indexOf('-') < 0)
     this.columnOptions = columnOptions.map(o => ({
       label: o.__config__.label,
       prop: o.__vModel__,
+      fixed: 'none',
       align: 'left',
       jnpfKey: o.__config__.jnpfKey,
       sortable: false,
@@ -506,6 +539,7 @@ export default {
     this.$nextTick(() => {
       this.setListValue(this.columnData.columnList, this.columnOptions, 'column')
       this.setListValue(this.columnData.searchList, this.searchOptions, "search")
+      if (this.btnsList.indexOf('upload') != -1) this.setDefaultUpLoadData()
     })
   },
   methods: {
@@ -527,6 +561,7 @@ export default {
         inter: for (let ii = 0; ii < data.length; ii++) {
           if (replacedData[i][key] === data[ii][key]) {
             if (type === 'column') {
+              data[ii].fixed = replacedData[i].fixed
               data[ii].align = replacedData[i].align
               data[ii].width = replacedData[i].width
               data[ii].sortable = replacedData[i].sortable
@@ -543,11 +578,31 @@ export default {
         this.$refs[type + 'Table'].toggleRowSelection(row, true)
       })
     },
+    setDefaultUpLoadData() {
+      let selectKey = this.columnData.uploaderTemplateJson.selectKey
+      const newList = []
+      for (let i = 0; i < selectKey.length; i++) {
+        const element = selectKey[i];
+        if (this.list.some(item => item.__vModel__ == element)) newList.push(element)
+      }
+      for (let i = 0; i < this.list.length; i++) {
+        const element = this.list[i]
+        const required = element.__config__.required
+        const jnpfKey = element.__config__.jnpfKey
+        if ((required || systemComponentsList.includes(jnpfKey))) {
+          if (!selectKey.includes(element.__vModel__)) {
+            newList.push(element.__vModel__)
+          }
+        }
+      }
+      this.columnData.uploaderTemplateJson.selectKey = newList
+    },
     /**
       * 供父组件使用 获取列表JSON
     */
     getData() {
       if (!this.columnData.columnList.length) return this.$message.warning('列表字段不允许为空')
+      if (!this.columnData.uploaderTemplateJson.selectKey && this.btnsList.indexOf('upload') != -1) return this.$message.warning('请设置导入模板')
       if (this.columnData.type == 2) {
         if (this.columnData.treeDataSource === 'dictionary' && !this.columnData.treeDictionary) return this.$message.warning('请选择数据字典')
         if (this.columnData.treeDataSource === 'api') {
@@ -638,6 +693,17 @@ export default {
       this.$nextTick(() => {
         this.$refs.formScript.init()
       })
+    },
+    setUploaderTemplateJson() {
+      this.uploadBoxVisible = true
+      this.$nextTick(() => {
+        const selectData = this.columnData.uploaderTemplateJson.selectKey ? this.columnData.uploaderTemplateJson.selectKey : []
+        const dataType = this.columnData.uploaderTemplateJson.dataType ? this.columnData.uploaderTemplateJson.dataType : ''
+        this.$refs.uploadRef.init(this.list, selectData, dataType)
+      })
+    },
+    onConfirm(data) {
+      this.columnData.uploaderTemplateJson = data
     }
   }
 }

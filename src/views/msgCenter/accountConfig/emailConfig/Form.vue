@@ -40,7 +40,7 @@
       </el-form-item>
     </el-form>
     <span slot="footer" class="dialog-footer">
-      <el-button type="primary" :loading="btnLoading" @click="sendTest()">
+      <el-button type="primary" :disabled="btnLoading" @click="sendTest()">
         {{'测试'}}</el-button>
       <el-button @click="visible = false">{{$t('common.cancelButton')}}</el-button>
       <el-button type="primary" :loading="btnLoading" @click="dataFormSubmit()">

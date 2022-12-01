@@ -10,9 +10,9 @@
             </el-form-item>
           </el-col>
           <el-col :span="6">
-            <el-form-item label="模板类型">
-              <el-select v-model="templateType" placeholder="选择模板类型" clearable>
-                <el-option v-for="(item,index) in templateTypeList" :key="index"
+            <el-form-item label="消息来源">
+              <el-select v-model="messageSource" placeholder="选择消息来源" clearable>
+                <el-option v-for="(item,index) in messageSourceList" :key="index"
                   :label="item.fullName" :value="item.enCode">
                 </el-option>
               </el-select>
@@ -29,7 +29,16 @@
           </el-col>
           <template v-if="showAll">
             <el-col :span="6">
-              <el-form-item label="状态">
+              <el-form-item label="模板类型">
+                <el-select v-model="templateType" placeholder="选择模板类型" clearable>
+                  <el-option v-for="(item,index) in templateTypeList" :key="index"
+                    :label="item.fullName" :value="item.enCode">
+                  </el-option>
+                </el-select>
+              </el-form-item>
+            </el-col>
+            <el-col :span="6">
+              <el-form-item :label="enabledMarkLabel">
                 <el-select v-model="enabledMark" placeholder="选择状态" clearable>
                   <el-option v-for="(item,index) in enabledMarkList" :key="index"
                     :label="item.fullName" :value="item.enCode">
@@ -65,18 +74,19 @@
         <JNPF-table v-loading="listLoading" :data="list">
           <el-table-column prop="fullName" label="名称" show-overflow-tooltip min-width="200" />
           <el-table-column prop="enCode" label="编码" width="180" />
-          <el-table-column prop="category" label="模板类型" width="170">
+          <el-table-column prop="messageSource" label="消息来源" width="100" />
+          <el-table-column prop="messageType" label="消息类型" width="100" />
+          <el-table-column prop="category" label="模板类型" width="100">
             <template slot-scope="scope">
               {{scope.row.templateType=='1'?'系统模板':'自定义模板'}}
             </template>
           </el-table-column>
-          <el-table-column prop="messageType" label="消息类型" width="170" />
-          <el-table-column prop="creatorUserId" label="创建人" width="120" />
+          <el-table-column prop="creatorUser" label="创建人" width="120" />
           <el-table-column prop="creatorTime" label="创建时间" :formatter="jnpf.tableDateFormat"
-            width="140" />
+            width="120" />
           <el-table-column prop="lastModifyTime" label="最后修改时间" :formatter="jnpf.tableDateFormat"
-            width="140" />
-          <el-table-column prop="sortCode" label="排序" width="100" />
+            width="120" />
+          <el-table-column prop="sortCode" label="排序" width="70" align="center" />
           <el-table-column prop="enabledMark" label="状态" width="70" align="center">
             <template slot-scope="scope">
               <el-tag :type="scope.row.enabledMark == 1 ? 'success' : 'danger'" disable-transitions>
@@ -113,7 +123,7 @@
   </div>
 </template>
 <script>
-import { getMsgTemplateList, delMsgTemplate, copyMsgTemplate } from '@/api/msgCenter/msgTemplate'
+import { getMsgTemplateList, delMsgTemplate, copyMsgTemplate, getMsgTypeList } from '@/api/msgCenter/msgTemplate'
 import Form from './Form'
 import Detail from './Detail'
 export default {
@@ -134,6 +144,8 @@ export default {
       ],
       msgType: "",
       msgTypeList: [],
+      messageSource: "",
+      messageSourceList: [],
       list: [],
       total: 0,
       listLoading: true,
@@ -144,6 +156,7 @@ export default {
       formVisible: false,
       viewVisible: false,
       showAll: false,
+      enabledMarkLabel: '状\u3000态'
     }
   },
   created() {
@@ -167,6 +180,9 @@ export default {
       this.$store.dispatch('base/getMsgTypeList').then((res) => {
         this.msgTypeList = res
       })
+      getMsgTypeList(4).then(res => {
+        this.messageSourceList = res.data
+      })
     },
     search() {
       this.listQuery = {
@@ -174,13 +190,15 @@ export default {
         pageSize: 20,
         templateType: this.templateType,
         messageType: this.msgType,
-        enabledMark: this.enabledMark
+        enabledMark: this.enabledMark,
+        messageSource: this.messageSource,
       }
       this.initData()
     },
     reset() {
       this.keyword = ''
       this.templateType = ""
+      this.messageSource = ""
       this.msgType = ""
       this.enabledMark = ""
       this.search()

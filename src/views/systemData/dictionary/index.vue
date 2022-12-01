@@ -13,11 +13,14 @@
           </el-dropdown-menu>
         </el-dropdown>
       </div>
+      <div class="JNPF-common-tree-search-box">
+        <el-input placeholder="输入关键字" v-model="filterText" suffix-icon="el-icon-search" clearable />
+      </div>
       <el-scrollbar class="JNPF-common-el-tree-scrollbar" v-loading="treeLoading">
         <el-tree ref="treeBox" :data="treeData" :props="defaultProps"
           :default-expand-all="expandsTree" highlight-current :expand-on-click-node="false"
           node-key="id" @node-click="handleNodeClick" class="JNPF-common-el-tree"
-          v-if="refreshTree">
+          :filter-node-method="filterNode" v-if="refreshTree">
           <span class="custom-tree-node" slot-scope="{ node }">
             <i class="el-icon-notebook-2" />
             <span class="text">{{node.label}}</span>
@@ -128,6 +131,12 @@ export default {
       expandsTree: true,
       refreshTable: true,
       refreshTree: true,
+      filterText: '',
+    }
+  },
+  watch: {
+    filterText(val) {
+      this.$refs.treeBox.filter(val)
     }
   },
   created() {
@@ -155,6 +164,10 @@ export default {
       }).catch(() => {
         this.treeLoading = false
       })
+    },
+    filterNode(value, data) {
+      if (!value) return true;
+      return data.fullName.indexOf(value) !== -1;
     },
     toggleExpand() {
       this.refreshTable = false;

@@ -6,7 +6,7 @@
         <div v-for="(item,i) in list" :key="i" class="item">
           <div class="head">
             <el-avatar :size="40" :src="define.comUrl + item.creatorUserHeadIcon" class="avatar" />
-            <p class="username">{{item.creatorUserName}}/{{item.creatorUserId}}</p>
+            <p class="username">{{item.creatorUser}}</p>
             <el-link :underline="false" class="del-btn" @click="delComment(item.id,i)" type="danger"
               v-if="item.isDel">删除</el-link>
             <span class="time">{{item.creatorTime|toDate()}}</span>

@@ -85,9 +85,15 @@
             </template>
             <template v-if="item.__config__.jnpfKey==='userSelect'">
               <userSelect v-model="item.value" :placeholder="'请选择'+item.__config__.label" clearable
-                class="item" :selectType="item.selectType" :ableDepIds="item.ableDepIds"
-                :ablePosIds="item.ablePosIds" :ableUserIds="item.ableUserIds"
-                :ableRoleIds="item.ableRoleIds" :ableGroupIds="item.ableGroupIds" />
+                class="item"
+                :selectType="item.selectType!='all'||item.selectType!='custom'?'all':item.selectType"
+                :ableDepIds="item.ableDepIds" :ablePosIds="item.ablePosIds"
+                :ableUserIds="item.ableUserIds" :ableRoleIds="item.ableRoleIds"
+                :ableGroupIds="item.ableGroupIds" />
+            </template>
+            <template v-if="item.__config__.jnpfKey==='usersSelect'">
+              <usersSelect v-model="item.value" :placeholder="'请选择'+item.__config__.label" clearable
+                class="item" :selectType="item.selectType" :ableIds="item.ableIds" />
             </template>
             <template v-if="item.__config__.jnpfKey==='posSelect'">
               <posSelect v-model="item.value" :placeholder="'请选择'+item.__config__.label" clearable
@@ -161,7 +167,10 @@ export default {
           }
           if (config.dataType === 'dynamic') {
             if (!config.propsUrl) return
-            getDataInterfaceRes(config.propsUrl).then(res => {
+            let query = {
+              paramList: config.templateJson || [],
+            }
+            getDataInterfaceRes(config.propsUrl, query).then(res => {
               let data = res.data
               if (Array.isArray(data)) {
                 isTreeSelect ? cur.options = data : cur.__slot__.options = data

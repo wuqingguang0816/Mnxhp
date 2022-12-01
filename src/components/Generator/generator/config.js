@@ -29,11 +29,11 @@ export const formConf = {
   classJson: "",
   funcs: {
     onLoad:
-      "({ formData, setFormData, setShowOrHide, setRequired, setDisabled, request, getFieldOptions, setFieldOptions }) => {\n    // 在此编写代码\n    \n}",
+      "({ formData, setFormData, setShowOrHide, setRequired, setDisabled, request }) => {\n    // 在此编写代码\n    \n}",
     beforeSubmit:
-      "({ formData, setFormData, setShowOrHide, setRequired, setDisabled, request, getFieldOptions, setFieldOptions }) => {\n    return new Promise((resolve, reject) => {\n        // 在此编写代码\n        \n        // 继续执行\n        resolve()\n    })\n}",
+      "({ formData, setFormData, setShowOrHide, setRequired, setDisabled, request }) => {\n    return new Promise((resolve, reject) => {\n        // 在此编写代码\n        \n        // 继续执行\n        resolve()\n    })\n}",
     afterSubmit:
-      "({ formData, setFormData, setShowOrHide, setRequired, setDisabled, request, getFieldOptions, setFieldOptions }) => {\n    // 在此编写代码\n    \n}"
+      "({ formData, setFormData, setShowOrHide, setRequired, setDisabled, request }) => {\n    // 在此编写代码\n    \n}"
   },
   idGlobal: 100
 };
@@ -67,9 +67,9 @@ export const inputComponents = [
     },
     on: {
       change:
-        "({ data, formData, setFormData, setShowOrHide, setRequired, setDisabled, request, getFieldOptions, setFieldOptions }) => {\n    // 在此编写代码\n    \n}",
+        "({ data, formData, setFormData, setShowOrHide, setRequired, setDisabled, request }) => {\n    // 在此编写代码\n    \n}",
       blur:
-        "({ data, formData, setFormData, setShowOrHide, setRequired, setDisabled, request, getFieldOptions, setFieldOptions }) => {\n    // 在此编写代码\n    \n}"
+        "({ data, formData, setFormData, setShowOrHide, setRequired, setDisabled, request }) => {\n    // 在此编写代码\n    \n}"
     },
     placeholder: "请输入",
     style: { width: "100%" },
@@ -100,6 +100,12 @@ export const inputComponents = [
       tableName: "",
       regList: [],
       trigger: "blur"
+    },
+    on: {
+      change:
+        "({ data, formData, setFormData, setShowOrHide, setRequired, setDisabled, request }) => {\n    // 在此编写代码\n    \n}",
+      blur:
+        "({ data, formData, setFormData, setShowOrHide, setRequired, setDisabled, request }) => {\n    // 在此编写代码\n    \n}"
     },
     type: "textarea",
     placeholder: "请输入",
@@ -134,10 +140,11 @@ export const inputComponents = [
     },
     on: {
       change:
-        "({ data, formData, setFormData, setShowOrHide, setRequired, setDisabled, request, getFieldOptions, setFieldOptions }) => {\n    // 在此编写代码\n    \n}",
+        "({ data, formData, setFormData, setShowOrHide, setRequired, setDisabled, request }) => {\n    // 在此编写代码\n    \n}",
       blur:
-        "({ data, formData, setFormData, setShowOrHide, setRequired, setDisabled, request, getFieldOptions, setFieldOptions }) => {\n    // 在此编写代码\n    \n}"
+        "({ data, formData, setFormData, setShowOrHide, setRequired, setDisabled, request }) => {\n    // 在此编写代码\n    \n}"
     },
+    style: { width: null },
     placeholder: "数字文本",
     min: undefined,
     max: undefined,
@@ -168,7 +175,7 @@ export const inputComponents = [
     },
     on: {
       change:
-        "({ data, formData, setFormData, setShowOrHide, setRequired, setDisabled, request, getFieldOptions, setFieldOptions }) => {\n    // 在此编写代码\n    \n}"
+        "({ data, formData, setFormData, setShowOrHide, setRequired, setDisabled, request }) => {\n    // 在此编写代码\n    \n}"
     },
     disabled: false,
     activeTxt: "开",
@@ -202,6 +209,7 @@ export const inputComponents = [
       dictionaryType: "",
       propsUrl: "",
       propsName: "",
+      templateJson: [],
       props: {
         label: "fullName",
         value: "id"
@@ -221,7 +229,7 @@ export const inputComponents = [
     },
     on: {
       change:
-        "({ data, formData, setFormData, setShowOrHide, setRequired, setDisabled, request, getFieldOptions, setFieldOptions }) => {\n    // 在此编写代码\n    \n}"
+        "({ data, formData, setFormData, setShowOrHide, setRequired, setDisabled, request }) => {\n    // 在此编写代码\n    \n}"
     },
     style: {},
     size: "small",
@@ -251,6 +259,7 @@ export const inputComponents = [
       dictionaryType: "",
       propsUrl: "",
       propsName: "",
+      templateJson: [],
       props: {
         label: "fullName",
         value: "id"
@@ -270,7 +279,7 @@ export const inputComponents = [
     },
     on: {
       change:
-        "({ data, formData, setFormData, setShowOrHide, setRequired, setDisabled, request, getFieldOptions, setFieldOptions }) => {\n    // 在此编写代码\n    \n}"
+        "({ data, formData, setFormData, setShowOrHide, setRequired, setDisabled, request }) => {\n    // 在此编写代码\n    \n}"
     },
     style: {},
     size: "small",
@@ -298,6 +307,7 @@ export const inputComponents = [
       dictionaryType: "",
       propsUrl: "",
       propsName: "",
+      templateJson: [],
       props: {
         label: "fullName",
         value: "id"
@@ -317,7 +327,7 @@ export const inputComponents = [
     },
     on: {
       change:
-        "({ data, formData, setFormData, setShowOrHide, setRequired, setDisabled, request, getFieldOptions, setFieldOptions }) => {\n    // 在此编写代码\n    \n}"
+        "({ data, formData, setFormData, setShowOrHide, setRequired, setDisabled, request }) => {\n    // 在此编写代码\n    \n}"
     },
     placeholder: "请选择",
     style: { width: "100%" },
@@ -347,6 +357,7 @@ export const inputComponents = [
       dataType: "static",
       propsUrl: "",
       propsName: "",
+      templateJson: [],
       dictionaryType: ""
     },
     options: [
@@ -363,9 +374,9 @@ export const inputComponents = [
     ],
     on: {
       change:
-        "({ data, formData, setFormData, setShowOrHide, setRequired, setDisabled, request, getFieldOptions, setFieldOptions }) => {\n    // 在此编写代码\n    \n}",
+        "({ data, formData, setFormData, setShowOrHide, setRequired, setDisabled, request }) => {\n    // 在此编写代码\n    \n}",
       blur:
-        "({ data, formData, setFormData, setShowOrHide, setRequired, setDisabled, request, getFieldOptions, setFieldOptions }) => {\n    // 在此编写代码\n    \n}"
+        "({ data, formData, setFormData, setShowOrHide, setRequired, setDisabled, request }) => {\n    // 在此编写代码\n    \n}"
     },
     placeholder: "请选择",
     style: { width: "100%" },
@@ -404,9 +415,9 @@ export const inputComponents = [
     },
     on: {
       change:
-        "({ data, formData, setFormData, setShowOrHide, setRequired, setDisabled, request, getFieldOptions, setFieldOptions }) => {\n    // 在此编写代码\n    \n}",
+        "({ data, formData, setFormData, setShowOrHide, setRequired, setDisabled, request }) => {\n    // 在此编写代码\n    \n}",
       blur:
-        "({ data, formData, setFormData, setShowOrHide, setRequired, setDisabled, request, getFieldOptions, setFieldOptions }) => {\n    // 在此编写代码\n    \n}"
+        "({ data, formData, setFormData, setShowOrHide, setRequired, setDisabled, request }) => {\n    // 在此编写代码\n    \n}"
     },
     placeholder: "请选择",
     type: "date",
@@ -438,9 +449,9 @@ export const inputComponents = [
     },
     on: {
       change:
-        "({ data, formData, setFormData, setShowOrHide, setRequired, setDisabled, request, getFieldOptions, setFieldOptions }) => {\n    // 在此编写代码\n    \n}",
+        "({ data, formData, setFormData, setShowOrHide, setRequired, setDisabled, request }) => {\n    // 在此编写代码\n    \n}",
       blur:
-        "({ data, formData, setFormData, setShowOrHide, setRequired, setDisabled, request, getFieldOptions, setFieldOptions }) => {\n    // 在此编写代码\n    \n}"
+        "({ data, formData, setFormData, setShowOrHide, setRequired, setDisabled, request }) => {\n    // 在此编写代码\n    \n}"
     },
     placeholder: "请选择",
     style: { width: "100%" },
@@ -474,7 +485,7 @@ export const inputComponents = [
     },
     on: {
       change:
-        "({ data, formData, setFormData, setShowOrHide, setRequired, setDisabled, request, getFieldOptions, setFieldOptions }) => {\n    // 在此编写代码\n    \n}"
+        "({ data, formData, setFormData, setShowOrHide, setRequired, setDisabled, request }) => {\n    // 在此编写代码\n    \n}"
     },
     disabled: false,
     accept: "",
@@ -505,7 +516,7 @@ export const inputComponents = [
     },
     on: {
       change:
-        "({ data, formData, setFormData, setShowOrHide, setRequired, setDisabled, request, getFieldOptions, setFieldOptions }) => {\n    // 在此编写代码\n    \n}"
+        "({ data, formData, setFormData, setShowOrHide, setRequired, setDisabled, request }) => {\n    // 在此编写代码\n    \n}"
     },
     disabled: false,
     accept: "",
@@ -559,7 +570,7 @@ export const inputComponents = [
     },
     on: {
       change:
-        "({ data, formData, setFormData, setShowOrHide, setRequired, setDisabled, request, getFieldOptions, setFieldOptions }) => {\n    // 在此编写代码\n    \n}"
+        "({ data, formData, setFormData, setShowOrHide, setRequired, setDisabled, request }) => {\n    // 在此编写代码\n    \n}"
     },
     style: {},
     max: 5,
@@ -589,8 +600,9 @@ export const inputComponents = [
     },
     on: {
       change:
-        "({ data, formData, setFormData, setShowOrHide, setRequired, setDisabled, request, getFieldOptions, setFieldOptions }) => {\n    // 在此编写代码\n    \n}"
+        "({ data, formData, setFormData, setShowOrHide, setRequired, setDisabled, request }) => {\n    // 在此编写代码\n    \n}"
     },
+    style: { width: "100%" },
     disabled: false,
     min: 0,
     max: 100,
@@ -617,6 +629,7 @@ export const inputComponents = [
       regList: [],
       trigger: "blur"
     },
+    style: { width: "100%" },
     placeholder: "请输入"
   },
   {
@@ -636,7 +649,7 @@ export const inputComponents = [
     },
     on: {
       click:
-        "({ data, formData, setFormData, setShowOrHide, setRequired, setDisabled, request, getFieldOptions, setFieldOptions }) => {\n    // 在此编写代码\n    \n}"
+        "({ data, formData, setFormData, setShowOrHide, setRequired, setDisabled, request }) => {\n    // 在此编写代码\n    \n}"
     },
     content: '文本链接',
     href: "",
@@ -665,7 +678,7 @@ export const inputComponents = [
     },
     on: {
       click:
-        "({ data, formData, setFormData, setShowOrHide, setRequired, setDisabled, request, getFieldOptions, setFieldOptions }) => {\n    // 在此编写代码\n    \n}"
+        "({ data, formData, setFormData, setShowOrHide, setRequired, setDisabled, request }) => {\n    // 在此编写代码\n    \n}"
     },
     align: "left",
     buttonText: "按钮",
@@ -688,7 +701,6 @@ export const inputComponents = [
       dragDisabled: false,
       visibility: ["pc", "app"]
     },
-    style: { width: "100%" },
     textStyle: {
       color: "#000000",
       "text-align": "left",
@@ -744,8 +756,9 @@ export const selectComponents = [
     },
     on: {
       change:
-        "({ data, formData, setFormData, setShowOrHide, setRequired, setDisabled, request, getFieldOptions, setFieldOptions }) => {\n    // 在此编写代码\n    \n}"
+        "({ data, formData, setFormData, setShowOrHide, setRequired, setDisabled, request }) => {\n    // 在此编写代码\n    \n}"
     },
+    style: { width: "100%" },
     placeholder: "请选择",
     multiple: false,
     clearable: true,
@@ -773,8 +786,9 @@ export const selectComponents = [
     },
     on: {
       change:
-        "({ data, formData, setFormData, setShowOrHide, setRequired, setDisabled, request, getFieldOptions, setFieldOptions }) => {\n    // 在此编写代码\n    \n}"
+        "({ data, formData, setFormData, setShowOrHide, setRequired, setDisabled, request }) => {\n    // 在此编写代码\n    \n}"
     },
+    style: { width: "100%" },
     placeholder: "请选择",
     selectType: 'all',
     ableDepIds: [],
@@ -804,8 +818,9 @@ export const selectComponents = [
     },
     on: {
       change:
-        "({ data, formData, setFormData, setShowOrHide, setRequired, setDisabled, request, getFieldOptions, setFieldOptions }) => {\n    // 在此编写代码\n    \n}"
+        "({ data, formData, setFormData, setShowOrHide, setRequired, setDisabled, request }) => {\n    // 在此编写代码\n    \n}"
     },
+    style: { width: "100%" },
     placeholder: "请选择",
     selectType: 'all',
     ableDepIds: [],
@@ -832,6 +847,43 @@ export const selectComponents = [
       visibility: ["pc", "app"],
       tableName: "",
       regList: [],
+      trigger: "click",
+      relationField: '',
+    },
+    on: {
+      change:
+        "({ data, formData, setFormData, setShowOrHide, setRequired, setDisabled, request }) => {\n    // 在此编写代码\n    \n}"
+    },
+    style: { width: "100%" },
+    placeholder: "请选择",
+    selectType: 'all',
+    ableRelationIds: [],
+    ableDepIds: [],
+    ablePosIds: [],
+    ableUserIds: [],
+    ableRoleIds: [],
+    ableGroupIds: [],
+    relationField: '',
+    multiple: false,
+    clearable: true,
+    disabled: false
+  },
+  {
+    __config__: {
+      jnpfKey: "usersSelect",
+      label: "用户组件",
+      labelWidth: undefined,
+      showLabel: true,
+      tag: "users-select",
+      tagIcon: "icon-ym icon-ym-generator-founder",
+      defaultValue: null,
+      required: false,
+      layout: "colFormItem",
+      span: 24,
+      dragDisabled: false,
+      visibility: ["pc", "app"],
+      tableName: "",
+      regList: [],
       trigger: "click"
     },
     on: {
@@ -840,11 +892,7 @@ export const selectComponents = [
     },
     placeholder: "请选择",
     selectType: 'all',
-    ableDepIds: [],
-    ablePosIds: [],
-    ableUserIds: [],
-    ableRoleIds: [],
-    ableGroupIds: [],
+    ableIds: [],
     multiple: false,
     clearable: true,
     disabled: false
@@ -870,8 +918,9 @@ export const selectComponents = [
     },
     on: {
       change:
-        "({ data, formData, setFormData, setShowOrHide, setRequired, setDisabled, request, getFieldOptions, setFieldOptions }) => {\n    // 在此编写代码\n    \n}"
+        "({ data, formData, setFormData, setShowOrHide, setRequired, setDisabled, request }) => {\n    // 在此编写代码\n    \n}"
     },
+    style: { width: "100%" },
     placeholder: "请选择",
     multiple: false,
     clearable: true,
@@ -898,13 +947,52 @@ export const selectComponents = [
     },
     on: {
       change:
-        "({ data, formData, setFormData, setShowOrHide, setRequired, setDisabled, request, getFieldOptions, setFieldOptions }) => {\n    // 在此编写代码\n    \n}"
+        "({ data, formData, setFormData, setShowOrHide, setRequired, setDisabled, request }) => {\n    // 在此编写代码\n    \n}"
     },
+    style: { width: "100%" },
     placeholder: "请选择",
     multiple: false,
     clearable: true,
     filterable: false,
     disabled: false
+  },
+  {
+    __config__: {
+      jnpfKey: "table",
+      label: "设计子表",
+      showLabel: false,
+      tagIcon: "icon-ym icon-ym-generator-table",
+      className: [],
+      tag: "JNPF-InputTable",
+      defaultValue: [],
+      layout: "rowFormItem",
+      dragDisabled: false,
+      visibility: ["pc", "app"],
+      showTitle: true,
+      type: "table",
+      rowType: "table",
+      children: [],
+      tableName: ""
+    },
+    disabled: false,
+    actionText: "添加",
+    "show-summary": false,
+    addType: 0,
+    addTableConf: {
+      popupTitle: '选择数据',
+      popupType: 'dialog',
+      popupWidth: '800px',
+      interfaceId: '',
+      interfaceName: '',
+      templateJson: [],
+      hasPage: true,
+      pageSize: 20,
+      columnOptions: [],
+      relationOptions: []
+    },
+    summaryField: [],
+    tableConf: {},
+    defaultValue: []
   },
   {
     __config__: {
@@ -927,12 +1015,14 @@ export const selectComponents = [
       dataType: "static",
       dictionaryType: "",
       propsUrl: "",
-      propsName: ""
+      propsName: "",
+      templateJson: [],
     },
     on: {
       change:
-        "({ data, formData, setFormData, setShowOrHide, setRequired, setDisabled, request, getFieldOptions, setFieldOptions }) => {\n    // 在此编写代码\n    \n}"
+        "({ data, formData, setFormData, setShowOrHide, setRequired, setDisabled, request }) => {\n    // 在此编写代码\n    \n}"
     },
+    style: { width: "100%" },
     placeholder: "请选择",
     props: {
       props: {
@@ -979,11 +1069,13 @@ export const selectComponents = [
     },
     on: {
       change:
-        "({ data, formData, setFormData, setShowOrHide, setRequired, setDisabled, request, getFieldOptions, setFieldOptions }) => {\n    // 在此编写代码\n    \n}"
+        "({ data, formData, setFormData, setShowOrHide, setRequired, setDisabled, request }) => {\n    // 在此编写代码\n    \n}"
     },
+    style: { width: "100%" },
     placeholder: "请选择",
     interfaceId: "",
     interfaceName: "",
+    templateJson: [],
     hasPage: false,
     pageSize: 20,
     columnOptions: [],
@@ -996,44 +1088,6 @@ export const selectComponents = [
     clearable: true,
     multiple: false,
     filterable: false
-  },
-  {
-    __config__: {
-      jnpfKey: "table",
-      label: "设计子表",
-      showLabel: false,
-      tagIcon: "icon-ym icon-ym-generator-table",
-      className: [],
-      tag: "JNPF-InputTable",
-      defaultValue: [],
-      layout: "rowFormItem",
-      dragDisabled: false,
-      visibility: ["pc", "app"],
-      showTitle: true,
-      type: "table",
-      rowType: "table",
-      children: [],
-      tableName: ""
-    },
-    disabled: false,
-    actionText: "添加",
-    "show-summary": false,
-    addType: 0,
-    addTableConf: {
-      popupTitle: '选择数据',
-      popupType: 'dialog',
-      popupWidth: '800px',
-      interfaceId: '',
-      interfaceName: '',
-      templateJson: [],
-      hasPage: true,
-      pageSize: 20,
-      columnOptions: [],
-      relationOptions: []
-    },
-    summaryField: [],
-    tableConf: {},
-    defaultValue: []
   },
   {
     __config__: {
@@ -1056,14 +1110,41 @@ export const selectComponents = [
     },
     on: {
       change:
-        "({ data, formData, setFormData, setShowOrHide, setRequired, setDisabled, request, getFieldOptions, setFieldOptions }) => {\n    // 在此编写代码\n    \n}"
+        "({ data, formData, setFormData, setShowOrHide, setRequired, setDisabled, request }) => {\n    // 在此编写代码\n    \n}"
     },
+    style: { width: "100%" },
     placeholder: "请选择",
     disabled: false,
     clearable: true,
     filterable: false,
     multiple: false,
     level: 2
+  },
+  {
+    __config__: {
+      jnpfKey: "billRule",
+      label: "单据组件",
+      labelWidth: undefined,
+      showLabel: true,
+      tag: "el-input",
+      defaultValue: "",
+      tagIcon: "icon-ym icon-ym-generator-documents",
+      className: [],
+      defaultValue: null,
+      layout: "colFormItem",
+      required: false,
+      span: 24,
+      dragDisabled: false,
+      visibility: ["pc", "app"],
+      tableName: "",
+      noShow: false,
+      trigger: "change",
+      rule: "",
+      ruleName: "",
+    },
+    style: { width: "100%" },
+    readonly: true,
+    placeholder: "系统自动生成"
   },
   {
     __config__: {
@@ -1086,8 +1167,9 @@ export const selectComponents = [
     },
     on: {
       change:
-        "({ data, formData, setFormData, setShowOrHide, setRequired, setDisabled, request, getFieldOptions, setFieldOptions }) => {\n    // 在此编写代码\n    \n}"
+        "({ data, formData, setFormData, setShowOrHide, setRequired, setDisabled, request }) => {\n    // 在此编写代码\n    \n}"
     },
+    style: { width: "100%" },
     placeholder: "请选择",
     modelId: "",
     relationField: "",
@@ -1122,11 +1204,13 @@ export const selectComponents = [
     },
     on: {
       change:
-        "({ data, formData, setFormData, setShowOrHide, setRequired, setDisabled, request, getFieldOptions, setFieldOptions }) => {\n    // 在此编写代码\n    \n}"
+        "({ data, formData, setFormData, setShowOrHide, setRequired, setDisabled, request }) => {\n    // 在此编写代码\n    \n}"
     },
+    style: { width: "100%" },
     placeholder: "请选择",
     interfaceId: "",
     interfaceName: "",
+    templateJson: [],
     hasPage: false,
     pageSize: 20,
     columnOptions: [],
@@ -1152,8 +1236,10 @@ export const selectComponents = [
       layout: "colFormItem",
       span: 24,
       dragDisabled: false,
+      isStorage: 1,
       visibility: ["pc", "app"]
     },
+    style: { width: "100%" },
     showField: "",
     relationField: ""
   },
@@ -1171,35 +1257,12 @@ export const selectComponents = [
       layout: "colFormItem",
       span: 24,
       dragDisabled: false,
+      isStorage: 1,
       visibility: ["pc", "app"]
     },
+    style: { width: "100%" },
     showField: "",
     relationField: ""
-  },
-  {
-    __config__: {
-      jnpfKey: "billRule",
-      label: "单据组件",
-      labelWidth: undefined,
-      showLabel: true,
-      tag: "el-input",
-      defaultValue: "",
-      tagIcon: "icon-ym icon-ym-generator-documents",
-      className: [],
-      defaultValue: null,
-      layout: "colFormItem",
-      required: false,
-      span: 24,
-      dragDisabled: false,
-      visibility: ["pc", "app"],
-      tableName: "",
-      noShow: false,
-      trigger: "change",
-      rule: "",
-      ruleName: "",
-    },
-    readonly: true,
-    placeholder: "系统自动生成"
   },
 ];
 
@@ -1223,6 +1286,7 @@ export const systemComponents = [
       tableName: "",
       noShow: false
     },
+    style: { width: "100%" },
     type: 'currUser',
     readonly: true,
     placeholder: ""
@@ -1245,6 +1309,7 @@ export const systemComponents = [
       tableName: "",
       noShow: false
     },
+    style: { width: "100%" },
     type: 'currTime',
     readonly: true,
     placeholder: ""
@@ -1267,6 +1332,7 @@ export const systemComponents = [
       tableName: "",
       noShow: false
     },
+    style: { width: "100%" },
     readonly: true,
     placeholder: "系统自动生成"
   },
@@ -1288,6 +1354,7 @@ export const systemComponents = [
       tableName: "",
       noShow: false
     },
+    style: { width: "100%" },
     readonly: true,
     placeholder: "系统自动生成"
   },
@@ -1309,6 +1376,7 @@ export const systemComponents = [
       tableName: "",
       noShow: false
     },
+    style: { width: "100%" },
     type: 'currOrganize',
     readonly: true,
     showLevel: "last",
@@ -1332,6 +1400,7 @@ export const systemComponents = [
       tableName: "",
       noShow: false
     },
+    style: { width: "100%" },
     type: 'currPosition',
     readonly: true,
     placeholder: ""
@@ -1397,14 +1466,16 @@ export const layoutComponents = [
           title: "面板1",
           name: "1",
           __config__: {
-            children: []
+            jnpfKey: "collapseItem",
+            children: [],
           }
         },
         {
           title: "面板2",
           name: "2",
           __config__: {
-            children: []
+            jnpfKey: "collapseItem",
+            children: [],
           }
         }
       ],
@@ -1412,7 +1483,7 @@ export const layoutComponents = [
     },
     on: {
       change:
-        "({ data, formData, setFormData, setShowOrHide, setRequired, setDisabled, request, getFieldOptions, setFieldOptions }) => {\n    // 在此编写代码\n    \n}"
+        "({ data, formData, setFormData, setShowOrHide, setRequired, setDisabled, request }) => {\n    // 在此编写代码\n    \n}"
     },
     accordion: false
   },
@@ -1432,13 +1503,15 @@ export const layoutComponents = [
         {
           title: "Tab 1",
           __config__: {
-            children: []
+            jnpfKey: "tabItem",
+            children: [],
           }
         },
         {
           title: "Tab 2",
           __config__: {
-            children: []
+            jnpfKey: "tabItem",
+            children: [],
           }
         }
       ],
@@ -1446,7 +1519,7 @@ export const layoutComponents = [
     },
     on: {
       "tab-click":
-        "({ data, formData, setFormData, setShowOrHide, setRequired, setDisabled, request, getFieldOptions, setFieldOptions }) => {\n    // 在此编写代码\n    \n}"
+        "({ data, formData, setFormData, setShowOrHide, setRequired, setDisabled, request }) => {\n    // 在此编写代码\n    \n}"
     },
     type: "",
     "tab-position": "top"

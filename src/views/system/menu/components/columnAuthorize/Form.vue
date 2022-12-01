@@ -27,6 +27,12 @@
             @change="changeFieldRule">
             <el-option v-for="item in fieldRuleOptions" :key="item.value" :label="item.label"
               :value="item.value">
+              <template v-if="item.value!=0">
+                <span>{{item.label}}<el-tooltip :content="`与主表是一对${item.value==1?'一':'多'}的主从关系`"
+                    placement="top-start">
+                    <i class="el-icon-warning-outline" style="margin-left:5px"></i>
+                  </el-tooltip></span>
+              </template>
             </el-option>
           </el-select>
         </jnpf-form-tip-item>

@@ -1,6 +1,7 @@
 <template >
   <div class="JNPF-common-layout">
-    <div class="JNPF-preview-main">
+    <FlowBox v-if="config.enableFlow " ref="FlowBox" @close="closeFlow" />
+    <div class="JNPF-preview-main" v-else>
       <div class="JNPF-common-page-header">
         <p>{{config.fullName}}</p>
         <div class="options">
@@ -16,12 +17,12 @@
     </div>
   </div>
 </template>
-
 <script>
 import { createModel } from '@/api/onlineDev/visualDev'
 import Parser from '@/components/Generator/parser/Parser'
+import FlowBox from '@/views/workFlow/components/FlowBox'
 export default {
-  components: { Parser },
+  components: { Parser, FlowBox },
   props: ['config', 'modelId', 'isPreview'],
   data() {
     return {
@@ -40,13 +41,31 @@ export default {
   },
   methods: {
     init() {
-      this.formConf = JSON.parse(this.config.formData)
-      this.loading = true
-      this.$nextTick(() => {
-        this.visible = true
-        this.loading = false
-        this.key = +new Date()
-      })
+      if (this.config.enableFlow) {
+        let data = {
+          id: '',
+          enCode: this.config.flowEnCode,
+          flowId: this.config.flowId,
+          formType: 2,
+          type: 1,
+          opType: '-1',
+          modelId: this.modelId,
+          isPreview: this.isPreview,
+          fromForm: 1,
+          hideCancelBtn: true
+        }
+        this.$nextTick(() => {
+          this.$refs.FlowBox.init(data)
+        })
+      } else {
+        this.formConf = JSON.parse(this.config.formData)
+        this.loading = true
+        this.$nextTick(() => {
+          this.visible = true
+          this.loading = false
+          this.key = +new Date()
+        })
+      }
     },
     submitForm(data, callback) {
       if (!data) return
@@ -74,7 +93,10 @@ export default {
       this.$nextTick(() => {
         this.$refs.dynamicForm && this.$refs.dynamicForm.resetForm()
       })
-    }
+    },
+    closeFlow(isRefresh) {
+      if (isRefresh) this.init()
+    },
   }
 }
 </script>

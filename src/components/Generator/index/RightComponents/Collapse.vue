@@ -41,7 +41,8 @@ export default {
         title: '新面板',
         name: this.jnpf.idGenerator(),
         __config__: {
-          children: []
+          jnpfKey: "collapseItem",
+          children: [],
         }
       })
     },

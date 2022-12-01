@@ -16,7 +16,7 @@
         </template>
       </el-table-column>
       <!-- 组件列 -->
-      <template v-for="(head, cindex) in tableData">
+      <template v-for="(head, cIndex) in tableData">
         <el-table-column :key="head.__config__.formId" :min-width="head['min-width']"
           :prop="head.__vModel__" :width="head.__config__.columnWidth"
           v-if="!head.__config__.noShow && (!head.__config__.visibility || (Array.isArray(head.__config__.visibility) && head.__config__.visibility.includes('pc')))">
@@ -27,22 +27,22 @@
           <template slot-scope="scope">
             <!-- 单选框组 多选框组 都替换成下拉 并添加options -->
             <template v-if="['select', 'checkbox','radio'].includes(head.__config__.jnpfKey)">
-              <el-select v-model="tableFormData[scope.$index][cindex].value"
-                v-bind="getConfById(head.__config__.formId)" :rowIndex="scope.$index"
-                @blur="onFormBlur(scope.$index, cindex, 'el-select')"
-                @change="onFormDataChange(scope.$index, cindex, 'el-select',arguments)">
-                <el-option v-for="(opt,oindex) in head.__slot__.options" :key="oindex"
-                  :label="opt[head.__config__.props.label]"
+              <el-select v-model="tableFormData[scope.$index][cIndex].value"
+                v-bind="getConfById(head.__config__.formId,scope.$index)" :rowIndex="scope.$index"
+                @blur="onFormBlur(scope.$index, cIndex, 'el-select')"
+                @change="onFormDataChange(scope.$index, cIndex, 'el-select',arguments)">
+                <el-option v-for="(opt,oIndex) in tableFormData[scope.$index][cIndex].options"
+                  :key="oIndex" :label="opt[head.__config__.props.label]"
                   :value="opt[head.__config__.props.value]">
                 </el-option>
               </el-select>
             </template>
             <!-- 单行输入 -->
             <template v-else-if="head.__config__.jnpfKey==='comInput'">
-              <el-input v-model="tableFormData[scope.$index][cindex].value"
-                v-bind="getConfById(head.__config__.formId)" :rowIndex="scope.$index"
-                @blur="onFormBlur(scope.$index, cindex, 'el-input')"
-                @change="onFormDataChange(scope.$index, cindex, 'el-input',arguments)">
+              <el-input v-model="tableFormData[scope.$index][cIndex].value"
+                v-bind="getConfById(head.__config__.formId,scope.$index)" :rowIndex="scope.$index"
+                @blur="onFormBlur(scope.$index, cIndex, 'el-input')"
+                @change="onFormDataChange(scope.$index, cIndex, 'el-input',arguments)">
                 <template v-if="head.__slot__">
                   <template slot="prepend" v-if="head.__slot__.prepend">
                     {{ head.__slot__.prepend }}
@@ -53,20 +53,35 @@
                 </template>
               </el-input>
             </template>
+            <!-- 下拉树形 -->
+            <template v-else-if="head.__config__.jnpfKey==='treeSelect'">
+              <JNPF-TreeSelect v-model="tableFormData[scope.$index][cIndex].value"
+                :options="tableFormData[scope.$index][cIndex].options" :props="head.props.props"
+                :placeholder="head.placeholder" :clearable="head.clearable"
+                :multiple="head.multiple" :filterable="head.filterable" :disabled="head.disabled" />
+            </template>
+            <!-- 级联选择 -->
+            <template v-else-if="head.__config__.jnpfKey==='cascader'">
+              <el-cascader v-model="tableFormData[scope.$index][cIndex].value"
+                :options="tableFormData[scope.$index][cIndex].options" :props="head.props.props"
+                :placeholder="head.placeholder" :clearable="head.clearable"
+                :show-all-levels="head['show-all-levels']" :separator="head.separator"
+                :filterable="head.filterable" :disabled="head.disabled" />
+            </template>
             <!-- 其他 -->
             <component v-else :is="head.__config__.tag" :rowIndex="scope.$index"
               :tableVModel="config.__vModel__" :componentVModel="head.__vModel__"
-              v-model="tableFormData[scope.$index][cindex].value"
+              v-model="tableFormData[scope.$index][cIndex].value"
               v-bind="getConfById(head.__config__.formId,scope.$index)" :formData="formData"
-              @blur="onFormBlur(scope.$index, cindex, head.__config__.tag)"
-              @change="onFormDataChange(scope.$index, cindex, head.__config__.tag,arguments)">
+              @blur="onFormBlur(scope.$index, cIndex, head.__config__.tag)"
+              @change="onFormDataChange(scope.$index, cIndex, head.__config__.tag,arguments)">
             </component>
-            <div class="error-tip" v-show="!tableFormData[scope.$index][cindex].valid">
+            <div class="error-tip" v-show="!tableFormData[scope.$index][cIndex].valid">
               不能为空
             </div>
             <div class="error-tip"
-              v-show="tableFormData[scope.$index][cindex].valid && !tableFormData[scope.$index][cindex].regValid">
-              {{ tableFormData[scope.$index][cindex].regErrorText }}
+              v-show="tableFormData[scope.$index][cIndex].valid && !tableFormData[scope.$index][cIndex].regValid">
+              {{ tableFormData[scope.$index][cIndex].regErrorText }}
             </div>
           </template>
         </el-table-column>
@@ -99,6 +114,8 @@ export default {
       default: () => ([])
     },
     formData: Object,
+    relations: Object,
+    vModel: String,
     disabled: {
       type: Boolean,
       default: false
@@ -122,6 +139,21 @@ export default {
       // this.addRow()
     }
   },
+  computed: {
+    childRelations() {
+      let obj = {}
+      for (let key in this.relations) {
+        if (key.includes('-')) {
+          let tableVModel = key.split('-')[0]
+          if (tableVModel === this.vModel) {
+            let newKey = key.split('-')[1]
+            obj[newKey] = this.relations[key]
+          }
+        }
+      }
+      return obj
+    }
+  },
   methods: {
     buildOptions() {
       this.tableData.forEach(cur => {
@@ -136,7 +168,10 @@ export default {
           }
           if (config.dataType === 'dynamic') {
             if (!config.propsUrl) return
-            getDataInterfaceRes(config.propsUrl).then(res => {
+            let query = {
+              paramList: config.templateJson ? this.getDefaultParamList(config.templateJson, this.formData) : [],
+            }
+            getDataInterfaceRes(config.propsUrl, query).then(res => {
               let realData = res.data
               if (Array.isArray(realData)) {
                 isTreeSelect ? cur.options = realData : cur.__slot__.options = realData
@@ -147,6 +182,150 @@ export default {
           }
         }
       })
+    },
+    handleRelationForParent(e, defaultValue, notSetDefault) {
+      if (!this.tableFormData.length) return
+      for (let i = 0; i < this.tableFormData.length; i++) {
+        let row = this.tableFormData[i];
+        for (let j = 0; j < row.length; j++) {
+          let item = row[j];
+          const vModel = item.jnpfKey === 'popupSelect' ? item.__vModel__.substring(0, item.__vModel__.indexOf('_jnpfRelation_')) : item.__vModel__
+          if (e.__vModel__ === vModel) {
+            if (!notSetDefault) item.value = defaultValue
+            if (e.opType === 'setOptions') {
+              item.options = []
+              let query = {
+                paramList: this.getParamList(e.__config__.templateJson, this.formData, i)
+              }
+              getDataInterfaceRes(e.__config__.propsUrl, query).then(res => {
+                let realData = res.data
+                item.options = Array.isArray(realData) ? realData : []
+              })
+            }
+            if (e.opType === 'setUserOptions') {
+              let value = this.formData[e.relationField] || []
+              item.config.ableRelationIds = Array.isArray(value) ? value : [value]
+            }
+            if (e.opType === 'setPopupOptions') { }
+          }
+        }
+      }
+      this.updateParentData()
+    },
+    handleRelation(data, rowIndex) {
+      const currRelations = this.childRelations
+      for (let key in currRelations) {
+        if (key === data.__vModel__) {
+          for (let i = 0; i < currRelations[key].length; i++) {
+            const e = currRelations[key][i];
+            const config = e.__config__
+            const jnpfKey = config.jnpfKey
+            let defaultValue = ''
+            if (['checkbox', 'cascader'].includes(jnpfKey) || (['select', 'treeSelect', 'popupSelect', 'popupTableSelect', 'userSelect'].includes(jnpfKey) && e.multiple)) {
+              defaultValue = []
+            }
+            let row = this.tableFormData[rowIndex];
+            for (let j = 0; j < row.length; j++) {
+              let item = row[j];
+              const vModel = item.jnpfKey === 'popupSelect' ? item.__vModel__.substring(0, item.__vModel__.indexOf('_jnpfRelation_')) : item.__vModel__
+              if (e.__vModel__ === vModel) {
+                item.value = defaultValue
+                this.handleRelation(item, rowIndex)
+                if (e.opType === 'setOptions') {
+                  item.options = []
+                  let query = {
+                    paramList: this.getParamList(e.__config__.templateJson, this.formData, rowIndex)
+                  }
+                  getDataInterfaceRes(e.__config__.propsUrl, query).then(res => {
+                    let realData = res.data
+                    item.options = Array.isArray(realData) ? realData : []
+                  })
+                }
+                if (e.opType === 'setUserOptions') {
+                  let value = this.getFieldVal(e.relationField, rowIndex) || []
+                  item.config.ableRelationIds = Array.isArray(value) ? value : [value]
+                }
+                if (e.opType === 'setPopupOptions') { }
+              }
+            }
+          }
+        }
+      }
+      this.updateParentData()
+    },
+    buildRowAttr(rowIndex) {
+      let row = this.tableFormData[rowIndex];
+      for (let i = 0; i < row.length; i++) {
+        let item = row[i];
+        const cur = row[i].config
+        const config = cur.__config__
+        if (dyOptionsList.indexOf(config.jnpfKey) > -1) {
+          if (config.dataType === 'dynamic') {
+            if (!config.propsUrl || !config.templateJson || !config.templateJson.length) return
+            let query = {
+              paramList: config.templateJson ? this.getParamList(config.templateJson, this.formData, rowIndex) : [],
+            }
+            getDataInterfaceRes(config.propsUrl, query).then(res => {
+              let realData = res.data
+              item.options = Array.isArray(realData) ? realData : []
+            })
+          }
+        }
+        if (config.jnpfKey === 'userSelect' && cur.relationField && cur.selectType !== 'all' && cur.selectType !== 'custom') {
+          let value = this.getFieldVal(cur.relationField, rowIndex) || []
+          cur.ableRelationIds = Array.isArray(value) ? value : [value]
+        }
+      }
+    },
+    getParamList(templateJson, formData, index) {
+      for (let i = 0; i < templateJson.length; i++) {
+        if (templateJson[i].relationField) {
+          if (templateJson[i].relationField.includes('-')) {
+            let childVModel = templateJson[i].relationField.split('-')[1]
+            let list = this.tableFormData[index].filter(o => o.__vModel__ === childVModel)
+            if (!list.length) {
+              templateJson[i].defaultValue = ''
+            } else {
+              let item = list[0]
+              templateJson[i].defaultValue = item.value
+            }
+          } else {
+            templateJson[i].defaultValue = formData[templateJson[i].relationField] || ''
+          }
+        }
+      }
+      return templateJson
+    },
+    getDefaultParamList(templateJson, formData) {
+      for (let i = 0; i < templateJson.length; i++) {
+        if (templateJson[i].relationField) {
+          if (templateJson[i].relationField.includes('-')) {
+            let childVModel = templateJson[i].relationField.split('-')[1]
+            let list = this.tableData.filter(o => o.__vModel__ === childVModel)
+            templateJson[i].defaultValue = ''
+            if (list.length) templateJson[i].defaultValue = list[0].__config__.defaultValue
+          } else {
+            templateJson[i].defaultValue = formData[templateJson[i].relationField] || ''
+          }
+        }
+      }
+      return templateJson
+    },
+    getFieldVal(field, rowIndex) {
+      let val = ''
+      if (field.includes('-')) {
+        let childVModel = field.split('-')[1]
+        let list = this.tableFormData[rowIndex].filter(o => o.__vModel__ === childVModel)
+        if (!list.length) {
+          val = ''
+        } else {
+          let item = list[0]
+          val = item.value
+        }
+      } else {
+        val = this.formData[field] || ''
+      }
+      return val
     },
     clearAddRowFlag() {
       this.$nextTick(() => {
@@ -265,7 +444,9 @@ export default {
       }
       data.required && (data.valid = this.checkData(data))
       data.regList && data.regList.length && (data.regValid = this.checkRegData(data))
-      if (['el-input-number', 'calculate'].includes(tag)) this.updateParentData()
+      // if (['el-input-number', 'calculate'].includes(tag)) this.updateParentData()
+      this.updateParentData()
+      this.handleRelation(data, rowIndex)
     },
     /**
      * 校验单个表单数据
@@ -320,7 +501,7 @@ export default {
      * 根据formId获取完整组件配置
      */
     getConfById(formId, rowIndex) {
-      let item = this.tableData.find(t => t.__config__.formId === formId)
+      let item = this.tableFormData[rowIndex].find(t => t.formId === formId).config
       let itemConfig = item.__config__
       let newObj = {}
       for (const key in item) {
@@ -340,6 +521,7 @@ export default {
       if (['relationFormAttr', 'popupAttr'].includes(itemConfig.jnpfKey)) {
         let prop = newObj['relationField'].split('_jnpfTable_')[0]
         newObj['relationField'] = prop + '_jnpfRelation_' + rowIndex
+        newObj['isStorage'] = itemConfig.isStorage
       }
       return newObj
     },
@@ -348,11 +530,16 @@ export default {
      */
     getEmptyRow(val, rowIndex) {
       return this.tableData.map((t, index) => {
+        let options = []
+        if (dyOptionsList.indexOf(t.__config__.jnpfKey) > -1) {
+          let isTreeSelect = t.__config__.jnpfKey === 'treeSelect' || t.__config__.jnpfKey === 'cascader'
+          options = isTreeSelect ? t.options : t.__slot__.options
+        }
         let res = {
           tag: t.__config__.tag,
           formId: t.__config__.formId,
           value: val && val[t.__vModel__] || t.__config__.defaultValue,
-          options: t.__slot__ && t.__slot__.options && t.__slot__.options || [], // 下拉 单选 多选
+          options,
           valid: true,
           regValid: true,
           regErrorText: '',
@@ -364,7 +551,6 @@ export default {
           rowData: val || {},
           config: t
         }
-        // if (t.tag === 'el-upload') this.$set(res, 'value', t.defaultValue)
         return res
       })
     },
@@ -391,10 +577,10 @@ export default {
     },
     addRow(val) {
       this.isAddRow = true
-      if (!Array.isArray(this.tableFormData)) {
-        this.tableFormData = []
-      }
-      this.tableFormData.push(JSON.parse(JSON.stringify(this.getEmptyRow(val, this.tableFormData.length))))
+      if (!Array.isArray(this.tableFormData)) this.tableFormData = []
+      const rowIndex = this.tableFormData.length
+      this.tableFormData.push(JSON.parse(JSON.stringify(this.getEmptyRow(val, rowIndex))))
+      this.buildRowAttr(rowIndex)
       this.clearAddRowFlag()
       this.updateParentData()
     },

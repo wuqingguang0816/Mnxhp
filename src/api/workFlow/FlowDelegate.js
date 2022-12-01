@@ -16,7 +16,7 @@ export function FlowDelegateInfo(id) {
   })
 }
 // 删除流程委托
-export function Delete(id) {
+export function DeleteDelagate(id) {
   return request({
     url: `/api/workflow/Engine/FlowDelegate/${id}`,
     method: 'DELETE'
@@ -35,6 +35,24 @@ export function Update(data) {
   return request({
     url: `/api/workflow/Engine/FlowDelegate/${data.id}`,
     method: 'PUT',
+    data
+  })
+}
+
+// 获取我的委托发起流程
+export function delegateGetflow(data) {
+  return request({
+    url: `/api/workflow/Engine/FlowDelegate/getflow`,
+    method: 'get',
+    data
+  })
+}
+
+// 获取一个流程的所有委托人
+export function getUserListByFlowId(data) {
+  return request({
+    url: `/api/workflow/Engine/FlowDelegate/userList`,
+    method: 'get',
     data
   })
 }

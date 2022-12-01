@@ -1,5 +1,4 @@
 import { mapGetters } from "vuex"
-import { Info } from '@/api/workFlow/workFlowForm'
 import { BillNumber } from '@/api/system/billRule'
 
 export default {
@@ -17,6 +16,7 @@ export default {
       eventType: '',
       loading: false,
       tableRequiredData: {},
+      formRef: 'dataForm',
     }
   },
   methods: {
@@ -25,25 +25,20 @@ export default {
       this.setting = data
       this.updateDataRule()
       this.$nextTick(() => {
-        this.$refs['dataForm'].resetFields()
-        if (this.beforeInit) this.beforeInit()
+        this.$refs[this.formRef].resetFields()
+        if (this.beforeInit && typeof this.beforeInit === "function") this.beforeInit()
         if (data.id) {
-          if (data.draftData) {
-            this.dataForm = data.draftData
-            if (this.dataForm.fileJson) {
-              this.fileList = JSON.parse(this.dataForm.fileJson)
-            }
-            this.$emit('setPageLoad')
-            return
+          let dataForm = data.draftData || data.formData
+          if (this.selfGetInfo && typeof this.selfGetInfo === "function") {
+            this.selfGetInfo(dataForm)
+          } else {
+            this.dataForm = dataForm
           }
-          if (this.selfGetInfo && typeof this.selfGetInfo === "function") return this.selfGetInfo()
-          Info(this.setting.enCode, data.id).then(res => {
-            this.dataForm = res.data
-            if (res.data.fileJson) {
-              this.fileList = JSON.parse(res.data.fileJson)
-            }
-            this.$emit('setPageLoad')
-          })
+          if (this.dataForm.fileJson) {
+            this.fileList = JSON.parse(this.dataForm.fileJson)
+          }
+          this.$emit('setPageLoad')
+          return
         } else {
           this.dataForm.flowId = data.flowId
           if (this.selfInit) this.selfInit(data)
@@ -66,19 +61,25 @@ export default {
     },
     dataFormSubmit(eventType, flowUrgent) {
       this.eventType = eventType
-      this.$refs['dataForm'].validate((valid) => {
+      this.$refs[this.formRef].validate((valid) => {
         if (valid) {
           if (this.exist && !this.exist()) return
-          if ('fileJson' in this.dataForm) {
-            this.dataForm.fileJson = JSON.stringify(this.fileList)
+          let dataForm = {}
+          if (this.beforeSubmit && typeof this.beforeSubmit === "function") {
+            dataForm = this.beforeSubmit()
+          } else {
+            dataForm = this.dataForm
+          }
+          if ('fileJson' in dataForm) {
+            dataForm.fileJson = JSON.stringify(this.fileList)
           }
           if (eventType === 'save' || eventType === 'submit') {
             if (this.selfSubmit && typeof this.selfSubmit === "function") {
-              this.selfSubmit(this.dataForm, flowUrgent)
+              this.selfSubmit(dataForm, flowUrgent)
               return
             }
           }
-          this.$emit('eventReceiver', this.dataForm, eventType)
+          this.$emit('eventReceiver', { formData: dataForm }, eventType)
         }
       })
     },

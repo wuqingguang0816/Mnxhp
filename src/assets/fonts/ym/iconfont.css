@@ -1,10 +1,9 @@
 @font-face {
   font-family: "icon-ym";
   /* Project id 3271933 */
-  src: url('iconfont.woff2?t=1660892518546') format('woff2'),
-    url('iconfont.woff?t=1660892518546') format('woff'),
-    url('iconfont.ttf?t=1660892518546') format('truetype'),
-    url('iconfont.svg?t=1660892518546#icon-ym') format('svg');
+  src: url('iconfont.woff2?t=1667890974760') format('woff2'),
+    url('iconfont.woff?t=1667890974760') format('woff'),
+    url('iconfont.ttf?t=1667890974760') format('truetype');
 }
 
 .icon-ym {
@@ -13,6 +12,42 @@
   font-style: normal;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-ym-flowEntrust-app:before {
+  content: "\e8da";
+}
+
+.icon-ym-btn-download:before {
+  content: "\e8d9";
+}
+
+.icon-ym-btn-upload:before {
+  content: "\e8d7";
+}
+
+.icon-ym-right:before {
+  content: "\e8d4";
+}
+
+.icon-ym-left:before {
+  content: "\e8d5";
+}
+
+.icon-ym-arrow-down:before {
+  content: "\e8d6";
+}
+
+.icon-ym-add-flow:before {
+  content: "\e8d8";
+}
+
+.icon-ym-launchFlow:before {
+  content: "\e8d2";
+}
+
+.icon-ym-funcFlow:before {
+  content: "\e8d3";
 }
 
 .icon-ym-accountConfig:before {

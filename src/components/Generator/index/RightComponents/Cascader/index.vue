@@ -6,7 +6,7 @@
     <el-form-item label="占位提示">
       <el-input v-model="activeData.placeholder" placeholder="请输入占位提示" />
     </el-form-item>
-    <el-form-item label="默认值" v-if="activeData.__config__.dataType === 'static'">
+    <el-form-item label="默认值">
       <el-cascader :options="activeData.options" clearable
         :show-all-levels="activeData['show-all-levels']" :props="activeData.props.props" filterable
         v-model="activeData.__config__.defaultValue" :key="cascaderKey"></el-cascader>
@@ -35,8 +35,8 @@
       </template>
       <template v-if="activeData.__config__.dataType === 'dictionary'">
         <el-form-item label="数据字典">
-          <JNPF-TreeSelect :options="treeData" v-model="activeData.__config__.dictionaryType"
-            placeholder="请选择数据字典" lastLevel clearable>
+          <JNPF-TreeSelect :options="dicOptions" v-model="activeData.__config__.dictionaryType"
+            placeholder="请选择数据字典" lastLevel clearable @change="dictionaryTypeChange">
           </JNPF-TreeSelect>
         </el-form-item>
         <el-form-item label="存储字段">
@@ -63,6 +63,26 @@
           <el-input v-model="activeData.props.props.children" placeholder="请输入子级字段"
             @change="onChange" />
         </el-form-item>
+        <el-table :data="activeData.__config__.templateJson"
+          v-if="activeData.__config__.templateJson && activeData.__config__.templateJson.length">
+          <el-table-column type="index" width="50" label="序号" align="center" />
+          <el-table-column prop="field" label="参数名称">
+            <template slot-scope="scope">
+              <span class="required-sign">{{scope.row.required?'*':''}}</span>
+              {{scope.row.fieldName?scope.row.field+'('+scope.row.fieldName+')':scope.row.field}}
+            </template>
+          </el-table-column>
+          <el-table-column prop="value" label="表单字段">
+            <template slot-scope="scope">
+              <el-select v-model="scope.row.relationField" placeholder="请选择表单字段" clearable
+                filterable @change="onRelationFieldChange($event,scope.row)">
+                <el-option v-for="item in formFieldsOptions" :key="item.realVModel"
+                  :label="item.realLabel" :value="item.realVModel">
+                </el-option>
+              </el-select>
+            </template>
+          </el-table-column>
+        </el-table>
       </template>
       <el-divider />
     </template>
@@ -93,18 +113,15 @@
 <script>
 
 import comMixin from '../mixin';
+import dynamicMixin from '../dynamicMixin';
 import TreeNodeDialog from './TreeNodeDialog'
-import { getDictionaryTypeSelector, getDictionaryDataSelector } from '@/api/systemData/dictionary'
-import { getDataInterfaceSelector, getDataInterfaceRes } from '@/api/systemData/dataInterface'
-import InterfaceDialog from '@/components/Process/PropPanel/InterfaceDialog'
+import { getDictionaryDataSelector } from '@/api/systemData/dictionary'
+import { getDataInterfaceRes } from '@/api/systemData/dataInterface'
 export default {
-  props: ['activeData'],
-  mixins: [comMixin],
-  components: { TreeNodeDialog, InterfaceDialog },
+  mixins: [comMixin, dynamicMixin],
+  components: { TreeNodeDialog },
   data() {
     return {
-      treeData: [],
-      dataInterfaceSelector: [],
       dialogVisible: false,
       currentNode: {},
       props: {
@@ -115,36 +132,7 @@ export default {
       cascaderKey: +new Date()
     }
   },
-  watch: {
-    'activeData.__config__.dataType': function (val) {
-      this.dataTypeChange()
-    },
-    'activeData.__config__.dictionaryType': function (val) {
-      this.activeData.__config__.defaultValue = []
-      if (!val) {
-        this.activeData.options = []
-        return
-      }
-      getDictionaryDataSelector(val).then(res => {
-        this.activeData.options = res.data.list
-      })
-    }
-  },
-  created() {
-    this.getDictionaryType()
-    this.getDataInterfaceSelector()
-  },
   methods: {
-    getDictionaryType() {
-      getDictionaryTypeSelector().then(res => {
-        this.treeData = res.data.list
-      })
-    },
-    getDataInterfaceSelector() {
-      getDataInterfaceSelector().then(res => {
-        this.dataInterfaceSelector = res.data
-      })
-    },
     renderContent(h, { node, data, store }) {
       return (
         <div class="custom-tree-node">
@@ -199,18 +187,35 @@ export default {
       this.activeData.__config__.dictionaryType = ''
       this.activeData.__config__.propsUrl = ''
       this.activeData.__config__.propsName = ''
+      this.activeData.__config__.templateJson = []
     },
-    propsUrlChange(val, item) {
+    dictionaryTypeChange(val) {
+      this.activeData.__config__.defaultValue = []
+      if (!val) {
+        this.activeData.options = []
+        return
+      }
+      getDictionaryDataSelector(val).then(res => {
+        this.activeData.options = res.data.list
+      })
+    },
+    propsUrlChange(val, row) {
       this.activeData.__config__.defaultValue = []
       if (!val) {
         this.activeData.__config__.propsUrl = ''
         this.activeData.__config__.propsName = ''
+        this.activeData.__config__.templateJson = []
         this.activeData.options = []
         return
       }
+      let list = row.requestParameters ? JSON.parse(row.requestParameters) : []
       this.activeData.__config__.propsUrl = val
-      this.activeData.__config__.propsName = item.fullName
-      getDataInterfaceRes(val).then(res => {
+      this.activeData.__config__.propsName = row.fullName
+      this.activeData.__config__.templateJson = list.map(o => ({ ...o, relationField: '' }))
+      let query = {
+        paramList: this.activeData.__config__.templateJson || [],
+      }
+      getDataInterfaceRes(val, query).then(res => {
         let data = res.data
         if (Array.isArray(data)) {
           this.activeData.options = data
@@ -220,14 +225,15 @@ export default {
       }).catch(() => {
         this.activeData.__config__.propsUrl = ''
         this.activeData.__config__.propsName = ''
+        this.activeData.__config__.templateJson = []
         this.activeData.options = []
       })
     }
   }
 }
 </script>
-<style lang="scss" scpoed>
-.custom-tree-node {
+<style lang="scss" scoped>
+>>> .custom-tree-node {
   width: 100%;
   font-size: 14px;
   display: flex;

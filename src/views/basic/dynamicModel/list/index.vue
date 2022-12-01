@@ -39,16 +39,18 @@
             </el-tooltip>
           </div>
         </div>
-        <JNPF-table v-loading="listLoading" :data="list" row-key="id" default-expand-all
+        <JNPF-table v-loading="listLoading" :data="list" row-key="id"
+          :default-expand-all="columnData.childTableStyle!==2"
           :tree-props="{children: 'children', hasChildren: ''}" @sort-change="sortChange"
           :row-style="rowStyle" :cell-style="cellStyle" :has-c="hasBatchBtn"
           @selection-change="handleSelectionChange" v-if="refreshTable" custom-column
-          :span-method="arraySpanMethod" ref="tableRef">
+          :span-method="arraySpanMethod" ref="tableRef" :hasNO="columnData.childTableStyle!==2"
+          :hasNOFixed="columnList.some(o=>o.fixed == 'left')">
           <template v-if="columnData.type === 4">
             <template v-for="(item, i) in columnList">
               <el-table-column :prop="item.prop" :label="item.label" :align="item.align"
-                :width="item.width" :key="i" :sortable="item.sortable?'custom':item.sortable"
-                v-if="item.jnpfKey !=='table'">
+                :fixed="item.fixed!='none'?item.fixed:false" :width="item.width" :key="i"
+                :sortable="item.sortable?'custom':item.sortable" v-if="item.jnpfKey !=='table'">
                 <template slot-scope="scope">
                   <template v-if="scope.row.rowEdit">
                     <template v-if="item.jnpfKey==='numInput'">
@@ -96,6 +98,12 @@
                         :selectType="item.selectType" :ableDepIds="item.ableDepIds"
                         :ablePosIds="item.ablePosIds" :ableUserIds="item.ableUserIds"
                         :ableRoleIds="item.ableRoleIds" :ableGroupIds="item.ableGroupIds"
+                        :multiple="item.multiple" :clearable="item.clearable"
+                        :disabled="item.disabled" />
+                    </template>
+                    <template v-else-if="['usersSelect'].includes(item.jnpfKey)">
+                      <usersSelect v-model="scope.row[item.prop]" :placeholder="item.placeholder"
+                        :selectType="item.selectType" :ableIds="item.ableIds"
                         :multiple="item.multiple" :clearable="item.clearable"
                         :disabled="item.disabled" />
                     </template>
@@ -197,9 +205,28 @@
             </template>
           </template>
           <template v-else>
+            <template v-if="columnData.childTableStyle==2&&childColumnList.length">
+              <el-table-column width="0" />
+              <el-table-column type="expand" width="40">
+                <template slot-scope="scope">
+                  <el-tabs>
+                    <el-tab-pane :label="child.label" v-for="(child,cIndex) in childColumnList"
+                      :key="cIndex">
+                      <el-table :data="scope.row[child.prop]" size='mini'>
+                        <el-table-column :prop="childTable.vModel" :label="childTable.childLabel"
+                          :align="childTable.align" :width="childTable.width"
+                          v-for="(childTable,iii) in child.children" :key="iii" />
+                      </el-table>
+                    </el-tab-pane>
+                  </el-tabs>
+                </template>
+              </el-table-column>
+              <el-table-column type="index" width="50" label="序号" align="center" />
+            </template>
             <template v-for="(item, i) in columnList">
               <template v-if="item.jnpfKey==='table'">
-                <el-table-column :prop="item.prop" :label="item.label" :align="item.align" :key="i">
+                <el-table-column :prop="item.prop" :label="item.label" :align="item.align" :key="i"
+                  v-if="columnData.childTableStyle!=2">
                   <el-table-column :prop="child.prop" :label="child.childLabel" :align="child.align"
                     :width="child.width" :key="ii"
                     :sortable="child.sortable?'custom':child.sortable"
@@ -213,22 +240,26 @@
                 </el-table-column>
               </template>
               <el-table-column :prop="item.prop" :label="item.label" :align="item.align"
+                :fixed="columnList.some(o=>o.fixed == 'left')&&i==0&&columnData.groupField&&columnData.type==3?'left':item.fixed!='none'&&columnData.childTableStyle!=2?item.fixed:false"
                 :width="item.width" :key="i" :sortable="item.sortable?'custom':item.sortable"
                 v-else />
             </template>
           </template>
-          <el-table-column prop="flowState" label="状态" width="100" v-if="config.webType == 3">
+          <el-table-column
+            :fixed="columnList.some(o=>o.fixed == 'right')&&columnData.childTableStyle!=2?'right':false"
+            prop="flowState" label="状态" width="100" v-if="config.enableFlow==1">
             <template slot-scope="scope" v-if="!scope.row.top">
               <el-tag v-if="scope.row.flowState==1">等待审核</el-tag>
               <el-tag type="success" v-else-if="scope.row.flowState==2">审核通过</el-tag>
-              <el-tag type="danger" v-else-if="scope.row.flowState==3">审核驳回</el-tag>
+              <el-tag type="danger" v-else-if="scope.row.flowState==3">审核退回</el-tag>
               <el-tag type="info" v-else-if="scope.row.flowState==4">流程撤回</el-tag>
               <el-tag type="info" v-else-if="scope.row.flowState==5">审核终止</el-tag>
               <el-tag type="warning" v-else>等待提交</el-tag>
             </template>
           </el-table-column>
-          <el-table-column label="操作" fixed="right" :width="operationWidth"
-            v-if="columnBtnsList.length || customBtnsList.length">
+          <el-table-column label="操作"
+            :fixed="columnData.childTableStyle==2&&childColumnList.length?false:'right'"
+            :width="operationWidth" v-if="columnBtnsList.length || customBtnsList.length">
             <template slot-scope="scope" v-if="!scope.row.top">
               <template v-if="scope.row.rowEdit">
                 <el-button size="mini" type="text" @click="saveForRowEdit(scope.row,1)">
@@ -236,7 +267,7 @@
                 <el-button size="mini" type="text" class="JNPF-table-delBtn"
                   @click="cancelRowEdit(scope.row,scope.$index)">取消</el-button>
                 <el-button size="mini" type="text" @click="submitForRowEdit(scope.row)"
-                  v-if="config.webType == 3">提交</el-button>
+                  v-if="config.enableFlow==1">提交</el-button>
               </template>
               <template v-else>
                 <template v-if="isPreview || !columnData.useBtnPermission">
@@ -244,26 +275,26 @@
                     <template v-if="item.value=='edit'">
                       <template v-if="columnData.type === 4">
                         <el-button size="mini" type="text" :key="i"
-                          :disabled="config.webType == 3 && [1,2,4,5].indexOf(scope.row.flowState)>-1"
+                          :disabled="config.enableFlow==1 && [1,2,4,5].indexOf(scope.row.flowState)>-1"
                           @click="scope.row.rowEdit=true">
                           {{item.label}}</el-button>
                       </template>
                       <template v-else>
                         <el-button size="mini" type="text" :key="i"
-                          :disabled="config.webType == 3 && [1,2,4,5].indexOf(scope.row.flowState)>-1"
+                          :disabled="config.enableFlow==1 && [1,2,4,5].indexOf(scope.row.flowState)>-1"
                           @click="columnBtnsHandel(item.value,scope.row)">
                           {{item.label}}</el-button>
                       </template>
                     </template>
                     <template v-else-if="item.value=='remove'">
                       <el-button size="mini" type="text" :key="i" class="JNPF-table-delBtn"
-                        :disabled="config.webType == 3 && [1,2,3,5].indexOf(scope.row.flowState)>-1"
+                        :disabled="config.enableFlow==1 && [1,2,3,5].indexOf(scope.row.flowState)>-1"
                         @click="columnBtnsHandel(item.value,scope.row,scope.$index)">
                         {{item.label}}</el-button>
                     </template>
                     <template v-else-if="item.value=='detail'">
                       <el-button size="mini" type="text" :key="i"
-                        :disabled="config.webType == 3 && !scope.row.flowState"
+                        :disabled="config.enableFlow==1 && !scope.row.flowState"
                         @click="columnBtnsHandel(item.value,scope.row)" v-if="scope.row.id">
                         {{item.label}}</el-button>
                     </template>
@@ -293,26 +324,26 @@
                     <template v-if="item.value=='edit'">
                       <template v-if="columnData.type === 4">
                         <el-button size="mini" type="text" :key="i"
-                          :disabled="config.webType == 3 && [1,2,4,5].indexOf(scope.row.flowState)>-1"
+                          :disabled="config.enableFlow==1 && [1,2,4,5].indexOf(scope.row.flowState)>-1"
                           @click="scope.row.rowEdit=true" v-has="'btn_'+item.value">
                           {{item.label}}</el-button>
                       </template>
                       <template v-else>
                         <el-button size="mini" type="text" :key="i"
-                          :disabled="config.webType == 3 && [1,2,4,5].indexOf(scope.row.flowState)>-1"
+                          :disabled="config.enableFlow==1 && [1,2,4,5].indexOf(scope.row.flowState)>-1"
                           @click="columnBtnsHandel(item.value,scope.row)" v-has="'btn_'+item.value">
                           {{item.label}}</el-button>
                       </template>
                     </template>
                     <template v-else-if="item.value=='remove'">
                       <el-button size="mini" type="text" :key="i" class="JNPF-table-delBtn"
-                        :disabled="config.webType == 3 && [1,2,3,5].indexOf(scope.row.flowState)>-1"
+                        :disabled="config.enableFlow==1 && [1,2,3,5].indexOf(scope.row.flowState)>-1"
                         @click="columnBtnsHandel(item.value,scope.row,scope.$index)"
                         v-has="'btn_'+item.value">{{item.label}}</el-button>
                     </template>
                     <template v-else-if="item.value=='detail'">
                       <el-button size="mini" type="text" :key="i"
-                        :disabled="config.webType == 3 && !scope.row.flowState"
+                        :disabled="config.enableFlow==1 && !scope.row.flowState"
                         @click="columnBtnsHandel(item.value,scope.row)" v-has="'btn_'+item.value">
                         {{item.label}}</el-button>
                     </template>
@@ -352,6 +383,7 @@
     <Form v-show="formVisible" ref="Form" @refreshDataList="refresh" />
     <Detail v-show="detailVisible" ref="Detail" @close="detailVisible = false" />
     <ExportBox v-if="exportBoxVisible" ref="ExportBox" @download="download" />
+    <ImportBox v-if="uploadBoxVisible" ref="UploadBox" @refresh="initData" />
     <SuperQuery v-if="superQueryVisible" ref="SuperQuery" :columnOptions="columnOptions"
       @superQuery="superQuery" />
     <candidate-form :visible.sync="candidateVisible" :candidateList="candidateList"
@@ -362,6 +394,7 @@
 
 <script>
 import { getModelList, deleteModel, batchDelete, exportModel, createModel, updateModel } from '@/api/onlineDev/visualDev'
+import { Create, Update } from '@/api/workFlow/workFlowForm'
 import { getDictionaryDataSelector } from '@/api/systemData/dictionary'
 import { getDataInterfaceRes } from '@/api/systemData/dataInterface'
 import { getColumnsByModuleId } from '@/api/common'
@@ -412,6 +445,7 @@ export default {
       detailVisible: false,
       importBoxVisible: false,
       exportBoxVisible: false,
+      uploadBoxVisible: false,
       superQueryVisible: false,
       treeData: [],
       treeActiveId: '',
@@ -420,6 +454,7 @@ export default {
       },
       formData: {},
       columnList: [],
+      childColumnList: [],
       columnOptions: [],
       exportList: [],
       columnBtnsList: [],
@@ -461,7 +496,7 @@ export default {
       if (this.columnData.type === 3) {
         this.columnData.columnList = this.columnData.columnList.filter(o => o.prop != this.columnData.groupField)
       }
-      if (this.config.webType == 3) {
+      if (this.config.enableFlow == 1) {
         this.flowTemplateJson = this.config.flowTemplateJson ? JSON.parse(this.config.flowTemplateJson) : {}
         this.isCustomCopy = this.flowTemplateJson.properties && this.flowTemplateJson.properties.isCustomCopy
       }
@@ -612,6 +647,7 @@ export default {
       }
       this.getMergeList(list)
       this.getExportList(list)
+      this.childColumnList = list.filter(o => o.jnpfKey === 'table')
       return list
     },
     getExportList(list) {
@@ -708,41 +744,61 @@ export default {
     },
     saveForRowEdit(row, status, candidateData) {
       if (this.isPreview) return this.$message({ message: '功能预览不支持数据保存', type: 'warning' })
-      let query = {
-        id: row.id,
-        status: status || "1",
-        candidateType: this.candidateType,
-        data: JSON.stringify(row)
-      }
-      if (candidateData) query = { ...query, ...candidateData }
-      if (this.config.webType == 3) query.flowId = this.config.flowId
-      const formMethod = query.id ? updateModel : createModel
-      formMethod(this.modelId, query).then(res => {
-        this.$message({
-          message: res.msg,
-          type: 'success',
-          duration: 1500,
-          onClose: () => {
-            this.candidateVisible = false
-            this.initData()
-          }
+      if (this.config.enableFlow == 1) {
+        let query = {
+          id: row.id,
+          status: status || "1",
+          candidateType: this.candidateType,
+          formData: row,
+          flowId: this.config.flowId,
+          flowUrgent: 1
+        }
+        if (candidateData) query = { ...query, ...candidateData }
+        const formMethod = query.id ? Update : Create
+        formMethod(query).then(res => {
+          this.$message({
+            message: res.msg,
+            type: 'success',
+            duration: 1500,
+            onClose: () => {
+              this.candidateVisible = false
+              this.initData()
+            }
+          })
         })
-      })
+      } else {
+        let query = {
+          id: row.id,
+          data: JSON.stringify(row)
+        }
+        const formMethod = query.id ? updateModel : createModel
+        formMethod(this.modelId, query).then(res => {
+          this.$message({
+            message: res.msg,
+            type: 'success',
+            duration: 1500,
+            onClose: () => {
+              this.candidateVisible = false
+              this.initData()
+            }
+          })
+        })
+      }
     },
     submitForRowEdit(row) {
       this.currRow = row
       if (this.isPreview) return this.$message({ message: '功能预览不支持数据保存', type: 'warning' })
       this.workFlowFormData = {
         id: row.id,
-        data: JSON.stringify(row),
+        formData: row,
         flowId: this.config.flowId
       }
-      Candidates(0, { formData: this.workFlowFormData }).then(res => {
+      Candidates(0, this.workFlowFormData).then(res => {
         let data = res.data
         this.candidateType = data.type
         if (data.type == 1) {
-          this.branchList = res.data.list
-          this.candidateList = []
+          this.branchList = res.data.list.filter(o => o.isBranchFlow)
+          this.candidateList = res.data.list.filter(o => !o.isBranchFlow && o.isCandidates)
           this.candidateVisible = true
         } else if (data.type == 2) {
           this.branchList = []
@@ -783,7 +839,7 @@ export default {
       this.list.unshift(item)
     },
     addOrUpdateHandle(id) {
-      if (this.config.webType == 3) {
+      if (this.config.enableFlow == 1) {
         let data = {
           id: id || '',
           enCode: this.config.flowEnCode,
@@ -817,6 +873,12 @@ export default {
         this.exportBoxVisible = true
         this.$nextTick(() => {
           this.$refs.ExportBox.init(this.exportList)
+        })
+      }
+      if (key == 'upload') {
+        this.uploadBoxVisible = true
+        this.$nextTick(() => {
+          this.$refs.UploadBox.init(this.modelId)
         })
       }
       if (this.isPreview) return
@@ -874,7 +936,7 @@ export default {
       }
     },
     goDetail(id, row) {
-      if (this.config.webType == 3) {
+      if (this.config.enableFlow == 1) {
         let data = {
           id,
           enCode: this.config.flowEnCode,
@@ -995,7 +1057,10 @@ export default {
           }
           if (config.dataType === 'dynamic') {
             if (!config.propsUrl) return
-            getDataInterfaceRes(config.propsUrl).then(res => {
+            let query = {
+              paramList: config.templateJson || [],
+            }
+            getDataInterfaceRes(config.propsUrl, query).then(res => {
               let data = res.data
               if (Array.isArray(data)) {
                 isTreeSelect ? cur.options = data : cur.__slot__.options = data

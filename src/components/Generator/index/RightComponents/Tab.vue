@@ -52,7 +52,8 @@ export default {
       this.activeData.__config__.children.push({
         title: 'New Tab',
         __config__: {
-          children: []
+          jnpfKey: "tabItem",
+          children: [],
         }
       })
     },

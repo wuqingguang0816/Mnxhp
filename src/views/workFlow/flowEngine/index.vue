@@ -12,8 +12,8 @@
           <el-col :span="6">
             <el-form-item label="流程分类">
               <el-select v-model="category" placeholder="请选择流程分类" clearable>
-                <el-option v-for="item in categoryList" :key="item.enCode" :label="item.fullName"
-                  :value="item.enCode">
+                <el-option v-for="item in categoryList" :key="item.id" :label="item.fullName"
+                  :value="item.id">
                 </el-option>
               </el-select>
             </el-form-item>
@@ -31,7 +31,7 @@
       <div class="JNPF-common-layout-main JNPF-flex-main">
         <div class="JNPF-common-head">
           <topOpts @add="dialogVisible=true">
-            <upload-btn url="/api/workflow/Engine/FlowEngine/Actions/ImportData"
+            <upload-btn url="/api/workflow/Engine/flowTemplate/Actions/ImportData"
               @on-success="reset()" />
           </topOpts>
           <div class="JNPF-common-head-right">
@@ -45,24 +45,25 @@
           <el-table-column prop="fullName" label="流程名称" min-width="150" />
           <el-table-column prop="enCode" label="流程编码" width="200" />
           <el-table-column prop="category" label="流程分类" width="150" />
-          <el-table-column prop="formType" label="表单类型" width="100">
-            <template slot-scope="scope">
-              <span>{{ scope.row.formType == 1? "系统表单" : "自定义表单" }}</span>
-            </template>
-          </el-table-column>
           <el-table-column prop="type" label="流程类型" width="80">
             <template slot-scope="scope">
               <span>{{ scope.row.type == 0? "发起流程" : "功能流程" }}</span>
             </template>
           </el-table-column>
-          <!-- <el-table-column prop="visibleType" label="可见范围" width="80">
+          <el-table-column prop="visibleType" label="可见范围" width="80">
             <template slot-scope="scope">
               <span>{{ scope.row.visibleType ==  0 ? "全部可见" : "部分可见" }}</span>
             </template>
-          </el-table-column> -->
+          </el-table-column>
+          <el-table-column prop="creatorUser" label="创建人" width="120" />
           <el-table-column prop="creatorTime" label="创建时间" :formatter="jnpf.tableDateFormat"
             width="120" />
           <el-table-column prop="sortCode" label="排序" width="70" align="center" />
+          <el-table-column prop="version" label="版本号" width="70" align="center">
+            <template slot-scope="scope">
+              <el-tag>V:{{scope.row.version}}</el-tag>
+            </template>
+          </el-table-column>
           <el-table-column prop="enabledMark" label="状态" width="70" align="center">
             <template slot-scope="scope">
               <el-tag :type="scope.row.enabledMark == 1 ? 'success' : 'danger'" disable-transitions>
@@ -71,17 +72,27 @@
           </el-table-column>
           <el-table-column label="操作" fixed="right" width="150">
             <template slot-scope="scope">
-              <tableOpts @edit="addOrUpdateHandle(scope.row.id,scope.row.formType)"
+              <tableOpts @edit="addOrUpdateHandle(scope.row.id,scope.row.type)"
                 @del="handleDel(scope.row.id)">
                 <el-dropdown>
                   <span class="el-dropdown-link">
                     <el-button type="text" size="mini">{{$t('common.moreBtn')}}<i
                         class="el-icon-arrow-down el-icon--right"></i>
+
                     </el-button>
                   </span>
                   <el-dropdown-menu slot="dropdown">
-                    <el-dropdown-item @click.native="preview(scope.row)">
-                      表单预览</el-dropdown-item>
+                    <el-dropdown-item v-if="scope.row.enabledMark!=1"
+                      @click.native="handleUpdate(scope.row)">
+                      启用流程</el-dropdown-item>
+                    <el-dropdown-item v-if="scope.row.enabledMark==1"
+                      @click.native="handleUpdate(scope.row)">
+                      禁用流程</el-dropdown-item>
+                    <el-dropdown-item @click.native="showManage(scope.row.id,scope.row.fullName)">
+                      版本管理</el-dropdown-item>
+                    <el-dropdown-item v-if="scope.row.hasAssistBtn==1"
+                      @click.native="management(scope.row.id)">
+                      协管流程</el-dropdown-item>
                     <el-dropdown-item @click.native="copy(scope.row.id)">
                       复制流程</el-dropdown-item>
                     <el-dropdown-item @click.native="handleExport(scope.row.id)">
@@ -97,40 +108,52 @@
       </div>
     </div>
     <Form v-if="formVisible" ref="Form" @close="closeForm" />
-    <preview v-if="previewVisible" ref="preview" @close="previewVisible=false" />
-    <previewDialog :visible.sync="previewDialogVisible" :id="currRow.id" type="flow"
-      @previewPc="previewPc" />
-    <el-dialog title="新建表单" :visible.sync="dialogVisible" class="JNPF-dialog JNPF-dialog_center"
+    <FlowManage v-if="manageVisible" ref="FlowManage" @close="closeManage" />
+    <el-dialog title="新建流程" :visible.sync="dialogVisible"
+      class="JNPF-dialog JNPF-dialog_center JNPF-dialog-add" :close-on-click-modal="false"
       lock-scroll width="600px">
       <div class="add-main">
-        <div class="add-item add-item-sys" @click="addFlow(1)">
-          <i class="add-icon el-icon-document"></i>
+        <div class="add-item add-item-left" @click="addFlow(0)">
+          <i class="add-icon icon-ym icon-ym-launchFlow"></i>
           <div class="add-txt">
-            <p class="add-title">系统表单</p>
-            <p class="add-desc">关联系统原有表单，便捷设计</p>
+            <p class="add-title">发起流程</p>
+            <p class="add-desc">设计工作流发起的业务流程</p>
           </div>
         </div>
-        <div class="add-item" @click="addFlow(2)">
-          <i class="add-icon icon-ym icon-ym-generator-company"></i>
+        <div class="add-item" @click="addFlow(1)">
+          <i class="add-icon icon-ym icon-ym-funcFlow"></i>
           <div class="add-txt">
-            <p class="add-title">自定义表单</p>
-            <p class="add-desc">自定义设计流程表单</p>
+            <p class="add-title">功能流程</p>
+            <p class="add-desc">在线开发和代码生成功能赋予流程</p>
           </div>
         </div>
       </div>
+    </el-dialog>
+    <el-dialog title='协管流程' :close-on-click-modal="false" :visible.sync="managementVisible"
+      class="JNPF-dialog JNPF-dialog_center" lock-scroll append-to-body width='600px'>
+      <el-form ref="dataForm" label-width="100px">
+        <el-form-item label="设置协管员">
+          <users-select multiple v-model="managementUserId" placeholder="请选择该流程协管人员" />
+        </el-form-item>
+      </el-form>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="managementVisible = false">{{$t('common.cancelButton')}}</el-button>
+        <el-button type="primary" @click="handleApproval()" :loading="btnLoading">
+          {{$t('common.confirmButton')}}
+        </el-button>
+      </span>
     </el-dialog>
   </div>
 </template>
 
 <script>
-import { FlowEngineList, Delete, Release, Stop, Copy, exportData } from '@/api/workFlow/FlowEngine'
+import { FlowEngineList, Delete, Release, Stop, Copy, exportData, assist, assistList } from '@/api/workFlow/FlowEngine'
 import Form from './Form'
-import preview from '../components/Preview'
-import previewDialog from '@/components/PreviewDialog'
+import FlowManage from './FlowManagement.vue'
 
 export default {
   name: 'workFlow-flowEngine',
-  components: { Form, preview, previewDialog },
+  components: { Form, FlowManage },
   data() {
     return {
       keyword: '',
@@ -143,13 +166,15 @@ export default {
       },
       total: 0,
       list: [],
+      btnLoading: false,
       listLoading: true,
       dialogVisible: false,
       formVisible: false,
-      previewVisible: false,
-      previewDialogVisible: false,
-      currRow: {},
-      categoryList: []
+      manageVisible: false,
+      categoryList: [],
+      managementVisible: false,
+      managementUserId: [],
+      templateId: ''
     }
   },
   created() {
@@ -202,15 +227,15 @@ export default {
         })
       }).catch(() => { });
     },
-    addFlow(formType) {
+    addFlow(type) {
       this.dialogVisible = false
-      this.addOrUpdateHandle('', formType)
+      this.addOrUpdateHandle('', type)
     },
     // 新增 / 修改
-    addOrUpdateHandle(id, formType) {
+    addOrUpdateHandle(id, type) {
       this.formVisible = true
       this.$nextTick(() => {
-        this.$refs.Form.init(this.categoryList, id, formType)
+        this.$refs.Form.init(this.categoryList, id, type)
       })
     },
     copy(id) {
@@ -238,33 +263,48 @@ export default {
         })
       }).catch(() => { });
     },
-    preview(row) {
-      this.currRow = row
-      this.$nextTick(() => {
-        this.previewDialogVisible = true
-      })
-    },
-    previewPc() {
-      let data = {
-        enCode: this.currRow.enCode,
-        fullName: this.currRow.fullName,
-        formType: this.currRow.formType,
-        flowId: this.currRow.id
-      }
-      this.previewVisible = true
-      this.$nextTick(() => {
-        this.$refs.preview.init(data)
-      })
-    },
     closeForm(isRefresh) {
       this.formVisible = false
       if (isRefresh) {
         this.initData()
       }
     },
+    showManage(id, fullName) {
+      this.manageVisible = true
+      this.$nextTick(() => {
+        this.$refs.FlowManage.init(id, fullName)
+      })
+    },
+    closeManage(isRefresh) {
+      this.manageVisible = false
+      if (isRefresh) {
+        this.initData()
+      }
+    },
+    handleApproval() {
+      let query = {
+        list: this.managementUserId,
+        templateId: this.templateId
+      }
+      assist(query).then(res => {
+        this.$message({
+          type: 'success',
+          message: res.msg
+        });
+        this.managementVisible = false
+        this.initData()
+      })
+    },
+    management(id) {
+      this.managementVisible = true
+      this.templateId = id
+      assistList(id).then(res => {
+        this.managementUserId = res.data.list || []
+      })
+    },
     handleUpdate(row) {
       if (row.enabledMark) {
-        this.$confirm('您确定要停止当前流程吗, 是否继续?', '提示', {
+        this.$confirm('此操作将禁用该流程，是否继续？', '提示', {
           type: 'warning'
         }).then(() => {
           Stop(row.id).then(res => {
@@ -276,7 +316,7 @@ export default {
           })
         }).catch(() => { });
       } else {
-        this.$confirm('您确定要发布当前流程吗, 是否继续?', '提示', {
+        this.$confirm('此操作将启用该流程，是否继续？', '提示', {
           type: 'warning'
         }).then(() => {
           Release(row.id).then(res => {
@@ -288,64 +328,8 @@ export default {
           })
         }).catch(() => { });
       }
-    }
+    },
+
   }
 }
 </script>
-<style lang="scss" scoped>
-.JNPF-dialog {
-  >>> .el-dialog__body {
-    padding: 50px 30px !important;
-  }
-}
-.add-main {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  .add-item {
-    width: 255px;
-    height: 136px;
-    background: #eff9ff;
-    display: flex;
-    align-items: center;
-    cursor: pointer;
-    padding-left: 20px;
-    &:hover {
-      opacity: 0.9;
-    }
-    &.add-item-sys {
-      background: #f1f5ff;
-      .add-icon {
-        background: #ccd9ff;
-        color: #537eff;
-      }
-    }
-    .add-icon {
-      width: 56px;
-      height: 56px;
-      margin-right: 10px;
-      background: #ceeaff;
-      border-radius: 10px;
-      color: #46adfe;
-      flex-shrink: 0;
-      font-size: 30px;
-      line-height: 56px;
-      text-align: center;
-    }
-    .add-txt {
-      height: 56px;
-      P {
-        line-height: 28px;
-      }
-      .add-title {
-        font-size: 18px;
-        font-weight: bold;
-      }
-      .add-desc {
-        color: #8d8989;
-        font-size: 12px;
-      }
-    }
-  }
-}
-</style>

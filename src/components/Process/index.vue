@@ -13,7 +13,7 @@ const getDataType = (data) => {
     return 'number'
   } else if (['checkbox', 'uploadFz', 'uploadImg', 'cascader', 'comSelect', 'address'].includes(jnpfKey)) {
     return 'array'
-  } else if (['select', 'depSelect', 'posSelect', 'userSelect', 'treeSelect', 'roleSelect', 'groupSelect'].includes(jnpfKey)) {
+  } else if (['select', 'depSelect', 'posSelect', 'userSelect', 'usersSelect', 'treeSelect', 'roleSelect', 'groupSelect'].includes(jnpfKey)) {
     if (data.multiple) return 'array'
   }
   return ''
@@ -29,7 +29,7 @@ export default {
     } else {
       data = getMockData()
     }
-    this.updateFiled(data)
+    // this.updateFiled(data)
     this.$store.dispatch('base/getPositionList')
     this.$store.dispatch('base/getRoleList')
     this.$store.dispatch('generator/getDepTree')

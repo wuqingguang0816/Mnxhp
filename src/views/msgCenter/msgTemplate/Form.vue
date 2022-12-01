@@ -86,13 +86,13 @@
                       </el-table-column>
                       <el-table-column prop="fieldName" label="参数说明">
                         <template slot-scope="scope">
-                          <p @click="addContent(scope.row)" style="cursor:pointer">
+                          <p @click="addContent(scope.row)" style="cursor:pointer;line-height:36px">
                             {{scope.row.fieldName}}
                           </p>
                         </template>
                       </el-table-column>
                       <el-table-column label="操作" width="70">
-                        <template slot-scope="scope">
+                        <template slot-scope="scope" v-if="scope.row.field!='@flowLink'">
                           <el-button type="text" @click="addEditParameter(scope.row,scope.$index)"
                             icon="el-icon-edit-outline"></el-button>
                           <el-button type="text" class="JNPF-table-delBtn" icon="el-icon-delete"
@@ -106,8 +106,8 @@
                   </div>
                 </div>
               </div>
-              <div class="right-pane" v-if="dataForm.messageType != 3">
-                <jnpf-form-tip-item label="消息标题" prop="title">
+              <div class="right-pane" v-if="dataForm.messageType != 3&&dataForm.messageType != 7">
+                <jnpf-form-tip-item label="消息标题" prop="title" tipLabel='参数格式：{参数名}'>
                   <el-input v-model="dataForm.title" placeholder="消息标题" clearable></el-input>
                 </jnpf-form-tip-item>
                 <jnpf-form-tip-item label="消息内容" prop="content" v-if="dataForm.messageType == 2"
@@ -122,10 +122,30 @@
                 </jnpf-form-tip-item>
               </div>
               <div class="right-pane" v-else>
-                <jnpf-form-tip-item label="模版编号" prop="templateCode"
-                  tipLabel="阿里云：在模板管理⻚⾯查看模板CODE<br/>腾讯云：在正⽂模板管理⻚⾯查看模板ID">
-                  <el-input v-model="dataForm.templateCode" placeholder="模版编号" />
-                </jnpf-form-tip-item>
+                <el-row :gutter="20">
+                  <el-col :span="12">
+                    <jnpf-form-tip-item label="模版编号" prop="templateCode"
+                      :tipLabel="dataForm.messageType==3?'阿里云：请在【阿里云管理后台-模板管理】⻚⾯查看模板CODE<br/>腾讯云：请在【腾讯云管理后台-正⽂模板管理】⻚⾯查看模板ID':'在【微信公众号管理后台-广告与服务-模板消息】⻚⾯查看模板ID'">
+                      <el-input v-model="dataForm.templateCode" placeholder="模版编号" />
+                    </jnpf-form-tip-item>
+                  </el-col>
+                  <el-col :span="12" offset="12"></el-col>
+                  <el-col :span="12" v-if="dataForm.messageType == 7">
+                    <jnpf-form-tip-item label="跳转方式" prop="wxSkip">
+                      <el-select v-model="dataForm.wxSkip" placeholder="选择跳转方式" clearable>
+                        <el-option v-for="(item,index) in wxSkipList" :key="index"
+                          :label="item.fullName" :value="item.enCode">
+                        </el-option>
+                      </el-select>
+                    </jnpf-form-tip-item>
+                  </el-col>
+                  <el-col :span="12" v-if="dataForm.messageType == 7&&dataForm.wxSkip == 1">
+                    <jnpf-form-tip-item label="关联小程序ID" prop="xcxAppId" label-width="126px"
+                      tipLabel="在【微信公众号管理后台-广告与服务-小程序管理】⻚⾯查看小程序ID">
+                      <el-input v-model="dataForm.xcxAppId" placeholder="关联小程序ID" clearable />
+                    </jnpf-form-tip-item>
+                  </el-col>
+                </el-row>
                 <div class="msg-pane">
                   <div class="list">
                     <el-table :data="smsList" ref="dragTable" row-key="id" size='mini'
@@ -133,16 +153,24 @@
                       <el-table-column label="序号" type="index" width="50"></el-table-column>
                       <el-table-column prop="name">
                         <template slot="header">
-                          <p>
+                          <p v-if="dataForm.messageType==3">
                             短信变量
                             <el-tooltip content="内容在第三方平台维护，绑定第三方平台短信变量，如：腾讯云：{1}，阿里云格式：${name}"
                               placement="top">
                               <a class="el-icon-warning-outline"></a>
                             </el-tooltip>
                           </p>
+                          <p v-else>
+                            变量
+                            <el-tooltip content="内容在微信公众号管理后台维护，绑定模板变量，如：{first.DATA}。"
+                              placement="top">
+                              <a class="el-icon-warning-outline"></a>
+                            </el-tooltip>
+                          </p>
                         </template>
                         <template slot-scope="scope">
-                          <el-input v-model="scope.row.smsField" placeholder="短信变量"></el-input>
+                          <el-input v-model="scope.row.smsField"
+                            :placeholder="dataForm.messageType==3?'短信变量':'变量'"></el-input>
                         </template>
                       </el-table-column>
                       <el-table-column label="参数">
@@ -153,6 +181,13 @@
                               :label="item.field" :value="item.field">
                             </el-option>
                           </el-select>
+                        </template>
+                      </el-table-column>
+                      <el-table-column label="标题" width="70" v-if="dataForm.messageType==7">
+                        <template slot-scope="scope">
+                          <el-checkbox v-model="scope.row.isTitle"
+                            @change='changeKey($event,scope.row)' :true-label="1"
+                            :false-label="0" />
                         </template>
                       </el-table-column>
                       <el-table-column label="操作" width="70">
@@ -214,6 +249,8 @@ export default {
         title: '',
         content: '',
         templateCode: '',
+        wxSkip: '1',
+        xcxAppId: ''
       },
       dataRule: {
         fullName: [
@@ -238,6 +275,12 @@ export default {
         templateCode: [
           { required: true, message: '模版编号不能为空', trigger: 'blur' },
         ],
+        wxSkip: [
+          { required: true, message: '跳转方式不能为空', trigger: 'blur' },
+        ],
+        xcxAppId: [
+          { required: true, message: '关联小程序ID不能为空', trigger: 'blur' },
+        ],
       },
       fieldRule: {
         field: [
@@ -259,16 +302,28 @@ export default {
       messageTypeList: [],
       isEdit: false,
       keyword: "",
-      parameterList: [],
+      parameterList: [
+        {
+          field: '@flowLink',
+          fieldName: '流程链接'
+        }
+      ],
       allParameterList: [],
-      smsList: []
+      smsList: [],
+      wxSkipList: [
+        { enCode: "1", fullName: '小程序' },
+        { enCode: "2", fullName: '页面' }
+      ]
     }
   },
   methods: {
     init(id) {
       this.dataForm.id = id || ''
-      this.parameterList = []
-      this.allParameterList = []
+      this.parameterList = [{
+        field: '@flowLink',
+        fieldName: '流程链接'
+      }]
+      this.allParameterList = this.parameterList
       this.getConfig()
       this.$nextTick(() => {
         this.$refs['dataForm'].resetFields()
@@ -304,18 +359,37 @@ export default {
           this.dataForm.smsFieldList = this.smsList
           this.btnLoading = true
           const formMethod = this.dataForm.id ? editMsgTemplate : addMsgTemplate
-          formMethod(this.dataForm).then((res) => {
-            this.$message({
-              message: res.msg,
-              type: 'success',
-              duration: 1500,
-              onClose: () => {
-                this.visible = false
-                this.btnLoading = false
-                this.$emit('close', true)
-              }
-            })
-          }).catch(() => { this.btnLoading = false })
+          let isOk = true;
+          for (let i = 0; i < this.dataForm.smsFieldList.length; i++) {
+            let list = this.dataForm.smsFieldList[i]
+            let num = this.dataForm.smsFieldList.filter(o => o.smsField == list.smsField)
+            if (num.length > 1) {
+              this.$message({
+                showClose: true,
+                message: `第${i + 1}行短信变量'${list.smsField}'已重复`,
+                type: 'error',
+                duration: 1000
+              });
+              this.visible = false
+              this.btnLoading = false
+              isOk = false
+              break
+            }
+          }
+          if (isOk) {
+            formMethod(this.dataForm).then((res) => {
+              this.$message({
+                message: res.msg,
+                type: 'success',
+                duration: 1500,
+                onClose: () => {
+                  this.visible = false
+                  this.btnLoading = false
+                  this.$emit('close', true)
+                }
+              })
+            }).catch(() => { this.btnLoading = false })
+          }
         }
       })
     },
@@ -377,7 +451,7 @@ export default {
     },
     searchParameter() {
       this.parameterList = this.allParameterList.filter(item => {
-        if (item.field.toLowerCase().includes(this.keyword.toLowerCase())) {
+        if (item.field.toLowerCase().includes(this.keyword.toLowerCase()) || item.fieldName.toLowerCase().includes(this.keyword.toLowerCase())) {
           return item
         }
       })
@@ -386,6 +460,7 @@ export default {
       this.smsList.push({
         smsField: "",
         field: "",
+        fieldId: this.jnpf.idGenerator()
       })
     },
     removeSmsData(index) {
@@ -396,7 +471,15 @@ export default {
     },
     goBack() {
       this.$emit('close')
-    }
+    },
+    changeKey(val, row) {
+      if (!val) return
+      for (let i = 0; i < this.smsList.length; i++) {
+        if (row.fieldId != this.smsList[i].fieldId) {
+          this.$set(this.smsList[i], 'isTitle', 0)
+        }
+      }
+    },
   }
 }
 </script>
@@ -449,6 +532,15 @@ export default {
             width: 70px;
             flex: unset;
           }
+        }
+
+        >>> .el-input {
+          width: auto;
+          margin: 5px 10px;
+        }
+
+        >>> .el-table {
+          border-top: unset;
         }
       }
       >>> .el-icon-edit-outline,

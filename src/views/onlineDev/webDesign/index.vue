@@ -48,8 +48,13 @@
           <el-table-column prop="webType" label="模式" width="70" align="center">
             <template slot-scope="scope">
               <span v-if="scope.row.webType == 1">表单</span>
-              <span v-if="scope.row.webType == 2">列表</span>
-              <span v-if="scope.row.webType == 3">流程</span>
+              <span v-else>列表</span>
+            </template>
+          </el-table-column>
+          <el-table-column prop="enableFlow" label="启用流程" width="80" align="center">
+            <template slot-scope="scope">
+              <span v-if="scope.row.enableFlow == 1">是</span>
+              <span v-else>否</span>
             </template>
           </el-table-column>
           <el-table-column prop="creatorUser" label="创建人" width="120" />
@@ -58,10 +63,10 @@
           <el-table-column prop="lastModifyTime" label="最后修改时间" :formatter="jnpf.tableDateFormat"
             width="120" />
           <el-table-column prop="sortCode" label="排序" width="70" align="center" />
-          <el-table-column prop="state" label="状态" width="70" align="center">
+          <el-table-column prop="state" label="状态" width="80" align="center">
             <template slot-scope="scope">
-              <el-tag :type="scope.row.state == 1 ? 'success' : 'danger'" disable-transitions>
-                {{scope.row.state==1?'启用':'禁用'}}</el-tag>
+              <el-tag :type="scope.row.isRelease == 1 ? 'success' : 'info'" disable-transitions>
+                {{scope.row.isRelease==1?'已发布':'未发布'}}</el-tag>
             </template>
           </el-table-column>
           <el-table-column label="操作" fixed="right" width="150">
@@ -74,13 +79,20 @@
                     </el-button>
                   </span>
                   <el-dropdown-menu slot="dropdown">
+                    <el-dropdown-item @click.native="openReleaseDialog(scope.row)">发布模板
+                    </el-dropdown-item>
+                    <el-dropdown-item v-if="scope.row.isRelease==1"
+                      @click.native="rollBack(scope.row)">
+                      回滚模板</el-dropdown-item>
                     <el-dropdown-item @click.native="toggleWebType(scope.row)">更改模式
                     </el-dropdown-item>
-                    <el-dropdown-item @click.native="openReleaseDialog(scope.row)">同步菜单
-                    </el-dropdown-item>
-                    <el-dropdown-item @click.native="preview(scope.row.id)">预览模板</el-dropdown-item>
                     <el-dropdown-item @click.native="copy(scope.row.id)">复制模板</el-dropdown-item>
                     <el-dropdown-item @click.native="exportModel(scope.row.id)">导出模板
+                    </el-dropdown-item>
+                    <el-dropdown-item v-if="scope.row.isRelease==1"
+                      @click.native="preview(scope.row.id,1)">预览模板
+                    </el-dropdown-item>
+                    <el-dropdown-item @click.native="preview(scope.row.id,0)">预览草稿
                     </el-dropdown-item>
                   </el-dropdown-menu>
                 </el-dropdown>
@@ -132,11 +144,12 @@
       </el-form>
       <span slot="footer" class="dialog-footer">
         <el-button @click="releaseDialogVisible = false">{{$t('common.cancelButton')}}</el-button>
-        <el-button type="primary" :loading="releaseBtnLoading" @click="release">
+        <el-button type="primary" :loading="releaseBtnLoading" @click="releaseModel">
           {{$t('common.confirmButton')}}</el-button>
       </span>
     </el-dialog>
-    <previewDialog :visible.sync="previewDialogVisible" :id="currId" type="webDesign" />
+    <previewDialog :visible.sync="previewDialogVisible" :id="currId" :previewType="previewType"
+      type="webDesign" />
   </div>
 </template>
 
@@ -145,7 +158,7 @@ import Form from './Form'
 import AddBox from '@/views/generator/AddBox'
 import mixin from '@/mixins/generator/index'
 import previewDialog from '@/components/PreviewDialog'
-import { Release } from '@/api/onlineDev/visualDev'
+import { Release, rollbackTemplate } from '@/api/onlineDev/visualDev'
 import { getMenuSelector } from '@/api/system/menu'
 export default {
   name: 'onlineDev-webDesign',
@@ -178,13 +191,41 @@ export default {
       appTreeData: [],
       pcSystemId: "",
       appSystemId: "",
+      previewType: ""
     }
   },
   methods: {
-    preview(id) {
+    preview(id, type) {
       this.currId = id
+      this.previewType = type
       this.$nextTick(() => {
         this.previewDialogVisible = true
+      })
+    },
+    rollBack(row) {
+      this.$confirm('此操作将当前编辑的模板内容回滚为已经发布的模板内容，是否继续？', '提示', {
+        type: 'warning'
+      }).then(() => {
+        rollbackTemplate(row.id).then((res) => {
+          this.$message({
+            type: 'success',
+            message: res.msg,
+            duration: 1000,
+          });
+          this.initData()
+        })
+      })
+    },
+    releaseModel() {
+      this.$refs['releaseForm'].validate((valid) => {
+        if (!valid) return
+        this.$confirm('发布模板会覆盖当前线上版本且进行菜单同步，是否继续？', '提示', {
+          type: 'warning'
+        }).then(() => {
+          setTimeout(() => {
+            this.release()
+          }, 200)
+        })
       })
     },
     openReleaseDialog(row) {
@@ -199,7 +240,7 @@ export default {
         appModuleParentId: '',
       }
       this.$nextTick(() => {
-        this.$refs['releaseForm'].resetFields()
+        this.$refs['releaseForm'] && this.$refs['releaseForm'].resetFields()
       })
       this.getMenuSelector()
       this.getAPPMenuSelector()
@@ -214,23 +255,20 @@ export default {
     },
     // 发布菜单
     release() {
-      this.$refs['releaseForm'].validate((valid) => {
-        if (!valid) return
-        if (!this.releaseQuery.pc && !this.releaseQuery.app) return this.$message.error('请至少选择一种菜单同步方式')
-        this.releaseBtnLoading = true
-        this.releaseQuery.pcSystemId = this.pcSystemId
-        this.releaseQuery.appSystemId = this.appSystemId
-        Release(this.currRow.id, this.releaseQuery).then(res => {
-          this.releaseBtnLoading = false
-          this.releaseDialogVisible = false
-          this.initData()
-          this.$message({
-            type: 'success',
-            message: res.msg,
-            duration: 1000,
-          });
-        }).catch(() => { this.releaseBtnLoading = false })
-      })
+      if (!this.releaseQuery.pc && !this.releaseQuery.app) return this.$message.error('请至少选择一种菜单同步方式')
+      this.releaseBtnLoading = true
+      this.releaseQuery.pcSystemId = this.pcSystemId
+      this.releaseQuery.appSystemId = this.appSystemId
+      Release(this.currRow.id, this.releaseQuery).then(res => {
+        this.releaseBtnLoading = false
+        this.releaseDialogVisible = false
+        this.initData()
+        this.$message({
+          type: 'success',
+          message: res.msg,
+          duration: 1000,
+        });
+      }).catch(() => { this.releaseBtnLoading = false })
     },
     getMenuSelector() {
       getMenuSelector({ category: 'Web' }, 0).then(res => {

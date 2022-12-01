@@ -87,6 +87,9 @@ export default {
     disabled: {
       type: Boolean,
       default: false
+    },
+    flowType: {
+      default: ""
     }
   },
   model: {
@@ -148,7 +151,8 @@ export default {
       let query = {
         keyword: this.keyword,
         ...this.listQuery,
-        category: this.category == '' ? '' : this.category
+        category: this.category == '' ? '' : this.category,
+        flowType: this.flowType
       }
       FlowEnginePageList(query).then((res) => {
         this.list = res.data.list
@@ -157,8 +161,8 @@ export default {
       }).catch(() => { this.listLoading = false })
     },
     handleNodeClick(data) {
-      this.category = ''
-      this.category = data.enCode
+      if (data.id == this.category) return
+      this.category = data.id || ''
       this.reset()
     },
     reset() {

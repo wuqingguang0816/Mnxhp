@@ -137,14 +137,43 @@
           </el-row>
         </el-form>
       </el-tab-pane>
+      <el-tab-pane label="个人签名">
+        <el-row class="sign" :gutter="40">
+          <div @click="addSign" style="cursor : pointer">
+            <el-col :span="6" class="sign-item">
+              <div class='add-sign'>
+                <i class="add-icon el-icon-plus"></i>
+              </div>
+            </el-col>
+          </div>
+          <template v-for="(item,i) in signList">
+            <el-col :span="6" class="sign-item" :key="i">
+              <div :class="item.isDefault?'add-sign active':'add-sign'">
+                <img :src="item.signImg" alt="" class="sign-img">
+                <div class="icon-checked1" v-if="item.isDefault">
+                  <i class=" el-icon-check"></i>
+                </div>
+                <div v-if="!item.isDefault" class="add-button">
+                  <el-button @click="deleteSign(item.id)">删除</el-button>
+                  <el-button type="primary" @click="updateDefault(item.id,item.signImg)">设为默认
+                  </el-button>
+                </div>
+              </div>
+            </el-col>
+          </template>
+        </el-row>
+      </el-tab-pane>
     </el-tabs>
+    <SignImgDialog v-if="signVisible" ref="SignImg" :lineWidth='3' :userInfo='userInfo'
+      :isDefault='0' @close="closeDialog" />
   </div>
 </template>
-
 <script>
-
-import { UpdateUser } from '@/api/permission/userSetting'
+import { UpdateUser, getSign, deleteSign, updateDefault } from '@/api/permission/userSetting'
+import { mapGetters } from "vuex";
+import SignImgDialog from '@/components/SignImgDialog'
 export default {
+  components: { SignImgDialog },
   props: {
     user: {
       type: Object,
@@ -173,6 +202,7 @@ export default {
         urgentContacts: '',
         urgentTelePhone: '',
         postalAddress: '',
+
       },
       form2Rule: {
         realName: [
@@ -182,7 +212,10 @@ export default {
       certificatesTypeOptions: [],
       educationOptions: [],
       genderOptions: [],
-      nationOptions: []
+      nationOptions: [],
+      signVisible: false,
+      signImg: '',
+      signList: []
     }
   },
   computed: {
@@ -195,12 +228,52 @@ export default {
     prevLogTime() {
       return this.jnpf.toDate(this.form.prevLogTime)
     },
+    ...mapGetters(['userInfo'])
   },
   created() {
     this.getOptions()
     this.getInfo()
+    this.getSign()
   },
   methods: {
+    closeDialog() {
+      this.signVisible = false
+      this.getSign()
+    },
+    getSign() {
+      getSign().then(res => {
+        this.signList = res.data || []
+      })
+    },
+    deleteSign(id) {
+      deleteSign(id).then(res => {
+        this.$message({
+          message: res.msg,
+          type: 'success',
+          duration: 1500
+        })
+        this.getSign()
+      })
+    },
+    updateDefault(id, signImg) {
+      updateDefault(id).then(res => {
+        this.$message({
+          message: res.msg,
+          type: 'success',
+          duration: 1500
+        })
+        this.$store.commit('user/SET_USERINFO_SIGNIMG', signImg)
+        this.getSign()
+      }).catch(err => {
+        this.getSign()
+      })
+    },
+    addSign() {
+      this.signVisible = true
+      this.$nextTick(() => {
+        this.$refs.SignImg.init()
+      })
+    },
     getOptions() {
       this.$store.dispatch('base/getDictionaryData', { sort: 'Education' }).then((res) => {
         this.educationOptions = JSON.parse(JSON.stringify(res))
@@ -245,5 +318,72 @@ export default {
   >>> .el-tabs__nav-scroll {
     padding-top: 0 !important;
   }
+}
+.sign {
+  padding: 20px 50px 0px 50px;
+}
+.add-sign {
+  position: relative;
+  height: 160px;
+  background-color: rgb(247, 247, 247);
+  border-radius: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  &.active {
+    border: 1px solid #1890ff;
+    box-shadow: 0 0 6px rgba(6, 58, 108, 0.26);
+    color: #1890ff;
+    .btn,
+    .icon-checked {
+      display: block;
+    }
+  }
+  .add-button {
+    position: absolute;
+    display: none;
+  }
+  .add-icon {
+    font-size: 50px;
+    color: rgb(157, 158, 159);
+  }
+  .sign-img {
+    width: 100%;
+    height: 100%;
+  }
+}
+.add-sign:hover .add-button {
+  display: flex;
+  width: 100%;
+  height: 100%;
+  border-radius: 10px;
+  background-color: rgba(157, 158, 159, 0.8);
+
+  justify-content: center;
+  align-items: center;
+}
+.icon-checked1 {
+  display: block;
+  width: 20px;
+  height: 20px;
+  border: 20px solid #1890ff;
+  border-left: 20px solid transparent;
+  border-top: 20px solid transparent;
+  border-bottom-right-radius: 10px;
+  position: absolute;
+  transform: scale(0.8);
+  right: -5px;
+  bottom: -5px;
+  i {
+    position: absolute;
+    top: -4px;
+    left: -4px;
+    font-size: 24px;
+    color: #fff;
+    transform: scale(0.8);
+  }
+}
+.sign-item {
+  margin-bottom: 20px;
 }
 </style>

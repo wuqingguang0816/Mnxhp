@@ -2,41 +2,78 @@
   <div class="transfer__body" v-loading="allLoading" :style="{height}">
     <div class="transfer-pane">
       <div class="transfer-pane__tools">
-        <el-input placeholder="输入关键词进行搜索" v-model="keyword" @keyup.enter.native="getData" clearable>
-          <el-button slot="append" icon="el-icon-search" @click="getData"></el-button>
+        <el-input placeholder="输入关键词进行搜索" v-model="pagination.keyword" @keyup.enter.native="search"
+          clearable>
+          <el-button slot="append" icon="el-icon-search" @click="search"></el-button>
         </el-input>
       </div>
-      <div class="transfer-pane__body">
+      <div class="transfer-pane__body left-pane">
         <el-tabs v-model="activeName" class="transfer-pane__body-tab">
           <el-tab-pane label="全部数据" name="all">
             <el-tree :data="treeData" :props="props" check-on-click-node
               @node-click="handleNodeClick" class="JNPF-common-el-tree" node-key="id"
-              v-loading="loading" lazy :load="loadNode">
+              v-loading="loading" lazy :load="loadNode" v-if="!this.isAsync">
               <span class="custom-tree-node" slot-scope="{ node, data }">
                 <i :class="data.icon"></i>
                 <span class="text">{{node.label}}</span>
               </span>
             </el-tree>
+            <div class="single-list" ref="infiniteBody" v-if="this.isAsync"
+              v-loading="loading && pagination.currentPage==1">
+              <template v-if="treeData.length">
+                <div v-for="(item,index) in treeData" :key="index" class="selected-item-user"
+                  @click="handleNodeClick(item)">
+                  <div class="selected-item-main">
+                    <el-avatar :size="36" :src="define.comUrl+item.headIcon"
+                      class="selected-item-headIcon">
+                    </el-avatar>
+                    <div class="selected-item-text">
+                      <p class="name">{{item.fullName}}</p>
+                      <p class="organize" :title="item.organize">{{item.organize}}</p>
+                    </div>
+                  </div>
+                </div>
+              </template>
+              <el-empty description="暂无数据" :image-size="120" v-else></el-empty>
+            </div>
           </el-tab-pane>
           <el-tab-pane label="当前组织" name="department">
-            <el-tree :data="treeData2" :props="props" :expand-on-click-node="false"
-              check-on-click-node @node-click="handleNodeClick2" class="JNPF-common-el-tree"
-              node-key="id" v-loading="loading">
-              <span class="custom-tree-node" slot-scope="{ node }">
-                <i class="icon-ym icon-ym-tree-user2"></i>
-                <span class="text">{{node.label}}</span>
-              </span>
-            </el-tree>
+            <div class="single-list" v-loading="loading">
+              <template v-if="treeData2.length">
+                <div v-for="(item,index) in treeData2" :key="index" class="selected-item-user"
+                  @click="handleNodeClick2(item)">
+                  <div class="selected-item-main">
+                    <el-avatar :size="36" :src="define.comUrl+item.headIcon"
+                      class="selected-item-headIcon">
+                    </el-avatar>
+                    <div class="selected-item-text">
+                      <p class="name">{{item.fullName}}</p>
+                      <p class="organize" :title="item.organize">{{item.organize}}</p>
+                    </div>
+                  </div>
+                </div>
+              </template>
+              <el-empty description="暂无数据" :image-size="120" v-else></el-empty>
+            </div>
           </el-tab-pane>
           <el-tab-pane label="我的下属" name="subordinates">
-            <el-tree :data="treeData3" :props="props" :expand-on-click-node="false"
-              check-on-click-node @node-click="handleNodeClick2" class="JNPF-common-el-tree"
-              node-key="id" v-loading="loading">
-              <span class="custom-tree-node" slot-scope="{ node }">
-                <i class="icon-ym icon-ym-tree-user2"></i>
-                <span class="text">{{node.label}}</span>
-              </span>
-            </el-tree>
+            <div class="single-list" v-loading="loading">
+              <template v-if="treeData3.length">
+                <div v-for="(item,index) in treeData3" :key="index" class="selected-item-user"
+                  @click="handleNodeClick2(item)">
+                  <div class="selected-item-main">
+                    <el-avatar :size="36" :src="define.comUrl+item.headIcon"
+                      class="selected-item-headIcon">
+                    </el-avatar>
+                    <div class="selected-item-text">
+                      <p class="name">{{item.fullName}}</p>
+                      <p class="organize" :title="item.organize">{{item.organize}}</p>
+                    </div>
+                  </div>
+                </div>
+              </template>
+              <el-empty description="暂无数据" :image-size="120" v-else></el-empty>
+            </div>
           </el-tab-pane>
         </el-tabs>
       </div>
@@ -54,11 +91,10 @@
                 class="selected-item-headIcon">
               </el-avatar>
               <div class="selected-item-text">
-                <p class="name">{{item.fullName}}
-                  <i class="el-icon-delete" @click="removeData(index)"></i>
-                </p>
+                <p class="name">{{item.fullName}}</p>
                 <p class="organize" :title="item.organize">{{item.organize}}</p>
               </div>
+              <i class="el-icon-delete" @click="removeData(index)"></i>
             </div>
           </div>
         </template>
@@ -70,6 +106,7 @@
 
 <script>
 import { getImUserSelector, getUserInfoList, getSubordinates, getOrganization } from '@/api/permission/user'
+import { throttle } from 'throttle-debounce'
 export default {
   name: 'JNPF-userTransfer',
   data() {
@@ -86,9 +123,17 @@ export default {
         label: 'fullName',
         isLeaf: 'isLeaf'
       },
-      keyword: '',
       nodeId: '0',
-      ids: []
+      ids: [],
+      total: 0,
+      isAsync: false,
+      finish: false,
+      listLoading: false,
+      pagination: {
+        keyword: '',
+        currentPage: 1,
+        pageSize: 20,
+      }
     }
   },
   props: {
@@ -111,7 +156,8 @@ export default {
   },
   watch: {
     activeName(val) {
-      this.keyword = ''
+      this.pagination.keyword = ''
+      this.isAsync = false
       if (!val) return
       this.nodeId = '0'
       this.treeData = []
@@ -124,26 +170,40 @@ export default {
     init() {
       this.selectedData = []
       this.ids = []
-      this.keyword = ''
+      this.pagination.keyword = ''
       this.activeName = ''
       this.nodeId = '0'
+      this.isAsync = false
+      this.finish = false
       this.$nextTick(() => {
         this.activeName = 'all'
         this.getSelectList()
       })
+    },
+    bindScroll() {
+      let _this = this,
+        vBody = _this.$refs.infiniteBody;
+      vBody.addEventListener("scroll", throttle(300, function () {
+        if (vBody.scrollHeight - vBody.clientHeight - vBody.scrollTop <= 200 && !_this.listLoading && !_this.finish) {
+          _this.pagination.currentPage += 1
+          _this.getList()
+        }
+      }));
     },
     getData() {
       if (this.activeName === 'all') {
         this.getList()
       } else if (this.activeName === 'department') {
         this.loading = true
-        getOrganization({ keyword: this.keyword, organizeId: '0' }).then(res => {
+        this.treeData2 = []
+        getOrganization({ keyword: this.pagination.keyword, organizeId: '0' }).then(res => {
           this.treeData2 = res.data
           this.loading = false
         })
       } else {
         this.loading = true
-        getSubordinates(this.keyword).then(res => {
+        this.treeData3 = []
+        getSubordinates(this.pagination.keyword).then(res => {
           this.treeData3 = res.data
           this.loading = false
         })
@@ -158,11 +218,32 @@ export default {
         this.allLoading = false
       })
     },
+    search() {
+      this.nodeId = '0'
+      this.treeData = []
+      this.pagination.currentPage = 1
+      this.isAsync = !!this.pagination.keyword
+      this.finish = false
+      if (this.isAsync && this.activeName === 'all') {
+        this.$nextTick(() => {
+          this.bindScroll()
+        })
+      }
+      this.getData()
+    },
     getList() {
       this.loading = true
-      if (this.keyword) this.nodeId = '0'
-      getImUserSelector(this.nodeId, this.keyword).then(res => {
-        this.treeData = res.data.list
+      if (this.pagination.keyword) this.nodeId = '0'
+      getImUserSelector(this.nodeId, this.pagination).then(res => {
+        if (this.pagination.keyword) {
+          if (res.data.list.length < this.pagination.pageSize) {
+            this.finish = true
+          }
+          this.treeData = [...this.treeData, ...res.data.list]
+          this.total = res.data.pagination.total
+        } else {
+          this.treeData = res.data.list
+        }
         this.loading = false
       })
     },

@@ -14,8 +14,8 @@
         <el-button @click="prev" :disabled="activeStep<=0">{{$t('common.prev')}}</el-button>
         <el-button @click="next" :disabled="activeStep>=1 || loading">{{$t('common.next')}}
         </el-button>
-        <el-button type="primary" @click="dataFormSubmit()" :disabled="activeStep!=1"
-          :loading="btnLoading">{{$t('common.confirmButton')}}</el-button>
+        <el-button type="primary" @click="dataFormSubmit()" :disabled="loading"
+          :loading="btnLoading">{{$t('common.saveButton')}}</el-button>
         <el-button @click="closeDialog()">{{$t('common.cancelButton')}}</el-button>
       </div>
     </div>
@@ -59,7 +59,7 @@
                 <template slot-scope="scope">
                   <el-tag v-if="scope.row.typeId=='1'">主表</el-tag>
                   <el-tag type="warning" v-else @click="changeTable(scope.row)"
-                    style="cursor:pointer" title="点击设置成主表">子表</el-tag>
+                    style="cursor:pointer" title="点击设置成主表">从表</el-tag>
                 </template>
               </el-table-column>
               <el-table-column prop="table" label="表名">
@@ -134,29 +134,6 @@ export default {
           { required: true, message: '模板分类不能为空', trigger: 'change' },
         ]
       }
-    }
-  },
-  methods: {
-    dataFormSubmit() {
-      this.$refs['generator'].getData().then(res => {
-        this.btnLoading = true
-        this.formData = res.formData
-        this.dataForm.formData = JSON.stringify(this.formData)
-        this.dataForm.tables = JSON.stringify(this.tables)
-        const formMethod = this.dataForm.id ? Update : Create
-        formMethod(this.dataForm).then((res) => {
-          this.$message({
-            message: res.msg,
-            type: 'success',
-            duration: 1500,
-            onClose: () => {
-              this.closeDialog(true)
-            }
-          })
-        }).catch(() => { this.btnLoading = false })
-      }).catch(err => {
-        err.msg && this.$message.warning(err.msg)
-      })
     }
   }
 }
