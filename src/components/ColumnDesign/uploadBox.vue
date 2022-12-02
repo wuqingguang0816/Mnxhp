@@ -67,10 +67,12 @@ export default {
         const required = element.__config__.required
         const jnpfKey = element.__config__.jnpfKey
         const disabled = systemComponentsList.includes(jnpfKey) || required
-        this.columnList.push({ __vModel__: element.__vModel__, label, disabled })
-        if ((required || systemComponentsList.includes(jnpfKey))) {
-          this.checkedList.push(element.__vModel__)
-          this.defaultCheckedList.push(element.__vModel__)
+        if (!excludeList.includes(jnpfKey)) {
+          this.columnList.push({ __vModel__: element.__vModel__, label, disabled })
+          if ((required || systemComponentsList.includes(jnpfKey))) {
+            this.checkedList.push(element.__vModel__)
+            this.defaultCheckedList.push(element.__vModel__)
+          }
         }
       }
       if (selectData && selectData.length) {
