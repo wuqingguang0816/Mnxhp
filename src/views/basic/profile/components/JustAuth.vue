@@ -23,7 +23,7 @@
             <el-button size="small" type="" v-if="item.entity"
               @click="deleteSocials(item.entity.userId,item.entity.id)">解绑</el-button>
             <el-button size="small" type="primary" v-if="!item.entity"
-              @click="bingding(item.enname)">绑定</el-button>
+              @click="binding(item.enname)">绑定</el-button>
           </el-col>
         </el-row>
         <el-divider class="divider-margin" :key="i"></el-divider>
@@ -47,6 +47,9 @@ export default {
     this.init()
     this.bindListener()
   },
+  beforeDestroy() {
+    window.removeEventListener('message', () => { })
+  },
   methods: {
     init() {
       this.loading = true
@@ -55,7 +58,7 @@ export default {
         this.loading = false
       })
     },
-    bingding(data) {
+    binding(data) {
       binding(data).then(res => {
         if (this.winURL && !this.winURL.closed) {
           this.winURL.location.replace(res.msg)
@@ -113,8 +116,6 @@ export default {
         })
         this.init()
       }).catch(() => { });
-
-
     },
     handleClose(done) {
       this.$confirm('确认关闭？')
@@ -123,7 +124,6 @@ export default {
         })
         .catch(_ => { });
     },
-
     iframeLoad() {
       window.addEventListener("message", this.handleMessage);
     },

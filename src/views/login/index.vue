@@ -403,6 +403,7 @@ export default {
         this.preUrl = res.data.url
         this.ticketParams = res.data.ticketParams
         this.socialsList = res.data.socialsList || []
+        localStorage.setItem('useSocials', this.socialsList.length)
         this.ssoLoading = false
       }).catch(() => {
         this.isSso = false
