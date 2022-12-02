@@ -1422,7 +1422,8 @@
                     <i class="el-icon-warning-outline"></i>
                   </el-tooltip>
                 </div>
-                <el-radio-group v-model="approverForm.rejectType" class="form-item-content">
+                <el-radio-group v-model="approverForm.rejectType" class="form-item-content"
+                  @input="radioInput">
                   <el-radio :label="1">重新审批
                     <el-tooltip content="若流程为A->B->C,C退回至A，则C->A->B->C" placement="top">
                       <i class="el-icon-warning-outline"></i>
@@ -3753,6 +3754,9 @@ export default {
       }
       loop(this.processData)
     },
+    radioInput(val) {
+      this.approverForm.rejectStep = '0'
+    },
   },
   watch: {
     visible(val) {
@@ -3770,9 +3774,6 @@ export default {
     },
     'startForm.titleContent'(newVal) {
       this.temporaryContent = newVal
-    },
-    'approverForm.rejectType'(val) {
-      this.approverForm.rejectStep = '0'
     },
     value(newVal) {
       if (newVal && newVal.properties) {
