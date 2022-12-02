@@ -10,8 +10,8 @@
           v-if="!dataForm.id&&isGradeUser==1" />
         <el-input v-model="myNameAccount" v-if="dataForm.id||isGradeUser==2" disabled />
       </jnpf-form-tip-item>
-      <jnpf-form-tip-item label="被委托人" prop="toUserId">
-        <user-select v-model="dataForm.toUserId" placeholder="选择被委托人" @change="onChange" />
+      <jnpf-form-tip-item label="受委托人" prop="toUserId">
+        <user-select v-model="dataForm.toUserId" placeholder="选择受委托人" @change="onChange" />
       </jnpf-form-tip-item>
       <jnpf-form-tip-item label="委托类型" prop="type">
         <el-select v-model="dataForm.type" placeholder="请选择">
@@ -104,7 +104,7 @@ export default {
           { required: true, message: '委托人不能为空', trigger: 'click' }
         ],
         toUserId: [
-          { required: true, message: '被委托人不能为空', trigger: 'click' }
+          { required: true, message: '受委托人不能为空', trigger: 'click' }
         ],
         type: [
           { required: true, message: '委托类型不能为空', trigger: 'change' }

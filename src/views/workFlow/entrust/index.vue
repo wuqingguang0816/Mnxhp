@@ -97,7 +97,7 @@
               </div>
               <JNPF-table v-loading="listLoading" :data="list">
                 <el-table-column prop="userName" label="委托人" width="150" />
-                <el-table-column prop="toUserName" label="被委托人" width="150" />
+                <el-table-column prop="toUserName" label="受委托人" width="150" />
                 <el-table-column prop="type" label="委托类型" width="150">
                   <template slot-scope="scope">
                     <span v-if='scope.row.type==0'>发起委托</span>
