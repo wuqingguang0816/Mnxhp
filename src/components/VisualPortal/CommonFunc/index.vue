@@ -53,6 +53,9 @@ export default {
             path = '/' + o.enCode
           } else {
             path = o.urlAddress.replace(/\${dataV}/g, this.define.dataV).replace(/\${jnpfToken}/g, getToken())
+            if(path.startsWith("/")){
+              path = location.origin + path;
+            }
           }
         }
         return {
