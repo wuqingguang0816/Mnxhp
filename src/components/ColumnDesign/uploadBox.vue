@@ -59,6 +59,7 @@ export default {
   methods: {
     init(columnList, selectData, dataType) {
       this.visible = true
+      this.columnList = []
       this.checkedList = []
       this.defaultCheckedList = []
       for (let i = 0; i < columnList.length; i++) {
