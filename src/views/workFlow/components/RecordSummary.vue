@@ -75,7 +75,7 @@ export default {
               j.fileList = j.fileList ? JSON.parse(j.fileList) : []
             })
             o.list = o.list.map(i => ({
-              txt: i.handleStatus == 0 ? '退回' : i.handleStatus == 1 ? '同意' : i.handleStatus == 2 ? '发起' : i.handleStatus == 3 ? '撤回' : i.handleStatus == 4 ? '终止' : i.handleStatus == 5 ? '指派' : i.handleStatus == 6 ? '加签' : i.handleStatus == 10 ? '前加签' : '转审',
+              txt: i.handleStatus == 0 ? '退回' : i.handleStatus == 1 ? '同意' : i.handleStatus == 2 ? '发起' : i.handleStatus == 3 ? '撤回' : i.handleStatus == 4 ? '终止' : i.handleStatus == 5 ? '指派' : i.handleStatus == 6 ? '后加签' : i.handleStatus == 10 ? '前加签' : '转审',
               tagType: i.handleStatus == 0 ? 'danger' : i.handleStatus == 1 ? 'success' : i.handleStatus == 3 || i.handleStatus == 4 ? 'warning' : "",
               ...i
             }))
