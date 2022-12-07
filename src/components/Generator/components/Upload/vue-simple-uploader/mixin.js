@@ -81,6 +81,7 @@ export default {
       // console.log(`上传中 ${file.name}，chunk：${chunk.startByte / 1024 / 1024} ~ ${chunk.endByte / 1024 / 1024}`)
     },
     onFileError(rootFile, file, response, chunk) {
+      file.cancel()
       this.$message.error(`上传失败`)
     },
     onFileSuccess(rootFile, file, response, chunk) {

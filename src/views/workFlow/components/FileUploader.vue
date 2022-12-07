@@ -138,6 +138,8 @@ export default {
         }
         this.$emit('fileSuccess', data)
         file.cancel()
+      }).catch(() => {
+        file.cancel()
       })
     }
   }
