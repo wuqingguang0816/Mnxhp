@@ -387,17 +387,18 @@ export default {
       let print = this.$refs.tsPrint.innerHTML
       let iframe = document.createElement('IFRAME');
       document.body.appendChild(iframe);
-      let doc = iframe.contentWindow.document
-      doc.write(print);
-      doc.close();
+      iframe.setAttribute("style", "position:absolute;width:0px;height:0px;left:-500px;top:-500px;");
       iframe.contentWindow.focus();
-      iframe.contentWindow.addEventListener('load', function () {
+      let doc = iframe.contentWindow.document
+      iframe.onload = function () {
         let oldTitle = document.title;
         document.title = "JNPF快速开发平台";
         iframe.contentWindow.print();
         document.title = oldTitle;
         document.body.removeChild(iframe);
-      })
+      }
+      doc.write(print);
+      doc.close();
     },
   }
 }
