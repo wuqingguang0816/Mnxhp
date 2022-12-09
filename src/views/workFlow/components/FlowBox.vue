@@ -323,8 +323,8 @@ export default {
         this.signImg = val
       }
     },
-    approverDialog() {
-      this.$emit('close', true)
+    approverDialog(needClose) {
+      if (needClose) this.$emit('close', true)
     },
     handleResurgence(errorRuleUserList) {
       this.$refs['resurgenceForm'].validate((valid) => {
@@ -407,7 +407,7 @@ export default {
         this.flowTaskOperatorRecordList = this.flowTaskOperatorRecordList.reverse()
         this.properties = res.data.approversProperties || {}
         this.endTime = this.flowTaskInfo.completion == 100 ? this.flowTaskInfo.endTime : 0
-        data.formConf = this.flowFormInfo.propertyJson
+        data.formConf = data.isPreview ? data.formConf : this.flowFormInfo.propertyJson
         if (data.opType != 1 && data.opType != '-1') data.readonly = true
         data.formOperates = res.data.formOperates || []
         if (data.opType == 0) {
@@ -613,7 +613,7 @@ export default {
     submitOrSave() {
       this.formData.status = this.eventType === 'submit' ? 0 : 1
       this.formData.flowUrgent = this.flowUrgent
-      if (this.setting.delegateUserList) {//被委托人不为空的时候走委托创建流程
+      if (this.setting.delegateUserList) {//受委托人不为空的时候走委托创建流程
         this.formData.delegateUserList = this.setting.delegateUserList
       }
 

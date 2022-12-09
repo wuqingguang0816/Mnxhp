@@ -138,6 +138,7 @@ export default {
         this.list = res.data.list
         this.total = res.data.pagination.total
         this.listLoading = false
+        if (this.value) this.checkedRow = this.list.find(ele => ele.id == this.value) || {}
       }).catch(() => { this.listLoading = false })
     },
     openDialog() {

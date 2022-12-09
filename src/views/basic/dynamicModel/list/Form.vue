@@ -1,6 +1,6 @@
 <template>
   <div>
-    <template v-if="formConf.popupType==='general'">
+    <template v-if="formConf.popupType==='general'&&dialogLoading">
       <el-dialog :title="!dataForm.id ? '新建' : '编辑'" :close-on-click-modal="false"
         :visible.sync="visible" class="JNPF-dialog JNPF-dialog_center" lock-scroll
         :width="formConf.generalWidth">
@@ -34,9 +34,9 @@
               <el-button @click="goBack">{{formConf.cancelButtonText||'取 消'}}</el-button>
             </div>
           </div>
-          <div class="dynamic-form-main" :style="{margin: '0 auto',width:formConf.fullScreenWidth}">
-            <parser :form-conf="formConf" @submit="submitForm" :key="key" ref="dynamicForm"
-              v-if="!loading" />
+          <div class="dynamic-form-main" v-if="!loading"
+            :style="{margin: '0 auto',width:formConf.fullScreenWidth}">
+            <parser :form-conf="formConf" @submit="submitForm" :key="key" ref="dynamicForm" />
           </div>
         </div>
       </transition>
@@ -90,7 +90,8 @@ export default {
       isPreview: false,
       useFormPermission: false,
       printBrowseVisible: false,
-      formOperates: []
+      formOperates: [],
+      dialogLoading: false
     }
   },
   methods: {
@@ -109,6 +110,7 @@ export default {
       this.dataForm.id = id || ''
       this.getFormOperates()
       this.loading = true
+      this.dialogLoading = false
       this.$nextTick(() => {
         if (this.dataForm.id) {
           let extra = {
@@ -122,6 +124,7 @@ export default {
             if (!this.dataForm.data) return
             this.formData = { ...JSON.parse(this.dataForm.data), id: this.dataForm.id }
             this.fillFormData(this.formConf, this.formData)
+            this.dialogLoading = true
             this.$nextTick(() => {
               this.visible = true
               this.loading = false
@@ -131,8 +134,11 @@ export default {
           this.$store.commit('generator/SET_DYNAMIC_MODEL_EXTRA', {})
           this.formData = {}
           this.fillFormData(this.formConf, this.formData)
-          this.visible = true
-          this.loading = false
+          this.dialogLoading = true
+          this.$nextTick(() => {
+            this.visible = true
+            this.loading = false
+          })
         }
         this.key = +new Date()
       })

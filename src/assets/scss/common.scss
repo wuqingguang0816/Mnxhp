@@ -511,7 +511,7 @@
     }
 
     .file-list {
-      padding-top: 10px;
+      padding: 10px 0;
       border-top: 1px solid #dcdfe6;
     }
   }
@@ -1844,7 +1844,7 @@
 }
 
 .el-table__expanded-cell[class*=cell] {
-  padding: 5px 25px !important;
+  padding: 5px 50px 5px 25px !important;
 }
 
 .el-button+.el-popconfirm,

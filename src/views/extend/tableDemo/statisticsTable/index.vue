@@ -30,7 +30,8 @@
             </el-tooltip>
           </div>
         </div>
-        <JNPF-table v-loading="listLoading" :data="list" show-summary>
+        <JNPF-table v-loading="listLoading" :data="list" show-summary
+          :summary-method="getSummaries">
           <el-table-column prop="projectName" label="项目名称" sortable width="200" />
           <el-table-column prop="projectCode" label="项目编码" sortable width="160" />
           <el-table-column prop="projectType" label="项目类型" sortable width="100">
@@ -137,6 +138,34 @@ export default {
         this.total = res.data.pagination.total
         this.listLoading = false
       })
+    },
+    getSummaries(param) {
+      const { columns, data } = param;
+      const sums = [];
+      columns.forEach((column, index) => {
+        if (index === 0) {
+          sums[index] = '合计';
+          return;
+        }
+        if (![9, 10, 11].includes(index)) {
+          sums[index] = '';
+          return;
+        }
+        const values = data.map(item => Number(item[column.property]));
+        if (!values.every(value => isNaN(value))) {
+          sums[index] = values.reduce((prev, curr) => {
+            const value = Number(curr);
+            if (!isNaN(value)) {
+              return prev + curr;
+            } else {
+              return prev;
+            }
+          }, 0);
+        } else {
+          sums[index] = '';
+        }
+      });
+      return sums
     },
     handleDel(index, id) {
       this.$confirm(this.$t('common.delTip'), this.$t('common.tipTitle'), {

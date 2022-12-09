@@ -3,15 +3,15 @@
     :visible.sync="visible" class="JNPF-dialog JNPF-dialog_center" lock-scroll width="600px">
     <el-form ref="dataForm" :model="dataForm" :rules="dataRule" label-width="100px"
       v-loading="loading">
-      <jnpf-form-tip-item label="委托人" prop="userId">
+      <!-- <jnpf-form-tip-item label="委托人" prop="userId">
         <user-select v-model="dataForm.userId" placeholder="选择委托人" @change="onChangeUser"
           v-if="!dataForm.id&&isGradeUser==0" />
         <grade-user-select v-model="dataForm.userId" placeholder="选择委托人" @change="onChangeUser"
           v-if="!dataForm.id&&isGradeUser==1" />
         <el-input v-model="myNameAccount" v-if="dataForm.id||isGradeUser==2" disabled />
-      </jnpf-form-tip-item>
-      <jnpf-form-tip-item label="被委托人" prop="toUserId">
-        <user-select v-model="dataForm.toUserId" placeholder="选择被委托人" @change="onChange" />
+      </jnpf-form-tip-item> -->
+      <jnpf-form-tip-item label="受委托人" prop="toUserId">
+        <user-select v-model="dataForm.toUserId" placeholder="选择受委托人" @change="onChange" />
       </jnpf-form-tip-item>
       <jnpf-form-tip-item label="委托类型" prop="type">
         <el-select v-model="dataForm.type" placeholder="请选择">
@@ -104,7 +104,7 @@ export default {
           { required: true, message: '委托人不能为空', trigger: 'click' }
         ],
         toUserId: [
-          { required: true, message: '被委托人不能为空', trigger: 'click' }
+          { required: true, message: '受委托人不能为空', trigger: 'click' }
         ],
         type: [
           { required: true, message: '委托类型不能为空', trigger: 'change' }
@@ -152,21 +152,24 @@ export default {
       this.dataForm.id = id || ''
       this.visible = true
       this.loading = true
+      this.myNameAccount = this.userInfo.userName + '/' + this.userInfo.userAccount
+      this.dataForm.userId = this.userInfo.userAccount
+      this.dataForm.userName = this.myNameAccount
       //初始化委托人组件
-      if (this.userInfo.isAdministrator) {
-        this.isGradeUser = 0
-      } else {
-        getListByAuthorize('0', null).then(res => {
-          if (res.data.list.length) {
-            this.isGradeUser = 1
-          }
-          if (this.isGradeUser == 2) {
-            this.myNameAccount = this.userInfo.userName + '/' + this.userInfo.userAccount
-            this.dataForm.userId = this.userInfo.userAccount
-            this.dataForm.userName = this.myNameAccount
-          }
-        })
-      }
+      // if (this.userInfo.isAdministrator) {
+      //   this.isGradeUser = 0
+      // } else {
+      //   getListByAuthorize('0', null).then(res => {
+      //     if (res.data.list.length) {
+      //       this.isGradeUser = 1
+      //     }
+      //     if (this.isGradeUser == 2) {
+      //       this.myNameAccount = this.userInfo.userName + '/' + this.userInfo.userAccount
+      //       this.dataForm.userId = this.userInfo.userAccount
+      //       this.dataForm.userName = this.myNameAccount
+      //     }
+      //   })
+      // }
       //初始化流程列表
       this.getFlowEngineList()
     },

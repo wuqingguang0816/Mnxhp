@@ -589,9 +589,11 @@ export default {
         const element = this.list[i]
         const required = element.__config__.required
         const jnpfKey = element.__config__.jnpfKey
-        if ((required || systemComponentsList.includes(jnpfKey))) {
-          if (!selectKey.includes(element.__vModel__)) {
-            newList.push(element.__vModel__)
+        if (!excludeList.includes(jnpfKey)) {
+          if ((required || systemComponentsList.includes(jnpfKey))) {
+            if (!selectKey.includes(element.__vModel__)) {
+              newList.push(element.__vModel__)
+            }
           }
         }
       }

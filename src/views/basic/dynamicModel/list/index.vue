@@ -848,7 +848,8 @@ export default {
           type: 1,
           opType: '-1',
           modelId: this.modelId,
-          isPreview: this.isPreview
+          isPreview: this.isPreview,
+          formConf: JSON.stringify(this.formData)
         }
         this.flowVisible = true
         this.$nextTick(() => {
