@@ -358,7 +358,7 @@ export default {
             opType: '-1',
             delegateUserList: [res.data.list[0].id],
           }
-          this.flowboxVisible = true
+          this.flowBoxVisible = true
           this.$nextTick(() => {
             this.$refs.FlowBox.init(data)
             this.flowVisible = false
@@ -375,7 +375,7 @@ export default {
         opType: '-1',
         delegateUserList: this.checkUserList,
       }
-      this.flowboxVisible = true
+      this.flowBoxVisible = true
       this.$nextTick(() => {
         this.$refs.FlowBox.init(data)
         this.flowVisible = false
