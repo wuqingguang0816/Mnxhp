@@ -385,6 +385,7 @@ export default {
     },
     print() {
       let print = this.$refs.tsPrint.innerHTML
+      print = print + `<style>html * {word-break:break-all}</style>`
       let iframe = document.createElement('IFRAME');
       document.body.appendChild(iframe);
       iframe.setAttribute("style", "position:absolute;width:0px;height:0px;left:-500px;top:-500px;");
