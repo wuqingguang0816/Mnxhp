@@ -63,15 +63,15 @@
           </div>
         </div>
         <JNPF-table v-loading="listLoading" :data="list" max-height="100%">
-          <el-table-column prop="fullName" label="名称" show-overflow-tooltip min-width="120" />
-          <el-table-column prop="enCode" label="编码" width="120" />
+          <el-table-column prop="fullName" label="名称" show-overflow-tooltip min-width="200" />
+          <el-table-column prop="enCode" label="编码" width="180" />
           <el-table-column prop="messageSource" label="消息来源" width="100" />
           <el-table-column prop="templateType" label="模板类型" width="100">
             <template slot-scope="scope">
               {{scope.row.templateType=='1'?'系统模板':'自定义模板'}}
             </template>
           </el-table-column>
-          <el-table-column prop="messageType" label="消息类型" width="450">
+          <el-table-column prop="messageType" label="消息类型" min-width="380">
             <template slot-scope="scope">
               <span class="my-span-tag" :style="{'background':colorList[item.type]}"
                 v-for="(item,index) in scope.row.messageType" :key="index">
@@ -253,7 +253,7 @@ export default {
 </script>
 <style lang="scss" scoped>
 .my-span-tag {
-  margin-right: 8px;
+  margin: 3px 8px 3px 0;
   color: #fff;
   height: 24px;
   padding: 0 8px;
