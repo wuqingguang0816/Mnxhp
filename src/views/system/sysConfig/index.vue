@@ -305,7 +305,7 @@
                 <el-input-number v-model="baseForm.unClickNum" :min="1" :precision="0" :step="1"
                   controls-position="right" />
               </jnpf-form-tip-item>
-              <el-form-item>
+              <el-form-item label-width="180px">
                 <el-button type="primary" size="small" :loading="btnLoading" class="saveBtn"
                   @click="submitForm()">保 存</el-button>
               </el-form-item>
