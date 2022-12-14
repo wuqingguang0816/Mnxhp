@@ -155,7 +155,8 @@ export default {
         { fullName: "禁用", enCode: '0' },
       ],
       messageSourceList: [],
-      colorList: ['', '#2870F8', '#6DE083', '#F48282', '#6893F5', '#64B0F4', '#FF96B2', '#9C82F4']
+      colorList: ['', 'rgba(40, 112, 248, 0.1)', 'rgba(109, 224, 131, 0.1)', 'rgba(244, 130, 130, 0.1)',
+        'rgba(104, 147, 245, 0.1)', 'rgba(100, 176, 244, 0.1)', 'rgba(255, 150, 178, 0.1)', 'rgba(156, 130, 244, 0.1)']
     }
   },
   created() {
@@ -254,7 +255,7 @@ export default {
 <style lang="scss" scoped>
 .my-span-tag {
   margin: 3px 8px 3px 0;
-  color: #fff;
+  color: #606266;
   height: 24px;
   padding: 0 8px;
   line-height: 24px;

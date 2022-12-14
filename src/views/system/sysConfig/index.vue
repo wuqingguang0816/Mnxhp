@@ -292,19 +292,23 @@
         <el-tab-pane label="流程设置" name="process">
           <el-row class="mt-20">
             <el-col :span="18">
-              <jnpf-form-tip-item label-width="180px" label="审批链接时效性" prop="title"
+              <jnpf-form-tip-item label-width="180px" label="链接时效性" prop="title"
                 tipLabel="审批链接是否有效：审批链接发送时间 + 审批链接时效性">
                 <el-input-number v-model="baseForm.linkTime" :min="1" :precision="0" :step="1"
-                  controls-position="right" /> 小时
+                  controls-position="right" />
+                <span class="lockTime unit">小时</span>
               </jnpf-form-tip-item>
-              <jnpf-form-tip-item label-width="180px" label="审批链接被点击后失效" prop="title"
+              <jnpf-form-tip-item label-width="180px" label="链接点击失效" prop="title"
                 tipLabel=" 禁用：不判断点击次数；启用：根据失效次数判断，点击超过次数链接失效。">
                 <el-switch v-model="baseForm.isClick" :active-value="1" :inactive-value="0" />
+                <div v-if="baseForm.isClick" style="margin-top:10px">
+                  <span class="lockTime">失效次数</span>
+                  <el-input-number v-model="baseForm.unClickNum" :min="1" :precision="0" :step="1"
+                    controls-position="right" />
+                  <span class="lockTime unit">次</span>
+                </div>
               </jnpf-form-tip-item>
-              <jnpf-form-tip-item label-width="180px" label="链接点击几次后失效" v-if="baseForm.isClick">
-                <el-input-number v-model="baseForm.unClickNum" :min="1" :precision="0" :step="1"
-                  controls-position="right" />
-              </jnpf-form-tip-item>
+
               <el-form-item label-width="180px">
                 <el-button type="primary" size="small" :loading="btnLoading" class="saveBtn"
                   @click="submitForm()">保 存</el-button>
@@ -737,6 +741,10 @@ export default {
     padding-right: 12px;
     color: #606266;
     font-size: 14px;
+  }
+  .unit {
+    padding-right: unset;
+    padding-left: 12px;
   }
   .img-list {
     display: flex;
