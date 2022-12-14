@@ -26,7 +26,10 @@
         <el-input v-model="dataForm.smtpUser" placeholder="SMTP用户名" clearable />
       </el-form-item>
       <el-form-item label="SMTP密码" prop="smtpPassword">
-        <el-input v-model="dataForm.smtpPassword" placeholder="SMTP密码" clearable show-password />
+        <el-input v-model="dataForm.smtpPassword" placeholder="SMTP密码" clearable show-password>
+          <el-button slot="append" :disabled="btnLoading" @click="sendTest()">测试
+          </el-button>
+        </el-input>
       </el-form-item>
       <el-form-item label="排序" prop="sortCode">
         <el-input-number :min="0" :max="999999" v-model="dataForm.sortCode"
@@ -40,8 +43,8 @@
       </el-form-item>
     </el-form>
     <span slot="footer" class="dialog-footer">
-      <el-button type="primary" :disabled="btnLoading" @click="sendTest()">
-        {{'测试'}}</el-button>
+      <!-- <el-button type="primary" :disabled="btnLoading" @click="sendTest()">
+        {{'测试'}}</el-button> -->
       <el-button @click="visible = false">{{$t('common.cancelButton')}}</el-button>
       <el-button type="primary" :loading="btnLoading" @click="dataFormSubmit()">
         {{$t('common.confirmButton')}}</el-button>
