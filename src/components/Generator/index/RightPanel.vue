@@ -1037,9 +1037,8 @@ export default {
       this.setDefaultOptions()
     },
     changeStorage() {
-      if (this.$store.getters.hasTable) return
-      if (this.activeData.__config__.isStorage == 1) return this.activeData.__vModel__ = ''
-      this.$emit('setVModel', this.activeData)
+      this.activeData.__vModel__ = ''
+      if (!this.$store.getters.hasTable) this.$emit('setVModel', this.activeData)
     },
     setDefaultOptions() {
       if (!this.$store.getters.hasTable) return
