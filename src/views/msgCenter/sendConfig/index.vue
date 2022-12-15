@@ -63,15 +63,15 @@
           </div>
         </div>
         <JNPF-table v-loading="listLoading" :data="list" max-height="100%">
-          <el-table-column prop="fullName" label="名称" show-overflow-tooltip min-width="120" />
-          <el-table-column prop="enCode" label="编码" width="120" />
+          <el-table-column prop="fullName" label="名称" show-overflow-tooltip min-width="200" />
+          <el-table-column prop="enCode" label="编码" width="180" />
           <el-table-column prop="messageSource" label="消息来源" width="100" />
           <el-table-column prop="templateType" label="模板类型" width="100">
             <template slot-scope="scope">
               {{scope.row.templateType=='1'?'系统模板':'自定义模板'}}
             </template>
           </el-table-column>
-          <el-table-column prop="messageType" label="消息类型" width="450">
+          <el-table-column prop="messageType" label="消息类型" min-width="380">
             <template slot-scope="scope">
               <span class="my-span-tag" :style="{'background':colorList[item.type]}"
                 v-for="(item,index) in scope.row.messageType" :key="index">
@@ -155,7 +155,8 @@ export default {
         { fullName: "禁用", enCode: '0' },
       ],
       messageSourceList: [],
-      colorList: ['', '#2870F8', '#6DE083', '#F48282', '#6893F5', '#64B0F4', '#FF96B2', '#9C82F4']
+      colorList: ['', 'rgba(40, 112, 248, 0.1)', 'rgba(109, 224, 131, 0.1)', 'rgba(244, 130, 130, 0.1)',
+        'rgba(104, 147, 245, 0.1)', 'rgba(100, 176, 244, 0.1)', 'rgba(255, 150, 178, 0.1)', 'rgba(156, 130, 244, 0.1)']
     }
   },
   created() {
@@ -253,8 +254,8 @@ export default {
 </script>
 <style lang="scss" scoped>
 .my-span-tag {
-  margin-right: 8px;
-  color: #fff;
+  margin: 3px 8px 3px 0;
+  color: #606266;
   height: 24px;
   padding: 0 8px;
   line-height: 24px;

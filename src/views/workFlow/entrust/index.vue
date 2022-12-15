@@ -136,7 +136,7 @@
     <Form v-if="formVisible" ref="Form" @refreshDataList="reset" />
     <MyEntrust v-if="flowVisible" ref="MyEntrust" @close="flowVisible=false"
       @choiceFlow="choiceFlow" />
-    <FlowBox v-if="flowboxVisible" ref="FlowBox" @close="closeForm" />
+    <FlowBox v-if="flowBoxVisible" ref="FlowBox" @close="closeForm" />
     <el-dialog title="发起人员" :close-on-click-modal="false" :visible.sync="visibleUsers"
       class="JNPF-dialog JNPF-dialog_center  JNPF-dialog_fq" lock-scroll width="600px">
       <div class="user-list">
@@ -187,7 +187,6 @@
     </el-dialog>
   </div>
 </template>
-
 <script>
 import { FlowDelegateList, DeleteDelagate, getUserListByFlowId } from '@/api/workFlow/FlowDelegate'
 import { FlowLaunchList, Delete } from '@/api/workFlow/FlowLaunch'
@@ -212,7 +211,7 @@ export default {
       },
       formVisible: false,
       flowVisible: false,
-      flowboxVisible: false,
+      flowBoxVisible: false,
       activeName: '0',
       category: '',
       delagateTypeList: [
@@ -241,7 +240,6 @@ export default {
   },
   computed: {
     ...mapGetters(['userInfo'])
-
   },
   methods: {
     getDictionaryData() {
@@ -256,10 +254,11 @@ export default {
         sort: 'desc',
         sidx: ''
       }
-      if (this.activeName == '0') {//委托发起
+      if (this.activeName == '0') {
         this.initFlowList()
-      } else { this.initData() }
-
+      } else {
+        this.initData()
+      }
     },
     reset() {
       this.keyword = ''
@@ -305,7 +304,7 @@ export default {
     },
     asyncDel(index, id) {
       DeleteDelagate(id).then(res => {
-        this.list.splice(index, 1);
+        this.initData()
         this.$message({
           type: 'success',
           message: res.msg
@@ -321,7 +320,7 @@ export default {
     },
     asyncDelFlow(index, id) {
       Delete(id).then(res => {
-        this.flowList.splice(index, 1);
+        this.initFlowList()
         this.$message({
           type: 'success',
           message: res.msg
@@ -331,7 +330,6 @@ export default {
     formatter(row, column) {
       return this.jnpf.dateFormat(row, column)
     },
-    // 新增 / 修改
     addOrUpdateHandle(id) {
       this.formVisible = true
       this.$nextTick(() => {
@@ -353,7 +351,6 @@ export default {
           this.visibleUsers = true
           this.checkFlowItem = item
         } else {
-
           let data = {
             id: '',
             enCode: item.enCode,
@@ -361,15 +358,13 @@ export default {
             opType: '-1',
             delegateUserList: [res.data.list[0].id],
           }
-          this.flowboxVisible = true
+          this.flowBoxVisible = true
           this.$nextTick(() => {
             this.$refs.FlowBox.init(data)
             this.flowVisible = false
           })
         }
-
       })
-
     },
     dataFormSubmit() {
       this.visibleUsers = false
@@ -380,14 +375,14 @@ export default {
         opType: '-1',
         delegateUserList: this.checkUserList,
       }
-      this.flowboxVisible = true
+      this.flowBoxVisible = true
       this.$nextTick(() => {
         this.$refs.FlowBox.init(data)
         this.flowVisible = false
       })
     },
     closeForm(isRefresh) {
-      this.flowboxVisible = false
+      this.flowBoxVisible = false
       if (isRefresh) this.search()
     },
     activeClick(tab, event) {
@@ -430,7 +425,7 @@ export default {
         opType,
         status: item.status
       }
-      this.flowboxVisible = true
+      this.flowBoxVisible = true
       this.$nextTick(() => {
         this.$refs.FlowBox.init(data)
       })

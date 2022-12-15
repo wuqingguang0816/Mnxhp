@@ -12,9 +12,8 @@
       </el-input>
     </el-form-item>
     <el-form-item label="最大上传数">
-      <el-input-number :value="activeData.limit" :min="0" placeholder="最大上传数"
-        @input="$set(activeData, 'limit', $event?$event:undefined)" :step="1"
-        controls-position="right" />
+      <el-input-number v-model="activeData.limit" :min="0" placeholder="最大上传数" :step="1"
+        :precision="0" controls-position="right" />
     </el-form-item>
     <!-- <el-form-item label="显示提示">
       <el-switch v-model="activeData.showTip" />
