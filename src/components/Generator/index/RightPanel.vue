@@ -121,7 +121,7 @@
             <template v-else>
               <template
                 v-if="activeData.__config__.jnpfKey==='calculate' ||activeData.__config__.jnpfKey==='popupAttr' ||activeData.__config__.jnpfKey==='relationFormAttr'">
-                <el-form-item label="控件类型">
+                <el-form-item label="控件用途">
                   <el-select v-model="activeData.__config__.isStorage" placeholder="请选择"
                     @change="changeStorage">
                     <el-option :label="item.label" :value="item.value"
@@ -1038,7 +1038,7 @@ export default {
     },
     changeStorage() {
       this.activeData.__vModel__ = ''
-      if (!this.$store.getters.hasTable) this.$emit('setVModel', this.activeData)
+      if (!this.$store.getters.hasTable && this.activeData.__config__.isStorage == 2) this.$emit('setVModel', this.activeData)
     },
     setDefaultOptions() {
       if (!this.$store.getters.hasTable) return

@@ -450,7 +450,7 @@ export default {
     },
     setVModel(item) {
       const config = item.__config__
-      item.__vModel__ = this.toggleVmodelCase(`${config.jnpfKey}Field${this.idGlobal}`)
+      item.__vModel__ = this.toggleVmodelCase(`${config.jnpfKey}Field${config.formId}`)
     },
     toggleVmodelCase(str) {
       const dbType = this.dbType || ''
