@@ -299,9 +299,11 @@ export default {
       return value
     },
     getValue(item) {
-      let regexp = /(?<=(((<|&lt;)[a-zA-Z-]+?){0,1}(>|&gt;)))([\s\S]+)(?=([\s]{0,1}(<|&lt;)\/[a-zA-Z-]+((>|&gt;){0,1})))/g
+      let regexp = /(((^|&)(<|&lt;)[a-zA-Z-]+?){0,1}(>|&gt;))([\s\S]+)((<|&lt;)\/[a-zA-Z-]+((>|&gt;){0,1}))/g
       let data = item.match(regexp)
       let value = data && data.length ? data[0] : ''
+      value = value.replace(/(((^|&)(<|&lt;)[a-zA-Z-]+?){0,1}(>|&gt;))/g, "");
+      value = value.replace(/((<|&lt;)\/[a-zA-Z-]+((>|&gt;){0,1}))/g, "");
       let regexp_ = /<span(\S|\s)*?<\/span>/g
       let data_ = value.match(regexp_)
       if (data_ && data_.length) {
