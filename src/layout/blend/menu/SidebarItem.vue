@@ -66,6 +66,7 @@ export default {
       } else {
         this.$router.push(item.path)
       }
+      this.$emit('setActiveName', item)
     },
     hasOneShowingChild(children = [], parent) {
       const showingChildren = children.filter(item => {

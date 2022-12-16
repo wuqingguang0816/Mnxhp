@@ -140,6 +140,9 @@ export default {
       listLoading: true,
       listQuery: {
         keyword: '',
+        enabledMark: '',
+        templateType: '',
+        messageSource: '',
         currentPage: 1,
         pageSize: 20
       },

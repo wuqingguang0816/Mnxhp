@@ -229,7 +229,7 @@ export default {
       default: 'all'
     },
     ableRelationIds: {
-      type: Array,
+      type: [Array, String],
       default: () => []
     },
     ableDepIds: {
@@ -442,7 +442,7 @@ export default {
             roleIds: [],
             groupIds: []
           }
-          this.ableQuery[id] = Array.isArray(this.ableRelationIds) ? this.ableRelationIds : [this.ableRelationIds]
+          this.ableQuery[id] = Array.isArray(this.ableRelationIds) ? this.ableRelationIds : this.ableRelationIds ? [this.ableRelationIds] : []
         }
         this.getData()
         this.$nextTick(() => {
