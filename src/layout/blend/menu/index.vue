@@ -53,6 +53,11 @@ export default {
       list: []
     }
   },
+  watch: {
+    $route(val) {
+      this.setDefault()
+    }
+  },
   created() {
     let _this = this
     this.$nextTick(() => {
