@@ -1477,6 +1477,9 @@
                     </el-select>
                   </el-form-item>
                   <el-checkbox v-model="approverForm.isCustomCopy">允许自选抄送人</el-checkbox>
+                  <div>
+                    <el-checkbox v-model="approverForm.isInitiatorCopy">允许给流程发起人</el-checkbox>
+                  </div>
                 </div>
               </el-form-item>
             </el-form>
@@ -2411,6 +2414,7 @@ const defaultApproverForm = {
   circulatePosition: [],   // 抄送岗位集合
   circulateUser: [],  // 抄送人集合
   isCustomCopy: false,
+  isInitiatorCopy: false,
   progress: '50',  // 进度
   rejectType: 1, //退回
   rejectStep: '0',  // 退回步骤
