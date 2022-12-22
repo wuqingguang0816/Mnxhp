@@ -63,19 +63,19 @@
                   </span>
                   <el-dropdown-menu slot="dropdown">
                     <el-dropdown-item @click.native="releaseForm(scope.row.id)">
-                      发布表单</el-dropdown-item>
-                    <el-dropdown-item @click.native="rollBackForm(scope.row.id)"
+                      发布</el-dropdown-item>
+                    <!-- <el-dropdown-item @click.native="rollBackForm(scope.row.id)"
                       v-if="scope.row.enabledMark">
-                      回滚表单</el-dropdown-item>
+                      回滚表单</el-dropdown-item> -->
                     <el-dropdown-item @click.native="copy(scope.row.id)">
-                      复制表单</el-dropdown-item>
+                      复制</el-dropdown-item>
                     <el-dropdown-item @click.native="exportModel(scope.row.id)">
-                      导出表单</el-dropdown-item>
+                      导出</el-dropdown-item>
                     <el-dropdown-item @click.native="preview(scope.row,'propertyJson')"
                       v-if="scope.row.enabledMark == 1">
-                      预览表单</el-dropdown-item>
+                      查看</el-dropdown-item>
                     <el-dropdown-item @click.native="preview(scope.row,'draftJson')">
-                      预览草稿</el-dropdown-item>
+                      预览</el-dropdown-item>
                   </el-dropdown-menu>
                 </el-dropdown>
               </tableOpts>
