@@ -82,7 +82,7 @@
     </div>
     <right-panel :active-data="activeData" :form-conf="formConf" :show-field="!!drawingList.length"
       @tag-change="tagChange" :modelType="modelType" :webType="webType"
-      @relationChange="relationChange" :drawingList="drawingList" />
+      @relationChange="relationChange" :drawingList="drawingList" @setVModel="setVModel" />
     <json-drawer size="550px" :visible.sync="jsonDrawerVisible" :jsonData="formData"
       @refresh="refreshJson" />
     <Preview :visible.sync="previewVisible" :form-data="formData" />
@@ -447,6 +447,10 @@ export default {
         config.children = config.children.map(childItem => this.createIdAndKey(childItem, item))
       }
       return item
+    },
+    setVModel(item) {
+      const config = item.__config__
+      item.__vModel__ = this.toggleVmodelCase(`${config.jnpfKey}Field${config.formId}`)
     },
     toggleVmodelCase(str) {
       const dbType = this.dbType || ''

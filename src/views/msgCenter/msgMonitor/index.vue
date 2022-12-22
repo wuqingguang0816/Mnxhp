@@ -68,7 +68,7 @@
         <JNPF-table v-loading="listLoading" :data="list" hasC @selection-change="handleChange">
           <el-table-column prop="messageType" label="消息类型" width="100" />
           <el-table-column prop="messageSource" label="消息来源" width="100" />
-          <el-table-column prop="title" label="标题" min-width="230" />
+          <el-table-column prop="title" label="消息标题" min-width="230" />
           <el-table-column prop="sendTime" label="发送时间" width="120"
             :formatter="jnpf.tableDateFormat" />
           <el-table-column label="操作" width="50" fixed="right">

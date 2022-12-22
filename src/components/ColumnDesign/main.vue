@@ -191,7 +191,7 @@
                   </el-radio-group>
                 </el-form-item>
               </template>
-              <el-form-item label="子表样式">
+              <el-form-item label="子表样式" v-if="columnData.type!=3&&columnData.type!=4">
                 <el-select v-model="columnData.childTableStyle" placeholder="请选择子表样式">
                   <el-option label="分组展示" :value="1" />
                   <el-option label="折叠展示" :value="2" />
@@ -589,9 +589,11 @@ export default {
         const element = this.list[i]
         const required = element.__config__.required
         const jnpfKey = element.__config__.jnpfKey
-        if ((required || systemComponentsList.includes(jnpfKey))) {
-          if (!selectKey.includes(element.__vModel__)) {
-            newList.push(element.__vModel__)
+        if (!excludeList.includes(jnpfKey)) {
+          if ((required || systemComponentsList.includes(jnpfKey))) {
+            if (!selectKey.includes(element.__vModel__)) {
+              newList.push(element.__vModel__)
+            }
           }
         }
       }

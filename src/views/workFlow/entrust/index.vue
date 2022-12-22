@@ -80,14 +80,13 @@
               :limit.sync="listQuery.pageSize" @pagination="initFlowList" />
           </div>
         </el-tab-pane>
-
         <template v-for="item in delagateTypeList">
           <el-tab-pane :label="item.label" :key="item.key">
             <div class="JNPF-common-layout-main JNPF-flex-main">
               <div class="JNPF-common-head">
                 <topOpts @add="addOrUpdateHandle()" addText="新建委托" v-if="item.key=='1'">
                 </topOpts>
-                <div v-else></div>
+                <div style="height:33px" v-else></div>
                 <div class="JNPF-common-head-right">
                   <el-tooltip effect="dark" :content="$t('common.refresh')" placement="top">
                     <el-link icon="icon-ym icon-ym-Refresh JNPF-common-head-icon" :underline="false"
@@ -96,8 +95,8 @@
                 </div>
               </div>
               <JNPF-table v-loading="listLoading" :data="list">
-                <el-table-column prop="userName" label="委托人" width="150" />
-                <el-table-column prop="toUserName" label="被委托人" width="150" />
+                <el-table-column prop="userName" label="委托人" width="150" v-if="item.key=='2'" />
+                <el-table-column prop="toUserName" label="受委托人" width="150" />
                 <el-table-column prop="type" label="委托类型" width="150">
                   <template slot-scope="scope">
                     <span v-if='scope.row.type==0'>发起委托</span>
@@ -130,32 +129,22 @@
               <pagination :total="total" :page.sync="listQuery.currentPage"
                 :limit.sync="listQuery.pageSize" @pagination="initData" />
             </div>
-
           </el-tab-pane>
         </template>
-
-        <!-- </el-tabs>
-
-        </el-tab-pane> -->
-
       </el-tabs>
-
     </div>
     <Form v-if="formVisible" ref="Form" @refreshDataList="reset" />
     <MyEntrust v-if="flowVisible" ref="MyEntrust" @close="flowVisible=false"
       @choiceFlow="choiceFlow" />
-    <FlowBox v-if="flowboxVisible" ref="FlowBox" @close="closeForm" />
-
+    <FlowBox v-if="flowBoxVisible" ref="FlowBox" @close="closeForm" />
     <el-dialog title="发起人员" :close-on-click-modal="false" :visible.sync="visibleUsers"
       class="JNPF-dialog JNPF-dialog_center  JNPF-dialog_fq" lock-scroll width="600px">
-
       <div class="user-list">
         <el-row v-if="flowUserList.length>1">
           <el-col :span="20" :offset="2" class="user-item" v-for="(item,index) in flowUserList"
             :key="index">
             <div class="user-item-main" :class="{active:checkUserList.includes(item.id)}"
               @click="checkUserChange(item.id)">
-              <!-- <i class="icon-ym icon-ym-wf-outgoingApply"></i> -->
               <div class="user-avatar-div">
                 <el-avatar class="user-avatar" :size="40" :src="define.comUrl+item.headIcon">
                 </el-avatar>
@@ -198,7 +187,6 @@
     </el-dialog>
   </div>
 </template>
-
 <script>
 import { FlowDelegateList, DeleteDelagate, getUserListByFlowId } from '@/api/workFlow/FlowDelegate'
 import { FlowLaunchList, Delete } from '@/api/workFlow/FlowLaunch'
@@ -223,7 +211,7 @@ export default {
       },
       formVisible: false,
       flowVisible: false,
-      flowboxVisible: false,
+      flowBoxVisible: false,
       activeName: '0',
       category: '',
       delagateTypeList: [
@@ -252,7 +240,6 @@ export default {
   },
   computed: {
     ...mapGetters(['userInfo'])
-
   },
   methods: {
     getDictionaryData() {
@@ -267,10 +254,11 @@ export default {
         sort: 'desc',
         sidx: ''
       }
-      if (this.activeName == '0') {//委托发起
+      if (this.activeName == '0') {
         this.initFlowList()
-      } else { this.initData() }
-
+      } else {
+        this.initData()
+      }
     },
     reset() {
       this.keyword = ''
@@ -316,7 +304,7 @@ export default {
     },
     asyncDel(index, id) {
       DeleteDelagate(id).then(res => {
-        this.list.splice(index, 1);
+        this.initData()
         this.$message({
           type: 'success',
           message: res.msg
@@ -332,7 +320,7 @@ export default {
     },
     asyncDelFlow(index, id) {
       Delete(id).then(res => {
-        this.flowList.splice(index, 1);
+        this.initFlowList()
         this.$message({
           type: 'success',
           message: res.msg
@@ -342,7 +330,6 @@ export default {
     formatter(row, column) {
       return this.jnpf.dateFormat(row, column)
     },
-    // 新增 / 修改
     addOrUpdateHandle(id) {
       this.formVisible = true
       this.$nextTick(() => {
@@ -364,7 +351,6 @@ export default {
           this.visibleUsers = true
           this.checkFlowItem = item
         } else {
-
           let data = {
             id: '',
             enCode: item.enCode,
@@ -372,15 +358,13 @@ export default {
             opType: '-1',
             delegateUserList: [res.data.list[0].id],
           }
-          this.flowboxVisible = true
+          this.flowBoxVisible = true
           this.$nextTick(() => {
             this.$refs.FlowBox.init(data)
             this.flowVisible = false
           })
         }
-
       })
-
     },
     dataFormSubmit() {
       this.visibleUsers = false
@@ -391,15 +375,14 @@ export default {
         opType: '-1',
         delegateUserList: this.checkUserList,
       }
-      this.flowboxVisible = true
+      this.flowBoxVisible = true
       this.$nextTick(() => {
         this.$refs.FlowBox.init(data)
         this.flowVisible = false
       })
     },
-
     closeForm(isRefresh) {
-      this.flowboxVisible = false
+      this.flowBoxVisible = false
       if (isRefresh) this.search()
     },
     activeClick(tab, event) {
@@ -409,7 +392,6 @@ export default {
       if (tab.paneName == '1') this.search()
       if (tab.paneName == '2') this.search()
     },
-
     initFlowList() {
       this.flowListLoading = true
       let query = {
@@ -443,12 +425,11 @@ export default {
         opType,
         status: item.status
       }
-      this.flowboxVisible = true
+      this.flowBoxVisible = true
       this.$nextTick(() => {
         this.$refs.FlowBox.init(data)
       })
     },
-
   }
 }
 </script>
@@ -458,7 +439,6 @@ export default {
 }
 .JNPF-el_tabs {
   >>> .el-tabs__item {
-    // width: 100px;
     text-align: center;
   }
   >>> .el-tabs__content {

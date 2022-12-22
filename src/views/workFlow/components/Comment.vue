@@ -54,7 +54,7 @@
             </div>
           </div>
         </el-form-item>
-        <el-form-item prop="file" v-show="dataForm.file.length">
+        <el-form-item prop="file">
           <ul class="el-upload-list el-upload-list el-upload-list--text">
             <li class="el-upload-list__item is-success" v-for="(file,index) in dataForm.file"
               :key="file.fileId">
@@ -383,6 +383,9 @@ export default {
   .el-upload-list__item {
     .el-upload-list__item-name {
       margin-right: 70px;
+      .el-icon-paperclip {
+        line-height: 25px;
+      }
     }
     .el-icon-download {
       display: inline-block;

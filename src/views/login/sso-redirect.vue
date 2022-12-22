@@ -17,13 +17,14 @@ export default {
     init() {
       const token = this.$route.query.token
       const theme = this.$route.query.theme
+      const redirect = this.$route.query.redirect
       if (!token) return
       const data = {
         token,
         theme
       }
       this.$store.dispatch('user/setToken', data).then(() => {
-        this.$router.push('/')
+        this.$router.push(redirect ? redirect : '/')
         this.loading = false
       })
     },

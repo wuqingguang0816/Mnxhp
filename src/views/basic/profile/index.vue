@@ -76,7 +76,7 @@
           </el-tree>
         </div>
       </el-tab-pane>
-      <el-tab-pane label="绑定设置" name="justAuth">
+      <el-tab-pane label="绑定设置" name="justAuth" v-if="useSocials">
         <JustAuth ref="justAuth" v-if="visible.justAuth" />
       </el-tab-pane>
       <el-tab-pane label="系统权限" name="authorize" class="el-tab-pane-authorize">
@@ -165,7 +165,11 @@ export default {
   created() {
     this.getInfo()
   },
-
+  computed: {
+    useSocials() {
+      return localStorage.getItem('useSocials') && localStorage.getItem('useSocials') != '0'
+    }
+  },
   methods: {
     getInfo() {
       this.userLoading = true

@@ -2,7 +2,7 @@
   <div :class="classObj" class="top-menu" id="topMenu">
     <el-menu mode="horizontal" :unique-opened="true" :default-active="activeName">
       <sidebar-item v-for="route in list" :key="route.enCode" :item="route" :base-path="route.path"
-        ref="sidebarItem" />
+        @setActiveName="setActiveName" ref="sidebarItem" />
     </el-menu>
   </div>
 </template>
@@ -53,6 +53,11 @@ export default {
       list: []
     }
   },
+  watch: {
+    $route(val) {
+      this.setDefault()
+    }
+  },
   created() {
     let _this = this
     this.$nextTick(() => {
@@ -88,6 +93,9 @@ export default {
     })
   },
   methods: {
+    setActiveName(item) {
+      this.activeName = item.path
+    },
     setDefault() {
       const currPath = this.$route.path
       if (currPath === '/home' || currPath === '/dashboard') {

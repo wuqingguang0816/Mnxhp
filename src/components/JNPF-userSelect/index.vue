@@ -229,7 +229,7 @@ export default {
       default: 'all'
     },
     ableRelationIds: {
-      type: Array,
+      type: [Array, String],
       default: () => []
     },
     ableDepIds: {
@@ -281,7 +281,6 @@ export default {
       inputHovering: false,
       inputWidth: 0,
       initialInputHeight: 0,
-      total: 0,
       isAsync: false,
       finish: false,
       pagination: {
@@ -392,7 +391,6 @@ export default {
           this.finish = true
         }
         this.ableList = [...this.ableList, ...res.data.list]
-        this.total = res.data.pagination.total
         this.loading = false
       }).catch(() => {
         this.loading = false
@@ -444,7 +442,7 @@ export default {
             roleIds: [],
             groupIds: []
           }
-          this.ableQuery[id] = Array.isArray(this.ableRelationIds) ? this.ableRelationIds : [this.ableRelationIds]
+          this.ableQuery[id] = Array.isArray(this.ableRelationIds) ? this.ableRelationIds : this.ableRelationIds ? [this.ableRelationIds] : []
         }
         this.getData()
         this.$nextTick(() => {
@@ -565,7 +563,6 @@ export default {
             this.finish = true
           }
           this.treeData = [...this.treeData, ...res.data.list]
-          this.total = res.data.pagination.total
         } else {
           this.treeData = res.data.list
         }

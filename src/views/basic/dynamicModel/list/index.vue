@@ -44,7 +44,8 @@
           :tree-props="{children: 'children', hasChildren: ''}" @sort-change="sortChange"
           :row-style="rowStyle" :cell-style="cellStyle" :has-c="hasBatchBtn"
           @selection-change="handleSelectionChange" v-if="refreshTable" custom-column
-          :span-method="arraySpanMethod" ref="tableRef" :hasNO="columnData.childTableStyle!==2"
+          :span-method="arraySpanMethod" ref="tableRef"
+          :hasNO="!(columnData.childTableStyle==2&&childColumnList.length&&columnData.type != 3&&columnData.type != 4)"
           :hasNOFixed="columnList.some(o=>o.fixed == 'left')">
           <template v-if="columnData.type === 4">
             <template v-for="(item, i) in columnList">
@@ -205,7 +206,8 @@
             </template>
           </template>
           <template v-else>
-            <template v-if="columnData.childTableStyle==2&&childColumnList.length">
+            <template
+              v-if="columnData.childTableStyle==2&&childColumnList.length&&columnData.type != 3&&columnData.type != 4">
               <el-table-column width="0" />
               <el-table-column type="expand" width="40">
                 <template slot-scope="scope">
@@ -226,7 +228,7 @@
             <template v-for="(item, i) in columnList">
               <template v-if="item.jnpfKey==='table'">
                 <el-table-column :prop="item.prop" :label="item.label" :align="item.align" :key="i"
-                  v-if="columnData.childTableStyle!=2">
+                  v-if="columnData.childTableStyle!=2||columnData.type == 3">
                   <el-table-column :prop="child.prop" :label="child.childLabel" :align="child.align"
                     :width="child.width" :key="ii"
                     :sortable="child.sortable?'custom':child.sortable"
@@ -848,7 +850,8 @@ export default {
           type: 1,
           opType: '-1',
           modelId: this.modelId,
-          isPreview: this.isPreview
+          isPreview: this.isPreview,
+          formConf: JSON.stringify(this.formData)
         }
         this.flowVisible = true
         this.$nextTick(() => {

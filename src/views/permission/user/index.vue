@@ -100,7 +100,8 @@
                     </el-dropdown-item>
                     <el-dropdown-item @click.native="unlockUser(scope.row.id)"
                       v-if="scope.row.enabledMark == 2">解除锁定</el-dropdown-item>
-                    <el-dropdown-item @click.native="socialsBindBtn(scope.row)">绑定管理
+                    <el-dropdown-item @click.native="socialsBindBtn(scope.row)" v-if="useSocials">
+                      绑定管理
                     </el-dropdown-item>
                   </el-dropdown-menu>
                 </el-dropdown>
@@ -181,6 +182,11 @@ export default {
   watch: {
     filterText(val) {
       this.$refs.treeBox.filter(val)
+    }
+  },
+  computed: {
+    useSocials() {
+      return localStorage.getItem('useSocials') && localStorage.getItem('useSocials') != '0'
     }
   },
   created() {
