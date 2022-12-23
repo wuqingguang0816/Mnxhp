@@ -4,7 +4,8 @@
     <el-tab-pane label="按岗位汇总" name="3"></el-tab-pane>
     <div class="recordSummary-list" v-loading="loading">
       <template v-if="list.length">
-        <el-card class="recordSummary-item" v-for="(item,i) in list" :key="i">
+        <el-card class="recordSummary-item" v-for="(item,i) in list" :key="i"
+          v-show="item.list&&item.list.length">
           <div class="recordSummary-item-main">
             <div class="cap">{{item.fullName}}意见</div>
             <div class="content">
