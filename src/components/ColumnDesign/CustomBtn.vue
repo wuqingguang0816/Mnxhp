@@ -187,6 +187,7 @@ export default {
         popupType: "dialog",
         popupWidth: "800px",
         formOptions: [],
+        customBtn: false,
         func: "",
         interfaceId: "",
         interfaceName: "",
@@ -328,6 +329,7 @@ export default {
       this.dataForm.popupType = "dialog"
       this.dataForm.popupWidth = "800px"
       this.dataForm.formOptions = []
+      this.dataForm.customBtn = false
       this.dataForm.func = defaultFunc
       this.dataForm.interfaceId = ""
       this.dataForm.interfaceName = ""

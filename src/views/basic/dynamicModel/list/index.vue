@@ -402,9 +402,10 @@ import Search from './Search'
 import ChildTableColumn from './child-table-column'
 import SuperQuery from '@/components/SuperQuery'
 import CandidateForm from '@/views/workFlow/components/CandidateForm'
+import CustomBox from '@/components/JNPFCustom'
 export default {
   name: 'dynamicModel',
-  components: { Form, ExportBox, Search, Detail, FlowBox, ChildTableColumn, SuperQuery, CandidateForm },
+  components: { Form, ExportBox, Search, Detail, FlowBox, ChildTableColumn, SuperQuery, CandidateForm, CustomBox },
   props: ['config', 'modelId', 'isPreview'],
   data() {
     return {

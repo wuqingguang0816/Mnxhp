@@ -72,7 +72,7 @@ export default {
     getConfigData() {
       getConfigData(this.config.modelId).then(res => {
         if (res.code !== 200 || !res.data) {
-          message({
+          this.$message({
             message: res.msg || '请求出错，请重试',
             type: 'error',
             duration: 1500,
