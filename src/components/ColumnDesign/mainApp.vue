@@ -138,8 +138,7 @@
                       <p class="custom-line-value">{{item.value}}</p>
                       <el-input v-model="item.label" placeholder="按钮名称" size="small">
                         <template slot="append">
-                          <el-button type="primary" @click="editFunc(item,'btn')"
-                            class="custom-btn">事件
+                          <el-button type="primary" @click="editFunc(item)" class="custom-btn">事件
                           </el-button>
                         </template>
                       </el-input>
@@ -182,14 +181,16 @@
     </div>
     <form-script :visible.sync="formScriptVisible" :value="activeItem.func" :type="activeItem.type"
       @updateScript="updateScript" />
+    <custom-btn v-if="customBtnVisible" :activeItem="activeItem" ref="customBtn"
+      @updateCustomBtn="updateCustomBtn" @closeDialog="customBtnVisible=false" />
   </div>
 </template>
 <script>
 import Sortable from 'sortablejs'
 import draggable from 'vuedraggable'
 import FormScript from './FormScript'
+import CustomBtn from './CustomBtn'
 import { getDrawingList } from '@/components/Generator/utils/db'
-import { deepClone } from '@/utils'
 import { noColumnShowList, noSearchList, useInputList, useDateList } from '@/components/Generator/generator/comConfig'
 const getSearchType = item => {
   const jnpfKey = item.__config__.jnpfKey
@@ -243,7 +244,7 @@ export default {
     },
     modelType: ''
   },
-  components: { draggable, FormScript },
+  components: { draggable, FormScript, CustomBtn },
   data() {
     return {
       currentTab: 'column',
@@ -266,6 +267,7 @@ export default {
       btnsList: [],
       columnBtnsList: [],
       formScriptVisible: false,
+      customBtnVisible: false,
       activeItem: {}
     }
   },
@@ -482,16 +484,21 @@ export default {
         func: ''
       })
     },
-    editFunc(item, type) {
+    editFunc(item) {
       if (!item.func) item.func = defaultFunc
       this.activeItem = item
-      this.activeItem.type = type
+      this.customBtnVisible = true
       this.$nextTick(() => {
-        this.formScriptVisible = true
+        this.$refs.customBtn.init('app')
       })
     },
     updateScript(func) {
       this.activeItem.func = func
+    },
+    updateCustomBtn(val) {
+      this.columnData.customBtnsList.forEach((ele, index) => {
+        if (ele.value == val.value) this.$set(this.columnData.customBtnsList, index, val)
+      })
     },
     addFunc(item, type) {
       if (!item.func) item.func = defaultFuncs

@@ -300,11 +300,6 @@
                         @click="columnBtnsHandel(item.value,scope.row)" v-if="scope.row.id">
                         {{item.label}}</el-button>
                     </template>
-                    <template v-else>
-                      <el-button size="mini" type="text" :key="i"
-                        @click="customBtnsHandel(item,scope.row,scope.$index)">
-                        {{item.label}}</el-button>
-                    </template>
                   </template>
                   <template v-if="customBtnsList.length">
                     <el-dropdown hide-on-click>
@@ -349,11 +344,6 @@
                         @click="columnBtnsHandel(item.value,scope.row)" v-has="'btn_'+item.value">
                         {{item.label}}</el-button>
                     </template>
-                    <template v-else>
-                      <el-button size="mini" type="text" :key="i" v-has="item.value"
-                        @click="customBtnsHandel(item,scope.row,scope.$index)">{{item.label}}
-                      </el-button>
-                    </template>
                   </template>
                   <template v-if="customBtnsList.length">
                     <el-dropdown hide-on-click>
@@ -386,6 +376,7 @@
     <Detail v-show="detailVisible" ref="Detail" @close="detailVisible = false" />
     <ExportBox v-if="exportBoxVisible" ref="ExportBox" @download="download" />
     <ImportBox v-if="uploadBoxVisible" ref="UploadBox" @refresh="initData" />
+    <CustomBox v-if="customBoxVisible" ref="CustomBox" @close="customBoxVisible= false" />
     <SuperQuery v-if="superQueryVisible" ref="SuperQuery" :columnOptions="columnOptions"
       @superQuery="superQuery" />
     <candidate-form :visible.sync="candidateVisible" :candidateList="candidateList"
@@ -448,6 +439,7 @@ export default {
       importBoxVisible: false,
       exportBoxVisible: false,
       uploadBoxVisible: false,
+      customBoxVisible: false,
       superQueryVisible: false,
       treeData: [],
       treeActiveId: '',
@@ -1014,6 +1006,18 @@ export default {
       this.initData()
     },
     customBtnsHandel(item, row, index) {
+      if (item.btnType == 1) this.handlePopup(item, row, index)
+      if (item.btnType == 2) this.handleScriptFunc(item, row, index)
+      if (item.btnType == 3) this.handleInterface(item, row, index)
+
+    },
+    handlePopup(item, row, index) {
+      this.customBoxVisible = true
+      this.$nextTick(() => {
+        this.$refs.CustomBox.init(item, this.modelId, row.id, this.isPreview)
+      })
+    },
+    handleScriptFunc(item, row, index) {
       const parameter = {
         data: row,
         index,
@@ -1024,6 +1028,25 @@ export default {
       const func = this.jnpf.getScriptFunc.call(this, item.func)
       if (!func) return
       func.call(this, parameter)
+    },
+    handleInterface(item, row, index) {
+      const handlerInterface = () => {
+        if (item.templateJson && item.templateJson.length) {
+          item.templateJson.forEach((ele) => {
+            ele.defaultValue = row[ele.relationField] || ""
+          })
+        }
+        let query = {
+          paramList: item.templateJson || [],
+        }
+        getDataInterfaceRes(item.interfaceId, query).then(res => {
+          this.$message({ message: res.msg, type: 'success' });
+        })
+      }
+      if (!item.useConfirm) return handlerInterface()
+      this.$confirm(item.confirmTitle || '确认执行此操作', '提示', { type: 'warning' }).then(() => {
+        handlerInterface()
+      }).catch(() => { })
     },
     request(url, method, data) {
       if (!url) return

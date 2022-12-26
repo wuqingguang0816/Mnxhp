@@ -13,6 +13,7 @@ import UserSelect from '@/components/JNPF-userSelect'
 import UsersSelect from '@/components/JNPF-usersSelect'
 import uploadBtn from '@/components/JNPF-uploadBtn'
 import ImportBox from '@/components/JNPFImport'
+import CustomBox from '@/components/JNPFCustom'
 // 代码生成器专供
 import JNPFText from '@/components/Generator/components/JNPFText'
 import JnpfLink from '@/components/Generator/components/JnpfLink'
@@ -80,5 +81,6 @@ export default {
     Vue.component('Screenfull', Screenfull)
     Vue.component('ColumnSettings', ColumnSettings)
     Vue.component('ImportBox', ImportBox)
+    Vue.component('CustomBox', CustomBox)
   }
 }

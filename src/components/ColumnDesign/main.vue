@@ -229,8 +229,7 @@
                       <p class="custom-line-value">{{item.value}}</p>
                       <el-input v-model="item.label" placeholder="按钮名称" size="small">
                         <template slot="append">
-                          <el-button type="primary" @click="editFunc(item,'btn')"
-                            class="custom-btn">事件
+                          <el-button type="primary" @click="editFunc(item)" class="custom-btn">事件
                           </el-button>
                         </template>
                       </el-input>
@@ -283,6 +282,8 @@
     </div>
     <form-script v-if="formScriptVisible" :key="scriptKey" :value="activeItem.func" ref="formScript"
       :type="activeItem.type" @updateScript="updateScript" @closeDialog="formScriptVisible=false" />
+    <custom-btn v-if="customBtnVisible" :key="scriptKey" :activeItem="activeItem" ref="customBtn"
+      @updateCustomBtn="updateCustomBtn" @closeDialog="customBtnVisible=false" />
     <upload-box ref="uploadRef" :visible.sync="uploadBoxVisible" @onConfirm="onConfirm" />
   </div>
 </template>
@@ -290,6 +291,7 @@
 import Sortable from 'sortablejs'
 import draggable from 'vuedraggable'
 import FormScript from './FormScript'
+import CustomBtn from './CustomBtn'
 import uploadBox from './uploadBox'
 import { getDrawingList } from '@/components/Generator/utils/db'
 import { noColumnShowList, noSearchList, useInputList, useDateList } from '@/components/Generator/generator/comConfig'
@@ -384,7 +386,7 @@ export default {
     webType: '',
     modelType: ''
   },
-  components: { draggable, FormScript, uploadBox },
+  components: { draggable, FormScript, uploadBox, CustomBtn },
   data() {
     return {
       currentTab: 'column',
@@ -418,6 +420,7 @@ export default {
       ],
       dataInterfaceSelector: [],
       formScriptVisible: false,
+      customBtnVisible: false,
       activeItem: {},
       scriptKey: '',
       uploadBoxVisible: false,
@@ -673,17 +676,21 @@ export default {
         func: ''
       })
     },
-    editFunc(item, type) {
+    editFunc(item) {
       if (!item.func) item.func = defaultFunc
       this.activeItem = item
-      this.activeItem.type = type
-      this.formScriptVisible = true
+      this.customBtnVisible = true
       this.$nextTick(() => {
-        this.$refs.formScript.init()
+        this.$refs.customBtn.init()
       })
     },
     updateScript(func) {
       this.activeItem.func = func
+    },
+    updateCustomBtn(val) {
+      this.columnData.customBtnsList.forEach((ele, index) => {
+        if (ele.value == val.value) this.$set(this.columnData.customBtnsList, index, val)
+      })
     },
     addFunc(item, type) {
       if (!item.func && type == 'afterOnload') item.func = defaultFuncs
