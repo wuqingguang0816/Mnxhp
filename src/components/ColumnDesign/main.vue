@@ -186,10 +186,30 @@
               <el-divider>表格配置</el-divider>
               <template v-if="columnData.type==3">
                 <el-form-item label="分组字段">
-                  <el-select v-model="columnData.groupField" placeholder="请选择分组字段">
+                  <el-select v-model="columnData.groupField" placeholder="请选择分组字段" clearable>
                     <el-option :label="item.__config__.label" :value="item.__vModel__"
                       v-for="(item, i) in groupFieldOptions" :key="i"></el-option>
                   </el-select>
+                </el-form-item>
+              </template>
+              <template v-if="columnData.type==5">
+                <el-form-item label="父级字段">
+                  <el-select v-model="columnData.parentField" placeholder="请选择父级字段">
+                    <el-option :label="item.__config__.label" :value="item.__vModel__"
+                      v-for="(item, i) in groupFieldOptions" :key="i"></el-option>
+                  </el-select>
+                </el-form-item>
+                <el-form-item label="子级字段">
+                  <el-select v-model="columnData.subField" placeholder="请选择子级字段">
+                    <el-option :label="item.__config__.label" :value="item.__vModel__"
+                      v-for="(item, i) in groupFieldOptions" :key="i"></el-option>
+                  </el-select>
+                </el-form-item>
+                <el-form-item label="数据加载">
+                  <el-radio-group v-model="columnData.treeLazyType">
+                    <el-radio :label="1">同步</el-radio>
+                    <el-radio :label="2">异步</el-radio>
+                  </el-radio-group>
                 </el-form-item>
               </template>
               <el-form-item label="排序类型">
@@ -207,7 +227,7 @@
               <el-form-item label="高级查询">
                 <el-switch v-model="columnData.hasSuperQuery"></el-switch>
               </el-form-item>
-              <template v-if="columnData.type !==3">
+              <template v-if="columnData.type !==3&&columnData.type !==5">
                 <el-form-item label="分页设置">
                   <el-switch v-model="columnData.hasPage"></el-switch>
                 </el-form-item>
@@ -220,7 +240,7 @@
                   </el-radio-group>
                 </el-form-item>
               </template>
-              <el-form-item label="子表样式" v-if="columnData.type!=3&&columnData.type!=4">
+              <el-form-item label="子表样式" v-if="columnData.type==1||columnData.type==2">
                 <el-select v-model="columnData.childTableStyle" placeholder="请选择子表样式">
                   <el-option label="分组展示" :value="1" />
                   <el-option label="折叠展示" :value="2" />
@@ -369,6 +389,8 @@ const defaultColumnData = {
   treePropsChildren: 'children',  // 子级字段
   treePropsLabel: 'fullName',  // 显示字段
   groupField: '',  // 分组字段
+  parentField: '', // 父级字段
+  treeLazyType: 1,  // 子级字段
   useColumnPermission: false,
   useFormPermission: false,
   useBtnPermission: false,
@@ -449,9 +471,10 @@ export default {
       columnBtnsList: [],
       typeList: [
         { url: require('@/assets/images/generator/columnType1.png'), value: 1, name: '普通表格' },
-        { url: require('@/assets/images/generator/columnType2.png'), value: 2, name: '左侧树形+普通表格' },
+        { url: require('@/assets/images/generator/columnType2.png'), value: 2, name: '左侧树+普通表格' },
         { url: require('@/assets/images/generator/columnType3.png'), value: 3, name: '分组表格' },
         { url: require('@/assets/images/generator/columnType4.png'), value: 4, name: '编辑表格' },
+        { url: require('@/assets/images/generator/columnType5.png'), value: 5, name: '树形表格' },
       ],
       dataInterfaceSelector: [],
       formScriptVisible: false,
@@ -651,9 +674,15 @@ export default {
           if (!this.columnData.treePropsChildren) return this.$message.warning('请输入子级字段')
         }
         if (!this.columnData.treeRelation) return this.$message.warning('请选择关联字段')
+        if (!this.columnData.treeInterfaceId && this.columnData.treeSynType == 2) return this.$message.warning('请选择异步数据接口')
       }
       if (this.columnData.type == 3) {
         if (!this.columnData.groupField) return this.$message.warning('请选择分组字段')
+      }
+      if (this.columnData.type == 5) {
+        if (!this.columnData.parentField) return this.$message.warning('请选择父级字段')
+        if (!this.columnData.subField) return this.$message.warning('请选择子级字段')
+        if (this.columnData.subField == this.columnData.parentField) return this.$message.warning('父级字段和子级字段不能相同')
       }
       this.columnData.defaultColumnList = this.columnOptions.map(o => ({
         ...o,

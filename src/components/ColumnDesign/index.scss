@@ -144,15 +144,19 @@
   .typeList {
     display: flex;
     flex-wrap: wrap;
-    justify-content: space-between;
+
+    .item:nth-child(3n+3) {
+      margin-right: unset;
+    }
 
     .item {
-      width: 150px;
+      width: 100px;
       margin-bottom: 15px;
+      margin-right: 10px;
 
       .item-img {
-        width: 150px;
-        height: 100px;
+        width: 100px;
+        height: 70px;
         background: #EBEEF5;
         border-radius: 4px;
         overflow: hidden;
