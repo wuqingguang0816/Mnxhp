@@ -87,9 +87,11 @@ export default {
           this.formData = {}
           if (this.config.formOptions.length) {
             for (let k in formData) {
-              const item = this.config.formOptions.find(ele => ele.currentField == k)
-              if (item && item.field) {
-                this.formData[item.field] = formData[k]
+              for (let i = 0; i < this.config.formOptions.length; i++) {
+                const ele = this.config.formOptions[i]
+                if (ele.currentField == k) {
+                  this.formData[ele.field] = formData[k]
+                }
               }
             }
           }
