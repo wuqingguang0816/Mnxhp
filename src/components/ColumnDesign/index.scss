@@ -37,6 +37,12 @@
     border-radius: 4px;
     overflow: hidden;
 
+    .left-tree-query {
+      >>>.el-form-item__label {
+        padding: 0;
+      }
+    }
+
     .field-box {
       position: relative;
       height: calc(100% - 42px);

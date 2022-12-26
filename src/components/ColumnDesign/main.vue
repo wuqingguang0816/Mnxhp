@@ -108,6 +108,9 @@
               </div>
               <template v-if="columnData.type==2">
                 <el-divider>左侧配置</el-divider>
+                <jnpf-form-tip-item class="left-tree-query" tip-label="暂不支持异步的左侧查询" label="左侧查询">
+                  <el-switch v-model="columnData.hasTreeQuery"></el-switch>
+                </jnpf-form-tip-item>
                 <el-form-item label="左侧标题">
                   <el-input v-model="columnData.treeTitle" placeholder="树形标题"></el-input>
                 </el-form-item>
@@ -153,6 +156,32 @@
                       v-for="(item, index) in list" :key="index"></el-option>
                   </el-select>
                 </el-form-item>
+                <el-form-item label="数据加载">
+                  <el-radio-group v-model="columnData.treeSynType">
+                    <el-radio :label="1">同步</el-radio>
+                    <el-radio :label="2">异步</el-radio>
+                  </el-radio-group>
+                </el-form-item>
+                <template v-if="columnData.treeSynType==2">
+                  <el-form-item label="数据接口">
+                    <interface-dialog :value="columnData.treeInterfaceId"
+                      :title="columnData.treeInterfaceName" @change="onInterfaceChange" />
+                  </el-form-item>
+                  <el-table :data="columnData.treeTemplateJson">
+                    <el-table-column type="index" width="50" label="序号" align="center" />
+                    <el-table-column prop="field" label="参数名称">
+                      <template slot-scope="scope">
+                        <span class="required-sign">{{scope.row.required?'*':''}}</span>
+                        {{scope.row.field}}
+                      </template>
+                    </el-table-column>
+                    <el-table-column prop="value" label="参数值">
+                      <template slot-scope="scope">
+                        <el-input v-model="scope.row.relationField" placeholder="请输入参数值" />
+                      </template>
+                    </el-table-column>
+                  </el-table>
+                </template>
               </template>
               <el-divider>表格配置</el-divider>
               <template v-if="columnData.type==3">
@@ -293,6 +322,7 @@ import draggable from 'vuedraggable'
 import FormScript from './FormScript'
 import CustomBtn from './CustomBtn'
 import uploadBox from './uploadBox'
+import InterfaceDialog from '@/components/Process/PropPanel/InterfaceDialog'
 import { getDrawingList } from '@/components/Generator/utils/db'
 import { noColumnShowList, noSearchList, useInputList, useDateList } from '@/components/Generator/generator/comConfig'
 import { getDataInterfaceSelector } from '@/api/systemData/dataInterface'
@@ -325,10 +355,15 @@ const defaultColumnData = {
   sort: 'desc',   // 排序类型
   hasPage: true,  // 列表分页
   pageSize: 20,  // 分页条数
+  hasTreeQuery: false, //左侧树查询
   treeTitle: '左侧标题', // 树形标题
   treeDataSource: 'dictionary',  // 树形数据来源
   treeDictionary: '',//数据字典
   treeRelation: '',  // 关联字段
+  treeSynType: 1, //数据加载 同步、异步
+  treeInterfaceId: '',
+  treeInterfaceName: '',
+  treeTemplateJson: [],
   treePropsUrl: '',  // 数据选择
   treePropsValue: 'id',  // 主键字段
   treePropsChildren: 'children',  // 子级字段
@@ -386,7 +421,7 @@ export default {
     webType: '',
     modelType: ''
   },
-  components: { draggable, FormScript, uploadBox, CustomBtn },
+  components: { draggable, FormScript, uploadBox, CustomBtn, InterfaceDialog },
   data() {
     return {
       currentTab: 'column',
@@ -713,7 +748,22 @@ export default {
     },
     onConfirm(data) {
       this.columnData.uploaderTemplateJson = data
-    }
+    },
+    onInterfaceChange(id, row) {
+      if (!id) {
+        this.columnData.treeInterfaceId = ''
+        this.columnData.treeInterfaceName = ''
+        this.columnData.treeTemplateJson = []
+        return
+      }
+      if (this.columnData.treeInterfaceId === id) return
+      this.columnData.treeInterfaceId = id
+      this.columnData.treeInterfaceName = row.fullName
+      this.columnData.treeTemplateJson = row.templateJson ? row.templateJson.map(o => ({
+        ...o,
+        relationField: ''
+      })) : []
+    },
   }
 }
 </script>
