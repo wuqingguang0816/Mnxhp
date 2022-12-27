@@ -11,6 +11,12 @@
         <el-form v-show="currentTab==='field' && showField" size="small" label-width="90px"
           labelPosition="left">
           <template v-if="activeData.__config__">
+            <template>
+              <el-form-item label="控件类型">
+                <el-button style="width: 100%" type="info" plain disabled>{{getCompName}}
+                </el-button>
+              </el-form-item>
+            </template>
             <template v-if="$store.getters.hasTable">
               <template v-if="activeData.__config__.jnpfKey==='table'">
                 <el-form-item
@@ -533,7 +539,8 @@
 </template>
 
 <script>
-import { noVModelList } from '@/components/Generator/generator/comConfig'
+import { noVModelList, calculateItem, onlinePeculiarList } from '@/components/Generator/generator/comConfig'
+import { inputComponents, selectComponents, systemComponents, layoutComponents } from '@/components/Generator/generator/config'
 import { isNumberStr } from '@/components/Generator/utils'
 import { saveFormConf, getDrawingList } from '@/components/Generator/utils/db'
 import { getDictionaryTypeSelector } from "@/api/systemData/dictionary"
@@ -796,6 +803,12 @@ export default {
       }
       loop(this.drawingList)
       return list
+    },
+    getCompName() {
+      const allComps = [...inputComponents, ...selectComponents, ...systemComponents, ...layoutComponents, calculateItem, ...onlinePeculiarList]
+      const comp = allComps.filter(o => o.__config__.jnpfKey === this.activeData.__config__.jnpfKey);
+      if (!comp.length) return '';
+      return comp[0].__config__.label;
     }
   },
   watch: {

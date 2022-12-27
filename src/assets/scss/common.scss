@@ -1513,6 +1513,8 @@
     .header-title {
       height: 60px;
       width: 320px;
+      display: flex;
+      align-items: center;
     }
 
     .header-logo {
@@ -1525,11 +1527,15 @@
     }
 
     .header-txt {
-      line-height: 60px;
       display: inline-block;
       margin: 0;
       color: #333;
       font-size: 18px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 150px;
+      cursor: pointer;
     }
 
     .steps {
