@@ -66,8 +66,8 @@ export default {
             this.dataForm = res.data
             this.dataForm.webType = this.dataForm.webType || 2
             if (isToggle) this.dataForm.webType = webType
-            this.maxStep = parseInt(this.dataForm.webType)
-            if (this.maxStep > 2) this.maxStep = 2
+            // this.maxStep = parseInt(this.dataForm.webType)
+            // if (this.maxStep > 2) this.maxStep = 2
             this.formData = this.dataForm.formData && JSON.parse(this.dataForm.formData)
             this.columnData = this.dataForm.columnData && JSON.parse(this.dataForm.columnData)
             this.appColumnData = this.dataForm.appColumnData && JSON.parse(this.dataForm.appColumnData)
@@ -78,7 +78,7 @@ export default {
         } else {
           this.dataForm.type = type
           this.dataForm.webType = webType || 2
-          this.maxStep = parseInt(this.dataForm.webType)
+          // this.maxStep = parseInt(this.dataForm.webType)
         }
       })
     },
@@ -172,6 +172,11 @@ export default {
           err.msg && this.$message.warning(err.msg)
         })
       }
+    },
+    changeList(type) {
+      this.$confirm(type == 1 ? '关闭后，将切换为纯表单模式' : '开启后，将切换为表单+列表模式', '提示', { type: 'warning' }).then(() => {
+        this.dataForm.webType = type == 1 ? 1 : 2
+      }).catch(() => { })
     }
   }
 }
