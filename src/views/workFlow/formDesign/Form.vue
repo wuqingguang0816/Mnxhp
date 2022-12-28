@@ -215,9 +215,8 @@ export default {
             this.defaultTable = JSON.parse(JSON.stringify(this.tables))
             this.updateFields()
             //自定义表单编辑直接到设计页面
-            this.$nextTick().then(() => {
-              res.data.formType == 2 ? this.next() : null
-
+            this.$nextTick(() => {
+              res.data.formType == 2 && this.next()
             })
           }).catch(() => { this.loading = false })
         } else {
