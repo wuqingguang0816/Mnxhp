@@ -137,6 +137,8 @@ export default {
         type: 'warning'
       }).then(() => {
         this.flowList.splice(index, 1)
+        this.activeConf = this.flowList[this.flowList.length - 1]
+        this.key = +new Date()
       }).catch(() => { })
     },
     copyFlow(item) {
@@ -163,10 +165,14 @@ export default {
       this.$refs['dataForm'].validate((valid) => {
         if (valid) {
           if (this.handleType === 'add') {
+            let boo = this.flowList.some(o => o.fullName === this.dataForm.fullName)
+            if (boo) return this.$message.warning('流程名称重复，请重新输入')
             this.flowList.push(JSON.parse(JSON.stringify(this.dataForm)))
             this.activeConf = this.flowList[this.flowList.length - 1]
             this.key = +new Date()
           } else {
+            let boo = this.flowList.some(o => o.fullName === this.dataForm.fullName && o.flowId !== this.dataForm.flowId)
+            if (boo) return this.$message.warning('流程名称重复，请重新输入')
             for (let i = 0; i < this.flowList.length; i++) {
               if (this.dataForm.flowId === this.flowList[i].flowId) {
                 this.$set(this.flowList, i, JSON.parse(JSON.stringify(this.dataForm)))
