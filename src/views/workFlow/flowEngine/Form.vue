@@ -190,7 +190,7 @@ export default {
       }).catch(() => { this.btnLoading = false })
     },
     setMainVersion(id, msg) {
-      this.$confirm('此操作将该版本设为主版本且影响启用的线上流程，是否继续?', '提示', {
+      this.$confirm('流程已被使用，此版本是否覆盖线上流程。覆盖后，新发起的流程按此版本流转?', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'

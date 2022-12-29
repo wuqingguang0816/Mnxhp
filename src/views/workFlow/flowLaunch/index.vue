@@ -307,7 +307,6 @@ export default {
     choiceFlow(item) {
       let data = {
         id: '',
-        enCode: item.enCode,
         flowId: item.id,
         opType: '-1'
       }
