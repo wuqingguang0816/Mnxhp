@@ -1,9 +1,13 @@
 <template>
   <div class="process-container" v-loading="loading">
     <div class="left-container">
-      <div class="left-list">
+      <draggable :list="flowList" :animation="340" group="selectItem" handle=".option-drag"
+        class="left-list">
         <div class="left-item" @click="changeFlow(item)" v-for="(item,i) in flowList"
           :key="item.flowId" :class="{'active':activeConf.flowId===item.flowId}">
+          <div class="option-drag">
+            <i class="icon-ym icon-ym-darg" />
+          </div>
           <p class="name">{{item.fullName}}</p>
           <el-dropdown @click.stop>
             <i class="icon el-icon-more"></i>
@@ -14,7 +18,7 @@
             </el-dropdown-menu>
           </el-dropdown>
         </div>
-      </div>
+      </draggable>
       <div class="add-btn" @click="addFlow">
         <el-button type="text" icon="el-icon-plus">添加流程</el-button>
       </div>
@@ -42,10 +46,11 @@
 <script>
 import ProcessMain from "./main"
 import { NodeUtils, getMockData } from "./FlowCard/util.js";
+import draggable from 'vuedraggable'
 
 export default {
   name: 'Process',
-  props: ['tabName', 'conf', 'flowType'],
+  props: ['tabName', 'conf', 'flowType', 'formInfo'],
   data() {
     let data = {}
     if (typeof this.conf === 'object' && this.conf !== null && JSON.stringify(this.conf) !== '{}') {
@@ -75,7 +80,8 @@ export default {
     };
   },
   components: {
-    ProcessMain
+    ProcessMain,
+    draggable
   },
   created() {
     this.loading = true
@@ -85,7 +91,7 @@ export default {
       let item = {
         id: '',
         flowId: this.jnpf.idGenerator(),
-        fullName: '流程',
+        fullName: this.formInfo.fullName,
         flowTemplateJson: getMockData()
       }
       this.flowList = [item]
@@ -118,18 +124,24 @@ export default {
     },
     addFlow() {
       this.handleType = 'add'
-      this.dataForm = {
-        id: '',
-        flowId: this.jnpf.idGenerator(),
-        fullName: '',
-        flowTemplateJson: getMockData()
-      }
       this.visible = true
+      this.$nextTick(() => {
+        this.$refs['dataForm'].resetFields()
+        this.dataForm = {
+          id: '',
+          flowId: this.jnpf.idGenerator(),
+          fullName: '',
+          flowTemplateJson: getMockData()
+        }
+      })
     },
     editFlow(item) {
       this.handleType = 'edit'
-      this.dataForm = JSON.parse(JSON.stringify(item))
       this.visible = true
+      this.$nextTick(() => {
+        this.$refs['dataForm'].resetFields()
+        this.dataForm = JSON.parse(JSON.stringify(item))
+      })
     },
     delFlow(index) {
       if (this.flowList.length === 1) return this.$message.warning(`最后一个流程不能删除`);
@@ -215,6 +227,9 @@ export default {
         border-radius: 4px;
         cursor: pointer;
         margin-bottom: 10px;
+        .option-drag {
+          margin-right: 6px;
+        }
         &.active {
           border: 1px solid #1890ff;
           background: #1890ff;
@@ -222,6 +237,9 @@ export default {
             color: #fff;
           }
           .icon {
+            color: #fff;
+          }
+          .option-drag {
             color: #fff;
           }
         }

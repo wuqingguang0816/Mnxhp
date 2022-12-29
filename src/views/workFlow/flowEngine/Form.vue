@@ -65,7 +65,7 @@
         </el-col>
       </el-row>
       <Process ref="processDesign" :conf="flowTemplateJson" :flowType="dataForm.type"
-        v-if="activeStep==1" />
+        v-if="activeStep==1" :formInfo="dataForm" />
     </div>
     <icon-box :visible.sync="iconBoxVisible" ref="iconBox" :current="dataForm.icon"
       @choiceIcon="choiceIcon" />
