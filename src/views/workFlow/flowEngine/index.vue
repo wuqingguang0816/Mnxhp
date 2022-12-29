@@ -50,20 +50,10 @@
               <span>{{ scope.row.type == 0? "发起流程" : "功能流程" }}</span>
             </template>
           </el-table-column>
-          <el-table-column prop="visibleType" label="可见范围" width="80">
-            <template slot-scope="scope">
-              <span>{{ scope.row.visibleType ==  0 ? "全部可见" : "部分可见" }}</span>
-            </template>
-          </el-table-column>
           <el-table-column prop="creatorUser" label="创建人" width="120" />
           <el-table-column prop="creatorTime" label="创建时间" :formatter="jnpf.tableDateFormat"
             width="120" />
           <el-table-column prop="sortCode" label="排序" width="70" align="center" />
-          <el-table-column prop="version" label="版本号" width="70" align="center">
-            <template slot-scope="scope">
-              <el-tag>V:{{scope.row.version}}</el-tag>
-            </template>
-          </el-table-column>
           <el-table-column prop="enabledMark" label="状态" width="70" align="center">
             <template slot-scope="scope">
               <el-tag :type="scope.row.enabledMark == 1 ? 'success' : 'danger'" disable-transitions>
@@ -76,9 +66,8 @@
                 @del="handleDel(scope.row.id)">
                 <el-dropdown>
                   <span class="el-dropdown-link">
-                    <el-button type="text" size="mini">{{$t('common.moreBtn')}}<i
-                        class="el-icon-arrow-down el-icon--right"></i>
-
+                    <el-button type="text" size="mini">{{$t('common.moreBtn')}}
+                      <i class="el-icon-arrow-down el-icon--right"></i>
                     </el-button>
                   </span>
                   <el-dropdown-menu slot="dropdown">

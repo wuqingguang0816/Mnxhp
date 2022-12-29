@@ -143,6 +143,9 @@ export default {
             this.type = this.dataForm.type == 1 ? '功能流程' : '发起流程'
             this.dataForm.flowTemplateJson && (this.flowTemplateJson = JSON.parse(this.dataForm.flowTemplateJson))
             this.loading = false
+            this.$nextTick(() => {
+              this.next()
+            })
           }).catch(() => { this.loading = false })
         } else {
           this.dataForm.type = type
