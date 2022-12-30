@@ -29,7 +29,7 @@
           <template v-if="showAll">
             <el-col :span="6">
               <el-form-item label="所属流程">
-                <el-select v-model="flowId" placeholder="选择所属流程" clearable>
+                <el-select v-model="templateId" placeholder="选择所属流程" clearable>
                   <el-option-group v-for="group in flowEngineList" :key="group.id"
                     :label="group.fullName+'【'+group.num+'】'">
                     <el-option v-for="item in group.children" :key="item.id" :label="item.fullName"
@@ -183,7 +183,7 @@ export default {
       pickerVal: [],
       startTime: '',
       endTime: '',
-      flowId: '',
+      templateId: '',
       flowCategory: '',
       creatorUserId: '',
       categoryList: [],
@@ -235,7 +235,7 @@ export default {
         keyword: this.keyword,
         startTime: this.startTime,
         endTime: this.endTime,
-        flowId: this.flowId,
+        templateId: this.templateId,
         flowUrgent: this.urgent,
         flowCategory: this.flowCategory,
         creatorUserId: this.creatorUserId
@@ -249,7 +249,6 @@ export default {
     toDetail(item) {
       let data = {
         id: item.processId,
-        enCode: item.flowCode,
         flowId: item.flowId,
         opType: 3,
         taskNodeId: item.thisStepId
@@ -268,7 +267,7 @@ export default {
       this.startTime = ''
       this.endTime = ''
       this.keyword = ''
-      this.flowId = ''
+      this.templateId = ''
       this.urgent = ''
       this.flowCategory = ''
       this.creatorUserId = ''

@@ -18,7 +18,7 @@
             </el-col>
             <el-col :span="6">
               <el-form-item label="所属流程">
-                <el-select v-model="listQuery.flowId" placeholder="选择所属流程" clearable
+                <el-select v-model="listQuery.templateId" placeholder="选择所属流程" clearable
                   @change="onFlowChange">
                   <el-option v-for="item in flowOptions" :key="item.id" :label="item.fullName"
                     :value="item.id" />
@@ -143,7 +143,7 @@ export default {
       btnLoading: false,
       listQuery: {
         keyword: '',
-        flowId: '',
+        templateId: '',
         nodeCode: '',
         flowCategory: '',
         creatorUserId: '',
@@ -222,7 +222,7 @@ export default {
       })
     },
     getNodeSelector() {
-      getNodeSelector(this.listQuery.flowId).then(res => {
+      getNodeSelector(this.listQuery.templateId).then(res => {
         this.nodeOptions = res.data
       })
     },
@@ -233,7 +233,7 @@ export default {
     },
     visibleChange(val) {
       if (!val) return
-      if (!this.listQuery.flowId) this.$message.warning('请先选择所属流程')
+      if (!this.listQuery.templateId) this.$message.warning('请先选择所属流程')
     },
     handleChange(val) {
       this.multipleSelection = val
@@ -383,7 +383,7 @@ export default {
       this.pickerVal = []
       this.listQuery = {
         keyword: '',
-        flowId: '',
+        templateId: '',
         nodeCode: '',
         flowCategory: '',
         creatorUserId: '',
