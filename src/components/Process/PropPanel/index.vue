@@ -1478,7 +1478,7 @@
                   </el-form-item>
                   <el-checkbox v-model="approverForm.isCustomCopy">允许自选抄送人</el-checkbox>
                   <div>
-                    <el-checkbox v-model="approverForm.isInitiatorCopy">允许给流程发起人</el-checkbox>
+                    <el-checkbox v-model="approverForm.isInitiatorCopy">抄送给流程发起人</el-checkbox>
                   </div>
                 </div>
               </el-form-item>
