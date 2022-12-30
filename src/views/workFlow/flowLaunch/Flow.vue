@@ -149,7 +149,7 @@ export default {
       })
     },
     jump(item) {
-      if (!item.enCode || !item.id) {
+      if (!item.id) {
         this.$message({
           type: 'error',
           message: '流程不存在'
