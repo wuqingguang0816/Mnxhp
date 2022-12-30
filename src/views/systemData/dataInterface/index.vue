@@ -81,6 +81,7 @@
                   <el-dropdown-menu slot="dropdown">
                     <el-dropdown-item @click.native="handlePreview(scope.row)">预览</el-dropdown-item>
                     <!-- <el-dropdown-item @click.native="viewLog(scope.row)">日志</el-dropdown-item> -->
+                    <el-dropdown-item @click.native="handleCopy(scope.row.id)">复制</el-dropdown-item>
                     <el-dropdown-item @click.native="exportData(scope.row.id)">导出</el-dropdown-item>
                   </el-dropdown-menu>
                 </el-dropdown>
@@ -102,7 +103,8 @@ import {
   getDataInterfaceList,
   updateDataInterfaceState,
   delDataInterface,
-  exportData
+  exportData,
+  copy
 } from '@/api/systemData/dataInterface'
 import Form from './Form'
 import Preview from './Preview'
@@ -235,6 +237,22 @@ export default {
           this.$refs.Preview.init(id, tenantId, fullName)
         })
       }
+    },
+    handleCopy(id) {
+      this.$confirm('您确定要复制该数据接口, 是否继续?', '提示', {
+        type: 'warning'
+      }).then(() => {
+        copy(id).then(res => {
+          this.$message({
+            type: 'success',
+            message: res.msg,
+            duration: 1000,
+            onClose: () => {
+              this.initData()
+            }
+          });
+        })
+      }).catch(() => { });
     },
     search() {
       this.listQuery.currentPage = 1
