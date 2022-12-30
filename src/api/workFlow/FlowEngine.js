@@ -186,7 +186,7 @@ export function assistList(id) {
   })
 }
 // 获取多流程流程列表
-export function getTemplateList(id) {
+export function getFlowList(id) {
   return request({
     url: `/api/workflow/Engine/flowTemplate/FlowJsonList/${id}`,
     method: 'get',

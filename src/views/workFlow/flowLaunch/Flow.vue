@@ -49,11 +49,13 @@
           </div>
         </el-tabs>
       </div>
-      <el-dialog title="请选择流程" :close-on-click-modal="false" append-to-body :visible.sync="visible"
-        class="JNPF-dialog template-dialog JNPF-dialog_center" lock-scroll width="400px">
+      <el-dialog title="请选择流程" :close-on-click-modal="false" append-to-body
+        :visible.sync="flowListVisible" class="JNPF-dialog template-dialog JNPF-dialog_center"
+        lock-scroll width="400px">
         <el-scrollbar class="template-list">
-          <div class="template-item" v-for="item in templateList" :key="item.id"
-            @click="choice(item)">{{item.fullName}}
+          <div class="template-item" v-for="item in flowList" :key="item.id"
+            @click="selectFlow(item)">
+            {{item.fullName}}
           </div>
         </el-scrollbar>
       </el-dialog>
@@ -62,7 +64,7 @@
 </template>
 
 <script>
-import { FlowEnginePageList, getTemplateList } from '@/api/workFlow/FlowEngine'
+import { FlowEnginePageList, getFlowList } from '@/api/workFlow/FlowEngine'
 export default {
   data() {
     return {
@@ -79,8 +81,8 @@ export default {
       list: [],
       listLoading: true,
       categoryList: [],
-      visible: false,
-      templateList: [],
+      flowListVisible: false,
+      flowList: [],
       activeFlow: {},
       showTitle: true
     }
@@ -156,24 +158,24 @@ export default {
         });
         return
       }
-      getTemplateList(item.id).then(res => {
-        this.templateList = res.data
-        if (!this.templateList.length) {
+      getFlowList(item.id).then(res => {
+        this.flowList = res.data
+        if (!this.flowList.length) {
           this.$message({
             type: 'error',
             message: '流程不存在'
           });
-        } else if (this.templateList.length === 1) {
-          this.activeFlow = this.templateList[0]
+        } else if (this.flowList.length === 1) {
+          this.activeFlow = this.flowList[0]
           this.$emit('choiceFlow', this.activeFlow)
         } else {
-          this.visible = true
+          this.flowListVisible = true
         }
       })
     },
-    choice(item) {
+    selectFlow(item) {
       this.activeFlow = item
-      this.visible = false
+      this.flowListVisible = false
       this.$emit('choiceFlow', this.activeFlow)
     }
   }
