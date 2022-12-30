@@ -137,6 +137,7 @@ export default {
       this.visible = true
       this.loading = true
       this.$nextTick(() => {
+        this.$refs['dataForm'].resetFields()
         if (this.dataForm.id) {
           FlowEngineInfo(this.dataForm.id).then(res => {
             this.dataForm = res.data
