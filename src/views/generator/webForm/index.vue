@@ -69,8 +69,6 @@
                     </el-button>
                   </span>
                   <el-dropdown-menu slot="dropdown">
-                    <el-dropdown-item @click.native="toggleWebType(scope.row)">更改模式
-                    </el-dropdown-item>
                     <el-dropdown-item @click.native="copy(scope.row.id)">复制模板</el-dropdown-item>
                     <el-dropdown-item @click.native="download(scope.row)">下载代码</el-dropdown-item>
                     <el-dropdown-item @click.native="preview(scope.row)">预览代码</el-dropdown-item>

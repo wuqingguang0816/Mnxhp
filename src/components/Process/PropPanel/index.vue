@@ -390,7 +390,7 @@
                 <div class="form-item-content">
                   <flow-form-dialog :value="startForm.formId" :title="startForm.formName"
                     :type="flowType" @change="onStartFormIdChange" :clearable="false"
-                    :placeholder='"请选择"+(flowType==1?"功能":"表单")' />
+                    :disabled="!!formInfo.onlineDev" :placeholder='"请选择"+(flowType==1?"功能":"表单")' />
                 </div>
               </el-form-item>
               <el-form-item label="发起设置" v-if="flowType!=1">
@@ -2704,7 +2704,7 @@ const systemFieldOptions = [{
   __vModel__: '@flowOperatorUserName',
 }]
 export default {
-  props: [/*当前节点数据*/"value", /*整个节点数据*/"processData", "flowType"],
+  props: [/*当前节点数据*/"value", /*整个节点数据*/"processData", "flowType", 'formInfo'],
   components: { OrgSelect, MsgDialog, InterfaceDialog, FormulaDialog, FlowDialog, Detail, FlowFormDialog },
   data() {
     return {

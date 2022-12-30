@@ -79,20 +79,25 @@
                     </el-button>
                   </span>
                   <el-dropdown-menu slot="dropdown">
-                    <el-dropdown-item @click.native="openReleaseDialog(scope.row)">发布模板
+                    <el-dropdown-item @click.native="handleEngine(scope.row.id)"
+                      v-if="scope.row.enableFlow">
+                      流程设计
+                    </el-dropdown-item>
+                    <el-dropdown-item @click.native="showManage(scope.row.id,scope.row.fullName)"
+                      v-if="scope.row.enableFlow">流程版本
+                    </el-dropdown-item>
+                    <el-dropdown-item @click.native="preview(scope.row.id,0)">预览
+                    </el-dropdown-item>
+                    <el-dropdown-item @click.native="openReleaseDialog(scope.row)">发布
                     </el-dropdown-item>
                     <el-dropdown-item v-if="scope.row.isRelease==1"
+                      @click.native="preview(scope.row.id,1)">查看
+                    </el-dropdown-item>
+                    <!-- <el-dropdown-item v-if="scope.row.isRelease==1"
                       @click.native="rollBack(scope.row)">
-                      回滚模板</el-dropdown-item>
-                    <el-dropdown-item @click.native="toggleWebType(scope.row)">更改模式
-                    </el-dropdown-item>
-                    <el-dropdown-item @click.native="copy(scope.row.id)">复制模板</el-dropdown-item>
-                    <el-dropdown-item @click.native="exportModel(scope.row.id)">导出模板
-                    </el-dropdown-item>
-                    <el-dropdown-item v-if="scope.row.isRelease==1"
-                      @click.native="preview(scope.row.id,1)">预览模板
-                    </el-dropdown-item>
-                    <el-dropdown-item @click.native="preview(scope.row.id,0)">预览草稿
+                      回滚模板</el-dropdown-item> -->
+                    <el-dropdown-item @click.native="copy(scope.row.id)">复制</el-dropdown-item>
+                    <el-dropdown-item @click.native="exportModel(scope.row.id)">导出
                     </el-dropdown-item>
                   </el-dropdown-menu>
                 </el-dropdown>
@@ -150,6 +155,8 @@
     </el-dialog>
     <previewDialog :visible.sync="previewDialogVisible" :id="currId" :previewType="previewType"
       type="webDesign" />
+    <EngineForm v-if="engineFormVisible" ref="engineForm" />
+    <FlowManage v-if="manageVisible" ref="FlowManage" />
   </div>
 </template>
 
@@ -160,10 +167,12 @@ import mixin from '@/mixins/generator/index'
 import previewDialog from '@/components/PreviewDialog'
 import { Release, rollbackTemplate } from '@/api/onlineDev/visualDev'
 import { getMenuSelector } from '@/api/system/menu'
+import EngineForm from '@/views/workFlow/flowEngine/Form'
+import FlowManage from '@/views/workFlow/flowEngine/FlowManagement'
 export default {
   name: 'onlineDev-webDesign',
   mixins: [mixin],
-  components: { Form, AddBox, previewDialog },
+  components: { Form, AddBox, previewDialog, EngineForm, FlowManage },
   data() {
     return {
       query: { keyword: '', type: 1 },
@@ -191,8 +200,14 @@ export default {
       appTreeData: [],
       pcSystemId: "",
       appSystemId: "",
-      previewType: ""
+      previewType: "",
+      enginCategoryList: [],
+      engineFormVisible: false,
+      manageVisible: false,
     }
+  },
+  created() {
+    this.getEnginCategoryList()
   },
   methods: {
     preview(id, type) {
@@ -284,6 +299,23 @@ export default {
             item.disabled = true
           }
         }
+      })
+    },
+    getEnginCategoryList() {
+      this.$store.dispatch('base/getDictionaryData', { sort: 'WorkFlowCategory' }).then((res) => {
+        this.enginCategoryList = res
+      })
+    },
+    showManage(id, fullName) {
+      this.manageVisible = true
+      this.$nextTick(() => {
+        this.$refs.FlowManage.init(id, fullName)
+      })
+    },
+    handleEngine(id) {
+      this.engineFormVisible = true
+      this.$nextTick(() => {
+        this.$refs.engineForm.init(this.enginCategoryList, id, 1)
       })
     }
   }

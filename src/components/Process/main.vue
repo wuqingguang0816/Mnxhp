@@ -21,7 +21,7 @@ const getDataType = (data) => {
 
 export default {
   name: 'ProcessMain',
-  props: ['conf', 'flowType', 'verifyMode'],
+  props: ['conf', 'flowType', 'verifyMode', 'formInfo'],
   data() {
     let data = {}
     data = this.conf
@@ -188,6 +188,7 @@ export default {
           value={this.activeData}
           flowType={this.flowType || 0}
           processData={this.data}
+          formInfo={this.formInfo}
           onConfirm={this.onPropEditConfirm}
           onCancel={this.onClosePanel}
         />

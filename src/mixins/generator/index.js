@@ -98,11 +98,6 @@ export default {
         })
       }).catch(() => { });
     },
-    toggleWebType(row) {
-      const { id, webType } = row
-      if (!webType) return
-      this.openAddBox(id, webType)
-    },
     openAddBox(id, webType) {
       this.addVisible = true
       this.currId = id || ''

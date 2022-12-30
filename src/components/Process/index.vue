@@ -24,7 +24,7 @@
       </div>
     </div>
     <div class="center-container">
-      <process-main :conf="activeConf.flowTemplateJson" :flowType="flowType"
+      <process-main :conf="activeConf.flowTemplateJson" :flowType="flowType" :formInfo="formInfo"
         v-if="activeConf && activeConf.flowTemplateJson" :verifyMode="verifyMode" :key="key" />
     </div>
     <el-dialog :title="handleType === 'add' ? '新建流程' : '编辑流程'" :close-on-click-modal="false"
@@ -32,7 +32,7 @@
       width="600px">
       <el-form ref="dataForm" :model="dataForm" :rules="dataRule" label-width="100px">
         <el-form-item label="流程名称" prop="fullName">
-          <el-input v-model="dataForm.fullName" placeholder="流程名称" />
+          <el-input v-model="dataForm.fullName" placeholder="流程名称" maxlength="50" />
         </el-form-item>
       </el-form>
       <span slot="footer" class="dialog-footer">
@@ -47,19 +47,28 @@
 import ProcessMain from "./main"
 import { NodeUtils, getMockData } from "./FlowCard/util.js";
 import draggable from 'vuedraggable'
+import { getFormInfo } from '@/api/workFlow/FormDesign'
+const requiredDisabled = (jnpfKey) => {
+  return ['billRule', 'createUser', 'createTime', 'modifyTime', 'modifyUser', 'currPosition', 'currOrganize', 'table'].includes(jnpfKey)
+}
+const getDataType = (data) => {
+  if (!data.__config__ || !data.__config__.jnpfKey) return ''
+  const jnpfKey = data.__config__.jnpfKey
+  if (['numInput', 'date', 'rate', 'slider'].includes(jnpfKey)) {
+    return 'number'
+  } else if (['checkbox', 'uploadFz', 'uploadImg', 'cascader', 'comSelect', 'address'].includes(jnpfKey)) {
+    return 'array'
+  } else if (['select', 'depSelect', 'posSelect', 'userSelect', 'treeSelect', 'roleSelect', 'groupSelect'].includes(jnpfKey)) {
+    if (data.multiple) return 'array'
+  }
+  return ''
+}
 
 export default {
   name: 'Process',
   props: ['tabName', 'conf', 'flowType', 'formInfo'],
   data() {
-    let data = {}
-    if (typeof this.conf === 'object' && this.conf !== null && JSON.stringify(this.conf) !== '{}') {
-      data = Object.assign(NodeUtils.createNode('start'), this.conf)
-    } else {
-      data = getMockData()
-    }
     return {
-      data,
       activeConf: null,
       key: + new Date(),
       loading: false,
@@ -67,6 +76,8 @@ export default {
       flowList: [],
       visible: false,
       handleType: '',
+      defaultData: {},
+      formFieldList: {},
       dataForm: {
         fullName: '',
         id: '',
@@ -84,28 +95,50 @@ export default {
     draggable
   },
   created() {
-    this.loading = true
-    if (Array.isArray(this.conf) && this.conf !== null && JSON.stringify(this.conf) !== '[]') {
-      this.flowList = this.conf
-    } else {
-      let item = {
-        id: '',
-        flowId: this.jnpf.idGenerator(),
-        fullName: this.formInfo.fullName,
-        flowTemplateJson: getMockData()
-      }
-      this.flowList = [item]
-    }
-    this.activeConf = this.flowList[0]
-    this.$nextTick(() => {
-      this.loading = false
-    })
     this.$store.dispatch('base/getPositionList')
     this.$store.dispatch('base/getRoleList')
     this.$store.dispatch('generator/getDepTree')
     this.$store.dispatch('generator/getGroupTree')
+    this.loading = true
+    if (this.formInfo.onlineDev) {
+      getFormInfo(this.formInfo.id).then(res => {
+        const defaultData = getMockData()
+        defaultData.properties.formName = res.data.fullName
+        defaultData.properties.formId = res.data.id
+        let { propertyJson } = res.data
+        let formJson = {}, fieldList = []
+        if (propertyJson) formJson = JSON.parse(propertyJson)
+        fieldList = formJson.fields
+        this.formFieldList = this.transformFieldList(fieldList)
+        defaultData.properties.formFieldList = this.formFieldList
+        defaultData.properties.formOperates = this.initFormOperates(defaultData)
+        this.defaultData = defaultData
+        this.initData()
+      })
+    } else {
+      this.initData()
+    }
   },
   methods: {
+    initData() {
+      if (Array.isArray(this.conf) && this.conf !== null && JSON.stringify(this.conf) !== '[]') {
+        this.flowList = this.conf
+        this.updateData()
+      } else {
+        const flowTemplateJson = this.formInfo.onlineDev ? JSON.parse(JSON.stringify(this.defaultData)) : getMockData()
+        let item = {
+          id: '',
+          flowId: this.jnpf.idGenerator(),
+          fullName: this.formInfo.fullName,
+          flowTemplateJson
+        }
+        this.flowList = [item]
+      }
+      this.activeConf = this.flowList[0]
+      this.$nextTick(() => {
+        this.loading = false
+      })
+    },
     // 给父级组件提供的获取流程数据得方法
     getData() {
       this.verifyMode = true
@@ -127,11 +160,12 @@ export default {
       this.visible = true
       this.$nextTick(() => {
         this.$refs['dataForm'].resetFields()
+        const flowTemplateJson = this.formInfo.onlineDev ? JSON.parse(JSON.stringify(this.defaultData)) : getMockData()
         this.dataForm = {
           id: '',
           flowId: this.jnpf.idGenerator(),
           fullName: '',
-          flowTemplateJson: getMockData()
+          flowTemplateJson
         }
       })
     },
@@ -159,10 +193,14 @@ export default {
         type: 'warning'
       }).then(() => {
         let flowId = this.jnpf.idGenerator()
+        let fullName = itemCopy.fullName + flowId
+        if (fullName.length > 50) {
+          fullName = fullName.substring(fullName.length - 50)
+        }
         const data = {
           id: '',
           flowId,
-          fullName: itemCopy.fullName + flowId,
+          fullName,
           flowTemplateJson: itemCopy.flowTemplateJson
         }
         this.flowList.push(data)
@@ -195,7 +233,79 @@ export default {
           this.visible = false
         }
       })
-    }
+    },
+    transformFieldList(formFieldList) {
+      let list = []
+      const loop = (data, parent) => {
+        if (!data) return
+        if (data.__vModel__) {
+          const isTableChild = parent && parent.__config__ && parent.__config__.jnpfKey === 'table'
+          let obj = JSON.parse(JSON.stringify(data))
+          if (isTableChild) {
+            obj.__vModel__ = parent.__vModel__ + '-' + data.__vModel__
+            obj.__config__.label = parent.__config__.label + '-' + data.__config__.label
+          }
+          list.push(obj)
+        }
+        if (Array.isArray(data)) data.forEach(d => loop(d, parent))
+        if (data.__config__ && data.__config__.children && Array.isArray(data.__config__.children)) {
+          loop(data.__config__.children, data)
+        }
+      }
+      loop(formFieldList)
+      return list
+    },
+    initFormOperates(target, isUpdate, isSameForm) {
+      const formOperates = target.properties && target.properties.formOperates || []
+      let res = []
+      const getWriteById = id => {
+        const arr = formOperates.filter(o => o.id === id)
+        return arr.length ? arr[0].write : NodeUtils.isStartNode(target)
+      }
+      const getReadById = id => {
+        const arr = formOperates.filter(o => o.id === id)
+        return arr.length ? arr[0].read : true
+      }
+      const getRequiredById = id => {
+        const arr = formOperates.filter(o => o.id === id)
+        return arr.length ? arr[0].required : false
+      }
+      if (!formOperates.length || isUpdate) {
+        for (let i = 0; i < this.formFieldList.length; i++) {
+          const data = this.formFieldList[i];
+          res.push({
+            id: data.__vModel__,
+            name: data.__config__.label,
+            required: !isSameForm ? data.__config__.required : data.__config__.required || getRequiredById(data.__vModel__),
+            requiredDisabled: requiredDisabled(data.__config__.jnpfKey) || data.__config__.required,
+            jnpfKey: data.__config__.jnpfKey,
+            dataType: getDataType(data),
+            read: !isSameForm ? true : getReadById(data.__vModel__),
+            write: !isSameForm ? NodeUtils.isStartNode(target) : getWriteById(data.__vModel__),
+          })
+        }
+      } else {
+        res = formOperates
+      }
+      return res
+    },
+    updateData() {
+      for (let i = 0; i < this.flowList.length; i++) {
+        this.flowList[i].flowTemplateJson = Object.assign(NodeUtils.createNode('start'), this.flowList[i].flowTemplateJson)
+        if (this.formInfo.onlineDev) this.updateFiled(this.flowList[i].flowTemplateJson)
+      }
+    },
+    updateFiled(flowTemplateJson) {
+      const loop = data => {
+        if (Array.isArray(data)) data.forEach(d => loop(d))
+        if (data.type === 'approver' || data.type === 'start') {
+          this.initFormOperates(data, true, true)
+        }
+        if (data.conditionNodes && Array.isArray(data.conditionNodes)) loop(data.conditionNodes)
+        if (data.childNode) loop(data.childNode)
+      }
+      loop(flowTemplateJson)
+    },
   }
 };
 </script>

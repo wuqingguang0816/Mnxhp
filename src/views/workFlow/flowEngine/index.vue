@@ -138,7 +138,7 @@
 <script>
 import { FlowEngineList, Delete, Release, Stop, Copy, exportData, assist, assistList } from '@/api/workFlow/FlowEngine'
 import Form from './Form'
-import FlowManage from './FlowManagement.vue'
+import FlowManage from './FlowManagement'
 
 export default {
   name: 'workFlow-flowEngine',
