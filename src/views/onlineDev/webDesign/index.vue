@@ -45,16 +45,10 @@
           <el-table-column prop="fullName" label="名称" show-overflow-tooltip min-width="200" />
           <el-table-column prop="enCode" label="编码" width="200" />
           <el-table-column prop="category" label="分类" width="150" />
-          <el-table-column prop="webType" label="模式" width="70" align="center">
+          <el-table-column prop="webType" label="模式" width="100" align="center">
             <template slot-scope="scope">
-              <span v-if="scope.row.webType == 1">表单</span>
-              <span v-else>列表</span>
-            </template>
-          </el-table-column>
-          <el-table-column prop="enableFlow" label="启用流程" width="80" align="center">
-            <template slot-scope="scope">
-              <span v-if="scope.row.enableFlow == 1">是</span>
-              <span v-else>否</span>
+              <span v-if="scope.row.webType == 1">普通表单</span>
+              <span v-else>数据视图</span>
             </template>
           </el-table-column>
           <el-table-column prop="creatorUser" label="创建人" width="120" />
@@ -93,11 +87,10 @@
                     <el-dropdown-item v-if="scope.row.isRelease==1"
                       @click.native="preview(scope.row.id,1)">查看
                     </el-dropdown-item>
-                    <!-- <el-dropdown-item v-if="scope.row.isRelease==1"
-                      @click.native="rollBack(scope.row)">
-                      回滚模板</el-dropdown-item> -->
                     <el-dropdown-item @click.native="copy(scope.row.id)">复制</el-dropdown-item>
                     <el-dropdown-item @click.native="exportModel(scope.row.id)">导出
+                    </el-dropdown-item>
+                    <el-dropdown-item @click.native="handleLink(scope.row.id)">外链
                     </el-dropdown-item>
                   </el-dropdown-menu>
                 </el-dropdown>
@@ -165,7 +158,7 @@ import Form from './Form'
 import AddBox from '@/views/generator/AddBox'
 import mixin from '@/mixins/generator/index'
 import previewDialog from '@/components/PreviewDialog'
-import { Release, rollbackTemplate } from '@/api/onlineDev/visualDev'
+import { Release } from '@/api/onlineDev/visualDev'
 import { getMenuSelector } from '@/api/system/menu'
 import EngineForm from '@/views/workFlow/flowEngine/Form'
 import FlowManage from '@/views/workFlow/flowEngine/FlowManagement'
@@ -217,19 +210,8 @@ export default {
         this.previewDialogVisible = true
       })
     },
-    rollBack(row) {
-      this.$confirm('此操作将当前编辑的模板内容回滚为已经发布的模板内容，是否继续？', '提示', {
-        type: 'warning'
-      }).then(() => {
-        rollbackTemplate(row.id).then((res) => {
-          this.$message({
-            type: 'success',
-            message: res.msg,
-            duration: 1000,
-          });
-          this.initData()
-        })
-      })
+    handleLink() {
+
     },
     releaseModel() {
       this.$refs['releaseForm'].validate((valid) => {
