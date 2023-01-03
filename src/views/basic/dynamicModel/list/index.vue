@@ -46,16 +46,16 @@
               <el-link icon="icon-ym icon-ym-filter JNPF-common-head-icon" :underline="false"
                 @click="openSuperQuery()" />
             </el-tooltip>
-            <template v-if="columnData.type==5">
+            <template v-if="columnData.type==5&&columnData.treeLazyType == 0">
               <el-tooltip effect="dark" content="展开" placement="top">
                 <el-link v-show="!expandsTree" type="text"
                   icon="icon-ym icon-ym-btn-expand JNPF-common-head-icon" :underline="false"
-                  @click="toggleExpand()" />
+                  @click="toggleExpandList()" />
               </el-tooltip>
               <el-tooltip effect="dark" content="折叠" placement="top">
                 <el-link v-show="expandsTree" type="text"
                   icon="icon-ym icon-ym-btn-collapse JNPF-common-head-icon" :underline="false"
-                  @click="toggleExpand()" />
+                  @click="toggleExpandList()" />
               </el-tooltip>
             </template>
             <el-tooltip effect="dark" :content="$t('common.refresh')" placement="top">
@@ -65,10 +65,10 @@
           </div>
         </div>
         <JNPF-table v-loading="listLoading" :data="list" row-key="id"
-          :default-expand-all="columnData.childTableStyle!==2&&columnData.treeLazyType!=1"
+          :default-expand-all="columnData.childTableStyle!==2&&columnData.treeLazyType==0?expandsTable:false"
           :lazy="columnData.type==5&&columnData.treeLazyType==1"
-          :tree-props="{children: 'children', hasChildren: 'hasChildren'}" :load="treeLoad"
-          @sort-change="sortChange" :row-style="rowStyle" :cell-style="cellStyle"
+          :tree-props="{children: 'children', hasChildren: columnData.treeLazyType==1?'hasChildren':''}"
+          :load="treeLoad" @sort-change="sortChange" :row-style="rowStyle" :cell-style="cellStyle"
           :has-c="hasBatchBtn" @selection-change="handleSelectionChange" v-if="refreshTable"
           custom-column :span-method="arraySpanMethod" ref="tableRef"
           :hasNO="!(columnData.childTableStyle==2&&childColumnList.length&&columnData.type != 3&&columnData.type != 4)"
@@ -485,6 +485,7 @@ export default {
       customBtnsList: [],
       hasBatchBtn: false,
       refreshTable: false,
+      expandsTable: true,
       multipleSelection: [],
       settingsColumnList: [],
       mergeList: [],
@@ -1036,13 +1037,6 @@ export default {
         this.$refs.SuperQuery.init()
       })
     },
-    toggleExpand() {
-      this.refreshTable = false;
-      this.expandsTree = !this.expandsTree;
-      this.$nextTick(() => {
-        this.refreshTable = true;
-      });
-    },
     superQuery(queryJson) {
       if (this.isPreview) return
       this.listQuery.superQueryJson = queryJson
@@ -1156,6 +1150,13 @@ export default {
         })
       })
     },
+    toggleExpandList() {
+      this.refreshTable = false;
+      this.expandsTable = !this.expandsTable;
+      this.$nextTick(() => {
+        this.refreshTable = true;
+      });
+    },
     loadNode(node, resolve) {
       const nodeData = node.data
       const config = this.columnData
@@ -1181,13 +1182,12 @@ export default {
     },
     treeLoad(tree, treeNode, resolve) {
       getModelSubList(this.modelId, tree.id, this.listQuery).then(res => {
-        const list = []
-        list = res.data.list.map(o => ({
-          ...o,
-          ...this.expandObj,
-          hasChildren: true
-        }))
-        if (Array.isArray(data)) {
+        if (res.data.list && Array.isArray(res.data.list)) {
+          const list = res.data.list.map(o => ({
+            ...o,
+            ...this.expandObj,
+            hasChildren: true
+          }))
           resolve(list);
         } else {
           resolve([]);
