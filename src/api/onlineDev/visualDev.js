@@ -109,6 +109,14 @@ export function getModelList(modelId, data) {
     data
   })
 }
+// 获取树形数据子集
+export function getModelSubList(modelId, id, data) {
+  return request({
+    url: `/api/visualdev/OnlineDev/${modelId}/List/${id}`,
+    method: 'post',
+    data
+  })
+}
 // 添加数据
 export function createModel(modelId, data) {
   return request({
@@ -207,12 +215,3 @@ export function exportData(modelId) {
     method: 'post'
   })
 }
-
-// 回滚模板
-export function rollbackTemplate(id) {
-  return request({
-    url: `/api/visualdev/Base/${id}/Actions/RollbackTemplate`,
-    method: 'get'
-  })
-}
-

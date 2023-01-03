@@ -65,11 +65,12 @@
           </div>
         </div>
         <JNPF-table v-loading="listLoading" :data="list" row-key="id"
-          :default-expand-all="columnData.childTableStyle!==2"
-          :tree-props="{children: 'children', hasChildren: ''}" @sort-change="sortChange"
-          :row-style="rowStyle" :cell-style="cellStyle" :has-c="hasBatchBtn"
-          @selection-change="handleSelectionChange" v-if="refreshTable" custom-column
-          :span-method="arraySpanMethod" ref="tableRef"
+          :default-expand-all="columnData.childTableStyle!==2&&columnData.treeLazyType!=1"
+          :lazy="columnData.type==5&&columnData.treeLazyType==1"
+          :tree-props="{children: 'children', hasChildren: 'hasChildren'}" :load="treeLoad"
+          @sort-change="sortChange" :row-style="rowStyle" :cell-style="cellStyle"
+          :has-c="hasBatchBtn" @selection-change="handleSelectionChange" v-if="refreshTable"
+          custom-column :span-method="arraySpanMethod" ref="tableRef"
           :hasNO="!(columnData.childTableStyle==2&&childColumnList.length&&columnData.type != 3&&columnData.type != 4)"
           :hasNOFixed="columnList.some(o=>o.fixed == 'left')">
           <template v-if="columnData.type === 4">
@@ -412,7 +413,7 @@
 </template>
 
 <script>
-import { getModelList, deleteModel, batchDelete, exportModel, createModel, updateModel } from '@/api/onlineDev/visualDev'
+import { getModelList, getModelSubList, deleteModel, batchDelete, exportModel, createModel, updateModel } from '@/api/onlineDev/visualDev'
 import { Create, Update } from '@/api/workFlow/workFlowForm'
 import { getDictionaryDataSelector } from '@/api/systemData/dictionary'
 import { getDataInterfaceRes } from '@/api/systemData/dataInterface'
@@ -576,7 +577,8 @@ export default {
         } else {
           this.list = res.data.list.map(o => ({
             ...o,
-            ...this.expandObj
+            ...this.expandObj,
+            hasChildren: true
           }))
         }
         if (this.columnData.type !== 3 && this.columnData.hasPage) this.total = res.data.pagination.total
@@ -1176,6 +1178,21 @@ export default {
           }
         })
       }
+    },
+    treeLoad(tree, treeNode, resolve) {
+      getModelSubList(this.modelId, tree.id, this.listQuery).then(res => {
+        const list = []
+        list = res.data.list.map(o => ({
+          ...o,
+          ...this.expandObj,
+          hasChildren: true
+        }))
+        if (Array.isArray(data)) {
+          resolve(list);
+        } else {
+          resolve([]);
+        }
+      })
     }
   }
 }

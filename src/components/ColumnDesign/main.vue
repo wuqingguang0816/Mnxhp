@@ -390,7 +390,8 @@ const defaultColumnData = {
   treePropsLabel: 'fullName',  // 显示字段
   groupField: '',  // 分组字段
   parentField: '', // 父级字段
-  treeLazyType: 0,  // 子级字段
+  subField: '',   // 子级字段
+  treeLazyType: 0,
   useColumnPermission: false,
   useFormPermission: false,
   useBtnPermission: false,
