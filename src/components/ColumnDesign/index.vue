@@ -1,6 +1,6 @@
 <template>
   <div class="columnDesign-box">
-    <div v-show="webType==2">
+    <div style="height:100%" v-show="webType==2">
       <column-main ref="columnMain" :conf="columnData" :modelType="modelType" :webType="webType"
         v-show="currentTab==='pc'" />
       <column-main-app ref="columnMainApp" :conf="appColumnData" :modelType="modelType"

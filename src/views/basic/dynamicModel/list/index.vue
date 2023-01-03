@@ -46,6 +46,18 @@
               <el-link icon="icon-ym icon-ym-filter JNPF-common-head-icon" :underline="false"
                 @click="openSuperQuery()" />
             </el-tooltip>
+            <template v-if="columnData.type==5">
+              <el-tooltip effect="dark" content="展开" placement="top">
+                <el-link v-show="!expandsTree" type="text"
+                  icon="icon-ym icon-ym-btn-expand JNPF-common-head-icon" :underline="false"
+                  @click="toggleExpand()" />
+              </el-tooltip>
+              <el-tooltip effect="dark" content="折叠" placement="top">
+                <el-link v-show="expandsTree" type="text"
+                  icon="icon-ym icon-ym-btn-collapse JNPF-common-head-icon" :underline="false"
+                  @click="toggleExpand()" />
+              </el-tooltip>
+            </template>
             <el-tooltip effect="dark" :content="$t('common.refresh')" placement="top">
               <el-link icon="icon-ym icon-ym-Refresh JNPF-common-head-icon" :underline="false"
                 @click="initData()" />
@@ -220,7 +232,7 @@
           </template>
           <template v-else>
             <template
-              v-if="columnData.childTableStyle==2&&childColumnList.length&&columnData.type != 3&&columnData.type != 4">
+              v-if="columnData.childTableStyle==2&&childColumnList.length&&columnData.type != 3&&columnData.type != 4&&columnData.type != 5">
               <el-table-column width="0" />
               <el-table-column type="expand" width="40">
                 <template slot-scope="scope">
@@ -263,7 +275,7 @@
           <el-table-column
             :fixed="columnList.some(o=>o.fixed == 'right')&&columnData.childTableStyle!=2?'right':false"
             prop="flowState" label="状态" width="100" v-if="config.enableFlow==1">
-            <template slot-scope="scope" v-if="!scope.row.top">
+            <template slot-scope="scope" v-if="!scope.row.top||columnData.type==5">
               <el-tag v-if="scope.row.flowState==1">等待审核</el-tag>
               <el-tag type="success" v-else-if="scope.row.flowState==2">审核通过</el-tag>
               <el-tag type="danger" v-else-if="scope.row.flowState==3">审核退回</el-tag>
@@ -275,7 +287,7 @@
           <el-table-column label="操作"
             :fixed="columnData.childTableStyle==2&&childColumnList.length?false:'right'"
             :width="operationWidth" v-if="columnBtnsList.length || customBtnsList.length">
-            <template slot-scope="scope" v-if="!scope.row.top">
+            <template slot-scope="scope" v-if="!scope.row.top||columnData.type==5">
               <template v-if="scope.row.rowEdit">
                 <el-button size="mini" type="text" @click="saveForRowEdit(scope.row,1)">
                   保存</el-button>
@@ -378,7 +390,8 @@
             </template>
           </el-table-column>
         </JNPF-table>
-        <template v-if="columnData.type !== 3 && columnData.hasPage&&refreshTable">
+        <template
+          v-if="columnData.type !== 3 &&columnData.type !== 5&& columnData.hasPage&&refreshTable">
           <pagination :total="total" :page.sync="listQuery.currentPage"
             :limit.sync="listQuery.pageSize" @pagination="initData" />
         </template>
@@ -1020,6 +1033,13 @@ export default {
       this.$nextTick(() => {
         this.$refs.SuperQuery.init()
       })
+    },
+    toggleExpand() {
+      this.refreshTable = false;
+      this.expandsTree = !this.expandsTree;
+      this.$nextTick(() => {
+        this.refreshTable = true;
+      });
     },
     superQuery(queryJson) {
       if (this.isPreview) return
