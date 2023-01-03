@@ -150,11 +150,13 @@
       type="webDesign" />
     <EngineForm v-if="engineFormVisible" ref="engineForm" />
     <FlowManage v-if="manageVisible" ref="FlowManage" />
+    <LinkDialog v-if="linkVisible" ref="LinkDialog" />
   </div>
 </template>
 
 <script>
 import Form from './Form'
+import LinkDialog from './ShortLinkDialog.vue'
 import AddBox from '@/views/generator/AddBox'
 import mixin from '@/mixins/generator/index'
 import previewDialog from '@/components/PreviewDialog'
@@ -165,7 +167,7 @@ import FlowManage from '@/views/workFlow/flowEngine/FlowManagement'
 export default {
   name: 'onlineDev-webDesign',
   mixins: [mixin],
-  components: { Form, AddBox, previewDialog, EngineForm, FlowManage },
+  components: { Form, AddBox, previewDialog, EngineForm, FlowManage, LinkDialog },
   data() {
     return {
       query: { keyword: '', type: 1 },
@@ -197,6 +199,7 @@ export default {
       enginCategoryList: [],
       engineFormVisible: false,
       manageVisible: false,
+      linkVisible: false,
     }
   },
   created() {
@@ -298,6 +301,12 @@ export default {
       this.engineFormVisible = true
       this.$nextTick(() => {
         this.$refs.engineForm.init(this.enginCategoryList, id, 1)
+      })
+    },
+    handleLink(id) {
+      this.linkVisible = true
+      this.$nextTick(() => {
+        this.$refs.LinkDialog.init(id)
       })
     }
   }
