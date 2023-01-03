@@ -207,8 +207,8 @@
                 </el-form-item>
                 <el-form-item label="数据加载">
                   <el-radio-group v-model="columnData.treeLazyType">
-                    <el-radio :label="1">同步</el-radio>
-                    <el-radio :label="2">异步</el-radio>
+                    <el-radio :label="0">同步</el-radio>
+                    <el-radio :label="1">异步</el-radio>
                   </el-radio-group>
                 </el-form-item>
               </template>
@@ -380,7 +380,7 @@ const defaultColumnData = {
   treeDataSource: 'dictionary',  // 树形数据来源
   treeDictionary: '',//数据字典
   treeRelation: '',  // 关联字段
-  treeSynType: 1, //数据加载 同步、异步
+  treeSynType: 0, //数据加载 同步、异步
   treeInterfaceId: '',
   treeInterfaceName: '',
   treeTemplateJson: [],
@@ -390,7 +390,7 @@ const defaultColumnData = {
   treePropsLabel: 'fullName',  // 显示字段
   groupField: '',  // 分组字段
   parentField: '', // 父级字段
-  treeLazyType: 1,  // 子级字段
+  treeLazyType: 0,  // 子级字段
   useColumnPermission: false,
   useFormPermission: false,
   useBtnPermission: false,
