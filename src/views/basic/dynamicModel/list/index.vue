@@ -267,6 +267,16 @@
                   </el-table-column>
                 </el-table-column>
               </template>
+              <el-table-column v-else-if="item.jnpfKey==='relationForm'" :prop="item.prop"
+                :label="item.label" :align="item.align"
+                :fixed="columnList.some(o=>o.fixed == 'left')&&i==0&&columnData.groupField&&columnData.type==3?'left':item.fixed!='none'&&columnData.childTableStyle!=2?item.fixed:false"
+                :width="item.width" :key="i" :sortable="item.sortable?'custom':item.sortable">
+                <template slot-scope="scope">
+                  <el-link :underline="false"
+                    @click.native="toDetail(scope.row,scope.row[`${item.prop}_id`])" type="primary">
+                    {{ scope.row[item.prop] }}</el-link>
+                </template>
+              </el-table-column>
               <el-table-column :prop="item.prop" :label="item.label" :align="item.align"
                 :fixed="columnList.some(o=>o.fixed == 'left')&&i==0&&columnData.groupField&&columnData.type==3?'left':item.fixed!='none'&&columnData.childTableStyle!=2?item.fixed:false"
                 :width="item.width" :key="i" :sortable="item.sortable?'custom':item.sortable"
@@ -413,7 +423,7 @@
 </template>
 
 <script>
-import { getModelList, getModelSubList, deleteModel, batchDelete, exportModel, createModel, updateModel } from '@/api/onlineDev/visualDev'
+import { getModelList, getModelSubList, deleteModel, batchDelete, exportModel, createModel, updateModel, getConfigData } from '@/api/onlineDev/visualDev'
 import { Create, Update } from '@/api/workFlow/workFlowForm'
 import { getDictionaryDataSelector } from '@/api/systemData/dictionary'
 import { getDataInterfaceRes } from '@/api/systemData/dataInterface'
@@ -588,6 +598,21 @@ export default {
           if (this.columnData.funcs && this.columnData.funcs.afterOnload && this.columnData.funcs.afterOnload.func) this.setTableLoadFunc()
         })
       })
+    },
+    toDetail(item, defaultValue) {
+      if (!defaultValue) return
+      this.mainLoading = true
+      getConfigData(item.modelId).then(res => {
+        this.mainLoading = false
+        if (!res.data) return
+        if (!res.data.formData) return
+        let formData = JSON.parse(res.data.formData)
+        formData.popupType = this.formData.popupType
+        this.detailVisible = true
+        this.$nextTick(() => {
+          this.$refs.Detail.init(formData, item.modelId, defaultValue)
+        })
+      }).catch(() => { this.mainLoading = false })
     },
     getTreeView() {
       if (this.columnData.treeDataSource === "dictionary") {
