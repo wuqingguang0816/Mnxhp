@@ -117,6 +117,13 @@ export function getModelSubList(modelId, id, data) {
     data
   })
 }
+export function getFields(id, data) {
+  return request({
+    url: `/api/system/DataInterface/${id}/Actions/GetFields`,
+    method: 'POST',
+    data
+  })
+}
 // 添加数据
 export function createModel(modelId, data) {
   return request({

@@ -1,9 +1,10 @@
 <template>
   <div class="columnDesign-box">
-    <div style="height:100%" v-show="webType==2">
+    <div style="height:100%" v-show="webType==2||webType==4">
       <column-main ref="columnMain" :conf="columnData" :modelType="modelType" :webType="webType"
-        v-show="currentTab==='pc'" />
+        :interfaceId="interfaceId" :templateJson="templateJson" v-show="currentTab==='pc'" />
       <column-main-app ref="columnMainApp" :conf="appColumnData" :modelType="modelType"
+        :webType="webType" :interfaceId="interfaceId" :templateJson="templateJson"
         v-show="currentTab==='app'" />
       <div class="head-tabs">
         <el-button icon="icon-ym icon-ym-pc" :class="{'unActive-btn':currentTab!=='pc'}" type="text"
@@ -12,7 +13,7 @@
           type="text" @click="currentTab='app'" size="medium">移动端</el-button>
       </div>
     </div>
-    <div class="column-empty-info" v-show="webType!=2">
+    <div class="column-empty-info" v-show="webType!=2&&webType!=4">
       <img src="@/assets/images/generator/columnType1.png" class=" empty-img">
       <p>开启后，表单带有数据列表</p>
       <el-button type="primary" style="width:150px" size="medium" @click="$emit('openList')">开启列表
@@ -35,7 +36,9 @@ export default {
       default: () => { }
     },
     webType: '',
-    modelType: ''
+    modelType: '',
+    interfaceId: '',
+    templateJson: []
   },
   components: { ColumnMain, ColumnMainApp },
   data() {

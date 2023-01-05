@@ -1,63 +1,11 @@
 
 <template>
   <div class="JNPF-common-layout">
-    <div class="JNPF-common-layout-left" v-if="columnData.type === 2">
-      <div class="JNPF-common-title" v-if="columnData.treeTitle">
-        <h2>{{columnData.treeTitle}}</h2>
-        <el-dropdown v-if="columnData.treeSynType==1">
-          <el-link icon="icon-ym icon-ym-mpMenu" :underline="false" />
-          <el-dropdown-menu slot="dropdown">
-            <el-dropdown-item @click.native="toggleTreeExpand(true)">展开全部</el-dropdown-item>
-            <el-dropdown-item @click.native="toggleTreeExpand(false)">折叠全部</el-dropdown-item>
-          </el-dropdown-menu>
-        </el-dropdown>
-      </div>
-      <div class="JNPF-common-tree-search-box"
-        v-if="columnData.hasTreeQuery&&columnData.treeSynType==1">
-        <el-input placeholder="输入关键字" v-model="keyword" suffix-icon="el-icon-search" clearable />
-      </div>
-      <el-tree :data="treeData" :props="treeProps"
-        :default-expand-all="columnData.treeSynType==1?expandsTree:false" highlight-current
-        ref="treeBox" :expand-on-click-node="false" @node-click="handleNodeClick"
-        class="JNPF-common-el-tree" :node-key="treeProps.value" :filter-node-method="filterNode"
-        :lazy="columnData.treeSynType==2?true:false" :load="loadNode" v-if="refreshTree">
-        <span class="custom-tree-node" slot-scope="{ node, data }">
-          <i :class="data.icon"></i>
-          <span class="text">{{node.label}}</span>
-        </span>
-      </el-tree>
-    </div>
     <div class="JNPF-common-layout-center">
-      <Search ref="Search" :list="columnData.searchList" @reset="reset" @search="searchData" />
       <div class="JNPF-common-layout-main JNPF-flex-main">
         <div class="JNPF-common-head">
-          <div v-if="isPreview || !columnData.useBtnPermission">
-            <el-button :type="i==0?'primary':'text'" :icon="item.icon"
-              @click="headBtnsHandel(item.value)" v-for="(item, i) in columnData.btnsList" :key="i">
-              {{item.label}}</el-button>
-          </div>
-          <div v-else>
-            <el-button :type="i==0?'primary':'text'" :icon="item.icon" v-has="'btn_'+item.value"
-              @click="headBtnsHandel(item.value)" v-for="(item, i) in columnData.btnsList" :key="i">
-              {{item.label}}</el-button>
-          </div>
+          <div></div>
           <div class="JNPF-common-head-right">
-            <el-tooltip content="高级查询" placement="top" v-if="columnData.hasSuperQuery">
-              <el-link icon="icon-ym icon-ym-filter JNPF-common-head-icon" :underline="false"
-                @click="openSuperQuery()" />
-            </el-tooltip>
-            <template v-if="columnData.type==5&&columnData.treeLazyType == 0">
-              <el-tooltip effect="dark" content="展开" placement="top">
-                <el-link v-show="!expandsTree" type="text"
-                  icon="icon-ym icon-ym-btn-expand JNPF-common-head-icon" :underline="false"
-                  @click="toggleExpandList()" />
-              </el-tooltip>
-              <el-tooltip effect="dark" content="折叠" placement="top">
-                <el-link v-show="expandsTree" type="text"
-                  icon="icon-ym icon-ym-btn-collapse JNPF-common-head-icon" :underline="false"
-                  @click="toggleExpandList()" />
-              </el-tooltip>
-            </template>
             <el-tooltip effect="dark" :content="$t('common.refresh')" placement="top">
               <el-link icon="icon-ym icon-ym-Refresh JNPF-common-head-icon" :underline="false"
                 @click="initData()" />
@@ -72,167 +20,8 @@
           :has-c="hasBatchBtn" @selection-change="handleSelectionChange" v-if="refreshTable"
           custom-column :span-method="arraySpanMethod" ref="tableRef"
           :hasNO="!(columnData.childTableStyle==2&&childColumnList.length&&columnData.type != 3&&columnData.type != 4)"
-          :hasNOFixed="columnList.some(o=>o.fixed == 'left')" show-summary
-          :summary-method="getTableSummaries">
-          <template v-if="columnData.type === 4">
-            <template v-for="(item, i) in columnList">
-              <el-table-column :prop="item.prop" :label="item.label" :align="item.align"
-                :fixed="item.fixed!='none'?item.fixed:false" :width="item.width" :key="i"
-                :sortable="item.sortable?'custom':item.sortable" v-if="item.jnpfKey !=='table'">
-                <template slot-scope="scope">
-                  <template v-if="scope.row.rowEdit">
-                    <template v-if="item.jnpfKey==='numInput'">
-                      <el-input-number v-model="scope.row[item.prop]"
-                        :placeholder="item.placeholder" :min="item.min" :max="item.max"
-                        :step="item.step" :precision="item.precision"
-                        :controls-position="item['controls-position']" :disabled="item.disabled"
-                        style="width:100%" />
-                    </template>
-                    <template v-else-if="['rate','slider'].includes(item.jnpfKey)">
-                      <el-input-number v-model="scope.row[item.prop]" placeholder="请输入"
-                        controls-position="right" style="width:100%" :disabled="item.disabled" />
-                    </template>
-                    <div v-else-if="item.jnpfKey==='switch'" style="padding-top: 5px;">
-                      <el-switch v-model="scope.row[item.prop]" :active-value="item['active-value']"
-                        :inactive-value="item['inactive-value']" :disabled="item.disabled" />
-                    </div>
-                    <template v-else-if="item.jnpfKey==='time'">
-                      <el-time-picker v-model="scope.row[item.prop]" style="width:100%"
-                        :picker-options="item['picker-options']" :placeholder="item.placeholder"
-                        :clearable="item.clearable" :value-format="item['value-format']"
-                        :format="item.format" :readonly="item.readonly" :disabled="item.disabled">
-                      </el-time-picker>
-                    </template>
-                    <template v-else-if="['date'].includes(item.jnpfKey)">
-                      <el-date-picker v-model="scope.row[item.prop]" :type="item.type||'datetime'"
-                        :clearable="item.clearable" :placeholder="item.placeholder"
-                        value-format="timestamp" :format="item.format||'yyyy-MM-dd HH:mm:ss'"
-                        style="width:100%" :readonly="item.readonly" :disabled="item.disabled">
-                      </el-date-picker>
-                    </template>
-                    <template v-else-if="['comSelect'].includes(item.jnpfKey)">
-                      <comSelect v-model="scope.row[item.prop]" :placeholder="item.placeholder"
-                        :multiple="item.multiple" :clearable="item.clearable"
-                        :disabled="item.disabled" />
-                    </template>
-                    <template v-else-if="['depSelect'].includes(item.jnpfKey)">
-                      <depSelect v-model="scope.row[item.prop]" :placeholder="item.placeholder"
-                        :selectType="item.selectType" :ableDepIds="item.ableDepIds"
-                        :multiple="item.multiple" :clearable="item.clearable"
-                        :disabled="item.disabled" />
-                    </template>
-                    <template v-else-if="['userSelect'].includes(item.jnpfKey)">
-                      <userSelect v-model="scope.row[item.prop]" :placeholder="item.placeholder"
-                        :selectType="item.selectType" :ableDepIds="item.ableDepIds"
-                        :ablePosIds="item.ablePosIds" :ableUserIds="item.ableUserIds"
-                        :ableRoleIds="item.ableRoleIds" :ableGroupIds="item.ableGroupIds"
-                        :multiple="item.multiple" :clearable="item.clearable"
-                        :disabled="item.disabled" />
-                    </template>
-                    <template v-else-if="['usersSelect'].includes(item.jnpfKey)">
-                      <usersSelect v-model="scope.row[item.prop]" :placeholder="item.placeholder"
-                        :selectType="item.selectType" :ableIds="item.ableIds"
-                        :multiple="item.multiple" :clearable="item.clearable"
-                        :disabled="item.disabled" />
-                    </template>
-                    <template v-else-if="['posSelect'].includes(item.jnpfKey)">
-                      <posSelect v-model="scope.row[item.prop]" :placeholder="item.placeholder"
-                        :selectType="item.selectType" :ableDepIds="item.ableDepIds"
-                        :ablePosIds="item.ablePosIds" :multiple="item.multiple"
-                        :clearable="item.clearable" :disabled="item.disabled" />
-                    </template>
-                    <template v-else-if="item.jnpfKey==='groupSelect'">
-                      <groupSelect v-model="scope.row[item.prop]" :placeholder="item.placeholder"
-                        :multiple="item.multiple" :clearable="item.clearable"
-                        :disabled="item.disabled" />
-                    </template>
-                    <template v-else-if="item.jnpfKey==='roleSelect'">
-                      <roleSelect v-model="scope.row[item.prop]" :placeholder="item.placeholder"
-                        :multiple="item.multiple" :clearable="item.clearable"
-                        :disabled="item.disabled" />
-                    </template>
-                    <template v-else-if="item.jnpfKey==='address'">
-                      <JNPFAddress v-model="scope.row[item.prop]" :level="item.level"
-                        :placeholder="item.placeholder" :multiple="item.multiple"
-                        :clearable="item.clearable" :disabled="item.disabled" />
-                    </template>
-                    <template v-else-if="['select','radio','checkbox'].includes(item.jnpfKey)">
-                      <el-select v-model="scope.row[item.prop]" :placeholder="item.placeholder"
-                        :filterable="item.filterable"
-                        :multiple="item.multiple||item.jnpfKey==='checkbox'"
-                        :clearable="item.clearable" :disabled="item.disabled">
-                        <el-option :label="oItem[item.__config__.props.label]"
-                          v-for="(oItem, i) in item.__slot__.options"
-                          :value="oItem[item.__config__.props.value]" :key="i"></el-option>
-                      </el-select>
-                    </template>
-                    <template v-else-if="item.jnpfKey==='cascader'">
-                      <el-cascader v-model="scope.row[item.prop]" :options="item.options"
-                        :clearable="item.clearable" :show-all-levels="item['show-all-levels']"
-                        :props="item.props.props" :filterable="item.filterable"
-                        :separator="item.separator" :placeholder="item.placeholder"
-                        :disabled="item.disabled" style="width:100%">
-                      </el-cascader>
-                    </template>
-                    <template v-else-if="item.jnpfKey==='treeSelect'">
-                      <JNPF-TreeSelect v-model="scope.row[item.prop]" :options="item.options"
-                        :props="item.props.props" :placeholder="item.placeholder"
-                        :multiple="item.multiple" :clearable="item.clearable"
-                        :disabled="item.disabled" />
-                    </template>
-                    <template v-else-if="item.jnpfKey==='relationForm'">
-                      <relationForm v-model="scope.row[item.prop]" :placeholder="item.placeholder"
-                        :modelId="item.modelId" :columnOptions="item.columnOptions"
-                        :relationField="item.relationField" :hasPage="item.hasPage"
-                        :pageSize="item.pageSize" :clearable="item.clearable"
-                        :disabled="item.disabled" />
-                    </template>
-                    <template v-else-if="item.jnpfKey==='popupSelect'">
-                      <popupSelect v-model="scope.row[item.prop]" :placeholder="item.placeholder"
-                        :interfaceId="item.interfaceId" :columnOptions="item.columnOptions"
-                        :propsValue="item.propsValue" :relationField="item.relationField"
-                        :hasPage="item.hasPage" :pageSize="item.pageSize"
-                        :popupType="item.popupType" :popupTitle="item.popupTitle"
-                        :popupWidth="item.popupWidth" :clearable="item.clearable"
-                        :disabled="item.disabled" />
-                    </template>
-                    <template v-else-if="item.jnpfKey==='popupTableSelect'">
-                      <popupTableSelect v-model="scope.row[item.prop]"
-                        :placeholder="item.placeholder" :interfaceId="item.interfaceId"
-                        :columnOptions="item.columnOptions" :propsValue="item.propsValue"
-                        :relationField="item.relationField" :hasPage="item.hasPage"
-                        :pageSize="item.pageSize" :popupType="item.popupType"
-                        :popupTitle="item.popupTitle" :popupWidth="item.popupWidth"
-                        :filterable="item.filterable" :multiple="item.multiple"
-                        :clearable="item.clearable" :disabled="item.disabled" />
-                    </template>
-                    <template v-else-if="['comInput','textarea'].includes(item.jnpfKey)">
-                      <el-input v-model="scope.row[item.prop]" :placeholder="item.placeholder"
-                        :readonly="item.readonly" :prefix-icon="item['prefix-icon']"
-                        :suffix-icon="item['suffix-icon']" :clearable="item.clearable"
-                        :show-word-limit="item['show-word-limit']" :maxlength="item.maxlength"
-                        :show-password="item['show-password']" :disabled="item.disabled">
-                        <template slot="prepend"
-                          v-if="item.__slot__ && item.__slot__.prepend">{{item.__slot__.prepend}}</template>
-                        <template slot="append"
-                          v-if="item.__slot__ && item.__slot__.append">{{item.__slot__.append}}</template>
-                      </el-input>
-                    </template>
-                    <template v-else-if="systemComponentsList.includes(item.jnpfKey)">
-                      {{scope.row[item.prop+'_name']||scope.row[item.prop]}}
-                    </template>
-                    <template v-else>
-                      {{scope.row[item.prop]}}
-                    </template>
-                  </template>
-                  <template v-else>
-                    {{scope.row[item.prop+'_name']||scope.row[item.prop]}}
-                  </template>
-                </template>
-              </el-table-column>
-            </template>
-          </template>
-          <template v-else>
+          :hasNOFixed="columnList.some(o=>o.fixed == 'left')">
+          <template>
             <template
               v-if="columnData.childTableStyle==2&&childColumnList.length&&columnData.type ==1&&columnData.type == 2">
               <el-table-column width="0" />
@@ -274,8 +63,7 @@
                 :width="item.width" :key="i" :sortable="item.sortable?'custom':item.sortable">
                 <template slot-scope="scope">
                   <el-link :underline="false"
-                    @click.native="toDetail(item.modelId,scope.row,scope.row[`${item.prop}_id`])"
-                    type="primary">
+                    @click.native="toDetail(scope.row,scope.row[`${item.prop}_id`])" type="primary">
                     {{ scope.row[item.prop] }}</el-link>
                 </template>
               </el-table-column>
@@ -285,120 +73,24 @@
                 v-else />
             </template>
           </template>
-          <el-table-column
-            :fixed="columnList.some(o=>o.fixed == 'right')&&columnData.childTableStyle!=2?'right':false"
-            prop="flowState" label="状态" width="100" v-if="config.enableFlow==1">
-            <template slot-scope="scope" v-if="!scope.row.top||columnData.type==5">
-              <el-tag v-if="scope.row.flowState==1">等待审核</el-tag>
-              <el-tag type="success" v-else-if="scope.row.flowState==2">审核通过</el-tag>
-              <el-tag type="danger" v-else-if="scope.row.flowState==3">审核退回</el-tag>
-              <el-tag type="info" v-else-if="scope.row.flowState==4">流程撤回</el-tag>
-              <el-tag type="info" v-else-if="scope.row.flowState==5">审核终止</el-tag>
-              <el-tag type="warning" v-else>等待提交</el-tag>
-            </template>
-          </el-table-column>
           <el-table-column label="操作"
             :fixed="columnData.childTableStyle==2&&childColumnList.length?false:'right'"
             :width="operationWidth" v-if="columnBtnsList.length || customBtnsList.length">
-            <template slot-scope="scope" v-if="!scope.row.top||columnData.type==5">
-              <template v-if="scope.row.rowEdit">
-                <el-button size="mini" type="text" @click="saveForRowEdit(scope.row,1)">
-                  保存</el-button>
-                <el-button size="mini" type="text" class="JNPF-table-delBtn"
-                  @click="cancelRowEdit(scope.row,scope.$index)">取消</el-button>
-                <el-button size="mini" type="text" @click="submitForRowEdit(scope.row)"
-                  v-if="config.enableFlow==1">提交</el-button>
-              </template>
-              <template v-else>
-                <template v-if="isPreview || !columnData.useBtnPermission">
-                  <template v-for="(item, i) in columnBtnsList">
-                    <template v-if="item.value=='edit'">
-                      <template v-if="columnData.type === 4">
-                        <el-button size="mini" type="text" :key="i"
-                          :disabled="config.enableFlow==1 && [1,2,4,5].indexOf(scope.row.flowState)>-1"
-                          @click="scope.row.rowEdit=true">
-                          {{item.label}}</el-button>
-                      </template>
-                      <template v-else>
-                        <el-button size="mini" type="text" :key="i"
-                          :disabled="config.enableFlow==1 && [1,2,4,5].indexOf(scope.row.flowState)>-1"
-                          @click="columnBtnsHandel(item.value,scope.row)">
-                          {{item.label}}</el-button>
-                      </template>
-                    </template>
-                    <template v-else-if="item.value=='remove'">
-                      <el-button size="mini" type="text" :key="i" class="JNPF-table-delBtn"
-                        :disabled="config.enableFlow==1 && [1,2,3,5].indexOf(scope.row.flowState)>-1"
-                        @click="columnBtnsHandel(item.value,scope.row,scope.$index)">
-                        {{item.label}}</el-button>
-                    </template>
-                    <template v-else-if="item.value=='detail'">
-                      <el-button size="mini" type="text" :key="i"
-                        :disabled="config.enableFlow==1 && !scope.row.flowState"
-                        @click="columnBtnsHandel(item.value,scope.row)" v-if="scope.row.id">
-                        {{item.label}}</el-button>
-                    </template>
-                  </template>
-                  <template v-if="customBtnsList.length">
-                    <el-dropdown hide-on-click>
-                      <span class="el-dropdown-link">
-                        <el-button type="text" size="mini">
-                          {{$t('common.moreBtn')}}<i class="el-icon-arrow-down el-icon--right"></i>
-                        </el-button>
-                      </span>
-                      <el-dropdown-menu slot="dropdown">
-                        <el-dropdown-item v-for="(item, i) in customBtnsList" :key="i"
-                          @click.native="customBtnsHandel(item,scope.row,scope.$index)">
-                          {{item.label}}</el-dropdown-item>
-                      </el-dropdown-menu>
-                    </el-dropdown>
-                  </template>
-                </template>
-                <template v-else>
-                  <template v-for="(item, i) in columnBtnsList">
-                    <template v-if="item.value=='edit'">
-                      <template v-if="columnData.type === 4">
-                        <el-button size="mini" type="text" :key="i"
-                          :disabled="config.enableFlow==1 && [1,2,4,5].indexOf(scope.row.flowState)>-1"
-                          @click="scope.row.rowEdit=true" v-has="'btn_'+item.value">
-                          {{item.label}}</el-button>
-                      </template>
-                      <template v-else>
-                        <el-button size="mini" type="text" :key="i"
-                          :disabled="config.enableFlow==1 && [1,2,4,5].indexOf(scope.row.flowState)>-1"
-                          @click="columnBtnsHandel(item.value,scope.row)" v-has="'btn_'+item.value">
-                          {{item.label}}</el-button>
-                      </template>
-                    </template>
-                    <template v-else-if="item.value=='remove'">
-                      <el-button size="mini" type="text" :key="i" class="JNPF-table-delBtn"
-                        :disabled="config.enableFlow==1 && [1,2,3,5].indexOf(scope.row.flowState)>-1"
-                        @click="columnBtnsHandel(item.value,scope.row,scope.$index)"
-                        v-has="'btn_'+item.value">{{item.label}}</el-button>
-                    </template>
-                    <template v-else-if="item.value=='detail'">
-                      <el-button size="mini" type="text" :key="i"
-                        :disabled="config.enableFlow==1 && !scope.row.flowState"
-                        @click="columnBtnsHandel(item.value,scope.row)" v-has="'btn_'+item.value">
-                        {{item.label}}</el-button>
-                    </template>
-                  </template>
-                  <template v-if="customBtnsList.length">
-                    <el-dropdown hide-on-click>
-                      <span class="el-dropdown-link">
-                        <el-button type="text" size="mini">
-                          {{$t('common.moreBtn')}}
-                          <i class="el-icon-arrow-down el-icon--right"></i>
-                        </el-button>
-                      </span>
-                      <el-dropdown-menu slot="dropdown">
-                        <el-dropdown-item v-for="(item, i) in customBtnsList" :key="i"
-                          @click.native="customBtnsHandel(item,scope.row,scope.$index)"
-                          v-has="item.value">{{item.label}}</el-dropdown-item>
-                      </el-dropdown-menu>
-                    </el-dropdown>
-                  </template>
-                </template>
+            <template slot-scope="scope" v-if="!scope.row.top">
+              <template v-if="customBtnsList.length">
+                <el-dropdown hide-on-click>
+                  <span class="el-dropdown-link">
+                    <el-button type="text" size="mini">
+                      {{$t('common.moreBtn')}}
+                      <i class="el-icon-arrow-down el-icon--right"></i>
+                    </el-button>
+                  </span>
+                  <el-dropdown-menu slot="dropdown">
+                    <el-dropdown-item v-for="(item, i) in customBtnsList" :key="i"
+                      @click.native="customBtnsHandel(item,scope.row,scope.$index)"
+                      v-has="item.value">{{item.label}}</el-dropdown-item>
+                  </el-dropdown-menu>
+                </el-dropdown>
               </template>
             </template>
           </el-table-column>
@@ -410,17 +102,6 @@
         </template>
       </div>
     </div>
-    <FlowBox v-if="flowVisible" ref="FlowBox" @close="closeFlow" />
-    <Form v-show="formVisible" ref="Form" @refreshDataList="refresh" />
-    <Detail v-show="detailVisible" ref="Detail" @close="detailVisible = false" />
-    <ExportBox v-if="exportBoxVisible" ref="ExportBox" @download="download" />
-    <ImportBox v-if="uploadBoxVisible" ref="UploadBox" @refresh="initData" />
-    <CustomBox v-if="customBoxVisible" ref="CustomBox" @close="customBoxVisible= false" />
-    <SuperQuery v-if="superQueryVisible" ref="SuperQuery" :columnOptions="columnOptions"
-      @superQuery="superQuery" />
-    <candidate-form :visible.sync="candidateVisible" :candidateList="candidateList"
-      :branchList="branchList" taskId="0" :formData="workFlowFormData"
-      @submitCandidate="submitCandidate" :isCustomCopy="isCustomCopy" />
   </div>
 </template>
 
@@ -430,21 +111,12 @@ import { Create, Update } from '@/api/workFlow/workFlowForm'
 import { getDictionaryDataSelector } from '@/api/systemData/dictionary'
 import { getDataInterfaceRes } from '@/api/systemData/dataInterface'
 import { getColumnsByModuleId } from '@/api/common'
-import { dyOptionsList, systemComponentsList } from '@/components/Generator/generator/comConfig'
+import { systemComponentsList } from '@/components/Generator/generator/comConfig'
 import { Candidates } from '@/api/workFlow/FlowBefore'
 import request from '@/utils/request'
-import Form from './Form'
-import FlowBox from '@/views/workFlow/components/FlowBox'
-import Detail from './detail'
-import ExportBox from '@/components/ExportBox'
-import Search from './Search'
-import ChildTableColumn from './child-table-column'
-import SuperQuery from '@/components/SuperQuery'
-import CandidateForm from '@/views/workFlow/components/CandidateForm'
-import CustomBox from '@/components/JNPFCustom'
+
 export default {
   name: 'dynamicModel',
-  components: { Form, ExportBox, Search, Detail, FlowBox, ChildTableColumn, SuperQuery, CandidateForm, CustomBox },
   props: ['config', 'modelId', 'isPreview'],
   data() {
     return {
@@ -534,7 +206,7 @@ export default {
       this.listLoading = true
       this.listQuery.menuId = this.$route.meta.modelId
       this.refreshTable = false
-      if (!this.config.columnData || !this.config.formData) return
+      if (!this.config.columnData) return
       this.columnData = JSON.parse(this.config.columnData)
       if (this.columnData.type === 3) {
         this.columnData.columnList = this.columnData.columnList.filter(o => o.prop != this.columnData.groupField)
@@ -543,11 +215,6 @@ export default {
         this.flowTemplateJson = this.config.flowTemplateJson ? JSON.parse(this.config.flowTemplateJson) : {}
         this.isCustomCopy = this.flowTemplateJson.properties && this.flowTemplateJson.properties.isCustomCopy
       }
-      this.hasBatchBtn = this.columnData.btnsList.some(o => o.value == 'batchRemove')
-      this.formData = JSON.parse(this.config.formData)
-      this.customBtnsList = this.columnData.customBtnsList || []
-      this.columnBtnsList = this.columnData.columnBtnsList || []
-      this.columnOptions = this.columnData.columnOptions || []
       this.listLoading = true
       if (this.isPreview) this.listQuery.menuId = "270579315303777093"
       let res = await getColumnsByModuleId(this.listQuery.menuId)
@@ -558,7 +225,6 @@ export default {
       this.$nextTick(() => {
         this.refreshTable = true
       })
-      if (this.columnData.type === 4) this.buildOptions()
       if (this.isPreview) return this.listLoading = false
       this.listQuery.pageSize = this.columnData.pageSize
       this.listQuery.sort = this.columnData.sort
@@ -567,16 +233,10 @@ export default {
       this.defaultListQuery.sort = this.columnData.sort
       this.defaultListQuery.sidx = this.columnData.defaultSidx
       if (this.columnData.type === 3 || !this.columnData.hasPage) this.listQuery.pageSize = 10000
-      if (this.columnData.type === 2) {
-        this.treeProps.value = this.columnData.treePropsValue || 'id'
-        this.treeProps.label = this.columnData.treePropsLabel || 'fullName'
-        this.treeProps.children = this.columnData.treePropsChildren || 'children'
-        this.getTreeView()
-      } else {
-        this.initData()
-      }
+      this.initData()
     },
     initData() {
+      console.log(this.columnData)
       if (this.isPreview) return
       this.listLoading = true
       getModelList(this.modelId, this.listQuery).then(res => {
@@ -599,42 +259,14 @@ export default {
         this.$nextTick(() => {
           if (this.columnData.funcs && this.columnData.funcs.afterOnload && this.columnData.funcs.afterOnload.func) this.setTableLoadFunc()
         })
+      }).catch(() => {
+        this.listLoading = false
       })
     },
-    /**
-    * 对表格进行合计 目前只支持数字，金额，滑块
-    */
-    getTableSummaries(param) {
-      const { columns, data } = param;
-      const sums = [];
-      if (!this.columnData.configurationTotal) return
-      columns.forEach((column, index) => {
-        if (index === 0) {
-          sums[index] = '合计';
-          return;
-        } else if (this.columnData.fieldsTotal.includes(column.property)) {
-          const values = data.map(item => Number(item[column.property]));
-          if (!values.every(value => isNaN(value))) {
-            sums[index] = values.reduce((prev, curr) => {
-              const value = Number(curr);
-              if (!isNaN(value)) {
-                return prev + curr;
-              } else {
-                return prev;
-              }
-            }, 0);
-            sums[index] += '';
-          } else {
-            sums[index] = '';
-          }
-        }
-      })
-      return sums;
-    },
-    toDetail(modelId, item, defaultValue) {
+    toDetail(item, defaultValue) {
       if (!defaultValue) return
       this.mainLoading = true
-      getConfigData(modelId).then(res => {
+      getConfigData(item.modelId).then(res => {
         this.mainLoading = false
         if (!res.data) return
         if (!res.data.formData) return
@@ -642,7 +274,7 @@ export default {
         formData.popupType = this.formData.popupType
         this.detailVisible = true
         this.$nextTick(() => {
-          this.$refs.Detail.init(formData, modelId, defaultValue)
+          this.$refs.Detail.init(formData, item.modelId, defaultValue)
         })
       }).catch(() => { this.mainLoading = false })
     },
@@ -1165,34 +797,7 @@ export default {
       if (!func) return
       func.call(this, parameter)
     },
-    buildOptions() {
-      this.columnData.columnList.forEach(cur => {
-        const config = cur.__config__
-        if (dyOptionsList.indexOf(config.jnpfKey) > -1) {
-          let isTreeSelect = config.jnpfKey === 'treeSelect' || config.jnpfKey === 'cascader'
-          if (config.dataType === 'dictionary') {
-            if (!config.dictionaryType) return
-            getDictionaryDataSelector(config.dictionaryType).then(res => {
-              isTreeSelect ? cur.options = res.data.list : cur.__slot__.options = res.data.list
-            })
-          }
-          if (config.dataType === 'dynamic') {
-            if (!config.propsUrl) return
-            let query = {
-              paramList: config.templateJson || [],
-            }
-            getDataInterfaceRes(config.propsUrl, query).then(res => {
-              let data = res.data
-              if (Array.isArray(data)) {
-                isTreeSelect ? cur.options = data : cur.__slot__.options = data
-              } else {
-                isTreeSelect ? cur.options = [] : cur.__slot__.options = []
-              }
-            })
-          }
-        }
-      })
-    },
+
     filterNode(value, data) {
       if (!value) return true;
       return data[this.treeProps.label].indexOf(value) !== -1;

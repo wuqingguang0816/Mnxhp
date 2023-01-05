@@ -11,7 +11,12 @@
                 title='点击拖动' />
             </template>
           </el-table-column>
-          <el-table-column prop="label" label="列名" />
+          <el-table-column prop="label" label="列名" v-if="webType!=4" />
+          <el-table-column prop="label" label="列名" v-else>
+            <template slot-scope="scope">
+              <el-input v-model="scope.row.label" placeholder="列名" />
+            </template>
+          </el-table-column>
           <el-table-column prop="prop" label="字段" />
           <el-table-column prop="searchType" label="类型">
             <template slot-scope="scope">
@@ -36,7 +41,12 @@
                 title='点击拖动' />
             </template>
           </el-table-column>
-          <el-table-column prop="label" label="列名" />
+          <el-table-column prop="label" label="列名" v-if="webType!=4" />
+          <el-table-column prop="label" label="列名" v-else>
+            <template slot-scope="scope">
+              <el-input v-model="scope.row.label" placeholder="列名" />
+            </template>
+          </el-table-column>
           <el-table-column prop="prop" label="字段" />
         </el-table>
       </div>
@@ -51,7 +61,12 @@
                 title='点击拖动' />
             </template>
           </el-table-column>
-          <el-table-column prop="label" label="列名" />
+          <el-table-column prop="label" label="列名" v-if="webType!=4" />
+          <el-table-column prop="label" label="列名" v-else>
+            <template slot-scope="scope">
+              <el-input v-model="scope.row.label" placeholder="列名" />
+            </template>
+          </el-table-column>
           <el-table-column prop="prop" label="字段" />
         </el-table>
       </div>
@@ -67,21 +82,24 @@
         <div class="columnList" v-show="currentTab==='sort'">
           <el-table :data="sortOptions" class="JNPF-common-table" height="100%"
             @selection-change="sortSelectionChange" ref="sortTable">
-            <el-table-column prop="label" label="排序字段" />
+            <el-table-column prop="label" label="排序字段" v-if="webType!=4" />
+            <el-table-column prop="prop" label="排序字段" v-else />
             <el-table-column type="selection" width="55" align="center" />
           </el-table>
         </div>
         <div class="columnList" v-show="currentTab==='search'">
           <el-table :data="searchOptions" class="JNPF-common-table" height="100%"
             @selection-change="searchSelectionChange" ref="searchTable">
-            <el-table-column prop="label" label="查询字段" />
+            <el-table-column prop="label" label="查询字段" v-if="webType!=4" />
+            <el-table-column prop="prop" label="查询字段" v-else />
             <el-table-column type="selection" width="55" align="center" />
           </el-table>
         </div>
         <div class="columnList" v-show="currentTab==='field'">
           <el-table :data="columnOptions" class="JNPF-common-table" height="100%"
             @selection-change="columnSelectionChange" ref="columnTable">
-            <el-table-column prop="label" label="列表字段" />
+            <el-table-column prop="label" label="列表字段" v-if="webType!=4" />
+            <el-table-column prop="prop" label="列表字段" v-else />
             <el-table-column type="selection" width="55" align="center" />
           </el-table>
         </div>
@@ -113,13 +131,14 @@
                 </el-radio-group>
               </el-form-item>
               <el-divider>按钮配置</el-divider>
-              <el-checkbox-group v-model="btnsList" class="btnsList">
+              <el-checkbox-group v-model="btnsList" class="btnsList" v-if="webType!=4">
                 <el-checkbox :label="item.value" v-for="item in btnsOption" :key="item.value">
                   <span class="btn-label">{{ item.value | btnText }}</span>
                   <el-input v-model="item.label" />
                 </el-checkbox>
               </el-checkbox-group>
-              <el-checkbox-group v-model="columnBtnsList" class="btnsList columnBtnList">
+              <el-checkbox-group v-model="columnBtnsList" class="btnsList columnBtnList"
+                v-if="webType!=4">
                 <el-checkbox :label="item.value" v-for="item in columnBtnsOption" :key="item.value">
                   <span class="btn-label">{{ item.value | btnText }}</span>
                   <el-input v-model="item.label" />
@@ -153,19 +172,21 @@
                   <el-button type="text" icon="el-icon-plus" @click="addCustomBtn">添加按钮</el-button>
                 </div>
               </template>
-              <el-divider>权限设置</el-divider>
-              <el-form-item label="按钮权限">
-                <el-switch v-model="columnData.useBtnPermission"></el-switch>
-              </el-form-item>
-              <el-form-item label="列表权限">
-                <el-switch v-model="columnData.useColumnPermission"></el-switch>
-              </el-form-item>
-              <el-form-item label="表单权限">
-                <el-switch v-model="columnData.useFormPermission"></el-switch>
-              </el-form-item>
-              <el-form-item label="数据权限">
-                <el-switch v-model="columnData.useDataPermission"></el-switch>
-              </el-form-item>
+              <template v-if="webType!=4">
+                <el-divider>权限设置</el-divider>
+                <el-form-item label="按钮权限">
+                  <el-switch v-model="columnData.useBtnPermission"></el-switch>
+                </el-form-item>
+                <el-form-item label="列表权限">
+                  <el-switch v-model="columnData.useColumnPermission"></el-switch>
+                </el-form-item>
+                <el-form-item label="表单权限">
+                  <el-switch v-model="columnData.useFormPermission"></el-switch>
+                </el-form-item>
+                <el-form-item label="数据权限">
+                  <el-switch v-model="columnData.useDataPermission"></el-switch>
+                </el-form-item>
+              </template>
               <template v-if="modelType==1">
                 <el-divider>脚本事件</el-divider>
                 <el-form-item label="表格事件">
@@ -192,6 +213,7 @@ import FormScript from './FormScript'
 import CustomBtn from './CustomBtn'
 import { getDrawingList } from '@/components/Generator/utils/db'
 import { noColumnShowList, noSearchList, useInputList, useDateList } from '@/components/Generator/generator/comConfig'
+import { getFields } from '@/api/onlineDev/visualDev'
 const getSearchType = item => {
   const jnpfKey = item.__config__.jnpfKey
   // 等于-1  模糊-2  范围-3
@@ -242,7 +264,10 @@ export default {
       type: Object,
       default: () => { },
     },
-    modelType: ''
+    webType: '',
+    modelType: '',
+    interfaceId: '',
+    templateJson: []
   },
   components: { draggable, FormScript, CustomBtn },
   data() {
@@ -318,66 +343,110 @@ export default {
     },
   },
   created() {
-    let list = []
-    let list1 = []
-    const loop = (data, parent) => {
-      if (!data) return
-      if (data.__config__ && data.__config__.children && Array.isArray(data.__config__.children)) {
-        loop(data.__config__.children, data)
-      }
-      if (Array.isArray(data)) data.forEach(d => loop(d, parent))
-      if (data.__config__ && data.__config__.jnpfKey) {
-        const visibility = !data.__config__.visibility || (Array.isArray(data.__config__.visibility) && data.__config__.visibility.includes('app'))
-        if (data.__config__.layout === "colFormItem" && data.__vModel__ && visibility) {
-          const isTableChild = parent && parent.__config__ && parent.__config__.jnpfKey === 'table'
-          const id = isTableChild ? parent.__vModel__ + '-' + data.__vModel__ : data.__vModel__
-          const label = isTableChild ? parent.__config__.label + '-' + data.__config__.label : data.__config__.label
-          data.__vModel__ = id
-          data.__config__.label = label
-          list.push(data)
-          if (data.__vModel__.indexOf('_jnpf_') < 0) list1.push(data)
-        }
-      }
-    }
-    loop(getDrawingList())
-    this.list = list
-    let options = list.filter(o => noColumnShowList.indexOf(o.__config__.jnpfKey) < 0)
-    let searchOptions = list.filter(o => noSearchList.indexOf(o.__config__.jnpfKey) < 0)
-    let sortOptions = list1.filter(o => noColumnShowList.indexOf(o.__config__.jnpfKey) < 0)
-    sortOptions = sortOptions.filter(o => o.__vModel__.indexOf('-') < 0)
-    this.groupFieldOptions = list.filter(o => o.__vModel__.indexOf('-') < 0)
-    this.columnOptions = options.map(o => ({
-      label: o.__config__.label,
-      prop: o.__vModel__,
-      align: 'left',
-      jnpfKey: o.__config__.jnpfKey,
-      sortable: false,
-      width: null,
-      ...o
-    }));
-    this.searchOptions = searchOptions.map(o => ({
-      label: o.__config__.label,
-      prop: o.__vModel__,
-      jnpfKey: o.__config__.jnpfKey,
-      value: '',
-      searchType: getSearchType(o),
-      ...o
-    }));
-    this.sortOptions = sortOptions.map(o => ({
-      label: o.__config__.label,
-      prop: o.__vModel__,
-      jnpfKey: o.__config__.jnpfKey,
-      ...o
-    }));
     if (typeof this.conf === 'object' && this.conf !== null) {
       this.columnData = Object.assign({}, defaultColumnData, this.conf)
     }
-    this.columnData.columnOptions = options
-    if (!this.columnOptions.length) this.columnData.columnList = []
-    if (!this.searchOptions.length) this.columnData.searchList = []
-    if (!this.sortOptions.length) this.columnData.sortList = []
-    this.setBtnValue(this.columnData.btnsList, this.btnsOption)
-    this.setBtnValue(this.columnData.columnBtnsList, this.columnBtnsOption)
+    if (this.webType != 4) {
+      let list = []
+      let list1 = []
+      const loop = (data, parent) => {
+        if (!data) return
+        if (data.__config__ && data.__config__.children && Array.isArray(data.__config__.children)) {
+          loop(data.__config__.children, data)
+        }
+        if (Array.isArray(data)) data.forEach(d => loop(d, parent))
+        if (data.__config__ && data.__config__.jnpfKey) {
+          const visibility = !data.__config__.visibility || (Array.isArray(data.__config__.visibility) && data.__config__.visibility.includes('app'))
+          if (data.__config__.layout === "colFormItem" && data.__vModel__ && visibility) {
+            const isTableChild = parent && parent.__config__ && parent.__config__.jnpfKey === 'table'
+            const id = isTableChild ? parent.__vModel__ + '-' + data.__vModel__ : data.__vModel__
+            const label = isTableChild ? parent.__config__.label + '-' + data.__config__.label : data.__config__.label
+            data.__vModel__ = id
+            data.__config__.label = label
+            list.push(data)
+            if (data.__vModel__.indexOf('_jnpf_') < 0) list1.push(data)
+          }
+        }
+      }
+      loop(getDrawingList())
+      this.list = list
+      let options = list.filter(o => noColumnShowList.indexOf(o.__config__.jnpfKey) < 0)
+      let searchOptions = list.filter(o => noSearchList.indexOf(o.__config__.jnpfKey) < 0)
+      let sortOptions = list1.filter(o => noColumnShowList.indexOf(o.__config__.jnpfKey) < 0)
+      sortOptions = sortOptions.filter(o => o.__vModel__.indexOf('-') < 0)
+      this.groupFieldOptions = list.filter(o => o.__vModel__.indexOf('-') < 0)
+      this.columnOptions = options.map(o => ({
+        label: o.__config__.label,
+        prop: o.__vModel__,
+        align: 'left',
+        jnpfKey: o.__config__.jnpfKey,
+        sortable: false,
+        width: null,
+        ...o
+      }));
+      this.searchOptions = searchOptions.map(o => ({
+        label: o.__config__.label,
+        prop: o.__vModel__,
+        jnpfKey: o.__config__.jnpfKey,
+        value: '',
+        searchType: getSearchType(o),
+        ...o
+      }));
+      this.sortOptions = sortOptions.map(o => ({
+        label: o.__config__.label,
+        prop: o.__vModel__,
+        jnpfKey: o.__config__.jnpfKey,
+        ...o
+      }));
+      this.columnData.columnOptions = options
+      if (!this.columnOptions.length) this.columnData.columnList = []
+      if (!this.searchOptions.length) this.columnData.searchList = []
+      if (!this.sortOptions.length) this.columnData.sortList = []
+      this.setBtnValue(this.columnData.btnsList, this.btnsOption)
+      this.setBtnValue(this.columnData.columnBtnsList, this.columnBtnsOption)
+    } else {
+      if (!this.interfaceId) return
+      const query = {
+        paramList: this.templateJson || []
+      }
+      getFields(this.interfaceId, query).then(res => {
+        let fieldsList = res.data
+        this.columnOptions = fieldsList.map(o => ({
+          label: "",
+          prop: o,
+          fixed: 'none',
+          align: 'left',
+          jnpfKey: o,
+          sortable: false,
+          width: null,
+        }));
+        this.searchOptions = fieldsList.map(o => ({
+          label: "",
+          prop: o,
+          jnpfKey: o,
+          value: '',
+          searchType: 1,
+          __vModel__: o,
+          __config__: {
+            label: ""
+          }
+        }));
+        this.sortOptions = fieldsList.map(o => ({
+          label: '',
+          prop: o,
+          jnpfKey: o,
+        }));
+        if (!this.columnOptions.length) this.columnData.columnList = []
+        if (!this.searchOptions.length) this.columnData.searchList = []
+        this.$nextTick(() => {
+          this.setListValue(this.columnData.columnList, this.columnOptions, 'column')
+          this.setListValue(this.columnData.searchList, this.searchOptions, "search")
+          this.setListValue(this.columnData.sortList, this.sortOptions, 'sort')
+        })
+      })
+    }
+
+
     this.btnsList = this.columnData.btnsList.map(o => o.value)
     this.columnBtnsList = this.columnData.columnBtnsList.map(o => o.value)
   },
@@ -410,6 +479,7 @@ export default {
             if (type === 'search') {
               data[ii].searchType = replacedData[i].searchType
             }
+            data[ii].label = replacedData[i].label
             res.push(data[ii])
             break inter
           }

@@ -47,8 +47,8 @@
           <el-table-column prop="category" label="分类" width="150" />
           <el-table-column prop="webType" label="模式" width="100" align="center">
             <template slot-scope="scope">
-              <span v-if="scope.row.webType == 1">普通表单</span>
-              <span v-else>数据视图</span>
+              <span v-if="scope.row.webType == 4">数据视图</span>
+              <span v-else>普通表单</span>
             </template>
           </el-table-column>
           <el-table-column prop="creatorUser" label="创建人" width="120" />
@@ -65,7 +65,8 @@
           </el-table-column>
           <el-table-column label="操作" fixed="right" width="150">
             <template slot-scope="scope">
-              <tableOpts @edit="addOrUpdateHandle(scope.row.id)" @del="handleDel(scope.row.id)">
+              <tableOpts @edit="addOrUpdateHandle(scope.row.id,scope.row.webType)"
+                @del="handleDel(scope.row.id)">
                 <el-dropdown>
                   <span class="el-dropdown-link">
                     <el-button type="text" size="mini">{{$t('common.moreBtn')}}<i
@@ -103,6 +104,7 @@
       </div>
     </div>
     <Form v-if="formVisible" ref="Form" @close="closeForm" />
+    <ViewForm v-if="viewFormVisible" ref="ViewForm" @close="closeForm" />
     <AddBox :visible.sync="addVisible" :webType="currWebType" @add="handleAdd" />
     <el-dialog title="同步菜单" :visible.sync="releaseDialogVisible"
       class="JNPF-dialog JNPF-dialog_center release-dialog" lock-scroll width="600px">
@@ -156,6 +158,7 @@
 
 <script>
 import Form from './Form'
+import ViewForm from './ViewForm'
 import LinkDialog from './ShortLinkDialog.vue'
 import AddBox from '@/views/generator/AddBox'
 import mixin from '@/mixins/generator/index'
@@ -167,7 +170,7 @@ import FlowManage from '@/views/workFlow/flowEngine/FlowManagement'
 export default {
   name: 'onlineDev-webDesign',
   mixins: [mixin],
-  components: { Form, AddBox, previewDialog, EngineForm, FlowManage, LinkDialog },
+  components: { Form, ViewForm, AddBox, previewDialog, EngineForm, FlowManage, LinkDialog },
   data() {
     return {
       query: { keyword: '', type: 1 },
@@ -200,6 +203,7 @@ export default {
       engineFormVisible: false,
       manageVisible: false,
       linkVisible: false,
+      viewFormVisible: false,
     }
   },
   created() {
@@ -212,9 +216,6 @@ export default {
       this.$nextTick(() => {
         this.previewDialogVisible = true
       })
-    },
-    handleLink() {
-
     },
     releaseModel() {
       this.$refs['releaseForm'].validate((valid) => {
