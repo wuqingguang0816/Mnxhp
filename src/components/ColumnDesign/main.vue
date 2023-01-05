@@ -246,6 +246,16 @@
                   <el-option label="折叠展示" :value="2" />
                 </el-select>
               </el-form-item>
+              <el-form-item label="合计配置">
+                <el-switch v-model="columnData.configurationTotal"></el-switch>
+              </el-form-item>
+              <el-form-item label="合计字段" v-if="columnData.configurationTotal">
+                <el-select v-model="columnData.fieldsTotal" placeholder="请选择合计字段" clearable
+                  multiple>
+                  <el-option :label="item.__config__.label" :value="item.__vModel__"
+                    v-for="(item, i) in groupFieldOptions" :key="i"></el-option>
+                </el-select>
+              </el-form-item>
               <el-divider>按钮配置</el-divider>
               <el-checkbox-group v-model="btnsList" class="btnsList">
                 <div v-for="item in btnsOption" :key="item.value">
@@ -367,6 +377,8 @@ const defaultColumnData = {
   searchList: [], // 查询字段
   hasSuperQuery: true, // 高级查询
   childTableStyle: 1, // 子表样式
+  configurationTotal: true, // 合计配置
+  fieldsTotal: [], // 合计字段
   columnList: [], // 字段列表
   columnOptions: [], // 字段列表
   defaultColumnList: [], // 所有可选择字段列表
