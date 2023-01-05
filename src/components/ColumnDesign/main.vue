@@ -471,7 +471,10 @@ export default {
     webType: '',
     modelType: '',
     interfaceId: '',
-    templateJson: []
+    templateJson: {
+      type: Array,
+      default: () => []
+    },
   },
   components: { draggable, FormScript, uploadBox, CustomBtn, InterfaceDialog },
   data() {

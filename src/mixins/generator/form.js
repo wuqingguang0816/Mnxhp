@@ -67,6 +67,7 @@ export default {
           getVisualDevInfo(this.dataForm.id).then(res => {
             this.dataForm = res.data
             this.dataForm.webType = this.dataForm.webType || 2
+            this.dataForm.interfaceParam = this.dataForm.interfaceParam ? JSON.parse(this.dataForm.interfaceParam) : []
             if (isToggle) this.dataForm.webType = webType
             if (parseInt(this.dataForm.webType) == 4) {
               this.maxStep = 1
@@ -110,6 +111,26 @@ export default {
           this.$refs['columnDesign'].getData().then(res => {
             this.columnData = res.columnData
             this.appColumnData = res.appColumnData
+            for (let i = 0; i < this.columnData.searchList.length; i++) {
+              const element = this.columnData.searchList[i];
+              if (!element.__config__.label) return this.$message({ message: '查询字段列名不能为空', type: 'warning' })
+            }
+            for (let i = 0; i < this.columnData.columnList.length; i++) {
+              const element = this.columnData.columnList[i];
+              if (!element.label) return this.$message({ message: '列表字段列名不能为空', type: 'warning' })
+            }
+            for (let i = 0; i < this.appColumnData.searchList.length; i++) {
+              const element = this.appColumnData.searchList[i];
+              if (!element.label) return this.$message({ message: '查询字段列名不能为空', type: 'warning' })
+            }
+            for (let i = 0; i < this.appColumnData.sortList.length; i++) {
+              const element = this.appColumnData.sortList[i];
+              if (!element.label) return this.$message({ message: '排序字段列名不能为空', type: 'warning' })
+            }
+            for (let i = 0; i < this.appColumnData.columnList.length; i++) {
+              const element = this.appColumnData.columnList[i];
+              if (!element.label) return this.$message({ message: '列表字段列名不能为空', type: 'warning' })
+            }
             getData()
             this.formSubmit()
           }).catch(err => {

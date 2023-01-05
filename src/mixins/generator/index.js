@@ -121,6 +121,7 @@ export default {
     },
     closeForm(isRefresh) {
       this.formVisible = false
+      this.viewFormVisible = false
       if (isRefresh) {
         this.initData()
       }
