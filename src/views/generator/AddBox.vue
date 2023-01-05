@@ -3,7 +3,7 @@
     v-bind="$attrs" v-on="$listeners" class="JNPF-dialog JNPF-dialog_center JNPF-dialog-add"
     :width="webType?'310px':'600px'">
     <div class="add-main">
-      <div class="add-item add-item-left" @click="add(1)" v-if="webType!==1">
+      <div class="add-item add-item-left" @click="add(2)" v-if="webType!==1">
         <i class="add-icon el-icon-document"></i>
         <div class="add-txt">
           <p class="add-title">表单</p>

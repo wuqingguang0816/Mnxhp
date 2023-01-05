@@ -48,6 +48,7 @@
           <el-table-column prop="webType" label="模式" width="100" align="center">
             <template slot-scope="scope">
               <span v-if="scope.row.webType == 4">数据视图</span>
+              <span v-else-if="scope.row.enableFlow">流程表单</span>
               <span v-else>普通表单</span>
             </template>
           </el-table-column>
