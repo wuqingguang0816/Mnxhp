@@ -203,13 +203,13 @@ export default {
       if (!id) {
         this.dataForm.interfaceId = ''
         this.dataForm.interfaceName = ''
-        this.dataForm.templateJson = []
+        this.dataForm.interfaceParam = []
         return
       }
       if (this.dataForm.interfaceId === id) return
       this.dataForm.interfaceId = id
       this.dataForm.interfaceName = row.fullName
-      this.dataForm.templateJson = row.templateJson || []
+      this.dataForm.interfaceParam = row.templateJson || []
     }
   }
 }
