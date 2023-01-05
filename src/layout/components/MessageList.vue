@@ -130,22 +130,32 @@ export default {
       });
     },
     readInfo(item) {
-      ReadInfo(item.id).then(res => {
-        this.info = res.data
-        this.files = res.data.files ? JSON.parse(res.data.files) : []
+      if (item.type == 2 && item.flowType == 2) {
         if (item.isRead == '0') {
           item.isRead = '1'
           this.$emit('read')
         }
-        if (item.type == 1) {
-          this.visible = true
-        } else {
-          if (!res.data.bodyText) return
-          this.drawer = false
-          const Base64 = require('js-base64').Base64
-          this.$router.push('/workFlowDetail?config=' + encodeURIComponent(Base64.encode(res.data.bodyText)))
-        }
-      })
+        this.drawer = false
+        this.$router.push('/entrust?config=1')
+      } else {
+        ReadInfo(item.id).then(res => {
+          this.info = res.data
+          this.files = res.data.files ? JSON.parse(res.data.files) : []
+          if (item.isRead == '0') {
+            item.isRead = '1'
+            this.$emit('read')
+          }
+          if (item.type == 1) {
+            this.visible = true
+          } else {
+            if (!res.data.bodyText) return
+            this.drawer = false
+            const Base64 = require('js-base64').Base64
+            this.$router.push('/workFlowDetail?config=' + encodeURIComponent(Base64.encode(res.data.bodyText)))
+          }
+        })
+      }
+
     },
     gotoCenter() {
       this.drawer = false

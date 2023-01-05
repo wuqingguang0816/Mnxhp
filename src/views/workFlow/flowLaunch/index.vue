@@ -83,7 +83,12 @@
           </div>
         </div>
         <JNPF-table v-loading="listLoading" :data="list">
-          <el-table-column prop="fullName" label="流程标题" show-overflow-tooltip min-width="150" />
+          <el-table-column prop="fullName" label="流程标题" show-overflow-tooltip min-width="150">
+            <template slot-scope="scope">
+              <el-tag type="success" v-if="scope.row.delegateUser">委托</el-tag>
+              {{scope.row.fullName}}
+            </template>
+          </el-table-column>
           <el-table-column prop="flowName" label="所属流程" width="130" />
           <el-table-column prop="startTime" label="发起时间" width="130"
             :formatter="jnpf.tableDateFormat" />
