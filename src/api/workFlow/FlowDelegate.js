@@ -56,3 +56,11 @@ export function getUserListByFlowId(data) {
     data
   })
 }
+
+// 流程委托结束
+export function Stop(id) {
+  return request({
+    url: `/api/workflow/Engine/FlowDelegate/Stop/${id}`,
+    method: 'get'
+  })
+}
