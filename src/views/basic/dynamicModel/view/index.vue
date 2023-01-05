@@ -2,6 +2,7 @@
 <template>
   <div class="JNPF-common-layout">
     <div class="JNPF-common-layout-center">
+      <Search ref="Search" :list="columnData.searchList" @reset="reset" @search="searchData" />
       <div class="JNPF-common-layout-main JNPF-flex-main">
         <div class="JNPF-common-head">
           <div></div>
@@ -22,25 +23,6 @@
           :hasNO="!(columnData.childTableStyle==2&&childColumnList.length&&columnData.type != 3&&columnData.type != 4)"
           :hasNOFixed="columnList.some(o=>o.fixed == 'left')">
           <template>
-            <template
-              v-if="columnData.childTableStyle==2&&childColumnList.length&&columnData.type ==1&&columnData.type == 2">
-              <el-table-column width="0" />
-              <el-table-column type="expand" width="40">
-                <template slot-scope="scope">
-                  <el-tabs>
-                    <el-tab-pane :label="child.label" v-for="(child,cIndex) in childColumnList"
-                      :key="cIndex">
-                      <el-table :data="scope.row[child.prop]" size='mini'>
-                        <el-table-column :prop="childTable.vModel" :label="childTable.childLabel"
-                          :align="childTable.align" :width="childTable.width"
-                          v-for="(childTable,iii) in child.children" :key="iii" />
-                      </el-table>
-                    </el-tab-pane>
-                  </el-tabs>
-                </template>
-              </el-table-column>
-              <el-table-column type="index" width="50" label="序号" align="center" />
-            </template>
             <template v-for="(item, i) in columnList">
               <template v-if="item.jnpfKey==='table'">
                 <el-table-column :prop="item.prop" :label="item.label" :align="item.align" :key="i"
@@ -111,16 +93,16 @@ import { Create, Update } from '@/api/workFlow/workFlowForm'
 import { getDictionaryDataSelector } from '@/api/systemData/dictionary'
 import { getDataInterfaceRes } from '@/api/systemData/dataInterface'
 import { getColumnsByModuleId } from '@/api/common'
-import { systemComponentsList } from '@/components/Generator/generator/comConfig'
 import { Candidates } from '@/api/workFlow/FlowBefore'
 import request from '@/utils/request'
+import Search from '../list/Search'
 
 export default {
   name: 'dynamicModel',
   props: ['config', 'modelId', 'isPreview'],
+  components: { Search },
   data() {
     return {
-      systemComponentsList,
       keyword: '',
       treeProps: {
         children: 'children',
@@ -146,14 +128,6 @@ export default {
         sort: 'desc',
         sidx: '',
       },
-      flowVisible: false,
-      formVisible: false,
-      detailVisible: false,
-      importBoxVisible: false,
-      exportBoxVisible: false,
-      uploadBoxVisible: false,
-      customBoxVisible: false,
-      superQueryVisible: false,
       treeData: [],
       expandsTree: true,
       treeActiveId: '',
@@ -208,6 +182,12 @@ export default {
       this.refreshTable = false
       if (!this.config.columnData) return
       this.columnData = JSON.parse(this.config.columnData)
+      if (this.config.webType == 4) {
+        for (let i = 0; i < this.columnData.searchList.length; i++) {
+          const element = this.columnData.searchList[i];
+          element.__config__.jnpfKey = 'comInput'
+        }
+      }
       if (this.columnData.type === 3) {
         this.columnData.columnList = this.columnData.columnList.filter(o => o.prop != this.columnData.groupField)
       }
@@ -236,7 +216,6 @@ export default {
       this.initData()
     },
     initData() {
-      console.log(this.columnData)
       if (this.isPreview) return
       this.listLoading = true
       getModelList(this.modelId, this.listQuery).then(res => {
@@ -262,21 +241,6 @@ export default {
       }).catch(() => {
         this.listLoading = false
       })
-    },
-    toDetail(item, defaultValue) {
-      if (!defaultValue) return
-      this.mainLoading = true
-      getConfigData(item.modelId).then(res => {
-        this.mainLoading = false
-        if (!res.data) return
-        if (!res.data.formData) return
-        let formData = JSON.parse(res.data.formData)
-        formData.popupType = this.formData.popupType
-        this.detailVisible = true
-        this.$nextTick(() => {
-          this.$refs.Detail.init(formData, item.modelId, defaultValue)
-        })
-      }).catch(() => { this.mainLoading = false })
     },
     getTreeView() {
       if (this.columnData.treeDataSource === "dictionary") {
@@ -549,150 +513,14 @@ export default {
       let item = JSON.parse(JSON.stringify(this.cacheList[index]))
       this.$set(this.list, index, item)
     },
-    addHandleForRowEdit() {
-      let item = {
-        rowEdit: true
-      }
-      for (let i = 0; i < this.columnData.columnList.length; i++) {
-        let e = this.columnData.columnList[i]
-        item[e.__vModel__] = e.__config__.defaultValue
-      }
-      this.list.unshift(item)
-    },
-    addOrUpdateHandle(id) {
-      if (this.config.enableFlow == 1) {
-        let data = {
-          id: id || '',
-          enCode: this.config.flowEnCode,
-          flowId: this.config.flowId,
-          formType: 2,
-          type: 1,
-          opType: '-1',
-          modelId: this.modelId,
-          isPreview: this.isPreview,
-          formConf: JSON.stringify(this.formData)
-        }
-        this.flowVisible = true
-        this.$nextTick(() => {
-          this.$refs.FlowBox.init(data)
-        })
-      } else {
-        this.formVisible = true
-        this.$nextTick(() => {
-          this.$refs.Form.init(this.formData, this.modelId, id, this.isPreview, this.columnData.useFormPermission)
-        })
-      }
-    },
-    headBtnsHandel(key) {
-      if (key === 'add') {
-        if (this.columnData.type === 4) {
-          this.addHandleForRowEdit()
-        } else {
-          this.addOrUpdateHandle()
-        }
-      }
-      if (key == 'download') {
-        this.exportBoxVisible = true
-        this.$nextTick(() => {
-          this.$refs.ExportBox.init(this.exportList)
-        })
-      }
-      if (key == 'upload') {
-        this.uploadBoxVisible = true
-        this.$nextTick(() => {
-          this.$refs.UploadBox.init(this.modelId)
-        })
-      }
-      if (this.isPreview) return
-      if (key === 'batchRemove') {
-        this.batchRemove()
-      }
-    },
     handleSelectionChange(val) {
       const res = val.map(item => item.id)
       this.multipleSelection = res
-    },
-    batchRemove() {
-      if (!this.multipleSelection.length) {
-        this.$message({
-          type: 'error',
-          message: '请选择一条数据',
-          duration: 1500,
-        })
-        return
-      }
-      this.$confirm('您确定要删除这些数据吗, 是否继续?', '提示', {
-        type: 'warning'
-      }).then(() => {
-        batchDelete(this.modelId, this.multipleSelection).then(res => {
-          this.$message({
-            type: 'success',
-            message: res.msg,
-            duration: 1500,
-            onClose: () => {
-              this.initData()
-            }
-          })
-        })
-      }).catch(() => { })
-    },
-    download(data) {
-      if (this.isPreview) return this.$message({ message: '功能预览不支持数据导出', type: 'warning' })
-      let query = { ...this.listQuery, ...data }
-      exportModel(this.modelId, query).then(res => {
-        if (!res.data.url) return
-        this.jnpf.downloadFile(res.data.url)
-        this.$refs.ExportBox.visible = false
-        this.exportBoxVisible = false
-      })
-    },
-    columnBtnsHandel(key, row, index) {
-      if (key === 'edit') {
-        this.addOrUpdateHandle(row.id)
-      }
-      if (key === 'detail') {
-        this.goDetail(row.id, row)
-      }
-      if (key == 'remove') {
-        this.handleDel(row.id, index)
-      }
-    },
-    goDetail(id, row) {
-      if (this.config.enableFlow == 1) {
-        let data = {
-          id,
-          enCode: this.config.flowEnCode,
-          flowId: this.config.flowId,
-          formType: 2,
-          type: 1,
-          opType: 0,
-          modelId: this.modelId,
-          isPreview: this.isPreview,
-          status: row.flowState
-        }
-        this.flowVisible = true
-        this.$nextTick(() => {
-          this.$refs.FlowBox.init(data)
-        })
-      } else {
-        this.detailVisible = true
-        this.$nextTick(() => {
-          this.$refs.Detail.init(this.formData, this.modelId, id, this.columnData.useFormPermission)
-        })
-      }
     },
     sortChange({ column, prop, order }) {
       this.listQuery.sort = order == 'ascending' ? 'asc' : 'desc'
       this.listQuery.sidx = !order ? '' : prop
       this.initData()
-    },
-    refresh(isRefresh) {
-      this.formVisible = false
-      if (isRefresh) this.initData()
-    },
-    closeFlow(isRefresh) {
-      this.flowVisible = false
-      if (isRefresh) this.initData()
     },
     reset() {
       this.listQuery.sort = this.defaultListQuery.sort
@@ -720,12 +548,6 @@ export default {
       this.listQuery.currentPage = 1
       this.initData()
     },
-    openSuperQuery() {
-      this.superQueryVisible = true
-      this.$nextTick(() => {
-        this.$refs.SuperQuery.init()
-      })
-    },
     superQuery(queryJson) {
       if (this.isPreview) return
       this.listQuery.superQueryJson = queryJson
@@ -736,13 +558,6 @@ export default {
       if (item.btnType == 1) this.handlePopup(item, row, index)
       if (item.btnType == 2) this.handleScriptFunc(item, row, index)
       if (item.btnType == 3) this.handleInterface(item, row, index)
-
-    },
-    handlePopup(item, row, index) {
-      this.customBoxVisible = true
-      this.$nextTick(() => {
-        this.$refs.CustomBox.init(item, this.modelId, row.id, this.isPreview)
-      })
     },
     handleScriptFunc(item, row, index) {
       const parameter = {
@@ -796,11 +611,6 @@ export default {
       const func = this.jnpf.getScriptFunc.call(this, this.columnData.funcs.afterOnload.func)
       if (!func) return
       func.call(this, parameter)
-    },
-
-    filterNode(value, data) {
-      if (!value) return true;
-      return data[this.treeProps.label].indexOf(value) !== -1;
     },
     toggleTreeExpand(expands) {
       this.refreshTree = false
