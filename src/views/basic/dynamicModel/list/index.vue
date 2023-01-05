@@ -273,7 +273,8 @@
                 :width="item.width" :key="i" :sortable="item.sortable?'custom':item.sortable">
                 <template slot-scope="scope">
                   <el-link :underline="false"
-                    @click.native="toDetail(scope.row,scope.row[`${item.prop}_id`])" type="primary">
+                    @click.native="toDetail(item.modelId,scope.row,scope.row[`${item.prop}_id`])"
+                    type="primary">
                     {{ scope.row[item.prop] }}</el-link>
                 </template>
               </el-table-column>
@@ -602,7 +603,7 @@ export default {
     toDetail(item, defaultValue) {
       if (!defaultValue) return
       this.mainLoading = true
-      getConfigData(item.modelId).then(res => {
+      getConfigData(modelId).then(res => {
         this.mainLoading = false
         if (!res.data) return
         if (!res.data.formData) return
@@ -610,7 +611,7 @@ export default {
         formData.popupType = this.formData.popupType
         this.detailVisible = true
         this.$nextTick(() => {
-          this.$refs.Detail.init(formData, item.modelId, defaultValue)
+          this.$refs.Detail.init(formData, modelId, defaultValue)
         })
       }).catch(() => { this.mainLoading = false })
     },
