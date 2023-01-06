@@ -126,6 +126,13 @@ export function getBatchFlowSelector() {
     method: 'get'
   })
 }
+// 获取批量审批流程（小id）
+export function getBatchFlowJsonList(id) {
+  return request({
+    url: `/api/workflow/Engine/FlowBefore/BatchFlowJsonList/${id}`,
+    method: 'get'
+  })
+}
 // 获取流程节点列表
 export function getNodeSelector(id) {
   return request({

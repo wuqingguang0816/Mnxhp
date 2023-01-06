@@ -19,7 +19,16 @@
             <el-col :span="6">
               <el-form-item label="所属流程">
                 <el-select v-model="listQuery.templateId" placeholder="选择所属流程" clearable
-                  @change="onFlowChange">
+                  @change="onTemplateIdChange">
+                  <el-option v-for="item in templateOptions" :key="item.id" :label="item.fullName"
+                    :value="item.id" />
+                </el-select>
+              </el-form-item>
+            </el-col>
+            <el-col :span="6">
+              <el-form-item label="所属名称">
+                <el-select v-model="listQuery.flowId" placeholder="选择所属名称" clearable
+                  @change="onFlowChange" @visible-change="visibleFlowChange">
                   <el-option v-for="item in flowOptions" :key="item.id" :label="item.fullName"
                     :value="item.id" />
                 </el-select>
@@ -125,11 +134,10 @@
 </template>
 
 <script>
-import { FlowBeforeList, getBatchFlowSelector, getNodeSelector, BatchCandidate, BatchOperation } from '@/api/workFlow/FlowBefore'
+import { FlowBeforeList, getBatchFlowSelector, getBatchFlowJsonList, getNodeSelector, BatchCandidate, BatchOperation, RejectList } from '@/api/workFlow/FlowBefore'
 import ApproveDialog from '@/views/workFlow/components/ApproveDialog'
 import ActionDialog from '@/views/workFlow/components/ActionDialog'
 import ErrorForm from '../components/ErrorForm'
-import { RejectList } from '@/api/workFlow/FlowBefore'
 export default {
   components: { ApproveDialog, ErrorForm, ActionDialog },
   props: ['categoryList'],
@@ -144,6 +152,7 @@ export default {
       listQuery: {
         keyword: '',
         templateId: '',
+        flowId: '',
         nodeCode: '',
         flowCategory: '',
         creatorUserId: '',
@@ -154,6 +163,7 @@ export default {
         sort: 'desc',
         sidx: ''
       },
+      templateOptions: [],
       flowOptions: [],
       nodeOptions: [],
       multipleSelection: [],
@@ -218,22 +228,39 @@ export default {
     },
     getBatchFlowSelector() {
       getBatchFlowSelector().then(res => {
+        this.templateOptions = res.data
+      })
+    },
+    getBatchFlowJsonList() {
+      getBatchFlowJsonList(this.listQuery.templateId).then(res => {
         this.flowOptions = res.data
       })
     },
     getNodeSelector() {
-      getNodeSelector(this.listQuery.templateId).then(res => {
+      getNodeSelector(this.listQuery.flowId).then(res => {
         this.nodeOptions = res.data
       })
+    },
+    onTemplateIdChange(val) {
+      this.listQuery.flowId = ''
+      this.listQuery.nodeCode = ''
+      this.flowOptions = []
+      this.nodeOptions = []
+      if (!val) return
+      this.getBatchFlowJsonList()
     },
     onFlowChange(val) {
       this.listQuery.nodeCode = ''
       if (!val) return this.nodeOptions = []
       this.getNodeSelector()
     },
-    visibleChange(val) {
+    visibleFlowChange(val) {
       if (!val) return
       if (!this.listQuery.templateId) this.$message.warning('请先选择所属流程')
+    },
+    visibleChange(val) {
+      if (!val) return
+      if (!this.listQuery.flowId) this.$message.warning('请先选择所属名称')
     },
     handleChange(val) {
       this.multipleSelection = val
@@ -384,6 +411,7 @@ export default {
       this.listQuery = {
         keyword: '',
         templateId: '',
+        flowId: '',
         nodeCode: '',
         flowCategory: '',
         creatorUserId: '',
