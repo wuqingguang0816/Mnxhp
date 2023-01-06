@@ -153,7 +153,7 @@
     <previewDialog :visible.sync="previewDialogVisible" :id="currId" :previewType="previewType"
       type="webDesign" />
     <EngineForm v-if="engineFormVisible" ref="engineForm" />
-    <FlowManage v-if="manageVisible" ref="FlowManage" />
+    <FlowManage v-if="manageVisible" ref="FlowManage" @close="manageVisible=false" />
     <LinkDialog v-if="linkVisible" ref="LinkDialog" />
   </div>
 </template>
