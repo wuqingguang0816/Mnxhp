@@ -524,6 +524,8 @@ export default {
             this.$emit('close', true)
           }
         })
+      }).catch(() => {
+        this.$refs.suspendDialog.btnLoading = false
       })
     },
     suspendReceiver(dataForm) {
