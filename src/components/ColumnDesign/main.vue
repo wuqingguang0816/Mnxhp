@@ -667,6 +667,15 @@ export default {
             label: ""
           }
         }));
+        this.groupFieldOptions = fieldsList.map(o => ({
+          label: o,
+          prop: o,
+          jnpfKey: o,
+          __vModel__: o,
+          __config__: {
+            label: o
+          }
+        }));
         if (!this.columnOptions.length) this.columnData.columnList = []
         if (!this.searchOptions.length) this.columnData.searchList = []
         this.$nextTick(() => {
