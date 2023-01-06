@@ -274,7 +274,7 @@
                 :width="item.width" :key="i" :sortable="item.sortable?'custom':item.sortable">
                 <template slot-scope="scope">
                   <el-link :underline="false"
-                    @click.native="toDetail(item.modelId,scope.row,scope.row[`${item.prop}_id`])"
+                    @click.native="toDetail(item.modelId,scope.row[`${item.prop}_id`])"
                     type="primary">
                     {{ scope.row[item.prop] }}</el-link>
                 </template>
@@ -316,7 +316,7 @@
                       <template v-if="columnData.type === 4">
                         <el-button size="mini" type="text" :key="i"
                           :disabled="config.enableFlow==1 && [1,2,4,5].indexOf(scope.row.flowState)>-1"
-                          @click="scope.row.rowEdit=true">
+                          @click="editForRowEdit(scope.row)">
                           {{item.label}}</el-button>
                       </template>
                       <template v-else>
@@ -421,6 +421,15 @@
     <candidate-form :visible.sync="candidateVisible" :candidateList="candidateList"
       :branchList="branchList" taskId="0" :formData="workFlowFormData"
       @submitCandidate="submitCandidate" :isCustomCopy="isCustomCopy" />
+    <el-dialog title="请选择流程" :close-on-click-modal="false" append-to-body
+      :visible.sync="flowListVisible" class="JNPF-dialog template-dialog JNPF-dialog_center"
+      lock-scroll width="400px">
+      <el-scrollbar class="template-list">
+        <div class="template-item" v-for="item in flowList" :key="item.id"
+          @click="selectFlow(item)">{{item.fullName}}
+        </div>
+      </el-scrollbar>
+    </el-dialog>
   </div>
 </template>
 
@@ -432,6 +441,7 @@ import { getDataInterfaceRes } from '@/api/systemData/dataInterface'
 import { getColumnsByModuleId } from '@/api/common'
 import { dyOptionsList, systemComponentsList } from '@/components/Generator/generator/comConfig'
 import { Candidates } from '@/api/workFlow/FlowBefore'
+import { getFlowList } from '@/api/workFlow/FlowEngine'
 import request from '@/utils/request'
 import Form from './Form'
 import FlowBox from '@/views/workFlow/components/FlowBox'
@@ -513,6 +523,9 @@ export default {
       rowStyle: null,
       cellStyle: null,
       refreshTree: true,
+      flowList: [],
+      flowListVisible: false,
+      currFlow: {}
     }
   },
   computed: {
@@ -540,8 +553,7 @@ export default {
         this.columnData.columnList = this.columnData.columnList.filter(o => o.prop != this.columnData.groupField)
       }
       if (this.config.enableFlow == 1) {
-        this.flowTemplateJson = this.config.flowTemplateJson ? JSON.parse(this.config.flowTemplateJson) : {}
-        this.isCustomCopy = this.flowTemplateJson.properties && this.flowTemplateJson.properties.isCustomCopy
+        if (this.config.flowId) this.getFlowList()
       }
       this.hasBatchBtn = this.columnData.btnsList.some(o => o.value == 'batchRemove')
       this.formData = JSON.parse(this.config.formData)
@@ -630,18 +642,17 @@ export default {
       })
       return sums;
     },
-    toDetail(modelId, item, defaultValue) {
-      if (!defaultValue) return
+    toDetail(modelId, id) {
+      if (!id) return
       this.mainLoading = true
       getConfigData(modelId).then(res => {
         this.mainLoading = false
-        if (!res.data) return
-        if (!res.data.formData) return
+        if (!res.data || !res.data.formData) return
         let formData = JSON.parse(res.data.formData)
         formData.popupType = this.formData.popupType
         this.detailVisible = true
         this.$nextTick(() => {
-          this.$refs.Detail.init(formData, modelId, defaultValue)
+          this.$refs.Detail.init(formData, modelId, id)
         })
       }).catch(() => { this.mainLoading = false })
     },
@@ -830,6 +841,15 @@ export default {
         }
       }).catch(() => { });
     },
+    editForRowEdit(row) {
+      row.rowEdit = true
+      if (!row.flowId) return
+      const list = this.flowList.filter(o => o.id === row.flowId)
+      if (!list.length) return
+      this.currFlow = list[0]
+      let flowTemplateJson = this.currFlow.flowTemplateJson ? JSON.parse(this.currFlow.flowTemplateJson) : {}
+      this.isCustomCopy = flowTemplateJson.properties && flowTemplateJson.properties.isCustomCopy
+    },
     saveForRowEdit(row, status, candidateData) {
       if (this.isPreview) return this.$message({ message: '功能预览不支持数据保存', type: 'warning' })
       if (this.config.enableFlow == 1) {
@@ -838,7 +858,7 @@ export default {
           status: status || "1",
           candidateType: this.candidateType,
           formData: row,
-          flowId: this.config.flowId,
+          flowId: this.currFlow.id,
           flowUrgent: 1
         }
         if (candidateData) query = { ...query, ...candidateData }
@@ -879,7 +899,7 @@ export default {
       this.workFlowFormData = {
         id: row.id,
         formData: row,
-        flowId: this.config.flowId
+        flowId: this.currFlow.id
       }
       Candidates(0, this.workFlowFormData).then(res => {
         let data = res.data
@@ -926,18 +946,61 @@ export default {
       }
       this.list.unshift(item)
     },
-    addOrUpdateHandle(id) {
+    addHandle() {
+      if (this.config.enableFlow == 1) {
+        if (!this.flowList.length) {
+          this.$message({
+            type: 'error',
+            message: '流程不存在'
+          });
+        } else if (this.flowList.length === 1) {
+          this.selectFlow(this.flowList[0])
+        } else {
+          this.flowListVisible = true
+        }
+      } else {
+        if (this.columnData.type === 4) {
+          this.addHandleForRowEdit()
+        } else {
+          this.formVisible = true
+          this.$nextTick(() => {
+            this.$refs.Form.init(this.formData, this.modelId, '', this.isPreview, this.columnData.useFormPermission)
+          })
+        }
+      }
+    },
+    selectFlow(item) {
+      this.currFlow = item
+      if (this.columnData.type === 4) {
+        let flowTemplateJson = item.flowTemplateJson ? JSON.parse(item.flowTemplateJson) : {}
+        this.isCustomCopy = flowTemplateJson.properties && flowTemplateJson.properties.isCustomCopy
+        this.flowListVisible = false
+        this.addHandleForRowEdit()
+      } else {
+        let data = {
+          id: '',
+          flowId: item.id,
+          opType: '-1',
+          type: 1,
+          modelId: this.modelId,
+          isPreview: this.isPreview,
+        }
+        this.flowListVisible = false
+        this.flowVisible = true
+        this.$nextTick(() => {
+          this.$refs.FlowBox.init(data)
+        })
+      }
+    },
+    updateHandle(row) {
       if (this.config.enableFlow == 1) {
         let data = {
-          id: id || '',
-          enCode: this.config.flowEnCode,
-          flowId: this.config.flowId,
-          formType: 2,
+          id: row.id,
+          flowId: row.flowId,
           type: 1,
           opType: '-1',
           modelId: this.modelId,
           isPreview: this.isPreview,
-          formConf: JSON.stringify(this.formData)
         }
         this.flowVisible = true
         this.$nextTick(() => {
@@ -946,17 +1009,13 @@ export default {
       } else {
         this.formVisible = true
         this.$nextTick(() => {
-          this.$refs.Form.init(this.formData, this.modelId, id, this.isPreview, this.columnData.useFormPermission)
+          this.$refs.Form.init(this.formData, this.modelId, row.id, this.isPreview, this.columnData.useFormPermission)
         })
       }
     },
     headBtnsHandel(key) {
       if (key === 'add') {
-        if (this.columnData.type === 4) {
-          this.addHandleForRowEdit()
-        } else {
-          this.addOrUpdateHandle()
-        }
+        this.addHandle()
       }
       if (key == 'download') {
         this.exportBoxVisible = true
@@ -1015,22 +1074,20 @@ export default {
     },
     columnBtnsHandel(key, row, index) {
       if (key === 'edit') {
-        this.addOrUpdateHandle(row.id)
+        this.updateHandle(row)
       }
       if (key === 'detail') {
-        this.goDetail(row.id, row)
+        this.goDetail(row)
       }
       if (key == 'remove') {
         this.handleDel(row.id, index)
       }
     },
-    goDetail(id, row) {
+    goDetail(row) {
       if (this.config.enableFlow == 1) {
         let data = {
-          id,
-          enCode: this.config.flowEnCode,
-          flowId: this.config.flowId,
-          formType: 2,
+          id: row.id,
+          flowId: row.flowId,
           type: 1,
           opType: 0,
           modelId: this.modelId,
@@ -1044,7 +1101,7 @@ export default {
       } else {
         this.detailVisible = true
         this.$nextTick(() => {
-          this.$refs.Detail.init(this.formData, this.modelId, id, this.columnData.useFormPermission)
+          this.$refs.Detail.init(this.formData, this.modelId, row.id, this.columnData.useFormPermission)
         })
       }
     },
@@ -1249,7 +1306,12 @@ export default {
           resolve([]);
         }
       })
-    }
+    },
+    getFlowList() {
+      getFlowList(this.config.flowId).then(res => {
+        this.flowList = res.data
+      })
+    },
   }
 }
 </script>
