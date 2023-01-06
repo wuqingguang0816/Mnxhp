@@ -146,14 +146,19 @@ export default {
           err.msg && this.$message.warning(err.msg)
         })
       } else if (this.activeStep == 2) {
-        this.$refs['columnDesign'].getData().then(res => {
-          this.columnData = res.columnData
-          this.appColumnData = res.appColumnData
+        if (this.dataForm.webType == 1) {
           getData()
           this.formSubmit()
-        }).catch(err => {
-          err.msg && this.$message.warning(err.msg)
-        })
+        } else {
+          this.$refs['columnDesign'].getData().then(res => {
+            this.columnData = res.columnData
+            this.appColumnData = res.appColumnData
+            getData()
+            this.formSubmit()
+          }).catch(err => {
+            err.msg && this.$message.warning(err.msg)
+          })
+        }
       }
     },
     formSubmit() {

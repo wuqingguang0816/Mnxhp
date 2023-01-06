@@ -92,7 +92,8 @@
                     <el-dropdown-item @click.native="copy(scope.row.id)">复制</el-dropdown-item>
                     <el-dropdown-item @click.native="exportModel(scope.row.id)">导出
                     </el-dropdown-item>
-                    <el-dropdown-item @click.native="handleLink(scope.row.id)">外链
+                    <el-dropdown-item @click.native="handleLink(scope.row.id)"
+                      v-if="scope.row.webType!=4&&!scope.row.enableFlow">外链
                     </el-dropdown-item>
                   </el-dropdown-menu>
                 </el-dropdown>
