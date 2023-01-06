@@ -95,7 +95,7 @@
 
 <script>
 import Process from '@/components/Process/Preview'
-import { flowJsonList, mainVersion, delVersion, getTemplateList } from '@/api/workFlow/FlowEngine'
+import { flowJsonList, mainVersion, delVersion, getFlowList } from '@/api/workFlow/FlowEngine'
 export default {
   components: { Process },
   props: [],
@@ -196,7 +196,7 @@ export default {
     init(flowId, fullName) {
       this.id = flowId
       this.title = fullName
-      getTemplateList(this.id).then(res => {
+      getFlowList(this.id).then(res => {
         this.templateList = res.data
         if (!this.templateList.length) {
           this.$message({
