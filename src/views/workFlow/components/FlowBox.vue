@@ -115,6 +115,22 @@
               </el-option>
             </el-select>
           </el-form-item>
+          <template v-if="properties.rejectType==3">
+            <el-form-item prop="rejectRadio">
+              <el-radio-group v-model="candidateForm.rejectType" class="form-item-content">
+                <el-radio :label=1>重新审批
+                  <el-tooltip content="若流程为A->B->C,C退回至A，则C->A->B->C" placement="top">
+                    <i class="el-icon-warning-outline"></i>
+                  </el-tooltip>
+                </el-radio>
+                <el-radio :label=2>直接提交给我
+                  <el-tooltip content="若流程为A->B->C,C退回至A，则C->A->C" placement="top">
+                    <i class="el-icon-warning-outline"></i>
+                  </el-tooltip>
+                </el-radio>
+              </el-radio-group>
+            </el-form-item>
+          </template>
         </template>
         <template v-if="properties.hasOpinion">
           <el-form-item label="审批意见" prop="handleOpinion">
@@ -181,6 +197,7 @@
     <error-form :visible.sync="errorVisible" :nodeList="errorNodeList" @submit="handleError" />
     <actionDialog v-if="actionVisible" ref="actionDialog" :assignNodeList="assignNodeList"
       @submit="actionReceiver" />
+    <SuspendDialog v-if="suspendVisible" ref="suspendDialog" @submit="suspendReceiver" />
     <HasFreeApprover :visible.sync="hasFreeApproverVisible" :taskId="setting.taskId"
       :formData="formData" :properties="properties" @close="approverDialog" />
     <SignImgDialog v-if="signVisible" ref="SignImg" :lineWidth='3' :userInfo='userInfo'
@@ -191,7 +208,7 @@
 
 <script>
 import SignImgDialog from '@/components/SignImgDialog'
-import { FlowBeforeInfo, Audit, Reject, Transfer, Recall, Cancel, Assign, SaveAudit, Candidates, CandidateUser, Resurgence, ResurgenceList, RejectList } from '@/api/workFlow/FlowBefore'
+import { FlowBeforeInfo, Audit, Reject, Transfer, Recall, Cancel, Assign, SaveAudit, Candidates, CandidateUser, Resurgence, ResurgenceList, RejectList, suspend, restore } from '@/api/workFlow/FlowBefore'
 import { Revoke, Press } from '@/api/workFlow/FlowLaunch'
 import { Create, Update } from '@/api/workFlow/workFlowForm'
 import recordList from './RecordList'
@@ -204,9 +221,10 @@ import Process from '@/components/Process/Preview'
 import PrintBrowse from '@/components/PrintBrowse'
 import ActionDialog from '@/views/workFlow/components/ActionDialog'
 import HasFreeApprover from './HasFreeApprover'
+import SuspendDialog from './SuspendDialog'
 import { mapGetters } from "vuex"
 export default {
-  components: { SignImgDialog, HasFreeApprover, recordList, Process, PrintBrowse, Comment, RecordSummary, CandidateForm, CandidateUserSelect, ErrorForm, ActionDialog },
+  components: { SignImgDialog, HasFreeApprover, recordList, Process, PrintBrowse, Comment, RecordSummary, CandidateForm, CandidateUserSelect, ErrorForm, ActionDialog, SuspendDialog },
   data() {
     return {
       resurgenceVisible: false,
@@ -241,6 +259,7 @@ export default {
       flowTaskOperatorRecordList: [],
       properties: {},
       endTime: 0,
+      suspendVisible: false,
       visible: false,
       handleId: '',
       activeTab: '0',
@@ -465,6 +484,8 @@ export default {
         if (flowTaskInfo.completion == 100) list.push({ label: '复 活', key: 'resurgence' })
         if (flowTaskInfo.completion > 0 && flowTaskInfo.completion < 100 && !flowTaskInfo.rejectDataId && (setting.status == 1 || setting.status == 3)) list.push({ label: '变 更', key: 'resurgence' })
         if (setting.status == 1 && this.assignNodeList.length) list.push({ label: '指 派', key: 'assign' })
+        if (flowTaskInfo.status == 1) list.push({ label: '挂 起', key: 'suspend' })
+        if (flowTaskInfo.status == 6) list.push({ label: '恢 复', key: 'recovery' })
       }
       this.moreBtnList = list
     },
@@ -477,7 +498,43 @@ export default {
       if (e == 'assign') return this.actionLauncher('assign')
       if (e == 'comment') return this.addComment()
       if (e == 'print') return this.printBrowseVisible = true
+      if (e == 'suspend') return this.suspend()
+      if (e == 'recovery') return this.recovery()
       this.eventLauncher(e)
+    },
+    suspend() {
+      this.suspendVisible = true
+      this.$nextTick(() => {
+        this.$refs.suspendDialog.init(this.setting.id)
+      })
+    },
+    recovery() {
+      let data = {
+        handleOpinion: '',
+        fileList: [],
+      }
+      restore(this.setting.id, data).then(res => {
+        this.$message({
+          message: res.msg,
+          type: 'success',
+          duration: 1500,
+          onClose: () => {
+            this.$emit('close', true)
+          }
+        })
+      })
+    },
+    suspendReceiver(dataForm) {
+      suspend(this.setting.id, dataForm).then(res => {
+        this.$message({
+          message: res.msg,
+          type: 'success',
+          duration: 1500,
+          onClose: () => {
+            this.$emit('close', true)
+          }
+        })
+      })
     },
     eventLauncher(eventType) {
       this.$refs.form && this.$refs.form.dataFormSubmit(eventType, this.flowUrgent)

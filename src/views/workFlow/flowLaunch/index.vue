@@ -105,6 +105,7 @@
               <el-tag type="danger" v-else-if="scope.row.status==3">审核退回</el-tag>
               <el-tag type="info" v-else-if="scope.row.status==4">流程撤回</el-tag>
               <el-tag type="info" v-else-if="scope.row.status==5">审核终止</el-tag>
+              <el-tag type="danger" v-else-if="scope.row.status==6">已被挂起</el-tag>
               <el-tag type="warning" v-else>等待提交</el-tag>
             </template>
           </el-table-column>
@@ -206,6 +207,9 @@ export default {
       }, {
         id: 5,
         fullName: '审核终止'
+      }, {
+        id: 6,
+        fullName: '已被挂起'
       }],
       urgentList: [
         {

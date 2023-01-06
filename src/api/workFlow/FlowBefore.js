@@ -166,3 +166,28 @@ export function FreeApprover(id, data) {
   })
 }
 
+//挂起类型
+export function suspendType(id) {
+  return request({
+    url: `/api/workflow/Engine/FlowBefore/Suspend/${id}`,
+    method: 'get',
+  })
+}
+
+//挂起流程
+export function suspend(id, data) {
+  return request({
+    url: `/api/workflow/Engine/FlowBefore/Suspend/${id}`,
+    method: 'post',
+    data
+  })
+}
+//恢复流程
+export function restore(id, data) {
+  return request({
+    url: `/api/workflow/Engine/FlowBefore/Restore/${id}`,
+    method: 'post',
+    data
+  })
+}
+
