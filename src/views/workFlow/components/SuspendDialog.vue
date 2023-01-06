@@ -23,8 +23,6 @@
         {{$t('common.confirmButton')}}
       </el-button>
     </span>
-    <SignImgDialog v-if="signVisible" ref="SignImg" :lineWidth='3' :userInfo='userInfo'
-      :isDefault='1' @close="signDialog" />
   </el-dialog>
 </template>
 <script>
