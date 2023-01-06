@@ -1,5 +1,5 @@
 <template>
-  <el-dialog :title="title" :close-on-click-modal="false" width='600px' :visible.sync="visible"
+  <el-dialog title="挂起流程暂停" :close-on-click-modal="false" width='600px' :visible.sync="visible"
     class="JNPF-dialog JNPF-dialog_center" lock-scroll append-to-body>
     <el-form ref="dataForm" :model="dataForm" label-width="80px" :rules="fromRules">
       <el-form-item label="挂起类型" prop="suspend">
@@ -10,7 +10,7 @@
         </el-select>
       </el-form-item>
       <el-form-item label="挂起原因" prop="handleOpinion">
-        <el-input v-model="dataForm.handleOpinion" :placeholder="请输入挂起原因" type="textarea"
+        <el-input v-model="dataForm.handleOpinion" placeholder="请输入挂起原因" type="textarea"
           :rows="4" />
       </el-form-item>
       <el-form-item label="挂起附件" prop="fileList">
