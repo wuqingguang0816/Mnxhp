@@ -11,7 +11,7 @@ export default {
     "generator": "代碼生成",
     "generator-webForm": "功能表單",
     "generator-appForm": "移動表單",
-    "generator-flowForm": "流程表單",
+    "generator-flowForm": "發起表單",
     "system": "系統管理",
     "system-sysConfig": "系統配置",
     "system-notice": "系統公告",

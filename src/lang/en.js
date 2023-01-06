@@ -11,7 +11,7 @@ export default {
     "generator": "Generator",
     "generator-webForm": "WebForm",
     "generator-appForm": "AppForm",
-    "generator-flowForm": "FlowForm",
+    "generator-flowForm": "InitiateForm",
     "system": "System",
     "system-sysConfig": "SysConfig",
     "system-notice": "Notice",
