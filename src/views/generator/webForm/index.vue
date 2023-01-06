@@ -30,7 +30,7 @@
       </el-row>
       <div class="JNPF-common-layout-main JNPF-flex-main">
         <div class="JNPF-common-head">
-          <topOpts @add="openAddBox()" addText="新建模板" />
+          <topOpts @add="handleAdd(2, true)" addText="新建模板" />
           <div class="JNPF-common-head-right">
             <el-tooltip effect="dark" :content="$t('common.refresh')" placement="top">
               <el-link icon="icon-ym icon-ym-Refresh JNPF-common-head-icon" :underline="false"
@@ -42,16 +42,10 @@
           <el-table-column prop="fullName" label="名称" show-overflow-tooltip min-width="200" />
           <el-table-column prop="enCode" label="编码" width="200" />
           <el-table-column prop="category" label="分类" width="150" />
-          <el-table-column prop="webType" label="模式" width="70" align="center">
+          <el-table-column prop="enableFlow" label="类型" width="80" align="center">
             <template slot-scope="scope">
-              <span v-if="scope.row.webType == 1">表单</span>
-              <span v-else>列表</span>
-            </template>
-          </el-table-column>
-          <el-table-column prop="enableFlow" label="启用流程" width="80" align="center">
-            <template slot-scope="scope">
-              <span v-if="scope.row.enableFlow == 1">是</span>
-              <span v-else>否</span>
+              <span v-if="scope.row.enableFlow == 1">流程表单</span>
+              <span v-else>普通表单</span>
             </template>
           </el-table-column>
           <el-table-column prop="creatorUser" label="创建人" width="120" />
@@ -83,7 +77,6 @@
       </div>
     </div>
     <Form v-if="formVisible" ref="Form" @close="closeForm" />
-    <AddBox :visible.sync="addVisible" :webType="currWebType" @add="handleAdd" />
     <Preview v-if="previewVisible" ref="preview" @close="previewVisible=false" />
     <DownloadForm v-if="downloadFormVisible" ref="downloadForm"
       @close="downloadFormVisible=false" />
@@ -92,14 +85,13 @@
 
 <script>
 import Form from './Form'
-import AddBox from '@/views/generator/AddBox'
 import DownloadForm from '../DownloadForm'
 import Preview from '../Preview'
 import mixin from '@/mixins/generator/index'
 export default {
   name: 'generator-webForm',
   mixins: [mixin],
-  components: { Form, AddBox, DownloadForm, Preview },
+  components: { Form, DownloadForm, Preview },
   data() {
     return {
       query: { keyword: '', type: 4 },
