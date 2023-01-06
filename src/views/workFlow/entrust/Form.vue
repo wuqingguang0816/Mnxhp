@@ -25,13 +25,15 @@
           @changeName="changeName" clearable />
       </jnpf-form-tip-item>
       <jnpf-form-tip-item label="开始时间" prop="startTime">
-        <el-date-picker v-model="dataForm.startTime" type="date" placeholder="选择日期"
-          value-format="timestamp" :editable='false' :picker-options="pickerOptions">
+        <el-date-picker v-model="dataForm.startTime" type="datetime" placeholder="选择日期"
+          value-format="timestamp" :editable='false' :picker-options="pickerOptions"
+          format='yyyy-MM-dd HH:mm'>
         </el-date-picker>
       </jnpf-form-tip-item>
       <jnpf-form-tip-item label="结束时间" prop="endTime">
-        <el-date-picker v-model="dataForm.endTime" type="date" placeholder="选择日期"
-          value-format="timestamp" :editable='false' :picker-options="pickerOptions">
+        <el-date-picker v-model="dataForm.endTime" type="datetime" placeholder="选择日期"
+          value-format="timestamp" :editable='false' :picker-options="pickerOptions"
+          format='yyyy-MM-dd HH:mm'>
         </el-date-picker>
       </jnpf-form-tip-item>
       <jnpf-form-tip-item label="委托说明" prop="description">
