@@ -1,6 +1,6 @@
 
 <template>
-  <el-drawer :size="value && isConditionNode() ?'650px':'600px'" class="drawer JNPF-common-drawer"
+  <el-drawer :size="value && isConditionNode() ?'750px':'600px'" class="drawer JNPF-common-drawer"
     :visible.sync="visible" @close="cancel" v-if="properties" append-to-body
     :wrapperClosable="false">
     <!-- 标题 -->
