@@ -282,7 +282,8 @@ export default {
         candidateList: [],
         fileList: [],
         handleOpinion: '',
-        rejectStep: ''
+        rejectStep: '',
+        rejectType: 1
       },
       printBrowseVisible: false,
       rejectList: [],
@@ -425,6 +426,7 @@ export default {
         this.flowTaskOperatorRecordList = res.data.flowTaskOperatorRecordList || []
         this.flowTaskOperatorRecordList = this.flowTaskOperatorRecordList.reverse()
         this.properties = res.data.approversProperties || {}
+        this.candidateForm.rejectType = this.properties.rejectType
         this.endTime = this.flowTaskInfo.completion == 100 ? this.flowTaskInfo.endTime : 0
         data.formConf = data.isPreview ? data.formConf : this.flowFormInfo.propertyJson
         if (data.opType != 1 && data.opType != '-1') data.readonly = true
@@ -838,7 +840,8 @@ export default {
           signImg: this.signImg,
           copyIds: this.copyIds.join(','),
           branchList: this.candidateForm.branchList,
-          candidateType: this.candidateType
+          candidateType: this.candidateType,
+          rejectType: this.candidateForm.rejectType
         }
         if (this.eventType === 'reject') query.rejectStep = this.candidateForm.rejectStep
         if (errorRuleUserList) query.errorRuleUserList = errorRuleUserList

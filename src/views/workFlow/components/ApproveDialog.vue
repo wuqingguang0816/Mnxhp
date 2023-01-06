@@ -29,6 +29,22 @@
               :value="item.nodeCode">
             </el-option>
           </el-select>
+          <template v-if="properties.rejectType==3">
+            <el-form-item prop="rejectRadio">
+              <el-radio-group v-model="dataForm.rejectType" class="form-item-content">
+                <el-radio :label="1">重新审批
+                  <el-tooltip content="若流程为A->B->C,C退回至A，则C->A->B->C" placement="top">
+                    <i class="el-icon-warning-outline"></i>
+                  </el-tooltip>
+                </el-radio>
+                <el-radio :label="2">直接提交给我
+                  <el-tooltip content="若流程为A->B->C,C退回至A，则C->A->C" placement="top">
+                    <i class="el-icon-warning-outline"></i>
+                  </el-tooltip>
+                </el-radio>
+              </el-radio-group>
+            </el-form-item>
+          </template>
         </el-form-item>
       </template>
       <el-form-item label="抄送人员" prop="copyIds" v-if="properties&&properties.isCustomCopy">
@@ -77,7 +93,8 @@ export default {
         candidateList: [],
         handleOpinion: '',
         fileList: [],
-        rejectStep: ''
+        rejectStep: '',
+        rejectType: 1
       },
       copyIds: [],
       signVisible: false,
@@ -119,6 +136,7 @@ export default {
       this.showReject = properties.showReject
       this.rejectList = properties.rejectList
       this.dataForm.rejectStep = properties.nodeCode
+      this.dataForm.rejectType = properties.rejectType
     },
     onBranchChange(val) {
       const defaultList = this.dataForm.candidateList.filter(o => o.isDefault)
@@ -155,7 +173,8 @@ export default {
             signImg: this.signImg,
             copyIds: this.copyIds.join(','),
             branchList: this.dataForm.branchList,
-            fileList: this.dataForm.fileList
+            fileList: this.dataForm.fileList,
+            rejectType: this.dataForm.rejectType
           }
           if (this.eventType === 'reject') query.rejectStep = this.dataForm.rejectStep
           if (this.dataForm.candidateList.length) {
