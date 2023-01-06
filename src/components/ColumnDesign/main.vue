@@ -178,11 +178,11 @@
                 </el-form-item>
                 <el-form-item label="数据加载">
                   <el-radio-group v-model="columnData.treeSynType">
-                    <el-radio :label="1">同步</el-radio>
-                    <el-radio :label="2">异步</el-radio>
+                    <el-radio :label="0">同步</el-radio>
+                    <el-radio :label="1">异步</el-radio>
                   </el-radio-group>
                 </el-form-item>
-                <template v-if="columnData.treeSynType==2">
+                <template v-if="columnData.treeSynType==1">
                   <el-form-item label="数据接口">
                     <interface-dialog :value="columnData.treeInterfaceId"
                       :title="columnData.treeInterfaceName" @change="onInterfaceChange" />
@@ -768,7 +768,7 @@ export default {
           if (!this.columnData.treePropsChildren) return this.$message.warning('请输入子级字段')
         }
         if (!this.columnData.treeRelation) return this.$message.warning('请选择关联字段')
-        if (!this.columnData.treeInterfaceId && this.columnData.treeSynType == 2) return this.$message.warning('请选择异步数据接口')
+        if (!this.columnData.treeInterfaceId && this.columnData.treeSynType == 1) return this.$message.warning('请选择异步数据接口')
       }
       if (this.columnData.type == 3) {
         if (!this.columnData.groupField) return this.$message.warning('请选择分组字段')
