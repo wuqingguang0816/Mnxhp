@@ -4,7 +4,7 @@
     <div class="JNPF-common-layout-left" v-if="columnData.type === 2">
       <div class="JNPF-common-title" v-if="columnData.treeTitle">
         <h2>{{columnData.treeTitle}}</h2>
-        <el-dropdown v-if="columnData.treeSynType==1">
+        <el-dropdown v-if="columnData.treeSynType==0">
           <el-link icon="icon-ym icon-ym-mpMenu" :underline="false" />
           <el-dropdown-menu slot="dropdown">
             <el-dropdown-item @click.native="toggleTreeExpand(true)">展开全部</el-dropdown-item>
@@ -13,14 +13,14 @@
         </el-dropdown>
       </div>
       <div class="JNPF-common-tree-search-box"
-        v-if="columnData.hasTreeQuery&&columnData.treeSynType==1">
+        v-if="columnData.hasTreeQuery&&columnData.treeSynType==0">
         <el-input placeholder="输入关键字" v-model="keyword" suffix-icon="el-icon-search" clearable />
       </div>
       <el-tree :data="treeData" :props="treeProps"
-        :default-expand-all="columnData.treeSynType==1?expandsTree:false" highlight-current
+        :default-expand-all="columnData.treeSynType==0?expandsTree:false" highlight-current
         ref="treeBox" :expand-on-click-node="false" @node-click="handleNodeClick"
         class="JNPF-common-el-tree" :node-key="treeProps.value" :filter-node-method="filterNode"
-        :lazy="columnData.treeSynType==2?true:false" :load="loadNode" v-if="refreshTree">
+        :lazy="columnData.treeSynType==1?true:false" :load="loadNode" v-if="refreshTree">
         <span class="custom-tree-node" slot-scope="{ node, data }">
           <i :class="data.icon"></i>
           <span class="text">{{node.label}}</span>
