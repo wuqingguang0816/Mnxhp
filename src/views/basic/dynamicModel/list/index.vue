@@ -72,8 +72,8 @@
           :has-c="hasBatchBtn" @selection-change="handleSelectionChange" v-if="refreshTable"
           custom-column :span-method="arraySpanMethod" ref="tableRef"
           :hasNO="!(columnData.childTableStyle==2&&childColumnList.length&&columnData.type != 3&&columnData.type != 4)"
-          :hasNOFixed="columnList.some(o=>o.fixed == 'left')"
-          :show-summary='columnData.configurationTotal' :summary-method="getTableSummaries">
+          :hasNOFixed="columnList.some(o=>o.fixed == 'left')" :show-summary='columnData.showSummary'
+          :summary-method="getTableSummaries">
           <template v-if="columnData.type === 4">
             <template v-for="(item, i) in columnList">
               <el-table-column :prop="item.prop" :label="item.label" :align="item.align"
