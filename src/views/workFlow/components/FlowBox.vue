@@ -59,16 +59,27 @@
         </el-button>
       </div>
     </div>
-    <div class="approve-result" v-if="(setting.opType==0||setting.opType==4) && activeTab==='0'">
+    <div class="approve-result"
+      v-if="(setting.opType==0||setting.opType==4) && activeTab==='0' &&!subFlowVisible">
       <div class="approve-result-img" :class="flowTaskInfo.status | flowStatus()"></div>
     </div>
     <el-tabs class="JNPF-el_tabs" v-model="activeTab">
-      <el-tab-pane label="表单信息" v-loading="loading" v-if="setting.opType!='4'">
+      <el-tab-pane label="表单信息" v-loading="loading" v-if="setting.opType!='4'&&!subFlowVisible ">
         <component :is="currentView" @close="goBack" ref="form" @eventReceiver="eventReceiver"
           @setLoad="setLoad" @setCandidateLoad="setCandidateLoad" @setPageLoad="setPageLoad" />
       </el-tab-pane>
       <el-tab-pane label="流程信息" v-loading="loading">
-        <Process :conf="flowTemplateJson" v-if="flowTemplateJson.nodeId" />
+        <template v-if="!subFlowVisible">
+          <Process :conf="flowTemplateJson" v-if="flowTemplateJson.nodeId" @subFlow='subFlow' />
+        </template>
+        <template v-else>
+          <el-tabs v-model="subFlowTab" @tab-click="activeClick" type="card">
+            <el-tab-pane v-for="(item,index) in subFlowInfoList" :key="index"
+              :label="item.flowTaskInfo.fullName" :name="item.flowTaskInfo.id">
+              <Process :conf="item.flowTemplateInfo.flowTemplateJson" />
+            </el-tab-pane>
+          </el-tabs>
+        </template>
       </el-tab-pane>
       <el-tab-pane label="流转记录" v-if="setting.opType!='-1'" v-loading="loading">
         <recordList :list='flowTaskOperatorRecordList' :endTime='endTime'
@@ -202,13 +213,14 @@
       :formData="formData" :properties="properties" @close="approverDialog" />
     <SignImgDialog v-if="signVisible" ref="SignImg" :lineWidth='3' :userInfo='userInfo'
       :isDefault='1' @close="signDialog" />
+    <FlowBox v-if="flowBoxVisible" ref="FlowBox" @close="flowBoxVisible = false" />
   </div>
   <!-- </transition> -->
 </template>
 
 <script>
 import SignImgDialog from '@/components/SignImgDialog'
-import { FlowBeforeInfo, Audit, Reject, Transfer, Recall, Cancel, Assign, SaveAudit, Candidates, CandidateUser, Resurgence, ResurgenceList, RejectList, suspend, restore } from '@/api/workFlow/FlowBefore'
+import { FlowBeforeInfo, Audit, Reject, Transfer, Recall, Cancel, Assign, SaveAudit, Candidates, CandidateUser, Resurgence, ResurgenceList, RejectList, suspend, restore, subFlowInfo } from '@/api/workFlow/FlowBefore'
 import { Revoke, Press } from '@/api/workFlow/FlowLaunch'
 import { Create, Update } from '@/api/workFlow/workFlowForm'
 import recordList from './RecordList'
@@ -224,9 +236,11 @@ import HasFreeApprover from './HasFreeApprover'
 import SuspendDialog from './SuspendDialog'
 import { mapGetters } from "vuex"
 export default {
+  name: 'FlowBox',
   components: { SignImgDialog, HasFreeApprover, recordList, Process, PrintBrowse, Comment, RecordSummary, CandidateForm, CandidateUserSelect, ErrorForm, ActionDialog, SuspendDialog },
   data() {
     return {
+      subFlowTab: '',
       resurgenceVisible: false,
       actionVisible: false,
       resurgenceForm: {
@@ -303,7 +317,10 @@ export default {
       errorVisible: false,
       errorNodeList: [],
       isValidate: false,
-      moreBtnList: []
+      moreBtnList: [],
+      subFlowVisible: false,
+      flowBoxVisible: false,
+      subFlowInfoList: [],
     }
   },
   computed: {
@@ -345,6 +362,36 @@ export default {
     },
     approverDialog(needClose) {
       if (needClose) this.$emit('close', true)
+    },
+    activeClick() {
+      let data = this.subFlowInfoList.filter(o => o.flowTaskInfo.id == this.subFlowTab)
+      if (data.length) {
+        this.fullName = data[0].flowTaskInfo.fullName
+        this.flowTaskOperatorRecordList = data[0].flowTaskOperatorRecordList || []
+        this.isComment = data[0].flowTemplateInfo.flowTemplateJson.isComment
+        this.isSummary = data[0].flowTemplateInfo.flowTemplateJson.isSummary
+        this.summaryType = data[0].flowTemplateInfo.flowTemplateJson.summaryType
+      }
+    },
+    subFlow(enCode) {
+      let flowTaskNodeList = this.flowTaskNodeList.filter(res => res.nodeCode == enCode)
+      if (!flowTaskNodeList.length) return
+      if (!flowTaskNodeList[0].type || flowTaskNodeList[0].nodeType != 'subFlow') return
+      let item = {
+        subFlowVisible: true,
+        ...flowTaskNodeList,
+        activeTab: this.activeTab,
+        ...this.setting,
+        isComment: this.isComment,
+        isSummary: this.isSummary,
+        summaryType: this.summaryType,
+        currentView: this.currentView,
+        flowTaskOperatorRecordList: this.flowTaskOperatorRecordList,
+      }
+      this.flowBoxVisible = true
+      this.$nextTick(() => {
+        this.$refs.FlowBox.init(item)
+      })
     },
     handleResurgence(errorRuleUserList) {
       this.$refs['resurgenceForm'].validate((valid) => {
@@ -392,16 +439,21 @@ export default {
       this.loading = true
       this.activeTab = '0'
       this.setting = data
-      /**
-       * opType
-       * -1 - 我发起的新建/编辑
-       * 0 - 我发起的详情
-       * 1 - 待办事宜
-       * 2 - 已办事宜
-       * 3 - 抄送事宜
-       * 4 - 流程监控
-       */
-      this.getBeforeInfo(data)
+      if (data.subFlowVisible) {
+        this.subFlowInfo(data)
+      } else {
+        /**
+         * opType
+         * -1 - 我发起的新建/编辑
+         * 0 - 我发起的详情
+         * 1 - 待办事宜
+         * 2 - 已办事宜
+         * 3 - 抄送事宜
+         * 4 - 流程监控
+         */
+        this.getBeforeInfo(data)
+      }
+
     },
     getBeforeInfo(data) {
       FlowBeforeInfo(data.id || 0, { taskNodeId: data.taskNodeId, taskOperatorId: data.taskId, flowId: data.flowId }).then(res => {
@@ -462,6 +514,7 @@ export default {
         this.initBtnList()
         setTimeout(() => {
           this.$nextTick(() => {
+
             this.$refs.form && this.$refs.form.init(data)
           })
         }, 500)
@@ -490,6 +543,49 @@ export default {
         if (flowTaskInfo.status == 6) list.push({ label: '恢 复', key: 'recovery' })
       }
       this.moreBtnList = list
+    },
+    subFlowInfo(data) {
+      this.loading = false
+      this.activeTab = '0'
+      this.subFlowVisible = true
+      subFlowInfo(data[0].id).then(res => {
+        this.subFlowInfoList = res.data || []
+        this.subFlowTab = this.subFlowInfoList[0].flowTaskInfo.id
+        this.fullName = this.subFlowInfoList[0].flowTaskInfo.fullName
+        this.flowTaskOperatorRecordList = this.subFlowInfoList[0].flowTaskOperatorRecordList || []
+        this.flowTaskOperatorRecordList = this.flowTaskOperatorRecordList.reverse()
+        for (let index = 0; index < this.subFlowInfoList.length; index++) {
+          let element = this.subFlowInfoList[index];
+          element.flowTemplateInfo.flowTemplateJson = element.flowTemplateInfo ? JSON.parse(element.flowTemplateInfo.flowTemplateJson) : {}
+          if (element.flowTaskNodeList.length) {
+            let assignNodeList = []
+            for (let i = 0; i < element.flowTaskNodeList.length; i++) {
+              const nodeItem = element.flowTaskNodeList[i]
+              data.opType == 4 && nodeItem.type == 1 && nodeItem.nodeType === 'approver' && assignNodeList.push(nodeItem)
+              const loop = data => {
+                if (Array.isArray(data)) data.forEach(d => loop(d))
+                if (data.nodeId === nodeItem.nodeCode) {
+                  if (nodeItem.type == 0) data.state = 'state-past'
+                  if (nodeItem.type == 1) data.state = 'state-curr'
+                  if (nodeItem.nodeType === 'approver' || nodeItem.nodeType === 'start' || nodeItem.nodeType === 'subFlow') data.content = nodeItem.userName
+                  return
+                }
+                if (data.conditionNodes && Array.isArray(data.conditionNodes)) loop(data.conditionNodes)
+                if (data.childNode) loop(data.childNode)
+              }
+              loop(element.flowTemplateInfo.flowTemplateJson)
+            }
+            element.assignNodeList = assignNodeList
+          } else {
+            element.flowTemplateInfo.flowTemplateJson.state = 'state-curr'
+          }
+          this.isComment = this.subFlowInfoList[0].flowTemplateInfo.flowTemplateJson.isComment
+          this.isSummary = this.subFlowInfoList[0].flowTemplateInfo.flowTemplateJson.isSummary
+          this.summaryType = this.subFlowInfoList[0].flowTemplateInfo.flowTemplateJson.summaryType
+        }
+      }).catch(() => { this.loading = false })
+
+
     },
     handleMore(e) {
       if (e == 'revoke') return this.actionLauncher('revoke')
@@ -938,5 +1034,17 @@ export default {
 .dropdown-item {
   min-width: 70px;
   text-align: center;
+}
+.subFlow_tabs {
+  // >>> .el-tabs__item {
+  //   text-align: center;
+  // }
+  // >>> .el-tabs__content {
+  //   padding: 0px 0 15px;
+  // }
+  height: 100%;
+  overflow: auto;
+  overflow-x: hidden;
+  /* padding: 0 10px 10px; */
 }
 </style>

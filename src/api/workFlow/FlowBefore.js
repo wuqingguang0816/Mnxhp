@@ -198,3 +198,11 @@ export function restore(id, data) {
   })
 }
 
+
+//查看子流程
+export function subFlowInfo(taskNodeId) {
+  return request({
+    url: `/api/workflow/Engine/FlowBefore/SubFlowInfo/${taskNodeId}`,
+    method: 'get',
+  })
+}
