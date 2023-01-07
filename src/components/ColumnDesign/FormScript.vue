@@ -15,12 +15,12 @@
           <JNPFCodeEditor v-model="text" :options="options" ref="CodeEditor" />
         </div>
         <div class="tips" v-if="type == 'btn'">
-          <p>支持JavaScript的脚本，参考编写脚本API</p>
+          <p>支持JavaScript的脚本</p>
           <p>data--列表当前行数据，index--列表当前行下标，request--异步请求(url,method,data)</p>
           <p>toast--消息提示，refresh--刷新页面</p>
         </div>
         <div class="tips" v-if="type == 'afterOnload'">
-          <p>支持JavaScript的脚本，参考编写脚本API</p>
+          <p>支持JavaScript的脚本</p>
           <p>data--列表行数据，tableRef--表格DOM元素，request--异步请求(url,methods,data)</p>
         </div>
         <div class="tips" v-if="type == 'rowStyle'">

@@ -285,7 +285,7 @@ export default {
 
     flowSelect() {
       this.visible = true
-      this.search()
+      this.reset()
     },
     getDictionaryData() {
       this.$store.dispatch('base/getDictionaryData', { sort: 'WorkFlowCategory' }).then((res) => {
@@ -314,8 +314,6 @@ export default {
       this.listQuery.sort = 'desc'
       this.initData()
     },
-
-
     handleSelection(selection, val) {
       const index = this.selectedData.findIndex((item) => {
         return item.id == val.id

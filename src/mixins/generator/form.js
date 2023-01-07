@@ -102,6 +102,12 @@ export default {
       if (!this.activeStep) {
         this.$refs['dataForm'].validate((valid) => {
           if (valid) {
+            if (!this.tables.length) {
+              if (this.defaultTable.length || type == 3 || type == 4) {
+                this.$message.warning('请至少选择一个数据表')
+                return
+              }
+            }
             getData()
             this.formSubmit()
           }

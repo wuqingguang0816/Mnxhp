@@ -15,7 +15,7 @@
           <JNPFCodeEditor v-model="text" :options="options" ref="CodeEditor" />
         </div>
         <div class="tips">
-          <p>支持JavaScript的脚本，参考编写脚本API</p>
+          <p>支持JavaScript的脚本</p>
         </div>
       </div>
     </div>
