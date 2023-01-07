@@ -572,8 +572,13 @@ export default {
       this.$emit('input', newVal)
     },
     removeRow(index) {
-      this.tableFormData.splice(index, 1)
-      this.updateParentData()
+      this.$confirm('此操作将永久删除该数据, 是否继续?', '提示', {
+        type: 'warning'
+      }).then(() => {
+        this.tableFormData.splice(index, 1)
+        this.updateParentData()
+      }).catch(() => {
+      });
     },
     addRow(val) {
       this.isAddRow = true
