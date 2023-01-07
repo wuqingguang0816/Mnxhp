@@ -21,7 +21,8 @@
           :has-c="hasBatchBtn" @selection-change="handleSelectionChange" v-if="refreshTable"
           custom-column :span-method="arraySpanMethod" ref="tableRef"
           :hasNO="!(columnData.childTableStyle==2&&childColumnList.length&&columnData.type != 3&&columnData.type != 4)"
-          :hasNOFixed="columnList.some(o=>o.fixed == 'left')">
+          :hasNOFixed="columnList.some(o=>o.fixed == 'left')" :show-summary='columnData.showSummary'
+          :summary-method="getTableSummaries">
           <template>
             <template v-for="(item, i) in columnList">
               <template v-if="item.jnpfKey==='table'">
@@ -274,6 +275,35 @@ export default {
           this.initData()
         })
       }
+    },
+    /**
+    * 对表格进行合计
+    */
+    getTableSummaries(param) {
+      const { columns, data } = param;
+      const sums = [];
+      columns.forEach((column, index) => {
+        if (index === 0) {
+          sums[index] = '合计';
+          return;
+        } else if (this.columnData.fieldsTotal.includes(column.property)) {
+          const values = data.map(item => Number(item[column.property]));
+          if (!values.every(value => isNaN(value))) {
+            sums[index] = values.reduce((prev, curr) => {
+              const value = Number(curr);
+              if (!isNaN(value)) {
+                return prev + curr;
+              } else {
+                return prev;
+              }
+            }, 0);
+            sums[index] += '';
+          } else {
+            sums[index] = '';
+          }
+        }
+      })
+      return sums;
     },
     getColumnList() {
       if (this.isPreview) {
