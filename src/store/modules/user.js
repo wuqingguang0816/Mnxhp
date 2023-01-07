@@ -220,6 +220,9 @@ const actions = {
                 routerListData.push(newObj)
               } else {
                 e.path = path
+                if(path.startsWith("/")){
+                  e.path = location.origin + path;
+                }
               }
             }
           }
