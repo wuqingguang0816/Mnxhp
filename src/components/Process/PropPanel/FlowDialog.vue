@@ -13,15 +13,15 @@
     </div>
     <el-dialog title="选择子流程" :close-on-click-modal="false" :visible.sync="visible"
       class="JNPF-dialog JNPF-dialog_center JNPF-dialog-tree-select" lock-scroll append-to-body
-      width="1000px">
+      width="600px">
       <div class="JNPF-common-layout">
-        <div class="JNPF-common-layout-left">
+        <!-- <div class="JNPF-common-layout-left">
           <el-scrollbar class="JNPF-common-el-tree-scrollbar" v-loading="treeLoading">
             <el-tree ref="treeBox" :data="treeData" :props="defaultProps" default-expand-all
               highlight-current :expand-on-click-node="false" node-key="id"
               @node-click="handleNodeClick" class="JNPF-common-el-tree" />
           </el-scrollbar>
-        </div>
+        </div> -->
         <div class="JNPF-common-layout-center">
           <el-row class="JNPF-common-search-box" :gutter="16">
             <el-form @submit.native.prevent>
@@ -55,7 +55,7 @@
               </el-table-column>
               <el-table-column type="index" width="50" label="序号" align="center" />
               <el-table-column prop="fullName" label="流程名称" />
-              <el-table-column prop="enCode" label="流程编码" />
+              <!-- <el-table-column prop="enCode" label="流程编码" /> -->
             </JNPF-table>
             <pagination :total="total" :page.sync="listQuery.currentPage"
               :limit.sync="listQuery.pageSize" @pagination="initData" />
@@ -71,7 +71,7 @@
 </template>
 
 <script>
-import { FlowEnginePageList } from '@/api/workFlow/FlowEngine'
+import { FlowEnginePageChildList } from '@/api/workFlow/FlowEngine'
 export default {
   props: {
     value: {
@@ -140,9 +140,9 @@ export default {
     }
   },
   created() {
-    this.$store.dispatch('base/getDictionaryData', { sort: 'WorkFlowCategory' }).then((res) => {
-      this.treeData = [{ fullName: '全部流程', id: '', enCode: '' }, ...res]
-    })
+    // this.$store.dispatch('base/getDictionaryData', { sort: 'WorkFlowCategory' }).then((res) => {
+    //   this.treeData = [{ fullName: '全部流程', id: '', enCode: '' }, ...res]
+    // })
     this.reset()
   },
   methods: {
@@ -151,10 +151,10 @@ export default {
       let query = {
         keyword: this.keyword,
         ...this.listQuery,
-        category: this.category == '' ? '' : this.category,
+        // category: this.category == '' ? '' : this.category,
         flowType: this.flowType
       }
-      FlowEnginePageList(query).then((res) => {
+      FlowEnginePageChildList(query).then((res) => {
         this.list = res.data.list
         this.total = res.data.pagination.total
         this.listLoading = false
@@ -179,6 +179,7 @@ export default {
       if (this.disabled) return
       this.checked = this.value
       this.visible = true
+      this.reset()
     },
     clear() {
       this.checked = ''
