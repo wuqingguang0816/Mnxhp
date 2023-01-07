@@ -184,7 +184,10 @@ export default {
       this.socket = this.$store.getters.socket || null
       if ('WebSocket' in window) {
         if (!this.socket) {
-          const webSocketUrl = `${this.define.WebSocketUrl}/${this.$store.getters.token}`
+          const isDev = process.env.NODE_ENV === 'development'
+          const token = this.$store.getters.token
+          const url = isDev ? this.define.APIURl + '/api/message/websocket/' + token : window.location.origin + '/websocket/' + token
+          const webSocketUrl = url.replace('https://', 'wss://').replace('http://', 'ws://')
           this.socket = new ReconnectingWebSocket(webSocketUrl)
           this.$store.commit('user/SET_SOCKET', this.socket)
         }
