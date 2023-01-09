@@ -24,7 +24,7 @@
           <el-button type="primary" @click="dataFormSubmit(1)" :loading="btnLoading">
             {{formConf.confirmButtonText||'确 定'}}</el-button>
           <el-button type="primary" @click="dataFormSubmit(2)" :loading="continueBtnLoading">
-            {{!dataForm.id ?'确定并新增':'保存并继续'}}</el-button>
+            {{!dataForm.id ?'确定并新增':'确定并继续'}}</el-button>
         </span>
       </el-dialog>
     </template>
@@ -49,7 +49,7 @@
                   </template>
                   <el-dropdown-item type="primary" @click.native="dataFormSubmit(2)"
                     :loading="continueBtnLoading">
-                    {{!dataForm.id ?'确定并新增':'保存并继续'}}</el-dropdown-item>
+                    {{!dataForm.id ?'确定并新增':'确定并继续'}}</el-dropdown-item>
                 </el-dropdown-menu>
               </el-dropdown>
               <template v-if="formConf.hasPrintBtn && formConf.printId && dataForm.id && false">
@@ -96,7 +96,7 @@
             <el-button type="primary" @click="dataFormSubmit()" :loading="btnLoading">
               {{formConf.confirmButtonText||'确 定'}}</el-button>
             <el-button type="primary" @click="dataFormSubmit(2)" :loading="continueBtnLoading">
-              {{!dataForm.id ?'确定并新增':'保存并继续'}}</el-button>
+              {{!dataForm.id ?'确定并新增':'确定并继续'}}</el-button>
           </div>
         </div>
       </el-drawer>
@@ -110,6 +110,7 @@ import { createModel, updateModel, getModelInfo } from '@/api/onlineDev/visualDe
 import Parser from '@/components/Generator/parser/Parser'
 import PrintBrowse from '@/components/PrintBrowse'
 import { deepClone } from '@/utils'
+import { forEach } from 'element-resize-detector/src/collection-utils'
 export default {
   components: { Parser, PrintBrowse },
   data() {
@@ -151,9 +152,13 @@ export default {
             this.dataForm = res.data
             if (!this.dataForm.data) return
             this.resetForm()
-            let formData = { ...JSON.parse(this.dataForm.data), id: this.dataForm.id }
-            this.fillFormData(this.formConf, formData)
+            this.formData = { ...JSON.parse(this.dataForm.data), id: this.dataForm.id }
+            this.fillFormData(this.formConf, this.formData)
+            this.$nextTick(() => {
+              this.key = +new Date()
+            })
           })
+
         }
       }
     },
@@ -172,6 +177,9 @@ export default {
             this.resetForm()
             let formData = { ...JSON.parse(this.dataForm.data), id: this.dataForm.id }
             this.fillFormData(this.formConf, formData)
+            this.$nextTick(() => {
+              this.key = +new Date()
+            })
           })
         }
       }
@@ -193,21 +201,23 @@ export default {
       this.getFormOperates()
       this.loading = true
       this.dialogLoading = false
+      this.prevDis = false
+      this.nextDis = false
       this.allList = allList || []
       if (allList.length) {
-        this.index = allList.findIndex(item => item.id === id)
-        if (this.index === 0) {
+        this.index = this.allList.findIndex(item => item.id === id)
+        if (this.index == 0) {
           this.prevDis = true
         }
-        if (this.index === allList.length - 1) {
+        if (this.index == this.allList.length - 1) {
           this.nextDis = true
         }
-        if (allList.length === 0) {
-          this.prevDis = true
-          this.nextDis = true
-        }
+      } else {
+        this.prevDis = true
+        this.nextDis = true
       }
       this.$nextTick(() => {
+
         if (this.dataForm.id) {
           let extra = {
             modelId,
