@@ -29,7 +29,7 @@
             :style="{'color':flowUrgentList[selectState].color}">{{flowUrgentList[selectState].name}}</span>
         </div>
       </template>
-      <div class="options">
+      <div class="options" v-if="!subFlowVisible">
         <el-dropdown class="dropdown" placement="bottom" @command="handleMore"
           v-if="moreBtnList.length">
           <el-button style="width:70px" :disabled="allBtnDisabled">
@@ -145,8 +145,17 @@
         </template>
         <template v-if="properties.hasOpinion">
           <el-form-item label="审批意见" prop="handleOpinion">
-            <el-input v-model="candidateForm.handleOpinion" placeholder="请输入审批意见" type="textarea"
-              :rows="4" />
+            <el-row>
+              <el-col :span="22">
+                <el-input v-model="candidateForm.handleOpinion" placeholder="请输入审批意见"
+                  type="textarea" :rows="4" />
+              </el-col>
+              <el-col :span="2">
+                <el-button plain @click="commonWords()" class="commonWords-button">
+                  常用语
+                </el-button>
+              </el-col>
+            </el-row>
           </el-form-item>
           <el-form-item label="审批附件" prop="fileList">
             <JNPF-UploadFz v-model="candidateForm.fileList" :limit="3" />
@@ -171,6 +180,7 @@
           {{$t('common.confirmButton')}}
         </el-button>
       </span>
+      <CommonWordsDialog v-if="commonWordsVisible" ref="commonWordsDialog" @change="common" />
     </el-dialog>
     <!-- 流程节点变更复活对话框 -->
     <el-dialog :title="flowTaskInfo.completion==100?'复活':'变更'" :close-on-click-modal="false"
@@ -186,8 +196,17 @@
           </el-select>
         </el-form-item>
         <el-form-item :label="flowTaskInfo.completion==100?'复活意见':'变更意见'" prop="handleOpinion">
-          <el-input type="textarea" v-model="resurgenceForm.handleOpinion" placeholder="请填写意见"
-            :rows="4" />
+          <el-row>
+            <el-col :span="22">
+              <el-input type="textarea" v-model="resurgenceForm.handleOpinion" placeholder="请填写意见"
+                :rows="4" />
+            </el-col>
+            <el-col :span="2">
+              <el-button plain @click="commonWords()" class="commonWords-button">
+                常用语
+              </el-button>
+            </el-col>
+          </el-row>
         </el-form-item>
         <el-form-item :label="flowTaskInfo.completion==100?'复活附件':'变更附件'" prop="fileList">
           <JNPF-UploadFz v-model="resurgenceForm.fileList" :limit="3" />
@@ -214,6 +233,7 @@
     <SignImgDialog v-if="signVisible" ref="SignImg" :lineWidth='3' :userInfo='userInfo'
       :isDefault='1' @close="signDialog" />
     <FlowBox v-if="flowBoxVisible" ref="FlowBox" @close="flowBoxVisible = false" />
+
   </div>
   <!-- </transition> -->
 </template>
@@ -234,10 +254,11 @@ import PrintBrowse from '@/components/PrintBrowse'
 import ActionDialog from '@/views/workFlow/components/ActionDialog'
 import HasFreeApprover from './HasFreeApprover'
 import SuspendDialog from './SuspendDialog'
+import CommonWordsDialog from './CommonWordsDialog'
 import { mapGetters } from "vuex"
 export default {
   name: 'FlowBox',
-  components: { SignImgDialog, HasFreeApprover, recordList, Process, PrintBrowse, Comment, RecordSummary, CandidateForm, CandidateUserSelect, ErrorForm, ActionDialog, SuspendDialog },
+  components: { SignImgDialog, HasFreeApprover, recordList, Process, PrintBrowse, Comment, RecordSummary, CandidateForm, CandidateUserSelect, ErrorForm, ActionDialog, SuspendDialog, CommonWordsDialog },
   data() {
     return {
       subFlowTab: '',
@@ -321,6 +342,7 @@ export default {
       subFlowVisible: false,
       flowBoxVisible: false,
       subFlowInfoList: [],
+      commonWordsVisible: false,
     }
   },
   computed: {
@@ -348,6 +370,23 @@ export default {
     }
   },
   methods: {
+    common(val) {
+      this.commonWordsVisible = false
+      if (val) {
+        if (this.resurgenceVisible) {
+          this.resurgenceForm.handleOpinion += val[0].commonWordsText
+        } else {
+          this.candidateForm.handleOpinion += val[0].commonWordsText
+        }
+
+      }
+    },
+    commonWords() {
+      this.commonWordsVisible = true
+      this.$nextTick(() => {
+        this.$refs.commonWordsDialog.init()
+      })
+    },
     addSign() {
       this.signVisible = true
       this.$nextTick(() => {
@@ -1046,5 +1085,8 @@ export default {
   overflow: auto;
   overflow-x: hidden;
   /* padding: 0 10px 10px; */
+}
+.commonWords-button {
+  margin-top: 57px;
 }
 </style>
