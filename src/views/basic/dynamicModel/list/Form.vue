@@ -21,7 +21,7 @@
             </el-button>
           </template>
           <el-button @click="goBack">{{formConf.cancelButtonText||'取 消'}}</el-button>
-          <el-button type="primary" @click="dataFormSubmit(1)" :loading="btnLoading">
+          <el-button type="primary" @click="dataFormSubmit()" :loading="btnLoading">
             {{formConf.confirmButtonText||'确 定'}}</el-button>
           <el-button type="primary" @click="dataFormSubmit(2)" :loading="continueBtnLoading">
             {{!dataForm.id ?'确定并新增':'确定并继续'}}</el-button>
@@ -57,7 +57,7 @@
                   {{formConf.printButtonText||'打 印'}}
                 </el-button>
               </template>
-              <el-button type="primary" @click="dataFormSubmit(1)" :loading="btnLoading">
+              <el-button type="primary" @click="dataFormSubmit()" :loading="btnLoading">
                 {{formConf.confirmButtonText||'确 定'}}</el-button>
               <el-button @click="goBack">{{formConf.cancelButtonText||'取 消'}}</el-button>
             </div>
@@ -139,7 +139,6 @@ export default {
     }
   },
   methods: {
-
     goBack() {
       this.visible = false
       this.$emit('refreshDataList', true)
