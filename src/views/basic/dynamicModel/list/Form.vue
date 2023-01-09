@@ -139,6 +139,71 @@ export default {
     }
   },
   methods: {
+
+    goBack() {
+      this.visible = false
+      this.$emit('refreshDataList', true)
+    },
+    print() {
+      if (this.isPreview) return this.$message({ message: '功能预览不支持打印', type: 'warning' })
+      this.printBrowseVisible = true
+    },
+    init(formConf, modelId, id, isPreview, useFormPermission, allList) {
+      this.formConf = deepClone(formConf)
+      this.modelId = modelId
+      this.isPreview = isPreview
+      this.useFormPermission = useFormPermission
+      this.dataForm.id = id || ''
+      this.getFormOperates()
+      this.loading = true
+      this.dialogLoading = false
+      this.prevDis = false
+      this.nextDis = false
+      this.allList = allList || []
+      if (allList.length) {
+        this.index = this.allList.findIndex(item => item.id === id)
+        if (this.index == 0) {
+          this.prevDis = true
+        }
+        if (this.index == this.allList.length - 1) {
+          this.nextDis = true
+        }
+      } else {
+        this.prevDis = true
+        this.nextDis = true
+      }
+      this.$nextTick(() => {
+        if (this.dataForm.id) {
+          let extra = {
+            modelId,
+            id,
+            type: 2
+          }
+          this.$store.commit('generator/SET_DYNAMIC_MODEL_EXTRA', extra)
+          getModelInfo(modelId, this.dataForm.id).then(res => {
+            this.dataForm = res.data
+            if (!this.dataForm.data) return
+            this.formData = { ...JSON.parse(this.dataForm.data), id: this.dataForm.id }
+            this.fillFormData(this.formConf, this.formData)
+            this.dialogLoading = true
+            this.$nextTick(() => {
+              this.visible = true
+              this.loading = false
+            })
+          })
+        } else {
+          this.$store.commit('generator/SET_DYNAMIC_MODEL_EXTRA', {})
+          this.formData = {}
+          this.fillFormData(this.formConf, this.formData)
+          this.dialogLoading = true
+          this.$nextTick(() => {
+            this.visible = true
+            this.loading = false
+          })
+        }
+        this.key = +new Date()
+      })
+    },
     prev() {
       this.index--
       if (this.index === 0) {
@@ -183,71 +248,6 @@ export default {
           })
         }
       }
-    },
-    goBack() {
-      this.visible = false
-      this.$emit('refreshDataList', true)
-    },
-    print() {
-      if (this.isPreview) return this.$message({ message: '功能预览不支持打印', type: 'warning' })
-      this.printBrowseVisible = true
-    },
-    init(formConf, modelId, id, isPreview, useFormPermission, allList) {
-      this.formConf = deepClone(formConf)
-      this.modelId = modelId
-      this.isPreview = isPreview
-      this.useFormPermission = useFormPermission
-      this.dataForm.id = id || ''
-      this.getFormOperates()
-      this.loading = true
-      this.dialogLoading = false
-      this.prevDis = false
-      this.nextDis = false
-      this.allList = allList || []
-      if (allList.length) {
-        this.index = this.allList.findIndex(item => item.id === id)
-        if (this.index == 0) {
-          this.prevDis = true
-        }
-        if (this.index == this.allList.length - 1) {
-          this.nextDis = true
-        }
-      } else {
-        this.prevDis = true
-        this.nextDis = true
-      }
-      this.$nextTick(() => {
-
-        if (this.dataForm.id) {
-          let extra = {
-            modelId,
-            id,
-            type: 2
-          }
-          this.$store.commit('generator/SET_DYNAMIC_MODEL_EXTRA', extra)
-          getModelInfo(modelId, this.dataForm.id).then(res => {
-            this.dataForm = res.data
-            if (!this.dataForm.data) return
-            this.formData = { ...JSON.parse(this.dataForm.data), id: this.dataForm.id }
-            this.fillFormData(this.formConf, this.formData)
-            this.dialogLoading = true
-            this.$nextTick(() => {
-              this.visible = true
-              this.loading = false
-            })
-          })
-        } else {
-          this.$store.commit('generator/SET_DYNAMIC_MODEL_EXTRA', {})
-          this.formData = {}
-          this.fillFormData(this.formConf, this.formData)
-          this.dialogLoading = true
-          this.$nextTick(() => {
-            this.visible = true
-            this.loading = false
-          })
-        }
-        this.key = +new Date()
-      })
     },
     getFormOperates() {
       if (this.isPreview || !this.useFormPermission) return
@@ -350,21 +350,3 @@ export default {
   }
 }
 </script>
-<style lang="scss" scoped>
-.upAndDown-button {
-  position: absolute;
-  left: 20px;
-}
-.options {
-  .dropdown {
-    margin-right: 10px;
-  }
-  .el-button {
-    min-width: 70px;
-  }
-}
-.dropdown-item {
-  min-width: 70px;
-  text-align: center;
-}
-</style>

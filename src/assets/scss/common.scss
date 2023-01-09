@@ -2561,3 +2561,23 @@ textarea.el-textarea__inner {
     color: #2188ff;
   }
 }
+
+.upAndDown-button {
+  position: absolute;
+  left: 20px;
+}
+
+.options {
+  .dropdown {
+    margin-right: 10px;
+  }
+
+  .el-button {
+    min-width: 70px;
+  }
+}
+
+.dropdown-item {
+  min-width: 70px;
+  text-align: center;
+}
