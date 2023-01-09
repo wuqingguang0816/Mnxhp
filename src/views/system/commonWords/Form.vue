@@ -26,7 +26,8 @@
       <el-button @click="cancel()">{{$t('common.cancelButton')}}</el-button>
       <el-button type="primary" :loading="btnLoading" @click="dataFormSubmit(2)">
         {{$t('common.confirmButton')}}</el-button>
-      <el-button @click="dataFormSubmit(1)" type="primary" :loading="continueBtnLoading">
+      <el-button @click="dataFormSubmit(1)" type="primary" v-if="!dataForm.id"
+        :loading="continueBtnLoading">
         保存并继续
       </el-button>
     </span>
