@@ -4,7 +4,7 @@
       <FlowBox v-if="flowVisible" ref="FlowBox" @close="closeFlow" />
       <el-dialog title="请选择流程" :close-on-click-modal="false" append-to-body
         :visible.sync="flowListVisible" class="JNPF-dialog template-dialog JNPF-dialog_center"
-        lock-scroll width="400px">
+        lock-scroll width="400px" :show-close="false" :modal="false">
         <el-scrollbar class="template-list">
           <div class="template-item" v-for="item in flowList" :key="item.id"
             @click="selectFlow(item)">{{item.fullName}}
