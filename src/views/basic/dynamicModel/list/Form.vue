@@ -2,19 +2,29 @@
   <div>
     <template v-if="formConf.popupType==='general'&&dialogLoading">
       <el-dialog :title="!dataForm.id ? '新建' : '编辑'" :close-on-click-modal="false"
-        :visible.sync="visible" class="JNPF-dialog JNPF-dialog_center" lock-scroll
+        :visible.sync="visible" class="JNPF-dialog JNPF-dialog_center" lock-scroll @close='goBack()'
         :width="formConf.generalWidth">
         <parser :form-conf="formConf" @submit="submitForm" :key="key" ref="dynamicForm"
           v-if="!loading" />
         <span slot="footer" class="dialog-footer">
+          <div class="upAndDown-button" v-if="dataForm.id">
+            <el-button @click="prev" :disabled='prevDis'>
+              {{'上一条'}}
+            </el-button>
+            <el-button @click="next" :disabled='nextDis'>
+              {{'下一条'}}
+            </el-button>
+          </div>
           <template v-if="formConf.hasPrintBtn && formConf.printId && dataForm.id && false">
             <el-button type="primary" @click="print">
               {{formConf.printButtonText||'打 印'}}
             </el-button>
           </template>
-          <el-button @click="visible = false">{{formConf.cancelButtonText||'取 消'}}</el-button>
-          <el-button type="primary" @click="dataFormSubmit()" :loading="btnLoading">
+          <el-button @click="goBack">{{formConf.cancelButtonText||'取 消'}}</el-button>
+          <el-button type="primary" @click="dataFormSubmit(1)" :loading="btnLoading">
             {{formConf.confirmButtonText||'确 定'}}</el-button>
+          <el-button type="primary" @click="dataFormSubmit(2)" :loading="continueBtnLoading">
+            {{!dataForm.id ?'确定并新增':'保存并继续'}}</el-button>
         </span>
       </el-dialog>
     </template>
@@ -24,12 +34,30 @@
           <div class="JNPF-common-page-header">
             <el-page-header @back="goBack" :content="!dataForm.id ? '新建' : '编辑'" />
             <div class="options">
+              <el-dropdown class="dropdown" placement="bottom">
+                <el-button style="width:70px">
+                  更 多<i class="el-icon-arrow-down el-icon--right"></i>
+                </el-button>
+                <el-dropdown-menu slot="dropdown">
+                  <template v-if="dataForm.id">
+                    <el-dropdown-item @click.native="prev" :disabled='prevDis'>
+                      {{'上一条'}}
+                    </el-dropdown-item>
+                    <el-dropdown-item @click.native="next" :disabled='nextDis'>
+                      {{'下一条'}}
+                    </el-dropdown-item>
+                  </template>
+                  <el-dropdown-item type="primary" @click.native="dataFormSubmit(2)"
+                    :loading="continueBtnLoading">
+                    {{!dataForm.id ?'确定并新增':'保存并继续'}}</el-dropdown-item>
+                </el-dropdown-menu>
+              </el-dropdown>
               <template v-if="formConf.hasPrintBtn && formConf.printId && dataForm.id && false">
                 <el-button type="primary" @click="print">
                   {{formConf.printButtonText||'打 印'}}
                 </el-button>
               </template>
-              <el-button type="primary" @click="dataFormSubmit()" :loading="btnLoading">
+              <el-button type="primary" @click="dataFormSubmit(1)" :loading="btnLoading">
                 {{formConf.confirmButtonText||'确 定'}}</el-button>
               <el-button @click="goBack">{{formConf.cancelButtonText||'取 消'}}</el-button>
             </div>
@@ -43,7 +71,7 @@
     </template>
     <template v-if="formConf.popupType==='drawer'">
       <el-drawer :title="!dataForm.id ? '新建' : '编辑'" :visible.sync="visible"
-        :wrapperClosable="false" :size='formConf.drawerWidth' append-to-body
+        :wrapperClosable="false" :size='formConf.drawerWidth' append-to-body @close='goBack()'
         class="JNPF-common-drawer">
         <div class="JNPF-flex-main">
           <div class="dynamicForm">
@@ -51,14 +79,24 @@
               v-if="!loading" />
           </div>
           <div class="drawer-footer">
+            <div class="upAndDown-button" v-if="dataForm.id">
+              <el-button @click="prev" :disabled='prevDis'>
+                {{'上一条'}}
+              </el-button>
+              <el-button @click="next" :disabled='nextDis'>
+                {{'下一条'}}
+              </el-button>
+            </div>
             <template v-if="formConf.hasPrintBtn && formConf.printId && dataForm.id && false">
               <el-button type="primary" @click="print">
                 {{formConf.printButtonText||'打 印'}}
               </el-button>
             </template>
-            <el-button @click="visible = false">{{formConf.cancelButtonText||'取 消'}}</el-button>
+            <el-button @click="goBack()">{{formConf.cancelButtonText||'取 消'}}</el-button>
             <el-button type="primary" @click="dataFormSubmit()" :loading="btnLoading">
               {{formConf.confirmButtonText||'确 定'}}</el-button>
+            <el-button type="primary" @click="dataFormSubmit(2)" :loading="continueBtnLoading">
+              {{!dataForm.id ?'确定并新增':'保存并继续'}}</el-button>
           </div>
         </div>
       </el-drawer>
@@ -91,18 +129,62 @@ export default {
       useFormPermission: false,
       printBrowseVisible: false,
       formOperates: [],
-      dialogLoading: false
+      dialogLoading: false,
+      continueBtnLoading: false,
+      index: 0,
+      prevDis: false,
+      nextDis: false,
+      allList: []
     }
   },
   methods: {
+    prev() {
+      this.index--
+      if (this.index === 0) {
+        this.prevDis = true
+      }
+      this.nextDis = false
+      for (let index = 0; index < this.allList.length; index++) {
+        const element = this.allList[index];
+        if (this.index == index) {
+          getModelInfo(this.modelId, element.id).then(res => {
+            this.dataForm = res.data
+            if (!this.dataForm.data) return
+            this.resetForm()
+            let formData = { ...JSON.parse(this.dataForm.data), id: this.dataForm.id }
+            this.fillFormData(this.formConf, formData)
+          })
+        }
+      }
+    },
+    next() {
+      this.index++
+      if (this.index === this.allList.length - 1) {
+        this.nextDis = true
+      }
+      this.prevDis = false
+      for (let index = 0; index < this.allList.length; index++) {
+        const element = this.allList[index];
+        if (this.index == index) {
+          getModelInfo(this.modelId, element.id).then(res => {
+            this.dataForm = res.data
+            if (!this.dataForm.data) return
+            this.resetForm()
+            let formData = { ...JSON.parse(this.dataForm.data), id: this.dataForm.id }
+            this.fillFormData(this.formConf, formData)
+          })
+        }
+      }
+    },
     goBack() {
-      this.$emit('refreshDataList')
+      this.visible = false
+      this.$emit('refreshDataList', true)
     },
     print() {
       if (this.isPreview) return this.$message({ message: '功能预览不支持打印', type: 'warning' })
       this.printBrowseVisible = true
     },
-    init(formConf, modelId, id, isPreview, useFormPermission) {
+    init(formConf, modelId, id, isPreview, useFormPermission, allList) {
       this.formConf = deepClone(formConf)
       this.modelId = modelId
       this.isPreview = isPreview
@@ -111,6 +193,20 @@ export default {
       this.getFormOperates()
       this.loading = true
       this.dialogLoading = false
+      this.allList = allList || []
+      if (allList.length) {
+        this.index = allList.findIndex(item => item.id === id)
+        if (this.index === 0) {
+          this.prevDis = true
+        }
+        if (this.index === allList.length - 1) {
+          this.nextDis = true
+        }
+        if (allList.length === 0) {
+          this.prevDis = true
+          this.nextDis = true
+        }
+      }
       this.$nextTick(() => {
         if (this.dataForm.id) {
           let extra = {
@@ -175,30 +271,90 @@ export default {
       loop(form.fields)
       form.formData = data
     },
-    submitForm(data, callback) {
+    resetForm() {
+      this.$nextTick(() => {
+        this.$refs.dynamicForm && this.$refs.dynamicForm.resetForm()
+      })
+    },
+    submitForm(data, callback, type) {
       if (!data) return
-      this.btnLoading = true
+      if (type == 2) {
+        this.continueBtnLoading = true
+      } else {
+        this.btnLoading = true
+      }
       const formData = { ...this.formData, ...data }
       this.dataForm.data = JSON.stringify(formData)
       const formMethod = this.dataForm.id ? updateModel : createModel
       formMethod(this.modelId, this.dataForm).then(res => {
-        this.$message({
-          message: res.msg,
-          type: 'success',
-          duration: 1500,
-          onClose: () => {
-            if (callback && typeof callback === "function") callback()
-            this.visible = false
-            this.btnLoading = false
-            this.$emit('refreshDataList', true)
-          }
-        })
-      }).catch(() => { this.btnLoading = false })
+        if (this.dataForm.id) {
+          this.$message({
+            message: res.msg,
+            type: 'success',
+            duration: 1500,
+            onClose: () => {
+              if (callback && typeof callback === "function") callback()
+              this.$nextTick(() => {
+                if (type == 2) {
+                  getModelInfo(this.modelId, this.dataForm.id).then(res => {
+                    this.dataForm = res.data
+                    this.continueBtnLoading = false
+                    if (!this.dataForm.data) return
+                    this.formData = { ...JSON.parse(this.dataForm.data), id: this.dataForm.id }
+                    this.fillFormData(this.formConf, this.formData)
+                  })
+                } else {
+                  this.visible = false
+                  this.btnLoading = false
+                  this.$emit('refreshDataList', true)
+                }
+              })
+            }
+          })
+        } else {
+          this.$message({
+            message: res.msg,
+            type: 'success',
+            duration: 1500,
+            onClose: () => {
+              if (callback && typeof callback === "function") callback()
+              this.$nextTick(() => {
+                this.continueBtnLoading = false
+                if (type == 2) return this.resetForm()
+                this.visible = false
+                this.btnLoading = false
+                this.$emit('refreshDataList', true)
+              })
+            }
+          })
+        }
+      }).catch(() => {
+        this.continueBtnLoading = false
+        this.btnLoading = false
+      })
     },
-    dataFormSubmit() {
+    dataFormSubmit(type) {
       if (this.isPreview) return this.$message({ message: '功能预览不支持数据保存', type: 'warning' })
-      this.$refs.dynamicForm && this.$refs.dynamicForm.submitForm()
+      this.$refs.dynamicForm && this.$refs.dynamicForm.submitForm(type)
     }
   }
 }
 </script>
+<style lang="scss" scoped>
+.upAndDown-button {
+  position: absolute;
+  left: 20px;
+}
+.options {
+  .dropdown {
+    margin-right: 10px;
+  }
+  .el-button {
+    min-width: 70px;
+  }
+}
+.dropdown-item {
+  min-width: 70px;
+  text-align: center;
+}
+</style>

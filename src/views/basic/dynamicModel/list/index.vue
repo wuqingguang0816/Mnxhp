@@ -964,7 +964,7 @@ export default {
         } else {
           this.formVisible = true
           this.$nextTick(() => {
-            this.$refs.Form.init(this.formData, this.modelId, '', this.isPreview, this.columnData.useFormPermission)
+            this.$refs.Form.init(this.formData, this.modelId, '', this.isPreview, this.columnData.useFormPermission, this.list)
           })
         }
       }
@@ -1009,7 +1009,7 @@ export default {
       } else {
         this.formVisible = true
         this.$nextTick(() => {
-          this.$refs.Form.init(this.formData, this.modelId, row.id, this.isPreview, this.columnData.useFormPermission)
+          this.$refs.Form.init(this.formData, this.modelId, row.id, this.isPreview, this.columnData.useFormPermission, this.list)
         })
       }
     },
