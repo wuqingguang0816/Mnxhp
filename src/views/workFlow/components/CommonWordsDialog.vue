@@ -45,9 +45,10 @@
       </el-form>
       <span slot="footer" class="dialog-footer">
         <el-button @click="cancel()">{{$t('common.cancelButton')}}</el-button>
-        <el-button type="primary" :loading="btnLoading" @click="dataFormSubmit(2)">
+        <el-button type="primary" :loading="dataFormBtnLoading" @click="dataFormSubmit(1)">
           {{$t('common.confirmButton')}}</el-button>
-        <el-button @click="dataFormSubmit(1)" type="primary" :loading="commonBtnLoading">
+        <el-button @click="dataFormSubmit(2)" type="primary" v-if="!this.dataForm.id"
+          :loading="commonBtnLoading">
           保存并新增
         </el-button>
       </span>
@@ -95,6 +96,8 @@ export default {
       label: '',
       commonWordsVisible: false,
       commonBtnLoading: false,
+      formLoading: false,
+      dataFormBtnLoading: false,
     }
   },
   computed: {
@@ -107,6 +110,16 @@ export default {
     addOrUpdateHandle(id) {
       this.commonWordsVisible = true
       this.dataForm.id = id || 0
+      this.$nextTick(() => {
+        this.$refs['dataForm'].resetFields()
+        this.treeLoading = true
+        if (this.dataForm.id) {
+          getCommonWordsInfo(this.dataForm.id).then(res => {
+            this.dataForm = res.data || {}
+          })
+        }
+        this.formLoading = false
+      })
     },
     select() {
       if (!this.checked) return
@@ -143,17 +156,21 @@ export default {
     dataFormSubmit(type) {
       this.$refs['dataForm'].validate((valid) => {
         if (valid) {
-          this.commonBtnLoading = true
+          if (type == 2) {
+            this.continueBtnLoading = true
+          } else {
+            this.dataFormBtnLoading = true
+          }
           const formMethod = this.dataForm.id ? Update : Create
           formMethod(this.dataForm).then(res => {
-            if (type == 1) {
+            if (type == 2) {
               this.$message({
                 message: res.msg,
                 type: 'success',
                 duration: 1500,
               })
               this.$nextTick(() => {
-                this.commonBtnLoading = false
+                this.continueBtnLoading = false
                 this.$refs['dataForm'].resetFields()
               })
             } else {
@@ -164,12 +181,15 @@ export default {
                 onClose: () => {
                   this.commonWordsVisible = false
                   this.commonBtnLoading = false
+                  this.dataFormBtnLoading = false
                   this.initData()
                 }
               })
             }
           }).catch(() => {
             this.btnLoading = false
+            this.commonWordsVisible = false
+
           })
         }
       })

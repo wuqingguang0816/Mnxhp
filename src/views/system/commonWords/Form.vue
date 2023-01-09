@@ -24,9 +24,9 @@
     </el-form>
     <span slot="footer" class="dialog-footer">
       <el-button @click="cancel()">{{$t('common.cancelButton')}}</el-button>
-      <el-button type="primary" :loading="btnLoading" @click="dataFormSubmit(2)">
+      <el-button type="primary" :loading="btnLoading" @click="dataFormSubmit(1)">
         {{$t('common.confirmButton')}}</el-button>
-      <el-button @click="dataFormSubmit(1)" type="primary" v-if="!dataForm.id"
+      <el-button @click="dataFormSubmit(2)" type="primary" v-if="!dataForm.id"
         :loading="continueBtnLoading">
         保存并继续
       </el-button>
@@ -121,11 +121,7 @@ export default {
                 duration: 1500,
               })
               this.$nextTick(() => {
-                if (type == 2) {
-                  this.continueBtnLoading = false
-                } else {
-                  this.btnLoading = false
-                }
+                this.continueBtnLoading = false
                 this.$refs['dataForm'].resetFields()
               })
             } else {
@@ -135,21 +131,14 @@ export default {
                 duration: 1500,
                 onClose: () => {
                   this.visible = false
-                  if (type == 2) {
-                    this.continueBtnLoading = false
-                  } else {
-                    this.btnLoading = false
-                  }
+                  this.btnLoading = false
                   this.$emit('refreshDataList')
                 }
               })
             }
           }).catch(() => {
-            if (type == 2) {
-              this.continueBtnLoading = false
-            } else {
-              this.btnLoading = false
-            }
+            this.continueBtnLoading = false
+            this.btnLoading = false
           })
         }
       })
