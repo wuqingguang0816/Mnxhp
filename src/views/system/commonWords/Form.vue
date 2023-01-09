@@ -26,7 +26,7 @@
       <el-button @click="cancel()">{{$t('common.cancelButton')}}</el-button>
       <el-button type="primary" :loading="btnLoading" @click="dataFormSubmit(2)">
         {{$t('common.confirmButton')}}</el-button>
-      <el-button @click="dataFormSubmit(1)" type="primary" :loading="btnLoading">
+      <el-button @click="dataFormSubmit(1)" type="primary" :loading="continueBtnLoading">
         保存并继续
       </el-button>
     </span>
@@ -46,6 +46,7 @@ export default {
       formLoading: false,
       treeLoading: false,
       btnLoading: false,
+      continueBtnLoading: false,
       singleSelectTreeVal: "", //单选树默认label值
       singleSelectTreeKey: "", //单选树默认key值
       systemOptions: [],
@@ -105,7 +106,11 @@ export default {
             }
           }
           this.dataForm.systemNames = systemNames
-          this.btnLoading = true
+          if (type == 2) {
+            this.continueBtnLoading = true
+          } else {
+            this.btnLoading = true
+          }
           const formMethod = this.dataForm.id ? Update : Create
           formMethod(this.dataForm).then(res => {
             if (type == 1) {
@@ -115,7 +120,11 @@ export default {
                 duration: 1500,
               })
               this.$nextTick(() => {
-                this.btnLoading = false
+                if (type == 2) {
+                  this.continueBtnLoading = false
+                } else {
+                  this.btnLoading = false
+                }
                 this.$refs['dataForm'].resetFields()
               })
             } else {
@@ -125,13 +134,21 @@ export default {
                 duration: 1500,
                 onClose: () => {
                   this.visible = false
-                  this.btnLoading = false
+                  if (type == 2) {
+                    this.continueBtnLoading = false
+                  } else {
+                    this.btnLoading = false
+                  }
                   this.$emit('refreshDataList')
                 }
               })
             }
           }).catch(() => {
-            this.btnLoading = false
+            if (type == 2) {
+              this.continueBtnLoading = false
+            } else {
+              this.btnLoading = false
+            }
           })
         }
       })
