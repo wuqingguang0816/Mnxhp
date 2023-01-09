@@ -24,11 +24,11 @@
     </el-form>
     <span slot="footer" class="dialog-footer">
       <el-button @click="cancel()">{{$t('common.cancelButton')}}</el-button>
-      <el-button type="primary" :loading="btnLoading" @click="dataFormSubmit(1)">
+      <el-button type="primary" :loading="btnLoading" @click="dataFormSubmit()">
         {{$t('common.confirmButton')}}</el-button>
       <el-button @click="dataFormSubmit(2)" type="primary" v-if="!dataForm.id"
         :loading="continueBtnLoading">
-        保存并继续
+        确定并新增
       </el-button>
     </span>
   </el-dialog>
@@ -92,6 +92,7 @@ export default {
       })
     },
     cancel() {
+      this.visible = false
       this.$emit('refreshDataList')
     },
     dataFormSubmit(type) {
@@ -114,28 +115,24 @@ export default {
           }
           const formMethod = this.dataForm.id ? Update : Create
           formMethod(this.dataForm).then(res => {
-            if (type == 1) {
-              this.$message({
-                message: res.msg,
-                type: 'success',
-                duration: 1500,
-              })
-              this.$nextTick(() => {
-                this.continueBtnLoading = false
-                this.$refs['dataForm'].resetFields()
-              })
-            } else {
-              this.$message({
-                message: res.msg,
-                type: 'success',
-                duration: 1500,
-                onClose: () => {
+            this.$message({
+              message: res.msg,
+              type: 'success',
+              duration: 1500,
+              onClose: () => {
+                if (type == 2) {
+                  this.$nextTick(() => {
+                    this.$refs['dataForm'].resetFields()
+                    this.continueBtnLoading = false
+                  }
+                  )
+                } else {
                   this.visible = false
                   this.btnLoading = false
                   this.$emit('refreshDataList')
                 }
-              })
-            }
+              }
+            })
           }).catch(() => {
             this.continueBtnLoading = false
             this.btnLoading = false

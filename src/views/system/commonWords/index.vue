@@ -29,7 +29,7 @@
           </div>
         </div>
         <JNPF-table v-loading="listLoading" :data="list" row-key="id">
-          <el-table-column prop="systemName" label="所属应用" />
+          <el-table-column prop="systemNames" label="所属应用" />
           <el-table-column prop="commonWordsText" label="常用语" />
           <el-table-column prop="sortCode" label="排序" width="70" align="center" />
           <el-table-column prop="enabledMark" label="状态" width="70" align="center">
