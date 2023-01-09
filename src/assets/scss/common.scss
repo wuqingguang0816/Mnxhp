@@ -2581,3 +2581,41 @@ textarea.el-textarea__inner {
   min-width: 70px;
   text-align: center;
 }
+
+.row-action {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 32px;
+
+  .ym-custom-arrow-expand {
+    position: absolute;
+    top: 50%;
+    opacity: 0;
+    z-index: -1;
+    transform: translate(-50%, -50%);
+    cursor: pointer;
+    line-height: 32px;
+    margin-left: 10px;
+  }
+}
+
+.el-table__row:hover {
+  .index {
+    display: none;
+
+    &.btn-disabled {
+      display: block;
+
+      &+.ym-custom-arrow-expand {
+        opacity: 0;
+        z-index: -1;
+      }
+    }
+  }
+
+  .ym-custom-arrow-expand {
+    z-index: 9;
+    opacity: 1;
+  }
+}

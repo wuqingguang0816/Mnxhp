@@ -71,10 +71,19 @@
           :load="treeLoad" @sort-change="sortChange" :row-style="rowStyle" :cell-style="cellStyle"
           :has-c="hasBatchBtn" @selection-change="handleSelectionChange" v-if="refreshTable"
           custom-column :span-method="arraySpanMethod" ref="tableRef"
-          :hasNO="!(columnData.childTableStyle==2&&childColumnList.length&&columnData.type != 3&&columnData.type != 4)"
+          :hasNO="!(columnData.childTableStyle==2&&childColumnList.length&&columnData.type != 3)&&columnData.type != 4"
           :hasNOFixed="columnList.some(o=>o.fixed == 'left')" :show-summary='columnData.showSummary'
           :summary-method="getTableSummaries">
           <template v-if="columnData.type === 4">
+            <el-table-column width="50" align="center" label="序号">
+              <template slot-scope="scope">
+                <div class="row-action">
+                  <span class="index">{{ scope.$index + 1 }}</span>
+                  <i class="ym-custom ym-custom-arrow-expand"
+                    @click="handleRowForm(scope.$index)"></i>
+                </div>
+              </template>
+            </el-table-column>
             <template v-for="(item, i) in columnList">
               <el-table-column :prop="item.prop" :label="item.label" :align="item.align"
                 :fixed="item.fixed!='none'?item.fixed:false" :width="item.width" :key="i"
@@ -1312,6 +1321,12 @@ export default {
         this.flowList = res.data
       })
     },
+    handleRowForm(index) {
+      this.formVisible = true
+      this.$nextTick(() => {
+        this.$refs.Form.init(this.formData, this.modelId, '', this.isPreview, this.columnData.useFormPermission, this.list, this.list[index])
+      })
+    }
   }
 }
 </script>

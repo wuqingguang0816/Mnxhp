@@ -1,13 +1,13 @@
 <template>
   <div>
     <template v-if="formConf.popupType==='general'&&dialogLoading">
-      <el-dialog :title="!dataForm.id ? '新建' : '编辑'" :close-on-click-modal="false"
+      <el-dialog :title="!dataForm.id?'新建':'编辑'" :close-on-click-modal="false"
         :visible.sync="visible" class="JNPF-dialog JNPF-dialog_center" lock-scroll @close='goBack()'
         :width="formConf.generalWidth">
         <parser :form-conf="formConf" @submit="submitForm" :key="key" ref="dynamicForm"
           v-if="!loading" />
         <span slot="footer" class="dialog-footer">
-          <div class="upAndDown-button" v-if="dataForm.id">
+          <div class="upAndDown-button" v-if="dataForm.id&&showMoreBtn">
             <el-button @click="prev" :disabled='prevDis'>
               {{'上一条'}}
             </el-button>
@@ -23,7 +23,8 @@
           <el-button @click="goBack">{{formConf.cancelButtonText||'取 消'}}</el-button>
           <el-button type="primary" @click="dataFormSubmit()" :loading="btnLoading">
             {{formConf.confirmButtonText||'确 定'}}</el-button>
-          <el-button type="primary" @click="dataFormSubmit(2)" :loading="continueBtnLoading">
+          <el-button type="primary" @click="dataFormSubmit(2)" :loading="continueBtnLoading"
+            v-if="showMoreBtn">
             {{!dataForm.id ?'确定并新增':'确定并继续'}}</el-button>
         </span>
       </el-dialog>
@@ -110,7 +111,6 @@ import { createModel, updateModel, getModelInfo } from '@/api/onlineDev/visualDe
 import Parser from '@/components/Generator/parser/Parser'
 import PrintBrowse from '@/components/PrintBrowse'
 import { deepClone } from '@/utils'
-import { forEach } from 'element-resize-detector/src/collection-utils'
 export default {
   components: { Parser, PrintBrowse },
   data() {
@@ -135,7 +135,8 @@ export default {
       index: 0,
       prevDis: false,
       nextDis: false,
-      allList: []
+      allList: [],
+      showMoreBtn: true
     }
   },
   methods: {
@@ -147,7 +148,7 @@ export default {
       if (this.isPreview) return this.$message({ message: '功能预览不支持打印', type: 'warning' })
       this.printBrowseVisible = true
     },
-    init(formConf, modelId, id, isPreview, useFormPermission, allList) {
+    init(formConf, modelId, id, isPreview, useFormPermission, allList, formData) {
       this.formConf = deepClone(formConf)
       this.modelId = modelId
       this.isPreview = isPreview
@@ -193,6 +194,13 @@ export default {
         } else {
           this.$store.commit('generator/SET_DYNAMIC_MODEL_EXTRA', {})
           this.formData = {}
+          if (formData) {
+            this.formData = formData
+            this.formConf.popupType = 'general'
+            this.formConf.generalWidth = '600px'
+            this.dataForm.id = formData.id || ''
+            this.showMoreBtn = false
+          }
           this.fillFormData(this.formConf, this.formData)
           this.dialogLoading = true
           this.$nextTick(() => {
