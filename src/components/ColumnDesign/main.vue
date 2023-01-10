@@ -155,6 +155,10 @@
                 </el-form-item>
               </template>
               <el-divider>表格配置</el-divider>
+              <el-form-item label="数据过滤">
+                <el-button style="width: 100%;" @click="filterPanelShow">添加过滤条件</el-button>
+              </el-form-item>
+              <Condition ref="conditionpane"  @ruleConfig="ruleConfig"></Condition>
               <template v-if="columnData.type==3">
                 <el-form-item label="分组字段">
                   <el-select v-model="columnData.groupField" placeholder="请选择分组字段">
@@ -287,6 +291,7 @@
   </div>
 </template>
 <script>
+import Condition from './FlowCondition'
 import Sortable from 'sortablejs'
 import draggable from 'vuedraggable'
 import FormScript from './FormScript'
@@ -384,7 +389,7 @@ export default {
     webType: '',
     modelType: ''
   },
-  components: { draggable, FormScript, uploadBox },
+  components: { draggable, FormScript, uploadBox, Condition },
   data() {
     return {
       currentTab: 'column',
@@ -543,6 +548,18 @@ export default {
     })
   },
   methods: {
+    filterPanelShow(){
+      this.$refs.conditionpane.show()
+    },
+    ruleConfig(data) {
+      this.columnData.ruleList.push(data)
+      /**if (this.isEdit) {
+        this.$set(this.columnData.ruleList, this.index, data)
+        this.isEdit = false
+      } else {
+        this.columnData.ruleList.push(data)
+      } */
+    },
     setBtnValue(replacedData, data, key) {
       key = key ? key : 'value'
       outer: for (let i = 0; i < replacedData.length; i++) {
