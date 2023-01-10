@@ -5,7 +5,16 @@
       <Search ref="Search" :list="columnData.searchList" @reset="reset" @search="searchData" />
       <div class="JNPF-common-layout-main JNPF-flex-main">
         <div class="JNPF-common-head">
-          <div></div>
+          <div v-if="isPreview || !columnData.useBtnPermission">
+            <el-button :type="i==0?'primary':'text'" :icon="item.icon"
+              @click="headBtnsHandel(item.value)" v-for="(item, i) in columnData.btnsList" :key="i">
+              {{item.label}}</el-button>
+          </div>
+          <div v-else>
+            <el-button :type="i==0?'primary':'text'" :icon="item.icon" v-has="'btn_'+item.value"
+              @click="headBtnsHandel(item.value)" v-for="(item, i) in columnData.btnsList" :key="i">
+              {{item.label}}</el-button>
+          </div>
           <div class="JNPF-common-head-right">
             <el-tooltip effect="dark" :content="$t('common.refresh')" placement="top">
               <el-link icon="icon-ym icon-ym-Refresh JNPF-common-head-icon" :underline="false"
@@ -25,53 +34,32 @@
           :summary-method="getTableSummaries">
           <template>
             <template v-for="(item, i) in columnList">
-              <template v-if="item.jnpfKey==='table'">
-                <el-table-column :prop="item.prop" :label="item.label" :align="item.align" :key="i"
-                  v-if="columnData.childTableStyle!=2||columnData.type == 3">
-                  <el-table-column :prop="child.prop" :label="child.childLabel" :align="child.align"
-                    :width="child.width" :key="ii"
-                    :sortable="child.sortable?'custom':child.sortable"
-                    v-for="(child, ii) in item.children" class-name="child-table-box">
-                    <template slot-scope="scope">
-                      <child-table-column :data="scope.row[item.prop]" :head="item.children"
-                        @toggleExpand="toggleExpand(scope.row,`${item.prop}Expand`)"
-                        :expand="scope.row[`${item.prop}Expand`]" v-if="!ii" />
-                    </template>
-                  </el-table-column>
-                </el-table-column>
-              </template>
-              <el-table-column v-else-if="item.jnpfKey==='relationForm'" :prop="item.prop"
-                :label="item.label" :align="item.align"
-                :fixed="columnList.some(o=>o.fixed == 'left')&&i==0&&columnData.groupField&&columnData.type==3?'left':item.fixed!='none'&&columnData.childTableStyle!=2?item.fixed:false"
-                :width="item.width" :key="i" :sortable="item.sortable?'custom':item.sortable">
-                <template slot-scope="scope">
-                  <el-link :underline="false"
-                    @click.native="toDetail(scope.row,scope.row[`${item.prop}_id`])" type="primary">
-                    {{ scope.row[item.prop] }}</el-link>
-                </template>
-              </el-table-column>
               <el-table-column :prop="item.prop" :label="item.label" :align="item.align"
                 :fixed="columnList.some(o=>o.fixed == 'left')&&i==0&&columnData.groupField&&columnData.type==3?'left':item.fixed!='none'&&columnData.childTableStyle!=2?item.fixed:false"
-                :width="item.width" :key="i" :sortable="item.sortable?'custom':item.sortable"
-                v-else />
+                :width="item.width" :key="i" :sortable="item.sortable?'custom':item.sortable" />
             </template>
           </template>
           <el-table-column label="操作"
             :fixed="columnData.childTableStyle==2&&childColumnList.length?false:'right'"
             :width="operationWidth" v-if="columnBtnsList.length || customBtnsList.length">
             <template slot-scope="scope" v-if="!scope.row.top">
-              <template v-if="customBtnsList.length">
+              <template v-for="(item, i) in customBtnsList">
+                <template v-if="i<2">
+                  <el-button size="mini" type="text" :key="i" @click="editForRowEdit(scope.row)">
+                    {{item.label}}</el-button>
+                </template>
+              </template>
+              <template v-if="customBtnsList.length>2">
                 <el-dropdown hide-on-click>
                   <span class="el-dropdown-link">
                     <el-button type="text" size="mini">
-                      {{$t('common.moreBtn')}}
-                      <i class="el-icon-arrow-down el-icon--right"></i>
+                      {{$t('common.moreBtn')}}<i class="el-icon-arrow-down el-icon--right"></i>
                     </el-button>
                   </span>
                   <el-dropdown-menu slot="dropdown">
-                    <el-dropdown-item v-for="(item, i) in customBtnsList" :key="i"
-                      @click.native="customBtnsHandel(item,scope.row,scope.$index)"
-                      v-has="item.value">{{item.label}}</el-dropdown-item>
+                    <el-dropdown-item v-for="(item, i) in customBtnsList" :key="i" v-show="i>1"
+                      @click.native="customBtnsHandel(item,scope.row,scope.$index)">{{item.label}}
+                    </el-dropdown-item>
                   </el-dropdown-menu>
                 </el-dropdown>
               </template>
@@ -85,6 +73,7 @@
         </template>
       </div>
     </div>
+    <ExportBox v-if="exportBoxVisible" ref="ExportBox" @download="download" />
   </div>
 </template>
 
@@ -97,11 +86,12 @@ import { getColumnsByModuleId } from '@/api/common'
 import { Candidates } from '@/api/workFlow/FlowBefore'
 import request from '@/utils/request'
 import Search from '../list/Search'
+import ExportBox from '@/components/ExportBox'
 
 export default {
   name: 'dynamicModel',
   props: ['config', 'modelId', 'isPreview'],
-  components: { Search },
+  components: { Search, ExportBox },
   data() {
     return {
       keyword: '',
@@ -160,12 +150,14 @@ export default {
       rowStyle: null,
       cellStyle: null,
       refreshTree: true,
+      exportBoxVisible: false,
     }
   },
   computed: {
     operationWidth() {
-      const customWidth = this.customBtnsList.length ? 50 : 0
-      return this.columnBtnsList.length * 50 + customWidth
+      const customWidth = this.customBtnsList.length ? 80 : 0
+      const width = this.customBtnsList.length <= 2 ? this.customBtnsList.length * 50 : 100
+      return width + customWidth
     }
   },
   watch: {
@@ -196,6 +188,8 @@ export default {
         this.flowTemplateJson = this.config.flowTemplateJson ? JSON.parse(this.config.flowTemplateJson) : {}
         this.isCustomCopy = this.flowTemplateJson.properties && this.flowTemplateJson.properties.isCustomCopy
       }
+      this.customBtnsList = this.columnData.customBtnsList || []
+      this.columnBtnsList = this.columnData.columnBtnsList || []
       this.listLoading = true
       if (this.isPreview) this.listQuery.menuId = "270579315303777093"
       let res = await getColumnsByModuleId(this.listQuery.menuId)
@@ -695,7 +689,25 @@ export default {
           resolve([]);
         }
       })
-    }
+    },
+    headBtnsHandel(key) {
+      if (key == 'download') {
+        this.exportBoxVisible = true
+        this.$nextTick(() => {
+          this.$refs.ExportBox.init(this.exportList)
+        })
+      }
+    },
+    download(data) {
+      if (this.isPreview) return this.$message({ message: '功能预览不支持数据导出', type: 'warning' })
+      let query = { ...this.listQuery, ...data }
+      exportModel(this.modelId, query).then(res => {
+        if (!res.data.url) return
+        this.jnpf.downloadFile(res.data.url)
+        this.$refs.ExportBox.visible = false
+        this.exportBoxVisible = false
+      })
+    },
   }
 }
 </script>
