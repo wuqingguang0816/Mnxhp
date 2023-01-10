@@ -40,16 +40,10 @@
             </template>
           </template>
           <el-table-column label="操作"
-            :fixed="columnData.childTableStyle==2&&childColumnList.length?false:'right'"
-            :width="operationWidth" v-if="columnBtnsList.length || customBtnsList.length">
+            :fixed="columnData.childTableStyle==2&&childColumnList.length?false:'right'" :width="80"
+            v-if="columnBtnsList.length || customBtnsList.length">
             <template slot-scope="scope" v-if="!scope.row.top">
-              <template v-for="(item, i) in customBtnsList">
-                <template v-if="i<2">
-                  <el-button size="mini" type="text" :key="i" @click="editForRowEdit(scope.row)">
-                    {{item.label}}</el-button>
-                </template>
-              </template>
-              <template v-if="customBtnsList.length>2">
+              <template v-if="customBtnsList.length">
                 <el-dropdown hide-on-click>
                   <span class="el-dropdown-link">
                     <el-button type="text" size="mini">
@@ -151,13 +145,6 @@ export default {
       cellStyle: null,
       refreshTree: true,
       exportBoxVisible: false,
-    }
-  },
-  computed: {
-    operationWidth() {
-      const customWidth = this.customBtnsList.length ? 80 : 0
-      const width = this.customBtnsList.length <= 2 ? this.customBtnsList.length * 50 : 100
-      return width + customWidth
     }
   },
   watch: {
