@@ -374,9 +374,9 @@ export default {
       this.commonWordsVisible = false
       if (val) {
         if (this.resurgenceVisible) {
-          this.resurgenceForm.handleOpinion += val[0].commonWordsText
+          this.resurgenceForm.handleOpinion += val.commonWordsText
         } else {
-          this.candidateForm.handleOpinion += val[0].commonWordsText
+          this.candidateForm.handleOpinion += val.commonWordsText
         }
 
       }

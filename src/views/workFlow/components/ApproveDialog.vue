@@ -208,7 +208,7 @@ export default {
     common() {
       this.commonWordsVisible = false
       if (val) {
-        this.candidateForm.handleOpinion += val[0].commonWordsText
+        this.candidateForm.handleOpinion += val.commonWordsText
       }
     },
     commonWords() {

@@ -25,7 +25,7 @@
       </div>
       <span slot="footer" class="dialog-footer">
         <el-button @click="visible = false">{{$t('common.cancelButton')}}</el-button>
-        <el-button type="primary" @click="handleSure()" :loading="btnLoading">
+        <el-button type="primary" @click="select()" :loading="btnLoading">
           {{$t('common.confirmButton')}}
         </el-button>
       </span>
@@ -59,7 +59,8 @@
 import {
   getSelector,
   Update,
-  Create
+  Create,
+  getCommonWordsInfo
 } from '@/api/system/commonWords'
 export default {
   components: {},
@@ -109,13 +110,14 @@ export default {
     },
     addOrUpdateHandle(id) {
       this.commonWordsVisible = true
+      this.formLoading = true
       this.dataForm.id = id || 0
       this.$nextTick(() => {
         this.$refs['dataForm'].resetFields()
-        this.treeLoading = true
         if (this.dataForm.id) {
           getCommonWordsInfo(this.dataForm.id).then(res => {
             this.dataForm = res.data || {}
+            this.formLoading = false
           })
         }
         this.formLoading = false
