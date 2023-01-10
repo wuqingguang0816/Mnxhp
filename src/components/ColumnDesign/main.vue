@@ -659,14 +659,14 @@ export default {
           prop: o,
           fixed: 'none',
           align: 'left',
-          jnpfKey: o,
+          jnpfKey: 'comInput',
           sortable: false,
           width: null,
         }));
         this.searchOptions = fieldsList.map(o => ({
           label: "",
           prop: o,
-          jnpfKey: o,
+          jnpfKey: 'comInput',
           value: '',
           searchType: 1,
           __vModel__: o,
@@ -677,7 +677,7 @@ export default {
         this.groupFieldOptions = fieldsList.map(o => ({
           label: o,
           prop: o,
-          jnpfKey: o,
+          jnpfKey: 'comInput',
           __vModel__: o,
           __config__: {
             label: o
