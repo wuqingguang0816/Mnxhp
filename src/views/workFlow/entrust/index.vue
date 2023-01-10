@@ -251,8 +251,8 @@ export default {
   },
   created() {
     this.config = this.$route.query.config
-    if (this.config == 1) {
-      this.activeName = '2'
+    if (this.config != 0) {
+      this.activeName = this.config == 1 ? '1' : '2'
       this.initData()
     } else {
       this.initFlowList()
