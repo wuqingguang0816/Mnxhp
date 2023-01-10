@@ -13,8 +13,7 @@
           <template v-if="activeData.__config__">
             <template>
               <el-form-item label="控件类型">
-                <el-button style="width: 100%" type="info" plain disabled>{{getCompName}}
-                </el-button>
+                <el-input :value="getCompName" disabled />
               </el-form-item>
             </template>
             <template v-if="$store.getters.hasTable">
