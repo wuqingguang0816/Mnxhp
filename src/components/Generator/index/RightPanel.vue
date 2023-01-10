@@ -13,8 +13,7 @@
           <template v-if="activeData.__config__">
             <template>
               <el-form-item label="控件类型">
-                <el-button style="width: 100%" type="info" plain disabled>{{getCompName}}
-                </el-button>
+                <el-input :value="getCompName" disabled />
               </el-form-item>
             </template>
             <template v-if="$store.getters.hasTable">
@@ -276,7 +275,7 @@
               <el-form-item label="控件文本">
                 <el-input v-model="activeData.buttonText" placeholder="请输入控件文本" />
               </el-form-item>
-              <el-form-item label="位置">
+              <el-form-item label="对齐方式">
                 <el-radio-group v-model="activeData.align">
                   <el-radio-button label="left">居左</el-radio-button>
                   <el-radio-button label="center">居中</el-radio-button>
