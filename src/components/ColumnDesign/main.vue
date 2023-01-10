@@ -662,6 +662,9 @@ export default {
           jnpfKey: 'comInput',
           sortable: false,
           width: null,
+          __config__: {
+            jnpfKey: 'comInput',
+          }
         }));
         this.searchOptions = fieldsList.map(o => ({
           label: "",
@@ -671,7 +674,8 @@ export default {
           searchType: 1,
           __vModel__: o,
           __config__: {
-            label: ""
+            label: "",
+            jnpfKey: 'comInput',
           }
         }));
         this.groupFieldOptions = fieldsList.map(o => ({
@@ -680,7 +684,8 @@ export default {
           jnpfKey: 'comInput',
           __vModel__: o,
           __config__: {
-            label: o
+            label: o,
+            jnpfKey: 'comInput',
           }
         }));
         if (!this.columnOptions.length) this.columnData.columnList = []
