@@ -280,7 +280,7 @@ export default {
         if (index === 0) {
           sums[index] = '合计';
           return;
-        } else if (this.columnData.fieldsTotal.includes(column.property)) {
+        } else if (this.columnData.summaryField.includes(column.property)) {
           const values = data.map(item => Number(item[column.property]));
           if (!values.every(value => isNaN(value))) {
             sums[index] = values.reduce((prev, curr) => {
@@ -290,8 +290,7 @@ export default {
               } else {
                 return prev;
               }
-            }, 0);
-            sums[index] += '';
+            }, 0).toFixed(2);
           } else {
             sums[index] = '';
           }
