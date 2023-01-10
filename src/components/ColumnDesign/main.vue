@@ -580,6 +580,11 @@ export default {
       }
       this.columnData.columnBtnsList = list
     },
+    'columnData.type': {
+      handler(val) {
+        if (val == 5) this.columnData.hasPage = false
+      }
+    }
   },
   created() {
     this.getDataInterfaceSelector()
