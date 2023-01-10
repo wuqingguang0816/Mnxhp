@@ -1434,7 +1434,12 @@
                       <i class="el-icon-warning-outline"></i>
                     </el-tooltip>
                   </el-radio>
-                  <el-radio :label="3">自选退回模式</el-radio>
+                  <el-radio :label="3">自选退回模式
+                    <el-tooltip content="由用户选择重新审批或从当前节点审批" placement="top">
+                      <i class="el-icon-warning-outline"></i>
+                    </el-tooltip>
+                  </el-radio>
+                  <el-radio :label="3"></el-radio>
                 </el-radio-group>
                 <el-select class="form-item-content" v-model="approverForm.rejectStep"
                   placeholder="请选择">
@@ -1491,46 +1496,44 @@
             <el-form label-position="top" class="pd-10-20">
               <el-form-item label="操作设置">
                 <div slot="label" class="form-item-label">操作设置</div>
-                <div class="form-item-content">
-                  <div class="per-cell">
-                    <el-checkbox v-model="approverForm.hasSaveBtn">暂存</el-checkbox>
-                    <el-input v-model="approverForm.saveBtnText" />
+                <div class="per-cell">
+                  <el-checkbox v-model="approverForm.hasSaveBtn">暂存</el-checkbox>
+                  <el-input v-model="approverForm.saveBtnText" />
+                </div>
+                <div class="per-cell">
+                  <el-checkbox v-model="approverForm.hasAuditBtn">同意</el-checkbox>
+                  <el-input v-model="approverForm.auditBtnText" />
+                </div>
+                <div class="per-cell">
+                  <el-checkbox v-model="approverForm.hasRejectBtn">退回</el-checkbox>
+                  <el-input v-model="approverForm.rejectBtnText" />
+                </div>
+                <div class="per-cell">
+                  <el-checkbox v-model="approverForm.hasRevokeBtn">撤回</el-checkbox>
+                  <el-input v-model="approverForm.revokeBtnText" />
+                </div>
+                <div class="per-cell">
+                  <el-checkbox v-model="approverForm.hasTransferBtn">转审</el-checkbox>
+                  <el-input v-model="approverForm.transferBtnText" />
+                </div>
+                <div class="per-cell">
+                  <el-checkbox v-model="approverForm.hasPrintBtn">打印</el-checkbox>
+                  <el-input v-model="approverForm.printBtnText" />
+                </div>
+                <div class="per-cell" v-if="approverForm.hasPrintBtn">
+                  <p style="width:112px"></p>
+                  <JNPF-TreeSelect :options="printTplList" v-model="approverForm.printId"
+                    placeholder="请选择打印模板" lastLevel clearable></JNPF-TreeSelect>
+                </div>
+                <div class="per-cell">
+                  <div slot="label" class="has-free-approver ">
+                    <el-checkbox v-model="approverForm.hasFreeApproverBtn">加签<el-tooltip
+                        content="允许在审批单中增加临时审批人" placement="top">
+                        <a class="el-icon-warning-outline form-item-approver"></a>
+                      </el-tooltip>
+                    </el-checkbox>
                   </div>
-                  <div class="per-cell">
-                    <el-checkbox v-model="approverForm.hasAuditBtn">同意</el-checkbox>
-                    <el-input v-model="approverForm.auditBtnText" />
-                  </div>
-                  <div class="per-cell">
-                    <el-checkbox v-model="approverForm.hasRejectBtn">退回</el-checkbox>
-                    <el-input v-model="approverForm.rejectBtnText" />
-                  </div>
-                  <div class="per-cell">
-                    <el-checkbox v-model="approverForm.hasRevokeBtn">撤回</el-checkbox>
-                    <el-input v-model="approverForm.revokeBtnText" />
-                  </div>
-                  <div class="per-cell">
-                    <el-checkbox v-model="approverForm.hasTransferBtn">转审</el-checkbox>
-                    <el-input v-model="approverForm.transferBtnText" />
-                  </div>
-                  <div class="per-cell">
-                    <el-checkbox v-model="approverForm.hasPrintBtn">打印</el-checkbox>
-                    <el-input v-model="approverForm.printBtnText" />
-                  </div>
-                  <div class="per-cell" v-if="approverForm.hasPrintBtn">
-                    <p style="width:112px"></p>
-                    <JNPF-TreeSelect :options="printTplList" v-model="approverForm.printId"
-                      placeholder="请选择打印模板" lastLevel clearable></JNPF-TreeSelect>
-                  </div>
-                  <div class="per-cell">
-                    <div slot="label" class="has-free-approver">
-                      <el-checkbox v-model="approverForm.hasFreeApproverBtn">加签<el-tooltip
-                          content="允许在审批单中增加临时审批人" placement="top">
-                          <a class="el-icon-warning-outline"></a>
-                        </el-tooltip>
-                      </el-checkbox>
-                    </div>
-                    <el-input v-model="approverForm.hasFreeApproverBtnText" />
-                  </div>
+                  <el-input v-model="approverForm.hasFreeApproverBtnText" />
                 </div>
               </el-form-item>
             </el-form>
@@ -4042,6 +4045,9 @@ export default {
 }
 .has-free-approver {
   width: 92px;
+}
+.form-item-approver {
+  margin-left: 5px;
 }
 .assignee-form {
   display: flex;
