@@ -160,7 +160,7 @@ export default {
       this.prevDis = false
       this.nextDis = false
       this.allList = allList || []
-      if (allList.length) {
+      if (this.allList.length) {
         this.index = this.allList.findIndex(item => item.id === id)
         if (this.index == 0) {
           this.prevDis = true
