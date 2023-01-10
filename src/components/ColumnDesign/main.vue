@@ -270,7 +270,7 @@
                 <el-switch v-model="columnData.showSummary"></el-switch>
               </el-form-item>
               <el-form-item label="合计字段" v-if="columnData.showSummary">
-                <el-select v-model="columnData.fieldsTotal" placeholder="请选择合计字段" clearable
+                <el-select v-model="columnData.summaryField" placeholder="请选择合计字段" clearable
                   multiple>
                   <template v-for="(item,i) in groupFieldOptions">
                     <el-option :key="i" :label="item.__config__.label" :value="item.__vModel__"
@@ -403,7 +403,7 @@ const defaultColumnData = {
   hasSuperQuery: true, // 高级查询
   childTableStyle: 1, // 子表样式
   showSummary: false, // 合计配置
-  fieldsTotal: [], // 合计字段
+  summaryField: [], // 合计字段
   columnList: [], // 字段列表
   columnOptions: [], // 字段列表
   defaultColumnList: [], // 所有可选择字段列表
