@@ -82,18 +82,18 @@
                     <el-dropdown-item @click.native="showManage(scope.row.id,scope.row.fullName)"
                       v-if="scope.row.enableFlow">流程版本
                     </el-dropdown-item>
-                    <el-dropdown-item @click.native="preview(scope.row.id,0)">预览
+                    <el-dropdown-item @click.native="preview(scope.row.id,0)">设计预览
                     </el-dropdown-item>
-                    <el-dropdown-item @click.native="openReleaseDialog(scope.row)">发布
+                    <el-dropdown-item @click.native="openReleaseDialog(scope.row)">发布表单
                     </el-dropdown-item>
                     <el-dropdown-item v-if="scope.row.isRelease==1"
-                      @click.native="preview(scope.row.id,1)">查看
+                      @click.native="preview(scope.row.id,1)">发布预览
                     </el-dropdown-item>
-                    <el-dropdown-item @click.native="copy(scope.row.id)">复制</el-dropdown-item>
-                    <el-dropdown-item @click.native="exportModel(scope.row.id)">导出
+                    <el-dropdown-item @click.native="copy(scope.row.id)">复制表单</el-dropdown-item>
+                    <el-dropdown-item @click.native="exportModel(scope.row.id)">导出表单
                     </el-dropdown-item>
                     <el-dropdown-item @click.native="handleLink(scope.row.id)"
-                      v-if="scope.row.webType!=4&&!scope.row.enableFlow">外链
+                      v-if="scope.row.webType!=4&&!scope.row.enableFlow">外链设置
                     </el-dropdown-item>
                   </el-dropdown-menu>
                 </el-dropdown>
