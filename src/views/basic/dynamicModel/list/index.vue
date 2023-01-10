@@ -48,12 +48,12 @@
             </el-tooltip>
             <template v-if="columnData.type==5&&columnData.treeLazyType == 0">
               <el-tooltip effect="dark" content="展开" placement="top">
-                <el-link v-show="!expandsTree" type="text"
+                <el-link v-show="!expandsTable" type="text"
                   icon="icon-ym icon-ym-btn-expand JNPF-common-head-icon" :underline="false"
                   @click="toggleExpandList()" />
               </el-tooltip>
               <el-tooltip effect="dark" content="折叠" placement="top">
-                <el-link v-show="expandsTree" type="text"
+                <el-link v-show="expandsTable" type="text"
                   icon="icon-ym icon-ym-btn-collapse JNPF-common-head-icon" :underline="false"
                   @click="toggleExpandList()" />
               </el-tooltip>
