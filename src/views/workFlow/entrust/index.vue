@@ -121,8 +121,9 @@
                 <el-table-column label="操作" fixed="right" width="150" v-if="item.key=='1'">
                   <template slot-scope="scope">
                     <tableOpts @edit="addOrUpdateHandle(scope.row.id)"
-                      @del="handleDel(scope.$index,scope.row.id)">
-                      <template v-if=' scope.row.status!=2'>
+                      @del="handleDel(scope.$index,scope.row.id)"
+                      :editDisabled="scope.row.status==2">
+                      <template v-if='scope.row.status!=2'>
                         <el-dropdown>
                           <span class="el-dropdown-link">
                             <el-button type="text" size="mini">{{$t('common.moreBtn')}}<i
