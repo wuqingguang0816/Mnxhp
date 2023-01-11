@@ -45,10 +45,11 @@
       </el-form>
       <span slot="footer" class="dialog-footer">
         <el-button @click="cancel()">{{$t('common.cancelButton')}}</el-button>
-        <el-button type="primary" :loading="dataFormBtnLoading" @click="dataFormSubmit(1)">
+        <el-button type="primary" :loading="dataFormBtnLoading" @click="dataFormSubmit(1)"
+          :disabled='commonBtnLoading'>
           {{$t('common.confirmButton')}}</el-button>
         <el-button @click="dataFormSubmit(2)" type="primary" v-if="!this.dataForm.id"
-          :loading="commonBtnLoading">
+          :loading="commonBtnLoading" :disabled='dataFormBtnLoading'>
           保存并新增
         </el-button>
       </span>

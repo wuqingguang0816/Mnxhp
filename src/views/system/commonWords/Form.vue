@@ -24,10 +24,11 @@
     </el-form>
     <span slot="footer" class="dialog-footer">
       <el-button @click="cancel()">{{$t('common.cancelButton')}}</el-button>
-      <el-button type="primary" :loading="btnLoading" @click="dataFormSubmit()">
+      <el-button type="primary" :loading="btnLoading" @click="dataFormSubmit()"
+        :disabled='continueBtnLoading'>
         {{$t('common.confirmButton')}}</el-button>
       <el-button @click="dataFormSubmit(2)" type="primary" v-if="!dataForm.id"
-        :loading="continueBtnLoading">
+        :loading="continueBtnLoading" :disabled='btnLoading'>
         确定并新增
       </el-button>
     </span>
