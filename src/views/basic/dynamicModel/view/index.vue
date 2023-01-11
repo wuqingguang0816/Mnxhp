@@ -51,7 +51,7 @@
                     </el-button>
                   </span>
                   <el-dropdown-menu slot="dropdown">
-                    <el-dropdown-item v-for="(item, i) in customBtnsList" :key="i" v-show="i>1"
+                    <el-dropdown-item v-for="(item, i) in customBtnsList" :key="i"
                       @click.native="customBtnsHandel(item,scope.row,scope.$index)">{{item.label}}
                     </el-dropdown-item>
                   </el-dropdown-menu>

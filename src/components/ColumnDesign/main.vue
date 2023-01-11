@@ -662,6 +662,7 @@ export default {
           jnpfKey: 'comInput',
           sortable: false,
           width: null,
+          __vModel__: o,
           __config__: {
             jnpfKey: 'comInput',
           }
@@ -697,6 +698,8 @@ export default {
       })
     }
     this.columnBtnsList = this.columnData.columnBtnsList.map(o => o.value)
+    this.setBtnValue(this.columnData.btnsList, this.btnsOption)
+    this.btnsList = this.columnData.btnsList.map(o => o.value)
   },
   mounted() {
     this.setSort()
@@ -851,7 +854,7 @@ export default {
       this.activeItem = item
       this.customBtnVisible = true
       this.$nextTick(() => {
-        this.$refs.customBtn.init()
+        this.$refs.customBtn.init('web', this.webType, this.columnOptions)
       })
     },
     updateScript(func) {

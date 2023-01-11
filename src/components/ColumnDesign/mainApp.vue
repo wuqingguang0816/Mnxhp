@@ -562,7 +562,7 @@ export default {
       this.activeItem = item
       this.customBtnVisible = true
       this.$nextTick(() => {
-        this.$refs.customBtn.init('app')
+        this.$refs.customBtn.init('app', this.webType, this.columnOptions)
       })
     },
     updateScript(func) {

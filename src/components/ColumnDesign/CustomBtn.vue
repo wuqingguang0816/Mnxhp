@@ -212,10 +212,13 @@ export default {
           { required: true, message: '确认框不能为空', trigger: 'input' }
         ],
       },
+      webType: "",
+      columnOptions: []
     }
   },
   computed: {
     formFieldsOptions() {
+      if (this.webType == 4) return this.columnOptions
       const noAllowList = ['table', 'uploadImg', 'uploadFz', 'modifyUser', 'modifyTime']
       let list = []
       const loop = (data, parent) => {
@@ -234,7 +237,9 @@ export default {
     }
   },
   methods: {
-    init(showType) {
+    init(showType, webType, columnOptions) {
+      this.webType = webType
+      this.columnOptions = columnOptions || []
       this.showType = showType || 'pc'
       this.visible = true
       this.dataForm = Object.assign(this.dataForm, this.activeItem)
