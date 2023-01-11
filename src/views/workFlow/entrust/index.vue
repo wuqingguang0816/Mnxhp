@@ -320,9 +320,10 @@ export default {
           e.endTime = endTime
           // 0-委托中 1-未开始 2-已失效
           let status = 0
+          console.log(endTime,currTime)
           if (startTime > currTime) {
             status = 1
-          } else if (endTime < currTime) {
+          } else if (endTime <= currTime) {
             status = 2
           } else {
             status = 0
