@@ -30,7 +30,8 @@
           :has-c="hasBatchBtn" @selection-change="handleSelectionChange" v-if="refreshTable"
           custom-column :span-method="arraySpanMethod" ref="tableRef"
           :hasNO="!(columnData.childTableStyle==2&&childColumnList.length&&columnData.type != 3&&columnData.type != 4)"
-          :hasNOFixed="columnList.some(o=>o.fixed == 'left')" :show-summary='columnData.showSummary'
+          :hasNOFixed="columnList.some(o=>o.fixed == 'left')"
+          :show-summary='columnData.showSummary && !(columnData.type==3 ||columnData.type==5)'
           :summary-method="getTableSummaries">
           <template>
             <template v-for="(item, i) in columnList">
