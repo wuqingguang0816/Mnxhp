@@ -224,14 +224,16 @@ export default {
         const element = this.allList[index];
         if (this.index == index) {
           getModelInfo(this.modelId, element.id).then(res => {
-            this.dataForm = res.data
+            this.dataForm = res.data || {}
             if (!this.dataForm.data) return
-            this.resetForm()
+            console.log(this.dataForm.data)
             this.formData = { ...JSON.parse(this.dataForm.data), id: this.dataForm.id }
-            this.fillFormData(this.formConf, this.formData)
             this.$nextTick(() => {
               this.key = +new Date()
             })
+            this.resetForm()
+            this.fillFormData(this.formConf, this.formData)
+
           })
 
         }
@@ -322,6 +324,7 @@ export default {
                     if (!this.dataForm.data) return
                     this.formData = { ...JSON.parse(this.dataForm.data), id: this.dataForm.id }
                     this.fillFormData(this.formConf, this.formData)
+
                   })
                 } else {
                   this.visible = false
@@ -340,7 +343,13 @@ export default {
               if (callback && typeof callback === "function") callback()
               this.$nextTick(() => {
                 this.continueBtnLoading = false
-                if (type == 2) return this.resetForm()
+                if (type == 2) {
+                  this.resetForm()
+                  this.$nextTick(() => {
+                    this.key = +new Date()
+                  })
+                  return
+                }
                 this.visible = false
                 this.btnLoading = false
                 this.$emit('refreshDataList', true)
