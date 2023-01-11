@@ -863,9 +863,7 @@ export default {
       this.activeItem.func = func
     },
     updateCustomBtn(val) {
-      this.columnData.customBtnsList.forEach((ele, index) => {
-        if (ele.value == val.value) this.$set(this.columnData.customBtnsList, index, val)
-      })
+      this.activeItem = val
     },
     addFunc(item, type) {
       if (!item.func && type == 'afterOnload') item.func = defaultFuncs
