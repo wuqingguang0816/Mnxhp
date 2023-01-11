@@ -576,7 +576,7 @@ export default {
     handlePopup(item, row, index) {
       this.customBoxVisible = true
       this.$nextTick(() => {
-        this.$refs.CustomBox.init(item, this.modelId, row.id, this.isPreview, row)
+        this.$refs.CustomBox.init(item, this.modelId, '', this.isPreview, row)
       })
     },
     handleScriptFunc(item, row, index) {
