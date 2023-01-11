@@ -335,10 +335,13 @@ export default {
         border: 1px solid #dcdfe6;
         padding: 0 10px;
         border-radius: 4px;
-        cursor: pointer;
         margin-bottom: 10px;
         .option-drag {
           margin-right: 6px;
+          cursor: move;
+        }
+        .icon {
+          cursor: pointer;
         }
         &.active {
           border: 1px solid #1890ff;
