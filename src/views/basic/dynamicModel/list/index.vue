@@ -1140,7 +1140,7 @@ export default {
     },
     searchData(queryJson) {
       if (this.columnData.type === 2 && this.treeActiveId) {
-        queryJson = JSON.parse(queryJson)
+        queryJson = queryJson ? JSON.parse(queryJson) : ''
         queryJson = { [this.columnData.treeRelation]: this.treeActiveId, ...queryJson }
         queryJson = JSON.stringify(queryJson)
       }
