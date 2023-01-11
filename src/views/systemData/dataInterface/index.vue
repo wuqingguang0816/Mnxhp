@@ -248,7 +248,7 @@ export default {
             message: res.msg,
             duration: 1000,
             onClose: () => {
-              this.initData()
+              this.getList()
             }
           });
         })
