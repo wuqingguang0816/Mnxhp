@@ -266,18 +266,20 @@
                   <el-option label="折叠展示" :value="2" />
                 </el-select>
               </el-form-item>
-              <el-form-item label="合计配置">
-                <el-switch v-model="columnData.showSummary"></el-switch>
-              </el-form-item>
-              <el-form-item label="合计字段" v-if="columnData.showSummary">
-                <el-select v-model="columnData.summaryField" placeholder="请选择合计字段" clearable
-                  multiple>
-                  <template v-for="(item,i) in groupFieldOptions">
-                    <el-option :key="i" :label="item.__config__.label" :value="item.__vModel__"
-                      v-if="['comInput','numInput','calculate'].includes(item.__config__.jnpfKey)" />
-                  </template>
-                </el-select>
-              </el-form-item>
+              <template v-if="columnData.type==1||columnData.type==2||columnData.type==4">
+                <el-form-item label="合计配置">
+                  <el-switch v-model="columnData.showSummary"></el-switch>
+                </el-form-item>
+                <el-form-item label="合计字段" v-if="columnData.showSummary">
+                  <el-select v-model="columnData.summaryField" placeholder="请选择合计字段" clearable
+                    multiple>
+                    <template v-for="(item,i) in groupFieldOptions">
+                      <el-option :key="i" :label="item.__config__.label" :value="item.__vModel__"
+                        v-if="['comInput','numInput','calculate'].includes(item.__config__.jnpfKey)" />
+                    </template>
+                  </el-select>
+                </el-form-item>
+              </template>
               <el-divider>按钮配置</el-divider>
               <el-checkbox-group v-model="btnsList" class="btnsList">
                 <div v-for="item in btnsOption" :key="item.value">
