@@ -156,7 +156,7 @@
               </template>
               <el-divider>表格配置</el-divider>
               <el-form-item label="数据过滤">
-                <el-button style="width: 100%;" @click="filterPanelShow">添加过滤条件</el-button>
+                <el-button style="width: 100%;" @click="filterPanelShow">{{ columnData.ruleList ? '编辑过滤条件':'添加过滤条件' }}</el-button>
               </el-form-item>
               <Condition ref="conditionpane"  @ruleConfig="ruleConfig"></Condition>
               <template v-if="columnData.type==3">
@@ -317,6 +317,7 @@ const defaultFuncs = '({ data, tableRef, request }) => {\r\n   \r\n}'
 const rowStyleDefaultFunc = '({row,rowIndex}) => {\r\n   \r\n}'
 const cellStyleDefaultFunc = '({row, column, rowIndex, columnIndex}) => {\r\n   \r\n}'
 const defaultColumnData = {
+  ruleList:[], // 过滤规则
   searchList: [], // 查询字段
   hasSuperQuery: true, // 高级查询
   childTableStyle: 1, // 子表样式
@@ -549,10 +550,10 @@ export default {
   },
   methods: {
     filterPanelShow(){
-      this.$refs.conditionpane.show()
+      this.$refs.conditionpane.show(this.columnData.ruleList)
     },
     ruleConfig(data) {
-      this.columnData.ruleList.push(data)
+      this.columnData.ruleList=[data]
       /**if (this.isEdit) {
         this.$set(this.columnData.ruleList, this.index, data)
         this.isEdit = false

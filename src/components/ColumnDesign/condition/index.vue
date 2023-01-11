@@ -59,7 +59,7 @@
           <el-col :span="12">
             <div v-if="item.fieldValueType === 2">
               <template v-if="item.jnpfKey === 'numInput'">
-                <el-input-number v-model="item.fieldValue" placeholder="请输入" :precision="item.precision"
+                <el-input-number v-model="item.fieldValue" placeholder="请输入1" :precision="item.precision"
                   controls-position="right" />
               </template>
               <template v-else-if="item.jnpfKey === 'calculate'">
@@ -110,10 +110,12 @@
                 <roleSelect v-model="item.fieldValue" placeholder="请选择" clearable
                   @change="onConditionObjChange(arguments, item)" />
               </template>
+              <!-- 其他情况 -->
               <template v-else>
                 <el-input v-model="item.fieldValue" placeholder="请输入"></el-input>
               </template>
             </div>
+            <!-- 当数据值选择表单时 -->
             <el-select v-model="item.fieldValue" placeholder="请选择" v-if="item.fieldValueType === 1"
               @change="fieldValueChange($event, item)">
               <el-option v-for="item in usedFormItems" :key="item.__vModel__" :label="item.__config__.label"
@@ -161,10 +163,6 @@
   </section>
 
 </template>
-
-<script setup>
-
-</script>
 
 <script>
 import { getDrawingList } from '@/components/Generator/utils/db'
