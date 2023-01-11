@@ -130,21 +130,18 @@ export default {
       });
     },
     readInfo(item) {
-      if (item.type == 2 && item.flowType == 2) {
+      ReadInfo(item.id).then(res => {
+        this.info = res.data
+        this.files = res.data.files ? JSON.parse(res.data.files) : []
         if (item.isRead == '0') {
           item.isRead = '1'
           this.$emit('read')
         }
-        this.drawer = false
-        this.$router.push('/entrust?config=1')
-      } else {
-        ReadInfo(item.id).then(res => {
-          this.info = res.data
-          this.files = res.data.files ? JSON.parse(res.data.files) : []
-          if (item.isRead == '0') {
-            item.isRead = '1'
-            this.$emit('read')
-          }
+        if (item.type == 2 && item.flowType == 2) {
+          let bodyText = JSON.parse(res.data.bodyText)
+          this.drawer = false
+          this.$router.push('/entrust?config=' + bodyText.type)
+        } else {
           if (item.type == 1) {
             this.visible = true
           } else {
@@ -153,9 +150,8 @@ export default {
             const Base64 = require('js-base64').Base64
             this.$router.push('/workFlowDetail?config=' + encodeURIComponent(Base64.encode(res.data.bodyText)))
           }
-        })
-      }
-
+        }
+      })
     },
     gotoCenter() {
       this.drawer = false

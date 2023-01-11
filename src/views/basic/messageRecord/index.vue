@@ -156,29 +156,29 @@ export default {
       this.multipleSelection = val.map(item => item.id)
     },
     readInfo(item) {
-      if (item.type == 2 && item.flowType == 2) {
+      ReadInfo(item.id).then(res => {
+        this.info = res.data
+        this.files = res.data.files ? JSON.parse(res.data.files) : []
+
         if (item.isRead == '0') {
           item.isRead = '1'
           this.$emit('read')
         }
-        this.drawer = false
-        this.$router.push('/entrust?config=1')
-      } else {
-        if (item.type == 1) {
-          this.formVisible = true
-          item.isRead = '1'
-          this.$nextTick(() => {
-            this.$refs.Form.init(item.id)
-          })
+        if (item.type == 2 && item.flowType == 2) {
+          let bodyText = JSON.parse(res.data.bodyText)
+          this.drawer = false
+          this.$router.push('/entrust?config=' + bodyText.type)
         } else {
-          ReadInfo(item.id).then(res => {
-            item.isRead = '1'
+          if (item.type == 1) {
+            this.visible = true
+          } else {
             if (!res.data.bodyText) return
+            this.drawer = false
             const Base64 = require('js-base64').Base64
             this.$router.push('/workFlowDetail?config=' + encodeURIComponent(Base64.encode(res.data.bodyText)))
-          })
+          }
         }
-      }
+      })
     }
   }
 }
