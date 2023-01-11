@@ -68,6 +68,7 @@
       </div>
     </div>
     <ExportBox v-if="exportBoxVisible" ref="ExportBox" @download="download" />
+    <CustomBox v-if="customBoxVisible" ref="CustomBox" @close="customBoxVisible= false" />
   </div>
 </template>
 
@@ -81,11 +82,12 @@ import { Candidates } from '@/api/workFlow/FlowBefore'
 import request from '@/utils/request'
 import Search from '../list/Search'
 import ExportBox from '@/components/ExportBox'
+import CustomBox from '@/components/JNPFCustom'
 
 export default {
   name: 'dynamicModel',
   props: ['config', 'modelId', 'isPreview'],
-  components: { Search, ExportBox },
+  components: { Search, ExportBox, CustomBox },
   data() {
     return {
       keyword: '',
@@ -145,6 +147,7 @@ export default {
       cellStyle: null,
       refreshTree: true,
       exportBoxVisible: false,
+      customBoxVisible: false,
     }
   },
   watch: {
@@ -568,6 +571,12 @@ export default {
       if (item.btnType == 1) this.handlePopup(item, row, index)
       if (item.btnType == 2) this.handleScriptFunc(item, row, index)
       if (item.btnType == 3) this.handleInterface(item, row, index)
+    },
+    handlePopup(item, row, index) {
+      this.customBoxVisible = true
+      this.$nextTick(() => {
+        this.$refs.CustomBox.init(item, this.modelId, row.id, this.isPreview, row)
+      })
     },
     handleScriptFunc(item, row, index) {
       const parameter = {

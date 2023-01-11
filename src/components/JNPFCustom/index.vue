@@ -59,17 +59,17 @@ export default {
     }
   },
   methods: {
-    init(config, modelId, id, isPreview = true) {
+    init(config, modelId, id, isPreview = true, row) {
       this.loading = true
       this.config = config
       this.id = id
       this.isPreview = isPreview
       this.modelId = modelId
       this.$nextTick(() => {
-        if (this.config.modelId) this.getConfigData()
+        if (this.config.modelId) this.getConfigData(row)
       })
     },
-    getConfigData() {
+    getConfigData(row) {
       getConfigData(this.config.modelId).then(res => {
         if (res.code !== 200 || !res.data) {
           this.$message({
@@ -80,11 +80,7 @@ export default {
           return
         }
         this.formConf = JSON.parse(res.data.formData)
-        getModelInfo(this.modelId, this.id).then(res => {
-          let dataForm = res.data
-          if (!dataForm.data) return
-          const formData = JSON.parse(dataForm.data)
-          this.formData = {}
+        const setDataFun = (formData) => {
           if (this.config.formOptions.length) {
             for (let k in formData) {
               for (let i = 0; i < this.config.formOptions.length; i++) {
@@ -100,7 +96,19 @@ export default {
             this.visible = true
             this.loading = false
           })
-        })
+        }
+        if (this.id) {
+          getModelInfo(this.modelId, this.id).then(res => {
+            let dataForm = res.data
+            if (!dataForm.data) return
+            const formData = JSON.parse(dataForm.data)
+            this.formData = {}
+            setDataFun(formData)
+          })
+        } else {
+          const formData = row
+          setDataFun(formData)
+        }
       }).catch(() => { })
     },
     fillFormData(form, data) {
@@ -146,7 +154,7 @@ export default {
       if (this.config.customBtn) {
         if (this.config.templateJson && this.config.templateJson.length) {
           this.config.templateJson.forEach((ele) => {
-            ele.defaultValue = data[ele.relationField] || ""
+            ele.defaultValue = data[ele.relationField]
           })
         }
         const query = {
