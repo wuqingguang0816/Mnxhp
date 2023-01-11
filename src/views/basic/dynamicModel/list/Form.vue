@@ -226,7 +226,6 @@ export default {
           getModelInfo(this.modelId, element.id).then(res => {
             this.dataForm = res.data || {}
             if (!this.dataForm.data) return
-            console.log(this.dataForm.data)
             this.formData = { ...JSON.parse(this.dataForm.data), id: this.dataForm.id }
             this.$nextTick(() => {
               this.key = +new Date()
@@ -324,7 +323,6 @@ export default {
                     if (!this.dataForm.data) return
                     this.formData = { ...JSON.parse(this.dataForm.data), id: this.dataForm.id }
                     this.fillFormData(this.formConf, this.formData)
-
                   })
                 } else {
                   this.visible = false
