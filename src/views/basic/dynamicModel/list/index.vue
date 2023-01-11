@@ -545,7 +545,7 @@ export default {
   },
   watch: {
     keyword(val) {
-      if (this.columnData.treeMethod == 1) this.$refs.treeBox.filter(val)
+      if (this.columnData.treeSynType == 0) this.$refs.treeBox.filter(val)
     }
   },
   created() {
