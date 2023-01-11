@@ -1439,7 +1439,6 @@
                       <i class="el-icon-warning-outline"></i>
                     </el-tooltip>
                   </el-radio>
-                  <el-radio :label="3"></el-radio>
                 </el-radio-group>
                 <el-select class="form-item-content" v-model="approverForm.rejectStep"
                   placeholder="请选择">
