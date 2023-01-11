@@ -13,7 +13,7 @@
     </div>
     <el-dialog title="选择子流程" :close-on-click-modal="false" :visible.sync="visible"
       class="JNPF-dialog JNPF-dialog_center JNPF-dialog-tree-select" lock-scroll append-to-body
-      width="600px">
+      width="800px">
       <div class="JNPF-common-layout">
         <!-- <div class="JNPF-common-layout-left">
           <el-scrollbar class="JNPF-common-el-tree-scrollbar" v-loading="treeLoading">
