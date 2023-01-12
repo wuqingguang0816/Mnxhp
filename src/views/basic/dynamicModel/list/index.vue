@@ -78,11 +78,12 @@
           <template v-if="columnData.type === 4">
             <el-table-column width="50" align="center" label="序号">
               <template slot-scope="scope">
-                <div class="row-action">
+                <div class="row-action" v-if="config.enableFlow==0">
                   <span class="index">{{ scope.$index + 1 }}</span>
                   <i class="ym-custom ym-custom-arrow-expand"
                     @click="handleRowForm(scope.$index)"></i>
                 </div>
+                <div v-else>{{ scope.$index + 1 }}</div>
               </template>
             </el-table-column>
             <template v-for="(item, i) in columnList">
