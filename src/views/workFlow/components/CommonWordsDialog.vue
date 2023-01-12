@@ -75,6 +75,7 @@ export default {
         systemNames: [],
         systemIds: [],
         commonWordsText: '',
+        commonWordsType: 1,
         sortCode: '',
         enabledMark: 1,
       },

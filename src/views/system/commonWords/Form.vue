@@ -58,6 +58,7 @@ export default {
         systemIds: [],
         commonWordsText: '',
         sortCode: '',
+        commonWordsType: 0,
         enabledMark: 1,
       },
       nodeId: '0',
