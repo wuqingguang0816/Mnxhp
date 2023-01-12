@@ -9,7 +9,8 @@
       </el-form-item>
       <el-form-item label="外链地址" v-if="dataForm.formUse==1">
         <el-row class="form-use-row">
-          <el-input v-model="dataForm.formLink" class="form-use-input float-left"> </el-input>
+          <el-input v-model="dataForm.formLink" class="form-use-input float-left" readonly>
+          </el-input>
           <el-button @click="open(dataForm.formLink)" class="float-left">打开</el-button>
           <el-button type="primary" @click="copy(dataForm.formLink,$event)" class="float-left">复制
           </el-button>
@@ -48,7 +49,7 @@
       </el-form-item>
       <el-form-item label="查询地址" v-if="dataForm.columnUse==1">
         <el-row class="form-use-row">
-          <el-input v-model="dataForm.columnLink" class="form-use-input float-left">
+          <el-input v-model="dataForm.columnLink" class="form-use-input float-left" readonly>
           </el-input>
           <el-button @click="open(dataForm.columnLink)" class="float-left">打开</el-button>
           <el-button type="primary" @click="copy(dataForm.columnLink,$event)" class="float-left">复制
@@ -104,9 +105,10 @@
 </template>
 
 <script>
-import { qrcanvas } from 'qrcanvas';
+import QRCode from 'qrcodejs2'
 import clipboard from '@/utils/clipboard'
 import { getShortLink, save } from '@/api/onlineDev/webDesign'
+import { getDrawingList } from '@/components/Generator/utils/db'
 import { getVisualDevInfo } from '@/api/onlineDev/visualDev'
 import ChangeField from '@/components/ChangeField'
 export default {
@@ -253,23 +255,31 @@ export default {
       if (!this.dataForm.formLink) {
         return
       }
-      const canvas = qrcanvas({
-        data: this.dataForm.formLink,
-        cellSize: 4
-      });
-      document.getElementById('qrcode').innerHTML = '';
-      document.getElementById('qrcode').appendChild(canvas);
+      this.$refs.qrCode.innerHTML = "";
+      this.qrcode = new QRCode(this.$refs.qrCode, {
+        width: 150,
+        height: 150, // 高度
+        text: this.dataForm.formLink, // 二维码内容
+        // render: 'canvas' // 设置渲染方式（有两种方式 table和canvas，默认是canvas）
+        // background: '#f0f'
+        // foreground: '#ff0'
+        correctLevel: QRCode.CorrectLevel.H //容错级别 容错级别有：（1）QRCode.CorrectLevel.L （2）QRCode.CorrectLevel.M （3）QRCode.CorrectLevel.Q （4）QRCode.CorrectLevel.H
+      })
     },
     getQRimg2() {
       if (!this.dataForm.columnLink) {
         return
       }
-      const canvas = qrcanvas({
-        data: this.dataForm.columnLink,
-        cellSize: 4
-      });
-      document.getElementById('qrcode2').innerHTML = '';
-      document.getElementById('qrcode2').appendChild(canvas);
+      this.$refs.qrCode2.innerHTML = "";
+      this.qrcode = new QRCode(this.$refs.qrCode2, {
+        width: 150,
+        height: 150, // 高度
+        text: this.dataForm.columnLink, // 二维码内容
+        // render: 'canvas' // 设置渲染方式（有两种方式 table和canvas，默认是canvas）
+        // background: '#f0f'
+        // foreground: '#ff0'
+        correctLevel: QRCode.CorrectLevel.H //容错级别 容错级别有：（1）QRCode.CorrectLevel.L （2）QRCode.CorrectLevel.M （3）QRCode.CorrectLevel.Q （4）QRCode.CorrectLevel.H
+      })
     },
     dataFormSubmit() {
       this.btnLoading = true
