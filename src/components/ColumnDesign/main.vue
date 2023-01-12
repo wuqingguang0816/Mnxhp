@@ -31,7 +31,7 @@
           <el-table-column prop='multiple' label="是否多选" align="center">
             <template slot-scope="scope">
               <el-checkbox v-model="scope.row.multiple"
-                v-if="['select','depSelect','roleSelect','currPosition','userSelect','usersSelect','currOrganize','comSelect'].includes(scope.row.jnpfKey)">
+                v-if="['select','depSelect','roleSelect','currPosition','userSelect','usersSelect','currOrganize','comSelect','posSelect','groupSelect'].includes(scope.row.jnpfKey)">
               </el-checkbox>
               <el-checkbox v-else disabled></el-checkbox>
             </template>
