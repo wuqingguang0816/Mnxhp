@@ -517,8 +517,8 @@ export default {
       typeList: [
         { url: require('@/assets/images/generator/columnType1.png'), value: 1, name: '普通表格' },
         { url: require('@/assets/images/generator/columnType2.png'), value: 2, name: '左侧树+普通表格' },
-        { url: require('@/assets/images/generator/columnType3.png'), value: 3, name: '分组表格' },
         { url: require('@/assets/images/generator/columnType4.png'), value: 4, name: '编辑表格' },
+        { url: require('@/assets/images/generator/columnType3.png'), value: 3, name: '分组表格' },
         { url: require('@/assets/images/generator/columnType5.png'), value: 5, name: '树形表格' },
       ],
       dataInterfaceSelector: [],
