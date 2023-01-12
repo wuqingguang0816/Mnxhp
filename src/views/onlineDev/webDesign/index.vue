@@ -154,14 +154,14 @@
       type="webDesign" />
     <EngineForm v-if="engineFormVisible" ref="engineForm" />
     <FlowManage v-if="manageVisible" ref="FlowManage" @close="manageVisible=false" />
-    <LinkDialog v-if="linkVisible" ref="LinkDialog" />
+    <LinkDialog v-if="linkVisible" ref="LinkDialog" @close="linkVisible=false" />
   </div>
 </template>
 
 <script>
 import Form from './Form'
 import ViewForm from './ViewForm'
-import LinkDialog from './ShortLinkDialog.vue'
+import LinkDialog from './ShortLinkDialog'
 import AddBox from '@/views/generator/AddBox'
 import mixin from '@/mixins/generator/index'
 import previewDialog from '@/components/PreviewDialog'
