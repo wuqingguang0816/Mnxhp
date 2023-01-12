@@ -1,6 +1,6 @@
 <template>
   <div class="popupSelect-container">
-    <div class="el-select" @click="openDialog">
+    <div @click="openDialog">
       <el-input placeholder="请选择模板" readonly :validate-event="false" v-model="title"
         @mouseenter.native="inputHovering = true" @mouseleave.native="inputHovering = false">
         <template slot="suffix">
@@ -9,6 +9,8 @@
           <i v-if="showClose" class="el-select__caret el-input__icon el-icon-circle-close"
             @click.stop="clear"></i>
         </template>
+        <el-button @click.stop="addOrUpdateHandle()" slot="append">
+          添加</el-button>
       </el-input>
     </div>
     <el-dialog title="模板" :close-on-click-modal="false" :visible.sync="visible"
@@ -68,6 +70,9 @@
         <el-button type="primary" @click="select()">{{$t('common.confirmButton')}}</el-button>
       </span>
     </el-dialog>
+    <!-- <el-button @click="addOrUpdateHandle()" style="float:right">
+      添加</el-button> -->
+    <Form v-if="billRuleFormVisible" ref="Form" @refreshDataList="initData" />
   </div>
 </template>
 
@@ -75,7 +80,11 @@
 import {
   getBillRuleSelector
 } from '@/api/system/billRule'
+import Form from './Form'
 export default {
+  components: {
+    Form
+  },
   props: {
     value: {
       default: ''
@@ -124,7 +133,9 @@ export default {
       inputHovering: false,
       visible: false,
       tableName: '',
-      categoryId: ''
+      categoryId: '',
+      categoryList: [],
+      billRuleFormVisible: false,
     }
   },
   computed: {
@@ -141,6 +152,7 @@ export default {
     this.$store.dispatch('base/getDictionaryData', { sort: 'businessType' }).then((res) => {
       this.treeData = [{ id: '', fullName: '业务分类', children: res }]
       this.categoryId = this.treeData[0].id
+      this.categoryList = res
       this.reset()
     })
   },
@@ -197,7 +209,13 @@ export default {
     rowClick(row) {
       this.checked = row.enCode
       this.checkedRow = row
-    }
+    },
+    addOrUpdateHandle(id) {
+      this.billRuleFormVisible = true
+      this.$nextTick(() => {
+        this.$refs.Form.init(id, this.categoryList)
+      })
+    },
   }
 }
 </script>

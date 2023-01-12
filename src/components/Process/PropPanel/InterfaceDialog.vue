@@ -1,6 +1,6 @@
 <template>
   <div class="popupSelect-container">
-    <div class="el-select" @click="openDialog">
+    <div @click="openDialog">
       <el-input :placeholder="'请选择'+popupTitle" v-model="title" readonly :validate-event="false"
         @mouseenter.native="inputHovering = true" @mouseleave.native="inputHovering = false">
         <template slot="suffix">
@@ -9,8 +9,12 @@
           <i v-if="showClose" class="el-select__caret el-input__icon el-icon-circle-close"
             @click.stop="clear"></i>
         </template>
+        <el-button @click.stop="addOrUpdateHandle()" slot="append">
+          添加</el-button>
       </el-input>
     </div>
+    <!-- <el-button @click="addOrUpdateHandle()" style="float:right">
+      添加</el-button> -->
     <el-dialog :title="popupTitle" :close-on-click-modal="false" :visible.sync="visible"
       class="JNPF-dialog JNPF-dialog_center JNPF-dialog-tree-select" lock-scroll append-to-body
       width="1000px">
@@ -102,12 +106,15 @@
         <el-button type="primary" @click="select()">{{$t('common.confirmButton')}}</el-button>
       </span>
     </el-dialog>
+    <Form v-if="formVisible" ref="Form" @close="closeForm" />
   </div>
 </template>
 
 <script>
 import { getDataInterfaceSelectorList } from '@/api/systemData/dataInterface'
+import Form from './Form'
 export default {
+  components: { Form },
   props: {
     value: {
       default: ''
@@ -163,7 +170,8 @@ export default {
       treeLoading: false,
       treeData: [],
       inputHovering: false,
-      visible: false
+      visible: false,
+      formVisible: false
     }
   },
   computed: {
@@ -243,7 +251,19 @@ export default {
     rowClick(row) {
       this.checked = row.id
       this.checkedRow = row
-    }
+    },
+    addOrUpdateHandle(id) {
+      this.formVisible = true
+      this.$nextTick(() => {
+        this.$refs.Form.init(id, "30be5ef4e3074dd89385ad6b4540c63d")
+      })
+    },
+    closeForm(isRefresh) {
+      this.formVisible = false
+      if (isRefresh) {
+        this.reset()
+      }
+    },
   }
 }
 </script>
