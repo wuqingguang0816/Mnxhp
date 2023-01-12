@@ -135,7 +135,7 @@ import SuperQuery from '@/components/SuperQuery'
 import CandidateForm from '@/views/workFlow/components/CandidateForm'
 import CustomBox from '@/components/JNPFCustom'
 import { getConfig, checkPwd } from '@/api/onlineDev/webDesign'
-import QRCode from 'qrcodejs2'
+import { qrcanvas } from 'qrcanvas';
 import md5 from 'js-md5';
 export default {
   name: 'dynamicModel',
@@ -342,16 +342,12 @@ export default {
       if (!this.formLink) {
         return
       }
-      this.$refs.qrCode.innerHTML = "";
-      this.qrcode = new QRCode(this.$refs.qrCode, {
-        width: 150,
-        height: 150, // 高度
-        text: this.formLink, // 二维码内容
-        // render: 'canvas' // 设置渲染方式（有两种方式 table和canvas，默认是canvas）
-        // background: '#f0f'
-        // foreground: '#ff0'
-        correctLevel: QRCode.CorrectLevel.H //容错级别 容错级别有：（1）QRCode.CorrectLevel.L （2）QRCode.CorrectLevel.M （3）QRCode.CorrectLevel.Q （4）QRCode.CorrectLevel.H
-      })
+      const canvas = qrcanvas({
+        data: this.dataForm.formLink,
+        cellSize: 4
+      });
+      document.getElementById('qrcode').innerHTML = '';
+      document.getElementById('qrcode').appendChild(canvas);
     },
     toDetail(item, defaultValue) {
       if (!defaultValue) return

@@ -11,7 +11,8 @@
         <el-row class="form-use-row">
           <el-input v-model="dataForm.formLink" class="form-use-input float-left"> </el-input>
           <el-button @click="open(dataForm.formLink)" class="float-left">打开</el-button>
-          <el-button type="primary" @click="copy(1)" class="float-left">复制</el-button>
+          <el-button type="primary" @click="copy(dataForm.formLink,$event)" class="float-left">复制
+          </el-button>
           <el-popover placement="bottom-end" width="180" trigger="hover">
             <div class="qrcode">
               <p>扫描二维码，分享此链接</p>
@@ -50,7 +51,8 @@
           <el-input v-model="dataForm.columnLink" class="form-use-input float-left">
           </el-input>
           <el-button @click="open(dataForm.columnLink)" class="float-left">打开</el-button>
-          <el-button type="primary" @click="copy(2)" class="float-left">复制</el-button>
+          <el-button type="primary" @click="copy(dataForm.columnLink,$event)" class="float-left">复制
+          </el-button>
           <el-popover placement="bottom-end" width="180" trigger="hover">
             <div class="qrcode">
               <p>扫描二维码，分享此链接</p>
@@ -91,7 +93,7 @@
       </template>
     </el-form>
     <span slot="footer" class="dialog-footer">
-      <el-button @click="visible = false">{{$t('common.cancelButton')}}</el-button>
+      <el-button @click="dialogVisible = false">{{$t('common.cancelButton')}}</el-button>
       <el-button type="primary" @click="dataFormSubmit()" :loading="btnLoading">
         {{$t('common.confirmButton')}}</el-button>
     </span>
@@ -102,9 +104,9 @@
 </template>
 
 <script>
-import QRCode from 'qrcodejs2'
+import { qrcanvas } from 'qrcanvas';
+import clipboard from '@/utils/clipboard'
 import { getShortLink, save } from '@/api/onlineDev/webDesign'
-import { getDrawingList } from '@/components/Generator/utils/db'
 import { getVisualDevInfo } from '@/api/onlineDev/visualDev'
 import ChangeField from '@/components/ChangeField'
 export default {
@@ -241,14 +243,8 @@ export default {
         this.$refs.ChangeField.openDialog()
       })
     },
-    copy(val) {
-      var input = document.createElement("input"); // 创建input对象
-      input.value = val == 1 ? this.dataForm.formLink : this.dataForm.columnLink; // 设置复制内容
-      document.body.appendChild(input); // 添加临时实例
-      input.select(); // 选择实例内容
-      document.execCommand("Copy"); // 执行复制
-      document.body.removeChild(input); // 删除临时实例
-      this.$message.success('复制成功！');
+    copy(text, event) {
+      clipboard(text, event)
     },
     open(val) {
       window.open(val)
@@ -257,31 +253,23 @@ export default {
       if (!this.dataForm.formLink) {
         return
       }
-      this.$refs.qrCode.innerHTML = "";
-      this.qrcode = new QRCode(this.$refs.qrCode, {
-        width: 150,
-        height: 150, // 高度
-        text: this.dataForm.formLink, // 二维码内容
-        // render: 'canvas' // 设置渲染方式（有两种方式 table和canvas，默认是canvas）
-        // background: '#f0f'
-        // foreground: '#ff0'
-        correctLevel: QRCode.CorrectLevel.H //容错级别 容错级别有：（1）QRCode.CorrectLevel.L （2）QRCode.CorrectLevel.M （3）QRCode.CorrectLevel.Q （4）QRCode.CorrectLevel.H
-      })
+      const canvas = qrcanvas({
+        data: this.dataForm.formLink,
+        cellSize: 4
+      });
+      document.getElementById('qrcode').innerHTML = '';
+      document.getElementById('qrcode').appendChild(canvas);
     },
     getQRimg2() {
       if (!this.dataForm.columnLink) {
         return
       }
-      this.$refs.qrCode2.innerHTML = "";
-      this.qrcode = new QRCode(this.$refs.qrCode2, {
-        width: 150,
-        height: 150, // 高度
-        text: this.dataForm.columnLink, // 二维码内容
-        // render: 'canvas' // 设置渲染方式（有两种方式 table和canvas，默认是canvas）
-        // background: '#f0f'
-        // foreground: '#ff0'
-        correctLevel: QRCode.CorrectLevel.H //容错级别 容错级别有：（1）QRCode.CorrectLevel.L （2）QRCode.CorrectLevel.M （3）QRCode.CorrectLevel.Q （4）QRCode.CorrectLevel.H
-      })
+      const canvas = qrcanvas({
+        data: this.dataForm.columnLink,
+        cellSize: 4
+      });
+      document.getElementById('qrcode2').innerHTML = '';
+      document.getElementById('qrcode2').appendChild(canvas);
     },
     dataFormSubmit() {
       this.btnLoading = true

@@ -60,6 +60,7 @@
     "normalize.css": "7.0.0",
     "nprogress": "0.2.0",
     "path-to-regexp": "2.4.0",
+    "qrcanvas": "^3.1.2",
     "qrcodejs2": "0.0.2",
     "reconnecting-websocket": "^4.4.0",
     "screenfull": "4.2.0",
