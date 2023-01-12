@@ -54,7 +54,8 @@
           </el-table-column>
           <el-table-column prop="value" label="弹窗表单值">
             <template slot-scope="scope">
-              <el-select v-model="scope.row.field" placeholder="请选择" filterable>
+              <el-select v-model="scope.row.field" placeholder="请选择" filterable
+                @visible-change="visibleChange">
                 <el-option v-for="item in fieldOptions" :key="item.vmodel" :label="item.label"
                   :value="item.vmodel">
                 </el-option>
@@ -93,7 +94,8 @@
             <el-table-column prop="value" label="对话框表单值">
               <template slot-scope="scope">
                 <el-select v-model="scope.row.relationField" placeholder="请选择对话框表单值" clearable
-                  filterable @change="onRelationFieldChange($event,scope.row)">
+                  filterable @change="onRelationFieldChange($event,scope.row)"
+                  @visible-change="visibleChange">
                   <el-option v-for="item in fieldOptions" :key="item.vmodel" :label="item.label"
                     :value="item.vmodel">
                   </el-option>
@@ -229,7 +231,6 @@ export default {
   },
   methods: {
     init(showType, activeItem, webType, columnOptions) {
-
       this.webType = webType
       this.columnOptions = columnOptions || []
       this.showType = showType || 'web'
@@ -292,7 +293,6 @@ export default {
       row.jnpfKey = item.__config__.jnpfKey
     },
     addRelationOption() {
-      if (!this.dataForm.modelId) return this.$message({ message: '请先选择表单', type: 'warning' });
       this.dataForm.formOptions.push({
         currentField: '',
         field: '',
@@ -341,6 +341,10 @@ export default {
       this.$refs['dataForm'].clearValidate()
       this.resetData()
       if (val == 2) this.initEditor()
+    },
+    visibleChange(val) {
+      if (!val) return
+      if (!this.dataForm.modelId) this.$message.warning('请先选择表单')
     }
   }
 }
