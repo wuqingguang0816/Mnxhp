@@ -273,7 +273,7 @@
                     <template slot-scope="scope">
                       <child-table-column :data="scope.row[item.prop]" :head="item.children"
                         @toggleExpand="toggleExpand(scope.row,`${item.prop}Expand`)"
-                        :expand="scope.row[`${item.prop}Expand`]" v-if="!ii" />
+                        @toDetail="toDetail" :expand="scope.row[`${item.prop}Expand`]" v-if="!ii" />
                     </template>
                   </el-table-column>
                 </el-table-column>

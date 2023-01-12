@@ -4,7 +4,13 @@
       <tr v-for="(item, index) in fewData" class="child-table__row" :key="index">
         <td v-for="(headItem, i) in head" :key="i" :style="{width:`${headItem.width-1}px`}"
           :class="{'td-flex-1':!headItem.width}">
-          <div class="cell">
+          <div class="cell" v-if="headItem.jnpfKey==='relationForm'">
+            <el-link :underline="false" type="primary"
+              @click.native="toDetail(headItem.modelId,item[`${headItem.vModel}_id`])">
+              {{ item[headItem.vModel] }}
+            </el-link>
+          </div>
+          <div class="cell" v-else>
             {{ item[headItem.vModel] }}
           </div>
         </td>
@@ -14,7 +20,13 @@
       <tr v-for="(item, index) in data" class="child-table__row" :key="index">
         <td v-for="(headItem, i) in head" :key="i" :style="{width:`${headItem.width-1}px`}"
           :class="{'td-flex-1':!headItem.width}">
-          <div class="cell">
+          <div class="cell" v-if="headItem.jnpfKey==='relationForm'">
+            <el-link :underline="false" type="primary"
+              @click.native="toDetail(headItem.modelId,item[`${headItem.vModel}_id`])">
+              {{ item[headItem.vModel] }}
+            </el-link>
+          </div>
+          <div class="cell" v-else>
             {{ item[headItem.vModel] }}
           </div>
         </td>
@@ -57,6 +69,7 @@ export default {
     }
   },
   computed: {
+
     fewData() {
       if (!this.data) return []
       return this.data.slice(0, this.defaultNumber)
@@ -65,6 +78,9 @@ export default {
   methods: {
     toggleExpand() {
       this.$emit('toggleExpand')
+    },
+    toDetail(modelId, id) {
+      this.$emit('toDetail', modelId, id)
     }
   }
 }
