@@ -176,12 +176,12 @@
                       v-for="(item, index) in list" :key="index"></el-option>
                   </el-select>
                 </el-form-item>
-                <el-form-item label="数据加载">
+                <jnpf-form-tip-item class="left-tree-query" tip-label="提供异步调用的数据接口" label="数据加载">
                   <el-radio-group v-model="columnData.treeSynType">
                     <el-radio :label="0">同步</el-radio>
                     <el-radio :label="1">异步</el-radio>
                   </el-radio-group>
-                </el-form-item>
+                </jnpf-form-tip-item>
                 <template v-if="columnData.treeSynType==1">
                   <el-form-item label="数据接口">
                     <interface-dialog :value="columnData.treeInterfaceId"
@@ -195,9 +195,9 @@
                         {{scope.row.field}}
                       </template>
                     </el-table-column>
-                    <el-table-column prop="value" label="参数值">
+                    <el-table-column prop="value" label="映射参数名">
                       <template slot-scope="scope">
-                        <el-input v-model="scope.row.relationField" placeholder="请输入参数值" />
+                        <el-input v-model="scope.row.relationField" placeholder="请输入" />
                       </template>
                     </el-table-column>
                   </el-table>
