@@ -16,9 +16,6 @@
         <el-step title="列表设计" @click.native="stepChick(1)" />
       </el-steps>
       <div class="options">
-        <el-button @click="changeList(1)" v-if="activeStep==2&&dataForm.webType==2" type="warning">
-          关闭列表
-        </el-button>
         <el-button @click="prev" :disabled="activeStep<=0">{{$t('common.prev')}}</el-button>
         <el-button @click="next" :disabled="activeStep>=maxStep || loading">{{$t('common.next')}}
         </el-button>
@@ -79,11 +76,9 @@
       <template v-if="activeStep==1">
         <columnDesign ref="columnDesign" :columnData="columnData" :appColumnData="appColumnData"
           :modelType="dataForm.type" :webType="dataForm.webType" :interfaceId="dataForm.interfaceId"
-          :templateJson="dataForm.interfaceParam" @openList="changeList(2)" />
+          :templateJson="dataForm.interfaceParam" />
       </template>
     </div>
-    <TableForm :visible.sync="formVisible" ref="tableForm" @closeForm="closeForm"
-      :dbLinkId="dataForm.dbLinkId" />
   </el-dialog>
 </template>
 
