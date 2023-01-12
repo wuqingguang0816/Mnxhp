@@ -176,31 +176,33 @@
                       v-for="(item, index) in list" :key="index"></el-option>
                   </el-select>
                 </el-form-item>
-                <jnpf-form-tip-item class="left-tree-query" tip-label="提供异步调用的数据接口" label="数据加载">
-                  <el-radio-group v-model="columnData.treeSynType">
-                    <el-radio :label="0">同步</el-radio>
-                    <el-radio :label="1">异步</el-radio>
-                  </el-radio-group>
-                </jnpf-form-tip-item>
-                <template v-if="columnData.treeSynType==1">
-                  <el-form-item label="数据接口">
-                    <interface-dialog :value="columnData.treeInterfaceId"
-                      :title="columnData.treeInterfaceName" @change="onInterfaceChange" />
-                  </el-form-item>
-                  <el-table :data="columnData.treeTemplateJson">
-                    <el-table-column type="index" width="50" label="序号" align="center" />
-                    <el-table-column prop="field" label="参数名称">
-                      <template slot-scope="scope">
-                        <span class="required-sign">{{scope.row.required?'*':''}}</span>
-                        {{scope.row.field}}
-                      </template>
-                    </el-table-column>
-                    <el-table-column prop="value" label="映射参数名">
-                      <template slot-scope="scope">
-                        <el-input v-model="scope.row.relationField" placeholder="请输入" />
-                      </template>
-                    </el-table-column>
-                  </el-table>
+                <template v-if="columnData.treeDataSource==='api'">
+                  <jnpf-form-tip-item class="left-tree-query" tip-label="提供异步调用的数据接口" label="数据加载">
+                    <el-radio-group v-model="columnData.treeSynType">
+                      <el-radio :label="0">同步</el-radio>
+                      <el-radio :label="1">异步</el-radio>
+                    </el-radio-group>
+                  </jnpf-form-tip-item>
+                  <template v-if="columnData.treeSynType==1">
+                    <el-form-item label="数据接口">
+                      <interface-dialog :value="columnData.treeInterfaceId"
+                        :title="columnData.treeInterfaceName" @change="onInterfaceChange" />
+                    </el-form-item>
+                    <el-table :data="columnData.treeTemplateJson">
+                      <el-table-column type="index" width="50" label="序号" align="center" />
+                      <el-table-column prop="field" label="参数名称">
+                        <template slot-scope="scope">
+                          <span class="required-sign">{{scope.row.required?'*':''}}</span>
+                          {{scope.row.field}}
+                        </template>
+                      </el-table-column>
+                      <el-table-column prop="value" label="映射参数名">
+                        <template slot-scope="scope">
+                          <el-input v-model="scope.row.relationField" placeholder="请输入" />
+                        </template>
+                      </el-table-column>
+                    </el-table>
+                  </template>
                 </template>
               </template>
               <el-divider>表格配置</el-divider>

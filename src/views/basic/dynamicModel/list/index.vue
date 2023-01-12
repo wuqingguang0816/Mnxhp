@@ -20,7 +20,8 @@
         :default-expand-all="columnData.treeSynType==0?expandsTree:false" highlight-current
         ref="treeBox" :expand-on-click-node="false" @node-click="handleNodeClick"
         class="JNPF-common-el-tree" :node-key="treeProps.value" :filter-node-method="filterNode"
-        :lazy="columnData.treeSynType==1?true:false" :load="loadNode" v-if="refreshTree">
+        :lazy="columnData.treeSynType==1&columnData.treeDataSource==='api'?true:false"
+        :load="loadNode" v-if="refreshTree">
         <span class="custom-tree-node" slot-scope="{ node, data }">
           <i :class="data.icon"></i>
           <span class="text">{{node.label}}</span>
