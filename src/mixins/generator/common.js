@@ -112,6 +112,9 @@ export default {
         }
       }
       this.loading = false
+      this.$nextTick(() => {
+        this.next()
+      })
     },
     getDbOptions() {
       getDataSourceListAll().then(res => {
