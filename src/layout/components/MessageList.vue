@@ -140,7 +140,7 @@ export default {
         if (item.type == 2 && item.flowType == 2) {
           let bodyText = JSON.parse(res.data.bodyText)
           this.drawer = false
-          this.$router.push('/entrust?config=' + bodyText.type)
+          this.$router.push('/workFlow/entrust?config=' + bodyText.type)
         } else {
           if (item.type == 1) {
             this.visible = true

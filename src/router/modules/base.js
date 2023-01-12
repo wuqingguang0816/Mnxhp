@@ -82,7 +82,7 @@ const baseRouter = [{
 	meta: {
 		title: 'entrust',
 		affix: false,
-		zhTitle: '委托给我的',
+		zhTitle: '流程委托',
 		icon: 'icon-ym icon-ym-flowEntrust',
 	}
 },

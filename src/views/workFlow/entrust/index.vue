@@ -240,7 +240,7 @@ export default {
       classObject: { active: true },
       checkFlowItem: {},
       dialogVisible: false,
-      config: ''
+      config: 0
     }
   },
   filters: {
@@ -251,7 +251,7 @@ export default {
   },
   created() {
     this.config = this.$route.query.config
-    if (this.config != 0) {
+    if (this.config) {
       this.activeName = this.config == 1 ? '1' : '2'
       this.initData()
     } else {
