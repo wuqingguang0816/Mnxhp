@@ -75,16 +75,6 @@ const baseRouter = [{
 		zhTitle: '流程详情',
 		icon: 'icon-ym icon-ym-workFlow',
 	}
-}, {
-	path: '/workFlow/entrust',
-	component: (resolve) => require(['@/views/workFlow/entrust'], resolve),
-	name: 'entrust',
-	meta: {
-		title: 'entrust',
-		affix: false,
-		zhTitle: '流程委托',
-		icon: 'icon-ym icon-ym-flowEntrust',
-	}
 },
 {
 	path: '/externalLink',
