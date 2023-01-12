@@ -1263,6 +1263,7 @@ export default {
       return data[this.treeProps.label].indexOf(value) !== -1;
     },
     toggleTreeExpand(expands) {
+      this.keyword = ''
       this.refreshTree = false
       this.expandsTree = expands
       this.$nextTick(() => {
