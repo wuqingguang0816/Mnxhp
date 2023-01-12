@@ -2,20 +2,27 @@
   <el-dialog :close-on-click-modal="false" class="JNPF-dialog JNPF-dialog_center form-script-dialog"
     lock-scroll append-to-body v-bind="$attrs" width="1000px" :modal-append-to-body="false"
     title="表单样式" v-on="$listeners" @open="onOpen">
-    <!-- <span slot="title" class="dialog-title">
-      <span>
-        <el-tooltip content="小程序不支持在线JS脚本" placement="top-start">
-          <a class="el-icon-warning-outline"></a>
-        </el-tooltip>
-      </span>
-    </span> -->
     <div class="form-script-dialog-body">
       <div class="right-main">
         <div class="codeEditor">
           <JNPFCodeEditor v-model="text" :options="options" ref="CodeEditor" />
         </div>
+        <div class="tips">
+          <p>实例：</p>
+          <p>.text{</p>
+          <p style="text-indent: 2em">
+            background-color: #fff; //背景颜色
+          </p>
+          <p style="text-indent: 2em">
+            font-size: 18px; //字体大小
+          </p>
+          <p>
+            }
+          </p>
+        </div>
       </div>
     </div>
+
     <span slot="footer" class="dialog-footer">
       <el-button @click="closeDialog">{{$t('common.cancelButton')}}</el-button>
       <el-button type="primary" @click="onClose()">{{$t('common.confirmButton')}}</el-button>
