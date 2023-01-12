@@ -427,25 +427,40 @@ export default {
           prop: o,
           fixed: 'none',
           align: 'left',
-          jnpfKey: o,
+          jnpfKey: 'comInput',
           sortable: false,
           width: null,
+          __vModel__: o,
+          __config__: {
+            jnpfKey: 'comInput',
+          }
         }));
         this.searchOptions = fieldsList.map(o => ({
           label: "",
           prop: o,
-          jnpfKey: o,
+          jnpfKey: 'comInput',
           value: '',
           searchType: 1,
           __vModel__: o,
           __config__: {
-            label: ""
+            label: "",
+            jnpfKey: 'comInput',
           }
         }));
         this.sortOptions = fieldsList.map(o => ({
           label: '',
           prop: o,
           jnpfKey: o,
+        }));
+        this.groupFieldOptions = fieldsList.map(o => ({
+          label: o,
+          prop: o,
+          jnpfKey: 'comInput',
+          __vModel__: o,
+          __config__: {
+            label: o,
+            jnpfKey: 'comInput',
+          }
         }));
         if (!this.columnOptions.length) this.columnData.columnList = []
         if (!this.searchOptions.length) this.columnData.searchList = []
@@ -562,15 +577,18 @@ export default {
       this.columnData.customBtnsList.push({
         value: 'btn_' + id,
         label: '按钮' + id,
-        func: ''
+        event: {
+          func: ''
+        }
       })
     },
     editFunc(item) {
-      if (!item.func) item.func = defaultFunc
+      if (!item.event.func) item.event.func = defaultFunc
       this.activeItem = item
       this.customBtnVisible = true
       this.$nextTick(() => {
-        this.$refs.customBtn.init('app', this.webType, this.columnOptions)
+        console.log(this.columnOptions)
+        this.$refs.customBtn.init('app', item.event, this.webType, this.columnOptions)
       })
     },
     updateScript(func) {
@@ -578,7 +596,7 @@ export default {
     },
     updateCustomBtn(val) {
       this.columnData.customBtnsList.forEach((ele, index) => {
-        if (ele.value == val.value) this.$set(this.columnData.customBtnsList, index, val)
+        if (ele.value == this.activeItem.value) this.$set(this.columnData.customBtnsList[index], 'event', val)
       })
     },
     addFunc(item, type) {

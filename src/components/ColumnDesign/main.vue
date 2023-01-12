@@ -367,7 +367,7 @@
     </div>
     <form-script v-if="formScriptVisible" :key="scriptKey" :value="activeItem.func" ref="formScript"
       :type="activeItem.type" @updateScript="updateScript" @closeDialog="formScriptVisible=false" />
-    <custom-btn v-if="customBtnVisible" :key="scriptKey" :activeItem="activeItem" ref="customBtn"
+    <custom-btn v-if="customBtnVisible" :key="scriptKey" ref="customBtn"
       @updateCustomBtn="updateCustomBtn" @closeDialog="customBtnVisible=false" />
     <upload-box ref="uploadRef" :visible.sync="uploadBoxVisible" @onConfirm="onConfirm" />
   </div>
@@ -848,22 +848,26 @@ export default {
       this.columnData.customBtnsList.push({
         value: 'btn_' + id,
         label: '按钮' + id,
-        func: ''
+        event: {
+          func: ''
+        }
       })
     },
     editFunc(item) {
-      if (!item.func) item.func = defaultFunc
+      if (!item.event.func) item.event.func = defaultFunc
       this.activeItem = item
       this.customBtnVisible = true
       this.$nextTick(() => {
-        this.$refs.customBtn.init('web', this.webType, this.columnOptions)
+        this.$refs.customBtn.init('web', item.event, this.webType, this.columnOptions)
       })
     },
     updateScript(func) {
       this.activeItem.func = func
     },
     updateCustomBtn(val) {
-      this.activeItem = val
+      this.columnData.customBtnsList.forEach((ele, index) => {
+        if (ele.value == this.activeItem.value) this.$set(this.columnData.customBtnsList[index], 'event', val)
+      })
     },
     addFunc(item, type) {
       if (!item.func && type == 'afterOnload') item.func = defaultFuncs

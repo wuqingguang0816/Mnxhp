@@ -1166,10 +1166,9 @@ export default {
       this.initData()
     },
     customBtnsHandel(item, row, index) {
-      if (item.btnType == 1) this.handlePopup(item, row, index)
-      if (item.btnType == 2) this.handleScriptFunc(item, row, index)
-      if (item.btnType == 3) this.handleInterface(item, row, index)
-
+      if (item.event.btnType == 1) this.handlePopup(item.event, row, index)
+      if (item.event.btnType == 2) this.handleScriptFunc(item.event, row, index)
+      if (item.event.btnType == 3) this.handleInterface(item.event, row, index)
     },
     handlePopup(item, row, index) {
       this.customBoxVisible = true
