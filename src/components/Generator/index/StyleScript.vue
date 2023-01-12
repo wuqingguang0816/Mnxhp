@@ -8,7 +8,7 @@
           <JNPFCodeEditor v-model="text" :options="options" ref="CodeEditor" />
         </div>
         <div class="tips">
-          <p>实例：</p>
+          <p>示例：</p>
           <p>.text{</p>
           <p style="text-indent: 2em">
             background-color: #fff; //背景颜色
