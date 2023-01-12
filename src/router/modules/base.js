@@ -76,7 +76,7 @@ const baseRouter = [{
 		icon: 'icon-ym icon-ym-workFlow',
 	}
 }, {
-	path: '/entrust',
+	path: '/workFlow/entrust',
 	component: (resolve) => require(['@/views/workFlow/entrust'], resolve),
 	name: 'entrust',
 	meta: {
