@@ -29,13 +29,23 @@
           <template v-if="showAll">
             <el-col :span="6">
               <el-form-item label="所属流程">
-                <el-select v-model="templateId" placeholder="选择所属流程" clearable>
+                <el-select v-model="templateId" placeholder="选择所属流程" clearable
+                  @change="onTemplateIdChange">
                   <el-option-group v-for="group in flowEngineList" :key="group.id"
                     :label="group.fullName+'【'+group.num+'】'">
                     <el-option v-for="item in group.children" :key="item.id" :label="item.fullName"
                       :value="item.id">
                     </el-option>
                   </el-option-group>
+                </el-select>
+              </el-form-item>
+            </el-col>
+            <el-col :span="6">
+              <el-form-item label="所属名称">
+                <el-select v-model="flowId" placeholder="选择所属名称" clearable
+                  @visible-change="visibleFlowChange">
+                  <el-option v-for="item in flowOptions" :key="item.id" :label="item.fullName"
+                    :value="item.id" />
                 </el-select>
               </el-form-item>
             </el-col>
@@ -123,7 +133,7 @@
 
 <script>
 import { FlowBeforeList } from '@/api/workFlow/FlowBefore'
-import { FlowEngineListAll } from '@/api/workFlow/FlowEngine'
+import { FlowEngineListAll, getFlowList } from '@/api/workFlow/FlowEngine'
 import FlowBox from '../components/FlowBox'
 export default {
   name: 'workFlow-flowDone',
@@ -186,10 +196,12 @@ export default {
       startTime: '',
       endTime: '',
       templateId: '',
+      flowId: '',
       flowCategory: '',
       creatorUserId: '',
       categoryList: [],
-      flowEngineList: []
+      flowEngineList: [],
+      flowOptions: []
     }
   },
   filters: {
@@ -238,6 +250,7 @@ export default {
         startTime: this.startTime,
         endTime: this.endTime,
         templateId: this.templateId,
+        flowId: this.flowId,
         flowUrgent: this.urgent,
         flowCategory: this.flowCategory,
         creatorUserId: this.creatorUserId
@@ -271,6 +284,7 @@ export default {
       this.endTime = ''
       this.keyword = ''
       this.templateId = ''
+      this.flowId = ''
       this.urgent = ''
       this.flowCategory = ''
       this.creatorUserId = ''
@@ -281,7 +295,22 @@ export default {
         sidx: ''
       }
       this.initData()
-    }
+    },
+    onTemplateIdChange(val) {
+      this.flowId = ''
+      this.flowOptions = []
+      if (!val) return
+      this.getFlowList()
+    },
+    getFlowList() {
+      getFlowList(this.templateId).then(res => {
+        this.flowOptions = res.data
+      })
+    },
+    visibleFlowChange(val) {
+      if (!val) return
+      if (!this.templateId) this.$message.warning('请先选择所属流程')
+    },
   }
 }
 </script>

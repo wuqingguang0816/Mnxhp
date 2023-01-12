@@ -34,16 +34,16 @@
                 </el-select>
               </el-form-item>
             </el-col>
-            <el-col :span="6">
-              <el-form-item label="所属节点">
-                <el-select v-model="listQuery.nodeCode" placeholder="选择所属节点" clearable
-                  @visible-change="visibleChange">
-                  <el-option v-for="item in nodeOptions" :key="item.id" :label="item.fullName"
-                    :value="item.id" />
-                </el-select>
-              </el-form-item>
-            </el-col>
             <template v-if="showAll">
+              <el-col :span="6">
+                <el-form-item label="所属节点">
+                  <el-select v-model="listQuery.nodeCode" placeholder="选择所属节点" clearable
+                    @visible-change="visibleChange">
+                    <el-option v-for="item in nodeOptions" :key="item.id" :label="item.fullName"
+                      :value="item.id" />
+                  </el-select>
+                </el-form-item>
+              </el-col>
               <el-col :span="6">
                 <el-form-item label="日期">
                   <el-date-picker v-model="pickerVal" type="daterange" start-placeholder="开始日期"
