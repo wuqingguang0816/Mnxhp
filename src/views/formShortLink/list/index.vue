@@ -117,7 +117,7 @@
 </template>
 
 <script>
-import { getModelList, getModelSubList, deleteModel, batchDelete, exportModel, createModel, updateModel, getConfigData } from '@/api/onlineDev/visualDev'
+import { getModelListLink, getModelSubList, deleteModel, batchDelete, exportModel, createModel, updateModel, getConfigData } from '@/api/onlineDev/visualDev'
 import { Create, Update } from '@/api/workFlow/workFlowForm'
 import { getDictionaryDataSelector } from '@/api/systemData/dictionary'
 import { getDataInterfaceRes } from '@/api/systemData/dataInterface'
@@ -289,7 +289,7 @@ export default {
     initData() {
       if (this.isPreview) return
       this.listLoading = true
-      getModelList(this.modelId, this.listQuery).then(res => {
+      getModelListLink(this.modelId, this.listQuery).then(res => {
         if (this.columnData.type === 4) {
           this.list = res.data.list.map(o => ({
             ...o,
