@@ -177,17 +177,18 @@
                   </el-select>
                 </el-form-item>
                 <template v-if="columnData.treeDataSource==='api'">
-                  <jnpf-form-tip-item class="left-tree-query" tip-label="提供异步调用的数据接口" label="数据加载">
+                  <el-form-item label="数据加载">
                     <el-radio-group v-model="columnData.treeSynType">
                       <el-radio :label="0">同步</el-radio>
                       <el-radio :label="1">异步</el-radio>
                     </el-radio-group>
-                  </jnpf-form-tip-item>
+                  </el-form-item>
                   <template v-if="columnData.treeSynType==1">
-                    <el-form-item label="数据接口">
+                    <jnpf-form-tip-item class="left-tree-query" tip-label="提供异步调用的数据接口"
+                      label="数据接口">
                       <interface-dialog :value="columnData.treeInterfaceId"
                         :title="columnData.treeInterfaceName" @change="onInterfaceChange" />
-                    </el-form-item>
+                    </jnpf-form-tip-item>
                     <el-table :data="columnData.treeTemplateJson">
                       <el-table-column type="index" width="50" label="序号" align="center" />
                       <el-table-column prop="field" label="参数名称">
