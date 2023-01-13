@@ -1,35 +1,42 @@
 <template>
-  <el-select v-model="valueTitle" :clearable="clearable" :disabled="disabled" @clear="clearHandle"
-    ref='elSelect' :placeholder="placeholder" :popper-class="`JNPF-select-tree ${themeClass}`"
-    @focus="selectFocus" :filterable="filterable" :filter-method="selectFilter"
-    class="JNPF-selectTree" @visible-change="visibleChange" :multiple="multiple"
-    :collapse-tags="collapseTags" @remove-tag="removeTag" :key="key">
-    <el-option v-for="item in selectOptions" :key="item.id" :label="item[props.label]"
-      :value="item[props.value]" style="display:none"></el-option>
-    <el-option :value="optionTitle" :label="optionTitle" class="options">
-      <el-tree id="tree-option" ref="selectTree" :accordion="accordion" :data="options"
-        :default-expand-all="defaultExpandAll" :props="props" :node-key="props.value"
-        :default-expanded-keys="defaultExpandedKey" @node-click="handleNodeClick"
-        :filter-node-method="filterNode" :show-checkbox="multiple" :check-on-click-node="multiple"
-        :class="{'single':!multiple}" :expand-on-click-node="!multiple" @check="check"
-        v-show="options.length">
-        <span class="custom-tree-node" :class="{'is-disabled': data.disabled}"
-          slot-scope="{ node, data }">
-          <slot :data="{ node, data }">
-            <i :class="data.icon" v-if="data.icon"></i>
-            <span class="text">{{node.label}}</span>
-          </slot>
-          <!-- 自定义slot示例 开始 -->
-          <!-- <template slot-scope="{data}">
+  <div class="selectBox">
+    <el-select v-model="valueTitle" :clearable="clearable" :disabled="disabled" @clear="clearHandle"
+      ref='elSelect' :placeholder="placeholder" :popper-class="`JNPF-select-tree ${themeClass}`"
+      @focus="selectFocus" :filterable="filterable" :filter-method="selectFilter"
+      class="JNPF-selectTree" @visible-change="visibleChange" :multiple="multiple"
+      :collapse-tags="collapseTags" @remove-tag="removeTag" :key="key"
+      :style="dicType==='1'?'width:75%':''">
+      <el-option v-for="item in selectOptions" :key="item.id" :label="item[props.label]"
+        :value="item[props.value]" style="display:none">
+      </el-option>
+      <el-option :value="optionTitle" :label="optionTitle" class="options">
+        <el-tree id="tree-option" ref="selectTree" :accordion="accordion" :data="options"
+          :default-expand-all="defaultExpandAll" :props="props" :node-key="props.value"
+          :default-expanded-keys="defaultExpandedKey" @node-click="handleNodeClick"
+          :filter-node-method="filterNode" :show-checkbox="multiple" :check-on-click-node="multiple"
+          :class="{'single':!multiple}" :expand-on-click-node="!multiple" @check="check"
+          v-show="options.length">
+          <span class="custom-tree-node" :class="{'is-disabled': data.disabled}"
+            slot-scope="{ node, data }">
+            <slot :data="{ node, data }">
+              <i :class="data.icon" v-if="data.icon"></i>
+              <span class="text">{{node.label}}</span>
+            </slot>
+            <!-- 自定义slot示例 开始 -->
+            <!-- <template slot-scope="{data}">
             <i :class="data.data.icon"></i>
             <span class="text">{{data.node.label}}</span>
           </template> -->
-          <!-- 自定义slot示例 结束 -->
-        </span>
-      </el-tree>
-      <p v-show="!options.length" class="empty-text">无数据</p>
-    </el-option>
-  </el-select>
+            <!-- 自定义slot示例 结束 -->
+          </span>
+        </el-tree>
+        <p v-show="!options.length" class="empty-text">无数据</p>
+      </el-option>
+    </el-select>
+    <el-button @click.stop="goDictionary()" slot="append" v-if="dicType=='1'" style="float: right;">
+      添加</el-button>
+  </div>
+
 </template>
 
 <script>
@@ -38,6 +45,10 @@ import { mapState } from 'vuex'
 export default {
   name: "el-tree-select",
   props: {
+    dicType: {
+      type: String,
+      default: ""
+    },
     // 配置项
     props: {
       type: Object,
@@ -226,6 +237,11 @@ export default {
       for (let i = 0; i < allNode.length; i++) {
         allNode[i].classList.remove('is-current')
       }
+    },
+    goDictionary() {
+      let src = window.location.protocol + "//" + window.location.host + "/systemData/dictionary"
+      // console.log(src);
+      window.open(src, "_blank")
     }
   },
   watch: {
@@ -243,8 +259,11 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.JNPF-selectTree {
+.selectBox {
   width: 100%;
+}
+.JNPF-selectTree {
+  width: 75%;
 }
 .el-scrollbar .el-scrollbar__view .el-select-dropdown__item {
   height: auto;
@@ -296,5 +315,10 @@ ul li >>> .el-tree .el-tree-node__content {
   cursor: auto;
   padding: 0;
   line-height: 24px;
+}
+.el-link {
+  line-height: 24px;
+  vertical-align: top;
+  padding: 0 20px;
 }
 </style>

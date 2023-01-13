@@ -80,7 +80,7 @@
 import {
   getBillRuleSelector
 } from '@/api/system/billRule'
-import Form from './Form'
+import Form from '@/views/system/billRule'
 export default {
   components: {
     Form

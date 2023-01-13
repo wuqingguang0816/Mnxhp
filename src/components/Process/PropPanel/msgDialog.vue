@@ -1,6 +1,6 @@
 <template>
   <div class="popupSelect-container">
-    <div class="el-select" @click="openDialog">
+    <div @click="openDialog">
       <el-input placeholder="请选择发送配置" v-model="title" readonly :validate-event="false"
         @mouseenter.native="inputHovering = true" @mouseleave.native="inputHovering = false">
         <template slot="suffix">
@@ -9,6 +9,8 @@
           <i v-if="showClose" class="el-select__caret el-input__icon el-icon-circle-close"
             @click.stop="clear"></i>
         </template>
+        <el-button @click.stop="goMsgConfig()" slot="append">
+          添加配置</el-button>
       </el-input>
     </div>
     <el-dialog title="消息发送配置" :close-on-click-modal="false" :visible.sync="visible"
@@ -156,6 +158,11 @@ export default {
     rowClick(row) {
       this.checked = row.id
       this.checkedRow = row
+    },
+    goMsgConfig() {
+      let src = window.location.protocol + "//" + window.location.host + "/msgCenter/sendConfig"
+      // let src = "http://localhost:3000/msgCenter/sendConfig"
+      window.open(src, "_blank")
     }
   }
 }
