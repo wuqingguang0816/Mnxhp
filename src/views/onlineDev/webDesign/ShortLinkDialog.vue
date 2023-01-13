@@ -28,16 +28,15 @@
           </el-popover>
         </el-row>
       </el-form-item>
-      <el-form-item label="凭密码填写" v-if="dataForm.formUse==1" class="spacing"
-        :prop='dataForm.formPassUse==1?"formPassword":""'>
+      <el-form-item label="凭密码填写" v-if="dataForm.formUse==1" class="spacing">
         <el-row class="distance">
           <el-col :span="6">
             <el-switch v-model="dataForm.formPassUse" :active-value="1" :inactive-value="0">
             </el-switch>
           </el-col>
           <el-col :span="18">
-            <el-input v-model="dataForm.formPassword" v-if="dataForm.formPassUse==1"
-              :required='dataForm.formPassUse==1'>
+            <el-input v-model="dataForm.formPassword" v-if="dataForm.formPassUse==1" type="password"
+              show-password maxlength="20">
             </el-input>
           </el-col>
         </el-row>
@@ -78,7 +77,7 @@
             <el-input v-model="columnText" @click.native="change(2)"> </el-input>
           </el-form-item>
         </el-row>
-        <el-form-item label="凭密码填写" :prop='dataForm.columnPassUse==1?"columnPassword":""'>
+        <el-form-item label="凭密码填写">
           <el-row class="distance">
             <el-col :span="6">
               <el-switch v-model="dataForm.columnPassUse" :active-value="1" :inactive-value="0">
@@ -86,7 +85,7 @@
             </el-col>
             <el-col :span="18">
               <el-input v-model="dataForm.columnPassword" v-if="dataForm.columnPassUse==1"
-                :required='dataForm.columnPassUse==1'>
+                type="password" show-password maxlength="20">
               </el-input>
             </el-col>
           </el-row>
@@ -112,22 +111,10 @@ import { getDrawingList } from '@/components/Generator/utils/db'
 import { getVisualDevInfo } from '@/api/onlineDev/visualDev'
 import ChangeField from '@/components/ChangeField'
 import { noColumnShowList } from '@/components/Generator/generator/comConfig'
+import { constantRoutes } from '@/router'
 export default {
   components: { ChangeField },
   data() {
-    const validatePassword = (rule, value, callback) => {
-      const passwordreg = /^(?=.*[0-9])(?=.*[a-zA-Z])(?=.*[^(0-9a-zA-Z)]).{6,16}$/
-      if (!value) {
-        callback(new Error('请输入凭密码填写'));
-      } else if (!passwordreg.test(value)) {
-        callback(new Error('密码必须由数字、字母、特殊字符组合,请输入6-16位'))
-      } else {
-        if (this.dataForm.columnPassword !== '' || this.dataForm.columnPassword !== '') {
-          this.$refs.dataForm.validateField('validatePassword');
-        }
-        callback()
-      }
-    }
     return {
       previewAppVisible: false,
       changeFieldVisible: false,
@@ -153,10 +140,28 @@ export default {
       columnText: '',
       dataRule: {
         formPassword: [
-          { required: true, validator: validatePassword, trigger: 'blur' }
+          {
+            required: true,
+            message: '请输入',
+            trigger: 'blur'
+          },
+          {
+            pattern: /^(?=.*[0-9])(?=.*[a-zA-Z])(?=.*[^(0-9a-zA-Z)]).{6,16}$/,
+            message: '密码必须由数字、字母、特殊字符组合,请输入6-16位',
+            trigger: 'blur'
+          },
         ],
         columnPassword: [
-          { required: true, validator: validatePassword, trigger: 'blur' }
+          {
+            required: true,
+            message: '请输入',
+            trigger: 'blur'
+          },
+          {
+            pattern: /^(?=.*[0-9])(?=.*[a-zA-Z])(?=.*[^(0-9a-zA-Z)]).{6,16}$/,
+            message: '密码必须由数字、字母、特殊字符组合,请输入6-16位',
+            trigger: 'blur'
+          },
         ],
       },
       qrcode: '',
@@ -201,6 +206,8 @@ export default {
     },
     init(id) {
       this.btnLoading = false
+      this.columnCondition = ''
+      this.columnText = ''
       getShortLink(id).then(res => {
         this.dataForm = res.data || {}
         this.dataForm.columnCondition = this.dataForm.columnCondition ? JSON.parse(this.dataForm.columnCondition) : []
@@ -304,9 +311,12 @@ export default {
       })
     },
     dataFormSubmit() {
-      this.btnLoading = true
+
       if (this.dataForm.formPassUse == 0) this.dataForm.formPassword = ''
       if (this.dataForm.columnPassUse == 0) this.dataForm.columnPassword = ''
+      if (this.dataForm.formPassUse == 1 && !this.dataForm.formPassword) return this.$message.error('请输入表单凭密码填写')
+      if (this.dataForm.columnPassUse == 1 && !this.dataForm.columnPassword) return this.$message.error('请输入列表凭密码填写')
+      this.btnLoading = true
       if (typeof this.dataForm.columnCondition !== 'string') this.dataForm.columnCondition = JSON.stringify(this.dataForm.columnCondition)
       if (typeof this.dataForm.columnText !== 'string') this.dataForm.columnText = JSON.stringify(this.dataForm.columnText)
       this.$refs['dataForm'].validate((valid) => {

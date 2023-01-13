@@ -217,8 +217,8 @@ export default {
 }
 >>> .dialog-footer {
   position: absolute;
-  right: 200px;
-  bottom: 50px;
+  right: 10px !important;
+  bottom: 0px !important;
 }
 .form-use-icon {
   font-size: 40px;

@@ -38,7 +38,7 @@
               :tree-props="{children: 'children', hasChildren: columnData.treeLazyType==1?'hasChildren':''}"
               :load="treeLoad" @sort-change="sortChange" :row-style="rowStyle"
               :cell-style="cellStyle" :has-c="hasBatchBtn" @selection-change="handleSelectionChange"
-              v-if="refreshTable" custom-column :span-method="arraySpanMethod" ref="tableRef"
+              v-if="refreshTable" :span-method="arraySpanMethod" ref="tableRef"
               :hasNO="!(columnData.childTableStyle==2&&childColumnList.length&&columnData.type != 3&&columnData.type != 4)"
               :hasNOFixed="columnList.some(o=>o.fixed == 'left')">
               <template>
