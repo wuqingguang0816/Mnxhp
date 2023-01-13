@@ -1,10 +1,7 @@
-// 开发环境接口配置
-// JAVA Boot版本对应后端接口地址
-// JAVA Cloud对应网关地址
-const APIURl = 'http://localhost:30000'
+const { APIURl } = require('./apiUrl')
 
 module.exports = {
-  APIURl: APIURl,
+  APIURl,
   timeout: process.env.NODE_ENV === 'development' ? 1000000 : 1000000,
   comUploadUrl: process.env.VUE_APP_BASE_API + '/api/file/Uploader',
   comUrl: process.env.VUE_APP_BASE_API,
