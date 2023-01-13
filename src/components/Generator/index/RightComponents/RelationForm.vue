@@ -99,7 +99,7 @@ export default {
   },
   methods: {
     getFeatureSelector() {
-      getFeatureSelector({ type: 1 }).then(res => {
+      getFeatureSelector({ type: 1, webType: '1,2' }).then(res => {
         this.treeData = res.data.list
       })
     },
