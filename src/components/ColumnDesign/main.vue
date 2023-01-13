@@ -219,13 +219,7 @@
                 <el-form-item label="父级字段">
                   <el-select v-model="columnData.parentField" placeholder="请选择父级字段">
                     <el-option :label="item.__config__.label" :value="item.__vModel__"
-                      v-for="(item, i) in groupFieldOptions" :key="i"></el-option>
-                  </el-select>
-                </el-form-item>
-                <el-form-item label="子级字段">
-                  <el-select v-model="columnData.subField" placeholder="请选择子级字段">
-                    <el-option :label="item.__config__.label" :value="item.__vModel__"
-                      v-for="(item, i) in groupFieldOptions" :key="i"></el-option>
+                      v-for="(item, i) in treeFieldOptions" :key="i"></el-option>
                   </el-select>
                 </el-form-item>
                 <el-form-item label="数据加载">
@@ -432,7 +426,6 @@ const defaultColumnData = {
   treePropsLabel: 'fullName',  // 显示字段
   groupField: '',  // 分组字段
   parentField: '', // 父级字段
-  subField: '',   // 子级字段
   treeLazyType: 0,
   useColumnPermission: false,
   useFormPermission: false,
@@ -515,6 +508,7 @@ export default {
       columnOptions: [],
       searchOptions: [],
       groupFieldOptions: [],
+      treeFieldOptions: [],
       btnsList: [],
       columnBtnsList: [],
       typeList: [
@@ -624,6 +618,7 @@ export default {
       let columnOptions = list.filter(o => noColumnShowList.indexOf(o.__config__.jnpfKey) < 0 || o.__config__.isStorage == 2)
       let searchOptions = list.filter(o => noSearchList.indexOf(o.__config__.jnpfKey) < 0)
       this.groupFieldOptions = list.filter(o => o.__vModel__.indexOf('-') < 0)
+      this.treeFieldOptions = list.filter(o => o.__vModel__.indexOf('-') < 0 && o.__config__.jnpfKey == 'treeSelect')
       this.columnOptions = columnOptions.map(o => ({
         label: o.__config__.label,
         prop: o.__vModel__,
@@ -795,8 +790,6 @@ export default {
       }
       if (this.columnData.type == 5) {
         if (!this.columnData.parentField) return this.$message.warning('请选择父级字段')
-        if (!this.columnData.subField) return this.$message.warning('请选择子级字段')
-        if (this.columnData.subField == this.columnData.parentField) return this.$message.warning('父级字段和子级字段不能相同')
       }
       this.columnData.defaultColumnList = this.columnOptions.map(o => ({
         ...o,
