@@ -226,7 +226,7 @@ export default {
             if (boo) return this.$message.warning('流程名称重复，请重新输入')
             for (let i = 0; i < this.flowList.length; i++) {
               if (this.dataForm.flowId === this.flowList[i].flowId) {
-                this.$set(this.flowList, i, JSON.parse(JSON.stringify(this.dataForm)))
+                this.$set(this.flowList[i], 'fullName', this.dataForm.fullName)
                 break
               }
             }
