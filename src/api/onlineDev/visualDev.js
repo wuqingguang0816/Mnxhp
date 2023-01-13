@@ -104,7 +104,7 @@ export function getFormData(modelId) {
 // 获取数据列表
 export function getModelList(modelId, data) {
   return request({
-    url: `/api/visualdev/OnlineDev/${modelId}/List`,
+    url: `/api/visualdev/OnlineDev/${modelId}/ListLink`,
     method: 'post',
     data
   })
