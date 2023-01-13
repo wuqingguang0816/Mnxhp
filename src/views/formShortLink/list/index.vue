@@ -430,43 +430,13 @@ export default {
       let list = []
       for (let i = 0; i < columnList.length; i++) {
         const e = columnList[i];
-        if (!e.__vModel__.includes('-')) {
-          let prop = e.__vModel__
-          let vModel = e.__vModel__
-          let label = e.__config__.label
-          let jnpfKey = e.__config__.jnpfKey
-          let on = e.on
-          let clearable = e.clearable
-          let disabled = e.disabled
-          let placeholder = e.placeholder
-          let __slot__ = e.__slot__
-          let __vModel__ = e.__vModel__
-          let style = e.style
-          let childLabel = e.__config__.label.replace(label + '-', '');
-          let newItem = {
-            align: "center",
-            prop,
-            label,
-            fixed: 'none',
-            jnpfKey,
-            children: [],
-            on,
-            clearable,
-            disabled,
-            placeholder,
-            __slot__,
-            __vModel__,
-            style,
-            'show-password': false,
-            'show-word-limit': false,
-            'prefix-icon': ''
-          }
-          list.push(newItem)
+        if (!e.prop.includes('-')) {
+          list.push(e)
         } else {
-          let prop = e.__vModel__.split('-')[0]
-          let vModel = e.__vModel__.split('-')[1]
-          let label = e.__config__.label.split('-')[0]
-          let childLabel = e.__config__.label.replace(label + '-', '');
+          let prop = e.prop.split('-')[0]
+          let vModel = e.prop.split('-')[1]
+          let label = e.label.split('-')[0]
+          let childLabel = e.label.replace(label + '-', '');
           let newItem = {
             align: "center",
             jnpfKey: "table",
@@ -486,8 +456,50 @@ export default {
           }
         }
       }
+      this.getMergeList(list)
+      this.getExportList(list)
       this.childColumnList = list.filter(o => o.jnpfKey === 'table')
       return list
+    },
+    getExportList(list) {
+      let exportList = []
+      for (let i = 0; i < list.length; i++) {
+        if (list[i].jnpfKey === 'table') {
+          for (let j = 0; j < list[i].children.length; j++) {
+            exportList.push(list[i].children[j])
+          }
+        } else {
+          exportList.push(list[i])
+        }
+      }
+      this.exportList = exportList
+    },
+    getMergeList(list) {
+      list.forEach(item => {
+        if (item.children && item.children.length > 0) {
+          item.children.forEach((child, index) => {
+            if (index == 0) {
+              this.mergeList.push({
+                prop: child.prop,
+                rowspan: 1,
+                colspan: item.children.length
+              })
+            } else {
+              this.mergeList.push({
+                prop: child.prop,
+                rowspan: 0,
+                colspan: 0
+              })
+            }
+          })
+        } else {
+          this.mergeList.push({
+            prop: item.prop,
+            rowspan: 1,
+            colspan: 1
+          })
+        }
+      })
     },
     arraySpanMethod({ column }) {
       for (let i = 0; i < this.mergeList.length; i++) {
@@ -961,6 +973,7 @@ export default {
   width: 80%;
   height: calc(100% - 50px) !important;
   margin: 0 auto;
+  position: relative;
   .form-top {
     height: 60px;
     line-height: 60px;
@@ -985,7 +998,7 @@ export default {
 .form-use-icon {
   font-size: 40px;
   position: absolute;
-  right: 130px;
+  right: -40px;
   top: 0px;
 }
 .lock-container {

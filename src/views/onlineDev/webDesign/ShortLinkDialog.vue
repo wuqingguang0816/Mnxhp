@@ -111,6 +111,7 @@ import { getShortLink, save } from '@/api/onlineDev/webDesign'
 import { getDrawingList } from '@/components/Generator/utils/db'
 import { getVisualDevInfo } from '@/api/onlineDev/visualDev'
 import ChangeField from '@/components/ChangeField'
+import { noColumnShowList } from '@/components/Generator/generator/comConfig'
 export default {
   components: { ChangeField },
   data() {
@@ -223,18 +224,39 @@ export default {
       })
       getVisualDevInfo(id).then(res => {
         this.formData = res.data.formData && JSON.parse(res.data.formData)
-        const noAllowList = ['table', 'uploadImg', 'uploadFz', 'modifyUser', 'modifyTime']
         let list = []
         const loop = (data, parent) => {
           if (!data) return
-          if (data.__config__ && data.__config__.jnpfKey !== 'table' && data.__config__.children && Array.isArray(data.__config__.children)) {
+          if (data.__config__ && data.__config__.children && Array.isArray(data.__config__.children)) {
             loop(data.__config__.children, data)
           }
           if (Array.isArray(data)) data.forEach(d => loop(d, parent))
-          if (data.__vModel__ && !noAllowList.includes(data.__config__.jnpfKey)) list.push(data)
+          if (data.__config__ && data.__config__.jnpfKey) {
+            const visibility = !data.__config__.visibility || (Array.isArray(data.__config__.visibility) && data.__config__.visibility.includes('pc'))
+            if (data.__config__.layout === "colFormItem" && data.__vModel__ && visibility) {
+              const isTableChild = parent && parent.__config__ && parent.__config__.jnpfKey === 'table'
+              const id = isTableChild ? parent.__vModel__ + '-' + data.__vModel__ : data.__vModel__
+              const label = isTableChild ? parent.__config__.label + '-' + data.__config__.label : data.__config__.label
+              data.__vModel__ = id
+              data.__config__.label = label
+              list.push(data)
+            }
+          }
         }
         loop(this.formData.fields)
         this.listOptions = list
+        this.listOptions = this.listOptions.filter(o => noColumnShowList.indexOf(o.__config__.jnpfKey) < 0 || o.__config__.isStorage == 2)
+        this.listOptions = this.listOptions.map(o => ({
+          label: o.__config__.label,
+          prop: o.__vModel__,
+          fixed: 'none',
+          align: 'left',
+          jnpfKey: o.__config__.jnpfKey,
+          sortable: false,
+          width: null,
+          type: 2,
+          ...o
+        }));
       })
       this.dialogVisible = true
     },
@@ -283,8 +305,8 @@ export default {
     },
     dataFormSubmit() {
       this.btnLoading = true
-      if (this.dataForm.formPassUse == 1) this.dataForm.formPassword = ''
-      if (this.dataForm.columnPassUse == 1) this.dataForm.columnPassword = ''
+      if (this.dataForm.formPassUse == 0) this.dataForm.formPassword = ''
+      if (this.dataForm.columnPassUse == 0) this.dataForm.columnPassword = ''
       if (typeof this.dataForm.columnCondition !== 'string') this.dataForm.columnCondition = JSON.stringify(this.dataForm.columnCondition)
       if (typeof this.dataForm.columnText !== 'string') this.dataForm.columnText = JSON.stringify(this.dataForm.columnText)
       this.$refs['dataForm'].validate((valid) => {

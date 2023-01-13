@@ -1,13 +1,13 @@
 <template >
   <div class="lock-container">
-    <div class=" lock-form" v-if="formPassUse==1">
+    <div class=" lock-form" v-show="formPassUse==1">
       <el-input placeholder="请输入验证码" show-password v-model="password">
         <el-button slot="append" @click="handleLogin" icon="ace-icon el-icon-unlock"
           :loading="passwordLoading">
         </el-button>
       </el-input>
     </div>
-    <div class="JNPF-common-layout" v-if="formPassUse==0">
+    <div class="JNPF-common-layout" v-show="formPassUse==0">
       <div class="main">
         <div class="form-top">
           <p>{{config.fullName}}</p>
@@ -198,6 +198,7 @@ export default {
   width: 80%;
   height: calc(100% - 50px) !important;
   margin: 0 auto;
+  position: relative;
   .form-top {
     height: 60px;
     line-height: 60px;
@@ -222,7 +223,7 @@ export default {
 .form-use-icon {
   font-size: 40px;
   position: absolute;
-  right: 130px;
+  right: -40px;
   top: 0px;
 }
 .lock-container {
