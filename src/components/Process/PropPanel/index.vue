@@ -1434,7 +1434,7 @@
                       <i class="el-icon-warning-outline"></i>
                     </el-tooltip>
                   </el-radio>
-                  <el-radio :label="3">自选退回模式
+                  <el-radio :label="3">自定义审批
                     <el-tooltip content="由用户选择重新审批或从当前节点审批" placement="top">
                       <i class="el-icon-warning-outline"></i>
                     </el-tooltip>
