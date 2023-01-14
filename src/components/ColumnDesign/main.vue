@@ -854,7 +854,7 @@ export default {
       this.activeItem = item
       this.customBtnVisible = true
       this.$nextTick(() => {
-        this.$refs.customBtn.init('web', item.event, this.webType, this.columnOptions)
+        this.$refs.customBtn.init('pc', item.event, this.webType, this.columnOptions)
       })
     },
     updateScript(func) {

@@ -26,13 +26,13 @@
         <el-form-item label="弹窗标题" prop="popupTitle">
           <el-input v-model="dataForm.popupTitle" placeholder="请输入弹窗标题" clearable />
         </el-form-item>
-        <el-form-item label="弹窗类型" v-show="showType==='web'">
+        <el-form-item label="弹窗类型" v-show="showType==='pc'">
           <el-select v-model="dataForm.popupType" placeholder="请选择弹窗类型">
             <el-option label="居中弹窗" value="dialog"></el-option>
             <el-option label="右侧弹窗" value="drawer"></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="弹窗宽度" v-show="showType==='web'">
+        <el-form-item label="弹窗宽度" v-show="showType==='pc'">
           <el-select v-model="dataForm.popupWidth" placeholder="请选择弹窗宽度">
             <el-option v-for="item in popupWidthOptions" :label="item" :value="item" :key="item" />
           </el-select>
@@ -172,7 +172,7 @@ export default {
       popupWidthOptions: ['600px', '800px', '1000px', '40%', '50%', '60%', '70%', '80%'],
       treeData: [],
       fieldOptions: [],
-      showType: 'web',
+      showType: 'pc',
       options: {
         language: 'javascript'
       },
@@ -233,7 +233,7 @@ export default {
     init(showType, activeItem, webType, columnOptions) {
       this.webType = webType
       this.columnOptions = columnOptions || []
-      this.showType = showType || 'web'
+      this.showType = showType || 'pc'
       this.visible = true
       this.$nextTick(() => {
         this.resetData()
