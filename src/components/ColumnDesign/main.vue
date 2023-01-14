@@ -257,12 +257,6 @@
                   </el-radio-group>
                 </el-form-item>
               </template>
-              <el-form-item label="子表样式" v-if="columnData.type==1||columnData.type==2">
-                <el-select v-model="columnData.childTableStyle" placeholder="请选择子表样式">
-                  <el-option label="分组展示" :value="1" />
-                  <el-option label="折叠展示" :value="2" />
-                </el-select>
-              </el-form-item>
               <template v-if="columnData.type==1||columnData.type==2||columnData.type==4">
                 <el-form-item label="合计配置">
                   <el-switch v-model="columnData.showSummary"></el-switch>
@@ -277,6 +271,12 @@
                   </el-select>
                 </el-form-item>
               </template>
+              <el-form-item label="子表样式" v-if="columnData.type==1||columnData.type==2">
+                <el-select v-model="columnData.childTableStyle" placeholder="请选择子表样式">
+                  <el-option label="分组展示" :value="1" />
+                  <el-option label="折叠展示" :value="2" />
+                </el-select>
+              </el-form-item>
               <el-divider>按钮配置</el-divider>
               <el-checkbox-group v-model="btnsList" class="btnsList">
                 <div v-for="item in btnsOption" :key="item.value">
