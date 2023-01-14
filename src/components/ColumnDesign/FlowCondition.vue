@@ -158,9 +158,17 @@ export default {
         //     desc += item.field + item.symbol + item.fieldValue + item.logicName;
         //   }
         // });
-        console.log(this.pconditions);
+        // 返回数据库关系对照
+        let fieldList = this.$store.state.generator.formItemList
+        let keyMap = fieldList.map(item=>{
+          let key = item.field
+          return {
+            [key]:item.columnName
+          }
+        })
         this.$emit("ruleConfig", {
           pconditions: this.pconditions,
+          keyMap
         });
 
         this.dialogVisible = false
