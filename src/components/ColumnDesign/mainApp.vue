@@ -381,7 +381,7 @@ export default {
       }
       loop(getDrawingList())
       this.list = list
-      let options = list.filter(o => noColumnShowList.indexOf(o.__config__.jnpfKey) < 0)
+      let options = list.filter(o => noColumnShowList.indexOf(o.__config__.jnpfKey) < 0 || o.__config__.isStorage == 2)
       let searchOptions = list.filter(o => noSearchList.indexOf(o.__config__.jnpfKey) < 0)
       let sortOptions = list1.filter(o => noColumnShowList.indexOf(o.__config__.jnpfKey) < 0)
       sortOptions = sortOptions.filter(o => o.__vModel__.indexOf('-') < 0)
