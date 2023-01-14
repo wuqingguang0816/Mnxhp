@@ -15,11 +15,11 @@ npm install --registry http://registry.npmmirror.com
 
 ### 开发环境
 
-- 打开`src/utils/define.js`,修改接口地址
+- 打开`src/utils/apiUrl.js`,修改接口地址
 
 ```bash
   // 开发环境接口配置
-  const APIURl = 'http://192.168.0.25:30000'
+   APIURl: 'http://192.168.0.25:30000'
 ```
 
 - 运行前端项目(默认会自动打开浏览器)
