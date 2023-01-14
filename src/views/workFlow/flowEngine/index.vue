@@ -113,7 +113,7 @@
           <i class="add-icon icon-ym icon-ym-funcFlow"></i>
           <div class="add-txt">
             <p class="add-title">功能流程</p>
-            <p class="add-desc">在线开发和代码生成功能赋予流程</p>
+            <p class="add-desc">代码生成功能赋予流程</p>
           </div>
         </div>
       </div>
