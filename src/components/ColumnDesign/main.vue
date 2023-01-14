@@ -222,12 +222,6 @@
                       v-for="(item, i) in treeFieldOptions" :key="i"></el-option>
                   </el-select>
                 </el-form-item>
-                <el-form-item label="数据加载">
-                  <el-radio-group v-model="columnData.treeLazyType">
-                    <el-radio :label="0">同步</el-radio>
-                    <el-radio :label="1">异步</el-radio>
-                  </el-radio-group>
-                </el-form-item>
               </template>
               <el-form-item label="排序类型">
                 <el-select v-model="columnData.sort" placeholder="请选择排序类型">
@@ -426,7 +420,6 @@ const defaultColumnData = {
   treePropsLabel: 'fullName',  // 显示字段
   groupField: '',  // 分组字段
   parentField: '', // 父级字段
-  treeLazyType: 0,
   useColumnPermission: false,
   useFormPermission: false,
   useBtnPermission: false,
