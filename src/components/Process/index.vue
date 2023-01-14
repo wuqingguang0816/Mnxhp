@@ -179,7 +179,7 @@ export default {
     },
     delFlow(index, isDelete) {
       if (this.flowList.length === 1) return this.$message.warning(`最后一个流程不能删除`);
-      if (isDelete == 1) return this.$message.warning(`流程已被使用，不能删除`);
+      if (isDelete) return this.$message.warning(`流程已被使用，不能删除`);
       this.$confirm('此操作将永久删除该流程，是否继续？', '提示', {
         type: 'warning'
       }).then(() => {
