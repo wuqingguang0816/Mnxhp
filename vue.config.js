@@ -1,7 +1,7 @@
 'use strict'
 const path = require('path')
 const defaultSettings = require('./src/settings.js')
-const define = require('./src/utils/define.js')
+const { APIURl } = require('./src/utils/apiUrl')
 const MonacoWebpackPlugin = require('monaco-editor-webpack-plugin')
 
 function resolve(dir) {
@@ -44,7 +44,7 @@ module.exports = {
     // 接口转发
     proxy: {
       '/dev': {
-        target: define.APIURl,
+        target: APIURl,
         changeOrigin: true,
         pathRewrite: {
           '^/dev': ''

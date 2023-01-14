@@ -106,13 +106,16 @@
         <el-button type="primary" @click="select()">{{$t('common.confirmButton')}}</el-button>
       </span>
     </el-dialog>
-    <Form v-if="formVisible" ref="Form" @close="closeForm" />
+    <el-dialog :visible.sync="formVisible" append-to-body
+      class="JNPF-dialog JNPF-dialog_center JNPF-dialog-tree-select" lock-scroll width="80%">
+      <Form ref="Form" @close="closeForm" />
+    </el-dialog>
   </div>
 </template>
 
 <script>
 import { getDataInterfaceSelectorList } from '@/api/systemData/dataInterface'
-import Form from './Form'
+import Form from '@/views/systemData/dataInterface/Form.vue'
 export default {
   components: { Form },
   props: {
@@ -253,9 +256,10 @@ export default {
       this.checkedRow = row
     },
     addOrUpdateHandle(id) {
+      let flag = 1
       this.formVisible = true
       this.$nextTick(() => {
-        this.$refs.Form.init(id, "30be5ef4e3074dd89385ad6b4540c63d")
+        this.$refs.Form.init(id, "30be5ef4e3074dd89385ad6b4540c63d", flag)
       })
     },
     closeForm(isRefresh) {
