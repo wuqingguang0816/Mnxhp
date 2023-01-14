@@ -65,7 +65,7 @@ export default {
         this.$refs['dataForm'].resetFields()
         suspendType(id).then(res => {
           if (res.data) {
-            let item = { value: true, label: '主流程挂起' }
+            let item = { value: true, label: '全部流程挂起' }
             this.suspendOptions.push(item)
           }
         })
