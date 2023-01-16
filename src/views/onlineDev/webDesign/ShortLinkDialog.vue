@@ -97,8 +97,8 @@
       <el-button type="primary" @click="dataFormSubmit()" :loading="btnLoading">
         {{$t('common.confirmButton')}}</el-button>
     </span>
-    <ChangeField v-if="changeFieldVisible" ref='ChangeField' multiline
-      :selectedList='type==1?dataForm.columnCondition:dataForm.columnText'
+    <ChangeField v-if="changeFieldVisible" ref='ChangeField' multiple
+      :selectedList='type==1?dataForm.queryCriteria:dataForm.listCriteria'
       @changeField="changeFields" :list='type==1?searchList:listOptions' :type='type' />
   </el-dialog>
 </template>
@@ -135,6 +135,8 @@ export default {
         columnPassword: '',
         columnCondition: [],
         columnText: [],
+        queryCriteria: [],
+        listCriteria: [],
       },
       columnCondition: '',
       columnText: '',
@@ -189,6 +191,7 @@ export default {
     changeFields(list) {
       if (this.type == 1) {
         this.dataForm.columnCondition = list
+        this.dataForm.queryCriteria = list
         let listArr = []
         for (let index = 0; index < this.dataForm.columnCondition.length; index++) {
           const element = this.dataForm.columnCondition[index];
@@ -197,12 +200,14 @@ export default {
         this.columnCondition = listArr.join(",")
       } else {
         this.dataForm.columnText = list
+        this.dataForm.listCriteria = list
         let listArr = []
         for (let index = 0; index < this.dataForm.columnText.length; index++) {
           const element = this.dataForm.columnText[index];
           listArr.push(element.__config__.label ? element.__vModel__ + '(' + element.__config__.label + ')' : element.__vModel__)
         }
         this.columnText = listArr.join(",")
+
       }
     },
     init(id) {
@@ -213,6 +218,8 @@ export default {
         this.dataForm = res.data || {}
         this.dataForm.columnCondition = this.dataForm.columnCondition ? JSON.parse(this.dataForm.columnCondition) : []
         this.dataForm.columnText = this.dataForm.columnText ? JSON.parse(this.dataForm.columnText) : []
+        this.dataForm.queryCriteria = this.dataForm.columnCondition
+        this.dataForm.listCriteria = this.dataForm.columnText
         let listArr = []
         if (this.dataForm.columnCondition.length) {
           for (let index = 0; index < this.dataForm.columnCondition.length; index++) {
