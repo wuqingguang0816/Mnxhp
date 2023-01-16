@@ -28,9 +28,9 @@
               </el-select>
             </template>
           </el-table-column>
-          <el-table-column prop='multiple' label="是否多选" align="center">
+          <el-table-column prop='searchMultiple' label="是否多选" align="center">
             <template slot-scope="scope">
-              <el-checkbox v-model="scope.row.multiple"
+              <el-checkbox v-model="scope.row.searchMultiple"
                 v-if="['select','depSelect','roleSelect','userSelect','usersSelect','comSelect','posSelect','groupSelect'].includes(scope.row.jnpfKey)">
               </el-checkbox>
               <el-checkbox v-else disabled></el-checkbox>
