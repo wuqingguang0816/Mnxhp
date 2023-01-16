@@ -205,10 +205,10 @@ export default {
         }
       })
     },
-    common() {
+    common(val) {
       this.commonWordsVisible = false
       if (val) {
-        this.candidateForm.handleOpinion += val.commonWordsText
+        this.dataForm.handleOpinion += val.commonWordsText
       }
     },
     commonWords() {
