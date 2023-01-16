@@ -5,8 +5,8 @@
       <div class="header-title">
         <img src="@/assets/images/jnpf.png" class="header-logo" />
         <p class="header-txt" v-if="activeStep==0"> · 在线开发</p>
-        <el-tooltip class="item" effect="dark" :content="dataForm.fullName" placement="bottom"
-          v-else>
+        <el-tooltip class="item" effect="dark" :content="dataForm.fullName" placement="top" v-else
+          style="z-index:5000">
           <p class="header-txt"> · {{dataForm.fullName}}</p>
         </el-tooltip>
       </div>
