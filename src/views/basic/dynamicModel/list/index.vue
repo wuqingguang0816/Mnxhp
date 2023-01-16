@@ -670,7 +670,7 @@ export default {
         this.mainLoading = false
         if (!res.data || !res.data.formData) return
         let formData = JSON.parse(res.data.formData)
-        formData.popupType = this.formData.popupType
+        formData.popupType = 'general'
         this.detailVisible = true
         this.$nextTick(() => {
           this.$refs.Detail.init(formData, modelId, id)
