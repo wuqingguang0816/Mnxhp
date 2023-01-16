@@ -110,7 +110,7 @@ import { getShortLink, save } from '@/api/onlineDev/webDesign'
 import { getDrawingList } from '@/components/Generator/utils/db'
 import { getVisualDevInfo } from '@/api/onlineDev/visualDev'
 import ChangeField from '@/components/ChangeField'
-import { noColumnShowList } from '@/components/Generator/generator/comConfig'
+import { noColumnShowList, noSearchList } from '@/components/Generator/generator/comConfig'
 import { constantRoutes } from '@/router'
 export default {
   components: { ChangeField },
@@ -254,7 +254,7 @@ export default {
         loop(this.formData.fields)
         this.listOptions = list
         this.listOptions = list.filter(o => noColumnShowList.indexOf(o.__config__.jnpfKey) < 0 || o.__config__.isStorage == 2)
-        this.searchList = list.filter(o => noColumnShowList.indexOf(o.__config__.jnpfKey) < 0)
+        this.searchList = list.filter(o => noSearchList.indexOf(o.__config__.jnpfKey) < 0)
         this.searchList = this.searchList.map(o => ({
           label: o.__config__.label,
           prop: o.__vModel__,
