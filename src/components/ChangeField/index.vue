@@ -126,9 +126,7 @@ export default {
       this.$emit("update:visible", false);
     },
     handleSelectionChange(val) {
-      if (val.length > 0) {
-        this.selectedData = val;
-      }
+      this.selectedData = val;
     },
     onClose() { },
     openDialog() {
