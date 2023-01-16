@@ -125,7 +125,7 @@ export default {
     value: {
       immediate: true,
       handler(val) {
-        this.fileList = val
+        this.fileList = Array.isArray(val) ? val : []
       }
     }
   },
