@@ -106,14 +106,14 @@
           <i class="add-icon icon-ym icon-ym-launchFlow"></i>
           <div class="add-txt">
             <p class="add-title">发起流程</p>
-            <p class="add-desc">设计工作流发起的业务流程</p>
+            <p class="add-desc">用于协同办公的业务流程</p>
           </div>
         </div>
         <div class="add-item" @click="addFlow(1)">
           <i class="add-icon icon-ym icon-ym-funcFlow"></i>
           <div class="add-txt">
             <p class="add-title">功能流程</p>
-            <p class="add-desc">代码生成功能赋予流程</p>
+            <p class="add-desc">用于业务系统的功能流程</p>
           </div>
         </div>
       </div>
