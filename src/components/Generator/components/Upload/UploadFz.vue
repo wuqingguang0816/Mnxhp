@@ -84,7 +84,7 @@ export default {
   },
   data() {
     return {
-      fileList: this.value,
+      fileList: [],
       previewVisible: false,
       activeFile: {},
     }

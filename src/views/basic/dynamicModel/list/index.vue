@@ -434,6 +434,7 @@
     </div>
     <FlowBox v-if="flowVisible" ref="FlowBox" @close="closeFlow" />
     <Form v-show="formVisible" ref="Form" @refreshDataList="refresh" />
+    <extraForm v-show="extraFormVisible" ref="extraForm" @refreshDataList="refresh" />
     <Detail v-show="detailVisible" ref="Detail" @close="detailVisible = false" />
     <ExportBox v-if="exportBoxVisible" ref="ExportBox" @download="download" />
     <ImportBox v-if="uploadBoxVisible" ref="UploadBox" @refresh="initData" />
@@ -466,6 +467,7 @@ import { Candidates } from '@/api/workFlow/FlowBefore'
 import { getFlowList } from '@/api/workFlow/FlowEngine'
 import request from '@/utils/request'
 import Form from './Form'
+import extraForm from './extraForm'
 import FlowBox from '@/views/workFlow/components/FlowBox'
 import Detail from './detail'
 import ExportBox from '@/components/ExportBox'
@@ -476,7 +478,7 @@ import CandidateForm from '@/views/workFlow/components/CandidateForm'
 import CustomBox from '@/components/JNPFCustom'
 export default {
   name: 'dynamicModel',
-  components: { Form, ExportBox, Search, Detail, FlowBox, ChildTableColumn, SuperQuery, CandidateForm, CustomBox },
+  components: { Form, extraForm, ExportBox, Search, Detail, FlowBox, ChildTableColumn, SuperQuery, CandidateForm, CustomBox },
   props: ['config', 'modelId', 'isPreview'],
   data() {
     return {
@@ -508,6 +510,7 @@ export default {
       },
       flowVisible: false,
       formVisible: false,
+      extraFormVisible: false,
       detailVisible: false,
       importBoxVisible: false,
       exportBoxVisible: false,
@@ -1133,6 +1136,7 @@ export default {
     },
     refresh(isRefresh) {
       this.formVisible = false
+      this.extraFormVisible = false
       if (isRefresh) this.initData()
     },
     closeFlow(isRefresh) {
@@ -1334,9 +1338,12 @@ export default {
       })
     },
     handleRowForm(index) {
-      this.formVisible = true
+      this.extraFormVisible = true
       this.$nextTick(() => {
-        this.$refs.Form.init(this.formData, this.modelId, '', this.isPreview, this.columnData.useFormPermission, this.list, this.list[index])
+        const fields = this.columnList.filter(o => o.jnpfKey != 'table')
+        fields.map(ele => { ele.__config__.span = 24 })
+        const formData = { ...this.formData, fields }
+        this.$refs.extraForm.init(formData, this.modelId, this.isPreview, this.columnData.useFormPermission, this.list[index])
       })
     }
   }
