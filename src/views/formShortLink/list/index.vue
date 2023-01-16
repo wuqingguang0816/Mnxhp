@@ -39,50 +39,47 @@
               :load="treeLoad" @sort-change="sortChange" :row-style="rowStyle"
               :cell-style="cellStyle" :has-c="hasBatchBtn" @selection-change="handleSelectionChange"
               v-if="refreshTable" :span-method="arraySpanMethod" ref="tableRef"
-              :hasNO="!(columnData.childTableStyle==2&&childColumnList.length&&columnData.type != 3&&columnData.type != 4)"
+              :hasNO="!(columnData.childTableStyle==2&&childColumnList.length&&columnData.type != 3)&&columnData.type != 4"
               :hasNOFixed="columnList.some(o=>o.fixed == 'left')">
-              <template>
-                <template
-                  v-if="columnData.childTableStyle==2&&childColumnList.length&&columnData.type != 3&&columnData.type != 4&&columnData.type != 5">
-                  <el-table-column width="0" />
-                  <el-table-column type="expand" width="40">
-                    <template slot-scope="scope">
-                      <el-tabs>
-                        <el-tab-pane :label="child.label" v-for="(child,cIndex) in childColumnList"
-                          :key="cIndex">
-                          <el-table :data="scope.row[child.prop]" size='mini'>
-                            <el-table-column :prop="childTable.vModel"
-                              :label="childTable.childLabel" :align="childTable.align"
-                              :width="childTable.width" v-for="(childTable,iii) in child.children"
-                              :key="iii" />
-                          </el-table>
-                        </el-tab-pane>
-                      </el-tabs>
-                    </template>
-                  </el-table-column>
-                  <el-table-column type="index" width="50" label="序号" align="center" />
-                </template>
-                <template v-for="(item, i) in columnList">
-                  <template v-if="item.jnpfKey==='table'">
-                    <el-table-column :prop="item.prop" :label="item.label" :align="item.align"
-                      :key="i" v-if="columnData.childTableStyle!=2||columnData.type == 3">
-                      <el-table-column :prop="child.prop" :label="child.childLabel"
-                        :align="child.align" :width="child.width" :key="ii"
-                        :sortable="child.sortable?'custom':child.sortable"
-                        v-for="(child, ii) in item.children" class-name="child-table-box">
-                        <template slot-scope="scope">
-                          <child-table-column :data="scope.row[item.prop]" :head="item.children"
-                            @toggleExpand="toggleExpand(scope.row,`${item.prop}Expand`)"
-                            :expand="scope.row[`${item.prop}Expand`]" v-if="!ii" />
-                        </template>
-                      </el-table-column>
-                    </el-table-column>
+              <template
+                v-if="columnData.childTableStyle==2&&childColumnList.length&&columnData.type ==1&&columnData.type == 2">
+                <el-table-column width="0" />
+                <el-table-column type="expand" width="40">
+                  <template slot-scope="scope">
+                    <el-tabs>
+                      <el-tab-pane :label="child.label" v-for="(child,cIndex) in childColumnList"
+                        :key="cIndex">
+                        <el-table :data="scope.row[child.prop]" size='mini'>
+                          <el-table-column :prop="childTable.vModel" :label="childTable.childLabel"
+                            :align="childTable.align" :width="childTable.width"
+                            v-for="(childTable,iii) in child.children" :key="iii" />
+                        </el-table>
+                      </el-tab-pane>
+                    </el-tabs>
                   </template>
+                </el-table-column>
+                <el-table-column type="index" width="50" label="序号" align="center" />
+              </template>
+              <template v-for="(item, i) in columnList">
+                <template v-if="item.jnpfKey==='table'">
                   <el-table-column :prop="item.prop" :label="item.label" :align="item.align"
-                    :fixed="columnList.some(o=>o.fixed == 'left')&&i==0&&columnData.groupField&&columnData.type==3?'left':item.fixed!='none'&&columnData.childTableStyle!=2?item.fixed:false"
-                    :width="item.width" :key="i" :sortable="item.sortable?'custom':item.sortable"
-                    v-else />
+                    :key="i" v-if="columnData.childTableStyle!=2||columnData.type == 3">
+                    <el-table-column :prop="child.prop" :label="child.childLabel"
+                      :align="child.align" :width="child.width" :key="ii"
+                      :sortable="child.sortable?'custom':child.sortable"
+                      v-for="(child, ii) in item.children" class-name="child-table-box">
+                      <template slot-scope="scope">
+                        <child-table-column :data="scope.row[item.prop]" :head="item.children"
+                          @toggleExpand="toggleExpand(scope.row,`${item.prop}Expand`)"
+                          :expand="scope.row[`${item.prop}Expand`]" v-if="!ii" />
+                      </template>
+                    </el-table-column>
+                  </el-table-column>
                 </template>
+                <el-table-column :prop="item.prop" :label="item.label" :align="item.align"
+                  :fixed="columnList.some(o=>o.fixed == 'left')&&i==0&&columnData.groupField&&columnData.type==3?'left':item.fixed!='none'&&columnData.childTableStyle!=2?item.fixed:false"
+                  :width="item.width" :key="i" :sortable="item.sortable?'custom':item.sortable"
+                  v-else />
               </template>
               <el-table-column label="操作"
                 :fixed="columnData.childTableStyle==2&&childColumnList.length?false:'right'"
@@ -409,29 +406,7 @@ export default {
       }
     },
     getColumnList() {
-      if (this.isPreview) {
-        const columnList = this.dataList
-        this.columnList = this.transformColumnList(columnList)
-        return
-      }
-      let columnPermissionList = []
-      if (!this.columnData.useColumnPermission) {
-        columnPermissionList = this.dataList
-      } else {
-        const permissionList = this.$store.getters.permissionList
-        const modelId = this.$route.meta.modelId
-        const list = permissionList.filter(o => o.modelId === modelId)
-        const columnList = list[0] && list[0].column ? list[0].column : []
-        for (let i = 0; i < this.dataList.length; i++) {
-          inner: for (let j = 0; j < columnList.length; j++) {
-            if (this.dataList[i].__vModel__ === columnList[j].enCode) {
-              columnPermissionList.push(this.dataList[i])
-              break inner
-            }
-          }
-        }
-      }
-      this.columnList = this.transformColumnList(columnPermissionList)
+      this.columnList = this.transformColumnList(this.dataList)
     },
     transformColumnList(columnList) {
       let list = []
