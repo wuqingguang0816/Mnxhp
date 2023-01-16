@@ -239,7 +239,16 @@
                     </template>
                   </template>
                   <template v-else>
-                    {{scope.row[item.prop+'_name']||scope.row[item.prop]}}
+                    <template v-if="['relationForm'].includes(item.jnpfKey)">
+                      <el-link :underline="false"
+                        @click.native="toDetail(item.modelId,scope.row[`${item.prop}`])"
+                        type="primary">
+                        {{scope.row[item.prop+'_name']||scope.row[item.prop]}}</el-link>
+                    </template>
+                    <template v-else>
+                      {{scope.row[item.prop+'_name']||scope.row[item.prop]}}
+                    </template>
+
                   </template>
                 </template>
               </el-table-column>
