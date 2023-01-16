@@ -99,7 +99,7 @@
     </span>
     <ChangeField v-if="changeFieldVisible" ref='ChangeField' multiline
       :selectedList='type==1?dataForm.columnCondition:dataForm.columnText'
-      @changeField="changeFields" :list='listOptions' :type='type' />
+      @changeField="changeFields" :list='type==1?searchList:listOptions' :type='type' />
   </el-dialog>
 </template>
 
@@ -167,6 +167,7 @@ export default {
       qrcode: '',
       formData: '',
       listOptions: [],
+      searchList: [],
       type: ''
     }
   },
@@ -252,7 +253,19 @@ export default {
         }
         loop(this.formData.fields)
         this.listOptions = list
-        this.listOptions = this.listOptions.filter(o => noColumnShowList.indexOf(o.__config__.jnpfKey) < 0 || o.__config__.isStorage == 2)
+        this.listOptions = list.filter(o => noColumnShowList.indexOf(o.__config__.jnpfKey) < 0 || o.__config__.isStorage == 2)
+        this.searchList = list.filter(o => noColumnShowList.indexOf(o.__config__.jnpfKey) < 0)
+        this.searchList = this.searchList.map(o => ({
+          label: o.__config__.label,
+          prop: o.__vModel__,
+          fixed: 'none',
+          align: 'left',
+          jnpfKey: o.__config__.jnpfKey,
+          sortable: false,
+          width: null,
+          type: 2,
+          ...o
+        }));
         this.listOptions = this.listOptions.map(o => ({
           label: o.__config__.label,
           prop: o.__vModel__,
