@@ -136,8 +136,7 @@
               <el-select v-model="scope.row.relationField" placeholder="请选择" clearable filterable
                 @change="onRelationFieldChange($event,scope.row)">
                 <el-option v-for="item in formFieldsOptions" :key="item.__vModel__"
-                  :label="item.__config__.label?item.__vModel__+'('+item.__config__.label+')':item.__vModel__"
-                  :value="item.__vModel__">
+                  :label="item.__config__.label" :value="item.__vModel__">
                 </el-option>
               </el-select>
             </template>
@@ -336,6 +335,7 @@ export default {
       this.dataForm.templateJson = []
       this.dataForm.useConfirm = false
       this.dataForm.confirmTitle = "此操作将通过接口处理"
+      this.fieldOptions = []
     },
     onBtnTypeChange(val) {
       this.$refs['dataForm'].clearValidate()
