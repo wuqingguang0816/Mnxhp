@@ -25,7 +25,7 @@
             :disabled='continueBtnLoading'>
             {{formConf.confirmButtonText||'确 定'}}</el-button>
           <el-button type="primary" @click="dataFormSubmit(2)" :loading="continueBtnLoading"
-            :disabled='btnLoading' v-if="showMoreBtn">
+            :disabled='btnLoading'>
             {{!dataForm.id ?'确定并新增':'确定并继续'}}</el-button>
         </span>
       </el-dialog>
