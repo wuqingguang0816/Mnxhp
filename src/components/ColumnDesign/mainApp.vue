@@ -208,8 +208,8 @@
         </el-scrollbar>
       </div>
     </div>
-    <form-script :visible.sync="formScriptVisible" :value="activeItem.func" :type="activeItem.type"
-      @updateScript="updateScript" />
+    <form-script v-if="formScriptVisible" ref="formScript" :value="activeItem.func"
+      :type="activeItem.type" @updateScript="updateScript" @closeDialog="formScriptVisible=false" />
     <custom-btn v-if="customBtnVisible" :activeItem="activeItem" ref="customBtn"
       @updateCustomBtn="updateCustomBtn" @closeDialog="customBtnVisible=false" />
   </div>
@@ -232,7 +232,7 @@ const getSearchType = item => {
   return 1
 }
 const defaultFunc = '({ data, index, request, toast, refresh }) => {\r\n   \r\n}'
-const defaultFuncs = '({ data, attributes, events, methods, tableRef, request }) => {\r\n   \r\n}'
+const defaultFuncs = '({ data, tableRef, request }) => {\r\n   \r\n}'
 
 const defaultColumnData = {
   searchList: [], // 查询字段
@@ -603,8 +603,9 @@ export default {
       if (!item.func) item.func = defaultFuncs
       this.activeItem = item
       this.activeItem.type = type
+      this.formScriptVisible = true
       this.$nextTick(() => {
-        this.formScriptVisible = true
+        this.$refs.formScript.init()
       })
     }
   }
