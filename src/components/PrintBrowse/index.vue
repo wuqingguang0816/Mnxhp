@@ -80,6 +80,8 @@ export default {
         this.replaceImg()
         this.replaceBarCode()
         this.replaceQrCode()
+        const pageBreak = '<p style="page-break-after:always;"></p>'
+        this.printTemplate = this.replaceAll(this.printTemplate, '<p><!-- pagebreak --></p>', pageBreak)
         this.loading = false
       })
     },
