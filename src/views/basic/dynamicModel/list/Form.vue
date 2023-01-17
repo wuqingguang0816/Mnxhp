@@ -37,7 +37,7 @@
             <el-page-header @back="goBack" :content="!dataForm.id ? '新建' : '编辑'" />
             <div class="options">
               <el-dropdown class="dropdown" placement="bottom">
-                <el-button style="width:70px">
+                <el-button style="width:70px" :disabled='continueBtnLoading'>
                   更 多<i class="el-icon-arrow-down el-icon--right"></i>
                 </el-button>
                 <el-dropdown-menu slot="dropdown">
@@ -50,7 +50,7 @@
                     </el-dropdown-item>
                   </template>
                   <el-dropdown-item type="primary" @click.native="dataFormSubmit(2)"
-                    :loading="continueBtnLoading">
+                    :loading="continueBtnLoading" :disabled='btnLoading'>
                     {{!dataForm.id ?'确定并新增':'确定并继续'}}</el-dropdown-item>
                 </el-dropdown-menu>
               </el-dropdown>
@@ -59,9 +59,11 @@
                   {{formConf.printButtonText||'打 印'}}
                 </el-button>
               </template>
-              <el-button type="primary" @click="dataFormSubmit()" :loading="btnLoading">
+              <el-button type="primary" @click="dataFormSubmit()" :loading="btnLoading"
+                :disabled='continueBtnLoading'>
                 {{formConf.confirmButtonText||'确 定'}}</el-button>
-              <el-button @click="goBack">{{formConf.cancelButtonText||'取 消'}}</el-button>
+              <el-button @click="goBack" :disabled='continueBtnLoading'>
+                {{formConf.cancelButtonText||'取 消'}}</el-button>
             </div>
           </div>
           <div class="dynamic-form-main" v-if="!loading"
@@ -165,7 +167,7 @@ export default {
       this.nextDis = false
       this.allList = allList || []
       if (type == 3 || type == 5) {
-        this.showMoreBtn = true
+        this.showMoreBtn = false
       } else {
         if (this.allList.length) {
           this.index = this.allList.findIndex(item => item.id === id)
