@@ -169,6 +169,8 @@ import { Release } from '@/api/onlineDev/visualDev'
 import { getMenuSelector } from '@/api/system/menu'
 import EngineForm from '@/views/workFlow/flowEngine/Form'
 import FlowManage from '@/views/workFlow/flowEngine/FlowManagement'
+import { getFormById } from '@/api/workFlow/FormDesign'
+import { getFlowList } from '@/api/workFlow/FlowEngine'
 export default {
   name: 'onlineDev-webDesign',
   mixins: [mixin],
@@ -301,10 +303,14 @@ export default {
       })
     },
     handleEngine(id) {
-      this.engineFormVisible = true
-      this.$nextTick(() => {
-        this.$refs.engineForm.init(this.enginCategoryList, id, 1)
+      getFormById(id).then(res1 => {
+        let flowId = res1.data && res1.data.id
+        this.engineFormVisible = true
+        this.$nextTick(() => {
+          this.$refs.engineForm.init(this.enginCategoryList, flowId, 1)
+        })
       })
+
     },
     handleLink(id) {
       this.linkVisible = true
