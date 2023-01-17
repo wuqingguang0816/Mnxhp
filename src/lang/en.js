@@ -159,7 +159,7 @@ export default {
   login: {
     title: 'Account Login',
     scanTitle: 'APP Scan Login',
-    codeTitle: 'Verification Code Login',
+    codeTitle: 'Verify Code Login',
     logIn: 'Login',
     username: 'Username',
     password: 'Password',
