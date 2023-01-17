@@ -722,28 +722,10 @@ export default {
       this.goDetail(row.id, row)
     },
     goDetail(id, row) {
-      if (this.config.enableFlow == 1) {
-        let data = {
-          id,
-          enCode: this.config.flowEnCode,
-          flowId: this.config.flowId,
-          formType: 2,
-          type: 1,
-          opType: 0,
-          modelId: this.modelId,
-          isPreview: this.isPreview,
-          status: row.flowState
-        }
-        this.flowVisible = true
-        this.$nextTick(() => {
-          this.$refs.FlowBox.init(data)
-        })
-      } else {
-        this.detailVisible = true
-        this.$nextTick(() => {
-          this.$refs.Detail.init(this.formData, this.modelId, id, this.columnData.useFormPermission)
-        })
-      }
+      this.detailVisible = true
+      this.$nextTick(() => {
+        this.$refs.Detail.init(this.formData, this.modelId, id)
+      })
     },
     sortChange({ column, prop, order }) {
       this.listQuery.sort = order == 'ascending' ? 'asc' : 'desc'

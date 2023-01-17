@@ -1,6 +1,6 @@
 <template>
   <div>
-    <template v-if="formData.popupType==='general'">
+    <template>
       <el-dialog title="详情" :close-on-click-modal="false" :visible.sync="visible"
         class="JNPF-dialog JNPF-dialog_center" lock-scroll :width="formData.generalWidth"
         append-to-body>
@@ -17,48 +17,6 @@
           <el-button @click="visible = false">{{$t('common.cancelButton')}}</el-button>
         </span>
       </el-dialog>
-    </template>
-    <template v-if="formData.popupType==='fullScreen'">
-      <transition name="el-zoom-in-center">
-        <div class="JNPF-preview-main">
-          <div class="JNPF-common-page-header">
-            <el-page-header @back="goBack" content="详情" />
-            <div class="options">
-              <template v-if="formData.hasPrintBtn && formData.printId">
-                <el-button type="primary" @click="printBrowseVisible=true">
-                  {{formData.printButtonText||'打 印'}}
-                </el-button>
-              </template>
-              <el-button @click="goBack">{{$t('common.cancelButton')}}</el-button>
-            </div>
-          </div>
-          <div class="dynamic-form-main dynamicDetail"
-            :style="{margin: '0 auto',width:formData.fullScreenWidth}"
-            v-loading="loading || mainLoading">
-            <Parser :formConf="formData" :relationData="relationData" @toDetail="toDetail"
-              v-if="!loading" :formValue="formValue" />
-          </div>
-        </div>
-      </transition>
-    </template>
-    <template v-if="formData.popupType==='drawer'">
-      <el-drawer title="详情" :visible.sync="visible" :wrapperClosable="false"
-        :size='formData.drawerWidth' append-to-body class="JNPF-common-drawer">
-        <div class="JNPF-flex-main">
-          <div class="dynamicForm dynamicDetail" v-loading="loading || mainLoading">
-            <Parser :formConf="formData" :relationData="relationData" @toDetail="toDetail"
-              v-if="!loading" :formValue="formValue" />
-          </div>
-          <div class="drawer-footer">
-            <template v-if="formData.hasPrintBtn && formData.printId">
-              <el-button type="primary" @click="printBrowseVisible=true">
-                {{formData.printButtonText||'打 印'}}
-              </el-button>
-            </template>
-            <el-button @click="visible = false">{{$t('common.cancelButton')}}</el-button>
-          </div>
-        </div>
-      </el-drawer>
     </template>
     <Detail v-if="detailVisible" ref="Detail" @close="detailVisible = false" />
     <print-browse :visible.sync="printBrowseVisible" :id="formData.printId" :formId="dataForm.id" />
@@ -102,7 +60,6 @@ export default {
       this.modelId = modelId
       this.useFormPermission = useFormPermission
       this.dataForm.id = id || ''
-      this.getFormOperates()
       this.loading = true
       this.relationData = {}
       this.$nextTick(() => {
@@ -251,15 +208,6 @@ export default {
             } else {
               const val = data.hasOwnProperty(item.__vModel__) ? data[item.__vModel__] : item.__config__.defaultValue
               item.__config__.defaultValue = val
-            }
-            if (this.useFormPermission) {
-              let id = item.__config__.isSubTable ? parent.__vModel__ + '-' + item.__vModel__ : item.__vModel__
-              let noShow = true
-              if (this.formOperates && this.formOperates.length) {
-                noShow = !this.formOperates.some(o => o.enCode === id)
-              }
-              noShow = item.__config__.noShow ? item.__config__.noShow : noShow
-              this.$set(item.__config__, 'noShow', noShow)
             }
           }
           if (['relationFormAttr', 'popupAttr'].includes(item.__config__.jnpfKey)) relationFormAttrList.push(item)
