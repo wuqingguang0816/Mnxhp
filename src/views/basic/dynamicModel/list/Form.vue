@@ -41,7 +41,7 @@
                   更 多<i class="el-icon-arrow-down el-icon--right"></i>
                 </el-button>
                 <el-dropdown-menu slot="dropdown">
-                  <template v-if="dataForm.id">
+                  <template v-if="dataForm.id && showMoreBtn">
                     <el-dropdown-item @click.native="prev" :disabled='prevDis'>
                       {{'上一条'}}
                     </el-dropdown-item>
@@ -81,7 +81,7 @@
               v-if="!loading" />
           </div>
           <div class="drawer-footer">
-            <div class="upAndDown-button" v-if="dataForm.id">
+            <div class="upAndDown-button" v-if="dataForm.id&& showMoreBtn">
               <el-button @click="prev" :disabled='prevDis'>
                 {{'上一条'}}
               </el-button>
@@ -139,19 +139,20 @@ export default {
       prevDis: false,
       nextDis: false,
       allList: [],
-      showMoreBtn: true
+      showMoreBtn: true,
+      refreshDataList: false
     }
   },
   methods: {
     goBack() {
       this.visible = false
-      this.$emit('refreshDataList', true)
+      this.$emit('refreshDataList', this.refreshDataList)
     },
     print() {
       if (this.isPreview) return this.$message({ message: '功能预览不支持打印', type: 'warning' })
       this.printBrowseVisible = true
     },
-    init(formConf, modelId, id, isPreview, useFormPermission, allList) {
+    init(formConf, modelId, id, isPreview, useFormPermission, allList, type) {
       this.formConf = deepClone(formConf)
       this.modelId = modelId
       this.isPreview = isPreview
@@ -163,14 +164,19 @@ export default {
       this.prevDis = false
       this.nextDis = false
       this.allList = allList || []
-      if (this.allList.length) {
-        this.index = this.allList.findIndex(item => item.id === id)
-        if (this.index == 0) this.prevDis = true
-        if (this.index == this.allList.length - 1) this.nextDis = true
+      if (type == 3 || type == 5) {
+        this.showMoreBtn = true
       } else {
-        this.prevDis = true
-        this.nextDis = true
+        if (this.allList.length) {
+          this.index = this.allList.findIndex(item => item.id === id)
+          if (this.index == 0) this.prevDis = true
+          if (this.index == this.allList.length - 1) this.nextDis = true
+        } else {
+          this.prevDis = true
+          this.nextDis = true
+        }
       }
+
       this.$nextTick(() => {
         if (this.dataForm.id) {
           let extra = {
@@ -284,6 +290,7 @@ export default {
     submitForm(data, callback, type) {
       if (!data) return
       if (type == 2) {
+        this.refreshDataList = true
         this.continueBtnLoading = true
       } else {
         this.btnLoading = true
