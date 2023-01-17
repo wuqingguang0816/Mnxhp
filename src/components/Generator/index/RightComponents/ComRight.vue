@@ -48,11 +48,10 @@
     </el-form-item>
     <el-form-item label="默认值">
       <com-select v-model="activeData.__config__.defaultValue" placeholder="选择默认值" clearable
-        v-if="activeData.__config__.jnpfKey==='comSelect'" :multiple="activeData.multiple"
-        :key="key" />
+        v-if="activeData.__config__.jnpfKey==='comSelect'" :multiple="activeData.multiple" :key="key" :disabled="activeData.__config__.defaultCurrent"/>
       <dep-select v-model="activeData.__config__.defaultValue" placeholder="选择默认值" clearable
         v-if="activeData.__config__.jnpfKey==='depSelect'" :multiple="activeData.multiple"
-        :key="key" :selectType="activeData.selectType" :ableDepIds="activeData.ableDepIds" />
+        :key="key" :selectType="activeData.selectType" :ableDepIds="activeData.ableDepIds" :disabled="activeData.__config__.defaultCurrent"/>
       <pos-select v-model="activeData.__config__.defaultValue" placeholder="选择默认值" clearable
         v-if="activeData.__config__.jnpfKey==='posSelect'" :multiple="activeData.multiple"
         :key="key" :selectType="activeData.selectType" :ableDepIds="activeData.ableDepIds"
@@ -61,7 +60,7 @@
         v-if="activeData.__config__.jnpfKey==='userSelect'" :multiple="activeData.multiple"
         :key="key" :selectType="activeData.selectType" :ableDepIds="activeData.ableDepIds"
         :ablePosIds="activeData.ablePosIds" :ableUserIds="activeData.ableUserIds"
-        :ableRoleIds="activeData.ableRoleIds" :ableGroupIds="activeData.ableGroupIds" />
+        :ableRoleIds="activeData.ableRoleIds" :ableGroupIds="activeData.ableGroupIds" :disabled="activeData.__config__.defaultCurrent" />
       <users-select v-model="activeData.__config__.defaultValue" placeholder="选择默认值" clearable
         v-if="activeData.__config__.jnpfKey==='usersSelect'" :multiple="activeData.multiple"
         :key="key" :selectType="activeData.selectType" :ableIds="activeData.ableIds" />
@@ -72,6 +71,19 @@
         :key="key" />
       <el-input :value="setDefaultValue(activeData.__config__.defaultValue)" placeholder="请输入默认值"
         @input="onDefaultValueInput" v-if="activeData.__config__.jnpfKey==='editor'" />
+    </el-form-item>
+    <el-form-item v-if="activeData.__config__.jnpfKey==='userSelect' || activeData.__config__.jnpfKey==='depSelect' || activeData.__config__.jnpfKey==='comSelect' ">
+      <el-checkbox label="true" v-model="activeData.__config__.defaultCurrent" @change="defaultCurrentChange(activeData.__config__.defaultCurrent, activeData.__config__.jnpfKey)" style="float: right;margin-right: 30px;">
+        <span v-if="activeData.__config__.jnpfKey==='userSelect'">
+          默认为当前登录用户
+        </span>
+        <span v-else-if="activeData.__config__.jnpfKey==='depSelect'">
+          默认为当前登录部门
+        </span>
+        <span v-else>
+          默认为当前登录组织
+        </span>
+      </el-checkbox>
     </el-form-item>
     <el-form-item label="能否清空" v-if="activeData.__config__.jnpfKey!=='editor'">
       <el-switch v-model="activeData.clearable" />
@@ -181,6 +193,15 @@ export default {
       this.$set(this.activeData.__config__, 'defaultValue', val ? [] : '')
       this.activeData.__config__.renderKey = +new Date()
       this.key = +new Date()
+    },
+    defaultCurrentChange(val, jnpfKey) {
+      if(val) {
+        if(jnpfKey === 'comSelect') {
+          this.$set(this.activeData.__config__, 'defaultValue', [])
+        }else{
+          this.$set(this.activeData.__config__, 'defaultValue', null)
+        }
+      }
     }
   }
 }

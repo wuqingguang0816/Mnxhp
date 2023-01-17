@@ -131,6 +131,7 @@ import { deepClone } from '@/utils'
 import { dyOptionsList, useInputList, useDateList, useSelectList } from '@/components/Generator/generator/comConfig'
 import { getDictionaryDataSelector } from '@/api/systemData/dictionary'
 import { getDataInterfaceRes } from '@/api/systemData/dataInterface'
+import {mapGetters} from "vuex";
 export default {
   props: ['list'],
   data() {
@@ -146,11 +147,29 @@ export default {
     list: {
       handler: function (val) {
         this.searchList = deepClone(val)
+        //处理搜索条件中的默认值
+        if(this.searchList != null && this.searchList.length > 0) {
+          for(let i = 0, len = this.searchList.length; i< len; i++) {
+            if(this.searchList[i].jnpfKey === 'date' && this.searchList[i].__config__.defaultCurrent == true) {
+              this.searchList[i].value = [new Date().getTime(), new Date().getTime()]
+            }else if(this.searchList[i].jnpfKey === 'depSelect' && this.searchList[i].__config__.defaultCurrent == true) {
+              this.searchList[i].value =  this.userInfo.departmentId
+            }else if(this.searchList[i].jnpfKey === 'comSelect' && this.searchList[i].__config__.defaultCurrent == true) {
+              this.searchList[i].value =  this.userInfo.organizeId
+            }else if(this.searchList[i].jnpfKey === 'userSelect' && this.searchList[i].__config__.defaultCurrent == true) {
+              this.searchList[i].value =  this.userInfo.userId
+            }
+          }
+        }
+
         this.buildOptions(this.searchList)
       },
       deep: true,
       immediate: true
     }
+  },
+  computed: {
+    ...mapGetters(['userInfo']),
   },
   methods: {
     buildOptions(componentList) {
