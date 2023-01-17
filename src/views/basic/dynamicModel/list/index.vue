@@ -290,17 +290,18 @@
                   </el-table-column>
                 </el-table-column>
               </template>
-              <el-table-column v-else-if="item.jnpfKey==='relationForm'" :prop="item.prop"
-                :label="item.label" :align="item.align"
-                :fixed="columnList.some(o=>o.fixed == 'left')&&i==0&&columnData.groupField&&columnData.type==3?'left':item.fixed!='none'&&columnData.childTableStyle!=2?item.fixed:false"
-                :width="item.width" :key="i" :sortable="item.sortable?'custom':item.sortable">
-                <template slot-scope="scope">
-                  <el-link :underline="false"
-                    @click.native="toDetail(item.modelId,scope.row[`${item.prop}_id`])"
-                    type="primary">
-                    {{ scope.row[item.prop] }}</el-link>
-                </template>
-              </el-table-column>
+              <template v-else-if="item.jnpfKey==='relationForm'">
+                <el-table-column :prop="item.prop" :label="item.label" :align="item.align"
+                  :fixed="columnList.some(o=>o.fixed == 'left')&&i==0&&columnData.groupField&&columnData.type==3?'left':item.fixed!='none'&&columnData.childTableStyle!=2?item.fixed:false"
+                  :width="item.width" :key="i" :sortable="item.sortable?'custom':item.sortable">
+                  <template slot-scope="scope">
+                    <el-link :underline="false"
+                      @click.native="toDetail(item.modelId,scope.row[`${item.prop}_id`])"
+                      type="primary">
+                      {{ scope.row[item.prop] }}</el-link>
+                  </template>
+                </el-table-column>
+              </template>
               <el-table-column :prop="item.prop" :label="item.label" :align="item.align"
                 :fixed="columnList.some(o=>o.fixed == 'left')&&i==0&&columnData.groupField&&columnData.type==3?'left':item.fixed!='none'&&columnData.childTableStyle!=2?item.fixed:false"
                 :width="item.width" :key="i" :sortable="item.sortable?'custom':item.sortable"
