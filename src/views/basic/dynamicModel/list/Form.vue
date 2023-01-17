@@ -151,7 +151,7 @@ export default {
       if (this.isPreview) return this.$message({ message: '功能预览不支持打印', type: 'warning' })
       this.printBrowseVisible = true
     },
-    init(formConf, modelId, id, isPreview, useFormPermission, allList, formData) {
+    init(formConf, modelId, id, isPreview, useFormPermission, allList) {
       this.formConf = deepClone(formConf)
       this.modelId = modelId
       this.isPreview = isPreview
@@ -165,12 +165,8 @@ export default {
       this.allList = allList || []
       if (this.allList.length) {
         this.index = this.allList.findIndex(item => item.id === id)
-        if (this.index == 0) {
-          this.prevDis = true
-        }
-        if (this.index == this.allList.length - 1) {
-          this.nextDis = true
-        }
+        if (this.index == 0) this.prevDis = true
+        if (this.index == this.allList.length - 1) this.nextDis = true
       } else {
         this.prevDis = true
         this.nextDis = true
@@ -197,13 +193,6 @@ export default {
         } else {
           this.$store.commit('generator/SET_DYNAMIC_MODEL_EXTRA', {})
           this.formData = {}
-          if (formData) {
-            this.formData = formData
-            this.formConf.popupType = 'general'
-            this.formConf.generalWidth = '600px'
-            this.dataForm.id = formData.id || ''
-            this.showMoreBtn = false
-          }
           this.fillFormData(this.formConf, this.formData)
           this.dialogLoading = true
           this.$nextTick(() => {
@@ -216,9 +205,7 @@ export default {
     },
     prev() {
       this.index--
-      if (this.index === 0) {
-        this.prevDis = true
-      }
+      if (this.index === 0) this.prevDis = true
       this.nextDis = false
       for (let index = 0; index < this.allList.length; index++) {
         const element = this.allList[index];
@@ -232,7 +219,6 @@ export default {
             })
             this.resetForm()
             this.fillFormData(this.formConf, this.formData)
-
           })
 
         }
@@ -240,9 +226,7 @@ export default {
     },
     next() {
       this.index++
-      if (this.index === this.allList.length - 1) {
-        this.nextDis = true
-      }
+      if (this.index === this.allList.length - 1) this.nextDis = true
       this.prevDis = false
       for (let index = 0; index < this.allList.length; index++) {
         const element = this.allList[index];
