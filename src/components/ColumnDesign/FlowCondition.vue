@@ -160,15 +160,8 @@ export default {
         // });
         // 返回数据库关系对照
         let fieldList = this.$store.state.generator.formItemList
-        let keyMap = fieldList.map(item=>{
-          let key = item.field
-          return {
-            [key]:item.columnName
-          }
-        })
         this.$emit("ruleConfig", {
-          pconditions: this.pconditions,
-          keyMap
+          pconditions: this.pconditions
         });
 
         this.dialogVisible = false
