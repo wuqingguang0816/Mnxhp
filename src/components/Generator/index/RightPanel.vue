@@ -482,6 +482,9 @@
             </span>
             <el-switch v-model="formConf.concurrencyLock" />
           </el-form-item>
+          <el-form-item label="逻辑删除">
+            <el-switch v-model="formConf.logicalDelete" />
+          </el-form-item>
           <template v-if="modelType!=3 && modelType!=6 && webType!=3">
             <el-divider>表单按钮</el-divider>
             <div class="per-cell">

@@ -55,7 +55,7 @@
 <script>
 import { deepClone } from '@/utils'
 import { inputComponents, selectComponents, systemComponents } from '@/components/Generator/generator/config'
-const ignoreList = ['divider', 'JNPFText', 'link', 'alert', 'button', 'table', 'relationFormAttr', 'popupAttr', 'calculate']
+const ignoreList = ['divider', 'JNPFText', 'link', 'alert', 'button', 'table']
 export default {
   props: ['conf', 'enCode'],
   data() {

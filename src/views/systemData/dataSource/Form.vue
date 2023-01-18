@@ -25,7 +25,7 @@
         <el-input v-model="dataForm.password" placeholder="密码" show-password />
       </el-form-item>
       <!-- ==============不同数据库之间差异的部分================ -->
-      <template v-if="dataForm.dbType==='MySQL'">
+      <template v-if="dataForm.dbType==='MySQL' || dataForm.dbType==='Doris'">
         <el-form-item label="库名" prop="serviceName">
           <el-input v-model="dataForm.serviceName" placeholder="库名">
             <el-button slot="append" @click="test" :loading="testLoad">测试连接</el-button>

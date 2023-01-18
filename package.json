@@ -7,30 +7,7 @@
   "scripts": {
     "dev": "vue-cli-service serve --open",
     "build": "cross-env NODE_ENV=production vue-cli-service build",
-    "build:staging": "cross-env NODE_ENV=production vue-cli-service build --mode staging",
-    "build:javaBootDev": "cross-env NODE_ENV=production vue-cli-service build --mode javaBootDev",
-    "build:javaBootTest": "cross-env NODE_ENV=production vue-cli-service build --mode javaBootTest",
-    "build:javaBootRelease": "cross-env NODE_ENV=production vue-cli-service build --mode javaBootRelease",
-    "build:javaBootPreview": "cross-env NODE_ENV=production vue-cli-service build --mode javaBootPreview",
-    "build:javaBootSaas": "cross-env NODE_ENV=production vue-cli-service build --mode javaBootSaas",
-    "build:javaCloudDev": "cross-env NODE_ENV=production vue-cli-service build --mode javaCloudDev",
-    "build:javaCloudTest": "cross-env NODE_ENV=production vue-cli-service build --mode javaCloudTest",
-    "build:javaCloudRelease": "cross-env NODE_ENV=production vue-cli-service build --mode javaCloudRelease",
-    "build:javaCloudSaas": "cross-env NODE_ENV=production vue-cli-service build --mode javaCloudSaas",
-    "build:dotNetDev": "cross-env NODE_ENV=production vue-cli-service build --mode dotNetDev",
-    "build:dotNetTest": "cross-env NODE_ENV=production vue-cli-service build --mode dotNetTest",
-    "build:dotNetRelease": "cross-env NODE_ENV=production vue-cli-service build --mode dotNetRelease",
-    "build:dotNetPreview": "cross-env NODE_ENV=production vue-cli-service build --mode dotNetPreview",
-    "build:dotNetSaas": "cross-env NODE_ENV=production vue-cli-service build --mode dotNetSaas",
-    "build:dotNetCloudDev": "cross-env NODE_ENV=production vue-cli-service build --mode dotNetCloudDev",
-    "build:dotNetCloudTest": "cross-env NODE_ENV=production vue-cli-service build --mode dotNetCloudTest",
-    "build:dotNetCloudRelease": "cross-env NODE_ENV=production vue-cli-service build --mode dotNetCloudRelease",
-    "build:dotNetCloudSaas": "cross-env NODE_ENV=production vue-cli-service build --mode dotNetCloudSaas",
-    "preview": "node build/index.js --preview",
-    "lint": "eslint --ext .js,.vue src",
-    "test:unit": "jest --clearCache && vue-cli-service test:unit",
-    "test:ci": "npm run lint && npm run test:unit",
-    "new": "plop"
+    "preview": "node build/index.js --preview"
   },
   "husky": {
     "hooks": {

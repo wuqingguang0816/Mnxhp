@@ -4,7 +4,8 @@
     <el-tab-pane label="按岗位汇总" name="3"></el-tab-pane>
     <div class="recordSummary-list" v-loading="loading">
       <template v-if="list.length">
-        <el-card class="recordSummary-item" v-for="(item,i) in list" :key="i">
+        <el-card class="recordSummary-item" v-for="(item,i) in list" :key="i"
+          v-show="item.list&&item.list.length">
           <div class="recordSummary-item-main">
             <div class="cap">{{item.fullName}}意见</div>
             <div class="content">
@@ -75,8 +76,8 @@ export default {
               j.fileList = j.fileList ? JSON.parse(j.fileList) : []
             })
             o.list = o.list.map(i => ({
-              txt: i.handleStatus == 0 ? '退回' : i.handleStatus == 1 ? '同意' : i.handleStatus == 2 ? '发起' : i.handleStatus == 3 ? '撤回' : i.handleStatus == 4 ? '终止' : i.handleStatus == 5 ? '指派' : i.handleStatus == 6 ? '后加签' : i.handleStatus == 10 ? '前加签' : '转审',
-              tagType: i.handleStatus == 0 ? 'danger' : i.handleStatus == 1 ? 'success' : i.handleStatus == 3 || i.handleStatus == 4 ? 'warning' : "",
+              txt: i.handleStatus == 0 ? '退回' : i.handleStatus == 1 ? '同意' : i.handleStatus == 2 ? '发起' : i.handleStatus == 3 ? '撤回' : i.handleStatus == 4 ? '终止' : i.handleStatus == 5 ? '指派' : i.handleStatus == 6 ? '后加签' : i.handleStatus == 10 ? '前加签' : i.handleStatus == 8 ? '变更' : '转审',
+              tagType: i.handleStatus == 0 ? 'danger' : i.handleStatus == 1 ? 'success' : i.handleStatus == 3 || i.handleStatus == 4 || i.handleStatus == 8 ? 'warning' : "",
               ...i
             }))
           })

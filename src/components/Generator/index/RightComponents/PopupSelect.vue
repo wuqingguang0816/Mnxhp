@@ -164,7 +164,7 @@ export default {
     },
     onRelationFieldChange(val, row) {
       if (!val) return row.jnpfKey = ''
-      let list = this.formFieldsOptions.filter(o => o.__vModel__ === val)
+      let list = this.formFieldsOptions.filter(o => o.realVModel === val)
       if (!list.length) return row.jnpfKey = ''
       let item = list[0]
       row.jnpfKey = item.__config__.jnpfKey

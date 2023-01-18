@@ -235,6 +235,7 @@ export default {
           err.msg && this.$message.warning(err.msg)
         })
       } else {
+        if (!this.tables.length && this.defaultTable.length) return this.$message.warning('请至少选择一个数据表')
         this.$refs['dataForm'].validate((valid) => {
           this.dataForm.tableJson = JSON.stringify(this.tables)
           if (!valid) return

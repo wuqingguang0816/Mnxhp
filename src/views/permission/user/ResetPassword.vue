@@ -33,7 +33,7 @@ import md5 from 'js-md5'
 export default {
   data() {
     const validateUserPassword = (rule, value, callback) => {
-      const passwordreg = /(?=.*\d)(?=.*[a-zA-Z])(?=.*[^a-zA-Z0-9]).{6,16}/
+      const passwordreg = /^(?=.*[0-9])(?=.*[a-zA-Z])(?=.*[^(0-9a-zA-Z)]).{6,16}$/
       if (!value) {
         callback(new Error('请输入新密码'));
       } else if (!passwordreg.test(value)) {

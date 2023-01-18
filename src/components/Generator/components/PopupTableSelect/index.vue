@@ -376,7 +376,7 @@ export default {
       }
     },
     setDefault() {
-      if (!this.value || !this.value.length) {
+      if (!this.value || (this.multiple && !this.value.length)) {
         this.innerValue = ''
         this.checked = ''
         this.selectedIds = []

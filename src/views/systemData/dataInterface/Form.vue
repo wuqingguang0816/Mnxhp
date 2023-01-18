@@ -177,7 +177,7 @@
         <JNPFCodeEditor v-model="text" :options="options" ref="CodeEditor" />
       </div>
       <div class="jsTips">
-        <p>1、支持JavaScript的脚本，参考编写脚本API</p>
+        <p>1、支持JavaScript的脚本</p>
         <p>2、小程序不支持在线JS脚本</p>
       </div>
     </div>
@@ -420,12 +420,12 @@ export default {
         getDataSourceListAll().then(res => {
           const list = res.data.list || []
           this.dbOptions = list.filter(o => o.children && o.children.length)
-          this.getTableList(this.dataForm.dbLinkId)
           if (this.dataForm.id) {
             this.getFormData()
           } else {
             this.dataForm.categoryId = categoryId
             this.formLoading = false
+            this.getTableList(this.dataForm.dbLinkId)
           }
         })
       })
@@ -433,6 +433,7 @@ export default {
     getFormData() {
       getDataInterfaceInfo(this.dataForm.id).then(res => {
         this.dataForm = res.data
+        this.getTableList(this.dataForm.dbLinkId)
         this.dataForm.query = res.data.query
         if (res.data.requestParameters) this.requestParameters = JSON.parse(res.data.requestParameters) || []
         if (res.data.requestHeaders) this.requestHeaders = JSON.parse(res.data.requestHeaders) || []

@@ -22,6 +22,7 @@ export const formConf = {
   printButtonText: "打 印",
   primaryKeyPolicy: 1,
   concurrencyLock: false,
+  logicalDelete: false,
   printId: "",
   formStyle: "",
   classNames: [],
