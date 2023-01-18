@@ -20,7 +20,7 @@
       </el-form-item>
       <template v-if="dataForm.btnType==1">
         <el-form-item label="选择表单" prop="modelId">
-          <JNPF-TreeSelect :options="treeData" v-model="dataForm.modelId" placeholder="请选择选择表单"
+          <JNPF-TreeSelect :options="treeData" v-model="dataForm.modelId" placeholder="请选择表单"
             lastLevel clearable @change="onModeIdChange" />
         </el-form-item>
         <el-form-item label="弹窗标题" prop="popupTitle">
@@ -77,8 +77,8 @@
           <el-switch v-model="dataForm.customBtn"></el-switch><span
             class="tips">（开启后，弹窗中按钮事件失效，调用接口事件。）</span>
         </el-form-item>
-        <template v-if="dataForm.customBtn" prop="interfaceId">
-          <el-form-item label="数据接口">
+        <template v-if="dataForm.customBtn">
+          <el-form-item label="数据接口" prop="interfaceId">
             <interface-dialog :value="dataForm.interfaceId" :title="dataForm.interfaceName"
               @change="onInterfaceChange" />
           </el-form-item>
