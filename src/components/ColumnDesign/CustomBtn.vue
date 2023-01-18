@@ -91,11 +91,10 @@
                 {{scope.row.fieldName?scope.row.field+'('+scope.row.fieldName+')':scope.row.field}}
               </template>
             </el-table-column>
-            <el-table-column prop="value" label="对话框表单值">
+            <el-table-column prop="value" label="弹窗表单值">
               <template slot-scope="scope">
-                <el-select v-model="scope.row.relationField" placeholder="请选择对话框表单值" clearable
-                  filterable @change="onRelationFieldChange($event,scope.row)"
-                  @visible-change="visibleChange">
+                <el-select v-model="scope.row.relationField" placeholder="请选择弹窗表单值" clearable
+                  filterable @visible-change="visibleChange">
                   <el-option v-for="item in fieldOptions" :key="item.vmodel" :label="item.label"
                     :value="item.vmodel">
                   </el-option>
@@ -133,8 +132,7 @@
           </el-table-column>
           <el-table-column prop="value" label="当前表单值">
             <template slot-scope="scope">
-              <el-select v-model="scope.row.relationField" placeholder="请选择" clearable filterable
-                @change="onRelationFieldChange($event,scope.row)">
+              <el-select v-model="scope.row.relationField" placeholder="请选择" clearable filterable>
                 <el-option v-for="item in formFieldsOptions" :key="item.__vModel__"
                   :label="item.__config__.label" :value="item.__vModel__">
                 </el-option>
@@ -283,13 +281,6 @@ export default {
         ...o,
         relationField: ''
       })) : []
-    },
-    onRelationFieldChange(val, row) {
-      if (!val) return row.jnpfKey = ''
-      let list = this.formFieldsOptions.filter(o => o.__vModel__ === val)
-      if (!list.length) return row.jnpfKey = ''
-      let item = list[0]
-      row.jnpfKey = item.__config__.jnpfKey
     },
     addRelationOption() {
       this.dataForm.formOptions.push({
