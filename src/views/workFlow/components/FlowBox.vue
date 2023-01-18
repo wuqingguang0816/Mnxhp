@@ -3,7 +3,11 @@
   <div class="JNPF-preview-main flow-form-main">
     <div class="JNPF-common-page-header">
       <div v-if="setting.fromForm">{{title}}</div>
-      <el-page-header @back="goBack" :content="title" v-else />
+      <el-page-header @back="goBack" v-else>
+        <template slot="content">
+          <div class="JNPF-page-header-content">{{title}}</div>
+        </template>
+      </el-page-header>
       <template v-if="!loading||title">
         <el-dropdown placement="bottom" @command="handleFlowUrgent" trigger="click"
           v-show="setting.opType=='-1'">
@@ -1088,5 +1092,11 @@ export default {
 }
 .commonWords-button {
   margin-top: 57px;
+}
+.JNPF-page-header-content {
+  max-width: 40vw;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 </style>
