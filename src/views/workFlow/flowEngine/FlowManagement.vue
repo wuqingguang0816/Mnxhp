@@ -95,6 +95,7 @@
 
 <script>
 import Process from '@/components/Process/Preview'
+import { getFormById } from '@/api/workFlow/FormDesign'
 import { flowJsonList, mainVersion, delVersion, getFlowList } from '@/api/workFlow/FlowEngine'
 export default {
   components: { Process },
@@ -180,8 +181,7 @@ export default {
             this.initData()
           }
         })
-      }).catch(() => {
-      });
+      })
     },
     flowInfo(item) {
       this.flowVisible = true
@@ -193,21 +193,24 @@ export default {
       }
       this.$emit('close', true)
     },
-    init(flowId, fullName) {
-      this.id = flowId
+    init(id, fullName) {
       this.title = fullName
-      getFlowList(this.id).then(res => {
-        this.templateList = res.data
-        if (!this.templateList.length) {
-          this.$message({
-            type: 'error',
-            message: '流程不存在'
-          });
-          return
-        }
-        this.flowId = this.templateList[0].id
-        this.initData()
-      })
+      this.listLoading = true
+      getFormById(id).then(data => {
+        this.id = data.data && data.data.id
+        getFlowList(this.id).then(res => {
+          this.templateList = res.data
+          if (!this.templateList.length) {
+            this.$message({
+              type: 'error',
+              message: '流程不存在'
+            });
+            return this.listLoading = false
+          }
+          this.flowId = this.templateList[0].id
+          this.initData()
+        }).catch(() => { this.listLoading = false });
+      }).catch(() => { this.listLoading = false });
     },
     reset() {
       this.pickerVal = ''

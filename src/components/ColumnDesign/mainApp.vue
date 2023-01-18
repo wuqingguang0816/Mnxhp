@@ -587,7 +587,6 @@ export default {
       this.activeItem = item
       this.customBtnVisible = true
       this.$nextTick(() => {
-        console.log(this.columnOptions)
         this.$refs.customBtn.init('app', item.event, this.webType, this.columnOptions)
       })
     },
