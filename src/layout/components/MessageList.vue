@@ -137,13 +137,19 @@ export default {
           item.isRead = '1'
           this.$emit('read')
         }
-        if (item.type == 1) {
-          this.visible = true
-        } else {
-          if (!res.data.bodyText) return
+        if (item.type == 2 && item.flowType == 2) {
+          let bodyText = JSON.parse(res.data.bodyText)
           this.drawer = false
-          const Base64 = require('js-base64').Base64
-          this.$router.push('/workFlowDetail?config=' + encodeURIComponent(Base64.encode(res.data.bodyText)))
+          this.$router.push('/workFlow/entrust?config=' + bodyText.type)
+        } else {
+          if (item.type == 1) {
+            this.visible = true
+          } else {
+            if (!res.data.bodyText) return
+            this.drawer = false
+            const Base64 = require('js-base64').Base64
+            this.$router.push('/workFlowDetail?config=' + encodeURIComponent(Base64.encode(res.data.bodyText)))
+          }
         }
       })
     },

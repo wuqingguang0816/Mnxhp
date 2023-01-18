@@ -15,7 +15,7 @@
           </template>
           <template v-else-if="useSelectList.indexOf(item.__config__.jnpfKey)>-1">
             <el-select v-model="item.value" :placeholder="'请选择'+item.__config__.label" clearable
-              filterable class="item">
+              filterable class="item" :multiple="item.searchMultiple">
               <el-option :label="oItem[item.__config__.props.label]"
                 v-for="(oItem, i) in item.__slot__.options"
                 :value="oItem[item.__config__.props.value]" :key="i"></el-option>
@@ -65,7 +65,7 @@
             <template
               v-if="item.__config__.jnpfKey==='currOrganize'||item.__config__.jnpfKey==='comSelect'">
               <comSelect v-model="item.value" :placeholder="'请选择'+item.__config__.label" clearable
-                class="item" />
+                class="item" :multiple="item.searchMultiple" />
             </template>
             <template v-if="item.__config__.jnpfKey==='currDept'">
               <depSelect v-model="item.value" :placeholder="'请选择'+item.__config__.label" clearable
@@ -73,15 +73,15 @@
             </template>
             <template v-if="item.__config__.jnpfKey==='currPosition'">
               <posSelect v-model="item.value" :placeholder="'请选择'+item.__config__.label" clearable
-                class="item" />
+                class="item" :multiple="item.searchMultiple" />
             </template>
             <template v-if="item.__config__.jnpfKey==='groupSelect'">
               <groupSelect v-model="item.value" :placeholder="'请选择'+item.__config__.label" clearable
-                class="item" />
+                class="item" :multiple="item.searchMultiple" />
             </template>
             <template v-if="item.__config__.jnpfKey==='roleSelect'">
               <roleSelect v-model="item.value" :placeholder="'请选择'+item.__config__.label" clearable
-                class="item" />
+                class="item" :multiple="item.searchMultiple" />
             </template>
             <template v-if="item.__config__.jnpfKey==='userSelect'">
               <userSelect v-model="item.value" :placeholder="'请选择'+item.__config__.label" clearable
@@ -89,20 +89,22 @@
                 :selectType="item.selectType!='all'||item.selectType!='custom'?'all':item.selectType"
                 :ableDepIds="item.ableDepIds" :ablePosIds="item.ablePosIds"
                 :ableUserIds="item.ableUserIds" :ableRoleIds="item.ableRoleIds"
-                :ableGroupIds="item.ableGroupIds" />
+                :ableGroupIds="item.ableGroupIds" :multiple="item.searchMultiple" />
             </template>
             <template v-if="item.__config__.jnpfKey==='usersSelect'">
               <usersSelect v-model="item.value" :placeholder="'请选择'+item.__config__.label" clearable
-                class="item" :selectType="item.selectType" :ableIds="item.ableIds" />
+                class="item" :selectType="item.selectType" :ableIds="item.ableIds"
+                :multiple="item.searchMultiple" />
             </template>
             <template v-if="item.__config__.jnpfKey==='posSelect'">
               <posSelect v-model="item.value" :placeholder="'请选择'+item.__config__.label" clearable
                 class="item" :selectType="item.selectType" :ableDepIds="item.ableDepIds"
-                :ablePosIds="item.ablePosIds" />
+                :ablePosIds="item.ablePosIds" :multiple="item.searchMultiple" />
             </template>
             <template v-if="item.__config__.jnpfKey==='depSelect'">
               <depSelect v-model="item.value" :placeholder="'请选择'+item.__config__.label" clearable
-                class="item" :selectType="item.selectType" :ableDepIds="item.ableDepIds" />
+                class="item" :selectType="item.selectType" :ableDepIds="item.ableDepIds"
+                :multiple="item.searchMultiple" />
             </template>
           </template>
         </el-form-item>

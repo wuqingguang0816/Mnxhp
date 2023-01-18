@@ -25,6 +25,15 @@
               </el-form-item>
             </el-col>
             <el-col :span="6">
+              <el-form-item label="所属流程">
+                <el-select v-model="flowId" placeholder="选择所属流程">
+                  <el-option v-for="item in templateList" :key="item.id" :label="item.fullName"
+                    :value="item.id">
+                  </el-option>
+                </el-select>
+              </el-form-item>
+            </el-col>
+            <el-col :span="6">
               <el-form-item>
                 <el-button type="primary" icon="el-icon-search" @click="search()">
                   {{$t('common.search')}}</el-button>
@@ -86,7 +95,8 @@
 
 <script>
 import Process from '@/components/Process/Preview'
-import { flowJsonList, mainVersion, delVersion } from '@/api/workFlow/FlowEngine'
+import { getFormById } from '@/api/workFlow/FormDesign'
+import { flowJsonList, mainVersion, delVersion, getFlowList } from '@/api/workFlow/FlowEngine'
 export default {
   components: { Process },
   props: [],
@@ -108,6 +118,7 @@ export default {
       startTime: '',
       endTime: '',
       keyword: '',
+      flowId: '',
       enCode: '',
       pickerVal: '',
       flowTemplateJson: {},
@@ -138,6 +149,7 @@ export default {
           }
         }]
       },
+      templateList: []
     }
   },
   methods: {
@@ -169,8 +181,7 @@ export default {
             this.initData()
           }
         })
-      }).catch(() => {
-      });
+      })
     },
     flowInfo(item) {
       this.flowVisible = true
@@ -182,10 +193,24 @@ export default {
       }
       this.$emit('close', true)
     },
-    init(flowId, fullName) {
-      this.id = flowId
+    init(id, fullName) {
       this.title = fullName
-      this.initData()
+      this.listLoading = true
+      getFormById(id).then(data => {
+        this.id = data.data && data.data.id
+        getFlowList(this.id).then(res => {
+          this.templateList = res.data
+          if (!this.templateList.length) {
+            this.$message({
+              type: 'error',
+              message: '流程不存在'
+            });
+            return this.listLoading = false
+          }
+          this.flowId = this.templateList[0].id
+          this.initData()
+        }).catch(() => { this.listLoading = false });
+      }).catch(() => { this.listLoading = false });
     },
     reset() {
       this.pickerVal = ''
@@ -214,12 +239,6 @@ export default {
         sort: 'desc',
         sidx: ''
       }
-      this.listQuery = {
-        currentPage: 1,
-        pageSize: 20,
-        sort: 'desc',
-        sidx: ''
-      }
       this.initData()
     },
     initData() {
@@ -229,14 +248,14 @@ export default {
         startTime: this.startTime,
         endTime: this.endTime,
         keyword: this.keyword,
-        templateId: this.id
+        templateId: this.id,
+        flowId: this.flowId
       }
       flowJsonList(this.id, query).then((res) => {
         this.list = res.data.list
         this.total = res.data.pagination.total
-
+        this.listLoading = false
       })
-      this.listLoading = false
     },
   }
 }

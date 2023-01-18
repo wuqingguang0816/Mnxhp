@@ -88,6 +88,14 @@ export function FlowEnginePageList(data) {
     data
   })
 }
+// 列表流程小idListAll
+export function FlowEnginePageChildList(data) {
+  return request({
+    url: `/api/workflow/Engine/flowTemplate/PageChildListAll`,
+    method: 'get',
+    data
+  })
+}
 // 流程引擎下拉框
 export function FlowEngineSelector(type) {
   return request({
@@ -185,7 +193,10 @@ export function assistList(id) {
     method: 'get'
   })
 }
-
-
-
-
+// 获取多流程流程列表
+export function getFlowList(id) {
+  return request({
+    url: `/api/workflow/Engine/flowTemplate/FlowJsonList/${id}`,
+    method: 'get',
+  })
+}

@@ -19,7 +19,9 @@ export default {
         state: 1,
         category: '',
         description: "",
-        tables: ''
+        tables: '',
+        interfaceId: '',
+        interfaceName: ''
       },
       dataRule: {
         fullName: [
@@ -65,9 +67,13 @@ export default {
           getVisualDevInfo(this.dataForm.id).then(res => {
             this.dataForm = res.data
             this.dataForm.webType = this.dataForm.webType || 2
+            this.dataForm.interfaceParam = this.dataForm.interfaceParam ? JSON.parse(this.dataForm.interfaceParam) : []
             if (isToggle) this.dataForm.webType = webType
-            this.maxStep = parseInt(this.dataForm.webType)
-            if (this.maxStep > 2) this.maxStep = 2
+            if (parseInt(this.dataForm.webType) == 4) {
+              this.maxStep = 1
+            } else {
+              this.maxStep = 2
+            }
             this.formData = this.dataForm.formData && JSON.parse(this.dataForm.formData)
             this.columnData = this.dataForm.columnData && JSON.parse(this.dataForm.columnData)
             this.appColumnData = this.dataForm.appColumnData && JSON.parse(this.dataForm.appColumnData)
@@ -78,7 +84,11 @@ export default {
         } else {
           this.dataForm.type = type
           this.dataForm.webType = webType || 2
-          this.maxStep = parseInt(this.dataForm.webType)
+          if (parseInt(this.dataForm.webType) == 4) {
+            this.maxStep = 1
+          } else {
+            this.maxStep = 2
+          }
         }
       })
     },
@@ -104,6 +114,37 @@ export default {
           }
         })
       } else if (this.activeStep == 1) {
+        if (this.dataForm.webType == 4) {
+          this.$refs['columnDesign'].getData().then(res => {
+            this.columnData = res.columnData
+            this.appColumnData = res.appColumnData
+            for (let i = 0; i < this.columnData.searchList.length; i++) {
+              const element = this.columnData.searchList[i];
+              if (!element.__config__.label) return this.$message({ message: '查询字段列名不能为空', type: 'warning' })
+            }
+            for (let i = 0; i < this.columnData.columnList.length; i++) {
+              const element = this.columnData.columnList[i];
+              if (!element.label) return this.$message({ message: '列表字段列名不能为空', type: 'warning' })
+            }
+            for (let i = 0; i < this.appColumnData.searchList.length; i++) {
+              const element = this.appColumnData.searchList[i];
+              if (!element.label) return this.$message({ message: '查询字段列名不能为空', type: 'warning' })
+            }
+            for (let i = 0; i < this.appColumnData.sortList.length; i++) {
+              const element = this.appColumnData.sortList[i];
+              if (!element.label) return this.$message({ message: '排序字段列名不能为空', type: 'warning' })
+            }
+            for (let i = 0; i < this.appColumnData.columnList.length; i++) {
+              const element = this.appColumnData.columnList[i];
+              if (!element.label) return this.$message({ message: '列表字段列名不能为空', type: 'warning' })
+            }
+            getData()
+            this.formSubmit()
+          }).catch(err => {
+            err.msg && this.$message.warning(err.msg)
+          })
+          return
+        }
         this.$refs['generator'].getData().then(res => {
           this.formData = res.formData
           getData()
@@ -112,14 +153,19 @@ export default {
           err.msg && this.$message.warning(err.msg)
         })
       } else if (this.activeStep == 2) {
-        this.$refs['columnDesign'].getData().then(res => {
-          this.columnData = res.columnData
-          this.appColumnData = res.appColumnData
+        if (this.dataForm.webType == 1) {
           getData()
           this.formSubmit()
-        }).catch(err => {
-          err.msg && this.$message.warning(err.msg)
-        })
+        } else {
+          this.$refs['columnDesign'].getData().then(res => {
+            this.columnData = res.columnData
+            this.appColumnData = res.appColumnData
+            getData()
+            this.formSubmit()
+          }).catch(err => {
+            err.msg && this.$message.warning(err.msg)
+          })
+        }
       }
     },
     formSubmit() {
@@ -131,6 +177,7 @@ export default {
           type: 'success',
           duration: 1500,
           onClose: () => {
+            this.btnLoading = false
             this.closeDialog(true)
           }
         })
@@ -179,6 +226,23 @@ export default {
           err.msg && this.$message.warning(err.msg)
         })
       }
+    },
+    changeList(type) {
+      this.$confirm(type == 1 ? '关闭后，将切换为纯表单模式' : '开启后，将切换为表单+列表模式', '提示', { type: 'warning' }).then(() => {
+        this.dataForm.webType = type == 1 ? 1 : 2
+      }).catch(() => { })
+    },
+    onInterfaceChange(id, row) {
+      if (!id) {
+        this.dataForm.interfaceId = ''
+        this.dataForm.interfaceName = ''
+        this.dataForm.interfaceParam = []
+        return
+      }
+      if (this.dataForm.interfaceId === id) return
+      this.dataForm.interfaceId = id
+      this.dataForm.interfaceName = row.fullName
+      this.dataForm.interfaceParam = row.templateJson || []
     }
   }
 }

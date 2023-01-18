@@ -1,7 +1,7 @@
 <template>
   <transition name="el-zoom-in-center">
     <div class="JNPF-preview-main">
-      <div class="JNPF-common-page-header">
+      <div class="JNPF-common-page-header" v-if="showTitle">
         <el-page-header @back="goBack" content="新建流程" />
         <div class="options">
           <el-button @click="goBack()">{{$t('common.cancelButton')}}</el-button>
@@ -49,12 +49,23 @@
           </div>
         </el-tabs>
       </div>
+      <el-dialog title="请选择流程" :close-on-click-modal="false" append-to-body
+        :visible.sync="flowListVisible" class="JNPF-dialog template-dialog JNPF-dialog_center"
+        lock-scroll width="400px">
+        <el-scrollbar class="template-list">
+          <div class="template-item" v-for="item in flowList" :key="item.id"
+            @click="selectFlow(item)">
+            {{item.fullName}}
+          </div>
+        </el-scrollbar>
+      </el-dialog>
     </div>
   </transition>
 </template>
 
 <script>
 import { delegateGetflow } from '@/api/workFlow/FlowDelegate'
+import { getFlowList } from '@/api/workFlow/FlowEngine'
 export default {
   data() {
     return {
@@ -71,7 +82,11 @@ export default {
       finish: false,
       list: [],
       listLoading: true,
-      categoryList: []
+      categoryList: [],
+      flowListVisible: false,
+      flowList: [],
+      activeFlow: {},
+      showTitle: true
     }
   },
   watch: {
@@ -83,8 +98,9 @@ export default {
     goBack() {
       this.$emit('close')
     },
-    init(type) {
+    init(type, flag) {
       this.flowType = type
+      this.showTitle = !flag
       this.search()
       this.getDictionaryData()
       this.$nextTick(() => {
@@ -107,7 +123,6 @@ export default {
       this.initData()
     },
     bindScroll() {
-
       let _this = this,
         vBody = _this.$refs.infiniteBody;
       vBody.addEventListener("scroll", function () {
@@ -140,14 +155,32 @@ export default {
       })
     },
     jump(item) {
-      if (!item.enCode) {
+      if (!item.id) {
         this.$message({
           type: 'error',
           message: '流程不存在'
         });
         return
       }
-      this.$emit('choiceFlow', item)
+      getFlowList(item.id).then(res => {
+        this.flowList = res.data
+        if (!this.flowList.length) {
+          this.$message({
+            type: 'error',
+            message: '流程不存在'
+          });
+        } else if (this.flowList.length === 1) {
+          this.activeFlow = this.flowList[0]
+          this.$emit('choiceFlow', this.activeFlow)
+        } else {
+          this.flowListVisible = true
+        }
+      })
+    },
+    selectFlow(item) {
+      this.activeFlow = item
+      this.flowListVisible = false
+      this.$emit('choiceFlow', this.activeFlow)
     }
   }
 }

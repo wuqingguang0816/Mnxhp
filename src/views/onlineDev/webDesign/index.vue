@@ -45,16 +45,11 @@
           <el-table-column prop="fullName" label="名称" show-overflow-tooltip min-width="200" />
           <el-table-column prop="enCode" label="编码" width="200" />
           <el-table-column prop="category" label="分类" width="150" />
-          <el-table-column prop="webType" label="模式" width="70" align="center">
+          <el-table-column prop="webType" label="类型" width="100" align="center">
             <template slot-scope="scope">
-              <span v-if="scope.row.webType == 1">表单</span>
-              <span v-else>列表</span>
-            </template>
-          </el-table-column>
-          <el-table-column prop="enableFlow" label="启用流程" width="80" align="center">
-            <template slot-scope="scope">
-              <span v-if="scope.row.enableFlow == 1">是</span>
-              <span v-else>否</span>
+              <span v-if="scope.row.webType == 4">数据视图</span>
+              <span v-else-if="scope.row.enableFlow">流程表单</span>
+              <span v-else>普通表单</span>
             </template>
           </el-table-column>
           <el-table-column prop="creatorUser" label="创建人" width="120" />
@@ -71,7 +66,8 @@
           </el-table-column>
           <el-table-column label="操作" fixed="right" width="150">
             <template slot-scope="scope">
-              <tableOpts @edit="addOrUpdateHandle(scope.row.id)" @del="handleDel(scope.row.id)">
+              <tableOpts @edit="addOrUpdateHandle(scope.row.id,scope.row.webType)"
+                @del="handleDel(scope.row.id)">
                 <el-dropdown>
                   <span class="el-dropdown-link">
                     <el-button type="text" size="mini">{{$t('common.moreBtn')}}<i
@@ -79,20 +75,25 @@
                     </el-button>
                   </span>
                   <el-dropdown-menu slot="dropdown">
-                    <el-dropdown-item @click.native="openReleaseDialog(scope.row)">发布模板
+                    <el-dropdown-item @click.native="handleEngine(scope.row.id)"
+                      v-if="scope.row.enableFlow">
+                      流程设计
+                    </el-dropdown-item>
+                    <el-dropdown-item @click.native="showManage(scope.row.id,scope.row.fullName)"
+                      v-if="scope.row.enableFlow">流程版本
+                    </el-dropdown-item>
+                    <el-dropdown-item @click.native="preview(scope.row.id,0)">设计预览
+                    </el-dropdown-item>
+                    <el-dropdown-item @click.native="openReleaseDialog(scope.row)">发布表单
                     </el-dropdown-item>
                     <el-dropdown-item v-if="scope.row.isRelease==1"
-                      @click.native="rollBack(scope.row)">
-                      回滚模板</el-dropdown-item>
-                    <el-dropdown-item @click.native="toggleWebType(scope.row)">更改模式
+                      @click.native="preview(scope.row.id,1)">发布预览
                     </el-dropdown-item>
-                    <el-dropdown-item @click.native="copy(scope.row.id)">复制模板</el-dropdown-item>
-                    <el-dropdown-item @click.native="exportModel(scope.row.id)">导出模板
+                    <el-dropdown-item @click.native="copy(scope.row.id)">复制表单</el-dropdown-item>
+                    <el-dropdown-item @click.native="exportModel(scope.row.id)">导出表单
                     </el-dropdown-item>
-                    <el-dropdown-item v-if="scope.row.isRelease==1"
-                      @click.native="preview(scope.row.id,1)">预览模板
-                    </el-dropdown-item>
-                    <el-dropdown-item @click.native="preview(scope.row.id,0)">预览草稿
+                    <el-dropdown-item @click.native="handleLink(scope.row.id)"
+                      v-if="scope.row.webType!=4&&!scope.row.enableFlow">外链设置
                     </el-dropdown-item>
                   </el-dropdown-menu>
                 </el-dropdown>
@@ -105,6 +106,7 @@
       </div>
     </div>
     <Form v-if="formVisible" ref="Form" @close="closeForm" />
+    <ViewForm v-if="viewFormVisible" ref="ViewForm" @close="closeForm" />
     <AddBox :visible.sync="addVisible" :webType="currWebType" @add="handleAdd" />
     <el-dialog title="同步菜单" :visible.sync="releaseDialogVisible"
       class="JNPF-dialog JNPF-dialog_center release-dialog" lock-scroll width="600px">
@@ -150,20 +152,29 @@
     </el-dialog>
     <previewDialog :visible.sync="previewDialogVisible" :id="currId" :previewType="previewType"
       type="webDesign" />
+    <EngineForm v-if="engineFormVisible" ref="engineForm" />
+    <FlowManage v-if="manageVisible" ref="FlowManage" @close="manageVisible=false" />
+    <LinkDialog v-if="linkVisible" ref="LinkDialog" @close="linkVisible=false" />
   </div>
 </template>
 
 <script>
 import Form from './Form'
+import ViewForm from './ViewForm'
+import LinkDialog from './ShortLinkDialog'
 import AddBox from '@/views/generator/AddBox'
 import mixin from '@/mixins/generator/index'
 import previewDialog from '@/components/PreviewDialog'
-import { Release, rollbackTemplate } from '@/api/onlineDev/visualDev'
+import { Release } from '@/api/onlineDev/visualDev'
 import { getMenuSelector } from '@/api/system/menu'
+import EngineForm from '@/views/workFlow/flowEngine/Form'
+import FlowManage from '@/views/workFlow/flowEngine/FlowManagement'
+import { getFormById } from '@/api/workFlow/FormDesign'
+import { getFlowList } from '@/api/workFlow/FlowEngine'
 export default {
   name: 'onlineDev-webDesign',
   mixins: [mixin],
-  components: { Form, AddBox, previewDialog },
+  components: { Form, ViewForm, AddBox, previewDialog, EngineForm, FlowManage, LinkDialog },
   data() {
     return {
       query: { keyword: '', type: 1 },
@@ -191,8 +202,16 @@ export default {
       appTreeData: [],
       pcSystemId: "",
       appSystemId: "",
-      previewType: ""
+      previewType: "",
+      enginCategoryList: [],
+      engineFormVisible: false,
+      manageVisible: false,
+      linkVisible: false,
+      viewFormVisible: false,
     }
+  },
+  created() {
+    this.getEnginCategoryList()
   },
   methods: {
     preview(id, type) {
@@ -200,20 +219,6 @@ export default {
       this.previewType = type
       this.$nextTick(() => {
         this.previewDialogVisible = true
-      })
-    },
-    rollBack(row) {
-      this.$confirm('此操作将当前编辑的模板内容回滚为已经发布的模板内容，是否继续？', '提示', {
-        type: 'warning'
-      }).then(() => {
-        rollbackTemplate(row.id).then((res) => {
-          this.$message({
-            type: 'success',
-            message: res.msg,
-            duration: 1000,
-          });
-          this.initData()
-        })
       })
     },
     releaseModel() {
@@ -284,6 +289,33 @@ export default {
             item.disabled = true
           }
         }
+      })
+    },
+    getEnginCategoryList() {
+      this.$store.dispatch('base/getDictionaryData', { sort: 'WorkFlowCategory' }).then((res) => {
+        this.enginCategoryList = res
+      })
+    },
+    showManage(id, fullName) {
+      this.manageVisible = true
+      this.$nextTick(() => {
+        this.$refs.FlowManage.init(id, fullName)
+      })
+    },
+    handleEngine(id) {
+      getFormById(id).then(res1 => {
+        let flowId = res1.data && res1.data.id
+        this.engineFormVisible = true
+        this.$nextTick(() => {
+          this.$refs.engineForm.init(this.enginCategoryList, flowId, 1)
+        })
+      })
+
+    },
+    handleLink(id) {
+      this.linkVisible = true
+      this.$nextTick(() => {
+        this.$refs.LinkDialog.init(id)
       })
     }
   }

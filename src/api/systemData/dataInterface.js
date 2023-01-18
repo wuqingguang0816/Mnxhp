@@ -59,6 +59,14 @@ export function updateDataInterfaceState(id) {
   })
 }
 
+// 复制接口数据
+export function copy(id) {
+  return request({
+    url: `/api/system/DataInterface/${id}/Actions/Copy`,
+    method: 'post'
+  })
+}
+
 // 获取接口数据
 export function getDataInterfaceRes(id, data) {
   return request({

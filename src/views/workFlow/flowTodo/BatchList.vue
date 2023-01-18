@@ -18,23 +18,32 @@
             </el-col>
             <el-col :span="6">
               <el-form-item label="所属流程">
-                <el-select v-model="listQuery.flowId" placeholder="选择所属流程" clearable
-                  @change="onFlowChange">
-                  <el-option v-for="item in flowOptions" :key="item.id" :label="item.fullName"
+                <el-select v-model="listQuery.templateId" placeholder="选择所属流程" clearable
+                  @change="onTemplateIdChange">
+                  <el-option v-for="item in templateOptions" :key="item.id" :label="item.fullName"
                     :value="item.id" />
                 </el-select>
               </el-form-item>
             </el-col>
             <el-col :span="6">
-              <el-form-item label="所属节点">
-                <el-select v-model="listQuery.nodeCode" placeholder="选择所属节点" clearable
-                  @visible-change="visibleChange">
-                  <el-option v-for="item in nodeOptions" :key="item.id" :label="item.fullName"
+              <el-form-item label="所属名称">
+                <el-select v-model="listQuery.flowId" placeholder="选择所属名称" clearable
+                  @change="onFlowChange" @visible-change="visibleFlowChange">
+                  <el-option v-for="item in flowOptions" :key="item.id" :label="item.fullName"
                     :value="item.id" />
                 </el-select>
               </el-form-item>
             </el-col>
             <template v-if="showAll">
+              <el-col :span="6">
+                <el-form-item label="所属节点">
+                  <el-select v-model="listQuery.nodeCode" placeholder="选择所属节点" clearable
+                    @visible-change="visibleChange">
+                    <el-option v-for="item in nodeOptions" :key="item.id" :label="item.fullName"
+                      :value="item.id" />
+                  </el-select>
+                </el-form-item>
+              </el-col>
               <el-col :span="6">
                 <el-form-item label="日期">
                   <el-date-picker v-model="pickerVal" type="daterange" start-placeholder="开始日期"
@@ -125,11 +134,10 @@
 </template>
 
 <script>
-import { FlowBeforeList, getBatchFlowSelector, getNodeSelector, BatchCandidate, BatchOperation } from '@/api/workFlow/FlowBefore'
+import { FlowBeforeList, getBatchFlowSelector, getBatchFlowJsonList, getNodeSelector, BatchCandidate, BatchOperation, RejectList } from '@/api/workFlow/FlowBefore'
 import ApproveDialog from '@/views/workFlow/components/ApproveDialog'
 import ActionDialog from '@/views/workFlow/components/ActionDialog'
 import ErrorForm from '../components/ErrorForm'
-import { RejectList } from '@/api/workFlow/FlowBefore'
 export default {
   components: { ApproveDialog, ErrorForm, ActionDialog },
   props: ['categoryList'],
@@ -143,6 +151,7 @@ export default {
       btnLoading: false,
       listQuery: {
         keyword: '',
+        templateId: '',
         flowId: '',
         nodeCode: '',
         flowCategory: '',
@@ -154,6 +163,7 @@ export default {
         sort: 'desc',
         sidx: ''
       },
+      templateOptions: [],
       flowOptions: [],
       nodeOptions: [],
       multipleSelection: [],
@@ -218,6 +228,11 @@ export default {
     },
     getBatchFlowSelector() {
       getBatchFlowSelector().then(res => {
+        this.templateOptions = res.data
+      })
+    },
+    getBatchFlowJsonList() {
+      getBatchFlowJsonList(this.listQuery.templateId).then(res => {
         this.flowOptions = res.data
       })
     },
@@ -226,14 +241,26 @@ export default {
         this.nodeOptions = res.data
       })
     },
+    onTemplateIdChange(val) {
+      this.listQuery.flowId = ''
+      this.listQuery.nodeCode = ''
+      this.flowOptions = []
+      this.nodeOptions = []
+      if (!val) return
+      this.getBatchFlowJsonList()
+    },
     onFlowChange(val) {
       this.listQuery.nodeCode = ''
       if (!val) return this.nodeOptions = []
       this.getNodeSelector()
     },
+    visibleFlowChange(val) {
+      if (!val) return
+      if (!this.listQuery.templateId) this.$message.warning('请先选择所属流程')
+    },
     visibleChange(val) {
       if (!val) return
-      if (!this.listQuery.flowId) this.$message.warning('请先选择所属流程')
+      if (!this.listQuery.flowId) this.$message.warning('请先选择所属名称')
     },
     handleChange(val) {
       this.multipleSelection = val
@@ -383,6 +410,7 @@ export default {
       this.pickerVal = []
       this.listQuery = {
         keyword: '',
+        templateId: '',
         flowId: '',
         nodeCode: '',
         flowCategory: '',

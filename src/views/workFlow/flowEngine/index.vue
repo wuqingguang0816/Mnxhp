@@ -50,20 +50,10 @@
               <span>{{ scope.row.type == 0? "发起流程" : "功能流程" }}</span>
             </template>
           </el-table-column>
-          <el-table-column prop="visibleType" label="可见范围" width="80">
-            <template slot-scope="scope">
-              <span>{{ scope.row.visibleType ==  0 ? "全部可见" : "部分可见" }}</span>
-            </template>
-          </el-table-column>
           <el-table-column prop="creatorUser" label="创建人" width="120" />
           <el-table-column prop="creatorTime" label="创建时间" :formatter="jnpf.tableDateFormat"
             width="120" />
           <el-table-column prop="sortCode" label="排序" width="70" align="center" />
-          <el-table-column prop="version" label="版本号" width="70" align="center">
-            <template slot-scope="scope">
-              <el-tag>V:{{scope.row.version}}</el-tag>
-            </template>
-          </el-table-column>
           <el-table-column prop="enabledMark" label="状态" width="70" align="center">
             <template slot-scope="scope">
               <el-tag :type="scope.row.enabledMark == 1 ? 'success' : 'danger'" disable-transitions>
@@ -76,9 +66,8 @@
                 @del="handleDel(scope.row.id)">
                 <el-dropdown>
                   <span class="el-dropdown-link">
-                    <el-button type="text" size="mini">{{$t('common.moreBtn')}}<i
-                        class="el-icon-arrow-down el-icon--right"></i>
-
+                    <el-button type="text" size="mini">{{$t('common.moreBtn')}}
+                      <i class="el-icon-arrow-down el-icon--right"></i>
                     </el-button>
                   </span>
                   <el-dropdown-menu slot="dropdown">
@@ -117,14 +106,14 @@
           <i class="add-icon icon-ym icon-ym-launchFlow"></i>
           <div class="add-txt">
             <p class="add-title">发起流程</p>
-            <p class="add-desc">设计工作流发起的业务流程</p>
+            <p class="add-desc">用于协同办公的业务流程</p>
           </div>
         </div>
         <div class="add-item" @click="addFlow(1)">
           <i class="add-icon icon-ym icon-ym-funcFlow"></i>
           <div class="add-txt">
             <p class="add-title">功能流程</p>
-            <p class="add-desc">在线开发和代码生成功能赋予流程</p>
+            <p class="add-desc">用于业务系统的功能流程</p>
           </div>
         </div>
       </div>
@@ -149,7 +138,7 @@
 <script>
 import { FlowEngineList, Delete, Release, Stop, Copy, exportData, assist, assistList } from '@/api/workFlow/FlowEngine'
 import Form from './Form'
-import FlowManage from './FlowManagement.vue'
+import FlowManage from './FlowManagement'
 
 export default {
   name: 'workFlow-flowEngine',

@@ -30,7 +30,7 @@
       <div class="JNPF-common-layout-main JNPF-flex-main">
         <div class="JNPF-common-head">
           <div>
-            <topOpts @add="addOrUpdateHandle()" addText="新建订单"></topOpts>
+            <topOpts @add="addHandle()" addText="新建订单"></topOpts>
           </div>
           <div class="JNPF-common-head-right">
             <el-tooltip effect="dark" :content="$t('common.refresh')" placement="top">
@@ -92,7 +92,7 @@
           </el-table-column>
           <el-table-column label="操作" width="150" fixed="right">
             <template slot-scope="scope">
-              <el-button size="mini" type="text" @click="addOrUpdateHandle(scope.row.id)"
+              <el-button size="mini" type="text" @click="updateHandle(scope.row)"
                 :disabled="[1,2,4,5].indexOf(scope.row.currentState)>-1" v-has="'btn_edit'">编辑
               </el-button>
               <el-button size="mini" type="text" class="JNPF-table-delBtn"
@@ -100,8 +100,7 @@
                 :disabled="[1,2,3,5].indexOf(scope.row.currentState)>-1" v-has="'btn_remove'">删除
               </el-button>
               <el-button size="mini" type="text" :disabled="!scope.row.currentState"
-                @click="toApprovalDetail(scope.row.id,scope.row.currentState)"
-                v-has="'btn_flowDetail'">详情</el-button>
+                @click="toApprovalDetail(scope.row)" v-has="'btn_flowDetail'">详情</el-button>
             </template>
           </el-table-column>
         </JNPF-table>
@@ -111,12 +110,21 @@
     </div>
     <FlowBox v-if="formVisible" @close="closeForm" ref="Form" />
     <Detail v-show="detailVisible" ref="detail" @close="detailVisible=false" />
+    <el-dialog title="请选择流程" :close-on-click-modal="false" append-to-body
+      :visible.sync="flowListVisible" class="JNPF-dialog template-dialog JNPF-dialog_center"
+      lock-scroll width="400px">
+      <el-scrollbar class="template-list">
+        <div class="template-item" v-for="item in flowList" :key="item.id"
+          @click="selectFlow(item)">{{item.fullName}}
+        </div>
+      </el-scrollbar>
+    </el-dialog>
   </div>
 </template>
 
 <script>
 import { OrderList, Delete, OrderEntryList, OrderReceivableList } from '@/api/extend/order'
-import { getFlowIdByCode } from '@/api/workFlow/FlowEngine'
+import { getFlowIdByCode, getFlowList } from '@/api/workFlow/FlowEngine'
 import Detail from './Detail'
 import FlowBox from '@/views/workFlow/components/FlowBox'
 export default {
@@ -163,10 +171,12 @@ export default {
           }
         }]
       },
-      flowId: '',
+      flowTemplateId: '',
       pickerVal: [],
       startTime: '',
-      endTime: ''
+      endTime: '',
+      flowListVisible: false,
+      flowList: []
     }
   },
   created() {
@@ -212,7 +222,13 @@ export default {
     },
     getFlowIdByCode() {
       getFlowIdByCode('crmOrder').then(res => {
-        this.flowId = res.data
+        this.flowTemplateId = res.data
+        this.getFlowList()
+      })
+    },
+    getFlowList() {
+      getFlowList(this.flowTemplateId).then(res => {
+        this.flowList = res.data
       })
     },
     expandChange(rows) {
@@ -247,12 +263,22 @@ export default {
         });
       })
     },
-    addOrUpdateHandle(id) {
+    addHandle() {
+      if (!this.flowList.length) {
+        this.$message({
+          type: 'error',
+          message: '流程不存在'
+        });
+      } else if (this.flowList.length === 1) {
+        this.selectFlow(this.flowList[0])
+      } else {
+        this.flowListVisible = true
+      }
+    },
+    updateHandle(row) {
       let data = {
-        id,
-        enCode: 'crmOrder',
-        flowId: this.flowId,
-        formType: 1,
+        id: row.id,
+        flowId: row.flowId,
         opType: '-1'
       }
       this.formVisible = true
@@ -260,14 +286,12 @@ export default {
         this.$refs.Form.init(data)
       })
     },
-    toApprovalDetail(id, status) {
+    toApprovalDetail(row) {
       let data = {
-        id,
-        enCode: 'crmOrder',
-        flowId: this.flowId,
-        formType: 1,
+        id: row.id,
+        flowId: row.flowId,
         opType: 0,
-        status
+        status: row.currentState
       }
       this.formVisible = true
       this.$nextTick(() => {
@@ -296,6 +320,18 @@ export default {
         sidx: ''
       }
       this.initData()
+    },
+    selectFlow(item) {
+      let data = {
+        id: '',
+        flowId: item.id,
+        opType: '-1'
+      }
+      this.flowListVisible = false
+      this.formVisible = true
+      this.$nextTick(() => {
+        this.$refs.Form.init(data)
+      })
     }
   }
 }

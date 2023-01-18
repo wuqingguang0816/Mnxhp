@@ -1,6 +1,17 @@
 <template >
   <div class="JNPF-common-layout">
-    <FlowBox v-if="config.enableFlow " ref="FlowBox" @close="closeFlow" />
+    <template v-if="config.enableFlow">
+      <FlowBox v-if="flowVisible" ref="FlowBox" @close="closeFlow" />
+      <el-dialog title="请选择流程" :close-on-click-modal="false" append-to-body
+        :visible.sync="flowListVisible" class="JNPF-dialog template-dialog JNPF-dialog_center"
+        lock-scroll width="400px">
+        <el-scrollbar class="template-list">
+          <div class="template-item" v-for="item in flowList" :key="item.id"
+            @click="selectFlow(item)">{{item.fullName}}
+          </div>
+        </el-scrollbar>
+      </el-dialog>
+    </template>
     <div class="JNPF-preview-main" v-else>
       <div class="JNPF-common-page-header">
         <p>{{config.fullName}}</p>
@@ -21,6 +32,7 @@
 import { createModel } from '@/api/onlineDev/visualDev'
 import Parser from '@/components/Generator/parser/Parser'
 import FlowBox from '@/views/workFlow/components/FlowBox'
+import { getFlowList } from '@/api/workFlow/FlowEngine'
 export default {
   components: { Parser, FlowBox },
   props: ['config', 'modelId', 'isPreview'],
@@ -33,30 +45,20 @@ export default {
       btnLoading: false,
       loading: true,
       key: +new Date(),
-      formConf: {}
+      formConf: {},
+      flowVisible: false,
+      flowListVisible: false,
+      flowList: [],
+      flowItem: {},
     }
   },
   created() {
     this.init()
   },
   methods: {
-    init() {
+    init(flag) {
       if (this.config.enableFlow) {
-        let data = {
-          id: '',
-          enCode: this.config.flowEnCode,
-          flowId: this.config.flowId,
-          formType: 2,
-          type: 1,
-          opType: '-1',
-          modelId: this.modelId,
-          isPreview: this.isPreview,
-          fromForm: 1,
-          hideCancelBtn: true
-        }
-        this.$nextTick(() => {
-          this.$refs.FlowBox.init(data)
-        })
+        this.getFlowList(flag)
       } else {
         this.formConf = JSON.parse(this.config.formData)
         this.loading = true
@@ -66,6 +68,35 @@ export default {
           this.key = +new Date()
         })
       }
+    },
+    getFlowList(flag) {
+      getFlowList(this.config.flowId).then(res => {
+        this.flowList = res.data
+        if (flag && this.flowItem.id) return this.selectFlow(this.flowItem)
+        if (!this.flowList.length) return this.$message({ type: 'error', message: '流程不存在' })
+        if (this.flowList.length === 1) return this.selectFlow(this.flowList[0])
+        this.flowListVisible = true
+      })
+    },
+    selectFlow(item) {
+      this.flowItem = item
+      let data = {
+        id: '',
+        enCode: this.config.flowEnCode,
+        flowId: item.id,
+        formType: 2,
+        opType: '-1',
+        type: 1,
+        modelId: this.modelId,
+        isPreview: this.isPreview,
+        fromForm: 1,
+        hideCancelBtn: true
+      }
+      this.flowListVisible = false
+      this.flowVisible = true
+      this.$nextTick(() => {
+        this.$refs.FlowBox.init(data)
+      })
     },
     submitForm(data, callback) {
       if (!data) return
@@ -95,7 +126,7 @@ export default {
       })
     },
     closeFlow(isRefresh) {
-      if (isRefresh) this.init()
+      if (isRefresh) this.init(true)
     },
   }
 }

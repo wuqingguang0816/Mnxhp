@@ -63,7 +63,12 @@ export const constantRoutes = [{
   path: '/auth-redirect',
   component: (resolve) => require(['@/views/login/auth-redirect'], resolve),
   hidden: true
-}
+},
+{
+  path: '/formShortLink',
+  component: (resolve) => require(['@/views/formShortLink'], resolve),
+  hidden: true
+},
 ]
 
 const createRouter = () => new Router({

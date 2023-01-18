@@ -4,7 +4,10 @@
     <div class="JNPF-full-dialog-header">
       <div class="header-title">
         <img src="@/assets/images/jnpf.png" class="header-logo" />
-        <p class="header-txt"> · 表单设计</p>
+        <p class="header-txt" v-if="activeStep==0"> · 表单设计</p>
+        <el-tooltip effect="dark" :content="dataForm.fullName" placement="bottom" v-else>
+          <p class="header-txt"> · {{dataForm.fullName}}</p>
+        </el-tooltip>
       </div>
       <el-steps :active="activeStep" finish-status="success" simple class="steps">
         <el-step title="基础信息" @click.native="stepChick(0)" />
@@ -38,6 +41,12 @@
               <el-input v-model="formType" maxlength="50" disabled></el-input>
             </jnpf-form-tip-item>
             <template v-if="dataForm.formType==1">
+              <jnpf-form-tip-item label="表单类别" prop="flowType">
+                <el-radio-group v-model="dataForm.flowType" size="small">
+                  <el-radio-button :label="0">发起表单</el-radio-button>
+                  <el-radio-button :label="1">功能表单</el-radio-button>
+                </el-radio-group>
+              </jnpf-form-tip-item>
               <jnpf-form-tip-item label="Web地址" prop="urlAddress">
                 <el-input v-model="dataForm.urlAddress" placeholder="Web地址">
                   <template slot="prepend">@/views/</template>
@@ -173,7 +182,7 @@ export default {
       dataRule: {
         fullName: [
           { required: true, message: '表单名称不能为空', trigger: 'blur' },
-          // { pattern: /^[\u4e00-\u9fa5_a-zA-Z0-9]+$/, message: '请输入正确的表单名称', trigger: 'blur' },1
+          // { pattern: /^[\u4e00-\u9fa5_a-zA-Z0-9]+$/, message: '请输入正确的表单名称', trigger: 'blur' },
         ],
         enCode: [
           { required: true, message: '表单编码不能为空', trigger: 'blur' },
@@ -181,6 +190,9 @@ export default {
         ],
         formType: [
           { required: true, message: '表单类型不能为空', trigger: 'blur' }
+        ],
+        flowType: [
+          { required: true, message: '表单类别不能为空', trigger: 'blur' }
         ],
       },
       tables: [],
@@ -209,16 +221,20 @@ export default {
         if (this.dataForm.id) {
           getFormInfo(this.dataForm.id).then(res => {
             this.dataForm = res.data
-            this.formType = res.data.formType == 2 ? "自定义表单" : (res.data.flowType == 1 ? "功能表单" : "系统表单")
+            this.formType = res.data.formType == 2 ? "自定义表单" : "系统表单"
             this.draftJson = res.data.draftJson && JSON.parse(res.data.draftJson)
             this.tables = this.dataForm.tableJson && JSON.parse(this.dataForm.tableJson) || []
             this.defaultTable = JSON.parse(JSON.stringify(this.tables))
             this.updateFields()
+            //自定义表单编辑直接到设计页面
+            this.$nextTick(() => {
+              res.data.formType == 2 && this.next()
+            })
           }).catch(() => { this.loading = false })
         } else {
           this.dataForm.flowType = flowType
           this.dataForm.formType = formType
-          this.formType = formType == 2 ? "自定义表单" : (flowType == 1 ? "功能表单" : "系统表单")
+          this.formType = formType == 2 ? "自定义表单" : "系统表单"
           this.loading = false
         }
       })

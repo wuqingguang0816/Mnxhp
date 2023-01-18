@@ -4,10 +4,24 @@
     <div class="JNPF-common-layout-left" v-if="columnData.type === 2">
       <div class="JNPF-common-title" v-if="columnData.treeTitle">
         <h2>{{columnData.treeTitle}}</h2>
+        <el-dropdown v-if="columnData.treeSynType==0">
+          <el-link icon="icon-ym icon-ym-mpMenu" :underline="false" />
+          <el-dropdown-menu slot="dropdown">
+            <el-dropdown-item @click.native="toggleTreeExpand(true)">展开全部</el-dropdown-item>
+            <el-dropdown-item @click.native="toggleTreeExpand(false)">折叠全部</el-dropdown-item>
+          </el-dropdown-menu>
+        </el-dropdown>
       </div>
-      <el-tree :data="treeData" :props="treeProps" default-expand-all highlight-current
+      <div class="JNPF-common-tree-search-box"
+        v-if="columnData.hasTreeQuery&&columnData.treeSynType==0">
+        <el-input placeholder="输入关键字" v-model="keyword" suffix-icon="el-icon-search" clearable />
+      </div>
+      <el-tree :data="treeData" :props="treeProps"
+        :default-expand-all="columnData.treeSynType==0?expandsTree:false" highlight-current
         ref="treeBox" :expand-on-click-node="false" @node-click="handleNodeClick"
-        class="JNPF-common-el-tree" :node-key="treeProps.value">
+        class="JNPF-common-el-tree" :node-key="treeProps.value" :filter-node-method="filterNode"
+        :lazy="columnData.treeSynType==1&columnData.treeDataSource==='api'?true:false"
+        :load="loadNode" v-if="refreshTree">
         <span class="custom-tree-node" slot-scope="{ node, data }">
           <i :class="data.icon"></i>
           <span class="text">{{node.label}}</span>
@@ -33,6 +47,18 @@
               <el-link icon="icon-ym icon-ym-filter JNPF-common-head-icon" :underline="false"
                 @click="openSuperQuery()" />
             </el-tooltip>
+            <template v-if="columnData.type==5&&columnData.treeLazyType == 0">
+              <el-tooltip effect="dark" content="展开" placement="top">
+                <el-link v-show="!expandsTable" type="text"
+                  icon="icon-ym icon-ym-btn-expand JNPF-common-head-icon" :underline="false"
+                  @click="toggleExpandList()" />
+              </el-tooltip>
+              <el-tooltip effect="dark" content="折叠" placement="top">
+                <el-link v-show="expandsTable" type="text"
+                  icon="icon-ym icon-ym-btn-collapse JNPF-common-head-icon" :underline="false"
+                  @click="toggleExpandList()" />
+              </el-tooltip>
+            </template>
             <el-tooltip effect="dark" :content="$t('common.refresh')" placement="top">
               <el-link icon="icon-ym icon-ym-Refresh JNPF-common-head-icon" :underline="false"
                 @click="initData()" />
@@ -40,14 +66,28 @@
           </div>
         </div>
         <JNPF-table v-loading="listLoading" :data="list" row-key="id"
-          :default-expand-all="columnData.childTableStyle!==2"
-          :tree-props="{children: 'children', hasChildren: ''}" @sort-change="sortChange"
-          :row-style="rowStyle" :cell-style="cellStyle" :has-c="hasBatchBtn"
-          @selection-change="handleSelectionChange" v-if="refreshTable" custom-column
-          :span-method="arraySpanMethod" ref="tableRef"
-          :hasNO="!(columnData.childTableStyle==2&&childColumnList.length&&columnData.type != 3&&columnData.type != 4)"
-          :hasNOFixed="columnList.some(o=>o.fixed == 'left')">
+          :default-expand-all="columnData.childTableStyle!==2&&columnData.treeLazyType==0?expandsTable:false"
+          :lazy="columnData.type==5&&columnData.treeLazyType==1"
+          :tree-props="{children: 'children', hasChildren: columnData.treeLazyType==1?'hasChildren':''}"
+          :load="treeLoad" @sort-change="sortChange" :row-style="rowStyle" :cell-style="cellStyle"
+          :has-c="hasBatchBtn" @selection-change="handleSelectionChange" v-if="refreshTable"
+          custom-column :span-method="arraySpanMethod" ref="tableRef"
+          :hasNO="!(columnData.childTableStyle==2&&childColumnList.length&&columnData.type != 3)&&columnData.type != 4"
+          :hasNOFixed="columnList.some(o=>o.fixed == 'left')"
+          :show-summary='columnData.showSummary && !(columnData.type==3 ||columnData.type==5)'
+          :summary-method="getTableSummaries">
           <template v-if="columnData.type === 4">
+            <el-table-column width="50" align="center" label="序号"
+              :fixed="columnList.some(o=>o.fixed == 'left')">
+              <template slot-scope="scope">
+                <div class="row-action" v-if="config.enableFlow==0">
+                  <span class="index">{{ scope.$index + 1 }}</span>
+                  <i class="ym-custom ym-custom-arrow-expand"
+                    @click="handleRowForm(scope.$index)"></i>
+                </div>
+                <div v-else>{{ scope.$index + 1 }}</div>
+              </template>
+            </el-table-column>
             <template v-for="(item, i) in columnList">
               <el-table-column :prop="item.prop" :label="item.label" :align="item.align"
                 :fixed="item.fixed!='none'?item.fixed:false" :width="item.width" :key="i"
@@ -199,7 +239,16 @@
                     </template>
                   </template>
                   <template v-else>
-                    {{scope.row[item.prop+'_name']||scope.row[item.prop]}}
+                    <template v-if="['relationForm'].includes(item.jnpfKey)">
+                      <el-link :underline="false"
+                        @click.native="toDetail(item.modelId,scope.row[`${item.prop}`])"
+                        type="primary">
+                        {{scope.row[item.prop+'_name']||scope.row[item.prop]}}</el-link>
+                    </template>
+                    <template v-else>
+                      {{scope.row[item.prop+'_name']||scope.row[item.prop]}}
+                    </template>
+
                   </template>
                 </template>
               </el-table-column>
@@ -207,7 +256,7 @@
           </template>
           <template v-else>
             <template
-              v-if="columnData.childTableStyle==2&&childColumnList.length&&columnData.type != 3&&columnData.type != 4">
+              v-if="columnData.childTableStyle==2&&childColumnList.length&&columnData.type ==1&&columnData.type == 2">
               <el-table-column width="0" />
               <el-table-column type="expand" width="40">
                 <template slot-scope="scope">
@@ -236,9 +285,21 @@
                     <template slot-scope="scope">
                       <child-table-column :data="scope.row[item.prop]" :head="item.children"
                         @toggleExpand="toggleExpand(scope.row,`${item.prop}Expand`)"
-                        :expand="scope.row[`${item.prop}Expand`]" v-if="!ii" />
+                        @toDetail="toDetail" :expand="scope.row[`${item.prop}Expand`]" v-if="!ii" />
                     </template>
                   </el-table-column>
+                </el-table-column>
+              </template>
+              <template v-else-if="item.jnpfKey==='relationForm'">
+                <el-table-column :prop="item.prop" :label="item.label" :align="item.align"
+                  :fixed="columnList.some(o=>o.fixed == 'left')&&i==0&&columnData.groupField&&columnData.type==3?'left':item.fixed!='none'&&columnData.childTableStyle!=2?item.fixed:false"
+                  :width="item.width" :key="i" :sortable="item.sortable?'custom':item.sortable">
+                  <template slot-scope="scope">
+                    <el-link :underline="false"
+                      @click.native="toDetail(item.modelId,scope.row[`${item.prop}_id`])"
+                      type="primary">
+                      {{ scope.row[item.prop] }}</el-link>
+                  </template>
                 </el-table-column>
               </template>
               <el-table-column :prop="item.prop" :label="item.label" :align="item.align"
@@ -250,7 +311,7 @@
           <el-table-column
             :fixed="columnList.some(o=>o.fixed == 'right')&&columnData.childTableStyle!=2?'right':false"
             prop="flowState" label="状态" width="100" v-if="config.enableFlow==1">
-            <template slot-scope="scope" v-if="!scope.row.top">
+            <template slot-scope="scope" v-if="!scope.row.top||columnData.type==5">
               <el-tag v-if="scope.row.flowState==1">等待审核</el-tag>
               <el-tag type="success" v-else-if="scope.row.flowState==2">审核通过</el-tag>
               <el-tag type="danger" v-else-if="scope.row.flowState==3">审核退回</el-tag>
@@ -262,7 +323,7 @@
           <el-table-column label="操作"
             :fixed="columnData.childTableStyle==2&&childColumnList.length?false:'right'"
             :width="operationWidth" v-if="columnBtnsList.length || customBtnsList.length">
-            <template slot-scope="scope" v-if="!scope.row.top">
+            <template slot-scope="scope" v-if="!scope.row.top||columnData.type==5">
               <template v-if="scope.row.rowEdit">
                 <el-button size="mini" type="text" @click="saveForRowEdit(scope.row,1)">
                   保存</el-button>
@@ -278,7 +339,7 @@
                       <template v-if="columnData.type === 4">
                         <el-button size="mini" type="text" :key="i"
                           :disabled="config.enableFlow==1 && [1,2,4,5].indexOf(scope.row.flowState)>-1"
-                          @click="scope.row.rowEdit=true">
+                          @click="editForRowEdit(scope.row)">
                           {{item.label}}</el-button>
                       </template>
                       <template v-else>
@@ -298,11 +359,6 @@
                       <el-button size="mini" type="text" :key="i"
                         :disabled="config.enableFlow==1 && !scope.row.flowState"
                         @click="columnBtnsHandel(item.value,scope.row)" v-if="scope.row.id">
-                        {{item.label}}</el-button>
-                    </template>
-                    <template v-else>
-                      <el-button size="mini" type="text" :key="i"
-                        @click="customBtnsHandel(item,scope.row,scope.$index)">
                         {{item.label}}</el-button>
                     </template>
                   </template>
@@ -349,11 +405,6 @@
                         @click="columnBtnsHandel(item.value,scope.row)" v-has="'btn_'+item.value">
                         {{item.label}}</el-button>
                     </template>
-                    <template v-else>
-                      <el-button size="mini" type="text" :key="i" v-has="item.value"
-                        @click="customBtnsHandel(item,scope.row,scope.$index)">{{item.label}}
-                      </el-button>
-                    </template>
                   </template>
                   <template v-if="customBtnsList.length">
                     <el-dropdown hide-on-click>
@@ -375,7 +426,8 @@
             </template>
           </el-table-column>
         </JNPF-table>
-        <template v-if="columnData.type !== 3 && columnData.hasPage&&refreshTable">
+        <template
+          v-if="columnData.type !== 3 &&columnData.type !== 5&& columnData.hasPage&&refreshTable">
           <pagination :total="total" :page.sync="listQuery.currentPage"
             :limit.sync="listQuery.pageSize" @pagination="initData" />
         </template>
@@ -383,27 +435,40 @@
     </div>
     <FlowBox v-if="flowVisible" ref="FlowBox" @close="closeFlow" />
     <Form v-show="formVisible" ref="Form" @refreshDataList="refresh" />
+    <extraForm v-show="extraFormVisible" ref="extraForm" @refreshDataList="refresh" />
     <Detail v-show="detailVisible" ref="Detail" @close="detailVisible = false" />
     <ExportBox v-if="exportBoxVisible" ref="ExportBox" @download="download" />
     <ImportBox v-if="uploadBoxVisible" ref="UploadBox" @refresh="initData" />
+    <CustomBox v-if="customBoxVisible" ref="CustomBox" @close="customBoxVisible= false" />
     <SuperQuery v-if="superQueryVisible" ref="SuperQuery" :columnOptions="columnOptions"
       @superQuery="superQuery" />
     <candidate-form :visible.sync="candidateVisible" :candidateList="candidateList"
       :branchList="branchList" taskId="0" :formData="workFlowFormData"
       @submitCandidate="submitCandidate" :isCustomCopy="isCustomCopy" />
+    <el-dialog title="请选择流程" :close-on-click-modal="false" append-to-body
+      :visible.sync="flowListVisible" class="JNPF-dialog template-dialog JNPF-dialog_center"
+      lock-scroll width="400px">
+      <el-scrollbar class="template-list">
+        <div class="template-item" v-for="item in flowList" :key="item.id"
+          @click="selectFlow(item)">{{item.fullName}}
+        </div>
+      </el-scrollbar>
+    </el-dialog>
   </div>
 </template>
 
 <script>
-import { getModelList, deleteModel, batchDelete, exportModel, createModel, updateModel } from '@/api/onlineDev/visualDev'
+import { getModelList, getModelSubList, deleteModel, batchDelete, exportModel, createModel, updateModel, getConfigData } from '@/api/onlineDev/visualDev'
 import { Create, Update } from '@/api/workFlow/workFlowForm'
 import { getDictionaryDataSelector } from '@/api/systemData/dictionary'
 import { getDataInterfaceRes } from '@/api/systemData/dataInterface'
 import { getColumnsByModuleId } from '@/api/common'
 import { dyOptionsList, systemComponentsList } from '@/components/Generator/generator/comConfig'
 import { Candidates } from '@/api/workFlow/FlowBefore'
+import { getFlowList } from '@/api/workFlow/FlowEngine'
 import request from '@/utils/request'
 import Form from './Form'
+import extraForm from './extraForm'
 import FlowBox from '@/views/workFlow/components/FlowBox'
 import Detail from './detail'
 import ExportBox from '@/components/ExportBox'
@@ -411,9 +476,10 @@ import Search from './Search'
 import ChildTableColumn from './child-table-column'
 import SuperQuery from '@/components/SuperQuery'
 import CandidateForm from '@/views/workFlow/components/CandidateForm'
+import CustomBox from '@/components/JNPFCustom'
 export default {
   name: 'dynamicModel',
-  components: { Form, ExportBox, Search, Detail, FlowBox, ChildTableColumn, SuperQuery, CandidateForm },
+  components: { Form, extraForm, ExportBox, Search, Detail, FlowBox, ChildTableColumn, SuperQuery, CandidateForm, CustomBox },
   props: ['config', 'modelId', 'isPreview'],
   data() {
     return {
@@ -422,7 +488,8 @@ export default {
       treeProps: {
         children: 'children',
         label: 'fullName',
-        value: 'id'
+        value: 'id',
+        isLeaf: 'isLeaf'
       },
       list: [],
       cacheList: [],
@@ -444,12 +511,15 @@ export default {
       },
       flowVisible: false,
       formVisible: false,
+      extraFormVisible: false,
       detailVisible: false,
       importBoxVisible: false,
       exportBoxVisible: false,
       uploadBoxVisible: false,
+      customBoxVisible: false,
       superQueryVisible: false,
       treeData: [],
+      expandsTree: true,
       treeActiveId: '',
       columnData: {
         columnBtnsList: []
@@ -463,6 +533,7 @@ export default {
       customBtnsList: [],
       hasBatchBtn: false,
       refreshTable: false,
+      expandsTable: true,
       multipleSelection: [],
       settingsColumnList: [],
       mergeList: [],
@@ -476,13 +547,22 @@ export default {
       currRow: {},
       workFlowFormData: {},
       rowStyle: null,
-      cellStyle: null
+      cellStyle: null,
+      refreshTree: true,
+      flowList: [],
+      flowListVisible: false,
+      currFlow: {}
     }
   },
   computed: {
     operationWidth() {
       const customWidth = this.customBtnsList.length ? 50 : 0
       return this.columnBtnsList.length * 50 + customWidth
+    }
+  },
+  watch: {
+    keyword(val) {
+      if (this.columnData.treeSynType == 0) this.$refs.treeBox.filter(val)
     }
   },
   created() {
@@ -499,8 +579,7 @@ export default {
         this.columnData.columnList = this.columnData.columnList.filter(o => o.prop != this.columnData.groupField)
       }
       if (this.config.enableFlow == 1) {
-        this.flowTemplateJson = this.config.flowTemplateJson ? JSON.parse(this.config.flowTemplateJson) : {}
-        this.isCustomCopy = this.flowTemplateJson.properties && this.flowTemplateJson.properties.isCustomCopy
+        if (this.config.flowId) this.getFlowList()
       }
       this.hasBatchBtn = this.columnData.btnsList.some(o => o.value == 'batchRemove')
       this.formData = JSON.parse(this.config.formData)
@@ -549,7 +628,8 @@ export default {
         } else {
           this.list = res.data.list.map(o => ({
             ...o,
-            ...this.expandObj
+            ...this.expandObj,
+            hasChildren: true
           }))
         }
         if (this.columnData.type !== 3 && this.columnData.hasPage) this.total = res.data.pagination.total
@@ -558,6 +638,48 @@ export default {
           if (this.columnData.funcs && this.columnData.funcs.afterOnload && this.columnData.funcs.afterOnload.func) this.setTableLoadFunc()
         })
       })
+    },
+    /**
+    * 对表格进行合计 目前只支持数字，金额，滑块
+    */
+    getTableSummaries(param) {
+      const { columns, data } = param;
+      const sums = [];
+      columns.forEach((column, index) => {
+        if (index === 0) {
+          sums[index] = '合计';
+          return;
+        } else if (this.columnData.summaryField.includes(column.property)) {
+          const values = data.map(item => Number(item[column.property]));
+          if (!values.every(value => isNaN(value))) {
+            sums[index] = values.reduce((prev, curr) => {
+              const value = Number(curr);
+              if (!isNaN(value)) {
+                return prev + curr;
+              } else {
+                return prev;
+              }
+            }, 0).toFixed(2);
+          } else {
+            sums[index] = '';
+          }
+        }
+      })
+      return sums;
+    },
+    toDetail(modelId, id) {
+      if (!id) return
+      this.mainLoading = true
+      getConfigData(modelId).then(res => {
+        this.mainLoading = false
+        if (!res.data || !res.data.formData) return
+        let formData = JSON.parse(res.data.formData)
+        formData.popupType = 'general'
+        this.detailVisible = true
+        this.$nextTick(() => {
+          this.$refs.Detail.init(formData, modelId, id)
+        })
+      }).catch(() => { this.mainLoading = false })
     },
     getTreeView() {
       if (this.columnData.treeDataSource === "dictionary") {
@@ -744,6 +866,15 @@ export default {
         }
       }).catch(() => { });
     },
+    editForRowEdit(row) {
+      row.rowEdit = true
+      if (!row.flowId) return
+      const list = this.flowList.filter(o => o.id === row.flowId)
+      if (!list.length) return
+      this.currFlow = list[0]
+      let flowTemplateJson = this.currFlow.flowTemplateJson ? JSON.parse(this.currFlow.flowTemplateJson) : {}
+      this.isCustomCopy = flowTemplateJson.properties && flowTemplateJson.properties.isCustomCopy
+    },
     saveForRowEdit(row, status, candidateData) {
       if (this.isPreview) return this.$message({ message: '功能预览不支持数据保存', type: 'warning' })
       if (this.config.enableFlow == 1) {
@@ -752,7 +883,7 @@ export default {
           status: status || "1",
           candidateType: this.candidateType,
           formData: row,
-          flowId: this.config.flowId,
+          flowId: this.currFlow.id,
           flowUrgent: 1
         }
         if (candidateData) query = { ...query, ...candidateData }
@@ -793,7 +924,7 @@ export default {
       this.workFlowFormData = {
         id: row.id,
         formData: row,
-        flowId: this.config.flowId
+        flowId: this.currFlow.id
       }
       Candidates(0, this.workFlowFormData).then(res => {
         let data = res.data
@@ -840,18 +971,61 @@ export default {
       }
       this.list.unshift(item)
     },
-    addOrUpdateHandle(id) {
+    addHandle() {
+      if (this.config.enableFlow == 1) {
+        if (!this.flowList.length) {
+          this.$message({
+            type: 'error',
+            message: '流程不存在'
+          });
+        } else if (this.flowList.length === 1) {
+          this.selectFlow(this.flowList[0])
+        } else {
+          this.flowListVisible = true
+        }
+      } else {
+        if (this.columnData.type === 4) {
+          this.addHandleForRowEdit()
+        } else {
+          this.formVisible = true
+          this.$nextTick(() => {
+            this.$refs.Form.init(this.formData, this.modelId, '', this.isPreview, this.columnData.useFormPermission, this.list, this.columnData.type)
+          })
+        }
+      }
+    },
+    selectFlow(item) {
+      this.currFlow = item
+      if (this.columnData.type === 4) {
+        let flowTemplateJson = item.flowTemplateJson ? JSON.parse(item.flowTemplateJson) : {}
+        this.isCustomCopy = flowTemplateJson.properties && flowTemplateJson.properties.isCustomCopy
+        this.flowListVisible = false
+        this.addHandleForRowEdit()
+      } else {
+        let data = {
+          id: '',
+          flowId: item.id,
+          opType: '-1',
+          type: 1,
+          modelId: this.modelId,
+          isPreview: this.isPreview,
+        }
+        this.flowListVisible = false
+        this.flowVisible = true
+        this.$nextTick(() => {
+          this.$refs.FlowBox.init(data)
+        })
+      }
+    },
+    updateHandle(row) {
       if (this.config.enableFlow == 1) {
         let data = {
-          id: id || '',
-          enCode: this.config.flowEnCode,
-          flowId: this.config.flowId,
-          formType: 2,
+          id: row.id,
+          flowId: row.flowId,
           type: 1,
           opType: '-1',
           modelId: this.modelId,
           isPreview: this.isPreview,
-          formConf: JSON.stringify(this.formData)
         }
         this.flowVisible = true
         this.$nextTick(() => {
@@ -860,17 +1034,13 @@ export default {
       } else {
         this.formVisible = true
         this.$nextTick(() => {
-          this.$refs.Form.init(this.formData, this.modelId, id, this.isPreview, this.columnData.useFormPermission)
+          this.$refs.Form.init(this.formData, this.modelId, row.id, this.isPreview, this.columnData.useFormPermission, this.list, this.columnData.type)
         })
       }
     },
     headBtnsHandel(key) {
       if (key === 'add') {
-        if (this.columnData.type === 4) {
-          this.addHandleForRowEdit()
-        } else {
-          this.addOrUpdateHandle()
-        }
+        this.addHandle()
       }
       if (key == 'download') {
         this.exportBoxVisible = true
@@ -929,22 +1099,20 @@ export default {
     },
     columnBtnsHandel(key, row, index) {
       if (key === 'edit') {
-        this.addOrUpdateHandle(row.id)
+        this.updateHandle(row)
       }
       if (key === 'detail') {
-        this.goDetail(row.id, row)
+        this.goDetail(row)
       }
       if (key == 'remove') {
         this.handleDel(row.id, index)
       }
     },
-    goDetail(id, row) {
+    goDetail(row) {
       if (this.config.enableFlow == 1) {
         let data = {
-          id,
-          enCode: this.config.flowEnCode,
-          flowId: this.config.flowId,
-          formType: 2,
+          id: row.id,
+          flowId: row.flowId,
           type: 1,
           opType: 0,
           modelId: this.modelId,
@@ -958,7 +1126,7 @@ export default {
       } else {
         this.detailVisible = true
         this.$nextTick(() => {
-          this.$refs.Detail.init(this.formData, this.modelId, id, this.columnData.useFormPermission)
+          this.$refs.Detail.init(this.formData, this.modelId, row.id, this.columnData.useFormPermission)
         })
       }
     },
@@ -969,6 +1137,7 @@ export default {
     },
     refresh(isRefresh) {
       this.formVisible = false
+      this.extraFormVisible = false
       if (isRefresh) this.initData()
     },
     closeFlow(isRefresh) {
@@ -988,7 +1157,7 @@ export default {
     },
     searchData(queryJson) {
       if (this.columnData.type === 2 && this.treeActiveId) {
-        queryJson = JSON.parse(queryJson)
+        queryJson = queryJson ? JSON.parse(queryJson) : ''
         queryJson = { [this.columnData.treeRelation]: this.treeActiveId, ...queryJson }
         queryJson = JSON.stringify(queryJson)
       }
@@ -1014,6 +1183,17 @@ export default {
       this.initData()
     },
     customBtnsHandel(item, row, index) {
+      if (item.event.btnType == 1) this.handlePopup(item.event, row, index)
+      if (item.event.btnType == 2) this.handleScriptFunc(item.event, row, index)
+      if (item.event.btnType == 3) this.handleInterface(item.event, row, index)
+    },
+    handlePopup(item, row, index) {
+      this.customBoxVisible = true
+      this.$nextTick(() => {
+        this.$refs.CustomBox.init(item, this.modelId, row.id, this.isPreview)
+      })
+    },
+    handleScriptFunc(item, row, index) {
       const parameter = {
         data: row,
         index,
@@ -1024,6 +1204,25 @@ export default {
       const func = this.jnpf.getScriptFunc.call(this, item.func)
       if (!func) return
       func.call(this, parameter)
+    },
+    handleInterface(item, row, index) {
+      const handlerInterface = () => {
+        if (item.templateJson && item.templateJson.length) {
+          item.templateJson.forEach((ele) => {
+            ele.defaultValue = row[ele.relationField] || ""
+          })
+        }
+        let query = {
+          paramList: item.templateJson || [],
+        }
+        getDataInterfaceRes(item.interfaceId, query).then(res => {
+          this.$message({ message: res.msg, type: 'success' });
+        })
+      }
+      if (!item.useConfirm) return handlerInterface()
+      this.$confirm(item.confirmTitle || '确认执行此操作', '提示', { type: 'warning' }).then(() => {
+        handlerInterface()
+      }).catch(() => { })
     },
     request(url, method, data) {
       if (!url) return
@@ -1075,6 +1274,79 @@ export default {
         }
       })
     },
+    filterNode(value, data) {
+      if (!value) return true;
+      return data[this.treeProps.label].indexOf(value) !== -1;
+    },
+    toggleTreeExpand(expands) {
+      this.keyword = ''
+      this.refreshTree = false
+      this.expandsTree = expands
+      this.$nextTick(() => {
+        this.refreshTree = true
+        this.$nextTick(() => {
+          this.$refs.treeBox.setCurrentKey(null)
+        })
+      })
+    },
+    toggleExpandList() {
+      this.refreshTable = false;
+      this.expandsTable = !this.expandsTable;
+      this.$nextTick(() => {
+        this.refreshTable = true;
+      });
+    },
+    loadNode(node, resolve) {
+      const nodeData = node.data
+      const config = this.columnData
+      if (config.treeInterfaceId) {
+        if (config.treeTemplateJson && config.treeTemplateJson.length) {
+          for (let i = 0; i < config.treeTemplateJson.length; i++) {
+            const element = config.treeTemplateJson[i];
+            element.defaultValue = nodeData[element.relationField] || ''
+          }
+        }
+        let query = {
+          paramList: config.treeTemplateJson || [],
+        }
+        getDataInterfaceRes(config.treeInterfaceId, query).then(res => {
+          let data = res.data
+          if (Array.isArray(data)) {
+            resolve(data);
+          } else {
+            resolve([]);
+          }
+        })
+      }
+    },
+    treeLoad(tree, treeNode, resolve) {
+      getModelSubList(this.modelId, tree.id, this.listQuery).then(res => {
+        if (res.data.list && Array.isArray(res.data.list)) {
+          const list = res.data.list.map(o => ({
+            ...o,
+            ...this.expandObj,
+            hasChildren: true
+          }))
+          resolve(list);
+        } else {
+          resolve([]);
+        }
+      })
+    },
+    getFlowList() {
+      getFlowList(this.config.flowId).then(res => {
+        this.flowList = res.data
+      })
+    },
+    handleRowForm(index) {
+      this.extraFormVisible = true
+      this.$nextTick(() => {
+        const fields = this.columnList.filter(o => o.jnpfKey != 'table')
+        fields.map(ele => { ele.__config__.span = 24 })
+        const formData = { ...this.formData, fields }
+        this.$refs.extraForm.init(formData, this.modelId, this.isPreview, this.columnData.useFormPermission, this.list[index])
+      })
+    }
   }
 }
 </script>

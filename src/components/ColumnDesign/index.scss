@@ -37,6 +37,12 @@
     border-radius: 4px;
     overflow: hidden;
 
+    .left-tree-query {
+      >>>.el-form-item__label {
+        padding: 0;
+      }
+    }
+
     .field-box {
       position: relative;
       height: calc(100% - 42px);
@@ -138,15 +144,27 @@
   .typeList {
     display: flex;
     flex-wrap: wrap;
-    justify-content: space-between;
+
+    .item:nth-child(3n+3) {
+      margin-right: unset;
+    }
 
     .item {
-      width: 150px;
+      width: 100px;
       margin-bottom: 15px;
+      margin-right: 10px;
+
+      &.item-box {
+        width: 150px;
+
+        .item-img {
+          height: 100px;
+        }
+      }
 
       .item-img {
-        width: 150px;
-        height: 100px;
+        width: 100%;
+        height: 70px;
         background: #EBEEF5;
         border-radius: 4px;
         overflow: hidden;

@@ -8,11 +8,12 @@
 import { getConfigData } from '@/api/onlineDev/visualDev'
 import Form from './form'
 import List from './list'
+import ViewForm from './view'
 import { message } from '@/utils/message'
 
 export default {
   name: 'dynamicModel',
-  components: { Form, List },
+  components: { Form, List, ViewForm },
   data() {
     return {
       currentView: '',
@@ -50,6 +51,8 @@ export default {
         this.config = res.data
         if (res.data.webType == '1') {
           this.currentView = 'Form'
+        } else if (res.data.webType == '4') {
+          this.currentView = 'ViewForm'
         } else {
           this.currentView = 'List'
         }

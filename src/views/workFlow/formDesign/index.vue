@@ -36,7 +36,7 @@
           <el-table-column prop="enCode" label="表单编码" width="200" />
           <el-table-column prop="formType" label="表单类型" width="100">
             <template slot-scope="scope">
-              <span>{{ scope.row.formType == 2 ? "自定义表单" : (scope.row.flowType == 1? "功能表单" : "系统表单" )}}</span>
+              <span>{{ scope.row.formType == 2 ? "自定义表单" : "系统表单"}}</span>
             </template>
           </el-table-column>
           <el-table-column prop="creatorUser" label="创建人" width="120" />
@@ -64,18 +64,18 @@
                   <el-dropdown-menu slot="dropdown">
                     <el-dropdown-item @click.native="releaseForm(scope.row.id)">
                       发布表单</el-dropdown-item>
-                    <el-dropdown-item @click.native="rollBackForm(scope.row.id)"
+                    <!-- <el-dropdown-item @click.native="rollBackForm(scope.row.id)"
                       v-if="scope.row.enabledMark">
-                      回滚表单</el-dropdown-item>
+                      回滚表单</el-dropdown-item> -->
+                    <el-dropdown-item @click.native="preview(scope.row,'draftJson')">
+                      设计预览</el-dropdown-item>
+                    <el-dropdown-item @click.native="preview(scope.row,'propertyJson')"
+                      v-if="scope.row.enabledMark == 1">
+                      发布预览</el-dropdown-item>
                     <el-dropdown-item @click.native="copy(scope.row.id)">
                       复制表单</el-dropdown-item>
                     <el-dropdown-item @click.native="exportModel(scope.row.id)">
                       导出表单</el-dropdown-item>
-                    <el-dropdown-item @click.native="preview(scope.row,'propertyJson')"
-                      v-if="scope.row.enabledMark == 1">
-                      预览表单</el-dropdown-item>
-                    <el-dropdown-item @click.native="preview(scope.row,'draftJson')">
-                      预览草稿</el-dropdown-item>
                   </el-dropdown-menu>
                 </el-dropdown>
               </tableOpts>
@@ -90,39 +90,22 @@
     <preview v-if="previewVisible" ref="preview" @close="previewVisible=false" />
     <previewDialog :visible.sync="previewDialogVisible" :id="currRow.id" type="flow"
       @previewPc="previewPc" :dataSource="currRow.dataSource" />
-    <el-dialog title="新建表单" :visible.sync="dialogVisible"
-      class="JNPF-dialog JNPF-dialog_center add-dialog" lock-scroll width="900px"
+    <el-dialog title="新建流程表单" :visible.sync="dialogVisible"
+      class="JNPF-dialog JNPF-dialog_center JNPF-dialog-add" lock-scroll width="600px"
       :show-close="false">
       <div class="add-main">
-        <div class="add-main-part add-main-left">
-          <div class="add-main-cap">发起流程表单</div>
-          <div class="add-main-container">
-            <div class="add-item" @click="addForm(0,2)">
-              <i class="add-icon icon-ym icon-ym-customForm"></i>
-              <div class="add-txt">
-                <p class="add-title">自定义表单</p>
-                <p class="add-desc">自定义设计业务流程表单</p>
-              </div>
-            </div>
-            <div class="add-item" @click="addForm(0,1)">
-              <i class="add-icon icon-ym icon-ym-systemForm"></i>
-              <div class="add-txt">
-                <p class="add-title">系统表单</p>
-                <p class="add-desc">关联系统原有表单，便捷设计</p>
-              </div>
-            </div>
+        <div class="add-item add-item-left" @click="addForm(0,2)">
+          <i class="add-icon icon-ym icon-ym-launchFlow"></i>
+          <div class="add-txt">
+            <p class="add-title">自定义表单</p>
+            <p class="add-desc">在线可视化流程表单</p>
           </div>
         </div>
-        <div class="add-main-part add-main-right">
-          <div class="add-main-cap">功能流程表单</div>
-          <div class="add-main-container">
-            <div class="add-item" @click="addForm(1,1)">
-              <i class="add-icon  icon-ym icon-ym-functionForm"></i>
-              <div class="add-txt">
-                <p class="add-title">功能表单</p>
-                <p class="add-desc">关联系统开发功能表单</p>
-              </div>
-            </div>
+        <div class="add-item" @click="addForm(0,1)">
+          <i class="add-icon icon-ym icon-ym-funcFlow"></i>
+          <div class="add-txt">
+            <p class="add-title">系统表单</p>
+            <p class="add-desc">代码生成的流程表单</p>
           </div>
         </div>
       </div>
@@ -323,81 +306,3 @@ export default {
   }
 }
 </script>
-<style lang="scss" scoped>
-.add-dialog {
-  >>> .el-dialog__header {
-    display: none !important;
-  }
-  >>> .el-dialog__body {
-    padding: 40px 30px !important;
-  }
-}
-.add-main {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  .add-main-part {
-    border: 1px solid #dcdfe6;
-    padding: 20px;
-    border-radius: 4px;
-  }
-  .add-main-cap {
-    line-height: 25px;
-    font-size: 18px;
-    color: #303133;
-    margin-bottom: 14px;
-    font-weight: 400;
-  }
-  .add-main-container {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-  }
-  .add-main-left {
-    width: 530px;
-    .add-item {
-      background: #f1f5ff;
-      .add-icon {
-        background: #ccd9ff;
-        color: #537eff;
-      }
-    }
-  }
-  .add-item {
-    width: 235px;
-    height: 120px;
-    background: #fef3e6;
-    display: flex;
-    align-items: center;
-    cursor: pointer;
-    border-radius: 4px;
-    padding-left: 12px;
-    .add-icon {
-      width: 48px;
-      height: 48px;
-      margin-right: 10px;
-      background: #fce1bf;
-      border-radius: 6px;
-      color: #ea986c;
-      flex-shrink: 0;
-      font-size: 30px;
-      line-height: 48px;
-      text-align: center;
-    }
-    .add-txt {
-      height: 48px;
-      P {
-        line-height: 28px;
-      }
-      .add-title {
-        font-size: 18px;
-        color: #606266;
-      }
-      .add-desc {
-        color: #8d8989;
-        font-size: 12px;
-      }
-    }
-  }
-}
-</style>

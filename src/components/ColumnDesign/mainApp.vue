@@ -11,7 +11,12 @@
                 title='点击拖动' />
             </template>
           </el-table-column>
-          <el-table-column prop="label" label="列名" />
+          <el-table-column prop="label" label="列名" v-if="webType!=4" />
+          <el-table-column prop="label" label="列名" v-else>
+            <template slot-scope="scope">
+              <el-input v-model="scope.row.label" placeholder="列名" />
+            </template>
+          </el-table-column>
           <el-table-column prop="prop" label="字段" />
           <el-table-column prop="searchType" label="类型">
             <template slot-scope="scope">
@@ -21,6 +26,14 @@
                 <el-option label="模糊查询" :value="2"></el-option>
                 <el-option label="范围查询" :value="3"></el-option>
               </el-select>
+            </template>
+          </el-table-column>
+          <el-table-column prop='searchMultiple' label="是否多选" align="center">
+            <template slot-scope="scope">
+              <el-checkbox v-model="scope.row.searchMultiple"
+                v-if="['select','depSelect','roleSelect','userSelect','usersSelect','comSelect','posSelect','groupSelect'].includes(scope.row.jnpfKey)">
+              </el-checkbox>
+              <el-checkbox v-else disabled></el-checkbox>
             </template>
           </el-table-column>
         </el-table>
@@ -36,7 +49,12 @@
                 title='点击拖动' />
             </template>
           </el-table-column>
-          <el-table-column prop="label" label="列名" />
+          <el-table-column prop="label" label="列名" v-if="webType!=4" />
+          <el-table-column prop="label" label="列名" v-else>
+            <template slot-scope="scope">
+              <el-input v-model="scope.row.label" placeholder="列名" />
+            </template>
+          </el-table-column>
           <el-table-column prop="prop" label="字段" />
         </el-table>
       </div>
@@ -51,7 +69,12 @@
                 title='点击拖动' />
             </template>
           </el-table-column>
-          <el-table-column prop="label" label="列名" />
+          <el-table-column prop="label" label="列名" v-if="webType!=4" />
+          <el-table-column prop="label" label="列名" v-else>
+            <template slot-scope="scope">
+              <el-input v-model="scope.row.label" placeholder="列名" />
+            </template>
+          </el-table-column>
           <el-table-column prop="prop" label="字段" />
         </el-table>
       </div>
@@ -67,21 +90,24 @@
         <div class="columnList" v-show="currentTab==='sort'">
           <el-table :data="sortOptions" class="JNPF-common-table" height="100%"
             @selection-change="sortSelectionChange" ref="sortTable">
-            <el-table-column prop="label" label="排序字段" />
+            <el-table-column prop="label" label="排序字段" v-if="webType!=4" />
+            <el-table-column prop="prop" label="排序字段" v-else />
             <el-table-column type="selection" width="55" align="center" />
           </el-table>
         </div>
         <div class="columnList" v-show="currentTab==='search'">
           <el-table :data="searchOptions" class="JNPF-common-table" height="100%"
             @selection-change="searchSelectionChange" ref="searchTable">
-            <el-table-column prop="label" label="查询字段" />
+            <el-table-column prop="label" label="查询字段" v-if="webType!=4" />
+            <el-table-column prop="prop" label="查询字段" v-else />
             <el-table-column type="selection" width="55" align="center" />
           </el-table>
         </div>
         <div class="columnList" v-show="currentTab==='field'">
           <el-table :data="columnOptions" class="JNPF-common-table" height="100%"
             @selection-change="columnSelectionChange" ref="columnTable">
-            <el-table-column prop="label" label="列表字段" />
+            <el-table-column prop="label" label="列表字段" v-if="webType!=4" />
+            <el-table-column prop="prop" label="列表字段" v-else />
             <el-table-column type="selection" width="55" align="center" />
           </el-table>
         </div>
@@ -113,13 +139,14 @@
                 </el-radio-group>
               </el-form-item>
               <el-divider>按钮配置</el-divider>
-              <el-checkbox-group v-model="btnsList" class="btnsList">
+              <el-checkbox-group v-model="btnsList" class="btnsList" v-if="webType!=4">
                 <el-checkbox :label="item.value" v-for="item in btnsOption" :key="item.value">
                   <span class="btn-label">{{ item.value | btnText }}</span>
                   <el-input v-model="item.label" />
                 </el-checkbox>
               </el-checkbox-group>
-              <el-checkbox-group v-model="columnBtnsList" class="btnsList columnBtnList">
+              <el-checkbox-group v-model="columnBtnsList" class="btnsList columnBtnList"
+                v-if="webType!=4">
                 <el-checkbox :label="item.value" v-for="item in columnBtnsOption" :key="item.value">
                   <span class="btn-label">{{ item.value | btnText }}</span>
                   <el-input v-model="item.label" />
@@ -138,8 +165,7 @@
                       <p class="custom-line-value">{{item.value}}</p>
                       <el-input v-model="item.label" placeholder="按钮名称" size="small">
                         <template slot="append">
-                          <el-button type="primary" @click="editFunc(item,'btn')"
-                            class="custom-btn">事件
+                          <el-button type="primary" @click="editFunc(item)" class="custom-btn">事件
                           </el-button>
                         </template>
                       </el-input>
@@ -154,19 +180,21 @@
                   <el-button type="text" icon="el-icon-plus" @click="addCustomBtn">添加按钮</el-button>
                 </div>
               </template>
-              <el-divider>权限设置</el-divider>
-              <el-form-item label="按钮权限">
-                <el-switch v-model="columnData.useBtnPermission"></el-switch>
-              </el-form-item>
-              <el-form-item label="列表权限">
-                <el-switch v-model="columnData.useColumnPermission"></el-switch>
-              </el-form-item>
-              <el-form-item label="表单权限">
-                <el-switch v-model="columnData.useFormPermission"></el-switch>
-              </el-form-item>
-              <el-form-item label="数据权限">
-                <el-switch v-model="columnData.useDataPermission"></el-switch>
-              </el-form-item>
+              <template v-if="webType!=4">
+                <el-divider>权限设置</el-divider>
+                <el-form-item label="按钮权限">
+                  <el-switch v-model="columnData.useBtnPermission"></el-switch>
+                </el-form-item>
+                <el-form-item label="列表权限">
+                  <el-switch v-model="columnData.useColumnPermission"></el-switch>
+                </el-form-item>
+                <el-form-item label="表单权限">
+                  <el-switch v-model="columnData.useFormPermission"></el-switch>
+                </el-form-item>
+                <el-form-item label="数据权限">
+                  <el-switch v-model="columnData.useDataPermission"></el-switch>
+                </el-form-item>
+              </template>
               <template v-if="modelType==1">
                 <el-divider>脚本事件</el-divider>
                 <el-form-item label="表格事件">
@@ -182,15 +210,18 @@
     </div>
     <form-script v-if="formScriptVisible" ref="formScript" :value="activeItem.func"
       :type="activeItem.type" @updateScript="updateScript" @closeDialog="formScriptVisible=false" />
+    <custom-btn v-if="customBtnVisible" :activeItem="activeItem" ref="customBtn"
+      @updateCustomBtn="updateCustomBtn" @closeDialog="customBtnVisible=false" />
   </div>
 </template>
 <script>
 import Sortable from 'sortablejs'
 import draggable from 'vuedraggable'
 import FormScript from './FormScript'
+import CustomBtn from './CustomBtn'
 import { getDrawingList } from '@/components/Generator/utils/db'
-import { deepClone } from '@/utils'
 import { noColumnShowList, noSearchList, useInputList, useDateList } from '@/components/Generator/generator/comConfig'
+import { getFields } from '@/api/onlineDev/visualDev'
 const getSearchType = item => {
   const jnpfKey = item.__config__.jnpfKey
   // 等于-1  模糊-2  范围-3
@@ -241,9 +272,15 @@ export default {
       type: Object,
       default: () => { },
     },
-    modelType: ''
+    webType: '',
+    modelType: '',
+    interfaceId: '',
+    templateJson: {
+      type: Array,
+      default: () => []
+    },
   },
-  components: { draggable, FormScript },
+  components: { draggable, FormScript, CustomBtn },
   data() {
     return {
       currentTab: 'column',
@@ -266,6 +303,7 @@ export default {
       btnsList: [],
       columnBtnsList: [],
       formScriptVisible: false,
+      customBtnVisible: false,
       activeItem: {}
     }
   },
@@ -316,66 +354,125 @@ export default {
     },
   },
   created() {
-    let list = []
-    let list1 = []
-    const loop = (data, parent) => {
-      if (!data) return
-      if (data.__config__ && data.__config__.children && Array.isArray(data.__config__.children)) {
-        loop(data.__config__.children, data)
-      }
-      if (Array.isArray(data)) data.forEach(d => loop(d, parent))
-      if (data.__config__ && data.__config__.jnpfKey) {
-        const visibility = !data.__config__.visibility || (Array.isArray(data.__config__.visibility) && data.__config__.visibility.includes('app'))
-        if (data.__config__.layout === "colFormItem" && data.__vModel__ && visibility) {
-          const isTableChild = parent && parent.__config__ && parent.__config__.jnpfKey === 'table'
-          const id = isTableChild ? parent.__vModel__ + '-' + data.__vModel__ : data.__vModel__
-          const label = isTableChild ? parent.__config__.label + '-' + data.__config__.label : data.__config__.label
-          data.__vModel__ = id
-          data.__config__.label = label
-          list.push(data)
-          if (data.__vModel__.indexOf('_jnpf_') < 0) list1.push(data)
-        }
-      }
-    }
-    loop(getDrawingList())
-    this.list = list
-    let options = list.filter(o => noColumnShowList.indexOf(o.__config__.jnpfKey) < 0 || o.__config__.isStorage == 2)
-    let searchOptions = list.filter(o => noSearchList.indexOf(o.__config__.jnpfKey) < 0)
-    let sortOptions = list1.filter(o => noColumnShowList.indexOf(o.__config__.jnpfKey) < 0 || o.__config__.isStorage == 2)
-    sortOptions = sortOptions.filter(o => o.__vModel__.indexOf('-') < 0)
-    this.groupFieldOptions = list.filter(o => o.__vModel__.indexOf('-') < 0)
-    this.columnOptions = options.map(o => ({
-      label: o.__config__.label,
-      prop: o.__vModel__,
-      align: 'left',
-      jnpfKey: o.__config__.jnpfKey,
-      sortable: false,
-      width: null,
-      ...o
-    }));
-    this.searchOptions = searchOptions.map(o => ({
-      label: o.__config__.label,
-      prop: o.__vModel__,
-      jnpfKey: o.__config__.jnpfKey,
-      value: '',
-      searchType: getSearchType(o),
-      ...o
-    }));
-    this.sortOptions = sortOptions.map(o => ({
-      label: o.__config__.label,
-      prop: o.__vModel__,
-      jnpfKey: o.__config__.jnpfKey,
-      ...o
-    }));
     if (typeof this.conf === 'object' && this.conf !== null) {
       this.columnData = Object.assign({}, defaultColumnData, this.conf)
     }
-    this.columnData.columnOptions = options
-    if (!this.columnOptions.length) this.columnData.columnList = []
-    if (!this.searchOptions.length) this.columnData.searchList = []
-    if (!this.sortOptions.length) this.columnData.sortList = []
-    this.setBtnValue(this.columnData.btnsList, this.btnsOption)
-    this.setBtnValue(this.columnData.columnBtnsList, this.columnBtnsOption)
+    if (this.webType != 4) {
+      let list = []
+      let list1 = []
+      const loop = (data, parent) => {
+        if (!data) return
+        if (data.__config__ && data.__config__.children && Array.isArray(data.__config__.children)) {
+          loop(data.__config__.children, data)
+        }
+        if (Array.isArray(data)) data.forEach(d => loop(d, parent))
+        if (data.__config__ && data.__config__.jnpfKey) {
+          const visibility = !data.__config__.visibility || (Array.isArray(data.__config__.visibility) && data.__config__.visibility.includes('app'))
+          if (data.__config__.layout === "colFormItem" && data.__vModel__ && visibility) {
+            const isTableChild = parent && parent.__config__ && parent.__config__.jnpfKey === 'table'
+            const id = isTableChild ? parent.__vModel__ + '-' + data.__vModel__ : data.__vModel__
+            const label = isTableChild ? parent.__config__.label + '-' + data.__config__.label : data.__config__.label
+            data.__vModel__ = id
+            data.__config__.label = label
+            list.push(data)
+            if (data.__vModel__.indexOf('_jnpf_') < 0) list1.push(data)
+          }
+        }
+      }
+      loop(getDrawingList())
+      this.list = list
+      let options = list.filter(o => noColumnShowList.indexOf(o.__config__.jnpfKey) < 0 || o.__config__.isStorage == 2)
+      let searchOptions = list.filter(o => noSearchList.indexOf(o.__config__.jnpfKey) < 0)
+      let sortOptions = list1.filter(o => noColumnShowList.indexOf(o.__config__.jnpfKey) < 0 || o.__config__.isStorage == 2)
+      sortOptions = sortOptions.filter(o => o.__vModel__.indexOf('-') < 0)
+      this.groupFieldOptions = list.filter(o => o.__vModel__.indexOf('-') < 0)
+      this.columnOptions = options.map(o => ({
+        label: o.__config__.label,
+        prop: o.__vModel__,
+        align: 'left',
+        jnpfKey: o.__config__.jnpfKey,
+        sortable: false,
+        width: null,
+        ...o
+      }));
+      this.searchOptions = searchOptions.map(o => ({
+        label: o.__config__.label,
+        prop: o.__vModel__,
+        jnpfKey: o.__config__.jnpfKey,
+        value: '',
+        searchType: getSearchType(o),
+        ...o
+      }));
+      this.sortOptions = sortOptions.map(o => ({
+        label: o.__config__.label,
+        prop: o.__vModel__,
+        jnpfKey: o.__config__.jnpfKey,
+        ...o
+      }));
+      this.columnData.columnOptions = options
+      if (!this.columnOptions.length) this.columnData.columnList = []
+      if (!this.searchOptions.length) this.columnData.searchList = []
+      if (!this.sortOptions.length) this.columnData.sortList = []
+      this.setBtnValue(this.columnData.btnsList, this.btnsOption)
+      this.setBtnValue(this.columnData.columnBtnsList, this.columnBtnsOption)
+    } else {
+      if (!this.interfaceId) return
+      const query = {
+        paramList: this.templateJson || []
+      }
+      getFields(this.interfaceId, query).then(res => {
+        let fieldsList = res.data
+        this.columnOptions = fieldsList.map(o => ({
+          label: "",
+          prop: o,
+          fixed: 'none',
+          align: 'left',
+          jnpfKey: 'comInput',
+          sortable: false,
+          width: null,
+          __vModel__: o,
+          __config__: {
+            jnpfKey: 'comInput',
+          }
+        }));
+        this.searchOptions = fieldsList.map(o => ({
+          label: "",
+          prop: o,
+          jnpfKey: 'comInput',
+          value: '',
+          searchType: 1,
+          __vModel__: o,
+          __config__: {
+            label: "",
+            jnpfKey: 'comInput',
+          }
+        }));
+        this.sortOptions = fieldsList.map(o => ({
+          label: '',
+          prop: o,
+          jnpfKey: o,
+        }));
+        this.groupFieldOptions = fieldsList.map(o => ({
+          label: o,
+          prop: o,
+          jnpfKey: 'comInput',
+          __vModel__: o,
+          __config__: {
+            label: o,
+            jnpfKey: 'comInput',
+          }
+        }));
+        if (!this.columnOptions.length) this.columnData.columnList = []
+        if (!this.searchOptions.length) this.columnData.searchList = []
+        this.$nextTick(() => {
+          this.setListValue(this.columnData.columnList, this.columnOptions, 'column')
+          this.setListValue(this.columnData.searchList, this.searchOptions, "search")
+          this.setListValue(this.columnData.sortList, this.sortOptions, 'sort')
+        })
+      })
+    }
+
+
     this.btnsList = this.columnData.btnsList.map(o => o.value)
     this.columnBtnsList = this.columnData.columnBtnsList.map(o => o.value)
   },
@@ -408,6 +505,7 @@ export default {
             if (type === 'search') {
               data[ii].searchType = replacedData[i].searchType
             }
+            data[ii].label = replacedData[i].label
             res.push(data[ii])
             break inter
           }
@@ -479,20 +577,26 @@ export default {
       this.columnData.customBtnsList.push({
         value: 'btn_' + id,
         label: '按钮' + id,
-        func: ''
+        event: {
+          func: ''
+        }
       })
     },
-    editFunc(item, type) {
-      if (!item.func) item.func = defaultFunc
+    editFunc(item) {
+      if (!item.event.func) item.event.func = defaultFunc
       this.activeItem = item
-      this.activeItem.type = type
-      this.formScriptVisible = true
+      this.customBtnVisible = true
       this.$nextTick(() => {
-        this.$refs.formScript.init()
+        this.$refs.customBtn.init('app', item.event, this.webType, this.columnOptions)
       })
     },
     updateScript(func) {
       this.activeItem.func = func
+    },
+    updateCustomBtn(val) {
+      this.columnData.customBtnsList.forEach((ele, index) => {
+        if (ele.value == this.activeItem.value) this.$set(this.columnData.customBtnsList[index], 'event', val)
+      })
     },
     addFunc(item, type) {
       if (!item.func) item.func = defaultFuncs

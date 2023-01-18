@@ -29,14 +29,40 @@
               :value="item.nodeCode">
             </el-option>
           </el-select>
+          <template v-if="properties.rejectType==3">
+            <el-form-item prop="rejectRadio">
+              <el-radio-group v-model="dataForm.rejectType" class="form-item-content">
+                <el-radio :label="1">重新审批
+                  <el-tooltip content="若流程为A->B->C,C退回至A，则C->A->B->C" placement="top">
+                    <i class="el-icon-warning-outline"></i>
+                  </el-tooltip>
+                </el-radio>
+                <el-radio :label="2">直接提交给我
+                  <el-tooltip content="若流程为A->B->C,C退回至A，则C->A->C" placement="top">
+                    <i class="el-icon-warning-outline"></i>
+                  </el-tooltip>
+                </el-radio>
+              </el-radio-group>
+            </el-form-item>
+          </template>
         </el-form-item>
       </template>
       <el-form-item label="抄送人员" prop="copyIds" v-if="properties&&properties.isCustomCopy">
         <user-select v-model="copyIds" placeholder="请选择" multiple />
       </el-form-item>
       <el-form-item label="审批意见" prop="handleOpinion" v-if="properties&&properties.hasOpinion">
-        <el-input v-model="dataForm.handleOpinion" placeholder="请输入审批意见" type="textarea"
-          :rows="4" />
+        <el-row>
+          <el-col :span="22">
+            <el-input v-model="dataForm.handleOpinion" placeholder="请输入审批意见" type="textarea"
+              :rows="4" />
+          </el-col>
+          <el-col :span="2">
+            <el-button plain @click="commonWords()" class="commonWords-button">
+              常用语
+            </el-button>
+          </el-col>
+        </el-row>
+
       </el-form-item>
       <el-form-item label="审批附件" prop="fileList" v-if="properties&&properties.hasOpinion">
         <JNPF-UploadFz v-model="dataForm.fileList" :limit="3" />
@@ -57,6 +83,7 @@
         {{$t('common.confirmButton')}}
       </el-button>
     </span>
+    <CommonWordsDialog v-if="commonWordsVisible" ref="commonWordsDialog" @change="common" />
     <SignImgDialog v-if="signVisible" ref="SignImg" :lineWidth='3' :userInfo='userInfo'
       :isDefault='1' @close="signDialog" />
   </el-dialog>
@@ -66,8 +93,9 @@
 import SignImgDialog from '@/components/SignImgDialog'
 import { mapGetters } from "vuex"
 import CandidateUserSelect from './CandidateUserSelect'
+import CommonWordsDialog from './CommonWordsDialog'
 export default {
-  components: { SignImgDialog, CandidateUserSelect },
+  components: { SignImgDialog, CandidateUserSelect, CommonWordsDialog },
   data() {
     return {
       visible: false,
@@ -77,7 +105,8 @@ export default {
         candidateList: [],
         handleOpinion: '',
         fileList: [],
-        rejectStep: ''
+        rejectStep: '',
+        rejectType: 1
       },
       copyIds: [],
       signVisible: false,
@@ -92,7 +121,8 @@ export default {
         data: '{}'
       },
       showReject: false,
-      rejectList: []
+      rejectList: [],
+      commonWordsVisible: false,
     }
   },
   computed: {
@@ -119,6 +149,7 @@ export default {
       this.showReject = properties.showReject
       this.rejectList = properties.rejectList
       this.dataForm.rejectStep = properties.nodeCode
+      this.dataForm.rejectType = properties.rejectType
     },
     onBranchChange(val) {
       const defaultList = this.dataForm.candidateList.filter(o => o.isDefault)
@@ -155,7 +186,8 @@ export default {
             signImg: this.signImg,
             copyIds: this.copyIds.join(','),
             branchList: this.dataForm.branchList,
-            fileList: this.dataForm.fileList
+            fileList: this.dataForm.fileList,
+            rejectType: this.dataForm.rejectType
           }
           if (this.eventType === 'reject') query.rejectStep = this.dataForm.rejectStep
           if (this.dataForm.candidateList.length) {
@@ -171,6 +203,18 @@ export default {
           this.btnLoading = true
           this.$emit('submit', query)
         }
+      })
+    },
+    common(val) {
+      this.commonWordsVisible = false
+      if (val) {
+        this.dataForm.handleOpinion += val.commonWordsText
+      }
+    },
+    commonWords() {
+      this.commonWordsVisible = true
+      this.$nextTick(() => {
+        this.$refs.commonWordsDialog.init()
       })
     },
     addSign() {
@@ -193,3 +237,8 @@ export default {
 }
 </script>
 
+<style lang="scss" scoped>
+.commonWords-button {
+  margin-top: 57px;
+}
+</style>

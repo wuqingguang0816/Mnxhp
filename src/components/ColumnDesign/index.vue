@@ -1,14 +1,23 @@
 <template>
   <div class="columnDesign-box">
-    <column-main ref="columnMain" :conf="columnData" :modelType="modelType" :webType="webType"
-      v-show="currentTab==='pc'" />
-    <column-main-app ref="columnMainApp" :conf="appColumnData" :modelType="modelType"
-      v-show="currentTab==='app'" />
-    <div class="head-tabs">
-      <el-button icon="icon-ym icon-ym-pc" :class="{'unActive-btn':currentTab!=='pc'}" type="text"
-        @click="currentTab='pc'" size="medium">桌面端</el-button>
-      <el-button icon="icon-ym icon-ym-mobile" :class="{'unActive-btn':currentTab!=='app'}"
-        type="text" @click="currentTab='app'" size="medium">移动端</el-button>
+    <div style="height:100%" v-show="webType==2||webType==3||webType==4">
+      <column-main ref="columnMain" :conf="columnData" :modelType="modelType" :webType="webType"
+        :interfaceId="interfaceId" :templateJson="templateJson" v-show="currentTab==='pc'" />
+      <column-main-app ref="columnMainApp" :conf="appColumnData" :modelType="modelType"
+        :webType="webType" :interfaceId="interfaceId" :templateJson="templateJson"
+        v-show="currentTab==='app'" />
+      <div class="head-tabs">
+        <el-button icon="icon-ym icon-ym-pc" :class="{'unActive-btn':currentTab!=='pc'}" type="text"
+          @click="currentTab='pc'" size="medium">桌面端</el-button>
+        <el-button icon="icon-ym icon-ym-mobile" :class="{'unActive-btn':currentTab!=='app'}"
+          type="text" @click="currentTab='app'" size="medium">移动端</el-button>
+      </div>
+    </div>
+    <div class="column-empty-info" v-show="webType!=2&&webType!=4">
+      <img src="@/assets/images/generator/columnType1.png" class=" empty-img">
+      <p>开启后，表单带有数据列表</p>
+      <el-button type="primary" style="width:150px" size="medium" @click="$emit('openList')">开启列表
+      </el-button>
     </div>
   </div>
 </template>
@@ -27,7 +36,12 @@ export default {
       default: () => { }
     },
     webType: '',
-    modelType: ''
+    modelType: '',
+    interfaceId: '',
+    templateJson: {
+      type: Array,
+      default: () => []
+    },
   },
   components: { ColumnMain, ColumnMainApp },
   data() {

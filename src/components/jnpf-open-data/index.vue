@@ -57,6 +57,7 @@ export default {
     setDefault() {
       if (this.type === 'currUser') {
         this.innerValue = this.userInfo.userName + '/' + this.userInfo.userAccount
+        if (!this.userInfo.userName && !this.userInfo.userAccount) this.innerValue = ''
       }
       if (this.type === 'currTime') {
         this.innerValue = this.jnpf.toDate(new Date().getTime(), 'yyyy-MM-dd HH:mm:ss')

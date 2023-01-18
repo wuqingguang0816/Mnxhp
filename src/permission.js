@@ -8,7 +8,7 @@ import getPageTitle from '@/utils/get-page-title'
 
 NProgress.configure({ showSpinner: false }) // NProgress Configuration
 
-const whiteList = ['/login', '/auth-redirect', '/sso'] // no redirect whitelist
+const whiteList = ['/login', '/auth-redirect', '/sso', '/formShortLink'] // no redirect whitelist
 
 router.beforeEach(async (to, from, next) => {
   // start progress bar
@@ -31,7 +31,8 @@ router.beforeEach(async (to, from, next) => {
     })
   }
   // determine whether the user has logged in
-  if (hasToken) {
+  if (hasToken && to.path !== '/formShortLink') {
+
     if (store.getters.isLock && to.path !== '/lockScreen' && to.path !== '/login') {
       next({
         path: '/lockScreen'

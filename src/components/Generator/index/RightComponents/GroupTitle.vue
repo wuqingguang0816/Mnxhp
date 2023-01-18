@@ -1,7 +1,7 @@
 <template>
   <el-row>
-    <el-form-item label="标题">
-      <el-input v-model="activeData.content" placeholder="请输入标题" />
+    <el-form-item label="分组标题">
+      <el-input v-model="activeData.content" placeholder="请输入分组标题" />
     </el-form-item>
     <el-form-item label="对齐方式">
       <el-radio-group v-model="activeData['content-position']">

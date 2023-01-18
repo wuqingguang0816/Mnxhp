@@ -177,6 +177,7 @@ export default {
       });
     },
     toggleTreeExpand(expands) {
+      this.filterText = ''
       this.refreshTree = false
       this.expandsTree = expands
       this.$nextTick(() => {
