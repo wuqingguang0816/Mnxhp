@@ -15,7 +15,7 @@
       </el-tree>
     </div>
     <div class="JNPF-common-layout-center">
-      <Search ref="Search" :list="columnData.searchList" @reset="reset" @search="searchData" />
+      <Search ref="Search" :list="columnData.searchList" @reset="reset" @search="searchData" :initDataJson="listQuery.queryJson"/>
       <div class="JNPF-common-layout-main JNPF-flex-main">
         <div class="JNPF-common-head">
           <div v-if="isPreview || !columnData.useBtnPermission">
@@ -411,6 +411,8 @@ import Search from './Search'
 import ChildTableColumn from './child-table-column'
 import SuperQuery from '@/components/SuperQuery'
 import CandidateForm from '@/views/workFlow/components/CandidateForm'
+import {mapGetters} from "vuex";
+
 export default {
   name: 'dynamicModel',
   components: { Form, ExportBox, Search, Detail, FlowBox, ChildTableColumn, SuperQuery, CandidateForm },
@@ -480,6 +482,7 @@ export default {
     }
   },
   computed: {
+    ...mapGetters(['userInfo']),
     operationWidth() {
       const customWidth = this.customBtnsList.length ? 50 : 0
       return this.columnBtnsList.length * 50 + customWidth
@@ -519,6 +522,7 @@ export default {
       })
       if (this.columnData.type === 4) this.buildOptions()
       if (this.isPreview) return this.listLoading = false
+      this.initDefaultSearchData()
       this.listQuery.pageSize = this.columnData.pageSize
       this.listQuery.sort = this.columnData.sort
       this.listQuery.sidx = this.columnData.defaultSidx
@@ -664,6 +668,27 @@ export default {
         }
       }
       this.exportList = exportList
+    },
+    initDefaultSearchData() {
+      let searchList = this.columnData.searchList
+      //处理搜索条件中的默认值
+      if(searchList != null && searchList.length > 0) {
+        let initQueryJson = {}
+        for(let i = 0, len = searchList.length; i< len; i++) {
+          if(searchList[i].jnpfKey === 'date' && searchList[i].__config__.defaultCurrent == true) {
+            initQueryJson[searchList[i].__vModel__] = [new Date().getTime(), new Date().getTime()]
+          }else if(searchList[i].jnpfKey === 'depSelect' && searchList[i].__config__.defaultCurrent == true && this.userInfo.deptId != null) {
+            initQueryJson[searchList[i].__vModel__] = this.userInfo.deptId
+          }else if(searchList[i].jnpfKey === 'comSelect' && searchList[i].__config__.defaultCurrent == true && this.userInfo.organizeId != null) {
+            initQueryJson[searchList[i].__vModel__] = this.userInfo.organizeId
+          }else if(searchList[i].jnpfKey === 'userSelect' && searchList[i].__config__.defaultCurrent == true) {
+            initQueryJson[searchList[i].__vModel__] = this.userInfo.userId
+          }
+        }
+        if(Object.keys(initQueryJson).length > 0) {
+          this.listQuery.queryJson = JSON.stringify(initQueryJson)
+        }
+      }
     },
     getMergeList(list) {
       list.forEach(item => {

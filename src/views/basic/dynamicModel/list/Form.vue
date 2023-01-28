@@ -144,9 +144,9 @@ export default {
             for(let i = 0, len = fields.length; i< len; i++) {
               if(fields[i].__config__.jnpfKey === 'date' && fields[i].__config__.defaultCurrent == true) {
                 this.formData[fields[i].__vModel__] = new Date().getTime()
-              }else if(fields[i].__config__.jnpfKey === 'depSelect' && fields[i].__config__.defaultCurrent == true) {
-                this.formData[fields[i].__vModel__] =  this.userInfo.departmentId
-              }else if(fields[i].__config__.jnpfKey === 'comSelect' && fields[i].__config__.defaultCurrent == true) {
+              }else if(fields[i].__config__.jnpfKey === 'depSelect' && fields[i].__config__.defaultCurrent == true && this.userInfo.deptId != null) {
+                this.formData[fields[i].__vModel__] =  this.userInfo.deptId
+              }else if(fields[i].__config__.jnpfKey === 'comSelect' && fields[i].__config__.defaultCurrent == true && this.userInfo.organizeId != null) {
                 this.formData[fields[i].__vModel__] =  this.userInfo.organizeId
               }else if(fields[i].__config__.jnpfKey === 'userSelect' && fields[i].__config__.defaultCurrent == true) {
                 this.formData[fields[i].__vModel__] =  this.userInfo.userId
