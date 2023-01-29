@@ -159,7 +159,6 @@ export default {
         //   }
         // });
         // 返回数据库关系对照
-        let fieldList = this.$store.state.generator.formItemList
         this.$emit("ruleConfig", {
           pconditions: this.pconditions
         });

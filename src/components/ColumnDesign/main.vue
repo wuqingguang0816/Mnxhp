@@ -156,7 +156,7 @@
               </template>
               <el-divider>表格配置</el-divider>
               <el-form-item label="数据过滤">
-                <el-button style="width: 100%;" @click="filterPanelShow">{{ columnData.ruleList ? '编辑过滤条件':'添加过滤条件' }}</el-button>
+                <el-button style="width: 100%;" @click="filterPanelShow">{{ columnData.ruleList.length>0 ? '编辑过滤条件':'添加过滤条件' }}</el-button>
               </el-form-item>
               <Condition ref="conditionpane"  @ruleConfig="ruleConfig"></Condition>
               <template v-if="columnData.type==3">
