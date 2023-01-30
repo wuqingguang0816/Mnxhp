@@ -676,9 +676,13 @@ export default {
         let initQueryJson = {}
         for(let i = 0, len = searchList.length; i< len; i++) {
           if(searchList[i].jnpfKey === 'date' && searchList[i].__config__.defaultCurrent == true) {
-            initQueryJson[searchList[i].__vModel__] = [new Date().getTime(), new Date().getTime()]
-          }else if(searchList[i].jnpfKey === 'depSelect' && searchList[i].__config__.defaultCurrent == true && this.userInfo.deptId != null) {
-            initQueryJson[searchList[i].__vModel__] = this.userInfo.deptId
+            let startDateTime = new Date()
+            startDateTime.setHours(0,0,0,0)
+            let endDateTime = new Date()
+            endDateTime.setHours(23,59,59,999)
+            initQueryJson[searchList[i].__vModel__] = [startDateTime.getTime(), endDateTime.getTime()]
+          }else if(searchList[i].jnpfKey === 'depSelect' && searchList[i].__config__.defaultCurrent == true && this.userInfo.departIds != null) {
+            initQueryJson[searchList[i].__vModel__] = this.userInfo.departIds
           }else if(searchList[i].jnpfKey === 'comSelect' && searchList[i].__config__.defaultCurrent == true && this.userInfo.organizeId != null) {
             initQueryJson[searchList[i].__vModel__] = this.userInfo.organizeId
           }else if(searchList[i].jnpfKey === 'userSelect' && searchList[i].__config__.defaultCurrent == true) {
