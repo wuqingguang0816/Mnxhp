@@ -137,23 +137,8 @@ export default {
           })
         } else {
           this.$store.commit('generator/SET_DYNAMIC_MODEL_EXTRA', {})
-          //处理默认值
-          let fields = this.formConf.fields;
           this.formData = {}
-          if(fields != null && fields.length > 0) {
-            for(let i = 0, len = fields.length; i< len; i++) {
-              if(fields[i].__config__.jnpfKey === 'date' && fields[i].__config__.defaultCurrent == true) {
-                this.formData[fields[i].__vModel__] = new Date().getTime()
-              }else if(fields[i].__config__.jnpfKey === 'depSelect' && fields[i].__config__.defaultCurrent == true && this.userInfo.deptId != null) {
-                this.formData[fields[i].__vModel__] =  this.userInfo.deptId
-              }else if(fields[i].__config__.jnpfKey === 'comSelect' && fields[i].__config__.defaultCurrent == true && this.userInfo.organizeId != null) {
-                this.formData[fields[i].__vModel__] =  this.userInfo.organizeId
-              }else if(fields[i].__config__.jnpfKey === 'userSelect' && fields[i].__config__.defaultCurrent == true) {
-                this.formData[fields[i].__vModel__] =  this.userInfo.userId
-              }
-            }
-          }
-          this.fillFormData(this.formConf, this.formData)
+          this.fillFormData(this.formConf, this.formData, "add")
           this.dialogLoading = true
           this.$nextTick(() => {
             this.visible = true
@@ -170,13 +155,28 @@ export default {
       const list = permissionList.filter(o => o.modelId === modelId)
       this.formOperates = list[0] && list[0].form ? list[0].form : []
     },
-    fillFormData(form, data) {
+    fillFormData(form, data, flag) {
       const loop = (list, parent) => {
         for (let i = 0; i < list.length; i++) {
           let item = list[i]
           if (item.__vModel__) {
-            const val = data.hasOwnProperty(item.__vModel__) ? data[item.__vModel__] : item.__config__.defaultValue
+            let val = data.hasOwnProperty(item.__vModel__) ? data[item.__vModel__] : item.__config__.defaultValue
             if (!item.__config__.isSubTable) item.__config__.defaultValue = val
+            if(flag == "add") {//新增时候，默认当前
+              if(item.__config__.jnpfKey === 'date' && item.__config__.defaultCurrent == true) {
+                val = new Date().getTime()
+                item.__config__.defaultValue = val
+              }else if(item.__config__.jnpfKey === 'depSelect' && item.__config__.defaultCurrent == true && this.userInfo.departIds != null) {
+                val =  this.userInfo.departIds
+                item.__config__.defaultValue = val
+              }else if(item.__config__.jnpfKey === 'comSelect' && item.__config__.defaultCurrent == true && this.userInfo.organizeId != null) {
+                val =  this.userInfo.organizeId
+                item.__config__.defaultValue = val
+              }else if(item.__config__.jnpfKey === 'userSelect' && item.__config__.defaultCurrent == true) {
+                val =  this.userInfo.userId
+                item.__config__.defaultValue = val
+              }
+            }
             if (!this.isPreview && this.useFormPermission) {
               let id = item.__config__.isSubTable ? parent.__vModel__ + '-' + item.__vModel__ : item.__vModel__
               let noShow = true
