@@ -405,6 +405,7 @@ export default {
         { value: 'download', icon: 'el-icon-download', label: '导出' },
         { value: 'upload', icon: 'el-icon-upload2', label: '导入' },
         { value: 'batchRemove', icon: 'el-icon-delete', label: '批量删除' },
+        { value: 'batchPrint', icon: 'el-icon-printer', label: '批量打印' },
       ],
       columnBtnsOption: [
         { value: 'edit', icon: 'el-icon-edit', label: '编辑' },
@@ -439,6 +440,9 @@ export default {
         case 'batchRemove':
           text = '批量删除'
           break;
+        case 'batchPrint':
+          text = '批量打印'
+          break;  
         case 'edit':
           text = '编辑'
           break;
