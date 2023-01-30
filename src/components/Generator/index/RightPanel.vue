@@ -501,7 +501,7 @@
                 <el-input v-model="formConf.printButtonText" />
               </div>
               <el-form-item label="" v-if="formConf.hasPrintBtn">
-                <JNPF-TreeSelect :options="printTplList" v-model="formConf.printId"
+                <JNPF-TreeSelect :options="printTplList" v-model="formConf.printId" multiple
                   placeholder="请选择打印模板" lastLevel clearable></JNPF-TreeSelect>
               </el-form-item>
             </template>
