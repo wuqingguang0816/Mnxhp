@@ -29,20 +29,57 @@ import {
   resetUserPassword
 } from '@/api/permission/user'
 import md5 from 'js-md5'
+import { getSystemConfig } from '@/api/system/sysConfig'
 
 export default {
   data() {
     const validateUserPassword = (rule, value, callback) => {
-      const passwordreg = /^(?=.*[0-9])(?=.*[a-zA-Z])(?=.*[^(0-9a-zA-Z)]).{6,16}$/
-      if (!value) {
-        callback(new Error('请输入新密码'));
-      } else if (!passwordreg.test(value)) {
-        callback(new Error('密码必须由数字、字母、特殊字符组合,请输入6-16位'))
-      } else {
-        if (this.dataForm.userPassword !== '') {
-          this.$refs.dataForm.validateField('validatePassword');
+      //是否包含数字
+      const containsNumbers = /[0-9]+/
+      //是否包含小写字符
+      const includeLowercaseLetters = /[a-z]+/
+      //是否包含大写字符
+      const includeUppercaseLetters = /[A-Z]+/
+      //是否包含字符
+      const containsCharacters = /\W/
+
+      if (value === '') {
+        callback(new Error('新密码不能为空'));
+      } else if(this.baseForm.passwordStrengthLimit == 1){
+        if(this.baseForm.passwordLengthMin){
+          if(value.length<this.baseForm.passwordLengthMinNumber){
+            callback(new Error('新密码长度不能小于'+this.baseForm.passwordLengthMinNumber+'位'));
+          }
         }
-        callback()
+        if(this.baseForm.containsNumbers){
+          if (!containsNumbers.test(value)) {
+            callback(new Error('新密码必须包含数字'));
+          }
+        }
+        if(this.baseForm.includeLowercaseLetters){
+          if (!includeLowercaseLetters.test(value)) {
+            callback(new Error('新密码必须包含小写字母'));
+          }
+        }
+        if(this.baseForm.includeUppercaseLetters){
+          if (!includeUppercaseLetters.test(value)) {
+            callback(new Error('新密码必须包含大写字字母'));
+          }
+        }
+        if(this.baseForm.containsCharacters){
+          if (!containsCharacters.test(value)) {
+            callback(new Error('新密码必须包含字符'));
+          }
+        }
+        if (this.dataForm.password2 !== '') {
+          this.$refs.dataForm.validateField('password2');
+        }
+        callback();
+      }else{
+        if (this.dataForm.password2 !== '') {
+          this.$refs.dataForm.validateField('password2');
+        }
+        callback();
       }
     }
     const validatePassword = (rule, value, callback) => {
@@ -64,6 +101,15 @@ export default {
         userPassword: '',
         validatePassword: ''
       },
+      baseForm:{
+        passwordStrengthLimit:0,
+        passwordLengthMin:false,
+        passwordLengthMinNumber:0,
+        containsNumbers:false,
+        includeLowercaseLetters:false,
+        includeUppercaseLetters:false,
+        containsCharacters:false,
+      },
       dataRule: {
         userPassword: [
           { required: true, validator: validateUserPassword, trigger: 'blur' }
@@ -74,7 +120,26 @@ export default {
       }
     }
   },
+  created() {
+    this.initData()
+  },
   methods: {
+    initData() {
+      this.listLoading = true
+      this.$nextTick(() => {
+        getSystemConfig().then(res => {
+          this.baseForm = res.data
+          this.baseForm.passwordLengthMin = this.baseForm.passwordLengthMin ? true : false
+          this.baseForm.containsNumbers = this.baseForm.containsNumbers ? true : false
+          this.baseForm.includeLowercaseLetters = this.baseForm.includeLowercaseLetters ? true : false
+          this.baseForm.includeUppercaseLetters = this.baseForm.includeUppercaseLetters ? true : false
+          this.baseForm.containsCharacters = this.baseForm.containsCharacters ? true : false
+          this.listLoading = false
+        }).catch(() => {
+          this.listLoading = false
+        })
+      })
+    },
     init(id, account) {
       this.visible = true
       this.formLoading = true
