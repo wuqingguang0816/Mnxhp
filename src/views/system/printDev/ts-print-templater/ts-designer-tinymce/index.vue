@@ -1,5 +1,5 @@
 <template>
-  <editor ref="mceEditor" :id="id" v-model="dataValue" v-bind="$attrs" :init="showInit"
+  <editor ref="mceEditor" :id="id" v-model="dataValue" v-bind="$attrs" :init="showInit" v-if="showEdit"
     :plugins="showPlugins" :toolbar="showToolbar" tinymce-script-src="/cdn/tinymce/tinymce.min.js"
     v-on="$listeners" />
 </template>
@@ -9,6 +9,7 @@ import Editor from '@tinymce/tinymce-vue'
 
 import plugins from './plugins'
 import toolbar from './toolbar'
+import { nextTick } from 'process'
 
 let unique = 0
 
@@ -28,6 +29,7 @@ export default {
   },
   data() {
     return {
+      pageVisible: false,
       id: this.uuid(),
       dataValue: '',
       languageTypeList: {
@@ -36,7 +38,8 @@ export default {
         'es': 'es_MX',
         'ja': 'ja'
       },
-      showInit: {}
+      showInit: {},
+      showEdit:false,
     }
   },
   computed: {
@@ -67,7 +70,12 @@ export default {
     },
     init: {
       handler() {
+        this.showEdit = false
+        this.uuid()
         this.initTinymce()
+        this.$nextTick(()=>{
+          this.showEdit = true
+        })
       },
       immediate: true,
       deep: true
@@ -77,6 +85,8 @@ export default {
   },
   methods: {
     initTinymce() {
+      
+      console.log(this.init);
       const initDefault = {
         skin: 'wukong',
         resize: false,
