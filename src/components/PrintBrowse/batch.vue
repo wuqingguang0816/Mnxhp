@@ -40,9 +40,8 @@
         }}</el-button>
       </div>
     </div>
-    <div class="main" v-loading="loading">
+    <div class="main" v-loading="loading" ref="tsPrint">
       <div
-        ref="tsPrint"
         class="print-content"
         v-html="item.printTemplate"
         v-for="(item, index) in batchData"
@@ -480,6 +479,7 @@ export default {
     },
     word() {
       let print = this.$refs.tsPrint.innerHTML;
+      console.log(print);
       const blob = new Blob([print], {
         type: ""
       });

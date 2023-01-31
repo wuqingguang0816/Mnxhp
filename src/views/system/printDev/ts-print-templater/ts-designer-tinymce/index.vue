@@ -9,7 +9,6 @@ import Editor from '@tinymce/tinymce-vue'
 
 import plugins from './plugins'
 import toolbar from './toolbar'
-import { nextTick } from 'process'
 
 let unique = 0
 
@@ -85,8 +84,6 @@ export default {
   },
   methods: {
     initTinymce() {
-      
-      console.log(this.init);
       const initDefault = {
         skin: 'wukong',
         resize: false,
