@@ -73,73 +73,131 @@
         </el-tab-pane>
         <el-tab-pane label="安全设置" name="second">
           <el-alert title="注意：系统登录安全、黑名单IP限制" type="warning" :closable="false" show-icon />
-          <el-row class="mt-20">
-            <el-col :span="18">
-              <el-form-item label="登录方式">
-                <el-select v-model="baseForm.singleLogin" placeholder="请选择">
-                  <el-option label="单一登录" :value="1" />
-                  <el-option label="同时登录" :value="2" />
-                </el-select>
-              </el-form-item>
-              <el-form-item label="超时登出">
-                <el-input-number v-model="baseForm.tokenTimeout" :min="1" :precision="0" :step="1"
-                  controls-position="right" /> 分钟
-              </el-form-item>
-              <el-form-item label="密码错误次数">
-                <el-input-number v-model="baseForm.passwordErrorsNumber" :min="0" :precision="0"
-                  :step="1" controls-position="right" /> 次
-                <div class="tip">输入密码错误将用户锁定，设置3以下值表示不启动该功能</div>
-                <el-radio-group v-model="baseForm.lockType">
-                  <el-radio :label="1">账号锁定</el-radio>
-                  <el-radio :label="2">延时登录</el-radio>
-                </el-radio-group>
-                <div v-if="baseForm.lockType===2">
-                  <span class="lockTime">延迟时间</span>
-                  <el-input-number v-model="baseForm.lockTime" :min="1" :precision="0" :step="1"
-                    controls-position="right" /> 分钟
-                </div>
-              </el-form-item>
-              <el-form-item label="登录验证码">
-                <el-switch v-model="baseForm.enableVerificationCode" :active-value="1"
-                  :inactive-value="0" />
-              </el-form-item>
-              <el-form-item label="验证码位数" v-if="baseForm.enableVerificationCode">
-                <el-input-number v-model="baseForm.verificationCodeNumber" :min="3" :max="6"
-                  :precision="0" :step="1" controls-position="right" /> 位
-              </el-form-item>
-              <el-form-item label="登录提示语">
-                <el-switch v-model="baseForm.lastLoginTimeSwitch" :active-value="1"
-                  :inactive-value="0" />
-              </el-form-item>
-              <el-form-item v-if="baseForm.lastLoginTimeSwitch">
-                <el-card class="box-card" shadow="never" style="width: 300px;"
-                  :body-style="{ padding: '0px 20px' }">
-                  <div slot="header">
-                    <span>上次登录信息提示</span>
-                    <i style="float: right; padding: 11px 0" class="el-icon-close" />
-                  </div>
-                  <div class="item">
-                    <p>时间：2018-10-17 12:40</p>
-                    <p>地点：上海市</p>
-                    <p>IP：255.255.0.0</p>
-                  </div>
-                </el-card>
-              </el-form-item>
-              <el-form-item label="白名单验证">
-                <el-switch v-model="baseForm.whitelistSwitch" :active-value="1"
-                  :inactive-value="0" />
-              </el-form-item>
-              <el-form-item label="白名单设置" v-if="baseForm.whitelistSwitch">
-                <el-input type="textarea" :autosize="{ minRows: 3, maxRows: 10}"
-                  v-model="baseForm.whiteListIp" placeholder="允许访问IP" />
-                <div class="tip">多个IP设置，用英文符号隔开，如192.168.0.1,192.168.0.2</div>
-              </el-form-item>
-              <el-form-item>
-                <el-button type="primary" size="small" :loading="btnLoading" class="saveBtn"
-                  @click="submitForm()">保 存</el-button>
-              </el-form-item>
-            </el-col>
-          </el-row>
+          <el-tabs tab-position="left" style="height:100%" v-model="secondTab" class="secondTab">
+            <el-tab-pane label="登录策略">
+              <el-row class="mt-20">
+                <el-col :span="18">
+                  <el-form-item label="登录方式">
+                    <el-select v-model="baseForm.singleLogin" placeholder="请选择">
+                      <el-option label="单一登录" :value="1" />
+                      <el-option label="同时登录" :value="2" />
+                    </el-select>
+                  </el-form-item>
+                  <el-form-item label="超时登出">
+                    <el-input-number v-model="baseForm.tokenTimeout" :min="1" :precision="0" :step="1"
+                                     controls-position="right" /> 分钟
+                  </el-form-item>
+                  <el-form-item label="密码错误次数">
+                    <el-input-number v-model="baseForm.passwordErrorsNumber" :min="0" :precision="0"
+                                     :step="1" controls-position="right" /> 次
+                    <div class="tip">输入密码错误将用户锁定，设置3以下值表示不启动该功能</div>
+                    <el-radio-group v-model="baseForm.lockType">
+                      <el-radio :label="1">账号锁定</el-radio>
+                      <el-radio :label="2">延时登录</el-radio>
+                    </el-radio-group>
+                    <div v-if="baseForm.lockType===2">
+                      <span class="lockTime">延迟时间</span>
+                      <el-input-number v-model="baseForm.lockTime" :min="1" :precision="0" :step="1"
+                                       controls-position="right" /> 分钟
+                    </div>
+                  </el-form-item>
+                  <el-form-item label="登录验证码">
+                    <el-switch v-model="baseForm.enableVerificationCode" :active-value="1"
+                               :inactive-value="0" />
+                  </el-form-item>
+                  <el-form-item label="验证码位数" v-if="baseForm.enableVerificationCode">
+                    <el-input-number v-model="baseForm.verificationCodeNumber" :min="3" :max="6"
+                                     :precision="0" :step="1" controls-position="right" /> 位
+                  </el-form-item>
+                  <el-form-item label="登录提示语">
+                    <el-switch v-model="baseForm.lastLoginTimeSwitch" :active-value="1"
+                               :inactive-value="0" />
+                  </el-form-item>
+                  <el-form-item v-if="baseForm.lastLoginTimeSwitch">
+                    <el-card class="box-card" shadow="never" style="width: 300px;"
+                             :body-style="{ padding: '0px 20px' }">
+                      <div slot="header">
+                        <span>上次登录信息提示</span>
+                        <i style="float: right; padding: 11px 0" class="el-icon-close" />
+                      </div>
+                      <div class="item">
+                        <p>时间：2018-10-17 12:40</p>
+                        <p>地点：上海市</p>
+                        <p>IP：255.255.0.0</p>
+                      </div>
+                    </el-card>
+                  </el-form-item>
+                  <el-form-item label="白名单验证">
+                    <el-switch v-model="baseForm.whitelistSwitch" :active-value="1"
+                               :inactive-value="0" />
+                  </el-form-item>
+                  <el-form-item label="白名单设置" v-if="baseForm.whitelistSwitch">
+                    <el-input type="textarea" :autosize="{ minRows: 3, maxRows: 10}"
+                              v-model="baseForm.whiteListIp" placeholder="允许访问IP" />
+                    <div class="tip">多个IP设置，用英文符号隔开，如192.168.0.1,192.168.0.2</div>
+                  </el-form-item>
+                  <el-form-item label="门户刷新设置">
+                    <el-input-number v-model="baseForm.dashboardTimedRefresh" :min="1" :precision="0" :step="1"
+                                     controls-position="right" /> 秒
+                  </el-form-item>
+                  <el-form-item>
+                    <el-button type="primary" size="small" :loading="btnLoading" class="saveBtn"
+                               @click="submitForm()">保 存</el-button>
+                  </el-form-item>
+                </el-col>
+              </el-row>
+            </el-tab-pane>
+            <el-tab-pane label="密码策略">
+              <el-row class="mt-20">
+                <el-col :span="18">
+                  <el-form-item label="密码定期更新">
+                    <el-switch v-model="baseForm.passwordIsUpdatedRegularly" :active-value="1"
+                               :inactive-value="0" />
+                  </el-form-item>
+                  <el-form-item label="更新周期" v-if="baseForm.passwordIsUpdatedRegularly">
+                    <el-input-number v-model="baseForm.updateCycle"
+                                     :precision="0" :step="1" controls-position="right" /> 天
+                  </el-form-item>
+                  <el-form-item label="提前" v-if="baseForm.passwordIsUpdatedRegularly">
+                    <el-input-number v-model="baseForm.updateInAdvance"
+                                     :precision="0" :step="1" controls-position="right" /> 天提醒更新
+                  </el-form-item>
+
+                  <el-form-item label="密码强度限制">
+                    <el-switch v-model="baseForm.passwordStrengthLimit" :active-value="1"
+                               :inactive-value="0" />
+                  </el-form-item>
+                  <el-form-item v-if="baseForm.passwordStrengthLimit">
+                    <el-checkbox v-model="baseForm.passwordLengthMin">最小长度</el-checkbox>
+                    <el-input-number v-model="baseForm.passwordLengthMinNumber"
+                                     :precision="0" :step="1" controls-position="right" /><br/>
+                    <el-checkbox v-model="baseForm.containsNumbers">包含数字</el-checkbox><br/>
+                    <el-checkbox v-model="baseForm.includeLowercaseLetters">包含小写字母</el-checkbox><br/>
+                    <el-checkbox v-model="baseForm.includeUppercaseLetters">包含大写字母</el-checkbox><br/>
+                    <el-checkbox v-model="baseForm.containsCharacters">包含字符</el-checkbox>
+                  </el-form-item>
+
+                  <el-form-item label="禁用旧密码">
+                    <el-switch v-model="baseForm.disableOldPassword" :active-value="1"
+                               :inactive-value="0" />
+                  </el-form-item>
+                  <el-form-item label="禁用个数" v-if="baseForm.disableOldPassword">
+                    <el-input-number v-model="baseForm.disableTheNumberOfOldPasswords"
+                                     :precision="0" :step="1" controls-position="right" /> 个
+                  </el-form-item>
+                  <el-form-item label="初始密码强制修改" label-width="130px">
+                    <el-switch v-model="baseForm.mandatoryModificationOfInitialPassword" :active-value="1"
+                               :inactive-value="0"/>
+                  </el-form-item>
+
+                  <el-form-item>
+                    <el-button type="primary" size="small" :loading="btnLoading" class="saveBtn"
+                               @click="submitForm()">保 存</el-button>
+                  </el-form-item>
+                </el-col>
+              </el-row>
+            </el-tab-pane>
+          </el-tabs>
         </el-tab-pane>
         <el-tab-pane label="同步设置" name="third">
           <el-tabs tab-position="left" style="height:100%" v-model="thirdTab" class="thirdTab">
@@ -380,6 +438,7 @@ export default {
       wechatLoading: false,
       dingLoading: false,
       thirdTab: '0',
+      secondTab: '0',
       visible: false,
       synchronization: '',
       name: '',
@@ -420,6 +479,19 @@ export default {
         lockType: 1,
         lockTime: 10,
         enableVerificationCode: 0,
+        passwordIsUpdatedRegularly: 0,
+        updateCycle: 0,
+        updateInAdvance: 0,
+        passwordStrengthLimit: 0,
+        passwordLengthMin: false,
+        passwordLengthMinNumber: 0,
+        containsNumbers: false,
+        includeLowercaseLetters: false,
+        includeUppercaseLetters: false,
+        containsCharacters: false,
+        disableOldPassword: 0,
+        disableTheNumberOfOldPasswords: 0,
+        mandatoryModificationOfInitialPassword: 0,
         linkTime: 24,
         isClick: 0,
         unClickNum: 1,
@@ -508,6 +580,11 @@ export default {
           this.baseForm.isClick = this.baseForm.isClick ? this.baseForm.isClick : 0
           this.baseForm.linkTime = this.baseForm.linkTime ? this.baseForm.linkTime : 24
           this.baseForm.unClickNum = this.baseForm.unClickNum ? this.baseForm.unClickNum : 1
+          this.baseForm.passwordLengthMin = this.baseForm.passwordLengthMin ? true : false
+          this.baseForm.containsNumbers = this.baseForm.containsNumbers ? true : false
+          this.baseForm.includeLowercaseLetters = this.baseForm.includeLowercaseLetters ? true : false
+          this.baseForm.includeUppercaseLetters = this.baseForm.includeUppercaseLetters ? true : false
+          this.baseForm.containsCharacters = this.baseForm.containsCharacters ? true : false
           this.listLoading = false
         }).catch(() => {
           this.listLoading = false
@@ -649,6 +726,11 @@ export default {
       this.baseForm.qyhIsSynUser = this.wxEvents[1].select ? 1 : 0
       this.baseForm.dingSynIsSynOrg = this.ddEvents[0].select ? 1 : 0
       this.baseForm.dingSynIsSynUser = this.ddEvents[1].select ? 1 : 0
+      this.baseForm.passwordLengthMin = this.baseForm.passwordLengthMin ? 1 : 0
+      this.baseForm.containsNumbers = this.baseForm.containsNumbers ? 1 : 0
+      this.baseForm.includeLowercaseLetters = this.baseForm.includeLowercaseLetters ? 1 : 0
+      this.baseForm.includeUppercaseLetters = this.baseForm.includeUppercaseLetters ? 1 : 0
+      this.baseForm.containsCharacters = this.baseForm.containsCharacters ? 1 : 0
       this.$confirm('您确定要保存，是否继续？', '提示', {
         type: 'warning'
       }).then(() => {
