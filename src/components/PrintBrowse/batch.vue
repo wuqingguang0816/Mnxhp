@@ -56,8 +56,9 @@ import { mapGetters } from "vuex";
 import { getBatchData } from "@/api/system/printDev";
 import QRCode from "qrcodejs2";
 import JsBarcode from "jsbarcode";
+import request from "@/utils/request"
 export default {
-  props: ["id", "formId", "fullName", "batchIds"],
+  props: ["id", "formId", "fullName", "batchIds","printTitle"],
   computed: {
     ...mapGetters(["userInfo"])
   },
@@ -77,6 +78,8 @@ export default {
         this.scrollpage(val);
       }
     }
+  },
+  mounted() {
   },
   methods: {
     scrollpage() {
@@ -509,9 +512,28 @@ export default {
         "position:absolute;width:0px;height:0px;left:-500px;top:-500px;"
       );
       iframe.contentWindow.focus();
+      
       let doc = iframe.contentWindow.document;
+      let _this = this
       iframe.onload = function() {
         let oldTitle = document.title;
+        iframe.contentWindow.onafterprint =  function(e) {
+          // 插入日志
+          let data = {
+            printTitle:oldTitle.split("-")[0].trim(),
+            printNum:_this.batchIds.length,
+            printId:_this.id
+          }
+          request({
+            url: `/api/system/printLog/save`,
+            method: "post",
+            data
+          }).then((res) => {
+          });
+          
+        };
+        
+        
         document.title = "JNPF快速开发平台";
         iframe.contentWindow.print();
         document.title = oldTitle;

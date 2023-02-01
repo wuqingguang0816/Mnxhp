@@ -96,7 +96,6 @@ export default {
         method: "post",
         data: this.query,
       }).then((res) => {
-        console.log(res);
         this.list = res.data.records;
         this.total = res.data.total;
         this.listLoading = false;
@@ -105,7 +104,6 @@ export default {
     reset() {
       this.query = {};
       this.query.printTitle = "";
-      this.query.printId = "";
       this.query.printTimeRange = [];
     },
     goBack() {
