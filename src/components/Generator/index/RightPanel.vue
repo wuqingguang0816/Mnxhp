@@ -502,7 +502,13 @@
               </div>
               <el-form-item label="" v-if="formConf.hasPrintBtn">
                 <JNPF-TreeSelect :options="printTplList" v-model="formConf.printId" multiple
-                  placeholder="请选择打印模板" lastLevel clearable></JNPF-TreeSelect>
+                  placeholder="请选择打印模板" lastLevel clearable>
+                  <div style="padding:10px 0;text-align:center" slot="header"  @click="openPrint">
+                      <el-link type="primary" :underline="false">添加打印模板
+                      </el-link>
+                      <el-divider></el-divider>
+                  </div> 
+                </JNPF-TreeSelect>
               </el-form-item>
             </template>
           </template>
@@ -847,6 +853,17 @@ export default {
     this.setDefaultOptions()
   },
   methods: {
+    // 如果要跳转新页面，请用函数包裹打开新页签。否则会出现被拦截
+    open(url) {
+      window.open(url, "_blank");
+    },
+    // 打印模板快捷入口
+    openPrint(){
+      let routeUrl = this.$router.resolve({
+        path: '/system/printDev?open=true'
+      });
+      this.open(routeUrl.href)
+    },
     addStyle() {
       this.$nextTick(() => {
         this.styleScriptVisible = true
@@ -1213,6 +1230,9 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+>>> .el-divider--horizontal{
+  margin-top:10px;
+}
 .right-board {
   width: 340px;
   position: absolute;

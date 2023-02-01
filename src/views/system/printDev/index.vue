@@ -116,6 +116,9 @@ export default {
     }
   },
   created() {
+    if(window.location.href.includes('open')){
+      this.addOrUpdateHandle()
+    }
     this.initData()
     this.getDictionaryData()
   },

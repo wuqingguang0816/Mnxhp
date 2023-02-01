@@ -6,6 +6,9 @@
       class="JNPF-selectTree" @visible-change="visibleChange" :multiple="multiple"
       :collapse-tags="collapseTags" @remove-tag="removeTag" :key="key"
       :style="dicType==='1'?'width:75%':''">
+      
+      <slot name="header"></slot>
+      
       <el-option v-for="item in selectOptions" :key="item.id" :label="item[props.label]"
         :value="item[props.value]" style="display:none">
       </el-option>
