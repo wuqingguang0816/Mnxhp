@@ -495,6 +495,9 @@ export const inputComponents = [
     sizeUnit: "MB",
     buttonText: "点击上传",
     showTip: false,
+    pathType: "defaultPath",
+    isAccount: 0,
+    folder: "",
     limit: 9
   },
   {
@@ -525,6 +528,9 @@ export const inputComponents = [
     showTip: false,
     fileSize: 10,
     sizeUnit: "MB",
+    pathType: "defaultPath",
+    isAccount: 0,
+    folder: "",
     limit: 9
   },
   {
@@ -747,7 +753,7 @@ export const selectComponents = [
       tagIcon: "icon-ym icon-ym-generator-company",
       className: [],
       defaultValue: [],
-      defaultCurrent:false,
+      defaultCurrent: false,
       required: false,
       layout: "colFormItem",
       span: 24,

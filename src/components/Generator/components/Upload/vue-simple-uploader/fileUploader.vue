@@ -25,6 +25,7 @@
 <script>
 import { chunkMerge } from '@/api/common'
 import uploadMixin from '@/components/Generator/components/Upload/vue-simple-uploader/mixin'
+import { isatty } from 'tty'
 
 const units = {
   KB: 1024,
@@ -54,6 +55,17 @@ export default {
       type: String,
       default: 'MB'
     },
+    pathType: {
+      type: String,
+      default: 'defaultPath'
+    },
+    isAccount: {
+      type: Number,
+      default: 0
+    },
+    folder: {
+      type: String,
+    },
     fileSize: {
       default: 5
     }
@@ -67,33 +79,28 @@ export default {
   computed: {
     acceptText() {
       let txt = ''
-      switch (this.accept) {
-        case 'image/*':
-          txt = '图片'
-          break;
-        case 'video/*':
-          txt = '视频'
-          break;
-        case 'audio/*':
-          txt = '音频'
-          break;
-        case '.xls,.xlsx':
-          txt = 'excel'
-          break;
-        case '.doc,.docx':
-          txt = 'word'
-          break;
-        case '.pdf':
-          txt = 'pdf'
-          break;
-        case '.txt':
-          txt = 'txt'
-          break;
-        default:
-          txt = ''
-          break;
+      if (this.accept.includes('image/*')) {
+        txt += '、图片'
       }
-      return txt
+      if (this.accept.includes('video/*')) {
+        txt += '、视频'
+      }
+      if (this.accept.includes('audio/*')) {
+        txt += '、音频'
+      }
+      if (this.accept.includes('.xls,.xlsx')) {
+        txt += '、excel'
+      }
+      if (this.accept.includes('.doc,.docx')) {
+        txt += '、word'
+      }
+      if (this.accept.includes('.pdf')) {
+        txt += '、pdf'
+      }
+      if (this.accept.includes('.txt')) {
+        txt += '、txt'
+      }
+      return txt.slice(1)
     },
   },
   methods: {
@@ -109,14 +116,72 @@ export default {
         this.$message.error(`文件大小超过${this.fileSize}${this.sizeUnit}`)
         return isRightSize
       }
-      let isAccept = true
-      if (this.accept === '.xls,.xlsx' || this.accept === '.doc,.docx' || this.accept === '.pdf' || this.accept === '.txt') {
-        let extension = file.getExtension()
-        isAccept = this.accept.indexOf(extension) > -1
-      } else if (this.accept === '*') { } else {
-        let type = file.fileType
-        isAccept = new RegExp(this.accept).test(type)
+      let isAccept = false
+      if (this.accept.includes) { }
+      let extension = file.getExtension()
+      if (this.accept.indexOf(extension) > -1) {
+        isAccept = true
+      } else if (this.accept === '*') {
+        isAccept = true
+      } else {
+        let isImage = false
+        let isVideo = false
+        let isAudio = false
+        if (this.accept.includes("image/*")) {
+          let type = file.fileType
+          isImage = new RegExp("image/*").test(type)
+          if (isImage) {
+            isAccept = true
+          } else {
+            if (this.accept.includes("video/*")) {
+              isVideo = new RegExp("video/*").test(type)
+              if (isVideo) {
+                isAccept = true
+              } else {
+                if (this.accept.includes("audio/*")) {
+                  isAudio = new RegExp("audio/*").test(type)
+                  if (isAudio) {
+                    isAccept = true
+                  }
+                }
+              }
+            } else {
+              if (this.accept.includes("audio/*")) {
+                isAudio = new RegExp("audio/*").test(type)
+                if (isAudio) {
+                  isAccept = true
+                }
+              }
+            }
+          }
+        } else if (this.accept.includes("video/*")) {
+          let type = file.fileType
+          isVideo = new RegExp("video/*").test(type)
+          if (isVideo) {
+            isAccept = true
+          } else {
+            if (this.accept.includes("audio/*")) {
+              isAudio = new RegExp("audio/*").test(type)
+              if (isAudio) {
+                isAccept = true
+              }
+            }
+          }
+        } else if (this.accept.includes("audio/*")) {
+          let type = file.fileType
+          isAudio = new RegExp("audio/*").test(type)
+          if (isAudio) {
+            isAccept = true
+          }
+        }
       }
+      // if (this.accept === '.xls,.xlsx' || this.accept === '.doc,.docx' || this.accept === '.pdf' || this.accept === '.txt') {
+      //   let extension = file.getExtension()
+      //   isAccept = this.accept.indexOf(extension) > -1
+      // } else if (this.accept === '*') { } else {
+      //   let type = file.fileType
+      //   isAccept = new RegExp(this.accept).test(type)
+      // }
       if (!isAccept) {
         this.$message.error(`请选择${this.acceptText}类型的文件`)
         return isAccept
@@ -131,6 +196,9 @@ export default {
       form.append('fileType', file.getType())
       form.append('extension', file.getExtension())
       form.append('type', this.type)
+      form.append('pathType', this.pathType)
+      form.append('isAccount', this.isAccount)
+      form.append('folder', this.folder)
       chunkMerge(form).then(res => {
         // 自定义完成状态
         this.$set(file, 'customCompleted', true)

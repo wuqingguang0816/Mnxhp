@@ -4,7 +4,8 @@
       <el-button size="small" icon="el-icon-upload" @click="uploadFile" :disabled="disabled">
         {{buttonText}}
       </el-button>
-      <el-button type="text" @click="downloadAll" style="float:right;" v-if="fileList.length"><i class="el-icon-download"></i>全部下载</el-button>
+      <el-button type="text" @click="downloadAll" style="float:right;" v-if="fileList.length"><i
+          class="el-icon-download"></i>全部下载</el-button>
       <div class="el-upload__tip" v-if="showTip">
         只能上传不超过{{fileSize}}{{sizeUnit}}的{{acceptText}}文件
       </div>
@@ -32,7 +33,7 @@
 </template>
 
 <script>
-import {getDownloadUrl, getPackDownloadUrl} from '@/api/common'
+import { getDownloadUrl, getPackDownloadUrl } from '@/api/common'
 import Preview from './Preview'
 import FileUploader from './vue-simple-uploader/fileUploader'
 export default {
@@ -79,6 +80,17 @@ export default {
       type: String,
       default: 'MB'
     },
+    pathType: {
+      type: String,
+      default: 'defaultPath'
+    },
+    isAccount: {
+      type: Number,
+      default: 0
+    },
+    folder: {
+      type: String,
+    },
     fileSize: {
       default: 10
     }
@@ -93,33 +105,28 @@ export default {
   computed: {
     acceptText() {
       let txt = ''
-      switch (this.accept) {
-        case 'image/*':
-          txt = '图片'
-          break;
-        case 'video/*':
-          txt = '视频'
-          break;
-        case 'audio/*':
-          txt = '音频'
-          break;
-        case '.xls,.xlsx':
-          txt = 'excel'
-          break;
-        case '.doc,.docx':
-          txt = 'word'
-          break;
-        case '.pdf':
-          txt = 'pdf'
-          break;
-        case '.txt':
-          txt = 'txt'
-          break;
-        default:
-          txt = ''
-          break;
+      if (this.accept.includes('image/*')) {
+        txt += '、图片'
       }
-      return txt
+      if (this.accept.includes('video/*')) {
+        txt += '、视频'
+      }
+      if (this.accept.includes('audio/*')) {
+        txt += '、音频'
+      }
+      if (this.accept.includes('.xls,.xlsx')) {
+        txt += '、excel'
+      }
+      if (this.accept.includes('.doc,.docx')) {
+        txt += '、word'
+      }
+      if (this.accept.includes('.pdf')) {
+        txt += '、pdf'
+      }
+      if (this.accept.includes('.txt')) {
+        txt += '、txt'
+      }
+      return txt.slice(1)
     }
   },
   watch: {
@@ -166,13 +173,13 @@ export default {
       this.$emit('change', this.fileList)
     },
     downloadAll() { //下载全部（打包下载）
-      if(!this.fileList.length) {
+      if (!this.fileList.length) {
         this.$message.error('未发现文件')
         return
       }
       let fileInfo = [];
-      for(let i=0, len = this.fileList.length; i< len; i ++) {
-        fileInfo.push({fileId:this.fileList[i].fileId, fileName:this.fileList[i].name})
+      for (let i = 0, len = this.fileList.length; i < len; i++) {
+        fileInfo.push({ fileId: this.fileList[i].fileId, fileName: this.fileList[i].name })
       }
       getPackDownloadUrl(this.type, fileInfo).then(res => {
         this.jnpf.downloadFile(res.data.downloadVo.url, res.data.downloadName)

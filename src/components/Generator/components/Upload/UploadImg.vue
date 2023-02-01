@@ -19,9 +19,9 @@
       </transition-group>
     </template>
     <template v-if="!detailed">
-      <el-upload :action="define.comUploadUrl+'/'+type" :headers="uploadHeaders" ref="elUpload"
-        :on-success="handleSuccess" :multiple="limit!==1" :show-file-list="false" accept="image/*"
-        :before-upload="beforeUpload" :disabled="disabled" list-type="picture-card"
+      <el-upload :action="define.comUploadUrl+'/'+type" :headers="uploadHeaders" :data="params"
+        ref="elUpload" :on-success="handleSuccess" :multiple="limit!==1" :show-file-list="false"
+        accept="image/*" :before-upload="beforeUpload" :disabled="disabled" list-type="picture-card"
         class="upload-btn">
         <i class="el-icon-plus"></i>
         <div slot="tip" class="el-upload__tip" v-show="showTip">
@@ -73,6 +73,17 @@ export default {
       type: String,
       default: 'MB'
     },
+    pathType: {
+      type: String,
+      default: 'defaultPath'
+    },
+    isAccount: {
+      type: Number,
+      default: 0
+    },
+    folder: {
+      type: String,
+    },
     fileSize: {
       default: 10
     },
@@ -80,7 +91,12 @@ export default {
   data() {
     return {
       fileList: [],
-      uploadHeaders: { Authorization: this.$store.getters.token }
+      uploadHeaders: { Authorization: this.$store.getters.token },
+      params: {
+        pathType: this.pathType,
+        isAccount: this.isAccount,
+        folder: this.folder
+      }
     }
   },
   watch: {
