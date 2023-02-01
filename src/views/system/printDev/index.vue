@@ -1,6 +1,6 @@
 <template>
   <div class="JNPF-common-layout">
-    <div class="JNPF-common-layout-center">
+    <div class="JNPF-common-layout-center" v-if="!logPanel">
       <el-row class="JNPF-common-search-box" :gutter="16">
         <el-form @submit.native.prevent>
           <el-col :span="6">
@@ -69,6 +69,7 @@
                     <el-dropdown-item @click.native="copy(scope.row.id)">复制</el-dropdown-item>
                     <el-dropdown-item @click.native="preview(scope.row.id)">预览</el-dropdown-item>
                     <el-dropdown-item @click.native="exportTpl(scope.row.id)">导出</el-dropdown-item>
+                    <el-dropdown-item @click.native="log(scope.row.id)">日志</el-dropdown-item>
                   </el-dropdown-menu>
                 </el-dropdown>
               </tableOpts>
@@ -81,19 +82,22 @@
     </div>
     <Form v-if="formVisible" ref="Form" @close="closeForm" />
     <Preview :visible.sync="previewVisible" :id="activeId" />
+    <log v-if="logPanel" ref="log" @goBack="logPanel=false"></log>
   </div>
 </template>
 
 <script>
 import { getPrintDevList, Delete, Copy, exportTpl } from '@/api/system/printDev'
 import Form from './Form'
+import log from './log.vue'
 import Preview from './Preview'
 
 export default {
   name: 'system-printDev',
-  components: { Form, Preview },
+  components: { Form, Preview ,log},
   data() {
     return {
+      logPanel:false,
       list: [],
       categoryList: [],
       keyword: '',
@@ -116,6 +120,12 @@ export default {
     this.getDictionaryData()
   },
   methods: {
+    log(id){
+      this.logPanel = true
+      this.$nextTick(()=>{
+        this.$refs.log.show(id)
+      })
+    },
     reset() {
       this.keyword = ''
       this.category = ''
