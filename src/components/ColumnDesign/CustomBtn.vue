@@ -3,7 +3,7 @@
     lock-scroll append-to-body v-bind="$attrs" width="800px" :modal-append-to-body="false"
     v-on="$listeners" destroy-on-close :visible.sync="visible">
     <span slot="title" class="dialog-title">
-      <span>按钮配置
+      <span>按钮事件配置
         <el-tooltip content="小程序不支持在线JS脚本" placement="top-start">
           <a class="el-icon-warning-outline"></a>
         </el-tooltip>
