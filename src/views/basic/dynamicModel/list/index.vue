@@ -551,6 +551,16 @@ export default {
             ...o,
             ...this.expandObj
           }))
+          if (this.columnData.type === 3) {
+            this.list.map(o => {
+              if (o.children && o.children.length) {
+                o.children = o.children.map(e => ({
+                  ...e,
+                  ...this.expandObj
+                }))
+              }
+            })
+          }
         }
         if (this.columnData.type !== 3 && this.columnData.hasPage) this.total = res.data.pagination.total
         this.listLoading = false
