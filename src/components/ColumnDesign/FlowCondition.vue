@@ -6,8 +6,11 @@
     append-to-body
     :before-close="handleClose"
   >
-    <Condition :value="pconditions" ref="base"></Condition>
-
+    <Condition
+      :value="pconditions"
+      ref="base"
+      :dataOptionMap="dataOptionMap"
+    ></Condition>
     <span slot="footer" class="dialog-footer">
       <el-button @click="dialogVisible = false">取 消</el-button>
       <el-button type="primary" @click="confirm">确 定</el-button>
@@ -20,97 +23,28 @@
 <script>
 import { getDrawingList } from "@/components/Generator/utils/db";
 import Condition from "./condition";
-
+import handleClipboard from "@/utils/clipboard";
+const dataOptionKey = ["radio", "checkbox"];
 export default {
   props: {
     value: {
       type: Array,
-      default: () => [],
+      default: () => []
+    },
+    columnData: {
+      type: Object,
+      default: {}
     },
     options: {
       type: Array,
-      default: () => [],
-    },
+      default: () => []
+    }
   },
   data() {
     return {
-      chooseNode: "",
+      dataOptionMap: {},
       dialogVisible: false,
-      progressOptions: ["10", "20", "30", "40", "50", "60", "70", "80", "90"],
-      symbolOptions: [
-        {
-          label: "大于等于",
-          value: ">=",
-        },
-        {
-          label: "大于",
-          value: ">",
-        },
-        {
-          label: "等于",
-          value: "==",
-        },
-        {
-          label: "小于等于",
-          value: "<=",
-        },
-        {
-          label: "小于",
-          value: "<",
-        },
-        {
-          label: "不等于",
-          value: "<>",
-        },
-        {
-          label: "包含",
-          value: "like",
-        },
-        {
-          label: "不包含",
-          value: "notLike",
-        },
-      ],
-      logicOptions: [
-        {
-          label: "并且",
-          value: "&&",
-        },
-        {
-          label: "或者",
-          value: "||",
-        },
-      ],
-      conditionTypeOptions: [
-        {
-          label: "字段",
-          value: 1,
-        },
-        // {
-        //   label: '公式',
-        //   value: 3
-        // }
-      ],
-      conditionTypeOptions1: [
-        {
-          label: "字段",
-          value: 1,
-        },
-        {
-          label: "自定义",
-          value: 2,
-        },
-      ],
-
-      conditionTypeAddtion: [
-        {
-          label: "当前值",
-          value: 3,
-        },
-      ],
-
-      pconditions: [],
-      pconditionsAddtion: [],
+      pconditions: []
     };
   },
   computed: {
@@ -131,20 +65,44 @@ export default {
         ) {
           loop(data.__config__.children, data);
         }
-        if (Array.isArray(data)) data.forEach((d) => loop(d, parent));
-        if (data.__vModel__ && data.__config__.jnpfKey !== "table") list.push(data);
+        if (Array.isArray(data)) data.forEach(d => loop(d, parent));
+        if (data.__vModel__ && data.__config__.jnpfKey !== "table")
+          list.push(data);
       };
       loop(getDrawingList());
       const formItems = list;
       return formItems;
-    },
+    }
   },
   created() {},
   mounted() {},
-  watch: {},
+  watch: {
+    columnData: {
+      handler(val) {
+        console.log(val.defaultColumnList);
+        let arr = val.defaultColumnList.filter(item =>
+        
+          dataOptionKey.includes(item.jnpfKey)
+        );
+        arr.forEach(item => {
+          let dataLabel = item.__config__.props.label;
+          let dataValue = item.__config__.props.value;
+          let options = item.__slot__.options.map(i => {
+            return {
+              ...i,
+              dataLabel: dataLabel,
+              dataValue: dataValue
+            };
+          });
+          this.dataOptionMap[item.__vModel__] = {options};
+        });
+      },
+      deep: true
+    }
+  },
   methods: {
     init(data) {
-      this.pconditions = data[0].pconditions
+      this.pconditions = data[0].pconditions;
     },
     confirm() {
       // 获取属性配置
@@ -158,24 +116,22 @@ export default {
         //     desc += item.field + item.symbol + item.fieldValue + item.logicName;
         //   }
         // });
-        // 返回数据库关系对照
         this.$emit("ruleConfig", {
           pconditions: this.pconditions
         });
 
-        this.dialogVisible = false
+        this.dialogVisible = false;
       });
     },
     handleClose() {
       this.dialogVisible = false;
     },
     show(data) {
-      console.log(data);
       this.dialogVisible = true;
-      if(data.length==0){
-        this.addCondition()
-      }else{
-        this.init(data)
+      if (data.length == 0) {
+        this.addCondition();
+      } else {
+        this.init(data);
       }
     },
     addCondition() {
@@ -190,74 +146,14 @@ export default {
         field: "",
         symbol: "",
         logic: "&&",
-        jnpfKey: "",
+        jnpfKey: ""
       };
       this.pconditions.push(item);
-    },
-    fieldNameChange(val, item, i) {
-      let obj = this.usedFormItems.filter((o) => o.__vModel__ == val)[0];
-      item.fieldName = obj.__config__.label;
-      item.jnpfKey = obj.__config__.jnpfKey;
-      item = { ...item, ...obj };
-      item.fieldValue = undefined;
-      item.fieldLabel = "";
-      this.$set(this.pconditions, i, item);
-    },
-    symbolChange(val, item) {
-      let obj = this.symbolOptions.filter((o) => o.value == val)[0];
-      item.symbolName = obj.label;
-    },
-    logicChange(val, item) {
-      let obj = this.logicOptions.filter((o) => o.value == val)[0];
-      item.logicName = obj.label;
-    },
-    fieldValueTypeChange(item) {
-      item.fieldValue = "";
-      item.fieldLabel = "";
-    },
-    fieldTypeChange(item) {
-      item.field = "";
-      item.fieldName = "";
-    },
-    fieldValueChange(val, item) {
-      let obj = this.usedFormItems.filter((o) => o.__vModel__ == val)[0];
-      item.fieldLabel = obj.__config__.label;
-    },
-    // 条件节点
-    onConditionDateChange(val, item) {
-      if (!val) return (item.fieldLabel = "");
-      let format = item.format || "yyyy-MM-dd HH:mm:ss";
-      item.fieldLabel = this.jnpf.toDate(val, format);
-    },
-    onConditionListChange(data, item) {
-      if (!data || !data[1]) return (item.fieldLabel = "");
-      let labelList = data[1].map((o) => o.fullName);
-      item.fieldLabel = labelList.join("/");
-    },
-    onConditionObjChange(data, item) {
-      if (!data || !data[1]) return (item.fieldLabel = "");
-      item.fieldLabel = data[1].fullName || "";
-    },
-    editFormula(item) {
-      this.activeItem = item;
-      this.$nextTick(() => {
-        this.formulaVisible = true;
-      });
-    },
-    updateFormula(formula) {
-      this.activeItem.field = formula;
-      this.activeItem.fieldName = formula;
-    },
-    /**
-     * 删除流程条件
-     */
-    onDelCondition(index) {
-      this.pconditions.splice(index, 1);
-    },
+    }
   },
   components: {
-    Condition,
-  },
+    Condition
+  }
 };
 </script>
 
