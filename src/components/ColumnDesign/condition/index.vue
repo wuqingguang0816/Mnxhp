@@ -109,7 +109,11 @@
                   controls-position="right"
                 />
               </template>
-              <template v-else-if="['radio','checkbox','select'].includes(item.jnpfKey)">
+              <template
+                v-else-if="
+                  ['radio', 'checkbox', 'select'].includes(item.jnpfKey)
+                "
+              >
                 <el-select v-model="item.fieldValue" placeholder="请选择">
                   <el-option
                     v-for="(item, index) in item.dataOptions"
@@ -119,12 +123,15 @@
                   ></el-option>
                 </el-select>
               </template>
-              <template v-else-if="['cascader','treeSelect'].includes(item.jnpfKey)">
+              <template
+                v-else-if="['cascader', 'treeSelect'].includes(item.jnpfKey)"
+              >
                 <el-cascader
                   v-model="item.fieldValue"
                   :options="item.dataOptions"
                   :props="item.props"
-                  @change="handleCascaderChange"></el-cascader>
+                  @change="handleCascaderChange"
+                ></el-cascader>
               </template>
               <template v-else-if="item.jnpfKey === 'calculate'">
                 <el-input-number
@@ -398,12 +405,12 @@ export default {
           value: "between"
         },
         {
-          label:'存在',
-          value:'in',
+          label: "存在",
+          value: "in"
         },
         {
-          label:'不存在',
-          value:'notIn',
+          label: "不存在",
+          value: "notIn"
         },
         {
           label: "包含",
@@ -496,9 +503,7 @@ export default {
     }
   },
   methods: {
-    handleCascaderChange(e){
-
-    },
+    handleCascaderChange(e) {},
     getData() {
       return this.pconditions;
     },
@@ -517,7 +522,7 @@ export default {
         symbolName: "",
         fieldValue: "",
         fieldValue2: "",
-        props:{},
+        props: {},
         showSecond: false,
         fieldType: 1,
         fieldValueType: this.type == "base" ? 2 : 3,
@@ -540,14 +545,14 @@ export default {
       item = { ...item, ...obj };
       item.fieldValue = undefined;
       item.fieldLabel = "";
-      if(['radio','checkbox','select'].includes(item.jnpfKey)){
+      if (["radio", "checkbox", "select"].includes(item.jnpfKey)) {
         item.dataOptions = this.dataOptionMap[val].options;
       }
-      if(["cascader","treeSelect"].includes(item.jnpfKey)){
+      if (["cascader", "treeSelect"].includes(item.jnpfKey)) {
         item.dataOptions = this.dataOptionMap[val].options;
         item.props = this.dataOptionMap[val].props;
       }
-  
+
       this.$set(this.pconditions, i, item);
     },
     symbolChange(val, item) {
