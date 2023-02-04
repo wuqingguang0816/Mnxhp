@@ -64,6 +64,7 @@
               width="120" />
             <el-table-column label="操作" fixed="right" width="150">
               <template slot-scope="scope">
+                <el-button type="text" v-if="scope.row.isPreview!=null" @click="handlepreview(scope.row)">预览 </el-button>
                 <el-button size="mini" type="text" @click="handleDownLoad(scope.row.id)"
                   :disabled="!scope.row.type">下载</el-button>
                 <el-button size="mini" type="text" class="JNPF-table-delBtn"
@@ -240,6 +241,7 @@
     <userBox v-if="userBoxVisible" ref="userBox" @refresh="initData" />
     <folderTree v-if="folderTreeVisible" ref="folderTree" @refresh="initData" />
     <fileUploader ref="fileUploader" :parentId="parentId" @fileSuccess="fileSuccess" />
+    <Preview :visible.sync="previewVisible" :file="activeFile" />
   </div>
 </template>
 
@@ -248,10 +250,11 @@ import { AllList, Create, Delete, Download, DocumentInfo, ShareCancel, ShareOutL
 import userBox from './UserBox'
 import folderTree from './FolderTree'
 import FileUploader from './fileUploader'
+import Preview from "./Preview";
 
 export default {
   name: 'extend-document',
-  components: { userBox, folderTree, FileUploader },
+  components: { userBox, folderTree, FileUploader, Preview },
   data() {
     return {
       userBoxVisible: false,
@@ -261,11 +264,18 @@ export default {
       keyword: '',
       parentId: '0',
       listLoading: true,
+      previewVisible: false,
       list: [],
       levelList: [{
         id: '0',
         fullName: '全部文档'
-      }]
+      }],
+      activeFile:{
+        fileId: '',
+        name: '',
+        url: '',
+        fileVersionId: ''
+      }
     }
   },
   watch: {
@@ -434,6 +444,14 @@ export default {
     },
     fileSuccess() {
       this.reset()
+    },
+    //预览文件
+    handlepreview(row) {
+      this.activeFile.name = row.fullName;
+      this.activeFile.fileId = row.filePath;
+      this.activeFile.fileVersionId = null;
+      this.activeFile.url = row.uploaderUrl;
+      this.previewVisible = true;
     },
     // 下载文件
     handleDownLoad(id) {
