@@ -109,7 +109,7 @@
                   controls-position="right"
                 />
               </template>
-              <template v-else-if="item.jnpfKey === 'radio'">
+              <template v-else-if="['radio','checkbox','select'].includes(item.jnpfKey)">
                 <el-select v-model="item.fieldValue" placeholder="请选择">
                   <el-option
                     v-for="(item, index) in item.dataOptions"
@@ -119,19 +119,12 @@
                   ></el-option>
                 </el-select>
               </template>
-              <template v-else-if="item.jnpfKey === 'checkbox'">
-                <el-select
+              <template v-else-if="['cascader','treeSelect'].includes(item.jnpfKey)">
+                <el-cascader
                   v-model="item.fieldValue"
-                  placeholder="请选择"
-                  multiple
-                >
-                  <el-option
-                    v-for="(item, index) in item.dataOptions"
-                    :key="index"
-                    :label="item[item.dataLabel]"
-                    :value="item[item.dataValue]"
-                  ></el-option>
-                </el-select>
+                  :options="item.dataOptions"
+                  :props="item.props"
+                  @change="handleCascaderChange"></el-cascader>
               </template>
               <template v-else-if="item.jnpfKey === 'calculate'">
                 <el-input-number
@@ -240,6 +233,7 @@
                 <userSelect
                   v-model="item.fieldValue"
                   placeholder="请选择"
+                  multiple
                   hasSys
                   clearable
                   @change="onConditionObjChange(arguments, item)"
@@ -267,6 +261,7 @@
               <template v-else-if="item.jnpfKey === 'groupSelect'">
                 <groupSelect
                   v-model="item.fieldValue"
+                  multiple
                   placeholder="请选择"
                   clearable
                   @change="onConditionObjChange(arguments, item)"
@@ -275,6 +270,7 @@
               <template v-else-if="item.jnpfKey === 'roleSelect'">
                 <roleSelect
                   v-model="item.fieldValue"
+                  multiple
                   placeholder="请选择"
                   clearable
                   @change="onConditionObjChange(arguments, item)"
@@ -500,6 +496,9 @@ export default {
     }
   },
   methods: {
+    handleCascaderChange(e){
+
+    },
     getData() {
       return this.pconditions;
     },
@@ -518,6 +517,7 @@ export default {
         symbolName: "",
         fieldValue: "",
         fieldValue2: "",
+        props:{},
         showSecond: false,
         fieldType: 1,
         fieldValueType: this.type == "base" ? 2 : 3,
@@ -540,9 +540,14 @@ export default {
       item = { ...item, ...obj };
       item.fieldValue = undefined;
       item.fieldLabel = "";
-      if(['radio','checkbox'].includes(item.jnpfKey)){
+      if(['radio','checkbox','select'].includes(item.jnpfKey)){
         item.dataOptions = this.dataOptionMap[val].options;
       }
+      if(["cascader","treeSelect"].includes(item.jnpfKey)){
+        item.dataOptions = this.dataOptionMap[val].options;
+        item.props = this.dataOptionMap[val].props;
+      }
+  
       this.$set(this.pconditions, i, item);
     },
     symbolChange(val, item) {

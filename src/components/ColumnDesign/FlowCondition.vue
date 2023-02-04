@@ -24,7 +24,6 @@
 import { getDrawingList } from "@/components/Generator/utils/db";
 import Condition from "./condition";
 import handleClipboard from "@/utils/clipboard";
-const dataOptionKey = ["radio", "checkbox"];
 export default {
   props: {
     value: {
@@ -80,9 +79,9 @@ export default {
     columnData: {
       handler(val) {
         console.log(val.defaultColumnList);
+        // 基本下拉数据
         let arr = val.defaultColumnList.filter(item =>
-        
-          dataOptionKey.includes(item.jnpfKey)
+          ["radio", "checkbox","select"].includes(item.jnpfKey)
         );
         arr.forEach(item => {
           let dataLabel = item.__config__.props.label;
@@ -96,6 +95,22 @@ export default {
           });
           this.dataOptionMap[item.__vModel__] = {options};
         });
+        // 树型数据
+        let arrTree = val.defaultColumnList.filter(item =>
+          [ "cascader","treeSelect"].includes(item.jnpfKey)
+        );
+        arrTree.forEach(item => {
+          console.log(item,222);
+          // let options = item.options.map(i => {
+          //   return {
+          //     ...i,
+          //     props:i.props.props
+          //   };
+          // });
+          this.dataOptionMap[item.__vModel__] = {options:item.options,props:item.props.props};
+          
+        })
+        console.log(this.dataOptionMap);
       },
       deep: true
     }
