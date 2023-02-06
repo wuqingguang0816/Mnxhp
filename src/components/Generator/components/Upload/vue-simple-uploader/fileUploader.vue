@@ -65,6 +65,7 @@ export default {
     },
     folder: {
       type: String,
+      default: ''
     },
     fileSize: {
       default: 5
