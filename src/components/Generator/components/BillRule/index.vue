@@ -70,9 +70,7 @@
         <el-button type="primary" @click="select()">{{$t('common.confirmButton')}}</el-button>
       </span>
     </el-dialog>
-    <!-- <el-button @click="addOrUpdateHandle()" style="float:right">
-      添加</el-button> -->
-    <Form v-if="billRuleFormVisible" ref="Form" @refreshDataList="initData" />
+    <Form ref="Form" @refreshDataList="initData" />
   </div>
 </template>
 
@@ -80,7 +78,7 @@
 import {
   getBillRuleSelector
 } from '@/api/system/billRule'
-import Form from '@/views/system/billRule'
+import Form from '@/views/system/billRule/Form.vue'
 export default {
   components: {
     Form
@@ -213,6 +211,7 @@ export default {
     addOrUpdateHandle(id) {
       this.billRuleFormVisible = true
       this.$nextTick(() => {
+        console.log(this.$refs.Form);
         this.$refs.Form.init(id, this.categoryList)
       })
     },
