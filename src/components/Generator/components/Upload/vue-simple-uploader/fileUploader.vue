@@ -117,7 +117,9 @@ export default {
         return isRightSize
       }
       let isAccept = false
-      if (this.accept.includes) { }
+      if (!this.accept) {
+        isAccept = true
+      }
       let extension = file.getExtension()
       if (this.accept.indexOf(extension) > -1) {
         isAccept = true
