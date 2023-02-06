@@ -4,7 +4,10 @@
     <div class="JNPF-full-dialog-header">
       <div class="header-title">
         <img src="@/assets/images/jnpf.png" class="header-logo" />
-        <p class="header-txt"> · 代码生成</p>
+        <p class="header-txt" v-if="activeStep==0"> · 代码生成</p>
+        <el-tooltip effect="dark" :content="dataForm.fullName" placement="bottom" v-else>
+          <p class="header-txt"> · {{dataForm.fullName}}</p>
+        </el-tooltip>
       </div>
       <el-steps :active="activeStep" finish-status="success" simple
         :class="'steps steps'+(maxStep+1)" v-if="!loading">
@@ -13,6 +16,9 @@
         <el-step title="列表设计" @click.native="stepChick(2)" v-if="maxStep>=2" />
       </el-steps>
       <div class="options">
+        <el-button @click="changeList(1)" v-if="activeStep==2&&dataForm.webType==2" type="warning">
+          关闭列表
+        </el-button>
         <el-button @click="prev" :disabled="activeStep<=0">{{$t('common.prev')}}</el-button>
         <el-button @click="next" :disabled="activeStep>=maxStep || loading">{{$t('common.next')}}
         </el-button>
@@ -40,8 +46,11 @@
                   v-for="item in categoryList" />
               </el-select>
             </el-form-item>
-            <el-form-item label="启用流程" prop="enableFlow">
-              <el-switch v-model="dataForm.enableFlow" :active-value="1" :inactive-value="0" />
+            <el-form-item label="模板类型" prop="enableFlow">
+              <el-radio-group v-model="dataForm.enableFlow" size="small">
+                <el-radio-button :label="0">普通表单</el-radio-button>
+                <el-radio-button :label="1">流程表单</el-radio-button>
+              </el-radio-group>
             </el-form-item>
             <el-form-item label="模板说明" prop="description">
               <el-input v-model="dataForm.description" placeholder="模板说明" type="textarea"
@@ -113,7 +122,8 @@
       </template>
       <template v-if="activeStep==2">
         <columnDesign ref="columnDesign" :columnData="columnData" :appColumnData="appColumnData"
-          :modelType="dataForm.type" :webType="dataForm.webType" :dbType="dbType" />
+          :modelType="dataForm.type" :webType="dataForm.webType" :dbType="dbType"
+          @openList="changeList(2)" />
       </template>
     </div>
     <TableForm :visible.sync="formVisible" ref="tableForm" @closeForm="closeForm"
@@ -141,6 +151,9 @@ export default {
         ],
         category: [
           { required: true, message: '模板分类不能为空', trigger: 'change' },
+        ],
+        enableFlow: [
+          { required: true }
         ]
       }
     }

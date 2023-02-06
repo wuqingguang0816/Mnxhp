@@ -248,7 +248,7 @@ export default {
     // 功能列表
     fetchFeatureList() {
       if (!this.featureWebData.length) {
-        getFeatureSelector({ type: 1 }).then(res => {
+        getFeatureSelector({ type: 1, isRelease: 1 }).then(res => {
           this.featureWebData = res.data.list
           this.tempData = this.featureWebData
         })

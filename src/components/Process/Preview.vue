@@ -37,10 +37,12 @@ export default {
      * @param { Object } data - 含有event(事件名称)/args(参数)两个属性
      */
     eventReceiver({ event, args }) {
+      this.$emit('subFlow', args[0].nodeId)
       if (event === "edit") {
         this.activeData = args[0]; // 打开属性面板
         return;
       }
+
       // 本实例只监听了第一层数据（startNode）变动
       // 为了实时更新  采用$forceUpdate刷新 但是由于某些条件下触发失效（未排除清除原因）
       // 使用key + 监听父组件updateId方式强制刷新
@@ -217,9 +219,9 @@ $bg-color: #fff;
 }
 
 .scale-slider {
-  position: fixed;
   right: 10px;
   z-index: 199;
+  float: right;
 
   .btn {
     display: inline-block;
@@ -233,7 +235,6 @@ $bg-color: #fff;
   }
 }
 .tips {
-  position: absolute;
   left: 20px;
   top: 0px;
   z-index: 199;

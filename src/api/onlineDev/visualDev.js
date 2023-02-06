@@ -109,6 +109,29 @@ export function getModelList(modelId, data) {
     data
   })
 }
+// 获取数据列表
+export function getModelListLink(modelId, data) {
+  return request({
+    url: `/api/visualdev/OnlineDev/${modelId}/ListLink`,
+    method: 'post',
+    data
+  })
+}
+// 获取树形数据子集
+export function getModelSubList(modelId, id, data) {
+  return request({
+    url: `/api/visualdev/OnlineDev/${modelId}/List/${id}`,
+    method: 'post',
+    data
+  })
+}
+export function getFields(id, data) {
+  return request({
+    url: `/api/system/DataInterface/${id}/Actions/GetFields`,
+    method: 'POST',
+    data
+  })
+}
 // 添加数据
 export function createModel(modelId, data) {
   return request({
@@ -207,12 +230,3 @@ export function exportData(modelId) {
     method: 'post'
   })
 }
-
-// 回滚模板
-export function rollbackTemplate(id) {
-  return request({
-    url: `/api/visualdev/Base/${id}/Actions/RollbackTemplate`,
-    method: 'get'
-  })
-}
-

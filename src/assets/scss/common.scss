@@ -470,6 +470,38 @@
         }
       }
     }
+
+    &.template-dialog {
+      .el-dialog__body {
+        height: 292px !important;
+        padding: 26px 0 10px !important;
+        overflow: hidden !important;
+
+        .template-list {
+          height: 100%;
+          width: 100%;
+
+          .template-item {
+            margin: 0 50px;
+            height: 40px;
+            border-radius: 4px;
+            margin-bottom: 10px;
+            line-height: 40px;
+            padding: 0 20px;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+            overflow: hidden;
+            word-break: break-all;
+            background: #eff9ff;
+            cursor: pointer;
+
+            &:last-child {
+              margin-bottom: 0;
+            }
+          }
+        }
+      }
+    }
   }
 
   &.enlarge-dialog .el-dialog .el-dialog__header {
@@ -1512,7 +1544,9 @@
 
     .header-title {
       height: 60px;
-      width: 320px;
+      width: 410px;
+      display: flex;
+      align-items: center;
     }
 
     .header-logo {
@@ -1525,11 +1559,15 @@
     }
 
     .header-txt {
-      line-height: 60px;
       display: inline-block;
       margin: 0;
       color: #333;
       font-size: 18px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 150px;
+      cursor: pointer;
     }
 
     .steps {
@@ -1553,7 +1591,7 @@
     }
 
     .options {
-      width: 320px;
+      width: 410px;
       text-align: right;
     }
   }
@@ -2521,5 +2559,63 @@ textarea.el-textarea__inner {
   .sign-title {
     font-size: 16px;
     color: #2188ff;
+  }
+}
+
+.upAndDown-button {
+  position: absolute;
+  left: 20px;
+}
+
+.options {
+  .dropdown {
+    margin-right: 10px;
+  }
+
+  .el-button {
+    min-width: 70px;
+  }
+}
+
+.dropdown-item {
+  min-width: 70px;
+  text-align: center;
+}
+
+.row-action {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 32px;
+
+  .ym-custom-arrow-expand {
+    position: absolute;
+    top: 50%;
+    opacity: 0;
+    z-index: -1;
+    transform: translate(-50%, -50%);
+    cursor: pointer;
+    line-height: 32px;
+    margin-left: 10px;
+  }
+}
+
+.el-table__row:hover {
+  .index {
+    display: none;
+
+    &.btn-disabled {
+      display: block;
+
+      &+.ym-custom-arrow-expand {
+        opacity: 0;
+        z-index: -1;
+      }
+    }
+  }
+
+  .ym-custom-arrow-expand {
+    z-index: 9;
+    opacity: 1;
   }
 }

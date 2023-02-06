@@ -118,10 +118,24 @@
                   </template>
                 </el-table-column>
                 <el-table-column prop="description" label="委托说明" />
-                <el-table-column label="操作" fixed="right" width="100" v-if="item.key=='1'">
+                <el-table-column label="操作" fixed="right" width="150" v-if="item.key=='1'">
                   <template slot-scope="scope">
                     <tableOpts @edit="addOrUpdateHandle(scope.row.id)"
-                      @del="handleDel(scope.$index,scope.row.id)">
+                      @del="handleDel(scope.$index,scope.row.id)"
+                      :editDisabled="scope.row.status==2">
+                      <template v-if='scope.row.status!=2'>
+                        <el-dropdown>
+                          <span class="el-dropdown-link">
+                            <el-button type="text" size="mini">{{$t('common.moreBtn')}}<i
+                                class="el-icon-arrow-down el-icon--right"></i>
+                            </el-button>
+                          </span>
+                          <el-dropdown-menu slot="dropdown">
+                            <el-dropdown-item @click.native="delegation(scope.row.id)">
+                              委托结束</el-dropdown-item>
+                          </el-dropdown-menu>
+                        </el-dropdown>
+                      </template>
                     </tableOpts>
                   </template>
                 </el-table-column>
@@ -188,7 +202,7 @@
   </div>
 </template>
 <script>
-import { FlowDelegateList, DeleteDelagate, getUserListByFlowId } from '@/api/workFlow/FlowDelegate'
+import { FlowDelegateList, DeleteDelagate, getUserListByFlowId, Stop } from '@/api/workFlow/FlowDelegate'
 import { FlowLaunchList, Delete } from '@/api/workFlow/FlowLaunch'
 import Form from './Form'
 import MyEntrust from './myEntrust.vue'
@@ -225,7 +239,8 @@ export default {
       checkUserList: [],
       classObject: { active: true },
       checkFlowItem: {},
-      dialogVisible: false
+      dialogVisible: false,
+      config: 0
     }
   },
   filters: {
@@ -235,13 +250,36 @@ export default {
     }
   },
   created() {
+    this.config = this.$route.query.config
+    if (this.config) {
+      this.activeName = this.config == 1 ? '1' : '2'
+      this.initData()
+    } else {
+      this.initFlowList()
+    }
     this.getDictionaryData()
-    this.initFlowList()
+
   },
   computed: {
     ...mapGetters(['userInfo'])
   },
   methods: {
+    delegation(id) {
+      this.$confirm('结束后，流程不再进行委托！', this.$t('common.tipTitle'), {
+        type: 'warning'
+      }).then(() => {
+        Stop(id).then(res => {
+          this.$message({
+            type: 'success',
+            message: res.msg,
+            duration: 1000,
+            onClose: () => {
+              this.initData()
+            }
+          });
+        })
+      }).catch(() => { });
+    },
     getDictionaryData() {
       this.$store.dispatch('base/getDictionaryData', { sort: 'WorkFlowCategory' }).then((res) => {
         this.categoryList = res
@@ -284,7 +322,7 @@ export default {
           let status = 0
           if (startTime > currTime) {
             status = 1
-          } else if (endTime < currTime) {
+          } else if (endTime <= currTime) {
             status = 2
           } else {
             status = 0

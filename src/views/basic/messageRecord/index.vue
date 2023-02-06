@@ -156,20 +156,28 @@ export default {
       this.multipleSelection = val.map(item => item.id)
     },
     readInfo(item) {
-      if (item.type == 1) {
-        this.formVisible = true
-        item.isRead = '1'
-        this.$nextTick(() => {
-          this.$refs.Form.init(item.id)
-        })
-      } else {
-        ReadInfo(item.id).then(res => {
+      ReadInfo(item.id).then(res => {
+        this.info = res.data
+        this.files = res.data.files ? JSON.parse(res.data.files) : []
+        if (item.isRead == '0') {
           item.isRead = '1'
-          if (!res.data.bodyText) return
-          const Base64 = require('js-base64').Base64
-          this.$router.push('/workFlowDetail?config=' + encodeURIComponent(Base64.encode(res.data.bodyText)))
-        })
-      }
+          this.$emit('read')
+        }
+        if (item.type == 2 && item.flowType == 2) {
+          let bodyText = JSON.parse(res.data.bodyText)
+          this.drawer = false
+          this.$router.push('/workFlow/entrust?config=' + bodyText.type)
+        } else {
+          if (item.type == 1) {
+            this.visible = true
+          } else {
+            if (!res.data.bodyText) return
+            this.drawer = false
+            const Base64 = require('js-base64').Base64
+            this.$router.push('/workFlowDetail?config=' + encodeURIComponent(Base64.encode(res.data.bodyText)))
+          }
+        }
+      })
     }
   }
 }

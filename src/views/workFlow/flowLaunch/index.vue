@@ -29,13 +29,23 @@
           <template v-if="showAll">
             <el-col :span="6">
               <el-form-item label="所属流程">
-                <el-select v-model="flowId" placeholder="选择所属流程" clearable>
+                <el-select v-model="templateId" placeholder="选择所属流程" clearable
+                  @change="onTemplateIdChange">
                   <el-option-group v-for="group in flowEngineList" :key="group.id"
                     :label="group.fullName+'【'+group.num+'】'">
                     <el-option v-for="item in group.children" :key="item.id" :label="item.fullName"
                       :value="item.id">
                     </el-option>
                   </el-option-group>
+                </el-select>
+              </el-form-item>
+            </el-col>
+            <el-col :span="6">
+              <el-form-item label="所属名称">
+                <el-select v-model="flowId" placeholder="选择所属名称" clearable
+                  @visible-change="visibleFlowChange">
+                  <el-option v-for="item in flowOptions" :key="item.id" :label="item.fullName"
+                    :value="item.id" />
                 </el-select>
               </el-form-item>
             </el-col>
@@ -83,7 +93,12 @@
           </div>
         </div>
         <JNPF-table v-loading="listLoading" :data="list">
-          <el-table-column prop="fullName" label="流程标题" show-overflow-tooltip min-width="150" />
+          <el-table-column prop="fullName" label="流程标题" show-overflow-tooltip min-width="150">
+            <template slot-scope="scope">
+              <el-tag type="success" v-if="scope.row.delegateUser">委托</el-tag>
+              {{scope.row.fullName}}
+            </template>
+          </el-table-column>
           <el-table-column prop="flowName" label="所属流程" width="130" />
           <el-table-column prop="startTime" label="发起时间" width="130"
             :formatter="jnpf.tableDateFormat" />
@@ -100,6 +115,7 @@
               <el-tag type="danger" v-else-if="scope.row.status==3">审核退回</el-tag>
               <el-tag type="info" v-else-if="scope.row.status==4">流程撤回</el-tag>
               <el-tag type="info" v-else-if="scope.row.status==5">审核终止</el-tag>
+              <el-tag type="danger" v-else-if="scope.row.status==6">已被挂起</el-tag>
               <el-tag type="warning" v-else>等待提交</el-tag>
             </template>
           </el-table-column>
@@ -136,7 +152,7 @@
 
 <script>
 import { FlowLaunchList, Delete } from '@/api/workFlow/FlowLaunch'
-import { FlowEngineListAll } from '@/api/workFlow/FlowEngine'
+import { FlowEngineListAll, getFlowList } from '@/api/workFlow/FlowEngine'
 import FlowBox from '../components/FlowBox'
 import flow from './Flow'
 export default {
@@ -201,6 +217,9 @@ export default {
       }, {
         id: 5,
         fullName: '审核终止'
+      }, {
+        id: 6,
+        fullName: '已被挂起'
       }],
       urgentList: [
         {
@@ -218,12 +237,14 @@ export default {
       pickerVal: [],
       startTime: '',
       endTime: '',
+      templateId: '',
       flowId: '',
       status: '',
       urgent: '',
       flowCategory: '',
       categoryList: [],
-      flowEngineList: []
+      flowEngineList: [],
+      flowOptions: []
     }
   },
   filters: {
@@ -271,6 +292,7 @@ export default {
         keyword: this.keyword,
         startTime: this.startTime,
         endTime: this.endTime,
+        templateId: this.templateId,
         flowId: this.flowId,
         status: this.status,
         flowUrgent: this.urgent,
@@ -307,7 +329,6 @@ export default {
     choiceFlow(item) {
       let data = {
         id: '',
-        enCode: item.enCode,
         flowId: item.id,
         opType: '-1'
       }
@@ -320,7 +341,6 @@ export default {
     toDetail(item, opType) {
       let data = {
         id: item.id,
-        enCode: item.flowCode,
         flowId: item.flowId,
         opType,
         status: item.status,
@@ -340,6 +360,7 @@ export default {
       this.startTime = ''
       this.endTime = ''
       this.keyword = ''
+      this.templateId = ''
       this.flowId = ''
       this.status = ''
       this.urgent = ''
@@ -351,7 +372,22 @@ export default {
         sidx: ''
       }
       this.initData()
-    }
+    },
+    onTemplateIdChange(val) {
+      this.flowId = ''
+      this.flowOptions = []
+      if (!val) return
+      this.getFlowList()
+    },
+    getFlowList() {
+      getFlowList(this.templateId).then(res => {
+        this.flowOptions = res.data
+      })
+    },
+    visibleFlowChange(val) {
+      if (!val) return
+      if (!this.templateId) this.$message.warning('请先选择所属流程')
+    },
   }
 }
 </script>

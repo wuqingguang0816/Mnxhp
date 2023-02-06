@@ -98,11 +98,6 @@ export default {
         })
       }).catch(() => { });
     },
-    toggleWebType(row) {
-      const { id, webType } = row
-      if (!webType) return
-      this.openAddBox(id, webType)
-    },
     openAddBox(id, webType) {
       this.addVisible = true
       this.currId = id || ''
@@ -111,7 +106,14 @@ export default {
     handleAdd(webType, isToggle) {
       this.addOrUpdateHandle(this.currId, webType, isToggle)
     },
+    addViewForm(id, webType, isToggle) {
+      this.viewFormVisible = true
+      this.$nextTick(() => {
+        this.$refs.ViewForm.init(this.categoryList, id, this.query.type, webType, isToggle)
+      })
+    },
     addOrUpdateHandle(id, webType, isToggle) {
+      if (webType == 4) return this.addViewForm(id, webType, isToggle)
       this.formVisible = true
       this.$nextTick(() => {
         this.$refs.Form.init(this.categoryList, id, this.query.type, webType, isToggle)
@@ -119,6 +121,7 @@ export default {
     },
     closeForm(isRefresh) {
       this.formVisible = false
+      this.viewFormVisible = false
       if (isRefresh) {
         this.initData()
       }

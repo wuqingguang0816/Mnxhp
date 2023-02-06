@@ -3,7 +3,11 @@
   <div class="JNPF-preview-main flow-form-main">
     <div class="JNPF-common-page-header">
       <div v-if="setting.fromForm">{{title}}</div>
-      <el-page-header @back="goBack" :content="title" v-else />
+      <el-page-header @back="goBack" v-else>
+        <template slot="content">
+          <div class="JNPF-page-header-content">{{title}}</div>
+        </template>
+      </el-page-header>
       <template v-if="!loading||title">
         <el-dropdown placement="bottom" @command="handleFlowUrgent" trigger="click"
           v-show="setting.opType=='-1'">
@@ -29,7 +33,7 @@
             :style="{'color':flowUrgentList[selectState].color}">{{flowUrgentList[selectState].name}}</span>
         </div>
       </template>
-      <div class="options">
+      <div class="options" v-if="!subFlowVisible">
         <el-dropdown class="dropdown" placement="bottom" @command="handleMore"
           v-if="moreBtnList.length">
           <el-button style="width:70px" :disabled="allBtnDisabled">
@@ -59,16 +63,27 @@
         </el-button>
       </div>
     </div>
-    <div class="approve-result" v-if="(setting.opType==0||setting.opType==4) && activeTab==='0'">
+    <div class="approve-result"
+      v-if="(setting.opType==0||setting.opType==4) && activeTab==='0' &&!subFlowVisible">
       <div class="approve-result-img" :class="flowTaskInfo.status | flowStatus()"></div>
     </div>
     <el-tabs class="JNPF-el_tabs" v-model="activeTab">
-      <el-tab-pane label="表单信息" v-loading="loading" v-if="setting.opType!='4'">
+      <el-tab-pane label="表单信息" v-loading="loading" v-if="setting.opType!='4'&&!subFlowVisible ">
         <component :is="currentView" @close="goBack" ref="form" @eventReceiver="eventReceiver"
           @setLoad="setLoad" @setCandidateLoad="setCandidateLoad" @setPageLoad="setPageLoad" />
       </el-tab-pane>
       <el-tab-pane label="流程信息" v-loading="loading">
-        <Process :conf="flowTemplateJson" v-if="flowTemplateJson.nodeId" />
+        <template v-if="!subFlowVisible">
+          <Process :conf="flowTemplateJson" v-if="flowTemplateJson.nodeId" @subFlow='subFlow' />
+        </template>
+        <template v-else>
+          <el-tabs v-model="subFlowTab" @tab-click="activeClick" type="card">
+            <el-tab-pane v-for="(item,index) in subFlowInfoList" :key="index"
+              :label="item.flowTaskInfo.fullName" :name="item.flowTaskInfo.id">
+              <Process :conf="item.flowTemplateInfo.flowTemplateJson" />
+            </el-tab-pane>
+          </el-tabs>
+        </template>
       </el-tab-pane>
       <el-tab-pane label="流转记录" v-if="setting.opType!='-1'" v-loading="loading">
         <recordList :list='flowTaskOperatorRecordList' :endTime='endTime'
@@ -115,11 +130,36 @@
               </el-option>
             </el-select>
           </el-form-item>
+          <template v-if="properties.rejectType==3">
+            <el-form-item prop="rejectRadio">
+              <el-radio-group v-model="candidateForm.rejectType" class="form-item-content">
+                <el-radio :label=1>重新审批
+                  <el-tooltip content="若流程为A->B->C,C退回至A，则C->A->B->C" placement="top">
+                    <i class="el-icon-warning-outline"></i>
+                  </el-tooltip>
+                </el-radio>
+                <el-radio :label=2>直接提交给我
+                  <el-tooltip content="若流程为A->B->C,C退回至A，则C->A->C" placement="top">
+                    <i class="el-icon-warning-outline"></i>
+                  </el-tooltip>
+                </el-radio>
+              </el-radio-group>
+            </el-form-item>
+          </template>
         </template>
         <template v-if="properties.hasOpinion">
           <el-form-item label="审批意见" prop="handleOpinion">
-            <el-input v-model="candidateForm.handleOpinion" placeholder="请输入审批意见" type="textarea"
-              :rows="4" />
+            <el-row>
+              <el-col :span="22">
+                <el-input v-model="candidateForm.handleOpinion" placeholder="请输入审批意见"
+                  type="textarea" :rows="4" />
+              </el-col>
+              <el-col :span="2">
+                <el-button plain @click="commonWords()" class="commonWords-button">
+                  常用语
+                </el-button>
+              </el-col>
+            </el-row>
           </el-form-item>
           <el-form-item label="审批附件" prop="fileList">
             <JNPF-UploadFz v-model="candidateForm.fileList" :limit="3" />
@@ -144,6 +184,7 @@
           {{$t('common.confirmButton')}}
         </el-button>
       </span>
+      <CommonWordsDialog v-if="commonWordsVisible" ref="commonWordsDialog" @change="common" />
     </el-dialog>
     <!-- 流程节点变更复活对话框 -->
     <el-dialog :title="flowTaskInfo.completion==100?'复活':'变更'" :close-on-click-modal="false"
@@ -159,8 +200,17 @@
           </el-select>
         </el-form-item>
         <el-form-item :label="flowTaskInfo.completion==100?'复活意见':'变更意见'" prop="handleOpinion">
-          <el-input type="textarea" v-model="resurgenceForm.handleOpinion" placeholder="请填写意见"
-            :rows="4" />
+          <el-row>
+            <el-col :span="22">
+              <el-input type="textarea" v-model="resurgenceForm.handleOpinion" placeholder="请填写意见"
+                :rows="4" />
+            </el-col>
+            <el-col :span="2">
+              <el-button plain @click="commonWords()" class="commonWords-button">
+                常用语
+              </el-button>
+            </el-col>
+          </el-row>
         </el-form-item>
         <el-form-item :label="flowTaskInfo.completion==100?'复活附件':'变更附件'" prop="fileList">
           <JNPF-UploadFz v-model="resurgenceForm.fileList" :limit="3" />
@@ -181,17 +231,20 @@
     <error-form :visible.sync="errorVisible" :nodeList="errorNodeList" @submit="handleError" />
     <actionDialog v-if="actionVisible" ref="actionDialog" :assignNodeList="assignNodeList"
       @submit="actionReceiver" />
+    <SuspendDialog v-if="suspendVisible" ref="suspendDialog" @submit="suspendReceiver" />
     <HasFreeApprover :visible.sync="hasFreeApproverVisible" :taskId="setting.taskId"
       :formData="formData" :properties="properties" @close="approverDialog" />
     <SignImgDialog v-if="signVisible" ref="SignImg" :lineWidth='3' :userInfo='userInfo'
       :isDefault='1' @close="signDialog" />
+    <FlowBox v-if="flowBoxVisible" ref="FlowBox" @close="flowBoxVisible = false" />
+
   </div>
   <!-- </transition> -->
 </template>
 
 <script>
 import SignImgDialog from '@/components/SignImgDialog'
-import { FlowBeforeInfo, Audit, Reject, Transfer, Recall, Cancel, Assign, SaveAudit, Candidates, CandidateUser, Resurgence, ResurgenceList, RejectList } from '@/api/workFlow/FlowBefore'
+import { FlowBeforeInfo, Audit, Reject, Transfer, Recall, Cancel, Assign, SaveAudit, Candidates, CandidateUser, Resurgence, ResurgenceList, RejectList, suspend, restore, subFlowInfo } from '@/api/workFlow/FlowBefore'
 import { Revoke, Press } from '@/api/workFlow/FlowLaunch'
 import { Create, Update } from '@/api/workFlow/workFlowForm'
 import recordList from './RecordList'
@@ -204,11 +257,15 @@ import Process from '@/components/Process/Preview'
 import PrintBrowse from '@/components/PrintBrowse'
 import ActionDialog from '@/views/workFlow/components/ActionDialog'
 import HasFreeApprover from './HasFreeApprover'
+import SuspendDialog from './SuspendDialog'
+import CommonWordsDialog from './CommonWordsDialog'
 import { mapGetters } from "vuex"
 export default {
-  components: { SignImgDialog, HasFreeApprover, recordList, Process, PrintBrowse, Comment, RecordSummary, CandidateForm, CandidateUserSelect, ErrorForm, ActionDialog },
+  name: 'FlowBox',
+  components: { SignImgDialog, HasFreeApprover, recordList, Process, PrintBrowse, Comment, RecordSummary, CandidateForm, CandidateUserSelect, ErrorForm, ActionDialog, SuspendDialog, CommonWordsDialog },
   data() {
     return {
+      subFlowTab: '',
       resurgenceVisible: false,
       actionVisible: false,
       resurgenceForm: {
@@ -241,6 +298,7 @@ export default {
       flowTaskOperatorRecordList: [],
       properties: {},
       endTime: 0,
+      suspendVisible: false,
       visible: false,
       handleId: '',
       activeTab: '0',
@@ -263,7 +321,8 @@ export default {
         candidateList: [],
         fileList: [],
         handleOpinion: '',
-        rejectStep: ''
+        rejectStep: '',
+        rejectType: 1
       },
       printBrowseVisible: false,
       rejectList: [],
@@ -283,7 +342,11 @@ export default {
       errorVisible: false,
       errorNodeList: [],
       isValidate: false,
-      moreBtnList: []
+      moreBtnList: [],
+      subFlowVisible: false,
+      flowBoxVisible: false,
+      subFlowInfoList: [],
+      commonWordsVisible: false,
     }
   },
   computed: {
@@ -311,6 +374,23 @@ export default {
     }
   },
   methods: {
+    common(val) {
+      this.commonWordsVisible = false
+      if (val) {
+        if (this.resurgenceVisible) {
+          this.resurgenceForm.handleOpinion += val.commonWordsText
+        } else {
+          this.candidateForm.handleOpinion += val.commonWordsText
+        }
+
+      }
+    },
+    commonWords() {
+      this.commonWordsVisible = true
+      this.$nextTick(() => {
+        this.$refs.commonWordsDialog.init()
+      })
+    },
     addSign() {
       this.signVisible = true
       this.$nextTick(() => {
@@ -325,6 +405,36 @@ export default {
     },
     approverDialog(needClose) {
       if (needClose) this.$emit('close', true)
+    },
+    activeClick() {
+      let data = this.subFlowInfoList.filter(o => o.flowTaskInfo.id == this.subFlowTab)
+      if (data.length) {
+        this.fullName = data[0].flowTaskInfo.fullName
+        this.flowTaskOperatorRecordList = data[0].flowTaskOperatorRecordList || []
+        this.isComment = data[0].flowTemplateInfo.flowTemplateJson.isComment
+        this.isSummary = data[0].flowTemplateInfo.flowTemplateJson.isSummary
+        this.summaryType = data[0].flowTemplateInfo.flowTemplateJson.summaryType
+      }
+    },
+    subFlow(enCode) {
+      let flowTaskNodeList = this.flowTaskNodeList.filter(res => res.nodeCode == enCode)
+      if (!flowTaskNodeList.length) return
+      if (!flowTaskNodeList[0].type || flowTaskNodeList[0].nodeType != 'subFlow') return
+      let item = {
+        subFlowVisible: true,
+        ...flowTaskNodeList,
+        activeTab: this.activeTab,
+        ...this.setting,
+        isComment: this.isComment,
+        isSummary: this.isSummary,
+        summaryType: this.summaryType,
+        currentView: this.currentView,
+        flowTaskOperatorRecordList: this.flowTaskOperatorRecordList,
+      }
+      this.flowBoxVisible = true
+      this.$nextTick(() => {
+        this.$refs.FlowBox.init(item)
+      })
     },
     handleResurgence(errorRuleUserList) {
       this.$refs['resurgenceForm'].validate((valid) => {
@@ -372,16 +482,21 @@ export default {
       this.loading = true
       this.activeTab = '0'
       this.setting = data
-      /**
-       * opType
-       * -1 - 我发起的新建/编辑
-       * 0 - 我发起的详情
-       * 1 - 待办事宜
-       * 2 - 已办事宜
-       * 3 - 抄送事宜
-       * 4 - 流程监控
-       */
-      this.getBeforeInfo(data)
+      if (data.subFlowVisible) {
+        this.subFlowInfo(data)
+      } else {
+        /**
+         * opType
+         * -1 - 我发起的新建/编辑
+         * 0 - 我发起的详情
+         * 1 - 待办事宜
+         * 2 - 已办事宜
+         * 3 - 抄送事宜
+         * 4 - 流程监控
+         */
+        this.getBeforeInfo(data)
+      }
+
     },
     getBeforeInfo(data) {
       FlowBeforeInfo(data.id || 0, { taskNodeId: data.taskNodeId, taskOperatorId: data.taskId, flowId: data.flowId }).then(res => {
@@ -406,6 +521,7 @@ export default {
         this.flowTaskOperatorRecordList = res.data.flowTaskOperatorRecordList || []
         this.flowTaskOperatorRecordList = this.flowTaskOperatorRecordList.reverse()
         this.properties = res.data.approversProperties || {}
+        this.candidateForm.rejectType = this.properties.rejectType
         this.endTime = this.flowTaskInfo.completion == 100 ? this.flowTaskInfo.endTime : 0
         data.formConf = data.isPreview ? data.formConf : this.flowFormInfo.propertyJson
         if (data.opType != 1 && data.opType != '-1') data.readonly = true
@@ -441,6 +557,7 @@ export default {
         this.initBtnList()
         setTimeout(() => {
           this.$nextTick(() => {
+
             this.$refs.form && this.$refs.form.init(data)
           })
         }, 500)
@@ -465,8 +582,53 @@ export default {
         if (flowTaskInfo.completion == 100) list.push({ label: '复 活', key: 'resurgence' })
         if (flowTaskInfo.completion > 0 && flowTaskInfo.completion < 100 && !flowTaskInfo.rejectDataId && (setting.status == 1 || setting.status == 3)) list.push({ label: '变 更', key: 'resurgence' })
         if (setting.status == 1 && this.assignNodeList.length) list.push({ label: '指 派', key: 'assign' })
+        if (flowTaskInfo.status == 1) list.push({ label: '挂 起', key: 'suspend' })
+        if (flowTaskInfo.status == 6) list.push({ label: '恢 复', key: 'recovery' })
       }
       this.moreBtnList = list
+    },
+    subFlowInfo(data) {
+      this.loading = false
+      this.activeTab = '0'
+      this.subFlowVisible = true
+      subFlowInfo(data[0].id).then(res => {
+        this.subFlowInfoList = res.data || []
+        this.subFlowTab = this.subFlowInfoList[0].flowTaskInfo.id
+        this.fullName = this.subFlowInfoList[0].flowTaskInfo.fullName
+        this.flowTaskOperatorRecordList = this.subFlowInfoList[0].flowTaskOperatorRecordList || []
+        this.flowTaskOperatorRecordList = this.flowTaskOperatorRecordList.reverse()
+        for (let index = 0; index < this.subFlowInfoList.length; index++) {
+          let element = this.subFlowInfoList[index];
+          element.flowTemplateInfo.flowTemplateJson = element.flowTemplateInfo ? JSON.parse(element.flowTemplateInfo.flowTemplateJson) : {}
+          if (element.flowTaskNodeList.length) {
+            let assignNodeList = []
+            for (let i = 0; i < element.flowTaskNodeList.length; i++) {
+              const nodeItem = element.flowTaskNodeList[i]
+              data.opType == 4 && nodeItem.type == 1 && nodeItem.nodeType === 'approver' && assignNodeList.push(nodeItem)
+              const loop = data => {
+                if (Array.isArray(data)) data.forEach(d => loop(d))
+                if (data.nodeId === nodeItem.nodeCode) {
+                  if (nodeItem.type == 0) data.state = 'state-past'
+                  if (nodeItem.type == 1) data.state = 'state-curr'
+                  if (nodeItem.nodeType === 'approver' || nodeItem.nodeType === 'start' || nodeItem.nodeType === 'subFlow') data.content = nodeItem.userName
+                  return
+                }
+                if (data.conditionNodes && Array.isArray(data.conditionNodes)) loop(data.conditionNodes)
+                if (data.childNode) loop(data.childNode)
+              }
+              loop(element.flowTemplateInfo.flowTemplateJson)
+            }
+            element.assignNodeList = assignNodeList
+          } else {
+            element.flowTemplateInfo.flowTemplateJson.state = 'state-curr'
+          }
+          this.isComment = this.subFlowInfoList[0].flowTemplateInfo.flowTemplateJson.isComment
+          this.isSummary = this.subFlowInfoList[0].flowTemplateInfo.flowTemplateJson.isSummary
+          this.summaryType = this.subFlowInfoList[0].flowTemplateInfo.flowTemplateJson.summaryType
+        }
+      }).catch(() => { this.loading = false })
+
+
     },
     handleMore(e) {
       if (e == 'revoke') return this.actionLauncher('revoke')
@@ -477,7 +639,45 @@ export default {
       if (e == 'assign') return this.actionLauncher('assign')
       if (e == 'comment') return this.addComment()
       if (e == 'print') return this.printBrowseVisible = true
+      if (e == 'suspend') return this.suspend()
+      if (e == 'recovery') return this.recovery()
       this.eventLauncher(e)
+    },
+    suspend() {
+      this.suspendVisible = true
+      this.$nextTick(() => {
+        this.$refs.suspendDialog.init(this.setting.id)
+      })
+    },
+    recovery() {
+      let data = {
+        handleOpinion: '',
+        fileList: [],
+      }
+      restore(this.setting.id, data).then(res => {
+        this.$message({
+          message: res.msg,
+          type: 'success',
+          duration: 1500,
+          onClose: () => {
+            this.$emit('close', true)
+          }
+        })
+      }).catch(() => {
+        this.$refs.suspendDialog.btnLoading = false
+      })
+    },
+    suspendReceiver(dataForm) {
+      suspend(this.setting.id, dataForm).then(res => {
+        this.$message({
+          message: res.msg,
+          type: 'success',
+          duration: 1500,
+          onClose: () => {
+            this.$emit('close', true)
+          }
+        })
+      })
     },
     eventLauncher(eventType) {
       this.$refs.form && this.$refs.form.dataFormSubmit(eventType, this.flowUrgent)
@@ -781,7 +981,8 @@ export default {
           signImg: this.signImg,
           copyIds: this.copyIds.join(','),
           branchList: this.candidateForm.branchList,
-          candidateType: this.candidateType
+          candidateType: this.candidateType,
+          rejectType: this.candidateForm.rejectType
         }
         if (this.eventType === 'reject') query.rejectStep = this.candidateForm.rejectStep
         if (errorRuleUserList) query.errorRuleUserList = errorRuleUserList
@@ -876,5 +1077,26 @@ export default {
 .dropdown-item {
   min-width: 70px;
   text-align: center;
+}
+.subFlow_tabs {
+  // >>> .el-tabs__item {
+  //   text-align: center;
+  // }
+  // >>> .el-tabs__content {
+  //   padding: 0px 0 15px;
+  // }
+  height: 100%;
+  overflow: auto;
+  overflow-x: hidden;
+  /* padding: 0 10px 10px; */
+}
+.commonWords-button {
+  margin-top: 57px;
+}
+.JNPF-page-header-content {
+  max-width: 40vw;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 </style>

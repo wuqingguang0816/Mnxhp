@@ -78,8 +78,25 @@
           </el-option-group>
         </el-select>
         <div class="box">
-          <el-tree :data="treeData" node-key="index" v-loading="treeLoading" :props="defaultProps"
-            @node-click="handleNodeClick" />
+          <div class="search-box">
+            <el-input placeholder="请输入关键词查询" v-model="keyword" @keyup.enter.native="search"
+              clearable class="search-input">
+              <el-button slot="append" icon="el-icon-search" @click="search"></el-button>
+            </el-input>
+          </div>
+          <div class="tree-box">
+            <el-tree :data="treeData" node-key="index" v-loading="treeLoading" :props="defaultProps"
+              lazy :load="loadNode" @node-click="handleNodeClick" :expand-on-click-node="false">
+              <span class="custom-tree-node" slot-scope="{ data }">
+                <span class="text" v-if="data.isLeaf">
+                  {{ data.fieldName?data.field + '(' + data.fieldName + ')':data.field}}
+                </span>
+                <span class="text" v-else>
+                  {{ data.tableName?data.table + '(' + data.tableName + ')':data.table}}
+                </span>
+              </span>
+            </el-tree>
+          </div>
         </div>
       </div>
       <div class="detail">
@@ -279,7 +296,7 @@ import {
   updateDataInterface,
 } from '@/api/systemData/dataInterface'
 import { getDataSourceListAll } from '@/api/systemData/dataSource'
-import { DataModelList } from '@/api/systemData/dataModel'
+import { DataModelList, DataModelFieldList } from '@/api/systemData/dataModel'
 import SQLEditor from '@/components/JNPFEditor/monaco'
 import JSONEditor from '@/components/JNPFEditor/monaco'
 import FieldForm from './FieldForm'
@@ -348,9 +365,8 @@ export default {
       treeData: [],
       defaultProps: {
         children: 'children',
-        label: function (data, node) {
-          return data.table + '(' + data.tableName + ')'
-        },
+        label: 'fullName',
+        isLeaf: 'isLeaf'
       },
       activeName: 'query',
       dataRule: {
@@ -404,6 +420,7 @@ export default {
       options: {
         language: 'javascript'
       },
+      keyword: ''
     }
   },
   methods: {
@@ -434,7 +451,7 @@ export default {
           } else {
             this.dataForm.categoryId = categoryId
             this.formLoading = false
-            this.getTableList(this.dataForm.dbLinkId)
+            this.getTableList()
           }
         })
       })
@@ -442,7 +459,7 @@ export default {
     getFormData() {
       getDataInterfaceInfo(this.dataForm.id).then(res => {
         this.dataForm = res.data
-        this.getTableList(this.dataForm.dbLinkId)
+        this.getTableList()
         this.dataForm.query = res.data.query
         if (res.data.requestParameters) this.requestParameters = JSON.parse(res.data.requestParameters) || []
         if (res.data.requestHeaders) this.requestHeaders = JSON.parse(res.data.requestHeaders) || []
@@ -466,17 +483,18 @@ export default {
     },
     handleSelectTable(val) {
       this.dataForm.dbLinkId = val
-      this.getTableList(val);
+      this.getTableList();
     },
-    getTableList(id) {
+    getTableList() {
       this.treeLoading = true
-      DataModelList(id).then(res => {
+      DataModelList(this.dataForm.dbLinkId, { keyword: this.keyword }).then(res => {
         this.treeData = res.data.list
         this.treeLoading = false
       })
     },
     handleNodeClick(data) {
-      this.$refs.SQLEditorRef && this.$refs.SQLEditorRef.insert(data.table)
+      const content = data.isLeaf ? data.field : data.table
+      this.$refs.SQLEditorRef && this.$refs.SQLEditorRef.insert(content)
     },
     handleSysNodeClick(data) {
       this.$refs.SQLEditorRef && this.$refs.SQLEditorRef.insert(data)
@@ -647,8 +665,18 @@ export default {
           }
         })
       }
+    },
+    loadNode(node, resolve) {
+      if (node.level === 0) {
+        return resolve(this.treeData)
+      }
+      DataModelFieldList(this.dataForm.dbLinkId, node.data.table).then(res => {
+        resolve(res.data.list.map(o => ({ ...o, isLeaf: true })))
+      })
+    },
+    search() {
+      this.getTableList();
     }
-
   }
 }
 </script>
@@ -721,10 +749,14 @@ export default {
         border-radius: 4px;
         height: calc(100% - 40px);
         border: 1px solid #dcdfe6;
-        overflow: auto;
-        overflow-x: hidden;
-        >>> .el-tree-node__content > .el-tree-node__expand-icon {
-          padding: 0;
+        overflow: hidden;
+        .search-box {
+          padding: 10px;
+        }
+        .tree-box {
+          height: calc(100% - 52px);
+          overflow: auto;
+          overflow-x: hidden;
         }
       }
     }

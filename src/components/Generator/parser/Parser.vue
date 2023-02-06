@@ -658,22 +658,22 @@ export default {
       if (!func) return
       func(this.parameter)
     },
-    submitForm() {
+    submitForm(type) {
       this.isTableValid = this.checkTableData()
       try {
         this.beforeSubmit().then(() => {
-          this.submit()
+          this.submit(type)
         })
       } catch (e) {
-        this.submit()
+        this.submit(type)
       }
     },
-    submit() {
+    submit(type) {
       this.$refs[this.formConf.formRef].validate(valid => {
         if (!valid) return false
         if (!this.isTableValid) return false
         // 触发submit事件
-        this.$emit('submit', this[this.formConf.formModel], this.afterSubmit)
+        this.$emit('submit', this[this.formConf.formModel], this.afterSubmit, type)
         return true
       })
     },

@@ -126,6 +126,13 @@ export function getBatchFlowSelector() {
     method: 'get'
   })
 }
+// 获取批量审批流程（小id）
+export function getBatchFlowJsonList(id) {
+  return request({
+    url: `/api/workflow/Engine/FlowBefore/BatchFlowJsonList/${id}`,
+    method: 'get'
+  })
+}
 // 获取流程节点列表
 export function getNodeSelector(id) {
   return request({
@@ -166,3 +173,36 @@ export function FreeApprover(id, data) {
   })
 }
 
+//挂起类型
+export function suspendType(id) {
+  return request({
+    url: `/api/workflow/Engine/FlowBefore/Suspend/${id}`,
+    method: 'get',
+  })
+}
+
+//挂起流程
+export function suspend(id, data) {
+  return request({
+    url: `/api/workflow/Engine/FlowBefore/Suspend/${id}`,
+    method: 'post',
+    data
+  })
+}
+//恢复流程
+export function restore(id, data) {
+  return request({
+    url: `/api/workflow/Engine/FlowBefore/Restore/${id}`,
+    method: 'post',
+    data
+  })
+}
+
+
+//查看子流程
+export function subFlowInfo(taskNodeId) {
+  return request({
+    url: `/api/workflow/Engine/FlowBefore/SubFlowInfo/${taskNodeId}`,
+    method: 'get',
+  })
+}
