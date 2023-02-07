@@ -646,4 +646,7 @@ export default {
 >>> .JNPF-selectTree {
   width: 130px;
 }
+>>> .popupSelect-container{
+  width: 130px;
+}
 </style>
