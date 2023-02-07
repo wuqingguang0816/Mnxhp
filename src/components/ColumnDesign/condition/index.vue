@@ -62,7 +62,7 @@
             placeholder="请选择"
             class="condition-select"
             v-if="type == 'base'"
-            @change="symbolChange($event, item)"
+            @change="symbolChange($event, item,index)"
           >
             <el-option
               v-for="item in symbolOptions"
@@ -77,7 +77,7 @@
             placeholder="请选择"
             class="condition-select"
             v-else
-            @change="symbolChange($event, item)"
+            @change="symbolChange($event, item,index)"
           >
             <el-option
               v-for="item in symbolOptionsAddtion"
@@ -326,7 +326,7 @@
           </el-col>
         </el-col>
 
-        <el-col :span="1" style="text-align: center; font-size: 16px">
+        <el-col :span="1" style="text-align: center; font-size: 16px;z-index:999">
           <i class="el-icon-delete" @click="onDelCondition(index)"></i>
         </el-col>
       </el-row>
@@ -555,12 +555,15 @@ export default {
 
       this.$set(this.pconditions, i, item);
     },
-    symbolChange(val, item) {
+    symbolChange(val, item,i) {
       let obj = this.symbolOptions.filter(o => o.value == val)[0];
       item.symbolName = obj.label;
       if (val === "between") {
         item.showSecond = true;
+      }else{
+        item.showSecond = false;
       }
+      this.$set(this.pconditions, i, item);
     },
     logicChange(val, item) {
       let obj = this.logicOptions.filter(o => o.value == val)[0];
