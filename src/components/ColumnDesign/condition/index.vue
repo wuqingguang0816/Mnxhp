@@ -62,7 +62,7 @@
             placeholder="请选择"
             class="condition-select"
             v-if="type == 'base'"
-            @change="symbolChange($event, item,index)"
+            @change="symbolChange($event, item, index)"
           >
             <el-option
               v-for="item in symbolOptions"
@@ -77,7 +77,7 @@
             placeholder="请选择"
             class="condition-select"
             v-else
-            @change="symbolChange($event, item,index)"
+            @change="symbolChange($event, item, index)"
           >
             <el-option
               v-for="item in symbolOptionsAddtion"
@@ -123,15 +123,25 @@
                   ></el-option>
                 </el-select>
               </template>
-              <template
-                v-else-if="['cascader', 'treeSelect'].includes(item.jnpfKey)"
-              >
+              <template v-else-if="['cascader'].includes(item.jnpfKey)">
                 <el-cascader
                   v-model="item.fieldValue"
                   :options="item.dataOptions"
                   :props="item.props"
                   @change="handleCascaderChange"
                 ></el-cascader>
+              </template>
+              <template v-else-if="['treeSelect'].includes(item.jnpfKey)">
+                <JNPF-TreeSelect
+                  v-model="item.fieldValue"
+                  :options="item.dataOptions"
+                  :props="item.props"
+                  style="width: 100%;"
+                  :placeholder="'请选择'"
+                  :clearable="true"
+                  :multiple="false"
+                  :filterable="true"
+                />
               </template>
               <template v-else-if="item.jnpfKey === 'calculate'">
                 <el-input-number
@@ -326,7 +336,10 @@
           </el-col>
         </el-col>
 
-        <el-col :span="1" style="text-align: center; font-size: 16px;z-index:999">
+        <el-col
+          :span="1"
+          style="text-align: center; font-size: 16px;z-index:999"
+        >
           <i class="el-icon-delete" @click="onDelCondition(index)"></i>
         </el-col>
       </el-row>
@@ -555,12 +568,12 @@ export default {
 
       this.$set(this.pconditions, i, item);
     },
-    symbolChange(val, item,i) {
+    symbolChange(val, item, i) {
       let obj = this.symbolOptions.filter(o => o.value == val)[0];
       item.symbolName = obj.label;
       if (val === "between") {
         item.showSecond = true;
-      }else{
+      } else {
         item.showSecond = false;
       }
       this.$set(this.pconditions, i, item);
@@ -629,5 +642,8 @@ export default {
   font-size: 15px;
   color: black;
   font-weight: 400;
+}
+>>> .JNPF-selectTree {
+  width: 130px;
 }
 </style>
