@@ -3,13 +3,31 @@
     <keep-alive :include="useCache?cachedViews:[]">
       <router-view :key="key" />
     </keep-alive>
+
+    <ResetPwdForm v-if="resetFormVisible" ref="ResetPwdForm" @refreshDataList="initData" />
   </section>
 </template>
 
 <script>
+import ResetPwdForm from './ResetPassword'
+import { mapGetters } from 'vuex'
+import { getSystemConfig } from '@/api/system/sysConfig'
+
 export default {
   name: 'AppMain',
+  components: {
+    ResetPwdForm
+  },
+  data() {
+    return {
+      resetFormVisible: false,
+      baseForm:{
+        mandatoryModificationOfInitialPassword:0,
+      }
+    }
+  },
   computed: {
+    ...mapGetters(['userInfo']),
     cachedViews() {
       return this.$store.state.tagsView.cachedViews
     },
@@ -22,6 +40,27 @@ export default {
     sysConfig() {
       return this.$store.state.settings.sysConfig
     }
+  },
+  created() {
+    this.initData()
+  },
+  methods: {
+    initData() {
+      this.listLoading = true
+      this.$nextTick(() => {
+        getSystemConfig().then(res => {
+          if(this.userInfo.changePasswordDate==null && res.data.mandatoryModificationOfInitialPassword==1){
+            this.resetFormVisible = true
+            this.$nextTick(() => {
+              this.$refs.ResetPwdForm.init(this.userInfo.userId, this.userInfo.userAccount)
+            })
+          }
+          this.listLoading = false
+        }).catch(() => {
+          this.listLoading = false
+        })
+      })
+    },
   }
 }
 </script>

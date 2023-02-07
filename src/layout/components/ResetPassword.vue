@@ -26,7 +26,7 @@
 
 <script>
 import {
-  resetUserPassword
+  resetUserPassword2
 } from '@/api/permission/user'
 import md5 from 'js-md5'
 import { getSystemConfig } from '@/api/system/sysConfig'
@@ -159,7 +159,7 @@ export default {
             userPassword: md5(this.dataForm.userPassword),
             validatePassword: md5(this.dataForm.validatePassword)
           }
-          resetUserPassword(formData).then(res => {
+          resetUserPassword2(formData).then(res => {
             this.$message({
               message: res.msg,
               type: 'success',

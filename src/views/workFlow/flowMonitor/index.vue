@@ -111,6 +111,11 @@
               {{ scope.row.flowUrgent | urgentText() }}
             </template>
           </el-table-column>
+          <el-table-column prop="flowVersion" label="版本号" width="70" align="center">
+            <template slot-scope="scope">
+              <el-tag type="primary">V:{{scope.row.flowVersion}}</el-tag>
+            </template>
+          </el-table-column>
           <el-table-column prop="status" label="流程状态" width="130" align="center">
             <template slot-scope="scope">
               <el-tag type="primary" v-if="scope.row.status==1">等待审核</el-tag>

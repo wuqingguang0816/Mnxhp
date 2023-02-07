@@ -36,7 +36,7 @@
       <template v-if="activeData.__config__.dataType === 'dictionary'">
         <el-form-item label="数据字典">
           <JNPF-TreeSelect :options="dicOptions" v-model="activeData.__config__.dictionaryType"
-            placeholder="请选择数据字典" lastLevel clearable @change="dictionaryTypeChange">
+            placeholder="请选择数据字典" lastLevel :dicType="'1'" clearable @change="dictionaryTypeChange">
           </JNPF-TreeSelect>
         </el-form-item>
         <el-form-item label="存储字段">

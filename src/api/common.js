@@ -7,6 +7,14 @@ export function getDownloadUrl(type, fileName) {
     method: 'get'
   })
 }
+// 获取全部下载文件链接（打包下载）
+export function getPackDownloadUrl(type, data) {
+  return request({
+    url: `/api/file/PackDownload/${type}`,
+    method: 'POST',
+    data
+  })
+}
 // 预览文件
 export function PreviewFile(data) {
   return request({

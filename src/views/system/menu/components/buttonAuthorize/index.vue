@@ -83,6 +83,7 @@ export default {
         { fullName: '详情', enCode: 'btn_detail' },
         { fullName: '删除', enCode: 'btn_remove' },
         { fullName: '批量删除', enCode: 'btn_batchRemove' },
+        { fullName: '批量打印', enCode: 'btn_batchPrint' },
         { fullName: '复制', enCode: 'btn_copy' },
         { fullName: '导入', enCode: 'btn_upload' },
         { fullName: '导出', enCode: 'btn_download' }

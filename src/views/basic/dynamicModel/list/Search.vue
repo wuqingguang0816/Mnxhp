@@ -133,8 +133,9 @@ import { deepClone } from '@/utils'
 import { dyOptionsList, useInputList, useDateList, useSelectList } from '@/components/Generator/generator/comConfig'
 import { getDictionaryDataSelector } from '@/api/systemData/dictionary'
 import { getDataInterfaceRes } from '@/api/systemData/dataInterface'
+
 export default {
-  props: ['list'],
+  props: ['list', 'initDataJson'],
   data() {
     return {
       showAll: false,
@@ -152,7 +153,27 @@ export default {
       },
       deep: true,
       immediate: true
+    },
+    initDataJson: {
+      handler: function (val) {
+        if(val != '') {
+          let initData = JSON.parse(val);
+          if(Object.keys(initData).length > 0) {
+            for(let key in initData) {
+              for (let i = 0; i < this.searchList.length; i++) {
+                if(this.searchList[i].__vModel__ === key) {
+                  this.searchList[i].value = initData[key]
+                  break;
+                }
+              }
+            }
+          }
+        }
+      }
     }
+  },
+  computed: {
+
   },
   methods: {
     buildOptions(componentList) {

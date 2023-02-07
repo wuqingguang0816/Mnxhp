@@ -83,3 +83,12 @@ export function getData(data) {
     data
   })
 }
+
+// 获取数据和打印模板
+export function getBatchData(data) {
+  return request({
+    url: `/api/system/printDev/BatchData`,
+    method: 'get',
+    data
+  })
+}

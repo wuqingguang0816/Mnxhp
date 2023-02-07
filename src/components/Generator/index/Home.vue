@@ -317,6 +317,26 @@ export default {
             if (config && config.children && Array.isArray(config.children)) {
               loop(config.children)
             }
+            if (config.jnpfKey === 'uploadFz') {
+              if (e.pathType === 'selfPath') {
+                if (e.isAccount === 0) {
+                  if (!e.folder) {
+                    reject({ msg: '请设置自定义路径', target: 1 })
+                    break
+                  }
+                }
+              }
+            }
+            if (config.jnpfKey === 'uploadImg') {
+              if (e.pathType === 'selfPath') {
+                if (e.isAccount === 0) {
+                  if (!e.folder) {
+                    reject({ msg: '请设置自定义路径', target: 1 })
+                    break
+                  }
+                }
+              }
+            }
           }
         }
         loop(this.drawingList)

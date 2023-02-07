@@ -207,6 +207,10 @@
                 </template>
               </template>
               <el-divider>表格配置</el-divider>
+              <el-form-item label="数据过滤">
+                <el-button style="width: 100%;" @click="filterPanelShow">{{ columnData.ruleList.length>0 ? '编辑过滤条件':'添加过滤条件' }}</el-button>
+              </el-form-item>
+              <Condition ref="conditionpane" :columnData="columnData" @ruleConfig="ruleConfig"></Condition>
               <template v-if="columnData.type==3">
                 <el-form-item label="分组字段">
                   <el-select v-model="columnData.groupField" placeholder="请选择分组字段" clearable>
@@ -364,6 +368,7 @@
   </div>
 </template>
 <script>
+import Condition from './FlowCondition'
 import Sortable from 'sortablejs'
 import draggable from 'vuedraggable'
 import FormScript from './FormScript'
@@ -392,6 +397,7 @@ const defaultFuncs = '({ data, tableRef, request }) => {\r\n   \r\n}'
 const rowStyleDefaultFunc = '({row,rowIndex}) => {\r\n   \r\n}'
 const cellStyleDefaultFunc = '({row, column, rowIndex, columnIndex}) => {\r\n   \r\n}'
 const defaultColumnData = {
+  ruleList:[], // 过滤规则
   searchList: [], // 查询字段
   hasSuperQuery: true, // 高级查询
   childTableStyle: 1, // 子表样式
@@ -477,7 +483,7 @@ export default {
       default: () => []
     },
   },
-  components: { draggable, FormScript, uploadBox, CustomBtn, InterfaceDialog },
+  components: { draggable, FormScript, uploadBox, CustomBtn, InterfaceDialog, Condition },
   data() {
     return {
       currentTab: 'column',
@@ -492,6 +498,7 @@ export default {
         { value: 'download', icon: 'el-icon-download', label: '导出' },
         { value: 'upload', icon: 'el-icon-upload2', label: '导入' },
         { value: 'batchRemove', icon: 'el-icon-delete', label: '批量删除' },
+        { value: 'batchPrint', icon: 'el-icon-printer', label: '批量打印' },
       ],
       columnBtnsOption: [
         { value: 'edit', icon: 'el-icon-edit', label: '编辑' },
@@ -529,6 +536,9 @@ export default {
           break;
         case 'batchRemove':
           text = '批量删除'
+          break;
+        case 'batchPrint':
+          text = '批量打印'
           break;
         case 'edit':
           text = '编辑'
@@ -703,6 +713,18 @@ export default {
     })
   },
   methods: {
+    filterPanelShow(){
+      this.$refs.conditionpane.show(this.columnData.ruleList)
+    },
+    ruleConfig(data) {
+      this.columnData.ruleList=[data]
+      /**if (this.isEdit) {
+        this.$set(this.columnData.ruleList, this.index, data)
+        this.isEdit = false
+      } else {
+        this.columnData.ruleList.push(data)
+      } */
+    },
     setBtnValue(replacedData, data, key) {
       key = key ? key : 'value'
       outer: for (let i = 0; i < replacedData.length; i++) {

@@ -1,7 +1,10 @@
 <template>
   <div class="JNPF-preview-main flow-form-main">
     <div class="JNPF-common-page-header">
-      <el-page-header @back="goBack" content="" />
+      <el-page-header @back="goBack" content="" v-if="goBackBtnFlag" />
+      <div class="title-box" v-if="titleFlag">
+        <h3>数据接口</h3>
+      </div>
       <el-steps :active="active" finish-status="success" simple
         :class="dataForm.dataType!=2?'elsteps':'steps'">
         <el-step title="基本信息"></el-step>
@@ -313,6 +316,8 @@ export default {
   },
   data() {
     return {
+      goBackBtnFlag: true,
+      titleFlag: false,
       active: 0,
       treeLoading: false,
       formLoading: false,
@@ -422,12 +427,16 @@ export default {
     goBack() {
       this.$emit('close')
     },
-    init(id, categoryId) {
+    init(id, categoryId, flag) {
       Object.assign(this.$data, this.$options.data())
       this.active = 0
       this.dataForm.id = id || ''
       this.formLoading = true
       this.$nextTick(() => {
+        if (1 === flag) {
+          this.goBackBtnFlag = false
+          this.titleFlag = true
+        }
         this.$refs['dataForm'].resetFields()
         // 获取分类
         this.$store.dispatch('base/getDictionaryData', { sort: 'DataInterfaceType' }).then((res) => {
@@ -672,6 +681,11 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
+.title-box {
+  padding: 2px 20px;
+  align-items: flex-start;
+  align-content: center;
+}
 .jsTips {
   -ms-flex-negative: 0;
   flex-shrink: 0;
