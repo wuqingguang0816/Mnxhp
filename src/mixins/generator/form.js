@@ -38,6 +38,7 @@ export default {
       stepLoading: false,
       maxStep: 2,
       tables: [],
+      interfaceParam: [],
       defaultTable: [],
       formVisible: false,
       btnLoading: false,
@@ -67,7 +68,6 @@ export default {
           getVisualDevInfo(this.dataForm.id).then(res => {
             this.dataForm = res.data
             this.dataForm.webType = this.dataForm.webType || 2
-            this.dataForm.interfaceParam = this.dataForm.interfaceParam ? JSON.parse(this.dataForm.interfaceParam) : []
             if (isToggle) this.dataForm.webType = webType
             if (parseInt(this.dataForm.webType) == 4) {
               this.maxStep = 1
@@ -78,6 +78,7 @@ export default {
             this.columnData = this.dataForm.columnData && JSON.parse(this.dataForm.columnData)
             this.appColumnData = this.dataForm.appColumnData && JSON.parse(this.dataForm.appColumnData)
             this.tables = this.dataForm.tables && JSON.parse(this.dataForm.tables) || []
+            this.interfaceParam = this.dataForm.interfaceParam && JSON.parse(this.dataForm.interfaceParam) || []
             this.defaultTable = this.dataForm.tables && JSON.parse(this.dataForm.tables) || []
             this.updateFields()
           }).catch(() => { this.loading = false })
@@ -98,7 +99,7 @@ export default {
         this.dataForm.formData = this.formData ? JSON.stringify(this.formData) : null
         this.dataForm.columnData = this.columnData ? JSON.stringify(this.columnData) : null
         this.dataForm.appColumnData = this.appColumnData ? JSON.stringify(this.appColumnData) : null
-        this.dataForm.interfaceParam = this.dataForm.interfaceParam ? JSON.stringify(this.dataForm.interfaceParam) : null
+        this.dataForm.interfaceParam = this.interfaceParam ? JSON.stringify(this.interfaceParam) : null
       }
       if (!this.activeStep) {
         this.$refs['dataForm'].validate((valid) => {
@@ -237,13 +238,13 @@ export default {
       if (!id) {
         this.dataForm.interfaceId = ''
         this.dataForm.interfaceName = ''
-        this.dataForm.interfaceParam = []
+        this.interfaceParam = []
         return
       }
       if (this.dataForm.interfaceId === id) return
       this.dataForm.interfaceId = id
       this.dataForm.interfaceName = row.fullName
-      this.dataForm.interfaceParam = row.templateJson || []
+      this.interfaceParam = row.templateJson || []
     }
   }
 }
