@@ -98,6 +98,7 @@ export default {
         this.dataForm.formData = this.formData ? JSON.stringify(this.formData) : null
         this.dataForm.columnData = this.columnData ? JSON.stringify(this.columnData) : null
         this.dataForm.appColumnData = this.appColumnData ? JSON.stringify(this.appColumnData) : null
+        this.dataForm.interfaceParam = this.dataForm.interfaceParam ? JSON.stringify(this.dataForm.interfaceParam) : null
       }
       if (!this.activeStep) {
         this.$refs['dataForm'].validate((valid) => {
