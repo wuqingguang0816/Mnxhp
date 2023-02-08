@@ -172,8 +172,11 @@ export default {
           this.drawer = false
           this.$router.push('/workFlow/entrust?config=' + bodyText.type)
         } else {
-          if (item.type == 1) {
-            this.visible = true
+          if (item.type == 1 || item.type == 3) {
+            this.formVisible = true
+            this.$nextTick(() => {
+              this.$refs.Form.init(item.id)
+            })
           } else {
             if (!res.data.bodyText) return
             this.drawer = false
