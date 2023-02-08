@@ -17,6 +17,7 @@
           </span>
           <el-dropdown-menu slot="dropdown">
             <el-dropdown-item command="全部">全部</el-dropdown-item>
+            <el-dropdown-item command="系统">系统</el-dropdown-item>
             <el-dropdown-item command="流程">流程</el-dropdown-item>
             <el-dropdown-item command="公告">公告</el-dropdown-item>
           </el-dropdown-menu>
@@ -195,6 +196,7 @@ export default {
       if (e == '全部') this.listQuery.type = ''
       if (e == '流程') this.listQuery.type = 2
       if (e == '公告') this.listQuery.type = 1
+      if (e == '系统') this.listQuery.type = 3
       this.init()
     },
     search() {

@@ -208,7 +208,7 @@
               </template>
               <el-divider>表格配置</el-divider>
               <el-form-item label="数据过滤">
-                <el-button style="width: 100%;" @click="filterPanelShow">{{ columnData.ruleList.length>0 ? '编辑过滤条件':'添加过滤条件' }}</el-button>
+                <el-button style="width: 100%;" @click="filterPanelShow">{{ ruleListBtn }}</el-button>
               </el-form-item>
               <Condition ref="conditionpane" :columnData="columnData" @ruleConfig="ruleConfig"></Condition>
               <template v-if="columnData.type==3">
@@ -484,6 +484,14 @@ export default {
     },
   },
   components: { draggable, FormScript, uploadBox, CustomBtn, InterfaceDialog, Condition },
+  computed:{
+    ruleListBtn(){
+      if(this.columnData.ruleList && this.columnData.ruleList.length > 0){
+        return this.columnData.ruleList[0]['pconditions'].length > 0 ? '编辑过滤条件' : '添加过滤条件'
+      }
+      return '添加过滤条件'
+    }
+  },
   data() {
     return {
       currentTab: 'column',
