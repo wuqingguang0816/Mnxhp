@@ -124,7 +124,6 @@
 <script>
 import comMixin from './mixin';
 import dynamicMixin from './dynamicMixin';
-import { clustering } from 'echarts-stat';
 export default {
   mixins: [comMixin, dynamicMixin],
   data() {
