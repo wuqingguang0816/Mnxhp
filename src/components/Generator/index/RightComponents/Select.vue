@@ -48,9 +48,18 @@
     </template>
     <template v-if="activeData.__config__.dataType === 'dictionary'">
       <el-form-item label="数据字典">
-        <JNPF-TreeSelect :options="dicOptions" v-model="activeData.__config__.dictionaryType"
-          placeholder="请选择数据字典" :dicType="'1'" lastLevel clearable @change="dictionaryTypeChange">
-        </JNPF-TreeSelect>
+        <el-row>
+          <el-col :span="18">
+            <JNPF-TreeSelect :options="dicOptions" v-model="activeData.__config__.dictionaryType"
+              placeholder="请选择数据字典" lastLevel clearable @change="dictionaryTypeChange"
+              @selectChange="selectChange">
+            </JNPF-TreeSelect>
+          </el-col>
+          <el-col :span="6">
+            <el-button @click="goDictionary()">
+              添加</el-button>
+          </el-col>
+        </el-row>
       </el-form-item>
       <el-form-item label="存储字段">
         <el-select v-model="activeData.__config__.props.value" placeholder="请选择存储字段">
@@ -115,10 +124,20 @@
 <script>
 import comMixin from './mixin';
 import dynamicMixin from './dynamicMixin';
+import { clustering } from 'echarts-stat';
 export default {
   mixins: [comMixin, dynamicMixin],
   data() {
     return {}
   },
+  methods: {
+    selectChange() {
+      this.$emit('changeSelect')
+    },
+    goDictionary() {
+      let src = window.location.protocol + "//" + window.location.host + "/systemData/dictionary"
+      window.open(src, "_blank")
+    }
+  }
 }
 </script>

@@ -1,7 +1,7 @@
 <template>
   <div class="comSelect-container">
     <JNPF-TreeSelect :options="treeData" v-model="innerValue" :placeholder="placeholder" clearable
-      :disabled="disabled" :dicType="'1'" v-on="$listeners" lastLevel>
+      :disabled="disabled" v-on="$listeners" lastLevel>
     </JNPF-TreeSelect>
   </div>
 </template>

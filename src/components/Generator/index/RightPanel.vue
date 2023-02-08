@@ -155,16 +155,17 @@
             <JNPFPsdInput v-if="activeData.__config__.jnpfKey==='PsdInput'"
               :active-data="activeData" />
             <JNPFRadio v-if="activeData.__config__.jnpfKey==='radio'" :active-data="activeData"
-              :dictionaryOptions="dictionaryOptions" :dataInterfaceOptions="dataInterfaceOptions" />
+              :dictionaryOptions="dictionaryOptions" :dataInterfaceOptions="dataInterfaceOptions"
+              @changeSelect="getDictionaryType" />
             <JNPFCheckbox v-if="activeData.__config__.jnpfKey==='checkbox'"
               :active-data="activeData" :dictionaryOptions="dictionaryOptions"
-              :dataInterfaceOptions="dataInterfaceOptions" />
+              :dataInterfaceOptions="dataInterfaceOptions" @changeSelect="getDictionaryType" />
             <JNPFSelect v-if="activeData.__config__.jnpfKey==='select'" :active-data="activeData"
               :key="activeData.__config__.renderKey" :dictionaryOptions="dictionaryOptions"
-              :dataInterfaceOptions="dataInterfaceOptions" />
+              :dataInterfaceOptions="dataInterfaceOptions" @changeSelect="getDictionaryType" />
             <JNPFCascader v-if="activeData.__config__.jnpfKey==='cascader'"
               :active-data="activeData" :dictionaryOptions="dictionaryOptions"
-              :dataInterfaceOptions="dataInterfaceOptions" />
+              :dataInterfaceOptions="dataInterfaceOptions" @changeSelect="getDictionaryType" />
             <JNPFTime v-if="activeData.__config__.jnpfKey==='time'" :active-data="activeData" />
             <JNPFTimeRange v-if="activeData.__config__.jnpfKey==='timeRange'"
               :active-data="activeData" />
@@ -187,7 +188,7 @@
               :active-data="activeData" />
             <TreeSelect v-if="activeData.__config__.jnpfKey==='treeSelect'"
               :active-data="activeData" :dictionaryOptions="dictionaryOptions"
-              :dataInterfaceOptions="dataInterfaceOptions" />
+              :dataInterfaceOptions="dataInterfaceOptions" @changeSelect="getDictionaryType" />
             <GroupTitle v-if="activeData.__config__.jnpfKey==='groupTitle'"
               :active-data="activeData" />
             <RelationForm v-if="activeData.__config__.jnpfKey==='relationForm'"
@@ -508,11 +509,11 @@
               <el-form-item label="" v-if="formConf.hasPrintBtn">
                 <JNPF-TreeSelect :options="printTplList" v-model="formConf.printId" multiple
                   placeholder="请选择打印模板" lastLevel clearable>
-                  <div style="padding:10px 0;text-align:center" slot="header"  @click="openPrint">
-                      <el-link type="primary" :underline="false">添加打印模板
-                      </el-link>
-                      <el-divider></el-divider>
-                  </div> 
+                  <div style="padding:10px 0;text-align:center" slot="header" @click="openPrint">
+                    <el-link type="primary" :underline="false">添加打印模板
+                    </el-link>
+                    <el-divider></el-divider>
+                  </div>
                 </JNPF-TreeSelect>
               </el-form-item>
             </template>
@@ -870,7 +871,7 @@ export default {
       window.open(url, "_blank");
     },
     // 打印模板快捷入口
-    openPrint(){
+    openPrint() {
       let routeUrl = this.$router.resolve({
         path: '/system/printDev?open=true'
       });
@@ -1127,6 +1128,7 @@ export default {
       }
     },
     getDictionaryType() {
+      console.log(123456);
       getDictionaryTypeSelector().then(res => {
         this.dictionaryOptions = res.data.list
       })
@@ -1242,8 +1244,8 @@ export default {
 </script>
 
 <style lang="scss" scoped>
->>> .el-divider--horizontal{
-  margin-top:10px;
+>>> .el-divider--horizontal {
+  margin-top: 10px;
 }
 .right-board {
   width: 340px;
