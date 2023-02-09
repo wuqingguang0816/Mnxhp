@@ -55,8 +55,7 @@
               <interface-dialog :value="dataForm.interfaceId" :title="dataForm.interfaceName"
                 @change="onInterfaceChange" />
             </el-form-item>
-            <el-table v-if="dataForm.interfaceParam" :data="dataForm.interfaceParam"
-              style="margin-bottom: 18px;">
+            <el-table v-if="interfaceParam" :data="interfaceParam" style="margin-bottom: 18px;">
               <el-table-column type="index" width="50" label="序号" align="center" />
               <el-table-column prop="field" label="参数名称" width="200">
                 <template slot-scope="scope">
@@ -76,7 +75,7 @@
       <template v-if="activeStep==1">
         <columnDesign ref="columnDesign" :columnData="columnData" :appColumnData="appColumnData"
           :modelType="dataForm.type" :webType="dataForm.webType" :interfaceId="dataForm.interfaceId"
-          :templateJson="dataForm.interfaceParam" />
+          :templateJson="interfaceParam" />
       </template>
     </div>
   </el-dialog>
