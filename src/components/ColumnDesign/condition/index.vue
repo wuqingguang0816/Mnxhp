@@ -4,8 +4,7 @@
       <el-col :span="4">逻辑</el-col>
       <el-col :span="4" class="label">条件字段</el-col>
       <el-col :span="4">比较</el-col>
-      <el-col :span="7" v-if="type == 'base'">数据值</el-col>
-      <el-col :span="4" v-else>数据值</el-col>
+      <el-col :span="7">数据值</el-col>
 
       <el-col :span="2"></el-col>
     </el-row>
@@ -61,35 +60,44 @@
             v-model="item.symbol"
             placeholder="请选择"
             class="condition-select"
-            v-if="type == 'base'"
             @change="symbolChange($event, item, index)"
           >
-            <el-option
-              v-for="item in symbolOptions"
-              :key="item.value"
-              :label="item.label"
-              :value="item.value"
+            <!-- 联动符号下拉框 -->
+            <template
+              v-if="['comInput', 'textarea', 'billRule'].includes(item.jnpfKey)"
             >
-            </el-option>
-          </el-select>
-          <el-select
-            v-model="item.symbol"
-            placeholder="请选择"
-            class="condition-select"
-            v-else
-            @change="symbolChange($event, item, index)"
-          >
-            <el-option
-              v-for="item in symbolOptionsAddtion"
-              :key="item.value"
-              :label="item.label"
-              :value="item.value"
+              <el-option
+                v-for="item in symbolOptionsBase"
+                :key="item.label"
+                :label="item.label"
+                :value="item.value"
+              >
+              </el-option>
+            </template>
+            <template
+              v-else-if="['numInput', 'date', 'time'].includes(item.jnpfKey)"
             >
-            </el-option>
+              <el-option
+                v-for="item in symbolOptionsDateNum"
+                :key="item.label"
+                :label="item.label"
+                :value="item.value"
+              >
+              </el-option>
+            </template>
+            <template v-else>
+              <el-option
+                v-for="item in symbolOptionsSelect"
+                :key="item.label"
+                :label="item.label"
+                :value="item.value"
+              >
+              </el-option>
+            </template>
           </el-select>
         </el-col>
 
-        <el-col :span="7" class="fieldValue" v-if="type == 'base'">
+        <el-col :span="7" class="fieldValue">
           <el-col :span="12">
             <div v-if="item.fieldValueType === 2">
               <template v-if="item.jnpfKey === 'numInput'">
@@ -136,7 +144,7 @@
                   v-model="item.fieldValue"
                   :options="item.dataOptions"
                   :props="item.props"
-                  style="width: 100%;"
+                  style="width: 100%"
                   :placeholder="'请选择'"
                   :clearable="true"
                   :multiple="false"
@@ -318,27 +326,9 @@
             </el-select>
           </el-col>
         </el-col>
-        <el-col :span="4" class="fieldValue" v-else>
-          <el-col :span="24">
-            <el-select
-              v-model="item.fieldValueType"
-              placeholder="请选择"
-              class="condition-select condition-type-select"
-              @change="fieldValueTypeChange(item)"
-            >
-              <el-option
-                v-for="item in conditionTypeAddtion"
-                :key="item.value"
-                :label="item.label"
-                :value="item.value"
-              />
-            </el-select>
-          </el-col>
-        </el-col>
-
         <el-col
           :span="1"
-          style="text-align: center; font-size: 16px;z-index:999"
+          style="text-align: center; font-size: 16px; z-index: 999"
         >
           <i class="el-icon-delete" @click="onDelCondition(index)"></i>
         </el-col>
@@ -388,6 +378,72 @@ export default {
           value: "<"
         }
       ],
+      symbolOptionsBase: [
+        {
+          label: "等于",
+          value: "=="
+        },
+        {
+          label: "不等于",
+          value: "<>"
+        },
+        {
+          label: "包含",
+          value: "like"
+        },
+        {
+          label: "不包含",
+          value: "notLike"
+        }
+      ],
+      symbolOptionsDateNum: [
+        {
+          label: "大于等于",
+          value: ">="
+        },
+        {
+          label: "大于",
+          value: ">"
+        },
+        {
+          label: "等于",
+          value: "=="
+        },
+        {
+          label: "小于等于",
+          value: "<="
+        },
+        {
+          label: "小于",
+          value: "<"
+        },
+        {
+          label: "不等于",
+          value: "<>"
+        },
+        {
+          label: "介于",
+          value: "between"
+        }
+      ],
+      symbolOptionsSelect: [
+        {
+          label: "等于",
+          value: "=="
+        },
+        {
+          label: "不等于",
+          value: "<>"
+        },
+        {
+          label: "等于任意一个",
+          value: "in"
+        },
+        {
+          label: "不等于任意一个",
+          value: "notIn"
+        }
+      ],
       symbolOptions: [
         {
           label: "大于等于",
@@ -418,11 +474,11 @@ export default {
           value: "between"
         },
         {
-          label: "存在",
+          label: "等于任意一个",
           value: "in"
         },
         {
-          label: "不存在",
+          label: "不等于任意一个",
           value: "notIn"
         },
         {
@@ -538,7 +594,7 @@ export default {
         props: {},
         showSecond: false,
         fieldType: 1,
-        fieldValueType: this.type == "base" ? 2 : 3,
+        fieldValueType: 2,
         fieldLabel: "",
         dataOptions: [],
         dataLabel: "",
@@ -565,7 +621,6 @@ export default {
         item.dataOptions = this.dataOptionMap[val].options;
         item.props = this.dataOptionMap[val].props;
       }
-
       this.$set(this.pconditions, i, item);
     },
     symbolChange(val, item, i) {
@@ -646,7 +701,7 @@ export default {
 >>> .JNPF-selectTree {
   width: 130px;
 }
->>> .popupSelect-container{
+>>> .popupSelect-container {
   width: 130px;
 }
 </style>

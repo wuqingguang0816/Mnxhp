@@ -4,11 +4,9 @@
       ref='elSelect' :placeholder="placeholder" :popper-class="`JNPF-select-tree ${themeClass}`"
       @focus="selectFocus" :filterable="filterable" :filter-method="selectFilter"
       class="JNPF-selectTree" @visible-change="visibleChange" :multiple="multiple"
-      :collapse-tags="collapseTags" @remove-tag="removeTag" :key="key"
-      :style="dicType==='1'?'width:75%':''">
-      
+      :collapse-tags="collapseTags" @remove-tag="removeTag" :key="key">
       <slot name="header"></slot>
-      
+
       <el-option v-for="item in selectOptions" :key="item.id" :label="item[props.label]"
         :value="item[props.value]" style="display:none">
       </el-option>
@@ -36,8 +34,6 @@
         <p v-show="!options.length" class="empty-text">无数据</p>
       </el-option>
     </el-select>
-    <el-button @click.stop="goDictionary()" slot="append" v-if="dicType=='1'" style="float: right;">
-      添加</el-button>
   </div>
 
 </template>
@@ -45,13 +41,11 @@
 <script>
 let isFirst = 1
 import { mapState } from 'vuex'
+import { getDictionaryTypeSelector } from "@/api/systemData/dictionary"
+import { clustering } from 'echarts-stat'
 export default {
   name: "el-tree-select",
   props: {
-    dicType: {
-      type: String,
-      default: ""
-    },
     // 配置项
     props: {
       type: Object,
@@ -122,6 +116,7 @@ export default {
       return data[this.props.label].indexOf(value) !== -1;
     },
     selectFocus() {
+      this.$emit('selectChange')
       this.initHandle()
       if (isFirst && this.$refs.elSelect) {
         isFirst = 0
@@ -241,11 +236,6 @@ export default {
         allNode[i].classList.remove('is-current')
       }
     },
-    goDictionary() {
-      let src = window.location.protocol + "//" + window.location.host + "/systemData/dictionary"
-      // console.log(src);
-      window.open(src, "_blank")
-    }
   },
   watch: {
     value(val) {
@@ -264,9 +254,6 @@ export default {
 <style lang="scss" scoped>
 .selectBox {
   width: 100%;
-}
-.JNPF-selectTree {
-  width: 75%;
 }
 .el-scrollbar .el-scrollbar__view .el-select-dropdown__item {
   height: auto;

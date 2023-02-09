@@ -211,7 +211,6 @@ export default {
     addOrUpdateHandle(id) {
       this.billRuleFormVisible = true
       this.$nextTick(() => {
-        console.log(this.$refs.Form);
         this.$refs.Form.init(id, this.categoryList)
       })
     },

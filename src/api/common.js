@@ -57,7 +57,6 @@ export function getTemplateDownload(modelId, url) {
 
 // 导入预览
 export function getImportPreview(modelId, data, url) {
-  console.log(url)
   return request({
     url: `/api/${url}/ImportPreview`,
     method: 'get',

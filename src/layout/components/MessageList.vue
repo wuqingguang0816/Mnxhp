@@ -143,7 +143,7 @@ export default {
           this.drawer = false
           this.$router.push('/workFlow/entrust?config=' + bodyText.type)
         } else {
-          if (item.type == 1) {
+          if (item.type == 1 || item.type == 3) {
             this.visible = true
           } else {
             if (!res.data.bodyText) return

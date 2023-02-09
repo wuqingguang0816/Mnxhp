@@ -1,17 +1,7 @@
 <template>
-  <el-dialog
-    v-bind="$attrs"
-    :close-on-click-modal="false"
-    :modal-append-to-body="false"
-    v-on="$listeners"
-    @open="onOpen"
-    fullscreen
-    lock-scroll
-    class="JNPF-full-dialog"
-    :show-close="false"
-    :modal="false"
-    append-to-body
-  >
+  <el-dialog v-bind="$attrs" :close-on-click-modal="false" :modal-append-to-body="false"
+    v-on="$listeners" @open="onOpen" fullscreen lock-scroll class="JNPF-full-dialog"
+    :show-close="false" :modal="false" append-to-body>
     <div class="JNPF-full-dialog-header">
       <div class="header-title">
         <img src="@/assets/images/jnpf.png" class="header-logo" />
@@ -19,16 +9,9 @@
       </div>
       <div class="header-page">
         <el-button @click="pageIndex = pageIndex - 1">上一页</el-button>
-        <el-input-number
-          style="width:60px;"
-          v-model="pageIndex"
-          @change="scrollpage"
-          @blur="scrollpage"
-          :controls="false"
-          controls-position="right"
-          :min="1"
-          :max="batchData.length"
-        ></el-input-number>
+        <el-input-number style="width:60px;" v-model="pageIndex" @change="scrollpage"
+          @blur="scrollpage" :controls="false" controls-position="right" :min="1"
+          :max="batchData.length"></el-input-number>
         <span class="page-size">/{{ batchData.length }}</span>
         <el-button @click="pageIndex = pageIndex + 1">下一页</el-button>
       </div>
@@ -41,12 +24,8 @@
       </div>
     </div>
     <div class="main" v-loading="loading" ref="tsPrint">
-      <div
-        class="print-content"
-        v-html="item.printTemplate"
-        v-for="(item, index) in batchData"
-        :key="index"
-      />
+      <div class="print-content" v-html="item.printTemplate" v-for="(item, index) in batchData"
+        :key="index" />
     </div>
   </el-dialog>
 </template>
@@ -58,7 +37,7 @@ import QRCode from "qrcodejs2";
 import JsBarcode from "jsbarcode";
 import request from "@/utils/request"
 export default {
-  props: ["id", "formId", "fullName", "batchIds","printTitle"],
+  props: ["id", "formId", "fullName", "batchIds", "printTitle"],
   computed: {
     ...mapGetters(["userInfo"])
   },
@@ -79,12 +58,9 @@ export default {
       }
     }
   },
-  mounted() {
-  },
   methods: {
     scrollpage() {
-      
-      let index = this.pageIndex-1<0? 0:this.pageIndex-1
+      let index = this.pageIndex - 1 < 0 ? 0 : this.pageIndex - 1
       this.$nextTick(() => {
         let dom = document.querySelector('.main')
         dom.scrollTo({
@@ -141,7 +117,6 @@ export default {
         // 记录的id
         formId: this.batchIds
       };
-
       getBatchData(query).then(res => {
         if (!res.data) return;
         let array = res.data;
@@ -235,15 +210,13 @@ export default {
         let content = "";
         for (let i = 0; i < recordList.length; i++) {
           const record = recordList[i];
-          content += `<tr><td style="width: 20%;" data-mce-style="width: 20%;"><span class="wk-print-tag-wukong wk-tiny-color--common" contenteditable="false">${
-            record.nodeName
-          }</span></td><td style="width: 20%;" data-mce-style="width: 20%;"><span class="wk-print-tag-wukong wk-tiny-color--common" contenteditable="false">${
-            record.userName
-          }</span></td><td style="width: 20%;" data-mce-style="width: 20%;"><span class="wk-print-tag-wukong wk-tiny-color--common" contenteditable="false">${this.jnpf.toDate(
-            record.handleTime
-          )}</span></td><td style="width: 20%;" data-mce-style="width: 20%;"><span class="wk-print-tag-wukong wk-tiny-color--common" contenteditable="false">${this.getHandleName(
-            record.handleStatus
-          )}</span></td><td style="width: 20%;" data-mce-style="width: 20%;"><span class="wk-print-tag-wukong wk-tiny-color--common" contenteditable="false">${record.handleOpinion ||
+          content += `<tr><td style="width: 20%;" data-mce-style="width: 20%;"><span class="wk-print-tag-wukong wk-tiny-color--common" contenteditable="false">${record.nodeName
+            }</span></td><td style="width: 20%;" data-mce-style="width: 20%;"><span class="wk-print-tag-wukong wk-tiny-color--common" contenteditable="false">${record.userName
+            }</span></td><td style="width: 20%;" data-mce-style="width: 20%;"><span class="wk-print-tag-wukong wk-tiny-color--common" contenteditable="false">${this.jnpf.toDate(
+              record.handleTime
+            )}</span></td><td style="width: 20%;" data-mce-style="width: 20%;"><span class="wk-print-tag-wukong wk-tiny-color--common" contenteditable="false">${this.getHandleName(
+              record.handleStatus
+            )}</span></td><td style="width: 20%;" data-mce-style="width: 20%;"><span class="wk-print-tag-wukong wk-tiny-color--common" contenteditable="false">${record.handleOpinion ||
             ""}</span></td></tr>`;
         }
         systemApprovalContent += content;
@@ -399,7 +372,6 @@ export default {
         }
       }
     },
-
     getWidthHeight(item, type = "width") {
       let regular = "";
       if (type == "width") regular = /width=[\"|'](.*?)[\"|']/gi;
@@ -482,7 +454,6 @@ export default {
     },
     word() {
       let print = this.$refs.tsPrint.innerHTML;
-      console.log(print);
       const blob = new Blob([print], {
         type: ""
       });
@@ -512,17 +483,16 @@ export default {
         "position:absolute;width:0px;height:0px;left:-500px;top:-500px;"
       );
       iframe.contentWindow.focus();
-      
       let doc = iframe.contentWindow.document;
       let _this = this
-      iframe.onload = function() {
+      iframe.onload = function () {
         let oldTitle = document.title;
-        iframe.contentWindow.onafterprint =  function(e) {
+        iframe.contentWindow.onafterprint = function (e) {
           // 插入日志
           let data = {
-            printTitle:oldTitle.split("-")[0].trim(),
-            printNum:_this.batchIds.length,
-            printId:_this.id
+            printTitle: oldTitle.split("-")[0].trim(),
+            printNum: _this.batchIds.length,
+            printId: _this.id
           }
           request({
             url: `/api/system/printLog/save`,
@@ -530,10 +500,8 @@ export default {
             data
           }).then((res) => {
           });
-          
+
         };
-        
-        
         document.title = "JNPF快速开发平台";
         iframe.contentWindow.print();
         document.title = oldTitle;
