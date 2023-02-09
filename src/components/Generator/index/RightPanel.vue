@@ -1128,7 +1128,6 @@ export default {
       }
     },
     getDictionaryType() {
-      console.log(123456);
       getDictionaryTypeSelector().then(res => {
         this.dictionaryOptions = res.data.list
       })
