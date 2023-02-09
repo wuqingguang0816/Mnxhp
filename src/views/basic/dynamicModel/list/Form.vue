@@ -275,11 +275,15 @@ export default {
               if(item.__config__.jnpfKey === 'date' && item.__config__.defaultCurrent == true) {
                 val = new Date().getTime()
                 item.__config__.defaultValue = val
-              }else if(item.__config__.jnpfKey === 'depSelect' && item.__config__.defaultCurrent == true && this.userInfo.departIds != null) {
-                val =  this.userInfo.departIds
+              }else if(item.__config__.jnpfKey === 'depSelect' && item.__config__.defaultCurrent == true && this.userInfo.departmentId != null) {
+                val =  this.userInfo.departmentId
                 item.__config__.defaultValue = val
               }else if(item.__config__.jnpfKey === 'comSelect' && item.__config__.defaultCurrent == true && this.userInfo.organizeId != null) {
-                val =  this.userInfo.organizeId
+                if(this.userInfo.organizeId instanceof Array) {
+                  val = this.userInfo.organizeId
+                } else{
+                  val = [this.userInfo.organizeId]
+                }
                 item.__config__.defaultValue = val
               }else if(item.__config__.jnpfKey === 'userSelect' && item.__config__.defaultCurrent == true) {
                 val =  this.userInfo.userId
