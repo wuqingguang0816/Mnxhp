@@ -319,7 +319,7 @@ export default {
             }
             if (config.jnpfKey === 'uploadFz') {
               if (e.pathType === 'selfPath') {
-                if (e.isAccount === 0) {
+                if (e.isAccount === '0') {
                   if (!e.folder) {
                     reject({ msg: '请设置自定义路径', target: 1 })
                     break
@@ -329,7 +329,7 @@ export default {
             }
             if (config.jnpfKey === 'uploadImg') {
               if (e.pathType === 'selfPath') {
-                if (e.isAccount === 0) {
+                if (e.isAccount === '0') {
                   if (!e.folder) {
                     reject({ msg: '请设置自定义路径', target: 1 })
                     break

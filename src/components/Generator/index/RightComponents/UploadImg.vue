@@ -23,7 +23,7 @@
     </el-form-item>
     <template v-if="activeData.pathType === 'selfPath'">
       <el-form-item label="分用户存储">
-        <el-switch v-model="activeData.isAccount" :active-value="1" :inactive-value="0" />
+        <el-switch v-model="activeData.isAccount" :active-value="'1'" :inactive-value="'0'" />
       </el-form-item>
       <el-form-item label="文件夹名">
         <el-input v-model="activeData.folder" placeholder="请输入显示字段" />
