@@ -815,13 +815,8 @@ export default {
             initQueryJson[searchList[i].__vModel__] = [startDateTime.getTime(), endDateTime.getTime()]
           }else if(searchList[i].jnpfKey === 'depSelect' && searchList[i].__config__.defaultCurrent == true && this.userInfo.departmentId != null) {
             initQueryJson[searchList[i].__vModel__] = this.userInfo.departmentId
-          }else if(searchList[i].jnpfKey === 'comSelect' && searchList[i].__config__.defaultCurrent == true && this.userInfo.organizeId != null) {
-            initQueryJson[searchList[i].__vModel__] = this.userInfo.organizeId
-            if(this.userInfo.organizeId instanceof Array) {
-              initQueryJson[searchList[i].__vModel__] = this.userInfo.organizeId
-            } else{
-              initQueryJson[searchList[i].__vModel__] = [this.userInfo.organizeId]
-            }
+          }else if(searchList[i].jnpfKey === 'comSelect' && searchList[i].__config__.defaultCurrent == true && this.userInfo.organizeIdList != null && this.userInfo.organizeIdList.length > 0) {
+            initQueryJson[searchList[i].__vModel__] = this.userInfo.organizeIdList
           }else if(searchList[i].jnpfKey === 'userSelect' && searchList[i].__config__.defaultCurrent == true) {
             initQueryJson[searchList[i].__vModel__] = this.userInfo.userId
           }

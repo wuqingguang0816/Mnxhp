@@ -278,12 +278,8 @@ export default {
               }else if(item.__config__.jnpfKey === 'depSelect' && item.__config__.defaultCurrent == true && this.userInfo.departmentId != null) {
                 val =  this.userInfo.departmentId
                 item.__config__.defaultValue = val
-              }else if(item.__config__.jnpfKey === 'comSelect' && item.__config__.defaultCurrent == true && this.userInfo.organizeId != null) {
-                if(this.userInfo.organizeId instanceof Array) {
-                  val = this.userInfo.organizeId
-                } else{
-                  val = [this.userInfo.organizeId]
-                }
+              }else if(item.__config__.jnpfKey === 'comSelect' && item.__config__.defaultCurrent == true && this.userInfo.organizeIdList != null && this.userInfo.organizeIdList.length > 0) {
+                val = this.userInfo.organizeIdList
                 item.__config__.defaultValue = val
               }else if(item.__config__.jnpfKey === 'userSelect' && item.__config__.defaultCurrent == true) {
                 val =  this.userInfo.userId
