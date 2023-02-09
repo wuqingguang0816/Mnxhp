@@ -60,7 +60,7 @@ export default {
       default: 'defaultPath'
     },
     isAccount: {
-      type: String,
+      type: Number,
       default: '0'
     },
     folder: {

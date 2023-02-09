@@ -496,7 +496,7 @@ export const inputComponents = [
     buttonText: "点击上传",
     showTip: false,
     pathType: "defaultPath",
-    isAccount: '0',
+    isAccount: 0,
     folder: "",
     limit: 9
   },
@@ -529,7 +529,7 @@ export const inputComponents = [
     fileSize: 10,
     sizeUnit: "MB",
     pathType: "defaultPath",
-    isAccount: '0',
+    isAccount: 0,
     folder: "",
     limit: 9
   },
