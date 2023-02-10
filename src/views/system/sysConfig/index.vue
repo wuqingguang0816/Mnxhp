@@ -580,11 +580,6 @@ export default {
           this.baseForm.isClick = this.baseForm.isClick ? this.baseForm.isClick : 0
           this.baseForm.linkTime = this.baseForm.linkTime ? this.baseForm.linkTime : 24
           this.baseForm.unClickNum = this.baseForm.unClickNum ? this.baseForm.unClickNum : 1
-          // this.baseForm.passwordLengthMin = this.baseForm.passwordLengthMin ? true : false
-          // this.baseForm.containsNumbers = this.baseForm.containsNumbers ? true : false
-          // this.baseForm.includeLowercaseLetters = this.baseForm.includeLowercaseLetters ? true : false
-          // this.baseForm.includeUppercaseLetters = this.baseForm.includeUppercaseLetters ? true : false
-          // this.baseForm.containsCharacters = this.baseForm.containsCharacters ? true : false
           this.listLoading = false
         }).catch(() => {
           this.listLoading = false
