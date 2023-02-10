@@ -178,13 +178,6 @@ export default {
           }
         }
       }
-      // if (this.accept === '.xls,.xlsx' || this.accept === '.doc,.docx' || this.accept === '.pdf' || this.accept === '.txt') {
-      //   let extension = file.getExtension()
-      //   isAccept = this.accept.indexOf(extension) > -1
-      // } else if (this.accept === '*') { } else {
-      //   let type = file.fileType
-      //   isAccept = new RegExp(this.accept).test(type)
-      // }
       if (!isAccept) {
         this.$message.error(`请选择${this.acceptText}类型的文件`)
         return isAccept
