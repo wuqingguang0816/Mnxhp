@@ -197,6 +197,7 @@ export default {
       this.title = fullName
       this.listLoading = true
       if (type) {
+        this.id = id
         getFlowList(this.id).then(res => {
           this.templateList = res.data
           if (!this.templateList.length) {
@@ -207,7 +208,6 @@ export default {
             return this.listLoading = false
           }
           this.flowId = this.templateList[0].id
-          this.initData()
         }).catch(() => { this.listLoading = false });
       } else {
         getFormById(id).then(data => {
@@ -222,10 +222,11 @@ export default {
               return this.listLoading = false
             }
             this.flowId = this.templateList[0].id
-            this.initData()
+
           }).catch(() => { this.listLoading = false });
         }).catch(() => { this.listLoading = false });
       }
+      this.initData()
     },
     reset() {
       this.pickerVal = ''
