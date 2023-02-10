@@ -98,24 +98,28 @@
         </el-col>
 
         <el-col :span="7" class="fieldValue">
-          <el-col :span="12">
+          <el-col :span="24">
             <div v-if="item.fieldValueType === 2">
               <template v-if="item.jnpfKey === 'numInput'">
-                <el-input-number
-                  v-model="item.fieldValue"
-                  placeholder="请输入"
-                  :precision="item.precision"
-                  :controls="false"
-                  controls-position="right"
-                />
-                <el-input-number
-                  v-if="item.showSecond"
-                  v-model="item.fieldValue2"
-                  placeholder="请输入"
-                  :precision="item.precision"
-                  :controls="false"
-                  controls-position="right"
-                />
+                <el-row>
+                  <el-col :span="12">
+                    <el-input-number
+                      v-model="item.fieldValue"
+                      placeholder="请输入"
+                      :precision="item.precision"
+                      :controls="false"
+                      controls-position="right"
+                  /></el-col>
+                  <el-col :span="12">
+                    <el-input-number
+                      v-if="item.showSecond"
+                      v-model="item.fieldValue2"
+                      placeholder="请输入"
+                      :precision="item.precision"
+                      :controls="false"
+                      controls-position="right"
+                  /></el-col>
+                </el-row>
               </template>
               <template
                 v-else-if="
@@ -174,62 +178,74 @@
                 />
               </template>
               <template v-else-if="item.jnpfKey === 'time'">
-                <el-time-picker
-                  v-model="item.fieldValue"
-                  :picker-options="item['picker-options']"
-                  placeholder="请选择"
-                  clearable
-                  :value-format="item['value-format']"
-                  :format="item.format"
-                >
-                </el-time-picker>
-                <el-time-picker
-                  v-if="item.showSecond"
-                  v-model="item.fieldValue2"
-                  :picker-options="item['picker-options']"
-                  placeholder="请选择"
-                  clearable
-                  :value-format="item['value-format']"
-                  :format="item.format"
-                >
-                </el-time-picker>
+                <el-row>
+                  <el-col :span="12"
+                    ><el-time-picker
+                      v-model="item.fieldValue"
+                      :picker-options="item['picker-options']"
+                      placeholder="请选择"
+                      clearable
+                      :value-format="item['value-format']"
+                      :format="item.format"
+                    >
+                    </el-time-picker
+                  ></el-col>
+                  <el-col :span="12">
+                    <el-time-picker
+                      v-if="item.showSecond"
+                      v-model="item.fieldValue2"
+                      :picker-options="item['picker-options']"
+                      placeholder="请选择"
+                      clearable
+                      :value-format="item['value-format']"
+                      :format="item.format"
+                    >
+                    </el-time-picker
+                  ></el-col>
+                </el-row>
               </template>
               <template
                 v-else-if="
                   ['date', 'createTime', 'modifyTime'].includes(item.jnpfKey)
                 "
               >
-                <el-date-picker
-                  v-model="item.fieldValue"
-                  clearable
-                  placeholder="请选择"
-                  :type="
-                    item.jnpfKey === 'date' && item.type
-                      ? item.type
-                      : 'datetime'
-                  "
-                  value-format="timestamp"
-                  @change="onConditionDateChange($event, item)"
-                  :format="item.format || 'yyyy-MM-dd HH:mm:ss'"
-                >
-                </el-date-picker>
-
-                <el-date-picker
-                  v-if="item.showSecond"
-                  v-model="item.fieldValue2"
-                  clearable
-                  placeholder="请选择"
-                  :type="
-                    item.jnpfKey === 'date' && item.type
-                      ? item.type
-                      : 'datetime'
-                  "
-                  value-format="timestamp"
-                  @change="onConditionDateChange($event, item)"
-                  :format="item.format || 'yyyy-MM-dd HH:mm:ss'"
-                >
-                </el-date-picker>
+                <el-row>
+                  <el-col :span="12">
+                    <el-date-picker
+                      v-model="item.fieldValue"
+                      clearable
+                      placeholder="请选择"
+                      :type="
+                        item.jnpfKey === 'date' && item.type
+                          ? item.type
+                          : 'datetime'
+                      "
+                      value-format="timestamp"
+                      @change="onConditionDateChange($event, item)"
+                      :format="item.format || 'yyyy-MM-dd HH:mm:ss'"
+                    >
+                    </el-date-picker>
+                  </el-col>
+                  <el-col :span="12">
+                    <el-date-picker
+                      v-if="item.showSecond"
+                      v-model="item.fieldValue2"
+                      clearable
+                      placeholder="请选择"
+                      :type="
+                        item.jnpfKey === 'date' && item.type
+                          ? item.type
+                          : 'datetime'
+                      "
+                      value-format="timestamp"
+                      @change="onConditionDateChange($event, item)"
+                      :format="item.format || 'yyyy-MM-dd HH:mm:ss'"
+                    >
+                    </el-date-picker>
+                  </el-col>
+                </el-row>
               </template>
+
               <template
                 v-else-if="['comSelect', 'currOrganize'].includes(item.jnpfKey)"
               >
@@ -328,7 +344,7 @@
         </el-col>
         <el-col
           :span="1"
-          style="text-align: center; font-size: 16px; z-index: 999"
+          style="text-align: right; font-size: 16px; z-index: 9999"
         >
           <i class="el-icon-delete" @click="onDelCondition(index)"></i>
         </el-col>
@@ -698,9 +714,11 @@ export default {
   color: black;
   font-weight: 400;
 }
+
 >>> .JNPF-selectTree {
   width: 130px;
 }
+
 >>> .popupSelect-container {
   width: 130px;
 }
