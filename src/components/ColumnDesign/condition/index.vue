@@ -75,7 +75,7 @@
               </el-option>
             </template>
             <template
-              v-else-if="['numInput', 'date', 'time'].includes(item.jnpfKey)"
+              v-else-if="['numInput', 'date', 'time','createTime','modifyTime'].includes(item.jnpfKey)"
             >
               <el-option
                 v-for="item in symbolOptionsDateNum"
