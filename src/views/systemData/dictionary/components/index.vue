@@ -1,6 +1,6 @@
 <template>
   <el-drawer title="字典分类管理" :visible.sync="drawer" :wrapperClosable="false" ref="drawer"
-    size="700px" :before-close="handleDrawerClose" class="JNPF-common-drawer">
+    size="700px" :before-close="handleDrawerClose" class="JNPF-common-drawer" append-to-body>
     <div class="JNPF-flex-main">
       <div class="JNPF-common-head">
         <topOpts @refresh="getDictionaryTypeList()" @add="addOrUpdateHandle()">

@@ -119,23 +119,42 @@
     <el-form-item label="是否必填">
       <el-switch v-model="activeData.__config__.required" />
     </el-form-item>
+    <div>
+      <el-dialog :visible.sync="dicVisible" append-to-body
+        class="JNPF-dialog JNPF-dialog_center JNPF-dialog-tree-select" lock-scroll width="80%"
+        @close="defaultValueChange">
+        <dicIndex ref="dicIndex"></dicIndex>
+      </el-dialog>
+    </div>
   </el-row>
 </template>
 <script>
 import comMixin from './mixin';
 import dynamicMixin from './dynamicMixin';
+import dicIndex from '@/views/systemData/dictionary/index.vue';
 export default {
+  components: {
+    dicIndex
+  },
   mixins: [comMixin, dynamicMixin],
   data() {
-    return {}
+    return {
+      dicVisible: false,
+    }
   },
   methods: {
     selectChange() {
       this.$emit('changeSelect')
+      this.dictionaryTypeChange(this.dictionaryId)
+    },
+    defaultValueChange() {
+      this.selectChange()
     },
     goDictionary() {
-      let src = window.location.protocol + "//" + window.location.host + "/systemData/dictionary"
-      window.open(src, "_blank")
+      this.dicVisible = true
+      this.$nextTick(() => {
+        this.$refs.dicIndex.initData()
+      })
     }
   }
 }
