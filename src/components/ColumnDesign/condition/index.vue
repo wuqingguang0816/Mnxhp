@@ -101,25 +101,18 @@
           <el-col :span="24">
             <div v-if="item.fieldValueType === 2">
               <template v-if="item.jnpfKey === 'numInput'">
-                <el-row>
-                  <el-col :span="12">
-                    <el-input-number
-                      v-model="item.fieldValue"
-                      placeholder="请输入"
-                      :precision="item.precision"
-                      :controls="false"
-                      controls-position="right"
-                  /></el-col>
-                  <el-col :span="12">
-                    <el-input-number
-                      v-if="item.showSecond"
-                      v-model="item.fieldValue2"
-                      placeholder="请输入"
-                      :precision="item.precision"
-                      :controls="false"
-                      controls-position="right"
-                  /></el-col>
-                </el-row>
+                <NumRange
+                  v-model="item.fieldValue"
+                  v-if="item.symbol == 'between'"
+                ></NumRange>
+                <el-input-number
+                  v-else
+                  v-model="item.fieldValue"
+                  placeholder="请输入"
+                  :precision="item.precision"
+                  :controls="false"
+                  controls-position="right"
+                />
               </template>
               <template
                 v-else-if="
@@ -178,72 +171,54 @@
                 />
               </template>
               <template v-else-if="item.jnpfKey === 'time'">
-                <el-row>
-                  <el-col :span="12"
-                    ><el-time-picker
-                      v-model="item.fieldValue"
-                      :picker-options="item['picker-options']"
-                      placeholder="请选择"
-                      clearable
-                      :value-format="item['value-format']"
-                      :format="item.format"
-                    >
-                    </el-time-picker
-                  ></el-col>
-                  <el-col :span="12">
-                    <el-time-picker
-                      v-if="item.showSecond"
-                      v-model="item.fieldValue2"
-                      :picker-options="item['picker-options']"
-                      placeholder="请选择"
-                      clearable
-                      :value-format="item['value-format']"
-                      :format="item.format"
-                    >
-                    </el-time-picker
-                  ></el-col>
-                </el-row>
+                <el-time-picker
+                  v-model="item.fieldValue"
+                  :picker-options="item['picker-options']"
+                  placeholder="请选择"
+                  clearable
+                  :is-range="item.symbol == 'between' ? true : false"
+                  :value-format="item['value-format']"
+                  :format="item.format"
+                >
+                </el-time-picker>
               </template>
               <template
                 v-else-if="
                   ['date', 'createTime', 'modifyTime'].includes(item.jnpfKey)
                 "
               >
-                <el-row>
-                  <el-col :span="12">
-                    <el-date-picker
-                      v-model="item.fieldValue"
-                      clearable
-                      placeholder="请选择"
-                      :type="
-                        item.jnpfKey === 'date' && item.type
-                          ? item.type
-                          : 'datetime'
-                      "
-                      value-format="timestamp"
-                      @change="onConditionDateChange($event, item)"
-                      :format="item.format || 'yyyy-MM-dd HH:mm:ss'"
-                    >
-                    </el-date-picker>
-                  </el-col>
-                  <el-col :span="12">
-                    <el-date-picker
-                      v-if="item.showSecond"
-                      v-model="item.fieldValue2"
-                      clearable
-                      placeholder="请选择"
-                      :type="
-                        item.jnpfKey === 'date' && item.type
-                          ? item.type
-                          : 'datetime'
-                      "
-                      value-format="timestamp"
-                      @change="onConditionDateChange($event, item)"
-                      :format="item.format || 'yyyy-MM-dd HH:mm:ss'"
-                    >
-                    </el-date-picker>
-                  </el-col>
-                </el-row>
+                <template v-if="item.symbol == 'between'">
+                  <el-date-picker
+                    v-model="item.fieldValue"
+                    clearable
+                    placeholder="请选择1"
+                    :type="'daterange'"
+                    value-format="timestamp"
+                    range-separator="至"
+                    start-placeholder="开始日期"
+                    end-placeholder="结束日期"
+                    style="width: 100%;"
+                    @change="onConditionDateChange($event, item)"
+                    :format="item.format || 'yyyy-MM-dd HH:mm:ss'"
+                  >
+                  </el-date-picker>
+                </template>
+
+                <el-date-picker
+                  v-else
+                  v-model="item.fieldValue"
+                  clearable
+                  placeholder="请选择2"
+                  :type="
+                    item.jnpfKey === 'date' && item.type
+                      ? item.type
+                      : 'datetime'
+                  "
+                  value-format="timestamp"
+                  @change="onConditionDateChange($event, item)"
+                  :format="item.format || 'yyyy-MM-dd HH:mm:ss'"
+                >
+                </el-date-picker>
               </template>
 
               <template
@@ -360,6 +335,7 @@
 
 <script>
 import { getDrawingList } from "@/components/Generator/utils/db";
+
 export default {
   props: {
     value: {
@@ -543,7 +519,6 @@ export default {
           value: 3
         }
       ],
-      showSecond: false,
       pconditions: []
     };
   },
@@ -608,7 +583,6 @@ export default {
         fieldValue: "",
         fieldValue2: "",
         props: {},
-        showSecond: false,
         fieldType: 1,
         fieldValueType: 2,
         fieldLabel: "",
@@ -642,11 +616,6 @@ export default {
     symbolChange(val, item, i) {
       let obj = this.symbolOptions.filter(o => o.value == val)[0];
       item.symbolName = obj.label;
-      if (val === "between") {
-        item.showSecond = true;
-      } else {
-        item.showSecond = false;
-      }
       this.$set(this.pconditions, i, item);
     },
     logicChange(val, item) {
