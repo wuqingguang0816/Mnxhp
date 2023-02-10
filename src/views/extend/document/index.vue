@@ -67,15 +67,14 @@
                 <el-button type="text" v-if="scope.row.isPreview!=null" @click="handlepreview(scope.row)">预览 </el-button>
                 <el-button size="mini" type="text" @click="handleDownLoad(scope.row.id)"
                   :disabled="!scope.row.type">下载</el-button>
-                <el-button size="mini" type="text" class="JNPF-table-delBtn"
-                  @click="handleDel(scope.$index,scope.row.id)">删除</el-button>
                 <el-dropdown>
                   <el-button type="text" size="mini">
                     {{$t('common.moreBtn')}}<i class="el-icon-arrow-down el-icon--right"></i>
                   </el-button>
                   <el-dropdown-menu slot="dropdown">
-                    <el-dropdown-item @click.native="shareFolder(scope.row.id)"
-                      v-if="scope.row.type">
+                    <el-dropdown-item size="mini" type="text" class="JNPF-table-delBtn"
+                                      @click.native="handleDel(scope.$index,scope.row.id)">删除</el-dropdown-item>
+                    <el-dropdown-item @click.native="shareFolder(scope.row.id)" v-if="scope.row.type">
                       共享
                     </el-dropdown-item>
                     <el-dropdown-item @click.native="getFolder(scope.row.id)">重命名
