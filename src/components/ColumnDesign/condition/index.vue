@@ -191,7 +191,7 @@
                   <el-date-picker
                     v-model="item.fieldValue"
                     clearable
-                    placeholder="请选择1"
+                    placeholder="请选择"
                     :type="'daterange'"
                     value-format="timestamp"
                     range-separator="至"
@@ -208,7 +208,7 @@
                   v-else
                   v-model="item.fieldValue"
                   clearable
-                  placeholder="请选择2"
+                  placeholder="请选择"
                   :type="
                     item.jnpfKey === 'date' && item.type
                       ? item.type
