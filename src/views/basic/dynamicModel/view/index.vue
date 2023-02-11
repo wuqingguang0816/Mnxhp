@@ -24,7 +24,7 @@
         </div>
         <JNPF-table v-loading="listLoading" :data="list" row-key="id"
           :default-expand-all="columnData.childTableStyle!==2?expandsTable:false"
-          :tree-props="{children: 'children', hasChildren: 'hasChildren'}" :load="treeLoad"
+          :tree-props="{children: 'children', hasChildren: ''}" :load="treeLoad"
           @sort-change="sortChange" :row-style="rowStyle" :cell-style="cellStyle"
           :has-c="hasBatchBtn" @selection-change="handleSelectionChange" v-if="refreshTable"
           custom-column :span-method="arraySpanMethod" ref="tableRef"
