@@ -261,7 +261,7 @@ export default {
     showManage(id, fullName) {
       this.manageVisible = true
       this.$nextTick(() => {
-        this.$refs.FlowManage.init(id, fullName)
+        this.$refs.FlowManage.init(id, fullName, 1)
       })
     },
     closeManage(isRefresh) {

@@ -193,11 +193,11 @@ export default {
       }
       this.$emit('close', true)
     },
-    init(id, fullName) {
+    init(id, fullName, type) {
       this.title = fullName
       this.listLoading = true
-      getFormById(id).then(data => {
-        this.id = data.data && data.data.id
+      if (type) {
+        this.id = id
         getFlowList(this.id).then(res => {
           this.templateList = res.data
           if (!this.templateList.length) {
@@ -208,9 +208,25 @@ export default {
             return this.listLoading = false
           }
           this.flowId = this.templateList[0].id
-          this.initData()
         }).catch(() => { this.listLoading = false });
-      }).catch(() => { this.listLoading = false });
+      } else {
+        getFormById(id).then(data => {
+          this.id = data.data && data.data.id
+          getFlowList(this.id).then(res => {
+            this.templateList = res.data
+            if (!this.templateList.length) {
+              this.$message({
+                type: 'error',
+                message: '流程不存在'
+              });
+              return this.listLoading = false
+            }
+            this.flowId = this.templateList[0].id
+
+          }).catch(() => { this.listLoading = false });
+        }).catch(() => { this.listLoading = false });
+      }
+      this.initData()
     },
     reset() {
       this.pickerVal = ''
