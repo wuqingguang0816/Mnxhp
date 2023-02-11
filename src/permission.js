@@ -21,12 +21,10 @@ router.beforeEach(async (to, from, next) => {
     let param = {
       token: to.query.token
     }
-    store.dispatch('user/resetToken').then(() => {
-      store.dispatch('user/setToken', param).then(() => {
-        next({
-          ...to,
-          replace: true
-        })
+    store.dispatch('user/setToken', param).then(() => {
+      next({
+        ...to,
+        replace: true
       })
     })
   }
