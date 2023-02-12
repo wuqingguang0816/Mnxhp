@@ -25,7 +25,7 @@
             :disabled='continueBtnLoading'>
             {{formConf.confirmButtonText||'确 定'}}</el-button>
           <el-button type="primary" @click="dataFormSubmit(2)" :loading="continueBtnLoading"
-            :disabled='btnLoading'>
+            v-if="!dataForm.id||type!=5" :disabled='btnLoading'>
             {{!dataForm.id ?'确定并新增':'确定并继续'}}</el-button>
         </span>
       </el-dialog>
@@ -50,7 +50,8 @@
                     </el-dropdown-item>
                   </template>
                   <el-dropdown-item type="primary" @click.native="dataFormSubmit(2)"
-                    :loading="continueBtnLoading" :disabled='btnLoading'>
+                    v-if="!dataForm.id||type!=5" :loading="continueBtnLoading"
+                    :disabled='btnLoading'>
                     {{!dataForm.id ?'确定并新增':'确定并继续'}}</el-dropdown-item>
                 </el-dropdown-menu>
               </el-dropdown>
@@ -100,8 +101,8 @@
             <el-button type="primary" @click="dataFormSubmit()" :loading="btnLoading"
               :disabled='continueBtnLoading'>
               {{formConf.confirmButtonText||'确 定'}}</el-button>
-            <el-button type="primary" @click="dataFormSubmit(2)" :loading="continueBtnLoading"
-              :disabled='btnLoading'>
+            <el-button type="primary" @click="dataFormSubmit(2)" v-if="!dataForm.id||type!=5"
+              :loading="continueBtnLoading" :disabled='btnLoading'>
               {{!dataForm.id ?'确定并新增':'确定并继续'}}</el-button>
           </div>
         </div>
@@ -142,6 +143,7 @@ export default {
       nextDis: false,
       allList: [],
       showMoreBtn: true,
+      type: 1,
       refreshDataList: false
     }
   },
@@ -166,6 +168,7 @@ export default {
       this.prevDis = false
       this.nextDis = false
       this.allList = allList || []
+      this.type = type
       if (type == 3 || type == 5) {
         this.showMoreBtn = false
       } else {
