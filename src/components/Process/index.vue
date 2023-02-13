@@ -100,8 +100,8 @@ export default {
     this.$store.dispatch('generator/getDepTree')
     this.$store.dispatch('generator/getGroupTree')
     this.loading = true
-    if (this.formInfo.onlineDev) {
-      getFormInfo(this.formInfo.id).then(res => {
+    if (this.formInfo.onlineDev && this.formInfo.onlineFormId) {
+      getFormInfo(this.formInfo.onlineFormId).then(res => {
         const defaultData = getMockData()
         defaultData.properties.formName = res.data.fullName
         defaultData.properties.formId = res.data.id
@@ -116,6 +116,7 @@ export default {
         this.initData()
       })
     } else {
+      this.defaultData = getMockData()
       this.initData()
     }
   },
@@ -125,12 +126,11 @@ export default {
         this.flowList = this.conf
         this.updateData()
       } else {
-        const flowTemplateJson = this.formInfo.onlineDev ? JSON.parse(JSON.stringify(this.defaultData)) : getMockData()
         let item = {
           id: '',
           flowId: this.jnpf.idGenerator(),
           fullName: this.formInfo.fullName,
-          flowTemplateJson
+          flowTemplateJson: JSON.parse(JSON.stringify(this.defaultData))
         }
         this.flowList = [item]
       }
@@ -160,12 +160,11 @@ export default {
       this.visible = true
       this.$nextTick(() => {
         this.$refs['dataForm'].resetFields()
-        const flowTemplateJson = this.formInfo.onlineDev ? JSON.parse(JSON.stringify(this.defaultData)) : getMockData()
         this.dataForm = {
           id: '',
           flowId: this.jnpf.idGenerator(),
           fullName: '',
-          flowTemplateJson
+          flowTemplateJson: JSON.parse(JSON.stringify(this.defaultData))
         }
       })
     },
@@ -293,7 +292,7 @@ export default {
     updateData() {
       for (let i = 0; i < this.flowList.length; i++) {
         this.flowList[i].flowTemplateJson = Object.assign(NodeUtils.createNode('start'), this.flowList[i].flowTemplateJson)
-        if (this.formInfo.onlineDev) this.updateFiled(this.flowList[i].flowTemplateJson)
+        if (this.formInfo.onlineDev && this.formInfo.onlineFormId) this.updateFiled(this.flowList[i].flowTemplateJson)
       }
     },
     updateFiled(flowTemplateJson) {
