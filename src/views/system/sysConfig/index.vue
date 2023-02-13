@@ -136,10 +136,6 @@
                               v-model="baseForm.whiteListIp" placeholder="允许访问IP" />
                     <div class="tip">多个IP设置，用英文符号隔开，如192.168.0.1,192.168.0.2</div>
                   </el-form-item>
-                  <el-form-item label="门户刷新设置">
-                    <el-input-number v-model="baseForm.dashboardTimedRefresh" :min="1" :precision="0" :step="1"
-                                     controls-position="right" /> 秒
-                  </el-form-item>
                   <el-form-item>
                     <el-button type="primary" size="small" :loading="btnLoading" class="saveBtn"
                                @click="submitForm()">保 存</el-button>
