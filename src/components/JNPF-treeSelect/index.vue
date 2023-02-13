@@ -4,6 +4,7 @@
     @focus="selectFocus" :filterable="filterable" :filter-method="selectFilter"
     class="JNPF-selectTree" @visible-change="visibleChange" :multiple="multiple"
     :collapse-tags="collapseTags" @remove-tag="removeTag" :key="key">
+    <slot name="header"></slot>
     <el-option v-for="item in selectOptions" :key="item.id" :label="item[props.label]"
       :value="item[props.value]" style="display:none"></el-option>
     <el-option :value="optionTitle" :label="optionTitle" class="options">

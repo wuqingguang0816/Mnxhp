@@ -278,6 +278,7 @@
               <el-divider>按钮配置</el-divider>
               <el-checkbox-group v-model="btnsList" class="btnsList">
                 <div v-for="item in btnsOption" :key="item.value">
+                
                   <el-checkbox :label="item.value">
                     <span class="btn-label">{{ item.value | btnText }}</span>
                     <el-input v-model="item.label" />
@@ -285,14 +286,29 @@
                   <el-button class="upload"
                     v-if="item.value === 'upload'&&btnsList.indexOf('upload')!=-1"
                     @click="setUploaderTemplateJson">请设置导入模板</el-button>
+                   
                 </div>
               </el-checkbox-group>
+              <template v-if="btnsList.includes('batchPrint')">
+                <el-form-item label="" label-width="104px" >
+                  <JNPF-TreeSelect key="sel" :options="printTplList" v-model="columnData.printIds" multiple
+                    placeholder="请选择打印模板" lastLevel clearable node-key="id">
+                    <div style="padding:10px 0;text-align:center" slot="header" @click="openPrint">
+                      <el-link type="primary" :underline="false">添加打印模板
+                      </el-link>
+                      <el-divider></el-divider>
+                    </div>
+                  </JNPF-TreeSelect>
+                </el-form-item> 
+              </template> 
               <el-checkbox-group v-model="columnBtnsList" class="btnsList columnBtnList">
                 <el-checkbox :label="item.value" v-for="item in columnBtnsOption" :key="item.value">
                   <span class="btn-label">{{ item.value | btnText }}</span>
                   <el-input v-model="item.label" />
                 </el-checkbox>
               </el-checkbox-group>
+              
+
               <template v-if="modelType==1">
                 <p class="btn-cap mt-10 mb-10">自定义按钮区
                 </p>
@@ -397,6 +413,7 @@ const defaultFuncs = '({ data, tableRef, request }) => {\r\n   \r\n}'
 const rowStyleDefaultFunc = '({row,rowIndex}) => {\r\n   \r\n}'
 const cellStyleDefaultFunc = '({row, column, rowIndex, columnIndex}) => {\r\n   \r\n}'
 const defaultColumnData = {
+  printIds:[],
   ruleList:[], // 过滤规则
   searchList: [], // 查询字段
   hasSuperQuery: true, // 高级查询
@@ -514,6 +531,7 @@ export default {
         { value: 'detail', icon: 'el-icon-tickets', label: '详情' }
       ],
       columnOptions: [],
+      printTplList: [],
       searchOptions: [],
       groupFieldOptions: [],
       treeFieldOptions: [],
@@ -717,10 +735,30 @@ export default {
     this.$nextTick(() => {
       this.setListValue(this.columnData.columnList, this.columnOptions, 'column')
       this.setListValue(this.columnData.searchList, this.searchOptions, "search")
+      this.getPrintTplList()
       if (this.btnsList.indexOf('upload') != -1) this.setDefaultUpLoadData()
     })
   },
   methods: {
+    open(url) {
+      window.open(url, "_blank");
+    },
+    openPrint() {
+      let routeUrl = this.$router.resolve({
+        path: '/system/printDev?open=true'
+      });
+      this.open(routeUrl.href)
+    },
+    getPrintTplList() {
+      this.$store.dispatch('base/getPrintFormTree').then(res => {
+        let list = res.filter(o => o.children && o.children.length)
+        this.printTplList = list.map(o => ({
+          ...o,
+          hasChildren: true
+        }))
+      })
+      
+    },
     filterPanelShow(){
       this.$refs.conditionpane.show(this.columnData.ruleList)
     },
