@@ -79,7 +79,7 @@ export default {
       handler: function (val) {
         if (!val) return
         if (!this.computeExps) { // formData更新可能比较频繁
-          this.computeExps = this.execRPN
+          this.computeExps = debounce(this.execRPN, 100)
         }
         this.computeExps()
       },
