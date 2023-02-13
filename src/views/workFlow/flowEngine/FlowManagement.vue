@@ -208,6 +208,7 @@ export default {
             return this.listLoading = false
           }
           this.flowId = this.templateList[0].id
+          this.initData()
         }).catch(() => { this.listLoading = false });
       } else {
         getFormById(id).then(data => {
@@ -222,11 +223,10 @@ export default {
               return this.listLoading = false
             }
             this.flowId = this.templateList[0].id
-
+            this.initData()
           }).catch(() => { this.listLoading = false });
         }).catch(() => { this.listLoading = false });
       }
-      this.initData()
     },
     reset() {
       this.pickerVal = ''
