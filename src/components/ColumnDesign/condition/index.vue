@@ -2,11 +2,11 @@
   <section class="condition-pane pd-10">
     <el-row class="condition-list condition-list-header">
       <el-col :span="4">逻辑</el-col>
-      <el-col :span="4" class="label">条件字段</el-col>
+      <el-col :span="6" class="label">条件字段</el-col>
       <el-col :span="4">比较</el-col>
-      <el-col :span="7">数据值</el-col>
+      <el-col :span="9">数据值</el-col>
 
-      <el-col :span="2"></el-col>
+      <el-col :span="1"></el-col>
     </el-row>
     <template>
       <el-row
@@ -14,7 +14,7 @@
         v-for="(item, index) in pconditions"
         :key="index"
       >
-        <el-col :span="3">
+        <el-col :span="4" class="wrap">
           <el-select
             v-model="item.logic"
             placeholder="请选择"
@@ -30,7 +30,7 @@
             </el-option>
           </el-select>
         </el-col>
-        <el-col :span="5" class="label">
+        <el-col :span="6" class="label wrap">
           <el-col :span="24">
             <el-button
               size="mini"
@@ -55,7 +55,7 @@
             </el-select>
           </el-col>
         </el-col>
-        <el-col :span="4">
+        <el-col :span="4" class="wrap">
           <el-select
             v-model="item.symbol"
             placeholder="请选择"
@@ -105,7 +105,7 @@
           </el-select>
         </el-col>
 
-        <el-col :span="7" class="fieldValue">
+        <el-col :span="9" class="fieldValue wrap">
           <el-col :span="24">
             <div v-if="item.fieldValueType === 2">
               <template v-if="item.jnpfKey === 'numInput'">
@@ -257,6 +257,16 @@
               </template>
               <template v-else-if="['depSelect'].includes(item.jnpfKey)">
                 <depSelect
+                  v-if="item.ableIds.length>0"
+                  v-model="item.fieldValue"
+                  placeholder="请选择"
+                  :selectType="item.selectType"
+                  :ableDepIds="item.ableIds"
+                  clearable
+                  @change="onConditionObjChange(arguments, item)"
+                />
+                <depSelect
+                  v-else
                   v-model="item.fieldValue"
                   placeholder="请选择"
                   clearable
@@ -342,6 +352,7 @@
           </el-col>
         </el-col>
         <el-col
+          class="wrap"
           :span="1"
           style="text-align: right; font-size: 16px; z-index: 9999"
         >
@@ -362,6 +373,10 @@ import { getDrawingList } from "@/components/Generator/utils/db";
 
 export default {
   props: {
+    ableIdMap:{
+      type: Object,
+      default: {}
+    },
     value: {
       type: Array,
       default: () => []
@@ -620,7 +635,8 @@ export default {
         field: "",
         symbol: "",
         logic: "&&",
-        jnpfKey: ""
+        jnpfKey: "",
+        ableIds:[],
       };
       this.pconditions.push(item);
     },
@@ -637,6 +653,10 @@ export default {
       if (["cascader", "treeSelect"].includes(item.jnpfKey)) {
         item.dataOptions = this.dataOptionMap[val].options;
         item.props = this.dataOptionMap[val].props;
+      }
+      if(['depSelect'].includes(item.jnpfKey)){
+        item.ableIds = this.ableIdMap[val].ableDepIds
+        item.selectType = this.ableIdMap[val].selectType
       }
       this.$set(this.pconditions, i, item);
     },
@@ -718,8 +738,11 @@ export default {
 .fieldValue {
   >>> .el-input__inner,
   .el-date-editor.el-input {
-    width: 130px;
+    width: 100%;
   }
+}
+.wrap{
+  padding: 0 4px;
 }
 
 .title {
@@ -727,12 +750,22 @@ export default {
   color: black;
   font-weight: 400;
 }
-
+.el-select{
+  width: 100%;
+}
+.el-icon-delete{
+  line-height: 32px;
+}
 >>> .JNPF-selectTree {
-  width: 130px;
+  width: 100%;
 }
 
 >>> .popupSelect-container {
-  width: 130px;
+  width: 100%;
+}
+.condition-list-header{
+  >>> .el-col{
+    padding: 0 4px;
+  }
 }
 </style>
