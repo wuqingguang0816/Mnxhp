@@ -75,7 +75,15 @@
               </el-option>
             </template>
             <template
-              v-else-if="['numInput', 'date', 'time','createTime','modifyTime'].includes(item.jnpfKey)"
+              v-else-if="
+                [
+                  'numInput',
+                  'date',
+                  'time',
+                  'createTime',
+                  'modifyTime'
+                ].includes(item.jnpfKey)
+              "
             >
               <el-option
                 v-for="item in symbolOptionsDateNum"
@@ -172,11 +180,25 @@
               </template>
               <template v-else-if="item.jnpfKey === 'time'">
                 <el-time-picker
+                  v-if="item.symbol == 'between'"
                   v-model="item.fieldValue"
+                  key="time1"
                   :picker-options="item['picker-options']"
                   placeholder="请选择"
                   clearable
-                  :is-range="item.symbol == 'between' ? true : false"
+                  :is-range="true"
+                  :value-format="item['value-format']"
+                  :format="item.format"
+                >
+                </el-time-picker>
+
+                <el-time-picker
+                  v-else
+                  v-model="item.fieldValue"
+                  key="time2"
+                  :picker-options="item['picker-options']"
+                  placeholder="请选择"
+                  clearable
                   :value-format="item['value-format']"
                   :format="item.format"
                 >
@@ -191,6 +213,7 @@
                   <el-date-picker
                     v-model="item.fieldValue"
                     clearable
+                    key="year1"
                     placeholder="请选择"
                     :type="'daterange'"
                     value-format="timestamp"
@@ -208,6 +231,7 @@
                   v-else
                   v-model="item.fieldValue"
                   clearable
+                  key="year2"
                   placeholder="请选择"
                   :type="
                     item.jnpfKey === 'date' && item.type
@@ -534,14 +558,17 @@ export default {
         if (!data) return;
         if (
           data.__config__ &&
-          data.__config__.jnpfKey !== "table" &&
+          !["switch", "table"].includes(data.__config__.jnpfKey) &&
           data.__config__.children &&
           Array.isArray(data.__config__.children)
         ) {
           loop(data.__config__.children, data);
         }
         if (Array.isArray(data)) data.forEach(d => loop(d, parent));
-        if (data.__vModel__ && data.__config__.jnpfKey !== "table")
+        if (
+          data.__vModel__ &&
+          !["switch", "table"].includes(data.__config__.jnpfKey)
+        )
           list.push(data);
       };
       loop(getDrawingList());
@@ -613,9 +640,26 @@ export default {
       }
       this.$set(this.pconditions, i, item);
     },
+    // 比较符号改变事件
     symbolChange(val, item, i) {
       let obj = this.symbolOptions.filter(o => o.value == val)[0];
       item.symbolName = obj.label;
+      if (["date", "createTime", "modifyTime"].includes(item.jnpfKey)) {
+        item.fieldValue = [];
+        if (val == "between") {
+          item.fieldValue = [+new Date(), +new Date()];
+        } else {
+          item.fieldValue = +new Date();
+        }
+      }
+      if (item.jnpfKey == "time") {
+        item.fieldValue = [];
+        if (val == "between") {
+          item.fieldValue = ["", ""];
+        } else {
+          item.fieldValue = "";
+        }
+      }
       this.$set(this.pconditions, i, item);
     },
     logicChange(val, item) {
