@@ -14,7 +14,7 @@
     <div>
       <el-dialog :visible.sync="dicVisible" append-to-body
         class="JNPF-dialog JNPF-dialog_center JNPF-dialog-tree-select" lock-scroll width="80%"
-        @close="defaultValueChange">
+        @close="selectChange">
         <dicIndex ref="dicIndex"></dicIndex>
       </el-dialog>
     </div>
@@ -43,23 +43,19 @@ export default {
   methods: {
     async getData() {
       this.treeData = await this.$store.dispatch('generator/getDicTree')
-    }
+    },
+    selectChange() {
+      this.$emit('changeSelect')
+    },
+    goDictionary() {
+      this.dicVisible = true
+      this.$nextTick(() => {
+        this.$refs.dicIndex.initData()
+      })
+    },
   },
   created() {
     this.getData()
-  },
-  selectChange() {
-    this.$emit('changeSelect')
-    this.dictionaryTypeChange(this.dictionaryId)
-  },
-  defaultValueChange() {
-    this.selectChange()
-  },
-  goDictionary() {
-    this.dicVisible = true
-    this.$nextTick(() => {
-      this.$refs.dicIndex.initData()
-    })
   },
   watch: {
     innerValue(val) {
