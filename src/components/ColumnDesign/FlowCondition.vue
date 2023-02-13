@@ -9,8 +9,8 @@
     <Condition
       :value="pconditions"
       ref="base"
+      :columnDataMap="columnDataMap"
       :dataOptionMap="dataOptionMap"
-      :ableIdMap="ableIdMap"
     ></Condition>
     <span slot="footer" class="dialog-footer">
       <el-button @click="dialogVisible = false">取 消</el-button>
@@ -42,7 +42,7 @@ export default {
   },
   data() {
     return {
-      ableIdMap: {},
+      columnDataMap:{},
       dataOptionMap: {},
       dialogVisible: false,
       pconditions: []
@@ -80,6 +80,9 @@ export default {
   watch: {
     columnData: {
       handler(val) {
+        val.columnOptions.map(item=>{
+          this.columnDataMap[item.__vModel__] = item 
+        })
         // 基本下拉数据
         let arr = val.columnOptions.filter(item =>
           ["radio", "checkbox", "select"].includes(item.__config__.jnpfKey)
@@ -106,13 +109,7 @@ export default {
             props: item.props.props
           };
         });
-        // 处理可选范围
-        let rangeArr = val.columnOptions.filter(item =>
-          ["depSelect"].includes(item.__config__.jnpfKey)
-        );
-        rangeArr.forEach(item => {
-          this.ableIdMap[item.__vModel__] = item;
-        });
+
       },
       deep: true
     }

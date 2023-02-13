@@ -64,7 +64,18 @@
           >
             <!-- 联动符号下拉框 -->
             <template
-              v-if="['comInput', 'textarea', 'billRule'].includes(item.jnpfKey)"
+              v-if="
+                [
+                  'comInput',
+                  'textarea',
+                  'billRule',
+                  'popupTableSelect',
+                  'relationForm',
+                  'relationFormAttr',
+                  'popupSelect',
+                  'popupAttr'
+                ].includes(item.jnpfKey)
+              "
             >
               <el-option
                 v-for="item in symbolOptionsBase"
@@ -251,26 +262,66 @@
                 <comSelect
                   v-model="item.fieldValue"
                   placeholder="请选择"
+                  ref="comselect"
                   clearable
+                  :multiple="item.multiple"
                   @change="onConditionListChange(arguments, item)"
                 />
               </template>
               <template v-else-if="['depSelect'].includes(item.jnpfKey)">
                 <depSelect
-                  v-if="item.ableIds.length>0"
                   v-model="item.fieldValue"
                   placeholder="请选择"
                   :selectType="item.selectType"
-                  :ableDepIds="item.ableIds"
+                  :ableDepIds="item.ableDepIds"
+                  :multiple="item.multiple"
                   clearable
                   @change="onConditionObjChange(arguments, item)"
                 />
-                <depSelect
-                  v-else
+              </template>
+              <template v-else-if="item.jnpfKey === 'popupTableSelect'">
+                <popupTableSelect
+                  v-model="item.fieldValue"
+                  :placeholder="item.placeholder"
+                  :interfaceId="item.interfaceId"
+                  :columnOptions="item.columnOptions"
+                  :propsValue="item.propsValue"
+                  :relationField="item.relationField"
+                  :hasPage="item.hasPage"
+                  :pageSize="item.pageSize"
+                  :popupType="item.popupType"
+                  :popupTitle="item.popupTitle"
+                  :popupWidth="item.popupWidth"
+                  :filterable="item.filterable"
+                  clearable
+                />
+              </template>
+              <template v-else-if="item.jnpfKey === 'relationForm'">
+                <relationForm
                   v-model="item.fieldValue"
                   placeholder="请选择"
+                  :modelId="item.modelId"
                   clearable
-                  @change="onConditionObjChange(arguments, item)"
+                  :columnOptions="item.columnOptions"
+                  :relationField="item.relationField"
+                  :hasPage="item.hasPage"
+                  :pageSize="item.pageSize"
+                />
+              </template>
+              <template v-else-if="item.jnpfKey === 'popupSelect'">
+                <popupSelect
+                  v-model="item.fieldValue"
+                  placeholder="请选择"
+                  :interfaceId="item.interfaceId"
+                  clearable
+                  :columnOptions="item.columnOptions"
+                  :propsValue="item.propsValue"
+                  :relationField="item.relationField"
+                  :hasPage="item.hasPage"
+                  :pageSize="item.pageSize"
+                  :popupType="item.popupType"
+                  :popupTitle="item.popupTitle"
+                  :popupWidth="item.popupWidth"
                 />
               </template>
               <template
@@ -373,7 +424,7 @@ import { getDrawingList } from "@/components/Generator/utils/db";
 
 export default {
   props: {
-    ableIdMap:{
+    columnDataMap: {
       type: Object,
       default: {}
     },
@@ -581,8 +632,24 @@ export default {
         }
         if (Array.isArray(data)) data.forEach(d => loop(d, parent));
         if (
+          //不支持控件：开关、文件上传、图片上传、颜色选择、评分、滑块、富文本、链接、
+          //按钮、文本、提示、二维码、条形码、用户组件、设计子表。
           data.__vModel__ &&
-          !["switch", "table"].includes(data.__config__.jnpfKey)
+          ![
+            "switch",
+            "uploadFz",
+            "uploadImg",
+            "colorPicker",
+            "rate",
+            "slider",
+            "editor",
+            "link",
+            "button",
+            "JNPFText",
+            "alert",
+            "usersSelect",
+            "table"
+          ].includes(data.__config__.jnpfKey)
         )
           list.push(data);
       };
@@ -623,7 +690,6 @@ export default {
         fieldName: "",
         symbolName: "",
         fieldValue: "",
-        fieldValue2: "",
         props: {},
         fieldType: 1,
         fieldValueType: 2,
@@ -635,8 +701,7 @@ export default {
         field: "",
         symbol: "",
         logic: "&&",
-        jnpfKey: "",
-        ableIds:[],
+        jnpfKey: ""
       };
       this.pconditions.push(item);
     },
@@ -654,10 +719,7 @@ export default {
         item.dataOptions = this.dataOptionMap[val].options;
         item.props = this.dataOptionMap[val].props;
       }
-      if(['depSelect'].includes(item.jnpfKey)){
-        item.ableIds = this.ableIdMap[val].ableDepIds
-        item.selectType = this.ableIdMap[val].selectType
-      }
+      item = { ...item, ...this.columnDataMap[val] };
       this.$set(this.pconditions, i, item);
     },
     // 比较符号改变事件
@@ -680,6 +742,13 @@ export default {
           item.fieldValue = "";
         }
       }
+      // if (val == "in" || val == "notIn") {
+      //   item.fieldValue = [];
+      //   item.multiple = true;
+      // } else {
+      //   item.fieldValue = "";
+      //   item.multiple = false;
+      // }
       this.$set(this.pconditions, i, item);
     },
     logicChange(val, item) {
@@ -741,7 +810,7 @@ export default {
     width: 100%;
   }
 }
-.wrap{
+.wrap {
   padding: 0 4px;
 }
 
@@ -750,10 +819,10 @@ export default {
   color: black;
   font-weight: 400;
 }
-.el-select{
+.el-select {
   width: 100%;
 }
-.el-icon-delete{
+.el-icon-delete {
   line-height: 32px;
 }
 >>> .JNPF-selectTree {
@@ -763,8 +832,8 @@ export default {
 >>> .popupSelect-container {
   width: 100%;
 }
-.condition-list-header{
-  >>> .el-col{
+.condition-list-header {
+  >>> .el-col {
     padding: 0 4px;
   }
 }
