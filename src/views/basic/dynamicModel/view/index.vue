@@ -23,10 +23,9 @@
           </div>
         </div>
         <JNPF-table v-loading="listLoading" :data="list" row-key="id"
-          :default-expand-all="columnData.childTableStyle!==2&&columnData.treeLazyType==0?expandsTable:false"
-          :lazy="columnData.type==5&&columnData.treeLazyType==1"
-          :tree-props="{children: 'children', hasChildren: columnData.treeLazyType==1?'hasChildren':''}"
-          :load="treeLoad" @sort-change="sortChange" :row-style="rowStyle" :cell-style="cellStyle"
+          :default-expand-all="columnData.childTableStyle!==2?expandsTable:false"
+          :tree-props="{children: 'children', hasChildren: ''}" :load="treeLoad"
+          @sort-change="sortChange" :row-style="rowStyle" :cell-style="cellStyle"
           :has-c="hasBatchBtn" @selection-change="handleSelectionChange" v-if="refreshTable"
           custom-column :span-method="arraySpanMethod" ref="tableRef"
           :hasNO="!(columnData.childTableStyle==2&&childColumnList.length&&columnData.type != 3&&columnData.type != 4)"

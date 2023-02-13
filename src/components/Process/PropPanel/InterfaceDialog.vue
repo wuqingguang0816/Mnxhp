@@ -13,8 +13,6 @@
           添加</el-button>
       </el-input>
     </div>
-    <!-- <el-button @click="addOrUpdateHandle()" style="float:right">
-      添加</el-button> -->
     <el-dialog :title="popupTitle" :close-on-click-modal="false" :visible.sync="visible"
       class="JNPF-dialog JNPF-dialog_center JNPF-dialog-tree-select" lock-scroll append-to-body
       width="1000px">
