@@ -462,7 +462,7 @@ export default {
           const relationKey = cur.relationField.split("_jnpfTable_")[0]
           componentList.forEach(item => {
             const noVisibility = Array.isArray(item.__config__.visibility) && !item.__config__.visibility.includes('pc')
-            if ((relationKey == item.__vModel__) && (noVisibility || !!item.__config__.noShow)) {
+            if ((relationKey == item.__vModel__) && (noVisibility || !!item.__config__.noShow) && !cur.__vModel__) {
               cur.__config__.noShow = true
             }
           })
