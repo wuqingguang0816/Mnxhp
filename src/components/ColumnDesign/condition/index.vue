@@ -3,7 +3,7 @@
     <el-row class="condition-list condition-list-header">
       <el-col :span="4">逻辑</el-col>
       <el-col :span="6" class="label">条件字段</el-col>
-      <el-col :span="4">比较</el-col>
+      <el-col :span="4">条件符号</el-col>
       <el-col :span="9">数据值</el-col>
 
       <el-col :span="1"></el-col>

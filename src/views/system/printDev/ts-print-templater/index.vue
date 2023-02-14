@@ -32,7 +32,7 @@
           class="rich-txt"
         />
       </div>
-      <pageSize ref="pageSize" @change="getEditConfig"></pageSize>
+      <pageSize ref="pageSize" v-model="pageParam" @change="getEditConfig"></pageSize>
     </div>
   </div>
 </template>
@@ -49,6 +49,10 @@ export default {
     treeData: {
       type: Array,
       default: () => []
+    },
+    pageParam:{
+      type:Object,
+      default:{}
     }
   },
   data() {
@@ -95,9 +99,16 @@ export default {
     };
   },
   mounted() {
-    this.getEditConfig()
+    // this.getEditConfig()
   },
   watch: {
+    pageParam:{
+      handler(val) {
+        this.getEditConfig(val)
+      },
+      immediate: true,
+      deep: true
+    },
     value: {
       handler(val) {
         if (val != this.content) {
@@ -147,6 +158,7 @@ export default {
         e.width = 776
         e.height = 'calc(100% - 10px)'
       }
+      this.$emit("pageParamChange",this.pageParam)
       let mt = e.mt 
       let mb = e.mb
       let ml = e.ml

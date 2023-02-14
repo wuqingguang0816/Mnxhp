@@ -87,8 +87,9 @@
           </el-form>
         </el-col>
       </el-row>
-      <template v-if="activeStep==1">
+      <template v-if="activeStep==1 && showPrint">
         <print-templater ref="printTemplater" :treeData="treeData" v-model="dataForm.printTemplate"
+          :pageParam="pageParam" @pageParamChange="pageParamChange"
           :type="dataForm.type" />
       </template>
     </div>
@@ -107,6 +108,7 @@ export default {
       loading: false,
       nextBtnLoading: false,
       activeStep: 0,
+      showPrint:false,
       dataForm: {
         id: '',
         fullName: '',
@@ -144,10 +146,14 @@ export default {
       sqlTemplate: [],
       categoryList: [],
       treeData: [],
-      dbOptions: []
+      dbOptions: [],
+      pageParam: {},
     }
   },
   methods: {
+    pageParamChange(pageParam){
+      this.dataForm.pageParam = pageParam && JSON.stringify(pageParam)
+    },
     init(categoryList, id) {
       this.categoryList = categoryList
       this.activeStep = 0
@@ -161,6 +167,10 @@ export default {
           getPrintDevInfo(this.dataForm.id).then(res => {
             this.dataForm = res.data
             this.sqlTemplate = this.dataForm.sqlTemplate && JSON.parse(this.dataForm.sqlTemplate) || []
+            
+            let e = res.data.pageParam && JSON.parse(res.data.pageParam)
+            this.pageParam = e
+            this.showPrint=true
             this.loading = false
           }).catch(() => { this.loading = false })
         }
