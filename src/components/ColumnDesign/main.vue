@@ -156,9 +156,17 @@
                 </template>
                 <template v-if="columnData.treeDataSource==='api'">
                   <el-form-item label="数据接口">
-                    <JNPF-TreeSelect :options="dataInterfaceSelector"
-                      v-model="columnData.treePropsUrl" placeholder="请选择数据接口" lastLevel
-                      lastLevelKey='categoryId' lastLevelValue='1' clearable />
+                    <el-row>
+                      <el-col :span="18">
+                        <JNPF-TreeSelect :options="dataInterfaceSelector"
+                          v-model="columnData.treePropsUrl" placeholder="请选择数据接口" lastLevel
+                          lastLevelKey='categoryId' lastLevelValue='1' clearable />
+                      </el-col>
+                      <el-col :span="6">
+                        <el-button @click="addInterface()">
+                          添加</el-button>
+                      </el-col>
+                    </el-row>
                   </el-form-item>
                   <el-form-item label="主键字段">
                     <el-input v-model="columnData.treePropsValue" placeholder="主键字段" />
@@ -208,9 +216,11 @@
               </template>
               <el-divider>表格配置</el-divider>
               <el-form-item label="数据过滤">
-                <el-button style="width: 100%;" @click="filterPanelShow">{{ ruleListBtn }}</el-button>
+                <el-button style="width: 100%;" @click="filterPanelShow">{{ ruleListBtn }}
+                </el-button>
               </el-form-item>
-              <Condition ref="conditionpane" :columnData="columnData" @ruleConfig="ruleConfig"></Condition>
+              <Condition ref="conditionpane" :columnData="columnData" @ruleConfig="ruleConfig">
+              </Condition>
               <template v-if="columnData.type==3">
                 <el-form-item label="分组字段">
                   <el-select v-model="columnData.groupField" placeholder="请选择分组字段" clearable>
@@ -278,7 +288,7 @@
               <el-divider>按钮配置</el-divider>
               <el-checkbox-group v-model="btnsList" class="btnsList">
                 <div v-for="item in btnsOption" :key="item.value">
-                
+
                   <el-checkbox :label="item.value">
                     <span class="btn-label">{{ item.value | btnText }}</span>
                     <el-input v-model="item.label" />
@@ -286,28 +296,27 @@
                   <el-button class="upload"
                     v-if="item.value === 'upload'&&btnsList.indexOf('upload')!=-1"
                     @click="setUploaderTemplateJson">请设置导入模板</el-button>
-                   
+
                 </div>
               </el-checkbox-group>
               <template v-if="btnsList.includes('batchPrint')">
-                <el-form-item label="" label-width="104px" >
-                  <JNPF-TreeSelect key="sel" :options="printTplList" v-model="columnData.printIds" multiple
-                    placeholder="请选择打印模板" lastLevel clearable node-key="id">
+                <el-form-item label="" label-width="104px">
+                  <JNPF-TreeSelect key="sel" :options="printTplList" v-model="columnData.printIds"
+                    multiple placeholder="请选择打印模板" lastLevel clearable node-key="id">
                     <div style="padding:10px 0;text-align:center" slot="header" @click="openPrint">
                       <el-link type="primary" :underline="false">添加打印模板
                       </el-link>
                       <el-divider></el-divider>
                     </div>
                   </JNPF-TreeSelect>
-                </el-form-item> 
-              </template> 
+                </el-form-item>
+              </template>
               <el-checkbox-group v-model="columnBtnsList" class="btnsList columnBtnList">
                 <el-checkbox :label="item.value" v-for="item in columnBtnsOption" :key="item.value">
                   <span class="btn-label">{{ item.value | btnText }}</span>
                   <el-input v-model="item.label" />
                 </el-checkbox>
               </el-checkbox-group>
-              
 
               <template v-if="modelType==1">
                 <p class="btn-cap mt-10 mb-10">自定义按钮区
@@ -375,6 +384,10 @@
           </div>
         </el-scrollbar>
       </div>
+      <el-dialog :visible.sync="interfaceVisible" append-to-body
+        class="JNPF-dialog JNPF-dialog_center JNPF-dialog-tree-select" lock-scroll width="80%">
+        <Form ref="Form" @close="closeForm" />
+      </el-dialog>
     </div>
     <form-script v-if="formScriptVisible" :key="scriptKey" :value="activeItem.func" ref="formScript"
       :type="activeItem.type" @updateScript="updateScript" @closeDialog="formScriptVisible=false" />
@@ -396,6 +409,7 @@ import { noColumnShowList, noSearchList, useInputList, useDateList } from '@/com
 import { getDataInterfaceSelector } from '@/api/systemData/dataInterface'
 import { noVModelList, systemComponentsList } from '@/components/Generator/generator/comConfig'
 import { getFields } from '@/api/onlineDev/visualDev'
+import Form from '@/views/systemData/dataInterface/Form.vue'
 const excludeList = [...noVModelList, 'uploadFz', 'uploadImg', 'colorPicker', 'popupTableSelect', 'relationForm', 'popupSelect', 'calculate', 'groupTitle']
 
 const getSearchType = item => {
@@ -413,8 +427,8 @@ const defaultFuncs = '({ data, tableRef, request }) => {\r\n   \r\n}'
 const rowStyleDefaultFunc = '({row,rowIndex}) => {\r\n   \r\n}'
 const cellStyleDefaultFunc = '({row, column, rowIndex, columnIndex}) => {\r\n   \r\n}'
 const defaultColumnData = {
-  printIds:[],
-  ruleList:[], // 过滤规则
+  printIds: [],
+  ruleList: [], // 过滤规则
   searchList: [], // 查询字段
   hasSuperQuery: true, // 高级查询
   childTableStyle: 1, // 子表样式
@@ -500,10 +514,10 @@ export default {
       default: () => []
     },
   },
-  components: { draggable, FormScript, uploadBox, CustomBtn, InterfaceDialog, Condition },
-  computed:{
-    ruleListBtn(){
-      if(this.columnData.ruleList && this.columnData.ruleList.length > 0){
+  components: { draggable, FormScript, uploadBox, CustomBtn, InterfaceDialog, Condition, Form },
+  computed: {
+    ruleListBtn() {
+      if (this.columnData.ruleList && this.columnData.ruleList.length > 0) {
         return this.columnData.ruleList[0]['pconditions'].length > 0 ? '编辑过滤条件' : '添加过滤条件'
       }
       return '添加过滤条件'
@@ -551,6 +565,7 @@ export default {
       activeItem: {},
       scriptKey: '',
       uploadBoxVisible: false,
+      interfaceVisible: false,
     }
   },
   filters: {
@@ -757,13 +772,13 @@ export default {
           hasChildren: true
         }))
       })
-      
+
     },
-    filterPanelShow(){
+    filterPanelShow() {
       this.$refs.conditionpane.show(this.columnData.ruleList)
     },
     ruleConfig(data) {
-      this.columnData.ruleList=[data]
+      this.columnData.ruleList = [data]
       /**if (this.isEdit) {
         this.$set(this.columnData.ruleList, this.index, data)
         this.isEdit = false
@@ -962,6 +977,20 @@ export default {
         ...o,
         relationField: ''
       })) : []
+    },
+    addInterface(id) {
+      let flag = 1
+      this.interfaceVisible = true
+      this.$nextTick(() => {
+        this.$refs.Form.init(id, "30be5ef4e3074dd89385ad6b4540c63d", flag)
+      })
+    },
+    closeForm(isRefresh) {
+      this.getDataInterfaceSelector()
+      this.interfaceVisible = false
+      if (isRefresh) {
+        this.reset()
+      }
     },
   }
 }
