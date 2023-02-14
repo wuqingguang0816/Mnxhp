@@ -308,6 +308,9 @@ export default {
         this.innerValue = ''
         this.selectedData = []
         this.tagsList = []
+        this.$nextTick(() => {
+          this.resetInputHeight();
+        }) 
         return
       }
       const arr = this.multiple ? this.value : [this.value]

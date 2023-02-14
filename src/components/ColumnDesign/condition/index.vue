@@ -88,6 +88,7 @@
             <template
               v-else-if="
                 [
+                  'calculate',
                   'numInput',
                   'date',
                   'time',
@@ -168,10 +169,22 @@
                 />
               </template>
               <template v-else-if="item.jnpfKey === 'calculate'">
-                <el-input-number
+                <!-- <el-input-number
                   v-model="item.fieldValue"
                   placeholder="请输入"
                   :precision="2"
+                  controls-position="right"
+                /> -->
+                <NumRange
+                  v-model="item.fieldValue"
+                  v-if="item.symbol == 'between'"
+                ></NumRange>
+                <el-input-number
+                  v-else
+                  v-model="item.fieldValue"
+                  placeholder="请输入"
+                  :precision="item.precision"
+                  :controls="false"
                   controls-position="right"
                 />
               </template>
@@ -324,18 +337,32 @@
                   :popupWidth="item.popupWidth"
                 />
               </template>
+              <template v-else-if="['userSelect'].includes(item.jnpfKey)">
+                <userSelect
+                  v-model="item.value"
+                  :placeholder="'请选择' + item.__config__.label"
+                  clearable
+                  class="item"
+                  :selectType="
+                    item.selectType != 'all' || item.selectType != 'custom'
+                      ? 'all'
+                      : item.selectType
+                  "
+                  :ableDepIds="item.ableDepIds"
+                  :ablePosIds="item.ablePosIds"
+                  :ableUserIds="item.ableUserIds"
+                  :ableRoleIds="item.ableRoleIds"
+                  :ableGroupIds="item.ableGroupIds"
+                  :multiple="item.multiple"
+                />
+              </template>
               <template
-                v-else-if="
-                  ['userSelect', 'createUser', 'modifyUser'].includes(
-                    item.jnpfKey
-                  )
-                "
+                v-else-if="['createUser', 'modifyUser'].includes(item.jnpfKey)"
               >
                 <userSelect
                   v-model="item.fieldValue"
                   placeholder="请选择"
                   multiple
-                  hasSys
                   clearable
                   @change="onConditionObjChange(arguments, item)"
                 />
@@ -632,10 +659,16 @@ export default {
         }
         if (Array.isArray(data)) data.forEach(d => loop(d, parent));
         if (
+          //关联表单 关联表单属性 弹窗选择 弹窗选择属性 下拉表格
           //不支持控件：开关、文件上传、图片上传、颜色选择、评分、滑块、富文本、链接、
           //按钮、文本、提示、二维码、条形码、用户组件、设计子表。
           data.__vModel__ &&
           ![
+            "relationForm",
+            "relationFormAttr",
+            "popupSelect",
+            "popupAttr",
+            "popupTableSelect",
             "switch",
             "uploadFz",
             "uploadImg",
@@ -726,8 +759,8 @@ export default {
     symbolChange(val, item, i) {
       let obj = this.symbolOptions.filter(o => o.value == val)[0];
       item.symbolName = obj.label;
+      item.fieldValue = undefined;
       if (["date", "createTime", "modifyTime"].includes(item.jnpfKey)) {
-        item.fieldValue = [];
         if (val == "between") {
           item.fieldValue = [+new Date(), +new Date()];
         } else {
@@ -735,20 +768,14 @@ export default {
         }
       }
       if (item.jnpfKey == "time") {
-        item.fieldValue = [];
         if (val == "between") {
           item.fieldValue = ["", ""];
         } else {
           item.fieldValue = "";
         }
       }
-      // if (val == "in" || val == "notIn") {
-      //   item.fieldValue = [];
-      //   item.multiple = true;
-      // } else {
-      //   item.fieldValue = "";
-      //   item.multiple = false;
-      // }
+
+      item.multiple = ["in", "notIn"].includes(val) ? true : false;
       this.$set(this.pconditions, i, item);
     },
     logicChange(val, item) {
@@ -822,8 +849,14 @@ export default {
 .el-select {
   width: 100%;
 }
+.el-input-number{
+  width: 100%;
+}
 .el-icon-delete {
   line-height: 32px;
+}
+.numRange{
+  max-width: inherit;
 }
 >>> .JNPF-selectTree {
   width: 100%;
