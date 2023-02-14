@@ -95,6 +95,10 @@
               :dataType="item.dataType" :relationField="item.relationField+'_id'"
               :formData="formValue"></jnpf-qrcode>
           </template>
+          <template v-else-if="item.__config__.jnpfKey==='calculate'&&item.__config__.isStorage==1">
+            <calculate :expression="item.expression" :isStorage="1" :formData="formValue"
+              :detailed="true" />
+          </template>
           <template v-else>
             <p class="jnpf-detail-text">
               <span
@@ -148,6 +152,13 @@
                   v-else-if="column.__config__.jnpfKey==='uploadFz'">
                   <template slot-scope="scope">
                     <JNPFUploadFz v-model="scope.row[column.__vModel__]" detailed disabled />
+                  </template>
+                </el-table-column>
+                <el-table-column :key="columnIndex" :label="column.__config__.label"
+                  v-else-if="column.__config__.jnpfKey==='calculate'&&column.__config__.isStorage==1">
+                  <template slot-scope="scope">
+                    <calculate :rowIndex="scope.$index" :expression="column.expression"
+                      :isStorage="1" :formData="formValue" :detailed="true" />
                   </template>
                 </el-table-column>
                 <el-table-column :key="columnIndex" :label="column.__config__.label"
