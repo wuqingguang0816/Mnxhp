@@ -808,12 +808,12 @@ export default {
               data[ii].align = replacedData[i].align
               data[ii].width = replacedData[i].width
               data[ii].sortable = replacedData[i].sortable
-              data[ii].label = replacedData[i].label
+              if (this.webType == 4) data[ii].label = replacedData[i].label
             }
             if (type === 'search') {
               data[ii].searchType = replacedData[i].searchType
               data[ii].searchMultiple = replacedData[i].searchMultiple
-              data[ii].__config__.label = replacedData[i].__config__.label
+              if (this.webType == 4) data[ii].__config__.label = replacedData[i].__config__.label
             }
             res.push(data[ii])
             break inter
