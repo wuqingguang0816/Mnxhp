@@ -11,6 +11,7 @@
       ref="base"
       :columnDataMap="columnDataMap"
       :dataOptionMap="dataOptionMap"
+      :columnOptions="columnOptions"
     ></Condition>
     <span slot="footer" class="dialog-footer">
       <el-button @click="dialogVisible = false">取 消</el-button>
@@ -42,10 +43,11 @@ export default {
   },
   data() {
     return {
-      columnDataMap:{},
+      columnDataMap: {},
       dataOptionMap: {},
       dialogVisible: false,
-      pconditions: []
+      pconditions: [],
+      columnOptions:[]
     };
   },
   computed: {
@@ -80,9 +82,10 @@ export default {
   watch: {
     columnData: {
       handler(val) {
-        val.columnOptions.map(item=>{
-          this.columnDataMap[item.__vModel__] = item 
-        })
+        this.columnOptions = val.columnOptions
+        val.columnOptions.map(item => {
+          this.columnDataMap[item.__vModel__] = item;
+        });
         // 基本下拉数据
         let arr = val.columnOptions.filter(item =>
           ["radio", "checkbox", "select"].includes(item.__config__.jnpfKey)
@@ -109,7 +112,6 @@ export default {
             props: item.props.props
           };
         });
-
       },
       deep: true
     }
