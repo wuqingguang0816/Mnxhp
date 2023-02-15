@@ -1,41 +1,36 @@
 <template>
-  <div class="selectBox">
-    <el-select v-model="valueTitle" :clearable="clearable" :disabled="disabled" @clear="clearHandle"
-      ref='elSelect' :placeholder="placeholder" :popper-class="`JNPF-select-tree ${themeClass}`"
-      @focus="selectFocus" :filterable="filterable" :filter-method="selectFilter"
-      class="JNPF-selectTree" @visible-change="visibleChange" :multiple="multiple"
-      :collapse-tags="collapseTags" @remove-tag="removeTag" :key="key">
-      <slot name="header"></slot>
-
-      <el-option v-for="item in selectOptions" :key="item.id" :label="item[props.label]"
-        :value="item[props.value]" style="display:none">
-      </el-option>
-      <el-option :value="optionTitle" :label="optionTitle" class="options">
-        <el-tree id="tree-option" ref="selectTree" :accordion="accordion" :data="options"
-          :default-expand-all="defaultExpandAll" :props="props" :node-key="props.value"
-          :default-expanded-keys="defaultExpandedKey" @node-click="handleNodeClick"
-          :filter-node-method="filterNode" :show-checkbox="multiple" :check-on-click-node="multiple"
-          :class="{'single':!multiple}" :expand-on-click-node="!multiple" @check="check"
-          v-show="options.length">
-          <span class="custom-tree-node" :class="{'is-disabled': data.disabled}"
-            slot-scope="{ node, data }">
-            <slot :data="{ node, data }">
-              <i :class="data.icon" v-if="data.icon"></i>
-              <span class="text">{{node.label}}</span>
-            </slot>
-            <!-- 自定义slot示例 开始 -->
-            <!-- <template slot-scope="{data}">
+  <el-select v-model="valueTitle" :clearable="clearable" :disabled="disabled" @clear="clearHandle"
+    ref='elSelect' :placeholder="placeholder" :popper-class="`JNPF-select-tree ${themeClass}`"
+    @focus="selectFocus" :filterable="filterable" :filter-method="selectFilter"
+    class="JNPF-selectTree" @visible-change="visibleChange" :multiple="multiple"
+    :collapse-tags="collapseTags" @remove-tag="removeTag" :key="key">
+    <slot name="header"></slot>
+    <el-option v-for="item in selectOptions" :key="item.id" :label="item[props.label]"
+      :value="item[props.value]" style="display:none"></el-option>
+    <el-option :value="optionTitle" :label="optionTitle" class="options">
+      <el-tree id="tree-option" ref="selectTree" :accordion="accordion" :data="options"
+        :default-expand-all="defaultExpandAll" :props="props" :node-key="props.value"
+        :default-expanded-keys="defaultExpandedKey" @node-click="handleNodeClick"
+        :filter-node-method="filterNode" :show-checkbox="multiple" :check-on-click-node="multiple"
+        :class="{'single':!multiple}" :expand-on-click-node="!multiple" @check="check"
+        v-show="options.length">
+        <span class="custom-tree-node" :class="{'is-disabled': data.disabled}"
+          slot-scope="{ node, data }">
+          <slot :data="{ node, data }">
+            <i :class="data.icon" v-if="data.icon"></i>
+            <span class="text">{{node.label}}</span>
+          </slot>
+          <!-- 自定义slot示例 开始 -->
+          <!-- <template slot-scope="{data}">
             <i :class="data.data.icon"></i>
             <span class="text">{{data.node.label}}</span>
           </template> -->
-            <!-- 自定义slot示例 结束 -->
-          </span>
-        </el-tree>
-        <p v-show="!options.length" class="empty-text">无数据</p>
-      </el-option>
-    </el-select>
-  </div>
-
+          <!-- 自定义slot示例 结束 -->
+        </span>
+      </el-tree>
+      <p v-show="!options.length" class="empty-text">无数据</p>
+    </el-option>
+  </el-select>
 </template>
 
 <script>
@@ -252,7 +247,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.selectBox {
+.JNPF-selectTree {
   width: 100%;
 }
 .el-scrollbar .el-scrollbar__view .el-select-dropdown__item {

@@ -2,13 +2,14 @@
   <el-dialog
     title="过滤规则配置"
     :visible.sync="dialogVisible"
-    width="50%"
+    width="800px"
     append-to-body
     :before-close="handleClose"
   >
     <Condition
       :value="pconditions"
       ref="base"
+      :columnDataMap="columnDataMap"
       :dataOptionMap="dataOptionMap"
     ></Condition>
     <span slot="footer" class="dialog-footer">
@@ -41,6 +42,7 @@ export default {
   },
   data() {
     return {
+      columnDataMap:{},
       dataOptionMap: {},
       dialogVisible: false,
       pconditions: []
@@ -78,9 +80,12 @@ export default {
   watch: {
     columnData: {
       handler(val) {
+        val.columnOptions.map(item=>{
+          this.columnDataMap[item.__vModel__] = item 
+        })
         // 基本下拉数据
-        let arr = val.defaultColumnList.filter(item =>
-          ["radio", "checkbox", "select"].includes(item.jnpfKey)
+        let arr = val.columnOptions.filter(item =>
+          ["radio", "checkbox", "select"].includes(item.__config__.jnpfKey)
         );
         arr.forEach(item => {
           let dataLabel = item.__config__.props.label;
@@ -95,8 +100,8 @@ export default {
           this.dataOptionMap[item.__vModel__] = { options };
         });
         // 树型数据
-        let arrTree = val.defaultColumnList.filter(item =>
-          ["cascader", "treeSelect"].includes(item.jnpfKey)
+        let arrTree = val.columnOptions.filter(item =>
+          ["cascader", "treeSelect"].includes(item.__config__.jnpfKey)
         );
         arrTree.forEach(item => {
           this.dataOptionMap[item.__vModel__] = {
@@ -104,6 +109,7 @@ export default {
             props: item.props.props
           };
         });
+
       },
       deep: true
     }

@@ -1,6 +1,11 @@
 <template>
-  <el-input v-model="innerValue" v-if="isStorage==1" readonly placeholder="用于展示计算结果，且数据不会保存" />
-  <el-input v-model="innerValue" v-else readonly placeholder="用于展示计算结果，且数据同时会保存入库" />
+  <div>
+    <template v-if="!detailed">
+      <el-input v-model="innerValue" v-if="isStorage==1" readonly placeholder="用于展示计算结果，且数据不会保存" />
+      <el-input v-model="innerValue" v-else readonly placeholder="用于展示计算结果，且数据同时会保存入库" />
+    </template>
+    <p v-else class="jnpf-detail-text">{{innerValue}}</p>
+  </div>
 </template>
 <script>
 import { mergeNumberOfExps, validExp, toRPN, calcRPN, debounce } from '../../utils'
@@ -16,7 +21,8 @@ export default {
     "tableVModel",
     "componentVModel",
     'isStorage',
-    "rowIndex" // 计算公式放在表格中时， 需要获取在表格中的行位置
+    "rowIndex", // 计算公式放在表格中时， 需要获取在表格中的行位置
+    "detailed"
   ],
   name: 'calculate',
   data() {
@@ -79,7 +85,7 @@ export default {
       handler: function (val) {
         if (!val) return
         if (!this.computeExps) { // formData更新可能比较频繁
-          this.computeExps = this.execRPN
+          this.computeExps = debounce(this.execRPN, 100)
         }
         this.computeExps()
       },

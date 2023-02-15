@@ -8,7 +8,9 @@ export default {
   props: ['activeData', 'dictionaryOptions', 'dataInterfaceOptions'],
   components: { draggable, InterfaceDialog },
   data() {
-    return {}
+    return {
+      dictionaryId: ''
+    }
   },
   computed: {
     dicOptions() {
@@ -76,6 +78,7 @@ export default {
       this.activeData.__config__.templateJson = []
     },
     dictionaryTypeChange(val) {
+      this.dictionaryId = val
       this.activeData.__config__.defaultValue = this.defaultValue
       if (!val) {
         this.activeData.__slot__.options = []

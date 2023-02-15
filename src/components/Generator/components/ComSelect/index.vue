@@ -341,6 +341,9 @@ export default {
         this.selectedIds = []
         this.selectedData = []
         this.tagsList = []
+        this.$nextTick(() => {
+          this.resetInputHeight();
+        })
         return
       }
       let selectedIds = this.multiple ? this.value : [this.value]

@@ -505,7 +505,7 @@ export default {
             if (type === 'search') {
               data[ii].searchType = replacedData[i].searchType
             }
-            data[ii].label = replacedData[i].label
+            if (this.webType == 4) data[ii].label = replacedData[i].label
             res.push(data[ii])
             break inter
           }

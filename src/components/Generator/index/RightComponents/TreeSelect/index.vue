@@ -108,6 +108,13 @@
       <el-switch v-model="activeData.__config__.required" />
     </el-form-item>
     <treeNode-dialog :visible.sync="dialogVisible" title="添加选项" @commit="addNode" />
+    <div>
+      <el-dialog :visible.sync="dicVisible" append-to-body
+        class="JNPF-dialog JNPF-dialog_center JNPF-dialog-tree-select" lock-scroll width="80%"
+        @close="defaultValueChange">
+        <dicIndex ref="dicIndex"></dicIndex>
+      </el-dialog>
+    </div>
   </el-row>
 </template>
 <script>
@@ -117,9 +124,10 @@ import dynamicMixin from '../dynamicMixin';
 import TreeNodeDialog from './TreeNodeDialog'
 import { getDictionaryDataSelector } from '@/api/systemData/dictionary'
 import { getDataInterfaceRes } from '@/api/systemData/dataInterface'
+import dicIndex from '@/views/systemData/dictionary/index.vue';
 export default {
   mixins: [comMixin, dynamicMixin],
-  components: { TreeNodeDialog },
+  components: { TreeNodeDialog, dicIndex },
   data() {
     return {
       dialogVisible: false,
@@ -129,7 +137,8 @@ export default {
         label: 'fullName',
         children: 'children',
       },
-      renderKey: +new Date()
+      renderKey: +new Date(),
+      dicVisible: false,
     }
   },
   methods: {
@@ -152,10 +161,16 @@ export default {
     },
     selectChange() {
       this.$emit('changeSelect')
+      this.dictionaryTypeChange(this.dictionaryId)
+    },
+    defaultValueChange() {
+      this.selectChange()
     },
     goDictionary() {
-      let src = window.location.protocol + "//" + window.location.host + "/systemData/dictionary"
-      window.open(src, "_blank")
+      this.dicVisible = true
+      this.$nextTick(() => {
+        this.$refs.dicIndex.initData()
+      })
     },
     addTreeItem() {
       this.dialogVisible = true

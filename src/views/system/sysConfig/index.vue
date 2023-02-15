@@ -136,10 +136,6 @@
                               v-model="baseForm.whiteListIp" placeholder="允许访问IP" />
                     <div class="tip">多个IP设置，用英文符号隔开，如192.168.0.1,192.168.0.2</div>
                   </el-form-item>
-                  <el-form-item label="门户刷新设置">
-                    <el-input-number v-model="baseForm.dashboardTimedRefresh" :min="1" :precision="0" :step="1"
-                                     controls-position="right" /> 秒
-                  </el-form-item>
                   <el-form-item>
                     <el-button type="primary" size="small" :loading="btnLoading" class="saveBtn"
                                @click="submitForm()">保 存</el-button>
@@ -168,13 +164,13 @@
                                :inactive-value="0" />
                   </el-form-item>
                   <el-form-item v-if="baseForm.passwordStrengthLimit">
-                    <el-checkbox v-model="baseForm.passwordLengthMin">最小长度</el-checkbox>
+                    <el-checkbox v-model="baseForm.passwordLengthMin" :true-label="1" :false-label="0">最小长度</el-checkbox>
                     <el-input-number v-model="baseForm.passwordLengthMinNumber"
                                      :precision="0" :step="1" controls-position="right" /><br/>
-                    <el-checkbox v-model="baseForm.containsNumbers">包含数字</el-checkbox><br/>
-                    <el-checkbox v-model="baseForm.includeLowercaseLetters">包含小写字母</el-checkbox><br/>
-                    <el-checkbox v-model="baseForm.includeUppercaseLetters">包含大写字母</el-checkbox><br/>
-                    <el-checkbox v-model="baseForm.containsCharacters">包含字符</el-checkbox>
+                    <el-checkbox v-model="baseForm.containsNumbers" :true-label="1" :false-label="0">包含数字</el-checkbox><br/>
+                    <el-checkbox v-model="baseForm.includeLowercaseLetters" :true-label="1" :false-label="0">包含小写字母</el-checkbox><br/>
+                    <el-checkbox v-model="baseForm.includeUppercaseLetters" :true-label="1" :false-label="0">包含大写字母</el-checkbox><br/>
+                    <el-checkbox v-model="baseForm.containsCharacters" :true-label="1" :false-label="0">包含字符</el-checkbox>
                   </el-form-item>
 
                   <el-form-item label="禁用旧密码">
@@ -185,7 +181,7 @@
                     <el-input-number v-model="baseForm.disableTheNumberOfOldPasswords"
                                      :precision="0" :step="1" controls-position="right" /> 个
                   </el-form-item>
-                  <el-form-item label="初始密码强制修改" label-width="130px">
+                  <el-form-item label="修改初始密码提醒" label-width="130px">
                     <el-switch v-model="baseForm.mandatoryModificationOfInitialPassword" :active-value="1"
                                :inactive-value="0"/>
                   </el-form-item>
@@ -580,11 +576,6 @@ export default {
           this.baseForm.isClick = this.baseForm.isClick ? this.baseForm.isClick : 0
           this.baseForm.linkTime = this.baseForm.linkTime ? this.baseForm.linkTime : 24
           this.baseForm.unClickNum = this.baseForm.unClickNum ? this.baseForm.unClickNum : 1
-          this.baseForm.passwordLengthMin = this.baseForm.passwordLengthMin ? true : false
-          this.baseForm.containsNumbers = this.baseForm.containsNumbers ? true : false
-          this.baseForm.includeLowercaseLetters = this.baseForm.includeLowercaseLetters ? true : false
-          this.baseForm.includeUppercaseLetters = this.baseForm.includeUppercaseLetters ? true : false
-          this.baseForm.containsCharacters = this.baseForm.containsCharacters ? true : false
           this.listLoading = false
         }).catch(() => {
           this.listLoading = false

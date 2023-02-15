@@ -5,7 +5,7 @@
         @mouseenter.native="inputHovering = true" @mouseleave.native="inputHovering = false">
         <template slot="suffix">
           <i v-show="!showClose"
-            :class="['el-select__caret', 'el-input__icon', 'el-icon-arrow-up']"></i>
+            :class="['el-select__caret', 'el-input__icon', 'el-icon-arrow-down']"></i>
           <i v-if="showClose" class="el-select__caret el-input__icon el-icon-circle-close"
             @click.stop="clear"></i>
         </template>
@@ -13,8 +13,6 @@
           添加</el-button>
       </el-input>
     </div>
-    <!-- <el-button @click="addOrUpdateHandle()" style="float:right">
-      添加</el-button> -->
     <el-dialog :title="popupTitle" :close-on-click-modal="false" :visible.sync="visible"
       class="JNPF-dialog JNPF-dialog_center JNPF-dialog-tree-select" lock-scroll append-to-body
       width="1000px">

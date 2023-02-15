@@ -2,11 +2,11 @@
   <section class="condition-pane pd-10">
     <el-row class="condition-list condition-list-header">
       <el-col :span="4">逻辑</el-col>
-      <el-col :span="4" class="label">条件字段</el-col>
-      <el-col :span="4">比较</el-col>
-      <el-col :span="7">数据值</el-col>
+      <el-col :span="6" class="label">条件字段</el-col>
+      <el-col :span="4">条件符号</el-col>
+      <el-col :span="9">数据值</el-col>
 
-      <el-col :span="2"></el-col>
+      <el-col :span="1"></el-col>
     </el-row>
     <template>
       <el-row
@@ -14,7 +14,7 @@
         v-for="(item, index) in pconditions"
         :key="index"
       >
-        <el-col :span="3">
+        <el-col :span="4" class="wrap">
           <el-select
             v-model="item.logic"
             placeholder="请选择"
@@ -30,7 +30,7 @@
             </el-option>
           </el-select>
         </el-col>
-        <el-col :span="5" class="label">
+        <el-col :span="6" class="label wrap">
           <el-col :span="24">
             <el-button
               size="mini"
@@ -55,7 +55,7 @@
             </el-select>
           </el-col>
         </el-col>
-        <el-col :span="4">
+        <el-col :span="4" class="wrap">
           <el-select
             v-model="item.symbol"
             placeholder="请选择"
@@ -64,7 +64,18 @@
           >
             <!-- 联动符号下拉框 -->
             <template
-              v-if="['comInput', 'textarea', 'billRule'].includes(item.jnpfKey)"
+              v-if="
+                [
+                  'comInput',
+                  'textarea',
+                  'billRule',
+                  'popupTableSelect',
+                  'relationForm',
+                  'relationFormAttr',
+                  'popupSelect',
+                  'popupAttr'
+                ].includes(item.jnpfKey)
+              "
             >
               <el-option
                 v-for="item in symbolOptionsBase"
@@ -75,7 +86,16 @@
               </el-option>
             </template>
             <template
-              v-else-if="['numInput', 'date', 'time'].includes(item.jnpfKey)"
+              v-else-if="
+                [
+                  'calculate',
+                  'numInput',
+                  'date',
+                  'time',
+                  'createTime',
+                  'modifyTime'
+                ].includes(item.jnpfKey)
+              "
             >
               <el-option
                 v-for="item in symbolOptionsDateNum"
@@ -97,20 +117,17 @@
           </el-select>
         </el-col>
 
-        <el-col :span="7" class="fieldValue">
-          <el-col :span="12">
+        <el-col :span="9" class="fieldValue wrap">
+          <el-col :span="24">
             <div v-if="item.fieldValueType === 2">
               <template v-if="item.jnpfKey === 'numInput'">
-                <el-input-number
+                <NumRange
                   v-model="item.fieldValue"
-                  placeholder="请输入"
-                  :precision="item.precision"
-                  :controls="false"
-                  controls-position="right"
-                />
+                  v-if="item.symbol == 'between'"
+                ></NumRange>
                 <el-input-number
-                  v-if="item.showSecond"
-                  v-model="item.fieldValue2"
+                  v-else
+                  v-model="item.fieldValue"
                   placeholder="请输入"
                   :precision="item.precision"
                   :controls="false"
@@ -152,10 +169,22 @@
                 />
               </template>
               <template v-else-if="item.jnpfKey === 'calculate'">
-                <el-input-number
+                <!-- <el-input-number
                   v-model="item.fieldValue"
                   placeholder="请输入"
                   :precision="2"
+                  controls-position="right"
+                /> -->
+                <NumRange
+                  v-model="item.fieldValue"
+                  v-if="item.symbol == 'between'"
+                ></NumRange>
+                <el-input-number
+                  v-else
+                  v-model="item.fieldValue"
+                  placeholder="请输入"
+                  :precision="item.precision"
+                  :controls="false"
                   controls-position="right"
                 />
               </template>
@@ -175,17 +204,22 @@
               </template>
               <template v-else-if="item.jnpfKey === 'time'">
                 <el-time-picker
+                  v-if="item.symbol == 'between'"
                   v-model="item.fieldValue"
+                  key="time1"
                   :picker-options="item['picker-options']"
                   placeholder="请选择"
                   clearable
+                  :is-range="true"
                   :value-format="item['value-format']"
                   :format="item.format"
                 >
                 </el-time-picker>
+
                 <el-time-picker
-                  v-if="item.showSecond"
-                  v-model="item.fieldValue2"
+                  v-else
+                  v-model="item.fieldValue"
+                  key="time2"
                   :picker-options="item['picker-options']"
                   placeholder="请选择"
                   clearable
@@ -199,25 +233,29 @@
                   ['date', 'createTime', 'modifyTime'].includes(item.jnpfKey)
                 "
               >
-                <el-date-picker
-                  v-model="item.fieldValue"
-                  clearable
-                  placeholder="请选择"
-                  :type="
-                    item.jnpfKey === 'date' && item.type
-                      ? item.type
-                      : 'datetime'
-                  "
-                  value-format="timestamp"
-                  @change="onConditionDateChange($event, item)"
-                  :format="item.format || 'yyyy-MM-dd HH:mm:ss'"
-                >
-                </el-date-picker>
+                <template v-if="item.symbol == 'between'">
+                  <el-date-picker
+                    v-model="item.fieldValue"
+                    clearable
+                    key="year1"
+                    placeholder="请选择"
+                    :type="'daterange'"
+                    value-format="timestamp"
+                    range-separator="至"
+                    start-placeholder="开始日期"
+                    end-placeholder="结束日期"
+                    style="width: 100%;"
+                    @change="onConditionDateChange($event, item)"
+                    :format="item.format || 'yyyy-MM-dd HH:mm:ss'"
+                  >
+                  </el-date-picker>
+                </template>
 
                 <el-date-picker
-                  v-if="item.showSecond"
-                  v-model="item.fieldValue2"
+                  v-else
+                  v-model="item.fieldValue"
                   clearable
+                  key="year2"
                   placeholder="请选择"
                   :type="
                     item.jnpfKey === 'date' && item.type
@@ -230,13 +268,16 @@
                 >
                 </el-date-picker>
               </template>
+
               <template
                 v-else-if="['comSelect', 'currOrganize'].includes(item.jnpfKey)"
               >
                 <comSelect
                   v-model="item.fieldValue"
                   placeholder="请选择"
+                  ref="comselect"
                   clearable
+                  :multiple="item.multiple"
                   @change="onConditionListChange(arguments, item)"
                 />
               </template>
@@ -244,22 +285,84 @@
                 <depSelect
                   v-model="item.fieldValue"
                   placeholder="请选择"
+                  :selectType="item.selectType"
+                  :ableDepIds="item.ableDepIds"
+                  :multiple="item.multiple"
                   clearable
                   @change="onConditionObjChange(arguments, item)"
                 />
               </template>
+              <template v-else-if="item.jnpfKey === 'popupTableSelect'">
+                <popupTableSelect
+                  v-model="item.fieldValue"
+                  :placeholder="item.placeholder"
+                  :interfaceId="item.interfaceId"
+                  :columnOptions="item.columnOptions"
+                  :propsValue="item.propsValue"
+                  :relationField="item.relationField"
+                  :hasPage="item.hasPage"
+                  :pageSize="item.pageSize"
+                  :popupType="item.popupType"
+                  :popupTitle="item.popupTitle"
+                  :popupWidth="item.popupWidth"
+                  :filterable="item.filterable"
+                  clearable
+                />
+              </template>
+              <template v-else-if="item.jnpfKey === 'relationForm'">
+                <relationForm
+                  v-model="item.fieldValue"
+                  placeholder="请选择"
+                  :modelId="item.modelId"
+                  clearable
+                  :columnOptions="item.columnOptions"
+                  :relationField="item.relationField"
+                  :hasPage="item.hasPage"
+                  :pageSize="item.pageSize"
+                />
+              </template>
+              <template v-else-if="item.jnpfKey === 'popupSelect'">
+                <popupSelect
+                  v-model="item.fieldValue"
+                  placeholder="请选择"
+                  :interfaceId="item.interfaceId"
+                  clearable
+                  :columnOptions="item.columnOptions"
+                  :propsValue="item.propsValue"
+                  :relationField="item.relationField"
+                  :hasPage="item.hasPage"
+                  :pageSize="item.pageSize"
+                  :popupType="item.popupType"
+                  :popupTitle="item.popupTitle"
+                  :popupWidth="item.popupWidth"
+                />
+              </template>
+              <template v-else-if="['userSelect'].includes(item.jnpfKey)">
+                <userSelect
+                  v-model="item.value"
+                  :placeholder="'请选择' + item.__config__.label"
+                  clearable
+                  class="item"
+                  :selectType="
+                    item.selectType != 'all' || item.selectType != 'custom'
+                      ? 'all'
+                      : item.selectType
+                  "
+                  :ableDepIds="item.ableDepIds"
+                  :ablePosIds="item.ablePosIds"
+                  :ableUserIds="item.ableUserIds"
+                  :ableRoleIds="item.ableRoleIds"
+                  :ableGroupIds="item.ableGroupIds"
+                  :multiple="item.multiple"
+                />
+              </template>
               <template
-                v-else-if="
-                  ['userSelect', 'createUser', 'modifyUser'].includes(
-                    item.jnpfKey
-                  )
-                "
+                v-else-if="['createUser', 'modifyUser'].includes(item.jnpfKey)"
               >
                 <userSelect
                   v-model="item.fieldValue"
                   placeholder="请选择"
                   multiple
-                  hasSys
                   clearable
                   @change="onConditionObjChange(arguments, item)"
                 />
@@ -327,8 +430,9 @@
           </el-col>
         </el-col>
         <el-col
+          class="wrap"
           :span="1"
-          style="text-align: center; font-size: 16px; z-index: 999"
+          style="text-align: right; font-size: 16px; z-index: 9999"
         >
           <i class="el-icon-delete" @click="onDelCondition(index)"></i>
         </el-col>
@@ -344,8 +448,13 @@
 
 <script>
 import { getDrawingList } from "@/components/Generator/utils/db";
+
 export default {
   props: {
+    columnDataMap: {
+      type: Object,
+      default: {}
+    },
     value: {
       type: Array,
       default: () => []
@@ -527,7 +636,6 @@ export default {
           value: 3
         }
       ],
-      showSecond: false,
       pconditions: []
     };
   },
@@ -543,14 +651,39 @@ export default {
         if (!data) return;
         if (
           data.__config__ &&
-          data.__config__.jnpfKey !== "table" &&
+          !["switch", "table"].includes(data.__config__.jnpfKey) &&
           data.__config__.children &&
           Array.isArray(data.__config__.children)
         ) {
           loop(data.__config__.children, data);
         }
         if (Array.isArray(data)) data.forEach(d => loop(d, parent));
-        if (data.__vModel__ && data.__config__.jnpfKey !== "table")
+        if (
+          //关联表单 关联表单属性 弹窗选择 弹窗选择属性 下拉表格
+          //不支持控件：开关、文件上传、图片上传、颜色选择、评分、滑块、富文本、链接、
+          //按钮、文本、提示、二维码、条形码、用户组件、设计子表。
+          data.__vModel__ &&
+          ![
+            "relationForm",
+            "relationFormAttr",
+            "popupSelect",
+            "popupAttr",
+            "popupTableSelect",
+            "switch",
+            "uploadFz",
+            "uploadImg",
+            "colorPicker",
+            "rate",
+            "slider",
+            "editor",
+            "link",
+            "button",
+            "JNPFText",
+            "alert",
+            "usersSelect",
+            "table"
+          ].includes(data.__config__.jnpfKey)
+        )
           list.push(data);
       };
       loop(getDrawingList());
@@ -590,9 +723,7 @@ export default {
         fieldName: "",
         symbolName: "",
         fieldValue: "",
-        fieldValue2: "",
         props: {},
-        showSecond: false,
         fieldType: 1,
         fieldValueType: 2,
         fieldLabel: "",
@@ -621,16 +752,30 @@ export default {
         item.dataOptions = this.dataOptionMap[val].options;
         item.props = this.dataOptionMap[val].props;
       }
+      item = { ...item, ...this.columnDataMap[val] };
       this.$set(this.pconditions, i, item);
     },
+    // 比较符号改变事件
     symbolChange(val, item, i) {
       let obj = this.symbolOptions.filter(o => o.value == val)[0];
       item.symbolName = obj.label;
-      if (val === "between") {
-        item.showSecond = true;
-      } else {
-        item.showSecond = false;
+      item.fieldValue = undefined;
+      if (["date", "createTime", "modifyTime"].includes(item.jnpfKey)) {
+        if (val == "between") {
+          item.fieldValue = [+new Date(), +new Date()];
+        } else {
+          item.fieldValue = +new Date();
+        }
       }
+      if (item.jnpfKey == "time") {
+        if (val == "between") {
+          item.fieldValue = ["", ""];
+        } else {
+          item.fieldValue = "";
+        }
+      }
+
+      item.multiple = ["in", "notIn"].includes(val) ? true : false;
       this.$set(this.pconditions, i, item);
     },
     logicChange(val, item) {
@@ -689,8 +834,11 @@ export default {
 .fieldValue {
   >>> .el-input__inner,
   .el-date-editor.el-input {
-    width: 130px;
+    width: 100%;
   }
+}
+.wrap {
+  padding: 0 4px;
 }
 
 .title {
@@ -698,10 +846,28 @@ export default {
   color: black;
   font-weight: 400;
 }
->>> .JNPF-selectTree {
-  width: 130px;
+.el-select {
+  width: 100%;
 }
+.el-input-number{
+  width: 100%;
+}
+.el-icon-delete {
+  line-height: 32px;
+}
+.numRange{
+  max-width: inherit;
+}
+>>> .JNPF-selectTree {
+  width: 100%;
+}
+
 >>> .popupSelect-container {
-  width: 130px;
+  width: 100%;
+}
+.condition-list-header {
+  >>> .el-col {
+    padding: 0 4px;
+  }
 }
 </style>

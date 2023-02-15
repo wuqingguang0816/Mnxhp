@@ -102,9 +102,7 @@
     </el-form>
     <div slot="footer" class="dialog-footer">
       <el-button @click="dialogFormVisible = false">取 消</el-button>
-      <el-button type="primary" @click="confirm"
-        >确 定</el-button
-      >
+      <el-button type="primary" @click="confirm">确 定</el-button>
     </div>
   </el-dialog>
 </template>
@@ -112,7 +110,18 @@
 <script>
 export default {
   components: {},
-  props: {},
+  props: ["value"],
+  watch: {
+    value: {
+      handler(val) {
+        if (val) {
+          this.form = val;
+        }
+      },
+      immediate: true,
+      deep: true
+    },
+  },
   data() {
     return {
       options: [
@@ -176,9 +185,9 @@ export default {
       this.form.width = data[0];
       this.form.height = data[1];
     },
-    confirm(){
-      this.$emit('change',this.form)
-      this.dialogFormVisible = false
+    confirm() {
+      this.$emit("change", this.form);
+      this.dialogFormVisible = false;
     }
   },
   computed: {},
