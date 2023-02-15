@@ -240,3 +240,16 @@ export function getDefaultCurrentValueUserId(data) {
     data
   })
 }
+
+// 获取默认当前值用户ID（同步）
+export async function getDefaultCurrentValueUserIdAsync(data) {
+  return new Promise(resolve => {
+    request({
+      url: `/api/permission/Users/getDefaultCurrentValueUserId`,
+      method: 'post',
+      data
+    }).then(ret => {
+      resolve(ret)
+    })
+  })
+}

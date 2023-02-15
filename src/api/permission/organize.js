@@ -106,3 +106,16 @@ export function getDefaultCurrentValueDepartmentId(data) {
     data
   })
 }
+
+// 获取默认当前值部门ID（同步）
+export async function getDefaultCurrentValueDepartmentIdAsync(data) {
+  return new Promise(resolve => {
+    request({
+      url: `/api/permission/Organize/getDefaultCurrentValueDepartmentId`,
+      method: 'post',
+      data
+    }).then(ret => {
+      resolve(ret)
+    })
+  })
+}
