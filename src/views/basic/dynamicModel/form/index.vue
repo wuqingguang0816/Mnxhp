@@ -33,6 +33,7 @@ import { createModel } from '@/api/onlineDev/visualDev'
 import Parser from '@/components/Generator/parser/Parser'
 import FlowBox from '@/views/workFlow/components/FlowBox'
 import { getFlowList } from '@/api/workFlow/FlowEngine'
+import {mapGetters} from "vuex";
 export default {
   components: { Parser, FlowBox },
   props: ['config', 'modelId', 'isPreview'],
@@ -52,6 +53,9 @@ export default {
       flowItem: {},
     }
   },
+  computed: {
+    ...mapGetters(['userInfo']),
+  },
   created() {
     this.init()
   },
@@ -61,6 +65,7 @@ export default {
         this.getFlowList(flag)
       } else {
         this.formConf = JSON.parse(this.config.formData)
+        this.fillFormData(this.formConf, {})
         this.loading = true
         this.$nextTick(() => {
           this.visible = true
@@ -68,6 +73,25 @@ export default {
           this.key = +new Date()
         })
       }
+    },
+    fillFormData(form, data, flag) {
+      const loop = (list, parent) => {
+        for (let i = 0; i < list.length; i++) {
+          let item = list[i]
+          if (item.__vModel__) {
+              if(item.__config__.jnpfKey === 'date' && item.__config__.defaultCurrent == true) {
+                item.__config__.defaultValue = new Date().getTime()
+              }else if(item.__config__.jnpfKey === 'comSelect' && item.__config__.defaultCurrent == true && this.userInfo.organizeIdList instanceof Array && this.userInfo.organizeIdList.length > 0) {
+                item.__config__.defaultValue = item.multiple == true?[this.userInfo.organizeIdList]:this.userInfo.organizeIdList
+              }
+          }
+          if (item.__config__ && item.__config__.children && Array.isArray(item.__config__.children)) {
+            loop(item.__config__.children, item)
+          }
+        }
+      }
+      loop(form.fields)
+      form.formData = data
     },
     getFlowList(flag) {
       getFlowList(this.config.flowId).then(res => {
