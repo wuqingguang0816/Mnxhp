@@ -451,6 +451,10 @@ import { getDrawingList } from "@/components/Generator/utils/db";
 
 export default {
   props: {
+    columnOptions:{
+      type: Array,
+      default: () => []
+    },
     columnDataMap: {
       type: Object,
       default: {}
@@ -686,7 +690,7 @@ export default {
         )
           list.push(data);
       };
-      loop(getDrawingList());
+      loop(this.columnOptions);
       const formItems = list;
       return formItems;
     }

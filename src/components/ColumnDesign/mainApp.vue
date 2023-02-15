@@ -115,6 +115,12 @@
           <div class="setting-box">
             <el-form :model="columnData" label-width="80px" label-position="left">
               <el-divider>表格配置</el-divider>
+              <el-form-item label="数据过滤">
+                <el-button style="width: 100%;" @click="filterPanelShow">{{ ruleListBtn }}
+                </el-button>
+              </el-form-item>
+              <Condition ref="conditionpane" :columnData="columnData" @ruleConfig="ruleConfig">
+              </Condition>
               <el-form-item label="排序类型">
                 <el-select v-model="columnData.sort" placeholder="请选择排序类型">
                   <el-option label="升序" value="asc"></el-option>
@@ -216,6 +222,7 @@
 </template>
 <script>
 import Sortable from 'sortablejs'
+import Condition from './FlowCondition'
 import draggable from 'vuedraggable'
 import FormScript from './FormScript'
 import CustomBtn from './CustomBtn'
@@ -235,6 +242,7 @@ const defaultFunc = '({ data, index, request, toast, refresh }) => {\r\n   \r\n}
 const defaultFuncs = '({ data, tableRef, request }) => {\r\n   \r\n}'
 
 const defaultColumnData = {
+  ruleListApp: [], // 过滤规则
   searchList: [], // 查询字段
   hasSuperQuery: false, // 高级查询
   columnList: [], // 字段列表
@@ -280,7 +288,15 @@ export default {
       default: () => []
     },
   },
-  components: { draggable, FormScript, CustomBtn },
+  components: { draggable, FormScript, CustomBtn, Condition },
+  computed: {
+    ruleListBtn() {
+      if (this.columnData.ruleListApp && this.columnData.ruleListApp.length > 0) {
+        return this.columnData.ruleListApp[0]['pconditions'].length > 0 ? '编辑过滤条件' : '添加过滤条件'
+      }
+      return '添加过滤条件'
+    }
+  },
   data() {
     return {
       currentTab: 'column',
@@ -485,6 +501,13 @@ export default {
     })
   },
   methods: {
+    filterPanelShow() {
+      this.$refs.conditionpane.show(this.columnData.ruleListApp)
+    },
+    ruleConfig(data) {
+      console.log(data);
+      this.columnData.ruleListApp = [data]
+    },
     setBtnValue(replacedData, data, key) {
       key = key ? key : 'value'
       outer: for (let i = 0; i < replacedData.length; i++) {
