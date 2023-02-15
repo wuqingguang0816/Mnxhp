@@ -97,3 +97,12 @@ export const getOrgByOrganizeCondition = (data) => {
     data
   })
 }
+
+// 获取默认当前值部门ID
+export function getDefaultCurrentValueDepartmentId(data) {
+  return request({
+    url: `/api/permission/Organize/getDefaultCurrentValueDepartmentId`,
+    method: 'post',
+    data
+  })
+}

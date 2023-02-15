@@ -275,16 +275,12 @@ export default {
               if(item.__config__.jnpfKey === 'date' && item.__config__.defaultCurrent == true) {
                 val = new Date().getTime()
                 item.__config__.defaultValue = val
-              }else if(item.__config__.jnpfKey === 'depSelect' && item.__config__.defaultCurrent == true && this.userInfo.departmentId != null) {
-                val =  this.userInfo.departmentId
-                item.__config__.defaultValue = val
-              }else if(item.__config__.jnpfKey === 'comSelect' && item.__config__.defaultCurrent == true && this.userInfo.organizeIdList != null && this.userInfo.organizeIdList.length > 0) {
-                val = this.userInfo.organizeIdList
-                item.__config__.defaultValue = val
-              }else if(item.__config__.jnpfKey === 'userSelect' && item.__config__.defaultCurrent == true) {
-                val =  this.userInfo.userId
+              }else if(item.__config__.jnpfKey === 'comSelect' && item.__config__.defaultCurrent == true && this.userInfo.organizeIdList instanceof Array && this.userInfo.organizeIdList.length > 0) {
+                val = item.multiple == true?[this.userInfo.organizeIdList]:this.userInfo.organizeIdList
                 item.__config__.defaultValue = val
               }
+            }else{
+
             }
             if (!this.isPreview && this.useFormPermission) {
               let id = item.__config__.isSubTable ? parent.__vModel__ + '-' + item.__vModel__ : item.__vModel__

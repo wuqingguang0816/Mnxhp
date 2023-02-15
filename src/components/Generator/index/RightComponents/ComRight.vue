@@ -46,7 +46,7 @@
         </el-radio-group>
       </template>
     </el-form-item>
-    <el-form-item label="默认值">
+    <el-form-item label="默认值" v-if="activeData.__config__.jnpfKey != 'userSelect' || (activeData.__config__.jnpfKey==='userSelect' && (activeData.selectType == 'all' || activeData.selectType == 'custom'))">
       <com-select v-model="activeData.__config__.defaultValue" placeholder="选择默认值" clearable
         v-if="activeData.__config__.jnpfKey==='comSelect'" :multiple="activeData.multiple" :key="key" :disabled="activeData.__config__.defaultCurrent"/>
       <dep-select v-model="activeData.__config__.defaultValue" placeholder="选择默认值" clearable
@@ -72,7 +72,7 @@
       <el-input :value="setDefaultValue(activeData.__config__.defaultValue)" placeholder="请输入默认值"
         @input="onDefaultValueInput" v-if="activeData.__config__.jnpfKey==='editor'" />
     </el-form-item>
-    <el-form-item v-if="activeData.__config__.jnpfKey==='userSelect' || activeData.__config__.jnpfKey==='depSelect' || activeData.__config__.jnpfKey==='comSelect' ">
+    <el-form-item v-if="(activeData.__config__.jnpfKey==='userSelect' && (activeData.selectType == 'all' || activeData.selectType == 'custom')) || activeData.__config__.jnpfKey==='depSelect' || activeData.__config__.jnpfKey==='comSelect' ">
       <el-checkbox label="true" v-model="activeData.__config__.defaultCurrent" @change="defaultCurrentChange(activeData.__config__.defaultCurrent, activeData.__config__.jnpfKey)" style="float: right;margin-right: 30px;">
         <span v-if="activeData.__config__.jnpfKey==='userSelect'">
           默认为当前登录用户
@@ -180,6 +180,10 @@ export default {
         this.activeData.ableRoleIds = []
         this.activeData.ableGroupIds = []
         this.activeData.relationField = ''
+        if(this.activeData.selectType != 'all' && this.activeData.selectType != 'custom') {
+          this.$set(this.activeData.__config__, 'defaultValue', null)
+          this.$set(this.activeData.__config__, 'defaultCurrent', false)
+        }
       }
       this.activeData.__config__.renderKey = +new Date()
       this.key = +new Date()

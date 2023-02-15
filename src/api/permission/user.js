@@ -231,3 +231,12 @@ export const getSelectedUserList = data => {
     data
   })
 }
+
+// 获取默认当前值用户ID
+export function getDefaultCurrentValueUserId(data) {
+  return request({
+    url: `/api/permission/Users/getDefaultCurrentValueUserId`,
+    method: 'post',
+    data
+  })
+}

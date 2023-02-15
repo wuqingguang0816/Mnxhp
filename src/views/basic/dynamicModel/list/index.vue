@@ -806,19 +806,27 @@ export default {
       //处理搜索条件中的默认值
       if(searchList != null && searchList.length > 0) {
         let initQueryJson = {}
-        for(let i = 0, len = searchList.length; i< len; i++) {
-          if(searchList[i].jnpfKey === 'date' && searchList[i].__config__.defaultCurrent == true) {
+        for (let i = 0, len = searchList.length; i < len; i++) {
+          if (searchList[i].jnpfKey === 'date' && searchList[i].__config__.defaultCurrent == true) {
+            //日期
             let startDateTime = new Date()
-            startDateTime.setHours(0,0,0,0)
+            startDateTime.setHours(0, 0, 0, 0)
             let endDateTime = new Date()
-            endDateTime.setHours(23,59,59,999)
+            endDateTime.setHours(23, 59, 59, 999)
             initQueryJson[searchList[i].__vModel__] = [startDateTime.getTime(), endDateTime.getTime()]
-          }else if(searchList[i].jnpfKey === 'depSelect' && searchList[i].__config__.defaultCurrent == true && this.userInfo.departmentId != null) {
-            initQueryJson[searchList[i].__vModel__] = this.userInfo.departmentId
-          }else if(searchList[i].jnpfKey === 'comSelect' && searchList[i].__config__.defaultCurrent == true && this.userInfo.organizeIdList != null && this.userInfo.organizeIdList.length > 0) {
-            initQueryJson[searchList[i].__vModel__] = this.userInfo.organizeIdList
-          }else if(searchList[i].jnpfKey === 'userSelect' && searchList[i].__config__.defaultCurrent == true) {
-            initQueryJson[searchList[i].__vModel__] = this.userInfo.userId
+          } else if (searchList[i].jnpfKey === 'comSelect' && searchList[i].__config__.defaultCurrent == true && this.userInfo.organizeIdList instanceof Array && this.userInfo.organizeIdList.length > 0) {
+            //组织机构
+            initQueryJson[searchList[i].__vModel__] = searchList[i].searchMultiple == true ? [this.userInfo.organizeIdList] : this.userInfo.organizeIdList;
+          }else if(searchList[i].jnpfKey === 'depSelect' && searchList[i].__config__.defaultCurrent == true && this.userInfo.departmentId != null && this.userInfo.departmentId != '') {
+            if(searchList[i].__config__.defaultValue != null) {
+              initQueryJson[searchList[i].__vModel__] = searchList[i].__config__.defaultValue
+            }
+          }else if(searchList[i].__config__.jnpfKey === 'userSelect' && searchList[i].__config__.defaultCurrent == true) {
+            if(searchList[i].__config__.defaultValue != null) {
+              initQueryJson[searchList[i].__vModel__] = searchList[i].__config__.defaultValue
+            }
+          } else {
+
           }
         }
         if(Object.keys(initQueryJson).length > 0) {
