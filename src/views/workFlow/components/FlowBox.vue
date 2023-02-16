@@ -583,7 +583,7 @@ export default {
         if (flowTaskInfo.completion > 0 && flowTaskInfo.completion < 100 && !flowTaskInfo.rejectDataId && (setting.status == 1 || setting.status == 3)) list.push({ label: '变 更', key: 'resurgence' })
         if (setting.status == 1 && this.assignNodeList.length) list.push({ label: '指 派', key: 'assign' })
         if (flowTaskInfo.status == 1) list.push({ label: '挂 起', key: 'suspend' })
-        if (flowTaskInfo.status == 6) list.push({ label: '恢 复', key: 'recovery' })
+        if (flowTaskInfo.status == 6 && !flowTaskInfo.suspend) list.push({ label: '恢 复', key: 'recovery' })
       }
       this.moreBtnList = list
     },

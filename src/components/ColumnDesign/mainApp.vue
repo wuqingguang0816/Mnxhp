@@ -527,6 +527,7 @@ export default {
           if (replacedData[i][key] === data[ii][key]) {
             if (type === 'search') {
               data[ii].searchType = replacedData[i].searchType
+              data[ii].searchMultiple = replacedData[i].searchMultiple
             }
             if (this.webType == 4) data[ii].label = replacedData[i].label
             res.push(data[ii])
