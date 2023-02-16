@@ -3,7 +3,7 @@
     <el-row>
       <el-col :span="18">
         <JNPF-TreeSelect :options="treeData" v-model="innerValue" :placeholder="placeholder"
-          clearable :disabled="disabled" v-on="$listeners" lastLevel @selectChange="selectChange">
+          clearable :disabled="disabled" v-on="$listeners" lastLevel>
         </JNPF-TreeSelect>
       </el-col>
       <el-col :span="6">
@@ -14,7 +14,7 @@
     <div>
       <el-dialog :visible.sync="dicVisible" append-to-body
         class="JNPF-dialog JNPF-dialog_center JNPF-dialog-tree-select" lock-scroll width="80%"
-        @close="selectChange">
+        @close="closeDic()">
         <dicIndex ref="dicIndex"></dicIndex>
       </el-dialog>
     </div>
@@ -44,8 +44,12 @@ export default {
     async getData() {
       this.treeData = await this.$store.dispatch('generator/getDicTree')
     },
-    selectChange() {
-      this.$emit('changeSelect')
+    async getNewData() {
+      this.$store.commit('generator/SET_DIC_TREE', [])
+      this.treeData = await this.$store.dispatch('generator/getDicTree')
+    },
+    closeDic() {
+      this.getNewData()
     },
     goDictionary() {
       this.dicVisible = true

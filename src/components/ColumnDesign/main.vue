@@ -986,10 +986,9 @@ export default {
       })
     },
     closeForm(isRefresh) {
-      this.getDataInterfaceSelector()
       this.interfaceVisible = false
       if (isRefresh) {
-        this.reset()
+        this.getDataInterfaceSelector()
       }
     },
   }
