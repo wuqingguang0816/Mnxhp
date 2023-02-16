@@ -788,8 +788,10 @@ export default {
       let exportList = []
       for (let i = 0; i < list.length; i++) {
         if (list[i].jnpfKey === 'table') {
-          for (let j = 0; j < list[i].children.length; j++) {
-            exportList.push(list[i].children[j])
+          if (this.columnData.type != 4) {
+            for (let j = 0; j < list[i].children.length; j++) {
+              exportList.push(list[i].children[j])
+            }
           }
         } else {
           exportList.push(list[i])
