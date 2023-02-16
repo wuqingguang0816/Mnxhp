@@ -158,7 +158,7 @@ export default {
         });
         return
       }
-      getFlowList(item.id).then(res => {
+      getFlowList(item.id, '1').then(res => {
         this.flowList = res.data
         if (!this.flowList.length) {
           this.$message({
