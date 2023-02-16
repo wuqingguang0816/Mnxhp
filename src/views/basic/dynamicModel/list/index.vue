@@ -1016,6 +1016,11 @@ export default {
       for (let i = 0; i < this.columnData.columnList.length; i++) {
         let e = this.columnData.columnList[i]
         item[e.__vModel__] = e.__config__.defaultValue
+        if(e.__config__.jnpfKey === 'date' && e.__config__.defaultCurrent == true) {
+          item[e.__vModel__] = new Date().getTime()
+        }else if(e.__config__.jnpfKey === 'comSelect' && e.__config__.defaultCurrent == true && this.userInfo.organizeIdList instanceof Array && this.userInfo.organizeIdList.length > 0) {
+          item[e.__vModel__] = e.multiple == true?[this.userInfo.organizeIdList]:this.userInfo.organizeIdList
+        }
       }
       this.list.unshift(item)
     },

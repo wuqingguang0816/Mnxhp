@@ -14,6 +14,7 @@ import { Candidates } from '@/api/workFlow/FlowBefore'
 import Parser from '@/components/Generator/parser/Parser'
 import CandidateForm from '@/views/workFlow/components/CandidateForm'
 import ErrorForm from '@/views/workFlow/components/ErrorForm'
+import {mapGetters} from "vuex";
 export default {
   components: { Parser, CandidateForm, ErrorForm },
   data() {
@@ -38,6 +39,9 @@ export default {
         flowId: ''
       }
     }
+  },
+  computed: {
+    ...mapGetters(['userInfo']),
   },
   methods: {
     init(data) {
@@ -79,7 +83,14 @@ export default {
           let item = list[i]
           if (item.__vModel__) {
             const val = data.hasOwnProperty(item.__vModel__) ? data[item.__vModel__] : item.__config__.defaultValue
-            if (!item.__config__.isSubTable) item.__config__.defaultValue = val
+            if (!item.__config__.isSubTable && item.__vModel__) {
+              item.__config__.defaultValue = val
+              if(item.__config__.jnpfKey === 'date' && item.__config__.defaultCurrent == true) {
+                item.__config__.defaultValue = new Date().getTime()
+              }else if(item.__config__.jnpfKey === 'comSelect' && item.__config__.defaultCurrent == true && this.userInfo.organizeIdList instanceof Array && this.userInfo.organizeIdList.length > 0) {
+                item.__config__.defaultValue = item.multiple == true?[this.userInfo.organizeIdList]:this.userInfo.organizeIdList
+              }
+            }
             let noShow = false, isDisabled = false, required = item.__config__.required || false
             if (this.setting.formOperates && this.setting.formOperates.length) {
               let id = item.__config__.isSubTable ? parent.__vModel__ + '-' + item.__vModel__ : item.__vModel__
