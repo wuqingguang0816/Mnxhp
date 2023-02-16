@@ -43,7 +43,7 @@
       </div>
     </div>
     <div class="main">
-      <PortalDesigner ref="portalDesigner" :conf="formData" :showType='showType' v-if="key" />
+      <PortalDesigner ref="portalDesigner" :conf="formData" :showType='showType' :key="key" />
     </div>
   </el-dialog>
 </template>
@@ -82,10 +82,7 @@ export default {
           getPortalInfo(id).then(res => {
             this.loading = false
             this.formData = JSON.parse(res.data.formData)
-            console.log()
-            this.$nextTick(() => {
-              this.key = true
-            })
+            this.key = +new Date()
           }).catch(() => { this.loading = false })
         }
       })
