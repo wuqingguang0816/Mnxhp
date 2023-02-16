@@ -308,7 +308,7 @@
         <el-button @click="showDataTodoData">设置</el-button>
       </el-form-item>
       <refresh :refresh="activeData.refresh" />
-      <todo-data ref="todoData" v-if="todoDataVisible" @refresh="todoDataRefresh" />
+      <todo-data ref="todoData" v-if="todoDataVisible" @refresh="commonRefresh" />
       <el-form-item label="名称大小">
         <el-input-number v-model="activeData.option.labelFontSize" controls-position="right"
           :min="12" :max="25" />
@@ -445,7 +445,7 @@
     </template>
     <TableList v-if="activeData.jnpfKey=='tableList'" :activeData="activeData"
       :showType='showType' />
-    <popupEditor v-if="editorVisible" ref="popupEditor" @refresh="refresh" />
+    <popupEditor v-if="editorVisible" ref="popupEditor" @refresh="commonRefresh" />
   </el-collapse-item>
 </template>
 <script>
@@ -671,7 +671,7 @@ export default {
       this.activeData.option[type] = val
       this.renderKeyChange()
     },
-    todoDataRefresh(val) {
+    commonRefresh(val) {
       this.activeData.option.defaultValue = val
       this.renderKeyChange()
     },
