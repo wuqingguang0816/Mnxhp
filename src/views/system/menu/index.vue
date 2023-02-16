@@ -55,6 +55,8 @@
                   <el-dropdown-menu slot="dropdown">
                     <el-dropdown-item @click.native="preview(scope.row)">
                       菜单管理</el-dropdown-item>
+                    <el-dropdown-item @click.native="portalManagement(scope.row)">
+                      门户管理</el-dropdown-item>
                   </el-dropdown-menu>
                 </el-dropdown>
               </tableOpts>
@@ -65,17 +67,20 @@
     </div>
     <Form v-if="formVisible" ref="Form" @refreshDataList="initData" />
     <menuManage v-if="previewVisible" ref="menuManage" @close="closeForm" />
+    <PortalManagement v-if="portalVisible" ref="portalManage" @close="closeForm" />
   </div>
 </template>
 <script>
 import Form from "./Form";
 import MenuManage from "./menuManage";
+import PortalManagement from './portalManagement'
 import { getSystem, delSystem } from "@/api/system/system";
 export default {
   name: "system-menu",
   components: {
     Form,
-    MenuManage
+    MenuManage,
+    PortalManagement
   },
   data() {
     return {
@@ -90,15 +95,23 @@ export default {
       expands: true,
       refreshTable: true,
       previewVisible: false,
-      total: 0
+      total: 0,
+      portalVisible: false
     };
   },
   created() {
     this.initData();
   },
   methods: {
+    portalManagement(row) {
+      this.portalVisible = true
+      this.$nextTick(() => {
+        this.$refs.portalManage.init(row);
+      })
+    },
     closeForm(isRefresh) {
       this.previewVisible = false
+      this.portalVisible = false
       if (isRefresh) this.refresh()
     },
     reset() {

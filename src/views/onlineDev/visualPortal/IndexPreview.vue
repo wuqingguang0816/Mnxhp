@@ -24,6 +24,7 @@
 <script>
 import { getPortalInfo } from '@/api/onlineDev/portal'
 import PortalLayout from '@/components/VisualPortal/Layout'
+import { getDataInterfaceRes } from '@/api/systemData/dataInterface'
 export default {
   props: ['id'],
   components: { PortalLayout },
@@ -34,7 +35,8 @@ export default {
       linkType: null,
       currentView: null,
       url: '',
-      loading: false
+      loading: false,
+      timerList: []
     }
   },
   methods: {
@@ -45,6 +47,7 @@ export default {
         this.type = res.data.type || 0
         this.linkType = res.data.linkType || 0
         this.url = res.data.customUrl
+        this.refresh = res.data.refresh || {}
         if (!res.data) return this.loading = false
         if (res.data.type === 1) {
           if (!res.data.customUrl && this.linkType === 1) return
@@ -59,6 +62,11 @@ export default {
     },
     closeDialog() {
       this.$emit('update:visible', false)
+      if (this.timerList.length) {
+        this.timerList.forEach((ele) => {
+          if (ele) clearInterval(ele)
+        })
+      }
     }
   }
 }

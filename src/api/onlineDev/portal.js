@@ -74,3 +74,22 @@ export function getAuthPortal(id) {
     method: 'GET'
   })
 }
+
+export function getAtlas() {
+  return request({
+    url: `/api/system/atlas`,
+    method: 'get',
+  })
+}
+
+
+export function getMapData(id) {
+  return request({
+    url: `/api/system/atlas/geojson`,
+    method: 'get',
+    data: {
+      code: id,
+      hasChildren: true
+    }
+  })
+}

@@ -58,8 +58,11 @@ export default {
     }
   },
   watch: {
-    value(val) {
-      this.imageUrl = val
+    value: {
+      handler(val) {
+        this.imageUrl = val
+      },
+      immediate: true
     }
   },
   methods: {

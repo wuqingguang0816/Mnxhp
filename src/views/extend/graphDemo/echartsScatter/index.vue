@@ -6,7 +6,7 @@
 
 <script>
 
-import echarts from 'echarts'
+import * as echarts from 'echarts';
 import ecStat from 'echarts-stat'
 import resize from '../mixins/resize'
 export default {

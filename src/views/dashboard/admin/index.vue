@@ -137,7 +137,7 @@
 </template>
 
 <script>
-import echarts from 'echarts'
+import * as echarts from 'echarts';
 import PanelGroup from './components/PanelGroup'
 import LineChart from './components/LineChart'
 import CountTo from 'vue-count-to'

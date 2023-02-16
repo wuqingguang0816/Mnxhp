@@ -11,17 +11,6 @@ const baseRouter = [{
 	}
 },
 {
-	path: '/dashboard',
-	component: (resolve) => require(['@/views/basic/dashboard'], resolve),
-	name: 'dashboard',
-	meta: {
-		title: 'dashboard',
-		icon: 'icon-ym icon-ym-generator-kanban',
-		affix: true,
-		zhTitle: '门户展示'
-	}
-},
-{
 	path: '/messageRecord',
 	component: (resolve) => require(['@/views/basic/messageRecord'], resolve),
 	name: 'messageRecord',

@@ -1,8 +1,7 @@
 <template>
   <el-card shadow="never" class="portal-todoList-box">
-    <div slot="header" class="portal-common-title">
-      <span>{{title}}</span>
-    </div>
+    <CardHeader v-if="activeData.title" slot="header" :title="activeData.title"
+      :card="activeData.card" />
     <div class="portal-todoList-box-body">
       <template v-if="list.length">
         <div class="item com-hover" @click="readInfo(item.id)" v-for="(item, i) in list" :key="i">
@@ -20,12 +19,13 @@
 </template>
 <script>
 import { getNotice } from '@/api/home'
+import CardHeader from "../CardHeader"
 import Form from '@/views/basic/messageRecord/Form'
 export default {
   props: {
-    title: { type: String, default: '' }
+    activeData: { type: Object, default: () => { } },
   },
-  components: { Form },
+  components: { Form, CardHeader },
   data() {
     return {
       formVisible: false,

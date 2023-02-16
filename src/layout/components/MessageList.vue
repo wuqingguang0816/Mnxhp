@@ -20,6 +20,7 @@
             <el-dropdown-item command="系统">系统</el-dropdown-item>
             <el-dropdown-item command="流程">流程</el-dropdown-item>
             <el-dropdown-item command="公告">公告</el-dropdown-item>
+            <el-dropdown-item command="日程">日程</el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>
         <div class="is-read-box">仅显示未读
@@ -63,13 +64,17 @@
         </div>
       </div>
     </el-dialog>
+    <ScheduleView v-if='scheduleVisible' ref="schedule" />
   </div>
 </template>
 
 <script>
 import { getMessageList, ReadInfo, MessageAllRead } from '@/api/system/message'
+import ScheduleView from '@/components/ScheduleView'
+
 export default {
   name: 'messageList',
+  components: { ScheduleView },
   data() {
     return {
       drawer: false,
@@ -89,7 +94,8 @@ export default {
       files: [],
       info: {},
       type: '全部',
-      isNoRead: true
+      isNoRead: true,
+      scheduleVisible: false
     }
   },
   watch: {
@@ -137,6 +143,14 @@ export default {
         if (item.isRead == '0') {
           item.isRead = '1'
           this.$emit('read')
+        }
+        if (item.type == 4) {
+          let bodyText = JSON.parse(res.data.bodyText)
+          this.scheduleVisible = true
+          this.$nextTick(() => {
+            this.$refs.schedule.init(bodyText.id, '', bodyText.groupId)
+          })
+          return
         }
         if (item.type == 2 && item.flowType == 2) {
           let bodyText = JSON.parse(res.data.bodyText)
@@ -194,9 +208,10 @@ export default {
     handleCommand(e) {
       this.type = e
       if (e == '全部') this.listQuery.type = ''
-      if (e == '流程') this.listQuery.type = 2
       if (e == '公告') this.listQuery.type = 1
+      if (e == '流程') this.listQuery.type = 2
       if (e == '系统') this.listQuery.type = 3
+      if (e == '日程') this.listQuery.type = 4
       this.init()
     },
     search() {
