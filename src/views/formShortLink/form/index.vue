@@ -98,7 +98,7 @@ export default {
       }
     },
     getFlowList(flag) {
-      getFlowList(this.config.flowId).then(res => {
+      getFlowList(this.config.flowId, '1').then(res => {
         this.flowList = res.data
         if (flag && this.flowItem.id) return this.selectFlow(this.flowItem)
         if (!this.flowList.length) return this.$message({ type: 'error', message: '流程不存在' })

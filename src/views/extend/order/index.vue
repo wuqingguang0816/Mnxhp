@@ -227,7 +227,7 @@ export default {
       })
     },
     getFlowList() {
-      getFlowList(this.flowTemplateId).then(res => {
+      getFlowList(this.flowTemplateId, '1').then(res => {
         this.flowList = res.data
       })
     },

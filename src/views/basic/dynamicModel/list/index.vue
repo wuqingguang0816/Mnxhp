@@ -29,7 +29,8 @@
       </el-tree>
     </div>
     <div class="JNPF-common-layout-center">
-      <Search ref="Search" :list="columnData.searchList" @reset="reset" @search="searchData" :initDataJson="listQuery.queryJson"/>
+      <Search ref="Search" :list="columnData.searchList" @reset="reset" @search="searchData"
+        :initDataJson="listQuery.queryJson" />
       <div class="JNPF-common-layout-main JNPF-flex-main">
         <div class="JNPF-common-head">
           <div v-if="isPreview || !columnData.useBtnPermission">
@@ -477,7 +478,7 @@ import ChildTableColumn from './child-table-column'
 import SuperQuery from '@/components/SuperQuery'
 import CandidateForm from '@/views/workFlow/components/CandidateForm'
 import CustomBox from '@/components/JNPFCustom'
-import {mapGetters} from "vuex";
+import { mapGetters } from "vuex";
 
 export default {
   name: 'dynamicModel',
@@ -804,7 +805,7 @@ export default {
     initDefaultSearchData() {
       let searchList = this.columnData.searchList
       //处理搜索条件中的默认值
-      if(searchList != null && searchList.length > 0) {
+      if (searchList != null && searchList.length > 0) {
         let initQueryJson = {}
         for (let i = 0, len = searchList.length; i < len; i++) {
           if (searchList[i].jnpfKey === 'date' && searchList[i].__config__.defaultCurrent == true) {
@@ -817,19 +818,19 @@ export default {
           } else if (searchList[i].jnpfKey === 'comSelect' && searchList[i].__config__.defaultCurrent == true && this.userInfo.organizeIdList instanceof Array && this.userInfo.organizeIdList.length > 0) {
             //组织机构
             initQueryJson[searchList[i].__vModel__] = searchList[i].searchMultiple == true ? [this.userInfo.organizeIdList] : this.userInfo.organizeIdList;
-          }else if(searchList[i].jnpfKey === 'depSelect' && searchList[i].__config__.defaultCurrent == true && this.userInfo.departmentId != null && this.userInfo.departmentId != '') {
-            if(searchList[i].__config__.defaultValue != null) {
+          } else if (searchList[i].jnpfKey === 'depSelect' && searchList[i].__config__.defaultCurrent == true && this.userInfo.departmentId != null && this.userInfo.departmentId != '') {
+            if (searchList[i].__config__.defaultValue != null) {
               initQueryJson[searchList[i].__vModel__] = searchList[i].__config__.defaultValue
             }
-          }else if(searchList[i].__config__.jnpfKey === 'userSelect' && searchList[i].__config__.defaultCurrent == true) {
-            if(searchList[i].__config__.defaultValue != null) {
+          } else if (searchList[i].__config__.jnpfKey === 'userSelect' && searchList[i].__config__.defaultCurrent == true) {
+            if (searchList[i].__config__.defaultValue != null) {
               initQueryJson[searchList[i].__vModel__] = searchList[i].__config__.defaultValue
             }
           } else {
 
           }
         }
-        if(Object.keys(initQueryJson).length > 0) {
+        if (Object.keys(initQueryJson).length > 0) {
           this.listQuery.queryJson = JSON.stringify(initQueryJson)
         }
       }
@@ -1381,7 +1382,7 @@ export default {
       })
     },
     getFlowList() {
-      getFlowList(this.config.flowId).then(res => {
+      getFlowList(this.config.flowId, '1').then(res => {
         this.flowList = res.data
       })
     },
