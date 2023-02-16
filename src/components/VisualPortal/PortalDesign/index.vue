@@ -4,8 +4,7 @@
     <div class="JNPF-full-dialog-header">
       <div class="header-title">
         <img src="@/assets/images/jnpf.png" class="header-logo" />
-        <el-tooltip class="item" effect="dark" :content="fullName" placement="top"
-          style="z-index:5000">
+        <el-tooltip class="item" effect="dark" :content="fullName" placement="top">
           <p class="header-txt"> · {{fullName}}</p>
         </el-tooltip>
       </div>
@@ -33,7 +32,7 @@
             class="active-btn" />
         </el-tooltip>
         <el-tooltip effect="dark" content="预览" placement="top">
-          <el-link icon="icon-ym el-icon-video-play" :underline="false" @click="preview"
+          <el-link icon="icon-ym el-icon-video-play" :underline="false" @click="preview()"
             class="active-btn" />
         </el-tooltip>
         <el-divider direction='vertical' class="divider"></el-divider>
@@ -42,8 +41,8 @@
         <el-button @click="closeDialog()">{{$t('common.cancelButton')}}</el-button>
       </div>
     </div>
-    <div class="main">
-      <PortalDesigner ref="portalDesigner" :conf="formData" :showType='showType' :key="key" />
+    <div class="main" v-if="!loading">
+      <PortalDesigner ref="portalDesigner" :conf="formData" :showType='showType' />
     </div>
   </el-dialog>
 </template>
@@ -64,7 +63,8 @@ export default {
       showType: 'pc',
       fullName: '',
       id: '',
-      key: false
+      key: false,
+      showFullName: false,
     }
   },
   methods: {
@@ -82,7 +82,6 @@ export default {
           getPortalInfo(id).then(res => {
             this.loading = false
             this.formData = JSON.parse(res.data.formData)
-            this.key = +new Date()
           }).catch(() => { this.loading = false })
         }
       })

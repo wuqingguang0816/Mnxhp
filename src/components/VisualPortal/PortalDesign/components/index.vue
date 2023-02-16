@@ -18,7 +18,7 @@
       </div>
       <el-scrollbar class="layout-area">
         <div v-if="showType=='pc'">
-          <grid-layout :layout.sync="layout" :row-height="40">
+          <grid-layout :layout.sync="layout" :row-height="40" v-if="layout.length">
             <grid-item v-for="item in layout" :x="item.x" :y="item.y" :w="item.w" :h="item.h"
               :i="item.i" :key="item.i" :maxH="item.maxH" :minH="item.minH" :minW="item.minW"
               :maxW="item.maxW" :class="{'active-item': item.i===activeId}"
@@ -41,8 +41,8 @@
           <div class="outeripad">
             <div class="ipadbody">
               <el-scrollbar class="center-scrollbar">
-                <draggable class="drawing-board" :list="layout" :animation="340"
-                  group="componentsGroup">
+                <draggable v-if="layout.length" class="drawing-board" :list="layout"
+                  :animation="340" group="componentsGroup">
                   <div v-for="(item,index) in layout" :key="index" class="item-box"
                     @click="handleClick(item)" :class="{'active-item': item.i===activeId}">
                     <parser :item="item" :showType='showType' />
@@ -133,7 +133,6 @@ export default {
     }
   },
   mounted() {
-    console.log(this.conf)
     if (typeof this.conf === 'object' && this.conf !== null) {
       this.config = { ...defaultConf, ...this.conf }
     } else {

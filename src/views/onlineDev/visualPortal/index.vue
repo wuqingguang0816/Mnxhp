@@ -78,7 +78,7 @@
                     <el-dropdown-item v-if="scope.row.type==0"
                       @click.native="design(scope.row.fullName,scope.row.id)">设计
                     </el-dropdown-item>
-                    <el-dropdown-item @click.native="preview(scope.row.id)">预览</el-dropdown-item>
+                    <el-dropdown-item @click.native="preview(scope.row.id,2)">预览</el-dropdown-item>
                     <el-dropdown-item @click.native="copy(scope.row.id)">复制</el-dropdown-item>
                     <el-dropdown-item @click.native="exportTemplate(scope.row.id)">导出
                     </el-dropdown-item>
@@ -94,8 +94,9 @@
     </div>
     <Form v-if="formVisible" ref="form" @close="closeForm" @initPortalDesign="design" />
     <PortalDesign v-if="portalDesignVisible" ref="portalDesign" @close="closeForm1" />
-    <Preview :visible.sync="previewVisible" :id="activeId" />
-
+    <Preview :visible.sync="previewVisible" :id="currId" />
+    <previewDialog :visible.sync="previewTypeVisible" :id="currId" :previewType="previewType"
+      type="portal" @previewPc='previewPc' />
   </div>
 </template>
 
@@ -103,10 +104,11 @@
 import { getPortalList, Delete, Copy, exportTemplate } from '@/api/onlineDev/portal'
 import Form from './Form'
 import PortalDesign from '@/components/VisualPortal/PortalDesign'
+import previewDialog from '@/components/PreviewDialog'
 import Preview from './IndexPreview'
 export default {
   name: 'onlineDev-visualPortal',
-  components: { Form, PortalDesign, Preview },
+  components: { Form, PortalDesign, previewDialog, Preview },
   data() {
     return {
       list: [],
@@ -120,15 +122,17 @@ export default {
         sidx: ''
       },
       total: 0,
-      activeId: '',
+      currId: '',
       transferId: '',
       dialogVisible: false,
       previewVisible: false,
+      previewTypeVisible: false,
       listLoading: false,
       formVisible: false,
       portalDesignVisible: false,
       categoryList: [],
-      showAll: false
+      showAll: false,
+      previewType: ''
     }
   },
   created() {
@@ -202,9 +206,15 @@ export default {
         })
       }).catch(() => { });
     },
-    preview(id) {
+    preview(id, type) {
       if (!id) return
-      this.activeId = id
+      this.currId = id
+      this.previewType = type
+      this.$nextTick(() => {
+        this.previewTypeVisible = true
+      })
+    },
+    previewPc() {
       this.previewVisible = true
     },
     exportTemplate(id) {

@@ -25,8 +25,8 @@
           </el-select>
         </jnpf-form-tip-item>
         <template v-if="dataForm.type==1">
-          <jnpf-form-tip-item label="链接类型" prop="linkType">
-            <el-select v-model="dataForm.linkType" placeholder="选择链接类型">
+          <jnpf-form-tip-item label="链接类型" prop="linkType" tip-label="链接类型选择页面，只支持PC显示，不支持APP显示。">
+            <el-select v-model="dataForm.linkType" placeholder="选择链接类型" @change="changeLinkType">
               <el-option label="页面" :value="0" />
               <el-option label="外链" :value="1" />
             </el-select>
@@ -129,6 +129,9 @@ export default {
         }
       })
     },
+    changeLinkType() {
+      this.dataForm.customUrl = ''
+    },
     dataFormSubmit(type) {
       this.$refs['dataForm'].validate((valid) => {
         if (!valid) return
@@ -148,8 +151,8 @@ export default {
               this.btnLoading = false
               this.visible = false
               this.$emit('close', true)
+              if (!this.dataForm.id) this.dataForm.id = res.data
               if (type == 1) this.$emit('initPortalDesign', this.dataForm.fullName, this.dataForm.id)
-
             }
           })
         }).catch(() => { this.btnLoading = false })
