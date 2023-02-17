@@ -339,7 +339,7 @@
               </template>
               <template v-else-if="['userSelect'].includes(item.jnpfKey)">
                 <userSelect
-                  v-model="item.value"
+                  v-model="item.fieldValue"
                   :placeholder="'请选择' + item.__config__.label"
                   clearable
                   class="item"
