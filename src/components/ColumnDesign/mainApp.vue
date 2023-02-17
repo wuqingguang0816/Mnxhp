@@ -505,7 +505,6 @@ export default {
       this.$refs.conditionpane.show(this.columnData.ruleListApp)
     },
     ruleConfig(data) {
-      console.log(data);
       this.columnData.ruleListApp = [data]
     },
     setBtnValue(replacedData, data, key) {

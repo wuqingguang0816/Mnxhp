@@ -451,7 +451,7 @@ import { getDrawingList } from "@/components/Generator/utils/db";
 
 export default {
   props: {
-    columnOptions:{
+    columnOptions: {
       type: Array,
       default: () => []
     },
@@ -478,6 +478,7 @@ export default {
   },
   data() {
     return {
+      nowJnpfKey:undefined,
       chooseNode: "",
       dialogVisible: false,
       progressOptions: ["10", "20", "30", "40", "50", "60", "70", "80", "90"],
@@ -743,6 +744,9 @@ export default {
       this.pconditions.push(item);
     },
     fieldNameChange(val, item, i) {
+      if (item.jnpfKey != this.nowJnpfKey) {
+        item.symbol = undefined;
+      }
       let obj = this.usedFormItems.filter(o => o.__vModel__ == val)[0];
       item.fieldName = obj.__config__.label;
       item.jnpfKey = obj.__config__.jnpfKey;
@@ -758,6 +762,7 @@ export default {
       }
       item = { ...item, ...this.columnDataMap[val] };
       this.$set(this.pconditions, i, item);
+      this.nowJnpfKey = item.jnpfKey;
     },
     // 比较符号改变事件
     symbolChange(val, item, i) {
@@ -853,13 +858,13 @@ export default {
 .el-select {
   width: 100%;
 }
-.el-input-number{
+.el-input-number {
   width: 100%;
 }
 .el-icon-delete {
   line-height: 32px;
 }
-.numRange{
+.numRange {
   max-width: inherit;
 }
 >>> .JNPF-selectTree {
