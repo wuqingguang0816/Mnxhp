@@ -633,7 +633,7 @@ export default {
       this.columnData.funcs = Object.assign({}, defaultFuncsData, this.columnData.funcs)
     }
     if (this.webType != 4) {
-      this.updateBtnsList(this.columnData.type)
+      if (this.columnData.type == 5) this.updateBtnsList(5)
       let list = []
       const loop = (data, parent) => {
         if (!data) return
@@ -988,7 +988,6 @@ export default {
       }
     },
     toggleType(val) {
-      console.log(123123)
       if (this.columnData.type == val) return;
       this.columnData.type = val;
       this.updateBtnsList(val)
