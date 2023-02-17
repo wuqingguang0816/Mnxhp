@@ -630,6 +630,7 @@ export default {
         if (val == 5) {
           this.columnData.hasPage = false
           this.btnsOption = [allBtnsOption[0]]
+          this.btnsList = []
           if (this.btnsList.includes('add')) this.btnsList = ['add']
         } else {
           this.btnsOption = allBtnsOption
