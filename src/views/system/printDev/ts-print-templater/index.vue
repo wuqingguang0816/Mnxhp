@@ -158,7 +158,7 @@ export default {
         e.width = 776
         e.height = 'calc(100% - 10px)'
       }
-      this.$emit("pageParamChange",this.pageParam)
+      this.$emit("pageParamChange",e)
       let mt = e.mt 
       let mb = e.mb
       let ml = e.ml
