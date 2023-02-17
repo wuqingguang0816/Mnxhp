@@ -20,8 +20,8 @@
         </jnpf-form-tip-item>
         <jnpf-form-tip-item label="类型" prop="type">
           <el-select v-model="dataForm.type" placeholder="选择类型">
-            <el-option label="配置路径" :value="1" />
             <el-option label="门户设计" :value="0" />
+            <el-option label="配置路径" :value="1" />
           </el-select>
         </jnpf-form-tip-item>
         <template v-if="dataForm.type==1">
@@ -35,6 +35,12 @@
             <el-input v-model="dataForm.customUrl" placeholder="链接地址">
               <template slot="prepend" v-if="dataForm.linkType===0">@/views/</template>
             </el-input>
+          </jnpf-form-tip-item>
+        </template>
+        <template v-if="dataForm.type==0">
+          <jnpf-form-tip-item label="锁定" prop="enabledLock"
+            tip-label="启用：不允许拖拽移动控件；禁用：允许用户在PC门户上拖拽大小及移动控件。">
+            <el-switch v-model="dataForm.enabledLock" :active-value="1" :inactive-value="0" />
           </jnpf-form-tip-item>
         </template>
         <jnpf-form-tip-item label="排序" prop="sortCode">
@@ -83,8 +89,7 @@ export default {
         customUrl: '',
         category: '',
         description: "",
-        locking: 0,
-
+        enabledLock: 0,
       },
       designBtnLoading: false,
       dataRule: {

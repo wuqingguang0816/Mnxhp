@@ -94,6 +94,10 @@
                               </el-button>
                             </span>
                             <el-dropdown-menu slot="dropdown">
+                              <el-dropdown-item v-if='listQuery.category==="Web"'
+                                @click.native="addOrUpdateHandle('',scope.row.parentId)">
+                                新建子级
+                              </el-dropdown-item>
                               <template v-if="[2, 3, 4].indexOf(scope.row.type) > -1">
                                 <el-dropdown-item v-if="scope.row.isButtonAuthorize === 1"
                                   @click.native="handleButtonAuthorize(scope.row)">
@@ -248,10 +252,10 @@ export default {
         this.refreshTable = true;
       });
     },
-    addOrUpdateHandle(id) {
+    addOrUpdateHandle(id, parentId) {
       this.formVisible = true;
       this.$nextTick(() => {
-        this.$refs.Form.init(id, this.listQuery.category, this.systemId);
+        this.$refs.Form.init(id, this.listQuery.category, this.systemId, parentId);
       });
     },
     handleUpdateState(row) {
