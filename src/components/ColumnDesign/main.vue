@@ -116,7 +116,7 @@
             <el-form :model="columnData" label-width="80px" label-position="left">
               <div class="typeList">
                 <div class="item" :class="{'item-box':webType==4}" v-for="(item, index) in typeList"
-                  :key="index" @click="columnData.type=item.value">
+                  :key="index" @click="toggleType(item.value)">
                   <div class="item-img" :class="{'checked':columnData.type==item.value}">
                     <img :src="item.url" alt="">
                     <div class="icon-checked" v-if="columnData.type==item.value">
@@ -498,7 +498,7 @@ const defaultFuncsData = {
     name: "脚本事件"
   }
 }
-const allBtnsOption = [
+const defaultBtnsOption = [
   { value: 'add', icon: 'el-icon-plus', label: '新增' },
   { value: 'download', icon: 'el-icon-download', label: '导出' },
   { value: 'upload', icon: 'el-icon-upload2', label: '导入' },
@@ -538,7 +538,7 @@ export default {
       searchList: [],
       columnList: [],
       columnData: JSON.parse(JSON.stringify(defaultColumnData)),
-      btnsOption: allBtnsOption,
+      btnsOption: defaultBtnsOption,
       columnBtnsOption: [
         { value: 'edit', icon: 'el-icon-edit', label: '编辑' },
         { value: 'remove', icon: 'el-icon-delete', label: '删除' },
@@ -624,19 +624,6 @@ export default {
         }
       }
       this.columnData.columnBtnsList = list
-    },
-    'columnData.type': {
-      handler(val) {
-        if (val == 5) {
-          this.columnData.hasPage = false
-          this.btnsOption = [allBtnsOption[0]]
-          this.btnsList = []
-          if (this.btnsList.includes('add')) this.btnsList = ['add']
-        } else {
-          this.btnsOption = allBtnsOption
-        }
-      },
-      immediate: true
     }
   },
   created() {
@@ -646,6 +633,7 @@ export default {
       this.columnData.funcs = Object.assign({}, defaultFuncsData, this.columnData.funcs)
     }
     if (this.webType != 4) {
+      this.updateBtnsList(this.columnData.type)
       let list = []
       const loop = (data, parent) => {
         if (!data) return
@@ -999,6 +987,20 @@ export default {
         this.getDataInterfaceSelector()
       }
     },
+    toggleType(val) {
+      console.log(123123)
+      if (this.columnData.type == val) return;
+      this.columnData.type = val;
+      this.updateBtnsList(val)
+    },
+    updateBtnsList(val) {
+      if (val == 5) {
+        this.btnsOption = [defaultBtnsOption[0]]
+        this.btnsList = this.btnsList.filter(o => o === 'add');
+      } else {
+        this.btnsOption = defaultBtnsOption
+      }
+    }
   }
 }
 </script>
