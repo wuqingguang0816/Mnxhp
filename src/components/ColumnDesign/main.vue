@@ -288,7 +288,6 @@
               <el-divider>按钮配置</el-divider>
               <el-checkbox-group v-model="btnsList" class="btnsList">
                 <div v-for="item in btnsOption" :key="item.value">
-
                   <el-checkbox :label="item.value">
                     <span class="btn-label">{{ item.value | btnText }}</span>
                     <el-input v-model="item.label" />
@@ -499,6 +498,13 @@ const defaultFuncsData = {
     name: "脚本事件"
   }
 }
+const allBtnsOption = [
+  { value: 'add', icon: 'el-icon-plus', label: '新增' },
+  { value: 'download', icon: 'el-icon-download', label: '导出' },
+  { value: 'upload', icon: 'el-icon-upload2', label: '导入' },
+  { value: 'batchRemove', icon: 'el-icon-delete', label: '批量删除' },
+  { value: 'batchPrint', icon: 'el-icon-printer', label: '批量打印' },
+]
 export default {
   name: 'columnDesign',
   props: {
@@ -532,13 +538,7 @@ export default {
       searchList: [],
       columnList: [],
       columnData: JSON.parse(JSON.stringify(defaultColumnData)),
-      btnsOption: [
-        { value: 'add', icon: 'el-icon-plus', label: '新增' },
-        { value: 'download', icon: 'el-icon-download', label: '导出' },
-        { value: 'upload', icon: 'el-icon-upload2', label: '导入' },
-        { value: 'batchRemove', icon: 'el-icon-delete', label: '批量删除' },
-        { value: 'batchPrint', icon: 'el-icon-printer', label: '批量打印' },
-      ],
+      btnsOption: allBtnsOption,
       columnBtnsOption: [
         { value: 'edit', icon: 'el-icon-edit', label: '编辑' },
         { value: 'remove', icon: 'el-icon-delete', label: '删除' },
@@ -627,8 +627,15 @@ export default {
     },
     'columnData.type': {
       handler(val) {
-        if (val == 5) this.columnData.hasPage = false
-      }
+        if (val == 5) {
+          this.columnData.hasPage = false
+          this.btnsOption = [allBtnsOption[0]]
+          if (this.btnsList.includes('add')) this.btnsList = ['add']
+        } else {
+          this.btnsOption = allBtnsOption
+        }
+      },
+      immediate: true
     }
   },
   created() {
