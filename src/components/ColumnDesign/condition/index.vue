@@ -744,9 +744,7 @@ export default {
       this.pconditions.push(item);
     },
     fieldNameChange(val, item, i) {
-      if (item.jnpfKey != this.nowJnpfKey) {
-        item.symbol = undefined;
-      }
+     
       let obj = this.usedFormItems.filter(o => o.__vModel__ == val)[0];
       item.fieldName = obj.__config__.label;
       item.jnpfKey = obj.__config__.jnpfKey;
@@ -761,6 +759,10 @@ export default {
         item.props = this.dataOptionMap[val].props;
       }
       item = { ...item, ...this.columnDataMap[val] };
+
+      if (item.jnpfKey != this.nowJnpfKey) {
+        item.symbol = undefined;
+      }
       this.$set(this.pconditions, i, item);
       this.nowJnpfKey = item.jnpfKey;
     },
