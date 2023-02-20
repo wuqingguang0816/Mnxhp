@@ -4,11 +4,11 @@
       <el-switch v-model="activeData.option.tooltipShow" />
     </el-form-item>
     <template v-if="activeData.option.tooltipShow">
-      <el-form-item label="字体大小">
+      <el-form-item label="字体大小" v-show="showType=='pc'">
         <el-input-number v-model="activeData.option.tooltipTextStyleFontSize"
           controls-position="right" :min="12" :max="25" />
       </el-form-item>
-      <el-form-item label="字体加粗">
+      <el-form-item label="字体加粗" v-show="showType=='pc'">
         <el-switch v-model="activeData.option.tooltipTextStyleFontWeight" />
       </el-form-item>
       <el-form-item label="字体颜色">
@@ -22,7 +22,7 @@
 </template>
 <script>
 export default {
-  props: ['activeData'],
+  props: ['activeData', 'showType'],
   data() {
     return {
     }

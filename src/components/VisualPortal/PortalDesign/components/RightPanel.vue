@@ -13,26 +13,33 @@
               v-if="activeData.jnpfKey!='tab'&&activeData.jnpfKey!='collapse'" />
             <Chart :activeData="activeData" :showType="showType" :menuList="menuList"
               :appMenuList="appMenuList" v-if="!noNeedTypeSetList.includes(activeData.jnpfKey)" />
-            <MainTitle :activeData="activeData"
+            <MainTitle :activeData="activeData" :showType="showType"
               v-if="chartList.includes(activeData.jnpfKey)||activeData.jnpfKey=='mapChart'" />
-            <SubTitle :activeData="activeData"
+            <SubTitle :activeData="activeData" :showType="showType"
               v-if="chartList.includes(activeData.jnpfKey)||activeData.jnpfKey=='mapChart'" />
-            <BarStyle :activeData="activeData" v-if="activeData.jnpfKey=='barChart'" />
-            <XAxis :activeData="activeData"
+            <BarStyle :activeData="activeData" :showType="showType"
+              v-if="activeData.jnpfKey=='barChart'" />
+            <XAxis :activeData="activeData" :showType="showType"
               v-if="activeData.jnpfKey=='barChart'||activeData.jnpfKey=='lineChart'" />
-            <YAxis :activeData="activeData"
+            <YAxis :activeData="activeData" :showType="showType"
               v-if="activeData.jnpfKey=='barChart'||activeData.jnpfKey=='lineChart'" />
-            <Label :activeData="activeData" v-if="chartList.includes(activeData.jnpfKey)" />
-            <Tooltip :activeData="activeData"
+            <Label :activeData="activeData" :showType="showType"
+              v-if="chartList.includes(activeData.jnpfKey)" />
+            <Tooltip :activeData="activeData" :showType="showType"
               v-if="chartList.includes(activeData.jnpfKey)||activeData.jnpfKey=='mapChart'" />
-            <Margin :activeData="activeData"
-              v-if="chartList.includes(activeData.jnpfKey)||activeData.jnpfKey=='mapChart'" />
-            <Legend :activeData="activeData" v-if="chartList.includes(activeData.jnpfKey)" />
-            <Color :activeData="activeData" v-if="chartList.includes(activeData.jnpfKey)" />
-            <Data :activeData="activeData" v-if="needDataSetList.includes(activeData.jnpfKey)" />
-            <Tab :activeData="activeData" v-if="activeData.jnpfKey=='tab'" />
-            <Collapse :activeData="activeData" v-if="activeData.jnpfKey=='collapse'" />
-            <Schedule :activeData="activeData" v-if="activeData.jnpfKey=='schedule'" />
+            <Margin :activeData="activeData" :showType="showType"
+              v-if="(chartList.includes(activeData.jnpfKey)||activeData.jnpfKey=='mapChart')&&showType=='px'" />
+            <Legend :activeData="activeData" :showType="showType"
+              v-if="chartList.includes(activeData.jnpfKey)" />
+            <Color :activeData="activeData" :showType="showType"
+              v-if="chartList.includes(activeData.jnpfKey)" />
+            <Data :activeData="activeData" :showType="showType"
+              v-if="needDataSetList.includes(activeData.jnpfKey)" />
+            <Tab :activeData="activeData" :showType="showType" v-if="activeData.jnpfKey=='tab'" />
+            <Collapse :activeData="activeData" :showType="showType"
+              v-if="activeData.jnpfKey=='collapse'" />
+            <Schedule :activeData="activeData" :showType="showType"
+              v-if="activeData.jnpfKey=='schedule'" />
           </el-collapse>
         </template>
       </el-form>

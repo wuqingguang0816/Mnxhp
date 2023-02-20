@@ -734,6 +734,7 @@ export const basicComponents = [{
     appModuleId: '',
     appUrlAddress: '',
     appLinkTarget: '_self',
+    carouselType: false
   },
   dataType: 'static',
   propsApi: '',

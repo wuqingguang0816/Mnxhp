@@ -7,7 +7,7 @@
       <el-input-number v-model="activeData.option.titleTextStyleFontSize" controls-position="right"
         :min="12" :max="25" />
     </el-form-item>
-    <el-form-item label="字体加粗">
+    <el-form-item label="字体加粗" v-show="showType=='pc'">
       <el-switch v-model="activeData.option.titleTextStyleFontWeight" />
     </el-form-item>
     <el-form-item label="字体颜色">
@@ -28,7 +28,7 @@
 <script>
 import { alignList } from '../../components/config'
 export default {
-  props: ['activeData'],
+  props: ['activeData', 'showType'],
   data() {
     return {
       alignList

@@ -183,7 +183,6 @@ export default {
     .el-card__body {
       padding: 0;
       position: relative;
-      overflow: unset;
     }
   }
 }

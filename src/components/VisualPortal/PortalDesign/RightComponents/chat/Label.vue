@@ -4,7 +4,7 @@
       <el-switch v-model="activeData.option.seriesLabelShow" />
     </el-form-item>
     <template v-if="activeData.option.seriesLabelShow">
-      <template v-if="activeData.jnpfKey=='pieChart'">
+      <template v-if="activeData.jnpfKey=='pieChart'&&showType=='pc'">
         <el-form-item label="显示位置">
           <el-radio-group v-model="activeData.option.seriesLabelPosition" size="small">
             <el-radio-button :label="item.value" v-for="(item,index) in labelPositionList"
@@ -21,19 +21,21 @@
           </el-checkbox-group>
         </el-form-item>
       </template>
-      <el-form-item label="字体大小">
-        <el-input-number v-model="activeData.option.seriesLabelFontSize" controls-position="right"
-          :min="12" :max="25" />
-      </el-form-item>
-      <el-form-item label="字体加粗">
-        <el-switch v-model="activeData.option.seriesLabelFontWeight" />
-      </el-form-item>
-      <el-form-item label="字体颜色">
-        <el-color-picker v-model="activeData.option.seriesLabelColor" />
-      </el-form-item>
-      <el-form-item label="背景色">
-        <el-color-picker v-model="activeData.option.seriesLabelBgColor" />
-      </el-form-item>
+      <template v-if="showType == 'pc'">
+        <el-form-item label="字体大小">
+          <el-input-number v-model="activeData.option.seriesLabelFontSize" controls-position="right"
+            :min="12" :max="25" />
+        </el-form-item>
+        <el-form-item label="字体加粗">
+          <el-switch v-model="activeData.option.seriesLabelFontWeight" />
+        </el-form-item>
+        <el-form-item label="字体颜色">
+          <el-color-picker v-model="activeData.option.seriesLabelColor" />
+        </el-form-item>
+        <el-form-item label="背景色">
+          <el-color-picker v-model="activeData.option.seriesLabelBgColor" />
+        </el-form-item>
+      </template>
     </template>
   </el-collapse-item>
 </template>
@@ -47,7 +49,7 @@ const labelShowList = [
   { label: '百分比', value: 'percent' }
 ]
 export default {
-  props: ['activeData'],
+  props: ['activeData', 'showType'],
   data() {
     return {
       labelPositionList: labelPositionList,

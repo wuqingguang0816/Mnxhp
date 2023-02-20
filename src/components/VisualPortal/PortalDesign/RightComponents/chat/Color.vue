@@ -1,6 +1,7 @@
 <template>
   <el-collapse-item title="自定义配色设置" name="11">
-    <template v-if="activeData.jnpfKey != 'pieChart'&&activeData.jnpfKey != 'radarChart'">
+    <template
+      v-if="activeData.jnpfKey != 'pieChart'&&activeData.jnpfKey != 'radarChart'&&showType=='pc'">
       <el-form-item label="文字颜色">
         <el-color-picker v-model="activeData.option.AxisTextStyleColor" />
       </el-form-item>
@@ -14,7 +15,7 @@
           <el-color-picker v-model="scope.row.color1" />
         </template>
       </el-table-column>
-      <el-table-column prop="fullName" label="渐变色">
+      <el-table-column prop="fullName" label="渐变色" v-if="showType=='pc'">
         <template slot-scope="scope">
           <el-color-picker v-model="scope.row.color2" />
         </template>
@@ -33,7 +34,7 @@
 </template>
 <script>
 export default {
-  props: ['activeData'],
+  props: ['activeData', 'showType'],
   methods: {
     addHandle() {
       this.activeData.option.colorList.push({ color1: "", color2: "" })

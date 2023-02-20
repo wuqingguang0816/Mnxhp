@@ -135,6 +135,7 @@ export default {
   mounted() {
     if (typeof this.conf === 'object' && this.conf !== null) {
       this.config = { ...defaultConf, ...this.conf }
+      console.log(this.config)
     } else {
       this.config = deepClone(defaultConf)
       this.config.layoutId = 100
@@ -185,6 +186,7 @@ export default {
         y = lastItem.y + lastItem.h
       }
       let row = { ...clone, i, x, y }
+      console.log(this.config.layoutId)
       if (needDefaultList.includes(row.jnpfKey) && type != 'copy') row.option.defaultValue = this.getDefaultValue(row)
       if (currentItem) {
         if (currentItem.jnpfKey == 'card') currentItem.children.push(row)
@@ -368,7 +370,7 @@ $lighterBlue: #409eff;
         }
 
         .outeripad {
-          background: url("../../../../assets/images/iphoneBg.png");
+          background: url('../../../../assets/images/iphoneBg.png');
           width: 389px;
           height: 711px;
           padding: 65px 40px;

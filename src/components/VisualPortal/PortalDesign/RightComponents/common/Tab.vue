@@ -1,13 +1,13 @@
 <template>
   <el-collapse-item title="标签设置" name="13">
-    <el-form-item label="风格类型">
+    <el-form-item label="风格类型" v-show="showType==='pc'">
       <el-radio-group v-model="activeData.type">
         <el-radio-button label="">默认</el-radio-button>
         <el-radio-button label="card">选项卡</el-radio-button>
         <el-radio-button label="border-card">卡片化</el-radio-button>
       </el-radio-group>
     </el-form-item>
-    <el-form-item label="选项卡位置">
+    <el-form-item label="选项卡位置" v-show="showType==='pc'">
       <el-radio-group v-model="activeData['tab-position']">
         <el-radio-button label="top">顶部</el-radio-button>
         <el-radio-button label="left">左侧</el-radio-button>
@@ -23,7 +23,7 @@
           <i class="icon-ym icon-ym-darg" />
         </div>
         <el-input v-model="item.title" placeholder="标签名称" size="small" />
-        <el-input v-model="item.icon" placeholder="请输入图标名称">
+        <el-input v-model="item.icon" placeholder="请输入图标名称" v-show="showType==='pc'">
           <el-button slot="append" @click="openIconsDialog(item.icon,index)">
             选择
           </el-button>
@@ -47,7 +47,7 @@ import draggable from 'vuedraggable'
 import iconBox from '@/components/JNPF-iconBox'
 export default {
   components: { draggable, iconBox },
-  props: ['activeData'],
+  props: ['activeData', 'showType'],
   data() {
     return {
       iconsVisible: false,

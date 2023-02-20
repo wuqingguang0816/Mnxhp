@@ -14,15 +14,15 @@
       <el-form-item label="线条宽度">
         <el-slider v-model="activeData.option.seriesLineStyleWidth" :max="20" />
       </el-form-item>
-      <el-form-item label="点的大小">
+      <el-form-item label="点的大小" v-show="showType == 'pc'">
         <el-slider v-model="activeData.option.seriesSymbolRotate" :max="20" />
       </el-form-item>
     </template>
     <template v-if="activeData.jnpfKey == 'pieChart'">
-      <el-form-item label="南丁格尔图">
+      <el-form-item label="南丁格尔图" v-show="showType == 'pc'||activeData.option.styleType==1">
         <el-switch v-model="activeData.option.roseType" />
       </el-form-item>
-      <el-form-item label="自动排序">
+      <el-form-item label="自动排序" v-show="showType == 'pc'">
         <el-switch v-model="activeData.option.sortable" />
       </el-form-item>
       <el-form-item label="不展示零">
@@ -30,22 +30,23 @@
       </el-form-item>
     </template>
     <template v-if="activeData.jnpfKey == 'radarChart'">
-      <el-form-item label="指示器大小">
+      <el-form-item label="指示器大小" v-show="showType == 'pc'">
         <el-input-number v-model="activeData.option.radarAxisNameFontSize" controls-position="right"
           :min="12" :max="25" />
       </el-form-item>
-      <el-form-item label="指示器加粗">
+      <el-form-item label="指示器加粗" v-show="showType == 'pc'">
         <el-switch v-model="activeData.option.radarAxisNameFontWeight" />
       </el-form-item>
       <el-form-item label="指示器颜色">
         <el-color-picker v-model="activeData.option.radarAxisNameColor" />
       </el-form-item>
-      <el-form-item label="区域透明度">
+      <el-form-item label="区域透明度" v-show="showType == 'pc'">
         <el-slider v-model="activeData.option.seriesAreaStyleOpacity" :max="1" :step="0.1" />
       </el-form-item>
     </template>
     <template v-if="activeData.jnpfKey == 'mapChart'">
-      <mapSet :activeData="activeData" :cascaderOptions="cascaderOptions"></mapSet>
+      <mapSet :activeData="activeData" :cascaderOptions="cascaderOptions" :showType="showType">
+      </mapSet>
     </template>
     <template v-if="activeData.jnpfKey == 'rankList'">
       <el-divider>列表字段</el-divider>
@@ -105,9 +106,9 @@
         </el-radio-group>
       </el-form-item>
       <el-form-item label="文本内容" v-if="activeData.dataType=='static'">
-        <el-input v-if="styleType==1" v-model="activeData.option.defaultValue"
+        <el-input v-if="activeData.option.styleType==1" v-model="activeData.option.defaultValue"
           placeholder="请输入文本内容" />
-        <el-button v-if="styleType==2" @click="showEditor()">设置</el-button>
+        <el-button v-if="activeData.option.styleType==2" @click="showEditor()">设置</el-button>
       </el-form-item>
       <el-form-item label="数据接口" v-else>
         <interface-dialog :value="activeData.propsApi" :title="activeData.propsName"
@@ -115,7 +116,7 @@
       </el-form-item>
       <refresh v-if="activeData.dataType==='dynamic'&&activeData.propsApi"
         :refresh="activeData.refresh" />
-      <template v-if="styleType!=2">
+      <template v-if="activeData.option.styleType!=2">
         <el-form-item label="文本大小">
           <el-input-number v-model="activeData.option.textFontSize" controls-position="right"
             :min="12" :max="25" />
@@ -167,10 +168,11 @@
         :showType="showType" />
     </template>
     <template v-if="activeData.jnpfKey == 'image'">
-      <jnpf-form-tip-item label="上传图片" v-if="styleType==1">
+      <jnpf-form-tip-item label="上传图片" v-if="activeData.option.styleType==1">
         <single-img v-model="activeData.option.defaultValue" />
       </jnpf-form-tip-item>
-      <jnpf-form-tip-item label="图片地址" v-else-if="styleType==2" tipLabel='地址以http://或https://为开头'>
+      <jnpf-form-tip-item label="图片地址" v-else-if="activeData.option.styleType==2"
+        tipLabel='地址以http://或https://为开头'>
         <el-input v-model="activeData.option.defaultValue" placeholder="图片地址" />
       </jnpf-form-tip-item>
       <el-form-item label="数据接口" v-else>
@@ -193,7 +195,7 @@
         :showType="showType" />
     </template>
     <template v-if="activeData.jnpfKey == 'carousel'">
-      <el-form-item label="轮播图方向">
+      <el-form-item label="轮播图方向" v-show="showType=='pc'">
         <el-radio-group v-model="activeData.option.carouselDirection" size="small">
           <el-radio-button :label="item.value" v-for="(item,index) in directionList" :key="index">
             {{item.label}}
@@ -218,15 +220,19 @@
           </el-radio-button>
         </el-radio-group>
       </el-form-item>
-      <el-form-item label="箭头显示" v-if="activeData.option.carouselDirection=='horizontal'">
+      <el-form-item label="箭头显示"
+        v-if="activeData.option.carouselDirection=='horizontal'&&showType=='pc'">
         <el-radio-group v-model="activeData.option.carouselArrow" size="small">
           <el-radio-button :label="item.value" v-for="(item,index) in arrowList" :key="index">
             {{item.label}}
           </el-radio-button>
         </el-radio-group>
       </el-form-item>
-      <el-form-item label="循环显示">
+      <el-form-item label="循环显示" v-show="showType=='pc'">
         <el-switch v-model="activeData.option.carouselLoop" />
+      </el-form-item>
+      <el-form-item label="3D效果">
+        <el-switch v-model="activeData.option.carouselType" />
       </el-form-item>
       <el-form-item label="选项">
         <el-button @click="showData('carouselData','carouselDataVisible')">设置</el-button>
@@ -243,11 +249,12 @@
       <textSet :activeData="activeData" />
     </template>
     <template v-if="activeData.jnpfKey == 'video'">
-      <el-form-item label="上传视频" v-if="styleType=='1'">
+      <el-form-item label="上传视频" v-if="activeData.option.styleType=='1'">
         <JNPF-UploadFz v-model="fileList" :limit="1" buttonText="上传视频" accept="video/*"
           fileSize="100" @change="UploadFzChange" />
       </el-form-item>
-      <jnpf-form-tip-item label="视频地址" v-else-if="styleType==2" tipLabel='地址以http://或https://开头'>
+      <jnpf-form-tip-item label="视频地址" v-else-if="activeData.option.styleType==2"
+        tipLabel='地址以http://或https://开头'>
         <el-input v-model="activeData.option.defaultValue" placeholder="视频地址" />
       </jnpf-form-tip-item>
       <template v-else>
@@ -543,25 +550,9 @@ export default {
         this.getStyleTypeOptions()
       },
       immediate: true,
-    },
-    styleType: {
-      handler(val) {
-        const jnpfKey = this.activeData.jnpfKey
-        // if (jnpfKey == 'image' || jnpfKey == 'video') {
-        //   console.log(val)
-        //   // this.activeData.propsApi = ""
-        //   // this.activeData.propsName = ""
-        //   // this.activeData.dataType = 'static'
-        //   // this.activeData.option.defaultValue = ''
-        //   if (val == '3') this.activeData.dataType = 'dynamic'
-        // }
-      },
-    },
+    }
   },
   computed: {
-    styleType() {
-      return this.activeData.option.styleType
-    },
     linkType() {
       return this.activeData.option.linkType || ''
     },
@@ -571,7 +562,7 @@ export default {
       this.cascaderOptions = res.data
     })
     this.fileList = []
-    if (this.activeData.jnpfKey == 'video' && this.activeData.option.defaultValue && this.styleType == 1) {
+    if (this.activeData.jnpfKey == 'video' && this.activeData.option.defaultValue && this.activeData.option.styleType == 1) {
       this.fileList = [this.activeData.option.defaultValue]
     }
   },
@@ -592,7 +583,7 @@ export default {
     getStyleTypeOptions() {
       this.styleTypeOptions = []
       const jnpfKey = this.activeData.jnpfKey
-      if (jnpfKey == 'barChart') this.styleTypeOptions = barStyleList
+      if (jnpfKey == 'barChart') this.styleTypeOptions = JSON.parse(JSON.stringify(barStyleList))
       if (jnpfKey == 'lineChart') this.styleTypeOptions = lineStyleList
       if (jnpfKey == 'pieChart') this.styleTypeOptions = pieStyleList
       if (jnpfKey == 'radarChart') this.styleTypeOptions = radarStyleList
@@ -602,6 +593,7 @@ export default {
       if (jnpfKey == 'video') this.styleTypeOptions = videoStyleList
       if (jnpfKey == 'mapChart') this.styleTypeOptions = mapStyleList
       if (jnpfKey == 'tableList') this.styleTypeOptions = tableTypeList
+      console.log(this.styleTypeOptions)
     },
     getTitle() {
       const jnpfKey = this.activeData.jnpfKey
