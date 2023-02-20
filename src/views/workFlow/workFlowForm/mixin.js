@@ -44,7 +44,7 @@ export default {
           if (this.selfInit) this.selfInit(data)
           if (!this.billEnCode) return this.$emit('setPageLoad')
           BillNumber(this.billEnCode).then(res => {
-            if (data.enCode === 'crmOrder') {
+            if (this.billEnCode === 'OrderNumber') {
               this.dataForm.orderCode = res.data
             } else {
               this.dataForm.billNo = res.data

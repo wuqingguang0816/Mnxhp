@@ -4,16 +4,24 @@
     class="JNPF-dialog JNPF-dialog_center" width="600px">
     <el-form ref="dataForm" v-loading="formLoading" :model="dataForm" :rules="dataRule"
       label-width="100px">
-      <el-form-item label="账户" prop="account">
-        <el-input v-model="dataForm.account" placeholder="账户" readonly />
+      <el-form-item label="旧密码" prop="oldPassword">
+        <el-input v-model="dataForm.oldPassword" placeholder="旧密码" show-password />
       </el-form-item>
-      <el-form-item label="新密码" prop="userPassword">
-        <el-input v-model="dataForm.userPassword" type="password" autocomplete="off"
-          placeholder="输入新密码" />
+      <el-form-item label="新密码" prop="password">
+        <el-input v-model="dataForm.password" placeholder="新密码" show-password />
       </el-form-item>
-      <el-form-item label="确认新密码" prop="validatePassword">
-        <el-input v-model="dataForm.validatePassword" type="password" autocomplete="off"
-          placeholder="确认新密码" />
+      <el-form-item label="重复密码" prop="password2">
+        <el-input v-model="dataForm.password2" placeholder="重复密码" show-password />
+      </el-form-item>
+      <el-form-item label="验证码" prop="code">
+        <el-col :span="17">
+          <el-input v-model="dataForm.code" placeholder="验证码">
+          </el-input>
+        </el-col>
+        <el-col :span="6" :offset="1" style="height:32px">
+          <img id="imgcode" alt="点击切换验证码" title="点击切换验证码" :src="define.comUrl+imgUrl"
+               @click="changeImg">
+        </el-col>
       </el-form-item>
     </el-form>
     <span slot="footer" class="dialog-footer">
@@ -25,15 +33,13 @@
 </template>
 
 <script>
-import {
-  resetUserPassword2
-} from '@/api/permission/user'
+import { UpdatePassword } from '@/api/permission/userSetting'
 import md5 from 'js-md5'
 import { getSystemConfig } from '@/api/system/sysConfig'
 
 export default {
   data() {
-    const validateUserPassword = (rule, value, callback) => {
+    const validatePass = (rule, value, callback) => {
       //是否包含数字
       const containsNumbers = /[0-9]+/
       //是否包含小写字符
@@ -82,24 +88,24 @@ export default {
         callback();
       }
     }
-    const validatePassword = (rule, value, callback) => {
-      if (value === '') {
-        callback(new Error('请再次输入新密码'));
-      } else if (value !== this.dataForm.userPassword) {
-        callback(new Error('两次输入密码不一致!'));
+    var validatePass2 = (rule, value, callback) => {
+      if (value !== this.dataForm.password) {
+        callback(new Error('两次密码输入不一致'));
       } else {
         callback();
       }
-    }
+    };
     return {
       visible: false,
       formLoading: false,
       btnLoading: false,
+      imgUrl: "",
+      timestamp: '',
       dataForm: {
-        id: '',
-        account: '',
-        userPassword: '',
-        validatePassword: ''
+        oldPassword: '',
+        password: '',
+        password2: '',
+        code: '',
       },
       baseForm:{
         passwordStrengthLimit:0,
@@ -111,16 +117,24 @@ export default {
         containsCharacters:false,
       },
       dataRule: {
-        userPassword: [
-          { required: true, validator: validateUserPassword, trigger: 'blur' }
+        oldPassword: [
+          { required: true, message: '旧密码不能为空', trigger: 'blur' }
         ],
-        validatePassword: [
-          { required: true, validator: validatePassword, trigger: 'blur' }
-        ]
+        password: [
+          { required: true, validator: validatePass, trigger: 'blur' }
+        ],
+        password2: [
+          { required: true, message: '重复密码不能为空', trigger: 'blur' },
+          { validator: validatePass2, trigger: 'blur' }
+        ],
+        code: [
+          { required: true, message: '验证码不能为空', trigger: 'blur' }
+        ],
       }
     }
   },
   created() {
+    this.changeImg(),
     this.initData()
   },
   methods: {
@@ -154,12 +168,13 @@ export default {
       this.$refs['dataForm'].validate((valid) => {
         if (valid) {
           this.btnLoading = true
-          const formData = {
-            id: this.dataForm.id,
-            userPassword: md5(this.dataForm.userPassword),
-            validatePassword: md5(this.dataForm.validatePassword)
+          let query = {
+            oldPassword: md5(this.dataForm.oldPassword),
+            password: md5(this.dataForm.password),
+            code: this.dataForm.code,
+            timestamp: this.timestamp
           }
-          resetUserPassword2(formData).then(res => {
+          UpdatePassword(query).then(res => {
             this.$message({
               message: res.msg,
               type: 'success',
@@ -175,6 +190,11 @@ export default {
           })
         }
       })
+    },
+    changeImg() {
+      let timestamp = Math.random()
+      this.timestamp = timestamp
+      this.imgUrl = `/api/file/ImageCode/${timestamp}`
     }
   }
 }

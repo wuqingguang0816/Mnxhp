@@ -9,7 +9,7 @@
           <i v-if="showClose" class="el-select__caret el-input__icon el-icon-circle-close"
             @click.stop="clear"></i>
         </template>
-        <el-button @click.stop="addOrUpdateHandle()" slot="append">
+        <el-button @click.stop="goDataInterface()" slot="append">
           添加</el-button>
       </el-input>
     </div>
@@ -104,18 +104,13 @@
         <el-button type="primary" @click="select()">{{$t('common.confirmButton')}}</el-button>
       </span>
     </el-dialog>
-    <el-dialog :visible.sync="formVisible" append-to-body
-      class="JNPF-dialog JNPF-dialog_center JNPF-dialog-tree-select" lock-scroll width="80%">
-      <Form ref="Form" @close="closeForm" />
-    </el-dialog>
   </div>
 </template>
 
 <script>
 import { getDataInterfaceSelectorList } from '@/api/systemData/dataInterface'
-import Form from '@/views/systemData/dataInterface/Form.vue'
 export default {
-  components: { Form },
+  components: {},
   props: {
     value: {
       default: ''
@@ -172,7 +167,6 @@ export default {
       treeData: [],
       inputHovering: false,
       visible: false,
-      formVisible: false
     }
   },
   computed: {
@@ -253,19 +247,10 @@ export default {
       this.checked = row.id
       this.checkedRow = row
     },
-    addOrUpdateHandle(id) {
-      let flag = 1
-      this.formVisible = true
-      this.$nextTick(() => {
-        this.$refs.Form.init(id, "30be5ef4e3074dd89385ad6b4540c63d", flag)
-      })
-    },
-    closeForm(isRefresh) {
-      this.formVisible = false
-      if (isRefresh) {
-        this.reset()
-      }
-    },
+    goDataInterface() {
+      let src = window.location.protocol + "//" + window.location.host + "/systemData/dataInterface"
+      window.open(src, "_blank")
+    }
   }
 }
 </script>

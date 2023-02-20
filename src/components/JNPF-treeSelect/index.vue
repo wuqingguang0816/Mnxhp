@@ -36,8 +36,6 @@
 <script>
 let isFirst = 1
 import { mapState } from 'vuex'
-import { getDictionaryTypeSelector } from "@/api/systemData/dictionary"
-import { clustering } from 'echarts-stat'
 export default {
   name: "el-tree-select",
   props: {
@@ -79,6 +77,10 @@ export default {
       type: Boolean,
       default: false
     },
+    isDataInterface: {
+      type: Number,
+      default: 0
+    }
   },
   computed: {
     ...mapState({
@@ -111,7 +113,9 @@ export default {
       return data[this.props.label].indexOf(value) !== -1;
     },
     selectFocus() {
-      this.$emit('selectChange')
+      if (this.isDataInterface === 1) {
+        this.$emit('selectChange')
+      }
       this.initHandle()
       if (isFirst && this.$refs.elSelect) {
         isFirst = 0

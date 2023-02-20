@@ -68,15 +68,6 @@ export const resetUserPassword = (data) => {
   })
 }
 
-// 首次登录强制修改用户密码
-export const resetUserPassword2 = (data) => {
-  return request({
-    url: `/api/permission/Users/${data.id}/Actions/ResetPassword2`,
-    method: 'POST',
-    data
-  })
-}
-
 // 更新用户状态
 export const updateUserState = (id) => {
   return request({

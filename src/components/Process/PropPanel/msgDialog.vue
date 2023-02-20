@@ -161,7 +161,6 @@ export default {
     },
     goMsgConfig() {
       let src = window.location.protocol + "//" + window.location.host + "/msgCenter/sendConfig"
-      // let src = "http://localhost:3000/msgCenter/sendConfig"
       window.open(src, "_blank")
     }
   }

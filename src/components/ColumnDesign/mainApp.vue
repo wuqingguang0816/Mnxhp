@@ -417,6 +417,7 @@ export default {
         jnpfKey: o.__config__.jnpfKey,
         value: '',
         searchType: getSearchType(o),
+        searchMultiple: true,
         ...o
       }));
       this.sortOptions = sortOptions.map(o => ({
@@ -458,6 +459,7 @@ export default {
           value: '',
           searchType: 1,
           __vModel__: o,
+          searchMultiple: true,
           __config__: {
             label: "",
             jnpfKey: 'comInput',

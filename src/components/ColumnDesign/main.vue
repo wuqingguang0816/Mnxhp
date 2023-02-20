@@ -158,12 +158,13 @@
                   <el-form-item label="数据接口">
                     <el-row>
                       <el-col :span="18">
-                        <JNPF-TreeSelect :options="dataInterfaceSelector"
+                        <JNPF-TreeSelect :options="dataInterfaceSelector" :isDataInterface="1"
                           v-model="columnData.treePropsUrl" placeholder="请选择数据接口" lastLevel
-                          lastLevelKey='categoryId' lastLevelValue='1' clearable />
+                          lastLevelKey='categoryId' lastLevelValue='1' clearable
+                          @selectChange="getDataInterfaceSelector" />
                       </el-col>
                       <el-col :span="6">
-                        <el-button @click="addInterface()">
+                        <el-button @click="goDataInterface()">
                           添加</el-button>
                       </el-col>
                     </el-row>
@@ -383,10 +384,6 @@
           </div>
         </el-scrollbar>
       </div>
-      <el-dialog :visible.sync="interfaceVisible" append-to-body
-        class="JNPF-dialog JNPF-dialog_center JNPF-dialog-tree-select" lock-scroll width="80%">
-        <Form ref="Form" @close="closeForm" />
-      </el-dialog>
     </div>
     <form-script v-if="formScriptVisible" :key="scriptKey" :value="activeItem.func" ref="formScript"
       :type="activeItem.type" @updateScript="updateScript" @closeDialog="formScriptVisible=false" />
@@ -408,7 +405,6 @@ import { noColumnShowList, noSearchList, useInputList, useDateList } from '@/com
 import { getDataInterfaceSelector } from '@/api/systemData/dataInterface'
 import { noVModelList, systemComponentsList } from '@/components/Generator/generator/comConfig'
 import { getFields } from '@/api/onlineDev/visualDev'
-import Form from '@/views/systemData/dataInterface/Form.vue'
 const excludeList = [...noVModelList, 'uploadFz', 'uploadImg', 'colorPicker', 'popupTableSelect', 'relationForm', 'popupSelect', 'calculate', 'groupTitle']
 
 const getSearchType = item => {
@@ -520,7 +516,7 @@ export default {
       default: () => []
     },
   },
-  components: { draggable, FormScript, uploadBox, CustomBtn, InterfaceDialog, Condition, Form },
+  components: { draggable, FormScript, uploadBox, CustomBtn, InterfaceDialog, Condition },
   computed: {
     ruleListBtn() {
       if (this.columnData.ruleList && this.columnData.ruleList.length > 0) {
@@ -565,7 +561,6 @@ export default {
       activeItem: {},
       scriptKey: '',
       uploadBoxVisible: false,
-      interfaceVisible: false,
     }
   },
   filters: {
@@ -675,6 +670,7 @@ export default {
         jnpfKey: o.__config__.jnpfKey,
         value: '',
         searchType: getSearchType(o),
+        searchMultiple: true,
         ...o
       }));
       this.columnData.columnOptions = columnOptions
@@ -714,6 +710,7 @@ export default {
           value: '',
           searchType: 1,
           __vModel__: o,
+          searchMultiple: true,
           __config__: {
             label: "",
             jnpfKey: 'comInput',
@@ -974,18 +971,9 @@ export default {
         relationField: ''
       })) : []
     },
-    addInterface(id) {
-      let flag = 1
-      this.interfaceVisible = true
-      this.$nextTick(() => {
-        this.$refs.Form.init(id, "30be5ef4e3074dd89385ad6b4540c63d", flag)
-      })
-    },
-    closeForm(isRefresh) {
-      this.interfaceVisible = false
-      if (isRefresh) {
-        this.getDataInterfaceSelector()
-      }
+    goDataInterface() {
+      let src = window.location.protocol + "//" + window.location.host + "/systemData/dataInterface"
+      window.open(src, "_blank")
     },
     toggleType(val) {
       if (this.columnData.type == val) return;
