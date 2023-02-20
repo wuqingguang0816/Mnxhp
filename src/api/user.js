@@ -28,6 +28,14 @@ export function getInfo() {
   })
 }
 
+// 修改密码信息发送
+export function updatePasswordMessage() {
+  return request({
+    url: '/api/oauth/updatePasswordMessage',
+    method: 'Post',
+  })
+}
+
 // 退出登录
 export function logout() {
   return request({

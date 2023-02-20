@@ -12,6 +12,7 @@
 import ResetPwdForm from './ResetPassword'
 import { mapGetters } from 'vuex'
 import { getSystemConfig } from '@/api/system/sysConfig'
+import { updatePasswordMessage } from '@/api/user'
 
 export default {
   name: 'AppMain',
@@ -48,6 +49,9 @@ export default {
     initData() {
       this.listLoading = true
       this.$nextTick(() => {
+        updatePasswordMessage().then(res => {
+
+        }),
         getSystemConfig().then(res => {
           if(this.userInfo.changePasswordDate==null && res.data.mandatoryModificationOfInitialPassword==1){
             this.resetFormVisible = true
