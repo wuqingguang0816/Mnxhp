@@ -67,7 +67,6 @@
     <right-panel :active-data="activeData" :refresh="refresh" :showType="showType" />
     <Preview :visible.sync="previewVisible" :layout="layout" />
   </el-container>
-
 </template>
 <script>
 import VueGridLayout from 'vue-grid-layout'

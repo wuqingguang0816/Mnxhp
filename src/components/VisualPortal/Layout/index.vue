@@ -1,10 +1,11 @@
 <template>
   <el-scrollbar class="layout-area">
     <template v-if="layout.length">
-      <grid-layout :layout.sync="layout" :row-height="40" :is-draggable="false"
-        :is-resizable="false">
+      <grid-layout :layout.sync="layout" :row-height="40">
         <grid-item v-for="item in layout" :x="item.x" :y="item.y" :w="item.w" :h="item.h"
-          :i="item.i" :key="item.i" static>
+          :i="item.i" :key="item.i" :maxH="item.maxH" :minH="item.minH" :minW="item.minW"
+          :maxW="item.maxW" @resized="resizedEvent(item.i,item)" @moved="movedEvent"
+          :static="enabledLock">
           <parser :item="item" :detailed="true" />
           <div class="mask" v-if="mask&&!noNeedMaskList.includes(item.jnpfKey)"></div>
         </grid-item>
@@ -25,6 +26,8 @@ export default {
   props: {
     layout: { type: Array, default: () => [] },
     mask: { type: Boolean, default: false },
+    detailed: { type: Boolean, default: false },
+    enabledLock: { type: Boolean, default: true },
   },
   components: {
     GridLayout: VueGridLayout.GridLayout,
@@ -37,8 +40,23 @@ export default {
       timer: ''
     }
   },
-  mounted() {
-    console.log(this.layout)
+  methods: {
+    movedEvent() {
+      this.$emit('layoutUpdatedEvent')
+    },
+    resizedEvent(i, item) {
+      this.$eventBus.$emit('eChart' + i)
+      const loop = (data) => {
+        if (data.children && item.children.length) {
+          data.children.map(ele => {
+            if (ele.jnpfKey) this.$eventBus.$emit('eChart' + ele.i)
+            if (ele.children && ele.children.length) loop(ele)
+          })
+        }
+      }
+      loop(item)
+      this.movedEvent()
+    }
   }
 }
 </script>
@@ -69,6 +87,9 @@ export default {
       width: 100%;
       height: 100%;
       z-index: 1;
+    }
+    >>> .vue-resizable-handle {
+      z-index: 200;
     }
   }
 }

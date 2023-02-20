@@ -12,7 +12,7 @@
       </div>
     </div>
     <div class="main" style="padding:0">
-      <PortalLayout v-if="showPortalLayout" :layout="layout" mask />
+      <PortalLayout v-if="showPortalLayout" :layout="layout" mask detailed />
     </div>
   </el-dialog>
 </template>
