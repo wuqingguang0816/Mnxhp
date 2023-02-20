@@ -1,12 +1,13 @@
 <template>
   <div class="JNPF-common-layout">
     <JNPF-table :data="list" :hasNO="false" class="recordListTable" height="100%">
-      <el-table-column prop="nodeName" label="节点名称" show-overflow-tooltip width="200">
+      <!-- <el-table-column prop="nodeName" label="节点名称" show-overflow-tooltip width="200">
         <template slot-scope="scope">
           <el-link type="primary" :underline="false" @click="handelNodeDetail(scope.row)">
             {{scope.row.nodeName}}</el-link>
         </template>
-      </el-table-column>
+      </el-table-column> -->
+      <el-table-column prop="nodeName" label="节点名称" width="200" />
       <el-table-column prop="userName" label="操作人员" width="150" />
       <el-table-column prop="creatorTime" label="接收时间" width="150"
         :formatter="jnpf.tableDateFormat" />
