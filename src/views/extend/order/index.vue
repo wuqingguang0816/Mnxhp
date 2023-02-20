@@ -279,7 +279,6 @@ export default {
       let data = {
         id: row.id,
         flowId: row.flowId,
-        enCode: 'crmOrder',
         opType: '-1'
       }
       this.formVisible = true
@@ -291,7 +290,6 @@ export default {
       let data = {
         id: row.id,
         flowId: row.flowId,
-        enCode: 'crmOrder',
         opType: 0,
         status: row.currentState
       }
@@ -327,7 +325,6 @@ export default {
       let data = {
         id: '',
         flowId: item.id,
-        enCode: 'crmOrder',
         opType: '-1'
       }
       this.flowListVisible = false

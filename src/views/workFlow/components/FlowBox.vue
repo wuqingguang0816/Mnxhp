@@ -511,6 +511,7 @@ export default {
         data.type = this.flowTemplateInfo.type
         data.draftData = res.data.draftData || null
         data.formData = res.data.formData || {}
+        data.formEnCode = this.flowFormInfo.enCode
         const formUrl = this.flowFormInfo.formType == 2 ? 'workFlow/workFlowForm/dynamicForm' : this.flowFormInfo.urlAddress ? this.flowFormInfo.urlAddress.replace(/\s*/g, "") : `workFlow/workFlowForm/${this.flowFormInfo.enCode}`
         this.currentView = (resolve) => require([`@/views/${formUrl}`], resolve)
         this.flowTaskNodeList = res.data.flowTaskNodeList || []
