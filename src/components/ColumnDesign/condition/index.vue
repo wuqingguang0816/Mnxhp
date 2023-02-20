@@ -149,24 +149,19 @@
                 </el-select>
               </template>
               <template v-else-if="['cascader'].includes(item.jnpfKey)">
-                <el-cascader
-                  v-model="item.fieldValue"
-                  :options="item.dataOptions"
-                  :props="item.props"
-                  @change="handleCascaderChange"
-                ></el-cascader>
+
+                <el-cascader v-model="item.fieldValue"
+                @change="handleCascaderChange"
+                :options="item.dataOptions" :props="item.props.props"
+                :placeholder="item.placeholder" :clearable="item.clearable"
+                :show-all-levels="item['show-all-levels']" :separator="item.separator"
+                :filterable="item.filterable" :disabled="item.disabled" />
               </template>
               <template v-else-if="['treeSelect'].includes(item.jnpfKey)">
-                <JNPF-TreeSelect
-                  v-model="item.fieldValue"
-                  :options="item.dataOptions"
-                  :props="item.props"
-                  style="width: 100%"
-                  :placeholder="'请选择'"
-                  :clearable="true"
-                  :multiple="false"
-                  :filterable="true"
-                />
+                <JNPF-TreeSelect v-model="item.fieldValue"
+                :options="item.dataOptions" :props="item.props.props"
+                :placeholder="item.placeholder" :clearable="item.clearable"
+                :multiple="item.multiple" :filterable="item.filterable" :disabled="item.disabled" />
               </template>
               <template v-else-if="item.jnpfKey === 'calculate'">
                 <!-- <el-input-number
@@ -343,11 +338,7 @@
                   :placeholder="'请选择' + item.__config__.label"
                   clearable
                   class="item"
-                  :selectType="
-                    item.selectType != 'all' || item.selectType != 'custom'
-                      ? 'all'
-                      : item.selectType
-                  "
+                  :selectType="item.selectType"
                   :ableDepIds="item.ableDepIds"
                   :ablePosIds="item.ablePosIds"
                   :ableUserIds="item.ableUserIds"
@@ -370,11 +361,10 @@
               <template
                 v-else-if="['posSelect', 'currPosition'].includes(item.jnpfKey)"
               >
-                <posSelect
-                  v-model="item.fieldValue"
-                  placeholder="请选择"
-                  clearable
-                  @change="onConditionObjChange(arguments, item)"
+                <posSelect v-model="item.fieldValue" :placeholder="'请选择'+item.__config__.label" clearable
+                class="item" :selectType="item.selectType" :ableDepIds="item.ableDepIds"
+                :ablePosIds="item.ablePosIds" :multiple="item.searchMultiple" 
+                @change="onConditionObjChange(arguments, item)"
                 />
               </template>
               <template v-else-if="item.jnpfKey === 'address'">
