@@ -367,6 +367,7 @@ export default {
       })
     },
     dataFormSubmit() {
+      if (!this.checkUserList.length) return this.$message.warning('请选择发起人员')
       this.visibleUsers = false
       let data = {
         id: '',
