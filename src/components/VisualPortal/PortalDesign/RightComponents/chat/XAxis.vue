@@ -1,6 +1,6 @@
 <template>
   <el-collapse-item title="X轴设置" name="5">
-    <el-form-item label="坐标轴类型">
+    <el-form-item label="坐标轴类型" v-show="showType=='pc'">
       <el-radio-group v-model="activeData.option.category" size="small">
         <el-radio-button :label="item.value" v-for="(item,index) in categoryList" :key="index">
           {{item.label}}
@@ -8,7 +8,7 @@
       </el-radio-group>
     </el-form-item>
     <el-form-item label="显示坐标轴">
-      <el-switch v-model="activeData.option.xAxisShow" v-show="showType=='pc'" />
+      <el-switch v-model="activeData.option.xAxisShow" />
     </el-form-item>
     <template v-if="activeData.option.xAxisShow">
       <el-form-item label="坐标轴颜色">

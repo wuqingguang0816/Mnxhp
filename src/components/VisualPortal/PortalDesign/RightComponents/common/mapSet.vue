@@ -53,11 +53,11 @@
       <el-switch v-model="activeData.option.drillDown" />
     </el-form-item>
     <template v-if="activeData.option.drillDown">
-      <el-form-item label="字体大小">
+      <el-form-item label="字体大小" v-if="showType == 'pc'">
         <el-input-number v-model="activeData.option.drillDownFontSize" controls-position="right"
           :min="12" :max="25" />
       </el-form-item>
-      <el-form-item label="字体加粗">
+      <el-form-item label="字体加粗" v-if="showType == 'pc'">
         <el-switch v-model="activeData.option.drillDownFontWeight" />
       </el-form-item>
       <el-form-item label="字体颜色">
