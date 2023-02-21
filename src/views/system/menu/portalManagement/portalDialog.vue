@@ -86,7 +86,11 @@ export default {
     disabled: {
       type: Boolean,
       default: false
-    }
+    },
+    systemId: {
+      type: String,
+      default: ''
+    },
   },
   model: {
     prop: 'value',
@@ -100,7 +104,7 @@ export default {
         keyword: '',
         currentPage: 1,
         pageSize: 20,
-        messageSource: 1
+        type: 0
       },
       total: 0,
       checked: '',
@@ -123,7 +127,7 @@ export default {
   methods: {
     initData() {
       this.listLoading = true
-      getPortalManageSelector(this.listQuery).then(res => {
+      getPortalManageSelector(this.systemId, this.listQuery).then(res => {
         this.list = res.data.list
         this.total = res.data.pagination.total
         this.listLoading = false

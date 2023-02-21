@@ -6,10 +6,10 @@
       v-loading="formLoading" class="menuForm">
       <el-form-item label="门户名称" prop="fullName">
         <portalDialog :value="dataForm.portalId" :title="dataForm.fullName"
-          @change="portalChange" />
+          :systemId="dataForm.systemId" @change="portalChange" />
       </el-form-item>
-      <el-form-item label="默认首页" prop="hPageMark">
-        <el-switch v-model="dataForm.hPageMark" :active-value="1" :inactive-value="0" />
+      <el-form-item label="默认首页" prop="homePageMark">
+        <el-switch v-model="dataForm.homePageMark" :active-value="1" :inactive-value="0" />
       </el-form-item>
       <el-form-item label="排序" prop="sortCode">
         <el-input-number :min="0" :max="999999" v-model="dataForm.sortCode"
@@ -31,7 +31,7 @@
 </template>
 
 <script>
-import { createPortal, updatePortal, getPortalManageInfo } from '@/api/system/menu'
+import { createPortal, updatePortal, getPortalManageInfo } from '@/api/system/portal'
 import portalDialog from './portalDialog'
 export default {
   components: { portalDialog },
@@ -45,7 +45,7 @@ export default {
         portalId: '',
         fullName: '',
         enCode: '',
-        hPageMark: 0,
+        homePageMark: 0,
         sortCode: 0,
         enabledMark: 1,
         description: '',
