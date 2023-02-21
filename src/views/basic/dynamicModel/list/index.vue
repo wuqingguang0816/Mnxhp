@@ -257,7 +257,7 @@
           </template>
           <template v-else>
             <template
-              v-if="columnData.childTableStyle==2&&childColumnList.length&&columnData.type ==1&&columnData.type == 2">
+              v-if="columnData.childTableStyle==2&&childColumnList.length&&(columnData.type ==1||columnData.type == 2)">
               <el-table-column width="0" />
               <el-table-column type="expand" width="40">
                 <template slot-scope="scope">
