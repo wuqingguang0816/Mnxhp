@@ -86,8 +86,8 @@
         </template>
       </el-tab-pane>
       <el-tab-pane label="流转记录" v-if="setting.opType!='-1'" v-loading="loading">
-        <recordList :list='flowTaskOperatorRecordList' :endTime='endTime'
-          :flowId="setting.flowId" />
+        <recordList :list='flowTaskOperatorRecordList' :endTime='endTime' :flowId="setting.flowId"
+          :opType="setting.opType" />
       </el-tab-pane>
       <el-tab-pane label="审批汇总" v-if="setting.opType!='-1' && isSummary" v-loading="loading"
         name="recordSummary">
