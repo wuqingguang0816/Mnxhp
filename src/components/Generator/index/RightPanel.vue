@@ -1041,7 +1041,7 @@ export default {
       this.setDefaultOptions()
     },
     changeStorage() {
-      this.activeData.__vModel__ = ''
+      if (this.activeData.__config__.isStorage == 1) this.activeData.__vModel__ = ''
       if (!this.$store.getters.hasTable && this.activeData.__config__.isStorage == 2) this.$emit('setVModel', this.activeData)
       const loop = list => {
         for (let i = 0; i < list.length; i++) {
