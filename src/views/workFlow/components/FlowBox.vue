@@ -201,15 +201,15 @@
         </el-form-item>
         <el-form-item :label="flowTaskInfo.completion==100?'复活意见':'变更意见'" prop="handleOpinion">
           <el-row>
-            <el-col :span="22">
+            <el-col :span="24">
               <el-input type="textarea" v-model="resurgenceForm.handleOpinion" placeholder="请填写意见"
                 :rows="4" />
             </el-col>
-            <el-col :span="2">
+            <!-- <el-col :span="2">
               <el-button plain @click="commonWords()" class="commonWords-button">
                 常用语
               </el-button>
-            </el-col>
+            </el-col> -->
           </el-row>
         </el-form-item>
         <el-form-item :label="flowTaskInfo.completion==100?'复活附件':'变更附件'" prop="fileList">
