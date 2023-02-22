@@ -406,7 +406,12 @@ import { getDataInterfaceSelector } from '@/api/systemData/dataInterface'
 import { noVModelList, systemComponentsList } from '@/components/Generator/generator/comConfig'
 import { getFields } from '@/api/onlineDev/visualDev'
 const excludeList = [...noVModelList, 'uploadFz', 'uploadImg', 'colorPicker', 'popupTableSelect', 'relationForm', 'popupSelect', 'calculate', 'groupTitle']
-
+const getSearchMultiple = item => {
+  const jnpfKey = item.__config__.jnpfKey
+  const searchMultipleList = ['select', 'depSelect', 'roleSelect', 'userSelect', 'usersSelect', 'comSelect', 'posSelect', 'groupSelect']
+  if (searchMultipleList.includes(jnpfKey)) return true
+  return false
+}
 const getSearchType = item => {
   const jnpfKey = item.__config__.jnpfKey
   // 等于-1  模糊-2  范围-3
@@ -670,7 +675,7 @@ export default {
         jnpfKey: o.__config__.jnpfKey,
         value: '',
         searchType: getSearchType(o),
-        searchMultiple: true,
+        searchMultiple: getSearchMultiple(o),
         ...o
       }));
       this.columnData.columnOptions = columnOptions
@@ -710,7 +715,7 @@ export default {
           value: '',
           searchType: 1,
           __vModel__: o,
-          searchMultiple: true,
+          searchMultiple: getSearchMultiple(o),
           __config__: {
             label: "",
             jnpfKey: 'comInput',

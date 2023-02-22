@@ -229,6 +229,12 @@ import CustomBtn from './CustomBtn'
 import { getDrawingList } from '@/components/Generator/utils/db'
 import { noColumnShowList, noSearchList, useInputList, useDateList } from '@/components/Generator/generator/comConfig'
 import { getFields } from '@/api/onlineDev/visualDev'
+const getSearchMultiple = item => {
+  const jnpfKey = item.__config__.jnpfKey
+  const searchMultipleList = ['select', 'depSelect', 'roleSelect', 'userSelect', 'usersSelect', 'comSelect', 'posSelect', 'groupSelect']
+  if (searchMultipleList.includes(jnpfKey)) return true
+  return false
+}
 const getSearchType = item => {
   const jnpfKey = item.__config__.jnpfKey
   // 等于-1  模糊-2  范围-3
@@ -411,13 +417,14 @@ export default {
         width: null,
         ...o
       }));
+
       this.searchOptions = searchOptions.map(o => ({
         label: o.__config__.label,
         prop: o.__vModel__,
         jnpfKey: o.__config__.jnpfKey,
         value: '',
         searchType: getSearchType(o),
-        searchMultiple: true,
+        searchMultiple: getSearchMultiple(o),
         ...o
       }));
       this.sortOptions = sortOptions.map(o => ({
@@ -459,7 +466,7 @@ export default {
           value: '',
           searchType: 1,
           __vModel__: o,
-          searchMultiple: true,
+          searchMultiple: getSearchMultiple(o),
           __config__: {
             label: "",
             jnpfKey: 'comInput',
