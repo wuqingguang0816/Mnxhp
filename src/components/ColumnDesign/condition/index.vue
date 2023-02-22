@@ -139,10 +139,11 @@
                   ['radio', 'checkbox', 'select'].includes(item.jnpfKey)
                 "
               >
-                <el-select v-model="item.fieldValue" placeholder="请选择">
+                <el-select v-model="item.fieldValue" placeholder="请选择" :multiple="item.multiple">
                   <el-option
                     v-for="(item, index) in item.dataOptions"
                     :key="index"
+                    
                     :label="item[item.dataLabel]"
                     :value="item[item.dataValue]"
                   ></el-option>
@@ -372,6 +373,7 @@
                   v-model="item.fieldValue"
                   placeholder="请选择"
                   :level="item.level"
+                  :multiple="item.multiple"
                   clearable
                   @change="onConditionListChange(arguments, item)"
                 />
@@ -734,7 +736,6 @@ export default {
       this.pconditions.push(item);
     },
     fieldNameChange(val, item, i) {
-     
       let obj = this.usedFormItems.filter(o => o.__vModel__ == val)[0];
       item.fieldName = obj.__config__.label;
       item.jnpfKey = obj.__config__.jnpfKey;
@@ -775,8 +776,13 @@ export default {
           item.fieldValue = "";
         }
       }
-
       item.multiple = ["in", "notIn"].includes(val) ? true : false;
+      if(['posSelect', 'currPosition'].includes(item.jnpfKey) && ["in", "notIn"].includes(val)){
+        item.searchMultiple = true
+      }
+      if(['cascader'].includes(item.jnpfKey) && ["in", "notIn"].includes(val)){
+        item.props.props.multiple = true
+      }
       this.$set(this.pconditions, i, item);
     },
     logicChange(val, item) {
@@ -848,6 +854,9 @@ export default {
   font-weight: 400;
 }
 .el-select {
+  width: 100%;
+}
+.el-cascader{
   width: 100%;
 }
 .el-input-number {
