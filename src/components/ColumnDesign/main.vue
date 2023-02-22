@@ -912,6 +912,7 @@ export default {
       this.columnData.treePropsValue = 'id'
       this.columnData.treePropsChildren = 'children'
       this.columnData.treePropsLabel = 'fullName'
+      this.columnData.treeSynType = 0;
     },
     addCustomBtn() {
       const id = this.jnpf.idGenerator()
