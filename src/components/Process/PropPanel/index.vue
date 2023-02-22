@@ -470,7 +470,7 @@
                   <div class="per-cell" v-if="startForm.hasPrintBtn">
                     <p style="width:112px"></p>
                     <JNPF-TreeSelect :options="printTplList" v-model="startForm.printId"
-                      placeholder="请选择打印模板" lastLevel clearable></JNPF-TreeSelect>
+                      placeholder="请选择打印模板" lastLevel clearable multiple></JNPF-TreeSelect>
                   </div>
                 </div>
               </el-form-item>
@@ -1522,7 +1522,7 @@
                 <div class="per-cell" v-if="approverForm.hasPrintBtn">
                   <p style="width:112px"></p>
                   <JNPF-TreeSelect :options="printTplList" v-model="approverForm.printId"
-                    placeholder="请选择打印模板" lastLevel clearable></JNPF-TreeSelect>
+                    placeholder="请选择打印模板" lastLevel clearable multiple></JNPF-TreeSelect>
                 </div>
                 <div class="per-cell">
                   <div slot="label" class="has-free-approver ">
