@@ -185,7 +185,6 @@ export default {
         y = lastItem.y + lastItem.h
       }
       let row = { ...clone, i, x, y }
-      console.log(this.config.layoutId)
       if (needDefaultList.includes(row.jnpfKey) && type != 'copy') row.option.defaultValue = this.getDefaultValue(row)
       if (currentItem) {
         if (currentItem.jnpfKey == 'card') currentItem.children.push(row)

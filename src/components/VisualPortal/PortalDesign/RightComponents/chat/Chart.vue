@@ -593,7 +593,6 @@ export default {
       if (jnpfKey == 'video') this.styleTypeOptions = videoStyleList
       if (jnpfKey == 'mapChart') this.styleTypeOptions = mapStyleList
       if (jnpfKey == 'tableList') this.styleTypeOptions = tableTypeList
-      console.log(this.styleTypeOptions)
     },
     getTitle() {
       const jnpfKey = this.activeData.jnpfKey

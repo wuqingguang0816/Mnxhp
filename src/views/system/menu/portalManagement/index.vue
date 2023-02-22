@@ -38,9 +38,9 @@
               </div>
               <JNPF-table v-loading="listLoading" :data="list">
                 <el-table-column prop="fullName" label="门户名称" align="center" />
-                <el-table-column prop="hPageMark" label="默认首页" align="center">
+                <el-table-column prop="homePageMark" label="默认首页" align="center">
                   <template slot-scope="scope">
-                    <span>{{scope.row.hPageMark==1?'是':'否'}}</span>
+                    <span>{{scope.row.homePageMark==1?'是':'否'}}</span>
                   </template>
                 </el-table-column>
                 <el-table-column prop="description" label="说明" align="center" />
@@ -122,7 +122,7 @@ import Transfer from "./Transfer";
 export default {
   name: "PortalManagement",
   components: {
-    Form,Transfer
+    Form, Transfer
   },
   data() {
     return {
@@ -222,7 +222,7 @@ export default {
       }
       getPortalManageList(this.systemId, query)
         .then((res) => {
-          this.treeList = res.data.list;
+          this.list = res.data.list;
           this.listLoading = false;
           this.btnLoading = false;
         })

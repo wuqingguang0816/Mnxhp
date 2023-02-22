@@ -436,14 +436,37 @@ export const timeAxisList = [
 ]
 export const tableList = [
   {
-    'comInputField101': '张三',
-    'comInputField102': '王五',
-    'comInputField103': '2012-04-12 08:46'
+    'comInputField101': '01',
+    'comInputField102': 'xx门店',
+    'comInputField103': '2598元',
+    'comInputField104': '85%',
+    'comInputField105': '2012-04-12 08:46'
   },
   {
-    'comInputField101': '李四',
-    'comInputField102': '销售二部',
-    'comInputField103': '2012-04-12 09:26'
+    'comInputField101': '02',
+    'comInputField102': 'xx门店',
+    'comInputField103': '2598元',
+    'comInputField104': '85%',
+    'comInputField105': '2012-04-12 08:46'
+  },
+  {
+    'comInputField101': '03',
+    'comInputField102': 'xx门店',
+    'comInputField103': '2598元',
+    'comInputField104': '85%',
+    'comInputField105': '2012-04-12 08:46'
+  }, {
+    'comInputField101': '04',
+    'comInputField102': 'xx门店',
+    'comInputField103': '2598元',
+    'comInputField104': '85%',
+    'comInputField105': '2012-04-12 08:46'
+  }, {
+    'comInputField101': '05',
+    'comInputField102': 'xx门店',
+    'comInputField103': '2598元',
+    'comInputField104': '85%',
+    'comInputField105': '2012-04-12 08:46'
   },
 ]
 

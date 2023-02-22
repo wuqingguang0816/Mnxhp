@@ -544,15 +544,16 @@ export const basicComponents = [{
     textFontWeight: false,
     appCount: 5,
     appColumnList: [{
-      fullName: '销售一部',
-      filedName: 'comInputField101',
+      fullName: '姓名',
+      filedName: 'comInputField102',
     },
     {
-      fullName: '销售二部',
-      filedName: 'comInputField102',
-    }],
+      fullName: '日期',
+      filedName: 'comInputField105',
+    }
+    ],
     columnData: [{
-      fullName: '销售一部',
+      fullName: '排名',
       filedName: 'comInputField101',
       sortable: false,
       fixed: "none",
@@ -560,28 +561,44 @@ export const basicComponents = [{
       width: 0
     },
     {
-      fullName: '销售二部',
+      fullName: '姓名',
       filedName: 'comInputField102',
-      sortable: true,
+      sortable: false,
+      fixed: "none",
+      align: 'left',
+      width: 0
+    },
+    {
+      fullName: '销售额',
+      filedName: 'comInputField103',
+      sortable: false,
+      fixed: "none",
+      align: 'left',
+      width: 0
+    },
+    {
+      fullName: '完成情况',
+      filedName: 'comInputField104',
+      sortable: false,
       fixed: "none",
       align: 'left',
       width: 0
     }],
     rowData: [{
       fullName: '标题',
-      filedName: 'comInputField101',
+      filedName: 'comInputField102',
       fontSize: 14,
       fontWeight: false,
       fontColor: '#000'
     }, {
       fullName: '描述',
-      filedName: 'comInputField102',
+      filedName: 'comInputField103',
       fontSize: 12,
       fontWeight: false,
       fontColor: '#999'
     }, {
       fullName: '时间',
-      filedName: 'comInputField103',
+      filedName: 'comInputField105',
       fontSize: 12,
       fontWeight: false,
       fontColor: '#999'
