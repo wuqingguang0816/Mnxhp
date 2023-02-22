@@ -83,7 +83,7 @@
             :systemId='systemId' />
           <el-dialog title="同步门户" :visible.sync="releaseDialogVisible" append-to-body
             class="JNPF-dialog JNPF-dialog_center release-dialog" lock-scroll width="600px">
-            <el-alert title="此操作将该门户重置，是否继续？" type="warning" :closable="false" show-icon />
+            <el-alert title="此操作将同步该门户，是否继续？" type="warning" :closable="false" show-icon />
             <div class="dialog-main">
               <div class="item" :class="{'active':releaseQuery.pc===1}" @click="selectToggle('pc')">
                 <i class="item-icon icon-ym icon-ym-pc"></i>
@@ -101,6 +101,12 @@
                 </div>
               </div>
             </div>
+            <el-form class="dialog-form-main" :model="releaseQuery" label-position="right"
+              label-width="50px" ref="releaseForm">
+              <el-form-item label="用户" prop="toUserIds">
+                <usersSelect v-model="toUserIds" placeholder="全部用户" multiple clearable />
+              </el-form-item>
+            </el-form>
             <span slot="footer" class="dialog-footer">
               <el-button @click="releaseDialogVisible = false">{{$t('common.cancelButton')}}
               </el-button>
@@ -115,7 +121,7 @@
 </template>
 <script>
 import {
-  getPortalManageList,
+  getPortalManageList, delPortal, Release
 } from "@/api/system/portal";
 import Form from "./Form";
 import Transfer from "./Transfer";
@@ -140,13 +146,15 @@ export default {
       releaseQuery: {
         pc: 1,
         app: 1,
-        systemId: ''
+        systemId: '',
+        toUserIds: ''
       },
       total: 0,
       list: [],
       portalId: '',
       releaseDialogVisible: false,
       currRow: {},
+      toUserIds: [],
       releaseBtnLoading: false,
       transferShow: false,
       transferId: ''
@@ -174,7 +182,12 @@ export default {
       this.releaseQuery = {
         pc: 1,
         app: 1,
+        systemId: '',
+        toUserIds: ''
       }
+      this.$nextTick(() => {
+        this.$refs['releaseForm'] && this.$refs['releaseForm'].resetFields()
+      })
     },
     selectToggle(key) {
       this.releaseQuery[key] = this.releaseQuery[key] === 1 ? 0 : 1
@@ -184,6 +197,7 @@ export default {
       if (!this.releaseQuery.pc && !this.releaseQuery.app) return this.$message.error('请至少选择一种同步方式')
       this.releaseBtnLoading = true
       this.releaseQuery.systemId = this.systemId
+      this.releaseQuery.toUserIds = this.toUserIds.join(',')
       Release(this.currRow.id, this.releaseQuery).then(res => {
         this.releaseBtnLoading = false
         this.releaseDialogVisible = false
@@ -240,19 +254,18 @@ export default {
     handleDel(id) {
       this.$confirm(this.$t("common.delTip"), this.$t("common.tipTitle"), {
         type: "warning",
-      })
-        .then(() => {
-          delMenu(id).then((res) => {
-            this.$message({
-              type: "success",
-              message: res.msg,
-              duration: 1500,
-              onClose: () => {
-                this.initData();
-              },
-            });
+      }).then(() => {
+        delPortal(id).then((res) => {
+          this.$message({
+            type: "success",
+            message: res.msg,
+            duration: 1500,
+            onClose: () => {
+              this.initData();
+            },
           });
-        })
+        });
+      })
         .catch(() => { });
     },
     exportMenu(id) {
@@ -313,7 +326,7 @@ export default {
     display: flex;
     justify-content: space-between;
     >>> .el-form-item {
-      width: 215px;
+      width: 100%;
     }
   }
   .dialog-main {

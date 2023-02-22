@@ -42,3 +42,20 @@ export function updatePortal(data) {
     data
   })
 }
+// 删除
+export function delPortal(id) {
+  return request({
+    url: `/api/system/PortalManage/${id}`,
+    method: 'DELETE',
+    data
+  })
+}
+
+//发布
+export function Release(id, data) {
+  return request({
+    url: `/api//Portal/Actions/release/${id}/${data.systemId}`,
+    method: 'put',
+    data
+  })
+}
