@@ -777,11 +777,21 @@ export default {
         }
       }
       item.multiple = ["in", "notIn"].includes(val) ? true : false;
-      if(['posSelect', 'currPosition'].includes(item.jnpfKey) && ["in", "notIn"].includes(val)){
-        item.searchMultiple = true
+      if(['posSelect', 'currPosition'].includes(item.jnpfKey) ){
+        if(["in", "notIn"].includes(val)){
+          item.searchMultiple = true
+        }else{
+          item.searchMultiple = false
+        }
+        
       }
-      if(['cascader'].includes(item.jnpfKey) && ["in", "notIn"].includes(val)){
-        item.props.props.multiple = true
+      if(['cascader'].includes(item.jnpfKey) ){
+        if(["in", "notIn"].includes(val)){
+          item.props.props.multiple = true
+        }else{
+          item.props.props.multiple = false
+        }
+        
       }
       this.$set(this.pconditions, i, item);
     },
