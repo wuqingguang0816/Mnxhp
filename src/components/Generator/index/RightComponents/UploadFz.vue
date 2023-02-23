@@ -65,13 +65,21 @@ export default {
   mixins: [comMixin],
   data() {
     return {
-      acceptArray: this.activeData.accept != "" ? this.activeData.accept.split(',,') : [],
     }
+  },
+  computed: {
+    acceptArray: {
+      get() {
+        return this.activeData.accept != "" ? this.activeData.accept.split(',,') : []
+      },
+      set(val) {
+        this.activeData.accept = val.join(',,');
+      }
+    },
   },
   created() { },
   methods: {
     onChange() {
-      this.activeData.accept = this.acceptArray.join(',,');
       this.activeData.__config__.renderKey = +new Date()
     }
   }
