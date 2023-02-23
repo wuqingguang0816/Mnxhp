@@ -34,18 +34,15 @@
       <div class="JNPF-common-layout-main JNPF-flex-main">
         <div class="JNPF-common-head">
           <div v-if="isPreview || !columnData.useBtnPermission">
-            <span v-for="(item, i) in columnData.btnsList" :key="i" >
-              <template v-if="item.value == 'batchPrint'" >
+            <span v-for="(item, i) in columnData.btnsList" :key="i">
+              <template v-if="item.value == 'batchPrint'">
                 <el-dropdown>
-                  <el-button type="text" icon="el-icon-printer"  :icon="item.icon" style="margin-left:20px"
-                    >批量打印
+                  <el-button type="text" icon="el-icon-printer" :icon="item.icon"
+                    style="margin-left:20px">批量打印
                   </el-button>
                   <el-dropdown-menu slot="dropdown">
-                    <div
-                      @click="handleBatchPrint(item.id)"
-                      v-for="(item, index) in printListOptions"
-                      :key="index"
-                    >
+                    <div @click="handleBatchPrint(item.id)"
+                      v-for="(item, index) in printListOptions" :key="index">
                       <el-dropdown-item>{{ item.fullName }}</el-dropdown-item>
                     </div>
                   </el-dropdown-menu>
@@ -53,25 +50,21 @@
               </template>
               <template v-else>
                 <el-button :type="i==0?'primary':'text'" :icon="item.icon"
-                @click="headBtnsHandel(item.value)" >
-                {{item.label}}</el-button>
-              </template>  
+                  @click="headBtnsHandel(item.value)">
+                  {{item.label}}</el-button>
+              </template>
             </span>
           </div>
           <div v-else>
             <span v-for="(item, i) in columnData.btnsList" :key="i">
               <template v-if="item.value == 'batchPrint'">
                 <el-dropdown>
-                  <el-button type="text" icon="el-icon-printer" v-has="'btn_'+item.value" :icon="item.icon"
-                  style="margin-left:20px"
-                    >批量打印
+                  <el-button type="text" icon="el-icon-printer" v-has="'btn_'+item.value"
+                    :icon="item.icon" style="margin-left:20px">批量打印
                   </el-button>
                   <el-dropdown-menu slot="dropdown">
-                    <div
-                      @click="handleBatchPrint(item.id)"
-                      v-for="(item, index) in printListOptions"
-                      :key="index"
-                    >
+                    <div @click="handleBatchPrint(item.id)"
+                      v-for="(item, index) in printListOptions" :key="index">
                       <el-dropdown-item>{{ item.fullName }}</el-dropdown-item>
                     </div>
                   </el-dropdown-menu>
@@ -79,11 +72,11 @@
               </template>
               <template v-else>
                 <el-button :type="i==0?'primary':'text'" :icon="item.icon" v-has="'btn_'+item.value"
-                @click="headBtnsHandel(item.value)" >
-                {{item.label}}</el-button>
-              </template>  
+                  @click="headBtnsHandel(item.value)">
+                  {{item.label}}</el-button>
+              </template>
             </span>
-            
+
           </div>
           <div class="JNPF-common-head-right">
             <el-tooltip content="高级查询" placement="top" v-if="columnData.hasSuperQuery">
@@ -309,7 +302,21 @@
                       <el-table :data="scope.row[child.prop]" size='mini'>
                         <el-table-column :prop="childTable.vModel" :label="childTable.childLabel"
                           :align="childTable.align" :width="childTable.width"
-                          v-for="(childTable,iii) in child.children" :key="iii" />
+                          v-for="(childTable,iii) in child.children" :key="iii">
+                          <template slot-scope="scope">
+                            <template v-if="childTable.jnpfKey==='relationForm'">
+                              <el-link :underline="false"
+                                @click.native="toDetail(childTable.modelId,scope.row[`${childTable.vModel}_id`])"
+                                type="primary">
+                                {{ scope.row[childTable.vModel]}}
+                              </el-link>
+                            </template>
+                            <template v-else>
+                              {{ scope.row[childTable.vModel]}}
+                            </template>
+                          </template>
+                        </el-table-column>
+
                       </el-table>
                     </el-tab-pane>
                   </el-tabs>
@@ -476,11 +483,8 @@
         </template>
       </div>
     </div>
-    <print-browse
-      :visible.sync="printBrowseVisible"
-      :id="printId"
-      :batchIds="multipleSelection.join()"
-    />
+    <print-browse :visible.sync="printBrowseVisible" :id="printId"
+      :batchIds="multipleSelection.join()" />
     <FlowBox v-if="flowVisible" ref="FlowBox" @close="closeFlow" />
     <Form v-show="formVisible" ref="Form" @refreshDataList="refresh" />
     <extraForm v-show="extraFormVisible" ref="extraForm" @refreshDataList="refresh" />
@@ -509,7 +513,7 @@
 import PrintBrowse from "@/components/PrintBrowse/batch";
 import { getModelList, getModelSubList, deleteModel, batchDelete, exportModel, createModel, updateModel, getConfigData } from '@/api/onlineDev/visualDev'
 import { Create, Update } from '@/api/workFlow/workFlowForm'
-import {printOptionsApi} from '@/api/system/printDev'
+import { printOptionsApi } from '@/api/system/printDev'
 import { getDictionaryDataSelector } from '@/api/systemData/dictionary'
 import { getDataInterfaceRes } from '@/api/systemData/dataInterface'
 import { getColumnsByModuleId } from '@/api/common'
@@ -531,7 +535,7 @@ import { mapGetters } from "vuex";
 
 export default {
   name: 'dynamicModel',
-  components: {PrintBrowse, Form, extraForm, ExportBox, Search, Detail, FlowBox, ChildTableColumn, SuperQuery, CandidateForm, CustomBox },
+  components: { PrintBrowse, Form, extraForm, ExportBox, Search, Detail, FlowBox, ChildTableColumn, SuperQuery, CandidateForm, CustomBox },
   props: ['config', 'modelId', 'isPreview'],
   data() {
     return {
@@ -638,7 +642,7 @@ export default {
       if (this.config.enableFlow == 1) {
         if (this.config.flowId) this.getFlowList()
       }
-      this.hasBatchBtn = this.columnData.btnsList.some(o => ['batchRemove','batchPrint'].includes(o.value))
+      this.hasBatchBtn = this.columnData.btnsList.some(o => ['batchRemove', 'batchPrint'].includes(o.value))
       this.formData = JSON.parse(this.config.formData)
       this.customBtnsList = this.columnData.customBtnsList || []
       this.columnBtnsList = this.columnData.columnBtnsList || []
@@ -672,11 +676,11 @@ export default {
         this.initData()
       }
     },
-    async getPrintListOptions(ids){
-      printOptionsApi(ids).then(res=>{
+    async getPrintListOptions(ids) {
+      printOptionsApi(ids).then(res => {
         this.printListOptions = res.data
       })
-      
+
     },
     initData() {
       if (this.isPreview) return
@@ -1077,10 +1081,10 @@ export default {
       for (let i = 0; i < this.columnData.columnList.length; i++) {
         let e = this.columnData.columnList[i]
         item[e.__vModel__] = e.__config__.defaultValue
-        if(e.__config__.jnpfKey === 'date' && e.__config__.defaultCurrent == true) {
+        if (e.__config__.jnpfKey === 'date' && e.__config__.defaultCurrent == true) {
           item[e.__vModel__] = new Date().getTime()
-        }else if(e.__config__.jnpfKey === 'comSelect' && e.__config__.defaultCurrent == true && this.userInfo.organizeIdList instanceof Array && this.userInfo.organizeIdList.length > 0) {
-          item[e.__vModel__] = e.multiple == true?[this.userInfo.organizeIdList]:this.userInfo.organizeIdList
+        } else if (e.__config__.jnpfKey === 'comSelect' && e.__config__.defaultCurrent == true && this.userInfo.organizeIdList instanceof Array && this.userInfo.organizeIdList.length > 0) {
+          item[e.__vModel__] = e.multiple == true ? [this.userInfo.organizeIdList] : this.userInfo.organizeIdList
         }
       }
       this.list.unshift(item)
@@ -1177,7 +1181,7 @@ export default {
       const res = val.map(item => item.id)
       this.multipleSelection = res
     },
-    handleBatchPrint(id){
+    handleBatchPrint(id) {
       if (!id) {
         this.$message({
           type: "warning",
