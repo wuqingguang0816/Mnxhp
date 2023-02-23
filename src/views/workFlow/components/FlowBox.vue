@@ -223,7 +223,7 @@
         </el-button>
       </span>
     </el-dialog>
-    <print-browse :visible.sync="printBrowseVisible" :id="properties.printId" :formId="setting.id"
+    <print-browse :visible.sync="printBrowseVisible" :id="printTemplateId" :formId="setting.id"
       :fullName="setting.fullName" />
     <candidate-form :visible.sync="candidateVisible" :candidateList="candidateList"
       :branchList="branchList" :taskId="setting.taskId" :formData="formData"
@@ -237,12 +237,13 @@
     <SignImgDialog v-if="signVisible" ref="SignImg" :lineWidth='3' :userInfo='userInfo'
       :isDefault='1' @close="signDialog" />
     <FlowBox v-if="flowBoxVisible" ref="FlowBox" @close="flowBoxVisible = false" />
-
+    <PrintDialog  v-if="printDialogVisible" ref="printDialog" @change="printBrowseHandle"></PrintDialog>
   </div>
   <!-- </transition> -->
 </template>
 
 <script>
+import PrintDialog from './PrintDialog'
 import SignImgDialog from '@/components/SignImgDialog'
 import { FlowBeforeInfo, Audit, Reject, Transfer, Recall, Cancel, Assign, SaveAudit, Candidates, CandidateUser, Resurgence, ResurgenceList, RejectList, suspend, restore, subFlowInfo } from '@/api/workFlow/FlowBefore'
 import { Revoke, Press } from '@/api/workFlow/FlowLaunch'
@@ -262,9 +263,11 @@ import CommonWordsDialog from './CommonWordsDialog'
 import { mapGetters } from "vuex"
 export default {
   name: 'FlowBox',
-  components: { SignImgDialog, HasFreeApprover, recordList, Process, PrintBrowse, Comment, RecordSummary, CandidateForm, CandidateUserSelect, ErrorForm, ActionDialog, SuspendDialog, CommonWordsDialog },
+  components: { PrintDialog,SignImgDialog, HasFreeApprover, recordList, Process, PrintBrowse, Comment, RecordSummary, CandidateForm, CandidateUserSelect, ErrorForm, ActionDialog, SuspendDialog, CommonWordsDialog },
   data() {
     return {
+      printTemplateId:'',
+      printDialogVisible:false,
       subFlowTab: '',
       resurgenceVisible: false,
       actionVisible: false,
@@ -631,6 +634,17 @@ export default {
 
 
     },
+    printBrowseHandle(id){
+      this.printTemplateId = id
+      this.printDialogVisible = false
+      this.printBrowseVisible=true
+    },
+    printDialog(){
+      this.printDialogVisible = true
+      this.$nextTick(()=>{
+        this.$refs.printDialog.init(JSON.parse(this.properties.printId))
+      })
+    },
     handleMore(e) {
       if (e == 'revoke') return this.actionLauncher('revoke')
       if (e == 'transfer') return this.actionLauncher('transfer')
@@ -639,7 +653,7 @@ export default {
       if (e == 'resurgence') return this.flowResurgence()
       if (e == 'assign') return this.actionLauncher('assign')
       if (e == 'comment') return this.addComment()
-      if (e == 'print') return this.printBrowseVisible = true
+      if (e == 'print')   return this.printDialog()
       if (e == 'suspend') return this.suspend()
       if (e == 'recovery') return this.recovery()
       this.eventLauncher(e)
