@@ -20,7 +20,8 @@
             </div>
             <div class="chatList-text">
               <div class="chatList-arrow"></div>
-              <p v-if="item.messageType=='text'" class="chatList__msg--text">{{item.message}}</p>
+              <p v-if="item.messageType=='text'" v-html="item.message" class="chatList__msg--text">
+              </p>
               <el-image :src="define.comUrl+item.message.path" class="chatList__msg--img"
                 v-if="item.messageType=='image' && item.message.path"
                 :preview-src-list="[define.comUrl+item.message.path]" :z-index="10000">
@@ -88,7 +89,7 @@
               </div>
               <div class="chatList-text">
                 <div class="chatList-arrow"></div>
-                <span v-if="item.messageType=='text'">{{item.message}}</span>
+                <span v-if="item.messageType=='text'" v-html="item.message"></span>
                 <el-image :src="define.comUrl+item.message.path" class="chatList__msg--img"
                   v-if="item.messageType=='image' && item.message.path"
                   :preview-src-list="[define.comUrl+item.message.path]" :z-index="10000">
