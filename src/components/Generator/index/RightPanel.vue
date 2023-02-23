@@ -86,7 +86,8 @@
                       </el-select>
                     </el-form-item>
                   </template>
-                  <el-form-item label="数据库表">
+                  <el-form-item label="数据库表"
+                    v-if="!noVModelList.includes(activeData.__config__.jnpfKey) ||activeData.__config__.isStorage==2">
                     <el-select v-model="activeData.__config__.relationTable" placeholder="请选择数据库表"
                       filterable disabled>
                       <el-option v-for="item in allTable" :key="item.table" :value="item.table"
@@ -1070,8 +1071,21 @@ export default {
       this.setDefaultOptions()
     },
     changeStorage() {
-      this.activeData.__vModel__ = ''
+      if (this.activeData.__config__.isStorage == 1) this.activeData.__vModel__ = ''
       if (!this.$store.getters.hasTable && this.activeData.__config__.isStorage == 2) this.$emit('setVModel', this.activeData)
+      const loop = list => {
+        for (let i = 0; i < list.length; i++) {
+          const e = list[i]
+          const config = e.__config__
+          if (config.jnpfKey === 'table' && e.__vModel__ === this.activeData.__config__.parentVModel) {
+            this.activeData.__config__.relationTable = config.tableName
+          }
+          if (config && config.jnpfKey != 'table' && config.children && Array.isArray(config.children)) {
+            loop(config.children)
+          }
+        }
+      }
+      loop(this.drawingList)
     },
     setDefaultOptions() {
       if (!this.$store.getters.hasTable) return
