@@ -37,7 +37,7 @@
           </el-select>
         </jnpf-form-tip-item>
         <jnpf-form-tip-item label="关联字段" prop="childTableKey"
-          tip-label="输入表单设计内设计子表控制字段名;例：tableField107" v-if="dataForm.fieldRule==2">
+          tip-label="输入表单设计内设计子表的控件字段名，例：tableField107" v-if="dataForm.fieldRule==2">
           <el-input v-model="dataForm.childTableKey" placeholder="请输入关联主表的子表控件名称" />
         </jnpf-form-tip-item>
         <jnpf-form-tip-item label="字段说明" prop="fullName">
