@@ -33,6 +33,7 @@ export default {
       branchList: [],
       errorVisible: false,
       errorNodeList: [],
+      isAdd:false,
       dataForm: {
         id: '',
         formData: {},
@@ -54,6 +55,7 @@ export default {
       this.$nextTick(() => {
         let extra = {}
         if (data.id) {
+          this.isAdd = false;
           extra = {
             modelId: data.flowId,
             id: data.id,
@@ -65,6 +67,8 @@ export default {
           }
           const formData = data.draftData || data.formData
           this.formData = { ...formData, flowId: data.flowId }
+        } else {
+          this.isAdd = true;
         }
         this.$store.commit('generator/SET_DYNAMIC_MODEL_EXTRA', extra)
         this.fillFormData(this.formConf, this.formData)
@@ -82,14 +86,14 @@ export default {
         for (let i = 0; i < list.length; i++) {
           let item = list[i]
           if (item.__vModel__) {
-            const val = data.hasOwnProperty(item.__vModel__) ? data[item.__vModel__] : item.__config__.defaultValue
-            if (!item.__config__.isSubTable && item.__vModel__) {
+            let val = data.hasOwnProperty(item.__vModel__) ? data[item.__vModel__] : item.__config__.defaultValue
+            if (!item.__config__.isSubTable) item.__config__.defaultValue = val
+            if(this.isAdd && item.__config__.jnpfKey === 'date' && item.__config__.defaultCurrent == true) {
+              val = new Date().getTime()
               item.__config__.defaultValue = val
-              if(item.__config__.jnpfKey === 'date' && item.__config__.defaultCurrent == true) {
-                item.__config__.defaultValue = new Date().getTime()
-              }else if(item.__config__.jnpfKey === 'comSelect' && item.__config__.defaultCurrent == true && this.userInfo.organizeIdList instanceof Array && this.userInfo.organizeIdList.length > 0) {
-                item.__config__.defaultValue = item.multiple == true?[this.userInfo.organizeIdList]:this.userInfo.organizeIdList
-              }
+            }else if(this.isAdd && item.__config__.jnpfKey === 'comSelect' && item.__config__.defaultCurrent == true && this.userInfo.organizeIdList instanceof Array && this.userInfo.organizeIdList.length > 0) {
+              val = item.multiple == true ? [this.userInfo.organizeIdList] : this.userInfo.organizeIdList
+              item.__config__.defaultValue = val
             }
             let noShow = false, isDisabled = false, required = item.__config__.required || false
             if (this.setting.formOperates && this.setting.formOperates.length) {
