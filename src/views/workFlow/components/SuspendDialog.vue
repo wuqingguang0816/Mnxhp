@@ -64,8 +64,9 @@ export default {
       this.$nextTick(() => {
         this.$refs['dataForm'].resetFields()
         suspendType(id).then(res => {
+          let item = {}
           if (res.data) {
-            let item = { value: true, label: '主流程挂起' }
+            item = { value: true, label: '主流程挂起' }
             this.suspendOptions.push(item)
           }
         })
