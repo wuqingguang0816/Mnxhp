@@ -501,7 +501,7 @@
               <el-checkbox v-model="formConf.hasCancelBtn" disabled>取消</el-checkbox>
               <el-input v-model="formConf.cancelButtonText" />
             </div>
-            <template v-if="webType==2">
+            <!-- <template v-if="webType==2">
               <div class="per-cell" :class="{'last':!formConf.hasPrintBtn}">
                 <el-checkbox v-model="formConf.hasPrintBtn">打印</el-checkbox>
                 <el-input v-model="formConf.printButtonText" />
@@ -516,7 +516,7 @@
                   </div>
                 </JNPF-TreeSelect>
               </el-form-item>
-            </template>
+            </template> -->
           </template>
           <template v-if="formConf.funcs && (modelType==1||modelType==6)">
             <el-divider>脚本事件</el-divider>
