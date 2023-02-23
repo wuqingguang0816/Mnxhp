@@ -635,7 +635,9 @@ export default {
       this.refreshTable = false
       if (!this.config.columnData || !this.config.formData) return
       this.columnData = JSON.parse(this.config.columnData)
-      this.getPrintListOptions(this.columnData.printIds)
+      if(this.columnData.printIds && this.columnData.printIds.length>0){
+        this.getPrintListOptions(this.columnData.printIds)
+      }
       if (this.columnData.type === 3) {
         this.columnData.columnList = this.columnData.columnList.filter(o => o.prop != this.columnData.groupField)
       }
