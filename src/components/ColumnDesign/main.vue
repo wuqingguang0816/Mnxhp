@@ -216,7 +216,7 @@
                 </template>
               </template>
               <el-divider>表格配置</el-divider>
-              <el-form-item label="数据过滤">
+              <el-form-item label="数据过滤" v-if="webType != 4">
                 <el-button style="width: 100%;" @click="filterPanelShow">{{ ruleListBtn }}
                 </el-button>
               </el-form-item>

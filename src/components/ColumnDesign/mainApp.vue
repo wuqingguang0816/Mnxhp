@@ -115,7 +115,7 @@
           <div class="setting-box">
             <el-form :model="columnData" label-width="80px" label-position="left">
               <el-divider>表格配置</el-divider>
-              <el-form-item label="数据过滤">
+              <el-form-item label="数据过滤" v-if="webType != 4">
                 <el-button style="width: 100%;" @click="filterPanelShow">{{ ruleListBtn }}
                 </el-button>
               </el-form-item>
