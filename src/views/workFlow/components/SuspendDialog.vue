@@ -50,7 +50,7 @@ export default {
       btnLoading: false,
       title: '',
       label: '',
-      suspendOptions: [{ value: false, label: '全部流程挂起' }]
+      suspendOptions: []
     }
   },
   computed: {
@@ -61,14 +61,18 @@ export default {
       this.dataForm.suspend = false
       this.dataForm.handleOpinion = ''
       this.dataForm.fileList = []
+      this.suspendOptions = []
       this.$nextTick(() => {
         this.$refs['dataForm'].resetFields()
         suspendType(id).then(res => {
-          let item = {}
+          let listOptions = []
           if (res.data) {
-            item = { value: true, label: '主流程挂起' }
-            this.suspendOptions.push(item)
+            listOptions = [{ value: false, label: '全部流程挂起' }, { value: true, label: '主流程挂起' }]
+
+          } else {
+            listOptions = [{ value: false, label: '全部流程挂起' }]
           }
+          this.suspendOptions = listOptions
         })
       })
     },
