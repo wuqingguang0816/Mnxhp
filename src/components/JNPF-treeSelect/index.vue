@@ -145,7 +145,7 @@ export default {
             this.valueTitle = titleList.map(o => o[this.props.value])
           }, 10)
         } else {
-          setTimeout(() => {selectFilter
+          setTimeout(() => {
             this.valueTitle = this.$refs.selectTree.getNode(this.value) ? this.$refs.selectTree.getNode(this.value).data[this.props.label] : ''     // 初始化显示
             this.$refs.selectTree.setCurrentKey(this.value)       // 设置默认选中
             this.defaultExpandedKey = [this.value]   // 设置默认展开
