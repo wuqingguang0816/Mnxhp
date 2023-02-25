@@ -159,7 +159,7 @@
                 :filterable="item.filterable" :disabled="item.disabled" />
               </template>
               <template v-else-if="['treeSelect'].includes(item.jnpfKey)">
-                <JNPF-TreeSelect v-model="item.fieldValue"
+                <JNPF-TreeSelect v-model="item.fieldValue" conditionFilter
                 :options="item.dataOptions" :props="item.props.props"
                 :placeholder="item.placeholder" :clearable="item.clearable"
                 :multiple="item.multiple" :filterable="item.filterable" :disabled="item.disabled" />

@@ -39,6 +39,8 @@ import { mapState } from 'vuex'
 export default {
   name: "el-tree-select",
   props: {
+    // 在过滤条件时候传true,设置不显示根节点标题
+    conditionFilter:{ type: Boolean, default: false },
     // 配置项
     props: {
       type: Object,
@@ -136,13 +138,14 @@ export default {
             if (this.lastLevel) {
               titleList = this.$refs.selectTree.getCheckedNodes(true)
             } else {
-              titleList = this.$refs.selectTree.getCheckedNodes()
+              titleList = this.$refs.selectTree.getCheckedNodes(this.conditionFilter)
             }
             this.selectOptions = titleList
+            console.log(titleList);
             this.valueTitle = titleList.map(o => o[this.props.value])
           }, 10)
         } else {
-          setTimeout(() => {
+          setTimeout(() => {selectFilter
             this.valueTitle = this.$refs.selectTree.getNode(this.value) ? this.$refs.selectTree.getNode(this.value).data[this.props.label] : ''     // 初始化显示
             this.$refs.selectTree.setCurrentKey(this.value)       // 设置默认选中
             this.defaultExpandedKey = [this.value]   // 设置默认展开
