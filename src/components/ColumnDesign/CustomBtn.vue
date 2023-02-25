@@ -170,6 +170,7 @@ export default {
       treeData: [],
       fieldOptions: [],
       showType: 'pc',
+      modelId: '',
       options: {
         language: 'javascript'
       },
@@ -234,7 +235,7 @@ export default {
       this.visible = true
       this.$nextTick(() => {
         this.resetData()
-        this.dataForm = Object.assign(this.dataForm, activeItem)
+        this.dataForm = Object.assign(this.dataForm, JSON.parse(JSON.stringify(activeItem)))
         this.getFeatureSelector()
         if (this.dataForm.btnType == 2) this.initEditor()
         if (this.dataForm.modelId) this.getFieldOptions()
@@ -259,7 +260,13 @@ export default {
         this.fieldOptions = []
         return
       }
+      if (this.modelId != val && this.dataForm.formOptions.length) {
+        this.dataForm.formOptions.forEach(ele => {
+          ele.field = ''
+        })
+      }
       this.getFieldOptions()
+      this.modelId = val
     },
     getFieldOptions() {
       if (!this.dataForm.modelId) return
