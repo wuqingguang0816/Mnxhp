@@ -403,7 +403,7 @@ export default {
           
           // 插入日志
           let data = {
-            printTitle:oldTitle.split("-")[0].trim(),
+            printTitle:_this.fullName,
             printNum:1,
             printId:_this.id
           }

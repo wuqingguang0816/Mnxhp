@@ -468,7 +468,7 @@ export default {
         iframe.contentWindow.onafterprint = function (e) {
           // 插入日志
           let data = {
-            printTitle: oldTitle.split("-")[0].trim(),
+            printTitle: _this.fullName,
             printNum: _this.batchIds.length,
             printId: _this.id
           }
