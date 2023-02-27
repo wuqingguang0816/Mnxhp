@@ -288,6 +288,10 @@ export default {
           if (data.method == 'messageList') {
             this.$refs.UserList.$refs.JNPFIm.getList(data)
           }
+          //刷新页面
+          if (data.method == 'refresh') {
+            location.reload()
+          }
         }
       }
     },

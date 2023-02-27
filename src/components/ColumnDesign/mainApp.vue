@@ -466,7 +466,7 @@ export default {
           value: '',
           searchType: 1,
           __vModel__: o,
-          searchMultiple: getSearchMultiple(o),
+          searchMultiple: false,
           __config__: {
             label: "",
             jnpfKey: 'comInput',
