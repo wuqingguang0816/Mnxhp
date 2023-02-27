@@ -45,7 +45,7 @@
       </el-form-item>
 
       <el-form-item label="方向" :label-width="formLabelWidth">
-        <el-radio-group v-model="form.direction" @input="input">
+        <el-radio-group v-model="form.direction">
           <el-radio-button
             v-for="(item, index) in directions"
             :label="item.label"
@@ -210,7 +210,9 @@ export default {
   },
   computed: {},
   created() {},
-  mounted() {}
+  mounted() {
+    console.log(this.form,11);
+  }
 };
 </script>
 

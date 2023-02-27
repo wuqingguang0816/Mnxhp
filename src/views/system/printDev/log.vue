@@ -2,7 +2,7 @@
   <transition name="el-zoom-in-center">
     <div class="JNPF-preview-main" v-loading="loading">
       <div class="header-wrap">
-        <el-page-header @back="goBack" content="详情页面"> </el-page-header>
+        <el-page-header @back="goBack" :content="title+'打印日志'"> </el-page-header>
       </div>
 
       <div class="main-panel">
@@ -16,7 +16,7 @@
                 </el-form-item>
               </el-col>
               <el-col :span="6">
-                <el-form-item label="创建时间">
+                <el-form-item label="打印时间">
                   <el-date-picker
                     v-model="query.printTimeRange"
                     type="daterange"
@@ -73,6 +73,7 @@ export default {
       total: 0,
       loading: false,
       listLoading: true,
+      title:"",
       query: {
         printTitle: "",
         printId: "",
@@ -84,8 +85,10 @@ export default {
     };
   },
   methods: {
-    show(id) {
-      this.query.printId = id;
+    show(row) {
+      console.log(row,11);
+      this.query.printId = row.id;
+      this.title = row.fullName
       this.initData();
       this.loading = false;
     },
@@ -104,6 +107,7 @@ export default {
     reset() {
       this.query.printTitle = "";
       this.query.printTimeRange = [];
+      this.initData()
     },
     goBack() {
       this.$emit("goBack");

@@ -108,7 +108,7 @@ export default {
       loading: false,
       nextBtnLoading: false,
       activeStep: 0,
-      showPrint:false,
+      showPrint:true,
       dataForm: {
         id: '',
         fullName: '',
@@ -164,12 +164,13 @@ export default {
         this.$refs['dataForm'].resetFields()
         if (this.dataForm.id) {
           this.loading = true
+          this.showPrint = false
           getPrintDevInfo(this.dataForm.id).then(res => {
             this.dataForm = res.data
             this.sqlTemplate = this.dataForm.sqlTemplate && JSON.parse(this.dataForm.sqlTemplate) || []
-            
             let e = res.data.pageParam && JSON.parse(res.data.pageParam)
             this.pageParam = e
+            this.pageParam.direction = "纵向"
             this.showPrint=true
             this.loading = false
           }).catch(() => { this.loading = false })

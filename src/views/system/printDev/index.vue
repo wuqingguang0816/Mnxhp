@@ -69,7 +69,7 @@
                     <el-dropdown-item @click.native="copy(scope.row.id)">复制</el-dropdown-item>
                     <el-dropdown-item @click.native="preview(scope.row.id)">预览</el-dropdown-item>
                     <el-dropdown-item @click.native="exportTpl(scope.row.id)">导出</el-dropdown-item>
-                    <el-dropdown-item @click.native="log(scope.row.id)">日志</el-dropdown-item>
+                    <el-dropdown-item @click.native="log(scope.row)">日志</el-dropdown-item>
                   </el-dropdown-menu>
                 </el-dropdown>
               </tableOpts>
@@ -123,10 +123,10 @@ export default {
     this.getDictionaryData()
   },
   methods: {
-    log(id){
+    log(row){
       this.logPanel = true
       this.$nextTick(()=>{
-        this.$refs.log.show(id)
+        this.$refs.log.show(row)
       })
     },
     reset() {
