@@ -237,7 +237,8 @@
     <SignImgDialog v-if="signVisible" ref="SignImg" :lineWidth='3' :userInfo='userInfo'
       :isDefault='1' @close="signDialog" />
     <FlowBox v-if="flowBoxVisible" ref="FlowBox" @close="flowBoxVisible = false" />
-    <PrintDialog  v-if="printDialogVisible" ref="printDialog" @change="printBrowseHandle"></PrintDialog>
+    <PrintDialog v-if="printDialogVisible" ref="printDialog" @change="printBrowseHandle">
+    </PrintDialog>
   </div>
   <!-- </transition> -->
 </template>
@@ -263,11 +264,11 @@ import CommonWordsDialog from './CommonWordsDialog'
 import { mapGetters } from "vuex"
 export default {
   name: 'FlowBox',
-  components: { PrintDialog,SignImgDialog, HasFreeApprover, recordList, Process, PrintBrowse, Comment, RecordSummary, CandidateForm, CandidateUserSelect, ErrorForm, ActionDialog, SuspendDialog, CommonWordsDialog },
+  components: { PrintDialog, SignImgDialog, HasFreeApprover, recordList, Process, PrintBrowse, Comment, RecordSummary, CandidateForm, CandidateUserSelect, ErrorForm, ActionDialog, SuspendDialog, CommonWordsDialog },
   data() {
     return {
-      printTemplateId:'',
-      printDialogVisible:false,
+      printTemplateId: '',
+      printDialogVisible: false,
       subFlowTab: '',
       resurgenceVisible: false,
       actionVisible: false,
@@ -410,13 +411,14 @@ export default {
       if (needClose) this.$emit('close', true)
     },
     activeClick() {
-      let data = this.subFlowInfoList.filter(o => o.flowTaskInfo.id == this.subFlowTab)
+      let data = this.subFlowInfoList.filter(o => o.flowTaskInfo.id == this.subFlowTab) || []
       if (data.length) {
         this.fullName = data[0].flowTaskInfo.fullName
         this.flowTaskOperatorRecordList = data[0].flowTaskOperatorRecordList || []
-        this.isComment = data[0].flowTemplateInfo.flowTemplateJson.isComment
-        this.isSummary = data[0].flowTemplateInfo.flowTemplateJson.isSummary
-        this.summaryType = data[0].flowTemplateInfo.flowTemplateJson.summaryType
+        let templateJson = data[0].flowTaskInfo.flowTemplateJson ? JSON.parse(data[0].flowTaskInfo.flowTemplateJson) : null
+        this.isComment = templateJson.properties.isComment
+        this.isSummary = templateJson.properties.isSummary
+        this.summaryType = templateJson.properties.summaryType
       }
     },
     subFlow(enCode) {
@@ -426,13 +428,7 @@ export default {
       let item = {
         subFlowVisible: true,
         ...flowTaskNodeList,
-        activeTab: this.activeTab,
         ...this.setting,
-        isComment: this.isComment,
-        isSummary: this.isSummary,
-        summaryType: this.summaryType,
-        currentView: this.currentView,
-        flowTaskOperatorRecordList: this.flowTaskOperatorRecordList,
       }
       this.flowBoxVisible = true
       this.$nextTick(() => {
@@ -626,22 +622,23 @@ export default {
           } else {
             element.flowTemplateInfo.flowTemplateJson.state = 'state-curr'
           }
-          this.isComment = this.subFlowInfoList[0].flowTemplateInfo.flowTemplateJson.isComment
-          this.isSummary = this.subFlowInfoList[0].flowTemplateInfo.flowTemplateJson.isSummary
-          this.summaryType = this.subFlowInfoList[0].flowTemplateInfo.flowTemplateJson.summaryType
+          let templateJson = this.subFlowInfoList[0].flowTaskInfo.flowTemplateJson ? JSON.parse(this.subFlowInfoList[0].flowTaskInfo.flowTemplateJson) : null
+          this.isComment = templateJson.properties.isComment
+          this.isSummary = templateJson.properties.isSummary
+          this.summaryType = templateJson.properties.summaryType
         }
       }).catch(() => { this.loading = false })
 
 
     },
-    printBrowseHandle(id){
+    printBrowseHandle(id) {
       this.printTemplateId = id
       this.printDialogVisible = false
-      this.printBrowseVisible=true
+      this.printBrowseVisible = true
     },
-    printDialog(){
+    printDialog() {
       this.printDialogVisible = true
-      this.$nextTick(()=>{
+      this.$nextTick(() => {
         this.$refs.printDialog.init(JSON.parse(this.properties.printId))
       })
     },
@@ -653,7 +650,7 @@ export default {
       if (e == 'resurgence') return this.flowResurgence()
       if (e == 'assign') return this.actionLauncher('assign')
       if (e == 'comment') return this.addComment()
-      if (e == 'print')   return this.printDialog()
+      if (e == 'print') return this.printDialog()
       if (e == 'suspend') return this.suspend()
       if (e == 'recovery') return this.recovery()
       this.eventLauncher(e)
