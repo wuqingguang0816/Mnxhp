@@ -115,12 +115,12 @@ export default {
     value: {
       handler(val) {
         if (val) {
-          this.form = val;
+          this.form = JSON.parse(JSON.stringify(val));
         }
       },
       immediate: true,
       deep: true
-    },
+    }
   },
   data() {
     return {
@@ -186,8 +186,26 @@ export default {
       this.form.height = data[1];
     },
     confirm() {
-      this.$emit("change", this.form);
-      this.dialogFormVisible = false;
+      try {
+        let width = this.form.width;
+        let height = this.form.height;
+        let mt = this.form.mt? this.form.mt:1;
+        let mb = this.form.mb? this.form.mb:1;
+        let ml = this.form.ml? this.form.ml:1;
+        let mr = this.form.mr ? this.form.mr:1;
+        if (width <= (Number(ml) + Number(mr))) {
+          this.$message.warning("左右边距合计不能超过纸张宽度");
+          return;
+        }
+        if (height <= (Number(mt) + Number(mb))) {
+          this.$message.warning("上下边距合计不能超过纸张高度");
+          return;
+        }
+        this.$emit("change", this.form);
+        this.dialogFormVisible = false;
+      } catch (error) {
+        this.dialogFormVisible = false;
+      }
     }
   },
   computed: {},
