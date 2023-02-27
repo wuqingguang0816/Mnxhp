@@ -40,7 +40,7 @@ import {
   getCommonWordsInfo,
   Create, Update
 } from '@/api/system/commonWords'
-import { getSystem } from "@/api/system/system";
+import { getEnableSystem } from "@/api/system/system";
 export default {
   data() {
     return {
@@ -82,7 +82,7 @@ export default {
       this.$nextTick(() => {
         this.$refs['dataForm'].resetFields()
         this.treeLoading = true
-        getSystem({ keyword: '' }).then(res => {
+        getEnableSystem().then(res => {
           this.systemOptions = res.data.list || []
         })
         if (this.dataForm.id) {

@@ -52,7 +52,7 @@
 
 <script>
 import {
-  commonWords,
+  getAllCommonWordList,
   deleteCommonWords
 } from '@/api/system/commonWords'
 import Form from './Form'
@@ -82,7 +82,7 @@ export default {
     initData() {
       this.listLoading = true
       this.list = []
-      commonWords(this.listQuery).then(res => {
+      getAllCommonWordList(this.listQuery).then(res => {
         this.list = res.data.list
         this.listLoading = false
       }).catch(() => {
