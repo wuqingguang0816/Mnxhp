@@ -45,7 +45,7 @@
       </el-form-item>
 
       <el-form-item label="方向" :label-width="formLabelWidth">
-        <el-radio-group v-model="form.direction">
+        <el-radio-group v-model="form.direction" @input="inputChange">
           <el-radio-button
             v-for="(item, index) in directions"
             :label="item.label"
@@ -177,8 +177,10 @@ export default {
     };
   },
   methods: {
-    input(e) {
-      [this.form.width, this.form.height] = [this.form.height, this.form.width];
+    inputChange(e) {
+      let temp = this.form.height
+      this.form.height = this.form.width
+      this.form.width = temp
     },
     change(e) {
       let data = this.sizeMap[e];

@@ -9,6 +9,7 @@
     <Condition
       :value="pconditions"
       ref="base"
+      :modelType="modelType"
       :columnDataMap="columnDataMap"
       :dataOptionMap="dataOptionMap"
       :columnOptions="columnOptions"
@@ -27,6 +28,10 @@ import { getDrawingList } from "@/components/Generator/utils/db";
 import Condition from "./condition";
 export default {
   props: {
+    modelType:{
+      type:String,
+      default:''
+    },
     value: {
       type: Array,
       default: () => []

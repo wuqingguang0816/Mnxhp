@@ -66,6 +66,7 @@
             <template
               v-if="
                 [
+                  'calculate',
                   'comInput',
                   'textarea',
                   'billRule',
@@ -443,6 +444,10 @@ import { getDrawingList } from "@/components/Generator/utils/db";
 
 export default {
   props: {
+    modelType:{
+      type:String,
+      default:''
+    },
     columnOptions: {
       type: Array,
       default: () => []
@@ -656,11 +661,12 @@ export default {
         }
         if (Array.isArray(data)) data.forEach(d => loop(d, parent));
         if (
-          //关联表单 关联表单属性 弹窗选择 弹窗选择属性 下拉表格
+          //下拉树形,关联表单 关联表单属性 弹窗选择 弹窗选择属性 下拉表格
           //不支持控件：开关、文件上传、图片上传、颜色选择、评分、滑块、富文本、链接、
           //按钮、文本、提示、二维码、条形码、用户组件、设计子表。
           data.__vModel__ &&
           ![
+            "treeSelect",
             "relationForm",
             "relationFormAttr",
             "popupSelect",
