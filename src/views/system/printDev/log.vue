@@ -8,10 +8,10 @@
       <div class="main-panel">
         <div class="JNPF-common-layout-center">
           <el-row class="JNPF-common-search-box" :gutter="16">
-            <el-form @submit.native.prevent>
+            <el-form  :model="query">
               <el-col :span="6">
                 <el-form-item label="名称">
-                  <el-input v-model="query.printTitle" placeholder="" clearable>
+                  <el-input v-model="query.printTitle" placeholder="请输入" clearable>
                   </el-input>
                 </el-form-item>
               </el-col>
@@ -102,7 +102,6 @@ export default {
       });
     },
     reset() {
-      this.query = {};
       this.query.printTitle = "";
       this.query.printTimeRange = [];
     },

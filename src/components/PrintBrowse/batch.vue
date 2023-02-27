@@ -73,31 +73,6 @@ export default {
       this.printTemplate = data.printTemplate;
       this.data = data.printData;
       this.recordList = data.operatorRecordList || [];
-      // this.$nextTick(() => {
-      //   const tableList = this.$refs.tsPrint.getElementsByTagName("table");
-      //   if (tableList.length) {
-      //     for (let j = 0; j < tableList.length; j++) {
-      //       const tableObj = tableList[j];
-      //       let tds = [];
-      //       let newTable = [];
-      //       for (let i = 0; i < tableObj.rows.length; i++) {
-      //         tds = tableObj.rows[i];
-      //         const dataTag = this.isChildTable(tds.cells);
-      //         if (dataTag) {
-      //           this.retrieveData(dataTag, tableObj, tds, newTable);
-      //         } else {
-      //           newTable.push(tds);
-      //         }
-      //       }
-      //       tableObj.getElementsByTagName("tbody")[0].innerHTML = "";
-      //       for (let i = 0; i < newTable.length; i++) {
-      //         tableObj
-      //           .getElementsByTagName("tbody")[0]
-      //           .appendChild(newTable[i]);
-      //       }
-      //     }
-      //   }
-      // });
       this.replaceValue(this.data);
       this.replaceSysValue();
       this.replaceImg();
@@ -106,6 +81,9 @@ export default {
       this.batchData.push({ printTemplate: this.printTemplate });
     },
     onOpen() {
+      // 打开时候初始化位置为第一页
+      this.pageIndex = 0
+
       this.batchData = [];
       if (!this.id) return;
       this.printTemplate = "";
@@ -277,7 +255,7 @@ export default {
               );
             }
           };
-          const isArray = false;
+          let isArray = false;
           try {
             isArray = Array.isArray(JSON.parse(value));
           } catch (error) {
@@ -490,7 +468,7 @@ export default {
         iframe.contentWindow.onafterprint = function (e) {
           // 插入日志
           let data = {
-            printTitle: oldTitle.split("-")[0].trim(),
+            printTitle: _this.fullName,
             printNum: _this.batchIds.length,
             printId: _this.id
           }

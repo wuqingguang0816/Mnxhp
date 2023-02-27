@@ -36,11 +36,11 @@
 <script>
 let isFirst = 1
 import { mapState } from 'vuex'
-import { getDictionaryTypeSelector } from "@/api/systemData/dictionary"
-import { clustering } from 'echarts-stat'
 export default {
   name: "el-tree-select",
   props: {
+    // 在过滤条件时候传true,设置不显示根节点标题
+    conditionFilter:{ type: Boolean, default: false },
     // 配置项
     props: {
       type: Object,
@@ -79,6 +79,10 @@ export default {
       type: Boolean,
       default: false
     },
+    isDataInterface: {
+      type: Number,
+      default: 0
+    }
   },
   computed: {
     ...mapState({
@@ -111,7 +115,9 @@ export default {
       return data[this.props.label].indexOf(value) !== -1;
     },
     selectFocus() {
-      this.$emit('selectChange')
+      if (this.isDataInterface === 1) {
+        this.$emit('selectChange')
+      }
       this.initHandle()
       if (isFirst && this.$refs.elSelect) {
         isFirst = 0
@@ -132,9 +138,10 @@ export default {
             if (this.lastLevel) {
               titleList = this.$refs.selectTree.getCheckedNodes(true)
             } else {
-              titleList = this.$refs.selectTree.getCheckedNodes()
+              titleList = this.$refs.selectTree.getCheckedNodes(this.conditionFilter)
             }
             this.selectOptions = titleList
+            console.log(titleList);
             this.valueTitle = titleList.map(o => o[this.props.value])
           }, 10)
         } else {

@@ -158,7 +158,7 @@ export default {
         e.width = 776
         e.height = 'calc(100% - 10px)'
       }
-      this.$emit("pageParamChange",this.pageParam)
+      this.$emit("pageParamChange",e)
       let mt = e.mt 
       let mb = e.mb
       let ml = e.ml
@@ -173,14 +173,14 @@ export default {
         content_style: `html {
           height: 100%; background: #fff;padding: 20px 0;box-sizing: border-box;
           
-          margin: ${mt}px!important ${mr}px ${mb}px ${ml}px;
-          margin-top:${mt}px!important;
+          margin: ${mt}mm!important ${mr}mm ${mb}mm ${ml}mm;
+          margin-top:${mt}mm!important;
         }
         body {
           font-family: simsun, serif, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
           padding: 40px 30px;
-          width: ${width}px;
-          height: ${height}px;
+          width: ${width}mm;
+          height: ${height}mm;
           margin: 0 auto !important;
           // border: 1px solid rgb(210, 213, 216);
           background: white;

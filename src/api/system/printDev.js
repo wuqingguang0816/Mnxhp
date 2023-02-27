@@ -8,6 +8,15 @@ export function getPrintDevList(data) {
     data
   })
 }
+// 获取列表下拉,根据ids
+export function printOptionsApi(data) {
+  return request({
+    url: '/api/system/printDev/getListOptions',
+    method: 'post',
+    data
+  })
+}
+
 // 获取详情
 export function getPrintDevInfo(id) {
   return request({

@@ -84,12 +84,12 @@
                     </el-select>
                   </el-form-item>
                   <el-form-item label="超时登出">
-                    <el-input-number v-model="baseForm.tokenTimeout" :min="1" :precision="0" :step="1"
-                                     controls-position="right" /> 分钟
+                    <el-input-number v-model="baseForm.tokenTimeout" :min="1" :precision="0"
+                      :step="1" controls-position="right" /> 分钟
                   </el-form-item>
                   <el-form-item label="密码错误次数">
                     <el-input-number v-model="baseForm.passwordErrorsNumber" :min="0" :precision="0"
-                                     :step="1" controls-position="right" /> 次
+                      :step="1" controls-position="right" /> 次
                     <div class="tip">输入密码错误将用户锁定，设置3以下值表示不启动该功能</div>
                     <el-radio-group v-model="baseForm.lockType">
                       <el-radio :label="1">账号锁定</el-radio>
@@ -98,24 +98,24 @@
                     <div v-if="baseForm.lockType===2">
                       <span class="lockTime">延迟时间</span>
                       <el-input-number v-model="baseForm.lockTime" :min="1" :precision="0" :step="1"
-                                       controls-position="right" /> 分钟
+                        controls-position="right" /> 分钟
                     </div>
                   </el-form-item>
                   <el-form-item label="登录验证码">
                     <el-switch v-model="baseForm.enableVerificationCode" :active-value="1"
-                               :inactive-value="0" />
+                      :inactive-value="0" />
                   </el-form-item>
                   <el-form-item label="验证码位数" v-if="baseForm.enableVerificationCode">
                     <el-input-number v-model="baseForm.verificationCodeNumber" :min="3" :max="6"
-                                     :precision="0" :step="1" controls-position="right" /> 位
+                      :precision="0" :step="1" controls-position="right" /> 位
                   </el-form-item>
                   <el-form-item label="登录提示语">
                     <el-switch v-model="baseForm.lastLoginTimeSwitch" :active-value="1"
-                               :inactive-value="0" />
+                      :inactive-value="0" />
                   </el-form-item>
                   <el-form-item v-if="baseForm.lastLoginTimeSwitch">
                     <el-card class="box-card" shadow="never" style="width: 300px;"
-                             :body-style="{ padding: '0px 20px' }">
+                      :body-style="{ padding: '0px 20px' }">
                       <div slot="header">
                         <span>上次登录信息提示</span>
                         <i style="float: right; padding: 11px 0" class="el-icon-close" />
@@ -129,16 +129,16 @@
                   </el-form-item>
                   <el-form-item label="白名单验证">
                     <el-switch v-model="baseForm.whitelistSwitch" :active-value="1"
-                               :inactive-value="0" />
+                      :inactive-value="0" />
                   </el-form-item>
                   <el-form-item label="白名单设置" v-if="baseForm.whitelistSwitch">
                     <el-input type="textarea" :autosize="{ minRows: 3, maxRows: 10}"
-                              v-model="baseForm.whiteListIp" placeholder="允许访问IP" />
+                      v-model="baseForm.whiteListIp" placeholder="允许访问IP" />
                     <div class="tip">多个IP设置，用英文符号隔开，如192.168.0.1,192.168.0.2</div>
                   </el-form-item>
                   <el-form-item>
                     <el-button type="primary" size="small" :loading="btnLoading" class="saveBtn"
-                               @click="submitForm()">保 存</el-button>
+                      @click="submitForm()">保 存</el-button>
                   </el-form-item>
                 </el-col>
               </el-row>
@@ -148,47 +148,52 @@
                 <el-col :span="18">
                   <el-form-item label="密码定期更新">
                     <el-switch v-model="baseForm.passwordIsUpdatedRegularly" :active-value="1"
-                               :inactive-value="0" />
+                      :inactive-value="0" />
                   </el-form-item>
                   <el-form-item label="更新周期" v-if="baseForm.passwordIsUpdatedRegularly">
-                    <el-input-number v-model="baseForm.updateCycle"
-                                     :precision="0" :step="1" controls-position="right" /> 天
+                    <el-input-number v-model="baseForm.updateCycle" :precision="0" :step="1"
+                      controls-position="right" /> 天
                   </el-form-item>
                   <el-form-item label="提前" v-if="baseForm.passwordIsUpdatedRegularly">
-                    <el-input-number v-model="baseForm.updateInAdvance"
-                                     :precision="0" :step="1" controls-position="right" /> 天提醒更新
+                    <el-input-number v-model="baseForm.updateInAdvance" :precision="0" :step="1"
+                      controls-position="right" /> 天提醒更新
                   </el-form-item>
 
                   <el-form-item label="密码强度限制">
                     <el-switch v-model="baseForm.passwordStrengthLimit" :active-value="1"
-                               :inactive-value="0" />
+                      :inactive-value="0" />
                   </el-form-item>
                   <el-form-item v-if="baseForm.passwordStrengthLimit">
-                    <el-checkbox v-model="baseForm.passwordLengthMin" :true-label="1" :false-label="0">最小长度</el-checkbox>
-                    <el-input-number v-model="baseForm.passwordLengthMinNumber"
-                                     :precision="0" :step="1" controls-position="right" /><br/>
-                    <el-checkbox v-model="baseForm.containsNumbers" :true-label="1" :false-label="0">包含数字</el-checkbox><br/>
-                    <el-checkbox v-model="baseForm.includeLowercaseLetters" :true-label="1" :false-label="0">包含小写字母</el-checkbox><br/>
-                    <el-checkbox v-model="baseForm.includeUppercaseLetters" :true-label="1" :false-label="0">包含大写字母</el-checkbox><br/>
-                    <el-checkbox v-model="baseForm.containsCharacters" :true-label="1" :false-label="0">包含字符</el-checkbox>
+                    <el-checkbox v-model="baseForm.passwordLengthMin" :true-label="1"
+                      :false-label="0">最小长度</el-checkbox>
+                    <el-input-number v-model="baseForm.passwordLengthMinNumber" :precision="0"
+                      :step="1" controls-position="right" /><br />
+                    <el-checkbox v-model="baseForm.containsNumbers" :true-label="1"
+                      :false-label="0">包含数字</el-checkbox><br />
+                    <el-checkbox v-model="baseForm.includeLowercaseLetters" :true-label="1"
+                      :false-label="0">包含小写字母</el-checkbox><br />
+                    <el-checkbox v-model="baseForm.includeUppercaseLetters" :true-label="1"
+                      :false-label="0">包含大写字母</el-checkbox><br />
+                    <el-checkbox v-model="baseForm.containsCharacters" :true-label="1"
+                      :false-label="0">包含字符</el-checkbox>
                   </el-form-item>
 
                   <el-form-item label="禁用旧密码">
                     <el-switch v-model="baseForm.disableOldPassword" :active-value="1"
-                               :inactive-value="0" />
+                      :inactive-value="0" />
                   </el-form-item>
                   <el-form-item label="禁用个数" v-if="baseForm.disableOldPassword">
                     <el-input-number v-model="baseForm.disableTheNumberOfOldPasswords"
-                                     :precision="0" :step="1" controls-position="right" /> 个
+                      :precision="0" :step="1" controls-position="right" /> 个
                   </el-form-item>
                   <el-form-item label="修改初始密码提醒" label-width="130px">
-                    <el-switch v-model="baseForm.mandatoryModificationOfInitialPassword" :active-value="1"
-                               :inactive-value="0"/>
+                    <el-switch v-model="baseForm.mandatoryModificationOfInitialPassword"
+                      :active-value="1" :inactive-value="0" />
                   </el-form-item>
 
                   <el-form-item>
                     <el-button type="primary" size="small" :loading="btnLoading" class="saveBtn"
-                               @click="submitForm()">保 存</el-button>
+                      @click="submitForm()">保 存</el-button>
                   </el-form-item>
                 </el-col>
               </el-row>
@@ -197,7 +202,7 @@
         </el-tab-pane>
         <el-tab-pane label="同步设置" name="third">
           <el-tabs tab-position="left" style="height:100%" v-model="thirdTab" class="thirdTab">
-            <el-tab-pane label="企业微信">
+            <el-tab-pane name="1" label="企业微信">
               <el-row :gutter="20" style="margin-top: 15px">
                 <el-col :span="12" :offset="6" :pull="6">
                   <el-form-item label="企业号Id" prop="qyhCorpId">
@@ -265,7 +270,7 @@
                 </el-col>
               </el-row>
             </el-tab-pane>
-            <el-tab-pane label="阿里钉钉">
+            <el-tab-pane name="2" label="阿里钉钉">
               <el-row :gutter="20" style="margin-top: 15px">
                 <el-col :span="12" :offset="6" :pull="6">
                   <el-form-item label="企业号Id" prop="dingAgentId">
@@ -433,7 +438,7 @@ export default {
       testDingLoading: false,
       wechatLoading: false,
       dingLoading: false,
-      thirdTab: '0',
+      thirdTab: '1',
       secondTab: '0',
       visible: false,
       synchronization: '',
@@ -545,11 +550,11 @@ export default {
     }
   },
   watch: {
-    thirdTab(val) {
-      if (val == 3 || val == 4) {
-        const type = val == 3 ? 1 : 2
-        this.getSynThirdTotal(type)
-      }
+    thirdTab: {
+      handler(val) {
+        this.getSynThirdTotal(val)
+      },
+      immediate: true
     },
     activeName(val) {
       if (val === 'fourth') {
@@ -626,7 +631,9 @@ export default {
     getSynThirdTotal(type) {
       getSynThirdTotal(type).then(res => {
         let list = res.data.map(o => ({ loading: false, ...o }))
-        type == 1 ? this.wxResults = list : this.ddResults = list
+        type == '1' ? this.wxResults = list : this.ddResults = list
+        console.log(this.wxResults)
+        console.log(this.ddResults)
       })
     },
     syncWechat(row) {

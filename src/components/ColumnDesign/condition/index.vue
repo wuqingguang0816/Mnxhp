@@ -139,34 +139,30 @@
                   ['radio', 'checkbox', 'select'].includes(item.jnpfKey)
                 "
               >
-                <el-select v-model="item.fieldValue" placeholder="请选择">
+                <el-select v-model="item.fieldValue" placeholder="请选择" :multiple="item.multiple">
                   <el-option
                     v-for="(item, index) in item.dataOptions"
                     :key="index"
+                    
                     :label="item[item.dataLabel]"
                     :value="item[item.dataValue]"
                   ></el-option>
                 </el-select>
               </template>
               <template v-else-if="['cascader'].includes(item.jnpfKey)">
-                <el-cascader
-                  v-model="item.fieldValue"
-                  :options="item.dataOptions"
-                  :props="item.props"
-                  @change="handleCascaderChange"
-                ></el-cascader>
+
+                <el-cascader v-model="item.fieldValue"
+                @change="handleCascaderChange"
+                :options="item.dataOptions" :props="item.props.props"
+                :placeholder="item.placeholder" :clearable="item.clearable"
+                :show-all-levels="item['show-all-levels']" :separator="item.separator"
+                :filterable="item.filterable" :disabled="item.disabled" />
               </template>
               <template v-else-if="['treeSelect'].includes(item.jnpfKey)">
-                <JNPF-TreeSelect
-                  v-model="item.fieldValue"
-                  :options="item.dataOptions"
-                  :props="item.props"
-                  style="width: 100%"
-                  :placeholder="'请选择'"
-                  :clearable="true"
-                  :multiple="false"
-                  :filterable="true"
-                />
+                <JNPF-TreeSelect v-model="item.fieldValue" conditionFilter
+                :options="item.dataOptions" :props="item.props.props"
+                :placeholder="item.placeholder" :clearable="item.clearable"
+                :multiple="item.multiple" :filterable="item.filterable" :disabled="item.disabled" />
               </template>
               <template v-else-if="item.jnpfKey === 'calculate'">
                 <!-- <el-input-number
@@ -339,15 +335,11 @@
               </template>
               <template v-else-if="['userSelect'].includes(item.jnpfKey)">
                 <userSelect
-                  v-model="item.value"
+                  v-model="item.fieldValue"
                   :placeholder="'请选择' + item.__config__.label"
                   clearable
                   class="item"
-                  :selectType="
-                    item.selectType != 'all' || item.selectType != 'custom'
-                      ? 'all'
-                      : item.selectType
-                  "
+                  :selectType="item.selectType"
                   :ableDepIds="item.ableDepIds"
                   :ablePosIds="item.ablePosIds"
                   :ableUserIds="item.ableUserIds"
@@ -370,11 +362,10 @@
               <template
                 v-else-if="['posSelect', 'currPosition'].includes(item.jnpfKey)"
               >
-                <posSelect
-                  v-model="item.fieldValue"
-                  placeholder="请选择"
-                  clearable
-                  @change="onConditionObjChange(arguments, item)"
+                <posSelect v-model="item.fieldValue" :placeholder="'请选择'+item.__config__.label" clearable
+                class="item" :selectType="item.selectType" :ableDepIds="item.ableDepIds"
+                :ablePosIds="item.ablePosIds" :multiple="item.searchMultiple" 
+                @change="onConditionObjChange(arguments, item)"
                 />
               </template>
               <template v-else-if="item.jnpfKey === 'address'">
@@ -382,6 +373,7 @@
                   v-model="item.fieldValue"
                   placeholder="请选择"
                   :level="item.level"
+                  :multiple="item.multiple"
                   clearable
                   @change="onConditionListChange(arguments, item)"
                 />
@@ -451,7 +443,7 @@ import { getDrawingList } from "@/components/Generator/utils/db";
 
 export default {
   props: {
-    columnOptions:{
+    columnOptions: {
       type: Array,
       default: () => []
     },
@@ -478,6 +470,7 @@ export default {
   },
   data() {
     return {
+      nowJnpfKey:undefined,
       chooseNode: "",
       dialogVisible: false,
       progressOptions: ["10", "20", "30", "40", "50", "60", "70", "80", "90"],
@@ -757,7 +750,12 @@ export default {
         item.props = this.dataOptionMap[val].props;
       }
       item = { ...item, ...this.columnDataMap[val] };
+
+      if (item.jnpfKey != this.nowJnpfKey) {
+        item.symbol = undefined;
+      }
       this.$set(this.pconditions, i, item);
+      this.nowJnpfKey = item.jnpfKey;
     },
     // 比较符号改变事件
     symbolChange(val, item, i) {
@@ -778,8 +776,23 @@ export default {
           item.fieldValue = "";
         }
       }
-
       item.multiple = ["in", "notIn"].includes(val) ? true : false;
+      if(['posSelect', 'currPosition'].includes(item.jnpfKey) ){
+        if(["in", "notIn"].includes(val)){
+          item.searchMultiple = true
+        }else{
+          item.searchMultiple = false
+        }
+        
+      }
+      if(['cascader'].includes(item.jnpfKey) ){
+        if(["in", "notIn"].includes(val)){
+          item.props.props.multiple = true
+        }else{
+          item.props.props.multiple = false
+        }
+        
+      }
       this.$set(this.pconditions, i, item);
     },
     logicChange(val, item) {
@@ -853,13 +866,16 @@ export default {
 .el-select {
   width: 100%;
 }
-.el-input-number{
+.el-cascader{
+  width: 100%;
+}
+.el-input-number {
   width: 100%;
 }
 .el-icon-delete {
   line-height: 32px;
 }
-.numRange{
+.numRange {
   max-width: inherit;
 }
 >>> .JNPF-selectTree {

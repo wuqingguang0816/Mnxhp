@@ -116,7 +116,7 @@
             <el-form :model="columnData" label-width="80px" label-position="left">
               <div class="typeList">
                 <div class="item" :class="{'item-box':webType==4}" v-for="(item, index) in typeList"
-                  :key="index" @click="columnData.type=item.value">
+                  :key="index" @click="toggleType(item.value)">
                   <div class="item-img" :class="{'checked':columnData.type==item.value}">
                     <img :src="item.url" alt="">
                     <div class="icon-checked" v-if="columnData.type==item.value">
@@ -158,12 +158,13 @@
                   <el-form-item label="数据接口">
                     <el-row>
                       <el-col :span="18">
-                        <JNPF-TreeSelect :options="dataInterfaceSelector"
+                        <JNPF-TreeSelect :options="dataInterfaceSelector" :isDataInterface="1"
                           v-model="columnData.treePropsUrl" placeholder="请选择数据接口" lastLevel
-                          lastLevelKey='categoryId' lastLevelValue='1' clearable />
+                          lastLevelKey='categoryId' lastLevelValue='1' clearable
+                          @selectChange="getDataInterfaceSelector" />
                       </el-col>
                       <el-col :span="6">
-                        <el-button @click="addInterface()">
+                        <el-button @click="goDataInterface()">
                           添加</el-button>
                       </el-col>
                     </el-row>
@@ -215,7 +216,7 @@
                 </template>
               </template>
               <el-divider>表格配置</el-divider>
-              <el-form-item label="数据过滤">
+              <el-form-item label="数据过滤" v-if="webType != 4">
                 <el-button style="width: 100%;" @click="filterPanelShow">{{ ruleListBtn }}
                 </el-button>
               </el-form-item>
@@ -288,7 +289,6 @@
               <el-divider>按钮配置</el-divider>
               <el-checkbox-group v-model="btnsList" class="btnsList">
                 <div v-for="item in btnsOption" :key="item.value">
-
                   <el-checkbox :label="item.value">
                     <span class="btn-label">{{ item.value | btnText }}</span>
                     <el-input v-model="item.label" />
@@ -384,10 +384,6 @@
           </div>
         </el-scrollbar>
       </div>
-      <el-dialog :visible.sync="interfaceVisible" append-to-body
-        class="JNPF-dialog JNPF-dialog_center JNPF-dialog-tree-select" lock-scroll width="80%">
-        <Form ref="Form" @close="closeForm" />
-      </el-dialog>
     </div>
     <form-script v-if="formScriptVisible" :key="scriptKey" :value="activeItem.func" ref="formScript"
       :type="activeItem.type" @updateScript="updateScript" @closeDialog="formScriptVisible=false" />
@@ -409,9 +405,13 @@ import { noColumnShowList, noSearchList, useInputList, useDateList } from '@/com
 import { getDataInterfaceSelector } from '@/api/systemData/dataInterface'
 import { noVModelList, systemComponentsList } from '@/components/Generator/generator/comConfig'
 import { getFields } from '@/api/onlineDev/visualDev'
-import Form from '@/views/systemData/dataInterface/Form.vue'
 const excludeList = [...noVModelList, 'uploadFz', 'uploadImg', 'colorPicker', 'popupTableSelect', 'relationForm', 'popupSelect', 'calculate', 'groupTitle']
-
+const getSearchMultiple = item => {
+  const jnpfKey = item.__config__.jnpfKey
+  const searchMultipleList = ['select', 'depSelect', 'roleSelect', 'userSelect', 'usersSelect', 'comSelect', 'posSelect', 'groupSelect']
+  if (searchMultipleList.includes(jnpfKey)) return true
+  return false
+}
 const getSearchType = item => {
   const jnpfKey = item.__config__.jnpfKey
   // 等于-1  模糊-2  范围-3
@@ -499,6 +499,13 @@ const defaultFuncsData = {
     name: "脚本事件"
   }
 }
+const defaultBtnsOption = [
+  { value: 'add', icon: 'el-icon-plus', label: '新增' },
+  { value: 'download', icon: 'el-icon-download', label: '导出' },
+  { value: 'upload', icon: 'el-icon-upload2', label: '导入' },
+  { value: 'batchRemove', icon: 'el-icon-delete', label: '批量删除' },
+  { value: 'batchPrint', icon: 'el-icon-printer', label: '批量打印' },
+]
 export default {
   name: 'columnDesign',
   props: {
@@ -514,7 +521,7 @@ export default {
       default: () => []
     },
   },
-  components: { draggable, FormScript, uploadBox, CustomBtn, InterfaceDialog, Condition, Form },
+  components: { draggable, FormScript, uploadBox, CustomBtn, InterfaceDialog, Condition },
   computed: {
     ruleListBtn() {
       if (this.columnData.ruleList && this.columnData.ruleList.length > 0) {
@@ -532,13 +539,7 @@ export default {
       searchList: [],
       columnList: [],
       columnData: JSON.parse(JSON.stringify(defaultColumnData)),
-      btnsOption: [
-        { value: 'add', icon: 'el-icon-plus', label: '新增' },
-        { value: 'download', icon: 'el-icon-download', label: '导出' },
-        { value: 'upload', icon: 'el-icon-upload2', label: '导入' },
-        { value: 'batchRemove', icon: 'el-icon-delete', label: '批量删除' },
-        { value: 'batchPrint', icon: 'el-icon-printer', label: '批量打印' },
-      ],
+      btnsOption: defaultBtnsOption,
       columnBtnsOption: [
         { value: 'edit', icon: 'el-icon-edit', label: '编辑' },
         { value: 'remove', icon: 'el-icon-delete', label: '删除' },
@@ -565,7 +566,6 @@ export default {
       activeItem: {},
       scriptKey: '',
       uploadBoxVisible: false,
-      interfaceVisible: false,
     }
   },
   filters: {
@@ -624,11 +624,6 @@ export default {
         }
       }
       this.columnData.columnBtnsList = list
-    },
-    'columnData.type': {
-      handler(val) {
-        if (val == 5) this.columnData.hasPage = false
-      }
     }
   },
   created() {
@@ -638,6 +633,7 @@ export default {
       this.columnData.funcs = Object.assign({}, defaultFuncsData, this.columnData.funcs)
     }
     if (this.webType != 4) {
+      if (this.columnData.type == 5) this.updateBtnsList(5)
       let list = []
       const loop = (data, parent) => {
         if (!data) return
@@ -679,6 +675,7 @@ export default {
         jnpfKey: o.__config__.jnpfKey,
         value: '',
         searchType: getSearchType(o),
+        searchMultiple: getSearchMultiple(o),
         ...o
       }));
       this.columnData.columnOptions = columnOptions
@@ -718,6 +715,7 @@ export default {
           value: '',
           searchType: 1,
           __vModel__: o,
+          searchMultiple: false,
           __config__: {
             label: "",
             jnpfKey: 'comInput',
@@ -914,6 +912,7 @@ export default {
       this.columnData.treePropsValue = 'id'
       this.columnData.treePropsChildren = 'children'
       this.columnData.treePropsLabel = 'fullName'
+      this.columnData.treeSynType = 0;
     },
     addCustomBtn() {
       const id = this.jnpf.idGenerator()
@@ -978,19 +977,23 @@ export default {
         relationField: ''
       })) : []
     },
-    addInterface(id) {
-      let flag = 1
-      this.interfaceVisible = true
-      this.$nextTick(() => {
-        this.$refs.Form.init(id, "30be5ef4e3074dd89385ad6b4540c63d", flag)
-      })
+    goDataInterface() {
+      let src = window.location.protocol + "//" + window.location.host + "/systemData/dataInterface"
+      window.open(src, "_blank")
     },
-    closeForm(isRefresh) {
-      this.interfaceVisible = false
-      if (isRefresh) {
-        this.getDataInterfaceSelector()
+    toggleType(val) {
+      if (this.columnData.type == val) return;
+      this.columnData.type = val;
+      this.updateBtnsList(val)
+    },
+    updateBtnsList(val) {
+      if (val == 5) {
+        this.btnsOption = [defaultBtnsOption[0]]
+        this.btnsList = this.btnsList.filter(o => o === 'add');
+      } else {
+        this.btnsOption = defaultBtnsOption
       }
-    },
+    }
   }
 }
 </script>

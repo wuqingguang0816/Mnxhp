@@ -34,14 +34,49 @@
       <div class="JNPF-common-layout-main JNPF-flex-main">
         <div class="JNPF-common-head">
           <div v-if="isPreview || !columnData.useBtnPermission">
-            <el-button :type="i==0?'primary':'text'" :icon="item.icon"
-              @click="headBtnsHandel(item.value)" v-for="(item, i) in columnData.btnsList" :key="i">
-              {{item.label}}</el-button>
+            <span v-for="(item, i) in columnData.btnsList" :key="i">
+              <template v-if="item.value == 'batchPrint'">
+                <el-dropdown>
+                  <el-button type="text" icon="el-icon-printer" :icon="item.icon"
+                    style="margin-left:20px">批量打印
+                  </el-button>
+                  <el-dropdown-menu slot="dropdown">
+                    <div @click="handleBatchPrint(item.id)"
+                      v-for="(item, index) in printListOptions" :key="index">
+                      <el-dropdown-item>{{ item.fullName }}</el-dropdown-item>
+                    </div>
+                  </el-dropdown-menu>
+                </el-dropdown>
+              </template>
+              <template v-else>
+                <el-button :type="i==0?'primary':'text'" :icon="item.icon"
+                  @click="headBtnsHandel(item.value)">
+                  {{item.label}}</el-button>
+              </template>
+            </span>
           </div>
           <div v-else>
-            <el-button :type="i==0?'primary':'text'" :icon="item.icon" v-has="'btn_'+item.value"
-              @click="headBtnsHandel(item.value)" v-for="(item, i) in columnData.btnsList" :key="i">
-              {{item.label}}</el-button>
+            <span v-for="(item, i) in columnData.btnsList" :key="i">
+              <template v-if="item.value == 'batchPrint'">
+                <el-dropdown>
+                  <el-button type="text" icon="el-icon-printer" v-has="'btn_'+item.value"
+                    :icon="item.icon" style="margin-left:20px">批量打印
+                  </el-button>
+                  <el-dropdown-menu slot="dropdown">
+                    <div @click="handleBatchPrint(item.id)"
+                      v-for="(item, index) in printListOptions" :key="index">
+                      <el-dropdown-item>{{ item.fullName }}</el-dropdown-item>
+                    </div>
+                  </el-dropdown-menu>
+                </el-dropdown>
+              </template>
+              <template v-else>
+                <el-button :type="i==0?'primary':'text'" :icon="item.icon" v-has="'btn_'+item.value"
+                  @click="headBtnsHandel(item.value)">
+                  {{item.label}}</el-button>
+              </template>
+            </span>
+
           </div>
           <div class="JNPF-common-head-right">
             <el-tooltip content="高级查询" placement="top" v-if="columnData.hasSuperQuery">
@@ -257,7 +292,7 @@
           </template>
           <template v-else>
             <template
-              v-if="columnData.childTableStyle==2&&childColumnList.length&&columnData.type ==1&&columnData.type == 2">
+              v-if="columnData.childTableStyle==2&&childColumnList.length&&(columnData.type ==1||columnData.type == 2)">
               <el-table-column width="0" />
               <el-table-column type="expand" width="40">
                 <template slot-scope="scope">
@@ -267,7 +302,21 @@
                       <el-table :data="scope.row[child.prop]" size='mini'>
                         <el-table-column :prop="childTable.vModel" :label="childTable.childLabel"
                           :align="childTable.align" :width="childTable.width"
-                          v-for="(childTable,iii) in child.children" :key="iii" />
+                          v-for="(childTable,iii) in child.children" :key="iii">
+                          <template slot-scope="scope">
+                            <template v-if="childTable.jnpfKey==='relationForm'">
+                              <el-link :underline="false"
+                                @click.native="toDetail(childTable.modelId,scope.row[`${childTable.vModel}_id`])"
+                                type="primary">
+                                {{ scope.row[childTable.vModel]}}
+                              </el-link>
+                            </template>
+                            <template v-else>
+                              {{ scope.row[childTable.vModel]}}
+                            </template>
+                          </template>
+                        </el-table-column>
+
                       </el-table>
                     </el-tab-pane>
                   </el-tabs>
@@ -434,6 +483,8 @@
         </template>
       </div>
     </div>
+    <print-browse :visible.sync="printBrowseVisible" :id="printId"
+      :batchIds="multipleSelection.join()" />
     <FlowBox v-if="flowVisible" ref="FlowBox" @close="closeFlow" />
     <Form v-show="formVisible" ref="Form" @refreshDataList="refresh" />
     <extraForm v-show="extraFormVisible" ref="extraForm" @refreshDataList="refresh" />
@@ -459,8 +510,10 @@
 </template>
 
 <script>
+import PrintBrowse from "@/components/PrintBrowse/batch";
 import { getModelList, getModelSubList, deleteModel, batchDelete, exportModel, createModel, updateModel, getConfigData } from '@/api/onlineDev/visualDev'
 import { Create, Update } from '@/api/workFlow/workFlowForm'
+import { printOptionsApi } from '@/api/system/printDev'
 import { getDictionaryDataSelector } from '@/api/systemData/dictionary'
 import { getDataInterfaceRes } from '@/api/systemData/dataInterface'
 import { getColumnsByModuleId } from '@/api/common'
@@ -482,10 +535,13 @@ import { mapGetters } from "vuex";
 
 export default {
   name: 'dynamicModel',
-  components: { Form, extraForm, ExportBox, Search, Detail, FlowBox, ChildTableColumn, SuperQuery, CandidateForm, CustomBox },
+  components: { PrintBrowse, Form, extraForm, ExportBox, Search, Detail, FlowBox, ChildTableColumn, SuperQuery, CandidateForm, CustomBox },
   props: ['config', 'modelId', 'isPreview'],
   data() {
     return {
+      printBrowseVisible: false,
+      printId: "",
+      printListOptions: [],
       systemComponentsList,
       keyword: '',
       treeProps: {
@@ -579,13 +635,16 @@ export default {
       this.refreshTable = false
       if (!this.config.columnData || !this.config.formData) return
       this.columnData = JSON.parse(this.config.columnData)
+      if(this.columnData.printIds && this.columnData.printIds.length>0){
+        this.getPrintListOptions(this.columnData.printIds)
+      }
       if (this.columnData.type === 3) {
         this.columnData.columnList = this.columnData.columnList.filter(o => o.prop != this.columnData.groupField)
       }
       if (this.config.enableFlow == 1) {
         if (this.config.flowId) this.getFlowList()
       }
-      this.hasBatchBtn = this.columnData.btnsList.some(o => o.value == 'batchRemove')
+      this.hasBatchBtn = this.columnData.btnsList.some(o => ['batchRemove', 'batchPrint'].includes(o.value))
       this.formData = JSON.parse(this.config.formData)
       this.customBtnsList = this.columnData.customBtnsList || []
       this.columnBtnsList = this.columnData.columnBtnsList || []
@@ -618,6 +677,12 @@ export default {
       } else {
         this.initData()
       }
+    },
+    async getPrintListOptions(ids) {
+      printOptionsApi(ids).then(res => {
+        this.printListOptions = res.data
+      })
+
     },
     initData() {
       if (this.isPreview) return
@@ -793,8 +858,10 @@ export default {
       let exportList = []
       for (let i = 0; i < list.length; i++) {
         if (list[i].jnpfKey === 'table') {
-          for (let j = 0; j < list[i].children.length; j++) {
-            exportList.push(list[i].children[j])
+          if (this.columnData.type != 4) {
+            for (let j = 0; j < list[i].children.length; j++) {
+              exportList.push(list[i].children[j])
+            }
           }
         } else {
           exportList.push(list[i])
@@ -1016,6 +1083,11 @@ export default {
       for (let i = 0; i < this.columnData.columnList.length; i++) {
         let e = this.columnData.columnList[i]
         item[e.__vModel__] = e.__config__.defaultValue
+        if (e.__config__.jnpfKey === 'date' && e.__config__.defaultCurrent == true) {
+          item[e.__vModel__] = new Date().getTime()
+        } else if (e.__config__.jnpfKey === 'comSelect' && e.__config__.defaultCurrent == true && this.userInfo.organizeIdList instanceof Array && this.userInfo.organizeIdList.length > 0) {
+          item[e.__vModel__] = e.multiple == true ? [this.userInfo.organizeIdList] : this.userInfo.organizeIdList
+        }
       }
       this.list.unshift(item)
     },
@@ -1110,6 +1182,26 @@ export default {
     handleSelectionChange(val) {
       const res = val.map(item => item.id)
       this.multipleSelection = res
+    },
+    handleBatchPrint(id) {
+      if (!id) {
+        this.$message({
+          type: "warning",
+          message: "请配置打印模板",
+          duration: 1500
+        });
+        return;
+      }
+      if (!this.multipleSelection.length) {
+        this.$message({
+          type: 'error',
+          message: '请选择一条数据',
+          duration: 1500,
+        })
+        return
+      }
+      this.printId = id;
+      this.printBrowseVisible = true;
     },
     batchRemove() {
       if (!this.multipleSelection.length) {

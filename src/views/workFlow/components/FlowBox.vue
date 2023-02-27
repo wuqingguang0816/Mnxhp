@@ -86,8 +86,8 @@
         </template>
       </el-tab-pane>
       <el-tab-pane label="流转记录" v-if="setting.opType!='-1'" v-loading="loading">
-        <recordList :list='flowTaskOperatorRecordList' :endTime='endTime'
-          :flowId="setting.flowId" />
+        <recordList :list='flowTaskOperatorRecordList' :endTime='endTime' :flowId="setting.flowId"
+          :opType="setting.opType" />
       </el-tab-pane>
       <el-tab-pane label="审批汇总" v-if="setting.opType!='-1' && isSummary" v-loading="loading"
         name="recordSummary">
@@ -201,15 +201,15 @@
         </el-form-item>
         <el-form-item :label="flowTaskInfo.completion==100?'复活意见':'变更意见'" prop="handleOpinion">
           <el-row>
-            <el-col :span="22">
+            <el-col :span="24">
               <el-input type="textarea" v-model="resurgenceForm.handleOpinion" placeholder="请填写意见"
                 :rows="4" />
             </el-col>
-            <el-col :span="2">
+            <!-- <el-col :span="2">
               <el-button plain @click="commonWords()" class="commonWords-button">
                 常用语
               </el-button>
-            </el-col>
+            </el-col> -->
           </el-row>
         </el-form-item>
         <el-form-item :label="flowTaskInfo.completion==100?'复活附件':'变更附件'" prop="fileList">
@@ -223,7 +223,7 @@
         </el-button>
       </span>
     </el-dialog>
-    <print-browse :visible.sync="printBrowseVisible" :id="properties.printId" :formId="setting.id"
+    <print-browse :visible.sync="printBrowseVisible" :id="printTemplateId" :formId="setting.id"
       :fullName="setting.fullName" />
     <candidate-form :visible.sync="candidateVisible" :candidateList="candidateList"
       :branchList="branchList" :taskId="setting.taskId" :formData="formData"
@@ -237,12 +237,14 @@
     <SignImgDialog v-if="signVisible" ref="SignImg" :lineWidth='3' :userInfo='userInfo'
       :isDefault='1' @close="signDialog" />
     <FlowBox v-if="flowBoxVisible" ref="FlowBox" @close="flowBoxVisible = false" />
-
+    <PrintDialog v-if="printDialogVisible" ref="printDialog" @change="printBrowseHandle">
+    </PrintDialog>
   </div>
   <!-- </transition> -->
 </template>
 
 <script>
+import PrintDialog from './PrintDialog'
 import SignImgDialog from '@/components/SignImgDialog'
 import { FlowBeforeInfo, Audit, Reject, Transfer, Recall, Cancel, Assign, SaveAudit, Candidates, CandidateUser, Resurgence, ResurgenceList, RejectList, suspend, restore, subFlowInfo } from '@/api/workFlow/FlowBefore'
 import { Revoke, Press } from '@/api/workFlow/FlowLaunch'
@@ -262,9 +264,11 @@ import CommonWordsDialog from './CommonWordsDialog'
 import { mapGetters } from "vuex"
 export default {
   name: 'FlowBox',
-  components: { SignImgDialog, HasFreeApprover, recordList, Process, PrintBrowse, Comment, RecordSummary, CandidateForm, CandidateUserSelect, ErrorForm, ActionDialog, SuspendDialog, CommonWordsDialog },
+  components: { PrintDialog, SignImgDialog, HasFreeApprover, recordList, Process, PrintBrowse, Comment, RecordSummary, CandidateForm, CandidateUserSelect, ErrorForm, ActionDialog, SuspendDialog, CommonWordsDialog },
   data() {
     return {
+      printTemplateId: '',
+      printDialogVisible: false,
       subFlowTab: '',
       resurgenceVisible: false,
       actionVisible: false,
@@ -407,13 +411,14 @@ export default {
       if (needClose) this.$emit('close', true)
     },
     activeClick() {
-      let data = this.subFlowInfoList.filter(o => o.flowTaskInfo.id == this.subFlowTab)
+      let data = this.subFlowInfoList.filter(o => o.flowTaskInfo.id == this.subFlowTab) || []
       if (data.length) {
         this.fullName = data[0].flowTaskInfo.fullName
         this.flowTaskOperatorRecordList = data[0].flowTaskOperatorRecordList || []
-        this.isComment = data[0].flowTemplateInfo.flowTemplateJson.isComment
-        this.isSummary = data[0].flowTemplateInfo.flowTemplateJson.isSummary
-        this.summaryType = data[0].flowTemplateInfo.flowTemplateJson.summaryType
+        let templateJson = data[0].flowTaskInfo.flowTemplateJson ? JSON.parse(data[0].flowTaskInfo.flowTemplateJson) : null
+        this.isComment = templateJson.properties.isComment
+        this.isSummary = templateJson.properties.isSummary
+        this.summaryType = templateJson.properties.summaryType
       }
     },
     subFlow(enCode) {
@@ -423,13 +428,7 @@ export default {
       let item = {
         subFlowVisible: true,
         ...flowTaskNodeList,
-        activeTab: this.activeTab,
         ...this.setting,
-        isComment: this.isComment,
-        isSummary: this.isSummary,
-        summaryType: this.summaryType,
-        currentView: this.currentView,
-        flowTaskOperatorRecordList: this.flowTaskOperatorRecordList,
       }
       this.flowBoxVisible = true
       this.$nextTick(() => {
@@ -511,6 +510,7 @@ export default {
         data.type = this.flowTemplateInfo.type
         data.draftData = res.data.draftData || null
         data.formData = res.data.formData || {}
+        data.formEnCode = this.flowFormInfo.enCode
         const formUrl = this.flowFormInfo.formType == 2 ? 'workFlow/workFlowForm/dynamicForm' : this.flowFormInfo.urlAddress ? this.flowFormInfo.urlAddress.replace(/\s*/g, "") : `workFlow/workFlowForm/${this.flowFormInfo.enCode}`
         this.currentView = (resolve) => require([`@/views/${formUrl}`], resolve)
         this.flowTaskNodeList = res.data.flowTaskNodeList || []
@@ -583,7 +583,7 @@ export default {
         if (flowTaskInfo.completion > 0 && flowTaskInfo.completion < 100 && !flowTaskInfo.rejectDataId && (setting.status == 1 || setting.status == 3)) list.push({ label: '变 更', key: 'resurgence' })
         if (setting.status == 1 && this.assignNodeList.length) list.push({ label: '指 派', key: 'assign' })
         if (flowTaskInfo.status == 1) list.push({ label: '挂 起', key: 'suspend' })
-        if (flowTaskInfo.status == 6) list.push({ label: '恢 复', key: 'recovery' })
+        if (flowTaskInfo.status == 6 && !flowTaskInfo.suspend) list.push({ label: '恢 复', key: 'recovery' })
       }
       this.moreBtnList = list
     },
@@ -622,13 +622,25 @@ export default {
           } else {
             element.flowTemplateInfo.flowTemplateJson.state = 'state-curr'
           }
-          this.isComment = this.subFlowInfoList[0].flowTemplateInfo.flowTemplateJson.isComment
-          this.isSummary = this.subFlowInfoList[0].flowTemplateInfo.flowTemplateJson.isSummary
-          this.summaryType = this.subFlowInfoList[0].flowTemplateInfo.flowTemplateJson.summaryType
+          let templateJson = this.subFlowInfoList[0].flowTaskInfo.flowTemplateJson ? JSON.parse(this.subFlowInfoList[0].flowTaskInfo.flowTemplateJson) : null
+          this.isComment = templateJson.properties.isComment
+          this.isSummary = templateJson.properties.isSummary
+          this.summaryType = templateJson.properties.summaryType
         }
       }).catch(() => { this.loading = false })
 
 
+    },
+    printBrowseHandle(id) {
+      this.printTemplateId = id
+      this.printDialogVisible = false
+      this.printBrowseVisible = true
+    },
+    printDialog() {
+      this.printDialogVisible = true
+      this.$nextTick(() => {
+        this.$refs.printDialog.init(JSON.parse(this.properties.printId))
+      })
     },
     handleMore(e) {
       if (e == 'revoke') return this.actionLauncher('revoke')
@@ -638,7 +650,7 @@ export default {
       if (e == 'resurgence') return this.flowResurgence()
       if (e == 'assign') return this.actionLauncher('assign')
       if (e == 'comment') return this.addComment()
-      if (e == 'print') return this.printBrowseVisible = true
+      if (e == 'print') return this.printDialog()
       if (e == 'suspend') return this.suspend()
       if (e == 'recovery') return this.recovery()
       this.eventLauncher(e)

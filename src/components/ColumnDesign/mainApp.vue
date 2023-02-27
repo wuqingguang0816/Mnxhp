@@ -115,7 +115,7 @@
           <div class="setting-box">
             <el-form :model="columnData" label-width="80px" label-position="left">
               <el-divider>表格配置</el-divider>
-              <el-form-item label="数据过滤">
+              <el-form-item label="数据过滤" v-if="webType != 4">
                 <el-button style="width: 100%;" @click="filterPanelShow">{{ ruleListBtn }}
                 </el-button>
               </el-form-item>
@@ -229,6 +229,12 @@ import CustomBtn from './CustomBtn'
 import { getDrawingList } from '@/components/Generator/utils/db'
 import { noColumnShowList, noSearchList, useInputList, useDateList } from '@/components/Generator/generator/comConfig'
 import { getFields } from '@/api/onlineDev/visualDev'
+const getSearchMultiple = item => {
+  const jnpfKey = item.__config__.jnpfKey
+  const searchMultipleList = ['select', 'depSelect', 'roleSelect', 'userSelect', 'usersSelect', 'comSelect', 'posSelect', 'groupSelect']
+  if (searchMultipleList.includes(jnpfKey)) return true
+  return false
+}
 const getSearchType = item => {
   const jnpfKey = item.__config__.jnpfKey
   // 等于-1  模糊-2  范围-3
@@ -411,12 +417,14 @@ export default {
         width: null,
         ...o
       }));
+
       this.searchOptions = searchOptions.map(o => ({
         label: o.__config__.label,
         prop: o.__vModel__,
         jnpfKey: o.__config__.jnpfKey,
         value: '',
         searchType: getSearchType(o),
+        searchMultiple: getSearchMultiple(o),
         ...o
       }));
       this.sortOptions = sortOptions.map(o => ({
@@ -458,6 +466,7 @@ export default {
           value: '',
           searchType: 1,
           __vModel__: o,
+          searchMultiple: false,
           __config__: {
             label: "",
             jnpfKey: 'comInput',
@@ -505,7 +514,6 @@ export default {
       this.$refs.conditionpane.show(this.columnData.ruleListApp)
     },
     ruleConfig(data) {
-      console.log(data);
       this.columnData.ruleListApp = [data]
     },
     setBtnValue(replacedData, data, key) {
@@ -527,6 +535,7 @@ export default {
           if (replacedData[i][key] === data[ii][key]) {
             if (type === 'search') {
               data[ii].searchType = replacedData[i].searchType
+              data[ii].searchMultiple = replacedData[i].searchMultiple
             }
             if (this.webType == 4) data[ii].label = replacedData[i].label
             res.push(data[ii])

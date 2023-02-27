@@ -25,7 +25,6 @@
 <script>
 import { getDrawingList } from "@/components/Generator/utils/db";
 import Condition from "./condition";
-import handleClipboard from "@/utils/clipboard";
 export default {
   props: {
     value: {
@@ -82,6 +81,7 @@ export default {
   watch: {
     columnData: {
       handler(val) {
+        console.log(val,12);
         this.columnOptions = val.columnOptions
         val.columnOptions.map(item => {
           this.columnDataMap[item.__vModel__] = item;
@@ -124,8 +124,17 @@ export default {
       // 获取属性配置
       this.$nextTick(() => {
         this.pconditions = this.$refs.base.getData();
+        let cloneConditions = JSON.parse(JSON.stringify(this.pconditions))
+        let data = cloneConditions.map(item=>{
+          // if(['cascader'].includes(item.jnpfKey)){
+          //   item.dataOptions = []
+          //   item.options = []
+          // }
+          return item
+        })
+        console.log(data,11)
         this.$emit("ruleConfig", {
-          pconditions: this.pconditions
+          pconditions: data
         });
 
         this.dialogVisible = false;

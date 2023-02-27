@@ -202,7 +202,7 @@ export default {
         socket.onmessage = (event) => {
           let data = JSON.parse(event.data)
           if (data.method == 'initMessage') {
-            this.messageCount = data.unreadMessageCount + data.unreadNoticeCount
+            this.messageCount = data.unreadMessageCount + data.unreadNoticeCount+data.unreadSystemMessageCount
             this.isTwinkle = !!data.unreadNums.length
           }
           //用户在线
@@ -287,6 +287,10 @@ export default {
           //消息列表
           if (data.method == 'messageList') {
             this.$refs.UserList.$refs.JNPFIm.getList(data)
+          }
+          //刷新页面
+          if (data.method == 'refresh') {
+            location.reload()
           }
         }
       }

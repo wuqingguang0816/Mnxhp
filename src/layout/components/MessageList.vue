@@ -35,6 +35,8 @@
             <el-badge is-dot :hidden="item.isRead=='1'" type="warning">
               <i class="icon-ym icon-ym-xitong JNPF-messageList-item-icon"
                 v-if="item.type == 1"></i>
+              <i class="icon-ym icon-ym-generator-notice JNPF-messageList-item-icon notice-icon"
+                 v-else-if="item.type == 3"></i>
               <i class="icon-ym icon-ym icon-ym-generator-flow JNPF-messageList-item-icon flow-icon"
                 v-else></i>
             </el-badge>
@@ -314,6 +316,9 @@ export default {
       }
       .flow-icon {
         background-color: #33cc51 !important;
+      }
+      .notice-icon {
+        background-color: #e09f0c !important;
       }
       .JNPF-messageList-item-icon {
         background-color: #1890ff;

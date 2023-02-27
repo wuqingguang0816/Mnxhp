@@ -203,7 +203,7 @@ export default {
               this.printTemplate = this.replaceAll(this.printTemplate, item, template)
             }
           }
-          const isArray = false
+          let isArray = false
           try {
             isArray = Array.isArray(JSON.parse(value))
           } catch (error) {
@@ -403,7 +403,7 @@ export default {
           
           // 插入日志
           let data = {
-            printTitle:oldTitle.split("-")[0].trim(),
+            printTitle:_this.fullName,
             printNum:1,
             printId:_this.id
           }
