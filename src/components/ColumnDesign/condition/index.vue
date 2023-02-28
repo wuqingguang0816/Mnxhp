@@ -827,6 +827,11 @@ export default {
       if (item.jnpfKey != this.nowJnpfKey) {
         item.symbol = undefined;
       }
+      if(['null','notNull'].includes(val)){
+        item.disabled = true
+      }else{
+        item.disabled = false
+      }
       this.$set(this.pconditions, i, item);
       this.nowJnpfKey = item.jnpfKey;
     },
