@@ -988,6 +988,7 @@ export default {
       this.updateBtnsList(val)
     },
     updateBtnsList(val) {
+      if (this.webType == '4') return
       if (val == 5) {
         this.btnsOption = [defaultBtnsOption[0]]
         this.btnsList = this.btnsList.filter(o => o === 'add');
