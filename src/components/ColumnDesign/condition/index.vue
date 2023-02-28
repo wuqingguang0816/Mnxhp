@@ -177,7 +177,7 @@
                   v-else
                   v-model="item.fieldValue"
                   placeholder="请输入"
-                  :precision="item.precision"
+                  :precision="2"
                   :disabled="item.disabled"
                   :controls="false"
                   controls-position="right"
