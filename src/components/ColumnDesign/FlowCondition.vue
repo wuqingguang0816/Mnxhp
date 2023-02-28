@@ -130,17 +130,17 @@ export default {
         this.pconditions = this.$refs.base.getData();
         let valid = true
         this.pconditions.forEach(k=>{
-          if(!k.field){
+          if(k.field == undefined){
             this.$message.warning("条件字段不能为空")
             valid = false
             return 
           }
-          if(!k.symbol){
+          if(!k.symbol == undefined){
             this.$message.warning("条件符号不能为空")
             valid = false
             return 
           }
-          if(!k.fieldValue){
+          if(!k.fieldValue == undefined){
             this.$message.warning("数据值不能为空")
             valid = false
             return 
