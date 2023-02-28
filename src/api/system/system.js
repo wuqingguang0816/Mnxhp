@@ -9,13 +9,6 @@ export const getSystem = (data) => {
   })
 }
 
-// 获取有效系统列表
-export const getEnableSystem = () => {
-  return request({
-    url: '/api/system/System/enableList',
-    method: 'GET',
-  })
-}
 
 //新建菜单列表
 export const create = (data) => {
