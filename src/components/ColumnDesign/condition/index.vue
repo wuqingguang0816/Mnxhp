@@ -841,7 +841,7 @@ export default {
           item.fieldValue = +new Date();
         }
       }
-      if (item.jnpfKey == "time") {
+      if (["time"].includes(item.jnpfKey)) {
         if (val == "between") {
           item.fieldValue = ["", ""];
         } else {
@@ -864,6 +864,13 @@ export default {
           item.searchMultiple = false
         }
         
+      }
+      if(["select"].includes(item.jnpfKey)){
+        if(["in", "notIn"].includes(val)){
+          item.fieldValue = []
+        }else{
+          item.fieldValue = ''
+        }
       }
       if(['cascader'].includes(item.jnpfKey) ){
         if(["in", "notIn"].includes(val)){
