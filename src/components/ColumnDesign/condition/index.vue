@@ -142,7 +142,7 @@
                   ['radio', 'checkbox', 'select'].includes(item.jnpfKey)
                 "
               >
-                <el-select v-model="item.fieldValue" placeholder="请选择" :multiple="item.multiple">
+                <el-select :disabled="item.disabled" v-model="item.fieldValue" placeholder="请选择" :multiple="item.multiple">
                   <el-option
                     v-for="(item, index) in item.dataOptions"
                     :key="index"
@@ -435,6 +435,7 @@
             <el-select
               v-model="item.fieldValue"
               placeholder="请选择"
+              :disabled="item.disabled"
               v-if="item.fieldValueType === 1"
               @change="fieldValueChange($event, item)"
             >
@@ -834,14 +835,14 @@ export default {
       let obj = this.symbolOptions.filter(o => o.value == val)[0];
       item.symbolName = obj.label;
       item.fieldValue = undefined;
-      if (["date", "createTime", "modifyTime"].includes(item.jnpfKey)) {
+      if (["date", "createTime", "modifyTime"].includes(item.jnpfKey) && !['null','notNull'].includes(val)) {
         if (val == "between") {
           item.fieldValue = [+new Date(), +new Date()];
         } else {
           item.fieldValue = +new Date();
         }
       }
-      if (["time"].includes(item.jnpfKey)) {
+      if (["time"].includes(item.jnpfKey) && !['null','notNull'].includes(val)) {
         if (val == "between") {
           item.fieldValue = ["", ""];
         } else {
