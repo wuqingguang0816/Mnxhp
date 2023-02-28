@@ -163,7 +163,7 @@ export default {
               for (let i = 0; i < this.searchList.length; i++) {
                 if (this.searchList[i].__vModel__ === key) {
                   if (this.searchList[i].searchMultiple) {
-                    if (this.searchList[i].jnpfKey = "comSelect") {
+                    if (this.searchList[i].jnpfKey == "comSelect") {
                       this.searchList[i].value = Array.isArray(initData[key]) && Array.isArray(initData[key][0]) ? initData[key] : [initData[key]]
                     } else {
                       this.searchList[i].value = Array.isArray(initData[key]) ? initData[key] : [initData[key]]
