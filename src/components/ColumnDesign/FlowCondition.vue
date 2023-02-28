@@ -86,7 +86,6 @@ export default {
   watch: {
     columnData: {
       handler(val) {
-        console.log(val,12);
         this.columnOptions = val.columnOptions
         val.columnOptions.map(item => {
           this.columnDataMap[item.__vModel__] = item;
@@ -129,6 +128,27 @@ export default {
       // 获取属性配置
       this.$nextTick(() => {
         this.pconditions = this.$refs.base.getData();
+        let valid = true
+        this.pconditions.forEach(k=>{
+          if(!k.field){
+            this.$message.warning("条件字段不能为空")
+            valid = false
+            return 
+          }
+          if(!k.symbol){
+            this.$message.warning("条件符号不能为空")
+            valid = false
+            return 
+          }
+          if(!k.fieldValue){
+            this.$message.warning("数据值不能为空")
+            valid = false
+            return 
+          }
+        })
+        if(!valid){
+          return
+        }
         let cloneConditions = JSON.parse(JSON.stringify(this.pconditions))
         let data = cloneConditions.map(item=>{
           // if(['cascader'].includes(item.jnpfKey)){
@@ -137,7 +157,6 @@ export default {
           // }
           return item
         })
-        console.log(data,11)
         this.$emit("ruleConfig", {
           pconditions: data
         });

@@ -124,12 +124,14 @@
               <template v-if="item.jnpfKey === 'numInput'">
                 <NumRange
                   v-model="item.fieldValue"
+                  :disabled="item.disabled"
                   v-if="item.symbol == 'between'"
                 ></NumRange>
                 <el-input-number
                   v-else
                   v-model="item.fieldValue"
                   placeholder="请输入"
+                  :disabled="item.disabled"
                   :precision="item.precision"
                   :controls="false"
                   controls-position="right"
@@ -144,7 +146,7 @@
                   <el-option
                     v-for="(item, index) in item.dataOptions"
                     :key="index"
-                    
+                    :disabled="item.disabled"
                     :label="item[item.dataLabel]"
                     :value="item[item.dataValue]"
                   ></el-option>
@@ -166,21 +168,17 @@
                 :multiple="item.multiple" :filterable="item.filterable" :disabled="item.disabled" />
               </template>
               <template v-else-if="item.jnpfKey === 'calculate'">
-                <!-- <el-input-number
-                  v-model="item.fieldValue"
-                  placeholder="请输入"
-                  :precision="2"
-                  controls-position="right"
-                /> -->
                 <NumRange
                   v-model="item.fieldValue"
                   v-if="item.symbol == 'between'"
+                  :disabled="item.disabled"
                 ></NumRange>
                 <el-input-number
                   v-else
                   v-model="item.fieldValue"
                   placeholder="请输入"
                   :precision="item.precision"
+                  :disabled="item.disabled"
                   :controls="false"
                   controls-position="right"
                 />
@@ -189,6 +187,7 @@
                 <el-input-number
                   v-model="item.fieldValue"
                   placeholder="请输入"
+                  :disabled="item.disabled"
                   controls-position="right"
                 />
               </template>
@@ -196,12 +195,14 @@
                 <el-switch
                   v-model="item.fieldValue"
                   :active-value="1"
+                  :disabled="item.disabled"
                   :inactive-value="0"
                 />
               </template>
               <template v-else-if="item.jnpfKey === 'time'">
                 <el-time-picker
                   v-if="item.symbol == 'between'"
+                  :disabled="item.disabled"
                   v-model="item.fieldValue"
                   key="time1"
                   :picker-options="item['picker-options']"
@@ -220,6 +221,7 @@
                   :picker-options="item['picker-options']"
                   placeholder="请选择"
                   clearable
+                  :disabled="item.disabled"
                   :value-format="item['value-format']"
                   :format="item.format"
                 >
@@ -234,6 +236,7 @@
                   <el-date-picker
                     v-model="item.fieldValue"
                     clearable
+                    :disabled="item.disabled"
                     key="year1"
                     placeholder="请选择"
                     :type="'daterange'"
@@ -252,6 +255,7 @@
                   v-else
                   v-model="item.fieldValue"
                   clearable
+                  :disabled="item.disabled"
                   key="year2"
                   placeholder="请选择"
                   :type="
@@ -271,6 +275,7 @@
               >
                 <comSelect
                   v-model="item.fieldValue"
+                  :disabled="item.disabled"
                   placeholder="请选择"
                   ref="comselect"
                   clearable
@@ -286,6 +291,7 @@
                   :ableDepIds="item.ableDepIds"
                   :multiple="item.multiple"
                   clearable
+                  :disabled="item.disabled"
                   @change="onConditionObjChange(arguments, item)"
                 />
               </template>
@@ -303,6 +309,7 @@
                   :popupTitle="item.popupTitle"
                   :popupWidth="item.popupWidth"
                   :filterable="item.filterable"
+                  :disabled="item.disabled"
                   clearable
                 />
               </template>
@@ -316,6 +323,7 @@
                   :relationField="item.relationField"
                   :hasPage="item.hasPage"
                   :pageSize="item.pageSize"
+                  :disabled="item.disabled"
                 />
               </template>
               <template v-else-if="item.jnpfKey === 'popupSelect'">
@@ -332,6 +340,7 @@
                   :popupType="item.popupType"
                   :popupTitle="item.popupTitle"
                   :popupWidth="item.popupWidth"
+                  :disabled="item.disabled"
                 />
               </template>
               <template v-else-if="['userSelect'].includes(item.jnpfKey)">
@@ -347,6 +356,7 @@
                   :ableRoleIds="item.ableRoleIds"
                   :ableGroupIds="item.ableGroupIds"
                   :multiple="item.multiple"
+                  :disabled="item.disabled"
                 />
               </template>
               <template
@@ -357,6 +367,7 @@
                   placeholder="请选择"
                   multiple
                   clearable
+                  :disabled="item.disabled"
                   @change="onConditionObjChange(arguments, item)"
                 />
               </template>
@@ -365,7 +376,7 @@
               >
                 <posSelect v-model="item.fieldValue" :placeholder="'请选择'+item.__config__.label" clearable
                 class="item" :selectType="item.selectType" :ableDepIds="item.ableDepIds"
-                :ablePosIds="item.ablePosIds" :multiple="item.searchMultiple" 
+                :ablePosIds="item.ablePosIds" :multiple="item.searchMultiple" :disabled="item.disabled"
                 @change="onConditionObjChange(arguments, item)"
                 />
               </template>
@@ -376,6 +387,7 @@
                   :level="item.level"
                   :multiple="item.multiple"
                   clearable
+                  :disabled="item.disabled"
                   @change="onConditionListChange(arguments, item)"
                 />
               </template>
@@ -385,6 +397,7 @@
                   multiple
                   placeholder="请选择"
                   clearable
+                  :disabled="item.disabled"
                   @change="onConditionObjChange(arguments, item)"
                 />
               </template>
@@ -394,6 +407,7 @@
                   multiple
                   placeholder="请选择"
                   clearable
+                  :disabled="item.disabled"
                   @change="onConditionObjChange(arguments, item)"
                 />
               </template>
@@ -401,6 +415,7 @@
               <template v-else>
                 <el-input
                   v-model="item.fieldValue"
+                  :disabled="item.disabled"
                   placeholder="请输入"
                 ></el-input>
               </template>
@@ -487,7 +502,15 @@ export default {
         {
           label: "小于",
           value: "<"
-        }
+        },
+        {
+          label: "为空",
+          value: "null"
+        },
+        {
+          label: "不为空",
+          value: "notNull"
+        },
       ],
       symbolOptionsBase: [
         {
@@ -505,7 +528,15 @@ export default {
         {
           label: "不包含",
           value: "notLike"
-        }
+        },
+        {
+          label: "为空",
+          value: "null"
+        },
+        {
+          label: "不为空",
+          value: "notNull"
+        },
       ],
       symbolOptionsDateNum: [
         {
@@ -535,7 +566,15 @@ export default {
         {
           label: "介于",
           value: "between"
-        }
+        },
+        {
+          label: "为空",
+          value: "null"
+        },
+        {
+          label: "不为空",
+          value: "notNull"
+        },
       ],
       symbolOptionsSelect: [
         {
@@ -553,7 +592,15 @@ export default {
         {
           label: "不等于任意一个",
           value: "notIn"
-        }
+        },
+        {
+          label: "为空",
+          value: "null"
+        },
+        {
+          label: "不为空",
+          value: "notNull"
+        },
       ],
       symbolOptions: [
         {
@@ -599,7 +646,15 @@ export default {
         {
           label: "不包含",
           value: "notLike"
-        }
+        },
+        {
+          label: "为空",
+          value: "null"
+        },
+        {
+          label: "不为空",
+          value: "notNull"
+        },
       ],
       logicOptions: [
         {
@@ -784,6 +839,11 @@ export default {
       }
       if(item.jnpfKey =='radio'){
         item.fieldValue = "";
+      }
+      if(['null','notNull'].includes(val)){
+        item.disabled = true
+      }else{
+        item.disabled = false
       }
       item.multiple = ["in", "notIn"].includes(val) ? true : false;
       if(['posSelect', 'currPosition'].includes(item.jnpfKey) ){
