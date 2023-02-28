@@ -147,7 +147,13 @@ export default {
       categoryList: [],
       treeData: [],
       dbOptions: [],
-      pageParam: {},
+      pageParam: {
+        mt: "1",
+        mb: "1",
+        ml: "1",
+        mr: "1",
+        direction: "纵向"
+      },
     }
   },
   methods: {

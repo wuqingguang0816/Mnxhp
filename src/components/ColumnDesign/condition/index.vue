@@ -782,6 +782,9 @@ export default {
           item.fieldValue = "";
         }
       }
+      if(item.jnpfKey =='radio'){
+        item.fieldValue = "";
+      }
       item.multiple = ["in", "notIn"].includes(val) ? true : false;
       if(['posSelect', 'currPosition'].includes(item.jnpfKey) ){
         if(["in", "notIn"].includes(val)){

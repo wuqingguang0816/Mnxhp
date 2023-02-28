@@ -160,10 +160,10 @@ export default {
       ],
       dialogFormVisible: false,
       form: {
-        mt: "",
-        mb: "",
-        ml: "",
-        mr: "",
+        mt: "1",
+        mb: "1",
+        ml: "1",
+        mr: "1",
         direction: "纵向"
       },
       formLabelWidth: "120px",
