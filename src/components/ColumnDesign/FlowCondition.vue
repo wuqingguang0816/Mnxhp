@@ -28,9 +28,9 @@ import { getDrawingList } from "@/components/Generator/utils/db";
 import Condition from "./condition";
 export default {
   props: {
-    modelType:{
-      type:String,
-      default:''
+    modelType: {
+      type: String,
+      default: ""
     },
     value: {
       type: Array,
@@ -51,7 +51,7 @@ export default {
       dataOptionMap: {},
       dialogVisible: false,
       pconditions: [],
-      columnOptions:[]
+      columnOptions: []
     };
   },
   computed: {
@@ -86,7 +86,7 @@ export default {
   watch: {
     columnData: {
       handler(val) {
-        this.columnOptions = val.columnOptions
+        this.columnOptions = val.columnOptions;
         val.columnOptions.map(item => {
           this.columnDataMap[item.__vModel__] = item;
         });
@@ -128,35 +128,37 @@ export default {
       // 获取属性配置
       this.$nextTick(() => {
         this.pconditions = this.$refs.base.getData();
-        let valid = true
-        this.pconditions.forEach(k=>{
-          if(k.field == undefined){
-            this.$message.warning("条件字段不能为空")
-            valid = false
-            return 
+        let valid = true;
+        this.pconditions.forEach(k => {
+          if (!["null", "notNull"].includes(k.symbol)) {
+            if (!k.field) {
+              this.$message.warning("条件字段不能为空");
+              valid = false;
+              return;
+            }
+            if (!k.symbol) {
+              this.$message.warning("条件符号不能为空");
+              valid = false;
+              return;
+            }
+            if (!k.fieldValue) {
+              this.$message.warning("数据值不能为空");
+              valid = false;
+              return;
+            }
           }
-          if(!k.symbol == undefined){
-            this.$message.warning("条件符号不能为空")
-            valid = false
-            return 
-          }
-          if(!k.fieldValue == undefined){
-            this.$message.warning("数据值不能为空")
-            valid = false
-            return 
-          }
-        })
-        if(!valid){
-          return
+        });
+        if (!valid) {
+          return;
         }
-        let cloneConditions = JSON.parse(JSON.stringify(this.pconditions))
-        let data = cloneConditions.map(item=>{
+        let cloneConditions = JSON.parse(JSON.stringify(this.pconditions));
+        let data = cloneConditions.map(item => {
           // if(['cascader'].includes(item.jnpfKey)){
           //   item.dataOptions = []
           //   item.options = []
           // }
-          return item
-        })
+          return item;
+        });
         this.$emit("ruleConfig", {
           pconditions: data
         });

@@ -842,7 +842,6 @@ export default {
       }
       if(['null','notNull'].includes(val)){
         item.disabled = true
-        item.fieldValue = ""
       }else{
         item.disabled = false
       }
