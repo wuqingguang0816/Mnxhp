@@ -300,6 +300,7 @@
                   v-model="item.fieldValue"
                   :placeholder="item.placeholder"
                   :interfaceId="item.interfaceId"
+                  :multiple="item.multiple"
                   :columnOptions="item.columnOptions"
                   :propsValue="item.propsValue"
                   :relationField="item.relationField"
@@ -319,6 +320,7 @@
                   placeholder="请选择"
                   :modelId="item.modelId"
                   clearable
+                  :multiple="item.multiple"
                   :columnOptions="item.columnOptions"
                   :relationField="item.relationField"
                   :hasPage="item.hasPage"
@@ -332,6 +334,7 @@
                   placeholder="请选择"
                   :interfaceId="item.interfaceId"
                   clearable
+                  :multiple="item.multiple"
                   :columnOptions="item.columnOptions"
                   :propsValue="item.propsValue"
                   :relationField="item.relationField"
@@ -365,18 +368,26 @@
                 <userSelect
                   v-model="item.fieldValue"
                   placeholder="请选择"
-                  multiple
+                  :multiple="item.multiple"
                   clearable
                   :disabled="item.disabled"
                   @change="onConditionObjChange(arguments, item)"
                 />
               </template>
               <template
-                v-else-if="['posSelect', 'currPosition'].includes(item.jnpfKey)"
+                v-else-if="['posSelect'].includes(item.jnpfKey)"
               >
                 <posSelect v-model="item.fieldValue" :placeholder="'请选择'+item.__config__.label" clearable
                 class="item" :selectType="item.selectType" :ableDepIds="item.ableDepIds"
                 :ablePosIds="item.ablePosIds" :multiple="item.searchMultiple" :disabled="item.disabled"
+                @change="onConditionObjChange(arguments, item)"
+                />
+              </template>
+              <template
+                v-else-if="[ 'currPosition'].includes(item.jnpfKey)"
+              >
+                <posSelect v-model="item.fieldValue" :placeholder="'请选择'+item.__config__.label" clearable
+                class="item"   :multiple="item.searchMultiple" :disabled="item.disabled"
                 @change="onConditionObjChange(arguments, item)"
                 />
               </template>
@@ -394,7 +405,7 @@
               <template v-else-if="item.jnpfKey === 'groupSelect'">
                 <groupSelect
                   v-model="item.fieldValue"
-                  multiple
+                  :multiple="item.multiple"
                   placeholder="请选择"
                   clearable
                   :disabled="item.disabled"
@@ -404,7 +415,7 @@
               <template v-else-if="item.jnpfKey === 'roleSelect'">
                 <roleSelect
                   v-model="item.fieldValue"
-                  multiple
+                  :multiple="item.multiple"
                   placeholder="请选择"
                   clearable
                   :disabled="item.disabled"
