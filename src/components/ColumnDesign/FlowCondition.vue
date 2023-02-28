@@ -172,6 +172,7 @@ export default {
     show(data) {
       this.dialogVisible = true;
       if (data.length == 0) {
+        this.pconditions = []
         this.addCondition();
       } else {
         this.init(data);
