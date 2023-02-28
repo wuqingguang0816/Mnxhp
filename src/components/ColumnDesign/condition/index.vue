@@ -871,18 +871,23 @@ export default {
         }
         
       }
-      if(["select"].includes(item.jnpfKey)){
-        if(["in", "notIn"].includes(val)){
-          item.fieldValue = []
-        }else{
-          item.fieldValue = ''
-        }
-      }
+      
       if(['cascader'].includes(item.jnpfKey) ){
         if(["in", "notIn"].includes(val)){
           item.props.props.multiple = true
         }else{
           item.props.props.multiple = false
+        }
+        
+      }
+
+      
+      if(["select"].includes(item.jnpfKey)){
+        
+        if(["in", "notIn"].includes(val)){
+          item.fieldValue = []
+        }else{
+          item.fieldValue = ''
         }
         
       }

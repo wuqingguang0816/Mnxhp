@@ -470,7 +470,11 @@
                   <div class="per-cell" v-if="startForm.hasPrintBtn">
                     <p style="width:112px"></p>
                     <JNPF-TreeSelect :options="printTplList" v-model="startForm.printId"
-                      placeholder="请选择打印模板" lastLevel clearable multiple></JNPF-TreeSelect>
+                      placeholder="请选择打印模板" lastLevel clearable multiple><div style="padding:10px 0;text-align:center" slot="header" @click="openPrint">
+                      <el-link type="primary" :underline="false">添加打印模板
+                      </el-link>
+                      <el-divider></el-divider>
+                    </div></JNPF-TreeSelect>
                   </div>
                 </div>
               </el-form-item>
@@ -1522,7 +1526,13 @@
                 <div class="per-cell" v-if="approverForm.hasPrintBtn">
                   <p style="width:112px"></p>
                   <JNPF-TreeSelect :options="printTplList" v-model="approverForm.printId"
-                    placeholder="请选择打印模板" lastLevel clearable multiple></JNPF-TreeSelect>
+                    placeholder="请选择打印模板" lastLevel clearable multiple>
+                    <div style="padding:10px 0;text-align:center" slot="header" @click="openPrint">
+                      <el-link type="primary" :underline="false">添加打印模板
+                      </el-link>
+                      <el-divider></el-divider>
+                    </div>
+                    </JNPF-TreeSelect>
                 </div>
                 <div class="per-cell">
                   <div slot="label" class="has-free-approver ">
@@ -2849,6 +2859,15 @@ export default {
     }
   },
   methods: {
+    open(url) {
+      window.open(url, "_blank");
+    },
+    openPrint() {
+      let routeUrl = this.$router.resolve({
+        path: '/system/printDev?open=true'
+      });
+      this.open(routeUrl.href)
+    },
     handleSelect(item) {
       this.temporaryContent += "{" + item.id + "}"
       this.startForm.titleContent = this.temporaryContent
