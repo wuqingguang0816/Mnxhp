@@ -151,6 +151,13 @@ export default {
         if (!valid) {
           return;
         }
+        // 处理精度
+        this.pconditions = this.pconditions.map(item=>{
+          if(item.jnpfKey === 'calculate'){
+            item.fieldValue = Number(item.fieldValue).toFixed(2)
+          }
+          return item
+        })
         let cloneConditions = JSON.parse(JSON.stringify(this.pconditions));
         let data = cloneConditions.map(item => {
           // if(['cascader'].includes(item.jnpfKey)){
