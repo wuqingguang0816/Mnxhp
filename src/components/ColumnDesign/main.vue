@@ -220,9 +220,8 @@
                 <el-button style="width: 100%;" @click="filterPanelShow">{{ ruleListBtn }}
                 </el-button>
               </el-form-item>
-              <Condition ref="conditionpane" 
-              :modelType="modelType"
-              :columnData="columnData" @ruleConfig="ruleConfig">
+              <Condition ref="conditionpane" :modelType="modelType" :columnData="columnData"
+                @ruleConfig="ruleConfig">
               </Condition>
               <template v-if="columnData.type==3">
                 <el-form-item label="分组字段">
@@ -268,7 +267,7 @@
                   </el-radio-group>
                 </el-form-item>
               </template>
-              <template v-if="columnData.type==1||columnData.type==2||columnData.type==4">
+              <div v-if="columnData.type==1||columnData.type==2||columnData.type==4">
                 <el-form-item label="合计配置">
                   <el-switch v-model="columnData.showSummary"></el-switch>
                 </el-form-item>
@@ -281,7 +280,7 @@
                     </template>
                   </el-select>
                 </el-form-item>
-              </template>
+              </div>
               <el-form-item label="子表样式" v-if="columnData.type==1||columnData.type==2">
                 <el-select v-model="columnData.childTableStyle" placeholder="请选择子表样式">
                   <el-option label="分组展示" :value="1" />
