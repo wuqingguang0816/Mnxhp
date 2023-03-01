@@ -39,7 +39,7 @@
       <div class="JNPF-common-layout-main JNPF-flex-main">
         <div class="JNPF-common-head">
           <topOpts @add="addOrUpdateHandle" addText="新建门户">
-            <upload-btn url="/api/visualdev/Portal/Model/Actions/ImportData"
+            <upload-btn url="/api/visualdev/Portal/Model/Actions/ImportData" accept=".vp"
               @on-success="initData" />
           </topOpts>
           <div class="JNPF-common-head-right">
