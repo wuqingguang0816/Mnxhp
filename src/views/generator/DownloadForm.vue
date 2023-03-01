@@ -6,7 +6,8 @@
         :rules="[{ required: true,message: '请选择模块命名', trigger: 'change' }]">
         <el-select v-model="dataForm.module" placeholder="请选择模块命名" filterable allow-create
           default-first-option clearable>
-          <el-option v-for="item in moduleList" :key="item" :label="item" :value="item" />
+          <el-option v-for="(item,i) in moduleList" :key="i" :label="item.fullName"
+            :value="item.id" />
         </el-select>
       </el-form-item>
       <el-form-item label="功能描述" prop="description"
@@ -30,7 +31,7 @@
 </template>
 
 <script>
-import { getAreasName, DownloadCode } from '@/api/onlineDev/visualDev'
+import { DownloadCode } from '@/api/onlineDev/visualDev'
 export default {
   data() {
     return {
@@ -57,7 +58,7 @@ export default {
       this.id = id
       this.type = type || 0
       this.tables = JSON.parse(tables)
-      this.getAreasName()
+      this.getDictionaryData()
       this.visible = true
       this.$nextTick(() => {
         this.$refs['dataForm'].resetFields()
@@ -72,9 +73,9 @@ export default {
         }))
       })
     },
-    getAreasName() {
-      getAreasName().then(res => {
-        this.moduleList = res.data
+    getDictionaryData() {
+      this.$store.dispatch('base/getDictionaryData', { sort: 'createModule' }).then((res) => {
+        this.moduleList = res
       })
     },
     dataFormSubmit() {
