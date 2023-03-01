@@ -37,8 +37,7 @@
             <span v-for="(item, i) in columnData.btnsList" :key="i">
               <template v-if="item.value == 'batchPrint'">
                 <el-dropdown>
-                  <el-button type="text" icon="el-icon-printer" :icon="item.icon"
-                    style="margin-left:20px">批量打印
+                  <el-button type="text" :icon="item.icon" style="margin-left:20px">批量打印
                   </el-button>
                   <el-dropdown-menu slot="dropdown">
                     <div @click="handleBatchPrint(item.id)"
@@ -59,8 +58,8 @@
             <span v-for="(item, i) in columnData.btnsList" :key="i">
               <template v-if="item.value == 'batchPrint'">
                 <el-dropdown>
-                  <el-button type="text" icon="el-icon-printer" v-has="'btn_'+item.value"
-                    :icon="item.icon" style="margin-left:20px">批量打印
+                  <el-button type="text" v-has="'btn_'+item.value" :icon="item.icon"
+                    style="margin-left:20px">批量打印
                   </el-button>
                   <el-dropdown-menu slot="dropdown">
                     <div @click="handleBatchPrint(item.id)"
@@ -76,7 +75,6 @@
                   {{item.label}}</el-button>
               </template>
             </span>
-
           </div>
           <div class="JNPF-common-head-right">
             <el-tooltip content="高级查询" placement="top" v-if="columnData.hasSuperQuery">
@@ -342,7 +340,7 @@
               </template>
               <template v-else-if="item.jnpfKey==='relationForm'">
                 <el-table-column :prop="item.prop" :label="item.label" :align="item.align"
-                  :fixed="columnList.some(o=>o.fixed == 'left')&&i==0&&columnData.groupField&&columnData.type==3?'left':item.fixed!='none'&&columnData.childTableStyle!=2?item.fixed:false"
+                  :fixed="getFixed(item, i)"
                   :width="item.width" :key="i" :sortable="item.sortable?'custom':item.sortable">
                   <template slot-scope="scope">
                     <el-link :underline="false"
@@ -353,9 +351,8 @@
                 </el-table-column>
               </template>
               <el-table-column :prop="item.prop" :label="item.label" :align="item.align"
-                :fixed="columnList.some(o=>o.fixed == 'left')&&i==0&&columnData.groupField&&columnData.type==3?'left':item.fixed!='none'&&columnData.childTableStyle!=2?item.fixed:false"
-                :width="item.width" :key="i" :sortable="item.sortable?'custom':item.sortable"
-                v-else />
+                :fixed="getFixed(item, i)" :width="item.width" :key="i"
+                :sortable="item.sortable?'custom':item.sortable" v-else />
             </template>
           </template>
           <el-table-column
@@ -635,7 +632,7 @@ export default {
       this.refreshTable = false
       if (!this.config.columnData || !this.config.formData) return
       this.columnData = JSON.parse(this.config.columnData)
-      if(this.columnData.printIds && this.columnData.printIds.length>0){
+      if (this.columnData.printIds && this.columnData.printIds.length > 0) {
         this.getPrintListOptions(this.columnData.printIds)
       }
       if (this.columnData.type === 3) {
@@ -682,7 +679,6 @@ export default {
       printOptionsApi(ids).then(res => {
         this.printListOptions = res.data
       })
-
     },
     initData() {
       if (this.isPreview) return
@@ -893,8 +889,6 @@ export default {
             if (searchList[i].__config__.defaultValue != null) {
               initQueryJson[searchList[i].__vModel__] = searchList[i].__config__.defaultValue
             }
-          } else {
-
           }
         }
         if (Object.keys(initQueryJson).length > 0) {
@@ -1486,8 +1480,17 @@ export default {
         const formData = { ...this.formData, fields }
         this.$refs.extraForm.init(formData, this.modelId, this.isPreview, this.columnData.useFormPermission, this.list[index])
       })
+    },
+    getFixed(item, i) {
+      if (i == 0 && this.columnData.groupField && this.columnData.type == 3) {
+        if (this.columnList.some(o => o.fixed == 'left')) return 'left'
+        return false
+      } else if (this.columnData.childTableStyle != 2) {
+        return item.fixed == 'none' ? false : item.fixed
+      } else {
+        return false
+      }
     }
   }
 }
 </script>
-

@@ -69,7 +69,7 @@
                     <el-dropdown-item @click.native="copy(scope.row.id)">复制</el-dropdown-item>
                     <el-dropdown-item @click.native="preview(scope.row.id)">预览</el-dropdown-item>
                     <el-dropdown-item @click.native="exportTpl(scope.row.id)">导出</el-dropdown-item>
-                    <el-dropdown-item @click.native="log(scope.row.id)">日志</el-dropdown-item>
+                    <el-dropdown-item @click.native="log(scope.row)">日志</el-dropdown-item>
                   </el-dropdown-menu>
                 </el-dropdown>
               </tableOpts>
@@ -94,10 +94,10 @@ import Preview from './Preview'
 
 export default {
   name: 'system-printDev',
-  components: { Form, Preview ,log},
+  components: { Form, Preview, log },
   data() {
     return {
-      logPanel:false,
+      logPanel: false,
       list: [],
       categoryList: [],
       keyword: '',
@@ -116,17 +116,15 @@ export default {
     }
   },
   created() {
-    if(window.location.href.includes('open')){
-      this.addOrUpdateHandle()
-    }
-    this.initData()
     this.getDictionaryData()
+    this.initData()
+
   },
   methods: {
-    log(id){
+    log(row) {
       this.logPanel = true
-      this.$nextTick(()=>{
-        this.$refs.log.show(id)
+      this.$nextTick(() => {
+        this.$refs.log.show(row)
       })
     },
     reset() {
@@ -161,6 +159,9 @@ export default {
     getDictionaryData() {
       this.$store.dispatch('base/getDictionaryData', { sort: 'printDev' }).then((res) => {
         this.categoryList = res
+        if (window.location.href.includes('open')) {
+          this.addOrUpdateHandle()
+        }
       })
     },
     addOrUpdateHandle(id) {

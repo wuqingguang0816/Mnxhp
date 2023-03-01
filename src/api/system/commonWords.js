@@ -1,13 +1,14 @@
 import request from '@/utils/request'
 
 // 获取审批常用语列表
-export function commonWords(data) {
+export function getCommonWordList(data) {
   return request({
     url: `/api/system/CommonWords`,
     method: 'get',
     data
   })
 }
+
 // 获取审批常用语详情
 export function getCommonWordsInfo(id) {
   return request({

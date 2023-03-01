@@ -89,8 +89,7 @@
       </el-row>
       <template v-if="activeStep==1 && showPrint">
         <print-templater ref="printTemplater" :treeData="treeData" v-model="dataForm.printTemplate"
-          :pageParam="pageParam" @pageParamChange="pageParamChange"
-          :type="dataForm.type" />
+          :pageParam="pageParam" @pageParamChange="pageParamChange" :type="dataForm.type" />
       </template>
     </div>
   </el-dialog>
@@ -108,7 +107,7 @@ export default {
       loading: false,
       nextBtnLoading: false,
       activeStep: 0,
-      showPrint:false,
+      showPrint: true,
       dataForm: {
         id: '',
         fullName: '',
@@ -147,11 +146,17 @@ export default {
       categoryList: [],
       treeData: [],
       dbOptions: [],
-      pageParam: {},
+      pageParam: {
+        mt: "1",
+        mb: "1",
+        ml: "1",
+        mr: "1",
+        direction: "纵向"
+      },
     }
   },
   methods: {
-    pageParamChange(pageParam){
+    pageParamChange(pageParam) {
       this.dataForm.pageParam = pageParam && JSON.stringify(pageParam)
     },
     init(categoryList, id) {
@@ -164,15 +169,17 @@ export default {
         this.$refs['dataForm'].resetFields()
         if (this.dataForm.id) {
           this.loading = true
+          this.showPrint = false
           getPrintDevInfo(this.dataForm.id).then(res => {
             this.dataForm = res.data
             this.sqlTemplate = this.dataForm.sqlTemplate && JSON.parse(this.dataForm.sqlTemplate) || []
-            
             let e = res.data.pageParam && JSON.parse(res.data.pageParam)
             this.pageParam = e
-            this.showPrint=true
+            this.pageParam.direction = "纵向"
+            this.showPrint = true
             this.loading = false
           }).catch(() => { this.loading = false })
+          this.showPrint = true
         }
       })
     },

@@ -4,6 +4,8 @@
 @import './element-ui.scss';
 // @import './sidebar.scss';
 @import './btn.scss';
+@import './fullCalendar.scss';
+
 
 body {
   height: 100%;
@@ -115,7 +117,6 @@ aside {
   -moz-osx-font-smoothing: grayscale;
 
   a {
-    color: #337ab7;
     cursor: pointer;
 
     &:hover {
@@ -226,14 +227,9 @@ aside {
   border: 5px solid transparent;
 }
 
-::-webkit-scrollbar-track {
-  // box-shadow: 1px 1px 5px rgba(0, 0, 0, .2) inset;
-}
-
 ::-webkit-scrollbar-thumb {
   min-height: 20px;
   background-clip: content-box;
-  // box-shadow: 0 0 0 5px rgba(0, 0, 0, .2) inset;
 }
 
 ::-webkit-scrollbar-corner {

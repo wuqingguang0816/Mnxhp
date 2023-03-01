@@ -82,7 +82,7 @@ export default {
       this.$nextTick(() => {
         this.$refs['dataForm'].resetFields()
         this.treeLoading = true
-        getSystem({ keyword: '' }).then(res => {
+        getSystem({ enableMark: "1" }).then(res => {
           this.systemOptions = res.data.list || []
         })
         if (this.dataForm.id) {

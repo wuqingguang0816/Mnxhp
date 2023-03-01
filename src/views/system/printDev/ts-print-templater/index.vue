@@ -6,31 +6,18 @@
           <div class="JNPF-common-title">
             <h2>表单字段</h2>
           </div>
-          <el-tree
-            :data="newData"
-            default-expand-all
-            :props="defaultProps"
-            @node-click="handleNodeClick"
-          ></el-tree>
+          <el-tree :data="newData" default-expand-all :props="defaultProps"
+            @node-click="handleNodeClick"></el-tree>
           <div class="JNPF-common-title sys-title">
             <h2>系统字段</h2>
           </div>
-          <el-tree
-            :data="newSysData"
-            default-expand-all
-            :props="defaultProps"
-            @node-click="handleNodeClick"
-          ></el-tree>
+          <el-tree :data="newSysData" default-expand-all :props="defaultProps"
+            @node-click="handleNodeClick"></el-tree>
         </el-scrollbar>
       </div>
       <div class="system-view-content">
-        <ts-designer-tinymce
-          v-model="content"
-          ref="createTinymce"
-          :height="richHeight"
-          :init="initConfig"
-          class="rich-txt"
-        />
+        <ts-designer-tinymce v-model="content" ref="createTinymce" :height="richHeight"
+          :init="initConfig" class="rich-txt" />
       </div>
       <pageSize ref="pageSize" v-model="pageParam" @change="getEditConfig"></pageSize>
     </div>
@@ -50,16 +37,16 @@ export default {
       type: Array,
       default: () => []
     },
-    pageParam:{
-      type:Object,
-      default:{}
+    pageParam: {
+      type: Object,
+      default: {}
     }
   },
   data() {
     return {
       showEdit: false,
       tabs: [],
-      initConfig:{},
+      initConfig: {},
       menuList: [],
       init: {},
       menuIndex: "",
@@ -102,7 +89,7 @@ export default {
     // this.getEditConfig()
   },
   watch: {
-    pageParam:{
+    pageParam: {
       handler(val) {
         this.getEditConfig(val)
       },
@@ -149,17 +136,17 @@ export default {
       }
     },
     getEditConfig(e) {
-      if(!e){
+      if (!e) {
         e = {}
         e.mt = 0
         e.mb = 0
-        e.ml = 0 
+        e.ml = 0
         e.mr = 0
         e.width = 776
         e.height = 'calc(100% - 10px)'
       }
-      this.$emit("pageParamChange",e)
-      let mt = e.mt 
+      this.$emit("pageParamChange", e)
+      let mt = e.mt
       let mb = e.mb
       let ml = e.ml
       let mr = e.mr
@@ -224,11 +211,11 @@ export default {
           editor.ui.registry.addButton("page", {
             text: `<i class="el-icon-s-order" style="font-size:18px"></i>`,
             tooltip: "纸张大小",
-            onAction: function() {
+            onAction: function () {
               _this.$refs.pageSize.dialogFormVisible = true;
             }
           });
-          editor.on("init", function() {
+          editor.on("init", function () {
             editor.execCommand("mceFocus");
           });
           editor.on("keydown", e => {
@@ -308,7 +295,6 @@ export default {
                 e.keyCode == 39 &&
                 e.keyCode == 40
               ) {
-                // console.log('上下左右')
                 this.cancelSpanEdit();
               }
             }
@@ -320,8 +306,6 @@ export default {
 
           editor.on("mouseup", e => {
             const selection = editor.selection.getSel();
-            // console.log(selection.isCollapsed, selection.anchorNode == selection.focusNode, selection.anchorOffset == selection.focusOffset)
-
             if (
               e.target.hasAttribute("contenteditable") &&
               selection.anchorOffset == 1 &&
@@ -387,11 +371,9 @@ export default {
       if (item.id == "img" || item.id == "barCode" || item.id == "qrCode") {
         return `&lt;${item.id} width='100' height='100'&gt;&lt;/${item.id}&gt;`;
       }
-      return `<span data-tag="${parent}.${
-        item.id
-      }" class="wk-print-tag-wukong ${this.getSpanColorClass()}" contenteditable="false">{${
-        item.id
-      }}</span>`;
+      return `<span data-tag="${parent}.${item.id
+        }" class="wk-print-tag-wukong ${this.getSpanColorClass()}" contenteditable="false">{${item.id
+        }}</span>`;
     },
     getSpanColorClass() {
       const color = [

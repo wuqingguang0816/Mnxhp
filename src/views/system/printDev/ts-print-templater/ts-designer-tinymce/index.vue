@@ -1,12 +1,11 @@
 <template>
-  <editor ref="mceEditor" :id="id" v-model="dataValue" v-bind="$attrs" :init="showInit" v-if="showEdit"
-    :plugins="showPlugins" :toolbar="showToolbar" tinymce-script-src="/cdn/tinymce/tinymce.min.js"
-    v-on="$listeners" />
+  <editor ref="mceEditor" :id="id" v-model="dataValue" v-bind="$attrs" :init="showInit"
+    v-if="showEdit" :plugins="showPlugins" :toolbar="showToolbar"
+    tinymce-script-src="/cdn/tinymce/tinymce.min.js" v-on="$listeners" />
 </template>
 
 <script>
 import Editor from '@tinymce/tinymce-vue'
-
 import plugins from './plugins'
 import toolbar from './toolbar'
 
@@ -38,18 +37,16 @@ export default {
         'ja': 'ja'
       },
       showInit: {},
-      showEdit:false,
+      showEdit: false,
     }
   },
   computed: {
     editor() {
       return window.tinymce.get(this.id)
     },
-
     showToolbar() {
       return this.toolbar != undefined ? this.toolbar : toolbar
     },
-
     showPlugins() {
       return this.plugins != undefined ? this.plugins : plugins
     }
@@ -72,7 +69,7 @@ export default {
         this.showEdit = false
         this.uuid()
         this.initTinymce()
-        this.$nextTick(()=>{
+        this.$nextTick(() => {
           this.showEdit = true
         })
       },

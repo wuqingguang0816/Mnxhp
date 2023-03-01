@@ -35,8 +35,8 @@
           <template>
             <template v-for="(item, i) in columnList">
               <el-table-column :prop="item.prop" :label="item.label" :align="item.align"
-                :fixed="columnList.some(o=>o.fixed == 'left')&&i==0&&columnData.groupField&&columnData.type==3?'left':item.fixed!='none'&&columnData.childTableStyle!=2?item.fixed:false"
-                :width="item.width" :key="i" :sortable="item.sortable?'custom':item.sortable" />
+                :fixed="getFixed(item,i)" :width="item.width" :key="i"
+                :sortable="item.sortable?'custom':item.sortable" />
             </template>
           </template>
           <el-table-column label="操作"
@@ -703,6 +703,16 @@ export default {
         this.exportBoxVisible = false
       })
     },
+    getFixed(item, i) {
+      if (i == 0 && this.columnData.groupField && this.columnData.type == 3) {
+        if (this.columnList.some(o => o.fixed == 'left')) return 'left'
+        return false
+      } else if (this.columnData.childTableStyle != 2) {
+        return item.fixed == 'none' ? false : item.fixed
+      } else {
+        return false
+      }
+    }
   }
 }
 </script>

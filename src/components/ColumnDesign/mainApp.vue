@@ -119,7 +119,9 @@
                 <el-button style="width: 100%;" @click="filterPanelShow">{{ ruleListBtn }}
                 </el-button>
               </el-form-item>
-              <Condition ref="conditionpane" :columnData="columnData" @ruleConfig="ruleConfig">
+              <Condition ref="conditionpane" 
+              :modelType="modelType"
+              :columnData="columnData" @ruleConfig="ruleConfig">
               </Condition>
               <el-form-item label="排序类型">
                 <el-select v-model="columnData.sort" placeholder="请选择排序类型">

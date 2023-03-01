@@ -86,7 +86,7 @@
             <template v-if="item.__config__.jnpfKey==='userSelect'">
               <userSelect v-model="item.value" :placeholder="'请选择'+item.__config__.label" clearable
                 class="item"
-                :selectType="item.selectType!='all'||item.selectType!='custom'?'all':item.selectType"
+                :selectType="(item.selectType!='all' && item.selectType!='custom')?'all':item.selectType"
                 :ableDepIds="item.ableDepIds" :ablePosIds="item.ablePosIds"
                 :ableUserIds="item.ableUserIds" :ableRoleIds="item.ableRoleIds"
                 :ableGroupIds="item.ableGroupIds" :multiple="item.searchMultiple" />
@@ -156,13 +156,21 @@ export default {
     },
     initDataJson: {
       handler: function (val) {
-        if(val != '') {
+        if (val != '') {
           let initData = JSON.parse(val);
-          if(Object.keys(initData).length > 0) {
-            for(let key in initData) {
+          if (Object.keys(initData).length > 0) {
+            for (let key in initData) {
               for (let i = 0; i < this.searchList.length; i++) {
-                if(this.searchList[i].__vModel__ === key) {
-                  this.searchList[i].value = initData[key]
+                if (this.searchList[i].__vModel__ === key) {
+                  if (this.searchList[i].searchMultiple) {
+                    if (this.searchList[i].jnpfKey == "comSelect") {
+                      this.searchList[i].value = Array.isArray(initData[key]) && Array.isArray(initData[key][0]) ? initData[key] : [initData[key]]
+                    } else {
+                      this.searchList[i].value = Array.isArray(initData[key]) ? initData[key] : [initData[key]]
+                    }
+                  } else {
+                    this.searchList[i].value = initData[key]
+                  }
                   break;
                 }
               }

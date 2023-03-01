@@ -1,8 +1,7 @@
 <template>
   <el-card shadow="never" class="portal-todoList-box">
-    <div slot="header" class="portal-common-title">
-      <span>{{title}}</span>
-    </div>
+    <CardHeader v-if="activeData.title" slot="header" :title="activeData.title"
+      :card="activeData.card" />
     <div class="portal-todoList-box-body">
       <template v-if="list.length">
         <router-link class="item com-hover" :to="'/emailDetail?id='+item.id"
@@ -20,9 +19,11 @@
 </template>
 <script>
 import { getEmail } from '@/api/home'
+import CardHeader from "../CardHeader"
 export default {
+  components: { CardHeader },
   props: {
-    title: { type: String, default: '' }
+    activeData: { type: Object, default: () => { } },
   },
   data() {
     return {

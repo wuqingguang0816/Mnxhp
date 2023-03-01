@@ -203,9 +203,10 @@ export default {
     }
   },
   methods: {
-    init(id, category, systemId) {
+    init(id, category, systemId, parentId) {
       Object.assign(this.$data, this.$options.data())
       this.dataForm.id = id || ''
+      this.dataForm.parentId = parentId || ''
       this.related = false
       this.visible = true
       this.$nextTick(() => {

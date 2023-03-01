@@ -40,7 +40,7 @@ export default {
   name: "el-tree-select",
   props: {
     // 在过滤条件时候传true,设置不显示根节点标题
-    conditionFilter:{ type: Boolean, default: false },
+    conditionFilter: { type: Boolean, default: false },
     // 配置项
     props: {
       type: Object,
@@ -141,7 +141,6 @@ export default {
               titleList = this.$refs.selectTree.getCheckedNodes(this.conditionFilter)
             }
             this.selectOptions = titleList
-            console.log(titleList);
             this.valueTitle = titleList.map(o => o[this.props.value])
           }, 10)
         } else {

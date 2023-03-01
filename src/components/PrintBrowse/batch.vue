@@ -83,7 +83,6 @@ export default {
     onOpen() {
       // 打开时候初始化位置为第一页
       this.pageIndex = 0
-
       this.batchData = [];
       if (!this.id) return;
       this.printTemplate = "";
@@ -467,11 +466,13 @@ export default {
         let oldTitle = document.title;
         iframe.contentWindow.onafterprint = function (e) {
           // 插入日志
+          let title = oldTitle.split('-')[0]
           let data = {
-            printTitle: _this.fullName,
-            printNum: _this.batchIds.length,
+            printTitle: _this.fullName ? _this.fullName : title,
+            printNum: _this.batchIds.split(",").length,
             printId: _this.id
           }
+          console.log(data, oldTitle);
           request({
             url: `/api/system/printLog/save`,
             method: "post",

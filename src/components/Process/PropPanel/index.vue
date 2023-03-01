@@ -470,7 +470,16 @@
                   <div class="per-cell" v-if="startForm.hasPrintBtn">
                     <p style="width:112px"></p>
                     <JNPF-TreeSelect :options="printTplList" v-model="startForm.printId"
-                      placeholder="请选择打印模板" lastLevel clearable multiple></JNPF-TreeSelect>
+                      placeholder="请选择打印模板" lastLevel clearable multiple>
+                      <div style="padding:10px 0;text-align:center" slot="header">
+                        <el-link type="primary" :underline="false" @click="openPrint">添加打印模板
+                        </el-link>
+                        <el-link type="info" style="position: absolute;right:8px;top: 18px;"
+                          @click="refreshPrintOptions" :underline="false">
+                          <i class="el-icon-refresh el-icon--right"></i></el-link>
+                        <el-divider></el-divider>
+                      </div>
+                    </JNPF-TreeSelect>
                   </div>
                 </div>
               </el-form-item>
@@ -1546,7 +1555,16 @@
                 <div class="per-cell" v-if="approverForm.hasPrintBtn">
                   <p style="width:112px"></p>
                   <JNPF-TreeSelect :options="printTplList" v-model="approverForm.printId"
-                    placeholder="请选择打印模板" lastLevel clearable multiple></JNPF-TreeSelect>
+                    placeholder="请选择打印模板" lastLevel clearable multiple>
+                    <div style="padding:10px 0;text-align:center" slot="header">
+                      <el-link type="primary" :underline="false" @click="openPrint">添加打印模板
+                      </el-link>
+                      <el-link type="info" style="position: absolute;right:8px;top: 18px;"
+                        @click="refreshPrintOptions" :underline="false">
+                        <i class="el-icon-refresh el-icon--right"></i></el-link>
+                      <el-divider></el-divider>
+                    </div>
+                  </JNPF-TreeSelect>
                 </div>
                 <div class="per-cell">
                   <div slot="label" class="has-free-approver ">
@@ -2938,6 +2956,28 @@ export default {
         if (index == 3 && !item.requiredDisabled) item.required = val;
       })
     },
+    refreshPrintOptions() {
+      getPrintDevSelector(2).then(res => {
+        let data = res.data.list
+
+        let list = data.filter(o => o.children && o.children.length)
+        this.printTplList = list.map(o => ({
+          ...o,
+          hasChildren: true
+        }))
+      }).catch(error => {
+        reject(error)
+      })
+    },
+    open(url) {
+      window.open(url, "_blank");
+    },
+    openPrint() {
+      let routeUrl = this.$router.resolve({
+        path: '/system/printDev?open=true'
+      });
+      this.open(routeUrl.href)
+    },
     handleSelect(item) {
       this.temporaryContent += "{" + item.id + "}"
       this.startForm.titleContent = this.temporaryContent
@@ -3104,6 +3144,12 @@ export default {
         })
         return
       }
+
+      if (this.startForm.hasPrintBtn && !this.startForm.printId) {
+        this.$message.warning('打印模板不能为空')
+        return this.value
+      }
+
       let titleObj = {
         title: this.properties.title
       }
@@ -3230,6 +3276,11 @@ export default {
           type: 'error',
         })
         return
+      }
+
+      if (this.approverForm.hasPrintBtn && !this.approverForm.printId) {
+        this.$message.warning('打印模板不能为空')
+        return this.value
       }
       const assigneeType = this.approverForm.assigneeType
       let content = ''
@@ -3952,6 +4003,10 @@ export default {
 
 .header {
   line-height: 28px;
+}
+
+>>> .el-divider--horizontal {
+  margin-top: 10px;
 }
 
 .actions {

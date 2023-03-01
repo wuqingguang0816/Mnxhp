@@ -91,16 +91,18 @@ export default {
         file.cancel()
         return
       }
-      // 秒传 直接展示
-      if (res.data.uploaded) {
-        // 秒传结果
-      } else if (res.data.merge) {
-        // 需要合并
-        this.handelSuccess(file)
-      } else {
-        // 上传错误
-        console.log(res.msg)
-      }
+      setTimeout(() => {
+        // 秒传 直接展示
+        if (res.data.uploaded) {
+          // 秒传结果
+        } else if (res.data.merge) {
+          // 需要合并
+          this.handelSuccess(file)
+        } else {
+          // 上传错误
+          console.log(res.msg)
+        }
+      }, 300);
     },
     /**
      * 计算md5，实现断点续传及秒传

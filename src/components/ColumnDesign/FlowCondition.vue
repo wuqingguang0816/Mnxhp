@@ -9,6 +9,7 @@
     <Condition
       :value="pconditions"
       ref="base"
+      :modelType="modelType"
       :columnDataMap="columnDataMap"
       :dataOptionMap="dataOptionMap"
       :columnOptions="columnOptions"
@@ -27,6 +28,10 @@ import { getDrawingList } from "@/components/Generator/utils/db";
 import Condition from "./condition";
 export default {
   props: {
+    modelType: {
+      type: String,
+      default: ""
+    },
     value: {
       type: Array,
       default: () => []
@@ -46,7 +51,7 @@ export default {
       dataOptionMap: {},
       dialogVisible: false,
       pconditions: [],
-      columnOptions:[]
+      columnOptions: []
     };
   },
   computed: {
@@ -81,8 +86,7 @@ export default {
   watch: {
     columnData: {
       handler(val) {
-        console.log(val,12);
-        this.columnOptions = val.columnOptions
+        this.columnOptions = val.columnOptions;
         val.columnOptions.map(item => {
           this.columnDataMap[item.__vModel__] = item;
         });
@@ -124,15 +128,49 @@ export default {
       // 获取属性配置
       this.$nextTick(() => {
         this.pconditions = this.$refs.base.getData();
-        let cloneConditions = JSON.parse(JSON.stringify(this.pconditions))
-        let data = cloneConditions.map(item=>{
+        let valid = true;
+        this.pconditions.forEach(k => {
+          if (!["null", "notNull"].includes(k.symbol)) {
+            if (!k.field) {
+              this.$message.warning("条件字段不能为空");
+              valid = false;
+              return;
+            }
+            if (!k.symbol) {
+              this.$message.warning("条件符号不能为空");
+              valid = false;
+              return;
+            }
+            if (!k.fieldValue) {
+              this.$message.warning("数据值不能为空");
+              valid = false;
+              return;
+            }
+            if(Array.isArray(k.fieldValue) && k.fieldValue.length == 0){
+              this.$message.warning("数据值不能为空");
+              valid = false;
+              return;
+            }
+          }
+        });
+        if (!valid) {
+          return;
+        }
+        // 处理精度
+        this.pconditions = this.pconditions.map(item=>{
+          if(item.jnpfKey === 'calculate'){
+            item.fieldValue = Number(item.fieldValue).toFixed(2)
+          }
+          return item
+        })
+        let cloneConditions = JSON.parse(JSON.stringify(this.pconditions));
+        let data = cloneConditions.map(item => {
           // if(['cascader'].includes(item.jnpfKey)){
           //   item.dataOptions = []
           //   item.options = []
           // }
-          return item
-        })
-        console.log(data,11)
+          return item;
+        });
         this.$emit("ruleConfig", {
           pconditions: data
         });
@@ -146,6 +184,7 @@ export default {
     show(data) {
       this.dialogVisible = true;
       if (data.length == 0) {
+        this.pconditions = []
         this.addCondition();
       } else {
         this.init(data);

@@ -504,16 +504,22 @@
             </div>
             <template v-if="webType==2">
               <div class="per-cell" :class="{'last':!formConf.hasPrintBtn}">
-                <el-checkbox v-model="formConf.hasPrintBtn">打印</el-checkbox>
+                <el-checkbox v-model="formConf.hasPrintBtn">打印
+                  <el-tooltip content="启用流程后,操作按钮以流程节点为准" placement="top">
+                <a class="el-icon-warning-outline"></a>
+              </el-tooltip>
+                </el-checkbox>
                 <el-input v-model="formConf.printButtonText" />
               </div>
               <el-form-item label="" v-if="formConf.hasPrintBtn">
                 <JNPF-TreeSelect :options="printTplList" v-model="formConf.printId" multiple
                   placeholder="请选择打印模板" lastLevel clearable>
-                  <div style="padding:10px 0;text-align:center" slot="header" @click="openPrint">
-                    <el-link type="primary" :underline="false">添加打印模板
+                  <div style="padding:10px 0;text-align:center" slot="header" >
+                    <el-link type="primary" :underline="false" @click="openPrint">添加打印模板
                     </el-link>
-                    <el-divider></el-divider>
+                    <el-link type="info" style="position: absolute;right:8px;top: 18px;" @click="refreshPrintOptions" :underline="false">
+                     <i class="el-icon-refresh el-icon--right"></i></el-link>
+                    <el-divider style="margin-top: 10px;"></el-divider>
                   </div>
                 </JNPF-TreeSelect>
               </el-form-item>
@@ -556,6 +562,7 @@ import { saveFormConf, getDrawingList } from '@/components/Generator/utils/db'
 import { getDictionaryTypeSelector } from "@/api/systemData/dictionary"
 import { getDataInterfaceSelector } from "@/api/systemData/dataInterface"
 import { DataModelFieldList } from '@/api/systemData/dataModel'
+import { getPrintDevSelector } from '@/api/system/printDev'
 import FormScript from './FormScript'
 import FieldDialog from './FieldDialog'
 import JNPFComInput from './RightComponents/ComInput'
@@ -867,6 +874,19 @@ export default {
     this.setDefaultOptions()
   },
   methods: {
+    refreshPrintOptions(){
+      getPrintDevSelector(2).then(res => {
+        let data = res.data.list
+
+        let list = data.filter(o => o.children && o.children.length)
+        this.printTplList = list.map(o => ({
+          ...o,
+          hasChildren: true
+        }))
+      }).catch(error => {
+        reject(error)
+      })
+    },
     // 如果要跳转新页面，请用函数包裹打开新页签。否则会出现被拦截
     open(url) {
       window.open(url, "_blank");

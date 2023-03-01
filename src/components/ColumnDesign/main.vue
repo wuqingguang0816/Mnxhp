@@ -220,7 +220,8 @@
                 <el-button style="width: 100%;" @click="filterPanelShow">{{ ruleListBtn }}
                 </el-button>
               </el-form-item>
-              <Condition ref="conditionpane" :columnData="columnData" @ruleConfig="ruleConfig">
+              <Condition ref="conditionpane" :modelType="modelType" :columnData="columnData"
+                @ruleConfig="ruleConfig">
               </Condition>
               <template v-if="columnData.type==3">
                 <el-form-item label="分组字段">
@@ -268,7 +269,7 @@
                   </el-radio-group>
                 </el-form-item>
               </template>
-              <template v-if="columnData.type==1||columnData.type==2||columnData.type==4">
+              <div v-if="columnData.type==1||columnData.type==2||columnData.type==4">
                 <el-form-item label="合计配置">
                   <el-switch v-model="columnData.showSummary"></el-switch>
                 </el-form-item>
@@ -281,7 +282,7 @@
                     </template>
                   </el-select>
                 </el-form-item>
-              </template>
+              </div>
               <el-form-item label="子表样式" v-if="columnData.type==1||columnData.type==2">
                 <el-select v-model="columnData.childTableStyle" placeholder="请选择子表样式">
                   <el-option label="分组展示" :value="1" />
@@ -305,11 +306,13 @@
                 <el-form-item label="" label-width="104px">
                   <JNPF-TreeSelect key="sel" :options="printTplList" v-model="columnData.printIds"
                     multiple placeholder="请选择打印模板" lastLevel clearable node-key="id">
-                    <div style="padding:10px 0;text-align:center" slot="header" @click="openPrint">
-                      <el-link type="primary" :underline="false">添加打印模板
-                      </el-link>
-                      <el-divider></el-divider>
-                    </div>
+                    <div style="padding:10px 0;text-align:center" class="printWrap" slot="header" >
+                    <el-link type="primary" :underline="false" @click="openPrint">添加打印模板
+                    </el-link>
+                    <el-link type="info" style="position: absolute;right:8px;top: 18px;" @click="refreshPrintOptions" :underline="false">
+                     <i class="el-icon-refresh el-icon--right"></i></el-link>
+                    <el-divider style="margin: 10px;!important 0;"></el-divider>
+                  </div>
                   </JNPF-TreeSelect>
                 </el-form-item>
               </template>
@@ -755,6 +758,19 @@ export default {
     })
   },
   methods: {
+    refreshPrintOptions(){
+      getPrintDevSelector(2).then(res => {
+        let data = res.data.list
+
+        let list = data.filter(o => o.children && o.children.length)
+        this.printTplList = list.map(o => ({
+          ...o,
+          hasChildren: true
+        }))
+      }).catch(error => {
+        reject(error)
+      })
+    },
     open(url) {
       window.open(url, "_blank");
     },
@@ -849,6 +865,10 @@ export default {
       * 供父组件使用 获取列表JSON
     */
     getData() {
+      if(this.btnsList.includes('batchPrint') && this.columnData.printIds.length === 0){
+        return this.$message.warning('打印模板不能为空')
+      }
+      if(!this.columnData.printIds) return this.$message.warning('打印模板不能为空')
       if (!this.columnData.columnList.length) return this.$message.warning('列表字段不允许为空')
       if (!this.columnData.uploaderTemplateJson.selectKey && this.btnsList.indexOf('upload') != -1) return this.$message.warning('请设置导入模板')
       if (this.columnData.type == 2) {
@@ -989,6 +1009,7 @@ export default {
       this.updateBtnsList(val)
     },
     updateBtnsList(val) {
+      if (this.webType == '4') return
       if (val == 5) {
         this.btnsOption = [defaultBtnsOption[0]]
         this.btnsList = this.btnsList.filter(o => o === 'add');
@@ -1001,4 +1022,10 @@ export default {
 </script>
 <style lang="scss" scoped>
 @import './index.scss';
+
+.printWrap{
+  .el-divider--horizontal{
+    margin: 10px 0!important;
+  }
+}
 </style>

@@ -2,42 +2,32 @@
   <transition name="el-zoom-in-center">
     <div class="JNPF-preview-main" v-loading="loading">
       <div class="header-wrap">
-        <el-page-header @back="goBack" content="详情页面"> </el-page-header>
+        <el-page-header @back="goBack" :content="title+'的打印日志'"> </el-page-header>
       </div>
 
       <div class="main-panel">
         <div class="JNPF-common-layout-center">
           <el-row class="JNPF-common-search-box" :gutter="16">
-            <el-form  :model="query">
+            <el-form :model="query">
               <el-col :span="6">
-                <el-form-item label="名称">
-                  <el-input v-model="query.printTitle" placeholder="请输入" clearable>
+                <el-form-item label="关键词">
+                  <el-input v-model="query.printTitle" placeholder="请输入关键词" clearable>
                   </el-input>
                 </el-form-item>
               </el-col>
               <el-col :span="6">
-                <el-form-item label="创建时间">
-                  <el-date-picker
-                    v-model="query.printTimeRange"
-                    type="daterange"
-                    align="right"
-                    unlink-panels
-                    range-separator="至"
-                    start-placeholder="开始日期"
-                    end-placeholder="结束日期"
-                  >
+                <el-form-item label="打印时间">
+                  <el-date-picker v-model="query.printTimeRange" type="daterange" align="right"
+                    unlink-panels range-separator="至" start-placeholder="开始日期"
+                    end-placeholder="结束日期">
                   </el-date-picker>
                 </el-form-item>
               </el-col>
 
               <el-col :span="6">
                 <el-form-item>
-                  <el-button type="primary" icon="el-icon-search" @click="initData"
-                    >查询</el-button
-                  >
-                  <el-button icon="el-icon-refresh-right" @click="reset()"
-                    >重置</el-button
-                  >
+                  <el-button type="primary" icon="el-icon-search" @click="initData">查询</el-button>
+                  <el-button icon="el-icon-refresh-right" @click="reset()">重置</el-button>
                 </el-form-item>
               </el-col>
             </el-form>
@@ -49,12 +39,8 @@
               <el-table-column prop="printTime" label="打印时间" align="left" />
               <el-table-column prop="printNum" label="打印条数" align="left" />
             </JNPF-table>
-            <pagination
-              :total="total"
-              :page.sync="query.current"
-              :limit.sync="query.size"
-              @pagination="initData"
-            />
+            <pagination :total="total" :page.sync="query.current" :limit.sync="query.size"
+              @pagination="initData" />
           </div>
         </div>
       </div>
@@ -73,6 +59,7 @@ export default {
       total: 0,
       loading: false,
       listLoading: true,
+      title: "",
       query: {
         printTitle: "",
         printId: "",
@@ -84,8 +71,9 @@ export default {
     };
   },
   methods: {
-    show(id) {
-      this.query.printId = id;
+    show(row) {
+      this.query.printId = row.id;
+      this.title = row.fullName
       this.initData();
       this.loading = false;
     },
@@ -104,14 +92,15 @@ export default {
     reset() {
       this.query.printTitle = "";
       this.query.printTimeRange = [];
+      this.initData()
     },
     goBack() {
       this.$emit("goBack");
     },
   },
   computed: {},
-  created() {},
-  mounted() {},
+  created() { },
+  mounted() { },
 };
 </script>
 
