@@ -567,14 +567,38 @@
         </el-tab-pane>
         <el-tab-pane label="表单权限">
           <div class="form-auth-table">
-            <el-table :data="getFormOperates()" class="JNPF-common-table" size="mini" height="100%">
+            <el-table :data="formOperatesList" class="JNPF-common-table" size="mini" height="100%">
               <el-table-column prop="name" label="表单字段" align="left"></el-table-column>
-              <el-table-column prop="write" label="操作" align="center" width="250">
+              <el-table-column width="80">
+                <template slot="header" slot-scope="scope">
+                  <el-checkbox @change="updateReadAllSelected($event,1)"
+                    :indeterminate="indeterminateReadFlag" v-model="readAllChecked">查看</el-checkbox>
+                </template>
                 <template slot-scope="scope">
-                  <el-checkbox v-model="scope.row.read">查看</el-checkbox>
-                  <el-checkbox v-model="scope.row.write">编辑</el-checkbox>
-                  <el-checkbox v-model="scope.row.required" :disabled="scope.row.requiredDisabled">
-                    必填</el-checkbox>
+                  <el-checkbox v-model="scope.row.read"
+                    @change="handleCheckedCitiesChange($event,1)">查看</el-checkbox>
+                </template>
+              </el-table-column>
+              <el-table-column width="80">
+                <template slot="header" slot-scope="scope">
+                  <el-checkbox @change="updateReadAllSelected($event,2)"
+                    :indeterminate="indeterminateWriteFlag"
+                    v-model="writeAllChecked">编辑</el-checkbox>
+                </template>
+                <template slot-scope="scope">
+                  <el-checkbox v-model="scope.row.write"
+                    @change="handleCheckedCitiesChange($event,2)">编辑</el-checkbox>
+                </template>
+              </el-table-column>
+              <el-table-column width="80">
+                <template slot="header" slot-scope="scope">
+                  <el-checkbox @change="updateReadAllSelected($event,3)"
+                    :indeterminate="indeterminateRequiredFlag"
+                    v-model="requiredAllChecked">编辑</el-checkbox>
+                </template>
+                <template slot-scope="scope">
+                  <el-checkbox v-model="scope.row.required" :disabled="scope.row.requiredDisabled"
+                    @change="handleCheckedCitiesChange($event,3)">编辑</el-checkbox>
                 </template>
               </el-table-column>
             </el-table>
@@ -1584,14 +1608,38 @@
         </el-tab-pane>
         <el-tab-pane label="表单权限" name="formAuth">
           <div class="form-auth-table">
-            <el-table :data="getFormOperates()" class="JNPF-common-table" size="mini" height="100%">
+            <el-table :data="formOperatesList" class="JNPF-common-table" size="mini" height="100%">
               <el-table-column prop="name" label="表单字段" align="left"></el-table-column>
-              <el-table-column prop="write" label="操作" align="center" width="250">
+              <el-table-column width="80">
+                <template slot="header" slot-scope="scope">
+                  <el-checkbox @change="updateReadAllSelected($event,1)"
+                    :indeterminate="indeterminateReadFlag" v-model="readAllChecked">查看</el-checkbox>
+                </template>
                 <template slot-scope="scope">
-                  <el-checkbox v-model="scope.row.read">查看</el-checkbox>
-                  <el-checkbox v-model="scope.row.write">编辑</el-checkbox>
-                  <el-checkbox v-model="scope.row.required" :disabled="scope.row.requiredDisabled">
-                    必填</el-checkbox>
+                  <el-checkbox v-model="scope.row.read"
+                    @change="handleCheckedCitiesChange($event,1)">查看</el-checkbox>
+                </template>
+              </el-table-column>
+              <el-table-column width="80">
+                <template slot="header" slot-scope="scope">
+                  <el-checkbox @change="updateReadAllSelected($event,2)"
+                    :indeterminate="indeterminateWriteFlag"
+                    v-model="writeAllChecked">编辑</el-checkbox>
+                </template>
+                <template slot-scope="scope">
+                  <el-checkbox v-model="scope.row.write"
+                    @change="handleCheckedCitiesChange($event,2)">编辑</el-checkbox>
+                </template>
+              </el-table-column>
+              <el-table-column width="80">
+                <template slot="header" slot-scope="scope">
+                  <el-checkbox @change="updateReadAllSelected($event,3)"
+                    :indeterminate="indeterminateRequiredFlag"
+                    v-model="requiredAllChecked">编辑</el-checkbox>
+                </template>
+                <template slot-scope="scope">
+                  <el-checkbox v-model="scope.row.required" :disabled="scope.row.requiredDisabled"
+                    @change="handleCheckedCitiesChange($event,3)">编辑</el-checkbox>
                 </template>
               </el-table-column>
             </el-table>
@@ -2811,6 +2859,13 @@ export default {
       approverTransmitRuleVisible: false,
       prevNodeList: [],
       isPrevNodeWithSubForm: false,
+      formOperatesList: [],
+      indeterminateReadFlag: false,
+      readAllChecked: false,
+      indeterminateWriteFlag: false,
+      writeAllChecked: false,
+      requiredAllChecked: false,
+      indeterminateRequiredFlag: false,
     };
   },
   computed: {
@@ -2849,6 +2904,40 @@ export default {
     }
   },
   methods: {
+    handleCheckedCitiesChange(val, index) {
+      let totalCount = this.formOperatesList.length
+      let requiredDisabledCount = this.formOperatesList.filter(o => !o.requiredDisabled).length
+      let readCount = 0
+      let writeCount = 0
+      let requiredCount = 0
+      this.formOperatesList.forEach(item => {
+        if (item.read && index == 1) {
+          readCount++
+        }
+        if (item.write && index == 2) {
+          writeCount++
+        }
+        if (item.required && index == 3) {
+          requiredCount++
+        }
+      })
+      if (index == 1) this.readAllChecked = readCount === totalCount
+      if (index == 2) this.writeAllChecked = writeCount === totalCount
+      if (index == 3) this.requiredAllChecked = requiredCount === requiredDisabledCount
+      if (index == 1) this.indeterminateReadFlag = readCount > 0 && readCount < totalCount
+      if (index == 2) this.indeterminateWriteFlag = writeCount > 0 && writeCount < totalCount
+      if (index == 3) this.indeterminateRequiredFlag = requiredCount > 0 && requiredCount < requiredDisabledCount
+    },
+    updateReadAllSelected(val, index) {
+      if (index == 1) this.indeterminateReadFlag = false
+      if (index == 2) this.indeterminateWriteFlag = false
+      if (index == 3) this.indeterminateRequiredFlag = false
+      this.formOperatesList.forEach(item => {
+        if (index == 1) item.read = val;
+        if (index == 2) item.write = val;
+        if (index == 3 && !item.requiredDisabled) item.required = val;
+      })
+    },
     handleSelect(item) {
       this.temporaryContent += "{" + item.id + "}"
       this.startForm.titleContent = this.temporaryContent
@@ -2880,6 +2969,28 @@ export default {
       let res = []
       this.isApproverNode() && (res = this.approverForm.formOperates)
       this.isStartNode() && (res = this.startForm.formOperates)
+      this.formOperatesList = res
+      let requiredDisabledCount = this.formOperatesList.filter(o => !o.requiredDisabled).length
+      let readCount = 0
+      let writeCount = 0
+      let requiredCount = 0
+      this.formOperatesList.forEach(item => {
+        if (item.read) {
+          readCount++
+        }
+        if (item.write) {
+          writeCount++
+        }
+        if (item.required) {
+          requiredCount++
+        }
+      })
+      this.readAllChecked = readCount === this.formOperatesList.length
+      this.writeAllChecked = writeCount === this.formOperatesList.length
+      this.requiredAllChecked = requiredCount === requiredDisabledCount
+      this.indeterminateReadFlag = readCount > 0 && readCount < this.formOperatesList.length
+      this.indeterminateWriteFlag = writeCount > 0 && writeCount < this.formOperatesList.length
+      this.indeterminateRequiredFlag = requiredCount > 0 && requiredCount < requiredDisabledCount
       return res
     },
     resetOrgColl() {
@@ -3247,6 +3358,7 @@ export default {
       let properties = JSON.parse(JSON.stringify(this.value.properties))
       Object.assign(this.startForm, properties)
       this.formFieldList = this.startForm.formFieldList
+      this.getFormOperates()
     },
     /**
     * 初始化审批节点所需数据
@@ -3263,6 +3375,7 @@ export default {
       this.getPrevNodeOption()
       this.approverForm.approveMsgConfig.on = typeof this.approverForm.approveMsgConfig.on === 'number' ? this.approverForm.approveMsgConfig.on : 2
       this.approverForm.rejectMsgConfig.on = typeof this.approverForm.rejectMsgConfig.on === 'number' ? this.approverForm.rejectMsgConfig.on : 2
+      this.getFormOperates()
     },
     initSubFlowData() {
       this.getNodeOption()
@@ -3714,6 +3827,7 @@ export default {
         this[form].formOperates = this.initFormOperates(this.value, true, isSameForm)
         // 更新所有没设置表单的节点的表单权限
         if (form === 'startForm') this.updateAllNodeFormOperates(list, isSameForm)
+        this.getFormOperates()
       })
     },
     transformFormJson(list) {
