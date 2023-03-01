@@ -37,8 +37,7 @@
             <span v-for="(item, i) in columnData.btnsList" :key="i">
               <template v-if="item.value == 'batchPrint'">
                 <el-dropdown>
-                  <el-button type="text" icon="el-icon-printer" :icon="item.icon"
-                    style="margin-left:20px">批量打印
+                  <el-button type="text" :icon="item.icon" style="margin-left:20px">批量打印
                   </el-button>
                   <el-dropdown-menu slot="dropdown">
                     <div @click="handleBatchPrint(item.id)"
@@ -59,8 +58,8 @@
             <span v-for="(item, i) in columnData.btnsList" :key="i">
               <template v-if="item.value == 'batchPrint'">
                 <el-dropdown>
-                  <el-button type="text" icon="el-icon-printer" v-has="'btn_'+item.value"
-                    :icon="item.icon" style="margin-left:20px">批量打印
+                  <el-button type="text" v-has="'btn_'+item.value" :icon="item.icon"
+                    style="margin-left:20px">批量打印
                   </el-button>
                   <el-dropdown-menu slot="dropdown">
                     <div @click="handleBatchPrint(item.id)"
@@ -76,7 +75,6 @@
                   {{item.label}}</el-button>
               </template>
             </span>
-
           </div>
           <div class="JNPF-common-head-right">
             <el-tooltip content="高级查询" placement="top" v-if="columnData.hasSuperQuery">
@@ -635,7 +633,7 @@ export default {
       this.refreshTable = false
       if (!this.config.columnData || !this.config.formData) return
       this.columnData = JSON.parse(this.config.columnData)
-      if(this.columnData.printIds && this.columnData.printIds.length>0){
+      if (this.columnData.printIds && this.columnData.printIds.length > 0) {
         this.getPrintListOptions(this.columnData.printIds)
       }
       if (this.columnData.type === 3) {
@@ -682,7 +680,6 @@ export default {
       printOptionsApi(ids).then(res => {
         this.printListOptions = res.data
       })
-
     },
     initData() {
       if (this.isPreview) return
@@ -893,8 +890,6 @@ export default {
             if (searchList[i].__config__.defaultValue != null) {
               initQueryJson[searchList[i].__vModel__] = searchList[i].__config__.defaultValue
             }
-          } else {
-
           }
         }
         if (Object.keys(initQueryJson).length > 0) {
@@ -1490,4 +1485,3 @@ export default {
   }
 }
 </script>
-
