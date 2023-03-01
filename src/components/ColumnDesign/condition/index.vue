@@ -598,11 +598,11 @@ export default {
         //   value: "<>"
         // },
         {
-          label: "等于任意一个",
+          label: "包含任意一个",
           value: "in"
         },
         {
-          label: "不等于任意一个",
+          label: "不包含任意一个",
           value: "notIn"
         },
         {
@@ -644,11 +644,11 @@ export default {
           value: "between"
         },
         {
-          label: "等于任意一个",
+          label: "包含任意一个",
           value: "in"
         },
         {
-          label: "不等于任意一个",
+          label: "不包含任意一个",
           value: "notIn"
         },
         {

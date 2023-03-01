@@ -10,7 +10,7 @@
           <el-row class="JNPF-common-search-box" :gutter="16">
             <el-form :model="query">
               <el-col :span="6">
-                <el-form-item label="名称">
+                <el-form-item label="关键词">
                   <el-input v-model="query.printTitle" placeholder="请输入关键词" clearable>
                   </el-input>
                 </el-form-item>

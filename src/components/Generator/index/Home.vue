@@ -341,7 +341,7 @@ export default {
         }
         loop(this.drawingList)
         this.AssembleFormData()
-        if (this.formData.hasPrintBtn && !this.formData.printId) {
+        if (this.formData.hasPrintBtn && (!this.formData.printId || !this.formData.printId.length)) {
           reject({ msg: `请选择打印模板`, target: 1 })
         }
         resolve({ formData: this.formData, target: 1 })

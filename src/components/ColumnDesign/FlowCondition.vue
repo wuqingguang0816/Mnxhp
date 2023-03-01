@@ -146,6 +146,11 @@ export default {
               valid = false;
               return;
             }
+            if(Array.isArray(k.fieldValue) && k.fieldValue.length == 0){
+              this.$message.warning("数据值不能为空");
+              valid = false;
+              return;
+            }
           }
         });
         if (!valid) {
