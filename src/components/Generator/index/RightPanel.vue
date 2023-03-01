@@ -279,9 +279,9 @@
               </el-form-item>
               <el-form-item label="对齐方式">
                 <el-radio-group v-model="activeData.align">
-                  <el-radio-button label="left">居左</el-radio-button>
-                  <el-radio-button label="center">居中</el-radio-button>
-                  <el-radio-button label="right">居右</el-radio-button>
+                  <el-radio-button label="left">左对齐</el-radio-button>
+                  <el-radio-button label="center">居中对齐</el-radio-button>
+                  <el-radio-button label="right">右对齐</el-radio-button>
                 </el-radio-group>
               </el-form-item>
               <el-form-item label="按钮类型">
@@ -374,7 +374,7 @@
           <template v-if="activeData.__config__">
             <template v-if="!activeData.__config__.isSubTable">
               <el-form-item label="控件栅格">
-                <el-slider v-model="activeData.__config__.span" :max="24" :min="6" show-stops
+                <el-slider v-model="activeData.__config__.span" :max="24" :min="2" show-stops
                   :step="2" show-tooltip />
               </el-form-item>
               <el-form-item label="标题宽度"
