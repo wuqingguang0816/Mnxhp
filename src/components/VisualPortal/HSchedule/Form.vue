@@ -85,7 +85,8 @@
             </el-select>
           </el-form-item>
           <el-form-item label="发送配置" prop="send" v-if="dataForm.reminderType==2">
-            <msg-dialog :value="dataForm.send" :title="dataForm.sendName" @change="onMsgChange" />
+            <msg-dialog :value="dataForm.send" :title="dataForm.sendName" @change="onMsgChange"
+              :messageSource="4" />
           </el-form-item>
         </template>
         <el-form-item label="重复提醒" prop="repetition">

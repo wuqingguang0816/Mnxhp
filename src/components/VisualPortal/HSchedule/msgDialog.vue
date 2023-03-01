@@ -83,6 +83,10 @@ export default {
     disabled: {
       type: Boolean,
       default: false
+    },
+    messageSource: {
+      type: Number,
+      default: 4
     }
   },
   model: {
@@ -97,7 +101,7 @@ export default {
         keyword: '',
         currentPage: 1,
         pageSize: 20,
-        messageSource: 1
+        messageSource: 4
       },
       total: 0,
       checked: '',
@@ -120,6 +124,7 @@ export default {
   methods: {
     initData() {
       this.listLoading = true
+      this.listQuery.messageSource = this.messageSource
       getMsgTemplate(this.listQuery).then(res => {
         this.list = res.data.list
         this.total = res.data.pagination.total
