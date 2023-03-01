@@ -41,7 +41,8 @@
       <div class="JNPF-common-layout-main JNPF-flex-main">
         <div class="JNPF-common-head">
           <topOpts @add="addOrUpdateHandle()">
-            <upload-btn url="/api/system/DataInterface/Action/Import" @on-success="getList" />
+            <upload-btn url="/api/system/DataInterface/Action/Import" accept=".bd"
+              @on-success="getList" />
           </topOpts>
           <div class="JNPF-common-head-right">
             <el-tooltip effect="dark" :content="$t('common.refresh')" placement="top">

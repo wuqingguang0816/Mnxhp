@@ -33,7 +33,8 @@
           <topOpts addText="新建报表" @add="addOrUpdateHandle()">
             <el-upload :action="define.reportServer+'/api/datareport/Data/Action/Import'"
               :headers="{ Authorization: $store.getters.token}" :on-success="handleSuccess"
-              :before-upload="()=>{btnLoading = true}" :show-file-list="false" class="upload-btn">
+              accept=".json" :before-upload="()=>{btnLoading = true}" :show-file-list="false"
+              class="upload-btn">
               <el-button type="text" icon="el-icon-upload2" :loading="btnLoading">导入</el-button>
             </el-upload>
           </topOpts>

@@ -34,7 +34,7 @@
         <div class="JNPF-common-head">
           <topOpts @add="addOrUpdateHandle()" addText="新建表名">
             <upload-btn :url="'/api/system/DataModel/'+dataBase+'/Action/Import'"
-              @on-success="getTableData" />
+              @on-success="getTableData" accept=".bdb" />
             <el-button type="text" icon="el-icon-menu" @click="handleFieldsManage()">常用字段
             </el-button>
           </topOpts>

@@ -1,7 +1,7 @@
 <template>
   <el-upload :action="define.comUrl+url" :headers="{ Authorization: $store.getters.token}"
-    :data="data" :on-success="handleSuccess" :before-upload="beforeUpload" :show-file-list="false"
-    class="upload-btn">
+    :accept="accept" :data="data" :on-success="handleSuccess" :before-upload="beforeUpload"
+    :show-file-list="false" class="upload-btn">
     <el-button ref="uploadBtn" :type="buttonType" :icon="showIcon?'el-icon-upload2':''"
       :loading="loading">
       {{buttonText}}
@@ -37,6 +37,10 @@ export default {
     showIcon: {
       type: Boolean,
       default: true
+    },
+    accept: {
+      type: String,
+      default: '*'
     },
   },
   methods: {

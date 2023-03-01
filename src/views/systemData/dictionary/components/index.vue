@@ -4,7 +4,7 @@
     <div class="JNPF-flex-main">
       <div class="JNPF-common-head">
         <topOpts @refresh="getDictionaryTypeList()" @add="addOrUpdateHandle()">
-          <upload-btn url="/api/system/DictionaryData/Action/Import"
+          <upload-btn url="/api/system/DictionaryData/Action/Import" accept=".bdd"
             @on-success="getDictionaryTypeList" />
         </topOpts>
         <div class="JNPF-common-head-right">
