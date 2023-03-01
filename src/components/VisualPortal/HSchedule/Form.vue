@@ -144,7 +144,6 @@
 import { mapGetters } from "vuex";
 import MsgDialog from "./msgDialog";
 import { ScheduleInfo, ScheduleUpdate, ScheduleCreate, ScheduleDelete } from '@/api/onlineDev/schedule'
-import { number } from 'echarts';
 export default {
   components: { MsgDialog },
   data() {
