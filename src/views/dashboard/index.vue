@@ -1,33 +1,195 @@
 <template>
-  <el-scrollbar class="dashboard-container">
-    <component :is="currentRole" />
-  </el-scrollbar>
+  <div class="dashboard-container" v-loading="loading">
+    <template v-if="!noData">
+      <template v-if="!ajaxing">
+        <template v-if="portalId">
+          <PortalLayout :layout="layout" :enabledLock="enabledLock" v-if="type===0"
+            @layoutUpdatedEvent="layoutUpdatedEvent" />
+          <div class="custom-page" v-if="type===1">
+            <component :is="currentView" v-if="linkType===0" />
+            <embed :src="url" width="100%" height="100%" type="text/html" v-if="linkType===1" />
+          </div>
+        </template>
+        <div class="portal-layout-nodata" v-else>
+          <img src="@/assets/images/dashboard-nodata.png" alt="" class="layout-nodata-img">
+          <p class="layout-nodata-txt">暂无数据</p>
+        </div>
+      </template>
+      <Setting ref="Setting" @refresh="refresh" />
+      <el-button type="primary" icon="el-icon-arrow-left" size="large" class="setting-btn"
+        @click="$refs.Setting.init(portalId)"></el-button>
+    </template>
+    <template v-else>
+      <el-scrollbar class="dashboard-container">
+        <adminDashboard />
+      </el-scrollbar>
+    </template>
+  </div>
 </template>
-
 <script>
+import { getAuthPortal, UpdateCustomPortal } from '@/api/onlineDev/portal'
+import Setting from './Setting'
+import PortalLayout from '@/components/VisualPortal/Layout'
+import { mapGetters } from 'vuex'
+import { getDataInterfaceRes } from '@/api/systemData/dataInterface'
 import adminDashboard from './admin'
-
 export default {
-  name: 'Dashboard',
-  components: { adminDashboard },
+  components: { Setting, PortalLayout, adminDashboard },
   data() {
     return {
-      currentRole: 'adminDashboard'
+      portalId: '',
+      layout: [],
+      type: null,
+      linkType: null,
+      currentView: null,
+      url: '',
+      ajaxing: true,
+      loading: false,
+      noData: false,
+      refreshData: {},
+      timerList: [],
+      formData: {},
+      enabledLock: true
+    }
+  },
+  computed: {
+    ...mapGetters(['userInfo'])
+  },
+  created() {
+    this.portalId = this.userInfo.portalId
+    this.getData()
+  },
+  destroyed() {
+    if (this.timerList.length) {
+      this.timerList.forEach((ele) => {
+        if (ele) clearInterval(ele)
+      })
+    }
+  },
+  methods: {
+    getData() {
+      this.loading = true
+      this.layout = []
+      this.noData = false
+      if (!this.portalId) {
+        this.loading = false
+        this.ajaxing = false
+        this.noData = true
+        return
+      }
+      getAuthPortal(this.portalId).then(res => {
+        this.type = res.data.type || 0
+        this.linkType = res.data.linkType || 0
+        this.url = res.data.customUrl
+        this.enabledLock = res.data.enabledLock || false
+        if (res.data) {
+          if (res.data.type === 1) {
+            if (res.data.customUrl && res.data.customUrl !== 1) {
+              this.currentView = (resolve) => require([`@/views/${res.data.customUrl}`], resolve)
+            }
+          } else {
+            if (res.data.formData) {
+              this.formData = JSON.parse(res.data.formData)
+              this.layout = this.formData.layout || []
+              this.refreshData = this.formData.refresh || {}
+            }
+          }
+        }
+        this.ajaxing = false
+        this.initAutoRefresh()
+        setTimeout(() => {
+          this.loading = false
+        }, 500);
+      }).catch(() => {
+        this.loading = false
+        this.ajaxing = false
+      })
+    },
+    refresh(id) {
+      if (!id) return
+      this.portalId = id
+      this.getData()
+    },
+    initAutoRefresh() {
+      if (!this.layout.length) return
+      this.timerList = []
+      if (this.refreshData.autoRefresh) {
+        var timer = setInterval(() => {
+          this.layout.forEach(ele => {
+            ele.renderKey = +new Date()
+            this.autoRefresh(ele)
+          });
+        }, this.refreshData.autoRefreshTime * 1000 * 60);
+        this.timerList.push(timer)
+      } else {
+        this.layout.forEach(ele => {
+          if (ele.refresh && ele.refresh.autoRefresh && ele.refresh.autoRefreshTime) {
+            var timer = setInterval(() => {
+              ele.renderKey = +new Date()
+              this.autoRefresh(ele)
+            }, ele.refresh.autoRefreshTime * 1000 * 60);
+            this.timerList.push(timer)
+          }
+        });
+      }
+    },
+    autoRefresh(item) {
+      const chartList = ['barChart', 'lineChart', 'pieChart', 'radarChart', 'mapChart']
+      if (item.dataType === 'dynamic' && chartList.includes(item.jnpfKey)) {
+        if (!item.propsApi) return
+        getDataInterfaceRes(item.propsApi).then(res => {
+          const realData = res.data
+          if (Array.isArray(realData)) {
+            item.option.defaultValue = realData
+          } else {
+            item.option.defaultValue = []
+          }
+        })
+      }
+    },
+    layoutUpdatedEvent() {
+      this.formData.layout = this.layout
+      const query = { formData: JSON.stringify(this.formData) }
+      UpdateCustomPortal(this.portalId, query).then(res => { })
     }
   }
 }
 </script>
 <style lang="scss" scoped>
 .dashboard-container {
+  width: 100%;
   height: 100%;
-  overflow: hidden;
-  border-radius: 4px;
-  >>> .el-scrollbar__wrap {
-    margin-bottom: 0 !important;
-    overflow-x: auto;
+  background: #ebeef5;
+  position: relative;
+  .custom-page {
+    width: 100%;
+    height: 100%;
   }
-  >>> .el-scrollbar__bar.is-horizontal > div {
-    display: none;
+  >>> .layout-area {
+    width: 100%;
+    border-radius: 4px;
+    overflow: hidden;
+  }
+  .setting-btn {
+    position: absolute;
+    top: 200px;
+    right: -10px;
+    height: 40px;
+    width: 40px;
+    text-align: center;
+    padding: 0;
+    border-radius: 20px 0 0 20px;
+    z-index: 100;
+    >>> i {
+      font-size: 20px;
+      font-weight: 580;
+    }
+  }
+  >>> .vue-grid-layout {
+    margin: -10px;
+  }
+  >>> .el-scrollbar__view {
+    overflow: hidden;
   }
 }
 </style>

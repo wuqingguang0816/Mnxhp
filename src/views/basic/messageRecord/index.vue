@@ -23,8 +23,9 @@
         <el-tabs type="border-card" v-model="activeName" class="messageRecord-tab">
           <el-tab-pane label="全部" name="0"></el-tab-pane>
           <el-tab-pane label="系统" name="3"></el-tab-pane>
-          <el-tab-pane label="流程" name="1"></el-tab-pane>
-          <el-tab-pane label="公告" name="2"></el-tab-pane>
+          <el-tab-pane label="流程" name="2"></el-tab-pane>
+          <el-tab-pane label="公告" name="1"></el-tab-pane>
+          <el-tab-pane label="日程" name="4"></el-tab-pane>
           <div class="box">
             <div class="JNPF-common-head">
               <div class="left-btn">
@@ -70,15 +71,17 @@
       </div>
     </div>
     <Form v-if="formVisible" ref="Form" @refreshDataList="initData" />
+    <ScheduleView v-if='scheduleVisible' ref="schedule" />
   </div>
 </template>
 
 <script>
 import { getMessageList, MessageDeleteRecord, ReadInfo } from '@/api/system/message'
 import Form from './Form'
+import ScheduleView from '@/components/ScheduleView'
 export default {
   name: 'messageRecord',
-  components: { Form },
+  components: { Form, ScheduleView },
   data() {
     return {
       visible: false,
@@ -93,7 +96,8 @@ export default {
         currentPage: 1,
         pageSize: 20,
         sort: 'desc',
-      }
+      },
+      scheduleVisible: false,
     }
   },
   watch: {
@@ -120,14 +124,10 @@ export default {
     },
     initData() {
       this.listLoading = true
-      let type = ''
-      if (this.activeName == 1) type = 2
-      if (this.activeName == 2) type = 1
-      if (this.activeName == 3) type = 3
       let data = {
         ...this.listQuery,
         keyword: this.keyword,
-        type
+        type: this.activeName == '0' ? '' : this.activeName
       }
       this.list = []
       getMessageList(data).then(res => {
@@ -166,6 +166,14 @@ export default {
         if (item.isRead == '0') {
           item.isRead = '1'
           this.$emit('read')
+        }
+        if (item.type == 4) {
+          let bodyText = JSON.parse(res.data.bodyText)
+          this.scheduleVisible = true
+          this.$nextTick(() => {
+            this.$refs.schedule.init(bodyText.id, '', bodyText.groupId)
+          })
+          return
         }
         if (item.type == 2 && item.flowType == 2) {
           let bodyText = JSON.parse(res.data.bodyText)

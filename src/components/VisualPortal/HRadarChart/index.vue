@@ -1,8 +1,7 @@
 <template>
   <el-card shadow="never" class="portal-eChart-box">
-    <div slot="header" class="portal-common-title">
-      <span>{{title}}</span>
-    </div>
+    <CardHeader v-if="activeData.title" slot="header" :title="activeData.title"
+      :card="activeData.card" />
     <div class="eChart-box-body">
       <div ref="chart" id="chart" v-show="!isEmpty"></div>
       <div class="portal-common-noData portal-common-noData-eChart" v-show="isEmpty">

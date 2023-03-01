@@ -19,6 +19,14 @@
             </el-form-item>
           </el-col>
           <el-col :span="6">
+            <el-form-item label="类型">
+              <el-select v-model="type" placeholder="请选择类型" clearable>
+                <el-option label="配置路径" :value="1" />
+                <el-option label="门户设计" :value="0" />
+              </el-select>
+            </el-form-item>
+          </el-col>
+          <el-col :span="6">
             <el-form-item>
               <el-button type="primary" icon="el-icon-search" @click="search()">
                 {{$t('common.search')}}</el-button>
@@ -30,7 +38,7 @@
       </el-row>
       <div class="JNPF-common-layout-main JNPF-flex-main">
         <div class="JNPF-common-head">
-          <topOpts @add="dialogVisible=true" addText="新建门户">
+          <topOpts @add="addOrUpdateHandle" addText="新建门户">
             <upload-btn url="/api/visualdev/Portal/Model/Actions/ImportData"
               @on-success="initData" />
           </topOpts>
@@ -59,8 +67,7 @@
           </el-table-column>
           <el-table-column label="操作" fixed="right" width="150">
             <template slot-scope="scope">
-              <tableOpts @edit="addOrUpdateHandle(scope.row.type,scope.row.id)"
-                @del="handleDel(scope.row.id)">
+              <tableOpts @edit="addOrUpdateHandle(scope.row.id)" @del="handleDel(scope.row.id)">
                 <el-dropdown>
                   <span class="el-dropdown-link">
                     <el-button type="text" size="mini">{{$t('common.moreBtn')}}<i
@@ -68,11 +75,13 @@
                     </el-button>
                   </span>
                   <el-dropdown-menu slot="dropdown">
-                    <el-dropdown-item @click.native="preview(scope.row.id)">预览</el-dropdown-item>
+                    <el-dropdown-item v-if="scope.row.type==0"
+                      @click.native="design(scope.row.fullName,scope.row.id)">设计
+                    </el-dropdown-item>
+                    <el-dropdown-item @click.native="preview(scope.row.id,2)">预览</el-dropdown-item>
                     <el-dropdown-item @click.native="copy(scope.row.id)">复制</el-dropdown-item>
                     <el-dropdown-item @click.native="exportTemplate(scope.row.id)">导出
                     </el-dropdown-item>
-                    <el-dropdown-item @click.native="distribute(scope.row.id)">授权</el-dropdown-item>
                   </el-dropdown-menu>
                 </el-dropdown>
               </tableOpts>
@@ -83,46 +92,29 @@
           :limit.sync="listQuery.pageSize" @pagination="initData" />
       </div>
     </div>
-    <Form v-if="formVisible" ref="form" @close="closeForm" />
-    <Form1 v-if="form1Visible" ref="form1" @close="closeForm1" />
-    <Preview :visible.sync="previewVisible" :id="activeId" />
-    <Transfer ref="transfer" :visible.sync="transferShow" :id="transferId" />
-    <el-dialog title="新建门户" :visible.sync="dialogVisible"
-      class="JNPF-dialog JNPF-dialog-add JNPF-dialog_center" lock-scroll width="600px">
-      <div class="add-main">
-        <div class="add-item add-item-left" @click="addOrUpdateHandle(1)">
-          <i class="add-icon icon-ym icon-ym-customUrl"></i>
-          <div class="add-txt">
-            <p class="add-title">自定义路径</p>
-            <p class="add-desc">配置静态页面地址</p>
-          </div>
-        </div>
-        <div class="add-item" @click="addOrUpdateHandle(0)">
-          <i class="add-icon icon-ym icon-ym-pageDesign"></i>
-          <div class="add-txt">
-            <p class="add-title">页面设计</p>
-            <p class="add-desc">拖拽生成门户</p>
-          </div>
-        </div>
-      </div>
-    </el-dialog>
+    <Form v-if="formVisible" ref="form" @close="closeForm" @initPortalDesign="design" />
+    <PortalDesign v-if="portalDesignVisible" ref="portalDesign" @close="closeForm1" />
+    <Preview :visible.sync="previewVisible" :id="currId" />
+    <previewDialog :visible.sync="previewTypeVisible" :id="currId" :previewType="previewType"
+      type="portal" @previewPc='previewPc' />
   </div>
 </template>
 
 <script>
 import { getPortalList, Delete, Copy, exportTemplate } from '@/api/onlineDev/portal'
 import Form from './Form'
-import Form1 from './Form1'
+import PortalDesign from '@/components/VisualPortal/PortalDesign'
+import previewDialog from '@/components/PreviewDialog'
 import Preview from './IndexPreview'
-import Transfer from './Transfer'
 export default {
   name: 'onlineDev-visualPortal',
-  components: { Form, Form1, Preview, Transfer },
+  components: { Form, PortalDesign, previewDialog, Preview },
   data() {
     return {
       list: [],
       keyword: '',
       category: '',
+      type: '',
       listQuery: {
         currentPage: 1,
         pageSize: 20,
@@ -130,15 +122,17 @@ export default {
         sidx: ''
       },
       total: 0,
-      activeId: '',
+      currId: '',
       transferId: '',
       dialogVisible: false,
       previewVisible: false,
-      transferShow: false,
+      previewTypeVisible: false,
       listLoading: false,
       formVisible: false,
-      form1Visible: false,
-      categoryList: []
+      portalDesignVisible: false,
+      categoryList: [],
+      showAll: false,
+      previewType: ''
     }
   },
   created() {
@@ -149,6 +143,7 @@ export default {
     reset() {
       this.keyword = ''
       this.category = ''
+      this.type = ''
       this.search()
     },
     search() {
@@ -170,6 +165,7 @@ export default {
       let query = {
         ...this.listQuery,
         keyword: this.keyword,
+        type: this.type,
         category: this.category
       }
       getPortalList(query).then(res => {
@@ -210,9 +206,15 @@ export default {
         })
       }).catch(() => { });
     },
-    preview(id) {
+    preview(id, type) {
       if (!id) return
-      this.activeId = id
+      this.currId = id
+      this.previewType = type
+      this.$nextTick(() => {
+        this.previewTypeVisible = true
+      })
+    },
+    previewPc() {
       this.previewVisible = true
     },
     exportTemplate(id) {
@@ -224,20 +226,19 @@ export default {
         })
       }).catch(() => { });
     },
-    distribute(id) {
-      this.transferId = id
-      this.transferShow = true
-    },
-    addOrUpdateHandle(type, id) {
+    design(fullName, id) {
       this.dialogVisible = false
-      const key = type === 1 ? 'form1' : 'form'
-      const time = type === 1 && !id ? 300 : 0
-      setTimeout(() => {
-        this[key + 'Visible'] = true
-        this.$nextTick(() => {
-          this.$refs[key].init(this.categoryList, id)
-        })
-      }, time);
+      this.portalDesignVisible = true
+      this.$nextTick(() => {
+        this.$refs.portalDesign.init(fullName, id)
+      })
+    },
+    addOrUpdateHandle(id) {
+      this.dialogVisible = false
+      this.formVisible = true
+      this.$nextTick(() => {
+        this.$refs.form.init(this.categoryList, id)
+      })
     },
     closeForm(isRefresh) {
       this.formVisible = false

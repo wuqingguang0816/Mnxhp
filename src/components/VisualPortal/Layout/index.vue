@@ -1,29 +1,13 @@
 <template>
   <el-scrollbar class="layout-area">
     <template v-if="layout.length">
-      <grid-layout :layout.sync="layout" :row-height="40" :is-draggable="false"
-        :is-resizable="false">
+      <grid-layout :layout.sync="layout" :row-height="40">
         <grid-item v-for="item in layout" :x="item.x" :y="item.y" :w="item.w" :h="item.h"
-          :i="item.i" :key="item.i" static>
-          <Todo v-if="item.jnpfKey==='todo'" :title="item.title" />
-          <CommonFunc v-if="item.jnpfKey==='commonFunc'" :title="item.title" :list="item.list" />
-          <TodoList v-if="item.jnpfKey==='todoList'" :title="item.title" />
-          <HNotice v-if="item.jnpfKey==='notice'" :title="item.title" />
-          <HEmail v-if="item.jnpfKey==='email'" :title="item.title" />
-          <DataBoard v-if="item.jnpfKey==='dataBoard'" :title="item.title" :list="item.list" />
-          <HBarChart v-if="item.jnpfKey==='barChart'" :title="item.title" :option="item.option"
-            :dataType="item.dataType" :propsApi="item.propsApi" />
-          <HAnnularChart v-if="item.jnpfKey==='annularChart'" :title="item.title"
-            :option=" item.option" :dataType="item.dataType" :propsApi="item.propsApi" />
-          <HAreaChart v-if="item.jnpfKey==='areaChart'" :title="item.title" :option="item.option"
-            :dataType="item.dataType" :propsApi="item.propsApi" />
-          <HLineChart v-if="item.jnpfKey==='lineChart'" :title="item.title" :option="item.option"
-            :dataType="item.dataType" :propsApi="item.propsApi" />
-          <HPieChart v-if="item.jnpfKey==='pieChart'" :title="item.title" :option="item.option"
-            :dataType="item.dataType" :propsApi="item.propsApi" />
-          <HRadarChart v-if="item.jnpfKey==='radarChart'" :title="item.title" :option="item.option"
-            :dataType="item.dataType" :propsApi="item.propsApi" />
-          <div class="mask" v-if="mask"></div>
+          :i="item.i" :key="item.i" :maxH="item.maxH" :minH="item.minH" :minW="item.minW"
+          :maxW="item.maxW" @resized="resizedEvent(item.i,item)" @moved="movedEvent"
+          :static="enabledLock">
+          <parser :item="item" :detailed="true" />
+          <div class="mask" v-if="mask&&!noNeedMaskList.includes(item.jnpfKey)"></div>
         </grid-item>
       </grid-layout>
     </template>
@@ -35,42 +19,45 @@
 </template>
 
 <script>
-import {
-  Todo,
-  CommonFunc,
-  TodoList,
-  HNotice,
-  HEmail,
-  DataBoard,
-  HBarChart,
-  HAnnularChart,
-  HAreaChart,
-  HLineChart,
-  HPieChart,
-  HRadarChart
-} from "@/components/VisualPortal"
+import parser from '@/components/VisualPortal/PortalDesign/components/parser'
 import VueGridLayout from 'vue-grid-layout'
+import { noNeedMaskList } from '@/components/VisualPortal/PortalDesign/components/config'
 export default {
   props: {
     layout: { type: Array, default: () => [] },
     mask: { type: Boolean, default: false },
+    detailed: { type: Boolean, default: false },
+    enabledLock: { type: Boolean, default: true },
   },
   components: {
     GridLayout: VueGridLayout.GridLayout,
     GridItem: VueGridLayout.GridItem,
-    Todo,
-    CommonFunc,
-    TodoList,
-    HNotice,
-    HEmail,
-    DataBoard,
-    HBarChart,
-    HAnnularChart,
-    HAreaChart,
-    HLineChart,
-    HPieChart,
-    HRadarChart
+    parser
   },
+  data() {
+    return {
+      noNeedMaskList,
+      timer: ''
+    }
+  },
+  methods: {
+    movedEvent() {
+      this.$emit('layoutUpdatedEvent')
+    },
+    resizedEvent(i, item) {
+      this.$eventBus.$emit('eChart' + i)
+      const loop = (data) => {
+        if (data.children && item.children.length) {
+          data.children.map(ele => {
+            if (ele.jnpfKey) this.$eventBus.$emit('eChart' + ele.i)
+            if (ele.children && ele.children.length) loop(ele)
+          })
+        }
+      }
+      loop(item)
+      this.movedEvent()
+    }
+  }
 }
 </script>
 <style lang="scss" scoped>
@@ -100,6 +87,9 @@ export default {
       width: 100%;
       height: 100%;
       z-index: 1;
+    }
+    >>> .vue-resizable-handle {
+      z-index: 200;
     }
   }
 }

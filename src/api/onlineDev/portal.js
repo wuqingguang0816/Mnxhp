@@ -74,3 +74,28 @@ export function getAuthPortal(id) {
     method: 'GET'
   })
 }
+// 获取全国省市区
+export function getAtlas() {
+  return request({
+    url: `/api/system/atlas`,
+    method: 'get',
+  })
+}
+// 获取地图json
+export function getMapData(id) {
+  return request({
+    url: `/api/system/atlas/geojson`,
+    method: 'get',
+    data: {
+      code: id,
+    }
+  })
+}
+// 用户拖拽后更新
+export function UpdateCustomPortal(id, data) {
+  return request({
+    url: `/api/visualdev/Portal/Custom/Save/${id}`,
+    method: 'PUT',
+    data
+  })
+}
