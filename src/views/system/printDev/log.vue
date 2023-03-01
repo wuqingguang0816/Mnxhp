@@ -2,7 +2,7 @@
   <transition name="el-zoom-in-center">
     <div class="JNPF-preview-main" v-loading="loading">
       <div class="header-wrap">
-        <el-page-header @back="goBack" :content="title+'打印日志'"> </el-page-header>
+        <el-page-header @back="goBack" :content="title+'的打印日志'"> </el-page-header>
       </div>
 
       <div class="main-panel">
@@ -11,7 +11,7 @@
             <el-form  :model="query">
               <el-col :span="6">
                 <el-form-item label="名称">
-                  <el-input v-model="query.printTitle" placeholder="请输入" clearable>
+                  <el-input v-model="query.printTitle" placeholder="请输入关键词" clearable>
                   </el-input>
                 </el-form-item>
               </el-col>

@@ -589,14 +589,14 @@ export default {
         },
       ],
       symbolOptionsSelect: [
-        {
-          label: "等于",
-          value: "=="
-        },
-        {
-          label: "不等于",
-          value: "<>"
-        },
+        // {
+        //   label: "等于",
+        //   value: "=="
+        // },
+        // {
+        //   label: "不等于",
+        //   value: "<>"
+        // },
         {
           label: "等于任意一个",
           value: "in"
