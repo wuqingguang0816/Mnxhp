@@ -180,7 +180,7 @@
                   </el-form-item>
                 </template>
                 <el-form-item label="关联字段">
-                  <el-select v-model="columnData.treeRelation" placeholder="请选择关联字段">
+                  <el-select v-model="columnData.treeRelation" placeholder="请选择关联字段" filterable>
                     <el-option :label="item.__config__.label" :value="item.__vModel__"
                       v-for="(item, index) in list" :key="index"></el-option>
                   </el-select>
@@ -224,7 +224,8 @@
               </Condition>
               <template v-if="columnData.type==3">
                 <el-form-item label="分组字段">
-                  <el-select v-model="columnData.groupField" placeholder="请选择分组字段" clearable>
+                  <el-select v-model="columnData.groupField" placeholder="请选择分组字段" clearable
+                    filterable>
                     <el-option :label="item.__config__.label" :value="item.__vModel__"
                       v-for="(item, i) in groupFieldOptions" :key="i"></el-option>
                   </el-select>
@@ -245,7 +246,8 @@
                 </el-select>
               </el-form-item>
               <el-form-item label="排序字段">
-                <el-select v-model="columnData.defaultSidx" placeholder="请选择排序字段" clearable>
+                <el-select v-model="columnData.defaultSidx" placeholder="请选择排序字段" clearable
+                  filterable>
                   <el-option :label="item.__config__.label" :value="item.__vModel__"
                     v-for="(item, i) in groupFieldOptions" :key="i"></el-option>
                 </el-select>
