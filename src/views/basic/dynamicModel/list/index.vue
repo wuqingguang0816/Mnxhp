@@ -340,7 +340,7 @@
               </template>
               <template v-else-if="item.jnpfKey==='relationForm'">
                 <el-table-column :prop="item.prop" :label="item.label" :align="item.align"
-                  :fixed="columnList.some(o=>o.fixed == 'left')&&i==0&&columnData.groupField&&columnData.type==3?'left':item.fixed!='none'&&columnData.childTableStyle!=2?item.fixed:false"
+                  :fixed="getFixed(item, i)"
                   :width="item.width" :key="i" :sortable="item.sortable?'custom':item.sortable">
                   <template slot-scope="scope">
                     <el-link :underline="false"
@@ -351,9 +351,8 @@
                 </el-table-column>
               </template>
               <el-table-column :prop="item.prop" :label="item.label" :align="item.align"
-                :fixed="columnList.some(o=>o.fixed == 'left')&&i==0&&columnData.groupField&&columnData.type==3?'left':item.fixed!='none'&&columnData.childTableStyle!=2?item.fixed:false"
-                :width="item.width" :key="i" :sortable="item.sortable?'custom':item.sortable"
-                v-else />
+                :fixed="getFixed(item, i)" :width="item.width" :key="i"
+                :sortable="item.sortable?'custom':item.sortable" v-else />
             </template>
           </template>
           <el-table-column
@@ -1481,6 +1480,16 @@ export default {
         const formData = { ...this.formData, fields }
         this.$refs.extraForm.init(formData, this.modelId, this.isPreview, this.columnData.useFormPermission, this.list[index])
       })
+    },
+    getFixed(item, i) {
+      if (i == 0 && this.columnData.groupField && this.columnData.type == 3) {
+        if (this.columnList.some(o => o.fixed == 'left')) return 'left'
+        return false
+      } else if (this.columnData.childTableStyle != 2) {
+        return item.fixed == 'none' ? false : item.fixed
+      } else {
+        return false
+      }
     }
   }
 }
