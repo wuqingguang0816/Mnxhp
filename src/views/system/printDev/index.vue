@@ -94,10 +94,10 @@ import Preview from './Preview'
 
 export default {
   name: 'system-printDev',
-  components: { Form, Preview ,log},
+  components: { Form, Preview, log },
   data() {
     return {
-      logPanel:false,
+      logPanel: false,
       list: [],
       categoryList: [],
       keyword: '',
@@ -118,12 +118,12 @@ export default {
   created() {
     this.getDictionaryData()
     this.initData()
-    
+
   },
   methods: {
-    log(row){
+    log(row) {
       this.logPanel = true
-      this.$nextTick(()=>{
+      this.$nextTick(() => {
         this.$refs.log.show(row)
       })
     },
@@ -159,7 +159,7 @@ export default {
     getDictionaryData() {
       this.$store.dispatch('base/getDictionaryData', { sort: 'printDev' }).then((res) => {
         this.categoryList = res
-        if(window.location.href.includes('open')){
+        if (window.location.href.includes('open')) {
           this.addOrUpdateHandle()
         }
       })

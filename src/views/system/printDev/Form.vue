@@ -89,8 +89,7 @@
       </el-row>
       <template v-if="activeStep==1 && showPrint">
         <print-templater ref="printTemplater" :treeData="treeData" v-model="dataForm.printTemplate"
-          :pageParam="pageParam" @pageParamChange="pageParamChange"
-          :type="dataForm.type" />
+          :pageParam="pageParam" @pageParamChange="pageParamChange" :type="dataForm.type" />
       </template>
     </div>
   </el-dialog>
@@ -108,7 +107,7 @@ export default {
       loading: false,
       nextBtnLoading: false,
       activeStep: 0,
-      showPrint:true,
+      showPrint: true,
       dataForm: {
         id: '',
         fullName: '',
@@ -157,7 +156,7 @@ export default {
     }
   },
   methods: {
-    pageParamChange(pageParam){
+    pageParamChange(pageParam) {
       this.dataForm.pageParam = pageParam && JSON.stringify(pageParam)
     },
     init(categoryList, id) {
@@ -177,10 +176,10 @@ export default {
             let e = res.data.pageParam && JSON.parse(res.data.pageParam)
             this.pageParam = e
             this.pageParam.direction = "纵向"
-            this.showPrint=true
+            this.showPrint = true
             this.loading = false
           }).catch(() => { this.loading = false })
-          this.showPrint=true
+          this.showPrint = true
         }
       })
     },

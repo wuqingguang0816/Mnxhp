@@ -632,8 +632,6 @@ export default {
       getSynThirdTotal(type).then(res => {
         let list = res.data.map(o => ({ loading: false, ...o }))
         type == '1' ? this.wxResults = list : this.ddResults = list
-        console.log(this.wxResults)
-        console.log(this.ddResults)
       })
     },
     syncWechat(row) {

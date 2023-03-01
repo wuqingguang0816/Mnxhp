@@ -462,18 +462,17 @@ export default {
       iframe.contentWindow.focus();
       let doc = iframe.contentWindow.document;
       let _this = this
-      console.log(_this);
       iframe.onload = function () {
         let oldTitle = document.title;
         iframe.contentWindow.onafterprint = function (e) {
           // 插入日志
           let title = oldTitle.split('-')[0]
           let data = {
-            printTitle: _this.fullName ? _this.fullName:title,
+            printTitle: _this.fullName ? _this.fullName : title,
             printNum: _this.batchIds.split(",").length,
             printId: _this.id
           }
-          console.log(data,oldTitle);
+          console.log(data, oldTitle);
           request({
             url: `/api/system/printLog/save`,
             method: "post",
