@@ -756,6 +756,19 @@ export default {
     })
   },
   methods: {
+    refreshPrintOptions(){
+      getPrintDevSelector(2).then(res => {
+        let data = res.data.list
+
+        let list = data.filter(o => o.children && o.children.length)
+        this.printTplList = list.map(o => ({
+          ...o,
+          hasChildren: true
+        }))
+      }).catch(error => {
+        reject(error)
+      })
+    },
     open(url) {
       window.open(url, "_blank");
     },
@@ -850,6 +863,10 @@ export default {
       * 供父组件使用 获取列表JSON
     */
     getData() {
+      if(this.btnsList.includes('batchPrint') && this.columnData.printIds.length === 0){
+        return this.$message.warning('打印模板不能为空')
+      }
+      if(!this.columnData.printIds) return this.$message.warning('打印模板不能为空')
       if (!this.columnData.columnList.length) return this.$message.warning('列表字段不允许为空')
       if (!this.columnData.uploaderTemplateJson.selectKey && this.btnsList.indexOf('upload') != -1) return this.$message.warning('请设置导入模板')
       if (this.columnData.type == 2) {
