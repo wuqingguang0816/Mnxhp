@@ -116,11 +116,9 @@ export default {
     }
   },
   created() {
-    if(window.location.href.includes('open')){
-      this.addOrUpdateHandle()
-    }
-    this.initData()
     this.getDictionaryData()
+    this.initData()
+    
   },
   methods: {
     log(row){
@@ -161,6 +159,9 @@ export default {
     getDictionaryData() {
       this.$store.dispatch('base/getDictionaryData', { sort: 'printDev' }).then((res) => {
         this.categoryList = res
+        if(window.location.href.includes('open')){
+          this.addOrUpdateHandle()
+        }
       })
     },
     addOrUpdateHandle(id) {

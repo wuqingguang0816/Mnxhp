@@ -180,6 +180,7 @@ export default {
             this.showPrint=true
             this.loading = false
           }).catch(() => { this.loading = false })
+          this.showPrint=true
         }
       })
     },
