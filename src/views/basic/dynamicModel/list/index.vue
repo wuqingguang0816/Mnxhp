@@ -34,21 +34,17 @@
       <div class="JNPF-common-layout-main JNPF-flex-main">
         <div class="JNPF-common-head">
           <div v-if="isPreview || !columnData.useBtnPermission">
-            <span v-for="(item, i) in columnData.btnsList" :key="i" style="margin: 0 4px;">
-              <template>
+            <span v-for="(item, i) in columnData.btnsList" :key="i" style="margin:0 4px;">
                 <el-button :type="i==0?'primary':'text'" :icon="item.icon"
                   @click="headBtnsHandel(item.value)">
                   {{item.label}}</el-button>
-              </template>    
             </span>
           </div>
           <div v-else>
-            <span v-for="(item, i) in columnData.btnsList" :key="i" style="margin: 0 4px;">
-              <template>
+            <span v-for="(item, i) in columnData.btnsList" :key="i" style="margin:0 4px;">
                 <el-button :type="i==0?'primary':'text'" :icon="item.icon" v-has="'btn_'+item.value"
                   @click="headBtnsHandel(item.value)">
                   {{item.label}}</el-button>
-              </template>
             </span>
           </div>
           <div class="JNPF-common-head-right">
@@ -1493,7 +1489,10 @@ export default {
 }
 </script>
 <style scoped lang="scss">
+.JNPF-common-head{
   >>> .el-button span{
-    margin-left: 0px;
+    margin-left: 0px!important;
   }
+}
+  
 </style>
