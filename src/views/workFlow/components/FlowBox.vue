@@ -244,7 +244,7 @@
 </template>
 
 <script>
-import PrintDialog from './PrintDialog'
+import PrintDialog from '@/components/PrintDialog'
 import SignImgDialog from '@/components/SignImgDialog'
 import { FlowBeforeInfo, Audit, Reject, Transfer, Recall, Cancel, Assign, SaveAudit, Candidates, CandidateUser, Resurgence, ResurgenceList, RejectList, suspend, restore, subFlowInfo } from '@/api/workFlow/FlowBefore'
 import { Revoke, Press } from '@/api/workFlow/FlowLaunch'

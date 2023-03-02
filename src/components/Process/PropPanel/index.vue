@@ -2867,7 +2867,7 @@ export default {
   },
   methods: {
     refreshPrintOptions(){
-      getPrintDevSelector(2).then(res => {
+      getPrintDevSelector(1).then(res => {
         let data = res.data.list
 
         let list = data.filter(o => o.children && o.children.length)

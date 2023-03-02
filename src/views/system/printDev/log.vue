@@ -115,8 +115,6 @@ export default {
 }
 
 .main-panel {
-  padding: 20px;
-  padding-top: 0px;
   min-height: 570px;
   height: calc(100% - 10px);
   background-color: #fff;

@@ -34,42 +34,17 @@
       <div class="JNPF-common-layout-main JNPF-flex-main">
         <div class="JNPF-common-head">
           <div v-if="isPreview || !columnData.useBtnPermission">
-            <span v-for="(item, i) in columnData.btnsList" :key="i">
-              <template v-if="item.value == 'batchPrint'">
-                <el-dropdown>
-                  <el-button type="text" :icon="item.icon" style="margin-left:20px">批量打印
-                  </el-button>
-                  <el-dropdown-menu slot="dropdown">
-                    <div @click="handleBatchPrint(item.id)"
-                      v-for="(item, index) in printListOptions" :key="index">
-                      <el-dropdown-item>{{ item.fullName }}</el-dropdown-item>
-                    </div>
-                  </el-dropdown-menu>
-                </el-dropdown>
-              </template>
-              <template v-else>
+            <span v-for="(item, i) in columnData.btnsList" :key="i" style="margin: 0 4px;">
+              <template>
                 <el-button :type="i==0?'primary':'text'" :icon="item.icon"
                   @click="headBtnsHandel(item.value)">
                   {{item.label}}</el-button>
-              </template>
+              </template>    
             </span>
           </div>
           <div v-else>
-            <span v-for="(item, i) in columnData.btnsList" :key="i">
-              <template v-if="item.value == 'batchPrint'">
-                <el-dropdown>
-                  <el-button type="text" v-has="'btn_'+item.value" :icon="item.icon"
-                    style="margin-left:20px">批量打印
-                  </el-button>
-                  <el-dropdown-menu slot="dropdown">
-                    <div @click="handleBatchPrint(item.id)"
-                      v-for="(item, index) in printListOptions" :key="index">
-                      <el-dropdown-item>{{ item.fullName }}</el-dropdown-item>
-                    </div>
-                  </el-dropdown-menu>
-                </el-dropdown>
-              </template>
-              <template v-else>
+            <span v-for="(item, i) in columnData.btnsList" :key="i" style="margin: 0 4px;">
+              <template>
                 <el-button :type="i==0?'primary':'text'" :icon="item.icon" v-has="'btn_'+item.value"
                   @click="headBtnsHandel(item.value)">
                   {{item.label}}</el-button>
@@ -494,6 +469,9 @@
     <candidate-form :visible.sync="candidateVisible" :candidateList="candidateList"
       :branchList="branchList" taskId="0" :formData="workFlowFormData"
       @submitCandidate="submitCandidate" :isCustomCopy="isCustomCopy" />
+    <PrintDialog v-if="printDialogVisible" ref="printDialog" @change="printBrowseHandle">
+    </PrintDialog>
+    
     <el-dialog title="请选择流程" :close-on-click-modal="false" append-to-body
       :visible.sync="flowListVisible" class="JNPF-dialog template-dialog JNPF-dialog_center"
       lock-scroll width="400px">
@@ -507,6 +485,7 @@
 </template>
 
 <script>
+import PrintDialog from '@/components/PrintDialog'
 import PrintBrowse from "@/components/PrintBrowse/batch";
 import { getModelList, getModelSubList, deleteModel, batchDelete, exportModel, createModel, updateModel, getConfigData } from '@/api/onlineDev/visualDev'
 import { Create, Update } from '@/api/workFlow/workFlowForm'
@@ -532,10 +511,11 @@ import { mapGetters } from "vuex";
 
 export default {
   name: 'dynamicModel',
-  components: { PrintBrowse, Form, extraForm, ExportBox, Search, Detail, FlowBox, ChildTableColumn, SuperQuery, CandidateForm, CustomBox },
+  components: { PrintDialog, PrintBrowse, Form, extraForm, ExportBox, Search, Detail, FlowBox, ChildTableColumn, SuperQuery, CandidateForm, CustomBox },
   props: ['config', 'modelId', 'isPreview'],
   data() {
     return {
+      printDialogVisible: false,
       printBrowseVisible: false,
       printId: "",
       printListOptions: [],
@@ -679,6 +659,32 @@ export default {
       printOptionsApi(ids).then(res => {
         this.printListOptions = res.data
       })
+    },
+    printBrowseHandle(id) {
+      this.printDialogVisible = false
+      this.handleBatchPrint(id)
+    },
+    printDialog() {
+      this.printDialogVisible = true
+      this.$nextTick(() => {
+        if(this.printListOptions.length==1){
+          this.printBrowseHandle(this.printListOptions[0].id)
+          return
+        }
+        this.$refs.printDialog.initOptions(this.printListOptions)
+      })
+    },
+    handleBatchPrint(id) {
+      if (!id) {
+        this.$message({
+          type: "warning",
+          message: "请配置打印模板",
+          duration: 1500
+        });
+        return;
+      }
+      this.printId = id;
+      this.printBrowseVisible = true;
     },
     initData() {
       if (this.isPreview) return
@@ -1172,30 +1178,22 @@ export default {
       if (key === 'batchRemove') {
         this.batchRemove()
       }
+
+      if(key === 'batchPrint'){
+        if (!this.multipleSelection.length) {
+          this.$message({
+            type: 'error',
+            message: '请选择一条数据',
+            duration: 1500,
+          })
+          return
+        }
+        this.printDialog()
+      }
     },
     handleSelectionChange(val) {
       const res = val.map(item => item.id)
       this.multipleSelection = res
-    },
-    handleBatchPrint(id) {
-      if (!id) {
-        this.$message({
-          type: "warning",
-          message: "请配置打印模板",
-          duration: 1500
-        });
-        return;
-      }
-      if (!this.multipleSelection.length) {
-        this.$message({
-          type: 'error',
-          message: '请选择一条数据',
-          duration: 1500,
-        })
-        return
-      }
-      this.printId = id;
-      this.printBrowseVisible = true;
     },
     batchRemove() {
       if (!this.multipleSelection.length) {
@@ -1494,3 +1492,8 @@ export default {
   }
 }
 </script>
+<style scoped lang="scss">
+  >>> .el-button span{
+    margin-left: 0px;
+  }
+</style>

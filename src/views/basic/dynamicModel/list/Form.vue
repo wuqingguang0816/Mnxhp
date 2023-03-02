@@ -108,11 +108,15 @@
         </div>
       </el-drawer>
     </template>
-    <print-browse :visible.sync="printBrowseVisible" :id="formConf.printId" :formId="dataForm.id" />
+    <PrintDialog v-if="printDialogVisible" ref="printDialog" @change="printBrowseHandle">
+    </PrintDialog>
+    
+    <print-browse :visible.sync="printBrowseVisible" :id="printId" :formId="dataForm.id" />
   </div>
 </template>
 
 <script>
+import PrintDialog from '@/components/PrintDialog'
 import { createModel, updateModel, getModelInfo } from '@/api/onlineDev/visualDev'
 import Parser from '@/components/Generator/parser/Parser'
 import PrintBrowse from '@/components/PrintBrowse'
@@ -120,9 +124,11 @@ import { deepClone } from '@/utils'
 import {mapGetters} from "vuex";
 
 export default {
-  components: { Parser, PrintBrowse },
+  components: { Parser, PrintBrowse, PrintDialog },
   data() {
     return {
+      printId:'',
+      printDialogVisible:false,
       visible: false,
       key: +new Date(),
       formConf: {},
@@ -157,9 +163,21 @@ export default {
       this.visible = false
       this.$emit('refreshDataList', this.refreshDataList)
     },
+    printBrowseHandle(id) {
+      this.printDialogVisible = false
+      this.printId = id;
+      this.printBrowseVisible = true;
+    },
     print() {
       if (this.isPreview) return this.$message({ message: '功能预览不支持打印', type: 'warning' })
-      this.printBrowseVisible = true
+      this.printDialogVisible = true
+      this.$nextTick(() => {
+        if(!this.formConf.printId.includes(",")){
+          this.printBrowseHandle(this.formConf.printId)
+          return
+        }
+        this.$refs.printDialog.initOptions(JSON.parse(JSON.stringify(this.formConf.printId)))
+      })
     },
     init(formConf, modelId, id, isPreview, useFormPermission, allList, type) {
       this.formConf = deepClone(formConf)
