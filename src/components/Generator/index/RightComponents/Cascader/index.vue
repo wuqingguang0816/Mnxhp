@@ -8,7 +8,7 @@
     </el-form-item>
     <el-form-item label="默认值">
       <el-cascader :options="activeData.options" clearable
-        :show-all-levels="activeData['show-all-levels']" :props="activeData.props.props" filterable
+        :showAllLevels="activeData['showAllLevels']" :props="activeData.props" filterable
         v-model="activeData.__config__.defaultValue" :key="cascaderKey"></el-cascader>
     </el-form-item>
     <el-form-item label="选项分隔符">
@@ -49,7 +49,7 @@
           </el-row>
         </el-form-item>
         <el-form-item label="存储字段">
-          <el-select v-model="activeData.props.props.value" placeholder="请选择存储字段">
+          <el-select v-model="activeData.props.value" placeholder="请选择存储字段">
             <el-option label="id" value="id"></el-option>
             <el-option label="enCode" value="enCode"></el-option>
           </el-select>
@@ -61,16 +61,13 @@
             :title="activeData.__config__.propsName" popupTitle="远端数据" @change="propsUrlChange" />
         </el-form-item>
         <el-form-item label="存储字段">
-          <el-input v-model="activeData.props.props.value" placeholder="请输入存储字段"
-            @change="onChange" />
+          <el-input v-model="activeData.props.value" placeholder="请输入存储字段" @change="onChange" />
         </el-form-item>
         <el-form-item label="显示字段">
-          <el-input v-model="activeData.props.props.label" placeholder="请输入显示字段"
-            @change="onChange" />
+          <el-input v-model="activeData.props.label" placeholder="请输入显示字段" @change="onChange" />
         </el-form-item>
         <el-form-item label="子级字段">
-          <el-input v-model="activeData.props.props.children" placeholder="请输入子级字段"
-            @change="onChange" />
+          <el-input v-model="activeData.props.children" placeholder="请输入子级字段" @change="onChange" />
         </el-form-item>
         <el-table :data="activeData.__config__.templateJson"
           v-if="activeData.__config__.templateJson && activeData.__config__.templateJson.length">
@@ -96,7 +93,7 @@
       <el-divider />
     </template>
     <el-form-item label="展示全路径">
-      <el-switch v-model="activeData['show-all-levels']" />
+      <el-switch v-model="activeData['showAllLevels']" />
     </el-form-item>
     <el-form-item label="能否清空">
       <el-switch v-model="activeData.clearable" />
@@ -105,7 +102,7 @@
       <el-switch v-model="activeData.filterable" />
     </el-form-item>
     <el-form-item label="能否多选">
-      <el-switch v-model="activeData.props.props.multiple" @change="onChange" />
+      <el-switch v-model="activeData.props.multiple" @change="onChange" />
     </el-form-item>
     <el-form-item label="是否禁用">
       <el-switch v-model="activeData.disabled" />
@@ -212,9 +209,9 @@ export default {
       this.activeData.__config__.renderKey = +new Date()
       this.activeData.__config__.defaultValue = []
       this.activeData.options = []
-      this.activeData.props.props.value = 'id'
-      this.activeData.props.props.label = 'fullName'
-      this.activeData.props.props.children = 'children'
+      this.activeData.props.value = 'id'
+      this.activeData.props.label = 'fullName'
+      this.activeData.props.children = 'children'
       this.activeData.__config__.dictionaryType = ''
       this.activeData.__config__.propsUrl = ''
       this.activeData.__config__.propsName = ''

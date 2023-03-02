@@ -35,7 +35,7 @@ const layouts = {
     if (config.showLabel === false) labelWidth = '0'
     const Item = config.jnpfKey === 'cascader'
       ? <el-cascader v-model={config.defaultValue} placeholder={element.placeholder} options={element.options}
-        props={element.props} disabled={element.disabled} show-all-levels={element['show-all-levels']} separator={element.separator}
+        props={element.props} disabled={element.disabled} showAllLevels={element['showAllLevels']} separator={element.separator}
         style={element.style} clearable={element.clearable} filterable={element.filterable} key={config.renderKey}></el-cascader>
       : <render key={config.renderKey} conf={element} onInput={event => { this.$set(config, 'defaultValue', event) }} />
     return (
@@ -60,7 +60,7 @@ const layouts = {
         <el-col span={element.__config__.span}>
           <el-row gutter={element.__config__.gutter} class={className}
             nativeOnClick={event => { activeItem(element); event.stopPropagation() }}>
-            <el-tabs type={element.type} tab-position={element['tab-position']} vModel={element.__config__.active}>
+            <el-tabs type={element.type} tab-position={element.tabPosition} vModel={element.__config__.active}>
               {
                 element.__config__.children.map((item, i) => {
                   let child = renderChildren.apply(this, [h, item, i, element])
@@ -223,11 +223,10 @@ function layoutIsNotFound() {
 function buildOptions(element) {
   const config = element.__config__
   if (dyOptionsList.indexOf(config.jnpfKey) > -1) {
-    let isTreeSelect = config.jnpfKey === 'treeSelect' || config.jnpfKey === 'cascader'
     if (config.dataType === 'dictionary') {
       if (!config.dictionaryType) return
       getDictionaryDataSelector(config.dictionaryType).then(res => {
-        isTreeSelect ? element.options = res.data.list : element.__slot__.options = res.data.list
+        element.options = res.data.list
       })
     }
     if (config.dataType === 'dynamic') {
@@ -235,9 +234,9 @@ function buildOptions(element) {
       getDataInterfaceRes(config.propsUrl).then(res => {
         let data = res.data
         if (Array.isArray(data)) {
-          isTreeSelect ? element.options = data : element.__slot__.options = data
+          element.options = data
         } else {
-          isTreeSelect ? element.options = [] : element.__slot__.options = []
+          element.options = []
         }
       })
     }

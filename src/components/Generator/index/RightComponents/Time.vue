@@ -8,12 +8,12 @@
     </el-form-item>
     <el-form-item label="默认值">
       <el-time-picker v-model="activeData.__config__.defaultValue"
-        :picker-options="activeData['picker-options']" placeholder="选择默认值" clearable
-        :value-format="activeData['value-format']" :format="activeData.format">
+        :picker-options="activeData.pickerOptions" placeholder="选择默认值" clearable
+        :value-format="activeData.valueFormat" :format="activeData.format">
       </el-time-picker>
     </el-form-item>
     <el-form-item label="时间段">
-      <el-input v-model="activeData['picker-options'].selectableRange" placeholder="请输入时间段" />
+      <el-input v-model="activeData.pickerOptions.selectableRange" placeholder="请输入时间段" />
     </el-form-item>
     <el-form-item label="时间格式">
       <el-input :value="activeData.format" placeholder="请输入时间格式" @input="setTimeValue($event)" />

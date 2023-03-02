@@ -317,7 +317,7 @@ export default {
             if (config && config.children && Array.isArray(config.children)) {
               loop(config.children)
             }
-            if (config.jnpfKey === 'uploadFz') {
+            if (config.jnpfKey === 'uploadFile') {
               if (e.pathType === 'selfPath') {
                 if (e.isAccount === 0) {
                   if (!e.folder) {

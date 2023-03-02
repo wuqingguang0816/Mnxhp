@@ -11,21 +11,21 @@
         @input="onDefaultValueInput" />
     </el-form-item>
     <el-form-item label="前缀" v-show="showType==='pc'">
-      <el-input v-model="activeData.__slot__.prepend" placeholder="请输入前缀" />
+      <el-input v-model="activeData.addonBefore" placeholder="请输入前缀" />
     </el-form-item>
     <el-form-item label="后缀" v-show="showType==='pc'">
-      <el-input v-model="activeData.__slot__.append" placeholder="请输入后缀" />
+      <el-input v-model="activeData.addonAfter" placeholder="请输入后缀" />
     </el-form-item>
     <el-form-item label="前图标" v-show="showType==='pc'">
-      <el-input v-model="activeData['prefix-icon']" placeholder="请输入前图标名称">
-        <el-button slot="append" @click="openIconsDialog('prefix-icon')">
+      <el-input v-model="activeData.prefixIcon" placeholder="请输入前图标名称">
+        <el-button slot="append" @click="openIconsDialog('prefixIcon')">
           选择
         </el-button>
       </el-input>
     </el-form-item>
     <el-form-item label="后图标" v-show="showType==='pc'">
-      <el-input v-model="activeData['suffix-icon']" placeholder="请输入后图标名称">
-        <el-button slot="append" @click="openIconsDialog('suffix-icon')">
+      <el-input v-model="activeData.suffixIcon" placeholder="请输入后图标名称">
+        <el-button slot="append" @click="openIconsDialog('suffixIcon')">
           选择
         </el-button>
       </el-input>
@@ -39,13 +39,13 @@
       <el-switch v-model="activeData.__config__.showLabel" />
     </el-form-item> -->
     <!-- <el-form-item label="输入统计">
-      <el-switch v-model="activeData['show-word-limit']" />
+      <el-switch v-model="activeData.showWordLimit" />
     </el-form-item> -->
     <el-form-item label="能否清空">
       <el-switch v-model="activeData.clearable" />
     </el-form-item>
     <el-form-item label="是否密码">
-      <el-switch v-model="activeData['show-password']" />
+      <el-switch v-model="activeData.showPassword" />
     </el-form-item>
     <el-form-item label="是否只读">
       <el-switch v-model="activeData.readonly" />

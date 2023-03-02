@@ -25,7 +25,7 @@
         controls-position="right" />
     </el-form-item>
     <el-form-item label="按钮位置">
-      <el-radio-group v-model="activeData['controls-position']">
+      <el-radio-group v-model="activeData.controlsPosition">
         <el-radio-button label="">默认</el-radio-button>
         <el-radio-button label="right">右侧</el-radio-button>
       </el-radio-group>
@@ -34,7 +34,7 @@
       <el-switch v-model="activeData.showChinese" />
     </el-form-item>
     <!-- <el-form-item label="严格步数">
-      <el-switch v-model="activeData['step-strictly']" />
+      <el-switch v-model="activeData.stepStrictly" />
     </el-form-item> -->
     <!-- <el-form-item label="显示标签">
       <el-switch v-model="activeData.__config__.showLabel" />

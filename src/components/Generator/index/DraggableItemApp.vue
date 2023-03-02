@@ -31,7 +31,7 @@ const layouts = {
     if (this.formConf.unFocusedComponentBorder) className += ' unfocus-bordered'
     let labelWidth = config.labelWidth ? `${config.labelWidth}px` : null
     if (config.showLabel === false) labelWidth = '0'
-    if (config.jnpfKey === 'JNPFText') {
+    if (config.jnpfKey === 'text') {
       return (
         <el-col span={24} class={className}
           nativeOnClick={event => { activeItem(element); event.stopPropagation() }}>
@@ -61,7 +61,7 @@ const layouts = {
           nativeOnClick={event => { activeItem(element); event.stopPropagation() }}>
           <el-form-item label-width="0">
             <el-alert title={element.title} type={element.type} closable={element.closable}
-              show-icon={element['show-icon']} />
+              show-icon={element.showIcon} />
           </el-form-item>
           {components.itemBtns.apply(this, arguments)}
         </el-col>
@@ -133,7 +133,7 @@ const layouts = {
         <el-col span={24}>
           <el-row gutter={element.__config__.gutter} class={className}
             nativeOnClick={event => { activeItem(element); event.stopPropagation() }}>
-            <el-tabs type={element.type} tab-position={element['tab-position']} vModel={element.__config__.active}>
+            <el-tabs type={element.type} tab-position={element.tabPosition} vModel={element.__config__.active}>
               {
                 element.__config__.children.map((item, i) => {
                   let child = renderChildren.apply(this, [h, item, i, element])

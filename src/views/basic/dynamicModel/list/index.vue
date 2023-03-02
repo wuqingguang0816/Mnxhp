@@ -14,7 +14,7 @@
       </div>
       <div class="JNPF-common-tree-search-box"
         v-if="columnData.hasTreeQuery&&columnData.treeSynType==0">
-        <el-input placeholder="输入关键字" v-model="keyword" suffix-icon="el-icon-search" clearable />
+        <el-input placeholder="输入关键字" v-model="keyword" suffixIcon="el-icon-search" clearable />
       </div>
       <el-tree :data="treeData" :props="treeProps"
         :default-expand-all="columnData.treeSynType==0?expandsTree:false" highlight-current
@@ -128,7 +128,7 @@
                 :sortable="item.sortable?'custom':item.sortable" v-if="item.jnpfKey !=='table'">
                 <template slot-scope="scope">
                   <template v-if="scope.row.rowEdit">
-                    <template v-if="item.jnpfKey==='numInput'">
+                    <template v-if="item.jnpfKey==='inputNumber'">
                       <el-input-number v-model="scope.row[item.prop]"
                         :placeholder="item.placeholder" :min="item.min" :max="item.max"
                         :step="item.step" :precision="item.precision"
@@ -143,21 +143,21 @@
                       <el-switch v-model="scope.row[item.prop]" :active-value="item['active-value']"
                         :inactive-value="item['inactive-value']" :disabled="item.disabled" />
                     </div>
-                    <template v-else-if="item.jnpfKey==='time'">
+                    <template v-else-if="item.jnpfKey==='timePicker'">
                       <el-time-picker v-model="scope.row[item.prop]" style="width:100%"
-                        :picker-options="item['picker-options']" :placeholder="item.placeholder"
-                        :clearable="item.clearable" :value-format="item['value-format']"
+                        :picker-options="item.pickerOptions" :placeholder="item.placeholder"
+                        :clearable="item.clearable" :value-format="item.valueFormat"
                         :format="item.format" :readonly="item.readonly" :disabled="item.disabled">
                       </el-time-picker>
                     </template>
-                    <template v-else-if="['date'].includes(item.jnpfKey)">
+                    <template v-else-if="['datePicker'].includes(item.jnpfKey)">
                       <el-date-picker v-model="scope.row[item.prop]" :type="item.type||'datetime'"
                         :clearable="item.clearable" :placeholder="item.placeholder"
                         value-format="timestamp" :format="item.format||'yyyy-MM-dd HH:mm:ss'"
                         style="width:100%" :readonly="item.readonly" :disabled="item.disabled">
                       </el-date-picker>
                     </template>
-                    <template v-else-if="['comSelect'].includes(item.jnpfKey)">
+                    <template v-else-if="['organizeSelect'].includes(item.jnpfKey)">
                       <comSelect v-model="scope.row[item.prop]" :placeholder="item.placeholder"
                         :multiple="item.multiple" :clearable="item.clearable"
                         :disabled="item.disabled" />
@@ -198,7 +198,7 @@
                         :multiple="item.multiple" :clearable="item.clearable"
                         :disabled="item.disabled" />
                     </template>
-                    <template v-else-if="item.jnpfKey==='address'">
+                    <template v-else-if="item.jnpfKey==='areaSelect'">
                       <JNPFAddress v-model="scope.row[item.prop]" :level="item.level"
                         :placeholder="item.placeholder" :multiple="item.multiple"
                         :clearable="item.clearable" :disabled="item.disabled" />
@@ -208,22 +208,22 @@
                         :filterable="item.filterable"
                         :multiple="item.multiple||item.jnpfKey==='checkbox'"
                         :clearable="item.clearable" :disabled="item.disabled">
-                        <el-option :label="oItem[item.__config__.props.label]"
-                          v-for="(oItem, i) in item.__slot__.options"
-                          :value="oItem[item.__config__.props.value]" :key="i"></el-option>
+                        <el-option :label="oItem[item.props.label]"
+                          v-for="(oItem, i) in item.options" :value="oItem[item.props.value]"
+                          :key="i"></el-option>
                       </el-select>
                     </template>
                     <template v-else-if="item.jnpfKey==='cascader'">
                       <el-cascader v-model="scope.row[item.prop]" :options="item.options"
-                        :clearable="item.clearable" :show-all-levels="item['show-all-levels']"
-                        :props="item.props.props" :filterable="item.filterable"
+                        :clearable="item.clearable" :showAllLevels="item['showAllLevels']"
+                        :props="item.props" :filterable="item.filterable"
                         :separator="item.separator" :placeholder="item.placeholder"
                         :disabled="item.disabled" style="width:100%">
                       </el-cascader>
                     </template>
                     <template v-else-if="item.jnpfKey==='treeSelect'">
                       <JNPF-TreeSelect v-model="scope.row[item.prop]" :options="item.options"
-                        :props="item.props.props" :placeholder="item.placeholder"
+                        :props="item.props" :placeholder="item.placeholder"
                         :multiple="item.multiple" :clearable="item.clearable"
                         :disabled="item.disabled" />
                     </template>
@@ -253,16 +253,16 @@
                         :filterable="item.filterable" :multiple="item.multiple"
                         :clearable="item.clearable" :disabled="item.disabled" />
                     </template>
-                    <template v-else-if="['comInput','textarea'].includes(item.jnpfKey)">
+                    <template v-else-if="['input','textarea'].includes(item.jnpfKey)">
                       <el-input v-model="scope.row[item.prop]" :placeholder="item.placeholder"
-                        :readonly="item.readonly" :prefix-icon="item['prefix-icon']"
-                        :suffix-icon="item['suffix-icon']" :clearable="item.clearable"
-                        :show-word-limit="item['show-word-limit']" :maxlength="item.maxlength"
-                        :show-password="item['show-password']" :disabled="item.disabled">
+                        :readonly="item.readonly" :prefixIcon="item.prefixIcon"
+                        :suffixIcon="item.suffixIcon" :clearable="item.clearable"
+                        :showWordLimit="item.showWordLimit" :maxlength="item.maxlength"
+                        :show-password="item.showPassword" :disabled="item.disabled">
                         <template slot="prepend"
-                          v-if="item.__slot__ && item.__slot__.prepend">{{item.__slot__.prepend}}</template>
+                          v-if="item.addonBefore">{{item.addonBefore}}</template>
                         <template slot="append"
-                          v-if="item.__slot__ && item.__slot__.append">{{item.__slot__.append}}</template>
+                          v-if="item.addonAfter">{{item.addonAfter}}</template>
                       </el-input>
                     </template>
                     <template v-else-if="systemComponentsList.includes(item.jnpfKey)">
@@ -340,8 +340,8 @@
               </template>
               <template v-else-if="item.jnpfKey==='relationForm'">
                 <el-table-column :prop="item.prop" :label="item.label" :align="item.align"
-                  :fixed="getFixed(item, i)"
-                  :width="item.width" :key="i" :sortable="item.sortable?'custom':item.sortable">
+                  :fixed="getFixed(item, i)" :width="item.width" :key="i"
+                  :sortable="item.sortable?'custom':item.sortable">
                   <template slot-scope="scope">
                     <el-link :underline="false"
                       @click.native="toDetail(item.modelId,scope.row[`${item.prop}_id`])"
@@ -871,14 +871,14 @@ export default {
       if (searchList != null && searchList.length > 0) {
         let initQueryJson = {}
         for (let i = 0, len = searchList.length; i < len; i++) {
-          if (searchList[i].jnpfKey === 'date' && searchList[i].__config__.defaultCurrent == true) {
+          if (searchList[i].jnpfKey === 'datePicker' && searchList[i].__config__.defaultCurrent == true) {
             //日期
             let startDateTime = new Date()
             startDateTime.setHours(0, 0, 0, 0)
             let endDateTime = new Date()
             endDateTime.setHours(23, 59, 59, 999)
             initQueryJson[searchList[i].__vModel__] = [startDateTime.getTime(), endDateTime.getTime()]
-          } else if (searchList[i].jnpfKey === 'comSelect' && searchList[i].__config__.defaultCurrent == true && this.userInfo.organizeIdList instanceof Array && this.userInfo.organizeIdList.length > 0) {
+          } else if (searchList[i].jnpfKey === 'organizeSelect' && searchList[i].__config__.defaultCurrent == true && this.userInfo.organizeIdList instanceof Array && this.userInfo.organizeIdList.length > 0) {
             //组织机构
             initQueryJson[searchList[i].__vModel__] = searchList[i].searchMultiple == true ? [this.userInfo.organizeIdList] : this.userInfo.organizeIdList;
           } else if (searchList[i].jnpfKey === 'depSelect' && searchList[i].__config__.defaultCurrent == true && this.userInfo.departmentId != null && this.userInfo.departmentId != '') {
@@ -1077,9 +1077,9 @@ export default {
       for (let i = 0; i < this.columnData.columnList.length; i++) {
         let e = this.columnData.columnList[i]
         item[e.__vModel__] = e.__config__.defaultValue
-        if (e.__config__.jnpfKey === 'date' && e.__config__.defaultCurrent == true) {
+        if (e.__config__.jnpfKey === 'datePicker' && e.__config__.defaultCurrent == true) {
           item[e.__vModel__] = new Date().getTime()
-        } else if (e.__config__.jnpfKey === 'comSelect' && e.__config__.defaultCurrent == true && this.userInfo.organizeIdList instanceof Array && this.userInfo.organizeIdList.length > 0) {
+        } else if (e.__config__.jnpfKey === 'organizeSelect' && e.__config__.defaultCurrent == true && this.userInfo.organizeIdList instanceof Array && this.userInfo.organizeIdList.length > 0) {
           item[e.__vModel__] = e.multiple == true ? [this.userInfo.organizeIdList] : this.userInfo.organizeIdList
         }
       }
@@ -1384,11 +1384,10 @@ export default {
       this.columnData.columnList.forEach(cur => {
         const config = cur.__config__
         if (dyOptionsList.indexOf(config.jnpfKey) > -1) {
-          let isTreeSelect = config.jnpfKey === 'treeSelect' || config.jnpfKey === 'cascader'
           if (config.dataType === 'dictionary') {
             if (!config.dictionaryType) return
             getDictionaryDataSelector(config.dictionaryType).then(res => {
-              isTreeSelect ? cur.options = res.data.list : cur.__slot__.options = res.data.list
+              cur.options = res.data.list
             })
           }
           if (config.dataType === 'dynamic') {
@@ -1399,9 +1398,9 @@ export default {
             getDataInterfaceRes(config.propsUrl, query).then(res => {
               let data = res.data
               if (Array.isArray(data)) {
-                isTreeSelect ? cur.options = data : cur.__slot__.options = data
+                cur.options = data
               } else {
-                isTreeSelect ? cur.options = [] : cur.__slot__.options = []
+                cur.options = []
               }
             })
           }

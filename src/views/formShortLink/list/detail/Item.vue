@@ -4,10 +4,10 @@
     v-if="!item.__config__.noShow && (!item.__config__.visibility || (Array.isArray(item.__config__.visibility) && item.__config__.visibility.includes('pc')))">
     <template v-if="item.__config__.layout==='colFormItem'">
       <template v-if="item.__config__.jnpfKey==='divider'">
-        <el-divider :content-position="item['content-position']">{{item.__slot__.default}}
+        <el-divider :content-position="item.contentPosition">{{item.__slot__.default}}
         </el-divider>
       </template>
-      <template v-else-if="item.__config__.jnpfKey==='JNPFText'">
+      <template v-else-if="item.__config__.jnpfKey==='text'">
         <el-form-item label-width="0">
           <JNPFText :lineHeight="item.lineHeight" :fontSize="item.fontSize"
             v-model="item.__config__.defaultValue" :textStyle="item.textStyle" />
@@ -22,12 +22,12 @@
       <template v-else-if="item.__config__.jnpfKey==='alert'">
         <el-form-item label-width="0">
           <el-alert :title="item.title" :type="item.type" :closable="item.closable"
-            :show-icon="item['show-icon']" />
+            :show-icon="item.showIcon" />
         </el-form-item>
       </template>
       <template v-else-if="item.__config__.jnpfKey==='groupTitle'">
         <el-form-item label-width="0">
-          <groupTitle :content="item.content" :content-position="item['content-position']" />
+          <groupTitle :content="item.content" :content-position="item.contentPosition" />
         </el-form-item>
       </template>
       <template v-else-if="item.__config__.jnpfKey==='button'">
@@ -40,7 +40,7 @@
         <el-form-item :prop="item.__vModel__"
           :label-width="item.__config__.labelWidth?`${item.__config__.labelWidth}px`: null"
           :label="item.__config__.showLabel ? item.__config__.label : '' ">
-          <template v-if="item.__config__.jnpfKey==='uploadFz'">
+          <template v-if="item.__config__.jnpfKey==='uploadFile'">
             <JNPFUploadFz v-model="item.__config__.defaultValue" detailed disabled />
           </template>
           <template v-else-if="item.__config__.jnpfKey==='uploadImg'">
@@ -50,18 +50,18 @@
             </el-image>
           </template>
           <template v-else-if="item.__config__.jnpfKey==='colorPicker'">
-            <el-color-picker v-model="item.__config__.defaultValue" :show-alpha="item['show-alpha']"
-              :color-format="item['color-format']" :size="item.size" disabled />
+            <el-color-picker v-model="item.__config__.defaultValue" :show-alpha="item.showAlpha"
+              :color-format="item.colorFormat" :size="item.size" disabled />
           </template>
           <template v-else-if="item.__config__.jnpfKey==='rate'">
             <el-rate v-model="item.__config__.defaultValue" :max="item.max"
-              :allow-half="item['allow-half']" :show-text="item['show-text']"
-              :show-score="item['show-score']" disabled />
+              :allow-half="item.allowHalf" :show-text="item.showText" :show-score="item.showScore"
+              disabled />
           </template>
           <template v-else-if="item.__config__.jnpfKey==='slider'">
             <div class="slider-box">
               <el-slider v-model="item.__config__.defaultValue" :range='item.range'
-                :show-stops="item['show-stops']" />
+                :show-stops="item.showStops" />
               <div class="slider-mark"></div>
             </div>
           </template>
@@ -97,9 +97,8 @@
           </template>
           <template v-else>
             <p class="jnpf-detail-text">
-              <span
-                v-if="item.__slot__&&item.__slot__.prepend">{{item.__slot__.prepend}}</span>{{getValue(item)}}<span
-                v-if="item.__slot__&&item.__slot__.append">{{item.__slot__.append}}</span>
+              <span v-if="item.addonBefore">{{item.addonBefore}}</span>{{getValue(item)}}<span
+                v-if="item.addonAfter">{{item.addonAfter}}</span>
             </p>
           </template>
         </el-form-item>
@@ -124,7 +123,7 @@
             <h2>{{item.__config__.label}}</h2>
           </div>
           <el-table :data="item.__config__.defaultValue"
-            :show-summary="!!item.__config__.defaultValue.length && item['show-summary'] && (item.summaryField && !!item.summaryField.length)"
+            :show-summary="!!item.__config__.defaultValue.length && item.showSummary && (item.summaryField && !!item.summaryField.length)"
             :summary-method="getSummaries">
             <template v-for="(column,columnIndex) in item.__config__.children">
               <template
@@ -145,7 +144,7 @@
                   </template>
                 </el-table-column>
                 <el-table-column :key="columnIndex" :label="column.__config__.label"
-                  v-else-if="column.__config__.jnpfKey==='uploadFz'">
+                  v-else-if="column.__config__.jnpfKey==='uploadFile'">
                   <template slot-scope="scope">
                     <JNPFUploadFz v-model="scope.row[column.__vModel__]" detailed disabled />
                   </template>

@@ -54,9 +54,9 @@ const requiredDisabled = (jnpfKey) => {
 const getDataType = (data) => {
   if (!data.__config__ || !data.__config__.jnpfKey) return ''
   const jnpfKey = data.__config__.jnpfKey
-  if (['numInput', 'date', 'rate', 'slider'].includes(jnpfKey)) {
+  if (['inputNumber', 'datePicker', 'rate', 'slider'].includes(jnpfKey)) {
     return 'number'
-  } else if (['checkbox', 'uploadFz', 'uploadImg', 'cascader', 'comSelect', 'address'].includes(jnpfKey)) {
+  } else if (['checkbox', 'uploadFile', 'uploadImg', 'cascader', 'organizeSelect', 'areaSelect'].includes(jnpfKey)) {
     return 'array'
   } else if (['select', 'depSelect', 'posSelect', 'userSelect', 'treeSelect', 'roleSelect', 'groupSelect'].includes(jnpfKey)) {
     if (data.multiple) return 'array'

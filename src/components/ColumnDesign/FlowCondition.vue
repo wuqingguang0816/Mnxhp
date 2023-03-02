@@ -1,19 +1,8 @@
 <template>
-  <el-dialog
-    title="过滤规则配置"
-    :visible.sync="dialogVisible"
-    width="800px"
-    append-to-body
-    :before-close="handleClose"
-  >
-    <Condition
-      :value="pconditions"
-      ref="base"
-      :modelType="modelType"
-      :columnDataMap="columnDataMap"
-      :dataOptionMap="dataOptionMap"
-      :columnOptions="columnOptions"
-    ></Condition>
+  <el-dialog title="过滤规则配置" :visible.sync="dialogVisible" width="800px" append-to-body
+    :before-close="handleClose">
+    <Condition :value="pconditions" ref="base" :modelType="modelType" :columnDataMap="columnDataMap"
+      :dataOptionMap="dataOptionMap" :columnOptions="columnOptions"></Condition>
     <span slot="footer" class="dialog-footer">
       <el-button @click="dialogVisible = false">取 消</el-button>
       <el-button type="primary" @click="confirm">确 定</el-button>
@@ -81,8 +70,8 @@ export default {
       return formItems;
     }
   },
-  created() {},
-  mounted() {},
+  created() { },
+  mounted() { },
   watch: {
     columnData: {
       handler(val) {
@@ -95,9 +84,9 @@ export default {
           ["radio", "checkbox", "select"].includes(item.__config__.jnpfKey)
         );
         arr.forEach(item => {
-          let dataLabel = item.__config__.props.label;
-          let dataValue = item.__config__.props.value;
-          let options = item.__slot__.options.map(i => {
+          let dataLabel = item.props.label;
+          let dataValue = item.props.value;
+          let options = item.options.map(i => {
             return {
               ...i,
               dataLabel: dataLabel,
@@ -113,7 +102,7 @@ export default {
         arrTree.forEach(item => {
           this.dataOptionMap[item.__vModel__] = {
             options: item.options,
-            props: item.props.props
+            props: item.props
           };
         });
       },
@@ -146,7 +135,7 @@ export default {
               valid = false;
               return;
             }
-            if(Array.isArray(k.fieldValue) && k.fieldValue.length == 0){
+            if (Array.isArray(k.fieldValue) && k.fieldValue.length == 0) {
               this.$message.warning("数据值不能为空");
               valid = false;
               return;
@@ -157,8 +146,8 @@ export default {
           return;
         }
         // 处理精度
-        this.pconditions = this.pconditions.map(item=>{
-          if(item.jnpfKey === 'calculate'){
+        this.pconditions = this.pconditions.map(item => {
+          if (item.jnpfKey === 'calculate') {
             item.fieldValue = Number(item.fieldValue).toFixed(2)
           }
           return item

@@ -10,7 +10,7 @@ export default [{
     required: true,
     layout: 'colFormItem',
     span: 24,
-    jnpfKey: 'comInput',
+    jnpfKey: 'input',
     // 正则校验规则
     regList: [{
       pattern: '/^1(3|4|5|7|8|9)\\d{9}$/',
@@ -26,11 +26,11 @@ export default [{
   placeholder: '请输入手机号',
   style: { width: '100%' },
   clearable: true,
-  'prefix-icon': 'el-icon-mobile',
-  'suffix-icon': '',
+  'prefixIcon': 'el-icon-mobile',
+  'suffixIcon': '',
   maxlength: 11,
-  'show-word-limit': true,
+  'showWordLimit': true,
   readonly: false,
   disabled: false,
-  jnpfKey: 'comInput'
+  jnpfKey: 'input'
 }]

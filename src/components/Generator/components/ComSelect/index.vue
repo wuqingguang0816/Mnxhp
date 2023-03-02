@@ -83,7 +83,7 @@ import { addResizeListener, removeResizeListener } from 'element-ui/src/utils/re
 import { getDepartmentSelectorByAuth } from "@/api/permission/department";
 import { getOrganizeSelectorByAuth } from '@/api/permission/organize'
 export default {
-  name: 'comSelect',
+  name: 'organizeSelect',
   inject: {
     elForm: {
       default: ''

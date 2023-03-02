@@ -4,7 +4,7 @@
       <el-input v-model="activeData.title" placeholder="请输入提示文本" />
     </el-form-item>
     <el-form-item label="提示图标">
-      <el-switch v-model="activeData['show-icon']" />
+      <el-switch v-model="activeData.showIcon" />
     </el-form-item>
     <el-form-item label="样式效果">
       <div class="type-list">

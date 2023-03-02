@@ -27,7 +27,7 @@
       <el-switch v-model="activeData.__config__.showLabel" />
     </el-form-item> -->
     <!-- <el-form-item label="输入统计">
-      <el-switch v-model="activeData['show-word-limit']" />
+      <el-switch v-model="activeData.showWordLimit" />
     </el-form-item> -->
     <!-- <el-form-item label="能否清空">
       <el-switch v-model="activeData.clearable" />

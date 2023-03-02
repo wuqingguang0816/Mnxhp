@@ -8,8 +8,8 @@
     </el-form-item>
     <el-form-item label="默认值">
       <JNPF-TreeSelect :options="activeData.options" v-model="activeData.__config__.defaultValue"
-        placeholder="选择默认值" clearable :multiple="activeData.multiple"
-        :props="activeData.props.props" :key="renderKey" />
+        placeholder="选择默认值" clearable :multiple="activeData.multiple" :props="activeData.props"
+        :key="renderKey" />
     </el-form-item>
     <template>
       <el-divider>数据选项</el-divider>
@@ -46,7 +46,7 @@
           </el-row>
         </el-form-item>
         <el-form-item label="存储字段">
-          <el-select v-model="activeData.props.props.value" placeholder="请选择存储字段">
+          <el-select v-model="activeData.props.value" placeholder="请选择存储字段">
             <el-option label="id" value="id"></el-option>
             <el-option label="enCode" value="enCode"></el-option>
           </el-select>
@@ -58,16 +58,13 @@
             :title="activeData.__config__.propsName" popupTitle="远端数据" @change="propsUrlChange" />
         </el-form-item>
         <el-form-item label="存储字段">
-          <el-input v-model="activeData.props.props.value" placeholder="请输入存储字段"
-            @change="onChange" />
+          <el-input v-model="activeData.props.value" placeholder="请输入存储字段" @change="onChange" />
         </el-form-item>
         <el-form-item label="显示字段">
-          <el-input v-model="activeData.props.props.label" placeholder="请输入显示字段"
-            @change="onChange" />
+          <el-input v-model="activeData.props.label" placeholder="请输入显示字段" @change="onChange" />
         </el-form-item>
         <el-form-item label="子级字段">
-          <el-input v-model="activeData.props.props.children" placeholder="请输入子级字段"
-            @change="onChange" />
+          <el-input v-model="activeData.props.children" placeholder="请输入子级字段" @change="onChange" />
         </el-form-item>
         <el-table :data="activeData.__config__.templateJson"
           v-if="activeData.__config__.templateJson && activeData.__config__.templateJson.length">
@@ -201,9 +198,9 @@ export default {
     dataTypeChange(val) {
       this.activeData.__config__.defaultValue = ''
       this.activeData.options = []
-      this.activeData.props.props.value = 'id'
-      this.activeData.props.props.label = 'fullName'
-      this.activeData.props.props.children = 'children'
+      this.activeData.props.value = 'id'
+      this.activeData.props.label = 'fullName'
+      this.activeData.props.children = 'children'
       this.activeData.__config__.dictionaryType = ''
       this.activeData.__config__.propsUrl = ''
       this.activeData.__config__.propsName = ''

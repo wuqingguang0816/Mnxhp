@@ -16,7 +16,7 @@ export default {
   'JNPF-Quill': 'blur',
   "JNPF-Text": 'blur',
   "JNPF-Amount": 'change',
-  "JNPF-UploadFz": 'change',
+  "JNPF-uploadFile": 'change',
   "JNPF-UploadImg": 'change',
   "com-select": 'change',
   "dep-select": 'change',

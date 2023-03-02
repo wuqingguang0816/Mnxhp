@@ -64,9 +64,6 @@ function buildDataObject(confClone, dataObject, formData) {
       dataObject.attrs[key] = val
     }
   })
-  if (jnpfKey === 'JNPFText') {
-    vModel.call(this, dataObject, confClone.__config__.defaultValue)
-  }
   if (['calculate', 'table', 'barcode', 'qrcode', 'popupSelect', 'popupTableSelect'].includes(jnpfKey)) {
     dataObject.attrs['formData'] = formData
   }
@@ -75,7 +72,6 @@ function buildDataObject(confClone, dataObject, formData) {
     dataObject.attrs['vModel'] = confClone.__vModel__
   }
   if (['popupAttr', 'calculate', 'relationFormAttr'].includes(jnpfKey)) {
-    dataObject.attrs['isStorage'] = confClone.__config__.isStorage
     dataObject.attrs['defaultValue'] = confClone.__config__.defaultValue
   }
   if (['relationForm', 'popupSelect'].includes(jnpfKey)) {

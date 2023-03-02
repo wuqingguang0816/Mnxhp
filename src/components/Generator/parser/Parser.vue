@@ -16,7 +16,7 @@ const layouts = {
     if (config.showLabel === false) labelWidth = '0'
     const Item = config.jnpfKey === 'cascader'
       ? <el-cascader v-model={this[this.formConf.formModel][scheme.__vModel__]} placeholder={scheme.placeholder} options={scheme.options}
-        props={scheme.props} disabled={scheme.disabled} show-all-levels={scheme['show-all-levels']} separator={scheme.separator}
+        props={scheme.props} disabled={scheme.disabled} showAllLevels={scheme['showAllLevels']} separator={scheme.separator}
         style={scheme.style} clearable={scheme.clearable} filterable={scheme.filterable}
         onChange={val => this.onCascaderChange(val, scheme.on)} onBlur={val => this.onCascaderBlur(val, scheme.on)}
         key={scheme.__config__.renderKey}></el-cascader>
@@ -42,7 +42,7 @@ const layouts = {
     if (scheme.__config__.jnpfKey === 'tab') {
       return (
         <el-col span={scheme.__config__.span} class="mb-10">
-          <el-tabs type={scheme.type} tab-position={scheme['tab-position']} vModel={scheme.__config__.active} {...{ on: listeners }}>
+          <el-tabs type={scheme.type} tab-position={scheme.tabPosition} vModel={scheme.__config__.active} {...{ on: listeners }}>
             {
               scheme.__config__.children.map((item, i) => {
                 let child = renderChildren.call(this, h, item)
@@ -183,7 +183,7 @@ function buildListeners(scheme) {
         if (key === 'change') {
           let data = ''
           if (['select', 'radio', 'checkbox'].includes(config.jnpfKey)) {
-            const options = scheme.__slot__.options
+            const options = scheme.options
             if (scheme.multiple || config.jnpfKey === 'checkbox') {
               let _data = []
               outer: for (let i = 0; i < params[0].length; i++) {
@@ -205,7 +205,7 @@ function buildListeners(scheme) {
               }
               data = _data
             }
-          } else if (config.jnpfKey === 'numInput') {
+          } else if (config.jnpfKey === 'inputNumber') {
             data = params[0]
           } else {
             data = params.length > 1 ? params[1] : params[0]
@@ -474,12 +474,11 @@ export default {
       componentList.forEach(cur => {
         const config = cur.__config__
         if (dyOptionsList.indexOf(config.jnpfKey) > -1) {
-          let isTreeSelect = config.jnpfKey === 'treeSelect' || config.jnpfKey === 'cascader'
           if (config.dataType === 'dictionary') {
             if (!config.dictionaryType) return
             getDictionaryDataSelector(config.dictionaryType).then(res => {
-              isTreeSelect ? cur.options = res.data.list : cur.__slot__.options = res.data.list
-              isTreeSelect ? data[cur.__vModel__ + 'Options'] = cur.options : data[cur.__vModel__ + 'Options'] = cur.__slot__.options
+              cur.options = res.data.list
+              data[cur.__vModel__ + 'Options'] = cur.options
             })
           } else if (config.dataType === 'dynamic') {
             if (!config.propsUrl) return
@@ -489,14 +488,14 @@ export default {
             getDataInterfaceRes(config.propsUrl, query).then(res => {
               let realData = res.data
               if (Array.isArray(realData)) {
-                isTreeSelect ? cur.options = realData : cur.__slot__.options = realData
+                cur.options = realData
               } else {
-                isTreeSelect ? cur.options = [] : cur.__slot__.options = []
+                cur.options = []
               }
-              isTreeSelect ? data[cur.__vModel__ + 'Options'] = cur.options : data[cur.__vModel__ + 'Options'] = cur.__slot__.options
+              data[cur.__vModel__ + 'Options'] = cur.options
             })
           } else {
-            isTreeSelect ? data[cur.__vModel__ + 'Options'] = cur.options : data[cur.__vModel__ + 'Options'] = cur.__slot__.options
+            data[cur.__vModel__ + 'Options'] = cur.options
           }
         }
         if (config.children && config.jnpfKey !== 'table') this.buildOptions(config.children, data, formData)
@@ -628,8 +627,7 @@ export default {
                 break;
               case 'options':
                 if (dyOptionsList.indexOf(item.__config__.jnpfKey) > -1) {
-                  let isTreeSelect = item.__config__.jnpfKey === 'treeSelect' || item.__config__.jnpfKey === 'cascader'
-                  isTreeSelect ? item.options = value : item.__slot__.options = value
+                  item.options = value
                 }
                 break;
               default:

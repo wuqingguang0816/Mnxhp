@@ -95,7 +95,7 @@ export default {
         }
         if (Array.isArray(data)) data.forEach(d => loop(d, parent))
         if (data.__config__ && data.__config__.jnpfKey && data.__vModel__) {
-          if (['numInput', 'calculate'].includes(data.__config__.jnpfKey)) {
+          if (['inputNumber', 'calculate'].includes(data.__config__.jnpfKey)) {
             const isTableChild = parent && parent.__config__ && parent.__config__.jnpfKey === 'table'
             calcList.push({
               __vModel__: isTableChild ? parent.__vModel__ + '.' + data.__vModel__ : data.__vModel__,

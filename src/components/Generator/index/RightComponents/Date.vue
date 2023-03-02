@@ -8,12 +8,14 @@
     </el-form-item>
     <el-form-item label="默认值">
       <el-date-picker v-model="activeData.__config__.defaultValue" :type="activeData.type"
-        placeholder="选择默认值" :value-format="activeData['value-format']" :format="activeData.format" :disabled="activeData.__config__.defaultCurrent">
+        placeholder="选择默认值" :value-format="activeData.valueFormat" :format="activeData.format"
+        :disabled="activeData.__config__.defaultCurrent">
       </el-date-picker>
     </el-form-item>
     <el-form-item label="">
-      <el-checkbox label="true" v-model="activeData.__config__.defaultCurrent" @change="defaultCurrentChange"
-         style="float: right;margin-right: 30px;">默认为当前系统时间</el-checkbox>
+      <el-checkbox label="true" v-model="activeData.__config__.defaultCurrent"
+        @change="defaultCurrentChange"
+        style="float: right;margin-right: 30px;">默认为当前系统时间</el-checkbox>
     </el-form-item>
     <el-form-item label="时间类型">
       <el-select v-model="activeData.type" placeholder="请选择时间类型" @change="dateTypeChange">
@@ -122,7 +124,7 @@ export default {
       this.setTimeValue(dateTimeFormat[val], val)
     },
     defaultCurrentChange(val) {
-      if(val) {
+      if (val) {
         this.$set(this.activeData.__config__, 'defaultValue', null)
       }
     }

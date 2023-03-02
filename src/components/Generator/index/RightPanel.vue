@@ -142,14 +142,14 @@
                   :disabled="activeData.__config__.jnpfKey==='table'" />
               </el-form-item>
             </template>
-            <JNPFComInput v-if="activeData.__config__.jnpfKey==='comInput'"
+            <JNPFComInput v-if="activeData.__config__.jnpfKey==='input'"
               :active-data="activeData" />
             <JNPF-textarea v-if="activeData.__config__.jnpfKey==='textarea'"
               :active-data="activeData" />
-            <JNPFText v-if="activeData.__config__.jnpfKey==='JNPFText'" :active-data="activeData" />
+            <JNPFText v-if="activeData.__config__.jnpfKey==='text'" :active-data="activeData" />
             <JnpfLink v-if="activeData.__config__.jnpfKey==='link'" :active-data="activeData" />
             <JnpfAlert v-if="activeData.__config__.jnpfKey==='alert'" :active-data="activeData" />
-            <JNPFNumInput v-if="activeData.__config__.jnpfKey==='numInput'"
+            <JNPFNumInput v-if="activeData.__config__.jnpfKey==='inputNumber'"
               :active-data="activeData" />
             <JNPFAmount v-if="activeData.__config__.jnpfKey==='JNPFAmount'"
               :active-data="activeData" />
@@ -167,10 +167,12 @@
             <JNPFCascader v-if="activeData.__config__.jnpfKey==='cascader'"
               :active-data="activeData" :dictionaryOptions="dictionaryOptions"
               :dataInterfaceOptions="dataInterfaceOptions" @changeSelect="getDictionaryType" />
-            <JNPFTime v-if="activeData.__config__.jnpfKey==='time'" :active-data="activeData" />
+            <JNPFTime v-if="activeData.__config__.jnpfKey==='timePicker'"
+              :active-data="activeData" />
             <JNPFTimeRange v-if="activeData.__config__.jnpfKey==='timeRange'"
               :active-data="activeData" />
-            <JNPFDate v-if="activeData.__config__.jnpfKey==='date'" :active-data="activeData" />
+            <JNPFDate v-if="activeData.__config__.jnpfKey==='datePicker'"
+              :active-data="activeData" />
             <JNPFDateRange v-if="activeData.__config__.jnpfKey==='dateRange'"
               :active-data="activeData" />
             <JNPFColorPicker v-if="activeData.__config__.jnpfKey==='colorPicker'"
@@ -180,12 +182,12 @@
             <JNPFSlider v-if="activeData.__config__.jnpfKey==='slider'" :active-data="activeData" />
             <JNPFDivider v-if="activeData.__config__.jnpfKey==='divider'"
               :active-data="activeData" />
-            <JNPFUploadFz v-if="activeData.__config__.jnpfKey==='uploadFz'"
+            <JNPFUploadFz v-if="activeData.__config__.jnpfKey==='uploadFile'"
               :active-data="activeData" />
             <JNPFUploadImg v-if="activeData.__config__.jnpfKey==='uploadImg'"
               :active-data="activeData" />
             <JNPFComRight v-if="isCommon" :active-data="activeData" />
-            <JNPFAddress v-if="activeData.__config__.jnpfKey==='address'"
+            <JNPFAddress v-if="activeData.__config__.jnpfKey==='areaSelect'"
               :active-data="activeData" />
             <TreeSelect v-if="activeData.__config__.jnpfKey==='treeSelect'"
               :active-data="activeData" :dictionaryOptions="dictionaryOptions"
@@ -378,7 +380,7 @@
                   :step="2" show-tooltip />
               </el-form-item>
               <el-form-item label="标题宽度"
-                v-if="!['divider','JNPFText','link','alert','button','table','groupTitle ','card','row','tab','collapse'].includes(activeData.__config__.jnpfKey)">
+                v-if="!['divider','text','link','alert','button','table','groupTitle ','card','row','tab','collapse'].includes(activeData.__config__.jnpfKey)">
                 <el-input-number v-model="activeData.__config__.labelWidth" placeholder="标题宽度"
                   :min="0" :precision="0" controls-position="right" />
               </el-form-item>
@@ -506,19 +508,20 @@
               <div class="per-cell" :class="{'last':!formConf.hasPrintBtn}">
                 <el-checkbox v-model="formConf.hasPrintBtn">打印
                   <el-tooltip content="启用流程后,操作按钮以流程节点为准" placement="top">
-                <a class="el-icon-warning-outline"></a>
-              </el-tooltip>
+                    <a class="el-icon-warning-outline"></a>
+                  </el-tooltip>
                 </el-checkbox>
                 <el-input v-model="formConf.printButtonText" />
               </div>
               <el-form-item label="" v-if="formConf.hasPrintBtn">
                 <JNPF-TreeSelect :options="printTplList" v-model="formConf.printId" multiple
                   placeholder="请选择打印模板" lastLevel clearable>
-                  <div style="padding:10px 0;text-align:center" slot="header" >
+                  <div style="padding:10px 0;text-align:center" slot="header">
                     <el-link type="primary" :underline="false" @click="openPrint">添加打印模板
                     </el-link>
-                    <el-link type="info" style="position: absolute;right:8px;top: 18px;" @click="refreshPrintOptions" :underline="false">
-                     <i class="el-icon-refresh el-icon--right"></i></el-link>
+                    <el-link type="info" style="position: absolute;right:8px;top: 18px;"
+                      @click="refreshPrintOptions" :underline="false">
+                      <i class="el-icon-refresh el-icon--right"></i></el-link>
                     <el-divider style="margin-top: 10px;"></el-divider>
                   </div>
                 </JNPF-TreeSelect>
@@ -601,10 +604,10 @@ import Tab from './RightComponents/Tab'
 import Collapse from './RightComponents/Collapse'
 import TableConfig from './RightComponents/Table'
 import StyleScript from './StyleScript'
-const commonRightList = ['comSelect', 'depSelect', 'posSelect', 'userSelect', 'usersSelect', 'groupSelect', "roleSelect", 'editor']
+const commonRightList = ['organizeSelect', 'depSelect', 'posSelect', 'userSelect', 'usersSelect', 'groupSelect', "roleSelect", 'editor']
 const systemList = ['createUser', 'createTime', 'modifyUser', 'modifyTime', 'currOrganize', 'currDept', 'currPosition', 'billRule']
 //不设置宽度
-const noWithList = ['switch', 'radio', 'checkbox', 'uploadFz', 'uploadImg', 'colorPicker', 'rate', 'link', 'button', 'JNPFText', 'alert', 'qrcode', 'barcode']
+const noWithList = ['switch', 'radio', 'checkbox', 'uploadFile', 'uploadImg', 'colorPicker', 'rate', 'link', 'button', 'text', 'alert', 'qrcode', 'barcode']
 const layoutList = ["groupTitle", 'divider', 'collapse', 'tab', 'row', 'card', 'table']
 
 export default {
@@ -874,7 +877,7 @@ export default {
     this.setDefaultOptions()
   },
   methods: {
-    refreshPrintOptions(){
+    refreshPrintOptions() {
       getPrintDevSelector(2).then(res => {
         let data = res.data.list
 
