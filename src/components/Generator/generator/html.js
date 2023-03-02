@@ -140,10 +140,10 @@ const tags = {
       width
     } = attrBuilder(el)
     const maxlength = el.maxlength ? `:maxlength="${el.maxlength}"` : ''
-    const showWordLimit = el['showWordLimit'] ? 'showWordLimit' : ''
+    const showWordLimit = el['show-word-limit'] ? 'show-word-limit' : ''
     const readonly = el.readonly ? 'readonly' : ''
-    const prefixIcon = el['prefixIcon'] ? `prefixIcon='${el['prefixIcon']}'` : ''
-    const suffixIcon = el['suffixIcon'] ? `suffixIcon='${el['suffixIcon']}'` : ''
+    const prefixIcon = el['prefix-icon'] ? `prefix-icon='${el['prefix-icon']}'` : ''
+    const suffixIcon = el['suffix-icon'] ? `suffix-icon='${el['suffix-icon']}'` : ''
     const showPassword = el['show-password'] ? 'show-password' : ''
     const type = el.type ? `type="${el.type}"` : ''
     const autosize = el.autosize && el.autosize.minRows ?
@@ -165,7 +165,7 @@ const tags = {
     const min = el.min ? `:min='${el.min}'` : ''
     const max = el.max ? `:max='${el.max}'` : ''
     const step = el.step ? `:step='${el.step}'` : ''
-    const stepStrictly = el.stepStrictly ? stepStrictly : ''
+    const stepStrictly = el['step-strictly'] ? 'step-strictly' : ''
     const precision = el.precision ? `:precision='${el.precision}'` : ''
 
     return `<${tag} ${vModel} ${placeholder} ${step} ${stepStrictly} ${precision} ${controlsPosition} ${min} ${max} ${disabled}></${tag}>`
@@ -226,7 +226,7 @@ const tags = {
     } = attrBuilder(el)
     const options = el.options ? `:options="${el.__vModel__}Options"` : ''
     const props = el.props ? `:props="${el.__vModel__}Props"` : ''
-    const showAllLevels = el['showAllLevels'] ? '' : ':showAllLevels="false"'
+    const showAllLevels = el['show-all-levels'] ? '' : ':show-all-levels="false"'
     const filterable = el.filterable ? 'filterable' : ''
     const separator = el.separator === '/' ? '' : `separator="${el.separator}"`
 
@@ -238,7 +238,7 @@ const tags = {
     const max = el.max ? `:max='${el.max}'` : ''
     const step = el.step ? `:step='${el.step}'` : ''
     const range = el.range ? 'range' : ''
-    const showStops = el.showStops ? `:show-stops="${el.showStops}"` : ''
+    const showStops = el['show-stops'] ? `:show-stops="${el['show-stops']}"` : ''
 
     return `<${tag} ${min} ${max} ${step} ${vModel} ${range} ${showStops} ${disabled}></${tag}>`
   },
@@ -256,8 +256,8 @@ const tags = {
     const rangeSeparator = el['range-separator'] ? `range-separator="${el['range-separator']}"` : ''
     const isRange = el['is-range'] ? 'is-range' : ''
     const format = el.format ? `format="${el.format}"` : ''
-    const valueFormat = el.valueFormat ? `value-format="${el.valueFormat}"` : ''
-    const pickerOptions = el.pickerOptions ? `:picker-options='${JSON.stringify(el.pickerOptions)}'` : ''
+    const valueFormat = el['value-format'] ? `value-format="${el['value-format']}"` : ''
+    const pickerOptions = el['picker-options'] ? `:picker-options='${JSON.stringify(el['picker-options'])}'` : ''
 
     return `<${tag} ${vModel} ${isRange} ${format} ${valueFormat} ${pickerOptions} ${width} ${placeholder} ${startPlaceholder} ${endPlaceholder} ${rangeSeparator} ${clearable} ${disabled}></${tag}>`
   },
@@ -274,8 +274,8 @@ const tags = {
     const endPlaceholder = el['end-placeholder'] ? `end-placeholder="${el['end-placeholder']}"` : ''
     const rangeSeparator = el['range-separator'] ? `range-separator="${el['range-separator']}"` : ''
     const format = el.format ? `format="${el.format}"` : ''
-    const valueFormat = el.valueFormat ? `value-format="${el.valueFormat}"` : ''
-    const type = el.type === 'datePicker' ? '' : `type="${el.type}"`
+    const valueFormat = el['value-format'] ? `value-format="${el['value-format']}"` : ''
+    const type = el.type === 'date' ? '' : `type="${el.type}"`
     const readonly = el.readonly ? 'readonly' : ''
 
     return `<${tag} ${type} ${vModel} ${format} ${valueFormat} ${width} ${placeholder} ${startPlaceholder} ${endPlaceholder} ${rangeSeparator} ${clearable} ${readonly} ${disabled}></${tag}>`
@@ -283,9 +283,9 @@ const tags = {
   'el-rate': el => {
     const { tag, disabled, vModel } = attrBuilder(el)
     const max = el.max ? `:max='${el.max}'` : ''
-    const allowHalf = el.allowHalf ? 'allow-half' : ''
-    const showText = el.showText ? 'show-text' : ''
-    const showScore = el.showScore ? 'show-score' : ''
+    const allowHalf = el['allow-half'] ? 'allow-half' : ''
+    const showText = el['show-text'] ? 'show-text' : ''
+    const showScore = el['show-score'] ? 'show-score' : ''
 
     return `<${tag} ${vModel} ${max} ${allowHalf} ${showText} ${showScore} ${disabled}></${tag}>`
   },
@@ -335,18 +335,18 @@ const tags = {
     const vModel = `value="${el.__config__.defaultValue}"`
     return `<${tag} ${vModel} ${textStyle} ${lineHeight} ${fontSize}></${tag}>`
   },
-  'JNPF-Amount': function (el) {
+  'JNPF-Amount': function(el) {
     const tag = this['el-input-number'](el)
     const showChinese = el.showChinese ? `:showChinese='${el.showChinese}'` : ''
     return addPropToTag(tag, showChinese)
   },
-  'el-divider': function (el) {
+  'el-divider': function(el) {
     const { tag } = attrBuilder(el)
-    const contentPosition = `content-position="${el.contentPosition}"`
+    const contentPosition = `content-position="${el['content-position']}"`
     const child = el.__slot__.default
     return `<${tag} ${contentPosition}>${child}</${tag}>`
   },
-  'JNPF-UploadImg': function (el) {
+  'JNPF-UploadImg': function(el) {
     const { tag, vModel, disabled } = attrBuilder(el)
     const accept = `accept="${el.accept}"`
     const fileSize = `:fileSize="${el.fileSize}"`
@@ -355,38 +355,38 @@ const tags = {
     const sizeUnit = `sizeUnit="${el.sizeUnit}"`
     return `<${tag} ${vModel} ${accept} ${fileSize} ${limit} ${showTip} ${sizeUnit} ${disabled}></${tag}>`
   },
-  'JNPF-uploadFile': function (el) {
+  'JNPF-UploadFz': function(el) {
     const tag = this['JNPF-UploadImg'](el)
     const buttonText = `buttonText="${el.buttonText}"`
     return addPropToTag(tag, buttonText)
   },
-  'JNPF-Quill': function (el) {
+  'JNPF-Quill': function(el) {
     const { tag, vModel, placeholder } = attrBuilder(el)
     return `<${tag} ${vModel} ${placeholder}></${tag}>`
   },
-  'com-select': function (el) {
+  'com-select': function(el) {
     const { tag, vModel, placeholder, disabled } = attrBuilder(el)
     return `<${tag} ${vModel} ${placeholder} ${disabled}></${tag}>`
   },
-  'dep-select': function (el) {
+  'dep-select': function(el) {
     const { tag, vModel, placeholder, disabled } = attrBuilder(el)
     return `<${tag} ${vModel} ${placeholder} ${disabled}></${tag}>`
   },
-  'pos-select': function (el) {
+  'pos-select': function(el) {
     const { tag, vModel, placeholder, disabled } = attrBuilder(el)
     const multiple = `:multiple="${el.multiple}"`
     return `<${tag} ${vModel} ${placeholder} ${multiple} ${disabled}></${tag}>`
   },
-  'user-select': function (el) {
+  'user-select': function(el) {
     const { tag, vModel, placeholder, disabled } = attrBuilder(el)
     const multiple = `:multiple="${el.multiple}"`
     return `<${tag} ${vModel} ${placeholder} ${multiple} ${disabled}></${tag}>`
   },
-  'dic-select': function (el) {
+  'dic-select': function(el) {
     const { tag, vModel, placeholder, disabled } = attrBuilder(el)
     return `<${tag} ${vModel} ${placeholder} ${disabled}></${tag}>`
   },
-  'JNPF-Address': function (el) {
+  'JNPF-Address': function(el) {
     const { tag, vModel, placeholder, disabled } = attrBuilder(el)
     const level = `:multiple="${el.level}"`
     return `<${tag} ${vModel} ${placeholder} ${level} ${disabled}></${tag}>`

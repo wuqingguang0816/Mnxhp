@@ -29,7 +29,7 @@
                 </el-select>
               </el-col>
               <el-col :span="8">
-                <template v-if="item.jnpfKey==='inputNumber'">
+                <template v-if="item.jnpfKey==='numInput'">
                   <el-input-number v-model="item.fieldValue" placeholder="请输入"
                     :precision="item.attr.precision" controls-position="right" style="width:100%" />
                 </template>
@@ -44,21 +44,20 @@
                 <div v-else-if="item.jnpfKey==='switch'" style="padding-top: 5px;">
                   <el-switch v-model="item.fieldValue" :active-value="1" :inactive-value="0" />
                 </div>
-                <template v-else-if="item.jnpfKey==='timePicker'">
+                <template v-else-if="item.jnpfKey==='time'">
                   <el-time-picker v-model="item.fieldValue" style="width:100%"
-                    :picker-options="item.attr.pickerOptions" placeholder="请选择" clearable
-                    :value-format="item.attr.valueFormat" :format="item.attr.format">
+                    :picker-options="item.attr['picker-options']" placeholder="请选择" clearable
+                    :value-format="item.attr['value-format']" :format="item.attr.format">
                   </el-time-picker>
                 </template>
-                <template
-                  v-else-if="['datePicker','createTime', 'modifyTime'].includes(item.jnpfKey)">
+                <template v-else-if="['date','createTime', 'modifyTime'].includes(item.jnpfKey)">
                   <el-date-picker v-model="item.fieldValue" clearable placeholder="请选择"
-                    :type="item.jnpfKey==='datePicker'&&item.attr.type?item.attr.type:'datetime'"
+                    :type="item.jnpfKey==='date'&&item.attr.type?item.attr.type:'datetime'"
                     value-format="timestamp" style="width:100%"
                     :format="item.attr.format||'yyyy-MM-dd HH:mm:ss'">
                   </el-date-picker>
                 </template>
-                <template v-else-if="['organizeSelect','currOrganize'].includes(item.jnpfKey)">
+                <template v-else-if="['comSelect','currOrganize'].includes(item.jnpfKey)">
                   <comSelect v-model="item.fieldValue" placeholder="请选择" clearable />
                 </template>
                 <template v-else-if="['depSelect'].includes(item.jnpfKey)">
@@ -93,26 +92,26 @@
                 <template v-else-if="item.jnpfKey==='roleSelect'">
                   <roleSelect v-model="item.fieldValue" placeholder="请选择" clearable />
                 </template>
-                <template v-else-if="item.jnpfKey==='areaSelect'">
+                <template v-else-if="item.jnpfKey==='address'">
                   <JNPFAddress v-model="item.fieldValue" placeholder="请选择" :level="item.attr.level"
                     clearable :key="item.cellKey" />
                 </template>
                 <template v-else-if="['select','radio','checkbox'].includes(item.jnpfKey)">
                   <el-select v-model="item.fieldValue" placeholder="请选择" clearable filterable>
-                    <el-option :label="oItem[item.attr.props.label]"
-                      v-for="(oItem, i) in item.attr.options" :value="oItem[item.attr.props.value]"
-                      :key="i"></el-option>
+                    <el-option :label="oItem[item.attr.__config__.props.label]"
+                      v-for="(oItem, i) in item.attr.__slot__.options"
+                      :value="oItem[item.attr.__config__.props.value]" :key="i"></el-option>
                   </el-select>
                 </template>
                 <template v-else-if="item.jnpfKey==='cascader'">
                   <el-cascader v-model="item.fieldValue" :options="item.attr.options" clearable
-                    :showAllLevels="item.attr['showAllLevels']" :props="item.attr.props" filterable
-                    placeholder="请选择" style="width:100%">
+                    :show-all-levels="item.attr['show-all-levels']" :props="item.attr.props.props"
+                    filterable placeholder="请选择" style="width:100%">
                   </el-cascader>
                 </template>
                 <template v-else-if="item.jnpfKey==='treeSelect'">
                   <JNPF-TreeSelect v-model="item.fieldValue" placeholder="请选择"
-                    :options="item.attr.options" :props="item.attr.props" clearable />
+                    :options="item.attr.options" :props="item.attr.props.props" clearable />
                 </template>
                 <template v-else-if="item.jnpfKey==='relationForm'">
                   <relationForm v-model="item.fieldValue" placeholder="请选择"
@@ -287,12 +286,13 @@ export default {
     buildOptions(componentList) {
       componentList.forEach(cur => {
         const config = cur.__config__
-        if (config.jnpfKey === 'cascader') cur.props.multiple = false
+        if (config.jnpfKey === 'cascader') cur.props.props.multiple = false
         if (dyOptionsList.indexOf(config.jnpfKey) > -1) {
+          let isTreeSelect = config.jnpfKey === 'treeSelect' || config.jnpfKey === 'cascader'
           if (config.dataType === 'dictionary') {
             if (!config.dictionaryType) return
             getDictionaryDataSelector(config.dictionaryType).then(res => {
-              cur.options = res.data.list
+              isTreeSelect ? cur.options = res.data.list : cur.__slot__.options = res.data.list
             })
           }
           if (config.dataType === 'dynamic') {
@@ -300,9 +300,9 @@ export default {
             getDataInterfaceRes(config.propsUrl).then(res => {
               let data = res.data
               if (Array.isArray(data)) {
-                cur.options = data
+                isTreeSelect ? cur.options = data : cur.__slot__.options = data
               } else {
-                cur.options = []
+                isTreeSelect ? cur.options = [] : cur.__slot__.options = []
               }
             })
           }
@@ -327,13 +327,14 @@ export default {
       let obj = this.columnOptions.filter(o => o.__vModel__ == val)[0]
       item.jnpfKey = obj.__config__.jnpfKey
       item.attr = obj
-      if (item.jnpfKey === 'cascader') item.attr.props.multiple = false
+      if (item.jnpfKey === 'cascader') item.attr.props.props.multiple = false
       let config = item.attr.__config__
       if (dyOptionsList.indexOf(config.jnpfKey) > -1) {
+        let isTreeSelect = config.jnpfKey === 'treeSelect' || config.jnpfKey === 'cascader'
         if (config.dataType === 'dictionary') {
           if (!config.dictionaryType) return
           getDictionaryDataSelector(config.dictionaryType).then(res => {
-            item.attr.options = res.data.list
+            isTreeSelect ? item.attr.options = res.data.list : item.attr.__slot__.options = res.data.list
           })
         }
         if (config.dataType === 'dynamic') {
@@ -341,9 +342,9 @@ export default {
           getDataInterfaceRes(config.propsUrl).then(res => {
             let data = res.data
             if (Array.isArray(data)) {
-              item.attr.options = data
+              isTreeSelect ? item.attr.options = data : item.attr.__slot__.options = data
             } else {
-              item.attr.options = []
+              isTreeSelect ? item.attr.options = [] : item.attr.__slot__.options = []
             }
           })
         }
@@ -428,9 +429,9 @@ export default {
     },
     getDataType(jnpfKey) {
       if (!jnpfKey) return ''
-      if (['inputNumber', 'datePicker', 'rate', 'slider'].includes(jnpfKey)) {
+      if (['numInput', 'date', 'rate', 'slider'].includes(jnpfKey)) {
         return 'number'
-      } else if (['uploadFile', 'uploadImg', 'cascader', 'organizeSelect', 'areaSelect'].includes(jnpfKey)) {
+      } else if (['uploadFz', 'uploadImg', 'cascader', 'comSelect', 'address'].includes(jnpfKey)) {
         return 'array'
       }
       return ''

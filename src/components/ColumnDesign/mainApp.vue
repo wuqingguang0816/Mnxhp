@@ -21,7 +21,7 @@
           <el-table-column prop="searchType" label="类型">
             <template slot-scope="scope">
               <el-select v-model="scope.row.searchType" placeholder="请选择"
-                :disabled="scope.row.jnpfKey!=='input'&&scope.row.jnpfKey!=='textarea'">
+                :disabled="scope.row.jnpfKey!=='comInput'&&scope.row.jnpfKey!=='textarea'">
                 <el-option label="等于查询" :value="1"></el-option>
                 <el-option label="模糊查询" :value="2"></el-option>
                 <el-option label="范围查询" :value="3"></el-option>
@@ -31,7 +31,7 @@
           <el-table-column prop='searchMultiple' label="是否多选" align="center">
             <template slot-scope="scope">
               <el-checkbox v-model="scope.row.searchMultiple"
-                v-if="['select','depSelect','roleSelect','userSelect','usersSelect','organizeSelect','posSelect','groupSelect'].includes(scope.row.jnpfKey)">
+                v-if="['select','depSelect','roleSelect','userSelect','usersSelect','comSelect','posSelect','groupSelect'].includes(scope.row.jnpfKey)">
               </el-checkbox>
               <el-checkbox v-else disabled></el-checkbox>
             </template>
@@ -119,8 +119,9 @@
                 <el-button style="width: 100%;" @click="filterPanelShow">{{ ruleListBtn }}
                 </el-button>
               </el-form-item>
-              <Condition ref="conditionpane" :modelType="modelType" :columnData="columnData"
-                @ruleConfig="ruleConfig">
+              <Condition ref="conditionpane" 
+              :modelType="modelType"
+              :columnData="columnData" @ruleConfig="ruleConfig">
               </Condition>
               <el-form-item label="排序类型">
                 <el-select v-model="columnData.sort" placeholder="请选择排序类型">
@@ -233,7 +234,7 @@ import { noColumnShowList, noSearchList, useInputList, useDateList } from '@/com
 import { getFields } from '@/api/onlineDev/visualDev'
 const getSearchMultiple = item => {
   const jnpfKey = item.__config__.jnpfKey
-  const searchMultipleList = ['select', 'depSelect', 'roleSelect', 'userSelect', 'usersSelect', 'organizeSelect', 'posSelect', 'groupSelect']
+  const searchMultipleList = ['select', 'depSelect', 'roleSelect', 'userSelect', 'usersSelect', 'comSelect', 'posSelect', 'groupSelect']
   if (searchMultipleList.includes(jnpfKey)) return true
   return false
 }
@@ -241,7 +242,7 @@ const getSearchType = item => {
   const jnpfKey = item.__config__.jnpfKey
   // 等于-1  模糊-2  范围-3
   const fuzzyList = [...useInputList]
-  const RangeList = [...useDateList, 'timePicker', 'datePicker', 'inputNumber', 'calculate']
+  const RangeList = [...useDateList, 'time', 'date', 'numInput', 'calculate']
   if (RangeList.includes(jnpfKey)) return 3
   if (fuzzyList.includes(jnpfKey)) return 2
   return 1
@@ -453,25 +454,25 @@ export default {
           prop: o,
           fixed: 'none',
           align: 'left',
-          jnpfKey: 'input',
+          jnpfKey: 'comInput',
           sortable: false,
           width: null,
           __vModel__: o,
           __config__: {
-            jnpfKey: 'input',
+            jnpfKey: 'comInput',
           }
         }));
         this.searchOptions = fieldsList.map(o => ({
           label: "",
           prop: o,
-          jnpfKey: 'input',
+          jnpfKey: 'comInput',
           value: '',
           searchType: 1,
           __vModel__: o,
           searchMultiple: false,
           __config__: {
             label: "",
-            jnpfKey: 'input',
+            jnpfKey: 'comInput',
           }
         }));
         this.sortOptions = fieldsList.map(o => ({
@@ -482,11 +483,11 @@ export default {
         this.groupFieldOptions = fieldsList.map(o => ({
           label: o,
           prop: o,
-          jnpfKey: 'input',
+          jnpfKey: 'comInput',
           __vModel__: o,
           __config__: {
             label: o,
-            jnpfKey: 'input',
+            jnpfKey: 'comInput',
           }
         }));
         if (!this.columnOptions.length) this.columnData.columnList = []

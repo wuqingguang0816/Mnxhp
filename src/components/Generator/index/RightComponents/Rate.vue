@@ -5,7 +5,7 @@
     </el-form-item>
     <el-form-item label="默认值">
       <el-rate v-model="activeData.__config__.defaultValue" :max="activeData.max"
-        :allow-half="activeData.allowHalf"></el-rate>
+        :allow-half="activeData['allow-half']"></el-rate>
       <a @click="activeData.__config__.defaultValue=0">清空</a>
     </el-form-item>
     <el-form-item label="最大值">
@@ -15,13 +15,13 @@
       <el-switch v-model="activeData.__config__.showLabel" />
     </el-form-item> -->
     <el-form-item label="允许半选">
-      <el-switch v-model="activeData.allowHalf" />
+      <el-switch v-model="activeData['allow-half']" />
     </el-form-item>
     <el-form-item label="辅助文字" v-show="showType==='pc'">
-      <el-switch v-model="activeData.showText" @change="rateTextChange" />
+      <el-switch v-model="activeData['show-text']" @change="rateTextChange" />
     </el-form-item>
     <el-form-item label="显示分数" v-show="showType==='pc'">
-      <el-switch v-model="activeData.showScore" @change="rateScoreChange" />
+      <el-switch v-model="activeData['show-score']" @change="rateScoreChange" />
     </el-form-item>
     <el-form-item label="是否禁用">
       <el-switch v-model="activeData.disabled" />
@@ -42,10 +42,10 @@ export default {
   created() { },
   methods: {
     rateTextChange(val) {
-      if (val) this.activeData.showScore = false
+      if (val) this.activeData['show-score'] = false
     },
     rateScoreChange(val) {
-      if (val) this.activeData.showText = false
+      if (val) this.activeData['show-text'] = false
     },
   }
 }

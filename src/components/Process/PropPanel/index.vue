@@ -54,7 +54,7 @@
                 :value="item.value" />
             </el-select>
             <div v-if="item.fieldValueType===2">
-              <template v-if="item.jnpfKey==='inputNumber'">
+              <template v-if="item.jnpfKey==='numInput'">
                 <el-input-number v-model="item.fieldValue" placeholder="请输入"
                   :precision="item.precision" controls-position="right" />
               </template>
@@ -69,21 +69,20 @@
               <template v-else-if="item.jnpfKey==='switch'">
                 <el-switch v-model="item.fieldValue" :active-value="1" :inactive-value="0" />
               </template>
-              <template v-else-if="item.jnpfKey==='timePicker'">
-                <el-time-picker v-model="item.fieldValue" :picker-options="item.pickerOptions"
-                  placeholder="请选择" clearable :value-format="item.valueFormat"
+              <template v-else-if="item.jnpfKey==='time'">
+                <el-time-picker v-model="item.fieldValue" :picker-options="item['picker-options']"
+                  placeholder="请选择" clearable :value-format="item['value-format']"
                   :format="item.format">
                 </el-time-picker>
               </template>
-              <template
-                v-else-if="['datePicker','createTime', 'modifyTime'].includes(item.jnpfKey)">
+              <template v-else-if="['date','createTime', 'modifyTime'].includes(item.jnpfKey)">
                 <el-date-picker v-model="item.fieldValue" clearable placeholder="请选择"
-                  :type="item.jnpfKey==='datePicker'&& item.type?item.type:'datetime'"
+                  :type="item.jnpfKey==='date'&& item.type?item.type:'datetime'"
                   value-format="timestamp" @change="onConditionDateChange($event,item)"
                   :format="item.format||'yyyy-MM-dd HH:mm:ss'">
                 </el-date-picker>
               </template>
-              <template v-else-if="['organizeSelect','currOrganize'].includes(item.jnpfKey)">
+              <template v-else-if="['comSelect','currOrganize'].includes(item.jnpfKey)">
                 <comSelect v-model="item.fieldValue" placeholder="请选择" clearable
                   @change="onConditionListChange(arguments,item)" />
               </template>
@@ -103,7 +102,7 @@
                 <posSelect v-model="item.fieldValue" placeholder="请选择" clearable
                   @change="onConditionObjChange(arguments,item)" />
               </template>
-              <template v-else-if="item.jnpfKey==='areaSelect'">
+              <template v-else-if="item.jnpfKey==='address'">
                 <JNPFAddress v-model="item.fieldValue" placeholder="请选择" :level="item.level"
                   clearable @change="onConditionListChange(arguments,item)" />
               </template>
@@ -580,7 +579,7 @@
             <el-table :data="formOperatesList" class="JNPF-common-table" size="mini" height="100%">
               <el-table-column prop="name" label="表单字段" align="left"></el-table-column>
               <el-table-column width="80">
-                <template slot="header">
+                <template slot="header" slot-scope="scope">
                   <el-checkbox @change="updateReadAllSelected($event,1)"
                     :indeterminate="indeterminateReadFlag" v-model="readAllChecked">查看</el-checkbox>
                 </template>
@@ -590,7 +589,7 @@
                 </template>
               </el-table-column>
               <el-table-column width="80">
-                <template slot="header">
+                <template slot="header" slot-scope="scope">
                   <el-checkbox @change="updateReadAllSelected($event,2)"
                     :indeterminate="indeterminateWriteFlag"
                     v-model="writeAllChecked">编辑</el-checkbox>
@@ -601,7 +600,7 @@
                 </template>
               </el-table-column>
               <el-table-column width="80">
-                <template slot="header">
+                <template slot="header" slot-scope="scope">
                   <el-checkbox @change="updateReadAllSelected($event,3)"
                     :indeterminate="indeterminateRequiredFlag"
                     v-model="requiredAllChecked">编辑</el-checkbox>
@@ -1630,7 +1629,7 @@
             <el-table :data="formOperatesList" class="JNPF-common-table" size="mini" height="100%">
               <el-table-column prop="name" label="表单字段" align="left"></el-table-column>
               <el-table-column width="80">
-                <template slot="header">
+                <template slot="header" slot-scope="scope">
                   <el-checkbox @change="updateReadAllSelected($event,1)"
                     :indeterminate="indeterminateReadFlag" v-model="readAllChecked">查看</el-checkbox>
                 </template>
@@ -1640,7 +1639,7 @@
                 </template>
               </el-table-column>
               <el-table-column width="80">
-                <template slot="header">
+                <template slot="header" slot-scope="scope">
                   <el-checkbox @change="updateReadAllSelected($event,2)"
                     :indeterminate="indeterminateWriteFlag"
                     v-model="writeAllChecked">编辑</el-checkbox>
@@ -1651,7 +1650,7 @@
                 </template>
               </el-table-column>
               <el-table-column width="80">
-                <template slot="header">
+                <template slot="header" slot-scope="scope">
                   <el-checkbox @change="updateReadAllSelected($event,3)"
                     :indeterminate="indeterminateRequiredFlag"
                     v-model="requiredAllChecked">编辑</el-checkbox>
@@ -2430,9 +2429,9 @@ const requiredDisabled = (jnpfKey) => {
 const getDataType = (data) => {
   if (!data.__config__ || !data.__config__.jnpfKey) return ''
   const jnpfKey = data.__config__.jnpfKey
-  if (['inputNumber', 'datePicker', 'rate', 'slider'].includes(jnpfKey)) {
+  if (['numInput', 'date', 'rate', 'slider'].includes(jnpfKey)) {
     return 'number'
-  } else if (['checkbox', 'uploadFile', 'uploadImg', 'cascader', 'organizeSelect', 'areaSelect'].includes(jnpfKey)) {
+  } else if (['checkbox', 'uploadFz', 'uploadImg', 'cascader', 'comSelect', 'address'].includes(jnpfKey)) {
     return 'array'
   } else if (['select', 'depSelect', 'posSelect', 'userSelect', 'treeSelect', 'roleSelect', 'groupSelect'].includes(jnpfKey)) {
     if (data.multiple) return 'array'
@@ -3001,7 +3000,7 @@ export default {
         value: '@launchTime(发起时间)'
       }]
       let items = []
-      items = this.usedFormItems.filter(o => o.__config__.jnpfKey === 'input' || o.__config__.jnpfKey === 'textarea' || o.__config__.jnpfKey === 'inputNumber')
+      items = this.usedFormItems.filter(o => o.__config__.jnpfKey === 'comInput' || o.__config__.jnpfKey === 'textarea' || o.__config__.jnpfKey === 'numInput')
       const params = items.map(o => ({ id: o.__vModel__, value: o.__vModel__ + "(" + o.__config__.label + ")" }))
 
       cb([...systemParams, ...params]);

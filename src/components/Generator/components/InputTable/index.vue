@@ -4,7 +4,7 @@
       <h2>{{ config.__config__.label }}</h2>
     </div>
     <el-table :data="tableFormData" class="JNPF-common-table" @cell-click="focusInput"
-      v-bind="config.tableConf || {}" :show-summary="config.showSummary"
+      v-bind="config.tableConf || {}" :show-summary="config['show-summary']"
       :summary-method="getTableSummaries" size="mini" ref="formTable">
       <el-table-column width="50" align="center" label="序号">
         <!-- 序号 -->
@@ -32,22 +32,23 @@
                 @blur="onFormBlur(scope.$index, cIndex, 'el-select')"
                 @change="onFormDataChange(scope.$index, cIndex, 'el-select',arguments)">
                 <el-option v-for="(opt,oIndex) in tableFormData[scope.$index][cIndex].options"
-                  :key="oIndex" :label="opt[head.props.label]" :value="opt[head.props.value]">
+                  :key="oIndex" :label="opt[head.__config__.props.label]"
+                  :value="opt[head.__config__.props.value]">
                 </el-option>
               </el-select>
             </template>
             <!-- 单行输入 -->
-            <template v-else-if="head.__config__.jnpfKey==='input'">
+            <template v-else-if="head.__config__.jnpfKey==='comInput'">
               <el-input v-model="tableFormData[scope.$index][cIndex].value"
                 v-bind="getConfById(head.__config__.formId,scope.$index)" :rowIndex="scope.$index"
                 @blur="onFormBlur(scope.$index, cIndex, 'el-input')"
                 @change="onFormDataChange(scope.$index, cIndex, 'el-input',arguments)">
                 <template v-if="head.__slot__">
-                  <template slot="prepend" v-if="head.addonBefore">
-                    {{ head.addonBefore }}
+                  <template slot="prepend" v-if="head.__slot__.prepend">
+                    {{ head.__slot__.prepend }}
                   </template>
-                  <template slot="append" v-if="head.addonAfter">
-                    {{ head.addonAfter }}
+                  <template slot="append" v-if="head.__slot__.append">
+                    {{ head.__slot__.append }}
                   </template>
                 </template>
               </el-input>
@@ -55,16 +56,16 @@
             <!-- 下拉树形 -->
             <template v-else-if="head.__config__.jnpfKey==='treeSelect'">
               <JNPF-TreeSelect v-model="tableFormData[scope.$index][cIndex].value"
-                :options="tableFormData[scope.$index][cIndex].options" :props="head.props"
+                :options="tableFormData[scope.$index][cIndex].options" :props="head.props.props"
                 :placeholder="head.placeholder" :clearable="head.clearable"
                 :multiple="head.multiple" :filterable="head.filterable" :disabled="head.disabled" />
             </template>
             <!-- 级联选择 -->
             <template v-else-if="head.__config__.jnpfKey==='cascader'">
               <el-cascader v-model="tableFormData[scope.$index][cIndex].value"
-                :options="tableFormData[scope.$index][cIndex].options" :props="head.props"
+                :options="tableFormData[scope.$index][cIndex].options" :props="head.props.props"
                 :placeholder="head.placeholder" :clearable="head.clearable"
-                :showAllLevels="head['showAllLevels']" :separator="head.separator"
+                :show-all-levels="head['show-all-levels']" :separator="head.separator"
                 :filterable="head.filterable" :disabled="head.disabled" />
             </template>
             <!-- 其他 -->
@@ -158,10 +159,11 @@ export default {
       this.tableData.forEach(cur => {
         const config = cur.__config__
         if (dyOptionsList.indexOf(config.jnpfKey) > -1) {
+          let isTreeSelect = config.jnpfKey === 'treeSelect' || config.jnpfKey === 'cascader'
           if (config.dataType === 'dictionary') {
             if (!config.dictionaryType) return
             getDictionaryDataSelector(config.dictionaryType).then(res => {
-              cur.options = res.data.list
+              isTreeSelect ? cur.options = res.data.list : cur.__slot__.options = res.data.list
             })
           }
           if (config.dataType === 'dynamic') {
@@ -172,9 +174,9 @@ export default {
             getDataInterfaceRes(config.propsUrl, query).then(res => {
               let realData = res.data
               if (Array.isArray(realData)) {
-                cur.options = realData
+                isTreeSelect ? cur.options = realData : cur.__slot__.options = realData
               } else {
-                cur.options = []
+                isTreeSelect ? cur.options = [] : cur.__slot__.options = []
               }
             })
           }
@@ -357,7 +359,8 @@ export default {
       for (let i = 0; i < this.tableData.length; i++) {
         if (this.tableData[i].__vModel__ === prop) {
           let item = this.tableData[i]
-          res = item.options || []
+          let isTreeSelect = item.__config__.jnpfKey === 'treeSelect' || item.__config__.jnpfKey === 'cascader'
+          isTreeSelect ? res = item.options || [] : res = item.__slot__.options || []
           break
         }
       }
@@ -412,7 +415,7 @@ export default {
             let _value = []
             outer: for (let i = 0; i < params[0].length; i++) {
               inner: for (let j = 0; j < options.length; j++) {
-                if (params[0][i] === options[j][data.config.props.value]) {
+                if (params[0][i] === options[j][data.config.__config__.props.value]) {
                   _value.push(options[j])
                   break inner
                 }
@@ -422,14 +425,14 @@ export default {
           } else {
             let _value = {}
             for (let i = 0; i < options.length; i++) {
-              if (params[0] === options[i][data.config.props.value]) {
+              if (params[0] === options[i][data.config.__config__.props.value]) {
                 _value = options[i]
                 break
               }
             }
             value = _value
           }
-        } else if (data.jnpfKey === 'inputNumber') {
+        } else if (data.jnpfKey === 'numInput') {
           value = params[0]
         } else {
           value = params.length > 1 ? params[1] : params[0]
@@ -529,7 +532,8 @@ export default {
       return this.tableData.map((t, index) => {
         let options = []
         if (dyOptionsList.indexOf(t.__config__.jnpfKey) > -1) {
-          options = t.options
+          let isTreeSelect = t.__config__.jnpfKey === 'treeSelect' || t.__config__.jnpfKey === 'cascader'
+          options = isTreeSelect ? t.options : t.__slot__.options
         }
         let res = {
           tag: t.__config__.tag,

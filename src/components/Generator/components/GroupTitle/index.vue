@@ -9,7 +9,7 @@ export default {
       type: String,
       default: ''
     },
-    contentPosition: {
+    'content-position': {
       type: String,
       default: 'left'
     },

@@ -20,7 +20,7 @@
 import { createModel, updateModel, getModelInfo } from '@/api/onlineDev/visualDev'
 import Parser from '@/components/Generator/parser/Parser'
 import { deepClone } from '@/utils'
-import { mapGetters } from "vuex";
+import {mapGetters} from "vuex";
 export default {
   components: { Parser },
   data() {
@@ -87,10 +87,10 @@ export default {
           let item = list[i]
           if (item.__vModel__) {
             let val = data.hasOwnProperty(item.__vModel__) ? data[item.__vModel__] : item.__config__.defaultValue
-            if (item.__config__.jnpfKey === 'datePicker' && item.__config__.defaultCurrent == true) {
+            if(item.__config__.jnpfKey === 'date' && item.__config__.defaultCurrent == true) {
               val = new Date().getTime()
-            } else if (item.__config__.jnpfKey === 'organizeSelect' && item.__config__.defaultCurrent == true && this.userInfo.organizeIdList instanceof Array && this.userInfo.organizeIdList.length > 0) {
-              val = item.multiple == true ? [this.userInfo.organizeIdList] : this.userInfo.organizeIdList
+            }else if(item.__config__.jnpfKey === 'comSelect' && item.__config__.defaultCurrent == true && this.userInfo.organizeIdList instanceof Array && this.userInfo.organizeIdList.length > 0) {
+              val = item.multiple == true?[this.userInfo.organizeIdList]:this.userInfo.organizeIdList
             }
             if (!item.__config__.isSubTable) item.__config__.defaultValue = val
             if (!this.isPreview && this.useFormPermission) {

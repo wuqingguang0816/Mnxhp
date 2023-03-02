@@ -1,6 +1,6 @@
 // 表单属性【右面板】
 export const formConf = {
-  formRef: "formRef",
+  formRef: "elForm",
   formModel: "dataForm",
   size: "small",
   labelPosition: "right",
@@ -43,11 +43,11 @@ export const formConf = {
 export const inputComponents = [
   {
     __config__: {
-      jnpfKey: "input",
+      jnpfKey: "comInput",
       label: "单行输入",
       labelWidth: undefined,
       showLabel: true,
-      tag: "JnpfInput",
+      tag: "el-input",
       tagIcon: "icon-ym icon-ym-generator-input",
       className: [],
       defaultValue: undefined,
@@ -62,22 +62,24 @@ export const inputComponents = [
       regList: [],
       trigger: "blur"
     },
+    __slot__: {
+      prepend: "",
+      append: ""
+    },
     on: {
       change:
         "({ data, formData, setFormData, setShowOrHide, setRequired, setDisabled, request }) => {\n    // 在此编写代码\n    \n}",
       blur:
         "({ data, formData, setFormData, setShowOrHide, setRequired, setDisabled, request }) => {\n    // 在此编写代码\n    \n}"
     },
-    addonBefore: "",
-    addonAfter: "",
     placeholder: "请输入",
     style: { width: "100%" },
     clearable: true,
-    prefixIcon: "",
-    suffixIcon: "",
+    "prefix-icon": "",
+    "suffix-icon": "",
     maxlength: null,
-    showWordLimit: false,
-    showPassword: false,
+    "show-word-limit": false,
+    "show-password": false,
     readonly: false,
     disabled: false
   },
@@ -87,7 +89,7 @@ export const inputComponents = [
       label: "多行输入",
       labelWidth: undefined,
       showLabel: true,
-      tag: "JnpfTextarea",
+      tag: "el-input",
       tagIcon: "icon-ym icon-ym-generator-textarea",
       className: [],
       defaultValue: undefined,
@@ -106,6 +108,7 @@ export const inputComponents = [
       blur:
         "({ data, formData, setFormData, setShowOrHide, setRequired, setDisabled, request }) => {\n    // 在此编写代码\n    \n}"
     },
+    type: "textarea",
     placeholder: "请输入",
     autosize: {
       minRows: 4,
@@ -113,17 +116,17 @@ export const inputComponents = [
     },
     style: { width: "100%" },
     maxlength: null,
-    showWordLimit: false,
+    "show-word-limit": true,
     readonly: false,
     disabled: false
   },
   {
     __config__: {
-      jnpfKey: "inputNumber",
+      jnpfKey: "numInput",
       label: "数字输入",
       showLabel: true,
       labelWidth: undefined,
-      tag: "JnpfInputNumber",
+      tag: "el-input-number",
       tagIcon: "icon-ym icon-ym-generator-number",
       className: [],
       defaultValue: undefined,
@@ -143,13 +146,13 @@ export const inputComponents = [
         "({ data, formData, setFormData, setShowOrHide, setRequired, setDisabled, request }) => {\n    // 在此编写代码\n    \n}"
     },
     style: { width: null },
-    placeholder: "请输入",
+    placeholder: "数字文本",
     min: undefined,
     max: undefined,
     step: 1,
-    stepStrictly: false,
+    "step-strictly": false,
     precision: undefined,
-    controlsPosition: "",
+    "controls-position": "",
     disabled: false
   },
   {
@@ -158,7 +161,7 @@ export const inputComponents = [
       label: "开关",
       labelWidth: undefined,
       showLabel: true,
-      tag: "JnpfSwitch",
+      tag: "el-switch",
       tagIcon: "icon-ym icon-ym-generator-switch",
       className: [],
       defaultValue: false,
@@ -178,10 +181,10 @@ export const inputComponents = [
     disabled: false,
     activeTxt: "开",
     inactiveTxt: "关",
-    activeColor: null,
-    inactiveColor: null,
-    activeValue: 1,
-    inactiveValue: 0
+    "active-color": null,
+    "inactive-color": null,
+    "active-value": 1,
+    "inactive-value": 0
   },
   {
     __config__: {
@@ -189,7 +192,7 @@ export const inputComponents = [
       label: "单选框组",
       labelWidth: undefined,
       showLabel: true,
-      tag: "JnpfRadio",
+      tag: "el-radio-group",
       tagIcon: "icon-ym icon-ym-generator-radio",
       className: [],
       defaultValue: undefined,
@@ -201,32 +204,35 @@ export const inputComponents = [
       tableName: "",
       regList: [],
       trigger: "change",
+      optionType: "default",
+      border: false,
       dataType: "static",
       dictionaryType: "",
       propsUrl: "",
       propsName: "",
       templateJson: [],
-    },
-    options: [
-      {
-        fullName: "选项一",
-        id: "1"
-      },
-      {
-        fullName: "选项二",
-        id: "2"
+      props: {
+        label: "fullName",
+        value: "id"
       }
-    ],
-    props: {
-      label: "fullName",
-      value: "id"
+    },
+    __slot__: {
+      options: [
+        {
+          fullName: "选项一",
+          id: "1"
+        },
+        {
+          fullName: "选项二",
+          id: "2"
+        }
+      ]
     },
     on: {
       change:
         "({ data, formData, setFormData, setShowOrHide, setRequired, setDisabled, request }) => {\n    // 在此编写代码\n    \n}"
     },
-    optionType: "default",
-    border: false,
+    style: {},
     size: "small",
     disabled: false
   },
@@ -236,7 +242,7 @@ export const inputComponents = [
       label: "多选框组",
       labelWidth: undefined,
       showLabel: true,
-      tag: "JnpfCheckbox",
+      tag: "el-checkbox-group",
       tagIcon: "icon-ym icon-ym-generator-checkbox",
       className: [],
       defaultValue: [],
@@ -248,33 +254,35 @@ export const inputComponents = [
       tableName: "",
       regList: [],
       trigger: "change",
+      optionType: "default",
+      border: false,
       dataType: "static",
       dictionaryType: "",
       propsUrl: "",
       propsName: "",
       templateJson: [],
-    },
-    options: [
-      {
-        fullName: "选项一",
-        id: "1"
-      },
-      {
-        fullName: "选项二",
-        id: "2"
+      props: {
+        label: "fullName",
+        value: "id"
       }
-    ],
-    props: {
-      label: "fullName",
-      value: "id"
+    },
+    __slot__: {
+      options: [
+        {
+          fullName: "选项一",
+          id: "1"
+        },
+        {
+          fullName: "选项二",
+          id: "2"
+        }
+      ]
     },
     on: {
       change:
         "({ data, formData, setFormData, setShowOrHide, setRequired, setDisabled, request }) => {\n    // 在此编写代码\n    \n}"
     },
     style: {},
-    optionType: "default",
-    border: false,
     size: "small",
     disabled: false
   },
@@ -284,7 +292,7 @@ export const inputComponents = [
       label: "下拉选择",
       labelWidth: undefined,
       showLabel: true,
-      tag: "JnpfSelect",
+      tag: "el-select",
       tagIcon: "icon-ym icon-ym-generator-select",
       className: [],
       defaultValue: "",
@@ -301,20 +309,22 @@ export const inputComponents = [
       propsUrl: "",
       propsName: "",
       templateJson: [],
-    },
-    options: [
-      {
-        fullName: "选项一",
-        id: "1"
-      },
-      {
-        fullName: "选项二",
-        id: "2"
+      props: {
+        label: "fullName",
+        value: "id"
       }
-    ],
-    props: {
-      label: "fullName",
-      value: "id"
+    },
+    __slot__: {
+      options: [
+        {
+          fullName: "选项一",
+          id: "1"
+        },
+        {
+          fullName: "选项二",
+          id: "2"
+        }
+      ]
     },
     on: {
       change:
@@ -333,7 +343,7 @@ export const inputComponents = [
       label: "级联选择",
       labelWidth: undefined,
       showLabel: true,
-      tag: "JnpfCascader",
+      tag: "el-cascader",
       tagIcon: "icon-ym icon-ym-generator-cascader",
       className: [],
       defaultValue: [],
@@ -372,12 +382,14 @@ export const inputComponents = [
     placeholder: "请选择",
     style: { width: "100%" },
     props: {
-      multiple: false,
-      value: "id",
-      label: "fullName",
-      children: "children"
+      props: {
+        multiple: false,
+        value: "id",
+        label: "fullName",
+        children: "children"
+      }
     },
-    showAllLevels: true,
+    "show-all-levels": true,
     disabled: false,
     clearable: true,
     filterable: false,
@@ -385,11 +397,11 @@ export const inputComponents = [
   },
   {
     __config__: {
-      jnpfKey: "datePicker",
+      jnpfKey: "date",
       label: "日期选择",
       labelWidth: undefined,
       showLabel: true,
-      tag: "JnpfDatePicker",
+      tag: "el-date-picker",
       tagIcon: "icon-ym icon-ym-generator-date",
       className: [],
       defaultValue: null,
@@ -415,16 +427,16 @@ export const inputComponents = [
     disabled: false,
     clearable: true,
     format: "yyyy-MM-dd",
-    valueFormat: "timestamp",
+    "value-format": "timestamp",
     readonly: false
   },
   {
     __config__: {
-      jnpfKey: "timePicker",
+      jnpfKey: "time",
       label: "时间选择",
       labelWidth: undefined,
       showLabel: true,
-      tag: "JnpfTimePicker",
+      tag: "el-time-picker",
       tagIcon: "icon-ym icon-ym-generator-time",
       className: [],
       defaultValue: null,
@@ -448,19 +460,19 @@ export const inputComponents = [
     disabled: false,
     clearable: true,
     readonly: false,
-    pickerOptions: {
+    "picker-options": {
       selectableRange: "00:00:00-23:59:59"
     },
     format: "HH:mm:ss",
-    valueFormat: "HH:mm:ss"
+    "value-format": "HH:mm:ss"
   },
   {
     __config__: {
-      jnpfKey: "uploadFile",
+      jnpfKey: "uploadFz",
       label: "文件上传",
       labelWidth: undefined,
       showLabel: true,
-      tag: "JnpfUploadFile",
+      tag: "JNPF-UploadFz",
       tagIcon: "icon-ym icon-ym-generator-upload",
       className: [],
       defaultValue: [],
@@ -494,7 +506,7 @@ export const inputComponents = [
       label: "图片上传",
       labelWidth: undefined,
       showLabel: true,
-      tag: "JnpfUploadImg",
+      tag: "JNPF-UploadImg",
       tagIcon: "icon-ym icon-ym-generator-upload",
       className: [],
       defaultValue: [],
@@ -527,7 +539,7 @@ export const inputComponents = [
       label: "颜色选择",
       labelWidth: undefined,
       showLabel: true,
-      tag: "JnpfColorPicker",
+      tag: "el-color-picker",
       tagIcon: "icon-ym icon-ym-generator-color",
       className: [],
       defaultValue: null,
@@ -540,8 +552,8 @@ export const inputComponents = [
       regList: [],
       trigger: "change"
     },
-    showAlpha: false,
-    colorFormat: '',
+    "show-alpha": false,
+    "color-format": "",
     disabled: false,
     size: "small"
   },
@@ -551,7 +563,7 @@ export const inputComponents = [
       label: "评分",
       labelWidth: undefined,
       showLabel: true,
-      tag: "JnpfRate",
+      tag: "el-rate",
       tagIcon: "icon-ym icon-ym-generator-rate",
       className: [],
       defaultValue: 0,
@@ -570,9 +582,9 @@ export const inputComponents = [
     },
     style: {},
     max: 5,
-    allowHalf: false,
-    showText: false,
-    showScore: false,
+    "allow-half": false,
+    "show-text": false,
+    "show-score": false,
     disabled: false
   },
   {
@@ -581,7 +593,7 @@ export const inputComponents = [
       label: "滑块",
       labelWidth: undefined,
       showLabel: true,
-      tag: "JnpfSlider",
+      tag: "el-slider",
       tagIcon: "icon-ym icon-ym-generator-slider",
       className: [],
       defaultValue: undefined,
@@ -603,7 +615,7 @@ export const inputComponents = [
     min: 0,
     max: 100,
     step: 1,
-    showStops: false,
+    "show-stops": false,
     range: false
   },
   {
@@ -612,7 +624,7 @@ export const inputComponents = [
       label: "富文本",
       labelWidth: undefined,
       showLabel: true,
-      tag: "JnpfEditor",
+      tag: "JNPF-Quill",
       tagIcon: "icon-ym icon-ym-generator-rich-text",
       className: [],
       defaultValue: null,
@@ -660,7 +672,7 @@ export const inputComponents = [
       label: "按钮",
       labelWidth: undefined,
       showLabel: false,
-      tag: "JnpfButton",
+      tag: "jnpf-button",
       tagIcon: "icon-ym icon-ym-generator-button",
       className: [],
       defaultValue: null,
@@ -683,14 +695,14 @@ export const inputComponents = [
   },
   {
     __config__: {
-      jnpfKey: "text",
+      jnpfKey: "JNPFText",
       label: "文本",
       labelWidth: undefined,
       showLabel: false,
-      tag: "JnpfText",
+      tag: "JNPF-Text",
       tagIcon: "icon-ym icon-ym-generator-textarea",
       className: [],
-      defaultValue: undefined,
+      defaultValue: "这是一段文字",
       required: false,
       layout: "colFormItem",
       span: 24,
@@ -705,8 +717,7 @@ export const inputComponents = [
       "text-decoration": "none",
       "line-height": 32,
       "font-size": 12
-    },
-    content: '这是一段文字',
+    }
   },
   {
     __config__: {
@@ -714,7 +725,7 @@ export const inputComponents = [
       label: "提示",
       labelWidth: undefined,
       showLabel: false,
-      tag: "JnpfAlert",
+      tag: "el-alert",
       tagIcon: "icon-ym icon-ym-generator-alert",
       className: [],
       required: false,
@@ -725,7 +736,7 @@ export const inputComponents = [
     },
     title: '这是一个提示',
     type: "success",
-    showIcon: false,
+    "show-icon": false,
     closable: false
   },
 ];
@@ -734,11 +745,11 @@ export const inputComponents = [
 export const selectComponents = [
   {
     __config__: {
-      jnpfKey: "organizeSelect",
+      jnpfKey: "comSelect",
       label: "组织选择",
       labelWidth: undefined,
       showLabel: true,
-      tag: "JnpfOrganizeSelect",
+      tag: "com-select",
       tagIcon: "icon-ym icon-ym-generator-company",
       className: [],
       defaultValue: [],
@@ -769,7 +780,7 @@ export const selectComponents = [
       label: "部门选择",
       labelWidth: undefined,
       showLabel: true,
-      tag: "JnpfDepSelect",
+      tag: "dep-select",
       tagIcon: "icon-ym icon-ym-generator-department",
       className: [],
       defaultValue: null,
@@ -802,7 +813,7 @@ export const selectComponents = [
       label: "岗位选择",
       labelWidth: undefined,
       showLabel: true,
-      tag: "JnpfPosSelect",
+      tag: "pos-select",
       tagIcon: "icon-ym icon-ym-generator-jobs",
       className: [],
       defaultValue: null,
@@ -835,7 +846,7 @@ export const selectComponents = [
       label: "用户选择",
       labelWidth: undefined,
       showLabel: true,
-      tag: "JnpfUserSelect",
+      tag: "user-select",
       tagIcon: "icon-ym icon-ym-generator-user",
       className: [],
       defaultValue: null,
@@ -874,7 +885,7 @@ export const selectComponents = [
       label: "角色选择",
       labelWidth: undefined,
       showLabel: true,
-      tag: "JnpfRoleSelect",
+      tag: "roleSelect",
       tagIcon: "icon-ym icon-ym-generator-role",
       className: [],
       defaultValue: null,
@@ -903,7 +914,7 @@ export const selectComponents = [
       label: "分组选择",
       labelWidth: undefined,
       showLabel: true,
-      tag: "JnpfGroupSelect",
+      tag: "groupSelect",
       tagIcon: "icon-ym icon-ym-generator-group1",
       className: [],
       defaultValue: '',
@@ -933,7 +944,7 @@ export const selectComponents = [
       label: "用户组件",
       labelWidth: undefined,
       showLabel: true,
-      tag: "JnpfUsersSelect",
+      tag: "users-select",
       tagIcon: "icon-ym icon-ym-generator-founder",
       defaultValue: null,
       required: false,
@@ -963,7 +974,7 @@ export const selectComponents = [
       showLabel: false,
       tagIcon: "icon-ym icon-ym-generator-table",
       className: [],
-      tag: "JnpfInputTable",
+      tag: "JNPF-InputTable",
       defaultValue: [],
       layout: "rowFormItem",
       dragDisabled: false,
@@ -976,7 +987,7 @@ export const selectComponents = [
     },
     disabled: false,
     actionText: "添加",
-    showSummary: false,
+    "show-summary": false,
     addType: 0,
     addTableConf: {
       popupTitle: '选择数据',
@@ -1000,7 +1011,7 @@ export const selectComponents = [
       label: "下拉树形",
       labelWidth: undefined,
       showLabel: true,
-      tag: "JnpfTreeSelect",
+      tag: "JNPFTreeSelect",
       tagIcon: "icon-ym icon-ym-generator-tree",
       className: [],
       defaultValue: null,
@@ -1025,9 +1036,11 @@ export const selectComponents = [
     style: { width: "100%" },
     placeholder: "请选择",
     props: {
-      value: "id",
-      label: "fullName",
-      children: "children"
+      props: {
+        value: "id",
+        label: "fullName",
+        children: "children"
+      }
     },
     options: [
       {
@@ -1053,7 +1066,7 @@ export const selectComponents = [
       labelWidth: undefined,
       showLabel: true,
       required: false,
-      tag: "JnpfPopupTableSelect",
+      tag: "popupTableSelect",
       tagIcon: "icon-ym icon-ym-generator-popupTableSelect",
       className: [],
       defaultValue: "",
@@ -1089,11 +1102,11 @@ export const selectComponents = [
   },
   {
     __config__: {
-      jnpfKey: "areaSelect",
+      jnpfKey: "address",
       label: "省市区域",
       labelWidth: undefined,
       showLabel: true,
-      tag: "JnpfAreaSelect",
+      tag: "JNPF-Address",
       tagIcon: "icon-ym icon-ym-generator-Provinces",
       className: [],
       defaultValue: [],
@@ -1124,7 +1137,7 @@ export const selectComponents = [
       label: "单据组件",
       labelWidth: undefined,
       showLabel: true,
-      tag: "JnpfInput",
+      tag: "el-input",
       tagIcon: "icon-ym icon-ym-generator-documents",
       className: [],
       defaultValue: null,
@@ -1149,7 +1162,7 @@ export const selectComponents = [
       label: "关联表单",
       labelWidth: undefined,
       showLabel: true,
-      tag: "JnpfRelationForm",
+      tag: "relationForm",
       tagIcon: "icon-ym icon-ym-generator-menu",
       className: [],
       defaultValue: "",
@@ -1187,7 +1200,7 @@ export const selectComponents = [
       labelWidth: undefined,
       showLabel: true,
       required: false,
-      tag: "JnpfPopupSelect",
+      tag: "popupSelect",
       tagIcon: "icon-ym icon-ym-generator-popup",
       className: [],
       defaultValue: "",
@@ -1225,7 +1238,7 @@ export const selectComponents = [
       label: "关联表单属性",
       labelWidth: undefined,
       showLabel: true,
-      tag: "JnpfRelationFormAttr",
+      tag: "relationFormAttr",
       tagIcon: "icon-ym icon-ym-generator-nature",
       className: [],
       defaultValue: "",
@@ -1233,12 +1246,12 @@ export const selectComponents = [
       layout: "colFormItem",
       span: 24,
       dragDisabled: false,
+      isStorage: 1,
       visibility: ["pc", "app"]
     },
     style: { width: "100%" },
     showField: "",
-    relationField: "",
-    isStorage: 0,
+    relationField: ""
   },
   {
     __config__: {
@@ -1246,7 +1259,7 @@ export const selectComponents = [
       label: "弹窗选择属性",
       labelWidth: undefined,
       showLabel: true,
-      tag: "JnpfPopupAttr",
+      tag: "popupAttr",
       tagIcon: "icon-ym icon-ym-generator-popup-attr",
       className: [],
       defaultValue: "",
@@ -1254,12 +1267,12 @@ export const selectComponents = [
       layout: "colFormItem",
       span: 24,
       dragDisabled: false,
+      isStorage: 1,
       visibility: ["pc", "app"]
     },
     style: { width: "100%" },
     showField: "",
-    relationField: "",
-    isStorage: 0,
+    relationField: ""
   },
 ];
 
@@ -1271,7 +1284,7 @@ export const systemComponents = [
       label: "创建人员",
       labelWidth: undefined,
       showLabel: true,
-      tag: "JnpfOpenData",
+      tag: "jnpf-open-data",
       tagIcon: "icon-ym icon-ym-generator-founder",
       className: [],
       defaultValue: "",
@@ -1294,7 +1307,7 @@ export const systemComponents = [
       label: "创建时间",
       labelWidth: undefined,
       showLabel: true,
-      tag: "JnpfOpenData",
+      tag: "jnpf-open-data",
       tagIcon: "icon-ym icon-ym-generator-createtime",
       className: [],
       defaultValue: "",
@@ -1317,7 +1330,7 @@ export const systemComponents = [
       label: "修改人员",
       labelWidth: undefined,
       showLabel: true,
-      tag: "JnpfInput",
+      tag: "el-input",
       tagIcon: "icon-ym icon-ym-generator-modifier",
       className: [],
       defaultValue: "",
@@ -1339,7 +1352,7 @@ export const systemComponents = [
       label: "修改时间",
       labelWidth: undefined,
       showLabel: true,
-      tag: "JnpfInput",
+      tag: "el-input",
       tagIcon: "icon-ym icon-ym-generator-modifytime",
       className: [],
       defaultValue: "",
@@ -1361,7 +1374,7 @@ export const systemComponents = [
       label: "所属组织",
       labelWidth: undefined,
       showLabel: true,
-      tag: "JnpfOpenData",
+      tag: "jnpf-open-data",
       tagIcon: "icon-ym icon-ym-generator-company",
       className: [],
       defaultValue: "",
@@ -1385,7 +1398,7 @@ export const systemComponents = [
       label: "所属岗位",
       labelWidth: undefined,
       showLabel: true,
-      tag: "JnpfOpenData",
+      tag: "jnpf-open-data",
       tagIcon: "icon-ym icon-ym-generator-station",
       className: [],
       defaultValue: "",
@@ -1412,7 +1425,7 @@ export const layoutComponents = [
       label: "分组标题",
       labelWidth: undefined,
       showLabel: false,
-      tag: "JnpfGroupTitle",
+      tag: "groupTitle",
       tagIcon: "icon-ym icon-ym-generator-group",
       className: [],
       defaultValue: null,
@@ -1423,7 +1436,7 @@ export const layoutComponents = [
       visibility: ["pc", "app"]
     },
     content: "分组标题",
-    contentPosition: 'left'
+    "content-position": "left"
   },
   {
     __config__: {
@@ -1431,7 +1444,7 @@ export const layoutComponents = [
       label: "分割线",
       labelWidth: undefined,
       showLabel: false,
-      tag: "JnpfDivider",
+      tag: "el-divider",
       tagIcon: "icon-ym icon-ym-generator-divider",
       className: [],
       defaultValue: null,
@@ -1441,8 +1454,10 @@ export const layoutComponents = [
       dragDisabled: false,
       visibility: ["pc", "app"]
     },
-    content: '我是分割线',
-    contentPosition: 'center'
+    __slot__: {
+      default: "我是分割线"
+    },
+    "content-position": "center"
   },
   {
     __config__: {
@@ -1517,7 +1532,7 @@ export const layoutComponents = [
         "({ data, formData, setFormData, setShowOrHide, setRequired, setDisabled, request }) => {\n    // 在此编写代码\n    \n}"
     },
     type: "",
-    tabPosition: 'top',
+    "tab-position": "top"
   },
   {
     __config__: {

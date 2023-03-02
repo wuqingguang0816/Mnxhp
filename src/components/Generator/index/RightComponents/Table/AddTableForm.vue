@@ -139,7 +139,7 @@ export default {
   },
   computed: {
     formFieldsOptions() {
-      const noAllowList = ['table', 'uploadImg', 'uploadFile', 'modifyUser', 'modifyTime']
+      const noAllowList = ['table', 'uploadImg', 'uploadFz', 'modifyUser', 'modifyTime']
       let list = []
       const loop = (data, parent) => {
         if (!data) return

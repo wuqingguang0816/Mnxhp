@@ -4,7 +4,7 @@
     width="950px" :modal-append-to-body="false" v-on="$listeners" @open="onOpen" @close="onClose">
     <div slot="title" class="icon-dialog-title">
       图标选择
-      <el-input v-model="keyword" placeholder="请输入图标名称" prefixIcon="el-icon-search" clearable />
+      <el-input v-model="keyword" placeholder="请输入图标名称" prefix-icon="el-icon-search" clearable />
     </div>
     <el-tabs class="JNPF-el_tabs" v-model="activeName">
       <el-tab-pane label="ymIcon 图标">

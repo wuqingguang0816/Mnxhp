@@ -8,7 +8,7 @@
       </el-radio-group>
     </el-form-item>
     <el-form-item label="选项卡位置" v-show="showType==='pc'">
-      <el-radio-group v-model="activeData.tabPosition">
+      <el-radio-group v-model="activeData['tab-position']">
         <el-radio-button label="top">顶部</el-radio-button>
         <el-radio-button label="left">左侧</el-radio-button>
         <el-radio-button label="right">右侧</el-radio-button>

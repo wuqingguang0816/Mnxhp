@@ -5,15 +5,15 @@
     </el-form-item>
     <el-form-item label="默认值">
       <el-color-picker v-model="activeData.__config__.defaultValue"
-        :color-format="activeData.colorFormat" :key="renderKey" :show-alpha="showAlpha">
+        :color-format="activeData['color-format']" :key="renderKey" :show-alpha="showAlpha">
       </el-color-picker>
     </el-form-item>
     <!-- <el-form-item label="显示标签">
       <el-switch v-model="activeData.__config__.showLabel" />
     </el-form-item> -->
     <el-form-item label="颜色格式">
-      <el-select v-model="activeData.colorFormat" placeholder="请选择颜色格式" :style="{ width: '100%' }"
-        clearable @change="colorFormatChange">
+      <el-select v-model="activeData['color-format']" placeholder="请选择颜色格式"
+        :style="{ width: '100%' }" clearable @change="colorFormatChange">
         <el-option v-for="(item, index) in colorFormatOptions" :key="index" :label="item.label"
           :value="item.value" />
       </el-select>
@@ -70,7 +70,7 @@ export default {
   methods: {
     colorFormatChange(val) {
       this.activeData.__config__.defaultValue = null
-      this.activeData.showAlpha = val.indexOf('a') > -1
+      this.activeData['show-alpha'] = val.indexOf('a') > -1
       this.activeData.__config__.renderKey = +new Date() // 更新renderKey,重新渲染该组件
       this.showAlpha = val.indexOf('a') > -1
       this.renderKey = +new Date()

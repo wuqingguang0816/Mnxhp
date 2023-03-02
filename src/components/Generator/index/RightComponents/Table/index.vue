@@ -13,13 +13,13 @@
       <el-button style="width: 100%;" @click="editConf()">配置表单</el-button>
     </el-form-item>
     <el-form-item label="合计设置">
-      <el-switch v-model="activeData.showSummary" />
+      <el-switch v-model="activeData['show-summary']" />
     </el-form-item>
-    <el-form-item label="合计字段" v-if="activeData.showSummary">
+    <el-form-item label="合计字段" v-if="activeData['show-summary']">
       <el-select v-model="activeData.summaryField" multiple placeholder="请选择合计字段">
         <template v-for="(item,i) in activeData.__config__.children">
           <el-option :key="i" :label="item.__config__.label" :value="item.__vModel__"
-            v-if="['input','inputNumber','calculate'].includes(item.__config__.jnpfKey) && item.__vModel__" />
+            v-if="['comInput','numInput','calculate'].includes(item.__config__.jnpfKey) && item.__vModel__" />
         </template>
       </el-select>
     </el-form-item>

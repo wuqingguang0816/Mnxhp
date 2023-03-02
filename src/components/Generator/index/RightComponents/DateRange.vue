@@ -11,7 +11,7 @@
     </el-form-item>
     <el-form-item label="默认值">
       <el-date-picker v-model="activeData.__config__.defaultValue" :type="activeData.type"
-        :value-format="activeData.valueFormat" :format="activeData.format" range-separator="至"
+        :value-format="activeData['value-format']" :format="activeData.format" range-separator="至"
         start-placeholder="开始日期" end-placeholder="结束日期">
       </el-date-picker>
     </el-form-item>

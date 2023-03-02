@@ -11,7 +11,7 @@
     </el-form-item>
     <el-form-item label="默认值">
       <el-time-picker v-model="activeData.__config__.defaultValue" start-placeholder="开始时间"
-        end-placeholder="结束时间" clearable :value-format="activeData.valueFormat"
+        end-placeholder="结束时间" clearable :value-format="activeData['value-format']"
         :format="activeData.format" is-range range-separator="至">
       </el-time-picker>
     </el-form-item>

@@ -40,7 +40,7 @@
 
 <script>
 import { noVModelList, systemComponentsList } from '@/components/Generator/generator/comConfig'
-const excludeList = [...noVModelList, 'uploadFile', 'uploadImg', 'colorPicker', 'popupTableSelect', 'relationForm', 'popupSelect', 'calculate', 'groupTitle']
+const excludeList = [...noVModelList, 'uploadFz', 'uploadImg', 'colorPicker', 'popupTableSelect', 'relationForm', 'popupSelect', 'calculate', 'groupTitle']
 export default {
   props: ['value'],
   data() {

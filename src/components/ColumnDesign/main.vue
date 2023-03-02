@@ -21,7 +21,7 @@
           <el-table-column prop="searchType" label="类型">
             <template slot-scope="scope">
               <el-select v-model="scope.row.searchType" placeholder="请选择"
-                :disabled="scope.row.jnpfKey!=='input'&&scope.row.jnpfKey!=='textarea'">
+                :disabled="scope.row.jnpfKey!=='comInput'&&scope.row.jnpfKey!=='textarea'">
                 <el-option label="等于查询" :value="1"></el-option>
                 <el-option label="模糊查询" :value="2"></el-option>
                 <el-option label="范围查询" :value="3"></el-option>
@@ -31,7 +31,7 @@
           <el-table-column prop='searchMultiple' label="是否多选" align="center">
             <template slot-scope="scope">
               <el-checkbox v-model="scope.row.searchMultiple"
-                v-if="['select','depSelect','roleSelect','userSelect','usersSelect','organizeSelect','posSelect','groupSelect'].includes(scope.row.jnpfKey)">
+                v-if="['select','depSelect','roleSelect','userSelect','usersSelect','comSelect','posSelect','groupSelect'].includes(scope.row.jnpfKey)">
               </el-checkbox>
               <el-checkbox v-else disabled></el-checkbox>
             </template>
@@ -278,7 +278,7 @@
                     multiple>
                     <template v-for="(item,i) in groupFieldOptions">
                       <el-option :key="i" :label="item.__config__.label" :value="item.__vModel__"
-                        v-if="['input','inputNumber','calculate'].includes(item.__config__.jnpfKey)" />
+                        v-if="['comInput','numInput','calculate'].includes(item.__config__.jnpfKey)" />
                     </template>
                   </el-select>
                 </el-form-item>
@@ -306,14 +306,13 @@
                 <el-form-item label="" label-width="104px">
                   <JNPF-TreeSelect key="sel" :options="printTplList" v-model="columnData.printIds"
                     multiple placeholder="请选择打印模板" lastLevel clearable node-key="id">
-                    <div style="padding:10px 0;text-align:center" class="printWrap" slot="header">
-                      <el-link type="primary" :underline="false" @click="openPrint">添加打印模板
-                      </el-link>
-                      <el-link type="info" style="position: absolute;right:8px;top: 18px;"
-                        @click="refreshPrintOptions" :underline="false">
-                        <i class="el-icon-refresh el-icon--right"></i></el-link>
-                      <el-divider style="margin: 10px;!important 0;"></el-divider>
-                    </div>
+                    <div style="padding:10px 0;text-align:center" class="printWrap" slot="header" >
+                    <el-link type="primary" :underline="false" @click="openPrint">添加打印模板
+                    </el-link>
+                    <el-link type="info" style="position: absolute;right:8px;top: 18px;" @click="refreshPrintOptions" :underline="false">
+                     <i class="el-icon-refresh el-icon--right"></i></el-link>
+                    <el-divider style="margin: 10px;!important 0;"></el-divider>
+                  </div>
                   </JNPF-TreeSelect>
                 </el-form-item>
               </template>
@@ -411,10 +410,10 @@ import { noColumnShowList, noSearchList, useInputList, useDateList } from '@/com
 import { getDataInterfaceSelector } from '@/api/systemData/dataInterface'
 import { noVModelList, systemComponentsList } from '@/components/Generator/generator/comConfig'
 import { getFields } from '@/api/onlineDev/visualDev'
-const excludeList = [...noVModelList, 'uploadFile', 'uploadImg', 'colorPicker', 'popupTableSelect', 'relationForm', 'popupSelect', 'calculate', 'groupTitle']
+const excludeList = [...noVModelList, 'uploadFz', 'uploadImg', 'colorPicker', 'popupTableSelect', 'relationForm', 'popupSelect', 'calculate', 'groupTitle']
 const getSearchMultiple = item => {
   const jnpfKey = item.__config__.jnpfKey
-  const searchMultipleList = ['select', 'depSelect', 'roleSelect', 'userSelect', 'usersSelect', 'organizeSelect', 'posSelect', 'groupSelect']
+  const searchMultipleList = ['select', 'depSelect', 'roleSelect', 'userSelect', 'usersSelect', 'comSelect', 'posSelect', 'groupSelect']
   if (searchMultipleList.includes(jnpfKey)) return true
   return false
 }
@@ -422,7 +421,7 @@ const getSearchType = item => {
   const jnpfKey = item.__config__.jnpfKey
   // 等于-1  模糊-2  范围-3
   const fuzzyList = [...useInputList]
-  const RangeList = [...useDateList, 'timePicker', 'datePicker', 'inputNumber', 'calculate']
+  const RangeList = [...useDateList, 'time', 'date', 'numInput', 'calculate']
   if (RangeList.includes(jnpfKey)) return 3
   if (fuzzyList.includes(jnpfKey)) return 2
   return 1
@@ -706,35 +705,35 @@ export default {
           prop: o,
           fixed: 'none',
           align: 'left',
-          jnpfKey: 'input',
+          jnpfKey: 'comInput',
           sortable: false,
           width: null,
           __vModel__: o,
           __config__: {
-            jnpfKey: 'input',
+            jnpfKey: 'comInput',
           }
         }));
         this.searchOptions = fieldsList.map(o => ({
           label: "",
           prop: o,
-          jnpfKey: 'input',
+          jnpfKey: 'comInput',
           value: '',
           searchType: 1,
           __vModel__: o,
           searchMultiple: false,
           __config__: {
             label: "",
-            jnpfKey: 'input',
+            jnpfKey: 'comInput',
           }
         }));
         this.groupFieldOptions = fieldsList.map(o => ({
           label: o,
           prop: o,
-          jnpfKey: 'input',
+          jnpfKey: 'comInput',
           __vModel__: o,
           __config__: {
             label: o,
-            jnpfKey: 'input',
+            jnpfKey: 'comInput',
           }
         }));
         if (!this.columnOptions.length) this.columnData.columnList = []
@@ -759,7 +758,7 @@ export default {
     })
   },
   methods: {
-    refreshPrintOptions() {
+    refreshPrintOptions(){
       getPrintDevSelector(2).then(res => {
         let data = res.data.list
 
@@ -866,10 +865,10 @@ export default {
       * 供父组件使用 获取列表JSON
     */
     getData() {
-      if (this.btnsList.includes('batchPrint') && this.columnData.printIds.length === 0) {
+      if(this.btnsList.includes('batchPrint') && this.columnData.printIds.length === 0){
         return this.$message.warning('打印模板不能为空')
       }
-      if (!this.columnData.printIds) return this.$message.warning('打印模板不能为空')
+      if(!this.columnData.printIds) return this.$message.warning('打印模板不能为空')
       if (!this.columnData.columnList.length) return this.$message.warning('列表字段不允许为空')
       if (!this.columnData.uploaderTemplateJson.selectKey && this.btnsList.indexOf('upload') != -1) return this.$message.warning('请设置导入模板')
       if (this.columnData.type == 2) {
@@ -1024,9 +1023,9 @@ export default {
 <style lang="scss" scoped>
 @import './index.scss';
 
-.printWrap {
-  .el-divider--horizontal {
-    margin: 10px 0 !important;
+.printWrap{
+  .el-divider--horizontal{
+    margin: 10px 0!important;
   }
 }
 </style>

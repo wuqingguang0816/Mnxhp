@@ -62,7 +62,7 @@ function buildAttributes(scheme, dataList, ruleList, optionsList, methodList, pr
   }
 
   // 处理props
-  if (scheme.props && scheme.props) {
+  if (scheme.props && scheme.props.props) {
     buildProps(scheme, propsList)
   }
 
@@ -168,14 +168,14 @@ function buildOptions(scheme, optionsList) {
   if (scheme.__vModel__ === undefined) return
   // el-cascader直接有options属性，其他组件都是定义在slot中，所以有两处判断
   let { options } = scheme
-  if (!options) options = scheme.options
+  if (!options) options = scheme.__slot__.options
   if (scheme.__config__.dataType === 'dynamic') { options = [] }
   const str = `${scheme.__vModel__}Options: ${JSON.stringify(options)},`
   optionsList.push(str)
 }
 
 function buildProps(scheme, propsList) {
-  const str = `${scheme.__vModel__}Props: ${JSON.stringify(scheme.props)},`
+  const str = `${scheme.__vModel__}Props: ${JSON.stringify(scheme.props.props)},`
   propsList.push(str)
 }
 

@@ -53,10 +53,10 @@ export default {
               width: '100%'
             },
             clearable: true,
-            'prefixIcon': 'el-icon-mobile',
-            'suffixIcon': '',
+            'prefix-icon': 'el-icon-mobile',
+            'suffix-icon': '',
             maxlength: 11,
-            'showWordLimit': true,
+            'show-word-limit': true,
             readonly: false,
             disabled: false
           },
@@ -220,10 +220,10 @@ export default {
               width: '100%'
             },
             clearable: true,
-            'prefixIcon': 'el-icon-mobile',
-            'suffixIcon': '',
+            'prefix-icon': 'el-icon-mobile',
+            'suffix-icon': '',
             maxlength: 11,
-            'showWordLimit': true,
+            'show-word-limit': true,
             readonly: false,
             disabled: false
           },

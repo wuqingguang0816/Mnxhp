@@ -117,7 +117,7 @@ import { createModel, updateModel, getModelInfo } from '@/api/onlineDev/visualDe
 import Parser from '@/components/Generator/parser/Parser'
 import PrintBrowse from '@/components/PrintBrowse'
 import { deepClone } from '@/utils'
-import { mapGetters } from "vuex";
+import {mapGetters} from "vuex";
 
 export default {
   components: { Parser, PrintBrowse },
@@ -274,15 +274,15 @@ export default {
           if (item.__vModel__) {
             let val = data.hasOwnProperty(item.__vModel__) ? data[item.__vModel__] : item.__config__.defaultValue
             if (!item.__config__.isSubTable) item.__config__.defaultValue = val
-            if (flag == "add") {//新增时候，默认当前
-              if (item.__config__.jnpfKey === 'datePicker' && item.__config__.defaultCurrent == true) {
+            if(flag == "add") {//新增时候，默认当前
+              if(item.__config__.jnpfKey === 'date' && item.__config__.defaultCurrent == true) {
                 val = new Date().getTime()
                 item.__config__.defaultValue = val
-              } else if (item.__config__.jnpfKey === 'organizeSelect' && item.__config__.defaultCurrent == true && this.userInfo.organizeIdList instanceof Array && this.userInfo.organizeIdList.length > 0) {
-                val = item.multiple == true ? [this.userInfo.organizeIdList] : this.userInfo.organizeIdList
+              }else if(item.__config__.jnpfKey === 'comSelect' && item.__config__.defaultCurrent == true && this.userInfo.organizeIdList instanceof Array && this.userInfo.organizeIdList.length > 0) {
+                val = item.multiple == true?[this.userInfo.organizeIdList]:this.userInfo.organizeIdList
                 item.__config__.defaultValue = val
               }
-            } else {
+            }else{
 
             }
             if (!this.isPreview && this.useFormPermission) {

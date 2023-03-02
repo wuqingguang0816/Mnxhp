@@ -168,7 +168,7 @@ export default {
       if (this.config.webType == 4) {
         for (let i = 0; i < this.columnData.searchList.length; i++) {
           const element = this.columnData.searchList[i];
-          element.__config__.jnpfKey = 'input'
+          element.__config__.jnpfKey = 'comInput'
         }
       }
       if (this.columnData.type === 3) {

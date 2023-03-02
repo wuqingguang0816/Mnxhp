@@ -1,7 +1,7 @@
 <template>
   <el-row>
     <el-form-item label="文本内容">
-      <el-input v-model="activeData.content" placeholder="请输入文本内容" />
+      <el-input v-model="activeData.__config__.defaultValue" placeholder="请输入文本内容" />
     </el-form-item>
     <!-- <el-form-item label="显示标签">
       <el-switch v-model="activeData.__config__.showLabel" />
