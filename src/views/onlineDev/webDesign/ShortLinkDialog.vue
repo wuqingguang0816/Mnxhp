@@ -11,10 +11,12 @@
         <el-row class="form-use-row">
           <el-input v-model="dataForm.formLink" class="form-use-input float-left" readonly>
           </el-input>
-          <el-button @click="open(dataForm.formLink)" class="float-left">打开</el-button>
-          <el-button type="primary" @click="copy(dataForm.formLink,$event)" class="float-left">复制
-          </el-button>
-          <el-popover placement="bottom-end" width="180" trigger="hover">
+          <el-button-group class="btn-left">
+            <el-button @click="open(dataForm.formLink)">打开</el-button>
+            <el-button type="primary" @click="copy(dataForm.formLink,$event)">复制
+            </el-button>
+          </el-button-group>
+          <el-popover placement="bottom-end" width="180" trigger="hover" class="btn-left">
             <div class="qrcode">
               <p>扫描二维码，分享此链接</p>
               <div id="qrcode" ref="qrCode" style="display: inline-block;margin: 2px 0px;"></div>
@@ -36,11 +38,12 @@
           </el-col>
           <el-col :span="18">
             <el-input v-model="dataForm.formPassword" v-if="dataForm.formPassUse==1" type="password"
-              show-password maxlength="20">
+              style="width:200px" show-password maxlength="20">
             </el-input>
           </el-col>
         </el-row>
       </el-form-item>
+      <el-divider></el-divider>
       <el-form-item label="公开查询">
         <el-switch v-model="dataForm.columnUse" :active-value="1" :inactive-value="0">
         </el-switch>
@@ -50,10 +53,13 @@
         <el-row class="form-use-row">
           <el-input v-model="dataForm.columnLink" class="form-use-input float-left" readonly>
           </el-input>
-          <el-button @click="open(dataForm.columnLink)" class="float-left">打开</el-button>
-          <el-button type="primary" @click="copy(dataForm.columnLink,$event)" class="float-left">复制
-          </el-button>
-          <el-popover placement="bottom-end" width="180" trigger="hover">
+          <el-button-group class="btn-left">
+            <el-button @click="open(dataForm.columnLink)" class="float-left">打开</el-button>
+            <el-button type="primary" @click="copy(dataForm.columnLink,$event)"
+              class="float-left">复制
+            </el-button>
+          </el-button-group>
+          <el-popover placement="bottom-end" width="180" trigger="hover" class="btn-left">
             <div class="qrcode">
               <p>扫描二维码，分享此链接</p>
               <div id="qrcode2" ref="qrCode2" style="display: inline-block;margin: 2px 0px;">
@@ -85,7 +91,7 @@
             </el-col>
             <el-col :span="18">
               <el-input v-model="dataForm.columnPassword" v-if="dataForm.columnPassUse==1"
-                type="password" show-password maxlength="20">
+                style="width:200px" type="password" show-password maxlength="20">
               </el-input>
             </el-col>
           </el-row>
@@ -381,7 +387,7 @@ export default {
     align-items: center;
   }
   .form-use-input {
-    width: 500px;
+    width: 419px;
   }
 
   .form-use-icon {
@@ -399,5 +405,8 @@ export default {
 }
 >>> .el-form-item__error {
   margin-left: 50px;
+}
+.btn-left {
+  margin-left: 15px;
 }
 </style>
