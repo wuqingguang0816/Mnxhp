@@ -396,6 +396,7 @@
   </div>
 </template>
 <script>
+import { getPrintDevSelector } from '@/api/system/printDev'
 import Condition from './FlowCondition'
 import Sortable from 'sortablejs'
 import draggable from 'vuedraggable'
@@ -864,9 +865,9 @@ export default {
     */
     getData() {
       if(this.btnsList.includes('batchPrint') && this.columnData.printIds.length === 0){
-        return this.$message.warning('打印模板不能为空')
+        return this.$message.warning('请选择打印模板')
       }
-      if(!this.columnData.printIds) return this.$message.warning('打印模板不能为空')
+      if(!this.columnData.printIds) return this.$message.warning('请选择打印模板')
       if (!this.columnData.columnList.length) return this.$message.warning('列表字段不允许为空')
       if (!this.columnData.uploaderTemplateJson.selectKey && this.btnsList.indexOf('upload') != -1) return this.$message.warning('请设置导入模板')
       if (this.columnData.type == 2) {

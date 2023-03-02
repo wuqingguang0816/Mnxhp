@@ -2362,6 +2362,7 @@
   </el-drawer>
 </template>
 <script>
+import { getPrintDevSelector } from '@/api/system/printDev'
 import { getFlowFormInfo } from '@/api/workFlow/FlowEngine'
 import { getFormInfo } from '@/api/workFlow/FormDesign'
 import { NodeUtils } from "../FlowCard/util"
@@ -3033,7 +3034,7 @@ export default {
       }
 
       if(this.startForm.hasPrintBtn && !this.startForm.printId){
-        this.$message.warning('打印模板不能为空')
+        this.$message.warning('请选择打印模板')
         return this.value
       }
 
@@ -3166,7 +3167,7 @@ export default {
       }
       
       if(this.approverForm.hasPrintBtn && !this.approverForm.printId){
-        this.$message.warning('打印模板不能为空')
+        this.$message.warning('请选择打印模板')
         return this.value
       }
       const assigneeType = this.approverForm.assigneeType
