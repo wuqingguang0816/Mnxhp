@@ -128,7 +128,7 @@ export default {
       })
     },
     select() {
-      if (!this.checked) return
+      if (!this.checked) return this.$message.warning("请选择一条数据")
       this.$emit('input', this.checked)
       this.$emit('change', this.checkedRow)
       this.visible = false
@@ -169,6 +169,8 @@ export default {
             message: res.msg,
             duration: 1500,
             onClose: () => {
+              this.checked = ''
+              this.checkedRow = {}
               this.initData()
             }
           })
