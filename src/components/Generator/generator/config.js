@@ -126,7 +126,7 @@ export const inputComponents = [
       label: "数字输入",
       showLabel: true,
       labelWidth: undefined,
-      tag: "el-input-number",
+      tag: "JnpfInputNumber",
       tagIcon: "icon-ym icon-ym-generator-number",
       className: [],
       defaultValue: undefined,
@@ -152,7 +152,11 @@ export const inputComponents = [
     step: 1,
     "step-strictly": false,
     precision: undefined,
-    "controls-position": "",
+    controlsPosition: "",
+    addonBefore: null,
+    addonAfter: null,
+    thousands: false,
+    isAmountChinese: false,
     disabled: false
   },
   {

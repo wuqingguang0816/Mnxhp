@@ -17,26 +17,37 @@
     <el-form-item label="最大值">
       <el-input-number v-model="activeData.max" placeholder="最大值" controls-position="right" />
     </el-form-item>
-    <el-form-item label="步长">
-      <el-input-number v-model="activeData.step" placeholder="步数" :min="1"
-        controls-position="right" />
-    </el-form-item>
     <el-form-item label="精度">
       <el-input-number v-model="activeData.precision" :min="0" placeholder="精度"
         controls-position="right" />
     </el-form-item>
     <el-form-item label="按钮位置" v-show="showType==='pc'">
-      <el-radio-group v-model="activeData['controls-position']">
-        <el-radio-button label="">默认</el-radio-button>
+      <el-radio-group v-model="activeData.controlsPosition">
+        <el-radio-button label="">无</el-radio-button>
+        <el-radio-button label="bothSides">两边</el-radio-button>
         <el-radio-button label="right">右侧</el-radio-button>
       </el-radio-group>
     </el-form-item>
-    <!-- <el-form-item label="严格步数">
-      <el-switch v-model="activeData['step-strictly']" />
-    </el-form-item> -->
-    <!-- <el-form-item label="显示标签">
-      <el-switch v-model="activeData.__config__.showLabel" />
-    </el-form-item> -->
+    <template v-if="!activeData.controlsPosition">
+      <el-form-item label="前缀">
+        <el-input v-model="activeData.addonBefore" placeholder="请输入前缀" />
+      </el-form-item>
+      <el-form-item label="后缀">
+        <el-input v-model="activeData.addonAfter" placeholder="请输入后缀" />
+      </el-form-item>
+      <el-form-item label="千位符">
+        <el-switch v-model="activeData.thousands" />
+      </el-form-item>
+    </template>
+    <template v-else>
+      <el-form-item label="步长">
+        <el-input-number v-model="activeData.step" placeholder="步数" :min="1"
+          controls-position="right" />
+      </el-form-item>
+    </template>
+    <el-form-item label="大写金额">
+      <el-switch v-model="activeData.isAmountChinese" />
+    </el-form-item>
     <el-form-item label="是否禁用">
       <el-switch v-model="activeData.disabled" />
     </el-form-item>
