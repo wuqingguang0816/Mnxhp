@@ -419,6 +419,7 @@ export default {
         this.isComment = templateJson.properties.isComment
         this.isSummary = templateJson.properties.isSummary
         this.summaryType = templateJson.properties.summaryType
+        this.flowUrgent = data[0].flowTaskInfo.flowUrgent || 1
       }
     },
     subFlow(enCode) {
@@ -594,6 +595,7 @@ export default {
       subFlowInfo(data[0].id).then(res => {
         this.subFlowInfoList = res.data || []
         this.subFlowTab = this.subFlowInfoList[0].flowTaskInfo.id
+        this.flowUrgent = this.subFlowInfoList[0].flowTaskInfo.flowUrgent || 1
         this.fullName = this.subFlowInfoList[0].flowTaskInfo.fullName
         this.flowTaskOperatorRecordList = this.subFlowInfoList[0].flowTaskOperatorRecordList || []
         this.flowTaskOperatorRecordList = this.flowTaskOperatorRecordList.reverse()
