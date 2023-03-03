@@ -68,3 +68,11 @@ export const getMsgTemplate = data => {
     data
   })
 }
+// 公告列表
+export const getMsgSelector = data => {
+  return request({
+    url: '/api/message/SendMessageConfig/Selector',
+    method: 'GET',
+    data
+  })
+}

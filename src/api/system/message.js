@@ -99,3 +99,10 @@ export function relocation(id) {
     method: 'DELETE'
   })
 }
+//发送配置回写
+export function sendMessageConfig(id) {
+  return request({
+    url: `api/message/SendMessageConfig/${id}`,
+    method: 'get'
+  })
+}

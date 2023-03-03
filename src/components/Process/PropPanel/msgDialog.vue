@@ -9,7 +9,7 @@
           <i v-if="showClose" class="el-select__caret el-input__icon el-icon-circle-close"
             @click.stop="clear"></i>
         </template>
-        <el-button @click.stop="goMsgConfig()" slot="append">
+        <el-button @click.stop="goMsgConfig()" slot="append" v-if="type != 5">
           添加配置</el-button>
       </el-input>
     </div>
@@ -67,7 +67,7 @@
 </template>
 
 <script>
-import { getMsgTemplate } from '@/api/msgCenter/sendConfig'
+import { getMsgTemplate, getMsgSelector } from '@/api/msgCenter/sendConfig'
 export default {
   name: 'PopupSelect',
   props: {
@@ -75,6 +75,10 @@ export default {
       default: ''
     },
     title: {
+      type: String,
+      default: ''
+    },
+    type: {
       type: String,
       default: ''
     },
@@ -122,7 +126,8 @@ export default {
   methods: {
     initData() {
       this.listLoading = true
-      getMsgTemplate(this.listQuery).then(res => {
+      let method = this.type == 5 ? getMsgSelector : getMsgTemplate
+      method(this.listQuery).then(res => {
         this.list = res.data.list
         this.total = res.data.pagination.total
         this.listLoading = false

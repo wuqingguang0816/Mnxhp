@@ -33,13 +33,14 @@
           <el-table-column prop="title" label="标题" show-overflow-tooltip />
           <el-table-column prop="creatorTime" label="创建时间" :formatter="jnpf.tableDateFormat"
             width="120" />
+          <el-table-column prop="creatorUser" label="创建人员" width="120" />
           <el-table-column prop="releaseUser" label="发布人员" width="120" />
           <el-table-column prop="releaseTime" label="发布时间" :formatter="jnpf.tableDateFormat"
             width="120" />
           <el-table-column prop="enabledMark" label="状态" width="100" align="center">
             <template slot-scope="scope">
               <el-tag :type="scope.row.enabledMark==1?'success':'warning'" disable-transitions>
-                {{ scope.row.enabledMark==1?'已发送':'存草稿' }}
+                {{ scope.row.enabledMark==1?'已发送':scope.row.enabledMark==0?'存草稿':'已过期' }}
               </el-tag>
             </template>
           </el-table-column>

@@ -19,18 +19,18 @@
         </jnpf-form-tip-item>
         <el-row>
           <el-col :span="12">
-            <jnpf-form-tip-item label="分类" prop="classify">
-              <el-select v-model="dataForm.classify" placeholder="选择消息来源" clearable
+            <jnpf-form-tip-item label="分类" prop="category">
+              <el-select v-model="dataForm.category" placeholder="选择消息来源" clearable
                 :disabled="this.dataForm.id?true:false">
-                <el-option v-for="(item,index) in classifyList" :key="index" :label="item.fullName"
+                <el-option v-for="(item,index) in categoryList" :key="index" :label="item.fullName"
                   :value="item.enCode">
                 </el-option>
               </el-select>
             </jnpf-form-tip-item>
           </el-col>
           <el-col :span="12">
-            <jnpf-form-tip-item label="失效时间" prop="timeExpires" tipLabel='当前时间超过失效时间，状态更新已过期'>
-              <el-date-picker v-model="dataForm.timeExpires" type="date" placeholder="选择失效时间"
+            <jnpf-form-tip-item label="失效时间" prop="expirationTime" tipLabel='当前时间超过失效时间，状态更新已过期'>
+              <el-date-picker v-model="dataForm.expirationTime" type="datetime" placeholder="选择失效时间"
                 value-format="timestamp">
               </el-date-picker>
             </jnpf-form-tip-item>
@@ -39,11 +39,11 @@
         <jnpf-form-tip-item label="附件" prop="files">
           <JNPF-UploadFz v-model="files" />
         </jnpf-form-tip-item>
-        <jnpf-form-tip-item label="封面图片" prop="title" tipLabel='门户公告通知缩略图展示，无设置则系统默认图片'>
+        <jnpf-form-tip-item label="封面图片" prop="coverImage" tipLabel='门户公告通知缩略图展示，无设置则系统默认图片'>
           <el-upload class="avatar-uploader" :headers="uploadHeaders"
             :action="define.comUploadUrl+'/userAvatar'" :show-file-list="false"
             :on-success="handleAvatarSuccess" accept="image/*">
-            <img v-if="dataForm.headIcon" :src="define.comUrl+dataForm.headIcon" class="avatar">
+            <img v-if="dataForm.coverImage" :src="define.comUrl+dataForm.coverImage" class="avatar">
             <i v-else class="el-icon-plus avatar-uploader-icon" />
           </el-upload>
         </jnpf-form-tip-item>
@@ -52,19 +52,19 @@
         </jnpf-form-tip-item>
         <el-row>
           <el-col :span="12">
-            <jnpf-form-tip-item label="提醒方式" prop="remindWays">
-              <el-select v-model="dataForm.remindWays" placeholder="选择消息来源" clearable
+            <jnpf-form-tip-item label="提醒方式" prop="remindCategory">
+              <el-select v-model="dataForm.remindCategory" placeholder="选择消息来源" clearable
                 :disabled="this.dataForm.id?true:false">
-                <el-option v-for="(item,index) in remindWaysList" :key="index"
+                <el-option v-for="(item,index) in remindCategoryList" :key="index"
                   :label="item.fullName" :value="item.enCode">
                 </el-option>
               </el-select>
             </jnpf-form-tip-item>
           </el-col>
-          <el-col :span="12" v-if="dataForm.remindWays == 1">
-            <jnpf-form-tip-item label="发送配置" prop="sendConfigured">
-              <msg-dialog :value="dataForm.send" :title="dataForm.sendName" @change="onMsgChange"
-                :messageSource="3" />
+          <el-col :span="12" v-if="dataForm.remindCategory == 2">
+            <jnpf-form-tip-item label="发送配置" prop="sendConfigId">
+              <msg-dialog :value="dataForm.sendConfigId" :title="dataForm.sendConfigName"
+                @change="onMsgChange" :messageSource="5" type="5" :key="key" />
             </jnpf-form-tip-item>
           </el-col>
         </el-row>
@@ -74,8 +74,8 @@
 </template>
 
 <script>
-import { createNotice, updateNotice, getNoticeInfo } from '@/api/system/message'
-import MsgDialog from "@/components/VisualPortal/HSchedule/msgDialog";
+import { createNotice, updateNotice, getNoticeInfo, sendMessageConfig } from '@/api/system/message'
+import MsgDialog from "@/components/Process/PropPanel/msgDialog";
 export default {
   components: { MsgDialog },
   data() {
@@ -84,26 +84,31 @@ export default {
       visible: false,
       formLoading: false,
       btnLoading: false,
+      key: +new Date(),
       dataForm: {
         id: '',
         toUserIds: '',
         title: '',
         files: '',
         bodyText: '',
-        headIcon: '',
-        remindWays: 0,
-        classify: 0,
-        sendConfigured: 0,
-        timeExpires: null
+        coverImage: '',
+        remindCategory: 1,
+        category: 1,
+        sendConfigId: 0,
+        sendConfigName: '',
+        expirationTime: null
       },
       sendConfiguredList: [],
-      remindWaysList: [{ 'fullName': '站内信', 'enCode': 0 }, { 'fullName': '自定义', 'enCode': 1 }, { 'fullName': '不提醒', 'enCode': 2 }],
-      classifyList: [{ 'fullName': '公告', 'enCode': 0 }, { 'fullName': '通知', 'enCode': 1 }],
+      remindCategoryList: [{ 'fullName': '站内信', 'enCode': 1 }, { 'fullName': '自定义', 'enCode': 2 }, { 'fullName': '不提醒', 'enCode': 3 }],
+      categoryList: [{ 'fullName': '公告', 'enCode': 1 }, { 'fullName': '通知', 'enCode': 2 }],
       toUserIds: [],
       files: [],
       dataRule: {
         title: [
           { required: true, message: '公告标题不能为空', trigger: 'blur' }
+        ],
+        sendConfigId: [
+          { required: true, message: '发送配置不能为空', trigger: 'blur' }
         ]
       }
     }
@@ -120,29 +125,39 @@ export default {
       this.formLoading = true
       this.$nextTick(() => {
         this.$refs['dataForm'].resetFields()
+        if (this.remindCategory != 1 && !this.dataForm.id) this.dataForm.sendConfigName = ""
         if (this.dataForm.id) {
           getNoticeInfo(this.dataForm.id).then(res => {
             this.dataForm = res.data
             this.files = res.data.files ? JSON.parse(res.data.files) : []
             this.toUserIds = res.data.toUserIds ? res.data.toUserIds.split(',') : []
+            this.$nextTick(() => {
+              this.sendMessageConfig(this.dataForm.sendConfigId)
+            })
           })
         }
         this.formLoading = false
       })
     },
+    sendMessageConfig(id) {
+      sendMessageConfig(id).then(res => {
+        this.dataForm.sendConfigName = res.data.fullName
+        this.key = +new Date()
+      })
+    },
     onMsgChange(id, item) {
       if (!id) {
-        this.dataForm.send = ''
-        this.dataForm.sendName = ''
+        this.dataForm.sendConfigId = ''
+        this.dataForm.sendConfigName = ''
         return
       }
-      if (this.dataForm.send === id) return
-      this.dataForm.send = id
-      this.dataForm.sendName = item.fullName
+      if (this.dataForm.sendConfigId === id) return
+      this.dataForm.sendConfigId = id
+      this.dataForm.sendConfigName = item.fullName
     },
     handleAvatarSuccess(res) {
       if (res.code === 200 && res.data && res.data.url) {
-        this.dataForm.headIcon = res.data.url
+        this.dataForm.coverImage = res.data.url
       } else {
         this.$message.error('头像上传失败');
       }
@@ -154,6 +169,8 @@ export default {
           this.dataForm.files = JSON.stringify(this.files)
           this.dataForm.toUserIds = this.toUserIds.join(',')
           const formMethod = this.dataForm.id ? updateNotice : createNotice
+          this.visible = false
+          this.btnLoading = false
           formMethod(this.dataForm).then(res => {
             this.$message({
               message: res.msg,
