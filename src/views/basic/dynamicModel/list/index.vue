@@ -35,16 +35,16 @@
         <div class="JNPF-common-head">
           <div v-if="isPreview || !columnData.useBtnPermission">
             <span v-for="(item, i) in columnData.btnsList" :key="i" style="margin:0 4px;">
-                <el-button :type="i==0?'primary':'text'" :icon="item.icon"
-                  @click="headBtnsHandel(item.value)">
-                  {{item.label}}</el-button>
+              <el-button :type="i==0?'primary':'text'" :icon="item.icon"
+                @click="headBtnsHandel(item.value)">
+                {{item.label}}</el-button>
             </span>
           </div>
           <div v-else>
             <span v-for="(item, i) in columnData.btnsList" :key="i" style="margin:0 4px;">
-                <el-button :type="i==0?'primary':'text'" :icon="item.icon" v-has="'btn_'+item.value"
-                  @click="headBtnsHandel(item.value)">
-                  {{item.label}}</el-button>
+              <el-button :type="i==0?'primary':'text'" :icon="item.icon" v-has="'btn_'+item.value"
+                @click="headBtnsHandel(item.value)">
+                {{item.label}}</el-button>
             </span>
           </div>
           <div class="JNPF-common-head-right">
@@ -71,7 +71,7 @@
           </div>
         </div>
         <JNPF-table v-loading="listLoading" :data="list" row-key="id"
-          :default-expand-all="columnData.childTableStyle!==2&&columnData.treeLazyType==0?expandsTable:false"
+          :default-expand-all="columnData.childTableStyle!==2&&columnData.treeLazyType!=1?expandsTable:false"
           :lazy="columnData.type==5&&columnData.treeLazyType==1"
           :tree-props="{children: 'children', hasChildren: columnData.treeLazyType==1?'hasChildren':''}"
           :load="treeLoad" @sort-change="sortChange" :row-style="rowStyle" :cell-style="cellStyle"
@@ -311,8 +311,8 @@
               </template>
               <template v-else-if="item.jnpfKey==='relationForm'">
                 <el-table-column :prop="item.prop" :label="item.label" :align="item.align"
-                  :fixed="getFixed(item, i)"
-                  :width="item.width" :key="i" :sortable="item.sortable?'custom':item.sortable">
+                  :fixed="getFixed(item, i)" :width="item.width" :key="i"
+                  :sortable="item.sortable?'custom':item.sortable">
                   <template slot-scope="scope">
                     <el-link :underline="false"
                       @click.native="toDetail(item.modelId,scope.row[`${item.prop}_id`])"
@@ -467,7 +467,6 @@
       @submitCandidate="submitCandidate" :isCustomCopy="isCustomCopy" />
     <PrintDialog v-if="printDialogVisible" ref="printDialog" @change="printBrowseHandle">
     </PrintDialog>
-    
     <el-dialog title="请选择流程" :close-on-click-modal="false" append-to-body
       :visible.sync="flowListVisible" class="JNPF-dialog template-dialog JNPF-dialog_center"
       lock-scroll width="400px">
@@ -663,7 +662,7 @@ export default {
     printDialog() {
       this.printDialogVisible = true
       this.$nextTick(() => {
-        if(this.printListOptions.length==1){
+        if (this.printListOptions.length == 1) {
           this.printBrowseHandle(this.printListOptions[0].id)
           return
         }
@@ -1175,7 +1174,7 @@ export default {
         this.batchRemove()
       }
 
-      if(key === 'batchPrint'){
+      if (key === 'batchPrint') {
         if (!this.multipleSelection.length) {
           this.$message({
             type: 'error',
@@ -1489,10 +1488,9 @@ export default {
 }
 </script>
 <style scoped lang="scss">
-.JNPF-common-head{
-  >>> .el-button span{
-    margin-left: 0px!important;
+.JNPF-common-head {
+  >>> .el-button span {
+    margin-left: 0px !important;
   }
 }
-  
 </style>
