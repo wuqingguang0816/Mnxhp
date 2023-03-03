@@ -7,9 +7,15 @@
       <el-checkbox-group v-model="activeData.__config__.defaultValue" :min="activeData.min"
         :max="activeData.max">
         <el-checkbox :label="item[activeData.__config__.props.value]"
-          v-for="(item,i) in activeData.__slot__.options" :key="i">
+          v-for="(item,i) in activeData.options" :key="i">
           {{item[activeData.__config__.props.label]}}</el-checkbox>
       </el-checkbox-group>
+    </el-form-item>
+    <el-form-item label="排列方式">
+      <el-radio-group v-model="activeData.direction" size="small" style="text-align:center">
+        <el-radio-button label="horizontal">水平排列</el-radio-button>
+        <el-radio-button label="vertical">垂直排列</el-radio-button>
+      </el-radio-group>
     </el-form-item>
     <el-divider>数据选项</el-divider>
     <el-form-item label="" label-width="40px">
@@ -21,16 +27,15 @@
       </el-radio-group>
     </el-form-item>
     <template v-if="activeData.__config__.dataType==='static'">
-      <draggable :list="activeData.__slot__.options" :animation="340" group="selectItem"
+      <draggable :list="activeData.options" :animation="340" group="selectItem"
         handle=".option-drag">
-        <div v-for="(item, index) in activeData.__slot__.options" :key="index" class="select-item">
+        <div v-for="(item, index) in activeData.options" :key="index" class="select-item">
           <div class="select-line-icon option-drag">
             <i class="icon-ym icon-ym-darg" />
           </div>
           <el-input v-model="item.fullName" placeholder="选项名" size="small" />
           <el-input v-model="item.id" placeholder="选项值" size="small" />
-          <div class="close-btn select-line-icon"
-            @click="activeData.__slot__.options.splice(index, 1)">
+          <div class="close-btn select-line-icon" @click="activeData.options.splice(index, 1)">
             <i class="el-icon-remove-outline" />
           </div>
         </div>
@@ -102,16 +107,16 @@
     </el-form-item> -->
     <template v-if="showType==='pc'">
       <el-form-item label="选项样式">
-        <el-radio-group v-model="activeData.__config__.optionType">
+        <el-radio-group v-model="activeData.optionType">
           <el-radio-button label="default">默认</el-radio-button>
           <el-radio-button label="button">按钮</el-radio-button>
         </el-radio-group>
       </el-form-item>
-      <el-form-item v-if=" activeData.__config__.optionType === 'default'" label="是否边框">
-        <el-switch v-model="activeData.__config__.border" />
+      <el-form-item v-if=" activeData.optionType === 'default'" label="是否边框">
+        <el-switch v-model="activeData.border" />
       </el-form-item>
-      <el-form-item v-if="activeData.__config__.optionType === 'button' ||
-                activeData.__config__.border" label="组件尺寸">
+      <el-form-item v-if="activeData.optionType === 'button' ||
+                activeData.border" label="组件尺寸">
         <el-radio-group v-model="activeData.size">
           <el-radio-button label="medium">中等</el-radio-button>
           <el-radio-button label="small">较小</el-radio-button>

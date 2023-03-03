@@ -38,7 +38,10 @@ import GroupTitle from '@/components/Generator/components/GroupTitle'
 import RelationForm from '@/components/Generator/components/RelationForm'
 import RelationFormAttr from '@/components/Generator/components/RelationFormAttr'
 import Calculate from '@/components/Generator/components/Calculate'
-
+import JnpfInputNumber from '@/components/Generator/components/JnpfInputNumber'
+import JnpfDatePicker from '@/components/Generator/components/JnpfDatePicker'
+import JnpfRadio from '@/components/Generator/components/JnpfRadio'
+import JnpfCheckbox from '@/components/Generator/components/JnpfCheckbox'
 export default {
   install(Vue, options) {
     Vue.component('JNPFTreeSelect', JNPFTreeSelect)
@@ -80,5 +83,9 @@ export default {
     Vue.component('Screenfull', Screenfull)
     Vue.component('ColumnSettings', ColumnSettings)
     Vue.component('ImportBox', ImportBox)
+    Vue.component('JnpfInputNumber', JnpfInputNumber)
+    Vue.component('JnpfDatePicker', JnpfDatePicker)
+    Vue.component('JnpfRadio', JnpfRadio)
+    Vue.component('JnpfCheckbox', JnpfCheckbox)
   }
 }

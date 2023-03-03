@@ -192,7 +192,7 @@ export const inputComponents = [
       label: "单选框组",
       labelWidth: undefined,
       showLabel: true,
-      tag: "el-radio-group",
+      tag: "JnpfRadio",
       tagIcon: "icon-ym icon-ym-generator-radio",
       className: [],
       defaultValue: undefined,
@@ -204,8 +204,6 @@ export const inputComponents = [
       tableName: "",
       regList: [],
       trigger: "change",
-      optionType: "default",
-      border: false,
       dataType: "static",
       dictionaryType: "",
       propsUrl: "",
@@ -216,25 +214,26 @@ export const inputComponents = [
         value: "id"
       }
     },
-    __slot__: {
-      options: [
-        {
-          fullName: "选项一",
-          id: "1"
-        },
-        {
-          fullName: "选项二",
-          id: "2"
-        }
-      ]
-    },
     on: {
       change:
         "({ data, formData, setFormData, setShowOrHide, setRequired, setDisabled, request }) => {\n    // 在此编写代码\n    \n}"
     },
     style: {},
     size: "small",
-    disabled: false
+    disabled: false,
+    options: [
+      {
+        fullName: "选项一",
+        id: "1"
+      },
+      {
+        fullName: "选项二",
+        id: "2"
+      }
+    ],
+    direction: 'horizontal',
+    optionType: "default",
+    border: false,
   },
   {
     __config__: {
@@ -242,7 +241,7 @@ export const inputComponents = [
       label: "多选框组",
       labelWidth: undefined,
       showLabel: true,
-      tag: "el-checkbox-group",
+      tag: "JnpfCheckbox",
       tagIcon: "icon-ym icon-ym-generator-checkbox",
       className: [],
       defaultValue: [],
@@ -254,8 +253,6 @@ export const inputComponents = [
       tableName: "",
       regList: [],
       trigger: "change",
-      optionType: "default",
-      border: false,
       dataType: "static",
       dictionaryType: "",
       propsUrl: "",
@@ -266,24 +263,25 @@ export const inputComponents = [
         value: "id"
       }
     },
-    __slot__: {
-      options: [
-        {
-          fullName: "选项一",
-          id: "1"
-        },
-        {
-          fullName: "选项二",
-          id: "2"
-        }
-      ]
-    },
     on: {
       change:
         "({ data, formData, setFormData, setShowOrHide, setRequired, setDisabled, request }) => {\n    // 在此编写代码\n    \n}"
     },
     style: {},
     size: "small",
+    optionType: "default",
+    border: false,
+    options: [
+      {
+        fullName: "选项一",
+        id: "1"
+      },
+      {
+        fullName: "选项二",
+        id: "2"
+      }
+    ],
+    direction: 'horizontal',
     disabled: false
   },
   {
