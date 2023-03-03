@@ -4,7 +4,7 @@
       <el-input v-model="activeData.__config__.label" placeholder="请输入控件标题" />
     </el-form-item>
     <el-form-item label="上传提示">
-      <el-input v-model="activeData.promptText" placeholder="请输入上传提示" type="textarea" />
+      <el-input v-model="activeData.tipText" placeholder="请输入上传提示" type="textarea" />
     </el-form-item>
     <el-form-item label="文件大小">
       <el-input v-model.number="activeData.fileSize" placeholder="请输入文件大小">

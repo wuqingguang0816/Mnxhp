@@ -496,6 +496,7 @@ export const inputComponents = [
     pathType: "defaultPath",
     isAccount: 0,
     folder: "",
+    tipText:'',
     limit: 9
   },
   {
@@ -529,6 +530,7 @@ export const inputComponents = [
     pathType: "defaultPath",
     isAccount: 0,
     folder: "",
+    tipText:'',
     limit: 9
   },
   {

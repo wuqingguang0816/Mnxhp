@@ -7,7 +7,7 @@
       <el-input v-model="activeData.buttonText" placeholder="请输入按钮文字" />
     </el-form-item>
     <el-form-item label="上传提示">
-      <el-input v-model="activeData.promptText" placeholder="请输入上传提示" type="textarea" />
+      <el-input v-model="activeData.tipText" placeholder="请输入上传提示" type="textarea" />
     </el-form-item>
     <el-form-item label="文件类型">
       <el-select v-model="acceptArray" placeholder="不限制" clearable @change="onChange" multiple>
