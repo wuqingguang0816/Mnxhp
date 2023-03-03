@@ -12,7 +12,8 @@
           labelPosition="left">
           <template v-if="activeData.__config__">
             <template>
-              <el-form-item label="控件类型">
+              <el-form-item label="控件类型"
+                :label-width="activeData.__config__.jnpfKey==='card'?'76px':''">
                 <el-input :value="getCompName" disabled />
               </el-form-item>
             </template>
@@ -506,19 +507,20 @@
               <div class="per-cell" :class="{'last':!formConf.hasPrintBtn}">
                 <el-checkbox v-model="formConf.hasPrintBtn">打印
                   <el-tooltip content="启用流程后,操作按钮以流程节点为准" placement="top">
-                <a class="el-icon-warning-outline"></a>
-              </el-tooltip>
+                    <a class="el-icon-warning-outline"></a>
+                  </el-tooltip>
                 </el-checkbox>
                 <el-input v-model="formConf.printButtonText" />
               </div>
               <el-form-item label="" v-if="formConf.hasPrintBtn">
                 <JNPF-TreeSelect :options="printTplList" v-model="formConf.printId" multiple
                   placeholder="请选择打印模板" lastLevel clearable>
-                  <div style="padding:10px 0;text-align:center" slot="header" >
+                  <div style="padding:10px 0;text-align:center" slot="header">
                     <el-link type="primary" :underline="false" @click="openPrint">添加打印模板
                     </el-link>
-                    <el-link type="info" style="position: absolute;right:8px;top: 18px;" @click="refreshPrintOptions" :underline="false">
-                     <i class="el-icon-refresh el-icon--right"></i></el-link>
+                    <el-link type="info" style="position: absolute;right:8px;top: 18px;"
+                      @click="refreshPrintOptions" :underline="false">
+                      <i class="el-icon-refresh el-icon--right"></i></el-link>
                     <el-divider style="margin-top: 10px;"></el-divider>
                   </div>
                 </JNPF-TreeSelect>
@@ -874,7 +876,7 @@ export default {
     this.setDefaultOptions()
   },
   methods: {
-    refreshPrintOptions(){
+    refreshPrintOptions() {
       getPrintDevSelector(2).then(res => {
         let data = res.data.list
 
