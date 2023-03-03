@@ -103,7 +103,6 @@ export default {
       this.$emit('close')
     },
     printBrowseHandle(id) {
-      console.log(id);
       this.printDialogVisible = false
       this.printId = id;
       this.printBrowseVisible = true;

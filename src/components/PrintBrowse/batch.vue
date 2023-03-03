@@ -472,7 +472,6 @@ export default {
             printNum: _this.batchIds.split(",").length,
             printId: _this.id
           }
-          console.log(data, oldTitle);
           request({
             url: `/api/system/printLog/save`,
             method: "post",
