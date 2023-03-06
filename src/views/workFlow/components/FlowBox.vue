@@ -420,6 +420,7 @@ export default {
         this.isSummary = templateJson.properties.isSummary
         this.summaryType = templateJson.properties.summaryType
         this.flowUrgent = data[0].flowTaskInfo.flowUrgent || 1
+        this.setting.id = data[0].flowTaskInfo.id
       }
     },
     subFlow(enCode) {
@@ -628,6 +629,7 @@ export default {
           this.isComment = templateJson.properties.isComment
           this.isSummary = templateJson.properties.isSummary
           this.summaryType = templateJson.properties.summaryType
+          this.setting.id = this.subFlowInfoList[0].flowTaskInfo.id
         }
       }).catch(() => { this.loading = false })
 
