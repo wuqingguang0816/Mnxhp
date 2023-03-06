@@ -185,6 +185,12 @@ export default {
         }, {
           value: 'NotIncluded',
           label: '不包含'
+        }, {
+          value: 'IsNull',
+          label: '是null'
+        }, {
+          value: 'IsNotNull',
+          label: '不是null'
         }
       ],
       dataForm: {
