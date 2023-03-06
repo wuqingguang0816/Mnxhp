@@ -96,7 +96,7 @@
                             <el-dropdown-menu slot="dropdown">
                               <el-dropdown-item
                                 v-if='listQuery.category==="Web" && scope.row.type==1'
-                                @click.native="addOrUpdateHandle('',scope.row.parentId)">
+                                @click.native="addOrUpdateHandle('',scope.row.id)">
                                 新建子级
                               </el-dropdown-item>
                               <template v-if="[2, 3, 4].indexOf(scope.row.type) > -1">
