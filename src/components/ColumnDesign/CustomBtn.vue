@@ -250,7 +250,7 @@ export default {
       });
     },
     getFeatureSelector() {
-      getFeatureSelector({ type: 1, webType: '1,2', enableFlow: 0 }).then(res => {
+      getFeatureSelector({ type: 1, webType: '1,2', enableFlow: 0, isRelease: 1 }).then(res => {
         this.treeData = res.data.list
       })
     },
