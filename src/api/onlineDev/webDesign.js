@@ -31,3 +31,11 @@ export function checkPwd(data) {
     data
   })
 }
+// 获取列表表单配置JSON
+export function getConfigData(modelId, data) {
+  return request({
+    url: `/api/visualdev/ShortLink/${modelId}/Config`,
+    method: 'get',
+    data
+  })
+}

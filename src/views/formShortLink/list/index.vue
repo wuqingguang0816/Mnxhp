@@ -259,13 +259,12 @@ export default {
       }
       this.hasBatchBtn = this.columnData.btnsList.some(o => o.value == 'batchRemove')
       this.formData = JSON.parse(this.config.formData)
+      this.formData.fields = this.formFields(this.formData.fields)
       this.customBtnsList = this.columnData.customBtnsList || []
       this.columnBtnsList = this.columnData.columnBtnsList || []
       this.columnOptions = this.columnData.columnOptions || []
       this.listLoading = true
       if (this.isPreview) this.listQuery.menuId = "270579315303777093"
-      let res = await getColumnsByModuleId(this.listQuery.menuId)
-      this.settingsColumnList = res.data || []
       this.rowStyle = this.jnpf.getScriptFunc.call(this, this.columnData.funcs && this.columnData.funcs.rowStyle && this.columnData.funcs.rowStyle.func)
       this.cellStyle = this.jnpf.getScriptFunc.call(this, this.columnData.funcs && this.columnData.funcs.cellStyle && this.columnData.funcs.cellStyle.func)
       this.getColumnList()
@@ -289,6 +288,27 @@ export default {
       } else {
         this.initData()
       }
+    },
+    formFields(getDrawingList) {
+      let list = []
+      const loop = (data, parent) => {
+        if (!data) return
+        if (data.__config__ && this.isIncludesTable(data) && data.__config__.children && Array.isArray(data.__config__.children)) {
+          loop(data.__config__.children, data)
+        }
+        if (Array.isArray(data)) data.forEach(d => loop(d, parent))
+        if (["comInput", "textarea", "numInput", "switch", "date", "time", "colorPicker", "rate", "slider", "editor", "link", "JNPFText", "alert"].includes(data.__config__.jnpfKey)
+          || (["radio", "checkbox", "select", "cascader"].includes(data.__config__.jnpfKey) && data.__config__.dataType === 'static')) {
+          list.push(data)
+        }
+      }
+      loop(getDrawingList)
+      return list
+    },
+    isIncludesTable(data) {
+      if ((!data.__config__.layout || data.__config__.layout === 'rowFormItem') && data.__config__.jnpfKey !== 'table') return true
+      if (this.activeData.__config__.isSubTable) return this.activeData.__config__.parentVModel === data.__vModel__
+      return data.__config__.jnpfKey !== 'table'
     },
     initData() {
       if (this.isPreview) return

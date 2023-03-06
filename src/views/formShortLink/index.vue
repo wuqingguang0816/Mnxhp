@@ -5,7 +5,7 @@
 </template>
 
 <script>
-import { getConfigData } from '@/api/onlineDev/visualDev'
+import { getConfigData } from '@/api/onlineDev/webDesign'
 import Form from './form'
 import List from './list'
 import { message } from '@/utils/message'
