@@ -24,8 +24,9 @@
 </template>
 
 <script>
-import { getDataChange, getConfigData } from '@/api/onlineDev/visualDev'
+import { getConfigData } from '@/api/onlineDev/visualDev'
 import { getDataInterfaceDataInfoByIds } from '@/api/systemData/dataInterface'
+import { getDataChange } from '@/api/onlineDev/webDesign'
 import { deepClone } from '@/utils'
 import Parser from './Parser'
 import PrintBrowse from '@/components/PrintBrowse'

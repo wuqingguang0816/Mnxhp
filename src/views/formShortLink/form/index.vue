@@ -218,6 +218,7 @@ export default {
     },
     resetForm() {
       this.formConf = JSON.parse(this.config.formData)
+      this.formConf.fields = this.formFields(this.formConf.fields)
       this.$nextTick(() => {
         this.$refs.dynamicForm && this.$refs.dynamicForm.resetForm()
       })

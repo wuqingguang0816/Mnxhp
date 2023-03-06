@@ -47,3 +47,11 @@ export function createModel(modelId, data) {
     data
   })
 }
+
+// 获取数据详情
+export function getDataChange(modelId, id) {
+  return request({
+    url: `/api/visualdev/ShortLink/${modelId}/${id}/DataChange`,
+    method: 'GET'
+  })
+}

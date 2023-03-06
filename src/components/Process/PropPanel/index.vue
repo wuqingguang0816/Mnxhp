@@ -471,13 +471,14 @@
                     <p style="width:112px"></p>
                     <JNPF-TreeSelect :options="printTplList" v-model="startForm.printId"
                       placeholder="请选择打印模板" lastLevel clearable multiple>
-                      <div style="padding:10px 0;text-align:center" slot="header" >
-                    <el-link type="primary" :underline="false" @click="openPrint">添加打印模板
-                    </el-link>
-                    <el-link type="info" style="position: absolute;right:8px;top: 18px;" @click="refreshPrintOptions" :underline="false">
-                     <i class="el-icon-refresh el-icon--right"></i></el-link>
-                    <el-divider></el-divider>
-                  </div>
+                      <div style="padding:10px 0;text-align:center" slot="header">
+                        <el-link type="primary" :underline="false" @click="openPrint">添加打印模板
+                        </el-link>
+                        <el-link type="info" style="position: absolute;right:8px;top: 18px;"
+                          @click="refreshPrintOptions" :underline="false">
+                          <i class="el-icon-refresh el-icon--right"></i></el-link>
+                        <el-divider></el-divider>
+                      </div>
                     </JNPF-TreeSelect>
                   </div>
                 </div>
@@ -1531,14 +1532,15 @@
                   <p style="width:112px"></p>
                   <JNPF-TreeSelect :options="printTplList" v-model="approverForm.printId"
                     placeholder="请选择打印模板" lastLevel clearable multiple>
-                    <div style="padding:10px 0;text-align:center" slot="header" >
-                    <el-link type="primary" :underline="false" @click="openPrint">添加打印模板
-                    </el-link>
-                    <el-link type="info" style="position: absolute;right:8px;top: 18px;" @click="refreshPrintOptions" :underline="false">
-                     <i class="el-icon-refresh el-icon--right"></i></el-link>
-                    <el-divider></el-divider>
-                  </div>
-                    </JNPF-TreeSelect>
+                    <div style="padding:10px 0;text-align:center" slot="header">
+                      <el-link type="primary" :underline="false" @click="openPrint">添加打印模板
+                      </el-link>
+                      <el-link type="info" style="position: absolute;right:8px;top: 18px;"
+                        @click="refreshPrintOptions" :underline="false">
+                        <i class="el-icon-refresh el-icon--right"></i></el-link>
+                      <el-divider></el-divider>
+                    </div>
+                  </JNPF-TreeSelect>
                 </div>
                 <div class="per-cell">
                   <div slot="label" class="has-free-approver ">
@@ -2866,7 +2868,7 @@ export default {
     }
   },
   methods: {
-    refreshPrintOptions(){
+    refreshPrintOptions() {
       getPrintDevSelector(1).then(res => {
         let data = res.data.list
 
@@ -2917,8 +2919,11 @@ export default {
     },
     getFormOperates() {
       let res = []
+      console.log(11111, this.approverForm.formOperates)
+      console.log(11111, this.startForm.formOperates)
       this.isApproverNode() && (res = this.approverForm.formOperates)
       this.isStartNode() && (res = this.startForm.formOperates)
+      console.log(11111, res)
       return res
     },
     resetOrgColl() {
@@ -2957,6 +2962,7 @@ export default {
       return tag.includes(item.tag) && this.showingPCons.includes(item.formId);
     },
     initFormOperates(target, isUpdate, isSameForm) {
+      console.log(target, isUpdate, isSameForm)
       const formOperates = target.properties && target.properties.formOperates || []
       let res = []
       const getWriteById = id => {
@@ -2974,6 +2980,7 @@ export default {
       if (!formOperates.length || isUpdate) {
         for (let i = 0; i < this.formFieldList.length; i++) {
           const data = this.formFieldList[i];
+
           res.push({
             id: data.__vModel__,
             name: data.__config__.label,
@@ -2986,6 +2993,7 @@ export default {
           })
         }
       } else {
+        console.log(88888, formOperates)
         res = formOperates
       }
       return res
@@ -3033,7 +3041,7 @@ export default {
         return
       }
 
-      if(this.startForm.hasPrintBtn && !this.startForm.printId){
+      if (this.startForm.hasPrintBtn && !this.startForm.printId) {
         this.$message.warning('请选择打印模板')
         return this.value
       }
@@ -3165,8 +3173,8 @@ export default {
         })
         return
       }
-      
-      if(this.approverForm.hasPrintBtn && !this.approverForm.printId){
+
+      if (this.approverForm.hasPrintBtn && !this.approverForm.printId) {
         this.$message.warning('请选择打印模板')
         return this.value
       }
