@@ -124,6 +124,10 @@ export default {
       this.visible = true
       this.formLoading = true
       this.$nextTick(() => {
+        // 获取公告类型
+        this.$store.dispatch('base/getDictionaryData', { sort: 'NoticeType' }).then(res => {
+          this.categoryList = res
+        })
         this.$refs['dataForm'].resetFields()
         if (this.remindCategory != 1 && !this.dataForm.id) this.dataForm.sendConfigName = ""
         if (this.dataForm.id) {
