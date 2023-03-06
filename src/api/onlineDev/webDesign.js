@@ -42,7 +42,7 @@ export function getConfigData(modelId, data) {
 // 添加数据
 export function createModel(modelId, data) {
   return request({
-    url: `/api/visualdev/OnlineDev/${modelId}`,
+    url: `/api/visualdev/ShortLink/${modelId}`,
     method: 'POST',
     data
   })
