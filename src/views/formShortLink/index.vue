@@ -23,11 +23,6 @@ export default {
     }
   },
   created() {
-    let param = {
-      token: this.$route.query.token || {}
-    }
-    this.$store.dispatch('user/setToken', param).then(() => {
-    })
     this.modelId = this.$route.query.modelId
     const type = this.$route.query.type ? this.$route.query.type : ''
     if (!this.modelId) return

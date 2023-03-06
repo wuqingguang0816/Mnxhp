@@ -268,6 +268,10 @@ export default {
         this.listOptions = list
         this.listOptions = list.filter(o => noColumnShowList.indexOf(o.__config__.jnpfKey) < 0 || o.__config__.isStorage == 2)
         this.searchList = list.filter(o => noSearchList.indexOf(o.__config__.jnpfKey) < 0)
+        this.listOptions = this.listOptions.filter(o => ["comInput", "textarea", "numInput", "switch", "date", "time", "colorPicker", "rate", "slider", "editor", "link", "JNPFText", "alert"].includes(o.__config__.jnpfKey)
+          || (["radio", "checkbox", "select", "cascader"].includes(o.__config__.jnpfKey) && o.__config__.dataType === 'static'))
+        this.searchList = this.searchList.filter(o => ["comInput", "textarea", "numInput", "switch", "date", "time", "colorPicker", "rate", "slider", "editor", "link", "JNPFText", "alert"].includes(o.__config__.jnpfKey)
+          || (["radio", "checkbox", "select", "cascader"].includes(o.__config__.jnpfKey) && o.__config__.dataType === 'static'))
         this.searchList = this.searchList.map(o => ({
           label: o.__config__.label,
           prop: o.__vModel__,
