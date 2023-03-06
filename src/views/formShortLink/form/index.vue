@@ -36,19 +36,21 @@
   </div>
 </template>
 <script>
-import { createModel } from '@/api/onlineDev/visualDev'
 import Parser from '@/components/Generator/parser/Parser'
 import FlowBox from '@/views/workFlow/components/FlowBox'
 import { getFlowList } from '@/api/workFlow/FlowEngine'
-import { getConfig, checkPwd } from '@/api/onlineDev/webDesign'
+import { getConfig, checkPwd, createModel } from '@/api/onlineDev/webDesign'
 import QRCode from 'qrcodejs2'
 import md5 from 'js-md5';
 const getFormDataFields = item => {
-  const jnpfKey = item.__config__.jnpfKey
-  const list = ["comInput", "textarea", "numInput", "switch", "date", "time", "colorPicker", "rate", "slider", "editor", "link", "JNPFText", "alert", 'table']
-  const fieldsSelectList = ["radio", "checkbox", "select", "cascader"]
-  if (list.includes(jnpfKey) || fieldsSelectList.includes(jnpfKey) && item.__config__.dataType === 'static') return false
-  return true
+  if (item.__config__) {
+    const jnpfKey = item.__config__.jnpfKey
+    const list = ["comInput", "textarea", "numInput", "switch", "date", "time", "colorPicker", "rate", "slider", "editor", "link", "JNPFText", "alert", 'table']
+    const fieldsSelectList = ["radio", "checkbox", "select", "cascader"]
+    if (list.includes(jnpfKey) || (fieldsSelectList.includes(jnpfKey) && item.__config__.dataType === 'static')) return true
+    return false
+  }
+  return false
 }
 export default {
   components: { Parser, FlowBox },
@@ -148,7 +150,8 @@ export default {
           loop(data.__config__.children, data)
         }
         if (Array.isArray(data)) data.forEach(d => loop(d, parent))
-        if (data.__config__) data.__config__.noShow = getFormDataFields(data)
+        if (data.__config__) data.__config__.noShow = !getFormDataFields(data)
+        getFormDataFields(data) && list.push(data)
       }
       loop(getDrawingList)
       return list

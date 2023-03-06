@@ -39,3 +39,11 @@ export function getConfigData(modelId, data) {
     data
   })
 }
+// 添加数据
+export function createModel(modelId, data) {
+  return request({
+    url: `/api/visualdev/OnlineDev/${modelId}`,
+    method: 'POST',
+    data
+  })
+}
