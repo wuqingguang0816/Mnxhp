@@ -113,11 +113,15 @@
 import QRCode from 'qrcodejs2'
 import clipboard from '@/utils/clipboard'
 import { getShortLink, save } from '@/api/onlineDev/webDesign'
-import { getDrawingList } from '@/components/Generator/utils/db'
 import { getVisualDevInfo } from '@/api/onlineDev/visualDev'
 import ChangeField from '@/components/ChangeField'
 import { noColumnShowList, noSearchList } from '@/components/Generator/generator/comConfig'
-import { constantRoutes } from '@/router'
+const getFormDataFields = item => {
+  const jnpfKey = item.__config__.jnpfKey
+  const fieldsList = ["comInput", "textarea", "numInput", "switch", "date", "time", "colorPicker", "rate", "slider", "editor", "link", "JNPFText", "alert"]
+  const fieldsSelectList = ["radio", "checkbox", "select", "cascader"]
+  if (fieldsList.includes(jnpfKey) || fieldsSelectList.includes(jnpfKey) && data.__config__.dataType === 'static') return item
+}
 export default {
   components: { ChangeField },
   data() {
@@ -268,10 +272,8 @@ export default {
         this.listOptions = list
         this.listOptions = list.filter(o => noColumnShowList.indexOf(o.__config__.jnpfKey) < 0 || o.__config__.isStorage == 2)
         this.searchList = list.filter(o => noSearchList.indexOf(o.__config__.jnpfKey) < 0)
-        this.listOptions = this.listOptions.filter(o => ["comInput", "textarea", "numInput", "switch", "date", "time", "colorPicker", "rate", "slider", "editor", "link", "JNPFText", "alert"].includes(o.__config__.jnpfKey)
-          || (["radio", "checkbox", "select", "cascader"].includes(o.__config__.jnpfKey) && o.__config__.dataType === 'static'))
-        this.searchList = this.searchList.filter(o => ["comInput", "textarea", "numInput", "switch", "date", "time", "colorPicker", "rate", "slider", "editor", "link", "JNPFText", "alert"].includes(o.__config__.jnpfKey)
-          || (["radio", "checkbox", "select", "cascader"].includes(o.__config__.jnpfKey) && o.__config__.dataType === 'static'))
+        this.listOptions = this.listOptions.filter(o => getFormDataFields(o))
+        this.searchList = this.searchList.filter(o => getFormDataFields(o))
         this.searchList = this.searchList.map(o => ({
           label: o.__config__.label,
           prop: o.__vModel__,

@@ -43,6 +43,12 @@ import { getFlowList } from '@/api/workFlow/FlowEngine'
 import { getConfig, checkPwd } from '@/api/onlineDev/webDesign'
 import QRCode from 'qrcodejs2'
 import md5 from 'js-md5';
+const getFormDataFields = item => {
+  const jnpfKey = item.__config__.jnpfKey
+  const fieldsList = ["comInput", "textarea", "numInput", "switch", "date", "time", "colorPicker", "rate", "slider", "editor", "link", "JNPFText", "alert", 'table']
+  const fieldsSelectList = ["radio", "checkbox", "select", "cascader"]
+  if (fieldsList.includes(jnpfKey) || fieldsSelectList.includes(jnpfKey) && data.__config__.dataType === 'static') return item
+}
 export default {
   components: { Parser, FlowBox },
   props: ['config', 'modelId', 'isPreview'],
@@ -89,6 +95,7 @@ export default {
         this.getFlowList(flag)
       } else {
         this.formConf = JSON.parse(this.config.formData)
+        this.formConf.fields = this.formFields(this.formConf.fields)
         this.loading = true
         this.$nextTick(() => {
           this.visible = true
@@ -131,6 +138,23 @@ export default {
 
         this.passwordLoading = false
       })
+    },
+    formFields(getDrawingList) {
+      let list = []
+      const loop = (data, parent) => {
+        if (!data) return
+        if (data.__config__ && this.isIncludesTable(data) && data.__config__.children && Array.isArray(data.__config__.children)) {
+          loop(data.__config__.children, data)
+        }
+        if (Array.isArray(data)) data.forEach(d => loop(d, parent))
+        list.push(getFormDataFields(data))
+      }
+      loop(getDrawingList)
+      return list
+    },
+    isIncludesTable(data) {
+      if ((!data.__config__.layout || data.__config__.layout === 'rowFormItem') && data.__config__.jnpfKey !== 'table') return true
+      return data.__config__.jnpfKey !== 'table'
     },
     selectFlow(item) {
       this.flowItem = item

@@ -134,6 +134,12 @@ import CustomBox from '@/components/JNPFCustom'
 import { getConfig, checkPwd } from '@/api/onlineDev/webDesign'
 import QRCode from 'qrcodejs2'
 import md5 from 'js-md5';
+const getFormDataFields = item => {
+  const jnpfKey = item.__config__.jnpfKey
+  const fieldsList = ["comInput", "textarea", "numInput", "switch", "date", "time", "colorPicker", "rate", "slider", "editor", "link", "JNPFText", "alert", 'table']
+  const fieldsSelectList = ["radio", "checkbox", "select", "cascader"]
+  if (fieldsList.includes(jnpfKey) || fieldsSelectList.includes(jnpfKey) && data.__config__.dataType === 'static') return item
+}
 export default {
   name: 'dynamicModel',
   components: { Form, ExportBox, Search, Detail, FlowBox, ChildTableColumn, SuperQuery, CandidateForm, CustomBox },
@@ -297,17 +303,13 @@ export default {
           loop(data.__config__.children, data)
         }
         if (Array.isArray(data)) data.forEach(d => loop(d, parent))
-        if (["comInput", "textarea", "numInput", "switch", "date", "time", "colorPicker", "rate", "slider", "editor", "link", "JNPFText", "alert"].includes(data.__config__.jnpfKey)
-          || (["radio", "checkbox", "select", "cascader"].includes(data.__config__.jnpfKey) && data.__config__.dataType === 'static')) {
-          list.push(data)
-        }
+        list.push(getFormDataFields(data))
       }
       loop(getDrawingList)
       return list
     },
     isIncludesTable(data) {
       if ((!data.__config__.layout || data.__config__.layout === 'rowFormItem') && data.__config__.jnpfKey !== 'table') return true
-      if (this.activeData.__config__.isSubTable) return this.activeData.__config__.parentVModel === data.__vModel__
       return data.__config__.jnpfKey !== 'table'
     },
     initData() {
