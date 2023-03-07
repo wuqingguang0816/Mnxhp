@@ -24,11 +24,10 @@
         accept="image/*" :before-upload="beforeUpload" :disabled="disabled" list-type="picture-card"
         class="upload-btn">
         <i class="el-icon-plus"></i>
-        <div slot="tip" class="el-upload__tip" v-show="showTip">
-          只能上传不超过{{fileSize}}{{sizeUnit}}的{{accept}}图片
-        </div>
       </el-upload>
     </template>
+    <div class="el-upload__tip" slot="tip" v-if="tipText"
+      :style="{'margin-top':fileList.length>0?'0px':'5px'}">{{ tipText }}</div>
   </div>
 </template>
 
@@ -88,6 +87,10 @@ export default {
     fileSize: {
       default: 10
     },
+    tipText: {
+      type: String,
+      default: ''
+    }
   },
   data() {
     return {
@@ -177,5 +180,8 @@ export default {
 }
 .upload-btn {
   display: inline-block;
+}
+.el-upload__tip {
+  color: #a5a5a5;
 }
 </style>
