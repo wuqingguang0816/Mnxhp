@@ -137,7 +137,7 @@ import md5 from 'js-md5';
 const getFormDataFields = item => {
   if (item.__config__) {
     const jnpfKey = item.__config__.jnpfKey
-    const list = ["comInput", "textarea", "numInput", "switch", "date", "time", "colorPicker", "rate", "slider", "editor", "link", "JNPFText", "alert", 'table']
+    const list = ["comInput", "textarea", "numInput", "switch", "date", "time", "colorPicker", "rate", "slider", "editor", "link", "JNPFText", "alert", 'table', "collapse", "tab", "row", "card"]
     const fieldsSelectList = ["radio", "checkbox", "select", "cascader"]
     if (list.includes(jnpfKey) || (fieldsSelectList.includes(jnpfKey) && item.__config__.dataType === 'static')) return true
     return false
@@ -315,7 +315,7 @@ export default {
     },
     isIncludesTable(data) {
       if ((!data.__config__.layout || data.__config__.layout === 'rowFormItem') && data.__config__.jnpfKey !== 'table') return true
-      return data.__config__.jnpfKey !== 'table'
+      return data.__config__.jnpfKey == 'table'
     },
     initData() {
       if (this.isPreview) return
