@@ -48,7 +48,7 @@
     </template>
     <template v-if="activeData.__config__.dataType === 'dictionary'">
       <el-form-item label="数据字典">
-        <el-row>
+        <el-row class="jnpf-el-row">
           <el-col :span="18">
             <JNPF-TreeSelect :options="dicOptions" v-model="activeData.__config__.dictionaryType"
               placeholder="请选择数据字典" lastLevel clearable @change="dictionaryTypeChange"
@@ -159,3 +159,22 @@ export default {
   }
 }
 </script>
+<style lang="scss" scoped>
+.jnpf-el-row {
+  >>> .el-input__inner {
+    border-radius: 4px 0 0 4px !important;
+  }
+
+  >>> .el-button {
+    border-left: 0;
+    background-color: #f5f7fa;
+    font-size: 13px;
+    color: #909399;
+    border-radius: 0 4px 4px 0;
+    line-height: 12px;
+  }
+  >>> .el-button:hover {
+    border-color: #dcdfe6;
+  }
+}
+</style>

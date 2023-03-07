@@ -1,5 +1,6 @@
 <template>
   <el-dialog
+  class="JNPF-dialog JNPF-dialog_center"
     title="过滤规则配置"
     :visible.sync="dialogVisible"
     width="800px"
@@ -15,7 +16,7 @@
       :columnOptions="columnOptions"
     ></Condition>
     <span slot="footer" class="dialog-footer">
-      <el-button @click="dialogVisible = false">取 消</el-button>
+      <el-button @click="handleClose">取 消</el-button>
       <el-button type="primary" @click="confirm">确 定</el-button>
     </span>
   </el-dialog>
@@ -47,6 +48,7 @@ export default {
   },
   data() {
     return {
+      tempCondition: [],
       columnDataMap: {},
       dataOptionMap: {},
       dialogVisible: false,
@@ -123,68 +125,70 @@ export default {
   methods: {
     init(data) {
       this.pconditions = data[0].pconditions;
+      this.tempCondition = JSON.parse(JSON.stringify(this.pconditions));
+    },
+    validData(flag) {
+      let valid = true;
+      this.pconditions.forEach(k => {
+        if (!["null", "notNull"].includes(k.symbol)) {
+          if (!k.field) {
+            if (flag != 1) this.$message.warning("条件字段不能为空");
+            valid = false;
+            return;
+          }
+          if (!k.symbol) {
+            if (flag != 1) this.$message.warning("条件符号不能为空");
+            valid = false;
+            return;
+          }
+          if (!k.fieldValue) {
+            if (flag != 1) this.$message.warning("数据值不能为空");
+            valid = false;
+            return;
+          }
+          if (Array.isArray(k.fieldValue) && k.fieldValue.length == 0) {
+            if (flag != 1) this.$message.warning("数据值不能为空");
+            valid = false;
+            return;
+          }
+        }
+      });
+      return valid;
     },
     confirm() {
       // 获取属性配置
       this.$nextTick(() => {
         this.pconditions = this.$refs.base.getData();
-        let valid = true;
-        this.pconditions.forEach(k => {
-          if (!["null", "notNull"].includes(k.symbol)) {
-            if (!k.field) {
-              this.$message.warning("条件字段不能为空");
-              valid = false;
-              return;
-            }
-            if (!k.symbol) {
-              this.$message.warning("条件符号不能为空");
-              valid = false;
-              return;
-            }
-            if (!k.fieldValue) {
-              this.$message.warning("数据值不能为空");
-              valid = false;
-              return;
-            }
-            if(Array.isArray(k.fieldValue) && k.fieldValue.length == 0){
-              this.$message.warning("数据值不能为空");
-              valid = false;
-              return;
-            }
-          }
-        });
-        if (!valid) {
+
+        if (!this.validData()) {
           return;
         }
         // 处理精度
-        this.pconditions = this.pconditions.map(item=>{
-          if(item.jnpfKey === 'calculate'){
-            item.fieldValue = Number(item.fieldValue).toFixed(2)
+        this.pconditions = this.pconditions.map(item => {
+          if (item.jnpfKey === "calculate") {
+            item.fieldValue = Number(item.fieldValue).toFixed(2);
           }
-          return item
-        })
-        let cloneConditions = JSON.parse(JSON.stringify(this.pconditions));
-        let data = cloneConditions.map(item => {
-          // if(['cascader'].includes(item.jnpfKey)){
-          //   item.dataOptions = []
-          //   item.options = []
-          // }
           return item;
         });
+        let cloneConditions = JSON.parse(JSON.stringify(this.pconditions));
         this.$emit("ruleConfig", {
-          pconditions: data
+          pconditions: cloneConditions
         });
+        this.tempCondition = cloneConditions;
 
         this.dialogVisible = false;
       });
     },
     handleClose() {
+      this.$emit("ruleConfig", {
+        pconditions: this.tempCondition
+      });
       this.dialogVisible = false;
     },
     show(data) {
       this.dialogVisible = true;
       if (data.length == 0) {
-        this.pconditions = []
+        this.pconditions = [];
         this.addCondition();
       } else {
         this.init(data);

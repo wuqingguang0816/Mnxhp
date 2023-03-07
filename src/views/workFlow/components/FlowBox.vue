@@ -244,7 +244,7 @@
 </template>
 
 <script>
-import PrintDialog from './PrintDialog'
+import PrintDialog from '@/components/PrintDialog'
 import SignImgDialog from '@/components/SignImgDialog'
 import { FlowBeforeInfo, Audit, Reject, Transfer, Recall, Cancel, Assign, SaveAudit, Candidates, CandidateUser, Resurgence, ResurgenceList, RejectList, suspend, restore, subFlowInfo } from '@/api/workFlow/FlowBefore'
 import { Revoke, Press } from '@/api/workFlow/FlowLaunch'
@@ -419,6 +419,8 @@ export default {
         this.isComment = templateJson.properties.isComment
         this.isSummary = templateJson.properties.isSummary
         this.summaryType = templateJson.properties.summaryType
+        this.flowUrgent = data[0].flowTaskInfo.flowUrgent || 1
+        this.setting.id = data[0].flowTaskInfo.id
       }
     },
     subFlow(enCode) {
@@ -523,7 +525,7 @@ export default {
         this.properties = res.data.approversProperties || {}
         this.candidateForm.rejectType = this.properties.rejectType
         this.endTime = this.flowTaskInfo.completion == 100 ? this.flowTaskInfo.endTime : 0
-        data.formConf = data.isPreview ? data.formConf : this.flowFormInfo.propertyJson
+        data.formConf =  this.flowFormInfo.propertyJson
         if (data.opType != 1 && data.opType != '-1') data.readonly = true
         data.formOperates = res.data.formOperates || []
         if (data.opType == 0) {
@@ -594,6 +596,7 @@ export default {
       subFlowInfo(data[0].id).then(res => {
         this.subFlowInfoList = res.data || []
         this.subFlowTab = this.subFlowInfoList[0].flowTaskInfo.id
+        this.flowUrgent = this.subFlowInfoList[0].flowTaskInfo.flowUrgent || 1
         this.fullName = this.subFlowInfoList[0].flowTaskInfo.fullName
         this.flowTaskOperatorRecordList = this.subFlowInfoList[0].flowTaskOperatorRecordList || []
         this.flowTaskOperatorRecordList = this.flowTaskOperatorRecordList.reverse()
@@ -626,6 +629,7 @@ export default {
           this.isComment = templateJson.properties.isComment
           this.isSummary = templateJson.properties.isSummary
           this.summaryType = templateJson.properties.summaryType
+          this.setting.id = this.subFlowInfoList[0].flowTaskInfo.id
         }
       }).catch(() => { this.loading = false })
 

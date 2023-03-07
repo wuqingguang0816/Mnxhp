@@ -22,9 +22,7 @@
     </div>
   </div>
 </template>
-
 <script>
-import { getVisualDevInfo } from '@/api/onlineDev/visualDev'
 export default {
   props: {
     type: {
@@ -105,8 +103,7 @@ export default {
       return criteria;
     }
   },
-  mounted() {
-  },
+  created() { },
   watch: {
     selectDisabled() {
       this.$nextTick(() => {

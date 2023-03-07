@@ -4,7 +4,7 @@
       <div class="header-wrap">
         <el-page-header @back="goBack" :content="title+'的打印日志'"> </el-page-header>
       </div>
-
+      <el-divider style="margin: 0px;"></el-divider>
       <div class="main-panel">
         <div class="JNPF-common-layout-center">
           <el-row class="JNPF-common-search-box" :gutter="16">
@@ -115,11 +115,8 @@ export default {
 }
 
 .main-panel {
-  margin-top: 20px;
-  padding: 20px;
   min-height: 570px;
   height: calc(100% - 10px);
-  margin-top: 20px;
   background-color: #fff;
   overflow: scroll;
 }
@@ -133,5 +130,8 @@ export default {
   padding: 20px 20px;
   font-size: 20px;
   background-color: #fff;
+}
+>>>.el-divider--horizontal{
+ margin: 0px;
 }
 </style>

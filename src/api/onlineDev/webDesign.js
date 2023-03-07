@@ -31,3 +31,27 @@ export function checkPwd(data) {
     data
   })
 }
+// 获取列表表单配置JSON
+export function getConfigData(modelId, data) {
+  return request({
+    url: `/api/visualdev/ShortLink/${modelId}/Config`,
+    method: 'get',
+    data
+  })
+}
+// 添加数据
+export function createModel(modelId, data) {
+  return request({
+    url: `/api/visualdev/ShortLink/${modelId}`,
+    method: 'POST',
+    data
+  })
+}
+
+// 获取数据详情
+export function getDataChange(modelId, id) {
+  return request({
+    url: `/api/visualdev/ShortLink/${modelId}/${id}/DataChange`,
+    method: 'GET'
+  })
+}

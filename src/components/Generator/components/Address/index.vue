@@ -207,6 +207,9 @@ export default {
         this.resetInputHeight();
       });
     },
+    level(){
+      this.initData()
+    }
   },
   methods: {
     onClose() { },

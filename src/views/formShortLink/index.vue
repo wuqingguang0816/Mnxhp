@@ -5,7 +5,7 @@
 </template>
 
 <script>
-import { getConfigData } from '@/api/onlineDev/visualDev'
+import { getConfigData } from '@/api/onlineDev/webDesign'
 import Form from './form'
 import List from './list'
 import { message } from '@/utils/message'
@@ -23,11 +23,6 @@ export default {
     }
   },
   created() {
-    let param = {
-      token: this.$route.query.token || {}
-    }
-    this.$store.dispatch('user/setToken', param).then(() => {
-    })
     this.modelId = this.$route.query.modelId
     const type = this.$route.query.type ? this.$route.query.type : ''
     if (!this.modelId) return

@@ -154,7 +154,7 @@ export default {
   },
   methods: {
     updateRelease(item) {
-      this.$confirm('确认是否将当前修改的版本设为主版本？', '系统提示', {
+      this.$confirm('启用后，新发起的流程将按此版本流转。未审批完的流程，按原来的版本流转。', '系统提示', {
         type: 'warning'
       }).then(() => {
         mainVersion(item.id).then(res => {
