@@ -1,5 +1,6 @@
 <template>
   <el-dialog
+  class="JNPF-dialog JNPF-dialog_center"
     title="过滤规则配置"
     :visible.sync="dialogVisible"
     width="800px"
