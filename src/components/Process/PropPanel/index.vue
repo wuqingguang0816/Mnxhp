@@ -579,7 +579,7 @@
             <el-table :data="formOperatesList" class="JNPF-common-table" size="mini" height="100%">
               <el-table-column prop="name" label="表单字段" align="left"></el-table-column>
               <el-table-column width="80">
-                <template slot="header" slot-scope="scope">
+                <template slot="header">
                   <el-checkbox @change="updateReadAllSelected($event,1)"
                     :indeterminate="indeterminateReadFlag" v-model="readAllChecked">查看</el-checkbox>
                 </template>
@@ -589,7 +589,7 @@
                 </template>
               </el-table-column>
               <el-table-column width="80">
-                <template slot="header" slot-scope="scope">
+                <template slot="header">
                   <el-checkbox @change="updateReadAllSelected($event,2)"
                     :indeterminate="indeterminateWriteFlag"
                     v-model="writeAllChecked">编辑</el-checkbox>
@@ -600,7 +600,7 @@
                 </template>
               </el-table-column>
               <el-table-column width="80">
-                <template slot="header" slot-scope="scope">
+                <template slot="header">
                   <el-checkbox @change="updateReadAllSelected($event,3)"
                     :indeterminate="indeterminateRequiredFlag"
                     v-model="requiredAllChecked">编辑</el-checkbox>
@@ -1629,7 +1629,7 @@
             <el-table :data="formOperatesList" class="JNPF-common-table" size="mini" height="100%">
               <el-table-column prop="name" label="表单字段" align="left"></el-table-column>
               <el-table-column width="80">
-                <template slot="header" slot-scope="scope">
+                <template slot="header">
                   <el-checkbox @change="updateReadAllSelected($event,1)"
                     :indeterminate="indeterminateReadFlag" v-model="readAllChecked">查看</el-checkbox>
                 </template>
@@ -1639,7 +1639,7 @@
                 </template>
               </el-table-column>
               <el-table-column width="80">
-                <template slot="header" slot-scope="scope">
+                <template slot="header">
                   <el-checkbox @change="updateReadAllSelected($event,2)"
                     :indeterminate="indeterminateWriteFlag"
                     v-model="writeAllChecked">编辑</el-checkbox>
@@ -1650,7 +1650,7 @@
                 </template>
               </el-table-column>
               <el-table-column width="80">
-                <template slot="header" slot-scope="scope">
+                <template slot="header">
                   <el-checkbox @change="updateReadAllSelected($event,3)"
                     :indeterminate="indeterminateRequiredFlag"
                     v-model="requiredAllChecked">编辑</el-checkbox>
@@ -2412,6 +2412,7 @@
   </el-drawer>
 </template>
 <script>
+import { getPrintDevSelector } from '@/api/system/printDev'
 import { getFlowFormInfo } from '@/api/workFlow/FlowEngine'
 import { getFormInfo } from '@/api/workFlow/FormDesign'
 import { NodeUtils } from "../FlowCard/util"
@@ -2957,9 +2958,8 @@ export default {
       })
     },
     refreshPrintOptions() {
-      getPrintDevSelector(2).then(res => {
+      getPrintDevSelector(1).then(res => {
         let data = res.data.list
-
         let list = data.filter(o => o.children && o.children.length)
         this.printTplList = list.map(o => ({
           ...o,
@@ -3146,7 +3146,7 @@ export default {
       }
 
       if (this.startForm.hasPrintBtn && !this.startForm.printId) {
-        this.$message.warning('打印模板不能为空')
+        this.$message.warning('请选择打印模板')
         return this.value
       }
 
@@ -3279,7 +3279,7 @@ export default {
       }
 
       if (this.approverForm.hasPrintBtn && !this.approverForm.printId) {
-        this.$message.warning('打印模板不能为空')
+        this.$message.warning('请选择打印模板')
         return this.value
       }
       const assigneeType = this.approverForm.assigneeType
