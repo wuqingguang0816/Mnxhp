@@ -6,6 +6,118 @@
   "description": "",
   "glyphs": [
     {
+      "icon_id": "34465802",
+      "name": "generator-tableGrid",
+      "font_class": "generator-tableGrid",
+      "unicode": "e8db",
+      "unicode_decimal": 59611
+    },
+    {
+      "icon_id": "34465803",
+      "name": "portal-card",
+      "font_class": "portal-card",
+      "unicode": "e8dc",
+      "unicode_decimal": 59612
+    },
+    {
+      "icon_id": "34465804",
+      "name": "portal-carousel",
+      "font_class": "portal-carousel",
+      "unicode": "e8dd",
+      "unicode_decimal": 59613
+    },
+    {
+      "icon_id": "34465805",
+      "name": "generator-insertCol",
+      "font_class": "generator-insertCol",
+      "unicode": "e8de",
+      "unicode_decimal": 59614
+    },
+    {
+      "icon_id": "34465806",
+      "name": "generator-insertRow",
+      "font_class": "generator-insertRow",
+      "unicode": "e8df",
+      "unicode_decimal": 59615
+    },
+    {
+      "icon_id": "34465807",
+      "name": "btn-batch",
+      "font_class": "btn-batch",
+      "unicode": "e8e0",
+      "unicode_decimal": 59616
+    },
+    {
+      "icon_id": "34465808",
+      "name": "portal-collapse",
+      "font_class": "portal-collapse",
+      "unicode": "e8e1",
+      "unicode_decimal": 59617
+    },
+    {
+      "icon_id": "34465809",
+      "name": "portal-rankList",
+      "font_class": "portal-rankList",
+      "unicode": "e8e2",
+      "unicode_decimal": 59618
+    },
+    {
+      "icon_id": "34465810",
+      "name": "portal-image",
+      "font_class": "portal-image",
+      "unicode": "e8e3",
+      "unicode_decimal": 59619
+    },
+    {
+      "icon_id": "34465811",
+      "name": "portal-tab",
+      "font_class": "portal-tab",
+      "unicode": "e8e4",
+      "unicode_decimal": 59620
+    },
+    {
+      "icon_id": "34465812",
+      "name": "portal-video",
+      "font_class": "portal-video",
+      "unicode": "e8e5",
+      "unicode_decimal": 59621
+    },
+    {
+      "icon_id": "34465813",
+      "name": "generator-TableSettings",
+      "font_class": "generator-TableSettings",
+      "unicode": "e8e6",
+      "unicode_decimal": 59622
+    },
+    {
+      "icon_id": "34465814",
+      "name": "btn-common",
+      "font_class": "btn-common",
+      "unicode": "e8e7",
+      "unicode_decimal": 59623
+    },
+    {
+      "icon_id": "34465815",
+      "name": "portal-iframe",
+      "font_class": "portal-iframe",
+      "unicode": "e8e8",
+      "unicode_decimal": 59624
+    },
+    {
+      "icon_id": "34465816",
+      "name": "portal-timeAxis",
+      "font_class": "portal-timeAxis",
+      "unicode": "e8e9",
+      "unicode_decimal": 59625
+    },
+    {
+      "icon_id": "34465817",
+      "name": "portal-schedule",
+      "font_class": "portal-schedule",
+      "unicode": "e8ea",
+      "unicode_decimal": 59626
+    },
+    {
       "icon_id": "32732986",
       "name": "flowEntrust-app",
       "font_class": "flowEntrust-app",
