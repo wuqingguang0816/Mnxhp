@@ -84,13 +84,6 @@ export default {
       if (this.formPassUse == 1) return
       this.init()
     })
-    var _this = this
-    document.onkeydown = function (e) {
-      var key = window.event.keyCode
-      if (key === 13) {
-        _this.handleLogin()
-      }
-    }
   },
   methods: {
     init(flag) {
