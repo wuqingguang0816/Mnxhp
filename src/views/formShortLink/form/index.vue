@@ -136,19 +136,16 @@ export default {
       })
     },
     formFields(getDrawingList) {
-      let list = []
       const loop = (data, parent) => {
         if (!data) return
         if (data.__config__ && this.isIncludesTable(data) && data.__config__.children && Array.isArray(data.__config__.children)) {
-          console.log(222, data, data.__config__.children)
           loop(data.__config__.children, data)
         }
         if (Array.isArray(data)) data.forEach(d => loop(d, parent))
         if (data.__config__) data.__config__.noShow = !getFormDataFields(data)
-        getFormDataFields(data) && list.push(data)
       }
       loop(getDrawingList)
-      return list
+      return getDrawingList
     },
     isIncludesTable(data) {
       if ((!data.__config__.layout || data.__config__.layout === 'rowFormItem') && data.__config__.jnpfKey !== 'table') return true
