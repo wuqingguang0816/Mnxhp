@@ -123,6 +123,7 @@ export default {
       this.visible = true
       this.btnLoading = false
       this.designBtnLoading = false
+      this.dataForm.formData = null
       this.$nextTick(() => {
         this.$refs['dataForm'].resetFields()
         if (this.dataForm.id) {
@@ -140,7 +141,6 @@ export default {
     dataFormSubmit(type) {
       this.$refs['dataForm'].validate((valid) => {
         if (!valid) return
-
         if (type) {
           this.designBtnLoading = true
         } else {
