@@ -1,9 +1,9 @@
 @font-face {
   font-family: "icon-ym";
   /* Project id 3271933 */
-  src: url('iconfont.woff2?t=1667890974760') format('woff2'),
-    url('iconfont.woff?t=1667890974760') format('woff'),
-    url('iconfont.ttf?t=1667890974760') format('truetype');
+  src: url('iconfont.woff2?t=1678187470423') format('woff2'),
+    url('iconfont.woff?t=1678187470423') format('woff'),
+    url('iconfont.ttf?t=1678187470423') format('truetype');
 }
 
 .icon-ym {
@@ -12,6 +12,70 @@
   font-style: normal;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-ym-generator-tableGrid:before {
+  content: "\e8db";
+}
+
+.icon-ym-portal-card:before {
+  content: "\e8dc";
+}
+
+.icon-ym-portal-carousel:before {
+  content: "\e8dd";
+}
+
+.icon-ym-generator-insertCol:before {
+  content: "\e8de";
+}
+
+.icon-ym-generator-insertRow:before {
+  content: "\e8df";
+}
+
+.icon-ym-btn-batch:before {
+  content: "\e8e0";
+}
+
+.icon-ym-portal-collapse:before {
+  content: "\e8e1";
+}
+
+.icon-ym-portal-rankList:before {
+  content: "\e8e2";
+}
+
+.icon-ym-portal-image:before {
+  content: "\e8e3";
+}
+
+.icon-ym-portal-tab:before {
+  content: "\e8e4";
+}
+
+.icon-ym-portal-video:before {
+  content: "\e8e5";
+}
+
+.icon-ym-generator-TableSettings:before {
+  content: "\e8e6";
+}
+
+.icon-ym-btn-common:before {
+  content: "\e8e7";
+}
+
+.icon-ym-portal-iframe:before {
+  content: "\e8e8";
+}
+
+.icon-ym-portal-timeAxis:before {
+  content: "\e8e9";
+}
+
+.icon-ym-portal-schedule:before {
+  content: "\e8ea";
 }
 
 .icon-ym-flowEntrust-app:before {
