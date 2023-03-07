@@ -26,12 +26,26 @@
               </el-select>
             </el-form-item>
           </el-col>
+          <template v-if="showAll">
+            <el-col :span="6">
+              <el-form-item label="锁定">
+                <el-select v-model="enabledLock" placeholder="请选择锁定类型">
+                  <el-option label="启用" :value="1" />
+                  <el-option label="禁用" :value="0" />
+                </el-select>
+              </el-form-item>
+            </el-col>
+          </template>
           <el-col :span="6">
             <el-form-item>
               <el-button type="primary" icon="el-icon-search" @click="search()">
                 {{$t('common.search')}}</el-button>
               <el-button icon="el-icon-refresh-right" @click="reset()">{{$t('common.reset')}}
               </el-button>
+              <el-button type="text" icon="el-icon-arrow-down" @click="showAll=true"
+                v-if="!showAll">展开</el-button>
+              <el-button type="text" icon="el-icon-arrow-up" @click="showAll=false" v-else>
+                收起</el-button>
             </el-form-item>
           </el-col>
         </el-form>
@@ -53,6 +67,16 @@
           <el-table-column prop="fullName" label="名称" show-overflow-tooltip min-width="200" />
           <el-table-column prop="enCode" label="编码" width="200" />
           <el-table-column prop="category" label="分类" width="150" />
+          <el-table-column prop="type" label="类型" width="150">
+            <template slot-scope="scope">
+              <p>{{scope.row.type==1?'配置路径':'门户设计'}}</p>
+            </template>
+          </el-table-column>
+          <el-table-column prop="enabledLock" label="锁定" width="150">
+            <template slot-scope="scope">
+              <p>{{scope.row.enabledLock==1?'启用':'禁用'}}</p>
+            </template>
+          </el-table-column>
           <el-table-column prop="creatorUser" label="创建人" width="120" />
           <el-table-column prop="creatorTime" label="创建时间" :formatter="jnpf.tableDateFormat"
             width="120" />
@@ -115,6 +139,7 @@ export default {
       keyword: '',
       category: '',
       type: '',
+      enabledLock: '',
       listQuery: {
         currentPage: 1,
         pageSize: 20,
@@ -144,6 +169,7 @@ export default {
       this.keyword = ''
       this.category = ''
       this.type = ''
+      this.enabledLock = ''
       this.search()
     },
     search() {
@@ -166,7 +192,8 @@ export default {
         ...this.listQuery,
         keyword: this.keyword,
         type: this.type,
-        category: this.category
+        category: this.category,
+        enabledLock: this.enabledLock
       }
       getPortalList(query).then(res => {
         this.list = res.data.list

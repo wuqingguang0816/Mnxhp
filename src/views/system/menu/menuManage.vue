@@ -86,7 +86,7 @@
                     <template slot-scope="scope">
                       <tableOpts @edit="addOrUpdateHandle(scope.row.id)"
                         @del="handleDel(scope.row.id)">
-                        <template v-if="scope.row.type && scope.row.type != 1">
+                        <template v-if="scope.row.type ">
                           <el-dropdown>
                             <span class="el-dropdown-link">
                               <el-button type="text" size="mini">{{ $t("common.moreBtn")
@@ -94,8 +94,9 @@
                               </el-button>
                             </span>
                             <el-dropdown-menu slot="dropdown">
-                              <el-dropdown-item v-if='listQuery.category==="Web"'
-                                @click.native="addOrUpdateHandle('',scope.row.parentId)">
+                              <el-dropdown-item
+                                v-if='listQuery.category==="Web" && scope.row.type==1'
+                                @click.native="addOrUpdateHandle('',scope.row.id)">
                                 新建子级
                               </el-dropdown-item>
                               <template v-if="[2, 3, 4].indexOf(scope.row.type) > -1">
@@ -116,7 +117,8 @@
                                   数据权限
                                 </el-dropdown-item>
                               </template>
-                              <el-dropdown-item @click.native="exportMenu(scope.row.id)">
+                              <el-dropdown-item @click.native="exportMenu(scope.row.id)"
+                                v-if="scope.row.type!=1">
                                 导出模板
                               </el-dropdown-item>
                             </el-dropdown-menu>

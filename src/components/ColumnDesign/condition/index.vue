@@ -142,7 +142,10 @@
                   ['radio', 'checkbox', 'select'].includes(item.jnpfKey)
                 "
               >
-                <el-select :disabled="item.disabled" v-model="item.fieldValue" placeholder="请选择" :multiple="item.multiple">
+                <template v-if="['null','notNull'].includes(item.symbol)">
+                  <el-input :disabled="item.disabled" v-model="item.fieldValue" placeholder="请选择"></el-input>
+                </template>
+                <el-select v-else :disabled="item.disabled" v-model="item.fieldValue" placeholder="请选择" :multiple="item.multiple">
                   <el-option
                     v-for="(item, index) in item.dataOptions"
                     :key="index"
@@ -151,6 +154,7 @@
                     :value="item[item.dataValue]"
                   ></el-option>
                 </el-select>
+                
               </template>
               <template v-else-if="['cascader'].includes(item.jnpfKey)">
 
@@ -849,14 +853,16 @@ export default {
       }
       if (["time"].includes(item.jnpfKey) && !['null','notNull'].includes(val)) {
         if (val == "between") {
-          item.fieldValue = ["", ""];
+          let date = new Date()
+          date.setHours(8)
+          date.setMinutes(0)
+          date.setSeconds(0)
+          item.fieldValue = [date,date];
         } else {
           item.fieldValue = "";
         }
       }
-      if(item.jnpfKey =='radio'){
-        item.fieldValue = "";
-      }
+
       if(['null','notNull'].includes(val)){
         item.disabled = true
       }else{
@@ -882,15 +888,15 @@ export default {
       }
 
       
-      if(["select"].includes(item.jnpfKey)){
-        
+      if(['select','radio','checkbox'].includes(item.jnpfKey)){
         if(["in", "notIn"].includes(val)){
           item.fieldValue = []
         }else{
           item.fieldValue = ''
         }
-        
       }
+
+
       this.$set(this.pconditions, i, item);
     },
     logicChange(val, item) {

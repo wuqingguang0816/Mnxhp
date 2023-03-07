@@ -13,10 +13,11 @@
         </el-table-column>
         <el-table-column label="操作" width="100">
           <template slot-scope="scope">
-            <div class="edit-outline" @click="addOrUpdateHandle(scope.row.id)"
-              v-if="scope.row.commonWordsType">
-              <i class="el-icon-edit-outline" />
-            </div>
+            <el-button type="text" @click="addOrUpdateHandle(scope.row.id)"
+              v-if="scope.row.commonWordsType" icon="el-icon-edit-outline"
+              class="outline"></el-button>
+            <el-button type="text" class="JNPF-table-delBtn outline" icon="el-icon-delete"
+              v-if="scope.row.commonWordsType" @click="handleDel(scope.row.id)"></el-button>
           </template>
         </el-table-column>
       </JNPF-table>
@@ -61,7 +62,8 @@ import {
   getSelector,
   Update,
   Create,
-  getCommonWordsInfo
+  getCommonWordsInfo,
+  deleteCommonWords
 } from '@/api/system/commonWords'
 export default {
   components: {},
@@ -126,7 +128,7 @@ export default {
       })
     },
     select() {
-      if (!this.checked) return
+      if (!this.checked) return this.$message.warning("请选择一条数据")
       this.$emit('input', this.checked)
       this.$emit('change', this.checkedRow)
       this.visible = false
@@ -156,6 +158,24 @@ export default {
     rowClick(row) {
       this.checked = row.id
       this.checkedRow = row
+    },
+    handleDel(id) {
+      this.$confirm(this.$t('common.delTip'), this.$t('common.tipTitle'), {
+        type: 'warning'
+      }).then(() => {
+        deleteCommonWords(id).then(res => {
+          this.$message({
+            type: 'success',
+            message: res.msg,
+            duration: 1500,
+            onClose: () => {
+              this.checked = ''
+              this.checkedRow = {}
+              this.initData()
+            }
+          })
+        })
+      }).catch(() => { })
     },
     dataFormSubmit(type) {
       this.$refs['dataForm'].validate((valid) => {
@@ -202,10 +222,8 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
-.edit-outline {
+.outline {
   font-size: 22px;
-  color: rgb(129, 211, 248);
-  cursor: pointer;
 }
 .table-dialog {
   >>> .el-dialog__body {

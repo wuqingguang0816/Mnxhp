@@ -1,6 +1,6 @@
 <template>
   <div class="comSelect-container">
-    <el-row>
+    <el-row class="jnpf-el-row">
       <el-col :span="18">
         <JNPF-TreeSelect :options="treeData" v-model="innerValue" :placeholder="placeholder"
           clearable :disabled="disabled" v-on="$listeners" lastLevel>
@@ -71,10 +71,27 @@ export default {
   }
 }
 </script>
-<style lang="scss">
+<style lang="scss" scoped>
 .comSelect-container {
   .el-select {
     width: 100%;
+  }
+}
+.jnpf-el-row {
+  >>> .el-input__inner {
+    border-radius: 4px 0 0 4px !important;
+  }
+
+  >>> .el-button {
+    border-left: 0;
+    background-color: #f5f7fa;
+    font-size: 13px;
+    color: #909399;
+    border-radius: 0 4px 4px 0;
+    line-height: 12px;
+  }
+  >>> .el-button:hover {
+    border-color: #dcdfe6;
   }
 }
 </style>

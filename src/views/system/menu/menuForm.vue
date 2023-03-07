@@ -206,13 +206,13 @@ export default {
     init(id, category, systemId, parentId) {
       Object.assign(this.$data, this.$options.data())
       this.dataForm.id = id || ''
-      this.dataForm.parentId = parentId || ''
       this.related = false
       this.visible = true
       this.$nextTick(() => {
         this.$refs['dataForm'].resetFields()
         this.dataForm.category = category
         this.dataForm.systemId = systemId
+
         // 获取上级菜单
         getMenuSelector({ category }, id || 0, systemId).then(res => {
           let topItem = {
@@ -223,6 +223,7 @@ export default {
           }
           this.treeData = [topItem]
         })
+        this.dataForm.parentId = parentId || ''
         // 获取菜单类型
         this.typeData = this.dataForm.category === 'App' ? appTypeData : typeData
         // 获取表单数据

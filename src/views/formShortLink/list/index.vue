@@ -134,6 +134,16 @@ import CustomBox from '@/components/JNPFCustom'
 import { getConfig, checkPwd } from '@/api/onlineDev/webDesign'
 import QRCode from 'qrcodejs2'
 import md5 from 'js-md5';
+const getFormDataFields = item => {
+  if (item.__config__) {
+    const jnpfKey = item.__config__.jnpfKey
+    const list = ["comInput", "textarea", "numInput", "switch", "date", "time", "colorPicker", "rate", "slider", "editor", "link", "JNPFText", "alert", 'table', "collapse", "tab", "row", "card"]
+    const fieldsSelectList = ["radio", "checkbox", "select", "cascader"]
+    if (list.includes(jnpfKey) || (fieldsSelectList.includes(jnpfKey) && item.__config__.dataType === 'static')) return true
+    return false
+  }
+  return false
+}
 export default {
   name: 'dynamicModel',
   components: { Form, ExportBox, Search, Detail, FlowBox, ChildTableColumn, SuperQuery, CandidateForm, CustomBox },
@@ -259,13 +269,12 @@ export default {
       }
       this.hasBatchBtn = this.columnData.btnsList.some(o => o.value == 'batchRemove')
       this.formData = JSON.parse(this.config.formData)
+      this.formData.fields = this.formFields(this.formData.fields)
       this.customBtnsList = this.columnData.customBtnsList || []
       this.columnBtnsList = this.columnData.columnBtnsList || []
       this.columnOptions = this.columnData.columnOptions || []
       this.listLoading = true
       if (this.isPreview) this.listQuery.menuId = "270579315303777093"
-      let res = await getColumnsByModuleId(this.listQuery.menuId)
-      this.settingsColumnList = res.data || []
       this.rowStyle = this.jnpf.getScriptFunc.call(this, this.columnData.funcs && this.columnData.funcs.rowStyle && this.columnData.funcs.rowStyle.func)
       this.cellStyle = this.jnpf.getScriptFunc.call(this, this.columnData.funcs && this.columnData.funcs.cellStyle && this.columnData.funcs.cellStyle.func)
       this.getColumnList()
@@ -289,6 +298,24 @@ export default {
       } else {
         this.initData()
       }
+    },
+    formFields(getDrawingList) {
+      let list = []
+      const loop = (data, parent) => {
+        if (!data) return
+        if (data.__config__ && this.isIncludesTable(data) && data.__config__.children && Array.isArray(data.__config__.children)) {
+          loop(data.__config__.children, data)
+        }
+        if (Array.isArray(data)) data.forEach(d => loop(d, parent))
+        if (data.__config__) data.__config__.noShow = !getFormDataFields(data)
+        getFormDataFields(data) && list.push(data)
+      }
+      loop(getDrawingList)
+      return list
+    },
+    isIncludesTable(data) {
+      if ((!data.__config__.layout || data.__config__.layout === 'rowFormItem') && data.__config__.jnpfKey !== 'table') return true
+      return data.__config__.jnpfKey == 'table'
     },
     initData() {
       if (this.isPreview) return

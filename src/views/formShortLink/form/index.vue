@@ -36,13 +36,22 @@
   </div>
 </template>
 <script>
-import { createModel } from '@/api/onlineDev/visualDev'
 import Parser from '@/components/Generator/parser/Parser'
 import FlowBox from '@/views/workFlow/components/FlowBox'
 import { getFlowList } from '@/api/workFlow/FlowEngine'
-import { getConfig, checkPwd } from '@/api/onlineDev/webDesign'
+import { getConfig, checkPwd, createModel } from '@/api/onlineDev/webDesign'
 import QRCode from 'qrcodejs2'
 import md5 from 'js-md5';
+const getFormDataFields = item => {
+  if (item.__config__) {
+    const jnpfKey = item.__config__.jnpfKey
+    const list = ["comInput", "textarea", "numInput", "switch", "date", "time", "colorPicker", "rate", "slider", "editor", "link", "JNPFText", "alert", 'table', "collapse", "tab", "row", "card"]
+    const fieldsSelectList = ["radio", "checkbox", "select", "cascader"]
+    if (list.includes(jnpfKey) || (fieldsSelectList.includes(jnpfKey) && item.__config__.dataType === 'static')) return true
+    return false
+  }
+  return false
+}
 export default {
   components: { Parser, FlowBox },
   props: ['config', 'modelId', 'isPreview'],
@@ -89,6 +98,7 @@ export default {
         this.getFlowList(flag)
       } else {
         this.formConf = JSON.parse(this.config.formData)
+        this.formConf.fields = this.formFields(this.formConf.fields)
         this.loading = true
         this.$nextTick(() => {
           this.visible = true
@@ -131,6 +141,25 @@ export default {
 
         this.passwordLoading = false
       })
+    },
+    formFields(getDrawingList) {
+      let list = []
+      const loop = (data, parent) => {
+        if (!data) return
+        if (data.__config__ && this.isIncludesTable(data) && data.__config__.children && Array.isArray(data.__config__.children)) {
+          console.log(222, data, data.__config__.children)
+          loop(data.__config__.children, data)
+        }
+        if (Array.isArray(data)) data.forEach(d => loop(d, parent))
+        if (data.__config__) data.__config__.noShow = !getFormDataFields(data)
+        getFormDataFields(data) && list.push(data)
+      }
+      loop(getDrawingList)
+      return list
+    },
+    isIncludesTable(data) {
+      if ((!data.__config__.layout || data.__config__.layout === 'rowFormItem') && data.__config__.jnpfKey !== 'table') return true
+      return data.__config__.jnpfKey == 'table'
     },
     selectFlow(item) {
       this.flowItem = item
@@ -190,6 +219,7 @@ export default {
     },
     resetForm() {
       this.formConf = JSON.parse(this.config.formData)
+      this.formConf.fields = this.formFields(this.formConf.fields)
       this.$nextTick(() => {
         this.$refs.dynamicForm && this.$refs.dynamicForm.resetForm()
       })

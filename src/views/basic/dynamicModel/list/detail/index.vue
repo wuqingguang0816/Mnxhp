@@ -10,7 +10,7 @@
         </div>
         <span slot="footer" class="dialog-footer">
           <template v-if="formData.hasPrintBtn && formData.printId">
-            <el-button type="primary" @click="printBrowseVisible=true">
+            <el-button type="primary" @click="print">
               {{formData.printButtonText||'打 印'}}
             </el-button>
           </template>
@@ -25,7 +25,7 @@
             <el-page-header @back="goBack" content="详情" />
             <div class="options">
               <template v-if="formData.hasPrintBtn && formData.printId">
-                <el-button type="primary" @click="printBrowseVisible=true">
+                <el-button type="primary" @click="print">
                   {{formData.printButtonText||'打 印'}}
                 </el-button>
               </template>
@@ -51,7 +51,7 @@
           </div>
           <div class="drawer-footer">
             <template v-if="formData.hasPrintBtn && formData.printId">
-              <el-button type="primary" @click="printBrowseVisible=true">
+              <el-button type="primary" @click="print">
                 {{formData.printButtonText||'打 印'}}
               </el-button>
             </template>
@@ -61,11 +61,14 @@
       </el-drawer>
     </template>
     <Detail v-if="detailVisible" ref="Detail" @close="detailVisible = false" />
-    <print-browse :visible.sync="printBrowseVisible" :id="formData.printId" :formId="dataForm.id" />
+    <print-browse :visible.sync="printBrowseVisible" :id="printId" :formId="dataForm.id" />
+    <PrintDialog v-if="printDialogVisible" ref="printDialog" @change="printBrowseHandle">
+    </PrintDialog>
   </div>
 </template>
 
 <script>
+import PrintDialog from '@/components/PrintDialog'
 import { getDataChange, getConfigData } from '@/api/onlineDev/visualDev'
 import { getDataInterfaceDataInfoByIds } from '@/api/systemData/dataInterface'
 import { deepClone } from '@/utils'
@@ -73,9 +76,11 @@ import Parser from './Parser'
 import PrintBrowse from '@/components/PrintBrowse'
 export default {
   name: 'Detail',
-  components: { Parser, PrintBrowse },
+  components: { Parser, PrintBrowse, PrintDialog },
   data() {
     return {
+      printId: '',
+      printDialogVisible: false,
       visible: false,
       dataForm: {
         id: '',
@@ -96,6 +101,22 @@ export default {
   methods: {
     goBack() {
       this.$emit('close')
+    },
+    printBrowseHandle(id) {
+      this.printDialogVisible = false
+      this.printId = id;
+      this.printBrowseVisible = true;
+    },
+    print() {
+      if (this.isPreview) return this.$message({ message: '功能预览不支持打印', type: 'warning' })
+      this.printDialogVisible = true
+      this.$nextTick(() => {
+        if(this.formData.printId.length == 1){
+          this.printBrowseHandle(this.formData.printId[0].id)
+          return
+        }
+        this.$refs.printDialog.init(this.formData.printId)
+      })
     },
     init(formData, modelId, id, useFormPermission) {
       this.formData = deepClone(formData)
