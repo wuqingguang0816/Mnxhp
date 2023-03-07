@@ -89,7 +89,7 @@ export default {
         customUrl: '',
         category: '',
         description: "",
-        enabledLock: 0,
+        enabledLock: 1,
       },
       designBtnLoading: false,
       dataRule: {

@@ -26,12 +26,26 @@
               </el-select>
             </el-form-item>
           </el-col>
+          <template v-if="showAll">
+            <el-col :span="6">
+              <el-form-item label="锁定">
+                <el-select v-model="enabledLock" placeholder="请选择锁定类型">
+                  <el-option label="是" :value="1" />
+                  <el-option label="否" :value="0" />
+                </el-select>
+              </el-form-item>
+            </el-col>
+          </template>
           <el-col :span="6">
             <el-form-item>
               <el-button type="primary" icon="el-icon-search" @click="search()">
                 {{$t('common.search')}}</el-button>
               <el-button icon="el-icon-refresh-right" @click="reset()">{{$t('common.reset')}}
               </el-button>
+              <el-button type="text" icon="el-icon-arrow-down" @click="showAll=true"
+                v-if="!showAll">展开</el-button>
+              <el-button type="text" icon="el-icon-arrow-up" @click="showAll=false" v-else>
+                收起</el-button>
             </el-form-item>
           </el-col>
         </el-form>
@@ -115,6 +129,7 @@ export default {
       keyword: '',
       category: '',
       type: '',
+      enabledLock: '',
       listQuery: {
         currentPage: 1,
         pageSize: 20,
@@ -144,6 +159,7 @@ export default {
       this.keyword = ''
       this.category = ''
       this.type = ''
+      this.enabledLock = ''
       this.search()
     },
     search() {
@@ -166,7 +182,8 @@ export default {
         ...this.listQuery,
         keyword: this.keyword,
         type: this.type,
-        category: this.category
+        category: this.category,
+        enabledLock: this.enabledLock
       }
       getPortalList(query).then(res => {
         this.list = res.data.list
