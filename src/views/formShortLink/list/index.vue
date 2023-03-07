@@ -99,14 +99,7 @@
         </div>
       </div>
     </div>
-    <FlowBox v-if="flowVisible" ref="FlowBox" @close="closeFlow" />
-    <Form v-show="formVisible" ref="Form" @refreshDataList="refresh" />
     <Detail v-show="detailVisible" ref="Detail" @close="detailVisible = false" />
-    <ExportBox v-if="exportBoxVisible" ref="ExportBox" @download="download" />
-    <ImportBox v-if="uploadBoxVisible" ref="UploadBox" @refresh="initData" />
-    <CustomBox v-if="customBoxVisible" ref="CustomBox" @close="customBoxVisible= false" />
-    <SuperQuery v-if="superQueryVisible" ref="SuperQuery" :columnOptions="columnOptions"
-      @superQuery="superQuery" />
     <candidate-form :visible.sync="candidateVisible" :candidateList="candidateList"
       :branchList="branchList" taskId="0" :formData="workFlowFormData"
       @submitCandidate="submitCandidate" :isCustomCopy="isCustomCopy" />
@@ -290,14 +283,7 @@ export default {
       this.defaultListQuery.sort = this.columnData.sort
       this.defaultListQuery.sidx = this.columnData.defaultSidx
       if (this.columnData.type === 3 || !this.columnData.hasPage) this.listQuery.pageSize = 10000
-      if (this.columnData.type === 2) {
-        this.treeProps.value = this.columnData.treePropsValue || 'id'
-        this.treeProps.label = this.columnData.treePropsLabel || 'fullName'
-        this.treeProps.children = this.columnData.treePropsChildren || 'children'
-        this.getTreeView()
-      } else {
-        this.initData()
-      }
+      this.initData()
     },
     formFields(getDrawingList) {
       let list = []
@@ -334,13 +320,9 @@ export default {
             ...this.expandObj,
             hasChildren: true
           }))
-
         }
         if (this.columnData.type !== 3 && this.columnData.hasPage) this.total = res.data.pagination.total
         this.listLoading = false
-        this.$nextTick(() => {
-          if (this.columnData.funcs && this.columnData.funcs.afterOnload && this.columnData.funcs.afterOnload.func) this.setTableLoadFunc()
-        })
       })
     },
     handleLogin() {
