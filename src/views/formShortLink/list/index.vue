@@ -128,13 +128,15 @@ import { getConfig, checkPwd } from '@/api/onlineDev/webDesign'
 import QRCode from 'qrcodejs2'
 import md5 from 'js-md5';
 const getFormDataFields = item => {
-  if (item.__config__) {
-    const jnpfKey = item.__config__.jnpfKey
-    const list = ["comInput", "textarea", "numInput", "switch", "date", "time", "colorPicker", "rate", "slider", "editor", "link", "JNPFText", "alert", 'table', "collapse", "tab", "row", "card"]
-    const fieldsSelectList = ["radio", "checkbox", "select", "cascader"]
-    if (list.includes(jnpfKey) || (fieldsSelectList.includes(jnpfKey) && item.__config__.dataType === 'static')) return true
-    return false
-  }
+  if (!item.__config__ || !item.__config__.jnpfKey) return true
+  const jnpfKey = item.__config__.jnpfKey
+  const list = ["comInput", "textarea", "numInput", "switch", "date", "time", "colorPicker", "rate",
+    "slider", "editor", "link", "JNPFText", "alert", 'table', "collapse", 'collapseItem', 'tabItem',
+    "tab", "row", "card"
+  ]
+  const fieldsSelectList = ["radio", "checkbox", "select", "cascader"]
+  if (list.includes(jnpfKey) || (fieldsSelectList.includes(jnpfKey) && item.__config__.dataType ===
+    'static')) return true
   return false
 }
 export default {
@@ -262,7 +264,7 @@ export default {
       }
       this.hasBatchBtn = this.columnData.btnsList.some(o => o.value == 'batchRemove')
       this.formData = JSON.parse(this.config.formData)
-      this.formData.fields = this.formFields(this.formData.fields)
+      this.formData.fields = this.recurSiveFilter(this.formData.fields)
       this.customBtnsList = this.columnData.customBtnsList || []
       this.columnBtnsList = this.columnData.columnBtnsList || []
       this.columnOptions = this.columnData.columnOptions || []
@@ -285,21 +287,13 @@ export default {
       if (this.columnData.type === 3 || !this.columnData.hasPage) this.listQuery.pageSize = 10000
       this.initData()
     },
-    formFields(getDrawingList) {
-      const loop = (data, parent) => {
-        if (!data) return
-        if (data.__config__ && this.isIncludesTable(data) && data.__config__.children && Array.isArray(data.__config__.children)) {
-          loop(data.__config__.children, data)
-        }
-        if (Array.isArray(data)) data.forEach(d => loop(d, parent))
-        if (data.__config__) data.__config__.noShow = !getFormDataFields(data)
-      }
-      loop(getDrawingList)
-      return getDrawingList
-    },
-    isIncludesTable(data) {
-      if ((!data.__config__.layout || data.__config__.layout === 'rowFormItem') && data.__config__.jnpfKey !== 'table') return true
-      return data.__config__.jnpfKey == 'table'
+    recurSiveFilter(getDrawingList) {
+      let newColumn = getDrawingList.filter(item => getFormDataFields(item))
+      newColumn.forEach(x =>
+        x.__config__ && x.__config__.children && Array.isArray(x.__config__.children) && (x
+          .__config__.children = this.recurSiveFilter(x.__config__.children))
+      )
+      return newColumn
     },
     initData() {
       if (this.isPreview) return
