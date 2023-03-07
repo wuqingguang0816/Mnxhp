@@ -30,8 +30,8 @@
             <el-col :span="6">
               <el-form-item label="锁定">
                 <el-select v-model="enabledLock" placeholder="请选择锁定类型">
-                  <el-option label="是" :value="1" />
-                  <el-option label="否" :value="0" />
+                  <el-option label="启用" :value="1" />
+                  <el-option label="禁用" :value="0" />
                 </el-select>
               </el-form-item>
             </el-col>
@@ -67,6 +67,12 @@
           <el-table-column prop="fullName" label="名称" show-overflow-tooltip min-width="200" />
           <el-table-column prop="enCode" label="编码" width="200" />
           <el-table-column prop="category" label="分类" width="150" />
+          <el-table-column prop="type" label="类型" width="150">
+            <p>{{scope.row.type==1?'配置路径':'门户设计'}}</p>
+          </el-table-column>
+          <el-table-column prop="enabledLock" label="锁定" width="150">
+            <p>{{scope.row.enabledLock==1?'启用':'禁用'}}</p>
+          </el-table-column>
           <el-table-column prop="creatorUser" label="创建人" width="120" />
           <el-table-column prop="creatorTime" label="创建时间" :formatter="jnpf.tableDateFormat"
             width="120" />
