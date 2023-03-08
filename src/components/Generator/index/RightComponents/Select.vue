@@ -3,6 +3,9 @@
     <el-form-item label="控件标题">
       <el-input v-model="activeData.__config__.label" placeholder="请输入控件标题" />
     </el-form-item>
+    <el-form-item label="标题提示">
+      <el-input v-model="activeData.__config__.tipLabel" placeholder="请输入标题提示" />
+    </el-form-item>
     <el-form-item label="占位提示">
       <el-input v-model="activeData.placeholder" placeholder="请输入占位提示" />
     </el-form-item>
@@ -41,8 +44,12 @@
       </draggable>
       <div style="margin-left: 29px;">
         <el-button style="padding-bottom: 0" icon="el-icon-circle-plus-outline" type="text"
-          @click="addSelectItem">
+          @click="addSelectItem()">
           添加选项
+        </el-button>
+        <el-button style="padding-bottom: 0" icon="el-icon-circle-plus-outline" type="text"
+          @click="updateSelectItem">
+          批量编辑
         </el-button>
       </div>
     </template>
@@ -125,6 +132,18 @@
         @close="defaultValueChange">
         <dicIndex ref="dicIndex"></dicIndex>
       </el-dialog>
+      <el-dialog :visible.sync="updateVisible" append-to-body title="批量编辑"
+        class="JNPF-dialog JNPF-dialog_center update-dialog" lock-scroll width="400">
+        <el-alert title="注意：每行对应一个选项；选项名和选项值之间用英文 | 隔开。参考格式如下：" type="warning" :closable="false"
+          show-icon />
+        <el-input type="textarea" :rows="10" v-model="resultInfo" autosize></el-input>
+        <span slot="footer" class="dialog-footer">
+          <el-button @click="updateVisible = false">{{$t('common.cancelButton')}}</el-button>
+          <el-button type="primary" @click="handleSure()">
+            {{$t('common.confirmButton')}}
+          </el-button>
+        </span>
+      </el-dialog>
     </div>
   </el-row>
 </template>
@@ -140,9 +159,19 @@ export default {
   data() {
     return {
       dicVisible: false,
+      updateVisible: false,
+      resultInfo: '',
+      separator: '|',
     }
   },
   methods: {
+    addSelectItem() {
+      const id = this.jnpf.idGenerator()
+      this.activeData.__slot__.options.push({
+        id: id,
+        fullName: '选项' + id,
+      })
+    },
     selectChange() {
       this.$emit('changeSelect')
       this.dictionaryTypeChange(this.dictionaryId)
@@ -155,7 +184,44 @@ export default {
       this.$nextTick(() => {
         this.$refs.dicIndex.initData()
       })
-    }
+    },
+    updateSelectItem() {
+      this.resultInfo = ''
+      if (this.activeData.__slot__.options.length > 0) {
+        this.activeData.__slot__.options.forEach((opt) => {
+          if (opt.id === opt.fullName) {
+            this.resultInfo += opt.id + '\n'
+          } else {
+            this.resultInfo += opt.fullName + this.separator + opt.id + '\n'
+          }
+        })
+      }
+      this.updateVisible = true
+    },
+    handleSure() {
+      let lineArray = this.resultInfo.split('\n')
+      if (lineArray.length > 0) {
+        this.activeData.__slot__.options = []
+        lineArray.forEach((optLine) => {
+          if (!!optLine && !!optLine.trim()) {
+            if (optLine.indexOf(this.separator) !== -1) {
+              this.activeData.__slot__.options.push({
+                id: optLine.split(this.separator)[0],
+                fullName: optLine.split(this.separator)[1]
+              })
+            } else {
+              this.activeData.__slot__.options.push({
+                id: optLine,
+                fullName: optLine
+              })
+            }
+          }
+        })
+      } else {
+        this.activeData.__slot__.options = []
+      }
+      this.updateVisible = false
+    },
   }
 }
 </script>
@@ -175,6 +241,17 @@ export default {
   }
   >>> .el-button:hover {
     border-color: #dcdfe6;
+  }
+}
+.update-dialog {
+  >>> .jsoneditor-outer {
+    >>> .el-dialog__body {
+      // min-height: 300px !important;
+      padding: 10px 20px 10px !important;
+    }
+    .option-box-tip {
+      margin-bottom: 20px;
+    }
   }
 }
 </style>

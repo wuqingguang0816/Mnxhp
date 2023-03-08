@@ -6,6 +6,9 @@
     <el-form-item label="提示图标">
       <el-switch v-model="activeData['show-icon']" />
     </el-form-item>
+    <el-form-item label="辅助文本">
+      <el-input v-model="activeData.description" />
+    </el-form-item>
     <el-form-item label="样式效果">
       <div class="type-list">
         <div class="type-list-item" :class="{active:activeData.type===item.id}"
@@ -13,6 +16,15 @@
           <el-alert :title="item.fullName" :type="item.id" :closable="false" center />
         </div>
       </div>
+    </el-form-item>
+    <el-form-item label="提示可关闭">
+      <el-switch v-model="activeData.closable" />
+    </el-form-item>
+    <el-form-item label="按钮文字" v-if="activeData.closable">
+      <el-input v-model="activeData.closeText" />
+    </el-form-item>
+    <el-form-item label="提示图标">
+      <el-switch v-model="activeData.showIcon" />
     </el-form-item>
   </el-row>
 </template>

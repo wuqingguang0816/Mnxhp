@@ -3,6 +3,9 @@
     <el-form-item label="控件标题">
       <el-input v-model="activeData.__config__.label" placeholder="请输入控件标题" />
     </el-form-item>
+    <el-form-item label="标题提示">
+      <el-input v-model="activeData.__config__.tipLabel" placeholder="请输入标题提示" />
+    </el-form-item>
     <el-form-item label="关联弹窗">
       <el-select v-model="activeData.relationField" placeholder="请选择关联弹窗" clearable>
         <el-option v-for="(item,i) in options" :key="i" :label="item.__config__.label"

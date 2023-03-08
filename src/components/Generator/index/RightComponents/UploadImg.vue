@@ -3,6 +3,9 @@
     <el-form-item label="控件标题">
       <el-input v-model="activeData.__config__.label" placeholder="请输入控件标题" />
     </el-form-item>
+    <el-form-item label="标题提示">
+      <el-input v-model="activeData.__config__.tipLabel" placeholder="请输入标题提示" />
+    </el-form-item>
     <el-form-item label="上传提示">
       <el-input v-model="activeData.tipText" placeholder="请输入上传提示" type="textarea" />
     </el-form-item>

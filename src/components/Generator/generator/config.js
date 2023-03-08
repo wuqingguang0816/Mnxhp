@@ -45,6 +45,7 @@ export const inputComponents = [
     __config__: {
       jnpfKey: "comInput",
       label: "单行输入",
+      tipLabel: "",
       labelWidth: undefined,
       showLabel: true,
       tag: "el-input",
@@ -87,6 +88,7 @@ export const inputComponents = [
     __config__: {
       jnpfKey: "textarea",
       label: "多行输入",
+      tipLabel: "",
       labelWidth: undefined,
       showLabel: true,
       tag: "el-input",
@@ -124,6 +126,7 @@ export const inputComponents = [
     __config__: {
       jnpfKey: "numInput",
       label: "数字输入",
+      tipLabel: "",
       showLabel: true,
       labelWidth: undefined,
       tag: "JnpfInputNumber",
@@ -163,6 +166,7 @@ export const inputComponents = [
     __config__: {
       jnpfKey: "switch",
       label: "开关",
+      tipLabel: "",
       labelWidth: undefined,
       showLabel: true,
       tag: "el-switch",
@@ -194,6 +198,7 @@ export const inputComponents = [
     __config__: {
       jnpfKey: "radio",
       label: "单选框组",
+      tipLabel: "",
       labelWidth: undefined,
       showLabel: true,
       tag: "JnpfRadio",
@@ -243,6 +248,7 @@ export const inputComponents = [
     __config__: {
       jnpfKey: "checkbox",
       label: "多选框组",
+      tipLabel: "",
       labelWidth: undefined,
       showLabel: true,
       tag: "JnpfCheckbox",
@@ -292,6 +298,7 @@ export const inputComponents = [
     __config__: {
       jnpfKey: "select",
       label: "下拉选择",
+      tipLabel: "",
       labelWidth: undefined,
       showLabel: true,
       tag: "el-select",
@@ -343,6 +350,7 @@ export const inputComponents = [
     __config__: {
       jnpfKey: "cascader",
       label: "级联选择",
+      tipLabel: "",
       labelWidth: undefined,
       showLabel: true,
       tag: "el-cascader",
@@ -401,9 +409,10 @@ export const inputComponents = [
     __config__: {
       jnpfKey: "date",
       label: "日期选择",
+      tipLabel: "",
       labelWidth: undefined,
       showLabel: true,
-      tag: "el-date-picker",
+      tag: "JnpfDatePicker",
       tagIcon: "icon-ym icon-ym-generator-date",
       className: [],
       defaultValue: null,
@@ -412,6 +421,14 @@ export const inputComponents = [
       layout: "colFormItem",
       span: 24,
       dragDisabled: false,
+      startTimeRule: false,
+      startTimeType: 1,
+      startTimeTarget: 1,
+      startTimeValue: "",
+      endTimeRule: false,
+      endTimeType: 1,
+      endTimeTarget: 1,
+      endTimeValue: "",
       visibility: ["pc", "app"],
       tableName: "",
       regList: [],
@@ -430,12 +447,17 @@ export const inputComponents = [
     clearable: true,
     format: "yyyy-MM-dd",
     "value-format": "timestamp",
-    readonly: false
+    startTime: null,
+    endTime: null,
+    readonly: false,
+    startRelationField: "",
+    endRelationField: "",
   },
   {
     __config__: {
       jnpfKey: "time",
       label: "时间选择",
+      tipLabel: "",
       labelWidth: undefined,
       showLabel: true,
       tag: "el-time-picker",
@@ -472,6 +494,7 @@ export const inputComponents = [
     __config__: {
       jnpfKey: "uploadFz",
       label: "文件上传",
+      tipLabel: "",
       labelWidth: undefined,
       showLabel: true,
       tag: "JNPF-UploadFz",
@@ -500,13 +523,14 @@ export const inputComponents = [
     pathType: "defaultPath",
     isAccount: 0,
     folder: "",
-    tipText:'',
+    tipText: '',
     limit: 9
   },
   {
     __config__: {
       jnpfKey: "uploadImg",
       label: "图片上传",
+      tipLabel: "",
       labelWidth: undefined,
       showLabel: true,
       tag: "JNPF-UploadImg",
@@ -534,13 +558,14 @@ export const inputComponents = [
     pathType: "defaultPath",
     isAccount: 0,
     folder: "",
-    tipText:'',
+    tipText: '',
     limit: 9
   },
   {
     __config__: {
       jnpfKey: "colorPicker",
       label: "颜色选择",
+      tipLabel: "",
       labelWidth: undefined,
       showLabel: true,
       tag: "el-color-picker",
@@ -565,6 +590,7 @@ export const inputComponents = [
     __config__: {
       jnpfKey: "rate",
       label: "评分",
+      tipLabel: "",
       labelWidth: undefined,
       showLabel: true,
       tag: "el-rate",
@@ -595,6 +621,7 @@ export const inputComponents = [
     __config__: {
       jnpfKey: "slider",
       label: "滑块",
+      tipLabel: "",
       labelWidth: undefined,
       showLabel: true,
       tag: "el-slider",
@@ -626,6 +653,7 @@ export const inputComponents = [
     __config__: {
       jnpfKey: "editor",
       label: "富文本",
+      tipLabel: "",
       labelWidth: undefined,
       showLabel: true,
       tag: "JNPF-Quill",
@@ -674,6 +702,7 @@ export const inputComponents = [
     __config__: {
       jnpfKey: "button",
       label: "按钮",
+      tipLabel: "",
       labelWidth: undefined,
       showLabel: false,
       tag: "jnpf-button",
@@ -701,6 +730,7 @@ export const inputComponents = [
     __config__: {
       jnpfKey: "JNPFText",
       label: "文本",
+      tipLabel: "",
       labelWidth: undefined,
       showLabel: false,
       tag: "JNPF-Text",
@@ -727,6 +757,7 @@ export const inputComponents = [
     __config__: {
       jnpfKey: "alert",
       label: "提示",
+      tipLabel: "",
       labelWidth: undefined,
       showLabel: false,
       tag: "el-alert",
@@ -751,6 +782,7 @@ export const selectComponents = [
     __config__: {
       jnpfKey: "comSelect",
       label: "组织选择",
+      tipLabel: "",
       labelWidth: undefined,
       showLabel: true,
       tag: "com-select",
@@ -782,6 +814,7 @@ export const selectComponents = [
     __config__: {
       jnpfKey: "depSelect",
       label: "部门选择",
+      tipLabel: "",
       labelWidth: undefined,
       showLabel: true,
       tag: "dep-select",
@@ -815,6 +848,7 @@ export const selectComponents = [
     __config__: {
       jnpfKey: "posSelect",
       label: "岗位选择",
+      tipLabel: "",
       labelWidth: undefined,
       showLabel: true,
       tag: "pos-select",
@@ -848,6 +882,7 @@ export const selectComponents = [
     __config__: {
       jnpfKey: "userSelect",
       label: "用户选择",
+      tipLabel: "",
       labelWidth: undefined,
       showLabel: true,
       tag: "user-select",
@@ -887,6 +922,7 @@ export const selectComponents = [
     __config__: {
       jnpfKey: "roleSelect",
       label: "角色选择",
+      tipLabel: "",
       labelWidth: undefined,
       showLabel: true,
       tag: "roleSelect",
@@ -916,6 +952,7 @@ export const selectComponents = [
     __config__: {
       jnpfKey: "groupSelect",
       label: "分组选择",
+      tipLabel: "",
       labelWidth: undefined,
       showLabel: true,
       tag: "groupSelect",
@@ -946,6 +983,7 @@ export const selectComponents = [
     __config__: {
       jnpfKey: "usersSelect",
       label: "用户组件",
+      tipLabel: "",
       labelWidth: undefined,
       showLabel: true,
       tag: "users-select",
@@ -975,6 +1013,7 @@ export const selectComponents = [
     __config__: {
       jnpfKey: "table",
       label: "设计子表",
+      tipLabel: "",
       showLabel: false,
       tagIcon: "icon-ym icon-ym-generator-table",
       className: [],
@@ -1013,6 +1052,7 @@ export const selectComponents = [
     __config__: {
       jnpfKey: "treeSelect",
       label: "下拉树形",
+      tipLabel: "",
       labelWidth: undefined,
       showLabel: true,
       tag: "JNPFTreeSelect",
@@ -1067,6 +1107,7 @@ export const selectComponents = [
     __config__: {
       jnpfKey: "popupTableSelect",
       label: "下拉表格",
+      tipLabel: "",
       labelWidth: undefined,
       showLabel: true,
       required: false,
@@ -1108,6 +1149,7 @@ export const selectComponents = [
     __config__: {
       jnpfKey: "address",
       label: "省市区域",
+      tipLabel: "",
       labelWidth: undefined,
       showLabel: true,
       tag: "JNPF-Address",
@@ -1139,6 +1181,7 @@ export const selectComponents = [
     __config__: {
       jnpfKey: "billRule",
       label: "单据组件",
+      tipLabel: "",
       labelWidth: undefined,
       showLabel: true,
       tag: "el-input",
@@ -1164,6 +1207,7 @@ export const selectComponents = [
     __config__: {
       jnpfKey: "relationForm",
       label: "关联表单",
+      tipLabel: "",
       labelWidth: undefined,
       showLabel: true,
       tag: "relationForm",
@@ -1201,6 +1245,7 @@ export const selectComponents = [
     __config__: {
       jnpfKey: "popupSelect",
       label: "弹窗选择",
+      tipLabel: "",
       labelWidth: undefined,
       showLabel: true,
       required: false,
@@ -1240,6 +1285,7 @@ export const selectComponents = [
     __config__: {
       jnpfKey: "relationFormAttr",
       label: "关联表单属性",
+      tipLabel: "",
       labelWidth: undefined,
       showLabel: true,
       tag: "relationFormAttr",
@@ -1261,6 +1307,7 @@ export const selectComponents = [
     __config__: {
       jnpfKey: "popupAttr",
       label: "弹窗选择属性",
+      tipLabel: "",
       labelWidth: undefined,
       showLabel: true,
       tag: "popupAttr",
@@ -1286,6 +1333,7 @@ export const systemComponents = [
     __config__: {
       jnpfKey: "createUser",
       label: "创建人员",
+      tipLabel: "",
       labelWidth: undefined,
       showLabel: true,
       tag: "jnpf-open-data",
@@ -1309,6 +1357,7 @@ export const systemComponents = [
     __config__: {
       jnpfKey: "createTime",
       label: "创建时间",
+      tipLabel: "",
       labelWidth: undefined,
       showLabel: true,
       tag: "jnpf-open-data",
@@ -1332,6 +1381,7 @@ export const systemComponents = [
     __config__: {
       jnpfKey: "modifyUser",
       label: "修改人员",
+      tipLabel: "",
       labelWidth: undefined,
       showLabel: true,
       tag: "el-input",
@@ -1354,6 +1404,7 @@ export const systemComponents = [
     __config__: {
       jnpfKey: "modifyTime",
       label: "修改时间",
+      tipLabel: "",
       labelWidth: undefined,
       showLabel: true,
       tag: "el-input",
@@ -1376,6 +1427,7 @@ export const systemComponents = [
     __config__: {
       jnpfKey: "currOrganize",
       label: "所属组织",
+      tipLabel: "",
       labelWidth: undefined,
       showLabel: true,
       tag: "jnpf-open-data",
@@ -1400,6 +1452,7 @@ export const systemComponents = [
     __config__: {
       jnpfKey: "currPosition",
       label: "所属岗位",
+      tipLabel: "",
       labelWidth: undefined,
       showLabel: true,
       tag: "jnpf-open-data",
@@ -1427,6 +1480,7 @@ export const layoutComponents = [
     __config__: {
       jnpfKey: "groupTitle",
       label: "分组标题",
+      tipLabel: "",
       labelWidth: undefined,
       showLabel: false,
       tag: "groupTitle",
@@ -1446,6 +1500,7 @@ export const layoutComponents = [
     __config__: {
       jnpfKey: "divider",
       label: "分割线",
+      tipLabel: "",
       labelWidth: undefined,
       showLabel: false,
       tag: "el-divider",
@@ -1467,6 +1522,7 @@ export const layoutComponents = [
     __config__: {
       jnpfKey: "collapse",
       label: "折叠面板",
+      tipLabel: "",
       showLabel: false,
       tag: "el-collapse",
       tagIcon: "icon-ym icon-ym-generator-fold",
@@ -1505,6 +1561,7 @@ export const layoutComponents = [
     __config__: {
       jnpfKey: "tab",
       label: "标签面板",
+      tipLabel: "",
       showLabel: false,
       tag: "el-tab",
       tagIcon: "icon-ym icon-ym-generator-label",
@@ -1542,6 +1599,7 @@ export const layoutComponents = [
     __config__: {
       jnpfKey: "row",
       label: "栅格容器",
+      tipLabel: "",
       tagIcon: "icon-ym icon-ym-generator-layout",
       className: [],
       layout: "rowFormItem",
@@ -1559,6 +1617,7 @@ export const layoutComponents = [
     __config__: {
       jnpfKey: "card",
       label: "卡片容器",
+      tipLabel: "",
       showLabel: false,
       tag: "el-card",
       tagIcon: "icon-ym icon-ym-generator-card",

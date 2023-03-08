@@ -3,6 +3,9 @@
     <el-form-item label="控件标题">
       <el-input v-model="activeData.__config__.label" placeholder="请输入控件标题" />
     </el-form-item>
+    <el-form-item label="标题提示">
+      <el-input v-model="activeData.__config__.tipLabel" placeholder="请输入标题提示" />
+    </el-form-item>
     <el-form-item label="占位提示" v-if="activeData.__config__.jnpfKey !=='editor'">
       <el-input v-model="activeData.placeholder" placeholder="请输入占位提示" />
     </el-form-item>
@@ -46,12 +49,15 @@
         </el-radio-group>
       </template>
     </el-form-item>
-    <el-form-item label="默认值" v-if="activeData.__config__.jnpfKey != 'userSelect' || (activeData.__config__.jnpfKey==='userSelect' && (activeData.selectType == 'all' || activeData.selectType == 'custom'))">
+    <el-form-item label="默认值"
+      v-if="activeData.__config__.jnpfKey != 'userSelect' || (activeData.__config__.jnpfKey==='userSelect' && (activeData.selectType == 'all' || activeData.selectType == 'custom'))">
       <com-select v-model="activeData.__config__.defaultValue" placeholder="选择默认值" clearable
-        v-if="activeData.__config__.jnpfKey==='comSelect'" :multiple="activeData.multiple" :key="key" :disabled="activeData.__config__.defaultCurrent"/>
+        v-if="activeData.__config__.jnpfKey==='comSelect'" :multiple="activeData.multiple"
+        :key="key" :disabled="activeData.__config__.defaultCurrent" />
       <dep-select v-model="activeData.__config__.defaultValue" placeholder="选择默认值" clearable
         v-if="activeData.__config__.jnpfKey==='depSelect'" :multiple="activeData.multiple"
-        :key="key" :selectType="activeData.selectType" :ableDepIds="activeData.ableDepIds" :disabled="activeData.__config__.defaultCurrent"/>
+        :key="key" :selectType="activeData.selectType" :ableDepIds="activeData.ableDepIds"
+        :disabled="activeData.__config__.defaultCurrent" />
       <pos-select v-model="activeData.__config__.defaultValue" placeholder="选择默认值" clearable
         v-if="activeData.__config__.jnpfKey==='posSelect'" :multiple="activeData.multiple"
         :key="key" :selectType="activeData.selectType" :ableDepIds="activeData.ableDepIds"
@@ -60,7 +66,8 @@
         v-if="activeData.__config__.jnpfKey==='userSelect'" :multiple="activeData.multiple"
         :key="key" :selectType="activeData.selectType" :ableDepIds="activeData.ableDepIds"
         :ablePosIds="activeData.ablePosIds" :ableUserIds="activeData.ableUserIds"
-        :ableRoleIds="activeData.ableRoleIds" :ableGroupIds="activeData.ableGroupIds" :disabled="activeData.__config__.defaultCurrent" />
+        :ableRoleIds="activeData.ableRoleIds" :ableGroupIds="activeData.ableGroupIds"
+        :disabled="activeData.__config__.defaultCurrent" />
       <users-select v-model="activeData.__config__.defaultValue" placeholder="选择默认值" clearable
         v-if="activeData.__config__.jnpfKey==='usersSelect'" :multiple="activeData.multiple"
         :key="key" :selectType="activeData.selectType" :ableIds="activeData.ableIds" />
@@ -72,8 +79,11 @@
       <el-input :value="setDefaultValue(activeData.__config__.defaultValue)" placeholder="请输入默认值"
         @input="onDefaultValueInput" v-if="activeData.__config__.jnpfKey==='editor'" />
     </el-form-item>
-    <el-form-item v-if="(activeData.__config__.jnpfKey==='userSelect' && (activeData.selectType == 'all' || activeData.selectType == 'custom')) || activeData.__config__.jnpfKey==='depSelect' || activeData.__config__.jnpfKey==='comSelect' ">
-      <el-checkbox label="true" v-model="activeData.__config__.defaultCurrent" @change="defaultCurrentChange(activeData.__config__.defaultCurrent, activeData.__config__.jnpfKey)" style="float: right;margin-right: 30px;">
+    <el-form-item
+      v-if="(activeData.__config__.jnpfKey==='userSelect' && (activeData.selectType == 'all' || activeData.selectType == 'custom')) || activeData.__config__.jnpfKey==='depSelect' || activeData.__config__.jnpfKey==='comSelect' ">
+      <el-checkbox label="true" v-model="activeData.__config__.defaultCurrent"
+        @change="defaultCurrentChange(activeData.__config__.defaultCurrent, activeData.__config__.jnpfKey)"
+        style="float: right;margin-right: 30px;">
         <span v-if="activeData.__config__.jnpfKey==='userSelect'">
           默认为当前登录用户
         </span>
@@ -180,7 +190,7 @@ export default {
         this.activeData.ableRoleIds = []
         this.activeData.ableGroupIds = []
         this.activeData.relationField = ''
-        if(this.activeData.selectType != 'all' && this.activeData.selectType != 'custom') {
+        if (this.activeData.selectType != 'all' && this.activeData.selectType != 'custom') {
           this.$set(this.activeData.__config__, 'defaultValue', null)
           this.$set(this.activeData.__config__, 'defaultCurrent', false)
         }
@@ -199,10 +209,10 @@ export default {
       this.key = +new Date()
     },
     defaultCurrentChange(val, jnpfKey) {
-      if(val) {
-        if(jnpfKey === 'comSelect') {
+      if (val) {
+        if (jnpfKey === 'comSelect') {
           this.$set(this.activeData.__config__, 'defaultValue', [])
-        }else{
+        } else {
           this.$set(this.activeData.__config__, 'defaultValue', null)
         }
       }

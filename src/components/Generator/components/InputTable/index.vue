@@ -1,7 +1,12 @@
 <template>
   <div class="jnpf-table-box" :class="[config.__config__.type]">
     <div class="JNPF-common-title" v-if="config.__config__.showTitle && config.__config__.label">
-      <h2>{{ config.__config__.label }}</h2>
+      <span slot="label" v-if="config.__config__.tipLabel">{{config.__config__.label}}
+        <el-tooltip placement="top" :content=config.__config__.tipLabel>
+          <a class='el-icon-warning-outline'></a>
+        </el-tooltip>
+      </span>
+      <h2 v-else>{{config.__config__.label}}</h2>
     </div>
     <el-table :data="tableFormData" class="JNPF-common-table" @cell-click="focusInput"
       v-bind="config.tableConf || {}" :show-summary="config['show-summary']"

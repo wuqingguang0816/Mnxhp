@@ -3,6 +3,9 @@
     <el-form-item label="控件标题">
       <el-input v-model="activeData.__config__.label" placeholder="请输入控件标题" />
     </el-form-item>
+    <el-form-item label="标题提示">
+      <el-input v-model="activeData.__config__.tipLabel" placeholder="请输入标题提示" />
+    </el-form-item>
     <el-form-item label="占位提示">
       <el-input v-model="activeData.placeholder" placeholder="请输入占位提示" />
     </el-form-item>
@@ -28,6 +31,10 @@
         <div style="margin-left: 20px">
           <el-button style="padding-bottom: 0" icon="el-icon-circle-plus-outline" type="text"
             @click="addTreeItem">添加父级</el-button>
+          <el-button style="padding-bottom: 0" icon="el-icon-circle-plus-outline" type="text"
+            @click="treeSelectItem">
+            树形编辑
+          </el-button>
         </div>
       </template>
       <template v-if="activeData.__config__.dataType === 'dictionary'">
@@ -114,6 +121,16 @@
         @close="defaultValueChange">
         <dicIndex ref="dicIndex"></dicIndex>
       </el-dialog>
+      <el-dialog :visible.sync="treeVisible" append-to-body :close-on-click-modal="false"
+        class="JNPF-dialog JNPF-dialog_center JNPF-dialog-tree-select" lock-scroll width="80%">
+        <el-input type="textarea" :rows="10" v-model="resultInfo" autosize></el-input>
+        <span slot="footer" class="dialog-footer">
+          <el-button @click="treeVisible = false">{{$t('common.cancelButton')}}</el-button>
+          <el-button type="primary" @click="treeSure()">
+            {{$t('common.confirmButton')}}
+          </el-button>
+        </span>
+      </el-dialog>
     </div>
   </el-row>
 </template>
@@ -139,6 +156,11 @@ export default {
       },
       renderKey: +new Date(),
       dicVisible: false,
+      treeVisible: false,
+      resultInfo: '',
+      separator: '|',
+
+      treeList: [],
     }
   },
   methods: {
@@ -248,6 +270,75 @@ export default {
         this.activeData.__config__.templateJson = []
         this.activeData.options = []
       })
+    },
+    treeSelectItem() {
+      this.resultInfo = ''
+      console.log(this.activeData.options, this.currentNode)
+      if (this.activeData.options.length > 0) {
+        const loop = (list, id) => {
+          for (let i = 0; i < list.length; i++) {
+            const e = list[i]
+            if (e.id === e.fullName) {
+              this.resultInfo += e.id + '\n'
+            } else {
+              let separator = ''
+              if (id) {
+                separator = this.separator + id
+              }
+              this.resultInfo += e.fullName + this.separator + e.id + separator + '\n'
+            }
+            if (e && e.children && Array.isArray(e.children)) {
+              loop(e.children, e.id)
+            }
+          }
+          console.log(this.resultInfo)
+        }
+        loop(this.activeData.options)
+      }
+      this.treeVisible = true
+    },
+    treeSure() {
+      this.activeData.options = []
+      let lineArray = this.resultInfo.split('\n')
+      if (lineArray.length > 0) {
+        lineArray.forEach((optLine) => {
+          if (!!optLine && !!optLine.trim()) {
+            if (optLine.indexOf(this.separator) !== -1) {
+              let item = optLine.split(this.separator) || []
+              const getParentId = (list, item) => {
+                let parentId = item[item.length - 1]
+                for (let i = 0; i < list.length; i++) {
+                  const element = list[i];
+                  if (element.children && element.children.length) getParentId(element.children, item)
+                  if (element.id == parentId) {
+                    element.children.push(
+                      {
+                        fullName: item[0],
+                        id: item[1],
+                        children: []
+                      }
+                    )
+                  }
+                }
+              }
+              if (item.length < 2) return
+              if (item.length == 2) {
+                this.activeData.options.push({
+                  fullName: item[0],
+                  id: item[1],
+                  children: []
+                })
+              } else {
+                getParentId(this.activeData.options, item)
+              }
+            }
+          }
+        })
+      } else {
+        this.activeData.options = []
+      }
+      console.log(this.activeData.options)
+      this.treeVisible = false
     }
   }
 }

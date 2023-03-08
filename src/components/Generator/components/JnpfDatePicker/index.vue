@@ -36,35 +36,11 @@ export default {
       type: 'date',
       pickerOptions: {
         disabledDate: (time) => {
-          if (this.startTime) {
-            if (time.getTime() <= this.startTime && this.endTime) {
-              return time.getTime() != this.startTime && time.getTime() <= this.endTime
-            }
+          if (this.endTime) {
+            return time.getTime() < this.startTime || time.getTime() > this.endTime
+          } else {
+            return time.getTime() < this.startTime
           }
-          // if (this.startTime && this.startTime == time.getTime()) {
-          //   console.log(222)
-          //   return time.getTime() == this.startTime
-          // } else if (this.startTime < time.getTime()) {
-          //   return time.getTime() < this.startTime
-          // }
-          // if (this.startTime && ) {
-          //   console.log(6666222)
-          //   if (this.endTime && this.endTime <= time.getTime()) {
-          //     return time.getTime() < this.startTime && this.endTime < time.getTime()
-          //   } else if (this.endTime && this.endTime > time.getTime()) {
-          //     return time.getTime() <= this.startTime && this.endTime >= time.getTime()
-          //   }
-          //   return time.getTime() < this.startTime
-          // }
-
-          // if (this.startTime && this.startTime > time.getTime()) {
-          //   if (this.endTime && this.endTime >= time.getTime()) {
-          //     return time.getTime() > this.startTime && this.endTime >= time.getTime()
-          //   } else if (this.endTime && this.endTime >= time.getTime()) {
-          //     return time.getTime() >this.startTime && this.endTime > time.getTime()
-          //   }
-          //   return time.getTime() > this.startTime
-          // }
         }
       }
     }

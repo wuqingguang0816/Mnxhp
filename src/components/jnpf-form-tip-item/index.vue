@@ -7,7 +7,7 @@
           <a :class="tipIcon"></a>
         </el-tooltip>
       </template>
-      <a v-else class="empty-icon"></a>
+      <a v-if="!tipLabel && label" class="empty-icon"></a>
     </span>
     <slot />
   </el-form-item>
