@@ -330,6 +330,7 @@ export default {
       let param = {
         id: this.id,
         type: 1,
+        tenantId: this.tenantId,
         password: md5(this.password)
       }
       checkPwd(param).then((res) => {

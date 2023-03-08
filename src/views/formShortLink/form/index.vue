@@ -124,6 +124,7 @@ export default {
       let param = {
         id: this.id,
         type: 0,
+        tenantId: this.tenantId,
         password: md5(this.password)
       }
       checkPwd(param).then((res) => {
@@ -172,7 +173,7 @@ export default {
       if (!data) return
       this.btnLoading = true
       this.dataForm.data = JSON.stringify(data)
-      createModel(this.modelId, this.dataForm,this.tenantId).then(res => {
+      createModel(this.modelId, this.dataForm, this.tenantId).then(res => {
         this.$message({
           message: res.msg,
           type: 'success',
