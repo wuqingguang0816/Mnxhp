@@ -11,7 +11,7 @@
           </el-col>
           <el-col :span="6">
             <el-form-item label="连接驱动">
-              <el-select v-model="dbType" placeholder="请选择连接驱动" clearable>
+              <el-select v-model="dbType" placeholder="请选择连接驱动" clearable filterable>
                 <el-option v-for="item in categoryList" :key="item.enCode" :label="item.fullName"
                   :value="item.enCode">
                 </el-option>

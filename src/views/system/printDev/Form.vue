@@ -63,7 +63,7 @@
                 :closable="false"></el-alert>
             </div>
             <el-form-item label="数据连接" prop="dbLinkId">
-              <el-select v-model="dataForm.dbLinkId" placeholder="请选择数据库" clearable>
+              <el-select v-model="dataForm.dbLinkId" placeholder="请选择数据库" clearable filterable>
                 <el-option-group v-for="group in dbOptions" :key="group.fullName"
                   :label="group.fullName">
                   <el-option v-for="item in group.children" :key="item.id" :label="item.fullName"

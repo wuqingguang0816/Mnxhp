@@ -40,7 +40,7 @@
           <el-col :span="12">
             <el-form-item label="消息类型" prop="messageType">
               <el-select v-model="dataForm.messageType" placeholder="选择消息类型" clearable
-                :disabled="this.dataForm.id?true:false" @change="onMsgTypeChange">
+                :disabled="this.dataForm.id?true:false" @change="onMsgTypeChange" filterable>
                 <el-option v-for="(item,index) in messageTypeList" :key="index"
                   :label="item.fullName" :value="item.enCode">
                 </el-option>

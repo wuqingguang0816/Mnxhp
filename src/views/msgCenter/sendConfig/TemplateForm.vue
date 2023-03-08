@@ -4,7 +4,7 @@
     width='600px'>
     <el-form :model="dataForm" :rules="dataRule" ref="dataForm" label-width="100px">
       <el-form-item label="消息类型" prop="messageType">
-        <el-select v-model="dataForm.messageType" placeholder="选择消息类型" clearable
+        <el-select v-model="dataForm.messageType" placeholder="选择消息类型" clearable filterable
           @change="onMessageTypeChange">
           <el-option v-for="(item,index) in msgTypeList" :key="index" :label="item.fullName"
             :value="item.enCode">

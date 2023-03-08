@@ -6,7 +6,7 @@
     <el-form ref="dataForm" :model="dataForm" label-width="140px" :rules="dataRule"
       @submit.native.prevent class="mt-10">
       <el-form-item label="数据库连接 From" prop="dbConnectionFrom">
-        <el-select v-model="dataForm.dbConnectionFrom" placeholder="请选择连接">
+        <el-select v-model="dataForm.dbConnectionFrom" placeholder="请选择连接" filterable>
           <el-option-group v-for="group in dbOptions" :key="group.fullName" :label="group.fullName">
             <el-option v-for="item in group.children" :key="item.id" :label="item.fullName"
               :value="item.id" />
@@ -14,7 +14,7 @@
         </el-select>
       </el-form-item>
       <el-form-item label="数据库连接 To" prop="dbConnectionTo">
-        <el-select v-model="dataForm.dbConnectionTo" placeholder="请选择连接">
+        <el-select v-model="dataForm.dbConnectionTo" placeholder="请选择连接" filterable>
           <el-option-group v-for="group in dbOptions" :key="group.fullName" :label="group.fullName">
             <el-option v-for="item in group.children" :key="item.id" :label="item.fullName"
               :value="item.id" />

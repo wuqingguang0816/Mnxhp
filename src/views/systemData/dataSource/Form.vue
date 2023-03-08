@@ -4,7 +4,7 @@
     <el-form ref="dataForm" :model="dataForm" :rules="dataRule" label-width="100px">
       <el-form-item label="连接驱动" prop="dbType">
         <el-select v-model="dataForm.dbType" placeholder="请选择" :disabled='!!dataForm.id'
-          @change='handleChange'>
+          @change='handleChange' filterable>
           <el-option v-for="item in dbOptions" :key="item.enCode" :label="item.fullName"
             :value="item.enCode" />
         </el-select>

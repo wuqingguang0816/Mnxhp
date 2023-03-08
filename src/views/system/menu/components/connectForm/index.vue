@@ -4,7 +4,8 @@
     <el-form ref="dataForm" :model="dataForm" :rules="dataRule" label-width="80px"
       v-loading="formLoading" class="menuForm">
       <el-form-item label="数据连接" prop="dbLinkId">
-        <el-select v-model="dataForm.dbLinkId" placeholder="请选择数据库" @change="onDbChange" clearable>
+        <el-select v-model="dataForm.dbLinkId" placeholder="请选择数据库" @change="onDbChange" clearable
+          filterable>
           <el-option-group v-for="group in dbOptions" :key="group.fullName" :label="group.fullName">
             <el-option v-for="item in group.children" :key="item.id" :label="item.fullName"
               :value="item.id" />

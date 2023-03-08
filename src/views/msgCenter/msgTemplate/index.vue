@@ -20,7 +20,7 @@
           </el-col>
           <el-col :span="6">
             <el-form-item label="消息类型">
-              <el-select v-model="msgType" placeholder="选择消息类型" clearable>
+              <el-select v-model="msgType" placeholder="选择消息类型" clearable filterable>
                 <el-option v-for="(item,index) in msgTypeList" :key="index" :label="item.fullName"
                   :value="item.enCode">
                 </el-option>

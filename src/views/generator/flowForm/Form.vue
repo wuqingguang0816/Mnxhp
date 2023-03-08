@@ -47,7 +47,7 @@
             </el-form-item>
             <el-form-item label="数据连接">
               <el-select v-model="dataForm.dbLinkId" placeholder="请选择数据库" @change="onDbChange"
-                clearable>
+                clearable filterable>
                 <el-option-group v-for="group in dbOptions" :key="group.fullName"
                   :label="group.fullName">
                   <el-option v-for="item in group.children" :key="item.id" :label="item.fullName"
@@ -74,7 +74,7 @@
               </el-table-column>
               <el-table-column prop="tableField" label="外键字段">
                 <template slot-scope="scope" v-if="scope.row.typeId !=='1'">
-                  <el-select v-model="scope.row.tableField" placeholder="请选择">
+                  <el-select v-model="scope.row.tableField" placeholder="请选择" filterable>
                     <el-option v-for="item in scope.row.fields" :key="item.field"
                       :label="item.field" :value="item.field">
                     </el-option>
@@ -84,7 +84,7 @@
               <!-- <el-table-column prop="relationTable" label="关联主表" /> -->
               <el-table-column prop="relationField" label="关联主键">
                 <template slot-scope="scope" v-if="scope.row.typeId !=='1'">
-                  <el-select v-model="scope.row.relationField" placeholder="请选择">
+                  <el-select v-model="scope.row.relationField" placeholder="请选择" filterable>
                     <el-option v-for="item in mainTableFields" :key="item.field" :label="item.field"
                       :value="item.field">
                     </el-option>
