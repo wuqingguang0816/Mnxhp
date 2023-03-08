@@ -524,7 +524,6 @@ export default {
       })
     },
     buildOptions(componentList, data, formData) {
-      console.log(data)
       componentList.forEach(cur => {
         const config = cur.__config__
         if (dyOptionsList.indexOf(config.jnpfKey) > -1) {
@@ -550,8 +549,6 @@ export default {
               isTreeSelect ? data[cur.__vModel__ + 'Options'] = cur.options : data[cur.__vModel__ + 'Options'] = cur.__slot__.options
             })
           } else {
-            console.log(cur)
-            console.log(isTreeSelect)
             isTreeSelect ? data[cur.__vModel__ + 'Options'] = cur.options : data[cur.__vModel__ + 'Options'] = cur.__slot__.options
           }
         }
