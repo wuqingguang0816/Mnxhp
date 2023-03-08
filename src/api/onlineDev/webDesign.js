@@ -16,9 +16,9 @@ export function save(data) {
 }
 
 // 获取外链信息
-export function getConfig(id) {
+export function getConfig(id, tenantId) {
   return request({
-    url: `/api/visualdev/ShortLink/getConfig/${id}`,
+    url: `/api/visualdev/ShortLink/getConfig/${id}` + (tenantId ? '?tenantId=' + tenantId : ''),
     method: 'get'
   })
 }
@@ -40,18 +40,29 @@ export function getConfigData(modelId, data, tenantId) {
   })
 }
 // 添加数据
-export function createModel(modelId, data) {
+export function createModel(modelId, data, tenantId) {
   return request({
-    url: `/api/visualdev/ShortLink/${modelId}`,
+    url: `/api/visualdev/ShortLink/${modelId}` + (tenantId ? '?tenantId=' + tenantId : ''),
     method: 'POST',
     data
   })
 }
 
+
 // 获取数据详情
-export function getDataChange(modelId, id) {
+export function getDataChange(modelId, id, tenantId) {
   return request({
-    url: `/api/visualdev/ShortLink/${modelId}/${id}/DataChange`,
+    url: `/api/visualdev/ShortLink/${modelId}/${id}/DataChange` + (tenantId ? '?tenantId=' + tenantId : ''),
     method: 'GET'
+  })
+}
+
+
+// 获取数据列表
+export function getModelListLink(modelId, data, tenantId) {
+  return request({
+    url: `/api/visualdev/ShortLink/${modelId}/ListLink` + (tenantId ? '?tenantId=' + tenantId : ''),
+    method: 'post',
+    data
   })
 }

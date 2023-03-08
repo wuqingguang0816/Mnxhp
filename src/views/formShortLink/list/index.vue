@@ -107,7 +107,7 @@
 </template>
 
 <script>
-import { getModelListLink, getModelSubList, deleteModel, batchDelete, exportModel, createModel, updateModel, getConfigData } from '@/api/onlineDev/visualDev'
+import { getModelSubList, deleteModel, batchDelete, exportModel, createModel, updateModel, getConfigData } from '@/api/onlineDev/visualDev'
 import { Create, Update } from '@/api/workFlow/workFlowForm'
 import { getDictionaryDataSelector } from '@/api/systemData/dictionary'
 import { getDataInterfaceRes } from '@/api/systemData/dataInterface'
@@ -124,7 +124,7 @@ import ChildTableColumn from './child-table-column'
 import SuperQuery from '@/components/SuperQuery'
 import CandidateForm from '@/views/workFlow/components/CandidateForm'
 import CustomBox from '@/components/JNPFCustom'
-import { getConfig, checkPwd } from '@/api/onlineDev/webDesign'
+import { getModelListLink, getConfig, checkPwd } from '@/api/onlineDev/webDesign'
 import QRCode from 'qrcodejs2'
 import md5 from 'js-md5';
 const getFormDataFields = item => {
@@ -142,7 +142,7 @@ const getFormDataFields = item => {
 export default {
   name: 'dynamicModel',
   components: { Form, ExportBox, Search, Detail, FlowBox, ChildTableColumn, SuperQuery, CandidateForm, CustomBox },
-  props: ['config', 'modelId', 'isPreview'],
+  props: ['config', 'modelId', 'isPreview', 'tenantId'],
   data() {
     return {
       systemComponentsList,
@@ -231,7 +231,7 @@ export default {
     }
   },
   created() {
-    getConfig(this.modelId).then(res => {
+    getConfig(this.modelId, this.tenantId).then(res => {
       this.searchList = res.data.columnCondition ? JSON.parse(res.data.columnCondition) : []
       this.dataList = res.data.columnText ? JSON.parse(res.data.columnText) : []
       this.formLink = res.data.formLink || ''
@@ -298,7 +298,7 @@ export default {
     initData() {
       if (this.isPreview) return
       this.listLoading = true
-      getModelListLink(this.modelId, this.listQuery).then(res => {
+      getModelListLink(this.modelId, this.listQuery, this.tenantId).then(res => {
         if (this.columnData.type === 4) {
           this.list = res.data.list.map(o => ({
             ...o,
@@ -725,7 +725,7 @@ export default {
     goDetail(id, row) {
       this.detailVisible = true
       this.$nextTick(() => {
-        this.$refs.Detail.init(this.formData, this.modelId, id)
+        this.$refs.Detail.init(this.formData, this.modelId, id, this.tenantId)
       })
     },
     sortChange({ column, prop, order }) {

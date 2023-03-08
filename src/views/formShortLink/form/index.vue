@@ -56,7 +56,7 @@ const getFormDataFields = item => {
 }
 export default {
   components: { Parser, FlowBox },
-  props: ['config', 'modelId', 'isPreview'],
+  props: ['config', 'modelId', 'isPreview', 'tenantId'],
   data() {
     return {
       visible: false,
@@ -79,7 +79,7 @@ export default {
     }
   },
   created() {
-    getConfig(this.modelId).then(res => {
+    getConfig(this.modelId, this.tenantId).then(res => {
       this.formLink = res.data.formLink || ''
       this.id = res.data.id || 0
       this.formPassUse = res.data.formPassUse || 0
@@ -94,7 +94,6 @@ export default {
       } else {
         this.formConf = JSON.parse(this.config.formData)
         this.formConf.fields = this.recurSiveFilter(this.formConf.fields)
-        console.log(this.formConf.fields)
         this.loading = true
         this.$nextTick(() => {
           this.visible = true
@@ -173,7 +172,7 @@ export default {
       if (!data) return
       this.btnLoading = true
       this.dataForm.data = JSON.stringify(data)
-      createModel(this.modelId, this.dataForm).then(res => {
+      createModel(this.modelId, this.dataForm,this.tenantId).then(res => {
         this.$message({
           message: res.msg,
           type: 'success',

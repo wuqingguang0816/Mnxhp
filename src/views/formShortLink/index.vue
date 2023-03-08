@@ -1,7 +1,7 @@
 
 <template>
   <component :is="currentView" :config="config" :modelId="modelId" :isPreview="isPreview"
-    v-show="showPage" />
+    :tenantId='tenantId' v-show="showPage" />
 </template>
 
 <script>
