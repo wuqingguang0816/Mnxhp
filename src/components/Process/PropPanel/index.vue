@@ -471,7 +471,7 @@
                     <p style="width:112px"></p>
                     <JNPF-TreeSelect :options="printTplList" v-model="startForm.printId"
                       placeholder="请选择打印模板" lastLevel clearable multiple>
-                      <div style="padding:10px 0;text-align:center" slot="header">
+                      <div style="padding:10px 0;text-align:center" class="printWrap" slot="header">
                         <el-link type="primary" :underline="false" @click="openPrint">添加打印模板
                         </el-link>
                         <el-link type="info" style="position: absolute;right:8px;top: 18px;"
@@ -1556,7 +1556,7 @@
                   <p style="width:112px"></p>
                   <JNPF-TreeSelect :options="printTplList" v-model="approverForm.printId"
                     placeholder="请选择打印模板" lastLevel clearable multiple>
-                    <div style="padding:10px 0;text-align:center" slot="header">
+                    <div  class="printWrap" slot="header">
                       <el-link type="primary" :underline="false" @click="openPrint">添加打印模板
                       </el-link>
                       <el-link type="info" style="position: absolute;right:8px;top: 18px;"
@@ -4005,10 +4005,14 @@ export default {
   line-height: 28px;
 }
 
->>> .el-divider--horizontal {
-  margin-top: 10px;
-}
 
+.printWrap {
+  padding:10px 0;
+  text-align:center;
+  >>> .el-divider--horizontal {
+    margin-top: 10px;
+  }
+}
 .actions {
   position: absolute;
   bottom: 0;

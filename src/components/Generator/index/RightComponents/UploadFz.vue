@@ -73,10 +73,13 @@ export default {
   computed: {
     acceptArray: {
       get() {
-        return this.activeData.accept != "" ? this.activeData.accept.split(',,') : []
+        if (!this.activeData.accept) return []
+        const str = this.activeData.accept.replace('.xls,.xlsx', '.xls|.xlsx').replace('.doc,.docx', '.doc|.docx')
+        const list = str.split(',').map(o => o.replace('|', ','))
+        return list
       },
       set(val) {
-        this.activeData.accept = val.join(',,');
+        this.activeData.accept = val.join(',');
       }
     },
   },

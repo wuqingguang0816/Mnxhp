@@ -515,7 +515,7 @@
               <el-form-item label="" v-if="formConf.hasPrintBtn">
                 <JNPF-TreeSelect :options="printTplList" v-model="formConf.printId" multiple
                   placeholder="请选择打印模板" lastLevel clearable>
-                  <div style="padding:10px 0;text-align:center" slot="header">
+                  <div  class="printWrap" slot="header">
                     <el-link type="primary" :underline="false" @click="openPrint">添加打印模板
                     </el-link>
                     <el-link type="info" style="position: absolute;right:8px;top: 18px;"
@@ -1279,8 +1279,14 @@ export default {
 </script>
 
 <style lang="scss" scoped>
->>> .el-divider--horizontal {
-  margin-top: 10px;
+
+.printWrap {
+  padding:10px 0;
+  text-align:center;
+  >>>.el-divider--horizontal {
+    margin: 10px 0;
+    
+  }
 }
 .right-board {
   width: 340px;

@@ -306,7 +306,7 @@
                 <el-form-item label="" label-width="104px">
                   <JNPF-TreeSelect key="sel" :options="printTplList" v-model="columnData.printIds"
                     multiple placeholder="请选择打印模板" lastLevel clearable node-key="id">
-                    <div style="padding:10px 0;text-align:center" class="printWrap" slot="header">
+                    <div  class="printWrap" slot="header">
                       <el-link type="primary" :underline="false" @click="openPrint">添加打印模板
                       </el-link>
                       <el-link type="info" style="position: absolute;right:8px;top: 18px;"
@@ -1026,7 +1026,9 @@ export default {
 @import './index.scss';
 
 .printWrap {
-  .el-divider--horizontal {
+  padding:10px 0;
+  text-align:center;
+  >>> .el-divider--horizontal {
     margin: 10px 0 !important;
   }
 }

@@ -8,14 +8,6 @@
           <Parser :formConf="formData" :relationData="relationData" @toDetail="toDetail"
             v-if="!loading" :formValue="formValue" />
         </div>
-        <span slot="footer" class="dialog-footer">
-          <template v-if="formData.hasPrintBtn && formData.printId">
-            <el-button type="primary" @click="printBrowseVisible=true">
-              {{formData.printButtonText||'打 印'}}
-            </el-button>
-          </template>
-          <el-button @click="visible = false">{{$t('common.cancelButton')}}</el-button>
-        </span>
       </el-dialog>
     </template>
     <Detail v-if="detailVisible" ref="Detail" @close="detailVisible = false" />
