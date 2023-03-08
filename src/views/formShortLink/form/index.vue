@@ -49,7 +49,7 @@ const getFormDataFields = item => {
     "slider", "editor", "link", "JNPFText", "alert", 'table', "collapse", 'collapseItem', 'tabItem',
     "tab", "row", "card"
   ]
-  const fieldsSelectList = ["radio", "checkbox", "select", "cascader"]
+  const fieldsSelectList = ["radio", "checkbox", "select", "cascader", "treeSelect"]
   if (list.includes(jnpfKey) || (fieldsSelectList.includes(jnpfKey) && item.__config__.dataType ===
     'static')) return true
   return false
