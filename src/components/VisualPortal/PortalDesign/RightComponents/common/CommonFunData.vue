@@ -47,7 +47,8 @@
               </JNPF-TreeSelect>
               <el-input v-if="scope.row.linkType==2" v-model="scope.row.urlAddress"
                 placeholder="填写地址">
-                <el-select slot="append" v-model="scope.row.linkTarget" style="width: 80px;">
+                <el-select slot="append" v-model="scope.row.linkTarget" style="width: 80px;"
+                  v-if="showType == 'pc'">
                   <el-option label="_self" value="_self" />
                   <el-option label="_blank" value="_blank" />
                 </el-select>
@@ -63,7 +64,7 @@
           </el-table-column>
         </JNPF-table>
         <div class="table-actions" @click="addHandle()">
-          <el-button type="text" icon="el-icon-plus">新建字段</el-button>
+          <el-button type="text" icon="el-icon-plus">添加</el-button>
         </div>
       </div>
       <span slot="footer" class="dialog-footer">

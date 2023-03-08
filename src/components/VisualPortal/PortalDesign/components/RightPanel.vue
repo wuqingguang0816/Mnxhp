@@ -1,7 +1,7 @@
 <template>
   <el-aside width="340px" class="right-box">
     <el-tabs v-model="currentTab" class="center-tabs">
-      <el-tab-pane label="组件属性" name="1" />
+      <el-tab-pane label="控件属性" name="1" />
       <el-tab-pane label="门户属性" name="2" />
     </el-tabs>
     <el-scrollbar class="aside-scrollbar">
