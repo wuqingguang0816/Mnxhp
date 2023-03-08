@@ -364,13 +364,17 @@ $lighterBlue: #409EFF;
     }
 
     &>.drawing-item-copy,
-    &>.drawing-item-delete {
+    &>.drawing-item-delete,
+    &>.drawing-item-add-row,
+    &>.drawing-item-add-col,
+    &>.drawing-item-cell {
       display: block;
     }
 
     &>.component-name {
       color: $lighterBlue;
     }
+
   }
 
   .el-form-item {
@@ -455,13 +459,19 @@ $lighterBlue: #409EFF;
     }
 
     &>.drawing-item-copy,
-    &>.drawing-item-delete {
+    &>.drawing-item-delete,
+    &>.drawing-item-add-row,
+    &>.drawing-item-add-col,
+    &>.drawing-item-cell {
       display: block;
     }
   }
 
   &>.drawing-item-copy,
-  &>.drawing-item-delete {
+  &>.drawing-item-delete,
+  &>.drawing-item-add-row,
+  &>.drawing-item-add-col,
+  &>.drawing-item-cell {
     display: none;
     position: absolute;
     top: -10px;
@@ -476,7 +486,10 @@ $lighterBlue: #409EFF;
     z-index: 1;
   }
 
-  &>.drawing-item-copy {
+  &>.drawing-item-copy,
+  &>.drawing-item-add-row,
+  &>.drawing-item-add-col,
+  &>.drawing-item-cell {
     right: 56px;
     border-color: $lighterBlue;
     color: $lighterBlue;
@@ -484,6 +497,26 @@ $lighterBlue: #409EFF;
 
     &:hover {
       background: $lighterBlue;
+      color: #fff;
+    }
+  }
+
+  &>.drawing-item-add-row {
+    right: 108px;
+  }
+
+  &>.drawing-item-add-col {
+    right: 78px;
+  }
+
+  &>.drawing-item-cell {
+    top: unset;
+    bottom: 0;
+    right: 0;
+    border-radius: unset;
+    background: $lighterBlue;
+
+    i {
       color: #fff;
     }
   }

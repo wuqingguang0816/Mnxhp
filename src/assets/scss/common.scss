@@ -1951,6 +1951,14 @@ textarea.el-textarea__inner {
     margin-bottom: unset !important;
   }
 
+  .table-grid-box {
+    margin-bottom: 0;
+
+    td {
+      padding-top: 0;
+    }
+  }
+
   .el-card__header {
     border-right: 1px solid #dcdfe6;
   }
@@ -2633,5 +2641,37 @@ textarea.el-textarea__inner {
   .ym-custom-arrow-expand {
     z-index: 9;
     opacity: 1;
+  }
+}
+
+.table-grid {
+  width: 100%;
+  text-align: center;
+  border-collapse: collapse;
+  table-layout: fixed;
+
+  .table-cell {
+    min-height: 75px;
+    overflow: auto;
+    padding-top: 10px;
+  }
+
+  .drawing-row-item {
+    padding: 0 2px;
+  }
+}
+
+.table-grid-box {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: fixed;
+  margin-bottom: 18px;
+
+  td {
+    border: 1px var(--borderType) rgba(0, 0, 0, .1);
+    overflow: hidden;
+    height: 50px;
+    padding-top: 18px;
+    padding-right: 10px;
   }
 }

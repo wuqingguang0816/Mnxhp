@@ -87,6 +87,40 @@ const layouts = {
         </el-col>
       )
     }
+    if (scheme.__config__.jnpfKey === 'tableGrid') {
+      return (
+        <el-col span={scheme.__config__.span} >
+          <el-row gutter={scheme.__config__.gutter}>
+            <table class="table-grid-box" style={{ '--borderType': scheme.__config__.borderType }}>
+              <tbody>
+                {
+                  scheme.__config__.children.map((item) => {
+                    return (
+                      <tr>
+                        {
+                          item.__config__.children.map((it, colIndex) => {
+                            let child = renderChildren.call(this, h, it)
+                            return !it.__config__.merged ? (
+                              <td colspan={it.__config__.colspan || 1} rowspan={it.__config__.rowspan || 1} >
+                                <el-col>
+                                  <el-row gutter={scheme.__config__.gutter} >
+                                    {child}
+                                  </el-row>
+                                </el-col>
+                              </td>
+                            ) : ''
+                          })
+                        }
+                      </tr>
+                    )
+                  })
+                }
+              </tbody>
+            </table>
+          </el-row>
+        </el-col>
+      )
+    }
     let child = renderChildren.apply(this, arguments)
     if (scheme.__config__.jnpfKey === 'table') {
       if (!scheme.__config__.noShow) this.tableRefs[scheme.__vModel__] = scheme
@@ -490,6 +524,7 @@ export default {
       })
     },
     buildOptions(componentList, data, formData) {
+      console.log(data)
       componentList.forEach(cur => {
         const config = cur.__config__
         if (dyOptionsList.indexOf(config.jnpfKey) > -1) {
@@ -515,6 +550,8 @@ export default {
               isTreeSelect ? data[cur.__vModel__ + 'Options'] = cur.options : data[cur.__vModel__ + 'Options'] = cur.__slot__.options
             })
           } else {
+            console.log(cur)
+            console.log(isTreeSelect)
             isTreeSelect ? data[cur.__vModel__ + 'Options'] = cur.options : data[cur.__vModel__ + 'Options'] = cur.__slot__.options
           }
         }

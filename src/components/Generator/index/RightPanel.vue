@@ -10,7 +10,7 @@
         <!-- 组件属性 -->
         <el-form v-show="currentTab==='field' && showField" size="small" label-width="90px"
           labelPosition="left">
-          <template v-if="activeData.__config__">
+          <template v-if="activeData.__config__&&activeData.__config__.jnpfKey">
             <template>
               <el-form-item label="控件类型"
                 :label-width="activeData.__config__.jnpfKey==='card'?'76px':''">
@@ -381,6 +381,14 @@
               label="栅格间隔">
               <el-input-number v-model="activeData.gutter" :min="0" placeholder="栅格间隔"
                 controls-position="right" />
+            </el-form-item>
+            <el-form-item label="表格边框" v-if="activeData.__config__.jnpfKey==='tableGrid'">
+              <el-radio-group v-model="activeData.__config__.borderType">
+                <el-radio-button label="none">无</el-radio-button>
+                <el-radio-button label="solid">实线</el-radio-button>
+                <el-radio-button label="dashed ">虚线</el-radio-button>
+                <el-radio-button label="dotted ">点状</el-radio-button>
+              </el-radio-group>
             </el-form-item>
           </template>
         </el-form>

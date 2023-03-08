@@ -46,8 +46,20 @@
               group="componentsGroup" @end='onCenterEnd'>
               <draggable-item v-for="(element, index) in drawingList" :key="element.renderKey"
                 :drawing-list="drawingList" :element="element" :index="index" :active-id="activeId"
-                :form-conf="formConf" @activeItem="activeFormItem" @copyItem="drawingItemCopy"
-                @deleteItem="drawingItemDelete" :put="shouldClone" :end='onTableEnd' />
+                :form-conf="formConf" :mergeLeftColDisabled="mergeLeftColDisabled"
+                :mergeRightColDisabled="mergeRightColDisabled"
+                :mergeWholeRowDisabled="mergeWholeRowDisabled"
+                :mergeAboveRowDisabled="mergeAboveRowDisabled"
+                :mergeBelowRowDisabled="mergeBelowRowDisabled"
+                :mergeWholeColDisabled="mergeWholeColDisabled"
+                :undoMergeRowDisabled="undoMergeRowDisabled"
+                :undoMergeColDisabled="undoMergeColDisabled"
+                :deleteWholeColDisabled="deleteWholeColDisabled"
+                :deleteWholeRowDisabled="deleteWholeRowDisabled" @activeItem="activeFormItem"
+                @copyItem="drawingItemCopy" @deleteItem="drawingItemDelete"
+                @addRow="handleTableAddRow" @addCol="handleTableAddCol"
+                @handleTableSetting="handleTableSetting" @handleShowMenu="handleShowMenu"
+                :put="shouldClone" :end='onTableEnd' />
             </draggable>
             <div v-show="!drawingList.length" class="empty-info">
               <img src="@/assets/images/emptyElement.png" alt="" class="empty-img">
@@ -170,7 +182,17 @@ export default {
           title: '布局控件',
           list: layoutComponents
         }
-      ]
+      ],
+      rowIndex: 0,
+      colIndex: 0,
+      rowData: [],
+      colData: [],
+      selectCell: {
+        __config__: {
+          rowspan: 1,
+          colspan: 1
+        }
+      }
     }
   },
   provide() {
@@ -179,6 +201,90 @@ export default {
     }
   },
   computed: {
+    mergeLeftColDisabled() {
+      if (!this.colData.length) return true
+      return (this.colIndex <= 0) || (this.colData[this.colIndex - 1].__config__.rowspan !== this.selectCell.__config__.rowspan)
+    },
+    mergeRightColDisabled() {
+      if (!this.colData.length) return true
+      let rightColIndex = this.colIndex + this.selectCell.__config__.colspan
+      return (this.colIndex >= this.colData.length - 1) || (rightColIndex > this.colData.length - 1)
+        || (this.colData[rightColIndex].__config__.rowspan !== this.selectCell.__config__.rowspan)
+    },
+    mergeWholeRowDisabled() {
+      if (!this.selectCell.__config__ || !this.rowData.length) return true
+      let rowDataChildren = this.rowData[this.rowIndex].__config__.children
+      let startRowspan = rowDataChildren[0].__config__.rowspan
+      let unmatchedFlag = false
+      for (let i = 1; i < rowDataChildren.length; i++) {
+        if (rowDataChildren[i].__config__.rowspan !== startRowspan) {
+          unmatchedFlag = true
+          break;
+        }
+      }
+      if (unmatchedFlag) return true
+      return (this.colData.length <= 1) || (this.colData.length === this.selectCell.__config__.colspan)
+    },
+    mergeAboveRowDisabled() {
+      if (!this.rowData.length || this.rowIndex <= 0) return true
+      return (this.rowData[this.rowIndex - 1].__config__.children[this.colIndex].__config__.colspan
+        !== this.selectCell.__config__.colspan) || this.rowData[this.rowIndex - 1].__config__.children[this.colIndex].__config__.merged
+    },
+    mergeBelowRowDisabled() {
+      if (!this.rowData.length || (this.rowIndex == this.rowData.length)) return true
+      let belowRowIndex = this.rowIndex + this.selectCell.__config__.rowspan
+      return (this.rowIndex >= this.rowData.length - 1) || (belowRowIndex > this.rowData.length - 1)
+        || (this.rowData[belowRowIndex].__config__.children[this.colIndex].__config__.colspan !== this.selectCell.__config__.colspan)
+        || this.rowData[belowRowIndex].__config__.children[this.colIndex].__config__.merged
+    },
+    mergeWholeColDisabled() {
+      if (!this.rowData.length) return true
+      let startColspan = this.rowData[0].__config__.children[this.colIndex].__config__.colspan
+      let unmatchedFlag = false
+      for (let i = 1; i < this.rowData.length; i++) {
+        if (this.rowData[i].__config__.children[this.colIndex].__config__.colspan !== startColspan) {
+          unmatchedFlag = true
+          break;
+        }
+      }
+      if (unmatchedFlag) return true
+      return (this.rowData.length <= 1) || (this.rowData.length === this.selectCell.__config__.rowspan)
+    },
+    undoMergeRowDisabled() {
+      return this.selectCell.__config__.merged || (this.selectCell.__config__.colspan <= 1)
+    },
+    undoMergeColDisabled() {
+      return this.selectCell.__config__.merged || (this.selectCell.__config__.rowspan <= 1)
+    },
+    deleteWholeColDisabled() {
+      if (!this.rowData.length) return true
+      if (this.rowData[0].__config__.children[0].__config__.colspan === this.rowData[0].__config__.children.length) return true
+      let startColspan = this.rowData[0].__config__.children[this.colIndex].__config__.colspan
+      let unmatchedFlag = false
+      for (let i = 1; i < this.rowData.length; i++) {
+        if (this.rowData[i].__config__.children[this.colIndex].__config__.colspan !== startColspan) {
+          unmatchedFlag = true
+          break;
+        }
+      }
+      if (unmatchedFlag) return true
+      return (this.rowData.length === 1) || (this.selectCell.__config__.colspan === this.rowData.length)
+    },
+    deleteWholeRowDisabled() {
+      if (!this.rowData.length || this.rowData.length <= this.rowIndex) return true
+      if (this.rowData[0].__config__.children[0].__config__.rowspan === this.rowData.length) return true
+      //整行所有单元格行高不一致不可删除！！
+      let startRowspan = this.rowData[this.rowIndex].__config__.children[0].__config__.rowspan
+      let unmatchedFlag = false
+      for (let i = 1; i < this.rowData[this.rowIndex].__config__.children.length; i++) {
+        if (this.rowData[this.rowIndex].__config__.children[i].__config__.rowspan !== startRowspan) {
+          unmatchedFlag = true
+          break;
+        }
+      }
+      if (unmatchedFlag) return true
+      return (this.rowData.length === 1) || (this.selectCell.__config__.rowspan === this.rowData.length)
+    }
   },
   watch: {
     // eslint-disable-next-line func-names
@@ -374,6 +480,9 @@ export default {
         this.activeItem = targetConf
         this.activeTableItem = conf
       }
+      if (conf.__config__.rowType === 'tableGrid') {
+        if (targetConf.__config__.jnpfKey === 'tableGrid') return false
+      }
       return true
     },
     activeFormItem(element) {
@@ -384,9 +493,9 @@ export default {
       this.showTip = true
       if (obj.from !== obj.to) {
         this.activeData = tempActiveData
-        this.activeId = this.idGlobal
+        this.activeId = tempActiveData.__config__.formId
       }
-      if (obj.to.className.indexOf('table') > -1) {
+      if (obj.to.className.indexOf('table-wrapper') > -1) {
         this.$set(this.activeItem.__config__, 'isSubTable', true)
         this.$set(this.activeItem.__config__, 'parentVModel', this.activeTableItem.__vModel__)
         if (this.$store.getters.hasTable) {
@@ -398,7 +507,7 @@ export default {
     onCenterEnd(obj) {
       this.showTip = true
       if (obj.from == obj.to) return
-      if (obj.to.className.indexOf('table') > -1) {
+      if (obj.to.className.indexOf('table-wrapper') > -1) {
         this.$set(this.activeItem.__config__, 'isSubTable', true)
         this.$set(this.activeItem.__config__, 'parentVModel', this.activeTableItem.__vModel__)
         if (this.$store.getters.hasTable) {
@@ -409,7 +518,7 @@ export default {
     },
     onTableEnd(obj, target, conf) {
       if (obj.from == obj.to) return
-      if (obj.to.className.indexOf('table') < 0) {
+      if (obj.to.className.indexOf('table-wrapper') < 0) {
         this.$set(this.activeItem.__config__, 'isSubTable', false)
         this.$set(this.activeItem.__config__, 'parentVModel', '')
         if (this.$store.getters.hasTable) this.activeItem.__vModel__ = ''
@@ -565,6 +674,257 @@ export default {
         }
       }
       loop(this.drawingList)
+    },
+    handleTableAddRow(element, insertPos, cloneRowIdx) {
+      const row = element.__config__.children
+      let rowIdx = (insertPos === undefined) ? row.length : insertPos
+      let newRow = (cloneRowIdx === undefined) ? deepClone(row[row.length - 1]) : deepClone(row[cloneRowIdx])
+      newRow.__config__.children.forEach(col => {
+        col.__config__.formId = ++this.idGlobal
+        col.__config__.merged = false
+        col.__config__.colspan = 1
+        col.__config__.rowspan = 1
+        col.__config__.children = []
+      })
+      newRow.__config__.formId = ++this.idGlobal
+      element.__config__.children.splice(rowIdx, 0, newRow)
+      let colNo = 0
+      while ((rowIdx < element.__config__.children.length - 1) && (colNo < element.__config__.children[0].__config__.children.length)) {  //越界判断
+        let rowMerged = element.__config__.children[rowIdx + 1].__config__.children[colNo].__config__.merged  //确定插入位置的单元格是否为合并单元格
+        if (!!rowMerged) {
+          let rowArray = element.__config__.children
+          let unMergedCell = {}
+          let startRowIndex = null
+          for (let i = rowIdx; i >= 0; i--) {  //查找该行已合并的主单元格
+            if (!rowArray[i].__config__.children[colNo].__config__.merged && (rowArray[i].__config__.children[colNo].__config__.rowspan > 1)) {
+              startRowIndex = i
+              unMergedCell = rowArray[i].__config__.children[colNo]
+              break
+            }
+          }
+          let newRowspan = unMergedCell.__config__.rowspan + 1
+          this.setPropsOfMergedRows(startRowIndex, unMergedCell.__config__.colspan, newRowspan, colNo)
+          colNo += unMergedCell.__config__.colspan
+        } else {
+          colNo += 1
+        }
+      }
+    },
+    handleTableAddCol(element, insertPos, cloneRowIdx) {
+      const row = element.__config__.children
+      let colIdx = (insertPos === undefined) ? row[0].__config__.children.length : insertPos  //确定插入列位置
+      row.forEach(item => {
+        let newCol = {
+          __config__: {
+            merged: false,
+            colspan: 1,
+            rowspan: 1,
+            formId: ++this.idGlobal,
+            children: []
+          }
+        }
+        item.__config__.children.splice(colIdx, 0, newCol)
+      })
+    },
+    mergeTableCol(element, type) {
+      let mergedColIndex = type == 1 ? this.colIndex : this.colIndex + this.colData[this.colIndex].__config__.colspan
+      let remainedColIndex = type == 1 ? this.colIndex - this.colData[this.colIndex - 1].__config__.colspan : this.colIndex
+      const colChildren = this.colData[mergedColIndex].__config__.children
+      const colChildren_ = this.colData[remainedColIndex].__config__.children
+      this.colData[remainedColIndex].__config__.children = [...colChildren_, ...deepClone(colChildren)]
+      let newColspan = this.colData[mergedColIndex].__config__.colspan * 1 + this.colData[remainedColIndex].__config__.colspan * 1
+      this.setPropsOfMergedCols(remainedColIndex, newColspan, this.selectCell.__config__.rowspan)
+    },
+    mergeWholeCol() {
+      let rowDataChildren = this.rowData[this.rowIndex].__config__.children
+      // let startRowspan = rowDataChildren[0].__config__.rowspan
+      // let unmatchedFlag = false
+      // for (let i = 1; i < rowDataChildren.length; i++) {
+      //   if (rowDataChildren[i].__config__.rowspan !== startRowspan) {
+      //     unmatchedFlag = true
+      //     break;
+      //   }
+      // }
+      // if (unmatchedFlag) return this.$message.warning("存在行高不一致的单元格, 无法合并整行")
+      let childrenData = this.colData.filter((colItem) => {
+        return !colItem.merged && !!colItem.__config__.children && (colItem.__config__.children.length > 0)
+      })
+      if (childrenData && childrenData.length) {
+        childrenData.map((o, i) => {
+          if (i != 0) this.colData[0].__config__.children.push(...deepClone(o.__config__.children))
+        })
+      }
+      this.setPropsOfMergedCols(0, this.colData.length, this.colData[this.colIndex].__config__.rowspan)
+    },
+    mergeTableRow(element, type) {
+      let mergedRowIndex = type == 1 ? this.rowIndex : this.rowIndex + this.selectCell.__config__.rowspan
+      let remainedRowIndex = type == 1 ? this.rowIndex - this.selectCell.__config__.rowspan : this.rowIndex
+      let childrenData = this.rowData[mergedRowIndex].__config__.children[this.colIndex].__config__.children
+      let childrenData_ = this.rowData[remainedRowIndex].__config__.children[this.colIndex].__config__.children
+      this.rowData[remainedRowIndex].__config__.children[this.colIndex].__config__.children = [...childrenData_, ...deepClone(childrenData)]
+      let newRowspan = this.rowData[mergedRowIndex].__config__.children[this.colIndex].__config__.rowspan * 1 + this.rowData[remainedRowIndex].__config__.children[this.colIndex].__config__.rowspan * 1
+      this.setPropsOfMergedRows(remainedRowIndex, this.selectCell.__config__.colspan, newRowspan)
+    },
+    mergeWholeRow() {
+      let startColspan = this.rowData[0].__config__.children[this.colIndex].__config__.colspan
+      // let unmatchedFlag = false
+      // for (let i = 1; i < this.rowData.length; i++) {
+      //   if (this.rowData[i].__config__.children[this.colIndex].__config__.colspan !== startColspan) {
+      //     unmatchedFlag = true
+      //     break;
+      //   }
+      // }
+      // if (unmatchedFlag) return this.$message.warning("存在列宽不一致的单元格, 无法合并整列")
+      let childrenData = []
+      this.rowData.forEach(o => {
+        let tempCell = o.__config__.children[this.colIndex]
+        if (!o.__config__.merged && !!o.__config__.children && o.__config__.children.length) {
+          childrenData.push(tempCell)
+        }
+      })
+      let firstCellOfCol = this.rowData[0].__config__.children[this.colIndex]
+      if (childrenData && childrenData.length) {
+        childrenData.map((o, i) => {
+          if (i != 0) firstCellOfCol.__config__.children.push(...deepClone(o.__config__.children))
+        })
+      }
+      this.setPropsOfMergedRows(0, firstCellOfCol.__config__.colspan, this.rowData.length)
+    },
+    undoMergeCol() {
+      this.setPropsOfSplitCol(this.colIndex, this.selectCell.__config__.colspan, this.selectCell.__config__.rowspan)
+    },
+    undoMergeRow() {
+      this.setPropsOfSplitRow(this.colIndex, this.selectCell.__config__.colspan, this.selectCell.__config__.rowspan)
+    },
+    deleteWholeCol() {
+      let startColspan = this.rowData[0].__config__.children[this.colIndex].__config__.colspan
+      this.rowData.forEach((rItem) => {
+        rItem.__config__.children.splice(this.colIndex, startColspan)
+      })
+    },
+    deleteWholeRow() {
+      let startRowspan = this.rowData[this.rowIndex].__config__.children[0].__config__.rowspan
+      this.rowData.splice(this.rowIndex, startRowspan)
+    },
+    setPropsOfMergedCols(startColIndex, newColspan, rowspan) {
+      for (let i = this.rowIndex; i < this.rowIndex + rowspan; i++) {
+        for (let j = startColIndex; j < startColIndex + newColspan; j++) {
+          if ((i === this.rowIndex) && (j === startColIndex)) {
+            this.rowData[i].__config__.children[j].__config__.colspan = newColspan
+            continue
+          }
+          this.rowData[i].__config__.children[j].__config__.merged = true
+          this.rowData[i].__config__.children[j].__config__.colspan = newColspan
+          this.rowData[i].__config__.children[j].__config__.children = []
+        }
+      }
+    },
+    setPropsOfMergedRows(startRowIndex, colspan, newRowspan, colIndex) {
+      if (!colIndex) colIndex = this.colIndex
+      for (let i = startRowIndex; i < startRowIndex + newRowspan; i++) {
+        for (let j = colIndex; j < colIndex + colspan; j++) {
+          if ((i === startRowIndex) && (j === colIndex)) {
+            this.rowData[i].__config__.children[j].__config__.rowspan = newRowspan
+            continue
+          }
+          this.rowData[i].__config__.children[j].__config__.merged = true
+          this.rowData[i].__config__.children[j].__config__.rowspan = newRowspan
+          this.rowData[i].__config__.children[j].__config__.children = []
+        }
+      }
+    },
+    setPropsOfSplitCol(startColIndex, colspan, rowspan) {
+      for (let i = this.rowIndex; i < this.rowIndex + rowspan; i++) {
+        for (let j = startColIndex; j < startColIndex + colspan; j++) {
+          if ((i === this.rowIndex) && (j === startColIndex)) {
+            this.rowData[i].__config__.children[j].__config__.colspan = 1
+            continue
+          }
+          this.rowData[i].__config__.children[j].__config__.merged = false;
+          this.rowData[i].__config__.children[j].__config__.colspan = 1
+        }
+      }
+    },
+    setPropsOfSplitRow(startColIndex, colspan, rowspan) {
+      for (let i = this.rowIndex; i < this.rowIndex + rowspan; i++) {
+        for (let j = startColIndex; j < startColIndex + colspan; j++) {
+          if ((i === this.rowIndex) && (j === startColIndex)) {
+            this.rowData[i].__config__.children[j].__config__.rowspan = 1
+            continue
+          }
+          this.rowData[i].__config__.children[j].__config__.merged = false;
+          this.rowData[i].__config__.children[j].__config__.rowspan = 1
+        }
+      }
+    },
+    handleTableSetting(e, element) {
+      switch (e) {
+        case '1':
+          //插入左侧列
+          this.handleTableAddCol(element, this.colIndex)
+          break;
+        case '2':
+          //插入右侧列
+          this.handleTableAddCol(element, this.colIndex + 1)
+          break;
+        case '3':
+          //插入上方行
+          this.handleTableAddRow(element, this.rowIndex, this.rowIndex)
+          break;
+        case '4':
+          //插入下方行
+          this.handleTableAddRow(element, this.rowIndex + 1, this.rowIndex)
+          break;
+        case '5':
+          //向左合并
+          this.mergeTableCol(element, 1)
+          break;
+        case '6':
+          //向右合并
+          this.mergeTableCol(element)
+          break;
+        case '7':
+          //合并整行
+          this.mergeWholeCol(element)
+          break;
+        case '8':
+          //向上合并
+          this.mergeTableRow(element, 1)
+          break;
+        case '9':
+          //向下合并
+          this.mergeTableRow(element)
+          break;
+        case '10':
+          //合并整列
+          this.mergeWholeRow()
+          break;
+        case '11':
+          //撤销行合并
+          this.undoMergeCol()
+          break;
+        case '12':
+          //撤销列合并
+          this.undoMergeRow()
+          break;
+        case '13':
+          //删除整列
+          this.deleteWholeCol()
+          break;
+        case '14':
+          //删除整行
+          this.deleteWholeRow()
+          break;
+        default:
+          break;
+      }
+    },
+    handleShowMenu(element, rowIndex, colIndex) {
+      this.rowIndex = rowIndex
+      this.colIndex = colIndex
+      this.rowData = element.__config__.children
+      this.colData = this.rowData[rowIndex].__config__.children
+      this.selectCell = this.colData[colIndex]
     }
   }
 }

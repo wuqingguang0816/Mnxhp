@@ -1632,4 +1632,37 @@ export const layoutComponents = [
     header: "卡片容器",
     shadow: "always"
   },
+  {
+    __config__: {
+      jnpfKey: "tableGrid",
+      label: "表格容器",
+      showLabel: false,
+      tagIcon: "icon-ym icon-ym-generator-tableGrid",
+      className: [],
+      defaultValue: [],
+      layout: "rowFormItem",
+      span: "24",
+      dragDisabled: false,
+      visibility: ["pc", "app"],
+      borderType: "solid",
+      rowType: "tableGrid",
+      children: [
+        {
+          __config__: {
+            children: [
+              {
+                __config__: {
+                  merged: false,
+                  rowType: "tableGrid",
+                  colspan: 1,
+                  rowspan: 1,
+                  children: []
+                }
+              }
+            ]
+          },
+        }
+      ]
+    },
+  },
 ];

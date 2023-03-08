@@ -198,6 +198,20 @@ const layouts = {
         </el-col>
       )
     }
+    if (element.__config__.jnpfKey === 'tableGrid') {
+      return (
+        <el-col span={24}>
+          <el-row gutter={element.__config__.gutter} class={className} style="padding-top:30px"
+            nativeOnClick={event => { activeItem(element); event.stopPropagation() }}>
+            <span class="component-name">{element.__config__.label}</span>
+            <div class=" drag-wrapper table-wrapper">
+              <div class="table-tip">请在桌面端设计表格（移动端不支持）</div>
+            </div>
+            {components.itemBtns.apply(this, arguments)}
+          </el-row>
+        </el-col>
+      )
+    }
     let child = renderChildren.apply(this, arguments)
     const group = { name: 'componentsGroup', put: (...arg) => put(...arg, element) }
     const onEnd = (...arg) => end(...arg, activeData, element)
