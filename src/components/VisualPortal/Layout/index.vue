@@ -5,7 +5,7 @@
         <grid-item v-for="item in layout" :x="item.x" :y="item.y" :w="item.w" :h="item.h"
           :i="item.i" :key="item.i" :maxH="item.maxH" :minH="item.minH" :minW="item.minW"
           :maxW="item.maxW" @resized="resizedEvent(item.i,item)" @moved="movedEvent"
-          :static="enabledLock">
+          :static="!!enabledLock">
           <parser :item="item" :detailed="true" />
           <div class="mask" v-if="mask&&!noNeedMaskList.includes(item.jnpfKey)"></div>
         </grid-item>
@@ -27,7 +27,7 @@ export default {
     layout: { type: Array, default: () => [] },
     mask: { type: Boolean, default: false },
     detailed: { type: Boolean, default: false },
-    enabledLock: { type: Boolean, default: true },
+    enabledLock: { type: Number, default: 1 },
   },
   components: {
     GridLayout: VueGridLayout.GridLayout,

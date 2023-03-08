@@ -53,7 +53,7 @@ export default {
           if (!res.data.customUrl && this.linkType === 1) return
           this.currentView = (resolve) => require([`@/views/${res.data.customUrl}`], resolve)
         } else {
-          if (!res.data.formData) return
+          if (!res.data.formData) return this.loading = false
           let formData = JSON.parse(res.data.formData)
           this.layout = formData.layout || []
         }
