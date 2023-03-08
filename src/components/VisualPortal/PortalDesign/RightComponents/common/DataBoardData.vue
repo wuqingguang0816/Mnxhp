@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-dialog title="数据设置" :close-on-click-modal="false" :visible.sync="visible"
+    <el-dialog title="选项设置" :close-on-click-modal="false" :visible.sync="visible"
       class="JNPF-dialog JNPF-dialog_center todoData" lock-scroll width="1000px" append-to-body>
       <div class="main">
         <JNPF-table :data="list" ref="dragTable" :hasNO="false">

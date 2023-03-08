@@ -28,7 +28,7 @@
             <Tooltip :activeData="activeData" :showType="showType"
               v-if="chartList.includes(activeData.jnpfKey)||activeData.jnpfKey=='mapChart'" />
             <Margin :activeData="activeData" :showType="showType"
-              v-if="(chartList.includes(activeData.jnpfKey)||activeData.jnpfKey=='mapChart')&&showType=='px'" />
+              v-if="(chartList.includes(activeData.jnpfKey)||activeData.jnpfKey=='mapChart')&&showType=='pc'" />
             <Legend :activeData="activeData" :showType="showType"
               v-if="chartList.includes(activeData.jnpfKey)" />
             <Color :activeData="activeData" :showType="showType"
