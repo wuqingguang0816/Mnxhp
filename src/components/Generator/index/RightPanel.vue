@@ -31,7 +31,7 @@
                     v-if="activeData.__config__.jnpfKey==='calculate' ||activeData.__config__.jnpfKey==='popupAttr' ||activeData.__config__.jnpfKey==='relationFormAttr'">
                     <el-form-item label="控件类型">
                       <el-select v-model="activeData.__config__.isStorage" placeholder="请选择"
-                        @change="changeStorage">
+                        @change="changeStorage" filterable>
                         <el-option :label="item.label" :value="item.value"
                           v-for="(item,i) in storageType" :key="i"></el-option>
                       </el-select>
@@ -81,7 +81,7 @@
                     v-if="activeData.__config__.jnpfKey==='calculate' ||activeData.__config__.jnpfKey==='popupAttr' ||activeData.__config__.jnpfKey==='relationFormAttr'">
                     <el-form-item label="控件类型">
                       <el-select v-model="activeData.__config__.isStorage" placeholder="请选择"
-                        @change="changeStorage">
+                        @change="changeStorage" filterable>
                         <el-option :label="item.label" :value="item.value"
                           v-for="(item,i) in storageType" :key="i"></el-option>
                       </el-select>
@@ -342,7 +342,7 @@
               </el-form-item>
               <el-form-item label="关联子表" v-if="$store.getters.hasTable">
                 <el-select v-model="activeData.__config__.tableName" placeholder="请选择关联子表"
-                  @change="onTableNameChange">
+                  @change="onTableNameChange" filterable>
                   <el-option v-for="item in subTable" :key="item.table"
                     :label="item.tableName?item.table+'('+item.tableName+')':item.table"
                     :value="item.table">
@@ -409,7 +409,7 @@
             </el-form-item>
             <el-form-item label="控件Class">
               <el-select v-model="activeData.__config__.className" multiple clearable
-                placeholder="请选择">
+                placeholder="请选择" filterable>
                 <el-option v-for="item in formConf.classNames" :key="item" :label="item"
                   :value="item">
                 </el-option>
@@ -530,7 +530,7 @@
               <el-form-item label="" v-if="formConf.hasPrintBtn">
                 <JNPF-TreeSelect :options="printTplList" v-model="formConf.printId" multiple
                   placeholder="请选择打印模板" lastLevel clearable>
-                  <div  class="printWrap" slot="header">
+                  <div class="printWrap" slot="header">
                     <el-link type="primary" :underline="false" @click="openPrint">添加打印模板
                     </el-link>
                     <el-link type="info" style="position: absolute;right:8px;top: 18px;"
@@ -1294,13 +1294,11 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-
 .printWrap {
-  padding:10px 0;
-  text-align:center;
-  >>>.el-divider--horizontal {
+  padding: 10px 0;
+  text-align: center;
+  >>> .el-divider--horizontal {
     margin: 10px 0;
-    
   }
 }
 .right-board {

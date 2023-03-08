@@ -29,7 +29,7 @@
     </el-form-item>
     <el-form-item label="显示字段">
       <el-select v-model="activeData.relationField" placeholder="请选择显示字段"
-        @visible-change="visibleChange" clearable>
+        @visible-change="visibleChange" clearable filterable>
         <el-option v-for="item in fieldOptions" :key="item.vmodel" :label="item.label"
           :value="item.vmodel" />
       </el-select>

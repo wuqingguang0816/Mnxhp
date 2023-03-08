@@ -13,7 +13,7 @@
           </el-input>
         </jnpf-form-tip-item>
         <jnpf-form-tip-item label="分类" prop="category">
-          <el-select v-model="dataForm.category" placeholder="选择分类">
+          <el-select v-model="dataForm.category" placeholder="选择分类" filterable>
             <el-option :key="item.id" :label="item.fullName" :value="item.id"
               v-for="item in categoryList" />
           </el-select>

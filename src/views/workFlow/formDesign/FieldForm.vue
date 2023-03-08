@@ -17,7 +17,7 @@
       </el-table-column>
       <el-table-column prop="jnpfKey" label="控件类型">
         <template slot-scope="scope">
-          <el-select v-model="scope.row.jnpfKey" placeholder="选择控件类型" clearable>
+          <el-select v-model="scope.row.jnpfKey" placeholder="选择控件类型" clearable filterable>
             <el-option-group v-for="group in componentList" :key="group.id"
               :label="group.fullName+'【'+group.children.length+'】'">
               <el-option v-for="item in group.children" :key="item.__config__.jnpfKey"
