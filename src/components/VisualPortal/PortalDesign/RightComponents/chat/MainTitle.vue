@@ -3,11 +3,11 @@
     <el-form-item label="标题名称">
       <el-input v-model="activeData.option.titleText" placeholder="请输入标题名称" />
     </el-form-item>
-    <el-form-item label="字体大小" v-show="showType=='pc'">
+    <el-form-item label="字体大小">
       <el-input-number v-model="activeData.option.titleTextStyleFontSize" controls-position="right"
         :min="12" :max="25" />
     </el-form-item>
-    <el-form-item label="字体加粗" v-show="showType=='pc'">
+    <el-form-item label="字体加粗">
       <el-switch v-model="activeData.option.titleTextStyleFontWeight" />
     </el-form-item>
     <el-form-item label="字体颜色">
