@@ -114,10 +114,10 @@ const layouts = {
     return (
       <el-col span={24} class={className}
         nativeOnClick={event => { activeItem(element); event.stopPropagation() }}>
-        <el-form-item label-width={labelWidth}
+        <jnpf-form-tip-item label-width={labelWidth} tip-label={config.tipLabel}
           label={config.showLabel ? config.label : ''} required={config.required}>
           {__vModel__}
-        </el-form-item>
+        </jnpf-form-tip-item>
         {components.itemBtns.apply(this, arguments)}
       </el-col>
     )
@@ -230,11 +230,19 @@ const layouts = {
       if (!element.__config__.children.length) {
         tip = <div class="table-tip">请将组件拖到此区域(可拖多个组件)</div>
       }
+      let toolTip = element.__config__.label
+      if (element.__config__.tipLabel) {
+        toolTip = <span slot="label">{element.__config__.label}
+          <el-tooltip placement="top" content={element.__config__.tipLabel}>
+            <a class='el-icon-warning-outline content-name'></a>
+          </el-tooltip>
+        </span >
+      }
       return (
         <el-col span={24}>
           <el-row gutter={element.__config__.gutter} class={className} style="padding-top:30px"
             nativeOnClick={event => { activeItem(element); event.stopPropagation() }}>
-            <span class="component-name">{element.__config__.label}</span>
+            <span class="component-name">{toolTip}</span>
             {tip}
             <draggable list={element.__config__.children} animation={340} group={group} onEnd={onEnd} class="drag-wrapper">
               {child}
@@ -249,11 +257,19 @@ const layouts = {
       if (!element.__config__.children.length) {
         tip = <div class="table-tip">请将组件拖到此区域(可拖多个组件)</div>
       }
+      let toolTip = element.__config__.label
+      if (element.__config__.tipLabel) {
+        toolTip = <span slot="label">{element.__config__.label}
+          <el-tooltip placement="top" content={element.__config__.tipLabel}>
+            <a class='el-icon-warning-outline content-name'></a>
+          </el-tooltip>
+        </span >
+      }
       return (
         <el-col span={24}>
           <el-row gutter={element.__config__.gutter} class={className} style="padding-top:30px"
             nativeOnClick={event => { activeItem(element); event.stopPropagation() }}>
-            <span class="component-name">{element.__config__.label}</span>
+            <span class="component-name">{toolTip}</span>
             {tip}
             <draggable list={element.__config__.children} animation={340} group={group} class="drag-wrapper table-wrapper" onEnd={onEnd} clone={cloneComponent}>
               {child}
