@@ -41,10 +41,10 @@ const layouts = {
     return (
       <el-col span={config.span} class={className}
         nativeOnClick={event => { activeItem(element); event.stopPropagation() }}>
-        <el-form-item label-width={labelWidth}
+        <jnpf-form-tip-item label-width={labelWidth} tip-label={config.tipLabel}
           label={config.showLabel ? config.label : ''} required={config.required}>
           {Item}
-        </el-form-item>
+        </jnpf-form-tip-item>
         {components.itemBtns.apply(this, arguments)}
       </el-col>
     )
@@ -142,7 +142,7 @@ const layouts = {
         <el-col span={element.__config__.span}>
           <el-row gutter={element.__config__.gutter} class={className}
             nativeOnClick={event => { activeItem(element); event.stopPropagation() }}>
-            <span class="component-name">{element.__config__.componentName}</span>
+            <span class="component-name" >{element.__config__.componentName} </span>
             {tip}
             <draggable list={element.__config__.children} animation={340} group={group} onEnd={onEnd} class="drag-wrapper" style="margin-top:20px">
               {child}
@@ -157,11 +157,19 @@ const layouts = {
       if (!element.__config__.children.length) {
         tip = <div class="table-tip">请将组件拖到此区域(可拖多个组件)</div>
       }
+      let toolTip = element.__config__.label
+      if (element.__config__.tipLabel) {
+        toolTip = <span slot="label">{element.__config__.label}
+          <el-tooltip placement="top" content={element.__config__.tipLabel}>
+            <a class='el-icon-warning-outline content-name'></a>
+          </el-tooltip>
+        </span >
+      }
       return (
         <el-col span={element.__config__.span}>
           <el-row gutter={element.__config__.gutter} class={className + ' drawing-row-item-table'}
             nativeOnClick={event => { activeItem(element); event.stopPropagation() }}>
-            <span class="component-name">{element.__config__.label}</span>
+            <span class="component-name" >{toolTip} </span>
             {tip}
             <el-form label-position="top">
               <draggable list={element.__config__.children} animation={340} group={group} class="drag-wrapper table-wrapper table-wrapper-web" onEnd={onEnd} clone={cloneComponent}>
@@ -178,11 +186,22 @@ const layouts = {
       if (!element.__config__.children.length) {
         tip = <div class="table-tip card-tip">请将组件拖到此区域(可拖多个组件)</div>
       }
+      let toolTip = element.__config__.label
+      if (element.__config__.tipLabel) {
+        toolTip = <span slot="label">{element.__config__.label}
+          <el-tooltip placement="top" content={element.__config__.tipLabel}>
+            <a class='el-icon-warning-outline content-name'></a>
+          </el-tooltip>
+        </span >
+      }
       return (
         <el-col span={element.__config__.span}>
           <el-row gutter={element.__config__.gutter} class={className}
             nativeOnClick={event => { activeItem(element); event.stopPropagation() }}>
             <el-card shadow={element.shadow} header={element.header}>
+              <div slot="header" >
+                <span>{toolTip}</span>
+              </div>
               <el-col>
                 <el-row gutter={element.__config__.gutter}
                   nativeOnClick={event => { activeItem(element); event.stopPropagation() }}>

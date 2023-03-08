@@ -11,7 +11,6 @@ const layouts = {
   colFormItem(h, scheme) {
     const config = scheme.__config__
     const listeners = buildListeners.call(this, scheme)
-
     let labelWidth = config.labelWidth ? `${config.labelWidth}px` : null
     if (config.showLabel === false) labelWidth = '0'
     const Item = config.jnpfKey === 'cascader'
@@ -24,13 +23,22 @@ const layouts = {
         key={scheme.__config__.renderKey} relations={config.jnpfKey === 'table' ? this.relations : undefined} />
     const visibility = !config.visibility || (Array.isArray(config.visibility) && config.visibility.includes('pc'))
     if (visibility && !config.noShow) {
-      return (
-        <el-col span={config.span} class={config.className}>
+      let toolTip = <el-col span={config.span} class={config.className}>
+        <jnpf-form-tip-item label-width={labelWidth} prop={scheme.__vModel__} key={config.renderKey} tip-label={config.tipLabel}
+          label={config.showLabel ? config.label : ''}>
+          {Item}
+        </jnpf-form-tip-item>
+      </el-col>
+      if (config.jnpfKey === 'table') {
+        toolTip = <el-col span={config.span} class={config.className}>
           <el-form-item label-width={labelWidth} prop={scheme.__vModel__} key={config.renderKey}
             label={config.showLabel ? config.label : ''}>
             {Item}
-          </el-form-item>
+          </el-form-item >
         </el-col>
+      }
+      return (
+        toolTip
       )
     }
   },
@@ -86,9 +94,20 @@ const layouts = {
       return layouts.colFormItem.call(this, h, param)
     }
     if (scheme.__config__.jnpfKey === 'card') {
+      let toolTip = scheme.__config__.label
+      if (scheme.__config__.tipLabel) {
+        toolTip = <span slot="label">{scheme.__config__.label}
+          <el-tooltip placement="top" content={scheme.__config__.tipLabel}>
+            <a class='el-icon-warning-outline' style='margin-left:4px'></a>
+          </el-tooltip>
+        </span >
+      }
       return (
         <el-col span={scheme.__config__.span} class="item-card">
           <el-card shadow={scheme.shadow} header={scheme.header} class="mb-20">
+            <div slot="header">
+              <span>{toolTip}</span>
+            </div>
             {child}
           </el-card>
         </el-col>

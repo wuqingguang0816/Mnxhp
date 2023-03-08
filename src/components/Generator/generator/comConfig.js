@@ -22,6 +22,7 @@ const calculateItem = {
   __config__: {
     jnpfKey: 'calculate',
     label: '计算公式',
+    tipLabel: "",
     labelWidth: undefined,
     showLabel: true,
     required: false,
@@ -45,6 +46,7 @@ const onlinePeculiarList = [{
   __config__: {
     jnpfKey: 'qrcode',
     label: '二维码',
+    tipLabel: "",
     labelWidth: undefined,
     showLabel: true,
     tag: 'jnpf-qrcode',
@@ -68,6 +70,7 @@ const onlinePeculiarList = [{
   __config__: {
     jnpfKey: 'barcode',
     label: '条形码',
+    tipLabel: "",
     labelWidth: undefined,
     showLabel: true,
     tag: 'jnpf-barcode',
