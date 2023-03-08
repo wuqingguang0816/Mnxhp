@@ -99,14 +99,7 @@
         </div>
       </div>
     </div>
-    <FlowBox v-if="flowVisible" ref="FlowBox" @close="closeFlow" />
-    <Form v-show="formVisible" ref="Form" @refreshDataList="refresh" />
     <Detail v-show="detailVisible" ref="Detail" @close="detailVisible = false" />
-    <ExportBox v-if="exportBoxVisible" ref="ExportBox" @download="download" />
-    <ImportBox v-if="uploadBoxVisible" ref="UploadBox" @refresh="initData" />
-    <CustomBox v-if="customBoxVisible" ref="CustomBox" @close="customBoxVisible= false" />
-    <SuperQuery v-if="superQueryVisible" ref="SuperQuery" :columnOptions="columnOptions"
-      @superQuery="superQuery" />
     <candidate-form :visible.sync="candidateVisible" :candidateList="candidateList"
       :branchList="branchList" taskId="0" :formData="workFlowFormData"
       @submitCandidate="submitCandidate" :isCustomCopy="isCustomCopy" />
@@ -135,13 +128,15 @@ import { getConfig, checkPwd } from '@/api/onlineDev/webDesign'
 import QRCode from 'qrcodejs2'
 import md5 from 'js-md5';
 const getFormDataFields = item => {
-  if (item.__config__) {
-    const jnpfKey = item.__config__.jnpfKey
-    const list = ["comInput", "textarea", "numInput", "switch", "date", "time", "colorPicker", "rate", "slider", "editor", "link", "JNPFText", "alert", 'table', "collapse", "tab", "row", "card"]
-    const fieldsSelectList = ["radio", "checkbox", "select", "cascader"]
-    if (list.includes(jnpfKey) || (fieldsSelectList.includes(jnpfKey) && item.__config__.dataType === 'static')) return true
-    return false
-  }
+  if (!item.__config__ || !item.__config__.jnpfKey) return true
+  const jnpfKey = item.__config__.jnpfKey
+  const list = ["comInput", "textarea", "numInput", "switch", "date", "time", "colorPicker", "rate",
+    "slider", "editor", "link", "JNPFText", "alert", 'table', "collapse", 'collapseItem', 'tabItem',
+    "tab", "row", "card"
+  ]
+  const fieldsSelectList = ["radio", "checkbox", "select", "cascader"]
+  if (list.includes(jnpfKey) || (fieldsSelectList.includes(jnpfKey) && item.__config__.dataType ===
+    'static')) return true
   return false
 }
 export default {
@@ -269,7 +264,7 @@ export default {
       }
       this.hasBatchBtn = this.columnData.btnsList.some(o => o.value == 'batchRemove')
       this.formData = JSON.parse(this.config.formData)
-      this.formData.fields = this.formFields(this.formData.fields)
+      this.formData.fields = this.recurSiveFilter(this.formData.fields)
       this.customBtnsList = this.columnData.customBtnsList || []
       this.columnBtnsList = this.columnData.columnBtnsList || []
       this.columnOptions = this.columnData.columnOptions || []
@@ -290,32 +285,15 @@ export default {
       this.defaultListQuery.sort = this.columnData.sort
       this.defaultListQuery.sidx = this.columnData.defaultSidx
       if (this.columnData.type === 3 || !this.columnData.hasPage) this.listQuery.pageSize = 10000
-      if (this.columnData.type === 2) {
-        this.treeProps.value = this.columnData.treePropsValue || 'id'
-        this.treeProps.label = this.columnData.treePropsLabel || 'fullName'
-        this.treeProps.children = this.columnData.treePropsChildren || 'children'
-        this.getTreeView()
-      } else {
-        this.initData()
-      }
+      this.initData()
     },
-    formFields(getDrawingList) {
-      let list = []
-      const loop = (data, parent) => {
-        if (!data) return
-        if (data.__config__ && this.isIncludesTable(data) && data.__config__.children && Array.isArray(data.__config__.children)) {
-          loop(data.__config__.children, data)
-        }
-        if (Array.isArray(data)) data.forEach(d => loop(d, parent))
-        if (data.__config__) data.__config__.noShow = !getFormDataFields(data)
-        getFormDataFields(data) && list.push(data)
-      }
-      loop(getDrawingList)
-      return list
-    },
-    isIncludesTable(data) {
-      if ((!data.__config__.layout || data.__config__.layout === 'rowFormItem') && data.__config__.jnpfKey !== 'table') return true
-      return data.__config__.jnpfKey == 'table'
+    recurSiveFilter(getDrawingList) {
+      let newColumn = getDrawingList.filter(item => getFormDataFields(item))
+      newColumn.forEach(x =>
+        x.__config__ && x.__config__.children && Array.isArray(x.__config__.children) && (x
+          .__config__.children = this.recurSiveFilter(x.__config__.children))
+      )
+      return newColumn
     },
     initData() {
       if (this.isPreview) return
@@ -334,13 +312,9 @@ export default {
             ...this.expandObj,
             hasChildren: true
           }))
-
         }
         if (this.columnData.type !== 3 && this.columnData.hasPage) this.total = res.data.pagination.total
         this.listLoading = false
-        this.$nextTick(() => {
-          if (this.columnData.funcs && this.columnData.funcs.afterOnload && this.columnData.funcs.afterOnload.func) this.setTableLoadFunc()
-        })
       })
     },
     handleLogin() {
