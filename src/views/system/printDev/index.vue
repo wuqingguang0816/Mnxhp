@@ -11,7 +11,7 @@
           </el-col>
           <el-col :span="6">
             <el-form-item label="所属分类">
-              <el-select v-model="category" placeholder="请选择所属分类" clearable>
+              <el-select v-model="category" placeholder="请选择所属分类" clearable filterable>
                 <el-option v-for="item in categoryList" :key="item.enCode" :label="item.fullName"
                   :value="item.enCode">
                 </el-option>
