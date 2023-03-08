@@ -32,9 +32,9 @@ export function checkPwd(data) {
   })
 }
 // 获取列表表单配置JSON
-export function getConfigData(modelId, data) {
+export function getConfigData(modelId, data, tenantId) {
   return request({
-    url: `/api/visualdev/ShortLink/${modelId}/Config`,
+    url: `/api/visualdev/ShortLink/${modelId}/Config` + (tenantId ? '?tenantId=' + tenantId : ''),
     method: 'get',
     data
   })

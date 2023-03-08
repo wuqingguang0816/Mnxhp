@@ -19,18 +19,20 @@ export default {
       showPage: false,
       isPreview: false,
       modelId: '',
-      config: {}
+      config: {},
+      tenantId: ''
     }
   },
   created() {
     this.modelId = this.$route.query.modelId
+    this.tenantId = this.$route.query.tenantId
     const type = this.$route.query.type ? this.$route.query.type : ''
     if (!this.modelId) return
     this.getConfigData({ type })
   },
   methods: {
     getConfigData(previewType) {
-      getConfigData(this.modelId, previewType).then(res => {
+      getConfigData(this.modelId, previewType, this.tenantId).then(res => {
         if (res.code !== 200 || !res.data) {
           this.$store.dispatch('tagsView/delView', this.$route)
           this.$router.replace('/404')
