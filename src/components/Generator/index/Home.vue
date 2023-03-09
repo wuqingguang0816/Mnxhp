@@ -416,6 +416,20 @@ export default {
                 break
               }
             }
+            if (config.jnpfKey === 'JnpfAutoComplete') {
+              if (!e.interfaceId) {
+                reject({ msg: '下拉补全控件“远端数据”属性为必填项', target: 1 })
+                break
+              }
+              if (!e.propsValue) {
+                reject({ msg: '下拉补全控件“储存字段”属性为必填项', target: 1 })
+                break
+              }
+              if (!e.relationField) {
+                reject({ msg: '下拉补全控件“显示字段”属性为必填项', target: 1 })
+                break
+              }
+            }
             if (config.layout === 'rowFormItem' && !config.children.length) {
               reject({ msg: `您的${config.label}控件中没有组件`, target: 1 })
               break

@@ -56,9 +56,8 @@
         </el-input>
       </el-form-item>
       <el-form-item label="" v-else-if="activeData.__config__.startTimeType==2">
-        <el-select v-model="activeData.startRelationField" placeholder="请选择关联日期字段"
-          @change="onStartTypeChange">
-          <el-option v-for="(item,i) in fieldsOptions" :key="i" :label="item.realLabel"
+        <el-select v-model="activeData.startRelationField" placeholder="请选择关联日期字段">
+          <el-option v-for="(item,i) in formFieldsOptions" :key="i" :label="item.realLabel"
             :value="item.realVModel" />
         </el-select>
       </el-form-item>
@@ -91,9 +90,8 @@
         </el-input>
       </el-form-item>
       <el-form-item label="" v-else-if="activeData.__config__.endType==2">
-        <el-select v-model="activeData.endRelationField" placeholder="请选择关联日期字段"
-          @change="onEndTypeChange">
-          <el-option v-for="(item,i) in fieldsOptions" :key="i" :label="item.realLabel"
+        <el-select v-model="activeData.endRelationField" placeholder="请选择关联日期字段">
+          <el-option v-for="(item,i) in formFieldsOptions" :key="i" :label="item.realLabel"
             :value="item.realVModel" />
         </el-select>
       </el-form-item>
@@ -227,7 +225,7 @@ export default {
   },
   mounted() {
   },
-  methods: {
+  computed: {
     formFieldsOptions() {
       let list = []
       const loop = (data, parent) => {
@@ -246,8 +244,10 @@ export default {
         }
       }
       loop(getDrawingList())
-      this.fieldsOptions = list || []
-    },
+      return list
+    }
+  },
+  methods: {
     endTimeTarget(val) {
       if (val == 2 || val == 1) {
         this.getEndDateTime()
@@ -265,14 +265,6 @@ export default {
       } else {
         this.getStartTime()
       }
-    },
-    onStartTypeChange(val) {
-      let item = this.fieldsOptions.filter(o => o.realVModel === val)[0]
-      if (item) return this.activeData.startTime = item.__config__.defaultValue || ''
-    },
-    onEndTypeChange(val) {
-      let item = this.fieldsOptions.filter(o => o.realVModel === val)[0]
-      if (item) return this.activeData.endTime = item.__config__.defaultValue || ''
     },
     isIncludesTable(data) {
       if ((!data.__config__.layout || data.__config__.layout === 'rowFormItem') && data.__config__.jnpfKey !== 'table') return true
@@ -458,7 +450,6 @@ export default {
         this.getStartDateTime()
       } else if (val == 2) {
         this.activeData.__config__.startTimeValue = ''
-        this.formFieldsOptions()
       } else {
         this.activeData.__config__.startTimeValue = ''
       }

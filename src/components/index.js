@@ -42,6 +42,9 @@ import JnpfInputNumber from '@/components/Generator/components/JnpfInputNumber'
 import JnpfDatePicker from '@/components/Generator/components/JnpfDatePicker'
 import JnpfRadio from '@/components/Generator/components/JnpfRadio'
 import JnpfCheckbox from '@/components/Generator/components/JnpfCheckbox'
+import JnpfSelect from '@/components/Generator/components/JnpfSelect'
+import JnpfAutoComplete from '@/components/Generator/components/JnpfAutoComplete'
+
 export default {
   install(Vue, options) {
     Vue.component('JNPFTreeSelect', JNPFTreeSelect)
@@ -87,5 +90,7 @@ export default {
     Vue.component('JnpfDatePicker', JnpfDatePicker)
     Vue.component('JnpfRadio', JnpfRadio)
     Vue.component('JnpfCheckbox', JnpfCheckbox)
+    Vue.component('JnpfSelect', JnpfSelect)
+    Vue.component('JnpfAutoComplete', JnpfAutoComplete)
   }
 }

@@ -1145,6 +1145,51 @@ export const selectComponents = [
   },
   {
     __config__: {
+      jnpfKey: "autoComplete",
+      label: "下拉补全",
+      tipLabel: "",
+      labelWidth: undefined,
+      showLabel: true,
+      tag: "JnpfAutoComplete",
+      tagIcon: "icon-ym icon-ym-generator-input",
+      className: [],
+      defaultValue: undefined,
+      required: false,
+      layout: "colFormItem",
+      span: 24,
+      dragDisabled: false,
+      visibility: ["pc", "app"],
+      tableName: "",
+      noShow: false,
+      unique: false,
+      regList: [],
+      trigger: "blur"
+    },
+    __slot__: {
+      prepend: "",
+      append: ""
+    },
+    on: {
+      change:
+        "({ data, formData, setFormData, setShowOrHide, setRequired, setDisabled, request }) => {\n    // 在此编写代码\n    \n}",
+      blur:
+        "({ data, formData, setFormData, setShowOrHide, setRequired, setDisabled, request }) => {\n    // 在此编写代码\n    \n}"
+    },
+    placeholder: "请输入",
+    style: { width: "100%" },
+    total: 10,
+    propsValue: "id",
+    relationField: "fullName",
+    interfaceId: "",
+    interfaceName: "",
+    templateJson: [],
+    clearable: true,
+    maxlength: null,
+    readonly: false,
+    disabled: false
+  },
+  {
+    __config__: {
       jnpfKey: "address",
       label: "省市区域",
       tipLabel: "",

@@ -204,6 +204,8 @@
               :active-data="activeData" />
             <PopupAttr v-if="activeData.__config__.jnpfKey==='popupAttr'" :active-data="activeData"
               ref="popupAttr" />
+            <AutoComplete v-if="activeData.__config__.jnpfKey==='autoComplete'"
+              :active-data="activeData" ref="AutoComplete" />
             <Tab v-if="activeData.__config__.jnpfKey==='tab'" :active-data="activeData" />
             <Collapse v-if="activeData.__config__.jnpfKey==='collapse'" :active-data="activeData" />
             <template v-if="activeData.__config__.jnpfKey==='barcode'">
@@ -630,6 +632,7 @@ import RelationForm from './RightComponents/RelationForm'
 import RelationFormAttr from './RightComponents/RelationFormAttr'
 import JNPFCalculate from './RightComponents/Calculate'
 import PopupSelect from './RightComponents/PopupSelect'
+import AutoComplete from './RightComponents/AutoComplete'
 import PopupAttr from './RightComponents/PopupAttr'
 import Tab from './RightComponents/Tab'
 import Collapse from './RightComponents/Collapse'
@@ -680,7 +683,8 @@ export default {
     PopupAttr,
     Tab,
     Collapse,
-    TableConfig
+    TableConfig,
+    AutoComplete
   },
   inject: ["getShowType", "getFormInfo"],
   props: ['showField', 'activeData', 'formConf', 'modelType', 'webType', 'drawingList'],
