@@ -30,6 +30,7 @@ export default {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  overflow: hidden;
   .title {
     flex: 1;
     display: flex;
@@ -39,6 +40,9 @@ export default {
     }
     span {
       padding-left: 5px;
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
     }
   }
   .button {
