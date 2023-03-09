@@ -1053,10 +1053,7 @@ export const chartComponents = [{
     //自定义配色
     AxisTextStyleColor: "",   //X、Y轴字体的颜色全局设置
     AxisLineStyleColor: "",   //X、Y轴轴线颜色全局设置
-    colorList: [
-      { color1: '#71B6F5', color2: "#4696DD" },
-      { color1: '#A2ED83', color2: "#6BD042" },
-    ],
+    colorList: [],
     //数据设置（系列）
     barType: []
   },
@@ -1102,7 +1099,7 @@ export const chartComponents = [{
     styleType: 1,
     defaultValue: [],
     roseType: false,
-    showZero: false,
+    roseType1: false,
     // 图表标题设置
     titleText: "",  //主标题
     titleTextStyleColor: "#303133", //主标题字体颜色
@@ -1258,10 +1255,7 @@ export const chartComponents = [{
     //自定义配色
     AxisTextStyleColor: "",   //X、Y轴字体的颜色全局设置
     AxisLineStyleColor: "",   //X、Y轴轴线颜色全局设置
-    colorList: [
-      { color1: '#71B6F5', color2: "#4696DD" },
-      { color1: '#A2ED83', color2: "#6BD042" },
-    ],
+    colorList: [],
   },
   refresh: {
     autoRefresh: false,
@@ -1350,10 +1344,7 @@ export const chartComponents = [{
     //自定义配色
     AxisTextStyleColor: "",   //X、Y轴字体的颜色全局设置
     AxisLineStyleColor: "",   //X、Y轴轴线颜色全局设置
-    colorList: [
-      { color1: '#71B6F5', color2: "#4696DD" },
-      { color1: '#A2ED83', color2: "#6BD042" },
-    ],
+    colorList: [],
   },
   refresh: {
     autoRefresh: false,

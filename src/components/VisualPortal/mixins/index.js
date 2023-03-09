@@ -62,10 +62,10 @@ export default {
       handler(val) {
         if (this.activeData.dataType == 'static') this.initStaticData(val)
       },
-      deep: true
     },
     'option.defaultValue': {
       handler(val) {
+        if (this.activeData.dataType !== 'static') return
         setTimeout(() => {
           this.chartData = val
           this.resetChart()
@@ -121,7 +121,6 @@ export default {
             }
           })
           if (this.option.sortable) this.getPieData(obj['data'])
-          if (this.option.showZero) obj['data'] = obj['data'].filter((item) => item.value != 0)
         } else if (jnpfKey == 'radarChart') {
           const typeList = chartArr.map((item) => item.type)
           const element = {
@@ -138,7 +137,6 @@ export default {
         }
         seriesData.push(obj)
       })
-
       let xAxis = {
         type: this.option.category == 'category' ? 'category' : 'value',
         show: this.option.xAxisShow,
@@ -288,12 +286,14 @@ export default {
               }
               if (this.option.colorList && this.option.colorList.length) {
                 const colorList = []
-                this.option.colorList.map((item) => {
-                  colorList.push(item.color1 ? item.color1 : item.color2)
+                this.option.colorList.map((item, index) => {
+                  const color = this.getColor(index) || '#71B6F5'
+                  colorList.push(color)
                 })
                 ele.color = colorList
               }
               ele.center = [this.option.seriesCenterLeft + '%', this.option.seriesCenterTop + '%']
+              ele.stillShowZeroSum = !this.option.showZero
             }
             return Object.assign(ele, {
               name: ele.name,
@@ -337,6 +337,16 @@ export default {
           }
           option.radar.push(radarObj)
         })
+      } else if (jnpfKey == 'pieChart') {
+        if (this.option.seriesLabelShowInfo.includes('count') && this.option.seriesLabelShowInfo.includes('percent')) {
+          option.tooltip.formatter = '{b}: {c} ({d}%)'
+        } else if (this.option.seriesLabelShowInfo.includes('count')) {
+          option.tooltip.formatter = '{b}: {c}'
+        } else if (this.option.seriesLabelShowInfo.includes('percent')) {
+          option.tooltip.formatter = '{b}: {d}%'
+        } else {
+          option.tooltip.formatter = '{b}'
+        }
       }
       this.currOption = option
     },
