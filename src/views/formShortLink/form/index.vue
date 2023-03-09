@@ -56,7 +56,7 @@ const getFormDataFields = item => {
 }
 export default {
   components: { Parser, FlowBox },
-  props: ['config', 'modelId', 'isPreview', 'tenantId'],
+  props: ['config', 'modelId', 'isPreview', 'encryption'],
   data() {
     return {
       visible: false,
@@ -79,7 +79,7 @@ export default {
     }
   },
   created() {
-    getConfig(this.modelId, this.tenantId).then(res => {
+    getConfig(this.modelId, this.encryption).then(res => {
       this.formLink = res.data.formLink || ''
       this.id = res.data.id || 0
       this.formPassUse = res.data.formPassUse || 0
@@ -124,7 +124,7 @@ export default {
       let param = {
         id: this.id,
         type: 0,
-        tenantId: this.tenantId,
+        encryption: this.encryption,
         password: md5(this.password)
       }
       checkPwd(param).then((res) => {
@@ -173,7 +173,7 @@ export default {
       if (!data) return
       this.btnLoading = true
       this.dataForm.data = JSON.stringify(data)
-      createModel(this.modelId, this.dataForm, this.tenantId).then(res => {
+      createModel(this.modelId, this.dataForm, this.encryption).then(res => {
         this.$message({
           message: res.msg,
           type: 'success',

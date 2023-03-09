@@ -142,7 +142,7 @@ const getFormDataFields = item => {
 export default {
   name: 'dynamicModel',
   components: { Form, ExportBox, Search, Detail, FlowBox, ChildTableColumn, SuperQuery, CandidateForm, CustomBox },
-  props: ['config', 'modelId', 'isPreview', 'tenantId'],
+  props: ['config', 'modelId', 'isPreview', 'encryption'],
   data() {
     return {
       systemComponentsList,
@@ -231,7 +231,7 @@ export default {
     }
   },
   created() {
-    getConfig(this.modelId, this.tenantId).then(res => {
+    getConfig(this.modelId, this.encryption).then(res => {
       this.searchList = res.data.columnCondition ? JSON.parse(res.data.columnCondition) : []
       this.dataList = res.data.columnText ? JSON.parse(res.data.columnText) : []
       this.formLink = res.data.formLink || ''
@@ -298,7 +298,7 @@ export default {
     initData() {
       if (this.isPreview) return
       this.listLoading = true
-      getModelListLink(this.modelId, this.listQuery, this.tenantId).then(res => {
+      getModelListLink(this.modelId, this.listQuery, this.encryption).then(res => {
         if (this.columnData.type === 4) {
           this.list = res.data.list.map(o => ({
             ...o,
@@ -330,7 +330,7 @@ export default {
       let param = {
         id: this.id,
         type: 1,
-        tenantId: this.tenantId,
+        encryption: this.encryption,
         password: md5(this.password)
       }
       checkPwd(param).then((res) => {
@@ -726,7 +726,7 @@ export default {
     goDetail(id, row) {
       this.detailVisible = true
       this.$nextTick(() => {
-        this.$refs.Detail.init(this.formData, this.modelId, id, this.tenantId)
+        this.$refs.Detail.init(this.formData, this.modelId, id, this.encryption)
       })
     },
     sortChange({ column, prop, order }) {

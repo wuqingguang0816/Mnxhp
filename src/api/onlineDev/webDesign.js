@@ -16,9 +16,9 @@ export function save(data) {
 }
 
 // 获取外链信息
-export function getConfig(id, tenantId) {
+export function getConfig(id, encryption) {
   return request({
-    url: `/api/visualdev/ShortLink/getConfig/${id}` + (tenantId ? '?tenantId=' + tenantId : ''),
+    url: `/api/visualdev/ShortLink/getConfig/${id}` + (encryption ? '?encryption=' + encryption : ''),
     method: 'get'
   })
 }
@@ -32,17 +32,16 @@ export function checkPwd(data) {
   })
 }
 // 获取列表表单配置JSON
-export function getConfigData(modelId, data, tenantId) {
+export function getConfigData(modelId, encryption) {
   return request({
-    url: `/api/visualdev/ShortLink/${modelId}/Config` + (tenantId ? '?tenantId=' + tenantId : ''),
+    url: `/api/visualdev/ShortLink/${modelId}/Config` + (encryption ? '?encryption=' + encryption : ''),
     method: 'get',
-    data
   })
 }
 // 添加数据
-export function createModel(modelId, data, tenantId) {
+export function createModel(modelId, data, encryption) {
   return request({
-    url: `/api/visualdev/ShortLink/${modelId}` + (tenantId ? '?tenantId=' + tenantId : ''),
+    url: `/api/visualdev/ShortLink/${modelId}` + (encryption ? '?encryption=' + encryption : ''),
     method: 'POST',
     data
   })
@@ -50,18 +49,18 @@ export function createModel(modelId, data, tenantId) {
 
 
 // 获取数据详情
-export function getDataChange(modelId, id, tenantId) {
+export function getDataChange(modelId, id, encryption) {
   return request({
-    url: `/api/visualdev/ShortLink/${modelId}/${id}/DataChange` + (tenantId ? '?tenantId=' + tenantId : ''),
+    url: `/api/visualdev/ShortLink/${modelId}/${id}/DataChange` + (encryption ? '?encryption=' + encryption : ''),
     method: 'GET'
   })
 }
 
 
 // 获取数据列表
-export function getModelListLink(modelId, data, tenantId) {
+export function getModelListLink(modelId, data, encryption) {
   return request({
-    url: `/api/visualdev/ShortLink/${modelId}/ListLink` + (tenantId ? '?tenantId=' + tenantId : ''),
+    url: `/api/visualdev/ShortLink/${modelId}/ListLink` + (encryption ? '?encryption=' + encryption : ''),
     method: 'post',
     data
   })

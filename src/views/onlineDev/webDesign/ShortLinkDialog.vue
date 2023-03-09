@@ -38,7 +38,7 @@
           </el-col>
           <el-col :span="18">
             <el-input v-model="dataForm.formPassword" v-if="dataForm.formPassUse==1" type="password"
-              style="width:200px" show-password maxlength="20">
+              placeholder="请输入密码" style="width:200px" show-password maxlength="20">
             </el-input>
           </el-col>
         </el-row>
@@ -77,10 +77,20 @@
       <template v-if="dataForm.columnUse==1">
         <el-row class="spacing">
           <el-form-item label="查询条件" prop="columnCondition">
-            <el-input v-model="columnCondition" @click.native="change(1)"> </el-input>
+            <el-select v-model="columnCondition" placeholder="请选择查询条件" clearable multiple filterable
+              @change="columnConditionChange">
+              <el-option v-for="item in searchList " :key="item.__vModel__" :label="item.label"
+                :value="item.__vModel__">
+              </el-option>
+            </el-select>
           </el-form-item>
           <el-form-item label="显示内容" prop="columnText">
-            <el-input v-model="columnText" @click.native="change(2)"> </el-input>
+            <el-select v-model="columnText" placeholder="请选择显示内容" clearable multiple filterable
+              @change="columnTextChange">
+              <el-option v-for="item in listOptions" :key="item.__vModel__" :label="item.label"
+                :value="item.__vModel__">
+              </el-option>
+            </el-select>
           </el-form-item>
         </el-row>
         <el-form-item label="凭密码填写">
@@ -91,7 +101,8 @@
             </el-col>
             <el-col :span="18">
               <el-input v-model="dataForm.columnPassword" v-if="dataForm.columnPassUse==1"
-                style="width:200px" type="password" show-password maxlength="20">
+                placeholder="请输入密码" style="width:200px" type="password" show-password
+                maxlength="20">
               </el-input>
             </el-col>
           </el-row>
@@ -103,9 +114,6 @@
       <el-button type="primary" @click="dataFormSubmit()" :loading="btnLoading">
         {{$t('common.confirmButton')}}</el-button>
     </span>
-    <ChangeField v-if="changeFieldVisible" ref='ChangeField' multiple
-      :selectedList='type==1?dataForm.queryCriteria:dataForm.listCriteria'
-      @changeField="changeFields" :list='type==1?searchList:listOptions' :type='type' />
   </el-dialog>
 </template>
 
@@ -145,11 +153,9 @@ export default {
         columnPassword: '',
         columnCondition: [],
         columnText: [],
-        queryCriteria: [],
-        listCriteria: [],
       },
-      columnCondition: '',
-      columnText: '',
+      columnCondition: [],
+      columnText: [],
       dataRule: {
         formPassword: [
           {
@@ -198,27 +204,29 @@ export default {
       a.download = '二维码' // 图片名称
       a.click()
     },
-    changeFields(list) {
-      if (this.type == 1) {
-        this.dataForm.columnCondition = list
-        this.dataForm.queryCriteria = list
-        let listArr = []
-        for (let index = 0; index < this.dataForm.columnCondition.length; index++) {
-          const element = this.dataForm.columnCondition[index];
-          listArr.push(element.__config__.label ? element.__vModel__ + '(' + element.__config__.label + ')' : element.__vModel__)
-        }
-        this.columnCondition = listArr.join(",")
-      } else {
-        this.dataForm.columnText = list
-        this.dataForm.listCriteria = list
-        let listArr = []
-        for (let index = 0; index < this.dataForm.columnText.length; index++) {
-          const element = this.dataForm.columnText[index];
-          listArr.push(element.__config__.label ? element.__vModel__ + '(' + element.__config__.label + ')' : element.__vModel__)
-        }
-        this.columnText = listArr.join(",")
-
+    columnConditionChange(arr) {
+      let list = []
+      for (let index = 0; index < this.searchList.length; index++) {
+        const element = this.searchList[index];
+        arr.forEach(o => {
+          if (element.__vModel__ == o) {
+            list.push(element)
+          }
+        })
       }
+      this.dataForm.columnCondition = list
+    },
+    columnTextChange(arr) {
+      let list = []
+      for (let index = 0; index < this.listOptions.length; index++) {
+        const element = this.listOptions[index];
+        arr.forEach(o => {
+          if (element.__vModel__ == o) {
+            list.push(element)
+          }
+        })
+      }
+      this.dataForm.columnText = list
     },
     init(id) {
       this.btnLoading = false
@@ -228,24 +236,20 @@ export default {
         this.dataForm = res.data || {}
         this.dataForm.columnCondition = this.dataForm.columnCondition ? JSON.parse(this.dataForm.columnCondition) : []
         this.dataForm.columnText = this.dataForm.columnText ? JSON.parse(this.dataForm.columnText) : []
-        this.dataForm.queryCriteria = this.dataForm.columnCondition
-        this.dataForm.listCriteria = this.dataForm.columnText
-        let listArr = []
+        let column = []
         if (this.dataForm.columnCondition.length) {
-          for (let index = 0; index < this.dataForm.columnCondition.length; index++) {
-            const element = this.dataForm.columnCondition[index];
-            listArr.push(element.__config__.label ? element.__vModel__ + '(' + element.__config__.label + ')' : element.__vModel__)
-          }
-          this.columnCondition = listArr.join(",")
+          this.dataForm.columnCondition.forEach(o => {
+            column.push(o.__vModel__)
+          })
         }
-        let columnTextList = []
+        this.columnCondition = column
+        let text = []
         if (this.dataForm.columnText.length) {
-          for (let index = 0; index < this.dataForm.columnText.length; index++) {
-            const element = this.dataForm.columnText[index];
-            columnTextList.push(element.__config__.label ? element.__vModel__ + '(' + element.__config__.label + ')' : element.__vModel__)
-          }
-          this.columnText = columnTextList.join(",")
+          this.dataForm.columnText.forEach(o => {
+            text.push(o.__vModel__)
+          })
         }
+        this.columnText = text
       })
       getVisualDevInfo(id).then(res => {
         this.formData = res.data.formData && JSON.parse(res.data.formData)
@@ -343,7 +347,6 @@ export default {
       })
     },
     dataFormSubmit() {
-
       if (this.dataForm.formPassUse == 0) this.dataForm.formPassword = ''
       if (this.dataForm.columnPassUse == 0) this.dataForm.columnPassword = ''
       if (this.dataForm.formPassUse == 1 && !this.dataForm.formPassword) return this.$message.error('请输入表单凭密码填写')
