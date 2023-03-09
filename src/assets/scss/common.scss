@@ -2671,7 +2671,7 @@ textarea.el-textarea__inner {
     border: 1px var(--borderType) rgba(0, 0, 0, .1);
     overflow: hidden;
     height: 50px;
-    padding-top: 18px;
-    padding-right: 10px;
+    padding: 18px 18px 0;
+
   }
 }

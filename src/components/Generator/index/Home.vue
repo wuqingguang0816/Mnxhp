@@ -736,16 +736,6 @@ export default {
       this.setPropsOfMergedCols(remainedColIndex, newColspan, this.selectCell.__config__.rowspan)
     },
     mergeWholeCol() {
-      let rowDataChildren = this.rowData[this.rowIndex].__config__.children
-      // let startRowspan = rowDataChildren[0].__config__.rowspan
-      // let unmatchedFlag = false
-      // for (let i = 1; i < rowDataChildren.length; i++) {
-      //   if (rowDataChildren[i].__config__.rowspan !== startRowspan) {
-      //     unmatchedFlag = true
-      //     break;
-      //   }
-      // }
-      // if (unmatchedFlag) return this.$message.warning("存在行高不一致的单元格, 无法合并整行")
       let childrenData = this.colData.filter((colItem) => {
         return !colItem.merged && !!colItem.__config__.children && (colItem.__config__.children.length > 0)
       })
@@ -756,9 +746,9 @@ export default {
       }
       this.setPropsOfMergedCols(0, this.colData.length, this.colData[this.colIndex].__config__.rowspan)
     },
-    mergeTableRow(element, type) {
+    mergeTableRow(type) {
       let mergedRowIndex = type == 1 ? this.rowIndex : this.rowIndex + this.selectCell.__config__.rowspan
-      let remainedRowIndex = type == 1 ? this.rowIndex - this.selectCell.__config__.rowspan : this.rowIndex
+      let remainedRowIndex = type == 1 ? this.rowIndex - 1 : this.rowIndex
       let childrenData = this.rowData[mergedRowIndex].__config__.children[this.colIndex].__config__.children
       let childrenData_ = this.rowData[remainedRowIndex].__config__.children[this.colIndex].__config__.children
       this.rowData[remainedRowIndex].__config__.children[this.colIndex].__config__.children = [...childrenData_, ...deepClone(childrenData)]
@@ -766,15 +756,6 @@ export default {
       this.setPropsOfMergedRows(remainedRowIndex, this.selectCell.__config__.colspan, newRowspan)
     },
     mergeWholeRow() {
-      let startColspan = this.rowData[0].__config__.children[this.colIndex].__config__.colspan
-      // let unmatchedFlag = false
-      // for (let i = 1; i < this.rowData.length; i++) {
-      //   if (this.rowData[i].__config__.children[this.colIndex].__config__.colspan !== startColspan) {
-      //     unmatchedFlag = true
-      //     break;
-      //   }
-      // }
-      // if (unmatchedFlag) return this.$message.warning("存在列宽不一致的单元格, 无法合并整列")
       let childrenData = []
       this.rowData.forEach(o => {
         let tempCell = o.__config__.children[this.colIndex]
@@ -889,11 +870,11 @@ export default {
           break;
         case '8':
           //向上合并
-          this.mergeTableRow(element, 1)
+          this.mergeTableRow(1)
           break;
         case '9':
           //向下合并
-          this.mergeTableRow(element)
+          this.mergeTableRow()
           break;
         case '10':
           //合并整列
