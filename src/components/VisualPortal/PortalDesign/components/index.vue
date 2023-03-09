@@ -38,7 +38,6 @@
           </div>
         </div>
         <div id="ipad" v-else>
-
           <div class="outeripad">
             <div class="ipadbody">
               <div class="ipad-name">当前展示pc设计内容，请前往APP查看效果</div>
@@ -293,7 +292,6 @@ $lighterBlue: #409eff;
       height: 40px;
       padding: 0 15px;
       box-sizing: border-box;
-      // border-radius: 4px;
       background: #fff;
       margin-right: 10px;
       border: none;
@@ -390,7 +388,7 @@ $lighterBlue: #409eff;
           }
 
           .ipadbody {
-            height: 100%;
+            height: 98%;
             // background: #ebeef5;
             .ipad-name {
               text-align: center;
@@ -402,7 +400,7 @@ $lighterBlue: #409eff;
             }
 
             .center-scrollbar {
-              height: 100%;
+              height: 95.6672%;
               overflow: hidden;
             }
           }
