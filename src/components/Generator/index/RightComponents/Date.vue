@@ -63,9 +63,9 @@
       </el-form-item>
     </template>
     <el-form-item label="结束时间">
-      <el-switch v-model="activeData.endTimeType" />
+      <el-switch v-model="activeData.__config__.endTimeRule" />
     </el-form-item>
-    <template v-if="activeData.endTimeType">
+    <template v-if="activeData.__config__.endTimeRule">
       <jnpf-form-tip-item label="类型" tip-label="系统会限制填写者填写此字段的当天起始日期范围（包含该日期）。该功能不做有效性验证，请自行保证。">
         <el-select v-model="activeData.__config__.endType" placeholder="请选择类型" @change="endType">
           <el-option v-for="(item, index) in typeOptions" :key="index" :label="item.label"
