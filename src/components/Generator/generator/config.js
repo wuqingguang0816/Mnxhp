@@ -1645,6 +1645,8 @@ export const layoutComponents = [
       dragDisabled: false,
       visibility: ["pc", "app"],
       borderType: "solid",
+      borderColor: '#E2E0E0',
+      borderWidth: 1,
       rowType: "tableGrid",
       children: [
         {

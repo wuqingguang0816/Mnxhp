@@ -91,7 +91,8 @@ const layouts = {
       return (
         <el-col span={scheme.__config__.span} >
           <el-row gutter={scheme.__config__.gutter}>
-            <table class="table-grid-box" style={{ '--borderType': scheme.__config__.borderType }}>
+            <table class="table-grid-box"
+              style={{ '--borderType': scheme.__config__.borderType, '--borderColor': scheme.__config__.borderColor, '--borderWidth': scheme.__config__.borderWidth + 'px' }}>
               <tbody>
                 {
                   scheme.__config__.children.map((item) => {

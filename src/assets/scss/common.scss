@@ -2668,7 +2668,7 @@ textarea.el-textarea__inner {
   margin-bottom: 18px;
 
   td {
-    border: 1px var(--borderType) rgba(0, 0, 0, .1);
+    border: var(--borderWidth)px var(--borderType) var(--borderColor);
     overflow: hidden;
     height: 50px;
     padding: 18px 18px 0;
