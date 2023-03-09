@@ -32,7 +32,7 @@
           <el-table-column prop="dataLength" label="链接类型" width="160px">
             <template slot-scope="scope">
               <el-select v-model="scope.row.linkType" placeholder="请选择链接类型"
-                @change="linkTypeChange(scope.$index)">
+                @change="linkTypeChange(scope.$index)" clearable>
                 <el-option v-for="(item, index) in linkTypeList" :key="index" :label="item.label"
                   :value="item.value" />
               </el-select>
@@ -152,7 +152,7 @@ export default {
       const item = {
         fullName: "",
         moduleId: "",
-        linkType: '1',
+        linkType: '',
         urlAddress: '',
         linkTarget: '_self',
         icon: "icon-ym icon-ym-webDesign",

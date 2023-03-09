@@ -15,11 +15,6 @@
               <el-input v-model="scope.row.fullName" placeholder="请输入名称" maxlength="50" />
             </template>
           </el-table-column>
-          <el-table-column prop="field" label="单位名称" width="80px">
-            <template slot-scope="scope">
-              <el-input v-model="scope.row.unit" placeholder="单位名称" maxlength="5" />
-            </template>
-          </el-table-column>
           <el-table-column prop="dataLength" label="数值类型" width="140px">
             <template slot-scope="scope">
               <el-select v-model="scope.row.dataType" placeholder="请选择数值类型"
@@ -35,6 +30,11 @@
                 :title="scope.row.propsName" popupTitle="数据接口"
                 @change="propsApiChange(arguments,scope.$index)" />
               <el-input v-else v-model="scope.row.num" placeholder="请输入数值" maxlength="10" />
+            </template>
+          </el-table-column>
+          <el-table-column prop="field" label="单位名称" width="80px">
+            <template slot-scope="scope">
+              <el-input v-model="scope.row.unit" placeholder="单位名称" maxlength="5" />
             </template>
           </el-table-column>
           <el-table-column prop="field" label="图标" width="180px">
@@ -145,6 +145,8 @@ export default {
         if (!element.icon) return this.$message({ message: '请选择图标', type: 'warning', duration: 1000 })
         if (element.dataType == 'dynamic' && !element.propsApi) return this.$message({ message: '请选择数据接口', type: 'warning', duration: 1000 })
         if (element.dataType == 'static' && !element.num) return this.$message({ message: '请输入数值', type: 'warning', duration: 1000 })
+        if (element.linkType == 1 && !element.urlAddress) return this.$message({ message: '请选择菜单', type: 'warning', duration: 1000 })
+        if (element.linkType == 2 && !element.urlAddress) return this.$message({ message: '请输入跳转链接', type: 'warning', duration: 1000 })
       }
       this.visible = false
       this.$emit('refresh', this.list)
@@ -182,7 +184,7 @@ export default {
       const item = {
         fullName: "",
         moduleId: "",
-        linkType: '1',
+        linkType: '',
         urlAddress: '',
         linkTarget: '_self',
         dataType: 'static',

@@ -148,7 +148,8 @@
       <el-form-item label="文本滚动" v-if="activeData.option.styleType!='2'">
         <el-switch v-model="activeData.option.textAutoplay" />
       </el-form-item>
-      <template v-if="activeData.option.textAutoplay&&activeData.option.styleType!='2'">
+      <template
+        v-if="activeData.option.textAutoplay&&activeData.option.styleType!='2'&&showType=='pc'">
         <el-form-item label="滚动方向">
           <el-radio-group v-model="activeData.option.textAutoplayMode" size="small"
             @change="renderKeyChange">

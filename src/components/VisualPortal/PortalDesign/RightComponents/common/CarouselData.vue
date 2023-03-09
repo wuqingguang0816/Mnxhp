@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-dialog title="数据设置" :close-on-click-modal="false" :visible.sync="visible"
+    <el-dialog title="选项设置" :close-on-click-modal="false" :visible.sync="visible"
       class="JNPF-dialog JNPF-dialog_center todoData" lock-scroll width="1000px" append-to-body>
       <div class="main">
         <JNPF-table :data="list" ref="dragTable" :hasNO="false">
@@ -114,6 +114,12 @@ export default {
       })
     },
     confirm() {
+      for (let i = 0; i < this.list.length; i++) {
+        const element = this.list[i];
+        console.log(element.linkType)
+        if (element.linkType == '1' && !element.urlAddress) return this.$message({ message: '请选择菜单', type: 'warning', duration: 1000 })
+        if (element.linkType == '2' && !element.urlAddress) return this.$message({ message: '请输入跳转链接', type: 'warning', duration: 1000 })
+      }
       this.visible = false
       this.$emit('refresh', this.list)
     },
@@ -152,7 +158,7 @@ export default {
         dataType: 2,
         propsApi: '',
         moduleId: "",
-        linkType: '1',
+        linkType: '',
         urlAddress: '',
         linkTarget: '_self',
         textDefaultValue: "JNPF快速开发平台",
