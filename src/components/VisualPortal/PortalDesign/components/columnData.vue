@@ -180,7 +180,8 @@ export default {
     display: flex;
     flex-direction: column;
     overflow: hidden;
-    padding-bottom: 20px !important;
+    padding: 0px 3px 2px !important;
+    // padding-bottom: 20px !important;
   }
 }
 </style>
