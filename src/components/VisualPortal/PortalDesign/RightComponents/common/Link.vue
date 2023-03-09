@@ -35,13 +35,7 @@
           </JNPF-TreeSelect>
         </el-form-item>
         <el-form-item label="链接地址" v-if="activeData.option.appLinkType==2">
-          <el-input v-model="activeData.option.appUrlAddress" placeholder="填写地址">
-            <el-select slot="append" v-model="activeData.option.appLinkTarget" style="width: 90px;"
-              v-if="showType == 'pc'">
-              <el-option label="_self" value="_self" />
-              <el-option label="_blank" value="_blank" />
-            </el-select>
-          </el-input>
+          <el-input v-model="activeData.option.appUrlAddress" placeholder="填写地址" />
         </el-form-item>
       </template>
     </template>
@@ -80,12 +74,7 @@
           </JNPF-TreeSelect>
         </el-form-item>
         <el-form-item label="链接地址" v-if="activeData.card.appLinkType==2">
-          <el-input v-model="activeData.card.appUrlAddress" placeholder="填写地址">
-            <el-select slot="append" v-model="activeData.card.appLinkTarget" style="width: 90px;">
-              <el-option label="_self" value="_self" />
-              <el-option label="_blank" value="_blank" />
-            </el-select>
-          </el-input>
+          <el-input v-model="activeData.card.appUrlAddress" placeholder="填写地址" />
         </el-form-item>
       </template>
     </template>

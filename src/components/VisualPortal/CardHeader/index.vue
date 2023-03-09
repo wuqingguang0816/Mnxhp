@@ -35,6 +35,7 @@ export default {
     flex: 1;
     display: flex;
     align-items: center;
+    overflow: hidden;
     i {
       font-size: 18px;
     }
