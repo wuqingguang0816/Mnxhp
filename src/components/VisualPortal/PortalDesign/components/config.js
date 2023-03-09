@@ -991,7 +991,7 @@ export const chartComponents = [{
     titleTextStyleFontSize: 18, //主标题字体大小[12-25px]
     titleTextStyleFontWeight: false,  //主标题是否加粗
     titleLeft: "center", //主子标题位置[left,center,right]
-    titleBgColor: '#fff', //主子标题背景色[rgba(),#303133]
+    titleBgColor: '', //主子标题背景色[rgba(),#303133]
     // 图表副标题设置
     titleSubtext: "", //子标题
     titleSubtextStyleColor: "#303133",//子标题字体颜色
@@ -1106,7 +1106,7 @@ export const chartComponents = [{
     titleTextStyleFontSize: 18, //主标题字体大小[12-25px]
     titleTextStyleFontWeight: false,  //主标题是否加粗
     titleLeft: "center", //主子标题位置[left,center,right]
-    titleBgColor: '#fff', //主子标题背景色[rgba(),#303133]
+    titleBgColor: '', //主子标题背景色[rgba(),#303133]
     // 图表副标题设置
     titleSubtext: "", //子标题
     titleSubtextStyleColor: "#303133",//子标题字体颜色
@@ -1194,7 +1194,7 @@ export const chartComponents = [{
     titleTextStyleFontSize: 18, //主标题字体大小[12-25px]
     titleTextStyleFontWeight: false,  //主标题是否加粗
     titleLeft: "center", //主子标题位置[left,center,right]
-    titleBgColor: '#fff', //主子标题背景色[rgba(),#303133]
+    titleBgColor: '', //主子标题背景色[rgba(),#303133]
     // 图表副标题设置
     titleSubtext: "", //子标题
     titleSubtextStyleColor: "#303133",//子标题字体颜色
@@ -1310,7 +1310,7 @@ export const chartComponents = [{
     titleTextStyleFontSize: 18, //主标题字体大小[12-25px]
     titleTextStyleFontWeight: false,  //主标题是否加粗
     titleLeft: "center", //主子标题位置[left,center,right]
-    titleBgColor: '#fff', //主子标题背景色[rgba(),#303133]
+    titleBgColor: '', //主子标题背景色[rgba(),#303133]
     // 图表副标题设置
     titleSubtext: "", //子标题
     titleSubtextStyleColor: "#303133",//子标题字体颜色
@@ -1411,7 +1411,7 @@ export const chartComponents = [{
     titleTextStyleFontSize: 18, //主标题字体大小[12-25px]
     titleTextStyleFontWeight: false,  //主标题是否加粗
     titleLeft: "center", //主子标题位置[left,center,right]
-    titleBgColor: '#fff', //主子标题背景色[rgba(),#303133]
+    titleBgColor: '', //主子标题背景色[rgba(),#303133]
     // 图表副标题设置
     titleSubtext: "", //子标题
     titleSubtextStyleColor: "#303133",//子标题字体颜色
@@ -1586,10 +1586,6 @@ export const linkTypeList = [
   { label: '外链', value: '2' }
 ]
 
-export const appLinkTypeList = [
-  { label: '功能', value: '1' },
-  { label: '外链', value: '2' }
-]
 
 export const directionList = [
   { label: '横向', value: 'horizontal' },

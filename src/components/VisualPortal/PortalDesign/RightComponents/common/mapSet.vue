@@ -99,7 +99,7 @@
       </el-form-item>
     </template>
     <template v-if="activeData.option.styleType==4&&showType == 'pc'">
-      <el-divider>柱形排名设置</el-divider>
+      <el-divider>柱状排名设置</el-divider>
       <el-form-item label="标题名称">
         <el-input v-model="activeData.option.barTitleText" placeholder="请输入标题名称" />
       </el-form-item>
