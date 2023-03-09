@@ -4,7 +4,7 @@
       <el-switch v-model="activeData.option.legendShow" />
     </el-form-item>
     <template v-if="activeData.option.legendShow&&showType=='pc'">
-      <el-form-item label="图例大小">
+      <el-form-item label="字体大小">
         <el-input-number v-model="activeData.option.legendTextStyleFontSize"
           controls-position="right" :min="12" :max="25" />
       </el-form-item>

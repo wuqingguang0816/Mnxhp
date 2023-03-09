@@ -163,6 +163,7 @@ export default {
           }
         },
         axisLine: {
+          show: this.option.xAxisShow,
           lineStyle: {
             color: this.option.AxisLineStyleColor ? this.option.AxisLineStyleColor : this.option.xAxisAxisLineLineStyleColor
           }
@@ -196,6 +197,7 @@ export default {
             }
           },
           axisLine: {
+            show: this.option.yAxisShow,
             lineStyle: {
               color: this.option.AxisLineStyleColor ? this.option.AxisLineStyleColor : this.option.yAxisAxisLineLineStyleColor
             }

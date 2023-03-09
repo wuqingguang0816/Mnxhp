@@ -3,7 +3,8 @@
     <template v-if="type == 1">
       <template v-if="showType == 'pc'">
         <el-form-item label="链接地址">
-          <el-select v-model="activeData.option.linkType" placeholder="请选择链接类型" clearable>
+          <el-select v-model="activeData.option.linkType" placeholder="请选择链接类型" clearable
+            @change="onLinkTypeChange(1)">
             <el-option v-for="(item, index) in linkTypeList" :key="index" :label="item.label"
               :value="item.value" />
           </el-select>
@@ -24,7 +25,8 @@
       </template>
       <template v-else>
         <el-form-item label="链接地址">
-          <el-select v-model="activeData.option.appLinkType" placeholder="请选择链接类型" clearable>
+          <el-select v-model="activeData.option.appLinkType" placeholder="请选择链接类型" clearable
+            @change="onLinkTypeChange(1,'app')">
             <el-option v-for="(item, index) in linkTypeList" :key="index" :label="item.label"
               :value="item.value" />
           </el-select>
@@ -42,7 +44,8 @@
     <template v-else>
       <template v-if="showType == 'pc'">
         <el-form-item label="右上角链接">
-          <el-select v-model="activeData.card.linkType" placeholder="请选择链接类型">
+          <el-select v-model="activeData.card.linkType" placeholder="请选择链接类型" clearable
+            @change="onLinkTypeChange(2)">
             <el-option v-for="(item, index) in linkTypeList" :key="index" :label="item.label"
               :value="item.value" />
           </el-select>
@@ -63,7 +66,8 @@
       </template>
       <template v-else>
         <el-form-item label="右上角链接">
-          <el-select v-model="activeData.card.appLinkType" placeholder="请选择链接类型">
+          <el-select v-model="activeData.card.appLinkType" placeholder="请选择链接类型" clearable
+            @change="onLinkTypeChange(2,'app')">
             <el-option v-for="(item, index) in linkTypeList" :key="index" :label="item.label"
               :value="item.value" />
           </el-select>
@@ -119,7 +123,6 @@ export default {
       if (item.linkTarget) this.activeData.option[isPc ? 'linkTarget' : 'appLinkTarget'] = item.linkTarget
       if (item.propertyJson) this.activeData.option[isPc ? 'propertyJson' : 'appPropertyJson'] = item.propertyJson
     },
-
     getSelectVal(data, item) {
       const isPc = this.showType == 'pc'
       this.activeData.card[isPc ? 'type' : 'appType'] = item.type
@@ -127,6 +130,15 @@ export default {
       if (item.linkTarget) this.activeData.card[isPc ? 'linkTarget' : 'appLinkTarget'] = item.linkTarget
       if (item.propertyJson) this.activeData.card[isPc ? 'propertyJson' : 'appPropertyJson'] = item.propertyJson
     },
+    onLinkTypeChange(type, showType) {
+      if (type == 1) {
+        if (showType == "app") return this.activeData.card.appUrlAddress = ''
+        this.activeData.card.urlAddress = ''
+      } else {
+        if (showType == "app") return this.activeData.option.appUrlAddress = ''
+        this.activeData.option.urlAddress = ''
+      }
+    }
   }
 }
 </script>

@@ -29,13 +29,13 @@
         <el-form-item label="字体加粗">
           <el-switch v-model="activeData.option.seriesLabelFontWeight" />
         </el-form-item>
-        <el-form-item label="字体颜色">
-          <el-color-picker v-model="activeData.option.seriesLabelColor" />
-        </el-form-item>
-        <el-form-item label="背景色">
-          <el-color-picker v-model="activeData.option.seriesLabelBgColor" />
-        </el-form-item>
       </template>
+      <el-form-item label="字体颜色">
+        <el-color-picker v-model="activeData.option.seriesLabelColor" />
+      </el-form-item>
+      <el-form-item label="背景色" v-if="showType == 'pc'">
+        <el-color-picker v-model="activeData.option.seriesLabelBgColor" />
+      </el-form-item>
     </template>
   </el-collapse-item>
 </template>
