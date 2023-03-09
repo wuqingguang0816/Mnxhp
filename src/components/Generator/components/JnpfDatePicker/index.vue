@@ -57,13 +57,10 @@ export default {
       if (val === 'yyyy' || val === 'yyyy-MM' || val === 'yyyy-MM-dd') return this.type = 'date'
       return this.type = 'datetime'
     },
-
   },
   computed: {
   },
   created() {
-    console.log(this.jnpf.toDate(this.startTime, "yyyy-MM-dd HH:mm"))
-    console.log(this.jnpf.toDate(this.endTime, "yyyy-MM-dd HH:mm"))
   },
   mounted() {
   },

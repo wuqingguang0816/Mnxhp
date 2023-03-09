@@ -171,9 +171,6 @@ export default {
     }
   },
   watch: {
-    // value(val) {
-    //   this.setDefault()
-    // },
     'activeData.__config__.startTimeValue'(val) {
       if (this.activeData.__config__.startTimeType == 4 || this.activeData.__config__.startTimeType == 5) {
         if (this.activeData.__config__.startTimeTarget == 2 || this.activeData.__config__.startTimeTarget == 1) {
@@ -201,10 +198,34 @@ export default {
         return this.activeData.endTime = val
       }
     },
+    'activeData.__config__.endTimeValue'(val) {
+      if (this.activeData.__config__.endType == 4 || this.activeData.__config__.endType == 5) {
+        if (this.activeData.__config__.endTimeTarget == 2 || this.activeData.__config__.endTimeTarget == 1) {
+          this.getEndDateTime()
+        } else if (this.activeData.__config__.endTimeTarget == 3) {
+          this.getEndTimeValue()
+        } else {
+          this.getEndTime()
+        }
+      } else if (this.activeData.__config__.endType == 1) {
+        return this.activeData.endTime = val
+      }
+    },
+    'activeData.__config__.startTimeRule'(val) {
+      if (val) {
+        this.startType()
+      }
+    },
+    'activeData.__config__.endTimeRule'(val) {
+      if (val) {
+        this.endType()
+      }
+    }
   },
   created() {
     this.getTargetOptions()
-    this.formFieldsOptions()
+  },
+  mounted() {
   },
   methods: {
     formFieldsOptions() {
@@ -248,7 +269,6 @@ export default {
     onStartTypeChange(val) {
       let item = this.fieldsOptions.filter(o => o.realVModel === val)[0]
       if (item) return this.activeData.startTime = item.__config__.defaultValue || ''
-      console.log(this.activeData.startTime, item.__config__.defaultValue)
     },
     onEndTypeChange(val) {
       let item = this.fieldsOptions.filter(o => o.realVModel === val)[0]
@@ -380,7 +400,6 @@ export default {
     getStartDateTime() {
       let previousDate = '';
       previousDate = this.getDateDay(this.activeData.__config__.startTimeTarget, this.activeData.__config__.startTimeType, this.activeData.__config__.startTimeValue)
-      console.log(new Date(previousDate).getTime())
       return this.activeData.startTime = new Date(previousDate).getTime()
     },
     getEndDateTime() {

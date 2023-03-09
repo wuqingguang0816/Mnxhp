@@ -301,7 +301,7 @@ export const inputComponents = [
       tipLabel: "",
       labelWidth: undefined,
       showLabel: true,
-      tag: "el-select",
+      tag: "JnpfSelect",
       tagIcon: "icon-ym icon-ym-generator-select",
       className: [],
       defaultValue: "",
@@ -323,18 +323,16 @@ export const inputComponents = [
         value: "id"
       }
     },
-    __slot__: {
-      options: [
-        {
-          fullName: "选项一",
-          id: "1"
-        },
-        {
-          fullName: "选项二",
-          id: "2"
-        }
-      ]
-    },
+    options: [
+      {
+        fullName: "选项一",
+        id: "1"
+      },
+      {
+        fullName: "选项二",
+        id: "2"
+      }
+    ],
     on: {
       change:
         "({ data, formData, setFormData, setShowOrHide, setRequired, setDisabled, request }) => {\n    // 在此编写代码\n    \n}"

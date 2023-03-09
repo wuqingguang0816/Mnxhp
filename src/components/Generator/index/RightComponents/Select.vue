@@ -12,7 +12,7 @@
     <el-form-item label="默认值">
       <el-select v-model="activeData.__config__.defaultValue" placeholder="选择默认值" clearable
         :multiple="activeData.multiple" filterable>
-        <el-option v-for="(item,i) in activeData.__slot__.options" :key="i"
+        <el-option v-for="(item,i) in activeData.options" :key="i"
           :label="item[activeData.__config__.props.label]"
           :value="item[activeData.__config__.props.value]">
         </el-option>
@@ -28,25 +28,25 @@
       </el-radio-group>
     </el-form-item>
     <template v-if="activeData.__config__.dataType==='static'">
-      <draggable :list="activeData.__slot__.options" :animation="340" group="selectItem"
+      <draggable :list="activeData.options" :animation="340" group="selectItem"
         handle=".option-drag">
-        <div v-for="(item, index) in activeData.__slot__.options" :key="index" class="select-item">
+        <div v-for="(item, index) in activeData.options" :key="index" class="select-item">
           <div class="select-line-icon option-drag">
             <i class="icon-ym icon-ym-darg" />
           </div>
           <el-input v-model="item.fullName" placeholder="选项名" size="small" />
           <el-input v-model="item.id" placeholder="选项值" size="small" />
-          <div class="close-btn select-line-icon"
-            @click="activeData.__slot__.options.splice(index, 1)">
+          <div class="close-btn select-line-icon" @click="activeData.options.splice(index, 1)">
             <i class="el-icon-remove-outline" />
           </div>
         </div>
       </draggable>
       <div style="margin-left: 29px;">
         <el-button style="padding-bottom: 0" icon="el-icon-circle-plus-outline" type="text"
-          @click="addSelectItem()">
+          @click="addSelectItem">
           添加选项
         </el-button>
+        <el-divider direction="vertical"></el-divider>
         <el-button style="padding-bottom: 0" icon="el-icon-circle-plus-outline" type="text"
           @click="updateSelectItem">
           批量编辑
@@ -132,28 +132,18 @@
         @close="defaultValueChange">
         <dicIndex ref="dicIndex"></dicIndex>
       </el-dialog>
-      <el-dialog :visible.sync="updateVisible" append-to-body title="批量编辑"
-        class="JNPF-dialog JNPF-dialog_center update-dialog" lock-scroll width="400">
-        <el-alert title="注意：每行对应一个选项；选项名和选项值之间用英文 | 隔开。参考格式如下：" type="warning" :closable="false"
-          show-icon />
-        <el-input type="textarea" :rows="10" v-model="resultInfo" autosize></el-input>
-        <span slot="footer" class="dialog-footer">
-          <el-button @click="updateVisible = false">{{$t('common.cancelButton')}}</el-button>
-          <el-button type="primary" @click="handleSure()">
-            {{$t('common.confirmButton')}}
-          </el-button>
-        </span>
-      </el-dialog>
     </div>
+    <BatchEditing v-if="updateVisible" ref="batchEditing" @change="handleSure" />
   </el-row>
 </template>
 <script>
 import comMixin from './mixin';
 import dynamicMixin from './dynamicMixin';
 import dicIndex from '@/views/systemData/dictionary/index.vue';
+import BatchEditing from './BatchEditing'
 export default {
   components: {
-    dicIndex
+    dicIndex, BatchEditing
   },
   mixins: [comMixin, dynamicMixin],
   data() {
@@ -165,13 +155,7 @@ export default {
     }
   },
   methods: {
-    addSelectItem() {
-      const id = this.jnpf.idGenerator()
-      this.activeData.__slot__.options.push({
-        id: id,
-        fullName: '选项' + id,
-      })
-    },
+
     selectChange() {
       this.$emit('changeSelect')
       this.dictionaryTypeChange(this.dictionaryId)
@@ -186,41 +170,13 @@ export default {
       })
     },
     updateSelectItem() {
-      this.resultInfo = ''
-      if (this.activeData.__slot__.options.length > 0) {
-        this.activeData.__slot__.options.forEach((opt) => {
-          if (opt.id === opt.fullName) {
-            this.resultInfo += opt.id + '\n'
-          } else {
-            this.resultInfo += opt.fullName + this.separator + opt.id + '\n'
-          }
-        })
-      }
       this.updateVisible = true
+      this.$nextTick(() => {
+        this.$refs.batchEditing.init(this.activeData.options)
+      })
     },
-    handleSure() {
-      let lineArray = this.resultInfo.split('\n')
-      if (lineArray.length > 0) {
-        this.activeData.__slot__.options = []
-        lineArray.forEach((optLine) => {
-          if (!!optLine && !!optLine.trim()) {
-            if (optLine.indexOf(this.separator) !== -1) {
-              this.activeData.__slot__.options.push({
-                id: optLine.split(this.separator)[0],
-                fullName: optLine.split(this.separator)[1]
-              })
-            } else {
-              this.activeData.__slot__.options.push({
-                id: optLine,
-                fullName: optLine
-              })
-            }
-          }
-        })
-      } else {
-        this.activeData.__slot__.options = []
-      }
-      this.updateVisible = false
+    handleSure(arr) {
+      this.activeData.options = arr || []
     },
   }
 }
@@ -241,17 +197,6 @@ export default {
   }
   >>> .el-button:hover {
     border-color: #dcdfe6;
-  }
-}
-.update-dialog {
-  >>> .jsoneditor-outer {
-    >>> .el-dialog__body {
-      // min-height: 300px !important;
-      padding: 10px 20px 10px !important;
-    }
-    .option-box-tip {
-      margin-bottom: 20px;
-    }
   }
 }
 </style>

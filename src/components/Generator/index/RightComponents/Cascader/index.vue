@@ -34,6 +34,11 @@
         <div style="margin-left: 20px">
           <el-button style="padding-bottom: 0" icon="el-icon-circle-plus-outline" type="text"
             @click="addTreeItem">添加父级</el-button>
+          <el-divider direction="vertical"></el-divider>
+          <el-button style="padding-bottom: 0" icon="el-icon-circle-plus-outline" type="text"
+            @click="treeSelectItem">
+            批量编辑
+          </el-button>
         </div>
       </template>
       <template v-if="activeData.__config__.dataType === 'dictionary'">
@@ -127,6 +132,7 @@
         <dicIndex ref="dicIndex"></dicIndex>
       </el-dialog>
     </div>
+    <TreeEditing v-if="updateVisible" ref="treeEditing" @change="handleSure" />
   </el-row>
 </template>
 <script>
@@ -137,9 +143,10 @@ import TreeNodeDialog from './TreeNodeDialog'
 import { getDictionaryDataSelector } from '@/api/systemData/dictionary'
 import { getDataInterfaceRes } from '@/api/systemData/dataInterface'
 import dicIndex from '@/views/systemData/dictionary/index.vue';
+import TreeEditing from './TreeEditing'
 export default {
   mixins: [comMixin, dynamicMixin],
-  components: { TreeNodeDialog, dicIndex },
+  components: { TreeNodeDialog, dicIndex, TreeEditing },
   data() {
     return {
       dialogVisible: false,
@@ -151,6 +158,7 @@ export default {
       },
       cascaderKey: +new Date(),
       dicVisible: false,
+      updateVisible: false,
     }
   },
   methods: {
@@ -262,6 +270,15 @@ export default {
         this.activeData.__config__.templateJson = []
         this.activeData.options = []
       })
+    },
+    treeSelectItem() {
+      this.updateVisible = true
+      this.$nextTick(() => {
+        this.$refs.treeEditing.init(this.activeData.options)
+      })
+    },
+    handleSure(arr) {
+      this.activeData.options = arr || []
     }
   }
 }

@@ -31,9 +31,10 @@
         <div style="margin-left: 20px">
           <el-button style="padding-bottom: 0" icon="el-icon-circle-plus-outline" type="text"
             @click="addTreeItem">添加父级</el-button>
+          <el-divider direction="vertical"></el-divider>
           <el-button style="padding-bottom: 0" icon="el-icon-circle-plus-outline" type="text"
             @click="treeSelectItem">
-            树形编辑
+            批量编辑
           </el-button>
         </div>
       </template>
@@ -121,16 +122,7 @@
         @close="defaultValueChange">
         <dicIndex ref="dicIndex"></dicIndex>
       </el-dialog>
-      <el-dialog :visible.sync="treeVisible" append-to-body :close-on-click-modal="false"
-        class="JNPF-dialog JNPF-dialog_center JNPF-dialog-tree-select" lock-scroll width="80%">
-        <el-input type="textarea" :rows="10" v-model="resultInfo" autosize></el-input>
-        <span slot="footer" class="dialog-footer">
-          <el-button @click="treeVisible = false">{{$t('common.cancelButton')}}</el-button>
-          <el-button type="primary" @click="treeSure()">
-            {{$t('common.confirmButton')}}
-          </el-button>
-        </span>
-      </el-dialog>
+      <TreeEditing v-if="updateVisible" ref="treeEditing" @change="handleSure" />
     </div>
   </el-row>
 </template>
@@ -142,9 +134,10 @@ import TreeNodeDialog from './TreeNodeDialog'
 import { getDictionaryDataSelector } from '@/api/systemData/dictionary'
 import { getDataInterfaceRes } from '@/api/systemData/dataInterface'
 import dicIndex from '@/views/systemData/dictionary/index.vue';
+import TreeEditing from './TreeEditing'
 export default {
   mixins: [comMixin, dynamicMixin],
-  components: { TreeNodeDialog, dicIndex },
+  components: { TreeNodeDialog, dicIndex, TreeEditing },
   data() {
     return {
       dialogVisible: false,
@@ -156,11 +149,7 @@ export default {
       },
       renderKey: +new Date(),
       dicVisible: false,
-      treeVisible: false,
-      resultInfo: '',
-      separator: '|',
-
-      treeList: [],
+      updateVisible: false,
     }
   },
   methods: {
@@ -272,73 +261,13 @@ export default {
       })
     },
     treeSelectItem() {
-      this.resultInfo = ''
-      console.log(this.activeData.options, this.currentNode)
-      if (this.activeData.options.length > 0) {
-        const loop = (list, id) => {
-          for (let i = 0; i < list.length; i++) {
-            const e = list[i]
-            if (e.id === e.fullName) {
-              this.resultInfo += e.id + '\n'
-            } else {
-              let separator = ''
-              if (id) {
-                separator = this.separator + id
-              }
-              this.resultInfo += e.fullName + this.separator + e.id + separator + '\n'
-            }
-            if (e && e.children && Array.isArray(e.children)) {
-              loop(e.children, e.id)
-            }
-          }
-          console.log(this.resultInfo)
-        }
-        loop(this.activeData.options)
-      }
-      this.treeVisible = true
+      this.updateVisible = true
+      this.$nextTick(() => {
+        this.$refs.treeEditing.init(this.activeData.options)
+      })
     },
-    treeSure() {
-      this.activeData.options = []
-      let lineArray = this.resultInfo.split('\n')
-      if (lineArray.length > 0) {
-        lineArray.forEach((optLine) => {
-          if (!!optLine && !!optLine.trim()) {
-            if (optLine.indexOf(this.separator) !== -1) {
-              let item = optLine.split(this.separator) || []
-              const getParentId = (list, item) => {
-                let parentId = item[item.length - 1]
-                for (let i = 0; i < list.length; i++) {
-                  const element = list[i];
-                  if (element.children && element.children.length) getParentId(element.children, item)
-                  if (element.id == parentId) {
-                    element.children.push(
-                      {
-                        fullName: item[0],
-                        id: item[1],
-                        children: []
-                      }
-                    )
-                  }
-                }
-              }
-              if (item.length < 2) return
-              if (item.length == 2) {
-                this.activeData.options.push({
-                  fullName: item[0],
-                  id: item[1],
-                  children: []
-                })
-              } else {
-                getParentId(this.activeData.options, item)
-              }
-            }
-          }
-        })
-      } else {
-        this.activeData.options = []
-      }
-      console.log(this.activeData.options)
-      this.treeVisible = false
+    handleSure(arr) {
+      this.activeData.options = arr || []
     }
   }
 }

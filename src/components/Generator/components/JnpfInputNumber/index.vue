@@ -3,8 +3,8 @@
     <template v-if='!thousands && !controlsPosition'>
       <div class="el-input el-input--small el-input-group el-input-group--prepend el-input--suffix">
         <div class="el-input-group__prepend" v-if="addonBefore">{{ addonBefore }}</div>
-        <el-input-number v-model="innerValue" placeholder="数字文本" :max="max" :min="min" :step="step"
-          :precision="precision" :disabled="disabled" class="input-number"
+        <el-input-number v-model="innerValue" :placeholder="placeholder" :max="max" :min="min"
+          :step="step" :precision="precision" :disabled="disabled" class="input-number"
           :controls-position="controlsPosition==='right'?'right':''"
           :controls="!controlsPosition?false:true">
         </el-input-number>
@@ -14,8 +14,8 @@
     <template v-else-if='thousands && !controlsPosition'>
       <div class="el-input el-input--small el-input-group el-input-group--prepend el-input--suffix">
         <div class="el-input-group__prepend" v-if="addonBefore">{{ addonBefore }}</div>
-        <el-input-number v-model="innerValue" placeholder="数字文本" :max="max" :min="min" :step="step"
-          :precision="precision" :disabled="disabled" v-thousands class="input-number"
+        <el-input-number v-model="innerValue" :placeholder="placeholder" :max="max" :min="min"
+          :step="step" :precision="precision" :disabled="disabled" v-thousands class="input-number"
           :controls-position="controlsPosition==='right'?'right':''"
           :controls="!controlsPosition?false:true">
         </el-input-number>
@@ -23,8 +23,8 @@
       </div>
     </template>
     <template v-else>
-      <el-input-number v-model="innerValue" placeholder="数字文本" :max="max" :min="min" :step="step"
-        :precision="precision" :disabled="disabled"
+      <el-input-number v-model="innerValue" :placeholder="placeholder" :max="max" :min="min"
+        :step="step" :precision="precision" :disabled="disabled"
         :controls-position="controlsPosition==='right'?'right':''"
         :controls="!controlsPosition?false:true">
       </el-input-number>
@@ -77,6 +77,10 @@ export default {
     addonBefore: {
       type: String,
       default: ''
+    },
+    placeholder: {
+      type: String,
+      default: '数字文本'
     },
     addonAfter: {
       type: String,

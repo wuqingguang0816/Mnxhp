@@ -62,14 +62,15 @@ export default {
       this.$set(this.activeData.__config__, 'defaultValue', val ? [] : '')
     },
     addSelectItem() {
-      this.activeData.__slot__.options.push({
-        fullName: '',
-        id: ''
+      const id = this.jnpf.idGenerator()
+      this.activeData.options.push({
+        id: id,
+        fullName: '选项' + id,
       })
     },
     dataTypeChange(val) {
       this.activeData.__config__.defaultValue = this.defaultValue
-      this.activeData.__slot__.options = []
+      this.activeData.options = []
       this.activeData.__config__.props.value = 'id'
       this.activeData.__config__.props.label = 'fullName'
       this.activeData.__config__.dictionaryType = ''
@@ -81,11 +82,11 @@ export default {
       this.dictionaryId = val
       this.activeData.__config__.defaultValue = this.defaultValue
       if (!val) {
-        this.activeData.__slot__.options = []
+        this.activeData.options = []
         return
       }
       getDictionaryDataSelector(val).then(res => {
-        this.activeData.__slot__.options = res.data.list
+        this.activeData.options = res.data.list
       })
     },
     propsUrlChange(val, row) {
@@ -94,7 +95,7 @@ export default {
         this.activeData.__config__.propsUrl = ''
         this.activeData.__config__.propsName = ''
         this.activeData.__config__.templateJson = []
-        this.activeData.__slot__.options = []
+        this.activeData.options = []
         return
       }
       let list = row.requestParameters ? JSON.parse(row.requestParameters) : []
@@ -107,15 +108,15 @@ export default {
       getDataInterfaceRes(val, query).then(res => {
         let data = res.data
         if (Array.isArray(data)) {
-          this.activeData.__slot__.options = data
+          this.activeData.options = data
         } else {
-          this.activeData.__slot__.options = []
+          this.activeData.options = []
         }
       }).catch(() => {
         this.activeData.__config__.propsUrl = ''
         this.activeData.__config__.propsName = ''
         this.activeData.__config__.templateJson = []
-        this.activeData.__slot__.options = []
+        this.activeData.options = []
       })
     }
   }

@@ -341,11 +341,10 @@ function layoutIsNotFound() {
 function buildOptions(element) {
   const config = element.__config__
   if (dyOptionsList.indexOf(config.jnpfKey) > -1) {
-    let isTreeSelect = config.jnpfKey === 'treeSelect' || config.jnpfKey === 'cascader'
     if (config.dataType === 'dictionary') {
       if (!config.dictionaryType) return
       getDictionaryDataSelector(config.dictionaryType).then(res => {
-        isTreeSelect ? element.options = res.data.list : element.__slot__.options = res.data.list
+        element.options = res.data.list
       })
     }
     if (config.dataType === 'dynamic') {
@@ -353,9 +352,9 @@ function buildOptions(element) {
       getDataInterfaceRes(config.propsUrl).then(res => {
         let data = res.data
         if (Array.isArray(data)) {
-          isTreeSelect ? element.options = data : element.__slot__.options = data
+          element.options = data
         } else {
-          isTreeSelect ? element.options = [] : element.__slot__.options = []
+          element.options = []
         }
       })
     }

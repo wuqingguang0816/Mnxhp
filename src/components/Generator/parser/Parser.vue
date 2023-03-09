@@ -237,7 +237,7 @@ function buildListeners(scheme) {
         if (key === 'change') {
           let data = ''
           if (['select', 'radio', 'checkbox'].includes(config.jnpfKey)) {
-            const options = scheme.__slot__.options
+            const options = scheme.options
             if (scheme.multiple || config.jnpfKey === 'checkbox') {
               let _data = []
               outer: for (let i = 0; i < params[0].length; i++) {
@@ -437,6 +437,38 @@ export default {
             }
           }
         }
+        if (config.jnpfKey === 'date') {
+          if (cur.startRelationField) {
+            let item = {
+              ...cur,
+              realVModel: cur.__config__.isSubTable ? cur.__config__.parentVModel + '-' + cur.__vModel__ : cur.__vModel__,
+              opType: 'setDate'
+            }
+            if (relations.hasOwnProperty(cur.startRelationField)) {
+              let boo = relations[cur.startRelationField].some(o => o.realVModel === cur.realVModel)
+              if (!boo) {
+                relations[cur.startRelationField].push(item)
+              }
+            } else {
+              relations[cur.startRelationField] = [item]
+            }
+          }
+          if (cur.endRelationField) {
+            let item = {
+              ...cur,
+              realVModel: cur.__config__.isSubTable ? cur.__config__.parentVModel + '-' + cur.__vModel__ : cur.__vModel__,
+              opType: 'setDate'
+            }
+            if (relations.hasOwnProperty(cur.endRelationField)) {
+              let boo = relations[cur.endRelationField].some(o => o.realVModel === cur.realVModel)
+              if (!boo) {
+                relations[cur.endRelationField].push(item)
+              }
+            } else {
+              relations[cur.endRelationField] = [item]
+            }
+          }
+        }
         if (config.children) this.buildRelations(config.children, relations)
       })
     },
@@ -474,6 +506,12 @@ export default {
                 this.comSet('ableRelationIds', e.__vModel__, Array.isArray(value) ? value : [value])
               }
               if (e.opType === 'setPopupOptions') { }
+              if (e.opType === 'setDate') {
+                let startTime = this[this.formConf.formModel][e.startRelationField] || 0
+                let endTime = this[this.formConf.formModel][e.endRelationField] || 0
+                this.comSet('startTime', e.__vModel__, startTime)
+                this.comSet('endTime', e.__vModel__, endTime)
+              }
             }
           }
         }
@@ -495,6 +533,12 @@ export default {
               if (e.opType === 'setUserOptions') {
                 let value = this[this.formConf.formModel][e.relationField] || []
                 this.comSet('ableRelationIds', e.__vModel__, Array.isArray(value) ? value : [value])
+              }
+              if (e.opType === 'setDate') {
+                let value = this[this.formConf.formModel][e.startRelationField] || []
+                let value2 = this[this.formConf.formModel][e.endRelationField] || []
+                this.comSet('startTime', e.__vModel__, value)
+                this.comSet('endTime', e.__vModel__, value2)
               }
             }
           }
@@ -532,8 +576,8 @@ export default {
           if (config.dataType === 'dictionary') {
             if (!config.dictionaryType) return
             getDictionaryDataSelector(config.dictionaryType).then(res => {
-              isTreeSelect ? cur.options = res.data.list : cur.__slot__.options = res.data.list
-              isTreeSelect ? data[cur.__vModel__ + 'Options'] = cur.options : data[cur.__vModel__ + 'Options'] = cur.__slot__.options
+              cur.options = res.data.list
+              data[cur.__vModel__ + 'Options'] = cur.options
             })
           } else if (config.dataType === 'dynamic') {
             if (!config.propsUrl) return
@@ -543,14 +587,14 @@ export default {
             getDataInterfaceRes(config.propsUrl, query).then(res => {
               let realData = res.data
               if (Array.isArray(realData)) {
-                isTreeSelect ? cur.options = realData : cur.__slot__.options = realData
+                isTreeSelect ? cur.options = realData : cur.options = realData
               } else {
-                isTreeSelect ? cur.options = [] : cur.__slot__.options = []
+                cur.options = []
               }
-              isTreeSelect ? data[cur.__vModel__ + 'Options'] = cur.options : data[cur.__vModel__ + 'Options'] = cur.__slot__.options
+              data[cur.__vModel__ + 'Options'] = cur.options
             })
           } else {
-            isTreeSelect ? data[cur.__vModel__ + 'Options'] = cur.options : data[cur.__vModel__ + 'Options'] = cur.__slot__.options
+            data[cur.__vModel__ + 'Options'] = cur.options
           }
         }
         if (config.children && config.jnpfKey !== 'table') this.buildOptions(config.children, data, formData)
@@ -680,10 +724,16 @@ export default {
               case 'ableRelationIds':
                 this.$set(item, field, value)
                 break;
+              case 'startTime':
+                this.$set(item, field, value)
+                break;
+              case 'endTime':
+                this.$set(item, field, value)
+                break;
               case 'options':
                 if (dyOptionsList.indexOf(item.__config__.jnpfKey) > -1) {
                   let isTreeSelect = item.__config__.jnpfKey === 'treeSelect' || item.__config__.jnpfKey === 'cascader'
-                  isTreeSelect ? item.options = value : item.__slot__.options = value
+                  isTreeSelect ? item.options = value : item.options = value
                 }
                 break;
               default:

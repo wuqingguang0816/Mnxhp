@@ -48,6 +48,11 @@
           @click="addSelectItem">
           添加选项
         </el-button>
+        <el-divider direction="vertical"></el-divider>
+        <el-button style="padding-bottom: 0" icon="el-icon-circle-plus-outline" type="text"
+          @click="updateSelectItem">
+          批量编辑
+        </el-button>
       </div>
     </template>
     <template v-if="activeData.__config__.dataType === 'dictionary'">
@@ -140,20 +145,23 @@
         <dicIndex ref="dicIndex"></dicIndex>
       </el-dialog>
     </div>
+    <BatchEditing v-if="updateVisible" ref="batchEditing" @change="handleSure" />
   </el-row>
 </template>
 <script>
 import comMixin from './mixin';
 import dynamicMixin from './dynamicMixin';
 import dicIndex from '@/views/systemData/dictionary/index.vue';
+import BatchEditing from './BatchEditing'
 export default {
   components: {
-    dicIndex
+    dicIndex, BatchEditing
   },
   mixins: [comMixin, dynamicMixin],
   data() {
     return {
       dicVisible: false,
+      updateVisible: false,
     }
   },
   methods: {
@@ -169,7 +177,16 @@ export default {
       this.$nextTick(() => {
         this.$refs.dicIndex.initData()
       })
-    }
+    },
+    updateSelectItem() {
+      this.updateVisible = true
+      this.$nextTick(() => {
+        this.$refs.batchEditing.init(this.activeData.options)
+      })
+    },
+    handleSure(arr) {
+      this.activeData.options = arr || []
+    },
   }
 
 }
