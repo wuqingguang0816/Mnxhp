@@ -41,6 +41,7 @@
     "axios": "0.18.1",
     "clipboard": "2.0.4",
     "codemirror": "^5.58.2",
+    "crypto-js": "^4.1.1",
     "dayjs": "^1.8.29",
     "driver.js": "0.9.5",
     "dropzone": "5.5.1",

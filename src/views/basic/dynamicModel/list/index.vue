@@ -253,7 +253,6 @@
                     <template v-else>
                       {{scope.row[item.prop+'_name']||scope.row[item.prop]}}
                     </template>
-
                   </template>
                 </template>
               </el-table-column>
@@ -285,7 +284,6 @@
                             </template>
                           </template>
                         </el-table-column>
-
                       </el-table>
                     </el-tab-pane>
                   </el-tabs>
@@ -588,7 +586,8 @@ export default {
   computed: {
     ...mapGetters(['userInfo']),
     operationWidth() {
-      const customWidth = this.customBtnsList.length ? 50 : 0
+      let customWidth = this.customBtnsList.length ? 50 : 0
+      if (this.columnData.type == 4 && this.config.enableFlow) customWidth += 50
       return this.columnBtnsList.length * 50 + customWidth
     }
   },

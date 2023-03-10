@@ -1,20 +1,8 @@
 <template>
-  <el-dialog
-  class="JNPF-dialog JNPF-dialog_center"
-    title="过滤规则配置"
-    :visible.sync="dialogVisible"
-    width="800px"
-    append-to-body
-    :before-close="handleClose"
-  >
-    <Condition
-      :value="pconditions"
-      ref="base"
-      :modelType="modelType"
-      :columnDataMap="columnDataMap"
-      :dataOptionMap="dataOptionMap"
-      :columnOptions="columnOptions"
-    ></Condition>
+  <el-dialog class="JNPF-dialog JNPF-dialog_center" title="过滤规则配置" :visible.sync="dialogVisible"
+    width="800px" append-to-body :before-close="handleClose">
+    <Condition :value="pconditions" ref="base" :modelType="modelType" :columnDataMap="columnDataMap"
+      :dataOptionMap="dataOptionMap" :columnOptions="columnOptions"></Condition>
     <span slot="footer" class="dialog-footer">
       <el-button @click="handleClose">取 消</el-button>
       <el-button type="primary" @click="confirm">确 定</el-button>
@@ -30,7 +18,7 @@ import Condition from "./condition";
 export default {
   props: {
     modelType: {
-      type: String,
+      type: [String, Number],
       default: ""
     },
     value: {
@@ -83,8 +71,8 @@ export default {
       return formItems;
     }
   },
-  created() {},
-  mounted() {},
+  created() { },
+  mounted() { },
   watch: {
     columnData: {
       handler(val) {

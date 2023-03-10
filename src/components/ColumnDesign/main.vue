@@ -281,7 +281,8 @@
                   </el-select>
                 </el-form-item>
               </div>
-              <el-form-item label="子表样式" v-if="columnData.type==1||columnData.type==2">
+              <el-form-item label="子表样式"
+                v-if="(columnData.type==1||columnData.type==2)&&webType != 4">
                 <el-select v-model="columnData.childTableStyle" placeholder="请选择子表样式">
                   <el-option label="分组展示" :value="1" />
                   <el-option label="折叠展示" :value="2" />
@@ -304,7 +305,7 @@
                 <el-form-item label="" label-width="104px">
                   <JNPF-TreeSelect key="sel" :options="printTplList" v-model="columnData.printIds"
                     multiple placeholder="请选择打印模板" lastLevel clearable node-key="id">
-                    <div  class="printWrap" slot="header">
+                    <div class="printWrap" slot="header">
                       <el-link type="primary" :underline="false" @click="openPrint">添加打印模板
                       </el-link>
                       <el-link type="info" style="position: absolute;right:8px;top: 18px;"
@@ -1024,8 +1025,8 @@ export default {
 @import './index.scss';
 
 .printWrap {
-  padding:10px 0;
-  text-align:center;
+  padding: 10px 0;
+  text-align: center;
   >>> .el-divider--horizontal {
     margin: 10px 0 !important;
   }

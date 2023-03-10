@@ -149,7 +149,6 @@ export default {
       this.showReject = properties.showReject
       this.rejectList = properties.rejectList
       this.dataForm.rejectStep = properties.nodeCode
-      this.dataForm.rejectType = properties.rejectType
     },
     onBranchChange(val) {
       const defaultList = this.dataForm.candidateList.filter(o => o.isDefault)

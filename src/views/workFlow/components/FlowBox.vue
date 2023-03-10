@@ -523,9 +523,8 @@ export default {
         this.flowTaskOperatorRecordList = res.data.flowTaskOperatorRecordList || []
         this.flowTaskOperatorRecordList = this.flowTaskOperatorRecordList.reverse()
         this.properties = res.data.approversProperties || {}
-        this.candidateForm.rejectType = this.properties.rejectType
         this.endTime = this.flowTaskInfo.completion == 100 ? this.flowTaskInfo.endTime : 0
-        data.formConf =  this.flowFormInfo.propertyJson
+        data.formConf = this.flowFormInfo.propertyJson
         if (data.opType != 1 && data.opType != '-1') data.readonly = true
         data.formOperates = res.data.formOperates || []
         if (data.opType == 0) {

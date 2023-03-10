@@ -49,14 +49,14 @@ const getFormDataFields = item => {
     "slider", "editor", "link", "JNPFText", "alert", 'table', "collapse", 'collapseItem', 'tabItem',
     "tab", "row", "card"
   ]
-  const fieldsSelectList = ["radio", "checkbox", "select", "cascader"]
+  const fieldsSelectList = ["radio", "checkbox", "select", "cascader", "treeSelect"]
   if (list.includes(jnpfKey) || (fieldsSelectList.includes(jnpfKey) && item.__config__.dataType ===
     'static')) return true
   return false
 }
 export default {
   components: { Parser, FlowBox },
-  props: ['config', 'modelId', 'isPreview'],
+  props: ['config', 'modelId', 'isPreview', 'encryption'],
   data() {
     return {
       visible: false,
@@ -79,7 +79,7 @@ export default {
     }
   },
   created() {
-    getConfig(this.modelId).then(res => {
+    getConfig(this.modelId, this.encryption).then(res => {
       this.formLink = res.data.formLink || ''
       this.id = res.data.id || 0
       this.formPassUse = res.data.formPassUse || 0
@@ -94,7 +94,6 @@ export default {
       } else {
         this.formConf = JSON.parse(this.config.formData)
         this.formConf.fields = this.recurSiveFilter(this.formConf.fields)
-        console.log(this.formConf.fields)
         this.loading = true
         this.$nextTick(() => {
           this.visible = true
@@ -125,6 +124,7 @@ export default {
       let param = {
         id: this.id,
         type: 0,
+        encryption: this.encryption,
         password: md5(this.password)
       }
       checkPwd(param).then((res) => {
@@ -173,7 +173,7 @@ export default {
       if (!data) return
       this.btnLoading = true
       this.dataForm.data = JSON.stringify(data)
-      createModel(this.modelId, this.dataForm).then(res => {
+      createModel(this.modelId, this.dataForm, this.encryption).then(res => {
         this.$message({
           message: res.msg,
           type: 'success',
