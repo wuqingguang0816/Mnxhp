@@ -3,7 +3,8 @@
     <template v-if="type == 1">
       <template v-if="showType == 'pc'">
         <el-form-item label="链接地址">
-          <el-select v-model="activeData.option.linkType" placeholder="请选择链接类型" clearable>
+          <el-select v-model="activeData.option.linkType" placeholder="请选择链接类型" clearable
+            @change="onLinkTypeChange(1)">
             <el-option v-for="(item, index) in linkTypeList" :key="index" :label="item.label"
               :value="item.value" />
           </el-select>
@@ -24,7 +25,8 @@
       </template>
       <template v-else>
         <el-form-item label="链接地址">
-          <el-select v-model="activeData.option.appLinkType" placeholder="请选择链接类型" clearable>
+          <el-select v-model="activeData.option.appLinkType" placeholder="请选择链接类型" clearable
+            @change="onLinkTypeChange(1,'app')">
             <el-option v-for="(item, index) in linkTypeList" :key="index" :label="item.label"
               :value="item.value" />
           </el-select>
@@ -35,19 +37,15 @@
           </JNPF-TreeSelect>
         </el-form-item>
         <el-form-item label="链接地址" v-if="activeData.option.appLinkType==2">
-          <el-input v-model="activeData.option.appUrlAddress" placeholder="填写地址">
-            <el-select slot="append" v-model="activeData.option.appLinkTarget" style="width: 90px;">
-              <el-option label="_self" value="_self" />
-              <el-option label="_blank" value="_blank" />
-            </el-select>
-          </el-input>
+          <el-input v-model="activeData.option.appUrlAddress" placeholder="填写地址" />
         </el-form-item>
       </template>
     </template>
     <template v-else>
       <template v-if="showType == 'pc'">
         <el-form-item label="右上角链接">
-          <el-select v-model="activeData.card.linkType" placeholder="请选择链接类型">
+          <el-select v-model="activeData.card.linkType" placeholder="请选择链接类型" clearable
+            @change="onLinkTypeChange(2)">
             <el-option v-for="(item, index) in linkTypeList" :key="index" :label="item.label"
               :value="item.value" />
           </el-select>
@@ -68,7 +66,8 @@
       </template>
       <template v-else>
         <el-form-item label="右上角链接">
-          <el-select v-model="activeData.card.appLinkType" placeholder="请选择链接类型">
+          <el-select v-model="activeData.card.appLinkType" placeholder="请选择链接类型" clearable
+            @change="onLinkTypeChange(2,'app')">
             <el-option v-for="(item, index) in linkTypeList" :key="index" :label="item.label"
               :value="item.value" />
           </el-select>
@@ -79,12 +78,7 @@
           </JNPF-TreeSelect>
         </el-form-item>
         <el-form-item label="链接地址" v-if="activeData.card.appLinkType==2">
-          <el-input v-model="activeData.card.appUrlAddress" placeholder="填写地址">
-            <el-select slot="append" v-model="activeData.card.appLinkTarget" style="width: 90px;">
-              <el-option label="_self" value="_self" />
-              <el-option label="_blank" value="_blank" />
-            </el-select>
-          </el-input>
+          <el-input v-model="activeData.card.appUrlAddress" placeholder="填写地址" />
         </el-form-item>
       </template>
     </template>
@@ -129,7 +123,6 @@ export default {
       if (item.linkTarget) this.activeData.option[isPc ? 'linkTarget' : 'appLinkTarget'] = item.linkTarget
       if (item.propertyJson) this.activeData.option[isPc ? 'propertyJson' : 'appPropertyJson'] = item.propertyJson
     },
-
     getSelectVal(data, item) {
       const isPc = this.showType == 'pc'
       this.activeData.card[isPc ? 'type' : 'appType'] = item.type
@@ -137,6 +130,15 @@ export default {
       if (item.linkTarget) this.activeData.card[isPc ? 'linkTarget' : 'appLinkTarget'] = item.linkTarget
       if (item.propertyJson) this.activeData.card[isPc ? 'propertyJson' : 'appPropertyJson'] = item.propertyJson
     },
+    onLinkTypeChange(type, showType) {
+      if (type == 1) {
+        if (showType == "app") return this.activeData.option.appUrlAddress = ''
+        this.activeData.option.urlAddress = ''
+      } else {
+        if (showType == "app") return this.activeData.card.appUrlAddress = ''
+        this.activeData.card.urlAddress = ''
+      }
+    }
   }
 }
 </script>

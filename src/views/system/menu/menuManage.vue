@@ -86,7 +86,8 @@
                     <template slot-scope="scope">
                       <tableOpts @edit="addOrUpdateHandle(scope.row.id)"
                         @del="handleDel(scope.row.id)">
-                        <template v-if="scope.row.type ">
+                        <template
+                          v-if="(listQuery.category==='Web'&&scope.row.type) || (listQuery.category==='App'&&scope.row.type!=1)">
                           <el-dropdown>
                             <span class="el-dropdown-link">
                               <el-button type="text" size="mini">{{ $t("common.moreBtn")

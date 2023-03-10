@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-dialog title="数据设置" :close-on-click-modal="false" :visible.sync="visible"
+    <el-dialog title="选项设置" :close-on-click-modal="false" :visible.sync="visible"
       class="JNPF-dialog JNPF-dialog_center todoData" lock-scroll width="1000px" append-to-body>
       <div class="main">
         <JNPF-table :data="list" ref="dragTable" :hasNO="false">
@@ -45,7 +45,8 @@
               </JNPF-TreeSelect>
               <el-input v-if="scope.row.linkType==2" v-model="scope.row.urlAddress"
                 placeholder="填写地址">
-                <el-select slot="append" v-model="scope.row.linkTarget" style="width: 80px;">
+                <el-select slot="append" v-model="scope.row.linkTarget" style="width: 80px;"
+                  v-if="showType == 'pc'">
                   <el-option label="_self" value="_self" />
                   <el-option label="_blank" value="_blank" />
                 </el-select>
@@ -65,7 +66,7 @@
           </el-table-column>
         </JNPF-table>
         <div class="table-actions" @click="addHandle()">
-          <el-button type="text" icon="el-icon-plus">新建字段</el-button>
+          <el-button type="text" icon="el-icon-plus">添加</el-button>
         </div>
       </div>
       <span slot="footer" class="dialog-footer">
@@ -113,6 +114,13 @@ export default {
       })
     },
     confirm() {
+      for (let i = 0; i < this.list.length; i++) {
+        const element = this.list[i];
+        if ((element.dataType == 1 || element.dataType == 2) && !element.imageUrl) return this.$message.warning(element.dataType == 2 ? '图片地址不能为空' : '请上传图片')
+        if (element.dataType == 3 && !element.propsApi) return this.$message.warning('请选择请选择数据接口')
+        if (element.linkType == '1' && (!element.urlAddress && !element.moduleId)) return this.$message({ message: '请选择菜单', type: 'warning', duration: 1000 })
+        if (element.linkType == '2' && !element.urlAddress) return this.$message({ message: '请输入跳转链接', type: 'warning', duration: 1000 })
+      }
       this.visible = false
       this.$emit('refresh', this.list)
     },
@@ -151,7 +159,7 @@ export default {
         dataType: 2,
         propsApi: '',
         moduleId: "",
-        linkType: '1',
+        linkType: '',
         urlAddress: '',
         linkTarget: '_self',
         textDefaultValue: "JNPF快速开发平台",

@@ -40,6 +40,7 @@
         <div id="ipad" v-else>
           <div class="outeripad">
             <div class="ipadbody">
+              <div class="ipad-name">当前展示pc设计内容，请前往APP查看效果</div>
               <el-scrollbar class="center-scrollbar">
                 <draggable v-if="layout.length" class="drawing-board" :list="layout"
                   :animation="340" group="componentsGroup">
@@ -288,14 +289,14 @@ $lighterBlue: #409eff;
     overflow: hidden;
     .action-bar {
       position: relative;
-      height: 42px;
+      height: 40px;
       padding: 0 15px;
       box-sizing: border-box;
-      border-radius: 4px;
       background: #fff;
       margin-right: 10px;
       border: none;
       display: flex;
+      border-bottom: 1px solid #dcdfe6;
       justify-content: space-between;
       .icon {
         color: #000 !important;
@@ -345,7 +346,10 @@ $lighterBlue: #409eff;
     .layout-area {
       height: calc(100% - 42px);
       margin-left: -10px;
-
+      margin-right: 10px;
+      background: #fff;
+      position: relative;
+      border: none;
       #ipad {
         height: calc(100% - 42px);
         display: flex;
@@ -384,15 +388,19 @@ $lighterBlue: #409eff;
           }
 
           .ipadbody {
-            height: 100%;
+            height: 98%;
             // background: #ebeef5;
-
+            .ipad-name {
+              text-align: center;
+              margin-bottom: 5px;
+              margin-top: 5px;
+            }
             .center-board-row > .el-form {
               height: 550px;
             }
 
             .center-scrollbar {
-              height: 100%;
+              height: 95.6672%;
               overflow: hidden;
             }
           }
@@ -401,6 +409,7 @@ $lighterBlue: #409eff;
 
       >>> .el-scrollbar__wrap {
         margin-bottom: 0 !important;
+        margin-left: 10px !important;
         overflow-x: auto;
       }
       .item-box {

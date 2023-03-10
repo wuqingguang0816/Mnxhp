@@ -5,8 +5,8 @@
         class="JNPF-dialog JNPF-dialog_center" lock-scroll :width="formData.generalWidth"
         append-to-body>
         <div class="dynamicDetail" v-loading="loading || mainLoading">
-          <Parser :formConf="formData" :relationData="relationData" @toDetail="toDetail"
-            v-if="!loading" :formValue="formValue" />
+          <Parser :formConf="formData" :relationData="relationData" v-if="!loading"
+            :formValue="formValue" />
         </div>
       </el-dialog>
     </template>
@@ -16,7 +16,7 @@
 </template>
 
 <script>
-import { getDataChange, getConfigData } from '@/api/onlineDev/visualDev'
+import { getDataChange } from '@/api/onlineDev/webDesign'
 import { getDataInterfaceDataInfoByIds } from '@/api/systemData/dataInterface'
 import { deepClone } from '@/utils'
 import Parser from './Parser'
@@ -47,10 +47,9 @@ export default {
     goBack() {
       this.$emit('close')
     },
-    init(formData, modelId, id, useFormPermission) {
+    init(formData, modelId, id, tenantId) {
       this.formData = deepClone(formData)
       this.modelId = modelId
-      this.useFormPermission = useFormPermission
       this.dataForm.id = id || ''
       this.loading = true
       this.relationData = {}
@@ -62,7 +61,7 @@ export default {
             type: 2
           }
           this.$store.commit('generator/SET_DYNAMIC_MODEL_EXTRA', extra)
-          getDataChange(modelId, this.dataForm.id).then(res => {
+          getDataChange(modelId, this.dataForm.id, tenantId).then(res => {
             this.dataForm = res.data
             if (!this.dataForm.data) return
             this.formValue = JSON.parse(this.dataForm.data)

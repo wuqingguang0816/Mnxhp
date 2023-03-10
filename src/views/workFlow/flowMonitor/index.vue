@@ -354,6 +354,7 @@ export default {
       this.urgent = ''
       this.flowCategory = ''
       this.creatorUserId = ''
+      this.flowOptions = []
       this.listQuery = {
         currentPage: 1,
         pageSize: 20,

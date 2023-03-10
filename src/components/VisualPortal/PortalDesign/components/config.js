@@ -8,7 +8,7 @@ const dataBoardDefault = [
     icon: "icon-ym icon-ym-wf-contractApproval",
     iconColor: "rgb(123, 26, 225)",
     moduleId: "",
-    linkType: '1',
+    linkType: '',
     urlAddress: '',
     linkTarget: '_self',
   },
@@ -21,7 +21,7 @@ const dataBoardDefault = [
     icon: "icon-ym icon-ym-wf-outgoingApply",
     iconColor: "rgb(74, 184, 255)",
     moduleId: "",
-    linkType: '1',
+    linkType: '',
     urlAddress: '',
     linkTarget: '_self',
   },
@@ -34,7 +34,7 @@ const dataBoardDefault = [
     icon: "icon-ym icon-ym-wf-payDistribution",
     iconColor: "rgb(255, 139, 88)",
     moduleId: "",
-    linkType: '1',
+    linkType: '',
     urlAddress: '',
     linkTarget: '_self',
   },
@@ -47,7 +47,7 @@ const dataBoardDefault = [
     icon: "icon-ym icon-ym-wf-incomeRecognition",
     iconColor: "rgb(252, 91, 135)",
     moduleId: "",
-    linkType: '1',
+    linkType: '',
     urlAddress: '',
     linkTarget: '_self',
   }
@@ -63,7 +63,7 @@ export const layoutComponents = [
       titleFontWeight: false,
       titleFontColor: '#303133',
       titleLeft: 'left',
-      titleBgColor: '#fff',
+      titleBgColor: '',
       cardIcon: 'icon-ym icon-ym-generator-todo',
       cardIconColor: "#666",
       linkType: '',
@@ -94,7 +94,7 @@ export const layoutComponents = [
       titleFontWeight: false,
       titleFontColor: '#303133',
       titleLeft: 'left',
-      titleBgColor: '#fff',
+      titleBgColor: '',
       cardIcon: 'icon-ym icon-ym-generator-todo',
       cardIconColor: "#666",
       linkType: '',
@@ -138,7 +138,7 @@ export const layoutComponents = [
   //     titleFontWeight: false,
   //     titleFontColor: '#303133',
   //     titleLeft: 'left',
-  //     titleBgColor: '#fff',
+  //     titleBgColor: '',
   //     cardIcon: 'icon-ym icon-ym-generator-todo',
   //     cardIconColor: "#666",
   //     linkType: '',
@@ -181,7 +181,7 @@ export const systemComponents = [{
     titleFontWeight: false,
     titleFontColor: '#303133',
     titleLeft: 'left',
-    titleBgColor: '#fff',
+    titleBgColor: '',
     cardIcon: 'icon-ym icon-ym-generator-notice',
     cardIconColor: "#666",
     linkType: '',
@@ -212,7 +212,7 @@ export const systemComponents = [{
     titleFontWeight: false,
     titleFontColor: '#303133',
     titleLeft: 'left',
-    titleBgColor: '#fff',
+    titleBgColor: '',
     cardIcon: 'icon-ym icon-ym-generator-email',
     cardIconColor: "#666",
     linkType: '',
@@ -243,7 +243,7 @@ export const systemComponents = [{
     titleFontWeight: false,
     titleFontColor: '#303133',
     titleLeft: 'left',
-    titleBgColor: '#fff',
+    titleBgColor: '',
     cardIcon: 'icon-ym icon-ym-generator-todolist',
     cardIconColor: "#666",
     linkType: '',
@@ -276,7 +276,7 @@ export const basicComponents = [{
     titleFontWeight: false,
     titleFontColor: '#303133',
     titleLeft: 'left',
-    titleBgColor: '#fff',
+    titleBgColor: '',
     cardIcon: 'icon-ym icon-ym-generator-todo',
     cardIconColor: "#666",
     linkType: '',
@@ -294,14 +294,13 @@ export const basicComponents = [{
     styleType: 1,
     defaultValue: [
       { fullName: "流程待办", id: "1", noShow: false, num: 0, category: '', urlAddress: "/workFlow/flowTodo", icon: "icon-ym icon-ym-flowTodo", iconBgColor: "#f68900", type: 2 },
-      { fullName: "流程委托", id: "2", noShow: false, num: 0, category: '', urlAddress: "/workFlow/entrust", icon: "icon-ym icon-ym-flowEntrust", iconBgColor: "#1890ff", type: 2 },
       { fullName: "流程已办", id: "3", noShow: false, num: 0, category: '', urlAddress: "/workFlow/flowDone", icon: "icon-ym icon-ym-flowDone", iconBgColor: "#7b1ae1", type: 2 },
       { fullName: "流程抄送", id: "4", noShow: false, num: 0, category: '', urlAddress: "/workFlow/flowCirculate", icon: "icon-ym icon-ym-flowForm", iconBgColor: "#33b932", type: 2 },
     ],
-    rowNumber: 4,
-    showBorder: true,
+    rowNumber: 3,
+    showBorder: false,
     appRowNumber: 4,
-    appShowBorder: true,
+    appShowBorder: false,
     labelFontSize: 14,
     labelFontWeight: false,
     labelFontColor: '#666',
@@ -331,7 +330,7 @@ export const basicComponents = [{
     titleFontWeight: false,
     titleFontColor: '#303133',
     titleLeft: 'left',
-    titleBgColor: '#fff',
+    titleBgColor: '',
     cardIcon: 'icon-ym icon-ym-generator-function',
     cardIconColor: "#666",
     linkType: '',
@@ -402,7 +401,7 @@ export const basicComponents = [{
     ],
     appDefaultValue: [
       {
-        fullName: "JNPF快速开发平台",
+        fullName: "JNPF快速开发",
         moduleId: "",
         linkType: '2',
         urlAddress: 'https://www.jnpfsoft.com/',
@@ -411,21 +410,11 @@ export const basicComponents = [{
         iconBgColor: "#33B932",
         type: 2
       },
-      {
-        fullName: "JNPF快速开发平台",
-        moduleId: "",
-        linkType: '2',
-        linkTarget: '_self',
-        urlAddress: "https://www.jnpfsoft.com/",
-        icon: "icon-ym icon-ym-portalDesign",
-        iconBgColor: "#33B932",
-        type: 2
-      },
     ],
     rowNumber: 5,
-    showBorder: true,
+    showBorder: false,
     appRowNumber: 4,
-    appShowBorder: true,
+    appShowBorder: false,
     labelFontSize: 14,
     labelFontWeight: false,
     labelFontColor: '#666',
@@ -448,7 +437,7 @@ export const basicComponents = [{
     titleFontWeight: false,
     titleFontColor: '#303133',
     titleLeft: 'left',
-    titleBgColor: '#fff',
+    titleBgColor: '',
     cardIcon: 'icon-ym icon-ym-generator-function',
     cardIconColor: "#666",
     linkType: '',
@@ -468,9 +457,9 @@ export const basicComponents = [{
     defaultValue: dataBoardDefault,
     appDefaultValue: dataBoardDefault,
     rowNumber: 4,
-    showBorder: true,
+    showBorder: false,
     appRowNumber: 4,
-    appShowBorder: true,
+    appShowBorder: false,
     labelFontSize: 14,
     labelFontWeight: false,
     labelFontColor: '#666',
@@ -499,14 +488,14 @@ export const basicComponents = [{
   title: '表格列表',
   dataType: 'static',
   propsApi: '',
-  border: false,
+  border: true,
   renderKey: '',
   card: {
     titleFontSize: 14,
     titleFontWeight: false,
     titleFontColor: '#303133',
     titleLeft: 'left',
-    titleBgColor: '#fff',
+    titleBgColor: '',
     cardIcon: 'icon-ym icon-ym-generator-table',
     cardIconColor: "#666",
     linkType: '',
@@ -527,7 +516,7 @@ export const basicComponents = [{
     headerFontSize: 14,
     headerFontWeight: false,
     headerFontColor: '#303133',
-    headerLeft: 'left',
+    headerLeft: 'center',
     headerBgColor: '#F4F6F8',
     tableIndex: true,
     tableCount: 5,
@@ -589,19 +578,19 @@ export const basicComponents = [{
       filedName: 'comInputField102',
       fontSize: 14,
       fontWeight: false,
-      fontColor: '#000'
+      fontColor: '#303133'
     }, {
       fullName: '描述',
       filedName: 'comInputField103',
       fontSize: 12,
       fontWeight: false,
-      fontColor: '#999'
+      fontColor: '#666666'
     }, {
       fullName: '时间',
       filedName: 'comInputField105',
       fontSize: 12,
       fontWeight: false,
-      fontColor: '#999'
+      fontColor: '#666666'
     }],
   },
   refresh: {
@@ -626,7 +615,7 @@ export const basicComponents = [{
     titleFontWeight: false,
     titleFontColor: '#303133',
     titleLeft: 'left',
-    titleBgColor: '#fff',
+    titleBgColor: '',
     cardIcon: 'icon-ym icon-ym-generator-textarea',
     cardIconColor: "#666",
     linkType: '',
@@ -683,7 +672,7 @@ export const basicComponents = [{
     titleFontWeight: false,
     titleFontColor: '#303133',
     titleLeft: 'left',
-    titleBgColor: '#fff',
+    titleBgColor: '',
     cardIcon: 'icon-ym icon-ym-generator-Panel',
     cardIconColor: "#666",
     linkType: '',
@@ -738,7 +727,7 @@ export const basicComponents = [{
     titleFontWeight: false,
     titleFontColor: '#303133',
     titleLeft: 'left',
-    titleBgColor: '#fff',
+    titleBgColor: '',
     cardIcon: 'icon-ym icon-ym-generator-Panel',
     cardIconColor: "#666",
     linkType: '',
@@ -763,7 +752,7 @@ export const basicComponents = [{
         dataType: 2,
         propsApi: '',
         moduleId: "",
-        linkType: '1',
+        linkType: '',
         urlAddress: '',
         linkTarget: '_self',
         textDefaultValue: "",
@@ -773,7 +762,7 @@ export const basicComponents = [{
         dataType: 2,
         propsApi: '',
         moduleId: "",
-        linkType: '1',
+        linkType: '',
         urlAddress: '',
         linkTarget: '_self',
         textDefaultValue: "",
@@ -783,7 +772,7 @@ export const basicComponents = [{
         dataType: 2,
         propsApi: '',
         moduleId: "",
-        linkType: '1',
+        linkType: '',
         urlAddress: '',
         linkTarget: '_self',
         textDefaultValue: "",
@@ -795,7 +784,7 @@ export const basicComponents = [{
         dataType: 2,
         propsApi: '',
         moduleId: "",
-        linkType: '1',
+        linkType: '',
         urlAddress: '',
         linkTarget: '_self',
         textDefaultValue: "",
@@ -805,7 +794,7 @@ export const basicComponents = [{
         dataType: 2,
         propsApi: '',
         moduleId: "",
-        linkType: '1',
+        linkType: '',
         urlAddress: '',
         linkTarget: '_self',
         textDefaultValue: "",
@@ -815,7 +804,7 @@ export const basicComponents = [{
         dataType: 2,
         propsApi: '',
         moduleId: "",
-        linkType: '1',
+        linkType: '',
         urlAddress: '',
         linkTarget: '_self',
         textDefaultValue: "",
@@ -857,7 +846,7 @@ export const basicComponents = [{
     titleFontWeight: false,
     titleFontColor: '#303133',
     titleLeft: 'left',
-    titleBgColor: '#fff',
+    titleBgColor: '',
     cardIcon: 'icon-ym icon-ym-generator-Panel',
     cardIconColor: "#666",
     linkType: '',
@@ -902,7 +891,7 @@ export const basicComponents = [{
     titleFontWeight: false,
     titleFontColor: '#303133',
     titleLeft: 'left',
-    titleBgColor: '#fff',
+    titleBgColor: '',
     cardIcon: 'icon-ym icon-ym-generator-Panel',
     cardIconColor: "#666",
     linkType: '',
@@ -940,7 +929,7 @@ export const basicComponents = [{
     titleFontWeight: false,
     titleFontColor: '#303133',
     titleLeft: 'left',
-    titleBgColor: '#fff',
+    titleBgColor: '',
     cardIcon: 'icon-ym icon-ym-generator-Panel',
     cardIconColor: "#666",
     linkType: '',
@@ -977,7 +966,7 @@ export const chartComponents = [{
     titleFontWeight: false,
     titleFontColor: '#303133',
     titleLeft: 'left',
-    titleBgColor: '#fff',
+    titleBgColor: '',
     cardIcon: 'icon-ym icon-ym-generator-bar',
     cardIconColor: "#666",
     linkType: '',
@@ -1002,7 +991,7 @@ export const chartComponents = [{
     titleTextStyleFontSize: 18, //主标题字体大小[12-25px]
     titleTextStyleFontWeight: false,  //主标题是否加粗
     titleLeft: "center", //主子标题位置[left,center,right]
-    titleBgColor: '#fff', //主子标题背景色[rgba(),#303133]
+    titleBgColor: '', //主子标题背景色[rgba(),#303133]
     // 图表副标题设置
     titleSubtext: "", //子标题
     titleSubtextStyleColor: "#303133",//子标题字体颜色
@@ -1064,10 +1053,7 @@ export const chartComponents = [{
     //自定义配色
     AxisTextStyleColor: "",   //X、Y轴字体的颜色全局设置
     AxisLineStyleColor: "",   //X、Y轴轴线颜色全局设置
-    colorList: [
-      { color1: '#71B6F5', color2: "#4696DD" },
-      { color1: '#A2ED83', color2: "#6BD042" },
-    ],
+    colorList: [],
     //数据设置（系列）
     barType: []
   },
@@ -1093,7 +1079,7 @@ export const chartComponents = [{
     titleFontWeight: false,
     titleFontColor: '#303133',
     titleLeft: 'left',
-    titleBgColor: '#fff',
+    titleBgColor: '',
     cardIcon: 'icon-ym icon-ym-generator-pie',
     cardIconColor: "#666",
     linkType: '',
@@ -1113,14 +1099,14 @@ export const chartComponents = [{
     styleType: 1,
     defaultValue: [],
     roseType: false,
-    showZero: false,
+    roseType1: false,
     // 图表标题设置
     titleText: "",  //主标题
     titleTextStyleColor: "#303133", //主标题字体颜色
     titleTextStyleFontSize: 18, //主标题字体大小[12-25px]
     titleTextStyleFontWeight: false,  //主标题是否加粗
     titleLeft: "center", //主子标题位置[left,center,right]
-    titleBgColor: '#fff', //主子标题背景色[rgba(),#303133]
+    titleBgColor: '', //主子标题背景色[rgba(),#303133]
     // 图表副标题设置
     titleSubtext: "", //子标题
     titleSubtextStyleColor: "#303133",//子标题字体颜色
@@ -1182,7 +1168,7 @@ export const chartComponents = [{
     titleFontWeight: false,
     titleFontColor: '#303133',
     titleLeft: 'left',
-    titleBgColor: '#fff',
+    titleBgColor: '',
     cardIcon: 'icon-ym icon-ym-generator-line',
     cardIconColor: "#666",
     linkType: '',
@@ -1208,7 +1194,7 @@ export const chartComponents = [{
     titleTextStyleFontSize: 18, //主标题字体大小[12-25px]
     titleTextStyleFontWeight: false,  //主标题是否加粗
     titleLeft: "center", //主子标题位置[left,center,right]
-    titleBgColor: '#fff', //主子标题背景色[rgba(),#303133]
+    titleBgColor: '', //主子标题背景色[rgba(),#303133]
     // 图表副标题设置
     titleSubtext: "", //子标题
     titleSubtextStyleColor: "#303133",//子标题字体颜色
@@ -1269,10 +1255,7 @@ export const chartComponents = [{
     //自定义配色
     AxisTextStyleColor: "",   //X、Y轴字体的颜色全局设置
     AxisLineStyleColor: "",   //X、Y轴轴线颜色全局设置
-    colorList: [
-      { color1: '#71B6F5', color2: "#4696DD" },
-      { color1: '#A2ED83', color2: "#6BD042" },
-    ],
+    colorList: [],
   },
   refresh: {
     autoRefresh: false,
@@ -1296,7 +1279,7 @@ export const chartComponents = [{
     titleFontWeight: false,
     titleFontColor: '#303133',
     titleLeft: 'left',
-    titleBgColor: '#fff',
+    titleBgColor: '',
     cardIcon: 'icon-ym icon-ym-generator-radar',
     cardIconColor: "#666",
     linkType: '',
@@ -1327,7 +1310,7 @@ export const chartComponents = [{
     titleTextStyleFontSize: 18, //主标题字体大小[12-25px]
     titleTextStyleFontWeight: false,  //主标题是否加粗
     titleLeft: "center", //主子标题位置[left,center,right]
-    titleBgColor: '#fff', //主子标题背景色[rgba(),#303133]
+    titleBgColor: '', //主子标题背景色[rgba(),#303133]
     // 图表副标题设置
     titleSubtext: "", //子标题
     titleSubtextStyleColor: "#303133",//子标题字体颜色
@@ -1361,10 +1344,7 @@ export const chartComponents = [{
     //自定义配色
     AxisTextStyleColor: "",   //X、Y轴字体的颜色全局设置
     AxisLineStyleColor: "",   //X、Y轴轴线颜色全局设置
-    colorList: [
-      { color1: '#71B6F5', color2: "#4696DD" },
-      { color1: '#A2ED83', color2: "#6BD042" },
-    ],
+    colorList: [],
   },
   refresh: {
     autoRefresh: false,
@@ -1388,7 +1368,7 @@ export const chartComponents = [{
     titleFontWeight: false,
     titleFontColor: '#303133',
     titleLeft: 'left',
-    titleBgColor: '#fff',
+    titleBgColor: '',
     cardIcon: 'icon-ym icon-ym-generator-area',
     cardIconColor: "#666",
     linkType: '',
@@ -1431,7 +1411,7 @@ export const chartComponents = [{
     titleTextStyleFontSize: 18, //主标题字体大小[12-25px]
     titleTextStyleFontWeight: false,  //主标题是否加粗
     titleLeft: "center", //主子标题位置[left,center,right]
-    titleBgColor: '#fff', //主子标题背景色[rgba(),#303133]
+    titleBgColor: '', //主子标题背景色[rgba(),#303133]
     // 图表副标题设置
     titleSubtext: "", //子标题
     titleSubtextStyleColor: "#303133",//子标题字体颜色
@@ -1492,7 +1472,7 @@ export const chartComponents = [{
     titleFontWeight: false,
     titleFontColor: '#303133',
     titleLeft: 'left',
-    titleBgColor: '#fff',
+    titleBgColor: '',
     cardIcon: 'icon-ym icon-ym-generator-radar',
     cardIconColor: "#666",
     linkType: '',
@@ -1539,7 +1519,7 @@ export const chartComponents = [{
     titleFontWeight: false,
     titleFontColor: '#303133',
     titleLeft: 'left',
-    titleBgColor: '#fff',
+    titleBgColor: '',
     cardIcon: 'icon-ym icon-ym-generator-radar',
     cardIconColor: "#666",
     linkType: '',
@@ -1606,10 +1586,6 @@ export const linkTypeList = [
   { label: '外链', value: '2' }
 ]
 
-export const appLinkTypeList = [
-  { label: '功能', value: '1' },
-  { label: '外链', value: '2' }
-]
 
 export const directionList = [
   { label: '横向', value: 'horizontal' },

@@ -1,12 +1,13 @@
 <template>
   <el-collapse-item :title="getTitle()" name="1">
-    <el-form-item :label="getTypeLabel()" v-if="!noStyleTypeList.includes(activeData.jnpfKey)">
+    <jnpf-form-tip-item :label="getTypeLabel()" :tip-label="getTipLabel()"
+      v-if="!noStyleTypeList.includes(activeData.jnpfKey)">
       <el-select v-model="activeData.option.styleType" placeholder="请选择风格类型"
         @change="styleTypeChange">
         <el-option v-for="(item, index) in styleTypeOptions" :key="index" :label="item.label"
           :value="item.value" />
       </el-select>
-    </el-form-item>
+    </jnpf-form-tip-item>
     <template v-if="activeData.jnpfKey == 'lineChart'">
       <el-form-item label="面积堆积">
         <el-switch v-model="activeData.option.areaStyle" />
@@ -148,7 +149,8 @@
       <el-form-item label="文本滚动" v-if="activeData.option.styleType!='2'">
         <el-switch v-model="activeData.option.textAutoplay" />
       </el-form-item>
-      <template v-if="activeData.option.textAutoplay&&activeData.option.styleType!='2'">
+      <template
+        v-if="activeData.option.textAutoplay&&activeData.option.styleType!='2'&&showType=='pc'">
         <el-form-item label="滚动方向">
           <el-radio-group v-model="activeData.option.textAutoplayMode" size="small"
             @change="renderKeyChange">
@@ -596,7 +598,7 @@ export default {
     },
     getTitle() {
       const jnpfKey = this.activeData.jnpfKey
-      if (jnpfKey == 'barChart') return '柱形图设置'
+      if (jnpfKey == 'barChart') return '柱状图设置'
       if (jnpfKey == 'lineChart') return '折线图设置'
       if (jnpfKey == 'pieChart') return '饼图设置'
       if (jnpfKey == 'radarChart') return '雷达图设置'
@@ -618,6 +620,14 @@ export default {
       if (jnpfKey == 'image') return '图片来源'
       if (jnpfKey == 'video') return '视频来源'
       return '风格类型'
+    },
+    getTipLabel() {
+      const jnpfKey = this.activeData.jnpfKey
+      if (jnpfKey == 'barChart') return 'APP不支持背景类型，默认显示基础类型'
+      if (jnpfKey == 'lineChart') return 'APP不支持堆叠类型，默认显示基础类型'
+      if (jnpfKey == 'mapChart') return 'APP不支持柱形和柱形排名类型，默认显示散点类型'
+      if (jnpfKey == 'timeAxis') return 'APP不支持所有交错类型，默认显示轴右侧'
+      return ''
     },
     addSelectItem() {
       this.activeData.option.columnOptions.push({

@@ -96,6 +96,7 @@
 
 <script>
 import Sortable from 'sortablejs'
+import { forEach } from 'element-resize-detector/src/collection-utils'
 export default {
   props: ['showType'],
   components: {},
@@ -141,8 +142,16 @@ export default {
       });
     },
     closeDialog() {
-      this.visible = false
+      if (!this.list.length) {
+        return this.$message.warning('数据不能为空')
+      }
+      for (let index = 0; index < this.list.length; index++) {
+        const element = this.list[index];
+        if (!element.fullName) return this.$message.warning('名称不能为空')
+        if (!element.filedName) return this.$message.warning('名称字段不能为空')
+      }
       this.$emit('columnList', this.list)
+      this.visible = false
     },
     handleDel(index) {
       this.list.splice(index, 1);
@@ -180,7 +189,8 @@ export default {
     display: flex;
     flex-direction: column;
     overflow: hidden;
-    padding-bottom: 20px !important;
+    padding: 0px 3px 2px !important;
+    // padding-bottom: 20px !important;
   }
 }
 </style>

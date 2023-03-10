@@ -1,7 +1,7 @@
 <template>
   <el-aside width="340px" class="right-box">
     <el-tabs v-model="currentTab" class="center-tabs">
-      <el-tab-pane label="组件属性" name="1" />
+      <el-tab-pane label="控件属性" name="1" />
       <el-tab-pane label="门户属性" name="2" />
     </el-tabs>
     <el-scrollbar class="aside-scrollbar">
@@ -28,7 +28,7 @@
             <Tooltip :activeData="activeData" :showType="showType"
               v-if="chartList.includes(activeData.jnpfKey)||activeData.jnpfKey=='mapChart'" />
             <Margin :activeData="activeData" :showType="showType"
-              v-if="(chartList.includes(activeData.jnpfKey)||activeData.jnpfKey=='mapChart')&&showType=='px'" />
+              v-if="(chartList.includes(activeData.jnpfKey)||activeData.jnpfKey=='mapChart')&&showType=='pc'" />
             <Legend :activeData="activeData" :showType="showType"
               v-if="chartList.includes(activeData.jnpfKey)" />
             <Color :activeData="activeData" :showType="showType"
@@ -129,6 +129,10 @@ export default {
       })
       getSelectorAll({ category: 'app' }).then(res => {
         this.appMenuList = res.data.list
+        for (let i = 0; i < this.appMenuList.length; i++) {
+          const element = this.appMenuList[i];
+          if (!element.children || !element.children.length) this.appMenuList.splice(i, 1)
+        }
       })
     },
     getDataInterfaceSelector() {
@@ -227,7 +231,7 @@ export default {
 <style lang="scss" scoped>
 .right-box {
   background: #fff;
-  border-radius: 4px;
+  // border-radius: 4px;
   .center-tabs {
     >>> .el-tabs__header {
       margin-bottom: 0 !important;

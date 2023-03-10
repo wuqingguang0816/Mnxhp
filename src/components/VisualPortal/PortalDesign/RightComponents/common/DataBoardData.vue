@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-dialog title="数据设置" :close-on-click-modal="false" :visible.sync="visible"
+    <el-dialog title="选项设置" :close-on-click-modal="false" :visible.sync="visible"
       class="JNPF-dialog JNPF-dialog_center todoData" lock-scroll width="1000px" append-to-body>
       <div class="main">
         <JNPF-table :data="list" ref="dragTable" :hasNO="false">
@@ -13,11 +13,6 @@
           <el-table-column prop="field" label="名称" width="160px">
             <template slot-scope="scope">
               <el-input v-model="scope.row.fullName" placeholder="请输入名称" maxlength="50" />
-            </template>
-          </el-table-column>
-          <el-table-column prop="field" label="单位名称" width="80px">
-            <template slot-scope="scope">
-              <el-input v-model="scope.row.unit" placeholder="单位名称" maxlength="5" />
             </template>
           </el-table-column>
           <el-table-column prop="dataLength" label="数值类型" width="140px">
@@ -37,6 +32,11 @@
               <el-input v-else v-model="scope.row.num" placeholder="请输入数值" maxlength="10" />
             </template>
           </el-table-column>
+          <el-table-column prop="field" label="单位名称" width="80px">
+            <template slot-scope="scope">
+              <el-input v-model="scope.row.unit" placeholder="单位名称" maxlength="5" />
+            </template>
+          </el-table-column>
           <el-table-column prop="field" label="图标" width="180px">
             <template slot-scope="scope">
               <el-input v-model="scope.row.icon" placeholder="请输入图标名称">
@@ -54,13 +54,8 @@
           </el-table-column>
           <el-table-column prop="dataLength" label="链接类型" width="160px">
             <template slot-scope="scope">
-              <el-select v-if="showType == 'pc'" v-model="scope.row.linkType" placeholder="请选择链接类型"
-                clearable>
+              <el-select v-model="scope.row.linkType" placeholder="请选择链接类型" clearable>
                 <el-option v-for="(item, index) in linkTypeList" :key="index" :label="item.label"
-                  :value="item.value" />
-              </el-select>
-              <el-select v-else v-model="scope.row.linkType" placeholder="请选择链接类型" clearable>
-                <el-option v-for="(item, index) in appLinkTypeList" :key="index" :label="item.label"
                   :value="item.value" />
               </el-select>
             </template>
@@ -74,7 +69,8 @@
               </JNPF-TreeSelect>
               <el-input v-if="scope.row.linkType==2" v-model="scope.row.urlAddress"
                 placeholder="填写地址">
-                <el-select slot="append" v-model="scope.row.linkTarget" style="width: 80px;">
+                <el-select slot="append" v-model="scope.row.linkTarget" style="width: 80px;"
+                  v-if="showType == 'pc'">
                   <el-option label="_self" value="_self" />
                   <el-option label="_blank" value="_blank" />
                 </el-select>
@@ -90,7 +86,7 @@
           </el-table-column>
         </JNPF-table>
         <div class="table-actions" @click="addHandle()">
-          <el-button type="text" icon="el-icon-plus">新建字段</el-button>
+          <el-button type="text" icon="el-icon-plus">添加</el-button>
         </div>
       </div>
       <span slot="footer" class="dialog-footer">
@@ -140,10 +136,13 @@ export default {
     confirm() {
       for (let i = 0; i < this.list.length; i++) {
         const element = this.list[i];
-        if (!element.fullName) return this.$message({ message: '请输入名称', type: 'warning', duration: 1000 })
-        if (!element.icon) return this.$message({ message: '请选择图标', type: 'warning', duration: 1000 })
-        if (element.dataType == 'dynamic' && !element.propsApi) return this.$message({ message: '请选择数据接口', type: 'warning', duration: 1000 })
-        if (element.dataType == 'static' && !element.num) return this.$message({ message: '请输入数值', type: 'warning', duration: 1000 })
+        if (!element.fullName) return this.$message.warning('名称不能为空')
+        if (element.dataType == 'dynamic' && !element.propsApi) return this.$message.warning('请选择数据接口')
+        if (element.dataType == 'static' && !element.num) return this.$message.warning('数值不能为空')
+        if (!element.icon) return this.$message.warning('请选择图标')
+        if (!element.iconColor) return this.$message.warning('请选择图标颜色')
+        if (element.linkType == 1 && (!element.urlAddress && !element.moduleId)) return this.$message.warning('请选择菜单')
+        if (element.linkType == 2 && !element.urlAddress) return this.$message.warning('跳转链接不能为空')
       }
       this.visible = false
       this.$emit('refresh', this.list)
@@ -181,7 +180,7 @@ export default {
       const item = {
         fullName: "",
         moduleId: "",
-        linkType: '1',
+        linkType: '',
         urlAddress: '',
         linkTarget: '_self',
         dataType: 'static',

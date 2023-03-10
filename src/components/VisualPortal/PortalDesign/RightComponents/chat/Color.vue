@@ -37,13 +37,9 @@ export default {
   props: ['activeData', 'showType'],
   methods: {
     addHandle() {
-      this.activeData.option.colorList.push({ color1: "", color2: "" })
+      this.activeData.option.colorList.push({ color1: "#1890ff", color2: "#4696DD" })
     },
     deleteBarColor(index) {
-      if (this.activeData.option.colorList.length <= 2) return this.$message({
-        type: 'warning',
-        message: '至少保留两种配色'
-      })
       this.$confirm(this.$t('common.delTip'), this.$t('common.tipTitle'), {
         type: 'warning'
       }).then(() => {

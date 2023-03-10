@@ -37,7 +37,7 @@
         </el-tooltip>
         <el-divider direction='vertical' class="divider"></el-divider>
         <el-button type="primary" @click="dataFormSubmit()" :loading="btnLoading">
-          保存</el-button>
+          保 存</el-button>
         <el-button @click="closeDialog()">{{$t('common.cancelButton')}}</el-button>
       </div>
     </div>

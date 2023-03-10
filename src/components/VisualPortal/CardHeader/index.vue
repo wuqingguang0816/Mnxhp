@@ -30,15 +30,20 @@ export default {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  overflow: hidden;
   .title {
     flex: 1;
     display: flex;
     align-items: center;
+    overflow: hidden;
     i {
       font-size: 18px;
     }
     span {
       padding-left: 5px;
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
     }
   }
   .button {

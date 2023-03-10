@@ -283,7 +283,8 @@
                   </el-select>
                 </el-form-item>
               </div>
-              <el-form-item label="子表样式" v-if="columnData.type==1||columnData.type==2">
+              <el-form-item label="子表样式"
+                v-if="(columnData.type==1||columnData.type==2)&&webType != 4">
                 <el-select v-model="columnData.childTableStyle" placeholder="请选择子表样式">
                   <el-option label="分组展示" :value="1" />
                   <el-option label="折叠展示" :value="2" />
