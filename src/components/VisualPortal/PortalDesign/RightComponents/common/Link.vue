@@ -132,11 +132,11 @@ export default {
     },
     onLinkTypeChange(type, showType) {
       if (type == 1) {
-        if (showType == "app") return this.activeData.card.appUrlAddress = ''
-        this.activeData.card.urlAddress = ''
-      } else {
         if (showType == "app") return this.activeData.option.appUrlAddress = ''
         this.activeData.option.urlAddress = ''
+      } else {
+        if (showType == "app") return this.activeData.card.appUrlAddress = ''
+        this.activeData.card.urlAddress = ''
       }
     }
   }
