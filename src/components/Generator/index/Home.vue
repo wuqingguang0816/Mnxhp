@@ -416,7 +416,7 @@ export default {
                 break
               }
             }
-            if (config.jnpfKey === 'JnpfAutoComplete') {
+            if (config.jnpfKey === 'autoComplete') {
               if (!e.interfaceId) {
                 reject({ msg: '下拉补全控件“远端数据”属性为必填项', target: 1 })
                 break

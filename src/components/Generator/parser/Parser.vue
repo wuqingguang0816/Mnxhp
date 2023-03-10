@@ -413,6 +413,7 @@ export default {
             } else {
               relations[cur.relationField] = [item]
             }
+
           }
         }
         if (config.jnpfKey === 'popupSelect') {
@@ -474,6 +475,7 @@ export default {
     },
     handleRelation(field) {
       if (!field) return
+
       const currRelations = this.relations
       for (let key in currRelations) {
         if (key === field) {
@@ -507,8 +509,18 @@ export default {
               }
               if (e.opType === 'setPopupOptions') { }
               if (e.opType === 'setDate') {
-                let startTime = this[this.formConf.formModel][e.startRelationField] || 0
-                let endTime = this[this.formConf.formModel][e.endRelationField] || 0
+                let startTime = ''
+                let endTime = ''
+                if (e.__config__startTimeType == 2) {
+                  startTime = this[this.formConf.formModel][e.startRelationField] || 0
+                } else {
+                  startTime = e.startTime
+                }
+                if (e.__config__endTimeType == 2) {
+                  endTime = this[this.formConf.formModel][e.endRelationField] || 0
+                } else {
+                  endTime = e.endTime
+                }
                 this.comSet('startTime', e.__vModel__, startTime)
                 this.comSet('endTime', e.__vModel__, endTime)
               }
@@ -520,6 +532,7 @@ export default {
     handleDefaultRelation(field) {
       if (!field) return
       const currRelations = this.relations
+
       for (let key in currRelations) {
         if (key === field) {
           for (let i = 0; i < currRelations[key].length; i++) {
@@ -535,10 +548,20 @@ export default {
                 this.comSet('ableRelationIds', e.__vModel__, Array.isArray(value) ? value : [value])
               }
               if (e.opType === 'setDate') {
-                let value = this[this.formConf.formModel][e.startRelationField] || []
-                let value2 = this[this.formConf.formModel][e.endRelationField] || []
-                this.comSet('startTime', e.__vModel__, value)
-                this.comSet('endTime', e.__vModel__, value2)
+                let startTime = ''
+                let endTime = ''
+                if (e.__config__startTimeType == 2) {
+                  startTime = this[this.formConf.formModel][e.startRelationField] || 0
+                } else {
+                  startTime = e.startTime
+                }
+                if (e.__config__endTimeType == 2) {
+                  endTime = this[this.formConf.formModel][e.endRelationField] || 0
+                } else {
+                  endTime = e.endTime
+                }
+                this.comSet('startTime', e.__vModel__, startTime)
+                this.comSet('endTime', e.__vModel__, endTime)
               }
             }
           }

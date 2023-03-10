@@ -36,6 +36,7 @@ export default {
       type: 'date',
       pickerOptions: {
         disabledDate: (time) => {
+          if (!this.startTime && !this.endTime) return false
           if (this.endTime) {
             return time.getTime() < this.startTime || time.getTime() > this.endTime
           } else {

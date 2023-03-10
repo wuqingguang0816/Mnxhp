@@ -19,7 +19,7 @@
     <el-form-item label="显示字段">
       <el-input v-model="activeData.relationField" placeholder="请输入显示字段" />
     </el-form-item>
-    <el-table :data="activeData.templateJson"
+    <el-table :data="activeData.templateJson" class="auto-table"
       v-if="activeData.templateJson && activeData.templateJson.length">
       <el-table-column type="index" width="50" label="序号" align="center" />
       <el-table-column prop="field" label="参数名称">
@@ -125,3 +125,8 @@ export default {
   }
 }
 </script>
+<style lang="scss" scoped>
+.auto-table {
+  margin-bottom: 20px;
+}
+</style>

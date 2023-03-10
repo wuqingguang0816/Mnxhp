@@ -212,6 +212,22 @@ export default {
               item.config.ableRelationIds = Array.isArray(value) ? value : [value]
             }
             if (e.opType === 'setPopupOptions') { }
+            if (e.opType === 'setDate') {
+              let startTime = 0
+              let endTime = 0
+              if (cur.startRelationField && cur.__config__.startTimeType == 2) {
+                startTime = this.getFieldVal(cur.startRelationField, rowIndex) || 0
+              } else if (cur.__config__.startTimeType != 2) {
+                startTime = cur.startTime
+              }
+              if (cur.endRelationField && cur.__config__.endTimeType == 2) {
+                endTime = this.getFieldVal(cur.endRelationField, rowIndex) || 0
+              } else if (cur.__config__.endTimeType != 2) {
+                endTime = cur.startTime
+              }
+              item.config.startTime = startTime
+              item.config.endTime = endTime
+            }
           }
         }
       }
@@ -251,6 +267,22 @@ export default {
                   item.config.ableRelationIds = Array.isArray(value) ? value : [value]
                 }
                 if (e.opType === 'setPopupOptions') { }
+                if (e.opType === 'setDate') {
+                  let startTime = 0
+                  let endTime = 0
+                  if (cur.startRelationField && cur.__config__.startTimeType == 2) {
+                    startTime = this.getFieldVal(cur.startRelationField, rowIndex) || 0
+                  } else if (cur.__config__.startTimeType != 2) {
+                    startTime = cur.startTime
+                  }
+                  if (cur.endRelationField && cur.__config__.endTimeType == 2) {
+                    endTime = this.getFieldVal(cur.endRelationField, rowIndex) || 0
+                  } else if (cur.__config__.endTimeType != 2) {
+                    endTime = cur.startTime
+                  }
+                  item.config.startTime = startTime
+                  item.config.endTime = endTime
+                }
               }
             }
           }
@@ -279,6 +311,22 @@ export default {
         if (config.jnpfKey === 'userSelect' && cur.relationField && cur.selectType !== 'all' && cur.selectType !== 'custom') {
           let value = this.getFieldVal(cur.relationField, rowIndex) || []
           cur.ableRelationIds = Array.isArray(value) ? value : [value]
+        }
+        if (config.jnpfKey === 'date') {
+          let startTime = 0
+          let endTime = 0
+          if (cur.startRelationField && cur.__config__.startTimeType == 2) {
+            startTime = this.getFieldVal(cur.startRelationField, rowIndex) || 0
+          } else if (cur.__config__.startTimeType != 2) {
+            startTime = cur.startTime
+          }
+          if (cur.endRelationField && cur.__config__.endTimeType == 2) {
+            endTime = this.getFieldVal(cur.endRelationField, rowIndex) || 0
+          } else if (cur.__config__.endTimeType != 2) {
+            endTime = cur.startTime
+          }
+          item.config.startTime = startTime
+          item.config.endTime = endTime
         }
       }
     },

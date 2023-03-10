@@ -28,7 +28,7 @@
     </el-form-item>
     <el-divider>规则</el-divider>
     <el-form-item label="开始时间">
-      <el-switch v-model="activeData.__config__.startTimeRule" />
+      <el-switch v-model="activeData.__config__.startTimeRule" @change="startTimeRuleChange" />
     </el-form-item>
     <template v-if="activeData.__config__.startTimeRule">
       <jnpf-form-tip-item label="类型" tip-label="系统会限制填写者填写此字段的当天起始日期范围（包含该日期）。该功能不做有效性验证，请自行保证。">
@@ -63,7 +63,7 @@
       </el-form-item>
     </template>
     <el-form-item label="结束时间">
-      <el-switch v-model="activeData.__config__.endTimeRule" />
+      <el-switch v-model="activeData.__config__.endTimeRule" @change="endTimeRuleChange" />
     </el-form-item>
     <template v-if="activeData.__config__.endTimeRule">
       <jnpf-form-tip-item label="类型" tip-label="系统会限制填写者填写此字段的当天起始日期范围（包含该日期）。该功能不做有效性验证，请自行保证。">
@@ -248,6 +248,20 @@ export default {
     }
   },
   methods: {
+    endTimeRuleChange() {
+      if (!this.activeData.__config__.endTimeRule) {
+        return this.activeData.endRelationField = ''
+      } else {
+        return this.activeData.__config__.endTimeType = 1
+      }
+    },
+    startTimeRuleChange() {
+      if (!this.activeData.__config__.startTimeRule) {
+        return this.activeData.startRelationField = ''
+      } else {
+        return this.activeData.__config__.startTimeType = 1
+      }
+    },
     endTimeTarget(val) {
       if (val == 2 || val == 1) {
         this.getEndDateTime()
@@ -441,6 +455,7 @@ export default {
     },
     startType(val) {
       this.activeData.startTime = null
+      this.activeData.startRelationField = ''
       if (val == 3) {
         this.activeData.__config__.startTimeValue = new Date().getTime()
         return this.activeData.startTime = this.activeData.__config__.startTimeValue
@@ -456,6 +471,7 @@ export default {
     },
     endType(val) {
       this.activeData.endTime = null
+      this.activeData.endRelationField = ''
       if (val == 3) {
         this.activeData.__config__.endTimeValue = new Date().getTime()
         return this.activeData.endTime = this.activeData.__config__.endTimeValue

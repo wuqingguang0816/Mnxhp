@@ -1,10 +1,10 @@
 <template>
-  <el-autocomplete v-model="innerValue" :fetch-suggestions="querySearchAsync" placeholder="请输入内容"
-    @select="handleSelect"></el-autocomplete>
+  <el-autocomplete v-model="innerValue" :fetch-suggestions="querySearchAsync"
+    :placeholder="placeholder" @select="handleSelect" :disabled="disabled"></el-autocomplete>
 </template>
 <script>
 export default {
-  name: 'JnpfSelect',
+  name: 'JnpfAutoComplete',
   components: {},
   props: {
     value: {
@@ -109,9 +109,9 @@ export default {
       ];
     },
     querySearchAsync(queryString, cb) {
+      console.log(queryString, cb)
       var restaurants = this.restaurants;
       var results = queryString ? restaurants.filter(this.createStateFilter(queryString)) : restaurants;
-
       clearTimeout(this.timeout);
       this.timeout = setTimeout(() => {
         cb(results);
