@@ -121,6 +121,7 @@ export default {
             }
           })
           if (this.option.sortable) this.getPieData(obj['data'])
+          if (this.option.showZero) obj['data'] = obj['data'].filter((item) => item.value != 0)
         } else if (jnpfKey == 'radarChart') {
           const typeList = chartArr.map((item) => item.type)
           const element = {
@@ -295,7 +296,6 @@ export default {
                 ele.color = colorList
               }
               ele.center = [this.option.seriesCenterLeft + '%', this.option.seriesCenterTop + '%']
-              ele.stillShowZeroSum = !this.option.showZero
             }
             return Object.assign(ele, {
               name: ele.name,
