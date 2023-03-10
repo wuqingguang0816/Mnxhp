@@ -598,7 +598,7 @@ export default {
     },
     getTitle() {
       const jnpfKey = this.activeData.jnpfKey
-      if (jnpfKey == 'barChart') return '柱形图设置'
+      if (jnpfKey == 'barChart') return '柱状图设置'
       if (jnpfKey == 'lineChart') return '折线图设置'
       if (jnpfKey == 'pieChart') return '饼图设置'
       if (jnpfKey == 'radarChart') return '雷达图设置'
@@ -617,7 +617,7 @@ export default {
     },
     getTypeLabel() {
       const jnpfKey = this.activeData.jnpfKey
-      if (jnpfKey == 'barChart') return '图片来源'
+      if (jnpfKey == 'image') return '图片来源'
       if (jnpfKey == 'video') return '视频来源'
       return '风格类型'
     },
