@@ -393,10 +393,11 @@ export default {
 
   .form-use-row {
     display: flex;
+    flex-shrink: 0;
     align-items: center;
   }
   .form-use-input {
-    width: 419px;
+    flex: 1;
   }
 
   .form-use-icon {
