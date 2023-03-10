@@ -488,7 +488,7 @@ export const basicComponents = [{
   title: '表格列表',
   dataType: 'static',
   propsApi: '',
-  border: false,
+  border: true,
   renderKey: '',
   card: {
     titleFontSize: 14,
@@ -516,7 +516,7 @@ export const basicComponents = [{
     headerFontSize: 14,
     headerFontWeight: false,
     headerFontColor: '#303133',
-    headerLeft: 'left',
+    headerLeft: 'center',
     headerBgColor: '#F4F6F8',
     tableIndex: true,
     tableCount: 5,
@@ -578,19 +578,19 @@ export const basicComponents = [{
       filedName: 'comInputField102',
       fontSize: 14,
       fontWeight: false,
-      fontColor: '#000'
+      fontColor: '#303133'
     }, {
       fullName: '描述',
       filedName: 'comInputField103',
       fontSize: 12,
       fontWeight: false,
-      fontColor: '#999'
+      fontColor: '#666666'
     }, {
       fullName: '时间',
       filedName: 'comInputField105',
       fontSize: 12,
       fontWeight: false,
-      fontColor: '#999'
+      fontColor: '#666666'
     }],
   },
   refresh: {

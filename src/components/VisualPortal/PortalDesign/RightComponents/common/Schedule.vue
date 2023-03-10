@@ -1,11 +1,11 @@
 <template>
   <el-collapse-item title="日程设置" name="14">
-    <el-form-item label="默认试图">
-      <el-select v-model="activeData.defaultView" placeholder="请选择" @change="renderKeyChange">
-        <el-option v-for="item in defaultViewOptions" :key="item.value" :label="item.label"
-          :value="item.value">
-        </el-option>
-      </el-select>
+    <el-form-item label="默认视图">
+      <el-radio-group v-model="activeData.defaultView" @change="renderKeyChange">
+        <el-radio-button label="dayGridMonth">年</el-radio-button>
+        <el-radio-button label="timeGridWeek">月</el-radio-button>
+        <el-radio-button label="timeGridDay">日</el-radio-button>
+      </el-radio-group>
     </el-form-item>
     <el-form-item label="显示农历">
       <el-switch v-model="activeData.showLunarCalendar">
