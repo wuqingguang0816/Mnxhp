@@ -111,10 +111,11 @@ export default {
     confirm() {
       for (let i = 0; i < this.list.length; i++) {
         const element = this.list[i];
-        if (!element.fullName) return this.$message({ message: '请输入名称', type: 'warning', duration: 1000 })
-        if (!element.icon) return this.$message({ message: '请选择图标', type: 'warning', duration: 1000 })
-        if (!element.linkType) return this.$message({ message: '请选择跳转类型', type: 'warning', duration: 1000 })
-        if (!element.urlAddress) return this.$message({ message: '请选择跳转地址', type: 'warning', duration: 1000 })
+        if (!element.fullName) return this.$message.warning('名称不能为空')
+        if (!element.icon) return this.$message.warning('请选择图标')
+        if (!element.iconBgColor) return this.$message.warning('请选择图标颜色')
+        if (element.linkType == 1 && (!element.urlAddress && !element.moduleId)) return this.$message.warning('请选择菜单')
+        if (element.linkType == 2 && !element.urlAddress) return this.$message.warning('跳转链接不能为空')
       }
       this.visible = false
       this.$emit('refresh', this.list)

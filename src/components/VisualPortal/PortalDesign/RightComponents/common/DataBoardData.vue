@@ -136,12 +136,13 @@ export default {
     confirm() {
       for (let i = 0; i < this.list.length; i++) {
         const element = this.list[i];
-        if (!element.fullName) return this.$message({ message: '请输入名称', type: 'warning', duration: 1000 })
-        if (!element.icon) return this.$message({ message: '请选择图标', type: 'warning', duration: 1000 })
-        if (element.dataType == 'dynamic' && !element.propsApi) return this.$message({ message: '请选择数据接口', type: 'warning', duration: 1000 })
-        if (element.dataType == 'static' && !element.num) return this.$message({ message: '请输入数值', type: 'warning', duration: 1000 })
-        if (element.linkType == 1 && !element.urlAddress) return this.$message({ message: '请选择菜单', type: 'warning', duration: 1000 })
-        if (element.linkType == 2 && !element.urlAddress) return this.$message({ message: '请输入跳转链接', type: 'warning', duration: 1000 })
+        if (!element.fullName) return this.$message.warning('名称不能为空')
+        if (element.dataType == 'dynamic' && !element.propsApi) return this.$message.warning('请选择数据接口')
+        if (element.dataType == 'static' && !element.num) return this.$message.warning('数值不能为空')
+        if (!element.icon) return this.$message.warning('请选择图标')
+        if (!element.iconColor) return this.$message.warning('请选择图标颜色')
+        if (element.linkType == 1 && (!element.urlAddress && !element.moduleId)) return this.$message.warning('请选择菜单')
+        if (element.linkType == 2 && !element.urlAddress) return this.$message.warning('跳转链接不能为空')
       }
       this.visible = false
       this.$emit('refresh', this.list)

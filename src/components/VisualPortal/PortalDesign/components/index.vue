@@ -409,6 +409,7 @@ $lighterBlue: #409eff;
 
       >>> .el-scrollbar__wrap {
         margin-bottom: 0 !important;
+        margin-left: 10px !important;
         overflow-x: auto;
       }
       .item-box {

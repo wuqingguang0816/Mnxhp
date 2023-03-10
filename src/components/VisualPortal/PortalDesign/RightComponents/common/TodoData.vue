@@ -30,7 +30,6 @@
         </el-table-column>
         <el-table-column prop="field" label="图标">
           <template slot-scope="scope">
-
             <el-input v-model="scope.row.icon" placeholder="请输入图标名称">
               <el-button slot="append" @click="openIconsDialog(scope.row.icon,scope.$index)">
                 选择
@@ -83,6 +82,12 @@ export default {
       })
     },
     confirm() {
+      for (let i = 0; i < this.list.length; i++) {
+        const element = this.list[i];
+        if (!element.fullName) return this.$message.warning('名称不能为空')
+        if (!element.icon) return this.$message.warning('请选择图标')
+        if (!element.iconBgColor) return this.$message.warning('请选择图标背景色')
+      }
       this.visible = false
       this.$emit('refresh', this.list)
     },
