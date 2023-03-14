@@ -1389,7 +1389,7 @@ export const chartComponents = [{
     defaultValue: [],
     mapType: ['100000'],
     mspScale: 1,
-    bgColor: '#fff',
+    bgColor: '',
     geoAreaColor: '#eee',  //区域颜色
     geoBorderColor: "#666",  //描边线颜色
     geoBorderWidth: 1,  //描边线 0 不显示
@@ -1401,7 +1401,7 @@ export const chartComponents = [{
     geoShadowColor: '#000',  //阴影颜色
     geoRoam: true,   //缩放
     geoAspectScale: 0.75,  //地图长宽比
-    drillDown: false,//是否下钻
+    drillDown: true,//是否下钻
     drillDownFontSize: 14,
     drillDownFontWeight: false,
     drillDownColor: "#303133",

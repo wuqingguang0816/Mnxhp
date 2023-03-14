@@ -248,7 +248,7 @@ export default {
         min: option.visualMapMin,
         max: option.visualMapMax,
         type: option.visualMapType,
-        text: ['High', 'Low'],
+        showLabel: true,
         realtime: false,
         calculable: true,
         inRange: {
@@ -490,6 +490,9 @@ export default {
         name: name,
         value: value,
         geoJson: geoJson
+      })
+      this.hashMap.forEach((value, key, mapObj) => {
+        if (key > this.zoom) this.hashMap.delete(key)
       })
       this.hashMap.delete(this.zoom + 1)
       this.hashMap = new Map(this.hashMap)

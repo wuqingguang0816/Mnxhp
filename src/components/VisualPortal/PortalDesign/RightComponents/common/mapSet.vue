@@ -67,32 +67,32 @@
     <template v-if="showType == 'pc'">
       <el-divider>视觉设置</el-divider>
       <el-form-item label="视觉类型">
-        <el-select v-model="activeData.option.visualMapType" placeholder="请选择类型">
-          <el-option label="连续" value="continuous" />
-          <el-option label="分段" value="piecewise" />
-        </el-select>
+        <el-radio-group v-model="activeData.option.visualMapType" size="small">
+          <el-radio-button label="continuous" key="continuous">连续</el-radio-button>
+          <el-radio-button label="piecewise" key="piecewise">分段</el-radio-button>
+        </el-radio-group>
       </el-form-item>
       <el-form-item label="最小值">
-        <el-input-number v-model="activeData.option.visualMapMin" controls-position="right"
-          :min="0" />
+        <el-input-number v-model="activeData.option.visualMapMin" controls-position="right" :min="0"
+          @change="onVisualMapMinChange" />
       </el-form-item>
       <el-form-item label="最大值">
-        <el-input-number v-model="activeData.option.visualMapMax" controls-position="right"
-          :min="0" />
+        <el-input-number v-model="activeData.option.visualMapMax" controls-position="right" :min="0"
+          @change="onVisualMapMaxChange" />
       </el-form-item>
     </template>
     <template v-if="activeData.option.styleType==1||activeData.option.styleType==4">
       <el-divider>散点设置</el-divider>
       <el-form-item label="散点类型" v-show="showType == 'pc'">
-        <el-select v-model="activeData.option.seriesType" placeholder="请选择类型">
-          <el-option label="散点" value="scatter" />
-          <el-option label="涟漪散点" value="effectScatter" />
-        </el-select>
+        <el-radio-group v-model="activeData.option.seriesType" size="small">
+          <el-radio-button label="scatter" key="scatter">散点</el-radio-button>
+          <el-radio-button label="effectScatter" key="effectScatter">涟漪散点</el-radio-button>
+        </el-radio-group>
       </el-form-item>
-      <el-form-item label="显示数量">
+      <jnpf-form-tip-item label="显示数量" tip-label="置空时，则显示全部数据">
         <el-input-number v-model="activeData.option.showNumber" controls-position="right" :min="0"
           :max="2000" />
-      </el-form-item>
+      </jnpf-form-tip-item>
       <el-form-item label="透明度" v-show="showType == 'pc'">
         <el-slider v-model="activeData.option.seriesItemStyleOpacity" :min="0" :max="1"
           :step="0.1" />
@@ -151,7 +151,7 @@
       </el-form-item>
     </template>
     <template v-if="activeData.option.styleType==3&&showType == 'pc'">
-      <el-divider>柱形图设置</el-divider>
+      <el-divider>柱形设置</el-divider>
       <el-form-item label="宽度">
         <el-input-number v-model="activeData.option.seriesBarWidth" controls-position="right"
           :min="0" :max="100" />
@@ -169,6 +169,12 @@ export default {
   methods: {
     cascaderChange() {
       this.activeData.option.updateMapType = +new Date()
+    },
+    onVisualMapMinChange(val) {
+      if (val > this.activeData.option.visualMapMax) this.$message.warning("最小值不能超过最大值，请重新输入")
+    },
+    onVisualMapMaxChange(val) {
+      if (val < this.activeData.option.visualMapMin) this.$message.warning("最大值不能小于最小值，请重新输入")
     }
   }
 }
