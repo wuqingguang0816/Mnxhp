@@ -74,12 +74,12 @@
       </div>
     </template>
     <template v-if="activeData.jnpfKey == 'timeAxis'">
-      <el-form-item label="标签布局">
+      <jnpf-form-tip-item label="标签布局" tip-label="APP不支持所有交错类型，默认显示轴右侧">
         <el-select v-model="activeData.option.layout" placeholder="请选择风格类型">
           <el-option v-for="(item, index) in layoutStyleList" :key="index" :label="item.label"
             :value="item.value" />
         </el-select>
-      </el-form-item>
+      </jnpf-form-tip-item>
       <el-form-item label="排序">
         <el-radio-group v-model="activeData.option.sortable" size="small">
           <el-radio-button :label="item.value" v-for="(item,index) in sortList" :key="index">
@@ -625,7 +625,6 @@ export default {
       if (jnpfKey == 'barChart') return 'APP不支持背景类型，默认显示基础类型'
       if (jnpfKey == 'lineChart') return 'APP不支持堆叠类型，默认显示基础类型'
       if (jnpfKey == 'mapChart') return 'APP不支持柱形和柱形排名类型，默认显示散点类型'
-      if (jnpfKey == 'timeAxis') return 'APP不支持所有交错类型，默认显示轴右侧'
       return ''
     },
     addSelectItem() {
