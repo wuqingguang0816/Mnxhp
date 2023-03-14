@@ -58,7 +58,7 @@ const dataBoardDefault = [
 ]
 export const layoutComponents = [
   {
-    icon: 'icon-ym icon-ym-generator-todo',
+    icon: 'icon-ym icon-ym-portal-card',
     label: '卡片面板',
     jnpfKey: 'card',
     title: '卡片面板',
@@ -68,7 +68,7 @@ export const layoutComponents = [
       titleFontColor: '#303133',
       titleLeft: 'left',
       titleBgColor: '',
-      cardIcon: 'icon-ym icon-ym-generator-todo',
+      cardIcon: 'icon-ym icon-ym-portal-card',
       cardIconColor: "#666",
       linkType: '',
       type: '',
@@ -88,7 +88,7 @@ export const layoutComponents = [
     maxW: 12,
     maxH: 12
   }, {
-    icon: 'icon-ym icon-ym-generator-todo',
+    icon: 'icon-ym icon-ym-portal-tab',
     label: '标签面板',
     jnpfKey: 'tab',
     title: '标签面板',
@@ -98,7 +98,7 @@ export const layoutComponents = [
       titleFontColor: '#303133',
       titleLeft: 'left',
       titleBgColor: '',
-      cardIcon: 'icon-ym icon-ym-generator-todo',
+      cardIcon: 'icon-ym icon-ym-portal-tab',
       cardIconColor: "#666",
       linkType: '',
       type: '',
@@ -131,7 +131,7 @@ export const layoutComponents = [
     maxH: 12
   },
   // {
-  //   icon: 'icon-ym icon-ym-generator-todo',
+  //   icon: 'icon-ym icon-ym-portal-collapse',
   //   label: '折叠面板',
   //   jnpfKey: 'collapse',
   //   title: '折叠面板',
@@ -141,7 +141,7 @@ export const layoutComponents = [
   //     titleFontColor: '#303133',
   //     titleLeft: 'left',
   //     titleBgColor: '',
-  //     cardIcon: 'icon-ym icon-ym-generator-todo',
+  //     cardIcon: 'icon-ym icon-ym-portal-collapse',
   //     cardIconColor: "#666",
   //     linkType: '',
   //     type: '',
@@ -665,7 +665,7 @@ export const basicComponents = [{
   maxH: 20
 },
 {
-  icon: 'icon-ym icon-ym-generator-Panel',
+  icon: 'icon-ym icon-ym-portal-image',
   label: '图片',
   jnpfKey: 'image',
   title: '图片',
@@ -676,7 +676,7 @@ export const basicComponents = [{
     titleFontColor: '#303133',
     titleLeft: 'left',
     titleBgColor: '',
-    cardIcon: 'icon-ym icon-ym-generator-Panel',
+    cardIcon: 'icon-ym icon-ym-portal-image',
     cardIconColor: "#666",
     linkType: '',
     type: '',
@@ -719,7 +719,7 @@ export const basicComponents = [{
   maxH: 20
 },
 {
-  icon: 'icon-ym icon-ym-generator-Panel',
+  icon: 'icon-ym icon-ym-portal-carousel',
   label: '轮播图',
   jnpfKey: 'carousel',
   title: '轮播图',
@@ -730,7 +730,7 @@ export const basicComponents = [{
     titleFontColor: '#303133',
     titleLeft: 'left',
     titleBgColor: '',
-    cardIcon: 'icon-ym icon-ym-generator-Panel',
+    cardIcon: 'icon-ym icon-ym-portal-carousel',
     cardIconColor: "#666",
     linkType: '',
     type: '',
@@ -843,7 +843,7 @@ export const basicComponents = [{
   maxH: 20
 },
 {
-  icon: 'icon-ym icon-ym-generator-Panel',
+  icon: 'icon-ym icon-ym-portal-video',
   label: '视频',
   jnpfKey: 'video',
   title: '视频',
@@ -854,7 +854,7 @@ export const basicComponents = [{
     titleFontColor: '#303133',
     titleLeft: 'left',
     titleBgColor: '',
-    cardIcon: 'icon-ym icon-ym-generator-Panel',
+    cardIcon: 'icon-ym icon-ym-portal-video',
     cardIconColor: "#666",
     linkType: '',
     type: '',
@@ -887,7 +887,7 @@ export const basicComponents = [{
   maxH: 20
 },
 {
-  icon: 'icon-ym icon-ym-generator-Panel',
+  icon: 'icon-ym icon-ym-portal-schedule',
   label: '日程',
   jnpfKey: 'schedule',
   title: "日程",
@@ -898,7 +898,7 @@ export const basicComponents = [{
     titleFontColor: '#303133',
     titleLeft: 'left',
     titleBgColor: '',
-    cardIcon: 'icon-ym icon-ym-generator-Panel',
+    cardIcon: 'icon-ym icon-ym-portal-schedule',
     cardIconColor: "#666",
     linkType: '',
     type: '',
@@ -925,7 +925,7 @@ export const basicComponents = [{
   firstDay: 0
 },
 {
-  icon: 'icon-ym icon-ym-generator-Panel',
+  icon: 'icon-ym icon-ym-portal-iframe',
   label: 'iframe',
   jnpfKey: 'iframe',
   title: 'iframe',
@@ -935,7 +935,7 @@ export const basicComponents = [{
     titleFontColor: '#303133',
     titleLeft: 'left',
     titleBgColor: '',
-    cardIcon: 'icon-ym icon-ym-generator-Panel',
+    cardIcon: 'icon-ym icon-ym-portal-iframe',
     cardIconColor: "#666",
     linkType: '',
     type: '',
@@ -1461,7 +1461,7 @@ export const chartComponents = [{
   maxH: 20
 },
 {
-  icon: 'icon-ym icon-ym-generator-radar',
+  icon: 'icon-ym icon-ym-portal-rankList',
   label: '排行榜',
   jnpfKey: 'rankList',
   title: '排行榜',
@@ -1472,7 +1472,7 @@ export const chartComponents = [{
     titleFontColor: '#303133',
     titleLeft: 'left',
     titleBgColor: '',
-    cardIcon: 'icon-ym icon-ym-generator-radar',
+    cardIcon: 'icon-ym icon-ym-portal-rankList',
     cardIconColor: "#666",
     linkType: '',
     type: '',
@@ -1507,7 +1507,7 @@ export const chartComponents = [{
   maxH: 20
 },
 {
-  icon: 'icon-ym icon-ym-generator-radar',
+  icon: 'icon-ym icon-ym-portal-timeAxis',
   label: '时间轴',
   jnpfKey: 'timeAxis',
   title: '时间轴',
@@ -1518,7 +1518,7 @@ export const chartComponents = [{
     titleFontColor: '#303133',
     titleLeft: 'left',
     titleBgColor: '',
-    cardIcon: 'icon-ym icon-ym-generator-radar',
+    cardIcon: 'icon-ym icon-ym-portal-timeAxis',
     cardIconColor: "#666",
     linkType: '',
     type: '',
