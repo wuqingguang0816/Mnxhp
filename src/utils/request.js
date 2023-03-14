@@ -54,7 +54,7 @@ service.interceptors.response.use(
     let config = response.config
     let url = config.url
     // 特殊接口处理
-    if (url.indexOf('/Base/DataSource/Actions/Test') > -1 || (url.indexOf('OnlineDev') > -1 && url.indexOf('Config') > -1)) return res
+    if (url.indexOf('/Base/DataSource/Actions/Test') > -1 || (url.indexOf('OnlineDev') > -1 && url.indexOf('Config') > -1 || url.indexOf('api/visualdev/Porta') > -1)) return res
     if (res.code !== 200) {
       message({
         message: res.msg || '请求出错，请重试',
