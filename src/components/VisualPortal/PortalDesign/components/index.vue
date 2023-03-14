@@ -101,7 +101,6 @@ const defaultConf = {
     autoRefreshTime: '5',
   }
 }
-
 export default {
   name: 'JNPF-PortalDesigner',
   props: ['conf', 'showType'],
@@ -130,6 +129,7 @@ export default {
       previewVisible: false,
       noNeedMaskList,
       config: {},
+      copyDrawingList: ''
     }
   },
   mounted() {
@@ -141,7 +141,7 @@ export default {
     }
     this.layout = this.config.layout || []
     this.refresh = this.config.refresh || {}
-    this.addRecord(this.layout)
+    this.addLocalRecord(this.layout)
     this.setActiveData()
     this.$eventBus.$on('addComponent', (val, currentVal, index) => {
       this.addComponent(val, '', currentVal, index)
@@ -157,10 +157,31 @@ export default {
   },
   methods: {
     handleData(data) {
-      this.layout = []
-      this.$nextTick(() => {
-        this.layout = data
-      })
+      this.layout = JSON.parse(JSON.stringify(data));
+      this.copyDrawingList = JSON.stringify(this.layout);
+      let boo = false;
+      const loop = list => {
+        for (let i = 0; i < list.length; i++) {
+          const e = list[i];
+          if (e.i === this.activeId) {
+            this.activeData = e;
+            this.activeId = e.i
+            boo = true;
+          }
+          if (e.children && Array.isArray(e.children)) loop(e.children);
+        }
+      };
+      loop(this.layout);
+      if (!boo) {
+        this.activeData = {};
+        this.activeId = null;
+      }
+    },
+    addLocalRecord(val) {
+      if (JSON.stringify(val) != this.copyDrawingList) {
+        this.copyDrawingList = JSON.stringify(val);
+        this.addRecord(val);
+      }
     },
     setActiveData(i = 0) {
       this.activeId = null
@@ -195,7 +216,7 @@ export default {
       this.activeId = this.config.layoutId
       this.activeData = row
       this.config.layoutId++
-      this.addRecord(this.layout)
+      this.addLocalRecord(this.layout)
     },
     getDefaultValue(row) {
       const jnpfKey = row.jnpfKey
@@ -213,7 +234,7 @@ export default {
       this.layout = this.layout.filter(item => item.i !== i);
       this.activeId = null
       this.activeData = {}
-      this.addRecord(this.layout)
+      this.addLocalRecord(this.layout)
       this.$nextTick(() => {
         const len = this.layout.length
         if (len) this.setActiveData(len - 1)
@@ -225,7 +246,7 @@ export default {
         this.config.layoutId = 100
         this.activeId = null
         this.activeData = {}
-        this.addRecord(this.layout)
+        this.addLocalRecord(this.layout)
       }).catch(() => { })
     },
     preview() {
