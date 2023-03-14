@@ -144,10 +144,10 @@ export default {
           //对应月视图
           dayGridMonth: {
             displayEventTime: false,//是否显示时间
-            eventLimit: 4,
-            dayMaxEventRows: 3,
-            /*  eventMaxStack:30, */
-            moreLinkContent: "更多",
+            eventLimit: 5,
+            dayMaxEventRows: 4,
+            // eventMaxStack: 30,
+            // moreLinkContent: "更多",
             moreLinkClick: "popover",
             dayCellContent(item) {
               let date = new Date(item.date);  // 参数需要毫秒数，所以这里将秒数乘于 1000

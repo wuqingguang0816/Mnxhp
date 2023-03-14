@@ -178,7 +178,6 @@ export default {
         if (!propsApi) return this.option.defaultValue = ''
         getDataInterfaceRes(propsApi).then(res => {
           this.defaultValue = res.data
-          console.log(222)
           this.defaultValue = this.showType === 'pc' ? this.defaultValue.slice(0, this.activeData.option.tableCount) : this.defaultValue.slice(0, this.activeData.option.appCount)
         })
       }

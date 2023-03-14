@@ -41,7 +41,8 @@
           </el-col>
         </el-form-item>
         <el-form-item label="时长" prop="duration" v-if="dataForm.duration!=-1&&dataForm.allDay==0">
-          <el-select v-model="dataForm.duration" placeholder="请选择" clearable>
+          <el-select v-model="dataForm.duration" placeholder="请选择" clearable
+            @change="durationChange">
             <el-option v-for="item in durationList" :key="item.id" :label="item.fullName"
               :value="item.id">
             </el-option>
@@ -338,6 +339,8 @@ export default {
       this.delVisible = false
       this.updateVisible = false
       this.repetitionType = false
+      this.dataForm.duration = 60
+      this.dataForm.endTime = ''
       this.$nextTick(() => {
         this.$refs['dataForm'].resetFields()
         if (this.dataForm.id) {
@@ -349,14 +352,19 @@ export default {
           this.dataForm.creatorUserId = this.userInfo.userId
           this.dataForm.startDay = startTime || ''
           this.dataForm.endDay = startTime || ''
-          let time = this.jnpf.toDate(this.dataForm.startDay, "HH:00")
-          this.dataForm.startTime = time
-          if (time) {
-            var arr = time.split(":")
-            this.dataForm.endTime = (Number(arr[0]) + 1) < 10 ? '0' + (Number(arr[0]) + 1) : (Number(arr[0]) + 1) + ':00'
-          }
+          let time = this.jnpf.toDate(new Date(), "HH")
+          this.dataForm.startTime = (Number(time) + 1) < 10 ? '0' + (Number(time) + 1) + ':00' : (Number(time) + 1) + ':00'
+          this.dataForm.endTime = (Number(time) + 2) < 10 ? '0' + (Number(time) + 2) + ':00' : (Number(time) + 2) + ':00'
         }
       })
+    },
+    durationChange() {
+      let arr = this.dataForm.startTime.split(":")
+      let time = Number(arr[0]) + 1
+      if (Number(time) == 24) {
+        time = 0
+      }
+      this.dataForm.endTime = time < 10 ? '0' + time + ':' + arr[1] : time + ':' + arr[1]
     },
     getDictionaryData() {
       this.$store.dispatch('base/getDictionaryData', { sort: 'scheduleType' }).then((res) => {
