@@ -511,12 +511,12 @@ export default {
               if (e.opType === 'setDate') {
                 let startTime = ''
                 let endTime = ''
-                if (e.__config__startTimeType == 2) {
+                if (e.__config__.startTimeType == 2) {
                   startTime = this[this.formConf.formModel][e.startRelationField] || 0
                 } else {
                   startTime = e.startTime
                 }
-                if (e.__config__endTimeType == 2) {
+                if (e.__config__.endTimeType == 2) {
                   endTime = this[this.formConf.formModel][e.endRelationField] || 0
                 } else {
                   endTime = e.endTime
@@ -550,12 +550,12 @@ export default {
               if (e.opType === 'setDate') {
                 let startTime = ''
                 let endTime = ''
-                if (e.__config__startTimeType == 2) {
+                if (e.__config__.startTimeType == 2) {
                   startTime = this[this.formConf.formModel][e.startRelationField] || 0
                 } else {
                   startTime = e.startTime
                 }
-                if (e.__config__endTimeType == 2) {
+                if (e.__config__.endTimeType == 2) {
                   endTime = this[this.formConf.formModel][e.endRelationField] || 0
                 } else {
                   endTime = e.endTime
