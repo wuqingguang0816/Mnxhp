@@ -18,13 +18,13 @@
         </el-option>
       </el-select>
     </el-form-item>
-    <refresh :refresh="activeData.refresh" />
+    <Refresh :refresh="activeData.refresh" />
   </el-collapse-item>
 </template>
 <script>
-import refresh from '../common/refresh'
+import Refresh from '../common/Refresh'
 export default {
-  components: { refresh },
+  components: { Refresh },
   props: ['activeData'],
   data() {
     return {

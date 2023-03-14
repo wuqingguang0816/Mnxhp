@@ -27,7 +27,7 @@
           </el-table-column>
         </el-table>
       </div>
-      <refresh v-if="activeData.dataType==='dynamic'&&activeData.propsApi"
+      <Refresh v-if="activeData.dataType==='dynamic'&&activeData.propsApi"
         :refresh="activeData.refresh" />
     </el-collapse-item>
     <JSONArea v-if="areaVisible" ref="JSONArea" @refresh="updateOption" />
@@ -41,13 +41,13 @@ const barTypeList = [
 
 import JSONArea from '../../components/JSONArea'
 import InterfaceDialog from '@/components/Process/PropPanel/InterfaceDialog'
-import refresh from '../common/refresh'
+import Refresh from '../common/Refresh'
 export default {
   props: ['activeData'],
   components: {
     JSONArea,
     InterfaceDialog,
-    refresh
+    Refresh
   },
   data() {
     return {

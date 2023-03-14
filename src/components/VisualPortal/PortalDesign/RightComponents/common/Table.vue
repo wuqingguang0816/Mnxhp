@@ -119,7 +119,7 @@
         <interface-dialog :value="activeData.propsApi" :title="activeData.propsName"
           popupTitle="数据接口" @change="propsApiChange" />
       </el-form-item>
-      <refresh v-if="activeData.propsApi" :refresh="activeData.refresh" />
+      <Refresh v-if="activeData.propsApi" :refresh="activeData.refresh" />
       <el-form-item :label="activeData.option.styleType==1?'列数据':'行数据'">
         <el-button
           @click="showColumnData(activeData.option.styleType==1?activeData.option.columnData:activeData.option.rowData,activeData.option.styleType)">
@@ -133,12 +133,12 @@
 </template>
 <script>
 import JSONArea from '../../components/JSONArea'
-import ColumnData from './columnData'
+import ColumnData from './ColumnData'
 import { alignList } from '../../components/config'
 import InterfaceDialog from '@/components/Process/PropPanel/InterfaceDialog'
-import refresh from '../common/refresh'
+import Refresh from '../common/Refresh'
 export default {
-  components: { JSONArea, InterfaceDialog, ColumnData, refresh },
+  components: { JSONArea, InterfaceDialog, ColumnData, Refresh },
   props: ['activeData', 'showType'],
   data() {
     return {

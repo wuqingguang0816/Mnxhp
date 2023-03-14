@@ -436,7 +436,7 @@
       <el-form-item label="选项">
         <el-button @click="showData('dataBoardData','dataBoardDataVisible')">设置</el-button>
       </el-form-item>
-      <refresh :refresh="activeData.refresh" />
+      <Refresh :refresh="activeData.refresh" />
       <DataBoardData ref="dataBoardData" :menuList="menuList" :appMenuList="appMenuList"
         :showType="showType" v-if="dataBoardDataVisible" @refresh="refresh" />
       <el-form-item label="名称大小">
@@ -517,7 +517,7 @@ import MapSet from '../common/MapSet'
 import Link from '../common/Link'
 import { getFeatureSelector } from '@/api/onlineDev/visualDev'
 import { getAtlas } from '@/api/onlineDev/portal'
-import refresh from '../common/refresh'
+import Refresh from '../common/Refresh'
 import singleImg from '@/components/Upload/SingleImg'
 export default {
   props: ['activeData', 'menuList', 'appMenuList', 'showType'],
@@ -533,7 +533,7 @@ export default {
     MapSet,
     Link,
     TableList,
-    refresh,
+    Refresh,
     singleImg
   },
   data() {
