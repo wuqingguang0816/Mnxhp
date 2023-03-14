@@ -290,9 +290,9 @@ export const basicComponents = [{
   option: {
     styleType: 1,
     defaultValue: [
-      { fullName: "流程待办", id: "1", noShow: false, num: 0, category: '', urlAddress: "/workFlow/flowTodo", icon: "icon-ym icon-ym-flowTodo", iconBgColor: "#f68900", type: 2 },
-      { fullName: "流程已办", id: "3", noShow: false, num: 0, category: '', urlAddress: "/workFlow/flowDone", icon: "icon-ym icon-ym-flowDone", iconBgColor: "#7b1ae1", type: 2 },
-      { fullName: "流程抄送", id: "4", noShow: false, num: 0, category: '', urlAddress: "/workFlow/flowCirculate", icon: "icon-ym icon-ym-flowForm", iconBgColor: "#33b932", type: 2 },
+      { fullName: "流程待办", id: "toBeReviewed", noShow: false, num: 0, category: [], urlAddress: "/workFlow/flowTodo", icon: "icon-ym icon-ym-flowTodo", iconBgColor: "#f68900", type: 2 },
+      { fullName: "流程已办", id: "flowDone", noShow: false, num: 0, category: [], urlAddress: "/workFlow/flowDone", icon: "icon-ym icon-ym-flowDone", iconBgColor: "#7b1ae1", type: 2 },
+      { fullName: "流程抄送", id: "flowCirculate", noShow: false, num: 0, category: [], urlAddress: "/workFlow/flowCirculate", icon: "icon-ym icon-ym-flowForm", iconBgColor: "#33b932", type: 2 },
     ],
     rowNumber: 3,
     showBorder: false,
