@@ -13,7 +13,7 @@
         <el-switch v-model="activeData.option.areaStyle" />
       </el-form-item>
       <el-form-item label="线条宽度">
-        <el-slider v-model="activeData.option.seriesLineStyleWidth" :max="20" />
+        <el-slider v-model="activeData.option.seriesLineStyleWidth" :min="1" :max="20" />
       </el-form-item>
       <el-form-item label="点的大小" v-show="showType == 'pc'">
         <el-slider v-model="activeData.option.seriesSymbolRotate" :max="20" />
