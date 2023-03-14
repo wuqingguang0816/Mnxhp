@@ -131,7 +131,10 @@ export default {
           getPortalInfo(this.dataForm.id).then(res => {
             this.dataForm = res.data
             this.loading = false
-          }).catch(() => { this.loading = false })
+          }).catch(() => {
+            this.loading = false
+            this.designBtnLoading = false
+          })
         }
       })
     },
@@ -160,7 +163,10 @@ export default {
               if (type == 1) this.$emit('initPortalDesign', this.dataForm.fullName, this.dataForm.id)
             }
           })
-        }).catch(() => { this.btnLoading = false })
+        }).catch(() => {
+          this.btnLoading = false
+          this.designBtnLoading = false
+        })
       })
     }
   }

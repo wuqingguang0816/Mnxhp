@@ -174,7 +174,7 @@ export default {
         startTime: '',
         endDay: '',
         endTime: '',
-        duration: '',
+        duration: 60,
         content: '',
         title: '',
         toUserIds: [],
@@ -257,10 +257,11 @@ export default {
         }, {
           id: 2,
           fullName: '此日程及后续'
-        }, {
-          id: 3,
-          fullName: '所有日程'
-        }
+        },
+        //  {
+        //   id: 3,
+        //   fullName: '所有日程'
+        // }
       ],
       reminderTimeList: [
         {
@@ -352,7 +353,7 @@ export default {
           this.dataForm.startTime = time
           if (time) {
             var arr = time.split(":")
-            this.dataForm.endTime = (Number(arr[0]) + 2) + ':00'
+            this.dataForm.endTime = (Number(arr[0]) + 1) < 10 ? '0' + (Number(arr[0]) + 1) : (Number(arr[0]) + 1) + ':00'
           }
         }
       })
@@ -360,6 +361,7 @@ export default {
     getDictionaryData() {
       this.$store.dispatch('base/getDictionaryData', { sort: 'scheduleType' }).then((res) => {
         this.typeOptions = res
+        if (this.typeOptions.length) this.dataForm.type = this.typeOptions[0].id
       })
     },
     onMsgChange(id, item) {
