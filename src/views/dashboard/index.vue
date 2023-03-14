@@ -99,6 +99,7 @@ export default {
       }).catch(() => {
         this.loading = false
         this.ajaxing = false
+        this.noData = true
       })
     },
     refresh(id) {
