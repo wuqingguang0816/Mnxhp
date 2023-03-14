@@ -45,7 +45,7 @@
       </el-form>
       <el-form v-show="currentTab==2" size="small" label-width="86px" labelPosition="left"
         class="portal-attr">
-        <refresh :refresh="refresh" />
+        <Refresh :refresh="refresh" />
       </el-form>
     </el-scrollbar>
     <iconBox :visible.sync="iconsVisible" :current="current" @choiceIcon="setIcon" />
@@ -75,7 +75,7 @@ import Data from '../RightComponents/chat/Data'
 import Tab from '../RightComponents/common/Tab'
 import Collapse from '../RightComponents/common/Collapse'
 import Schedule from '../RightComponents/common/Schedule'
-import refresh from '../RightComponents/common/refresh'
+import Refresh from '../RightComponents/common/Refresh'
 import { chartList, needDataSetList, systemList, layoutList } from './config'
 export default {
   props: ['activeData', 'showType', 'refresh'],
@@ -100,7 +100,7 @@ export default {
     Tab,
     Collapse,
     Schedule,
-    refresh
+    Refresh
   },
   data() {
     return {

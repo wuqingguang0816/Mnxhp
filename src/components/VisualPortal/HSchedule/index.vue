@@ -84,12 +84,11 @@ export default {
         eventColor: '#3BB2E3', // 全部日历日程背景色
         themeSystem: 'bootstrap', // 主题色(本地测试未能生效)
         // initialDate: moment().format('YYYY-MM-DD'), // 自定义设置背景颜色时一定要初始化日期时间
-        timeGridEventMinHeight: '20', // 设置事件的最小高度
         aspectRatio: 1.65, // 设置日历单元格宽度与高度的比例。
         // displayEventTime: false, // 是否显示时间
         // allDaySlot: false, // 周，日视图时，all-day 不显示
         allDayText: '全天',//设置all-day 标题
-        eventLimit: true, // 设置月日程，与all-day slot的最大显示数量，超过的通过弹窗显示
+        // eventLimit: true, // 设置月日程，与all-day slot的最大显示数量，超过的通过弹窗显示
         headerToolbar: { // 日历头部按钮位置
           left: 'prev next today',
           center: 'title',
@@ -107,14 +106,14 @@ export default {
           meridiem: false,
           hour12: false // 设置时间为24小时
         },
-        eventLimitNum: { // 事件显示数量限制(本地测试未能生效)
-          dayGrid: {
-            eventLimit: 5
-          },
-          timeGrid: {
-            eventLimit: 2 // adjust to 6 only for timeGridWeek/timeGridDay
-          }
-        },
+        // eventLimitNum: { // 事件显示数量限制(本地测试未能生效)
+        //   dayGrid: {
+        //     eventLimit: 5
+        //   },
+        //   timeGrid: {
+        //     eventLimit: 2 // adjust to 6 only for timeGridWeek/timeGridDay
+        //   }
+        // },
         // 事件
         dateClick: this.handleEventClick, // 点击日历日程事件
         eventClick: this.eventClick, // 点击日历日程事件
@@ -128,7 +127,7 @@ export default {
         // loading: this.loadingEvent, // 视图数据加载中、加载完成触发（用于配合显示/隐藏加载指示器。）
         // selectAllow: this.selectAllow, //编程控制用户可以选择的地方，返回true则表示可选择，false表示不可选择
         // eventMouseEnter: this.eventMouseEnter, // 鼠标滑过
-        allowContextMenu: false,
+        // allowContextMenu: false,
         editable: false, // 是否可以进行（拖动、缩放）修改
         eventStartEditable: false, // Event日程开始时间可以改变，默认true，如果是false其实就是指日程块不能随意拖动，只能上下拉伸改变他的endTime
         eventDurationEditable: false, // Event日程的开始结束时间距离是否可以改变，默认true，如果是false则表示开始结束时间范围不能拉伸，只能拖拽
@@ -138,13 +137,18 @@ export default {
         dayMaxEvents: false,
         weekends: true,
         navLinks: false, // 天链接
-        selectHelper: false,
+        // selectHelper: false,
         datesSet: this.datesRender,
         slotEventOverlap: false, // 相同时间段的多个日程视觉上是否允许重叠，默认true允许
         views: {
           //对应月视图
           dayGridMonth: {
             displayEventTime: false,//是否显示时间
+            eventLimit: 5,
+            dayMaxEventRows: 4,
+            // eventMaxStack: 30,
+            // moreLinkContent: "更多",
+            moreLinkClick: "popover",
             dayCellContent(item) {
               let date = new Date(item.date);  // 参数需要毫秒数，所以这里将秒数乘于 1000
               let Y = date.getFullYear() + '-';
@@ -244,7 +248,7 @@ export default {
       List(query).then(res => {
         this.calendarOptions.events = res.data.list.map(o => ({
           id: o.id,
-          title: o.content,
+          title: o.title,
           start: o.startDay,
           end: o.endDay,
           color: o.color,

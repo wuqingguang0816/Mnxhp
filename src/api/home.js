@@ -1,10 +1,11 @@
 import request from '@/utils/request'
 
 // 获取我的待办
-export function getFlowTodoCount() {
+export function getFlowTodoCount(data) {
   return request({
     url: '/api/visualdev/Dashboard/FlowTodoCount',
-    method: 'get'
+    method: 'post',
+    data
   })
 }
 // 获取通知公告

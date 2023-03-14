@@ -1556,7 +1556,7 @@
                   <p style="width:112px"></p>
                   <JNPF-TreeSelect :options="printTplList" v-model="approverForm.printId"
                     placeholder="请选择打印模板" lastLevel clearable multiple>
-                    <div  class="printWrap" slot="header">
+                    <div class="printWrap" slot="header">
                       <el-link type="primary" :underline="false" @click="openPrint">添加打印模板
                       </el-link>
                       <el-link type="info" style="position: absolute;right:8px;top: 18px;"
@@ -4005,10 +4005,9 @@ export default {
   line-height: 28px;
 }
 
-
 .printWrap {
-  padding:10px 0;
-  text-align:center;
+  padding: 10px 0;
+  text-align: center;
   >>> .el-divider--horizontal {
     margin-top: 10px;
   }

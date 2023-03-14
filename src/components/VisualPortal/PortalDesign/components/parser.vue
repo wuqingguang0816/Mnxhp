@@ -27,7 +27,7 @@
         <div class="portal-box-body">
           <div v-show="item.children&&item.children.length" class="portal-box-item"
             v-for="(it,index) in item.children" :key="index">
-            <parser :item="it" :class="{'active-item': it.i===activeId}" />
+            <parser :item="it" :class="{'active-item': it.i===activeId}" :detailed="detailed" />
             <el-popconfirm v-if="!detailed" title="确定删除该组件？" class="drawing-item-delete"
               @confirm="(event)=>{handleRemoveItem(index,item.children)}">
               <i slot="reference" class="el-icon-delete"></i>
@@ -48,7 +48,7 @@
           <div class="portal-box-body">
             <div v-show="child.children&&child.children.length" class="portal-box-item"
               v-for="(it,index) in child.children" :key="index">
-              <parser :item="it" :class="{'active-item': it.i===activeId}" />
+              <parser :item="it" :class="{'active-item': it.i===activeId}" :detailed="detailed" />
               <el-popconfirm v-if="!detailed" title="确定删除该组件？" class="drawing-item-delete"
                 @confirm="(event)=>{handleRemoveItem(index,child.children)}">
                 <i slot="reference" class="el-icon-delete"></i>
@@ -98,7 +98,6 @@ import {
   HRadarChart,
   HTimeAxis,
 } from "@/components/VisualPortal"
-
 import CardHeader from "@/components/VisualPortal/CardHeader"
 import AddBtn from "./AddBtn"
 
@@ -192,6 +191,7 @@ export default {
   display: flex;
   align-items: center;
   justify-content: center;
+  padding: 15px;
 
   .portal-box-item {
     width: 100%;
@@ -230,12 +230,6 @@ export default {
       }
     }
   }
-  // >>> .el-collapse-item__wrap {
-  //   height: 280px;
-  //   .el-collapse-item__content {
-  //     height: 100%;
-  //   }
-  // }
 }
 .active-item {
   border: 1px solid #409eff;
@@ -251,7 +245,7 @@ export default {
 .drawing-item-delete {
   display: none;
   position: absolute;
-  top: -10px;
+  top: 5px;
   right: 20px;
   width: 22px;
   height: 22px;
@@ -265,5 +259,11 @@ export default {
   border-color: #f56c6c;
   color: #f56c6c;
   background: #fff;
+}
+
+.el-tabs--border-card {
+  >>> .el-tabs__content {
+    padding: 0;
+  }
 }
 </style>

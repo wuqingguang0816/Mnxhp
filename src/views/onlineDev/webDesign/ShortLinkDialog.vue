@@ -286,7 +286,7 @@ export default {
           jnpfKey: o.__config__.jnpfKey,
           sortable: false,
           width: null,
-          type: 2,
+          type: 1,
           ...o
         }));
         this.listOptions = this.listOptions.map(o => ({
@@ -297,7 +297,7 @@ export default {
           jnpfKey: o.__config__.jnpfKey,
           sortable: false,
           width: null,
-          type: 2,
+          type: 1,
           ...o
         }));
       })

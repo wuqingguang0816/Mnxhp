@@ -50,9 +50,9 @@ export default {
   created() {},
   mounted() {},
   methods: {
-    init(id) {
-      if (this.printListOptions.length == 0 && id.length > 0) {
-        printOptionsApi(id).then(res => {
+    init(ids) {
+      if (this.printListOptions.length == 0 && ids.length > 0) {
+        printOptionsApi({ids}).then(res => {
           this.printListOptions = res.data;
           this.printVisible = true;
         });

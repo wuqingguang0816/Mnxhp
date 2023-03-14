@@ -2,9 +2,9 @@
   <el-collapse-item title="日程设置" name="14">
     <el-form-item label="默认视图">
       <el-radio-group v-model="activeData.defaultView" @change="renderKeyChange">
-        <el-radio-button label="dayGridMonth">年</el-radio-button>
-        <el-radio-button label="timeGridWeek">月</el-radio-button>
         <el-radio-button label="timeGridDay">日</el-radio-button>
+        <el-radio-button label="timeGridWeek">周</el-radio-button>
+        <el-radio-button label="dayGridMonth">月</el-radio-button>
       </el-radio-group>
     </el-form-item>
     <el-form-item label="显示农历">
@@ -18,13 +18,13 @@
         </el-option>
       </el-select>
     </el-form-item>
-    <refresh :refresh="activeData.refresh" />
+    <Refresh :refresh="activeData.refresh" />
   </el-collapse-item>
 </template>
 <script>
-import refresh from '../common/refresh'
+import Refresh from '../common/Refresh'
 export default {
-  components: { refresh },
+  components: { Refresh },
   props: ['activeData'],
   data() {
     return {

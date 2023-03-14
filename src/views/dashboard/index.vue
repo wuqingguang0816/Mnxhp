@@ -49,7 +49,7 @@ export default {
       refreshData: {},
       timerList: [],
       formData: {},
-      enabledLock: true
+      enabledLock: 1
     }
   },
   computed: {
@@ -60,11 +60,7 @@ export default {
     this.getData()
   },
   destroyed() {
-    if (this.timerList.length) {
-      this.timerList.forEach((ele) => {
-        if (ele) clearInterval(ele)
-      })
-    }
+    this.clearAutoRefresh()
   },
   methods: {
     getData() {
@@ -81,7 +77,7 @@ export default {
         this.type = res.data.type || 0
         this.linkType = res.data.linkType || 0
         this.url = res.data.customUrl
-        this.enabledLock = res.data.enabledLock || false
+        this.enabledLock = res.data.enabledLock || 0
         if (res.data) {
           if (res.data.type === 1) {
             if (res.data.customUrl && res.data.customUrl !== 1) {
@@ -103,11 +99,13 @@ export default {
       }).catch(() => {
         this.loading = false
         this.ajaxing = false
+        this.noData = true
       })
     },
     refresh(id) {
       if (!id) return
       this.portalId = id
+      this.clearAutoRefresh()
       this.getData()
     },
     initAutoRefresh() {
@@ -144,6 +142,13 @@ export default {
           } else {
             item.option.defaultValue = []
           }
+        })
+      }
+    },
+    clearAutoRefresh() {
+      if (this.timerList.length) {
+        this.timerList.forEach((ele) => {
+          if (ele) clearInterval(ele)
         })
       }
     },

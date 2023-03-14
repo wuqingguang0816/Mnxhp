@@ -2,7 +2,7 @@
   <div>
     <el-dialog title="选项设置" :close-on-click-modal="false" :visible.sync="visible"
       class="JNPF-dialog JNPF-dialog_center todoData" lock-scroll width="1000px" append-to-body>
-      <JNPF-table :data="list" ref="dragTable" :hasNO="false">
+      <JNPF-table :data="list" ref="dragTable" :hasNO="false" row-key="id">
         <el-table-column align="center" label="拖动" width="50">
           <template>
             <i class="drag-handler icon-ym icon-ym-darg" style="cursor: move;font-size:20px"
@@ -17,7 +17,7 @@
         <el-table-column prop="dataType" label="分类" width="250px">
           <template slot-scope="scope">
             <el-select v-if="scope.row.id!=2" v-model="scope.row.category" placeholder="请选择"
-              clearable>
+              multiple clearable>
               <el-option v-for="item in categoryList" :key="item.id" :label="item.fullName"
                 :value="item.id" />
             </el-select>

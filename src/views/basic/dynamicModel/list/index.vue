@@ -650,7 +650,7 @@ export default {
       }
     },
     async getPrintListOptions(ids) {
-      printOptionsApi(ids).then(res => {
+      printOptionsApi({ids}).then(res => {
         this.printListOptions = res.data
       })
     },

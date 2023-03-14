@@ -299,7 +299,7 @@ export default {
       const loop = data => {
         if (Array.isArray(data)) data.forEach(d => loop(d))
         if (data.type === 'approver' || data.type === 'start') {
-          this.initFormOperates(data, true, true)
+          data.properties.formOperates = this.initFormOperates(data, true, true)
         }
         if (data.conditionNodes && Array.isArray(data.conditionNodes)) loop(data.conditionNodes)
         if (data.childNode) loop(data.childNode)

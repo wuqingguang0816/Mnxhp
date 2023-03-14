@@ -21,7 +21,8 @@
             @mouseover="getQRimg"></div>
         </el-popover>
         <div class="JNPF-common-layout-center">
-          <Search ref="Search" :list="searchList" @reset="reset" @search="searchData" />
+          <Search ref="Search" :list="searchList" @reset="reset" @search="searchData"
+            :initDataJson="listQuery.queryJson" />
           <div class="JNPF-common-layout-main JNPF-flex-main">
             <div class="JNPF-common-head">
               <div></div>
@@ -240,21 +241,17 @@ export default {
       if (this.columnPassUse == 1) return
       this.init()
     })
-    var _this = this
-    document.onkeydown = function (e) {
-      var key = window.event.keyCode
-      if (key === 13) {
-        _this.handleLogin()
-      }
-    }
+
   },
   methods: {
     async init() {
       this.listLoading = true
-      this.listQuery.menuId = this.$route.query.modelId
+      this.listQuery.menuId = this.modelId
       this.refreshTable = false
       if (!this.config.columnData || !this.config.formData) return
       this.columnData = JSON.parse(this.config.columnData)
+      this.columnData.type = 1
+      this.columnData.searchList = this.searchList
       if (this.columnData.type === 3) {
         this.columnData.columnList = this.columnData.columnList.filter(o => o.prop != this.columnData.groupField)
       }
@@ -265,9 +262,6 @@ export default {
       this.hasBatchBtn = this.columnData.btnsList.some(o => o.value == 'batchRemove')
       this.formData = JSON.parse(this.config.formData)
       this.formData.fields = this.recurSiveFilter(this.formData.fields)
-      this.customBtnsList = this.columnData.customBtnsList || []
-      this.columnBtnsList = this.columnData.columnBtnsList || []
-      this.columnOptions = this.columnData.columnOptions || []
       this.listLoading = true
       if (this.isPreview) this.listQuery.menuId = "270579315303777093"
       this.rowStyle = this.jnpf.getScriptFunc.call(this, this.columnData.funcs && this.columnData.funcs.rowStyle && this.columnData.funcs.rowStyle.func)
@@ -295,24 +289,42 @@ export default {
       )
       return newColumn
     },
+    initDefaultSearchData() {
+      let searchList = this.columnData.searchList
+      //处理搜索条件中的默认值
+      if (searchList != null && searchList.length > 0) {
+        let initQueryJson = {}
+        for (let i = 0, len = searchList.length; i < len; i++) {
+          if (searchList[i].jnpfKey === 'date' && searchList[i].__config__.defaultCurrent == true) {
+            //日期
+            let startDateTime = new Date()
+            startDateTime.setHours(0, 0, 0, 0)
+            let endDateTime = new Date()
+            endDateTime.setHours(23, 59, 59, 999)
+            initQueryJson[searchList[i].__vModel__] = [startDateTime.getTime(), endDateTime.getTime()]
+          } else if (searchList[i].jnpfKey === 'comSelect' && searchList[i].__config__.defaultCurrent == true && this.userInfo.organizeIdList instanceof Array && this.userInfo.organizeIdList.length > 0) {
+            //组织机构
+            initQueryJson[searchList[i].__vModel__] = searchList[i].searchMultiple == true ? [this.userInfo.organizeIdList] : this.userInfo.organizeIdList;
+          } else if (searchList[i].jnpfKey === 'depSelect' && searchList[i].__config__.defaultCurrent == true && this.userInfo.departmentId != null && this.userInfo.departmentId != '') {
+            if (searchList[i].__config__.defaultValue != null) {
+              initQueryJson[searchList[i].__vModel__] = searchList[i].__config__.defaultValue
+            }
+          } else if (searchList[i].__config__.jnpfKey === 'userSelect' && searchList[i].__config__.defaultCurrent == true) {
+            if (searchList[i].__config__.defaultValue != null) {
+              initQueryJson[searchList[i].__vModel__] = searchList[i].__config__.defaultValue
+            }
+          }
+        }
+        if (Object.keys(initQueryJson).length > 0) {
+          this.listQuery.queryJson = JSON.stringify(initQueryJson)
+        }
+      }
+    },
     initData() {
       if (this.isPreview) return
       this.listLoading = true
       getModelListLink(this.modelId, this.listQuery, this.encryption).then(res => {
-        if (this.columnData.type === 4) {
-          this.list = res.data.list.map(o => ({
-            ...o,
-            ...this.expandObj,
-            rowEdit: false
-          }))
-          this.cacheList = JSON.parse(JSON.stringify(this.list))
-        } else {
-          this.list = res.data.list.map(o => ({
-            ...o,
-            ...this.expandObj,
-            hasChildren: true
-          }))
-        }
+        this.list = res.data.list
         if (this.columnData.type !== 3 && this.columnData.hasPage) this.total = res.data.pagination.total
         this.listLoading = false
       })
@@ -340,7 +352,6 @@ export default {
           this.init()
         }
       }).catch(() => {
-
         this.passwordLoading = false
       })
     },
@@ -745,25 +756,14 @@ export default {
     reset() {
       this.listQuery.sort = this.defaultListQuery.sort
       this.listQuery.sidx = this.defaultListQuery.sidx
-      if (this.columnData.type === 2) {
-        let obj = { [this.columnData.treeRelation]: this.treeActiveId }
-        let queryJson = this.treeActiveId ? JSON.stringify(obj) : ''
-        this.search(queryJson)
-      } else {
-        this.search('')
-      }
+      this.search('')
     },
     searchData(queryJson) {
-      if (this.columnData.type === 2 && this.treeActiveId) {
-        queryJson = JSON.parse(queryJson)
-        queryJson = { [this.columnData.treeRelation]: this.treeActiveId, ...queryJson }
-        queryJson = JSON.stringify(queryJson)
-      }
       this.search(queryJson)
     },
     search(queryJson) {
-      if (this.isPreview) return
-      if (!queryJson) this.$refs.treeBox && this.$refs.treeBox.setCurrentKey(null);
+      // if (this.isPreview) return
+      // if (!queryJson) this.$refs.treeBox && this.$refs.treeBox.setCurrentKey(null);
       this.listQuery.queryJson = queryJson
       this.listQuery.currentPage = 1
       this.initData()

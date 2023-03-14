@@ -18,7 +18,7 @@
             <template v-for="(item, i) in list">
               <el-table-column :prop="item.filedName" :label="item.fullName" :align="item.align"
                 :width="item.width" :key="i" :sortable="item.sortable"
-                :fixed='item.fixed=="none"?false:item.fixed' />
+                :fixed='item.fixed=="none"?"":item.fixed' />
             </template>
           </JNPF-table>
         </template>
@@ -128,6 +128,7 @@
 </template>
 <script>
 import CardHeader from "../CardHeader"
+import { getDataInterfaceRes } from '@/api/systemData/dataInterface'
 export default {
   components: { CardHeader },
   props: {
@@ -144,19 +145,7 @@ export default {
   watch: {
   },
   created() {
-    this.defaultValue = this.activeData.option.defaultValue
-    this.defaultValue = JSON.parse(JSON.stringify(this.activeData.option.defaultValue))
-    if (this.showType === 'pc') {
-      this.defaultValue = this.defaultValue.slice(0, this.activeData.option.tableCount)
-      if (this.activeData.option.styleType == 1) {
-        this.list = this.activeData.option.columnData
-      } else {
-        this.list = this.activeData.option.rowData
-      }
-    } else {
-      this.defaultValue = this.defaultValue.slice(0, this.activeData.option.appCount)
-      this.list = this.activeData.option.appColumnList
-    }
+    this.initData()
   },
   methods: {
     tableRowClassName({ row, rowIndex }) {
@@ -169,6 +158,28 @@ export default {
       } else {
         styleJson.background = this.activeData.option.tableEvenLineColor ? this.activeData.option.tableEvenLineColor : this.activeData.option.tableBgColor
         return styleJson
+      }
+    },
+    initData() {
+      this.defaultValue = JSON.parse(JSON.stringify(this.activeData.option.defaultValue))
+      if (this.showType === 'pc') {
+        this.defaultValue = this.defaultValue.slice(0, this.activeData.option.tableCount)
+        if (this.activeData.option.styleType == 1) {
+          this.list = this.activeData.option.columnData
+        } else {
+          this.list = this.activeData.option.rowData
+        }
+      } else {
+        this.defaultValue = this.defaultValue.slice(0, this.activeData.option.appCount)
+        this.list = this.activeData.option.appColumnList
+      }
+      if (this.activeData.dataType === 'dynamic') {
+        const propsApi = this.activeData.propsApi
+        if (!propsApi) return this.option.defaultValue = ''
+        getDataInterfaceRes(propsApi).then(res => {
+          this.defaultValue = res.data
+          this.defaultValue = this.showType === 'pc' ? this.defaultValue.slice(0, this.activeData.option.tableCount) : this.defaultValue.slice(0, this.activeData.option.appCount)
+        })
       }
     }
   }

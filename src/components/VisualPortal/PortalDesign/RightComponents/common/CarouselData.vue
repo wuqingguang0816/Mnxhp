@@ -3,7 +3,7 @@
     <el-dialog title="选项设置" :close-on-click-modal="false" :visible.sync="visible"
       class="JNPF-dialog JNPF-dialog_center todoData" lock-scroll width="1000px" append-to-body>
       <div class="main">
-        <JNPF-table :data="list" ref="dragTable" :hasNO="false">
+        <JNPF-table :data="list" ref="dragTable" :hasNO="false" row-key="id">
           <el-table-column align="center" label="拖动" width="50">
             <template>
               <i class="drag-handler icon-ym icon-ym-darg" style="cursor: move;font-size:20px"
@@ -26,6 +26,11 @@
                 placeholder="图片地址" />
               <interface-dialog v-else :value="scope.row.propsApi" :title="scope.row.propsName"
                 popupTitle="数据接口" @change="propsApiChange(arguments,scope.$index)" />
+            </template>
+          </el-table-column>
+          <el-table-column prop="field" label="文本内容" width="180px">
+            <template slot-scope="scope">
+              <el-input v-model="scope.row.textDefaultValue" placeholder="请输入名称" maxlength="50" />
             </template>
           </el-table-column>
           <el-table-column prop="dataLength" label="链接类型" width="160px">
@@ -51,11 +56,6 @@
                   <el-option label="_blank" value="_blank" />
                 </el-select>
               </el-input>
-            </template>
-          </el-table-column>
-          <el-table-column prop="field" label="文本内容" width="180px">
-            <template slot-scope="scope">
-              <el-input v-model="scope.row.textDefaultValue" placeholder="请输入名称" maxlength="50" />
             </template>
           </el-table-column>
           <el-table-column label="操作" width="50" fixed="right">
@@ -162,7 +162,8 @@ export default {
         linkType: '',
         urlAddress: '',
         linkTarget: '_self',
-        textDefaultValue: "JNPF快速开发平台",
+        textDefaultValue: "",
+        id: this.jnpf.idGenerator()
       }
       this.list.push(item)
     },

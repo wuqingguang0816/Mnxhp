@@ -9,7 +9,7 @@
       </el-form-item>
       <template v-if="showType == 'pc'">
         <el-form-item label="Y轴名称">
-          <el-input v-model="activeData.option.yAxisName" placeholder="请输入X轴名称" />
+          <el-input v-model="activeData.option.yAxisName" placeholder="请输入Y轴名称" />
         </el-form-item>
         <el-form-item label="字体大小">
           <el-input-number v-model="activeData.option.yAxisNameTextStyleFontSize"

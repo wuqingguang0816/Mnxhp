@@ -11,6 +11,7 @@ const dataBoardDefault = [
     linkType: '',
     urlAddress: '',
     linkTarget: '_self',
+    id: '1',
   },
   {
     fullName: "新增商机",
@@ -24,6 +25,7 @@ const dataBoardDefault = [
     linkType: '',
     urlAddress: '',
     linkTarget: '_self',
+    id: '2',
   },
   {
     fullName: "合同金额",
@@ -37,6 +39,7 @@ const dataBoardDefault = [
     linkType: '',
     urlAddress: '',
     linkTarget: '_self',
+    id: '3',
   },
   {
     fullName: "回款金额",
@@ -50,11 +53,12 @@ const dataBoardDefault = [
     linkType: '',
     urlAddress: '',
     linkTarget: '_self',
+    id: '4',
   }
 ]
 export const layoutComponents = [
   {
-    icon: 'icon-ym icon-ym-generator-todo',
+    icon: 'icon-ym icon-ym-portal-card',
     label: '卡片面板',
     jnpfKey: 'card',
     title: '卡片面板',
@@ -64,7 +68,7 @@ export const layoutComponents = [
       titleFontColor: '#303133',
       titleLeft: 'left',
       titleBgColor: '',
-      cardIcon: 'icon-ym icon-ym-generator-todo',
+      cardIcon: 'icon-ym icon-ym-portal-card',
       cardIconColor: "#666",
       linkType: '',
       type: '',
@@ -75,7 +79,6 @@ export const layoutComponents = [
       appType: '',
       appModuleId: '',
       appUrlAddress: '',
-      appLinkTarget: '_self',
     },
     children: [],
     w: 6,
@@ -85,7 +88,7 @@ export const layoutComponents = [
     maxW: 12,
     maxH: 12
   }, {
-    icon: 'icon-ym icon-ym-generator-todo',
+    icon: 'icon-ym icon-ym-portal-tab',
     label: '标签面板',
     jnpfKey: 'tab',
     title: '标签面板',
@@ -95,7 +98,7 @@ export const layoutComponents = [
       titleFontColor: '#303133',
       titleLeft: 'left',
       titleBgColor: '',
-      cardIcon: 'icon-ym icon-ym-generator-todo',
+      cardIcon: 'icon-ym icon-ym-portal-tab',
       cardIconColor: "#666",
       linkType: '',
       type: '',
@@ -106,7 +109,6 @@ export const layoutComponents = [
       appType: '',
       appModuleId: '',
       appUrlAddress: '',
-      appLinkTarget: '_self',
     },
     children: [
       {
@@ -129,7 +131,7 @@ export const layoutComponents = [
     maxH: 12
   },
   // {
-  //   icon: 'icon-ym icon-ym-generator-todo',
+  //   icon: 'icon-ym icon-ym-portal-collapse',
   //   label: '折叠面板',
   //   jnpfKey: 'collapse',
   //   title: '折叠面板',
@@ -139,7 +141,7 @@ export const layoutComponents = [
   //     titleFontColor: '#303133',
   //     titleLeft: 'left',
   //     titleBgColor: '',
-  //     cardIcon: 'icon-ym icon-ym-generator-todo',
+  //     cardIcon: 'icon-ym icon-ym-portal-collapse',
   //     cardIconColor: "#666",
   //     linkType: '',
   //     type: '',
@@ -148,7 +150,6 @@ export const layoutComponents = [
   //     appLinkType: '',
   //     appType: '',
   //     appUrlAddress: '',
-  //     appLinkTarget: '_self',
   //   },
   //   children: [
   //     {
@@ -193,7 +194,6 @@ export const systemComponents = [{
     appType: '',
     appModuleId: '',
     appUrlAddress: '',
-    appLinkTarget: '_self',
   },
   w: 4,
   h: 7,
@@ -224,7 +224,6 @@ export const systemComponents = [{
     appType: '',
     appModuleId: '',
     appUrlAddress: '',
-    appLinkTarget: '_self',
   },
   w: 4,
   h: 7,
@@ -255,7 +254,6 @@ export const systemComponents = [{
     appType: '',
     appModuleId: '',
     appUrlAddress: '',
-    appLinkTarget: '_self',
   },
   w: 4,
   h: 7,
@@ -288,14 +286,13 @@ export const basicComponents = [{
     appType: '',
     appModuleId: '',
     appUrlAddress: '',
-    appLinkTarget: '_self',
   },
   option: {
     styleType: 1,
     defaultValue: [
-      { fullName: "流程待办", id: "1", noShow: false, num: 0, category: '', urlAddress: "/workFlow/flowTodo", icon: "icon-ym icon-ym-flowTodo", iconBgColor: "#f68900", type: 2 },
-      { fullName: "流程已办", id: "3", noShow: false, num: 0, category: '', urlAddress: "/workFlow/flowDone", icon: "icon-ym icon-ym-flowDone", iconBgColor: "#7b1ae1", type: 2 },
-      { fullName: "流程抄送", id: "4", noShow: false, num: 0, category: '', urlAddress: "/workFlow/flowCirculate", icon: "icon-ym icon-ym-flowForm", iconBgColor: "#33b932", type: 2 },
+      { fullName: "流程待办", id: "toBeReviewed", noShow: false, num: 0, category: [], urlAddress: "/workFlow/flowTodo", icon: "icon-ym icon-ym-flowTodo", iconBgColor: "#f68900", type: 2 },
+      { fullName: "流程已办", id: "flowDone", noShow: false, num: 0, category: [], urlAddress: "/workFlow/flowDone", icon: "icon-ym icon-ym-flowDone", iconBgColor: "#7b1ae1", type: 2 },
+      { fullName: "流程抄送", id: "flowCirculate", noShow: false, num: 0, category: [], urlAddress: "/workFlow/flowCirculate", icon: "icon-ym icon-ym-flowForm", iconBgColor: "#33b932", type: 2 },
     ],
     rowNumber: 3,
     showBorder: false,
@@ -342,7 +339,6 @@ export const basicComponents = [{
     appType: '',
     appModuleId: '',
     appUrlAddress: '',
-    appLinkTarget: '_self',
   },
   option: {
     styleType: 1,
@@ -356,7 +352,8 @@ export const basicComponents = [{
         urlAddress: "onlineDev/webDesign",
         icon: "icon-ym icon-ym-webDesign",
         iconBgColor: "#FF3B3B",
-        type: 2
+        type: 2,
+        id: "1",
       },
       {
         fullName: "流程设计",
@@ -366,7 +363,8 @@ export const basicComponents = [{
         urlAddress: "workFlow/flowEngine",
         icon: "icon-ym icon-ym-flowDesign",
         iconBgColor: "#7B1AE1",
-        type: 2
+        type: 2,
+        id: "2",
       },
       {
         fullName: "权限管理",
@@ -376,7 +374,8 @@ export const basicComponents = [{
         urlAddress: "permission/authorize",
         icon: "icon-ym icon-ym-authorize",
         iconBgColor: "#1890FF",
-        type: 2
+        type: 2,
+        id: "3",
       },
       {
         fullName: "报表设计",
@@ -386,7 +385,8 @@ export const basicComponents = [{
         urlAddress: "onlineDev/dataReport",
         icon: "icon-ym icon-ym-reportDesign",
         iconBgColor: "#F68900",
-        type: 2
+        type: 2,
+        id: "4",
       },
       {
         fullName: "门户设计",
@@ -396,7 +396,8 @@ export const basicComponents = [{
         urlAddress: "onlineDev/visualPortal",
         icon: "icon-ym icon-ym-portalDesign",
         iconBgColor: "#33B932",
-        type: 2
+        type: 2,
+        id: "5",
       }
     ],
     appDefaultValue: [
@@ -408,7 +409,8 @@ export const basicComponents = [{
         linkTarget: '_blank',
         icon: "icon-ym icon-ym-webDesign",
         iconBgColor: "#33B932",
-        type: 2
+        type: 2,
+        id: "1",
       },
     ],
     rowNumber: 5,
@@ -449,7 +451,6 @@ export const basicComponents = [{
     appType: '',
     appModuleId: '',
     appUrlAddress: '',
-    appLinkTarget: '_self',
   },
   option: {
     styleType: 1,
@@ -507,7 +508,6 @@ export const basicComponents = [{
     appType: '',
     appModuleId: '',
     appUrlAddress: '',
-    appLinkTarget: '_self',
   },
   option: {
     styleType: 1,
@@ -547,7 +547,8 @@ export const basicComponents = [{
       sortable: false,
       fixed: "none",
       align: 'left',
-      width: 0
+      width: 0,
+      id: '1'
     },
     {
       fullName: '姓名',
@@ -555,7 +556,8 @@ export const basicComponents = [{
       sortable: false,
       fixed: "none",
       align: 'left',
-      width: 0
+      width: 0,
+      id: '2'
     },
     {
       fullName: '销售额',
@@ -563,7 +565,8 @@ export const basicComponents = [{
       sortable: false,
       fixed: "none",
       align: 'left',
-      width: 0
+      width: 0,
+      id: '3'
     },
     {
       fullName: '完成情况',
@@ -571,26 +574,27 @@ export const basicComponents = [{
       sortable: false,
       fixed: "none",
       align: 'left',
-      width: 0
+      width: 0,
+      id: '4'
     }],
     rowData: [{
       fullName: '标题',
       filedName: 'comInputField102',
       fontSize: 14,
       fontWeight: false,
-      fontColor: '#303133'
+      fontColor: '#303133',
     }, {
       fullName: '描述',
       filedName: 'comInputField103',
       fontSize: 12,
       fontWeight: false,
-      fontColor: '#666666'
+      fontColor: '#666666',
     }, {
       fullName: '时间',
       filedName: 'comInputField105',
       fontSize: 12,
       fontWeight: false,
-      fontColor: '#666666'
+      fontColor: '#666666',
     }],
   },
   refresh: {
@@ -627,7 +631,6 @@ export const basicComponents = [{
     appType: '',
     appModuleId: '',
     appUrlAddress: '',
-    appLinkTarget: '_self',
   },
   dataType: 'static',
   propsApi: '',
@@ -662,7 +665,7 @@ export const basicComponents = [{
   maxH: 20
 },
 {
-  icon: 'icon-ym icon-ym-generator-Panel',
+  icon: 'icon-ym icon-ym-portal-image',
   label: '图片',
   jnpfKey: 'image',
   title: '图片',
@@ -673,7 +676,7 @@ export const basicComponents = [{
     titleFontColor: '#303133',
     titleLeft: 'left',
     titleBgColor: '',
-    cardIcon: 'icon-ym icon-ym-generator-Panel',
+    cardIcon: 'icon-ym icon-ym-portal-image',
     cardIconColor: "#666",
     linkType: '',
     type: '',
@@ -684,7 +687,6 @@ export const basicComponents = [{
     appType: '',
     appModuleId: '',
     appUrlAddress: '',
-    appLinkTarget: '_self',
   },
   dataType: 'static',
   propsApi: '',
@@ -717,7 +719,7 @@ export const basicComponents = [{
   maxH: 20
 },
 {
-  icon: 'icon-ym icon-ym-generator-Panel',
+  icon: 'icon-ym icon-ym-portal-carousel',
   label: '轮播图',
   jnpfKey: 'carousel',
   title: '轮播图',
@@ -728,7 +730,7 @@ export const basicComponents = [{
     titleFontColor: '#303133',
     titleLeft: 'left',
     titleBgColor: '',
-    cardIcon: 'icon-ym icon-ym-generator-Panel',
+    cardIcon: 'icon-ym icon-ym-portal-carousel',
     cardIconColor: "#666",
     linkType: '',
     type: '',
@@ -739,7 +741,6 @@ export const basicComponents = [{
     appType: '',
     appModuleId: '',
     appUrlAddress: '',
-    appLinkTarget: '_self',
     carouselType: false
   },
   dataType: 'static',
@@ -756,6 +757,7 @@ export const basicComponents = [{
         urlAddress: '',
         linkTarget: '_self',
         textDefaultValue: "",
+        id: '1'
       },
       {
         imageUrl: "https://app.cdn.jnpfsoft.com/image/3.2/banner2.png",
@@ -766,6 +768,7 @@ export const basicComponents = [{
         urlAddress: '',
         linkTarget: '_self',
         textDefaultValue: "",
+        id: '2'
       },
       {
         imageUrl: "https://app.cdn.jnpfsoft.com/image/3.2/banner4.png",
@@ -776,6 +779,7 @@ export const basicComponents = [{
         urlAddress: '',
         linkTarget: '_self',
         textDefaultValue: "",
+        id: '3'
       },
     ],
     appDefaultValue: [
@@ -788,6 +792,7 @@ export const basicComponents = [{
         urlAddress: '',
         linkTarget: '_self',
         textDefaultValue: "",
+        id: '1'
       },
       {
         imageUrl: "https://app.cdn.jnpfsoft.com/image/3.2/banner2.png",
@@ -798,6 +803,7 @@ export const basicComponents = [{
         urlAddress: '',
         linkTarget: '_self',
         textDefaultValue: "",
+        id: '2'
       },
       {
         imageUrl: "https://app.cdn.jnpfsoft.com/image/3.2/banner4.png",
@@ -808,6 +814,7 @@ export const basicComponents = [{
         urlAddress: '',
         linkTarget: '_self',
         textDefaultValue: "",
+        id: '3'
       },
     ],
     carouselAutoplay: true,
@@ -836,7 +843,7 @@ export const basicComponents = [{
   maxH: 20
 },
 {
-  icon: 'icon-ym icon-ym-generator-Panel',
+  icon: 'icon-ym icon-ym-portal-video',
   label: '视频',
   jnpfKey: 'video',
   title: '视频',
@@ -847,7 +854,7 @@ export const basicComponents = [{
     titleFontColor: '#303133',
     titleLeft: 'left',
     titleBgColor: '',
-    cardIcon: 'icon-ym icon-ym-generator-Panel',
+    cardIcon: 'icon-ym icon-ym-portal-video',
     cardIconColor: "#666",
     linkType: '',
     type: '',
@@ -858,7 +865,6 @@ export const basicComponents = [{
     appType: '',
     appModuleId: '',
     appUrlAddress: '',
-    appLinkTarget: '_self',
   },
   dataType: 'static',
   propsApi: '',
@@ -881,7 +887,7 @@ export const basicComponents = [{
   maxH: 20
 },
 {
-  icon: 'icon-ym icon-ym-generator-Panel',
+  icon: 'icon-ym icon-ym-portal-schedule',
   label: '日程',
   jnpfKey: 'schedule',
   title: "日程",
@@ -892,7 +898,7 @@ export const basicComponents = [{
     titleFontColor: '#303133',
     titleLeft: 'left',
     titleBgColor: '',
-    cardIcon: 'icon-ym icon-ym-generator-Panel',
+    cardIcon: 'icon-ym icon-ym-portal-schedule',
     cardIconColor: "#666",
     linkType: '',
     type: '',
@@ -903,7 +909,6 @@ export const basicComponents = [{
     appType: '',
     appModuleId: '',
     appUrlAddress: '',
-    appLinkTarget: '_self',
   },
   refresh: {
     autoRefresh: false,
@@ -920,7 +925,7 @@ export const basicComponents = [{
   firstDay: 0
 },
 {
-  icon: 'icon-ym icon-ym-generator-Panel',
+  icon: 'icon-ym icon-ym-portal-iframe',
   label: 'iframe',
   jnpfKey: 'iframe',
   title: 'iframe',
@@ -930,7 +935,7 @@ export const basicComponents = [{
     titleFontColor: '#303133',
     titleLeft: 'left',
     titleBgColor: '',
-    cardIcon: 'icon-ym icon-ym-generator-Panel',
+    cardIcon: 'icon-ym icon-ym-portal-iframe',
     cardIconColor: "#666",
     linkType: '',
     type: '',
@@ -941,7 +946,6 @@ export const basicComponents = [{
     appType: '',
     appModuleId: '',
     appUrlAddress: '',
-    appLinkTarget: '_self',
   },
   option: {
     defaultValue: "https://www.jnpfsoft.com/",
@@ -978,7 +982,6 @@ export const chartComponents = [{
     appType: '',
     appModuleId: '',
     appUrlAddress: '',
-    appLinkTarget: '_self',
   },
   dataType: 'static',
   propsApi: '',
@@ -1091,7 +1094,6 @@ export const chartComponents = [{
     appType: '',
     appModuleId: '',
     appUrlAddress: '',
-    appLinkTarget: '_self',
   },
   dataType: 'static',
   propsApi: '',
@@ -1180,7 +1182,6 @@ export const chartComponents = [{
     appType: '',
     appModuleId: '',
     appUrlAddress: '',
-    appLinkTarget: '_self',
   },
   dataType: 'static',
   propsApi: '',
@@ -1291,7 +1292,6 @@ export const chartComponents = [{
     appType: '',
     appModuleId: '',
     appUrlAddress: '',
-    appLinkTarget: '_self',
   },
   dataType: 'static',
   propsApi: '',
@@ -1380,7 +1380,6 @@ export const chartComponents = [{
     appType: '',
     appModuleId: '',
     appUrlAddress: '',
-    appLinkTarget: '_self',
   },
   dataType: 'static',
   propsApi: '',
@@ -1389,7 +1388,7 @@ export const chartComponents = [{
     defaultValue: [],
     mapType: ['100000'],
     mspScale: 1,
-    bgColor: '#fff',
+    bgColor: '',
     geoAreaColor: '#eee',  //区域颜色
     geoBorderColor: "#666",  //描边线颜色
     geoBorderWidth: 1,  //描边线 0 不显示
@@ -1401,7 +1400,7 @@ export const chartComponents = [{
     geoShadowColor: '#000',  //阴影颜色
     geoRoam: true,   //缩放
     geoAspectScale: 0.75,  //地图长宽比
-    drillDown: false,//是否下钻
+    drillDown: true,//是否下钻
     drillDownFontSize: 14,
     drillDownFontWeight: false,
     drillDownColor: "#303133",
@@ -1432,7 +1431,7 @@ export const chartComponents = [{
     seriesBlurSize: 20,   //热力图点的模糊大小
     seriesMaxOpacity: 1,    //热力图最大透明度
     showNumber: undefined,  //数据显示数量
-    autoCarousel: false,   //自动轮播
+    autoCarousel: true,   //自动轮播
     autoCarouselTime: 3000,  //自动轮播时间
     visualMapType: 'continuous',   //continuous:连续型视觉  piecewise:分段型视觉
     visualMapMin: 0,    //最小值
@@ -1462,7 +1461,7 @@ export const chartComponents = [{
   maxH: 20
 },
 {
-  icon: 'icon-ym icon-ym-generator-radar',
+  icon: 'icon-ym icon-ym-portal-rankList',
   label: '排行榜',
   jnpfKey: 'rankList',
   title: '排行榜',
@@ -1473,7 +1472,7 @@ export const chartComponents = [{
     titleFontColor: '#303133',
     titleLeft: 'left',
     titleBgColor: '',
-    cardIcon: 'icon-ym icon-ym-generator-radar',
+    cardIcon: 'icon-ym icon-ym-portal-rankList',
     cardIconColor: "#666",
     linkType: '',
     type: '',
@@ -1484,7 +1483,6 @@ export const chartComponents = [{
     appType: '',
     appModuleId: '',
     appUrlAddress: '',
-    appLinkTarget: '_self',
   },
   dataType: 'static',
   propsApi: '',
@@ -1509,7 +1507,7 @@ export const chartComponents = [{
   maxH: 20
 },
 {
-  icon: 'icon-ym icon-ym-generator-radar',
+  icon: 'icon-ym icon-ym-portal-timeAxis',
   label: '时间轴',
   jnpfKey: 'timeAxis',
   title: '时间轴',
@@ -1520,7 +1518,7 @@ export const chartComponents = [{
     titleFontColor: '#303133',
     titleLeft: 'left',
     titleBgColor: '',
-    cardIcon: 'icon-ym icon-ym-generator-radar',
+    cardIcon: 'icon-ym icon-ym-portal-timeAxis',
     cardIconColor: "#666",
     linkType: '',
     type: '',
@@ -1531,7 +1529,6 @@ export const chartComponents = [{
     appType: '',
     appModuleId: '',
     appUrlAddress: '',
-    appLinkTarget: '_self',
   },
   dataType: 'static',
   propsApi: '',
@@ -1564,7 +1561,7 @@ export const layoutList = ['card', 'tab', 'collapse']
 //是否需要数据设置控件
 export const needDataSetList = ['rankList', 'timeAxis', 'mapChart', ...chartList]
 //是否需要分格类型
-export const noStyleTypeList = ['text', 'carousel', 'iframe', 'todo', 'commonFunc', 'dataBoard', 'tableList', ...layoutList]
+export const noStyleTypeList = ['text', 'image', 'carousel', 'video', 'iframe', 'todo', 'commonFunc', 'dataBoard', 'tableList', ...layoutList]
 
 //是否需要mask层控件
 export const noNeedMaskList = ['text', 'image', 'carousel', 'video', 'iframe', 'rankList', 'timeAxis', 'schedule', 'tableList', 'mapChart', ...layoutList]

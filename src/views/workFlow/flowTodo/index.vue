@@ -219,7 +219,7 @@ export default {
     }
   },
   created() {
-    if (this.$route.query.category) this.flowCategory = this.$route.query.flowCategory
+    // if (this.$route.query.category) this.flowCategory = this.$route.query.flowCategory
     this.getDictionaryData()
     this.getFlowEngineList()
     this.initData()

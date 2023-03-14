@@ -97,6 +97,7 @@ export default {
           this.dataForm = res.data || {}
         }).catch(() => {
           this.loading = false
+          this.visible = false
         })
       })
     },

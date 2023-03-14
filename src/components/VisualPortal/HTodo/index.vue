@@ -47,9 +47,18 @@ export default {
   },
   methods: {
     initData() {
-      getFlowTodoCount().then(res => {
+      const query = {
+        flowDoneType: [],
+        toBeReviewedType: [],
+        toBeReviewedType: [],
+      }
+      this.list.map(ele => {
+        if (ele.id == 'flowDone') query.flowDoneType = ele.category
+        if (ele.id == 'toBeReviewed') query.toBeReviewedType = ele.category
+        if (ele.id == 'flowCirculate') query.flowCirculateType = ele.category
+      })
+      getFlowTodoCount(query).then(res => {
         this.list.forEach((ele) => {
-          if (ele.id == 'entrust') ele.num = res.data.entrust || 0
           if (ele.id == 'flowDone') ele.num = res.data.flowDone || 0
           if (ele.id == 'toBeReviewed') ele.num = res.data.toBeReviewed || 0
           if (ele.id == 'flowCirculate') ele.num = res.data.flowCirculate || 0

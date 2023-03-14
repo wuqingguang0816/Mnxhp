@@ -31,7 +31,6 @@ import { getDataInterfaceRes } from '@/api/systemData/dataInterface'
 import resize from '@/components/Charts/mixins/resize'
 import { mapChartData } from '@/components/VisualPortal/PortalDesign/components/data'
 import { debounce } from 'throttle-debounce'
-import { update } from '@/api/systemData/interfaceOauth'
 export default {
   mixins: [resize],
   components: { CardHeader },
@@ -248,7 +247,7 @@ export default {
         min: option.visualMapMin,
         max: option.visualMapMax,
         type: option.visualMapType,
-        text: ['High', 'Low'],
+        showLabel: true,
         realtime: false,
         calculable: true,
         inRange: {
@@ -490,6 +489,9 @@ export default {
         name: name,
         value: value,
         geoJson: geoJson
+      })
+      this.hashMap.forEach((value, key, mapObj) => {
+        if (key > this.zoom) this.hashMap.delete(key)
       })
       this.hashMap.delete(this.zoom + 1)
       this.hashMap = new Map(this.hashMap)

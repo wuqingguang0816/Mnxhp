@@ -16,7 +16,7 @@
           </div>
         </div>
       </div>
-      <el-scrollbar class="layout-area">
+      <el-scrollbar class="layout-area" :class="{'ml-10':showType=='pc'}">
         <div v-if="showType=='pc'">
           <grid-layout :layout.sync="layout" :row-height="40" v-if="layout.length">
             <grid-item v-for="item in layout" :x="item.x" :y="item.y" :w="item.w" :h="item.h"
@@ -101,7 +101,6 @@ const defaultConf = {
     autoRefreshTime: '5',
   }
 }
-
 export default {
   name: 'JNPF-PortalDesigner',
   props: ['conf', 'showType'],
@@ -130,19 +129,19 @@ export default {
       previewVisible: false,
       noNeedMaskList,
       config: {},
+      copyDrawingList: ''
     }
   },
   mounted() {
     if (typeof this.conf === 'object' && this.conf !== null) {
       this.config = { ...defaultConf, ...this.conf }
-      console.log(this.config)
     } else {
       this.config = deepClone(defaultConf)
       this.config.layoutId = 100
     }
     this.layout = this.config.layout || []
     this.refresh = this.config.refresh || {}
-    this.addRecord(this.layout)
+    this.addLocalRecord(this.layout)
     this.setActiveData()
     this.$eventBus.$on('addComponent', (val, currentVal, index) => {
       this.addComponent(val, '', currentVal, index)
@@ -150,7 +149,6 @@ export default {
     this.$eventBus.$on('handlerActive', val => {
       this.handleClick(val)
     })
-
   },
   beforeDestroy() {
     if (this.activeData && this.activeData.i) this.$eventBus.$off('eChart' + this.activeData.i)
@@ -159,10 +157,31 @@ export default {
   },
   methods: {
     handleData(data) {
-      this.layout = []
-      this.$nextTick(() => {
-        this.layout = data
-      })
+      this.layout = JSON.parse(JSON.stringify(data));
+      this.copyDrawingList = JSON.stringify(this.layout);
+      let boo = false;
+      const loop = list => {
+        for (let i = 0; i < list.length; i++) {
+          const e = list[i];
+          if (e.i === this.activeId) {
+            this.activeData = e;
+            this.activeId = e.i
+            boo = true;
+          }
+          if (e.children && Array.isArray(e.children)) loop(e.children);
+        }
+      };
+      loop(this.layout);
+      if (!boo) {
+        this.activeData = {};
+        this.activeId = null;
+      }
+    },
+    addLocalRecord(val) {
+      if (JSON.stringify(val) != this.copyDrawingList) {
+        this.copyDrawingList = JSON.stringify(val);
+        this.addRecord(val);
+      }
     },
     setActiveData(i = 0) {
       this.activeId = null
@@ -197,7 +216,7 @@ export default {
       this.activeId = this.config.layoutId
       this.activeData = row
       this.config.layoutId++
-      this.addRecord(this.layout)
+      this.addLocalRecord(this.layout)
     },
     getDefaultValue(row) {
       const jnpfKey = row.jnpfKey
@@ -215,7 +234,7 @@ export default {
       this.layout = this.layout.filter(item => item.i !== i);
       this.activeId = null
       this.activeData = {}
-      this.addRecord(this.layout)
+      this.addLocalRecord(this.layout)
       this.$nextTick(() => {
         const len = this.layout.length
         if (len) this.setActiveData(len - 1)
@@ -227,7 +246,7 @@ export default {
         this.config.layoutId = 100
         this.activeId = null
         this.activeData = {}
-        this.addRecord(this.layout)
+        this.addLocalRecord(this.layout)
       }).catch(() => { })
     },
     preview() {
@@ -409,7 +428,6 @@ $lighterBlue: #409eff;
 
       >>> .el-scrollbar__wrap {
         margin-bottom: 0 !important;
-        margin-left: 10px !important;
         overflow-x: auto;
       }
       .item-box {
@@ -500,6 +518,11 @@ $lighterBlue: #409eff;
   >>> .components-item {
     line-height: 35px;
     padding: 0 25px 0 20px;
+  }
+}
+.ml-10 {
+  >>> .el-scrollbar__wrap {
+    margin-left: 10px !important;
   }
 }
 </style>

@@ -1,6 +1,6 @@
 <template>
   <el-collapse-item :title="getTitle()" name="1">
-    <jnpf-form-tip-item :label="getTypeLabel()" :tip-label="getTipLabel()"
+    <jnpf-form-tip-item label="风格类型" :tip-label="getTipLabel()"
       v-if="!noStyleTypeList.includes(activeData.jnpfKey)">
       <el-select v-model="activeData.option.styleType" placeholder="请选择风格类型"
         @change="styleTypeChange">
@@ -13,7 +13,7 @@
         <el-switch v-model="activeData.option.areaStyle" />
       </el-form-item>
       <el-form-item label="线条宽度">
-        <el-slider v-model="activeData.option.seriesLineStyleWidth" :max="20" />
+        <el-slider v-model="activeData.option.seriesLineStyleWidth" :min="1" :max="20" />
       </el-form-item>
       <el-form-item label="点的大小" v-show="showType == 'pc'">
         <el-slider v-model="activeData.option.seriesSymbolRotate" :max="20" />
@@ -46,8 +46,7 @@
       </el-form-item>
     </template>
     <template v-if="activeData.jnpfKey == 'mapChart'">
-      <mapSet :activeData="activeData" :cascaderOptions="cascaderOptions" :showType="showType">
-      </mapSet>
+      <MapSet :activeData="activeData" :cascaderOptions="cascaderOptions" :showType="showType" />
     </template>
     <template v-if="activeData.jnpfKey == 'rankList'">
       <el-divider>列表字段</el-divider>
@@ -74,12 +73,12 @@
       </div>
     </template>
     <template v-if="activeData.jnpfKey == 'timeAxis'">
-      <el-form-item label="标签布局">
+      <jnpf-form-tip-item label="标签布局" tip-label="APP不支持所有交错类型，默认显示轴右侧">
         <el-select v-model="activeData.option.layout" placeholder="请选择风格类型">
           <el-option v-for="(item, index) in layoutStyleList" :key="index" :label="item.label"
             :value="item.value" />
         </el-select>
-      </el-form-item>
+      </jnpf-form-tip-item>
       <el-form-item label="排序">
         <el-radio-group v-model="activeData.option.sortable" size="small">
           <el-radio-button :label="item.value" v-for="(item,index) in sortList" :key="index">
@@ -149,9 +148,8 @@
       <el-form-item label="文本滚动" v-if="activeData.option.styleType!='2'">
         <el-switch v-model="activeData.option.textAutoplay" />
       </el-form-item>
-      <template
-        v-if="activeData.option.textAutoplay&&activeData.option.styleType!='2'&&showType=='pc'">
-        <el-form-item label="滚动方向">
+      <template v-if="activeData.option.textAutoplay&&activeData.option.styleType!='2'">
+        <el-form-item label="滚动方向" v-if="showType=='pc'">
           <el-radio-group v-model="activeData.option.textAutoplayMode" size="small"
             @change="renderKeyChange">
             <el-radio-button label="left">横向</el-radio-button>
@@ -170,6 +168,15 @@
         :showType="showType" />
     </template>
     <template v-if="activeData.jnpfKey == 'image'">
+      <el-form-item label="图片来源">
+        <el-radio-group v-model="activeData.option.styleType" size="small"
+          @change="styleTypeChange">
+          <el-radio-button :label="item.value" v-for="(item,index) in styleTypeOptions"
+            :key="index">
+            {{item.label}}
+          </el-radio-button>
+        </el-radio-group>
+      </el-form-item>
       <jnpf-form-tip-item label="上传图片" v-if="activeData.option.styleType==1">
         <single-img v-model="activeData.option.defaultValue" />
       </jnpf-form-tip-item>
@@ -233,7 +240,7 @@
       <el-form-item label="循环显示" v-show="showType=='pc'">
         <el-switch v-model="activeData.option.carouselLoop" />
       </el-form-item>
-      <el-form-item label="3D效果">
+      <el-form-item label="3D效果" v-show="showType!='pc'">
         <el-switch v-model="activeData.option.carouselType" />
       </el-form-item>
       <el-form-item label="选项">
@@ -251,6 +258,15 @@
       <textSet :activeData="activeData" />
     </template>
     <template v-if="activeData.jnpfKey == 'video'">
+      <el-form-item label="视频来源">
+        <el-radio-group v-model="activeData.option.styleType" size="small"
+          @change="styleTypeChange">
+          <el-radio-button :label="item.value" v-for="(item,index) in styleTypeOptions"
+            :key="index">
+            {{item.label}}
+          </el-radio-button>
+        </el-radio-group>
+      </el-form-item>
       <el-form-item label="上传视频" v-if="activeData.option.styleType=='1'">
         <JNPF-UploadFz v-model="fileList" :limit="1" buttonText="上传视频" accept="video/*"
           fileSize="100" @change="UploadFzChange" />
@@ -282,9 +298,9 @@
       </el-form-item>
     </template>
     <template v-if="activeData.jnpfKey == 'iframe'">
-      <el-form-item label="链接地址">
+      <jnpf-form-tip-item label="链接地址" tip-label="地址以http://或https://为开头">
         <el-input v-model="activeData.option.defaultValue" placeholder="请输入链接地址" />
-      </el-form-item>
+      </jnpf-form-tip-item>
     </template>
     <template v-if="activeData.jnpfKey == 'todo'">
       <template v-if="showType=='app'">
@@ -372,10 +388,12 @@
       <CommonFunData ref="commonFunData" :menuList="menuList" :appMenuList="appMenuList"
         :showType="showType" v-if="commonFunDataVisible" @refresh="refresh" />
       <el-form-item label="图标位置" v-if="showType=='pc'">
-        <el-select v-model="activeData.option.styleType" placeholder="请选择风格类型">
-          <el-option v-for="(item, index) in commonFuncStyleList" :key="index" :label="item.label"
-            :value="item.value" />
-        </el-select>
+        <el-radio-group v-model="activeData.option.styleType" size="small">
+          <el-radio-button :label="item.value" v-for="(item,index) in commonFuncStyleList"
+            :key="index">
+            {{item.label}}
+          </el-radio-button>
+        </el-radio-group>
       </el-form-item>
       <el-form-item label="名称大小">
         <el-input-number v-model="activeData.option.labelFontSize" controls-position="right"
@@ -418,7 +436,7 @@
       <el-form-item label="选项">
         <el-button @click="showData('dataBoardData','dataBoardDataVisible')">设置</el-button>
       </el-form-item>
-      <refresh :refresh="activeData.refresh" />
+      <Refresh :refresh="activeData.refresh" />
       <DataBoardData ref="dataBoardData" :menuList="menuList" :appMenuList="appMenuList"
         :showType="showType" v-if="dataBoardDataVisible" @refresh="refresh" />
       <el-form-item label="名称大小">
@@ -495,11 +513,11 @@ import DataBoardData from '../common/DataBoardData'
 import CarouselData from '../common/CarouselData'
 import TableList from '../common/Table'
 import textSet from '../common/Text'
-import mapSet from '../common/mapSet'
+import MapSet from '../common/MapSet'
 import Link from '../common/Link'
 import { getFeatureSelector } from '@/api/onlineDev/visualDev'
 import { getAtlas } from '@/api/onlineDev/portal'
-import refresh from '../common/refresh'
+import Refresh from '../common/Refresh'
 import singleImg from '@/components/Upload/SingleImg'
 export default {
   props: ['activeData', 'menuList', 'appMenuList', 'showType'],
@@ -512,10 +530,10 @@ export default {
     CarouselData,
     InterfaceDialog,
     textSet,
-    mapSet,
+    MapSet,
     Link,
     TableList,
-    refresh,
+    Refresh,
     singleImg
   },
   data() {
@@ -615,18 +633,11 @@ export default {
       if (jnpfKey == 'dataBoard') return '数据面板设置'
       if (jnpfKey == 'tableList') return '表格列表设置'
     },
-    getTypeLabel() {
-      const jnpfKey = this.activeData.jnpfKey
-      if (jnpfKey == 'image') return '图片来源'
-      if (jnpfKey == 'video') return '视频来源'
-      return '风格类型'
-    },
     getTipLabel() {
       const jnpfKey = this.activeData.jnpfKey
       if (jnpfKey == 'barChart') return 'APP不支持背景类型，默认显示基础类型'
       if (jnpfKey == 'lineChart') return 'APP不支持堆叠类型，默认显示基础类型'
       if (jnpfKey == 'mapChart') return 'APP不支持柱形和柱形排名类型，默认显示散点类型'
-      if (jnpfKey == 'timeAxis') return 'APP不支持所有交错类型，默认显示轴右侧'
       return ''
     },
     addSelectItem() {
