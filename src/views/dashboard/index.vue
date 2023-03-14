@@ -49,7 +49,7 @@ export default {
       refreshData: {},
       timerList: [],
       formData: {},
-      enabledLock: true
+      enabledLock: 1
     }
   },
   computed: {
@@ -81,7 +81,7 @@ export default {
         this.type = res.data.type || 0
         this.linkType = res.data.linkType || 0
         this.url = res.data.customUrl
-        this.enabledLock = res.data.enabledLock || false
+        this.enabledLock = res.data.enabledLock || 0
         if (res.data) {
           if (res.data.type === 1) {
             if (res.data.customUrl && res.data.customUrl !== 1) {

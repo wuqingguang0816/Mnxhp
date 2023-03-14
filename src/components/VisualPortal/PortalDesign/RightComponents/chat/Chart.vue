@@ -149,9 +149,8 @@
       <el-form-item label="文本滚动" v-if="activeData.option.styleType!='2'">
         <el-switch v-model="activeData.option.textAutoplay" />
       </el-form-item>
-      <template
-        v-if="activeData.option.textAutoplay&&activeData.option.styleType!='2'&&showType=='pc'">
-        <el-form-item label="滚动方向">
+      <template v-if="activeData.option.textAutoplay&&activeData.option.styleType!='2'">
+        <el-form-item label="滚动方向" v-if="showType=='pc'">
           <el-radio-group v-model="activeData.option.textAutoplayMode" size="small"
             @change="renderKeyChange">
             <el-radio-button label="left">横向</el-radio-button>
@@ -233,7 +232,7 @@
       <el-form-item label="循环显示" v-show="showType=='pc'">
         <el-switch v-model="activeData.option.carouselLoop" />
       </el-form-item>
-      <el-form-item label="3D效果">
+      <el-form-item label="3D效果" v-show="showType!='pc'">
         <el-switch v-model="activeData.option.carouselType" />
       </el-form-item>
       <el-form-item label="选项">
@@ -282,9 +281,9 @@
       </el-form-item>
     </template>
     <template v-if="activeData.jnpfKey == 'iframe'">
-      <el-form-item label="链接地址">
+      <jnpf-form-tip-item label="链接地址" tip-label="地址以http://或https://为开头">
         <el-input v-model="activeData.option.defaultValue" placeholder="请输入链接地址" />
-      </el-form-item>
+      </jnpf-form-tip-item>
     </template>
     <template v-if="activeData.jnpfKey == 'todo'">
       <template v-if="showType=='app'">
