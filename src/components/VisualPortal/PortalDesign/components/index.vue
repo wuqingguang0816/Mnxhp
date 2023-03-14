@@ -16,7 +16,7 @@
           </div>
         </div>
       </div>
-      <el-scrollbar class="layout-area">
+      <el-scrollbar class="layout-area" :class="{'ml-10':showType=='pc'}">
         <div v-if="showType=='pc'">
           <grid-layout :layout.sync="layout" :row-height="40" v-if="layout.length">
             <grid-item v-for="item in layout" :x="item.x" :y="item.y" :w="item.w" :h="item.h"
@@ -407,7 +407,6 @@ $lighterBlue: #409eff;
 
       >>> .el-scrollbar__wrap {
         margin-bottom: 0 !important;
-        margin-left: 10px !important;
         overflow-x: auto;
       }
       .item-box {
@@ -498,6 +497,11 @@ $lighterBlue: #409eff;
   >>> .components-item {
     line-height: 35px;
     padding: 0 25px 0 20px;
+  }
+}
+.ml-10 {
+  >>> .el-scrollbar__wrap {
+    margin-left: 10px !important;
   }
 }
 </style>

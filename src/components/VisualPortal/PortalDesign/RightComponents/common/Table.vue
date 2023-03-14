@@ -133,7 +133,7 @@
 </template>
 <script>
 import JSONArea from '../../components/JSONArea'
-import ColumnData from '../../components/columnData'
+import ColumnData from './columnData'
 import { alignList } from '../../components/config'
 import InterfaceDialog from '@/components/Process/PropPanel/InterfaceDialog'
 import refresh from '../common/refresh'

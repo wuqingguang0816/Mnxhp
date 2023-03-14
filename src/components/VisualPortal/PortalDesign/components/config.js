@@ -11,6 +11,7 @@ const dataBoardDefault = [
     linkType: '',
     urlAddress: '',
     linkTarget: '_self',
+    id: '1',
   },
   {
     fullName: "新增商机",
@@ -24,6 +25,7 @@ const dataBoardDefault = [
     linkType: '',
     urlAddress: '',
     linkTarget: '_self',
+    id: '2',
   },
   {
     fullName: "合同金额",
@@ -37,6 +39,7 @@ const dataBoardDefault = [
     linkType: '',
     urlAddress: '',
     linkTarget: '_self',
+    id: '3',
   },
   {
     fullName: "回款金额",
@@ -50,6 +53,7 @@ const dataBoardDefault = [
     linkType: '',
     urlAddress: '',
     linkTarget: '_self',
+    id: '4',
   }
 ]
 export const layoutComponents = [
@@ -356,7 +360,8 @@ export const basicComponents = [{
         urlAddress: "onlineDev/webDesign",
         icon: "icon-ym icon-ym-webDesign",
         iconBgColor: "#FF3B3B",
-        type: 2
+        type: 2,
+        id: "1",
       },
       {
         fullName: "流程设计",
@@ -366,7 +371,8 @@ export const basicComponents = [{
         urlAddress: "workFlow/flowEngine",
         icon: "icon-ym icon-ym-flowDesign",
         iconBgColor: "#7B1AE1",
-        type: 2
+        type: 2,
+        id: "2",
       },
       {
         fullName: "权限管理",
@@ -376,7 +382,8 @@ export const basicComponents = [{
         urlAddress: "permission/authorize",
         icon: "icon-ym icon-ym-authorize",
         iconBgColor: "#1890FF",
-        type: 2
+        type: 2,
+        id: "3",
       },
       {
         fullName: "报表设计",
@@ -386,7 +393,8 @@ export const basicComponents = [{
         urlAddress: "onlineDev/dataReport",
         icon: "icon-ym icon-ym-reportDesign",
         iconBgColor: "#F68900",
-        type: 2
+        type: 2,
+        id: "4",
       },
       {
         fullName: "门户设计",
@@ -396,7 +404,8 @@ export const basicComponents = [{
         urlAddress: "onlineDev/visualPortal",
         icon: "icon-ym icon-ym-portalDesign",
         iconBgColor: "#33B932",
-        type: 2
+        type: 2,
+        id: "5",
       }
     ],
     appDefaultValue: [
@@ -408,7 +417,8 @@ export const basicComponents = [{
         linkTarget: '_blank',
         icon: "icon-ym icon-ym-webDesign",
         iconBgColor: "#33B932",
-        type: 2
+        type: 2,
+        id: "1",
       },
     ],
     rowNumber: 5,
@@ -547,7 +557,8 @@ export const basicComponents = [{
       sortable: false,
       fixed: "none",
       align: 'left',
-      width: 0
+      width: 0,
+      id: '1'
     },
     {
       fullName: '姓名',
@@ -555,7 +566,8 @@ export const basicComponents = [{
       sortable: false,
       fixed: "none",
       align: 'left',
-      width: 0
+      width: 0,
+      id: '2'
     },
     {
       fullName: '销售额',
@@ -563,7 +575,8 @@ export const basicComponents = [{
       sortable: false,
       fixed: "none",
       align: 'left',
-      width: 0
+      width: 0,
+      id: '3'
     },
     {
       fullName: '完成情况',
@@ -571,26 +584,27 @@ export const basicComponents = [{
       sortable: false,
       fixed: "none",
       align: 'left',
-      width: 0
+      width: 0,
+      id: '4'
     }],
     rowData: [{
       fullName: '标题',
       filedName: 'comInputField102',
       fontSize: 14,
       fontWeight: false,
-      fontColor: '#303133'
+      fontColor: '#303133',
     }, {
       fullName: '描述',
       filedName: 'comInputField103',
       fontSize: 12,
       fontWeight: false,
-      fontColor: '#666666'
+      fontColor: '#666666',
     }, {
       fullName: '时间',
       filedName: 'comInputField105',
       fontSize: 12,
       fontWeight: false,
-      fontColor: '#666666'
+      fontColor: '#666666',
     }],
   },
   refresh: {
@@ -756,6 +770,7 @@ export const basicComponents = [{
         urlAddress: '',
         linkTarget: '_self',
         textDefaultValue: "",
+        id: '1'
       },
       {
         imageUrl: "https://app.cdn.jnpfsoft.com/image/3.2/banner2.png",
@@ -766,6 +781,7 @@ export const basicComponents = [{
         urlAddress: '',
         linkTarget: '_self',
         textDefaultValue: "",
+        id: '2'
       },
       {
         imageUrl: "https://app.cdn.jnpfsoft.com/image/3.2/banner4.png",
@@ -776,6 +792,7 @@ export const basicComponents = [{
         urlAddress: '',
         linkTarget: '_self',
         textDefaultValue: "",
+        id: '3'
       },
     ],
     appDefaultValue: [
@@ -788,6 +805,7 @@ export const basicComponents = [{
         urlAddress: '',
         linkTarget: '_self',
         textDefaultValue: "",
+        id: '1'
       },
       {
         imageUrl: "https://app.cdn.jnpfsoft.com/image/3.2/banner2.png",
@@ -798,6 +816,7 @@ export const basicComponents = [{
         urlAddress: '',
         linkTarget: '_self',
         textDefaultValue: "",
+        id: '2'
       },
       {
         imageUrl: "https://app.cdn.jnpfsoft.com/image/3.2/banner4.png",
@@ -808,6 +827,7 @@ export const basicComponents = [{
         urlAddress: '',
         linkTarget: '_self',
         textDefaultValue: "",
+        id: '3'
       },
     ],
     carouselAutoplay: true,

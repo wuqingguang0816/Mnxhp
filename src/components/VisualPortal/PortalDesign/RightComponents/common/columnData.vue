@@ -1,7 +1,7 @@
 <template>
   <el-dialog title="选项设置" :close-on-click-modal="false" :visible.sync="visible"
     class="JNPF-dialog JNPF-dialog_center dialog_height" lock-scroll width="1000px" append-to-body>
-    <JNPF-table :data="list" ref="dragTable" :hasNO="false" v-if="type==1">
+    <JNPF-table :data="list" ref="dragTable" :hasNO="false" row-key="id" v-if="type==1">
       <el-table-column align="center" label="拖动" width="50">
         <template>
           <i class="drag-handler icon-ym icon-ym-darg" style="cursor: move;font-size:20px"
@@ -159,9 +159,9 @@ export default {
     addHandle() {
       let item = {}
       if (this.showType === 'app') {
-        item = { fullName: "", filedName: "" }
+        item = { fullName: "", filedName: "", id: this.jnpf.idGenerator() }
       } else {
-        item = { fullName: "", filedName: "", sortable: false, fixed: "none", align: 'left', width: 0 }
+        item = { fullName: "", filedName: "", sortable: false, fixed: "none", align: 'left', width: 0, id: this.jnpf.idGenerator() }
       }
       this.list.push(item)
     },
