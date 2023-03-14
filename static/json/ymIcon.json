@@ -6,6 +6,34 @@
   "description": "",
   "glyphs": [
     {
+      "icon_id": "34573599",
+      "name": "generator-autoComplete",
+      "font_class": "generator-autoComplete",
+      "unicode": "e8eb",
+      "unicode_decimal": 59627
+    },
+    {
+      "icon_id": "34573600",
+      "name": "contacts",
+      "font_class": "contacts",
+      "unicode": "e8ec",
+      "unicode_decimal": 59628
+    },
+    {
+      "icon_id": "34573601",
+      "name": "portal-text",
+      "font_class": "portal-text",
+      "unicode": "e8ed",
+      "unicode_decimal": 59629
+    },
+    {
+      "icon_id": "34573602",
+      "name": "portal-mapChart",
+      "font_class": "portal-mapChart",
+      "unicode": "e8ee",
+      "unicode_decimal": 59630
+    },
+    {
       "icon_id": "34465802",
       "name": "generator-tableGrid",
       "font_class": "generator-tableGrid",

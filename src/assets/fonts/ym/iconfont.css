@@ -1,9 +1,9 @@
 @font-face {
   font-family: "icon-ym";
   /* Project id 3271933 */
-  src: url('iconfont.woff2?t=1678187470423') format('woff2'),
-    url('iconfont.woff?t=1678187470423') format('woff'),
-    url('iconfont.ttf?t=1678187470423') format('truetype');
+  src: url('iconfont.woff2?t=1678786283641') format('woff2'),
+    url('iconfont.woff?t=1678786283641') format('woff'),
+    url('iconfont.ttf?t=1678786283641') format('truetype');
 }
 
 .icon-ym {
@@ -12,6 +12,22 @@
   font-style: normal;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-ym-generator-autoComplete:before {
+  content: "\e8eb";
+}
+
+.icon-ym-contacts:before {
+  content: "\e8ec";
+}
+
+.icon-ym-portal-text:before {
+  content: "\e8ed";
+}
+
+.icon-ym-portal-mapChart:before {
+  content: "\e8ee";
 }
 
 .icon-ym-generator-tableGrid:before {
