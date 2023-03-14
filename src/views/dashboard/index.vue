@@ -60,11 +60,7 @@ export default {
     this.getData()
   },
   destroyed() {
-    if (this.timerList.length) {
-      this.timerList.forEach((ele) => {
-        if (ele) clearInterval(ele)
-      })
-    }
+    this.clearAutoRefresh()
   },
   methods: {
     getData() {
@@ -108,6 +104,7 @@ export default {
     refresh(id) {
       if (!id) return
       this.portalId = id
+      this.clearAutoRefresh()
       this.getData()
     },
     initAutoRefresh() {
@@ -144,6 +141,13 @@ export default {
           } else {
             item.option.defaultValue = []
           }
+        })
+      }
+    },
+    clearAutoRefresh() {
+      if (this.timerList.length) {
+        this.timerList.forEach((ele) => {
+          if (ele) clearInterval(ele)
         })
       }
     },
