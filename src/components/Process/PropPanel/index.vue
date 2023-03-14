@@ -1532,7 +1532,7 @@
                   <p style="width:112px"></p>
                   <JNPF-TreeSelect :options="printTplList" v-model="approverForm.printId"
                     placeholder="请选择打印模板" lastLevel clearable multiple>
-                    <div  class="printWrap" slot="header">
+                    <div class="printWrap" slot="header">
                       <el-link type="primary" :underline="false" @click="openPrint">添加打印模板
                       </el-link>
                       <el-link type="info" style="position: absolute;right:8px;top: 18px;"
@@ -2871,7 +2871,6 @@ export default {
     refreshPrintOptions() {
       getPrintDevSelector(1).then(res => {
         let data = res.data.list
-
         let list = data.filter(o => o.children && o.children.length)
         this.printTplList = list.map(o => ({
           ...o,
@@ -2919,11 +2918,8 @@ export default {
     },
     getFormOperates() {
       let res = []
-      console.log(11111, this.approverForm.formOperates)
-      console.log(11111, this.startForm.formOperates)
       this.isApproverNode() && (res = this.approverForm.formOperates)
       this.isStartNode() && (res = this.startForm.formOperates)
-      console.log(11111, res)
       return res
     },
     resetOrgColl() {
@@ -2962,7 +2958,6 @@ export default {
       return tag.includes(item.tag) && this.showingPCons.includes(item.formId);
     },
     initFormOperates(target, isUpdate, isSameForm) {
-      console.log(target, isUpdate, isSameForm)
       const formOperates = target.properties && target.properties.formOperates || []
       let res = []
       const getWriteById = id => {
@@ -2980,7 +2975,6 @@ export default {
       if (!formOperates.length || isUpdate) {
         for (let i = 0; i < this.formFieldList.length; i++) {
           const data = this.formFieldList[i];
-
           res.push({
             id: data.__vModel__,
             name: data.__config__.label,
@@ -2993,7 +2987,6 @@ export default {
           })
         }
       } else {
-        console.log(88888, formOperates)
         res = formOperates
       }
       return res
@@ -3898,10 +3891,9 @@ export default {
   line-height: 28px;
 }
 
-
 .printWrap {
-  padding:10px 0;
-  text-align:center;
+  padding: 10px 0;
+  text-align: center;
   >>> .el-divider--horizontal {
     margin-top: 10px;
   }
