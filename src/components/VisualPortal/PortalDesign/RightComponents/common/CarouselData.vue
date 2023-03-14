@@ -28,6 +28,11 @@
                 popupTitle="数据接口" @change="propsApiChange(arguments,scope.$index)" />
             </template>
           </el-table-column>
+          <el-table-column prop="field" label="文本内容" width="180px">
+            <template slot-scope="scope">
+              <el-input v-model="scope.row.textDefaultValue" placeholder="请输入名称" maxlength="50" />
+            </template>
+          </el-table-column>
           <el-table-column prop="dataLength" label="链接类型" width="160px">
             <template slot-scope="scope">
               <el-select v-model="scope.row.linkType" placeholder="请选择链接类型" clearable>
@@ -51,11 +56,6 @@
                   <el-option label="_blank" value="_blank" />
                 </el-select>
               </el-input>
-            </template>
-          </el-table-column>
-          <el-table-column prop="field" label="文本内容" width="180px">
-            <template slot-scope="scope">
-              <el-input v-model="scope.row.textDefaultValue" placeholder="请输入名称" maxlength="50" />
             </template>
           </el-table-column>
           <el-table-column label="操作" width="50" fixed="right">
