@@ -135,7 +135,6 @@ export default {
   mounted() {
     if (typeof this.conf === 'object' && this.conf !== null) {
       this.config = { ...defaultConf, ...this.conf }
-      console.log(this.config)
     } else {
       this.config = deepClone(defaultConf)
       this.config.layoutId = 100
@@ -150,7 +149,6 @@ export default {
     this.$eventBus.$on('handlerActive', val => {
       this.handleClick(val)
     })
-
   },
   beforeDestroy() {
     if (this.activeData && this.activeData.i) this.$eventBus.$off('eChart' + this.activeData.i)

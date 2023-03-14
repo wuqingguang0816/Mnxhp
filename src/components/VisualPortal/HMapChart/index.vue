@@ -31,7 +31,6 @@ import { getDataInterfaceRes } from '@/api/systemData/dataInterface'
 import resize from '@/components/Charts/mixins/resize'
 import { mapChartData } from '@/components/VisualPortal/PortalDesign/components/data'
 import { debounce } from 'throttle-debounce'
-import { update } from '@/api/systemData/interfaceOauth'
 export default {
   mixins: [resize],
   components: { CardHeader },
