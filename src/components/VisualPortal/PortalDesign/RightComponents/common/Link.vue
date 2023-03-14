@@ -120,23 +120,40 @@ export default {
       const isPc = this.showType == 'pc'
       this.activeData.option[isPc ? 'type' : 'appType'] = item.type
       this.activeData.option[isPc ? 'urlAddress' : 'appUrlAddress'] = item.urlAddress
-      if (item.linkTarget) this.activeData.option[isPc ? 'linkTarget' : 'appLinkTarget'] = item.linkTarget
+      if (item.linkTarget && isPc) this.activeData.option.linkTarget = item.linkTarget
       if (item.propertyJson) this.activeData.option[isPc ? 'propertyJson' : 'appPropertyJson'] = item.propertyJson
     },
     getSelectVal(data, item) {
       const isPc = this.showType == 'pc'
       this.activeData.card[isPc ? 'type' : 'appType'] = item.type
       this.activeData.card[isPc ? 'urlAddress' : 'appUrlAddress'] = item.urlAddress
-      if (item.linkTarget) this.activeData.card[isPc ? 'linkTarget' : 'appLinkTarget'] = item.linkTarget
+      if (item.linkTarget && isPc) this.activeData.card.linkTarget = item.linkTarget
       if (item.propertyJson) this.activeData.card[isPc ? 'propertyJson' : 'appPropertyJson'] = item.propertyJson
     },
     onLinkTypeChange(type, showType) {
       if (type == 1) {
-        if (showType == "app") return this.activeData.option.appUrlAddress = ''
-        this.activeData.option.urlAddress = ''
+        if (showType == "app") {
+          this.activeData.option.appType = ''
+          this.activeData.option.appUrlAddress = ''
+          this.activeData.option.appModuleId = ''
+        } else {
+          this.activeData.option.type = ''
+          this.activeData.option.moduleId = ''
+          this.activeData.option.linkTarget = '_self',
+            this.activeData.option.urlAddress = ''
+        }
       } else {
-        if (showType == "app") return this.activeData.card.appUrlAddress = ''
-        this.activeData.card.urlAddress = ''
+        if (showType == "app") {
+          this.activeData.card.appType = ''
+          this.activeData.card.appUrlAddress = ''
+          this.activeData.card.appModuleId = ''
+        } else {
+          this.activeData.card.type = ''
+          this.activeData.card.moduleId = ''
+          this.activeData.card.linkTarget = '_self'
+          this.activeData.card.urlAddress = ''
+        }
+
       }
     }
   }

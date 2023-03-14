@@ -79,7 +79,6 @@ export const layoutComponents = [
       appType: '',
       appModuleId: '',
       appUrlAddress: '',
-      appLinkTarget: '_self',
     },
     children: [],
     w: 6,
@@ -110,7 +109,6 @@ export const layoutComponents = [
       appType: '',
       appModuleId: '',
       appUrlAddress: '',
-      appLinkTarget: '_self',
     },
     children: [
       {
@@ -152,7 +150,6 @@ export const layoutComponents = [
   //     appLinkType: '',
   //     appType: '',
   //     appUrlAddress: '',
-  //     appLinkTarget: '_self',
   //   },
   //   children: [
   //     {
@@ -197,7 +194,6 @@ export const systemComponents = [{
     appType: '',
     appModuleId: '',
     appUrlAddress: '',
-    appLinkTarget: '_self',
   },
   w: 4,
   h: 7,
@@ -228,7 +224,6 @@ export const systemComponents = [{
     appType: '',
     appModuleId: '',
     appUrlAddress: '',
-    appLinkTarget: '_self',
   },
   w: 4,
   h: 7,
@@ -259,7 +254,6 @@ export const systemComponents = [{
     appType: '',
     appModuleId: '',
     appUrlAddress: '',
-    appLinkTarget: '_self',
   },
   w: 4,
   h: 7,
@@ -292,7 +286,6 @@ export const basicComponents = [{
     appType: '',
     appModuleId: '',
     appUrlAddress: '',
-    appLinkTarget: '_self',
   },
   option: {
     styleType: 1,
@@ -346,7 +339,6 @@ export const basicComponents = [{
     appType: '',
     appModuleId: '',
     appUrlAddress: '',
-    appLinkTarget: '_self',
   },
   option: {
     styleType: 1,
@@ -459,7 +451,6 @@ export const basicComponents = [{
     appType: '',
     appModuleId: '',
     appUrlAddress: '',
-    appLinkTarget: '_self',
   },
   option: {
     styleType: 1,
@@ -517,7 +508,6 @@ export const basicComponents = [{
     appType: '',
     appModuleId: '',
     appUrlAddress: '',
-    appLinkTarget: '_self',
   },
   option: {
     styleType: 1,
@@ -641,7 +631,6 @@ export const basicComponents = [{
     appType: '',
     appModuleId: '',
     appUrlAddress: '',
-    appLinkTarget: '_self',
   },
   dataType: 'static',
   propsApi: '',
@@ -698,7 +687,6 @@ export const basicComponents = [{
     appType: '',
     appModuleId: '',
     appUrlAddress: '',
-    appLinkTarget: '_self',
   },
   dataType: 'static',
   propsApi: '',
@@ -753,7 +741,6 @@ export const basicComponents = [{
     appType: '',
     appModuleId: '',
     appUrlAddress: '',
-    appLinkTarget: '_self',
     carouselType: false
   },
   dataType: 'static',
@@ -878,7 +865,6 @@ export const basicComponents = [{
     appType: '',
     appModuleId: '',
     appUrlAddress: '',
-    appLinkTarget: '_self',
   },
   dataType: 'static',
   propsApi: '',
@@ -923,7 +909,6 @@ export const basicComponents = [{
     appType: '',
     appModuleId: '',
     appUrlAddress: '',
-    appLinkTarget: '_self',
   },
   refresh: {
     autoRefresh: false,
@@ -961,7 +946,6 @@ export const basicComponents = [{
     appType: '',
     appModuleId: '',
     appUrlAddress: '',
-    appLinkTarget: '_self',
   },
   option: {
     defaultValue: "https://www.jnpfsoft.com/",
@@ -998,7 +982,6 @@ export const chartComponents = [{
     appType: '',
     appModuleId: '',
     appUrlAddress: '',
-    appLinkTarget: '_self',
   },
   dataType: 'static',
   propsApi: '',
@@ -1111,7 +1094,6 @@ export const chartComponents = [{
     appType: '',
     appModuleId: '',
     appUrlAddress: '',
-    appLinkTarget: '_self',
   },
   dataType: 'static',
   propsApi: '',
@@ -1200,7 +1182,6 @@ export const chartComponents = [{
     appType: '',
     appModuleId: '',
     appUrlAddress: '',
-    appLinkTarget: '_self',
   },
   dataType: 'static',
   propsApi: '',
@@ -1311,7 +1292,6 @@ export const chartComponents = [{
     appType: '',
     appModuleId: '',
     appUrlAddress: '',
-    appLinkTarget: '_self',
   },
   dataType: 'static',
   propsApi: '',
@@ -1400,7 +1380,6 @@ export const chartComponents = [{
     appType: '',
     appModuleId: '',
     appUrlAddress: '',
-    appLinkTarget: '_self',
   },
   dataType: 'static',
   propsApi: '',
@@ -1452,7 +1431,7 @@ export const chartComponents = [{
     seriesBlurSize: 20,   //热力图点的模糊大小
     seriesMaxOpacity: 1,    //热力图最大透明度
     showNumber: undefined,  //数据显示数量
-    autoCarousel: false,   //自动轮播
+    autoCarousel: true,   //自动轮播
     autoCarouselTime: 3000,  //自动轮播时间
     visualMapType: 'continuous',   //continuous:连续型视觉  piecewise:分段型视觉
     visualMapMin: 0,    //最小值
@@ -1504,7 +1483,6 @@ export const chartComponents = [{
     appType: '',
     appModuleId: '',
     appUrlAddress: '',
-    appLinkTarget: '_self',
   },
   dataType: 'static',
   propsApi: '',
@@ -1551,7 +1529,6 @@ export const chartComponents = [{
     appType: '',
     appModuleId: '',
     appUrlAddress: '',
-    appLinkTarget: '_self',
   },
   dataType: 'static',
   propsApi: '',

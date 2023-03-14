@@ -1,7 +1,7 @@
 <template>
   <el-collapse-item title="卡片设置" name="13">
     <el-form-item label="标题名称">
-      <el-input v-model="activeData.title" placeholder="请输入文本内容" />
+      <el-input v-model="activeData.title" placeholder="请输入标题名称" />
     </el-form-item>
     <el-form-item label="字体大小">
       <el-input-number v-model="activeData.card.titleFontSize" controls-position="right" :min="12"
