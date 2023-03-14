@@ -46,8 +46,7 @@
       </el-form-item>
     </template>
     <template v-if="activeData.jnpfKey == 'mapChart'">
-      <mapSet :activeData="activeData" :cascaderOptions="cascaderOptions" :showType="showType">
-      </mapSet>
+      <MapSet :activeData="activeData" :cascaderOptions="cascaderOptions" :showType="showType" />
     </template>
     <template v-if="activeData.jnpfKey == 'rankList'">
       <el-divider>列表字段</el-divider>
@@ -514,7 +513,7 @@ import DataBoardData from '../common/DataBoardData'
 import CarouselData from '../common/CarouselData'
 import TableList from '../common/Table'
 import textSet from '../common/Text'
-import mapSet from '../common/mapSet'
+import MapSet from '../common/MapSet'
 import Link from '../common/Link'
 import { getFeatureSelector } from '@/api/onlineDev/visualDev'
 import { getAtlas } from '@/api/onlineDev/portal'
@@ -531,7 +530,7 @@ export default {
     CarouselData,
     InterfaceDialog,
     textSet,
-    mapSet,
+    MapSet,
     Link,
     TableList,
     refresh,
