@@ -1564,7 +1564,7 @@ export const layoutList = ['card', 'tab', 'collapse']
 //是否需要数据设置控件
 export const needDataSetList = ['rankList', 'timeAxis', 'mapChart', ...chartList]
 //是否需要分格类型
-export const noStyleTypeList = ['text', 'carousel', 'iframe', 'todo', 'commonFunc', 'dataBoard', 'tableList', ...layoutList]
+export const noStyleTypeList = ['text', 'image', 'carousel', 'video', 'iframe', 'todo', 'commonFunc', 'dataBoard', 'tableList', ...layoutList]
 
 //是否需要mask层控件
 export const noNeedMaskList = ['text', 'image', 'carousel', 'video', 'iframe', 'rankList', 'timeAxis', 'schedule', 'tableList', 'mapChart', ...layoutList]

@@ -1,6 +1,6 @@
 <template>
   <el-collapse-item :title="getTitle()" name="1">
-    <jnpf-form-tip-item :label="getTypeLabel()" :tip-label="getTipLabel()"
+    <jnpf-form-tip-item label="风格类型" :tip-label="getTipLabel()"
       v-if="!noStyleTypeList.includes(activeData.jnpfKey)">
       <el-select v-model="activeData.option.styleType" placeholder="请选择风格类型"
         @change="styleTypeChange">
@@ -169,6 +169,15 @@
         :showType="showType" />
     </template>
     <template v-if="activeData.jnpfKey == 'image'">
+      <el-form-item label="图片来源">
+        <el-radio-group v-model="activeData.option.styleType" size="small"
+          @change="styleTypeChange">
+          <el-radio-button :label="item.value" v-for="(item,index) in styleTypeOptions"
+            :key="index">
+            {{item.label}}
+          </el-radio-button>
+        </el-radio-group>
+      </el-form-item>
       <jnpf-form-tip-item label="上传图片" v-if="activeData.option.styleType==1">
         <single-img v-model="activeData.option.defaultValue" />
       </jnpf-form-tip-item>
@@ -250,6 +259,15 @@
       <textSet :activeData="activeData" />
     </template>
     <template v-if="activeData.jnpfKey == 'video'">
+      <el-form-item label="视频来源">
+        <el-radio-group v-model="activeData.option.styleType" size="small"
+          @change="styleTypeChange">
+          <el-radio-button :label="item.value" v-for="(item,index) in styleTypeOptions"
+            :key="index">
+            {{item.label}}
+          </el-radio-button>
+        </el-radio-group>
+      </el-form-item>
       <el-form-item label="上传视频" v-if="activeData.option.styleType=='1'">
         <JNPF-UploadFz v-model="fileList" :limit="1" buttonText="上传视频" accept="video/*"
           fileSize="100" @change="UploadFzChange" />
@@ -371,10 +389,12 @@
       <CommonFunData ref="commonFunData" :menuList="menuList" :appMenuList="appMenuList"
         :showType="showType" v-if="commonFunDataVisible" @refresh="refresh" />
       <el-form-item label="图标位置" v-if="showType=='pc'">
-        <el-select v-model="activeData.option.styleType" placeholder="请选择风格类型">
-          <el-option v-for="(item, index) in commonFuncStyleList" :key="index" :label="item.label"
-            :value="item.value" />
-        </el-select>
+        <el-radio-group v-model="activeData.option.styleType" size="small">
+          <el-radio-button :label="item.value" v-for="(item,index) in commonFuncStyleList"
+            :key="index">
+            {{item.label}}
+          </el-radio-button>
+        </el-radio-group>
       </el-form-item>
       <el-form-item label="名称大小">
         <el-input-number v-model="activeData.option.labelFontSize" controls-position="right"
@@ -613,12 +633,6 @@ export default {
       if (jnpfKey == 'commonFunc') return '常用功能设置'
       if (jnpfKey == 'dataBoard') return '数据面板设置'
       if (jnpfKey == 'tableList') return '表格列表设置'
-    },
-    getTypeLabel() {
-      const jnpfKey = this.activeData.jnpfKey
-      if (jnpfKey == 'image') return '图片来源'
-      if (jnpfKey == 'video') return '视频来源'
-      return '风格类型'
     },
     getTipLabel() {
       const jnpfKey = this.activeData.jnpfKey
