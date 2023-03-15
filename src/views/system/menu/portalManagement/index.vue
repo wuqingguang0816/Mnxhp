@@ -49,6 +49,7 @@
                   :formatter="jnpf.tableDateFormat" />
                 <el-table-column prop="lastModifyTime" label="最后修改时间"
                   :formatter="jnpf.tableDateFormat" />
+                <el-table-column prop="sortCode" label="排序" width="70" align="center" />
                 <el-table-column prop="enabledMark" label="状态" width="70" align="center">
                   <template slot-scope="scope">
                     <el-tag :type="scope.row.enabledMark == 1 ? 'success' : 'danger'"
@@ -94,7 +95,7 @@
             <div class="dialog-main">
               <div class="item" :class="{'active':releaseQuery.pc===1}" @click="selectToggle('pc')">
                 <i class="item-icon icon-ym icon-ym-pc"></i>
-                <p class="item-title">同步Web端菜单</p>
+                <p class="item-title">同步Web端门户</p>
                 <div class="icon-checked">
                   <i class="el-icon-check"></i>
                 </div>
@@ -102,7 +103,7 @@
               <div class="item" :class="{'active':releaseQuery.app===1}"
                 @click="selectToggle('app')">
                 <i class="item-icon icon-ym icon-ym-mobile"></i>
-                <p class="item-title">同步APP端菜单</p>
+                <p class="item-title">同步APP端门户</p>
                 <div class="icon-checked">
                   <i class="el-icon-check"></i>
                 </div>

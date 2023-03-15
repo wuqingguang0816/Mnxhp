@@ -53,7 +53,7 @@ export default {
       },
       dataRule: {
         fullName: [
-          { required: true, message: '门户不能为空', trigger: 'blur' },
+          { required: true, message: '门户名称不能为空', trigger: 'blur' },
         ]
       }
     }
