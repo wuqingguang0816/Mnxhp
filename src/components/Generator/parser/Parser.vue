@@ -470,6 +470,38 @@ export default {
             }
           }
         }
+        if (config.jnpfKey === 'time') {
+          if (cur.startRelationField) {
+            let item = {
+              ...cur,
+              realVModel: cur.__config__.isSubTable ? cur.__config__.parentVModel + '-' + cur.__vModel__ : cur.__vModel__,
+              opType: 'setTime'
+            }
+            if (relations.hasOwnProperty(cur.startRelationField)) {
+              let boo = relations[cur.startRelationField].some(o => o.realVModel === cur.realVModel)
+              if (!boo) {
+                relations[cur.startRelationField].push(item)
+              }
+            } else {
+              relations[cur.startRelationField] = [item]
+            }
+          }
+          if (cur.endRelationField) {
+            let item = {
+              ...cur,
+              realVModel: cur.__config__.isSubTable ? cur.__config__.parentVModel + '-' + cur.__vModel__ : cur.__vModel__,
+              opType: 'setTime'
+            }
+            if (relations.hasOwnProperty(cur.endRelationField)) {
+              let boo = relations[cur.endRelationField].some(o => o.realVModel === cur.realVModel)
+              if (!boo) {
+                relations[cur.endRelationField].push(item)
+              }
+            } else {
+              relations[cur.endRelationField] = [item]
+            }
+          }
+        }
         if (config.children) this.buildRelations(config.children, relations)
       })
     },
@@ -524,6 +556,22 @@ export default {
                 this.comSet('startTime', e.__vModel__, startTime)
                 this.comSet('endTime', e.__vModel__, endTime)
               }
+              if (e.opType === 'setTime') {
+                let startTime = ''
+                let endTime = ''
+                if (e.__config__.startTimeType == 2) {
+                  startTime = this[this.formConf.formModel][e.startRelationField] || 0
+                } else {
+                  startTime = e.startTime
+                }
+                if (e.__config__.endTimeType == 2) {
+                  endTime = this[this.formConf.formModel][e.endRelationField] || 0
+                } else {
+                  endTime = e.endTime
+                }
+                this.comSet('startTime', e.__vModel__, startTime)
+                this.comSet('endTime', e.__vModel__, endTime)
+              }
             }
           }
         }
@@ -532,7 +580,6 @@ export default {
     handleDefaultRelation(field) {
       if (!field) return
       const currRelations = this.relations
-
       for (let key in currRelations) {
         if (key === field) {
           for (let i = 0; i < currRelations[key].length; i++) {
@@ -548,6 +595,22 @@ export default {
                 this.comSet('ableRelationIds', e.__vModel__, Array.isArray(value) ? value : [value])
               }
               if (e.opType === 'setDate') {
+                let startTime = ''
+                let endTime = ''
+                if (e.__config__.startTimeType == 2) {
+                  startTime = this[this.formConf.formModel][e.startRelationField] || 0
+                } else {
+                  startTime = e.startTime
+                }
+                if (e.__config__.endTimeType == 2) {
+                  endTime = this[this.formConf.formModel][e.endRelationField] || 0
+                } else {
+                  endTime = e.endTime
+                }
+                this.comSet('startTime', e.__vModel__, startTime)
+                this.comSet('endTime', e.__vModel__, endTime)
+              }
+              if (e.opType === 'setTime') {
                 let startTime = ''
                 let endTime = ''
                 if (e.__config__.startTimeType == 2) {

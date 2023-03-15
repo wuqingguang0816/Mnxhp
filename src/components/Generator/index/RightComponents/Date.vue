@@ -10,7 +10,7 @@
       <el-input v-model="activeData.placeholder" placeholder="请输入占位提示" />
     </el-form-item>
     <el-form-item label="格式">
-      <el-select v-model="activeData.format" placeholder="请选择时间类型" @change="dateTypeChange">
+      <el-select v-model="activeData.format" placeholder="请选择日期类型" @change="dateTypeChange">
         <el-option v-for="(item, index) in formatOptions" :key="index" :label="item.label"
           :value="item.value" />
       </el-select>
@@ -67,19 +67,20 @@
     </el-form-item>
     <template v-if="activeData.__config__.endTimeRule">
       <jnpf-form-tip-item label="类型" tip-label="系统会限制填写者填写此字段的当天起始日期范围（包含该日期）。该功能不做有效性验证，请自行保证。">
-        <el-select v-model="activeData.__config__.endType" placeholder="请选择类型" @change="endType">
+        <el-select v-model="activeData.__config__.endTimeType" placeholder="请选择类型"
+          @change="endType">
           <el-option v-for="(item, index) in typeOptions" :key="index" :label="item.label"
             :value="item.value" />
         </el-select>
       </jnpf-form-tip-item>
-      <el-form-item label="" v-if="activeData.__config__.endType==1">
+      <el-form-item label="" v-if="activeData.__config__.endTimeType==1">
         <el-date-picker v-model="activeData.__config__.endTimeValue" :type="type"
           placeholder="请选择时间" :value-format="activeData['value-format']"
           :format="activeData.format">
         </el-date-picker>
       </el-form-item>
       <el-form-item label=""
-        v-else-if="activeData.__config__.endType==4 ||activeData.__config__.endType==5">
+        v-else-if="activeData.__config__.endTimeType==4 ||activeData.__config__.endTimeType==5">
         <el-input type="number" v-model="activeData.__config__.endTimeValue" placeholder="请输入"
           min="1">
           <el-select slot="append" v-model="activeData.__config__.endTimeTarget"
@@ -89,7 +90,7 @@
           </el-select>
         </el-input>
       </el-form-item>
-      <el-form-item label="" v-else-if="activeData.__config__.endType==2">
+      <el-form-item label="" v-else-if="activeData.__config__.endTimeType==2">
         <el-select v-model="activeData.endRelationField" placeholder="请选择关联日期字段">
           <el-option v-for="(item,i) in formFieldsOptions" :key="i" :label="item.realLabel"
             :value="item.realVModel" />
@@ -118,7 +119,6 @@ export default {
   mixins: [comMixin],
   data() {
     return {
-      //yyyy-MM-dd HH:mm:ss
       formatOptions: [
         {
           label: 'yyyy',
@@ -165,7 +165,6 @@ export default {
       ],
       type: 'date',
       targetOptions: [],
-      fieldsOptions: [],
     }
   },
   watch: {
@@ -184,7 +183,7 @@ export default {
 
     },
     'activeData.__config__.endTimeValue'(val) {
-      if (this.activeData.__config__.endType == 4 || this.activeData.__config__.endType == 5) {
+      if (this.activeData.__config__.endTimeType == 4 || this.activeData.__config__.endTimeType == 5) {
         if (this.activeData.__config__.endTimeTarget == 2 || this.activeData.__config__.endTimeTarget == 1) {
           this.getEndDateTime()
         } else if (this.activeData.__config__.endTimeTarget == 3) {
@@ -192,31 +191,18 @@ export default {
         } else {
           this.getEndTime()
         }
-      } else if (this.activeData.__config__.endType == 1) {
-        return this.activeData.endTime = val
-      }
-    },
-    'activeData.__config__.endTimeValue'(val) {
-      if (this.activeData.__config__.endType == 4 || this.activeData.__config__.endType == 5) {
-        if (this.activeData.__config__.endTimeTarget == 2 || this.activeData.__config__.endTimeTarget == 1) {
-          this.getEndDateTime()
-        } else if (this.activeData.__config__.endTimeTarget == 3) {
-          this.getEndTimeValue()
-        } else {
-          this.getEndTime()
-        }
-      } else if (this.activeData.__config__.endType == 1) {
+      } else if (this.activeData.__config__.endTimeType == 1) {
         return this.activeData.endTime = val
       }
     },
     'activeData.__config__.startTimeRule'(val) {
-      if (val) {
-        this.startType()
+      if (!val) {
+        this.activeData.startRelationField = ''
       }
     },
     'activeData.__config__.endTimeRule'(val) {
-      if (val) {
-        this.endType()
+      if (!val) {
+        this.activeData.endRelationField = ''
       }
     }
   },
@@ -410,7 +396,7 @@ export default {
     },
     getEndDateTime() {
       let previousDate = '';
-      previousDate = this.getDateDay(this.activeData.__config__.endTimeTarget, this.activeData.__config__.endType, this.activeData.__config__.endTimeValue)
+      previousDate = this.getDateDay(this.activeData.__config__.endTimeTarget, this.activeData.__config__.endTimeType, this.activeData.__config__.endTimeValue)
       console.log(previousDate)
       return this.activeData.endTime = new Date(previousDate).getTime()
     },
@@ -422,7 +408,7 @@ export default {
       }
     },
     getEndTime() {
-      if (this.activeData.__config__.endType == 4) {
+      if (this.activeData.__config__.endTimeType == 4) {
         return this.activeData.endTime = this.getBeforeTime(this.activeData.__config__.endTimeTarget, this.activeData.__config__.endTimeValue)
       } else {
         return this.activeData.endTime = this.getLaterTime(this.activeData.__config__.endTimeTarget, this.activeData.__config__.endTimeValue)
@@ -442,7 +428,7 @@ export default {
     getEndTimeValue() {
       let num = this.activeData.__config__.endTimeValue
       let previousDate = ''
-      if (this.activeData.__config__.endType == 4) {
+      if (this.activeData.__config__.endTimeType == 4) {
         previousDate = this.getBeforeData(num)
         return this.activeData.endTime = new Date(previousDate).getTime()
       } else {

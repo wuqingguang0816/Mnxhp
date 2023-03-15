@@ -27,7 +27,12 @@
           v-if="!head.__config__.noShow && (!head.__config__.visibility || (Array.isArray(head.__config__.visibility) && head.__config__.visibility.includes('pc')))">
           <template slot="header">
             <span style="color: #f56c6c;" v-if="head.__config__.required">*</span>
-            {{ head.__config__['label'] }}
+            <span slot="label" v-if="head.__config__.tipLabel">{{head.__config__['label']}}
+              <el-tooltip placement="top" :content=head.__config__.tipLabel>
+                <a class='el-icon-warning-outline'></a>
+              </el-tooltip>
+            </span>
+            <span v-if="!head.__config__['tipLabel']">{{ head.__config__['label'] }}</span>
           </template>
           <template slot-scope="scope">
             <!-- 单选框组 多选框组 都替换成下拉 并添加options -->
@@ -215,15 +220,15 @@ export default {
             if (e.opType === 'setDate') {
               let startTime = 0
               let endTime = 0
-              if (cur.startRelationField && cur.__config__.startTimeType == 2) {
-                startTime = this.getFieldVal(cur.startRelationField, rowIndex) || 0
-              } else if (cur.__config__.startTimeType != 2) {
-                startTime = cur.startTime
+              if (e.startRelationField && e.__config__.startTimeType == 2) {
+                startTime = this.formData[e.startRelationField] || 0
+              } else if (e.__config__.startTimeType != 2) {
+                startTime = e.startTime
               }
-              if (cur.endRelationField && cur.__config__.endTimeType == 2) {
-                endTime = this.getFieldVal(cur.endRelationField, rowIndex) || 0
-              } else if (cur.__config__.endTimeType != 2) {
-                endTime = cur.startTime
+              if (e.endRelationField && e.__config__.endTimeType == 2) {
+                endTime = this.formData[e.endRelationField] || 0
+              } else if (e.__config__.endTimeType != 2) {
+                endTime = e.startTime
               }
               item.config.startTime = startTime
               item.config.endTime = endTime
@@ -270,15 +275,15 @@ export default {
                 if (e.opType === 'setDate') {
                   let startTime = 0
                   let endTime = 0
-                  if (cur.startRelationField && cur.__config__.startTimeType == 2) {
-                    startTime = this.getFieldVal(cur.startRelationField, rowIndex) || 0
-                  } else if (cur.__config__.startTimeType != 2) {
-                    startTime = cur.startTime
+                  if (e.startRelationField && e.__config__.startTimeType == 2) {
+                    startTime = this.getFieldVal(e.startRelationField, rowIndex) || 0
+                  } else if (e.__config__.startTimeType != 2) {
+                    startTime = e.startTime
                   }
-                  if (cur.endRelationField && cur.__config__.endTimeType == 2) {
-                    endTime = this.getFieldVal(cur.endRelationField, rowIndex) || 0
-                  } else if (cur.__config__.endTimeType != 2) {
-                    endTime = cur.startTime
+                  if (e.endRelationField && e.__config__.endTimeType == 2) {
+                    endTime = this.getFieldVal(e.endRelationField, rowIndex) || 0
+                  } else if (e.__config__.endTimeType != 2) {
+                    endTime = e.startTime
                   }
                   item.config.startTime = startTime
                   item.config.endTime = endTime
