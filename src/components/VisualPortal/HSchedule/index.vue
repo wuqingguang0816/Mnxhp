@@ -228,7 +228,6 @@ export default {
       let startTime = this.jnpf.toDate(arg.date, "yyyy-MM-dd HH:00"),
         clickTime = this.jnpf.toDate(arg.date, "yyyyMMdd"),
         currTime = this.jnpf.toDate(new Date(), "yyyyMMdd");
-      if (clickTime < currTime) return
       if (clickTime == currTime) {
         let thisDate = new Date();
         thisDate.setHours(thisDate.getHours() + 1);
