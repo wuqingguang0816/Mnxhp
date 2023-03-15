@@ -243,25 +243,23 @@ export default {
     getBeforeTime(type, val) {
       let date = new Date()
       if (type == 1) {
-        date.setHours(date.getHours() - val)
+        date.setHours(Number(date.getHours()) - Number(val))
       } else if (type == 2) {
-        date.setMinutes(date.getMinutes() - val)
+        date.setMinutes(Number(date.getMinutes()) - Number(val))
       } else if (type == 3) {
-        date.getSeconds(date.getSeconds() - val)
+        date.setSeconds(Number(date.getSeconds()) - Number(val))
       }
       return date
     },
     getLaterTime(type, val) {
       let date = new Date()
-      console.log(this.jnpf.toDate(date.getHours(), 'HH:mm:ss'))
       if (type == 1) {
-        date.setHours(date.getHours() + val)
+        date.setHours(Number(date.getHours()) + Number(val))
       } else if (type == 2) {
-        date.setMinutes(date.getMinutes() + val)
+        date.setMinutes(Number(date.getMinutes()) + Number(val))
       } else if (type == 3) {
-        date.getSeconds(date.getSeconds() + val)
+        date.setSeconds(Number(date.getSeconds()) + Number(val))
       }
-      console.log(this.jnpf.toDate(date, 'HH:mm:ss'))
       return date
     },
     getStartTime() {
