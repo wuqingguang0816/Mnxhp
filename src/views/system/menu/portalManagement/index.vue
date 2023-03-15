@@ -273,8 +273,7 @@ export default {
             },
           });
         });
-      })
-        .catch(() => { });
+      }).catch(() => { });
     },
     exportMenu(id) {
       this.$confirm("您确定要导出该菜单, 是否继续?", "提示", {
