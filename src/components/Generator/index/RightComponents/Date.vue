@@ -273,22 +273,22 @@ export default {
     getBeforeTime(type, val) {
       let date = new Date()
       if (type == 4) {
-        date.setHours(date.getHours() - val)
+        date.setHours((Number(date.getHours()) - Number(val)))
       } else if (type == 5) {
-        date.setMinutes(date.getMinutes() - val)
+        date.setMinutes((Number(date.getMinutes()) - Number(val)))
       } else if (type == 6) {
-        date.getSeconds(date.getSeconds() - val)
+        date.getseconds((Number(date.getSeconds()) - Number(val)))
       }
       return date.getTime()
     },
     getLaterTime(type, val) {
       let date = new Date()
       if (type == 4) {
-        date.setHours(date.getHours() + val)
+        date.setHours((Number(date.getHours()) + Number(val)))
       } else if (type == 5) {
-        date.setMinutes(date.getMinutes() + val)
+        date.setMinutes((Number(date.getMinutes()) + Number(val)))
       } else if (type == 6) {
-        date.getSeconds(date.getSeconds() + val)
+        date.setSeconds((Number(date.getSeconds()) + Number(val)))
       }
       return date.getTime()
     },
@@ -396,7 +396,6 @@ export default {
     getEndDateTime() {
       let previousDate = '';
       previousDate = this.getDateDay(this.activeData.__config__.endTimeTarget, this.activeData.__config__.endTimeType, this.activeData.__config__.endTimeValue)
-      console.log(previousDate)
       return this.activeData.endTime = new Date(previousDate).getTime()
     },
     getStartTime() {

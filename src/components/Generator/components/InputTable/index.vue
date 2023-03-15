@@ -233,6 +233,22 @@ export default {
               item.config.startTime = startTime
               item.config.endTime = endTime
             }
+            if (e.opType === 'setTime') {
+              let startTime = ''
+              let endTime = ''
+              if (e.startRelationField && e.__config__.startTimeType == 2) {
+                startTime = this.formData[e.startRelationField] || 0
+              } else if (e.__config__.startTimeType != 2) {
+                startTime = e.startTime
+              }
+              if (e.endRelationField && e.__config__.endTimeType == 2) {
+                endTime = this.formData[e.endRelationField] || 0
+              } else if (e.__config__.endTimeType != 2) {
+                endTime = e.startTime
+              }
+              item.config.startTime = startTime
+              item.config.endTime = endTime
+            }
           }
         }
       }
@@ -288,6 +304,22 @@ export default {
                   item.config.startTime = startTime
                   item.config.endTime = endTime
                 }
+                if (e.opType === 'setTime') {
+                  let startTime = 0
+                  let endTime = 0
+                  if (e.startRelationField && e.__config__.startTimeType == 2) {
+                    startTime = this.getFieldVal(e.startRelationField, rowIndex) || 0
+                  } else if (e.__config__.startTimeType != 2) {
+                    startTime = e.startTime
+                  }
+                  if (e.endRelationField && e.__config__.endTimeType == 2) {
+                    endTime = this.getFieldVal(e.endRelationField, rowIndex) || 0
+                  } else if (e.__config__.endTimeType != 2) {
+                    endTime = e.startTime
+                  }
+                  item.config.startTime = startTime
+                  item.config.endTime = endTime
+                }
               }
             }
           }
@@ -318,6 +350,22 @@ export default {
           cur.ableRelationIds = Array.isArray(value) ? value : [value]
         }
         if (config.jnpfKey === 'date') {
+          let startTime = 0
+          let endTime = 0
+          if (cur.startRelationField && cur.__config__.startTimeType == 2) {
+            startTime = this.getFieldVal(cur.startRelationField, rowIndex) || 0
+          } else if (cur.__config__.startTimeType != 2) {
+            startTime = cur.startTime
+          }
+          if (cur.endRelationField && cur.__config__.endTimeType == 2) {
+            endTime = this.getFieldVal(cur.endRelationField, rowIndex) || 0
+          } else if (cur.__config__.endTimeType != 2) {
+            endTime = cur.startTime
+          }
+          item.config.startTime = startTime
+          item.config.endTime = endTime
+        }
+        if (config.jnpfKey === 'time') {
           let startTime = 0
           let endTime = 0
           if (cur.startRelationField && cur.__config__.startTimeType == 2) {
