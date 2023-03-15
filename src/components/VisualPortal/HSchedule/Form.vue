@@ -97,7 +97,7 @@
           </el-select>
         </el-form-item>
         <el-form-item label="结束重复" prop="repeatTime" v-if='dataForm.repetition!="1"' required>
-          <el-date-picker v-model="dataForm.repeatTime" type="datetime" placeholder="选择日期时间"
+          <el-date-picker v-model="dataForm.repeatTime" type="date" placeholder="选择日期时间"
             :editable="false" :clearable="false" format="yyyy-MM-dd" value-format="timestamp">
           </el-date-picker>
         </el-form-item>
@@ -208,7 +208,7 @@ export default {
           { required: true, validator: validatePass, trigger: 'change' }
         ],
         repeatTime: [
-          { required: true, message: '结束重复不能为空', trigger: 'change' }
+          { required: true, validator: validatePass, trigger: 'change' }
         ],
         send: [
           { required: true, message: '发送配置不能为空', trigger: 'change' }
