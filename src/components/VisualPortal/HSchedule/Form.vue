@@ -208,7 +208,7 @@ export default {
           { required: true, validator: validatePass, trigger: 'change' }
         ],
         repeatTime: [
-          { required: true, validator: validatePass, trigger: 'change' }
+          { required: true, message: '结束重复不能为空', trigger: 'change' }
         ],
         send: [
           { required: true, message: '发送配置不能为空', trigger: 'change' }
@@ -386,22 +386,22 @@ export default {
       this.dataForm.sendName = item.fullName
     },
     dataFormSubmit() {
-      if (this.allDay == 0) {
-        if (!dataForm.startTime) return this.$message({ message: '开始时间不能为空', type: 'error' })
-      }
-      if (this.allDay == 0 && dataForm.duration == -1) {
-        if (!dataForm.endTime) return this.$message({ message: '结束日期不能为空', type: 'error' })
-      }
-      if (this.dataForm.allDay == 1) {
-        if (this.dataForm.startDay > this.dataForm.endDay) {
-          return this.$message({ message: '于开始时间不能大结束时间', type: 'error' })
-        }
-      }
-      if (this.dataForm.repetition != "1" && (this.dataForm.startDay > this.dataForm.repeatTime)) {
-        return this.$message({ message: '开始时间不能大于结束重复', type: 'error' })
-      }
       this.$refs['dataForm'].validate((valid) => {
         if (valid) {
+          if (!this.allDay) {
+            if (!this.dataForm.startTime) return this.$message({ message: '开始时间不能为空', type: 'error' })
+          }
+          if (!this.allDay == 0 && this.dataForm.duration == -1) {
+            if (!this.dataForm.endTime) return this.$message({ message: '结束日期不能为空', type: 'error' })
+          }
+          if (this.dataForm.allDay == 1) {
+            if (this.dataForm.startDay > this.dataForm.endDay) {
+              return this.$message({ message: '于开始时间不能大结束时间', type: 'error' })
+            }
+          }
+          if (this.dataForm.repetition != -1 && (this.dataForm.startDay == this.dataForm.endDay)) {
+            if (this.dataForm.startTime == this.dataForm.endTime) return this.$message({ message: '开始时间与结束结束重复', type: 'error' })
+          }
           const formMethod = this.dataForm.id ? ScheduleUpdate : ScheduleCreate
           if (this.dataForm.id && this.repetitionType) {
             if (!this.updateVisible) {
