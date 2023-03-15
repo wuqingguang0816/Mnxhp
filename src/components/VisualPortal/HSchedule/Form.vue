@@ -30,12 +30,12 @@
         </el-form-item>
         <el-form-item label="开始时间" prop="startDay">
           <el-col :span="14">
-            <el-date-picker v-model="dataForm.startDay" type="date" placeholder="选择日期时间"
+            <el-date-picker v-model="dataForm.startDay" type="date" placeholder="请选择开始日期"
               :editable="false" :clearable="false" format="yyyy-MM-dd" value-format="timestamp">
             </el-date-picker>
           </el-col>
           <el-col :span="2">
-            <el-time-select placeholder="选择日期时间" v-model="dataForm.startTime" :picker-options="{
+            <el-time-select placeholder="请选择开始时间" v-model="dataForm.startTime" :picker-options="{
        start: '00:00',step: '00:05',end: '23:55'}" style="width:166px;" v-if="dataForm.allDay==0">
             </el-time-select>
           </el-col>
@@ -50,12 +50,12 @@
         </el-form-item>
         <el-form-item label="结束时间" prop="endDay" v-if='dataForm.duration==-1||dataForm.allDay'>
           <el-col :span="14">
-            <el-date-picker v-model="dataForm.endDay" type="date" placeholder="选择日期时间"
+            <el-date-picker v-model="dataForm.endDay" type="date" placeholder="请选择结束日期"
               :editable="false" :clearable="false" format="yyyy-MM-dd" value-format="timestamp">
             </el-date-picker>
           </el-col>
           <el-col :span="2">
-            <el-time-select placeholder="选择日期时间" v-model="dataForm.endTime" :picker-options="{
+            <el-time-select placeholder="请选择结束时间" v-model="dataForm.endTime" :picker-options="{
        start: '00:00',step: '00:05',end: '23:55'}" style="width:166px;" v-if="dataForm.allDay==0">
             </el-time-select>
           </el-col>
@@ -214,6 +214,9 @@ export default {
           { required: true, message: '发送配置不能为空', trigger: 'change' }
         ],
         reminderType: [
+          { required: true, message: '提醒方式不能为空', trigger: 'change' }
+        ],
+        startTime: [
           { required: true, message: '提醒方式不能为空', trigger: 'change' }
         ],
       },
@@ -383,6 +386,12 @@ export default {
       this.dataForm.sendName = item.fullName
     },
     dataFormSubmit() {
+      if (this.allDay == 0) {
+        if (!dataForm.startTime) return this.$message({ message: '开始时间不能为空', type: 'error' })
+      }
+      if (this.allDay == 0 && dataForm.duration == -1) {
+        if (!dataForm.endTime) return this.$message({ message: '结束日期不能为空', type: 'error' })
+      }
       if (this.dataForm.allDay == 1) {
         if (this.dataForm.startDay > this.dataForm.endDay) {
           return this.$message({ message: '于开始时间不能大结束时间', type: 'error' })

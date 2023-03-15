@@ -242,12 +242,12 @@ export default {
         ...this.listQuery,
         keyword: this.keyword,
       }
-      getPortalManageList(this.systemId, query)
-        .then((res) => {
-          this.list = res.data.list;
-          this.listLoading = false;
-          this.btnLoading = false;
-        })
+      getPortalManageList(this.systemId, query).then((res) => {
+        this.list = res.data.list;
+        this.total = res.data.pagination.total
+        this.listLoading = false;
+        this.btnLoading = false;
+      })
         .catch(() => {
           this.listLoading = false;
           this.btnLoading = false;
