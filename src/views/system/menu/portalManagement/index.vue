@@ -49,6 +49,13 @@
                   :formatter="jnpf.tableDateFormat" />
                 <el-table-column prop="lastModifyTime" label="最后修改时间"
                   :formatter="jnpf.tableDateFormat" />
+                <el-table-column prop="enabledMark" label="状态" width="70" align="center">
+                  <template slot-scope="scope">
+                    <el-tag :type="scope.row.enabledMark == 1 ? 'success' : 'danger'"
+                      disable-transitions>
+                      {{scope.row.enabledMark==1?'启用':'禁用'}}</el-tag>
+                  </template>
+                </el-table-column>
                 <el-table-column label="操作" fixed="right" width="200">
                   <template slot-scope="scope">
                     <tableOpts @edit="addOrUpdateHandle(scope.row.id)"

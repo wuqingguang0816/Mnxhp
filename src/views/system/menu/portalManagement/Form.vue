@@ -1,5 +1,5 @@
 <template>
-  <el-dialog :title="!dataForm.id ? '新建' : '编辑'" :close-on-click-modal="false"
+  <el-dialog :title="!dataForm.id ? '添加' : '编辑'" :close-on-click-modal="false"
     :close-on-press-escape="false" :visible.sync="visible" lock-scroll append-to-body
     class="JNPF-dialog JNPF-dialog_center" width="600px">
     <el-form ref="dataForm" :model="dataForm" :rules="dataRule" label-width="80px"
@@ -19,7 +19,7 @@
         <el-switch v-model="dataForm.enabledMark" :active-value="1" :inactive-value="0" />
       </el-form-item>
       <el-form-item label="说明" prop="bodyText">
-        <el-input v-model="dataForm.description" type="textarea" :rows="4" />
+        <el-input v-model="dataForm.description" type="textarea" :rows="4" placeholder="说明" />
       </el-form-item>
     </el-form>
     <span slot="footer" class="dialog-footer">
@@ -53,8 +53,7 @@ export default {
       },
       dataRule: {
         fullName: [
-          { required: true, message: '菜单名称不能为空', trigger: 'blur' },
-          { max: 50, message: '菜单名称最多为50个字符！', trigger: 'blur' }
+          { required: true, message: '门户不能为空', trigger: 'blur' },
         ]
       }
     }
