@@ -1694,9 +1694,11 @@ export const layoutComponents = [
       children: [
         {
           __config__: {
+            jnpfKey: "tableGridTr",
             children: [
               {
                 __config__: {
+                  jnpfKey: "tableGridTd",
                   merged: false,
                   rowType: "tableGrid",
                   colspan: 1,

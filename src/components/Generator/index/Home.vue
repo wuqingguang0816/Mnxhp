@@ -701,6 +701,7 @@ export default {
         col.__config__.children = []
       })
       newRow.__config__.formId = ++this.idGlobal
+      newRow.__config__.jnpfKey = "tableGridTr"
       element.__config__.children.splice(rowIdx, 0, newRow)
       let colNo = 0
       while ((rowIdx < element.__config__.children.length - 1) && (colNo < element.__config__.children[0].__config__.children.length)) {  //越界判断
@@ -730,6 +731,7 @@ export default {
       row.forEach(item => {
         let newCol = {
           __config__: {
+            jnpfKey: "tableGridTd",
             merged: false,
             colspan: 1,
             rowspan: 1,
