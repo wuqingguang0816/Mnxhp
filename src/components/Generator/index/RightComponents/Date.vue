@@ -178,9 +178,8 @@ export default {
           this.getStartTime()
         }
       } else if (this.activeData.__config__.startTimeType == 1) {
-        return this.activeData.startTime = val
+        this.activeData.startTime = val
       }
-
     },
     'activeData.__config__.endTimeValue'(val) {
       if (this.activeData.__config__.endTimeType == 4 || this.activeData.__config__.endTimeType == 5) {
@@ -444,7 +443,7 @@ export default {
       this.activeData.startRelationField = ''
       if (val == 3) {
         this.activeData.__config__.startTimeValue = new Date().getTime()
-        return this.activeData.startTime = this.activeData.__config__.startTimeValue
+        this.activeData.startTime = this.activeData.__config__.startTimeValue
       } else if (val == 4 || val == 5) {
         this.activeData.__config__.startTimeValue = 1
         this.activeData.__config__.startTimeTarget = 1
@@ -460,7 +459,7 @@ export default {
       this.activeData.endRelationField = ''
       if (val == 3) {
         this.activeData.__config__.endTimeValue = new Date().getTime()
-        return this.activeData.endTime = this.activeData.__config__.endTimeValue
+        this.activeData.endTime = this.activeData.__config__.endTimeValue
       } else if (val == 4 || val == 5) {
         this.activeData.__config__.endTimeValue = 1
         this.activeData.__config__.endTimeTarget = 1
