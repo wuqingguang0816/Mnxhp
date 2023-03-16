@@ -129,9 +129,9 @@ const layouts = {
       return layouts.colFormItem.call(this, h, param)
     }
     if (scheme.__config__.jnpfKey === 'card') {
-      let toolTip = scheme.__config__.label
+      let toolTip = scheme.header
       if (scheme.__config__.tipLabel) {
-        toolTip = <span slot="label">{scheme.__config__.label}
+        toolTip = <span slot="label">{scheme.header}
           <el-tooltip placement="top" content={scheme.__config__.tipLabel}>
             <a class='el-icon-warning-outline' style='margin-left:4px'></a>
           </el-tooltip>

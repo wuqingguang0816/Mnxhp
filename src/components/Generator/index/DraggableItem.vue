@@ -285,9 +285,9 @@ const layouts = {
       if (!element.__config__.children.length) {
         tip = <div class="table-tip card-tip">请将组件拖到此区域(可拖多个组件)</div>
       }
-      let toolTip = element.__config__.label
+      let toolTip = element.header
       if (element.__config__.tipLabel) {
-        toolTip = <span slot="label">{element.__config__.label}
+        toolTip = <span slot="label">{element.header}
           <el-tooltip placement="top" content={element.__config__.tipLabel}>
             <a class='el-icon-warning-outline content-name'></a>
           </el-tooltip>
