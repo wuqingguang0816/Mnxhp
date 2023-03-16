@@ -1,7 +1,6 @@
 <template>
   <el-date-picker :type="type" v-model="innerValue" placeholder="请选择" :value-format="valueFormat"
-    :picker-options='pickerOptions' :format="format" @blur="datePickerBlur"
-    @change="datePickerChange"></el-date-picker>
+    :picker-options='pickerOptions' :format="format"></el-date-picker>
 </template>
 <script>
 export default {
@@ -9,6 +8,7 @@ export default {
   components: {},
   props: {
     activeData: {
+
       default: undefined
     },
     value: {
@@ -34,21 +34,9 @@ export default {
 
   data() {
     return {
-      // this.jnpf.toDate(new Date(), this.activeData.format)
       innerValue: this.value,
       type: 'date',
       pickerOptions: {
-        selectableRange: ((val) => {
-          let startTime = this.jnpf.toDate(this.startTime, 'HH:mm:ss')
-          let endTime = this.jnpf.toDate(this.endTime, 'HH:mm:ss')
-          console.log(this.value)
-          let type = false
-          if (this.startTime < this.endTime) {
-            type = true
-          }
-          return [`${startTime} ? ${startTime} : '00:00:00' - ${type} ? "23:59:59":${endTime}`]
-          // return [startTime ? startTime : '00:00:00' - "23.59.59"]
-        })(),
         disabledDate: (time) => {
           if (!this.startTime && !this.endTime) return false
           if (this.endTime) {
@@ -79,12 +67,6 @@ export default {
   mounted() {
   },
   methods: {
-    datePickerBlur() {
-      console.log(111111)
-    },
-    datePickerChange() {
-      console.log(222222)
-    }
   }
 
 }

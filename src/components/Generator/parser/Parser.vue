@@ -137,13 +137,14 @@ const layouts = {
           </el-tooltip>
         </span >
       }
+      let header = ''
+      if (scheme.header) {
+        header = <div slot="header" ><span>{toolTip}</span></div>
+      }
       return (
         <el-col span={scheme.__config__.span} class="item-card">
           <el-card shadow={scheme.shadow} header={scheme.header} class="mb-20">
-            <div slot="header">
-              <span>{toolTip}</span>
-            </div>
-            {child}
+            {header}
           </el-card>
         </el-col>
       )

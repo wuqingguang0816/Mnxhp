@@ -34,12 +34,10 @@ export default {
     return {
       pickerOptions: {
         selectableRange: (() => {
-          console.log(this.startTime, this.endTime)
           return [`${this.startTime} ? ${this.startTime} : '00:00:00' - ${this.endTime} ? ${this.endTime}:"23:59:59"`]
         })(),
       },
       innerValue: this.value,
-      type: 'date',
     }
   },
   watch: {

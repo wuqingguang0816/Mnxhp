@@ -293,14 +293,16 @@ const layouts = {
           </el-tooltip>
         </span >
       }
+      let header = ''
+      if (element.header) {
+        header = <div slot="header" ><span>{toolTip}</span></div>
+      }
       return (
         <el-col span={element.__config__.span}>
           <el-row gutter={element.__config__.gutter} class={className}
             nativeOnClick={event => { activeItem(element); event.stopPropagation() }}>
             <el-card shadow={element.shadow} header={element.header}>
-              <div slot="header" >
-                <span>{toolTip}</span>
-              </div>
+              {header}
               <el-col>
                 <el-row gutter={element.__config__.gutter}
                   nativeOnClick={event => { activeItem(element); event.stopPropagation() }}>

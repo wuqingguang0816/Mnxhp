@@ -67,7 +67,7 @@ function buildDataObject(confClone, dataObject, formData) {
   if (jnpfKey === 'JNPFText') {
     vModel.call(this, dataObject, confClone.__config__.defaultValue)
   }
-  if (['calculate', 'table', 'barcode', 'qrcode', 'popupSelect', 'popupTableSelect'].includes(jnpfKey)) {
+  if (['calculate', 'table', 'barcode', 'qrcode', 'popupSelect', 'popupTableSelect', 'autoComplete'].includes(jnpfKey)) {
     dataObject.attrs['formData'] = formData
   }
   if (['table'].includes(jnpfKey)) {

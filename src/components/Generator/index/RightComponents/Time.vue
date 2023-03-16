@@ -17,8 +17,7 @@
     </el-form-item>
     <el-form-item label="默认值">
       <el-time-picker v-model="activeData.__config__.defaultValue"
-        :disabled="activeData.__config__.defaultCurrent"
-        :picker-options="activeData['picker-options']" placeholder="选择默认值" clearable
+        :disabled="activeData.__config__.defaultCurrent" placeholder="选择默认值" clearable
         :value-format="activeData['value-format']" :format="activeData.format">
       </el-time-picker>
     </el-form-item>
@@ -27,9 +26,9 @@
         @change="defaultCurrentChange" style="float: right;margin-right: 30px;">默认为当前系统时间
       </el-checkbox>
     </el-form-item>
-    <el-form-item label="时间段">
+    <!-- <el-form-item label="时间段">
       <el-input v-model="activeData['picker-options'].selectableRange" placeholder="请输入时间段" />
-    </el-form-item>
+    </el-form-item> -->
     <el-divider>规则</el-divider>
     <el-form-item label="开始时间">
       <el-switch v-model="activeData.__config__.startTimeRule" @change="startTimeRuleChange" />
@@ -78,8 +77,7 @@
         </el-select>
       </jnpf-form-tip-item>
       <el-form-item label="" v-if="activeData.__config__.endTimeType==1">
-        <el-time-picker v-model="activeData.__config__.endTimeValue"
-          :picker-options="activeData['picker-options']" placeholder="请选择时间" clearable
+        <el-time-picker v-model="activeData.__config__.endTimeValue" placeholder="请选择时间" clearable
           :value-format="activeData['value-format']" :format="activeData.format">
         </el-time-picker>
       </el-form-item>

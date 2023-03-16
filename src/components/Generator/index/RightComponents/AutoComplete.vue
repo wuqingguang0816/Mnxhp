@@ -93,6 +93,7 @@ export default {
         }
       }
       loop(getDrawingList())
+      list.push({ realVModel: '@keyword', realLabel: '@keyword', jnpfKey: '' })
       return list
     }
   },
@@ -117,6 +118,7 @@ export default {
     },
     onRelationFieldChange(val, row) {
       if (!val) return row.jnpfKey = ''
+      if (val === '@keyword') return row.jnpfKey = ''
       let list = this.formFieldsOptions.filter(o => o.realVModel === val)
       if (!list.length) return row.jnpfKey = ''
       let item = list[0]
