@@ -14,6 +14,11 @@
                 </div>
               </el-form-item>
             </el-col>
+            <el-col :span="24">
+              <el-form-item label="窗口标题" prop="title">
+                <el-input v-model="baseForm.title" clearable placeholder="窗口标题" />
+              </el-form-item>
+            </el-col>
             <el-col :span="12">
               <el-form-item label="系统名称" prop="sysName">
                 <el-input v-model="baseForm.sysName" clearable placeholder="系统名称" />
@@ -446,6 +451,7 @@ export default {
       names: '',
       row: '',
       baseForm: {
+        title: '',
         sysName: '',
         sysDescription: '',
         sysVersion: '',
@@ -746,7 +752,8 @@ export default {
                 companyName: this.baseForm.companyName,
                 navigationIcon: this.baseForm.navigationIcon,
                 logoIcon: this.baseForm.logoIcon,
-                appIcon: this.baseForm.appIcon
+                appIcon: this.baseForm.appIcon,
+                title: this.baseForm.title
               }
               this.$store.commit('settings/CHANGE_SETTING', { key: "sysConfig", value: sysConfig })
               this.initData()

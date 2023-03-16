@@ -1,11 +1,10 @@
 import defaultSettings from '@/settings'
 import i18n from '@/lang'
 import { getLanguage } from '@/lang/index'
-
-const title = defaultSettings.title
-
+import store from '@/store'
 export default function getPageTitle(key, fullName) {
-  const realTitle = getLanguage() === 'en' ? 'JNPF' : getLanguage() === 'zhtw' ? 'JNPF軟件開發平臺' : title
+  const title = store.getters.sysConfig.title || "JNPF快速开发平台"
+  const realTitle = getLanguage() === 'en' ? title : getLanguage() === 'zhtw' ? title : title
   const hasKey = i18n.te(`route.${key}`)
   if (hasKey) {
     const pageName = i18n.t(`route.${key}`)
