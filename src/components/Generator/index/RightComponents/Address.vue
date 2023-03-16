@@ -17,6 +17,9 @@
         <el-radio :label="3">省市区-街道</el-radio>
       </el-radio-group>
     </el-form-item>
+    <jnpf-form-tip-item label="显示路径" tip-label="格式选择省市（xx省/xx市），启用显示xx省/xx市；禁用显示xx市。">
+      <el-switch v-model="activeData.showPath" />
+    </jnpf-form-tip-item>
     <el-form-item label="能否清空">
       <el-switch v-model="activeData.clearable" />
     </el-form-item>
