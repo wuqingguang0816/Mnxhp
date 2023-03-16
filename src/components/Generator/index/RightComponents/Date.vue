@@ -197,11 +197,15 @@ export default {
     'activeData.__config__.startTimeRule'(val) {
       if (!val) {
         this.activeData.startRelationField = ''
+        this.activeData.startTime = ''
+        this.activeData.__config__.startTimeValue = ''
       }
     },
     'activeData.__config__.endTimeRule'(val) {
       if (!val) {
         this.activeData.endRelationField = ''
+        this.activeData.endTime = ''
+        this.activeData.__config__.endTimeValue = ''
       }
     }
   },
