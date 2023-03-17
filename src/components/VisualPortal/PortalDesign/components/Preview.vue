@@ -12,7 +12,7 @@
       </div>
     </div>
     <div class="main" style="padding:0">
-      <PortalLayout v-if="showPortalLayout" :layout="layout" mask detailed />
+      <PortalLayout v-if="showPortalLayout" :layout="layoutData" mask detailed />
     </div>
   </el-dialog>
 </template>
@@ -24,12 +24,25 @@ export default {
   components: { PortalLayout },
   data() {
     return {
-      showPortalLayout: false
+      showPortalLayout: false,
+      layoutData: []
     }
   },
   methods: {
     onOpen() {
       this.showPortalLayout = true
+      this.layoutData = this.filterList(JSON.parse(JSON.stringify(this.layout)))
+    },
+    filterList(layout) {
+      const loop = list => {
+        for (let i = 0; i < list.length; i++) {
+          const item = list[i];
+          if (!(Array.isArray(item.visibility) && item.visibility.includes('pc'))) list.splice(i, 1)
+          if (item.children && item.children.length) loop(item.children)
+        }
+      }
+      loop(layout)
+      return layout
     },
     closeDialog() {
       this.$emit('update:visible', false)

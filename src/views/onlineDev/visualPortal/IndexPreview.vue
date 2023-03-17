@@ -55,10 +55,21 @@ export default {
         } else {
           if (!res.data.formData) return this.loading = false
           let formData = JSON.parse(res.data.formData)
-          this.layout = formData.layout || []
+          this.layout = this.filterList(JSON.parse(JSON.stringify(formData.layout)) || [])
         }
         this.loading = false
       })
+    },
+    filterList(layout) {
+      const loop = list => {
+        for (let i = 0; i < list.length; i++) {
+          const item = list[i];
+          if (!(Array.isArray(item.visibility) && item.visibility.includes('pc'))) list.splice(i, 1)
+          if (item.children && item.children.length) loop(item.children)
+        }
+      }
+      loop(layout)
+      return layout
     },
     closeDialog() {
       this.$emit('update:visible', false)

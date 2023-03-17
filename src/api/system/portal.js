@@ -47,7 +47,6 @@ export function delPortal(id) {
   return request({
     url: `/api/system/PortalManage/${id}`,
     method: 'DELETE',
-    data
   })
 }
 

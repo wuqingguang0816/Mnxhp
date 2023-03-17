@@ -30,12 +30,12 @@
         </el-form-item>
         <el-form-item label="开始时间" prop="startDay">
           <el-col :span="14">
-            <el-date-picker v-model="dataForm.startDay" type="date" placeholder="选择日期时间"
+            <el-date-picker v-model="dataForm.startDay" type="date" placeholder="请选择开始日期"
               :editable="false" :clearable="false" format="yyyy-MM-dd" value-format="timestamp">
             </el-date-picker>
           </el-col>
           <el-col :span="2">
-            <el-time-select placeholder="选择日期时间" v-model="dataForm.startTime" :picker-options="{
+            <el-time-select placeholder="请选择开始时间" v-model="dataForm.startTime" :picker-options="{
        start: '00:00',step: '00:05',end: '23:55'}" style="width:166px;" v-if="dataForm.allDay==0">
             </el-time-select>
           </el-col>
@@ -50,12 +50,12 @@
         </el-form-item>
         <el-form-item label="结束时间" prop="endDay" v-if='dataForm.duration==-1||dataForm.allDay'>
           <el-col :span="14">
-            <el-date-picker v-model="dataForm.endDay" type="date" placeholder="选择日期时间"
+            <el-date-picker v-model="dataForm.endDay" type="date" placeholder="请选择结束日期"
               :editable="false" :clearable="false" format="yyyy-MM-dd" value-format="timestamp">
             </el-date-picker>
           </el-col>
           <el-col :span="2">
-            <el-time-select placeholder="选择日期时间" v-model="dataForm.endTime" :picker-options="{
+            <el-time-select placeholder="请选择结束时间" v-model="dataForm.endTime" :picker-options="{
        start: '00:00',step: '00:05',end: '23:55'}" style="width:166px;" v-if="dataForm.allDay==0">
             </el-time-select>
           </el-col>
@@ -98,7 +98,7 @@
           </el-select>
         </el-form-item>
         <el-form-item label="结束重复" prop="repeatTime" v-if='dataForm.repetition!="1"' required>
-          <el-date-picker v-model="dataForm.repeatTime" type="datetime" placeholder="选择日期时间"
+          <el-date-picker v-model="dataForm.repeatTime" type="date" placeholder="选择日期时间"
             :editable="false" :clearable="false" format="yyyy-MM-dd" value-format="timestamp">
           </el-date-picker>
         </el-form-item>
@@ -216,6 +216,9 @@ export default {
         reminderType: [
           { required: true, message: '提醒方式不能为空', trigger: 'change' }
         ],
+        startTime: [
+          { required: true, message: '提醒方式不能为空', trigger: 'change' }
+        ],
       },
       urgentList: [
         {
@@ -330,16 +333,18 @@ export default {
     ...mapGetters(['userInfo'])
   },
   created() {
-    this.getDictionaryData()
+
   },
   methods: {
     init(id, startTime) {
       this.dataForm.id = id || 0
       this.visible = true
+      this.dataForm.type = ''
       this.delVisible = false
       this.updateVisible = false
       this.repetitionType = false
       this.dataForm.duration = 60
+      this.getDictionaryData()
       this.dataForm.endTime = ''
       this.$nextTick(() => {
         this.$refs['dataForm'].resetFields()
@@ -383,16 +388,22 @@ export default {
       this.dataForm.sendName = item.fullName
     },
     dataFormSubmit() {
-      if (this.dataForm.allDay == 1) {
-        if (this.dataForm.startDay > this.dataForm.endDay) {
-          return this.$message({ message: '于开始时间不能大结束时间', type: 'error' })
-        }
-      }
-      if (this.dataForm.repetition != "1" && (this.dataForm.startDay > this.dataForm.repeatTime)) {
-        return this.$message({ message: '开始时间不能大于结束重复', type: 'error' })
-      }
       this.$refs['dataForm'].validate((valid) => {
         if (valid) {
+          if (!this.allDay) {
+            if (!this.dataForm.startTime) return this.$message({ message: '开始时间不能为空', type: 'error' })
+          }
+          if (!this.allDay && this.dataForm.duration == -1) {
+            if (!this.dataForm.endTime) return this.$message({ message: '结束日期不能为空', type: 'error' })
+          }
+          if (this.dataForm.allDay == 1) {
+            if (this.dataForm.startDay > this.dataForm.endDay) {
+              return this.$message({ message: '于开始时间不能大结束时间', type: 'error' })
+            }
+          }
+          if (this.dataForm.repetition != -1 && (this.dataForm.startDay == this.dataForm.endDay)) {
+            if (this.dataForm.startTime == this.dataForm.endTime) return this.$message({ message: '开始时间与结束结束重复', type: 'error' })
+          }
           const formMethod = this.dataForm.id ? ScheduleUpdate : ScheduleCreate
           if (this.dataForm.id && this.repetitionType) {
             if (!this.updateVisible) {

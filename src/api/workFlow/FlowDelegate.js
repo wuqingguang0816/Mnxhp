@@ -61,6 +61,6 @@ export function getUserListByFlowId(data) {
 export function Stop(id) {
   return request({
     url: `/api/workflow/Engine/FlowDelegate/Stop/${id}`,
-    method: 'get'
+    method: 'put'
   })
 }

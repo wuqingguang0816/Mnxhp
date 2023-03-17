@@ -41,6 +41,12 @@
             <Schedule :activeData="activeData" :showType="showType"
               v-if="activeData.jnpfKey=='schedule'" />
           </el-collapse>
+          <el-form-item label="多端显示" style="margin-top:10px">
+            <el-checkbox-group v-model="activeData.visibility" size="mini">
+              <el-checkbox label="pc">Web</el-checkbox>
+              <el-checkbox label="app" :disabled="activeData.jnpfKey=='iframe'">App</el-checkbox>
+            </el-checkbox-group>
+          </el-form-item>
         </template>
       </el-form>
       <el-form v-show="currentTab==2" size="small" label-width="86px" labelPosition="left"
@@ -247,7 +253,8 @@ export default {
   >>> .el-scrollbar__view {
     padding: 0 15px 15px;
     .el-input-number,
-    .el-select {
+    .el-select,
+    .el-cascader {
       width: 100%;
     }
   }
