@@ -263,7 +263,7 @@ export default {
     setSpanEditAttr(node, canEdit) {
       if (node && node.hasAttribute('contenteditable')) {
         if (node.getAttribute('contenteditable') != canEdit) {
-          node.setAttribute('contenteditable', canEdit)
+          node.setAttribute('contenteditable', false)
         }
       }
 
@@ -274,7 +274,7 @@ export default {
             this.setSpanEditAttr(element, canEdit)
           } else if (element.hasAttribute('contenteditable')) {
             if (node.getAttribute('contenteditable') != canEdit) {
-              element.setAttribute('contenteditable', canEdit)
+              element.setAttribute('contenteditable', false)
             }
           }
         }
