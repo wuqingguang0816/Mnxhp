@@ -508,7 +508,6 @@ export default {
     },
     handleRelation(field) {
       if (!field) return
-
       const currRelations = this.relations
       for (let key in currRelations) {
         if (key === field) {

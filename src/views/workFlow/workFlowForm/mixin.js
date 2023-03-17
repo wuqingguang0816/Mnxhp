@@ -64,6 +64,7 @@ export default {
       this.$refs[this.formRef].validate((valid) => {
         if (valid) {
           if (this.exist && !this.exist()) return
+          if (this.selfExist && !this.selfExist()) return
           let dataForm = {}
           if (this.beforeSubmit && typeof this.beforeSubmit === "function") {
             dataForm = this.beforeSubmit()

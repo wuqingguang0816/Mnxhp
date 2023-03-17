@@ -50,7 +50,7 @@ export default {
       const query = {
         flowDoneType: [],
         toBeReviewedType: [],
-        toBeReviewedType: [],
+        flowCirculateType: [],
       }
       this.list.map(ele => {
         if (ele.id == 'flowDone') query.flowDoneType = ele.category

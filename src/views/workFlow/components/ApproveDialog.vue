@@ -139,6 +139,7 @@ export default {
       this.dataForm.branchList = []
       this.dataForm.handleOpinion = ''
       this.formData.flowId = flowId
+      this.dataForm.rejectType = this.properties.rejectType == 3 ? 1 : this.properties.rejectType
       this.copyIds = []
       this.signImg = ""
       if (this.properties && this.properties.hasSign) this.signImg = this.userInfo.signImg

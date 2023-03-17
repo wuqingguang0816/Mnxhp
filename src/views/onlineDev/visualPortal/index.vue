@@ -29,7 +29,7 @@
           <template v-if="showAll">
             <el-col :span="6">
               <el-form-item label="锁定">
-                <el-select v-model="enabledLock" placeholder="请选择锁定类型">
+                <el-select v-model="enabledLock" placeholder="请选择锁定类型" clearable>
                   <el-option label="启用" :value="1" />
                   <el-option label="禁用" :value="0" />
                 </el-select>

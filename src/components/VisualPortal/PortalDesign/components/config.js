@@ -62,6 +62,7 @@ export const layoutComponents = [
     label: '卡片面板',
     jnpfKey: 'card',
     title: '卡片面板',
+    visibility: ["pc", "app"],
     card: {
       titleFontSize: 14,
       titleFontWeight: false,
@@ -92,6 +93,7 @@ export const layoutComponents = [
     label: '标签面板',
     jnpfKey: 'tab',
     title: '标签面板',
+    visibility: ["pc", "app"],
     card: {
       titleFontSize: 14,
       titleFontWeight: false,
@@ -135,6 +137,7 @@ export const layoutComponents = [
   //   label: '折叠面板',
   //   jnpfKey: 'collapse',
   //   title: '折叠面板',
+  //   visibility: ["pc", "app"],
   //   card: {
   //     titleFontSize: 14,
   //     titleFontWeight: false,
@@ -177,6 +180,7 @@ export const systemComponents = [{
   label: '公告通知',
   jnpfKey: 'notice',
   title: '公告通知',
+  visibility: ["pc", "app"],
   card: {
     titleFontSize: 14,
     titleFontWeight: false,
@@ -207,6 +211,7 @@ export const systemComponents = [{
   label: '未读邮件',
   jnpfKey: 'email',
   title: '未读邮件',
+  visibility: ["pc", "app"],
   card: {
     titleFontSize: 14,
     titleFontWeight: false,
@@ -237,6 +242,7 @@ export const systemComponents = [{
   label: '待办事项',
   jnpfKey: 'todoList',
   title: '待办事项',
+  visibility: ["pc", "app"],
   card: {
     titleFontSize: 14,
     titleFontWeight: false,
@@ -269,6 +275,7 @@ export const basicComponents = [{
   jnpfKey: 'todo',
   title: '我的待办',
   renderKey: '',
+  visibility: ["pc", "app"],
   card: {
     titleFontSize: 14,
     titleFontWeight: false,
@@ -322,6 +329,7 @@ export const basicComponents = [{
   jnpfKey: 'commonFunc',
   title: '常用功能',
   renderKey: '',
+  visibility: ["pc", "app"],
   card: {
     titleFontSize: 14,
     titleFontWeight: false,
@@ -434,6 +442,7 @@ export const basicComponents = [{
   jnpfKey: 'dataBoard',
   title: '数据面板',
   renderKey: '',
+  visibility: ["pc", "app"],
   card: {
     titleFontSize: 14,
     titleFontWeight: false,
@@ -491,6 +500,7 @@ export const basicComponents = [{
   propsApi: '',
   border: true,
   renderKey: '',
+  visibility: ["pc", "app"],
   card: {
     titleFontSize: 14,
     titleFontWeight: false,
@@ -614,6 +624,7 @@ export const basicComponents = [{
   jnpfKey: 'text',
   title: '文本',
   renderKey: '',
+  visibility: ["pc", "app"],
   card: {
     titleFontSize: 14,
     titleFontWeight: false,
@@ -670,6 +681,7 @@ export const basicComponents = [{
   jnpfKey: 'image',
   title: '图片',
   renderKey: '',
+  visibility: ["pc", "app"],
   card: {
     titleFontSize: 14,
     titleFontWeight: false,
@@ -724,6 +736,7 @@ export const basicComponents = [{
   jnpfKey: 'carousel',
   title: '轮播图',
   renderKey: '',
+  visibility: ["pc", "app"],
   card: {
     titleFontSize: 14,
     titleFontWeight: false,
@@ -848,6 +861,7 @@ export const basicComponents = [{
   jnpfKey: 'video',
   title: '视频',
   renderKey: '',
+  visibility: ["pc", "app"],
   card: {
     titleFontSize: 14,
     titleFontWeight: false,
@@ -892,6 +906,7 @@ export const basicComponents = [{
   jnpfKey: 'schedule',
   title: "日程",
   renderKey: '',
+  visibility: ["pc", "app"],
   card: {
     titleFontSize: 14,
     titleFontWeight: false,
@@ -929,6 +944,7 @@ export const basicComponents = [{
   label: 'iframe',
   jnpfKey: 'iframe',
   title: 'iframe',
+  visibility: ["pc"],
   card: {
     titleFontSize: 14,
     titleFontWeight: false,
@@ -965,6 +981,7 @@ export const chartComponents = [{
   jnpfKey: 'barChart',
   title: '柱状图',
   renderKey: '',
+  visibility: ["pc", "app"],
   card: {
     titleFontSize: 14,
     titleFontWeight: false,
@@ -1077,6 +1094,7 @@ export const chartComponents = [{
   jnpfKey: 'pieChart',
   title: '饼图',
   renderKey: '',
+  visibility: ["pc", "app"],
   card: {
     titleFontSize: 14,
     titleFontWeight: false,
@@ -1165,6 +1183,7 @@ export const chartComponents = [{
   jnpfKey: 'lineChart',
   title: '折线图',
   renderKey: '',
+  visibility: ["pc", "app"],
   card: {
     titleFontSize: 14,
     titleFontWeight: false,
@@ -1275,6 +1294,7 @@ export const chartComponents = [{
   jnpfKey: 'radarChart',
   title: '雷达图',
   renderKey: '',
+  visibility: ["pc", "app"],
   card: {
     titleFontSize: 14,
     titleFontWeight: false,
@@ -1363,6 +1383,7 @@ export const chartComponents = [{
   jnpfKey: 'mapChart',
   title: '地图',
   renderKey: '',
+  visibility: ["pc"],
   card: {
     titleFontSize: 14,
     titleFontWeight: false,
@@ -1466,6 +1487,7 @@ export const chartComponents = [{
   jnpfKey: 'rankList',
   title: '排行榜',
   renderKey: '',
+  visibility: ["pc", "app"],
   card: {
     titleFontSize: 14,
     titleFontWeight: false,
@@ -1512,6 +1534,7 @@ export const chartComponents = [{
   jnpfKey: 'timeAxis',
   title: '时间轴',
   renderKey: '',
+  visibility: ["pc", "app"],
   card: {
     titleFontSize: 14,
     titleFontWeight: false,

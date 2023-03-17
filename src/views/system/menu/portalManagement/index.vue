@@ -49,6 +49,14 @@
                   :formatter="jnpf.tableDateFormat" />
                 <el-table-column prop="lastModifyTime" label="最后修改时间"
                   :formatter="jnpf.tableDateFormat" />
+                <el-table-column prop="sortCode" label="排序" width="70" align="center" />
+                <el-table-column prop="enabledMark" label="状态" width="70" align="center">
+                  <template slot-scope="scope">
+                    <el-tag :type="scope.row.enabledMark == 1 ? 'success' : 'danger'"
+                      disable-transitions>
+                      {{scope.row.enabledMark==1?'启用':'禁用'}}</el-tag>
+                  </template>
+                </el-table-column>
                 <el-table-column label="操作" fixed="right" width="200">
                   <template slot-scope="scope">
                     <tableOpts @edit="addOrUpdateHandle(scope.row.id)"
@@ -87,7 +95,7 @@
             <div class="dialog-main">
               <div class="item" :class="{'active':releaseQuery.pc===1}" @click="selectToggle('pc')">
                 <i class="item-icon icon-ym icon-ym-pc"></i>
-                <p class="item-title">同步Web端菜单</p>
+                <p class="item-title">同步Web端门户</p>
                 <div class="icon-checked">
                   <i class="el-icon-check"></i>
                 </div>
@@ -95,7 +103,7 @@
               <div class="item" :class="{'active':releaseQuery.app===1}"
                 @click="selectToggle('app')">
                 <i class="item-icon icon-ym icon-ym-mobile"></i>
-                <p class="item-title">同步APP端菜单</p>
+                <p class="item-title">同步APP端门户</p>
                 <div class="icon-checked">
                   <i class="el-icon-check"></i>
                 </div>
@@ -234,12 +242,12 @@ export default {
         ...this.listQuery,
         keyword: this.keyword,
       }
-      getPortalManageList(this.systemId, query)
-        .then((res) => {
-          this.list = res.data.list;
-          this.listLoading = false;
-          this.btnLoading = false;
-        })
+      getPortalManageList(this.systemId, query).then((res) => {
+        this.list = res.data.list;
+        this.total = res.data.pagination.total
+        this.listLoading = false;
+        this.btnLoading = false;
+      })
         .catch(() => {
           this.listLoading = false;
           this.btnLoading = false;
@@ -265,8 +273,7 @@ export default {
             },
           });
         });
-      })
-        .catch(() => { });
+      }).catch(() => { });
     },
     exportMenu(id) {
       this.$confirm("您确定要导出该菜单, 是否继续?", "提示", {

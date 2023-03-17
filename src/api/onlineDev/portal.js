@@ -68,10 +68,11 @@ export function SetDefault(id) {
   })
 }
 // 获取门户展示数据(权限)
-export function getAuthPortal(id) {
+export function getAuthPortal(id, data) {
   return request({
     url: `/api/visualdev/Portal/${id}/auth`,
-    method: 'GET'
+    method: 'GET',
+    data
   })
 }
 // 获取全国省市区
