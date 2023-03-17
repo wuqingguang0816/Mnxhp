@@ -8,9 +8,9 @@
     </el-form-item>
     <el-form-item label="默认值">
       <el-radio-group v-model="activeData.__config__.defaultValue">
-        <el-radio :label="item[activeData.__config__.props.value]"
-          v-for="(item,i) in activeData.options" :key="i">
-          {{item[activeData.__config__.props.label]}}</el-radio>
+        <el-radio :label="item[activeData.props.props.value]" v-for="(item,i) in activeData.options"
+          :key="i">
+          {{item[activeData.props.props.label]}}</el-radio>
       </el-radio-group>
     </el-form-item>
     <el-form-item label="排列方式">
@@ -70,7 +70,7 @@
         </el-row>
       </el-form-item>
       <el-form-item label="存储字段">
-        <el-select v-model="activeData.__config__.props.value" placeholder="请选择存储字段">
+        <el-select v-model="activeData.props.props.value" placeholder="请选择存储字段">
           <el-option label="id" value="id"></el-option>
           <el-option label="enCode" value="enCode"></el-option>
         </el-select>
@@ -82,10 +82,10 @@
           :title="activeData.__config__.propsName" popupTitle="远端数据" @change="propsUrlChange" />
       </el-form-item>
       <el-form-item label="存储字段">
-        <el-input v-model="activeData.__config__.props.value" placeholder="请输入存储字段" />
+        <el-input v-model="activeData.props.props.value" placeholder="请输入存储字段" />
       </el-form-item>
       <el-form-item label="显示字段">
-        <el-input v-model="activeData.__config__.props.label" placeholder="请输入显示字段" />
+        <el-input v-model="activeData.props.props.label" placeholder="请输入显示字段" />
       </el-form-item>
       <el-table :data="activeData.__config__.templateJson"
         v-if="activeData.__config__.templateJson && activeData.__config__.templateJson.length">
@@ -185,6 +185,16 @@ export default {
     },
     handleSure(arr) {
       this.activeData.options = arr || []
+    },
+    dataTypeChange(val) {
+      this.activeData.__config__.defaultValue = ''
+      this.activeData.options = []
+      this.activeData.props.props.value = 'id'
+      this.activeData.props.props.label = 'fullName'
+      this.activeData.__config__.dictionaryType = ''
+      this.activeData.__config__.propsUrl = ''
+      this.activeData.__config__.propsName = ''
+      this.activeData.__config__.templateJson = []
     },
   }
 }

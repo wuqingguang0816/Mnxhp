@@ -4,19 +4,20 @@
       :disabled="disabled">
       <p v-for="(item,i) in options" :key="i"
         :class="direction==='vertical'?border?'select-border':'select-item':'select-horizontal'">
-        <el-radio :label="item.id" :border="border">
-          {{item.fullName}}</el-radio>
+        <el-radio :label="item[props.value]" :border="border">
+          {{item[props.label]}}</el-radio>
       </p>
     </el-radio-group>
     <el-radio-group v-model="innerValue" :size="size" v-else :disabled="disabled">
       <template v-if="direction=='horizontal'">
-        <el-radio-button v-for="(item,i) in options" :key="i" :label="item.id" :border="border">
-          {{item.fullName}}</el-radio-button>
+        <el-radio-button v-for="(item,i) in options" :key="i" :label="item[props.value]"
+          :border="border">
+          {{item[props.label]}}</el-radio-button>
       </template>
       <template v-else>
         <p v-for="(item,i) in options" :key="i" class="vertical-button">
-          <el-radio-button :label="item.id" :border="border">
-            {{item.fullName}}</el-radio-button>
+          <el-radio-button :label="item[props.value]" :border="border">
+            {{item[props.label]}}</el-radio-button>
         </p>
       </template>
     </el-radio-group>
@@ -54,6 +55,10 @@ export default {
       type: Boolean,
       default: false
     },
+    props: {
+      value: "id",
+      label: "fullName",
+    }
   },
   data() {
     return {

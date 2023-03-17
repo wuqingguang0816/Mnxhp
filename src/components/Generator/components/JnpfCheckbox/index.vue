@@ -4,20 +4,20 @@
       :disabled="disabled">
       <p v-for="(item,i) in options" :key="i"
         :class="direction==='vertical'?border?'select-border':'select-item':'select-horizontal'">
-        <el-checkbox :label="item.id" :border="border" @change="onChange()">
-          {{item.fullName}}</el-checkbox>
+        <el-checkbox :label="item[props.value]" :border="border" @change="onChange()">
+          {{item[props.label]}}</el-checkbox>
       </p>
     </el-checkbox-group>
     <el-checkbox-group v-model="innerValue" :size="size" v-else :disabled="disabled">
       <template v-if="direction=='horizontal'">
-        <el-checkbox-button v-for="(item,i) in options" :key="i" :label="item.id" :border="border"
-          @change="onChange()">
-          {{item.fullName}}</el-checkbox-button>
+        <el-checkbox-button v-for="(item,i) in options" :key="i" :label="item[props.value]"
+          :border="border" @change="onChange()">
+          {{item[props.label]}}</el-checkbox-button>
       </template>
       <template v-else>
         <p v-for="(item,i) in options" :key="i" class="vertical-button">
-          <el-checkbox-button :label="item.id" :border="border" @change="onChange()">
-            {{item.fullName}}</el-checkbox-button>
+          <el-checkbox-button :label="item[props.value]" :border="border" @change="onChange()">
+            {{item[props.label]}}</el-checkbox-button>
         </p>
       </template>
     </el-checkbox-group>
@@ -56,6 +56,10 @@ export default {
       type: Boolean,
       default: false
     },
+    props: {
+      value: "id",
+      label: "fullName",
+    }
   },
   data() {
     return {
@@ -68,7 +72,8 @@ export default {
     }
   },
   computed: {},
-  created() { },
+  created() {
+  },
   mounted() { },
   methods: {
     onChange() {

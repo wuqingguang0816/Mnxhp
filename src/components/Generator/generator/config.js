@@ -218,10 +218,6 @@ export const inputComponents = [
       propsUrl: "",
       propsName: "",
       templateJson: [],
-      props: {
-        label: "fullName",
-        value: "id"
-      }
     },
     on: {
       change:
@@ -230,6 +226,12 @@ export const inputComponents = [
     style: {},
     size: "small",
     disabled: false,
+    props: {
+      props: {
+        label: "fullName",
+        value: "id"
+      }
+    },
     options: [
       {
         fullName: "选项一",
@@ -268,10 +270,6 @@ export const inputComponents = [
       propsUrl: "",
       propsName: "",
       templateJson: [],
-      props: {
-        label: "fullName",
-        value: "id"
-      }
     },
     on: {
       change:
@@ -281,6 +279,12 @@ export const inputComponents = [
     size: "small",
     optionType: "default",
     border: false,
+    props: {
+      props: {
+        label: "fullName",
+        value: "id"
+      }
+    },
     options: [
       {
         fullName: "选项一",
@@ -318,6 +322,8 @@ export const inputComponents = [
       propsUrl: "",
       propsName: "",
       templateJson: [],
+    },
+    props: {
       props: {
         label: "fullName",
         value: "id"
@@ -1088,11 +1094,8 @@ export const selectComponents = [
     style: { width: "100%" },
     placeholder: "请选择",
     props: {
-      props: {
-        value: "id",
-        label: "fullName",
-        children: "children"
-      }
+      value: "id",
+      label: "fullName",
     },
     options: [
       {
