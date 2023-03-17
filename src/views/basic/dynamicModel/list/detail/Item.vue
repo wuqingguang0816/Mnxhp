@@ -198,6 +198,21 @@
           </el-collapse-item>
         </el-collapse>
       </template>
+      <template v-if="item.__config__.jnpfKey==='tableGrid'">
+        <table class="table-grid-box"
+          :style="{'--borderType':item.__config__.borderType,'--borderColor':item.__config__.borderColor,'--borderWidth':item.__config__.borderWidth+ 'px'}">
+          <tbody>
+            <tr v-for="child,index in item.__config__.children" :key="index">
+              <td v-for="(it,i) in child.__config__.children" :key="i"
+                :colspan="it.__config__.colspan" :rowspan="it.__config__.rowspan"
+                v-show="!it.__config__.merged">
+                <Item v-for="(childItem, childIndex) in it.__config__.children" :key="childIndex"
+                  :item="childItem" v-bind="$props" v-on="$listeners" />
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </template>
     </template>
   </el-col>
 </template>
