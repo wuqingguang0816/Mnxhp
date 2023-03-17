@@ -86,7 +86,7 @@ export default {
           } else {
             if (res.data.formData) {
               this.formData = JSON.parse(res.data.formData)
-              this.layout = this.formData.layout || []
+              this.layout = this.filterList(JSON.parse(JSON.stringify(this.formData.layout)) || [])
               this.refreshData = this.formData.refresh || {}
             }
           }
@@ -101,6 +101,17 @@ export default {
         this.ajaxing = false
         this.noData = true
       })
+    },
+    filterList(layout) {
+      const loop = list => {
+        for (let i = 0; i < list.length; i++) {
+          const item = list[i];
+          if (!(Array.isArray(item.visibility) && item.visibility.includes('pc'))) list.splice(i, 1)
+          if (item.children && item.children.length) loop(item.children)
+        }
+      }
+      loop(layout)
+      return layout
     },
     refresh(id) {
       if (!id) return
