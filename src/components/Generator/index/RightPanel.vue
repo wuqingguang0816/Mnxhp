@@ -384,22 +384,24 @@
               <el-input-number v-model="activeData.gutter" :min="0" placeholder="栅格间隔"
                 controls-position="right" />
             </el-form-item>
-            <el-form-item label="表格边框" v-if="activeData.__config__.jnpfKey==='tableGrid'">
-              <el-radio-group v-model="activeData.__config__.borderType">
-                <el-radio-button label="none">无</el-radio-button>
-                <el-radio-button label="solid">实线</el-radio-button>
-                <el-radio-button label="dashed">虚线</el-radio-button>
-                <el-radio-button label="dotted">点状</el-radio-button>
-              </el-radio-group>
-            </el-form-item>
-            <template v-if="activeData.__config__.borderType!='none'">
-              <el-form-item label="边框颜色">
-                <el-color-picker v-model="activeData.__config__.borderColor"></el-color-picker>
+            <template v-if="activeData.__config__.jnpfKey==='tableGrid'">
+              <el-form-item label="表格边框">
+                <el-radio-group v-model="activeData.__config__.borderType">
+                  <el-radio-button label="none">无</el-radio-button>
+                  <el-radio-button label="solid">实线</el-radio-button>
+                  <el-radio-button label="dashed">虚线</el-radio-button>
+                  <el-radio-button label="dotted">点状</el-radio-button>
+                </el-radio-group>
               </el-form-item>
-              <el-form-item label="边框宽度">
-                <el-input-number v-model="activeData.__config__.borderWidth" :min="0" :precision="0"
-                  controls-position="right" />
-              </el-form-item>
+              <template v-if="activeData.__config__.borderType!='none'">
+                <el-form-item label="边框颜色">
+                  <el-color-picker v-model="activeData.__config__.borderColor"></el-color-picker>
+                </el-form-item>
+                <el-form-item label="边框宽度">
+                  <el-input-number v-model="activeData.__config__.borderWidth" :min="0"
+                    :precision="0" controls-position="right" />
+                </el-form-item>
+              </template>
             </template>
           </template>
         </el-form>
