@@ -11,7 +11,7 @@
           </el-col>
           <el-col :span="6">
             <el-form-item label="数据连接">
-              <el-select v-model="dataBase" placeholder="请选择数据连接" @change="getTableData">
+              <el-select v-model="dataBase" placeholder="请选择数据连接" @change="getTableData" filterable>
                 <el-option-group v-for="group in dbOptions" :key="group.fullName"
                   :label="group.fullName">
                   <el-option v-for="item in group.children" :key="item.id" :label="item.fullName"
@@ -67,7 +67,7 @@
           <el-table-column type="index" width="50" label="序号" align="center" />
           <el-table-column prop="table" label="表名" width="300" sortable />
           <el-table-column prop="tableName" label="说明" show-overflow-tooltip sortable />
-          <el-table-column prop="sum" label="总数" width="90" sortable />
+          <!-- <el-table-column prop="sum" label="总数" width="90" sortable /> -->
           <el-table-column label="操作" width="150" fixed="right">
             <template slot-scope="scope">
               <tableOpts @edit="addOrUpdateHandle(scope.row.table)"
@@ -91,6 +91,8 @@
             </template>
           </el-table-column>
         </JNPF-table>
+        <pagination :total="total" :page.sync="listQuery.currentPage"
+          :limit.sync="listQuery.pageSize" @pagination="initData" />
       </div>
     </div>
     <Form v-show="formVisible" ref="Form" @close="closeForm" />
@@ -110,6 +112,12 @@ export default {
   components: { Form, Preview, FieldsList },
   data() {
     return {
+      total: 0,
+      listQuery: {
+        keyword: '',
+        currentPage: 1,
+        pageSize: 20
+      },
       keyword: '',
       list: [],
       formVisible: false,
@@ -129,7 +137,13 @@ export default {
       this.getTableData()
     },
     reset() {
-      this.keyword = ''
+      this.keyword = '';
+      this.listQuery = {
+        currentPage: 1,
+        pageSize: 20,
+        sort: 'desc',
+        sidx: ''
+      }
       this.getTableData()
     },
     initData() {
@@ -141,9 +155,15 @@ export default {
       })
     },
     getTableData() {
+
+      let query = {
+        ...this.listQuery,
+        keyword: this.keyword
+      }
       this.listLoading = true
-      DataModelList(this.dataBase, { keyword: this.keyword }).then(res => {
+      DataModelList(this.dataBase, query).then(res => {
         this.list = res.data.list
+        this.total = res.data.pagination.total
         for (let i = 0; i < this.list.length; i++) {
           this.$set(this.list[i], 'isExpanded', false)
           this.$set(this.list[i], 'childTableLoading', false)
