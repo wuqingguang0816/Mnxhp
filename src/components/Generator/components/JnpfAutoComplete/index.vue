@@ -21,10 +21,6 @@ export default {
     formData: {
       type: Object
     },
-    options: {
-      type: Array,
-      default: () => []
-    },
     placeholder: {
       type: String,
       default: '请选择'
@@ -107,7 +103,7 @@ export default {
       if (!this.interfaceId) return
       const paramList = this.getParamList()
       paramList.forEach(res => {
-        res.defaultValue = res.relationField === '@keyword' ? queryString : res.relationField
+        res.defaultValue = res.relationField === '@keyword' ? queryString : res.defaultValue
       })
       let query = {
         interfaceId: this.interfaceId,

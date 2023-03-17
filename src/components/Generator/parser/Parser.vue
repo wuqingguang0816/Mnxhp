@@ -417,6 +417,24 @@ export default {
 
           }
         }
+        if (config.jnpfKey === 'address' && ['address', 'cities'].includes(cur.selectType)) {
+          if (cur.relationField) {
+            let item = {
+              ...cur,
+              realVModel: cur.__config__.isSubTable ? cur.__config__.parentVModel + '-' + cur.__vModel__ : cur.__vModel__,
+              opType: 'setAddressOptions'
+            }
+            if (relations.hasOwnProperty(cur.relationField)) {
+              let boo = relations[cur.relationField].some(o => o.realVModel === cur.realVModel)
+              if (!boo) {
+                relations[cur.relationField].push(item)
+              }
+            } else {
+              relations[cur.relationField] = [item]
+            }
+
+          }
+        }
         if (config.jnpfKey === 'popupSelect') {
           if (cur.templateJson && cur.templateJson.length) {
             for (let i = 0; i < cur.templateJson.length; i++) {
@@ -539,6 +557,10 @@ export default {
                 let value = this[this.formConf.formModel][e.relationField] || []
                 this.comSet('ableRelationIds', e.__vModel__, Array.isArray(value) ? value : [value])
               }
+              if (e.opType === 'setAddressOptions') {
+                let value = this[this.formConf.formModel][e.relationField] || []
+                this.comSet('ableAddressIds', e.__vModel__, Array.isArray(value) ? value : [value])
+              }
               if (e.opType === 'setPopupOptions') { }
               if (e.opType === 'setDate') {
                 let startTime = ''
@@ -593,6 +615,10 @@ export default {
               if (e.opType === 'setUserOptions') {
                 let value = this[this.formConf.formModel][e.relationField] || []
                 this.comSet('ableRelationIds', e.__vModel__, Array.isArray(value) ? value : [value])
+              }
+              if (e.opType === 'setAddressOptions') {
+                let value = this[this.formConf.formModel][e.relationField] || []
+                this.comSet('ableAddressIds', e.__vModel__, Array.isArray(value) ? value : [value])
               }
               if (e.opType === 'setDate') {
                 let startTime = ''
@@ -808,6 +834,9 @@ export default {
                 this.$set(item, field, value)
                 break;
               case 'ableRelationIds':
+                this.$set(item, field, value)
+                break;
+              case 'ableAddressIds':
                 this.$set(item, field, value)
                 break;
               case 'startTime':

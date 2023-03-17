@@ -23,9 +23,6 @@
     <el-form-item label="按钮文字" v-if="activeData.closable">
       <el-input v-model="activeData.closeText" />
     </el-form-item>
-    <el-form-item label="提示图标">
-      <el-switch v-model="activeData.showIcon" />
-    </el-form-item>
   </el-row>
 </template>
 <script>

@@ -1226,6 +1226,8 @@ export const selectComponents = [
     placeholder: "请选择",
     showPath: false,
     disabled: false,
+    ableAddressIds: [],
+    selectType: 'all',
     clearable: true,
     filterable: false,
     multiple: false,

@@ -579,7 +579,7 @@
             <el-table :data="formOperatesList" class="JNPF-common-table" size="mini" height="100%">
               <el-table-column prop="name" label="表单字段" align="left"></el-table-column>
               <el-table-column width="80">
-                <template slot="header">
+                <template slot="header" slot-scope="scope">
                   <el-checkbox @change="updateReadAllSelected($event,1)"
                     :indeterminate="indeterminateReadFlag" v-model="readAllChecked">查看</el-checkbox>
                 </template>
@@ -589,7 +589,7 @@
                 </template>
               </el-table-column>
               <el-table-column width="80">
-                <template slot="header">
+                <template slot="header" slot-scope="scope">
                   <el-checkbox @change="updateReadAllSelected($event,2)"
                     :indeterminate="indeterminateWriteFlag"
                     v-model="writeAllChecked">编辑</el-checkbox>
@@ -600,7 +600,7 @@
                 </template>
               </el-table-column>
               <el-table-column width="80">
-                <template slot="header">
+                <template slot="header" slot-scope="scope">
                   <el-checkbox @change="updateReadAllSelected($event,3)"
                     :indeterminate="indeterminateRequiredFlag"
                     v-model="requiredAllChecked">编辑</el-checkbox>
@@ -1629,7 +1629,7 @@
             <el-table :data="formOperatesList" class="JNPF-common-table" size="mini" height="100%">
               <el-table-column prop="name" label="表单字段" align="left"></el-table-column>
               <el-table-column width="80">
-                <template slot="header">
+                <template slot="header" slot-scope="scope">
                   <el-checkbox @change="updateReadAllSelected($event,1)"
                     :indeterminate="indeterminateReadFlag" v-model="readAllChecked">查看</el-checkbox>
                 </template>
@@ -1639,7 +1639,7 @@
                 </template>
               </el-table-column>
               <el-table-column width="80">
-                <template slot="header">
+                <template slot="header" slot-scope="scope">
                   <el-checkbox @change="updateReadAllSelected($event,2)"
                     :indeterminate="indeterminateWriteFlag"
                     v-model="writeAllChecked">编辑</el-checkbox>
@@ -1650,7 +1650,7 @@
                 </template>
               </el-table-column>
               <el-table-column width="80">
-                <template slot="header">
+                <template slot="header" slot-scope="scope">
                   <el-checkbox @change="updateReadAllSelected($event,3)"
                     :indeterminate="indeterminateRequiredFlag"
                     v-model="requiredAllChecked">编辑</el-checkbox>
