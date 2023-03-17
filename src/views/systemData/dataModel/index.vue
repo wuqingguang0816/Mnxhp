@@ -155,7 +155,6 @@ export default {
       })
     },
     getTableData() {
-
       let query = {
         ...this.listQuery,
         keyword: this.keyword
