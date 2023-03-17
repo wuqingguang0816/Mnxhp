@@ -2,7 +2,8 @@
   <transition name="el-zoom-in-center">
     <div class="JNPF-preview-main" v-loading="loading">
       <div class="header-wrap">
-        <el-page-header @back="goBack" :content="title+'的打印日志'"> </el-page-header>
+        <el-page-header @back="goBack" :content="title + '的打印日志'">
+        </el-page-header>
       </div>
       <el-divider style="margin: 0px;"></el-divider>
       <div class="main-panel">
@@ -11,23 +12,41 @@
             <el-form :model="query">
               <el-col :span="6">
                 <el-form-item label="关键词">
-                  <el-input v-model="query.printTitle" placeholder="请输入关键词" clearable>
+                  <el-input
+                    v-model="query.keyword"
+                    placeholder="请输入关键词"
+                    clearable
+                  >
                   </el-input>
                 </el-form-item>
               </el-col>
               <el-col :span="6">
                 <el-form-item label="打印时间">
-                  <el-date-picker v-model="query.printTimeRange" type="daterange" align="right"
-                    unlink-panels range-separator="至" start-placeholder="开始日期"
-                    end-placeholder="结束日期">
+                  <el-date-picker
+                    v-model="printTimeRange"
+                    type="daterange"
+                    align="right"
+                    unlink-panels
+                    range-separator="至"
+                    start-placeholder="开始日期"
+                    end-placeholder="结束日期"
+                    :picker-options="pickerOptions"
+                  >
                   </el-date-picker>
                 </el-form-item>
               </el-col>
 
               <el-col :span="6">
                 <el-form-item>
-                  <el-button type="primary" icon="el-icon-search" @click="initData">查询</el-button>
-                  <el-button icon="el-icon-refresh-right" @click="reset()">重置</el-button>
+                  <el-button
+                    type="primary"
+                    icon="el-icon-search"
+                    @click="initData"
+                    >查询</el-button
+                  >
+                  <el-button icon="el-icon-refresh-right" @click="reset()"
+                    >重置</el-button
+                  >
                 </el-form-item>
               </el-col>
             </el-form>
@@ -36,11 +55,15 @@
             <JNPF-table v-loading="listLoading" :data="list">
               <el-table-column prop="printTitle" label="名称" align="left" />
               <el-table-column prop="printMan" label="打印人" align="left" />
-              <el-table-column prop="printTime" label="打印时间" align="left" />
+              <el-table-column prop="printTime" label="打印时间" :formatter="jnpf.tableDateFormat" align="left" />
               <el-table-column prop="printNum" label="打印条数" align="left" />
             </JNPF-table>
-            <pagination :total="total" :page.sync="query.current" :limit.sync="query.size"
-              @pagination="initData" />
+            <pagination
+              :total="pagination.total"
+              :page.sync="pagination.currentPage"
+              :limit.sync="pagination.pageSize"
+              @pagination="initData"
+            />
           </div>
         </div>
       </div>
@@ -55,52 +78,94 @@ export default {
   props: {},
   data() {
     return {
+      pickerOptions: {
+        shortcuts: [
+          {
+            text: "最近一周",
+            onClick(picker) {
+              const end = new Date();
+              const start = new Date();
+              start.setTime(start.getTime() - 3600 * 1000 * 24 * 7);
+              picker.$emit("pick", [start, end]);
+            }
+          },
+          {
+            text: "最近一个月",
+            onClick(picker) {
+              const end = new Date();
+              const start = new Date();
+              start.setTime(start.getTime() - 3600 * 1000 * 24 * 30);
+              picker.$emit("pick", [start, end]);
+            }
+          },
+          {
+            text: "最近三个月",
+            onClick(picker) {
+              const end = new Date();
+              const start = new Date();
+              start.setTime(start.getTime() - 3600 * 1000 * 24 * 90);
+              picker.$emit("pick", [start, end]);
+            }
+          }
+        ]
+      },
       list: [],
-      total: 0,
+      pagination: {},
       loading: false,
       listLoading: true,
       title: "",
+      printTimeRange: [],
       query: {
-        printTitle: "",
+        keyword: "",
         printId: "",
-        printTimeRange: [],
-
-        current: 0,
-        size: 20,
-      },
+        startTime: undefined,
+        endTime: undefined,
+        currentPage: 0,
+        pageSize: 20
+      }
     };
   },
   methods: {
     show(row) {
-      this.query.printId = row.id;
-      this.title = row.fullName
+      this.title = row.fullName;
+      this.rowId = row.id;
       this.initData();
       this.loading = false;
     },
     initData() {
       this.listLoading = true;
+      if (this.printTimeRange && this.printTimeRange.length > 0) {
+        this.query.startTime = +this.printTimeRange[0];
+        this.query.endTime = +this.printTimeRange[1];
+      }else {
+        this.query.startTime = ''
+        this.query.endTime = ''
+      }
+      let url = `/api/system/printLog/${this.rowId}`;
       request({
-        url: `/api/system/printLog/list`,
-        method: "post",
-        data: this.query,
-      }).then((res) => {
-        this.list = res.data.records;
-        this.total = res.data.total;
+        url,
+        method: "get",
+        data: this.query
+      }).then(res => {
+        this.list = res.data.list;
+        this.pagination = res.data.pagination;
         this.listLoading = false;
       });
     },
     reset() {
-      this.query.printTitle = "";
-      this.query.printTimeRange = [];
-      this.initData()
+      this.query.keyword = "";
+      this.printTimeRange = [];
+      this.query.startTime = undefined;
+      this.query.endTime = undefined;
+      this.initData();
     },
     goBack() {
       this.$emit("goBack");
-    },
+    }
   },
   computed: {},
-  created() { },
-  mounted() { },
+  created() {},
+  mounted() {}
 };
 </script>
 
@@ -131,7 +196,7 @@ export default {
   font-size: 20px;
   background-color: #fff;
 }
->>>.el-divider--horizontal{
- margin: 0px;
+>>> .el-divider--horizontal {
+  margin: 0px;
 }
 </style>

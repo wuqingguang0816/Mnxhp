@@ -220,7 +220,7 @@ const actions = {
                 routerListData.push(newObj)
               } else {
                 e.path = path
-                if(path.startsWith("/")){
+                if (path.startsWith("/")) {
                   e.path = location.origin + path;
                 }
               }
@@ -238,7 +238,7 @@ const actions = {
             }
           }
         } else {
-          menuList = routerList && routerList.length ? routerList[0].children : menuList
+          menuList = routerList && routerList.length ? routerList[0].children || [] : menuList
         }
         if (!menuList.length) {
           reject('您的权限不足，请联系管理员')

@@ -36,6 +36,7 @@
 import Parser from '@/components/Generator/parser/Parser'
 import { getConfigData, getModelInfo, createModel } from '@/api/onlineDev/visualDev'
 import { getDataInterfaceRes } from '@/api/systemData/dataInterface'
+import {mapGetters} from "vuex";
 export default {
   name: 'popup',
   components: { Parser },
@@ -55,8 +56,12 @@ export default {
         id: "",
         data: ""
       },
-      modelId: ""
+      modelId: "",
+      isAdd:false
     }
+  },
+  computed: {
+    ...mapGetters(['userInfo']),
   },
   methods: {
     init(config, modelId, id, isPreview = true, row) {
@@ -65,6 +70,7 @@ export default {
       this.id = id
       this.isPreview = isPreview
       this.modelId = modelId
+      this.isAdd = true
       this.$nextTick(() => {
         if (this.config.modelId) this.getConfigData(row)
       })
@@ -116,8 +122,17 @@ export default {
         for (let i = 0; i < list.length; i++) {
           let item = list[i]
           if (item.__vModel__) {
-            const val = data.hasOwnProperty(item.__vModel__) ? data[item.__vModel__] : item.__config__.defaultValue
+            let val = data.hasOwnProperty(item.__vModel__) ? data[item.__vModel__] : item.__config__.defaultValue
             if (!item.__config__.isSubTable) item.__config__.defaultValue = val
+            if(this.isAdd || item.__config__.isSubTable == true) {//新增时候，默认当前
+              if(item.__config__.jnpfKey === 'date' && item.__config__.defaultCurrent == true) {
+                val = new Date().getTime()
+                item.__config__.defaultValue = val
+              }else if(item.__config__.jnpfKey === 'comSelect' && item.__config__.defaultCurrent == true && this.userInfo.organizeIdList instanceof Array && this.userInfo.organizeIdList.length > 0) {
+                val = item.multiple == true?[this.userInfo.organizeIdList]:this.userInfo.organizeIdList
+                item.__config__.defaultValue = val
+              }
+            }
           }
           if (!this.isPreview && this.useFormPermission) {
             let id = item.__config__.isSubTable ? parent.__vModel__ + '-' + item.__vModel__ : item.__vModel__
