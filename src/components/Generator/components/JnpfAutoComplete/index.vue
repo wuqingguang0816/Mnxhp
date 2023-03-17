@@ -107,7 +107,7 @@ export default {
       if (!this.interfaceId) return
       const paramList = this.getParamList()
       paramList.forEach(res => {
-        res.relationField = res.relationField === '@keyword' ? queryString : res.relationField
+        res.defaultValue = res.relationField === '@keyword' ? queryString : res.relationField
       })
       let query = {
         interfaceId: this.interfaceId,
@@ -117,7 +117,7 @@ export default {
       }
       getDataInterfaceDataSelect(this.interfaceId, query).then(res => {
         this.list = res.data.list || []
-        cb(this.list.splice(this.total))
+        cb(this.list.splice(0, this.total))
       }).catch(() => { })
 
     },
