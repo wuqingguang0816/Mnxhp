@@ -333,16 +333,18 @@ export default {
     ...mapGetters(['userInfo'])
   },
   created() {
-    this.getDictionaryData()
+
   },
   methods: {
     init(id, startTime) {
       this.dataForm.id = id || 0
       this.visible = true
+      this.dataForm.type = ''
       this.delVisible = false
       this.updateVisible = false
       this.repetitionType = false
       this.dataForm.duration = 60
+      this.getDictionaryData()
       this.dataForm.endTime = ''
       this.$nextTick(() => {
         this.$refs['dataForm'].resetFields()
