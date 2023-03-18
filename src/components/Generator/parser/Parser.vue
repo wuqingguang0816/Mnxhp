@@ -145,6 +145,7 @@ const layouts = {
         <el-col span={scheme.__config__.span} class="item-card">
           <el-card shadow={scheme.shadow} header={scheme.header} class="mb-20">
             {header}
+            {child}
           </el-card>
         </el-col>
       )
@@ -243,7 +244,7 @@ function buildListeners(scheme) {
               let _data = []
               outer: for (let i = 0; i < params[0].length; i++) {
                 inner: for (let j = 0; j < options.length; j++) {
-                  if (params[0][i] === options[j][config.props.value]) {
+                  if (params[0][i] === options[j][scheme.props.props.value]) {
                     _data.push(options[j])
                     break inner
                   }
@@ -253,7 +254,7 @@ function buildListeners(scheme) {
             } else {
               let _data = {}
               for (let i = 0; i < options.length; i++) {
-                if (params[0] === options[i][config.props.value]) {
+                if (params[0] === options[i][scheme.props.props.value]) {
                   _data = options[i]
                   break
                 }
