@@ -3,7 +3,9 @@
     <div class="uploader-file-progress" :class="progressingClass"
       :style="file.customCompleted||status==='error'?successProgressStyle:progressStyle"></div>
     <div class="uploader-file-info">
-      <div class="uploader-file-name"><i class="el-icon-paperclip"></i>{{file.name}}</div>
+      <div class="uploader-file-name">
+        <i class="el-icon-paperclip"></i>{{file.name.replaceAll('#', '')}}
+      </div>
       <!-- <div class="uploader-file-size">{{formatedSize}}</div>
       <div class="uploader-file-meta"></div> -->
       <div class="uploader-file-status">
