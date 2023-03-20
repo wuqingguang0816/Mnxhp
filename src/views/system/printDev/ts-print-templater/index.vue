@@ -341,9 +341,9 @@ export default {
       }
     },
     setSpanEditAttr(node, canEdit) {
-      if (node && node.hasAttribute("contenteditable")) {
-        if (node.getAttribute("contenteditable") != canEdit) {
-          node.setAttribute("contenteditable", canEdit);
+      if (node && node.hasAttribute('contenteditable')) {
+        if (node.getAttribute('contenteditable') != canEdit) {
+          node.setAttribute('contenteditable', false)
         }
       }
 
@@ -351,10 +351,10 @@ export default {
         for (let index = 0; index < node.children.length; index++) {
           const element = node.children[index];
           if (element.children) {
-            this.setSpanEditAttr(element, canEdit);
-          } else if (element.hasAttribute("contenteditable")) {
-            if (node.getAttribute("contenteditable") != canEdit) {
-              element.setAttribute("contenteditable", canEdit);
+            this.setSpanEditAttr(element, canEdit)
+          } else if (element.hasAttribute('contenteditable')) {
+            if (node.getAttribute('contenteditable') != canEdit) {
+              element.setAttribute('contenteditable', false)
             }
           }
         }

@@ -9,17 +9,19 @@ import handleClipboard from '@/utils/clipboard'
 let activeData = {}
 const components = {
   itemBtns(h, element, index, parent) {
+    const gutter = element.__config__.layout === 'colFormItem' && this.formConf.gutter ? this.formConf.gutter : 15
+    const rightDistance = gutter / 2
     const { copyItem, deleteItem } = this.$listeners
     return [
-      <span class="drawing-item-copy" title="复制" onClick={event => {
+      <span class="drawing-item-copy" style={{ '--rightDistance': rightDistance + 50 + 'px' }} title="复制" onClick={event => {
         copyItem(element, parent); event.stopPropagation()
       }}>
         <i class="el-icon-copy-document" />
       </span>,
-      <el-popconfirm title="确定删除该组件？" class="drawing-item-delete" onConfirm={event => {
+      <el-popconfirm title="确定删除该组件？" class="drawing-item-delete" style={{ '--rightDistance': rightDistance + 18 + 'px' }} onConfirm={event => {
         deleteItem(index, parent)
       }}>
-        <span title="删除" slot="reference" style="width:100%;height:100%;display:inline-block">
+        <span title="删除" slot="reference" style="width:100%;height:100%;display:inline-block" >
           <i class="el-icon-delete" />
         </span>
       </el-popconfirm>

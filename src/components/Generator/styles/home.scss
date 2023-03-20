@@ -490,7 +490,7 @@ $lighterBlue: #409EFF;
   &>.drawing-item-add-row,
   &>.drawing-item-add-col,
   &>.drawing-item-cell {
-    right: 56px;
+    right: var(--rightDistance);
     border-color: $lighterBlue;
     color: $lighterBlue;
     background: #fff;
@@ -522,7 +522,7 @@ $lighterBlue: #409EFF;
   }
 
   &>.drawing-item-delete {
-    right: 24px;
+    right: var(--rightDistance);
     border-color: #F56C6C;
     color: #F56C6C;
     background: #fff;

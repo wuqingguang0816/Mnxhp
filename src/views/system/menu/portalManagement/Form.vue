@@ -8,8 +8,11 @@
         <portalDialog :value="dataForm.portalId" :title="dataForm.fullName"
           :systemId="dataForm.systemId" @change="portalChange" />
       </el-form-item>
-      <el-form-item label="默认首页" prop="homePageMark">
-        <el-switch v-model="dataForm.homePageMark" :active-value="1" :inactive-value="0" />
+      <el-form-item label="分类" prop="category">
+        <el-select v-model="dataForm.category" placeholder="选择分类" readonly>
+          <el-option :key="item.id" :label="item.fullName" :value="item.id"
+            v-for="item in categoryList" />
+        </el-select>
       </el-form-item>
       <el-form-item label="排序" prop="sortCode">
         <el-input-number :min="0" :max="999999" v-model="dataForm.sortCode"
@@ -44,6 +47,7 @@ export default {
         id: '',
         portalId: '',
         fullName: '',
+        category: '',
         enCode: '',
         homePageMark: 0,
         sortCode: 0,
@@ -51,6 +55,7 @@ export default {
         description: '',
         systemId: '',//系统id
       },
+      categoryList: [],
       dataRule: {
         fullName: [
           { required: true, message: '门户名称不能为空', trigger: 'blur' },
@@ -78,11 +83,13 @@ export default {
     portalChange(id, item) {
       if (!id) {
         this.dataForm.portalId = ''
+        this.dataForm.categoryId = ''
         this.dataForm.fullName = ''
         return
       }
       if (this.dataForm.portalId === id) return
       this.dataForm.portalId = id
+      this.dataForm.category = item.categoryId
       this.dataForm.fullName = item.fullName
     },
     dataFormSubmit() {

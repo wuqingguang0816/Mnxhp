@@ -112,7 +112,7 @@ export default {
       this.printDialogVisible = true
       this.$nextTick(() => {
         if(this.formData.printId.length == 1){
-          this.printBrowseHandle(this.formData.printId[0].id)
+          this.printBrowseHandle(this.formData.printId[0])
           return
         }
         this.$refs.printDialog.init(this.formData.printId)

@@ -199,7 +199,7 @@ export default {
         // 自定义完成状态
         this.$set(file, 'customCompleted', true)
         let data = {
-          name: file.name,
+          name: file.name.replaceAll('#', ''),
           fileId: res.data.name,
           fileSize: res.data.fileSize,
           fileExtension: res.data.fileExtension,

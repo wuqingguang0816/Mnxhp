@@ -37,12 +37,8 @@
                 </el-tooltip>
               </div>
               <JNPF-table v-loading="listLoading" :data="list">
+                <el-table-column prop="category" label="分类" align="center" />
                 <el-table-column prop="fullName" label="门户名称" align="center" />
-                <el-table-column prop="homePageMark" label="默认首页" align="center">
-                  <template slot-scope="scope">
-                    <span>{{scope.row.homePageMark==1?'是':'否'}}</span>
-                  </template>
-                </el-table-column>
                 <el-table-column prop="description" label="说明" align="center" />
                 <el-table-column prop="creatorUser" label="创建人" />
                 <el-table-column prop="creatorTime" label="创建时间"
