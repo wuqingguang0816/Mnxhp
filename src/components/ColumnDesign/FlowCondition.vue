@@ -13,7 +13,9 @@
 <script setup></script>
 
 <script>
-import { getDrawingList } from "@/components/Generator/utils/db";
+import { dyOptionsList } from '@/components/Generator/generator/comConfig'
+import { getDictionaryDataSelector } from '@/api/systemData/dictionary'
+import { getDataInterfaceRes } from '@/api/systemData/dataInterface'
 import Condition from "./condition";
 export default {
   props: {
@@ -84,7 +86,35 @@ export default {
   methods: {
     init(data) {
       this.pconditions = data;
+      this.buildOptions(data)
       this.tempCondition = JSON.parse(JSON.stringify(this.pconditions));
+    },
+    buildOptions(componentList) {
+      componentList.forEach(cur => {
+        const config = cur.__config__
+        if (config.jnpfKey === 'cascader') cur.props.props.multiple = false
+        if (dyOptionsList.indexOf(config.jnpfKey) > -1) {
+          let isTreeSelect = config.jnpfKey === 'treeSelect' || config.jnpfKey === 'cascader'
+          if (config.dataType === 'dictionary') {
+            if (!config.dictionaryType) return
+            getDictionaryDataSelector(config.dictionaryType).then(res => {
+              isTreeSelect ? cur.options = res.data.list : cur.__slot__.options = res.data.list
+            })
+          }
+          if (config.dataType === 'dynamic') {
+            if (!config.propsUrl) return
+            getDataInterfaceRes(config.propsUrl).then(res => {
+              let data = res.data
+              if (Array.isArray(data)) {
+                isTreeSelect ? cur.options = data : cur.__slot__.options = data
+              } else {
+                isTreeSelect ? cur.options = [] : cur.__slot__.options = []
+              }
+            })
+          }
+        }
+      })
+      return componentList
     },
     validData(flag) {
       let valid = true;
