@@ -299,7 +299,7 @@ export default {
   computed: {
     ruleListBtn() {
       if (this.columnData.ruleListApp && this.columnData.ruleListApp.length > 0) {
-        return this.columnData.ruleListApp[0]['pconditions'].length > 0 ? '编辑过滤条件' : '添加过滤条件'
+        return this.columnData.ruleListApp.length > 0 ? '编辑过滤条件' : '添加过滤条件'
       }
       return '添加过滤条件'
     }

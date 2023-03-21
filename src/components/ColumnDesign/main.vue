@@ -531,7 +531,7 @@ export default {
   computed: {
     ruleListBtn() {
       if (this.columnData.ruleList && this.columnData.ruleList.length > 0) {
-        return this.columnData.ruleList[0]['pconditions'].length > 0 ? '编辑过滤条件' : '添加过滤条件'
+        return this.columnData.ruleList.length > 0 ? '编辑过滤条件' : '添加过滤条件'
       }
       return '添加过滤条件'
     }
@@ -792,16 +792,11 @@ export default {
 
     },
     filterPanelShow() {
+      console.log(this.columnData.ruleList)
       this.$refs.conditionpane.show(this.columnData.ruleList)
     },
     ruleConfig(data) {
-      this.columnData.ruleList = [data]
-      /**if (this.isEdit) {
-        this.$set(this.columnData.ruleList, this.index, data)
-        this.isEdit = false
-      } else {
-        this.columnData.ruleList.push(data)
-      } */
+      this.columnData.ruleList = data
     },
     setBtnValue(replacedData, data, key) {
       key = key ? key : 'value'
