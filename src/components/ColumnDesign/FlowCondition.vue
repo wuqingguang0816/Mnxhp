@@ -112,7 +112,7 @@ export default {
   },
   methods: {
     init(data) {
-      this.pconditions = data[0].pconditions;
+      this.pconditions = data;
       this.tempCondition = JSON.parse(JSON.stringify(this.pconditions));
     },
     validData(flag) {
@@ -159,18 +159,14 @@ export default {
           return item;
         });
         let cloneConditions = JSON.parse(JSON.stringify(this.pconditions));
-        this.$emit("ruleConfig", {
-          pconditions: cloneConditions
-        });
+        this.$emit("ruleConfig", cloneConditions);
         this.tempCondition = cloneConditions;
 
         this.dialogVisible = false;
       });
     },
     handleClose() {
-      this.$emit("ruleConfig", {
-        pconditions: this.tempCondition
-      });
+      this.$emit("ruleConfig", this.tempCondition);
       this.dialogVisible = false;
     },
     show(data) {

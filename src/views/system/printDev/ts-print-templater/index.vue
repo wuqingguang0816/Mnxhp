@@ -138,19 +138,22 @@ export default {
     getEditConfig(e) {
       if (!e) {
         e = {}
-        e.mt = 0
-        e.mb = 0
-        e.ml = 0
-        e.mr = 0
-        e.width = 776
-        e.height = 'calc(100% - 10px)'
+        e.mt = 10
+        e.mb = 10
+        e.ml = 10
+        e.mr = 10
+        e.width = 210
+        e.height = 297
+        e.direction = "纵向"
+        e.type = '2'
+        this.$emit("pageParamInit", e)
       }
       this.$emit("pageParamChange", e)
       let mt = e.mt
       let mb = e.mb
       let ml = e.ml
       let mr = e.mr
-      let width = e.width ? e.width : 776
+      let width = e.width ? e.width : 297
       let height = e.height ? e.height : 'calc(100% - 10px)'
       this.initConfig = {
         menubar: false,
@@ -158,16 +161,16 @@ export default {
         statusbar: false,
         // extended_valid_elements: 'span[class|title|wktag|style|contenteditable]',
         content_style: `html {
-          height: 100%; background: #fff;padding: 20px 0;box-sizing: border-box;
-          
-          margin: ${mt}mm!important ${mr}mm ${mb}mm ${ml}mm;
-          margin-top:${mt}mm!important;
+          background: #fff;
+          padding: 20px 0;
+          box-sizing: border-box;
+          padding-bottom:20px;
         }
         body {
           font-family: simsun, serif, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-          padding: 40px 30px;
           width: ${width}mm;
           height: ${height}mm;
+          padding: ${mt}mm ${mr}mm ${mb}mm ${ml}mm !important;
           margin: 0 auto !important;
           // border: 1px solid rgb(210, 213, 216);
           background: white;
@@ -451,5 +454,8 @@ export default {
     line-height: 35px;
     border-radius: 0;
   }
+}
+.tox-sidebar-wrap {
+  margin-bottom: 20px;
 }
 </style>
