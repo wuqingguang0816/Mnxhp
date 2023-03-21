@@ -12,7 +12,7 @@
             </template>
           </el-table-column>
           <el-table-column prop="label" label="列名" v-if="webType!=4" />
-          <el-table-column prop="label" label="请输入列名" v-else>
+          <el-table-column prop="label" label="列名" v-else>
             <template slot-scope="scope">
               <el-input v-model="scope.row.label" placeholder="列名" />
             </template>
