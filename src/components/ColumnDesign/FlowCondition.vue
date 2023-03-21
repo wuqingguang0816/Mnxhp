@@ -44,35 +44,6 @@ export default {
       columnOptions: []
     };
   },
-  computed: {
-    // 未使用的条件个数
-    notUseConNum() {
-      // 发起人是默认就有得  所以需要加 1
-      return this.pconditions.length - this.showingPCons.length + 1;
-    },
-    usedFormItems() {
-      let list = [];
-      const loop = (data, parent) => {
-        if (!data) return;
-        if (
-          data.__config__ &&
-          data.__config__.jnpfKey !== "table" &&
-          data.__config__.children &&
-          Array.isArray(data.__config__.children)
-        ) {
-          loop(data.__config__.children, data);
-        }
-        if (Array.isArray(data)) data.forEach(d => loop(d, parent));
-        if (data.__vModel__ && data.__config__.jnpfKey !== "table")
-          list.push(data);
-      };
-      loop(getDrawingList());
-      const formItems = list;
-      return formItems;
-    }
-  },
-  created() { },
-  mounted() { },
   watch: {
     columnData: {
       handler(val) {

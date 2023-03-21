@@ -510,24 +510,6 @@ export default {
       chooseNode: "",
       dialogVisible: false,
       progressOptions: ["10", "20", "30", "40", "50", "60", "70", "80", "90"],
-      symbolOptionsAddtion: [
-        {
-          label: "大于",
-          value: ">"
-        },
-        {
-          label: "小于",
-          value: "<"
-        },
-        {
-          label: "为空",
-          value: "null"
-        },
-        {
-          label: "不为空",
-          value: "notNull"
-        },
-      ],
       symbolOptionsBase: [
         {
           label: "等于",
@@ -593,14 +575,6 @@ export default {
         },
       ],
       symbolOptionsSelect: [
-        // {
-        //   label: "等于",
-        //   value: "=="
-        // },
-        // {
-        //   label: "不等于",
-        //   value: "<>"
-        // },
         {
           label: "包含任意一个",
           value: "in"
