@@ -85,9 +85,9 @@ export default {
           ["radio", "checkbox", "select"].includes(item.__config__.jnpfKey)
         );
         arr.forEach(item => {
-          let dataLabel = item.__config__.props.label;
-          let dataValue = item.__config__.props.value;
-          let options = item.__slot__.options.map(i => {
+          let dataLabel = item.props.props.label;
+          let dataValue = item.props.props.value;
+          let options = item.options.map(i => {
             return {
               ...i,
               dataLabel: dataLabel,
