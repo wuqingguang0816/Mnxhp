@@ -516,12 +516,19 @@ export default {
           config.regList.push(required)
         }
         rules[cur.__vModel__] = config.regList.map(item => {
-          item.pattern && (item.pattern = eval(item.pattern))
+          item.pattern && this.isRegExp(item.pattern) && (item.pattern = eval(item.pattern))
           item.trigger = config.trigger || 'blur'
           return item
         })
         if (config.children && config.jnpfKey !== 'table') this.buildRules(config.children, rules)
       })
+    },
+    isRegExp(val) {
+      try {
+        return Object.prototype.toString.call(eval(val)) === '[object RegExp]'
+      } catch {
+        return false
+      }
     },
     onLoad(formConfCopy) {
       if (!formConfCopy || !formConfCopy.funcs || !formConfCopy.funcs.onLoad) return
