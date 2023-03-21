@@ -187,7 +187,7 @@ export default {
     handelSuccess(file) {
       const form = new FormData()
       form.append('identifier', file.uniqueIdentifier)
-      form.append('fileName', file.name)
+      form.append('fileName', file.name.replaceAll('#', ''))
       form.append('fileSize', file.size)
       form.append('fileType', file.getType())
       form.append('extension', file.getExtension())
