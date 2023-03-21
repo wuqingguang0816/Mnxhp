@@ -11,7 +11,7 @@
                 title='点击拖动' />
             </template>
           </el-table-column>
-          <el-table-column prop="label" label="列名" v-if="webType!=4" />
+          <el-table-column prop="label" label="请输入列名" v-if="webType!=4" />
           <el-table-column prop="label" label="列名" v-else>
             <template slot-scope="scope">
               <el-input v-model="scope.row.label" placeholder="列名" />
@@ -119,9 +119,8 @@
                 <el-button style="width: 100%;" @click="filterPanelShow">{{ ruleListBtn }}
                 </el-button>
               </el-form-item>
-              <Condition ref="conditionpane" 
-              :modelType="modelType"
-              :columnData="columnData" @ruleConfig="ruleConfig">
+              <Condition ref="conditionpane" :modelType="modelType" :columnData="columnData"
+                @ruleConfig="ruleConfig">
               </Condition>
               <el-form-item label="排序类型">
                 <el-select v-model="columnData.sort" placeholder="请选择排序类型">
