@@ -126,7 +126,7 @@ export default {
     handelSuccess(file) {
       const form = new FormData()
       form.append('identifier', file.uniqueIdentifier)
-      form.append('fileName', file.name)
+      form.append('fileName', file.name.replaceAll('#', ''))
       form.append('fileSize', file.size)
       form.append('fileType', file.getType())
       form.append('extension', file.getExtension())
@@ -135,7 +135,7 @@ export default {
         // 自定义完成状态
         this.$set(file, 'customCompleted', true)
         let data = {
-          name: file.name,
+          name: file.name.replaceAll('#', ''),
           fileId: res.data.name,
           fileSize: res.data.fileSize,
           fileExtension: res.data.fileExtension,
