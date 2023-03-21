@@ -49,7 +49,7 @@
               <el-table-column type="index" width="50" label="序号" align="center" />
               <el-table-column prop="fullName" label="名称" />
               <el-table-column prop="enCode" label="编码" />
-              <el-table-column prop="category" label="分类" />
+              <el-table-column prop="categoryName" label="分类" />
             </JNPF-table>
             <pagination :total="total" :page.sync="listQuery.currentPage"
               :limit.sync="listQuery.pageSize" @pagination="initData" />
