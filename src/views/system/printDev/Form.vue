@@ -89,7 +89,9 @@
       </el-row>
       <template v-if="activeStep==1 && showPrint">
         <print-templater ref="printTemplater" :treeData="treeData" v-model="dataForm.printTemplate"
-          :pageParam="pageParam" @pageParamChange="pageParamChange" :type="dataForm.type" />
+          :pageParam="pageParam" 
+          @pageParamInit="pageParamInit"
+          @pageParamChange="pageParamChange" :type="dataForm.type" />
       </template>
     </div>
   </el-dialog>
@@ -120,7 +122,8 @@ export default {
         sqlTemplate: '',
         leftFields: '',
         printTemplate: '',
-        description: ''
+        description: '',
+        pageParam: {}
       },
       dataRule: {
         fullName: [
@@ -147,15 +150,21 @@ export default {
       treeData: [],
       dbOptions: [],
       pageParam: {
-        mt: "1",
-        mb: "1",
-        ml: "1",
-        mr: "1",
+        mt: "10",
+        mb: "10",
+        ml: "10",
+        mr: "10",
+        type: "2",
+        width :210,
+        height : 297,
         direction: "纵向"
       },
     }
   },
   methods: {
+    pageParamInit(e){
+      this.pageParam = e
+    },
     pageParamChange(pageParam) {
       this.dataForm.pageParam = pageParam && JSON.stringify(pageParam)
     },
