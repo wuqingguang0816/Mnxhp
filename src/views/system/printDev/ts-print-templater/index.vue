@@ -161,13 +161,13 @@ export default {
         statusbar: false,
         // extended_valid_elements: 'span[class|title|wktag|style|contenteditable]',
         content_style: `html {
-          height: 100%; background: #fff;padding: 20px 0;box-sizing: border-box;
+          background: #fff;
+          padding: 20px 0;
+          box-sizing: border-box;
           padding-bottom:20px;
-          margin-bottom: 20px;
         }
         body {
           font-family: simsun, serif, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-          
           width: ${width}mm;
           height: ${height}mm;
           padding: ${mt}mm ${mr}mm ${mb}mm ${ml}mm !important;
@@ -455,7 +455,7 @@ export default {
     border-radius: 0;
   }
 }
-.tox-sidebar-wrap{
+.tox-sidebar-wrap {
   margin-bottom: 20px;
 }
 </style>
