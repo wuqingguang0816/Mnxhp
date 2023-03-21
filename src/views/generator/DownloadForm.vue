@@ -10,6 +10,10 @@
             :value="item.id" />
         </el-select>
       </el-form-item>
+      <el-form-item label="模块包名" prop="description"
+        :rules="[{ required: true,message: '模块包名不能为空', trigger: 'blur' }]">
+        <el-input v-model="dataForm.modulePackageName" placeholder="功能描述" />
+      </el-form-item>
       <el-form-item label="功能描述" prop="description"
         :rules="[{ required: true,message: '功能描述不能为空', trigger: 'blur' }]">
         <el-input v-model="dataForm.description" placeholder="功能描述" />
@@ -41,7 +45,8 @@ export default {
         module: '',
         description: '',
         subClassName: [],
-        className: ''
+        className: '',
+        modulePackageName: ''
       },
       id: '',
       type: '',
