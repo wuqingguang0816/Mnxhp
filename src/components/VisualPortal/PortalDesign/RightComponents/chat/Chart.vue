@@ -354,6 +354,9 @@
       <el-form-item label="数值颜色">
         <el-color-picker v-model="activeData.option.valueFontColor" />
       </el-form-item>
+      <el-form-item label="数值背景色" v-if="showType=='app'">
+        <el-color-picker v-model="activeData.option.valueFontBgColor" />
+      </el-form-item>
     </template>
     <template v-if="activeData.jnpfKey == 'commonFunc'">
       <template v-if="showType=='app'">

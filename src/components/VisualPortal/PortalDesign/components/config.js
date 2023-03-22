@@ -311,6 +311,7 @@ export const basicComponents = [{
     valueFontSize: 24,
     valueFontWeight: true,
     valueFontColor: '#303133',
+    valueFontBgColor: '#FE433E',
   },
   refresh: {
     autoRefresh: false,
