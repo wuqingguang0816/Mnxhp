@@ -116,27 +116,27 @@ export default {
       })
       return componentList
     },
-    validData(flag) {
+    validData() {
       let valid = true;
       this.pconditions.forEach(k => {
         if (!["null", "notNull"].includes(k.symbol)) {
           if (!k.field) {
-            if (flag != 1) this.$message.warning("条件字段不能为空");
+            this.$message.warning("条件字段不能为空");
             valid = false;
             return;
           }
           if (!k.symbol) {
-            if (flag != 1) this.$message.warning("条件符号不能为空");
+            this.$message.warning("条件符号不能为空");
             valid = false;
             return;
           }
           if (!k.fieldValue) {
-            if (flag != 1) this.$message.warning("数据值不能为空");
+            this.$message.warning("数据值不能为空");
             valid = false;
             return;
           }
           if (Array.isArray(k.fieldValue) && k.fieldValue.length == 0) {
-            if (flag != 1) this.$message.warning("数据值不能为空");
+            this.$message.warning("数据值不能为空");
             valid = false;
             return;
           }
