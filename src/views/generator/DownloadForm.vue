@@ -92,7 +92,8 @@ export default {
             module: this.dataForm.module,
             className: this.dataForm.className,
             subClassName: subClassName.join(','),
-            description: this.dataForm.description
+            description: this.dataForm.description,
+            modulePackageName: this.dataForm.modulePackageName
           }
           DownloadCode(this.id, query).then(res => {
             if (!res.data || !res.data.url) return this.loading = false
