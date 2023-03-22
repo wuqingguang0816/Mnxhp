@@ -220,13 +220,13 @@ export default {
             if (e.opType === 'setDate') {
               let startTime = 0
               let endTime = 0
-              if (e.startRelationField && e.__config__.startTimeType == 2) {
-                startTime = this.formData[e.startRelationField] || 0
+              if (e.__config__.startRelationField && e.__config__.startTimeType == 2) {
+                startTime = this.formData[e.__config__.startRelationField] || 0
               } else if (e.__config__.startTimeType != 2) {
                 startTime = e.startTime
               }
-              if (e.endRelationField && e.__config__.endTimeType == 2) {
-                endTime = this.formData[e.endRelationField] || 0
+              if (e.__config__.endRelationField && e.__config__.endTimeType == 2) {
+                endTime = this.formData[e.__config__.endRelationField] || 0
               } else if (e.__config__.endTimeType != 2) {
                 endTime = e.startTime
               }
@@ -236,13 +236,13 @@ export default {
             if (e.opType === 'setTime') {
               let startTime = ''
               let endTime = ''
-              if (e.startRelationField && e.__config__.startTimeType == 2) {
-                startTime = this.formData[e.startRelationField] || 0
+              if (e.__config__.startRelationField && e.__config__.startTimeType == 2) {
+                startTime = this.formData[e.__config__.startRelationField] || 0
               } else if (e.__config__.startTimeType != 2) {
                 startTime = e.startTime
               }
-              if (e.endRelationField && e.__config__.endTimeType == 2) {
-                endTime = this.formData[e.endRelationField] || 0
+              if (e.__config__.endRelationField && e.__config__.endTimeType == 2) {
+                endTime = this.formData[e.__config__.endRelationField] || 0
               } else if (e.__config__.endTimeType != 2) {
                 endTime = e.startTime
               }
@@ -291,13 +291,13 @@ export default {
                 if (e.opType === 'setDate') {
                   let startTime = 0
                   let endTime = 0
-                  if (e.startRelationField && e.__config__.startTimeType == 2) {
-                    startTime = this.getFieldVal(e.startRelationField, rowIndex) || 0
+                  if (e.__config__.startRelationField && e.__config__.startTimeType == 2) {
+                    startTime = this.getFieldVal(e.__config__.startRelationField, rowIndex) || 0
                   } else if (e.__config__.startTimeType != 2) {
                     startTime = e.startTime
                   }
-                  if (e.endRelationField && e.__config__.endTimeType == 2) {
-                    endTime = this.getFieldVal(e.endRelationField, rowIndex) || 0
+                  if (e.__config__.endRelationField && e.__config__.endTimeType == 2) {
+                    endTime = this.getFieldVal(e.__config__.endRelationField, rowIndex) || 0
                   } else if (e.__config__.endTimeType != 2) {
                     endTime = e.startTime
                   }
@@ -307,13 +307,13 @@ export default {
                 if (e.opType === 'setTime') {
                   let startTime = 0
                   let endTime = 0
-                  if (e.startRelationField && e.__config__.startTimeType == 2) {
-                    startTime = this.getFieldVal(e.startRelationField, rowIndex) || 0
+                  if (e.__config__.startRelationField && e.__config__.startTimeType == 2) {
+                    startTime = this.getFieldVal(e.__config__.startRelationField, rowIndex) || 0
                   } else if (e.__config__.startTimeType != 2) {
                     startTime = e.startTime
                   }
-                  if (e.endRelationField && e.__config__.endTimeType == 2) {
-                    endTime = this.getFieldVal(e.endRelationField, rowIndex) || 0
+                  if (e.__config__.endRelationField && e.__config__.endTimeType == 2) {
+                    endTime = this.getFieldVal(e.__config__.endRelationField, rowIndex) || 0
                   } else if (e.__config__.endTimeType != 2) {
                     endTime = e.startTime
                   }
@@ -352,13 +352,13 @@ export default {
         if (config.jnpfKey === 'date') {
           let startTime = 0
           let endTime = 0
-          if (cur.startRelationField && cur.__config__.startTimeType == 2) {
-            startTime = this.getFieldVal(cur.startRelationField, rowIndex) || 0
+          if (cur.__config__.startRelationField && cur.__config__.startTimeType == 2) {
+            startTime = this.getFieldVal(cur.__config__.startRelationField, rowIndex) || 0
           } else if (cur.__config__.startTimeType != 2) {
             startTime = cur.startTime
           }
-          if (cur.endRelationField && cur.__config__.endTimeType == 2) {
-            endTime = this.getFieldVal(cur.endRelationField, rowIndex) || 0
+          if (cur.__config__.endRelationField && cur.__config__.endTimeType == 2) {
+            endTime = this.getFieldVal(cur.__config__.endRelationField, rowIndex) || 0
           } else if (cur.__config__.endTimeType != 2) {
             endTime = cur.startTime
           }
@@ -368,13 +368,13 @@ export default {
         if (config.jnpfKey === 'time') {
           let startTime = 0
           let endTime = 0
-          if (cur.startRelationField && cur.__config__.startTimeType == 2) {
-            startTime = this.getFieldVal(cur.startRelationField, rowIndex) || 0
+          if (cur.__config__.startRelationField && cur.__config__.startTimeType == 2) {
+            startTime = this.getFieldVal(cur.__config__.startRelationField, rowIndex) || 0
           } else if (cur.__config__.startTimeType != 2) {
             startTime = cur.startTime
           }
-          if (cur.endRelationField && cur.__config__.endTimeType == 2) {
-            endTime = this.getFieldVal(cur.endRelationField, rowIndex) || 0
+          if (cur.__config__.endRelationField && cur.__config__.endTimeType == 2) {
+            endTime = this.getFieldVal(cur.__config__.endRelationField, rowIndex) || 0
           } else if (cur.__config__.endTimeType != 2) {
             endTime = cur.startTime
           }

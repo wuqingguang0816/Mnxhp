@@ -432,6 +432,8 @@ export const inputComponents = [
       endTimeRule: false,
       endTimeType: 1,
       endTimeTarget: 1,
+      startRelationField: "",
+      endRelationField: "",
       endTimeValue: "",
       visibility: ["pc", "app"],
       tableName: "",
@@ -454,8 +456,6 @@ export const inputComponents = [
     startTime: null,
     endTime: null,
     readonly: false,
-    startRelationField: "",
-    endRelationField: "",
   },
   {
     __config__: {
@@ -480,6 +480,8 @@ export const inputComponents = [
       endTimeType: 1,
       endTimeTarget: 1,
       endTimeValue: "",
+      startRelationField: "",
+      endRelationField: "",
       visibility: ["pc", "app"],
       tableName: "",
       regList: [],

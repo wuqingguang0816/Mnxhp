@@ -465,28 +465,28 @@ export default {
               realVModel: cur.__config__.isSubTable ? cur.__config__.parentVModel + '-' + cur.__vModel__ : cur.__vModel__,
               opType: 'setDate'
             }
-            if (relations.hasOwnProperty(cur.startRelationField)) {
-              let boo = relations[cur.startRelationField].some(o => o.realVModel === cur.realVModel)
+            if (relations.hasOwnProperty(cur.__config__.startRelationField)) {
+              let boo = relations[cur.__config__.startRelationField].some(o => o.realVModel === cur.realVModel)
               if (!boo) {
-                relations[cur.startRelationField].push(item)
+                relations[cur.__config__.startRelationField].push(item)
               }
             } else {
-              relations[cur.startRelationField] = [item]
+              relations[cur.__config__.startRelationField] = [item]
             }
           }
-          if (cur.endRelationField) {
+          if (cur.__config__.endRelationField) {
             let item = {
               ...cur,
               realVModel: cur.__config__.isSubTable ? cur.__config__.parentVModel + '-' + cur.__vModel__ : cur.__vModel__,
               opType: 'setDate'
             }
-            if (relations.hasOwnProperty(cur.endRelationField)) {
-              let boo = relations[cur.endRelationField].some(o => o.realVModel === cur.realVModel)
+            if (relations.hasOwnProperty(cur.__config__.endRelationField)) {
+              let boo = relations[cur.__config__.endRelationField].some(o => o.realVModel === cur.realVModel)
               if (!boo) {
-                relations[cur.endRelationField].push(item)
+                relations[cur.__config__.endRelationField].push(item)
               }
             } else {
-              relations[cur.endRelationField] = [item]
+              relations[cur.__config__.endRelationField] = [item]
             }
           }
         }
@@ -497,28 +497,28 @@ export default {
               realVModel: cur.__config__.isSubTable ? cur.__config__.parentVModel + '-' + cur.__vModel__ : cur.__vModel__,
               opType: 'setTime'
             }
-            if (relations.hasOwnProperty(cur.startRelationField)) {
-              let boo = relations[cur.startRelationField].some(o => o.realVModel === cur.realVModel)
+            if (relations.hasOwnProperty(cur.__config__.startRelationField)) {
+              let boo = relations[cur.__config__.startRelationField].some(o => o.realVModel === cur.realVModel)
               if (!boo) {
-                relations[cur.startRelationField].push(item)
+                relations[cur.__config__.startRelationField].push(item)
               }
             } else {
-              relations[cur.startRelationField] = [item]
+              relations[cur.__config__.startRelationField] = [item]
             }
           }
-          if (cur.endRelationField) {
+          if (cur.__config__.endRelationField) {
             let item = {
               ...cur,
               realVModel: cur.__config__.isSubTable ? cur.__config__.parentVModel + '-' + cur.__vModel__ : cur.__vModel__,
               opType: 'setTime'
             }
-            if (relations.hasOwnProperty(cur.endRelationField)) {
-              let boo = relations[cur.endRelationField].some(o => o.realVModel === cur.realVModel)
+            if (relations.hasOwnProperty(cur.__config__.endRelationField)) {
+              let boo = relations[cur.__config__.endRelationField].some(o => o.realVModel === cur.realVModel)
               if (!boo) {
-                relations[cur.endRelationField].push(item)
+                relations[cur.__config__.endRelationField].push(item)
               }
             } else {
-              relations[cur.endRelationField] = [item]
+              relations[cur.__config__.endRelationField] = [item]
             }
           }
         }
@@ -567,12 +567,12 @@ export default {
                 let startTime = ''
                 let endTime = ''
                 if (e.__config__.startTimeType == 2) {
-                  startTime = this[this.formConf.formModel][e.startRelationField] || 0
+                  startTime = this[this.formConf.formModel][e.__config__.startRelationField] || 0
                 } else {
                   startTime = e.startTime
                 }
                 if (e.__config__.endTimeType == 2) {
-                  endTime = this[this.formConf.formModel][e.endRelationField] || 0
+                  endTime = this[this.formConf.formModel][e.__config__.endRelationField] || 0
                 } else {
                   endTime = e.endTime
                 }
@@ -583,12 +583,12 @@ export default {
                 let startTime = ''
                 let endTime = ''
                 if (e.__config__.startTimeType == 2) {
-                  startTime = this[this.formConf.formModel][e.startRelationField] || 0
+                  startTime = this[this.formConf.formModel][e.__config__.startRelationField] || 0
                 } else {
                   startTime = e.startTime
                 }
                 if (e.__config__.endTimeType == 2) {
-                  endTime = this[this.formConf.formModel][e.endRelationField] || 0
+                  endTime = this[this.formConf.formModel][e.__config__.endRelationField] || 0
                 } else {
                   endTime = e.endTime
                 }
@@ -625,12 +625,12 @@ export default {
                 let startTime = ''
                 let endTime = ''
                 if (e.__config__.startTimeType == 2) {
-                  startTime = this[this.formConf.formModel][e.startRelationField] || 0
+                  startTime = this[this.formConf.formModel][e.__config__.startRelationField] || 0
                 } else {
                   startTime = e.startTime
                 }
                 if (e.__config__.endTimeType == 2) {
-                  endTime = this[this.formConf.formModel][e.endRelationField] || 0
+                  endTime = this[this.formConf.formModel][e.__config__.endRelationField] || 0
                 } else {
                   endTime = e.endTime
                 }
@@ -641,12 +641,12 @@ export default {
                 let startTime = ''
                 let endTime = ''
                 if (e.__config__.startTimeType == 2) {
-                  startTime = this[this.formConf.formModel][e.startRelationField] || 0
+                  startTime = this[this.formConf.formModel][e.__config__.startRelationField] || 0
                 } else {
                   startTime = e.startTime
                 }
                 if (e.__config__.endTimeType == 2) {
-                  endTime = this[this.formConf.formModel][e.endRelationField] || 0
+                  endTime = this[this.formConf.formModel][e.__config__.endRelationField] || 0
                 } else {
                   endTime = e.endTime
                 }
