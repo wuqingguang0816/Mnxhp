@@ -261,7 +261,7 @@
                       </el-tooltip>
                     </div>
                     <el-input v-model="subFlowForm.getUserUrl" placeholder="请输入http或https接口地址">
-                      <template slot="prepend">GET</template>
+                      <template slot="prepend">POST</template>
                     </el-input>
                   </el-form-item>
                   <el-form-item style="margin-bottom:0!important;"
@@ -1363,7 +1363,7 @@
                       </el-tooltip>
                     </div>
                     <el-input v-model="approverForm.getUserUrl" placeholder="请输入http或https接口地址">
-                      <template slot="prepend">GET</template>
+                      <template slot="prepend">POST</template>
                     </el-input>
                   </el-form-item>
                   <el-form-item style="margin-bottom:0!important"
