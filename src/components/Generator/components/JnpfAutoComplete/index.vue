@@ -114,7 +114,7 @@ export default {
 
     },
     handleSelect(item) {
-      // console.log(item);
+      this.innerValue = item[this.relationField] || ''
     }
   }
 
