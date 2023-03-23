@@ -10,7 +10,7 @@
             :value="item.id" />
         </el-select>
       </el-form-item>
-      <el-form-item label="模块包名" prop="description"
+      <el-form-item label="模块包名" prop="description" v-if="hasPackage"
         :rules="[{ required: true,message: '模块包名不能为空', trigger: 'blur' }]">
         <el-input v-model="dataForm.modulePackageName" placeholder="功能描述" />
       </el-form-item>
@@ -46,22 +46,24 @@ export default {
         description: '',
         subClassName: [],
         className: '',
-        modulePackageName: ''
+        modulePackageName: 'jnpf'
       },
       id: '',
       type: '',
       tables: [],
-      moduleList: []
+      moduleList: [],
+      hasPackage: true
     }
   },
   methods: {
-    init(tables, id, type) {
+    init(tables, id, type, hasPackage) {
       if (!tables || !id) {
         this.visible = false
         return
       }
       this.id = id
       this.type = type || 0
+      this.hasPackage = hasPackage || true
       this.tables = JSON.parse(tables)
       this.getDictionaryData()
       this.visible = true
@@ -81,6 +83,7 @@ export default {
     getDictionaryData() {
       this.$store.dispatch('base/getDictionaryData', { sort: 'createModule' }).then((res) => {
         this.moduleList = res
+        if (this.moduleList.length) this.dataForm.module = this.moduleList[0].id
       })
     },
     dataFormSubmit() {

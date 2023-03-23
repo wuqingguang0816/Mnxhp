@@ -98,7 +98,7 @@ export default {
     download(row) {
       this.downloadFormVisible = true
       this.$nextTick(() => {
-        this.$refs.downloadForm.init(row.tables, row.id, 3)
+        this.$refs.downloadForm.init(row.tables, row.id, 3, row.hasPackage)
       })
     },
     preview(row) {
