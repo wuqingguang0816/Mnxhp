@@ -18,10 +18,10 @@
                   </el-form-item>
                 </el-col>
                 <el-col :span="6">
-                  <el-form-item label="所属分类">
+                  <el-form-item label="分类">
                     <el-select v-model="category" placeholder="请选择所属分类" clearable>
                       <el-option v-for="item in categoryList" :key="item.id" :label="item.fullName"
-                                 :value="item.id">
+                        :value="item.id">
                       </el-option>
                     </el-select>
                   </el-form-item>
@@ -171,8 +171,8 @@ export default {
       releaseBtnLoading: false,
       transferShow: false,
       transferId: '',
-    categoryList:[],
-      category:""
+      categoryList: [],
+      category: ""
     }
   },
   created() {
@@ -240,7 +240,7 @@ export default {
     },
     reset() {
       this.keyword = "";
-      this.category= "";
+      this.category = "";
       this.search();
     },
     search() {
@@ -256,7 +256,7 @@ export default {
       this.listLoading = true;
       let query = {
         ...this.listQuery,
-        category:this.category,
+        category: this.category,
         keyword: this.keyword,
       }
       getPortalManageList(this.systemId, query).then((res) => {
@@ -273,7 +273,7 @@ export default {
     addOrUpdateHandle(id) {
       this.formVisible = true;
       this.$nextTick(() => {
-        this.$refs.Form.init(id, this.systemId,this.categoryList);
+        this.$refs.Form.init(id, this.systemId, this.categoryList);
       });
     },
     handleDel(id) {
