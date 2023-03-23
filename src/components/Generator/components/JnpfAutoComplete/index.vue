@@ -99,7 +99,7 @@ export default {
       if (!this.interfaceId) return
       const paramList = this.getParamList()
       paramList.forEach(res => {
-        res.defaultValue = res.relationField === '@keyword' ? queryString : ''
+        res.defaultValue = res.relationField === '@keyword' ? queryString : res.defaultValue
       })
       let query = {
         interfaceId: this.interfaceId,
