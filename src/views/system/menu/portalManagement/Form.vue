@@ -69,7 +69,7 @@ export default {
       this.categoryList = categoryList || []
       this.dataForm.systemId = systemId || ''
       this.dataForm.portalId = ''
-      this.dataForm.categoryId = ''
+      this.dataForm.category = ''
       this.dataForm.fullName = ''
       this.visible = true
       this.$nextTick(() => {
@@ -88,7 +88,7 @@ export default {
     portalChange(id, item) {
       if (!id) {
         this.dataForm.portalId = ''
-        this.dataForm.categoryId = ''
+        this.dataForm.category = ''
         this.dataForm.fullName = ''
         return
       }
