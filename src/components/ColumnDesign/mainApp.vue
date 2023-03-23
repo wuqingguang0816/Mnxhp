@@ -116,7 +116,8 @@
             <el-form :model="columnData" label-width="80px" label-position="left">
               <el-divider>表格配置</el-divider>
               <el-form-item label="数据过滤" v-if="webType != 4">
-                <el-button style="width: 100%;" @click="filterPanelShow">{{ ruleListBtn }}
+                <el-button style="width: 100%;" @click="filterPanelShow">
+                  {{ this.columnData.ruleListApp && this.columnData.ruleListApp.length > 0 ? '编辑过滤条件' : '添加过滤条件' }}
                 </el-button>
               </el-form-item>
               <Condition ref="conditionpane" :modelType="modelType" :columnData="columnData"
@@ -296,14 +297,6 @@ export default {
     },
   },
   components: { draggable, FormScript, CustomBtn, Condition },
-  computed: {
-    ruleListBtn() {
-      if (this.columnData.ruleListApp && this.columnData.ruleListApp.length > 0) {
-        return this.columnData.ruleListApp.length > 0 ? '编辑过滤条件' : '添加过滤条件'
-      }
-      return '添加过滤条件'
-    }
-  },
   data() {
     return {
       currentTab: 'column',
@@ -515,7 +508,7 @@ export default {
       this.$refs.conditionpane.show(this.columnData.ruleListApp)
     },
     ruleConfig(data) {
-      this.columnData.ruleListApp = [data]
+      this.columnData.ruleListApp = data
     },
     setBtnValue(replacedData, data, key) {
       key = key ? key : 'value'

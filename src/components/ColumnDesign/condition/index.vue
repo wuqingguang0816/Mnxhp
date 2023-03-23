@@ -19,7 +19,6 @@
             v-model="item.logic"
             placeholder="请选择"
             class="condition-select"
-            @change="logicChange($event, item)"
           >
             <el-option
               v-for="item in logicOptions"
@@ -36,7 +35,6 @@
               size="mini"
               v-if="item.fieldType === 3"
               class="edit-script-btn"
-              @click="editFormula(item)"
               >公式编辑
             </el-button>
             <el-select
@@ -159,7 +157,6 @@
               <template v-else-if="['cascader'].includes(item.jnpfKey)">
 
                 <el-cascader v-model="item.fieldValue"
-                @change="handleCascaderChange"
                 :options="item.dataOptions" :props="item.props.props"
                 :placeholder="item.placeholder" :clearable="item.clearable"
                 :show-all-levels="item['show-all-levels']" :separator="item.separator"
@@ -243,13 +240,12 @@
                     :disabled="item.disabled"
                     key="year1"
                     placeholder="请选择"
-                    :type="'daterange'"
+                    :type="item.type==='datetime'?'datetimerange':'daterange'"
                     value-format="timestamp"
                     range-separator="至"
                     start-placeholder="开始日期"
                     end-placeholder="结束日期"
                     style="width: 100%;"
-                    @change="onConditionDateChange($event, item)"
                     :format="item.format || 'yyyy-MM-dd HH:mm:ss'"
                   >
                   </el-date-picker>
@@ -268,7 +264,6 @@
                       : 'datetime'
                   "
                   value-format="timestamp"
-                  @change="onConditionDateChange($event, item)"
                   :format="item.format || 'yyyy-MM-dd HH:mm:ss'"
                 >
                 </el-date-picker>
@@ -284,7 +279,6 @@
                   ref="comselect"
                   clearable
                   :multiple="item.multiple"
-                  @change="onConditionListChange(arguments, item)"
                 />
               </template>
               <template v-else-if="['depSelect'].includes(item.jnpfKey)">
@@ -296,7 +290,6 @@
                   :multiple="item.multiple"
                   clearable
                   :disabled="item.disabled"
-                  @change="onConditionObjChange(arguments, item)"
                 />
               </template>
               <template v-else-if="item.jnpfKey === 'popupTableSelect'">
@@ -356,8 +349,7 @@
                   :placeholder="'请选择' + item.__config__.label"
                   clearable
                   class="item"
-                  :selectType="item.selectType"
-                  :ableDepIds="item.ableDepIds"
+                  :selectType="item.selectType != 'all' || item.selectType != 'custom' ? 'all' : item.selectType"                  :ableDepIds="item.ableDepIds"
                   :ablePosIds="item.ablePosIds"
                   :ableUserIds="item.ableUserIds"
                   :ableRoleIds="item.ableRoleIds"
@@ -375,7 +367,6 @@
                   :multiple="item.multiple"
                   clearable
                   :disabled="item.disabled"
-                  @change="onConditionObjChange(arguments, item)"
                 />
               </template>
               <template
@@ -384,7 +375,6 @@
                 <posSelect v-model="item.fieldValue" :placeholder="'请选择'+item.__config__.label" clearable
                 class="item" :selectType="item.selectType" :ableDepIds="item.ableDepIds"
                 :ablePosIds="item.ablePosIds" :multiple="item.searchMultiple" :disabled="item.disabled"
-                @change="onConditionObjChange(arguments, item)"
                 />
               </template>
               <template
@@ -392,7 +382,6 @@
               >
                 <posSelect v-model="item.fieldValue" :placeholder="'请选择'+item.__config__.label" clearable
                 class="item"   :multiple="item.searchMultiple" :disabled="item.disabled"
-                @change="onConditionObjChange(arguments, item)"
                 />
               </template>
               <template v-else-if="item.jnpfKey === 'address'">
@@ -403,7 +392,6 @@
                   :multiple="item.multiple"
                   clearable
                   :disabled="item.disabled"
-                  @change="onConditionListChange(arguments, item)"
                 />
               </template>
               <template v-else-if="item.jnpfKey === 'groupSelect'">
@@ -413,7 +401,6 @@
                   placeholder="请选择"
                   clearable
                   :disabled="item.disabled"
-                  @change="onConditionObjChange(arguments, item)"
                 />
               </template>
               <template v-else-if="item.jnpfKey === 'roleSelect'">
@@ -423,7 +410,6 @@
                   placeholder="请选择"
                   clearable
                   :disabled="item.disabled"
-                  @change="onConditionObjChange(arguments, item)"
                 />
               </template>
               <!-- 其他情况 -->
@@ -441,7 +427,6 @@
               placeholder="请选择"
               :disabled="item.disabled"
               v-if="item.fieldValueType === 1"
-              @change="fieldValueChange($event, item)"
             >
               <el-option
                 v-for="item in usedFormItems"
@@ -510,24 +495,6 @@ export default {
       chooseNode: "",
       dialogVisible: false,
       progressOptions: ["10", "20", "30", "40", "50", "60", "70", "80", "90"],
-      symbolOptionsAddtion: [
-        {
-          label: "大于",
-          value: ">"
-        },
-        {
-          label: "小于",
-          value: "<"
-        },
-        {
-          label: "为空",
-          value: "null"
-        },
-        {
-          label: "不为空",
-          value: "notNull"
-        },
-      ],
       symbolOptionsBase: [
         {
           label: "等于",
@@ -593,14 +560,6 @@ export default {
         },
       ],
       symbolOptionsSelect: [
-        // {
-        //   label: "等于",
-        //   value: "=="
-        // },
-        // {
-        //   label: "不等于",
-        //   value: "<>"
-        // },
         {
           label: "包含任意一个",
           value: "in"
@@ -687,10 +646,6 @@ export default {
           label: "字段",
           value: 1
         }
-        // {
-        //   label: '公式',
-        //   value: 3
-        // }
       ],
       conditionTypeOptions1: [
         {
@@ -779,7 +734,6 @@ export default {
     }
   },
   methods: {
-    handleCascaderChange(e) {},
     getData() {
       return this.pconditions;
     },
@@ -794,8 +748,6 @@ export default {
     },
     addCondition() {
       let item = {
-        fieldName: "",
-        symbolName: "",
         fieldValue: "",
         props: {},
         fieldType: 1,
@@ -804,7 +756,6 @@ export default {
         dataOptions: [],
         dataLabel: "",
         dataValue: "",
-        logicName: "并且",
         field: "",
         symbol: "",
         logic: "&&",
@@ -831,7 +782,7 @@ export default {
       if (item.jnpfKey != this.nowJnpfKey) {
         item.symbol = undefined;
       }
-      if(['null','notNull'].includes(val)){
+      if(['null','notNull'].includes(item.symbol)){
         item.disabled = true
       }else{
         item.disabled = false
@@ -846,18 +797,14 @@ export default {
       item.fieldValue = undefined;
       if (["date", "createTime", "modifyTime"].includes(item.jnpfKey) && !['null','notNull'].includes(val)) {
         if (val == "between") {
-          item.fieldValue = [+new Date(), +new Date()];
+          item.fieldValue = [];
         } else {
-          item.fieldValue = +new Date();
+          item.fieldValue = undefined;
         }
       }
       if (["time"].includes(item.jnpfKey) && !['null','notNull'].includes(val)) {
         if (val == "between") {
-          let date = new Date()
-          date.setHours(8)
-          date.setMinutes(0)
-          date.setSeconds(0)
-          item.fieldValue = [date,date];
+          item.fieldValue = undefined;
         } else {
           item.fieldValue = "";
         }
@@ -896,52 +843,10 @@ export default {
         }
       }
 
-
       this.$set(this.pconditions, i, item);
     },
-    logicChange(val, item) {
-      let obj = this.logicOptions.filter(o => o.value == val)[0];
-      item.logicName = obj.label;
-    },
-    fieldValueTypeChange(item) {
-      item.fieldValue = "";
-      item.fieldLabel = "";
-    },
-    fieldTypeChange(item) {
-      item.field = "";
-      item.fieldName = "";
-    },
-    fieldValueChange(val, item) {
-      let obj = this.usedFormItems.filter(o => o.__vModel__ == val)[0];
-      item.fieldLabel = obj.__config__.label;
-    },
-    // 条件节点
-    onConditionDateChange(val, item) {
-      if (!val) return (item.fieldLabel = "");
-      let format = item.format || "yyyy-MM-dd HH:mm:ss";
-      item.fieldLabel = this.jnpf.toDate(val, format);
-    },
-    onConditionListChange(data, item) {
-      if (!data || !data[1]) return (item.fieldLabel = "");
-      let labelList = data[1].map(o => o.fullName);
-      item.fieldLabel = labelList.join("/");
-    },
-    onConditionObjChange(data, item) {
-      if (!data || !data[1]) return (item.fieldLabel = "");
-      item.fieldLabel = data[1].fullName || "";
-    },
-    editFormula(item) {
-      this.activeItem = item;
-      this.$nextTick(() => {
-        this.formulaVisible = true;
-      });
-    },
-    updateFormula(formula) {
-      this.activeItem.field = formula;
-      this.activeItem.fieldName = formula;
-    },
     /**
-     * 删除流程条件
+     * 删除条件
      */
     onDelCondition(index) {
       this.pconditions.splice(index, 1);
