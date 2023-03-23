@@ -37,13 +37,14 @@ export default {
       const loop = list => {
         for (let i = 0; i < list.length; i++) {
           const item = list[i];
-          if (!(Array.isArray(item.visibility) && item.visibility.includes('pc'))) {
+          if (!(Array.isArray(item.visibility) && item.visibility.includes('pc')) && item.jnpfKey) {
             list.splice(i, 1)
             i--
           }
           if (item.children && item.children.length) loop(item.children)
         }
       }
+
       loop(layout)
       return layout
     },
