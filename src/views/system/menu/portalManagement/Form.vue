@@ -68,6 +68,9 @@ export default {
       this.dataForm.id = id || ''
       this.categoryList = categoryList || []
       this.dataForm.systemId = systemId || ''
+      this.dataForm.portalId = ''
+      this.dataForm.categoryId = ''
+      this.dataForm.fullName = ''
       this.visible = true
       this.$nextTick(() => {
         this.$refs['dataForm'].resetFields()
