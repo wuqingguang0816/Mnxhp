@@ -664,6 +664,10 @@ export const basicComponents = [{
     moduleId: '',
     urlAddress: '',
     linkTarget: '_self',
+    appLinkType: '',
+    appType: '',
+    appModuleId: '',
+    appUrlAddress: '',
   },
   refresh: {
     autoRefresh: false,
