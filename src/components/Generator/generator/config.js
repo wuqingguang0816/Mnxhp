@@ -1229,7 +1229,6 @@ export const selectComponents = [
     },
     style: { width: "100%" },
     placeholder: "请选择",
-    showPath: false,
     disabled: false,
     ableAddressIds: [],
     selectType: 'all',

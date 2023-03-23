@@ -58,8 +58,7 @@
           </div>
           <div class="transfer-pane__body shadow right-pane">
             <template>
-              <div v-for="(item, index) in showPath?selectedData:selectedData1" :key="index"
-                class="selected-item">
+              <div v-for="(item, index) in selectedData" :key="index" class="selected-item">
                 <span>{{item}}</span>
                 <i class="el-icon-delete" @click="removeData(index)"></i>
               </div>
@@ -116,18 +115,6 @@ export default {
       type: Boolean,
       default: false
     },
-    showPath: {
-      type: Boolean,
-      default: false
-    },
-    selectType: {
-      type: String,
-      default: 'all'
-    },
-    ableAddressIds: {
-      type: [Array, String],
-      default: () => []
-    },
     size: String,
   },
   data() {
@@ -143,7 +130,6 @@ export default {
         isLeaf: 'isLeaf'
       },
       selectedData: [],
-      selectedData1: [],
       selectedIds: [],
       tagsList: [],
       inputHovering: false,
@@ -188,6 +174,7 @@ export default {
   },
   mounted() {
     addResizeListener(this.$el, this.handleResize);
+
     const reference = this.$refs.reference;
     if (reference && reference.$el) {
       const sizeMap = {
@@ -223,7 +210,6 @@ export default {
     level() {
       this.initData()
     }
-
   },
   methods: {
     onClose() { },
@@ -231,7 +217,6 @@ export default {
       if (this.selectDisabled) return
       this.innerValue = ''
       this.selectedData = []
-      this.selectedData1 = []
       this.selectedIds = []
       this.tagsList = []
       this.$emit('input', [])
@@ -241,15 +226,7 @@ export default {
       if (this.selectDisabled) return
       this.visible = true
       this.nodeId = '-1'
-      if (this.selectType === 'all') {
-        this.setDefault()
-      } else {
-        console.log(111, this.ableAddressIds)
-        this.selectedData1 = []
-        this.selectedData = []
-        this.selectedIds = []
-      }
-
+      this.setDefault()
     },
     loadNode(node, resolve) {
       if (node.level === 0) {
@@ -267,19 +244,13 @@ export default {
     },
     initData() {
       this.loading = true
-      if (this.selectType === 'all') {
-        getProvinceSelector(this.nodeId).then(res => {
-          this.treeData = res.data.list.map(value => ({
-            ...value,
-            isLeaf: 0 >= this.level ? true : value.isLeaf
-          }));
-          this.loading = false
-        })
-      } else {
-
+      getProvinceSelector(this.nodeId).then(res => {
+        this.treeData = res.data.list.map(value => ({
+          ...value,
+          isLeaf: 0 >= this.level ? true : value.isLeaf
+        }));
         this.loading = false
-      }
-
+      })
     },
     getNodePath(node) {
       let fullPath = []
@@ -294,27 +265,22 @@ export default {
       if (!node.isLeaf) return
       const nodePath = this.getNodePath(node)
       let currId = nodePath.map(o => o.id)
-      let currData = nodePath.map(o => o.fullName).join("/")
-      let currData1 = nodePath.map(o => o.fullName)
+      let currData = nodePath.map(o => o.fullName).join('/')
       if (this.multiple) {
         const boo = this.selectedIds.some(o => o.join('/') === currId.join('/'))
         if (boo) return
         this.selectedIds.push(currId)
         this.selectedData.push(currData)
-        this.selectedData1.push(currData1[currData1.length - 1])
       } else {
         this.selectedIds = [currId]
-        this.selectedData1 = [currData1[currData1.length - 1]]
-        this.selectedData = this.showPath ? [currData] : this.selectedData1
+        this.selectedData = [currData]
       }
     },
     removeAll() {
-      this.selectedData1 = []
       this.selectedData = []
       this.selectedIds = []
     },
     removeData(index) {
-      this.selectedData1.splice(index, 1)
       this.selectedData.splice(index, 1)
       this.selectedIds.splice(index, 1)
     },
@@ -331,10 +297,9 @@ export default {
         }
         selectedData.push(item)
       }
-      if (!this.showPath) selectedData = this.selectedData1
       if (this.multiple) {
         this.innerValue = ''
-        this.tagsList = JSON.parse(JSON.stringify(this.showPath ? this.selectedData : this.selectedData1))
+        this.tagsList = JSON.parse(JSON.stringify(this.selectedData))
         this.$emit('input', this.selectedIds)
         this.$emit('change', this.selectedIds, selectedData)
       } else {
@@ -358,9 +323,9 @@ export default {
         this.selectedData = res.data.map(o => o.join('/'))
         if (this.multiple) {
           this.innerValue = ''
-          this.tagsList = JSON.parse(JSON.stringify(this.showPath ? this.selectedData : this.selectedData1))
+          this.tagsList = JSON.parse(JSON.stringify(this.selectedData))
         } else {
-          this.innerValue = this.showPath ? this.selectedData.join(',') : this.selectedData1[0]
+          this.innerValue = this.selectedData.join(',')
         }
         this.$nextTick(() => {
           if (this.multiple) {
@@ -371,13 +336,11 @@ export default {
     },
     deleteTag(event, index) {
       this.selectedData.splice(index, 1)
-      this.selectedData1.splice(index, 1)
       this.selectedIds.splice(index, 1)
       this.confirm()
       event.stopPropagation();
     },
     handleClearClick(event) {
-      this.selectedData1 = []
       this.selectedData = []
       this.selectedIds = []
       this.confirm()
