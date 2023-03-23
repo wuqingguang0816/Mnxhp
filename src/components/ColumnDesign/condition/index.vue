@@ -152,7 +152,7 @@
                     :value="item[item.dataValue]"
                   ></el-option>
                 </el-select>
-                
+
               </template>
               <template v-else-if="['cascader'].includes(item.jnpfKey)">
 
@@ -492,9 +492,7 @@ export default {
   data() {
     return {
       nowJnpfKey:undefined,
-      chooseNode: "",
       dialogVisible: false,
-      progressOptions: ["10", "20", "30", "40", "50", "60", "70", "80", "90"],
       symbolOptionsBase: [
         {
           label: "等于",
@@ -641,38 +639,10 @@ export default {
           value: "||"
         }
       ],
-      conditionTypeOptions: [
-        {
-          label: "字段",
-          value: 1
-        }
-      ],
-      conditionTypeOptions1: [
-        {
-          label: "字段",
-          value: 1
-        },
-        {
-          label: "自定义",
-          value: 2
-        }
-      ],
-
-      conditionTypeAddtion: [
-        {
-          label: "当前值",
-          value: 3
-        }
-      ],
       pconditions: []
     };
   },
   computed: {
-    // 未使用的条件个数
-    notUseConNum() {
-      // 发起人是默认就有得  所以需要加 1
-      return this.pconditions.length - this.showingPCons.length + 1;
-    },
     usedFormItems() {
       let list = [];
       const loop = (data, parent) => {
@@ -720,8 +690,6 @@ export default {
       return formItems;
     }
   },
-  created() {},
-  mounted() {},
   watch: {
     value: {
       handler(val) {
@@ -744,6 +712,22 @@ export default {
       this.dialogVisible = true;
       if (data != null) {
         this.init(data);
+      }
+    },
+    setTimeInit(val,item){
+      if (["date", "createTime", "modifyTime"].includes(item.jnpfKey) && !['null','notNull'].includes(val)) {
+        if (item.symbol === "between") {
+          item.fieldValue = [+new Date(),+new Date()];
+        } else {
+          item.fieldValue = +new Date();
+        }
+      }
+      if (["time"].includes(item.jnpfKey) && !['null','notNull'].includes(val)) {
+        if (val === "between") {
+          item.fieldValue = ['8:00:00', '8:00:00'];
+        } else {
+          item.fieldValue = '8:00:00';
+        }
       }
     },
     addCondition() {
@@ -769,7 +753,6 @@ export default {
       item.jnpfKey = obj.__config__.jnpfKey;
       item = { ...item, ...obj };
       item.fieldValue = undefined;
-      item.fieldLabel = "";
       if (["radio", "checkbox", "select"].includes(item.jnpfKey)) {
         item.dataOptions = this.dataOptionMap[val].options;
       }
@@ -778,6 +761,8 @@ export default {
         item.props = this.dataOptionMap[val].props;
       }
       item = { ...item, ...this.columnDataMap[val] };
+      // 配置时间默认值
+      this.setTimeInit(val,item)
 
       if (item.jnpfKey != this.nowJnpfKey) {
         item.symbol = undefined;
@@ -792,23 +777,9 @@ export default {
     },
     // 比较符号改变事件
     symbolChange(val, item, i) {
-      let obj = this.symbolOptions.filter(o => o.value == val)[0];
-      item.symbolName = obj.label;
       item.fieldValue = undefined;
-      if (["date", "createTime", "modifyTime"].includes(item.jnpfKey) && !['null','notNull'].includes(val)) {
-        if (val == "between") {
-          item.fieldValue = [];
-        } else {
-          item.fieldValue = undefined;
-        }
-      }
-      if (["time"].includes(item.jnpfKey) && !['null','notNull'].includes(val)) {
-        if (val == "between") {
-          item.fieldValue = undefined;
-        } else {
-          item.fieldValue = "";
-        }
-      }
+
+      this.setTimeInit(val,item)
 
       if(['null','notNull'].includes(val)){
         item.disabled = true
@@ -822,19 +793,19 @@ export default {
         }else{
           item.searchMultiple = false
         }
-        
+
       }
-      
+
       if(['cascader'].includes(item.jnpfKey) ){
         if(["in", "notIn"].includes(val)){
           item.props.props.multiple = true
         }else{
           item.props.props.multiple = false
         }
-        
+
       }
 
-      
+
       if(['select','radio','checkbox'].includes(item.jnpfKey)){
         if(["in", "notIn"].includes(val)){
           item.fieldValue = []
