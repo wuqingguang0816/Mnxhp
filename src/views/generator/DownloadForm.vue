@@ -1,31 +1,34 @@
 <template>
   <el-dialog title="输出设置" :close-on-click-modal="false" :visible.sync="visible"
-    class="JNPF-dialog JNPF-dialog_center" lock-scroll width="600px">
+    class="JNPF-dialog JNPF-dialog_center release-dialog" lock-scroll width="600px">
+    <el-alert title="注意：以下只能包含数字、字母、下划线、小圆点..但不能用数字开头，不能是关键字或保留字。" type="warning" :closable="false"
+      show-icon style="margin-bottom: 12px;" />
     <el-form ref="dataForm" label-width="100px" :model="dataForm">
-      <el-form-item label="模块命名" prop="module" v-if="type!=3"
+      <jnpf-form-tip-item label="模块命名" prop="module" v-if="type!=3"
         :rules="[{ required: true,message: '请选择模块命名', trigger: 'change' }]">
         <el-select v-model="dataForm.module" placeholder="请选择模块命名" filterable allow-create
           default-first-option clearable>
           <el-option v-for="(item,i) in moduleList" :key="i" :label="item.fullName"
             :value="item.id" />
         </el-select>
-      </el-form-item>
-      <el-form-item label="模块包名" prop="description" v-if="hasPackage"
+      </jnpf-form-tip-item>
+      <jnpf-form-tip-item label="模块包名" prop="description" v-if="hasPackage"
+        tipLabel="修改包名需要调整controller和mapper扫描配置"
         :rules="[{ required: true,message: '模块包名不能为空', trigger: 'blur' }]">
         <el-input v-model="dataForm.modulePackageName" placeholder="功能描述" />
-      </el-form-item>
-      <el-form-item label="功能描述" prop="description"
+      </jnpf-form-tip-item>
+      <jnpf-form-tip-item label="功能描述" prop="description"
         :rules="[{ required: true,message: '功能描述不能为空', trigger: 'blur' }]">
         <el-input v-model="dataForm.description" placeholder="功能描述" />
-      </el-form-item>
-      <el-form-item label="功能类名" prop="className"
+      </jnpf-form-tip-item>
+      <jnpf-form-tip-item label="功能类名" prop="className"
         :rules="[{ required: true,message: '功能类名不能为空', trigger: 'blur' }]">
         <el-input v-model="dataForm.className" placeholder="功能类名" />
-      </el-form-item>
-      <el-form-item :label="item.placeholderText" :prop="'subClassName.' + i + '.fullName'"
+      </jnpf-form-tip-item>
+      <jnpf-form-tip-item :label="item.placeholderText" :prop="'subClassName.' + i + '.fullName'"
         v-for="(item,i) in dataForm.subClassName" :key="i" :rules="item.rules">
         <el-input v-model="item.fullName" :placeholder="item.placeholderText" />
-      </el-form-item>
+      </jnpf-form-tip-item>
     </el-form>
     <span slot="footer" class="dialog-footer">
       <el-button @click="visible = false">{{$t('common.cancelButton')}}</el-button>
@@ -112,3 +115,12 @@ export default {
   }
 }
 </script>
+<style lang="scss" scoped>
+.release-dialog {
+  >>> .el-dialog {
+    .el-dialog__body {
+      padding: 12px 55px;
+    }
+  }
+}
+</style>
