@@ -49,10 +49,6 @@ export default {
       type: String,
       default: ''
     },
-    propsValue: {
-      type: String,
-      default: 'id'
-    },
     relationField: {
       type: String,
       default: 'fullName'

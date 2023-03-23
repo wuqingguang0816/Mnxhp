@@ -1193,7 +1193,6 @@ export const selectComponents = [
     placeholder: "请输入",
     style: { width: "100%" },
     total: 10,
-    propsValue: "id",
     relationField: "fullName",
     interfaceId: "",
     interfaceName: "",

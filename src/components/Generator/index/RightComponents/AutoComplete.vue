@@ -13,9 +13,6 @@
       <interface-dialog :value="activeData.interfaceId" :title="activeData.interfaceName"
         popupTitle="远端数据" @change="onInterfaceIdChange" />
     </el-form-item>
-    <el-form-item label="存储字段">
-      <el-input v-model="activeData.propsValue" placeholder="请输入存储字段" />
-    </el-form-item>
     <el-form-item label="显示字段">
       <el-input v-model="activeData.relationField" placeholder="请输入显示字段" />
     </el-form-item>
