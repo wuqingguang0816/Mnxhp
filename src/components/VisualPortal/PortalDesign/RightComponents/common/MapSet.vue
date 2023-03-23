@@ -19,7 +19,7 @@
         <el-input-number v-model="activeData.option.geoLabelFontSize" controls-position="right"
           :min="12" :max="25" />
       </el-form-item>
-      <el-form-item label="字体加粗">
+      <el-form-item label="字体加粗" v-if="showType == 'pc'">
         <el-switch v-model="activeData.option.geoLabelFontWeight" />
       </el-form-item>
       <el-form-item label="字体颜色">

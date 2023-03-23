@@ -71,6 +71,7 @@ export default {
   watch: {
     'option': {
       handler() {
+        this.clearHashMap()
         this.updateMapChart()
       },
       deep: true
