@@ -141,8 +141,10 @@ export default {
     }
     this.layout = this.config.layout || []
     this.refresh = this.config.refresh || {}
-    this.addLocalRecord(this.layout)
-    this.setActiveData()
+    setTimeout(() => {
+      this.addLocalRecord(this.layout)
+      this.setActiveData()
+    }, 50);
     this.$eventBus.$on('addComponent', (val, currentVal, index) => {
       this.addComponent(val, '', currentVal, index)
     })
