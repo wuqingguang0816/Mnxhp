@@ -11,7 +11,7 @@
     </el-form-item>
     <el-form-item label="默认值">
       <JNPFAddress v-model="activeData.__config__.defaultValue" placeholder="选择默认值" clearable
-        :multiple="activeData.multiple" />
+        :multiple="activeData.multiple" :level="activeData.level" />
     </el-form-item>
     <el-form-item label="格式">
       <el-radio-group v-model="activeData.level" @change="levelChange" class="level">
