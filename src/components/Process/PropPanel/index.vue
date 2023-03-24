@@ -2307,6 +2307,7 @@
             <el-col :span="2" class="rule-cell">上节点</el-col>
             <el-col :span="7" class="rule-cell">
               <el-select v-model="child.parentField" placeholder="请选择字段" filterable clearable>
+                <el-option label="上节点表单Id" value="@prevNodeFormId" />
                 <el-option v-for="field in item.formFieldList" :key="field.__vModel__"
                   :label="field.__config__.label" :value="field.__vModel__" />
               </el-select>
