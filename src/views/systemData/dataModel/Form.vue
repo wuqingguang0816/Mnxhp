@@ -33,8 +33,8 @@
             </el-dropdown>
           </div>
         </div>
-        <el-table v-loading="listLoading" :data="list" size='mini' ref="dragTable"
-          :row-key="row=>row.index" v-if="refreshTable">
+        <el-table v-loading="listLoading" :data="list" size='mini' ref="dragTable" row-key="index"
+          v-if="refreshTable">
           <el-table-column align="center" label="拖动" width="50">
             <template>
               <i class="drag-handler icon-ym icon-ym-darg" style="cursor: move;font-size:20px"
@@ -156,7 +156,7 @@ export default {
             this.dataForm = res.data.tableInfo
             const hasTableData = res.data.hasTableData || false
             this.$set(this.dataForm, 'newTable', this.dataForm.table)
-            this.list = res.data.tableFieldList.map((o, i) => ({ index: i, ...o }))
+            this.list = res.data.tableFieldList.map((o, i) => ({ index: this.jnpf.idGenerator(), ...o }))
             for (let index = 0; index < this.list.length; index++) {
               const element = this.list[index];
               if (hasTableData) element.disabled = true
@@ -316,10 +316,10 @@ export default {
       this.list.splice(index, 1)
     },
     addHandle(row) {
-      let index = this.list.length, item = {}
+      let item = {}
       if (!row) {
         item = {
-          field: "", dataType: "varchar", dataLength: 50, allowNull: 1, primaryKey: 0, fieldName: "", index
+          field: "", dataType: "varchar", dataLength: 50, allowNull: 1, primaryKey: 0, fieldName: "", index: this.jnpf.idGenerator()
         }
       } else {
         item = {
@@ -328,7 +328,7 @@ export default {
           dataLength: row.dataLength,
           allowNull: row.allowNull,
           fieldName: row.fieldName,
-          index,
+          index: this.jnpf.idGenerator(),
           primaryKey: 0
         }
       }
