@@ -81,6 +81,7 @@ export default {
       this.btnLoading = false
       this.id = id || 0
       this.showType = 'pc'
+      this.initRedo()
       this.$nextTick(() => {
         if (id) {
           this.loading = true

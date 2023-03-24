@@ -189,7 +189,7 @@ export default {
       this.isEmpty = JSON.stringify(this.currOption) === "{}"
       if (!this.isEmpty) {
         this.initCurrOption()
-        echarts.registerMap('10000', this.geoJson);
+        echarts.registerMap(this.code, this.geoJson);
         this.chart.setOption(this.currOption, true)
         this.setScatterMapChart()
         this.setBarMapChart()

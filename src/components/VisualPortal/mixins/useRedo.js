@@ -15,9 +15,6 @@ export default {
       return this.recordList.length > this.currentRecordIndex + 1
     },
   },
-  created() {
-    this.initRedo()
-  },
   methods: {
     initRedo(limit = 500) {
       this.recordList = [];
