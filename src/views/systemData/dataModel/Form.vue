@@ -156,7 +156,7 @@ export default {
             this.dataForm = res.data.tableInfo
             const hasTableData = res.data.hasTableData || false
             this.$set(this.dataForm, 'newTable', this.dataForm.table)
-            this.list = res.data.tableFieldList.map((o, i) => ({ index: this.jnpf.idGenerator(), ...o }))
+            this.list = res.data.tableFieldList.map((o, i) => ({ ...o, index: this.jnpf.idGenerator() }))
             for (let index = 0; index < this.list.length; index++) {
               const element = this.list[index];
               if (hasTableData) element.disabled = true
