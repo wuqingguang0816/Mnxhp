@@ -52,6 +52,7 @@ export default {
       hashMap: new Map(),
       zoom: 1,
       showBarTitle: false,
+      code: "",
       updateMapChart: debounce(200, function () {
         this.resetChart()
       }),
@@ -139,8 +140,9 @@ export default {
       getMapData(code).then(res => {
         this.chart.hideLoading();
         this.geoJson = res.data
+        this.code = code
         this.initCurrOption()
-        echarts.registerMap('10000', this.geoJson);
+        echarts.registerMap(code, this.geoJson);
         this.chart.setOption(this.currOption, true)
         this.setScatterMapChart()
         this.setBarMapChart()
@@ -154,8 +156,9 @@ export default {
             if (this.currMapCode == item.id) return
             this.currMapCode = item.id
             getMapData(item.id).then(res => {
+              this.code = item.enCode
               this.initCurrOption()
-              echarts.registerMap('10000', res.data);
+              echarts.registerMap(item.enCode, res.data);
               this.chart.setOption(this.currOption, true)
               this.setScatterMapChart()
               this.setBarMapChart()
@@ -222,7 +225,7 @@ export default {
       }
       let geo = {
         id: "china",
-        map: '10000',
+        map: this.code,
         show: true,
         roam: option.geoRoam,
         aspectScale: option.geoAspectScale || 0.75,
