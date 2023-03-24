@@ -170,6 +170,7 @@ export default {
           this.dataForm.newTable = table || ''
           this.listLoading = false
           this.list = []
+          this.setSort()
         }
       })
     },
