@@ -91,7 +91,6 @@ import Preview from './Preview'
 import CardHeader from '@/components/VisualPortal/CardHeader'
 import RightPanel from './RightPanel'
 import parser from './parser'
-import useRedoMixins from '@/components/VisualPortal/mixins/useRedo'
 import draggable from 'vuedraggable'
 const defaultConf = {
   layoutId: 100,
@@ -104,7 +103,6 @@ const defaultConf = {
 export default {
   name: 'JNPF-PortalDesigner',
   props: ['conf', 'showType'],
-  mixins: [useRedoMixins],
   components: {
     GridLayout: VueGridLayout.GridLayout,
     GridItem: VueGridLayout.GridItem,
@@ -182,7 +180,7 @@ export default {
     addLocalRecord(val) {
       if (JSON.stringify(val) != this.copyDrawingList) {
         this.copyDrawingList = JSON.stringify(val);
-        this.addRecord(val);
+        this.$emit('addRecord', val)
       }
     },
     setActiveData(i = 0) {
