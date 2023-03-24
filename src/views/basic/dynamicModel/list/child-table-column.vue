@@ -2,7 +2,8 @@
   <div class="child-table-column">
     <template v-if="!expand">
       <tr v-for="(item, index) in fewData" class="child-table__row" :key="index">
-        <td v-for="(headItem, i) in head" :key="i" :style="{width:`${headItem.width-1}px`}"
+        <td v-for="(headItem, i) in head" :key="i"
+          :style="{width:`${headItem.width-1}px`,'text-align':headItem.align}"
           :class="{'td-flex-1':!headItem.width}">
           <div class="cell">
             {{ item[headItem.vModel] }}
@@ -12,7 +13,8 @@
     </template>
     <template v-if="expand">
       <tr v-for="(item, index) in data" class="child-table__row" :key="index">
-        <td v-for="(headItem, i) in head" :key="i" :style="{width:`${headItem.width-1}px`}"
+        <td v-for="(headItem, i) in head" :key="i"
+          :style="{width:`${headItem.width-1}px`,'text-align':headItem.align}"
           :class="{'td-flex-1':!headItem.width}">
           <div class="cell">
             {{ item[headItem.vModel] }}
