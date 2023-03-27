@@ -1,52 +1,267 @@
 <template>
-  <el-card shadow="never" class="portal-todoList-box">
+  <el-card shadow="never"
+    :class="activeData.option.styleType==1?'portal-eChart-box':'portal-table-box'">
     <CardHeader v-if="activeData.title" slot="header" :title="activeData.title"
       :card="activeData.card" />
-    <div class="portal-todoList-box-body">
-      <template v-if="list.length">
-        <div class="item com-hover" @click="readInfo(item.id)" v-for="(item, i) in list" :key="i">
-          <span class="name">{{item.fullName}}</span>
-          <span class="time">{{item.creatorTime | toDate('yyyy-MM-dd')}}</span>
+    <div class="portal-table-box-body">
+      <template v-if='showType=="pc"'>
+        <template v-if="activeData.option.styleType==1">
+          <JNPF-table :data="defaultValue" :show-header='activeData.option.showHeader'
+            :hasNO="false" :border='activeData.border' :header-cell-style="{'font-size':activeData.option.headerFontSize+'px',
+        'text-align':activeData.option.headerLeft, 
+        background:activeData.option.headerBgColor,color:activeData.option.headerFontColor,
+        'font-weight':activeData.option.headerFontWeight?'bolder':'normal'}"
+            :cell-style="tableRowClassName" :default-sort="{prop: 'date', order: 'descending'}"
+            style="height: 100%;">
+            <el-table-column type="index" width="50" v-if="activeData.option.tableIndex" label="序号"
+              fixed='left' align="center" />
+            <template v-for="(item, i) in list">
+              <el-table-column :prop="item.filedName" :label="item.fullName" :align="item.align"
+                :width="item.width" :key="i" :sortable="item.sortable"
+                :fixed='item.fixed=="none"?"":item.fixed' v-if="item.id != 6">
+                <template slot-scope="scope">
+                  <el-tag v-if="item.filedName === 'fullName'" size="mini"
+                    :color="item.type == 1?'#e5ebfe':'#ebe6ff'"
+                    :style="{'color':item.type == 1?'#1448f4':'#5e00f3'}">{{ item.type == 1?'公告':'通知' }}</el-tag>
+                  <span style="margin-left: 10px">{{ scope.row[item.filedName] }}</span>
+                </template>
+              </el-table-column>
+            </template>
+          </JNPF-table>
+        </template>
+        <template v-if="activeData.option.styleType==2">
+          <template v-if="defaultValue.length">
+            <a class="item" v-for="(item, i) in defaultValue" :key="i">
+              <div v-if=' i% 2 == 0'
+                :style="{background: activeData.option.tableOddLineColor ? activeData.option.tableOddLineColor : activeData.option.tableBgColor }">
+                <span class="name"
+                  :style="{'font-weight':list[0].fontWeight?'bolder':'normal','font-size':list[0].fontSize+'px',color:list[0].fontColor}">
+                  {{item[list[0].filedName]}}</span>
+                <span class="time"
+                  :style="{'font-weight':list[2].fontWeight?'bolder':'normal','font-size':list[2].fontSize+'px',color:list[2].fontColor}">{{item[list[2].filedName]}}</span>
+                <div class="content"
+                  :style="{'font-weight':list[1].fontWeight?'bolder':'normal','font-size':list[1].fontSize+'px',color:list[1].fontColor}">
+                  {{item[list[1].filedName]}}
+                </div>
+              </div>
+              <div v-else
+                :style="{background: activeData.option.tableEvenLineColor ? activeData.option.tableEvenLineColor : activeData.option.tableBgColor }">
+                <span class="name"
+                  :style="{'font-weight':list[0].fontWeight?'bolder':'normal','font-size':list[0].fontSize+'px',color:list[0].fontColor}">
+                  {{item[list[0].filedName]}}</span>
+                <span class="time"
+                  :style="{'font-weight':list[2].fontWeight?'bolder':'normal','font-size':list[2].fontSize+'px',color:list[2].fontColor}">{{item[list[2].filedName]}}</span>
+                <div class="content"
+                  :style="{'font-weight':list[1].fontWeight?'bolder':'normal','font-size':list[1].fontSize+'px',color:list[1].fontColor}">
+                  {{item[list[1].filedName]}}
+                </div>
+              </div>
+              <el-divider class="divider-margin "></el-divider>
+            </a>
+          </template>
+          <div class="portal-common-noData" v-else>
+            <img src="@/assets/images/portal-nodata.png" alt="" class="noData-img">
+            <p class="noData-txt">暂无数据</p>
+          </div>
+        </template>
+        <template v-if="activeData.option.styleType==3">
+          <template v-if="defaultValue.length">
+            <template v-for="(item, i) in defaultValue">
+              <el-col :key='i' v-if="list.length">
+                <div class="row-title" v-if=' i% 2 == 0'
+                  :style="{background: activeData.option.tableOddLineColor ? activeData.option.tableOddLineColor : activeData.option.tableBgColor }">
+                  <div class="title"
+                    :style="{'font-weight':list[0].fontWeight?'bolder':'normal','font-size':list[0].fontSize+'px',color:list[0].fontColor}">
+                    {{item[list[0].filedName]}}
+                  </div>
+                  <div class="content" v-if="activeData.option.describe"
+                    :style="{'font-weight':list[1].fontWeight?'bolder':'normal','font-size':list[1].fontSize+'px',color:list[1].fontColor}">
+                    {{item[list[1].filedName]}}
+                  </div>
+                  <div class="content"
+                    :style="{'font-weight':list[2].fontWeight?'bolder':'normal','font-size':list[2].fontSize+'px',color:list[2].fontColor}">
+                    {{item[list[2].filedName]}}
+                  </div>
+                </div>
+                <div class="row-title" v-else
+                  :style="{background: activeData.option.tableEvenLineColor ? activeData.option.tableEvenLineColor : activeData.option.tableBgColor }">
+                  <div class="title"
+                    :style="{'font-weight':list[0].fontWeight?'bolder':'normal','font-size':list[0].fontSize+'px',color:list[0].fontColor}">
+                    {{item[list[0].filedName]}}
+                  </div>
+                  <div class="content" v-if="activeData.option.describe"
+                    :style="{'font-weight':list[1].fontWeight?'bolder':'normal','font-size':list[1].fontSize+'px',color:list[1].fontColor}">
+                    {{item[list[1].filedName]}}
+                  </div>
+                  <div class="content"
+                    :style="{'font-weight':list[2].fontWeight?'bolder':'normal','font-size':list[2].fontSize+'px',color:list[2].fontColor}">
+                    {{item[list[2].filedName]}}
+                  </div>
+                </div>
+                <el-divider class="divider-margin "></el-divider>
+              </el-col>
+            </template>
+          </template>
+          <div class="portal-common-noData" v-else>
+            <img src="@/assets/images/portal-nodata.png" alt="" class="noData-img">
+            <p class="noData-txt">暂无数据</p>
+          </div>
+        </template>
+      </template>
+      <template v-else>
+        <template v-if="defaultValue.length">
+          <div v-for="(item, i) in defaultValue" :key="i">
+            <div class="app-title" :style="{'font-weight': activeData.option.textFontWeight?'bolder':'normal',
+          'font-size':activeData.option.textFontSize+'px',
+          color:activeData.option.textFontColor
+          }">
+              <template v-for="(it, ii) in list">
+                <div :key="ii" style="margin-left: 20px;" class="name">
+                  <span
+                    v-if="activeData.option.showName">{{it.fullName}}:</span><span>{{item[it.filedName]}}</span>
+                </div>
+              </template>
+              <el-divider class="divider-margin "></el-divider>
+            </div>
+          </div>
+        </template>
+        <div class="portal-common-noData" v-else>
+          <img src="@/assets/images/portal-nodata.png" alt="" class="noData-img">
+          <p class="noData-txt">暂无数据</p>
         </div>
       </template>
-      <div class="portal-common-noData" v-else>
-        <img src="@/assets/images/portal-nodata.png" alt="" class="noData-img">
-        <p class="noData-txt">暂无数据</p>
-      </div>
     </div>
-    <Form v-if="formVisible" ref="Form" />
   </el-card>
 </template>
 <script>
-import { getNotice } from '@/api/home'
 import CardHeader from "../CardHeader"
-import Form from '@/views/basic/messageRecord/Form'
+import { getNotice } from '@/api/home'
 export default {
+  components: { CardHeader },
   props: {
+    showType: { type: String, default: 'pc' },
     activeData: { type: Object, default: () => { } },
   },
-  components: { Form, CardHeader },
   data() {
     return {
-      formVisible: false,
+      key: +new Date(),
+      defaultValue: [],
       list: []
     }
   },
+  watch: {
+  },
   created() {
-    this.getData()
+    this.initData()
   },
   methods: {
-    getData() {
-      getNotice().then(res => {
-        this.list = res.data.list.slice(0, 7)
-      })
+    tableRowClassName({ row, rowIndex }) {
+      let styleJson = {}
+      styleJson['font-size'] = this.activeData.option.tableFontSize + 'px'
+      styleJson['color'] = this.activeData.option.tableFontColor
+      if (rowIndex % 2 == 0) {
+        styleJson.background = this.activeData.option.tableOddLineColor ? this.activeData.option.tableOddLineColor : this.activeData.option.tableBgColor
+        return styleJson
+      } else {
+        styleJson.background = this.activeData.option.tableEvenLineColor ? this.activeData.option.tableEvenLineColor : this.activeData.option.tableBgColor
+        return styleJson
+      }
     },
-    readInfo(id) {
-      this.formVisible = true
-      this.$nextTick(() => {
-        this.$refs.Form.init(id)
+    initData() {
+      getNotice().then(res => {
+        this.defaultValue = JSON.parse(JSON.stringify(res.data.list)) || []
+        this.defaultValue.map(o => {
+          o.creatorTime = this.jnpf.toDate(o.creatorTime)
+          o.releaseTime = this.jnpf.toDate(o.releaseTime)
+        })
       })
+      if (this.showType === 'pc') {
+        this.defaultValue = this.defaultValue.slice(0, this.activeData.option.tableCount)
+        if (this.activeData.option.styleType == 1) {
+          this.list = this.activeData.option.columnData.filter(o => o.show)
+        } else {
+          this.list = this.activeData.option.rowData
+        }
+      } else {
+        this.defaultValue = this.defaultValue.slice(0, this.activeData.option.appCount)
+        this.list = this.activeData.option.appColumnList
+      }
     }
   }
 }
 </script>
+<style lang="scss" scoped>
+.portal-box-body {
+  height: 100%;
+  overflow: auto;
+  .text {
+    margin: 15px;
+  }
+}
+.row-title {
+  width: 100%;
+  padding-top: 10px;
+  .title {
+    margin-left: 20px;
+  }
+  .title-time {
+    position: fixed;
+    right: 20px;
+  }
+  .content {
+    margin-left: 20px;
+    margin-top: 5px;
+  }
+}
+.divider-margin {
+  margin: 0px 0px;
+}
+.app-title {
+  width: 100%;
+  padding-top: 5px;
+  // border: 1px solid #000;
+}
+.portal-table-box {
+  .el-card__header {
+    height: 55px;
+    padding: 0;
+  }
+
+  .el-card__body {
+    width: 100%;
+    height: calc(100% - 55px);
+  }
+
+  .portal-table-box-body {
+    padding: 0 20px;
+    height: 100%;
+    overflow: hidden;
+
+    .item {
+      display: block;
+      line-height: 20px;
+      margin-top: 20px;
+      font-size: 0;
+      margin-left: 20px;
+
+      .time {
+        font-size: 14px;
+        display: inline-block;
+        color: #999;
+        width: 120px;
+        text-align: right;
+      }
+    }
+  }
+}
+.name {
+  font-size: 14px;
+  display: inline-block;
+  width: calc(100% - 120px);
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  word-break: break-all;
+  vertical-align: top;
+}
+</style>

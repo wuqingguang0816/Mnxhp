@@ -40,6 +40,8 @@
               v-if="activeData.jnpfKey=='collapse'" />
             <Schedule :activeData="activeData" :showType="showType"
               v-if="activeData.jnpfKey=='schedule'" />
+            <Notice :activeData="activeData" :showType="showType"
+              v-if="activeData.jnpfKey=='notice'" />
           </el-collapse>
           <el-form-item label="多端显示" style="margin-top:10px">
             <el-checkbox-group v-model="activeData.visibility" size="mini">
@@ -81,6 +83,7 @@ import Data from '../RightComponents/chat/Data'
 import Tab from '../RightComponents/common/Tab'
 import Collapse from '../RightComponents/common/Collapse'
 import Schedule from '../RightComponents/common/Schedule'
+import Notice from '../RightComponents/common/Notice'
 import Refresh from '../RightComponents/common/Refresh'
 import { chartList, needDataSetList, systemList, layoutList } from './config'
 export default {
@@ -106,7 +109,8 @@ export default {
     Tab,
     Collapse,
     Schedule,
-    Refresh
+    Refresh,
+    Notice
   },
   data() {
     return {
