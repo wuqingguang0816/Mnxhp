@@ -3504,6 +3504,7 @@ export default {
         fieldValue: '',
         fieldType: 1,
         fieldValueType: 2,
+        fieldValueJnpfKey: '',
         fieldLabel: '',
         logicName: '并且',
         field: '',
@@ -3530,6 +3531,7 @@ export default {
       item = { ...item, ...obj }
       item.fieldValue = undefined
       item.fieldLabel = ''
+      item.fieldValueJnpfKey = ''
       this.$set(this.pconditions, i, item)
     },
     symbolChange(val, item) {
@@ -3543,6 +3545,7 @@ export default {
     fieldValueTypeChange(item) {
       item.fieldValue = ''
       item.fieldLabel = ''
+      item.fieldValueJnpfKey = ''
     },
     fieldTypeChange(item) {
       item.field = ''
@@ -3551,6 +3554,7 @@ export default {
     fieldValueChange(val, item) {
       let obj = this.usedFormItems.filter(o => o.__vModel__ == val)[0]
       item.fieldLabel = obj.__config__.label
+      item.fieldValueJnpfKey = obj.__config__.jnpfKey || ''
     },
     // 条件字段验证
     exist() {
