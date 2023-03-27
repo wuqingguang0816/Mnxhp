@@ -1096,8 +1096,11 @@ export const selectComponents = [
     style: { width: "100%" },
     placeholder: "请选择",
     props: {
-      value: "id",
-      label: "fullName",
+      props: {
+        value: "id",
+        label: "fullName",
+        children: "children"
+      }
     },
     options: [
       {
