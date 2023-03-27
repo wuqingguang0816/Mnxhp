@@ -414,8 +414,8 @@
                 <el-slider v-model="activeData.__config__.span" :max="24" :min="2" show-stops
                   :step="2" show-tooltip />
               </el-form-item>
-              <el-form-item label="标题宽度"
-                v-if="!['divider','JNPFText','link','alert','button','table','groupTitle ','card','row','tab','collapse'].includes(activeData.__config__.jnpfKey)">
+              <el-form-item label="标题宽度1"
+                v-if="!['divider','JNPFText','link','alert','button','table','groupTitle','card','row','tab','collapse'].includes(activeData.__config__.jnpfKey)">
                 <el-input-number v-model="activeData.__config__.labelWidth" placeholder="标题宽度"
                   :min="0" :precision="0" controls-position="right" />
               </el-form-item>
@@ -1315,7 +1315,6 @@ export default {
   }
 }
 </script>
-
 <style lang="scss" scoped>
 .printWrap {
   padding: 10px 0;

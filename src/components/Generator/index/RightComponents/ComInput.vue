@@ -76,7 +76,7 @@
         <i class="el-icon-close" />
       </span>
       <el-form-item label="表达式">
-        <el-input v-model="item.pattern" placeholder="请输入正则" />
+        <el-input v-model="item.pattern" placeholder="请输入正则" @change="onPatternChange" />
       </el-form-item>
       <el-form-item label="错误提示" style="margin-bottom:0">
         <el-input v-model="item.message" placeholder="请输入错误提示" />
@@ -163,6 +163,14 @@ export default {
         pattern: row.pattern,
         message: row.message
       })
+    },
+    onPatternChange(val) {
+      try {
+        const isRegExp = Object.prototype.toString.call(eval(val)) === '[object RegExp]'
+        if (!isRegExp) this.$message.error('请输入正确的正则表达式')
+      } catch {
+        this.$message.error('请输入正确的正则表达式')
+      }
     }
   }
 }

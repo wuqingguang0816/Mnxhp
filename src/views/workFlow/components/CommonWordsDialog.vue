@@ -143,6 +143,8 @@ export default {
     },
     cancel() {
       this.commonWordsVisible = false
+      this.checked = ''
+      this.checkedRow = {}
       this.initData()
     },
     clear() {
@@ -206,6 +208,8 @@ export default {
                   this.commonWordsVisible = false
                   this.commonBtnLoading = false
                   this.dataFormBtnLoading = false
+                  this.checked = ''
+                  this.checkedRow = {}
                   this.initData()
                 }
               })

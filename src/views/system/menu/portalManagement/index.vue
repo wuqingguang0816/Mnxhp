@@ -18,6 +18,15 @@
                   </el-form-item>
                 </el-col>
                 <el-col :span="6">
+                  <el-form-item label="分类">
+                    <el-select v-model="category" placeholder="请选择所属分类" clearable>
+                      <el-option v-for="item in categoryList" :key="item.id" :label="item.fullName"
+                        :value="item.id">
+                      </el-option>
+                    </el-select>
+                  </el-form-item>
+                </el-col>
+                <el-col :span="6">
                   <el-form-item>
                     <el-button type="primary" icon="el-icon-search" @click="search()">
                       {{$t('common.search')}}</el-button>
@@ -37,7 +46,7 @@
                 </el-tooltip>
               </div>
               <JNPF-table v-loading="listLoading" :data="list">
-                <el-table-column prop="category" label="分类" align="center" />
+                <el-table-column prop="categoryName" label="分类" align="center" />
                 <el-table-column prop="fullName" label="门户名称" align="center" />
                 <el-table-column prop="description" label="说明" align="center" />
                 <el-table-column prop="creatorUser" label="创建人" />
@@ -161,8 +170,13 @@ export default {
       toUserIds: [],
       releaseBtnLoading: false,
       transferShow: false,
-      transferId: ''
+      transferId: '',
+      categoryList: [],
+      category: ""
     }
+  },
+  created() {
+    this.getDictionaryData()
   },
   methods: {
     goBack(isRefresh) {
@@ -196,6 +210,11 @@ export default {
     selectToggle(key) {
       this.releaseQuery[key] = this.releaseQuery[key] === 1 ? 0 : 1
     },
+    getDictionaryData() {
+      this.$store.dispatch('base/getDictionaryData', { sort: 'portalDesigner' }).then((res) => {
+        this.categoryList = res
+      })
+    },
     // 发布菜单
     release() {
       if (!this.releaseQuery.pc && !this.releaseQuery.app) return this.$message.error('请至少选择一种同步方式')
@@ -221,6 +240,7 @@ export default {
     },
     reset() {
       this.keyword = "";
+      this.category = "";
       this.search();
     },
     search() {
@@ -236,6 +256,7 @@ export default {
       this.listLoading = true;
       let query = {
         ...this.listQuery,
+        category: this.category,
         keyword: this.keyword,
       }
       getPortalManageList(this.systemId, query).then((res) => {
@@ -252,7 +273,7 @@ export default {
     addOrUpdateHandle(id) {
       this.formVisible = true;
       this.$nextTick(() => {
-        this.$refs.Form.init(id, this.systemId);
+        this.$refs.Form.init(id, this.systemId, this.categoryList);
       });
     },
     handleDel(id) {

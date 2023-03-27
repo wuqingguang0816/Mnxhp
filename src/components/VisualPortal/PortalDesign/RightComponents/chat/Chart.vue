@@ -246,7 +246,8 @@
       <el-form-item label="选项">
         <el-button @click="showData('carouselData','carouselDataVisible')">设置</el-button>
       </el-form-item>
-      <refresh :refresh="activeData.refresh" />
+      <refresh :refresh="activeData.refresh"
+        v-show="activeData.option[showType=='pc'?'defaultValue':'appDefaultValue'].find(ele => ele.dataType === 3)" />
       <CarouselData ref="carouselData" :menuList="menuList" :appMenuList="appMenuList"
         :showType="showType" v-if="carouselDataVisible" @refresh="refresh" />
       <el-form-item label="填充方式">
@@ -354,6 +355,9 @@
       <el-form-item label="数值颜色">
         <el-color-picker v-model="activeData.option.valueFontColor" />
       </el-form-item>
+      <el-form-item label="数值背景色" v-if="showType=='app'">
+        <el-color-picker v-model="activeData.option.valueFontBgColor" />
+      </el-form-item>
     </template>
     <template v-if="activeData.jnpfKey == 'commonFunc'">
       <template v-if="showType=='app'">
@@ -436,7 +440,8 @@
       <el-form-item label="选项">
         <el-button @click="showData('dataBoardData','dataBoardDataVisible')">设置</el-button>
       </el-form-item>
-      <Refresh :refresh="activeData.refresh" />
+      <Refresh :refresh="activeData.refresh"
+        v-show="activeData.option[showType=='pc'?'defaultValue':'appDefaultValue'].find(ele => ele.dataType === 'dynamic')" />
       <DataBoardData ref="dataBoardData" :menuList="menuList" :appMenuList="appMenuList"
         :showType="showType" v-if="dataBoardDataVisible" @refresh="refresh" />
       <el-form-item label="名称大小">

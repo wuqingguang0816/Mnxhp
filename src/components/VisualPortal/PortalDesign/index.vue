@@ -8,24 +8,26 @@
           <p class="header-txt"> · {{fullName}}</p>
         </el-tooltip>
       </div>
-      <div>
-        <el-tooltip effect="dark" content="pc" placement="top">
-          <el-link icon="icon-ym icon-ym-pc" :underline="false"
-            :class="showType=='pc'?'selectActive':'unActive'" @click="showType='pc'" />
-        </el-tooltip>
-        <el-tooltip effect="dark" content="app" placement="top">
-          <el-link icon="icon-ym icon-ym-mobile" :underline="false"
-            :class="showType=='app'?'selectActive':'unActive'" @click="showType='app'" />
-        </el-tooltip>
-      </div>
+      <el-radio-group v-model="showType" size="mini">
+        <el-radio-button label="pc">
+          <el-tooltip effect="dark" content="pc" placement="top">
+            <i class="icon-ym icon-ym-pc" />
+          </el-tooltip>
+        </el-radio-button>
+        <el-radio-button label="app">
+          <el-tooltip effect="dark" content="app" placement="top">
+            <i class="icon-ym icon-ym-mobile" />
+          </el-tooltip>
+        </el-radio-button>
+      </el-radio-group>
       <div class="options">
         <el-tooltip effect="dark" content="撤销" placement="top">
           <el-link icon="icon-ym icon-ym-report-icon-undo" :underline="false" class="active-btn"
-            @click="handleRedo('handleUndo')" />
+            :disabled="!getCanUndo" @click="handleRedoAndUndo('handleUndo')" />
         </el-tooltip>
         <el-tooltip effect="dark" content="重做" placement="top">
           <el-link icon="icon-ym icon-ym-report-icon-restore" :underline="false" class="active-btn"
-            @click="handleRedo('handleRedo')" />
+            :disabled="!getCanRedo" @click="handleRedoAndUndo('handleRedo')" />
         </el-tooltip>
         <el-tooltip effect="dark" content="清空" placement="top">
           <el-link icon="icon-ym icon-ym-clean" :underline="false" @click="empty"
@@ -42,7 +44,8 @@
       </div>
     </div>
     <div class="main" v-if="!loading">
-      <PortalDesigner ref="portalDesigner" :conf="formData" :showType='showType' />
+      <PortalDesigner ref="portalDesigner" :conf="formData" :showType='showType'
+        @addRecord="handleAddRecord" />
     </div>
   </el-dialog>
 </template>
@@ -50,7 +53,9 @@
 <script>
 import { getPortalInfo, Update, Create } from '@/api/onlineDev/portal'
 import PortalDesigner from './components'
+import useRedoMixins from '@/components/VisualPortal/mixins/useRedo'
 export default {
+  mixins: [useRedoMixins],
   components: { PortalDesigner },
   data() {
     return {
@@ -76,6 +81,7 @@ export default {
       this.btnLoading = false
       this.id = id || 0
       this.showType = 'pc'
+      this.initRedo()
       this.$nextTick(() => {
         if (id) {
           this.loading = true
@@ -114,14 +120,17 @@ export default {
       this.visible = false
       this.$emit('close', isRefresh)
     },
-    handleRedo(func) {
-      this.$refs.portalDesigner[func](this.$refs.portalDesigner.handleData)
+    handleRedoAndUndo(func) {
+      this[func](this.$refs.portalDesigner.handleData)
     },
     preview() {
       this.$refs.portalDesigner.preview()
     },
     empty() {
       this.$refs.portalDesigner.empty()
+    },
+    handleAddRecord(val) {
+      this.addRecord(val)
     }
   }
 }
@@ -150,5 +159,8 @@ export default {
 .divider {
   height: 28px;
   margin: 0 15px;
+}
+>>> .el-radio-button__inner {
+  padding: 7px 10px !important;
 }
 </style>

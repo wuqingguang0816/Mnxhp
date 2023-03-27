@@ -86,12 +86,12 @@ export default {
         for (let i = 0; i < list.length; i++) {
           let item = list[i]
           if (item.__vModel__) {
-            let val = data.hasOwnProperty(item.__vModel__) ? data[item.__vModel__] : item.__config__.defaultValue
             if(item.__config__.jnpfKey === 'date' && item.__config__.defaultCurrent == true) {
-              val = new Date().getTime()
+              item.__config__.defaultValue = new Date().getTime()
             }else if(item.__config__.jnpfKey === 'comSelect' && item.__config__.defaultCurrent == true && this.userInfo.organizeIdList instanceof Array && this.userInfo.organizeIdList.length > 0) {
-              val = item.multiple == true?[this.userInfo.organizeIdList]:this.userInfo.organizeIdList
+              item.__config__.defaultValue = item.multiple == true?[this.userInfo.organizeIdList]:this.userInfo.organizeIdList
             }
+            let val = data.hasOwnProperty(item.__vModel__) ? data[item.__vModel__] : item.__config__.defaultValue
             if (!item.__config__.isSubTable) item.__config__.defaultValue = val
             if (!this.isPreview && this.useFormPermission) {
               let id = item.__config__.isSubTable ? parent.__vModel__ + '-' + item.__vModel__ : item.__vModel__

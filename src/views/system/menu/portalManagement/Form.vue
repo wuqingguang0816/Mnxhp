@@ -6,10 +6,10 @@
       v-loading="formLoading" class="menuForm">
       <el-form-item label="门户名称" prop="fullName">
         <portalDialog :value="dataForm.portalId" :title="dataForm.fullName"
-          :systemId="dataForm.systemId" @change="portalChange" />
+          :systemId="dataForm.systemId" @change="portalChange" :disabled="dataForm.id?true:false" />
       </el-form-item>
       <el-form-item label="分类" prop="category">
-        <el-select v-model="dataForm.category" placeholder="选择分类" readonly>
+        <el-select v-model="dataForm.category" placeholder="请选择分类" disabled>
           <el-option :key="item.id" :label="item.fullName" :value="item.id"
             v-for="item in categoryList" />
         </el-select>
@@ -64,9 +64,13 @@ export default {
     }
   },
   methods: {
-    init(id, systemId) {
+    init(id, systemId, categoryList) {
       this.dataForm.id = id || ''
+      this.categoryList = categoryList || []
       this.dataForm.systemId = systemId || ''
+      this.dataForm.portalId = ''
+      this.dataForm.category = ''
+      this.dataForm.fullName = ''
       this.visible = true
       this.$nextTick(() => {
         this.$refs['dataForm'].resetFields()
@@ -75,6 +79,7 @@ export default {
           this.formLoading = true
           getPortalManageInfo(this.dataForm.id).then(res => {
             this.dataForm = res.data
+            this.dataForm.category = this.dataForm.categoryId
             this.$nextTick(() => { this.formLoading = false })
           }).catch(() => { })
         }
@@ -83,7 +88,7 @@ export default {
     portalChange(id, item) {
       if (!id) {
         this.dataForm.portalId = ''
-        this.dataForm.categoryId = ''
+        this.dataForm.category = ''
         this.dataForm.fullName = ''
         return
       }

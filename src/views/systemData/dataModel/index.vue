@@ -95,7 +95,7 @@
           :limit.sync="listQuery.pageSize" @pagination="initData" />
       </div>
     </div>
-    <Form v-show="formVisible" ref="Form" @close="closeForm" />
+    <Form v-if="formVisible" ref="Form" @close="closeForm" />
     <Preview v-show="showData" ref="preview" @close="closeData" />
     <FieldsList v-if="drawer" ref="fieldsList" />
   </div>

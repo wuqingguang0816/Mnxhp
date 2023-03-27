@@ -90,13 +90,14 @@ export default {
       this.type = type
       this.dataForm.id = id || 0
       this.groupId = groupId || 0
-      this.visible = true
       this.loading = true
       this.$nextTick(() => {
         ScheduleDetail(this.groupId, this.dataForm.id).then(res => {
           this.dataForm = res.data || {}
+          this.visible = true
         }).catch(() => {
           this.loading = false
+          this.visible = false
         })
       })
     },

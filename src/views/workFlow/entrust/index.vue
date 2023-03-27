@@ -132,7 +132,7 @@
                           </span>
                           <el-dropdown-menu slot="dropdown">
                             <el-dropdown-item @click.native="delegation(scope.row.id)">
-                              委托结束</el-dropdown-item>
+                              结束委托</el-dropdown-item>
                           </el-dropdown-menu>
                         </el-dropdown>
                       </template>
@@ -265,7 +265,7 @@ export default {
   },
   methods: {
     delegation(id) {
-      this.$confirm('结束后，流程不再进行委托！', this.$t('common.tipTitle'), {
+      this.$confirm('结束后，流程不再进行委托！', '结束委托', {
         type: 'warning'
       }).then(() => {
         Stop(id).then(res => {

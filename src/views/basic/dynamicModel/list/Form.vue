@@ -110,7 +110,7 @@
     </template>
     <PrintDialog v-if="printDialogVisible" ref="printDialog" @change="printBrowseHandle">
     </PrintDialog>
-    
+
     <print-browse :visible.sync="printBrowseVisible" :id="printId" :formId="dataForm.id" />
   </div>
 </template>
@@ -121,14 +121,14 @@ import { createModel, updateModel, getModelInfo } from '@/api/onlineDev/visualDe
 import Parser from '@/components/Generator/parser/Parser'
 import PrintBrowse from '@/components/PrintBrowse'
 import { deepClone } from '@/utils'
-import {mapGetters} from "vuex";
+import { mapGetters } from "vuex";
 
 export default {
   components: { Parser, PrintBrowse, PrintDialog },
   data() {
     return {
-      printId:'',
-      printDialogVisible:false,
+      printId: '',
+      printDialogVisible: false,
       visible: false,
       key: +new Date(),
       formConf: {},
@@ -172,7 +172,7 @@ export default {
       if (this.isPreview) return this.$message({ message: '功能预览不支持打印', type: 'warning' })
       this.printDialogVisible = true
       this.$nextTick(() => {
-        if(!this.formConf.printId.includes(",")){
+        if (!this.formConf.printId.includes(",")) {
           this.printBrowseHandle(this.formConf.printId)
           return
         }
@@ -241,42 +241,25 @@ export default {
       this.index--
       if (this.index === 0) this.prevDis = true
       this.nextDis = false
-      for (let index = 0; index < this.allList.length; index++) {
-        const element = this.allList[index];
-        if (this.index == index) {
-          getModelInfo(this.modelId, element.id).then(res => {
-            this.dataForm = res.data || {}
-            if (!this.dataForm.data) return
-            this.formData = { ...JSON.parse(this.dataForm.data), id: this.dataForm.id }
-            this.$nextTick(() => {
-              this.key = +new Date()
-            })
-            this.resetForm()
-            this.fillFormData(this.formConf, this.formData)
-          })
-
-        }
-      }
+      this.renewModelInfo()
     },
     next() {
       this.index++
       if (this.index === this.allList.length - 1) this.nextDis = true
       this.prevDis = false
-      for (let index = 0; index < this.allList.length; index++) {
-        const element = this.allList[index];
-        if (this.index == index) {
-          getModelInfo(this.modelId, element.id).then(res => {
-            this.dataForm = res.data
-            if (!this.dataForm.data) return
-            this.resetForm()
-            let formData = { ...JSON.parse(this.dataForm.data), id: this.dataForm.id }
-            this.fillFormData(this.formConf, formData)
-            this.$nextTick(() => {
-              this.key = +new Date()
-            })
-          })
-        }
-      }
+      this.renewModelInfo()
+    },
+    renewModelInfo() {
+      getModelInfo(this.modelId, this.allList[this.index].id).then(res => {
+        this.dataForm = res.data
+        if (!this.dataForm.data) return
+        this.resetForm()
+        let formData = { ...JSON.parse(this.dataForm.data), id: this.dataForm.id }
+        this.fillFormData(this.formConf, formData)
+        this.$nextTick(() => {
+          this.key = +new Date()
+        })
+      })
     },
     getFormOperates() {
       if (this.isPreview || !this.useFormPermission) return
@@ -292,12 +275,12 @@ export default {
           if (item.__vModel__) {
             let val = data.hasOwnProperty(item.__vModel__) ? data[item.__vModel__] : item.__config__.defaultValue
             if (!item.__config__.isSubTable) item.__config__.defaultValue = val
-            if(flag == "add" || item.__config__.isSubTable == true) {//新增时候，默认当前
-              if(item.__config__.jnpfKey === 'date' && item.__config__.defaultCurrent == true) {
+            if (flag == "add" || item.__config__.isSubTable == true) {//新增时候，默认当前
+              if (item.__config__.jnpfKey === 'date' && item.__config__.defaultCurrent == true) {
                 val = new Date().getTime()
                 item.__config__.defaultValue = val
-              }else if(item.__config__.jnpfKey === 'comSelect' && item.__config__.defaultCurrent == true && this.userInfo.organizeIdList instanceof Array && this.userInfo.organizeIdList.length > 0) {
-                val = item.multiple == true?[this.userInfo.organizeIdList]:this.userInfo.organizeIdList
+              } else if (item.__config__.jnpfKey === 'comSelect' && item.__config__.defaultCurrent == true && this.userInfo.organizeIdList instanceof Array && this.userInfo.organizeIdList.length > 0) {
+                val = item.multiple == true ? [this.userInfo.organizeIdList] : this.userInfo.organizeIdList
                 item.__config__.defaultValue = val
               }
             }

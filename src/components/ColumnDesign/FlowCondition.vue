@@ -13,7 +13,9 @@
 <script setup></script>
 
 <script>
-import { getDrawingList } from "@/components/Generator/utils/db";
+import { dyOptionsList } from '@/components/Generator/generator/comConfig'
+import { getDictionaryDataSelector } from '@/api/systemData/dictionary'
+import { getDataInterfaceRes } from '@/api/systemData/dataInterface'
 import Condition from "./condition";
 export default {
   props: {
@@ -44,35 +46,6 @@ export default {
       columnOptions: []
     };
   },
-  computed: {
-    // 未使用的条件个数
-    notUseConNum() {
-      // 发起人是默认就有得  所以需要加 1
-      return this.pconditions.length - this.showingPCons.length + 1;
-    },
-    usedFormItems() {
-      let list = [];
-      const loop = (data, parent) => {
-        if (!data) return;
-        if (
-          data.__config__ &&
-          data.__config__.jnpfKey !== "table" &&
-          data.__config__.children &&
-          Array.isArray(data.__config__.children)
-        ) {
-          loop(data.__config__.children, data);
-        }
-        if (Array.isArray(data)) data.forEach(d => loop(d, parent));
-        if (data.__vModel__ && data.__config__.jnpfKey !== "table")
-          list.push(data);
-      };
-      loop(getDrawingList());
-      const formItems = list;
-      return formItems;
-    }
-  },
-  created() { },
-  mounted() { },
   watch: {
     columnData: {
       handler(val) {
@@ -112,30 +85,58 @@ export default {
   },
   methods: {
     init(data) {
-      this.pconditions = data[0].pconditions;
+      this.pconditions = data;
+      this.buildOptions(data)
       this.tempCondition = JSON.parse(JSON.stringify(this.pconditions));
     },
-    validData(flag) {
+    buildOptions(componentList) {
+      componentList.forEach(cur => {
+        const config = cur.__config__
+        if (config.jnpfKey === 'cascader') cur.props.props.multiple = false
+        if (dyOptionsList.indexOf(config.jnpfKey) > -1) {
+          let isTreeSelect = config.jnpfKey === 'treeSelect' || config.jnpfKey === 'cascader'
+          if (config.dataType === 'dictionary') {
+            if (!config.dictionaryType) return
+            getDictionaryDataSelector(config.dictionaryType).then(res => {
+              isTreeSelect ? cur.options = res.data.list : cur.__slot__.options = res.data.list
+            })
+          }
+          if (config.dataType === 'dynamic') {
+            if (!config.propsUrl) return
+            getDataInterfaceRes(config.propsUrl).then(res => {
+              let data = res.data
+              if (Array.isArray(data)) {
+                isTreeSelect ? cur.options = data : cur.__slot__.options = data
+              } else {
+                isTreeSelect ? cur.options = [] : cur.__slot__.options = []
+              }
+            })
+          }
+        }
+      })
+      return componentList
+    },
+    validData() {
       let valid = true;
       this.pconditions.forEach(k => {
         if (!["null", "notNull"].includes(k.symbol)) {
           if (!k.field) {
-            if (flag != 1) this.$message.warning("条件字段不能为空");
+            this.$message.warning("条件字段不能为空");
             valid = false;
             return;
           }
           if (!k.symbol) {
-            if (flag != 1) this.$message.warning("条件符号不能为空");
+            this.$message.warning("条件符号不能为空");
             valid = false;
             return;
           }
           if (!k.fieldValue) {
-            if (flag != 1) this.$message.warning("数据值不能为空");
+            this.$message.warning("数据值不能为空");
             valid = false;
             return;
           }
           if (Array.isArray(k.fieldValue) && k.fieldValue.length == 0) {
-            if (flag != 1) this.$message.warning("数据值不能为空");
+            this.$message.warning("数据值不能为空");
             valid = false;
             return;
           }
@@ -159,18 +160,14 @@ export default {
           return item;
         });
         let cloneConditions = JSON.parse(JSON.stringify(this.pconditions));
-        this.$emit("ruleConfig", {
-          pconditions: cloneConditions
-        });
+        this.$emit("ruleConfig", cloneConditions);
         this.tempCondition = cloneConditions;
 
         this.dialogVisible = false;
       });
     },
     handleClose() {
-      this.$emit("ruleConfig", {
-        pconditions: this.tempCondition
-      });
+      this.$emit("ruleConfig", this.tempCondition);
       this.dialogVisible = false;
     },
     show(data) {
