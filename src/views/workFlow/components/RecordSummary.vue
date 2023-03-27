@@ -76,8 +76,8 @@ export default {
               j.fileList = j.fileList ? JSON.parse(j.fileList) : []
             })
             o.list = o.list.map(i => ({
-              txt: i.handleStatus == 0 ? '退回' : i.handleStatus == 1 ? '同意' : i.handleStatus == 2 ? '发起' : i.handleStatus == 3 ? '撤回' : i.handleStatus == 4 ? '终止' : i.handleStatus == 5 ? '指派' : i.handleStatus == 6 ? '后加签' : i.handleStatus == 10 ? '前加签' : i.handleStatus == 8 ? '变更' : i.handleStatus == 11 ? '挂起' : '转审',
-              tagType: i.handleStatus == 0 ? 'danger' : i.handleStatus == 1 ? 'success' : i.handleStatus == 3 || i.handleStatus == 4 || i.handleStatus == 8 ? 'warning' : "",
+              txt: i.handleStatus == 0 ? '退回' : i.handleStatus == 1 ? '同意' : i.handleStatus == 2 ? '发起' : i.handleStatus == 3 ? '撤回' : i.handleStatus == 4 ? '终止' : i.handleStatus == 5 ? '指派' : i.handleStatus == 6 ? '后加签' : i.handleStatus == 10 ? '前加签' : i.handleStatus == 8 ? '变更' : i.handleStatus == 11 ? '挂起' : i.handleStatus == 12 ? '恢复' : '转审',
+              tagType: i.handleStatus == 0 || i.handleStatus == 11 ? 'danger' : i.handleStatus == 1 || i.handleStatus == 12 ? 'success' : i.handleStatus == 3 || i.handleStatus == 4 || i.handleStatus == 8 ? 'warning' : "",
               ...i
             }))
           })

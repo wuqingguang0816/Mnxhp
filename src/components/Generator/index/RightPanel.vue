@@ -378,8 +378,8 @@
                 <el-slider v-model="activeData.__config__.span" :max="24" :min="6" show-stops
                   :step="2" show-tooltip />
               </el-form-item>
-              <el-form-item label="标题宽度"
-                v-if="!['divider','JNPFText','link','alert','button','table','groupTitle ','card','row','tab','collapse'].includes(activeData.__config__.jnpfKey)">
+              <el-form-item label="标题宽度1"
+                v-if="!['divider','JNPFText','link','alert','button','table','groupTitle','card','row','tab','collapse'].includes(activeData.__config__.jnpfKey)">
                 <el-input-number v-model="activeData.__config__.labelWidth" placeholder="标题宽度"
                   :min="0" :precision="0" controls-position="right" />
               </el-form-item>
@@ -515,7 +515,7 @@
               <el-form-item label="" v-if="formConf.hasPrintBtn">
                 <JNPF-TreeSelect :options="printTplList" v-model="formConf.printId" multiple
                   placeholder="请选择打印模板" lastLevel clearable>
-                  <div  class="printWrap" slot="header">
+                  <div class="printWrap" slot="header">
                     <el-link type="primary" :underline="false" @click="openPrint">添加打印模板
                     </el-link>
                     <el-link type="info" style="position: absolute;right:8px;top: 18px;"
@@ -1277,15 +1277,12 @@ export default {
   }
 }
 </script>
-
 <style lang="scss" scoped>
-
 .printWrap {
-  padding:10px 0;
-  text-align:center;
-  >>>.el-divider--horizontal {
+  padding: 10px 0;
+  text-align: center;
+  >>> .el-divider--horizontal {
     margin: 10px 0;
-    
   }
 }
 .right-board {
