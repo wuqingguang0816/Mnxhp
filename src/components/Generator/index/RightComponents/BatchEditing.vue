@@ -55,8 +55,8 @@ export default {
           if (!!optLine && !!optLine.trim()) {
             if (optLine.indexOf(this.separator) !== -1) {
               this.options.push({
-                id: optLine.split(this.separator)[0],
-                fullName: optLine.split(this.separator)[1]
+                id: optLine.split(this.separator)[1],
+                fullName: optLine.split(this.separator)[0]
               })
             } else {
               this.options.push({

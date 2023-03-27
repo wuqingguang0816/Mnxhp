@@ -96,8 +96,8 @@ export default {
   watch: {
     innerValue: {
       handler(val) {
-        this.$emit('input', val)
-        this.$emit('change', val)
+        this.$emit('input', val || '')
+        this.$emit('change', val || '')
         if (!this.isAmountChinese) return
         this.amountChinese(val)
       },
@@ -151,31 +151,30 @@ export default {
         if (el.value === 'NaN') el.value = ''
       },
       componentUpdated: (el, binding, vnode) => {
+        // 聚焦转化为数字格式（去除千分位）
+        el.focus()
         let precision = vnode.child.precision
         if (el.tagName.toLocaleUpperCase() !== 'INPUT') {
           el = el.getElementsByTagName('input')[0]
         }
-        // 聚焦转化为数字格式（去除千分位）
-        el.focus()
         el.onblur = e => {
           el.value = parseFloat(el.value).toLocaleString('zh', {
             minimumFractionDigits: precision,
             maximumFractionDigits: precision
           })
         }
+        console.log(el.value)
         if (el.value === 'NaN') el.value = ''
+        console.log(el.value)
       },
       unbind: (el, binding, vnode) => {
         let precision = vnode.child.precision
         if (el.tagName.toLocaleUpperCase() !== 'INPUT') {
           el = el.getElementsByTagName('input')[0]
         }
-        let timer = setTimeout(() => {
-          let a = el.value.replace(/,/g, '') //去除千分号的','
-          el.value = parseFloat(a).toFixed(precision)
-          if (el.value === 'NaN') el.value = ''
-          clearTimeout(timer)
-        }, 0)
+        let a = el.value.replace(/,/g, '') //去除千分号的','
+        el.value = parseFloat(a).toFixed(precision)
+        if (el.value === 'NaN') el.value = ''
       },
 
     }

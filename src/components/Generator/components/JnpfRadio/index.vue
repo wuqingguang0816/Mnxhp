@@ -101,7 +101,7 @@ export default {
   display: inline-block;
   line-height: 1;
   vertical-align: middle;
-  margin: 0 10px;
+  margin-right: 20px;
 }
 .vertical-button {
   margin: 5px 0;
