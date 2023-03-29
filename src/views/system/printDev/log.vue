@@ -15,6 +15,7 @@
                   <el-input
                     v-model="query.keyword"
                     placeholder="请输入关键词"
+                    @keyup.enter.native="initData()"
                     clearable
                   >
                   </el-input>
