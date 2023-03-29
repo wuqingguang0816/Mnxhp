@@ -302,16 +302,16 @@ export default {
       return value
     },
     getValue(item) {
-      let regexp = /(((^|&)(<|&lt;)[a-zA-Z-]+?){0,1}(>|&gt;))([\s\S]+)((<|&lt;)\/[a-zA-Z-]+((>|&gt;){0,1}))/g
-      let data = item.match(regexp)
-      let value = data && data.length ? data[0] : ''
-      value = value.replace(/(((^|&)(<|&lt;)[a-zA-Z-]+?){0,1}(>|&gt;))/g, "");
-      value = value.replace(/((<|&lt;)\/[a-zA-Z-]+((>|&gt;){0,1}))/g, "");
+      let regexp = /((^(<|&lt;)[a-zA-Z-]+?){0,1}(>|&gt;))([\s\S]+)((<|&lt;)\/[a-zA-Z-]+((>|&gt;){0,1}))/g
+      let data = regexp.exec(item)
+      let value = data && data.length ? data[5] : ''
       let regexp_ = /<span(\S|\s)*?<\/span>/g
       let data_ = value.match(regexp_)
       if (data_ && data_.length) {
         let res = data_[0].match(regexp)
         value = res && res.length ? res[0] : ''
+        value = value.replace('</span>', "");
+        value = value.replace('>', "");
         return this.data[value] ? this.data[value] : value
       } else {
         return this.data[value] ? this.data[value] : value
@@ -399,13 +399,13 @@ export default {
       let _this = this
       iframe.onload = function () {
         let oldTitle = document.title;
-        iframe.contentWindow.onafterprint =  function(e) {
-          
+        iframe.contentWindow.onafterprint = function (e) {
+
           let title = oldTitle.split('-')[0]
           let data = {
             printTitle: _this.fullName ? _this.fullName : title,
-            printNum:1,
-            printId:_this.id
+            printNum: 1,
+            printId: _this.id
           }
           request({
             url: `/api/system/printLog/save`,
@@ -413,10 +413,10 @@ export default {
             data
           }).then((res) => {
           });
-          
+
         };
 
-        
+
         document.title = "JNPF快速开发平台";
         iframe.contentWindow.print();
         document.title = oldTitle;

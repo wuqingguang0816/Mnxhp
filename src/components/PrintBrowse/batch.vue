@@ -363,19 +363,19 @@ export default {
       return value;
     },
     getValue(item) {
-      let regexp = /(((^|&)(<|&lt;)[a-zA-Z-]+?){0,1}(>|&gt;))([\s\S]+)((<|&lt;)\/[a-zA-Z-]+((>|&gt;){0,1}))/g;
-      let data = item.match(regexp);
-      let value = data && data.length ? data[0] : "";
-      value = value.replace(/(((^|&)(<|&lt;)[a-zA-Z-]+?){0,1}(>|&gt;))/g, "");
-      value = value.replace(/((<|&lt;)\/[a-zA-Z-]+((>|&gt;){0,1}))/g, "");
-      let regexp_ = /<span(\S|\s)*?<\/span>/g;
-      let data_ = value.match(regexp_);
+      let regexp = /((^(<|&lt;)[a-zA-Z-]+?){0,1}(>|&gt;))([\s\S]+)((<|&lt;)\/[a-zA-Z-]+((>|&gt;){0,1}))/g
+      let data = regexp.exec(item)
+      let value = data && data.length ? data[5] : ''
+      let regexp_ = /<span(\S|\s)*?<\/span>/g
+      let data_ = value.match(regexp_)
       if (data_ && data_.length) {
-        let res = data_[0].match(regexp);
-        value = res && res.length ? res[0] : "";
-        return this.data[value] ? this.data[value] : value;
+        let res = data_[0].match(regexp)
+        value = res && res.length ? res[0] : ''
+        value = value.replace('</span>', "");
+        value = value.replace('>', "");
+        return this.data[value] ? this.data[value] : value
       } else {
-        return this.data[value] ? this.data[value] : value;
+        return this.data[value] ? this.data[value] : value
       }
     },
     getIsChildren(item) {
