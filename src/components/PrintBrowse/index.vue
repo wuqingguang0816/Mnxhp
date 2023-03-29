@@ -401,9 +401,9 @@ export default {
         let oldTitle = document.title;
         iframe.contentWindow.onafterprint =  function(e) {
           
-          // 插入日志
+          let title = oldTitle.split('-')[0]
           let data = {
-            printTitle:_this.fullName,
+            printTitle: _this.fullName ? _this.fullName : title,
             printNum:1,
             printId:_this.id
           }
