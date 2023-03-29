@@ -409,7 +409,8 @@
         <!-- 组件样式 -->
         <el-form v-show="currentTab === 'style'" size="small" label-width="90px"
           labelPosition="left">
-          <template v-if="activeData.__config__">
+          <template
+            v-if="activeData.__config__&&activeData.__config__.jnpfKey!='tableGridTr'&&activeData.__config__.jnpfKey!='tableGridTd'">
             <template v-if="!activeData.__config__.isSubTable">
               <el-form-item label="控件栅格">
                 <el-slider v-model="activeData.__config__.span" :max="24" :min="2" show-stops

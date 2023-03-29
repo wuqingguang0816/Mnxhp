@@ -268,7 +268,7 @@ export default {
         }
       }
       if (unmatchedFlag) return true
-      return (this.rowData.length === 1) || (this.selectCell.__config__.colspan === this.rowData.length)
+      return (this.selectCell.__config__.colspan === this.colData.length)
     },
     deleteWholeRowDisabled() {
       if (!this.rowData.length || this.rowData.length <= this.rowIndex) return true
@@ -753,7 +753,7 @@ export default {
       })
       if (childrenData && childrenData.length) {
         childrenData.map((o, i) => {
-          if (i != 0) this.colData[0].__config__.children.push(...deepClone(o.__config__.children))
+          this.colData[0].__config__.children.push(...deepClone(o.__config__.children))
         })
       }
       this.setPropsOfMergedCols(0, this.colData.length, this.colData[this.colIndex].__config__.rowspan)
@@ -911,6 +911,19 @@ export default {
         default:
           break;
       }
+      this.resetData()
+    },
+    resetData() {
+      this.rowIndex = 0,
+        this.colIndex = 0,
+        this.rowData = [],
+        this.colData = [],
+        this.selectCell = {
+          __config__: {
+            rowspan: 1,
+            colspan: 1
+          }
+        }
     },
     handleShowMenu(element, rowIndex, colIndex) {
       this.rowIndex = rowIndex
