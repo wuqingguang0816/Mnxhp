@@ -279,7 +279,7 @@ export default {
     }
   },
   methods: {
-    init(id) {
+    init(id, organizeIdTree) {
       this.visible = true
       this.dataForm.id = id || ''
       this.roleId = []
@@ -323,6 +323,7 @@ export default {
             this.formLoading = false
           }).catch(() => this.formLoading = false)
         } else {
+          this.dataForm.organizeIdTree = organizeIdTree.length ? [organizeIdTree] : []
           this.formLoading = false
         }
       })
