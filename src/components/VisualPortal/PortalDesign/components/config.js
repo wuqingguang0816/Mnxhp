@@ -200,7 +200,7 @@ export const systemComponents = [{
     appUrlAddress: '',
   },
   option: {
-    showHeader:true,
+    showHeader: true,
     styleType: 1,
     defaultValue: [],
     showImage: true,
@@ -234,9 +234,9 @@ export const systemComponents = [{
     ],
     columnData: [{
       fullName: '标题',
-      filedName:'fullName',
+      filedName: 'fullName',
       sortable: false,
-      show:true,
+      show: true,
       fixed: "none",
       align: 'left',
       width: 0,
@@ -244,9 +244,9 @@ export const systemComponents = [{
     },
     {
       fullName: '创建人',
-      filedName:'creatorUser',
+      filedName: 'creatorUser',
       sortable: false,
-      show:true,
+      show: true,
       fixed: "none",
       align: 'left',
       width: 0,
@@ -254,9 +254,9 @@ export const systemComponents = [{
     },
     {
       fullName: '创建时间',
-      filedName:'creatorTime',
+      filedName: 'creatorTime',
       sortable: false,
-      show:true,
+      show: true,
       fixed: "none",
       align: 'left',
       width: 0,
@@ -264,30 +264,30 @@ export const systemComponents = [{
     },
     {
       fullName: '发布人',
-      filedName:'releaseUser',
+      filedName: 'releaseUser',
       sortable: false,
-      show:true,
+      show: true,
       fixed: "none",
       align: 'left',
       width: 0,
       id: '4'
-    },{
+    }, {
       fullName: '发布时间',
-      filedName:'releaseTime',
+      filedName: 'releaseTime',
       sortable: false,
-      show:true,
+      show: true,
       fixed: "none",
       align: 'left',
       width: 0,
       id: '5'
-    },{
+    }, {
       fullName: '分类',
       sortable: false,
-      show:true,
+      show: true,
       fixed: "none",
       align: 'left',
       width: 0,
-      classify:"公告",
+      classify: "公告",
       id: '6'
     }],
     rowData: [{
@@ -310,7 +310,7 @@ export const systemComponents = [{
       fontColor: '#666666',
     }],
   },
-  border:true,
+  border: true,
   refresh: {
     autoRefresh: false,
     autoRefreshTime: 5,
