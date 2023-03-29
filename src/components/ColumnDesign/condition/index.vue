@@ -157,7 +157,7 @@
               <template v-else-if="['cascader'].includes(item.jnpfKey)">
 
                 <el-cascader v-model="item.fieldValue"
-                :options="item.dataOptions" :props="item.props.props"
+                :options="item.dataOptions" :props="getCasProps(item.props.props)"
                 :placeholder="item.placeholder" :clearable="item.clearable"
                 :show-all-levels="item['show-all-levels']" :separator="item.separator"
                 :filterable="item.filterable" :disabled="item.disabled" />
@@ -704,6 +704,10 @@ export default {
     }
   },
   methods: {
+    getCasProps(props){
+      props.multiple = true
+      return props
+    },
     input() {
       this.$forceUpdate();
     },
@@ -785,7 +789,7 @@ export default {
         if(["in", "notIn"].includes(val)){
           item.props.props.multiple = true
         }else{
-          item.props.props.multiple = false
+          // item.props.props.multiple = false
         }
 
       }
