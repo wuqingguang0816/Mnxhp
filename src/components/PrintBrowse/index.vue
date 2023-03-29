@@ -49,7 +49,7 @@ export default {
         formId: this.formId
       }
       getData(query).then(res => {
-        if (!res.data) return
+        if (!res.data || !res.data.printData) return this.loading = false
         this.printTemplate = res.data.printTemplate
         this.data = res.data.printData
         this.recordList = res.data.operatorRecordList || []
@@ -401,9 +401,9 @@ export default {
         let oldTitle = document.title;
         iframe.contentWindow.onafterprint =  function(e) {
           
-          // 插入日志
+          let title = oldTitle.split('-')[0]
           let data = {
-            printTitle:_this.fullName,
+            printTitle: _this.fullName ? _this.fullName : title,
             printNum:1,
             printId:_this.id
           }
