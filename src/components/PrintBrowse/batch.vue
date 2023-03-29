@@ -95,7 +95,7 @@ export default {
         formId: this.batchIds
       };
       getBatchData(query).then(res => {
-        if (!res.data) return;
+        if (!res.data || !res.data.printData) return this.loading = false
         let array = res.data;
         for (let index = 0; index < array.length; index++) {
           const element = array[index];
