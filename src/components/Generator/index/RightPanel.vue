@@ -399,7 +399,7 @@
                   <el-color-picker v-model="activeData.__config__.borderColor"></el-color-picker>
                 </el-form-item>
                 <el-form-item label="边框宽度">
-                  <el-input-number v-model="activeData.__config__.borderWidth" :min="0" :max="10"
+                  <el-input-number v-model="activeData.__config__.borderWidth" :min="1" :max="10"
                     :precision="0" controls-position="right" />
                 </el-form-item>
               </template>
