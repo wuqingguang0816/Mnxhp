@@ -31,33 +31,44 @@
         </template>
         <template v-if="activeData.option.styleType==2">
           <template v-if="defaultValue.length">
-            <a class="item" v-for="(item, i) in defaultValue" :key="i">
-              <div v-if=' i% 2 == 0'
-                :style="{background: activeData.option.tableOddLineColor ? activeData.option.tableOddLineColor : activeData.option.tableBgColor }">
-                <span class="name"
-                  :style="{'font-weight':list[0].fontWeight?'bolder':'normal','font-size':list[0].fontSize+'px',color:list[0].fontColor}">
-                  {{item[list[0].filedName]}}</span>
-                <span class="time"
-                  :style="{'font-weight':list[2].fontWeight?'bolder':'normal','font-size':list[2].fontSize+'px',color:list[2].fontColor}">{{item[list[2].filedName]}}</span>
-                <div class="content"
-                  :style="{'font-weight':list[1].fontWeight?'bolder':'normal','font-size':list[1].fontSize+'px',color:list[1].fontColor}">
-                  {{item[list[1].filedName]}}
-                </div>
+            <div v-for="(item, i) in defaultValue" :key="i"
+              :style="{background: activeData.option.noticeOddLineColor ? activeData.option.noticeOddLineColor : activeData.option.noticeBgColor }"
+              style="display: flex;height: 100%;width: 100%;padding: 6px 0; border-bottom: 1px solid #ebeef5;">
+              <div style="width: 52px;height: 52px;flex-shrink: 0;">
+                <img :src="item.coverImage ? define.comUrl+item.coverImage : coverImage" alt=""
+                  style="width: 100%;height: 100%;">
               </div>
-              <div v-else
-                :style="{background: activeData.option.tableEvenLineColor ? activeData.option.tableEvenLineColor : activeData.option.tableBgColor }">
-                <span class="name"
-                  :style="{'font-weight':list[0].fontWeight?'bolder':'normal','font-size':list[0].fontSize+'px',color:list[0].fontColor}">
-                  {{item[list[0].filedName]}}</span>
-                <span class="time"
-                  :style="{'font-weight':list[2].fontWeight?'bolder':'normal','font-size':list[2].fontSize+'px',color:list[2].fontColor}">{{item[list[2].filedName]}}</span>
-                <div class="content"
-                  :style="{'font-weight':list[1].fontWeight?'bolder':'normal','font-size':list[1].fontSize+'px',color:list[1].fontColor}">
-                  {{item[list[1].filedName]}}
+              <div
+                style="flex: 1;margin-left: 10px;display: flex;flex-direction: column;justify-content: space-between;min-width: 0;">
+                <div>
+                  <el-tag size="mini" :color="item.type == 1?'#ebe6ff':'#e5ebfe'"
+                    :style="{'color':item.type == 1?'#9016f3':'#1448f4'}">{{ item.type == 1?'公告':'通知' }}</el-tag>
+                  <span style="margin-left: 10px"
+                    :style="{'color':list[1].fontColor,'font-size':list[1].fontSize+'px','font-weight':list[1].fontWeight?700:400}">{{ item.fullName }}</span>
+                  <span style="float: right;"
+                    :style="{'color':list[3].fontColor,'font-size':list[3].fontSize+'px','font-weight':list[3].fontWeight?700:400}">{{ list[3].timeClassify === '创建时间'?item.creatorTime: item.releaseTime}}</span>
                 </div>
+                <p :style="{'color':list[2].fontColor,'font-size':list[2].fontSize+'px','font-weight':list[2].fontWeight?700:400}"
+                  style="min-width: 0; overflow: hidden; white-space: nowrap; -o-text-overflow: ellipsis; text-overflow:ellipsis;">
+                  {{ item.excerpt }}</p>
               </div>
-              <el-divider class="divider-margin "></el-divider>
-            </a>
+            </div>
+
+            <!-- <div
+              style="display: flex;height: 100%;width: 100%;padding: 10px 0; border-bottom: 1px solid #ebeef5;align-items: center;">
+              <div style="width: 52px;height: 52px;">
+                <img src="@/assets/images/gg.png" alt="" style="width: 100%;height: 100%;">
+              </div>
+              <div
+                style="flex: 1;margin-left: 10px;display: flex;flex-direction: column;justify-content: space-between;">
+                <div>
+                  <el-tag size="mini">通知</el-tag>
+                  <span style="margin-left: 10px">看到房价肯定饭卡手动阀拉开圣诞节看风景</span>
+                </div>
+                <span style="margin: 4px 0;">5555555555555555正文</span>
+                <span style="float: right;">2023-02-26 15:30:52</span>
+              </div>
+            </div> -->
           </template>
           <div class="portal-common-noData" v-else>
             <img src="@/assets/images/portal-nodata.png" alt="" class="noData-img">
@@ -136,14 +147,16 @@
 <script>
 import CardHeader from "../CardHeader"
 import { getNotice } from '@/api/home'
+import { Image } from "element-ui"
 export default {
-  components: { CardHeader },
+  components: { CardHeader, Image },
   props: {
     showType: { type: String, default: 'pc' },
     activeData: { type: Object, default: () => { } },
   },
   data() {
     return {
+      coverImage: '@/assets/images/portal-nodata.png',
       key: +new Date(),
       defaultValue: [],
       list: []
@@ -160,10 +173,10 @@ export default {
       styleJson['font-size'] = this.activeData.option.tableFontSize + 'px'
       styleJson['color'] = this.activeData.option.tableFontColor
       if (rowIndex % 2 == 0) {
-        styleJson.background = this.activeData.option.tableOddLineColor ? this.activeData.option.tableOddLineColor : this.activeData.option.tableBgColor
+        styleJson.background = this.activeData.option.noticeOddLineColor ? this.activeData.option.noticeOddLineColor : this.activeData.option.noticeBgColor
         return styleJson
       } else {
-        styleJson.background = this.activeData.option.tableEvenLineColor ? this.activeData.option.tableEvenLineColor : this.activeData.option.tableBgColor
+        styleJson.background = this.activeData.option.noticeEvenyLineColor ? this.activeData.option.noticeEvenyLineColor : this.activeData.option.noticeBgColor
         return styleJson
       }
     },
@@ -174,18 +187,18 @@ export default {
           o.creatorTime = this.jnpf.toDate(o.creatorTime)
           o.releaseTime = this.jnpf.toDate(o.releaseTime)
         })
-      })
-      if (this.showType === 'pc') {
-        this.defaultValue = this.defaultValue.slice(0, this.activeData.option.tableCount)
-        if (this.activeData.option.styleType == 1) {
-          this.list = this.activeData.option.columnData.filter(o => o.show)
+        if (this.showType === 'pc') {
+          this.defaultValue = this.defaultValue.slice(0, this.activeData.option.tableCount)
+          if (this.activeData.option.styleType == 1) {
+            this.list = this.activeData.option.columnData.filter(o => o.show)
+          } else {
+            this.list = this.activeData.option.rowData
+          }
         } else {
-          this.list = this.activeData.option.rowData
+          this.defaultValue = this.defaultValue.slice(0, this.activeData.option.appCount)
+          this.list = this.activeData.option.appColumnList
         }
-      } else {
-        this.defaultValue = this.defaultValue.slice(0, this.activeData.option.appCount)
-        this.list = this.activeData.option.appColumnList
-      }
+      })
     }
   }
 }

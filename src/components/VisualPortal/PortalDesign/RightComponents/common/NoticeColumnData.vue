@@ -3,7 +3,7 @@
     class="JNPF-dialog JNPF-dialog_center dialog_height" lock-scroll width="1000px" append-to-body>
     <el-table-column prop="classify" label="">
     </el-table-column>
-    <JNPF-table :data="list" ref="dragTable" :hasNO="false" row-key="id" v-if="type==1">
+    <JNPF-table :data="list" ref="dragTable" :hasNO="false" row-key="id">
       <el-table-column align="center" label="拖动" width="50">
         <template>
           <i class="drag-handler icon-ym icon-ym-darg" style="cursor: move;font-size:20px"
@@ -13,30 +13,91 @@
       <el-table-column prop="fullName" label="名称">
         <template slot-scope="scope">
           <div style="display: flex;">
-            <el-input v-model="scope.row.fullName" placeholder="请输入名称"
-              :style="{'width': scope.row.id != 6?'50%':'100%'}" />
+            <el-input v-model="scope.row.fullName" placeholder="请输入名称" />
             <el-select v-model="scope.row.classify" placeholder="请选择" style="margin-left: 5px;"
-              v-if="scope.row.id == 6">
+              v-if="scope.row.filedName == 'classify'">
               <el-option v-for="item in classifyOptions" :key="item.value" :label="item.fullName"
+                :value="item.value">
+              </el-option>
+            </el-select>
+            <el-select v-model="scope.row.timeClassify" placeholder="请选择" style="margin-left: 5px;"
+              v-if="scope.row.filedName == 'time'">
+              <el-option v-for="item in timeOptions" :key="item.value" :label="item.fullName"
+                :value="item.value">
+              </el-option>
+            </el-select>
+            <el-select v-model="scope.row.userClassify" placeholder="请选择" style="margin-left: 5px;"
+              v-if="scope.row.filedName == 'user'">
+              <el-option v-for="item in userOptions" :key="item.value" :label="item.fullName"
                 :value="item.value">
               </el-option>
             </el-select>
           </div>
         </template>
       </el-table-column>
-      <el-table-column label="是否显示" prop="show" width="70">
-        <template slot-scope="scope">
-          <el-switch v-model="scope.row.show">
-          </el-switch>
-        </template>
-      </el-table-column>
-      <template v-if="showType!='app'">
-        <el-table-column prop="sortable" label="排序" width="60" align="center">
+      <template v-if="type !=1 && showType == 'pc'">
+        <el-table-column label="是否显示" prop="show" width="70">
+          <template slot-scope="scope">
+            <el-switch v-model="scope.row.show">
+            </el-switch>
+          </template>
+        </el-table-column>
+        <el-table-column prop="fontSize" label="大小" width="170">
+          <template slot-scope="scope">
+            <el-input-number v-model="scope.row.fontSize" placeholder="大小" :min="0" :precision="0"
+              controls-position="right" style="width:100%" />
+          </template>
+        </el-table-column>
+        <el-table-column prop="fontWeight" label="加粗" align="center">
+          <template slot-scope="scope">
+            <el-switch v-model="scope.row.fontWeight" />
+          </template>
+        </el-table-column>
+        <el-table-column prop="fontColor" label="颜色" align="center">
+          <template slot-scope="scope">
+            <el-color-picker v-model="scope.row.fontColor" />
+          </template>
+        </el-table-column>
+      </template>
+      <template v-if="showType == 'app'">
+        <el-table-column label="是否显示" prop="show" width="70">
+          <template slot-scope="scope">
+            <el-switch v-model="scope.row.show">
+            </el-switch>
+          </template>
+        </el-table-column>
+        <el-table-column prop="fontSize" label="大小" width="170">
+          <template slot-scope="scope">
+            <el-input-number v-model="scope.row.fontSize" placeholder="大小" :min="0" :precision="0"
+              controls-position="right" style="width:100%" />
+          </template>
+        </el-table-column>
+        <el-table-column prop="fontWeight" label="加粗" align="center" width="100">
+          <template slot-scope="scope">
+            <el-switch v-model="scope.row.fontWeight" />
+          </template>
+        </el-table-column>
+        <el-table-column prop="fontColor" label="颜色" align="center" width="100">
+          <template slot-scope="scope">
+            <el-color-picker v-model="scope.row.fontColor" />
+          </template>
+        </el-table-column>
+      </template>
+      <template v-if="showType == 'pc' && type ==1">
+        <el-table-column label="是否显示" prop="show" width="70">
+          <template slot-scope="scope">
+            <el-switch v-model="scope.row.show">
+            </el-switch>
+          </template>
+        </el-table-column>
+        <el-table-column prop="sortable" label="排序" width="60" align="center"
+          v-if="showType == 'pc'">
           <template slot-scope="scope">
             <el-checkbox v-model="scope.row.sortable" />
           </template>
         </el-table-column>
-        <el-table-column prop="align" label="冻结方式">
+
+        <el-table-column prop="align" label="冻结方式" v-if="showType == 'pc'">
           <template slot-scope="scope">
             <el-select v-model="scope.row.fixed" placeholder="请选择">
               <el-option v-for="item in fixedOptions" :key="item.value" :label="item.fullName"
@@ -45,7 +106,7 @@
             </el-select>
           </template>
         </el-table-column>
-        <el-table-column prop="align" label="对齐方式">
+        <el-table-column prop="align" label="对齐方式" v-if="showType == 'pc'">
           <template slot-scope="scope">
             <el-select v-model="scope.row.align" placeholder="请选择">
               <el-option v-for="item in alignOptions" :key="item.value" :label="item.fullName"
@@ -61,40 +122,8 @@
           </template>
         </el-table-column>
       </template>
-      <el-table-column label="操作" width="50">
-        <template slot-scope="scope">
-          <el-button size="mini" type="text" class="JNPF-table-delBtn"
-            @click="handleDel(scope.$index)">删除</el-button>
-        </template>
-      </el-table-column>
     </JNPF-table>
-    <JNPF-table :data="list" ref="dragTable" :hasNO="false" v-else>
-      <el-table-column prop="fullName" label="名称">
-        <template slot-scope="scope">
-          <el-input v-model="scope.row.fullName" placeholder="请输入名称" />
-        </template>
-      </el-table-column>
-      <el-table-column prop="filedName" label="字段名称">
-        <template slot-scope="scope">
-          <el-input v-model="scope.row.filedName" placeholder="请输入字段名称" />
-        </template>
-      </el-table-column>
-      <el-table-column prop="fontSize" label="大小">
-        <template slot-scope="scope">
-          <el-input-number v-model="scope.row.fontSize" placeholder="大小" :min="0" :precision="0"
-            controls-position="right" style="width:100%" />
-        </template>
-      </el-table-column>
-      <el-table-column prop="fontWeight" label="加粗" align="center">
-        <template slot-scope="scope">
-          <el-switch v-model="scope.row.fontWeight" />
-        </template>
-      </el-table-column>
-      <el-table-column prop="fontColor" label="颜色" align="center">
-        <template slot-scope="scope">
-          <el-color-picker v-model="scope.row.fontColor" />
-        </template>
-      </el-table-column>
+    <JNPF-table :data="list" ref="dragTable" :hasNO="false" v-if="showType!='app' ">
     </JNPF-table>
     <span slot="footer" class="dialog-footer">
       <el-button @click="visible = false">{{$t('common.cancelButton')}}</el-button>
@@ -143,6 +172,22 @@ export default {
           value: '2',
           fullName: '通知'
         }],
+      timeOptions: [
+        {
+          value: '1',
+          fullName: '创建时间'
+        }, {
+          value: '2',
+          fullName: '发布时间'
+        }],
+      userOptions: [
+        {
+          value: '1',
+          fullName: '创建人员'
+        }, {
+          value: '2',
+          fullName: '发布人员'
+        }],
     }
   },
   mounted() {
@@ -162,7 +207,6 @@ export default {
         const element = this.list[index];
         if (!element.fullName) return this.$message.warning('名称不能为空')
       }
-      console.log(this.list)
       this.$emit('columnList', this.list)
       this.visible = false
     },

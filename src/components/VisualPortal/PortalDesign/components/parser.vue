@@ -4,7 +4,8 @@
     <HCommonFunc v-if="item.jnpfKey==='commonFunc'" :activeData="item" :key="item.renderKey" />
     <HDataBoard v-if="item.jnpfKey==='dataBoard'" :activeData="item" :key="item.renderKey" />
     <HTodoList v-if="item.jnpfKey==='todoList'" :activeData="item" />
-    <HNotice v-if="item.jnpfKey==='notice'" :activeData="item" />
+    <HNotice v-if="item.jnpfKey==='notice'" :activeData="item" :key="item.renderKey"
+      :showType='showType' />
     <HEmail v-if="item.jnpfKey==='email'" :activeData="item" />
     <HTable v-if="item.jnpfKey==='tableList'" :activeData="item" :showType='showType'
       :key="item.renderKey" />
