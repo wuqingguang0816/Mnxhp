@@ -223,7 +223,6 @@ export default {
       getDepartmentSelectorByAuth().then(res => {
         this.treeData = res.data.list
         this.treeLoading = false
-        this.organizeIdTree = []
         if (isInit) this.initData()
       }).catch(() => {
         this.treeLoading = false

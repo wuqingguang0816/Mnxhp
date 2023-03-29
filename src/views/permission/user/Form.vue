@@ -324,6 +324,9 @@ export default {
           }).catch(() => this.formLoading = false)
         } else {
           this.dataForm.organizeIdTree = organizeIdTree.length ? [organizeIdTree] : []
+          if (this.dataForm.organizeIdTree && this.dataForm.organizeIdTree.length) {
+            this.getOptionsByOrgIds(this.dataForm.organizeIdTree)
+          }
           this.formLoading = false
         }
       })
