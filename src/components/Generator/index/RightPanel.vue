@@ -10,7 +10,8 @@
         <!-- 组件属性 -->
         <el-form v-show="currentTab==='field' && showField" size="small" label-width="90px"
           labelPosition="left">
-          <template v-if="activeData.__config__&&activeData.__config__.jnpfKey">
+          <template
+            v-if="activeData.__config__&&activeData.__config__.jnpfKey&&activeData.__config__.jnpfKey!='tableGridTr'&&activeData.__config__.jnpfKey!='tableGridTd'">
             <template>
               <el-form-item label="控件类型"
                 :label-width="activeData.__config__.jnpfKey==='card'?'76px':''">
@@ -398,7 +399,7 @@
                   <el-color-picker v-model="activeData.__config__.borderColor"></el-color-picker>
                 </el-form-item>
                 <el-form-item label="边框宽度">
-                  <el-input-number v-model="activeData.__config__.borderWidth" :min="0"
+                  <el-input-number v-model="activeData.__config__.borderWidth" :min="1" :max="10"
                     :precision="0" controls-position="right" />
                 </el-form-item>
               </template>
@@ -408,13 +409,14 @@
         <!-- 组件样式 -->
         <el-form v-show="currentTab === 'style'" size="small" label-width="90px"
           labelPosition="left">
-          <template v-if="activeData.__config__">
+          <template
+            v-if="activeData.__config__&&activeData.__config__.jnpfKey!='tableGridTr'&&activeData.__config__.jnpfKey!='tableGridTd'">
             <template v-if="!activeData.__config__.isSubTable">
               <el-form-item label="控件栅格">
                 <el-slider v-model="activeData.__config__.span" :max="24" :min="2" show-stops
                   :step="2" show-tooltip />
               </el-form-item>
-              <el-form-item label="标题宽度1"
+              <el-form-item label="标题宽度"
                 v-if="!['divider','JNPFText','link','alert','button','table','groupTitle','card','row','tab','collapse'].includes(activeData.__config__.jnpfKey)">
                 <el-input-number v-model="activeData.__config__.labelWidth" placeholder="标题宽度"
                   :min="0" :precision="0" controls-position="right" />
