@@ -420,6 +420,7 @@
                   v-model="item.fieldValue"
                   :disabled="item.disabled"
                   placeholder="请输入"
+                  @input="input"
                 ></el-input>
               </template>
             </div>
@@ -463,7 +464,7 @@ import { getDrawingList } from "@/components/Generator/utils/db";
 export default {
   props: {
     modelType:{
-      type:String,
+      type:[String, Number],
       default:''
     },
     columnOptions: {
