@@ -340,6 +340,7 @@ export default {
     },
     getJsQrcode(value, id, width, height) {
       if (!value) return
+      console.log(id,document.getElementById(id));
       let qrcode = new QRCode(document.getElementById(id), {
         width: width ? width : 265,
         height: height ? height : 265, // 高度

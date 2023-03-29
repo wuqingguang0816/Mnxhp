@@ -70,6 +70,7 @@ export default {
       });
     },
     resolveOne(data) {
+      console.log(111);
       this.printTemplate = data.printTemplate;
       this.data = data.printData;
       this.recordList = data.operatorRecordList || [];
@@ -95,10 +96,11 @@ export default {
         formId: this.batchIds
       };
       getBatchData(query).then(res => {
-        if (!res.data || !res.data.printData) return this.loading = false
+        if (!res.data ) return 
         let array = res.data;
         for (let index = 0; index < array.length; index++) {
           const element = array[index];
+          if (!element.printData) break;
           this.resolveOne(element);
         }
         this.loading = false;
@@ -402,6 +404,7 @@ export default {
     },
     getJsQrcode(value, id, width, height) {
       if (!value) return;
+      console.log(id,document.getElementById(id));
       let qrcode = new QRCode(document.getElementById(id), {
         width: width ? width : 265,
         height: height ? height : 265, // 高度
@@ -454,6 +457,7 @@ export default {
       let print = this.$refs.tsPrint.innerHTML;
       print = print + `<style>html * {word-break:break-all}</style>`;
       let iframe = document.createElement("IFRAME");
+      console.log(111);
       document.body.appendChild(iframe);
       iframe.setAttribute(
         "style",
