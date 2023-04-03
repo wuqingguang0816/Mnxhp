@@ -120,7 +120,8 @@ export const inputComponents = [
     maxlength: null,
     "show-word-limit": true,
     readonly: false,
-    disabled: false
+    disabled: false,
+    readonly: false,
   },
   {
     __config__: {
