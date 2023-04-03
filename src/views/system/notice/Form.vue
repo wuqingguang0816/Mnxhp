@@ -19,7 +19,7 @@
         </jnpf-form-tip-item>
         <el-row>
           <el-col :span="12">
-            <jnpf-form-tip-item label="分类" prop="category">
+            <jnpf-form-tip-item label="类型" prop="category">
               <el-select v-model="dataForm.category" placeholder="选择消息来源" clearable
                 :disabled="this.dataForm.id?true:false">
                 <el-option v-for="(item,index) in categoryList" :key="index" :label="item.fullName"
@@ -50,6 +50,9 @@
         <jnpf-form-tip-item label="正文" prop="bodyText">
           <JNPFQuill v-model="dataForm.bodyText" />
         </jnpf-form-tip-item>
+        <jnpf-form-tip-item label="摘要" prop="excerpt">
+          <el-input v-model="dataForm.excerpt" placeholder="摘要" />
+        </jnpf-form-tip-item>
         <el-row>
           <el-col :span="12">
             <jnpf-form-tip-item label="提醒方式" prop="remindCategory">
@@ -72,7 +75,6 @@
     </div>
   </transition>
 </template>
-
 <script>
 import { createNotice, updateNotice, getNoticeInfo, sendMessageConfig } from '@/api/system/message'
 import MsgDialog from "@/components/Process/PropPanel/msgDialog";
@@ -96,7 +98,8 @@ export default {
         category: 1,
         sendConfigId: 0,
         sendConfigName: '',
-        expirationTime: null
+        expirationTime: null,
+        excerpt: ""
       },
       sendConfiguredList: [],
       remindCategoryList: [{ 'fullName': '站内信', 'enCode': 1 }, { 'fullName': '自定义', 'enCode': 2 }, { 'fullName': '不提醒', 'enCode': 3 }],
@@ -109,6 +112,12 @@ export default {
         ],
         sendConfigId: [
           { required: true, message: '发送配置不能为空', trigger: 'blur' }
+        ],
+        category: [
+          { required: true, message: '分类不能为空', trigger: 'blur' }
+        ],
+        remindCategory: [
+          { required: true, message: '提醒方式不能为空', trigger: 'blur' }
         ]
       }
     }

@@ -35,7 +35,7 @@ export function MessageDeleteRecord(data) {
 export function getNoticeList(data) {
   return request({
     url: '/api/message/Notice',
-    method: 'GET',
+    method: 'post',
     data
   })
 }

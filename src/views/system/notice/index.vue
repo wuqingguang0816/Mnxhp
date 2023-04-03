@@ -10,6 +10,24 @@
             </el-form-item>
           </el-col>
           <el-col :span="6">
+            <el-form-item label="类型">
+              <el-select v-model="noticeSource" multiple placeholder="选择公告类型" clearable>
+                <el-option v-for="(item,index) in noticeSourceList" :key="index"
+                  :label="item.fullName" :value="item.enCode">
+                </el-option>
+              </el-select>
+            </el-form-item>
+          </el-col>
+          <el-col :span="6">
+            <el-form-item label="状态">
+              <el-select v-model="noticeStatus" multiple placeholder="选择状态" clearable>
+                <el-option v-for="(item,index) in noticeStatusList" :key="index"
+                  :label="item.fullName" :value="item.enCode">
+                </el-option>
+              </el-select>
+            </el-form-item>
+          </el-col>
+          <el-col :span="6">
             <el-form-item>
               <el-button type="primary" icon="el-icon-search" @click="search()">
                 {{$t('common.search')}}</el-button>
@@ -31,6 +49,15 @@
         </div>
         <JNPF-table v-loading="listLoading" :data="list" max-height="100%">
           <el-table-column prop="title" label="标题" show-overflow-tooltip />
+          <el-table-column prop="type" label="类型" show-overflow-tooltip width="100">
+            <template slot-scope="scope">
+              <div>
+                {{scope.row.type==1?'公告':'系统'}}
+              </div>
+            </template>
+          </el-table-column>
+          <el-table-column prop="expirationTime" label="失效时间" :formatter="jnpf.tableDateFormat"
+            width="120" />
           <el-table-column prop="creatorTime" label="创建时间" :formatter="jnpf.tableDateFormat"
             width="120" />
           <el-table-column prop="creatorUser" label="创建人员" width="120" />
@@ -92,6 +119,17 @@ export default {
         currentPage: 1,
         pageSize: 20
       },
+      noticeSourceList: [
+        { fullName: "系统", enCode: '2' },
+        { fullName: "公告", enCode: '1' },
+      ],
+      noticeStatusList: [
+        { fullName: "存草稿", enCode: '0' },
+        { fullName: "已发送", enCode: '1' },
+        { fullName: "已过期", enCode: '2' },
+      ],
+      noticeStatus: [],
+      noticeSource: [],
       formVisible: false,
       viewVisible: false
     }
@@ -101,7 +139,9 @@ export default {
   },
   methods: {
     initData() {
-      this.listLoading = true
+      this.listLoading = true;
+      this.listQuery.enabledMark = this.noticeStatus;
+      this.listQuery.type = this.noticeSource;
       getNoticeList(this.listQuery).then(res => {
         this.list = res.data.list
         this.total = res.data.pagination.total
@@ -157,13 +197,19 @@ export default {
       }).catch(() => { })
     },
     search() {
-      this.listQuery.currentPage = 1
-      this.listQuery.pageSize = 20
-      this.listQuery.sort = 'desc'
+      this.listQuery = {
+        currentPage: 1,
+        pageSize: 20,
+        sort: 'desc',
+        enabledMark: this.noticeStatus,
+        type: this.noticeSource
+      }
       this.initData()
     },
     reset() {
-      this.listQuery.keyword = ''
+      this.listQuery.keyword = '';
+      this.listQuery.enabledMark = [];
+      this.listQuery.type = [];
       this.search()
     }
   }
