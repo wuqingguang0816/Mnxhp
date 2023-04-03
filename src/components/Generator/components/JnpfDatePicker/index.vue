@@ -55,7 +55,7 @@ export default {
     value(val) {
       this.innerValue = val
     },
-    format() {
+    format(val) {
       if (val === 'yyyy' || val === 'yyyy-MM' || val === 'yyyy-MM-dd') return this.type = 'date'
       return this.type = 'datetime'
     },

@@ -7,7 +7,7 @@
       <el-switch v-model="activeData['show-icon']" />
     </el-form-item>
     <el-form-item label="辅助文本">
-      <el-input v-model="activeData.description" />
+      <el-input type="textarea" :rows="3" v-model="activeData.description" placeholder="请输入辅助文本" />
     </el-form-item>
     <el-form-item label="样式效果">
       <div class="type-list">
@@ -21,7 +21,7 @@
       <el-switch v-model="activeData.closable" />
     </el-form-item>
     <el-form-item label="按钮文字" v-if="activeData.closable">
-      <el-input v-model="activeData.closeText" />
+      <el-input v-model="activeData.closeText" maxlength="10" placeholder="请输入按钮文字" />
     </el-form-item>
   </el-row>
 </template>

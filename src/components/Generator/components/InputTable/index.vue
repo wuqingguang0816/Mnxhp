@@ -42,8 +42,8 @@
                 @blur="onFormBlur(scope.$index, cIndex, 'el-select')"
                 @change="onFormDataChange(scope.$index, cIndex, 'el-select',arguments)">
                 <el-option v-for="(opt,oIndex) in tableFormData[scope.$index][cIndex].options"
-                  :key="oIndex" :label="opt[head.__config__.props.label]"
-                  :value="opt[head.__config__.props.value]">
+                  :key="oIndex" :label="opt[head.props.props.label]"
+                  :value="opt[head.props.props.value]">
                 </el-option>
               </el-select>
             </template>
@@ -638,8 +638,7 @@ export default {
       return this.tableData.map((t, index) => {
         let options = []
         if (dyOptionsList.indexOf(t.__config__.jnpfKey) > -1) {
-          let isTreeSelect = t.__config__.jnpfKey === 'treeSelect' || t.__config__.jnpfKey === 'cascader'
-          options = isTreeSelect ? t.options : t.__slot__.options
+          options = t.options
         }
         let res = {
           tag: t.__config__.tag,

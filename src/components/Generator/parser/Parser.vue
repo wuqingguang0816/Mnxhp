@@ -459,6 +459,9 @@ export default {
           }
         }
         if (config.jnpfKey === 'date') {
+          if (config.defaultCurrent) {
+            config.defaultValue = new Date().getTime()
+          }
           if (cur.startRelationField) {
             let item = {
               ...cur,

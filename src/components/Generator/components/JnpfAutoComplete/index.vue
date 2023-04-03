@@ -1,6 +1,6 @@
 <template>
   <el-autocomplete v-model="innerValue" :fetch-suggestions="querySearchAsync"
-    :placeholder="placeholder" @select="handleSelect" :disabled="disabled"
+    :placeholder="placeholder" @select="handleSelect" :disabled="disabled" :clearable="clearable"
     popper-class="sale-order-popper">
     <template slot-scope="{ item }">
       <div class="sale-order-popper-item">

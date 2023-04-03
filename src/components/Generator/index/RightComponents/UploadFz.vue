@@ -50,9 +50,9 @@
         <el-input v-model="activeData.folder" placeholder="请输入显示字段" />
       </el-form-item>
     </template>
-    <el-form-item label="显示提示">
+    <!-- <el-form-item label="显示提示">
       <el-switch v-model="activeData.showTip" />
-    </el-form-item>
+    </el-form-item> -->
     <el-form-item label="是否禁用">
       <el-switch v-model="activeData.disabled" />
     </el-form-item>
