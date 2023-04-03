@@ -198,7 +198,7 @@ export default {
           if (config.dataType === 'dictionary') {
             if (!config.dictionaryType) return
             getDictionaryDataSelector(config.dictionaryType).then(res => {
-              isTreeSelect ? cur.options = res.data.list : cur.__slot__.options = res.data.list
+              cur.options = res.data.list
             })
           }
           if (config.dataType === 'dynamic') {
@@ -209,9 +209,9 @@ export default {
             getDataInterfaceRes(config.propsUrl, query).then(res => {
               let data = res.data
               if (Array.isArray(data)) {
-                isTreeSelect ? cur.options = data : cur.__slot__.options = data
+                cur.options = data
               } else {
-                isTreeSelect ? cur.options = [] : cur.__slot__.options = []
+                cur.options = []
               }
             })
           }
