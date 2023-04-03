@@ -25,10 +25,10 @@
       <el-input-number v-model="activeData.precision" :min="0" placeholder="精度"
         controls-position="right" />
     </el-form-item>
-    <el-form-item label="按钮位置">
+    <el-form-item label="按钮">
       <el-radio-group v-model="activeData.controlsPosition">
         <el-radio-button label="">无</el-radio-button>
-        <el-radio-button label="bothSides">两边</el-radio-button>
+        <el-radio-button label="bothSides">左右</el-radio-button>
         <el-radio-button label="right">右侧</el-radio-button>
       </el-radio-group>
     </el-form-item>
@@ -51,6 +51,9 @@
     </template>
     <el-form-item label="大写金额">
       <el-switch v-model="activeData.isAmountChinese" />
+    </el-form-item>
+    <el-form-item label="是否只读">
+      <el-switch v-model="activeData.readonly" />
     </el-form-item>
     <el-form-item label="是否禁用">
       <el-switch v-model="activeData.disabled" />

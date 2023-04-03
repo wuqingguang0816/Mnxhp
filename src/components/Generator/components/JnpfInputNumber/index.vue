@@ -4,8 +4,8 @@
       <div class="el-input el-input--small el-input-group el-input-group--prepend el-input--suffix">
         <div class="el-input-group__prepend" v-if="addonBefore">{{ addonBefore }}</div>
         <el-input-number v-model="innerValue" :placeholder="placeholder" :max="max" :min="min"
-          :step="step" :precision="precision" :disabled="disabled" class="input-number"
-          :controls-position="controlsPosition==='right'?'right':''"
+          :readonly="readonly" :step="step" :precision="precision" :disabled="disabled"
+          class="input-number" :controls-position="controlsPosition==='right'?'right':''"
           :controls="!controlsPosition?false:true">
         </el-input-number>
         <div class="el-input-group__append" v-if="addonAfter">{{ addonAfter }}</div>
@@ -15,8 +15,8 @@
       <div class="el-input el-input--small el-input-group el-input-group--prepend el-input--suffix">
         <div class="el-input-group__prepend" v-if="addonBefore">{{ addonBefore }}</div>
         <el-input-number v-model="innerValue" :placeholder="placeholder" :max="max" :min="min"
-          :step="step" :precision="precision" :disabled="disabled" v-thousands class="input-number"
-          :controls-position="controlsPosition==='right'?'right':''"
+          :readonly="readonly" :step="step" :precision="precision" :disabled="disabled" v-thousands
+          class="input-number" :controls-position="controlsPosition==='right'?'right':''"
           :controls="!controlsPosition?false:true">
         </el-input-number>
         <div class="el-input-group__append" v-if="addonAfter">{{ addonAfter }}</div>
@@ -24,7 +24,7 @@
     </template>
     <template v-else>
       <el-input-number v-model="innerValue" :placeholder="placeholder" :max="max" :min="min"
-        :step="step" :precision="precision" :disabled="disabled"
+        :step="step" :precision="precision" :disabled="disabled" :readonly="readonly"
         :controls-position="controlsPosition==='right'?'right':''"
         :controls="!controlsPosition?false:true">
       </el-input-number>
@@ -85,6 +85,10 @@ export default {
     addonAfter: {
       type: String,
       default: ''
+    },
+    readonly: {
+      type: Boolean,
+      default: false
     }
   },
   data() {
@@ -96,8 +100,8 @@ export default {
   watch: {
     innerValue: {
       handler(val) {
-        this.$emit('input', val || '')
-        this.$emit('change', val || '')
+        this.$emit('input', val)
+        this.$emit('change', val)
         if (!this.isAmountChinese) return
         this.amountChinese(val)
       },
