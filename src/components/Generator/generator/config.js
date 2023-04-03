@@ -788,7 +788,7 @@ export const inputComponents = [
     title: '这是一个提示',
     type: "success",
     "show-icon": false,
-    closable: false
+    closable: true
   },
 ];
 

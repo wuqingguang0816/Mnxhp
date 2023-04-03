@@ -106,6 +106,11 @@
                 class="item" :selectType="item.selectType" :ableDepIds="item.ableDepIds"
                 :multiple="item.searchMultiple" />
             </template>
+            <template v-if="item.__config__.jnpfKey==='autoComplete'">
+              <JnpfAutoComplete v-model="item.value" :placeholder="item.__config__.label"
+                :total="item.total" clearable class="item" :relationField="item.relationField"
+                :templateJson="item.templateJson" :interfaceId="item.relationField" />
+            </template>
           </template>
         </el-form-item>
       </el-col>
