@@ -172,9 +172,6 @@ export default {
     'activeData.__config__.defaultCurrent'(val) {
       if (val) return this.activeData.__config__.defaultValue = ''
     },
-    'activeData.__config__.defaultValue'(val) {
-      if (val) return this.activeData.__config__.defaultCurrent = false
-    },
     'activeData.__config__.startTimeValue'(val) {
       if (this.activeData.__config__.startTimeType == 4 || this.activeData.__config__.startTimeType == 5) {
         if (this.activeData.__config__.startTimeTarget == 2 || this.activeData.__config__.startTimeTarget == 1) {
