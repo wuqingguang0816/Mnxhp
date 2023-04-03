@@ -66,7 +66,9 @@
             width="120" />
           <el-table-column prop="enabledMark" label="状态" width="100" align="center">
             <template slot-scope="scope">
-              <el-tag :type="scope.row.enabledMark==1?'success':'warning'" disable-transitions>
+              <el-tag
+                :type="scope.row.enabledMark==1?'success':scope.row.enabledMark==0?'warning':'info'"
+                disable-transitions>
                 {{ scope.row.enabledMark==1?'已发送':scope.row.enabledMark==0?'存草稿':'已过期' }}
               </el-tag>
             </template>
