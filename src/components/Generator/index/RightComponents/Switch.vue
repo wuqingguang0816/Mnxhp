@@ -4,7 +4,8 @@
       <el-input v-model="activeData.__config__.label" placeholder="请输入控件标题" />
     </el-form-item>
     <el-form-item label="标题提示">
-      <el-input v-model="activeData.__config__.tipLabel" placeholder="请输入标题提示" />
+      <el-input type="textarea" :rows="3" v-model="activeData.__config__.tipLabel"
+        placeholder="请输入标题提示" />
     </el-form-item>
     <el-form-item label="开启展示值">
       <el-input v-model="activeData.activeTxt" placeholder="请输入开启展示值" />

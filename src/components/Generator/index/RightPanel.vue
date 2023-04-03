@@ -214,7 +214,8 @@
                 <el-input v-model="activeData.__config__.label" placeholder="请输入控件标题" />
               </el-form-item>
               <el-form-item label="标题提示">
-                <el-input v-model="activeData.__config__.tipLabel" placeholder="请输入标题提示" />
+                <el-input type="textarea" :rows="3" v-model="activeData.__config__.tipLabel"
+                  placeholder="请输入标题提示" />
               </el-form-item>
               <el-form-item label="编码格式">
                 <el-select v-model="activeData.format" placeholder="请选择">
@@ -256,7 +257,8 @@
                 <el-input v-model="activeData.__config__.label" placeholder="请输入控件标题" />
               </el-form-item>
               <el-form-item label="标题提示">
-                <el-input v-model="activeData.__config__.tipLabel" placeholder="请输入标题提示" />
+                <el-input type="textarea" :rows="3" v-model="activeData.__config__.tipLabel"
+                  placeholder="请输入标题提示" />
               </el-form-item>
               <el-form-item label="实点颜色">
                 <el-color-picker v-model="activeData.colorDark"></el-color-picker>
@@ -309,9 +311,6 @@
               <el-form-item label="控件标题">
                 <el-input v-model="activeData.__config__.label" placeholder="请输入控件标题" />
               </el-form-item>
-              <el-form-item label="标题提示">
-                <el-input v-model="activeData.__config__.tipLabel" placeholder="请输入标题提示" />
-              </el-form-item>
               <el-form-item label="单据模板" v-if="activeData.__config__.jnpfKey==='billRule'">
                 <BillRule :value="activeData.__config__.rule"
                   :title="activeData.__config__.ruleName" @change="onRuleChange" />
@@ -341,7 +340,8 @@
                 <el-input v-model="activeData.__config__.label" placeholder="请输入控件标题" />
               </el-form-item>
               <el-form-item label="标题提示">
-                <el-input v-model="activeData.__config__.tipLabel" placeholder="请输入标题提示" />
+                <el-input type="textarea" :rows="3" v-model="activeData.__config__.tipLabel"
+                  placeholder="请输入标题提示" />
               </el-form-item>
               <el-form-item label="关联子表" v-if="$store.getters.hasTable">
                 <el-select v-model="activeData.__config__.tableName" placeholder="请选择关联子表"
@@ -363,7 +363,8 @@
                 <el-input v-model="activeData.header" placeholder="请输入卡片标题" />
               </el-form-item>
               <el-form-item label="标题提示" label-width="76px">
-                <el-input v-model="activeData.__config__.tipLabel" placeholder="请输入标题提示" />
+                <el-input type="textarea" :rows="3" v-model="activeData.__config__.tipLabel"
+                  placeholder="请输入标题提示" />
               </el-form-item>
               <el-form-item label="显示阴影" label-width="76px" v-show="showType==='pc'">
                 <el-radio-group v-model="activeData.shadow" size="small">
