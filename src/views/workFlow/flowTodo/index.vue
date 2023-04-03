@@ -18,8 +18,8 @@
             </el-form-item>
           </el-col>
           <el-col :span="6">
-            <el-form-item label="所属分类">
-              <el-select v-model="flowCategory" placeholder="选择所属分类" clearable filterable>
+            <el-form-item label="分类">
+              <el-select v-model="flowCategory" placeholder="选择分类" clearable filterable>
                 <el-option v-for="item in categoryList" :key="item.id" :label="item.fullName"
                   :value="item.id">
                 </el-option>
