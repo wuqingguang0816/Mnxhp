@@ -829,11 +829,8 @@ export default {
     setPropsOfSplitCol(startColIndex, colspan, rowspan) {
       for (let i = this.rowIndex; i < this.rowIndex + rowspan; i++) {
         for (let j = startColIndex; j < startColIndex + colspan; j++) {
-          if ((i === this.rowIndex) && (j === startColIndex)) {
-            this.rowData[i].__config__.children[j].__config__.colspan = 1
-            continue
-          }
           this.rowData[i].__config__.children[j].__config__.merged = false;
+          this.rowData[i].__config__.children[j].__config__.rowspan = 1
           this.rowData[i].__config__.children[j].__config__.colspan = 1
         }
       }
@@ -841,12 +838,9 @@ export default {
     setPropsOfSplitRow(startColIndex, colspan, rowspan) {
       for (let i = this.rowIndex; i < this.rowIndex + rowspan; i++) {
         for (let j = startColIndex; j < startColIndex + colspan; j++) {
-          if ((i === this.rowIndex) && (j === startColIndex)) {
-            this.rowData[i].__config__.children[j].__config__.rowspan = 1
-            continue
-          }
           this.rowData[i].__config__.children[j].__config__.merged = false;
           this.rowData[i].__config__.children[j].__config__.rowspan = 1
+          this.rowData[i].__config__.children[j].__config__.colspan = 1
         }
       }
     },
