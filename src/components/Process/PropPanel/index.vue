@@ -603,11 +603,11 @@
                 <template slot="header" slot-scope="scope">
                   <el-checkbox @change="updateReadAllSelected($event,3)"
                     :indeterminate="indeterminateRequiredFlag"
-                    v-model="requiredAllChecked">编辑</el-checkbox>
+                    v-model="requiredAllChecked">删除</el-checkbox>
                 </template>
                 <template slot-scope="scope">
                   <el-checkbox v-model="scope.row.required" :disabled="scope.row.requiredDisabled"
-                    @change="handleCheckedCitiesChange($event,3)">编辑</el-checkbox>
+                    @change="handleCheckedCitiesChange($event,3)">删除</el-checkbox>
                 </template>
               </el-table-column>
             </el-table>
@@ -1653,11 +1653,11 @@
                 <template slot="header" slot-scope="scope">
                   <el-checkbox @change="updateReadAllSelected($event,3)"
                     :indeterminate="indeterminateRequiredFlag"
-                    v-model="requiredAllChecked">编辑</el-checkbox>
+                    v-model="requiredAllChecked">删除</el-checkbox>
                 </template>
                 <template slot-scope="scope">
                   <el-checkbox v-model="scope.row.required" :disabled="scope.row.requiredDisabled"
-                    @change="handleCheckedCitiesChange($event,3)">编辑</el-checkbox>
+                    @change="handleCheckedCitiesChange($event,3)">删除</el-checkbox>
                 </template>
               </el-table-column>
             </el-table>
