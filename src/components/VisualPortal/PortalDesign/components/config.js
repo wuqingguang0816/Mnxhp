@@ -203,7 +203,6 @@ export const systemComponents = [{
   option: {
     showHeader:true,
     styleType: 1,
-    appStyleType:1,
     defaultValue: [],
     showImage: true,
     headerFontSize: 14,
@@ -211,10 +210,10 @@ export const systemComponents = [{
     headerFontColor: '#303133',
     headerLeft: 'center',
     headerBgColor: '#F4F6F8',
-    noticeIndex: true,
-    noticeCount: 5,
-    noticeFontSize: 14,
-    noticeFontColor: '#666666',
+    tableIndex: true,
+    tableCount: 5,
+    tableFontSize: 14,
+    tableFontColor: '#666666',
     noticeBgColor: '',
     noticeOddLineColor: '',
     noticeEvenyLineColor: '',
@@ -228,21 +227,24 @@ export const systemComponents = [{
       fullName: '类型',
       filedName: 'classify',
       fontSize: 12,
-      classify:['公告','通知'],
+      classify:['1','2'],
       fontWeight: false,
       fontColor: '#666666',
+      show:true
     },{
     fullName: '标题',
     filedName: 'fullName',
     fontSize: 14,
     fontWeight: false,
     fontColor: '#303133',
+    show:true
   }, {
     fullName: '摘要',
     filedName: 'content',
     fontSize: 12,
     fontWeight: false,
     fontColor: '#666666',
+    show:true
   }, {
     fullName: '时间',
     filedName: 'time',
@@ -250,6 +252,7 @@ export const systemComponents = [{
     timeClassify:'创建时间',
     fontWeight: false,
     fontColor: '#666666',
+    show:true
   }, {
     fullName: '人员',
     filedName: 'user',
@@ -257,6 +260,7 @@ export const systemComponents = [{
     timeClassify:'发布人',
     fontWeight: false,
     fontColor: '#666666',
+    show:true
   }
     ],
     columnData: [{
@@ -267,7 +271,7 @@ export const systemComponents = [{
       fixed: "none",
       align: 'left',
       width: 0,
-      classify:['公告','通知'],
+      classify:['1','2'],
       id: '6'
     },{
       fullName: '标题',
@@ -323,21 +327,24 @@ export const systemComponents = [{
         fullName: '类型',
         filedName: 'classify',
         fontSize: 12,
-        classify:['公告','通知'],
+        classify:['1','2'],
         fontWeight: false,
         fontColor: '#666666',
+        show:true
       },{
       fullName: '标题',
       filedName: 'fullName',
       fontSize: 14,
       fontWeight: false,
       fontColor: '#303133',
+      show:true
     }, {
       fullName: '摘要',
       filedName: 'content',
       fontSize: 12,
       fontWeight: false,
       fontColor: '#666666',
+      show:true
     }, {
       fullName: '时间',
       filedName: 'time',
@@ -345,6 +352,7 @@ export const systemComponents = [{
       timeClassify:'创建时间',
       fontWeight: false,
       fontColor: '#666666',
+      show:true
     }],
   },
   border:true,

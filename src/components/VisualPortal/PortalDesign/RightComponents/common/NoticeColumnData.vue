@@ -4,25 +4,19 @@
     <el-table-column prop="classify" label="">
     </el-table-column>
     <JNPF-table :data="list" ref="dragTable" :hasNO="false" row-key="id">
-      <el-table-column align="center" label="拖动" width="50">
-        <template>
-          <i class="drag-handler icon-ym icon-ym-darg" style="cursor: move;font-size:20px"
-            title='点击拖动' />
-        </template>
-      </el-table-column>
       <el-table-column prop="fullName" label="名称">
         <template slot-scope="scope">
           <div style="display: flex;">
             <el-input v-model="scope.row.fullName" placeholder="请输入名称" />
-            <el-select v-model="scope.row.classify" placeholder="请选择" style="margin-left: 5px;"
-              v-if="scope.row.filedName == 'classify'">
+            <el-select v-model="scope.row.classify" multiple placeholder="请选择"
+              style="margin-left: 5px;" v-if="scope.row.filedName == 'classify'">
               <el-option v-for="item in classifyOptions" :key="item.value" :label="item.fullName"
                 :value="item.value">
               </el-option>
             </el-select>
             <el-select v-model="scope.row.timeClassify" placeholder="请选择" style="margin-left: 5px;"
               v-if="scope.row.filedName == 'time'">
-              <el-option v-for="item in timeOptions" :key="item.value" :label="item.fullName"
+              <el-option v-for="item in timeOptions" :key="item.fullName" :label="item.fullName"
                 :value="item.value">
               </el-option>
             </el-select>
@@ -45,22 +39,24 @@
         <el-table-column prop="fontSize" label="大小" width="170">
           <template slot-scope="scope">
             <el-input-number v-model="scope.row.fontSize" placeholder="大小" :min="0" :precision="0"
-              controls-position="right" style="width:100%" />
+              controls-position="right" style="width:100%"
+              v-if="scope.row.filedName !== 'classify'" />
           </template>
         </el-table-column>
-        <el-table-column prop="fontWeight" label="加粗" align="center">
+        <el-table-column prop="fontWeight" label="加粗" align="center" width="100">
           <template slot-scope="scope">
-            <el-switch v-model="scope.row.fontWeight" />
+            <el-switch v-model="scope.row.fontWeight" v-if="scope.row.filedName !== 'classify'" />
           </template>
         </el-table-column>
-        <el-table-column prop="fontColor" label="颜色" align="center">
+        <el-table-column prop="fontColor" label="颜色" align="center" width="100">
           <template slot-scope="scope">
-            <el-color-picker v-model="scope.row.fontColor" />
+            <el-color-picker v-model="scope.row.fontColor"
+              v-if="scope.row.filedName !== 'classify'" />
           </template>
         </el-table-column>
       </template>
       <template v-if="showType == 'app'">
-        <el-table-column label="是否显示" prop="show" width="70">
+        <el-table-column label="是否显示" prop="show" width="90">
           <template slot-scope="scope">
             <el-switch v-model="scope.row.show">
             </el-switch>
@@ -69,17 +65,19 @@
         <el-table-column prop="fontSize" label="大小" width="170">
           <template slot-scope="scope">
             <el-input-number v-model="scope.row.fontSize" placeholder="大小" :min="0" :precision="0"
-              controls-position="right" style="width:100%" />
+              controls-position="right" style="width:100%"
+              v-if="scope.row.filedName !== 'classify'" />
           </template>
         </el-table-column>
         <el-table-column prop="fontWeight" label="加粗" align="center" width="100">
           <template slot-scope="scope">
-            <el-switch v-model="scope.row.fontWeight" />
+            <el-switch v-model="scope.row.fontWeight" v-if="scope.row.filedName !== 'classify'" />
           </template>
         </el-table-column>
         <el-table-column prop="fontColor" label="颜色" align="center" width="100">
           <template slot-scope="scope">
-            <el-color-picker v-model="scope.row.fontColor" />
+            <el-color-picker v-model="scope.row.fontColor"
+              v-if="scope.row.filedName !== 'classify'" />
           </template>
         </el-table-column>
       </template>
@@ -97,28 +95,31 @@
           </template>
         </el-table-column>
 
-        <el-table-column prop="align" label="冻结方式" v-if="showType == 'pc'">
+        <el-table-column prop="align" label="冻结方式" v-if="showType == 'pc'" width="110">
           <template slot-scope="scope">
-            <el-select v-model="scope.row.fixed" placeholder="请选择">
+            <el-select v-model="scope.row.fixed" placeholder="请选择"
+              v-if="scope.row.filedName !== 'classify'">
               <el-option v-for="item in fixedOptions" :key="item.value" :label="item.fullName"
                 :value="item.value">
               </el-option>
             </el-select>
           </template>
         </el-table-column>
-        <el-table-column prop="align" label="对齐方式" v-if="showType == 'pc'">
+        <el-table-column prop="align" label="对齐方式" v-if="showType == 'pc'" width="110">
           <template slot-scope="scope">
-            <el-select v-model="scope.row.align" placeholder="请选择">
+            <el-select v-model="scope.row.align" placeholder="请选择"
+              v-if="scope.row.filedName !== 'classify'">
               <el-option v-for="item in alignOptions" :key="item.value" :label="item.fullName"
                 :value="item.value">
               </el-option>
             </el-select>
           </template>
         </el-table-column>
-        <el-table-column prop="width" label="宽度">
+        <el-table-column prop="width" label="宽度" width="110">
           <template slot-scope="scope">
             <el-input-number v-model="scope.row.width" placeholder="宽度" :min="0" :precision="0"
-              controls-position="right" style="width:100%" />
+              controls-position="right" style="width:100%"
+              v-if="scope.row.filedName !== 'classify'" />
           </template>
         </el-table-column>
       </template>
