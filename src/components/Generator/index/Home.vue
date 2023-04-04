@@ -753,7 +753,7 @@ export default {
       })
       if (childrenData && childrenData.length) {
         childrenData.map((o, i) => {
-          this.colData[0].__config__.children.push(...deepClone(o.__config__.children))
+          if (i != 0) this.colData[0].__config__.children.push(...deepClone(o.__config__.children))
         })
       }
       this.setPropsOfMergedCols(0, this.colData.length, this.colData[this.colIndex].__config__.rowspan)
