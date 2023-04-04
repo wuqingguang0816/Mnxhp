@@ -1,10 +1,10 @@
 <template>
   <el-card shadow="never"
-    :class="activeData.option.styleType==1?'portal-eChart-box':'portal-table-box'">
+    :class="activeData.option.styleType==1 ?'portal-eChart-box':'portal-notice-box'">
     <CardHeader v-if="activeData.title" slot="header" :title="activeData.title"
       :card="activeData.card" />
-    <div class="portal-table-box-body">
-      <template v-if='showType=="pc"'>
+    <div class="portal-notice-box-body">
+      <template>
         <template v-if="activeData.option.styleType==1">
           <JNPF-table :data="defaultValue" :show-header='activeData.option.showHeader'
             :hasNO="false" :border='activeData.border' :header-cell-style="{'font-size':activeData.option.headerFontSize+'px',
@@ -31,44 +31,53 @@
         </template>
         <template v-if="activeData.option.styleType==2">
           <template v-if="defaultValue.length">
-            <div v-for="(item, i) in defaultValue" :key="i"
-              :style="{background: activeData.option.noticeOddLineColor ? activeData.option.noticeOddLineColor : activeData.option.noticeBgColor }"
-              style="display: flex;height: 100%;width: 100%;padding: 6px 0; border-bottom: 1px solid #ebeef5;">
-              <div style="width: 52px;height: 52px;flex-shrink: 0;">
-                <img :src="item.coverImage ? define.comUrl+item.coverImage : coverImage" alt=""
-                  style="width: 100%;height: 100%;">
-              </div>
-              <div
-                style="flex: 1;margin-left: 10px;display: flex;flex-direction: column;justify-content: space-between;min-width: 0;">
-                <div>
-                  <el-tag size="mini" :color="item.type == 1?'#ebe6ff':'#e5ebfe'"
-                    :style="{'color':item.type == 1?'#9016f3':'#1448f4'}">{{ item.type == 1?'公告':'通知' }}</el-tag>
-                  <span style="margin-left: 10px"
-                    :style="{'color':list[1].fontColor,'font-size':list[1].fontSize+'px','font-weight':list[1].fontWeight?700:400}">{{ item.fullName }}</span>
-                  <span style="float: right;"
-                    :style="{'color':list[3].fontColor,'font-size':list[3].fontSize+'px','font-weight':list[3].fontWeight?700:400}">{{ list[3].timeClassify === '创建时间'?item.creatorTime: item.releaseTime}}</span>
+            <div v-for="(item, i) in defaultValue" :key="i" class="portal-list-box">
+              <div v-if=' i% 2 == 0' class="portal-list-item"
+                :style="{background: activeData.option.noticeOddLineColor ? activeData.option.noticeOddLineColor : activeData.option.noticeBgColor }">
+                <div class="item-image-box">
+                  <img :src="item.coverImage ? define.comUrl+item.coverImage : coverImage" alt=""
+                    class="item-image">
                 </div>
-                <p :style="{'color':list[2].fontColor,'font-size':list[2].fontSize+'px','font-weight':list[2].fontWeight?700:400}"
-                  style="min-width: 0; overflow: hidden; white-space: nowrap; -o-text-overflow: ellipsis; text-overflow:ellipsis;">
-                  {{ item.excerpt }}</p>
+                <div class="itme-content-box">
+                  <div class="item-title">
+                    <el-tag size="mini" :color="item.type == 1?'#ebe6ff':'#e5ebfe'"
+                      :style="{'color':item.type == 1?'#9016f3':'#1448f4'}">{{ item.type == 1?'公告':'通知' }}</el-tag>
+                    <span class="item-left-span"
+                      :style="{'color':list[1].fontColor,'font-size':list[1].fontSize+'px','font-weight':list[1].fontWeight?700:400}">{{ item.fullName }}</span>
+                    <span class="item-right-span" v-if="list[3].timeClassify === '创建时间'"
+                      :style="{'color':list[3].fontColor,'font-size':list[3].fontSize+'px','font-weight':list[3].fontWeight?700:400}">{{ item.creatorTime| toDateValue()}}</span>
+                    <span class="item-right-span" v-else
+                      :style="{'color':list[3].fontColor,'font-size':list[3].fontSize+'px','font-weight':list[3].fontWeight?700:400}">{{item.releaseTime| toDateValue()}}</span>
+                  </div>
+                  <p :style="{'color':list[2].fontColor,'font-size':list[2].fontSize+'px','font-weight':list[2].fontWeight?700:400}"
+                    class="itme-content">
+                    {{ item.excerpt }}</p>
+                </div>
+              </div>
+              <div v-else
+                :style="{background: activeData.option.noticeEvenyLineColor ? activeData.option.noticeEvenyLineColor : activeData.option.noticeBgColor }"
+                class="portal-list-item">
+                <div class="item-image-box">
+                  <img :src="item.coverImage ? define.comUrl+item.coverImage : coverImage" alt=""
+                    class="item-image">
+                </div>
+                <div class="itme-content-box">
+                  <div class="item-title">
+                    <el-tag size="mini" :color="item.type == 1?'#ebe6ff':'#e5ebfe'"
+                      :style="{'color':item.type == 1?'#9016f3':'#1448f4'}">{{ item.type == 1?'公告':'通知' }}</el-tag>
+                    <span class="item-left-span"
+                      :style="{'color':list[1].fontColor,'font-size':list[1].fontSize+'px','font-weight':list[1].fontWeight?700:400}">{{ item.fullName }}</span>
+                    <span class="item-right-span" v-if="list[3].timeClassify === '创建时间'"
+                      :style="{'color':list[3].fontColor,'font-size':list[3].fontSize+'px','font-weight':list[3].fontWeight?700:400}">{{ item.creatorTime| toDateValue()}}</span>
+                    <span class="item-right-span" v-else
+                      :style="{'color':list[3].fontColor,'font-size':list[3].fontSize+'px','font-weight':list[3].fontWeight?700:400}">{{item.releaseTime| toDateValue()}}</span>
+                  </div>
+                  <p :style="{'color':list[2].fontColor,'font-size':list[2].fontSize+'px','font-weight':list[2].fontWeight?700:400}"
+                    class="itme-content">
+                    {{ item.excerpt }}</p>
+                </div>
               </div>
             </div>
-
-            <!-- <div
-              style="display: flex;height: 100%;width: 100%;padding: 10px 0; border-bottom: 1px solid #ebeef5;align-items: center;">
-              <div style="width: 52px;height: 52px;">
-                <img src="@/assets/images/gg.png" alt="" style="width: 100%;height: 100%;">
-              </div>
-              <div
-                style="flex: 1;margin-left: 10px;display: flex;flex-direction: column;justify-content: space-between;">
-                <div>
-                  <el-tag size="mini">通知</el-tag>
-                  <span style="margin-left: 10px">看到房价肯定饭卡手动阀拉开圣诞节看风景</span>
-                </div>
-                <span style="margin: 4px 0;">5555555555555555正文</span>
-                <span style="float: right;">2023-02-26 15:30:52</span>
-              </div>
-            </div> -->
           </template>
           <div class="portal-common-noData" v-else>
             <img src="@/assets/images/portal-nodata.png" alt="" class="noData-img">
@@ -77,69 +86,56 @@
         </template>
         <template v-if="activeData.option.styleType==3">
           <template v-if="defaultValue.length">
-            <template v-for="(item, i) in defaultValue">
-              <el-col :key='i' v-if="list.length">
-                <div class="row-title" v-if=' i% 2 == 0'
-                  :style="{background: activeData.option.tableOddLineColor ? activeData.option.tableOddLineColor : activeData.option.tableBgColor }">
-                  <div class="title"
-                    :style="{'font-weight':list[0].fontWeight?'bolder':'normal','font-size':list[0].fontSize+'px',color:list[0].fontColor}">
-                    {{item[list[0].filedName]}}
-                  </div>
-                  <div class="content" v-if="activeData.option.describe"
-                    :style="{'font-weight':list[1].fontWeight?'bolder':'normal','font-size':list[1].fontSize+'px',color:list[1].fontColor}">
-                    {{item[list[1].filedName]}}
-                  </div>
-                  <div class="content"
-                    :style="{'font-weight':list[2].fontWeight?'bolder':'normal','font-size':list[2].fontSize+'px',color:list[2].fontColor}">
-                    {{item[list[2].filedName]}}
-                  </div>
+            <div v-for="(item, i) in defaultValue" class="portal-list-box" :key="i">
+              <div class="portal-list-item" v-if=' i% 2 == 0'
+                :style="{background: activeData.option.noticeOddLineColor ? activeData.option.noticeOddLineColor : activeData.option.noticeBgColor }">
+                <div class="item-image-box">
+                  <img src="@/assets/images/gg.png" alt="" class="item-image">
                 </div>
-                <div class="row-title" v-else
-                  :style="{background: activeData.option.tableEvenLineColor ? activeData.option.tableEvenLineColor : activeData.option.tableBgColor }">
-                  <div class="title"
-                    :style="{'font-weight':list[0].fontWeight?'bolder':'normal','font-size':list[0].fontSize+'px',color:list[0].fontColor}">
-                    {{item[list[0].filedName]}}
+                <div style="" class="itme-content-box">
+                  <div class="item-title">
+                    <el-tag size="mini" :color="item.type == 1?'#ebe6ff':'#e5ebfe'"
+                      :style="{'color':item.type == 1?'#9016f3':'#1448f4'}">{{ item.type == 1?'公告':'通知' }}</el-tag>
+                    <span class="item-left-span"
+                      :style="{'color':list[1].fontColor,'font-size':list[1].fontSize+'px','font-weight':list[1].fontWeight?700:400}">{{ item.fullName }}</span>
                   </div>
-                  <div class="content" v-if="activeData.option.describe"
-                    :style="{'font-weight':list[1].fontWeight?'bolder':'normal','font-size':list[1].fontSize+'px',color:list[1].fontColor}">
-                    {{item[list[1].filedName]}}
-                  </div>
-                  <div class="content"
-                    :style="{'font-weight':list[2].fontWeight?'bolder':'normal','font-size':list[2].fontSize+'px',color:list[2].fontColor}">
-                    {{item[list[2].filedName]}}
-                  </div>
+                  <p :style="{'color':list[2].fontColor,'font-size':list[2].fontSize+'px','font-weight':list[2].fontWeight?700:400}"
+                    class="itme-content">
+                    {{ item.excerpt }}</p>
+                  <span class="item-right-span" v-if="list[3].timeClassify === '创建时间'"
+                    :style="{'color':list[3].fontColor,'font-size':list[3].fontSize+'px','font-weight':list[3].fontWeight?700:400}">{{ item.creatorTime| toDateValue()}}</span>
+                  <span class="item-right-span" v-else
+                    :style="{'color':list[3].fontColor,'font-size':list[3].fontSize+'px','font-weight':list[3].fontWeight?700:400}">{{item.releaseTime| toDateValue()}}</span>
                 </div>
-                <el-divider class="divider-margin "></el-divider>
-              </el-col>
-            </template>
+              </div>
+              <div class="portal-list-item" v-else
+                :style="{background: activeData.option.noticeEvenyLineColor ? activeData.option.noticeEvenyLineColor : activeData.option.noticeBgColor }">
+                <div class="item-image-box">
+                  <img src="@/assets/images/gg.png" alt="" class="item-image">
+                </div>
+                <div style="" class="itme-content-box">
+                  <div class="item-title">
+                    <el-tag size="mini" :color="item.type == 1?'#ebe6ff':'#e5ebfe'"
+                      :style="{'color':item.type == 1?'#9016f3':'#1448f4'}">{{ item.type == 1?'公告':'通知' }}</el-tag>
+                    <span class="item-left-span"
+                      :style="{'color':list[1].fontColor,'font-size':list[1].fontSize+'px','font-weight':list[1].fontWeight?700:400}">{{ item.fullName }}</span>
+                  </div>
+                  <p :style="{'color':list[2].fontColor,'font-size':list[2].fontSize+'px','font-weight':list[2].fontWeight?700:400}"
+                    class="itme-content">
+                    {{ item.excerpt }}</p>
+                  <span class="item-right-span" v-if="list[3].timeClassify === '创建时间'"
+                    :style="{'color':list[3].fontColor,'font-size':list[3].fontSize+'px','font-weight':list[3].fontWeight?700:400}">{{ item.creatorTime| toDateValue()}}</span>
+                  <span class="item-right-span" v-else
+                    :style="{'color':list[3].fontColor,'font-size':list[3].fontSize+'px','font-weight':list[3].fontWeight?700:400}">{{item.releaseTime| toDateValue()}}</span>
+                </div>
+              </div>
+            </div>
           </template>
           <div class="portal-common-noData" v-else>
             <img src="@/assets/images/portal-nodata.png" alt="" class="noData-img">
             <p class="noData-txt">暂无数据</p>
           </div>
         </template>
-      </template>
-      <template v-else>
-        <template v-if="defaultValue.length">
-          <div v-for="(item, i) in defaultValue" :key="i">
-            <div class="app-title" :style="{'font-weight': activeData.option.textFontWeight?'bolder':'normal',
-          'font-size':activeData.option.textFontSize+'px',
-          color:activeData.option.textFontColor
-          }">
-              <template v-for="(it, ii) in list">
-                <div :key="ii" style="margin-left: 20px;" class="name">
-                  <span
-                    v-if="activeData.option.showName">{{it.fullName}}:</span><span>{{item[it.filedName]}}</span>
-                </div>
-              </template>
-              <el-divider class="divider-margin "></el-divider>
-            </div>
-          </div>
-        </template>
-        <div class="portal-common-noData" v-else>
-          <img src="@/assets/images/portal-nodata.png" alt="" class="noData-img">
-          <p class="noData-txt">暂无数据</p>
-        </div>
       </template>
     </div>
   </el-card>
@@ -159,7 +155,8 @@ export default {
       coverImage: '@/assets/images/portal-nodata.png',
       key: +new Date(),
       defaultValue: [],
-      list: []
+      list: [],
+      typeList: []
     }
   },
   watch: {
@@ -181,22 +178,43 @@ export default {
       }
     },
     initData() {
-      getNotice().then(res => {
+      this.activeData.option.columnData.forEach((o, i) => {
+        if (o.classify && o.classify.length) {
+          this.typeList = o.classify
+        }
+      });
+      let data = {
+        typeList: this.typeList
+      }
+      getNotice(data).then(res => {
         this.defaultValue = JSON.parse(JSON.stringify(res.data.list)) || []
-        this.defaultValue.map(o => {
-          o.creatorTime = this.jnpf.toDate(o.creatorTime)
-          o.releaseTime = this.jnpf.toDate(o.releaseTime)
-        })
-        if (this.showType === 'pc') {
-          this.defaultValue = this.defaultValue.slice(0, this.activeData.option.tableCount)
-          if (this.activeData.option.styleType == 1) {
-            this.list = this.activeData.option.columnData.filter(o => o.show)
-          } else {
-            this.list = this.activeData.option.rowData
-          }
+        if (this.activeData.option.styleType == 1) {
+          this.defaultValue.map(o => {
+            o.creatorTime = this.jnpf.toDate(o.creatorTime)
+            o.releaseTime = this.jnpf.toDate(o.releaseTime)
+          })
+        }
+
+
+        // if (this.showType === 'pc') {
+        //   this.defaultValue = this.defaultValue.slice(0, this.activeData.option.tableCount)
+        //   if (this.activeData.option.styleType == 1) {
+        //     this.list = this.activeData.option.columnData.filter(o => o.show)
+        //   } else {
+        //     this.list = this.activeData.option.rowData
+        //   }
+        // } else {
+        //   this.defaultValue = this.defaultValue.slice(0, this.activeData.option.appCount)
+        //   this.list = this.activeData.option.appColumnList
+        // }
+
+
+
+        this.defaultValue = this.defaultValue.slice(0, this.activeData.option.noticeCount)
+        if (this.activeData.option.styleType == 1) {
+          this.list = this.activeData.option.columnData.filter(o => o.show)
         } else {
-          this.defaultValue = this.defaultValue.slice(0, this.activeData.option.appCount)
-          this.list = this.activeData.option.appColumnList
+          this.list = this.activeData.option.rowData
         }
       })
     }
@@ -204,77 +222,51 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
-.portal-box-body {
-  height: 100%;
-  overflow: auto;
-  .text {
-    margin: 15px;
-  }
-}
-.row-title {
-  width: 100%;
-  padding-top: 10px;
-  .title {
-    margin-left: 20px;
-  }
-  .title-time {
-    position: fixed;
-    right: 20px;
-  }
-  .content {
-    margin-left: 20px;
-    margin-top: 5px;
-  }
-}
-.divider-margin {
-  margin: 0px 0px;
-}
-.app-title {
-  width: 100%;
-  padding-top: 5px;
-  // border: 1px solid #000;
-}
-.portal-table-box {
-  .el-card__header {
-    height: 55px;
-    padding: 0;
-  }
+.portal-notice-box {
+  .portal-notice-box-body {
+    padding: 18px 20px;
+    .portal-list-box {
+      .portal-list-item {
+        display: flex;
+        height: 100%;
+        width: 100%;
+        padding: 6px 0;
+        border-bottom: 1px solid #ebeef5;
+        .item-image-box {
+          width: 52px;
+          height: 52px;
+          flex-shrink: 0;
+          .item-image {
+            width: 100%;
+            height: 100%;
+          }
+        }
+        .itme-content-box {
+          flex: 1;
+          margin-left: 10px;
+          display: flex;
+          flex-direction: column;
+          justify-content: space-between;
+          min-width: 0;
 
-  .el-card__body {
-    width: 100%;
-    height: calc(100% - 55px);
-  }
-
-  .portal-table-box-body {
-    padding: 0 20px;
-    height: 100%;
-    overflow: hidden;
-
-    .item {
-      display: block;
-      line-height: 20px;
-      margin-top: 20px;
-      font-size: 0;
-      margin-left: 20px;
-
-      .time {
-        font-size: 14px;
-        display: inline-block;
-        color: #999;
-        width: 120px;
-        text-align: right;
+          .item-title {
+            .item-left-span {
+              margin-left: 10px;
+            }
+            .item-right-span {
+              float: right;
+            }
+          }
+          .itme-content {
+            min-width: 0;
+            overflow: hidden;
+            white-space: nowrap;
+            -o-text-overflow: ellipsis;
+            text-overflow: ellipsis;
+          }
+        }
       }
     }
   }
-}
-.name {
-  font-size: 14px;
-  display: inline-block;
-  width: calc(100% - 120px);
-  white-space: nowrap;
-  text-overflow: ellipsis;
-  overflow: hidden;
-  word-break: break-all;
-  vertical-align: top;
 }
 </style>

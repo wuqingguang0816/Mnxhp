@@ -9,7 +9,7 @@
         </el-select>
       </el-form-item>
       <el-form-item label="风格类型" v-if="showType=='app'">
-        <el-select v-model="activeData.option.appStyleType" placeholder="请选择风格类型"
+        <el-select v-model="activeData.option.styleType" placeholder="请选择风格类型"
           @change="renderKeyChange">
           <el-option v-for="(item, index) in appStyleTypeOptions" :key="index" :label="item.label"
             :value="item.value" />

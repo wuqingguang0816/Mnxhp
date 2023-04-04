@@ -9,10 +9,11 @@ export function getFlowTodoCount(data) {
   })
 }
 // 获取通知公告
-export function getNotice() {
+export function getNotice(data) {
   return request({
-    url: '/api/visualdev/Dashboard/Notice',
-    method: 'get'
+    url: `/api/visualdev/Dashboard/Notice`,
+    method: 'post',
+    data
   })
 }
 // 获取未读邮件
