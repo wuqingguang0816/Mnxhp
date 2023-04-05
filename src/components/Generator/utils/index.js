@@ -194,7 +194,7 @@ export function getAmountChinese(val) {
       if (pos % 4 === 0) res += N_UNIT2[Math.floor(pos / 4)]
     }
   }
-  res += '圆'
+  res += '元'
   // 小数部分
   if (parseInt(decimal)) {
     for (let i = 0; i < 4; i++) {
@@ -236,7 +236,7 @@ export const validExp = (expressions, mergeNum = true) => {
     return false
   }
   for (let i = 0; i < arr.length - 1; i += 2) {
-    if (typeof(+arr[i]) !== 'number' || !Number.isNaN(+arr[i + 1])) return false
+    if (typeof (+arr[i]) !== 'number' || !Number.isNaN(+arr[i + 1])) return false
   }
   return true
 }
@@ -319,7 +319,7 @@ export const calcRPN = rpnExps => {
  */
 export const debounce = (func, gap) => {
   let timer
-  return function() {
+  return function () {
     timer && clearTimeout(timer)
     timer = setTimeout(() => {
       func.apply(this, arguments)

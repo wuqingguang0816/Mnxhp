@@ -39,7 +39,7 @@
       <el-form-item label="后缀">
         <el-input v-model="activeData.addonAfter" placeholder="请输入后缀" />
       </el-form-item>
-      <el-form-item label="千位符">
+      <el-form-item label="千位分隔">
         <el-switch v-model="activeData.thousands" />
       </el-form-item>
     </template>
@@ -51,9 +51,6 @@
     </template>
     <el-form-item label="大写金额">
       <el-switch v-model="activeData.isAmountChinese" />
-    </el-form-item>
-    <el-form-item label="是否只读">
-      <el-switch v-model="activeData.readonly" />
     </el-form-item>
     <el-form-item label="是否禁用">
       <el-switch v-model="activeData.disabled" />

@@ -4,8 +4,8 @@
       <div class="el-input el-input--small el-input-group el-input-group--prepend el-input--suffix">
         <div class="el-input-group__prepend" v-if="addonBefore">{{ addonBefore }}</div>
         <el-input-number v-model="innerValue" :placeholder="placeholder" :max="max" :min="min"
-          :readonly="readonly" :step="step" :precision="precision" :disabled="disabled"
-          class="input-number" :controls-position="controlsPosition==='right'?'right':''"
+          :step="step" :precision="precision" :disabled="disabled" class="input-number"
+          :controls-position="controlsPosition==='right'?'right':''"
           :controls="!controlsPosition?false:true">
         </el-input-number>
         <div class="el-input-group__append" v-if="addonAfter">{{ addonAfter }}</div>
@@ -15,8 +15,8 @@
       <div class="el-input el-input--small el-input-group el-input-group--prepend el-input--suffix">
         <div class="el-input-group__prepend" v-if="addonBefore">{{ addonBefore }}</div>
         <el-input-number v-model="innerValue" :placeholder="placeholder" :max="max" :min="min"
-          :readonly="readonly" :step="step" :precision="precision" :disabled="disabled" v-thousands
-          class="input-number" :controls-position="controlsPosition==='right'?'right':''"
+          :step="step" :precision="precision" :disabled="disabled" v-thousands class="input-number"
+          :controls-position="controlsPosition==='right'?'right':''"
           :controls="!controlsPosition?false:true">
         </el-input-number>
         <div class="el-input-group__append" v-if="addonAfter">{{ addonAfter }}</div>
@@ -24,7 +24,7 @@
     </template>
     <template v-else>
       <el-input-number v-model="innerValue" :placeholder="placeholder" :max="max" :min="min"
-        :step="step" :precision="precision" :disabled="disabled" :readonly="readonly"
+        :step="step" :precision="precision" :disabled="disabled"
         :controls-position="controlsPosition==='right'?'right':''"
         :controls="!controlsPosition?false:true">
       </el-input-number>
@@ -102,7 +102,6 @@ export default {
       handler(val) {
         this.$emit('input', val)
         this.$emit('change', val)
-        if (!this.isAmountChinese) return
         this.amountChinese(val)
       },
       deep: true
@@ -110,13 +109,11 @@ export default {
     value: {
       handler(val) {
         this.innerValue = val
-        if (!this.isAmountChinese) return
         this.amountChinese(this.innerValue)
       },
       deep: true
     },
     isAmountChinese() {
-      if (!this.isAmountChinese) return
       this.amountChinese(this.innerValue)
     },
   },
@@ -134,6 +131,9 @@ export default {
         if (el.tagName.toLocaleUpperCase() !== 'INPUT') {
           el = el.getElementsByTagName('input')[0]
         }
+        // if (typeof fn !== 'function') {
+        //   return el.value = ''
+        // }
         // 千分位
         el.value = parseFloat(el.value).toLocaleString('zh', {
           minimumFractionDigits: precision,
@@ -158,6 +158,7 @@ export default {
         // 聚焦转化为数字格式（去除千分位）
         el.focus()
         let precision = vnode.child.precision
+        console.log(el)
         if (el.tagName.toLocaleUpperCase() !== 'INPUT') {
           el = el.getElementsByTagName('input')[0]
         }
@@ -167,8 +168,7 @@ export default {
             maximumFractionDigits: precision
           })
         }
-        console.log(el.value)
-        if (el.value === 'NaN') el.value = ''
+        if (!el.value) el = el
         console.log(el.value)
       },
       unbind: (el, binding, vnode) => {
@@ -187,6 +187,7 @@ export default {
   },
   methods: {
     amountChinese(val) {
+      if (!this.isAmountChinese) return
       this.amountChineseName = getAmountChinese(val)
     }
   }
