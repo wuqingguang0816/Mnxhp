@@ -168,8 +168,7 @@ export default {
             maximumFractionDigits: precision
           })
         }
-        if (!el.value) el = el
-        console.log(el.value)
+        if (el.value === 'NaN') el.value = ''
       },
       unbind: (el, binding, vnode) => {
         let precision = vnode.child.precision

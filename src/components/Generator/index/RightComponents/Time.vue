@@ -11,7 +11,8 @@
       <el-input v-model="activeData.placeholder" placeholder="请输入占位提示" />
     </el-form-item>
     <el-form-item label="格式">
-      <el-select v-model="activeData.format" placeholder="请选择时间类型" @change="dateTypeChange">
+      <el-select v-model="activeData.format" placeholder="请选择时间类型" @change="dateTypeChange"
+        filterable>
         <el-option v-for="(item, index) in formatOptions" :key="index" :label="item.label"
           :value="item.value" />
       </el-select>
@@ -31,17 +32,17 @@
       <el-input v-model="activeData['picker-options'].selectableRange" placeholder="请输入时间段" />
     </el-form-item> -->
     <el-divider>规则</el-divider>
-    <el-form-item label="开始时间">
+    <jnpf-form-tip-item label="开始时间" tip-label="系统会限制填写者填写此字段的当前起始时间范围（包含该时间）。该功能不做有效性验证，请自行保证。">
       <el-switch v-model="activeData.__config__.startTimeRule" @change="startTimeRuleChange" />
-    </el-form-item>
+    </jnpf-form-tip-item>
     <template v-if="activeData.__config__.startTimeRule">
-      <jnpf-form-tip-item label="类型" tip-label="系统会限制填写者填写此字段的当天起始日期范围（包含该日期）。该功能不做有效性验证，请自行保证。">
+      <el-form-item label="类型">
         <el-select v-model="activeData.__config__.startTimeType" placeholder="请选择类型"
           @change="startType">
           <el-option v-for="(item, index) in typeOptions" :key="index" :label="item.label"
             :value="item.value" />
         </el-select>
-      </jnpf-form-tip-item>
+      </el-form-item>
       <el-form-item label="" v-if="activeData.__config__.startTimeType==1">
         <el-time-picker v-model="activeData.__config__.startTimeValue"
           :picker-options="activeData['picker-options']" placeholder="选择默认值" clearable
@@ -66,17 +67,17 @@
         </el-select>
       </el-form-item>
     </template>
-    <el-form-item label="结束时间">
+    <jnpf-form-tip-item label="结束时间" tip-label="系统会限制填写者填写此字段的当前起始时间范围（包含该时间）。该功能不做有效性验证，请自行保证。">
       <el-switch v-model="activeData.__config__.endTimeRule" @change="endTimeRuleChange" />
-    </el-form-item>
+    </jnpf-form-tip-item>
     <template v-if="activeData.__config__.endTimeRule">
-      <jnpf-form-tip-item label="类型" tip-label="系统会限制填写者填写此字段的当天起始日期范围（包含该日期）。该功能不做有效性验证，请自行保证。">
+      <el-form-item label="类型">
         <el-select v-model="activeData.__config__.endTimeType" placeholder="请选择类型"
           @change="endType">
           <el-option v-for="(item, index) in typeOptions" :key="index" :label="item.label"
             :value="item.value" />
         </el-select>
-      </jnpf-form-tip-item>
+      </el-form-item>
       <el-form-item label="" v-if="activeData.__config__.endTimeType==1">
         <el-time-picker v-model="activeData.__config__.endTimeValue" placeholder="请选择时间" clearable
           :value-format="activeData['value-format']" :format="activeData.format">
@@ -324,7 +325,7 @@ export default {
       }
     },
     defaultCurrentChange(val) {
-      if (val) this.activeData.__config__.defaultValue = this.jnpf.toDate(new Date(), this.activeData.format)
+      if (val) this.activeData.__config__.defaultValue = ''
     },
   }
 }

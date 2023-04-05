@@ -170,9 +170,6 @@ export default {
     }
   },
   watch: {
-    'activeData.__config__.defaultCurrent'(val) {
-      if (val) return this.activeData.__config__.defaultValue = ''
-    },
     'activeData.__config__.startTimeValue'(val) {
       if (this.activeData.__config__.startTimeType == 4 || this.activeData.__config__.startTimeType == 5) {
         if (this.activeData.__config__.startTimeTarget == 2 || this.activeData.__config__.startTimeTarget == 1) {
@@ -496,7 +493,7 @@ export default {
       return this.type = 'datetime'
     },
     defaultCurrentChange(val) {
-      if (val) this.activeData.__config__.defaultValue = new Date().getTime()
+      if (val) this.activeData.__config__.defaultValue = ''
     }
   }
 }

@@ -470,6 +470,7 @@ export const inputComponents = [
       className: [],
       defaultValue: null,
       required: false,
+      defaultCurrent: false,
       layout: "colFormItem",
       span: 24,
       dragDisabled: false,

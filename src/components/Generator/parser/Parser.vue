@@ -494,6 +494,9 @@ export default {
           }
         }
         if (config.jnpfKey === 'time') {
+          if (config.defaultCurrent) {
+            config.defaultValue = this.jnpf.toDate(new Date(), cur.format)
+          }
           if (cur.startRelationField) {
             let item = {
               ...cur,
@@ -571,11 +574,15 @@ export default {
                 let endTime = ''
                 if (e.__config__.startTimeType == 2) {
                   startTime = this[this.formConf.formModel][e.__config__.startRelationField] || 0
+                } else if (e.__config__.startTimeType == 3) {
+                  startTime = new Date().getTime()
                 } else {
                   startTime = e.startTime
                 }
                 if (e.__config__.endTimeType == 2) {
                   endTime = this[this.formConf.formModel][e.__config__.endRelationField] || 0
+                } else if (e.__config__.endTimeType == 3) {
+                  endTime = new Date().getTime()
                 } else {
                   endTime = e.endTime
                 }
@@ -587,11 +594,15 @@ export default {
                 let endTime = ''
                 if (e.__config__.startTimeType == 2) {
                   startTime = this[this.formConf.formModel][e.__config__.startRelationField] || 0
+                } else if (e.__config__.startTimeType == 3) {
+                  startTime = this.jnpf.toDate(new Date(), e.format)
                 } else {
                   startTime = e.startTime
                 }
                 if (e.__config__.endTimeType == 2) {
                   endTime = this[this.formConf.formModel][e.__config__.endRelationField] || 0
+                } else if (e.__config__.endTimeType == 3) {
+                  endTime = this.jnpf.toDate(new Date(), e.format)
                 } else {
                   endTime = e.endTime
                 }
@@ -645,11 +656,15 @@ export default {
                 let endTime = ''
                 if (e.__config__.startTimeType == 2) {
                   startTime = this[this.formConf.formModel][e.__config__.startRelationField] || 0
+                } else if (e.__config__.startTimeType == 3) {
+                  startTime = this.jnpf.toDate(new Date(), e.format)
                 } else {
                   startTime = e.startTime
                 }
                 if (e.__config__.endTimeType == 2) {
                   endTime = this[this.formConf.formModel][e.__config__.endRelationField] || 0
+                } else if (e.__config__.endTimeType == 3) {
+                  endTime = this.jnpf.toDate(new Date(), e.format)
                 } else {
                   endTime = e.endTime
                 }
