@@ -16,9 +16,8 @@
           <template v-else-if="useSelectList.indexOf(item.__config__.jnpfKey)>-1">
             <el-select v-model="item.value" :placeholder="'请选择'+item.__config__.label" clearable
               filterable class="item" :multiple="item.searchMultiple">
-              <el-option :label="oItem[item.__config__.props.label]"
-                v-for="(oItem, i) in item.__slot__.options"
-                :value="oItem[item.__config__.props.value]" :key="i"></el-option>
+              <el-option :label="oItem[item.props.props.label]" v-for="(oItem, i) in item.options"
+                :value="oItem[item.props.props.value]" :key="i"></el-option>
             </el-select>
           </template>
           <template v-else>
