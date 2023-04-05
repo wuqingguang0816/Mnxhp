@@ -1,10 +1,20 @@
 <template>
-  <p class="groupTitle" :style="{'text-align':contentPosition}">{{content}}</p>
+  <p class="groupTitle" :style="{'text-align':contentPosition}">{{content}}
+    <span slot="label" v-if="tipLabel">
+      <el-tooltip placement="top" :content=tipLabel>
+        <a class='el-icon-warning-outline'></a>
+      </el-tooltip>
+    </span>
+  </p>
 </template>
 <script>
 export default {
   name: 'groupTitle',
   props: {
+    tipLabel: {
+      type: String,
+      default: ''
+    },
     content: {
       type: String,
       default: ''

@@ -1543,7 +1543,6 @@ export const layoutComponents = [
     __config__: {
       jnpfKey: "groupTitle",
       label: "分组标题",
-      tipLabel: "",
       labelWidth: undefined,
       showLabel: false,
       tag: "groupTitle",
@@ -1557,6 +1556,7 @@ export const layoutComponents = [
       visibility: ["pc", "app"]
     },
     content: "分组标题",
+    tipLabel: "",
     "content-position": "left"
   },
   {
