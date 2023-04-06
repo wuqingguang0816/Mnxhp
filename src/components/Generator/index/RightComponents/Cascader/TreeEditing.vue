@@ -73,22 +73,26 @@ export default {
                   const element = list[i];
                   if (element.children && element.children.length) getParentId(element.children, item)
                   if (element.id == parentId) {
-                    element.children = element.children ? element.children : []
-                    element.children.push(
-                      {
-                        fullName: item[0],
-                        id: item[1],
-                      }
-                    )
+                    if (!this.isRepeatId(item[1])) {
+                      element.children = element.children ? element.children : []
+                      element.children.push(
+                        {
+                          fullName: item[0],
+                          id: item[1],
+                        }
+                      )
+                    }
                   }
                 }
               }
               if (item.length < 2) return
               if (item.length == 2) {
-                this.options.push({
-                  fullName: item[0],
-                  id: item[1],
-                })
+                if (!this.isRepeatId(item[1])) {
+                  this.options.push({
+                    fullName: item[0],
+                    id: item[1],
+                  })
+                }
               } else {
                 getParentId(this.options, item)
               }
@@ -101,6 +105,20 @@ export default {
       this.$emit('change', this.options)
       this.visible = false
     },
+    isRepeatId(id) {
+      var flag = false
+      const loop = (list) => {
+        for (let i = 0; i < list.length; i++) {
+          const element = list[i];
+          if (element.id == id) {
+            flag = true
+          }
+          if (Array.isArray(element.children)) loop(element.children)
+        }
+      }
+      loop(this.options)
+      return flag
+    }
   }
 }
 </script>
