@@ -34,6 +34,9 @@ export default {
     return {
       pickerOptions: {
         selectableRange: (() => {
+          if (this.startTime > this.endTime) {
+            return ['00:00:00' - '00:00:00']
+          }
           return [`${this.startTime} ? ${this.startTime} : '00:00:00' - ${this.endTime} ? ${this.endTime}:"23:59:59"`]
         })(),
       },

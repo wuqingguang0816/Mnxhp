@@ -22,7 +22,7 @@
       <template v-else-if="item.__config__.jnpfKey==='alert'">
         <el-form-item label-width="0">
           <el-alert :title="item.title" :type="item.type" :closable="item.closable"
-            :show-icon="item['show-icon']" />
+            :show-icon="item['show-icon']" :closeText="item.closeText" />
         </el-form-item>
       </template>
       <template v-else-if="item.__config__.jnpfKey==='groupTitle'">
@@ -99,8 +99,13 @@
             <calculate :expression="item.expression" :isStorage="1" :formData="formValue"
               :detailed="true" />
           </template>
+          <template v-else-if="item.__config__.jnpfKey==='numInput'">
+            <JnpfNumber v-model="item.__config__.defaultValue" :thousands="item.thousands"
+              :isAmountChinese="item.isAmountChinese" :addonBefore="item.addonBefore"
+              :addonAfter="item.addonAfter" :precision="item.precision"></JnpfNumber>
+          </template>
           <template v-else>
-            <p class="jnpf-detail-text">
+            <p class=" jnpf-detail-text">
               <span
                 v-if="item.__slot__&&item.__slot__.prepend">{{item.__slot__.prepend}}</span>{{getValue(item)}}<span
                 v-if="item.__slot__&&item.__slot__.append">{{item.__slot__.append}}</span>

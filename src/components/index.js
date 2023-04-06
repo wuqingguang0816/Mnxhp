@@ -39,6 +39,7 @@ import RelationForm from '@/components/Generator/components/RelationForm'
 import RelationFormAttr from '@/components/Generator/components/RelationFormAttr'
 import Calculate from '@/components/Generator/components/Calculate'
 import JnpfInputNumber from '@/components/Generator/components/JnpfInputNumber'
+import JnpfNumber from '@/components/Generator/components/JnpfNumber'
 import JnpfDatePicker from '@/components/Generator/components/JnpfDatePicker'
 import JnpfRadio from '@/components/Generator/components/JnpfRadio'
 import JnpfCheckbox from '@/components/Generator/components/JnpfCheckbox'
@@ -87,11 +88,13 @@ export default {
     Vue.component('ColumnSettings', ColumnSettings)
     Vue.component('ImportBox', ImportBox)
     Vue.component('JnpfInputNumber', JnpfInputNumber)
+    Vue.component('JnpfNumber', JnpfNumber)
     Vue.component('JnpfDatePicker', JnpfDatePicker)
     Vue.component('JnpfRadio', JnpfRadio)
     Vue.component('JnpfCheckbox', JnpfCheckbox)
     Vue.component('JnpfSelect', JnpfSelect)
     Vue.component('JnpfAutoComplete', JnpfAutoComplete)
     Vue.component('JnpfTimePicker', JnpfTimePicker)
+
   }
 }

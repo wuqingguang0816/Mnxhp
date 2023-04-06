@@ -29,7 +29,7 @@
       <el-radio-group v-model="activeData.controlsPosition">
         <el-radio-button label="">无</el-radio-button>
         <el-radio-button label="bothSides">左右</el-radio-button>
-        <el-radio-button label="right">右侧</el-radio-button>
+        <el-radio-button v-show="showType==='pc'" label="right">右侧</el-radio-button>
       </el-radio-group>
     </el-form-item>
     <template v-if="!activeData.controlsPosition">
@@ -63,7 +63,7 @@
 <script>
 import comMixin from './mixin';
 export default {
-  props: ['activeData'],
+  props: ['activeData', 'showType'],
   mixins: [comMixin],
   data() {
     return {}

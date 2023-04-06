@@ -172,10 +172,10 @@ export function getAmountChinese(val) {
   if (Number.isNaN(amount) || amount < 0) return ''
   const NUMBER = ['零', '壹', '贰', '叁', '肆', '伍', '陆', '柒', '捌', '玖']
   const N_UNIT1 = ['', '拾', '佰', '仟']
-  const N_UNIT2 = ['', '万', '亿']
+  const N_UNIT2 = ['', '万', '亿', '兆']
   const D_UNIT = ['角', '分', '厘', '毫']
   let [integer, decimal] = amount.toString().split('.')
-  if (integer && integer.length > 12) return '金额过大无法计算'
+  if (integer && integer.length > 15) return '金额过大无法计算'
   let res = ''
   // 整数部分
   if (integer) {
