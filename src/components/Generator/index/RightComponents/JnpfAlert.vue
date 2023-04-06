@@ -3,9 +3,6 @@
     <el-form-item label="提示文本">
       <el-input v-model="activeData.title" placeholder="请输入提示文本" />
     </el-form-item>
-    <el-form-item label="提示图标">
-      <el-switch v-model="activeData['show-icon']" />
-    </el-form-item>
     <el-form-item label="辅助文本">
       <el-input type="textarea" :rows="3" v-model="activeData.description" placeholder="请输入辅助文本" />
     </el-form-item>
@@ -16,6 +13,9 @@
           <el-alert :title="item.fullName" :type="item.id" :closable="false" center />
         </div>
       </div>
+    </el-form-item>
+    <el-form-item label="提示图标">
+      <el-switch v-model="activeData['show-icon']" />
     </el-form-item>
     <el-form-item label="提示可关闭">
       <el-switch v-model="activeData.closable" />
