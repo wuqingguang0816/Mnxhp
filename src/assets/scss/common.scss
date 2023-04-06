@@ -2668,11 +2668,15 @@ textarea.el-textarea__inner {
   table-layout: fixed;
   margin-bottom: 18px;
 
-  td {
-    border: var(--borderWidth) var(--borderType) var(--borderColor);
-    overflow: hidden;
-    height: 50px;
-    padding: 18px 18px 0;
+  &>tbody {
+    &>tr {
+      &>td {
+        border: var(--borderWidth) var(--borderType) var(--borderColor);
+        overflow: hidden;
+        height: 50px;
+        padding: 18px 18px 0;
 
+      }
+    }
   }
 }
