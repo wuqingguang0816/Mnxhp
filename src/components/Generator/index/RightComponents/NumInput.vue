@@ -63,7 +63,7 @@
 <script>
 import comMixin from './mixin';
 export default {
-  props: ['activeData', 'showType'],
+  props: ['activeData'],
   mixins: [comMixin],
   data() {
     return {}

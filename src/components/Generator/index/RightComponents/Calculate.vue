@@ -17,6 +17,16 @@
         <span v-else class="placeholder-text">编辑计算公式</span>
       </div>
     </el-form-item>
+    <el-form-item label="精度">
+      <el-input-number v-model="activeData.precision" :min="0" placeholder="精度"
+        controls-position="right" />
+    </el-form-item>
+    <el-form-item label="千位分隔">
+      <el-switch v-model="activeData.thousands" />
+    </el-form-item>
+    <el-form-item label="大写金额">
+      <el-switch v-model="activeData.isAmountChinese" />
+    </el-form-item>
     <el-form-item label="是否隐藏">
       <el-switch v-model="activeData.__config__.noShow" />
     </el-form-item>

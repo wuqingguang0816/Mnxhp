@@ -197,7 +197,7 @@ export function dynamicText(value, options) {
 export function dynamicTreeText(value, options) {
   if (!value) return ''
 
-  function transfer(data) {
+  function transfer(data, partition) {
     let textList = []
 
     function loop(data, id) {
@@ -210,9 +210,13 @@ export function dynamicTreeText(value, options) {
       }
     }
     for (let i = 0; i < data.length; i++) {
-      loop(options, data[i])
+      if (Array.isArray(data[i])) {
+        textList.push(transfer(data[i], "/"))
+      } else {
+        loop(options, data[i])
+      }
     }
-    return textList.join()
+    return textList.join(partition)
   }
   if (!options || !Array.isArray(options)) return value.join()
   if (Array.isArray(value)) {

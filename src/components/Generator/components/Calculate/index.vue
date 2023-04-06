@@ -5,10 +5,12 @@
       <el-input v-model="innerValue" v-else readonly placeholder="用于展示计算结果，且数据同时会保存入库" />
     </template>
     <p v-else class="jnpf-detail-text">{{innerValue}}</p>
+    <p v-if="isAmountChinese" style="color:#C0C0C0">{{ amountChineseName }}</p>
   </div>
 </template>
 <script>
 import { mergeNumberOfExps, validExp, toRPN, calcRPN, debounce } from '../../utils'
+import { getAmountChinese } from "@/components/Generator/utils/index"
 export default {
   model: {
     prop: 'value',
@@ -22,13 +24,18 @@ export default {
     "componentVModel",
     'isStorage',
     "rowIndex", // 计算公式放在表格中时， 需要获取在表格中的行位置
-    "detailed"
+    "detailed",
+    "isAmountChinese",
+    "thousands",
+    'precision'
   ],
   name: 'calculate',
   data() {
     return {
       innerValue: this.value,
-      RPN_EXP: toRPN(mergeNumberOfExps(this.expression))
+      RPN_EXP: toRPN(mergeNumberOfExps(this.expression)),
+      setValue: 0,
+      amountChineseName: ''
     }
   },
   computed: {
@@ -70,14 +77,22 @@ export default {
      */
     execRPN() {
       const temp = this.RPN_EXP.map(t => typeof t === 'object' ? this.getFormVal(t.__vModel__) : t)
-      this.innerValue = Number.parseFloat(calcRPN(temp)).toFixed(2)
+      this.innerValue = Number.parseFloat(calcRPN(temp)).toFixed(this.precision)
+      this.setValue = JSON.parse(JSON.stringify(this.innerValue))
       if (isNaN(this.innerValue)) this.innerValue = 0
-      this.$emit('input', this.innerValue)
+      this.$emit('input', this.setValue)
       if (this.rowIndex >= 0 && this.componentVModel && this.tableVModel) {
         if (this.rootFormData[this.tableVModel][this.rowIndex][this.componentVModel] !== this.innerValue) {
-          this.$emit('change', this.innerValue)
+          this.$emit('change', this.setValue)
         }
       }
+      if (this.thousands) {
+        this.innerValue = parseFloat(this.innerValue).toLocaleString('zh', {
+          minimumFractionDigits: this.precision,
+          maximumFractionDigits: this.precision
+        })
+      }
+      if (this.isAmountChinese) this.amountChineseName = getAmountChinese(this.setValue)
     }
   },
   watch: {
@@ -92,6 +107,7 @@ export default {
       deep: true,
       immediate: true
     }
-  }
+
+  },
 }
 </script>

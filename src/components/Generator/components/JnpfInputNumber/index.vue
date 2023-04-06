@@ -43,7 +43,7 @@ export default {
       default: ''
     },
     value: {
-      type: Number,
+      type: [Number, String],
       default: undefined
     },
     max: {
@@ -131,9 +131,6 @@ export default {
         if (el.tagName.toLocaleUpperCase() !== 'INPUT') {
           el = el.getElementsByTagName('input')[0]
         }
-        // if (typeof fn !== 'function') {
-        //   return el.value = ''
-        // }
         // 千分位
         el.value = parseFloat(el.value).toLocaleString('zh', {
           minimumFractionDigits: precision,
@@ -158,7 +155,6 @@ export default {
         // 聚焦转化为数字格式（去除千分位）
         el.focus()
         let precision = vnode.child.precision
-        console.log(el)
         if (el.tagName.toLocaleUpperCase() !== 'INPUT') {
           el = el.getElementsByTagName('input')[0]
         }
@@ -168,18 +164,8 @@ export default {
             maximumFractionDigits: precision
           })
         }
-        if (el.value === 'NaN') el.value = ''
+        el.value = el.value ? el.value : 0
       },
-      unbind: (el, binding, vnode) => {
-        let precision = vnode.child.precision
-        if (el.tagName.toLocaleUpperCase() !== 'INPUT') {
-          el = el.getElementsByTagName('input')[0]
-        }
-        let a = el.value.replace(/,/g, '') //去除千分号的','
-        el.value = parseFloat(a).toFixed(precision)
-        if (el.value === 'NaN') el.value = ''
-      },
-
     }
   },
   mounted() {

@@ -39,7 +39,10 @@ const calculateItem = {
     regList: []
   },
   style: { width: "100%" },
-  expression: []
+  expression: [],
+  thousands: false,
+  isAmountChinese: false,
+  precision: 2,
 }
 // 在线开发-功能设计/流程设计/移动设计独有组件
 const onlinePeculiarList = [{

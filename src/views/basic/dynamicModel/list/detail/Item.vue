@@ -95,9 +95,10 @@
               :dataType="item.dataType" :relationField="item.relationField+'_id'"
               :formData="formValue"></jnpf-qrcode>
           </template>
-          <template v-else-if="item.__config__.jnpfKey==='calculate'&&item.__config__.isStorage==1">
+          <template v-else-if="item.__config__.jnpfKey==='calculate'">
             <calculate :expression="item.expression" :isStorage="1" :formData="formValue"
-              :detailed="true" />
+              :isAmountChinese="item.isAmountChinese" :thousands="item. thousands"
+              :precision="item.precision" :detailed="true" />
           </template>
           <template v-else-if="item.__config__.jnpfKey==='numInput'">
             <JnpfNumber v-model="item.__config__.defaultValue" :thousands="item.thousands"
@@ -162,16 +163,26 @@
                   </template>
                 </el-table-column>
                 <el-table-column :key="columnIndex" :label="column.__config__.label"
-                  v-else-if="column.__config__.jnpfKey==='calculate'&&column.__config__.isStorage==1">
+                  v-else-if="column.__config__.jnpfKey==='calculate'">
                   <template slot-scope="scope">
                     <calculate :rowIndex="scope.$index" :expression="column.expression"
-                      :isStorage="1" :formData="formValue" :detailed="true" />
+                      :isStorage="1" :formData="formValue" :isAmountChinese="column.isAmountChinese"
+                      :thousands="column.thousands" :precision="column.precision"
+                      :detailed="true" />
                   </template>
                 </el-table-column>
                 <el-table-column :key="columnIndex" :label="column.__config__.label"
                   v-else-if="column.__config__.jnpfKey==='uploadImg'">
                   <template slot-scope="scope">
                     <JNPFUploadImg v-model="scope.row[column.__vModel__]" detailed disabled />
+                  </template>
+                </el-table-column>
+                <el-table-column :key="columnIndex" :label="column.__config__.label"
+                  v-else-if="column.__config__.jnpfKey==='numInput'">
+                  <template slot-scope="scope">
+                    <JnpfNumber v-model="scope.row[column.__vModel__]" :thousands="column.thousands"
+                      :isAmountChinese="column.isAmountChinese" :addonBefore="column.addonBefore"
+                      :addonAfter="column.addonAfter" :precision="column.precision"></JnpfNumber>
                   </template>
                 </el-table-column>
                 <el-table-column :key="columnIndex" :prop="column.__vModel__"

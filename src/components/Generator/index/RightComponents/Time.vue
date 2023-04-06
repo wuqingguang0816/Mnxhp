@@ -285,6 +285,7 @@ export default {
       }
     },
     dateTypeChange(val) {
+      this.activeData['value-format'] = val
       this.getTargetOptions()
     },
     startType(val) {
