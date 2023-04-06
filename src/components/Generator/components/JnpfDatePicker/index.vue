@@ -56,15 +56,13 @@ export default {
       this.innerValue = val
     },
     format(val) {
-      if (val === 'yyyy' || val === 'yyyy-MM' || val === 'yyyy-MM-dd') return this.type = 'date'
-      return this.type = 'datetime'
+      return this.type = val === 'yyyy' ? 'year' : val === 'yyyy-MM' ? 'month' : val === 'yyyy-MM-dd' ? 'date' : 'datetime'
     },
   },
   computed: {
   },
   created() {
-    if (this.format === 'yyyy' || this.format === 'yyyy-MM' || this.format === 'yyyy-MM-dd') return this.type = 'date'
-    return this.type = 'datetime'
+    this.type = this.format === 'yyyy' ? 'year' : this.format === 'yyyy-MM' ? 'month' : this.format === 'yyyy-MM-dd' ? 'date' : 'datetime'
   },
   mounted() {
   },

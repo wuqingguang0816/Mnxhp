@@ -211,8 +211,7 @@ export default {
       }
     },
     'activeData.format'(val) {
-      if (val === 'yyyy' || val === 'yyyy-MM' || val === 'yyyy-MM-dd') return this.type = 'date'
-      return this.type = 'datetime'
+      return this.type = val === 'yyyy' ? 'year' : val === 'yyyy-MM' ? 'month' : val === 'yyyy-MM-dd' ? 'date' : 'datetime'
     },
   },
   created() {

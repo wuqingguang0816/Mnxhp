@@ -105,7 +105,7 @@
               :addonAfter="item.addonAfter" :precision="item.precision"></JnpfNumber>
           </template>
           <template v-else>
-            <p class=" jnpf-detail-text">
+            <p class="jnpf-detail-text">
               <span
                 v-if="item.__slot__&&item.__slot__.prepend">{{item.__slot__.prepend}}</span>{{getValue(item)}}<span
                 v-if="item.__slot__&&item.__slot__.append">{{item.__slot__.append}}</span>
