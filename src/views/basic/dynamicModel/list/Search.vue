@@ -108,7 +108,7 @@
             <template v-if="item.__config__.jnpfKey==='autoComplete'">
               <JnpfAutoComplete v-model="item.value" :placeholder="item.__config__.label"
                 :total="item.total" clearable class="item" :relationField="item.relationField"
-                :templateJson="item.templateJson" :interfaceId="item.relationField" />
+                :templateJson="item.templateJson" :interfaceId="item.interfaceId" />
             </template>
           </template>
         </el-form-item>
