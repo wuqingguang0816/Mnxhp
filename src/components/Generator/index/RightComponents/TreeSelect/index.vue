@@ -28,7 +28,7 @@
       <template v-if="activeData.__config__.dataType === 'static'">
         <!-- 级联选择静态树 -->
         <el-tree draggable :data="activeData.options" node-key="id" :expand-on-click-node="false"
-          :render-content="renderContent" :props="props" />
+          :render-content="renderContent" :props="activeData.props.props" />
         <div style="margin-left: 20px">
           <el-button style="padding-bottom: 0" icon="el-icon-circle-plus-outline" type="text"
             @click="addTreeItem">添加父级</el-button>
