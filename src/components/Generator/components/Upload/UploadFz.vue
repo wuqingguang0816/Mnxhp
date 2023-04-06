@@ -6,9 +6,6 @@
       </el-button>
       <el-button type="text" @click="downloadAll" style="float:right;" v-if="fileList.length"><i
           class="el-icon-download"></i>全部下载</el-button>
-      <div class="el-upload__tip" v-if="tipText">
-        {{ tipText }}
-      </div>
     </template>
     <template v-if="fileList.length">
       <ul class="el-upload-list el-upload-list el-upload-list--text">
@@ -26,6 +23,11 @@
           <i class="el-icon-close" title="删除" v-if="!disabled" @click="handleRemove(index)"></i>
         </li>
       </ul>
+    </template>
+    <template>
+      <div class="el-upload__tip" v-if="tipText">
+        {{ tipText }}
+      </div>
     </template>
     <fileUploader ref="fileUploader" v-bind="$props" @fileSuccess="fileSuccess" />
     <Preview :visible.sync="previewVisible" :file="activeFile" />

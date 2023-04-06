@@ -26,8 +26,9 @@
         <i class="el-icon-plus"></i>
       </el-upload>
     </template>
-    <div class="el-upload__tip" slot="tip" v-if="tipText"
-      :style="{'margin-top':fileList.length>0?'0px':'5px'}">{{ tipText }}</div>
+    <template>
+      <div class="el-upload__tip" slot="tip" v-if="tipText">{{ tipText }}</div>
+    </template>
   </div>
 </template>
 
@@ -183,5 +184,12 @@ export default {
 }
 .el-upload__tip {
   color: #a5a5a5;
+  word-break: break-all;
+  line-height: 1.3;
+  margin-top: 5px;
+}
+.el-upload-list--picture-card {
+  display: inline-block;
+  height: 0;
 }
 </style>
