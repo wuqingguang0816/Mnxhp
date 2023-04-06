@@ -46,6 +46,7 @@
                     <el-tag size="mini" :color="item.type == 1?'#ebe6ff':'#e5ebfe'"
                       v-if="list[0].show"
                       :style="{'color':item.type == 1?'#9016f3':'#1448f4'}">{{ item.type == 1?'公告':'通知' }}</el-tag>
+                    {{ list[1].fontColor }}
                     <span class="item-left-span" v-if="list[1].show"
                       :style="{'color':list[1].fontColor,'font-size':list[1].fontSize+'px','font-weight':list[1].fontWeight?700:400}">{{ item.fullName }}</span>
                     <div v-if="list[3].show">
@@ -203,20 +204,6 @@ export default {
       }
       getNotice(data).then(res => {
         this.defaultValue = JSON.parse(JSON.stringify(res.data.list)) || []
-        // if (this.showType === 'pc') {
-        //   this.defaultValue = this.defaultValue.slice(0, this.activeData.option.tableCount)
-        //   if (this.activeData.option.styleType == 1) {
-        //     this.list = this.activeData.option.columnData.filter(o => o.show)
-        //   } else {
-        //     this.list = this.activeData.option.rowData
-        //   }
-        // } else {
-        //   this.defaultValue = this.defaultValue.slice(0, this.activeData.option.appCount)
-        //   this.list = this.activeData.option.appColumnList
-        // }
-
-
-
         this.defaultValue = this.defaultValue.slice(0, this.activeData.option.noticeCount)
         if (this.activeData.option.styleType == 1) {
           this.defaultValue.map(o => {
@@ -226,7 +213,6 @@ export default {
           this.list = this.activeData.option.columnData.filter(o => o.show || !o.show && o.id == 6)
         } else {
           this.list = this.activeData.option.rowData
-          console.log(this.activeData.option)
         }
       })
     }

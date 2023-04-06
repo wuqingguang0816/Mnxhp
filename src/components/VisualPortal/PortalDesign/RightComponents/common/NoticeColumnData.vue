@@ -124,8 +124,6 @@
         </el-table-column>
       </template>
     </JNPF-table>
-    <JNPF-table :data="list" ref="dragTable" :hasNO="false" v-if="showType!='app' ">
-    </JNPF-table>
     <span slot="footer" class="dialog-footer">
       <el-button @click="visible = false">{{$t('common.cancelButton')}}</el-button>
       <el-button type="primary" @click="closeDialog()">{{$t('common.confirmButton')}}</el-button>
@@ -190,9 +188,6 @@ export default {
           fullName: '发布人员'
         }],
     }
-  },
-  mounted() {
-
   },
   methods: {
     init(option, type) {

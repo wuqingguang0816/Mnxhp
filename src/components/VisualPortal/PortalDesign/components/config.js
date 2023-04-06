@@ -180,6 +180,7 @@ export const systemComponents = [{
   label: '公告通知',
   jnpfKey: 'notice',
   title: '公告通知',
+  dataType:'dynamic',
   renderKey: '',
   visibility: ["pc", "app"],
   card: {
