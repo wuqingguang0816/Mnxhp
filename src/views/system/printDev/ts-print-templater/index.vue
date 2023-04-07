@@ -13,6 +13,11 @@
           </div>
           <el-tree :data="newSysData" default-expand-all :props="defaultProps"
             @node-click="handleNodeClick"></el-tree>
+          <div class="JNPF-common-title sys-title">
+            <h2>函数</h2>
+          </div>
+          <el-tree :data="parameter" default-expand-all :props="defaultProps"
+            @node-click="handleNodeClick"></el-tree>
         </el-scrollbar>
       </div>
       <div class="system-view-content">
@@ -77,8 +82,16 @@ export default {
         {
           fullName: "条形码",
           id: "barCode"
-        }
+        },
       ],
+      parameter: [{
+        fullName: "千位分隔符(字段或数字,小数位数)",
+        id: "thousands"
+      },
+      {
+        fullName: "大写金额(字段或数字)",
+        id: "isAmountChinese"
+      }],
       defaultProps: {
         children: "children",
         label: "fullName"
@@ -374,6 +387,8 @@ export default {
       if (item.id == "img" || item.id == "barCode" || item.id == "qrCode") {
         return `&lt;${item.id} width='100' height='100'&gt;&lt;/${item.id}&gt;`;
       }
+      if (item.id == 'isAmountChinese') return `大写金额(${parent})`
+      if (item.id == 'thousands') return `千位分隔符(${parent},2)`
       return `<span data-tag="${parent}.${item.id
         }" class="wk-print-tag-wukong ${this.getSpanColorClass()}" contenteditable="false">{${item.id
         }}</span>`;
