@@ -64,7 +64,6 @@
             <template
               v-if="
                 [
-                  'calculate',
                   'comInput',
                   'textarea',
                   'billRule',
