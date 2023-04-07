@@ -97,7 +97,7 @@
           </template>
           <template v-else-if="item.__config__.jnpfKey==='calculate'">
             <calculate :expression="item.expression" :isStorage="1" :formData="formValue"
-              :isAmountChinese="item.isAmountChinese" :thousands="item. thousands"
+              :isAmountChinese="item.isAmountChinese" :thousands="item.thousands"
               :precision="item.precision" :detailed="true" />
           </template>
           <template v-else-if="item.__config__.jnpfKey==='numInput'">
