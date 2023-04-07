@@ -8,7 +8,6 @@ export default {
   components: {},
   props: {
     activeData: {
-
       default: undefined
     },
     value: {
@@ -29,12 +28,15 @@ export default {
     },
     endTime: {
       default: undefined
+    },
+    type: {
+      type: String,
+      default: 'date'
     }
   },
   data() {
     return {
       innerValue: this.value,
-      type: 'date',
       pickerOptions: {
         disabledDate: (time) => {
           if (!this.startTime && !this.endTime) return false
@@ -55,14 +57,10 @@ export default {
     value(val) {
       this.innerValue = val
     },
-    format(val) {
-      return this.type = val === 'yyyy' ? 'year' : val === 'yyyy-MM' ? 'month' : val === 'yyyy-MM-dd' ? 'date' : 'datetime'
-    },
   },
   computed: {
   },
   created() {
-    this.type = this.format === 'yyyy' ? 'year' : this.format === 'yyyy-MM' ? 'month' : this.format === 'yyyy-MM-dd' ? 'date' : 'datetime'
   },
   mounted() {
   },

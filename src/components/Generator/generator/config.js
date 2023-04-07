@@ -457,6 +457,7 @@ export const inputComponents = [
     startTime: null,
     endTime: null,
     readonly: false,
+    type: 'date'
   },
   {
     __config__: {

@@ -18,8 +18,8 @@
       </el-select>
     </el-form-item>
     <el-form-item label="默认值">
-      <el-date-picker v-model="activeData.__config__.defaultValue" :type="type" placeholder="选择默认值"
-        :value-format="activeData['value-format']" :format="activeData.format"
+      <el-date-picker v-model="activeData.__config__.defaultValue" :type="activeData.type"
+        placeholder="选择默认值" :value-format="activeData['value-format']" :format="activeData.format"
         :disabled="activeData.__config__.defaultCurrent">
       </el-date-picker>
     </el-form-item>
@@ -41,7 +41,7 @@
         </el-select>
       </el-form-item>
       <el-form-item label="" v-if="activeData.__config__.startTimeType==1">
-        <el-date-picker v-model="activeData.__config__.startTimeValue" :type="type"
+        <el-date-picker v-model="activeData.__config__.startTimeValue" :type="activeData.type"
           placeholder="请选择时间" :value-format="activeData['value-format']"
           :format="activeData.format">
         </el-date-picker>
@@ -76,7 +76,7 @@
         </el-select>
       </el-form-item>
       <el-form-item label="" v-if="activeData.__config__.endTimeType==1">
-        <el-date-picker v-model="activeData.__config__.endTimeValue" :type="type"
+        <el-date-picker v-model="activeData.__config__.endTimeValue" :type="activeData.type"
           placeholder="请选择时间" :value-format="activeData['value-format']"
           :format="activeData.format">
         </el-date-picker>
@@ -211,7 +211,7 @@ export default {
       }
     },
     'activeData.format'(val) {
-      return this.type = val === 'yyyy' ? 'year' : val === 'yyyy-MM' ? 'month' : val === 'yyyy-MM-dd' ? 'date' : 'datetime'
+      return this.activeData.type = val === 'yyyy' ? 'year' : val === 'yyyy-MM' ? 'month' : val === 'yyyy-MM-dd' ? 'date' : 'datetime'
     },
   },
   created() {
