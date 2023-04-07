@@ -1,7 +1,7 @@
 <template>
   <el-date-picker :type="type === 'year' ? 'year' : (type + 'range')" v-model="innerValue"
     placeholder="请选择" :value-format="valueFormat" :picker-options='pickerOptions' style="width:100%"
-    range-separator="至" :start-placeholder="startPlaceholder" :end-placeholder="endPlaceholder"
+    :start-placeholder="startPlaceholder" :end-placeholder="endPlaceholder"
     :format="format"></el-date-picker>
 </template>
 <script>

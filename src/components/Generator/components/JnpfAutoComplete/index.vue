@@ -16,6 +16,7 @@ export default {
   components: {},
   props: {
     value: {
+      type: String,
       default: undefined
     },
     formData: {

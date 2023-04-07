@@ -462,7 +462,7 @@ export default {
           if (config.defaultCurrent) {
             config.defaultValue = new Date().getTime()
           }
-          if (cur.startRelationField) {
+          if (cur.__config__.startRelationField) {
             let item = {
               ...cur,
               realVModel: cur.__config__.isSubTable ? cur.__config__.parentVModel + '-' + cur.__vModel__ : cur.__vModel__,

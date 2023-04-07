@@ -8,38 +8,40 @@
         </el-divider>
       </template>
       <template v-else-if="item.__config__.jnpfKey==='JNPFText'">
-        <el-form-item label-width="0">
+        <jnpf-form-tip-item label-width="0" :tipLabel="item.__config__.tipLabel">
           <JNPFText :lineHeight="item.lineHeight" :fontSize="item.fontSize"
             v-model="item.__config__.defaultValue" :textStyle="item.textStyle" />
-        </el-form-item>
+        </jnpf-form-tip-item>
       </template>
       <template v-else-if="item.__config__.jnpfKey==='link'">
-        <el-form-item label-width="0">
+        <jnpf-form-tip-item label-width="0" :tipLabel="item.__config__.tipLabel">
           <jnpf-link :content="item.content" :href="item.href" :target="item.target"
             :textStyle="item.textStyle" />
-        </el-form-item>
+        </jnpf-form-tip-item>
       </template>
       <template v-else-if="item.__config__.jnpfKey==='alert'">
-        <el-form-item label-width="0">
+        <jnpf-form-tip-item label-width="0" :tipLabel="item.__config__.tipLabel">
           <el-alert :title="item.title" :type="item.type" :closable="item.closable"
             :show-icon="item['show-icon']" :closeText="item.closeText" />
-        </el-form-item>
+        </jnpf-form-tip-item>
       </template>
       <template v-else-if="item.__config__.jnpfKey==='groupTitle'">
-        <el-form-item label-width="0">
-          <groupTitle :content="item.content" :content-position="item['content-position']" />
-        </el-form-item>
+        <jnpf-form-tip-item label-width="0">
+          <groupTitle :content="item.content" :tipLabel="item.tipLabel"
+            :content-position="item['content-position']" />
+        </jnpf-form-tip-item>
       </template>
       <template v-else-if="item.__config__.jnpfKey==='button'">
-        <el-form-item label-width="0">
+        <jnpf-form-tip-item label-width="0" :tipLabel="item.__config__.tipLabel">
           <jnpf-button :align="item.align" :buttonText="item.buttonText" :type="item.type"
             :disabled="item.disabled" />
-        </el-form-item>
+        </jnpf-form-tip-item>
       </template>
       <template v-else>
-        <el-form-item :prop="item.__vModel__"
+        <jnpf-form-tip-item :prop="item.__vModel__"
           :label-width="item.__config__.labelWidth?`${item.__config__.labelWidth}px`: null"
-          :label="item.__config__.showLabel ? item.__config__.label : '' ">
+          :label="item.__config__.showLabel ? item.__config__.label : '' "
+          :tipLabel=item.__config__.tipLabel>
           <template v-if="item.__config__.jnpfKey==='uploadFz'">
             <JNPFUploadFz v-model="item.__config__.defaultValue" detailed disabled />
           </template>
@@ -112,12 +114,20 @@
                 v-if="item.__slot__&&item.__slot__.append">{{item.__slot__.append}}</span>
             </p>
           </template>
-        </el-form-item>
+        </jnpf-form-tip-item>
       </template>
     </template>
     <template v-else>
       <template v-if="item.__config__.jnpfKey==='card'">
         <el-card :shadow="item.shadow" :header="item.header" class="mb-20">
+          <template slot="header">
+            <span slot="label" v-if="item.__config__.tipLabel">{{item.header}}
+              <el-tooltip placement="top" :content=item.__config__.tipLabel>
+                <a class='el-icon-warning-outline'></a>
+              </el-tooltip>
+            </span>
+            <span v-if="!item.__config__['tipLabel']">{{ item.header}}</span>
+          </template>
           <el-row>
             <Item v-for="(childItem, childIndex) in item.__config__.children" :key="childIndex"
               :item="childItem" v-bind="$props" v-on="$listeners" />
@@ -131,9 +141,14 @@
         </el-row>
       </template>
       <template v-if="item.__config__.jnpfKey==='table'">
-        <el-form-item label-width="0" v-if="!item.__config__.noShow">
+        <jnpf-form-tip-item label-width="0" v-if="!item.__config__.noShow">
           <div class="JNPF-common-title" v-if="item.__config__.showTitle">
-            <h2>{{item.__config__.label}}</h2>
+            <span slot="label" v-if="item.__config__.tipLabel">{{item.__config__.label}}
+              <el-tooltip placement="top" :content=item.__config__.tipLabel>
+                <a class='el-icon-warning-outline'></a>
+              </el-tooltip>
+            </span>
+            <h2 v-else>{{item.__config__.label}}</h2>
           </div>
           <el-table :data="item.__config__.defaultValue"
             :show-summary="!!item.__config__.defaultValue.length && item['show-summary'] && (item.summaryField && !!item.summaryField.length)"
@@ -187,6 +202,16 @@
                 </el-table-column>
                 <el-table-column :key="columnIndex" :prop="column.__vModel__"
                   :label="column.__config__.label" v-else>
+                  <template slot="header">
+                    <span slot="label"
+                      v-if="column.__config__.tipLabel">{{column.__config__['label']}}
+                      <el-tooltip placement="top" :content=column.__config__.tipLabel>
+                        <a class='el-icon-warning-outline'></a>
+                      </el-tooltip>
+                    </span>
+                    <span
+                      v-if="!column.__config__['tipLabel']">{{ column.__config__['label'] }}</span>
+                  </template>
                   <template slot-scope="scope">
                     <span
                       v-if="column.__slot__&&column.__slot__.prepend">{{column.__slot__.prepend}}</span>{{scope.row[column.__vModel__]}}<span
@@ -196,7 +221,7 @@
               </template>
             </template>
           </el-table>
-        </el-form-item>
+        </jnpf-form-tip-item>
       </template>
       <template v-if="item.__config__.jnpfKey==='tab'">
         <el-tabs :type="item.type" :tab-position="item['tab-position']"
