@@ -37,11 +37,10 @@
                 :startTime="item.startTime" :endTime="item.endTime" class="item" />
             </template>
             <template v-if="item.__config__.jnpfKey==='date'">
-              <JnpfDatePicker v-model="item.value" :type="item.type+'range'" clearable
-                :value-format="item['value-format']" :format="item.format" start-placeholder="开始日期"
-                end-placeholder="结束日期" class="item" :startTime="item.startTime"
-                :endTime="item.endTime">
-              </JnpfDatePicker>
+              <JnpfDateRangePicker v-model="item.value" :type="item.type" clearable
+                :valueFormat="item['value-format']" :format="item.format" startPlaceholder="开始日期"
+                endPlaceholder="结束日期" class="item">
+              </JnpfDateRangePicker>
             </template>
             <template v-if="item.__config__.jnpfKey==='dateRange'">
               <el-date-picker v-model="item.value" :type="item.type" clearable

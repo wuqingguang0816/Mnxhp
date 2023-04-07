@@ -41,6 +41,7 @@ import Calculate from '@/components/Generator/components/Calculate'
 import JnpfInputNumber from '@/components/Generator/components/JnpfInputNumber'
 import JnpfNumber from '@/components/Generator/components/JnpfNumber'
 import JnpfDatePicker from '@/components/Generator/components/JnpfDatePicker'
+import JnpfDateRangePicker from '@/components/Generator/components/JnpfDateRangePicker'
 import JnpfRadio from '@/components/Generator/components/JnpfRadio'
 import JnpfCheckbox from '@/components/Generator/components/JnpfCheckbox'
 import JnpfSelect from '@/components/Generator/components/JnpfSelect'
@@ -95,6 +96,6 @@ export default {
     Vue.component('JnpfSelect', JnpfSelect)
     Vue.component('JnpfAutoComplete', JnpfAutoComplete)
     Vue.component('JnpfTimePicker', JnpfTimePicker)
-
+    Vue.component('JnpfDateRangePicker', JnpfDateRangePicker)
   }
 }
