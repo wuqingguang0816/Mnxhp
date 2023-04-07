@@ -45,18 +45,20 @@ const printOptionApi = {
             }
           }
 
-          this.replaceValue(this.mainData)
-          this.replaceValueSub(this.subData)
           this.replaceSysValue()
           this.replaceImg()
           this.replaceBarCode()
           this.replaceQrCode()
+          this.handleDataType(dom)
+          this.replaceValue(this.mainData)
+          this.replaceValueSub(this.subData)
+          const pageBreak = '<p style="page-break-after:always;"></p>'
+          this.printTemplate = this.replaceAll(this.printTemplate, '<p><!-- pagebreak --></p>', pageBreak)
           resolve(this.printTemplate)
         })
 
       })
     },
-
     isChildTable(cells) {
       let tableName = ''
       outer: for (let j = 0; j < cells.length; j++) {
@@ -67,9 +69,6 @@ const printOptionApi = {
         inner: for (let j = 0; j < spanList.length; j++) {
           const spanEle = spanList[j];
           const dataTag = spanEle.getAttribute('data-tag') ? spanEle.getAttribute('data-tag').split('.')[0] : 'null'
-          if (dataTag == 'headTable') {
-            this.mainData.push(spanEle.innerText)
-          }
           if (dataTag && dataTag !== 'headTable' && dataTag !== 'null') {
             hasChildTable = true
             tableName = dataTag
@@ -83,33 +82,9 @@ const printOptionApi = {
     closeDialog() {
       this.$emit('update:visible', false)
     },
-    generateTable(data, tds) {
-      for (let key in data) {
-        for (let j = 0; j < tds.cells.length; j++) {
-          let spanList = tds.cells[j].getElementsByTagName('span')
-          for (let i = 0; i < spanList.length; i++) {
-
-            let tag = spanList[i].getAttribute('data-tag')
-            if (tag) {
-              const dataTag = tag.split('.')[1]
-              if (key != dataTag) {
-                continue
-              }
-              let group = tag.split('.')[0]
-              let dataTagArr = this.subData[group]
-              if (!dataTagArr) dataTagArr = []
-              dataTagArr.push(key)
-              this.subData[group] = dataTagArr
-            }
-
-          }
-        }
-      }
-      return tds
-    },
     retrieveData(subData, tableObj, tds, newTable) {
       for (let j = 0; j < subData.length; j++) {
-        let tr = this.generateTable(subData[j], tds.cloneNode(true))
+        let tr = tds.cloneNode(true)
         let tds1 = tr.children
         for (let i = 0; i < tds1.length; i++) {
           const element = tds1[i];
@@ -151,6 +126,24 @@ const printOptionApi = {
       this.printTemplate = this.replaceAll(this.printTemplate, '{systemPrinter}', systemPrinter)
       this.printTemplate = this.replaceAll(this.printTemplate, '{systemPrintTime}', systemPrintTime)
       this.printTemplate = this.replaceAll(this.printTemplate, '{systemApprovalContent}', systemApprovalContent)
+    },
+    handleDataType(dom) {
+      let dataList = dom.querySelectorAll('span')
+      dataList.forEach(element => {
+        let dataTag = element.getAttribute('data-tag') ? element.getAttribute('data-tag').split('.')[0] : false
+        let dataKey = element.innerText
+        if (dataTag && dataKey.startsWith("{")) {
+          if (dataTag == 'headTable') {
+            this.mainData.push(dataKey)
+          } else {
+            let dataTagArr = this.subData[dataTag]
+            if (!dataTagArr) dataTagArr = []
+            if (!dataTagArr.includes(dataKey)) dataTagArr.push(dataKey.replace("{","").replace("}",""))
+            this.subData[dataTag] = dataTagArr
+          }
+
+        }
+      })
     },
     replaceValue(mainData) {
       let template = JSON.parse(JSON.stringify(this.printTemplate))
