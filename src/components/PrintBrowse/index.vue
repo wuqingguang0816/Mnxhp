@@ -20,9 +20,7 @@
       <div class="options">
         <el-button type="primary" size="small" @click="word">下 载</el-button>
         <el-button type="primary" size="small" @click="print">打 印</el-button>
-        <el-button @click="closeDialog()">{{
-          $t("common.cancelButton")
-        }}</el-button>
+        <el-button @click="closeDialog()">{{ $t("common.cancelButton") }}</el-button>
       </div>
     </div>
     <div class="main" v-loading="loading">
@@ -39,8 +37,7 @@ export default {
   props: ["id", "formId", "fullName"],
 
   data() {
-    return {
-    };
+    return {};
   },
   methods: {
     onOpen() {
@@ -50,14 +47,17 @@ export default {
       this.loading = true;
       let query = {
         id: this.id,
-        formId: this.formId
+        formId: this.formId,
       };
-      getData(query).then(res => {
+      getData(query).then(async(res) => {
         if (!res.data || !res.data.printData) return (this.loading = false);
-        this.printTemplate = this.handleData(res.data);
+        let dom = this.$refs["tsPrint"];
+        this.printTemplate = await this.handleData(res.data, dom);
+        
+        this.loading = false
       });
-    }
-  }
+    },
+  },
 };
 </script>
 <style lang="scss" scoped>

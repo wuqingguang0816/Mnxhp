@@ -8,52 +8,55 @@ const printOptionApi = {
   computed: {
     ...mapGetters(['userInfo'])
   },
-	data() {
-		return {
-      data:{},
+  data() {
+    return {
+      data: {},
       printTemplate: '',
       recordList: [],
-      loading: false
+      loading: false,
+      mainData: [],
+      subData: {}
     }
-	},
-	methods: {
-    handleData(data){
-      this.printTemplate = data.printTemplate
-      this.data = data.printData
-      this.recordList = data.operatorRecordList || []
-      this.$nextTick(() => {
-        const tableList = this.$refs.tsPrint.getElementsByTagName('table')
-        if (tableList.length) {
-          for (let j = 0; j < tableList.length; j++) {
-            const tableObj = tableList[j];
-            let tds = []
-            let newTable = []
-            for (let i = 0; i < tableObj.rows.length; i++) {
-              tds = tableObj.rows[i]
-              const dataTag = this.isChildTable(tds.cells)
-              if (dataTag) {
-                this.retrieveData(dataTag, tableObj, tds, newTable)
-              } else {
-                newTable.push(tds)
+  },
+  methods: {
+    handleData(data, dom) {
+      return new Promise((resolve) => {
+
+        this.printTemplate = data.printTemplate
+        this.data = data.printData
+        this.recordList = data.operatorRecordList || []
+        this.$nextTick(() => {
+          const tableList = dom.getElementsByTagName('table')
+
+          if (tableList.length) {
+            for (let j = 0; j < tableList.length; j++) {
+              const tableObj = tableList[j];
+              let tds = []
+              let newTable = []
+              for (let i = 0; i < tableObj.rows.length; i++) {
+                tds = tableObj.rows[i]
+                const dataTag = this.isChildTable(tds.cells)
+                if (dataTag) {
+                  this.retrieveData(this.data[dataTag], tableObj, tds, newTable)
+                } else {
+                  newTable.push(tds)
+                }
               }
             }
-            tableObj.getElementsByTagName('tbody')[0].innerHTML = ''
-            for (let i = 0; i < newTable.length; i++) {
-              tableObj.getElementsByTagName('tbody')[0].appendChild(newTable[i])
-            }
           }
-        }
+
+          this.replaceValue(this.mainData)
+          this.replaceValueSub(this.subData)
+          this.replaceSysValue()
+          this.replaceImg()
+          this.replaceBarCode()
+          this.replaceQrCode()
+          resolve(this.printTemplate)
+        })
+
       })
-      this.replaceValue(this.data)
-      this.replaceSysValue()
-      this.replaceImg()
-      this.replaceBarCode()
-      this.replaceQrCode()
-      const pageBreak = '<p style="page-break-after:always;"></p>'
-      this.loading = false
-      return this.replaceAll(this.printTemplate, '<p><!-- pagebreak --></p>', pageBreak)
     },
-    
+
     isChildTable(cells) {
       let tableName = ''
       outer: for (let j = 0; j < cells.length; j++) {
@@ -64,6 +67,9 @@ const printOptionApi = {
         inner: for (let j = 0; j < spanList.length; j++) {
           const spanEle = spanList[j];
           const dataTag = spanEle.getAttribute('data-tag') ? spanEle.getAttribute('data-tag').split('.')[0] : 'null'
+          if (dataTag == 'headTable') {
+            this.mainData.push(spanEle.innerText)
+          }
           if (dataTag && dataTag !== 'headTable' && dataTag !== 'null') {
             hasChildTable = true
             tableName = dataTag
@@ -82,30 +88,36 @@ const printOptionApi = {
         for (let j = 0; j < tds.cells.length; j++) {
           let spanList = tds.cells[j].getElementsByTagName('span')
           for (let i = 0; i < spanList.length; i++) {
-            const dataTag = spanList[i].getAttribute('data-tag') ? spanList[i].getAttribute('data-tag').split('.')[1] : 'null'
-            if (key == dataTag) {
-              spanList[i].innerHTML = data[key]
+
+            let tag = spanList[i].getAttribute('data-tag')
+            if (tag) {
+              const dataTag = tag.split('.')[1]
+              if (key != dataTag) {
+                continue
+              }
+              let group = tag.split('.')[0]
+              let dataTagArr = this.subData[group]
+              if (!dataTagArr) dataTagArr = []
+              dataTagArr.push(key)
+              this.subData[group] = dataTagArr
             }
+
           }
         }
       }
       return tds
     },
-    retrieveData(dataTag, tableObj, tds, newTable) {
-      for (let key in this.data) {
-        if (key == dataTag) {
-          for (let j = 0; j < this.data[key].length; j++) {
-            let tr = this.generateTable(this.data[key][j], tds.cloneNode(true))
-            let tds1 = tr.children
-            for (let i = 0; i < tds1.length; i++) {
-              const element = tds1[i];
-              this.replaceImg(element)
-              this.replaceBarCode(element)
-              this.replaceQrCode(element)
-            }
-            newTable.push(tr)
-          }
+    retrieveData(subData, tableObj, tds, newTable) {
+      for (let j = 0; j < subData.length; j++) {
+        let tr = this.generateTable(subData[j], tds.cloneNode(true))
+        let tds1 = tr.children
+        for (let i = 0; i < tds1.length; i++) {
+          const element = tds1[i];
+          this.replaceImg(element)
+          this.replaceBarCode(element)
+          this.replaceQrCode(element)
         }
+        newTable.push(tr)
       }
     },
     getHandleName(handleStatus) {
@@ -140,12 +152,24 @@ const printOptionApi = {
       this.printTemplate = this.replaceAll(this.printTemplate, '{systemPrintTime}', systemPrintTime)
       this.printTemplate = this.replaceAll(this.printTemplate, '{systemApprovalContent}', systemApprovalContent)
     },
-    replaceValue(data) {
-      for (let key in data) {
-        this.printTemplate = this.replaceAll(this.printTemplate, `{${key}}`, data[key] || '')
-        if (Array.isArray(data[key]) && data[key] && data[key].length) {
-          this.replaceValue(data[key])
+    replaceValue(mainData) {
+      let template = JSON.parse(JSON.stringify(this.printTemplate))
+      for (let key in this.data) {
+        if (mainData.includes(`{${key}}`)) {
+          template = template.replace(`{${key}}`, this.data[key] || '')
         }
+      }
+      this.printTemplate = template
+    },
+    replaceValueSub(data) {
+      for (let key in data) {
+        let subData = this.data[key][0]
+        let replaceKey = data[key]
+        replaceKey.forEach(key => {
+          let text = subData[key] ? subData[key] : ''
+          this.printTemplate = this.printTemplate.replaceAll(`{${key}}`, text)
+        });
+
       }
     },
     replaceImg(childItem) {
@@ -393,11 +417,7 @@ const printOptionApi = {
       doc.write(print);
       doc.close();
     },
-  },
-	mounted() {
-
-	}
-
+  }
 }
 
 export default printOptionApi;

@@ -20,7 +20,7 @@
       <div class="header-page">
         <el-button @click="pageIndex = pageIndex - 1">上一页</el-button>
         <el-input-number
-          style="width:60px;"
+          style="width: 60px"
           class="text-center"
           v-model="pageIndex"
           @change="scrollpage"
@@ -36,17 +36,11 @@
       <div class="options">
         <el-button type="primary" size="small" @click="word">下 载</el-button>
         <el-button type="primary" size="small" @click="print">打 印</el-button>
-        <el-button @click="closeDialog()">{{
-          $t("common.cancelButton")
-        }}</el-button>
+        <el-button @click="closeDialog()">{{ $t("common.cancelButton") }}</el-button>
       </div>
     </div>
 
-    <div class="main" v-loading="loading" v-if="!batchIds.includes(',')">
-      <div ref="tsPrint" class="print-content" v-html="printTemplate" />
-    </div>
-
-    <div class="main" v-loading="loading" ref="tsPrint" v-else>
+    <div class="main" ref="tsPrint" v-loading="loading">
       <div
         class="print-content"
         v-html="item"
@@ -68,15 +62,15 @@ export default {
   data() {
     return {
       pageIndex: 1,
-      batchData: []
+      batchData: [],
     };
   },
   watch: {
     pageIndex: {
       handler(val) {
         this.scrollpage(val);
-      }
-    }
+      },
+    },
   },
   methods: {
     scrollpage() {
@@ -85,7 +79,7 @@ export default {
         let dom = document.querySelector(".main");
         dom.scrollTo({
           top: (window.document.body.clientHeight - 10) * index,
-          behavior: "smooth"
+          behavior: "smooth",
         });
       });
     },
@@ -99,22 +93,29 @@ export default {
       this.loading = true;
       let query = {
         id: this.id,
-        formId: this.batchIds
+        formId: this.batchIds,
       };
-      this.$nextTick(() => {
-        getBatchData(query).then(res => {
+      getBatchData(query).then((res) => {
         if (!res.data) return;
         let array = res.data;
-        
+        for (let index = 0; index < array.length; index++) {
+          const element = array[index];
+          this.batchData.push(element.printTemplate);
+        }
+        this.$nextTick(async () => {
+          let dom = this.$refs["tsPrint"];
           for (let index = 0; index < array.length; index++) {
             const element = array[index];
             if (!element.printData) break;
-            let data = this.handleData(element);
-            this.batchData.push(data);
+            let domCurrent = dom.querySelectorAll(".print-content")[index];
+            let data = await this.handleData(element, domCurrent);
+            this.batchData[index] = data;
+            if (index == array.length - 1) {
+              this.loading = false;
+            }
           }
+        });
       });
-      })
-      
     },
 
     print() {
@@ -129,21 +130,21 @@ export default {
       iframe.contentWindow.focus();
       let doc = iframe.contentWindow.document;
       let _this = this;
-      iframe.onload = function() {
+      iframe.onload = function () {
         let oldTitle = document.title;
-        iframe.contentWindow.onafterprint = function(e) {
+        iframe.contentWindow.onafterprint = function (e) {
           // 插入日志
           let title = oldTitle.split("-")[0];
           let data = {
             printTitle: _this.fullName ? _this.fullName : title,
             printNum: _this.batchIds.split(",").length,
-            printId: _this.id
+            printId: _this.id,
           };
           request({
             url: `/api/system/printLog/save`,
             method: "post",
-            data
-          }).then(res => {});
+            data,
+          }).then((res) => {});
         };
         document.title = "JNPF快速开发平台";
         iframe.contentWindow.print();
@@ -152,8 +153,8 @@ export default {
       };
       doc.write(print);
       doc.close();
-    }
-  }
+    },
+  },
 };
 </script>
 <style lang="scss" scoped>
