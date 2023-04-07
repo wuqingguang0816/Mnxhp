@@ -26,24 +26,23 @@ const printOptionApi = {
         this.data = data.printData
         this.recordList = data.operatorRecordList || []
         this.$nextTick(() => {
-          const tableList = dom.getElementsByTagName('table')
-
-          if (tableList.length) {
-            for (let j = 0; j < tableList.length; j++) {
-              const tableObj = tableList[j];
-              let tds = []
-              let newTable = []
-              for (let i = 0; i < tableObj.rows.length; i++) {
-                tds = tableObj.rows[i]
-                const dataTag = this.isChildTable(tds.cells)
-                if (dataTag) {
-                  this.retrieveData(this.data[dataTag], tableObj, tds, newTable)
-                } else {
-                  newTable.push(tds)
-                }
-              }
-            }
-          }
+          // const tableList = dom.getElementsByTagName('table')
+          // if (tableList.length) {
+          //   for (let j = 0; j < tableList.length; j++) {
+          //     const tableObj = tableList[j];
+          //     let tds = []
+          //     let newTable = []
+          //     for (let i = 0; i < tableObj.rows.length; i++) {
+          //       tds = tableObj.rows[i]
+          //       const dataTag = this.isChildTable(tds.cells)
+          //       if (dataTag) {
+          //         this.retrieveData(this.data[dataTag], tableObj, tds, newTable)
+          //       } else {
+          //         newTable.push(tds)
+          //       }
+          //     }
+          //   }
+          // }
 
           this.replaceSysValue()
           this.replaceImg()
@@ -132,7 +131,7 @@ const printOptionApi = {
       dataList.forEach(element => {
         let dataTag = element.getAttribute('data-tag') ? element.getAttribute('data-tag').split('.')[0] : false
         let dataKey = element.innerText
-        if (dataTag && dataKey.startsWith("{")) {
+        if (dataTag && dataTag!='null' && dataKey.startsWith("{")) {
           if (dataTag == 'headTable') {
             this.mainData.push(dataKey)
           } else {
