@@ -29,6 +29,16 @@ const layouts = {
           {Item}
         </jnpf-form-tip-item>
       </el-col>
+      if (config.jnpfKey === 'alert') {
+        toolTip = <el-col span={config.span} class={config.className}>
+          <jnpf-form-tip-item label-width={labelWidth} prop={scheme.__vModel__} key={config.renderKey} tip-label={config.tipLabel}
+            label={config.showLabel ? config.label : ''}>
+            <div style="word-break: break-all">
+              {Item}
+            </div>
+          </jnpf-form-tip-item>
+        </el-col>
+      }
       if (config.jnpfKey === 'table') {
         toolTip = <el-col span={config.span} class={config.className}>
           <el-form-item label-width={labelWidth} prop={scheme.__vModel__} key={config.renderKey}

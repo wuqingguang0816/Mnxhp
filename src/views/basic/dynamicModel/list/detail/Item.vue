@@ -22,7 +22,8 @@
       <template v-else-if="item.__config__.jnpfKey==='alert'">
         <jnpf-form-tip-item label-width="0" :tipLabel="item.__config__.tipLabel">
           <el-alert :title="item.title" :type="item.type" :closable="item.closable"
-            :show-icon="item['show-icon']" :closeText="item.closeText" />
+            :description="item.description" :show-icon="item['show-icon']"
+            style="word-break: break-all" :closeText="item.closeText" />
         </jnpf-form-tip-item>
       </template>
       <template v-else-if="item.__config__.jnpfKey==='groupTitle'">
