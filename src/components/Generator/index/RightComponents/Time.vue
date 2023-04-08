@@ -269,19 +269,19 @@ export default {
     getStartTime() {
       if (this.activeData.__config__.startTimeType == 4) {
         let item = this.getBeforeTime(this.activeData.__config__.startTimeTarget, this.activeData.__config__.startTimeValue)
-        return this.activeData.startTime = this.jnpf.toDate(item, 'HH:mm:ss')
+        return this.activeData.startTime = this.jnpf.toDate(item, this.activeData.format)
       } else {
         let item = this.getLaterTime(this.activeData.__config__.startTimeTarget, this.activeData.__config__.startTimeValue)
-        return this.activeData.startTime = this.jnpf.toDate(item, 'HH:mm:ss')
+        return this.activeData.startTime = this.jnpf.toDate(item, this.activeData.format)
       }
     },
     getEndTime() {
       if (this.activeData.__config__.endTimeType == 4) {
         let item = this.getBeforeTime(this.activeData.__config__.endTimeTarget, this.activeData.__config__.endTimeValue)
-        return this.activeData.endTime = this.jnpf.toDate(item, 'HH:mm:ss')
+        return this.activeData.endTime = this.jnpf.toDate(item, this.activeData.format)
       } else {
         let item = this.getLaterTime(this.activeData.__config__.endTimeTarget, this.activeData.__config__.endTimeValue)
-        return this.activeData.endTime = this.jnpf.toDate(item, 'HH:mm:ss')
+        return this.activeData.endTime = this.jnpf.toDate(item, this.activeData.format)
       }
     },
     dateTypeChange(val) {
@@ -292,12 +292,12 @@ export default {
       this.activeData.startTime = null
       this.activeData.startRelationField = ''
       if (val == 3) {
-        this.activeData.__config__.startTimeValue = this.jnpf.toDate(new Date(), 'HH:mm:ss')
+        this.activeData.__config__.startTimeValue = this.jnpf.toDate(new Date(), this.activeData.format)
         return this.activeData.startTime = this.activeData.__config__.startTimeValue
       } else if (val == 4 || val == 5) {
         this.activeData.__config__.startTimeValue = 1
         this.activeData.__config__.startTimeTarget = 1
-        return this.activeData.startTime = this.jnpf.toDate(this.getBeforeTime(1, 1), 'HH:mm:ss')
+        return this.activeData.startTime = this.jnpf.toDate(this.getBeforeTime(1, 1), this.activeData.format)
       } else if (val == 2) {
         this.activeData.__config__.startTimeValue = ''
       } else {
@@ -308,12 +308,12 @@ export default {
       this.activeData.endTime = null
       this.activeData.endRelationField = ''
       if (val == 3) {
-        this.activeData.__config__.endTimeValue = this.jnpf.toDate(new Date(), 'HH:mm:ss')
+        this.activeData.__config__.endTimeValue = this.jnpf.toDate(new Date(), this.activeData.format)
         return this.activeData.endTime = this.activeData.__config__.endTimeValue
       } else if (val == 4 || val == 5) {
         this.activeData.__config__.endTimeValue = 1
         this.activeData.__config__.endTimeTarget = 1
-        return this.activeData.endTime = this.jnpf.toDate(this.getLaterTime(1, 1), 'HH:mm:ss')
+        return this.activeData.endTime = this.jnpf.toDate(this.getLaterTime(1, 1), this.activeData.format)
       } else {
         this.activeData.__config__.endTimeValue = ''
       }
