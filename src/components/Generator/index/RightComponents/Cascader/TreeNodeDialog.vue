@@ -27,6 +27,12 @@
 </template>
 <script>
 export default {
+  props: {
+    currentNode: {
+      type: Object,
+      default: () => { }
+    }
+  },
   data() {
     return {
       formData: {
@@ -41,7 +47,7 @@ export default {
   },
   methods: {
     onOpen() {
-      this.formData = { fullName: '', id: '' }
+      this.formData = { fullName: this.currentNode.fullName || '', id: this.currentNode.id || '' }
     },
     onClose() { },
     close() {

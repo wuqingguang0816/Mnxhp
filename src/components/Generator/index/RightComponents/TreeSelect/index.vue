@@ -116,7 +116,8 @@
     <el-form-item label="是否必填">
       <el-switch v-model="activeData.__config__.required" />
     </el-form-item>
-    <treeNode-dialog :visible.sync="dialogVisible" title="添加选项" @commit="addNode" />
+    <treeNode-dialog :visible.sync="dialogVisible" :title="currentNode.id?'编辑选项':'添加选项'"
+      :currentNode=currentNode @commit="addNode" />
     <div>
       <el-dialog :visible.sync="dicVisible" append-to-body
         class="JNPF-dialog JNPF-dialog_center JNPF-dialog-tree-select" lock-scroll width="80%"
@@ -163,6 +164,10 @@ export default {
               class="el-icon-plus"
               title="添加"
             ></i>
+            <i on-click={() => this.update(data)}
+              class="el-icon-edit-outline"
+              title="编辑"
+            ></i>
             <i on-click={() => this.remove(node, data)}
               class="el-icon-delete"
               title="删除"
@@ -190,6 +195,10 @@ export default {
     },
     addNode(data) {
       this.currentNode.push(data)
+    },
+    update(data) {
+      this.dialogVisible = true
+      this.currentNode = data
     },
     append(data) {
       if (!data.children) {
@@ -286,6 +295,9 @@ export default {
     margin-left: 6px;
   }
   .el-icon-plus {
+    color: #409eff;
+  }
+  .el-icon-edit-outline {
     color: #409eff;
   }
   .el-icon-delete {

@@ -54,7 +54,7 @@
         <el-input type="number" v-model="activeData.__config__.startTimeValue" placeholder="请输入"
           min="1">
           <el-select slot="append" v-model="activeData.__config__.startTimeTarget"
-            style="width: 85px;" placeholder="请选择" @change="startTimeTarget">
+            style="width: 70px;" placeholder="请选择" @change="startTimeTarget">
             <el-option v-for="(item, index) in targetOptions" :key="index" :label="item.label"
               :value="item.value" />
           </el-select>
@@ -88,7 +88,7 @@
         <el-input type="number" v-model="activeData.__config__.endTimeValue" placeholder="请输入"
           min="1">
           <el-select slot="append" v-model="activeData.__config__.endTimeTarget"
-            @change="endTimeTarget" style="width: 85px;" placeholder="请选择">
+            @change="endTimeTarget" style="width: 70px;" placeholder="请选择">
             <el-option v-for="(item, index) in targetOptions" :key="index" :label="item.label"
               :value="item.value" />
           </el-select>
