@@ -203,6 +203,7 @@ export default {
     line-height: 1.2;
     color: #a5a5a5;
     margin-top: 5px;
+    word-break: break-all;
   }
 }
 .el-upload-list__item {
