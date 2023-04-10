@@ -196,6 +196,7 @@ export default {
 .row-title {
   width: 100%;
   padding-top: 10px;
+
   .title {
     margin-left: 20px;
   }
@@ -210,27 +211,35 @@ export default {
 }
 .divider-margin {
   margin: 0px 0px;
+  margin-top: 10px !important;
 }
 .app-title {
   width: 100%;
   padding-top: 5px;
   // border: 1px solid #000;
 }
+.portal-table-box-body {
+  height: 100%;
+  overflow: auto;
+}
 .portal-table-box {
-  .el-card__header {
+  display: flex;
+  flex-direction: column;
+  >>> .el-card__header {
     height: 55px;
     padding: 0;
   }
 
-  .el-card__body {
+  >>> .el-card__body {
     width: 100%;
-    height: calc(100% - 55px);
+    flex: 1;
+    overflow: hidden;
   }
 
   .portal-table-box-body {
     padding: 0 20px;
     height: 100%;
-    overflow: hidden;
+    overflow: auto;
 
     .item {
       display: block;
@@ -238,7 +247,6 @@ export default {
       margin-top: 20px;
       font-size: 0;
       margin-left: 20px;
-
       .time {
         font-size: 14px;
         display: inline-block;
