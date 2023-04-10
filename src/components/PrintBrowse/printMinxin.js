@@ -3,6 +3,7 @@ import { mapGetters } from "vuex";
 import QRCode from "qrcodejs2";
 import JsBarcode from "jsbarcode";
 import request from "@/utils/request";
+import { getAmountChinese } from "@/components/Generator/utils/index"
 
 const printOptionApi = {
   computed: {
@@ -131,24 +132,62 @@ const printOptionApi = {
       dataList.forEach(element => {
         let dataTag = element.getAttribute('data-tag') ? element.getAttribute('data-tag').split('.')[0] : false
         let dataKey = element.innerText
-        if (dataTag && dataTag!='null' && dataKey.startsWith("{")) {
+        if (dataTag && dataTag != 'null' && dataKey.startsWith("{")) {
           if (dataTag == 'headTable') {
             this.mainData.push(dataKey)
           } else {
             let dataTagArr = this.subData[dataTag]
             if (!dataTagArr) dataTagArr = []
-            if (!dataTagArr.includes(dataKey)) dataTagArr.push(dataKey.replace("{","").replace("}",""))
+            if (!dataTagArr.includes(dataKey)) dataTagArr.push(dataKey.replace("{", "").replace("}", ""))
             this.subData[dataTag] = dataTagArr
           }
-
+        } else if (dataTag == 'isAmountChinese') {
+          let data = this.getAmount(dataKey)
+          if (isNaN(data)) {
+            let innerHTML = element.innerHTML.replace('大写金额(', '').replace(')', '')
+            this.printTemplate = this.replaceAll(this.printTemplate, element.innerHTML, innerHTML)
+            let subData = element.querySelectorAll('span')[0]
+            let subDataTag = subData.getAttribute('data-tag') ? subData.getAttribute('data-tag').split('.')[0] : false
+            let data_ = data.replace('{', "").replace("}", "")
+            if (subDataTag == 'headTable') {
+              this.data[data_] = getAmountChinese(this.data[data_])
+            } else {
+              this.data[subDataTag][0][data_] = getAmountChinese(this.data[subDataTag][0][data_])
+            }
+          } else {
+            this.printTemplate = this.replaceAll(this.printTemplate, dataKey, getAmountChinese(data))
+          }
+        } else if (dataTag == 'thousands') {
+          let [data, place] = this.getAmount(dataKey).split(',')
+          if (!data) return
+          if (isNaN(data)) {
+            let innerHTML = element.innerHTML.replace('千位分隔符(', '').replace(')', '').split(',')[0]
+            this.printTemplate = this.replaceAll(this.printTemplate, element.innerHTML, innerHTML)
+            let subData = element.querySelectorAll('span')[0]
+            let subDataTag = subData.getAttribute('data-tag') ? subData.getAttribute('data-tag').split('.')[0] : false
+            let data_ = data.replace('{', "").replace("}", "")
+            if (subDataTag == 'headTable') {
+              this.data[data_] = this.getThousands(this.data[data_])
+            } else {
+              this.data[subDataTag][0][data_] = this.getThousands(this.data[subDataTag][0][data_])
+            }
+          } else {
+            this.printTemplate = this.replaceAll(this.printTemplate, dataKey, this.getThousands(data, place || 0))
+          }
         }
+      })
+    },
+    getThousands(value, place) {
+      return parseFloat(value).toLocaleString('zh', {
+        minimumFractionDigits: place,
+        maximumFractionDigits: place
       })
     },
     replaceValue(mainData) {
       let template = JSON.parse(JSON.stringify(this.printTemplate))
       for (let key in this.data) {
         if (mainData.includes(`{${key}}`)) {
-          template = template.replace(`{${key}}`, this.data[key] || '')
+          template = template.replace(`{${key}}`, this.data[key] || this.data[key] == 0 ? this.data[key] : '')
         }
       }
       this.printTemplate = template
@@ -158,7 +197,7 @@ const printOptionApi = {
         let subData = this.data[key][0]
         let replaceKey = data[key]
         replaceKey.forEach(key => {
-          let text = subData[key] ? subData[key] : ''
+          let text = subData[key] || subData[key] == 0 ? subData[key] : ''
           this.printTemplate = this.printTemplate.replaceAll(`{${key}}`, text)
         });
 
@@ -350,6 +389,14 @@ const printOptionApi = {
         newData += data[i]
       }
       return newData
+    },
+    getAmount(element) {
+      let reg = /\((.+?)\)/g;
+      let res = element.match(reg);
+      let data = res ? res[0] : ''
+      data = data.replace('(', '')
+      data = data.replace(')', '')
+      return data
     },
     word() {
       let print = this.$refs.tsPrint.innerHTML
