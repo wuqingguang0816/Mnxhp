@@ -46,7 +46,7 @@
     </el-form-item> -->
     <el-row>
       <el-col :span="12">
-        <el-form-item label="是否只读">
+        <el-form-item label="是否只读" v-show="showType==='pc'">
           <el-switch v-model="activeData.readonly" />
         </el-form-item>
       </el-col>

@@ -66,7 +66,7 @@
           <el-table-column prop="account" label="账号" width="100" />
           <el-table-column prop="realName" label="姓名" width="100" />
           <el-table-column prop="gender" label="性别" width="90" align="center">
-            <template slot-scope="scope" sortable>
+            <template slot-scope="scope">
               <span>{{ scope.row.gender ==1 ? '男': ( scope.row.gender == 2 ? '女' : '保密') }}</span>
             </template>
           </el-table-column>
@@ -122,15 +122,8 @@
   </div>
 </template>
 <script>
-import {
-  getDepartmentSelectorByAuth
-} from '@/api/permission/department'
-import {
-  getUserList,
-  updateUserState,
-  unlockUser,
-  delUser
-} from '@/api/permission/user'
+import { getDepartmentSelectorByAuth } from '@/api/permission/department'
+import { getUserList, updateUserState, unlockUser, delUser } from '@/api/permission/user'
 import Form from './Form'
 import Diagram from './Diagram'
 import ResetPwdForm from './ResetPassword'
@@ -177,6 +170,7 @@ export default {
       refreshTree: true,
       filterText: '',
       socialsVisible: false,
+      organizeIdTree: []
     }
   },
   watch: {
@@ -244,16 +238,27 @@ export default {
         this.listLoading = false
       })
     },
-    handleNodeClick(data) {
+    getNodePath(node) {
+      let fullPath = []
+      const loop = (node) => {
+        if (node.level) fullPath.unshift(node.data)
+        if (node.parent) loop(node.parent)
+      }
+      loop(node)
+      return fullPath
+    },
+    handleNodeClick(data, node) {
       if (this.listQuery.organizeId === data.id) return
       this.listQuery.organizeId = data.id
       this.type = data.type
+      const nodePath = this.getNodePath(node)
+      this.organizeIdTree = nodePath.map(o => o.id)
       this.reset()
     },
     addOrUpdateHandle(id) {
       this.formVisible = true
       this.$nextTick(() => {
-        this.$refs.Form.init(id, this.type === 'department' ? this.listQuery.organizeId : '')
+        this.$refs.Form.init(id, this.organizeIdTree || [])
       })
     },
     removeForm(isRefresh) {
