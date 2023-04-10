@@ -38,11 +38,14 @@
             class="active-btn" />
         </el-tooltip>
         <el-divider direction='vertical' class="divider"></el-divider>
+        <el-button type="primary" @click="dataFormSubmit(1)" :loading="btnLoading">
+          保存并发布</el-button>
         <el-button type="primary" @click="dataFormSubmit()" :loading="btnLoading">
           保 存</el-button>
         <el-button @click="closeDialog()">{{$t('common.cancelButton')}}</el-button>
       </div>
     </div>
+    <ReleaseDialog :visible.sync="releaseDialog" ref="release" @release="closeDialog" />
     <div class="main" v-if="!loading">
       <PortalDesigner ref="portalDesigner" :conf="formData" :showType='showType'
         @addRecord="handleAddRecord" />
@@ -54,11 +57,13 @@
 import { getPortalInfo, Update, Create } from '@/api/onlineDev/portal'
 import PortalDesigner from './components'
 import useRedoMixins from '@/components/VisualPortal/mixins/useRedo'
+import ReleaseDialog from '@/views/onlineDev/visualPortal/releaseDialog'
 export default {
   mixins: [useRedoMixins],
-  components: { PortalDesigner },
+  components: { PortalDesigner, ReleaseDialog },
   data() {
     return {
+      currRow: {},
       visible: false,
       loading: false,
       formVisible: false,
@@ -70,37 +75,38 @@ export default {
       id: '',
       key: false,
       showFullName: false,
+      releaseDialog: false,
     }
   },
   methods: {
-    init(fullName, id) {
+    init(row) {
+      this.currRow = row
       this.visible = true
       this.loading = false
       this.formData = null
-      this.fullName = fullName
+      this.fullName = row.fullName
       this.btnLoading = false
-      this.id = id || 0
       this.showType = 'pc'
       this.initRedo()
       this.$nextTick(() => {
-        if (id) {
+        if (this.currRow.id) {
           this.loading = true
-          getPortalInfo(id).then(res => {
+          getPortalInfo(this.currRow.id).then(res => {
             this.loading = false
             this.formData = JSON.parse(res.data.formData)
           }).catch(() => { this.loading = false })
         }
       })
     },
-    dataFormSubmit() {
+    dataFormSubmit(type) {
       this.$refs['portalDesigner'].getData().then(res => {
         this.btnLoading = true
         this.formData = res.formData
         let query = {
           formData: JSON.stringify(this.formData),
-          id: this.id
+          id: this.currRow.id
         }
-        const formMethod = this.id ? Update : Create
+        const formMethod = this.currRow.id ? Update : Create
         formMethod(query).then((res) => {
           this.$message({
             message: res.msg,
@@ -108,7 +114,14 @@ export default {
             duration: 1500,
             onClose: () => {
               this.btnLoading = false
-              this.closeDialog(true)
+              if (type == 1) {
+                this.$nextTick(() => {
+                  this.releaseDialog = true
+                  this.$refs.release.openRelease(this.currRow)
+                })
+              } else {
+                this.closeDialog(true)
+              }
             }
           })
         }).catch(() => { this.btnLoading = false })
@@ -136,6 +149,9 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
+>>> .options {
+  width: 500px !important;
+}
 .unActive {
   width: 30px;
   height: 30px;
