@@ -36,7 +36,7 @@
 import Parser from '@/components/Generator/parser/Parser'
 import { getConfigData, getModelInfo, createModel } from '@/api/onlineDev/visualDev'
 import { getDataInterfaceRes } from '@/api/systemData/dataInterface'
-import {mapGetters} from "vuex";
+import { mapGetters } from "vuex";
 export default {
   name: 'popup',
   components: { Parser },
@@ -57,7 +57,7 @@ export default {
         data: ""
       },
       modelId: "",
-      isAdd:false
+      isAdd: false
     }
   },
   computed: {
@@ -124,12 +124,12 @@ export default {
           if (item.__vModel__) {
             let val = data.hasOwnProperty(item.__vModel__) ? data[item.__vModel__] : item.__config__.defaultValue
             if (!item.__config__.isSubTable) item.__config__.defaultValue = val
-            if(this.isAdd || item.__config__.isSubTable == true) {//新增时候，默认当前
-              if(item.__config__.jnpfKey === 'date' && item.__config__.defaultCurrent == true) {
+            if (this.isAdd || item.__config__.isSubTable == true) {//新增时候，默认当前
+              if (item.__config__.jnpfKey === 'date' && item.__config__.defaultCurrent == true) {
                 val = new Date().getTime()
                 item.__config__.defaultValue = val
-              }else if(item.__config__.jnpfKey === 'comSelect' && item.__config__.defaultCurrent == true && this.userInfo.organizeIdList instanceof Array && this.userInfo.organizeIdList.length > 0) {
-                val = item.multiple == true?[this.userInfo.organizeIdList]:this.userInfo.organizeIdList
+              } else if (item.__config__.jnpfKey === 'comSelect' && item.__config__.defaultCurrent == true && this.userInfo.organizeIdList instanceof Array && this.userInfo.organizeIdList.length > 0) {
+                val = data[item.__vModel__] ? data[item.__vModel__] : item.multiple == true ? [this.userInfo.organizeIdList] : this.userInfo.organizeIdList
                 item.__config__.defaultValue = val
               }
             }
