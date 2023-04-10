@@ -1,6 +1,6 @@
 <template>
   <el-date-picker :type="type" v-model="innerValue" placeholder="请选择" :value-format="valueFormat"
-    :picker-options='pickerOptions' @change="change" :format="format"></el-date-picker>
+    :picker-options='pickerOptions' :format="format"></el-date-picker>
 </template>
 <script>
 export default {
@@ -65,9 +65,6 @@ export default {
   mounted() {
   },
   methods: {
-    change(val) {
-      if (val < this.startTime) return this.innerValue = ''
-    }
   }
 
 }

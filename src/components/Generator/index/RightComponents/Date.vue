@@ -211,6 +211,17 @@ export default {
       }
     },
     'activeData.format'(val) {
+      if (val === 'yyyy') {
+        this.targetOptions = [{ label: '年', value: 1 }]
+      } else if (val === 'yyyy-MM') {
+        this.targetOptions = [{ label: '年', value: 1 }, { label: '月', value: 2 }]
+      } else if (val === 'yyyy-MM-dd') {
+        this.targetOptions = [{ label: '年', value: 1 }, { label: '月', value: 2 }, { label: '日', value: 3 }]
+      } else if (val === 'yyyy-MM-dd HH:mm') {
+        this.targetOptions = [{ label: '年', value: 1 }, { label: '月', value: 2 }, { label: '日', value: 3 }, { label: '时', value: 4 }, { label: '分', value: 5 }]
+      } else {
+        this.targetOptions = [{ label: '年', value: 1 }, { label: '月', value: 2 }, { label: '日', value: 3 }, { label: '时', value: 4 }, { label: '分', value: 5 }, { label: '秒', value: 6 }]
+      }
       return this.activeData.type = val === 'yyyy' ? 'year' : val === 'yyyy-MM' ? 'month' : val === 'yyyy-MM-dd' ? 'date' : 'datetime'
     },
   },
