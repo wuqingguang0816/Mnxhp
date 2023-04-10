@@ -30,7 +30,6 @@
       :border="false">
       <el-table-column prop="table" label="表名" width="300" />
       <el-table-column prop="tableName" label="说明" show-overflow-tooltip />
-      <el-table-column prop="sum" label="总数" width="90" />
     </JNPF-table>
     <span slot="footer" class="dialog-footer">
       <el-button @click="closeDialog">{{$t('common.cancelButton')}}</el-button>
@@ -65,7 +64,11 @@ export default {
     initData() {
       this.listLoading = true
       const dbLinkId = this.dbLinkId || '0'
-      DataModelList(dbLinkId, { keyword: this.keyword }).then(res => {
+      DataModelList(dbLinkId, {
+        keyword: this.keyword,
+        currentPage: 1,
+        pageSize: 1000000
+      }).then(res => {
         this.list = res.data.list
         this.listLoading = false
       })

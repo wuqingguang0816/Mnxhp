@@ -65,7 +65,6 @@
         <el-table-column type="index" width="50" label="序号" align="center" />
         <el-table-column prop="table" label="表名" width="300" />
         <el-table-column prop="tableName" label="说明" show-overflow-tooltip />
-        <el-table-column prop="sum" label="总数" width="90" />
       </JNPF-table>
       <span slot="footer" class="dialog-footer">
         <el-button @click="onCloseVisible">{{$t("common.cancelButton")}}</el-button>
@@ -217,7 +216,11 @@ export default {
   methods: {
     async getData() {
       const dbLinkId = this.dbLinkId || "0";
-      DataModelList(dbLinkId, { keyword: this.keyword }).then((res) => {
+      DataModelList(dbLinkId, {
+        keyword: this.keyword,
+        currentPage: 1,
+        pageSize: 1000000
+      }).then((res) => {
         this.allList = res.data.list
         this.setDefault()
       })

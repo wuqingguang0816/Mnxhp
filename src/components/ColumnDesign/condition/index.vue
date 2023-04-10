@@ -64,7 +64,6 @@
             <template
               v-if="
                 [
-                  'calculate',
                   'comInput',
                   'textarea',
                   'billRule',
@@ -157,7 +156,7 @@
               <template v-else-if="['cascader'].includes(item.jnpfKey)">
 
                 <el-cascader v-model="item.fieldValue"
-                :options="item.dataOptions" :props="item.props.props"
+                :options="item.dataOptions" :props="getCasProps(item.props.props)"
                 :placeholder="item.placeholder" :clearable="item.clearable"
                 :show-all-levels="item['show-all-levels']" :separator="item.separator"
                 :filterable="item.filterable" :disabled="item.disabled" />
@@ -210,6 +209,7 @@
                   placeholder="请选择"
                   clearable
                   :is-range="true"
+                  @input="input()"
                   :value-format="item['value-format']"
                   :format="item.format"
                 >
@@ -243,6 +243,7 @@
                     :type="item.type==='datetime'?'datetimerange':'daterange'"
                     value-format="timestamp"
                     range-separator="至"
+                    @input="input()"
                     start-placeholder="开始日期"
                     end-placeholder="结束日期"
                     style="width: 100%;"
@@ -418,6 +419,7 @@
                   v-model="item.fieldValue"
                   :disabled="item.disabled"
                   placeholder="请输入"
+                  @input="input"
                 ></el-input>
               </template>
             </div>
@@ -461,7 +463,7 @@ import { getDrawingList } from "@/components/Generator/utils/db";
 export default {
   props: {
     modelType:{
-      type:String,
+      type:[String, Number],
       default:''
     },
     columnOptions: {
@@ -702,6 +704,13 @@ export default {
     }
   },
   methods: {
+    getCasProps(props){
+      props.multiple = true
+      return props
+    },
+    input() {
+      this.$forceUpdate();
+    },
     getData() {
       return this.pconditions;
     },
@@ -712,22 +721,6 @@ export default {
       this.dialogVisible = true;
       if (data != null) {
         this.init(data);
-      }
-    },
-    setTimeInit(val,item){
-      if (["date", "createTime", "modifyTime"].includes(item.jnpfKey) && !['null','notNull'].includes(val)) {
-        if (item.symbol === "between") {
-          item.fieldValue = [+new Date(),+new Date()];
-        } else {
-          item.fieldValue = +new Date();
-        }
-      }
-      if (["time"].includes(item.jnpfKey) && !['null','notNull'].includes(val)) {
-        if (val === "between") {
-          item.fieldValue = ['8:00:00', '8:00:00'];
-        } else {
-          item.fieldValue = '8:00:00';
-        }
       }
     },
     addCondition() {
@@ -761,8 +754,6 @@ export default {
         item.props = this.dataOptionMap[val].props;
       }
       item = { ...item, ...this.columnDataMap[val] };
-      // 配置时间默认值
-      this.setTimeInit(val,item)
 
       if (item.jnpfKey != this.nowJnpfKey) {
         item.symbol = undefined;
@@ -778,8 +769,6 @@ export default {
     // 比较符号改变事件
     symbolChange(val, item, i) {
       item.fieldValue = undefined;
-
-      this.setTimeInit(val,item)
 
       if(['null','notNull'].includes(val)){
         item.disabled = true
@@ -800,7 +789,7 @@ export default {
         if(["in", "notIn"].includes(val)){
           item.props.props.multiple = true
         }else{
-          item.props.props.multiple = false
+          // item.props.props.multiple = false
         }
 
       }

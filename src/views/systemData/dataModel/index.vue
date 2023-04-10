@@ -67,7 +67,6 @@
           <el-table-column type="index" width="50" label="序号" align="center" />
           <el-table-column prop="table" label="表名" width="300" sortable />
           <el-table-column prop="tableName" label="说明" show-overflow-tooltip sortable />
-          <!-- <el-table-column prop="sum" label="总数" width="90" sortable /> -->
           <el-table-column label="操作" width="150" fixed="right">
             <template slot-scope="scope">
               <tableOpts @edit="addOrUpdateHandle(scope.row.table)"

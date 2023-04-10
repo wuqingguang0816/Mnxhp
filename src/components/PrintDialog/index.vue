@@ -51,12 +51,17 @@ export default {
   mounted() {},
   methods: {
     init(ids) {
+      if(ids.length == 1) {
+        this.$emit("change", ids[0]);
+        return
+      }
       if (this.printListOptions.length == 0 && ids.length > 0) {
         printOptionsApi({ids}).then(res => {
           this.printListOptions = res.data;
           this.printVisible = true;
         });
       }else{
+        
         this.printVisible = true;
       }
     },
