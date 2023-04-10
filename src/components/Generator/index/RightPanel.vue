@@ -235,7 +235,7 @@
                   :precision="0" controls-position="right" />
               </el-form-item>
               <el-form-item label="默认值">
-                <el-select v-model="activeData.dataType" placeholder="请选择">
+                <el-select v-model="activeData.dataType" placeholder="请选择" filterable>
                   <el-option label="固定值" value="static"></el-option>
                   <el-option label="组件联动" value="relation"></el-option>
                 </el-select>
