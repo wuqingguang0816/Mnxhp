@@ -126,7 +126,7 @@
       <el-switch v-model="activeData.__config__.showLabel" />
     </el-form-item> -->
     <treeNode-dialog :visible.sync="dialogVisible" :title="currentNode.id?'编辑选项':'添加选项'"
-      :currentNode=currentNode @commit="addNode" />
+      :currentNode="currentNode.id?currentNode:{}" @commit="addNode" />
     <div>
       <el-dialog :visible.sync="dicVisible" append-to-body
         class="JNPF-dialog JNPF-dialog_center JNPF-dialog-tree-select" lock-scroll width="80%"
@@ -203,7 +203,13 @@ export default {
       this.currentNode = this.activeData.options
     },
     addNode(data) {
-      this.currentNode.push(data)
+      if (this.currentNode.id) {
+        this.currentNode.id = data.id
+        this.currentNode.fullName = data.fullName
+      } else {
+        this.currentNode.push(data)
+
+      }
     },
     update(data) {
       this.dialogVisible = true
