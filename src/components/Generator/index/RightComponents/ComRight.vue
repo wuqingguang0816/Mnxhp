@@ -12,7 +12,8 @@
     </el-form-item>
     <el-form-item label="可选范围"
       v-if="['depSelect','posSelect','usersSelect'].includes(activeData.__config__.jnpfKey)">
-      <el-select v-model="activeData.selectType" placeholder="请选择" @change="onTypeChange">
+      <el-select v-model="activeData.selectType" placeholder="请选择" @change="onTypeChange"
+        filterable>
         <el-option v-for="item in selectTypeOptions" :key="item.value" :label="item.label"
           :value="item.value" />
       </el-select>
@@ -32,7 +33,8 @@
       </template>
     </el-form-item>
     <el-form-item label="可选范围" v-if="activeData.__config__.jnpfKey==='userSelect'">
-      <el-select v-model="activeData.selectType" placeholder="请选择" @change="onTypeChange">
+      <el-select v-model="activeData.selectType" placeholder="请选择" @change="onTypeChange"
+        filterable>
         <el-option v-for="item in userSelectTypeOptions" :key="item.value" :label="item.label"
           :value="item.value" />
       </el-select>

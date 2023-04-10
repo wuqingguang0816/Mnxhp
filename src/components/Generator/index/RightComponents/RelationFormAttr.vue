@@ -9,14 +9,14 @@
     </el-form-item>
     <el-form-item label="关联功能">
       <el-select v-model="activeData.relationField" placeholder="请选择关联功能" clearable
-        @change="onRelationFieldChange">
+        @change="onRelationFieldChange" filterable>
         <el-option v-for="(item,i) in options" :key="i" :label="item.__config__.label"
           :value="item.prop" />
       </el-select>
     </el-form-item>
     <el-form-item label="关联字段">
       <el-select v-model="activeData.showField" placeholder="请选择关联字段"
-        @visible-change="visibleChange" clearable>
+        @visible-change="visibleChange" clearable filterable>
         <el-option v-for="item in fieldOptions" :key="item.vmodel" :label="item.label"
           :value="item.vmodel" />
       </el-select>

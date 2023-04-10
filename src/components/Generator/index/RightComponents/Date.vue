@@ -35,7 +35,7 @@
     <template v-if="activeData.__config__.startTimeRule">
       <el-form-item label="类型">
         <el-select v-model="activeData.__config__.startTimeType" placeholder="请选择类型"
-          @change="startType">
+          @change="startType" filterable>
           <el-option v-for="(item, index) in typeOptions" :key="index" :label="item.label"
             :value="item.value" />
         </el-select>
@@ -51,14 +51,15 @@
         <el-input type="number" v-model="activeData.__config__.startTimeValue" placeholder="请输入"
           min="1">
           <el-select slot="append" v-model="activeData.__config__.startTimeTarget"
-            style="width: 70px;" placeholder="请选择" @change="startTimeTarget">
+            style="width: 70px;" placeholder="请选择" @change="startTimeTarget" filterable>
             <el-option v-for="(item, index) in targetOptions" :key="index" :label="item.label"
               :value="item.value" />
           </el-select>
         </el-input>
       </el-form-item>
       <el-form-item label="" v-else-if="activeData.__config__.startTimeType==2">
-        <el-select v-model="activeData.__config__.startRelationField" placeholder="请选择关联日期字段">
+        <el-select v-model="activeData.__config__.startRelationField" placeholder="请选择关联日期字段"
+          filterable>
           <el-option v-for="(item,i) in formFieldsOptions" :key="i" :label="item.realLabel"
             :value="item.realVModel" />
         </el-select>
@@ -69,8 +70,8 @@
     </jnpf-form-tip-item>
     <template v-if="activeData.__config__.endTimeRule">
       <el-form-item label="类型">
-        <el-select v-model="activeData.__config__.endTimeType" placeholder="请选择类型"
-          @change="endType">
+        <el-select v-model="activeData.__config__.endTimeType" placeholder="请选择类型" @change="endType"
+          filterable>
           <el-option v-for="(item, index) in typeOptions" :key="index" :label="item.label"
             :value="item.value" />
         </el-select>
@@ -86,16 +87,17 @@
         <el-input type="number" v-model="activeData.__config__.endTimeValue" placeholder="请输入"
           min="1">
           <el-select slot="append" v-model="activeData.__config__.endTimeTarget"
-            style="width: 70px;" placeholder="请选择">
+            style="width: 70px;" placeholder="请选择" filterable>
             <el-option v-for="(item, index) in targetOptions" :key="index" :label="item.label"
               :value="item.value" />
           </el-select>
         </el-input>
       </el-form-item>
       <el-form-item label="" v-else-if="activeData.__config__.endTimeType==2">
-        <el-select v-model="activeData.__config__.endRelationField" placeholder="请选择关联日期字段">
+        <el-select v-model="activeData.__config__.endRelationField" placeholder="请选择关联日期字段"
+          filterable>
           <el-option v-for="(item,i) in formFieldsOptions" :key="i" :label="item.realLabel"
-            :value="item.realVModel" />
+            :value="item.realVModel" filterable />
         </el-select>
       </el-form-item>
     </template>

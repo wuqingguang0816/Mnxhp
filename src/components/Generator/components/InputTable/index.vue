@@ -37,7 +37,7 @@
           <template slot-scope="scope">
             <!-- 单选框组 多选框组 都替换成下拉 并添加options -->
             <template v-if="['select', 'checkbox','radio'].includes(head.__config__.jnpfKey)">
-              <el-select v-model="tableFormData[scope.$index][cIndex].value"
+              <el-select v-model="tableFormData[scope.$index][cIndex].value" filterable
                 v-bind="getConfById(head.__config__.formId,scope.$index)" :rowIndex="scope.$index"
                 @blur="onFormBlur(scope.$index, cIndex, 'el-select')"
                 @change="onFormDataChange(scope.$index, cIndex, 'el-select',arguments)">

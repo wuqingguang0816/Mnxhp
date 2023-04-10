@@ -73,7 +73,7 @@
           </el-table-column>
           <el-table-column prop="align" label="对齐">
             <template slot-scope="scope">
-              <el-select v-model="scope.row.align" placeholder="请选择">
+              <el-select v-model="scope.row.align" placeholder="请选择" filterable>
                 <el-option v-for="item in alignOptions" :key="item" :label="item" :value="item">
                 </el-option>
               </el-select>
@@ -218,7 +218,7 @@
               <el-divider>表格配置</el-divider>
               <el-form-item label="数据过滤" v-if="webType != 4">
                 <el-button style="width: 100%;" @click="filterPanelShow">
-                {{ this.columnData.ruleList && this.columnData.ruleList.length > 0 ? '编辑过滤条件' : '添加过滤条件' }}
+                  {{ this.columnData.ruleList && this.columnData.ruleList.length > 0 ? '编辑过滤条件' : '添加过滤条件' }}
                 </el-button>
               </el-form-item>
               <Condition ref="conditionpane" :modelType="modelType" :columnData="columnData"
@@ -235,7 +235,7 @@
               </template>
               <template v-if="columnData.type==5">
                 <el-form-item label="父级字段">
-                  <el-select v-model="columnData.parentField" placeholder="请选择父级字段">
+                  <el-select v-model="columnData.parentField" placeholder="请选择父级字段" filterable>
                     <el-option :label="item.__config__.label" :value="item.__vModel__"
                       v-for="(item, i) in treeFieldOptions" :key="i"></el-option>
                   </el-select>
@@ -276,7 +276,7 @@
                 </el-form-item>
                 <el-form-item label="合计字段" v-if="columnData.showSummary">
                   <el-select v-model="columnData.summaryField" placeholder="请选择合计字段" clearable
-                    multiple>
+                    multiple filterable>
                     <template v-for="(item,i) in groupFieldOptions">
                       <el-option :key="i" :label="item.__config__.label" :value="item.__vModel__"
                         v-if="['comInput','numInput','calculate'].includes(item.__config__.jnpfKey)" />

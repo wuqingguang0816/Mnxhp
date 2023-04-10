@@ -13,7 +13,7 @@
         </el-select>
       </el-form-item>
       <el-form-item label="弹窗宽度">
-        <el-select v-model="dataForm.popupWidth" placeholder="请选择弹窗宽度">
+        <el-select v-model="dataForm.popupWidth" placeholder="请选择弹窗宽度" filterable>
           <el-option v-for="item in popupWidthOptions" :label="item" :value="item" :key="item" />
         </el-select>
       </el-form-item>

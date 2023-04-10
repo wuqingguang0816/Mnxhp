@@ -20,7 +20,7 @@
       </el-select>
     </el-form-item>
     <el-form-item label="弹窗宽度" v-show="showType==='pc'">
-      <el-select v-model="activeData.popupWidth" placeholder="请选择弹窗宽度">
+      <el-select v-model="activeData.popupWidth" placeholder="请选择弹窗宽度" filterable>
         <el-option v-for="item in popupWidthOptions" :label="item" :value="item" :key="item" />
       </el-select>
     </el-form-item>
@@ -43,7 +43,7 @@
           <i class="icon-ym icon-ym-darg" />
         </div>
         <el-select v-model="item.value" placeholder="请选择显示字段" @visible-change="visibleChange"
-          clearable @change="onChange($event,item)">
+          clearable @change="onChange($event,item)" filterable>
           <el-option v-for="item in fieldOptions" :key="item.vmodel" :label="item.label"
             :value="item.vmodel" />
         </el-select>

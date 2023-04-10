@@ -17,7 +17,7 @@
     </el-form-item> -->
     <el-form-item label="颜色格式">
       <el-select v-model="activeData['color-format']" placeholder="请选择颜色格式"
-        :style="{ width: '100%' }" clearable @change="colorFormatChange">
+        :style="{ width: '100%' }" clearable @change="colorFormatChange" filterable>
         <el-option v-for="(item, index) in colorFormatOptions" :key="index" :label="item.label"
           :value="item.value" />
       </el-select>

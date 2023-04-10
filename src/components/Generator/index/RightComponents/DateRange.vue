@@ -16,7 +16,8 @@
       </el-date-picker>
     </el-form-item>
     <el-form-item label="时间类型">
-      <el-select v-model="activeData.type" placeholder="请选择时间类型" @change="dateTypeChange">
+      <el-select v-model="activeData.type" placeholder="请选择时间类型" @change="dateTypeChange"
+        filterable>
         <el-option v-for="(item, index) in dateOptions" :key="index" :label="item.label"
           :value="item.value" />
       </el-select>

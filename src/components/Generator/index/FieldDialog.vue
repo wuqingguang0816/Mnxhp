@@ -14,7 +14,7 @@
           <template slot-scope="scope">
             <span class="table-cell"
               v-if="scope.row.disabled">{{scope.row.dataType|dataType}}</span>
-            <el-select v-model="scope.row.dataType" placeholder="请选择" v-else>
+            <el-select v-model="scope.row.dataType" placeholder="请选择" filterable v-else>
               <el-option v-for="item in options" :key="item.value" :label="item.label"
                 :value="item.value" />
             </el-select>

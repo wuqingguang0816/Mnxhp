@@ -24,7 +24,7 @@
       <template v-for="(item, index) in pconditions">
         <el-row class="condition-list" :key="index">
           <el-col :span="8" class="label">
-            <el-select v-model="item.fieldType" placeholder="请选择"
+            <el-select v-model="item.fieldType" placeholder="请选择" filterable
               class="condition-select condition-type-select" @change="fieldTypeChange(item)">
               <el-option v-for="item in conditionTypeOptions" :key="item.value" :label="item.label"
                 :value="item.value" />
@@ -32,7 +32,7 @@
             <el-button size="mini" v-if="item.fieldType===3" class="edit-script-btn"
               @click="editFormula(item)">公式编辑
             </el-button>
-            <el-select v-model="item.field" placeholder="请选择"
+            <el-select v-model="item.field" placeholder="请选择" filterable
               @change="fieldNameChange($event,item,index)" v-else>
               <el-option v-for="item in usedFormItems" :key="item.__vModel__"
                 :label="item.__config__.label" :value="item.__vModel__">
@@ -41,14 +41,14 @@
           </el-col>
           <el-col :span="4">
             <el-select v-model="item.symbol" placeholder="请选择" class="condition-select"
-              @change="symbolChange($event,item)">
+              @change="symbolChange($event,item)" filterable>
               <el-option v-for="item in symbolOptions" :key="item.value" :label="item.label"
                 :value="item.value">
               </el-option>
             </el-select>
           </el-col>
           <el-col :span="8" class="fieldValue">
-            <el-select v-model="item.fieldValueType" placeholder="请选择"
+            <el-select v-model="item.fieldValueType" placeholder="请选择" filterable
               class="condition-select condition-type-select" @change="fieldValueTypeChange(item)">
               <el-option v-for="item in conditionTypeOptions1" :key="item.value" :label="item.label"
                 :value="item.value" />
@@ -119,7 +119,7 @@
               </template>
             </div>
             <el-select v-model="item.fieldValue" placeholder="请选择" v-if="item.fieldValueType===1"
-              @change="fieldValueChange($event,item)">
+              @change="fieldValueChange($event,item)" filterable>
               <el-option v-for="item in usedFormItems" :key="item.__vModel__"
                 :label="item.__config__.label" :value="item.__vModel__">
               </el-option>
@@ -127,7 +127,7 @@
           </el-col>
           <el-col :span="3">
             <el-select v-model="item.logic" placeholder="请选择" class="condition-select"
-              @change="logicChange($event,item)">
+              @change="logicChange($event,item)" filterable>
               <el-option v-for="item in logicOptions" :key="item.value" :label="item.label"
                 :value="item.value">
               </el-option>
@@ -246,7 +246,7 @@
                   </el-form-item>
                   <el-form-item label="审批节点" style="margin-bottom:0!important;"
                     v-if="subFlowForm.initiateType === 5">
-                    <el-select v-model="subFlowForm.nodeId" placeholder="请选择节点">
+                    <el-select v-model="subFlowForm.nodeId" placeholder="请选择节点" filterable>
                       <el-option v-for="item in nodeOptions" :key="item.nodeId"
                         :label="item.properties.title" :value="item.nodeId">
                       </el-option>
@@ -330,7 +330,7 @@
                   </el-tooltip>
                 </div>
                 <el-select class="form-item-content" v-model="subFlowForm.launchMsgConfig.on"
-                  placeholder="请选择">
+                  placeholder="请选择" filterable>
                   <el-option v-for="item in noticeOptionsData" :key="item.value" :label="item.label"
                     :value="item.value" />
                 </el-select>
@@ -430,7 +430,7 @@
                         <a class="el-icon-warning-outline"></a>
                       </el-tooltip>
                     </div>
-                    <el-select v-model="startForm.extraCopyRule">
+                    <el-select v-model="startForm.extraCopyRule" filterable>
                       <el-option v-for="(item,i) in extraRuleOptions" :key="i"
                         :label="item.value==1?'无抄送人范围':item.label" :value="item.value" />
                     </el-select>
@@ -824,7 +824,7 @@
                   </el-tooltip>
                 </div>
                 <el-select class="form-item-content" v-model="startForm.endMsgConfig.on"
-                  placeholder="请选择">
+                  placeholder="请选择" filterable>
                   <el-option v-for="item in noticeOptionsData" :key="item.value" :label="item.label"
                     :value="item.value" />
                 </el-select>
@@ -881,7 +881,7 @@
                   </el-tooltip>
                 </div>
                 <el-select class="form-item-content" v-model="startForm.approveMsgConfig.on"
-                  placeholder="请选择">
+                  placeholder="请选择" filterable>
                   <el-option v-for="item in noticeOptionsData" :key="item.value" :label="item.label"
                     :value="item.value" />
                 </el-select>
@@ -938,7 +938,7 @@
                   </el-tooltip>
                 </div>
                 <el-select class="form-item-content" v-model="startForm.rejectMsgConfig.on"
-                  placeholder="请选择">
+                  placeholder="请选择" filterable>
                   <el-option v-for="item in noticeOptionsData" :key="item.value" :label="item.label"
                     :value="item.value" />
                 </el-select>
@@ -995,7 +995,7 @@
                   </el-tooltip>
                 </div>
                 <el-select class="form-item-content" v-model="startForm.copyMsgConfig.on"
-                  placeholder="请选择">
+                  placeholder="请选择" filterable>
                   <el-option v-for="item in noticeOptionsData" :key="item.value" :label="item.label"
                     :value="item.value" />
                 </el-select>
@@ -1052,7 +1052,7 @@
                   </el-tooltip>
                 </div>
                 <el-select class="form-item-content" v-model="startForm.overTimeMsgConfig.on"
-                  placeholder="请选择">
+                  placeholder="请选择" filterable>
                   <el-option v-for="item in noticeOptionsData" :key="item.value" :label="item.label"
                     :value="item.value" />
                 </el-select>
@@ -1103,7 +1103,7 @@
                   </el-tooltip>
                 </div>
                 <el-select class="form-item-content" v-model="startForm.noticeMsgConfig.on"
-                  placeholder="请选择">
+                  placeholder="请选择" filterable>
                   <el-option v-for="item in noticeOptionsData" :key="item.value" :label="item.label"
                     :value="item.value" />
                 </el-select>
@@ -1156,7 +1156,7 @@
               <el-form-item label="限时设置">
                 <div slot="label" class="form-item-label">限时设置</div>
                 <el-select class="form-item-content" v-model="startForm.timeLimitConfig.on"
-                  placeholder="请选择">
+                  placeholder="请选择" filterable>
                   <el-option v-for="item in noticeOptions" :key="item.value" :label="item.label"
                     :value="item.value" />
                 </el-select>
@@ -1164,7 +1164,7 @@
               <div class="form-item-content" v-if="startForm.timeLimitConfig.on===1">
                 <el-form-item label="节点限定时长起始值">
                   <el-select disabled v-model="startForm.timeLimitConfig.nodeLimit"
-                    placeholder="请选择">
+                    placeholder="请选择" filterable>
                     <el-option v-for="item in overTimeOptions" :key="item.value" :label="item.label"
                       :value="item.value" />
                   </el-select>
@@ -1184,7 +1184,7 @@
                   </el-tooltip>
                 </div>
                 <el-select class="form-item-content" v-model="startForm.overTimeConfig.on"
-                  placeholder="请选择">
+                  placeholder="请选择" filterable>
                   <el-option v-for="item in noticeOptions" :key="item.value" :label="item.label"
                     :value="item.value" />
                 </el-select>
@@ -1249,7 +1249,7 @@
                   </el-tooltip>
                 </div>
                 <el-select class="form-item-content" v-model="startForm.noticeConfig.on"
-                  placeholder="请选择">
+                  placeholder="请选择" filterable>
                   <el-option v-for="item in noticeOptions" :key="item.value" :label="item.label"
                     :value="item.value" />
                 </el-select>
@@ -1372,7 +1372,7 @@
                         <el-option :value="5" label="分组"></el-option>
                       </el-select>
                       <el-select v-model="approverForm.formField" placeholder="请选择字段"
-                        class="form-field">
+                        class="form-field" filterable>
                         <el-option v-for="item in usedFormItems" :key="item.__vModel__"
                           :label="item.__config__.label" :value="item.__vModel__">
                         </el-option>
@@ -1381,7 +1381,7 @@
                   </el-form-item>
                   <el-form-item label="审批节点" style="margin-bottom:0!important"
                     v-if="approverForm.assigneeType === 5">
-                    <el-select v-model="approverForm.nodeId" placeholder="请选择节点">
+                    <el-select v-model="approverForm.nodeId" placeholder="请选择节点" filterable>
                       <el-option v-for="item in nodeOptions" :key="item.nodeId"
                         :label="item.properties.title" :value="item.nodeId">
                       </el-option>
@@ -1419,7 +1419,7 @@
                         <a class="el-icon-warning-outline"></a>
                       </el-tooltip>
                     </div>
-                    <el-select v-model="approverForm.extraRule">
+                    <el-select v-model="approverForm.extraRule" filterable>
                       <el-option v-for="(item,i) in extraRuleOptions" :key="i" :label="item.label"
                         :value="item.value" />
                     </el-select>
@@ -1443,7 +1443,8 @@
                     <a class="el-icon-warning-outline"></a>
                   </el-tooltip>
                 </div>
-                <el-select class="form-item-content" v-model="approverForm.countersignRatio">
+                <el-select class="form-item-content" v-model="approverForm.countersignRatio"
+                  filterable>
                   <el-option v-for="item in 10" :key="item*10" :label="item*10+'%'"
                     :value="item*10">
                   </el-option>
@@ -1483,7 +1484,7 @@
               <el-form-item label="进度设置">
                 <div slot="label" class="form-item-label">进度设置</div>
                 <el-select class="form-item-content" v-model="approverForm.progress"
-                  placeholder="请选择">
+                  placeholder="请选择" filterable>
                   <el-option v-for="item in progressOptions" :key="item" :label="item+'%'"
                     :value="item">
                   </el-option>

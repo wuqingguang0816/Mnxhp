@@ -56,7 +56,7 @@
                     v-if="activeData.__vModel__!==undefined && !noVModelList.includes(activeData.__config__.jnpfKey) ||activeData.__config__.isStorage==2 "
                     label="控件字段">
                     <el-select v-model="activeData.__vModel__" placeholder="请选择数据库字段" clearable
-                      @change="fieldChange" filterable popper-class="field-select-popper">
+                      filterable @change="fieldChange" popper-class="field-select-popper">
                       <p class="el-select-dropdown__empty" slot="empty">
                         <span>无匹配数据，</span>
                         <el-link type="primary" :underline="false" @click="openFieldDialog">添加字段
@@ -131,7 +131,7 @@
                 v-if="activeData.__config__.jnpfKey==='calculate' ||activeData.__config__.jnpfKey==='popupAttr' ||activeData.__config__.jnpfKey==='relationFormAttr'">
                 <el-form-item label="控件用途">
                   <el-select v-model="activeData.__config__.isStorage" placeholder="请选择"
-                    @change="changeStorage">
+                    @change="changeStorage" filterable>
                     <el-option :label="item.label" :value="item.value"
                       v-for="(item,i) in storageType" :key="i"></el-option>
                   </el-select>
@@ -218,7 +218,7 @@
                   placeholder="请输入标题提示" />
               </el-form-item>
               <el-form-item label="编码格式">
-                <el-select v-model="activeData.format" placeholder="请选择">
+                <el-select v-model="activeData.format" placeholder="请选择" filterable>
                   <el-option :label="item.label" :value="item.value"
                     v-for="(item,i) in barcodeFormatOptions" :key="i"></el-option>
                 </el-select>
@@ -491,13 +491,13 @@
             </el-select>
           </el-form-item>
           <el-form-item label="表单宽度" v-if="formConf.popupType==='general'">
-            <el-select v-model="formConf.generalWidth" placeholder="请选择">
+            <el-select v-model="formConf.generalWidth" placeholder="请选择" filterable>
               <el-option v-for="item in generalWidthOptions" :label="item" :value="item"
                 :key="item" />
             </el-select>
           </el-form-item>
           <el-form-item label="表单宽度" v-if="formConf.popupType==='fullScreen'">
-            <el-select v-model="formConf.fullScreenWidth" placeholder="请选择">
+            <el-select v-model="formConf.fullScreenWidth" placeholder="请选择" filterable>
               <el-option v-for="item in fullScreenWidthOptions" :label="item" :value="item"
                 :key="item" />
             </el-select>
@@ -512,7 +512,7 @@
             <el-button style="width: 100%;" @click="addStyle">编写样式</el-button>
           </el-form-item>
           <el-form-item label="表单Class">
-            <el-select v-model="formConf.className" multiple clearable placeholder="请选择">
+            <el-select v-model="formConf.className" multiple clearable placeholder="请选择" filterable>
               <el-option v-for="item in formConf.classNames" :key="item" :label="item"
                 :value="item">
               </el-option>
