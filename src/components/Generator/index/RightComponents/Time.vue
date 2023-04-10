@@ -191,6 +191,13 @@ export default {
         this.activeData.endTime = ''
         this.activeData.__config__.endTimeValue = ''
       }
+    },
+    'activeData.format'(val) {
+      if (val === 'HH:mm') {
+        this.targetOptions = [{ label: '时', value: 1 }, { label: '分', value: 2 }]
+      } else {
+        this.targetOptions = [{ label: '时', value: 1 }, { label: '分', value: 2 }, { label: '秒', value: 3 }]
+      }
     }
   },
   created() {
