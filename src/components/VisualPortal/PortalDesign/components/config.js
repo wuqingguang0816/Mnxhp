@@ -557,7 +557,7 @@ export const basicComponents = [{
       filedName: 'comInputField101',
       sortable: false,
       fixed: "none",
-      align: 'left',
+      align: 'center',
       width: 0,
       id: '1'
     },
@@ -566,7 +566,7 @@ export const basicComponents = [{
       filedName: 'comInputField102',
       sortable: false,
       fixed: "none",
-      align: 'left',
+      align: 'center',
       width: 0,
       id: '2'
     },
@@ -575,7 +575,7 @@ export const basicComponents = [{
       filedName: 'comInputField103',
       sortable: false,
       fixed: "none",
-      align: 'left',
+      align: 'center',
       width: 0,
       id: '3'
     },
@@ -584,7 +584,7 @@ export const basicComponents = [{
       filedName: 'comInputField104',
       sortable: false,
       fixed: "none",
-      align: 'left',
+      align: 'center',
       width: 0,
       id: '4'
     }],
