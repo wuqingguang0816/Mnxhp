@@ -69,7 +69,7 @@ export default {
         }
         if(this.baseForm.includeUppercaseLetters){
           if (!includeUppercaseLetters.test(value)) {
-            callback(new Error('新密码必须包含大写字字母'));
+            callback(new Error('新密码必须包含大写字母'));
           }
         }
         if(this.baseForm.containsCharacters){

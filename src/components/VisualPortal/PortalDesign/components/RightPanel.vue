@@ -241,7 +241,6 @@ export default {
 <style lang="scss" scoped>
 .right-box {
   background: #fff;
-  // border-radius: 4px;
   .center-tabs {
     >>> .el-tabs__header {
       margin-bottom: 0 !important;
@@ -260,6 +259,9 @@ export default {
     .el-select,
     .el-cascader {
       width: 100%;
+    }
+    .el-slider {
+      margin-right: 10px;
     }
   }
   .portal-attr {
