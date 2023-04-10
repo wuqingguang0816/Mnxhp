@@ -373,9 +373,9 @@ export default {
       let dateArray = []
       //获取今天日期
       let myDate = new Date()
-      let hours = date.getHours() < 10 ? '0' + date.getHours() : date.getHours()
-      let minutes = date.getMinutes() < 10 ? '0' + date.getMinutes() : date.getMinutes()
-      let seconds = date.getSeconds() < 10 ? '0' + date.getSeconds() : date.getSeconds()
+      let hours = myDate.getHours() < 10 ? '0' + myDate.getHours() : myDate.getHours()
+      let minutes = myDate.getMinutes() < 10 ? '0' + myDate.getMinutes() : myDate.getMinutes()
+      let seconds = myDate.getSeconds() < 10 ? '0' + myDate.getSeconds() : myDate.getSeconds()
       let today = myDate.getFullYear() + '-' + (myDate.getMonth() + 1) + "-" + myDate.getDate();
       myDate.setDate(myDate.getDate() - num)
       let dateTemp;  // 临时日期数据

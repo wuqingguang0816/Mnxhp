@@ -39,6 +39,14 @@ export default {
       innerValue: this.value,
       pickerOptions: {
         disabledDate: (time) => {
+          if (this.startTime) {
+            let startTime = this.jnpf.toDate(this.startTime, "yyyy-MM-dd 00:00:00")
+            this.startTime = new Date(startTime).getTime()
+          }
+          if (this.endTime) {
+            let endTime = this.jnpf.toDate(this.endTime, "yyyy-MM-dd 00:00:00")
+            this.endTime = new Date(endTime).getTime()
+          }
           if (!this.startTime && !this.endTime) return false
           if (this.endTime) {
             return time.getTime() < this.startTime || time.getTime() > this.endTime
