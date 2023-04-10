@@ -56,10 +56,10 @@
         </template>
       </el-table-column>
     </JNPF-table>
-    <JNPF-table :data="list" ref="dragTable" :hasNO="false" v-else>
-      <el-table-column prop="fullName" label="名称">
+    <JNPF-table :data="list" ref="dragTable" v-else>
+      <el-table-column prop="fullName" label="名称" width="100">
         <template slot-scope="scope">
-          <el-input v-model="scope.row.fullName" placeholder="请输入名称" />
+          <p>{{scope.row.fullName  }}</p>
         </template>
       </el-table-column>
       <el-table-column prop="filedName" label="字段名称">
