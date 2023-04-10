@@ -387,8 +387,9 @@ export default {
       if (item.id == "img" || item.id == "barCode" || item.id == "qrCode") {
         return `&lt;${item.id} width='100' height='100'&gt;&lt;/${item.id}&gt;`;
       }
-      if (item.id == 'isAmountChinese') return `大写金额(${parent})`
-      if (item.id == 'thousands') return `千位分隔符(${parent},2)`
+      if (item.id == 'isAmountChinese') return `<span data-tag='isAmountChinese'>大写金额(${parent})<span>`
+      if (item.id == 'thousands') return `<span data-tag='thousands'>大写金额(${parent},2)<span>`
+
       return `<span data-tag="${parent}.${item.id
         }" class="wk-print-tag-wukong ${this.getSpanColorClass()}" contenteditable="false">{${item.id
         }}</span>`;
