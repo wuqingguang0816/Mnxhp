@@ -359,7 +359,7 @@ export default {
     setSpanEditAttr(node, canEdit) {
       if (node && node.hasAttribute('contenteditable')) {
         if (node.getAttribute('contenteditable') != canEdit) {
-          node.setAttribute('contenteditable', canEdit)
+          node.setAttribute('contenteditable', false)
         }
       }
 
@@ -370,7 +370,7 @@ export default {
             this.setSpanEditAttr(element, canEdit)
           } else if (element.hasAttribute('contenteditable')) {
             if (node.getAttribute('contenteditable') != canEdit) {
-              element.setAttribute('contenteditable', canEdit)
+              element.setAttribute('contenteditable', false)
             }
           }
         }
@@ -388,8 +388,7 @@ export default {
         return `&lt;${item.id} width='100' height='100'&gt;&lt;/${item.id}&gt;`;
       }
       if (item.id == 'isAmountChinese') return `<span data-tag='isAmountChinese'>大写金额(${parent})<span>`
-      if (item.id == 'thousands') return `<span data-tag='thousands'>大写金额(${parent},2)<span>`
-
+      if (item.id == 'thousands') return `<span data-tag='thousands'>千位分隔符(${parent},2)<span>`
       return `<span data-tag="${parent}.${item.id
         }" class="wk-print-tag-wukong ${this.getSpanColorClass()}" contenteditable="false">{${item.id
         }}</span>`;
