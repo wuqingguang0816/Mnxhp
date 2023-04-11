@@ -47,6 +47,7 @@ export default {
   },
   computed: {},
   created() {
+    if (!this.innerValue && this.isAmountChinese) this.innerValue = 0
     this.amountChinese(this.innerValue)
     this.thousandSeparator()
   },
@@ -55,14 +56,13 @@ export default {
   methods: {
     thousandSeparator() {
       if (this.thousands) {
-        this.innerValue = parseFloat(this.innerValue).toLocaleString('zh', {
+        this.innerValue = this.innerValue.toLocaleString('zh', {
           minimumFractionDigits: this.precision,
           maximumFractionDigits: this.precision
         })
       } else {
         this.innerValue = this.innerValue
       }
-
       return this.innerValue
     },
     amountChinese(val) {

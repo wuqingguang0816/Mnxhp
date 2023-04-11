@@ -173,7 +173,7 @@ export default {
           if (config.dataType === 'dictionary') {
             if (!config.dictionaryType) return
             getDictionaryDataSelector(config.dictionaryType).then(res => {
-              isTreeSelect ? cur.options = res.data.list : cur.__slot__.options = res.data.list
+              cur.options = res.data.list
             })
           }
           if (config.dataType === 'dynamic') {
@@ -184,9 +184,9 @@ export default {
             getDataInterfaceRes(config.propsUrl, query).then(res => {
               let realData = res.data
               if (Array.isArray(realData)) {
-                isTreeSelect ? cur.options = realData : cur.__slot__.options = realData
+                cur.options = realData
               } else {
-                isTreeSelect ? cur.options = [] : cur.__slot__.options = []
+                cur.options = []
               }
             })
           }
@@ -489,8 +489,7 @@ export default {
       for (let i = 0; i < this.tableData.length; i++) {
         if (this.tableData[i].__vModel__ === prop) {
           let item = this.tableData[i]
-          let isTreeSelect = item.__config__.jnpfKey === 'treeSelect' || item.__config__.jnpfKey === 'cascader'
-          isTreeSelect ? res = item.options || [] : res = item.__slot__.options || []
+          res = item.options || []
           break
         }
       }
@@ -545,7 +544,7 @@ export default {
             let _value = []
             outer: for (let i = 0; i < params[0].length; i++) {
               inner: for (let j = 0; j < options.length; j++) {
-                if (params[0][i] === options[j][data.config.__config__.props.value]) {
+                if (params[0][i] === options[j][data.config.props.props.value]) {
                   _value.push(options[j])
                   break inner
                 }
@@ -555,7 +554,7 @@ export default {
           } else {
             let _value = {}
             for (let i = 0; i < options.length; i++) {
-              if (params[0] === options[i][data.config.__config__.props.value]) {
+              if (params[0] === options[i][data.config.props.props.value]) {
                 _value = options[i]
                 break
               }
