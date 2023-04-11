@@ -116,7 +116,11 @@ export default {
 </script>
 <style lang="scss" scoped>
 .rankList-box-body {
+  margin: 0 10px;
   height: 100%;
+  >>> .el-table tr:last-child td {
+    border-bottom: unset;
+  }
   .rank-box {
     .rank-box-span {
       display: inline-block;

@@ -215,11 +215,13 @@ export default {
     >>> .el-timeline-item:nth-of-type(even) {
       .el-timeline-item__wrapper {
         top: 40px;
+        padding-left: unset;
       }
     }
     >>> .el-timeline-item:nth-of-type(odd) {
       .el-timeline-item__wrapper {
         top: -24px;
+        padding-left: unset;
       }
     }
   }
@@ -228,11 +230,13 @@ export default {
     >>> .el-timeline-item:nth-of-type(even) {
       .el-timeline-item__wrapper {
         top: -24px;
+        padding-left: unset;
       }
     }
     >>> .el-timeline-item:nth-of-type(odd) {
       .el-timeline-item__wrapper {
         top: 40px;
+        padding-left: unset;
       }
     }
   }
