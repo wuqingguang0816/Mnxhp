@@ -114,7 +114,7 @@
                     v-if="activeData.option.showName">{{it.fullName}}:</span><span>{{item[it.filedName]}}</span>
                 </div>
               </template>
-              <el-divider class="divider-margin "></el-divider>
+              <el-divider class="divider-margin" v-if="i<defaultValue.length-1"></el-divider>
             </div>
           </div>
         </template>
