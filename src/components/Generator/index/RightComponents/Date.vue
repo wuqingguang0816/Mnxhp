@@ -40,13 +40,13 @@
             :value="item.value" />
         </el-select>
       </el-form-item>
-      <el-form-item label="" v-if="activeData.__config__.startTimeType==1">
+      <el-form-item class="spacing" label="" v-if="activeData.__config__.startTimeType==1">
         <el-date-picker v-model="activeData.__config__.startTimeValue" :type="activeData.type"
           placeholder="请选择时间" :value-format="activeData['value-format']"
           :format="activeData.format">
         </el-date-picker>
       </el-form-item>
-      <el-form-item label=""
+      <el-form-item label="" class="spacing"
         v-else-if="activeData.__config__.startTimeType==4 ||activeData.__config__.startTimeType==5">
         <el-input type="number" v-model="activeData.__config__.startTimeValue" placeholder="请输入"
           min="1">
@@ -57,7 +57,7 @@
           </el-select>
         </el-input>
       </el-form-item>
-      <el-form-item label="" v-else-if="activeData.__config__.startTimeType==2">
+      <el-form-item label="" class="spacing" v-else-if="activeData.__config__.startTimeType==2">
         <el-select v-model="activeData.__config__.startRelationField" placeholder="请选择关联日期字段"
           filterable>
           <el-option v-for="(item,i) in formFieldsOptions" :key="i" :label="item.realLabel"
@@ -76,13 +76,13 @@
             :value="item.value" />
         </el-select>
       </el-form-item>
-      <el-form-item label="" v-if="activeData.__config__.endTimeType==1">
+      <el-form-item class="spacing" label="" v-if="activeData.__config__.endTimeType==1">
         <el-date-picker v-model="activeData.__config__.endTimeValue" :type="activeData.type"
           placeholder="请选择时间" :value-format="activeData['value-format']"
           :format="activeData.format">
         </el-date-picker>
       </el-form-item>
-      <el-form-item label=""
+      <el-form-item label="" class="spacing"
         v-else-if="activeData.__config__.endTimeType==4 ||activeData.__config__.endTimeType==5">
         <el-input type="number" v-model="activeData.__config__.endTimeValue" placeholder="请输入"
           min="1">
@@ -93,7 +93,7 @@
           </el-select>
         </el-input>
       </el-form-item>
-      <el-form-item label="" v-else-if="activeData.__config__.endTimeType==2">
+      <el-form-item class="spacing" label="" v-else-if="activeData.__config__.endTimeType==2">
         <el-select v-model="activeData.__config__.endRelationField" placeholder="请选择关联日期字段"
           filterable>
           <el-option v-for="(item,i) in formFieldsOptions" :key="i" :label="item.realLabel"
@@ -510,3 +510,10 @@ export default {
   }
 }
 </script>
+<style lang="scss" scoped>
+.spacing {
+  >>> .el-form-item__content {
+    margin-top: -10px;
+  }
+}
+</style>
