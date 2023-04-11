@@ -10,12 +10,12 @@
           </template>
           <template v-else-if="useDateList.indexOf(item.__config__.jnpfKey)>-1">
             <el-date-picker v-model="item.value" value-format="timestamp" format="yyyy-MM-dd"
-              start-placeholder="开始日期" end-placeholder="结束日期" class="item" type="daterange"
-              clearable />
+              @change="changeValue" start-placeholder="开始日期" end-placeholder="结束日期" class="item"
+              type="daterange" clearable />
           </template>
           <template v-else-if="useSelectList.indexOf(item.__config__.jnpfKey)>-1">
             <el-select v-model="item.value" :placeholder="'请选择'+item.__config__.label" clearable
-              filterable class="item" :multiple="item.searchMultiple">
+              @change="changeValue" filterable class="item" :multiple="item.searchMultiple">
               <el-option :label="oItem[item.__config__.props.label]"
                 v-for="(oItem, i) in item.__slot__.options"
                 :value="oItem[item.__config__.props.value]" :key="i"></el-option>
