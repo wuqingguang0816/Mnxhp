@@ -4,11 +4,6 @@
       <el-input v-model="activeData.__config__.label" placeholder="请输入控件标题" />
     </el-form-item>
     <el-form-item label="标题提示">
-      <span slot="label">标题提示
-        <el-tooltip placement="top" content='1111'>
-          <a class='el-icon-warning-outline'></a>
-        </el-tooltip>
-      </span>
       <el-input type="textarea" :rows="3" v-model="activeData.__config__.tipLabel"
         placeholder="请输入标题提示" />
     </el-form-item>

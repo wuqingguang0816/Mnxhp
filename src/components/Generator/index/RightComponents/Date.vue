@@ -200,14 +200,14 @@ export default {
     },
     'activeData.__config__.startTimeRule'(val) {
       if (!val) {
-        this.activeData.startRelationField = ''
+        this.activeData.__config__.__vModel__startRelationField = ''
         this.activeData.startTime = ''
         this.activeData.__config__.startTimeValue = ''
       }
     },
     'activeData.__config__.endTimeRule'(val) {
       if (!val) {
-        this.activeData.endRelationField = ''
+        this.activeData.__config__.endRelationField = ''
         this.activeData.endTime = ''
         this.activeData.__config__.endTimeValue = ''
       }
@@ -257,14 +257,14 @@ export default {
   methods: {
     endTimeRuleChange() {
       if (!this.activeData.__config__.endTimeRule) {
-        return this.activeData.endRelationField = ''
+        return this.activeData.__config__.endRelationField = ''
       } else {
         return this.activeData.__config__.endTimeType = 1
       }
     },
     startTimeRuleChange() {
       if (!this.activeData.__config__.startTimeRule) {
-        return this.activeData.startRelationField = ''
+        return this.activeData.__config__.startRelationField = ''
       } else {
         return this.activeData.__config__.startTimeType = 1
       }
@@ -461,7 +461,7 @@ export default {
     },
     startType(val) {
       this.activeData.startTime = null
-      this.activeData.startRelationField = ''
+      this.activeData.__config__.startRelationField = ''
       if (val == 3) {
         this.activeData.__config__.startTimeValue = new Date().getTime()
         this.activeData.startTime = this.activeData.__config__.startTimeValue
@@ -477,7 +477,7 @@ export default {
     },
     endType(val) {
       this.activeData.endTime = null
-      this.activeData.endRelationField = ''
+      this.activeData.__config__.endRelationField = ''
       if (val == 3) {
         this.activeData.__config__.endTimeValue = new Date().getTime()
         this.activeData.endTime = this.activeData.__config__.endTimeValue
