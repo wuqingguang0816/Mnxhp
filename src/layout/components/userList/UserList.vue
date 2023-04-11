@@ -398,7 +398,7 @@ export default {
     .userList-item {
       position: relative;
       display: block;
-      padding: 0 20px;
+      padding: 0 10px;
       background-color: #fff;
       border-bottom: 1px solid #f5f7f9;
       height: 60px;
