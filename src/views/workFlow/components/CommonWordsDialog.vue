@@ -1,14 +1,9 @@
 <template>
   <div>
-    <el-dialog title="选择审批常用语" :close-on-click-modal="false" width='500px' :visible.sync="visible"
-      class="JNPF-dialog JNPF-dialog_center table-dialog" lock-scroll append-to-body>
-      <JNPF-table :data="list" :border="false" @row-click="rowClick" :hasNO="false"
+    <el-popover placement="bottom-start" width="500" trigger="manual" ref="popover"
+      v-model="visible" class="popover-container">
+      <JNPF-table :data="list" class="table" :border="false" @row-click="rowClick" :hasNO="false"
         :show-header='false'>
-        <el-table-column width="35">
-          <template slot-scope="scope">
-            <el-radio :label="scope.row.id" v-model="checked">&nbsp;</el-radio>
-          </template>
-        </el-table-column>
         <el-table-column label="字段" prop="commonWordsText" align="left">
         </el-table-column>
         <el-table-column label="操作" width="100">
@@ -22,7 +17,7 @@
         </el-table-column>
       </JNPF-table>
       <div class="table-actions" @click="addOrUpdateHandle()">
-        <el-button type="text" icon="el-icon-plus">添加审批常用语</el-button>
+        <el-button type="text" icon="el-icon-plus">新 增</el-button>
       </div>
       <span slot="footer" class="dialog-footer">
         <el-button @click="visible = false">{{$t('common.cancelButton')}}</el-button>
@@ -30,7 +25,9 @@
           {{$t('common.confirmButton')}}
         </el-button>
       </span>
-    </el-dialog>
+      <el-button slot="reference" type="text" @click="openDialog"
+        icon="el-icon-plus">常用语</el-button>
+    </el-popover>
     <el-dialog :title="!this.dataForm.id?'新增审批常用语':'编辑审批常用语'" :close-on-click-modal="false"
       width='600px' :visible.sync="commonWordsVisible" class="JNPF-dialog JNPF-dialog_center"
       @close='cancel()' lock-scroll append-to-body>
@@ -108,7 +105,7 @@ export default {
   computed: {
   },
   methods: {
-    init() {
+    openDialog() {
       this.visible = true
       this.initData()
     },
@@ -128,7 +125,6 @@ export default {
       })
     },
     select() {
-      if (!this.checked) return this.$message.warning("请选择一条数据")
       this.$emit('input', this.checked)
       this.$emit('change', this.checkedRow)
       this.visible = false
@@ -145,7 +141,7 @@ export default {
       this.commonWordsVisible = false
       this.checked = ''
       this.checkedRow = {}
-      this.initData()
+      this.openDialog()
     },
     clear() {
       this.checked = ''
@@ -160,6 +156,7 @@ export default {
     rowClick(row) {
       this.checked = row.id
       this.checkedRow = row
+      this.select()
     },
     handleDel(id) {
       this.$confirm(this.$t('common.delTip'), this.$t('common.tipTitle'), {
@@ -173,7 +170,7 @@ export default {
             onClose: () => {
               this.checked = ''
               this.checkedRow = {}
-              this.initData()
+              this.openDialog()
             }
           })
         })
@@ -210,7 +207,7 @@ export default {
                   this.dataFormBtnLoading = false
                   this.checked = ''
                   this.checkedRow = {}
-                  this.initData()
+                  this.openDialog()
                 }
               })
             }
@@ -227,21 +224,10 @@ export default {
 </script>
 <style lang="scss" scoped>
 .outline {
-  font-size: 22px;
+  font-size: 18px;
 }
-.table-dialog {
-  >>> .el-dialog__body {
-    height: 30vh;
-    padding: 0 !important;
-    display: flex;
-    flex-direction: column;
-    overflow: hidden;
-    .JNPF-common-search-box {
-      margin-bottom: 0;
-      .JNPF-common-search-box-right {
-        padding: 10px 10px 0 0;
-      }
-    }
-  }
+.table {
+  height: 219px;
+  overflow: auto;
 }
 </style>
