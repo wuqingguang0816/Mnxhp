@@ -2682,5 +2682,5 @@ textarea.el-textarea__inner {
 }
 
 .el-autocomplete-suggestion {
-  width: unset !important;
+  min-width: 180px !important;
 }
