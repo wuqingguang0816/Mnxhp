@@ -12,7 +12,7 @@
         background:activeData.option.headerBgColor,color:activeData.option.headerFontColor,
         'font-weight':activeData.option.headerFontWeight?'bolder':'normal'}"
             :cell-style="tableRowClassName" :default-sort="{prop: 'date', order: 'descending'}"
-            style="height: 100%;">
+            :class="!activeData.border?'tableList':''">
             <el-table-column type="index" width="50" v-if="activeData.option.tableIndex" label="序号"
               fixed='left' align="center" />
             <template v-for="(item, i) in list">
@@ -49,7 +49,7 @@
                   {{item[list[1].filedName]}}
                 </div>
               </div>
-              <el-divider class="divider-margin "></el-divider>
+              <el-divider class="divider-margin" v-if="i<defaultValue.length-1"></el-divider>
             </a>
           </template>
           <div class="portal-common-noData" v-else>
@@ -91,7 +91,7 @@
                     {{item[list[2].filedName]}}
                   </div>
                 </div>
-                <el-divider class="divider-margin "></el-divider>
+                <el-divider class="divider-margin" v-if="i<defaultValue.length-1"></el-divider>
               </el-col>
             </template>
           </template>
@@ -255,6 +255,12 @@ export default {
         text-align: right;
       }
     }
+  }
+}
+.tableList {
+  height: 100%;
+  >>> .el-table tr:last-child td {
+    border-bottom: unset;
   }
 }
 .name {
