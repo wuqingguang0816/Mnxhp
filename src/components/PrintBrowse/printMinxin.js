@@ -177,11 +177,18 @@ const printOptionApi = {
         }
       })
     },
-    getThousands(value, place = 0) {
+    getThousands(value, place) {
+      place = place ? place : this.getPlace(value)
       return parseFloat(value).toLocaleString('zh', {
         minimumFractionDigits: place,
         maximumFractionDigits: place
       })
+    },
+    getPlace(value) {
+      if (!value || value.toString().indexOf(".") == -1) return 0
+      var index = value.toString().indexOf(".") + 1;
+      var count = value.toString().length - index;
+      return count
     },
     replaceValue(mainData) {
       let template = JSON.parse(JSON.stringify(this.printTemplate))
