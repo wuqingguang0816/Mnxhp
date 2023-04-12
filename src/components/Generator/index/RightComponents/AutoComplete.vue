@@ -75,6 +75,7 @@ export default {
   computed: {
     formFieldsOptions() {
       let list = []
+      list.push({ realVModel: '@keyword', realLabel: '@keyword', jnpfKey: '' })
       const loop = (data, parent) => {
         if (!data) return
         if (data.__config__ && this.isIncludesTable(data) && data.__config__.children && Array.isArray(data.__config__.children)) {
@@ -91,7 +92,6 @@ export default {
         }
       }
       loop(getDrawingList())
-      list.push({ realVModel: '@keyword', realLabel: '@keyword', jnpfKey: '' })
       return list
     }
   },

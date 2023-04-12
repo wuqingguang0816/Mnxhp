@@ -15,7 +15,7 @@ export default {
   components: {},
   props: {
     value: {
-      type: Number,
+      type: [Number, String],
       default: undefined
     },
     thousands: {
@@ -47,7 +47,6 @@ export default {
   },
   computed: {},
   created() {
-    if (!this.innerValue) this.innerValue = 0
     this.amountChinese(this.innerValue)
     this.thousandSeparator()
   },
