@@ -7,7 +7,7 @@
         <el-input v-model="dataForm.field" placeholder="参数名称" />
       </el-form-item>
       <el-form-item label="参数类型" prop="dataType">
-        <el-select v-model="dataForm.dataType" placeholder="请选择参数类型">
+        <el-select v-model="dataForm.dataType" placeholder="请选择参数类型" filterable>
           <el-option v-for="item in options" :key="item.value" :label="item.label"
             :value="item.value" />
         </el-select>

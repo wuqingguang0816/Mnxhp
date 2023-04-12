@@ -11,7 +11,8 @@
           </el-col>
           <el-col :span="6">
             <el-form-item label="消息来源">
-              <el-select v-model="listQuery.messageSource" placeholder="选择消息来源" clearable>
+              <el-select v-model="listQuery.messageSource" placeholder="选择消息来源" clearable
+                filterable>
                 <el-option v-for="(item,index) in messageSourceList" :key="index"
                   :label="item.fullName" :value="item.enCode">
                 </el-option>
@@ -20,7 +21,7 @@
           </el-col>
           <el-col :span="6">
             <el-form-item label="模板类型">
-              <el-select v-model="listQuery.templateType" placeholder="选择模板类型" clearable>
+              <el-select v-model="listQuery.templateType" placeholder="选择模板类型" clearable filterable>
                 <el-option v-for="(item,index) in templateTypeList" :key="index"
                   :label="item.fullName" :value="item.enCode">
                 </el-option>
@@ -30,7 +31,7 @@
           <template v-if="showAll">
             <el-col :span="6">
               <el-form-item label="状态">
-                <el-select v-model="listQuery.enabledMark" placeholder="选择状态" clearable>
+                <el-select v-model="listQuery.enabledMark" placeholder="选择状态" clearable filterable>
                   <el-option v-for="(item,index) in enabledMarkList" :key="index"
                     :label="item.fullName" :value="item.enCode">
                   </el-option>

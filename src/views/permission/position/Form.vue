@@ -14,7 +14,7 @@
         <el-input v-model="dataForm.enCode" placeholder="输入编码" />
       </el-form-item>
       <el-form-item label="岗位类型" prop="type">
-        <el-select v-model="dataForm.type" placeholder="请选择类型">
+        <el-select v-model="dataForm.type" placeholder="请选择类型" filterable>
           <el-option v-for="item in typeOptions" :key="item.enCode" :label="item.fullName"
             :value="item.enCode">
           </el-option>

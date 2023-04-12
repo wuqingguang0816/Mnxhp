@@ -35,7 +35,7 @@
               </el-input>
             </el-form-item>
             <el-form-item label="模板分类" prop="category">
-              <el-select v-model="dataForm.category" placeholder="选择分类">
+              <el-select v-model="dataForm.category" placeholder="选择分类" filterable>
                 <el-option :key="item.id" :label="item.fullName" :value="item.enCode"
                   v-for="item in categoryList" />
               </el-select>
@@ -89,9 +89,8 @@
       </el-row>
       <template v-if="activeStep==1 && showPrint">
         <print-templater ref="printTemplater" :treeData="treeData" v-model="dataForm.printTemplate"
-          :pageParam="pageParam" 
-          @pageParamInit="pageParamInit"
-          @pageParamChange="pageParamChange" :type="dataForm.type" />
+          :pageParam="pageParam" @pageParamInit="pageParamInit" @pageParamChange="pageParamChange"
+          :type="dataForm.type" />
       </template>
     </div>
   </el-dialog>
@@ -155,14 +154,14 @@ export default {
         ml: "10",
         mr: "10",
         type: "2",
-        width :210,
-        height : 297,
+        width: 210,
+        height: 297,
         direction: "纵向"
       },
     }
   },
   methods: {
-    pageParamInit(e){
+    pageParamInit(e) {
       this.pageParam = e
     },
     pageParamChange(pageParam) {

@@ -33,7 +33,7 @@
               <el-input v-model="dataForm.enCode" placeholder="流程编码" maxlength="50"></el-input>
             </el-form-item>
             <el-form-item label="流程分类" prop="category">
-              <el-select v-model="dataForm.category" placeholder="选择分类">
+              <el-select v-model="dataForm.category" placeholder="选择分类" filterable>
                 <el-option :key="item.id" :label="item.fullName" :value="item.id"
                   v-for="item in categoryList" />
               </el-select>

@@ -19,7 +19,7 @@
           <el-table-column prop="title" label="系列" />
           <el-table-column prop="type" label="类型">
             <template slot-scope="scope">
-              <el-select v-model="scope.row.type" placeholder="请选择分格类型">
+              <el-select v-model="scope.row.type" placeholder="请选择分格类型" filterable>
                 <el-option v-for="(item, index) in barTypeList" :key="index" :label="item.label"
                   :value="item.value" />
               </el-select>

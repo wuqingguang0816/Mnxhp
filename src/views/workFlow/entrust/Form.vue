@@ -14,7 +14,7 @@
         <user-select v-model="dataForm.toUserId" placeholder="选择受委托人" @change="onChange" />
       </jnpf-form-tip-item>
       <jnpf-form-tip-item label="委托类型" prop="type">
-        <el-select v-model="dataForm.type" placeholder="请选择">
+        <el-select v-model="dataForm.type" placeholder="请选择" filterable>
           <el-option v-for="item in typeOptions" :key="item.value" :label="item.label"
             :value="item.value">
           </el-option>

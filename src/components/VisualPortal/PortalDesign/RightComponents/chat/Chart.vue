@@ -2,7 +2,7 @@
   <el-collapse-item :title="getTitle()" name="1">
     <jnpf-form-tip-item label="风格类型" :tip-label="getTipLabel()"
       v-if="!noStyleTypeList.includes(activeData.jnpfKey)">
-      <el-select v-model="activeData.option.styleType" placeholder="请选择风格类型"
+      <el-select v-model="activeData.option.styleType" placeholder="请选择风格类型" filterable
         @change="styleTypeChange">
         <el-option v-for="(item, index) in styleTypeOptions" :key="index" :label="item.label"
           :value="item.value" />
@@ -74,7 +74,7 @@
     </template>
     <template v-if="activeData.jnpfKey == 'timeAxis'">
       <jnpf-form-tip-item label="标签布局" tip-label="APP不支持所有交错类型，默认显示轴右侧">
-        <el-select v-model="activeData.option.layout" placeholder="请选择风格类型">
+        <el-select v-model="activeData.option.layout" placeholder="请选择风格类型" filterable>
           <el-option v-for="(item, index) in layoutStyleList" :key="index" :label="item.label"
             :value="item.value" />
         </el-select>
@@ -191,7 +191,7 @@
       <refresh v-if="activeData.dataType==='dynamic'&&activeData.propsApi"
         :refresh="activeData.refresh" />
       <el-form-item label="填充方式">
-        <el-select v-model="activeData.option.imageFillStyle" placeholder="请选择风格类型">
+        <el-select v-model="activeData.option.imageFillStyle" placeholder="请选择风格类型" filterable>
           <el-option v-for="(item, index) in fillStyleList" :key="index" :label="item.label"
             :value="item.value" />
         </el-select>
@@ -251,7 +251,7 @@
       <CarouselData ref="carouselData" :menuList="menuList" :appMenuList="appMenuList"
         :showType="showType" v-if="carouselDataVisible" @refresh="refresh" />
       <el-form-item label="填充方式">
-        <el-select v-model="activeData.option.imageFillStyle" placeholder="请选择风格类型">
+        <el-select v-model="activeData.option.imageFillStyle" placeholder="请选择风格类型" filterable>
           <el-option v-for="(item, index) in fillStyleList" :key="index" :label="item.label"
             :value="item.value" />
         </el-select>
@@ -306,7 +306,7 @@
     <template v-if="activeData.jnpfKey == 'todo'">
       <template v-if="showType=='app'">
         <el-form-item label="风格类型">
-          <el-select v-model="activeData.option.styleType" placeholder="请选择风格类型">
+          <el-select v-model="activeData.option.styleType" placeholder="请选择风格类型" filterable>
             <el-option v-for="(item, index) in appTodoStyleList" :key="index" :label="item.label"
               :value="item.value" />
           </el-select>
@@ -362,7 +362,7 @@
     <template v-if="activeData.jnpfKey == 'commonFunc'">
       <template v-if="showType=='app'">
         <el-form-item label="风格类型">
-          <el-select v-model="activeData.option.appStyleType" placeholder="请选择风格类型">
+          <el-select v-model="activeData.option.appStyleType" placeholder="请选择风格类型" filterable>
             <el-option v-for="(item, index) in appTodoStyleList" :key="index" :label="item.label"
               :value="item.value" />
           </el-select>
@@ -413,7 +413,7 @@
     <template v-if="activeData.jnpfKey == 'dataBoard'">
       <template v-if="showType=='app'">
         <el-form-item label="风格类型">
-          <el-select v-model="activeData.option.appStyleType" placeholder="请选择风格类型">
+          <el-select v-model="activeData.option.appStyleType" placeholder="请选择风格类型" filterable>
             <el-option v-for="(item, index) in appTodoStyleList" :key="index" :label="item.label"
               :value="item.value" />
           </el-select>

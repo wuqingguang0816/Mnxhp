@@ -10,7 +10,8 @@
         <el-input v-model="dataForm.enCode" placeholder="请输入编码" clearable />
       </jnpf-form-tip-item>
       <jnpf-form-tip-item label="类型" prop="webhookType">
-        <el-select v-model="dataForm.webhookType" placeholder="请选择类型" clearable @change="change">
+        <el-select v-model="dataForm.webhookType" placeholder="请选择类型" clearable @change="change"
+          filterable>
           <el-option v-for="item in webhookList" :label="item.fullName" :value="item.enCode"
             :key="item.enCode" />
         </el-select>
@@ -20,7 +21,7 @@
       </jnpf-form-tip-item>
       <jnpf-form-tip-item label="认证类型" prop="approveType">
         <el-select v-model="dataForm.approveType" placeholder="请选择认证类型" clearable
-          :disabled="dataForm.webhookType ==2 ? true : false">
+          :disabled="dataForm.webhookType ==2 ? true : false" filterable>
           <el-option v-for="item in approveTypeList" :label="item.fullName" :value="item.enCode"
             :key="item.enCode" />
         </el-select>

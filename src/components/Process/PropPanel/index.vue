@@ -211,7 +211,7 @@
                     从目标服务中获取子流程发起人</div>
                   <el-form-item label="发起者的" style="margin-bottom:0!important;"
                     v-if="subFlowForm.initiateType === 1">
-                    <el-select v-model="subFlowForm.managerLevel">
+                    <el-select v-model="subFlowForm.managerLevel" filterable>
                       <el-option v-for="item in 10" :key="item"
                         :label="item===1?'直接主管':'第'+item+'级主管'" :value="item">
                       </el-option>
@@ -219,7 +219,7 @@
                   </el-form-item>
                   <el-form-item label="发起者的" style="margin-bottom:0!important;"
                     v-if="subFlowForm.initiateType === 2">
-                    <el-select v-model="subFlowForm.departmentLevel">
+                    <el-select v-model="subFlowForm.departmentLevel" filterable>
                       <el-option v-for="item in 10" :key="item" :label="'第'+item+'级部门主管'"
                         :value="item">
                       </el-option>
@@ -237,7 +237,7 @@
                         <el-option :value="5" label="分组"></el-option>
                       </el-select>
                       <el-select v-model="subFlowForm.formField" placeholder="请选择字段"
-                        class="form-field">
+                        class="form-field" filterable>
                         <el-option v-for="item in usedFormItems" :key="item.__vModel__"
                           :label="item.__config__.label" :value="item.__vModel__">
                         </el-option>
@@ -767,7 +767,7 @@
                   </el-tooltip>
                 </div>
                 <el-select class="form-item-content" v-model="startForm.waitMsgConfig.on"
-                  placeholder="请选择">
+                  placeholder="请选择" filterable>
                   <el-option v-for="item in noticeOptionsData" :key="item.value" :label="item.label"
                     :value="item.value" />
                 </el-select>
@@ -1510,7 +1510,7 @@
                         <a class="el-icon-warning-outline"></a>
                       </el-tooltip>
                     </div>
-                    <el-select v-model="approverForm.extraCopyRule">
+                    <el-select v-model="approverForm.extraCopyRule" filterable>
                       <el-option v-for="(item,i) in extraRuleOptions" :key="i"
                         :label="item.value==1?'无抄送人范围':item.label" :value="item.value" />
                     </el-select>
@@ -1908,7 +1908,7 @@
                   </el-tooltip>
                 </div>
                 <el-select class="form-item-content" v-model="approverForm.approveMsgConfig.on"
-                  placeholder="请选择">
+                  placeholder="请选择" filterable>
                   <el-option v-for="item in nodeNoticeOptionsData" :key="item.value"
                     :label="item.label" :value="item.value" />
                 </el-select>
@@ -1965,7 +1965,7 @@
                   </el-tooltip>
                 </div>
                 <el-select class="form-item-content" v-model="approverForm.rejectMsgConfig.on"
-                  placeholder="请选择">
+                  placeholder="请选择" filterable>
                   <el-option v-for="item in nodeNoticeOptionsData" :key="item.value"
                     :label="item.label" :value="item.value" />
                 </el-select>
@@ -2022,7 +2022,7 @@
                   </el-tooltip>
                 </div>
                 <el-select class="form-item-content" v-model="approverForm.copyMsgConfig.on"
-                  placeholder="请选择">
+                  placeholder="请选择" filterable>
                   <el-option v-for="item in nodeNoticeOptionsData" :key="item.value"
                     :label="item.label" :value="item.value" />
                 </el-select>
@@ -2079,7 +2079,7 @@
                   </el-tooltip>
                 </div>
                 <el-select class="form-item-content" v-model="approverForm.overTimeMsgConfig.on"
-                  placeholder="请选择">
+                  placeholder="请选择" filterable>
                   <el-option v-for="item in nodeNoticeOptionsData" :key="item.value"
                     :label="item.label" :value="item.value" />
                 </el-select>
@@ -2130,7 +2130,7 @@
                   </el-tooltip>
                 </div>
                 <el-select class="form-item-content" v-model="approverForm.noticeMsgConfig.on"
-                  placeholder="请选择">
+                  placeholder="请选择" filterable>
                   <el-option v-for="item in nodeNoticeOptionsData" :key="item.value"
                     :label="item.label" :value="item.value" />
                 </el-select>
@@ -2183,20 +2183,22 @@
               <el-form-item label="限时设置">
                 <div slot="label" class="form-item-label">限时设置</div>
                 <el-select class="form-item-content" v-model="approverForm.timeLimitConfig.on"
-                  placeholder="请选择">
+                  placeholder="请选择" filterable>
                   <el-option v-for="item in nodeNoticeOptions" :key="item.value" :label="item.label"
                     :value="item.value" />
                 </el-select>
               </el-form-item>
               <div class="form-item-content" v-if="approverForm.timeLimitConfig.on===1">
                 <el-form-item label="节点限定时长起始值">
-                  <el-select v-model="approverForm.timeLimitConfig.nodeLimit" placeholder="请选择">
+                  <el-select v-model="approverForm.timeLimitConfig.nodeLimit" placeholder="请选择"
+                    filterable>
                     <el-option v-for="item in overTimeOptions" :key="item.value" :label="item.label"
                       :value="item.value" />
                   </el-select>
                 </el-form-item>
                 <el-form-item label="表单字段" v-if="approverForm.timeLimitConfig.nodeLimit===2">
-                  <el-select v-model="approverForm.timeLimitConfig.formField" placeholder="请选择字段">
+                  <el-select v-model="approverForm.timeLimitConfig.formField" placeholder="请选择字段"
+                    filterable>
                     <el-option v-for="item in usedFormItems" :key="item.__vModel__"
                       :label="item.__config__.label" :value="item.__vModel__">
                     </el-option>
@@ -2217,7 +2219,7 @@
                   </el-tooltip>
                 </div>
                 <el-select class="form-item-content" v-model="approverForm.overTimeConfig.on"
-                  placeholder="请选择">
+                  placeholder="请选择" filterable>
                   <el-option v-for="item in nodeNoticeOptions" :key="item.value" :label="item.label"
                     :value="item.value" />
                 </el-select>
@@ -2282,7 +2284,7 @@
                   </el-tooltip>
                 </div>
                 <el-select class="form-item-content" v-model="approverForm.noticeConfig.on"
-                  placeholder="请选择">
+                  placeholder="请选择" filterable>
                   <el-option v-for="item in nodeNoticeOptions" :key="item.value" :label="item.label"
                     :value="item.value" />
                 </el-select>

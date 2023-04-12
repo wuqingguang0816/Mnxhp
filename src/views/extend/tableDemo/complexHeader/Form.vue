@@ -15,7 +15,7 @@
         <el-input v-model="dataForm.jackStands" placeholder="立项人" />
       </el-form-item>
       <el-form-item label="项目类型" prop="projectType">
-        <el-select v-model="dataForm.projectType" placeholder="请选择项目类型">
+        <el-select v-model="dataForm.projectType" placeholder="请选择项目类型" filterable>
           <el-option v-for="item in industryTypeList" :key="item.id" :label="item.fullName"
             :value="item.id">
           </el-option>

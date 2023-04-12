@@ -5,7 +5,7 @@
     <el-form ref="dataForm" :model="dataForm" :rules="dataRule" v-loading="formLoading"
       label-width="100px">
       <el-form-item label="所属应用" prop="systemIds">
-        <el-select v-model="dataForm.systemIds" placeholder="请选择" multiple clearable>
+        <el-select v-model="dataForm.systemIds" placeholder="请选择" multiple clearable filterable>
           <el-option v-for="item in systemOptions" :key="item.id" :label="item.fullName"
             :value="item.id">
           </el-option>

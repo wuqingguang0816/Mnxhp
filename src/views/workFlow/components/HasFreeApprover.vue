@@ -18,7 +18,7 @@
       <el-form-item label="分支选择" prop="branchList"
         v-if="branchList.length &&hasFreeApproverForm.freeApproverType===2">
         <el-select v-model="hasFreeApproverForm.branchList" multiple placeholder="请选择审批分支" clearable
-          @change="onBranchChange">
+          @change="onBranchChange" filterable>
           <el-option v-for="item in branchList" :key="item.nodeId" :label="item.nodeName"
             :value="item.nodeId" />
         </el-select>

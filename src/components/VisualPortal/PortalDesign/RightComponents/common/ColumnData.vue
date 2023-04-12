@@ -26,7 +26,7 @@
         </el-table-column>
         <el-table-column prop="align" label="冻结方式">
           <template slot-scope="scope">
-            <el-select v-model="scope.row.fixed" placeholder="请选择">
+            <el-select v-model="scope.row.fixed" placeholder="请选择" filterable>
               <el-option v-for="item in fixedOptions" :key="item.value" :label="item.fullName"
                 :value="item.value">
               </el-option>
@@ -35,7 +35,7 @@
         </el-table-column>
         <el-table-column prop="align" label="对齐方式">
           <template slot-scope="scope">
-            <el-select v-model="scope.row.align" placeholder="请选择">
+            <el-select v-model="scope.row.align" placeholder="请选择" filterable>
               <el-option v-for="item in alignOptions" :key="item.value" :label="item.fullName"
                 :value="item.value">
               </el-option>

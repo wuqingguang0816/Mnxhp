@@ -19,7 +19,7 @@
             <el-col :span="6">
               <el-form-item label="所属流程">
                 <el-select v-model="listQuery.templateId" placeholder="选择所属流程" clearable
-                  @change="onTemplateIdChange">
+                  @change="onTemplateIdChange" filterable>
                   <el-option v-for="item in templateOptions" :key="item.id" :label="item.fullName"
                     :value="item.id" />
                 </el-select>
@@ -28,7 +28,7 @@
             <el-col :span="6">
               <el-form-item label="所属名称">
                 <el-select v-model="listQuery.flowId" placeholder="选择所属名称" clearable
-                  @change="onFlowChange" @visible-change="visibleFlowChange">
+                  @change="onFlowChange" @visible-change="visibleFlowChange" filterable>
                   <el-option v-for="item in flowOptions" :key="item.id" :label="item.fullName"
                     :value="item.id" />
                 </el-select>
@@ -38,7 +38,7 @@
               <el-col :span="6">
                 <el-form-item label="所属节点">
                   <el-select v-model="listQuery.nodeCode" placeholder="选择所属节点" clearable
-                    @visible-change="visibleChange">
+                    @visible-change="visibleChange" filterable>
                     <el-option v-for="item in nodeOptions" :key="item.id" :label="item.fullName"
                       :value="item.id" />
                   </el-select>
@@ -54,7 +54,8 @@
               </el-col>
               <el-col :span="6">
                 <el-form-item label="分类">
-                  <el-select v-model="listQuery.flowCategory" placeholder="选择分类" clearable>
+                  <el-select v-model="listQuery.flowCategory" placeholder="选择分类" clearable
+                    filterable>
                     <el-option v-for="item in categoryList" :key="item.id" :label="item.fullName"
                       :value="item.id">
                     </el-option>

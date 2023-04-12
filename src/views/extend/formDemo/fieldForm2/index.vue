@@ -25,7 +25,7 @@
           </el-checkbox-group>
         </el-form-item>
         <el-form-item label="角色类型">
-          <el-select v-model="dataForm.RoleType" placeholder="请选择类型">
+          <el-select v-model="dataForm.RoleType" placeholder="请选择类型" filterable>
             <el-option v-for="item in options" :key="item.enCode" :label="item.fullName"
               :value="item.enCode">
             </el-option>

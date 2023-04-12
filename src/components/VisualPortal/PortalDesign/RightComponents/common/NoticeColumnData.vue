@@ -9,19 +9,19 @@
           <div style="display: flex;">
             <el-input v-model="scope.row.fullName" placeholder="请输入名称" />
             <el-select v-model="scope.row.classify" multiple placeholder="请选择"
-              style="margin-left: 5px;" v-if="scope.row.filedName == 'classify'">
+              style="margin-left: 5px;" v-if="scope.row.filedName == 'classify'" filterable>
               <el-option v-for="item in classifyOptions" :key="item.value" :label="item.fullName"
                 :value="item.value">
               </el-option>
             </el-select>
             <el-select v-model="scope.row.timeClassify" placeholder="请选择" style="margin-left: 5px;"
-              v-if="scope.row.filedName == 'time'">
+              v-if="scope.row.filedName == 'time'" filterable>
               <el-option v-for="item in timeOptions" :key="item.fullName" :label="item.fullName"
                 :value="item.value">
               </el-option>
             </el-select>
             <el-select v-model="scope.row.userClassify" placeholder="请选择" style="margin-left: 5px;"
-              v-if="scope.row.filedName == 'user'">
+              v-if="scope.row.filedName == 'user'" filterable>
               <el-option v-for="item in userOptions" :key="item.value" :label="item.fullName"
                 :value="item.value">
               </el-option>
@@ -98,7 +98,7 @@
         <el-table-column prop="align" label="冻结方式" v-if="showType == 'pc'" width="110">
           <template slot-scope="scope">
             <el-select v-model="scope.row.fixed" placeholder="请选择"
-              v-if="scope.row.filedName !== 'classify'">
+              v-if="scope.row.filedName !== 'classify'" filterable>
               <el-option v-for="item in fixedOptions" :key="item.value" :label="item.fullName"
                 :value="item.value">
               </el-option>
@@ -108,7 +108,7 @@
         <el-table-column prop="align" label="对齐方式" v-if="showType == 'pc'" width="110">
           <template slot-scope="scope">
             <el-select v-model="scope.row.align" placeholder="请选择"
-              v-if="scope.row.filedName !== 'classify'">
+              v-if="scope.row.filedName !== 'classify'" filterable>
               <el-option v-for="item in alignOptions" :key="item.value" :label="item.fullName"
                 :value="item.value">
               </el-option>

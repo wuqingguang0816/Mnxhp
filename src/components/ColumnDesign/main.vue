@@ -64,7 +64,7 @@
           </el-table-column>
           <el-table-column prop="align" label="冻结" v-if="columnData.childTableStyle!=2">
             <template slot-scope="scope">
-              <el-select v-model="scope.row.fixed" placeholder="请选择"
+              <el-select v-model="scope.row.fixed" placeholder="请选择" filterable
                 :disabled="scope.row.__config__&&scope.row.__config__.isSubTable">
                 <el-option v-for="item in fixedOptions" :key="item" :label="item" :value="item">
                 </el-option>

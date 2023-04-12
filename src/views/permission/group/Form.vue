@@ -10,7 +10,7 @@
         <el-input v-model="dataForm.enCode" placeholder="输入分组编码" />
       </el-form-item>
       <el-form-item label="分组类型" prop="type">
-        <el-select v-model="dataForm.type" placeholder="请选择分组类型">
+        <el-select v-model="dataForm.type" placeholder="请选择分组类型" filterable>
           <el-option v-for="item in typeOptions" :key="item.id" :label="item.fullName"
             :value="item.id">
           </el-option>

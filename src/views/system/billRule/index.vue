@@ -11,7 +11,7 @@
           </el-col>
           <el-col :span="6">
             <el-form-item label="业务分类">
-              <el-select v-model="categoryId" placeholder="请选择业务分类" clearable>
+              <el-select v-model="categoryId" placeholder="请选择业务分类" clearable filterable>
                 <el-option v-for="item in categoryList" :key="item.id" :label="item.fullName"
                   :value="item.id">
                 </el-option>

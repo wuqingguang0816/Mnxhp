@@ -3,7 +3,7 @@
     class="JNPF-dialog JNPF-dialog_center" lock-scroll append-to-body>
     <el-form ref="dataForm" :model="dataForm" label-width="80px" :rules="fromRules">
       <el-form-item label="挂起类型" prop="suspend">
-        <el-select v-model="dataForm.suspend" placeholder="挂起类型">
+        <el-select v-model="dataForm.suspend" placeholder="挂起类型" filterable>
           <el-option v-for="item in suspendOptions" :key="item.value" :label="item.label"
             :value="item.value">
           </el-option>

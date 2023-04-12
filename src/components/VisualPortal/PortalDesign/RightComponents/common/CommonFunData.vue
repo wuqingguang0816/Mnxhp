@@ -31,7 +31,7 @@
           </el-table-column>
           <el-table-column prop="dataLength" label="链接类型" width="160px">
             <template slot-scope="scope">
-              <el-select v-model="scope.row.linkType" placeholder="请选择链接类型"
+              <el-select v-model="scope.row.linkType" placeholder="请选择链接类型" filterable
                 @change="linkTypeChange(scope.$index)" clearable>
                 <el-option v-for="(item, index) in linkTypeList" :key="index" :label="item.label"
                   :value="item.value" />

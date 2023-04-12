@@ -29,7 +29,7 @@
         </el-row>
       </el-form-item>
       <el-form-item label="类型" prop="type">
-        <el-select v-model="dataForm.type" placeholder="请选择类型" @change="changeMenuType">
+        <el-select v-model="dataForm.type" placeholder="请选择类型" @change="changeMenuType" filterable>
           <el-option v-for="item in typeData" :key="item.enCode" :label="item.fullName"
             :value="item.enCode">
           </el-option>

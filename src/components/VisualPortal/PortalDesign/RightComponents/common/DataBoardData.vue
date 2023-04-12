@@ -18,7 +18,7 @@
           <el-table-column prop="dataLength" label="数值类型" width="140px">
             <template slot-scope="scope">
               <el-select v-model="scope.row.dataType" placeholder="请选择数值类型"
-                @change="dataTypeChange(scope.$index)">
+                @change="dataTypeChange(scope.$index)" filterable>
                 <el-option v-for="(item, index) in dataTypeList" :key="index" :label="item.label"
                   :value="item.value" />
               </el-select>
@@ -54,7 +54,7 @@
           </el-table-column>
           <el-table-column prop="dataLength" label="链接类型" width="160px">
             <template slot-scope="scope">
-              <el-select v-model="scope.row.linkType" placeholder="请选择链接类型" clearable>
+              <el-select v-model="scope.row.linkType" placeholder="请选择链接类型" clearable filterable>
                 <el-option v-for="(item, index) in linkTypeList" :key="index" :label="item.label"
                   :value="item.value" />
               </el-select>

@@ -11,7 +11,7 @@
         <el-input v-model="dataForm.fieldName" placeholder="输入说明" maxlength="50" />
       </el-form-item>
       <el-form-item label="类型" prop="dataType">
-        <el-select v-model="dataForm.dataType" placeholder="请选择类型">
+        <el-select v-model="dataForm.dataType" placeholder="请选择类型" filterable>
           <el-option v-for="item in options" :key="item.value" :label="item.label"
             :value="item.value" />
         </el-select>

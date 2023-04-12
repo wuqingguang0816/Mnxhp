@@ -4,7 +4,7 @@
       <template v-if="showType == 'pc'">
         <el-form-item label="链接地址">
           <el-select v-model="activeData.option.linkType" placeholder="请选择链接类型" clearable
-            @change="onLinkTypeChange(1)">
+            @change="onLinkTypeChange(1)" filterable>
             <el-option v-for="(item, index) in linkTypeList" :key="index" :label="item.label"
               :value="item.value" />
           </el-select>
@@ -26,7 +26,7 @@
       <template v-else>
         <el-form-item label="链接地址">
           <el-select v-model="activeData.option.appLinkType" placeholder="请选择链接类型" clearable
-            @change="onLinkTypeChange(1,'app')">
+            @change="onLinkTypeChange(1,'app')" filterable>
             <el-option v-for="(item, index) in linkTypeList" :key="index" :label="item.label"
               :value="item.value" />
           </el-select>
@@ -45,7 +45,7 @@
       <template v-if="showType == 'pc'">
         <el-form-item label="右上角链接">
           <el-select v-model="activeData.card.linkType" placeholder="请选择链接类型" clearable
-            @change="onLinkTypeChange(2)">
+            @change="onLinkTypeChange(2)" filterable>
             <el-option v-for="(item, index) in linkTypeList" :key="index" :label="item.label"
               :value="item.value" />
           </el-select>

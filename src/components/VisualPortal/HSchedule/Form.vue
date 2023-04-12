@@ -5,14 +5,14 @@
       append-to-body>
       <el-form ref="dataForm" :model="dataForm" :rules="dataRule" label-width="100px">
         <el-form-item label="类型" prop="type">
-          <el-select v-model="dataForm.type" placeholder="请选择" clearable>
+          <el-select v-model="dataForm.type" placeholder="请选择" clearable filterable>
             <el-option v-for="item in typeOptions" :key="item.id" :label="item.fullName"
               :value="item.id">
             </el-option>
           </el-select>
         </el-form-item>
         <el-form-item label="紧急程度" prop="urgent">
-          <el-select v-model="dataForm.urgent" placeholder="请选择">
+          <el-select v-model="dataForm.urgent" placeholder="请选择" filterable>
             <el-option v-for="item in urgentList" :key="item.id" :label="item.fullName"
               :value="item.id">
             </el-option>
@@ -71,7 +71,7 @@
             :predefine="['#188ae2', '#35b8e0', '#26bf8c','#f9c851','#ff5b5b', '#5b69bc', '#ff8acc', '#3b3e47','#282828' ]" />
         </el-form-item>
         <el-form-item label="提醒时间" prop="reminderTime">
-          <el-select v-model="dataForm.reminderTime" placeholder="请选择">
+          <el-select v-model="dataForm.reminderTime" placeholder="请选择" filterable>
             <el-option v-for="item in reminderTimeList" :key="item.id" :label="item.fullName"
               :value="item.id">
             </el-option>
@@ -79,7 +79,7 @@
         </el-form-item>
         <template v-if="dataForm.reminderTime!=-2">
           <el-form-item label="提醒方式" prop="reminderType">
-            <el-select v-model="dataForm.reminderType" placeholder="请选择">
+            <el-select v-model="dataForm.reminderType" placeholder="请选择" filterable>
               <el-option v-for="item in remindList" :key="item.id" :label="item.fullName"
                 :value="item.id">
               </el-option>
@@ -91,7 +91,7 @@
           </el-form-item>
         </template>
         <el-form-item label="重复提醒" prop="repetition">
-          <el-select v-model="dataForm.repetition" placeholder="请选择">
+          <el-select v-model="dataForm.repetition" placeholder="请选择" filterable>
             <el-option v-for="item in repeatReminderList" :key="item.id" :label="item.fullName"
               :value="item.id">
             </el-option>

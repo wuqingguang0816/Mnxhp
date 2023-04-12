@@ -503,7 +503,7 @@
             </el-select>
           </el-form-item>
           <el-form-item label="表单宽度" v-if="formConf.popupType==='drawer'">
-            <el-select v-model="formConf.drawerWidth" placeholder="请选择">
+            <el-select v-model="formConf.drawerWidth" placeholder="请选择" filterable>
               <el-option v-for="item in generalWidthOptions" :label="item" :value="item"
                 :key="item" />
             </el-select>

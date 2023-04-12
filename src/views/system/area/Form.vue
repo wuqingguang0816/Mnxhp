@@ -4,7 +4,7 @@
     <el-form ref="dataForm" :model="dataForm" :rules="dataRule" v-loading="formLoading"
       label-width="100px">
       <el-form-item label="区域上级" prop="parentId">
-        <el-select ref="singleTree" v-model="singleSelectTreeVal" clearable
+        <el-select ref="singleTree" v-model="singleSelectTreeVal" clearable filterable
           popper-class="select-tree" value-key="id" @clear="selectTreeClearHandle">
           <el-option :value="singleSelectTreeKey" class="options">
             <el-tree ref="singleSelectTree" :current-node-key="singleSelectTreeKey" :data="treeData"

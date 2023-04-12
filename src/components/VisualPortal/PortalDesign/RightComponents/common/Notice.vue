@@ -3,14 +3,14 @@
     <el-collapse-item title="公告通知设置" name="14">
       <el-form-item label="风格类型" v-if="showType=='pc'">
         <el-select v-model="activeData.option.styleType" placeholder="请选择风格类型"
-          @change="renderKeyChange">
+          @change="renderKeyChange" filterable>
           <el-option v-for="(item, index) in styleTypeOptions" :key="index" :label="item.label"
             :value="item.value" />
         </el-select>
       </el-form-item>
       <el-form-item label="风格类型" v-if="showType=='app'">
         <el-select v-model="activeData.option.styleType" placeholder="请选择风格类型"
-          @change="renderKeyChange">
+          @change="renderKeyChange" filterable>
           <el-option v-for="(item, index) in appStyleTypeOptions" :key="index" :label="item.label"
             :value="item.value" />
         </el-select>

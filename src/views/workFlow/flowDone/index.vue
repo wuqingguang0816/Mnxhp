@@ -30,7 +30,7 @@
             <el-col :span="6">
               <el-form-item label="所属流程">
                 <el-select v-model="templateId" placeholder="选择所属流程" clearable
-                  @change="onTemplateIdChange">
+                  @change="onTemplateIdChange" filterable>
                   <el-option-group v-for="group in flowEngineList" :key="group.id"
                     :label="group.fullName+'【'+group.num+'】'">
                     <el-option v-for="item in group.children" :key="item.id" :label="item.fullName"
@@ -43,7 +43,7 @@
             <el-col :span="6">
               <el-form-item label="所属名称">
                 <el-select v-model="flowId" placeholder="选择所属名称" clearable
-                  @visible-change="visibleFlowChange">
+                  @visible-change="visibleFlowChange" filterable>
                   <el-option v-for="item in flowOptions" :key="item.id" :label="item.fullName"
                     :value="item.id" />
                 </el-select>

@@ -11,7 +11,7 @@
           </el-col>
           <el-col :span="6">
             <el-form-item label="类型">
-              <el-select v-model="webhookType" placeholder="请选择类型" clearable>
+              <el-select v-model="webhookType" placeholder="请选择类型" clearable filterable>
                 <el-option v-for="item in webhookList" :key="item.enCode" :label="item.fullName"
                   :value="item.enCode">
                 </el-option>
@@ -20,7 +20,7 @@
           </el-col>
           <el-col :span="6">
             <el-form-item label="状态">
-              <el-select v-model="enabledMark" placeholder="请选择状态" clearable>
+              <el-select v-model="enabledMark" placeholder="请选择状态" clearable filterable>
                 <el-option v-for="item in categoryList" :key="item.enCode" :label="item.fullName"
                   :value="item.enCode">
                 </el-option>

@@ -30,7 +30,7 @@
           <el-col :span="12">
             <el-form-item label="消息来源" prop="messageSource">
               <el-select v-model="dataForm.messageSource" placeholder="选择消息来源" clearable
-                :disabled="this.dataForm.id?true:false">
+                :disabled="this.dataForm.id?true:false" filterable>
                 <el-option v-for="(item,index) in messageSourceList" :key="index"
                   :label="item.fullName" :value="item.enCode">
                 </el-option>
@@ -132,7 +132,8 @@
                   <el-col :span="12" offset="12"></el-col>
                   <el-col :span="12" v-if="dataForm.messageType == 7">
                     <jnpf-form-tip-item label="跳转方式" prop="wxSkip">
-                      <el-select v-model="dataForm.wxSkip" placeholder="选择跳转方式" clearable>
+                      <el-select v-model="dataForm.wxSkip" placeholder="选择跳转方式" clearable
+                        filterable>
                         <el-option v-for="(item,index) in wxSkipList" :key="index"
                           :label="item.fullName" :value="item.enCode">
                         </el-option>
@@ -176,7 +177,7 @@
                       <el-table-column label="参数">
                         <template slot-scope="scope">
                           <el-select v-model="scope.row.field" placeholder="选择参数" clearable
-                            style=“width:100%”>
+                            style=“width:100%” filterable>
                             <el-option v-for="(item,index) in parameterList" :key="index"
                               :label="item.field" :value="item.field">
                             </el-option>

@@ -12,7 +12,7 @@
       </el-switch>
     </el-form-item>
     <el-form-item label="周第一天">
-      <el-select v-model="activeData.firstDay" placeholder="请选择">
+      <el-select v-model="activeData.firstDay" placeholder="请选择" filterable>
         <el-option v-for="item in firstDayOptions" :key="item.value" :label="item.label"
           :value="item.value">
         </el-option>

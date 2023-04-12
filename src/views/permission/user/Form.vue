@@ -131,7 +131,7 @@
             </el-col>
             <el-col :sm="12" :xs="24">
               <el-form-item label="证件类型" prop="certificatesType">
-                <el-select v-model="dataForm.certificatesType" placeholder="选择证件类型">
+                <el-select v-model="dataForm.certificatesType" placeholder="选择证件类型" filterable>
                   <el-option v-for="item in certificatesTypeTreeData" :key="item.id"
                     :label="item.fullName" :value="item.id" />
                 </el-select>

@@ -62,7 +62,7 @@
             </el-col>
             <el-col :span="12">
               <el-form-item label="证件类型">
-                <el-select v-model="form2.certificatesType" placeholder="请选择类型">
+                <el-select v-model="form2.certificatesType" placeholder="请选择类型" filterable>
                   <el-option v-for="item in certificatesTypeOptions" :key="item.id"
                     :label="item.fullName" :value="item.id">
                   </el-option>
@@ -76,7 +76,7 @@
             </el-col>
             <el-col :span="12">
               <el-form-item label="文化程度">
-                <el-select v-model="form2.education" placeholder="请选择学历">
+                <el-select v-model="form2.education" placeholder="请选择学历" filterable>
                   <el-option v-for="item in educationOptions" :key="item.id" :label="item.fullName"
                     :value="item.id">
                   </el-option>

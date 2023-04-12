@@ -38,21 +38,21 @@
           <el-input v-model="dataForm.fullName" placeholder="输入字段说明" />
         </jnpf-form-tip-item>
         <jnpf-form-tip-item label="字段类型" prop="type">
-          <el-select v-model="dataForm.type" placeholder="请选择" clearable>
+          <el-select v-model="dataForm.type" placeholder="请选择" clearable filterable>
             <el-option v-for="item in typeOptions" :key="item.value" :label="item.label"
               :value="item.value">
             </el-option>
           </el-select>
         </jnpf-form-tip-item>
         <jnpf-form-tip-item label="条件符号" prop="conditionSymbol">
-          <el-select v-model="conditionSymbol" multiple placeholder="请选择">
+          <el-select v-model="conditionSymbol" multiple placeholder="请选择" filterable>
             <el-option v-for="item in conditionSymbolOptions" :key="item.value" :label="item.label"
               :value="item.value">
             </el-option>
           </el-select>
         </jnpf-form-tip-item>
         <jnpf-form-tip-item label="条件内容" prop="conditionText">
-          <el-select v-model="dataForm.conditionText" placeholder="请选择" clearable>
+          <el-select v-model="dataForm.conditionText" placeholder="请选择" clearable filterable>
             <el-option v-for="item in conditionTextOptions" :key="item.value" :label="item.label"
               :value="item.value">
             </el-option>

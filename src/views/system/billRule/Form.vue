@@ -11,7 +11,7 @@
         <el-input v-model="dataForm.enCode" placeholder="业务编码" />
       </el-form-item>
       <el-form-item label="业务分类" prop="category">
-        <el-select v-model="dataForm.category" placeholder="请选择" clearable>
+        <el-select v-model="dataForm.category" placeholder="请选择" clearable filterable>
           <el-option v-for="(item,index) in categoryList" :label="item.fullName" :value="item.id"
             :key="index" />
         </el-select>

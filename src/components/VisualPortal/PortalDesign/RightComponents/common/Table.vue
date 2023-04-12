@@ -40,7 +40,7 @@
     <template v-else>
       <el-form-item label="风格类型">
         <el-select v-model="activeData.option.styleType" placeholder="请选择风格类型"
-          @change="renderKeyChange">
+          @change="renderKeyChange" filterable>
           <el-option v-for="(item, index) in styleTypeOptions" :key="index" :label="item.label"
             :value="item.value" />
         </el-select>

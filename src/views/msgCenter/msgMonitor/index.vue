@@ -29,7 +29,7 @@
           <template v-if="showAll">
             <el-col :span="6">
               <el-form-item label="消息来源">
-                <el-select v-model="messageSource" placeholder="消息来源" clearable>
+                <el-select v-model="messageSource" placeholder="消息来源" clearable filterable>
                   <el-option v-for="(item,index) in messageSourceList" :key="index"
                     :label="item.fullName" :value="item.enCode">
                   </el-option>

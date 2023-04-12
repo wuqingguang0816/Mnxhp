@@ -26,7 +26,7 @@
             </el-col>
             <el-col :span="6">
               <el-form-item label="所属流程">
-                <el-select v-model="flowId" placeholder="选择所属流程">
+                <el-select v-model="flowId" placeholder="选择所属流程" filterable>
                   <el-option v-for="item in templateList" :key="item.id" :label="item.fullName"
                     :value="item.id">
                   </el-option>
