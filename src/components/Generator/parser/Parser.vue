@@ -1,5 +1,6 @@
 <script>
 import { deepClone } from '@/utils'
+import { getDateDay, getLaterData, getBeforeData, getBeforeTime, getLaterTime } from '@/components/Generator/utils/index.js'
 import render from '@/components/Generator/render/render.js'
 import { dyOptionsList } from '@/components/Generator/generator/comConfig'
 import { getDictionaryDataSelector } from '@/api/systemData/dictionary'
@@ -472,6 +473,65 @@ export default {
           if (config.defaultCurrent) {
             config.defaultValue = new Date().getTime()
           }
+          if (config.startTimeRule) {
+            if (config.startTimeType == 1) {
+              cur.startTime = config.startTimeValue
+            } else if (config.startTimeType == 3) {
+              cur.startTime = new Date().getTime()
+            } else if (config.startTimeType == 4) {
+              let previousDate = '';
+              if (config.startTimeTarget == 1 || config.startTimeTarget == 2) {
+                previousDate = getDateDay(config.startTimeTarget, config.startTimeType, config.startTimeValue)
+                cur.startTime = new Date(previousDate).getTime()
+              } else if (config.startTimeTarget == 3) {
+                previousDate = getBeforeData(config.startTimeValue)
+                cur.startTime = new Date(previousDate).getTime()
+              } else {
+                cur.startTime = getBeforeTime(config.startTimeTarget, config.startTimeValue)
+              }
+            } else if (config.startTimeType == 5) {
+              let previousDate = '';
+              if (config.startTimeTarget == 1 || config.startTimeTarget == 2) {
+                previousDate = getDateDay(config.startTimeTarget, config.startTimeType, config.startTimeValue)
+                cur.startTime = new Date(previousDate).getTime()
+              } else if (config.startTimeTarget == 3) {
+                previousDate = getLaterData(config.startTimeValue)
+                cur.startTime = new Date(previousDate).getTime()
+              } else {
+                cur.startTime = getLaterTime(config.startTimeTarget, config.startTimeValue)
+              }
+            }
+          }
+          if (config.endTimeRule) {
+            if (config.endTimeType == 1) {
+              cur.endTime = config.endTimeValue
+            } else if (config.endTimeType == 3) {
+              cur.endTime = new Date().getTime()
+            } else if (config.endTimeType == 4) {
+              let previousDate = '';
+              if (config.endTimeTarget == 1 || config.endTimeTarget == 2) {
+                previousDate = getDateDay(config.endTimeTarget, config.endTimeType, config.endTimeValue)
+                cur.endTime = new Date(previousDate).getTime()
+              } else if (config.endTimeTarget == 3) {
+                previousDate = getBeforeData(config.endTimeValue)
+                cur.endTime = new Date(previousDate).getTime()
+              } else {
+                cur.endTime = getBeforeTime(config.endTimeTarget, config.endTimeValue)
+              }
+            } else if (config.endTimeType == 5) {
+              let previousDate = '';
+              if (config.endTimeTarget == 1 || config.endTimeTarget == 2) {
+                previousDate = getDateDay(config.endTimeTarget, config.endTimeType, config.endTimeValue)
+                cur.endTime = new Date(previousDate).getTime()
+              } else if (config.endTimeTarget == 3) {
+                previousDate = getLaterData(config.endTimeValue)
+                cur.endTime = new Date(previousDate).getTime()
+              } else {
+                cur.endTime = getLaterTime(config.endTimeTarget, config.endTimeValue)
+              }
+            }
+          }
+
           if (cur.__config__.startRelationField) {
             let item = {
               ...cur,
@@ -506,6 +566,36 @@ export default {
         if (config.jnpfKey === 'time') {
           if (config.defaultCurrent) {
             config.defaultValue = this.jnpf.toDate(new Date(), cur.format)
+          }
+          if (config.startTimeRule) {
+            if (config.startTimeType == 1) {
+              cur.startTime = config.startTimeValue
+            } else if (config.startTimeType == 3) {
+              cur.startTime = this.jnpf.toDate(new Date(), cur.format)
+            } else if (config.startTimeType == 4) {
+              let previousDate = '';
+              previousDate = getBeforeTime(config.startTimeTarget, config.startTimeValue)
+              cur.startTime = this.jnpf.toDate(previousDate, cur.format)
+            } else if (config.startTimeType == 5) {
+              let previousDate = '';
+              previousDate = getLaterTime(config.startTimeTarget, config.startTimeValue)
+              cur.startTime = this.jnpf.toDate(previousDate, cur.format)
+            }
+          }
+          if (config.endTimeRule) {
+            if (config.endTimeType == 1) {
+              cur.endTime = config.startTimeValue
+            } else if (config.endTimeType == 3) {
+              cur.endTime = this.jnpf.toDate(new Date(), cur.format)
+            } else if (config.endTimeType == 4) {
+              let previousDate = '';
+              previousDate = getBeforeTime(config.endTimeTarget, config.endTimeValue)
+              cur.endTime = this.jnpf.toDate(previousDate, cur.format)
+            } else if (config.endTimeType == 5) {
+              let previousDate = '';
+              previousDate = getLaterTime(config.endTimeTarget, config.endTimeValue)
+              cur.endTime = this.jnpf.toDate(previousDate, cur.format)
+            }
           }
           if (cur.startRelationField) {
             let item = {
@@ -584,15 +674,11 @@ export default {
                 let endTime = ''
                 if (e.__config__.startTimeType == 2) {
                   startTime = this[this.formConf.formModel][e.__config__.startRelationField] || 0
-                } else if (e.__config__.startTimeType == 3) {
-                  startTime = new Date().getTime()
                 } else {
                   startTime = e.startTime
                 }
                 if (e.__config__.endTimeType == 2) {
                   endTime = this[this.formConf.formModel][e.__config__.endRelationField] || 0
-                } else if (e.__config__.endTimeType == 3) {
-                  endTime = new Date().getTime()
                 } else {
                   endTime = e.endTime
                 }

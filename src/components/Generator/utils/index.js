@@ -326,3 +326,129 @@ export const debounce = (func, gap) => {
     }, gap)
   }
 }
+
+
+
+
+//计算年或者月
+export function getDateDay(Target, type, monthNum) {
+  let date = new Date()
+  let year = date.getFullYear() //获取当前日期的年份
+  let month = (date.getMonth() + 1 < 10 ? '0' + (date.getMonth() + 1) : date.getMonth() + 1) //获取当前日期的月份
+  let day = date.getDate() //获取当前日期的日
+  let hours = date.getHours() < 10 ? '0' + date.getHours() : date.getHours()
+  let minutes = date.getMinutes() < 10 ? '0' + date.getMinutes() : date.getMinutes()
+  let seconds = date.getSeconds() < 10 ? '0' + date.getSeconds() : date.getSeconds()
+  let days = new Date(year, month, 0)
+  days = days.getDate(); //获取当前日期中的月的天数
+  let year2 = year;
+  let month2;
+  if (Target == 2) {
+    if (type == 5) {
+      month2 = parseInt(month) + parseInt(monthNum)
+      if (month2 > 12) {
+        year2 = parseInt(year2) + parseInt((parseInt(month2) / 12 == 0 ? 1 : parseInt(month2) / 12));
+        month2 = parseInt(month2) % 12;
+      }
+    } else if (type == 4) {
+      month2 = parseInt(month) - monthNum;
+      if (month2 <= 0) {
+        let absM = Math.abs(month2);
+        year2 = parseInt(year2) - Math.ceil(absM / 12 == 0 ? 1 : parseInt(absM) / 12);
+        month2 = 12 - (absM % 12);
+      }
+    }
+  } else if (Target == 1) {
+    month2 = parseInt(month)
+    if (type == 5) {
+      year2 = parseInt(year) + parseInt(monthNum)
+    } else if (type == 4) {
+      year2 = parseInt(year) - parseInt(monthNum)
+    }
+  }
+  let day2 = day;
+  let days2 = new Date(year2, month2, 0);
+  days2 = days2.getDate();
+  if (day2 > days2) {
+    day2 = days2;
+  }
+  if (month2 < 10) {
+    month2 = '0' + month2;
+  }
+  let t2 = year2 + '-' + month2 + '-' + day2 + ' ' + hours + ':' + minutes + ':' + seconds;
+  return t2;
+}
+
+//计算日
+export function getLaterData(days) {
+  let date = new Date();
+  date.setDate(date.getDate() + days);
+  let month = date.getMonth() + 1;
+  let day = date.getDate();
+  let hours = date.getHours() < 10 ? '0' + date.getHours() : date.getHours()
+  let minutes = date.getMinutes() < 10 ? '0' + date.getMinutes() : date.getMinutes()
+  let seconds = date.getSeconds() < 10 ? '0' + date.getSeconds() : date.getSeconds()
+  return date.getFullYear() + '-' + ('0' + month).slice(-2) + '-' + ('0' + day).slice(-2) + ' ' + hours + ':' + minutes + ':' + seconds;
+}
+export function getBeforeData(num) {
+  let dateArray = []
+  //获取今天日期
+  let myDate = new Date()
+  let hours = myDate.getHours() < 10 ? '0' + myDate.getHours() : myDate.getHours()
+  let minutes = myDate.getMinutes() < 10 ? '0' + myDate.getMinutes() : myDate.getMinutes()
+  let seconds = myDate.getSeconds() < 10 ? '0' + myDate.getSeconds() : myDate.getSeconds()
+  let today = myDate.getFullYear() + '-' + (myDate.getMonth() + 1) + "-" + myDate.getDate();
+  myDate.setDate(myDate.getDate() - num)
+  let dateTemp;  // 临时日期数据
+  let flag = 1;
+  for (let i = 0; i < num; i++) {
+    dateTemp = myDate.getFullYear() + '-' + (myDate.getMonth() + 1) + "-" + myDate.getDate()
+    dateArray.push({
+      date: dateTemp
+    })
+    myDate.setDate(myDate.getDate() + flag);
+  }
+  dateArray.push({
+    date: today
+  })
+  let arr = []
+  let newArr = []
+  dateArray.forEach(item => {
+    arr.push(item.date.split('-'))
+  })
+  for (let i = 0; i < arr.length; i++) {
+    if (arr[i][1] < 10) {
+      arr[i][1] = "0" + arr[i][1]
+    }
+    if (arr[i][2] < 10) {
+      arr[i][2] = "0" + arr[i][2]
+    }
+  }
+  for (let j = 0; j < arr.length; j++) {
+    newArr.push(arr[j].join("-"))
+  }
+  return newArr[0] + ' ' + hours + ':' + minutes + ':' + seconds
+}
+
+export function getBeforeTime(type, val) {
+  let date = new Date()
+  if (type == 4 || type == 1) {
+    date.setHours((Number(date.getHours()) - Number(val)))
+  } else if (type == 5 || type == 2) {
+    date.setMinutes((Number(date.getMinutes()) - Number(val)))
+  } else if (type == 6 || type == 3) {
+    date.getseconds((Number(date.getSeconds()) - Number(val)))
+  }
+  return date.getTime()
+}
+export function getLaterTime(type, val) {
+  let date = new Date()
+  if (type == 4 || type == 1) {
+    date.setHours((Number(date.getHours()) + Number(val)))
+  } else if (type == 5 || type == 2) {
+    date.setMinutes((Number(date.getMinutes()) + Number(val)))
+  } else if (type == 6 || type == 3) {
+    date.setSeconds((Number(date.getSeconds()) + Number(val)))
+  }
+  return date.getTime()
+}

@@ -54,7 +54,7 @@
         <el-input type="number" v-model="activeData.__config__.startTimeValue" placeholder="请输入"
           min="1">
           <el-select slot="append" v-model="activeData.__config__.startTimeTarget"
-            style="width: 70px;" placeholder="请选择" @change="startTimeTarget" filterable>
+            style="width: 70px;" placeholder="请选择" filterable>
             <el-option v-for="(item, index) in targetOptions" :key="index" :label="item.label"
               :value="item.value" />
           </el-select>
@@ -89,7 +89,7 @@
         <el-input type="number" v-model="activeData.__config__.endTimeValue" placeholder="请输入"
           min="1">
           <el-select slot="append" v-model="activeData.__config__.endTimeTarget"
-            @change="endTimeTarget" style="width: 70px;" placeholder="请选择" filterable>
+            style="width: 70px;" placeholder="请选择" filterable>
             <el-option v-for="(item, index) in targetOptions" :key="index" :label="item.label"
               :value="item.value" />
           </el-select>
@@ -166,20 +166,6 @@ export default {
     }
   },
   watch: {
-    'activeData.__config__.startTimeValue'(val) {
-      if (this.activeData.__config__.startTimeType == 4 || this.activeData.__config__.startTimeType == 5) {
-        this.getStartTime()
-      } else if (this.activeData.__config__.startTimeType == 1) {
-        return this.activeData.startTime = val
-      }
-    },
-    'activeData.__config__.endTimeValue'(val) {
-      if (this.activeData.__config__.endTimeType == 4 || this.activeData.__config__.endTimeType == 5) {
-        this.getEndTime()
-      } else if (this.activeData.__config__.endTimeType == 1) {
-        return this.activeData.endTime = val
-      }
-    },
     'activeData.__config__.startTimeRule'(val) {
       if (!val) {
         this.activeData.__config__.startRelationField = ''
@@ -242,56 +228,10 @@ export default {
         return this.activeData.__config__.startTimeType = 1
       }
     },
-    endTimeTarget(val) {
-      this.getEndTime()
-    },
-    startTimeTarget(val) {
-      this.getStartTime()
-    },
     isIncludesTable(data) {
       if ((!data.__config__.layout || data.__config__.layout === 'rowFormItem') && data.__config__.jnpfKey !== 'table') return true
       if (this.activeData.__config__.isSubTable) return this.activeData.__config__.parentVModel === data.__vModel__
       return data.__config__.jnpfKey !== 'table'
-    },
-    getBeforeTime(type, val) {
-      let date = new Date()
-      if (type == 1) {
-        date.setHours(Number(date.getHours()) - Number(val))
-      } else if (type == 2) {
-        date.setMinutes(Number(date.getMinutes()) - Number(val))
-      } else if (type == 3) {
-        date.setSeconds(Number(date.getSeconds()) - Number(val))
-      }
-      return date
-    },
-    getLaterTime(type, val) {
-      let date = new Date()
-      if (type == 1) {
-        date.setHours(Number(date.getHours()) + Number(val))
-      } else if (type == 2) {
-        date.setMinutes(Number(date.getMinutes()) + Number(val))
-      } else if (type == 3) {
-        date.setSeconds(Number(date.getSeconds()) + Number(val))
-      }
-      return date
-    },
-    getStartTime() {
-      if (this.activeData.__config__.startTimeType == 4) {
-        let item = this.getBeforeTime(this.activeData.__config__.startTimeTarget, this.activeData.__config__.startTimeValue)
-        return this.activeData.startTime = this.jnpf.toDate(item, this.activeData.format)
-      } else {
-        let item = this.getLaterTime(this.activeData.__config__.startTimeTarget, this.activeData.__config__.startTimeValue)
-        return this.activeData.startTime = this.jnpf.toDate(item, this.activeData.format)
-      }
-    },
-    getEndTime() {
-      if (this.activeData.__config__.endTimeType == 4) {
-        let item = this.getBeforeTime(this.activeData.__config__.endTimeTarget, this.activeData.__config__.endTimeValue)
-        return this.activeData.endTime = this.jnpf.toDate(item, this.activeData.format)
-      } else {
-        let item = this.getLaterTime(this.activeData.__config__.endTimeTarget, this.activeData.__config__.endTimeValue)
-        return this.activeData.endTime = this.jnpf.toDate(item, this.activeData.format)
-      }
     },
     dateTypeChange(val) {
       this.activeData['value-format'] = val

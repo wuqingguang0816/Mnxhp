@@ -51,7 +51,7 @@
         <el-input type="number" v-model="activeData.__config__.startTimeValue" placeholder="请输入"
           min="1">
           <el-select slot="append" v-model="activeData.__config__.startTimeTarget"
-            style="width: 70px;" placeholder="请选择" @change="startTimeTarget" filterable>
+            style="width: 70px;" placeholder="请选择" filterable>
             <el-option v-for="(item, index) in targetOptions" :key="index" :label="item.label"
               :value="item.value" />
           </el-select>
@@ -172,32 +172,6 @@ export default {
     }
   },
   watch: {
-    'activeData.__config__.startTimeValue'(val) {
-      if (this.activeData.__config__.startTimeType == 4 || this.activeData.__config__.startTimeType == 5) {
-        if (this.activeData.__config__.startTimeTarget == 2 || this.activeData.__config__.startTimeTarget == 1) {
-          this.getStartDateTime()
-        } else if (this.activeData.__config__.startTimeTarget == 3) {
-          this.getStartTimeValue()
-        } else {
-          this.getStartTime()
-        }
-      } else if (this.activeData.__config__.startTimeType == 1) {
-        this.activeData.startTime = val
-      }
-    },
-    'activeData.__config__.endTimeValue'(val) {
-      if (this.activeData.__config__.endTimeType == 4 || this.activeData.__config__.endTimeType == 5) {
-        if (this.activeData.__config__.endTimeTarget == 2 || this.activeData.__config__.endTimeTarget == 1) {
-          this.getEndDateTime()
-        } else if (this.activeData.__config__.endTimeTarget == 3) {
-          this.getEndTimeValue()
-        } else {
-          this.getEndTime()
-        }
-      } else if (this.activeData.__config__.endTimeType == 1) {
-        return this.activeData.endTime = val
-      }
-    },
     'activeData.__config__.startTimeRule'(val) {
       if (!val) {
         this.activeData.__config__.__vModel__startRelationField = ''
@@ -269,192 +243,10 @@ export default {
         return this.activeData.__config__.startTimeType = 1
       }
     },
-    endTimeTarget(val) {
-      if (val == 2 || val == 1) {
-        this.getEndDateTime()
-      } else if (val == 3) {
-        this.getEndTimeValue()
-      } else {
-        this.getEndTime()
-      }
-    },
-    startTimeTarget(val) {
-      if (val == 2 || val == 1) {
-        this.getStartDateTime()
-      } else if (val == 3) {
-        this.getStartTimeValue()
-      } else {
-        this.getStartTime()
-      }
-    },
     isIncludesTable(data) {
       if ((!data.__config__.layout || data.__config__.layout === 'rowFormItem') && data.__config__.jnpfKey !== 'table') return true
       if (this.activeData.__config__.isSubTable) return this.activeData.__config__.parentVModel === data.__vModel__
       return data.__config__.jnpfKey !== 'table'
-    },
-    getBeforeTime(type, val) {
-      let date = new Date()
-      if (type == 4) {
-        date.setHours((Number(date.getHours()) - Number(val)))
-      } else if (type == 5) {
-        date.setMinutes((Number(date.getMinutes()) - Number(val)))
-      } else if (type == 6) {
-        date.getseconds((Number(date.getSeconds()) - Number(val)))
-      }
-      return date.getTime()
-    },
-    getLaterTime(type, val) {
-      let date = new Date()
-      if (type == 4) {
-        date.setHours((Number(date.getHours()) + Number(val)))
-      } else if (type == 5) {
-        date.setMinutes((Number(date.getMinutes()) + Number(val)))
-      } else if (type == 6) {
-        date.setSeconds((Number(date.getSeconds()) + Number(val)))
-      }
-      return date.getTime()
-    },
-    getDateDay(Target, type, monthNum) {
-      let date = new Date()
-      let year = date.getFullYear() //获取当前日期的年份
-      let month = (date.getMonth() + 1 < 10 ? '0' + (date.getMonth() + 1) : date.getMonth() + 1) //获取当前日期的月份
-      let day = date.getDate() //获取当前日期的日
-      let hours = date.getHours() < 10 ? '0' + date.getHours() : date.getHours()
-      let minutes = date.getMinutes() < 10 ? '0' + date.getMinutes() : date.getMinutes()
-      let seconds = date.getSeconds() < 10 ? '0' + date.getSeconds() : date.getSeconds()
-      let days = new Date(year, month, 0)
-      days = days.getDate(); //获取当前日期中的月的天数
-      let year2 = year;
-      let month2;
-      if (Target == 2) {
-        if (type == 5) {
-          month2 = parseInt(month) + parseInt(monthNum)
-          if (month2 > 12) {
-            year2 = parseInt(year2) + parseInt((parseInt(month2) / 12 == 0 ? 1 : parseInt(month2) / 12));
-            month2 = parseInt(month2) % 12;
-          }
-        } else if (type == 4) {
-          month2 = parseInt(month) - monthNum;
-          if (month2 <= 0) {
-            let absM = Math.abs(month2);
-            year2 = parseInt(year2) - Math.ceil(absM / 12 == 0 ? 1 : parseInt(absM) / 12);
-            month2 = 12 - (absM % 12);
-          }
-        }
-      } else if (Target == 1) {
-        month2 = parseInt(month)
-        if (type == 5) {
-          year2 = parseInt(year) + parseInt(monthNum)
-        } else if (type == 4) {
-          year2 = parseInt(year) - parseInt(monthNum)
-        }
-      }
-      let day2 = day;
-      let days2 = new Date(year2, month2, 0);
-      days2 = days2.getDate();
-      if (day2 > days2) {
-        day2 = days2;
-      }
-      if (month2 < 10) {
-        month2 = '0' + month2;
-      }
-      let t2 = year2 + '-' + month2 + '-' + day2 + ' ' + hours + ':' + minutes + ':' + seconds;
-      return t2;
-    },
-    getLaterData(days) {
-      let date = new Date();
-      date.setDate(date.getDate() + days);
-      let month = date.getMonth() + 1;
-      let day = date.getDate();
-      let hours = date.getHours() < 10 ? '0' + date.getHours() : date.getHours()
-      let minutes = date.getMinutes() < 10 ? '0' + date.getMinutes() : date.getMinutes()
-      let seconds = date.getSeconds() < 10 ? '0' + date.getSeconds() : date.getSeconds()
-      return date.getFullYear() + '-' + ('0' + month).slice(-2) + '-' + ('0' + day).slice(-2) + ' ' + hours + ':' + minutes + ':' + seconds;
-    },
-    getBeforeData(num) {
-      let dateArray = []
-      //获取今天日期
-      let myDate = new Date()
-      let hours = myDate.getHours() < 10 ? '0' + myDate.getHours() : myDate.getHours()
-      let minutes = myDate.getMinutes() < 10 ? '0' + myDate.getMinutes() : myDate.getMinutes()
-      let seconds = myDate.getSeconds() < 10 ? '0' + myDate.getSeconds() : myDate.getSeconds()
-      let today = myDate.getFullYear() + '-' + (myDate.getMonth() + 1) + "-" + myDate.getDate();
-      myDate.setDate(myDate.getDate() - num)
-      let dateTemp;  // 临时日期数据
-      let flag = 1;
-      for (let i = 0; i < num; i++) {
-        dateTemp = myDate.getFullYear() + '-' + (myDate.getMonth() + 1) + "-" + myDate.getDate()
-        dateArray.push({
-          date: dateTemp
-        })
-        myDate.setDate(myDate.getDate() + flag);
-      }
-      dateArray.push({
-        date: today
-      })
-      let arr = []
-      let newArr = []
-      dateArray.forEach(item => {
-        arr.push(item.date.split('-'))
-      })
-      for (let i = 0; i < arr.length; i++) {
-        if (arr[i][1] < 10) {
-          arr[i][1] = "0" + arr[i][1]
-        }
-        if (arr[i][2] < 10) {
-          arr[i][2] = "0" + arr[i][2]
-        }
-      }
-      for (let j = 0; j < arr.length; j++) {
-        newArr.push(arr[j].join("-"))
-      }
-      return newArr[0] + ' ' + hours + ':' + minutes + ':' + seconds
-    },
-    getStartDateTime() {
-      let previousDate = '';
-      previousDate = this.getDateDay(this.activeData.__config__.startTimeTarget, this.activeData.__config__.startTimeType, this.activeData.__config__.startTimeValue)
-      return this.activeData.startTime = new Date(previousDate).getTime()
-    },
-    getEndDateTime() {
-      let previousDate = '';
-      previousDate = this.getDateDay(this.activeData.__config__.endTimeTarget, this.activeData.__config__.endTimeType, this.activeData.__config__.endTimeValue)
-      return this.activeData.endTime = new Date(previousDate).getTime()
-    },
-    getStartTime() {
-      if (this.activeData.__config__.startTimeType == 4) {
-        return this.activeData.startTime = this.getBeforeTime(this.activeData.__config__.startTimeTarget, this.activeData.__config__.startTimeValue)
-      } else {
-        return this.activeData.startTime = this.getLaterTime(this.activeData.__config__.startTimeTarget, this.activeData.__config__.startTimeValue)
-      }
-    },
-    getEndTime() {
-      if (this.activeData.__config__.endTimeType == 4) {
-        return this.activeData.endTime = this.getBeforeTime(this.activeData.__config__.endTimeTarget, this.activeData.__config__.endTimeValue)
-      } else {
-        return this.activeData.endTime = this.getLaterTime(this.activeData.__config__.endTimeTarget, this.activeData.__config__.endTimeValue)
-      }
-    },
-    getStartTimeValue() {
-      let num = this.activeData.__config__.startTimeValue
-      let previousDate = ''
-      if (this.activeData.__config__.startTimeType == 4) {
-        previousDate = this.getBeforeData(num)
-        return this.activeData.startTime = new Date(previousDate).getTime()
-      } else {
-        previousDate = this.getLaterData(num)
-        return this.activeData.startTime = new Date(previousDate).getTime()
-      }
-    },
-    getEndTimeValue() {
-      let num = this.activeData.__config__.endTimeValue
-      let previousDate = ''
-      if (this.activeData.__config__.endTimeType == 4) {
-        previousDate = this.getBeforeData(num)
-        return this.activeData.endTime = new Date(previousDate).getTime()
-      } else {
-        previousDate = this.getLaterData(num)
-        return this.activeData.endTime = new Date(previousDate).getTime()
-      }
     },
     dateTypeChange(val) {
       this.getTargetOptions()
@@ -462,13 +254,9 @@ export default {
     startType(val) {
       this.activeData.startTime = null
       this.activeData.__config__.startRelationField = ''
-      if (val == 3) {
-        this.activeData.__config__.startTimeValue = new Date().getTime()
-        this.activeData.startTime = this.activeData.__config__.startTimeValue
-      } else if (val == 4 || val == 5) {
+      if (val == 4 || val == 5) {
         this.activeData.__config__.startTimeValue = 1
         this.activeData.__config__.startTimeTarget = 1
-        this.getStartDateTime()
       } else if (val == 2) {
         this.activeData.__config__.startTimeValue = ''
       } else {
@@ -478,13 +266,9 @@ export default {
     endType(val) {
       this.activeData.endTime = null
       this.activeData.__config__.endRelationField = ''
-      if (val == 3) {
-        this.activeData.__config__.endTimeValue = new Date().getTime()
-        this.activeData.endTime = this.activeData.__config__.endTimeValue
-      } else if (val == 4 || val == 5) {
+      if (val == 4 || val == 5) {
         this.activeData.__config__.endTimeValue = 1
         this.activeData.__config__.endTimeTarget = 1
-        this.getEndDateTime()
       } else {
         this.activeData.__config__.endTimeValue = ''
       }
