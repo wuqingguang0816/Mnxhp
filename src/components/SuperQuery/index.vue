@@ -136,6 +136,11 @@
                     :popupWidth="item.attr.popupWidth" :filterable="item.attr.filterable"
                     clearable />
                 </template>
+                <template v-else-if="item.jnpfKey==='autoComplete'">
+                  <JnpfAutoComplete v-model="item.fieldValue" :placeholder="item.attr.placeholder"
+                    :interfaceId="item.attr.interfaceId" :templateJson="item.attr.templateJson"
+                    :total="item.attr.total" :relationField="item.attr.relationField" clearable />
+                </template>
                 <template v-else>
                   <el-input v-model="item.fieldValue" placeholder="请输入" clearable />
                 </template>
