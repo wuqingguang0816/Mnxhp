@@ -167,17 +167,17 @@ const printOptionApi = {
             let subDataTag = subData.getAttribute('data-tag') ? subData.getAttribute('data-tag').split('.')[0] : false
             let data_ = data.replace('{', "").replace("}", "")
             if (subDataTag == 'headTable') {
-              this.data[data_] = this.getThousands(this.data[data_])
+              this.data[data_] = this.getThousands(this.data[data_], place)
             } else {
-              this.data[subDataTag][0][data_] = this.getThousands(this.data[subDataTag][0][data_])
+              this.data[subDataTag][0][data_] = this.getThousands(this.data[subDataTag][0][data_], place)
             }
           } else {
-            this.printTemplate = this.replaceAll(this.printTemplate, dataKey, this.getThousands(data, place || 0))
+            this.printTemplate = this.replaceAll(this.printTemplate, dataKey, this.getThousands(data, place))
           }
         }
       })
     },
-    getThousands(value, place) {
+    getThousands(value, place = 0) {
       return parseFloat(value).toLocaleString('zh', {
         minimumFractionDigits: place,
         maximumFractionDigits: place
