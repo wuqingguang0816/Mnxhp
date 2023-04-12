@@ -100,8 +100,8 @@ export default {
   watch: {
     innerValue: {
       handler(val) {
-        this.$emit('input', val)
-        this.$emit('change', val)
+        this.$emit('input', val || 0)
+        this.$emit('change', val || 0)
         this.amountChinese(val)
       },
       deep: true
@@ -121,12 +121,13 @@ export default {
 
   },
   created() {
+    if (!this.innerValue) return this.innerValue = 0
   },
   directives: {
     thousands: {
       // 被绑定元素插入父节点时调用
       inserted: (el, binding, vnode) => {
-        let precision = vnode.child.precision
+        let precision = vnode.context.precision
         // 获取input节点
         if (el.tagName.toLocaleUpperCase() !== 'INPUT') {
           el = el.getElementsByTagName('input')[0]
@@ -140,29 +141,34 @@ export default {
         el.onfocus = e => {
           let a = el.value.replace(/,/g, '') //去除千分号的','
           el.value = parseFloat(a).toFixed(precision)
-          if (el.value === 'NaN') el.value = ''
         }
         el.onblur = e => {
           el.value = parseFloat(el.value).toLocaleString('zh', {
             minimumFractionDigits: precision,
             maximumFractionDigits: precision
           })
-          if (el.value === 'NaN') el.value = ''
         }
-        if (el.value === 'NaN') el.value = ''
       },
       componentUpdated: (el, binding, vnode) => {
         // 聚焦转化为数字格式（去除千分位）
         el.focus()
-        let precision = vnode.child.precision
+        let precision = vnode.context.precision
         if (el.tagName.toLocaleUpperCase() !== 'INPUT') {
           el = el.getElementsByTagName('input')[0]
         }
+        // 聚焦转化为数字格式（去除千分位）
         el.onblur = e => {
           el.value = parseFloat(el.value).toLocaleString('zh', {
             minimumFractionDigits: precision,
             maximumFractionDigits: precision
           })
+        }
+        el.value = el.value ? el.value : 0
+      },
+      unbind: (el, binding, vnode) => {
+        // 聚焦转化为数字格式（去除千分位）
+        if (el.tagName.toLocaleUpperCase() !== 'INPUT') {
+          el = el.getElementsByTagName('input')[0]
         }
         el.value = el.value ? el.value : 0
       },

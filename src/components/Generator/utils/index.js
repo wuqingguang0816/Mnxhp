@@ -175,7 +175,7 @@ export function getAmountChinese(val) {
   const N_UNIT2 = ['', '万', '亿', '兆']
   const D_UNIT = ['角', '分', '厘', '毫']
   let [integer, decimal] = amount.toString().split('.')
-  if (integer && integer.length > 15) return '金额过大无法计算'
+  if (integer && integer.length > 15) return '数字较大溢出'
   let res = ''
   // 整数部分
   if (integer) {

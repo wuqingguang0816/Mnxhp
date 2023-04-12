@@ -1,9 +1,9 @@
 <template>
   <div>
-    <template class="input-color">
-      <span v-if="addonBefore">{{ addonBefore }}</span>
-      <span>{{ innerValue }}</span>
-      <span v-if="addonAfter">{{ addonAfter }}</span>
+    <template>
+      <span v-if="addonBefore" class="addon">{{ addonBefore }}</span>
+      <span class="innerValue">{{ innerValue }}</span>
+      <span v-if="addonAfter" class="addon">{{ addonAfter }}</span>
     </template>
     <p v-if="isAmountChinese" class="input-color">{{ amountChineseName }}</p>
   </div>
@@ -47,7 +47,7 @@ export default {
   },
   computed: {},
   created() {
-    if (!this.innerValue && this.isAmountChinese) this.innerValue = 0
+    if (!this.innerValue) this.innerValue = 0
     this.amountChinese(this.innerValue)
     this.thousandSeparator()
   },
@@ -80,6 +80,12 @@ export default {
   >>> .el-input__inner {
     border-radius: 0px !important;
   }
+}
+.addon {
+  color: #303133;
+}
+.innerValue {
+  color: #606266;
 }
 .input-color {
   color: #c0c0c0;
