@@ -141,7 +141,7 @@
                 <el-table-column :key="columnIndex" :label="column.__config__.label"
                   v-else-if="['relationFormAttr','popupAttr'].includes(column.__config__.jnpfKey)">
                   <template slot-scope="scope">
-                    {{ scope.row[column.relationField.split('_jnpfTable_')[0]+'_'+column.showField] }}
+                    {{ scope.row[column.__vModel__] }}
                   </template>
                 </el-table-column>
                 <el-table-column :key="columnIndex" :label="column.__config__.label"
