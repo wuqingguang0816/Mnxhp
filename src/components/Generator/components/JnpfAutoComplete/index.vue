@@ -106,6 +106,7 @@ export default {
         interfaceId: this.interfaceId,
         propsValue: this.propsValue,
         relationField: this.relationField,
+        pageSize: 10000,
         paramList
       }
       getDataInterfaceDataSelect(this.interfaceId, query).then(res => {
