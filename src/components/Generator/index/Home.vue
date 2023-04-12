@@ -32,8 +32,8 @@
             type="text" @click="showType='app'" size="medium">移动端</el-button>
           <el-button class="unActive-btn" icon="el-icon-video-play" type="text" @click="preview"
             size="medium">预览</el-button>
-          <el-button icon="el-icon-view" type="text" @click="showJson" size="medium">
-            查看json</el-button>
+          <!-- <el-button icon="el-icon-view" type="text" @click="showJson" size="medium">
+            查看json</el-button> -->
           <el-button class="delete-btn unActive-btn" icon="icon-ym icon-ym-clean" type="text"
             @click="empty" size="medium">清空</el-button>
         </div>
