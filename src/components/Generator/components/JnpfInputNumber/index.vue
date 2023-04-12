@@ -108,7 +108,7 @@ export default {
     },
     value: {
       handler(val) {
-        this.innerValue = val
+        this.innerValue = val || 0
         this.amountChinese(this.innerValue)
       },
       deep: true
