@@ -55,7 +55,8 @@
         </jnpf-form-tip-item>
         <el-row>
           <el-col :span="12">
-            <jnpf-form-tip-item label="提醒方式" prop="remindCategory">
+            <jnpf-form-tip-item label="提醒方式" prop="remindCategory" tipLabel='
+提醒方式设置在【消息中心】-【消息发送配置】维护；默认站内信提醒，选择自定义则取自定义模板配置。'>
               <el-select v-model="dataForm.remindCategory" placeholder="选择消息来源" clearable
                 :disabled="this.dataForm.id?true:false" filterable>
                 <el-option v-for="(item,index) in remindCategoryList" :key="index"
