@@ -122,7 +122,7 @@ export default {
         pageSize: 20
       },
       noticeSourceList: [
-        { fullName: "系统", enCode: '2' },
+        { fullName: "通知", enCode: '2' },
         { fullName: "公告", enCode: '1' },
       ],
       noticeStatusList: [
