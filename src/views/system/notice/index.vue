@@ -200,6 +200,7 @@ export default {
     },
     search() {
       this.listQuery = {
+        ...this.listQuery,
         currentPage: 1,
         pageSize: 20,
         sort: 'desc',
@@ -209,6 +210,7 @@ export default {
       this.initData()
     },
     reset() {
+      this.noticeSource = [];
       this.listQuery.keyword = '';
       this.listQuery.enabledMark = [];
       this.listQuery.type = [];
