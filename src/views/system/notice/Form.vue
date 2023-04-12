@@ -20,8 +20,8 @@
         <el-row>
           <el-col :span="12">
             <jnpf-form-tip-item label="类型" prop="category">
-              <el-select v-model="dataForm.category" placeholder="选择消息来源" clearable
-                :disabled="this.dataForm.id?true:false" filterable>
+              <el-select v-model="dataForm.category" placeholder="选择公告类型" clearable
+                :disabled="this.dataForm.id?true:false" filterable :key="key">
                 <el-option v-for="(item,index) in categoryList" :key="index" :label="item.fullName"
                   :value="item.enCode">
                 </el-option>
@@ -95,7 +95,7 @@ export default {
         bodyText: '',
         coverImage: '',
         remindCategory: 1,
-        category: 1,
+        category: '1',
         sendConfigId: 0,
         sendConfigName: '',
         expirationTime: null,
@@ -103,7 +103,7 @@ export default {
       },
       sendConfiguredList: [],
       remindCategoryList: [{ 'fullName': '站内信', 'enCode': 1 }, { 'fullName': '自定义', 'enCode': 2 }, { 'fullName': '不提醒', 'enCode': 3 }],
-      categoryList: [{ 'fullName': '公告', 'enCode': 1 }, { 'fullName': '通知', 'enCode': 2 }],
+      categoryList: [],
       toUserIds: [],
       files: [],
       dataRule: {
@@ -150,6 +150,7 @@ export default {
           })
         }
         this.formLoading = false
+        this.key = +new Date()
       })
     },
     sendMessageConfig(id) {
