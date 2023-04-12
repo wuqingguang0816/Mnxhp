@@ -13,7 +13,7 @@
     <el-form-item label="默认值">
       <el-input-number v-model="activeData.__config__.defaultValue" placeholder="默认值"
         :min="activeData.min" :max="activeData.max" :step="activeData.step"
-        :precision="activeData.precision" controls-position="right" />
+        :precision="activeData.precision" controls-position="right" @change="change" />
     </el-form-item>
     <el-form-item label="最小值">
       <el-input-number v-model="activeData.min" placeholder="最小值" controls-position="right" />
@@ -69,6 +69,10 @@ export default {
     return {}
   },
   created() { },
-  methods: {}
+  methods: {
+    change() {
+      if (typeof this.activeData.__config__.defaultValue === 'undefined') this.activeData.__config__.defaultValue = null
+    }
+  }
 }
 </script>

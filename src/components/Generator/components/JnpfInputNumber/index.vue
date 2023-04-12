@@ -6,7 +6,7 @@
         <el-input-number v-model="innerValue" :placeholder="placeholder" :max="max" :min="min"
           :step="step" :precision="precision" :disabled="disabled" class="input-number"
           :controls-position="controlsPosition==='right'?'right':''"
-          :controls="!controlsPosition?false:true">
+          :controls="!controlsPosition?false:true" @change="change">
         </el-input-number>
         <div class="el-input-group__append" v-if="addonAfter">{{ addonAfter }}</div>
       </div>
@@ -17,7 +17,7 @@
         <el-input-number v-model="innerValue" :placeholder="placeholder" :max="max" :min="min"
           :step="step" :precision="precision" :disabled="disabled" v-thousands class="input-number"
           :controls-position="controlsPosition==='right'?'right':''"
-          :controls="!controlsPosition?false:true">
+          :controls="!controlsPosition?false:true" @change="change">
         </el-input-number>
         <div class="el-input-group__append" v-if="addonAfter">{{ addonAfter }}</div>
       </div>
@@ -26,7 +26,7 @@
       <el-input-number v-model="innerValue" :placeholder="placeholder" :max="max" :min="min"
         :step="step" :precision="precision" :disabled="disabled"
         :controls-position="controlsPosition==='right'?'right':''"
-        :controls="!controlsPosition?false:true">
+        :controls="!controlsPosition?false:true" @change="change">
       </el-input-number>
     </template>
     <p v-if="isAmountChinese" style="color:#C0C0C0">{{ amountChineseName }}</p>
@@ -108,7 +108,7 @@ export default {
     },
     value: {
       handler(val) {
-        this.innerValue = val || 0
+        this.innerValue = val
         this.amountChinese(this.innerValue)
       },
       deep: true
@@ -121,13 +121,13 @@ export default {
 
   },
   created() {
-    if (!this.innerValue) return this.innerValue = 0
+    if (!this.innerValue) return this.innerValue = null
   },
   directives: {
     thousands: {
       // 被绑定元素插入父节点时调用
       inserted: (el, binding, vnode) => {
-        let precision = vnode.context.precision
+        let precision = vnode.child.precision
         // 获取input节点
         if (el.tagName.toLocaleUpperCase() !== 'INPUT') {
           el = el.getElementsByTagName('input')[0]
@@ -152,7 +152,7 @@ export default {
       componentUpdated: (el, binding, vnode) => {
         // 聚焦转化为数字格式（去除千分位）
         el.focus()
-        let precision = vnode.context.precision
+        let precision = vnode.child.precision
         if (el.tagName.toLocaleUpperCase() !== 'INPUT') {
           el = el.getElementsByTagName('input')[0]
         }
@@ -163,14 +163,14 @@ export default {
             maximumFractionDigits: precision
           })
         }
-        el.value = el.value ? el.value : 0
+        el.value = el.value ? el.value : null
       },
       unbind: (el, binding, vnode) => {
         // 聚焦转化为数字格式（去除千分位）
         if (el.tagName.toLocaleUpperCase() !== 'INPUT') {
           el = el.getElementsByTagName('input')[0]
         }
-        el.value = el.value ? el.value : 0
+        el.value = el.value ? el.value : null
       },
     }
   },
@@ -180,6 +180,11 @@ export default {
     amountChinese(val) {
       if (!this.isAmountChinese) return
       this.amountChineseName = getAmountChinese(val)
+    },
+    change() {
+      if (typeof this.innerValue === 'undefined') this.innerValue = null
+      this.$emit('input', this.innerValue || 0)
+      this.$emit('change', this.innerValue || 0)
     }
   }
 
