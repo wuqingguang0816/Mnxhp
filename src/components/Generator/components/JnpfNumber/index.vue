@@ -1,9 +1,9 @@
 <template>
   <div>
     <template>
-      <span v-if="addonBefore" class="addon">{{ addonBefore }}</span>
+      <span v-if="addonBefore" class="addonBefore">{{ addonBefore }} </span>
       <span class="innerValue">{{ innerValue }}</span>
-      <span v-if="addonAfter" class="addon">{{ addonAfter }}</span>
+      <span v-if="addonAfter" class="addonAfter">{{ addonAfter }}</span>
     </template>
     <p v-if="isAmountChinese" class="input-color">{{ amountChineseName }}</p>
   </div>
@@ -81,7 +81,12 @@ export default {
     border-radius: 0px !important;
   }
 }
-.addon {
+.addonBefore {
+  padding-right: 8px;
+  color: #303133;
+}
+.addonAfter {
+  padding-left: 8px;
   color: #303133;
 }
 .innerValue {
