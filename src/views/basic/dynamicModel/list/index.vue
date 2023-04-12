@@ -214,6 +214,13 @@
                         :popupWidth="item.popupWidth" :clearable="item.clearable"
                         :disabled="item.disabled" />
                     </template>
+                    <template v-else-if="item.jnpfKey==='autoComplete'">
+                      <JnpfAutoComplete v-model="scope.row[item.prop]"
+                        :placeholder="item.placeholder" :interfaceId="item.interfaceId"
+                        :relationField="item.relationField" :total="item.total"
+                        :clearable="item.clearable" :templateJson="item.templateJson"
+                        :disabled="item.disabled" />
+                    </template>
                     <template v-else-if="item.jnpfKey==='popupTableSelect'">
                       <popupTableSelect v-model="scope.row[item.prop]"
                         :placeholder="item.placeholder" :interfaceId="item.interfaceId"
