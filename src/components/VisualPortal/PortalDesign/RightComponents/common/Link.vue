@@ -67,7 +67,7 @@
       <template v-else>
         <el-form-item label="右上角链接">
           <el-select v-model="activeData.card.appLinkType" placeholder="请选择链接类型" clearable
-            @change="onLinkTypeChange(2,'app')">
+            @change="onLinkTypeChange(2,'app')" filterable>
             <el-option v-for="(item, index) in linkTypeList" :key="index" :label="item.label"
               :value="item.value" />
           </el-select>
