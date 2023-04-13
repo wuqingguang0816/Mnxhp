@@ -354,15 +354,11 @@ export default {
           let endTime = 0
           if (cur.__config__.startRelationField && cur.__config__.startTimeType == 2) {
             startTime = this.getFieldVal(cur.__config__.startRelationField, rowIndex) || 0
-          } else if (cur.__config__.endTimeType == 3) {
-            startTime = new Date().getTime()
           } else {
             startTime = cur.startTime
           }
           if (cur.__config__.endRelationField && cur.__config__.endTimeType == 2) {
             endTime = this.getFieldVal(cur.__config__.endRelationField, rowIndex) || 0
-          } else if (cur.__config__.endTimeType == 3) {
-            endTime = new Date().getTime()
           } else {
             endTime = cur.endTime
           }

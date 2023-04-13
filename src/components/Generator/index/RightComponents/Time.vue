@@ -61,7 +61,7 @@
         </el-input>
       </el-form-item>
       <el-form-item label="" class="spacing" v-else-if="activeData.__config__.startTimeType==2">
-        <el-select v-model="activeData.__config__.startRelationField" placeholder="请选择关联时间字段"
+        <el-select v-model="activeData.__config__.startRelationField" placeholder="请选择关联时间选择"
           filterable>
           <el-option v-for="(item,i) in formFieldsOptions" :key="i" :label="item.realLabel"
             :value="item.realVModel" />
@@ -96,7 +96,7 @@
         </el-input>
       </el-form-item>
       <el-form-item class="spacing" label="" v-else-if="activeData.__config__.endTimeType==2">
-        <el-select v-model="activeData.__config__.endRelationField" placeholder="请选择关联时间字段"
+        <el-select v-model="activeData.__config__.endRelationField" placeholder="请选择关联时间选择"
           filterable>
           <el-option v-for="(item,i) in formFieldsOptions" :key="i" :label="item.realLabel"
             :value="item.realVModel" />

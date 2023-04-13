@@ -516,7 +516,7 @@ export default {
                 previousDate = getBeforeData(config.endTimeValue)
                 cur.endTime = new Date(previousDate).getTime()
               } else {
-                cur.endTime = getBeforeTime(config.endTimeTarget, config.endTimeValue)
+                cur.endTime = getBeforeTime(config.endTimeTarget, config.endTimeValue).getTime()
               }
             } else if (config.endTimeType == 5) {
               let previousDate = '';
@@ -527,7 +527,7 @@ export default {
                 previousDate = getLaterData(config.endTimeValue)
                 cur.endTime = new Date(previousDate).getTime()
               } else {
-                cur.endTime = getLaterTime(config.endTimeTarget, config.endTimeValue)
+                cur.endTime = getLaterTime(config.endTimeTarget, config.endTimeValue).getTime()
               }
             }
           }
@@ -597,7 +597,7 @@ export default {
               cur.endTime = this.jnpf.toDate(previousDate, cur.format)
             }
           }
-          if (cur.startRelationField) {
+          if (cur.__config__.startRelationField) {
             let item = {
               ...cur,
               realVModel: cur.__config__.isSubTable ? cur.__config__.parentVModel + '-' + cur.__vModel__ : cur.__vModel__,
@@ -690,15 +690,11 @@ export default {
                 let endTime = ''
                 if (e.__config__.startTimeType == 2) {
                   startTime = this[this.formConf.formModel][e.__config__.startRelationField] || 0
-                } else if (e.__config__.startTimeType == 3) {
-                  startTime = this.jnpf.toDate(new Date(), e.format)
                 } else {
                   startTime = e.startTime
                 }
                 if (e.__config__.endTimeType == 2) {
                   endTime = this[this.formConf.formModel][e.__config__.endRelationField] || 0
-                } else if (e.__config__.endTimeType == 3) {
-                  endTime = this.jnpf.toDate(new Date(), e.format)
                 } else {
                   endTime = e.endTime
                 }
@@ -752,15 +748,11 @@ export default {
                 let endTime = ''
                 if (e.__config__.startTimeType == 2) {
                   startTime = this[this.formConf.formModel][e.__config__.startRelationField] || 0
-                } else if (e.__config__.startTimeType == 3) {
-                  startTime = this.jnpf.toDate(new Date(), e.format)
                 } else {
                   startTime = e.startTime
                 }
                 if (e.__config__.endTimeType == 2) {
                   endTime = this[this.formConf.formModel][e.__config__.endRelationField] || 0
-                } else if (e.__config__.endTimeType == 3) {
-                  endTime = this.jnpf.toDate(new Date(), e.format)
                 } else {
                   endTime = e.endTime
                 }

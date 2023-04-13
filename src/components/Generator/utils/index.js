@@ -439,7 +439,7 @@ export function getBeforeTime(type, val) {
   } else if (type == 6 || type == 3) {
     date.getseconds((Number(date.getSeconds()) - Number(val)))
   }
-  return date.getTime()
+  return date
 }
 export function getLaterTime(type, val) {
   let date = new Date()
@@ -450,5 +450,5 @@ export function getLaterTime(type, val) {
   } else if (type == 6 || type == 3) {
     date.setSeconds((Number(date.getSeconds()) + Number(val)))
   }
-  return date.getTime()
+  return date
 }
