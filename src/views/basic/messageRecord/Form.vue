@@ -7,6 +7,7 @@
       <div class="info">
         <span>{{info.releaseTime|toDate()}}</span><span>{{info.releaseUser}}</span>
       </div>
+      <p style="padding: 20px 0 10px;color: #303133;">{{ info.excerpt }}</p>
       <div class="main" v-html="info.bodyText"></div>
       <div class="file-list" v-if="files.length">
         <JNPF-UploadFz v-model="files" disabled detailed />
