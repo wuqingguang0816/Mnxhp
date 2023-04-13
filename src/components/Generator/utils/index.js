@@ -437,7 +437,7 @@ export function getBeforeTime(type, val) {
   } else if (type == 5 || type == 2) {
     date.setMinutes((Number(date.getMinutes()) - Number(val)))
   } else if (type == 6 || type == 3) {
-    date.getseconds((Number(date.getSeconds()) - Number(val)))
+    date.setSeconds((Number(date.getSeconds()) - Number(val)))
   }
   return date
 }
