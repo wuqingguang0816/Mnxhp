@@ -211,6 +211,7 @@ export default {
     },
     reset() {
       this.noticeSource = [];
+      this.noticeStatus = [];
       this.listQuery.keyword = '';
       this.listQuery.enabledMark = [];
       this.listQuery.type = [];
