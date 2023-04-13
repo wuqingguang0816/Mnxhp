@@ -36,97 +36,66 @@
                 </el-col>
               </el-form>
             </el-row>
-            <div class="JNPF-common-layout-main JNPF-flex-main">
-              <div class="JNPF-common-head">
-                <topOpts @add="addOrUpdateHandle" addText='添加'>
-                </topOpts>
-                <el-tooltip effect="dark" :content="$t('common.refresh')" placement="top">
-                  <el-link icon="icon-ym icon-ym-Refresh JNPF-common-head-icon" :underline="false"
-                    @click="initData()" />
-                </el-tooltip>
-              </div>
-              <JNPF-table v-loading="listLoading" :data="list">
-                <el-table-column prop="categoryName" label="分类" align="center" />
-                <el-table-column prop="fullName" label="门户名称" align="center" />
-                <el-table-column prop="description" label="说明" align="center" />
-                <el-table-column prop="creatorUser" label="创建人" />
-                <el-table-column prop="creatorTime" label="创建时间"
-                  :formatter="jnpf.tableDateFormat" />
-                <el-table-column prop="lastModifyTime" label="最后修改时间"
-                  :formatter="jnpf.tableDateFormat" />
-                <el-table-column prop="sortCode" label="排序" width="70" align="center" />
-                <el-table-column prop="enabledMark" label="状态" width="70" align="center">
-                  <template slot-scope="scope">
-                    <el-tag :type="scope.row.enabledMark == 1 ? 'success' : 'danger'"
-                      disable-transitions>
-                      {{scope.row.enabledMark==1?'启用':'禁用'}}</el-tag>
-                  </template>
-                </el-table-column>
-                <el-table-column label="操作" fixed="right" width="200">
-                  <template slot-scope="scope">
-                    <tableOpts @edit="addOrUpdateHandle(scope.row.id)"
-                      @del="handleDel(scope.row.id)">
-                      <template>
-                        <el-dropdown>
-                          <span class="el-dropdown-link">
-                            <el-button type="text" size="mini">{{ $t("common.moreBtn")
+            <el-tabs type="border-card" v-model="categoryType" class="menu-tab"
+              @tab-click="activeClick">
+              <el-tab-pane label="Web门户" name="Web"></el-tab-pane>
+              <el-tab-pane label="App门户" name="App"></el-tab-pane>
+              <div class="JNPF-common-layout-main JNPF-flex-main">
+                <div class="JNPF-common-head">
+                  <topOpts @add="addOrUpdateHandle" addText='添加'>
+                  </topOpts>
+                  <el-tooltip effect="dark" :content="$t('common.refresh')" placement="top">
+                    <el-link icon="icon-ym icon-ym-Refresh JNPF-common-head-icon" :underline="false"
+                      @click="initData()" />
+                  </el-tooltip>
+                </div>
+                <JNPF-table v-loading="listLoading" :data="list">
+                  <el-table-column prop="categoryName" label="分类" align="center" />
+                  <el-table-column prop="fullName" label="门户名称" align="center" />
+                  <el-table-column prop="description" label="说明" align="center" />
+                  <el-table-column prop="creatorUser" label="创建人" width="120" />
+                  <el-table-column prop="creatorTime" label="创建时间" width="120"
+                    :formatter="jnpf.tableDateFormat" />
+                  <el-table-column prop="lastModifyTime" label="最后修改时间"
+                    :formatter="jnpf.tableDateFormat" />
+                  <el-table-column prop="sortCode" label="排序" width="70" align="center" />
+                  <el-table-column prop="enabledMark" label="状态" width="70" align="center">
+                    <template slot-scope="scope">
+                      <el-tag :type="scope.row.enabledMark == 1 ? 'success' : 'danger'"
+                        disable-transitions>
+                        {{scope.row.enabledMark==1?'启用':'禁用'}}</el-tag>
+                    </template>
+                  </el-table-column>
+                  <el-table-column label="操作" fixed="right" width="200">
+                    <template slot-scope="scope">
+                      <tableOpts @edit="addOrUpdateHandle(scope.row.id)"
+                        @del="handleDel(scope.row.id)">
+                        <template>
+                          <el-dropdown>
+                            <span class="el-dropdown-link">
+                              <el-button type="text" size="mini">{{ $t("common.moreBtn")
                             }}<i class="el-icon-arrow-down el-icon--right"></i>
-                            </el-button>
-                          </span>
-                          <el-dropdown-menu slot="dropdown">
-                            <el-dropdown-item @click.native="handleAuthorize(scope.row.id)">
-                              授权
-                            </el-dropdown-item>
-                            <el-dropdown-item @click.native="openReleaseDialog(scope.row)">
-                              发布
-                            </el-dropdown-item>
-                          </el-dropdown-menu>
-                        </el-dropdown>
-                      </template>
-                    </tableOpts>
-                  </template>
-                </el-table-column>
-              </JNPF-table>
-              <pagination :total="total" :page.sync="listQuery.currentPage"
-                :limit.sync="listQuery.pageSize" @pagination="initData" />
-            </div>
+                              </el-button>
+                            </span>
+                            <el-dropdown-menu slot="dropdown">
+                              <el-dropdown-item @click.native="handleAuthorize(scope.row.id)">
+                                授权
+                              </el-dropdown-item>
+                            </el-dropdown-menu>
+                          </el-dropdown>
+                        </template>
+                      </tableOpts>
+                    </template>
+                  </el-table-column>
+                </JNPF-table>
+                <pagination :total="total" :page.sync="listQuery.currentPage"
+                  :limit.sync="listQuery.pageSize" @pagination="initData" />
+              </div>
+            </el-tabs>
           </div>
           <Form v-if="formVisible" ref="Form" @refreshDataList="refresh" />
           <Transfer ref="transfer" :visible.sync="transferShow" :id="transferId"
             :systemId='systemId' />
-          <el-dialog title="同步门户" :visible.sync="releaseDialogVisible" append-to-body
-            class="JNPF-dialog JNPF-dialog_center release-dialog" lock-scroll width="600px">
-            <el-alert title="此操作将同步该门户，是否继续？" type="warning" :closable="false" show-icon />
-            <div class="dialog-main">
-              <div class="item" :class="{'active':releaseQuery.pc===1}" @click="selectToggle('pc')">
-                <i class="item-icon icon-ym icon-ym-pc"></i>
-                <p class="item-title">同步Web端门户</p>
-                <div class="icon-checked">
-                  <i class="el-icon-check"></i>
-                </div>
-              </div>
-              <div class="item" :class="{'active':releaseQuery.app===1}"
-                @click="selectToggle('app')">
-                <i class="item-icon icon-ym icon-ym-mobile"></i>
-                <p class="item-title">同步APP端门户</p>
-                <div class="icon-checked">
-                  <i class="el-icon-check"></i>
-                </div>
-              </div>
-            </div>
-            <el-form class="dialog-form-main" :model="releaseQuery" label-position="right"
-              label-width="50px" ref="releaseForm">
-              <el-form-item label="用户" prop="toUserIds">
-                <usersSelect v-model="toUserIds" placeholder="全部用户" multiple clearable />
-              </el-form-item>
-            </el-form>
-            <span slot="footer" class="dialog-footer">
-              <el-button @click="releaseDialogVisible = false">{{$t('common.cancelButton')}}
-              </el-button>
-              <el-button type="primary" :loading="releaseBtnLoading" @click="release">
-                {{$t('common.confirmButton')}}</el-button>
-            </span>
-          </el-dialog>
         </div>
       </div>
     </div>
@@ -154,8 +123,9 @@ export default {
         currentPage: 1,
         pageSize: 20,
         sort: 'desc',
-        sidx: ''
+        sidx: '',
       },
+      categoryType: "Web",
       releaseQuery: {
         pc: 1,
         app: 1,
@@ -188,6 +158,7 @@ export default {
     init(data) {
       this.title = data.fullName + '的门户管理'
       this.systemId = data.id
+      this.categoryType = 'Web'
       this.initData();
     },
     handleAuthorize(id) {
@@ -252,12 +223,17 @@ export default {
       }
       this.initData()
     },
+    activeClick(tab, event) {
+      this.categoryType = tab.name
+      this.search()
+    },
     initData() {
       this.listLoading = true;
       let query = {
         ...this.listQuery,
         category: this.category,
         keyword: this.keyword,
+        platform: this.categoryType
       }
       getPortalManageList(this.systemId, query).then((res) => {
         this.list = res.data.list;
@@ -273,7 +249,7 @@ export default {
     addOrUpdateHandle(id) {
       this.formVisible = true;
       this.$nextTick(() => {
-        this.$refs.Form.init(id, this.systemId, this.categoryList);
+        this.$refs.Form.init(id, this.systemId, this.categoryList, this.categoryType);
       });
     },
     handleDel(id) {
@@ -337,83 +313,6 @@ export default {
   }
   >>> .el-tabs__header {
     padding: 0;
-  }
-}
-.release-dialog {
-  >>> .el-dialog {
-    .el-dialog__body {
-      padding: 12px 55px;
-    }
-  }
-  .dialog-form-main {
-    margin-top: 20px;
-    display: flex;
-    justify-content: space-between;
-    >>> .el-form-item {
-      width: 100%;
-    }
-  }
-  .dialog-main {
-    margin-top: 20px;
-    display: flex;
-    justify-content: space-between;
-    .item {
-      position: relative;
-      width: 215px;
-      height: 127px;
-      cursor: pointer;
-      border: 1px solid #dcdfe6;
-      border-radius: 6px;
-      text-align: center;
-      padding-top: 20px;
-      color: #606266;
-      &.active {
-        border-color: #1890ff;
-        color: #1890ff;
-        box-shadow: 0 0 6px rgba(6, 58, 108, 0.1);
-        .item-icon {
-          border-color: #1890ff;
-        }
-        .icon-checked {
-          display: block;
-        }
-      }
-      .item-icon {
-        display: inline-block;
-        width: 44px;
-        height: 44px;
-        margin-bottom: 16px;
-        border: 2px solid #606266;
-        line-height: 40px;
-        font-size: 24px;
-        text-align: center;
-        border-radius: 50%;
-      }
-      .item-title {
-        font-size: 16px;
-        font-weight: 400;
-      }
-      .icon-checked {
-        display: none;
-        width: 18px;
-        height: 18px;
-        border: 18px solid #1890ff;
-        border-left: 18px solid transparent;
-        border-top: 18px solid transparent;
-        border-bottom-right-radius: 4px;
-        position: absolute;
-        right: 0px;
-        bottom: 0px;
-
-        i {
-          font-size: 16px;
-          position: absolute;
-          top: 0;
-          left: -2px;
-          color: #fff;
-        }
-      }
-    }
   }
 }
 </style>

@@ -36,7 +36,7 @@
               <i class="icon-ym icon-ym-xitong JNPF-messageList-item-icon"
                 v-if="item.type == 1"></i>
               <i class="icon-ym icon-ym-generator-notice JNPF-messageList-item-icon notice-icon"
-                 v-else-if="item.type == 3"></i>
+                v-else-if="item.type == 3"></i>
               <i class="icon-ym icon-ym icon-ym-generator-flow JNPF-messageList-item-icon flow-icon"
                 v-else></i>
             </el-badge>
@@ -281,7 +281,7 @@ export default {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 0 20px;
+      padding: 0 10px;
       background: #fff;
     }
     .JNPF-messageList-box {
@@ -304,7 +304,7 @@ export default {
     .JNPF-messageList-item {
       position: relative;
       display: block;
-      padding: 0 20px;
+      padding: 0 10px;
       background-color: #fff;
       border-bottom: 1px solid #f5f7f9;
       height: 60px;

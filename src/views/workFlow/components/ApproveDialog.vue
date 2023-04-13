@@ -51,18 +51,9 @@
         <user-select v-model="copyIds" placeholder="请选择" multiple />
       </el-form-item>
       <el-form-item label="审批意见" prop="handleOpinion" v-if="properties&&properties.hasOpinion">
-        <el-row>
-          <el-col :span="22">
-            <el-input v-model="dataForm.handleOpinion" placeholder="请输入审批意见" type="textarea"
-              :rows="4" />
-          </el-col>
-          <el-col :span="2">
-            <el-button plain @click="commonWords()" class="commonWords-button">
-              常用语
-            </el-button>
-          </el-col>
-        </el-row>
-
+        <el-input v-model="candidateForm.handleOpinion" placeholder="请输入审批意见" type="textarea"
+          :rows="4" />
+        <CommonWordsDialog ref="commonWordsDialog" @change="common" />
       </el-form-item>
       <el-form-item label="审批附件" prop="fileList" v-if="properties&&properties.hasOpinion">
         <JNPF-UploadFz v-model="dataForm.fileList" :limit="3" />
@@ -83,7 +74,6 @@
         {{$t('common.confirmButton')}}
       </el-button>
     </span>
-    <CommonWordsDialog v-if="commonWordsVisible" ref="commonWordsDialog" @change="common" />
     <SignImgDialog v-if="signVisible" ref="SignImg" :lineWidth='3' :userInfo='userInfo'
       :isDefault='1' @close="signDialog" />
   </el-dialog>
@@ -210,12 +200,6 @@ export default {
       if (val) {
         this.dataForm.handleOpinion += val.commonWordsText
       }
-    },
-    commonWords() {
-      this.commonWordsVisible = true
-      this.$nextTick(() => {
-        this.$refs.commonWordsDialog.init()
-      })
     },
     addSign() {
       this.signVisible = true

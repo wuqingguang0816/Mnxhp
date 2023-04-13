@@ -99,8 +99,10 @@
                     </el-button>
                   </span>
                   <el-dropdown-menu slot="dropdown">
-                    <el-dropdown-item v-if="scope.row.type==0"
-                      @click.native="design(scope.row.fullName,scope.row.id)">设计
+                    <el-dropdown-item @click.native="openReleaseDialog(scope.row)">
+                      发布
+                    </el-dropdown-item>
+                    <el-dropdown-item v-if="scope.row.type==0" @click.native="design(scope.row)">设计
                     </el-dropdown-item>
                     <el-dropdown-item @click.native="preview(scope.row.id,2)">预览</el-dropdown-item>
                     <el-dropdown-item @click.native="copy(scope.row.id)">复制</el-dropdown-item>
@@ -119,6 +121,7 @@
     <Form v-if="formVisible" ref="form" @close="closeForm" @initPortalDesign="design" />
     <PortalDesign v-if="portalDesignVisible" ref="portalDesign" @close="closeForm1" />
     <Preview :visible.sync="previewVisible" :id="currId" />
+    <ReleaseDialog :visible.sync="releaseDialog" ref="release" @release="search()" />
     <previewDialog :visible.sync="previewTypeVisible" :id="currId" :previewType="previewType"
       type="portal" @previewPc='previewPc' />
   </div>
@@ -130,9 +133,10 @@ import Form from './Form'
 import PortalDesign from '@/components/VisualPortal/PortalDesign'
 import previewDialog from '@/components/PreviewDialog'
 import Preview from './IndexPreview'
+import ReleaseDialog from './releaseDialog'
 export default {
   name: 'onlineDev-visualPortal',
-  components: { Form, PortalDesign, previewDialog, Preview },
+  components: { Form, PortalDesign, previewDialog, Preview, ReleaseDialog },
   data() {
     return {
       list: [],
@@ -157,7 +161,8 @@ export default {
       portalDesignVisible: false,
       categoryList: [],
       showAll: false,
-      previewType: ''
+      previewType: '',
+      releaseDialog: false
     }
   },
   created() {
@@ -241,6 +246,12 @@ export default {
         this.previewTypeVisible = true
       })
     },
+    openReleaseDialog(row) {
+      this.$nextTick(() => {
+        this.releaseDialog = true
+        this.$refs.release.openRelease(row)
+      })
+    },
     previewPc() {
       this.previewVisible = true
     },
@@ -253,11 +264,11 @@ export default {
         })
       }).catch(() => { });
     },
-    design(fullName, id) {
+    design(row) {
       this.dialogVisible = false
       this.portalDesignVisible = true
       this.$nextTick(() => {
-        this.$refs.portalDesign.init(fullName, id)
+        this.$refs.portalDesign.init(row)
       })
     },
     addOrUpdateHandle(id) {

@@ -124,6 +124,9 @@ export default {
     this.$eventBus.$on('eChart' + this.activeData.i, () => {
       this.$nextTick(() => {
         this.resize()
+        this.$nextTick(() => {
+          this.setBarMapChart()
+        })
       })
     })
     this.getAtlasList()

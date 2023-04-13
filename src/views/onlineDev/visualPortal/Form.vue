@@ -160,7 +160,7 @@ export default {
               this.visible = false
               this.$emit('close', true)
               if (!this.dataForm.id) this.dataForm.id = res.data
-              if (type == 1) this.$emit('initPortalDesign', this.dataForm.fullName, this.dataForm.id)
+              if (type == 1) this.$emit('initPortalDesign', this.dataForm)
             }
           })
         }).catch(() => {

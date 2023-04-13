@@ -126,7 +126,7 @@ import ChangeField from '@/components/ChangeField'
 import { noColumnShowList, noSearchList } from '@/components/Generator/generator/comConfig'
 const getFormDataFields = item => {
   const jnpfKey = item.__config__.jnpfKey
-  const fieldsList = ["comInput", "textarea", "numInput", "switch", "date", "time", "colorPicker", "rate", "slider", "editor", "link", "JNPFText", "alert"]
+  const fieldsList = ["comInput", "textarea", "numInput", "date", "time", "colorPicker", "rate", "slider", "editor", "link", "JNPFText", "alert"]
   const fieldsSelectList = ["radio", "checkbox", "select", "cascader", "treeSelect"]
   if (fieldsList.includes(jnpfKey) || fieldsSelectList.includes(jnpfKey) && item.__config__.dataType === 'static') return item
 }
