@@ -23,8 +23,8 @@
                   <div>
                     <el-tag
                       v-if="item.filedName === 'fullName' && list.filter(o=>o.id=='6')[0].show"
-                      size="mini" :color="item.type == 1?'#e5ebfe':'#ebe6ff'"
-                      :style="{'color':item.type == 1?'#1448f4':'#5e00f3'}">{{ item.type == 1?'公告':'通知' }}</el-tag>
+                      size="mini" :color="scope.row.category == 1?'#e5ebfe':'#ebe6ff'"
+                      :style="{'color':scope.row.category == 1?'#1448f4':'#5e00f3'}">{{ scope.row.category == 1 ? '公告':'通知' }}</el-tag>
                     <span style="margin-left: 10px;">{{ scope.row[item.filedName] }}</span>
                   </div>
                 </template>
@@ -32,21 +32,24 @@
             </template>
           </JNPF-table>
         </template>
+
         <template v-if="activeData.option.styleType==2">
           <template v-if="defaultValue.length">
             <div v-for="(item, i) in defaultValue" :key="i" class="portal-list-box">
               <div v-if=' i% 2 == 0' class="portal-list-item"
                 :style="{background: activeData.option.noticeOddLineColor ? activeData.option.noticeOddLineColor : activeData.option.noticeBgColor }">
                 <div class="item-image-box" v-if="activeData.option.showImage">
-                  <img :src="item.coverImage ? define.comUrl+item.coverImage : coverImage" alt=""
+                  <img v-if="item.category == 1"
+                    :src="item.coverImage ? define.comUrl+item.coverImage : coverImage" alt=""
                     class="item-image">
+                  <img v-else :src="item.coverImage ? define.comUrl+item.coverImage : coverImage2"
+                    alt="" class="item-image">
                 </div>
                 <div class="itme-content-box">
                   <div class="item-title">
-                    <el-tag size="mini" :color="item.type == 1?'#ebe6ff':'#e5ebfe'"
+                    <el-tag size="mini" :color="item.category == 1?'#ebe6ff':'#e5ebfe'"
                       v-if="list[0].show"
-                      :style="{'color':item.type == 1?'#9016f3':'#1448f4'}">{{ item.type == 1?'公告':'通知' }}</el-tag>
-                    {{ list[1].fontColor }}
+                      :style="{'color':item.category == 1?'#9016f3':'#1448f4'}">{{ item.category == 1?'公告':'通知' }}</el-tag>
                     <span class="item-left-span" v-if="list[1].show"
                       :style="{'color':list[1].fontColor,'font-size':list[1].fontSize+'px','font-weight':list[1].fontWeight?700:400}">{{ item.fullName }}</span>
                     <div v-if="list[3].show">
@@ -70,9 +73,9 @@
                 </div>
                 <div class="itme-content-box">
                   <div class="item-title">
-                    <el-tag size="mini" :color="item.type == 1?'#ebe6ff':'#e5ebfe'"
+                    <el-tag size="mini" :color="item.category == 1?'#ebe6ff':'#e5ebfe'"
                       v-if="list[0].show"
-                      :style="{'color':item.type == 1?'#9016f3':'#1448f4'}">{{ item.type == 1?'公告':'通知' }}</el-tag>
+                      :style="{'color':item.category == 1?'#9016f3':'#1448f4'}">{{ item.category == 1?'公告':'通知' }}</el-tag>
                     <span class="item-left-span" v-if="list[1].show"
                       :style="{'color':list[1].fontColor,'font-size':list[1].fontSize+'px','font-weight':list[1].fontWeight?700:400}">{{ item.fullName }}</span>
                     <div v-if="list[3].show">
@@ -104,9 +107,9 @@
                 </div>
                 <div style="" class="itme-content-box">
                   <div class="item-title">
-                    <el-tag size="mini" :color="item.type == 1?'#ebe6ff':'#e5ebfe'"
+                    <el-tag size="mini" :color="item.category == 1?'#ebe6ff':'#e5ebfe'"
                       v-if="list[0].show"
-                      :style="{'color':item.type == 1?'#9016f3':'#1448f4'}">{{ item.type == 1?'公告':'通知' }}</el-tag>
+                      :style="{'color':item.category == 1?'#9016f3':'#1448f4'}">{{ item.category == 1?'公告':'通知' }}</el-tag>
                     <span class="item-left-span" v-if="list[1].show"
                       :style="{'color':list[1].fontColor,'font-size':list[1].fontSize+'px','font-weight':list[1].fontWeight?700:400}">{{ item.fullName }}</span>
                   </div>
@@ -128,9 +131,9 @@
                 </div>
                 <div style="" class="itme-content-box">
                   <div class="item-title">
-                    <el-tag size="mini" :color="item.type == 1?'#ebe6ff':'#e5ebfe'"
+                    <el-tag size="mini" :color="item.category == 1?'#ebe6ff':'#e5ebfe'"
                       v-if="list[0].show"
-                      :style="{'color':item.type == 1?'#9016f3':'#1448f4'}">{{ item.type == 1?'公告':'通知' }}</el-tag>
+                      :style="{'color':item.category == 1?'#9016f3':'#1448f4'}">{{ item.category == 1?'公告':'通知' }}</el-tag>
                     <span class="item-left-span" v-if="list[1].show"
                       :style="{'color':list[1].fontColor,'font-size':list[1].fontSize+'px','font-weight':list[1].fontWeight?700:400}">{{ item.fullName }}</span>
                   </div>
@@ -168,7 +171,8 @@ export default {
   },
   data() {
     return {
-      coverImage: '@/assets/images/portal-nodata.png',
+      coverImage: require("@/assets/images/gg.png"),
+      coverImage2: require('@/assets/images/tz.png'),
       key: +new Date(),
       defaultValue: [],
       list: [],
