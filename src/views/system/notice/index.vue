@@ -52,7 +52,7 @@
           <el-table-column prop="type" label="类型" show-overflow-tooltip width="100">
             <template slot-scope="scope">
               <div>
-                {{scope.row.type==1?'公告':'通知'}}
+                {{scope.row.category==1?'公告':'通知'}}
               </div>
             </template>
           </el-table-column>
