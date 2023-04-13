@@ -32,7 +32,7 @@
             </template>
             <template
               v-if="item.__config__.jnpfKey==='time'|| item.__config__.jnpfKey==='timeRange'">
-              <JnpfTimePicker v-model="item.value" start-placeholder="开始时间" end-placeholder="结束时间"
+              <el-time-picker v-model="item.value" start-placeholder="开始时间" end-placeholder="结束时间"
                 clearable :value-format="item['value-format']" :format="item.format" is-range
                 :startTime="item.startTime" :endTime="item.endTime" class="item" />
             </template>
