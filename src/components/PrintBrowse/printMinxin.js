@@ -141,41 +141,47 @@ const printOptionApi = {
             if (!dataTagArr.includes(dataKey)) dataTagArr.push(dataKey.replace("{", "").replace("}", ""))
             this.subData[dataTag] = dataTagArr
           }
-        } else if (dataTag == 'isAmountChinese') {
-          let data = this.getAmount(dataKey)
-          if (isNaN(data)) {
-            let innerHTML = element.innerHTML.replace('大写金额(', '').replace(')', '')
-            this.printTemplate = this.replaceAll(this.printTemplate, element.innerHTML, innerHTML)
-            let subData = element.querySelectorAll('span')[0]
-            let subDataTag = subData.getAttribute('data-tag') ? subData.getAttribute('data-tag').split('.')[0] : false
-            let data_ = data.replace('{', "").replace("}", "")
-            if (subDataTag == 'headTable') {
-              this.data[data_] = getAmountChinese(this.data[data_])
-            } else {
-              this.data[subDataTag][0][data_] = getAmountChinese(this.data[subDataTag][0][data_])
-            }
-          } else {
-            this.printTemplate = this.replaceAll(this.printTemplate, dataKey, getAmountChinese(data))
-          }
-        } else if (dataTag == 'thousands') {
-          let [data, place] = this.getAmount(dataKey).split(',')
-          if (!data) return
-          if (isNaN(data)) {
-            let innerHTML = element.innerHTML.replace('千位分隔符(', '').replace(')', '').split(',')[0]
-            this.printTemplate = this.replaceAll(this.printTemplate, element.innerHTML, innerHTML)
-            let subData = element.querySelectorAll('span')[0]
-            let subDataTag = subData.getAttribute('data-tag') ? subData.getAttribute('data-tag').split('.')[0] : false
-            let data_ = data.replace('{', "").replace("}", "")
-            if (subDataTag == 'headTable') {
-              this.data[data_] = this.getThousands(this.data[data_], place)
-            } else {
-              this.data[subDataTag][0][data_] = this.getThousands(this.data[subDataTag][0][data_], place)
-            }
-          } else {
-            this.printTemplate = this.replaceAll(this.printTemplate, dataKey, this.getThousands(data, place))
-          }
         }
       })
+      var stringToHTML = function (str) {
+        var dom = document.createElement('div');
+        dom.innerHTML = str;
+        return dom;
+      };
+      let reg = /大写金额\((.+?)\)/g;
+      let list = this.printTemplate.match(reg);
+      if (list && list.length) {
+        for (let i = 0; i < list.length; i++) {
+          const element = list[i];
+          let data = this.getAmount(element)
+          if (isNaN(data)) {
+            data = stringToHTML(data)
+            let subData = data.querySelectorAll('span') ? data.querySelectorAll('span')[0] : ''
+            let [subDataTag, data_] = subData.getAttribute('data-tag') ? subData.getAttribute('data-tag').split('.') : []
+            let value = subDataTag == 'headTable' ? getAmountChinese(this.data[data_]) : getAmountChinese(this.data[subDataTag][0][data_])
+            this.printTemplate = this.replaceAll(this.printTemplate, element, value)
+          } else {
+            this.printTemplate = this.replaceAll(this.printTemplate, element, getAmountChinese(data))
+          }
+        }
+      }
+      let reg1 = /千位分隔符\((.+?)\)/g;
+      let list1 = this.printTemplate.match(reg1);
+      if (list1 && list1.length) {
+        for (let i = 0; i < list1.length; i++) {
+          const element = list1[i];
+          let [data, place] = this.getAmount(element).split(',')
+          if (isNaN(data)) {
+            data = stringToHTML(data)
+            let subData = data.querySelectorAll('span') ? data.querySelectorAll('span')[0] : ''
+            let [subDataTag, data_] = subData.getAttribute('data-tag') ? subData.getAttribute('data-tag').split('.') : []
+            let value = subDataTag == 'headTable' ? this.getThousands(this.data[data_], place) : this.getThousands(this.data[subDataTag][0][data_], place)
+            this.printTemplate = this.replaceAll(this.printTemplate, element, value)
+          } else {
+            this.printTemplate = this.replaceAll(this.printTemplate, element, this.getThousands(data, place))
+          }
+        }
+      }
     },
     getThousands(value, place) {
       place = place ? place : this.getPlace(value)
@@ -185,6 +191,7 @@ const printOptionApi = {
       })
     },
     getPlace(value) {
+      console.log(value)
       if (!value || value.toString().indexOf(".") == -1) return 0
       var index = value.toString().indexOf(".") + 1;
       var count = value.toString().length - index;
