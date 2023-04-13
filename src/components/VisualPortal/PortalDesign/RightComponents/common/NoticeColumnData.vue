@@ -1,9 +1,7 @@
 <template>
   <el-dialog title="选项设置" :close-on-click-modal="false" :visible.sync="visible"
     class="JNPF-dialog JNPF-dialog_center dialog_height" lock-scroll width="1000px" append-to-body>
-    <el-table-column prop="classify" label="">
-    </el-table-column>
-    <JNPF-table :data="list" ref="dragTable" :hasNO="false" row-key="id">
+    <JNPF-table :data="list" ref="dragNoticeTable" :hasNO="false" row-key="id">
       <el-table-column prop="fullName" label="名称">
         <template slot-scope="scope">
           <div style="display: flex;">
@@ -211,7 +209,7 @@ export default {
     },
 
     setSort() {
-      const el = this.$refs.dragTable.$el.querySelectorAll('.el-table__body-wrapper > table > tbody')[0]
+      const el = this.$refs.dragNoticeTable.$el.querySelectorAll('.el-table__body-wrapper > table > tbody')[0]
       this.sortable = Sortable.create(el, {
         ghostClass: 'sortable-ghost', // Class name for the drop placeholder,
         setData: function (dataTransfer) {

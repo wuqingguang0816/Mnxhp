@@ -119,7 +119,7 @@
             :max="99999" @change="renderKeyChange" />
         </el-form-item>
       </template>
-      <NoticeColumnData v-if="columnVisible" ref="columnData" :showType='showType'
+      <NoticeColumnData v-if="columnVisible" ref="noticeColumnData" :showType='showType'
         @columnList='columnList' />
     </el-collapse-item>
   </div>
@@ -166,9 +166,11 @@ export default {
     },
     showColumnData(option, type) {
       this.columnVisible = true
-      this.$nextTick(() => {
-        this.$refs.columnData.init(option, type)
-      })
+      setTimeout(() => {
+        this.$nextTick(() => {
+          this.$refs.noticeColumnData.init(option, type)
+        })
+      }, 300)
     },
   }
 }
