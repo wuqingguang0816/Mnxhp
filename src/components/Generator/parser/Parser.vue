@@ -564,37 +564,40 @@ export default {
           }
         }
         if (config.jnpfKey === 'time') {
+          let format = cur.format === 'HH:mm' ? 'HH:mm:00' : cur.format
           if (config.defaultCurrent) {
-            config.defaultValue = this.jnpf.toDate(new Date(), cur.format)
+            config.defaultValue = this.jnpf.toDate(new Date(), format)
           }
           if (config.startTimeRule) {
             if (config.startTimeType == 1) {
               cur.startTime = config.startTimeValue
+              if (cur.format === 'HH:mm') cur.startTime = cur.startTime + ':00'
             } else if (config.startTimeType == 3) {
-              cur.startTime = this.jnpf.toDate(new Date(), cur.format)
+              cur.startTime = this.jnpf.toDate(new Date(), format)
             } else if (config.startTimeType == 4) {
               let previousDate = '';
               previousDate = getBeforeTime(config.startTimeTarget, config.startTimeValue)
-              cur.startTime = this.jnpf.toDate(previousDate, cur.format)
+              cur.startTime = this.jnpf.toDate(previousDate, format)
             } else if (config.startTimeType == 5) {
               let previousDate = '';
               previousDate = getLaterTime(config.startTimeTarget, config.startTimeValue)
-              cur.startTime = this.jnpf.toDate(previousDate, cur.format)
+              cur.startTime = this.jnpf.toDate(previousDate, format)
             }
           }
           if (config.endTimeRule) {
             if (config.endTimeType == 1) {
-              cur.endTime = config.startTimeValue
+              cur.endTime = config.endTimeValue
+              if (cur.format === 'HH:mm') cur.endTime = cur.endTime + ':00'
             } else if (config.endTimeType == 3) {
-              cur.endTime = this.jnpf.toDate(new Date(), cur.format)
+              cur.endTime = this.jnpf.toDate(new Date(), format)
             } else if (config.endTimeType == 4) {
               let previousDate = '';
               previousDate = getBeforeTime(config.endTimeTarget, config.endTimeValue)
-              cur.endTime = this.jnpf.toDate(previousDate, cur.format)
+              cur.endTime = this.jnpf.toDate(previousDate, format)
             } else if (config.endTimeType == 5) {
               let previousDate = '';
               previousDate = getLaterTime(config.endTimeTarget, config.endTimeValue)
-              cur.endTime = this.jnpf.toDate(previousDate, cur.format)
+              cur.endTime = this.jnpf.toDate(previousDate, format)
             }
           }
           if (cur.__config__.startRelationField) {
