@@ -10,7 +10,7 @@
     <el-form-item label="字体加粗">
       <el-switch v-model="activeData.card.titleFontWeight" />
     </el-form-item>
-    <el-form-item label="字体颜色">
+    <el-form-item label="字体颜色" style="height:32px">
       <el-color-picker v-model="activeData.card.titleFontColor" />
     </el-form-item>
     <el-form-item label="字体位置">
@@ -20,7 +20,7 @@
         </el-radio-button>
       </el-radio-group>
     </el-form-item>
-    <el-form-item label="背景色">
+    <el-form-item label="背景色" style="height:32px">
       <el-color-picker v-model="activeData.card.titleBgColor" />
     </el-form-item>
     <el-form-item label="图标">
@@ -30,7 +30,7 @@
         </el-button>
       </el-input>
     </el-form-item>
-    <el-form-item label="图标颜色">
+    <el-form-item label="图标颜色" style="height:32px">
       <el-color-picker v-model="activeData.card.cardIconColor" />
     </el-form-item>
     <iconBox :visible.sync="iconsVisible" :current="activeData.card.cardIcon"

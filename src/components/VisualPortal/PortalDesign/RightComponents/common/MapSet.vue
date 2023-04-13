@@ -5,10 +5,10 @@
         :props="{ checkStrictly: true,value:'id', label:'fullName'}"
         v-model="activeData.option.mapType" @change="cascaderChange"></el-cascader>
     </el-form-item>
-    <el-form-item label="背景色">
+    <el-form-item label="背景色" style="height:32px">
       <el-color-picker v-model="activeData.option.bgColor" />
     </el-form-item>
-    <el-form-item label="区域颜色">
+    <el-form-item label="区域颜色" style="height:32px">
       <el-color-picker v-model="activeData.option.geoAreaColor" />
     </el-form-item>
     <el-form-item label="区域名称">
@@ -29,14 +29,14 @@
     <el-form-item label="区域线">
       <el-slider v-model="activeData.option.geoBorderWidth" :min="0" :max="10" :step="1" />
     </el-form-item>
-    <el-form-item label="区域线颜色">
+    <el-form-item label="区域线颜色" style="height:32px">
       <el-color-picker v-model="activeData.option.geoBorderColor" />
     </el-form-item>
     <template v-if="showType == 'pc'">
       <el-form-item label="阴影大小">
         <el-slider v-model="activeData.option.geoShadowOffset" :min="0" :max="5" :step="1" />
       </el-form-item>
-      <el-form-item label="阴影颜色">
+      <el-form-item label="阴影颜色" style="height:32px">
         <el-color-picker v-model="activeData.option.geoShadowColor" />
       </el-form-item>
       <el-form-item label="鼠标缩放">
@@ -60,7 +60,7 @@
       <el-form-item label="字体加粗">
         <el-switch v-model="activeData.option.drillDownFontWeight" />
       </el-form-item>
-      <el-form-item label="字体颜色">
+      <el-form-item label="字体颜色" style="height:32px">
         <el-color-picker v-model="activeData.option.drillDownColor" />
       </el-form-item>
     </template>
@@ -110,7 +110,7 @@
       <el-form-item label="字体加粗">
         <el-switch v-model="activeData.option.barTitleTextStyleFontWeight" />
       </el-form-item>
-      <el-form-item label="字体颜色">
+      <el-form-item label="字体颜色" style="height:32px">
         <el-color-picker v-model="activeData.option.barTitleTextStyleColor" />
       </el-form-item>
       <el-form-item label="底边距">

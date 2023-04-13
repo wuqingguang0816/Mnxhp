@@ -30,10 +30,10 @@
           <el-switch v-model="activeData.option.seriesLabelFontWeight" />
         </el-form-item>
       </template>
-      <el-form-item label="字体颜色">
+      <el-form-item label="字体颜色" style="height:32px">
         <el-color-picker v-model="activeData.option.seriesLabelColor" />
       </el-form-item>
-      <el-form-item label="背景色" v-if="showType == 'pc'">
+      <el-form-item label="背景色" v-if="showType == 'pc'" style="height:32px">
         <el-color-picker v-model="activeData.option.seriesLabelBgColor" />
       </el-form-item>
     </template>
