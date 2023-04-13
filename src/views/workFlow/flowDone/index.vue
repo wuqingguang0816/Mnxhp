@@ -56,7 +56,7 @@
             </el-col>
             <el-col :span="6">
               <el-form-item label="紧急程度">
-                <el-select v-model="urgent" placeholder="选择紧急程度" clearable>
+                <el-select v-model="urgent" placeholder="选择紧急程度" clearable filterable>
                   <el-option v-for="(item,i) in urgentList" :key="i" :label="item.fullName"
                     :value="item.id">
                   </el-option>

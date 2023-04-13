@@ -11,7 +11,7 @@
           </el-col>
           <el-col :span="6">
             <el-form-item label="渠道">
-              <el-select v-model="channel" placeholder="请选择渠道" clearable>
+              <el-select v-model="channel" placeholder="请选择渠道" clearable filterable>
                 <el-option v-for="item in channelList" :key="item.id" :label="item.fullName"
                   :value="item.id">
                 </el-option>

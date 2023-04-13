@@ -1354,7 +1354,7 @@
                     从目标服务中获取审批人</div>
                   <el-form-item label="发起者的" style="margin-bottom:0!important"
                     v-if="approverForm.assigneeType === 1">
-                    <el-select v-model="approverForm.managerLevel">
+                    <el-select v-model="approverForm.managerLevel" filterable>
                       <el-option v-for="item in 10" :key="item"
                         :label="item===1?'直属主管':'第'+item+'级主管'" :value="item">
                       </el-option>
@@ -1475,7 +1475,7 @@
                   </el-radio>
                 </el-radio-group>
                 <el-select class="form-item-content" v-model="approverForm.rejectStep"
-                  placeholder="请选择">
+                  placeholder="请选择" filterable>
                   <el-option v-for="item in rejectStepOptions" :key="item.nodeId"
                     :label="item.properties.title" :value="item.nodeId">
                   </el-option>

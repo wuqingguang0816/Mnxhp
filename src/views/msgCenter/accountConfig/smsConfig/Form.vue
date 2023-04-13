@@ -10,7 +10,8 @@
         <el-input v-model="dataForm.enCode" placeholder="编码" clearable />
       </jnpf-form-tip-item>
       <jnpf-form-tip-item label="渠道" prop="channel">
-        <el-select v-model="dataForm.channel" placeholder="请选择" clearable @change="channelVal">
+        <el-select v-model="dataForm.channel" placeholder="请选择" clearable @change="channelVal"
+          filterable>
           <el-option v-for="item in channelList" :label="item.fullName" :value="item.id"
             :key="item.value" />
         </el-select>
