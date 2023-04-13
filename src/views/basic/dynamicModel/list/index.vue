@@ -493,7 +493,7 @@ import request from '@/utils/request'
 import Form from './Form'
 import extraForm from './extraForm'
 import FlowBox from '@/views/workFlow/components/FlowBox'
-import Detail from './detail'
+import Detail from './Detail'
 import ExportBox from '@/components/ExportBox'
 import Search from './Search'
 import ChildTableColumn from './child-table-column'
@@ -580,7 +580,8 @@ export default {
       refreshTree: true,
       flowList: [],
       flowListVisible: false,
-      currFlow: {}
+      currFlow: {},
+      mainLoading: false
     }
   },
   computed: {
@@ -650,7 +651,7 @@ export default {
       }
     },
     async getPrintListOptions(ids) {
-      printOptionsApi({ids}).then(res => {
+      printOptionsApi({ ids }).then(res => {
         this.printListOptions = res.data
       })
     },
