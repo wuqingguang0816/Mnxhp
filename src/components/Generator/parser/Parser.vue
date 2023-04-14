@@ -531,7 +531,6 @@ export default {
               }
             }
           }
-
           if (cur.__config__.startRelationField) {
             let item = {
               ...cur,
@@ -690,25 +689,24 @@ export default {
                 this.comSet('endTime', e.__vModel__, endTime)
               }
               if (e.opType === 'setTime') {
-                let format = e.format
                 let startTime = ''
                 let endTime = ''
                 if (e.__config__.startTimeType == 2) {
-                  if (format == 'HH:mm') {
-                    startTime = this[this.formConf.formModel][e.__config__.startRelationField] || '00:00:00'
-                    startTime = startTime + ':00'
-                  } else {
+                  startTime = this[this.formConf.formModel][e.__config__.startRelationField] || '00:00:00'
+                  if (startTime && (startTime.split(':').length == 3)) {
                     startTime = startTime
+                  } else {
+                    startTime = startTime + ':00'
                   }
                 } else {
                   startTime = e.startTime
                 }
                 if (e.__config__.endTimeType == 2) {
-                  if (format == 'HH:mm') {
-                    endTime = this[this.formConf.formModel][e.__config__.endRelationField] || '00:00:00'
-                    endTime = endTime + ':00'
-                  } else {
+                  endTime = this[this.formConf.formModel][e.__config__.endRelationField] || '00:00:00'
+                  if (endTime && (endTime.split(':').length == 3)) {
                     endTime = endTime
+                  } else {
+                    endTime = endTime + ':00'
                   }
                 } else {
                   endTime = e.endTime
@@ -759,25 +757,24 @@ export default {
                 this.comSet('endTime', e.__vModel__, endTime)
               }
               if (e.opType === 'setTime') {
-                let format = e.format
                 let startTime = ''
                 let endTime = ''
                 if (e.__config__.startTimeType == 2) {
-                  if (format == 'HH:mm') {
-                    startTime = this[this.formConf.formModel][e.__config__.startRelationField] || '00:00:00'
-                    startTime = startTime + ':00'
-                  } else {
+                  startTime = this[this.formConf.formModel][e.__config__.startRelationField] || '00:00:00'
+                  if (startTime && (startTime.split(':').length == 3)) {
                     startTime = startTime
+                  } else {
+                    startTime = startTime + ':00'
                   }
                 } else {
                   startTime = e.startTime
                 }
                 if (e.__config__.endTimeType == 2) {
-                  if (format == 'HH:mm') {
-                    endTime = this[this.formConf.formModel][e.__config__.endRelationField] || '00:00:00'
-                    endTime = endTime + ':00'
-                  } else {
+                  endTime = this[this.formConf.formModel][e.__config__.endRelationField] || '00:00:00'
+                  if (endTime && (endTime.split(':').length == 3)) {
                     endTime = endTime
+                  } else {
+                    endTime = endTime + ':00'
                   }
                 } else {
                   endTime = e.endTime
