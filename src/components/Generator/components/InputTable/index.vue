@@ -234,15 +234,26 @@ export default {
               item.config.endTime = endTime
             }
             if (e.opType === 'setTime') {
+              let format = e.format
               let startTime = ''
               let endTime = ''
               if (e.__config__.startRelationField && e.__config__.startTimeType == 2) {
-                startTime = this.formData[e.__config__.startRelationField] || 0
+                if (format == 'HH:mm') {
+                  startTime = this.formData[e.__config__.startRelationField] || '00:00:00'
+                  startTime = startTime + ':00'
+                } else {
+                  startTime = startTime
+                }
               } else {
                 startTime = e.startTime
               }
               if (e.__config__.endRelationField && e.__config__.endTimeType == 2) {
-                endTime = this.formData[e.__config__.endRelationField] || 0
+                if (format == 'HH:mm') {
+                  endTime = this.formData[e.__config__.endRelationField] || '00:00:00'
+                  endTime = endTime + ':00'
+                } else {
+                  endTime = endTime
+                }
               } else {
                 endTime = e.endTime
               }
@@ -305,15 +316,26 @@ export default {
                   item.config.endTime = endTime
                 }
                 if (e.opType === 'setTime') {
+                  let format = e.format
                   let startTime = 0
                   let endTime = 0
                   if (e.__config__.startRelationField && e.__config__.startTimeType == 2) {
-                    startTime = this.getFieldVal(e.__config__.startRelationField, rowIndex) || 0
+                    startTime = this.getFieldVal(e.__config__.startRelationField, rowIndex) || '00:00:00'
+                    if (format == 'HH:mm') {
+                      startTime = startTime + ':00'
+                    } else {
+                      startTime = startTime
+                    }
                   } else {
                     startTime = e.startTime
                   }
                   if (e.__config__.endRelationField && e.__config__.endTimeType == 2) {
-                    endTime = this.getFieldVal(e.__config__.endRelationField, rowIndex) || 0
+                    endTime = this.getFieldVal(e.__config__.endRelationField, rowIndex) || '00:00:00'
+                    if (format == 'HH:mm') {
+                      endTime = endTime + ':00'
+                    } else {
+                      endTime = endTime
+                    }
                   } else {
                     endTime = e.endTime
                   }
@@ -366,15 +388,26 @@ export default {
           item.config.endTime = endTime
         }
         if (config.jnpfKey === 'time') {
+          let format = cur.format
           let startTime = 0
           let endTime = 0
           if (cur.__config__.startRelationField && cur.__config__.startTimeType == 2) {
-            startTime = this.getFieldVal(cur.__config__.startRelationField, rowIndex) || 0
+            startTime = this.getFieldVal(cur.__config__.startRelationField, rowIndex) || '00:00:00'
+            if (format == 'HH:mm') {
+              startTime = startTime + ':00'
+            } else {
+              startTime = startTime
+            }
           } else {
             startTime = cur.startTime
           }
           if (cur.__config__.endRelationField && cur.__config__.endTimeType == 2) {
-            endTime = this.getFieldVal(cur.__config__.endRelationField, rowIndex) || 0
+            endTime = this.getFieldVal(cur.__config__.endRelationField, rowIndex) || '00:00:00'
+            if (format == 'HH:mm') {
+              endTime = endTime + ':00'
+            } else {
+              endTime = endTime
+            }
           } else {
             endTime = cur.endTime
           }
