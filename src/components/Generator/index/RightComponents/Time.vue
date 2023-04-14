@@ -52,7 +52,7 @@
       <el-form-item label="" class="spacing"
         v-else-if="activeData.__config__.startTimeType==4 ||activeData.__config__.startTimeType==5">
         <el-input type="number" v-model="activeData.__config__.startTimeValue" placeholder="请输入"
-          min="1">
+          :min="1" @change="startValue">
           <el-select slot="append" v-model="activeData.__config__.startTimeTarget"
             style="width: 70px;" placeholder="请选择" filterable>
             <el-option v-for="(item, index) in targetOptions" :key="index" :label="item.label"
@@ -87,7 +87,7 @@
       <el-form-item label="" class="spacing"
         v-else-if="activeData.__config__.endTimeType==4 ||activeData.__config__.endTimeType==5">
         <el-input type="number" v-model="activeData.__config__.endTimeValue" placeholder="请输入"
-          min="1">
+          :min="1" @change="endValue">
           <el-select slot="append" v-model="activeData.__config__.endTimeTarget"
             style="width: 70px;" placeholder="请选择" filterable>
             <el-option v-for="(item, index) in targetOptions" :key="index" :label="item.label"
@@ -214,6 +214,12 @@ export default {
     }
   },
   methods: {
+    startValue(val) {
+      if (val < 1) this.activeData.__config__.startTimeValue = 1
+    },
+    endValue(val) {
+      if (val < 1) this.activeData.__config__.endTimeValue = 1
+    },
     endTimeRuleChange() {
       if (!this.activeData.__config__.endTimeRule) {
         return this.activeData.__config__.endRelationField = ''
@@ -246,7 +252,6 @@ export default {
       } else if (val == 4 || val == 5) {
         this.activeData.__config__.startTimeValue = 1
         this.activeData.__config__.startTimeTarget = 1
-        return this.activeData.startTime = this.jnpf.toDate(this.getBeforeTime(1, 1), this.activeData.format)
       } else if (val == 2) {
         this.activeData.__config__.startTimeValue = ''
       } else {
@@ -262,7 +267,6 @@ export default {
       } else if (val == 4 || val == 5) {
         this.activeData.__config__.endTimeValue = 1
         this.activeData.__config__.endTimeTarget = 1
-        return this.activeData.endTime = this.jnpf.toDate(this.getLaterTime(1, 1), this.activeData.format)
       } else {
         this.activeData.__config__.endTimeValue = ''
       }
