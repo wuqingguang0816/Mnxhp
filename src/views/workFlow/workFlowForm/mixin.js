@@ -22,6 +22,7 @@ export default {
   methods: {
     init(data) {
       this.dataForm.id = data.id || ''
+      if (this.dataForm.id) this.loading = true
       this.setting = data
       this.updateDataRule()
       this.$nextTick(() => {
@@ -37,6 +38,7 @@ export default {
           if (this.dataForm.fileJson) {
             this.fileList = JSON.parse(this.dataForm.fileJson)
           }
+          this.loading = false
           this.$emit('setPageLoad')
           return
         } else {
