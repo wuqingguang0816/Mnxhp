@@ -97,7 +97,7 @@ export default {
         coverImage: '',
         remindCategory: 1,
         category: '1',
-        sendConfigId: 0,
+        sendConfigId: '',
         sendConfigName: '',
         expirationTime: null,
         excerpt: ""
@@ -146,7 +146,7 @@ export default {
             this.files = res.data.files ? JSON.parse(res.data.files) : []
             this.toUserIds = res.data.toUserIds ? res.data.toUserIds.split(',') : []
             this.$nextTick(() => {
-              this.sendMessageConfig(this.dataForm.sendConfigId)
+              if (this.dataForm.sendConfigId) this.sendMessageConfig(this.dataForm.sendConfigId)
             })
           })
         }
