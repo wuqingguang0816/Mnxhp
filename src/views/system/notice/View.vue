@@ -7,6 +7,7 @@
       <div class="info">
         <span>{{jnpf.dateFormat(dataForm.releaseTime)}}</span><span>{{dataForm.releaseUser}}</span>
       </div>
+      <p style="padding: 20px 0 10px;color: #303133;">{{ dataForm.excerpt }}</p>
       <div class="main" v-html="dataForm.bodyText"></div>
       <div class="file-list" v-if="files.length">
         <JNPF-UploadFz v-model="files" disabled detailed />
