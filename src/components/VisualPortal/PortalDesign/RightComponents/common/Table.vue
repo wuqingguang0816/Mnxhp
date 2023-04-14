@@ -5,20 +5,6 @@
         <el-switch v-model="activeData.option.showName">
         </el-switch>
       </el-form-item>
-      <el-form-item label="显示条数">
-        <el-input-number v-model="activeData.option.appCount" controls-position="right" :min="5"
-          :max="99999" />
-      </el-form-item>
-      <el-form-item label="字体大小">
-        <el-input-number v-model="activeData.option.textFontSize" controls-position="right"
-          :min="12" :max="25" />
-      </el-form-item>
-      <el-form-item label="字体加粗">
-        <el-switch v-model="activeData.option.textFontWeight" />
-      </el-form-item>
-      <el-form-item label="字体颜色" style="height:32px">
-        <el-color-picker v-model="activeData.option.textFontColor" />
-      </el-form-item>
       <el-form-item label="数据类型">
         <el-radio-group v-model="activeData.dataType" size="small" @change="dataTypeChange">
           <el-radio-button label="static">静态数据</el-radio-button>
@@ -35,6 +21,32 @@
       <refresh v-if="activeData.propsApi" :refresh="activeData.refresh" />
       <el-form-item label="行数据">
         <el-button @click="showColumnData(activeData.option.appColumnList)">设置</el-button>
+      </el-form-item>
+      <el-form-item label="显示条数">
+        <el-input-number v-model="activeData.option.appCount" controls-position="right" :min="5"
+          :max="99999" />
+      </el-form-item>
+      <template v-if="activeData.option.showName">
+        <el-form-item label="名称大小">
+          <el-input-number v-model="activeData.option.nameFontSize" controls-position="right"
+            :min="12" :max="25" />
+        </el-form-item>
+        <el-form-item label="名称加粗">
+          <el-switch v-model="activeData.option.nameFontWeight" />
+        </el-form-item>
+        <el-form-item label="名称颜色" style="height:32px">
+          <el-color-picker v-model="activeData.option.nameFontColor" />
+        </el-form-item>
+      </template>
+      <el-form-item label="数据大小">
+        <el-input-number v-model="activeData.option.dataFontSize" controls-position="right"
+          :min="12" :max="25" />
+      </el-form-item>
+      <el-form-item label="数据加粗">
+        <el-switch v-model="activeData.option.dataFontWeight" />
+      </el-form-item>
+      <el-form-item label="数据颜色" style="height:32px">
+        <el-color-picker v-model="activeData.option.dataFontColor" />
       </el-form-item>
     </template>
     <template v-else>
