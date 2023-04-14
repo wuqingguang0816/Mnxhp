@@ -30,7 +30,7 @@ import { deepClone } from '@/utils'
 import Parser from './detail/Parser'
 import PrintBrowse from '@/components/PrintBrowse'
 export default {
-  name: 'Detail',
+  name: 'RelevanceDetail',
   components: { Parser, PrintBrowse, PrintDialog },
   data() {
     return {
