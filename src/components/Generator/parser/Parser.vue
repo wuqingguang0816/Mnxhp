@@ -569,8 +569,12 @@ export default {
           }
           if (config.startTimeRule) {
             if (config.startTimeType == 1) {
-              cur.startTime = config.startTimeValue
-              if (cur.format === 'HH:mm') cur.startTime = cur.startTime + ':00'
+              cur.startTime = config.startTimeValue || '00:00:00'
+              if (cur.startTime.split(':').length == 3) {
+                cur.startTime = cur.startTime
+              } else {
+                cur.startTime = cur.startTime + ':00'
+              }
             } else if (config.startTimeType == 3) {
               cur.startTime = this.jnpf.toDate(new Date(), format)
             } else if (config.startTimeType == 4) {
@@ -585,8 +589,12 @@ export default {
           }
           if (config.endTimeRule) {
             if (config.endTimeType == 1) {
-              cur.endTime = config.endTimeValue
-              if (cur.format === 'HH:mm') cur.endTime = cur.endTime + ':00'
+              cur.endTime = config.endTimeValue || '00:00:00'
+              if (cur.endTime.split(':').length == 3) {
+                cur.endTime = cur.endTime
+              } else {
+                cur.endTime = cur.endTime + ':00'
+              }
             } else if (config.endTimeType == 3) {
               cur.endTime = this.jnpf.toDate(new Date(), format)
             } else if (config.endTimeType == 4) {
@@ -769,6 +777,7 @@ export default {
                 } else {
                   startTime = e.startTime
                 }
+                console.log(startTime)
                 if (e.__config__.endTimeType == 2) {
                   endTime = this[this.formConf.formModel][e.__config__.endRelationField] || '00:00:00'
                   if (endTime && (endTime.split(':').length == 3)) {
