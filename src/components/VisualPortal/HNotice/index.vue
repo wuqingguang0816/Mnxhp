@@ -12,7 +12,7 @@
         background:activeData.option.headerBgColor,color:activeData.option.headerFontColor,
         'font-weight':activeData.option.headerFontWeight?'bolder':'normal'}"
             :cell-style="tableRowClassName" :default-sort="{prop: 'date', order: 'descending'}"
-            style="height: 100%;">
+            :class="!activeData.border?'noticeList':''">
             <el-table-column type="index" width="50" v-if="activeData.option.tableIndex" label="序号"
               fixed='left' align="center" />
             <template v-for="(item, i) in list">
@@ -24,7 +24,7 @@
                     <el-tag
                       v-if="item.filedName === 'fullName' && list.filter(o=>o.id=='6')[0].show"
                       size="mini" :color="scope.row.category == 1?'#e5ebfe':'#ebe6ff'"
-                      :style="{'color':scope.row.category == 1?'#1448f4':'#5e00f3'}">{{ scope.row.category == 1 ? '公告':'通知' }}</el-tag>
+                      :style="{'color':scope.row.category == 1?'#1448f4':'#5e00f3'}">{{ scope.row.category }}</el-tag>
                     <span style="margin-left: 10px;">{{ scope.row[item.filedName] }}</span>
                   </div>
                 </template>
@@ -32,12 +32,12 @@
             </template>
           </JNPF-table>
         </template>
-
         <template v-if="activeData.option.styleType==2">
           <template v-if="defaultValue.length">
-            <div v-for="(item, i) in defaultValue" :key="i" class="portal-list-box">
+            <div v-for="(item, i) in defaultValue" :key="i" class="portal-list-box"
+              :style="{'border-bottom':i == defaultValue.length-1 ? 'none':'1px solid #ebeef5'}">
               <div v-if=' i% 2 == 0' class="portal-list-item"
-                :style="{background: activeData.option.noticeOddLineColor ? activeData.option.noticeOddLineColor : activeData.option.noticeBgColor }">
+                :style="{'background': activeData.option.noticeOddLineColor ? activeData.option.noticeOddLineColor : activeData.option.noticeBgColor }">
                 <div class="item-image-box" v-if="activeData.option.showImage">
                   <img v-if="item.category == 1"
                     :src="item.coverImage ? define.comUrl+item.coverImage : coverImage" alt=""
@@ -99,7 +99,8 @@
         </template>
         <template v-if="activeData.option.styleType==3">
           <template v-if="defaultValue.length">
-            <div v-for="(item, i) in defaultValue" class="portal-list-box" :key="i">
+            <div v-for="(item, i) in defaultValue" class="portal-list-box" :key="i"
+              :style="{'border-bottom':i == defaultValue.length-1 ? 'none':'1px solid #ebeef5'}">
               <div class="portal-list-item" v-if=' i% 2 == 0'
                 :style="{background: activeData.option.noticeOddLineColor ? activeData.option.noticeOddLineColor : activeData.option.noticeBgColor }">
                 <div class="item-image-box">
@@ -190,10 +191,10 @@ export default {
       styleJson['font-size'] = this.activeData.option.tableFontSize + 'px'
       styleJson['color'] = this.activeData.option.tableFontColor
       if (rowIndex % 2 == 0) {
-        styleJson.background = this.activeData.option.noticeOddLineColor ? this.activeData.option.noticeOddLineColor : this.activeData.option.noticeBgColor
+        styleJson.background = this.activeData.option.tableOddLineColor ? this.activeData.option.tableOddLineColor : this.activeData.option.tableBgColor
         return styleJson
       } else {
-        styleJson.background = this.activeData.option.noticeEvenyLineColor ? this.activeData.option.noticeEvenyLineColor : this.activeData.option.noticeBgColor
+        styleJson.background = this.activeData.option.tableEvenLineColor ? this.activeData.option.tableEvenLineColor : this.activeData.option.tableBgColor
         return styleJson
       }
     },
@@ -225,19 +226,39 @@ export default {
 </script>
 <style lang="scss" scoped>
 .portal-notice-box {
+  &.el-card__header {
+    padding: 18px 0;
+  }
   .portal-notice-box-body {
-    padding: 18px 20px;
+    height: 100%;
+    overflow: auto;
+    .noticeList {
+      >>> .el-table tr:last-child td {
+        border-bottom: unset;
+      }
+    }
     .portal-list-box {
+      display: flex;
+      flex-direction: column;
+      >>> .el-card__header {
+        height: 55px;
+        padding: 0;
+      }
+      >>> .el-card__body {
+        width: 100%;
+        flex: 1;
+        overflow: hidden;
+      }
       .portal-list-item {
         display: flex;
         height: 100%;
         width: 100%;
-        padding: 6px 0;
-        border-bottom: 1px solid #ebeef5;
+        padding: 12px 0;
         .item-image-box {
           width: 52px;
           height: 52px;
           flex-shrink: 0;
+
           .item-image {
             width: 100%;
             height: 100%;

@@ -270,7 +270,7 @@ export const systemComponents = [{
       filedName: 'classify',
       show: true,
       fixed: "none",
-      align: 'left',
+      align: 'center',
       width: 0,
       classify: ['1', '2'],
       id: '6'
@@ -280,7 +280,7 @@ export const systemComponents = [{
       sortable: false,
       show: true,
       fixed: "none",
-      align: 'left',
+      align: 'center',
       width: 0,
       id: '1'
     },
@@ -290,7 +290,7 @@ export const systemComponents = [{
       sortable: false,
       show: true,
       fixed: "none",
-      align: 'left',
+      align: 'center',
       width: 0,
       id: '2'
     },
@@ -300,7 +300,7 @@ export const systemComponents = [{
       sortable: false,
       show: true,
       fixed: "none",
-      align: 'left',
+      align: 'center',
       width: 0,
       id: '3'
     },
@@ -310,7 +310,7 @@ export const systemComponents = [{
       sortable: false,
       show: true,
       fixed: "none",
-      align: 'left',
+      align: 'center',
       width: 0,
       id: '4'
     }, {
@@ -319,7 +319,7 @@ export const systemComponents = [{
       sortable: false,
       show: true,
       fixed: "none",
-      align: 'left',
+      align: 'center',
       width: 0,
       id: '5'
     }],
