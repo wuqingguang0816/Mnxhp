@@ -104,7 +104,7 @@ export default {
       },
       sendConfiguredList: [],
       remindCategoryList: [{ 'fullName': '站内信', 'enCode': 1 }, { 'fullName': '自定义', 'enCode': 2 }, { 'fullName': '不提醒', 'enCode': 3 }],
-      categoryList: [{ fullName: "公告", enCode: 1 }, { fullName: "通知", enCode: 2 },],
+      categoryList: [],
       toUserIds: [],
       files: [],
       dataRule: {
@@ -134,6 +134,10 @@ export default {
       this.visible = true
       this.formLoading = true
       this.$nextTick(() => {
+        // 获取公告类型
+        this.$store.dispatch('base/getDictionaryData', { sort: 'NoticeType' }).then(res => {
+          this.categoryList = res
+        })
         this.$refs['dataForm'].resetFields()
         if (this.remindCategory != 1 && !this.dataForm.id) this.dataForm.sendConfigName = ""
         if (this.dataForm.id) {

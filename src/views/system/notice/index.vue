@@ -20,7 +20,7 @@
           </el-col>
           <el-col :span="6">
             <el-form-item label="状态">
-              <el-select v-model="noticeStatus" multiple placeholder="选择状态" clearable filterable>
+              <el-select v-model="noticeStatus" multiple placeholder="选择状态" clearable>
                 <el-option v-for="(item,index) in noticeStatusList" :key="index"
                   :label="item.fullName" :value="item.enCode">
                 </el-option>
@@ -52,7 +52,7 @@
           <el-table-column prop="type" label="类型" show-overflow-tooltip width="100">
             <template slot-scope="scope">
               <div>
-                {{scope.row.category==1?'公告':'通知'}}
+                {{scope.row.category}}
               </div>
             </template>
           </el-table-column>
@@ -121,10 +121,7 @@ export default {
         currentPage: 1,
         pageSize: 20
       },
-      noticeSourceList: [
-        { fullName: "通知", enCode: '2' },
-        { fullName: "公告", enCode: '1' },
-      ],
+      noticeSourceList: [],
       noticeStatusList: [
         { fullName: "存草稿", enCode: '0' },
         { fullName: "已发送", enCode: '1' },
@@ -141,6 +138,10 @@ export default {
   },
   methods: {
     initData() {
+      // 获取公告类型
+      this.$store.dispatch('base/getDictionaryData', { sort: 'NoticeType' }).then(res => {
+        this.noticeSourceList = res
+      })
       this.listLoading = true;
       this.listQuery.enabledMark = this.noticeStatus;
       this.listQuery.type = this.noticeSource;
