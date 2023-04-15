@@ -225,6 +225,11 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
+.noticeList {
+  >>> .el-table tr:last-child td {
+    border-bottom: unset;
+  }
+}
 .portal-notice-box {
   &.el-card__header {
     padding: 18px 0;
@@ -232,11 +237,6 @@ export default {
   .portal-notice-box-body {
     height: 100%;
     overflow: auto;
-    .noticeList {
-      >>> .el-table tr:last-child td {
-        border-bottom: unset;
-      }
-    }
     .portal-list-box {
       display: flex;
       flex-direction: column;
