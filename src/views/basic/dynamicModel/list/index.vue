@@ -454,7 +454,8 @@
     <FlowBox v-if="flowVisible" ref="FlowBox" @close="closeFlow" />
     <Form v-show="formVisible" ref="Form" @refreshDataList="refresh" />
     <extraForm v-show="extraFormVisible" ref="extraForm" @refreshDataList="refresh" />
-    <Detail v-show="detailVisible" ref="Detail" @close="detailVisible = false" />
+    <Detail v-if="detailVisible" ref="Detail" @close="detailVisible = false" />
+    <RelevanceDetail v-if="detailsVisible" ref="RelevanceDetail" @close="detailsVisible = false" />
     <ExportBox v-if="exportBoxVisible" ref="ExportBox" @download="download" />
     <ImportBox v-if="uploadBoxVisible" ref="UploadBox" @refresh="initData" />
     <CustomBox v-if="customBoxVisible" ref="CustomBox" @close="customBoxVisible= false" />
@@ -494,6 +495,7 @@ import Form from './Form'
 import extraForm from './extraForm'
 import FlowBox from '@/views/workFlow/components/FlowBox'
 import Detail from './detail'
+import RelevanceDetail from './RelevanceDetail'
 import ExportBox from '@/components/ExportBox'
 import Search from './Search'
 import ChildTableColumn from './child-table-column'
@@ -504,7 +506,7 @@ import { mapGetters } from "vuex";
 
 export default {
   name: 'dynamicModel',
-  components: { PrintDialog, PrintBrowse, Form, extraForm, ExportBox, Search, Detail, FlowBox, ChildTableColumn, SuperQuery, CandidateForm, CustomBox },
+  components: { PrintDialog, PrintBrowse, Form, extraForm, ExportBox, Search, Detail, FlowBox, ChildTableColumn, SuperQuery, CandidateForm, CustomBox, RelevanceDetail },
   props: ['config', 'modelId', 'isPreview'],
   data() {
     return {
@@ -542,6 +544,7 @@ export default {
       formVisible: false,
       extraFormVisible: false,
       detailVisible: false,
+      detailsVisible: false,
       importBoxVisible: false,
       exportBoxVisible: false,
       uploadBoxVisible: false,
@@ -650,7 +653,7 @@ export default {
       }
     },
     async getPrintListOptions(ids) {
-      printOptionsApi({ids}).then(res => {
+      printOptionsApi({ ids }).then(res => {
         this.printListOptions = res.data
       })
     },
@@ -751,9 +754,9 @@ export default {
         if (!res.data || !res.data.formData) return
         let formData = JSON.parse(res.data.formData)
         formData.popupType = 'general'
-        this.detailVisible = true
+        this.detailsVisible = true
         this.$nextTick(() => {
-          this.$refs.Detail.init(formData, modelId, id)
+          this.$refs.RelevanceDetail.init(formData, modelId, id)
         })
       }).catch(() => { this.mainLoading = false })
     },
