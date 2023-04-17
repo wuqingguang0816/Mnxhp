@@ -500,7 +500,9 @@ export default {
               } else {
                 cur.startTime = getLaterTime(config.startTimeTarget, config.startTimeValue)
               }
+
             }
+
           }
           if (config.endTimeRule) {
             if (config.endTimeType == 1) {
@@ -572,9 +574,15 @@ export default {
               cur.startTime = config.startTimeValue || '00:00:00'
               if (cur.startTime.split(':').length == 3) {
                 cur.startTime = cur.startTime
+
               } else {
                 cur.startTime = cur.startTime + ':00'
               }
+              console.log(config)
+              if (config.label === '时间时分主') {
+                console.log(cur.startTime)
+              }
+
             } else if (config.startTimeType == 3) {
               cur.startTime = this.jnpf.toDate(new Date(), format)
             } else if (config.startTimeType == 4) {

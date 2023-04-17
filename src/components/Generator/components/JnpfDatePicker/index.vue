@@ -1,6 +1,7 @@
 <template>
   <el-date-picker :type="type" v-model="innerValue" placeholder="请选择" :value-format="valueFormat"
-    :picker-options='pickerOptions' :format="format" @change="change"></el-date-picker>
+    :picker-options='pickerOptions' :format="format" @change="change" :disabled="disabled"
+    :clearable="clearable" :readonly="readonly"></el-date-picker>
 </template>
 <script>
 export default {
@@ -32,7 +33,19 @@ export default {
     type: {
       type: String,
       default: 'date'
-    }
+    },
+    disabled: {
+      type: Boolean,
+      default: false
+    },
+    clearable: {
+      type: Boolean,
+      default: true
+    },
+    readonly: {
+      type: Boolean,
+      default: true
+    },
   },
   data() {
     return {
@@ -54,6 +67,7 @@ export default {
             return time.getTime() < this.startTime
           }
         },
+
       }
     }
   },
@@ -66,10 +80,8 @@ export default {
       this.innerValue = val
     },
   },
-  computed: {
-  },
-  created() {
-  },
+  computed: {},
+  created() { },
   mounted() {
   },
   methods: {

@@ -135,8 +135,10 @@ export default {
                 val = data[item.__vModel__] ? data[item.__vModel__] : item.multiple == true ? [this.userInfo.organizeIdList] : this.userInfo.organizeIdList
                 item.__config__.defaultValue = val
               } else if (item.__config__.jnpfKey === 'time' && item.__config__.defaultCurrent == true) {
-                val = data[item.__vModel__] ? data[item.__vModel__] : item.multiple == true ? [this.userInfo.organizeIdList] : this.userInfo.organizeIdList
-                item.__config__.defaultValue = val
+                if (!data.hasOwnProperty(item.__vModel__)) {
+                  val = this.jnpf.toDate(new Date(), item.format)
+                  item.__config__.defaultValue = val
+                }
               }
             }
           }

@@ -381,8 +381,9 @@ export function getDateDay(Target, type, monthNum) {
 
 //计算日
 export function getLaterData(days) {
+
   let date = new Date();
-  date.setDate(date.getDate() + days);
+  date.setDate(date.getDate() + Number(days));
   let month = date.getMonth() + 1;
   let day = date.getDate();
   let hours = date.getHours() < 10 ? '0' + date.getHours() : date.getHours()
@@ -398,7 +399,7 @@ export function getBeforeData(num) {
   let minutes = myDate.getMinutes() < 10 ? '0' + myDate.getMinutes() : myDate.getMinutes()
   let seconds = myDate.getSeconds() < 10 ? '0' + myDate.getSeconds() : myDate.getSeconds()
   let today = myDate.getFullYear() + '-' + (myDate.getMonth() + 1) + "-" + myDate.getDate();
-  myDate.setDate(myDate.getDate() - num)
+  myDate.setDate(myDate.getDate() - Number(num))
   let dateTemp;  // 临时日期数据
   let flag = 1;
   for (let i = 0; i < num; i++) {

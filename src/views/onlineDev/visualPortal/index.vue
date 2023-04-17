@@ -65,14 +65,14 @@
         </div>
         <JNPF-table v-loading="listLoading" :data="list">
           <el-table-column prop="fullName" label="名称" show-overflow-tooltip min-width="200" />
-          <el-table-column prop="enCode" label="编码" width="200" />
-          <el-table-column prop="category" label="分类" width="150" />
-          <el-table-column prop="type" label="类型" width="150">
+          <el-table-column prop="enCode" label="编码" width="180" />
+          <el-table-column prop="category" label="分类" width="100" />
+          <el-table-column prop="type" label="类型" width="100">
             <template slot-scope="scope">
               <p>{{scope.row.type==1?'配置路径':'门户设计'}}</p>
             </template>
           </el-table-column>
-          <el-table-column prop="enabledLock" label="锁定" width="150">
+          <el-table-column prop="enabledLock" label="锁定" width="100">
             <template slot-scope="scope">
               <p>{{scope.row.enabledLock==1?'启用':'禁用'}}</p>
             </template>
@@ -82,7 +82,7 @@
             width="120" />
           <el-table-column prop="lastModifyTime" label="最后修改时间" :formatter="jnpf.tableDateFormat"
             width="120" />
-          <el-table-column prop="sortCode" label="排序" width="70" align="center" />
+          <el-table-column prop="sortCode" label="排序" width="70" />
           <el-table-column prop="enabledMark" label="状态" width="70" align="center">
             <template slot-scope="scope">
               <el-tag :type="scope.row.enabledMark == 1 ? 'success' : 'danger'" disable-transitions>

@@ -5,14 +5,14 @@
     <div class="dialog-main">
       <div class="item" :class="{'active':releaseQuery.pc===1}" @click="selectToggle('pc')">
         <i class="item-icon icon-ym icon-ym-pc"></i>
-        <p class="item-title">同步Web端菜单</p>
+        <p class="item-title">同步Web端门户</p>
         <div class="icon-checked">
           <i class="el-icon-check"></i>
         </div>
       </div>
       <div class="item" :class="{'active':releaseQuery.app===1}" @click="selectToggle('app')">
         <i class="item-icon icon-ym icon-ym-mobile"></i>
-        <p class="item-title">同步APP端菜单</p>
+        <p class="item-title">同步APP端门户</p>
         <div class="icon-checked">
           <i class="el-icon-check"></i>
         </div>
@@ -22,16 +22,16 @@
       label-position="right" label-width="50px" ref="releaseForm">
       <template v-if="!currRow.pcIsRelease">
         <el-form-item label="上级" prop="pcModuleParentId" v-if="releaseQuery.pc">
-          <JNPF-TreeSelect v-model="releaseQuery.pcModuleParentId" :options="treeData"
-            placeholder="选择上级菜单" @change="treeSelectChange(arguments,'pc')" />
+          <el-select v-model="releaseQuery.pcModuleParentId" :options="treeData" multiline
+            placeholder="选择应用" @change="treeSelectChange(arguments,'pc')" />
         </el-form-item>
       </template>
       <template v-if="!currRow.appIsRelease">
         <el-form-item label="" v-if="(!releaseQuery.pc||currRow.pcIsRelease) && releaseQuery.app">
         </el-form-item>
         <el-form-item label="上级" prop="appModuleParentId" v-if="releaseQuery.app">
-          <JNPF-TreeSelect v-model="releaseQuery.appModuleParentId" :options="appTreeData"
-            placeholder="选择上级菜单" @change="treeSelectChange(arguments,'app')" />
+          <el-select v-model="releaseQuery.appModuleParentId" :options="appTreeData" multiline
+            placeholder="选择应用" @change="treeSelectChange(arguments,'app')" />
         </el-form-item>
       </template>
     </el-form>

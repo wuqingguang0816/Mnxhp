@@ -42,14 +42,13 @@
       </el-form-item>
       <el-form-item class="spacing" label="" v-if="activeData.__config__.startTimeType==1">
         <el-date-picker v-model="activeData.__config__.startTimeValue" :type="activeData.type"
-          placeholder="请选择时间" :value-format="activeData['value-format']"
-          :format="activeData.format">
+          placeholder="请选择时间" :value-format="activeData['value-format']" :format="format">
         </el-date-picker>
       </el-form-item>
       <el-form-item label="" class="spacing"
         v-else-if="activeData.__config__.startTimeType==4 ||activeData.__config__.startTimeType==5">
         <el-input type="number" v-model="activeData.__config__.startTimeValue" placeholder="请输入"
-          min="1">
+          min="1" @change="startValue">
           <el-select slot="append" v-model="activeData.__config__.startTimeTarget"
             style="width: 70px;" placeholder="请选择" filterable>
             <el-option v-for="(item, index) in targetOptions" :key="index" :label="item.label"
@@ -78,14 +77,13 @@
       </el-form-item>
       <el-form-item class="spacing" label="" v-if="activeData.__config__.endTimeType==1">
         <el-date-picker v-model="activeData.__config__.endTimeValue" :type="activeData.type"
-          placeholder="请选择时间" :value-format="activeData['value-format']"
-          :format="activeData.format">
+          :format="format" placeholder="请选择时间" :value-format="activeData['value-format']">
         </el-date-picker>
       </el-form-item>
       <el-form-item label="" class="spacing"
         v-else-if="activeData.__config__.endTimeType==4 ||activeData.__config__.endTimeType==5">
         <el-input type="number" v-model="activeData.__config__.endTimeValue" placeholder="请输入"
-          min="1">
+          min="1" @change="endValue">
           <el-select slot="append" v-model="activeData.__config__.endTimeTarget"
             style="width: 70px;" placeholder="请选择" filterable>
             <el-option v-for="(item, index) in targetOptions" :key="index" :label="item.label"
@@ -102,7 +100,7 @@
       </el-form-item>
     </template>
     <el-form-item label="能否清空">
-      <el-switch v-model="activeData.clearable" />
+      <el-switch v-model="activeData.clearable" v-show="showType==='pc'" />
     </el-form-item>
     <el-form-item label="是否只读" v-show="showType==='pc'">
       <el-switch v-model="activeData.readonly" />
@@ -167,6 +165,7 @@ export default {
           value: 5
         },
       ],
+      format: '',
       type: 'date',
       targetOptions: [],
     }
@@ -186,19 +185,25 @@ export default {
         this.activeData.__config__.endTimeValue = ''
       }
     },
-    'activeData.format'(val) {
-      if (val === 'yyyy') {
-        this.targetOptions = [{ label: '年', value: 1 }]
-      } else if (val === 'yyyy-MM') {
-        this.targetOptions = [{ label: '年', value: 1 }, { label: '月', value: 2 }]
-      } else if (val === 'yyyy-MM-dd') {
-        this.targetOptions = [{ label: '年', value: 1 }, { label: '月', value: 2 }, { label: '日', value: 3 }]
-      } else if (val === 'yyyy-MM-dd HH:mm') {
-        this.targetOptions = [{ label: '年', value: 1 }, { label: '月', value: 2 }, { label: '日', value: 3 }, { label: '时', value: 4 }, { label: '分', value: 5 }]
-      } else {
-        this.targetOptions = [{ label: '年', value: 1 }, { label: '月', value: 2 }, { label: '日', value: 3 }, { label: '时', value: 4 }, { label: '分', value: 5 }, { label: '秒', value: 6 }]
-      }
-      return this.activeData.type = val === 'yyyy' ? 'year' : val === 'yyyy-MM' ? 'month' : val === 'yyyy-MM-dd' ? 'date' : 'datetime'
+    'activeData.format': {
+      handler(val) {
+        if (val === 'yyyy') {
+          this.targetOptions = [{ label: '年', value: 1 }]
+        } else if (val === 'yyyy-MM') {
+          this.targetOptions = [{ label: '年', value: 1 }, { label: '月', value: 2 }]
+        } else if (val === 'yyyy-MM-dd') {
+          this.targetOptions = [{ label: '年', value: 1 }, { label: '月', value: 2 }, { label: '日', value: 3 }]
+        } else if (val === 'yyyy-MM-dd HH:mm') {
+          this.targetOptions = [{ label: '年', value: 1 }, { label: '月', value: 2 }, { label: '日', value: 3 }, { label: '时', value: 4 }, { label: '分', value: 5 }]
+        } else {
+          this.targetOptions = [{ label: '年', value: 1 }, { label: '月', value: 2 }, { label: '日', value: 3 }, { label: '时', value: 4 }, { label: '分', value: 5 }, { label: '秒', value: 6 }]
+        }
+        this.format = val
+        console.log(this.format)
+        this.activeData.type = val === 'yyyy' ? 'year' : val === 'yyyy-MM' ? 'month' : val === 'yyyy-MM-dd' ? 'date' : 'datetime'
+      },
+      immediate: true,
+      deep: true
     },
   },
   created() {
@@ -229,6 +234,12 @@ export default {
     }
   },
   methods: {
+    startValue(val) {
+      if (val < 1) this.activeData.__config__.startTimeValue = 1
+    },
+    endValue(val) {
+      if (val < 1) this.activeData.__config__.endTimeValue = 1
+    },
     endTimeRuleChange() {
       if (!this.activeData.__config__.endTimeRule) {
         return this.activeData.__config__.endRelationField = ''
