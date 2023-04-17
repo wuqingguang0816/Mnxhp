@@ -125,10 +125,16 @@ export default {
             let val = data.hasOwnProperty(item.__vModel__) ? data[item.__vModel__] : item.__config__.defaultValue
             if (!item.__config__.isSubTable) item.__config__.defaultValue = val
             if (this.isAdd || item.__config__.isSubTable == true) {//新增时候，默认当前
+              if (item.__config__.jnpfKey === 'date' || item.__config__.jnpfKey === 'time') item.__config__.custom = true
               if (item.__config__.jnpfKey === 'date' && item.__config__.defaultCurrent == true) {
-                val = new Date().getTime()
-                item.__config__.defaultValue = val
+                if (!data.hasOwnProperty(item.__vModel__)) {
+                  val = new Date().getTime()
+                  item.__config__.defaultValue = val
+                }
               } else if (item.__config__.jnpfKey === 'comSelect' && item.__config__.defaultCurrent == true && this.userInfo.organizeIdList instanceof Array && this.userInfo.organizeIdList.length > 0) {
+                val = data[item.__vModel__] ? data[item.__vModel__] : item.multiple == true ? [this.userInfo.organizeIdList] : this.userInfo.organizeIdList
+                item.__config__.defaultValue = val
+              } else if (item.__config__.jnpfKey === 'time' && item.__config__.defaultCurrent == true) {
                 val = data[item.__vModel__] ? data[item.__vModel__] : item.multiple == true ? [this.userInfo.organizeIdList] : this.userInfo.organizeIdList
                 item.__config__.defaultValue = val
               }
