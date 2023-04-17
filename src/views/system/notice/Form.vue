@@ -9,6 +9,11 @@
           <el-button @click="goBack()">{{$t('common.cancelButton')}}</el-button>
         </div>
       </div>
+      <div>
+        <el-alert title="提醒方式设置在【消息中心】-【消息发送配置】维护；默认站内信提醒，选择自定义则取自定义模板配置" type="warning"
+          :closable="false" show-icon>
+        </el-alert>
+      </div>
       <el-form ref="dataForm" :model="dataForm" :rules="dataRule" v-loading="formLoading"
         label-width="100px" class="main">
         <jnpf-form-tip-item label="标题" prop="title">
@@ -55,8 +60,7 @@
         </jnpf-form-tip-item>
         <el-row>
           <el-col :span="12">
-            <jnpf-form-tip-item label="提醒方式" prop="remindCategory" tipLabel='
-提醒方式设置在【消息中心】-【消息发送配置】维护；默认站内信提醒，选择自定义则取自定义模板配置。'>
+            <jnpf-form-tip-item label="提醒方式" prop="remindCategory">
               <el-select v-model="dataForm.remindCategory" placeholder="选择消息来源" clearable
                 :disabled="this.dataForm.id?true:false" filterable>
                 <el-option v-for="(item,index) in remindCategoryList" :key="index"
