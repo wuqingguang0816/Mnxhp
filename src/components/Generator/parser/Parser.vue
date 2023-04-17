@@ -470,7 +470,7 @@ export default {
           }
         }
         if (config.jnpfKey === 'date') {
-          if (config.defaultCurrent) {
+          if (!config.custom && config.defaultCurrent) {
             config.defaultValue = new Date().getTime()
           }
           if (config.startTimeRule) {
@@ -562,7 +562,7 @@ export default {
             }
           }
         }
-        if (config.jnpfKey === 'time') {
+        if (!config.custom && config.jnpfKey === 'time') {
           let format = cur.format === 'HH:mm' ? 'HH:mm:00' : cur.format
           if (config.defaultCurrent) {
             config.defaultValue = this.jnpf.toDate(new Date(), format)
@@ -777,7 +777,6 @@ export default {
                 } else {
                   startTime = e.startTime
                 }
-                console.log(startTime)
                 if (e.__config__.endTimeType == 2) {
                   endTime = this[this.formConf.formModel][e.__config__.endRelationField] || '00:00:00'
                   if (endTime && (endTime.split(':').length == 3)) {
