@@ -42,7 +42,8 @@
                   'relationForm',
                   'relationFormAttr',
                   'popupSelect',
-                  'popupAttr'
+                  'popupAttr',
+                  'autoComplete'
                 ].includes(item.jnpfKey)
               ">
               <el-option v-for="item in symbolOptionsBase" :key="item.label" :label="item.label"
@@ -80,6 +81,12 @@
                 <el-input-number v-else v-model="item.fieldValue" placeholder="请输入"
                   :disabled="item.disabled" :precision="item.precision" :controls="false"
                   controls-position="right" />
+              </template>
+              <template v-else-if="item.jnpfKey === 'autoComplete'">
+                <JnpfAutoComplete v-model="item.fieldValue" placeholder="请选择"
+                  :interfaceId="item.interfaceId" clearable :disabled="item.disabled"
+                  :propsValue="item.propsValue" :relationField="item.relationField"
+                  :templateJson="item.templateJson" :total="item.total" />
               </template>
               <template v-else-if="
                   ['radio', 'checkbox', 'select'].includes(item.jnpfKey)
@@ -188,12 +195,6 @@
                   :pageSize="item.pageSize" :popupType="item.popupType"
                   :popupTitle="item.popupTitle" :popupWidth="item.popupWidth"
                   :disabled="item.disabled" />
-              </template>
-              <template v-else-if="item.jnpfKey === 'autoComplete'">
-                <JnpfAutoComplete v-model="item.fieldValue" placeholder="请选择"
-                  :interfaceId="item.interfaceId" clearable :disabled="item.disabled"
-                  :propsValue="item.propsValue" :relationField="item.relationField"
-                  :templateJson="item.templateJson" :total="item.total" />
               </template>
               <template v-else-if="['userSelect'].includes(item.jnpfKey)">
                 <userSelect v-model="item.fieldValue" :placeholder="'请选择' + item.__config__.label"
