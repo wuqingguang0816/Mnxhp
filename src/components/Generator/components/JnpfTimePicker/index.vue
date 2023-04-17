@@ -1,6 +1,7 @@
 <template>
   <el-time-picker v-model="innerValue" :placeholder="placeholder" :value-format="valueFormat"
-    :picker-options='pickerOptions' :format="format"></el-time-picker>
+    :picker-options='pickerOptions' :format="format" :disabled="disabled" :clearable="clearable"
+    :readonly="readonly"></el-time-picker>
 </template>
 <script>
 export default {
@@ -24,15 +25,28 @@ export default {
       default: undefined
     },
     startTime: {
+      type: String,
       default: undefined
     },
     endTime: {
+      type: String,
       default: undefined
-    }
+    },
+    disabled: {
+      type: Boolean,
+      default: false
+    },
+    clearable: {
+      type: Boolean,
+      default: true
+    },
+    readonly: {
+      type: Boolean,
+      default: true
+    },
   },
   data() {
     return {
-
       innerValue: this.value,
     }
   },
@@ -48,18 +62,13 @@ export default {
   computed: {
     pickerOptions() {
       let selectableRange = [`${this.startTime || '00:00:00'} - ${this.endTime || '23:59:59'}`]
-      if (this.startTime && this.endTime && (this.startTime > this.endTime)) selectableRange = '00:00:00 - 00:00:00'
+      if (this.startTime && this.endTime && (this.startTime > this.endTime)) selectableRange = '00:00:00 -00:00:00'
       return { selectableRange }
     }
   },
-  created() {
-
-  },
-  mounted() {
-  },
-  methods: {
-
-  }
+  created() { },
+  mounted() { },
+  methods: {}
 
 }
 </script>

@@ -109,8 +109,8 @@
     <!-- <el-form-item label="显示标签">
       <el-switch v-model="activeData.__config__.showLabel" />
     </el-form-item> -->
-    <el-form-item label="能否清空">
-      <el-switch v-model="activeData.clearable" v-show="showType==='pc'" />
+    <el-form-item label="能否清空" v-show="showType==='pc'">
+      <el-switch v-model="activeData.clearable" />
     </el-form-item>
     <el-form-item label="是否只读" v-show="showType==='pc'">
       <el-switch v-model="activeData.readonly" />
