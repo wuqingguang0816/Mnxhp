@@ -99,7 +99,7 @@ export default {
     async updateFields() {
       if (!this.tables.length) {
         this.loading = false
-        this.next()
+        this.$nextTick(() => this.next())
         return
       }
       this.dataForm.dbLinkId = this.dataForm.dbLinkId || '0'
