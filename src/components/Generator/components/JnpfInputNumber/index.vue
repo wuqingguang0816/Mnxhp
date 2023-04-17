@@ -122,6 +122,7 @@ export default {
   },
   created() {
     if (!this.innerValue) return this.innerValue = null
+    this.amountChinese(this.innerValue)
   },
   directives: {
     thousands: {
