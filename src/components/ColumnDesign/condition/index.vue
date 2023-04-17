@@ -114,8 +114,9 @@
               <template v-else-if="item.jnpfKey === 'calculate'">
                 <NumRange v-model="item.fieldValue" v-if="item.symbol == 'between'"
                   :disabled="item.disabled"></NumRange>
-                <el-input-number v-else v-model="item.fieldValue" placeholder="请输入" :precision="2"
-                  :disabled="item.disabled" :controls="false" controls-position="right" />
+                <el-input-number v-else v-model="item.fieldValue" placeholder="请输入"
+                  :precision="item.precision" :disabled="item.disabled" :controls="false"
+                  controls-position="right" />
               </template>
               <template v-else-if="['rate', 'slider'].includes(item.jnpfKey)">
                 <el-input-number v-model="item.fieldValue" placeholder="请输入"
@@ -142,22 +143,17 @@
                   ['date', 'createTime', 'modifyTime'].includes(item.jnpfKey)
                 ">
                 <template v-if="item.symbol == 'between'">
-                  <el-date-picker v-model="item.fieldValue" clearable :disabled="item.disabled"
-                    key="year1" placeholder="请选择"
-                    :type="item.type==='datetime'?'datetimerange':'daterange'"
-                    value-format="timestamp" range-separator="至" @input="input()"
+                  <JnpfDateRangePicker v-model="item.fieldValue" clearable :disabled="item.disabled"
+                    key="year1" placeholder="请选择" :type="item.type"
+                    :valueFormat="item['value-format']" range-separator="至" @input="input()"
                     start-placeholder="开始日期" end-placeholder="结束日期" style="width: 100%;"
-                    :format="item.format || 'yyyy-MM-dd HH:mm:ss'">
-                  </el-date-picker>
+                    :format="item.format">
+                  </JnpfDateRangePicker>
                 </template>
-
-                <el-date-picker v-else v-model="item.fieldValue" clearable :disabled="item.disabled"
-                  key="year2" placeholder="请选择" :type="
-                    item.jnpfKey === 'date' && item.type
-                      ? item.type
-                      : 'datetime'
-                  " value-format="timestamp" :format="item.format || 'yyyy-MM-dd HH:mm:ss'">
-                </el-date-picker>
+                <JnpfDatePicker v-else v-model="item.fieldValue" clearable :disabled="item.disabled"
+                  key="year2" placeholder="请选择" :type="item.type"
+                  :valueFormat="item['value-format']" :format="item.format">
+                </JnpfDatePicker>
               </template>
 
               <template v-else-if="['comSelect', 'currOrganize'].includes(item.jnpfKey)">
@@ -192,6 +188,12 @@
                   :pageSize="item.pageSize" :popupType="item.popupType"
                   :popupTitle="item.popupTitle" :popupWidth="item.popupWidth"
                   :disabled="item.disabled" />
+              </template>
+              <template v-else-if="item.jnpfKey === 'autoComplete'">
+                <JnpfAutoComplete v-model="item.fieldValue" placeholder="请选择"
+                  :interfaceId="item.interfaceId" clearable :disabled="item.disabled"
+                  :propsValue="item.propsValue" :relationField="item.relationField"
+                  :templateJson="item.templateJson" :total="item.total" />
               </template>
               <template v-else-if="['userSelect'].includes(item.jnpfKey)">
                 <userSelect v-model="item.fieldValue" :placeholder="'请选择' + item.__config__.label"

@@ -199,7 +199,6 @@ export default {
           this.targetOptions = [{ label: '年', value: 1 }, { label: '月', value: 2 }, { label: '日', value: 3 }, { label: '时', value: 4 }, { label: '分', value: 5 }, { label: '秒', value: 6 }]
         }
         this.format = val
-        console.log(this.format)
         this.activeData.type = val === 'yyyy' ? 'year' : val === 'yyyy-MM' ? 'month' : val === 'yyyy-MM-dd' ? 'date' : 'datetime'
       },
       immediate: true,

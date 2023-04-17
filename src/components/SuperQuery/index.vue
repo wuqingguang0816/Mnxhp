@@ -35,7 +35,8 @@
                 </template>
                 <template v-else-if="item.jnpfKey==='calculate'">
                   <el-input-number v-model="item.fieldValue" placeholder="请输入"
-                    controls-position="right" style="width:100%" :precision="item.precision||0" />
+                    controls-position="right" style="width:100%"
+                    :precision="item.attr.precision||0" />
                 </template>
                 <template v-else-if="['rate','slider'].includes(item.jnpfKey)">
                   <el-input-number v-model="item.fieldValue" placeholder="请输入"

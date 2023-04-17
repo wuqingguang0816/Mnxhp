@@ -44,7 +44,7 @@ export default {
     },
     readonly: {
       type: Boolean,
-      default: true
+      default: false
     },
   },
   data() {
@@ -67,7 +67,6 @@ export default {
             return time.getTime() < this.startTime
           }
         },
-
       }
     }
   },
@@ -82,8 +81,7 @@ export default {
   },
   computed: {},
   created() { },
-  mounted() {
-  },
+  mounted() { },
   methods: {
     change(val) {
       if (this.format == 'yyyy-MM-dd' || this.format == 'yyyy-MM' || this.format == 'yyyy') return this.innerValue = val
