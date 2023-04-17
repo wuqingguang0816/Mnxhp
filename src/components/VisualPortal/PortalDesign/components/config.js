@@ -362,11 +362,11 @@ export const systemComponents = [{
     autoRefreshTime: 5,
   },
   w: 6,
-  h: 7,
+  h: 8,
   minW: 4,
-  minH: 7,
+  minH: 4,
   maxW: 12,
-  maxH: 7
+  maxH: 20
 },
 {
   icon: 'icon-ym icon-ym-generator-email',

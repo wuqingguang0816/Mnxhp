@@ -245,10 +245,22 @@ export default {
     border-bottom: unset;
   }
 }
+.portal-table-box-body {
+  height: 100%;
+  overflow: auto;
+}
 .portal-notice-box {
-  &.el-card__header {
-    padding: 18px 0;
-    height: 54px;
+  display: flex;
+  flex-direction: column;
+
+  >>> .el-card__header {
+    height: 55px;
+    padding: 0;
+  }
+  >>> .el-card__body {
+    width: 100%;
+    flex: 1;
+    overflow: hidden;
   }
   .portal-notice-box-body {
     height: 100%;
@@ -257,15 +269,6 @@ export default {
       display: flex;
       flex-direction: column;
 
-      >>> .el-card__header {
-        height: 55px;
-        padding: 0;
-      }
-      >>> .el-card__body {
-        width: 100%;
-        flex: 1;
-        overflow: hidden;
-      }
       .portal-list-item {
         display: flex;
         height: 100%;
