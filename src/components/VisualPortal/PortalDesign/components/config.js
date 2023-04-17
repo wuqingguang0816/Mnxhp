@@ -204,6 +204,7 @@ export const systemComponents = [{
   option: {
     showHeader: true,
     styleType: 1,
+    appStyleType: 1,
     defaultValue: [],
     showImage: true,
     headerFontSize: 14,

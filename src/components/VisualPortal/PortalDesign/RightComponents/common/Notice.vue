@@ -9,7 +9,7 @@
         </el-select>
       </el-form-item>
       <el-form-item label="风格类型" v-if="showType=='app'">
-        <el-select v-model="activeData.option.styleType" placeholder="请选择风格类型"
+        <el-select v-model="activeData.option.appStyleType" placeholder="请选择风格类型"
           @change="renderKeyChange" filterable>
           <el-option v-for="(item, index) in appStyleTypeOptions" :key="index" :label="item.label"
             :value="item.value" />
@@ -106,7 +106,7 @@
         </template>
       </template>
       <template v-if="showType=='app'">
-        <el-form-item label="显示图片" v-if="activeData.option.styleType!=3">
+        <el-form-item label="显示图片" v-if="activeData.option.appStyleType!=3">
           <el-switch v-model="activeData.option.showImage">
           </el-switch>
         </el-form-item>

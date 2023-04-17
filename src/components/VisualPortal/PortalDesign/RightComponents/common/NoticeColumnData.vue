@@ -5,7 +5,8 @@
       <el-table-column prop="fullName" label="名称">
         <template slot-scope="scope">
           <div style="display: flex;">
-            <el-input v-model="scope.row.fullName" placeholder="请输入名称" disabled />
+            <el-input v-model="scope.row.fullName" placeholder="请输入名称"
+              :disabled="type !=1?true:false" />
             <el-select v-model="scope.row.classify" multiple placeholder="请选择"
               style="margin-left: 5px;" v-if="scope.row.filedName == 'classify'" filterable>
               <el-option v-for="item in classifyOptions" :key="item.value" :label="item.fullName"

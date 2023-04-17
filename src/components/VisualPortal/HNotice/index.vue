@@ -40,7 +40,7 @@
                 <div v-if=' i% 2 == 0' class="portal-list-item"
                   :style="{'background': activeData.option.noticeOddLineColor ? activeData.option.noticeOddLineColor : activeData.option.noticeBgColor }">
                   <div class="item-image-box" v-if="activeData.option.showImage">
-                    <img v-if="item.category == 1"
+                    <img v-if="item.category == '公告'"
                       :src="item.coverImage ? define.comUrl+item.coverImage : coverImage" alt=""
                       class="item-image">
                     <img v-else :src="item.coverImage ? define.comUrl+item.coverImage : coverImage2"
@@ -48,9 +48,9 @@
                   </div>
                   <div class="itme-content-box">
                     <div class="item-title">
-                      <el-tag size="mini" :color="item.category == 1?'#ebe6ff':'#e5ebfe'"
+                      <el-tag size="mini" :color="item.category == '公告'?'#ebe6ff':'#e5ebfe'"
                         v-if="list[0].show"
-                        :style="{'color':item.category == 1?'#9016f3':'#1448f4'}">{{ item.category == 1?'公告':'通知' }}</el-tag>
+                        :style="{'color':item.category == '公告'?'#9016f3':'#1448f4'}">{{ item.category}}</el-tag>
                       <span class="item-left-span" v-if="list[1].show"
                         :style="{'color':list[1].fontColor,'font-size':list[1].fontSize+'px','font-weight':list[1].fontWeight?700:400}">{{ item.fullName }}</span>
                       <div v-if="list[3].show">
@@ -74,9 +74,9 @@
                   </div>
                   <div class="itme-content-box">
                     <div class="item-title">
-                      <el-tag size="mini" :color="item.category == 1?'#ebe6ff':'#e5ebfe'"
+                      <el-tag size="mini" :color="item.category == '公告'?'#ebe6ff':'#e5ebfe'"
                         v-if="list[0].show"
-                        :style="{'color':item.category == 1?'#9016f3':'#1448f4'}">{{ item.category == 1?'公告':'通知' }}</el-tag>
+                        :style="{'color':item.category == '公告'?'#9016f3':'#1448f4'}">{{ item.category }}</el-tag>
                       <span class="item-left-span" v-if="list[1].show"
                         :style="{'color':list[1].fontColor,'font-size':list[1].fontSize+'px','font-weight':list[1].fontWeight?700:400}">{{ item.fullName }}</span>
                       <div v-if="list[3].show">
@@ -113,9 +113,9 @@
                   </div>
                   <div style="" class="itme-content-box">
                     <div class="item-title">
-                      <el-tag size="mini" :color="item.category == 1?'#ebe6ff':'#e5ebfe'"
+                      <el-tag size="mini" :color="item.category == '公告'?'#ebe6ff':'#e5ebfe'"
                         v-if="list[0].show"
-                        :style="{'color':item.category == 1?'#9016f3':'#1448f4'}">{{ item.category == 1?'公告':'通知' }}</el-tag>
+                        :style="{'color':item.category == '公告'?'#9016f3':'#1448f4'}">{{ item.category == '公告'?'公告':'通知' }}</el-tag>
                       <span class="item-left-span" v-if="list[1].show"
                         :style="{'color':list[1].fontColor,'font-size':list[1].fontSize+'px','font-weight':list[1].fontWeight?700:400}">{{ item.fullName }}</span>
                     </div>
