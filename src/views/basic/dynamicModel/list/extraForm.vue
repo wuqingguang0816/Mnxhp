@@ -88,8 +88,12 @@ export default {
           if (item.__vModel__) {
             if(item.__config__.jnpfKey === 'date' && item.__config__.defaultCurrent == true) {
               item.__config__.defaultValue = new Date().getTime()
-            }else if(item.__config__.jnpfKey === 'comSelect' && item.__config__.defaultCurrent == true && this.userInfo.organizeIdList instanceof Array && this.userInfo.organizeIdList.length > 0) {
-              item.__config__.defaultValue = item.multiple == true?[this.userInfo.organizeIdList]:this.userInfo.organizeIdList
+            }else if(item.__config__.jnpfKey === 'comSelect' && item.__config__.defaultCurrent == true) {
+              if(this.userInfo.organizeIdList instanceof Array && this.userInfo.organizeIdList.length > 0) {
+                item.__config__.defaultValue = item.multiple == true?[this.userInfo.organizeIdList]:this.userInfo.organizeIdList
+              } else {
+                item.__config__.defaultValue = []
+              }
             }
             let val = data.hasOwnProperty(item.__vModel__) ? data[item.__vModel__] : item.__config__.defaultValue
             if (!item.__config__.isSubTable) item.__config__.defaultValue = val
