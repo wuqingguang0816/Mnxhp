@@ -10,7 +10,7 @@
     <el-form-item label="文本斜体" v-if="activeData.jnpfKey=='text'">
       <el-switch v-model="activeData.option.textFontStyle" />
     </el-form-item>
-    <el-form-item label="文本颜色">
+    <el-form-item label="文本颜色" style="height:32px">
       <el-color-picker v-model="activeData.option.textFontColor" />
     </el-form-item>
     <el-form-item label="文本位置">
@@ -27,7 +27,7 @@
         </el-radio-button>
       </el-radio-group>
     </el-form-item>
-    <el-form-item label="背景色">
+    <el-form-item label="背景色" style="height:32px">
       <el-color-picker v-model="activeData.option.textBgColor" />
     </el-form-item>
   </div>

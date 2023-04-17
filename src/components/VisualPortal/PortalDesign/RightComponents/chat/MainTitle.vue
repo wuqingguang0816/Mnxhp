@@ -10,7 +10,7 @@
     <el-form-item label="字体加粗">
       <el-switch v-model="activeData.option.titleTextStyleFontWeight" />
     </el-form-item>
-    <el-form-item label="字体颜色">
+    <el-form-item label="字体颜色" style="height:32px">
       <el-color-picker v-model="activeData.option.titleTextStyleColor" />
     </el-form-item>
     <el-form-item label="字体位置">
@@ -20,7 +20,7 @@
         </el-radio-button>
       </el-radio-group>
     </el-form-item>
-    <el-form-item label="背景色">
+    <el-form-item label="背景色" style="height:32px">
       <el-color-picker v-model="activeData.option.titleBgColor" />
     </el-form-item>
   </el-collapse-item>

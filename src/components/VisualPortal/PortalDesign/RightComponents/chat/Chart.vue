@@ -38,7 +38,7 @@
       <el-form-item label="指示器加粗" v-show="showType == 'pc'">
         <el-switch v-model="activeData.option.radarAxisNameFontWeight" />
       </el-form-item>
-      <el-form-item label="指示器颜色">
+      <el-form-item label="指示器颜色" style="height:32px">
         <el-color-picker v-model="activeData.option.radarAxisNameColor" />
       </el-form-item>
       <el-form-item label="区域透明度" v-show="showType == 'pc'">
@@ -127,7 +127,7 @@
         <el-form-item label="文本斜体">
           <el-switch v-model="activeData.option.textFontStyle" />
         </el-form-item>
-        <el-form-item label="文本颜色">
+        <el-form-item label="文本颜色" style="height:32px">
           <el-color-picker v-model="activeData.option.textFontColor" />
         </el-form-item>
         <el-form-item label="文本位置">
@@ -161,7 +161,7 @@
             :min="10" :max="100" @change="renderKeyChange" />
         </el-form-item>
       </template>
-      <el-form-item label="背景色">
+      <el-form-item label="背景色" style="height:32px">
         <el-color-picker v-model="activeData.option.textBgColor" />
       </el-form-item>
       <Link :activeData="activeData" :menuList="menuList" :appMenuList="appMenuList"
@@ -342,7 +342,7 @@
       <el-form-item label="名称加粗">
         <el-switch v-model="activeData.option.labelFontWeight" />
       </el-form-item>
-      <el-form-item label="名称颜色">
+      <el-form-item label="名称颜色" style="height:32px">
         <el-color-picker v-model="activeData.option.labelFontColor" />
       </el-form-item>
       <el-form-item label="数值大小">
@@ -352,10 +352,10 @@
       <el-form-item label="数值加粗">
         <el-switch v-model="activeData.option.valueFontWeight" />
       </el-form-item>
-      <el-form-item label="数值颜色">
+      <el-form-item label="数值颜色" style="height:32px">
         <el-color-picker v-model="activeData.option.valueFontColor" />
       </el-form-item>
-      <el-form-item label="数值背景色" v-if="showType=='app'">
+      <el-form-item label="数值背景色" v-if="showType=='app'" style="height:32px">
         <el-color-picker v-model="activeData.option.valueFontBgColor" />
       </el-form-item>
     </template>
@@ -406,7 +406,7 @@
       <el-form-item label="名称加粗">
         <el-switch v-model="activeData.option.labelFontWeight" />
       </el-form-item>
-      <el-form-item label="名称颜色">
+      <el-form-item label="名称颜色" style="height:32px">
         <el-color-picker v-model="activeData.option.labelFontColor" />
       </el-form-item>
     </template>
@@ -451,7 +451,7 @@
       <el-form-item label="名称加粗">
         <el-switch v-model="activeData.option.labelFontWeight" />
       </el-form-item>
-      <el-form-item label="名称颜色">
+      <el-form-item label="名称颜色" style="height:32px">
         <el-color-picker v-model="activeData.option.labelFontColor" />
       </el-form-item>
       <el-form-item label="数值大小">
@@ -461,7 +461,7 @@
       <el-form-item label="数值加粗">
         <el-switch v-model="activeData.option.valueFontWeight" />
       </el-form-item>
-      <el-form-item label="数值颜色">
+      <el-form-item label="数值颜色" style="height:32px">
         <el-color-picker v-model="activeData.option.valueFontColor" />
       </el-form-item>
       <el-form-item label="单位大小">
@@ -471,7 +471,7 @@
       <el-form-item label="单位加粗">
         <el-switch v-model="activeData.option.unitFontWeight" />
       </el-form-item>
-      <el-form-item label="单位颜色">
+      <el-form-item label="单位颜色" style="height:32px">
         <el-color-picker v-model="activeData.option.unitFontColor" />
       </el-form-item>
     </template>

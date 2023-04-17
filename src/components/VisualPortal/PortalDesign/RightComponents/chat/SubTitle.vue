@@ -10,7 +10,7 @@
     <el-form-item label="字体加粗">
       <el-switch v-model="activeData.option.titleSubtextStyleFontWeight" />
     </el-form-item>
-    <el-form-item label="字体颜色">
+    <el-form-item label="字体颜色" style="height:32px">
       <el-color-picker v-model="activeData.option.titleSubtextStyleColor" />
     </el-form-item>
   </el-collapse-item>

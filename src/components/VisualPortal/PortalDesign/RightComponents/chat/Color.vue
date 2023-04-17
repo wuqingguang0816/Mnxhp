@@ -2,10 +2,10 @@
   <el-collapse-item title="自定义配色设置" name="11">
     <template
       v-if="activeData.jnpfKey != 'pieChart'&&activeData.jnpfKey != 'radarChart'&&showType=='pc'">
-      <el-form-item label="文字颜色">
+      <el-form-item label="文字颜色" style="height:32px">
         <el-color-picker v-model="activeData.option.AxisTextStyleColor" />
       </el-form-item>
-      <el-form-item label="轴线颜色">
+      <el-form-item label="轴线颜色" style="height:32px">
         <el-color-picker v-model="activeData.option.AxisLineStyleColor" />
       </el-form-item>
     </template>

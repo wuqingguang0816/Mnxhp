@@ -11,7 +11,7 @@
       <el-switch v-model="activeData.option.xAxisShow" />
     </el-form-item>
     <template v-if="activeData.option.xAxisShow">
-      <el-form-item label="坐标轴颜色">
+      <el-form-item label="坐标轴颜色" style="height:32px">
         <el-color-picker v-model="activeData.option.xAxisAxisLineLineStyleColor" />
       </el-form-item>
       <template v-if="showType=='pc'">
@@ -25,7 +25,7 @@
         <el-form-item label="字体加粗" v-if="activeData.option.xAxisShow">
           <el-switch v-model="activeData.option.xAxisNameTextStyleFontWeight" />
         </el-form-item>
-        <el-form-item label="字体颜色" v-if="activeData.option.xAxisShow">
+        <el-form-item label="字体颜色" v-if="activeData.option.xAxisShow" style="height:32px">
           <el-color-picker v-model="activeData.option.xAxisNameTextStyleColor" />
         </el-form-item>
       </template>
@@ -36,7 +36,7 @@
       <el-form-item label="标签加粗" v-show="showType=='pc'">
         <el-switch v-model="activeData.option.xAxisAxisLabelTextFontWeight" />
       </el-form-item>
-      <el-form-item label="标签颜色">
+      <el-form-item label="标签颜色" style="height:32px">
         <el-color-picker v-model="activeData.option.xAxisAxisLabelTextStyleColor" />
       </el-form-item>
       <el-form-item label="标签角度">
@@ -46,7 +46,7 @@
       <el-form-item label="显示网格线">
         <el-switch v-model="activeData.option.xAxisSplitLineShow" />
       </el-form-item>
-      <el-form-item label="网格线颜色" v-if="activeData.option.xAxisSplitLineShow">
+      <el-form-item label="网格线颜色" v-if="activeData.option.xAxisSplitLineShow" style="height:32px">
         <el-color-picker v-model="activeData.option.xAxisSplitLineLineStyleColor" />
       </el-form-item>
     </template>

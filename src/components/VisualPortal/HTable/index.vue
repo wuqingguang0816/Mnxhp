@@ -104,14 +104,17 @@
       <template v-else>
         <template v-if="defaultValue.length">
           <div v-for="(item, i) in defaultValue" :key="i">
-            <div class="app-title" :style="{'font-weight': activeData.option.textFontWeight?'bolder':'normal',
-          'font-size':activeData.option.textFontSize+'px',
-          color:activeData.option.textFontColor
-          }">
+            <div class="app-title">
               <template v-for="(it, ii) in list">
-                <div :key="ii" style="margin-left: 20px;" class="name">
-                  <span
-                    v-if="activeData.option.showName">{{it.fullName}}:</span><span>{{item[it.filedName]}}</span>
+                <div :key="ii" style="margin-left: 20px;"
+                  :class='!activeData.option.dataFontWeight?"name":"app-name"'>
+                  <span v-if="activeData.option.showName" :style="{'font-weight': activeData.option.nameFontWeight?'bolder':'normal',
+          'font-size':activeData.option.nameFontSize+'px',
+          color:activeData.option.nameFontColor
+          }">{{it.fullName}}:</span><span :style="{'font-weight': activeData.option.dataFontWeight?'bolder':'normal',
+          'font-size':activeData.option.dataFontSize+'px',
+          color:activeData.option.dataFontColor
+          }">{{item[it.filedName]}}</span>
                 </div>
               </template>
               <el-divider class="divider-margin" v-if="i<defaultValue.length-1"></el-divider>
@@ -267,6 +270,16 @@ export default {
   font-size: 14px;
   display: inline-block;
   width: calc(100% - 120px);
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  word-break: break-all;
+  vertical-align: top;
+}
+.app-name {
+  font-size: 14px;
+  display: inline-block;
+  width: 100%;
   white-space: nowrap;
   text-overflow: ellipsis;
   overflow: hidden;

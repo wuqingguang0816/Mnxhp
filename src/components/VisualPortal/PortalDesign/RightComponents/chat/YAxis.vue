@@ -18,7 +18,7 @@
         <el-form-item label="字体加粗">
           <el-switch v-model="activeData.option.yAxisNameTextStyleFontWeight" />
         </el-form-item>
-        <el-form-item label="字体颜色">
+        <el-form-item label="字体颜色" style="height:32px">
           <el-color-picker v-model="activeData.option.yAxisNameTextStyleColor" />
         </el-form-item>
       </template>
@@ -29,13 +29,13 @@
       <el-form-item label="标签加粗" v-show="showType == 'pc'">
         <el-switch v-model="activeData.option.yAxisAxisLabelTextFontWeight" />
       </el-form-item>
-      <el-form-item label="标签颜色">
+      <el-form-item label="标签颜色" style="height:32px">
         <el-color-picker v-model="activeData.option.yAxisAxisLabelTextStyleColor" />
       </el-form-item>
       <el-form-item label="显示网格线">
         <el-switch v-model="activeData.option.yAxisSplitLineShow" />
       </el-form-item>
-      <el-form-item label="网格线颜色" v-if="activeData.option.yAxisSplitLineShow">
+      <el-form-item label="网格线颜色" v-if="activeData.option.yAxisSplitLineShow" style="height:32px">
         <el-color-picker v-model="activeData.option.yAxisSplitLineLineStyleColor" />
       </el-form-item>
     </template>
