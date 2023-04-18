@@ -188,8 +188,8 @@ export default {
   line-height: 1.3;
   margin-top: 5px;
 }
-.el-upload-list--picture-card {
-  display: inline-block;
-  height: 0;
-}
+// .el-upload-list--picture-card {
+//   display: inline-block;
+//   height: 0;
+// }
 </style>
