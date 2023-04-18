@@ -106,7 +106,7 @@ export default {
   methods: {
     change(val) {
       if (this.format == 'yyyy-MM-dd' || this.format == 'yyyy-MM' || this.format == 'yyyy') return this.innerValue = val
-      if (val < this.innerStartTime) this.innerValue = ''
+      if (val < this.innerStartTime || val > this.innerEndTime) this.innerValue = ''
     }
   }
 
