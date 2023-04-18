@@ -85,11 +85,11 @@ export default {
       return {
         disabledDate(time) {
           if (that.innerStartTime) {
-            let innerStartTime = _this.jnpf.toDate(that.innerStartTime, 'yyyy-MM-dd 00:00:00')
+            let innerStartTime = that.jnpf.toDate(that.innerStartTime, 'yyyy-MM-dd 00:00:00')
             that.innerStartTime = new Date(innerStartTime).getTime()
           }
           if (that.innerEndTime) {
-            let innerEndTime = that.jnpf.toDate(_this.innerEndTime, 'yyyy-MM-dd 00:00:00')
+            let innerEndTime = that.jnpf.toDate(that.innerEndTime, 'yyyy-MM-dd 00:00:00')
             that.innerEndTime = new Date(innerEndTime).getTime()
           }
           const timeVal = time.getTime()
