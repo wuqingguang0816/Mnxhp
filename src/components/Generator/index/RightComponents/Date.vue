@@ -278,6 +278,7 @@ export default {
       } else {
         this.targetOptions = [{ label: '年', value: 1 }, { label: '月', value: 2 }, { label: '日', value: 3 }]
       }
+      this.activeData.type = this.activeData.format === 'yyyy' ? 'year' : this.activeData.format === 'yyyy-MM' ? 'month' : this.activeData.format === 'yyyy-MM-dd' ? 'date' : 'datetime'
       if (this.activeData.format === 'yyyy' || this.activeData.format === 'yyyy-MM' || this.activeData.format === 'yyyy-MM-dd') return this.type = 'date'
       return this.type = 'datetime'
     },

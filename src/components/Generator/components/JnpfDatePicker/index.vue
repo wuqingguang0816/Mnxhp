@@ -105,7 +105,8 @@ export default {
   mounted() { },
   methods: {
     change(val) {
-      if (val >= this.innerStartTime && this.innerEndTime && val <= this.innerEndTime) this.innerValue = val
+      if (!this.innerStartTime && !this.innerStartTime) return this.innerValue = val
+      if (val >= this.innerStartTime && this.innerEndTime && val <= this.innerEndTime) return this.innerValue = val
       if (val >= this.innerStartTime && !this.innerEndTime) return this.innerValue = val
       return this.innerValue = ''
     }
