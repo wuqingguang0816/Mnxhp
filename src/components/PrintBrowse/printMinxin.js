@@ -21,7 +21,6 @@ const printOptionApi = {
       printTemplate: "",
       recordList: [],
       loading: false,
-      subMap: {},
       printTemplateRe: '',
       mainArr: [],
       qrcodeId: '',
@@ -33,7 +32,6 @@ const printOptionApi = {
     }
   },
   methods: {
-
     initData() {
       this.barTemp = []
       this.qrTemp = []
@@ -126,15 +124,9 @@ const printOptionApi = {
           this.printTemplate = domCurrent.innerHTML
 
           await this.subDo(domCurrent)
-          // this.handleDataType(domCurrent)
-          // this.replaceMainValue(this.mainData)
-          // this.replaceSubValue(this.subData)
 
           this.replaceValue(this.data)
-
-
           this.replaceSysValue()
-
           this.replaceImg()
           this.replaceBarCodeMain()
           this.replaceQrCodeMain()
@@ -176,8 +168,6 @@ const printOptionApi = {
             this.getJsBarcode(value, '#barcode' + id, width, height)
             // 获取节点内容替换
             let dom = document.querySelector('#barcode' + id)
-
-            // this.printTemplate = this.replaceAll(this.printTemplate, item, dom)
             this.printTemplate = this.printTemplate.replace(item, dom.outerHTML)
           })
         }
@@ -200,41 +190,18 @@ const printOptionApi = {
           const height = this.getWidthHeight(item, 'height')
           const value = this.getValue(item)
           const id = this.jnpf.idGenerator()
-          const template = `<span id='qrCode${id}'/>`
-          if (childItem) {
-            // childItem.innerHTML = template
-            this.qrcodeId = `qrCode${id}`
-            this.width = `${width}`
-            this.height = `${height}`
-          } else {
-            // 在页面中设置这个dom
-            this.qrcodeId = `qrCode${id}`
-            this.width = `${width}`
-            this.height = `${height}`
-          }
+
+          // 在页面中设置这个dom
+          this.qrcodeId = `qrCode${id}`
+          this.width = `${width}`
+          this.height = `${height}`
+
           this.$nextTick(() => {
             let base64Url = this.getJsQrcode(value, 'qrCode' + id, width, height)
             this.printTemplate = this.printTemplate.replace(item, `<img id='qrCode${id}'  width='${width}' height='${height}' src='${base64Url}'/>`)
           })
         }
 
-      }
-    },
-    replaceValueOut(domCurrent, data) {
-      const spanList = domCurrent.querySelectorAll('span')
-      for (let index = 0; index < spanList.length; index++) {
-        const element = spanList[index];
-        let tag = element.getAttribute("data-tag")
-        let table = tag.split('.')[0]
-        let field = tag.split('.')[1]
-        if (table === 'headTable') {
-          this.printTemplate = this.replaceAll(this.printTemplate, `{${field}}`, data[field] || '')
-          this.mainArr.push(field)
-        } else {
-          if (!this.subMap.table) this.subMap.table = []
-          this.subMap.table.push(field)
-          this.printTemplate = this.replaceAll(this.printTemplate, `{${field}}`, data[table][field] || '')
-        }
       }
     },
     isChildTable(cells) {
@@ -274,7 +241,7 @@ const printOptionApi = {
       }
       return tds
     },
-    async retrieveData(dataTag, tableObj, tds, newTable) {
+    retrieveData(dataTag, tableObj, tds, newTable) {
       for (let key in this.data) {
         if (key == dataTag) {
           for (let j = 0; j < this.data[key].length; j++) {
@@ -322,40 +289,6 @@ const printOptionApi = {
       this.printTemplate = this.replaceAll(this.printTemplate, '{systemPrinter}', systemPrinter)
       this.printTemplate = this.replaceAll(this.printTemplate, '{systemPrintTime}', systemPrintTime)
       this.printTemplate = this.replaceAll(this.printTemplate, '{systemApprovalContent}', systemApprovalContent)
-    },
-    handleDataType(dom) {
-      let dataList = dom.querySelectorAll('span')
-      dataList.forEach(element => {
-        let dataTag = element.getAttribute('data-tag') ? element.getAttribute('data-tag').split('.')[0] : false
-        let dataKey = element.innerText
-        if (dataTag && dataTag != 'null' && dataKey.startsWith("{")) {
-          if (dataTag == 'headTable') {
-            this.mainData.push(dataKey)
-          } else {
-            let dataTagArr = this.subData[dataTag]
-            if (!dataTagArr) dataTagArr = []
-            dataKey = dataKey.replace("{", "").replace("}", "")
-            if (!dataTagArr.includes(dataKey)) dataTagArr.push(dataKey)
-            this.subData[dataTag] = dataTagArr
-          }
-        }
-      })
-    },
-    replaceSubValue(data) {
-      for (let key in data) {
-        let subArr = this.data[key]
-        // 每一个子表有几行数据
-        for (let index = 0; index < subArr.length; index++) {
-          const subData = subArr[index];
-
-          let replaceKey = data[key]
-          replaceKey.forEach(key => {
-            let text = subData[key] ? subData[key] : ''
-            this.printTemplate = this.printTemplate.replace(`{${key}}`, subData[key])
-            // 继续补充新的行
-          });
-        }
-      }
     },
     replaceMainValue(mainData) {
       let template = JSON.parse(JSON.stringify(this.printTemplate))
@@ -439,7 +372,6 @@ const printOptionApi = {
           const height = this.getWidthHeight(item, 'height')
           const value = this.getValue(item)
           const id = this.jnpf.idGenerator()
-          const template = `<img width='${width}' height='${height}'  id='barcode${id}'/>`
 
           // 先收集码生成的信息
           let info = {
@@ -509,10 +441,6 @@ const printOptionApi = {
         value = res && res.length ? res[0] : ''
         value = value.replace('</span>', "");
         value = value.replace('>', "");
-
-        // value = value.replace('{','').replace('}','')
-        // let url = JSON.parse(this.data[value])
-        // url = url[0].url
         return this.data[value] ? this.data[value] : value
       } else {
         return this.data[value] ? this.data[value] : value
