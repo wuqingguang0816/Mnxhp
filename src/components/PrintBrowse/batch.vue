@@ -80,13 +80,15 @@ export default {
       handler(val) {
         this.scrollpage(val);
       },
+      deep:true,
+      immediate:true
     },
   },
   methods: {
     scrollpage() {
       let index = this.pageIndex - 1 < 0 ? 0 : this.pageIndex - 1;
       this.$nextTick(() => {
-        let dom = document.querySelector(".main");
+        let dom = this.$refs.tsPrint
         dom.scrollTo({
           top: (window.document.body.clientHeight - 10) * index,
           behavior: "smooth",
