@@ -187,24 +187,9 @@ export default {
         this.activeData.__config__.endTimeValue = ''
       }
     },
-    'activeData.format': {
-      handler(val) {
-        if (val === 'yyyy') {
-          this.targetOptions = [{ label: '年', value: 1 }]
-        } else if (val === 'yyyy-MM') {
-          this.targetOptions = [{ label: '年', value: 1 }, { label: '月', value: 2 }]
-        } else if (val === 'yyyy-MM-dd') {
-          this.targetOptions = [{ label: '年', value: 1 }, { label: '月', value: 2 }, { label: '日', value: 3 }]
-        } else if (val === 'yyyy-MM-dd HH:mm') {
-          this.targetOptions = [{ label: '年', value: 1 }, { label: '月', value: 2 }, { label: '日', value: 3 }, { label: '时', value: 4 }, { label: '分', value: 5 }]
-        } else {
-          this.targetOptions = [{ label: '年', value: 1 }, { label: '月', value: 2 }, { label: '日', value: 3 }, { label: '时', value: 4 }, { label: '分', value: 5 }, { label: '秒', value: 6 }]
-        }
-        this.activeData.type = val === 'yyyy' ? 'year' : val === 'yyyy-MM' ? 'month' : val === 'yyyy-MM-dd' ? 'date' : 'datetime'
-        this.key2 = +new Date()
-      },
-      immediate: true,
-      deep: true
+    'activeData.format'() {
+      this.getTargetOptions()
+      this.key2 = +new Date()
     },
   },
   created() {
@@ -290,12 +275,8 @@ export default {
         this.targetOptions = [{ label: '年', value: 1 }]
       } else if (this.activeData.format === 'yyyy-MM') {
         this.targetOptions = [{ label: '年', value: 1 }, { label: '月', value: 2 }]
-      } else if (this.activeData.format === 'yyyy-MM-dd') {
-        this.targetOptions = [{ label: '年', value: 1 }, { label: '月', value: 2 }, { label: '日', value: 3 }]
-      } else if (this.activeData.format === 'yyyy-MM-dd HH:mm') {
-        this.targetOptions = [{ label: '年', value: 1 }, { label: '月', value: 2 }, { label: '日', value: 3 }, { label: '时', value: 4 }, { label: '分', value: 5 }]
       } else {
-        this.targetOptions = [{ label: '年', value: 1 }, { label: '月', value: 2 }, { label: '日', value: 3 }, { label: '时', value: 4 }, { label: '分', value: 5 }, { label: '秒', value: 6 }]
+        this.targetOptions = [{ label: '年', value: 1 }, { label: '月', value: 2 }, { label: '日', value: 3 }]
       }
       if (this.activeData.format === 'yyyy' || this.activeData.format === 'yyyy-MM' || this.activeData.format === 'yyyy-MM-dd') return this.type = 'date'
       return this.type = 'datetime'

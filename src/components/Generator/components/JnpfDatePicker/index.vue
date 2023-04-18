@@ -50,7 +50,9 @@ export default {
   data() {
     return {
       innerValue: this.value,
-      key: +new Date()
+      key: +new Date(),
+      innerStartTime: this.startTime,
+      innerEndTime: this.endTime
     }
   },
   watch: {
@@ -63,32 +65,39 @@ export default {
     },
     format() {
       this.key = +new Date()
-    }
+    },
+    startTime(val) {
+      this.innerStartTime = val
+    },
+    endTime(val) {
+      this.innerEndTime = val
+    },
+
   },
   computed: {
     readOnly() {
       if (this.readonly) return true
-      if (this.startTime && this.endTime && (this.startTime > this.endTime)) return true
+      if (this.innerStartTime && this.innerEndTime && (this.innerStartTime > this.innerEndTime)) return true
       return false
     },
     pickerOptions() {
       let _this = this
       return {
         disabledDate(time) {
-          if (_this.startTime) {
-            let startTime = _this.jnpf.toDate(_this.startTime, "yyyy-MM-dd 00:00:00")
-            _this.startTime = new Date(startTime).getTime()
+          if (_this.innerStartTime) {
+            let innerStartTime = _this.jnpf.toDate(_this.innerStartTime, 'yyyy-MM-dd 00:00:00')
+            _this.innerStartTime = new Date(innerStartTime).getTime()
           }
-          if (_this.endTime) {
-            let endTime = _this.jnpf.toDate(_this.endTime, "yyyy-MM-dd 00:00:00")
-            _this.endTime = new Date(endTime).getTime()
+          if (_this.innerEndTime) {
+            let innerEndTime = _this.jnpf.toDate(_this.innerEndTime, 'yyyy-MM-dd 00:00:00')
+            _this.innerEndTime = new Date(innerEndTime).getTime()
           }
 
-          if (!_this.startTime && !_this.endTime) return false
-          if (_this.endTime) {
-            return time.getTime() < _this.startTime || time.getTime() > _this.endTime
+          if (!_this.innerStartTime && !_this.innerEndTime) return false
+          if (_this.innerEndTime) {
+            return time.getTime() < _this.innerStartTime || time.getTime() > _this.innerEndTime
           } else {
-            return time.getTime() < _this.startTime
+            return time.getTime() < _this.innerStartTime
           }
         }
       }
@@ -99,7 +108,7 @@ export default {
   methods: {
     change(val) {
       if (this.format == 'yyyy-MM-dd' || this.format == 'yyyy-MM' || this.format == 'yyyy') return this.innerValue = val
-      if (val < this.startTime) this.innerValue = ''
+      if (val < this.innerEndTime) this.innerValue = ''
     }
   }
 

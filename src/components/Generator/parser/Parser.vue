@@ -487,7 +487,7 @@ export default {
                 previousDate = getBeforeData(config.startTimeValue)
                 cur.startTime = new Date(previousDate).getTime()
               } else {
-                cur.startTime = getBeforeTime(config.startTimeTarget, config.startTimeValue)
+                cur.startTime = getBeforeTime(config.startTimeTarget, config.startTimeValue).getTime()
               }
             } else if (config.startTimeType == 5) {
               let previousDate = '';
@@ -498,7 +498,7 @@ export default {
                 previousDate = getLaterData(config.startTimeValue)
                 cur.startTime = new Date(previousDate).getTime()
               } else {
-                cur.startTime = getLaterTime(config.startTimeTarget, config.startTimeValue)
+                cur.startTime = getLaterTime(config.startTimeTarget, config.startTimeValue).getTime()
               }
 
             }
@@ -574,15 +574,9 @@ export default {
               cur.startTime = config.startTimeValue || '00:00:00'
               if (cur.startTime.split(':').length == 3) {
                 cur.startTime = cur.startTime
-
               } else {
                 cur.startTime = cur.startTime + ':00'
               }
-              console.log(config)
-              if (config.label === '时间时分主') {
-                console.log(cur.startTime)
-              }
-
             } else if (config.startTimeType == 3) {
               cur.startTime = this.jnpf.toDate(new Date(), format)
             } else if (config.startTimeType == 4) {

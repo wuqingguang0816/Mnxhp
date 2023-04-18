@@ -399,7 +399,7 @@ export function getBeforeData(num) {
   let minutes = myDate.getMinutes() < 10 ? '0' + myDate.getMinutes() : myDate.getMinutes()
   let seconds = myDate.getSeconds() < 10 ? '0' + myDate.getSeconds() : myDate.getSeconds()
   let today = myDate.getFullYear() + '-' + (myDate.getMonth() + 1) + "-" + myDate.getDate();
-  myDate.setDate(myDate.getDate() - Number(num))
+  myDate.setDate(myDate.getDate() - num)
   let dateTemp;  // 临时日期数据
   let flag = 1;
   for (let i = 0; i < num; i++) {
