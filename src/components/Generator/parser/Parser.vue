@@ -591,7 +591,7 @@ export default {
           }
           if (config.endTimeRule) {
             if (config.endTimeType == 1) {
-              cur.endTime = config.endTimeValue || '00:00:00'
+              cur.endTime = config.endTimeValue || '23:59:59'
               if (cur.endTime.split(':').length == 3) {
                 cur.endTime = cur.endTime
               } else {
@@ -608,6 +608,7 @@ export default {
               previousDate = getLaterTime(config.endTimeTarget, config.endTimeValue)
               cur.endTime = this.jnpf.toDate(previousDate, format)
             }
+            console.log(cur.endTime)
           }
           if (cur.__config__.startRelationField) {
             let item = {

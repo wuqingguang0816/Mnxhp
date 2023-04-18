@@ -240,7 +240,7 @@ export default {
               if (e.__config__.startRelationField && e.__config__.startTimeType == 2) {
                 startTime = this.formData[e.__config__.startRelationField] || '00:00:00'
                 startTime = startTime + ':00'
-                if (startTime && (startTime.split(':').length == 3)) {
+                if (startTime.split(':').length == 3) {
                   startTime = startTime
                 } else {
                   startTime = startTime + ':00'
@@ -249,8 +249,8 @@ export default {
                 startTime = e.startTime
               }
               if (e.__config__.endRelationField && e.__config__.endTimeType == 2) {
-                endTime = this.formData[e.__config__.endRelationField] || '00:00:00'
-                if (endTime && (endTime.split(':').length == 3)) {
+                endTime = this.formData[e.__config__.endRelationField] || '23:59:59'
+                if (endTime.split(':').length == 3) {
                   endTime = endTime
                 } else {
                   endTime = endTime + ':00'
@@ -321,7 +321,7 @@ export default {
                   let endTime = 0
                   if (e.__config__.startRelationField && e.__config__.startTimeType == 2) {
                     startTime = this.getFieldVal(e.__config__.startRelationField, rowIndex) || '00:00:00'
-                    if (startTime && (startTime.split(':').length == 3)) {
+                    if (startTime.split(':').length == 3) {
                       startTime = startTime
                     } else {
                       startTime = startTime + ':00'
@@ -330,8 +330,8 @@ export default {
                     startTime = e.startTime
                   }
                   if (e.__config__.endRelationField && e.__config__.endTimeType == 2) {
-                    endTime = this.getFieldVal(e.__config__.endRelationField, rowIndex) || '00:00:00'
-                    if (endTime && (endTime.split(':').length == 3)) {
+                    endTime = this.getFieldVal(e.__config__.endRelationField, rowIndex) || '23:59:59'
+                    if (endTime.split(':').length == 3) {
                       endTime = endTime
                     } else {
                       endTime = endTime + ':00'
@@ -401,8 +401,8 @@ export default {
             startTime = cur.startTime
           }
           if (cur.__config__.endRelationField && cur.__config__.endTimeType == 2) {
-            endTime = this.getFieldVal(cur.__config__.endRelationField, rowIndex) || '00:00:00'
-            if (startTime && (startTime.split(':').length == 3)) {
+            endTime = this.getFieldVal(cur.__config__.endRelationField, rowIndex) || '23:59:59'
+            if (startTime.split(':').length == 3) {
               endTime = endTime
             } else {
               endTime = endTime + ':00'
