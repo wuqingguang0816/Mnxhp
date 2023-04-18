@@ -884,9 +884,9 @@ export default {
           } else if (searchList[i].jnpfKey === 'comSelect' && searchList[i].__config__.defaultCurrent == true) {
             //组织机构
             if(this.userInfo.organizeIdList instanceof Array && this.userInfo.organizeIdList.length > 0) {
-               initQueryJson[searchList[i].__vModel__] = searchList[i].searchMultiple == true ? [this.userInfo.organizeIdList] : this.userInfo.organizeIdList;
+              initQueryJson[searchList[i].__vModel__] = searchList[i].searchMultiple == true ? [this.userInfo.organizeIdList] : this.userInfo.organizeIdList;
             }else {
-              initQueryJson[searchList[i].__vModel__] = []
+              initQueryJson[searchList[i].__vModel__] = undefined
             }
           } else if (searchList[i].jnpfKey === 'depSelect' && searchList[i].__config__.defaultCurrent == true && this.userInfo.departmentId != null && this.userInfo.departmentId != '') {
             if (searchList[i].__config__.defaultValue != null) {
