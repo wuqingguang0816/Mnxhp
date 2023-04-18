@@ -105,8 +105,9 @@ export default {
   mounted() { },
   methods: {
     change(val) {
-      if (this.format == 'yyyy-MM-dd' || this.format == 'yyyy-MM' || this.format == 'yyyy') return this.innerValue = val
-      if (val < this.innerStartTime || val > this.innerEndTime) this.innerValue = ''
+      if (val >= this.innerStartTime && this.innerEndTime && val <= this.innerEndTime) this.innerValue = val
+      if (val >= this.innerStartTime && !this.innerEndTime) return this.innerValue = val
+      return this.innerValue = ''
     }
   }
 

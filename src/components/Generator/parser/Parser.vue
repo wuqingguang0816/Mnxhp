@@ -608,7 +608,6 @@ export default {
               previousDate = getLaterTime(config.endTimeTarget, config.endTimeValue)
               cur.endTime = this.jnpf.toDate(previousDate, format)
             }
-            console.log(cur.endTime)
           }
           if (cur.__config__.startRelationField) {
             let item = {
