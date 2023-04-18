@@ -1,7 +1,7 @@
 <template>
   <el-date-picker :type="type" v-model="innerValue" placeholder="请选择" :value-format="valueFormat"
     :picker-options='pickerOptions' :format="format" @change="change" :disabled="disabled"
-    :clearable="clearable" :readonly="readonly"></el-date-picker>
+    :clearable="clearable" :readonly="readOnly" :key="key"></el-date-picker>
 </template>
 <script>
 export default {
@@ -50,24 +50,7 @@ export default {
   data() {
     return {
       innerValue: this.value,
-      pickerOptions: {
-        disabledDate: (time) => {
-          if (this.startTime) {
-            let startTime = this.jnpf.toDate(this.startTime, "yyyy-MM-dd 00:00:00")
-            this.startTime = new Date(startTime).getTime()
-          }
-          if (this.endTime) {
-            let endTime = this.jnpf.toDate(this.endTime, "yyyy-MM-dd 00:00:00")
-            this.endTime = new Date(endTime).getTime()
-          }
-          if (!this.startTime && !this.endTime) return false
-          if (this.endTime) {
-            return time.getTime() < this.startTime || time.getTime() > this.endTime
-          } else {
-            return time.getTime() < this.startTime
-          }
-        },
-      }
+      key: +new Date()
     }
   },
   watch: {
@@ -78,8 +61,39 @@ export default {
     value(val) {
       this.innerValue = val
     },
+    format() {
+      this.key = +new Date()
+    }
   },
-  computed: {},
+  computed: {
+    readOnly() {
+      if (this.readonly) return true
+      if (this.startTime && this.endTime && (this.startTime > this.endTime)) return true
+      return false
+    },
+    pickerOptions() {
+      let _this = this
+      return {
+        disabledDate(time) {
+          if (_this.startTime) {
+            let startTime = _this.jnpf.toDate(_this.startTime, "yyyy-MM-dd 00:00:00")
+            _this.startTime = new Date(startTime).getTime()
+          }
+          if (_this.endTime) {
+            let endTime = _this.jnpf.toDate(_this.endTime, "yyyy-MM-dd 00:00:00")
+            _this.endTime = new Date(endTime).getTime()
+          }
+
+          if (!_this.startTime && !_this.endTime) return false
+          if (_this.endTime) {
+            return time.getTime() < _this.startTime || time.getTime() > _this.endTime
+          } else {
+            return time.getTime() < _this.startTime
+          }
+        }
+      }
+    }
+  },
   created() { },
   mounted() { },
   methods: {

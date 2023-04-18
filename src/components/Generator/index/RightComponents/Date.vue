@@ -41,9 +41,10 @@
         </el-select>
       </el-form-item>
       <el-form-item class="spacing" label="" v-if="activeData.__config__.startTimeType==1">
-        <el-date-picker v-model="activeData.__config__.startTimeValue" :type="activeData.type"
-          placeholder="请选择时间" :value-format="activeData['value-format']" :format="format">
-        </el-date-picker>
+        <JnpfDatePicker v-model="activeData.__config__.startTimeValue" :type="activeData.type"
+          placeholder="请选择时间" :kay="key2" :valueFormat="activeData['value-format']"
+          :format="activeData.format">
+        </JnpfDatePicker>
       </el-form-item>
       <el-form-item label="" class="spacing"
         v-else-if="activeData.__config__.startTimeType==4 ||activeData.__config__.startTimeType==5">
@@ -76,9 +77,10 @@
         </el-select>
       </el-form-item>
       <el-form-item class="spacing" label="" v-if="activeData.__config__.endTimeType==1">
-        <el-date-picker v-model="activeData.__config__.endTimeValue" :type="activeData.type"
-          :format="format" placeholder="请选择时间" :value-format="activeData['value-format']">
-        </el-date-picker>
+        <JnpfDatePicker v-model="activeData.__config__.endTimeValue" :type="activeData.type"
+          :format="activeData.format" placeholder="请选择时间" :kay="key2"
+          :valueFormat="activeData['value-format']">
+        </JnpfDatePicker>
       </el-form-item>
       <el-form-item label="" class="spacing"
         v-else-if="activeData.__config__.endTimeType==4 ||activeData.__config__.endTimeType==5">
@@ -165,9 +167,9 @@ export default {
           value: 5
         },
       ],
-      format: '',
       type: 'date',
       targetOptions: [],
+      key2: ''
     }
   },
   watch: {
@@ -198,8 +200,8 @@ export default {
         } else {
           this.targetOptions = [{ label: '年', value: 1 }, { label: '月', value: 2 }, { label: '日', value: 3 }, { label: '时', value: 4 }, { label: '分', value: 5 }, { label: '秒', value: 6 }]
         }
-        this.format = val
         this.activeData.type = val === 'yyyy' ? 'year' : val === 'yyyy-MM' ? 'month' : val === 'yyyy-MM-dd' ? 'date' : 'datetime'
+        this.key2 = +new Date()
       },
       immediate: true,
       deep: true

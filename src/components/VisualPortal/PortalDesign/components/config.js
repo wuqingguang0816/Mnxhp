@@ -696,7 +696,6 @@ export const basicComponents = [{
     tableCount: 5,
     tableFontSize: 14,
     tableFontColor: '#606266',
-    tableBgColor: '',
     tableOddLineColor: '',
     tableEvenLineColor: '',
     tableBgColor: '',

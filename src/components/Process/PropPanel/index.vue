@@ -59,8 +59,14 @@
                   :precision="item.precision" controls-position="right" />
               </template>
               <template v-else-if="item.jnpfKey==='calculate'">
-                <el-input-number v-model="item.fieldValue" placeholder="请输入" :precision="2"
-                  controls-position="right" />
+                <el-input-number v-model="item.fieldValue" placeholder="请输入"
+                  :precision="item.precision||0" controls-position="right" />
+              </template>
+              <template v-else-if="item.jnpfKey==='autoComplete'">
+                <JnpfAutoComplete v-model="item.fieldValue" placeholder="请选择"
+                  :interfaceId="item.interfaceId" clearable :propsValue="item.propsValue"
+                  :relationField="item.relationField" :templateJson="item.templateJson"
+                  :total="item.total" />
               </template>
               <template v-else-if="['rate','slider'].includes(item.jnpfKey)">
                 <el-input-number v-model="item.fieldValue" placeholder="请输入"
@@ -75,12 +81,18 @@
                   :format="item.format">
                 </el-time-picker>
               </template>
-              <template v-else-if="['date','createTime', 'modifyTime'].includes(item.jnpfKey)">
+              <template v-else-if="['createTime', 'modifyTime'].includes(item.jnpfKey)">
                 <el-date-picker v-model="item.fieldValue" clearable placeholder="请选择"
-                  :type="item.jnpfKey==='date'&& item.type?item.type:'datetime'"
-                  value-format="timestamp" @change="onConditionDateChange($event,item)"
+                  :type="item.type" value-format="timestamp"
+                  @change="onConditionDateChange($event,item)"
                   :format="item.format||'yyyy-MM-dd HH:mm:ss'">
                 </el-date-picker>
+              </template>
+              <template v-else-if="item.jnpfKey==='date'">
+                <JnpfDatePicker v-model="item.fieldValue" clearable placeholder="请选择"
+                  :type="item.type" @change="onConditionDateChange($event,item)"
+                  :valueFormat="item['value-format']" :format="item.format">
+                </JnpfDatePicker>
               </template>
               <template v-else-if="['comSelect','currOrganize'].includes(item.jnpfKey)">
                 <comSelect v-model="item.fieldValue" placeholder="请选择" clearable
