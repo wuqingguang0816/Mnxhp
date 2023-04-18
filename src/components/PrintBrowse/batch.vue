@@ -40,6 +40,16 @@
       </div>
     </div>
 
+    <div v-if="showContainer">
+      <!-- 主表使用 -->
+      <img :width="width" :height="height" :id="barcodeId" ref="barContainer" />
+      <img :width="width" :height="height" :id="qrcodeId" ref="qrContainer" />
+
+      <!-- 子表使用 -->
+      <div ref="barcodewrap"></div>
+      <div ref="qrcodewrap"></div>
+    </div>
+
     <div class="main" ref="tsPrint" v-loading="loading">
       <div
         class="print-content"
@@ -86,8 +96,9 @@ export default {
     onOpen() {
       // 打开时候初始化位置为第一页
       this.pageIndex = 0;
-      this.batchData = [];
       if (!this.id) return;
+      this.initData();
+      this.batchData = [];
       this.printTemplate = "";
       this.data = {};
       this.loading = true;
@@ -102,15 +113,18 @@ export default {
           const element = array[index];
           this.batchData.push(element.printTemplate);
         }
+        this.showContainer = true
         this.$nextTick(async () => {
           let dom = this.$refs["tsPrint"];
           for (let index = 0; index < array.length; index++) {
             const element = array[index];
             if (!element.printData) break;
+            // 获取每一页dom
             let domCurrent = dom.querySelectorAll(".print-content")[index];
-            let data = await this.handleData(element, domCurrent);
-            this.batchData[index] = data;
+            await this.handleData(element, domCurrent);
+            this.batchData[index] = this.printTemplate;
             if (index == array.length - 1) {
+              this.showContainer = false
               this.loading = false;
             }
           }
