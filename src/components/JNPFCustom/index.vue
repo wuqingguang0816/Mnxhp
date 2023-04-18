@@ -2,10 +2,10 @@
   <div class="main">
     <template v-if="config.popupType==='dialog'">
       <el-dialog :title="config.popupTitle" :close-on-click-modal="false" :visible.sync="visible"
-        class="JNPF-dialog JNPF-dialog_center" lock-scroll append-to-body :width='config.popupWidth'
-        @close="$emit('close')">
+                 class="JNPF-dialog JNPF-dialog_center" lock-scroll append-to-body :width='config.popupWidth'
+                 @close="$emit('close')">
         <parser :form-conf="formConf" @submit="submitForm" :key="key" ref="dynamicForm"
-          v-if="!loading" />
+                v-if="!loading" />
         <span slot="footer" class="dialog-footer">
           <el-button @click="visible = false">{{$t('common.cancelButton')}}</el-button>
           <el-button type="primary" @click="dataFormSubmit" :loading="btnLoading">
@@ -15,12 +15,12 @@
     </template>
     <template v-if="config.popupType==='drawer'">
       <el-drawer :title="config.popupTitle" :visible.sync="visible" :wrapperClosable="false"
-        ref="drawer" :size='config.popupWidth' append-to-body class="JNPF-common-drawer"
-        @close="$emit('close')">
+                 ref="drawer" :size='config.popupWidth' append-to-body class="JNPF-common-drawer"
+                 @close="$emit('close')">
         <div class="JNPF-flex-main">
           <div class="dynamicForm">
             <parser :form-conf="formConf" @submit="submitForm" :key="key" ref="dynamicForm"
-              v-if="!loading" />
+                    v-if="!loading" />
           </div>
           <div class="drawer-footer">
             <el-button @click="visible = false">{{$t('common.cancelButton')}}</el-button>
@@ -126,10 +126,16 @@ export default {
             if (!item.__config__.isSubTable) item.__config__.defaultValue = val
             if (this.isAdd || item.__config__.isSubTable == true) {//新增时候，默认当前
               if (item.__config__.jnpfKey === 'date' && item.__config__.defaultCurrent == true) {
-                val = new Date().getTime()
-                item.__config__.defaultValue = val
-              } else if (item.__config__.jnpfKey === 'comSelect' && item.__config__.defaultCurrent == true && this.userInfo.organizeIdList instanceof Array && this.userInfo.organizeIdList.length > 0) {
-                val = data[item.__vModel__] ? data[item.__vModel__] : item.multiple == true ? [this.userInfo.organizeIdList] : this.userInfo.organizeIdList
+                if (!data.hasOwnProperty(item.__vModel__)) {
+                  val = new Date().getTime()
+                  item.__config__.defaultValue = val
+                }
+              } else if (item.__config__.jnpfKey === 'comSelect' && item.__config__.defaultCurrent == true) {
+                if(this.userInfo.organizeIdList instanceof Array && this.userInfo.organizeIdList.length > 0) {
+                  val = data[item.__vModel__] ? data[item.__vModel__] : (item.multiple == true ? [this.userInfo.organizeIdList] : this.userInfo.organizeIdList)
+                }else {
+                  val = data[item.__vModel__] ? data[item.__vModel__] : []
+                }
                 item.__config__.defaultValue = val
               }
             }

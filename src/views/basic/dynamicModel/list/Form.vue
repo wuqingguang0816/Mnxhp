@@ -110,7 +110,7 @@
     </template>
     <PrintDialog v-if="printDialogVisible" ref="printDialog" @change="printBrowseHandle">
     </PrintDialog>
-    
+
     <print-browse :visible.sync="printBrowseVisible" :id="printId" :formId="dataForm.id" />
   </div>
 </template>
@@ -296,8 +296,12 @@ export default {
               if(item.__config__.jnpfKey === 'date' && item.__config__.defaultCurrent == true) {
                 val = new Date().getTime()
                 item.__config__.defaultValue = val
-              }else if(item.__config__.jnpfKey === 'comSelect' && item.__config__.defaultCurrent == true && this.userInfo.organizeIdList instanceof Array && this.userInfo.organizeIdList.length > 0) {
-                val = item.multiple == true?[this.userInfo.organizeIdList]:this.userInfo.organizeIdList
+              }else if(item.__config__.jnpfKey === 'comSelect' && item.__config__.defaultCurrent == true) {
+                if(this.userInfo.organizeIdList instanceof Array && this.userInfo.organizeIdList.length > 0) {
+                  val = item.multiple == true?[this.userInfo.organizeIdList]:this.userInfo.organizeIdList
+                }else {
+                  val = []
+                }
                 item.__config__.defaultValue = val
               }
             }
