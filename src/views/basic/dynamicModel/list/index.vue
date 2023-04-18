@@ -899,6 +899,11 @@ export default {
             if (searchList[i].__config__.defaultValue != null) {
               initQueryJson[searchList[i].__vModel__] = searchList[i].__config__.defaultValue
             }
+          } else if (searchList[i].jnpfKey === 'time' && searchList[i].__config__.defaultCurrent == true) {
+            let startTime = new Date()
+            let endTime = new Date()
+            endTime.setHours(endTime.getHours() + 1)
+            initQueryJson[searchList[i].__vModel__] = [this.jnpf.toDate(startTime, 'HH:mm:ss'), this.jnpf.toDate(endTime, 'HH:mm:ss')]
           }
         }
         if (Object.keys(initQueryJson).length > 0) {

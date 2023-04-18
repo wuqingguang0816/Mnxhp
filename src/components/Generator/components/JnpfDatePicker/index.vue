@@ -40,7 +40,7 @@ export default {
     },
     clearable: {
       type: Boolean,
-      default: true
+      default: false
     },
     readonly: {
       type: Boolean,
@@ -81,24 +81,22 @@ export default {
       return false
     },
     pickerOptions() {
-      let _this = this
+      let that = this
       return {
         disabledDate(time) {
-          if (_this.innerStartTime) {
-            let innerStartTime = _this.jnpf.toDate(_this.innerStartTime, 'yyyy-MM-dd 00:00:00')
-            _this.innerStartTime = new Date(innerStartTime).getTime()
+          if (that.innerStartTime) {
+            let innerStartTime = _this.jnpf.toDate(that.innerStartTime, 'yyyy-MM-dd 00:00:00')
+            that.innerStartTime = new Date(innerStartTime).getTime()
           }
-          if (_this.innerEndTime) {
-            let innerEndTime = _this.jnpf.toDate(_this.innerEndTime, 'yyyy-MM-dd 00:00:00')
-            _this.innerEndTime = new Date(innerEndTime).getTime()
+          if (that.innerEndTime) {
+            let innerEndTime = that.jnpf.toDate(_this.innerEndTime, 'yyyy-MM-dd 00:00:00')
+            that.innerEndTime = new Date(innerEndTime).getTime()
           }
-
-          if (!_this.innerStartTime && !_this.innerEndTime) return false
-          if (_this.innerEndTime) {
-            return time.getTime() < _this.innerStartTime || time.getTime() > _this.innerEndTime
-          } else {
-            return time.getTime() < _this.innerStartTime
-          }
+          const timeVal = time.getTime()
+          if (!that.innerStartTime && !that.innerEndTime) return false
+          if (that.innerStartTime && that.innerEndTime) return timeVal < that.innerStartTime || timeVal > that.innerEndTime
+          if (that.innerEndTime) return timeVal > that.innerEndTime
+          return timeVal < that.innerStartTime
         }
       }
     }
@@ -108,7 +106,7 @@ export default {
   methods: {
     change(val) {
       if (this.format == 'yyyy-MM-dd' || this.format == 'yyyy-MM' || this.format == 'yyyy') return this.innerValue = val
-      if (val < this.innerEndTime) this.innerValue = ''
+      if (val < this.innerStartTime) this.innerValue = ''
     }
   }
 
