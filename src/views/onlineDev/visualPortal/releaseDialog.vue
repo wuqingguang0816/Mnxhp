@@ -22,16 +22,20 @@
       label-position="right" label-width="50px" ref="releaseForm">
       <template v-if="!currRow.pcIsRelease">
         <el-form-item label="上级" prop="pcModuleParentId" v-if="releaseQuery.pc">
-          <el-select v-model="releaseQuery.pcModuleParentId" :options="treeData" multiline
-            placeholder="选择应用" @change="treeSelectChange(arguments,'pc')" />
+          <el-select v-model="releaseQuery.pcModuleParentId" multiple placeholder="选择应用">
+            <el-option v-for="item in treeData" :key="item.id" :label="item.name" :value="item.id">
+            </el-option>
+          </el-select>
         </el-form-item>
       </template>
       <template v-if="!currRow.appIsRelease">
         <el-form-item label="" v-if="(!releaseQuery.pc||currRow.pcIsRelease) && releaseQuery.app">
         </el-form-item>
         <el-form-item label="上级" prop="appModuleParentId" v-if="releaseQuery.app">
-          <el-select v-model="releaseQuery.appModuleParentId" :options="appTreeData" multiline
-            placeholder="选择应用" @change="treeSelectChange(arguments,'app')" />
+          <el-select v-model="releaseQuery.appModuleParentId" multiple placeholder="选择应用">
+            <el-option v-for="item in treeData" :key="item.id" :label="item.name" :value="item.id">
+            </el-option>
+          </el-select>
         </el-form-item>
       </template>
     </el-form>
@@ -46,7 +50,7 @@
 import {
   Release
 } from "@/api/system/portal";
-import { getMenuSelector } from '@/api/system/menu'
+import { mapGetters } from "vuex";
 export default {
   props: [],
   name: 'releaseDialog',
@@ -76,7 +80,9 @@ export default {
       appSystemId: "",
     }
   },
-  computed: {},
+  computed: {
+    ...mapGetters(['userInfo']),
+  },
   methods: {
     releaseModel() {
       this.$refs['releaseForm'].validate((valid) => {
@@ -104,23 +110,17 @@ export default {
       this.$nextTick(() => {
         this.$refs['releaseForm'] && this.$refs['releaseForm'].resetFields()
       })
-      this.getMenuSelector()
-      this.getAPPMenuSelector()
+      this.treeData = this.userInfo.systemIds || []
     },
     selectToggle(key) {
       this.releaseQuery[key] = this.releaseQuery[key] === 1 ? 0 : 1
-    },
-    treeSelectChange(data, type) {
-      const systemId = data[1].systemId
-      if (type == 'pc') this.pcSystemId = systemId
-      if (type == 'app') this.appSystemId = systemId
     },
     // 发布菜单
     release() {
       if (!this.releaseQuery.pc && !this.releaseQuery.app) return this.$message.error('请至少选择一种菜单同步方式')
       this.releaseBtnLoading = true
-      this.releaseQuery.pcSystemId = this.pcSystemId
-      this.releaseQuery.appSystemId = this.appSystemId
+      this.releaseQuery.pcSystemId = this.releaseQuery.pcModuleParentId.toString()
+      this.releaseQuery.appSystemId = this.releaseQuery.pcModuleParentId.toString()
       Release(this.currRow.id, this.releaseQuery).then(res => {
         this.$message({
           type: 'success',
@@ -134,22 +134,6 @@ export default {
         });
 
       }).catch(() => { this.releaseBtnLoading = false })
-    },
-    getMenuSelector() {
-      getMenuSelector({ category: 'Web' }, 0).then(res => {
-        this.treeData = res.data.list
-      })
-    },
-    getAPPMenuSelector() {
-      getMenuSelector({ category: 'App' }, 0).then(res => {
-        this.appTreeData = res.data.list || []
-        for (let index = 0; index < this.appTreeData.length; index++) {
-          const item = this.appTreeData[index];
-          if (item.type == 0) {
-            item.disabled = true
-          }
-        }
-      })
     },
   }
 }
