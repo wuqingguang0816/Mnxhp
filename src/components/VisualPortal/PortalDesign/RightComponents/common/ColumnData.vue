@@ -56,7 +56,9 @@
         </template>
       </el-table-column>
     </JNPF-table>
-    <JNPF-table :data="list" ref="dragTable" v-else>
+    <el-table :data="list" ref="dragTable" :hasNO="false" v-else>
+      <el-table-column prop="index" type="index" width="50" label="序号" align="center">
+      </el-table-column>
       <el-table-column prop="fullName" label="名称" width="100">
         <template slot-scope="scope">
           <p>{{scope.row.fullName  }}</p>
@@ -83,7 +85,7 @@
           <el-color-picker v-model="scope.row.fontColor" />
         </template>
       </el-table-column>
-    </JNPF-table>
+    </el-table>
     <div class="table-actions" @click="addHandle()" v-if="type==1">
       <el-button type="text" icon="el-icon-plus">添加</el-button>
     </div>
