@@ -195,12 +195,13 @@ export default {
     formFieldsOptions() {
       let list = []
       const loop = (data, parent) => {
+
         if (!data) return
         if (data.__config__ && this.isIncludesTable(data) && data.__config__.children && Array.isArray(data.__config__.children)) {
           loop(data.__config__.children, data)
         }
         if (Array.isArray(data)) data.forEach(d => loop(d, parent))
-        if (data.__vModel__ && data.__config__.jnpfKey === 'time' && data.__vModel__ !== this.activeData.__vModel__) {
+        if (data.__vModel__ && data.__config__.jnpfKey === 'time' && (data.__vModel__ !== this.activeData.__vModel__ || (data.__vModel__ == this.activeData.__vModel__ && data.__config__.relationTable))) {
           const isTableChild = parent && parent.__config__ && parent.__config__.jnpfKey === 'table'
           list.push({
             realVModel: isTableChild ? parent.__vModel__ + '-' + data.__vModel__ : data.__vModel__,

@@ -206,7 +206,7 @@ export default {
           loop(data.__config__.children, data)
         }
         if (Array.isArray(data)) data.forEach(d => loop(d, parent))
-        if (data.__vModel__ && data.__config__.jnpfKey === 'date' && data.__vModel__ !== this.activeData.__vModel__) {
+        if (data.__vModel__ && data.__config__.jnpfKey === 'date' && (data.__vModel__ !== this.activeData.__vModel__ || (data.__vModel__ == this.activeData.__vModel__ && data.__config__.relationTable))) {
           const isTableChild = parent && parent.__config__ && parent.__config__.jnpfKey === 'table'
           list.push({
             realVModel: isTableChild ? parent.__vModel__ + '-' + data.__vModel__ : data.__vModel__,
