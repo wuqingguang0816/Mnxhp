@@ -152,13 +152,6 @@ export default {
         if (!this.validData()) {
           return;
         }
-        // 处理精度
-        this.pconditions = this.pconditions.map(item => {
-          if (item.jnpfKey === "calculate") {
-            item.fieldValue = Number(item.fieldValue).toFixed(2);
-          }
-          return item;
-        });
         let cloneConditions = JSON.parse(JSON.stringify(this.pconditions));
         this.$emit("ruleConfig", cloneConditions);
         this.tempCondition = cloneConditions;

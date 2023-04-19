@@ -171,6 +171,7 @@
                 <NumRange
                   v-model="item.fieldValue"
                   v-if="item.symbol == 'between'"
+                  :precision="2"
                   :disabled="item.disabled"
                 ></NumRange>
                 <el-input-number

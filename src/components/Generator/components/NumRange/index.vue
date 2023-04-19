@@ -1,8 +1,8 @@
 <template>
   <div class="numRange">
-    <el-input-number v-model="min" :controls="false" placeholder="最小值" @change="onChange" />
+    <el-input-number v-model="min" :controls="false" :precision="precision" placeholder="最小值" @change="onChange" />
     <span class="separator">-</span>
-    <el-input-number v-model="max" :controls="false" placeholder="最大值" @change="onChange" />
+    <el-input-number v-model="max" :controls="false" :precision="precision" placeholder="最大值" @change="onChange" />
   </div>
 </template>
 <script>
@@ -11,7 +11,7 @@ export default {
     prop: 'value',
     event: 'change'
   },
-  props: ["value"],
+  props: ["value","precision"],
   name: 'numRange',
   data() {
     return {
