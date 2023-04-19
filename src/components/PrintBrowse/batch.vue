@@ -103,7 +103,6 @@ export default {
             
             // 获取每一页dom
             let domCurrent = dom.querySelectorAll(".print-content")[index];
-            element.printData =null
             if (!element.printData) {
               this.batchData[index] = domCurrent.innerHTML.replace(/\{(.*?)\}/g,"");
             }
